@@ -397,6 +397,100 @@ for (const tipo of stilePhp || []) {
 violazioni['stile-proprio-elenco'] = stileScarti.map((x) => ({ file: 'elenco', type: '', key: String(x), label: '' }));
 RULES.push({ id: 'stile-proprio-elenco', titolo: 'Le tile che applicano da sé lo stile tipografico: elenco PHP = JS, e lo leggono davvero' });
 
+// ─── tile atomiche: un solo elenco, uguale in PHP e in JS ────────────────────
+// Badge, pulsante, icona, divisore, spaziatore, interruttore: contenitore sempre
+// trasparente e senza cornice, e nell'inspector niente sfondo/raggio/bordo/ombra
+// del contenitore. Il renderer PHP e il builder devono concordare sull'elenco, e
+// nel JS l'elenco vive in UN posto (useBackgroundStyle.js): c'era una copia a
+// cinque, senza il badge, dentro BuilderInspector.
+const atomPhp = elencoTipi('includes/class-frontend-renderer.php', '$ATOMIC_TILES = [');
+const atomJs = elencoTipi('src/composables/useBackgroundStyle.js', 'export const ATOMIC_TILE_TYPES = new Set([');
+const atomScarti = diff(atomPhp, atomJs);
+(function copieLocali(dir) {
+  for (const f of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, f.name);
+    if (f.isDirectory()) { copieLocali(p); continue; }
+    if (!/\.(js|vue)$/.test(f.name) || p.endsWith('useBackgroundStyle.js')) continue;
+    if (/ATOMIC_TILES?\s*=\s*new Set\(\[/.test(fs.readFileSync(p, 'utf8'))) atomScarti.push('copia locale: ' + path.relative(ROOT, p));
+  }
+})(path.join(ROOT, 'src'));
+violazioni['atomiche-elenco'] = atomScarti.map((x) => ({ file: 'elenco', type: '', key: String(x), label: '' }));
+RULES.push({ id: 'atomiche-elenco', titolo: 'Tile atomiche: elenco PHP = JS, e nel JS un solo elenco' });
+
+// ─── controlli fantasma: offerti dall'inspector, mai letti dal renderer ─────
+// «Un controllo che non fa niente è peggio di un controllo che manca.» Cinque
+// famiglie ricorrenti, ricalcolate dal codice. Il renderer di riferimento è il
+// PHP: è lui che disegna sia il sito sia il canvas del builder (iframe).
+// Le soglie di partenza sono il debito censito il giorno in cui la regola è nata:
+// possono solo scendere, tile per tile.
+function matchParen(src, i) {
+  let depth = 0, str = null;
+  for (let j = i; j < src.length; j++) {
+    const c = src[j];
+    if (str) { if (c === BS) { j++; continue; } if (c === str) str = null; continue; }
+    if (c === "'" || c === '"' || c === '`') { str = c; continue; }
+    if (c === '(') depth++;
+    else if (c === ')') { depth--; if (depth === 0) return j; }
+  }
+  return -1;
+}
+const leggeChiave = (php, k) => new RegExp("\\[\\s*'" + k + "'\\s*\\]").test(php);
+const presetSrc = fs.readFileSync(path.join(ROOT, 'src/config/tilePresets.js'), 'utf8');
+const presetBody = presetSrc.slice(presetSrc.indexOf('export const TILE_PRESETS = {'));
+const tipiConPreset = new Set([...presetBody.matchAll(/\n {2}['"]?([a-z0-9_-]+)['"]?\s*:\s*[{A-Z]/g)].map((x) => x[1]));
+const fantasmi = { preset: [], hover: [], dispositivo: [], bordo: [], effettiTesto: [] };
+for (const f of fs.readdirSync(ELEMENTS).filter((x) => x.endsWith('.js') && !x.startsWith('_'))) {
+  const src = fs.readFileSync(path.join(ELEMENTS, f), 'utf8');
+  const tipo = (src.match(/type:\s*'([^']+)'/) || [])[1];
+  const php = phpPerTipo[tipo];
+  if (!tipo || php === undefined) continue;
+  const nome = f.replace(/\.js$/, '');
+  // 1. «Stile» (preset): serve una voce in TILE_PRESETS o un renderer che lo legga
+  if (/key:\s*'preset'/.test(src) && !tipiConPreset.has(tipo) && !leggeChiave(php, 'preset')) {
+    fantasmi.preset.push({ file: nome, type: 'select', key: 'preset', label: '' });
+  }
+  // 2. toggle Normale/Hover: la chiave hover deve arrivare al renderer
+  for (let i = src.indexOf('withHover('); i >= 0; i = src.indexOf('withHover(', i + 1)) {
+    const fine = matchParen(src, i + 'withHover'.length);
+    const call = src.slice(i, fine + 1);
+    const key = (call.match(/key:\s*'([a-z0-9_]+)'/) || [])[1];
+    if (!key) continue;
+    const hk = (call.match(/hoverKey:\s*'([a-z0-9_]+)'/) || [])[1] || key + '_hover';
+    const inMappa = /build_hover_css/.test(php) && new RegExp("'" + key + "'\\s*=>").test(php);
+    if (!php.includes(hk) && !inMappa) fantasmi.hover.push({ file: nome, type: 'hover', key: hk, label: '' });
+  }
+  // 3. selettore del dispositivo (`responsive: true`): i valori per tablet e
+  //    telefono devono essere letti (a mano o con css_per_dispositivo())
+  for (const obj of allObjects(src)) {
+    const km = obj.match(/^\{\s*key:\s*'([a-z0-9_]+)'/);
+    if (!km || !/responsive:\s*true/.test(obj)) continue;
+    const k = km[1];
+    const letto = leggePerDispositivo(php, k) || new RegExp("css_per_dispositivo\\(\\s*\\$\\w+\\s*,\\s*'" + k + "'").test(php);
+    if (!letto) fantasmi.dispositivo.push({ file: nome, type: 'disp.', key: k, label: '' });
+  }
+  // 4. «Bordo» condiviso: la chiave del bordo deve essere letta
+  for (let i = src.indexOf('borderFields('); i >= 0; i = src.indexOf('borderFields(', i + 1)) {
+    if (/function\s+$/.test(src.slice(Math.max(0, i - 9), i))) continue;
+    const call = src.slice(i, matchParen(src, i + 'borderFields'.length) + 1);
+    const k = (call.match(/key:\s*'([a-z0-9_]+)'/) || [])[1] || 'border';
+    if (!leggeChiave(php, k)) fantasmi.bordo.push({ file: nome, type: 'border', key: k, label: '' });
+  }
+  // 5. «Effetti testo» condivisi: il renderer deve usare Olobuild_Text_Effects
+  if (/textEffectsFields\(/.test(src) && !/Olobuild_Text_Effects|tfx_/.test(php)) {
+    fantasmi.effettiTesto.push({ file: nome, type: 'text-fx', key: 'text_effect', label: '' });
+  }
+}
+violazioni['fantasma-preset'] = fantasmi.preset;
+RULES.push({ id: 'fantasma-preset', titolo: 'Il menu «Stile» (preset) ha preset registrati o un renderer che lo legge' });
+violazioni['fantasma-hover'] = fantasmi.hover;
+RULES.push({ id: 'fantasma-hover', titolo: 'Il toggle Normale/Hover di un campo scrive una chiave che il renderer legge' });
+violazioni['fantasma-dispositivo'] = fantasmi.dispositivo;
+RULES.push({ id: 'fantasma-dispositivo', titolo: 'Un campo con selettore del dispositivo è letto per tablet e telefono' });
+violazioni['fantasma-bordo'] = fantasmi.bordo;
+RULES.push({ id: 'fantasma-bordo', titolo: 'Il controllo «Bordo» condiviso è disegnato dal renderer' });
+violazioni['fantasma-effetti-testo'] = fantasmi.effettiTesto;
+RULES.push({ id: 'fantasma-effetti-testo', titolo: 'Gli «Effetti testo» condivisi sono resi dal renderer' });
+
 // ─── confronto con la baseline ──────────────────────────────────────────────
 const args = process.argv.slice(2);
 const conteggi = Object.fromEntries(Object.entries(violazioni).map(([k, v]) => [k, v.length]));

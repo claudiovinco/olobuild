@@ -184,6 +184,37 @@ abstract class Olobuild_Tile_Base {
     }
 
     /**
+     * Regole per dispositivo di un campo `responsive: true` dell'inspector, che
+     * salva `<chiave>_tablet_landscape`, `_tablet`, `_mobile_landscape`, `_mobile`.
+     * Una media query per ogni dispositivo che ha un valore, dalla più larga alla
+     * più stretta: a parità di selettore vince l'ultima, cioè il dispositivo più
+     * piccolo — la stessa cascata del canvas (useResponsiveValue.js).
+     * Senza questo il selettore del dispositivo accanto al campo salvava valori
+     * che nessuno leggeva. Soglie standard (come section-header).
+     *
+     * @param array    $s        Settings della tile.
+     * @param string   $key      Chiave base (es. 'alignment').
+     * @param string   $selector Selettore CSS (già sicuro: classe generata dalla tile).
+     * @param callable $decl     Valore salvato → dichiarazioni CSS ('' = nessuna).
+     * @return string CSS senza <style>, '' se nessun dispositivo ha un valore.
+     */
+    protected function css_per_dispositivo( $s, $key, $selector, $decl ) {
+        $soglie = [ 'tablet_landscape' => 1200, 'tablet' => 960, 'mobile_landscape' => 640, 'mobile' => 480 ];
+        $css    = '';
+        foreach ( $soglie as $dispositivo => $px ) {
+            $v = $s[ $key . '_' . $dispositivo ] ?? '';
+            if ( $v === '' || $v === null ) {
+                continue;
+            }
+            $d = (string) call_user_func( $decl, $v );
+            if ( $d !== '' ) {
+                $css .= '@media (max-width:' . $px . 'px){' . $selector . '{' . $d . '}}';
+            }
+        }
+        return $css;
+    }
+
+    /**
      * Convert a color (hex, rgb, rgba) to "r,g,b" triplet for use inside rgba().
      * V3.26.0 — shared helper used by audacious preset extra CSS.
      *

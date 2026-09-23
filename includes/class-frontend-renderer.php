@@ -756,17 +756,54 @@ class Olobuild_Frontend_Renderer {
     /**
      * Tile che applicano lo «Stile tipografico» da sé, a un elemento preciso.
      * Per tutte le altre la classe `olo-typo-<id>` sul wrapper porta lo stile a
-     * ogni testo: qui no, perché la tile ha testi con un ruolo proprio — la
-     * Section Header lo applica al solo titolo, e l'occhiello resta in mono
-     * maiuscolo invece di diventare una copia del titolo.
-     * Gemello JS: STILE_TIPOGRAFICO_PROPRIO in GridCell.vue (l'audit li confronta).
+     * ogni testo: qui no, perché la tile decide cosa prendere dallo stile e cosa
+     * tenere di suo. Section Header e Statstrip lo applicano al solo titolo /
+     * valore; badge, pulsante e barra in basso ne prendono la famiglia (il
+     * pulsante anche il peso) ma tengono maiuscolo e spaziatura propri; headline
+     * e finder lo applicano ai propri elementi.
+     * ⚠️ Con la classe sul wrapper le regole arrivavano allo <span> del testo e
+     * scavalcavano quei valori: i 102 badge e i 35 pulsanti OLOX avevano perso
+     * maiuscolo e spaziatura (1.4.457→465).
+     * Gemello JS: STILE_TIPOGRAFICO_PROPRIO in GridCell.vue (l'audit li confronta,
+     * e controlla che ogni tile dell'elenco legga davvero typography_preset).
      *
      * @param string $type Slug della tile.
      * @return bool
      */
     private static function tile_stile_tipografico_proprio( $type ) {
-        static $elenco = [ 'section-header' ];
+        static $elenco = [ 'section-header', 'statstrip', 'badge', 'button', 'bottombar', 'finder', 'headline' ];
         return in_array( (string) $type, $elenco, true );
+    }
+
+    /**
+     * Stile del CONTENITORE di una tile atomica (badge, pulsante, icona, divisore,
+     * spaziatore, interruttore). Il wrapper resta trasparente e senza cornice:
+     * sfondo, raggio, bordo, effetti bordo, ombra e filtro sfondo si tolgono in ogni
+     * stato (anche hover) e per ogni dispositivo, prima di passare lo stile agli
+     * helper del wrapper. Prima si toglievano solo i valori base, e un'ombra o un
+     * bordo impostati in hover o per il telefono disegnavano ancora un rettangolo
+     * attorno al vuoto. Margini, padding, dimensioni, trasformazioni, opacità,
+     * ombra del testo e maschera restano: agiscono davvero.
+     * Gemello inspector: styleFieldsBase() non mostra quei controlli alle atomiche.
+     *
+     * @param array $style Stile del nodo.
+     * @return array
+     */
+    private static function stile_contenitore_atomico( array $style ) {
+        $pulisci = static function ( array $s ) {
+            foreach ( array_keys( $s ) as $k ) {
+                $base = preg_replace( '/_(widescreen|tablet_landscape|tablet|mobile_landscape|mobile)$/', '', (string) $k );
+                if ( preg_match( '/^(bg|bg_color|border|border_radius|border_hover|border_color|border_width|border_style|border_effect.*|shadow.*|box_shadow_.*|backdrop_.*)$/', $base ) ) {
+                    unset( $s[ $k ] );
+                }
+            }
+            return $s;
+        };
+        $out = $pulisci( $style );
+        if ( isset( $style['hover'] ) && is_array( $style['hover'] ) ) {
+            $out['hover'] = $pulisci( $style['hover'] );
+        }
+        return $out;
     }
 
     private function render_element_node( $node, $manager, $template_id, &$hover_css_rules, &$tile_counter ) {
@@ -957,14 +994,10 @@ class Olobuild_Frontend_Renderer {
         // Helper unificato: margin/padding/border-radius/border/opacity/flex/transform/
         // box-shadow inline/text-shadow/backdrop/overflow/dimensions/mask/custom_css/position.
         // `apply_box_shadow=false` per element trasparenti — usano drop-shadow filter sotto.
-        // v1.0.55 — Per atomic: passiamo style filtrato (no border_radius/border/shadow), così
-        // l'helper applica solo margin/padding/dimensions/flex/transform/etc. al wrapper.
-        $box_style = $style;
-        if ( $is_atomic_tile ) {
-            unset( $box_style['border_radius'], $box_style['border'], $box_style['shadow'],
-                   $box_style['box_shadow_h'], $box_style['box_shadow_v'], $box_style['box_shadow_blur'],
-                   $box_style['box_shadow_spread'], $box_style['box_shadow_color'], $box_style['box_shadow_inset'] );
-        }
+        // v1.0.55 — Per atomic: passiamo style filtrato, così gli helper applicano al
+        // wrapper solo margin/padding/dimensions/flex/transform/etc. Lo stesso stile
+        // filtrato va anche a hover e per-dispositivo, più sotto.
+        $box_style = $is_atomic_tile ? self::stile_contenitore_atomico( $style ) : $style;
         $this->apply_common_box_styles(
             $inline_styles, $box_style, $settings, $advanced,
             [ 'apply_box_shadow' => (bool) $has_bg_any && ! $is_atomic_tile ]
@@ -1060,8 +1093,8 @@ class Olobuild_Frontend_Renderer {
         $id_attr = ' id="' . esc_attr( $css_id ) . '"';
 
         // Hover CSS rules
-        $this->collect_hover_css( $style, $css_id, $is_fullwidth, $hover_css_rules, $advanced );
-        $this->collect_responsive_css( $style, $css_id, $advanced );
+        $this->collect_hover_css( $box_style, $css_id, $is_fullwidth, $hover_css_rules, $advanced );
+        $this->collect_responsive_css( $box_style, $css_id, $advanced );
 
         // Custom CSS per elemento (campo settings.custom_css)
         $this->collect_custom_css( $settings, $css_id, $hover_css_rules );

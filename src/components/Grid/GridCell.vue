@@ -58,7 +58,7 @@ import { t } from '@/i18n';
 import { useBuilderStore } from '@/stores/builder';
 import { useTilesStore } from '@/stores/tiles';
 import TileBase from '@/components/Tiles/TileBase.vue';
-import { useBackgroundStyle } from '@/composables/useBackgroundStyle';
+import { useBackgroundStyle, ATOMIC_TILE_TYPES } from '@/composables/useBackgroundStyle';
 import { getShadowValue, getDropShadowValue } from '@/composables/useShadowMap';
 
 // Gemello JS dell'elenco in trait-olobuild-renderer-css.php: le tile che montano
@@ -79,7 +79,7 @@ const OMBRA_SUL_WRAPPER = new Set([
 // tile che applicano lo «Stile tipografico» da sé, a un elemento preciso, e
 // che quindi non ricevono la classe olo-typo-* sul wrapper.
 const STILE_TIPOGRAFICO_PROPRIO = new Set([
-  'section-header',
+  'section-header', 'statstrip', 'badge', 'button', 'bottombar', 'finder', 'headline',
 ]);
 import { rv } from '@/composables/useResponsiveValue';
 import { useTileActions } from '@/composables/useTileActions';
@@ -369,8 +369,12 @@ const cellStyle = computed(() => {
   // Text color (usato dai preset stilistici: i discendenti ereditano)
   if (s.text_color) style.color = s.text_color;
 
+  // Tile atomica: il contenitore resta senza cornice — niente raggio, bordo, ombra né
+  // filtro sfondo, in nessuno stato (gemello di stile_contenitore_atomico() in PHP).
+  const atomica = ATOMIC_TILE_TYPES.has(props.tile.type);
+
   // Border radius (responsive) — il check !== undefined gestisce anche il valore 0
-  const brVal = rv(s, 'border_radius', undefined, mode);
+  const brVal = atomica ? undefined : rv(s, 'border_radius', undefined, mode);
   if (brVal !== undefined && brVal !== null && brVal !== '') {
     if (typeof brVal === 'object') {
       style.borderRadius = `${brVal.tl||0}px ${brVal.tr||0}px ${brVal.br||0}px ${brVal.bl||0}px`;
@@ -380,7 +384,7 @@ const cellStyle = computed(() => {
   }
 
   // Border
-  if (s.border_width && parseInt(s.border_width) > 0) {
+  if (!atomica && s.border_width && parseInt(s.border_width) > 0) {
     style.borderWidth = `${s.border_width}px`;
     style.borderStyle = s.border_style || 'solid';
     style.borderColor = s.border_color || '#374151';
@@ -388,7 +392,7 @@ const cellStyle = computed(() => {
 
   // Shadow — box-shadow solo per elementi con sfondo (segue border-radius del div).
   // Per elementi trasparenti, l'ombra va applicata sul div contenuto (contentFilterStyle).
-  if (s.shadow && s.shadow !== 'none') {
+  if (!atomica && s.shadow && s.shadow !== 'none') {
     const cellHasBg = !!(bgInlineStyle.value?.backgroundColor || hasBgImage.value);
     if (cellHasBg) {
       const sv = getShadowValue(s);
@@ -482,7 +486,7 @@ const cellStyle = computed(() => {
   if (parseInt(bdBlur)) bdParts.push(`blur(${parseInt(bdBlur)}px)`);
   if (bdBr != null && bdBr !== '' && parseInt(bdBr) !== 100) bdParts.push(`brightness(${parseInt(bdBr)}%)`);
   if (bdSat != null && bdSat !== '' && parseInt(bdSat) !== 100) bdParts.push(`saturate(${parseInt(bdSat)}%)`);
-  if (bdParts.length) {
+  if (!atomica && bdParts.length) {
     style.backdropFilter = bdParts.join(' ');
     style.WebkitBackdropFilter = style.backdropFilter;
   }
@@ -569,6 +573,7 @@ const cellStyle = computed(() => {
 const contentFilterStyle = computed(() => {
   const s = props.tile.style || {};
   if (!s.shadow || s.shadow === 'none') return null;
+  if (ATOMIC_TILE_TYPES.has(props.tile.type)) return null; // il PHP non la disegna
   const cellHasBg = !!(bgInlineStyle.value?.backgroundColor || hasBgImage.value);
   if (cellHasBg) return null; // box-shadow è già sul div esterno
   const ds = getDropShadowValue(s);
@@ -585,12 +590,14 @@ const hoverCssTag = computed(() => {
   const trans = s.transition || { duration: 300, easing: 'ease' };
   const sel = `[data-tile-id="${props.tile.id}"]`;
   const isFullWidth = !!s.full_width;
-  // Collect hover declarations
+  // Collect hover declarations — per le atomiche niente sfondo/bordo/raggio/ombra
+  // del contenitore neanche in hover (come stile_contenitore_atomico() in PHP).
+  const atomica = ATOMIC_TILE_TYPES.has(props.tile.type);
   const hoverDecls = [];
-  if (hover.bg_color) hoverDecls.push(`background-color: ${hover.bg_color}`);
+  if (!atomica && hover.bg_color) hoverDecls.push(`background-color: ${hover.bg_color}`);
   if (hover.text_color) hoverDecls.push(`color: ${hover.text_color}`);
-  if (hover.border_color) hoverDecls.push(`border-color: ${hover.border_color}`);
-  if (hover.border_radius != null && hover.border_radius !== '') {
+  if (!atomica && hover.border_color) hoverDecls.push(`border-color: ${hover.border_color}`);
+  if (!atomica && hover.border_radius != null && hover.border_radius !== '') {
     const br = hover.border_radius;
     if (typeof br === 'object') {
       hoverDecls.push(`border-radius: ${br.tl||0}px ${br.tr||0}px ${br.br||0}px ${br.bl||0}px`);
@@ -598,7 +605,7 @@ const hoverCssTag = computed(() => {
       hoverDecls.push(`border-radius: ${br}px`);
     }
   }
-  if (hover.shadow) {
+  if (!atomica && hover.shadow) {
     const val = getShadowValue(hover, 'shadow');
     if (val && val !== 'none') hoverDecls.push(`box-shadow: ${val}`);
     else if (hover.shadow === 'none') hoverDecls.push('box-shadow: none');

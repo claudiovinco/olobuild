@@ -51,7 +51,8 @@ padding/margine → `type:'spacing'` (4 lati) · raggio → `type:'border-radius
 (key-mapped, chiavi invariate) · font → `type:'font-family'` · icone → `type:'icon'`.
 
 - **Controllo di regressione**: `node scripts/audit-ui-standard.mjs` (con `--list` il dettaglio).
-  Le soglie stanno in `scripts/ui-standard-baseline.json` e sono a **0**: non vanno alzate.
+  Le soglie stanno in `scripts/ui-standard-baseline.json` e sono a **0**: non vanno alzate. Fanno
+  eccezione le `fantasma-*`, nate col debito censito (23 set 2026): possono solo scendere.
 - **Ponte legacy** (`src/config/fieldLegacyBridge.js`): un controllo composito montato su una
   tile che salva ancora chiavi piatte si INIZIALIZZA da quelle (`legacyKeys`) e le tiene in
   SINCRONIA a ogni modifica → nessuna migrazione dati, i renderer non ancora aggiornati
@@ -82,6 +83,27 @@ padding/margine → `type:'spacing'` (4 lati) · raggio → `type:'border-radius
   che segue la sagoma visibile. Un box-shadow lì disegnerebbe un rettangolo attorno al vuoto.
 - ⚠️ Gli helper (`spacing_css`, `sides_css`, `border_radius`) **restituiscono già l'unità**:
   aggiungere `px` nel template produce `16pxpx` e la dichiarazione viene scartata in silenzio.
+
+### Zone di controllo del tab Stile (standard, pilota: badge 1.4.467)
+- **Due blocchi, con intestazione**: **Elemento** (ciò che la tile disegna, `settings`) e
+  **Contenitore** (il riquadro della tile nella griglia, `style`). Raggio, Bordo, Ombra esistono in
+  entrambi: senza l'intestazione non si capiva su cosa agissero.
+- **Zone dell'elemento**, sempre in quest'ordine e con questi nomi, solo quelle che servono:
+  **Aspetto** (variante/preset, colori, ombra) · **Testo** (stile tipografico + un controllo
+  tipografia per testo) · **Forma** (raggio, padding, dimensioni) · **Disposizione** (allineamento,
+  colonne, gap). Tile a più parti (section header, card): una zona per parte (Occhiello, Titolo…),
+  poi Disposizione.
+- **Tile atomiche** (badge, pulsante, icona, divisore, spaziatore, interruttore): contenitore sempre
+  trasparente → nell'inspector solo Layout, Spazi (margine/padding) ed Effetti senza ombra né filtro
+  sfondo; il PHP scarta il resto in ogni stato e dispositivo (`stile_contenitore_atomico()`). Elenco
+  unico: `ATOMIC_TILE_TYPES` (useBackgroundStyle.js) = `$ATOMIC_TILES` (audit `atomiche-elenco`).
+- **Niente controlli fantasma** (audit `fantasma-*`): menu «Stile» senza preset registrati, toggle
+  Hover su chiavi mai lette, selettore del dispositivo su valori mai letti (in PHP:
+  `css_per_dispositivo()` di Olobuild_Tile_Base), «Bordo» ed «Effetti testo» condivisi mai resi. Per
+  ognuno si sceglie: farlo funzionare (PHP + gemello Vue) o toglierlo. Un campo che dipende da un
+  altro si nasconde quando non agisce (`condition`: «Posizione icona» senza icona).
+- **Il nome dice cosa fa**: «Colore sfondo» sul badge era il colore da cui la variante ricava la
+  pillola (Soft = 12% di sfondo, 22% di bordo), non lo sfondo — e ha tratto in inganno chi l'ha usato.
 
 ## Regole
 - Tailwind prefix: `mb-` (evita conflitti con WordPress)

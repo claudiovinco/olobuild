@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, shadowField, withHover } from './_shared.js';
+import { shadowField } from './_shared.js';
 import { t } from '@/i18n';
 
 /**
@@ -7,7 +7,13 @@ import { t } from '@/i18n';
  * pensato per indicatori "Online / In diretta / Novità" (vedi Try home).
  *
  *   fields[]      → testo, icona, posizione icona, Stato live (toggle + colore onda)
- *   styleFields[] → preset, variante, colori, tipografia, forma (radius), padding, ombra, bordo
+ *   styleFields[] → zone standard dell'elemento: Aspetto · Testo · Forma · Disposizione
+ *
+ * Ogni controllo è letto da class-badge-tile.php e dal gemello BadgeTile.vue.
+ * Tolti perché non facevano niente: «Stile» (nessun preset registrato per il
+ * badge in tilePresets.js), «Effetti testo» (mai resi), «Bordo» ed «Effetti bordo»
+ * (il bordo lo decide la variante), l'hover del raggio (mai letto). Le chiavi già
+ * salvate restano nei template: semplicemente nessuno le mostra più.
  *
  * Chiavi nuove additive: badge_live (bool), badge_live_color ('success'|'primary').
  */
@@ -19,7 +25,6 @@ export default {
   defaults: {
     bg: { type: 'none' },
     typography_preset: '',
-    preset: 'custom',
     text: t('Online'),
     icon: '',
     icon_position: 'before',
@@ -32,6 +37,7 @@ export default {
     variant: 'soft',
     bg_color: '',
     text_color: '',
+    font_family: '',
     font_size: '13',
     font_weight: '600',
     text_transform: 'none',
@@ -41,22 +47,17 @@ export default {
     padding_x: 13,
     alignment: 'left',
     shadow: 'none',
-    ...textEffectsDefaults,
-    text_effect_target: 'text',
-    border: { ...borderDefault },
-    border_hover: { ...borderHoverDefault },
-    border_hover_duration: 300,
-    ...borderEffectDefaults,
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'text', label: t('Testo'), type: 'text' },
     { key: 'icon', label: t('Icona (opzionale)'), type: 'icon' },
+    // Senza icona la posizione non ha niente da spostare.
     { key: 'icon_position', label: t('Posizione icona'), type: 'select', options: [
       { value: 'before', label: t('Prima del testo') },
       { value: 'after', label: t('Dopo il testo') },
-    ]},
+    ], condition: { field: 'icon', op: 'notEmpty' } },
 
     { type: 'separator', label: t('Badge aggiuntivi') },
     { key: 'extra_items', label: t('Altre etichette'), type: 'content-items', itemLabel: t('Etichetta'),
@@ -78,40 +79,37 @@ export default {
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
+  // Zone standard dell'elemento, sempre in quest'ordine: Aspetto · Testo · Forma ·
+  // Disposizione. Sotto, il tab mostra il «Contenitore» (solo spazi ed effetti:
+  // il badge è una tile atomica).
   styleFields: [
-    { type: 'separator', label: t('Preset stilistico') },
-    { key: 'preset', label: t('Stile'), type: 'select', options: [
-      { value: 'modern-soft',     label: t('Modern Soft') },
-      { value: 'minimal-line',    label: t('Minimal Line') },
-      { value: 'magazine-bold',   label: t('Magazine Bold') },
-      { value: 'solid-pill',      label: t('Solid Pill') },
-      { value: 'glass-frosted',   label: t('Glass Frosted') },
-      { value: 'neon-glow',       label: t('Neon Glow') },
-      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
-      { value: 'sticker-fun',     label: t('Sticker Fun') },
-      { value: 'retro-terminal',  label: t('Retro Terminal') },
-      { value: 'tilt-3d',         label: t('3D Tilt') },
-      { value: 'custom',          label: t('Personalizzato') },
-    ]},
+    { type: 'separator', label: t('Aspetto') },
     { key: 'variant', label: t('Variante'), type: 'select', options: [
       { value: 'soft',    label: t('Soft (tinta tenue)') },
       { value: 'solid',   label: t('Pieno') },
       { value: 'outline', label: t('Contorno') },
       { value: 'light',   label: t('Chiaro') },
     ]},
-    { key: 'alignment', label: t('Allineamento'), type: 'select', responsive: true, options: [
-      { value: 'left',   label: t('Sinistra') },
-      { value: 'center', label: t('Centro') },
-      { value: 'right',  label: t('Destra') },
-    ]},
+    // Il colore da cui la variante ricava la pillola, NON lo sfondo: con Soft lo
+    // sfondo è il 12% di questo colore e il bordo il 22%. Chiamato «Colore sfondo»
+    // traeva in inganno (sulla home di try 14 badge lo usavano come sfondo finale).
+    // Con «Chiaro» la variante non lo usa: il campo sparisce.
+    { key: 'bg_color', label: t('Colore'), type: 'color',
+      description: t('Soft: sfondo al 12% e bordo al 22% · Pieno: sfondo · Contorno: bordo e testo.'),
+      condition: { field: 'variant', op: 'neq', value: 'light' } },
+    ...shadowField,
 
-    ...textEffectsFields([ { value: 'text', label: t('Solo Testo') } ]),
-
-    { type: 'separator', label: t('Tipografia') },
+    { type: 'separator', label: t('Testo') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    // Dallo stile tipografico il badge prende la sola FAMIGLIA: peso, maiuscolo
+    // e spaziatura restano suoi (i badge OLOX: mono dallo stile, maiuscolo
+    // spaziato dal badge). A stile collegato si nasconde quindi solo «Famiglia».
     { type: 'typography', label: t('Testo'),
+      linkedPresetKey: 'typography_preset',
+      linkedPresetGoverns: ['family'],
       responsiveKeys: [],
       keys: {
+        family:        'font_family',
         size:          'font_size',
         weight:        'font_weight',
         transform:     'text_transform',
@@ -121,15 +119,16 @@ export default {
       sizeMin: 10, sizeMax: 28,
     },
 
-    { type: 'separator', label: t('Colori') },
-    { key: 'bg_color', label: t('Colore sfondo'), type: 'color' },
-
     { type: 'separator', label: t('Forma') },
-    withHover({ key: 'badge_radius', label: t('Raggio'), type: 'border-radius' }),
+    { key: 'badge_radius', label: t('Raggio'), type: 'border-radius' },
     { key: 'padding', label: t('Padding'), type: 'spacing', min: 0, max: 60,
       legacyKeys: { y: 'padding_y', x: 'padding_x' } },
 
-    ...shadowField,
-    ...borderFields(),
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'alignment', label: t('Allineamento'), type: 'select', responsive: true, options: [
+      { value: 'left',   label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right',  label: t('Destra') },
+    ]},
   ],
 };

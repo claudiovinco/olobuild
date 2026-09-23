@@ -19,9 +19,11 @@
 
 <script setup>
 import { computed } from 'vue';
+import { useBuilderStore } from '@/stores/builder';
+import { rv } from '@/composables/useResponsiveValue';
 import { toSpacingCss } from '@/composables/useBoxModel';
 import iconsSvg from '../ProSlider/uikitIconsSvg.js';
-import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
+import { resolveColor, resolveFontFamily, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -59,11 +61,25 @@ function radiusCss(r) {
 const extraItems = computed(() =>
   (Array.isArray(s.value.extra_items) ? s.value.extra_items : []).filter((it) => (it.text || '').trim()));
 
-const wrapStyle = computed(() => ({
-  display: 'flex',
-  justifyContent: s.value.alignment === 'center' ? 'center' : s.value.alignment === 'right' ? 'flex-end' : 'flex-start',
-  ...(extraItems.value.length ? { flexWrap: 'wrap', gap: '8px' } : {}),
-}));
+// Allineamento per dispositivo — gemello di css_per_dispositivo() nel PHP.
+const builderStore = useBuilderStore();
+const wrapStyle = computed(() => {
+  const a = rv(props.settings, 'alignment', s.value.alignment, builderStore.viewMode);
+  return {
+    display: 'flex',
+    justifyContent: a === 'center' ? 'center' : a === 'right' ? 'flex-end' : 'flex-start',
+    ...(extraItems.value.length ? { flexWrap: 'wrap', gap: '8px' } : {}),
+  };
+});
+
+// Famiglia: dallo stile tipografico se collegato (il badge ne prende solo la
+// famiglia), altrimenti quella scelta — gemello di class-badge-tile.php.
+function famigliaBadge() {
+  const tp = String(s.value.typography_preset || '').replace(/[^A-Za-z0-9_-]/g, '');
+  if (tp) return { fontFamily: `var(--olo-font-${tp}-family)` };
+  const ff = resolveFontFamily(s.value.font_family || '');
+  return ff && ff !== 'inherit' ? { fontFamily: ff } : {};
+}
 
 // Stile pill per un accent dato (riusato per i badge aggiuntivi con colore
 // per-item: lì il testo segue l'accent dell'item, non il text_color della tile).
@@ -76,6 +92,7 @@ function pillStyle(acc, ownText = true) {
     gap: '8px',
     padding: toSpacingCss(s.value.padding, { legacy: { y: s.value.padding_y, x: s.value.padding_x }, fallback: [7, 13, 7, 13] }),
     borderRadius: radiusCss(s.value.badge_radius),
+    ...famigliaBadge(),
     fontSize: `${parseInt(s.value.font_size) || 13}px`,
     fontWeight: s.value.font_weight || '600',
     textTransform: s.value.text_transform || 'none',

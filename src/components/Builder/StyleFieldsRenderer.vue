@@ -1,5 +1,13 @@
 <template>
   <div class="mb-space-y-3">
+    <!-- Due blocchi, sempre in quest'ordine e con questi nomi: ELEMENTO (ciò che la
+         tile disegna, tile.settings) e CONTENITORE (il riquadro della tile nella
+         griglia, tile.style). Stessa parola, due oggetti diversi — «Raggio», «Bordo»,
+         «Ombra» esistono in entrambi — e senza l'intestazione non si capiva su cosa
+         agisse ciascuno. Le intestazioni compaiono solo quando i blocchi sono due. -->
+    <div v-if="dueBlocchi && tileStyleSections.length" class="olo-sfr-blocco">
+      <span class="olo-sfr-blocco-titolo">{{ t('Elemento') }}</span>
+    </div>
     <!-- Tile-specific style sections (es. tipografia hero, colori CTA) — letti/scritti su tile.settings -->
     <template v-for="section in tileStyleSections" :key="'tilesty-' + section.idx">
       <CollapseSection
@@ -42,6 +50,12 @@
       </template>
     </template>
 
+    <div v-if="dueBlocchi && groupedSections.length" class="olo-sfr-blocco">
+      <span class="olo-sfr-blocco-titolo">{{ t('Contenitore') }}</span>
+      <span class="olo-sfr-blocco-nota">{{ atomica
+        ? t('Lo spazio attorno all\'elemento nella griglia. Sfondo, bordo e ombra si impostano sull\'elemento, qui sopra.')
+        : t('Il riquadro che contiene la tile nella griglia.') }}</span>
+    </div>
     <!-- Wrapper style sections (universali — letti/scritti su tile.style) -->
     <template v-for="section in groupedSections" :key="'sec-' + section.idx">
       <CollapseSection
@@ -62,11 +76,13 @@
             <StyleBoxStack
               v-else-if="field.type === 'box-stack'"
               :tileStyle="tileStyle"
+              :soloSpazi="!!field.soloSpazi"
               @update="$emit('update', $event)"
             />
             <StyleEffectsStack
               v-else-if="field.type === 'effects-stack'"
               :tileStyle="tileStyle"
+              :atomica="!!field.atomica"
               @update="$emit('update', $event)"
             />
             <StyleShadowBlock
@@ -121,11 +137,13 @@
             <StyleBoxStack
               v-else-if="field.type === 'box-stack'"
               :tileStyle="tileStyle"
+              :soloSpazi="!!field.soloSpazi"
               @update="$emit('update', $event)"
             />
             <StyleEffectsStack
               v-else-if="field.type === 'effects-stack'"
               :tileStyle="tileStyle"
+              :atomica="!!field.atomica"
               @update="$emit('update', $event)"
             />
             <StyleShadowBlock
@@ -179,6 +197,7 @@ import FieldTextShadow from './fields/FieldTextShadow.vue';
 import FieldBackdropFilter from './fields/FieldBackdropFilter.vue';
 import FieldBorderLegacy from './fields/FieldBorderLegacy.vue';
 import { t } from '@/i18n';
+import { ATOMIC_TILE_TYPES } from '@/composables/useBackgroundStyle';
 import { evaluateCondition } from '@/utils/fieldCondition';
 import { normalizeSearchQuery, fieldMatchesSearch, sectionLabelMatchesSearch } from '@/utils/inspectorSearch.js';
 
@@ -280,6 +299,12 @@ const tileStyleSections = computed(() => {
   return filterSectionsBySearch(groupBySeparator(fields));
 });
 
+// Blocchi «Elemento» / «Contenitore»: servono quando la tile ha stili propri. Per
+// sezione, riga e colonna l'elemento È il contenitore: un blocco solo, senza titoli.
+const STRUTTURALI = new Set(['section', 'row', 'column', 'inner-columns']);
+const atomica   = computed(() => ATOMIC_TILE_TYPES.has(props.tileType));
+const dueBlocchi = computed(() => !STRUTTURALI.has(props.tileType) && (props.tileFields || []).length > 0);
+
 function emitMain(key, value) {
   emit('update', { type: 'main', key, value });
 }
@@ -338,3 +363,36 @@ function onMultiKeyHoverUpdate(field, newObj) {
   }
 }
 </script>
+
+<style scoped>
+/* Intestazione di blocco (Elemento / Contenitore): piu' in alto nella gerarchia
+   delle sezioni, quindi a sinistra, accento chrome e filetto, non un'altra card. */
+.olo-sfr-blocco {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px 4px 0;
+}
+.olo-sfr-blocco-titolo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--olo-ui-accent, #e8622a);
+}
+.olo-sfr-blocco-titolo::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.25;
+}
+.olo-sfr-blocco-nota {
+  font-size: 12px;
+  line-height: 1.45;
+  color: #6b7280;
+}
+</style>

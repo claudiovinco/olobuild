@@ -19,7 +19,6 @@ class Olobuild_Badge_Tile extends Olobuild_Tile_Base {
     protected $icon     = 'dashicons-tag';
     protected $category = 'text';
     protected $defaults = [
-        'preset'          => 'custom',
         'text'            => 'Online',
         'icon'            => '',
         'icon_position'   => 'before',
@@ -28,6 +27,7 @@ class Olobuild_Badge_Tile extends Olobuild_Tile_Base {
         'variant'         => 'soft',
         'bg_color'        => '',
         'text_color'      => '',
+        'font_family'     => '',
         'font_size'       => '13',
         'font_weight'     => '600',
         'text_transform'  => 'none',
@@ -36,14 +36,6 @@ class Olobuild_Badge_Tile extends Olobuild_Tile_Base {
         'padding_y'       => 7,
         'padding_x'       => 13,
         'alignment'       => 'left',
-        'border'                  => [],
-        'border_hover'            => [],
-        'border_hover_duration'   => 300,
-        'border_effect'           => 'none',
-        'border_effect_intensity' => 'medium',
-        'border_effect_color2'    => '',
-        'border_effect_angle'     => 135,
-        'border_effect_speed'     => 4,
     ];
 
     public function get_controls() {
@@ -103,15 +95,28 @@ class Olobuild_Badge_Tile extends Olobuild_Tile_Base {
         };
         list( $bg, $border, $color ) = $variant_css( $accent );
 
-        $justify = $s['alignment'] === 'center' ? 'center' : ( $s['alignment'] === 'right' ? 'flex-end' : 'flex-start' );
+        // Allineamento, anche per dispositivo: il campo è `responsive: true` e prima
+        // i valori per tablet e telefono venivano salvati senza che nessuno li leggesse.
+        $giustifica = static function ( $a ) {
+            return $a === 'center' ? 'center' : ( $a === 'right' ? 'flex-end' : ( $a === 'left' ? 'flex-start' : '' ) );
+        };
+        $justify  = $giustifica( $s['alignment'] ) ?: 'flex-start';
+        $css_disp = $this->css_per_dispositivo( $s, 'alignment', '.' . $uid, static function ( $a ) use ( $giustifica ) {
+            $j = $giustifica( $a );
+            // !important: il valore del desktop è inline sul contenitore del badge.
+            return $j !== '' ? 'justify-content:' . $j . '!important' : '';
+        } );
 
         // Set tipografico globale (stesso pattern di headline): family dal set,
-        // gli altri assi restano quelli espliciti della tile.
+        // gli altri assi restano quelli espliciti della tile. Senza set vale la
+        // famiglia scelta nel controllo (minimo garantito); a set collegato
+        // l'inspector quella riga non la mostra.
         $tp = sanitize_text_field( $s['typography_preset'] ?? '' );
         if ( $tp !== '' && ! preg_match( '/^[A-Za-z0-9_-]+$/', $tp ) ) {
             $tp = '';
         }
-        $tp_css = $tp ? "font-family:var(--olo-font-{$tp}-family);" : '';
+        $ff     = $tp ? '' : $this->resolve_font_family( (string) ( $s['font_family'] ?? '' ) );
+        $tp_css = $tp ? "font-family:var(--olo-font-{$tp}-family);" : ( $ff && $ff !== 'inherit' ? 'font-family:' . $ff . ';' : '' );
 
         $base_css = 'display:inline-flex;align-items:center;gap:8px;'
             . 'padding:' . $pad_css . ';'
@@ -153,6 +158,9 @@ class Olobuild_Badge_Tile extends Olobuild_Tile_Base {
         $text = esc_html( wp_strip_all_tags( $s['text'] ?? '' ) );
 
         ob_start();
+        if ( $css_disp !== '' ) {
+            echo '<style>' . $css_disp . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- media query built by css_per_dispositivo(): selector = internally generated uid class, declaration from a fixed whitelist (flex-start/center/flex-end)
+        }
         ?>
         <div class="olo-badge-wrap <?php echo esc_attr( $uid ); ?>" style="display:flex;justify-content:<?php echo esc_attr( $justify ); ?>;<?php echo esc_attr( $wrap_extra ); ?>">
             <span class="olo-badge" style="<?php echo esc_attr( $badge_css ); ?>">

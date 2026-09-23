@@ -1417,6 +1417,7 @@ import GlobalTypographyPanel from './GlobalTypographyPanel.vue';
 import { useGlobalPanels } from '@/composables/useGlobalPanels';
 import HeightModeSelector from '../ProSlider/HeightModeSelector.vue';
 import { TILE_PRESETS, BASE_THEME_PRESETS } from '@/config/tilePresets';
+import { ATOMIC_TILE_TYPES } from '@/composables/useBackgroundStyle';
 import { MEGAMENU_TEMPLATES } from '@/config/megamenuTemplates';
 
 // Pannello degli stili tipografici globali, aperto dai campi che li usano.
@@ -2956,8 +2957,9 @@ function applyTilePresetTheme(tile, presetId) {
   // al wrapper esterno. Sono elementi inline/atomici dentro una colonna molto più grande, e
   // replicare bg crea un container enorme colorato attorno al piccolo elemento (rotto visivamente).
   // Solo le tile "card-like" (panel, content, hero, ecc.) traggono beneficio dalla replica.
-  const ATOMIC_TILES = new Set(['button', 'icon', 'divider', 'spacer', 'togglebtn']);
-  if (ATOMIC_TILES.has(tile.type)) {
+  // Elenco unico delle atomiche (useBackgroundStyle.js, gemello PHP $ATOMIC_TILES):
+  // qui ne esisteva una copia a cinque, senza il badge.
+  if (ATOMIC_TILE_TYPES.has(tile.type)) {
     // v1.0.53 — CLEANUP per tile atomiche: rimuovi bg/radius/shadow dal wrapper esistente
     // (template salvati prima del v1.0.52 potevano avere il wrapper colorato dal preset
     // precedente — questo li pulisce non appena l'utente cambia preset).

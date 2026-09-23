@@ -1,4 +1,5 @@
 import { withHover, borderEffectFields } from './_shared.js';
+import { ATOMIC_TILE_TYPES } from '@/composables/useBackgroundStyle';
 import { t } from '@/i18n';
 
 /**
@@ -26,6 +27,13 @@ import { t } from '@/i18n';
  */
 
 export function styleFieldsBase(tileType) {
+  // Tile ATOMICHE (badge, pulsante, icona, divisore, spaziatore, interruttore): il
+  // contenitore resta SEMPRE trasparente e senza cornice. Sfondo, raggio, bordo, effetti
+  // bordo, ombra e filtro sfondo si impostano sull'elemento, nella parte alta del tab;
+  // quelli del contenitore il renderer li scarta (stile_contenitore_atomico() in PHP,
+  // ATOMIC_TILE_TYPES nel canvas). Mostrarli voleva dire offrire controlli che non
+  // fanno niente: si sceglieva uno sfondo per il badge e non compariva.
+  const atomica = ATOMIC_TILE_TYPES.has(tileType);
   return [
     // ─── LAYOUT ─────────────────────────────────────────────────
     // Pannello unico compatto (StyleLayoutStack): larghezza piena (+descrizione), larghezza,
@@ -43,20 +51,25 @@ export function styleFieldsBase(tileType) {
     // Sostituisce le sezioni separate "Spaziatura" e "Border radius" con un solo
     // pannello impilato (design handoff boxcontrol). Stesse chiavi salvate:
     // margin_*/padding_* (per-breakpoint) e border_radius (+ style.hover.border_radius).
-    { type: 'separator', label: t('Spazi & Bordi') },
-    { type: 'box-stack', searchTerms: ['margine', 'margin', 'padding', 'spaziatura', 'spacing', 'raggio', 'radius', 'bordo', 'border', 'angoli', 'arrotonda'] },
+    // Tile atomica: solo margine e padding (`soloSpazi`), raggio e bordo stanno sull'elemento.
+    { type: 'separator', label: atomica ? t('Spazi') : t('Spazi & Bordi') },
+    { type: 'box-stack', soloSpazi: atomica, searchTerms: atomica
+      ? ['margine', 'margin', 'padding', 'spaziatura', 'spacing']
+      : ['margine', 'margin', 'padding', 'spaziatura', 'spacing', 'raggio', 'radius', 'bordo', 'border', 'angoli', 'arrotonda'] },
 
-    // ─── SFONDO ─────────────────────────────────────────────────
-    { type: 'separator', label: t('Sfondo') },
-    { key: 'bg', label: t('Sfondo'), type: 'background', showParallax: true, searchTerms: ['background', 'sfondo', 'colore', 'immagine', 'gradiente', 'video', 'parallax'] },
+    ...(atomica ? [] : [
+      // ─── SFONDO ─────────────────────────────────────────────────
+      { type: 'separator', label: t('Sfondo') },
+      { key: 'bg', label: t('Sfondo'), type: 'background', showParallax: true, searchTerms: ['background', 'sfondo', 'colore', 'immagine', 'gradiente', 'video', 'parallax'] },
 
-    // ─── EFFETTI BORDO ──────────────────────────────────────────
-    // Il CONTROLLO bordo (style.border / border_<bp> per-device / border_hover) ora vive
-    // DENTRO il pannello "Spazi & Bordi" (box-stack), accanto a margine/padding/raggio.
-    // Qui resta solo la sezione "Effetti bordo" (neon/gradiente), che opera su border_effect_*
-    // e legge style.border come colore base.
-    // PHP frontend: build_wrapper_border_css (desktop, inline) + collect_responsive_css (border_<bp>).
-    ...borderEffectFields(),
+      // ─── EFFETTI BORDO ──────────────────────────────────────────
+      // Il CONTROLLO bordo (style.border / border_<bp> per-device / border_hover) ora vive
+      // DENTRO il pannello "Spazi & Bordi" (box-stack), accanto a margine/padding/raggio.
+      // Qui resta solo la sezione "Effetti bordo" (neon/gradiente), che opera su border_effect_*
+      // e legge style.border come colore base.
+      // PHP frontend: build_wrapper_border_css (desktop, inline) + collect_responsive_css (border_<bp>).
+      ...borderEffectFields(),
+    ]),
 
     // ─── EFFETTI ────────────────────────────────────────────────
     // Pannello unico compatto (StyleEffectsStack): ombra, opacità, trasformazione, ombra
@@ -64,8 +77,11 @@ export function styleFieldsBase(tileType) {
     // anteprima effetti dal vivo. Chiavi salvate INVARIATE e allineate al renderer PHP
     // (collect_hover_css): shadow/shadow_custom, opacity, transform (oggetto; hover su chiavi
     // piatte transform_*), text_shadow_*, backdrop_*, mask (non hoverable).
+    // Tile atomica (`atomica`): niente Ombra e niente Filtro sfondo del contenitore.
     { type: 'separator', label: t('Effetti') },
-    { type: 'effects-stack', searchTerms: ['ombra', 'shadow', 'opacità', 'opacity', 'trasformazione', 'transform', 'scala', 'scale', 'rotazione', 'rotate', 'filtro', 'filter', 'backdrop', 'blur', 'glassmorphism', 'maschera', 'mask', 'effetti'] },
+    { type: 'effects-stack', atomica, searchTerms: atomica
+      ? ['opacità', 'opacity', 'trasformazione', 'transform', 'scala', 'scale', 'rotazione', 'rotate', 'ombra testo', 'text shadow', 'maschera', 'mask', 'effetti']
+      : ['ombra', 'shadow', 'opacità', 'opacity', 'trasformazione', 'transform', 'scala', 'scale', 'rotazione', 'rotate', 'filtro', 'filter', 'backdrop', 'blur', 'glassmorphism', 'maschera', 'mask', 'effetti'] },
 
     // ─── BLEND MODE WRAPPER ─────────────────────────────────────
     // mix-blend-mode sul wrapper del tile/contenitore: utile per nav/heading che

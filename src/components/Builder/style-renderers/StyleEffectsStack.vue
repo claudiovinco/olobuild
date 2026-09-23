@@ -21,8 +21,9 @@
       </div>
     </div>
 
-    <!-- OMBRA -->
-    <div class="olo-es-group">
+    <!-- OMBRA — non per le tile atomiche (`atomica`): l'ombra del contenitore verrebbe
+         scartata, quella vera si imposta sull'elemento. -->
+    <div v-if="!atomica" class="olo-es-group">
       <span class="olo-es-gtitle">{{ t('Ombra') }}</span>
       <div class="olo-es-scale" role="radiogroup" :aria-label="t('Livello ombra')">
         <button v-for="opt in shadowScale" :key="opt.v" type="button"
@@ -128,8 +129,9 @@
       <FieldColor :modelValue="String(sv('text_shadow_color', '') || '#000000')" @update:modelValue="setv('text_shadow_color', $event)" />
     </div>
 
-    <!-- FILTRO SFONDO -->
-    <div class="olo-es-group">
+    <!-- FILTRO SFONDO — non per le tile atomiche: sfocherebbe il rettangolo attorno
+         all'elemento, che per regola resta trasparente. -->
+    <div v-if="!atomica" class="olo-es-group">
       <span class="olo-es-gtitle">{{ t('Filtro sfondo · glassmorphism') }}<span v-if="bp !== 'desktop'" class="olo-es-gbp">{{ bpLabel }}</span></span>
       <div class="olo-es-sliderrow">
         <span class="olo-es-lab">{{ t('Sfoc.') }}</span>
@@ -207,6 +209,8 @@ import { t } from '@/i18n';
 
 const props = defineProps({
   tileStyle: { type: Object, required: true },
+  // Tile atomica (styleFieldsBase → `atomica`): niente Ombra né Filtro sfondo.
+  atomica: { type: Boolean, default: false },
 });
 const emit = defineEmits(['update']);
 
@@ -355,7 +359,7 @@ const previewStyle = computed(() => {
   const bdb = num(sv('backdrop_blur', 0), 0);
   const bdbr = num(sv('backdrop_brightness', 100), 100);
   const bds = num(sv('backdrop_saturate', 100), 100);
-  const backdrop = (bdb || bdbr !== 100 || bds !== 100) ? `blur(${bdb}px) brightness(${bdbr}%) saturate(${bds}%)` : 'none';
+  const backdrop = !props.atomica && (bdb || bdbr !== 100 || bds !== 100) ? `blur(${bdb}px) brightness(${bdbr}%) saturate(${bds}%)` : 'none';
 
   return {
     opacity: num(sv('opacity', 100), 100) / 100,

@@ -46,8 +46,9 @@
       </div>
     </div>
 
-    <!-- Raggio (Normale / Hover) -->
-    <div class="olo-bs-field">
+    <!-- Raggio (Normale / Hover) — non per le tile atomiche (`soloSpazi`): il loro
+         contenitore resta senza cornice, raggio e bordo stanno sull'elemento. -->
+    <div v-if="!soloSpazi" class="olo-bs-field">
       <div class="olo-bs-head">
         <span class="olo-bs-ic" v-html="ICONS.radius"></span>
         <span class="olo-bs-name">{{ t('Raggio') }}</span>
@@ -69,7 +70,7 @@
     </div>
 
     <!-- Bordo (Normale per-device / Hover globale) -->
-    <div class="olo-bs-field">
+    <div v-if="!soloSpazi" class="olo-bs-field">
       <div class="olo-bs-head">
         <span class="olo-bs-ic" v-html="ICONS.border"></span>
         <span class="olo-bs-name">{{ t('Bordo') }}</span>
@@ -103,6 +104,8 @@ import { t } from '@/i18n';
 
 const props = defineProps({
   tileStyle: { type: Object, required: true },
+  // Tile atomica: solo margine e padding (styleFieldsBase → `soloSpazi`).
+  soloSpazi: { type: Boolean, default: false },
 });
 const emit = defineEmits(['update']);
 
