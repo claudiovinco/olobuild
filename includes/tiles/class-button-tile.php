@@ -25,6 +25,7 @@ class Olobuild_Button_Tile extends Olobuild_Tile_Base {
         'padding_y'          => '14',
         'font_size'          => '16',
         'font_weight'        => '600',
+        'font_family'        => '',
         'letter_spacing'     => '0',
         'text_transform'     => 'none',
         'icon'               => '',
@@ -147,6 +148,14 @@ class Olobuild_Button_Tile extends Olobuild_Tile_Base {
             $tp_css .= "letter-spacing: var(--olo-font-{$tp}-letter-spacing);\n";
         }
 
+        // Minimo garantito: la famiglia scelta nel controllo, quando non c'è uno
+        // stile collegato (con lo stile la famiglia viene da lì, e l'inspector
+        // quella riga non la mostra). Calcolata QUI: subito sotto $tp diventa il padding.
+        $btn_ff = $tp ? '' : $this->resolve_font_family( (string) ( $s['font_family'] ?? '' ) );
+        if ( $btn_ff === 'inherit' ) {
+            $btn_ff = '';
+        }
+
         // Padding: tile_padding (standard spacing object) with backward compat for padding_x/padding_y
         $tp = $s['tile_padding'] ?? null;
         if ( is_array( $tp ) ) {
@@ -244,6 +253,7 @@ class Olobuild_Button_Tile extends Olobuild_Tile_Base {
                 border-radius: <?php echo $rad_css; ?>;
                 font-size: <?php echo $fs; ?>px;
                 font-weight: <?php echo $font_weight; ?>;
+                <?php if ( $btn_ff ) : // resolve_font_family() ammette solo lettere, cifre, spazi, virgole, apici, trattini e var(): niente < > { } ; — in un <style> esc_attr() romperebbe gli apici ?>font-family: <?php echo $btn_ff; ?>;<?php endif; ?>
                 <?php if ( $tp_css ) : echo $tp_css; endif; ?>
                 text-decoration: none !important;
                 text-align: center;

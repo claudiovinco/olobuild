@@ -8,6 +8,7 @@
 <script setup>
 import { computed, ref, watch, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
+import { resolveFontFamily, fontWeightCss } from '@/composables/oloTileDefaults';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -28,6 +29,10 @@ const defaults = {
   max_width_ch: 20,
   lead_size: 16.5,
   lead_max_width_ch: 52,
+  text_font_family: '',
+  text_font_weight: '',
+  lead_font_family: '',
+  lead_font_weight: '',
 
   // KIT standard OLObuild — additivi, no-op coi default (sfondo none, ombra none, bordo 0)
   bg: { type: 'none' },
@@ -127,27 +132,47 @@ const rootStyle = computed(() => {
   return base;
 });
 
-const pStyle = computed(() => ({
-  fontFamily: DISP,
-  fontWeight: 600,
-  fontSize: `clamp(${sizeMin.value}px,4.2vw,${sizeMax.value}px)`,
-  lineHeight: 1.04,
-  letterSpacing: '-.01em',
-  textTransform: 'none',
-  maxWidth: maxCh.value + 'ch',
-  margin: 0,
-  color: txt.value,
-}));
+// Stile tipografico collegato: governa famiglia, peso, interlinea, spaziatura
+// e maiuscole di entrambi i testi (classe olo-typo-* sul wrapper, GridCell).
+// Qui gli stili sono INLINE e batterebbero la classe: a stile collegato quelle
+// proprietà non si scrivono — gemello di class-scrubtext-tile.php.
+const stileCollegato = computed(() => !!String(s.value.typography_preset || '').trim());
 
-const leadStyle = computed(() => ({
-  fontFamily: SANS,
-  fontWeight: 400,
-  fontSize: leadSize.value + 'px',
-  lineHeight: 1.65,
-  color: leadCol.value,
-  maxWidth: leadCh.value + 'ch',
-  margin: '28px 0 0',
-}));
+const pStyle = computed(() => {
+  const st = {
+    fontSize: `clamp(${sizeMin.value}px,4.2vw,${sizeMax.value}px)`,
+    maxWidth: maxCh.value + 'ch',
+    margin: 0,
+    color: txt.value,
+  };
+  if (stileCollegato.value) return st;
+  const ff = resolveFontFamily(s.value.text_font_family || '');
+  return {
+    ...st,
+    fontFamily: ff && ff !== 'inherit' ? ff : DISP,
+    fontWeight: fontWeightCss(s.value.text_font_weight) || 600,
+    lineHeight: 1.04,
+    letterSpacing: '-.01em',
+    textTransform: 'none',
+  };
+});
+
+const leadStyle = computed(() => {
+  const st = {
+    fontSize: leadSize.value + 'px',
+    color: leadCol.value,
+    maxWidth: leadCh.value + 'ch',
+    margin: '28px 0 0',
+  };
+  if (stileCollegato.value) return st;
+  const ff = resolveFontFamily(s.value.lead_font_family || '');
+  return {
+    ...st,
+    fontFamily: ff && ff !== 'inherit' ? ff : SANS,
+    fontWeight: fontWeightCss(s.value.lead_font_weight) || 400,
+    lineHeight: 1.65,
+  };
+});
 
 // ── Signature: scrub parola-per-parola allo scroll (parità con runtime PHP) ──
 const textEl = ref(null);

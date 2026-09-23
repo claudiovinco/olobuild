@@ -18,7 +18,7 @@
 <script setup>
 import { computed } from 'vue';
 import { toSpacingCss } from '@/composables/useBoxModel';
-import { resolveFontFamily } from '@/composables/oloTileDefaults';
+import { resolveFontFamily, fontWeightCss } from '@/composables/oloTileDefaults';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -31,7 +31,7 @@ const defaults = {
   ],
   columns: 4, band_padding_y: 40, show_dividers: true, divider_color: '#d7d1c2', band_border: true,
   value_font_family: 'heading', value_color: '#18181a', value_size: 48, value_weight: '600',
-  label_color: '#8d8a82', label_size: 13, label_uppercase: false, align: 'left', mono_font_family: '',
+  label_color: '#8d8a82', label_size: 13, label_uppercase: false, label_weight: '', align: 'left', mono_font_family: '',
 };
 
 const HEADING = "var(--olo-font-family-heading, 'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
@@ -61,14 +61,35 @@ const cellStyle = computed(() => ({
   alignItems: align.value === 'center' ? 'center' : 'stretch',
   '--olo-ss-line': line.value,
 }));
-const valueStyle = computed(() => ({
-  fontFamily: vfam.value, fontWeight: s.value.value_weight || '600', fontSize: (s.value.value_size || 48) + 'px',
-  lineHeight: 1, letterSpacing: '-0.02em', color: s.value.value_color || '#18181a',
-}));
-const labelStyle = computed(() => ({
-  fontFamily: mono.value, fontSize: (s.value.label_size || 13) + 'px', color: s.value.label_color || '#8d8a82', lineHeight: 1.4,
-  textTransform: s.value.label_uppercase ? 'uppercase' : 'none', letterSpacing: s.value.label_uppercase ? '0.06em' : 'normal',
-}));
+// Stile tipografico: vale per il solo VALORE (gemello di class-statstrip-tile.php;
+// il wrapper non riceve la classe olo-typo-*). I valori della tile restano
+// come riserva nel var().
+const valueStyle = computed(() => {
+  const fw = /^\d+$/.test(String(s.value.value_weight)) ? String(s.value.value_weight) : '600';
+  const tp = String(s.value.typography_preset || '').toLowerCase().replace(/[^a-z0-9_-]/g, '');
+  const st = {
+    fontFamily: vfam.value, fontWeight: fw, fontSize: (s.value.value_size || 48) + 'px',
+    lineHeight: 1, letterSpacing: '-0.02em', color: s.value.value_color || '#18181a',
+  };
+  if (tp) {
+    st.fontFamily = `var(--olo-font-${tp}-family, ${vfam.value})`;
+    st.fontWeight = `var(--olo-font-${tp}-weight, ${fw})`;
+    st.lineHeight = `var(--olo-font-${tp}-line-height, 1)`;
+    st.letterSpacing = `var(--olo-font-${tp}-letter-spacing, -0.02em)`;
+    st.textTransform = `var(--olo-font-${tp}-transform, none)`;
+  }
+  return st;
+});
+const labelStyle = computed(() => {
+  const st = {
+    fontFamily: mono.value, fontSize: (s.value.label_size || 13) + 'px', color: s.value.label_color || '#8d8a82', lineHeight: 1.4,
+    textTransform: s.value.label_uppercase ? 'uppercase' : 'none', letterSpacing: s.value.label_uppercase ? '0.06em' : 'normal',
+  };
+  // Minimo garantito: il peso dell'etichetta.
+  const lw = fontWeightCss(s.value.label_weight);
+  if (lw) st.fontWeight = lw;
+  return st;
+});
 </script>
 
 <style scoped>

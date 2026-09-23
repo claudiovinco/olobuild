@@ -35,6 +35,7 @@ export default {
     label_color: 'var(--olo-color-text-soft, #6b7280)',
     label_size: 13,
     label_uppercase: false,
+    label_weight: '',
 
     align: 'left',
     mono_font_family: '',
@@ -70,11 +71,17 @@ export default {
     { key: 'divider_color', label: t('Colore linee'),          type: 'color' },
 
     { type: 'separator', label: t('Valore') },
+    // Lo stile tipografico vale per il SOLO valore (l'etichetta resta in mono):
+    // a stile collegato il controllo sotto nasconde famiglia e peso.
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
-    { type: 'typography', label: t('Valore'), responsiveKeys: [], keys: { size: 'value_size', weight: 'value_weight', color: 'value_color', family: 'value_font_family' }, sizeMin: 20, sizeMax: 96 },
+    { type: 'typography', label: t('Valore'), responsiveKeys: [], linkedPresetKey: 'typography_preset',
+      keys: { family: 'value_font_family', size: 'value_size', weight: 'value_weight', color: 'value_color' }, sizeMin: 20, sizeMax: 96 },
 
     { type: 'separator', label: t('Etichetta') },
-    { key: 'mono_font_family', label: t('Font etichetta (vuoto = mono del tema)'), type: 'font-family' },
-    { type: 'typography', label: t('Etichetta'), responsiveKeys: [], keys: { size: 'label_size', color: 'label_color', uppercase: 'label_uppercase' }, sizeMin: 10, sizeMax: 22 },
+    // La famiglia dell'etichetta stava in un campo a parte («Font etichetta»):
+    // ora è nel controllo tipografia, chiave INVARIATA (mono_font_family, vuoto =
+    // mono del tema).
+    { type: 'typography', label: t('Etichetta'), responsiveKeys: [],
+      keys: { family: 'mono_font_family', size: 'label_size', weight: 'label_weight', color: 'label_color', uppercase: 'label_uppercase' }, sizeMin: 10, sizeMax: 22 },
   ],
 };

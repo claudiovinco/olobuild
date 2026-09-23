@@ -26,6 +26,8 @@ class Olobuild_Headline_Tile extends Olobuild_Tile_Base {
         'decoration'        => 'line',
         'decoration_color'  => '',
         'subtitle_color'    => '',
+        'subtitle_font_family' => '',
+        'subtitle_font_weight' => '',
         'text_stroke'       => '0',
         'text_stroke_color' => '',
         'text_shadow'       => '',
@@ -258,8 +260,15 @@ class Olobuild_Headline_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
 
             <?php if ( ! empty( $subtitle_text ) ) : ?>
-                <?php $sub_fs = absint( $s['subtitle_font_size'] ?? 0 ); ?>
-                <p class="olo-hl-subtitle<?php echo $s_tfx_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments escaped internally; font-size absint()-built; color via safe_color_css(); subtitle esc_html()'d above ?>" style="margin:12px 0 0;font-size:<?php echo $sub_fs > 0 ? $sub_fs . 'px' : '1em'; ?>;line-height:1.5;<?php if ( $sub_clr ) echo 'color:' . $sub_clr . ';'; ?>"<?php echo $s_tfx_data; ?>><?php echo $subtitle_text; ?></p>
+                <?php
+                $sub_fs = absint( $s['subtitle_font_size'] ?? 0 );
+                // Minimo garantito: famiglia e peso anche per il sottotitolo, scritti
+                // sul <p> stesso (il testo sta lì dentro, non in un figlio).
+                $sub_ff = $this->resolve_font_family( (string) ( $s['subtitle_font_family'] ?? '' ) );
+                $sub_fw = $this->font_weight_css( $s['subtitle_font_weight'] ?? '' );
+                $sub_typo = ( $sub_ff && $sub_ff !== 'inherit' ? 'font-family:' . $sub_ff . ';' : '' ) . ( $sub_fw !== '' ? 'font-weight:' . $sub_fw . ';' : '' );
+                ?>
+                <p class="olo-hl-subtitle<?php echo $s_tfx_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments escaped internally; font-size absint()-built; color via safe_color_css(); family via resolve_font_family() whitelist, weight via font_weight_css(), both esc_attr()'d; subtitle esc_html()'d above ?>" style="margin:12px 0 0;font-size:<?php echo $sub_fs > 0 ? $sub_fs . 'px' : '1em'; ?>;line-height:1.5;<?php if ( $sub_clr ) echo 'color:' . $sub_clr . ';'; ?><?php echo esc_attr( $sub_typo ); ?>"<?php echo $s_tfx_data; ?>><?php echo $subtitle_text; ?></p>
             <?php endif; ?>
         </div>
         <?php

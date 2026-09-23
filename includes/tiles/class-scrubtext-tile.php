@@ -29,6 +29,10 @@ class Olobuild_ScrubText_Tile extends Olobuild_Tile_Base {
         'size_max'          => 56,
         'max_width_ch'      => 20,
         'lead_size'         => 16.5,
+        'text_font_family'  => '',
+        'text_font_weight'  => '',
+        'lead_font_family'  => '',
+        'lead_font_weight'  => '',
         'lead_max_width_ch' => 52,
 
         // KIT standard OLObuild — additivi, no-op coi default (sfondo none, ombra none, bordo 0)
@@ -82,6 +86,18 @@ class Olobuild_ScrubText_Tile extends Olobuild_Tile_Base {
         $disp = "var(--olo-font-family-heading, 'Big Shoulders Display', sans-serif)";
         $sans = "var(--olo-font-family, 'Hanken Grotesk', sans-serif)";
 
+        // Minimo garantito: famiglia e peso di manifesto e lead. Con uno stile
+        // tipografico collegato governa lo stile (la classe olo-typo-* sul wrapper
+        // vince su queste regole): i valori locali non si usano, e l'inspector
+        // quelle righe non le mostra.
+        $tp_on  = sanitize_key( (string) ( $s['typography_preset'] ?? '' ) ) !== '';
+        $p_fam  = $tp_on ? '' : $this->resolve_font_family( (string) ( $s['text_font_family'] ?? '' ) );
+        $p_fam  = ( $p_fam && $p_fam !== 'inherit' ) ? $p_fam : $disp;
+        $p_fw   = ( $tp_on ? '' : $this->font_weight_css( $s['text_font_weight'] ?? '' ) ) ?: '600';
+        $l_fam  = $tp_on ? '' : $this->resolve_font_family( (string) ( $s['lead_font_family'] ?? '' ) );
+        $l_fam  = ( $l_fam && $l_fam !== 'inherit' ) ? $l_fam : $sans;
+        $l_fw   = ( $tp_on ? '' : $this->font_weight_css( $s['lead_font_weight'] ?? '' ) ) ?: '400';
+
         // ── KIT standard OLObuild: sfondo completo + ombra + bordo sul contenitore ──
         $bg_obj  = $s['bg'] ?? null;
         $bg_decl = '';
@@ -104,9 +120,9 @@ class Olobuild_ScrubText_Tile extends Olobuild_Tile_Base {
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist, sizes via floatval() with positive fallbacks, opacity clamped 0-1, fixed font-stack literals, background/shadow/border via the Olobuild_CSS_Builder/Olobuild_Tile_Base shared helpers (sanitized internally); $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?>{font-family:<?php echo $sans; ?>;<?php echo $box_decl; ?>}
-            .<?php echo $uid; ?> .ost-p{font-family:<?php echo $disp; ?>;font-weight:600;font-size:clamp(<?php echo $smin; ?>px,4.2vw,<?php echo $smax; ?>px);line-height:1.04;letter-spacing:-.01em;text-transform:none;max-width:<?php echo $mch; ?>ch;margin:0;color:<?php echo $txt; ?>;}
+            .<?php echo $uid; ?> .ost-p{font-family:<?php echo $p_fam; ?>;font-weight:<?php echo $p_fw; ?>;font-size:clamp(<?php echo $smin; ?>px,4.2vw,<?php echo $smax; ?>px);line-height:1.04;letter-spacing:-.01em;text-transform:none;max-width:<?php echo $mch; ?>ch;margin:0;color:<?php echo $txt; ?>;}
             .<?php echo $uid; ?> .ost-p em{font-style:normal;color:<?php echo $acc; ?>;}
-            .<?php echo $uid; ?> .ost-lead{font-family:<?php echo $sans; ?>;font-weight:400;font-size:<?php echo $lsz; ?>px;line-height:1.65;color:<?php echo $lcol; ?>;max-width:<?php echo $lch; ?>ch;margin:28px 0 0;}
+            .<?php echo $uid; ?> .ost-lead{font-family:<?php echo $l_fam; ?>;font-weight:<?php echo $l_fw; ?>;font-size:<?php echo $lsz; ?>px;line-height:1.65;color:<?php echo $lcol; ?>;max-width:<?php echo $lch; ?>ch;margin:28px 0 0;}
             .<?php echo $uid; ?> .st-w{opacity:<?php echo $dim; ?>;transition:opacity .3s ease;}
             .<?php echo $uid; ?> .st-w.on{opacity:1;}
             @media(prefers-reduced-motion:reduce){.<?php echo $uid; ?> .st-w{opacity:1;}}

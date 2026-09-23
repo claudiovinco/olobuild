@@ -482,6 +482,7 @@
         :letterSpacingUnit="field.letterSpacingUnit || 'px'"
         :presetKey="field.presetKey || ''"
         :linkedPresetKey="field.linkedPresetKey || ''"
+        :linkedPresetGoverns="field.linkedPresetGoverns || []"
         :sizeMin="field.sizeMin"
         :sizeMax="field.sizeMax"
         :sizeStep="field.sizeStep"

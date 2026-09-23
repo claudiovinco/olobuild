@@ -35,7 +35,7 @@
 import { computed } from 'vue';
 import { useBuilderStore } from '@/stores/builder';
 import { rv } from '@/composables/useResponsiveValue';
-import { resolveColor, resolveFontFamily, TOKENS, buildDefaults } from '@/composables/oloTileDefaults';
+import { resolveColor, resolveFontFamily, fontWeightCss, TOKENS, buildDefaults } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -105,6 +105,17 @@ const headingStyle = computed(() => {
     fontWeight: 'bold',
   };
 
+  // Stile tipografico: la tile lo applica da sé al titolo (gemello di
+  // class-headline-tile.php); il wrapper non riceve la classe olo-typo-*.
+  const tp = String(s.value.typography_preset || '').toLowerCase().replace(/[^a-z0-9_-]/g, '');
+  if (tp) {
+    st.fontFamily = `var(--olo-font-${tp}-family)`;
+    st.fontWeight = `var(--olo-font-${tp}-weight)`;
+    st.textTransform = `var(--olo-font-${tp}-transform)`;
+    st.lineHeight = `var(--olo-font-${tp}-line-height)`;
+    st.letterSpacing = `var(--olo-font-${tp}-letter-spacing)`;
+  }
+
   // Italic
   if (s.value.heading_italic) {
     st.fontStyle = 'italic';
@@ -133,6 +144,13 @@ const headingStyle = computed(() => {
   const hf = resolveFontFamily(s.value.heading_font, FONT_LEGACY);
   if (hf && hf !== 'inherit') {
     st.fontFamily = hf;
+  }
+
+  // Dimensione esplicita: scavalca il preset uk-heading-* (come il PHP).
+  const hfs = parseInt(s.value.heading_font_size, 10) || 0;
+  if (hfs > 0) {
+    st.fontSize = hfs + 'px';
+    st.lineHeight = 1.2;
   }
 
   // Gradient wins over heading_color — token-first (primario → accento brand)
@@ -175,11 +193,22 @@ const headingStyle = computed(() => {
   return st;
 });
 
-const subtitleStyle = computed(() => ({
-  margin: '12px 0 0',
-  // sottotitolo "curato": grigio soft di default (token-first)
-  color: resolveColor(s.value.subtitle_color, TOKENS.textSoft),
-}));
+const subtitleStyle = computed(() => {
+  const st = {
+    margin: '12px 0 0',
+    // Gemello di class-headline-tile.php: corpo esplicito o 1em, interlinea 1.5.
+    fontSize: (parseInt(s.value.subtitle_font_size, 10) || 0) > 0 ? parseInt(s.value.subtitle_font_size, 10) + 'px' : '1em',
+    lineHeight: 1.5,
+    // sottotitolo "curato": grigio soft di default (token-first)
+    color: resolveColor(s.value.subtitle_color, TOKENS.textSoft),
+  };
+  // Minimo garantito: famiglia e peso anche per il sottotitolo.
+  const ff = resolveFontFamily(s.value.subtitle_font_family || '');
+  if (ff && ff !== 'inherit') st.fontFamily = ff;
+  const fw = fontWeightCss(s.value.subtitle_font_weight);
+  if (fw) st.fontWeight = fw;
+  return st;
+});
 
 const alignJustify = computed(() => {
   const m = { left: 'flex-start', center: 'center', right: 'flex-end' };

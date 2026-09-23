@@ -33,6 +33,7 @@ class Olobuild_StatStrip_Tile extends Olobuild_Tile_Base {
         'label_color'       => 'var(--olo-color-text-soft, #8d8a82)',
         'label_size'        => 13,
         'label_uppercase'   => false,
+        'label_weight'      => '',
         'align'             => 'left',
         'mono_font_family'  => '',
     ];
@@ -62,6 +63,21 @@ class Olobuild_StatStrip_Tile extends Olobuild_Tile_Base {
         ) );
         $v_size  = max( 20, min( 96, absint( $s['value_size'] ) ) );
         $v_wt    = preg_match( '/^\d+$/', (string) $s['value_weight'] ) ? $s['value_weight'] : '600';
+        // Stile tipografico: vale per il VALORE, non per l'etichetta (che resta in
+        // mono). Famiglia, peso, interlinea, spaziatura e maiuscole dal set; quelli
+        // della tile restano come riserva se il set viene cancellato. Il wrapper
+        // non riceve la classe olo-typo-* (tile_stile_tipografico_proprio()).
+        $tp      = sanitize_key( (string) ( $s['typography_preset'] ?? '' ) );
+        // Due pezzi, per tenere l'ordine storico delle dichiarazioni (la dimensione sta nel mezzo).
+        $v_head  = 'font-family:' . $vfam . ';font-weight:' . $v_wt . ';';
+        $v_tail  = 'line-height:1;letter-spacing:-0.02em;';
+        if ( $tp !== '' ) {
+            $v_head = "font-family:var(--olo-font-{$tp}-family, {$vfam});font-weight:var(--olo-font-{$tp}-weight, {$v_wt});";
+            $v_tail = "line-height:var(--olo-font-{$tp}-line-height, 1);letter-spacing:var(--olo-font-{$tp}-letter-spacing, -0.02em);"
+                . "text-transform:var(--olo-font-{$tp}-transform, none);";
+        }
+        // Minimo garantito: il peso dell'etichetta (prima ereditava quello della pagina).
+        $l_wt    = $this->font_weight_css( $s['label_weight'] ?? '' );
         $l_size  = max( 10, min( 22, absint( $s['label_size'] ) ) );
 
         $line    = $this->safe_color_css( $s['divider_color'] ) ?: '#d7d1c2';
@@ -90,8 +106,8 @@ class Olobuild_StatStrip_Tile extends Olobuild_Tile_Base {
                     $label = $it['label'] ?? '';
                 ?>
                     <div class="olo-statstrip__cell" style="<?php echo esc_attr( $cell_style ); ?>">
-                        <div class="olo-statstrip__value" style="font-family:<?php echo esc_attr( $vfam ); ?>;font-weight:<?php echo esc_attr( $v_wt ); ?>;font-size:<?php echo (int) $v_size; ?>px;line-height:1;letter-spacing:-0.02em;color:<?php echo esc_attr( $v_color ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.value'; ?>"><?php echo esc_html( $value ); ?></div>
-                        <div class="olo-statstrip__label" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $l_size; ?>px;color:<?php echo esc_attr( $l_color ); ?>;line-height:1.4;<?php echo $upper ? 'text-transform:uppercase;letter-spacing:0.06em;' : ''; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.label'; ?>"><?php echo esc_html( $label ); ?></div>
+                        <div class="olo-statstrip__value" style="<?php echo esc_attr( $v_head ); ?>font-size:<?php echo (int) $v_size; ?>px;<?php echo esc_attr( $v_tail ); ?>color:<?php echo esc_attr( $v_color ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.value'; ?>"><?php echo esc_html( $value ); ?></div>
+                        <div class="olo-statstrip__label" style="font-family:<?php echo esc_attr( $mono ); ?>;<?php echo $l_wt !== '' ? 'font-weight:' . esc_attr( $l_wt ) . ';' : ''; ?>font-size:<?php echo (int) $l_size; ?>px;color:<?php echo esc_attr( $l_color ); ?>;line-height:1.4;<?php echo $upper ? 'text-transform:uppercase;letter-spacing:0.06em;' : ''; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.label'; ?>"><?php echo esc_html( $label ); ?></div>
                     </div>
                 <?php endforeach; ?>
             </div>

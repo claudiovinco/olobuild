@@ -22,6 +22,8 @@
                      che il renderer legge davvero: l'audit (regola dispositivo-letto) lo verifica.
       linkedPresetKey chiave di uno «Stile tipografico» che, scelto, governa famiglia,
                      peso, maiuscole, interlinea e spaziatura: quelle righe si nascondono.
+      linkedPresetGoverns sottoinsieme delle proprietà governate, se la tile ne prende
+                     solo alcune (badge: ['family']; pulsante: ['family', 'weight']).
       sizeMin/Max/Step       bound degli scrubber di dimensione (NON chiavi)
       maxWidthMin/Max/Step   bound dello scrubber della misura di riga
 
@@ -138,7 +140,7 @@
                mostrano (non farebbero niente); qui si dice da dove vengono. -->
           <div v-if="presetCollegato" class="typo-linked">
             <p class="typo-linked-txt">
-              {{ presetGovernateTesto }} {{ t('vengono dallo stile') }}
+              {{ presetGovernateTesto }}
               <strong>«{{ presetCollegato.label }}»</strong><template v-if="presetDettaglio">: {{ presetDettaglio }}</template>.
             </p>
             <button
@@ -477,6 +479,11 @@ const props = defineProps({
   // corrispondenti allora non si mostrano — sarebbero controlli che non fanno
   // niente — e al loro posto compare una nota con il set e il modo di scollegarlo.
   linkedPresetKey: { type: String, default: '' },
+  // Quali proprietà lo stile governa DAVVERO per questo elemento (chiavi
+  // logiche). Vuoto = tutte quelle di un set. Il badge ne prende solo la
+  // famiglia, il pulsante famiglia e peso: nascondere anche maiuscolo e
+  // spaziatura vorrebbe dire nascondere controlli che funzionano.
+  linkedPresetGoverns: { type: Array, default: () => [] },
   // Chiavi che hanno un valore per tablet/telefono. Vuoto per default: il
   // selettore di dispositivo si mostra solo dove il renderer quei valori li legge
   // (su 131 controlli che lo offrivano, 128 li salvavano senza che nessuno li usasse).
@@ -651,32 +658,54 @@ const presetCollegato = computed(() => {
   return { id, label: set?.label || set?.name || id, set };
 });
 
+// Le proprietà che lo stile collegato governa per questo elemento.
+const governate = computed(() => {
+  const tutte = GOVERNATE.map(([k]) => k);
+  if (!props.linkedPresetGoverns?.length) return tutte;
+  const set = new Set(props.linkedPresetGoverns);
+  // 'transform' e 'uppercase' sono la stessa proprietà in due forme.
+  if (set.has('transform')) set.add('uppercase');
+  return tutte.filter(k => set.has(k));
+});
+
 function governata(logicalKey) {
-  return !!presetCollegato.value && GOVERNATE.some(([k]) => k === logicalKey);
+  return !!presetCollegato.value && governate.value.includes(logicalKey);
 }
 
-// «Famiglia, peso e interlinea» — solo le proprietà che QUESTO controllo ha.
+// «Famiglia, peso e interlinea» — solo le proprietà che QUESTO controllo ha
+// e che lo stile governa davvero.
+// Con una sola proprietà la frase vuole l'articolo e il singolare
+// («La famiglia viene dallo stile»), con più d'una l'elenco e il plurale.
+const ARTICOLO = { famiglia: 'La famiglia', peso: 'Il peso', maiuscole: 'Le maiuscole', interlinea: "L'interlinea", spaziatura: 'La spaziatura' };
 const presetGovernateTesto = computed(() => {
-  const nomi = [...new Set(GOVERNATE.filter(([k]) => props.keys?.[k]).map(([, n]) => t(n)))];
-  if (!nomi.length) return t('Le proprietà del carattere');
-  const testo = nomi.length === 1 ? nomi[0] : nomi.slice(0, -1).join(', ') + ' ' + t('e') + ' ' + nomi[nomi.length - 1];
-  return testo.charAt(0).toUpperCase() + testo.slice(1);
+  const nomi = [...new Set(GOVERNATE.filter(([k]) => props.keys?.[k] && governate.value.includes(k)).map(([, n]) => n))];
+  if (!nomi.length) return t('Il carattere viene dallo stile');
+  if (nomi.length === 1) {
+    return nomi[0] === 'maiuscole'
+      ? t('Le maiuscole vengono dallo stile')
+      : t(ARTICOLO[nomi[0]]) + ' ' + t('viene dallo stile');
+  }
+  const testo = nomi.slice(0, -1).map(n => t(n)).join(', ') + ' ' + t('e') + ' ' + t(nomi[nomi.length - 1]);
+  return testo.charAt(0).toUpperCase() + testo.slice(1) + ' ' + t('vengono dallo stile');
 });
 
 // "Montserrat · 700 · 1.3" — cosa si riceve davvero dal set.
 const presetDettaglio = computed(() => {
   const set = presetCollegato.value?.set;
   if (!set) return '';
+  // Solo i valori che lo stile dà DAVVERO a questo elemento: al badge arriva la
+  // sola famiglia, e scrivere anche peso e interlinea del set sarebbe falso.
+  const g = (k) => governate.value.includes(k);
   const out = [];
   const fam = resolveFontToken(set.family, stylesStore);
-  if (fam) out.push(fam.split(',')[0].replace(/['"]/g, '').trim());
-  if (set.weight) out.push(String(set.weight));
-  if (set.line_height) out.push(fmt(set.line_height));
-  if (set.transform && set.transform !== 'none') out.push(optionLabel(TRANSFORM_OPTIONS, set.transform));
+  if (g('family') && fam) out.push(fam.split(',')[0].replace(/['"]/g, '').trim());
+  if (g('weight') && set.weight) out.push(String(set.weight));
+  if (g('lineHeight') && set.line_height) out.push(fmt(set.line_height));
+  if (g('transform') && set.transform && set.transform !== 'none') out.push(optionLabel(TRANSFORM_OPTIONS, set.transform));
   const lsRaw = String(set.letter_spacing ?? '').trim();
   const ls = parseFloat(lsRaw);
   // Numero nudo = px (come lo scrive il CSS dei set); con unità resta com'è.
-  if (Number.isFinite(ls) && ls !== 0) out.push(/[a-z%]$/i.test(lsRaw) ? lsRaw : fmt(lsRaw, 'px'));
+  if (g('letterSpacing') && Number.isFinite(ls) && ls !== 0) out.push(/[a-z%]$/i.test(lsRaw) ? lsRaw : fmt(lsRaw, 'px'));
   return out.filter(Boolean).join(' · ');
 });
 

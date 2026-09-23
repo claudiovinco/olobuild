@@ -31,6 +31,10 @@ export default {
     max_width_ch: 20,
     lead_size: 16.5,
     lead_max_width_ch: 52,
+    text_font_family: '',
+    text_font_weight: '',
+    lead_font_family: '',
+    lead_font_weight: '',
 
     // KIT standard OLObuild — additivi, no-op coi default (sfondo none, ombra none, bordo 0)
     bg: { type: 'none' },
@@ -67,11 +71,15 @@ export default {
     // Chiavi invariate — i renderer Vue/PHP continuano a leggere le stesse.
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    // Lo stile tipografico collegato governa ENTRAMBI i testi (famiglia, peso,
+    // interlinea…): a stile scelto i due controlli quelle righe non le mostrano.
     { type: 'typography', label: t('Testo manifesto'), responsiveKeys: [],
-      keys: { fluidMin: 'size_min', fluidMax: 'size_max', maxWidth: 'max_width_ch', color: 'text_color' },
+      linkedPresetKey: 'typography_preset',
+      keys: { family: 'text_font_family', fluidMin: 'size_min', fluidMax: 'size_max', weight: 'text_font_weight', maxWidth: 'max_width_ch', color: 'text_color' },
       sizeMin: 12, sizeMax: 200, maxWidthMin: 6, maxWidthMax: 60 },
     { type: 'typography', label: t('Paragrafo lead'), responsiveKeys: [],
-      keys: { size: 'lead_size', maxWidth: 'lead_max_width_ch', color: 'lead_color' },
+      linkedPresetKey: 'typography_preset',
+      keys: { family: 'lead_font_family', size: 'lead_size', weight: 'lead_font_weight', maxWidth: 'lead_max_width_ch', color: 'lead_color' },
       sizeMin: 10, sizeMax: 32, sizeStep: 0.5, maxWidthMin: 20, maxWidthMax: 100,
       condition: { field: 'show_lead', op: 'eq', value: true } },
 

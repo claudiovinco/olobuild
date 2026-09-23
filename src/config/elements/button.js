@@ -27,6 +27,7 @@ export default {
     wrap_padding_y: 16,
 
     typography_preset: '',
+    font_family: '',
     bg: { type: 'none' },
     letter_spacing: '0',
     text_transform: 'none',
@@ -98,9 +99,15 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    // Dallo stile tipografico il pulsante prende famiglia e peso (e interlinea);
+    // maiuscolo e spaziatura, se impostati qui, restano suoi. A stile collegato
+    // si nascondono quindi solo «Famiglia» e «Peso».
     { type: 'typography', label: t('Testo'),
+      linkedPresetKey: 'typography_preset',
+      linkedPresetGoverns: ['family', 'weight'],
       responsiveKeys: [],
       keys: {
+        family:        'font_family',
         size:          'font_size',
         weight:        'font_weight',
         transform:     'text_transform',

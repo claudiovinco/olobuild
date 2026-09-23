@@ -44,7 +44,7 @@ import { useBuilderStore } from '@/stores/builder';
 import { rv } from '@/composables/useResponsiveValue';
 import { getShadowValue } from '@/composables/useShadowMap';
 import { useBoxModel } from '@/composables/useBoxModel';
-import { resolveColor, TOKENS, buildDefaults } from '@/composables/oloTileDefaults';
+import { resolveColor, resolveFontFamily, TOKENS, buildDefaults } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -118,6 +118,22 @@ const btnStyle = computed(() => {
     overflow: 'hidden',
     transition: 'transform .15s ease, box-shadow .15s ease',
   };
+
+  // Stile tipografico: il pulsante lo applica da sé (gemello di
+  // class-button-tile.php, il wrapper non riceve la classe olo-typo-*):
+  // famiglia, peso e interlinea dallo stile; maiuscolo e spaziatura solo se
+  // qui non ne è impostato uno proprio. Senza stile, la famiglia scelta.
+  const tp = String(s.value.typography_preset || '').replace(/[^A-Za-z0-9_-]/g, '');
+  if (tp) {
+    style.fontFamily = `var(--olo-font-${tp}-family)`;
+    style.fontWeight = `var(--olo-font-${tp}-weight)`;
+    style.lineHeight = `var(--olo-font-${tp}-line-height)`;
+    if (!style.textTransform) style.textTransform = `var(--olo-font-${tp}-transform)`;
+    if (!(ls > 0)) style.letterSpacing = `var(--olo-font-${tp}-letter-spacing)`;
+  } else {
+    const ff = resolveFontFamily(s.value.font_family || '');
+    if (ff && ff !== 'inherit') style.fontFamily = ff;
+  }
 
   if (ls > 0) style.letterSpacing = ls + 'px';
   if (bw > 0) style.border = `${bw}px solid ${resolveColor(s.value.border_color, TOKENS.primary)}`;
