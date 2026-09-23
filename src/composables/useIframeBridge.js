@@ -11,6 +11,9 @@ import { loadScrollFlashPrefs } from '@/utils/scrollFlashPrefs';
 
 let debounceTimer = null;
 let patchTimer = null;
+const patchQueue = new Set();   // tile da patchare allo scadere di patchTimer
+const patchPending = new Set(); // patch chieste mentre una richiesta era in volo
+let zonePending = null;          // zona header/footer chiesta durante una richiesta in volo
 let zoneTimer = null;
 let lastTileSnapshot = null;
 let renderInFlight = false;
@@ -64,8 +67,12 @@ export function useIframeBridge(iframeRef) {
     }
 
     renderInFlight = true;
+    // Ciò che si INVIA è ciò che risulterà reso: le modifiche fatte durante la
+    // richiesta restano fuori e le riprende dopoRichiesta().
+    let inviati = null;
     try {
-      const body = { tiles: deepClone(tiles), page_settings: pageSettings };
+      inviati = deepClone(tiles);
+      const body = { tiles: inviati, page_settings: pageSettings };
       // Include header/footer SOLO in modalità standalone. In modalità inline
       // (iframe = pagina WP reale) header e footer sono già renderizzati dal
       // tema; aggiungerli qui produrrebbe duplicati.
@@ -98,11 +105,26 @@ export function useIframeBridge(iframeRef) {
       if (data.html) {
         postToIframe('olo:render', { html: data.html, css: data.inline_css || '' });
       }
-      lastTileSnapshot = deepClone(tiles);
+      lastTileSnapshot = inviati;
     } catch (err) {
       console.error('[IframeBridge] render error:', err);
+      // Anche se fallisce, conta come tentato: senza, dopoRichiesta() riproverebbe
+      // all'infinito (rete giù). La prossima modifica rifà il render.
+      if (inviati) lastTileSnapshot = inviati;
     }
     renderInFlight = false;
+    dopoRichiesta();
+  }
+
+  // Modifiche arrivate mentre una richiesta era in volo: prima si SCARTAVANO (return
+  // silenzioso) e l'anteprima restava indietro — scrivendo un testo, le ultime lettere
+  // non comparivano e sembrava un limite di caratteri. Ora si ricordano e si rifanno
+  // appena la richiesta in corso finisce, con lo stato di quel momento.
+  function dopoRichiesta() {
+    if (renderInFlight || patchInFlight) return;
+    if (zonePending) { const z = zonePending; zonePending = null; scheduleZoneRender(z); }
+    if (patchPending.size) { const ids = [...patchPending]; patchPending.clear(); ids.forEach(schedulePatch); }
+    onTilesChange(); // confronta ciò che è stato reso con lo stato attuale
   }
 
   // ── Patch single tile — incremental render via /builder/render-tile ──
@@ -130,7 +152,7 @@ export function useIframeBridge(iframeRef) {
   let patchInFlight = false;
 
   async function patchTile(tileId) {
-    if (renderInFlight || patchInFlight) return;
+    if (renderInFlight || patchInFlight) { patchPending.add(tileId); return; }
     const node = findNodeById(tilesStore.canvasTiles, tileId);
     if (!node) { scheduleFullRender(); return; }
     if (!isPatchable(node)) { scheduleFullRender(); return; }
@@ -184,6 +206,7 @@ export function useIframeBridge(iframeRef) {
       scheduleFullRender();
     } finally {
       patchInFlight = false;
+      dopoRichiesta();
     }
   }
 
@@ -248,15 +271,25 @@ export function useIframeBridge(iframeRef) {
   function scheduleFullRender() {
     clearTimeout(debounceTimer);
     clearTimeout(patchTimer);
+    patchQueue.clear(); // il render completo copre anche le patch in attesa
     debounceTimer = setTimeout(renderFull, 300);
   }
 
+  // Tile da patchare allo scadere del timer. Prima il timer di una seconda tile
+  // cancellava quello della prima (es. «incolla stile» su più tile): la prima non
+  // veniva mai resa. Una tile → patch; più tile insieme → un solo render completo.
   function schedulePatch(tileId) {
     clearTimeout(patchTimer);
+    patchQueue.add(tileId);
     // 80ms vs 300ms del full: la patch è 5-10× più leggera, possiamo essere reattivi.
     // Componenti inspector hanno già debounce/throttle propri (color picker, range, ecc.)
     // quindi NON moltiplichiamo richieste.
-    patchTimer = setTimeout(() => patchTile(tileId), 80);
+    patchTimer = setTimeout(() => {
+      const ids = [...patchQueue];
+      patchQueue.clear();
+      if (ids.length === 1) patchTile(ids[0]);
+      else if (ids.length > 1) scheduleFullRender();
+    }, 80);
   }
 
   // ── Render di una singola zona (header/footer) — usato in modalità INLINE ──
@@ -267,7 +300,7 @@ export function useIframeBridge(iframeRef) {
   // (preservandone il wrapper <header>/<footer>, quindi overlay/sticky restano intatti).
   // Fail-safe: su qualsiasi errore non facciamo nulla → la zona resta com'era (= stato attuale).
   async function renderZone(zone) {
-    if (renderInFlight || patchInFlight) return;
+    if (renderInFlight || patchInFlight) { zonePending = zone; return; }
     const zoneTiles = zone === 'footer' ? tilesStore.footerTiles : tilesStore.headerTiles;
     if (!zoneTiles || !zoneTiles.length) return;
     const olo = window.oloData || {};
