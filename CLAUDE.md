@@ -126,9 +126,13 @@ padding/margine → `type:'spacing'` (4 lati) · raggio → `type:'border-radius
   zona di disposizione che la tile ha già, se no «Disposizione» in fondo; 3) una sezione che
   nomina una parte senza zona → zona con quel nome; 4) il resto per famiglia (Aspetto · Testo ·
   Forma), riusando la zona della famiglia che la tile ha già.
-- ⚠️ **Le `condition` dei separatori NON le valuta nessun tab** (una sezione si vede se ha un campo
-  visibile): la condizione che deve nascondere i controlli va sui CAMPI (array = AND). Spostando
-  campi da una sezione condizionata la condizione si porta sul campo (map: `grid_columns` per modo).
+- **Condizione di sezione**: la `condition`/`show` di un separatore vale per TUTTA la sezione, nel
+  Contenuto, nello Stile e nelle voci dei ripetitori (`isSectionVisible()` in `fieldCondition.js`,
+  dal 1.4.479: prima nessun tab la leggeva). ⚠️ Un campo che vale anche in altri casi NON va sotto un
+  separatore condizionato, sparirebbe con la sezione: lo Zoom del servizio dinamico della mappa stava
+  sotto «Marker» (solo indirizzo singolo), il Punto focale di scrollscrub sotto «Sovraimpressione»
+  (solo padding 0). Spostando campi fuori da una sezione condizionata la condizione va sul campo
+  (array = AND). Una `show()` che va in errore mostra il campo invece di bloccare l'inspector.
 - **Bordo in hover**: lo stato Hover non ancora impostato parte dal bordo normale (InspectorField),
   altrimenti scegliere il solo colore salvava lati a 0 e in hover il bordo spariva. Lati a 0 espliciti
   = bordo tolto in hover (FieldBorder non ha lo stile «nessuno»). Le chiavi hover storiche salvate

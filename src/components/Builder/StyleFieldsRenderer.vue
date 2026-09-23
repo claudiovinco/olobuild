@@ -46,7 +46,10 @@
           </template>
         </div>
       </CollapseSection>
-      <template v-else>
+      <!-- Solo la sezione SENZA intestazione (campi prima del primo separatore): una sezione
+           con nome nascosta dalla condizione del separatore non deve ricadere qui e mostrare
+           i campi senza titolo. -->
+      <template v-else-if="!section.label">
         <div class="mb-space-y-3">
           <template v-for="(field, fIdx) in section.fields" :key="field.key || ('tsf0-' + fIdx)">
             <InspectorField
@@ -227,7 +230,7 @@ import FieldBackdropFilter from './fields/FieldBackdropFilter.vue';
 import FieldBorderLegacy from './fields/FieldBorderLegacy.vue';
 import { t } from '@/i18n';
 import { ATOMIC_TILE_TYPES } from '@/composables/useBackgroundStyle';
-import { evaluateCondition } from '@/utils/fieldCondition';
+import { isFieldVisible as sharedIsFieldVisible, isSectionVisible } from '@/utils/fieldCondition';
 import { normalizeSearchQuery, fieldMatchesSearch, sectionLabelMatchesSearch } from '@/utils/inspectorSearch.js';
 
 // Mapping multi-key: oggetto-UI → chiavi piatte salvate su tile.style
@@ -281,11 +284,12 @@ const searchActive = computed(() => !!searchQ.value);
 
 function groupBySeparator(fields) {
   const sections = [];
-  let current = { label: null, fields: [] };
+  let current = { label: null, sep: null, fields: [] };
   for (const f of fields) {
     if (f.type === 'separator') {
       if (current.fields.length > 0) sections.push(current);
-      current = { label: f.label, fields: [] };
+      // `sep`: la condizione del separatore vale per tutta la sezione (isSectionVisible)
+      current = { label: f.label, sep: f, fields: [] };
     } else {
       current.fields.push(f);
     }
@@ -310,17 +314,13 @@ function filterSectionsBySearch(sections) {
 }
 
 // Valuta la `condition` dichiarata sul field (es. `text_effect_phrases` visibile
-// SOLO se `text_effect === 'typewriter-loop'`). Stessa logica di
-// BuilderInspector.evaluateCondition: senza questa i field tile-specific
-// venivano renderizzati sempre, ignorando la condizione.
-// evaluateCondition: helper condiviso (@/utils/fieldCondition).
+// SOLO se `text_effect === 'typewriter-loop'`): valutatore condiviso (@/utils/fieldCondition).
 function isFieldVisible(field, settings) {
-  if (field.condition && !evaluateCondition(field.condition, settings)) return false;
-  if (typeof field.show === 'function' && !field.show(settings)) return false;
-  return true;
+  return sharedIsFieldVisible(field, settings || {});
 }
+// Una sezione si vede se la condizione del suo SEPARATORE è vera e ha un campo visibile.
 function sectionHasVisibleFields(section) {
-  return (section.fields || []).some(f => isFieldVisible(f, props.tileSettings));
+  return isSectionVisible(section.sep, section.fields, props.tileSettings || {});
 }
 
 const groupedSections   = computed(() => filterSectionsBySearch(groupBySeparator(styleFieldsBase(props.tileType))));

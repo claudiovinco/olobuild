@@ -1393,7 +1393,7 @@
 <script setup>
 import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue';
 import { t } from '@/i18n';
-import { evaluateCondition } from '@/utils/fieldCondition';
+import { isSectionVisible, isFieldVisible as sharedIsFieldVisible } from '@/utils/fieldCondition';
 import { useBuilderStore } from '@/stores/builder';
 import { useTilesStore } from '@/stores/tiles';
 import { getElementDef, getElementFields, getElementDefaults } from '@/config/elementRegistry';
@@ -2492,8 +2492,7 @@ function ensureContentItems(tile, field) {
 
 function isFieldVisible(field, sectionLabel = null) {
   const settings = selectedTile.value?.settings || {};
-  if (field.condition && !evaluateCondition(field.condition, settings)) return false;
-  if (typeof field.show === 'function' && !field.show(settings)) return false;
+  if (!sharedIsFieldVisible(field, settings)) return false; // condition + show (protetta)
   // Filter "show only modified": confronta valore corrente con default del tile config
   if (showOnlyModified.value && field.key) {
     const cur = settings[field.key];
@@ -2528,13 +2527,14 @@ function isFieldDefault(cur, def) {
  */
 const groupedSections = computed(() => {
   const sections = [];
-  let current = { label: null, fields: [] };
+  let current = { label: null, sep: null, fields: [] };
   for (const field of elementFields.value) {
     if (field.type === 'separator') {
       if (current.fields.length > 0 || current.label !== null) {
         sections.push(current);
       }
-      current = { label: field.label, fields: [] };
+      // `sep`: la condizione del separatore vale per tutta la sezione (isSectionVisible)
+      current = { label: field.label, sep: field, fields: [] };
     } else {
       current.fields.push(field);
     }
@@ -2546,10 +2546,12 @@ const groupedSections = computed(() => {
 });
 
 /**
- * Check if a section has at least one visible field.
+ * Una sezione si vede se la condizione del suo SEPARATORE è vera e ha almeno un campo
+ * visibile (con i filtri dell'inspector: ricerca, «solo modificati»).
  */
 function sectionHasVisibleFields(section) {
-  return section.fields.some(f => isFieldVisible(f, section.label));
+  return isSectionVisible(section.sep, section.fields, selectedTile.value?.settings || {},
+    (f) => isFieldVisible(f, section.label));
 }
 
 const tileStyle = computed(() => selectedTile.value?.style || {});

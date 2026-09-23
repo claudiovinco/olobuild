@@ -55,7 +55,7 @@
 
           <!-- Expanded editor -->
           <div v-if="expandedId === element.id" class="cie-body">
-            <div v-for="field in itemFields" :key="(field.key || '') + ':' + (field.type || '') + ':' + (field.label || '')" v-show="isFieldVisible(field, element)" class="cie-field" :class="{ 'cie-field--inline': field.type === 'number' || field.type === 'range' }">
+            <div v-for="(field, fi) in itemFields" :key="(field.key || '') + ':' + (field.type || '') + ':' + (field.label || '')" v-show="campoVisibileNellaVoce(field, fi, element)" class="cie-field" :class="{ 'cie-field--inline': field.type === 'number' || field.type === 'range' }">
               <label v-if="field.type !== 'separator' && !isDelegated(field)" class="cie-label">{{ etichettaDi(field).testo }}</label>
 
               <!-- separator (intestazione di sezione, nessun input) -->
@@ -343,7 +343,7 @@ import IconPicker from '../ProSlider/IconPicker.vue';
 import { useToast } from '@/composables/useToast';
 import iconsSvg from '../ProSlider/uikitIconsSvg.js';
 import { useMediaPicker } from '@/composables/useMediaPicker';
-import { isFieldVisible as sharedIsFieldVisible } from '@/utils/fieldCondition';
+import { isFieldVisible as sharedIsFieldVisible, isSectionVisible } from '@/utils/fieldCondition';
 import InspectorField from './InspectorField.vue';
 import { useStylesStore } from '@/stores/styles';
 import { useGlobalPanels } from '@/composables/useGlobalPanels';
@@ -728,6 +728,27 @@ function duplicateItem(index) {
 // (prima qui esistevano solo in/eq/notEmpty e `neq` veniva ignorato).
 function isFieldVisible(field, element) {
   return sharedIsFieldVisible(field, element || {});
+}
+
+// Sezioni dentro le voci: per ogni campo, l'indice del separatore che lo precede (-1 = nessuno).
+const sezioneDi = computed(() => {
+  let s = -1;
+  return (props.itemFields || []).map((f, i) => (f && f.type === 'separator' ? (s = i) : s));
+});
+// La condizione di un separatore vale per tutta la sua sezione (prima nascondeva solo
+// l'intestazione): un campo si vede se sono vere la sua condizione e quella della sezione,
+// un separatore se la sua condizione è vera e la sezione ha almeno un campo visibile.
+function campoVisibileNellaVoce(field, i, element) {
+  const campi = props.itemFields || [];
+  const voce = element || {};
+  if (field.type === 'separator') {
+    const dopo = [];
+    for (let k = i + 1; k < campi.length && campi[k]?.type !== 'separator'; k++) dopo.push(campi[k]);
+    return isSectionVisible(field, dopo, voce);
+  }
+  if (!isFieldVisible(field, voce)) return false;
+  const s = sezioneDi.value[i];
+  return s < 0 || isFieldVisible(campi[s], voce);
 }
 
 function removeItem(index) {

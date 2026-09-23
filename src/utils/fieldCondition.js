@@ -96,6 +96,31 @@ export function evaluateCondition(condition, settings) {
 export function isFieldVisible(field, settings) {
   if (!field) return false;
   if (field.condition && !evaluateCondition(field.condition, settings)) return false;
-  if (typeof field.show === 'function' && !field.show(settings || {})) return false;
+  if (typeof field.show === 'function') {
+    // Una show() che fallisce su un valore inatteso (es. `s.images?.some` con images non
+    // array) non deve bloccare l'inspector: il campo si mostra.
+    try {
+      if (!field.show(settings || {})) return false;
+    } catch (e) {
+      return true;
+    }
+  }
   return true;
+}
+
+/**
+ * Visibilità di una SEZIONE dell'inspector: il separatore e i campi che lo seguono fino al
+ * separatore successivo. La `condition`/`show` del separatore vale per tutta la sezione (prima
+ * nessun tab la leggeva: una sezione compariva appena aveva un campo visibile), e serve almeno
+ * un campo visibile. `campoVisibile` permette al chiamante di aggiungere i suoi filtri (ricerca…).
+ *
+ * @param {Object|null} separator  il field `type:'separator'` (null = sezione senza intestazione)
+ * @param {Object[]}    fields     i campi della sezione
+ * @param {Object}      settings   valori correnti (tile.settings o la voce del ripetitore)
+ * @param {Function}    [campoVisibile]  (field) → boolean
+ */
+export function isSectionVisible(separator, fields, settings, campoVisibile) {
+  if (separator && !isFieldVisible(separator, settings)) return false;
+  const vis = campoVisibile || ((f) => isFieldVisible(f, settings));
+  return (fields || []).some(vis);
 }

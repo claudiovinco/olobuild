@@ -194,6 +194,11 @@ export default {
     { key: 'round', label: t('Raggio angoli'), type: 'border-radius' },
     { key: 'item_padding', label: t('Padding'), type: 'spacing', min: 0, max: 80,
       description: t('0 = immagine a tutto bordo con testo sovrapposto in basso.') },
+    // Vale per tutte le immagini con qualsiasi padding: fuori dalla «Sovraimpressione», che si
+    // vede solo col padding a 0.
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
+      contextKeys: { fit: '' },
+      description: t('Punto focale applicato a tutte le immagini del nastro (object-position).') },
 
     { key: 'items', type: 'content-items', label: t('Elementi'), itemLabel: t('Elemento'), etichettaDa: 'title', miniaturaDa: 'media', itemFields: [
         { key: 'color',       label: t('Colore sfondo elemento'),        type: 'color' },
@@ -208,9 +213,6 @@ export default {
     { key: 'overlay_scrim_height', label: t('Altezza sfumatura'), type: 'range', min: 20, max: 100, step: 2,
       condition: { field: 'item_padding', op: 'eq', value: 0 },
       description: t('Quanta parte della card copre, dal fondo verso l\'alto.') },
-    { key: 'object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
-      contextKeys: { fit: '' },
-      description: t('Punto focale applicato a tutte le immagini del nastro (object-position).') },
 
     { type: 'separator', label: t('Colori predefiniti') },
     { key: 'item_bg_default', label: t('Sfondo elemento (default)'), type: 'color',

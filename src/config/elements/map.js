@@ -143,6 +143,9 @@ export default {
     { key: 'latitude', label: t('Latitudine'), type: 'text', condition: { field: 'mode', value: 'single' } },
     { key: 'longitude', label: t('Longitudine'), type: 'text', condition: { field: 'mode', value: 'single' } },
     { key: 'zoom', label: t('Zoom'), type: 'range', min: 1, max: 19, step: 1, condition: { field: 'mode', value: 'single' } },
+    // ── Campi modalità dynamic_service ── (prima della sezione «Marker», che vale solo
+    // per l'indirizzo singolo e con la sua condizione nasconderebbe anche questo Zoom)
+    { key: 'zoom', label: t('Zoom'), type: 'range', min: 1, max: 19, step: 1, condition: { field: 'mode', value: 'dynamic_service' } },
 
     { type: 'separator', label: t('Marker'), condition: { field: 'mode', value: 'single' } },
     { key: 'marker', label: t('Mostra marker'), type: 'toggle', condition: { field: 'mode', value: 'single' } },
@@ -160,9 +163,6 @@ export default {
       { value: 'image', label: t('Immagine personalizzata') },
     ], condition: { field: 'mode', value: 'single' } },
     { key: 'marker_image', label: t('Immagine marker'), type: 'image', condition: { field: 'marker_type', value: 'image' } },
-
-    // ── Campi modalità dynamic_service ──
-    { key: 'zoom', label: t('Zoom'), type: 'range', min: 1, max: 19, step: 1, condition: { field: 'mode', value: 'dynamic_service' } },
 
     // ── Campi modalità sedi ──
     { type: 'separator', label: t('Sorgente dati'), condition: { field: 'mode', value: 'locations' } },
