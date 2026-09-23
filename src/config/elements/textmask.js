@@ -141,7 +141,7 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Testo'),
-      responsiveKeys: ['size', 'letterSpacing'],
+      responsiveKeys: ['size'],
       keys: {
         family:        'font_family',
         size:          'font_size',

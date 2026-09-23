@@ -251,7 +251,7 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Titolo modale'),
-      responsiveKeys: ['size', 'letterSpacing'],
+      responsiveKeys: [],
       letterSpacingUnit: 'em',
       keys: {
         size:          'modal_title_size',
@@ -262,7 +262,7 @@ export default {
       sizeMin: 14, sizeMax: 48, sizeStep: 1,
     },
     { type: 'typography', label: t('Pulsante'),
-      responsiveKeys: ['letterSpacing'],
+      responsiveKeys: [],
       letterSpacingUnit: 'em',
       keys: {
         weight:        'button_weight',

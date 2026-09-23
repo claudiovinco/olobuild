@@ -257,7 +257,7 @@ export default {
     { type: 'separator', label: t('Tipografia headline') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Headline'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         family:     'headline_font_family',
         size:       'headline_font_size',

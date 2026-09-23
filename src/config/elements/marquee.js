@@ -144,7 +144,7 @@ export default {
       condition: { field: 'content_type', value: 'text' } },
     { type: 'typography', label: t('Testo'),
       condition: { field: 'content_type', value: 'text' },
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:          'font_size',
         weight:        'font_weight',

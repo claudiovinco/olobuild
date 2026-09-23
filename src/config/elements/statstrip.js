@@ -71,7 +71,7 @@ export default {
 
     { type: 'separator', label: t('Valore') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
-    { type: 'typography', label: t('Valore'), responsiveKeys: ['size'], keys: { size: 'value_size', weight: 'value_weight', color: 'value_color', family: 'value_font_family' }, sizeMin: 20, sizeMax: 96 },
+    { type: 'typography', label: t('Valore'), responsiveKeys: [], keys: { size: 'value_size', weight: 'value_weight', color: 'value_color', family: 'value_font_family' }, sizeMin: 20, sizeMax: 96 },
 
     { type: 'separator', label: t('Etichetta') },
     { key: 'mono_font_family', label: t('Font etichetta (vuoto = mono del tema)'), type: 'font-family' },

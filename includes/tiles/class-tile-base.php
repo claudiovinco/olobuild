@@ -171,6 +171,19 @@ abstract class Olobuild_Tile_Base {
     }
 
     /**
+     * Peso del carattere dal controllo tipografia, CSS-safe. '' = non impostato
+     * (il testo tiene il peso che la tile gli dà di suo). Accetta i numeri
+     * 100–900 e le parole chiave; tutto il resto viene scartato.
+     *
+     * @param mixed $value Valore salvato ('700', 700, 'bold', '').
+     * @return string Peso valido o ''.
+     */
+    protected function font_weight_css( $value ) {
+        $v = trim( (string) $value );
+        return preg_match( '/^(?:[1-9]00|normal|bold|lighter|bolder)$/', $v ) ? $v : '';
+    }
+
+    /**
      * Convert a color (hex, rgb, rgba) to "r,g,b" triplet for use inside rgba().
      * V3.26.0 — shared helper used by audacious preset extra CSS.
      *

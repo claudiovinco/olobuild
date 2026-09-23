@@ -93,7 +93,7 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Pulsante'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:   'btn_font_size',
         weight: 'btn_font_weight',

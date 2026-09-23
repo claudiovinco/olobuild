@@ -369,7 +369,7 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Etichetta'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         family:        'label_font_family',
         size:          'label_size',
@@ -410,7 +410,7 @@ export default {
     withHover({ key: 'submit_radius', label: t('Raggio'), type: 'border-radius' }),
     { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 48 },
     { type: 'typography', label: t('Pulsante'),
-      responsiveKeys: ['size', 'letterSpacing'],
+      responsiveKeys: [],
       keys: {
         family:        'submit_font_family',
         size:          'submit_font_size',

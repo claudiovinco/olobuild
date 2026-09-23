@@ -141,7 +141,7 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'),
-      responsiveKeys: ['size', 'lineHeight'],
+      responsiveKeys: ['lineHeight'],
       keys: {
         tag:        'heading_tag',
         family:     'heading_font_family',
@@ -152,7 +152,7 @@ export default {
       sizeMin: 12, sizeMax: 60,
     },
     { type: 'typography', label: t('Testo'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         family: 'text_font_family',
         size:   'text_font_size',

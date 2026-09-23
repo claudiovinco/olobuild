@@ -753,6 +753,22 @@ class Olobuild_Frontend_Renderer {
         return in_array( (string) $type, $elenco, true );
     }
 
+    /**
+     * Tile che applicano lo «Stile tipografico» da sé, a un elemento preciso.
+     * Per tutte le altre la classe `olo-typo-<id>` sul wrapper porta lo stile a
+     * ogni testo: qui no, perché la tile ha testi con un ruolo proprio — la
+     * Section Header lo applica al solo titolo, e l'occhiello resta in mono
+     * maiuscolo invece di diventare una copia del titolo.
+     * Gemello JS: STILE_TIPOGRAFICO_PROPRIO in GridCell.vue (l'audit li confronta).
+     *
+     * @param string $type Slug della tile.
+     * @return bool
+     */
+    private static function tile_stile_tipografico_proprio( $type ) {
+        static $elenco = [ 'section-header' ];
+        return in_array( (string) $type, $elenco, true );
+    }
+
     private function render_element_node( $node, $manager, $template_id, &$hover_css_rules, &$tile_counter ) {
         // Resolve global widget
         if ( ! empty( $node['global_id'] ) ) {
@@ -991,7 +1007,7 @@ class Olobuild_Frontend_Renderer {
 
         // Build classes
         $classes = [ 'olo-frontend-tile' ];
-        $typo_class = $this->typo_preset_class( $settings );
+        $typo_class = self::tile_stile_tipografico_proprio( $type ) ? '' : $this->typo_preset_class( $settings );
         if ( $typo_class ) $classes[] = $typo_class;
         if ( $shadow_class ) $classes[] = $shadow_class;
         if ( $is_fullwidth ) $classes[] = 'olo-tile-fullwidth';

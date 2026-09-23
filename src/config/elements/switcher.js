@@ -127,7 +127,7 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Tab'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:       'tab_font_size',
         weight:     'tab_font_weight',

@@ -260,7 +260,7 @@ export default {
     // ── Tipografia ──
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Legenda'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:   'legend_font_size',
         weight: 'legend_font_weight',
@@ -269,7 +269,7 @@ export default {
       sizeMin: 8, sizeMax: 20, sizeStep: 1,
     },
     { type: 'typography', label: t('Titolo'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:   'title_font_size',
         weight: 'title_font_weight',
@@ -278,7 +278,7 @@ export default {
       sizeMin: 10, sizeMax: 32, sizeStep: 1,
     },
     { type: 'typography', label: t('Sottotitolo'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:  'subtitle_font_size',
         color: 'subtitle_color',
@@ -286,7 +286,7 @@ export default {
       sizeMin: 8, sizeMax: 20, sizeStep: 1,
     },
     { type: 'typography', label: t('Tooltip'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:  'tooltip_font_size',
         color: 'tooltip_text_color',
@@ -294,7 +294,7 @@ export default {
       sizeMin: 8, sizeMax: 18, sizeStep: 1,
     },
     { type: 'typography', label: t('Assi'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:  'tick_font_size',
         color: 'text_color',

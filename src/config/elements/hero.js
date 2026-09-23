@@ -357,7 +357,7 @@ export default {
       description: t('Colora le parole in corsivo (em) del titolo, il dot eyebrow e il glow di default. Vuoto = nessun accento.') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'),
-      responsiveKeys: ['size', 'lineHeight', 'letterSpacing'],
+      responsiveKeys: [],
       keys: {
         tag:           'title_tag',
         family:        'title_font_family',
@@ -372,7 +372,7 @@ export default {
       sizeMin: 14, sizeMax: 120, sizeStep: 1,
     },
     { type: 'typography', label: t('Sottotitolo'),
-      responsiveKeys: ['size', 'letterSpacing'],
+      responsiveKeys: [],
       keys: {
         size:          'subtitle_font_size',
         weight:        'subtitle_font_weight',

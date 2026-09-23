@@ -91,7 +91,7 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Numero'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:   'number_font_size',
         weight: 'number_font_weight',
@@ -100,7 +100,7 @@ export default {
       sizeMin: 20, sizeMax: 120, sizeStep: 2,
     },
     { type: 'typography', label: t('Etichetta'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:   'label_font_size',
         weight: 'label_font_weight',

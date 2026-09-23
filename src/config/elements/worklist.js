@@ -79,7 +79,7 @@ export default {
 
     { type: 'separator', label: t('Titolo') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
-    { type: 'typography', label: t('Titolo'), responsiveKeys: ['size'], keys: { size: 'title_size', weight: 'title_weight', color: 'title_color', family: 'title_font_family' }, sizeMin: 20, sizeMax: 72 },
+    { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { size: 'title_size', weight: 'title_weight', color: 'title_color', family: 'title_font_family' }, sizeMin: 20, sizeMax: 72 },
 
     { type: 'separator', label: t('Meta (numero · categoria · anno)') },
     { key: 'mono_font_family', label: t('Font meta (vuoto = mono del tema)'), type: 'font-family' },

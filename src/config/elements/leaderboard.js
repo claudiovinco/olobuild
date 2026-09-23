@@ -141,7 +141,7 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Nome'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:   'name_size',
         weight: 'name_weight',

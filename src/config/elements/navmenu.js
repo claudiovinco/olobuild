@@ -211,7 +211,7 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Link nav'),
-      responsiveKeys: ['size', 'letterSpacing'],
+      responsiveKeys: [],
       keys: {
         size:          'font_size',
         weight:        'font_weight',

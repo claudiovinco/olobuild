@@ -70,7 +70,7 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Meta'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:  'font_size',
         color: 'text_color',

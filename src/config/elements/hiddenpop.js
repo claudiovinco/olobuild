@@ -199,7 +199,7 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:  'title_size',
         color: 'title_color',
@@ -208,7 +208,7 @@ export default {
       condition: { field: 'mode', op: 'eq', value: 'simple' },
     },
     { type: 'typography', label: t('Testo'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         color: 'text_color',
       },

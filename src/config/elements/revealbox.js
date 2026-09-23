@@ -130,7 +130,7 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Zona Visibile'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:  'top_font_size',
         color: 'top_text_color',
@@ -160,7 +160,7 @@ export default {
       condition: { field: 'bottom_icon', operator: '!=', value: '' } },
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Zona Rivelata'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:  'bottom_font_size',
         color: 'bottom_text_color',

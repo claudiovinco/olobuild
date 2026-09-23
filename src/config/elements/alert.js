@@ -83,7 +83,7 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Testo'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         color: 'custom_text_color',
       },

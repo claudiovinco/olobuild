@@ -1,6 +1,7 @@
 <template>
   <div class="olo-sechead" :style="gridStyle">
-    <div class="olo-sechead__left">
+    <!-- L'allineamento vale per l'intera colonna: occhiello, titolo e sottotitolo insieme (come il PHP). -->
+    <div class="olo-sechead__left" :style="{ textAlign: halign }">
       <div v-if="s.eyebrow_show && s.eyebrow_text" class="olo-sechead__eyebrow" :style="eyebrowStyle">
         <span v-if="isBullet" class="olo-sechead__dot" :style="{ background: s.eyebrow_dot_color || '#b3261e' }"></span>
         <span v-else-if="s.eyebrow_separator" style="white-space:pre">{{ s.eyebrow_separator }}</span>
@@ -27,16 +28,21 @@
 
 <script setup>
 import { computed } from 'vue';
-import { resolveFontFamily } from '@/composables/oloTileDefaults';
+import { resolveFontFamily, fontWeightCss } from '@/composables/oloTileDefaults';
+import { rv } from '@/composables/useResponsiveValue';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
 const defaults = {
+  typography_preset: '',
   eyebrow_show: true,
   eyebrow_text: 'PROVALO SUBITO',
   eyebrow_color: '#b3261e',
   eyebrow_dot_color: '#b3261e',
   eyebrow_separator: '— ',
+  eyebrow_font_family: '',
+  eyebrow_font_size: '',
+  eyebrow_font_weight: '',
   headline_lines: [
     { text: 'Nessun rischio,', color: '#0f172a', italic: false },
     { text: 'solo prodotto.',  color: '#b3261e', italic: true  },
@@ -52,9 +58,13 @@ const defaults = {
   tagline_text_italic: true,
   tagline_text_color: '#0f172a',
   tagline_text_size: 22,
+  tagline_font_family: '',
+  tagline_font_weight: '',
   tagline_caption: 'TRE GARANZIE · CINQUE PROMESSE',
   tagline_caption_color: '',
   tagline_caption_size: 11,
+  tagline_caption_font_family: '',
+  tagline_caption_font_weight: '',
   layout: 'split',
   split_ratio: '1.6fr 1fr',
   gap: 60,
@@ -74,6 +84,7 @@ const headlines = computed(() => (Array.isArray(s.value.headline_lines) ? s.valu
 const isBullet  = computed(() => (s.value.eyebrow_separator || '').trim() === '·');
 const showTagline  = computed(() => s.value.tagline_show && s.value.layout === 'split');
 const showSubtitle = computed(() => s.value.tagline_show && s.value.layout !== 'split' && !!s.value.tagline_text);
+const halign = computed(() => (s.value.layout === 'center' ? 'center' : (s.value.headline_align || 'left')));
 
 const gridStyle = computed(() => {
   const base = {
@@ -87,42 +98,73 @@ const gridStyle = computed(() => {
   return base;
 });
 
-const eyebrowStyle = computed(() => ({
-  display: 'inline-flex', alignItems: 'center', gap: '10px',
-  fontFamily: MONO, fontSize: '12px', letterSpacing: '0.1em',
-  textTransform: 'uppercase', color: s.value.eyebrow_color || '#b3261e',
-  marginBottom: '24px',
-}));
+const eyebrowStyle = computed(() => {
+  const st = {
+    display: 'inline-flex', alignItems: 'center', gap: '10px',
+    fontFamily: resolveFontFamily(s.value.eyebrow_font_family, FONT_LEGACY) || MONO,
+    fontSize: (parseInt(s.value.eyebrow_font_size, 10) || 12) + 'px',
+    letterSpacing: '0.1em',
+    textTransform: 'uppercase', color: s.value.eyebrow_color || '#b3261e',
+    marginBottom: '24px',
+  };
+  const fw = fontWeightCss(s.value.eyebrow_font_weight);
+  if (fw) st.fontWeight = fw;
+  return st;
+});
 
-const headlineStyle = computed(() => ({
-  fontFamily: hfam.value,
-  fontSize: (s.value.headline_font_size || 96) + 'px',
-  lineHeight: s.value.headline_line_height || 1,
-  fontWeight: s.value.headline_font_weight || '700',
-  letterSpacing: '-0.02em',
-  textAlign: s.value.layout === 'center' ? 'center' : (s.value.headline_align || 'left'),
-  margin: 0,
-}));
+// Stile tipografico: vale per il solo titolo, come nel PHP. A set collegato
+// famiglia, peso, interlinea, spaziatura e maiuscole vengono dal set; i valori
+// della tile restano come riserva nel var().
+const preset = computed(() => String(s.value.typography_preset || '').toLowerCase().replace(/[^a-z0-9_-]/g, ''));
 
-const taglineStyle = computed(() => ({
-  fontFamily: hfam.value,
-  fontSize: (s.value.tagline_text_size || 22) + 'px',
-  color: s.value.tagline_text_color || '#0f172a',
-  fontStyle: s.value.tagline_text_italic ? 'italic' : 'normal',
-  lineHeight: 1.3, marginBottom: '10px',
-}));
+const headlineStyle = computed(() => {
+  // Dimensione per il dispositivo mostrato nel canvas (tablet/telefono, se impostate).
+  const size = parseInt(rv(s.value, 'headline_font_size'), 10) || parseInt(s.value.headline_font_size, 10) || 96;
+  const lh = parseFloat(s.value.headline_line_height) || 1;
+  const fw = /^\d+$/.test(String(s.value.headline_font_weight)) ? String(s.value.headline_font_weight) : '700';
+  const tp = preset.value;
+  const st = {
+    fontFamily: tp ? `var(--olo-font-${tp}-family, ${hfam.value})` : hfam.value,
+    fontSize: size + 'px',
+    lineHeight: tp ? `var(--olo-font-${tp}-line-height, ${lh})` : lh,
+    fontWeight: tp ? `var(--olo-font-${tp}-weight, ${fw})` : fw,
+    letterSpacing: tp ? `var(--olo-font-${tp}-letter-spacing, -0.02em)` : '-0.02em',
+    textAlign: halign.value,
+    margin: 0,
+  };
+  if (tp) st.textTransform = `var(--olo-font-${tp}-transform, none)`;
+  return st;
+});
 
-const captionStyle = computed(() => ({
-  fontFamily: MONO,
-  fontSize: (s.value.tagline_caption_size || 11) + 'px',
-  letterSpacing: '0.1em', textTransform: 'uppercase',
-  color: s.value.tagline_caption_color || 'var(--olo-color-text-faint, #9ca3af)',
-}));
+const taglineStyle = computed(() => {
+  const st = {
+    fontFamily: resolveFontFamily(s.value.tagline_font_family, FONT_LEGACY) || hfam.value,
+    fontSize: (s.value.tagline_text_size || 22) + 'px',
+    color: s.value.tagline_text_color || '#0f172a',
+    fontStyle: s.value.tagline_text_italic ? 'italic' : 'normal',
+    lineHeight: 1.3, marginBottom: '10px',
+  };
+  const fw = fontWeightCss(s.value.tagline_font_weight);
+  if (fw) st.fontWeight = fw;
+  return st;
+});
+
+const captionStyle = computed(() => {
+  const st = {
+    fontFamily: resolveFontFamily(s.value.tagline_caption_font_family, FONT_LEGACY) || MONO,
+    fontSize: (s.value.tagline_caption_size || 11) + 'px',
+    letterSpacing: '0.1em', textTransform: 'uppercase',
+    color: s.value.tagline_caption_color || 'var(--olo-color-text-faint, #9ca3af)',
+  };
+  const fw = fontWeightCss(s.value.tagline_caption_font_weight);
+  if (fw) st.fontWeight = fw;
+  return st;
+});
 
 const subtitleStyle = computed(() => {
   const centered = s.value.layout === 'center';
-  return {
-    fontFamily: SANS,
+  const st = {
+    fontFamily: resolveFontFamily(s.value.tagline_font_family, FONT_LEGACY) || SANS,
     fontSize: (s.value.tagline_text_size || 18) + 'px',
     lineHeight: 1.6,
     color: s.value.tagline_text_color || '#475569',
@@ -131,8 +173,11 @@ const subtitleStyle = computed(() => {
     marginLeft: centered ? 'auto' : null,
     marginRight: centered ? 'auto' : null,
     marginTop: Math.max(8, Math.min(80, s.value.gap || 18)) + 'px',
-    textAlign: centered ? 'center' : (s.value.headline_align || 'left'),
+    textAlign: halign.value,
   };
+  const fw = fontWeightCss(s.value.tagline_font_weight);
+  if (fw) st.fontWeight = fw;
+  return st;
 });
 </script>
 

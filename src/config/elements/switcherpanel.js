@@ -225,7 +225,7 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Voce nav'),
-      responsiveKeys: ['size', 'letterSpacing'],
+      responsiveKeys: [],
       letterSpacingUnit: 'em',
       keys: {
         size:          'nav_font_size',
@@ -236,7 +236,7 @@ export default {
       sizeMin: 9, sizeMax: 20, sizeStep: 1,
     },
     { type: 'typography', label: t('Titolo pannello'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         tag:    'title_tag',
         size:   'panel_title_size',
@@ -246,7 +246,7 @@ export default {
       sizeMin: 16, sizeMax: 56, sizeStep: 1,
     },
     { type: 'typography', label: t('Testo pannello'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:  'panel_text_size',
         color: 'panel_text_color',

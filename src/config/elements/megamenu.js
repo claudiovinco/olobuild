@@ -484,7 +484,7 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Voce nav'),
-      responsiveKeys: ['size', 'letterSpacing'],
+      responsiveKeys: [],
       keys: {
         size:          'font_size',
         weight:        'font_weight',
@@ -501,7 +501,7 @@ export default {
       },
     },
     { type: 'typography', label: t('Intestazione panel'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:      'heading_size',
         weight:    'heading_weight',
@@ -511,7 +511,7 @@ export default {
       sizeMin: 12, sizeMax: 20, sizeStep: 1,
     },
     { type: 'typography', label: t('Link panel'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:       'link_size',
         color:      'link_color',
@@ -533,7 +533,7 @@ export default {
       show: showBtnAspect,
     },
     { type: 'typography', label: t('Testo mobile'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:  'mobile_font_size',
         color: 'mobile_text_color',
@@ -546,7 +546,7 @@ export default {
       },
     },
     { type: 'typography', label: t('Top bar testo'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:  'topbar_font_size',
         color: 'topbar_text_color',

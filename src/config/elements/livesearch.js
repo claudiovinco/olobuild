@@ -130,7 +130,7 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Input'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:  'input_font_size',
         color: 'input_color',

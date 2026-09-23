@@ -144,6 +144,15 @@ export function resolveFontFamily(value, legacyMap = null) {
 }
 
 /**
+ * fontWeightCss — peso dal controllo tipografia, validato. Gemello di
+ * Olobuild_Tile_Base::font_weight_css (PHP): '' = non impostato.
+ */
+export function fontWeightCss(value) {
+  const v = (value == null ? '' : String(value)).trim();
+  return /^(?:[1-9]00|normal|bold|lighter|bolder)$/.test(v) ? v : '';
+}
+
+/**
  * Default curati per tipo di tile. Pensati per essere "belli appena inseriti":
  * colore brand, testo leggibile, raggio/padding dalla scala condivisa, micro-ombra.
  *

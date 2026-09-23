@@ -194,7 +194,7 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Intestazione'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         family: 'header_font_family',
         size:   'header_font_size',
@@ -205,7 +205,7 @@ export default {
       sizeMin: 12, sizeMax: 22, sizeStep: 1,
     },
     { type: 'typography', label: t('Contenuto'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:  'content_font_size',
         color: 'text_color',

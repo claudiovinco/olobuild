@@ -105,7 +105,7 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Nome'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         tag:    'name_tag',
         size:   'name_size',
@@ -115,7 +115,7 @@ export default {
       sizeMin: 14, sizeMax: 32, sizeStep: 1,
     },
     { type: 'typography', label: t('Biografia'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:  'bio_size',
         color: 'bio_color',
@@ -123,7 +123,7 @@ export default {
       sizeMin: 11, sizeMax: 18, sizeStep: 1,
     },
     { type: 'typography', label: t('Ruolo'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:  'role_size',
         color: 'role_color',

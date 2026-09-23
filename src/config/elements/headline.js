@@ -90,7 +90,7 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         tag:       'tag',
         size:      'heading_font_size',
@@ -103,7 +103,7 @@ export default {
       sizeMin: 0, sizeMax: 120, sizeStep: 1,
     },
     { type: 'typography', label: t('Sottotitolo'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:  'subtitle_font_size',
         color: 'subtitle_color',

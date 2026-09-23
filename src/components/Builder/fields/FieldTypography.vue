@@ -18,7 +18,10 @@
       presetKey      chiave dello store globale per il preset (opzionale).
                      Se presente, mostra l'icona globe accanto alla matita.
       responsiveKeys array di chiavi logiche ('size', 'lineHeight', 'letterSpacing'...)
-                     che supportano i breakpoint (default: ['size'])
+                     con un valore per tablet e telefono (default: nessuna). Solo quelle
+                     che il renderer legge davvero: l'audit (regola dispositivo-letto) lo verifica.
+      linkedPresetKey chiave di uno «Stile tipografico» che, scelto, governa famiglia,
+                     peso, maiuscole, interlinea e spaziatura: quelle righe si nascondono.
       sizeMin/Max/Step       bound degli scrubber di dimensione (NON chiavi)
       maxWidthMin/Max/Step   bound dello scrubber della misura di riga
 
@@ -131,6 +134,21 @@
         </div>
 
         <div class="typo-body">
+          <!-- Stile tipografico collegato: le proprietà che governa non si
+               mostrano (non farebbero niente); qui si dice da dove vengono. -->
+          <div v-if="presetCollegato" class="typo-linked">
+            <p class="typo-linked-txt">
+              {{ presetGovernateTesto }} {{ t('vengono dallo stile') }}
+              <strong>«{{ presetCollegato.label }}»</strong><template v-if="presetDettaglio">: {{ presetDettaglio }}</template>.
+            </p>
+            <button
+              type="button"
+              class="typo-linked-btn"
+              :title="t('Scollega lo stile e torna ai valori di questo elemento')"
+              @click="scollegaPreset"
+            >{{ t('Regola a mano') }}</button>
+          </div>
+
           <!-- Tag HTML (semantica) -->
           <div v-if="keys.tag" class="typo-row">
             <label class="typo-label">{{ t('Tag HTML') }}</label>
@@ -138,7 +156,7 @@
           </div>
 
           <!-- Famiglia -->
-          <div v-if="keys.family" class="typo-row">
+          <div v-if="keys.family && !governata('family')" class="typo-row">
             <label class="typo-label">{{ t('Famiglia') }}</label>
             <FieldFontFamily
               :modelValue="values[keys.family] || ''"
@@ -154,10 +172,10 @@
                 v-if="isResponsive('size')"
                 type="button"
                 class="typo-bp-toggle"
-                :class="{ active: bpFor.size !== 'desktop' }"
+                :class="{ active: bpFor.size !== 'desktop', 'typo-bp-toggle--valori': haValoriDispositivo(keys.size) }"
                 @click="cycleBp('size')"
-                :title="t('Cambia breakpoint')"
-              >{{ bpShort(bpFor.size) }}</button>
+                :title="bpTitolo(bpFor.size)"
+              ><span class="typo-bp-ico" v-html="BP_ICONE[bpFor.size]"></span><span v-if="bpFor.size !== 'desktop'" class="typo-bp-txt">{{ t(BP_NOME[bpFor.size]) }}</span></button>
             </div>
             <div class="typo-range-row">
               <NumberScrubber
@@ -228,20 +246,20 @@
           </div>
 
           <!-- Peso -->
-          <div v-if="keys.weight" class="typo-row">
+          <div v-if="keys.weight && !governata('weight')" class="typo-row">
             <label class="typo-label">{{ t('Peso') }}</label>
             <FieldSelect ui="dropdown" :model-value="values[keys.weight] || ''" :options="WEIGHT_OPTIONS" @update:model-value="emitKey(keys.weight, $event)" />
           </div>
 
           <!-- Trasformazione -->
-          <div v-if="keys.transform" class="typo-row">
+          <div v-if="keys.transform && !governata('transform')" class="typo-row">
             <label class="typo-label">{{ t('Trasformazione') }}</label>
             <FieldSelect ui="dropdown" :model-value="values[keys.transform] || ''" :options="TRANSFORM_OPTIONS" @update:model-value="emitKey(keys.transform, $event)" />
           </div>
 
           <!-- Maiuscolo / corsivo: le scorciatoie booleane che decine di tile
                tengono al posto di transform/style. Il valore resta un bool. -->
-          <div v-if="keys.uppercase" class="typo-row typo-row--switch">
+          <div v-if="keys.uppercase && !governata('uppercase')" class="typo-row typo-row--switch">
             <label class="typo-label">{{ t('Maiuscolo') }}</label>
             <FieldToggle :modelValue="!!values[keys.uppercase]" @update:modelValue="emitKey(keys.uppercase, $event)" />
           </div>
@@ -263,17 +281,17 @@
           </div>
 
           <!-- Interlinea (responsive) -->
-          <div v-if="keys.lineHeight" class="typo-row">
+          <div v-if="keys.lineHeight && !governata('lineHeight')" class="typo-row">
             <div class="typo-row-head">
               <label class="typo-label">{{ t('Interlinea') }}</label>
               <button
                 v-if="isResponsive('lineHeight')"
                 type="button"
                 class="typo-bp-toggle"
-                :class="{ active: bpFor.lineHeight !== 'desktop' }"
+                :class="{ active: bpFor.lineHeight !== 'desktop', 'typo-bp-toggle--valori': haValoriDispositivo(keys.lineHeight) }"
                 @click="cycleBp('lineHeight')"
-                :title="t('Cambia breakpoint')"
-              >{{ bpShort(bpFor.lineHeight) }}</button>
+                :title="bpTitolo(bpFor.lineHeight)"
+              ><span class="typo-bp-ico" v-html="BP_ICONE[bpFor.lineHeight]"></span><span v-if="bpFor.lineHeight !== 'desktop'" class="typo-bp-txt">{{ t(BP_NOME[bpFor.lineHeight]) }}</span></button>
             </div>
             <div class="typo-range-row">
               <NumberScrubber
@@ -290,17 +308,17 @@
           </div>
 
           <!-- Spaziatura lettere (responsive, unità configurabile) -->
-          <div v-if="keys.letterSpacing" class="typo-row">
+          <div v-if="keys.letterSpacing && !governata('letterSpacing')" class="typo-row">
             <div class="typo-row-head">
               <label class="typo-label">{{ lsRange.label }}</label>
               <button
                 v-if="isResponsive('letterSpacing')"
                 type="button"
                 class="typo-bp-toggle"
-                :class="{ active: bpFor.letterSpacing !== 'desktop' }"
+                :class="{ active: bpFor.letterSpacing !== 'desktop', 'typo-bp-toggle--valori': haValoriDispositivo(keys.letterSpacing) }"
                 @click="cycleBp('letterSpacing')"
-                :title="t('Cambia breakpoint')"
-              >{{ bpShort(bpFor.letterSpacing) }}</button>
+                :title="bpTitolo(bpFor.letterSpacing)"
+              ><span class="typo-bp-ico" v-html="BP_ICONE[bpFor.letterSpacing]"></span><span v-if="bpFor.letterSpacing !== 'desktop'" class="typo-bp-txt">{{ t(BP_NOME[bpFor.letterSpacing]) }}</span></button>
             </div>
             <div class="typo-range-row">
               <NumberScrubber
@@ -453,7 +471,16 @@ const props = defineProps({
   values: { type: Object, default: () => ({}) },
   label: { type: String, default: 'Tipografia' },
   presetKey: { type: String, default: '' },
-  responsiveKeys: { type: Array, default: () => ['size'] },
+  // Chiave (fra i settings della tile) di uno «Stile tipografico» che, quando è
+  // scelto, GOVERNA famiglia, peso, maiuscole, interlinea e spaziatura di questo
+  // elemento: il renderer usa i valori del set e ignora quelli locali. Le righe
+  // corrispondenti allora non si mostrano — sarebbero controlli che non fanno
+  // niente — e al loro posto compare una nota con il set e il modo di scollegarlo.
+  linkedPresetKey: { type: String, default: '' },
+  // Chiavi che hanno un valore per tablet/telefono. Vuoto per default: il
+  // selettore di dispositivo si mostra solo dove il renderer quei valori li legge
+  // (su 131 controlli che lo offrivano, 128 li salvavano senza che nessuno li usasse).
+  responsiveKeys: { type: Array, default: () => [] },
   sizeMin: { type: Number, default: 8 },
   sizeMax: { type: Number, default: 120 },
   sizeStep: { type: Number, default: 1 },
@@ -495,11 +522,25 @@ function isResponsive(logicalKey) {
   return props.responsiveKeys.includes(logicalKey);
 }
 
-function bpShort(bp) {
-  if (bp === 'desktop') return '🖥';
-  if (bp === 'tablet') return '◫';
-  if (bp === 'mobile') return '▯';
-  return bp;
+// Il selettore del dispositivo: icone SVG (erano emoji) e il nome scritto
+// accanto quando non si sta regolando il computer, così si vede per quale
+// schermo vale il numero che si sta cambiando.
+const BP_ICONE = {
+  desktop: '<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="2" y="3" width="16" height="11" rx="1"/><path d="M6 17h8M10 14v3"/></svg>',
+  tablet: '<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="4" y="2" width="12" height="16" rx="1.5"/><path d="M9 15h2"/></svg>',
+  mobile: '<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="6" y="2.5" width="8" height="15" rx="1.5"/><path d="M9.2 15h1.6"/></svg>',
+};
+const BP_NOME = { desktop: 'computer', tablet: 'tablet', mobile: 'telefono' };
+function bpTitolo(bp) {
+  if (bp === 'tablet') return t('Valore per il tablet — clic per il telefono');
+  if (bp === 'mobile') return t('Valore per il telefono — clic per tornare al computer');
+  return t('Valore per il computer — clic per tablet e telefono');
+}
+// Il pallino sul selettore dice che per tablet o telefono c'è già un valore proprio.
+function haValoriDispositivo(baseKey) {
+  if (!baseKey) return false;
+  const v = props.values || {};
+  return [baseKey + '_tablet', baseKey + '_mobile'].some(k => v[k] !== undefined && v[k] !== null && v[k] !== '');
 }
 
 function cycleBp(logicalKey) {
@@ -589,6 +630,61 @@ const hasPresetValue = computed(() => {
   return !!props.presetKey && !!props.values?.[props.presetKey];
 });
 
+/* ── Stile tipografico collegato ─────────────────────────────────────────── */
+
+// Le proprietà che un set globale definisce (famiglia, peso, maiuscole,
+// interlinea, spaziatura) e il nome con cui la nota le elenca.
+const GOVERNATE = [
+  ['family', 'famiglia'],
+  ['weight', 'peso'],
+  ['transform', 'maiuscole'],
+  ['uppercase', 'maiuscole'],
+  ['lineHeight', 'interlinea'],
+  ['letterSpacing', 'spaziatura'],
+];
+
+const presetCollegato = computed(() => {
+  if (!props.linkedPresetKey) return null;
+  const id = String(props.values?.[props.linkedPresetKey] || '');
+  if (!id) return null;
+  const set = (stylesStore.globalTypography || []).find(s => s.id === id) || null;
+  return { id, label: set?.label || set?.name || id, set };
+});
+
+function governata(logicalKey) {
+  return !!presetCollegato.value && GOVERNATE.some(([k]) => k === logicalKey);
+}
+
+// «Famiglia, peso e interlinea» — solo le proprietà che QUESTO controllo ha.
+const presetGovernateTesto = computed(() => {
+  const nomi = [...new Set(GOVERNATE.filter(([k]) => props.keys?.[k]).map(([, n]) => t(n)))];
+  if (!nomi.length) return t('Le proprietà del carattere');
+  const testo = nomi.length === 1 ? nomi[0] : nomi.slice(0, -1).join(', ') + ' ' + t('e') + ' ' + nomi[nomi.length - 1];
+  return testo.charAt(0).toUpperCase() + testo.slice(1);
+});
+
+// "Montserrat · 700 · 1.3" — cosa si riceve davvero dal set.
+const presetDettaglio = computed(() => {
+  const set = presetCollegato.value?.set;
+  if (!set) return '';
+  const out = [];
+  const fam = resolveFontToken(set.family, stylesStore);
+  if (fam) out.push(fam.split(',')[0].replace(/['"]/g, '').trim());
+  if (set.weight) out.push(String(set.weight));
+  if (set.line_height) out.push(fmt(set.line_height));
+  if (set.transform && set.transform !== 'none') out.push(optionLabel(TRANSFORM_OPTIONS, set.transform));
+  const lsRaw = String(set.letter_spacing ?? '').trim();
+  const ls = parseFloat(lsRaw);
+  // Numero nudo = px (come lo scrive il CSS dei set); con unità resta com'è.
+  if (Number.isFinite(ls) && ls !== 0) out.push(/[a-z%]$/i.test(lsRaw) ? lsRaw : fmt(lsRaw, 'px'));
+  return out.filter(Boolean).join(' · ');
+});
+
+function scollegaPreset() {
+  if (!props.linkedPresetKey) return;
+  emit('update', { key: props.linkedPresetKey, value: '' });
+}
+
 /* ── Sintesi sul trigger ─────────────────────────────────────────────────────
    Il popover fa risparmiare spazio ma nasconde lo stato: senza aprirlo non
    sapevi che il titolo era a 46px. Qui sotto le chiavi valorizzate diventano
@@ -628,20 +724,22 @@ const FAMIGLIE_LEGACY = {
   heading: 'Titoli', serif: 'Titoli', body: 'Testo', sans: 'Testo', mono: 'Mono',
 };
 
-// 'var(--olo-font-family-heading)' → "Titoli" · "Georgia, serif" → "Georgia"
+// 'var(--olo-font-family-heading)' → "Poppins" · "Georgia, serif" → "Georgia"
+// Per i ruoli del tema la sintesi scrive il font VERO: «Titoli» accanto a uno
+// stile tipografico che si chiama anch'esso «Titoli» (ma è un altro font) non
+// diceva niente. Il nome del ruolo resta solo se il tema non ha un font.
 function familyLabel(value) {
   const v = String(value || '').trim();
   if (!v) return '';
+  const vero = resolveFontToken(v, stylesStore);
+  if (vero) return vero.split(',')[0].replace(/['"]/g, '').trim();
+  // Il tema non ha un font per quel ruolo, o il set non esiste più.
   if (FAMIGLIE_LEGACY[v.toLowerCase()]) return t(FAMIGLIE_LEGACY[v.toLowerCase()]);
   if (v.startsWith('var(--olo-font-family-heading')) return t('Titoli');
   if (v.startsWith('var(--olo-font-family-mono')) return t('Mono');
   if (v.startsWith('var(--olo-font-family')) return t('Testo');
   const custom = v.match(/^var\(--olo-font-([\w-]+)-family/);
-  if (custom) {
-    const id = custom[1];
-    const set = (stylesStore.globalTypography || []).find(s => s.id === id);
-    return set?.label || set?.name || id;
-  }
+  if (custom) return custom[1];
   return v.split(',')[0].replace(/['"]/g, '').trim();
 }
 
@@ -652,8 +750,11 @@ const summaryParts = computed(() => {
     const hit = globalPresets.value.find(p => p.value === props.values[props.presetKey]);
     out.push(hit ? hit.label : String(props.values[props.presetKey]));
   }
+  // Stile collegato: la sintesi lo nomina e salta ciò che lo stile governa,
+  // altrimenti mostrerebbe valori locali che sulla pagina non si vedono.
+  if (presetCollegato.value) out.push('«' + presetCollegato.value.label + '»');
   if (filled('tag')) out.push(String(raw('tag')).toUpperCase());
-  if (filled('family')) out.push(familyLabel(raw('family')));
+  if (filled('family') && !governata('family')) out.push(familyLabel(raw('family')));
 
   // Dimensione: fluida (min–max) oppure fissa
   if (filled('fluidMin') || filled('fluidMax')) {
@@ -665,17 +766,17 @@ const summaryParts = computed(() => {
   }
   if (filled('maxWidth')) out.push(fmt(raw('maxWidth'), props.maxWidthUnit));
 
-  if (filled('weight')) out.push(String(raw('weight')));
-  if (filled('lineHeight')) out.push(fmt(raw('lineHeight')));
-  if (filled('letterSpacing')) out.push(fmt(raw('letterSpacing'), props.letterSpacingUnit));
+  if (filled('weight') && !governata('weight')) out.push(String(raw('weight')));
+  if (filled('lineHeight') && !governata('lineHeight')) out.push(fmt(raw('lineHeight')));
+  if (filled('letterSpacing') && !governata('letterSpacing')) out.push(fmt(raw('letterSpacing'), props.letterSpacingUnit));
   if (filled('wordSpacing')) out.push(fmt(raw('wordSpacing'), 'px') + ' ' + t('parole'));
 
   // filled() PRIMA di optionLabel: ogni lista ha un'opzione con value ''
   // etichettata «Predefinito», e senza la guardia la sintesi la stampava anche
   // per chiavi che la tile non mappa affatto ("26–46px · 28ch · Predefinito ·
   // Predefinito · Predefinito").
-  if (filled('transform') && raw('transform') !== 'none') out.push(optionLabel(TRANSFORM_OPTIONS, raw('transform')));
-  if (raw('uppercase') === true) out.push(t('MAIUSCOLO'));
+  if (filled('transform') && raw('transform') !== 'none' && !governata('transform')) out.push(optionLabel(TRANSFORM_OPTIONS, raw('transform')));
+  if (raw('uppercase') === true && !governata('uppercase')) out.push(t('MAIUSCOLO'));
   if (raw('italic') === true) out.push(t('Corsivo'));
   if (filled('style') && raw('style') !== 'normal') out.push(optionLabel(STYLE_OPTIONS, raw('style')));
   if (filled('decoration') && raw('decoration') !== 'none') out.push(optionLabel(DECORATION_OPTIONS, raw('decoration')));
@@ -720,6 +821,18 @@ const stileAnteprima = computed(() => {
 
   const col = resolveColorToken(raw('color'), stylesStore);
   if (col) st.color = col;
+
+  // A stile collegato l'anteprima mostra il set, cioè quello che va in pagina.
+  const set = presetCollegato.value?.set;
+  if (set) {
+    const famSet = resolveFontToken(set.family, stylesStore);
+    if (famSet) { st.fontFamily = famSet; assicuraFontPreview(famSet); } else delete st.fontFamily;
+    st.fontWeight = set.weight || 'normal';
+    st.lineHeight = set.line_height || 'normal';
+    st.textTransform = set.transform || 'none';
+    const lsSet = String(set.letter_spacing ?? '').trim();
+    st.letterSpacing = /^-?[0-9.]+$/.test(lsSet) ? lsSet + 'px' : (lsSet || 'normal');
+  }
 
   return st;
 });
@@ -910,15 +1023,36 @@ watch(presetOpen, (val) => {
   color: #6b7280;
 }
 .typo-bp-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   background: transparent;
   border: 1px solid transparent;
   color: #9ca3af;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 10.5px;
+  font-weight: 500;
   line-height: 1;
   padding: 2px 5px;
   border-radius: 4px;
   transition: all 0.12s;
+}
+.typo-bp-ico { display: inline-flex; }
+.typo-bp-toggle:focus-visible {
+  outline: 2px solid var(--olo-ui-accent, #e8622a);
+  outline-offset: 1px;
+}
+/* Pallino: per tablet o telefono esiste già un valore proprio */
+.typo-bp-toggle--valori::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--olo-ui-accent, #e8622a);
 }
 .typo-bp-toggle:hover {
   background: #f3f4f6;
@@ -987,6 +1121,43 @@ watch(presetOpen, (val) => {
   font-size: 10px;
   line-height: 1.35;
   color: #9ca3af;
+}
+
+/* Nota «stile collegato»: sta in cima, al posto delle righe che lo stile governa */
+.typo-linked {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  background: #f8f9fb;
+  border: 1px solid #eef0f3;
+}
+.typo-linked-txt {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: #4b5563;
+}
+.typo-linked-txt strong {
+  color: #111827;
+  font-weight: 600;
+}
+.typo-linked-btn {
+  align-self: flex-start;
+  padding: 0;
+  background: none;
+  border: 0;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--olo-ui-accent, #e8622a);
+  cursor: pointer;
+}
+.typo-linked-btn:hover { text-decoration: underline; }
+.typo-linked-btn:focus-visible {
+  outline: 2px solid var(--olo-ui-accent, #e8622a);
+  outline-offset: 2px;
+  border-radius: 3px;
 }
 
 .typo-preset-list {

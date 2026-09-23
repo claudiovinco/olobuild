@@ -89,7 +89,7 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Testo'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:  'font_size',
         color: 'text_color',

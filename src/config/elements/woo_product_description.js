@@ -61,7 +61,7 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Descrizione'),
-      responsiveKeys: ['size', 'lineHeight'],
+      responsiveKeys: [],
       keys: {
         size:       'font_size',
         lineHeight: 'line_height',

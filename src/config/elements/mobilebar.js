@@ -99,7 +99,7 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Pannello'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:       'panel_font_size',
         color:      'panel_text_color',

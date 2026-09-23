@@ -297,7 +297,7 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Titolo card'),
-      responsiveKeys: ['letterSpacing'],
+      responsiveKeys: [],
       keys: {
         family:        'font_family',
         weight:        'title_weight',

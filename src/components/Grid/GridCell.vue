@@ -75,6 +75,12 @@ const OMBRA_SUL_WRAPPER = new Set([
   'woo_product_filter', 'woo_product_gallery_slider', 'woo_quickview', 'woo_recently_viewed',
   'woo_wishlist',
 ]);
+// Gemello JS di tile_stile_tipografico_proprio() in class-frontend-renderer.php:
+// tile che applicano lo «Stile tipografico» da sé, a un elemento preciso, e
+// che quindi non ricevono la classe olo-typo-* sul wrapper.
+const STILE_TIPOGRAFICO_PROPRIO = new Set([
+  'section-header',
+]);
 import { rv } from '@/composables/useResponsiveValue';
 import { useTileActions } from '@/composables/useTileActions';
 
@@ -266,7 +272,7 @@ const cellClasses = computed(() => {
   // gemelle di class-style-system.php) colpiscono i discendenti, perche' per
   // sola eredita' il preset perdeva contro ogni regola del tema.
   const typoPreset = String(props.tile.settings?.typography_preset || '').replace(/[^a-z0-9_-]/gi, '');
-  if (typoPreset) classes.push('olo-typo-' + typoPreset);
+  if (typoPreset && !STILE_TIPOGRAFICO_PROPRIO.has(props.tile.type)) classes.push('olo-typo-' + typoPreset);
   if (isSelected.value) classes.push('olo-grid-cell--selected');
   if (props.tile.style?.full_width) classes.push('olo-grid-cell--fullwidth');
   if (hasBgImage.value || hasOverlay.value) classes.push('olo-grid-cell--has-bg');

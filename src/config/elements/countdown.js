@@ -130,7 +130,7 @@ export default {
     // `text_color` (ereditato dal wrapper .olo-countdown). Il mapping precedente era
     // invertito: il color picker sotto "Numeri" cambiava le etichette.
     { type: 'typography', label: t('Numeri'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:   'number_font_size',
         weight: 'number_font_weight',
@@ -139,7 +139,7 @@ export default {
       sizeMin: 16, sizeMax: 120, sizeStep: 2,
     },
     { type: 'typography', label: t('Etichette'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:   'label_font_size',
         weight: 'label_font_weight',
@@ -148,7 +148,7 @@ export default {
       sizeMin: 8, sizeMax: 24, sizeStep: 1,
     },
     { type: 'typography', label: t('Separatore'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:  'separator_font_size',
         color: 'separator_color',

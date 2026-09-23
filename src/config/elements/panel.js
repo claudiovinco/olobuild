@@ -214,7 +214,7 @@ export default {
       { value: 'justify', label: t('Giustificato') },
     ]},
     { type: 'typography', label: t('Titolo'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         tag:    'title_element',
         size:   'title_size',
@@ -224,7 +224,7 @@ export default {
       sizeMin: 0, sizeMax: 60, sizeStep: 1,
     },
     { type: 'typography', label: t('Meta'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:  'meta_size',
         color: 'meta_color',
@@ -232,7 +232,7 @@ export default {
       sizeMin: 0, sizeMax: 24, sizeStep: 1,
     },
     { type: 'typography', label: t('Contenuto'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:  'content_size',
         color: 'content_color',

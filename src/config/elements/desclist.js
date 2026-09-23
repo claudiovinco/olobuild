@@ -91,7 +91,7 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Termine'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:   'term_font_size',
         weight: 'term_font_weight',
@@ -100,7 +100,7 @@ export default {
       sizeMin: 12, sizeMax: 24, sizeStep: 1,
     },
     { type: 'typography', label: t('Definizione'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:  'definition_font_size',
         color: 'definition_color',

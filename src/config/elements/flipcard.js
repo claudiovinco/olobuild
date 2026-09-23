@@ -240,7 +240,7 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Titolo'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:   'title_size',
         weight: 'title_weight',
@@ -249,7 +249,7 @@ export default {
       sizeMin: 16, sizeMax: 40, sizeStep: 1,
     },
     { type: 'typography', label: t('Descrizione'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:  'desc_size',
         color: 'back_text_color',

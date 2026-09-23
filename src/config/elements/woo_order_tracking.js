@@ -63,7 +63,7 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Label'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         tag:   'title_tag',
         color: 'text_color',
@@ -71,7 +71,7 @@ export default {
       sizeMin: 12, sizeMax: 60,
     },
     { type: 'typography', label: t('Pulsante'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         color: 'button_color',
       },

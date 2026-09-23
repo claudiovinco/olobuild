@@ -330,6 +330,73 @@ const scartiJs = diff(inPhp, inJs);
 violazioni['ombra-wrapper-elenco'] = [...scartiPhp, ...scartiJs].map((x) => ({ file: 'elenco', type: '', key: String(x), label: '' }));
 RULES.push({ id: 'ombra-wrapper-elenco', titolo: 'L\'elenco «ombra sul wrapper» combacia fra PHP, JS e stato reale del codice' });
 
+// ─── il selettore «per dispositivo» della tipografia deve essere letto ───────
+// Le chiavi logiche in `responsiveKeys` fanno comparire, accanto alla proprietà,
+// il selettore desktop/tablet/telefono, che salva `<chiave>_tablet` e
+// `<chiave>_mobile`. Se il renderer PHP della tile quelle chiavi non le legge, il
+// selettore è un controllo che non fa niente: erano 128 su 131. Qui lo si
+// ricalcola dal codice. Senza `responsiveKeys` il selettore non compare.
+const phpPerTipo = {};
+for (const f of fs.readdirSync(path.join(ROOT, 'includes/tiles')).filter((x) => x.endsWith('.php'))) {
+  const src = fs.readFileSync(path.join(ROOT, 'includes/tiles', f), 'utf8');
+  const m = src.match(/protected\s+\$type\s*=\s*'([^']+)'/);
+  if (m) phpPerTipo[m[1]] = src;
+}
+const leggePerDispositivo = (php, k) => php.includes(k + '_tablet') || php.includes(k + '_mobile')
+  || php.includes("'" + k + "_' .") || php.includes("'" + k + "_'.");
+const dispositivoFantasma = [];
+for (const f of fs.readdirSync(ELEMENTS).filter((x) => x.endsWith('.js') && !x.startsWith('_'))) {
+  const src = fs.readFileSync(path.join(ELEMENTS, f), 'utf8');
+  const tipo = (src.match(/type:\s*'([^']+)'/) || [])[1];
+  if (!tipo) continue;
+  const php = phpPerTipo[tipo] || '';
+  const re = /type:\s*'typography'/g;
+  let m;
+  while ((m = re.exec(src))) {
+    const inizio = src.lastIndexOf('{', m.index);
+    let prof = 0, fine = inizio;
+    for (let i = inizio; i < src.length; i++) {
+      if (src[i] === '{') prof++;
+      else if (src[i] === '}') { prof--; if (prof === 0) { fine = i; break; } }
+    }
+    const blocco = src.slice(inizio, fine + 1);
+    const rk = blocco.match(/responsiveKeys:\s*\[([^\]]*)\]/);
+    if (!rk) continue;
+    for (const [, logica] of rk[1].matchAll(/'(\w+)'/g)) {
+      const mk = blocco.match(new RegExp('(?:^|[\\s{,])' + logica + ":\\s*'([^']+)'"));
+      if (!mk) continue; // chiave logica non mappata: il selettore non compare
+      if (!leggePerDispositivo(php, mk[1])) {
+        dispositivoFantasma.push({ file: f.replace(/\.js$/, ''), type: 'typography', key: mk[1] + ' (' + logica + ')', label: '' });
+      }
+    }
+  }
+}
+violazioni['dispositivo-letto'] = dispositivoFantasma;
+RULES.push({ id: 'dispositivo-letto', titolo: 'Il selettore tablet/telefono della tipografia compare solo dove il renderer ne legge i valori' });
+
+// ─── «stile tipografico applicato dalla tile»: PHP e JS d'accordo ───────────
+// Le tile dell'elenco non ricevono la classe olo-typo-* sul wrapper: lo stile
+// lo applicano loro a un elemento preciso. L'elenco è scritto in PHP e in JS
+// (sito e canvas devono decidere allo stesso modo), e ogni tile che vi compare
+// deve leggere davvero `typography_preset`, altrimenti lo stile non farebbe niente.
+function elencoTipi(file, marcatore) {
+  try {
+    const src = fs.readFileSync(path.join(ROOT, file), 'utf8');
+    const i = src.indexOf(marcatore);
+    if (i < 0) return null;
+    const blocco = src.slice(i, src.indexOf(']', i));
+    return new Set([...blocco.matchAll(/'([a-z0-9_-]+)'/g)].map((x) => x[1]));
+  } catch { return null; }
+}
+const stilePhp = elencoTipi('includes/class-frontend-renderer.php', 'function tile_stile_tipografico_proprio');
+const stileJs = elencoTipi('src/components/Grid/GridCell.vue', 'const STILE_TIPOGRAFICO_PROPRIO = new Set([');
+const stileScarti = diff(stilePhp, stileJs);
+for (const tipo of stilePhp || []) {
+  if (!/typography_preset/.test(phpPerTipo[tipo] || '')) stileScarti.push(tipo + ' (non legge typography_preset)');
+}
+violazioni['stile-proprio-elenco'] = stileScarti.map((x) => ({ file: 'elenco', type: '', key: String(x), label: '' }));
+RULES.push({ id: 'stile-proprio-elenco', titolo: 'Le tile che applicano da sé lo stile tipografico: elenco PHP = JS, e lo leggono davvero' });
+
 // ─── confronto con la baseline ──────────────────────────────────────────────
 const args = process.argv.slice(2);
 const conteggi = Object.fromEntries(Object.entries(violazioni).map(([k, v]) => [k, v.length]));

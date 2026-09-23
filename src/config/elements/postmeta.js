@@ -123,7 +123,7 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Voci'),
-      responsiveKeys: ['size'],
+      responsiveKeys: [],
       keys: {
         size:          'font_size',
         family:        'font_family',
