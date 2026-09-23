@@ -59,6 +59,7 @@
 <script setup>
 import { t } from '@/i18n';
 import { computed } from 'vue';
+import { toSpacingSides, sidesCss } from '@/composables/useBoxModel';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -134,12 +135,19 @@ const vertListStyle = computed(() => ({
 }));
 
 function vertItemStyle(idx) {
-  const pad = parseInt(s.value.v_item_padding) || 10;
+  // Gemello di class-navmenu-tile.php: numero = resa storica (N, N+4 ai lati), oggetto = 4 lati.
+  const raw = s.value.v_item_padding;
+  const pad = raw && typeof raw === 'object'
+    ? Math.max(4, toSpacingSides(raw, { fallback: [10, 14, 10, 14] }).top)
+    : Math.max(4, parseInt(raw) || 10);
+  const padCss = raw && typeof raw === 'object'
+    ? sidesCss(toSpacingSides(raw, { fallback: [10, 14, 10, 14] }))
+    : pad + 'px ' + (pad + 4) + 'px';
   const radius = parseInt(s.value.v_border_radius) || 6;
   // TOKEN-FIRST: voce attiva = primario brand (era #e1474f / rgba indaco off-brand)
   const accent = s.value.active_color || 'var(--olo-color-primary, #e1474f)';
   const base = {
-    padding: pad + 'px ' + (pad + 4) + 'px',
+    padding: padCss,
     borderRadius: radius + 'px',
     fontSize: (parseInt(s.value.font_size) || 14) + 'px',
     fontWeight: s.value.font_weight || '500',

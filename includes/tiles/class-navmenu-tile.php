@@ -408,7 +408,18 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
         // --- Vertical mode styles ---
         if ( ( $s['style'] ?? '' ) === 'vertical' ) {
             $v_spacing    = max( 0, intval( $s['v_item_spacing'] ) );
-            $v_padding    = max( 4, intval( $s['v_item_padding'] ) );
+            // «Padding voce» è il controllo a 4 lati: un numero (valore storico o lati collegati)
+            // dà la resa di sempre, N sopra e sotto e N+4 ai lati; un oggetto dà i 4 lati scelti.
+            // Prima intval() dell'oggetto valeva 1 → la voce prendeva sempre 4px.
+            $v_pad_raw    = $s['v_item_padding'] ?? 10;
+            if ( is_array( $v_pad_raw ) ) {
+                $v_sides   = Olobuild_Tile_Utils::spacing_sides( $v_pad_raw, [], [ 10, 14, 10, 14 ] );
+                $v_padding = max( 4, $v_sides['top'] ); // base delle voci annidate
+                $v_pad_css = Olobuild_Tile_Utils::sides_css( $v_sides );
+            } else {
+                $v_padding = max( 4, intval( $v_pad_raw ) );
+                $v_pad_css = $v_padding . 'px ' . ( $v_padding + 4 ) . 'px';
+            }
             $v_radius     = max( 0, Olobuild_Tile_Utils::radius_int( $s['v_border_radius'] ) );
             $v_rad_h      = Olobuild_Tile_Utils::radius_hover( $s, 'v_border_radius_hover' );
             $v_hover_bg   = $this->safe_color_css( $s['v_hover_bg'] ?? '' );
@@ -419,7 +430,7 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
             $v_icon_size  = max( 14, intval( $s['v_icon_size'] ) );
 
             $rules[] = "{$sel} .olo-vnav-list { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:{$v_spacing}px; }";
-            $rules[] = "{$sel} .olo-vnav-link { display:flex; align-items:center; gap:8px; padding:{$v_padding}px " . ( $v_padding + 4 ) . "px; border-radius:{$v_radius}px; text-decoration:none; transition:background .15s,color .15s" . ( $v_rad_h ? ', ' . $v_rad_h['transition'] : '' ) . "; }";
+            $rules[] = "{$sel} .olo-vnav-link { display:flex; align-items:center; gap:8px; padding:{$v_pad_css}; border-radius:{$v_radius}px; text-decoration:none; transition:background .15s,color .15s" . ( $v_rad_h ? ', ' . $v_rad_h['transition'] : '' ) . "; }";
             // a11y tastiera: anello di focus visibile sulle voci di menu verticale
             $rules[] = "{$sel} .olo-vnav-link:focus-visible { outline:none; box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }";
 
