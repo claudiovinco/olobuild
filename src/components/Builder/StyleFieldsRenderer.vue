@@ -4,8 +4,9 @@
          tile disegna, tile.settings) e CONTENITORE (il riquadro della tile nella
          griglia, tile.style). Stessa parola, due oggetti diversi — «Raggio», «Bordo»,
          «Ombra» esistono in entrambi — e senza l'intestazione non si capiva su cosa
-         agisse ciascuno. Le intestazioni compaiono solo quando i blocchi sono due. -->
-    <div v-if="dueBlocchi && tileStyleSections.length" class="olo-sfr-blocco">
+         agisse ciascuno. Sezione, riga e colonna non le hanno: lì l'elemento È il
+         contenitore. -->
+    <div v-if="conBlocchi && tileStyleSections.length" class="olo-sfr-blocco">
       <span class="olo-sfr-blocco-titolo">{{ t('Elemento') }}</span>
     </div>
     <!-- Tile-specific style sections (es. tipografia hero, colori CTA) — letti/scritti su tile.settings -->
@@ -50,10 +51,10 @@
       </template>
     </template>
 
-    <div v-if="dueBlocchi && groupedSections.length" class="olo-sfr-blocco">
+    <div v-if="conBlocchi && groupedSections.length" class="olo-sfr-blocco">
       <span class="olo-sfr-blocco-titolo">{{ t('Contenitore') }}</span>
       <span class="olo-sfr-blocco-nota">{{ atomica
-        ? t('Lo spazio attorno all\'elemento nella griglia. Sfondo, bordo e ombra si impostano sull\'elemento, qui sopra.')
+        ? t('Lo spazio attorno all\'elemento nella griglia: resta sempre trasparente, senza sfondo né cornice.')
         : t('Il riquadro che contiene la tile nella griglia.') }}</span>
     </div>
     <!-- Wrapper style sections (universali — letti/scritti su tile.style) -->
@@ -299,11 +300,11 @@ const tileStyleSections = computed(() => {
   return filterSectionsBySearch(groupBySeparator(fields));
 });
 
-// Blocchi «Elemento» / «Contenitore»: servono quando la tile ha stili propri. Per
-// sezione, riga e colonna l'elemento È il contenitore: un blocco solo, senza titoli.
+// Blocchi «Elemento» / «Contenitore» per ogni tile di contenuto. Per sezione, riga
+// e colonna l'elemento È il contenitore: un blocco solo, senza titoli.
 const STRUTTURALI = new Set(['section', 'row', 'column', 'inner-columns']);
-const atomica   = computed(() => ATOMIC_TILE_TYPES.has(props.tileType));
-const dueBlocchi = computed(() => !STRUTTURALI.has(props.tileType) && (props.tileFields || []).length > 0);
+const atomica    = computed(() => ATOMIC_TILE_TYPES.has(props.tileType));
+const conBlocchi = computed(() => !!props.tileType && !STRUTTURALI.has(props.tileType));
 
 function emitMain(key, value) {
   emit('update', { type: 'main', key, value });
