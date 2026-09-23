@@ -140,7 +140,10 @@ export default {
     ] },
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    // Stile tipografico collegato = governa famiglia, peso e interlinea di titolo
+    // e testo: i due controlli quelle righe allora non le mostrano.
     { type: 'typography', label: t('Titolo'),
+      linkedPresetKey: 'typography_preset',
       responsiveKeys: ['lineHeight'],
       keys: {
         tag:        'heading_tag',
@@ -152,6 +155,7 @@ export default {
       sizeMin: 12, sizeMax: 60,
     },
     { type: 'typography', label: t('Testo'),
+      linkedPresetKey: 'typography_preset',
       responsiveKeys: [],
       keys: {
         family: 'text_font_family',

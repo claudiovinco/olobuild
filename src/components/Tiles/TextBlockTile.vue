@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { resolveFontFamily } from '@/composables/oloTileDefaults';
+import { resolveFontFamily, fontWeightCss } from '@/composables/oloTileDefaults';
 import { computed } from 'vue';
 
 const props = defineProps({
@@ -52,12 +52,18 @@ const contentStyle = computed(() => {
   const fs = parseInt(s.value.font_size);
   if (fs > 0) style.fontSize = fs + 'px';
 
+  // Stile tipografico collegato: governa famiglia, peso e interlinea (classe
+  // olo-typo-* sul wrapper, GridCell); i valori locali non si scrivono —
+  // gemello di class-text-block-tile.php.
+  if (String(s.value.typography_preset || '').trim()) return style;
+
   if (s.value.line_height) style.lineHeight = s.value.line_height;
 
   // Minimo garantito — gemello di class-text-block-tile.php.
   const ff = resolveFontFamily(s.value.font_family || '');
   if (ff) style.fontFamily = ff;
-  if (s.value.font_weight) style.fontWeight = s.value.font_weight;
+  const fw = fontWeightCss(s.value.font_weight);
+  if (fw) style.fontWeight = fw;
 
   return style;
 });

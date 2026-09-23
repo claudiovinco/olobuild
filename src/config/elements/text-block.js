@@ -67,7 +67,10 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    // Stile tipografico collegato = governa famiglia, peso e interlinea: il
+    // controllo quelle righe allora non le mostra.
     { type: 'typography', label: t('Testo'),
+      linkedPresetKey: 'typography_preset',
       responsiveKeys: [],
       keys: {
         family:     'font_family',

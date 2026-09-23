@@ -84,8 +84,9 @@ class Olobuild_TextBlock_Tile extends Olobuild_Tile_Base {
             }
         }
 
-        // Apply global typography preset if set
-        $tp = sanitize_text_field( $s['typography_preset'] ?? '' );
+        // Apply global typography preset if set — sanitize_key: il valore finisce
+        // nei nomi delle custom property, e gli id dei set sono chiavi.
+        $tp = sanitize_key( (string) ( $s['typography_preset'] ?? '' ) );
         if ( $tp ) {
             $style .= "font-family:var(--olo-font-{$tp}-family);";
             $style .= "font-weight:var(--olo-font-{$tp}-weight);";
@@ -105,18 +106,20 @@ class Olobuild_TextBlock_Tile extends Olobuild_Tile_Base {
         }
 
         // Minimo garantito del controllo tipografia: famiglia e peso accanto a
-        // corpo, interlinea e colore. Vengono DOPO il preset globale, cosi' la
-        // scelta sul singolo elemento vince sullo stile di tutta la tile.
-        $ff = $this->resolve_font_family( (string) ( $s['font_family'] ?? '' ) );
+        // corpo, interlinea e colore. Con uno stile tipografico collegato non si
+        // scrivono: lo stile governa famiglia, peso e interlinea (sui paragrafi
+        // arriva comunque, tramite la classe olo-typo-* sul wrapper), e
+        // l'inspector quelle tre righe allora non le mostra.
+        $ff = $tp ? '' : $this->resolve_font_family( (string) ( $s['font_family'] ?? '' ) );
         if ( $ff ) {
             $style .= 'font-family:' . $ff . ';';
         }
-        $fw = trim( (string) ( $s['font_weight'] ?? '' ) );
-        if ( $fw !== '' && preg_match( '/^(?:[1-9]00|normal|bold|lighter|bolder)$/', $fw ) ) {
+        $fw = $tp ? '' : $this->font_weight_css( $s['font_weight'] ?? '' );
+        if ( $fw !== '' ) {
             $style .= 'font-weight:' . $fw . ';';
         }
 
-        $lh = $s['line_height'] ?? '';
+        $lh = $tp ? '' : ( $s['line_height'] ?? '' );
         if ( is_numeric( $lh ) ) {
             $lh_val = (float) $lh;
             if ( $lh_val >= 0.5 && $lh_val <= 5 ) {

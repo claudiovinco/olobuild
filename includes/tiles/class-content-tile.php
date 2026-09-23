@@ -86,13 +86,19 @@ class Olobuild_Content_Tile extends Olobuild_Tile_Base {
         $txt_clr = $this->safe_color_css( $s['text_color'] ?? '' );
         $txt_style = '';
         if ( $txt_clr ) { $txt_style = 'color:' . $txt_clr . ';'; }
+        // Stile tipografico collegato: governa famiglia, peso e interlinea di
+        // titolo e testo, tramite la classe olo-typo-* sul wrapper. I valori
+        // locali allora non si scrivono: sul titolo batterebbero lo stile (inline
+        // vince), sul testo lo perderebbero (le regole colpiscono i <p>) — e
+        // l'inspector, a stile collegato, quelle righe non le mostra.
+        $tp_on = sanitize_key( (string) ( $s['typography_preset'] ?? '' ) ) !== '';
         // Minimo garantito: il corpo testo aveva il solo colore.
-        $t_ff = $this->resolve_font_family( (string) ( $s['text_font_family'] ?? '' ) );
+        $t_ff = $tp_on ? '' : $this->resolve_font_family( (string) ( $s['text_font_family'] ?? '' ) );
         if ( $t_ff ) { $txt_style .= 'font-family:' . $t_ff . ';'; }
         $t_fs = absint( $s['text_font_size'] ?? 0 );
         if ( $t_fs > 0 ) { $txt_style .= 'font-size:' . $t_fs . 'px;'; }
-        $t_fw = trim( (string) ( $s['text_font_weight'] ?? '' ) );
-        if ( $t_fw !== '' && preg_match( '/^(?:[1-9]00|normal|bold|lighter|bolder)$/', $t_fw ) ) { $txt_style .= 'font-weight:' . $t_fw . ';'; }
+        $t_fw = $tp_on ? '' : $this->font_weight_css( $s['text_font_weight'] ?? '' );
+        if ( $t_fw !== '' ) { $txt_style .= 'font-weight:' . $t_fw . ';'; }
 
         // Heading (plain text, no HTML)
         $heading_text = esc_html( wp_strip_all_tags( $s['heading'] ) );
@@ -117,10 +123,10 @@ class Olobuild_Content_Tile extends Olobuild_Tile_Base {
         if ( $hd_fw === '' || ! preg_match( '/^(?:[1-9]00|normal|bold|lighter|bolder)$/', $hd_fw ) ) {
             $hd_fw = 'bold';
         }
-        $hstyle = 'margin:0 0 ' . $hd_gap . 'px 0;font-weight:' . $hd_fw . ';font-size:' . $font_size . ';';
-        $hd_ff = $this->resolve_font_family( (string) ( $s['heading_font_family'] ?? '' ) );
+        $hstyle = 'margin:0 0 ' . $hd_gap . 'px 0;' . ( $tp_on ? '' : 'font-weight:' . $hd_fw . ';' ) . 'font-size:' . $font_size . ';';
+        $hd_ff = $tp_on ? '' : $this->resolve_font_family( (string) ( $s['heading_font_family'] ?? '' ) );
         if ( $hd_ff ) { $hstyle .= 'font-family:' . $hd_ff . ';'; }
-        $hd_lh  = isset( $s['heading_line_height'] ) ? floatval( $s['heading_line_height'] ) : 0;
+        $hd_lh  = ( ! $tp_on && isset( $s['heading_line_height'] ) ) ? floatval( $s['heading_line_height'] ) : 0;
         if ( $hd_lh > 0 ) { $hstyle .= 'line-height:' . $hd_lh . ';'; }
         $allowed_align = [ 'left', 'center', 'right', 'justify' ];
         $hd_align = in_array( $s['heading_align'] ?? '', $allowed_align, true ) ? ( $s['heading_align'] ?? '' ) : '';
