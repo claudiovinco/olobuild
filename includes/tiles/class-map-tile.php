@@ -481,6 +481,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
         $per_page      = max( 1, absint( $s['results_per_page'] ?? 10 ) );
         $card_mh       = max( 0, absint( $s['card_max_height'] ?? 0 ) );
         $card_r        = max( 0, Olobuild_Tile_Utils::radius_int( $s['card_border_radius'] ?? 8 ) );
+        $card_r_h      = Olobuild_Tile_Utils::radius_hover( $s, 'card_border_radius_hover' );
         $show_search   = ! empty( $s['show_location_search'] );
         $show_radius   = ! empty( $s['show_radius'] );
         $radius_d      = max( 1, min( 50, absint( $s['radius_default'] ?? 5 ) ) );
@@ -541,7 +542,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
         ob_start();
         ?>
         <style>
-        <?php echo $this->build_plm_css( $uid, $map_pos, $map_w, $height, $f_cols, $grid_cols, $card_r, $card_mh, $color, $btn_bg, $btn_color, $filter_pos, $filter_w ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by build_plm_css() exclusively from absint/clamped ints, safe_hex() colors and whitelisted enums ?>
+        <?php echo $this->build_plm_css( $uid, $map_pos, $map_w, $height, $f_cols, $grid_cols, $card_r, $card_mh, $color, $btn_bg, $btn_color, $filter_pos, $filter_w, $card_r_h ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by build_plm_css() exclusively from absint/clamped ints, safe_hex() colors and whitelisted enums ?>
         </style>
 
         <div class="olo-tile olo-tile--plm <?php echo esc_attr( $uid ); ?>" role="region" aria-label="<?php echo esc_attr( olobuild_t( 'Mappa luoghi' ) ); ?>">
@@ -889,6 +890,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
         $per_page      = max( 1, absint( $s['results_per_page'] ?? 10 ) );
         $card_mh       = max( 0, absint( $s['card_max_height'] ?? 0 ) );
         $card_r        = max( 0, Olobuild_Tile_Utils::radius_int( $s['card_border_radius'] ?? 8 ) );
+        $card_r_h      = Olobuild_Tile_Utils::radius_hover( $s, 'card_border_radius_hover' );
         $show_search   = ! empty( $s['show_location_search'] );
         $show_radius   = ! empty( $s['show_radius'] );
         $radius_d      = max( 1, min( 50, absint( $s['radius_default'] ?? 5 ) ) );
@@ -961,7 +963,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
         ob_start();
         ?>
         <style>
-        <?php echo $this->build_plm_css( $uid, $map_pos, $map_w, $height, $f_cols, $grid_cols, $card_r, $card_mh, $color, $btn_bg, $btn_color, $filter_pos, $filter_w ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by build_plm_css() exclusively from absint/clamped ints, safe_hex() colors and whitelisted enums ?>
+        <?php echo $this->build_plm_css( $uid, $map_pos, $map_w, $height, $f_cols, $grid_cols, $card_r, $card_mh, $color, $btn_bg, $btn_color, $filter_pos, $filter_w, $card_r_h ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by build_plm_css() exclusively from absint/clamped ints, safe_hex() colors and whitelisted enums ?>
         </style>
 
         <div class="olo-tile olo-tile--plm <?php echo esc_attr( $uid ); ?>" role="region" aria-label="<?php echo esc_attr( olobuild_t( 'Mappa servizi' ) ); ?>">
@@ -1894,7 +1896,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
     /**
      * Build split-view CSS scoped to a unique id. Mirrors the PropertyMapSearch layout.
      */
-    private function build_plm_css( $uid, $map_pos, $map_w, $height, $f_cols, $g_cols, $card_r, $card_mh, $color, $btn_bg, $btn_color, $filter_pos = 'right', $filter_w = '45%' ) {
+    private function build_plm_css( $uid, $map_pos, $map_w, $height, $f_cols, $g_cols, $card_r, $card_mh, $color, $btn_bg, $btn_color, $filter_pos = 'right', $filter_w = '45%', $card_r_h = null ) {
         $sel = '.' . $uid;
 
         // Two areas: M (map) and R (results-panel which contains filters + list + pag).
@@ -1950,8 +1952,9 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
         <?php echo $sel; ?> .plm-view-btn:last-child { border-radius: 0 4px 4px 0; }
         <?php echo $sel; ?> .plm-view-btn.is-active { background: <?php echo $color; ?>; border-color: <?php echo $color; ?>; color: #fff; }
         <?php echo $sel; ?> .plm-results-list { flex: 1; overflow-y: auto; padding: 12px 16px; min-height: 0; }
-        <?php echo $sel; ?> .plm-card { display: grid; grid-template-columns: 38% 1fr; border: 1px solid #E5E7EB; border-radius: <?php echo (int) $card_r; ?>px; overflow: hidden;<?php if ( $card_mh > 0 ) echo ' max-height: ' . (int) $card_mh . 'px;'; ?> background: #fff; margin-bottom: 10px; transition: box-shadow 0.2s, transform 0.15s; cursor: pointer; text-decoration: none; color: inherit; }
-        <?php echo $sel; ?> .plm-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-1px); }
+        <?php echo $sel; ?> .plm-card { display: grid; grid-template-columns: 38% 1fr; border: 1px solid #E5E7EB; border-radius: <?php echo (int) $card_r; ?>px; overflow: hidden;<?php if ( $card_mh > 0 ) echo ' max-height: ' . (int) $card_mh . 'px;'; ?> background: #fff; margin-bottom: 10px; transition: box-shadow 0.2s, transform 0.15s<?php if ( $card_r_h ) echo ', ' . $card_r_h['transition']; ?>; cursor: pointer; text-decoration: none; color: inherit; }
+        <?php echo $sel; ?> .plm-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-1px);<?php if ( $card_r_h ) echo ' border-radius: ' . $card_r_h['css'] . ' !important;'; ?> }
+        <?php if ( $card_r_h ) : // In griglia il testo ripete gli angoli bassi della card: seguono l'hover. ?><?php echo $sel; ?> .plm-results-list.plm-grid-view .plm-card-body { transition: <?php echo $card_r_h['transition']; ?>; } <?php echo $sel; ?> .plm-results-list.plm-grid-view .plm-card:hover .plm-card-body { border-radius: 0 0 <?php echo (int) $card_r_h['br']; ?>px <?php echo (int) $card_r_h['bl']; ?>px !important; }<?php endif; ?>
         <?php echo $sel; ?> .plm-card.is-highlighted { box-shadow: 0 0 0 2px <?php echo $color; ?>, 0 4px 12px rgba(0,0,0,0.1); }
         <?php echo $sel; ?> .plm-results-list.plm-grid-view { display: grid; grid-template-columns: repeat(<?php echo (int) $g_cols; ?>, 1fr); gap: 10px; padding: 12px 16px; align-content: start; }
         <?php echo $sel; ?> .plm-results-list.plm-grid-view .plm-card { display: flex; flex-direction: column; margin-bottom: 0; position: relative; min-height: 220px; }

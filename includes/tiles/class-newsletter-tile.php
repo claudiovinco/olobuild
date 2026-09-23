@@ -156,6 +156,8 @@ class Olobuild_Newsletter_Tile extends Olobuild_Tile_Base {
         $ih          = absint( $s['input_height'] ) ?: 44;
         $ir          = Olobuild_Tile_Utils::radius_int( $s['input_radius'] );
         $br          = Olobuild_Tile_Utils::radius_int( $s['btn_radius'] );
+        $ir_h        = Olobuild_Tile_Utils::radius_hover( $s, 'input_radius_hover' );
+        $br_h        = Olobuild_Tile_Utils::radius_hover( $s, 'btn_radius_hover' );
         $is_h        = $s['layout'] === 'horizontal';
         $is_minimal  = $s['layout'] === 'minimal';
         $eyebrow_col = $this->safe_color_css( $s['eyebrow_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
@@ -166,7 +168,7 @@ class Olobuild_Newsletter_Tile extends Olobuild_Tile_Base {
         ?>
         <style>
         .<?php echo $uid; ?>{display:flex;justify-content:<?php echo $align_css; ?>}
-        .<?php echo $uid; ?> .olo-nl-box{max-width:<?php echo absint($s['max_width']) ?: 600; ?>px;width:100%;background:<?php echo esc_attr($bg); ?>;border-radius:<?php echo $radius; ?>px;padding: <?php echo $pad; ?>;<?php echo ! empty( $s['box_border'] ) ? 'border:1px solid ' . esc_attr( $s['box_border'] ) . ';' : ''; ?>text-align:center}
+        .<?php echo $uid; ?> .olo-nl-box{max-width:<?php echo absint($s['max_width']) ?: 600; ?>px;width:100%;background:<?php echo esc_attr($bg); ?>;border-radius:<?php echo $radius; ?>px;padding: <?php echo $pad; ?>;<?php echo ! empty( $s['box_border'] ) ? 'border:1px solid ' . esc_attr( $s['box_border'] ) . ';' : ''; ?>text-align:center}<?php echo Olobuild_Tile_Utils::radius_hover_rules( ".{$uid} .olo-nl-box", $s, 'border_radius_hover' ); ?>
         .<?php echo $uid; ?> .olo-nl-eyebrow{display:block;font-size:11px;font-weight:600;letter-spacing:.32em;text-transform:uppercase;color:<?php echo $eyebrow_col; ?>;margin:0 0 14px}
         .<?php echo $uid; ?> .olo-nl-title{font-size:<?php echo absint($s['title_size']); ?>px;font-weight:<?php echo esc_attr($s['title_weight']); ?>;color:<?php echo $s['title_color'] ? esc_attr($s['title_color']) : 'inherit'; ?>;margin:0 0 8px;line-height:1.3}
         .<?php echo $uid; ?> .olo-nl-title em{font-style:italic;color:<?php echo $accent_col; ?>}
@@ -175,11 +177,11 @@ class Olobuild_Newsletter_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-nl-icon img{width:<?php echo absint($s['icon_size']); ?>px;height:auto;display:inline-block}
         .<?php echo $uid; ?> .olo-nl-form{display:flex;<?php echo $is_h ? 'flex-direction:row;gap:8px;align-items:stretch' : 'flex-direction:column;gap:10px'; ?>}
         .<?php echo $uid; ?> .olo-nl-form input[type="text"],
-        .<?php echo $uid; ?> .olo-nl-form input[type="email"]{height:<?php echo $ih; ?>px;padding:0 14px;background:<?php echo esc_attr($s['input_bg']); ?>;color:<?php echo esc_attr($s['input_color']); ?>;border:1px solid <?php echo esc_attr($s['input_border']); ?>;border-radius:<?php echo $ir; ?>px;font-size:14px;outline:none;transition:border-color 0.2s;flex:1;min-width:0}
+        .<?php echo $uid; ?> .olo-nl-form input[type="email"]{height:<?php echo $ih; ?>px;padding:0 14px;background:<?php echo esc_attr($s['input_bg']); ?>;color:<?php echo esc_attr($s['input_color']); ?>;border:1px solid <?php echo esc_attr($s['input_border']); ?>;border-radius:<?php echo $ir; ?>px;font-size:14px;outline:none;transition:border-color 0.2s<?php if ( $ir_h ) echo ', ' . $ir_h['transition']; ?>;flex:1;min-width:0}<?php if ( $ir_h ) : ?>.<?php echo $uid; ?> .olo-nl-form input[type="email"]:hover{border-radius:<?php echo $ir_h['css']; ?> !important}<?php endif; ?>
         .<?php echo $uid; ?> .olo-nl-form input:focus{border-color:<?php echo esc_attr($focus_b); ?>;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent)}
         <?php if ( ! empty( $s['input_placeholder_color'] ) ) : ?>.<?php echo $uid; ?> .olo-nl-form input::placeholder{color:<?php echo esc_attr($s['input_placeholder_color']); ?>;opacity:1}<?php endif; ?>
-        .<?php echo $uid; ?> .olo-nl-btn{height:<?php echo $ih; ?>px;padding:0 <?php echo $is_minimal ? '16' : '24'; ?>px;background:<?php echo esc_attr($btn_bg); ?>;color:<?php echo esc_attr($s['btn_color']); ?>;border:none;border-radius:<?php echo $br; ?>px;font-size:<?php echo absint($s['btn_font_size']); ?>px;font-weight:<?php echo esc_attr($s['btn_font_weight']); ?>;cursor:pointer;transition:background 0.2s,transform 0.15s;display:inline-flex;align-items:center;gap:6px;justify-content:center;white-space:nowrap;<?php echo $is_h ? '' : 'width:100%'; ?>}
-        .<?php echo $uid; ?> .olo-nl-btn:hover{background:<?php echo esc_attr($btn_hover); ?>;<?php if ( ! empty( $s['btn_color_hover'] ) ) echo 'color:' . esc_attr( $s['btn_color_hover'] ) . ';'; ?>transform:translateY(-1px)}
+        .<?php echo $uid; ?> .olo-nl-btn{height:<?php echo $ih; ?>px;padding:0 <?php echo $is_minimal ? '16' : '24'; ?>px;background:<?php echo esc_attr($btn_bg); ?>;color:<?php echo esc_attr($s['btn_color']); ?>;border:none;border-radius:<?php echo $br; ?>px;font-size:<?php echo absint($s['btn_font_size']); ?>px;font-weight:<?php echo esc_attr($s['btn_font_weight']); ?>;cursor:pointer;transition:background 0.2s,transform 0.15s<?php if ( $br_h ) echo ', ' . $br_h['transition']; ?>;display:inline-flex;align-items:center;gap:6px;justify-content:center;white-space:nowrap;<?php echo $is_h ? '' : 'width:100%'; ?>}
+        .<?php echo $uid; ?> .olo-nl-btn:hover{background:<?php echo esc_attr($btn_hover); ?>;<?php if ( ! empty( $s['btn_color_hover'] ) ) echo 'color:' . esc_attr( $s['btn_color_hover'] ) . ';'; ?>transform:translateY(-1px)<?php if ( $br_h ) echo ';border-radius:' . $br_h['css'] . ' !important'; ?>}
         .<?php echo $uid; ?> .olo-nl-btn:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent)}
         .<?php echo $uid; ?> .olo-nl-privacy{font-size:11px;color:<?php echo ! empty( $s['privacy_color'] ) ? esc_attr( $s['privacy_color'] ) : 'var(--olo-color-text-muted,#9CA3AF)'; ?>;margin-top:10px;display:flex;align-items:flex-start;gap:6px;justify-content:center;text-align:left}
         .<?php echo $uid; ?> .olo-nl-privacy a{color:inherit;text-decoration:underline}

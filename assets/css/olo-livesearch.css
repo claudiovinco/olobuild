@@ -271,6 +271,12 @@
   border-radius: var(--ls-thumb-radius, 6px);
   object-fit: cover;
   background: #f3f4f6;
+  transition: border-radius var(--ls-thumb-radius-dur, 0ms) cubic-bezier(.4,0,.2,1);
+}
+
+/* Raggio in hover (campo «Raggio miniatura», stato Hover): senza valore resta il base. */
+.olo-ls-item-link:hover .olo-ls-thumb {
+  border-radius: var(--ls-thumb-radius-hover, var(--ls-thumb-radius, 6px));
 }
 
 .olo-ls-thumb--empty {

@@ -90,6 +90,7 @@ class Olobuild_Pricelist_Tile extends Olobuild_Tile_Base {
         $padding_x     = (int) $padding_sides['left'] . 'px';
         $card_bg     = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'rgba(255, 255, 255, 0.8)';
         $card_radius = Olobuild_Tile_Utils::radius_int( $s['card_border_radius'] ?? 12 );
+        $card_radius_h = Olobuild_Tile_Utils::radius_hover( $s, 'card_border_radius_hover' );
         $card_border = Olobuild_Tile_Utils::border_color( $s['card_border_color'] ?? null, 'rgba(0, 0, 0, 0.06)' );
         $hover_lift  = filter_var( $s['hover_lift'] ?? true, FILTER_VALIDATE_BOOLEAN );
         $hl_border   = $this->safe_color_css( $s['highlighted_bg'] ) ? $this->safe_color_css( $s['highlighted_bg'] ) : 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 20%, transparent)';
@@ -111,10 +112,11 @@ class Olobuild_Pricelist_Tile extends Olobuild_Tile_Base {
                 border-radius: <?php echo (int) $card_radius; ?>px;
                 background: <?php echo $card_bg; ?>;
                 <?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border_color'] ?? null, [ 'width' => 1, 'color' => $card_border ] ) ); ?>
-                transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+                transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease<?php if ( $card_radius_h ) echo ', ' . $card_radius_h['transition']; ?>;
                 position: relative;
                 overflow: hidden;
             }
+            <?php if ( $card_radius_h ) : ?>.<?php echo $uid; ?> .olo-pl-card:hover { border-radius: <?php echo $card_radius_h['css']; ?> !important; }<?php endif; ?>
             <?php if ( $hover_lift ) : ?>
             .<?php echo $uid; ?> .olo-pl-card:hover {
                 transform: translateY(-2px);
@@ -190,6 +192,8 @@ class Olobuild_Pricelist_Tile extends Olobuild_Tile_Base {
                 <?php echo esc_attr( $badge_border_decl ); ?>
                 <?php endif; ?>
             }
+            <?php // Raggio badge in hover: il badge sta dentro la card e cambia quando si passa sulla card. ?>
+            <?php echo Olobuild_Tile_Utils::radius_hover_rules( ".{$uid} .olo-pl-badge", $s, 'badge_border_radius_hover', '', ".{$uid} .olo-pl-card:hover .olo-pl-badge" ); ?>
             .<?php echo $uid; ?> .olo-pl-price {
                 color: <?php echo $price_clr; ?>;
                 font-weight: 700;

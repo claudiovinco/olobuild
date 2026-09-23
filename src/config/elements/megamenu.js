@@ -650,7 +650,7 @@ export default {
       condition: { field: 'panel_shadow', op: 'eq', value: 'custom' } },
 
     { type: 'separator', label: t('Mega Panel — Layout') },
-    withHover({ key: 'panel_radius', label: t('Raggio'), type: 'border-radius' }),
+    { key: 'panel_radius', label: t('Raggio'), type: 'border-radius' },
     { key: 'panel_padding', label: t('Padding'), type: 'spacing', max: 60 },
     { key: 'panel_border_top', label: t('Linea accento top'), type: 'range', min: 0, max: 5, step: 1 },
     { key: 'panel_border_color', label: t('Colore linea accento'), type: 'color' },

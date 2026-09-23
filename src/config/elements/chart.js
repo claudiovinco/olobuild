@@ -322,8 +322,8 @@ export default {
       legacyKeys: { width: 'tooltip_border_width', color: 'tooltip_border_color' } },
 
 
-    withHover({ key: 'tooltip_corner_radius', label: t('Raggio tooltip'), type: 'border-radius',
-      condition: { field: 'tooltip_enabled', value: true } }),
+    { key: 'tooltip_corner_radius', label: t('Raggio tooltip'), type: 'border-radius',
+      condition: { field: 'tooltip_enabled', value: true } },
     { key: 'tooltip_padding', label: t('Padding tooltip'), type: 'spacing', max: 20,
       condition: { field: 'tooltip_enabled', value: true } },
 
@@ -331,8 +331,8 @@ export default {
     { type: 'separator', label: t('Stile dati — aspetto') },
 
     { key: 'border_color_override', label: t('Colore bordo globale'), type: 'color' },
-    withHover({ key: 'bar_radius', label: t('Raggio barre'), type: 'border-radius',
-      condition: { field: 'chart_type', value: 'bar' } }),
+    { key: 'bar_radius', label: t('Raggio barre'), type: 'border-radius',
+      condition: { field: 'chart_type', value: 'bar' } },
     { key: 'tension', label: t('Curvatura linea'), type: 'range', min: 0, max: 1, step: 0.05,
       condition: { field: 'chart_type', op: 'in', value: ['line', 'radar'] } },
     { key: 'point_radius', label: t('Raggio punti'), type: 'range', min: 0, max: 12, step: 1,

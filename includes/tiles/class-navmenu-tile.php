@@ -410,6 +410,7 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
             $v_spacing    = max( 0, intval( $s['v_item_spacing'] ) );
             $v_padding    = max( 4, intval( $s['v_item_padding'] ) );
             $v_radius     = max( 0, Olobuild_Tile_Utils::radius_int( $s['v_border_radius'] ) );
+            $v_rad_h      = Olobuild_Tile_Utils::radius_hover( $s, 'v_border_radius_hover' );
             $v_hover_bg   = $this->safe_color_css( $s['v_hover_bg'] ?? '' );
             $v_active_bg  = $this->safe_color_css( $s['v_active_bg'] ?? '' );
             $v_icon_color = $this->safe_color_css( $s['v_icon_color'] ?? '' );
@@ -418,7 +419,7 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
             $v_icon_size  = max( 14, intval( $s['v_icon_size'] ) );
 
             $rules[] = "{$sel} .olo-vnav-list { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:{$v_spacing}px; }";
-            $rules[] = "{$sel} .olo-vnav-link { display:flex; align-items:center; gap:8px; padding:{$v_padding}px " . ( $v_padding + 4 ) . "px; border-radius:{$v_radius}px; text-decoration:none; transition:background .15s,color .15s; }";
+            $rules[] = "{$sel} .olo-vnav-link { display:flex; align-items:center; gap:8px; padding:{$v_padding}px " . ( $v_padding + 4 ) . "px; border-radius:{$v_radius}px; text-decoration:none; transition:background .15s,color .15s" . ( $v_rad_h ? ', ' . $v_rad_h['transition'] : '' ) . "; }";
             // a11y tastiera: anello di focus visibile sulle voci di menu verticale
             $rules[] = "{$sel} .olo-vnav-link:focus-visible { outline:none; box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }";
 
@@ -434,6 +435,9 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
             }
 
             // Hover
+            if ( $v_rad_h ) {
+                $rules[] = "{$sel} .olo-vnav-link:hover { border-radius:{$v_rad_h['css']} !important; }";
+            }
             if ( $v_hover_bg ) {
                 $rules[] = "{$sel} .olo-vnav-link:hover { background:{$v_hover_bg}; }";
             } else {

@@ -337,6 +337,13 @@ class Olobuild_LiveSearch_Tile extends Olobuild_Tile_Base {
             '--ls-thumb-radius'       => Olobuild_Tile_Utils::border_radius( $s['thumb_radius'] ?? 0 ),
             '--ls-columns'            => max( 1, min( 4, intval( $s['results_columns'] ?? 1 ) ) ),
         ];
+        // Raggio miniatura in hover: viaggia in variabili (le miniature le disegna il JS e,
+        // in modale, l'overlay finisce nel <body>: un selettore sull'id non lo raggiunge).
+        $thumb_h = Olobuild_Tile_Utils::radius_hover( $s, 'thumb_radius_hover' );
+        if ( $thumb_h ) {
+            $css_vars_arr['--ls-thumb-radius-hover'] = $thumb_h['css'];
+            $css_vars_arr['--ls-thumb-radius-dur']   = $thumb_h['dur'] . 'ms';
+        }
         if ( $mode === 'modal' ) {
             $css_vars_arr['--ls-modal-width']    = $modal_width . 'px';
             $css_vars_arr['--ls-backdrop-color']  = $this->safe_color_css( $s['backdrop_color'] ?? 'rgba(0,0,0,0.5)' );

@@ -155,6 +155,11 @@ class Olobuild_Search_Tile extends Olobuild_Tile_Base {
             box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
         }
         <?php if ( $btn_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> button[type=submit]{transition:border-radius 400ms cubic-bezier(.4,0,.2,1) !important}.<?php echo $uid; ?> button[type=submit]:hover{border-radius:<?php echo $btn_radius_hover_css; ?> !important}<?php endif; ?>
+        <?php
+        // Raggio del campo in hover. Il modulo ha già `transition:all 0.2s` inline: la durata
+        // scelta passa solo con !important (la voce border-radius, dopo, prevale su `all`).
+        $radius_h = $style !== 'underline' ? Olobuild_Tile_Utils::radius_hover( $s, 'border_radius_hover' ) : null;
+        if ( $radius_h ) : ?>.<?php echo $uid; ?> .olo-srch-form{transition:all 0.2s ease, <?php echo $radius_h['transition']; ?> !important}.<?php echo $uid; ?> .olo-srch-form:hover{border-radius:<?php echo $radius_h['css']; ?> !important}<?php endif; ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-search <?php echo esc_attr( $uid ); ?> olo-srch-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>"<?php if ( $wrapper_css ) echo ' style="' . esc_attr( $wrapper_css ) . '"'; ?>>

@@ -137,7 +137,8 @@ class Olobuild_Lightbox_Tile extends Olobuild_Tile_Base {
         }
 
         $html .= '</div>';
-        $html .= '<style>.olo-lb-item:hover .olo-lb-overlay{opacity:1!important}</style>';
+        $html .= '<style>.olo-lb-item:hover .olo-lb-overlay{opacity:1!important}'
+               . Olobuild_Tile_Utils::radius_hover_rules( '.' . esc_attr( $uid ) . ' .olo-lb-item', $settings, 'thumb_radius_hover' ) . '</style>';
 
         $tfx_css = $this->tfx_css( $settings, '.olo-lightbox-grid' );
         if ( $tfx_css ) $html .= '<style>' . $tfx_css . '</style>';

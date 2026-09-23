@@ -833,7 +833,10 @@ function resetHoverValue() {
   // Reset to empty/null per field type
   const f = props.field;
   let empty = '';
-  if (f.type === 'spacing' || f.type === 'border-radius') empty = { top: 0, right: 0, bottom: 0, left: 0, linked: true };
+  // Raggio: «Azzera» = nessun hover. Un oggetto a zeri per il PHP è «angoli vivi in
+  // hover» (Olobuild_Tile_Utils::has_radius_hover) e squadrava l'elemento al passaggio.
+  if (f.type === 'border-radius') empty = '';
+  else if (f.type === 'spacing') empty = { top: 0, right: 0, bottom: 0, left: 0, linked: true };
   else if (f.type === 'border') empty = { top: 0, right: 0, bottom: 0, left: 0, linked: true, style: '', color: '' };
   else if (f.type === 'toggle') empty = false;
   emit('update:hoverValue', { key: hoverKey.value, value: empty });

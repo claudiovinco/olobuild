@@ -586,10 +586,12 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
         $border_hover_css  = $this->build_border_hover_css( ".{$uid} .olo-scratch-stage", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
         $border_effect_css = $this->build_border_effect_css( ".{$uid} .olo-scratch-stage", $s['border'] ?? [], $s );
-        if ( $border_css || $border_hover_css || $border_effect_css ) {
+        // Raggio in hover: dopo il bordo in hover, di cui riprende la transizione (stesso elemento).
+        $radius_hover_css  = Olobuild_Tile_Utils::radius_hover_rules( ".{$uid} .olo-scratch-stage", $s, 'border_radius_hover', Olobuild_Tile_Utils::transizione_di( $border_hover_css ) );
+        if ( $border_css || $border_hover_css || $border_effect_css || $radius_hover_css ) {
             echo '<style>';
             if ( $border_css ) echo ".{$uid} .olo-scratch-stage{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base::build_border_css() from sanitized values (intval/safe color whitelist)
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base border helpers from sanitized values
+            echo $border_hover_css . $border_effect_css . $radius_hover_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base border helpers from sanitized values; radius rules from Olobuild_Tile_Utils::radius_hover_rules() (integer px)
         }
         return ob_get_clean();
     }

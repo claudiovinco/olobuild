@@ -298,6 +298,7 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
         $gap       = absint( $s['gap'] );
         $radius    = $this->build_border_radius_css( $s['border_radius'] ?? [] );
         if ( ! $radius ) $radius = is_numeric( $s['border_radius'] ) ? absint( $s['border_radius'] ) . 'px' : '8px';
+        $radius_h  = Olobuild_Tile_Utils::radius_hover( $s, 'border_radius_hover' );
 
         $allowed_layouts = [ 'grid','masonry','masonry-pin','bento','magazine','mosaic','split-index','carousel','polaroid','postcard-stack' ];
         $layout = in_array( $s['layout'], $allowed_layouts, true ) ? $s['layout'] : 'grid';
@@ -455,8 +456,9 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
                 position: relative;
                 border-radius: <?php echo $radius; ?>;
                 overflow: hidden;
-                transition: opacity 0.4s ease, transform 0.4s ease;
+                transition: opacity 0.4s ease, transform 0.4s ease<?php if ( $radius_h ) echo ', ' . $radius_h['transition']; ?>;
             }
+            <?php if ( $radius_h ) : ?>.<?php echo $uid; ?>-grid .olo-pf-item:hover { border-radius: <?php echo $radius_h['css']; ?> !important; }<?php endif; ?>
             .<?php echo $uid; ?>-grid .olo-pf-item.olo-pf-hidden {
                 opacity: 0;
                 position: absolute;

@@ -168,6 +168,12 @@ class Olobuild_FlipCard_Tile extends Olobuild_Tile_Base {
                 cursor: pointer;
             }
             <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
+            <?php
+            // Raggio immagine in hover: l'immagine è uno strato SOTTO il contenuto della faccia
+            // (non riceve mai :hover da sé), quindi cambia quando si passa sulla card.
+            echo Olobuild_Tile_Utils::radius_hover_rules( ".{$uid} .olo-fc-img--front", $s, 'front_image_radius_hover', '', ".{$uid}:hover .olo-fc-img--front" );
+            echo Olobuild_Tile_Utils::radius_hover_rules( ".{$uid} .olo-fc-img--back", $s, 'back_image_radius_hover', '', ".{$uid}:hover .olo-fc-img--back" );
+            ?>
             .<?php echo $uid; ?> .olo-fc-inner {
                 position: relative;
                 width: 100%;
@@ -391,6 +397,8 @@ class Olobuild_FlipCard_Tile extends Olobuild_Tile_Base {
             $img_pad_sides = Olobuild_Tile_Utils::spacing_sides( $s[ $prefix . 'image_padding' ] ?? 0, [], [ 0, 0, 0, 0 ] );
             $img_pad       = array_sum( $img_pad_sides );
             $img_rad = intval( $s[ $prefix . 'image_radius' ] ?? 0 );
+            // Con il raggio in hover serve il contenitore anche a raggio 0 (la transizione parte da lì).
+            $img_rad_h = Olobuild_Tile_Utils::radius_hover( $s, $side === 'front' ? 'front_image_radius_hover' : 'back_image_radius_hover' );
             $img_fit = in_array( $s[ $prefix . 'image_fit' ] ?? 'cover', [ 'cover', 'contain', 'fill' ] ) ? $s[ $prefix . 'image_fit' ] : 'cover';
             $img_pos = trim( (string) ( $s[ $prefix . 'image_position' ] ?? 'center center' ) );
             if ( $img_pos === '' ) {
@@ -401,7 +409,7 @@ class Olobuild_FlipCard_Tile extends Olobuild_Tile_Base {
             if ( $img_fit === 'contain' ) {
                 $img_obj_fit .= 'background:inherit;';
             }
-            if ( $img_pad > 0 || $img_rad > 0 ) {
+            if ( $img_pad > 0 || $img_rad > 0 || $img_rad_h ) {
                 $wrap_style = 'position:absolute;z-index:0;overflow:hidden;';
                 if ( $img_pad > 0 ) {
                     $wrap_style .= 'inset:' . Olobuild_Tile_Utils::sides_css( $img_pad_sides ) . ';';
@@ -411,7 +419,7 @@ class Olobuild_FlipCard_Tile extends Olobuild_Tile_Base {
                 if ( $img_rad > 0 ) {
                     $wrap_style .= "border-radius:{$img_rad}px;";
                 }
-                $html .= '<div style="' . esc_attr( $wrap_style ) . '">';
+                $html .= '<div class="olo-fc-img olo-fc-img--' . esc_attr( $side ) . '" style="' . esc_attr( $wrap_style ) . '">';
                 $html .= Olobuild_Tile_Utils::img_srcset( absint( $s[ $prefix . 'image_id' ] ?? 0 ), $s[ $prefix . 'image' ], ucfirst( $side ) . ' side', 'olo-fc-bg', 'full', 'style="position:absolute;inset:0;width:100%;height:100%;' . esc_attr( $img_obj_fit ) . '"' );
                 $html .= '</div>';
             } else {

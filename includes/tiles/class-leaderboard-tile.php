@@ -161,6 +161,7 @@ class Olobuild_Leaderboard_Tile extends Olobuild_Tile_Base {
                 padding: <?php echo $row_pad; ?>;
                 box-sizing: border-box;
             }
+            <?php echo Olobuild_Tile_Utils::radius_hover_rules( ".{$uid} .olo-lb-row", $s, 'border_radius_hover' ); ?>
             <?php if ( $show_pos ) : ?>
             .<?php echo $uid; ?> .olo-lb-pos {
                 font-size: <?php echo (int) $pos_size; ?>px;

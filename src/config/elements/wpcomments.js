@@ -91,7 +91,7 @@ export default {
     { type: 'separator', label: t('Avatar') },
     { key: 'avatar_size', label: t('Dimensione avatar'), type: 'range', min: 24, max: 96, step: 4,
       condition: { field: 'show_avatar', operator: '==', value: true } },
-    withHover({ key: 'avatar_border_radius', label: t('Raggio avatar'), type: 'border-radius',
+    withHover({ key: 'avatar_border_radius', label: t('Raggio avatar'), type: 'border-radius', unit: '%',
       condition: { field: 'show_avatar', operator: '==', value: true } }),
 
     { type: 'separator', label: t('Colori') },

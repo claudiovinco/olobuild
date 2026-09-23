@@ -83,6 +83,18 @@ padding/margine → `type:'spacing'` (4 lati) · raggio → `type:'border-radius
   che segue la sagoma visibile. Un box-shadow lì disegnerebbe un rettangolo attorno al vuoto.
 - ⚠️ Gli helper (`spacing_css`, `sides_css`, `border_radius`) **restituiscono già l'unità**:
   aggiungere `px` nel template produce `16pxpx` e la dichiarazione viene scartata in silenzio.
+- **Raggio in hover** (toggle Normale/Hover del campo Raggio, `withHover`): PHP
+  `Olobuild_Tile_Utils::radius_hover()` / `radius_hover_rules()` leggono `{key}_hover` e
+  `{key}_hover_duration` (default 300 ms, come l'inspector). La transizione si **aggiunge** a
+  quella dell'elemento: in CSS vince UNA sola `transition`, e se sullo stesso elemento c'è il
+  Bordo in hover la regola del raggio va emessa DOPO riprendendone la transizione
+  (`transizione_di( $border_hover_css )`). Immagini e badge dentro una card cambiano al
+  passaggio sulla card (non ricevono `:hover` da sé). «Azzera» sul Raggio salva '' = nessun
+  hover: un oggetto a zeri per il PHP è «angoli vivi in hover».
+- ⚠️ **Anteprima del builder** (`useIframeBridge.js`): una modifica arrivata mentre una
+  richiesta di render è in volo NON va scartata (si ricorda e si rifà dopo, `dopoRichiesta()`);
+  il render completo registra come reso ciò che ha INVIATO. Scartarla lasciava il canvas a
+  metà parola e sembrava un «limite di caratteri» (23 set 2026).
 
 ### Zone di controllo del tab Stile (standard, pilota: badge 1.4.467)
 - **Due blocchi, con intestazione**: **Elemento** (ciò che la tile disegna, `settings`) e

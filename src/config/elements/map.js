@@ -402,7 +402,7 @@ export default {
     { key: 'svc_popup_btn_color', label: t('Colore pulsante'), type: 'color', condition: { field: 'mode', value: 'services' } },
     { key: 'svc_popup_bg', label: t('Sfondo'), type: 'color', condition: { field: 'mode', value: 'services' } },
     { key: 'svc_popup_color', label: t('Colore testo'), type: 'color', condition: { field: 'mode', value: 'services' } },
-    withHover({ key: 'svc_popup_radius', label: t('Raggio'), type: 'border-radius', condition: { field: 'mode', value: 'services' } }),
+    { key: 'svc_popup_radius', label: t('Raggio'), type: 'border-radius', condition: { field: 'mode', value: 'services' } },
 
     // ══════ LAYOUT SPLIT-VIEW (locations + services) ══════
     // Il layout split-view ha mappa su un lato e pannello risultati (filtri + lista) dall'altro.

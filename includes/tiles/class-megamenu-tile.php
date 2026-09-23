@@ -377,6 +377,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         $btn_color   = $this->safe_color( $s['btn_color'] ) ?: 'var(--olo-color-primary-contrast, #FFFFFF)';
         // 4 angoli reali (prima radius_int appiattiva al massimo) — coerenza col canvas.
         $btn_radius  = Olobuild_Tile_Utils::border_radius( $s['btn_radius'] ) ?: '0px';
+        $btn_rad_h   = Olobuild_Tile_Utils::radius_hover( $s, 'btn_radius_hover' );
         $btn_hbg     = $this->safe_color( $s['btn_hover_bg'] );
         // Padding interno: chiave unificata btn_padding (4 lati); fallback per i
         // template salvati con i legacy btn_padding_v/h — di cui pad_int leggeva
@@ -1115,7 +1116,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             <?php if ( $btn_lsp ) : ?>letter-spacing: <?php echo $btn_lsp; ?>px;<?php endif; ?>
             <?php if ( $btn_sh !== 'none' ) : ?>box-shadow: <?php echo $btn_sh; ?>;<?php endif; ?>
             text-decoration: none;
-            transition: background .2s, transform .15s, box-shadow .2s, color .2s;
+            transition: background .2s, transform .15s, box-shadow .2s, color .2s<?php if ( $btn_rad_h ) echo ', ' . $btn_rad_h['transition']; ?>;
             white-space: nowrap;
             <?php if ( $btn_bw > 0 ) : ?>border: <?php echo $btn_bw; ?>px solid <?php echo $btn_bc ?: $btn_color; ?>;<?php endif; ?>
         }
@@ -1125,6 +1126,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             <?php if ( $btn_hfx === 'lift' ) : ?>transform: translateY(-1px);<?php endif; ?>
             <?php if ( $btn_hfx === 'scale' ) : ?>transform: scale(1.04);<?php endif; ?>
             <?php if ( $btn_hfx === 'glow' ) : ?>box-shadow: 0 6px 20px rgba(15,23,42,.28);<?php endif; ?>
+            <?php if ( $btn_rad_h ) : ?>border-radius: <?php echo $btn_rad_h['css']; ?> !important;<?php endif; ?>
         }
         .<?php echo $uid; ?> .olo-mm-btn::after { display: none; }
 

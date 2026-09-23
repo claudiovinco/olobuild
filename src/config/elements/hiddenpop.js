@@ -1,4 +1,4 @@
-import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { withHover } from './_shared.js';
 import { ratioOptions } from './_imageFrame.js';
 import { t } from '@/i18n';
 
@@ -72,11 +72,6 @@ export default {
     display_date_to: '',
     display_referrer: '',
     tile_padding: { top: 0, right: 0, bottom: 0, left: 0 }, // padding del contenitore
-    border_radius: { tl: 0, tr: 0, br: 0, bl: 0 },
-    border: { ...borderDefault },
-    border_hover: { ...borderHoverDefault },
-    border_hover_duration: 300,
-    ...borderEffectDefaults,
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────
@@ -245,7 +240,5 @@ export default {
 
     { type: 'separator', label: t('Contenitore') },
     { key: 'tile_padding', type: 'spacing', label: t('Padding') },
-    withHover({ key: 'border_radius', type: 'border-radius', label: t('Raggio') }),
-    ...borderFields(),
   ],
 };

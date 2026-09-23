@@ -131,6 +131,8 @@ class Olobuild_Wpcomments_Tile extends Olobuild_Tile_Base {
                 border-radius: <?php echo (int) $avatar_radius; ?>%;
                 display: block;
             }
+            <?php // Raggio avatar in hover: stessa unità del base (%). ?>
+            <?php echo Olobuild_Tile_Utils::radius_hover_rules( ".{$uid} .olo-comment-avatar img", $s, 'avatar_border_radius_hover', '', '', '%' ); ?>
             .<?php echo $uid; ?> .olo-comment-meta {
                 display: flex;
                 align-items: center;

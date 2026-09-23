@@ -203,6 +203,8 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
                 filter: <?php echo $filter_map[ $s['avatar_filter'] ]; ?>;
                 <?php endif; ?>
             }
+            <?php // Raggio avatar in hover: vale per l'avatar quadrato, come il raggio base (il tondo resta tondo). ?>
+            <?php if ( ( $s['avatar_shape'] ?? '' ) === 'square' ) echo Olobuild_Tile_Utils::radius_hover_rules( ".{$uid} .olo-test-author img", $s, 'avatar_radius_hover' ); ?>
             .<?php echo $uid; ?> .olo-test-author-name {
                 font-weight: 600;
                 color: <?php echo $fg; ?>;

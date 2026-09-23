@@ -35,7 +35,8 @@ class Olobuild_Paymentbuttons_Tile extends Olobuild_Tile_Base {
         $btn_style = "background-color:{$bg_color};color:{$text_color};border-radius:{$radius};font-size:{$font_size}px;padding:12px 32px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-weight:600;";
         if ( $full_width ) $btn_style .= 'width:100%;justify-content:center;';
 
-        $html  = '<style>.' . $uid . ' .olo-pay-btn:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);}</style>';
+        $html  = '<style>.' . $uid . ' .olo-pay-btn:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);}'
+               . Olobuild_Tile_Utils::radius_hover_rules( '.' . $uid . ' .olo-pay-btn', $settings, 'border_radius_hover' ) . '</style>';
         $html .= '<div class="olo-paymentbuttons ' . esc_attr( $uid ) . '" style="text-align:' . $alignment . '">';
 
         if ( $provider === 'stripe' || $provider === 'both' ) {

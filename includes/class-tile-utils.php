@@ -236,6 +236,68 @@ class Olobuild_Tile_Utils {
     }
 
     /**
+     * Raggio in hover di un elemento: gemello PHP del campo «Raggio» con il toggle
+     * Normale/Hover (withHover() in _shared.js). Legge `$hover_key` (numero o 4 angoli;
+     * 4 angoli tutti a 0 = angoli vivi in hover) e `{$hover_key}_duration` (predefinita
+     * 300 ms, la stessa che mostra l'inspector).
+     *
+     * `transition` va AGGIUNTA a quella che l'elemento ha già, mai sostituita: una
+     * `transition:border-radius …` da sola spegnerebbe le altre animazioni (sollevamento,
+     * ombra, colori).
+     *
+     * @param array  $s         Settings del tile.
+     * @param string $hover_key Chiave del valore hover (es. 'card_radius_hover').
+     * @param string $unit      'px' oppure '%' (quando il raggio base è reso in percentuale: max 50).
+     * @return array{css:string,tl:int,tr:int,br:int,bl:int,dur:int,transition:string}|null  null se l'hover non è impostato.
+     */
+    public static function radius_hover( $s, $hover_key, $unit = 'px' ) {
+        $v = is_array( $s ) ? ( $s[ $hover_key ] ?? null ) : null;
+        if ( ! self::has_radius_hover( $v ) ) return null;
+        if ( is_array( $v ) ) {
+            $c = [ absint( $v['tl'] ?? 0 ), absint( $v['tr'] ?? 0 ), absint( $v['br'] ?? 0 ), absint( $v['bl'] ?? 0 ) ];
+        } else {
+            $c = array_fill( 0, 4, absint( $v ) );
+        }
+        $u = $unit === '%' ? '%' : 'px';
+        if ( $u === '%' ) $c = array_map( static function ( $x ) { return min( 50, $x ); }, $c );
+        $d = $s[ $hover_key . '_duration' ] ?? '';
+        $d = ( $d === '' || $d === null ) ? 300 : min( 3000, absint( $d ) );
+        return [
+            'css'        => "{$c[0]}{$u} {$c[1]}{$u} {$c[2]}{$u} {$c[3]}{$u}",
+            'tl'         => $c[0],
+            'tr'         => $c[1],
+            'br'         => $c[2],
+            'bl'         => $c[3],
+            'dur'        => $d,
+            'transition' => "border-radius {$d}ms cubic-bezier(.4,0,.2,1)",
+        ];
+    }
+
+    /**
+     * Regole CSS complete del raggio in hover per `$sel`: transizione (che conserva
+     * `$altre_transizioni`, cioè la transition che l'elemento ha già) + `:hover`.
+     * '' se l'hover non è impostato. Con `$hover_sel` il raggio cambia su un'altra
+     * regola (es. `.card:hover .img`).
+     *
+     * @return string CSS già pronto (selettori generati dal tile, valori interi).
+     */
+    /**
+     * La `transition` scritta in un blocco CSS già generato (es. da build_border_hover_css()),
+     * da ripetere quando un'altra regola sullo STESSO elemento aggiunge la sua: in CSS vince
+     * una sola dichiarazione `transition`, e l'ultima spegnerebbe l'animazione del bordo.
+     */
+    public static function transizione_di( $css ) {
+        return ( is_string( $css ) && preg_match( '/\{\s*transition:\s*([^;}]+)/', $css, $m ) ) ? trim( $m[1] ) : '';
+    }
+
+    public static function radius_hover_rules( $sel, $s, $hover_key, $altre_transizioni = '', $hover_sel = '', $unit = 'px' ) {
+        $h = self::radius_hover( $s, $hover_key, $unit );
+        if ( ! $h ) return '';
+        $tr = trim( (string) $altre_transizioni ) !== '' ? trim( $altre_transizioni ) . ', ' . $h['transition'] : $h['transition'];
+        return $sel . '{transition:' . $tr . '}' . ( $hover_sel !== '' ? $hover_sel : $sel . ':hover' ) . '{border-radius:' . $h['css'] . ' !important}';
+    }
+
+    /**
     /**
      * Sanitize a hex color. Returns empty string if invalid.
      *

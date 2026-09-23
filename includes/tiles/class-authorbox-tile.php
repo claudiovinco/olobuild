@@ -189,6 +189,8 @@ class Olobuild_Authorbox_Tile extends Olobuild_Tile_Base {
                 <?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['avatar_border'] ?? null, [ 'width' => $abw, 'color' => $abc ] ) ); ?>
                 <?php endif; ?>
             }
+            <?php // Raggio avatar in hover: stessa unità del base (%). ?>
+            <?php echo Olobuild_Tile_Utils::radius_hover_rules( ".{$uid} .olo-ab-avatar img", $s, 'avatar_border_radius_hover', '', '', '%' ); ?>
             .<?php echo $uid; ?> .olo-ab-info {
                 flex: 1;
                 min-width: 0;
