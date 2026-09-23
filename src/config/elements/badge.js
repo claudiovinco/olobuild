@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderDefault } from './_shared.js';
 import { t } from '@/i18n';
 
 /**
@@ -11,9 +11,10 @@ import { t } from '@/i18n';
  *
  * Ogni controllo è letto da class-badge-tile.php e dal gemello BadgeTile.vue.
  * Tolti perché non facevano niente: «Stile» (nessun preset registrato per il
- * badge in tilePresets.js), «Effetti testo» (mai resi), «Bordo» ed «Effetti bordo»
- * (il bordo lo decide la variante), l'hover del raggio (mai letto). Le chiavi già
- * salvate restano nei template: semplicemente nessuno le mostra più.
+ * badge in tilePresets.js), «Effetti testo» (mai resi), «Effetti bordo» e gli
+ * hover di raggio e bordo (mai letti). Le chiavi già salvate restano nei
+ * template: semplicemente nessuno le mostra più. «Bordo» invece è rimasto e ora
+ * è disegnato: sostituisce quello della variante (la home di try ne ha bisogno).
  *
  * Chiavi nuove additive: badge_live (bool), badge_live_color ('success'|'primary').
  */
@@ -47,6 +48,7 @@ export default {
     padding_x: 13,
     alignment: 'left',
     shadow: 'none',
+    border: { ...borderDefault },
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────
@@ -84,19 +86,24 @@ export default {
   // il badge è una tile atomica).
   styleFields: [
     { type: 'separator', label: t('Aspetto') },
+    // Ogni voce dice cosa fa del «Colore» qui sotto: la spiegazione sta dove si
+    // sceglie (la descrizione di un campo in linea l'inspector non la mostra).
     { key: 'variant', label: t('Variante'), type: 'select', options: [
-      { value: 'soft',    label: t('Soft (tinta tenue)') },
-      { value: 'solid',   label: t('Pieno') },
-      { value: 'outline', label: t('Contorno') },
-      { value: 'light',   label: t('Chiaro') },
+      { value: 'soft',    label: t('Soft — tinta tenue del colore') },
+      { value: 'solid',   label: t('Pieno — sfondo del colore') },
+      { value: 'outline', label: t('Contorno — bordo e testo del colore') },
+      { value: 'light',   label: t('Chiaro — bianco, bordo neutro') },
     ]},
     // Il colore da cui la variante ricava la pillola, NON lo sfondo: con Soft lo
     // sfondo è il 12% di questo colore e il bordo il 22%. Chiamato «Colore sfondo»
     // traeva in inganno (sulla home di try 14 badge lo usavano come sfondo finale).
     // Con «Chiaro» la variante non lo usa: il campo sparisce.
     { key: 'bg_color', label: t('Colore'), type: 'color',
-      description: t('Soft: sfondo al 12% e bordo al 22% · Pieno: sfondo · Contorno: bordo e testo.'),
       condition: { field: 'variant', op: 'neq', value: 'light' } },
+    // Bordo proprio: se impostato prende il posto di quello della variante. Con
+    // «Pieno» si ottiene un design esatto (sfondo = Colore, bordo = questo).
+    { key: 'border', label: t('Bordo'), type: 'border',
+      description: t('A zero resta il bordo della variante.') },
     ...shadowField,
 
     { type: 'separator', label: t('Testo') },

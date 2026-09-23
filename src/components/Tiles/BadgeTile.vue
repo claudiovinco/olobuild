@@ -21,7 +21,7 @@
 import { computed } from 'vue';
 import { useBuilderStore } from '@/stores/builder';
 import { rv } from '@/composables/useResponsiveValue';
-import { toSpacingCss } from '@/composables/useBoxModel';
+import { toSpacingCss, toBorderStyle } from '@/composables/useBoxModel';
 import iconsSvg from '../ProSlider/uikitIconsSvg.js';
 import { resolveColor, resolveFontFamily, TOKENS } from '@/composables/oloTileDefaults';
 
@@ -83,7 +83,19 @@ function famigliaBadge() {
 
 // Stile pill per un accent dato (riusato per i badge aggiuntivi con colore
 // per-item: lì il testo segue l'accent dell'item, non il text_color della tile).
+// Il bordo proprio (Aspetto → Bordo), se impostato, prende il posto di quello
+// della variante su tutte le pillole — gemello di $bordo_di in class-badge-tile.php.
 function pillStyle(acc, ownText = true) {
+  const st = variantStyle(acc, ownText);
+  const bordo = toBorderStyle(s.value.border);
+  if (Object.keys(bordo).length) {
+    delete st.border;
+    Object.assign(st, bordo);
+  }
+  return st;
+}
+
+function variantStyle(acc, ownText) {
   const v = s.value.variant;
   const textOverride = ownText ? s.value.text_color : '';
   const base = {

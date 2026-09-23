@@ -104,6 +104,9 @@ padding/margine → `type:'spacing'` (4 lati) · raggio → `type:'border-radius
   altro si nasconde quando non agisce (`condition`: «Posizione icona» senza icona).
 - **Il nome dice cosa fa**: «Colore sfondo» sul badge era il colore da cui la variante ricava la
   pillola (Soft = 12% di sfondo, 22% di bordo), non lo sfondo — e ha tratto in inganno chi l'ha usato.
+- ⚠️ La `description` di un campo **in linea** (select, colore, testo, interruttore, numero…:
+  `INLINE_COMPACT`/`INLINE_FILL` in InspectorField) **non viene mostrata**: la spiegazione va nella
+  label o nelle voci della select. ~206 descrizioni sono oggi invisibili (lotto da decidere).
 
 ## Regole
 - Tailwind prefix: `mb-` (evita conflitti con WordPress)

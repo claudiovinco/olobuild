@@ -95,6 +95,15 @@ class Olobuild_Badge_Tile extends Olobuild_Tile_Base {
         };
         list( $bg, $border, $color ) = $variant_css( $accent );
 
+        // Bordo proprio (Aspetto → Bordo): se impostato prende il posto di quello
+        // della variante, su tutte le pillole (stesso stile). A zero resta la
+        // variante. Serve a riprodurre un design preciso: con «Pieno» il colore è
+        // lo sfondo esatto e qui il bordo esatto (la home di try ne ha 14).
+        $bordo = $this->build_border_css( $s['border'] ?? null );
+        $bordo_di = static function ( $della_variante ) use ( $bordo ) {
+            return $bordo !== '' ? $bordo : 'border:' . $della_variante . ';';
+        };
+
         // Allineamento, anche per dispositivo: il campo è `responsive: true` e prima
         // i valori per tablet e telefono venivano salvati senza che nessuno li leggesse.
         $giustifica = static function ( $a ) {
@@ -124,7 +133,7 @@ class Olobuild_Badge_Tile extends Olobuild_Tile_Base {
             . $tp_css
             . 'font-size:' . $fs . 'px;font-weight:' . $fw . ';text-transform:' . $tt . ';'
             . 'letter-spacing:' . $ls . 'px;line-height:1;';
-        $badge_css = $base_css . 'background:' . $bg . ';border:' . $border . ';color:' . $color . ';';
+        $badge_css = $base_css . 'background:' . $bg . ';' . $bordo_di( $border ) . 'color:' . $color . ';';
 
         // Badge aggiuntivi (additivo): pill gemelle con colore per-item.
         $extras = [];
@@ -139,7 +148,7 @@ class Olobuild_Badge_Tile extends Olobuild_Tile_Base {
             if ( $it_txt_clr ) {
                 $iclr = $it_txt_clr;
             }
-            $extras[] = [ $it_text, $base_css . 'background:' . $ibg . ';border:' . $ibrd . ';color:' . $iclr . ';' ];
+            $extras[] = [ $it_text, $base_css . 'background:' . $ibg . ';' . $bordo_di( $ibrd ) . 'color:' . $iclr . ';' ];
         }
         $wrap_extra = $extras ? 'flex-wrap:wrap;gap:8px;' : '';
 
