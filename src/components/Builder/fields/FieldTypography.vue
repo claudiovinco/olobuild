@@ -39,7 +39,7 @@
     <div class="typo-id">
       <label class="typo-row-label">{{ t(label) }}</label>
       <span class="typo-summary" :class="{ 'typo-summary--empty': !summaryText }" :title="summaryTitle">
-        <span v-if="summaryColor" class="typo-summary-dot" :style="{ background: summaryColor }"></span>
+        <span v-if="summaryDot" class="typo-summary-dot" :style="{ background: summaryDot }"></span>
         {{ summaryText || t('predefinito') }}
       </span>
     </div>
@@ -402,7 +402,7 @@
 import { t } from '@/i18n';
 import { ref, reactive, computed, watch, nextTick } from 'vue';
 import { useStylesStore } from '@/stores/styles';
-import { resolveColorToken } from '@/utils/colorToken';
+import { resolveColorToken, describeColor } from '@/utils/colorToken';
 import { resolveFontToken, assicuraFontPreview } from '@/utils/fontToken';
 import { useGlobalPanels } from '@/composables/useGlobalPanels';
 import FieldFontFamily from './FieldFontFamily.vue';
@@ -820,6 +820,12 @@ const summaryText = computed(() => summaryParts.value.join(' · '));
 // I token vanno risolti in JS — nel pannello di destra `var(--olo-color-*)`
 // non esiste, è definito dentro il canvas.
 const summaryColor = computed(() => resolveColorToken(raw('color'), stylesStore));
+// Il pallino dipinge solo un colore che si conosce, con la stessa lettura della
+// pastiglia di FieldColor: `currentColor` qui prenderebbe il grigio della sintesi.
+const summaryDot = computed(() => {
+  const c = describeColor(raw('color'), stylesStore);
+  return c.kind === 'color' || c.kind === 'paint' ? c.paint : '';
+});
 
 /**
  * Stile dell'anteprima: le stesse proprietà che il controllo governa, risolte

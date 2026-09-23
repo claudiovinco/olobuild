@@ -27,30 +27,40 @@
         <button
           type="button"
           class="fc-swatch fc-swatch--add"
-          :title="t('Aggiungi colore corrente ai globali')"
+          :title="puoAggiungere ? t('Aggiungi colore corrente ai globali') : t('Nessun colore concreto da aggiungere')"
+          :disabled="!puoAggiungere"
           @click="addCurrentAsGlobal"
         >+</button>
       </div>
     </div>
 
     <div class="fc-hex-wrap">
-      <input
-        type="color"
-        :value="hexPart"
-        @input="onHexChange($event.target.value)"
-        @change="onHexChange($event.target.value)"
-        class="fc-swatch-inline"
-      />
+      <!-- La pastiglia dipinge il valore VERO sopra una scacchiera; l'input nativo,
+           che sa mostrare solo un #rrggbb pieno, è invisibile e fa da pulsante. -->
+      <label class="fc-swatch-inline" :class="'fc-swatch-inline--' + colore.kind" :title="titoloSwatch">
+        <span class="fc-swatch-face" aria-hidden="true">
+          <span v-if="colore.paint" class="fc-swatch-paint" :style="{ background: colore.paint }"></span>
+        </span>
+        <input
+          type="color"
+          :value="hexPart"
+          @input="onHexChange($event.target.value)"
+          @change="onHexChange($event.target.value)"
+          class="fc-swatch-native"
+          :aria-label="etichettaSwatch"
+        />
+      </label>
       <input
         type="text"
         :value="displayValue"
         :title="modelValue || ''"
+        :placeholder="t('Predefinito')"
         spellcheck="false"
         @focus="scrivendo = true"
         @blur="scrivendo = false"
         @change="onTextChange($event.target.value)"
         class="fc-hex-input"
-        :class="{ 'fc-hex-input--nome': !scrivendo && nomeToken }"
+        :class="{ 'fc-hex-input--nome': !modelValue || (!scrivendo && nomeToken) }"
       />
       <button
         type="button"
@@ -67,19 +77,23 @@
         </svg>
       </button>
     </div>
-    <div class="fc-alpha-row">
+    <!-- L'alfa esiste solo per un colore concreto: su un valore vuoto o su
+         currentColor non c'è niente da rendere trasparente, e un 100% lo
+         affermerebbe il falso. -->
+    <div class="fc-alpha-row" :title="haColore ? null : t('Nessun colore concreto: l\'alfa non si applica')">
       <span class="fc-alpha-label">{{ t('Alfa') }}</span>
       <input
         type="range"
         :value="alphaPct"
+        :disabled="!haColore"
         @input="onAlphaChange(parseInt($event.target.value))"
         min="0" max="100" step="5"
         class="fc-alpha-range"
-        :style="{ '--fc-rgb': previewRgb }"
+        :style="haColore ? { '--fc-rgb': previewRgb } : null"
         :aria-label="t('Opacità colore')"
-        :aria-valuetext="alphaPct + '%'"
+        :aria-valuetext="haColore ? alphaPct + '%' : t('Non applicabile')"
       />
-      <span class="fc-alpha-val">{{ alphaPct }}%</span>
+      <span class="fc-alpha-val">{{ haColore ? alphaPct + '%' : '—' }}</span>
     </div>
   </div>
 </template>
@@ -88,10 +102,12 @@
 import { t } from '@/i18n';
 import { computed, ref } from 'vue';
 import { useStylesStore } from '@/stores/styles';
-import { tokenParts, buildSwatchColors, tokenLabel } from '@/utils/colorToken';
+import { tokenParts, buildSwatchColors, tokenLabel, describeColor } from '@/utils/colorToken';
 
 const props = defineProps({
-  modelValue: { type: String, default: '#000000' },
+  // Vuoto = nessun colore impostato: decide la tile. Il vecchio default
+  // '#000000' faceva vedere nero anche un campo mai toccato.
+  modelValue: { type: String, default: '' },
 });
 const emit = defineEmits(['update:modelValue']);
 
@@ -132,51 +148,6 @@ function selectColor(id) {
   emit('update:modelValue', `var(--olo-color-${id})`);
 }
 
-/**
- * Parse incoming color: supports #hex, rgba(r,g,b,a), and var(--olo-color-*)
- */
-function parseColor(val) {
-  if (!val) return { hex: '#000000', alpha: 1 };
-
-  // var(--olo-color-*) — risolto dai ruoli/globali per l'anteprima.
-  // ATTENZIONE alla forma con RISERVA, `var(--olo-color-dark, #16263d)`: e' quella
-  // usata da tutti i default delle tile. Il vecchio regex la leggeva come un id
-  // chiamato «dark, #16263d», non lo trovava e ripiegava su NERO — cioe' centinaia
-  // di campi colore mostravano una pastiglia nera al posto del loro colore vero.
-  if (val.startsWith('var(--olo-color-')) {
-    const t = tokenParts(val);
-    if (t) {
-      const hex = resolveSwatch(t.id);
-      if (hex) return parseColor(hex);
-      // Token non ancora definito nella palette: vale la riserva scritta dentro.
-      if (t.fallback) return parseColor(t.fallback);
-    }
-    return { hex: '#000000', alpha: 1 };
-  }
-
-  // rgba(r, g, b, a)
-  const rgbaMatch = val.match(/^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?\s*\)$/i);
-  if (rgbaMatch) {
-    const r = parseInt(rgbaMatch[1]);
-    const g = parseInt(rgbaMatch[2]);
-    const b = parseInt(rgbaMatch[3]);
-    const a = rgbaMatch[4] !== undefined ? parseFloat(rgbaMatch[4]) : 1;
-    const hex = '#' + [r, g, b].map(c => c.toString(16).padStart(2, '0')).join('');
-    return { hex, alpha: a };
-  }
-
-  // #hex (3, 6, or 8 chars)
-  let h = val.replace('#', '');
-  if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
-  if (h.length === 8) {
-    const a = parseInt(h.substring(6, 8), 16) / 255;
-    return { hex: '#' + h.substring(0, 6), alpha: Math.round(a * 100) / 100 };
-  }
-  if (h.length === 6) return { hex: '#' + h, alpha: 1 };
-
-  return { hex: '#000000', alpha: 1 };
-}
-
 function toOutput(hex, alpha) {
   if (alpha >= 1) return hex;
   const h = hex.replace('#', '');
@@ -186,16 +157,41 @@ function toOutput(hex, alpha) {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-const isGlobalVar = computed(() => {
-  return props.modelValue && props.modelValue.startsWith('var(--olo-color-');
-});
+// Cosa dipinge il valore — colore concreto (anche `transparent`, nero ad alfa 0),
+// sfumatura, parola di contesto, vuoto, irrisolvibile. La lettura sta in
+// colorToken.js: il vecchio parser ripiegava su #000000 per tutto ciò che non
+// era hex/rgba/token, e `transparent` diventava un quadrato nero con alfa 100%.
+const colore = computed(() => describeColor(props.modelValue, stylesStore));
+const haColore = computed(() => colore.value.kind === 'color');
 
-const parsed = computed(() => parseColor(props.modelValue));
-const hexPart = computed(() => parsed.value.hex);
-const alphaPct = computed(() => {
-  if (isGlobalVar.value) return 100;
-  return Math.round(parsed.value.alpha * 100);
+// L'input nativo accetta solo #rrggbb: dove un colore non c'è apre il selettore
+// sul nero, ma quel nero non si vede — la pastiglia visibile è quella dipinta.
+const hexPart = computed(() => (haColore.value
+  ? '#' + colore.value.rgb.map(c => c.toString(16).padStart(2, '0')).join('')
+  : '#000000'));
+const alphaPct = computed(() => (haColore.value ? Math.round(colore.value.alpha * 100) : 0));
+// Terna "r, g, b" del colore corrente (senza alfa) per il gradiente della barra Alfa.
+const previewRgb = computed(() => (haColore.value ? colore.value.rgb.join(', ') : ''));
+
+// Cosa la pastiglia non può dipingere, detto a parole (tooltip + lettore di schermo).
+const statoColore = computed(() => {
+  const c = colore.value;
+  switch (c.kind) {
+    case 'color': return c.alpha === 0 ? t('Trasparente') : '';
+    case 'empty': return t('Nessun colore impostato: vale quello predefinito della tile');
+    case 'keyword': return String(props.modelValue).trim() + ': ' + t('dipende da dove si trova, qui non si può mostrare');
+    case 'paint': return t('Sfumatura o spazio colore esteso: l\'alfa non si regola da qui');
+    default:
+      if (c.reason === 'token') return t('Token fuori dalla palette del builder: qui non si può mostrare');
+      if (c.reason === 'var') return t('Variabile CSS che qui non si può risolvere');
+      return t('Non è un colore CSS valido');
+  }
 });
+const titoloSwatch = computed(() => statoColore.value || t('Scegli colore'));
+const etichettaSwatch = computed(() => (statoColore.value
+  ? t('Scegli colore') + ' — ' + statoColore.value
+  : t('Scegli colore')));
+
 // Un token scritto per esteso non ci sta e si legge a meta':
 // «var(--olo-color-muted-co…». Il nome del colore lo abbiamo gia' negli
 // swatch, quindi a riposo si mostra quello; il token completo resta nel
@@ -204,35 +200,20 @@ const scrivendo = ref(false);
 const nomeToken = computed(() => tokenLabel(props.modelValue, stylesStore));
 const displayValue = computed(() => {
   if (!scrivendo.value && nomeToken.value) return nomeToken.value;
-  return props.modelValue || '#000000';
-});
-const previewColor = computed(() => {
-  if (isGlobalVar.value) {
-    return toOutput(parsed.value.hex, 1);
-  }
-  return toOutput(parsed.value.hex, parsed.value.alpha);
-});
-
-// Terna "r, g, b" del colore corrente (senza alfa) per il gradiente della barra Alfa.
-const previewRgb = computed(() => {
-  const h = parsed.value.hex.replace('#', '');
-  const rp = parseInt(h.substring(0, 2), 16); const r = !isNaN(rp) ? rp : 0;
-  const gp = parseInt(h.substring(2, 4), 16); const g = !isNaN(gp) ? gp : 0;
-  const bp = parseInt(h.substring(4, 6), 16); const b = !isNaN(bp) ? bp : 0;
-  return `${r}, ${g}, ${b}`;
+  return props.modelValue || '';
 });
 
 function onHexChange(hex) {
-  emit('update:modelValue', toOutput(hex, parsed.value.alpha));
+  // Un colore scelto dal selettore si deve vedere: da `transparent` (o da un
+  // colore ad alfa 0) si riparte opachi, se no la scelta resterebbe invisibile.
+  const alpha = haColore.value && colore.value.alpha > 0 ? colore.value.alpha : 1;
+  emit('update:modelValue', toOutput(hex, alpha));
 }
 
 function onAlphaChange(pct) {
-  if (isGlobalVar.value) {
-    // Switching away from global: use the resolved hex
-    emit('update:modelValue', toOutput(parsed.value.hex, pct / 100));
-    return;
-  }
-  emit('update:modelValue', toOutput(parsed.value.hex, pct / 100));
+  if (!haColore.value) return;
+  // Da un token si passa al colore risolto, con la nuova alfa.
+  emit('update:modelValue', toOutput(hexPart.value, pct / 100));
 }
 
 function onTextChange(val) {
@@ -240,11 +221,16 @@ function onTextChange(val) {
   emit('update:modelValue', val);
 }
 
+// Fra i globali entra solo un colore che si vede: da un valore vuoto, da
+// currentColor o da `transparent` il vecchio «+» aggiungeva un #000000.
+const puoAggiungere = computed(() => haColore.value && colore.value.alpha > 0);
+
 /**
  * Add the current color as a new global color and persist immediately.
  */
 async function addCurrentAsGlobal() {
-  const hex = parsed.value.hex;
+  if (!puoAggiungere.value) return;
+  const hex = hexPart.value;
   // Check if this hex already exists in globals
   const existing = (stylesStore.globalColors || []).find(
     gc => gc.value.toLowerCase() === hex.toLowerCase()
@@ -267,12 +253,16 @@ async function addCurrentAsGlobal() {
  * Remove a quick-added global color and persist.
  */
 async function removeQuickColor(colorId) {
+  // Il colore risolto si legge PRIMA di togliere il globale: dopo, il token non
+  // si risolve più e al suo posto usciva un #000000.
+  const eraScelto = isSwatchSelected(colorId);
+  const risolto = haColore.value ? toOutput(hexPart.value, colore.value.alpha) : '';
   const newColors = (stylesStore.globalColors || []).filter(gc => gc.id !== colorId);
   stylesStore.setGlobalColors(newColors);
   await stylesStore.saveGlobalColors();
-  // If this color was selected, revert to its resolved hex
-  if (isSwatchSelected(colorId)) {
-    emit('update:modelValue', parsed.value.hex);
+  // If this color was selected, revert to its resolved color
+  if (eraScelto && risolto) {
+    emit('update:modelValue', risolto);
   }
 }
 </script>
@@ -359,11 +349,15 @@ async function removeQuickColor(colorId) {
   box-shadow: none;
   border: 1px dashed #d1d5db;
 }
-.fc-swatch--add:hover {
+.fc-swatch--add:hover:not(:disabled) {
   background: #e5e7eb;
   color: #374151;
   border-color: #9ca3af;
   transform: scale(1.15);
+}
+.fc-swatch--add:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 /* ── Hex wrap (swatch inline + text input) ── */
@@ -375,21 +369,79 @@ async function removeQuickColor(colorId) {
   overflow: hidden;
   background: #fff;
 }
+/* ── Pastiglia: il valore VERO, dipinto sopra una scacchiera ──
+   L'input nativo sa mostrare solo un #rrggbb pieno: `transparent`, un'alfa o una
+   parola chiave diventavano un quadrato nero. Ora l'input è invisibile e fa solo
+   da pulsante; si vede la faccia, con il colore sopra la scacchiera. */
 .fc-swatch-inline {
+  position: relative;
+  flex-shrink: 0;
+  box-sizing: border-box;
   width: 32px;
   height: 32px;
-  border: none;
+  padding: 3px;
   cursor: pointer;
-  padding: 0;
-  background: none;
-  flex-shrink: 0;
 }
-.fc-swatch-inline::-webkit-color-swatch-wrapper {
-  padding: 2px;
-}
-.fc-swatch-inline::-webkit-color-swatch {
-  border: none;
+.fc-swatch-face {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
   border-radius: 3px;
+  overflow: hidden;
+  background:
+    linear-gradient(45deg, #cbd5e1 25%, transparent 0, transparent 75%, #cbd5e1 0) 0 0 / 8px 8px,
+    linear-gradient(45deg, #cbd5e1 25%, transparent 0, transparent 75%, #cbd5e1 0) 4px 4px / 8px 8px,
+    #fff;
+}
+.fc-swatch-paint {
+  position: absolute;
+  inset: 0;
+}
+/* Filo sopra il colore: un bianco su fondo bianco resta leggibile. */
+.fc-swatch-face::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+}
+/* Vuoto: nessun colore impostato. Niente scacchiera — quella vuol dire
+   «trasparente», che è un valore — ma un riquadro tratteggiato. */
+.fc-swatch-inline--empty .fc-swatch-face {
+  background: #fff;
+}
+.fc-swatch-inline--empty .fc-swatch-face::after {
+  box-shadow: none;
+  border: 1px dashed #cbd5e1;
+}
+/* Parola di contesto (currentColor, inherit…): tratteggio neutro, il colore
+   lo decide la pagina. Irrisolvibile o non valido: lo stesso, in ambra. */
+.fc-swatch-inline--keyword .fc-swatch-face {
+  background: repeating-linear-gradient(135deg, #e5e7eb 0 2px, #fff 2px 5px);
+}
+.fc-swatch-inline--unknown .fc-swatch-face {
+  background: repeating-linear-gradient(135deg, #fcd34d 0 2px, #fff 2px 5px);
+}
+.fc-swatch-native {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.fc-swatch-inline:has(.fc-swatch-native:focus-visible) .fc-swatch-face {
+  outline: 2px solid var(--olo-ui-accent, #e8622a);
+  outline-offset: 1px;
+}
+.fc-hex-input::placeholder {
+  color: #9ca3af;
 }
 .fc-hex-input--nome {
   font-family: inherit;
@@ -498,5 +550,20 @@ async function removeQuickColor(colorId) {
 }
 .fc-alpha-range:focus-visible {
   box-shadow: 0 0 0 2px rgba(232, 98, 42, 0.5);
+}
+/* Senza un colore concreto la barra è spenta: sola scacchiera, niente cursore. */
+.fc-alpha-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  background:
+    linear-gradient(45deg, #cbd5e1 25%, transparent 0, transparent 75%, #cbd5e1 0) 0 0 / 10px 10px,
+    linear-gradient(45deg, #cbd5e1 25%, transparent 0, transparent 75%, #cbd5e1 0) 5px 5px / 10px 10px,
+    #fff;
+}
+.fc-alpha-range:disabled::-webkit-slider-thumb {
+  visibility: hidden;
+}
+.fc-alpha-range:disabled::-moz-range-thumb {
+  visibility: hidden;
 }
 </style>

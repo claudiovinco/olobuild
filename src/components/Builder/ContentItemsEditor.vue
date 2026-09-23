@@ -130,10 +130,11 @@
                 @update:modelValue="updateField(index, field.key, $event)"
               />
 
-              <!-- color -->
+              <!-- color — vuoto resta vuoto: FieldColor lo mostra come «Predefinito»,
+                   mentre il vecchio ripiego '#000000' lo faceva vedere nero. -->
               <FieldColor
                 v-else-if="field.type === 'color'"
-                :modelValue="element[field.key] || '#000000'"
+                :modelValue="element[field.key] || ''"
                 @update:modelValue="updateField(index, field.key, $event)"
               />
 
