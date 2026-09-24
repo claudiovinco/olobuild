@@ -311,22 +311,50 @@ trait Olobuild_Builder_Settings_Trait {
         ] );
 
         // ─── Endpoint generici per i 5 tab migrati in Configurazione (v1.0.30) ───
-        // Cookie Consent — option array unica `olo_cookie_settings`
+        // Cookie Consent — option array unica `olobuild_cookie_settings`
         register_rest_route( $ns, '/cookie-consent', [
             [
                 'methods'             => 'GET',
                 'callback'            => function () {
-                    return rest_ensure_response( get_option( 'olobuild_cookie_settings', [] ) );
+                    // Lo stato che il sito usa davvero (default del runtime + salvato):
+                    // l'option grezza di un sito mai salvato è [] e la scheda mostrava
+                    // «acceso» un banner che sul sito è spento.
+                    $opts = Olobuild_Cookie_Consent::get_options();
+                    // Booleani col giudizio del runtime (! empty, come init() e il banner):
+                    // un '1' salvato a mano non deve apparire spento nella scheda.
+                    foreach ( [ 'enabled', 'auto_block', 'block_iframes' ] as $k ) {
+                        $opts[ $k ] = ! empty( $opts[ $k ] );
+                    }
+                    // Posizione come la rende il banner (render_frontend): tutto ciò che non è
+                    // 'top' sta in basso. Un vecchio 'bottom_left' o 'center' appare «In basso».
+                    $opts['position'] = ( 'top' === $opts['position'] ) ? 'top' : 'bottom';
+                    return rest_ensure_response( $opts );
                 },
                 'permission_callback' => function () { return current_user_can( 'manage_options' ); },
             ],
             [
                 'methods'             => 'POST',
                 'callback'            => function ( $req ) {
-                    $existing = get_option( 'olobuild_cookie_settings', [] );
-                    $payload  = $req->get_json_params();
+                    $saved = get_option( Olobuild_Cookie_Consent::OPT, [] );
+                    if ( ! is_array( $saved ) ) $saved = [];
+                    $payload = $req->get_json_params();
                     if ( ! is_array( $payload ) ) $payload = [];
-                    update_option( 'olobuild_cookie_settings', array_merge( $existing, $payload ) );
+
+                    // Il payload va SOPRA lo stato vero e solo POI si sanifica: sanitize_options
+                    // mette a false i booleani assenti e a '' i testi assenti, e un payload
+                    // parziale spegnerebbe auto_block o svuoterebbe i testi del banner.
+                    // Sincronizza anche olobuild_cookie_consent_enabled (letta dall'export).
+                    $clean = Olobuild_Cookie_Consent::instance()->sanitize_options(
+                        array_merge( Olobuild_Cookie_Consent::get_options(), $payload )
+                    );
+                    // Si scrivono solo le chiavi del runtime già salvate o appena inviate:
+                    // i default restano impliciti e un loro cambio futuro raggiunge il sito.
+                    $runtime = array_intersect_key( $clean, $saved + $payload );
+                    // Chiavi della scheda che il runtime non conosce: conservate come sono.
+                    $proto = array_intersect_key( $payload, array_flip( [ 'mode', 'block_scripts', 'reshow_months', 'categories', 'copy' ] ) );
+                    $rest  = array_diff_key( $saved, $clean );
+
+                    update_option( Olobuild_Cookie_Consent::OPT, array_merge( $rest, $proto, $runtime ) );
                     update_option( 'olobuild_settings_last_saved', time() );
                     return rest_ensure_response( [ 'ok' => true ] );
                 },

@@ -53,9 +53,12 @@ class Olobuild_FullPage_Cache {
         add_action( 'wp_update_nav_menu', [ __CLASS__, 'purge_all' ] );
         add_action( 'switch_theme', [ __CLASS__, 'purge_all' ] );
         add_action( 'customize_save_after', [ __CLASS__, 'purge_all' ] );
-        foreach ( [ 'olobuild_active_header', 'olobuild_active_footer', 'olobuild_styles' ] as $opt ) {
+        foreach ( [ 'olobuild_active_header', 'olobuild_active_footer', 'olobuild_styles', 'olobuild_cookie_settings' ] as $opt ) {
             add_action( 'update_option_' . $opt, [ __CLASS__, 'purge_all' ] );
         }
+        // Banner cookie acceso/spento, blocco script e iframe: le pagine in cache li
+        // hanno già scritti. Il primo salvataggio dei cookie è un add_option.
+        add_action( 'add_option_olobuild_cookie_settings', [ __CLASS__, 'purge_all' ] );
     }
 
     /* ── stato ─────────────────────────────────────────────── */
