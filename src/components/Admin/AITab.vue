@@ -174,11 +174,14 @@ import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
 import CfgNumber from './controls/CfgNumber.vue';
+import { okOrThrow, cfgJob, assertLoaded, reloadJob, conIniziali } from './cfgSave';
 
-const showToast = inject('showToast', () => {});
-const setDirty  = inject('setDirty',  () => {});
+const TAB_ID = 'ai';
+const shellDirty = inject('setDirty', () => {});
+const setDirty = (v) => shellDirty(v, TAB_ID);
+const loaded = ref(false);
 
-const form = ref({
+const INIZIALE = {
   provider: 'anthropic',
   anthropic_key: '',
   openai_key: '',
@@ -190,7 +193,8 @@ const form = ref({
   temperature: 0.35,
   tone: 'warm',
   system_prompt: '',
-});
+};
+const form = ref({ ...INIZIALE });
 
 const MODELS = {
   anthropic: [
@@ -257,7 +261,7 @@ function updateKey(val) {
 async function loadSettings() {
   try {
     const res = await fetch(`${window.oloData.restUrl}ai/settings`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
-    if (res.ok) Object.assign(form.value, await res.json());
+    if (res.ok) { form.value = conIniziali(INIZIALE, await res.json()); loaded.value = true; }
   } catch (e) { /* defaults */ }
   try {
     const res2 = await fetch(`${window.oloData.restUrl}ai/usage`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
@@ -272,17 +276,16 @@ async function loadSettings() {
 }
 
 async function saveSettings() {
-  try {
-    await fetch(`${window.oloData.restUrl}ai/settings`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-      body: JSON.stringify(form.value),
-    });
-  } catch (e) { showToast(t('Errore di salvataggio AI'), 'error'); }
+  assertLoaded(loaded);
+  await okOrThrow(fetch(`${window.oloData.restUrl}ai/settings`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+    body: JSON.stringify(form.value),
+  }));
 }
 
-const onSave = () => saveSettings();
-const onDiscard = () => loadSettings();
+const onSave = cfgJob(TAB_ID, saveSettings);
+const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadSettings));
 
 onMounted(() => {
   loadSettings();

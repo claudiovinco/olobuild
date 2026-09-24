@@ -97,9 +97,12 @@ import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
 import CfgNumber from './controls/CfgNumber.vue';
+import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
 
-const showToast = inject('showToast', () => {});
-const setDirty  = inject('setDirty',  () => {});
+const TAB_ID = 'popups';
+const shellDirty = inject('setDirty', () => {});
+const setDirty = (v) => shellDirty(v, TAB_ID);
+const loaded = ref(false);
 
 const popups = ref([]);
 const templates = ref([]);
@@ -176,24 +179,23 @@ async function loadPopups() {
     if (res.ok) {
       const data = await res.json();
       popups.value = Array.isArray(data) ? data : (data?.popups || []);
+      loaded.value = true;
     }
   } catch (e) { /* keep empty */ }
 }
 
+// Con la lettura fallita l'elenco è vuoto: salvarlo cancellerebbe tutti i popup.
 async function savePopups() {
-  try {
-    await fetch(`${window.oloData.restUrl}global-popups`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-      body: JSON.stringify({ popups: popups.value }),
-    });
-  } catch (e) {
-    showToast(t('Errore di salvataggio popup'), 'error');
-  }
+  assertLoaded(loaded);
+  await okOrThrow(fetch(`${window.oloData.restUrl}global-popups`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+    body: JSON.stringify({ popups: popups.value }),
+  }));
 }
 
-const onSave = () => savePopups();
-const onDiscard = () => loadPopups();
+const onSave = cfgJob(TAB_ID, savePopups);
+const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadPopups));
 
 onMounted(() => {
   loadPopups();

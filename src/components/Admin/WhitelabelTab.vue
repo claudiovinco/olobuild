@@ -136,11 +136,15 @@
 <script setup>
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import { okOrThrow, cfgJob, assertLoaded, reloadJob, conIniziali } from './cfgSave';
 
+const TAB_ID = 'whitelabel';
 const showToast = inject('showToast', () => {});
-const setDirty  = inject('setDirty',  () => {});
+const shellDirty = inject('setDirty', () => {});
+const setDirty = (v) => shellDirty(v, TAB_ID);
+const loaded = ref(false);
 
-const form = ref({
+const INIZIALE = {
   enabled: true,
   plugin_name: '',
   plugin_description: '',
@@ -153,7 +157,8 @@ const form = ref({
   hide_for_non_admins: false,
   custom_doc_enabled: false,
   custom_doc_url: '',
-});
+};
+const form = ref({ ...INIZIALE });
 
 const initial = computed(() => (form.value.plugin_name || form.value.author_name || 'O').charAt(0).toUpperCase());
 
@@ -188,22 +193,21 @@ function pickLogo(kind) {
 async function loadSettings() {
   try {
     const res = await fetch(`${window.oloData.restUrl}white-label`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
-    if (res.ok) Object.assign(form.value, await res.json());
+    if (res.ok) { form.value = conIniziali(INIZIALE, await res.json()); loaded.value = true; }
   } catch (e) { /* defaults */ }
 }
 
 async function saveSettings() {
-  try {
-    await fetch(`${window.oloData.restUrl}white-label`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-      body: JSON.stringify(form.value),
-    });
-  } catch (e) { showToast(t('Errore di salvataggio White Label'), 'error'); }
+  assertLoaded(loaded);
+  await okOrThrow(fetch(`${window.oloData.restUrl}white-label`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+    body: JSON.stringify(form.value),
+  }));
 }
 
-const onSave = () => saveSettings();
-const onDiscard = () => loadSettings();
+const onSave = cfgJob(TAB_ID, saveSettings);
+const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadSettings));
 
 onMounted(() => {
   loadSettings();

@@ -121,9 +121,13 @@ import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
 import CfgNumber from './controls/CfgNumber.vue';
+import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
 
+const TAB_ID = 'tipografia';
 const showToast = inject('showToast', () => {});
-const setDirty  = inject('setDirty',  () => {});
+const shellDirty = inject('setDirty', () => {});
+const setDirty = (v) => shellDirty(v, TAB_ID);
+const loaded = ref(false);
 
 // Display: serif prima, poi le famiglie senza grazie (etichettate · sans) —
 // css2 tollera pesi/assi mancanti, quindi ogni famiglia Google è caricabile
@@ -193,11 +197,21 @@ const RATIO_OPTIONS = [
   { value: '1.5',   label: '1.5 · Perfect Fifth' },
 ];
 
-const display = ref({ family: 'Instrument Serif', weight: 400 });
-const body    = ref({ family: 'Work Sans', weight: 500 });
-const mono    = ref({ family: '' });
-const scale   = ref({ base: 16, ratio: 1.25, lineHeight: 1.55 });
-const fullStyles = ref({});   // tutto olo_styles, per non perdere gli altri blocchi al PUT
+// Valori mostrati quando il server non ne ha uno (le famiglie valgono '' in
+// get_defaults). loadSettings li usa come riserva: «Annulla modifiche» rilegge
+// con loadSettings e deve tornare allo stato della prima lettura, non lasciare
+// a video il font annullato.
+const INIZIALE = {
+  display: { family: 'Instrument Serif', weight: 400 },
+  body:    { family: 'Work Sans', weight: 500 },
+  mono:    { family: '' },
+  scale:   { base: 16, ratio: 1.25, lineHeight: 1.55 },
+};
+const display = ref({ ...INIZIALE.display });
+const body    = ref({ ...INIZIALE.body });
+const mono    = ref({ ...INIZIALE.mono });
+const scale   = ref({ ...INIZIALE.scale });
+const fullStyles = ref({});   // olo_styles letto dal server: il blocco typography conserva le chiavi non mostrate qui
 
 const displayFontFamily = computed(() => `'${display.value.family}', ${DISPLAY_SANS.has(display.value.family) ? 'sans-serif' : 'serif'}`);
 const bodyFontFamily    = computed(() => `'${body.value.family}', sans-serif`);
@@ -240,17 +254,18 @@ async function loadSettings() {
       const data = await res.json();
       fullStyles.value = data.styles || {};
       const tp = (data.styles && data.styles.typography) || {};
-      if (tp.font_family_heading) display.value.family = tp.font_family_heading;
-      if (tp.font_weight_heading) display.value.weight = parseInt(tp.font_weight_heading) || 400;
-      if (tp.font_family)         body.value.family = tp.font_family;
-      if (tp.font_family_mono)    mono.value.family = tp.font_family_mono;
-      if (tp.font_weight_body)    body.value.weight = parseInt(tp.font_weight_body) || 500;
-      if (tp.font_size_base)      scale.value.base = parseInt(tp.font_size_base) || 16;
-      if (tp.line_height)         scale.value.lineHeight = parseFloat(tp.line_height) || 1.55;
-      if (tp.scale_ratio)         scale.value.ratio = parseFloat(tp.scale_ratio) || 1.25;
+      display.value.family   = tp.font_family_heading || INIZIALE.display.family;
+      display.value.weight   = parseInt(tp.font_weight_heading) || INIZIALE.display.weight;
+      body.value.family      = tp.font_family || INIZIALE.body.family;
+      mono.value.family      = tp.font_family_mono || INIZIALE.mono.family;
+      body.value.weight      = parseInt(tp.font_weight_body) || INIZIALE.body.weight;
+      scale.value.base       = parseInt(tp.font_size_base) || INIZIALE.scale.base;
+      scale.value.lineHeight = parseFloat(tp.line_height) || INIZIALE.scale.lineHeight;
+      scale.value.ratio      = parseFloat(tp.scale_ratio) || INIZIALE.scale.ratio;
       ensureFontLoaded(display.value.family);
       ensureFontLoaded(body.value.family);
       if (mono.value.family) ensureFontLoaded(mono.value.family);
+      loaded.value = true;
     }
   } catch (e) { /* defaults */ }
 }
@@ -275,21 +290,21 @@ function buildTypographyBlock() {
   };
 }
 
+// Solo il proprio blocco: rimandare l'intero olo_styles letto all'apertura
+// riportava indietro il primario salvato nel frattempo da Palette & Stili.
 async function saveSettings() {
-  try {
-    const payload = { ...fullStyles.value, typography: buildTypographyBlock() };
-    const res = await fetch(`${window.oloData.restUrl}styles`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-      body: JSON.stringify(payload),
-    });
-    if (!res.ok) throw new Error();
-    fullStyles.value = payload;
-  } catch (e) { showToast(t('Errore di salvataggio tipografia'), 'error'); }
+  assertLoaded(loaded);
+  const payload = { typography: buildTypographyBlock() };
+  await okOrThrow(fetch(`${window.oloData.restUrl}styles`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+    body: JSON.stringify(payload),
+  }));
+  fullStyles.value = { ...fullStyles.value, typography: payload.typography };
 }
 
-const onSave = () => saveSettings();
-const onDiscard = () => loadSettings();
+const onSave = cfgJob(TAB_ID, saveSettings);
+const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadSettings));
 
 onMounted(() => {
   ensureFontLoaded('Instrument Serif');

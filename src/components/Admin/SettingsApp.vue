@@ -171,11 +171,17 @@
             @click="onPick(d)"
           >{{ t(d.label) }}</button>
         </span>
+        <!-- L'esito negativo resta scritto finché la scheda è da salvare:
+             il toast da solo sparisce e non dice più niente. -->
+        <span v-if="saveErrorText" class="save-error" role="alert">
+          {{ saveErrorText }}
+          <button type="button" class="dirty-tab-link" :disabled="busy" @click="onSave">{{ t('Riprova') }}</button>
+        </span>
         <span v-if="lastSavedAt">{{ t('Ultimo salvataggio') }} <b>{{ lastSavedAt }}</b></span>
       </div>
       <div class="grow"></div>
       <div class="save-actions">
-        <button class="cfg-btn cfg-btn-ghost" :disabled="!dirty || saving" @click="onDiscard">
+        <button class="cfg-btn cfg-btn-ghost" :disabled="!dirty || busy" @click="onDiscard">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6"/><path d="M3 13a9 9 0 1 0 3-6.7L3 9"/></svg>
           {{ t('Annulla modifiche') }}
         </button>
@@ -183,9 +189,9 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
           {{ t('Anteprima') }}
         </button>
-        <button class="cfg-btn cfg-btn-primary" :disabled="!dirty || saving" @click="onSave">
+        <button class="cfg-btn cfg-btn-primary" :disabled="!dirty || busy" @click="onSave">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
-          {{ saving ? t('Salvataggio…') : t('Salva impostazioni') }}
+          {{ saving ? (saveProgress ? t('Salvataggio') + ' ' + saveProgress + '…' : t('Salvataggio…')) : t('Salva impostazioni') }}
         </button>
       </div>
     </footer>
@@ -283,7 +289,14 @@ const filterQuery = ref('');
 // esistono. Set riassegnato a ogni cambio (mai mutato) per la reattività.
 const dirtyTabs = ref(new Set());
 const dirty = computed(() => dirtyTabs.value.size > 0);
+// Contatore delle modifiche per scheda: a fine salvataggio si spegne il
+// puntino solo delle schede non ritoccate mentre la richiesta era in volo.
+const dirtyGen = new Map();
 const saving = ref(false);
+const discarding = ref(false);
+const busy = computed(() => saving.value || discarding.value);
+const saveProgress = ref('');       // «2/4» mentre si salvano più schede
+const saveFailures = ref([]);       // [{ id, msg }] dell'ultimo salvataggio
 const lastSavedAt = ref(window.oloData?.settingsLastSaved || '');
 const toast = ref(null);
 const contentEl = ref(null);
@@ -533,39 +546,104 @@ function findAndFlash(entry) {
   return false;
 }
 
-// I tab figli emettono `dirty` quando un loro field cambia.
-function markDirty(v) {
-  const id = activeTab.value;
+// I tab figli segnalano la modifica con setDirty(true, <id della scheda>);
+// senza id vale la scheda attiva (compatibilità con l'emit `dirty`).
+function markDirty(v, id = activeTab.value) {
+  if (!id) return;
+  if (v) dirtyGen.set(id, (dirtyGen.get(id) || 0) + 1);
   const next = new Set(dirtyTabs.value);
   if (v) next.add(id); else next.delete(id);
   dirtyTabs.value = next;
 }
 function onTabDirty() { markDirty(true); }
 
+function tabLabel(id) {
+  const item = ALL_ITEMS.find(i => i.id === id);
+  return item ? t(item.label) : id;
+}
+function describeFailures(list) {
+  return list.map(f => tabLabel(f.id) + (f.msg ? ` (${f.msg})` : '')).join(' · ');
+}
+// Resta scritto finché la scheda fallita è da salvare (un «Annulla» lo toglie).
+const saveErrorText = computed(() => {
+  const list = saveFailures.value.filter(f => dirtyTabs.value.has(f.id));
+  return list.length ? `${t('Non salvato')}: ${describeFailures(list)}` : '';
+});
+
+// Esegue IN FILA il lavoro delle schede indicate: l'evento porta
+// detail = { tabs, jobs } e ogni scheda in `tabs` iscrive la propria funzione
+// (vedi cfgSave.js). In fila apposta: PUT /styles legge, fonde e riscrive
+// l'option sul server, e due richieste sovrapposte si perderebbero a vicenda.
+async function runTabJobs(eventName, tabs, onStep) {
+  const jobs = [];
+  window.dispatchEvent(new CustomEvent(eventName, { detail: { tabs, jobs } }));
+  const done = [];
+  const failed = [];
+  for (let i = 0; i < tabs.length; i++) {
+    const id = tabs[i];
+    if (onStep) onStep(i + 1, tabs.length);
+    const job = jobs.find(j => j.id === id);
+    try {
+      if (!job) throw new Error(t('scheda non pronta'));
+      await job.run();
+      done.push(id);
+    } catch (e) {
+      failed.push({ id, msg: (e && e.message) || '' });
+    }
+  }
+  return { done, failed };
+}
+
+// Spegne il puntino delle schede riuscite, tranne quelle ritoccate nel frattempo.
+function clearDone(done, gen0) {
+  const next = new Set(dirtyTabs.value);
+  done.forEach((id) => {
+    if ((dirtyGen.get(id) || 0) === gen0.get(id)) next.delete(id);
+  });
+  dirtyTabs.value = next;
+}
+
+// Salvano SOLO le schede modificate, una dopo l'altra; l'esito arriva prima
+// del messaggio. Chi fallisce tiene il puntino e il motivo resta nella barra.
 async function onSave() {
-  if (!dirty.value || saving.value) return;
+  if (!dirty.value || busy.value) return;
   saving.value = true;
+  saveFailures.value = [];
+  const tabs = [...dirtyTabs.value];
+  const gen0 = new Map(tabs.map(id => [id, dirtyGen.get(id) || 0]));
   try {
-    // Il singolo tab si auto-salva via provide/inject 'requestSave';
-    // qui notifichiamo tutti i tab presenti via custom event globale,
-    // così ognuno fa il suo POST. Sequenziale per evitare race su option keys.
-    window.dispatchEvent(new CustomEvent('olo-cfg-save'));
-    // Mostriamo toast subito; il singolo tab fa il proprio toast in caso di errore.
-    showToast(t('Impostazioni salvate'), 'success');
-    dirtyTabs.value = new Set();
-    lastSavedAt.value = formatNow();
-  } catch (e) {
-    showToast(e?.message || t('Errore di salvataggio'), 'error');
+    const { done, failed } = await runTabJobs('olo-cfg-save', tabs, (i, n) => {
+      saveProgress.value = n > 1 ? `${i}/${n}` : '';
+    });
+    clearDone(done, gen0);
+    if (done.length) lastSavedAt.value = formatNow();
+    saveFailures.value = failed;
+    if (failed.length) {
+      showToast(`${t('Non salvato')}: ${describeFailures(failed)}`, 'error', 8000);
+    } else {
+      showToast(t('Impostazioni salvate'), 'success');
+    }
   } finally {
     saving.value = false;
+    saveProgress.value = '';
   }
 }
 
-function onDiscard() {
-  if (!dirty.value) return;
+async function onDiscard() {
+  if (!dirty.value || busy.value) return;
   if (!confirm(t('Annullare tutte le modifiche non salvate?'))) return;
-  window.dispatchEvent(new CustomEvent('olo-cfg-discard'));
-  dirtyTabs.value = new Set();
+  discarding.value = true;
+  const tabs = [...dirtyTabs.value];
+  const gen0 = new Map(tabs.map(id => [id, dirtyGen.get(id) || 0]));
+  try {
+    const { done, failed } = await runTabJobs('olo-cfg-discard', tabs);
+    clearDone(done, gen0);
+    if (failed.length) {
+      showToast(`${t('Modifiche non annullate')}: ${describeFailures(failed)}`, 'error', 8000);
+    }
+  } finally {
+    discarding.value = false;
+  }
 }
 
 function onPreview() {
@@ -579,15 +657,20 @@ function formatNow() {
   return `${t('oggi alle')} ${hh}:${mm}`;
 }
 
-function showToast(message, type = 'success') {
+// Un toast nuovo azzera il timer del precedente: prima il timer di un
+// «Preset applicato» poteva chiudere in anticipo un errore arrivato dopo.
+let toastTimer = null;
+function showToast(message, type = 'success', ms = 2500) {
   toast.value = { message, type };
-  setTimeout(() => { toast.value = null; }, 2500);
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { toast.value = null; }, ms);
 }
 
 // Provide il setter di toast ai tab figli (mantiene compat con codice esistente).
 provide('showToast', showToast);
-// Provide anche il setter di dirty per i tab che vogliono notificarlo direttamente.
-provide('setDirty', (v) => { markDirty(!!v); });
+// Setter di dirty per i tab: (v, id) — l'id lega la modifica alla scheda che
+// la fa anche se arriva dopo un await, quando l'utente può già essere altrove.
+provide('setDirty', (v, id) => { markDirty(!!v, id); });
 
 // Cleanup search se cambia tab.
 watch(activeTab, () => { filterQuery.value = ''; });
@@ -613,8 +696,9 @@ onMounted(() => {
 
   // La topbar ora ha link che lasciano la pagina (aree, Strumenti…): con
   // modifiche non salvate il browser chiede conferma prima di buttarle via.
+  // Anche a salvataggio in corso: chiudere la pagina troncherebbe le richieste.
   window.addEventListener('beforeunload', (e) => {
-    if (dirty.value) {
+    if (dirty.value || busy.value) {
       e.preventDefault();
       e.returnValue = '';
     }
@@ -1310,6 +1394,17 @@ onMounted(() => {
   text-decoration: underline; text-underline-offset: 3px;
 }
 .cfg-savebar .meta .dirty-tab-link:hover { color: var(--c-red-dark); }
+.cfg-savebar .meta .dirty-tab-link:focus-visible { outline: 2px solid var(--c-red); outline-offset: 2px; border-radius: 3px; }
+.cfg-savebar .meta .save-error {
+  display: inline-flex; align-items: center; gap: 2px;
+  color: var(--c-red-dark); font-weight: 600;
+  margin-right: 14px;
+}
+/* Con la riga d'esito il testo va a capo, non i pulsanti. */
+.cfg-savebar .meta { min-width: 0; }
+.cfg-savebar .save-actions { flex-shrink: 0; }
+.cfg-savebar .save-actions .cfg-btn { white-space: nowrap; }
+.cfg-savebar .meta .save-error .dirty-tab-link { color: var(--c-red-dark); }
 
 /* ═══ Ricerca a livello di campo ═══ */
 .cfg-macro-tab .hit-n,

@@ -125,9 +125,12 @@
 <script setup>
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import { okOrThrow, cfgJob, assertLoaded, reloadJob, conIniziali } from './cfgSave';
 
-const showToast = inject('showToast', () => {});
-const setDirty  = inject('setDirty',  () => {});
+const TAB_ID = 'analytics';
+const shellDirty = inject('setDirty', () => {});
+const setDirty = (v) => shellDirty(v, TAB_ID);
+const loaded = ref(false);
 
 const events = [
   { key: 'track_buttons',   label: 'Click sui pulsanti',  hint: 'Emette event click su ogni button tile.' },
@@ -139,7 +142,7 @@ const events = [
   { key: 'track_outbound',  label: 'Link esterni',        hint: 'Click su link verso altri domini.' },
 ];
 
-const form = ref({
+const INIZIALE = {
   ga_id: '', fb_pixel_id: '', gtm_id: '', clarity_id: '', hotjar_id: '',
   track_buttons: true, track_forms: true, track_video: true,
   track_scroll: true, track_pricing: true, track_downloads: true, track_outbound: true,
@@ -147,7 +150,8 @@ const form = ref({
   download_extensions: 'pdf,zip,doc,docx,xls,xlsx',
   anonymize_ip: true, respect_dnt: false, exclude_admins: true, consent_required: true,
   head_scripts: '', body_scripts: '',
-});
+};
+const form = ref({ ...INIZIALE });
 
 const anyConnected = computed(() => !!(form.value.ga_id || form.value.fb_pixel_id || form.value.gtm_id || form.value.clarity_id || form.value.hotjar_id));
 
@@ -156,24 +160,21 @@ function set(k, v) { form.value[k] = v; setDirty(true); }
 async function loadSettings() {
   try {
     const res = await fetch(`${window.oloData.restUrl}analytics`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
-    if (res.ok) Object.assign(form.value, await res.json());
+    if (res.ok) { form.value = conIniziali(INIZIALE, await res.json()); loaded.value = true; }
   } catch (e) { /* defaults */ }
 }
 
 async function saveSettings() {
-  try {
-    await fetch(`${window.oloData.restUrl}analytics`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-      body: JSON.stringify(form.value),
-    });
-  } catch (e) {
-    showToast(t('Errore di salvataggio tracking'), 'error');
-  }
+  assertLoaded(loaded);
+  await okOrThrow(fetch(`${window.oloData.restUrl}analytics`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+    body: JSON.stringify(form.value),
+  }));
 }
 
-const onSave = () => saveSettings();
-const onDiscard = () => loadSettings();
+const onSave = cfgJob(TAB_ID, saveSettings);
+const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadSettings));
 
 onMounted(() => {
   loadSettings();

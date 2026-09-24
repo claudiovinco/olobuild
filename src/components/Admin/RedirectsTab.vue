@@ -138,9 +138,13 @@
 import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
+import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
 
+const TAB_ID = 'redirects';
 const showToast = inject('showToast', () => {});
-const setDirty  = inject('setDirty',  () => {});
+const shellDirty = inject('setDirty', () => {});
+const setDirty = (v) => shellDirty(v, TAB_ID);
+const loaded = ref(false);
 
 const REDIRECT_TYPE_OPTIONS = [
   { value: 301, label: '301' },
@@ -156,14 +160,20 @@ const indexNowKey = ref('');
 const addingRow = ref(false);
 const newRow = ref({ from_url: '', to_url: '', type: 301 });
 
-async function loadRedirects() {
+// soloElenchi: dopo una CRUD si rileggono solo redirect e log 404. La chiave
+// IndexNow a video può essere una modifica non ancora salvata: riscriverla col
+// valore del server la perdeva, e il «Salva» successivo mandava quello vecchio.
+async function loadRedirects(soloElenchi = false) {
   try {
     const res = await fetch(`${window.oloData.restUrl}redirects`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (res.ok) {
       const data = await res.json();
       redirects.value = data?.redirects || [];
       log404.value = data?.log404 || [];
-      indexNowKey.value = data?.indexnow_key || '';
+      if (!soloElenchi) {
+        indexNowKey.value = data?.indexnow_key || '';
+        loaded.value = true;
+      }
     }
   } catch (e) { /* keep */ }
 }
@@ -182,7 +192,7 @@ async function saveNewRow() {
     if (res.ok) {
       addingRow.value = false;
       newRow.value = { from_url: '', to_url: '', type: 301 };
-      await loadRedirects();
+      await loadRedirects(true);
     } else {
       showToast(t('Errore: redirect non salvata'), 'error');
     }
@@ -191,30 +201,36 @@ async function saveNewRow() {
   }
 }
 
+// Scritture immediate (fuori da «Salva impostazioni»): un 403/500 o la rete
+// assente lo dicono, e gli elenchi si rileggono solo se il server ha risposto ok.
 async function deleteRedirect(id) {
   if (!confirm(t('Eliminare questa redirect?'))) return;
   try {
-    const res = await fetch(`${window.oloData.restUrl}redirects`, {
+    await okOrThrow(fetch(`${window.oloData.restUrl}redirects`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
       body: JSON.stringify({ action: 'delete', id }),
-    });
-    if (res.ok) await loadRedirects();
+    }));
   } catch (e) {
-    showToast(t('Errore di eliminazione'), 'error');
+    showToast(`${t('Errore di eliminazione')} (${(e && e.message) || ''})`, 'error', 8000);
+    return;
   }
+  await loadRedirects(true);
 }
 
 async function clearLog404() {
   if (!confirm(t('Svuotare tutto il log dei 404?'))) return;
   try {
-    await fetch(`${window.oloData.restUrl}redirects`, {
+    await okOrThrow(fetch(`${window.oloData.restUrl}redirects`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
       body: JSON.stringify({ action: 'clear_404' }),
-    });
-    await loadRedirects();
-  } catch (e) { /* noop */ }
+    }));
+  } catch (e) {
+    showToast(`${t('Log 404 non svuotato')} (${(e && e.message) || ''})`, 'error', 8000);
+    return;
+  }
+  await loadRedirects(true);
 }
 
 function promote404(row) {
@@ -230,19 +246,16 @@ function onIndexNowChange(v) {
 
 async function saveSettings() {
   // Solo l'IndexNow key è "settings-style"; le redirect sono CRUD inline.
-  try {
-    await fetch(`${window.oloData.restUrl}redirects`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-      body: JSON.stringify({ action: 'save_indexnow', indexnow_key: indexNowKey.value }),
-    });
-  } catch (e) {
-    showToast(t('Errore di salvataggio'), 'error');
-  }
+  assertLoaded(loaded);
+  await okOrThrow(fetch(`${window.oloData.restUrl}redirects`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+    body: JSON.stringify({ action: 'save_indexnow', indexnow_key: indexNowKey.value }),
+  }));
 }
 
-const onSave = () => saveSettings();
-const onDiscard = () => loadRedirects();
+const onSave = cfgJob(TAB_ID, saveSettings);
+const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadRedirects));
 
 onMounted(() => {
   loadRedirects();

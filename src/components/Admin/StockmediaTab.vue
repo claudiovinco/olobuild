@@ -107,9 +107,12 @@
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
+import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
 
-const showToast = inject('showToast', () => {});
-const setDirty  = inject('setDirty',  () => {});
+const TAB_ID = 'stockmedia';
+const shellDirty = inject('setDirty', () => {});
+const setDirty = (v) => shellDirty(v, TAB_ID);
+const loaded = ref(false);
 
 const services = ref([
   { id: 'unsplash',  name: 'Unsplash',  desc: '3M+ foto royalty-free, alta qualità editoriale', key: '', reveal: false, optionKey: 'olo_unsplash_api_key', docUrl: 'https://unsplash.com/developers' },
@@ -163,43 +166,44 @@ function openDocs(s) {
 function setBehavior(k, v) { behavior.value[k] = v; setDirty(true); }
 
 async function loadKeys() {
+  // Le chiavi vuote a video si salverebbero sopra quelle vere: servono entrambe le letture.
+  let keysOk = false;
+  let behaviorOk = false;
   try {
     const res = await fetch(`${window.oloData.restUrl}api-keys`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (res.ok) {
       const data = await res.json();
       services.value.forEach(s => {
-        if (data[s.optionKey]) s.key = data[s.optionKey];
+        s.key = data[s.optionKey] || ''; // vuota sul server = vuota a video, anche dopo «Annulla»
       });
+      keysOk = true;
     }
   } catch (e) { /* defaults */ }
   try {
     const res2 = await fetch(`${window.oloData.restUrl}stockmedia-behavior`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
-    if (res2.ok) Object.assign(behavior.value, await res2.json());
+    if (res2.ok) { Object.assign(behavior.value, await res2.json()); behaviorOk = true; }
   } catch (e) { /* defaults */ }
+  if (keysOk && behaviorOk) loaded.value = true;
 }
 
 async function saveKeys() {
+  assertLoaded(loaded);
   const body = {};
   services.value.forEach(s => { body[s.optionKey] = (s.key || '').trim(); });
-  try {
-    const r1 = await fetch(`${window.oloData.restUrl}api-keys`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-      body: JSON.stringify(body),
-    });
-    const r2 = await fetch(`${window.oloData.restUrl}stockmedia-behavior`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-      body: JSON.stringify(behavior.value),
-    });
-    if (!r1.ok || !r2.ok) throw new Error();
-  } catch (e) {
-    showToast(t('Errore di salvataggio'), 'error');
-  }
+  await okOrThrow(fetch(`${window.oloData.restUrl}api-keys`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+    body: JSON.stringify(body),
+  }));
+  await okOrThrow(fetch(`${window.oloData.restUrl}stockmedia-behavior`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+    body: JSON.stringify(behavior.value),
+  }));
 }
 
-const onSave = () => saveKeys();
-const onDiscard = () => loadKeys();
+const onSave = cfgJob(TAB_ID, saveKeys);
+const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadKeys));
 
 onMounted(() => {
   loadKeys();

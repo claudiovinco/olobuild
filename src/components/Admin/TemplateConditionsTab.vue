@@ -97,9 +97,12 @@ import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
 import CfgNumber from './controls/CfgNumber.vue';
+import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
 
-const showToast = inject('showToast', () => {});
-const setDirty  = inject('setDirty',  () => {});
+const TAB_ID = 'tplconditions';
+const shellDirty = inject('setDirty', () => {});
+const setDirty = (v) => shellDirty(v, TAB_ID);
+const loaded = ref(false);
 
 const rules = ref([]);
 const templates = ref([]);
@@ -172,24 +175,22 @@ async function loadRules() {
     if (res.ok) {
       const data = await res.json();
       rules.value = Array.isArray(data) ? data : (data?.rules || []);
+      loaded.value = true;
     }
   } catch (e) { /* keep empty */ }
 }
 
 async function saveRules() {
-  try {
-    await fetch(`${window.oloData.restUrl}template-conditions`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-      body: JSON.stringify({ rules: rules.value }),
-    });
-  } catch (e) {
-    showToast(t('Errore di salvataggio regole'), 'error');
-  }
+  assertLoaded(loaded);
+  await okOrThrow(fetch(`${window.oloData.restUrl}template-conditions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+    body: JSON.stringify({ rules: rules.value }),
+  }));
 }
 
-const onSave = () => saveRules();
-const onDiscard = () => loadRules();
+const onSave = cfgJob(TAB_ID, saveRules);
+const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadRules));
 
 onMounted(() => {
   loadRules();

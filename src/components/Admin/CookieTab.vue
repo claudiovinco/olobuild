@@ -158,30 +158,38 @@
 import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgNumber from './controls/CfgNumber.vue';
+import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
 
-const showToast = inject('showToast', () => {});
-const setDirty  = inject('setDirty',  () => {});
+const TAB_ID = 'cookie';
+const shellDirty = inject('setDirty', () => {});
+const setDirty = (v) => shellDirty(v, TAB_ID);
+const loaded = ref(false);
 
-const form = ref({
+// Valori della prima apertura: ogni lettura riparte da qui (vedi loadSettings).
+const copia = (v) => JSON.parse(JSON.stringify(v));
+const INIZIALE_FORM = {
   enabled: true,
   mode: 'optin',
   block_scripts: true,
   reshow_months: 6,
   position: 'bottom_left',
-});
+};
+const form = ref(copia(INIZIALE_FORM));
 
-const categories = ref([
+const INIZIALE_CATEGORIE = [
   { id: 'necessary',  label: 'Strettamente necessari', desc: 'Carrello, login, lingua. Non disattivabili.',         required: true,  active: true,  count: 4 },
   { id: 'functional', label: 'Funzionali',             desc: 'Chat live, salvataggio form, preferenze.',              required: false, active: true,  count: 2 },
   { id: 'analytics',  label: 'Analytics',              desc: 'Google Analytics, Hotjar.',                             required: false, active: true,  count: 3 },
   { id: 'marketing',  label: 'Marketing & Pixel',      desc: 'Meta Pixel, LinkedIn Insight, Google Ads.',             required: false, active: false, count: 5 },
-]);
+];
+const categories = ref(copia(INIZIALE_CATEGORIE));
 
 const activeLang = ref('it');
-const copy = ref({
+const INIZIALE_COPY = {
   it: { title: 'Utilizziamo i cookie', body: 'Per offrirti la migliore esperienza utilizziamo cookie. Puoi accettare tutti, solo gli essenziali o personalizzare le tue preferenze.', accept_all: 'Accetta tutti', only_essentials: 'Solo essenziali', customize: 'Personalizza' },
   en: { title: 'We use cookies', body: 'To give you the best experience we use cookies. Accept all, essentials only, or customize your preferences.', accept_all: 'Accept all', only_essentials: 'Essentials only', customize: 'Customize' },
-});
+};
+const copy = ref(copia(INIZIALE_COPY));
 
 function set(k, v) { form.value[k] = v; setDirty(true); }
 function setCopy(k, v) { copy.value[activeLang.value][k] = v; setDirty(true); }
@@ -205,6 +213,11 @@ async function loadSettings() {
     const res = await fetch(`${window.oloData.restUrl}cookie-consent`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (res.ok) {
       const data = await res.json();
+      // Si riparte dai valori iniziali: l'option mai salvata vale [] e i rami qui
+      // sotto non toccherebbero niente, lasciando a video ciò che «Annulla» deve togliere.
+      form.value = copia(INIZIALE_FORM);
+      categories.value = copia(INIZIALE_CATEGORIE);
+      copy.value = copia(INIZIALE_COPY);
       if (data) {
         if (typeof data.enabled === 'boolean') form.value.enabled = data.enabled;
         if (data.mode) form.value.mode = data.mode;
@@ -214,22 +227,22 @@ async function loadSettings() {
         if (Array.isArray(data.categories)) categories.value = data.categories;
         if (data.copy) Object.assign(copy.value, data.copy);
       }
+      loaded.value = true;
     }
   } catch (e) { /* defaults */ }
 }
 
 async function saveSettings() {
-  try {
-    await fetch(`${window.oloData.restUrl}cookie-consent`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-      body: JSON.stringify({ ...form.value, categories: categories.value, copy: copy.value }),
-    });
-  } catch (e) { showToast(t('Errore di salvataggio Cookie'), 'error'); }
+  assertLoaded(loaded);
+  await okOrThrow(fetch(`${window.oloData.restUrl}cookie-consent`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+    body: JSON.stringify({ ...form.value, categories: categories.value, copy: copy.value }),
+  }));
 }
 
-const onSave = () => saveSettings();
-const onDiscard = () => loadSettings();
+const onSave = cfgJob(TAB_ID, saveSettings);
+const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadSettings));
 
 onMounted(() => {
   loadSettings();

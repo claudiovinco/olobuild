@@ -116,9 +116,13 @@
 <script setup>
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
 
+const TAB_ID = 'responsive';
 const showToast = inject('showToast', () => {});
-const setDirty  = inject('setDirty',  () => {});
+const shellDirty = inject('setDirty', () => {});
+const setDirty = (v) => shellDirty(v, TAB_ID);
+const loaded = ref(false);
 
 const DEFAULT_BPS = [
   { id: 'desktop_xl', name: 'Desktop XL', min: '1440', max: '∞',    icon: '🖥️', is_default: false },
@@ -144,7 +148,6 @@ function bpIconSvg(b) {
 
 const breakpoints = ref(JSON.parse(JSON.stringify(DEFAULT_BPS)));
 const advanced = ref({ strategy: 'mobile' });
-const fullStyles = ref({});   // tutto olo_styles, per non perdere gli altri blocchi al PUT
 
 const PALETTE = ['#fde2e4', '#fbd5d8', '#f5959c', '#ec5a62', '#c8323a', '#8a1f24', '#5a1015'];
 const INFINITE_SHARE = 15; // % a destra riservata al breakpoint senza max
@@ -232,29 +235,29 @@ async function loadSettings() {
     const res = await fetch(`${window.oloData.restUrl}styles`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (res.ok) {
       const data = await res.json();
-      fullStyles.value = data.styles || {};
       const s = data.styles || {};
       if (Array.isArray(s.breakpoints) && s.breakpoints.length) breakpoints.value = s.breakpoints;
       if (s.breakpoint_strategy) advanced.value.strategy = s.breakpoint_strategy;
+      loaded.value = true;
     }
   } catch (e) { /* defaults */ }
 }
 
+// Solo il proprio blocco: il server fonde per blocco (array_replace), e rimandare
+// l'intero olo_styles letto all'apertura riportava indietro colori e tipografia
+// salvati nel frattempo dalle altre schede.
 async function saveSettings() {
-  try {
-    const payload = { ...fullStyles.value, breakpoints: breakpoints.value, breakpoint_strategy: advanced.value.strategy };
-    const res = await fetch(`${window.oloData.restUrl}styles`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-      body: JSON.stringify(payload),
-    });
-    if (!res.ok) throw new Error();
-    fullStyles.value = payload;
-  } catch (e) { showToast(t('Errore di salvataggio breakpoint'), 'error'); }
+  assertLoaded(loaded);
+  const payload = { breakpoints: breakpoints.value, breakpoint_strategy: advanced.value.strategy };
+  await okOrThrow(fetch(`${window.oloData.restUrl}styles`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+    body: JSON.stringify(payload),
+  }));
 }
 
-const onSave = () => saveSettings();
-const onDiscard = () => loadSettings();
+const onSave = cfgJob(TAB_ID, saveSettings);
+const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadSettings));
 
 onMounted(() => {
   loadSettings();

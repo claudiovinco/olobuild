@@ -187,9 +187,13 @@
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
+import { okOrThrow, cfgJob, assertLoaded, reloadJob, conIniziali } from './cfgSave';
 
+const TAB_ID = 'seo';
 const showToast = inject('showToast', () => {});
-const setDirty  = inject('setDirty',  () => {});
+const shellDirty = inject('setDirty', () => {});
+const setDirty = (v) => shellDirty(v, TAB_ID);
+const loaded = ref(false);
 
 const SEPARATOR_OPTIONS = [
   { value: '—', label: t('— (em dash)') },
@@ -213,20 +217,26 @@ const SCHEMA_TYPE_OPTIONS = [
   { value: 'ProfessionalService', label: 'ProfessionalService' },
 ];
 
-const titles = ref({
+// Valori di partenza: una sezione mai salvata torna [] dal server, e «Annulla modifiche»
+// deve riportare a QUESTI, non lasciare a video quelli annullati.
+const INIZIALE_TITLES = {
   pattern: '{page} {sep} {site}',
   separator: '—',
   description: '',
   language: 'it_IT',
   robots: 'index_follow',
-});
-const social = ref({
+};
+const INIZIALE_SOCIAL = {
   twitter_handle: '',
   card_type: 'summary_large',
   og_image: '',
-});
-const sitemap = ref({ enabled: true });
-const schema  = ref({ type: 'Organization', auto_ping: true });
+};
+const INIZIALE_SITEMAP = { enabled: true };
+const INIZIALE_SCHEMA  = { type: 'Organization', auto_ping: true };
+const titles  = ref({ ...INIZIALE_TITLES });
+const social  = ref({ ...INIZIALE_SOCIAL });
+const sitemap = ref({ ...INIZIALE_SITEMAP });
+const schema  = ref({ ...INIZIALE_SCHEMA });
 
 const sitemapUrl = computed(() => (window.oloData?.siteUrl || '/') + 'sitemap.xml');
 const googleSearchConsole = 'https://search.google.com/search-console';
@@ -269,28 +279,29 @@ async function loadSettings() {
       fetch(base + 'sitemap', { headers }).then(r => r.ok ? r.json() : null).catch(() => null),
       fetch(base + 'advanced', { headers }).then(r => r.ok ? r.json() : null).catch(() => null),
     ]);
-    if (tRes)  Object.assign(titles.value, tRes);
-    if (sRes)  Object.assign(social.value, sRes);
-    if (smRes) Object.assign(sitemap.value, smRes);
-    if (schRes && schRes.schema) Object.assign(schema.value, schRes.schema);
+    if (tRes)   titles.value  = conIniziali(INIZIALE_TITLES, tRes);
+    if (sRes)   social.value  = conIniziali(INIZIALE_SOCIAL, sRes);
+    if (smRes)  sitemap.value = conIniziali(INIZIALE_SITEMAP, smRes);
+    if (schRes) schema.value  = conIniziali(INIZIALE_SCHEMA, schRes.schema);
+    // Si salvano tutte e quattro: basta una lettura mancata per spedire i default.
+    if (tRes && sRes && smRes && schRes) loaded.value = true;
   } catch (e) { /* defaults */ }
 }
 
 async function saveSettings() {
-  try {
-    const base = `${window.oloData.restUrl}seo/`;
-    const headers = { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce };
-    await Promise.all([
-      fetch(base + 'titles',  { method: 'POST', headers, body: JSON.stringify(titles.value) }),
-      fetch(base + 'social',  { method: 'POST', headers, body: JSON.stringify(social.value) }),
-      fetch(base + 'sitemap', { method: 'POST', headers, body: JSON.stringify(sitemap.value) }),
-      fetch(base + 'advanced',{ method: 'POST', headers, body: JSON.stringify({ schema: schema.value }) }),
-    ]);
-  } catch (e) { showToast(t('Errore di salvataggio SEO'), 'error'); }
+  assertLoaded(loaded);
+  const base = `${window.oloData.restUrl}seo/`;
+  const headers = { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce };
+  await Promise.all([
+    okOrThrow(fetch(base + 'titles',  { method: 'POST', headers, body: JSON.stringify(titles.value) })),
+    okOrThrow(fetch(base + 'social',  { method: 'POST', headers, body: JSON.stringify(social.value) })),
+    okOrThrow(fetch(base + 'sitemap', { method: 'POST', headers, body: JSON.stringify(sitemap.value) })),
+    okOrThrow(fetch(base + 'advanced',{ method: 'POST', headers, body: JSON.stringify({ schema: schema.value }) })),
+  ]);
 }
 
-const onSave = () => saveSettings();
-const onDiscard = () => loadSettings();
+const onSave = cfgJob(TAB_ID, saveSettings);
+const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadSettings));
 
 onMounted(() => {
   loadSettings();

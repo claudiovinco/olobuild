@@ -302,13 +302,17 @@
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgNumber from './controls/CfgNumber.vue';
+import { okOrThrow, cfgJob, assertLoaded, reloadJob, conIniziali } from './cfgSave';
 
+const TAB_ID = 'performance';
 const showToast = inject('showToast', () => {});
-const setDirty  = inject('setDirty',  () => {});
+const shellDirty = inject('setDirty', () => {});
+const setDirty = (v) => shellDirty(v, TAB_ID);
+const loaded = ref(false);
 
 const purging = ref(false);
 
-const form = ref({
+const INIZIALE = {
   // Critical CSS
   critical_css_enabled: false,
   critical_css_ttl: 7,
@@ -336,7 +340,8 @@ const form = ref({
   // Custom domains
   dns_prefetch_domains: '',
   preconnect_domains: '',
-});
+};
+const form = ref({ ...INIZIALE });
 
 const stats = ref({
   score: 0,
@@ -400,7 +405,7 @@ async function regenerateCache() {
 async function loadSettings() {
   try {
     const res = await fetch(`${window.oloData.restUrl}performance`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
-    if (res.ok) Object.assign(form.value, await res.json());
+    if (res.ok) { form.value = conIniziali(INIZIALE, await res.json()); loaded.value = true; }
   } catch (e) { /* defaults */ }
 }
 async function loadStats() {
@@ -411,18 +416,17 @@ async function loadStats() {
 }
 
 async function saveSettings() {
-  try {
-    await fetch(`${window.oloData.restUrl}performance`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-      body: JSON.stringify(form.value),
-    });
-    await loadStats(); // refresh score dopo save
-  } catch (e) { showToast(t('Errore di salvataggio Performance'), 'error'); }
+  assertLoaded(loaded);
+  await okOrThrow(fetch(`${window.oloData.restUrl}performance`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+    body: JSON.stringify(form.value),
+  }));
+  await loadStats(); // refresh score dopo save (non fa fallire il salvataggio)
 }
 
-const onSave = () => saveSettings();
-const onDiscard = () => loadSettings();
+const onSave = cfgJob(TAB_ID, saveSettings);
+const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadSettings));
 
 onMounted(() => {
   loadSettings();

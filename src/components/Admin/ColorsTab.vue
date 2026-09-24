@@ -322,9 +322,13 @@ import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import { HARMONY_RULES, harmonize, paletteToRoles, neutralsFromSeed, readableText, contrastRatio, isValidHex } from '@/utils/colorHarmony';
 import CfgSelect from './controls/CfgSelect.vue';
+import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
 
+const TAB_ID = 'colori';
 const showToast = inject('showToast', () => {});
-const setDirty  = inject('setDirty',  () => {});
+const shellDirty = inject('setDirty', () => {});
+const setDirty = (v) => shellDirty(v, TAB_ID);
+const loaded = ref(false);
 
 const BRAND_ROLES = [
   { key: 'primary',   name: 'Primary',   role: 'Brand · CTA · pulsanti' },
@@ -363,7 +367,6 @@ const DARK_STRATEGY_OPTS = [
   { value: 'luminance', label: t('Solo aggiusta luminanza') },
 ];
 
-const fullStyles = ref({});            // tutto olo_styles (per non perdere typography/layout al save)
 const colors = ref({ ...DEFAULT_COLORS });
 const presets = ref({});               // builtin presets {key: {name, colors, ...}}
 const customPresets = ref([]);         // olo_design_presets: preset salvati dall'utente
@@ -588,10 +591,10 @@ async function loadStyles() {
     if (res.ok) {
       const data = await res.json();
       const s = data.styles || {};
-      fullStyles.value = s;
       colors.value = { ...DEFAULT_COLORS, ...(s.colors || {}) };
       if (s.neutrals) neutrals.value = { mode: s.neutrals.mode || 'auto', tint: s.neutrals.tint || 'zinc', scale: (s.neutrals.scale && s.neutrals.scale.length) ? [...s.neutrals.scale] : [...NEUTRAL_PRESETS[s.neutrals.tint || 'zinc']] };
       if (s.dark_mode) darkMode.value = { enabled: s.dark_mode.enabled !== false, strategy: s.dark_mode.strategy || 'auto' };
+      loaded.value = true;
     }
   } catch (e) { /* defaults */ }
   // Global colors: per i ruoli core (primary/secondary/...) il global color VINCE nel CSS
@@ -650,12 +653,20 @@ async function syncGlobalColors() {
   }
   globalColors.value = next;
   if (!changed) return;
+  // I global color dei ruoli core vincono nel CSS: se questo PUT fallisce la
+  // scheda non è salvata davvero, e resta da salvare (il flag torna com'era).
+  const touchedBefore = globalColorsTouched.value;
   globalColorsTouched.value = false;
-  await fetch(`${window.oloData.restUrl}global-colors`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-    body: JSON.stringify(next),
-  });
+  try {
+    await okOrThrow(fetch(`${window.oloData.restUrl}global-colors`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+      body: JSON.stringify(next),
+    }));
+  } catch (e) {
+    globalColorsTouched.value = touchedBefore;
+    throw e;
+  }
 }
 
 // I colori globali EXTRA si salvano subito e in modo merge-safe (rileggo dal server,
@@ -692,28 +703,27 @@ function setExtraGlobalHex(id, val) {
 function setExtraGlobalLabel(id, label) {
   persistGlobalColors((list) => list.map((g) => (g.id === id ? { ...g, label } : g)));
 }
+// Solo i blocchi di questa scheda: il server fonde per blocco (array_replace), e
+// rimandare l'intero olo_styles letto all'apertura riportava indietro la
+// tipografia (e gli altri blocchi) salvata nel frattempo dalle altre schede.
 async function saveStyles() {
+  assertLoaded(loaded);
   recomputeContrasts();
-  try {
-    const body = {
-      ...fullStyles.value,
-      colors: { ...colors.value },
-      neutrals: { mode: neutrals.value.mode, tint: neutrals.value.tint, scale: [...displayNeutrals.value] },
-      dark_mode: { enabled: darkMode.value.enabled, strategy: darkMode.value.strategy },
-    };
-    const res = await fetch(`${window.oloData.restUrl}styles`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-      body: JSON.stringify(body),
-    });
-    if (!res.ok) throw new Error();
-    fullStyles.value = body;
-    await syncGlobalColors();
-  } catch (e) { showToast(t('Errore di salvataggio colori'), 'error'); }
+  const body = {
+    colors: { ...colors.value },
+    neutrals: { mode: neutrals.value.mode, tint: neutrals.value.tint, scale: [...displayNeutrals.value] },
+    dark_mode: { enabled: darkMode.value.enabled, strategy: darkMode.value.strategy },
+  };
+  await okOrThrow(fetch(`${window.oloData.restUrl}styles`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+    body: JSON.stringify(body),
+  }));
+  await syncGlobalColors();
 }
 
-const onSave = () => saveStyles();
-const onDiscard = () => loadStyles();
+const onSave = cfgJob(TAB_ID, saveStyles);
+const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadStyles));
 
 onMounted(() => {
   loadStyles();

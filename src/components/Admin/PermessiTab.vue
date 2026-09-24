@@ -97,9 +97,13 @@
 <script setup>
 import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
 
+const TAB_ID = 'permessi';
 const showToast = inject('showToast', () => {});
-const setDirty  = inject('setDirty',  () => {});
+const shellDirty = inject('setDirty', () => {});
+const setDirty = (v) => shellDirty(v, TAB_ID);
+const loaded = ref(false);
 
 const roles = ref([
   { id: 'admin',   label: 'Admin',       count: 1, custom: false },
@@ -154,24 +158,22 @@ async function loadSettings() {
       if (Array.isArray(data?.roles)) roles.value = data.roles;
       if (Array.isArray(data?.matrix)) matrix.value = data.matrix;
       if (data?.advanced) Object.assign(advanced.value, data.advanced);
+      loaded.value = true;
     }
   } catch (e) { /* defaults */ }
 }
 
 async function saveSettings() {
-  try {
-    await fetch(`${window.oloData.restUrl}role-manager`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-      body: JSON.stringify({ roles: roles.value, matrix: matrix.value, advanced: advanced.value }),
-    });
-  } catch (e) {
-    showToast(t('Errore di salvataggio permessi'), 'error');
-  }
+  assertLoaded(loaded);
+  await okOrThrow(fetch(`${window.oloData.restUrl}role-manager`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+    body: JSON.stringify({ roles: roles.value, matrix: matrix.value, advanced: advanced.value }),
+  }));
 }
 
-const onSave = () => saveSettings();
-const onDiscard = () => loadSettings();
+const onSave = cfgJob(TAB_ID, saveSettings);
+const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadSettings));
 
 onMounted(() => {
   loadSettings();

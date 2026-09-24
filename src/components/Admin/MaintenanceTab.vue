@@ -89,9 +89,13 @@
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
+import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
 
+const TAB_ID = 'maintenance';
 const showToast = inject('showToast', () => {});
-const setDirty  = inject('setDirty',  () => {});
+const shellDirty = inject('setDirty', () => {});
+const setDirty = (v) => shellDirty(v, TAB_ID);
+const loaded = ref(false);
 
 const form = ref({
   mode: 'off',
@@ -145,6 +149,8 @@ async function generateTemplate(kind) {
       await loadTemplates();
       if (kind === 'coming_soon') form.value.coming_soon_template_id = data.template_id;
       else                         form.value.template_id            = data.template_id;
+      // La selezione è una modifica della scheda: senza il puntino non verrebbe salvata.
+      setDirty(true);
       showToast(t('Template creato e selezionato'), 'success');
       // Apri il template appena creato nell'editor in una nuova tab.
       if (data.edit_url && confirm(t('Aprire il template appena creato nel builder per personalizzarlo?'))) {
@@ -173,24 +179,21 @@ async function loadTemplates() {
 async function loadSettings() {
   try {
     const res = await fetch(`${window.oloData.restUrl}maintenance`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
-    if (res.ok) Object.assign(form.value, await res.json());
+    if (res.ok) { Object.assign(form.value, await res.json()); loaded.value = true; }
   } catch (e) { /* defaults */ }
 }
 
 async function saveSettings() {
-  try {
-    await fetch(`${window.oloData.restUrl}maintenance`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-      body: JSON.stringify(form.value),
-    });
-  } catch (e) {
-    showToast(t('Errore di salvataggio manutenzione'), 'error');
-  }
+  assertLoaded(loaded);
+  await okOrThrow(fetch(`${window.oloData.restUrl}maintenance`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+    body: JSON.stringify(form.value),
+  }));
 }
 
-const onSave = () => saveSettings();
-const onDiscard = () => loadSettings();
+const onSave = cfgJob(TAB_ID, saveSettings);
+const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadSettings));
 
 onMounted(() => {
   loadSettings();

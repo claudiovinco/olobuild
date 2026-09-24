@@ -206,14 +206,20 @@
 </template>
 
 <script setup>
-import { computed, inject, onMounted, onBeforeUnmount, watch } from 'vue';
+import { computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import { useStylesStore } from '@/stores/styles';
 import CfgNumber from './controls/CfgNumber.vue';
+import { okOrThrow, cfgJob } from './cfgSave';
+
+const TAB_ID = 'spaziature';
+// I blocchi di olo_styles che questa scheda modifica (e i soli che salva).
+const BLOCKS = ['spacing', 'layout', 'section_padding', 'gutter', 'fluid_scaling'];
+const UPDATE_ACTIONS = ['updateSpacing', 'updateLayout', 'updateSectionPadding', 'updateGutter', 'updateFluidScaling'];
 
 const stylesStore = useStylesStore();
-const showToast = inject('showToast', () => {});
-const setDirty  = inject('setDirty',  () => {});
+const shellDirty = inject('setDirty', () => {});
+const setDirty = (v) => shellDirty(v, TAB_ID);
 
 const spacingLabels = {
   xs: 'XS', sm: 'SM', md: 'MD', lg: 'LG', xl: 'XL', '2xl': '2XL', '3xl': '3XL', '4xl': '4XL',
@@ -239,7 +245,12 @@ function visualWidth(key) {
   return Math.min(n, 120);
 }
 
-watch(() => stylesStore.isDirty, (v) => { if (v) setDirty(true); });
+// Ogni modifica accende il puntino. Prima si guardava il passaggio false→true
+// di stylesStore.isDirty: dopo un salvataggio fallito restava vero e le
+// modifiche successive non venivano più segnalate (né salvate).
+stylesStore.$onAction(({ name, after }) => {
+  if (UPDATE_ACTIONS.includes(name)) after(() => setDirty(true));
+});
 
 function resetAll() {
   if (!confirm(t('Ripristinare tutti i valori di spaziature, container, ritmo, gutter e scaling?'))) return;
@@ -262,13 +273,41 @@ function resetAll() {
   stylesStore.updateFluidScaling('mobile',  0.65);
 }
 
-async function onSave() { await stylesStore.saveStyles(); showToast(t('Spaziature salvate')); }
+// Solo i blocchi di questa scheda. Lo store parte dallo snapshot di olo_styles
+// del caricamento pagina: rimandarlo intero (stylesStore.saveStyles) riportava
+// indietro colori e tipografia salvati nel frattempo dalle altre schede.
+// L'esito lo annuncia la shell: niente più «Spaziature salvate» anche su errore.
+async function saveBlocks() {
+  const body = {};
+  BLOCKS.forEach((k) => { if (stylesStore.styles[k] !== undefined) body[k] = stylesStore.styles[k]; });
+  await okOrThrow(fetch(`${window.oloData.restUrl}styles`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+    body: JSON.stringify(body),
+  }));
+  stylesStore.isDirty = false;
+}
+
+// «Annulla modifiche»: rilegge dal server i soli blocchi di questa scheda.
+async function reloadBlocks() {
+  const res = await okOrThrow(fetch(`${window.oloData.restUrl}styles`, { headers: { 'X-WP-Nonce': window.oloData.nonce } }));
+  const s = ((await res.json()) || {}).styles || {};
+  BLOCKS.forEach((k) => {
+    if (s[k] !== undefined) stylesStore.styles[k] = JSON.parse(JSON.stringify(s[k]));
+  });
+  stylesStore.isDirty = false;
+}
+
+const onSave = cfgJob(TAB_ID, saveBlocks);
+const onDiscard = cfgJob(TAB_ID, reloadBlocks);
 
 onMounted(() => {
   window.addEventListener('olo-cfg-save', onSave);
+  window.addEventListener('olo-cfg-discard', onDiscard);
 });
 onBeforeUnmount(() => {
   window.removeEventListener('olo-cfg-save', onSave);
+  window.removeEventListener('olo-cfg-discard', onDiscard);
 });
 </script>
 
