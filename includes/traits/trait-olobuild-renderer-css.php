@@ -25,8 +25,11 @@ trait Olobuild_Renderer_Css_Trait {
      */
     private function safe_border_color( $val ) {
         $val = trim( $val ?? '#374151' );
-        // Allow hex, rgb/rgba, hsl/hsla, named colors, CSS custom properties
-        if ( preg_match( '/^(#[0-9a-fA-F]{3,8}|rgba?\([^)]+\)|hsla?\([^)]+\)|var\(--[a-zA-Z0-9_-]+\)|[a-zA-Z]+)$/', $val ) ) {
+        // Allow hex, rgb/rgba, hsl/hsla, named colors, CSS custom properties.
+        // Un token può portare la riserva, var(--olo-color-x, #hex): è la forma
+        // che FieldColor salva per i colori globali, e il bordo del Contenitore la
+        // scartava in #374151. Nella riserva niente ; { } < > né virgolette.
+        if ( preg_match( '/^(#[0-9a-fA-F]{3,8}|rgba?\([^)]+\)|hsla?\([^)]+\)|var\(\s*--[\w-]+(?:\s*,\s*[^;{}<>"\']+)?\)|[a-zA-Z]+)$/', $val ) ) {
             return $val;
         }
         return '#374151';

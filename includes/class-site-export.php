@@ -91,22 +91,36 @@ class Olobuild_Site_Export {
         }
 
         // Global widgets
+        $widget_ids = []; // quelli appena creati, per con_colori_del_sito
         if (!empty($data['global_widgets'])) {
             $gw_table = $wpdb->prefix . 'olobuild_global_widgets';
             foreach ($data['global_widgets'] as $gw) {
-                $wpdb->insert($gw_table, [
+                $ok = $wpdb->insert($gw_table, [
                     'name'       => $gw['name'] ?? 'Widget',
                     'tile_data'  => $gw['tile_data'] ?? '{}',
                     'created_at' => current_time('mysql'),
                     'updated_at' => current_time('mysql'),
                 ]);
+                if ($ok && $wpdb->insert_id) {
+                    $widget_ids[] = (int) $wpdb->insert_id;
+                }
             }
         }
         // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
         // Styles
         if (isset($data['styles'])) update_option('olobuild_styles', $data['styles']);
-        if (isset($data['global_colors'])) update_option('olobuild_global_colors', $data['global_colors']);
+        if (isset($data['global_colors'])) {
+            // I colori del sito che il pacchetto non porta restano, nascosti (tranne i
+            // ruoli dello stile e i ruoli delle tile che il contenuto del sito, senza
+            // i template e i widget appena creati e senza gli stili se il pacchetto
+            // li ha appena sostituiti, non nomina): le tile che usano
+            // var(--olo-color-<id>) non li perdono.
+            $colori = class_exists('Olobuild_Style_System')
+                ? Olobuild_Style_System::instance()->con_colori_del_sito($data['global_colors'], array_values($id_map), $widget_ids, isset($data['styles']))
+                : $data['global_colors'];
+            update_option('olobuild_global_colors', $colori);
+        }
         if (isset($data['global_typography'])) update_option('olobuild_global_typography', $data['global_typography']);
 
         // Options with ID remapping

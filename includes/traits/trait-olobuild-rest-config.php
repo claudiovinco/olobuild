@@ -225,12 +225,36 @@ trait Olobuild_Rest_Config_Trait {
             if ( ! empty( $color['quick'] ) ) {
                 $entry['quick'] = true;
             }
+            // Nascosto = tolto dalle swatch ma ancora emesso nel CSS: le tile che
+            // usano var(--olo-color-<id>) non perdono il colore. Assente = visibile.
+            if ( ! empty( $color['hidden'] ) ) {
+                $entry['hidden'] = true;
+            }
             $sanitized[] = $entry;
         }
 
         update_option( 'olobuild_global_colors', $sanitized, false );
 
         return rest_ensure_response( $sanitized );
+    }
+
+    /**
+     * Dove è usato un colore globale, prima di eliminarlo.
+     *
+     * La ricerca è Olobuild_Style_System::uso_colore(), la stessa dell'import
+     * del sito: template (contenuto e impostazioni di pagina; header, footer e
+     * popup), global widget, test A/B, sezioni salvate, stili globali e, a
+     * parte, le revisioni. 'ruolo_tile' (accent, dark, light) conta 1 in
+     * 'total': i default delle tile lo leggono anche dove nessuno lo nomina, e
+     * cancellarlo ricolora ogni tile che non ha scelto un colore.
+     * 'templates' elenca al massimo 10 titoli; 'template_count' li conta tutti.
+     */
+    public function global_color_usage( $request ) {
+        $id = sanitize_key( (string) $request->get_param( 'id' ) );
+        if ( '' === $id ) {
+            return new WP_Error( 'invalid_id', __( 'Colore non indicato.', 'olobuild' ), [ 'status' => 400 ] );
+        }
+        return rest_ensure_response( Olobuild_Style_System::uso_colore( $id ) );
     }
 
     // === Global Typography ===

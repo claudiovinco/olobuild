@@ -368,6 +368,13 @@ class Olobuild_Rest_Api {
                 'permission_callback' => [ $this, 'check_permission' ],
             ],
         ] );
+        // Dove è usato un colore globale (prima di eliminarlo). L'id sta nel percorso:
+        // con i permalink semplici restUrl è «?rest_route=…» e un «?id=» in coda si romperebbe.
+        register_rest_route( $this->namespace, '/global-colors/(?P<id>[a-z0-9_-]+)/usage', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'global_color_usage' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+        ] );
 
         // Global Typography
         register_rest_route( $this->namespace, '/global-typography', [

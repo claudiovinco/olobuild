@@ -36,18 +36,43 @@ export function tokenParts(val) {
 }
 
 /**
- * Swatch disponibili: ruoli del tema (olo_styles.colors) + globali custom.
+ * Swatch della palette: ruoli del tema (olo_styles.colors) + globali custom.
+ * Un globale NASCOSTO (`hidden`, «Nascondi» del builder o della Configurazione)
+ * è ancora qui, col suo flag: il sito continua a emetterne il token e le tile
+ * che lo usano devono ancora risolverlo e chiamarlo per nome. Chi mostra le
+ * swatch da scegliere (FieldColor) lo toglie dalla lista che rende.
  */
 export function buildSwatchColors(stylesStore) {
   const c = stylesStore?.colors || {};
   const roleIds = new Set(ROLE_SWATCHES.map(r => r.id));
   const roles = ROLE_SWATCHES
     .filter(r => c[r.id])
-    .map(r => ({ id: r.id, label: r.label, value: c[r.id], quick: false }));
+    .map(r => ({ id: r.id, label: r.label, value: c[r.id], quick: false, hidden: false }));
   const globals = (stylesStore?.globalColors || [])
     .filter(g => g && g.id && !roleIds.has(g.id))
-    .map(g => ({ id: g.id, label: g.label || g.id, value: g.value, quick: !!g.quick }));
+    .map(g => ({ id: g.id, label: g.label || g.id, value: g.value, quick: !!g.quick, hidden: !!g.hidden }));
   return [...roles, ...globals];
+}
+
+/**
+ * Il token da salvare quando si sceglie una swatch.
+ * Un globale custom porta con sé la RISERVA, l'hex che ha adesso:
+ * `var(--olo-color-c1a2b3, #1e3a8a)`. Se un giorno il colore sparisse dalla
+ * palette (eliminato, o un sito importato senza), la tile resta del suo colore
+ * invece di perdere la dichiarazione in silenzio. La riserva è SEMPRE un hex
+ * (#rrggbb, #rrggbbaa con l'alfa): il PHP (safe_color_css) accetta solo una
+ * riserva senza parentesi, e un rgba() la farebbe scartare per intero.
+ * I ruoli del tema (primary, text…) non si eliminano: restano token nudi.
+ */
+export function tokenDaSalvare(id, stylesStore) {
+  const tok = `var(--olo-color-${id})`;
+  if (ROLE_SWATCHES.some(r => r.id === id)) return tok;
+  const d = describeColor(tok, stylesStore);
+  if (d.kind !== 'color' || !Array.isArray(d.rgb)) return tok;
+  const hex2 = n => Math.min(255, Math.max(0, Math.round(n))).toString(16).padStart(2, '0');
+  let riserva = '#' + d.rgb.map(hex2).join('');
+  if (d.alpha < 1) riserva += hex2(d.alpha * 255);
+  return `var(--olo-color-${id}, ${riserva})`;
 }
 
 /**

@@ -21,9 +21,10 @@
             v-if="sc.quick"
             type="button"
             class="fc-swatch-del"
-            :title="t('Rimuovi colore')"
+            :title="t('Nascondi dalla palette')"
+            :aria-label="t('Nascondi dalla palette') + ' — ' + sc.label"
             :disabled="stylesStore.savingColors"
-            @click.stop="removeQuickColor(sc.id)"
+            @click.stop="hideQuickColor(sc.id)"
           >{{ t('&times;') }}</button>
         </span>
         <!-- Mentre la palette si salva «+», «×» e le swatch rapide sono occupati:
@@ -109,7 +110,7 @@ import { t } from '@/i18n';
 import { computed, ref } from 'vue';
 import { useStylesStore } from '@/stores/styles';
 import { useToast } from '@/composables/useToast.js';
-import { tokenParts, buildSwatchColors, tokenLabel, describeColor } from '@/utils/colorToken';
+import { tokenParts, buildSwatchColors, tokenLabel, describeColor, tokenDaSalvare } from '@/utils/colorToken';
 
 const props = defineProps({
   // Vuoto = nessun colore impostato: decide la tile. Il vecchio default
@@ -124,7 +125,8 @@ const toast = useToast();
 // Swatch mostrate: ruoli del tema (olo_styles.colors) + globali custom (accent, "+").
 // La lista e la lettura dei token stanno in @/utils/colorToken: le usa anche la
 // sintesi di FieldTypography, che deve dipingere lo stesso colore.
-const swatchColors = computed(() => buildSwatchColors(stylesStore));
+// Un colore nascosto non si offre più, ma resta nel sito (vedi buildSwatchColors).
+const swatchColors = computed(() => buildSwatchColors(stylesStore).filter(sc => !sc.hidden));
 
 function resolveSwatch(id) {
   const sc = swatchColors.value.find(c => c.id === id);
@@ -152,8 +154,10 @@ function isSwatchSelected(id) {
 }
 
 // Seleziona un colore come TOKEN var(--olo-color-id): così segue la palette globale.
+// Un globale custom porta anche la riserva hex (tokenDaSalvare): se il colore
+// sparisse dalla palette, la tile resta del suo colore.
 function selectColor(id) {
-  emit('update:modelValue', `var(--olo-color-${id})`);
+  emit('update:modelValue', tokenDaSalvare(id, stylesStore));
 }
 
 function toOutput(hex, alpha) {
@@ -239,22 +243,35 @@ const puoAggiungere = computed(() => haColore.value && colore.value.alpha > 0);
 async function addCurrentAsGlobal() {
   if (!puoAggiungere.value || stylesStore.savingColors) return;
   const hex = hexPart.value;
+  const valorePrima = props.modelValue;
   // Check if this hex already exists in globals
-  const existing = (stylesStore.globalColors || []).find(
-    gc => gc.value.toLowerCase() === hex.toLowerCase()
+  const uguali = (stylesStore.globalColors || []).filter(
+    gc => gc && gc.id && typeof gc.value === 'string' && gc.value.toLowerCase() === hex.toLowerCase()
   );
-  if (existing) {
+  const visibile = uguali.find(gc => !gc.hidden);
+  if (visibile) {
     // Already exists — just select it
-    selectColor(existing.id);
+    selectColor(visibile.id);
+    return;
+  }
+  const existing = uguali[0];
+  if (existing) {
+    // Lo stesso colore c'è già, nascosto: si rimette fra le swatch invece di
+    // crearne un doppione, e il campo prende il SUO token — scelto da nascosto
+    // sarebbe un token che nessuna swatch mostra più.
+    const esito = await stylesStore.mutaGlobalColors(lista => lista.map(g => (g.id === existing.id ? senzaHidden(g) : g)));
+    if (!esito.ok) {
+      toast.error(t('Colore non rimesso fra i colori globali') + (esito.motivo ? ' — ' + esito.motivo : ''), 6000);
+      return;
+    }
+    if (props.modelValue === valorePrima) selectColor(existing.id);
     return;
   }
   const id = 'c' + Date.now().toString(36);
   const label = hex.toUpperCase();
-  const valorePrima = props.modelValue;
   // Il colore entra nella palette (e nelle swatch di ogni campo) solo quando il
   // server l'ha scritto: prima di allora non c'è niente da scegliere.
-  const newColors = [...(stylesStore.globalColors || []), { id, label, value: hex, quick: true }];
-  const esito = await stylesStore.saveGlobalColors(newColors);
+  const esito = await stylesStore.mutaGlobalColors(lista => [...lista, { id, label, value: hex, quick: true }]);
   if (!esito.ok) {
     // Il colore non è sul server: la palette resta com'era e il campo tiene l'hex.
     toast.error(t('Colore non aggiunto ai colori globali') + (esito.motivo ? ' — ' + esito.motivo : ''), 6000);
@@ -265,30 +282,27 @@ async function addCurrentAsGlobal() {
   if (props.modelValue === valorePrima) selectColor(id);
 }
 
+function senzaHidden(g) {
+  const copia = { ...g };
+  delete copia.hidden;
+  return copia;
+}
+
 /**
- * Remove a quick-added global color and persist.
+ * «×» su un colore rapido: lo NASCONDE dalla palette, non lo cancella.
+ * Il sito continua a emetterne il token (canvas e frontend), quindi le tile che
+ * lo usano — anche in altre pagine, in header e footer — non cambiano, e il
+ * campo aperto resta sul suo token. Cancellarlo davvero le lasciava senza
+ * colore, in silenzio. Si rimette fra le swatch col «+» sullo stesso colore o
+ * da Configurazione › Palette › Colori globali extra › Nascosti, dove si
+ * elimina davvero solo un colore che nessun template usa.
  */
-async function removeQuickColor(colorId) {
+async function hideQuickColor(colorId) {
   if (stylesStore.savingColors) return;
-  // Il colore risolto si legge PRIMA di togliere il globale: dopo, il token non
-  // si risolve più e al suo posto usciva un #000000.
-  const eraScelto = isSwatchSelected(colorId);
-  const risolto = haColore.value ? toOutput(hexPart.value, colore.value.alpha) : '';
-  const valorePrima = props.modelValue;
-  // Anche la rimozione vale solo a esito noto. Sul server il colore resta (la
-  // fusione di saveGlobalColors lo riprende, come nella 1.4.483): toglierlo
-  // davvero lascerebbe senza colore, in silenzio, le altre tile che usano il suo
-  // token. Lo farà l'eliminazione morbida di globali-colore-eliminato-rompe.
-  const newColors = (stylesStore.globalColors || []).filter(gc => gc.id !== colorId);
-  const esito = await stylesStore.saveGlobalColors(newColors);
+  const esito = await stylesStore.mutaGlobalColors(lista => lista.map(g => (g.id === colorId ? { ...g, hidden: true } : g)));
   if (!esito.ok) {
-    // Il colore è ancora sul server: resta nella palette e il campo resta sul token.
-    toast.error(t('Colore non rimosso dai colori globali') + (esito.motivo ? ' — ' + esito.motivo : ''), 6000);
-    return;
-  }
-  // If this color was selected, revert to its resolved color
-  if (eraScelto && risolto && props.modelValue === valorePrima) {
-    emit('update:modelValue', risolto);
+    // Sul server il colore è ancora visibile: resta fra le swatch.
+    toast.error(t('Colore non nascosto dalla palette') + (esito.motivo ? ' — ' + esito.motivo : ''), 6000);
   }
 }
 </script>
@@ -338,8 +352,13 @@ async function removeQuickColor(colorId) {
   justify-content: center;
   z-index: 1;
 }
-.fc-swatch-wrap:hover .fc-swatch-del {
+.fc-swatch-wrap:hover .fc-swatch-del,
+.fc-swatch-wrap:focus-within .fc-swatch-del {
   display: flex;
+}
+.fc-swatch-del:focus-visible {
+  outline: 2px solid var(--olo-ui-accent, #e8622a);
+  outline-offset: 1px;
 }
 .fc-swatch-del:disabled {
   opacity: 0.45;

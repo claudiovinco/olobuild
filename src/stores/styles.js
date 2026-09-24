@@ -536,11 +536,10 @@ export const useStylesStore = defineStore('styles', {
     // SOLO se il server l'ha scritta. Il «+» la passava allo store prima dell'esito,
     // e la swatch nuova, cliccata durante il volo, legava la tile a un token che
     // un salvataggio fallito lasciava inesistente.
-    // La fusione riprende dal server ogni colore che `lista` non ha, anche quello
-    // tolto con la «×»: cancellarlo davvero farebbe perdere il colore, in silenzio,
-    // alle tile che usano var(--olo-color-<id>) in altre pagine, in header e footer.
-    // La cancellazione vera spetta alla scheda globali-colore-eliminato-rompe
-    // (eliminazione morbida, riserva nel token, conteggio d'uso).
+    // La fusione riprende dal server ogni colore che `lista` non ha: nessun colore
+    // si cancella da qui, perché le tile che usano var(--olo-color-<id>) in altre
+    // pagine, in header e footer lo perderebbero in silenzio. Il «+» e la «×» del
+    // builder passano da mutaGlobalColors (la «×» nasconde, non cancella).
     async saveGlobalColors(lista = this.globalColors) {
       // Flag DEDICATO (non this.isSaving, condiviso con saveStyles): aggiungere un colore
       // globale non deve essere saltato durante un salvataggio stili/autosave.
@@ -570,6 +569,38 @@ export const useStylesStore = defineStore('styles', {
         return { ok: true };
       } catch (err) {
         console.error('saveGlobalColors error:', err);
+        return { ok: false, motivo: motivoErrore(err) };
+      } finally {
+        this.savingColors = false;
+      }
+    },
+
+    // Una modifica alla palette applicata alla lista del SERVER, come fa la
+    // Configurazione (persistGlobalColors): si rilegge, `modifica` riceve una
+    // copia di quella lista e restituisce la nuova, che si scrive. La lista del
+    // builder, caricata all'apertura, non ricopre così ciò che l'admin ha cambiato
+    // nel frattempo: un colore nascosto tornava visibile, un valore tornava vecchio.
+    // Esito { ok } / { ok: false, motivo } come saveGlobalColors; senza rilettura
+    // non si scrive niente.
+    async mutaGlobalColors(modifica) {
+      if (this.savingColors) return inCorso();
+      this.savingColors = true;
+      try {
+        const rr = await chiedi(`${oloData.restUrl}global-colors`);
+        const server = await rr.json();
+        if (!Array.isArray(server)) throw new ErroreRest(t('risposta non valida del server'));
+        const next = modifica(server.filter(g => g && g.id).map(g => ({ ...g })));
+        const res = await chiedi(`${oloData.restUrl}global-colors`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(next),
+        });
+        const data = await res.json();
+        this.globalColors = Array.isArray(data) ? data : next;
+        this.globalColorsDirty = false;
+        return { ok: true };
+      } catch (err) {
+        console.error('mutaGlobalColors error:', err);
         return { ok: false, motivo: motivoErrore(err) };
       } finally {
         this.savingColors = false;

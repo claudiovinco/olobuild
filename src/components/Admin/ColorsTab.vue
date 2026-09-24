@@ -218,12 +218,34 @@
             <span class="prefix">#</span>
             <input type="text" :value="(g.value || '').replace(/^#/, '').toUpperCase()" @change="setExtraGlobalHex(g.id, $event.target.value)" maxlength="6" spellcheck="false" />
           </div>
-          <button class="cfg-btn-icon cfg-btn-ghost" :title="t('Elimina')" @click="removeExtraGlobal(g.id)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          <button type="button" class="cfg-btn-icon cfg-btn-ghost xg-act" :title="t('Elimina')" :aria-label="t('Elimina') + ' ' + (g.label || g.id)" :disabled="xgFermi" @click="removeExtraGlobal(g.id)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
           </button>
         </div>
       </div>
       <div v-else class="xg-empty">{{ t('Nessun colore globale extra. Aggiungine uno, oppure generane con la regola Triade/Tetrade qui sopra.') }}</div>
+
+      <!-- Colori nascosti: fuori dalle swatch del builder, ma ancora nel CSS del sito. -->
+      <div v-if="hiddenGlobals.length" class="xg-hidden">
+        <div class="xg-hidden-head">
+          <b>{{ t('Nascosti') }}</b>
+          <span class="cfg-pill off">{{ hiddenGlobals.length }}</span>
+        </div>
+        <p class="xg-hidden-hint">{{ t('Tolti dalle swatch del builder ma ancora nel CSS del sito: le tile che li usano restano del loro colore.') }}</p>
+        <div class="brand-list">
+          <div v-for="g in hiddenGlobals" :key="g.id" class="brand-row">
+            <span class="brand-swatch xg-hidden-sw" :style="{ background: g.value }" aria-hidden="true"></span>
+            <div class="brand-info">
+              <div class="brand-name">{{ g.label || g.id }}</div>
+              <div class="brand-role">var(--olo-color-{{ g.id }})</div>
+            </div>
+            <button type="button" class="cfg-btn cfg-btn-secondary xg-act" :disabled="xgFermi" @click="showExtraGlobal(g.id)">{{ t('Mostra di nuovo') }}</button>
+            <button type="button" class="cfg-btn-icon cfg-btn-ghost xg-act" :title="t('Elimina')" :aria-label="t('Elimina') + ' ' + (g.label || g.id)" :disabled="xgFermi" @click="removeExtraGlobal(g.id)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -420,7 +442,11 @@ const presetList = computed(() => {
 
 // Id riservati ai ruoli del pannello: i restanti global sono "extra" riutilizzabili.
 const CORE_IDS = ['primary', 'secondary', 'success', 'warning', 'danger', 'link', 'text', 'text_muted', 'background', 'muted', 'border', 'primary_contrast', 'secondary_contrast', 'muted_contrast'];
-const extraGlobals = computed(() => (globalColors.value || []).filter((g) => g && g.id && !CORE_IDS.includes(g.id)));
+// I nascosti (`hidden`) sono fuori dalle swatch del builder ma ancora emessi nel CSS:
+// stanno in un gruppo a parte, da cui si rimettono in vista o si eliminano.
+const extraGlobals = computed(() => (globalColors.value || []).filter((g) => g && g.id && !CORE_IDS.includes(g.id) && !g.hidden));
+const hiddenGlobals = computed(() => (globalColors.value || []).filter((g) => g && g.id && !CORE_IDS.includes(g.id) && g.hidden));
+const xgBusy = ref(false);
 
 // Badge "Attivo" REALE: il preset i cui primary+secondary combaciano con i colori correnti.
 const activePresetKey = computed(() => {
@@ -679,7 +705,7 @@ async function leggiGlobalColors() {
 // Se la rilettura non riesce non si scrive (la lista a video, forse vecchia,
 // cancellerebbe i colori aggiunti altrove); se il PUT fallisce la lista torna a
 // quella del server: a video resta ciò che è salvato davvero, più il toast.
-async function persistGlobalColors(mutator) {
+async function scriviGlobalColors(mutator) {
   let list;
   try {
     list = await leggiGlobalColors();
@@ -701,13 +727,97 @@ async function persistGlobalColors(mutator) {
     showToast(t('Errore salvataggio colori globali'), 'error');
   }
 }
+function persistGlobalColors(mutator) {
+  return inCodaColori(() => scriviGlobalColors(mutator));
+}
+// Le scritture della lista passano una alla volta, nell'ordine in cui partono: ognuna
+// rilegge dal server e riscrive l'INTERA lista, e due in volo insieme («Mostra di nuovo»
+// su un colore ed «Elimina» su un altro, due ritocchi di fila, il «Salva» della scheda)
+// potevano leggere la lista prima della scrittura dell'altra e riportarla indietro.
+// Finché una scrittura è in coda o in volo, e per tutta un'eliminazione (xgBusy: conteggio,
+// conferma, scrittura), «Mostra di nuovo» ed «Elimina» restano disattivati (xgFermi).
+// Chi è in coda non deve accodarne un'altra e aspettarla: si fermerebbe per sempre.
+let codaColori = Promise.resolve();
+const scrittureColori = ref(0);
+const xgFermi = computed(() => xgBusy.value || scrittureColori.value > 0);
+function inCodaColori(fn) {
+  scrittureColori.value++;
+  const giro = codaColori.then(() => fn());
+  codaColori = giro.then(() => {}, () => {}); // un errore non ferma la coda
+  return giro.finally(() => { scrittureColori.value--; });
+}
 function addExtraGlobal() {
   const id = 'c' + Date.now().toString(36);
   persistGlobalColors((list) => [...list, { id, label: t('Nuovo colore'), value: '#888888' }]);
 }
-function removeExtraGlobal(id) {
-  if (!confirm(t('Eliminare questo colore globale?'))) return;
-  persistGlobalColors((list) => list.filter((g) => g.id !== id));
+// Dove il colore è usato, detto a parole: «3 template (Home, Chi siamo, Header); 1 widget globale».
+// ruolo_tile (accent, dark, light): i default delle tile lo leggono anche dove nessuno lo nomina.
+function descriviUso(uso) {
+  const parti = [];
+  const nt = uso.template_count || 0;
+  if (nt) {
+    const titoli = (uso.templates || []).map((x) => x.title || ('#' + x.id));
+    parti.push(nt + ' ' + t('template') + (titoli.length ? ' (' + titoli.join(', ') + (nt > titoli.length ? ', …' : '') + ')' : ''));
+  }
+  if (uso.widgets) parti.push(uso.widgets + ' ' + (uso.widgets === 1 ? t('widget globale') : t('widget globali')));
+  if (uso.ab_tests) parti.push(uso.ab_tests + ' ' + t('test A/B'));
+  if (uso.sezioni) parti.push(uso.sezioni + ' ' + (uso.sezioni === 1 ? t('sezione salvata nella libreria') : t('sezioni salvate nella libreria')));
+  if (uso.styles) parti.push(t('stili globali'));
+  if (uso.ruolo_tile) parti.push(t('tutte le tile senza un colore scelto (è il loro colore predefinito)'));
+  return parti.join('; ');
+}
+
+// «Elimina» chiede prima al server dove il colore è usato. Un colore usato non si
+// cancella: si NASCONDE (resta nel CSS, le tile non cambiano). Cancellarlo davvero
+// toglie la variabile e quelle tile perdono il colore, in silenzio, su pagine che
+// nessuno sta guardando: da nascosto e ancora usato serve una seconda conferma.
+// Senza la risposta del conteggio non si elimina niente.
+async function removeExtraGlobal(id) {
+  if (xgFermi.value) return;
+  xgBusy.value = true;
+  try {
+    let uso;
+    try {
+      const r = await okOrThrow(fetch(`${window.oloData.restUrl}global-colors/${encodeURIComponent(id)}/usage`, {
+        headers: { 'X-WP-Nonce': window.oloData.nonce },
+      }));
+      uso = await r.json();
+      if (!uso || typeof uso.total !== 'number') throw new Error(t('risposta non valida del server'));
+    } catch (e) {
+      showToast(t('Non so dove è usato questo colore: non lo elimino') + (e && e.message ? ' — ' + e.message : ''), 'error');
+      return;
+    }
+    const attuale = (globalColors.value || []).find((g) => g && g.id === id);
+    if (uso.total > 0) {
+      const dove = descriviUso(uso);
+      if (!(attuale && attuale.hidden)) {
+        if (!confirm(t('Questo colore è usato in') + ' ' + dove + '.\n\n'
+          + t('Invece di eliminarlo lo nascondo: sparisce dalle swatch del builder ma resta nel CSS, e quelle tile non cambiano.'))) return;
+        await persistGlobalColors((list) => list.map((g) => (g.id === id ? { ...g, hidden: true } : g)));
+        return;
+      }
+      if (!confirm(t('Questo colore nascosto è ancora usato in') + ' ' + dove + '.\n\n'
+        + t('Se lo elimini, quelle tile perdono questo colore: resta solo il colore di riserva, dove la tile ne ha uno. Eliminarlo comunque?'))) return;
+    } else {
+      const rev = uso.revisions
+        ? '\n\n' + t('Compare in') + ' ' + uso.revisions + ' ' + t('revisioni: ripristinandone una, quel colore mancherà.')
+        : '';
+      if (!confirm(t('Eliminare questo colore globale? Non risulta usato in template, widget globali, test A/B, sezioni salvate nella libreria o stili globali.') + rev)) return;
+    }
+    await persistGlobalColors((list) => list.filter((g) => g.id !== id));
+  } finally {
+    xgBusy.value = false;
+  }
+}
+// Un colore nascosto torna fra le swatch del builder.
+function showExtraGlobal(id) {
+  if (xgFermi.value) return;
+  persistGlobalColors((list) => list.map((g) => {
+    if (g.id !== id) return g;
+    const copia = { ...g };
+    delete copia.hidden;
+    return copia;
+  }));
 }
 function setExtraGlobalHex(id, val) {
   const clean = '#' + String(val).replace(/[^0-9a-fA-F]/g, '').slice(0, 6).toUpperCase();
@@ -732,7 +842,7 @@ async function saveStyles() {
     headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
     body: JSON.stringify(body),
   }));
-  await syncGlobalColors();
+  await inCodaColori(syncGlobalColors); // una scrittura della lista alla volta (inCodaColori)
 }
 
 const onSave = cfgJob(TAB_ID, saveStyles);
@@ -788,6 +898,12 @@ onBeforeUnmount(() => {
 .xg-label { border: 0; background: transparent; font: 600 14px var(--c-sans); color: var(--c-navy); padding: 1px 0; outline: none; width: 100%; border-bottom: 1px solid transparent; }
 .xg-label:focus { border-bottom-color: var(--c-line); }
 .xg-empty { font-size: 13px; color: var(--c-text-mute); padding: 10px 4px; }
+.xg-act:focus-visible { outline: 2px solid var(--c-red); outline-offset: 2px; }
+.xg-hidden { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--c-line-soft); }
+.xg-hidden-head { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--c-navy); }
+.xg-hidden-hint { font-size: 12px; color: var(--c-text-mute); margin: 4px 0 10px; }
+.xg-hidden-sw { cursor: default; opacity: .7; }
+.xg-hidden-sw:hover { transform: none; }
 
 /* Preset grid */
 .preset-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }

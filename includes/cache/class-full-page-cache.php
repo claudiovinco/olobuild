@@ -56,6 +56,13 @@ class Olobuild_FullPage_Cache {
         foreach ( [ 'olobuild_active_header', 'olobuild_active_footer', 'olobuild_styles', 'olobuild_cookie_settings' ] as $opt ) {
             add_action( 'update_option_' . $opt, [ __CLASS__, 'purge_all' ] );
         }
+        // Colori globali e set tipografici: generate_css() li scrive inline in ogni
+        // pagina (--olo-color-<id>, --olo-font-<id>-*). Un valore cambiato o un colore
+        // eliminato si vedevano solo alla scadenza della cache. Il primo è un add_option.
+        foreach ( [ 'olobuild_global_colors', 'olobuild_global_typography' ] as $opt ) {
+            add_action( 'update_option_' . $opt, [ __CLASS__, 'purge_all' ] );
+            add_action( 'add_option_' . $opt, [ __CLASS__, 'purge_all' ] );
+        }
         // Banner cookie acceso/spento, blocco script e iframe: le pagine in cache li
         // hanno già scritti. Il primo salvataggio dei cookie è un add_option.
         add_action( 'add_option_olobuild_cookie_settings', [ __CLASS__, 'purge_all' ] );

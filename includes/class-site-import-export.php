@@ -339,6 +339,7 @@ class Olobuild_Site_Import_Export {
         // L'import sito è una MIGRAZIONE esplicita: gli stili del pacchetto
         // sostituiscono quelli del sito di destinazione (prima venivano applicati
         // solo a sito "vergine" → i colori non arrivavano mai).
+        $stili_importati = false;
         if ( ! empty( $json['global_styles'] ) && is_array( $json['global_styles'] ) ) {
             // ⚠️ Olobuild_Style_System è un singleton (costruttore privato): usare
             // instance(), mai `new` (fatal — il vecchio ramo non girava mai e
@@ -348,12 +349,16 @@ class Olobuild_Site_Import_Export {
                 : [];
             if ( ! empty( $sanitized_styles ) ) {
                 update_option( 'olobuild_styles', $sanitized_styles );
+                $stili_importati = true;
             }
         }
 
-        // Opzioni globali della famiglia olobuild (HUD, cursore, colori extra…)
+        // Opzioni globali della famiglia olobuild (HUD, cursore, colori extra…).
+        // I template appena creati, e gli stili se il pacchetto li ha appena
+        // sostituiti, non contano come contenuto del sito quando si decide quali
+        // colori globali del sito restano (con_colori_del_sito).
         if ( ! empty( $json['options'] ) && is_array( $json['options'] ) ) {
-            $this->import_global_options( $json['options'] );
+            $this->import_global_options( $json['options'], array_values( $id_map ), $stili_importati );
         }
 
         // Pagine WP collegate ai template (+ front page)
@@ -627,8 +632,14 @@ class Olobuild_Site_Import_Export {
     /**
      * Importa le opzioni globali della famiglia olobuild, ognuna attraverso il
      * proprio sanitizer (mai fidarsi del JSON del pacchetto).
+     *
+     * @param array $options            Blocco 'options' del pacchetto.
+     * @param int[] $template_importati Id dei template appena creati dall'import:
+     *                                  per i colori globali non sono contenuto del sito.
+     * @param bool  $stili_importati    true = l'import ha appena sostituito gli stili
+     *                                  globali: per i colori globali non contano nemmeno loro.
      */
-    private function import_global_options( $options ) {
+    private function import_global_options( $options, $template_importati = [], $stili_importati = false ) {
         $o = (array) $options;
 
         if ( isset( $o['cursor_hud'] ) && is_array( $o['cursor_hud'] ) ) {
@@ -660,7 +671,21 @@ class Olobuild_Site_Import_Export {
                 if ( ! empty( $color['quick'] ) ) {
                     $entry['quick'] = true;
                 }
+                if ( ! empty( $color['hidden'] ) ) {
+                    $entry['hidden'] = true;
+                }
                 $clean[] = $entry;
+            }
+            // I colori del sito che il pacchetto non porta restano, NASCOSTI: le tile
+            // e i template già qui che usano var(--olo-color-<id>) non perdono il
+            // colore. Tranne i ruoli dello stile (primary, text…), che coprirebbero
+            // i colori appena importati, e i ruoli delle tile (accent, dark, light…)
+            // che il contenuto del sito, senza i template (e gli stili, se il
+            // pacchetto li ha sostituiti) appena importati, non nomina: i default
+            // delle tile li leggerebbero anche nei template importati. Stili e
+            // template del pacchetto sono già scritti.
+            if ( class_exists( 'Olobuild_Style_System' ) ) {
+                $clean = Olobuild_Style_System::instance()->con_colori_del_sito( $clean, $template_importati, [], $stili_importati );
             }
             update_option( 'olobuild_global_colors', $clean, false );
         }

@@ -255,11 +255,7 @@ class Olobuild_Style_System {
         if ( ! is_array( $colors ) || empty( $colors ) ) {
             return;
         }
-        $fallbacks = [
-            'accent'   => $colors['accent']   ?? ( $colors['primary']   ?? null ),
-            'accent-2' => $colors['accent-2'] ?? ( $colors['secondary'] ?? null ),
-            'accent_2' => $colors['accent_2'] ?? ( $colors['secondary'] ?? null ),
-        ];
+        $fallbacks = self::accenti_della_palette( $colors );
         $gc = get_option( 'olobuild_global_colors', [] );
         if ( ! is_array( $gc ) || ! $gc ) {
             return;
@@ -280,6 +276,23 @@ class Olobuild_Style_System {
         if ( $changed ) {
             update_option( 'olobuild_global_colors', $gc, false );
         }
+    }
+
+    /**
+     * I colori globali che seguono la palette senza esserne una chiave: accent
+     * segue primary, accent-2 / accent_2 seguono secondary (se lo stile non ne
+     * ha di suoi). null = nessun valore da dare.
+     *
+     * @param array $colors blocco olobuild_styles['colors'].
+     * @return array [ id => valore|null ]
+     */
+    private static function accenti_della_palette( $colors ) {
+        $colors = is_array( $colors ) ? $colors : [];
+        return [
+            'accent'   => $colors['accent']   ?? ( $colors['primary']   ?? null ),
+            'accent-2' => $colors['accent-2'] ?? ( $colors['secondary'] ?? null ),
+            'accent_2' => $colors['accent_2'] ?? ( $colors['secondary'] ?? null ),
+        ];
     }
 
     /**
@@ -572,6 +585,290 @@ class Olobuild_Style_System {
     }
 
     /**
+     * Alias che generate_css() emette SEMPRE nella regola .olo-template, in
+     * quest'ordine: i nomi usati dalle tile, mappati sui token del tema (vedi
+     * _olo-tokens.scss). Fonte unica anche per id_colori_dello_stile().
+     */
+    const ALIAS_COLORI = [
+        'on-primary'  => 'var(--olo-color-primary-contrast, #ffffff)',
+        'text-soft'   => 'var(--olo-color-text-muted, #6b7280)',
+        'text-faint'  => 'var(--olo-color-text-muted, #94a3b8)',
+        'surface'     => 'var(--olo-color-background, #ffffff)',
+        'surface-alt' => 'var(--olo-color-muted, #f6f7f9)',
+        'error'       => 'var(--olo-color-danger, #b42318)',
+        'info'        => '#2563eb',
+    ];
+
+    /**
+     * I ruoli GLOBALI delle tile che lo stile non emette: accent, dark, light
+     * (GLOBAL in oloTileDefaults.js, TOKEN_MAPPING) e accent-2 / accent_2 (che
+     * sync_global_palette tiene allineati). I default delle tile li usano con
+     * la riserva, var(--olo-color-accent, #f4a23b): un colore globale con uno di
+     * questi id ricolora tutte le tile che non hanno scelto un colore.
+     */
+    const RUOLI_GLOBALI_TILE = [ 'accent', 'accent-2', 'accent_2', 'dark', 'light' ];
+
+    /**
+     * I ruoli che i default delle tile leggono DAVVERO senza salvarli:
+     * var(--olo-color-accent, …), var(--olo-color-dark, …) e
+     * var(--olo-color-light, …) in decine di renderer di includes/tiles e nei
+     * gemelli in src/ (tile Vue, oloTileDefaults.js, preset). Un colore globale
+     * con uno di questi id colora ogni tile che non ne ha scelto uno, anche se
+     * nessun template lo nomina (uso_colore(): 'ruolo_tile'). accent-2 e
+     * accent_2 non li legge nessun default: --olo-color-accent-2 e
+     * --olo-color-accent_2 non compaiono nel codice delle tile (25 set 2026).
+     */
+    const RUOLI_LETTI_DAI_DEFAULT = [ 'accent', 'dark', 'light' ];
+
+    /**
+     * Gli id dei colori globali la cui variabile il CSS emette GIÀ dallo stile:
+     * le chiavi dei colori dello stile passato più i predefiniti, che
+     * get_styles() aggiunge sempre, col nome che prendono nella variabile
+     * (text_muted esce --olo-color-text-muted), più gli alias fissi
+     * (ALIAS_COLORI: error, info, surface…). Nella regola .olo-template
+     * generate_css() (e il gemello in src/stores/styles.js) scrive i colori
+     * dello stile, poi i colori globali, poi gli alias. Un colore globale con
+     * l'id di una chiave dello stile esce DOPO e la copre. Uno con l'id di un
+     * alias esce PRIMA e non agisce (vince l'alias): tenerlo non serve, e fra
+     * i colori extra mostrerebbe un valore diverso da quello reso. La forma con
+     * «_» (text_muted) non è né l'una né l'altra: un colore globale esce col
+     * suo id com'è (--olo-color-text_muted), una variabile diversa che non
+     * copre niente.
+     *
+     * @param array $colors blocco olobuild_styles['colors'].
+     * @return array [ id => true ]
+     */
+    public static function id_colori_dello_stile( $colors ) {
+        $defaults = self::instance()->get_defaults();
+        $chiavi   = array_merge( array_keys( $defaults['colors'] ), is_array( $colors ) ? array_keys( $colors ) : [] );
+        $ids      = [];
+        foreach ( $chiavi as $k ) {
+            $ids[ str_replace( '_', '-', (string) $k ) ] = true;
+        }
+        foreach ( array_keys( self::ALIAS_COLORI ) as $alias ) {
+            $ids[ $alias ] = true;
+        }
+        return $ids;
+    }
+
+    /**
+     * Import (sito): i colori globali del pacchetto più quelli del sito che il
+     * pacchetto non porta, NASCOSTI. Le tile e i template già qui che usano
+     * var(--olo-color-<id>) non perdono il colore: tolti dalla lista, sparivano
+     * dal CSS in silenzio. Non restano:
+     * - quelli la cui variabile il CSS emette già dallo stile
+     *   (id_colori_dello_stile()): con l'id di una chiave dei colori dello
+     *   stile (primary, text-muted…) coprirebbero i colori appena importati;
+     *   con quello di un alias fisso (error, info, surface…) non agirebbero
+     *   (l'alias esce dopo e vince) e fra gli extra mostrerebbero un valore
+     *   diverso da quello reso;
+     * - i ruoli globali delle tile (RUOLI_GLOBALI_TILE: accent, accent-2,
+     *   accent_2, dark, light) che il contenuto PROPRIO del sito non nomina:
+     *   uso_colore() senza i template e i global widget appena importati
+     *   (template, widget globali, test A/B, sezioni salvate, stili globali;
+     *   gli stili solo se l'import non li ha sostituiti, $stili_importati).
+     *   Un colore nascosto resta nel CSS e i default delle tile lo leggono
+     *   (var(--olo-color-dark, #16263d), con riserve diverse da tile a tile): i
+     *   template importati non renderebbero più come sul sito d'origine, dove
+     *   quel colore non c'era e valeva la riserva. Il compromesso: una tile del
+     *   sito che il ruolo lo prendeva solo dal suo default, senza nominarlo,
+     *   torna alla sua riserva, come faceva l'import prima che tenesse i
+     *   colori del sito e come fa il ripristino di una versione dello stile.
+     * Un ruolo che il sito nomina resta, nascosto: accent, accent-2 e accent_2
+     * col valore che sync_global_palette() darebbe loro coi colori importati
+     * (il primary e il secondary del pacchetto: col valore di prima le tile che
+     * li usano mostrerebbero la palette vecchia), dark e light col loro. Gli
+     * altri colori del sito restano, nascosti, come sono. I colori del
+     * pacchetto restano come arrivano. Da chiamare DOPO aver scritto gli stili e
+     * i template importati e PRIMA di scrivere la lista.
+     *
+     * Gli stili globali si leggono come sono in quel momento. Se il pacchetto
+     * ne porta, sono già i suoi e quelli del sito non ci sono più (restano
+     * solo nell'istantanea dell'import): con $stili_importati non contano,
+     * come i template appena importati. Se non ne porta, restano quelli del
+     * sito e contano.
+     *
+     * @param array $importati          Colori globali del pacchetto (già ripuliti).
+     * @param int[] $template_importati Id dei template appena creati dall'import.
+     * @param int[] $widget_importati   Id dei global widget appena creati dall'import.
+     * @param bool  $stili_importati    true = l'import ha appena sostituito gli stili globali.
+     * @return array La lista da salvare.
+     */
+    public function con_colori_del_sito( $importati, $template_importati = [], $widget_importati = [], $stili_importati = false ) {
+        $out           = array_values( is_array( $importati ) ? $importati : [] );
+        $nel_pacchetto = [];
+        foreach ( $out as $c ) {
+            if ( is_array( $c ) && ! empty( $c['id'] ) && is_scalar( $c['id'] ) ) {
+                $nel_pacchetto[ (string) $c['id'] ] = true;
+            }
+        }
+        $colori  = $this->get_styles()['colors'];
+        $ruoli   = self::id_colori_dello_stile( $colori );
+        $accenti = self::accenti_della_palette( $colori );
+        $attuali = get_option( 'olobuild_global_colors', [] );
+        foreach ( is_array( $attuali ) ? $attuali : [] as $c ) {
+            if ( ! is_array( $c ) || empty( $c['id'] ) || ! is_scalar( $c['id'] ) ) {
+                continue;
+            }
+            $id = (string) $c['id'];
+            if ( isset( $nel_pacchetto[ $id ] ) || isset( $ruoli[ $id ] ) ) {
+                continue;
+            }
+            if ( in_array( $id, self::RUOLI_GLOBALI_TILE, true )
+                && ! self::nominato_dal_sito( self::uso_colore( $id, $template_importati, $widget_importati, false ), ! $stili_importati ) ) {
+                continue;
+            }
+            if ( isset( $accenti[ $id ] ) ) {
+                $c['value'] = $accenti[ $id ];
+            }
+            $c['hidden'] = true;
+            $out[]       = $c;
+        }
+        return $out;
+    }
+
+    /**
+     * Un colore che il contenuto del sito nomina esplicitamente: template,
+     * widget globali, test A/B, sezioni salvate o (con $con_stili) stili
+     * globali. Non conta 'ruolo_tile' (i default delle tile) né le revisioni.
+     *
+     * @param array $uso       Risultato di uso_colore().
+     * @param bool  $con_stili false = gli stili globali non contano (sono quelli appena importati).
+     */
+    private static function nominato_dal_sito( $uso, $con_stili = true ) {
+        return ( (int) $uso['template_count'] + (int) $uso['widgets'] + (int) $uso['ab_tests'] + (int) $uso['sezioni'] ) > 0
+            || ( $con_stili && ! empty( $uso['styles'] ) );
+    }
+
+    /**
+     * Dove è usato il colore globale $id. Fonte unica della rotta
+     * GET global-colors/<id>/usage («Elimina» in Configurazione › Palette) e
+     * dell'import del sito (con_colori_del_sito()).
+     *
+     * Una tile salva il colore scelto come var(--olo-color-<id>): eliminare il
+     * colore toglie la variabile dal CSS e quelle tile perdono il colore, in
+     * silenzio, su pagine che nessuno sta guardando. Il token si cerca nei
+     * template (contenuto e impostazioni di pagina; header, footer e popup sono
+     * template anche loro), nei global widget, nei test A/B, nelle sezioni
+     * salvate della libreria (option olobuild_user_templates) e negli stili
+     * globali. Le revisioni si contano a parte (non sono in 'total'):
+     * ripristinarne una riporta il token. 'ruolo_tile' dice che i default delle
+     * tile leggono quel colore anche dove nessuno lo nomina
+     * (RUOLI_LETTI_DAI_DEFAULT): conta 1 in 'total'.
+     *
+     * Il LIKE trova anche gli id che iniziano allo stesso modo (accent in
+     * accent-2, c1 in c10): il confine dell'id si controlla dopo, sul testo.
+     *
+     * @param string $id                   Id del colore globale.
+     * @param int[]  $escludi_template_ids Template da non contare (l'import: quelli appena creati).
+     * @param int[]  $escludi_widget_ids   Global widget da non contare (l'import: quelli appena creati).
+     * @param bool   $con_revisioni        false = le revisioni non si cercano ('revisions' resta 0).
+     * @return array [ 'id', 'total', 'template_count', 'templates' (al massimo 10: id, title, type),
+     *                 'widgets', 'ab_tests', 'sezioni', 'styles', 'revisions', 'ruolo_tile' ]
+     */
+    public static function uso_colore( $id, $escludi_template_ids = [], $escludi_widget_ids = [], $con_revisioni = true ) {
+        global $wpdb;
+
+        $id  = sanitize_key( (string) $id );
+        $uso = [
+            'id'             => $id,
+            'total'          => 0,
+            'template_count' => 0,
+            'templates'      => [],
+            'widgets'        => 0,
+            'ab_tests'       => 0,
+            'sezioni'        => 0,
+            'styles'         => false,
+            'revisions'      => 0,
+            'ruolo_tile'     => in_array( $id, self::RUOLI_LETTI_DAI_DEFAULT, true ),
+        ];
+        if ( '' === $id ) {
+            return $uso;
+        }
+
+        $token     = '--olo-color-' . $id;
+        $like      = '%' . $wpdb->esc_like( $token ) . '%';
+        $confine   = '/' . preg_quote( $token, '/' ) . '(?![A-Za-z0-9_-])/';
+        $escludi_t = array_fill_keys( array_map( 'intval', (array) $escludi_template_ids ), true );
+        $escludi_w = array_fill_keys( array_map( 'intval', (array) $escludi_widget_ids ), true );
+
+        $t_templates = Olobuild_Database::table( 'templates' );
+        $t_widgets   = Olobuild_Database::table( 'global_widgets' );
+        $t_revisions = Olobuild_Database::table( 'revisions' );
+        $t_ab        = Olobuild_Database::table( 'ab_tests' );
+
+        // Tabelle custom del plugin ({prefix}olobuild_*); nessun equivalente WP_Query; conteggio al
+        // momento (non cacheabile). Solo nomi tabella da $wpdb->prefix interpolati, il token passa da prepare.
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+        $righe = $wpdb->get_results(
+            $wpdb->prepare( "SELECT id, title, type, content, settings FROM {$t_templates} WHERE content LIKE %s OR settings LIKE %s ORDER BY title", $like, $like ),
+            ARRAY_A
+        );
+        $templates = [];
+        foreach ( (array) $righe as $r ) {
+            if ( isset( $escludi_t[ (int) $r['id'] ] ) ) {
+                continue;
+            }
+            if ( preg_match( $confine, (string) $r['content'] ) || preg_match( $confine, (string) $r['settings'] ) ) {
+                $templates[] = [
+                    'id'    => (int) $r['id'],
+                    'title' => (string) $r['title'],
+                    'type'  => (string) $r['type'],
+                ];
+            }
+        }
+
+        $righe = $wpdb->get_results( $wpdb->prepare( "SELECT id, tile_data FROM {$t_widgets} WHERE tile_data LIKE %s", $like ), ARRAY_A );
+        foreach ( (array) $righe as $r ) {
+            if ( ! isset( $escludi_w[ (int) $r['id'] ] ) && preg_match( $confine, (string) $r['tile_data'] ) ) {
+                $uso['widgets']++;
+            }
+        }
+
+        // La tabella dei test A/B nasce al primo test: se non c'è, non si interroga.
+        if ( strtolower( (string) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $t_ab ) ) ) ) === strtolower( $t_ab ) ) {
+            $righe = $wpdb->get_col( $wpdb->prepare( "SELECT variants FROM {$t_ab} WHERE variants LIKE %s", $like ) );
+            foreach ( (array) $righe as $dati ) {
+                if ( preg_match( $confine, (string) $dati ) ) {
+                    $uso['ab_tests']++;
+                }
+            }
+        }
+
+        // Revisioni: solo un conteggio (possono essere molte e grandi). Il token
+        // seguito da ')' ',' o spazio è il confine di un var() scritto da una tile.
+        if ( $con_revisioni ) {
+            $uso['revisions'] = (int) $wpdb->get_var(
+                $wpdb->prepare(
+                    "SELECT COUNT(*) FROM {$t_revisions} WHERE content LIKE %s OR content LIKE %s OR content LIKE %s",
+                    '%' . $wpdb->esc_like( $token . ')' ) . '%',
+                    '%' . $wpdb->esc_like( $token . ',' ) . '%',
+                    '%' . $wpdb->esc_like( $token . ' ' ) . '%'
+                )
+            );
+        }
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+
+        // Sezioni salvate nella libreria («Salva come template» di una sezione, fra i
+        // «Personali»: Olobuild_Template_Library::save_user_template): stanno in
+        // un'option, col contenuto com'è arrivato dal builder (un array di sezioni).
+        $sezioni = get_option( 'olobuild_user_templates', [] );
+        foreach ( is_array( $sezioni ) ? $sezioni : [] as $sezione ) {
+            $contenuto = is_array( $sezione ) ? ( $sezione['content'] ?? null ) : null;
+            if ( null !== $contenuto && preg_match( $confine, is_string( $contenuto ) ? $contenuto : (string) wp_json_encode( $contenuto ) ) ) {
+                $uso['sezioni']++;
+            }
+        }
+
+        $uso['styles']         = (bool) preg_match( $confine, (string) wp_json_encode( get_option( 'olobuild_styles', [] ) ) );
+        $uso['template_count'] = count( $templates );
+        $uso['templates']      = array_slice( $templates, 0, 10 );
+        $uso['total']          = $uso['template_count'] + $uso['widgets'] + $uso['ab_tests'] + $uso['sezioni']
+            + ( $uso['styles'] ? 1 : 0 ) + ( $uso['ruolo_tile'] ? 1 : 0 );
+        return $uso;
+    }
+
+    /**
      * Get global typography sets from wp_options.
      */
     public function get_global_typography() {
@@ -669,13 +966,9 @@ class Olobuild_Style_System {
         }
         // Alias di compatibilità: i nomi-pacchetto usati dalle tile mappano sui
         // token del tema (così seguono la palette del cliente). Vedi _olo-tokens.scss.
-        $css .= "  --olo-color-on-primary: var(--olo-color-primary-contrast, #ffffff);\n";
-        $css .= "  --olo-color-text-soft: var(--olo-color-text-muted, #6b7280);\n";
-        $css .= "  --olo-color-text-faint: var(--olo-color-text-muted, #94a3b8);\n";
-        $css .= "  --olo-color-surface: var(--olo-color-background, #ffffff);\n";
-        $css .= "  --olo-color-surface-alt: var(--olo-color-muted, #f6f7f9);\n";
-        $css .= "  --olo-color-error: var(--olo-color-danger, #b42318);\n";
-        $css .= "  --olo-color-info: #2563eb;\n";
+        foreach ( self::ALIAS_COLORI as $alias => $valore ) {
+            $css .= "  --olo-color-{$alias}: {$valore};\n";
+        }
         // Typography
         if ( ! empty( $t['font_family'] ) ) {
             $css .= "  --olo-font-family: {$t['font_family']};\n";
