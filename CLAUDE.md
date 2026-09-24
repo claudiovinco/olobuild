@@ -74,7 +74,8 @@ padding/margine → `type:'spacing'` (4 lati) · raggio → `type:'border-radius
   Vince la forma già più diffusa, non una preferenza: prima c'erano 103 nomi per il raggio.
 - **L'unità sta nel CONTROLLO, non nell'etichetta**: `range` e `number` la mostrano accanto al
   numero (`src/utils/fieldLabel.js` la stacca dalla coda dell'etichetta e la passa al campo).
-  Per `spacing`, che nei 4 riquadri non la mostra, l'etichetta la tiene: non toglierla.
+  Dalla 1.4.439 anche `spacing` e `border-radius` (FieldBox, col selettore d'unità) la mostrano:
+  nessuna etichetta la tiene più (audit `unita-nel-controllo`).
 - **Un controllo che non fa niente è peggio di un controllo che manca.** Se una tile offre una
   proprietà, un renderer deve leggerla: 54 tile mostravano «Ombra» senza disegnarla
   (`Olobuild_Frontend_Renderer::tile_ombra_non_resa()` + gemello `OMBRA_SUL_WRAPPER` in
