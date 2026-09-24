@@ -192,8 +192,12 @@
           >{{ t(h.tab) }} ({{ h.count }})</button>
         </div>
 
+        <!-- Chiave per tile: a ogni selezione i pannelli ripartono da zero (Normale, sezioni ai
+             default) invece di riusare le istanze della tile precedente e scrivere in Hover senza
+             saperlo. Chiavi DIVERSE per ramo: con la stessa chiave Vue patcherebbe il pannello di
+             un tab con quello di un altro (la build non lo segnala). -->
         <!-- ============ Content tab (data-driven) ============ -->
-        <div v-if="activeTab === 'Contenuto'" class="mb-space-y-3" role="tabpanel" id="inspector-panel-Contenuto" :aria-labelledby="'inspector-tab-Contenuto'">
+        <div v-if="activeTab === 'Contenuto'" :key="'Contenuto-' + selectedTile.id" class="mb-space-y-3" role="tabpanel" id="inspector-panel-Contenuto" :aria-labelledby="'inspector-tab-Contenuto'">
           <!-- Custom editor: ProSlider -->
           <div v-if="elementDef?.customEditor === 'proslider'" class="mb-space-y-3">
             <p class="mb-text-xs mb-text-gray-400">{{ t("Configura slide, livelli e animazioni nell'editor visuale.") }}</p>
@@ -338,7 +342,7 @@
         </div>
 
         <!-- ============ Style tab ============ -->
-        <div v-else-if="activeTab === 'Stile'" class="mb-space-y-4" role="tabpanel" id="inspector-panel-Stile" :aria-labelledby="'inspector-tab-Stile'">
+        <div v-else-if="activeTab === 'Stile'" :key="'Stile-' + selectedTile.id" class="mb-space-y-4" role="tabpanel" id="inspector-panel-Stile" :aria-labelledby="'inspector-tab-Stile'">
           <StyleFieldsRenderer
             :tileStyle="tileStyle"
             :tileFields="campiStileElemento"
@@ -350,7 +354,7 @@
         </div>
 
         <!-- ============ Advanced tab ============ -->
-        <div v-else class="mb-space-y-4" role="tabpanel" id="inspector-panel-Avanzate" :aria-labelledby="'inspector-tab-Avanzate'">
+        <div v-else :key="'Avanzate-' + selectedTile.id" class="mb-space-y-4" role="tabpanel" id="inspector-panel-Avanzate" :aria-labelledby="'inspector-tab-Avanzate'">
           <!-- ===== MACRO: Identificatori ===== -->
           <CollapseSection id="v2i-sec-adv-id" :title="t('Identificatori')" :defaultOpen="true" :macro="true">
             <div class="mb-space-y-3">
