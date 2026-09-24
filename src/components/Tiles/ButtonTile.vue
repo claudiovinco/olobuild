@@ -23,8 +23,8 @@
         v-else-if="bgImageUrl"
         :style="{ position:'absolute', inset:0, backgroundImage:`url('${bgImageUrl}')`, backgroundSize:'cover', backgroundPosition:bgImagePos, zIndex:0 }"
       ></div>
-      <span style="display:inline-flex;align-items:center;position:relative;z-index:2;" :style="{ flexDirection: s.icon_position === 'after' ? 'row-reverse' : 'row', gap: (parseInt(s.icon_spacing) || 8) + 'px' }">
-        <span v-if="iconSvg" class="olo-btn-icon" :style="{ width: '1em', height: '1em', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }" v-html="iconSvg"></span>
+      <span style="display:inline-flex;align-items:center;position:relative;z-index:2;" :style="{ flexDirection: s.icon_position === 'after' ? 'row-reverse' : 'row', gap: iconGap }">
+        <span v-if="iconSvg" class="olo-btn-icon" aria-hidden="true" :style="iconStyle" v-html="iconSvg"></span>
         <span data-olo-editable="text">{{ s.text || 'Clicca qui' }}</span>
       </span>
       <!-- hover indicator -->
@@ -54,7 +54,8 @@ const builderStore = useBuilderStore();
 
 // Fonte UNICA dei default (stessi del registry button.js) — niente più
 // ridichiarazioni divergenti (era bg_color '#e1474f' vs '' nel config).
-const s = computed(() => ({ ...buildDefaults('button'), ...props.settings }));
+const DEFAULTS = buildDefaults('button');
+const s = computed(() => ({ ...DEFAULTS, ...props.settings }));
 
 // Box-model normalizzato (gestisce numero|oggetto + legacy padding_x/padding_y).
 const { radiusCss, paddingCss } = useBoxModel(s, {
@@ -63,7 +64,32 @@ const { radiusCss, paddingCss } = useBoxModel(s, {
   paddingLegacy: ['padding_y', 'padding_x'],
 });
 
+// Libreria unificata (UIkit vince sui nomi doppi, poi Lucide), come render_icon_html()
+// in PHP. Le icone «custom:» qui non ci sono: nessuna tile Vue sa ancora caricarle.
 const iconSvg = computed(() => iconsSvg[s.value.icon] || '');
+
+// Gemello di icona_pulsante() in class-button-tile.php: la dimensione è in px
+// (20 = la resa storica, uk-icon ratio 1; prima qui era 1em e il canvas non
+// combaciava col sito) e il colore '' eredita quello del testo, anche in hover.
+const iconPx = computed(() => {
+  const v = s.value.icon_size;
+  const n = (typeof v === 'number' || typeof v === 'string') ? parseInt(v, 10) : NaN;
+  return n >= 1 ? Math.min(n, 200) : DEFAULTS.icon_size;
+});
+const iconStyle = computed(() => ({
+  width: `${iconPx.value}px`,
+  height: `${iconPx.value}px`,
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexShrink: 0,
+  color: resolveColor(s.value.icon_color, 'inherit'),
+}));
+// Gemello di absint( $s['icon_spacing'] ?? 8 ): «Spazio icona» a 0 è 0 px, non 8.
+const iconGap = computed(() => {
+  const n = parseInt(s.value.icon_spacing ?? 8, 10);
+  return `${Number.isFinite(n) ? Math.abs(n) : 0}px`;
+});
 
 // Bg creativo (unified bg field) — supporta video/image come sfondo del button
 const bgVideoUrl = computed(() => {
@@ -146,11 +172,15 @@ const btnStyle = computed(() => {
 </script>
 
 <style scoped>
+/* Come .uk-icon: il riempimento arriva ereditato dallo span, così l'SVG di Lucide
+   (fill="none" sul radice, tratto in currentColor) resta a contorno invece di
+   diventare una sagoma piena, e UIkit disegna senza il tratto in più. */
+.olo-btn-icon {
+  fill: currentColor;
+}
 .olo-btn-icon :deep(svg) {
   width: 100%;
   height: 100%;
-  fill: currentColor;
-  stroke: currentColor;
 }
 /* a11y: anello di focus visibile da tastiera (color-mix sul primario corrente) */
 .olo-btn:focus-visible {

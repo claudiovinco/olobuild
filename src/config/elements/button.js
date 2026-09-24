@@ -5,7 +5,7 @@ import { t } from '@/i18n';
 /**
  * Tile Button — split CONTENUTO/STILE (regola universale Olobuild).
  *   fields[]      → testo, icona, URL, target, allineamento (semantica)
- *   styleFields[] → preset, colori, tipografia, padding, bordo, ombra, hover
+ *   styleFields[] → preset, colori, tipografia, icona, padding, bordo, ombra, hover
  *   AVANZATE      → meta tecnico
  */
 export default {
@@ -15,7 +15,8 @@ export default {
   category: 'essential',
   // Default da FONTE UNICA (buildDefaults): bg_color:'', text_color:'',
   // border_radius:10, tile_padding(SPACE), font_size:16, font_weight:600,
-  // shadow:'sm', hover_effect:'lift', text. Le chiavi salvate restano identiche.
+  // shadow:'sm', hover_effect:'lift', icon_size:20, icon_color:'', text. Le chiavi
+  // salvate restano identiche.
   defaults: {
     ...buildDefaults('button'),
     text: t('Clicca qui'),        // i18n (sovrascrive la stringa non tradotta)
@@ -88,15 +89,10 @@ export default {
       { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
     ]},
-    { key: 'icon_spacing', label: t('Spazio icona'), type: 'range', min: 0, max: 24, step: 2 },
+    { key: 'full_width', label: t('Larghezza piena'), type: 'toggle' },
 
     ...textEffectsFields([ { value: 'text', label: t('Solo Testo') } ]),
 
-    { key: 'icon_position', label: t('Posizione icona'), type: 'select', options: [
-      { value: 'before', label: t('Prima del testo') },
-      { value: 'after', label: t('Dopo il testo') },
-    ]},
-    { key: 'full_width', label: t('Larghezza piena'), type: 'toggle' },
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     // Dallo stile tipografico il pulsante prende famiglia e peso (e interlinea);
@@ -117,6 +113,20 @@ export default {
       sizeMin: 12, sizeMax: 32,
       letterSpacingUnit: 'px',
     },
+
+    // Zona della parte «Icona»: tutti e quattro i controlli agiscono solo se nel
+    // Contenuto è scelta un'icona, quindi la condizione sta sul separatore e vale per
+    // l'intera sezione (isSectionVisible). Dimensione in px (20 = la resa storica,
+    // uk-icon ratio 1) e colore ('' = quello del testo, anche in hover): letti da
+    // icona_pulsante() in class-button-tile.php e da ButtonTile.vue.
+    { type: 'separator', label: t('Icona'), condition: { field: 'icon', op: 'notEmpty' } },
+    { key: 'icon_size', label: t('Dimensione icona'), type: 'range', min: 10, max: 64, step: 1, unit: 'px' },
+    { key: 'icon_color', label: t('Colore icona'), type: 'color' },
+    { key: 'icon_position', label: t('Posizione icona'), type: 'select', options: [
+      { value: 'before', label: t('Prima del testo') },
+      { value: 'after', label: t('Dopo il testo') },
+    ]},
+    { key: 'icon_spacing', label: t('Spazio icona'), type: 'range', min: 0, max: 24, step: 2, unit: 'px' },
 
     { type: 'separator', label: t('Sfondo & colori') },
     // bg_color e text_color: toggle Normale/Hover unificato (withHover) — chiavi salvate

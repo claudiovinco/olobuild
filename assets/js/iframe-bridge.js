@@ -554,8 +554,17 @@
     var tileId = findTileId(el);
     var field = el.dataset.oloEditable;
 
-    // Get edited content
-    var newValue = field === 'content' ? el.innerHTML : el.textContent.trim();
+    // Get edited content. Il testo si legge senza le icone: l'SVG di un'icona
+    // personalizzata (es. nel pulsante) può avere <title>, <desc>, <style> o <text>, e il
+    // loro testo finirebbe nella chiave salvata («Asset 1Vai»).
+    var newValue;
+    if (field === 'content') {
+      newValue = el.innerHTML;
+    } else {
+      var senzaIcone = el.cloneNode(true);
+      senzaIcone.querySelectorAll('svg,[uk-icon],.olo-button-icon').forEach(function(n) { n.remove(); });
+      newValue = senzaIcone.textContent.trim();
+    }
 
     el.removeAttribute('contenteditable');
     // Se l'attributo data-olo-editable era stato auto-assegnato dal doppio-click

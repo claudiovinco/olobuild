@@ -173,6 +173,8 @@ export const TILE_DEFAULTS = {
     font_weight: 600,
     shadow: 'sm',                 // micro-ombra elegante invece di 'none' piatto
     hover_effect: 'lift',
+    icon_size: 20,                // px; 20 = uk-icon ratio 1, la resa storica (PHP: $defaults)
+    icon_color: '',               // '' ⇒ il colore del testo, anche in hover
   },
   divider: {
     style: 'solid',

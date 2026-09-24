@@ -15,6 +15,9 @@ abstract class Olobuild_Tile_Base {
     /** Tracks whether the delegated-events footer script has been enqueued. */
     private static $delegated_events_enqueued = false;
 
+    /** Librerie di icone già lette in questa richiesta (vedi libreria_icone()). */
+    private static $librerie_icone = [];
+
     public function get_type() {
         return $this->type;
     }
@@ -897,29 +900,11 @@ abstract class Olobuild_Tile_Base {
         // UIkit precede in caso di nome duplicato (preserva look storico): se la
         // 131-set UIkit conosce il nome, deleghiamo a uk-icon JS (più leggero).
         // Lucide (~1700 icone, ISC) coprono il resto via SVG inline server-side.
-        static $uikit_lib = null;
-        if ( $uikit_lib === null ) {
-            $uikit_path = OLOBUILD_PATH . 'assets/data/uikit-icons.json';
-            if ( file_exists( $uikit_path ) ) {
-                $raw = file_get_contents( $uikit_path );
-                $uikit_lib = json_decode( $raw, true ) ?: [];
-            } else {
-                $uikit_lib = [];
-            }
-        }
+        $uikit_lib = self::libreria_icone( 'uikit' );
         if ( isset( $uikit_lib[ $icon_name ] ) ) {
             return '<span ' . $extra_attr . ' uk-icon="icon: ' . esc_attr( $icon_name ) . '; ratio: ' . esc_attr( $ratio ) . '"></span>';
         }
-        static $lucide_lib = null;
-        if ( $lucide_lib === null ) {
-            $lucide_path = OLOBUILD_PATH . 'assets/data/lucide-icons.json';
-            if ( file_exists( $lucide_path ) ) {
-                $raw = file_get_contents( $lucide_path );
-                $lucide_lib = json_decode( $raw, true ) ?: [];
-            } else {
-                $lucide_lib = [];
-            }
-        }
+        $lucide_lib = self::libreria_icone( 'lucide' );
         if ( isset( $lucide_lib[ $icon_name ] ) ) {
             $size = round( 20 * $ratio );
             $svg = $lucide_lib[ $icon_name ];
@@ -930,6 +915,47 @@ abstract class Olobuild_Tile_Base {
         // Fallback: il nome non è in nessuno dei due dict — lascia che UIkit JS provi
         // (potrebbe essere un'icona nuova di una versione UIkit più recente).
         return '<span ' . $extra_attr . ' uk-icon="icon: ' . esc_attr( $icon_name ) . '; ratio: ' . esc_attr( $ratio ) . '"></span>';
+    }
+
+    /**
+     * Da quale libreria arriva un'icona, con le stesse precedenze di render_icon_html():
+     * 'custom' (prefisso «custom:»), 'uikit', 'lucide', oppure '' se nessuna la conosce
+     * (render_icon_html() la affida comunque a uk-icon).
+     *
+     * @param string $icon_name
+     * @return string
+     */
+    protected function origine_icona( $icon_name ) {
+        $icon_name = (string) $icon_name;
+        if ( $icon_name === '' ) return '';
+        if ( str_starts_with( $icon_name, 'custom:' ) ) return 'custom';
+        $uikit_lib = self::libreria_icone( 'uikit' );
+        if ( isset( $uikit_lib[ $icon_name ] ) ) return 'uikit';
+        $lucide_lib = self::libreria_icone( 'lucide' );
+        if ( isset( $lucide_lib[ $icon_name ] ) ) return 'lucide';
+        return '';
+    }
+
+    /**
+     * Una libreria di icone come dizionario nome → SVG: 'uikit' (131, rese da uk-icon) o
+     * 'lucide' (~1700, SVG in linea). Letta una volta per richiesta e condivisa da
+     * render_icon_html() e origine_icona() in tutte le tile.
+     *
+     * @param string $quale 'uikit' | 'lucide'
+     * @return array
+     */
+    protected static function libreria_icone( $quale ) {
+        if ( ! in_array( $quale, [ 'uikit', 'lucide' ], true ) ) return [];
+        if ( ! isset( self::$librerie_icone[ $quale ] ) ) {
+            $lib  = [];
+            $path = OLOBUILD_PATH . 'assets/data/' . $quale . '-icons.json';
+            if ( file_exists( $path ) ) {
+                $raw = json_decode( file_get_contents( $path ), true );
+                $lib = is_array( $raw ) ? $raw : [];
+            }
+            self::$librerie_icone[ $quale ] = $lib;
+        }
+        return self::$librerie_icone[ $quale ];
     }
 
     /**
