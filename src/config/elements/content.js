@@ -98,8 +98,12 @@ export default {
     ], condition: { field: 'text_effect', op: 'neq', value: 'none' } },
     { key: 'text_effect_cursor', label: t('Mostra cursore lampeggiante'), type: 'toggle',
       condition: { field: 'text_effect', op: 'eq', value: 'typewriter' } },
+    // AND: il default di text_effect_cursor è true, quindi da solo mostrava il campo anche con Effetto = Nessuno.
     { key: 'text_effect_cursor_char', label: t('Carattere cursore'), type: 'text',
-      condition: { field: 'text_effect_cursor', op: 'eq', value: true } },
+      condition: [
+        { field: 'text_effect', op: 'eq', value: 'typewriter' },
+        { field: 'text_effect_cursor', op: 'eq', value: true },
+      ] },
     { key: 'text_effect_phrases', label: t('Frasi (una per riga)'), type: 'textarea',
       description: t('Verranno mostrate in loop con effetto typewriter'),
       condition: { field: 'text_effect', op: 'eq', value: 'typewriter-loop' } },
