@@ -618,6 +618,274 @@ for (const f of fs.readdirSync(ELEMENTS).filter((x) => x.endsWith('.js') && !x.s
 violazioni['stile-nel-contenuto'] = stileNelContenuto;
 RULES.push({ id: 'stile-nel-contenuto', titolo: 'Nessun controllo di stile o colore nel tab Contenuto (anche nelle voci dei ripetitori)' });
 
+// ─── compatto 0.1: le regole dei tre piani (chrome-*, css-*, densita-*) ─────
+// Il sistema compatto (audit_results/MIGLIORIE_OLOBUILD_2026-09.md, passo 0.1) tocca
+// tre piani: il chrome dell'inspector, il CSS di resa, la densità del contenuto.
+// Qui entrano SOLO le regole che oggi si definiscono senza ambiguità. La soglia è il
+// conteggio del 24 set 2026: quelle a 0 restano 0, le altre possono solo scendere.
+// Il resto arriva col passo che crea ciò che la regola controlla (motivi e passi in
+// scripts/golden/README.md):
+//   chrome-token, chrome-accento → A1 (i token e le esclusioni non esistono ancora)
+//   chrome-segmentato-unico → A1/D1, chrome-popover-motore → A1/D3 (oggi sono elenchi a mano)
+//   css-important-tile → dopo B1 (B1 aggiunge la sua costante: fissata prima, B1 la alzerebbe)
+//   densita-default-gemelli → 0.3 (oggi non è 0; l'elenco lo calcola il censimento)
+//   densita-scala-unica, densita-gemelli, densita-token-consumati → C1
+//   densita-fisse-elenco → C2/E3 · densita-auto-gemelli, densita-auto-renderer → E1
+// Sono conteggi di testo: i commenti /* … */ non contano (le righe restano al loro posto).
+const relC = (p) => path.relative(ROOT, p).split(path.sep).join('/');
+function fileC(dir, re, ricorsivo = false) {
+  const out = [];
+  if (!fs.existsSync(dir)) return out;
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, e.name);
+    if (e.isDirectory()) { if (ricorsivo) out.push(...fileC(p, re, true)); continue; }
+    if (re.test(e.name)) out.push(p);
+  }
+  return out.sort();
+}
+const senzaCommentiC = (s) => s.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' '));
+const sorgentiC = new Map();
+const leggiC = (f) => {
+  if (!sorgentiC.has(f)) {
+    const src = senzaCommentiC(fs.readFileSync(f, 'utf8'));
+    const righe = [0];
+    for (let i = 0; i < src.length; i++) if (src[i] === '\n') righe.push(i + 1);
+    sorgentiC.set(f, { src, righe });
+  }
+  return sorgentiC.get(f);
+};
+const rigaC = (righe, idx) => { let lo = 0, hi = righe.length - 1; while (lo < hi) { const m = (lo + hi + 1) >> 1; if (righe[m] <= idx) lo = m; else hi = m - 1; } return lo + 1; };
+function occorrenzeC(files, re) {
+  const out = [];
+  for (const f of files) {
+    const { src, righe } = leggiC(f);
+    for (const m of src.matchAll(re)) {
+      out.push({ file: relC(f), type: ':' + rigaC(righe, m.index), key: m[0].replace(/\s+/g, ' ').slice(0, 90), label: '' });
+    }
+  }
+  return out;
+}
+// I gruppi di file. T = renderer PHP delle tile, V = tile del canvas Vue, C = config
+// dell'inspector, F = frontend.css, R = CSS di resa + renderer di pagina + Style System.
+const GC = {
+  T: fileC(path.join(ROOT, 'includes/tiles'), /\.php$/),
+  V: fileC(path.join(ROOT, 'src/components/Tiles'), /\.vue$/, true),
+  C: fileC(ELEMENTS, /\.js$/),
+  F: [path.join(ROOT, 'assets/css/frontend.css')],
+  R: [
+    ...['frontend', 'olo-proslider', 'olo-livesearch', 'olo-pdfviewer', 'olo-svganimator', 'olox', 'timeline-super', 'location-single']
+      .map((n) => path.join(ROOT, 'assets/css', n + '.css')),
+    path.join(ROOT, 'includes/class-frontend-renderer.php'),
+    ...fileC(path.join(ROOT, 'includes/traits'), /^trait-olobuild-renderer-.*\.php$/),
+    path.join(ROOT, 'includes/class-style-system.php'),
+  ].filter((f) => fs.existsSync(f)),
+};
+const TVR = [...GC.T, ...GC.V, ...GC.R];
+const nuoveRegole = [];
+const regolaC = (id, titolo, trovate) => { violazioni[id] = trovate; nuoveRegole.push({ id, titolo }); };
+
+// PIANO 1 — chrome
+// I token del chrome (--olo-ui-*) sono dell'editor: una tile che li legge cambierebbe
+// aspetto sul sito quando cambia la densità dell'EDITOR. (--olo-ui-accent è a parte:
+// lo usano i segnaposto del builder, e l'accento lo governa chrome-accento in A1.)
+regolaC('chrome-nelle-tile', 'Le tile (PHP, Vue, config, frontend.css) non leggono i token del chrome --olo-ui-*',
+  occorrenzeC([...GC.T, ...GC.V, ...GC.C, ...GC.F], /--olo-ui-(ctl|fs|lh|s[1-6]|row|inline|section|panel|rail|toolbar|sb|switch|swatch|label|status)/g));
+
+// Una `description` su un campo reso IN LINEA (renderInline di InspectorField: tipi
+// INLINE_COMPACT e INLINE_FILL, salvo layout:'block', hoverable, aiGenerate:'alt',
+// geocode) non viene mostrata. Gli elenchi si leggono da InspectorField.vue, così la
+// regola segue il componente. Debito del giorno, va a 0 con A3 (FieldRow).
+// Nelle voci dei ripetitori (itemFields) i tipi di CIE_NATIVE li rende ContentItemsEditor
+// da sé e la description la mostra (cie-desc): lì conta solo chi delega a InspectorField
+// (unit, date, time, datetime). CIE_NATIVE si legge da ContentItemsEditor.vue.
+{
+  const ifSrc = fs.readFileSync(path.join(ROOT, 'src/components/Builder/InspectorField.vue'), 'utf8');
+  const elenco = (nome) => { const m = ifSrc.match(new RegExp('const ' + nome + '\\s*=\\s*\\[([^\\]]*)\\]')); return m ? [...m[1].matchAll(/'([^']+)'/g)].map((x) => x[1]) : null; };
+  const compatti = elenco('INLINE_COMPACT'), riempiti = elenco('INLINE_FILL');
+  const trovate = [];
+  if (!compatti || !riempiti) trovate.push({ file: 'InspectorField', type: '', key: '(INLINE_COMPACT/INLINE_FILL non trovati)', label: '' });
+  const inLinea = new Set([...(compatti || []), ...(riempiti || [])]);
+  const cieM = fs.readFileSync(path.join(ROOT, 'src/components/Builder/ContentItemsEditor.vue'), 'utf8').match(/const CIE_NATIVE\s*=\s*new Set\(\[([^\]]*)\]/);
+  const cieNative = cieM ? new Set([...cieM[1].matchAll(/'([^']*)'/g)].map((x) => x[1])) : null;
+  if (!cieNative) trovate.push({ file: 'ContentItemsEditor', type: '', key: '(CIE_NATIVE non trovato)', label: '' });
+  // Per file, i corpi dei campi scritti dentro un `itemFields: [ … ]` (multinsieme: un corpo
+  // identico può comparire più volte). Gli array annidati stanno già in quello esterno.
+  const fineArray = (src, i) => {
+    let depth = 0, str = null;
+    for (let j = i; j < src.length; j++) {
+      const c = src[j];
+      if (str) { if (c === BS) { j++; continue; } if (c === str) str = null; continue; }
+      if (c === "'" || c === '"' || c === '`') { str = c; continue; }
+      if (c === '/' && src[j + 1] === '/') { while (j < src.length && src[j] !== '\n') j++; continue; }
+      if (c === '/' && src[j + 1] === '*') { j += 2; while (j < src.length && !(src[j] === '*' && src[j + 1] === '/')) j++; j++; continue; }
+      if (c === '[') depth++;
+      else if (c === ']') { depth--; if (depth === 0) return j; }
+    }
+    return -1;
+  };
+  const nelleVoci = new Map();
+  for (const f of fs.readdirSync(ELEMENTS).filter((x) => x.endsWith('.js') && !x.startsWith('_'))) {
+    const src = fs.readFileSync(path.join(ELEMENTS, f), 'utf8');
+    const conta = new Map();
+    let fine = -1;
+    for (const m of src.matchAll(/\bitemFields\s*:\s*\[/g)) {
+      if (m.index < fine) continue;
+      const a = m.index + m[0].length - 1;
+      const b = fineArray(src, a);
+      if (b < 0) continue;
+      fine = b;
+      for (const body of allObjects(src.slice(a + 1, b))) conta.set(body, (conta.get(body) || 0) + 1);
+    }
+    nelleVoci.set(f.replace(/\.js$/, ''), conta);
+  }
+  // I campi avvolti in withHover(...) diventano hoverable: restano a tutta riga.
+  const avvolti = new Set();
+  for (const f of fs.readdirSync(ELEMENTS).filter((x) => x.endsWith('.js') && !x.startsWith('_'))) {
+    const src = fs.readFileSync(path.join(ELEMENTS, f), 'utf8');
+    for (let i = src.indexOf('withHover('); i >= 0; i = src.indexOf('withHover(', i + 1)) {
+      const a = src.indexOf('{', i);
+      const fineCall = matchParen(src, i + 'withHover'.length);
+      if (a < 0 || a > fineCall) continue;
+      const b = matchBrace(src, a);
+      if (b > 0) avvolti.add(src.slice(a, b + 1));
+    }
+  }
+  for (const r of fields) {
+    if (!inLinea.has(r.type) || !topProp(r.body, 'description')) continue;
+    if (topProp(r.body, 'layout') === 'block' || topProp(r.body, 'aiGenerate') === 'alt' || r.type === 'geocode') continue;
+    if (/(^|[{,\s])hoverable\s*:\s*true/.test(r.body) || avvolti.has(r.body)) continue;
+    const voci = nelleVoci.get(r.file);
+    const n = voci ? voci.get(r.body) || 0 : 0;
+    if (n > 0) {
+      voci.set(r.body, n - 1);
+      if (cieNative && cieNative.has(r.type)) continue; // voce di ripetitore resa da ContentItemsEditor
+    }
+    trovate.push({ file: r.file, type: r.type, key: r.key, label: '' });
+  }
+  regolaC('chrome-descrizione-invisibile', 'Nessuna description su un campo reso in linea (lì InspectorField non la mostra)', trovate);
+}
+
+// «Durata» del toggle Normale/Hover: withHover() offre sempre il campo `{key}_hover_duration`
+// (o hoverDurationKey). Agisce solo se il renderer PHP della tile lo legge: per nome, con
+// build_hover_css() (la mappa lo deriva dalla chiave) o con radius_hover*() (lo deriva
+// dalla chiave hover). Debito del giorno: può solo scendere (D1 mostra «Durata» solo lì).
+{
+  const trovate = [];
+  // Il tipo della tile è il `type` di primo livello di `export default { … }`: il primo
+  // «type:» del file può essere quello di un campo o di un commento (proslider, revealbox,
+  // spacer), e la tile verrebbe saltata in silenzio.
+  const tipoConfig = (src) => {
+    const i = src.search(/export\s+default\s*\{/);
+    if (i < 0) return null;
+    const a = src.indexOf('{', i);
+    const b = matchBrace(src, a);
+    return b > a ? topProp(src.slice(a, b + 1), 'type') : null;
+  };
+  for (const f of fs.readdirSync(ELEMENTS).filter((x) => x.endsWith('.js') && !x.startsWith('_'))) {
+    const src = fs.readFileSync(path.join(ELEMENTS, f), 'utf8');
+    const tipo = tipoConfig(src);
+    const php = phpPerTipo[tipo];
+    if (!tipo || php === undefined) continue; // renderer fuori da includes/tiles (offcanvas, olo_room_* di OLObooking)
+    for (let i = src.indexOf('withHover('); i >= 0; i = src.indexOf('withHover(', i + 1)) {
+      const call = src.slice(i, matchParen(src, i + 'withHover'.length) + 1);
+      const key = (call.match(/key:\s*'([a-z0-9_]+)'/) || [])[1];
+      if (!key) continue;
+      const hk = (call.match(/hoverKey:\s*'([a-z0-9_]+)'/) || [])[1] || key + '_hover';
+      const dk = (call.match(/hoverDurationKey:\s*'([a-z0-9_]+)'/) || [])[1] || key + '_hover_duration';
+      // letta = usata come indice ($s['…']) o passata come dur_key: stare nei $defaults non basta
+      const perNome = leggeChiave(php, dk) || new RegExp("'dur_key'\\s*=>\\s*'" + dk + "'").test(php);
+      const daMappa = dk === key + '_hover_duration' && /build_hover_css/.test(php) && new RegExp("'" + key + "'\\s*=>").test(php);
+      const daRaggio = dk === hk + '_duration' && /radius_hover(_rules)?\s*\(/.test(php) && php.includes("'" + hk + "'");
+      if (!perNome && !daMappa && !daRaggio) trovate.push({ file: f.replace(/\.js$/, ''), type: 'durata', key: dk, label: '' });
+    }
+  }
+  regolaC('fantasma-durata', 'La «Durata» dell\'hover è letta dal renderer PHP della tile', trovate);
+}
+
+// PIANO 2 — CSS di resa
+regolaC('css-layer-tile', 'Nessun @layer nel CSS delle tile e di resa (la cascata la decide B1, non un livello)',
+  occorrenzeC(TVR, /@layer\b/g));
+regolaC('css-container-senza-nome', 'Ogni @container nomina il suo contenitore (mai la query anonima)',
+  occorrenzeC(TVR, /@container\s*\(/g));
+// Le unità cq* hanno senso solo dentro @container olo-cell (la cella della griglia).
+{
+  const trovate = [];
+  for (const f of TVR) {
+    const { src, righe } = leggiC(f);
+    const blocchi = [];
+    for (const m of src.matchAll(/@container\s+olo-cell\b[^{]*\{/g)) {
+      let d = 0, j = m.index + m[0].length - 1;
+      for (; j < src.length; j++) { if (src[j] === '{') d++; else if (src[j] === '}') { d--; if (d === 0) break; } }
+      blocchi.push([m.index, j]);
+    }
+    for (const m of src.matchAll(/\d(cqi|cqw|cqh|cqb|cqmin|cqmax)\b/g)) {
+      if (blocchi.some(([a, b]) => m.index > a && m.index < b)) continue;
+      trovate.push({ file: relC(f), type: ':' + rigaC(righe, m.index), key: m[0], label: '' });
+    }
+  }
+  regolaC('css-cq-fuori-container', 'Le unità cq* stanno solo dentro @container olo-cell', trovate);
+}
+// L'uid delle tile nasce da wp_rand(10000, 99999): l'HTML cambia a ogni vista e il banco
+// deve renderlo deterministico (scripts/golden/golden-stub.php). Scende con B/E3.
+regolaC('css-uid-casuale', 'Uid di tile da wp_rand(10000, 99999) nei renderer PHP', occorrenzeC(GC.T, /\bwp_rand\s*\(\s*10000\s*,\s*99999\s*\)/g));
+// «16pxpx»: gli helper che restituiscono GIÀ l'unità (spacing_css, sides_css, border_radius,
+// build_border_radius_css, radius_force_css, css_len) seguiti da `. 'px'` o, in una stringa,
+// da `}px`. La chiamata si chiude sulle sue parentesi (una regex ne scavalcherebbe una e prenderebbe il
+// `. 'px'` di un intval() più avanti). spacing_sides() no: restituisce numeri. Controprova
+// sull'HTML reso: la colonna pxpx di _summary.tsv del banco (anche per un valore passato
+// da una variabile, che qui non si vede).
+{
+  const trovate = [];
+  for (const f of fileC(path.join(ROOT, 'includes'), /\.php$/, true)) {
+    const { src, righe } = leggiC(f);
+    for (const m of src.matchAll(/\b(?:spacing_css|sides_css|border_radius|build_border_radius_css|radius_force_css|css_len)\s*\(/g)) {
+      const b = matchParen(src, m.index + m[0].length - 1);
+      if (b < 0) continue;
+      const dopo = src.slice(b + 1, b + 24);
+      if (/^\s*\.\s*['"]px/.test(dopo) || /^\s*\}px/.test(dopo)) {
+        trovate.push({ file: relC(f), type: ':' + rigaC(righe, m.index), key: src.slice(m.index, b + 1).replace(/\s+/g, ' ').slice(0, 90), label: '' });
+      }
+    }
+  }
+  regolaC('css-pxpx', 'Nessun helper che restituisce già l\'unità seguito da \'px\' nei renderer PHP (16pxpx)', trovate);
+}
+// Le soglie di @media scritte a mano fuori dal contratto dei 5 breakpoint (1400, 1200,
+// 960, 640, 480 e i loro −1). Una per ogni min-/max-width letterale in px.
+{
+  const contratto = new Set([1400, 1200, 960, 640, 480, 1399, 1199, 959, 639, 479]);
+  const trovate = [];
+  for (const f of [...GC.T, ...GC.R]) {
+    const { src, righe } = leggiC(f);
+    for (const q of src.matchAll(/@media\b[^{]*/g)) {
+      for (const m of q[0].matchAll(/\((?:max|min)-width\s*:\s*(\d+(?:\.\d+)?)px/g)) {
+        if (contratto.has(Number(m[1]))) continue;
+        trovate.push({ file: relC(f), type: ':' + rigaC(righe, q.index), key: m[0] + ')', label: '' });
+      }
+    }
+  }
+  regolaC('css-soglie-fuori-contratto', 'Le @media usano solo le soglie del contratto (1400/1200/960/640/480 e −1)', trovate);
+}
+
+// PIANO 3 — densità del contenuto
+regolaC('densita-doppia', 'Mai var(--olo-density|ds|dr) moltiplicato per var(--olo-space-*|radius-*) nello stesso calc()',
+  occorrenzeC(TVR, /calc\([^;{}]*?var\(\s*--olo-(?:density|ds|dr)\b[^;{}]*?var\(\s*--olo-(?:space|radius)-|calc\([^;{}]*?var\(\s*--olo-(?:space|radius)-[^;{}]*?var\(\s*--olo-(?:density|ds|dr)\b/g));
+regolaC('densita-ds-senza-ripiego', 'Ogni var(--olo-ds|dr|density) ha il ripiego ", 1"',
+  occorrenzeC([...TVR, ...GC.C, ...fileC(path.join(ROOT, 'src'), /\.(js|vue|scss|css)$/, true).filter((f) => !f.startsWith(path.join(ROOT, 'src/components/Tiles')) && !f.startsWith(ELEMENTS))],
+    /var\(\s*--olo-(?:ds|dr|density)\s*(?:\)|,(?!\s*1\s*\)))/g));
+// I tipi presenti al 24 set 2026 non leggono i token effettivi --olo-space-*/--olo-radius-*
+// (li converte E3, famiglia per famiglia, con la moltiplicazione per la densità). Una
+// tile NATA DOPO che li legge va messa qui sotto per nome di file.
+const TILE_NATE_DOPO_0_1 = new Set([]);
+regolaC('densita-token-in-tile-esistenti', 'Le tile esistenti non leggono --olo-space-*/--olo-radius-*',
+  occorrenzeC([...GC.T, ...GC.V, ...GC.F].filter((f) => !TILE_NATE_DOPO_0_1.has(path.basename(f))), /var\(\s*--olo-(?:space|radius)-/g));
+// I px scritti a mano per spazi e raggi nei renderer PHP: un intero ≥ 3 in una
+// dichiarazione padding/margin/gap/border-radius (e lati). Regex fissata qui: il
+// conteggio di partenza dipende da lei (il report diceva 1.896 con una regex non scritta).
+regolaC('densita-letterali', 'px di spazio e raggio scritti a mano in includes/tiles (scendono con E3)',
+  occorrenzeC(GC.T, /\b(?:padding|margin|gap|row-gap|column-gap|border-radius)(?:-(?:top|right|bottom|left|inline|block)(?:-start|-end)?)?\s*:\s*[^;{}"'<>]*?\b(?:[3-9]|\d{2,})px/g));
+
+for (const r of nuoveRegole) RULES.push(r);
+
 // ─── confronto con la baseline ──────────────────────────────────────────────
 const args = process.argv.slice(2);
 const conteggi = Object.fromEntries(Object.entries(violazioni).map(([k, v]) => [k, v.length]));

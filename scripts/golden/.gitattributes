@@ -1,0 +1,7 @@
+# Il banco gira su Linux (mosaic): script e PHP con fine riga LF anche se estratti su Windows.
+*.sh   text eol=lf
+*.php  text eol=lf
+*.mjs  text eol=lf
+*.json text eol=lf
+*.css  text eol=lf
+*.md   text eol=lf

@@ -1,5 +1,5 @@
 {
-  "aggiornato": "2026-09-23",
+  "aggiornato": "2026-09-24",
   "soglie": {
     "padding-spacing": 0,
     "margin-spacing": 0,
@@ -25,6 +25,19 @@
     "fantasma-dispositivo": 22,
     "fantasma-bordo": 3,
     "fantasma-effetti-testo": 11,
-    "stile-nel-contenuto": 0
+    "stile-nel-contenuto": 0,
+    "chrome-nelle-tile": 0,
+    "chrome-descrizione-invisibile": 240,
+    "fantasma-durata": 79,
+    "css-layer-tile": 0,
+    "css-container-senza-nome": 0,
+    "css-cq-fuori-container": 0,
+    "css-uid-casuale": 168,
+    "css-pxpx": 0,
+    "css-soglie-fuori-contratto": 93,
+    "densita-doppia": 0,
+    "densita-ds-senza-ripiego": 0,
+    "densita-token-in-tile-esistenti": 0,
+    "densita-letterali": 1926
   }
 }

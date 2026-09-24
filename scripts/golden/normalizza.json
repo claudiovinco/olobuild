@@ -1,0 +1,47 @@
+{
+  "nota": "Regole applicate da render-golden.php all'HTML reso PRIMA dell'md5 (il grezzo, se diverso, resta in _grezzo/). Stessa sintassi in PCRE e in JavaScript: prova-banco.mjs le esegue con node. {VERSIONE} = OLOBUILD_VERSION, quotata a runtime.",
+  "regole": [
+    {
+      "nome": "a-capo",
+      "cerca": "\\r\\n?",
+      "sostituisci": "\n",
+      "perche": "Un PHP con fine riga CRLF stampa \\r nell'HTML e nel CSS in linea: il browser li normalizza a LF già nella lettura (HTML, preprocessing dell'input), quindi la resa non cambia. Il deploy può portare file CRLF o LF a seconda del working tree Windows (core.autocrlf): senza questa regola il banco segnalerebbe differenze di soli a capo."
+    },
+    {
+      "nome": "token-modulo",
+      "cerca": "\\bv2:\\d{9,11}:[0-9a-f]{64}\\b",
+      "sostituisci": "v2:0:TOKEN",
+      "perche": "Olobuild_Form_Handler::generate_token() firma il modulo con time(): cambia a ogni secondo (class-form-handler.php, stampato da class-form-tile.php in _olo_form_token)."
+    },
+    {
+      "nome": "versione-plugin",
+      "cerca": "([?&;](?:ver|v)=){VERSIONE}(?![\\w.])",
+      "sostituisci": "$1VERSIONE",
+      "perche": "Ogni passo alza OLOBUILD_VERSION: un ?ver= nell'HTML cambierebbe l'md5 di ogni template anche a resa identica."
+    },
+    {
+      "nome": "uid-olo-booking",
+      "cerca": "(\\boa-[^\\s\"'<>.#-]{1,4}-)[0-9a-f]{6}\\b",
+      "sostituisci": "$1UID",
+      "perche": "olo-booking (tile accommodation, class-ac-tile-base.php) forma la classe con md5(uniqid()): cambia a ogni render, fuori dal controllo dello stub."
+    },
+    {
+      "nome": "uid-olo-tutor-faq",
+      "cerca": "\\botfaq-[0-9a-f]{6}\\b",
+      "sostituisci": "otfaq-UID",
+      "perche": "olo-tutor (class-course-faq-tile.php) forma l'id con md5(settings . microtime())."
+    },
+    {
+      "nome": "turn-olotour-utente",
+      "cerca": "((?:&quot;|\")username(?:&quot;|\"):(?:&quot;|\"))\\d{9,11}:",
+      "sostituisci": "$1TS:",
+      "perche": "olotour stampa credenziali TURN a scadenza: lo username comincia con un timestamp."
+    },
+    {
+      "nome": "turn-olotour-credenziale",
+      "cerca": "((?:&quot;|\")credential(?:&quot;|\"):(?:&quot;|\"))[A-Za-z0-9+/\\\\]{20,90}={0,2}",
+      "sostituisci": "$1CRED",
+      "perche": "La credenziale TURN di olotour è un HMAC del timestamp (base64, con lo slash scritto \\/ quando è JSON dentro un attributo): cambia con lui."
+    }
+  ]
+}

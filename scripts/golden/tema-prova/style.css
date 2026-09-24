@@ -1,0 +1,14 @@
+/*
+Theme Name: Olo Tema Prova
+Description: Tema classico minimo del banco di verifica di Olobuild (passo 0.1 del sistema compatto). Tre regole scelte apposta per disturbare: un tema qualunque colora i link, dà margini ai titoli e ai paragrafi del contenuto. Le pagine di Olobuild devono restare uguali. Solo per il banco: non va distribuito.
+Author: Claudio Vinco
+Version: 1.0.0
+Requires at least: 6.3
+Requires PHP: 7.4
+License: GPLv2 or later
+Text Domain: olo-tema-prova
+*/
+
+a { color: red; }
+h2 { margin: 2em 0; }
+.entry-content p { margin-bottom: 1.5em; }
