@@ -882,31 +882,8 @@ export const SETTINGS_FIELD_INDEX = {
 	"permessi": [
 		{
 			"kind": "section",
-			"label": "Matrice permessi",
-			"hint": "Cliccare una cella per cambiare un permesso. I ruoli custom si possono creare e modificare."
-		},
-		{
-			"kind": "section",
-			"label": "Opzioni avanzate",
-			"hint": ""
-		},
-		{
-			"kind": "field",
-			"label": "Lock dei template Header/Footer",
-			"hint": "Solo Admin può modificarli. Sicurezza per agenzie che consegnano siti ai clienti.",
-			"section": "Opzioni avanzate"
-		},
-		{
-			"kind": "field",
-			"label": "Lock degli Stili globali",
-			"hint": "Una volta consegnato il sito, il cliente non può rovinare la palette/tipografia.",
-			"section": "Opzioni avanzate"
-		},
-		{
-			"kind": "field",
-			"label": "Sandbox per Contributors",
-			"hint": "I contributor lavorano su una copia draft, niente live edit.",
-			"section": "Opzioni avanzate"
+			"label": "Ruoli del sito",
+			"hint": "L'editor visuale si apre solo con il permesso «Gestire le opzioni» (amministratori). I livelli per ruolo (solo contenuti, solo design) non sono ancora applicati nel builder."
 		}
 	]
 };

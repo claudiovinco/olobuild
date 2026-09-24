@@ -2,262 +2,161 @@
   <div class="cfg-page-head">
     <div>
       <h1>{{ t('Permessi') }} <em>{{ t('& Ruoli') }}</em></h1>
-      <p>{{ t('Chi può fare cosa nel builder. Si appoggia ai ruoli WordPress, ma li estende con permessi granulari specifici di OLObuild.') }}</p>
-    </div>
-    <div class="head-actions">
-      <button class="cfg-btn cfg-btn-secondary" @click="createCustomRole">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-        {{ t('Crea ruolo custom') }}
-      </button>
+      <p>{{ t('Chi può usare il builder, letto dai ruoli di WordPress. La scheda è in sola lettura: non ha niente da salvare.') }}</p>
     </div>
   </div>
 
-  <!-- ─── Matrice permessi ─── -->
+  <!-- Una restrizione per ruolo salvata (anche per errore dalla vecchia scheda,
+       che la riduceva ai soli amministratori): si dice e si può togliere. -->
+  <div v-if="state && state.configured" class="perm-banner" role="status">
+    <div class="perm-banner-text">
+      <b>{{ t('Restrizione per ruolo salvata') }}</b>
+      <span>{{ t('Le API del builder rispondono solo a') }}: {{ allowedNames }}. {{ t('Gli altri ruoli con «Modifica pagine» ricevono un errore 403.') }}</span>
+    </div>
+    <button type="button" class="cfg-btn cfg-btn-secondary perm-reset" :disabled="resetting" @click="resetAccess">
+      {{ resetting ? t('Ripristino…') : t('Ripristina comportamento predefinito') }}
+    </button>
+  </div>
+
   <div class="cfg-card">
     <div class="cfg-card-head">
       <div class="head-ic">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L2 19l3 3 7.3-7.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4 2.6-2.6z"/></svg>
       </div>
       <div>
-        <h3>{{ t('Matrice permessi') }}</h3>
-        <p>{{ t('Cliccare una cella per cambiare un permesso. I ruoli custom si possono creare e modificare.') }}</p>
+        <h3>{{ t('Ruoli del sito') }}</h3>
+        <p>{{ t('L\'editor visuale si apre solo con il permesso «Gestire le opzioni» (amministratori). I livelli per ruolo (solo contenuti, solo design) non sono ancora applicati nel builder.') }}</p>
       </div>
     </div>
-    <div class="cfg-card-body" style="padding: 0; overflow: auto;">
-      <table class="perm-table">
+    <div class="cfg-card-body perm-body">
+      <p v-if="loading" class="perm-msg">{{ t('Caricamento…') }}</p>
+      <p v-else-if="error" class="perm-msg perm-error" role="alert">{{ error }}</p>
+      <table v-else-if="state" class="perm-table">
         <thead>
           <tr>
-            <th class="perm-col">{{ t('Permesso') }}</th>
-            <th v-for="r in roles" :key="r.id">
-              <div class="role-name">
-                {{ r.label }}
-                <span v-if="r.custom" class="cfg-pill new role-pill">CUSTOM</span>
-              </div>
-              <div class="role-count">{{ r.count }} {{ t('utenti') }}</div>
-            </th>
+            <th scope="col">{{ t('Ruolo') }}</th>
+            <th scope="col">{{ t('Utenti') }}</th>
+            <th scope="col">{{ t('Può aprire il builder') }}</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(row, ri) in matrix" :key="row.perm">
-            <td class="perm-name">{{ t(row.perm) }}</td>
-            <td v-for="r in roles" :key="r.id" class="perm-cell" @click="toggleCell(ri, r.id)">
-              <span :class="row[r.id] ? 'check-on' : 'check-off'">
-                <svg v-if="row[r.id]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
-                <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
-              </span>
+          <tr v-for="r in state.roles" :key="r.slug">
+            <th scope="row" class="perm-name">{{ r.name }}</th>
+            <td class="perm-num">{{ r.users }}</td>
+            <td>
+              <span class="cfg-pill" :class="r.manage_options ? 'ok' : 'off'"><span class="dot"></span>{{ r.manage_options ? t('Sì') : t('No') }}</span>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
-
-  <!-- ─── Opzioni avanzate ─── -->
-  <div class="cfg-card">
-    <div class="cfg-card-head">
-      <div class="head-ic">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="14" r="4"/><path d="m11 12 9-9 3 3-3 3-2-2-2 2-2-2-3 3"/></svg>
-      </div>
-      <div>
-        <h3>{{ t('Opzioni avanzate') }}</h3>
-      </div>
-    </div>
-    <div class="cfg-card-body tight">
-      <div class="cfg-row">
-        <div class="label-col">
-          <label>{{ t('Lock dei template Header/Footer') }}</label>
-          <div class="hint">{{ t('Solo Admin può modificarli. Sicurezza per agenzie che consegnano siti ai clienti.') }}</div>
-        </div>
-        <div class="control-col">
-          <button class="cfg-switch" :class="{ 'is-on': advanced.lock_header_footer }" @click="setAdv('lock_header_footer', !advanced.lock_header_footer)" role="switch"></button>
-        </div>
-      </div>
-      <div class="cfg-row">
-        <div class="label-col">
-          <label>{{ t('Lock degli Stili globali') }}</label>
-          <div class="hint">{{ t('Una volta consegnato il sito, il cliente non può rovinare la palette/tipografia.') }}</div>
-        </div>
-        <div class="control-col">
-          <button class="cfg-switch" :class="{ 'is-on': advanced.lock_styles }" @click="setAdv('lock_styles', !advanced.lock_styles)" role="switch"></button>
-        </div>
-      </div>
-      <div class="cfg-row no-divider">
-        <div class="label-col">
-          <label>{{ t('Sandbox per Contributors') }}</label>
-          <div class="hint">{{ t('I contributor lavorano su una copia draft, niente live edit.') }}</div>
-        </div>
-        <div class="control-col">
-          <button class="cfg-switch" :class="{ 'is-on': advanced.sandbox_contributors }" @click="setAdv('sandbox_contributors', !advanced.sandbox_contributors)" role="switch"></button>
-        </div>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script setup>
-import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, inject, onMounted, onActivated } from 'vue';
 import { t } from '@/i18n';
-import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
+import { okOrThrow } from './cfgSave';
 
-const TAB_ID = 'permessi';
+// Sola lettura sui dati veri (GET /role-manager): niente valori scritti nel
+// codice, niente puntino «da salvare», niente partecipazione a «Salva
+// impostazioni». La vecchia matrice inventata mandava { roles, matrix,
+// advanced } e il server riduceva l'accesso ai soli amministratori.
 const showToast = inject('showToast', () => {});
-const shellDirty = inject('setDirty', () => {});
-const setDirty = (v) => shellDirty(v, TAB_ID);
-const loaded = ref(false);
 
-const roles = ref([
-  { id: 'admin',   label: 'Admin',       count: 1, custom: false },
-  { id: 'editor',  label: 'Editor',      count: 0, custom: false },
-  { id: 'author',  label: 'Author',      count: 0, custom: false },
-  { id: 'contrib', label: 'Contributor', count: 0, custom: false },
-  { id: 'client',  label: 'Cliente',     count: 0, custom: true },
-]);
+const state = ref(null);      // { configured, allowed: [slug], roles: [{ slug, name, users, edit_pages, manage_options }] }
+const loading = ref(true);
+const error = ref('');
+const resetting = ref(false);
 
-const matrix = ref([
-  { perm: 'Aprire l\'editor',                 admin: true, editor: true, author: true,  contrib: false, client: true  },
-  { perm: 'Pubblicare pagine',                admin: true, editor: true, author: true,  contrib: false, client: false },
-  { perm: 'Modificare Stili globali',         admin: true, editor: true, author: false, contrib: false, client: false },
-  { perm: 'Modificare Header / Footer',       admin: true, editor: true, author: false, contrib: false, client: false },
-  { perm: 'Modificare Configurazione',        admin: true, editor: false, author: false, contrib: false, client: false },
-  { perm: 'Sfogliare la libreria template',   admin: true, editor: true, author: true,  contrib: true,  client: true  },
-  { perm: 'Salvare template personalizzati',  admin: true, editor: true, author: false, contrib: false, client: false },
-  { perm: 'Importare / esportare',            admin: true, editor: false, author: false, contrib: false, client: false },
-  { perm: 'Vedere Analytics',                 admin: true, editor: true, author: false, contrib: false, client: true  },
-]);
-
-const advanced = ref({
-  lock_header_footer: true,
-  lock_styles: true,
-  sandbox_contributors: false,
+const allowedNames = computed(() => {
+  if (!state.value) return '';
+  const names = {};
+  (state.value.roles || []).forEach((r) => { names[r.slug] = r.name; });
+  return (state.value.allowed || []).map((slug) => names[slug] || slug).join(', ');
 });
 
-function toggleCell(rowIdx, roleId) {
-  matrix.value[rowIdx][roleId] = !matrix.value[rowIdx][roleId];
-  setDirty(true);
-}
-function setAdv(k, v) { advanced.value[k] = v; setDirty(true); }
-
-function createCustomRole() {
-  const name = prompt(t('Nome del ruolo custom (es. "SEO specialist"):'));
-  if (!name) return;
-  const id = name.toLowerCase().replace(/[^a-z0-9]+/g, '_').slice(0, 20);
-  if (roles.value.find(r => r.id === id)) {
-    showToast(t('Esiste già un ruolo con questo nome'), 'error');
-    return;
-  }
-  roles.value.push({ id, label: name, count: 0, custom: true });
-  matrix.value.forEach(row => { row[id] = false; });
-  setDirty(true);
-}
-
-async function loadSettings() {
+async function load() {
+  loading.value = !state.value;
   try {
-    const res = await fetch(`${window.oloData.restUrl}role-manager`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
-    if (res.ok) {
-      const data = await res.json();
-      if (Array.isArray(data?.roles)) roles.value = data.roles;
-      if (Array.isArray(data?.matrix)) matrix.value = data.matrix;
-      if (data?.advanced) Object.assign(advanced.value, data.advanced);
-      loaded.value = true;
-    }
-  } catch (e) { /* defaults */ }
+    const res = await okOrThrow(fetch(`${window.oloData.restUrl}role-manager`, { headers: { 'X-WP-Nonce': window.oloData.nonce } }));
+    state.value = await res.json();
+    error.value = '';
+  } catch (e) {
+    // Mai dati di riserva: se la lettura fallisce lo si dice.
+    state.value = null;
+    error.value = `${t('Impossibile leggere i permessi')} (${(e && e.message) || ''})`;
+  } finally {
+    loading.value = false;
+  }
 }
 
-async function saveSettings() {
-  assertLoaded(loaded);
-  await okOrThrow(fetch(`${window.oloData.restUrl}role-manager`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-    body: JSON.stringify({ roles: roles.value, matrix: matrix.value, advanced: advanced.value }),
-  }));
+async function resetAccess() {
+  if (resetting.value) return;
+  if (!confirm(t('Togliere la restrizione per ruolo salvata? L\'accesso alle API del builder tornerà a dipendere solo dai permessi di WordPress.'))) return;
+  resetting.value = true;
+  try {
+    const res = await okOrThrow(fetch(`${window.oloData.restUrl}role-manager`, {
+      method: 'DELETE',
+      headers: { 'X-WP-Nonce': window.oloData.nonce },
+    }));
+    state.value = await res.json();
+    error.value = '';
+    showToast(t('Comportamento predefinito ripristinato'), 'success');
+  } catch (e) {
+    showToast(`${t('Ripristino non riuscito')} (${(e && e.message) || ''})`, 'error', 8000);
+  } finally {
+    resetting.value = false;
+  }
 }
 
-const onSave = cfgJob(TAB_ID, saveSettings);
-const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadSettings));
-
-onMounted(() => {
-  loadSettings();
-  window.addEventListener('olo-cfg-save', onSave);
-  window.addEventListener('olo-cfg-discard', onDiscard);
-});
-onBeforeUnmount(() => {
-  window.removeEventListener('olo-cfg-save', onSave);
-  window.removeEventListener('olo-cfg-discard', onDiscard);
+onMounted(load);
+// Sotto KeepAlive la scheda resta montata: tornandoci si rilegge lo stato vero
+// (la prima attivazione coincide col montaggio, già coperto da onMounted).
+let primaAttivazione = true;
+onActivated(() => {
+  if (primaAttivazione) { primaAttivazione = false; return; }
+  load();
 });
 </script>
 
 <style scoped>
+.perm-body { padding: 0; overflow: auto; }
 .perm-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
 }
 .perm-table thead tr { background: var(--c-bg); }
-.perm-table th {
-  padding: 12px 14px;
+.perm-table thead th {
+  padding: 12px 22px;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--c-text-faint);
-  text-align: center;
-  min-width: 100px;
-}
-.perm-table th.perm-col {
   text-align: left;
-  padding: 12px 22px;
-  min-width: 280px;
-}
-.role-name {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  justify-content: center;
-  font-size: 12px;
-  color: var(--c-navy);
-  text-transform: none;
-  letter-spacing: 0;
-  font-weight: 600;
-}
-.role-pill {
-  font-size: 8px;
-  padding: 1px 5px;
-}
-.role-count {
-  font-weight: 500;
-  color: var(--c-text-faint);
-  font-size: 10px;
-  text-transform: none;
-  letter-spacing: 0;
-  margin-top: 2px;
 }
 .perm-table tbody tr { border-top: 1px solid var(--c-line-soft); }
-.perm-table tbody tr:hover { background: var(--c-bg); }
-.perm-name {
-  padding: 10px 22px;
-  font-weight: 500;
-  color: var(--c-navy);
+.perm-table tbody th,
+.perm-table tbody td { padding: 10px 22px; text-align: left; }
+.perm-name { font-weight: 500; color: var(--c-navy); }
+.perm-num { font-variant-numeric: tabular-nums; color: var(--c-text-mute); }
+.perm-msg { margin: 0; padding: 18px 22px; font-size: 13px; color: var(--c-text-mute); }
+.perm-error { color: var(--c-red-dark); }
+.perm-banner {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  background: var(--c-warning-soft);
+  border: 1px solid var(--c-warning-soft);
+  border-left: 3px solid var(--c-warning);
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--c-text);
 }
-.perm-cell {
-  text-align: center;
-  padding: 10px 14px;
-  cursor: pointer;
-}
-.check-on, .check-off {
-  width: 22px; height: 22px;
-  margin: 0 auto;
-  border-radius: 5px;
-  display: grid; place-items: center;
-}
-.check-on {
-  background: var(--c-red-soft);
-  color: var(--c-red);
-}
-.check-off {
-  background: var(--c-bg);
-  color: var(--c-text-faint);
-  border: 1px solid var(--c-line);
-}
-.check-on svg, .check-off svg { width: 12px; height: 12px; }
-.perm-cell:hover .check-off { background: #fff; border-color: var(--c-red-soft-2); color: var(--c-red); }
+.perm-banner-text { display: grid; gap: 2px; flex: 1 1 280px; }
+.perm-banner-text b { color: var(--c-navy); }
+.perm-reset { flex-shrink: 0; }
+.perm-reset:focus-visible { outline: 2px solid var(--c-red); outline-offset: 2px; }
 </style>

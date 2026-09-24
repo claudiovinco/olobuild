@@ -264,8 +264,9 @@ class Olobuild_Role_Manager {
 
     public function add_admin_page() {
         // v1.0.30 — pagina migrata in ?page=olobuilder-settings&tab=permessi
-        // Submenu rimosso: i campi vivono ora in Configurazione → Permessi & Ruoli.
-        // La classe resta attiva per il filter user_has_cap e per applicare le restrizioni nell'inspector.
+        // Submenu rimosso: la scheda Configurazione → Permessi & Ruoli mostra lo stato
+        // in sola lettura (GET /role-manager) e ne permette il ripristino (DELETE).
+        // La classe resta attiva per il filtro olobuild_can_edit_builder (API del builder).
     }
 
     public function render_admin_page() {
@@ -477,11 +478,21 @@ class Olobuild_Role_Manager {
 
     public function register_routes() {
         register_rest_route( 'olobuild/v1', '/role-manager', [
-            'methods'             => 'POST',
-            'callback'            => [ $this, 'save_roles_api' ],
-            'permission_callback' => function () {
-                return current_user_can( 'manage_options' );
-            },
+            [
+                'methods'             => 'GET',
+                'callback'            => [ $this, 'get_roles_api' ],
+                'permission_callback' => [ $this, 'can_manage_roles' ],
+            ],
+            [
+                'methods'             => 'POST',
+                'callback'            => [ $this, 'save_roles_api' ],
+                'permission_callback' => [ $this, 'can_manage_roles' ],
+            ],
+            [
+                'methods'             => 'DELETE',
+                'callback'            => [ $this, 'reset_roles_api' ],
+                'permission_callback' => [ $this, 'can_manage_roles' ],
+            ],
         ] );
 
         register_rest_route( 'olobuild/v1', '/role-restrictions', [
@@ -493,43 +504,167 @@ class Olobuild_Role_Manager {
         ] );
     }
 
+    /**
+     * Permesso delle rotte /role-manager: solo chi gestisce le opzioni del sito.
+     *
+     * @return bool
+     */
+    public function can_manage_roles() {
+        return current_user_can( 'manage_options' );
+    }
+
+    /**
+     * Stato reale dell'accesso al builder, per la scheda Permessi (sola lettura).
+     *
+     * «configured» segue check_permission(): option assente o vuota = nessuna
+     * restrizione (comportamento storico). NON si usa get_allowed_roles(): il suo
+     * default ['administrator'] farebbe sembrare «solo amministratori» un sito mai
+     * configurato.
+     *
+     * @return array
+     */
+    public function get_access_state() {
+        $raw        = get_option( 'olobuild_builder_roles', null );
+        $configured = is_array( $raw ) && ! empty( $raw );
+        $allowed    = $configured ? array_values( array_filter( $raw, 'is_string' ) ) : [];
+        $counts     = count_users();
+        $avail      = ( isset( $counts['avail_roles'] ) && is_array( $counts['avail_roles'] ) ) ? $counts['avail_roles'] : [];
+
+        $roles = [];
+        foreach ( wp_roles()->roles as $slug => $role ) {
+            $caps    = ( isset( $role['capabilities'] ) && is_array( $role['capabilities'] ) ) ? $role['capabilities'] : [];
+            $roles[] = [
+                'slug'           => (string) $slug,
+                'name'           => translate_user_role( isset( $role['name'] ) ? $role['name'] : (string) $slug ),
+                'users'          => isset( $avail[ $slug ] ) ? (int) $avail[ $slug ] : 0,
+                'edit_pages'     => ! empty( $caps['edit_pages'] ),
+                'manage_options' => ! empty( $caps['manage_options'] ),
+            ];
+        }
+
+        return [
+            'configured' => $configured,
+            'allowed'    => $allowed,
+            'roles'      => $roles,
+        ];
+    }
+
+    public function get_roles_api() {
+        return rest_ensure_response( $this->get_access_state() );
+    }
+
+    /**
+     * «Ripristina comportamento predefinito»: senza olobuild_builder_roles
+     * check_permission() non restringe più (decidono i permessi di WordPress).
+     * Solo su clic esplicito: un ['administrator'] salvato può essere voluto.
+     * Le altre option (content/design only, restrizioni) restano come sono.
+     */
+    public function reset_roles_api() {
+        delete_option( 'olobuild_builder_roles' );
+        return rest_ensure_response( $this->get_access_state() );
+    }
+
     public function save_roles_api( $request ) {
         $data = $request->get_json_params();
         if ( ! is_array( $data ) ) {
             return new WP_Error( 'invalid', 'Dati non validi', [ 'status' => 400 ] );
         }
 
-        $full_access   = [ 'administrator' ];
-        $design_only   = [];
-        $content_only  = [];
+        // Formato atteso: { ruolo: 'full'|'design'|'content'|'none' } con ruoli WP esistenti.
+        // Tutto il resto si rifiuta PRIMA di scrivere: il { roles, matrix, advanced } della
+        // vecchia scheda Permessi (ancora in cache in qualche browser) non combaciava con
+        // nessun caso e riduceva olobuild_builder_roles ai soli amministratori; lo switch
+        // lasco trattava anche true (e 0 su PHP 7.4) come 'full'.
+        $levels  = [ 'full', 'design', 'content', 'none' ];
+        $known   = array_map( 'strval', array_keys( wp_roles()->roles ) );
+        $invalid = [];
+        foreach ( $data as $role => $level ) {
+            if ( ! is_string( $level )
+                || ! in_array( $level, $levels, true )
+                || ! in_array( sanitize_key( (string) $role ), $known, true ) ) {
+                $invalid[] = sanitize_text_field( (string) $role );
+            }
+        }
+        if ( empty( $data ) || ! empty( $invalid ) ) {
+            return new WP_Error(
+                'olobuild_invalid_roles',
+                __( 'Dati dei permessi non validi: nessuna modifica salvata.', 'olobuild' ),
+                [
+                    'status'  => 400,
+                    'invalid' => $invalid,
+                ]
+            );
+        }
+
+        // Si parte dagli elenchi attuali e si cambiano SOLO i ruoli nominati: un ruolo
+        // assente dal payload resta com'è. Prima gli assenti valevano 'none' e un payload
+        // valido ma parziale ({ administrator: 'full' }) toglieva il builder a tutti gli
+        // altri. Una revoca si chiede per nome, con 'none'.
+        // Option mai configurata = nessuna restrizione (check_permission): per lasciare
+        // invariati i ruoli non nominati si parte da tutti i ruoli WordPress.
+        $saved        = get_option( 'olobuild_builder_roles', null );
+        $full_access  = ( is_array( $saved ) && ! empty( $saved ) ) ? self::role_list( $saved ) : $known;
+        $design_only  = self::role_list( get_option( 'olobuild_design_only_roles', [] ) );
+        $content_only = self::role_list( get_option( 'olobuild_content_only_roles', [] ) );
+        $before       = [ $full_access, $design_only, $content_only ];
 
         foreach ( $data as $role => $level ) {
-            $role = sanitize_key( $role );
+            $role = sanitize_key( (string) $role );
             if ( $role === 'administrator' ) {
                 continue; // Always full
             }
 
-            switch ( $level ) {
-                case 'full':
-                    $full_access[] = $role;
-                    break;
-                case 'design':
-                    $full_access[] = $role;
-                    $design_only[] = $role;
-                    break;
-                case 'content':
-                    $full_access[] = $role;
-                    $content_only[] = $role;
-                    break;
-                // 'none' = not in any list
-            }
+            // 'full' = solo in olobuild_builder_roles; 'design'/'content' = anche
+            // nel proprio elenco; 'none' = in nessuno.
+            $full_access  = self::with_role( $full_access, $role, 'none' !== $level );
+            $design_only  = self::with_role( $design_only, $role, 'design' === $level );
+            $content_only = self::with_role( $content_only, $role, 'content' === $level );
         }
 
-        $this->set_allowed_roles( $full_access );
-        $this->set_content_only_roles( $content_only );
-        update_option( 'olobuild_design_only_roles', $design_only );
+        // Si scrive SOLO l'elenco che cambia. Riscriverli tutti e tre appena uno cambiava
+        // salvava olobuild_builder_roles con i ruoli di oggi anche per un { editor: 'content' }:
+        // un sito mai configurato diventava ristretto e i ruoli registrati dopo (shop_manager…)
+        // perdevano il builder. Così olobuild_builder_roles nasce solo da un 'none' esplicito.
+        if ( $full_access !== $before[0] ) {
+            $this->set_allowed_roles( $full_access );
+        }
+        if ( $design_only !== $before[1] ) {
+            update_option( 'olobuild_design_only_roles', $design_only );
+        }
+        if ( $content_only !== $before[2] ) {
+            $this->set_content_only_roles( $content_only );
+        }
 
         return rest_ensure_response( [ 'success' => true ] );
+    }
+
+    /**
+     * Elenco di slug da una option di ruoli: solo stringhe non vuote, chiavi 0..n.
+     *
+     * @param mixed $value Valore salvato.
+     * @return array
+     */
+    private static function role_list( $value ) {
+        return array_values( array_filter( array_filter( (array) $value, 'is_string' ) ) );
+    }
+
+    /**
+     * Mette o toglie un ruolo da un elenco senza toccare gli altri né l'ordine:
+     * un ruolo già al suo posto lascia l'elenco identico.
+     *
+     * @param array  $list    Slug dei ruoli.
+     * @param string $role    Slug del ruolo.
+     * @param bool   $present true = deve esserci, false = non deve esserci.
+     * @return array
+     */
+    private static function with_role( array $list, $role, $present ) {
+        $has = in_array( $role, $list, true );
+        if ( $present && ! $has ) {
+            $list[] = $role;
+        } elseif ( ! $present && $has ) {
+            $list = array_values( array_diff( $list, [ $role ] ) );
+        }
+        return $list;
     }
 
     /**
