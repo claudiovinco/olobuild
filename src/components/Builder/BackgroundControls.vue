@@ -5,7 +5,7 @@
     riga di chip testuali (etichette a capo, niente anteprime); ora è una
     GRIGLIA di swatch con mini-anteprima reale, raggruppata in
     Colore · Generativi · Media. Sotto, i controlli del tipo scelto seguono il
-    sistema (slider arancio CHROME via --olo-ui-accent + valbox con unità,
+    sistema (NumberScrubber: slider arancio CHROME via --olo-ui-accent + numero con unità,
     select con chevron) e la Sovrapposizione è una sotto-sezione con occhio.
 
     CONTRATTO DATI INVARIATO: cambia SOLO la presentazione. Tutte le chiavi
@@ -455,7 +455,6 @@ import { patternList, getPatternCSS } from '@/utils/patternCSS';
 import { getGlowCSS, getGlowColors, glowPresets } from '@/utils/glowCSS';
 import { getMeshCSS, getMeshColors, meshPresets } from '@/utils/meshCSS';
 import { getCrtCSS, crtModels } from '@/utils/crtCSS';
-import { handleNumberWheel } from '@/utils/numberInputWheel';
 import ParallaxEditor from './ParallaxEditor.vue';
 import FieldGradient from './fields/FieldGradient.vue';
 import FieldColor from './fields/FieldColor.vue';
@@ -471,21 +470,6 @@ const SIZE_OPTS = [
   { value: 'contain', label: 'Contain' },
   { value: 'auto', label: 'Auto' },
 ];
-
-const POSITION_OPTS = [
-  { value: 'center center', label: 'Centro' },
-  { value: 'top center', label: 'Alto' },
-  { value: 'bottom center', label: 'Basso' },
-  { value: 'left center', label: 'Sinistra' },
-  { value: 'right center', label: 'Destra' },
-  { value: 'top left', label: 'Alto sinistra' },
-  { value: 'top right', label: 'Alto destra' },
-  { value: 'bottom left', label: 'Basso sinistra' },
-  { value: 'bottom right', label: 'Basso destra' },
-];
-
-// Galleria: solo le 5 posizioni base (come il select originale)
-const POSITION_BASE_OPTS = POSITION_OPTS.slice(0, 5);
 
 const VIDEO_FIT_OPTS = [
   { value: 'cover', label: 'Cover' },
@@ -844,21 +828,11 @@ function updateField(key, value) {
   emit('update:modelValue', { ...bg.value, [key]: value });
 }
 
-// Commit numerico robusto (slider + valbox): scarta NaN tornando al default,
+// Commit numerico robusto (NumberScrubber): scarta NaN tornando al default,
 // così svuotare il campo non corrompe la chiave salvata.
 function commitInt(key, raw, def = 0) {
   const n = parseInt(raw, 10);
   updateField(key, Number.isNaN(n) ? def : n);
-}
-
-// Stile di riempimento "arancio fino al valore" per gli slider nativi (WebKit).
-// Firefox usa ::-moz-range-progress (vedi <style>). var(--ui)=accento chrome.
-function fillStyle(value, min, max) {
-  const lo = Number(min);
-  const hi = Number(max);
-  const val = Number(value);
-  const pct = hi > lo ? Math.max(0, Math.min(100, ((val - lo) / (hi - lo)) * 100)) : 0;
-  return { background: `linear-gradient(to right, var(--ui) ${pct}%, var(--track) ${pct}%)` };
 }
 
 // Sovrapposizione: disclosure locale (occhio). Aperta se esiste già un overlay.
@@ -1000,7 +974,6 @@ function updateParallaxData(newData) {
   --faint: #94a3b8;
   --line: #e5e7eb;
   --surface-alt: #f6f7f9;
-  --track: #e5e7eb;
   --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   background: #fff;
   border: 1px solid var(--line);
@@ -1184,91 +1157,13 @@ function updateParallaxData(newData) {
 }
 .spacer { flex: 1; }
 
-/* NumberScrubber inline (slider + valbox): occupa la riga come il vecchio
-   .uirange + .valbox. Le NumberScrubber compatte (senza .ns-grow) mantengono la
-   larghezza naturale della valbox e non si allargano. */
+/* NumberScrubber inline (slider + numero): occupa la riga. Le NumberScrubber
+   compatte (senza .ns-grow) mantengono la larghezza naturale del numero e non si
+   allargano. */
 .row > .ns-grow { flex: 1; min-width: 0; }
 
 /* contenitore dei FieldSelect nelle row */
 .selwrap { flex: 1; position: relative; min-width: 0; }
-
-/* slider — track con riempimento arancio (WebKit via :style; FF via progress) */
-.uirange {
-  flex: 1;
-  min-width: 40px;
-  -webkit-appearance: none;
-  appearance: none;
-  height: 6px;
-  border-radius: 99px;
-  background: var(--track);
-  outline: none;
-  cursor: pointer;
-}
-.uirange::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  background: #fff;
-  border: 2px solid var(--ui);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
-  cursor: pointer;
-}
-.uirange::-moz-range-thumb {
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  background: #fff;
-  border: 2px solid var(--ui);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
-  cursor: pointer;
-}
-.uirange::-moz-range-track { height: 6px; border-radius: 99px; background: var(--track); }
-.uirange::-moz-range-progress { height: 6px; border-radius: 99px; background: var(--ui); }
-.uirange:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui) 25%, transparent); }
-
-/* valbox numerico con unità */
-.valbox {
-  display: flex;
-  align-items: center;
-  border: 1px solid var(--line);
-  border-radius: 9px;
-  overflow: hidden;
-  background: #fff;
-  height: 34px;
-  width: 74px;
-  flex-shrink: 0;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-.valbox--wide { width: 96px; }
-.valbox:focus-within {
-  border-color: var(--ui);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui) 18%, transparent);
-}
-.valbox input {
-  width: 100%;
-  min-width: 0;
-  border: 0;
-  outline: none;
-  text-align: center;
-  font: 500 13px var(--mono);
-  color: var(--ink);
-  background: transparent;
-  -moz-appearance: textfield;
-}
-.valbox input::-webkit-inner-spin-button,
-.valbox input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-.valbox .u {
-  font-size: 11px;
-  color: var(--faint);
-  font-weight: 600;
-  padding: 0 8px;
-  border-left: 1px solid #eef0f3;
-  align-self: stretch;
-  display: flex;
-  align-items: center;
-  background: var(--surface-alt);
-}
 
 /* griglia 2 colonne (colori affiancati) */
 /* Coppie di FieldColor (pattern, CRT): impilate a tutta larghezza — affiancate a
@@ -1276,8 +1171,7 @@ function updateParallaxData(newData) {
 .grid2 { display: grid; grid-template-columns: 1fr; gap: 10px; }
 .cell { display: flex; flex-direction: column; gap: 6px; }
 
-/* Aurora: palette dinamica + valbox senza unità (N° luci) */
-.valbox.nounit { width: 54px; }
+/* Aurora: palette dinamica */
 .row.tgl-inline { justify-content: space-between; }
 .mesh-color-row { display: flex; align-items: flex-start; gap: 6px; }
 .mesh-color-field { flex: 1; min-width: 0; }

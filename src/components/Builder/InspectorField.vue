@@ -402,12 +402,6 @@
         @update:modelValue="onFieldUpdate($event)"
       />
 
-      <FieldTransform
-        v-else-if="field.type === 'transform'"
-        :modelValue="effectiveValue"
-        @update:modelValue="onFieldUpdate($event)"
-      />
-
       <FieldFontFamily
         v-else-if="field.type === 'font-family'"
         :modelValue="effectiveValue"
@@ -441,18 +435,6 @@
 
       <FieldTextShadow
         v-else-if="field.type === 'text-shadow'"
-        :modelValue="effectiveValue"
-        @update:modelValue="onFieldUpdate($event)"
-      />
-
-      <FieldBackdropFilter
-        v-else-if="field.type === 'backdrop-filter'"
-        :modelValue="effectiveValue"
-        @update:modelValue="onFieldUpdate($event)"
-      />
-
-      <FieldBorderLegacy
-        v-else-if="field.type === 'border-legacy'"
         :modelValue="effectiveValue"
         @update:modelValue="onFieldUpdate($event)"
       />
@@ -640,7 +622,6 @@ import FieldMegaPanelMap from './fields/FieldMegaPanelMap.vue';
 import FieldMultiPills from './fields/FieldMultiPills.vue';
 import FieldBoxShadow from './fields/FieldBoxShadow.vue';
 import FieldGradient from './fields/FieldGradient.vue';
-import FieldTransform from './fields/FieldTransform.vue';
 import FieldFontFamily from './fields/FieldFontFamily.vue';
 import FieldUnit from './fields/FieldUnit.vue';
 import FieldTypography from './fields/FieldTypography.vue';
@@ -659,8 +640,6 @@ import { t } from '@/i18n';
 
 import FieldEditor from './fields/FieldEditor.vue';
 import FieldTextShadow from './fields/FieldTextShadow.vue';
-import FieldBackdropFilter from './fields/FieldBackdropFilter.vue';
-import FieldBorderLegacy from './fields/FieldBorderLegacy.vue';
 import FieldContentPopup from './fields/FieldContentPopup.vue';
 import BackgroundControls from './BackgroundControls.vue';
 import { useGlobalPanels } from '@/composables/useGlobalPanels';
@@ -984,14 +963,11 @@ const fieldComponent = computed(() => {
     case 'multi_pills': return FieldMultiPills;
     case 'box-shadow': return FieldBoxShadow;
     case 'gradient': return FieldGradient;
-    case 'transform': return FieldTransform;
     case 'datetime': return FieldDatetime;
     case 'date': return FieldDate;
     case 'time': return FieldTime;
     case 'code': return FieldTextarea;
     case 'text-shadow': return FieldTextShadow;
-    case 'backdrop-filter': return FieldBackdropFilter;
-    case 'border-legacy': return FieldBorderLegacy;
     case 'background': return BackgroundControls;
     default: return FieldText;
   }

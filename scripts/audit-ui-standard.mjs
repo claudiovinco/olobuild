@@ -918,6 +918,43 @@ violazioni['componente-orfano'] = fileDi(path.join(SRC, 'components/Builder'), (
   .map((c) => ({ file: 'Builder', type: '', key: path.relative(SRC, c).split(path.sep).join('/'), label: '' }));
 RULES.push({ id: 'componente-orfano', titolo: 'Ogni componente di src/components/Builder è importato da un altro file' });
 
+// ─── controlli orfani: un ramo dei dispatcher che nessun campo raggiunge ─────
+// FieldBorderLegacy, FieldTransform e FieldBackdropFilter restavano montabili da
+// InspectorField per tipi che nessun config dichiarava più (dalla v1.2.50), con la
+// vecchia interfaccia pronta a ricomparire. Due controlli: (a) ogni componente di
+// fields/ è importato E usato fuori dalla riga di import; (b) ogni tipo gestito dai
+// dispatcher (InspectorField, StyleFieldsRenderer, ContentItemsEditor) è dichiarato
+// da un campo (`type: 'x'`) in un altro file di src/, config `_*.js` compresi.
+const campoOrfano = [];
+const sorgentiSrc = fileDi(SRC, (n) => /\.(vue|js|ts|mjs)$/.test(n)).map((p) => ({ p: path.normalize(p), s: fs.readFileSync(p, 'utf8') }));
+const kebab = (x) => x.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+for (const c of fileDi(path.join(SRC, 'components/Builder/fields'), (n) => n.endsWith('.vue'))) {
+  const abs = path.normalize(c);
+  const usato = sorgentiSrc.some(({ p, s }) => p !== abs && [...s.matchAll(/^\s*import\s+([A-Za-z_$][\w$]*)\s+from\s*['"]([^'"]+\.vue)['"];?\s*$/gm)].some((m) => {
+    const spec = m[2];
+    const dest = spec.startsWith('@/') ? path.join(SRC, spec.slice(2)) : spec.startsWith('.') ? path.resolve(path.dirname(p), spec) : null;
+    if (!dest || path.normalize(dest) !== abs) return false;
+    const resto = s.replace(m[0], '');
+    return new RegExp('\\b' + m[1] + '\\b').test(resto) || resto.includes('<' + kebab(m[1]));
+  }));
+  if (!usato) campoOrfano.push({ file: 'fields', type: 'mai usato', key: path.basename(c), label: '' });
+}
+const DISPATCHER = ['InspectorField.vue', 'StyleFieldsRenderer.vue', 'ContentItemsEditor.vue'].map((f) => path.normalize(path.join(SRC, 'components/Builder', f)));
+const tipiDispatcher = new Set();
+for (const d of DISPATCHER) {
+  const s = fs.readFileSync(d, 'utf8');
+  // Solo confronti sul tipo del CAMPO e i case che restituiscono un componente: i case
+  // di optionsSource ('taxonomies', 'templates'…) non sono tipi di campo.
+  for (const m of s.matchAll(/\b(?:props\.field|field|f|fieldDef)\.type\s*===\s*'([a-z0-9_-]+)'/g)) tipiDispatcher.add(m[1]);
+  for (const m of s.matchAll(/\bcase\s+'([a-z0-9_-]+)'\s*:\s*return\s+[A-Z]\w*/g)) tipiDispatcher.add(m[1]);
+}
+const dichiarazioni = sorgentiSrc.filter(({ p }) => !DISPATCHER.includes(p)).map(({ s }) => s).join('\n');
+for (const ti of [...tipiDispatcher].sort()) {
+  if (!new RegExp('\\btype\\s*:\\s*[\'"]' + ti + '[\'"]').test(dichiarazioni)) campoOrfano.push({ file: 'dispatcher', type: 'tipo', key: ti, label: '' });
+}
+violazioni['campo-orfano'] = campoOrfano;
+RULES.push({ id: 'campo-orfano', titolo: 'Ogni controllo di fields/ è usato e ogni tipo dei dispatcher è dichiarato da un campo' });
+
 // ─── confronto con la baseline ──────────────────────────────────────────────
 const args = process.argv.slice(2);
 const conteggi = Object.fromEntries(Object.entries(violazioni).map(([k, v]) => [k, v.length]));

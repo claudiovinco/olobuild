@@ -992,7 +992,7 @@ class Olobuild_CSS_Builder {
     public function build_transform_css( $style ) {
         $parts = [];
 
-        // Support nested transform object from FieldTransform
+        // Oggetto transform scritto da StyleEffectsStack; senza, le chiavi piatte transform_*.
         $tf = isset( $style['transform'] ) && is_array( $style['transform'] ) ? $style['transform'] : null;
 
         $rotate = $tf ? floatval( $tf['rotate'] ?? 0 ) : ( isset( $style['transform_rotate'] ) ? floatval( $style['transform_rotate'] ) : 0 );

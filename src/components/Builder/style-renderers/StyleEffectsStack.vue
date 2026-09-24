@@ -52,7 +52,7 @@
     <div class="olo-es-group">
       <span class="olo-es-gtitle">{{ t('Trasformazione') }}<span v-if="bp !== 'desktop'" class="olo-es-gbp">{{ bpLabel }}</span></span>
       <div class="olo-es-sliderrow">
-        <span class="olo-es-lab">{{ t('Rotaz.') }}</span>
+        <span class="olo-es-lab" :title="t('Rotazione')">{{ t('Rotazione') }}</span>
         <NumberScrubber class="olo-es-ns" :modelValue="tget('rotate', 0)" :min="-180" :max="180" :step="1"
           :defaultValue="0" emitAs="number" unit="°" :sliderOnFocus="false" :ariaLabel="t('Rotazione')"
           @update:modelValue="tsetC('rotate', $event, -180, 180, 0)" />
@@ -108,19 +108,19 @@
       <span class="olo-es-gtitle">{{ t('Ombra testo') }}<span v-if="bp !== 'desktop'" class="olo-es-gbp">{{ bpLabel }}</span></span>
       <div class="olo-es-trio">
         <div class="olo-es-field">
-          <span class="olo-es-lab">{{ t('Oriz.') }}</span>
+          <span class="olo-es-lab">X</span>
           <NumberScrubber class="olo-es-ns" :modelValue="tsGet('h')" :min="-50" :max="50" :step="1"
             :defaultValue="0" emitAs="number" unit="px" :ariaLabel="t('Orizzontale')"
             @update:modelValue="setv('text_shadow_h', $event)" />
         </div>
         <div class="olo-es-field">
-          <span class="olo-es-lab">{{ t('Vert.') }}</span>
+          <span class="olo-es-lab">Y</span>
           <NumberScrubber class="olo-es-ns" :modelValue="tsGet('v')" :min="-50" :max="50" :step="1"
             :defaultValue="0" emitAs="number" unit="px" :ariaLabel="t('Verticale')"
             @update:modelValue="setv('text_shadow_v', $event)" />
         </div>
         <div class="olo-es-field">
-          <span class="olo-es-lab">{{ t('Sfoc.') }}</span>
+          <span class="olo-es-lab" :title="t('Sfocatura')">{{ t('Sfocatura') }}</span>
           <NumberScrubber class="olo-es-ns" :modelValue="tsGet('blur')" :min="0" :max="50" :step="1"
             :defaultValue="0" emitAs="number" unit="px" :ariaLabel="t('Sfocatura')"
             @update:modelValue="setv('text_shadow_blur', Math.max(0, $event))" />
@@ -134,19 +134,19 @@
     <div v-if="!atomica" class="olo-es-group">
       <span class="olo-es-gtitle">{{ t('Filtro sfondo · glassmorphism') }}<span v-if="bp !== 'desktop'" class="olo-es-gbp">{{ bpLabel }}</span></span>
       <div class="olo-es-sliderrow">
-        <span class="olo-es-lab">{{ t('Sfoc.') }}</span>
+        <span class="olo-es-lab" :title="t('Sfocatura')">{{ t('Sfocatura') }}</span>
         <NumberScrubber class="olo-es-ns" :modelValue="num(sv('backdrop_blur', 0), 0)" :min="0" :max="30" :step="1"
           :defaultValue="0" emitAs="number" unit="px" :sliderOnFocus="false" :ariaLabel="t('Sfocatura sfondo')"
           @update:modelValue="setvC('backdrop_blur', $event, 0, 30, 0)" />
       </div>
       <div class="olo-es-sliderrow">
-        <span class="olo-es-lab">{{ t('Lumin.') }}</span>
+        <span class="olo-es-lab" :title="t('Luminosità')">{{ t('Luminosità') }}</span>
         <NumberScrubber class="olo-es-ns" :modelValue="num(sv('backdrop_brightness', 100), 100)" :min="0" :max="200" :step="5"
           :defaultValue="100" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Luminosità')"
           @update:modelValue="setvC('backdrop_brightness', $event, 0, 200, 100)" />
       </div>
       <div class="olo-es-sliderrow">
-        <span class="olo-es-lab">{{ t('Satur.') }}</span>
+        <span class="olo-es-lab" :title="t('Saturazione')">{{ t('Saturazione') }}</span>
         <NumberScrubber class="olo-es-ns" :modelValue="num(sv('backdrop_saturate', 100), 100)" :min="0" :max="200" :step="5"
           :defaultValue="100" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Saturazione')"
           @update:modelValue="setvC('backdrop_saturate', $event, 0, 200, 100)" />
@@ -433,8 +433,14 @@ const previewStyle = computed(() => {
 
 /* riga generica (label + controllo) */
 .olo-es-row { display: flex; align-items: center; gap: 12px; }
+/* 84px: le etichette sono parole intere (SATURAZIONE ≈ 78px a 10px maiuscolo);
+   in una lingua più lunga il testo si tronca con i puntini e il title lo dice intero. */
 .olo-es-lab {
-  flex: 0 0 64px;
+  flex: 0 0 84px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -508,7 +514,7 @@ const previewStyle = computed(() => {
 .olo-es-duo, .olo-es-trio { display: flex; gap: 10px; }
 .olo-es-duo .olo-es-field, .olo-es-trio .olo-es-field { flex: 1; min-width: 0; }
 .olo-es-field { display: flex; flex-direction: column; gap: 6px; }
-/* In colonna la label NON deve ereditare flex:0 0 64px (= altezza fissa 64px) dalle righe
+/* In colonna la label NON deve ereditare flex:0 0 84px (= altezza fissa 84px) dalle righe
    orizzontali: altrimenti crea un vuoto verticale enorme sotto SPOSTA/SKEW/OMBRA TESTO. */
 .olo-es-field .olo-es-lab { flex: 0 0 auto; }
 .olo-es-numwrap {

@@ -39,6 +39,7 @@
     "densita-ds-senza-ripiego": 0,
     "densita-token-in-tile-esistenti": 0,
     "densita-letterali": 1926,
-    "componente-orfano": 0
+    "componente-orfano": 0,
+    "campo-orfano": 0
   }
 }
