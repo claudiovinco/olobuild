@@ -1,0 +1,898 @@
+{
+ "fonte": "mosaic.clod.eu, tabella wp_olobuild_templates, 208 template, 24 set 2026",
+ "nota": "n = occorrenze, tpl = template che la usano; compaiono anche tipi di sfondo (solid, gradient...) che non sono tile",
+ "uso": {
+  "ac-address": {
+   "n": 1,
+   "tpl": 1
+  },
+  "ac-amenities": {
+   "n": 1,
+   "tpl": 1
+  },
+  "ac-availability-calendar": {
+   "n": 1,
+   "tpl": 1
+  },
+  "ac-booking-form": {
+   "n": 2,
+   "tpl": 2
+  },
+  "ac-certifications": {
+   "n": 1,
+   "tpl": 1
+  },
+  "ac-contact-form": {
+   "n": 1,
+   "tpl": 1
+  },
+  "ac-description": {
+   "n": 1,
+   "tpl": 1
+  },
+  "ac-faq": {
+   "n": 1,
+   "tpl": 1
+  },
+  "ac-features": {
+   "n": 1,
+   "tpl": 1
+  },
+  "ac-grid": {
+   "n": 3,
+   "tpl": 3
+  },
+  "ac-hero": {
+   "n": 1,
+   "tpl": 1
+  },
+  "ac-host-info": {
+   "n": 1,
+   "tpl": 1
+  },
+  "ac-map": {
+   "n": 1,
+   "tpl": 1
+  },
+  "ac-mushrooms": {
+   "n": 1,
+   "tpl": 1
+  },
+  "ac-related": {
+   "n": 1,
+   "tpl": 1
+  },
+  "ac-reviews": {
+   "n": 1,
+   "tpl": 1
+  },
+  "ac-rules": {
+   "n": 1,
+   "tpl": 1
+  },
+  "ac-search": {
+   "n": 3,
+   "tpl": 3
+  },
+  "ac-search-results": {
+   "n": 1,
+   "tpl": 1
+  },
+  "ac-table": {
+   "n": 1,
+   "tpl": 1
+  },
+  "ac-video": {
+   "n": 1,
+   "tpl": 1
+  },
+  "accommodation-certifications": {
+   "n": 1,
+   "tpl": 1
+  },
+  "accordion": {
+   "n": 8,
+   "tpl": 6
+  },
+  "alert": {
+   "n": 6,
+   "tpl": 5
+  },
+  "animatedheading": {
+   "n": 3,
+   "tpl": 3
+  },
+  "announcementbar": {
+   "n": 1,
+   "tpl": 1
+  },
+  "audiohero": {
+   "n": 1,
+   "tpl": 1
+  },
+  "badge": {
+   "n": 103,
+   "tpl": 15
+  },
+  "blendtext": {
+   "n": 23,
+   "tpl": 4
+  },
+  "bottombar": {
+   "n": 2,
+   "tpl": 2
+  },
+  "breadcrumbs": {
+   "n": 3,
+   "tpl": 3
+  },
+  "builder": {
+   "n": 3,
+   "tpl": 3
+  },
+  "buildermock": {
+   "n": 1,
+   "tpl": 1
+  },
+  "button": {
+   "n": 219,
+   "tpl": 69
+  },
+  "calendar": {
+   "n": 1,
+   "tpl": 1
+  },
+  "carousel": {
+   "n": 1,
+   "tpl": 1
+  },
+  "categoryrail": {
+   "n": 2,
+   "tpl": 2
+  },
+  "chart": {
+   "n": 1,
+   "tpl": 1
+  },
+  "chathero": {
+   "n": 1,
+   "tpl": 1
+  },
+  "code": {
+   "n": 3,
+   "tpl": 3
+  },
+  "color": {
+   "n": 68,
+   "tpl": 7
+  },
+  "column": {
+   "n": 1624,
+   "tpl": 188
+  },
+  "content": {
+   "n": 206,
+   "tpl": 43
+  },
+  "countdown": {
+   "n": 8,
+   "tpl": 8
+  },
+  "counter": {
+   "n": 48,
+   "tpl": 19
+  },
+  "coverdots": {
+   "n": 2,
+   "tpl": 2
+  },
+  "cta-banner": {
+   "n": 31,
+   "tpl": 20
+  },
+  "desclist": {
+   "n": 11,
+   "tpl": 10
+  },
+  "divider": {
+   "n": 14,
+   "tpl": 13
+  },
+  "email": {
+   "n": 1,
+   "tpl": 1
+  },
+  "featuredstory": {
+   "n": 2,
+   "tpl": 2
+  },
+  "finder": {
+   "n": 4,
+   "tpl": 4
+  },
+  "flipcard": {
+   "n": 12,
+   "tpl": 3
+  },
+  "form": {
+   "n": 11,
+   "tpl": 11
+  },
+  "fragment": {
+   "n": 2,
+   "tpl": 2
+  },
+  "gallery": {
+   "n": 32,
+   "tpl": 20
+  },
+  "glow": {
+   "n": 4,
+   "tpl": 4
+  },
+  "glowgallery": {
+   "n": 1,
+   "tpl": 1
+  },
+  "glowhero": {
+   "n": 1,
+   "tpl": 1
+  },
+  "goo": {
+   "n": 1,
+   "tpl": 1
+  },
+  "gradient": {
+   "n": 19,
+   "tpl": 9
+  },
+  "grid": {
+   "n": 4,
+   "tpl": 4
+  },
+  "headline": {
+   "n": 498,
+   "tpl": 88
+  },
+  "hero": {
+   "n": 32,
+   "tpl": 15
+  },
+  "hero-split": {
+   "n": 3,
+   "tpl": 3
+  },
+  "hiddenpop": {
+   "n": 1,
+   "tpl": 1
+  },
+  "hotspot": {
+   "n": 2,
+   "tpl": 2
+  },
+  "hoursstrip": {
+   "n": 1,
+   "tpl": 1
+  },
+  "html": {
+   "n": 104,
+   "tpl": 22
+  },
+  "icon": {
+   "n": 10,
+   "tpl": 6
+  },
+  "iconbox": {
+   "n": 296,
+   "tpl": 28
+  },
+  "iconlist": {
+   "n": 4,
+   "tpl": 4
+  },
+  "icontabs": {
+   "n": 3,
+   "tpl": 1
+  },
+  "image": {
+   "n": 217,
+   "tpl": 71
+  },
+  "imagehero": {
+   "n": 2,
+   "tpl": 2
+  },
+  "imgcompare": {
+   "n": 2,
+   "tpl": 2
+  },
+  "info": {
+   "n": 1,
+   "tpl": 1
+  },
+  "info-cards": {
+   "n": 14,
+   "tpl": 11
+  },
+  "inner-column": {
+   "n": 4,
+   "tpl": 2
+  },
+  "inner-columns": {
+   "n": 2,
+   "tpl": 2
+  },
+  "introsplit": {
+   "n": 9,
+   "tpl": 7
+  },
+  "killnextprev": {
+   "n": 1,
+   "tpl": 1
+  },
+  "langswitcher": {
+   "n": 4,
+   "tpl": 4
+  },
+  "leaderboard": {
+   "n": 1,
+   "tpl": 1
+  },
+  "linear": {
+   "n": 8,
+   "tpl": 5
+  },
+  "link": {
+   "n": 3,
+   "tpl": 1
+  },
+  "list": {
+   "n": 10,
+   "tpl": 6
+  },
+  "loginform": {
+   "n": 2,
+   "tpl": 2
+  },
+  "lookbookmixer": {
+   "n": 3,
+   "tpl": 2
+  },
+  "map": {
+   "n": 6,
+   "tpl": 6
+  },
+  "marquee": {
+   "n": 12,
+   "tpl": 12
+  },
+  "maskedvideohero": {
+   "n": 2,
+   "tpl": 2
+  },
+  "matchfixtures": {
+   "n": 1,
+   "tpl": 1
+  },
+  "mediacta": {
+   "n": 2,
+   "tpl": 2
+  },
+  "mega": {
+   "n": 1,
+   "tpl": 1
+  },
+  "megamenu": {
+   "n": 18,
+   "tpl": 18
+  },
+  "menuanchor": {
+   "n": 55,
+   "tpl": 13
+  },
+  "mesh": {
+   "n": 2,
+   "tpl": 2
+  },
+  "nav": {
+   "n": 28,
+   "tpl": 11
+  },
+  "navmenu": {
+   "n": 2,
+   "tpl": 2
+  },
+  "newsletter": {
+   "n": 8,
+   "tpl": 8
+  },
+  "newsticker": {
+   "n": 3,
+   "tpl": 3
+  },
+  "none": {
+   "n": 1298,
+   "tpl": 72
+  },
+  "oloheader": {
+   "n": 1,
+   "tpl": 1
+  },
+  "oloxlessons": {
+   "n": 1,
+   "tpl": 1
+  },
+  "oloxpanel": {
+   "n": 8,
+   "tpl": 1
+  },
+  "oloxquiz": {
+   "n": 1,
+   "tpl": 1
+  },
+  "oloxrail": {
+   "n": 1,
+   "tpl": 1
+  },
+  "oloxscene": {
+   "n": 13,
+   "tpl": 7
+  },
+  "oloxsticky": {
+   "n": 2,
+   "tpl": 2
+  },
+  "osmmap": {
+   "n": 2,
+   "tpl": 2
+  },
+  "ot_course_categories": {
+   "n": 3,
+   "tpl": 3
+  },
+  "ot_course_countdown": {
+   "n": 3,
+   "tpl": 3
+  },
+  "ot_course_enroll": {
+   "n": 4,
+   "tpl": 4
+  },
+  "ot_course_faq": {
+   "n": 3,
+   "tpl": 3
+  },
+  "ot_course_features": {
+   "n": 3,
+   "tpl": 3
+  },
+  "ot_course_grid": {
+   "n": 3,
+   "tpl": 3
+  },
+  "ot_course_hero": {
+   "n": 4,
+   "tpl": 4
+  },
+  "ot_course_info": {
+   "n": 4,
+   "tpl": 4
+  },
+  "ot_course_program": {
+   "n": 4,
+   "tpl": 4
+  },
+  "ot_course_stats": {
+   "n": 3,
+   "tpl": 3
+  },
+  "ot_course_teacher": {
+   "n": 3,
+   "tpl": 3
+  },
+  "ot_course_testimonials": {
+   "n": 3,
+   "tpl": 3
+  },
+  "overlay": {
+   "n": 1,
+   "tpl": 1
+  },
+  "overlaygrid": {
+   "n": 2,
+   "tpl": 2
+  },
+  "overlayslider": {
+   "n": 1,
+   "tpl": 1
+  },
+  "pagelight": {
+   "n": 13,
+   "tpl": 13
+  },
+  "panel": {
+   "n": 4,
+   "tpl": 2
+  },
+  "panelslider": {
+   "n": 5,
+   "tpl": 1
+  },
+  "particlefx": {
+   "n": 4,
+   "tpl": 4
+  },
+  "pattern": {
+   "n": 11,
+   "tpl": 8
+  },
+  "pdfpro": {
+   "n": 1,
+   "tpl": 1
+  },
+  "photocover": {
+   "n": 1,
+   "tpl": 1
+  },
+  "physicsbin": {
+   "n": 2,
+   "tpl": 2
+  },
+  "popover": {
+   "n": 1,
+   "tpl": 1
+  },
+  "popup": {
+   "n": 1,
+   "tpl": 1
+  },
+  "postgrid": {
+   "n": 5,
+   "tpl": 5
+  },
+  "presencegrid": {
+   "n": 1,
+   "tpl": 1
+  },
+  "pricing": {
+   "n": 13,
+   "tpl": 6
+  },
+  "process-steps": {
+   "n": 1,
+   "tpl": 1
+  },
+  "productgrid": {
+   "n": 10,
+   "tpl": 9
+  },
+  "producthero": {
+   "n": 1,
+   "tpl": 1
+  },
+  "progallery": {
+   "n": 17,
+   "tpl": 1
+  },
+  "projector": {
+   "n": 4,
+   "tpl": 3
+  },
+  "propertyaddress": {
+   "n": 1,
+   "tpl": 1
+  },
+  "propertycontactform": {
+   "n": 1,
+   "tpl": 1
+  },
+  "propertycta": {
+   "n": 1,
+   "tpl": 1
+  },
+  "propertydescription": {
+   "n": 1,
+   "tpl": 1
+  },
+  "propertyexcerpt": {
+   "n": 1,
+   "tpl": 1
+  },
+  "propertyfeatures": {
+   "n": 1,
+   "tpl": 1
+  },
+  "propertygallery": {
+   "n": 1,
+   "tpl": 1
+  },
+  "propertyhero": {
+   "n": 1,
+   "tpl": 1
+  },
+  "propertyheroscroll": {
+   "n": 1,
+   "tpl": 1
+  },
+  "propertyinfo": {
+   "n": 1,
+   "tpl": 1
+  },
+  "propertymapsearch": {
+   "n": 1,
+   "tpl": 1
+  },
+  "propertyprice": {
+   "n": 1,
+   "tpl": 1
+  },
+  "propertyrelated": {
+   "n": 1,
+   "tpl": 1
+  },
+  "propertyrules": {
+   "n": 1,
+   "tpl": 1
+  },
+  "propertysearch": {
+   "n": 1,
+   "tpl": 1
+  },
+  "propertyspecs": {
+   "n": 1,
+   "tpl": 1
+  },
+  "propertyvideo": {
+   "n": 1,
+   "tpl": 1
+  },
+  "proslider": {
+   "n": 7,
+   "tpl": 4
+  },
+  "quotation": {
+   "n": 3,
+   "tpl": 3
+  },
+  "radial": {
+   "n": 2,
+   "tpl": 2
+  },
+  "row": {
+   "n": 1058,
+   "tpl": 188
+  },
+  "schedule": {
+   "n": 1,
+   "tpl": 1
+  },
+  "scratchfx": {
+   "n": 3,
+   "tpl": 3
+  },
+  "scrollprogress": {
+   "n": 2,
+   "tpl": 2
+  },
+  "scrubtext": {
+   "n": 1,
+   "tpl": 1
+  },
+  "searchhero": {
+   "n": 2,
+   "tpl": 2
+  },
+  "section": {
+   "n": 934,
+   "tpl": 189
+  },
+  "section-header": {
+   "n": 37,
+   "tpl": 16
+  },
+  "shapedivider": {
+   "n": 2,
+   "tpl": 2
+  },
+  "shatteredimage": {
+   "n": 3,
+   "tpl": 3
+  },
+  "showcasegrid": {
+   "n": 3,
+   "tpl": 3
+  },
+  "sitelogo": {
+   "n": 5,
+   "tpl": 5
+  },
+  "slideshow": {
+   "n": 2,
+   "tpl": 2
+  },
+  "social": {
+   "n": 45,
+   "tpl": 17
+  },
+  "solid": {
+   "n": 300,
+   "tpl": 82
+  },
+  "spacer": {
+   "n": 370,
+   "tpl": 51
+  },
+  "stackscroll": {
+   "n": 1,
+   "tpl": 1
+  },
+  "starrating": {
+   "n": 1,
+   "tpl": 1
+  },
+  "statstrip": {
+   "n": 3,
+   "tpl": 3
+  },
+  "svganimator": {
+   "n": 1,
+   "tpl": 1
+  },
+  "switcher": {
+   "n": 8,
+   "tpl": 2
+  },
+  "switcherpanel": {
+   "n": 11,
+   "tpl": 1
+  },
+  "table": {
+   "n": 3,
+   "tpl": 3
+  },
+  "team": {
+   "n": 12,
+   "tpl": 4
+  },
+  "templateembed": {
+   "n": 1,
+   "tpl": 1
+  },
+  "testimonial": {
+   "n": 19,
+   "tpl": 13
+  },
+  "text": {
+   "n": 67,
+   "tpl": 11
+  },
+  "text-block": {
+   "n": 295,
+   "tpl": 55
+  },
+  "textpath": {
+   "n": 3,
+   "tpl": 3
+  },
+  "timeline": {
+   "n": 4,
+   "tpl": 3
+  },
+  "toc": {
+   "n": 6,
+   "tpl": 6
+  },
+  "totop": {
+   "n": 1,
+   "tpl": 1
+  },
+  "transparent": {
+   "n": 3,
+   "tpl": 1
+  },
+  "trust-strip": {
+   "n": 2,
+   "tpl": 2
+  },
+  "variablespecimen": {
+   "n": 1,
+   "tpl": 1
+  },
+  "video": {
+   "n": 25,
+   "tpl": 17
+  },
+  "videoplaylist": {
+   "n": 1,
+   "tpl": 1
+  },
+  "viewer360": {
+   "n": 1,
+   "tpl": 1
+  },
+  "viewscounter": {
+   "n": 1,
+   "tpl": 1
+  },
+  "vtour": {
+   "n": 4,
+   "tpl": 4
+  },
+  "woo_addtocart": {
+   "n": 1,
+   "tpl": 1
+  },
+  "woo_breadcrumbs": {
+   "n": 1,
+   "tpl": 1
+  },
+  "woo_cart": {
+   "n": 1,
+   "tpl": 1
+  },
+  "woo_checkout_multistep": {
+   "n": 1,
+   "tpl": 1
+  },
+  "woo_comparison": {
+   "n": 1,
+   "tpl": 1
+  },
+  "woo_myaccount": {
+   "n": 1,
+   "tpl": 1
+  },
+  "woo_notices": {
+   "n": 1,
+   "tpl": 1
+  },
+  "woo_price": {
+   "n": 1,
+   "tpl": 1
+  },
+  "woo_product_description": {
+   "n": 1,
+   "tpl": 1
+  },
+  "woo_product_image": {
+   "n": 1,
+   "tpl": 1
+  },
+  "woo_product_meta": {
+   "n": 1,
+   "tpl": 1
+  },
+  "woo_product_stock": {
+   "n": 1,
+   "tpl": 1
+  },
+  "woo_product_tabs": {
+   "n": 1,
+   "tpl": 1
+  },
+  "woo_product_title": {
+   "n": 1,
+   "tpl": 1
+  },
+  "woo_products": {
+   "n": 1,
+   "tpl": 1
+  },
+  "woo_rating": {
+   "n": 1,
+   "tpl": 1
+  },
+  "woo_sale_badge": {
+   "n": 1,
+   "tpl": 1
+  },
+  "workgrid": {
+   "n": 3,
+   "tpl": 3
+  },
+  "worklist": {
+   "n": 2,
+   "tpl": 2
+  }
+ }
+}

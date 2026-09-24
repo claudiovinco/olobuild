@@ -1,0 +1,1765 @@
+{
+ "sliders": [
+  {
+   "type": "carousel",
+   "file": "carousel.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 29
+  },
+  {
+   "type": "slideshow",
+   "file": "slideshow.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 18
+  },
+  {
+   "type": "proslider",
+   "file": "proslider.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 34
+  },
+  {
+   "type": "overlayslider",
+   "file": "overlayslider.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 38
+  },
+  {
+   "type": "panelslider",
+   "file": "panelslider.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 47
+  },
+  {
+   "type": "northquoteslider",
+   "file": "northquoteslider.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 19
+  },
+  {
+   "type": "filmreel",
+   "file": "filmreel.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 29
+  },
+  {
+   "type": "categoryrail",
+   "file": "categoryrail.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 21
+  },
+  {
+   "type": "marquee",
+   "file": "marquee.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 28
+  },
+  {
+   "type": "newsticker",
+   "file": "newsticker.js",
+   "hidden": false,
+   "cat": "dynamic",
+   "nf": 45
+  },
+  {
+   "type": "announcementbar",
+   "file": "announcementbar.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 12
+  },
+  {
+   "type": "stackscroll",
+   "file": "stackscroll.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 25
+  },
+  {
+   "type": "scrollscrub",
+   "file": "scrollscrub.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 44
+  },
+  {
+   "type": "lookbookmixer",
+   "file": "lookbookmixer.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 19
+  },
+  {
+   "type": "oloxmarquee",
+   "file": "oloxmarquee.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 5
+  },
+  {
+   "type": "oloxrail",
+   "file": "oloxrail.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 17
+  }
+ ],
+ "gallerie": [
+  {
+   "type": "gallery",
+   "file": "gallery.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 33
+  },
+  {
+   "type": "progallery",
+   "file": "progallery.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 81
+  },
+  {
+   "type": "lightbox",
+   "file": "lightbox.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 17
+  },
+  {
+   "type": "showcasegrid",
+   "file": "showcasegrid.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 24
+  },
+  {
+   "type": "overlaygrid",
+   "file": "overlaygrid.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 49
+  },
+  {
+   "type": "overlay",
+   "file": "overlay.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 17
+  },
+  {
+   "type": "workgrid",
+   "file": "workgrid.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 19
+  },
+  {
+   "type": "worklist",
+   "file": "worklist.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 20
+  },
+  {
+   "type": "hoverlist",
+   "file": "hoverlist.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 28
+  },
+  {
+   "type": "themedemos",
+   "file": "themedemos.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 17
+  },
+  {
+   "type": "shatteredimage",
+   "file": "shatteredimage.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 25
+  },
+  {
+   "type": "beforeafter",
+   "file": "beforeafter.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 24
+  },
+  {
+   "type": "imgcompare",
+   "file": "imgcompare.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 25
+  },
+  {
+   "type": "viewer360",
+   "file": "viewer360.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 29
+  },
+  {
+   "type": "image",
+   "file": "image.js",
+   "hidden": false,
+   "cat": "essential",
+   "nf": 43
+  },
+  {
+   "type": "grid",
+   "file": "grid.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 38
+  },
+  {
+   "type": "photocover",
+   "file": "photocover.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 20
+  },
+  {
+   "type": "glowgallery",
+   "file": "glowgallery.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 36
+  }
+ ],
+ "dinamici": [
+  {
+   "type": "postgrid",
+   "file": "postgrid.js",
+   "hidden": false,
+   "cat": "dynamic",
+   "nf": 64
+  },
+  {
+   "type": "queryloop",
+   "file": "queryloop.js",
+   "hidden": false,
+   "cat": "dynamic",
+   "nf": 65
+  },
+  {
+   "type": "relatedposts",
+   "file": "relatedposts.js",
+   "hidden": false,
+   "cat": "dynamic",
+   "nf": 18
+  },
+  {
+   "type": "portfolio",
+   "file": "portfolio.js",
+   "hidden": false,
+   "cat": "dynamic",
+   "nf": 55
+  },
+  {
+   "type": "productgrid",
+   "file": "productgrid.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 64
+  },
+  {
+   "type": "product-cards",
+   "file": "product-cards.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 35
+  },
+  {
+   "type": "presencegrid",
+   "file": "presencegrid.js",
+   "hidden": false,
+   "cat": "dynamic",
+   "nf": 32
+  },
+  {
+   "type": "sitemap",
+   "file": "sitemap.js",
+   "hidden": false,
+   "cat": "dynamic",
+   "nf": 36
+  },
+  {
+   "type": "tagcloud",
+   "file": "tagcloud.js",
+   "hidden": false,
+   "cat": "dynamic",
+   "nf": 17
+  },
+  {
+   "type": "authorbox",
+   "file": "authorbox.js",
+   "hidden": false,
+   "cat": "dynamic",
+   "nf": 17
+  },
+  {
+   "type": "postmeta",
+   "file": "postmeta.js",
+   "hidden": false,
+   "cat": "dynamic",
+   "nf": 26
+  },
+  {
+   "type": "readingtime",
+   "file": "readingtime.js",
+   "hidden": false,
+   "cat": "dynamic",
+   "nf": 9
+  },
+  {
+   "type": "viewscounter",
+   "file": "viewscounter.js",
+   "hidden": false,
+   "cat": "dynamic",
+   "nf": 10
+  },
+  {
+   "type": "postnavigation",
+   "file": "postnavigation.js",
+   "hidden": false,
+   "cat": "navigation",
+   "nf": 17
+  },
+  {
+   "type": "killnextprev",
+   "file": "killnextprev.js",
+   "hidden": false,
+   "cat": "navigation",
+   "nf": 1
+  },
+  {
+   "type": "pagination",
+   "file": "pagination.js",
+   "hidden": false,
+   "cat": "navigation",
+   "nf": 14
+  },
+  {
+   "type": "wpcomments",
+   "file": "wpcomments.js",
+   "hidden": false,
+   "cat": "dynamic",
+   "nf": 20
+  }
+ ],
+ "card": [
+  {
+   "type": "info-cards",
+   "file": "info-cards.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 41
+  },
+  {
+   "type": "iconbox",
+   "file": "iconbox.js",
+   "hidden": false,
+   "cat": "content",
+   "nf": 20
+  },
+  {
+   "type": "flipcard",
+   "file": "flipcard.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 45
+  },
+  {
+   "type": "revealbox",
+   "file": "revealbox.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 30
+  },
+  {
+   "type": "team",
+   "file": "team.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 29
+  },
+  {
+   "type": "testimonial",
+   "file": "testimonial.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 37
+  },
+  {
+   "type": "quotation",
+   "file": "quotation.js",
+   "hidden": false,
+   "cat": "text",
+   "nf": 6
+  },
+  {
+   "type": "pricing",
+   "file": "pricing.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 51
+  },
+  {
+   "type": "pricelist",
+   "file": "pricelist.js",
+   "hidden": false,
+   "cat": "content",
+   "nf": 26
+  },
+  {
+   "type": "cta-banner",
+   "file": "cta-banner.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 27
+  },
+  {
+   "type": "trust-strip",
+   "file": "trust-strip.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 20
+  },
+  {
+   "type": "statstrip",
+   "file": "statstrip.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 10
+  },
+  {
+   "type": "counter",
+   "file": "counter.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 14
+  },
+  {
+   "type": "countercircle",
+   "file": "countercircle.js",
+   "hidden": false,
+   "cat": "content",
+   "nf": 13
+  },
+  {
+   "type": "progress",
+   "file": "progress.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 15
+  },
+  {
+   "type": "progresstracker",
+   "file": "progresstracker.js",
+   "hidden": false,
+   "cat": "content",
+   "nf": 17
+  },
+  {
+   "type": "process-steps",
+   "file": "process-steps.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 16
+  },
+  {
+   "type": "step-timeline",
+   "file": "step-timeline.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 40
+  },
+  {
+   "type": "timeline",
+   "file": "timeline.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 43
+  },
+  {
+   "type": "alert",
+   "file": "alert.js",
+   "hidden": false,
+   "cat": "text",
+   "nf": 10
+  },
+  {
+   "type": "badge",
+   "file": "badge.js",
+   "hidden": false,
+   "cat": "text",
+   "nf": 17
+  },
+  {
+   "type": "section-header",
+   "file": "section-header.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 19
+  },
+  {
+   "type": "oloxcards",
+   "file": "oloxcards.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 15
+  },
+  {
+   "type": "oloxpricing",
+   "file": "oloxpricing.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 17
+  },
+  {
+   "type": "oloxlist",
+   "file": "oloxlist.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 13
+  },
+  {
+   "type": "oloxstatement",
+   "file": "oloxstatement.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 11
+  }
+ ],
+ "pannelli": [
+  {
+   "type": "accordion",
+   "file": "accordion.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 42
+  },
+  {
+   "type": "icontabs",
+   "file": "icontabs.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 20
+  },
+  {
+   "type": "switcher",
+   "file": "switcher.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 25
+  },
+  {
+   "type": "switcherpanel",
+   "file": "switcherpanel.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 46
+  },
+  {
+   "type": "panel",
+   "file": "panel.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 33
+  },
+  {
+   "type": "popup",
+   "file": "popup.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 57
+  },
+  {
+   "type": "popover",
+   "file": "popover.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 19
+  },
+  {
+   "type": "offcanvas",
+   "file": "offcanvas.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 15
+  },
+  {
+   "type": "hiddenpop",
+   "file": "hiddenpop.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 42
+  },
+  {
+   "type": "floatingpanel",
+   "file": "floatingpanel.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 35
+  },
+  {
+   "type": "togglebtn",
+   "file": "togglebtn.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 17
+  },
+  {
+   "type": "evonotes",
+   "file": "evonotes.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 17
+  },
+  {
+   "type": "finder",
+   "file": "finder.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 32
+  },
+  {
+   "type": "tripfinder",
+   "file": "tripfinder.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 17
+  },
+  {
+   "type": "mixer",
+   "file": "mixer.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 14
+  },
+  {
+   "type": "projector",
+   "file": "projector.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 19
+  },
+  {
+   "type": "scaler",
+   "file": "scaler.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 21
+  },
+  {
+   "type": "coverdots",
+   "file": "coverdots.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 14
+  },
+  {
+   "type": "hotspot",
+   "file": "hotspot.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 23
+  },
+  {
+   "type": "hotspots",
+   "file": "hotspots.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 17
+  },
+  {
+   "type": "oloxpanel",
+   "file": "oloxpanel.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 46
+  },
+  {
+   "type": "oloxscene",
+   "file": "oloxscene.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 38
+  }
+ ],
+ "navigazione": [
+  {
+   "type": "nav",
+   "file": "nav.js",
+   "hidden": false,
+   "cat": "navigation",
+   "nf": 25
+  },
+  {
+   "type": "navmenu",
+   "file": "navmenu.js",
+   "hidden": false,
+   "cat": "navigation",
+   "nf": 45
+  },
+  {
+   "type": "megamenu",
+   "file": "megamenu.js",
+   "hidden": false,
+   "cat": "navigation",
+   "nf": 167
+  },
+  {
+   "type": "subnav",
+   "file": "subnav.js",
+   "hidden": false,
+   "cat": "navigation",
+   "nf": 20
+  },
+  {
+   "type": "oloheader",
+   "file": "oloheader.js",
+   "hidden": false,
+   "cat": "header",
+   "nf": 72
+  },
+  {
+   "type": "mobilebar",
+   "file": "mobilebar.js",
+   "hidden": false,
+   "cat": "navigation",
+   "nf": 20
+  },
+  {
+   "type": "bottombar",
+   "file": "bottombar.js",
+   "hidden": false,
+   "cat": "content",
+   "nf": 11
+  },
+  {
+   "type": "breadcrumbs",
+   "file": "breadcrumbs.js",
+   "hidden": false,
+   "cat": "navigation",
+   "nf": 6
+  },
+  {
+   "type": "menuanchor",
+   "file": "menuanchor.js",
+   "hidden": false,
+   "cat": "navigation",
+   "nf": 4
+  },
+  {
+   "type": "toc",
+   "file": "toc.js",
+   "hidden": false,
+   "cat": "navigation",
+   "nf": 11
+  },
+  {
+   "type": "totop",
+   "file": "totop.js",
+   "hidden": false,
+   "cat": "navigation",
+   "nf": 3
+  },
+  {
+   "type": "scrollprogress",
+   "file": "scrollprogress.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 7
+  },
+  {
+   "type": "langswitcher",
+   "file": "langswitcher.js",
+   "hidden": false,
+   "cat": "navigation",
+   "nf": 30
+  },
+  {
+   "type": "search",
+   "file": "search.js",
+   "hidden": false,
+   "cat": "navigation",
+   "nf": 26
+  },
+  {
+   "type": "livesearch",
+   "file": "livesearch.js",
+   "hidden": false,
+   "cat": "navigation",
+   "nf": 35
+  },
+  {
+   "type": "sitelogo",
+   "file": "sitelogo.js",
+   "hidden": false,
+   "cat": "navigation",
+   "nf": 17
+  },
+  {
+   "type": "darkmode",
+   "file": "darkmode.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 11
+  },
+  {
+   "type": "pagetitlebar",
+   "file": "pagetitlebar.js",
+   "hidden": false,
+   "cat": "structure",
+   "nf": 18
+  },
+  {
+   "type": "oloxnav",
+   "file": "oloxnav.js",
+   "hidden": true,
+   "cat": "navigation",
+   "nf": 18
+  },
+  {
+   "type": "oloxfoot",
+   "file": "oloxfoot.js",
+   "hidden": true,
+   "cat": "navigation",
+   "nf": 14
+  },
+  {
+   "type": "section",
+   "file": "section.js",
+   "hidden": false,
+   "cat": "structure",
+   "nf": 13
+  },
+  {
+   "type": "column",
+   "file": "column.js",
+   "hidden": false,
+   "cat": "structure",
+   "nf": 7
+  },
+  {
+   "type": "row",
+   "file": "row.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 31
+  },
+  {
+   "type": "inner-columns",
+   "file": "inner-columns.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 5
+  }
+ ],
+ "testo": [
+  {
+   "type": "headline",
+   "file": "headline.js",
+   "hidden": false,
+   "cat": "essential",
+   "nf": 22
+  },
+  {
+   "type": "text-block",
+   "file": "text-block.js",
+   "hidden": false,
+   "cat": "essential",
+   "nf": 10
+  },
+  {
+   "type": "content",
+   "file": "content.js",
+   "hidden": false,
+   "cat": "essential",
+   "nf": 36
+  },
+  {
+   "type": "animatedheading",
+   "file": "animatedheading.js",
+   "hidden": false,
+   "cat": "text",
+   "nf": 11
+  },
+  {
+   "type": "scrubtext",
+   "file": "scrubtext.js",
+   "hidden": false,
+   "cat": "text",
+   "nf": 8
+  },
+  {
+   "type": "textpath",
+   "file": "textpath.js",
+   "hidden": false,
+   "cat": "text",
+   "nf": 10
+  },
+  {
+   "type": "textmask",
+   "file": "textmask.js",
+   "hidden": false,
+   "cat": "creative",
+   "nf": 30
+  },
+  {
+   "type": "blendtext",
+   "file": "blendtext.js",
+   "hidden": false,
+   "cat": "creative",
+   "nf": 13
+  },
+  {
+   "type": "variablespecimen",
+   "file": "variablespecimen.js",
+   "hidden": false,
+   "cat": "text",
+   "nf": 20
+  },
+  {
+   "type": "list",
+   "file": "list.js",
+   "hidden": false,
+   "cat": "text",
+   "nf": 14
+  },
+  {
+   "type": "iconlist",
+   "file": "iconlist.js",
+   "hidden": false,
+   "cat": "text",
+   "nf": 17
+  },
+  {
+   "type": "desclist",
+   "file": "desclist.js",
+   "hidden": false,
+   "cat": "text",
+   "nf": 16
+  },
+  {
+   "type": "table",
+   "file": "table.js",
+   "hidden": false,
+   "cat": "text",
+   "nf": 13
+  },
+  {
+   "type": "code",
+   "file": "code.js",
+   "hidden": false,
+   "cat": "text",
+   "nf": 8
+  },
+  {
+   "type": "html",
+   "file": "html.js",
+   "hidden": false,
+   "cat": "text",
+   "nf": 2
+  },
+  {
+   "type": "shortcode",
+   "file": "shortcode.js",
+   "hidden": false,
+   "cat": "dynamic",
+   "nf": 2
+  },
+  {
+   "type": "button",
+   "file": "button.js",
+   "hidden": false,
+   "cat": "essential",
+   "nf": 21
+  },
+  {
+   "type": "icon",
+   "file": "icon.js",
+   "hidden": false,
+   "cat": "essential",
+   "nf": 11
+  },
+  {
+   "type": "divider",
+   "file": "divider.js",
+   "hidden": false,
+   "cat": "essential",
+   "nf": 9
+  },
+  {
+   "type": "spacer",
+   "file": "spacer.js",
+   "hidden": false,
+   "cat": "essential",
+   "nf": 15
+  },
+  {
+   "type": "shapedivider",
+   "file": "shapedivider.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 10
+  }
+ ],
+ "media": [
+  {
+   "type": "video",
+   "file": "video.js",
+   "hidden": false,
+   "cat": "essential",
+   "nf": 26
+  },
+  {
+   "type": "videoplaylist",
+   "file": "videoplaylist.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 15
+  },
+  {
+   "type": "audio",
+   "file": "audio.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 16
+  },
+  {
+   "type": "soundcloud",
+   "file": "soundcloud.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 10
+  },
+  {
+   "type": "lottie",
+   "file": "lottie.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 10
+  },
+  {
+   "type": "svganimator",
+   "file": "svganimator.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 28
+  },
+  {
+   "type": "asciiviz",
+   "file": "asciiviz.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 23
+  },
+  {
+   "type": "map",
+   "file": "map.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 99
+  },
+  {
+   "type": "osmmap",
+   "file": "osmmap.js",
+   "hidden": false,
+   "cat": "content",
+   "nf": 17
+  },
+  {
+   "type": "pdfviewer",
+   "file": "pdfviewer.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 23
+  },
+  {
+   "type": "pdfpro",
+   "file": "pdfpro.js",
+   "hidden": false,
+   "cat": "media",
+   "nf": 48
+  },
+  {
+   "type": "instagram",
+   "file": "instagram.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 9
+  },
+  {
+   "type": "facebookpage",
+   "file": "facebookpage.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 12
+  },
+  {
+   "type": "twitterfeed",
+   "file": "twitterfeed.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 12
+  },
+  {
+   "type": "social",
+   "file": "social.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 13
+  },
+  {
+   "type": "sharebuttons",
+   "file": "sharebuttons.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 11
+  },
+  {
+   "type": "linkinbio",
+   "file": "linkinbio.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 23
+  },
+  {
+   "type": "templateembed",
+   "file": "templateembed.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 1
+  },
+  {
+   "type": "fragment",
+   "file": "fragment.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 0
+  },
+  {
+   "type": "goo",
+   "file": "goo.js",
+   "hidden": false,
+   "cat": "atmosphere",
+   "nf": 17
+  },
+  {
+   "type": "pagelight",
+   "file": "pagelight.js",
+   "hidden": false,
+   "cat": "atmosphere",
+   "nf": 6
+  },
+  {
+   "type": "particlefx",
+   "file": "particlefx.js",
+   "hidden": false,
+   "cat": "atmosphere",
+   "nf": 24
+  },
+  {
+   "type": "physicsbin",
+   "file": "physicsbin.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 17
+  },
+  {
+   "type": "scratchfx",
+   "file": "scratchfx.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 28
+  },
+  {
+   "type": "chart",
+   "file": "chart.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 58
+  },
+  {
+   "type": "oloxpagefx",
+   "file": "oloxpagefx.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 6
+  }
+ ],
+ "conversione": [
+  {
+   "type": "form",
+   "file": "form.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 101
+  },
+  {
+   "type": "newsletter",
+   "file": "newsletter.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 63
+  },
+  {
+   "type": "loginform",
+   "file": "loginform.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 62
+  },
+  {
+   "type": "countdown",
+   "file": "countdown.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 27
+  },
+  {
+   "type": "timezone",
+   "file": "timezone.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 17
+  },
+  {
+   "type": "hoursstrip",
+   "file": "hoursstrip.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 11
+  },
+  {
+   "type": "schedule",
+   "file": "schedule.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 13
+  },
+  {
+   "type": "availability",
+   "file": "availability.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 16
+  },
+  {
+   "type": "matchfixtures",
+   "file": "matchfixtures.js",
+   "hidden": false,
+   "cat": "content",
+   "nf": 28
+  },
+  {
+   "type": "leaderboard",
+   "file": "leaderboard.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 29
+  },
+  {
+   "type": "starrating",
+   "file": "starrating.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 11
+  },
+  {
+   "type": "paymentbuttons",
+   "file": "paymentbuttons.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 16
+  },
+  {
+   "type": "buildermock",
+   "file": "buildermock.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 10
+  },
+  {
+   "type": "builder",
+   "file": "builder.js",
+   "hidden": false,
+   "cat": "interactive",
+   "nf": 25
+  },
+  {
+   "type": "oloxlessons",
+   "file": "oloxlessons.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 8
+  },
+  {
+   "type": "oloxquiz",
+   "file": "oloxquiz.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 11
+  },
+  {
+   "type": "oloxsticky",
+   "file": "oloxsticky.js",
+   "hidden": false,
+   "cat": "marketing",
+   "nf": 16
+  },
+  {
+   "type": "oloxmanual",
+   "file": "oloxmanual.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 21
+  },
+  {
+   "type": "oloxhome",
+   "file": "oloxhome.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 59
+  },
+  {
+   "type": "oloxbanner",
+   "file": "oloxbanner.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 6
+  },
+  {
+   "type": "oloxhero",
+   "file": "oloxhero.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 34
+  },
+  {
+   "type": "hero",
+   "file": "hero.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 76
+  },
+  {
+   "type": "hero-split",
+   "file": "hero-split.js",
+   "hidden": false,
+   "cat": "layout",
+   "nf": 63
+  },
+  {
+   "type": "imagehero",
+   "file": "imagehero.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 37
+  },
+  {
+   "type": "mediacta",
+   "file": "mediacta.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 33
+  },
+  {
+   "type": "maskedvideohero",
+   "file": "maskedvideohero.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 24
+  },
+  {
+   "type": "glowhero",
+   "file": "glowhero.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 39
+  },
+  {
+   "type": "chathero",
+   "file": "chathero.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 38
+  },
+  {
+   "type": "searchhero",
+   "file": "searchhero.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 24
+  },
+  {
+   "type": "producthero",
+   "file": "producthero.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 47
+  },
+  {
+   "type": "featuredstory",
+   "file": "featuredstory.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 36
+  },
+  {
+   "type": "introsplit",
+   "file": "introsplit.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 45
+  },
+  {
+   "type": "audiohero",
+   "file": "audiohero.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 26
+  },
+  {
+   "type": "smearhero",
+   "file": "smearhero.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 19
+  },
+  {
+   "type": "terminalhero",
+   "file": "terminalhero.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 45
+  },
+  {
+   "type": "northvideohero",
+   "file": "northvideohero.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 31
+  },
+  {
+   "type": "studiohero",
+   "file": "studiohero.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 43
+  },
+  {
+   "type": "masthead",
+   "file": "masthead.js",
+   "hidden": true,
+   "cat": "marketing",
+   "nf": 22
+  }
+ ],
+ "commercio": [
+  {
+   "type": "olo_room_availability",
+   "file": "olo_room_availability.js",
+   "hidden": false,
+   "cat": "olo-space",
+   "nf": 11
+  },
+  {
+   "type": "olo_room_calendar",
+   "file": "olo_room_calendar.js",
+   "hidden": false,
+   "cat": "olo-space",
+   "nf": 13
+  },
+  {
+   "type": "olo_room_contacts",
+   "file": "olo_room_contacts.js",
+   "hidden": false,
+   "cat": "olo-space",
+   "nf": 3
+  },
+  {
+   "type": "olo_room_description",
+   "file": "olo_room_description.js",
+   "hidden": false,
+   "cat": "olo-space",
+   "nf": 1
+  },
+  {
+   "type": "olo_room_gallery",
+   "file": "olo_room_gallery.js",
+   "hidden": false,
+   "cat": "olo-space",
+   "nf": 11
+  },
+  {
+   "type": "olo_room_grid",
+   "file": "olo_room_grid.js",
+   "hidden": false,
+   "cat": "olo-space",
+   "nf": 62
+  },
+  {
+   "type": "olo_room_hero",
+   "file": "olo_room_hero.js",
+   "hidden": false,
+   "cat": "olo-space",
+   "nf": 7
+  },
+  {
+   "type": "olo_room_info",
+   "file": "olo_room_info.js",
+   "hidden": false,
+   "cat": "olo-space",
+   "nf": 2
+  },
+  {
+   "type": "olo_room_pricing",
+   "file": "olo_room_pricing.js",
+   "hidden": false,
+   "cat": "olo-space",
+   "nf": 2
+  },
+  {
+   "type": "olo_room_related",
+   "file": "olo_room_related.js",
+   "hidden": false,
+   "cat": "olo-space",
+   "nf": 31
+  },
+  {
+   "type": "woo_addtocart",
+   "file": "woo_addtocart.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 13
+  },
+  {
+   "type": "woo_breadcrumbs",
+   "file": "woo_breadcrumbs.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 5
+  },
+  {
+   "type": "woo_cart",
+   "file": "woo_cart.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 7
+  },
+  {
+   "type": "woo_categories",
+   "file": "woo_categories.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 17
+  },
+  {
+   "type": "woo_checkout",
+   "file": "woo_checkout.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 14
+  },
+  {
+   "type": "woo_checkout_multistep",
+   "file": "woo_checkout_multistep.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 9
+  },
+  {
+   "type": "woo_comparison",
+   "file": "woo_comparison.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 12
+  },
+  {
+   "type": "woo_cross_sells",
+   "file": "woo_cross_sells.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 25
+  },
+  {
+   "type": "woo_minicart",
+   "file": "woo_minicart.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 12
+  },
+  {
+   "type": "woo_myaccount",
+   "file": "woo_myaccount.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 16
+  },
+  {
+   "type": "woo_notices",
+   "file": "woo_notices.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 6
+  },
+  {
+   "type": "woo_order_tracking",
+   "file": "woo_order_tracking.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 6
+  },
+  {
+   "type": "woo_price",
+   "file": "woo_price.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 10
+  },
+  {
+   "type": "woo_products",
+   "file": "woo_products.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 33
+  },
+  {
+   "type": "woo_product_bundle",
+   "file": "woo_product_bundle.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 22
+  },
+  {
+   "type": "woo_product_description",
+   "file": "woo_product_description.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 5
+  },
+  {
+   "type": "woo_product_filter",
+   "file": "woo_product_filter.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 17
+  },
+  {
+   "type": "woo_product_gallery_slider",
+   "file": "woo_product_gallery_slider.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 22
+  },
+  {
+   "type": "woo_product_image",
+   "file": "woo_product_image.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 11
+  },
+  {
+   "type": "woo_product_meta",
+   "file": "woo_product_meta.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 8
+  },
+  {
+   "type": "woo_product_navigation",
+   "file": "woo_product_navigation.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 7
+  },
+  {
+   "type": "woo_product_stock",
+   "file": "woo_product_stock.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 10
+  },
+  {
+   "type": "woo_product_tabs",
+   "file": "woo_product_tabs.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 8
+  },
+  {
+   "type": "woo_product_title",
+   "file": "woo_product_title.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 5
+  },
+  {
+   "type": "woo_quickview",
+   "file": "woo_quickview.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 16
+  },
+  {
+   "type": "woo_rating",
+   "file": "woo_rating.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 7
+  },
+  {
+   "type": "woo_recently_viewed",
+   "file": "woo_recently_viewed.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 23
+  },
+  {
+   "type": "woo_related",
+   "file": "woo_related.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 13
+  },
+  {
+   "type": "woo_sale_badge",
+   "file": "woo_sale_badge.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 7
+  },
+  {
+   "type": "woo_upsells",
+   "file": "woo_upsells.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 14
+  },
+  {
+   "type": "woo_wishlist",
+   "file": "woo_wishlist.js",
+   "hidden": false,
+   "cat": "woocommerce",
+   "nf": 21
+  }
+ ]
+}
