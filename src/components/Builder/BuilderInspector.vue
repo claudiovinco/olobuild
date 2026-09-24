@@ -1402,7 +1402,6 @@ import { useBuilderStore } from '@/stores/builder';
 import { useTilesStore } from '@/stores/tiles';
 import { getElementDef, getElementFields, getElementDefaults } from '@/config/elementRegistry';
 import { heroConvertTarget, convertHeroTile } from '@/utils/heroConvert';
-import BackgroundControls from './BackgroundControls.vue';
 import PageSettingsPanel from './PageSettingsPanel.vue';
 import ContentItemsEditor from './ContentItemsEditor.vue';
 import InspectorField from './InspectorField.vue';
@@ -1412,8 +1411,6 @@ import { normalizeSearchQuery, fieldMatchesSearch, sectionLabelMatchesSearch, co
 import FieldSelect from './fields/FieldSelect.vue';
 import FieldColor from './fields/FieldColor.vue';
 import CollapseSection from './CollapseSection.vue';
-import FieldBoxShadow from './fields/FieldBoxShadow.vue';
-import FieldTransform from './fields/FieldTransform.vue';
 import ParallaxEditor from './ParallaxEditor.vue';
 import BezierPathEditor from './BezierPathEditor.vue';
 import ProSliderEditor from '../ProSlider/ProSliderEditor.vue';
@@ -1803,7 +1800,6 @@ const _railIcons = {
   sliding:    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M16 7l5 5-5 5"/></svg>',
   flask:      '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6L4 21h16L14 9V3"/></svg>',
 };
-function railIcon(name) { return _railIcons[name] || _railIcons.square; }
 
 // Heuristic icon assignment based on a section label
 function _iconForSectionLabel(label) {
@@ -2224,7 +2220,6 @@ function navigateTab(dir) {
   });
 }
 const showProSliderEditor = ref(false);
-const sides = ['top', 'right', 'bottom', 'left'];
 const viewports = [
   { key: 'desktop', label: 'Desktop', svg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>' },
   { key: 'tablet_landscape', label: 'Tablet L', svg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><line x1="12" x2="12.01" y1="12" y2="12"/></svg>' },
@@ -2573,54 +2568,12 @@ const responsiveBreakpoints = _allBps.filter(bp =>
   bp.key === 'desktop' || _bpEnabled[bp.key] !== false
 );
 
-// Spacing breakpoints
-const spacingBp = ref('desktop');
-const spacingBpLabel = computed(() => responsiveBreakpoints.find(b => b.key === spacingBp.value)?.label || '');
-function spacingKey(base) {
-  return spacingBp.value === 'desktop' ? base : base + '_' + spacingBp.value;
-}
-
 // Positioning breakpoints
 const positionBp = ref('desktop');
 const positionBpLabel = computed(() => responsiveBreakpoints.find(b => b.key === positionBp.value)?.label || '');
 function positionKey(base) {
   return positionBp.value === 'desktop' ? base : base + '_' + positionBp.value;
 }
-
-// Margin linked/unlinked
-const marginObj = computed(() => ({
-  top: parseInt(tileStyle.value[spacingKey('margin_top')]) || 0,
-  right: parseInt(tileStyle.value[spacingKey('margin_right')]) || 0,
-  bottom: parseInt(tileStyle.value[spacingKey('margin_bottom')]) || 0,
-  left: parseInt(tileStyle.value[spacingKey('margin_left')]) || 0,
-}));
-function onMarginUpdate(val) {
-  updateStyle(spacingKey('margin_top'), val.top);
-  updateStyle(spacingKey('margin_right'), val.right);
-  updateStyle(spacingKey('margin_bottom'), val.bottom);
-  updateStyle(spacingKey('margin_left'), val.left);
-}
-
-// Padding linked/unlinked
-const paddingObj = computed(() => ({
-  top: parseInt(tileStyle.value[spacingKey('padding_top')]) || 0,
-  right: parseInt(tileStyle.value[spacingKey('padding_right')]) || 0,
-  bottom: parseInt(tileStyle.value[spacingKey('padding_bottom')]) || 0,
-  left: parseInt(tileStyle.value[spacingKey('padding_left')]) || 0,
-}));
-function onPaddingUpdate(val) {
-  updateStyle(spacingKey('padding_top'), val.top);
-  updateStyle(spacingKey('padding_right'), val.right);
-  updateStyle(spacingKey('padding_bottom'), val.bottom);
-  updateStyle(spacingKey('padding_left'), val.left);
-}
-
-const tileBg = computed(() => {
-  const s = tileStyle.value;
-  if (s.bg) return s.bg;
-  if (s.bg_color) return { type: 'solid', color: s.bg_color };
-  return { type: 'none' };
-});
 
 const tileAdvanced = computed(() => selectedTile.value?.advanced || {});
 
@@ -3079,12 +3032,6 @@ function onStyleUpdate(payload) {
       break;
     }
   }
-}
-
-function onTileBgUpdate(newBg) {
-  if (!builderStore.selectedTileId) return;
-  tilesStore.updateTileStyle(builderStore.selectedTileId, { bg: newBg });
-  builderStore.markDirtyForTile(builderStore.selectedTileId);
 }
 
 function updateAdvanced(key, value) {

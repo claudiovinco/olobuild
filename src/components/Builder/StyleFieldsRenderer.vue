@@ -119,12 +119,6 @@
               :atomica="!!field.atomica"
               @update="$emit('update', $event)"
             />
-            <StyleShadowBlock
-              v-else-if="field.type === 'shadow-block'"
-              :field="field"
-              :tileStyle="tileStyle"
-              @update="$emit('update', $event)"
-            />
             <StyleNestedField
               v-else-if="field.key && field.key.includes('.')"
               :field="field"
@@ -132,7 +126,7 @@
               @update="$emit('update', $event)"
             />
             <InspectorField
-              v-else-if="!isMultiKey(field.type) && isFieldVisible(field, tileStyle)"
+              v-else-if="isFieldVisible(field, tileStyle)"
               :field="field"
               :modelValue="tileStyle?.[field.key] ?? ''"
               :tileSettings="tileStyle"
@@ -141,20 +135,6 @@
               @update:hoverValue="emitHover($event)"
               @update:responsiveValue="emitResponsive($event)"
             />
-            <!-- Multi-key types: text-shadow, backdrop-filter, border-legacy.
-                 v-else-if (non v-else): un field normale nascosto da condition
-                 non deve cadere qui e renderizzare una label orfana. -->
-            <div v-else-if="isFieldVisible(field, tileStyle)">
-              <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t(field.label) }}</label>
-              <component
-                :is="multiKeyComponent(field.type)"
-                :modelValue="multiKeyValue(field)"
-                :hoverable="!!field.hoverable"
-                :hoverModelValue="multiKeyHoverValue(field)"
-                @update:modelValue="onMultiKeyUpdate(field, $event)"
-                @update:hoverModelValue="onMultiKeyHoverUpdate(field, $event)"
-              />
-            </div>
           </template>
         </div>
       </CollapseSection>
@@ -180,12 +160,6 @@
               :atomica="!!field.atomica"
               @update="$emit('update', $event)"
             />
-            <StyleShadowBlock
-              v-else-if="field.type === 'shadow-block'"
-              :field="field"
-              :tileStyle="tileStyle"
-              @update="$emit('update', $event)"
-            />
             <StyleNestedField
               v-else-if="field.key && field.key.includes('.')"
               :field="field"
@@ -193,7 +167,7 @@
               @update="$emit('update', $event)"
             />
             <InspectorField
-              v-else-if="!isMultiKey(field.type) && isFieldVisible(field, tileStyle)"
+              v-else-if="isFieldVisible(field, tileStyle)"
               :field="field"
               :modelValue="tileStyle?.[field.key] ?? ''"
               :tileSettings="tileStyle"
@@ -202,14 +176,6 @@
               @update:hoverValue="emitHover($event)"
               @update:responsiveValue="emitResponsive($event)"
             />
-            <div v-else-if="isFieldVisible(field, tileStyle)">
-              <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t(field.label) }}</label>
-              <component
-                :is="multiKeyComponent(field.type)"
-                :modelValue="multiKeyValue(field)"
-                @update:modelValue="onMultiKeyUpdate(field, $event)"
-              />
-            </div>
           </template>
         </div>
       </template>
@@ -227,28 +193,15 @@ import { getElementDefaults, getElementFields } from '@/config/elementRegistry';
 import StyleBoxStack from './style-renderers/StyleBoxStack.vue';
 import StyleLayoutStack from './style-renderers/StyleLayoutStack.vue';
 import StyleEffectsStack from './style-renderers/StyleEffectsStack.vue';
-import StyleShadowBlock from './style-renderers/StyleShadowBlock.vue';
 import StyleNestedField from './style-renderers/StyleNestedField.vue';
-import FieldTextShadow from './fields/FieldTextShadow.vue';
-import FieldBackdropFilter from './fields/FieldBackdropFilter.vue';
-import FieldBorderLegacy from './fields/FieldBorderLegacy.vue';
 import { t } from '@/i18n';
 import { ATOMIC_TILE_TYPES } from '@/composables/useBackgroundStyle';
 import { isFieldVisible as sharedIsFieldVisible, isSectionVisible } from '@/utils/fieldCondition';
 import { normalizeSearchQuery, fieldMatchesSearch, sectionLabelMatchesSearch } from '@/utils/inspectorSearch.js';
 
-// Mapping multi-key: oggetto-UI → chiavi piatte salvate su tile.style
-// Chiavi PHP-renderer-compatible: NON cambia il formato salvato, solo la UI consolidata.
-const MULTI_KEY_MAP = {
-  'text-shadow':     [ ['h', 'text_shadow_h'], ['v', 'text_shadow_v'], ['blur', 'text_shadow_blur'], ['color', 'text_shadow_color'] ],
-  'backdrop-filter': [ ['blur', 'backdrop_blur'], ['brightness', 'backdrop_brightness'], ['saturate', 'backdrop_saturate'] ],
-  'border-legacy':   [ ['width', 'border_width'], ['style', 'border_style'], ['color', 'border_color'] ],
-};
-
 /**
  * StyleFieldsRenderer — render data-driven del tab Stile a partire da
- * styleFieldsBase(). Sostituisce il template hard-coded di
- * BuilderInspector.vue:227-534 (sotto-tab Normale).
+ * styleFieldsBase(), montato dal tab Stile di BuilderInspector.vue.
  *
  * Ascolta gli eventi dei sub-renderer e emette UN solo evento `update` al parent
  * con un payload uniforme:
@@ -369,50 +322,6 @@ function emitResponsive({ key, value }) {
 // Tile-specific style fields → vanno scritti in tile.settings (non tile.style).
 function emitSetting(key, value) {
   emit('update', { type: 'setting', key, value });
-}
-
-function isMultiKey(type) {
-  return Object.prototype.hasOwnProperty.call(MULTI_KEY_MAP, type);
-}
-function multiKeyComponent(type) {
-  if (type === 'text-shadow') return FieldTextShadow;
-  if (type === 'backdrop-filter') return FieldBackdropFilter;
-  if (type === 'border-legacy') return FieldBorderLegacy;
-  return null;
-}
-function multiKeyValue(field) {
-  const map = MULTI_KEY_MAP[field.type] || [];
-  const out = {};
-  for (const [objKey, flatKey] of map) {
-    out[objKey] = props.tileStyle?.[flatKey] ?? '';
-  }
-  return out;
-}
-function onMultiKeyUpdate(field, newObj) {
-  const map = MULTI_KEY_MAP[field.type] || [];
-  const updates = map.map(([objKey, flatKey]) => ({ key: flatKey, value: newObj?.[objKey] ?? '' }));
-  emit('update', { type: 'multi', updates });
-}
-
-// Hover support per multi-key field marcati con withHover() in styleFieldsBase.
-// Lettura/scrittura su tile.style.hover.<flatKey> (stesso schema legacy del bg_color hover).
-function multiKeyHoverValue(field) {
-  if (!field.hoverable) return {};
-  const map = MULTI_KEY_MAP[field.type] || [];
-  const hover = props.tileStyle?.hover || {};
-  const out = {};
-  for (const [objKey, flatKey] of map) {
-    out[objKey] = hover[flatKey] ?? '';
-  }
-  return out;
-}
-function onMultiKeyHoverUpdate(field, newObj) {
-  if (!field.hoverable) return;
-  const map = MULTI_KEY_MAP[field.type] || [];
-  // Emette N eventi hover, uno per chiave: il dispatcher onStyleUpdate li applica via updateHover.
-  for (const [objKey, flatKey] of map) {
-    emit('update', { type: 'hover', key: flatKey, value: newObj?.[objKey] ?? '' });
-  }
 }
 </script>
 

@@ -89,7 +89,7 @@ controlli icona, avviso di contrasto AA nell'editor quando i colori falliscono.
 sistemi paralleli per lo stesso scopo → l'utente non sa quale vince. L'hover è sparso
 su `hover_bg_color/hover_text_color/hover_shadow/hover_effect/...` + i `withHover()`.
 L'ombra custom hover apre **7 campi condizionali** inline.
-→ **Fix:** un solo sistema per concetto (preferire gli oggetti `bg`/`border`/shadow-block),
+→ **Fix:** un solo sistema per concetto (preferire gli oggetti `bg`/`border` e l'ombra `type:'box-shadow'`),
 deprecare i gemelli legacy dietro un layer di migrazione; raccogliere l'hover in un unico
 modello (come fa `StyleBoxStack` col toggle Normale/Hover).
 

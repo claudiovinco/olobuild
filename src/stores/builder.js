@@ -26,7 +26,6 @@ export const useBuilderStore = defineStore('builder', {
     previewInlineCss: '',
     cleanMode: false,
     pageSettingsOpen: false,
-    stylePanelOpen: false,
     inlineEditingTileId: null,
     inlineEditingField: null,
     // Inspector V2: when true, every hoverable field opens its hover variant
@@ -244,7 +243,6 @@ export const useBuilderStore = defineStore('builder', {
       this.selectedTileId = tileId;
       this.selectedTileIds = tileId ? [tileId] : [];
       this.pageSettingsOpen = false;
-      this.stylePanelOpen = false;
     },
 
     // Ctrl/Cmd-click: aggiunge/toglie una tile dal set, mantenendo l'ultima come primaria.
@@ -261,7 +259,6 @@ export const useBuilderStore = defineStore('builder', {
           : null;
       }
       this.pageSettingsOpen = false;
-      this.stylePanelOpen = false;
     },
 
     deselectTile() {
@@ -298,16 +295,6 @@ export const useBuilderStore = defineStore('builder', {
       if (this.pageSettingsOpen) {
         this.selectedTileId = null;
         this.selectedTileIds = [];
-        this.stylePanelOpen = false;
-      }
-    },
-
-    toggleStylePanel() {
-      this.stylePanelOpen = !this.stylePanelOpen;
-      if (this.stylePanelOpen) {
-        this.selectedTileId = null;
-        this.selectedTileIds = [];
-        this.pageSettingsOpen = false;
       }
     },
 

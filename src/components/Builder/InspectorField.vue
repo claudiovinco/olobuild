@@ -677,7 +677,7 @@ const props = defineProps({
   tileSettings: { type: Object, default: null },
   // hover storage layout:
   //   false (default) → flat in tileSettings: settings[`${key}_hover`]
-  //   true            → nested under .hover: tileSettings.hover[key]   (per scope=style legacy)
+  //   true            → nested under .hover: tileSettings.hover[key]   (layout di tile.style.hover)
   hoverNested: { type: Boolean, default: false },
   // Tipo della tile i cui SETTINGS il campo legge (tab Stile, blocco Elemento): da qui
   // arriva il valore predefinito del doppio clic. Vuoto = si ricava da tileId, se c'è;
@@ -696,7 +696,6 @@ const respBreakpoints = [
   { key: 'mobile', label: 'Mobile', short: 'MB' },
 ];
 const builderStore = useBuilderStore();
-const respOpen = ref(false);
 const respBp = ref('desktop');
 
 // Disclosure per field.reveal (es. object-position pesante): parte chiuso, ma si apre
@@ -712,7 +711,6 @@ watch(() => builderStore.viewMode, (mode) => {
     respBp.value = 'desktop';
   } else {
     respBp.value = mode;
-    respOpen.value = true;
   }
 }, { immediate: true });
 
@@ -825,11 +823,6 @@ const hoverDurationValue = computed(() => {
   const v = props.tileSettings[hoverDurationKey.value];
   return (v == null || v === '') ? (props.field.hoverDefaultDuration ?? 300) : v;
 });
-
-function onHoverUpdate(value) {
-  if (!hoverKey.value) return;
-  emit('update:hoverValue', { key: hoverKey.value, value });
-}
 
 function onHoverDurationUpdate(value) {
   if (!hoverDurationKey.value) return;
@@ -1176,8 +1169,6 @@ const fieldProps = computed(() => {
     default: return base;
   }
 });
-
-const fieldPropsHover = computed(() => ({ ...fieldProps.value, modelValue: hoverValue.value }));
 
 // ── AI Alt Text Generation ──
 const tilesStore = useTilesStore();

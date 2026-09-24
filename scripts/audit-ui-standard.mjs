@@ -886,6 +886,38 @@ regolaC('densita-letterali', 'px di spazio e raggio scritti a mano in includes/t
 
 for (const r of nuoveRegole) RULES.push(r);
 
+// ─── componenti orfani dell'area inspector ──────────────────────────────────
+// Un componente che nessuno importa non gira mai, ma va comunque mantenuto e al
+// prossimo intervento si rischia di aggiornare lui invece di quello vivo (StylePanel,
+// ResponsiveFieldWrap: 400 righe tolte nel 2026-09). Gli import si risolvono sul
+// percorso ('./', '../', '@/'), non sul solo nome del file. ESCLUSI: orfani che
+// un'altra scheda del report deve ancora riusare o togliere — chi lo fa, li leva da qui.
+const ESCLUSI_ORFANI = new Set([
+  'AISettingsPanel.vue', 'GlobalColorsPanel.vue', // globali-orfani
+  'DesignPresets.vue',                            // inserimento-designpresets-orfano
+  'DeviceSwitch.vue',                             // canvas-desktop-non-desktop
+]);
+function fileDi(dir, ok, acc = []) {
+  for (const f of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, f.name);
+    if (f.isDirectory()) fileDi(p, ok, acc); else if (ok(f.name)) acc.push(p);
+  }
+  return acc;
+}
+const SRC = path.join(ROOT, 'src');
+const importati = new Set();
+for (const f of fileDi(SRC, (n) => /\.(vue|js|ts|mjs)$/.test(n))) {
+  for (const m of fs.readFileSync(f, 'utf8').matchAll(/(?:\bfrom\s*|\bimport\s*\(?\s*)['"]([^'"]+\.vue)['"]/g)) {
+    const spec = m[1];
+    const abs = spec.startsWith('@/') ? path.join(SRC, spec.slice(2)) : spec.startsWith('.') ? path.resolve(path.dirname(f), spec) : null;
+    if (abs && path.normalize(abs) !== path.normalize(f)) importati.add(path.normalize(abs));
+  }
+}
+violazioni['componente-orfano'] = fileDi(path.join(SRC, 'components/Builder'), (n) => n.endsWith('.vue'))
+  .filter((c) => !importati.has(path.normalize(c)) && !ESCLUSI_ORFANI.has(path.basename(c)))
+  .map((c) => ({ file: 'Builder', type: '', key: path.relative(SRC, c).split(path.sep).join('/'), label: '' }));
+RULES.push({ id: 'componente-orfano', titolo: 'Ogni componente di src/components/Builder è importato da un altro file' });
+
 // ─── confronto con la baseline ──────────────────────────────────────────────
 const args = process.argv.slice(2);
 const conteggi = Object.fromEntries(Object.entries(violazioni).map(([k, v]) => [k, v.length]));

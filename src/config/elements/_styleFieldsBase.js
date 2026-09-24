@@ -4,10 +4,9 @@ import { t } from '@/i18n';
 
 /**
  * Definizione dichiarativa dei field del tab "Stile" del wrapper di un tile.
- * Sostituisce il template hard-coded in BuilderInspector.vue:227-889.
  *
  * SCOPE: questi field scrivono su `tile.style.*` (NON `tile.settings.*`).
- * L'InspectorField va invocato con `:scope="'style'"`.
+ * StyleFieldsRenderer rende i campi semplici con InspectorField e `:hoverNested="true"`.
  *
  * Hover: i field marcati con withHover() salvano l'override in `tile.style.hover.X`
  * (schema legacy preservato per backward-compat). NON in `tile.style.X_hover`.
@@ -15,9 +14,9 @@ import { t } from '@/i18n';
  * BREAKPOINT-AWARE: i field marcati con `responsive: true` usano la chiave
  * `key_${breakpoint}` (es. `tile_width_tablet`) — già supportato da InspectorField.
  *
- * SPACING BREAKPOINT: margin/padding hanno un breakpoint dedicato (`spacingBp`)
- * gestito separatamente nel renderer perché lavora su 4 sub-keys (top/right/bottom/left)
- * non su un singolo key responsive.
+ * SPACING BREAKPOINT: margin/padding seguono il dispositivo della barra in alto dentro
+ * StyleBoxStack (builderStore.viewMode), perché lavorano su 4 sub-keys
+ * (top/right/bottom/left) e non su un singolo key responsive.
  */
 /**
  * tileType opzionale: per tile strutturali (section/row/column/inner-columns) i field
@@ -125,10 +124,9 @@ export function styleFieldsBase(tileType) {
 }
 
 /**
- * Field "compositi" che leggono/scrivono su MULTIPLE chiavi del tile.style.
- * Sono pseudo-field: il renderer custom espande in N controlli reali.
- *
- * Mapping per il PHP renderer (per backward-compat al rendering):
+ * Mappa delle chiavi piatte di tile.style per il renderer PHP (backward-compat al
+ * rendering). I nomi a sinistra sono etichette di gruppo, NON tipi di campo: nessun
+ * config li dichiara e nessun renderer del tab Stile li espande.
  *
  *   border_legacy:    style.border_width, style.border_style, style.border_color
  *   border_legacy_hover: style.hover.border_color (solo color, le size legacy non hanno hover)
