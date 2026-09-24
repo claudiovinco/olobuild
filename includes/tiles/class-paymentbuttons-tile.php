@@ -9,7 +9,7 @@ class Olobuild_Paymentbuttons_Tile extends Olobuild_Tile_Base {
 
     public function get_controls() { return []; }
 
-    public function render( $settings, $id = '' ) {
+    public function render( $settings, $style = [] ) {
         $provider    = $settings['provider'] ?? 'stripe';
         $uid = 'olo-pb-' . wp_rand( 10000, 99999 );
         $amount      = esc_attr( $settings['amount'] ?? '29.99' );
@@ -19,8 +19,8 @@ class Olobuild_Paymentbuttons_Tile extends Olobuild_Tile_Base {
         $success_url = esc_url( $settings['success_url'] ?? '' );
         $cancel_url  = esc_url( $settings['cancel_url'] ?? '' );
         $alignment   = esc_attr( $settings['alignment'] ?? 'center' );
-        $bg_color    = $settings['bg_color'] ?: 'var(--olo-color-primary, #e1474f)';
-        $text_color  = $settings['text_color'] ?: '#ffffff';
+        $bg_color    = ( $settings['bg_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
+        $text_color  = ( $settings['text_color'] ?? '' ) ?: '#ffffff';
         $radius      = Olobuild_Tile_Utils::border_radius( $settings['border_radius'] ?? 8 );
         $font_size   = intval( $settings['font_size'] ?? 16 );
         $full_width  = ! empty( $settings['full_width'] );
@@ -55,7 +55,7 @@ class Olobuild_Paymentbuttons_Tile extends Olobuild_Tile_Base {
         if ( $provider === 'paypal' || $provider === 'both' ) {
             $pp_style = $btn_style . 'background-color:#0070ba;';
             if ( $provider === 'both' ) $pp_style .= 'margin-left:12px;';
-            $html .= '<div id="olo-paypal-' . esc_attr( $id ) . '"';
+            $html .= '<div id="' . esc_attr( $uid ) . '-paypal"';
             $html .= ' class="olo-pay-paypal-container"';
             if ( $paypal_id ) {
                 $html .= ' data-paypal-id="' . $paypal_id . '"';

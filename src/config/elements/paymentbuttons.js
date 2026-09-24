@@ -14,6 +14,9 @@ export default {
   name: t('Pulsanti Pagamento'),
   icon: 'dashicons-money-alt',
   category: 'marketing',
+  // Ritirata dalla palette: nessuno script legge i data-stripe-* né riempie il contenitore
+  // PayPal, quindi la tile non fa pagare. I template salvati continuano a renderizzare.
+  hidden: true,
   defaults: {
     bg: { type: 'none' },
     typography_preset: '',
