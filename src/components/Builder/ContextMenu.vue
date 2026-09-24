@@ -247,18 +247,13 @@ function doCopy() {
 
 function doPaste() {
   if (!tilesStore.clipboardTile || !tileId.value) { close(); return; }
-  // Find parent of current tile and paste after it
   const tile = tilesStore.getTileById(tileId.value);
   if (!tile) { close(); return; }
-  // Paste as sibling after current tile
-  const parent = findParentOfTile(tileId.value);
-  if (parent) {
-    const idx = parent.children.findIndex(c => c.id === tileId.value);
-    tilesStore.pasteTile(parent.id, idx + 1);
-  } else {
-    tilesStore.pasteTile(null);
-  }
-  builderStore.isDirty = true;
+  // Incolla subito dopo la tile, nella SUA zona (header, pagina o footer), come
+  // Ctrl+V: prima il genitore si cercava solo nel corpo e l'incolla su una tile
+  // dell'header finiva in fondo alla pagina.
+  const clone = tilesStore.pasteAfterTile(tileId.value);
+  builderStore.markDirtyForTile(clone ? clone.id : tileId.value);
   close();
 }
 
@@ -270,7 +265,7 @@ function doCopyStyle() {
 function doPasteStyle() {
   if (tileId.value) {
     tilesStore.pasteStyle(tileId.value);
-    builderStore.isDirty = true;
+    builderStore.markDirtyForTile(tileId.value);
   }
   close();
 }
@@ -278,7 +273,7 @@ function doPasteStyle() {
 function doDuplicate() {
   if (tileId.value) {
     tilesStore.duplicateTile(tileId.value);
-    builderStore.isDirty = true;
+    builderStore.markDirtyForTile(tileId.value);
   }
   close();
 }
@@ -286,7 +281,7 @@ function doDuplicate() {
 function doMoveUp() {
   if (tileId.value) {
     tilesStore.moveUp(tileId.value);
-    builderStore.isDirty = true;
+    builderStore.markDirtyForTile(tileId.value);
   }
   close();
 }
@@ -294,7 +289,7 @@ function doMoveUp() {
 function doMoveDown() {
   if (tileId.value) {
     tilesStore.moveDown(tileId.value);
-    builderStore.isDirty = true;
+    builderStore.markDirtyForTile(tileId.value);
   }
   close();
 }
@@ -313,9 +308,10 @@ function doLoadTemplate() {
 }
 
 async function doSaveGlobal() {
-  if (tileId.value) {
-    await tilesStore.saveAsGlobalWidget(tileId.value);
-    builderStore.isDirty = true;
+  const id = tileId.value;
+  if (id) {
+    await tilesStore.saveAsGlobalWidget(id);
+    builderStore.markDirtyForTile(id);
   }
   close();
 }
@@ -323,7 +319,7 @@ async function doSaveGlobal() {
 function doDetachGlobal() {
   if (tileId.value) {
     tilesStore.detachGlobalWidget(tileId.value);
-    builderStore.isDirty = true;
+    builderStore.markDirtyForTile(tileId.value);
   }
   close();
 }
@@ -390,7 +386,7 @@ function doChangeLayout(layoutKey) {
     }
   }
 
-  builderStore.isDirty = true;
+  builderStore.markDirtyForTile(row.id);
   close();
 }
 
@@ -398,7 +394,7 @@ function doChangeGrid(templateId) {
   const row = parentRow.value;
   if (!row) { close(); return; }
   tilesStore.changeRowToGrid(row.id, templateId);
-  builderStore.isDirty = true;
+  builderStore.markDirtyForTile(row.id);
   close();
 }
 
@@ -434,19 +430,6 @@ function findNodeInTree(nodes, id) {
     if (n.children) {
       const f = findNodeInTree(n.children, id);
       if (f) return f;
-    }
-  }
-  return null;
-}
-
-// Utility: find parent node of a tile
-function findParentOfTile(id, nodes) {
-  nodes = nodes || tilesStore.canvasTiles;
-  for (const node of nodes) {
-    if (Array.isArray(node.children)) {
-      if (node.children.some(c => c.id === id)) return node;
-      const found = findParentOfTile(id, node.children);
-      if (found) return found;
     }
   }
   return null;

@@ -313,12 +313,17 @@ async function openBuilder(templateId) {
   if (builderStore.currentTemplate.content) {
     tilesStore.setCanvasTiles(builderStore.currentTemplate.content);
   }
-  // Sincronizza widget globali: aggiorna istanze locali dal master DB
   await tilesStore.fetchGlobalWidgets();
-  tilesStore.syncGlobalWidgetsOnLoad();
 
   // Load header + footer for unified editing (page/single templates only)
   await builderStore.loadUnifiedContext();
+
+  // Sincronizza widget globali: aggiorna le istanze locali dal master DB, anche
+  // quelle di header e footer (quindi DOPO averli caricati). Altrimenti un'istanza
+  // vecchia dell'header riscriverebbe il master al primo salvataggio, annullando
+  // la modifica fatta al widget altrove. Prima della cronologia: il riallineamento
+  // fa parte della versione salvata e non chiede un salvataggio.
+  tilesStore.syncGlobalWidgetsOnLoad();
 
   // Punto zero della cronologia = pagina caricata (header/footer compresi):
   // Ctrl+Z subito dopo l'apertura non deve svuotare la pagina né l'header globale.

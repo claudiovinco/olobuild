@@ -1,9 +1,174 @@
 import { defineStore } from 'pinia';
 import { useTilesStore as useTilesStoreRef } from './tiles';
 import { useToast } from '../composables/useToast.js';
+import { t } from '@/i18n';
 
 function getOloData() {
   return window.oloData || {};
+}
+
+// ── Versione salvata di ogni zona ──
+// Stringhe JSON di ciò che il server ha davvero: fissate a pagina caricata
+// (captureSavedBaseline, da initHistory) e riscritte con ciò che si è INVIATO
+// dopo ogni salvataggio riuscito (non con la risposta: il server può ripulire il
+// contenuto e la zona resterebbe «da salvare» per sempre).
+// Servono a due cose: al salvataggio si scrive ogni zona diversa da qui (il
+// confronto copre tutto il payload, anche le zone che un'assegnazione ha segnato
+// male; il flag decide solo finché la versione salvata non è nota), e il confronto
+// corregge i flag «da salvare» (un annulla che torna al salvato mostra «Salvato»).
+// b = tile del corpo · m = titolo, tipo, impostazioni e stato del corpo · h/f = header/footer.
+const salvato = { b: null, m: null, h: null, f: null };
+
+// Versione salvata non affidabile: la zona è stata scritta ma il master di un suo
+// widget globale no. Non coincide con nessuna fotografia (un JSON di tile inizia
+// sempre con «[»): la zona resta «da salvare», anche dopo un annulla, finché un
+// salvataggio non scrive zona e master.
+const VERSIONE_INCOMPLETA = '#incompleta';
+
+function chiaveZona(zone) {
+  if (zone === 'header') return 'h';
+  if (zone === 'footer') return 'f';
+  return 'b';
+}
+
+function azzeraSalvato() {
+  salvato.b = null;
+  salvato.m = null;
+  salvato.h = null;
+  salvato.f = null;
+}
+
+function metaJson(tpl) {
+  return tpl ? JSON.stringify({
+    title: tpl.title || '',
+    type: tpl.type || '',
+    settings: tpl.settings || {},
+    status: tpl.status || 'draft',
+  }) : null;
+}
+
+function fotoZone(ts) {
+  return {
+    b: JSON.stringify(ts.canvasTiles),
+    h: JSON.stringify(ts.headerTiles),
+    f: JSON.stringify(ts.footerTiles),
+  };
+}
+
+// PHP può restituire settings = [] invece di {}.
+function normalizzaTemplate(tpl) {
+  if (tpl && (!tpl.settings || Array.isArray(tpl.settings))) tpl.settings = {};
+  return tpl;
+}
+
+function titoloTra(tpl) {
+  const s = tpl && typeof tpl.title === 'string' ? tpl.title.trim() : '';
+  return s ? ' «' + s + '»' : '';
+}
+
+/**
+ * Nonce REST scaduto (ore di lavoro): se ne chiede uno nuovo a WordPress
+ * (admin-ajax.php?action=rest-nonce, endpoint del core). Il nonce si scrive
+ * DENTRO window.oloData, senza sostituire l'oggetto: tiles.js e diversi
+ * componenti ne tengono un riferimento. Una risposta che non è un nonce
+ * ('0', '-1', 400) vuol dire sessione chiusa.
+ */
+async function rinnovaNonce() {
+  if (typeof window === 'undefined') return false;
+  try {
+    const base = window.ajaxurl || 'admin-ajax.php';
+    const url = base + (base.indexOf('?') === -1 ? '?' : '&') + 'action=rest-nonce';
+    const res = await fetch(url, { credentials: 'same-origin', cache: 'no-store' });
+    if (!res.ok) return false;
+    const nonce = String(await res.text()).trim();
+    if (!/^[a-f0-9]{10}$/.test(nonce)) return false;
+    if (window.oloData) window.oloData.nonce = nonce;
+    if (window.oloThumbConfig) window.oloThumbConfig.nonce = nonce;
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function leggiErrore(res) {
+  try {
+    const j = await res.json();
+    return { code: (j && j.code) || '', message: (j && j.message) || '' };
+  } catch (e) {
+    return { code: '', message: '' };
+  }
+}
+
+/**
+ * Scrittura REST (PUT/POST) con UN solo nuovo tentativo se il nonce è scaduto.
+ * Riprovare è sicuro: il 403 rest_cookie_invalid_nonce arriva prima dell'handler,
+ * il server non ha scritto niente (nemmeno la revisione).
+ * La usano le zone e i master dei widget globali (syncGlobalWidgetsOnSave).
+ * Esito: { ok: true, status, data } oppure { ok: false, status, code, message }
+ * con sessione (nonce non rinnovabile), rete (nessuna risposta) o invalida
+ * (risposta 2xx che non è JSON).
+ */
+async function inviaRest(url, method, corpo) {
+  const invia = async () => {
+    try {
+      return await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-WP-Nonce': getOloData().nonce,
+        },
+        body: corpo,
+      });
+    } catch (e) {
+      return null; // nessuna risposta: rete assente o connessione caduta
+    }
+  };
+  let res = await invia();
+  if (res && res.status === 403) {
+    const err = await leggiErrore(res);
+    if (err.code !== 'rest_cookie_invalid_nonce') {
+      return { ok: false, status: 403, code: err.code, message: err.message };
+    }
+    if (!(await rinnovaNonce())) {
+      return { ok: false, status: 403, code: err.code, sessione: true };
+    }
+    res = await invia();
+  }
+  if (!res) return { ok: false, status: 0, rete: true };
+  if (!res.ok) {
+    const err = await leggiErrore(res);
+    return {
+      ok: false,
+      status: res.status,
+      code: err.code,
+      message: err.message,
+      sessione: err.code === 'rest_cookie_invalid_nonce',
+    };
+  }
+  // 2xx che non è JSON (es. un avviso PHP stampato prima, una pagina di login):
+  // non si sa che cosa il server abbia scritto, la zona resta da salvare.
+  try {
+    return { ok: true, status: res.status, data: await res.json() };
+  } catch (e) {
+    return { ok: false, status: res.status, invalida: true };
+  }
+}
+
+async function inviaTemplate(url, method, corpo) {
+  const r = await inviaRest(url, method, corpo);
+  if (!r.ok) return r;
+  if (!r.data || typeof r.data !== 'object') return { ok: false, status: r.status, invalida: true };
+  r.data = normalizzaTemplate(r.data);
+  return r;
+}
+
+/** Motivo di una scrittura non riuscita, per il messaggio del salvataggio. */
+function motivoDi(r) {
+  if (r.sessione) return t('sessione scaduta: accedi di nuovo e premi Riprova');
+  if (r.rete) return t('errore di rete');
+  if (r.invalida) return t('risposta non valida del server');
+  if (r.imprevisto) return t('errore imprevisto');
+  return 'HTTP ' + r.status + (r.message ? ' ' + r.message : '');
 }
 
 export const useBuilderStore = defineStore('builder', {
@@ -15,6 +180,11 @@ export const useBuilderStore = defineStore('builder', {
     selectedTileIds: [],
     isDirty: false,
     isSaving: false,
+    // Ultimo salvataggio con zone NON scritte: { zones: ['header'], message }
+    // (zones = zone rimaste da salvare, anche quella del widget globale non scritto).
+    // null dopo un salvataggio riuscito o a pagina appena caricata.
+    // La toolbar legge il getter erroreSalvataggio, non questo.
+    saveError: null,
     viewMode: 'desktop', // desktop | widescreen | tablet_landscape | tablet | mobile_landscape | mobile
     previewMode: false,
     wireframeMode: false,
@@ -63,6 +233,21 @@ export const useBuilderStore = defineStore('builder', {
      */
     isAnyDirty(state) {
       return state.isDirty || state.headerDirty || state.footerDirty;
+    },
+    /**
+     * L'ultimo salvataggio fallito, finché almeno una delle zone che non ha scritto
+     * resta da salvare (stessa mappa di markZoneDirty): se un annulla la riporta al
+     * salvato, l'errore non vale più per le modifiche arrivate dopo in altre zone.
+     */
+    erroreSalvataggio(state) {
+      const e = state.saveError;
+      if (!e) return null;
+      const aperta = e.zones.some((z) => {
+        if (state.unifiedMode && z === 'header') return state.headerDirty;
+        if (state.unifiedMode && z === 'footer') return state.footerDirty;
+        return state.isDirty;
+      });
+      return aperta ? e : null;
     },
     pageSettings(state) {
       const defaults = {
@@ -116,6 +301,10 @@ export const useBuilderStore = defineStore('builder', {
           if (!tpl.settings || Array.isArray(tpl.settings)) tpl.settings = {};
           this.currentTemplate = tpl;
           this.isDirty = false;
+          // La versione salvata del template precedente non vale per questo:
+          // si rifissa a caricamento finito (initHistory → captureSavedBaseline).
+          azzeraSalvato();
+          this.saveError = null;
           return true;
         } catch (err) {
           console.error(`loadTemplate attempt ${attempt + 1}/${MAX_RETRIES + 1} error:`, err);
@@ -127,6 +316,13 @@ export const useBuilderStore = defineStore('builder', {
       return false;
     },
 
+    /**
+     * Salva. Restituisce { saved: [zone scritte], failed: [zone non scritte],
+     * incerti: [zone di failed con esito incerto] } (in failed anche 'globali' se
+     * il master di un widget globale non è stato scritto; incerta = risposta 2xx
+     * che non è JSON, il server può aver scritto), oppure undefined se non c'è un
+     * template aperto o un salvataggio è già in corso.
+     */
     async saveTemplate() {
       if (!this.currentTemplate || this.isSaving) return;
 
@@ -135,63 +331,46 @@ export const useBuilderStore = defineStore('builder', {
         return this.saveAllZones();
       }
 
-      this.isSaving = true;
-      const olo = getOloData();
-      try {
-        const tilesStore = useTilesStoreRef();
-
-        // Sincronizza widget globali modificati → master nel DB
-        await tilesStore.syncGlobalWidgetsOnSave();
-
-        const method = this.currentTemplate.id ? 'PUT' : 'POST';
-        const url = this.currentTemplate.id
-          ? `${olo.restUrl}templates/${this.currentTemplate.id}`
-          : `${olo.restUrl}templates`;
-
-        const res = await fetch(url, {
-          method,
-          headers: {
-            'Content-Type': 'application/json',
-            'X-WP-Nonce': olo.nonce,
-          },
-          body: JSON.stringify({
-            title: this.currentTemplate.title || 'Untitled',
-            type: this.currentTemplate.type || 'page',
-            content: tilesStore.canvasTiles,
-            settings: this.currentTemplate.settings || {},
-            status: this.currentTemplate.status || 'draft',
-          }),
-        });
-
-        if (!res.ok) throw new Error('Failed to save template');
-        const saved = await res.json();
-        // Ensure settings is always a plain object (PHP may return [] instead of {})
-        if (!saved.settings || Array.isArray(saved.settings)) saved.settings = {};
-        this.currentTemplate = saved;
-        this.isDirty = false;
-        useToast().success('Template salvato');
-
-        // Trigger auto-thumbnail capture (handler standalone in olo-thumb-capture.js)
-        if (saved.id && typeof window !== 'undefined') {
-          window.dispatchEvent(new CustomEvent('olobuild:saved', {
-            detail: { templateId: saved.id, type: saved.type },
-          }));
-        }
-      } catch (err) {
-        console.error('saveTemplate error:', err);
-        useToast().error('Errore nel salvataggio');
-      } finally {
-        this.isSaving = false;
-      }
+      return this._salvaZone(['body']);
     },
 
     async togglePublish() {
       if (!this.currentTemplate || this.isSaving) return;
 
-      const newStatus = this.currentTemplate.status === 'published' ? 'draft' : 'published';
-      this.currentTemplate.status = newStatus;
+      const tpl = this.currentTemplate;
+      const prevStatus = tpl.status;
+      const prevDirty = this.isDirty;
+      const nuovo = tpl.status === 'published' ? 'draft' : 'published';
+      tpl.status = nuovo;
       this.isDirty = true;
-      await this.saveTemplate();
+      // Se il corpo non viene scritto, il messaggio dice che lo stato non è cambiato
+      // e «Riprova» ripete QUESTA azione: un salvataggio semplice scriverebbe la
+      // pagina nello stato di prima, o non avrebbe niente da scrivere. Un toast
+      // rimasto aperto non ripete l'azione se lo stato è già quello voluto: si
+      // guarda il template aperto ADESSO (un salvataggio riuscito lo sostituisce
+      // con la risposta del server), riconosciuto dall'id.
+      const esito = await this._salvaZone(this.unifiedMode ? ['body', 'header', 'footer'] : ['body'], {
+        prefisso: nuovo === 'published' ? t('Non pubblicato') : t('Non riportato in bozza'),
+        riprova: () => {
+          const cur = this.currentTemplate;
+          const ora = cur && cur.status === 'published' ? 'published' : 'draft';
+          if (cur && cur.id === tpl.id && ora !== nuovo) this.togglePublish();
+          else this.saveTemplate();
+        },
+      });
+      // Corpo con esito incerto (risposta 2xx che non è JSON): il server ha
+      // probabilmente già scritto il nuovo stato, e con lui lo stato della pagina
+      // WordPress. Resta il nuovo stato, con il corpo da salvare: «Riprova» o il
+      // prossimo salvataggio lo riscrivono. Rimettere quello di prima lo farebbe
+      // sembrare salvato, e il salvataggio dopo cambierebbe lo stato in silenzio.
+      if (!esito || (esito.failed.includes('body') && !esito.incerti.includes('body'))) {
+        // Il template non è stato scritto: il pulsante torna allo stato di prima,
+        // altrimenti direbbe «Pubblicato» per una pagina che sul sito non lo è.
+        if (this.currentTemplate === tpl) tpl.status = prevStatus;
+        this.isDirty = prevDirty;
+        this.reconcileDirty(fotoZone(useTilesStoreRef()));
+      }
+      return esito;
     },
 
     async togglePreview() {
@@ -394,106 +573,288 @@ export const useBuilderStore = defineStore('builder', {
      */
     async saveAllZones() {
       if (this.isSaving) return;
-      this.isSaving = true;
+      return this._salvaZone(['body', 'header', 'footer']);
+    },
 
-      const olo = getOloData();
+    /**
+     * Salva le zone indicate, ognuna per conto suo: un errore su una zona non
+     * ferma le altre e non si trasforma in «Tutto salvato». Le zone non scritte
+     * restano «da salvare», il messaggio le nomina e offre «Riprova».
+     * azione (facoltativa, da togglePublish): { prefisso, riprova } per quando
+     * il corpo non viene scritto.
+     */
+    async _salvaZone(zone, azione) {
+      this.isSaving = true;
       const tilesStore = useTilesStoreRef();
+      const toast = useToast();
+      const saved = [];
+      const failed = [];
+      const incerti = [];
+      const motivi = [];
+      const aggiungiMotivo = (m) => { if (m && !motivi.includes(m)) motivi.push(m); };
+      // Tile con global_id il cui master non è stato scritto: [{ tileId, esito }].
+      let globaliKo = [];
 
       try {
-        // Sync global widgets across all zones
-        await tilesStore.syncGlobalWidgetsOnSave();
-
-        // Save body (main template)
-        if (this.isDirty && this.currentTemplate) {
-          const method = this.currentTemplate.id ? 'PUT' : 'POST';
-          const url = this.currentTemplate.id
-            ? `${olo.restUrl}templates/${this.currentTemplate.id}`
-            : `${olo.restUrl}templates`;
-
-          const res = await fetch(url, {
-            method,
-            headers: {
-              'Content-Type': 'application/json',
-              'X-WP-Nonce': olo.nonce,
-            },
-            body: JSON.stringify({
-              title: this.currentTemplate.title || 'Untitled',
-              type: this.currentTemplate.type || 'page',
-              content: tilesStore.canvasTiles,
-              settings: this.currentTemplate.settings || {},
-              status: this.currentTemplate.status || 'draft',
-            }),
-          });
-          if (res.ok) {
-            const saved = await res.json();
-            if (!saved.settings || Array.isArray(saved.settings)) saved.settings = {};
-            this.currentTemplate = saved;
-            this.isDirty = false;
+        // Fotografia di ciò che parte per ogni zona, PRIMA di ogni richiesta (anche
+        // di quelle dei master, che fotografano i loro dati nello stesso istante):
+        // una modifica fatta mentre il salvataggio è in corso resta «da salvare»,
+        // e zona e master partono uguali.
+        const foto = {};
+        for (const z of zone) {
+          try {
+            foto[z] = this._fotoZona(z);
+          } catch (err) {
+            console.error('[Olobuild] salvataggio zona ' + z + ':', err);
+            foto[z] = { errore: true };
           }
         }
 
-        // Save header
-        if (this.headerDirty && this.headerTemplate?.id) {
-          const res = await fetch(`${olo.restUrl}templates/${this.headerTemplate.id}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-WP-Nonce': olo.nonce,
-            },
-            body: JSON.stringify({
-              title: this.headerTemplate.title || 'Header',
-              type: 'header',
-              content: tilesStore.headerTiles,
-              settings: this.headerTemplate.settings || {},
-              status: this.headerTemplate.status || 'published',
-            }),
-          });
-          if (res.ok) {
-            const saved = await res.json();
-            if (!saved.settings || Array.isArray(saved.settings)) saved.settings = {};
-            this.headerTemplate = saved;
-            this.headerDirty = false;
+        // Sincronizza widget globali → master nel DB, con lo stesso invio delle zone:
+        // col nonce scaduto si rinnova anche qui e l'esito non si perde.
+        try {
+          globaliKo = (await tilesStore.syncGlobalWidgetsOnSave(inviaRest)) || [];
+        } catch (err) {
+          console.error('[Olobuild] syncGlobalWidgetsOnSave error:', err);
+          globaliKo = [{ tileId: null, esito: { ok: false, imprevisto: true } }];
+        }
+
+        for (const z of zone) {
+          let esito;
+          try {
+            esito = await this._scriviZona(z, foto[z]);
+          } catch (err) {
+            console.error('[Olobuild] salvataggio zona ' + z + ':', err);
+            esito = { zone: z, stato: 'ko', motivo: t('errore imprevisto') };
+          }
+          if (esito.stato === 'ok') {
+            saved.push(z);
+          } else if (esito.stato === 'ko') {
+            failed.push(z);
+            if (esito.incerto) incerti.push(z);
+            aggiungiMotivo(esito.motivo);
+            this.markZoneDirty(z);
           }
         }
-
-        // Save footer
-        if (this.footerDirty && this.footerTemplate?.id) {
-          const res = await fetch(`${olo.restUrl}templates/${this.footerTemplate.id}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-WP-Nonce': olo.nonce,
-            },
-            body: JSON.stringify({
-              title: this.footerTemplate.title || 'Footer',
-              type: 'footer',
-              content: tilesStore.footerTiles,
-              settings: this.footerTemplate.settings || {},
-              status: this.footerTemplate.status || 'published',
-            }),
-          });
-          if (res.ok) {
-            const saved = await res.json();
-            if (!saved.settings || Array.isArray(saved.settings)) saved.settings = {};
-            this.footerTemplate = saved;
-            this.footerDirty = false;
-          }
-        }
-
-        useToast().success('Tutto salvato');
-
-        // Trigger auto-thumbnail capture per il template body (l'unico che si vede)
-        if (this.currentTemplate?.id && typeof window !== 'undefined') {
-          window.dispatchEvent(new CustomEvent('olobuild:saved', {
-            detail: { templateId: this.currentTemplate.id, type: this.currentTemplate.type },
-          }));
-        }
-      } catch (err) {
-        console.error('saveAllZones error:', err);
-        useToast().error('Errore nel salvataggio');
       } finally {
         this.isSaving = false;
       }
+
+      // Master di un widget globale non scritto: il sito rende l'istanza dal master e
+      // alla riapertura il builder la riallinea al master, quindi la modifica andrebbe
+      // persa. Lo si dice («Widget globali») e la zona che contiene il widget resta da
+      // salvare: il prossimo salvataggio riscrive zona e master.
+      const zoneAperte = failed.slice();
+      if (globaliKo.length) {
+        failed.push('globali');
+        globaliKo.forEach((g) => {
+          aggiungiMotivo(motivoDi(g.esito || {}));
+          const z = (this.unifiedMode && g.tileId && tilesStore.getZoneForTile(g.tileId)) || 'body';
+          salvato[chiaveZona(z)] = VERSIONE_INCOMPLETA;
+          this.markZoneDirty(z);
+          if (!zoneAperte.includes(z)) zoneAperte.push(z);
+        });
+      }
+
+      // I flag seguono ciò che c'è davvero: restano accese le zone non scritte
+      // e quelle modificate mentre il salvataggio era in corso.
+      this.reconcileDirty(fotoZone(tilesStore));
+
+      if (failed.length) {
+        // «Riprova» ripete l'azione che ha fallito: Pubblica/Ritira se il corpo non è
+        // stato scritto durante un cambio di stato, altrimenti il salvataggio.
+        // Corpo con esito incerto: non si sa se lo stato è cambiato, lo si dice.
+        const suAzione = !!(azione && typeof azione.riprova === 'function' && failed.includes('body'));
+        let prefisso = t('Non salvato');
+        if (suAzione) prefisso = incerti.includes('body') ? t('Esito incerto') : azione.prefisso;
+        const message = prefisso + ': '
+          + failed.map((z) => this.zoneLabel(z)).join(' · ')
+          + (motivi.length ? ' — ' + motivi.join('; ') : '');
+        this.saveError = { zones: zoneAperte, message };
+        toast.action(message, t('Riprova'), suAzione ? azione.riprova : () => { this.saveTemplate(); }, 10000, 'error');
+      } else {
+        this.saveError = null;
+        if (saved.length) {
+          toast.success(t('Salvato') + ': ' + saved.map((z) => this.zoneLabel(z)).join(' · '));
+        } else {
+          toast.info(t('Nessuna modifica da salvare'));
+        }
+      }
+
+      // Trigger auto-thumbnail capture per il template body (handler standalone in olo-thumb-capture.js)
+      if (saved.length && this.currentTemplate?.id && typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('olobuild:saved', {
+          detail: { templateId: this.currentTemplate.id, type: this.currentTemplate.type },
+        }));
+      }
+
+      return { saved, failed, incerti };
+    },
+
+    /**
+     * Fotografia sincrona di UNA zona ('body' | 'header' | 'footer'): decide se va
+     * scritta e ne prepara il payload. Si scrive se è diversa dalla versione
+     * salvata; se la versione salvata non è nota, se è segnata. Il corpo mai
+     * scritto (senza id) si scrive sempre.
+     * Restituisce null (niente da scrivere), { manca: true } (header/footer da
+     * scrivere senza template) o { tpl, json, meta, corpo }.
+     * Il payload è quello di sempre (title, type, content, settings, status).
+     */
+    _fotoZona(zone) {
+      const tilesStore = useTilesStoreRef();
+      const isBody = zone === 'body';
+      const chiave = chiaveZona(zone);
+      const tpl = isBody ? this.currentTemplate : (zone === 'header' ? this.headerTemplate : this.footerTemplate);
+      const tiles = isBody ? tilesStore.canvasTiles : (zone === 'header' ? tilesStore.headerTiles : tilesStore.footerTiles);
+      const flag = isBody ? this.isDirty : (zone === 'header' ? this.headerDirty : this.footerDirty);
+
+      if (isBody && !tpl) return null;
+
+      const json = JSON.stringify(tiles);
+      const meta = isBody ? metaJson(tpl) : null;
+      // Con la versione salvata nota decide il confronto, che copre tutto il payload
+      // (header e footer: il builder ne cambia solo le tile): un flag rimasto acceso
+      // su una zona uguale al salvato non crea una revisione identica.
+      const nota = salvato[chiave] !== null;
+      const diversa = nota
+        && (json !== salvato[chiave] || (isBody && meta !== salvato.m));
+      const need = (isBody && !tpl.id) || (nota ? diversa : flag);
+      if (!need) return null;
+
+      // Header/footer da scrivere ma senza template: lo si dice, non si salta in silenzio.
+      // (Il corpo senza id si crea con un POST, come sempre.)
+      if (!isBody && (!tpl || !tpl.id)) return { manca: true };
+
+      const corpo = JSON.stringify(isBody ? {
+        title: tpl.title || 'Untitled',
+        type: tpl.type || 'page',
+        content: tiles,
+        settings: tpl.settings || {},
+        status: tpl.status || 'draft',
+      } : {
+        title: tpl.title || (zone === 'header' ? 'Header' : 'Footer'),
+        type: zone,
+        content: tiles,
+        settings: tpl.settings || {},
+        status: tpl.status || 'published',
+      });
+      return { tpl, json, meta, corpo };
+    },
+
+    /**
+     * Scrive UNA zona con la sua fotografia (_fotoZona, presa all'inizio del
+     * salvataggio): quello che cambia dopo resta «da salvare».
+     * Esito: { zone, stato: 'ok' | 'skip' | 'ko', motivo, incerto }
+     * (incerto = risposta 2xx che non è JSON: il server può aver scritto).
+     */
+    async _scriviZona(zone, foto) {
+      if (!foto) return { zone, stato: 'skip' };
+      if (foto.errore) return { zone, stato: 'ko', motivo: t('errore imprevisto') };
+      if (foto.manca) return { zone, stato: 'ko', motivo: t('template non trovato') };
+
+      const olo = getOloData();
+      const isBody = zone === 'body';
+      const { tpl, json, corpo } = foto;
+      const metaInviato = foto.meta;
+      const url = tpl.id ? `${olo.restUrl}templates/${tpl.id}` : `${olo.restUrl}templates`;
+      const r = await inviaTemplate(url, tpl.id ? 'PUT' : 'POST', corpo);
+
+      if (!r.ok) return { zone, stato: 'ko', status: r.status, motivo: motivoDi(r), incerto: !!r.invalida };
+
+      const saved = r.data;
+      if (isBody) {
+        // Aperto un altro template nel frattempo: niente da aggiornare qui.
+        if (this.currentTemplate !== tpl) return { zone, stato: 'ok' };
+        if (metaJson(tpl) === metaInviato) {
+          this.currentTemplate = saved;
+          salvato.m = metaJson(saved);
+        } else {
+          // Titolo, impostazioni o stato cambiati durante il salvataggio: restano
+          // quelli locali. Dal server arrivano id, date, linked_post_* e, chiave per
+          // chiave, le impostazioni che ha scritto lui (settings.post_id della pagina
+          // collegata creata da maybe_auto_create_linked_page) se il client non le ha
+          // toccate: senza, il salvataggio dopo creerebbe un'altra pagina bozza.
+          const base = JSON.parse(metaInviato);
+          const inviate = base.settings && typeof base.settings === 'object' ? base.settings : (base.settings = {});
+          const locali = tpl.settings && typeof tpl.settings === 'object' ? tpl.settings : {};
+          const server = saved.settings || {};
+          Object.keys(server).forEach((k) => {
+            const s = JSON.stringify(server[k]);
+            const i = JSON.stringify(inviate[k]);
+            if (s !== i && JSON.stringify(locali[k]) === i) {
+              locali[k] = server[k];
+              inviate[k] = server[k];
+            }
+          });
+          const unito = Object.assign({}, saved);
+          ['title', 'type', 'status'].forEach((k) => { if (tpl[k] !== undefined) unito[k] = tpl[k]; });
+          unito.settings = locali;
+          this.currentTemplate = unito;
+          salvato.m = JSON.stringify(base);
+        }
+        salvato.b = json;
+      } else if (zone === 'header') {
+        if (this.headerTemplate === tpl) {
+          this.headerTemplate = saved;
+          salvato.h = json;
+        }
+      } else if (this.footerTemplate === tpl) {
+        this.footerTemplate = saved;
+        salvato.f = json;
+      }
+      return { zone, stato: 'ok' };
+    },
+
+    /**
+     * Nome di una zona nei messaggi del salvataggio. Unico punto: le etichette
+     * delle zone del canvas potranno arricchirlo.
+     */
+    zoneLabel(zone) {
+      if (zone === 'globali') return t('Widget globali');
+      if (zone === 'header') return t('Header') + titoloTra(this.headerTemplate);
+      if (zone === 'footer') return t('Footer') + titoloTra(this.footerTemplate);
+      return this.unifiedMode ? t('Pagina') : t('Template');
+    },
+
+    /**
+     * Fissa la versione salvata = stato attuale. Va richiamata a pagina CARICATA
+     * (initHistory): da qui in poi ogni zona diversa è «da salvare».
+     */
+    captureSavedBaseline(foto) {
+      const f = foto || fotoZone(useTilesStoreRef());
+      salvato.b = f.b;
+      salvato.h = f.h;
+      salvato.f = f.f;
+      salvato.m = metaJson(this.currentTemplate);
+      this.saveError = null;
+      this.reconcileDirty(f);
+    },
+
+    /**
+     * Ricava i flag «da salvare» dal confronto con la versione salvata
+     * (fotografia { b, h, f } della cronologia). Il corpo confronta anche
+     * titolo, tipo, impostazioni e stato. Un template mai scritto (senza id)
+     * resta «da salvare» finché il salvataggio non riesce.
+     */
+    reconcileDirty(foto) {
+      if (!foto) return;
+      if (this.currentTemplate && salvato.b !== null && salvato.m !== null) {
+        const diversa = foto.b !== salvato.b || metaJson(this.currentTemplate) !== salvato.m;
+        this.isDirty = this.currentTemplate.id ? diversa : (this.isDirty || diversa);
+      }
+      if (this.unifiedMode) {
+        if (salvato.h !== null) this.headerDirty = foto.h !== salvato.h;
+        if (salvato.f !== null) this.footerDirty = foto.f !== salvato.f;
+      }
+    },
+
+    /**
+     * Segna «da salvare» una zona ('header' | 'footer' | 'body').
+     */
+    markZoneDirty(zone) {
+      if (this.unifiedMode && zone === 'header') this.headerDirty = true;
+      else if (this.unifiedMode && zone === 'footer') this.footerDirty = true;
+      else this.isDirty = true;
     },
 
     /**
@@ -505,10 +866,7 @@ export const useBuilderStore = defineStore('builder', {
         return;
       }
       const tilesStore = useTilesStoreRef();
-      const zone = tilesStore.getZoneForTile(tileId);
-      if (zone === 'header') this.headerDirty = true;
-      else if (zone === 'footer') this.footerDirty = true;
-      else this.isDirty = true;
+      this.markZoneDirty(tilesStore.getZoneForTile(tileId));
     },
   },
 });

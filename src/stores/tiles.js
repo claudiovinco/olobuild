@@ -11,6 +11,15 @@ import { getElementDef } from '@/config/elementRegistry';
 
 const oloData = window.oloData || {};
 
+// Dati del master di un widget globale: la tile senza id, figli e global_id.
+function datiMaster(tile) {
+  const dati = JSON.parse(JSON.stringify(tile));
+  delete dati.id;
+  delete dati.children;
+  delete dati.global_id;
+  return dati;
+}
+
 // Re-export tree utilities so existing imports from tiles.js keep working
 export { generateId, createSection, createRow, createColumn, createInnerColumn, CONTAINER_TYPES, migrateLegacyContent, isLegacyFormat, deepCloneWithNewIds };
 
@@ -1128,29 +1137,48 @@ export const useTilesStore = defineStore('tiles', {
       }
     },
 
-    async updateGlobalWidget(globalId, tileId) {
-      const tile = this.getTileById(tileId);
-      if (!tile) return;
-
-      const tileData = JSON.parse(JSON.stringify(tile));
-      delete tileData.id;
-      delete tileData.children;
-      delete tileData.global_id;
-
-      try {
-        const res = await fetch(`${oloData.restUrl}global-widgets/${globalId}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-WP-Nonce': oloData.nonce,
-          },
-          body: JSON.stringify({ tile_data: tileData }),
-        });
-        if (!res.ok) throw new Error('Failed to update global widget');
-        await this.fetchGlobalWidgets();
-      } catch (err) {
-        console.error('updateGlobalWidget error:', err);
+    /**
+     * Scrive il master del widget globale con i dati della tile. `invia(url, metodo,
+     * corpo)` è l'invio del salvataggio del builder (rinnova il nonce scaduto e
+     * riprova una volta); senza, una fetch semplice. `dati` (facoltativo): i dati
+     * del master già fotografati da chi salva; senza, quelli attuali della tile.
+     * Restituisce l'esito { ok, status, … }: chi salva deve sapere se il master è
+     * stato scritto.
+     */
+    async updateGlobalWidget(globalId, tileId, invia, dati) {
+      let tileData = dati;
+      if (!tileData) {
+        const tile = this.getTileById(tileId);
+        if (!tile) return { ok: true, status: 0 };
+        tileData = datiMaster(tile);
       }
+
+      const url = `${oloData.restUrl}global-widgets/${globalId}`;
+      const corpo = JSON.stringify({ tile_data: tileData });
+      let esito;
+      try {
+        if (typeof invia === 'function') {
+          esito = await invia(url, 'PUT', corpo);
+        } else {
+          const res = await fetch(url, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-WP-Nonce': oloData.nonce,
+            },
+            body: corpo,
+          });
+          esito = { ok: res.ok, status: res.status };
+        }
+      } catch (err) {
+        esito = { ok: false, status: 0, rete: true };
+      }
+      if (!esito || !esito.ok) {
+        console.error('updateGlobalWidget error:', globalId, esito);
+        return esito || { ok: false, status: 0 };
+      }
+      await this.fetchGlobalWidgets();
+      return esito;
     },
 
     detachGlobalWidget(tileId) {
@@ -1196,21 +1224,29 @@ export const useTilesStore = defineStore('tiles', {
 
     /**
      * Al salvataggio: aggiorna il master nel DB per ogni tile con global_id.
+     * `invia` come in updateGlobalWidget. I dati di TUTTI i master si fotografano
+     * subito, prima della prima richiesta: nello stesso istante in cui chi salva
+     * fotografa le zone, così una modifica fatta durante le richieste non finisce
+     * in un master sì e nella sua zona no. Restituisce le tile il cui master NON
+     * è stato scritto: [{ tileId, esito }] (vuoto = tutto scritto).
      */
-    async syncGlobalWidgetsOnSave() {
+    async syncGlobalWidgetsOnSave(invia) {
       const globals = [];
       const walk = (nodes) => {
         for (const n of nodes) {
-          if (n.global_id) globals.push(n);
+          if (n.global_id) globals.push({ globalId: n.global_id, tileId: n.id, dati: datiMaster(n) });
           if (Array.isArray(n.children)) walk(n.children);
         }
       };
       walk(this.canvasTiles);
       walk(this.headerTiles);
       walk(this.footerTiles);
-      for (const tile of globals) {
-        await this.updateGlobalWidget(tile.global_id, tile.id);
+      const falliti = [];
+      for (const g of globals) {
+        const esito = await this.updateGlobalWidget(g.globalId, g.tileId, invia, g.dati);
+        if (!esito || !esito.ok) falliti.push({ tileId: g.tileId, esito: esito || { ok: false, status: 0 } });
       }
+      return falliti;
     },
 
     /**

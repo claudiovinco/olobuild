@@ -500,6 +500,10 @@
         <template v-if="builderStore.isSaving">
           <svg class="mb-animate-spin mb-text-gray-400" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
         </template>
+        <template v-else-if="builderStore.erroreSalvataggio">
+          <span class="mb-w-1.5 mb-h-1.5 mb-rounded-full mb-bg-red-400"></span>
+          <span class="mb-text-red-400">{{ t('Non salvato') }}</span>
+        </template>
         <template v-else-if="builderStore.isAnyDirty">
           <span class="mb-w-1.5 mb-h-1.5 mb-rounded-full mb-bg-amber-400"></span>
           <span class="mb-text-amber-400/90">{{ t('Non salvato') }}</span>
@@ -510,7 +514,7 @@
         </template>
       </div>
       <button
-        @click="builderStore.saveTemplate()"
+        @click="salvaOra"
         :disabled="builderStore.isSaving || !builderStore.isAnyDirty"
         :class="[
           'mb-px-4 mb-py-1.5 mb-text-xs mb-font-medium mb-rounded-md mb-transition-colors',
@@ -604,8 +608,16 @@ const lastSavedAt = ref(null);
 watch(() => builderStore.isSaving, (now, prev) => {
   if (prev && !now && !builderStore.isAnyDirty) lastSavedAt.value = new Date();
 });
+// Pulsante Salva e Ctrl+S: vale anche se è cambiato solo l'header o il footer.
+// Prima si chiude la fotografia in sospeso (debounce), che aggiorna i flag: un
+// flag rimasto acceso su una zona uguale al salvato si spegne senza scrivere.
+function salvaOra() {
+  history.pushStateNow();
+  if (builderStore.isAnyDirty) builderStore.saveTemplate();
+}
 const saveStatusTitle = computed(() => {
   if (builderStore.isSaving) return t('Salvataggio in corso…');
+  if (builderStore.erroreSalvataggio) return builderStore.erroreSalvataggio.message;
   if (builderStore.isAnyDirty) return t('Ci sono modifiche non salvate');
   if (lastSavedAt.value) return t('Salvato alle') + ' ' + lastSavedAt.value.toLocaleTimeString();
   return t('Tutte le modifiche sono salvate');
@@ -719,7 +731,7 @@ function onGlobalKeydown(e) {
   // Ctrl+S → Save
   if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.code === 'KeyS') && !e.altKey) {
     e.preventDefault();
-    if (builderStore.isDirty) { builderStore.saveTemplate(); }
+    salvaOra();
     return;
   }
 
@@ -772,8 +784,8 @@ function onGlobalKeydown(e) {
     if (tilesStore.clipboardTile) {
       e.preventDefault();
       const id = builderStore.selectedTileId;
-      tilesStore.pasteAfterTile(id);
-      builderStore.isDirty = true;
+      const clone = tilesStore.pasteAfterTile(id);
+      builderStore.markDirtyForTile(clone ? clone.id : id);
     }
   }
   // Ctrl+D → Duplica la/le tile selezionate (multi-selezione inclusa)
@@ -783,8 +795,10 @@ function onGlobalKeydown(e) {
       : (builderStore.selectedTileId ? [builderStore.selectedTileId] : []);
     if (ids.length) {
       e.preventDefault();
-      ids.forEach(id => tilesStore.duplicateTile(id));
-      builderStore.isDirty = true;
+      ids.forEach(id => {
+        tilesStore.duplicateTile(id);
+        builderStore.markDirtyForTile(id);
+      });
     }
   }
   // Ctrl+Alt+C → Copy Style
@@ -800,7 +814,7 @@ function onGlobalKeydown(e) {
     const id = builderStore.selectedTileId;
     if (id && tilesStore.clipboardStyle) {
       tilesStore.pasteStyle(id);
-      builderStore.isDirty = true;
+      builderStore.markDirtyForTile(id);
     }
     return;
   }
@@ -1046,9 +1060,19 @@ const realPreviewUrl = computed(() => {
 });
 
 async function openRealPreview() {
-  // Auto-save se ci sono modifiche non salvate
-  if (builderStore.isDirty) {
-    await builderStore.saveTemplate();
+  // Un salvataggio è già in corso (es. Ctrl+S appena premuto): la pagina potrebbe
+  // mostrare la versione di prima come se niente fosse.
+  if (builderStore.isSaving) {
+    toast.info(t('Salvataggio in corso: riprova tra un attimo'));
+    return;
+  }
+  // Auto-save se ci sono modifiche non salvate (anche solo all'header o al footer)
+  history.pushStateNow();
+  if (builderStore.isAnyDirty) {
+    const esito = await builderStore.saveTemplate();
+    // Salvataggio non riuscito (o non partito): il messaggio d'errore c'è già, e
+    // aprire la pagina mostrerebbe la versione vecchia come se niente fosse.
+    if (!esito || esito.failed.length) return;
   }
   const url = realPreviewUrl.value;
   if (!url) {

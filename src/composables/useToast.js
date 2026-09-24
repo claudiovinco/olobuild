@@ -66,7 +66,7 @@ function showAction(message, actionLabel, onAction, type = 'info', duration = 60
   ensureContainer();
   const el = document.createElement('div');
   el.className = 'olo-toast olo-toast-' + type;
-  el.setAttribute('role', 'status');
+  el.setAttribute('role', type === 'error' ? 'alert' : 'status');
 
   const msg = document.createElement('span');
   msg.className = 'olo-toast-msg';
@@ -101,7 +101,8 @@ export function useToast() {
     success: (msg, dur) => show(msg, 'success', dur),
     error:   (msg, dur) => show(msg, 'error', dur),
     warning: (msg, dur) => show(msg, 'warning', dur),
-    action:  (msg, actionLabel, onAction, dur) => showAction(msg, actionLabel, onAction, 'info', dur),
+    // type facoltativo: 'error' per un'azione di recupero (es. «Riprova» dopo un salvataggio fallito).
+    action:  (msg, actionLabel, onAction, dur, type = 'info') => showAction(msg, actionLabel, onAction, type, dur),
     announce: (msg) => { ensureLiveRegion(); liveRegion.textContent = ''; requestAnimationFrame(() => { liveRegion.textContent = msg; }); },
   };
 }

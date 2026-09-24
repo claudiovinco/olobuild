@@ -60,6 +60,8 @@ export function useHistory() {
       // il bump forza il re-render del live preview per tutte le zone.
       tilesStore._bumpVersion();
       lastSnapshot = state;
+      // Un annulla che torna alla versione salvata spegne il «da salvare».
+      builderStore.reconcileDirty(state);
     } catch (e) {
       console.error('[Olobuild] Undo/Redo restore failed:', e);
     } finally {
@@ -79,6 +81,9 @@ export function useHistory() {
       debounceTimer = null;
     }
     const current = snapshot();
+    // Ogni zona è «da salvare» se è diversa dalla sua versione salvata, qualunque
+    // punto l'abbia modificata (anche chi ha segnato la zona sbagliata).
+    builderStore.reconcileDirty(current);
     if (sameSnapshot(current, lastSnapshot)) return;
     if (lastSnapshot !== null) {
       undoStack.value.push(lastSnapshot);
@@ -137,6 +142,8 @@ export function useHistory() {
     // e su un nuovo template non vogliamo riferimenti al template precedente.
     lastSnapshot = null;
     lastSnapshot = snapshot();
+    // Stessa fotografia = versione salvata di corpo, header e footer.
+    builderStore.captureSavedBaseline(lastSnapshot);
 
     if (!initialized) {
       initialized = true;

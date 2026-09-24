@@ -554,7 +554,7 @@ function confirmRename(tile) {
     delete tile.settings._label;
   }
   renamingId.value = null;
-  builderStore.isDirty = true;
+  builderStore.markDirtyForTile(tile.id);
 }
 
 function cancelRename() {
@@ -907,7 +907,7 @@ function selectTile(id, zone) {
 
 function duplicate(id) {
   tilesStore.duplicateTile(id);
-  builderStore.isDirty = true;
+  builderStore.markDirtyForTile(id);
 }
 
 function remove(id) {

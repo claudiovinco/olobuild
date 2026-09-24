@@ -211,7 +211,7 @@ export function useDragDrop() {
     if (!newTile) return null;
 
     tilesStore.addChild(columnId, newTile);
-    builderStore.isDirty = true;
+    builderStore.markDirtyForTile(newTile.id);
     builderStore.selectTile(newTile.id);
     return newTile;
   }
@@ -226,7 +226,7 @@ export function useDragDrop() {
     if (!newTile) return null;
 
     tilesStore.addChild(columnId, newTile, index);
-    builderStore.isDirty = true;
+    builderStore.markDirtyForTile(newTile.id);
     builderStore.selectTile(newTile.id);
     return newTile;
   }
@@ -263,7 +263,7 @@ export function useDragDrop() {
     if (!newTile) return null;
 
     tilesStore.addChild(columnId, newTile);
-    builderStore.isDirty = true;
+    builderStore.markDirtyForTile(newTile.id);
     builderStore.selectTile(newTile.id);
     return newTile;
   }
@@ -276,7 +276,7 @@ export function useDragDrop() {
     if (!newTile) return null;
 
     tilesStore.addChild(columnId, newTile, index);
-    builderStore.isDirty = true;
+    builderStore.markDirtyForTile(newTile.id);
     builderStore.selectTile(newTile.id);
     return newTile;
   }

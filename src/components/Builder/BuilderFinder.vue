@@ -298,7 +298,7 @@ function selectCanvasTile(item) {
     if (original) {
       const clone = deepCloneWithNewIds(original);
       tilesStore.addChild(targetColumnId.value, clone);
-      builderStore.isDirty = true;
+      builderStore.markDirtyForTile(clone.id);
       builderStore.selectTile(clone.id);
     }
   } else {

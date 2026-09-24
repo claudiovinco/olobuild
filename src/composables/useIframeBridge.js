@@ -451,8 +451,13 @@ export function useIframeBridge(iframeRef) {
 
       case 'olo:reorder':
         if (d.sourceId && d.targetId) {
+          // La tile trascinata col grip (può non essere quella selezionata) e
+          // moveNodeNear attraversa le zone: si segnano la zona di partenza,
+          // letta prima dello spostamento, e quella di arrivo.
+          const zonaPartenza = tilesStore.getZoneForTile(d.sourceId);
           tilesStore.moveNodeNear(d.sourceId, d.targetId, d.before);
-          builderStore.markDirtyForTile(d.tileId || builderStore.selectedTileId);
+          builderStore.markDirtyForTile(d.sourceId);
+          if (zonaPartenza) builderStore.markZoneDirty(zonaPartenza);
         }
         break;
 
@@ -467,7 +472,7 @@ export function useIframeBridge(iframeRef) {
       case 'olo:add-column':
         if (d.tileId) {
           tilesStore.addColumnForTile(d.tileId);
-          builderStore.isDirty = true;
+          builderStore.markDirtyForTile(d.tileId);
         }
         break;
 

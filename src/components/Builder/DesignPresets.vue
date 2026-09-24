@@ -256,7 +256,7 @@ function applyPreset(preset) {
   const tileId = builderStore.selectedTileId;
   if (!tileId) return;
   tilesStore.applyStylePreset(tileId, preset.style);
-  builderStore.isDirty = true;
+  builderStore.markDirtyForTile(tileId);
 }
 
 // ── Edit name ──
@@ -335,7 +335,7 @@ function applyBuiltinPreset(bp) {
   if (bp.colors.primary) styleUpdate.bg_color = bp.colors.primary;
   if (bp.colors.text) styleUpdate.text_color = bp.colors.text;
   tilesStore.applyStylePreset(tileId, styleUpdate);
-  builderStore.isDirty = true;
+  builderStore.markDirtyForTile(tileId);
 }
 
 // ── Fetch built-in presets ──
