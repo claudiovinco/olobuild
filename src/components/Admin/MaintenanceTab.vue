@@ -34,24 +34,26 @@
       <div class="cfg-row" v-show="form.mode === 'coming_soon'">
         <div class="label-col"><label>{{ t('Template Coming Soon') }}</label><div class="hint">{{ t('Quale template Olobuild mostrare come "Coming Soon".') }}</div></div>
         <div class="control-col template-select-row">
-          <CfgSelect :model-value="form.coming_soon_template_id" :options="templateOptions" @update:model-value="set('coming_soon_template_id', parseInt($event) || 0)" />
+          <CfgSelect searchable :model-value="form.coming_soon_template_id" :options="comingSoonOptions" @update:model-value="set('coming_soon_template_id', parseInt($event) || 0)" />
           <button class="cfg-btn cfg-btn-secondary" :disabled="generating === 'coming_soon'" @click="generateTemplate('coming_soon')" :title="t('Crea un template Coming Soon precaricato (headline + countdown +30gg + CTA) e selezionalo')">
             <svg v-if="generating !== 'coming_soon'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/></svg>
             <svg v-else class="spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7l3 2.7"/></svg>
             {{ generating === 'coming_soon' ? t('Creazione…') : t('Genera template') }}
           </button>
+          <TemplateListError />
         </div>
       </div>
 
       <div class="cfg-row" v-show="form.mode === 'maintenance'">
         <div class="label-col"><label>{{ t('Template Manutenzione') }}</label><div class="hint">{{ t('Quale template Olobuild mostrare durante la manutenzione (HTTP 503).') }}</div></div>
         <div class="control-col template-select-row">
-          <CfgSelect :model-value="form.template_id" :options="templateOptions" @update:model-value="set('template_id', parseInt($event) || 0)" />
+          <CfgSelect searchable :model-value="form.template_id" :options="maintenanceOptions" @update:model-value="set('template_id', parseInt($event) || 0)" />
           <button class="cfg-btn cfg-btn-secondary" :disabled="generating === 'maintenance'" @click="generateTemplate('maintenance')" :title="t('Crea un template Manutenzione precaricato e selezionalo')">
             <svg v-if="generating !== 'maintenance'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/></svg>
             <svg v-else class="spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7l3 2.7"/></svg>
             {{ generating === 'maintenance' ? t('Creazione…') : t('Genera template') }}
           </button>
+          <TemplateListError />
         </div>
       </div>
     </div>
@@ -89,7 +91,9 @@
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
+import TemplateListError from './controls/TemplateListError.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
+import { useTemplateOptions } from './composables/useTemplateOptions';
 
 const TAB_ID = 'maintenance';
 const showToast = inject('showToast', () => {});
@@ -105,7 +109,7 @@ const form = ref({
   bypass_secret: '',
 });
 
-const templates = ref([]);
+const { load: loadTemplates, refresh: refreshTemplates, optionsFor } = useTemplateOptions();
 const generating = ref(null); // 'coming_soon' | 'maintenance' | null
 const availableRoles = ref([
   { slug: 'administrator', label: 'Administrator' },
@@ -115,10 +119,10 @@ const availableRoles = ref([
   { slug: 'subscriber',    label: 'Subscriber' },
 ]);
 
-const templateOptions = computed(() => [
-  { value: 0, label: t('— Seleziona template —') },
-  ...templates.value.map(tpl => ({ value: tpl.id, label: tpl.title })),
-]);
+// Template di tipo Pagina (il generatore crea pagine). Il sito li mostra anche in
+// bozza, quindi le bozze restano. Il template già scelto resta sempre fra le voci.
+const comingSoonOptions = computed(() => optionsFor({ types: ['page'], selected: form.value.coming_soon_template_id }));
+const maintenanceOptions = computed(() => optionsFor({ types: ['page'], selected: form.value.template_id }));
 
 const modeLabel = computed(() => {
   if (form.value.mode === 'off') return t('Sito online');
@@ -146,7 +150,8 @@ async function generateTemplate(kind) {
     });
     const data = await res.json();
     if (res.ok && data?.template_id) {
-      await loadTemplates();
+      // Rilettura forzata: l'elenco già in memoria non ha il template appena creato.
+      await refreshTemplates();
       if (kind === 'coming_soon') form.value.coming_soon_template_id = data.template_id;
       else                         form.value.template_id            = data.template_id;
       // La selezione è una modifica della scheda: senza il puntino non verrebbe salvata.
@@ -164,16 +169,6 @@ async function generateTemplate(kind) {
   } finally {
     generating.value = null;
   }
-}
-
-async function loadTemplates() {
-  try {
-    const res = await fetch(`${window.oloData.restUrl}templates?per_page=200`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
-    if (res.ok) {
-      const data = await res.json();
-      templates.value = (data?.templates || data || []).map(t => ({ id: t.id || t.ID, title: t.title || t.post_title || '(no title)' }));
-    }
-  } catch (e) { /* keep empty */ }
 }
 
 async function loadSettings() {
@@ -223,6 +218,7 @@ onBeforeUnmount(() => {
 .cfg-role-check input { accent-color: var(--c-red); }
 .template-select-row {
   display: flex;
+  flex-wrap: wrap; /* l'avviso «Elenco dei template non caricato» va a capo */
   gap: 8px;
   align-items: stretch;
 }

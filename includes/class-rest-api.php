@@ -57,6 +57,8 @@ class Olobuild_Rest_Api {
                     'per_page' => [ 'default' => 20, 'sanitize_callback' => 'absint' ],
                     'status'   => [ 'default' => '', 'sanitize_callback' => 'sanitize_text_field' ],
                     'type'     => [ 'default' => '', 'sanitize_callback' => 'sanitize_text_field' ],
+                    // Lista leggera per i menu (es. "id,title,type,status"): vedi get_templates().
+                    'fields'   => [ 'default' => '', 'sanitize_callback' => 'sanitize_text_field' ],
                 ],
             ],
             [
@@ -1084,8 +1086,49 @@ class Olobuild_Rest_Api {
         return $settings_post_id ?: 0;
     }
 
+    /**
+     * Colonne chieste con `fields` (es. "id,title,type,status"), ristrette alla
+     * whitelist della lista leggera. Array vuoto = risposta completa di sempre.
+     */
+    private function list_fields_param( $raw ) {
+        if ( ! is_string( $raw ) || '' === $raw ) {
+            return [];
+        }
+        $wanted = array_map( 'strtolower', array_map( 'trim', explode( ',', $raw ) ) );
+        return array_values( array_intersect( [ 'id', 'title', 'type', 'status' ], $wanted ) );
+    }
+
     public function get_templates( $request ) {
         $db = new Olobuild_Database();
+
+        // Lista leggera per i menu della Configurazione (Assegnazione template,
+        // Manutenzione, Popup, Template WooCommerce): solo le colonne chieste, senza
+        // content/settings, istanze, autore, post collegato (2 query per template) e byType.
+        // Ordine per id, stabile fra una pagina e l'altra: il titolo lo ordina il menu.
+        // Senza `fields` la risposta resta quella di sempre (TemplateList, mega menu).
+        $fields = $this->list_fields_param( $request->get_param( 'fields' ) );
+        if ( ! empty( $fields ) ) {
+            $light = $db->list_templates( [
+                'page'     => max( 1, (int) $request->get_param( 'page' ) ),
+                'per_page' => min( 1000, max( 1, (int) $request->get_param( 'per_page' ) ) ),
+                'status'   => $request->get_param( 'status' ),
+                'type'     => $request->get_param( 'type' ),
+                'orderby'  => 'id',
+                'order'    => 'ASC',
+                'fields'   => $fields,
+            ] );
+            $items = [];
+            foreach ( (array) ( $light['items'] ?? [] ) as $row ) {
+                $row['id'] = (int) $row['id'];
+                $items[]   = $row;
+            }
+            return rest_ensure_response( [
+                'items' => $items,
+                'total' => (int) ( $light['total'] ?? 0 ),
+                'pages' => (int) ( $light['pages'] ?? 0 ),
+            ] );
+        }
+
         $result = $db->list_templates( [
             'page'     => $request->get_param( 'page' ),
             'per_page' => $request->get_param( 'per_page' ),

@@ -48,7 +48,8 @@
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('Template') }}</label><div class="hint">{{ t('Quale template Olobuild usare come contenuto del popup.') }}</div></div>
         <div class="control-col">
-          <CfgSelect :model-value="popup.template_id" :options="templateOptions" @update:model-value="setField(idx, 'template_id', parseInt($event) || 0)" />
+          <CfgSelect searchable :model-value="popup.template_id" :options="optionsFor({ showType: true, selected: popup.template_id })" @update:model-value="setField(idx, 'template_id', parseInt($event) || 0)" />
+          <TemplateListError />
         </div>
       </div>
       <div class="cfg-row">
@@ -93,11 +94,13 @@
 </template>
 
 <script setup>
-import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
+import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
 import CfgNumber from './controls/CfgNumber.vue';
+import TemplateListError from './controls/TemplateListError.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
+import { useTemplateOptions } from './composables/useTemplateOptions';
 
 const TAB_ID = 'popups';
 const shellDirty = inject('setDirty', () => {});
@@ -105,7 +108,9 @@ const setDirty = (v) => shellDirty(v, TAB_ID);
 const loaded = ref(false);
 
 const popups = ref([]);
-const templates = ref([]);
+// Tutti i template, col tipo accanto: un tipo «popup» non esiste e il popup
+// mostra qualunque template. Il template già scelto resta sempre fra le voci.
+const { load: loadTemplates, optionsFor } = useTemplateOptions();
 
 const TRIGGER_OPTIONS = [
   { value: 'page_load',      label: t('Al caricamento pagina') },
@@ -121,11 +126,6 @@ const FREQUENCY_OPTIONS = [
   { value: 'once_week',    label: t('Una volta a settimana') },
   { value: 'once_ever',    label: t('Una sola volta in assoluto') },
 ];
-
-const templateOptions = computed(() => [
-  { value: 0, label: t('— Seleziona template —') },
-  ...templates.value.map(tpl => ({ value: tpl.id, label: tpl.title })),
-]);
 
 function defaultPopup() {
   return {
@@ -161,16 +161,6 @@ function triggerLabel(trigger) {
 function frequencyLabel(freq) {
   const map = { always: 'Ogni volta', once_session: '1/sessione', once_day: '1/giorno', once_week: '1/settimana', once_ever: '1 sola volta' };
   return map[freq] || freq;
-}
-
-async function loadTemplates() {
-  try {
-    const res = await fetch(`${window.oloData.restUrl}templates?per_page=200`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
-    if (res.ok) {
-      const data = await res.json();
-      templates.value = (data?.templates || data || []).map(t => ({ id: t.id || t.ID, title: t.title || t.post_title || '(no title)' }));
-    }
-  } catch (e) { /* keep empty */ }
 }
 
 async function loadPopups() {

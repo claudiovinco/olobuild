@@ -56,7 +56,8 @@
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('Template') }}</label></div>
         <div class="control-col">
-          <CfgSelect :model-value="rule.template_id" :options="templateOptions" @update:model-value="setField(idx, 'template_id', parseInt($event) || 0)" />
+          <CfgSelect searchable :model-value="rule.template_id" :options="optionsForRule(rule)" @update:model-value="setField(idx, 'template_id', parseInt($event) || 0)" />
+          <TemplateListError />
         </div>
       </div>
       <div class="cfg-row">
@@ -93,11 +94,13 @@
 </template>
 
 <script setup>
-import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
+import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
 import CfgNumber from './controls/CfgNumber.vue';
+import TemplateListError from './controls/TemplateListError.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
+import { useTemplateOptions } from './composables/useTemplateOptions';
 
 const TAB_ID = 'tplconditions';
 const shellDirty = inject('setDirty', () => {});
@@ -105,7 +108,7 @@ const setDirty = (v) => shellDirty(v, TAB_ID);
 const loaded = ref(false);
 
 const rules = ref([]);
-const templates = ref([]);
+const { load: loadTemplates, optionsFor } = useTemplateOptions();
 
 const conditionTypeOptions = [
   { value: 'entire_site',      label: t('Tutto il sito') },
@@ -128,10 +131,18 @@ const conditionTypeOptions = [
   { value: 'woo_checkout',     label: t('WooCommerce checkout') },
 ];
 
-const templateOptions = computed(() => [
-  { value: 0, label: t('— Seleziona template —') },
-  ...templates.value.map(tpl => ({ value: tpl.id, label: tpl.title })),
-]);
+// Header e footer: solo i pubblicati del loro tipo (le bozze il sito non le
+// disegna). Single e Archive: tutti, col tipo accanto. Il template già scelto
+// resta comunque fra le voci e cambiare contesto non lo azzera.
+function optionsForRule(rule) {
+  const zone = rule.context === 'header' || rule.context === 'footer';
+  return optionsFor({
+    types: zone ? [rule.context] : null,
+    publishedOnly: zone,
+    showType: !zone,
+    selected: rule.template_id,
+  });
+}
 
 function defaultRule() {
   return {
@@ -157,16 +168,6 @@ function setCond(idx, ci, k, v) { rules.value[idx].conditions[ci][k] = v; setDir
 function contextLabel(c) {
   const map = { header: 'Header', footer: 'Footer', single: 'Pagine singole', archive: 'Archivi' };
   return map[c] || c;
-}
-
-async function loadTemplates() {
-  try {
-    const res = await fetch(`${window.oloData.restUrl}templates?per_page=200`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
-    if (res.ok) {
-      const data = await res.json();
-      templates.value = (data?.templates || data || []).map(t => ({ id: t.id || t.ID, title: t.title || t.post_title || '(no title)' }));
-    }
-  } catch (e) { /* keep empty */ }
 }
 
 async function loadRules() {

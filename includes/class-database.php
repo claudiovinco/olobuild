@@ -293,6 +293,9 @@ class Olobuild_Database {
             'page'     => 1,
             'orderby'  => 'updated_at',
             'order'    => 'DESC',
+            // Colonne da leggere, fra id/title/type/status (lista leggera dei menu).
+            // Vuoto = tutte, con content e settings decodificati, come sempre.
+            'fields'   => [],
         ];
         $args = wp_parse_args( $args, $defaults );
 
@@ -320,16 +323,32 @@ class Olobuild_Database {
         $orderby = in_array( $args['orderby'], $allowed_orderby, true ) ? $args['orderby'] : 'updated_at';
         $order = strtoupper( $args['order'] ) === 'ASC' ? 'ASC' : 'DESC';
 
-        $offset = max( 0, ( (int) $args['page'] - 1 ) * (int) $args['per_page'] );
-        $limit  = (int) $args['per_page'];
+        // Almeno 1: con per_page=0 il conteggio delle pagine qui sotto divideva per
+        // zero (DivisionByZeroError su PHP 8).
+        $limit  = max( 1, (int) $args['per_page'] );
+        $offset = max( 0, ( (int) $args['page'] - 1 ) * $limit );
 
-        $sql = "SELECT * FROM {$this->table_templates()} WHERE $where ORDER BY $orderby $order LIMIT %d OFFSET %d";
+        // Nella SELECT finiscono solo nomi di questa whitelist: array_intersect
+        // conserva i valori del PRIMO array, mai quelli ricevuti.
+        $cols = '*';
+        if ( is_array( $args['fields'] ) && ! empty( $args['fields'] ) ) {
+            $picked = array_values( array_intersect( [ 'id', 'title', 'type', 'status' ], $args['fields'] ) );
+            if ( ! empty( $picked ) ) {
+                if ( ! in_array( 'id', $picked, true ) ) {
+                    array_unshift( $picked, 'id' );
+                }
+                $cols = implode( ', ', $picked );
+            }
+        }
+
+        $sql = "SELECT $cols FROM {$this->table_templates()} WHERE $where ORDER BY $orderby $order LIMIT %d OFFSET %d";
         $params[] = $limit;
         $params[] = $offset;
 
         // Tabella custom del plugin (olo_templates); nessun equivalente WP_Query; risultato
         // cacheato con wp_cache_get/set (vedi sopra/sotto). Nomi tabella ($wpdb->prefix),
-        // colonna $orderby (whitelist allowed_orderby) e $order (ASC/DESC) sono interpolati in
+        // colonne $cols (whitelist id/title/type/status), colonna $orderby (whitelist
+        // allowed_orderby) e $order (ASC/DESC) sono interpolati in
         // modo sicuro; i VALORI passano sempre da $wpdb->prepare con placeholder %s/%d.
         // PHPCS non traccia la whitelist a monte.
         // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
@@ -338,10 +357,17 @@ class Olobuild_Database {
             ARRAY_A
         );
 
+        // Con `fields` content e settings non sono letti: decodificarli darebbe
+        // «Undefined array key» su PHP 8.
         foreach ( $rows as &$row ) {
-            $row['content']  = json_decode( $row['content'], true ) ?? [];
-            $row['settings'] = json_decode( $row['settings'], true ) ?? [];
+            if ( array_key_exists( 'content', $row ) ) {
+                $row['content'] = json_decode( $row['content'], true ) ?? [];
+            }
+            if ( array_key_exists( 'settings', $row ) ) {
+                $row['settings'] = json_decode( $row['settings'], true ) ?? [];
+            }
         }
+        unset( $row );
 
         // Get total count
         $count_sql = "SELECT COUNT(*) FROM {$this->table_templates()} WHERE $where";

@@ -19,13 +19,14 @@
       </div>
     </div>
     <div class="cfg-card-body">
+      <TemplateListError />
       <div v-for="pt in pageTypes" :key="pt.key" class="cfg-row">
         <div class="label-col">
           <label>{{ t(pt.label) }}</label>
           <div class="hint">{{ t(pt.hint) }}</div>
         </div>
         <div class="control-col">
-          <CfgSelect :model-value="form[pt.optionKey]" :options="templateOptions" @update:model-value="set(pt.optionKey, parseInt($event) || 0)" />
+          <CfgSelect searchable :model-value="form[pt.optionKey]" :options="optionsFor({ selected: form[pt.optionKey], emptyLabel: t('Default WooCommerce') })" @update:model-value="set(pt.optionKey, parseInt($event) || 0)" />
         </div>
       </div>
     </div>
@@ -33,10 +34,12 @@
 </template>
 
 <script setup>
-import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
+import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
+import TemplateListError from './controls/TemplateListError.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob, conIniziali, salvaERileggi } from './cfgSave';
+import { useTemplateOptions } from './composables/useTemplateOptions';
 
 const TAB_ID = 'wootemplates';
 const shellDirty = inject('setDirty', () => {});
@@ -59,39 +62,16 @@ const INIZIALE = Object.fromEntries(pageTypes.map((pt) => [pt.optionKey, 0]));
 const CHIAVI = Object.keys(INIZIALE);
 const form = ref({ ...INIZIALE });
 
-const templates = ref([]);
 const wooActive = ref(true);
 
-const templateOptions = computed(() => {
-  const opts = [
-    { value: 0, label: t('Default WooCommerce') },
-    ...templates.value.map(tpl => ({ value: tpl.id, label: tpl.title })),
-  ];
-  // Un template assegnato fuori dall'elenco (ne arrivano 200, i più recenti) resta
-  // visibile col suo numero invece di «—»: il valore salvato non sparisce dalla vista.
-  const presenti = new Set(opts.map((o) => String(o.value)));
-  CHIAVI.forEach((k) => {
-    const id = form.value[k];
-    if (id && !presenti.has(String(id))) {
-      presenti.add(String(id));
-      opts.push({ value: id, label: t('Template #{id}').replace('{id}', id) });
-    }
-  });
-  return opts;
-});
+// L'elenco condiviso delle schede della Configurazione (useTemplateOptions): tutti i
+// template, di ogni tipo e stato come prima, a pagine, ordinati per titolo. Prima
+// arrivavano i 200 modificati più di recente e oltre quelli un template non si poteva
+// assegnare. Il template assegnato resta sempre fra le voci, anche se non esiste più
+// («Template non trovato #id»); se l'elenco non arriva lo dice, con «Riprova».
+const { load: loadTemplates, optionsFor } = useTemplateOptions();
 
 function set(k, v) { form.value[k] = v; setDirty(true); }
-
-async function loadTemplates() {
-  try {
-    const res = await fetch(`${window.oloData.restUrl}templates?per_page=200`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
-    if (res.ok) {
-      const data = await res.json();
-      const list = data?.items || data?.templates || (Array.isArray(data) ? data : []);
-      templates.value = list.map(t => ({ id: t.id || t.ID, title: t.title || t.post_title || '(no title)' }));
-    }
-  } catch (e) { /* keep empty */ }
-}
 
 async function loadSettings(invariato) {
   try {

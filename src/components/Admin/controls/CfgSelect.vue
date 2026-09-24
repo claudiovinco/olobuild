@@ -21,13 +21,24 @@
         v-if="open"
         ref="popEl"
         class="cfg-layer csel-pop"
+        :class="{ 'has-search': showSearch }"
         :style="popStyle"
-        role="listbox"
+        :role="showSearch ? null : 'listbox'"
         @keydown="onPopKeydown"
       >
-        <div class="csel-list" ref="listEl">
+        <input
+          v-if="showSearch"
+          ref="searchEl"
+          v-model="query"
+          type="search"
+          class="csel-search"
+          :placeholder="t('Cerca…')"
+          :aria-label="t('Cerca')"
+          autocomplete="off"
+        />
+        <div class="csel-list" ref="listEl" :role="showSearch ? 'listbox' : null">
           <button
-            v-for="(opt, i) in options"
+            v-for="(opt, i) in filtered"
             :key="String(opt.value)"
             type="button"
             class="csel-item"
@@ -40,6 +51,7 @@
             <span class="csel-item-label">{{ opt.label }}</span>
             <svg v-if="isSelected(opt)" class="csel-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
           </button>
+          <div v-if="noMatch" class="csel-empty">{{ t('Nessun risultato') }}</div>
         </div>
       </div>
     </Teleport>
@@ -50,7 +62,8 @@
 // Select custom della pagina cfg: rimpiazza i <select> nativi (popup OS non
 // stilizzabile, focus ring blu di sistema). Stesso modello dati: emette i
 // value originali invariati. Le label arrivano già tradotte dal chiamante.
-import { ref, computed, nextTick, onBeforeUnmount } from 'vue';
+import { ref, computed, watch, nextTick, onBeforeUnmount } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   modelValue: { type: [String, Number], default: '' },
@@ -58,15 +71,41 @@ const props = defineProps({
   placeholder: { type: String, default: '—' },
   disabled: { type: Boolean, default: false },
   size: { type: String, default: '' }, // '', 'xs', 'sm', 'md', 'lg'
+  // Campo di ricerca in testa al menu quando le voci sono più di SEARCH_MIN
+  // (es. i template). Spento di serie: gli altri menu restano come sono.
+  searchable: { type: Boolean, default: false },
 });
 const emit = defineEmits(['update:modelValue']);
+
+const SEARCH_MIN = 12;
 
 const open = ref(false);
 const highlight = ref(-1);
 const rootEl = ref(null);
 const popEl = ref(null);
 const listEl = ref(null);
+const searchEl = ref(null);
 const popStyle = ref({});
+const query = ref('');
+let openUp = false;
+
+const showSearch = computed(() => props.searchable && props.options.length > SEARCH_MIN);
+// Confronto senza maiuscole né accenti («perché» trova «Perche»).
+function fold(s) {
+  return String(s ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
+// La voce vuota in testa (valore 0 / '') resta sempre, per poter togliere la scelta.
+function isEmptyValue(v) {
+  return v === 0 || v === '' || v === '0' || v == null;
+}
+const filtered = computed(() => {
+  const q = fold(query.value).trim();
+  if (!showSearch.value || !q) return props.options;
+  return props.options.filter((o, i) => (i === 0 && isEmptyValue(o.value)) || fold(o.label).includes(q));
+});
+const noMatch = computed(() =>
+  showSearch.value && fold(query.value).trim() !== '' && !filtered.value.some(o => !isEmptyValue(o.value))
+);
 
 const sizeClass = computed(() => (props.size ? `cfg-w-${props.size}` : ''));
 const selectedOption = computed(() =>
@@ -89,9 +128,14 @@ async function openPop() {
   await nextTick();
   position();
   popEl.value?.focus?.();
-  // Focus sulla lista per la keyboard nav
-  const el = popEl.value?.querySelector('.csel-item.is-selected') || popEl.value?.querySelector('.csel-item');
-  el?.focus({ preventScroll: true });
+  if (searchEl.value) {
+    // Con la ricerca si scrive subito; frecce e Invio agiscono sulle voci trovate.
+    searchEl.value.focus({ preventScroll: true });
+  } else {
+    // Focus sulla lista per la keyboard nav
+    const el = popEl.value?.querySelector('.csel-item.is-selected') || popEl.value?.querySelector('.csel-item');
+    el?.focus({ preventScroll: true });
+  }
   scrollHighlightIntoView();
   window.addEventListener('resize', close, { once: true });
 }
@@ -99,22 +143,41 @@ async function openPop() {
 function close(refocus = true) {
   if (!open.value) return;
   open.value = false;
+  query.value = '';
   if (refocus) rootEl.value?.querySelector('.csel-trigger')?.focus();
 }
+
+// A ogni ricerca si evidenzia la prima voce trovata (o la scelta, a campo vuoto)
+// e il menu resta attaccato al campo dalla stessa parte in cui si è aperto.
+// Senza risultati non si evidenzia niente: Invio non deve scegliere la voce vuota
+// e azzerare la scelta (resta sceglibile con le frecce o col clic).
+watch(query, (q) => {
+  if (!open.value) return;
+  const list = filtered.value;
+  if (fold(q).trim()) {
+    const first = list.findIndex(o => !isEmptyValue(o.value));
+    highlight.value = first >= 0 ? first : -1;
+  } else {
+    highlight.value = Math.max(0, list.findIndex(o => isSelected(o)));
+  }
+  nextTick(() => { position(true); scrollHighlightIntoView(); });
+});
 
 function pick(opt) {
   emit('update:modelValue', opt.value);
   close();
 }
 
-function position() {
+function position(keepSide = false) {
   const trigger = rootEl.value;
   const pop = popEl.value;
   if (!trigger || !pop) return;
   const r = trigger.getBoundingClientRect();
   const popH = Math.min(pop.scrollHeight + 12, 292);
-  const below = window.innerHeight - r.bottom;
-  const openUp = below < popH + 8 && r.top > popH + 8;
+  if (!keepSide) {
+    const below = window.innerHeight - r.bottom;
+    openUp = below < popH + 8 && r.top > popH + 8;
+  }
   popStyle.value = {
     position: 'fixed',
     left: `${Math.round(r.left)}px`,
@@ -126,9 +189,11 @@ function position() {
 }
 
 function move(delta) {
-  if (!props.options.length) return;
-  const n = props.options.length;
-  highlight.value = ((highlight.value + delta) % n + n) % n;
+  if (!filtered.value.length) return;
+  const n = filtered.value.length;
+  // Da «nessuna voce evidenziata» (ricerca senza risultati): giù va alla prima, su all'ultima.
+  const from = highlight.value < 0 ? (delta > 0 ? -1 : n) : highlight.value;
+  highlight.value = ((from + delta) % n + n) % n;
   scrollHighlightIntoView();
 }
 
@@ -147,11 +212,13 @@ function onTriggerKeydown(e) {
 }
 
 function onPopKeydown(e) {
+  // Nel campo di ricerca lo spazio si scrive, non sceglie.
+  if (e.key === ' ' && e.target === searchEl.value) return;
   if (e.key === 'ArrowDown') { e.preventDefault(); move(1); }
   else if (e.key === 'ArrowUp') { e.preventDefault(); move(-1); }
   else if (e.key === 'Enter' || e.key === ' ') {
     e.preventDefault();
-    const opt = props.options[highlight.value];
+    const opt = highlight.value >= 0 ? filtered.value[highlight.value] : null;
     if (opt) pick(opt);
   } else if (e.key === 'Escape' || e.key === 'Tab') {
     e.preventDefault();
@@ -218,4 +285,22 @@ onBeforeUnmount(() => close(false));
 .csel-item.is-highlighted { background: var(--c-bg); }
 .csel-item.is-selected { color: var(--c-navy); font-weight: 600; }
 .csel-check { width: 14px; height: 14px; color: var(--c-red); flex-shrink: 0; }
+
+/* Ricerca (prop searchable) */
+.csel-pop.has-search { flex-direction: column; }
+.csel-search {
+  flex: 0 0 auto;
+  margin: 6px 6px 0;
+  min-height: 0;
+  padding: 6px 10px;
+  border: 1px solid var(--c-line);
+  border-radius: 7px;
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--c-text);
+}
+.csel-search:focus-visible { outline: 2px solid var(--c-red); outline-offset: 1px; box-shadow: none; }
+.csel-empty { padding: 7px 10px; font-size: 12.5px; color: var(--c-text-mute); }
 </style>
