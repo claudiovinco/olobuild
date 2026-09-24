@@ -93,6 +93,20 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
         'webhook_enabled'   => false,
         'webhook_url'       => '',
         'webhook_method'    => 'POST',
+        'hubspot_enabled'   => false,
+        'hubspot_portal_id' => '',
+        'hubspot_form_guid' => '',
+        'hubspot_email_field' => 'email',
+        'hubspot_field_map'   => '',
+        'activecampaign_enabled'     => false,
+        'activecampaign_list_id'     => '',
+        'activecampaign_email_field' => 'email',
+        'convertkit_enabled'     => false,
+        'convertkit_form_id'     => '',
+        'convertkit_email_field' => 'email',
+        'brevo_enabled'     => false,
+        'brevo_list_id'     => '',
+        'brevo_email_field' => 'email',
         'file_max_size'     => '5',
         'file_types'        => '.pdf,.doc,.docx,.jpg,.png',
         'store_submissions' => false,
@@ -261,7 +275,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
         }
 
         // Form config as JSON for the AJAX handler
-        $form_config = wp_json_encode( [
+        $form_config_data = [
             'email_to'          => $s['email_to'],
             'email_cc'          => $s['email_cc'],
             'email_from_name'   => $s['email_from_name'],
@@ -287,7 +301,38 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
             'webhook_enabled'   => ! empty( $s['webhook_enabled'] ),
             'webhook_url'       => esc_url_raw( $s['webhook_url'] ?? '' ),
             'webhook_method'    => in_array( $s['webhook_method'] ?? 'POST', [ 'POST', 'PUT' ], true ) ? ( $s['webhook_method'] ?? 'POST' ) : 'POST',
-        ] );
+        ];
+
+        // HubSpot, ActiveCampaign, ConvertKit e Brevo: l'inspector li offre e l'handler li
+        // esegue, ma il config firmato non li portava e nessuno partiva mai. Entrano solo se
+        // accesi: un form senza questi servizi stampa lo stesso config (e lo stesso token) di
+        // prima. Sanificati come Mailchimp; il token li copre come il resto del config.
+        if ( ! empty( $s['hubspot_enabled'] ) ) {
+            $form_config_data['hubspot_enabled']   = true;
+            $form_config_data['hubspot_portal_id'] = sanitize_text_field( $s['hubspot_portal_id'] ?? '' );
+            $form_config_data['hubspot_form_guid'] = sanitize_text_field( $s['hubspot_form_guid'] ?? '' );
+            // HubSpot scarta l'intero invio se c'è un campo che il suo modulo non ha: si mandano
+            // solo l'email e i campi mappati (campo=proprietà HubSpot), mai tutti.
+            $form_config_data['hubspot_email_field'] = sanitize_key( $s['hubspot_email_field'] ?? 'email' );
+            $form_config_data['hubspot_field_map']   = sanitize_textarea_field( $s['hubspot_field_map'] ?? '' );
+        }
+        if ( ! empty( $s['activecampaign_enabled'] ) ) {
+            $form_config_data['activecampaign_enabled']     = true;
+            $form_config_data['activecampaign_list_id']     = sanitize_text_field( $s['activecampaign_list_id'] ?? '' );
+            $form_config_data['activecampaign_email_field'] = sanitize_key( $s['activecampaign_email_field'] ?? 'email' );
+        }
+        if ( ! empty( $s['convertkit_enabled'] ) ) {
+            $form_config_data['convertkit_enabled']     = true;
+            $form_config_data['convertkit_form_id']     = sanitize_text_field( $s['convertkit_form_id'] ?? '' );
+            $form_config_data['convertkit_email_field'] = sanitize_key( $s['convertkit_email_field'] ?? 'email' );
+        }
+        if ( ! empty( $s['brevo_enabled'] ) ) {
+            $form_config_data['brevo_enabled']     = true;
+            $form_config_data['brevo_list_id']     = sanitize_text_field( $s['brevo_list_id'] ?? '' );
+            $form_config_data['brevo_email_field'] = sanitize_key( $s['brevo_email_field'] ?? 'email' );
+        }
+
+        $form_config = wp_json_encode( $form_config_data );
 
         // Container style
         $container_style = '';

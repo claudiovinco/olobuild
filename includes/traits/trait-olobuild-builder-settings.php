@@ -189,6 +189,23 @@ trait Olobuild_Builder_Settings_Trait {
             'olobuilder-settings',
             'olo_mailchimp_section'
         );
+
+        // ── Altri servizi del Form contatti ──
+        // Le legge Olobuild_Form_Handler (send_to_activecampaign/convertkit/brevo); si
+        // impostano dalla scheda «Integrazioni form» della Configurazione, via REST
+        // settings/api-keys (che le sanifica da sé: admin_init lì non gira).
+        register_setting( 'olobuild_settings_group', 'olobuild_activecampaign_url', [
+            'type'              => 'string',
+            'sanitize_callback' => 'esc_url_raw',
+            'default'           => '',
+        ] );
+        foreach ( [ 'olobuild_activecampaign_key', 'olobuild_convertkit_key', 'olobuild_brevo_key' ] as $integration_key ) {
+            register_setting( 'olobuild_settings_group', $integration_key, [
+                'type'              => 'string',
+                'sanitize_callback' => 'sanitize_text_field',
+                'default'           => '',
+            ] );
+        }
     }
 
     /**
@@ -1002,11 +1019,15 @@ trait Olobuild_Builder_Settings_Trait {
             'olobuild_pexels_api_key', 'olobuild_pixabay_api_key', 'olobuild_unsplash_api_key',
             'olobuild_freesound_api_key', 'olobuild_recaptcha_site_key', 'olobuild_recaptcha_secret_key',
             'olobuild_mailchimp_api_key',
+            'olobuild_activecampaign_url', 'olobuild_activecampaign_key', 'olobuild_convertkit_key',
+            'olobuild_brevo_key',
         ];
         // La recaptcha_site_key e' pubblica (renderizzata nell'HTML): resta in chiaro.
+        // L'URL dell'account ActiveCampaign non e' una credenziale (la chiave e' a parte):
+        // in chiaro, cosi' si vede quale account e' collegato.
         // Tutto il resto e' segreto e viene mascherato: solo gli ultimi 4 caratteri
         // lasciano il server, coerente con Olobuild_AI_Assistant::get_settings().
-        $public = [ 'olobuild_recaptcha_site_key' ];
+        $public = [ 'olobuild_recaptcha_site_key', 'olobuild_activecampaign_url' ];
         $data   = [];
         foreach ( $keys as $k ) {
             $val = (string) get_option( $k, '' );
@@ -1018,6 +1039,10 @@ trait Olobuild_Builder_Settings_Trait {
             }
             $data[ $k ] = $val;
         }
+        // Ultimo invio rifiutato da ogni servizio del Form (codice, data, messaggio del
+        // provider, mai chiavi né email): la scheda «Integrazioni form» lo mostra al
+        // posto di «Pronto». Oggetto anche se vuoto.
+        $data['form_integrations_errors'] = (object) ( class_exists( 'Olobuild_Form_Handler' ) ? Olobuild_Form_Handler::integrations_errors() : [] );
         return rest_ensure_response( $data );
     }
 
@@ -1026,16 +1051,41 @@ trait Olobuild_Builder_Settings_Trait {
             'olobuild_pexels_api_key', 'olobuild_pixabay_api_key', 'olobuild_unsplash_api_key',
             'olobuild_freesound_api_key', 'olobuild_recaptcha_site_key', 'olobuild_recaptcha_secret_key',
             'olobuild_mailchimp_api_key',
+            'olobuild_activecampaign_url', 'olobuild_activecampaign_key', 'olobuild_convertkit_key',
+            'olobuild_brevo_key',
+        ];
+        // Servizio del Form a cui appartiene la chiave: cambiata la chiave, l'ultimo errore
+        // salvato per quel servizio era della chiave vecchia e non va più mostrato.
+        $form_service = [
+            'olobuild_mailchimp_api_key'  => 'mailchimp',
+            'olobuild_activecampaign_url' => 'activecampaign',
+            'olobuild_activecampaign_key' => 'activecampaign',
+            'olobuild_convertkit_key'     => 'convertkit',
+            'olobuild_brevo_key'          => 'brevo',
         ];
         $body = $request->get_json_params();
         foreach ( $allowed as $k ) {
-            if ( isset( $body[ $k ] ) ) {
+            if ( isset( $body[ $k ] ) && is_scalar( $body[ $k ] ) ) {
                 $val = (string) $body[ $k ];
                 // Placeholder mascherato (contiene '*') = valore non modificato: non sovrascrivere il segreto reale.
                 if ( strpos( $val, '*' ) !== false ) {
                     continue;
                 }
-                update_option( $k, sanitize_text_field( $val ) );
+                if ( 'olobuild_activecampaign_url' === $k ) {
+                    // Si incolla spesso senza schema («account.api-us1.com»): esc_url_raw
+                    // metterebbe http://, e l'API di ActiveCampaign risponde solo in https.
+                    $val = trim( $val );
+                    if ( '' !== $val && ! preg_match( '#^https?://#i', $val ) ) {
+                        $val = 'https://' . $val;
+                    }
+                    $val = untrailingslashit( esc_url_raw( $val, [ 'https', 'http' ] ) );
+                } else {
+                    $val = sanitize_text_field( $val );
+                }
+                // update_option() è true solo se il valore è cambiato.
+                if ( update_option( $k, $val ) && isset( $form_service[ $k ] ) && class_exists( 'Olobuild_Form_Handler' ) ) {
+                    Olobuild_Form_Handler::forget_integration_error( $form_service[ $k ] );
+                }
             }
         }
         return rest_ensure_response( [ 'success' => true ] );

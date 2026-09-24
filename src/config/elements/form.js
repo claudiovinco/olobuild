@@ -2,6 +2,19 @@ import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, bo
 import { t } from '@/i18n';
 
 /**
+ * Etichetta dell'interruttore di un servizio che usa chiavi globali: se in Configurazione
+ * → Integrazioni form la chiave manca lo dice qui (la description dei campi in linea non si
+ * vede), invece di lasciare un interruttore che non fa niente. Il builder riceve solo sì/no
+ * (oloData.formIntegrations, da Olobuild_Form_Handler::integrations_status()); fuori dal
+ * builder, o senza il dato, l'etichetta resta il solo nome.
+ */
+function etichettaServizio(nome, servizio) {
+  const stato = typeof window !== 'undefined' ? window.oloData?.formIntegrations : null;
+  if (!stato || stato[servizio] !== false) return nome;
+  return nome + ' — ' + t('chiave mancante in Configurazione');
+}
+
+/**
  * Tile Form — split CONTENUTO/STILE.
  *   fields[]      → campi del form, impostazioni invio (email_to/cc/from/subject/messaggi/redirect/anim),
  *                   auto-reply, pulsante invio (text+icon+pos+align+fullwidth), multi-step toggle+style+labels,
@@ -99,6 +112,8 @@ export default {
     hubspot_enabled: false,
     hubspot_portal_id: '',
     hubspot_form_guid: '',
+    hubspot_email_field: 'email',
+    hubspot_field_map: '',
     activecampaign_enabled: false,
     activecampaign_list_id: '',
     activecampaign_email_field: 'email',
@@ -247,10 +262,12 @@ export default {
       condition: { field: 'rate_limit', op: 'eq', value: true } },
     { key: 'rate_limit_window', label: t('Finestra (minuti)'), type: 'range', min: 5, max: 120, step: 5,
       condition: { field: 'rate_limit', op: 'eq', value: true } },
-    { key: 'recaptcha_enabled', label: t('reCAPTCHA v3'), type: 'toggle' },
+    { key: 'recaptcha_enabled', label: etichettaServizio(t('reCAPTCHA v3'), 'recaptcha'), type: 'toggle' },
 
-    { type: 'separator', label: t('Mailchimp') },
-    { key: 'mailchimp_enabled', label: t('Mailchimp'), type: 'toggle' },
+    // Una sola sezione per tutti i servizi (prima erano sei), chiusa di default. L'interruttore
+    // di ogni servizio fa da titolo: i suoi campi compaiono sotto solo quando è acceso.
+    { type: 'separator', label: t('Integrazioni') },
+    { key: 'mailchimp_enabled', label: etichettaServizio(t('Mailchimp'), 'mailchimp'), type: 'toggle' },
     { key: 'mailchimp_list_id', label: t('List/Audience ID'), type: 'text', placeholder: t('abc1234def'),
       condition: { field: 'mailchimp_enabled', op: 'eq', value: true } },
     { key: 'mailchimp_email_field', label: t('Nome campo email'), type: 'text', placeholder: t('email'),
@@ -258,7 +275,6 @@ export default {
     { key: 'mailchimp_merge_fields', label: t('Merge fields (campo=MERGE)'), type: 'textarea', placeholder: t('nome=FNAME\ncognome=LNAME'),
       condition: { field: 'mailchimp_enabled', op: 'eq', value: true } },
 
-    { type: 'separator', label: t('Webhook') },
     { key: 'webhook_enabled', label: t('Webhook'), type: 'toggle' },
     { key: 'webhook_url', label: t('Webhook URL'), type: 'text', placeholder: t('https://...'),
       condition: { field: 'webhook_enabled', op: 'eq', value: true } },
@@ -267,29 +283,33 @@ export default {
       { value: 'PUT', label: t('PUT') },
     ], condition: { field: 'webhook_enabled', op: 'eq', value: true } },
 
-    { type: 'separator', label: t('HubSpot') },
     { key: 'hubspot_enabled', label: t('HubSpot'), type: 'toggle' },
     { key: 'hubspot_portal_id', label: t('HubSpot Portal ID'), type: 'text', placeholder: '12345678',
       condition: { field: 'hubspot_enabled', op: 'eq', value: true } },
     { key: 'hubspot_form_guid', label: t('HubSpot Form GUID'), type: 'text', placeholder: t('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'),
       condition: { field: 'hubspot_enabled', op: 'eq', value: true } },
+    { key: 'hubspot_email_field', label: t('Nome campo email'), type: 'text', placeholder: t('email'),
+      condition: { field: 'hubspot_enabled', op: 'eq', value: true } },
+    // HubSpot scarta l'INTERO invio se riceve un campo che il suo modulo non ha: si mandano solo
+    // l'email e i campi mappati qui, col nome interno della proprietà HubSpot.
+    { key: 'hubspot_field_map', label: t('Altri campi (campo=proprietà HubSpot)'), type: 'textarea', placeholder: t('nome=firstname\nmessaggio=message'),
+      condition: { field: 'hubspot_enabled', op: 'eq', value: true } },
+    { type: 'description', description: t('A HubSpot arrivano solo l\'email e i campi elencati qui sopra. Usa il nome interno delle proprietà e metti solo quelle che il modulo HubSpot ha, comprese tutte quelle obbligatorie: altrimenti HubSpot scarta l\'intero invio.'),
+      condition: { field: 'hubspot_enabled', op: 'eq', value: true } },
 
-    { type: 'separator', label: t('ActiveCampaign') },
-    { key: 'activecampaign_enabled', label: t('ActiveCampaign'), type: 'toggle' },
+    { key: 'activecampaign_enabled', label: etichettaServizio(t('ActiveCampaign'), 'activecampaign'), type: 'toggle' },
     { key: 'activecampaign_list_id', label: t('List ID'), type: 'text', placeholder: '1',
       condition: { field: 'activecampaign_enabled', op: 'eq', value: true } },
     { key: 'activecampaign_email_field', label: t('Nome campo email'), type: 'text', placeholder: t('email'),
       condition: { field: 'activecampaign_enabled', op: 'eq', value: true } },
 
-    { type: 'separator', label: t('ConvertKit') },
-    { key: 'convertkit_enabled', label: t('ConvertKit'), type: 'toggle' },
+    { key: 'convertkit_enabled', label: etichettaServizio(t('ConvertKit'), 'convertkit'), type: 'toggle' },
     { key: 'convertkit_form_id', label: t('Form ID'), type: 'text', placeholder: '1234567',
       condition: { field: 'convertkit_enabled', op: 'eq', value: true } },
     { key: 'convertkit_email_field', label: t('Nome campo email'), type: 'text', placeholder: t('email'),
       condition: { field: 'convertkit_enabled', op: 'eq', value: true } },
 
-    { type: 'separator', label: t('Brevo (Sendinblue)') },
-    { key: 'brevo_enabled', label: t('Brevo (Sendinblue)'), type: 'toggle' },
+    { key: 'brevo_enabled', label: etichettaServizio(t('Brevo (Sendinblue)'), 'brevo'), type: 'toggle' },
     { key: 'brevo_list_id', label: t('List ID'), type: 'text', placeholder: '3',
       condition: { field: 'brevo_enabled', op: 'eq', value: true } },
     { key: 'brevo_email_field', label: t('Nome campo email'), type: 'text', placeholder: t('email'),

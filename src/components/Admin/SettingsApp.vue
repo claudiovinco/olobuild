@@ -228,6 +228,7 @@ import PerformanceTab from './PerformanceTab.vue';
 import MaintenanceTab from './MaintenanceTab.vue';
 import AITab from './AITab.vue';
 import StockmediaTab from './StockmediaTab.vue';
+import IntegrazioniTab from './IntegrazioniTab.vue';
 import WhitelabelTab from './WhitelabelTab.vue';
 import PermessiTab from './PermessiTab.vue';
 
@@ -269,6 +270,9 @@ const IA_GROUPS = [
       // alla console = salto di menu (feedback utente); senza una pagina
       // cockpit dedicata, la sua casa resta la Configurazione.
       { id: 'stockmedia',  label: 'Stock media',              icon: 'image',    component: StockmediaTab },
+      // Chiavi dei servizi del Form contatti (reCAPTCHA, Mailchimp, ActiveCampaign,
+      // ConvertKit, Brevo): prima nessuna schermata le impostava.
+      { id: 'integrazioni', label: 'Integrazioni form',       icon: 'plug',     component: IntegrazioniTab },
     ],
   },
   {
@@ -467,6 +471,7 @@ const ICONS = {
   gauge:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14 8 10"/><circle cx="12" cy="14" r="9"/><path d="M3 14a9 9 0 0 1 18 0"/></svg>',
   sparkles: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/><path d="M19 14l.7 2.3L22 17l-2.3.7L19 20l-.7-2.3L16 17l2.3-.7L19 14z"/></svg>',
   image:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>',
+  plug:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v6M15 2v6"/><path d="M6 8h12v4a6 6 0 0 1-12 0V8z"/><path d="M12 18v4"/></svg>',
   drop:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s7 8 7 13a7 7 0 0 1-14 0c0-5 7-13 7-13z"/></svg>',
   wrench:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L2 19l3 3 7.3-7.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4 2.6-2.6z"/></svg>',
   sitemap:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="2" width="4" height="4"/><rect x="3" y="14" width="4" height="4"/><rect x="10" y="14" width="4" height="4"/><rect x="17" y="14" width="4" height="4"/><path d="M12 6v4M5 14v-2h14v2"/></svg>',

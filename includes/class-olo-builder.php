@@ -1087,6 +1087,8 @@ class Olobuild_Builder {
                 get_option( 'olobuild_stockmedia_behavior', [] ) ?: [],
                 [ 'preferred' => 'unsplash', 'download_local' => true, 'optimize_on_download' => false ]
             ),
+            // Solo sì/no per servizio: l'inspector del Form dice nell'etichetta quando manca la chiave.
+            'formIntegrations'   => Olobuild_Form_Handler::integrations_status(),
             'templateList'       => $this->get_template_list(),
             'megapanelTemplates' => $this->get_megapanel_templates(),
             'widgetTemplates'    => $this->get_widget_templates(),

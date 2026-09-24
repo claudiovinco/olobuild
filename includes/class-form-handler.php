@@ -7,6 +7,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Olobuild_Form_Handler {
 
     /**
+     * Option con l'ultimo errore di ogni servizio del form (autoload no): la scrive
+     * note_integration_response(), la legge la scheda «Integrazioni form».
+     */
+    const INTEGRATION_ERRORS_OPTION = 'olobuild_form_integrations_last_error';
+
+    /**
      * Secret key used to sign form tokens (HMAC).
      * Derived from WordPress AUTH_SALT for uniqueness per-site.
      *
@@ -569,38 +575,8 @@ class Olobuild_Form_Handler {
         }
 
         // 12b. HubSpot integration
-        $hubspot_enabled = ! empty( $config['hubspot_enabled'] );
-        $hubspot_portal  = $config['hubspot_portal_id'] ?? '';
-        $hubspot_form    = $config['hubspot_form_guid'] ?? '';
-        if ( $hubspot_enabled ) {
-            if ( $hubspot_portal !== '' ) {
-                if ( $hubspot_form !== '' ) {
-                    $hubspot_fields = [];
-                    foreach ( $sanitized as $key => $value ) {
-                        if ( is_string( $value ) ) {
-                            $hubspot_fields[] = [
-                                'name'  => $key,
-                                'value' => $value,
-                            ];
-                        }
-                    }
-                    $hubspot_url = 'https://api.hsforms.com/submissions/v3/integration/submit/'
-                        . sanitize_text_field( $hubspot_portal ) . '/' . sanitize_text_field( $hubspot_form );
-                    $hubspot_body = [
-                        'fields'  => $hubspot_fields,
-                        'context' => [
-                            'pageUri'   => wp_get_referer(),
-                            'pageName'  => get_the_title(),
-                            'ipAddress' => $this->get_client_ip(),
-                        ],
-                    ];
-                    wp_remote_post( $hubspot_url, [
-                        'headers' => [ 'Content-Type' => 'application/json' ],
-                        'body'    => wp_json_encode( $hubspot_body ),
-                        'timeout' => 10,
-                    ] );
-                }
-            }
+        if ( ! empty( $config['hubspot_enabled'] ) ) {
+            $this->send_to_hubspot( $sanitized, $config );
         }
 
         // 12c. ActiveCampaign integration
@@ -665,6 +641,277 @@ class Olobuild_Form_Handler {
     }
 
     /**
+     * Quali servizi del form hanno le chiavi globali (Configurazione → Integrazioni form).
+     *
+     * Solo sì/no, mai le chiavi: serve all'inspector per dire nell'etichetta del
+     * servizio che manca la chiave, invece di lasciare un interruttore che non fa
+     * niente. Stesse option che leggono i send_to_* qui sotto e il render del form
+     * (reCAPTCHA: la site key per stampare lo script, la secret per verificare).
+     * HubSpot e webhook non hanno chiavi globali: bastano i dati nel form.
+     *
+     * @return array<string,bool>
+     */
+    public static function integrations_status() {
+        $has = function ( $option ) {
+            $value = get_option( $option, '' );
+            return is_scalar( $value ) && trim( (string) $value ) !== '';
+        };
+        return [
+            'recaptcha'      => $has( 'olobuild_recaptcha_site_key' ) && $has( 'olobuild_recaptcha_secret_key' ),
+            'mailchimp'      => $has( 'olobuild_mailchimp_api_key' ),
+            'activecampaign' => $has( 'olobuild_activecampaign_url' ) && $has( 'olobuild_activecampaign_key' ),
+            'convertkit'     => $has( 'olobuild_convertkit_key' ),
+            'brevo'          => $has( 'olobuild_brevo_key' ),
+        ];
+    }
+
+    /**
+     * Ultimo errore di ogni servizio del form: [ servizio => { code, time, message } ].
+     * code 0 = il servizio non è stato raggiunto (rete, o dati mancanti lato nostro).
+     *
+     * @return array<string,array>
+     */
+    public static function integrations_errors() {
+        $errors = get_option( self::INTEGRATION_ERRORS_OPTION, [] );
+        return is_array( $errors ) ? $errors : [];
+    }
+
+    /**
+     * Dimentica l'ultimo errore di un servizio (chiave cambiata in Configurazione:
+     * l'errore era della chiave vecchia).
+     */
+    public static function forget_integration_error( $service ) {
+        $errors = self::integrations_errors();
+        if ( isset( $errors[ $service ] ) ) {
+            unset( $errors[ $service ] );
+            update_option( self::INTEGRATION_ERRORS_OPTION, $errors, false );
+        }
+    }
+
+    /**
+     * Legge l'esito della chiamata a un servizio del form. Un errore di rete o una
+     * risposta non 2xx non ferma l'invio (l'email è già partita) né gli altri servizi,
+     * ma non resta muto: si ricorda l'ultimo errore del servizio, che la scheda
+     * «Integrazioni form» mostra al posto di «Pronto». Una risposta 2xx lo cancella.
+     *
+     * @param string         $service  mailchimp|webhook|hubspot|activecampaign|convertkit|brevo
+     * @param array|WP_Error $response Risultato di wp_remote_*.
+     * @param string[]       $redact   Testi da non salvare mai (chiave API, email di chi scrive).
+     * @return bool True se il servizio ha accettato la chiamata.
+     */
+    private static function note_integration_response( $service, $response, $redact = [] ) {
+        if ( is_wp_error( $response ) ) {
+            self::save_integration_error( $service, 0, $response->get_error_message(), $redact );
+            return false;
+        }
+        $code = (int) wp_remote_retrieve_response_code( $response );
+        if ( $code >= 200 && $code < 300 ) {
+            self::forget_integration_error( $service );
+            return true;
+        }
+        self::save_integration_error( $service, $code, self::provider_message( wp_remote_retrieve_body( $response ) ), $redact );
+        return false;
+    }
+
+    /**
+     * Il messaggio d'errore del provider, dal corpo della risposta: HubSpot e
+     * ActiveCampaign lo mettono in errors[0], Mailchimp in detail, Brevo e ConvertKit
+     * in message/error. Se il corpo non è JSON, il testo com'è (poi ripulito).
+     */
+    private static function provider_message( $body ) {
+        $json = json_decode( (string) $body, true );
+        if ( is_array( $json ) ) {
+            $first      = ( isset( $json['errors'] ) && is_array( $json['errors'] ) && isset( $json['errors'][0] ) && is_array( $json['errors'][0] ) ) ? $json['errors'][0] : [];
+            $candidates = [
+                $first['message'] ?? null,
+                $first['detail'] ?? null,
+                $first['title'] ?? null,
+                $json['detail'] ?? null,
+                $json['message'] ?? null,
+                $json['error'] ?? null,
+                $json['title'] ?? null,
+            ];
+            foreach ( $candidates as $candidate ) {
+                if ( is_string( $candidate ) && trim( $candidate ) !== '' ) {
+                    return $candidate;
+                }
+            }
+        }
+        return (string) $body;
+    }
+
+    /**
+     * Salva l'ultimo errore di un servizio: codice HTTP, data e un estratto del
+     * messaggio, MAI la chiave né l'email di chi ha scritto.
+     */
+    private static function save_integration_error( $service, $code, $message, $redact = [] ) {
+        // Testo semplice su una riga (una pagina d'errore HTML diventa il suo testo).
+        $message = sanitize_text_field( wp_check_invalid_utf8( (string) $message, true ) );
+        foreach ( (array) $redact as $secret ) {
+            if ( is_string( $secret ) && strlen( $secret ) >= 4 ) {
+                $message = str_ireplace( $secret, '***', $message );
+            }
+        }
+        $message = function_exists( 'mb_substr' ) ? mb_substr( $message, 0, 200 ) : substr( $message, 0, 200 );
+
+        $errors             = self::integrations_errors();
+        $errors[ $service ] = [
+            'code'    => (int) $code,
+            'time'    => time(),
+            'message' => $message,
+        ];
+        update_option( self::INTEGRATION_ERRORS_OPTION, $errors, false );
+
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- diagnostica gated su WP_DEBUG: un servizio del form ha rifiutato l'invio; senza chiavi né email.
+            error_log( sprintf( '[Olobuild] Form -> %s: %s %s', $service, $code ? 'HTTP ' . (int) $code : 'non raggiunto', $message ) );
+        }
+    }
+
+    /**
+     * Righe «campo=destinazione» (una per riga) → [ campo del form => destinazione ].
+     * Il campo passa da sanitize_key come le chiavi dei dati inviati; la destinazione
+     * la normalizza chi chiama.
+     */
+    private static function parse_field_map( $raw ) {
+        $map = [];
+        if ( ! is_string( $raw ) || $raw === '' ) {
+            return $map;
+        }
+        foreach ( explode( "\n", $raw ) as $line ) {
+            $parts = explode( '=', trim( $line ), 2 );
+            if ( count( $parts ) !== 2 ) {
+                continue;
+            }
+            $field  = sanitize_key( trim( $parts[0] ) );
+            $target = trim( $parts[1] );
+            if ( $field !== '' && $target !== '' ) {
+                $map[ $field ] = $target;
+            }
+        }
+        return $map;
+    }
+
+    /**
+     * Nome, cognome e telefono di chi scrive, per i servizi che li vogliono separati
+     * (ActiveCampaign, ConvertKit, Brevo). I campi in inglese come prima: «name»
+     * diviso al primo spazio vince su first_name/last_name. Se mancano, quelli in
+     * italiano: il form predefinito della tile ha «nome» (diviso allo stesso modo,
+     * salvo che ci sia anche «cognome»), poi «cognome» e «telefono».
+     *
+     * @return array{first:string,last:string,phone:string}
+     */
+    private static function contact_parts( $form_data ) {
+        $text  = function ( $key ) use ( $form_data ) {
+            $value = $form_data[ $key ] ?? '';
+            return is_string( $value ) ? trim( $value ) : '';
+        };
+        $first = $text( 'first_name' );
+        $last  = $text( 'last_name' );
+        $full  = $text( 'name' );
+        if ( $full === '' && $first === '' && $last === '' ) {
+            $cognome = $text( 'cognome' );
+            if ( $cognome !== '' ) {
+                $first = $text( 'nome' );
+                $last  = $cognome;
+            } else {
+                $full = $text( 'nome' );
+            }
+        }
+        if ( $full !== '' ) {
+            $parts = explode( ' ', $full, 2 );
+            $first = $parts[0];
+            if ( isset( $parts[1] ) ) {
+                $last = trim( $parts[1] );
+            }
+        }
+        $phone = $text( 'phone' );
+        if ( $phone === '' ) {
+            $phone = $text( 'telefono' );
+        }
+        return [
+            'first' => $first,
+            'last'  => $last,
+            'phone' => $phone,
+        ];
+    }
+
+    /**
+     * Invia il contatto a un modulo HubSpot (Forms API v3, senza chiave).
+     *
+     * HubSpot scarta l'INTERO invio (400 FIELD_NOT_IN_FORM_DEFINITION) se c'è anche un
+     * solo campo che il suo modulo non ha: per questo si mandano solo l'email, come
+     * proprietà «email» che ogni modulo HubSpot ha, e i campi elencati nella mappa
+     * «campo=proprietà HubSpot». Mai i nomi del form così come sono.
+     */
+    private function send_to_hubspot( $form_data, $config ) {
+        $portal = sanitize_text_field( $config['hubspot_portal_id'] ?? '' );
+        $guid   = sanitize_text_field( $config['hubspot_form_guid'] ?? '' );
+        if ( $portal === '' || $guid === '' ) {
+            return;
+        }
+
+        $properties  = [];
+        $email_field = sanitize_key( $config['hubspot_email_field'] ?? 'email' ) ?: 'email';
+        $email_raw   = $form_data[ $email_field ] ?? '';
+        $email       = is_string( $email_raw ) ? sanitize_email( $email_raw ) : '';
+        if ( $email !== '' ) {
+            $properties['email'] = $email;
+        }
+        foreach ( self::parse_field_map( $config['hubspot_field_map'] ?? '' ) as $field => $property ) {
+            // Nomi interni HubSpot: minuscole, cifre, trattino basso.
+            $property = sanitize_key( $property );
+            if ( $property === '' || isset( $properties[ $property ] ) || ! isset( $form_data[ $field ] ) ) {
+                continue;
+            }
+            $value = $form_data[ $field ];
+            // Caselle multiple: HubSpot vuole le scelte separate da punto e virgola.
+            $value = is_array( $value ) ? implode( ';', $value ) : (string) $value;
+            if ( $value !== '' ) {
+                $properties[ $property ] = $value;
+            }
+        }
+        if ( empty( $properties ) ) {
+            return;
+        }
+
+        $fields = [];
+        foreach ( $properties as $name => $value ) {
+            $fields[] = [
+                'name'  => (string) $name,
+                'value' => $value,
+            ];
+        }
+
+        // Il contesto porta solo stringhe valorizzate: senza Referer wp_get_referer()
+        // è false, e dentro la REST non c'è un post da cui prendere il titolo; l'IP
+        // solo se pubblico.
+        $context = [];
+        $page    = (string) wp_get_referer();
+        if ( $page !== '' ) {
+            $context['pageUri'] = $page;
+        }
+        $ip = $this->get_client_ip();
+        if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) ) {
+            $context['ipAddress'] = $ip;
+        }
+        $body = [ 'fields' => $fields ];
+        if ( ! empty( $context ) ) {
+            $body['context'] = $context;
+        }
+
+        $response = wp_remote_post(
+            'https://api.hsforms.com/submissions/v3/integration/submit/' . rawurlencode( $portal ) . '/' . rawurlencode( $guid ),
+            [
+                'headers' => [ 'Content-Type' => 'application/json' ],
+                'body'    => wp_json_encode( $body ),
+                'timeout' => 10,
+            ]
+        );
+        self::note_integration_response( 'hubspot', $response, [ $email ] );
+    }
+
+    /**
      * Send subscriber to Mailchimp via API v3.
      */
     private function send_to_mailchimp( $form_data, $config ) {
@@ -680,11 +927,15 @@ class Olobuild_Form_Handler {
             $dc = substr( $api_key, strpos( $api_key, '-' ) + 1 );
         }
         if ( empty( $dc ) ) {
+            // La chiave c'è ma non dice a quale server parlare: in Configurazione «Pronto»
+            // non basta a capirlo, lo dice l'errore salvato.
+            self::save_integration_error( 'mailchimp', 0, __( 'API key senza il datacenter finale (per esempio -us21).', 'olobuild' ) );
             return;
         }
 
         // Get email from form data
-        $email_field = sanitize_key( $config['mailchimp_email_field'] ?? 'email' );
+        // Campo lasciato vuoto nell'inspector = «email», come dice il suo segnaposto.
+        $email_field = sanitize_key( $config['mailchimp_email_field'] ?? 'email' ) ?: 'email';
         $email       = sanitize_email( $form_data[ $email_field ] ?? '' );
         if ( empty( $email ) ) {
             return;
@@ -719,7 +970,7 @@ class Olobuild_Form_Handler {
 
         $url = "https://{$dc}.api.mailchimp.com/3.0/lists/{$list_id}/members/" . md5( strtolower( $email ) );
 
-        wp_remote_request( $url, [
+        $response = wp_remote_request( $url, [
             'method'  => 'PUT',
             'headers' => [
                 'Authorization' => 'Basic ' . base64_encode( 'anystring:' . $api_key ),
@@ -728,6 +979,7 @@ class Olobuild_Form_Handler {
             'body'    => wp_json_encode( $body ),
             'timeout' => 10,
         ] );
+        self::note_integration_response( 'mailchimp', $response, [ $api_key, $email ] );
     }
 
     /**
@@ -741,7 +993,7 @@ class Olobuild_Form_Handler {
             return;
         }
 
-        wp_remote_request( $url, [
+        $response = wp_remote_request( $url, [
             'method'  => $method,
             'headers' => [
                 'Content-Type' => 'application/json',
@@ -755,6 +1007,9 @@ class Olobuild_Form_Handler {
             ] ),
             'timeout' => 10,
         ] );
+        // Un webhook può rimandare indietro i dati ricevuti: nel messaggio salvato non
+        // resta niente di ciò che ha scritto il visitatore.
+        self::note_integration_response( 'webhook', $response, array_filter( $form_data, 'is_string' ) );
     }
 
     /**
@@ -767,19 +1022,15 @@ class Olobuild_Form_Handler {
 
         if ( empty( $api_url ) || empty( $api_key ) ) return;
 
-        $email_field = sanitize_key( $config['activecampaign_email_field'] ?? 'email' );
+        $email_field = sanitize_key( $config['activecampaign_email_field'] ?? 'email' ) ?: 'email';
         $email = sanitize_email( $form_data[ $email_field ] ?? '' );
         if ( empty( $email ) ) return;
 
         $contact = [ 'email' => $email ];
-        if ( ! empty( $form_data['first_name'] ) ) $contact['firstName'] = $form_data['first_name'];
-        if ( ! empty( $form_data['last_name'] ) )  $contact['lastName']  = $form_data['last_name'];
-        if ( ! empty( $form_data['name'] ) ) {
-            $parts = explode( ' ', $form_data['name'], 2 );
-            $contact['firstName'] = $parts[0];
-            if ( isset( $parts[1] ) ) $contact['lastName'] = $parts[1];
-        }
-        if ( ! empty( $form_data['phone'] ) ) $contact['phone'] = $form_data['phone'];
+        $who     = self::contact_parts( $form_data );
+        if ( $who['first'] !== '' ) $contact['firstName'] = $who['first'];
+        if ( $who['last'] !== '' )  $contact['lastName']  = $who['last'];
+        if ( $who['phone'] !== '' ) $contact['phone']     = $who['phone'];
 
         // Create/update contact
         $response = wp_remote_post( $api_url . '/api/3/contact/sync', [
@@ -792,11 +1043,11 @@ class Olobuild_Form_Handler {
         ] );
 
         // Add to list if list_id provided
-        if ( ! is_wp_error( $response ) && ! empty( $list_id ) ) {
+        if ( self::note_integration_response( 'activecampaign', $response, [ $api_key, $email ] ) && ! empty( $list_id ) ) {
             $body = json_decode( wp_remote_retrieve_body( $response ), true );
             $contact_id = $body['contact']['id'] ?? null;
             if ( $contact_id ) {
-                wp_remote_post( $api_url . '/api/3/contactLists', [
+                $list_response = wp_remote_post( $api_url . '/api/3/contactLists', [
                     'headers' => [
                         'Api-Token'    => $api_key,
                         'Content-Type' => 'application/json',
@@ -804,6 +1055,7 @@ class Olobuild_Form_Handler {
                     'body'    => wp_json_encode( [ 'contactList' => [ 'list' => (int) $list_id, 'contact' => (int) $contact_id, 'status' => 1 ] ] ),
                     'timeout' => 10,
                 ] );
+                self::note_integration_response( 'activecampaign', $list_response, [ $api_key, $email ] );
             }
         }
     }
@@ -817,7 +1069,7 @@ class Olobuild_Form_Handler {
 
         if ( empty( $api_key ) || empty( $form_id ) ) return;
 
-        $email_field = sanitize_key( $config['convertkit_email_field'] ?? 'email' );
+        $email_field = sanitize_key( $config['convertkit_email_field'] ?? 'email' ) ?: 'email';
         $email = sanitize_email( $form_data[ $email_field ] ?? '' );
         if ( empty( $email ) ) return;
 
@@ -825,16 +1077,15 @@ class Olobuild_Form_Handler {
             'api_key'    => $api_key,
             'email'      => $email,
         ];
-        if ( ! empty( $form_data['first_name'] ) ) $body['first_name'] = $form_data['first_name'];
-        if ( ! empty( $form_data['name'] ) ) {
-            $body['first_name'] = explode( ' ', $form_data['name'] )[0];
-        }
+        $who = self::contact_parts( $form_data );
+        if ( $who['first'] !== '' ) $body['first_name'] = $who['first'];
 
-        wp_remote_post( "https://api.convertkit.com/v3/forms/{$form_id}/subscribe", [
+        $response = wp_remote_post( 'https://api.convertkit.com/v3/forms/' . rawurlencode( $form_id ) . '/subscribe', [
             'headers' => [ 'Content-Type' => 'application/json' ],
             'body'    => wp_json_encode( $body ),
             'timeout' => 10,
         ] );
+        self::note_integration_response( 'convertkit', $response, [ $api_key, $email ] );
     }
 
     /**
@@ -846,23 +1097,19 @@ class Olobuild_Form_Handler {
 
         if ( empty( $api_key ) ) return;
 
-        $email_field = sanitize_key( $config['brevo_email_field'] ?? 'email' );
+        $email_field = sanitize_key( $config['brevo_email_field'] ?? 'email' ) ?: 'email';
         $email = sanitize_email( $form_data[ $email_field ] ?? '' );
         if ( empty( $email ) ) return;
 
         $body = [ 'email' => $email, 'updateEnabled' => true ];
         $attrs = [];
-        if ( ! empty( $form_data['first_name'] ) ) $attrs['FIRSTNAME'] = $form_data['first_name'];
-        if ( ! empty( $form_data['last_name'] ) )  $attrs['LASTNAME']  = $form_data['last_name'];
-        if ( ! empty( $form_data['name'] ) ) {
-            $parts = explode( ' ', $form_data['name'], 2 );
-            $attrs['FIRSTNAME'] = $parts[0];
-            if ( isset( $parts[1] ) ) $attrs['LASTNAME'] = $parts[1];
-        }
+        $who   = self::contact_parts( $form_data );
+        if ( $who['first'] !== '' ) $attrs['FIRSTNAME'] = $who['first'];
+        if ( $who['last'] !== '' )  $attrs['LASTNAME']  = $who['last'];
         if ( ! empty( $attrs ) ) $body['attributes'] = $attrs;
         if ( $list_id > 0 ) $body['listIds'] = [ $list_id ];
 
-        wp_remote_post( 'https://api.brevo.com/v3/contacts', [
+        $response = wp_remote_post( 'https://api.brevo.com/v3/contacts', [
             'headers' => [
                 'api-key'      => $api_key,
                 'Content-Type' => 'application/json',
@@ -870,6 +1117,7 @@ class Olobuild_Form_Handler {
             'body'    => wp_json_encode( $body ),
             'timeout' => 10,
         ] );
+        self::note_integration_response( 'brevo', $response, [ $api_key, $email ] );
     }
 
     /**

@@ -34,6 +34,7 @@ const TAB_META = {
 	maintenance:   { label: 'Manutenzione & Coming Soon', group: 'Prestazioni & Servizi' },
 	ai:            { label: 'AI Assistant',            group: 'Prestazioni & Servizi' },
 	stockmedia:    { label: 'Stock media',             group: 'Prestazioni & Servizi' },
+	integrazioni:  { label: 'Integrazioni form',       group: 'Prestazioni & Servizi' },
 	whitelabel:    { label: 'White Label',             group: 'Team & Brand' },
 	permessi:      { label: 'Permessi & Ruoli',        group: 'Team & Brand' },
 };
@@ -55,6 +56,7 @@ const TAB_FILES = {
 	maintenance:   'MaintenanceTab.vue',
 	ai:            'AITab.vue',
 	stockmedia:    'StockmediaTab.vue',
+	integrazioni:  'IntegrazioniTab.vue',
 	whitelabel:    'WhitelabelTab.vue',
 	permessi:      'PermessiTab.vue',
 };
