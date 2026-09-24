@@ -688,6 +688,10 @@ class Olobuild_Frontend_Renderer {
             // ri-gira quando la tile viene clonata dal <template> lazy — nastro senza
             // skew né trascinamento. Tile leggera (testo/loghi): sempre eager.
             'marquee',
+            // checkout WooCommerce: checkout.js si aggancia a form.checkout al DOM ready.
+            // Un form nato dopo da un <template> resta senza AJAX né validazione e i
+            // gateway JS non partono: l'ordine non si completa.
+            'woo_checkout', 'woo_checkout_multistep',
         ];
         if ( in_array( $type, $no_lazy, true ) ) {
             return $html;

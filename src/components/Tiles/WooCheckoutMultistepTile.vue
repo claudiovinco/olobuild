@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="olo-woo-multistep-preview">
+    <div class="olo-woo-multistep-preview" :style="rootStyle">
       <!-- Progress bar -->
       <div :style="progressBarStyle">
         <div v-for="(label, i) in steps" :key="i" :style="stepStyle(i)">
@@ -26,9 +26,18 @@
 import { t } from '@/i18n';
 import { computed } from 'vue';
 import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
+import { toBorderStyle } from '@/composables/useBoxModel';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const s = computed(() => props.settings || {});
-const steps = computed(() => (s.value.step_labels || 'Dati,Spedizione,Pagamento,Conferma').split(',').map(l => l.trim()));
+// Bordo salvato sul contenitore della tile, come #uid nel PHP (build_border_css): vuoto se inattivo.
+const rootStyle = computed(() => toBorderStyle(s.value.border));
+// Gemello del PHP: tre passi per ruolo (dati, spedizione, riepilogo e pagamento), la
+// 4ª etichetta in poi non si usa, un'etichetta vuota ripiega sul nome predefinito. Il sito
+// toglie il passo Spedizione quando il carrello non lo chiede: il canvas non ha un carrello.
+const steps = computed(() => {
+  const raw = String(s.value.step_labels ?? '').split(',').map(l => l.trim());
+  return [t('Dati'), t('Spedizione'), t('Pagamento')].map((d, i) => raw[i] || d);
+});
 const accent = computed(() => resolveColor(s.value.accent_color, TOKENS.primary));
 const radius = computed(() => ((v => isNaN(v) ? 12 : v)(parseInt(s.value.card_radius))) + 'px');
 

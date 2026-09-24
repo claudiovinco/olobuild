@@ -17,7 +17,7 @@ export default {
     preset: 'custom',
     bg: { type: 'none' },
     typography_preset: '',
-    step_labels: 'Dati,Spedizione,Pagamento,Conferma',
+    step_labels: 'Dati,Spedizione,Pagamento',
     step_style: 'progress',
     accent_color: '',
     step_bg: '',
@@ -33,7 +33,9 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'step_labels', label: t('Etichette step (virgola)'), type: 'text' },
+    // Una etichetta per RUOLO, non per posizione: la 2ª (Spedizione) sparisce col suo passo
+    // quando il carrello non chiede un indirizzo; dalla 4ª in poi non si usano.
+    { key: 'step_labels', label: t('Etichette passi: dati, spedizione, pagamento (virgola)'), type: 'text' },
     { key: 'show_order_review', label: t('Mostra riepilogo ordine'), type: 'toggle' },
   ],
 
