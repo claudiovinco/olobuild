@@ -26,16 +26,12 @@ class Olobuild_Footer_Integration {
      * Risolve il template Footer attivo secondo la priorità:
      *   1) override per-pagina (`_olo_footer_id` post-meta)
      *   2) regole di visualizzazione (Olobuild_Template_Conditions)
-     *   3) footer globale (`olo_active_footer` option)
+     *   3) footer globale (`olobuild_active_footer` option)
+     * La catena è una sola, condivisa col builder: Olobuild_Template_Conditions::resolve_zone().
      */
     private function resolve_active_footer() {
-        if ( is_singular() ) {
-            $override = (int) get_post_meta( get_queried_object_id(), '_olo_footer_id', true );
-            if ( $override ) return $override;
-        }
-        $by_rules = (int) apply_filters( 'olobuild_resolve_template_id', 0, 'footer' );
-        if ( $by_rules ) return $by_rules;
-        return (int) get_option( 'olobuild_active_footer', 0 );
+        $zone = Olobuild_Template_Conditions::resolve_zone( 'footer' );
+        return (int) $zone['id'];
     }
 
     /**

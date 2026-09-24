@@ -26,7 +26,8 @@ class Olobuild_Template_Conditions {
         add_action( 'rest_api_init', [ $this, 'register_routes' ] );
 
         // Override single template selection with conditions
-        add_filter( 'olobuild_resolve_template_id', [ $this, 'resolve_by_conditions' ], 10, 2 );
+        // (terzo argomento facoltativo: la pagina su cui valutarle, vedi resolve_zone()).
+        add_filter( 'olobuild_resolve_template_id', [ $this, 'resolve_by_conditions' ], 10, 3 );
 
         // Admin UI: pagina dedicata sotto Olobuild
         add_action( 'admin_menu', [ $this, 'register_admin_page' ], 30 );
@@ -38,14 +39,64 @@ class Olobuild_Template_Conditions {
      * ───────────────────────────────────────────── */
 
     /**
+     * Header o footer EFFETTIVO, con la sua provenienza. Unica catena, per il sito
+     * e per il builder:
+     *   1) assegnazione della pagina (meta `_olo_header_id` / `_olo_footer_id`;
+     *      -1 = «nessun header/footer su questa pagina», e vince anche lui)
+     *   2) regole di visualizzazione (filtro `olobuild_resolve_template_id`)
+     *   3) header/footer globale (option `olobuild_active_header` / `_footer`)
+     *
+     * $post_id null: la richiesta corrente, come il sito ha sempre fatto.
+     * $post_id > 0: quella pagina, anche da un'altra richiesta (il builder, in
+     * admin): le regole leggono il post invece dei conditional tag.
+     * $post_id <= 0: solo il globale, senza regole (in admin «Tutto il sito» o
+     * «Utenti loggati» scatterebbero sempre).
+     *
+     * @param string   $zone    'header' | 'footer'
+     * @param int|null $post_id
+     * @return array { id: int, source: 'page'|'rule'|'global' }
+     */
+    public static function resolve_zone( $zone, $post_id = null ) {
+        $zone = ( 'footer' === $zone ) ? 'footer' : 'header';
+
+        if ( null === $post_id ) {
+            $post = is_singular() ? (int) get_queried_object_id() : 0;
+        } else {
+            $post = max( 0, (int) $post_id );
+        }
+
+        if ( $post > 0 ) {
+            $own = (int) get_post_meta( $post, '_olo_' . $zone . '_id', true );
+            if ( $own ) {
+                return [ 'id' => $own, 'source' => 'page' ];
+            }
+        }
+
+        if ( null === $post_id ) {
+            $by_rules = (int) apply_filters( 'olobuild_resolve_template_id', 0, $zone );
+        } elseif ( $post > 0 ) {
+            $by_rules = (int) apply_filters( 'olobuild_resolve_template_id', 0, $zone, $post );
+        } else {
+            $by_rules = 0;
+        }
+        if ( $by_rules ) {
+            return [ 'id' => $by_rules, 'source' => 'rule' ];
+        }
+
+        return [ 'id' => (int) get_option( 'olobuild_active_' . $zone, 0 ), 'source' => 'global' ];
+    }
+
+    /**
      * Resolve template ID based on advanced conditions.
      * Falls back to simple post_type option if no conditions match.
      *
      * @param int    $template_id Current template ID (from simple system)
      * @param string $context     'single', 'archive', 'header', 'footer'
+     * @param int    $post_id     Pagina su cui valutare le condizioni (0 = richiesta corrente)
      * @return int Template ID
      */
-    public function resolve_by_conditions( $template_id, $context = 'single' ) {
+    public function resolve_by_conditions( $template_id, $context = 'single', $post_id = 0 ) {
+        $post_id = (int) $post_id;
         $assignments = get_option( 'olobuild_template_conditions', [] );
         if ( empty( $assignments ) || ! is_array( $assignments ) ) {
             return $template_id;
@@ -70,7 +121,7 @@ class Olobuild_Template_Conditions {
             $conditions = $assignment['conditions'] ?? [];
             $logic      = $assignment['conditions_logic'] ?? 'AND';
 
-            if ( $this->evaluate_conditions( $conditions, $logic ) ) {
+            if ( $this->evaluate_conditions( $conditions, $logic, $post_id ) ) {
                 return $tpl_id;
             }
         }
@@ -81,14 +132,14 @@ class Olobuild_Template_Conditions {
     /**
      * Evaluate a set of conditions with AND/OR logic.
      */
-    private function evaluate_conditions( $conditions, $logic = 'AND' ) {
+    private function evaluate_conditions( $conditions, $logic = 'AND', $post_id = 0 ) {
         if ( empty( $conditions ) ) {
             return true;
         }
 
         $results = [];
         foreach ( $conditions as $cond ) {
-            $results[] = $this->evaluate_single( $cond );
+            $results[] = $this->evaluate_single( $cond, $post_id );
         }
 
         if ( $logic === 'OR' ) {
@@ -99,10 +150,19 @@ class Olobuild_Template_Conditions {
         return ! in_array( false, $results, true );
     }
 
-    private function evaluate_single( $cond ) {
+    private function evaluate_single( $cond, $post_id = 0 ) {
         $type   = $cond['type'] ?? '';
         $value  = $cond['value'] ?? '';
         $negate = ! empty( $cond['negate'] );
+
+        // Su una pagina data (il builder): ciò che dipende dalla pagina legge il
+        // post; utente e data restano sulla richiesta corrente, come sul sito.
+        if ( $post_id > 0 ) {
+            $result = $this->evaluate_for_post( $type, $value, (int) $post_id );
+            if ( null !== $result ) {
+                return $negate ? ! $result : $result;
+            }
+        }
 
         $result = false;
 
@@ -232,6 +292,89 @@ class Olobuild_Template_Conditions {
         }
 
         return $negate ? ! $result : $result;
+    }
+
+    /**
+     * Le condizioni che dipendono dalla pagina, valutate su un post dato invece
+     * che sulla richiesta corrente: lo stesso esito che il sito avrebbe aprendo
+     * quel post (singolare). null = condizione che non dipende dalla pagina
+     * (utente, data) o sconosciuta: la valuta evaluate_single() come sul sito.
+     *
+     * @param string $type
+     * @param mixed  $value
+     * @param int    $post_id
+     * @return bool|null
+     */
+    private function evaluate_for_post( $type, $value, $post_id ) {
+        $post_type = get_post_type( $post_id );
+
+        switch ( $type ) {
+            case 'entire_site':
+            case 'singular':
+                return true;
+
+            case 'front_page':
+                return 'page' === get_option( 'show_on_front' )
+                    && (int) get_option( 'page_on_front' ) === $post_id;
+
+            case 'page':
+                // is_page( 0 ) vale per qualunque pagina: stesso esito per un ID non numerico.
+                $page_id = intval( $value );
+                return 'page' === $post_type
+                    && ( empty( $value ) || 'all' === $value || 0 === $page_id || $page_id === $post_id );
+
+            case 'post':
+                return 'post' === $post_type
+                    && ( empty( $value ) || 'all' === $value || intval( $value ) === $post_id );
+
+            case 'post_type':
+                $wanted = sanitize_text_field( $value );
+                return '' === $wanted || $post_type === $wanted;
+
+            case 'archive':
+            case '404':
+            case 'search':
+                return false;
+
+            case 'category':
+                return (bool) has_category( $value ? intval( $value ) : null, $post_id );
+
+            case 'tag':
+                return (bool) has_tag( sanitize_text_field( $value ), $post_id );
+
+            case 'taxonomy':
+                $parts = explode( ':', (string) $value );
+                if ( count( $parts ) >= 2 ) {
+                    return (bool) has_term( $parts[1], $parts[0], $post_id );
+                }
+                return false;
+
+            case 'author':
+                return (int) get_post_field( 'post_author', $post_id ) === (int) $value;
+
+            case 'has_template':
+                return (int) get_post_meta( $post_id, '_olo_template_id', true ) === intval( $value );
+
+            case 'post_format':
+                return (bool) has_post_format( sanitize_text_field( $value ), $post_id );
+
+            // WooCommerce
+            case 'woo_shop':
+                return function_exists( 'wc_get_page_id' ) && (int) wc_get_page_id( 'shop' ) === $post_id;
+            case 'woo_product':
+                return function_exists( 'is_product' ) && 'product' === $post_type;
+            case 'woo_product_cat':
+                return function_exists( 'is_product' ) && 'product' === $post_type
+                    && (bool) has_term( sanitize_text_field( $value ), 'product_cat', $post_id );
+            case 'woo_cart':
+                return function_exists( 'wc_get_page_id' ) && (int) wc_get_page_id( 'cart' ) === $post_id;
+            case 'woo_checkout':
+                return function_exists( 'wc_get_page_id' ) && (int) wc_get_page_id( 'checkout' ) === $post_id;
+            case 'woo_account':
+                return function_exists( 'wc_get_page_id' ) && (int) wc_get_page_id( 'myaccount' ) === $post_id;
+        }
+
+        return null;
     }
 
     /* ─────────────────────────────────────────────

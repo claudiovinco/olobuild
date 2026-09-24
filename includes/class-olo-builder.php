@@ -126,19 +126,35 @@ class Olobuild_Builder {
      *
      * Comportamento context-aware:
      *
-     *   1. Se siamo su un permalink reale (`is_singular()`), NON serviamo il
+     *   1. Se siamo sul permalink della pagina del template (punto 2), o su una
+     *      singular con un template non ancora salvato, NON serviamo il
      *      template standalone: lasciamo WP renderizzare la pagina con il suo
      *      tema (header/footer/regole template Olobuild) e sostituiamo SOLO
      *      il content del post con un placeholder che il bridge JS aggiorna
      *      via postMessage. Così il preview mostra header/footer reali esattamente
      *      come sono in prod (incluso `_olo_header_id` per-page o regole).
      *
-     *   2. Se Vue ha passato `olo_tpl=<id>` e siamo sulla home (caso default
-     *      quando il template editato è una "page"), facciamo lookup automatico
-     *      di un post che usa quel template e ridirezioniamo all'iframe contestuale.
+     *   2. Se Vue ha passato `olo_tpl=<id>`, l'iframe va sulla pagina che il
+     *      builder mostra per quel template (builder_preview_post: `olo_post`
+     *      se la usa, altrimenti la pagina collegata: la prima pubblicata, poi
+     *      privata, poi bozza, come linked_post_id della REST), anche quando
+     *      l'URL di partenza (home_url) è già una singular: con una home statica
+     *      restava sulla HOME, col suo header, per qualunque template. Il redirect
+     *      avviene una volta sola (`olo_pv`): niente giri a vuoto se il permalink
+     *      non porta a una singular (pagina degli articoli).
+     *      Con `olo_ctx=1` (BuilderCanvas, sempre con olo_tpl) la pagina è quella
+     *      del contesto del builder (oloData.resolvedZones.postId, anche 0) e vale
+     *      per tutta la sessione: la si valida e basta, senza cercarne un'altra.
+     *      Altrimenti un salvataggio che crea la pagina collegata
+     *      (maybe_auto_create_linked_page) spostava l'iframe su una pagina il cui
+     *      header, per regola, non era quello caricato dal builder.
      *
-     *   3. Altrimenti (home senza match, archive, ecc.) serviamo il template
-     *      standalone come fallback (status quo).
+     *   3. Altrimenti (template senza pagina, archive, contesto 0 o non valido)
+     *      serviamo il template standalone, con header e footer del builder.
+     *      Con la home statica è una novità: prima ogni template andava inline
+     *      sulla home, col suo header anche quando il builder ne caricava un
+     *      altro. Un template non ancora salvato su una singular resta inline
+     *      come prima.
      */
     public function serve_builder_iframe() {
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per routing dell'iframe builder; nessuna modifica di stato; sola verifica di presenza del flag.
@@ -165,39 +181,100 @@ class Olobuild_Builder {
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per routing/paginazione iframe builder; nessuna modifica di stato; valore sanitizzato via absint().
         $tpl_id = isset( $_GET['olo_tpl'] ) ? absint( wp_unslash( $_GET['olo_tpl'] ) ) : 0;
 
-        // Modalità inline (1): siamo già su un permalink reale.
-        if ( is_singular() ) {
-            $this->setup_inline_preview_mode();
-            return;
-        }
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per routing dell'iframe builder (pagina di contesto); nessuna modifica di stato; valore sanitizzato via absint() e verificato con edit_post in builder_preview_post().
+        $requested = isset( $_GET['olo_post'] ) ? absint( wp_unslash( $_GET['olo_post'] ) ) : 0;
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per routing dell'iframe builder (contesto esplicito del builder); nessuna modifica di stato; sola verifica di presenza del flag.
+        $explicit  = ! empty( $_GET['olo_ctx'] );
+        $target    = $tpl_id ? self::builder_preview_post( $tpl_id, $requested, $explicit ) : 0;
 
-        // Modalità inline (2): redirect automatico al primo post associato al template.
-        if ( $tpl_id ) {
-            $associated = get_posts( [
-                'post_type'      => 'any',
-                'meta_key'       => '_olo_template_id', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- lookup del post associato al template Olobuild; meta query necessaria alla funzione, una sola riga (posts_per_page=1, fields=ids), volume limitato.
-                'meta_value'     => $tpl_id, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- lookup del post associato al template Olobuild; meta query necessaria alla funzione, una sola riga, volume limitato.
-                'posts_per_page' => 1,
-                'fields'         => 'ids',
-                'post_status'    => [ 'publish', 'private', 'draft' ],
-            ] );
-            if ( ! empty( $associated ) ) {
-                $url = get_permalink( $associated[0] );
+        if ( $target ) {
+            // Modalità inline (1): siamo sulla pagina che il template disegna.
+            if ( is_singular() && (int) get_queried_object_id() === $target ) {
+                $this->setup_inline_preview_mode();
+                return;
+            }
+            // Modalità inline (2): ci si va, una volta sola (olo_pv).
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per routing dell'iframe builder (guardia anti-loop del redirect); nessuna modifica di stato; sola verifica di presenza del flag.
+            if ( empty( $_GET['olo_pv'] ) ) {
+                $url = get_permalink( $target );
                 if ( $url ) {
                     $url = add_query_arg( [
                         'olo_builder_iframe' => 1,
                         'olo_tpl'            => $tpl_id,
+                        'olo_post'           => $target,
+                        'olo_ctx'            => 1,
+                        'olo_pv'             => 1,
                     ], $url );
                     wp_safe_redirect( $url );
                     exit;
                 }
             }
+        } elseif ( ! $tpl_id && is_singular() ) {
+            // Template non ancora salvato: inline sulla pagina richiesta, come sempre.
+            $this->setup_inline_preview_mode();
+            return;
         }
 
         // Fallback: standalone iframe template (home root, no associated post).
         $this->enqueue_builder_iframe_assets();
         include OLOBUILD_PATH . 'templates/builder-iframe.php';
         exit;
+    }
+
+    /**
+     * La pagina che l'anteprima del builder mostra per un template. È la STESSA
+     * per l'iframe (serve_builder_iframe) e per header e footer che il builder
+     * carica (oloData.resolvedZones): altrimenti il canvas mostrerebbe l'header
+     * di una pagina e il builder ne modificherebbe un altro.
+     * La pagina chiesta ($requested: quella da cui si è aperto il builder), se
+     * usa quel template e si può modificare; altrimenti la pagina collegata con
+     * la stessa priorità di linked_post_id (Olobuild_Rest_Api::prepare_template,
+     * che usano «Reale» e il pannello SEO): la pubblicata più vecchia, poi la
+     * privata, poi la bozza. Il post più recente poteva essere una bozza
+     * («Handoff …») con un altro header. 0 = nessuna (anteprima standalone).
+     * $only_requested (l'iframe col contesto del builder, olo_ctx): solo la
+     * pagina chiesta, mai un'altra; 0 se non è valida.
+     *
+     * @param int  $tpl_id
+     * @param int  $requested
+     * @param bool $only_requested
+     * @return int
+     */
+    private static function builder_preview_post( $tpl_id, $requested = 0, $only_requested = false ) {
+        $tpl_id    = (int) $tpl_id;
+        $requested = (int) $requested;
+        if ( $tpl_id <= 0 ) {
+            return 0;
+        }
+        $statuses = [ 'publish', 'private', 'draft' ];
+
+        if ( $requested > 0
+            && current_user_can( 'edit_post', $requested )
+            && in_array( get_post_status( $requested ), $statuses, true )
+            && (int) get_post_meta( $requested, '_olo_template_id', true ) === $tpl_id
+        ) {
+            return $requested;
+        }
+        if ( $only_requested ) {
+            return 0;
+        }
+
+        foreach ( $statuses as $status ) {
+            $associated = get_posts( [
+                'post_type'      => 'any',
+                'meta_key'       => '_olo_template_id', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- lookup del post associato al template Olobuild; meta query necessaria alla funzione, una sola riga (posts_per_page=1, fields=ids), volume limitato.
+                'meta_value'     => $tpl_id, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- lookup del post associato al template Olobuild; meta query necessaria alla funzione, una sola riga, volume limitato.
+                'posts_per_page' => 1,
+                'fields'         => 'ids',
+                'post_status'    => $status,
+                'orderby'        => 'date',
+                'order'          => 'ASC',
+            ] );
+            if ( ! empty( $associated ) ) {
+                return (int) $associated[0];
+            }
+        }
+        return 0;
     }
 
     /** Handles registrati per il documento standalone builder-iframe.php. */
@@ -1053,6 +1130,33 @@ class Olobuild_Builder {
             }
         }
 
+        // Header e footer EFFETTIVI della pagina che il builder mostra: la stessa
+        // dell'iframe (builder_preview_post; BuilderCanvas gli rimanda questo postId,
+        // anche 0, con olo_ctx e l'iframe lo tiene per tutta la sessione),
+        // altrimenti la pagina da cui si è aperto il builder o quella collegata nei
+        // settings. Risolti come sul sito (meta della pagina → regole → globale).
+        // Senza una pagina: il globale, senza regole (in admin «Tutto il sito» o
+        // «Utenti loggati» scatterebbero sempre). activeHeaderId/activeFooterId
+        // restano «il globale» (pulsante «Attiva come header globale», lista).
+        $context_post_id = $template_id_for_link ? self::builder_preview_post( $template_id_for_link, $post_id ) : 0;
+        if ( ! $context_post_id ) {
+            foreach ( [ $post_id, $linked_post_id ] as $candidate ) {
+                $candidate_status = $candidate ? get_post_status( $candidate ) : false;
+                if ( $candidate_status
+                    && ! in_array( $candidate_status, [ 'trash', 'auto-draft' ], true )
+                    && current_user_can( 'edit_post', $candidate )
+                ) {
+                    $context_post_id = (int) $candidate;
+                    break;
+                }
+            }
+        }
+        $resolved_zones = [
+            'postId' => $context_post_id,
+            'header' => Olobuild_Template_Conditions::resolve_zone( 'header', $context_post_id ),
+            'footer' => Olobuild_Template_Conditions::resolve_zone( 'footer', $context_post_id ),
+        ];
+
         wp_localize_script( 'olobuilder-js', 'oloData', [
             // Con lo slash finale, come ovunque: la pagina builder era l'unica
             // senza, e ogni `${oloData.restUrl}styles` diventava `v1styles` → 404.
@@ -1081,6 +1185,9 @@ class Olobuild_Builder {
             'wpMenus'        => $this->get_wp_menus(),
             'activeHeaderId' => (int) get_option( 'olobuild_active_header', 0 ),
             'activeFooterId' => (int) get_option( 'olobuild_active_footer', 0 ),
+            // { postId, header: { id, source }, footer: { id, source } }: vedi sopra.
+            // id -1 = la pagina non ha header/footer; source 'page'|'rule'|'global'.
+            'resolvedZones'  => $resolved_zones,
             'active404Id'    => (int) get_option( 'olobuild_active_404', 0 ),
             'activeSingles'  => $this->get_active_singles_map(),
             'stockmedia'     => wp_parse_args(

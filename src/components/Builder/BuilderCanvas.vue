@@ -305,7 +305,14 @@ const iframeSrc = computed(() => {
   // Evita che il browser serva una response cached vecchia (es. 403 dopo cambio capability).
   const updatedAt = builderStore.currentTemplate?.updated_at || '';
   const buster = updatedAt ? '&v=' + encodeURIComponent(updatedAt) : '';
-  return base + '?olo_builder_iframe=1' + (tplId ? '&olo_tpl=' + tplId : '') + buster;
+  // Pagina per cui il builder ha risolto header e footer (oloData.resolvedZones):
+  // il PHP porta l'iframe lì, così il canvas mostra le zone che si modificano.
+  // Sempre, anche 0 (olo_ctx): il contesto vale per tutta la sessione, e il PHP
+  // non cerca un'altra pagina quando un salvataggio ne crea una collegata.
+  const risolte = window.oloData?.resolvedZones;
+  const pagina = Math.max(0, parseInt(risolte?.postId, 10) || 0);
+  const post = tplId && risolte && typeof risolte === 'object' ? '&olo_ctx=1&olo_post=' + pagina : '';
+  return base + '?olo_builder_iframe=1' + (tplId ? '&olo_tpl=' + tplId : '') + post + buster;
 });
 
 const iframeStyle = computed(() => {

@@ -383,9 +383,11 @@ export const useBuilderStore = defineStore('builder', {
         let inlineCss = '';
         // Non caricare header/footer se stai editando un header o footer
         if (type !== 'header' && type !== 'footer') {
-          const headerId = olo.activeHeaderId;
-          const footerId = olo.activeFooterId;
-          if (headerId) {
+          // Quelli che il builder ha caricato (della pagina, oloData.resolvedZones),
+          // non i globali: senza header o footer (-1, tipo sbagliato) niente render.
+          const headerId = parseInt(this.headerTemplate?.id, 10) || 0;
+          const footerId = parseInt(this.footerTemplate?.id, 10) || 0;
+          if (headerId > 0) {
             try {
               const res = await fetch(`${olo.restUrl}templates/${headerId}/render`, { headers: { 'X-WP-Nonce': olo.nonce } });
               if (res.ok) {
@@ -396,7 +398,7 @@ export const useBuilderStore = defineStore('builder', {
               }
             } catch (e) { /* ignora */ }
           }
-          if (footerId) {
+          if (footerId > 0) {
             try {
               const res = await fetch(`${olo.restUrl}templates/${footerId}/render`, { headers: { 'X-WP-Nonce': olo.nonce } });
               if (res.ok) {
@@ -522,11 +524,25 @@ export const useBuilderStore = defineStore('builder', {
       }
 
       const tilesStore = useTilesStoreRef();
+      // Header e footer EFFETTIVI della pagina (oloData.resolvedZones, risolti dal
+      // PHP come sul sito: meta della pagina → regole → globale, per la stessa
+      // pagina che l'iframe mostra). Prima si caricava sempre il globale, e
+      // salvando si scriveva l'header globale mentre la pagina ne usava un altro.
+      // Se la zona risolta c'è, non si ripiega mai sul globale: -1 = la pagina non
+      // ha header. Senza resolvedZones (dati vecchi) resta il globale.
       // Coerce stringhe '0' a falsy e ignora id non positivi.
       // Senza questa coercion, `'0'` (stringa) supera `if (id)` (truthy) e fa fetch a /templates/0
       // che restituisce 404 — innocuo ma sporca la console.
-      const headerId = parseInt(olo.activeHeaderId, 10) || 0;
-      const footerId = parseInt(olo.activeFooterId, 10) || 0;
+      const risolte = olo.resolvedZones && typeof olo.resolvedZones === 'object' ? olo.resolvedZones : null;
+      const idZona = (zona, globale) => {
+        const r = risolte && risolte[zona];
+        if (r && typeof r === 'object' && r.id !== undefined && r.id !== null && r.id !== '') {
+          return parseInt(r.id, 10) || 0;
+        }
+        return parseInt(globale, 10) || 0;
+      };
+      const headerId = idZona('header', olo.activeHeaderId);
+      const footerId = idZona('footer', olo.activeFooterId);
 
       // Load header template
       if (headerId > 0) {
@@ -536,9 +552,15 @@ export const useBuilderStore = defineStore('builder', {
           });
           if (res.ok) {
             const tpl = await res.json();
-            if (!tpl.settings || Array.isArray(tpl.settings)) tpl.settings = {};
-            this.headerTemplate = tpl;
-            tilesStore.setHeaderTiles(tpl.content || []);
+            // Solo un template header: il salvataggio lo riscrive con type 'header'
+            // (_fotoZona), e un'assegnazione sbagliata lo trasformerebbe.
+            if (tpl && tpl.type === 'header') {
+              if (!tpl.settings || Array.isArray(tpl.settings)) tpl.settings = {};
+              this.headerTemplate = tpl;
+              tilesStore.setHeaderTiles(tpl.content || []);
+            } else {
+              console.warn('[Olobuild] L\'header della pagina non è un template header, non lo carico:', headerId);
+            }
           }
         } catch (e) {
           console.warn('[Olobuild] Failed to load header template:', e);
@@ -553,9 +575,13 @@ export const useBuilderStore = defineStore('builder', {
           });
           if (res.ok) {
             const tpl = await res.json();
-            if (!tpl.settings || Array.isArray(tpl.settings)) tpl.settings = {};
-            this.footerTemplate = tpl;
-            tilesStore.setFooterTiles(tpl.content || []);
+            if (tpl && tpl.type === 'footer') {
+              if (!tpl.settings || Array.isArray(tpl.settings)) tpl.settings = {};
+              this.footerTemplate = tpl;
+              tilesStore.setFooterTiles(tpl.content || []);
+            } else {
+              console.warn('[Olobuild] Il footer della pagina non è un template footer, non lo carico:', footerId);
+            }
           }
         } catch (e) {
           console.warn('[Olobuild] Failed to load footer template:', e);

@@ -76,18 +76,14 @@ class Olobuild_Header_Integration {
      * Risolve il template Header attivo secondo la priorità:
      *   1) override per-pagina (`_olo_header_id` post-meta)
      *   2) regole di visualizzazione (Olobuild_Template_Conditions)
-     *   3) header globale (`olo_active_header` option)
+     *   3) header globale (`olobuild_active_header` option)
+     * La catena è una sola, condivisa col builder: Olobuild_Template_Conditions::resolve_zone().
      *
      * @return int  template_id o 0 se nessuno applicabile
      */
     private function resolve_active_header() {
-        if ( is_singular() ) {
-            $override = (int) get_post_meta( get_queried_object_id(), '_olo_header_id', true );
-            if ( $override ) return $override;
-        }
-        $by_rules = (int) apply_filters( 'olobuild_resolve_template_id', 0, 'header' );
-        if ( $by_rules ) return $by_rules;
-        return (int) get_option( 'olobuild_active_header', 0 );
+        $zone = Olobuild_Template_Conditions::resolve_zone( 'header' );
+        return (int) $zone['id'];
     }
 
     /**
