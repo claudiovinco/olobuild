@@ -13,8 +13,10 @@ function ensureContainer() {
   container.setAttribute('aria-live', 'polite');
   container.setAttribute('aria-atomic', 'false');
   const style = document.createElement('style');
+  // Sopra ogni modale e menu del builder (il più alto è a 100090): un toast con «Riprova»
+  // aperto da un modale (tipografia globale) finiva sotto il suo sfondo, e il clic lo chiudeva.
   style.textContent =
-    '.olo-toast-container{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:99999;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}' +
+    '.olo-toast-container{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:100100;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}' +
     '.olo-toast{display:flex;align-items:center;gap:14px;padding:10px 16px;border-radius:8px;color:#fff;font-size:13px;font-family:system-ui,sans-serif;pointer-events:auto;opacity:0;transform:translateY(12px);transition:opacity .3s,transform .3s;max-width:420px;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.18)}' +
     '.olo-toast.olo-toast-show{opacity:1;transform:translateY(0)}' +
     '.olo-toast-error{background:#ef4444}' +

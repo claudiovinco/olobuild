@@ -629,12 +629,9 @@ async function loadStyles() {
 async function syncGlobalColors() {
   // PUT /global-colors fa REPLACE totale dell'array: rileggo lo stato corrente dal
   // server per non cancellare colori aggiunti altrove (es. il "+" del builder) con
-  // uno snapshot stale.
-  let server = globalColors.value;
-  try {
-    const r = await fetch(`${window.oloData.restUrl}global-colors`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
-    if (r.ok) { const s = await r.json(); if (Array.isArray(s)) server = s; }
-  } catch (e) { /* fallback allo stato locale */ }
+  // uno snapshot stale. Senza rilettura non si scrive: l'errore arriva alla shell
+  // e la scheda resta da salvare (prima si ripiegava sulla lista a video).
+  const server = await leggiGlobalColors();
   let changed = globalColorsTouched.value;
   // 1) allinea i ruoli core ai valori correnti del pannello
   const next = server.map((gc) => {
@@ -669,24 +666,40 @@ async function syncGlobalColors() {
   }
 }
 
+// Lista dei colori globali com'è sul server; lancia se non si riesce a leggerla.
+async function leggiGlobalColors() {
+  const r = await okOrThrow(fetch(`${window.oloData.restUrl}global-colors`, { headers: { 'X-WP-Nonce': window.oloData.nonce } }));
+  const s = await r.json();
+  if (!Array.isArray(s)) throw new Error(t('risposta non valida del server'));
+  return s;
+}
+
 // I colori globali EXTRA si salvano subito e in modo merge-safe (rileggo dal server,
 // applico la mutazione, riscrivo): così add/edit/delete non si pestano col builder.
+// Se la rilettura non riesce non si scrive (la lista a video, forse vecchia,
+// cancellerebbe i colori aggiunti altrove); se il PUT fallisce la lista torna a
+// quella del server: a video resta ciò che è salvato davvero, più il toast.
 async function persistGlobalColors(mutator) {
-  let list = Array.isArray(globalColors.value) ? globalColors.value : [];
+  let list;
   try {
-    const r = await fetch(`${window.oloData.restUrl}global-colors`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
-    if (r.ok) { const s = await r.json(); if (Array.isArray(s)) list = s; }
-  } catch (e) { /* usa stato locale */ }
+    list = await leggiGlobalColors();
+  } catch (e) {
+    globalColors.value = (globalColors.value || []).slice(); // il campo toccato torna al valore salvato
+    showToast(t('Errore salvataggio colori globali'), 'error');
+    return;
+  }
   const next = mutator(list.map((x) => ({ ...x })));
   globalColors.value = next;
   try {
-    const res = await fetch(`${window.oloData.restUrl}global-colors`, {
+    await okOrThrow(fetch(`${window.oloData.restUrl}global-colors`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
       body: JSON.stringify(next),
-    });
-    if (!res.ok) throw new Error();
-  } catch (e) { showToast(t('Errore salvataggio colori globali'), 'error'); }
+    }));
+  } catch (e) {
+    globalColors.value = list;
+    showToast(t('Errore salvataggio colori globali'), 'error');
+  }
 }
 function addExtraGlobal() {
   const id = 'c' + Date.now().toString(36);

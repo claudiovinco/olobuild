@@ -14,6 +14,7 @@
             :class="{ 'fc-swatch--active': isSwatchSelected(sc.id) }"
             :style="{ background: sc.value }"
             :title="sc.label + ' — var(--olo-color-' + sc.id + ')'"
+            :disabled="sc.quick && stylesStore.savingColors"
             @click="selectColor(sc.id)"
           ></button>
           <button
@@ -21,14 +22,19 @@
             type="button"
             class="fc-swatch-del"
             :title="t('Rimuovi colore')"
+            :disabled="stylesStore.savingColors"
             @click.stop="removeQuickColor(sc.id)"
           >{{ t('&times;') }}</button>
         </span>
+        <!-- Mentre la palette si salva «+», «×» e le swatch rapide sono occupati:
+             il colore nuovo compare solo a salvataggio riuscito, e una swatch
+             che si sta togliendo non si può più scegliere. -->
         <button
           type="button"
           class="fc-swatch fc-swatch--add"
           :title="puoAggiungere ? t('Aggiungi colore corrente ai globali') : t('Nessun colore concreto da aggiungere')"
-          :disabled="!puoAggiungere"
+          :disabled="!puoAggiungere || stylesStore.savingColors"
+          :aria-busy="stylesStore.savingColors ? 'true' : null"
           @click="addCurrentAsGlobal"
         >+</button>
       </div>
@@ -102,6 +108,7 @@
 import { t } from '@/i18n';
 import { computed, ref } from 'vue';
 import { useStylesStore } from '@/stores/styles';
+import { useToast } from '@/composables/useToast.js';
 import { tokenParts, buildSwatchColors, tokenLabel, describeColor } from '@/utils/colorToken';
 
 const props = defineProps({
@@ -112,6 +119,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const stylesStore = useStylesStore();
+const toast = useToast();
 
 // Swatch mostrate: ruoli del tema (olo_styles.colors) + globali custom (accent, "+").
 // La lista e la lettura dei token stanno in @/utils/colorToken: le usa anche la
@@ -229,7 +237,7 @@ const puoAggiungere = computed(() => haColore.value && colore.value.alpha > 0);
  * Add the current color as a new global color and persist immediately.
  */
 async function addCurrentAsGlobal() {
-  if (!puoAggiungere.value) return;
+  if (!puoAggiungere.value || stylesStore.savingColors) return;
   const hex = hexPart.value;
   // Check if this hex already exists in globals
   const existing = (stylesStore.globalColors || []).find(
@@ -242,26 +250,44 @@ async function addCurrentAsGlobal() {
   }
   const id = 'c' + Date.now().toString(36);
   const label = hex.toUpperCase();
+  const valorePrima = props.modelValue;
+  // Il colore entra nella palette (e nelle swatch di ogni campo) solo quando il
+  // server l'ha scritto: prima di allora non c'è niente da scegliere.
   const newColors = [...(stylesStore.globalColors || []), { id, label, value: hex, quick: true }];
-  stylesStore.setGlobalColors(newColors);
-  await stylesStore.saveGlobalColors();
-  // Auto-select the newly added color
-  selectColor(id);
+  const esito = await stylesStore.saveGlobalColors(newColors);
+  if (!esito.ok) {
+    // Il colore non è sul server: la palette resta com'era e il campo tiene l'hex.
+    toast.error(t('Colore non aggiunto ai colori globali') + (esito.motivo ? ' — ' + esito.motivo : ''), 6000);
+    return;
+  }
+  // Il token si sceglie solo a colore salvato, e solo se il campo nel frattempo
+  // non è cambiato.
+  if (props.modelValue === valorePrima) selectColor(id);
 }
 
 /**
  * Remove a quick-added global color and persist.
  */
 async function removeQuickColor(colorId) {
+  if (stylesStore.savingColors) return;
   // Il colore risolto si legge PRIMA di togliere il globale: dopo, il token non
   // si risolve più e al suo posto usciva un #000000.
   const eraScelto = isSwatchSelected(colorId);
   const risolto = haColore.value ? toOutput(hexPart.value, colore.value.alpha) : '';
+  const valorePrima = props.modelValue;
+  // Anche la rimozione vale solo a esito noto. Sul server il colore resta (la
+  // fusione di saveGlobalColors lo riprende, come nella 1.4.483): toglierlo
+  // davvero lascerebbe senza colore, in silenzio, le altre tile che usano il suo
+  // token. Lo farà l'eliminazione morbida di globali-colore-eliminato-rompe.
   const newColors = (stylesStore.globalColors || []).filter(gc => gc.id !== colorId);
-  stylesStore.setGlobalColors(newColors);
-  await stylesStore.saveGlobalColors();
+  const esito = await stylesStore.saveGlobalColors(newColors);
+  if (!esito.ok) {
+    // Il colore è ancora sul server: resta nella palette e il campo resta sul token.
+    toast.error(t('Colore non rimosso dai colori globali') + (esito.motivo ? ' — ' + esito.motivo : ''), 6000);
+    return;
+  }
   // If this color was selected, revert to its resolved color
-  if (eraScelto && risolto) {
+  if (eraScelto && risolto && props.modelValue === valorePrima) {
     emit('update:modelValue', risolto);
   }
 }
@@ -315,6 +341,10 @@ async function removeQuickColor(colorId) {
 .fc-swatch-wrap:hover .fc-swatch-del {
   display: flex;
 }
+.fc-swatch-del:disabled {
+  opacity: 0.45;
+  cursor: progress;
+}
 
 .fc-swatch {
   width: 14px;
@@ -330,6 +360,14 @@ async function removeQuickColor(colorId) {
 .fc-swatch:hover {
   transform: scale(1.15);
   border-color: rgba(255, 255, 255, 0.5);
+}
+
+.fc-swatch:disabled:not(.fc-swatch--add) {
+  opacity: 0.6;
+  cursor: progress;
+}
+.fc-swatch:disabled:hover {
+  transform: none;
 }
 
 .fc-swatch--active {
@@ -358,6 +396,11 @@ async function removeQuickColor(colorId) {
 .fc-swatch--add:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+}
+/* Occupato dal salvataggio della palette (non «niente da aggiungere»): attesa,
+   come la «×» e le swatch rapide. */
+.fc-swatch--add:disabled[aria-busy="true"] {
+  cursor: progress;
 }
 
 /* ── Hex wrap (swatch inline + text input) ── */

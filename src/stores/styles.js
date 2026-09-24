@@ -1,7 +1,58 @@
 import { defineStore } from 'pinia';
 import { contrastOn } from '@/composables/oloTileDefaults';
+import { t } from '@/i18n';
+import { okOrThrow } from '@/components/Admin/cfgSave';
+import { rinnovaNonce, nonceScaduto } from '@/utils/restNonce';
 
 const oloData = window.oloData || {};
+
+// Il nonce si legge a ogni richiesta: rinnovaNonce lo aggiorna dentro window.oloData.
+function nonceAttuale() {
+  return (typeof window !== 'undefined' && window.oloData ? window.oloData : oloData).nonce;
+}
+
+// ── Esito dei salvataggi ──
+// Le azioni che scrivono sul server restituiscono { ok: true } oppure
+// { ok: false, motivo } (e inCorso: true se un salvataggio uguale è già in
+// volo). Prima l'errore finiva solo in console e il chiamante annunciava
+// «salvato» comunque: alla ricarica il lavoro era perso.
+class ErroreRest extends Error {}
+
+// fetch che non inghiotte niente: nessuna risposta → «errore di rete»,
+// risposta non 2xx → okOrThrow («500 …»). Il nonce lo mette chiedi: scaduto
+// (403 rest_cookie_invalid_nonce, arriva prima dell'handler e il server non ha
+// scritto niente) se ne chiede uno nuovo e si ripete UNA volta, come il
+// salvataggio della pagina; senza, ogni «Riprova» falliva di nuovo.
+async function chiedi(url, opzioni = {}) {
+  const invia = async () => {
+    try {
+      return await fetch(url, { ...opzioni, headers: { ...(opzioni.headers || {}), 'X-WP-Nonce': nonceAttuale() } });
+    } catch (e) {
+      throw new ErroreRest(t('errore di rete'));
+    }
+  };
+  let res = await invia();
+  if (await nonceScaduto(res)) {
+    // WordPress non ne dà uno nuovo: la sessione è chiusa davvero.
+    if (!(await rinnovaNonce())) throw new ErroreRest(t('sessione scaduta: accedi di nuovo e riprova'));
+    res = await invia();
+  }
+  try {
+    return await okOrThrow(res);
+  } catch (e) {
+    throw new ErroreRest(e.message);
+  }
+}
+
+function motivoErrore(err) {
+  if (err instanceof ErroreRest) return err.message;
+  if (err instanceof SyntaxError) return t('risposta non valida del server');
+  return t('errore imprevisto');
+}
+
+function inCorso() {
+  return { ok: false, inCorso: true, motivo: t('salvataggio già in corso') };
+}
 
 // Il valore di un set tipografico può essere un var() di ruolo, uno stack
 // web-safe o il nome di un solo font: virgolettare sempre trasformava le prime
@@ -38,8 +89,15 @@ export const useStylesStore = defineStore('styles', {
     isDirty: false,
     isSaving: false,
     savingColors: false, // flag dedicato al save dei global colors (non condiviso con isSaving)
+    savingTypography: false, // idem per i set tipografici
     globalColors: JSON.parse(JSON.stringify(oloData.globalColors || [])),
     globalTypography: JSON.parse(JSON.stringify(oloData.globalTypography || [])),
+    // Set tipografici mandati a salvare e non ancora scritti (salvataggio fallito o
+    // in volo): li lascia il pannello quando si chiude, e alla riapertura li
+    // riprende (restano «da salvare»). Non stanno in globalTypography, che offre
+    // i set alle tile: un set mai salvato darebbe loro un var(--olo-font-<id>-family)
+    // che sul sito non esiste. Solo in memoria, come ogni modifica non salvata.
+    globalTypographyDraft: null,
     globalColorsDirty: false,
     globalTypographyDirty: false,
   }),
@@ -429,45 +487,39 @@ export const useStylesStore = defineStore('styles', {
     },
 
     async saveStyles() {
-      if (this.isSaving) return;
+      if (this.isSaving) return inCorso();
       this.isSaving = true;
       try {
-        const res = await fetch(`${oloData.restUrl}styles`, {
+        const res = await chiedi(`${oloData.restUrl}styles`, {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-WP-Nonce': oloData.nonce,
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(this.styles),
         });
-        if (!res.ok) throw new Error('Failed to save styles');
         const data = await res.json();
         this.generatedCss = data.css;
         this.isDirty = false;
+        return { ok: true };
       } catch (err) {
         console.error('saveStyles error:', err);
+        return { ok: false, motivo: motivoErrore(err) };
       } finally {
         this.isSaving = false;
       }
     },
 
     async resetStyles() {
-      if (this.isSaving) return;
+      if (this.isSaving) return inCorso();
       this.isSaving = true;
       try {
-        const res = await fetch(`${oloData.restUrl}styles/reset`, {
-          method: 'POST',
-          headers: {
-            'X-WP-Nonce': oloData.nonce,
-          },
-        });
-        if (!res.ok) throw new Error('Failed to reset styles');
+        const res = await chiedi(`${oloData.restUrl}styles/reset`, { method: 'POST' });
         const data = await res.json();
         this.styles = data.styles;
         this.generatedCss = data.css;
         this.isDirty = false;
+        return { ok: true };
       } catch (err) {
         console.error('resetStyles error:', err);
+        return { ok: false, motivo: motivoErrore(err) };
       } finally {
         this.isSaving = false;
       }
@@ -480,37 +532,45 @@ export const useStylesStore = defineStore('styles', {
       this.globalColorsDirty = true;
     },
 
-    async saveGlobalColors() {
+    // `lista` è la palette da scrivere: diventa quella dello store (e delle swatch)
+    // SOLO se il server l'ha scritta. Il «+» la passava allo store prima dell'esito,
+    // e la swatch nuova, cliccata durante il volo, legava la tile a un token che
+    // un salvataggio fallito lasciava inesistente.
+    // La fusione riprende dal server ogni colore che `lista` non ha, anche quello
+    // tolto con la «×»: cancellarlo davvero farebbe perdere il colore, in silenzio,
+    // alle tile che usano var(--olo-color-<id>) in altre pagine, in header e footer.
+    // La cancellazione vera spetta alla scheda globali-colore-eliminato-rompe
+    // (eliminazione morbida, riserva nel token, conteggio d'uso).
+    async saveGlobalColors(lista = this.globalColors) {
       // Flag DEDICATO (non this.isSaving, condiviso con saveStyles): aggiungere un colore
       // globale non deve essere saltato durante un salvataggio stili/autosave.
-      if (this.savingColors) return;
+      if (this.savingColors) return inCorso();
       this.savingColors = true;
       try {
         // Merge-safe: rileggi dal server e unisci, per non perdere colori aggiunti altrove
         // (es. dal pannello admin) con uno store stale del builder.
-        let server = [];
-        try {
-          const rr = await fetch(`${oloData.restUrl}global-colors`, { headers: { 'X-WP-Nonce': oloData.nonce } });
-          if (rr.ok) { const s = await rr.json(); if (Array.isArray(s)) server = s; }
-        } catch (e) { /* offline: usa solo lo stato locale */ }
+        // Se la rilettura non riesce, o non restituisce una lista, non si scrive: la
+        // lista locale, forse vecchia, sostituirebbe quella del server cancellando i
+        // colori aggiunti altrove.
+        const rr = await chiedi(`${oloData.restUrl}global-colors`);
+        const server = await rr.json();
+        if (!Array.isArray(server)) throw new ErroreRest(t('risposta non valida del server'));
         const byId = new Map();
-        for (const g of this.globalColors) { if (g && g.id) byId.set(g.id, g); }
+        for (const g of (lista || [])) { if (g && g.id) byId.set(g.id, g); }
         for (const sg of server) { if (sg && sg.id && !byId.has(sg.id)) byId.set(sg.id, sg); }
         const merged = Array.from(byId.values());
-        const res = await fetch(`${oloData.restUrl}global-colors`, {
+        const res = await chiedi(`${oloData.restUrl}global-colors`, {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-WP-Nonce': oloData.nonce,
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(merged),
         });
-        if (!res.ok) throw new Error('Failed to save global colors');
         const data = await res.json();
         this.globalColors = data;
         this.globalColorsDirty = false;
+        return { ok: true };
       } catch (err) {
         console.error('saveGlobalColors error:', err);
+        return { ok: false, motivo: motivoErrore(err) };
       } finally {
         this.savingColors = false;
       }
@@ -536,26 +596,33 @@ export const useStylesStore = defineStore('styles', {
       this.globalTypographyDirty = true;
     },
 
-    async saveGlobalTypography() {
-      if (this.isSaving) return;
-      this.isSaving = true;
+    // I set passati diventano quelli dello store (offerti alle tile) SOLO se il
+    // server li ha scritti. La bozza (globalTypographyDraft) la scrive il pannello
+    // quando si chiude; qui si toglie solo se è proprio ciò che si è scritto: una
+    // bozza diversa l'ha lasciata un pannello chiuso DOPO l'invio, con modifiche
+    // successive, e resta da salvare. Un errore non la tocca.
+    async saveGlobalTypography(sets = this.globalTypography) {
+      if (this.savingTypography) return inCorso();
+      this.savingTypography = true;
+      const inviato = JSON.stringify(sets || []);
       try {
-        const res = await fetch(`${oloData.restUrl}global-typography`, {
+        const res = await chiedi(`${oloData.restUrl}global-typography`, {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-WP-Nonce': oloData.nonce,
-          },
-          body: JSON.stringify(this.globalTypography),
+          headers: { 'Content-Type': 'application/json' },
+          body: inviato,
         });
-        if (!res.ok) throw new Error('Failed to save global typography');
         const data = await res.json();
         this.globalTypography = data;
         this.globalTypographyDirty = false;
+        if (this.globalTypographyDraft && JSON.stringify(this.globalTypographyDraft) === inviato) {
+          this.globalTypographyDraft = null;
+        }
+        return { ok: true };
       } catch (err) {
         console.error('saveGlobalTypography error:', err);
+        return { ok: false, motivo: motivoErrore(err) };
       } finally {
-        this.isSaving = false;
+        this.savingTypography = false;
       }
     },
 

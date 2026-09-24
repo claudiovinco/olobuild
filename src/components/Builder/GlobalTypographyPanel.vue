@@ -111,7 +111,7 @@
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
       </svg>
-      Aggiungi set tipografico
+      {{ t('Aggiungi set tipografico') }}
     </button>
 
     <div class="gtp-actions">
@@ -120,7 +120,7 @@
         :disabled="!isDirty || isSaving"
         @click="save"
       >
-        {{ isSaving ? 'Salvataggio...' : 'Salva tipografia' }}
+        {{ isSaving ? t('Salvataggio...') : t('Salva tipografia') }}
       </button>
     </div>
   </div>
@@ -128,7 +128,7 @@
 
 <script setup>
 import { t } from '@/i18n';
-import { ref, watch, computed, nextTick } from 'vue';
+import { ref, watch, computed, nextTick, onBeforeUnmount } from 'vue';
 import { useStylesStore } from '@/stores/styles';
 import { useToast } from '@/composables/useToast.js';
 import FieldFontFamily from './fields/FieldFontFamily.vue';
@@ -169,14 +169,23 @@ function normalizza(sets, nuovi = false) {
   }));
 }
 
-const localSets = ref(normalizza(JSON.parse(JSON.stringify(stylesStore.globalTypography || []))));
+// Chiudendo il pannello con un salvataggio fallito o ancora in volo, la bozza
+// resta nello store: riaprendo la si ritrova, ancora «da salvare». Un set che
+// non è fra quelli salvati è nuovo: il suo id segue ancora il nome.
+const bozza = stylesStore.globalTypographyDraft;
+const localSets = ref(bozza ? normalizzaBozza(bozza) : normalizza(JSON.parse(JSON.stringify(stylesStore.globalTypography || []))));
 
-const isDirty = ref(false);
-const isSaving = computed(() => stylesStore.isSaving);
+function normalizzaBozza(sets) {
+  const salvati = new Set((stylesStore.globalTypography || []).map((s) => s && s.id));
+  return normalizza(JSON.parse(JSON.stringify(sets))).map((s) => ({ ...s, _nuovo: !salvati.has(s.id) }));
+}
+
+const isDirty = ref(!!bozza);
+const isSaving = computed(() => stylesStore.savingTypography);
 
 // Se il sito non ha ancora set, la lista parte con una proposta: sono set nuovi,
 // quindi il pulsante «Salva» deve essere attivo (altrimenti non si salvano mai).
-if (localSets.value.length === 0) {
+if (!bozza && localSets.value.length === 0) {
   localSets.value = normalizza([
     { id: 'heading', label: 'Titoli', family: 'Montserrat', weight: '700', transform: 'none', line_height: '1.3', letter_spacing: '0' },
     { id: 'subheading', label: 'Sottotitoli', family: 'Montserrat', weight: '500', transform: 'none', line_height: '1.4', letter_spacing: '0.5' },
@@ -185,6 +194,17 @@ if (localSets.value.length === 0) {
   ], true);
   isDirty.value = true;
 }
+
+// Lavoro mandato a salvare: pannello nato da una bozza, oppure «Salva» premuto
+// (in volo, fallito, o riuscito con modifiche fatte durante il volo). Chiudendo
+// il pannello non si butta. Una modifica mai mandata a salvare si scarta alla
+// chiusura, come prima.
+let daSalvare = !!bozza;
+let inVolo = false;
+// La bozza da cui il pannello è nato, com'era all'apertura: se la scrive un
+// salvataggio partito prima (in volo alla chiusura, o il «Riprova» del vecchio
+// toast) e qui non è cambiato niente, il pannello torna pulito.
+let nataDa = bozza ? JSON.stringify(puliti()) : null;
 
 // Il nome dei set appena aggiunti va messo a fuoco: si scrive subito.
 const campiNome = new Map();
@@ -258,17 +278,98 @@ function removeSet(index) {
   isDirty.value = true;
 }
 
-async function save() {
-  const puliti = localSets.value.map((s, i) => {
+function puliti() {
+  return localSets.value.map((s, i) => {
     const { _uid, _nuovo, ...resto } = s;
     return { ...resto, id: resto.id || idLibero(slug(resto.label), i) };
   });
-  stylesStore.setGlobalTypography(JSON.parse(JSON.stringify(puliti)));
-  await stylesStore.saveGlobalTypography();
-  localSets.value.forEach((s) => { s._nuovo = false; });
-  isDirty.value = false;
+}
+
+async function save() {
+  if (stylesStore.savingTypography) return; // lo annuncerà il salvataggio già in volo
+  const inviato = JSON.stringify(puliti());
+  const uidInviati = localSets.value.map((s) => s._uid);
+  daSalvare = true;
+  inVolo = true;
+  // Lo store adotta i set solo se il server li scrive: un salvataggio fallito
+  // non deve offrire alle tile set che sul sito non esistono.
+  let esito;
+  try {
+    esito = await stylesStore.saveGlobalTypography(JSON.parse(inviato));
+  } finally {
+    inVolo = false;
+  }
+  if (esito.inCorso) return;
+  if (!esito.ok) {
+    // Resta «da salvare»: Salva attivo, id dei set nuovi ancora liberi. Se il
+    // pannello è stato chiuso nel frattempo, la bozza l'ha lasciata la chiusura.
+    toast.action(
+      t('Tipografia globale non salvata') + (esito.motivo ? ' — ' + esito.motivo : ''),
+      t('Riprova'), riprova, 10000, 'error'
+    );
+    return;
+  }
+  if (montato) {
+    // Una bozza rimasta nello store è quella da cui il pannello è nato, e ciò che
+    // è stato scritto la comprende. (Chiuso durante il volo, la bozza è quella
+    // della chiusura: lo store la toglie solo se non ha modifiche successive.)
+    stylesStore.globalTypographyDraft = null;
+    nataDa = null;
+  }
+  // Modifiche fatte mentre il salvataggio era in volo: restano da salvare.
+  localSets.value.forEach((s) => { if (uidInviati.includes(s._uid)) s._nuovo = false; });
+  isDirty.value = JSON.stringify(puliti()) !== inviato;
+  daSalvare = isDirty.value;
   toast.success(t('Tipografia globale salvata'));
 }
+
+// «Riprova» dal toast: col pannello aperto si risalva ciò che è a video; chiuso,
+// la bozza rimasta nello store (se non c'è più, è già stata scritta).
+let montato = true;
+async function riprova() {
+  if (montato) { save(); return; }
+  const sets = stylesStore.globalTypographyDraft;
+  if (!sets) return;
+  const esito = await stylesStore.saveGlobalTypography(JSON.parse(JSON.stringify(sets)));
+  if (esito.inCorso) return;
+  if (esito.ok) {
+    toast.success(t('Tipografia globale salvata'));
+  } else {
+    toast.action(
+      t('Tipografia globale non salvata') + (esito.motivo ? ' — ' + esito.motivo : ''),
+      t('Riprova'), riprova, 10000, 'error'
+    );
+  }
+}
+
+// Chiudere il pannello con lavoro mandato a salvare (fallito, in volo, o nato da
+// una bozza) non lo butta: la bozza prende anche le modifiche fatte dopo il
+// clic su Salva. Se il salvataggio in volo poi riesce, lo store la toglie solo
+// se coincide con ciò che ha scritto.
+onBeforeUnmount(() => {
+  montato = false;
+  if (isDirty.value && daSalvare) {
+    stylesStore.globalTypographyDraft = puliti();
+  }
+});
+
+// La bozza da cui il pannello è nato è stata scritta da un salvataggio partito
+// prima (chiuso mentre era in volo, o «Riprova» del vecchio toast): se qui non
+// è cambiato niente, a video ci sono i set salvati e non resta niente da salvare.
+// Se invece è cambiato qualcosa resta da salvare, ma i set ormai sul sito
+// tengono il loro id (rinominarli li staccherebbe dalle tile).
+watch(() => stylesStore.globalTypographyDraft, (d) => {
+  if (d || nataDa === null || inVolo) return;
+  if (isDirty.value && JSON.stringify(puliti()) === nataDa) {
+    localSets.value = normalizza(JSON.parse(JSON.stringify(stylesStore.globalTypography || [])));
+    isDirty.value = false;
+    daSalvare = false;
+  } else {
+    const salvati = new Set((stylesStore.globalTypography || []).map((s) => s && s.id));
+    localSets.value.forEach((s) => { if (salvati.has(s.id)) s._nuovo = false; });
+  }
+  nataDa = null;
+});
 
 // Sync from store if it changes externally
 watch(() => stylesStore.globalTypography, (newVal) => {
