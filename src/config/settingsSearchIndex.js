@@ -813,6 +813,66 @@ export const SETTINGS_FIELD_INDEX = {
 			"section": "Comportamento default"
 		}
 	],
+	"integrazioni": [
+		{
+			"kind": "section",
+			"label": "reCAPTCHA v3",
+			"hint": "Anti-spam di Google, senza caselle da spuntare. Nel form si accende da Anti-spam; servono entrambe le chiavi."
+		},
+		{
+			"kind": "field",
+			"label": "Site key",
+			"hint": "Pubblica: viene stampata nella pagina del form.",
+			"section": "reCAPTCHA v3"
+		},
+		{
+			"kind": "field",
+			"label": "Secret key",
+			"hint": "Resta sul server: verifica ogni invio.",
+			"section": "reCAPTCHA v3"
+		},
+		{
+			"kind": "section",
+			"label": "Liste e CRM",
+			"hint": "Chi compila il form viene aggiunto alla lista del servizio. Senza la chiave il servizio non riceve niente, anche se nel form è acceso."
+		},
+		{
+			"kind": "field",
+			"label": "Mailchimp — API key",
+			"hint": "Profilo → Extras → API keys. Finisce con il datacenter, per esempio -us21.",
+			"section": "Liste e CRM"
+		},
+		{
+			"kind": "field",
+			"label": "ActiveCampaign — URL dell'account",
+			"hint": "Impostazioni → Sviluppatore. Senza https:// lo aggiunge Olobuild.",
+			"section": "Liste e CRM"
+		},
+		{
+			"kind": "field",
+			"label": "ActiveCampaign — API key",
+			"hint": "Nella stessa pagina dell'URL. Servono tutti e due.",
+			"section": "Liste e CRM"
+		},
+		{
+			"kind": "field",
+			"label": "ConvertKit (Kit) — API key v3",
+			"hint": "Impostazioni → Sviluppatore: la API key v3, non la API secret.",
+			"section": "Liste e CRM"
+		},
+		{
+			"kind": "field",
+			"label": "Brevo — API key",
+			"hint": "SMTP e API → Chiavi API: una chiave v3 (inizia con xkeysib-).",
+			"section": "Liste e CRM"
+		},
+		{
+			"kind": "field",
+			"label": "HubSpot e webhook",
+			"hint": "Nessuna chiave: si impostano nel form. Per HubSpot Portal ID, Form GUID e quali campi mandare, con il nome della proprietà HubSpot: un campo che il modulo HubSpot non ha fa scartare l'intero invio.",
+			"section": "Liste e CRM"
+		}
+	],
 	"whitelabel": [
 		{
 			"kind": "section",
