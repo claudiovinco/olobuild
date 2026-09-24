@@ -47,7 +47,7 @@ const regularStyle = computed(() => ({
   textDecoration: s.value.show_sale ? 'line-through' : 'none',
   color: s.value.show_sale ? regularColor.value : priceColor.value,
   fontSize: s.value.show_sale ? (parseInt(s.value.font_size) * 0.75) + 'px' : s.value.font_size + 'px',
-  fontWeight: s.value.show_sale ? '400' : s.value.font_weight,
+  fontWeight: s.value.show_sale ? '400' : (s.value.font_weight || '700'),
 }));
 
 const saleStyle = computed(() => ({

@@ -41,7 +41,8 @@ export default {
     { key: 'show_sale', label: t('Mostra prezzo scontato'), type: 'toggle' },
     { key: 'show_suffix', label: t('Mostra suffisso prezzo'), type: 'toggle' },
     { key: 'prefix', label: t('Prefisso'), type: 'text', placeholder: t('es. A partire da') },
-    { key: 'suffix', label: t('Suffisso'), type: 'text', placeholder: t('es. + IVA') },
+    { key: 'suffix', label: t('Suffisso'), type: 'text', placeholder: t('es. + IVA'),
+      condition: { field: 'show_suffix', value: true } },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────

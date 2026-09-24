@@ -50,6 +50,22 @@ body[data-olo-pagebg], html[data-olo-pagebg], body[data-olo-pagebg] #olo-iframe-
 .olo-fp-wrapper {
   scroll-margin-top: 80px;
 }
+/* Testo per i lettori di schermo (WooCommerce lo mette in coda alla forchetta di prezzo,
+   wc_format_price_range(), e al prezzo barrato, wc_format_sale_price()). Sul sito lo
+   nasconde il CSS di WooCommerce o del tema; questo documento non carica né l'uno né
+   l'altro, e il canvas lo mostrava in chiaro dopo il prezzo. */
+.screen-reader-text {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 </style>
 </head>
 <body>

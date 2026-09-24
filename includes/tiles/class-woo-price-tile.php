@@ -66,19 +66,62 @@ class Olobuild_Woo_Price_Tile extends Olobuild_Tile_Base {
 
         // Font
         $font_size   = max( 12, min( 72, absint( $s['font_size'] ) ) );
-        $font_weight = in_array( $s['font_weight'], [ '400', '600', '700', '800' ], true ) ? $s['font_weight'] : '700';
+        // Tutti i pesi del controllo tipografia (100–900), anche salvati come numero.
+        $font_weight = $this->font_weight_css( $s['font_weight'] ) ?: '700';
         $text_align  = in_array( $s['text_align'], [ 'left', 'center', 'right' ], true ) ? $s['text_align'] : 'left';
 
         // Prices
         $on_sale      = $product->is_on_sale();
-        $regular_raw  = $product->get_regular_price();
-        $sale_raw     = $product->get_sale_price();
+        $html_barrato = '';
+        $html_prezzo  = '';
+
+        if ( $product instanceof WC_Product_Variable ) {
+            // Il genitore variabile non ha un prezzo proprio (regolare e saldo vuoti →
+            // wc_price('') = 0,00): come WooCommerce, forchetta delle varianti, oppure
+            // barrato + saldo se tutte hanno lo stesso prezzo pieno. Senza suffisso:
+            // quello lo governa la tile.
+            $prezzi = $product->get_variation_prices( true );
+            if ( ! empty( $prezzi['price'] ) ) {
+                $min     = reset( $prezzi['price'] );
+                $max     = end( $prezzi['price'] );
+                $min_reg = reset( $prezzi['regular_price'] );
+                $max_reg = end( $prezzi['regular_price'] );
+                if ( $min !== $max ) {
+                    $html_prezzo = wc_format_price_range( $min, $max );
+                } elseif ( $on_sale && $min_reg === $max_reg ) {
+                    $html_barrato = wc_price( $max_reg );
+                    $html_prezzo  = wc_price( $min );
+                } else {
+                    $html_prezzo = wc_price( $min );
+                }
+            }
+        } elseif ( $product instanceof WC_Product_Grouped ) {
+            // Il raggruppato non ha prezzo proprio: forchetta dei figli visibili, come WooCommerce.
+            $prezzi_figli = [];
+            $figli        = array_filter( array_map( 'wc_get_product', $product->get_children() ), 'wc_products_array_filter_visible_grouped' );
+            foreach ( $figli as $figlio ) {
+                if ( '' !== $figlio->get_price() ) {
+                    $prezzi_figli[] = wc_get_price_to_display( $figlio );
+                }
+            }
+            if ( ! empty( $prezzi_figli ) ) {
+                $min         = min( $prezzi_figli );
+                $max         = max( $prezzi_figli );
+                $html_prezzo = $min !== $max ? wc_format_price_range( $min, $max ) : wc_price( $min );
+            }
+        } else {
+            // Semplici, esterni, singole varianti: invariato.
+            $regular_raw  = $product->get_regular_price();
+            $sale_raw     = $product->get_sale_price();
+            $html_barrato = $on_sale ? wc_price( $regular_raw ) : '';
+            $html_prezzo  = wc_price( $on_sale ? $sale_raw : $regular_raw );
+        }
 
         $prefix = sanitize_text_field( $s['prefix'] );
         $suffix = sanitize_text_field( $s['suffix'] );
 
         ob_start();
-        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colours via the safe_color_css() whitelist, $font_size via absint()+min()/max() clamps (round() products), $font_weight/$text_align via in_array() whitelists; $uid is internally generated.
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colours via the safe_color_css() whitelist, $font_size via absint()+min()/max() clamps (round() products), $font_weight via the font_weight_css() whitelist, $text_align via an in_array() whitelist; $uid is internally generated.
         ?>
         <style>
             .<?php echo $uid; ?> {
@@ -121,19 +164,19 @@ class Olobuild_Woo_Price_Tile extends Olobuild_Tile_Base {
             <span class="olo-woo-price-prefix"><?php echo esc_html( $prefix ); ?></span>
             <?php endif; ?>
             <?php if ( $on_sale ) : ?>
-                <?php if ( ! empty( $s['show_regular'] ) ) : ?>
-                <span class="olo-woo-price-regular"><?php echo wc_price( $regular_raw ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_price() returns escaped WooCommerce price HTML ?></span>
+                <?php if ( ! empty( $s['show_regular'] ) && '' !== $html_barrato ) : ?>
+                <span class="olo-woo-price-regular"><?php echo $html_barrato; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above only by wc_price(), escaped WooCommerce price HTML ?></span>
                 <?php endif; ?>
-                <?php if ( ! empty( $s['show_sale'] ) ) : ?>
-                <span class="olo-woo-price-sale"><?php echo wc_price( $sale_raw ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_price() returns escaped WooCommerce price HTML ?></span>
+                <?php if ( ! empty( $s['show_sale'] ) && '' !== $html_prezzo ) : ?>
+                <span class="olo-woo-price-sale"><?php echo $html_prezzo; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above only by wc_price()/wc_format_price_range(), escaped WooCommerce price HTML ?></span>
                 <?php endif; ?>
             <?php else : ?>
-                <?php if ( ! empty( $s['show_regular'] ) ) : ?>
-                <span class="olo-woo-price-regular no-sale"><?php echo wc_price( $regular_raw ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_price() returns escaped WooCommerce price HTML ?></span>
+                <?php if ( ! empty( $s['show_regular'] ) && '' !== $html_prezzo ) : ?>
+                <span class="olo-woo-price-regular no-sale"><?php echo $html_prezzo; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above only by wc_price()/wc_format_price_range(), escaped WooCommerce price HTML ?></span>
                 <?php endif; ?>
             <?php endif; ?>
             <?php if ( ! empty( $s['show_suffix'] ) ) : ?>
-            <span class="olo-woo-price-suffix"><?php echo esc_html( $suffix ?: $product->get_price_suffix() ); ?></span>
+            <span class="olo-woo-price-suffix"><?php echo $suffix ? esc_html( $suffix ) : wp_kses_post( $product->get_price_suffix() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tile text via esc_html(); WooCommerce's suffix is HTML (<small class="woocommerce-price-suffix">), filtered by wp_kses_post() ?></span>
             <?php endif; ?>
         </div>
         <?php
