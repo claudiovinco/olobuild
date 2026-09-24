@@ -77,6 +77,7 @@ import AIAssistant from './components/Builder/AIAssistant.vue';
 import TemplateLibrary from './components/Builder/TemplateLibrary.vue';
 import ThemeSelector from './components/Builder/ThemeSelector.vue';
 import InsertPanel from './components/Builder/InsertPanel.vue';
+import { annunciaStileSostituito } from './utils/styleSnapshots';
 
 const builderStore = useBuilderStore();
 const tilesStore = useTilesStore();
@@ -263,6 +264,8 @@ function onLoadTemplate() {
 onMounted(async () => {
   tilesStore.fetchRegisteredTiles();
   initHistory();
+  // Un import di tema ha appena ricaricato la pagina: toast con «Ripristina».
+  annunciaStileSostituito();
   document.addEventListener('olo:save-section', onSaveSection);
   document.addEventListener('olo:load-template', onLoadTemplate);
   window.addEventListener('beforeunload', onBeforeUnload);

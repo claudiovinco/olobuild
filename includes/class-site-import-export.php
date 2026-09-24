@@ -332,6 +332,13 @@ class Olobuild_Site_Import_Export {
             }
         }
 
+        // Da qui l'import sostituisce stile, colori, set tipografici, font, header e
+        // footer del sito: prima se ne prende una copia (Configurazione › Palette ›
+        // Versioni dello stile). Le pagine che riusa si aggiungono in import_olo_pages.
+        $snap_id = class_exists( 'Olobuild_Style_System' )
+            ? Olobuild_Style_System::instance()->take_snapshot( 'import_sito' )
+            : '';
+
         // Import global styles — SEMPRE attraverso sanitize_styles per evitare
         // stored XSS via bundle malevolo. `olo_styles` viene poi interpolato in
         // <style> da Olobuild_Style_System::generate_css() (es. var(--olo-color-X)),
@@ -364,7 +371,7 @@ class Olobuild_Site_Import_Export {
         // Pagine WP collegate ai template (+ front page)
         $pages_imported = 0;
         if ( ! empty( $json['pages'] ) && is_array( $json['pages'] ) ) {
-            $pages_imported = $this->import_olo_pages( $json['pages'], $id_map, $json['show_on_front'] ?? '' );
+            $pages_imported = $this->import_olo_pages( $json['pages'], $id_map, $json['show_on_front'] ?? '', $snap_id );
         }
 
         // Remap header/footer IDs
@@ -565,10 +572,15 @@ class Olobuild_Site_Import_Export {
      * con lo stesso slug viene riusata (aggiornandone il template). Imposta la
      * front page se la sorgente la marcava.
      *
+     * Una pagina riusata finisce, com'era (template, titolo, stato), nell'istantanea
+     * $snap_id: «Ripristina» le rimette il template di prima. Il testo della
+     * pagina, che l'import sostituisce, non si registra.
+     *
      * @return int Numero pagine create/collegate.
      */
-    private function import_olo_pages( $pages, $id_map, $show_on_front = '' ) {
-        $made = 0;
+    private function import_olo_pages( $pages, $id_map, $show_on_front = '', $snap_id = '' ) {
+        $made         = 0;
+        $pagine_prima = [];
         foreach ( (array) $pages as $pg ) {
             $tpl_old = intval( $pg['template_id'] ?? 0 );
             $tpl_new = $id_map[ $tpl_old ] ?? 0;
@@ -586,6 +598,12 @@ class Olobuild_Site_Import_Export {
             $ping_status    = ( ( $pg['ping_status'] ?? 'closed' ) === 'open' ) ? 'open' : 'closed';
 
             if ( $existing ) {
+                if ( $snap_id && ! isset( $pagine_prima[ $existing->ID ] ) ) {
+                    $stato = Olobuild_Style_System::stato_pagina( $existing->ID );
+                    if ( $stato ) {
+                        $pagine_prima[ $existing->ID ] = $stato;
+                    }
+                }
                 // Pagina riusata = MIGRATA: titolo e contenuto arrivano dal
                 // pacchetto, altrimenti il vecchio post_content resta in pagina
                 // e viene renderizzato DOPO il template (auto_render_template
@@ -621,6 +639,9 @@ class Olobuild_Site_Import_Export {
                 update_option( 'page_on_front', $page_id );
             }
             $made++;
+        }
+        if ( $snap_id && $pagine_prima ) {
+            Olobuild_Style_System::instance()->amend_snapshot_pages( $snap_id, $pagine_prima );
         }
         return $made;
     }

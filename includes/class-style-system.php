@@ -6,6 +6,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Olobuild_Style_System {
 
+    /** Versioni dello stile: option, quante se ne tengono, finestra di accorpamento (s dall'ultimo salvataggio). */
+    const SNAPSHOT_OPT     = 'olobuild_design_preset_snapshots';
+    const SNAPSHOT_MAX     = 10;
+    const SNAPSHOT_ACCORPA = 900;
+
+    /** Motivi delle istantanee di un import: la più recente non esce mai dall'elenco. */
+    const SNAPSHOT_IMPORT = [ 'import_tema', 'import_sito' ];
+
     private static $instance = null;
 
     public static function instance() {
@@ -247,7 +255,12 @@ class Olobuild_Style_System {
      * In generate_css i olo_global_colors[id core] sono emessi DOPO olo_styles.colors e VINCONO
      * nel CSS: se restano placeholder (es. import tema che scrive solo olo_styles) SOVRASCRIVONO
      * la palette del cliente. Questo li tiene allineati, qualunque sia il flusso (UI, API, import).
-     * accent/accent-2 (senza equivalente diretto in colors) seguono primary/secondary. Idempotente.
+     * accent/accent-2/accent_2 (senza equivalente diretto in colors) seguono primary/secondary.
+     * Un id con «_» (text_muted, primary_contrast) non si allinea: esce come
+     * --olo-color-text_muted, una variabile diversa da quella del ruolo, che non copre niente.
+     * È un colore a sé, modificabile fra gli extra di Configurazione › Palette: riallinearlo al
+     * ruolo riscriveva a ogni salvataggio della palette il valore scelto lì. Stessa regola di
+     * copreRuolo() in ColorsTab.vue. Idempotente.
      *
      * @param array $colors  blocco olo_styles['colors'] (primary/secondary/...).
      */
@@ -262,11 +275,12 @@ class Olobuild_Style_System {
         }
         $changed = false;
         foreach ( $gc as &$g ) {
-            $id = isset( $g['id'] ) ? $g['id'] : '';
+            $id = ( is_array( $g ) && isset( $g['id'] ) && is_scalar( $g['id'] ) ) ? (string) $g['id'] : '';
             if ( '' === $id ) {
                 continue;
             }
-            $val = $colors[ $id ] ?? ( $fallbacks[ $id ] ?? null );
+            $del_ruolo = false === strpos( $id, '_' ) ? ( $colors[ $id ] ?? null ) : null;
+            $val       = $del_ruolo ?? ( $fallbacks[ $id ] ?? null );
             if ( null !== $val && ( ! isset( $g['value'] ) || $g['value'] !== $val ) ) {
                 $g['value'] = $val;
                 $changed    = true;
@@ -334,10 +348,587 @@ class Olobuild_Style_System {
 
     /**
      * Reset to defaults.
+     *
+     * Lo stile di prima va fra le versioni (se il ripristino cambia qualcosa):
+     * senza, il ripristino ai valori predefiniti cancellava olobuild_styles e non
+     * si tornava indietro. delete_option non svuota la cache delle pagine (si
+     * aggancia a update_option): la si svuota qui.
      */
     public function reset_styles() {
+        $prima = $this->stato_stile();
         delete_option( 'olobuild_styles' );
+        $this->take_snapshot( 'ripristino_stili', '', [], $prima );
+        self::svuota_cache_pagine();
         return $this->get_defaults();
+    }
+
+    /* ── Versioni dello stile (istantanee) ──────────────────────────────────
+     *
+     * Import di un tema, salvataggio degli stili, ripristino dei predefiniti e
+     * import del sito cambiano lo stile di TUTTO il sito in un colpo: colori,
+     * tipografia, set tipografici e font, header, footer e 404 attivi, cursore e
+     * mirino, pagina iniziale. Prima di farlo si
+     * copia com'era (al massimo 10 copie, in olobuild_design_preset_snapshots,
+     * autoload no; la copia dell'ultimo import non esce mai), e «Ripristina» lo
+     * rimette.
+     */
+
+    /**
+     * Le option che quei flussi cambiano per tutto il sito. I set tipografici e
+     * i font caricati li sostituisce l'import del sito (import_global_options).
+     */
+    private static function snapshot_keys() {
+        return [
+            'olobuild_styles',
+            'olobuild_global_colors',
+            'olobuild_global_typography',
+            'olobuild_custom_fonts',
+            'olobuild_active_header',
+            'olobuild_active_footer',
+            'olobuild_active_404',
+            'olobuild_magnetic_cursor',
+            'olobuild_cursor_hud',
+            'show_on_front',
+            'page_on_front',
+            'page_for_posts',
+        ];
+    }
+
+    /** L'elenco salvato, tollerante: un'option rovinata vale «nessuna istantanea». */
+    private function snapshot_list() {
+        $list = get_option( self::SNAPSHOT_OPT, [] );
+        if ( ! is_array( $list ) ) {
+            return [];
+        }
+        return array_values( array_filter( $list, function ( $v ) {
+            return is_array( $v ) && ! empty( $v['id'] ) && is_scalar( $v['id'] );
+        } ) );
+    }
+
+    /**
+     * Com'è adesso una pagina che un import sta per riusare: template, titolo, stato.
+     *
+     * @return array|null null se la pagina non esiste.
+     */
+    public static function stato_pagina( $page_id ) {
+        $page_id = (int) $page_id;
+        $post    = $page_id > 0 ? get_post( $page_id ) : null;
+        if ( ! $post ) {
+            return null;
+        }
+        $tpl = get_post_meta( $page_id, '_olo_template_id', true );
+        return [
+            'tpl'    => ( '' === $tpl || false === $tpl || null === $tpl ) ? null : (string) $tpl,
+            'title'  => (string) $post->post_title,
+            'status' => (string) $post->post_status,
+        ];
+    }
+
+    private static function pulisci_pagine( $pagine ) {
+        $out = [];
+        foreach ( is_array( $pagine ) ? $pagine : [] as $pid => $stato ) {
+            $pid = (int) $pid;
+            if ( $pid <= 0 || ! is_array( $stato ) ) {
+                continue;
+            }
+            $out[ $pid ] = [
+                'tpl'    => ( isset( $stato['tpl'] ) && is_scalar( $stato['tpl'] ) ) ? (string) $stato['tpl'] : null,
+                'title'  => (string) ( $stato['title'] ?? '' ),
+                'status' => (string) ( $stato['status'] ?? '' ),
+            ];
+        }
+        return $out;
+    }
+
+    /**
+     * Lo stile del sito com'è adesso: le option di snapshot_keys(), quelle che
+     * non esistono e un hash per confrontare due stati.
+     *
+     * @return array [ 'options' => [], 'absent' => [], 'hash' => string ]
+     */
+    public function stato_stile() {
+        $assente = new stdClass();
+        $options = [];
+        $absent  = [];
+        foreach ( self::snapshot_keys() as $k ) {
+            $v = get_option( $k, $assente );
+            if ( $v === $assente ) {
+                $absent[] = $k;
+            } else {
+                $options[ $k ] = $v;
+            }
+        }
+        return [
+            'options' => $options,
+            'absent'  => $absent,
+            'hash'    => md5( maybe_serialize( [ $options, $absent ] ) ),
+        ];
+    }
+
+    /**
+     * Copia lo stile del sito com'è adesso e la mette in testa all'elenco.
+     *
+     * Nessuna voce nuova se lo stato è identico all'ultima istantanea con lo
+     * stesso motivo, o se è un altro salvataggio degli stili dello stesso utente
+     * entro 15 minuti dal suo salvataggio precedente (la voce accorpata ricorda
+     * l'ora dell'ultimo in 'ultimo', la copia resta quella di prima): una
+     * sessione di ritocchi, anche lunga, è una voce sola, con la copia di PRIMA
+     * della sessione.
+     *
+     * Oltre il tetto (SNAPSHOT_MAX, filtro olobuild_style_snapshots_max) escono
+     * le voci più vecchie, mai la nuova, l'istantanea di import (tema o sito)
+     * più recente né $conserva: una serie di salvataggi non spinge fuori la
+     * copia di prima dell'import, e ripristinare la voce più vecchia non la fa
+     * sparire dall'elenco.
+     *
+     * Con $prima (stato_stile() preso PRIMA di un'operazione già fatta) si
+     * registra quello, e solo se l'operazione ha cambiato qualcosa: un
+     * salvataggio degli stili senza modifiche non aggiunge voci.
+     *
+     * @param string     $motivo    import_tema | stili_salvati | ripristino_stili | prima_del_ripristino | import_sito
+     * @param string     $dettaglio Per esempio il nome del tema.
+     * @param array      $pagine    [ page_id => stato_pagina() ] delle pagine da rimettere.
+     * @param array|null $prima     stato_stile() di prima dell'operazione.
+     * @param string     $conserva  Id di un'istantanea che il taglio non deve togliere (quella che si sta ripristinando).
+     * @return string Id dell'istantanea (quella nuova, o quella che già vale); '' se niente è cambiato.
+     */
+    public function take_snapshot( $motivo, $dettaglio = '', $pagine = [], $prima = null, $conserva = '' ) {
+        $motivo = sanitize_key( (string) $motivo );
+        $pagine = self::pulisci_pagine( $pagine );
+        if ( is_array( $prima ) && isset( $prima['hash'], $prima['options'], $prima['absent'] ) ) {
+            if ( $this->stato_stile()['hash'] === $prima['hash'] ) {
+                return '';
+            }
+            $stato = $prima;
+        } else {
+            $stato = $this->stato_stile();
+        }
+        $options = $stato['options'];
+        $absent  = $stato['absent'];
+        $hash    = $stato['hash'];
+        $utente  = get_current_user_id();
+        $ora     = time();
+        $list    = $this->snapshot_list();
+
+        if ( $list ) {
+            $ultima        = $list[0];
+            $stesso_motivo = ( $ultima['motivo'] ?? '' ) === $motivo;
+            if ( $stesso_motivo && ! $pagine && empty( $ultima['pagine'] ) && ( $ultima['hash'] ?? '' ) === $hash ) {
+                return (string) $ultima['id'];
+            }
+            // Dall'ultima attività, non dall'ora della voce: con un salvataggio ogni
+            // 10 minuti nasceva una voce ogni 20 e in qualche ora l'elenco si riempiva.
+            if ( 'stili_salvati' === $motivo && $stesso_motivo
+                && (int) ( $ultima['utente'] ?? 0 ) === $utente
+                && ( $ora - (int) ( $ultima['ultimo'] ?? ( $ultima['ora'] ?? 0 ) ) ) < self::SNAPSHOT_ACCORPA ) {
+                $list[0]['ultimo'] = $ora;
+                update_option( self::SNAPSHOT_OPT, $list, false );
+                return (string) $ultima['id'];
+            }
+        }
+
+        $voce = [
+            'id'        => str_replace( '-', '', wp_generate_uuid4() ),
+            'motivo'    => $motivo,
+            'dettaglio' => sanitize_text_field( (string) $dettaglio ),
+            'utente'    => $utente,
+            'ora'       => $ora,
+            'hash'      => $hash,
+            'options'   => $options,
+            'absent'    => $absent,
+            'pagine'    => $pagine,
+        ];
+        array_unshift( $list, $voce );
+        $max  = max( 1, (int) apply_filters( 'olobuild_style_snapshots_max', self::SNAPSHOT_MAX ) );
+        $list = self::taglia_istantanee( $list, $max, [ $voce['id'], (string) $conserva ] );
+        update_option( self::SNAPSHOT_OPT, $list, false );
+        return $voce['id'];
+    }
+
+    /**
+     * Porta l'elenco (dalla più nuova alla più vecchia) a $max voci togliendo
+     * le più vecchie, tranne quelle in $conserva e l'istantanea di import (tema
+     * o sito, SNAPSHOT_IMPORT) più recente. Se restano solo voci protette
+     * l'elenco può superare $max (succede solo con un tetto sotto 3).
+     *
+     * @param array    $list     Elenco delle istantanee.
+     * @param int      $max      Quante tenerne.
+     * @param string[] $conserva Id da non togliere.
+     * @return array
+     */
+    private static function taglia_istantanee( $list, $max, $conserva ) {
+        $protette = [];
+        foreach ( (array) $conserva as $id ) {
+            if ( '' !== (string) $id ) {
+                $protette[ (string) $id ] = true;
+            }
+        }
+        foreach ( $list as $voce ) {
+            if ( in_array( (string) ( $voce['motivo'] ?? '' ), self::SNAPSHOT_IMPORT, true ) ) {
+                $protette[ (string) $voce['id'] ] = true;
+                break;
+            }
+        }
+        $list = array_values( $list );
+        for ( $i = count( $list ) - 1; $i >= 0 && count( $list ) > $max; $i-- ) {
+            if ( ! isset( $protette[ (string) $list[ $i ]['id'] ] ) ) {
+                array_splice( $list, $i, 1 );
+            }
+        }
+        return $list;
+    }
+
+    /**
+     * Aggiunge a un'istantanea le pagine riusate da un import (com'erano prima):
+     * si sa quali sono solo mentre l'import le tocca. Una pagina già registrata
+     * resta com'era.
+     */
+    public function amend_snapshot_pages( $id, $pagine ) {
+        $pagine = self::pulisci_pagine( $pagine );
+        if ( ! $pagine ) {
+            return;
+        }
+        $list = $this->snapshot_list();
+        foreach ( $list as $i => $voce ) {
+            if ( (string) $voce['id'] !== (string) $id ) {
+                continue;
+            }
+            $gia                  = is_array( $voce['pagine'] ?? null ) ? $voce['pagine'] : [];
+            $list[ $i ]['pagine'] = $gia + $pagine;
+            update_option( self::SNAPSHOT_OPT, $list, false );
+            return;
+        }
+    }
+
+    /**
+     * L'elenco da mostrare: solo i metadati, mai le copie.
+     */
+    public function list_snapshots() {
+        $out = [];
+        foreach ( $this->snapshot_list() as $voce ) {
+            $opt      = is_array( $voce['options'] ?? null ) ? $voce['options'] : [];
+            $styles   = is_array( $opt['olobuild_styles'] ?? null ) ? $opt['olobuild_styles'] : [];
+            $primario = '';
+            // Nel CSS il global color «primary» vince su styles.colors.primary.
+            foreach ( is_array( $opt['olobuild_global_colors'] ?? null ) ? $opt['olobuild_global_colors'] : [] as $gc ) {
+                if ( is_array( $gc ) && 'primary' === ( $gc['id'] ?? '' ) && ! empty( $gc['value'] ) && is_string( $gc['value'] ) ) {
+                    $primario = $gc['value'];
+                }
+            }
+            if ( '' === $primario && is_string( $styles['colors']['primary'] ?? null ) ) {
+                $primario = $styles['colors']['primary'];
+            }
+            $font   = $styles['typography']['font_family_heading'] ?? '';
+            $utente = get_userdata( (int) ( $voce['utente'] ?? 0 ) );
+            $out[]  = [
+                'id'          => (string) $voce['id'],
+                'motivo'      => (string) ( $voce['motivo'] ?? '' ),
+                'dettaglio'   => (string) ( $voce['dettaglio'] ?? '' ),
+                'utente'      => $utente ? (string) $utente->display_name : '',
+                'ora'         => (int) ( $voce['ora'] ?? 0 ),
+                'primario'    => sanitize_text_field( $primario ),
+                'font_titoli' => is_string( $font ) ? sanitize_text_field( $font ) : '',
+                'pagine'      => is_array( $voce['pagine'] ?? null ) ? count( $voce['pagine'] ) : 0,
+            ];
+        }
+        return $out;
+    }
+
+    /**
+     * Rimette lo stile del sito com'era nell'istantanea $id.
+     *
+     * Prima copia lo stato attuale («prima del ripristino»): anche il ripristino
+     * si annulla. Le option si riscrivono come erano (quelle che allora non
+     * esistevano si cancellano), tranne colori globali, set tipografici e font
+     * caricati: tornano quelli dell'istantanea e restano, in coda, quelli nati
+     * dopo, che le tile possono già usare (var(--olo-color-<id>),
+     * var(--olo-font-<id>-*)). Non restano i colori nati dopo con l'id di una
+     * chiave dei colori dello stile (primary, text-muted…), che nel CSS escono
+     * dopo lo stile appena rimesso e lo coprirebbero, né quelli con l'id di un
+     * ruolo globale delle tile (accent, dark, light, RUOLI_GLOBALI_TILE), che
+     * ricolorerebbero le tile che li usano (accent, dark e light anche dai loro
+     * default, RUOLI_LETTI_DAI_DEFAULT). Nemmeno quelli con l'id di un alias
+     * fisso (error, info, surface…, id_colori_dello_stile()): nel CSS l'alias
+     * esce dopo e vince, quindi non agiscono, e fra gli extra mostrerebbero un
+     * valore diverso da quello reso. Un header, footer, 404, una pagina (anche
+     * iniziale o degli articoli, anche nel cestino) o il template di una
+     * pagina eliminati nel frattempo non si rimettono (il sito resterebbe
+     * senza): restano quelli attuali e la risposta li elenca in 'saltati' (le
+     * pagine come 'pagina:<id>' e 'template_pagina:<id>', col titolo in
+     * 'titoli'); senza la pagina iniziale non si riscrive nemmeno
+     * show_on_front. Un font caricato i cui file sono stati cancellati non
+     * torna: 'font:<id>', col nome in 'font'.
+     *
+     * @return array|WP_Error [ 'ok' => true, 'prima' => id, 'saltati' => [ … ], 'titoli' => [ page_id => titolo ], 'font' => [ font_id => nome ] ]
+     */
+    public function restore_snapshot( $id ) {
+        $voce = null;
+        foreach ( $this->snapshot_list() as $v ) {
+            if ( (string) $v['id'] === (string) $id ) {
+                $voce = $v;
+                break;
+            }
+        }
+        if ( ! $voce ) {
+            return new WP_Error( 'olobuild_snapshot_not_found', __( 'Versione dello stile non trovata.', 'olobuild' ), [ 'status' => 404 ] );
+        }
+
+        $pagine     = is_array( $voce['pagine'] ?? null ) ? $voce['pagine'] : [];
+        $pagine_ora = [];
+        foreach ( array_keys( $pagine ) as $pid ) {
+            $stato = self::stato_pagina( $pid );
+            if ( $stato ) {
+                $pagine_ora[ $pid ] = $stato;
+            }
+        }
+        // Con l'elenco pieno il taglio toglieva proprio la voce più vecchia: se è
+        // quella che si ripristina, resta.
+        $prima = $this->take_snapshot( 'prima_del_ripristino', '', $pagine_ora, null, (string) $voce['id'] );
+
+        $opzioni = is_array( $voce['options'] ?? null ) ? $voce['options'] : [];
+        $assenti = is_array( $voce['absent'] ?? null ) ? $voce['absent'] : [];
+        $zone    = [ 'olobuild_active_header', 'olobuild_active_footer', 'olobuild_active_404' ];
+        $db      = class_exists( 'Olobuild_Database' ) ? new Olobuild_Database() : null;
+        $saltati = [];
+        $titoli  = [];
+        $font    = [];
+
+        // Colori dello stile che si sta rimettendo (con i predefiniti, come get_styles()).
+        $stile_snap = ( is_array( $opzioni['olobuild_styles'] ?? null ) && is_array( $opzioni['olobuild_styles']['colors'] ?? null ) )
+            ? $opzioni['olobuild_styles']['colors']
+            : [];
+
+        // La pagina iniziale di allora non si può rimettere: show_on_front resta
+        // com'è. Riscritto a «page» senza pagina (WordPress, eliminandola o
+        // cestinandola, l'aveva riportato agli articoli), la home diventava una
+        // pagina statica senza pagina, o una pagina nel cestino: 404.
+        $home_saltata = ! in_array( 'page_on_front', $assenti, true )
+            && (int) ( $opzioni['page_on_front'] ?? 0 ) > 0
+            && ! self::pagina_rimettibile( (int) $opzioni['page_on_front'], $pagine );
+
+        foreach ( self::snapshot_keys() as $k ) {
+            if ( 'olobuild_global_colors' === $k ) {
+                $escludi = self::id_colori_dello_stile( $stile_snap ) + array_fill_keys( self::RUOLI_GLOBALI_TILE, true );
+                $fusi    = self::fondi_per_id( $opzioni[ $k ] ?? [], get_option( $k, [] ), $escludi );
+                // Assente allora e niente da tenere: si torna ad assente, non a [].
+                if ( in_array( $k, $assenti, true ) && ! $fusi ) {
+                    delete_option( $k );
+                } else {
+                    update_option( $k, $fusi, false );
+                }
+                continue;
+            }
+            if ( in_array( $k, [ 'olobuild_global_typography', 'olobuild_custom_fonts' ], true ) ) {
+                $attuali = get_option( $k, [] );
+                if ( in_array( $k, $assenti, true ) && ( ! is_array( $attuali ) || ! $attuali ) ) {
+                    delete_option( $k );
+                } else {
+                    $dallo_snap = $opzioni[ $k ] ?? [];
+                    if ( 'olobuild_custom_fonts' === $k ) {
+                        $dallo_snap = self::font_con_file( $dallo_snap, $attuali, $saltati, $font );
+                    }
+                    // Autoload come li salvano i loro pannelli: i set tipografici no, i font caricati invariato.
+                    update_option( $k, self::fondi_per_id( $dallo_snap, $attuali ), 'olobuild_global_typography' === $k ? false : null );
+                }
+                continue;
+            }
+            if ( in_array( $k, $assenti, true ) ) {
+                delete_option( $k );
+                continue;
+            }
+            if ( ! array_key_exists( $k, $opzioni ) ) {
+                continue;
+            }
+            $v = $opzioni[ $k ];
+            if ( 'show_on_front' === $k && $home_saltata && 'page' === $v ) {
+                continue;
+            }
+            if ( in_array( $k, $zone, true ) && (int) $v > 0 && ( ! $db || ! $db->get_template( (int) $v ) ) ) {
+                $saltati[] = $k;
+                continue;
+            }
+            if ( in_array( $k, [ 'page_on_front', 'page_for_posts' ], true ) && (int) $v > 0 && ! self::pagina_rimettibile( (int) $v, $pagine ) ) {
+                // Con la home sugli articoli quella pagina non era in uso (WordPress ne
+                // conserva l'id): resta il valore attuale, senza segnalare una perdita.
+                if ( 'page' === ( $opzioni['show_on_front'] ?? '' ) ) {
+                    $saltati[] = $k;
+                }
+                continue;
+            }
+            update_option( $k, $v );
+        }
+
+        foreach ( $pagine as $pid => $stato ) {
+            $pid = (int) $pid;
+            if ( $pid <= 0 || ! is_array( $stato ) ) {
+                continue;
+            }
+            $post = get_post( $pid );
+            if ( ! $post ) {
+                $saltati[]      = 'pagina:' . $pid;
+                $titoli[ $pid ] = (string) ( $stato['title'] ?? '' );
+                continue;
+            }
+            if ( ! isset( $stato['tpl'] ) || null === $stato['tpl'] ) {
+                delete_post_meta( $pid, '_olo_template_id' );
+            } elseif ( (int) $stato['tpl'] > 0 && ( ! $db || ! $db->get_template( (int) $stato['tpl'] ) ) ) {
+                // Il template di allora non c'è più: la pagina tiene quello attuale.
+                $saltati[]      = 'template_pagina:' . $pid;
+                $titoli[ $pid ] = (string) ( $stato['title'] ?? '' );
+            } else {
+                update_post_meta( $pid, '_olo_template_id', $stato['tpl'] );
+            }
+            $modifica = [];
+            if ( '' !== (string) ( $stato['title'] ?? '' ) && $post->post_title !== $stato['title'] ) {
+                $modifica['post_title'] = $stato['title'];
+            }
+            if ( '' !== (string) ( $stato['status'] ?? '' ) && $post->post_status !== $stato['status'] ) {
+                $modifica['post_status'] = $stato['status'];
+            }
+            if ( $modifica ) {
+                $modifica['ID'] = $pid;
+                wp_update_post( wp_slash( $modifica ) );
+            }
+        }
+
+        // La cache delle pagine si svuota da sé solo su update_option di stili,
+        // colori globali, set tipografici, header e footer: non su delete_option,
+        // 404, cursori, home.
+        self::svuota_cache_pagine();
+
+        return [
+            'ok'      => true,
+            'prima'   => $prima,
+            'saltati' => $saltati,
+            'titoli'  => (object) $titoli,
+            'font'    => (object) $font,
+        ];
+    }
+
+    /** Toglie un'istantanea dall'elenco. */
+    public function delete_snapshot( $id ) {
+        $list = $this->snapshot_list();
+        $dopo = array_values( array_filter( $list, function ( $v ) use ( $id ) {
+            return (string) $v['id'] !== (string) $id;
+        } ) );
+        if ( count( $dopo ) === count( $list ) ) {
+            return new WP_Error( 'olobuild_snapshot_not_found', __( 'Versione dello stile non trovata.', 'olobuild' ), [ 'status' => 404 ] );
+        }
+        update_option( self::SNAPSHOT_OPT, $dopo, false );
+        return [ 'ok' => true ];
+    }
+
+    /**
+     * Elenchi con un id (colori globali, set tipografici, font caricati) al
+     * ripristino: le voci dell'istantanea come erano (coi loro valori e il loro
+     * `hidden`), più in coda quelle nate dopo. Riscriverla identica toglieva dal
+     * CSS i colori e i set creati dopo, e le tile che li usano li perdevano in
+     * silenzio. Le voci nate dopo con un id in $escludi non restano.
+     */
+    private static function fondi_per_id( $snap, $attuali, $escludi = [] ) {
+        $out = [];
+        $ids = [];
+        foreach ( is_array( $snap ) ? $snap : [] as $c ) {
+            if ( ! is_array( $c ) ) {
+                continue;
+            }
+            $out[] = $c;
+            if ( ! empty( $c['id'] ) && is_scalar( $c['id'] ) ) {
+                $ids[ (string) $c['id'] ] = true;
+            }
+        }
+        foreach ( is_array( $attuali ) ? $attuali : [] as $c ) {
+            if ( is_array( $c ) && ! empty( $c['id'] ) && is_scalar( $c['id'] )
+                && ! isset( $ids[ (string) $c['id'] ] ) && ! isset( $escludi[ (string) $c['id'] ] ) ) {
+                $out[] = $c;
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * Una pagina che il ripristino può rimettere come pagina iniziale o degli
+     * articoli: esiste e non è nel cestino, oppure è nel cestino ma è fra le
+     * pagine dell'istantanea con un altro stato, che il ripristino le rende.
+     *
+     * @param int   $pid    Id della pagina.
+     * @param array $pagine Le pagine dell'istantanea [ page_id => stato_pagina() ].
+     */
+    private static function pagina_rimettibile( $pid, $pagine ) {
+        $post = $pid > 0 ? get_post( $pid ) : null;
+        if ( ! $post ) {
+            return false;
+        }
+        if ( 'trash' !== $post->post_status ) {
+            return true;
+        }
+        $stato = ( isset( $pagine[ $pid ] ) && is_array( $pagine[ $pid ] ) ) ? (string) ( $pagine[ $pid ]['status'] ?? '' ) : '';
+        return '' !== $stato && 'trash' !== $stato;
+    }
+
+    /**
+     * I font caricati di un'istantanea, senza le varianti il cui file, nella
+     * cartella del gestore font di questo sito, non c'è più:
+     * Olobuild_Custom_Fonts::delete_font() cancella i file, e la voce rimessa
+     * farebbe emettere un @font-face che dà 404 su ogni pagina. Un URL fuori da
+     * quella cartella non si giudica. Un font rimasto senza varianti non torna:
+     * resta quello attuale con lo stesso id, se c'è, altrimenti va in $saltati
+     * come 'font:<id>', col nome in $nomi.
+     *
+     * @param array $fonts   olobuild_custom_fonts dell'istantanea.
+     * @param array $attuali olobuild_custom_fonts di adesso.
+     * @return array I font dell'istantanea da rimettere.
+     */
+    private static function font_con_file( $fonts, $attuali, &$saltati, &$nomi ) {
+        if ( ! is_array( $fonts ) || ! class_exists( 'Olobuild_Custom_Fonts' ) ) {
+            return $fonts;
+        }
+        $schema  = '#^https?:#i';
+        $base    = preg_replace( $schema, '', Olobuild_Custom_Fonts::get_upload_url() ) . '/';
+        $dir     = Olobuild_Custom_Fonts::get_upload_dir() . '/';
+        $ci_sono = [];
+        foreach ( is_array( $attuali ) ? $attuali : [] as $f ) {
+            if ( is_array( $f ) && ! empty( $f['id'] ) && is_scalar( $f['id'] ) ) {
+                $ci_sono[ (string) $f['id'] ] = true;
+            }
+        }
+        $out = [];
+        foreach ( $fonts as $f ) {
+            if ( ! is_array( $f ) || empty( $f['variants'] ) || ! is_array( $f['variants'] ) ) {
+                $out[] = $f;
+                continue;
+            }
+            $varianti = [];
+            foreach ( $f['variants'] as $v ) {
+                $file = ( is_array( $v ) && isset( $v['file'] ) && is_string( $v['file'] ) ) ? $v['file'] : '';
+                if ( '' !== $file && 0 === strpos( preg_replace( $schema, '', $file ), $base )
+                    && ! file_exists( $dir . basename( $file ) ) ) {
+                    continue;
+                }
+                $varianti[] = $v;
+            }
+            if ( count( $varianti ) === count( $f['variants'] ) ) {
+                $out[] = $f;
+                continue;
+            }
+            if ( $varianti ) {
+                $f['variants'] = $varianti;
+                $out[]         = $f;
+                continue;
+            }
+            $id = ( isset( $f['id'] ) && is_scalar( $f['id'] ) ) ? (string) $f['id'] : '';
+            if ( '' !== $id && ! isset( $ci_sono[ $id ] ) ) {
+                $saltati[]   = 'font:' . $id;
+                $nomi[ $id ] = ( isset( $f['name'] ) && is_scalar( $f['name'] ) && '' !== (string) $f['name'] ) ? (string) $f['name'] : $id;
+            }
+        }
+        return $out;
+    }
+
+    private static function svuota_cache_pagine() {
+        if ( class_exists( 'Olobuild_FullPage_Cache' ) ) {
+            Olobuild_FullPage_Cache::purge_all();
+        }
     }
 
     /**

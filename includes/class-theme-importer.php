@@ -179,11 +179,24 @@ class Olobuild_Theme_Importer {
         $db = new Olobuild_Database();
         $results = [ 'templates' => [], 'styles' => false, 'activated' => [] ];
 
+        // ── Step 0: istantanea dello stile del sito, PRIMA di cambiarlo ──
+        // Header, footer e 404 attivi, stili, colori globali, cursori e pagina
+        // iniziale: «Ripristina» (toast dopo l'import, Configurazione › Palette ›
+        // Versioni dello stile) li rimette com'erano. Vale anche per il wizard.
+        $snap_id = class_exists( 'Olobuild_Style_System' )
+            ? Olobuild_Style_System::instance()->take_snapshot( 'import_tema', $theme_json['name'] ?? ( $theme['name'] ?? $theme_id ) )
+            : '';
+        $pagine_prima = [];
+
         // ── Step 1: Copy logos to uploads ──
+        // Un file per tema: col nome unico il logo del tema importato dopo
+        // sovrascriveva quello dei template già importati, anche dell'header che
+        // «Ripristina» rimette in uso.
         $upload_dir = wp_upload_dir();
         $logo_url = '';
         $logo_light_url = '';
-        foreach ( [ 'logo.png' => 'olobuild-logo.png', 'logo-light.png' => 'olobuild-logo-light.png' ] as $src_file => $dest_file ) {
+        $logo_slug = sanitize_file_name( $theme_id );
+        foreach ( [ 'logo.png' => 'olobuild-logo-' . $logo_slug . '.png', 'logo-light.png' => 'olobuild-logo-' . $logo_slug . '-light.png' ] as $src_file => $dest_file ) {
             $src = $dir . '/' . $src_file;
             if ( file_exists( $src ) ) {
                 $dest = $upload_dir['basedir'] . '/' . $dest_file;
@@ -239,6 +252,13 @@ class Olobuild_Theme_Importer {
             // Replace logo placeholders
             if ( $logo_url ) {
                 $json_str = str_replace( 'LOGO_PLACEHOLDER', $logo_url, $json_str );
+            }
+            // Percorsi fissi dei loghi col nome di prima (il footer di tutor-clod punta a
+            // olobuild-logo-light.png): vanno al file di QUESTO tema, che ha il suo nome.
+            foreach ( [ 'olobuild-logo-light.png' => $logo_light_url, 'olobuild-logo.png' => $logo_url ] as $vecchio => $url_tema ) {
+                if ( $url_tema ) {
+                    $json_str = str_replace( '"/wp-content/uploads/' . $vecchio . '"', wp_json_encode( $url_tema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), $json_str );
+                }
             }
 
             // Replace menu_id "auto" with actual menu ID.
@@ -388,6 +408,15 @@ class Olobuild_Theme_Importer {
                 }
 
                 if ( $page_id ) {
+                    // La pagina c'era già: com'era prima (template, titolo, stato) va
+                    // nell'istantanea, altrimenti «Ripristina» lascerebbe la home del
+                    // sito sul template del tema.
+                    if ( $snap_id && ! isset( $pagine_prima[ $page_id ] ) ) {
+                        $stato = Olobuild_Style_System::stato_pagina( $page_id );
+                        if ( $stato ) {
+                            $pagine_prima[ $page_id ] = $stato;
+                        }
+                    }
                     // Lo slug di una pagina che esisteva gia' non si tocca: e' un indirizzo
                     // pubblicato, e cambiarlo romperebbe i collegamenti di chi ce l'ha.
                     wp_update_post( [ 'ID' => $page_id, 'post_title' => $title, 'post_status' => 'publish' ] );
@@ -417,8 +446,21 @@ class Olobuild_Theme_Importer {
             }
         }
 
+        if ( $snap_id && $pagine_prima ) {
+            Olobuild_Style_System::instance()->amend_snapshot_pages( $snap_id, $pagine_prima );
+        }
+
         // Mark setup complete
         update_option( 'olobuild_setup_complete', true );
+
+        // Chi importa può non poter ripristinare (le versioni dello stile sono da
+        // amministratore): il toast del builder lo dice invece di un 403.
+        if ( $snap_id ) {
+            $results['snapshot'] = [
+                'id'          => $snap_id,
+                'can_restore' => current_user_can( 'manage_options' ),
+            ];
+        }
 
         return $results;
     }

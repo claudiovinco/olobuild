@@ -881,8 +881,7 @@ trait Olobuild_Builder_Settings_Trait {
             ],
         ] );
 
-        // Design Presets — behavior (overwrite_manual, snapshot_before, preview_mode)
-        // + snapshots stub (per ora list/restore/delete: noop, gli stili reali sono in olo_styles).
+        // Design Presets — behavior (overwrite_manual, snapshot_before, preview_mode).
         register_rest_route( $ns, '/design-presets/behavior', [
             [
                 'methods'             => 'GET',
@@ -923,20 +922,36 @@ trait Olobuild_Builder_Settings_Trait {
             'permission_callback' => function () { return current_user_can( 'manage_options' ); },
         ] );
 
-        // Design Presets — snapshots (stub: list ritorna [], action: noop)
+        // Design Presets — snapshots: le versioni dello stile del sito (Olobuild_Style_System,
+        // prese prima di import tema/sito, salvataggio stili e ripristino dei predefiniti).
+        // GET = elenco leggero (mai le copie); POST { action: 'restore' | 'delete', id }.
+        // Da amministratore: il ripristino cambia anche la pagina iniziale del sito.
         register_rest_route( $ns, '/design-presets/snapshots', [
             [
                 'methods'             => 'GET',
                 'callback'            => function () {
-                    return rest_ensure_response( get_option( 'olobuild_design_preset_snapshots', [] ) );
+                    return rest_ensure_response( Olobuild_Style_System::instance()->list_snapshots() );
                 },
                 'permission_callback' => function () { return current_user_can( 'manage_options' ); },
             ],
             [
                 'methods'             => 'POST',
-                'callback'            => function () {
-                    // Stub — TODO: implementare restore/delete reale che ripristina olo_styles ecc.
-                    return rest_ensure_response( [ 'ok' => true ] );
+                'callback'            => function ( $req ) {
+                    $p      = $req->get_json_params();
+                    $p      = is_array( $p ) ? $p : [];
+                    $azione = is_scalar( $p['action'] ?? null ) ? sanitize_key( (string) $p['action'] ) : '';
+                    $id     = is_scalar( $p['id'] ?? null ) ? sanitize_key( (string) $p['id'] ) : '';
+                    if ( '' === $id ) {
+                        return new WP_Error( 'invalid_id', __( 'Versione dello stile non indicata.', 'olobuild' ), [ 'status' => 400 ] );
+                    }
+                    if ( 'restore' === $azione ) {
+                        $esito = Olobuild_Style_System::instance()->restore_snapshot( $id );
+                    } elseif ( 'delete' === $azione ) {
+                        $esito = Olobuild_Style_System::instance()->delete_snapshot( $id );
+                    } else {
+                        return new WP_Error( 'invalid_action', __( 'Azione non valida.', 'olobuild' ), [ 'status' => 400 ] );
+                    }
+                    return is_wp_error( $esito ) ? $esito : rest_ensure_response( $esito );
                 },
                 'permission_callback' => function () { return current_user_can( 'manage_options' ); },
             ],

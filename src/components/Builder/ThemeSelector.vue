@@ -5,23 +5,24 @@
 <script setup>
 import { computed } from 'vue';
 import { createThemePicker } from '../../theme-picker/themePicker.js';
+import { t } from '@/i18n';
+import { useToast } from '@/composables/useToast.js';
+import { ricordaStileSostituito } from '@/utils/styleSnapshots';
 
 const oloData = computed(() => window.oloData || {});
+const toast = useToast();
 
 let picker = null;
 
-function showToast(msg, isError) {
-  const toast = document.createElement('div');
-  toast.textContent = msg;
-  toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:8px;font-size:14px;font-weight:500;z-index:9999999;box-shadow:0 4px 20px rgba(0,0,0,0.3);transition:opacity 0.3s;font-family:system-ui,-apple-system,sans-serif;'
-    + (isError ? 'background:#991B1B;color:#FEF2F2' : 'background:#065F46;color:#ECFDF5');
-  document.body.appendChild(toast);
-  setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
-}
-
 async function importTheme(theme) {
   if (!theme || !theme.id) return;
-  if (!confirm('Importare questo tema? Verranno creati nuovi template e impostati come header/footer attivi.')) return;
+  const nome = theme.name || theme.id;
+  // La conferma dice tutto ciò che cambia per il sito intero, non solo i template.
+  if (!confirm(
+    t('Importare il tema') + ' «' + nome + '»?\n\n'
+    + t('Per tutto il sito cambiano: colori (anche della modalità scura), tipografia e font, spaziature, header, footer e pagina 404 attivi, cursore e mirino se il tema li porta, e la pagina iniziale, che mostrerà il template del tema. Si creano nuovi template e pagine; il menu del tema, se ne ha uno, prende il posto delle voci di un menu con lo stesso nome. Le pagine che esistono già non si duplicano: la pagina iniziale, quella degli articoli e le pagine che hanno già l\'indirizzo di una pagina del tema prendono il template e il titolo del tema e vengono pubblicate; se il tema ha una pagina degli articoli, diventa quella del sito.') + '\n\n'
+    + t('Lo stile di prima resta fra le versioni dello stile: «Ripristina», subito dopo l\'import o da Configurazione › Palette › Versioni dello stile (da amministratore), rimette stile, header, footer, 404, cursore, pagina iniziale e degli articoli, e template, titolo e stato delle pagine che esistevano già. I template, le pagine nuove e le voci del menu restano.')
+  )) return;
 
   picker && picker.setBusy(true);
   try {
@@ -33,29 +34,33 @@ async function importTheme(theme) {
     const result = await res.json();
     if (result.templates) {
       picker && picker.close();
-      showToast(`✅ Tema importato! ${result.templates.length} template creati.`);
+      // Il «Ripristina» compare dopo la ricarica qui sotto (App.vue → annunciaStileSostituito).
+      ricordaStileSostituito(result.snapshot, nome);
+      toast.success(t('Tema importato') + ': ' + result.templates.length + ' ' + t('template creati.'), 4000);
       // Genera subito le anteprime delle card (render REST → cattura), poi ricarica
-      const ids = result.templates.map(t => t.id).filter(Boolean);
+      const ids = result.templates.map(tpl => tpl.id).filter(Boolean);
       if (ids.length && typeof window.oloGenerateMissingThumbs === 'function') {
-        const progress = document.createElement('div');
-        progress.style.cssText = 'position:fixed;bottom:72px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:8px;font-size:14px;font-weight:500;z-index:9999999;box-shadow:0 4px 20px rgba(0,0,0,0.3);font-family:system-ui,-apple-system,sans-serif;background:#1E3A8A;color:#EFF6FF';
-        document.body.appendChild(progress);
+        // Un solo toast col contatore visibile «i/total», aggiornato sul posto (è un
+        // role=status: i lettori di schermo lo leggono). Resta fino alla ricarica qui sotto.
+        const testo = t('Genero le anteprime dei template…');
+        const avanzamento = toast.info(testo, 600000);
         try {
           await window.oloGenerateMissingThumbs(ids, {
-            onProgress: (i, total) => { progress.textContent = `🖼 Generazione anteprime… ${i}/${total}`; },
+            onProgress: (i, total) => { if (avanzamento) avanzamento.testo(testo + ' ' + i + '/' + total); },
           });
         } catch (e) { console.warn('thumb generation failed:', e); }
-        progress.remove();
       }
       window.location.reload();
     } else {
-      picker && picker.setBusy(false);
-      showToast('❌ Errore nell\'importazione', true);
+      // Il selettore sta sopra i toast (z-index 999999, sfondo scuro e sfocato):
+      // aperto, l'errore finiva sotto e non si leggeva. close() azzera `picker` (onClose).
+      if (picker) picker.close();
+      toast.error(t('Errore nell\'importazione') + (result && result.message ? ' — ' + result.message : ''), 6000);
     }
   } catch (e) {
     console.error('importTheme error:', e);
-    picker && picker.setBusy(false);
-    showToast('❌ ' + (e.message || 'Errore'), true);
+    if (picker) picker.close();
+    toast.error(t('Errore nell\'importazione') + ' — ' + (e.message || t('errore di rete')), 6000);
   }
 }
 

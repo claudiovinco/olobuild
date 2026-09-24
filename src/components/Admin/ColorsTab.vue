@@ -337,6 +337,35 @@
       </div>
     </div>
   </div>
+
+  <!-- 7) VERSIONI DELLO STILE (istantanee, olobuild_design_preset_snapshots) -->
+  <div v-if="versioniLette" class="cfg-card">
+    <div class="cfg-card-head">
+      <div class="head-ic">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>
+      </div>
+      <div>
+        <h3>{{ t('Versioni dello stile') }}</h3>
+        <p>{{ t('Com\'era lo stile del sito prima di ogni import di tema o del sito, salvataggio degli stili e ripristino dei predefiniti: colori, tipografia, set tipografici e font caricati, header, footer e pagina 404 attivi, cursore e mirino, pagina iniziale e il template delle pagine che l\'import ha riusato. Non tornano i template e le pagine creati dall\'import, né il testo delle pagine riusate dall\'import del sito. Restano le ultime 10, e sempre quella di prima dell\'ultimo import.') }}</p>
+      </div>
+      <div class="head-actions">
+        <span class="cfg-pill">{{ versioni.length }}</span>
+      </div>
+    </div>
+    <div class="cfg-card-body">
+      <div v-if="versioni.length" class="brand-list">
+        <div v-for="v in versioni" :key="v.id" class="brand-row snap-row">
+          <span class="snap-sw" :style="v.primario ? { background: v.primario } : null" aria-hidden="true"></span>
+          <div class="brand-info">
+            <div class="brand-name">{{ motivoVersione(v) }}</div>
+            <div class="brand-role">{{ dataVersione(v.ora) }}<template v-if="v.utente"> · {{ v.utente }}</template><template v-if="v.font_titoli"> · {{ v.font_titoli }}</template></div>
+          </div>
+          <button type="button" class="cfg-btn cfg-btn-secondary xg-act" :disabled="ripristinando" @click="ripristinaVersione(v)">{{ t('Ripristina') }}</button>
+        </div>
+      </div>
+      <div v-else class="xg-empty">{{ t('Nessuna versione ancora: la prima nasce al prossimo import o salvataggio degli stili.') }}</div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -345,6 +374,7 @@ import { t } from '@/i18n';
 import { HARMONY_RULES, harmonize, paletteToRoles, neutralsFromSeed, readableText, contrastRatio, isValidHex } from '@/utils/colorHarmony';
 import CfgSelect from './controls/CfgSelect.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
+import { ripristinaIstantanea, descriviSaltati } from '@/utils/styleSnapshots';
 
 const TAB_ID = 'colori';
 const showToast = inject('showToast', () => {});
@@ -440,12 +470,14 @@ const presetList = computed(() => {
   return [...builtin, ...mine];
 });
 
-// Id riservati ai ruoli del pannello: i restanti global sono "extra" riutilizzabili.
-const CORE_IDS = ['primary', 'secondary', 'success', 'warning', 'danger', 'link', 'text', 'text_muted', 'background', 'muted', 'border', 'primary_contrast', 'secondary_contrast', 'muted_contrast'];
+// Un globale che copre un ruolo della Palette (copreRuolo: primary, text…) si modifica
+// nella riga del ruolo; tutti gli altri sono "extra" riutilizzabili. Anche text_muted o
+// primary_contrast: escono come --olo-color-text_muted, non coprono il ruolo e, nascosti
+// dopo un import, prima non si potevano né rimettere in vista né eliminare.
 // I nascosti (`hidden`) sono fuori dalle swatch del builder ma ancora emessi nel CSS:
 // stanno in un gruppo a parte, da cui si rimettono in vista o si eliminano.
-const extraGlobals = computed(() => (globalColors.value || []).filter((g) => g && g.id && !CORE_IDS.includes(g.id) && !g.hidden));
-const hiddenGlobals = computed(() => (globalColors.value || []).filter((g) => g && g.id && !CORE_IDS.includes(g.id) && g.hidden));
+const extraGlobals = computed(() => (globalColors.value || []).filter((g) => g && g.id && !copreRuolo(g) && !g.hidden));
+const hiddenGlobals = computed(() => (globalColors.value || []).filter((g) => g && g.id && !copreRuolo(g) && g.hidden));
 const xgBusy = ref(false);
 
 // Badge "Attivo" REALE: il preset i cui primary+secondary combaciano con i colori correnti.
@@ -632,7 +664,7 @@ async function loadStyles() {
       const g = await rg.json();
       globalColors.value = Array.isArray(g) ? g : [];
       globalColors.value.forEach((gc) => {
-        if (gc && gc.id && gc.value && colors.value[gc.id] !== undefined) {
+        if (gc && gc.value && copreRuolo(gc)) {
           colors.value[gc.id] = gc.value.toUpperCase ? gc.value.toUpperCase() : gc.value;
         }
       });
@@ -652,6 +684,14 @@ async function loadStyles() {
 
 // I global color con id = ruolo core (primary/secondary/...) vincono nel CSS frontend.
 // Li riallineiamo ai valori correnti del pannello così il cambio è davvero visibile.
+// Solo gli id senza «_»: il ruolo text_muted esce come --olo-color-text-muted, mentre un
+// globale «text_muted» esce come --olo-color-text_muted e non copre niente (se è nascosto,
+// dopo un import o un ripristino, riporterebbe in Palette un valore che il sito non usa):
+// sta fra gli extra (o fra i nascosti) col suo valore. Gemello PHP: sync_global_palette().
+function copreRuolo(gc) {
+  return !!(gc && gc.id) && !String(gc.id).includes('_') && colors.value[gc.id] !== undefined;
+}
+
 async function syncGlobalColors() {
   // PUT /global-colors fa REPLACE totale dell'array: rileggo lo stato corrente dal
   // server per non cancellare colori aggiunti altrove (es. il "+" del builder) con
@@ -661,7 +701,7 @@ async function syncGlobalColors() {
   let changed = globalColorsTouched.value;
   // 1) allinea i ruoli core ai valori correnti del pannello
   const next = server.map((gc) => {
-    if (gc && gc.id && colors.value[gc.id] !== undefined && gc.value !== colors.value[gc.id]) {
+    if (copreRuolo(gc) && gc.value !== colors.value[gc.id]) {
       changed = true;
       return { ...gc, value: colors.value[gc.id] };
     }
@@ -845,11 +885,62 @@ async function saveStyles() {
   await inCodaColori(syncGlobalColors); // una scrittura della lista alla volta (inCodaColori)
 }
 
-const onSave = cfgJob(TAB_ID, saveStyles);
+// ── Versioni dello stile ──
+// Il server copia lo stile del sito prima di import (tema, sito), salvataggi degli
+// stili e ripristino dei predefiniti; qui si elencano e si ripristinano. La card
+// non rende la scheda «da salvare»: il ripristino si applica subito.
+const versioni = ref([]);
+const versioniLette = ref(false); // senza permesso (o con errore) la card non c'è
+const ripristinando = ref(false);
+const MOTIVI_VERSIONE = {
+  import_tema: 'Prima dell\'import del tema',
+  stili_salvati: 'Prima di un salvataggio degli stili',
+  ripristino_stili: 'Prima del ripristino degli stili predefiniti',
+  prima_del_ripristino: 'Prima di un ripristino di versione',
+  import_sito: 'Prima dell\'import del sito',
+};
+function motivoVersione(v) {
+  const base = t(MOTIVI_VERSIONE[v.motivo] || 'Versione dello stile');
+  return v.dettaglio ? base + ' «' + v.dettaglio + '»' : base;
+}
+function dataVersione(ora) {
+  const n = Number(ora) || 0;
+  return n ? new Date(n * 1000).toLocaleString() : '';
+}
+async function caricaVersioni() {
+  try {
+    const r = await okOrThrow(fetch(`${window.oloData.restUrl}design-presets/snapshots`, { headers: { 'X-WP-Nonce': window.oloData.nonce } }));
+    const d = await r.json();
+    versioni.value = Array.isArray(d) ? d : [];
+    versioniLette.value = true;
+  } catch (e) { /* senza elenco la card resta nascosta */ }
+}
+async function ripristinaVersione(v) {
+  if (ripristinando.value) return;
+  if (!confirm(t('Ripristinare lo stile del sito com\'era in quel momento?') + '\n\n'
+    + t('Colori, tipografia, set tipografici e font, header, footer e pagina 404 attivi, cursore e mirino, pagina iniziale e il template delle pagine riusate dall\'import tornano a quel punto; lo stato di adesso resta fra le versioni. I set tipografici, i font e i colori globali creati dopo restano, tranne i colori che ricolorano tutto il sito: quelli con il nome di un ruolo del tema (primary, text…) o di un ruolo delle tile (accent, dark, light) tornano come erano o spariscono. Non tornano il testo delle pagine riusate dall\'import del sito né i template, le pagine e le voci di menu creati, né ciò che nel frattempo è stato eliminato. La pagina si ricarica.'))) return;
+  ripristinando.value = true;
+  try {
+    const esito = await ripristinaIstantanea(v.id);
+    const saltati = descriviSaltati(esito);
+    showToast(saltati
+      ? t('Stile ripristinato, tranne ciò che nel frattempo è stato eliminato (resta com\'è ora)') + ': ' + saltati
+      : t('Stile ripristinato'), 'success', saltati ? 6000 : 2500);
+    // Le altre schede tengono i blocchi di stile letti all'apertura: al primo
+    // «Salva» riscriverebbero quelli di prima del ripristino.
+    setTimeout(() => window.location.reload(), saltati ? 4000 : 800);
+  } catch (e) {
+    ripristinando.value = false;
+    showToast(t('Ripristino non riuscito') + (e && e.message ? ' — ' + e.message : ''), 'error', 6000);
+  }
+}
+
+const onSave = cfgJob(TAB_ID, async () => { await saveStyles(); caricaVersioni(); });
 const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadStyles));
 
 onMounted(() => {
   loadStyles();
+  caricaVersioni();
   window.addEventListener('olo-cfg-save', onSave);
   window.addEventListener('olo-cfg-discard', onDiscard);
 });
@@ -904,6 +995,8 @@ onBeforeUnmount(() => {
 .xg-hidden-hint { font-size: 12px; color: var(--c-text-mute); margin: 4px 0 10px; }
 .xg-hidden-sw { cursor: default; opacity: .7; }
 .xg-hidden-sw:hover { transform: none; }
+.snap-row { grid-template-columns: 32px 1fr auto; }
+.snap-sw { width: 32px; height: 32px; border-radius: 8px; background: var(--c-bg); box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); }
 
 /* Preset grid */
 .preset-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }

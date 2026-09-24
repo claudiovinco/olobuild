@@ -108,6 +108,12 @@ class Olobuild_Site_Export {
         }
         // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
+        // Prima di sostituire stile, colori, set tipografici, font, header e footer:
+        // una copia (Configurazione › Palette › Versioni dello stile).
+        if (class_exists('Olobuild_Style_System')) {
+            Olobuild_Style_System::instance()->take_snapshot('import_sito');
+        }
+
         // Styles
         if (isset($data['styles'])) update_option('olobuild_styles', $data['styles']);
         if (isset($data['global_colors'])) {

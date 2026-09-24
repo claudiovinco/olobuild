@@ -73,7 +73,7 @@ Path: `D:\TECNICA\olobuild\includes\class-theme-importer.php`. Classe `Olo_Theme
 
 **`import_theme($theme_id)`** (r.160-355), nell'ordine:
 
-1. **Loghi** (r.171-185): copia `logo.png` → `uploads/olobuild-logo.png` e `logo-light.png` → `uploads/olobuild-logo-light.png`. ⚠️ Nome destinazione FISSO cross-tema: ogni import sovrascrive il logo del tema precedente. Se manca `logo-light.png`, fallback a `logo.png`.
+1. **Loghi** (r.171-185): copia `logo.png` → `uploads/olobuild-logo-<id tema>.png` e `logo-light.png` → `uploads/olobuild-logo-<id tema>-light.png`: un file per tema (fino alla 1.4.484 il nome era FISSO, `olobuild-logo(-light).png`, e ogni import sovrascriveva il logo del tema precedente, anche nei template già importati). Se manca `logo-light.png`, fallback a `logo.png`. Nei JSON del tema le stringhe intere `"/wp-content/uploads/olobuild-logo.png"` e `"/wp-content/uploads/olobuild-logo-light.png"` vengono riscritte con l'URL del file di QUESTO tema.
 2. **Menu** (r.187-215): `wp_create_nav_menu(menu.name)`; se esiste già riusa il `term_id` e **svuota le voci esistenti** (anti-duplicazione al re-import, r.198-204), poi crea le voci come custom link.
 3. **Template** (r.217-261): per ogni voce di `templates` carica il file JSON **come stringa** e fa 2 sostituzioni placeholder:
    - `LOGO_PLACEHOLDER` → URL logo caricato (str_replace, r.230);
@@ -183,6 +183,6 @@ Così le tile ereditano gratis: `--olo-color-surface`=ink, `--olo-color-surface-
 Cartella: `D:\TECNICA\olobuild\assets\data\themes\clod-evoluzione\` con:
 - `theme.json` — `id:"clod-evoluzione"` (= nome cartella), `menu`, `templates{header,footer,homepage,…}`, `activate{header,footer}`, `pages{home:{set_as_homepage:true},…}`, `styles{colors,typography,google_fonts:["Big Shoulders Display","Hanken Grotesk","Space Mono"],spacing:{}}`; opzionali `category`, `zone`, `cursor`, `preview.ink`.
 - `header.json` / `footer.json` / `homepage.json` — array di sezioni `{id,type,settings,style,advanced,children}` (section→row→column→tile); nel megamenu `"menu_id":"auto"`; per il logo usare la stringa `LOGO_PLACEHOLDER` se serve immagine.
-- `logo.png`, `logo-light.png` (copiati in uploads come `olobuild-logo[-light].png`), `screenshot.jpg|png|webp`.
+- `logo.png`, `logo-light.png` (copiati in uploads come `olobuild-logo-<id tema>[-light].png`), `screenshot.jpg|png|webp`.
 - Import: REST `POST olo/v1/...` → `Olo_Rest_Api::import_theme` (`class-rest-api.php:2214`) → `Olo_Theme_Importer::import_theme`.
 - Attenzioni: pesi font >700 non self-hostati di default; `olo_global_colors` non sincronizzato dall'import; re-import = template nuovi (orfani i vecchi); full-bleed = `width:"fullbleed"` + `padding:"remove-vertical"`.

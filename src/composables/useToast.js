@@ -45,6 +45,8 @@ function ensureLiveRegion() {
   document.body.appendChild(liveRegion);
 }
 
+// Restituisce { testo(msg) }: il testo di QUESTO toast si aggiorna sul posto (es. un
+// avanzamento «3/12») invece di impilare un toast per passo.
 function show(message, type = 'info', duration = 3000) {
   ensureContainer();
   const el = document.createElement('div');
@@ -57,6 +59,7 @@ function show(message, type = 'info', duration = 3000) {
     el.classList.remove('olo-toast-show');
     setTimeout(() => el.remove(), 300);
   }, duration);
+  return { testo: (msg) => { el.textContent = msg; } };
 }
 
 /**

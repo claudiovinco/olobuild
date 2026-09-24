@@ -20,8 +20,8 @@ assets/data/themes/tutor-clod/
 ├─ lo-studio.json        I giorni fra le lezioni
 ├─ la-scuola.json        Una scuola intera
 ├─ come-si-prova.json    Come si prova
-├─ logo.png              → copiato in uploads/olobuild-logo.png
-├─ logo-light.png        → copiato in uploads/olobuild-logo-light.png (versione bianca per il footer navy)
+├─ logo.png              → copiato in uploads/olobuild-logo-tutor-clod.png
+├─ logo-light.png        → copiato in uploads/olobuild-logo-tutor-clod-light.png (versione bianca per il footer navy)
 └─ screenshot.jpg        card del modale "Importa Temi" (1280×800)
 ```
 
@@ -101,7 +101,7 @@ Tablet/mobile: `font_size_h1_tablet 42`, `h1_mobile 32` (già in `theme.json`).
 ### footer.json
 | blocco | tile | chiavi che contano |
 |---|---|---|
-| logo | `image` | `image_url: "/wp-content/uploads/olobuild-logo-light.png"` (la **variante bianca**, copiata lì dall'importer: `LOGO_PLACEHOLDER` risolve solo al logo scuro, invisibile sul navy), `image_width/max_width: "140px"`, `height:"auto"`, `object_fit:"contain"`, `image_alignment:"left"`, `link_url:"/"`, `alt_text:"OLOtutor"`. ⚠️ Se il sito usa un percorso uploads non standard, correggere l'URL dopo l'import. |
+| logo | `image` | `image_url: "/wp-content/uploads/olobuild-logo-light.png"` (la **variante bianca**: `LOGO_PLACEHOLDER` risolve solo al logo scuro, invisibile sul navy). L'importer copia il logo in un file per tema (fino alla 1.4.484 il nome era fisso, `olobuild-logo-light.png`), `olobuild-logo-tutor-clod-light.png`, e riscrive questa stringa esatta con l'URL completo di quel file: così vale anche con un percorso uploads non standard. `image_width/max_width: "140px"`, `height:"auto"`, `object_fit:"contain"`, `image_alignment:"left"`, `link_url:"/"`, `alt_text:"OLOtutor"`. |
 | proprietà dei contenuti | `text-block` | 14/1.65, colore `color-mix(secondary_contrast 60%)`, max 420 |
 | due colonne link | `headline` (12/600 uppercase) + `nav` verticale | link `color-mix(secondary_contrast 65%)`, hover pieno |
 | chiusura | `divider` + `text-block` | divider 1px `color-mix(secondary_contrast 8%)`, spacing 24; riga finale 13px |

@@ -1449,7 +1449,12 @@ class Olobuild_Rest_Api {
     public function save_styles( $request ) {
         $body         = $request->get_json_params();
         $style_system = Olobuild_Style_System::instance();
+        // Copia dello stile di prima (Configurazione › Palette › Versioni dello stile),
+        // registrata solo se il salvataggio cambia qualcosa. I salvataggi di fila
+        // dello stesso utente si accorpano in una sola.
+        $prima        = $style_system->stato_stile();
         $saved        = $style_system->save_styles( $body );
+        $style_system->take_snapshot( 'stili_salvati', '', [], $prima );
 
         return rest_ensure_response( [
             'styles' => $style_system->get_styles(),
