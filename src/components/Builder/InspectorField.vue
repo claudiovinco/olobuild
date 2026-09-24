@@ -651,6 +651,7 @@ import FieldIconSelect from './fields/FieldIconSelect.vue';
 import DynamicFieldToggle from './DynamicFieldToggle.vue';
 import { useTilesStore } from '@/stores/tiles';
 import { useStylesStore } from '@/stores/styles';
+import { getElementDefaults } from '@/config/elementRegistry';
 import { seedFromLegacy, legacyMirror, seedBorderFromColor } from '@/config/fieldLegacyBridge';
 import { borderIsSet } from '@/composables/useBoxModel';
 import { staccaUnita } from '@/utils/fieldLabel';
@@ -678,6 +679,10 @@ const props = defineProps({
   //   false (default) → flat in tileSettings: settings[`${key}_hover`]
   //   true            → nested under .hover: tileSettings.hover[key]   (per scope=style legacy)
   hoverNested: { type: Boolean, default: false },
+  // Tipo della tile i cui SETTINGS il campo legge (tab Stile, blocco Elemento): da qui
+  // arriva il valore predefinito del doppio clic. Vuoto = si ricava da tileId, se c'è;
+  // nessuna fonte per il Contenitore (tile.style) e per le voci dei ripetitori.
+  tileType: { type: String, default: '' },
 });
 
 const emit = defineEmits(['update:modelValue', 'update:dynamic', 'update:attachmentId', 'confirm', 'update:responsiveValue', 'update:hoverValue', 'update:settingKey']);
@@ -1113,19 +1118,32 @@ const objectPositionContext = computed(() => {
   };
 });
 
-// Resolve the default value for this field by looking up the registered tile defaults.
-// Used by FieldRange (and similar) for the "double-click to reset" feature.
+// Doppio clic = valore predefinito (FieldRange/NumberScrubber). Fonte unica, in ordine:
+// field.default → config JS della tile (getElementDefaults, gli stessi che normalizeNodes
+// fonde nei settings) → default PHP registrati (registeredTiles). La tile è tileType (tab
+// Stile) o quella di tileId (Contenuto). In Hover e su un dispositivo ≠ desktop il controllo
+// scrive un'ALTRA chiave: vale il default di QUELLA chiave e, se manca, '' (= nessuna
+// variazione in hover / «Eredita»), mai il default della chiave normale: 100 in
+// hover_filter_brightness sostituirebbe in hover tutta la catena dei filtri. Il Contenitore
+// (hoverNested, tile.style) non ha default nei settings della tile. Senza nessuna fonte →
+// null: NumberScrubber ripiega sul minimo come prima.
+const hasOwn = (o, k) => !!o && typeof o === 'object' && Object.prototype.hasOwnProperty.call(o, k);
 const fieldDefaultValue = computed(() => {
-  // Explicit per-field default has priority
-  if (Object.prototype.hasOwnProperty.call(props.field, 'default')) return props.field.default;
-  if (!props.tileId) return null;
+  const f = props.field;
+  const inHover = !!f.hoverable && hoverOpen.value;
+  const inBp = !inHover && !!f.responsive && respBp.value !== 'desktop';
+  if (!inHover && !inBp && hasOwn(f, 'default')) return f.default;
+  const nessuno = (inHover || inBp) ? '' : null;
+  if (props.hoverNested) return nessuno;
   const tilesStore = useTilesStore();
-  const tile = tilesStore.getTileById?.(props.tileId);
-  if (!tile?.type) return null;
-  const reg = tilesStore.registeredTiles?.find?.(t => t.type === tile.type);
-  const defaults = reg?.defaults;
-  if (!defaults) return null;
-  return Object.prototype.hasOwnProperty.call(defaults, props.field.key) ? defaults[props.field.key] : null;
+  const type = props.tileType || (props.tileId ? tilesStore.getTileById?.(props.tileId)?.type : '') || '';
+  if (!type) return nessuno;
+  const key = inHover ? hoverKey.value : (inBp ? respKey.value : f.key);
+  const js = getElementDefaults(type);
+  if (hasOwn(js, key)) return js[key];
+  const reg = tilesStore.registeredTiles?.find?.(t => t.type === type)?.defaults;
+  if (hasOwn(reg, key)) return reg[key];
+  return nessuno;
 });
 
 // Valore "personalizzato" (≠ default) — usato dal pallino sul pulsante reveal.

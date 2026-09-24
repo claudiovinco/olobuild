@@ -1,5 +1,6 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 import { shadowField } from './_shared.js';
+import { TILE_DEFAULTS } from '@/composables/oloTileDefaults';
 import { t } from '@/i18n';
 
 /**
@@ -135,9 +136,14 @@ export default {
       { value: 'dot', label: t('Punto') },
       { value: 'star', label: t('Stella') },
     ]},
+    // `default`: valore del doppio clic (UI, non una chiave salvata). Senza, il reset
+    // scriveva il minimo (1 e 2) mentre i renderer partono da 3 e 6 (PHP ?? 3/6, Vue
+    // buildDefaults('headline')): stessa costante del render Vue.
     { key: 'decoration_count', label: t('Quantità'), type: 'range', min: 1, max: 9, step: 1,
+      default: TILE_DEFAULTS.headline.decoration_count,
       condition: { field: 'decoration', value: ['dot', 'star'] } },
     { key: 'decoration_spacing', label: t('Spaziatura'), type: 'range', min: 2, max: 20, step: 1,
+      default: TILE_DEFAULTS.headline.decoration_spacing,
       condition: { field: 'decoration', value: ['dot', 'star'] } },
     { key: 'decoration_color', label: t('Colore decorazione'), type: 'color',
       condition: { field: 'decoration', operator: '!=', value: 'none' } },

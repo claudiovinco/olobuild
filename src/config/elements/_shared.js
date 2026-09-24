@@ -1046,11 +1046,14 @@ export function borderEffectFields() {
       condition: { field: 'border_effect', op: 'in', value: ['neon', 'neon-pulse'] } },
     { key: 'border_effect_color2', label: t('Colore 2'), type: 'color',
       condition: { field: 'border_effect', op: 'in', value: ['gradient', 'gradient-spin'] } },
+    // `default`: valore del doppio clic (proprietà della UI, non una chiave salvata). Nel
+    // Contenitore (tile.style) non c'è altra fonte: senza, il reset scriveva il minimo (0 e 1)
+    // mentre il renderer ripiega su 135 e 4. Stessa costante di borderEffectDefaults.
     { key: 'border_effect_angle', label: t('Angolo gradiente (°)'), type: 'range',
-      min: 0, max: 360, step: 5,
+      min: 0, max: 360, step: 5, default: borderEffectDefaults.border_effect_angle,
       condition: { field: 'border_effect', op: '=', value: 'gradient' } },
     { key: 'border_effect_speed', label: t('Velocità rotazione (s)'), type: 'range',
-      min: 1, max: 20, step: 1,
+      min: 1, max: 20, step: 1, default: borderEffectDefaults.border_effect_speed,
       condition: { field: 'border_effect', op: '=', value: 'gradient-spin' } },
   ];
 }

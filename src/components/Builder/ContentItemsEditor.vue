@@ -112,7 +112,7 @@
                 :min="field.min ?? 0"
                 :max="field.max ?? 100"
                 :step="field.step ?? 1"
-                :defaultValue="field.min ?? 0"
+                :defaultValue="defaultVoce(field)"
                 :unit="etichettaDi(field).unita"
                 emitAs="number"
                 :ariaLabel="field.label"
@@ -126,6 +126,7 @@
                 :min="field.min ?? null"
                 :max="field.max ?? null"
                 :step="field.step ?? 1"
+                :defaultValue="defaultVoce(field)"
                 :unit="etichettaDi(field).unita"
                 emitAs="number"
                 :ariaLabel="field.label"
@@ -368,6 +369,17 @@ function etichettaDi(field) {
 function isDelegated(field) {
   const ty = field?.type || 'text';
   return !CIE_NATIVE.has(ty) && !CIE_SKIP.has(ty);
+}
+
+// Doppio clic su un numero della voce: torna al valore di una voce NUOVA (field.default,
+// poi newItemDefaults), non al minimo. Le voci d'esempio dei default della tile non sono
+// default. '' vale «nessuna fonte» (con emitAs number diventerebbe 0). Senza fonte → null:
+// NumberScrubber ripiega sul minimo come prima.
+function defaultVoce(field) {
+  const own = (o, k) => !!o && Object.prototype.hasOwnProperty.call(o, k);
+  const v = own(field, 'default') ? field.default
+    : (own(props.newItemDefaults, field?.key) ? props.newItemDefaults[field.key] : null);
+  return (v === '' || v === undefined) ? null : v;
 }
 
 const props = defineProps({

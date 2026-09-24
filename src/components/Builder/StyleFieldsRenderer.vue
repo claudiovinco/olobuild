@@ -25,6 +25,7 @@
               :field="field"
               :modelValue="tileSettings?.[field.key] ?? ''"
               :tileSettings="tileSettings"
+              :tileType="tileType"
               @update:modelValue="emitSetting(field.key, $event)"
               @update:hoverValue="emitSetting($event.key, $event.value)"
               @update:responsiveValue="emitSetting($event.key, $event.value)"
@@ -34,6 +35,7 @@
                 <ContentItemsEditor
                   :modelValue="vociDi(field)"
                   :itemFields="field.itemFields || []"
+                  :newItemDefaults="defaultVociDi(field)"
                   :itemLabel="field.itemLabel || 'Item'"
                   :tileSettings="tileSettings"
                   :strutturaFissa="true"
@@ -57,6 +59,7 @@
               :field="field"
               :modelValue="tileSettings?.[field.key] ?? ''"
               :tileSettings="tileSettings"
+              :tileType="tileType"
               @update:modelValue="emitSetting(field.key, $event)"
               @update:hoverValue="emitSetting($event.key, $event.value)"
               @update:responsiveValue="emitSetting($event.key, $event.value)"
@@ -66,6 +69,7 @@
                 <ContentItemsEditor
                   :modelValue="vociDi(field)"
                   :itemFields="field.itemFields || []"
+                  :newItemDefaults="defaultVociDi(field)"
                   :itemLabel="field.itemLabel || 'Item'"
                   :tileSettings="tileSettings"
                   :strutturaFissa="true"
@@ -219,7 +223,7 @@ import { styleFieldsBase } from '@/config/elements/_styleFieldsBase.js';
 import CollapseSection from './CollapseSection.vue';
 import InspectorField from './InspectorField.vue';
 import ContentItemsEditor from './ContentItemsEditor.vue';
-import { getElementDefaults } from '@/config/elementRegistry';
+import { getElementDefaults, getElementFields } from '@/config/elementRegistry';
 import StyleBoxStack from './style-renderers/StyleBoxStack.vue';
 import StyleLayoutStack from './style-renderers/StyleLayoutStack.vue';
 import StyleEffectsStack from './style-renderers/StyleEffectsStack.vue';
@@ -277,6 +281,15 @@ function vociDi(field) {
   if (Array.isArray(v)) return v;
   const def = (getElementDefaults(props.tileType) || {})[field.key];
   return Array.isArray(def) ? JSON.parse(JSON.stringify(def)) : [];
+}
+
+// Valori di una voce NUOVA del ripetitore: lo specchio dello Stile non li dichiara, li ha
+// il campo gemello del Contenuto (stessa chiave). Servono al doppio clic sui numeri delle
+// voci, che torna al valore di una voce nuova invece che al minimo.
+function defaultVociDi(field) {
+  if (field.newItemDefaults) return field.newItemDefaults;
+  const gemello = getElementFields(props.tileType).find(f => f && f.key === field.key && f.type === 'content-items');
+  return gemello?.newItemDefaults || {};
 }
 
 const searchQ      = computed(() => normalizeSearchQuery(props.searchQuery));
