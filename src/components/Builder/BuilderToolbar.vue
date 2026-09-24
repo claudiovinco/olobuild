@@ -687,12 +687,30 @@ const zoomMenuStyle = computed(() => {
 });
 
 // ─── Global Keyboard Shortcuts (Copy/Paste Style) ───
+// Campi in cui si SCRIVE: lì Ctrl+Z / Ctrl+Shift+Z sono del campo (annulla nativo
+// o cronologia di Tiptap), non della pagina. Select, cursori, interruttori e colori
+// non hanno un annulla proprio: lì Ctrl+Z continua ad annullare la pagina. Neanche i
+// campi numerici (NumberScrubber): cambiano con rotellina, frecce e trascinamento, che il
+// browser non mette nella sua pila, e Ctrl+Z nel campo non farebbe niente.
+// Regge anche il finto target { tagName, isContentEditable } di onIframeKey.
+const TEXT_INPUT_TYPES = /^(text|search|url|tel|email|password)$/i;
+function isTextEntry(el) {
+  if (!el) return false;
+  if (el.isContentEditable) return true;
+  if (el.readOnly || el.disabled) return false;
+  if (el.tagName === 'TEXTAREA') return true;
+  return el.tagName === 'INPUT' && TEXT_INPUT_TYPES.test(el.type || 'text');
+}
+
 function onGlobalKeydown(e) {
   const tag = e.target?.tagName || 'DIV';
   const isEditing = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || e.target?.isContentEditable;
 
   // Ctrl+Z → Undo / Ctrl+Shift+Z → Redo
   if ((e.ctrlKey || e.metaKey) && (e.key === 'z' || e.code === 'KeyZ')) {
+    // Già gestito (Tiptap) o dentro un campo di testo: l'annulla resta al campo.
+    // La modifica del campo entra comunque nella cronologia (fotografia con debounce).
+    if (e.defaultPrevented || isTextEntry(e.target)) return;
     e.preventDefault();
     if (e.shiftKey) { history.redo(); } else { history.undo(); }
     return;

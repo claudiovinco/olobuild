@@ -320,6 +320,10 @@ async function openBuilder(templateId) {
   // Load header + footer for unified editing (page/single templates only)
   await builderStore.loadUnifiedContext();
 
+  // Punto zero della cronologia = pagina caricata (header/footer compresi):
+  // Ctrl+Z subito dopo l'apertura non deve svuotare la pagina né l'header globale.
+  initHistory();
+
   currentView.value = 'builder';
 }
 
@@ -367,12 +371,14 @@ async function createAndOpenBuilder(typeOrObj = 'page') {
       builderStore.currentTemplate = tpl;
       tilesStore.setCanvasTiles([]);
       builderStore.isDirty = false;
+      initHistory();
       currentView.value = 'builder';
     }
   } catch (err) {
     console.error('Create template error:', err);
     builderStore.currentTemplate = { title, type, content: [], settings, status: 'draft' };
     tilesStore.setCanvasTiles([]);
+    initHistory();
     currentView.value = 'builder';
   }
 }

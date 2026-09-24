@@ -118,7 +118,19 @@ export function useHistory() {
     restore(undoStack.value.pop());
   }
 
+  /**
+   * Punto zero della cronologia. Va richiamato a pagina CARICATA (fine di
+   * openBuilder/createAndOpenBuilder, header e footer compresi): se partisse
+   * prima, il primo passo annullabile sarebbe la pagina vuota e un Ctrl+Z
+   * svuoterebbe corpo, header e footer segnandoli da salvare.
+   * Il debounce in sospeso (mutazioni del caricamento) va buttato: è già
+   * compreso nella fotografia di partenza.
+   */
   function initHistory() {
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+      debounceTimer = null;
+    }
     undoStack.value = [];
     redoStack.value = [];
     // Azzera prima di ricampionare: snapshot() riusa le stringhe di lastSnapshot,
