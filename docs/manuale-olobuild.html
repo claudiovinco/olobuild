@@ -578,7 +578,8 @@
 <h2 id="form">13. Form Builder</h2>
 <ul>
   <li><strong>Campi</strong>: testo, email, textarea, select, checkbox, radio, file upload</li>
-  <li><strong>Sicurezza</strong>: token HMAC (scadenza 12h) + rate limiting per IP</li>
+  <li><strong>Sicurezza</strong>: token HMAC legato al config del form (scadenza 8 giorni, o la durata della cache di pagina di Olobuild più un giorno se è più lunga: il form invia anche dalle pagine in cache; filtro <code>olobuild_form_token_ttl</code>, in secondi) + rate limiting per IP. Con cache esterne più lunghe di 7 giorni o senza scadenza (plugin di cache senza timeout, Cloudflare con Edge TTL lungo) serve il filtro, altrimenti dopo 8 giorni il form smette di inviare: risponde che il token non è valido o è scaduto, e ricaricare non basta finché la cache non viene svuotata</li>
+  <li><strong>Difese strette e config già distribuiti</strong>: honeypot, limite di invii, reCAPTCHA, risposta automatica, destinatari e webhook viaggiano nel config firmato stampato nella pagina. Se li cambi, un config raccolto prima (per esempio da un bot) resta accettato fino alla scadenza del suo token. Lo stesso vale per un form o una pagina eliminati o resi privati: il loro config continua a inviare fino alla scadenza del token. Per ritirarli prima porta il filtro <code>olobuild_form_token_ttl</code> al minimo, 12 ore (43200 secondi): i config firmati più di 12 ore fa vengono rifiutati subito, i più recenti entro 12 ore. Poi svuota la cache di pagina, anche quelle esterne: le pagine rimaste in cache più di 12 ore smetterebbero di inviare</li>
   <li><strong>Notifiche</strong>: email admin + risposta automatica utente</li>
   <li><strong>Database</strong>: storico submission in admin con filtri e ricerca</li>
   <li><strong>Export CSV</strong>: esporta tutte le submission</li>

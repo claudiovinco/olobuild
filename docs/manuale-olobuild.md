@@ -612,7 +612,8 @@ Il tile **Form** permette di creare form contatto senza plugin esterni.
 
 - **Campi**: testo, email, textarea, select, checkbox, radio, file upload
 - **Validazione**: lato client + lato server
-- **Sicurezza**: token HMAC con scadenza 12 ore
+- **Sicurezza**: token HMAC legato al config del form, con scadenza lunga (8 giorni, o la durata della cache di pagina di Olobuild più un giorno se è più lunga; filtro `olobuild_form_token_ttl`, in secondi): il form invia anche dalle pagine in cache. Con cache esterne più lunghe di 7 giorni o senza scadenza (plugin di cache senza timeout, Cloudflare con Edge TTL lungo) serve il filtro, altrimenti dopo 8 giorni il form smette di inviare: risponde che il token non è valido o è scaduto, e ricaricare non basta finché la cache non viene svuotata
+- **Difese strette e config già distribuiti**: honeypot, limite di invii, reCAPTCHA, risposta automatica, destinatari e webhook viaggiano nel config firmato stampato nella pagina. Se li cambi, un config raccolto prima (per esempio da un bot) resta accettato fino alla scadenza del suo token. Lo stesso vale per un form o una pagina eliminati o resi privati: il loro config continua a inviare fino alla scadenza del token. Per ritirarli prima porta il filtro `olobuild_form_token_ttl` al minimo, 12 ore (43200 secondi): i config firmati più di 12 ore fa vengono rifiutati subito, i più recenti entro 12 ore. Poi svuota la cache di pagina, anche quelle esterne: le pagine rimaste in cache più di 12 ore smetterebbero di inviare
 - **Rate limiting**: limite submission per IP (anti-spam)
 - **Upload file**: validazione MIME type e dimensione massima
 - **Notifiche email**: al proprietario del sito + risposta automatica all'utente

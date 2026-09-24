@@ -14,12 +14,48 @@ class Olobuild_Form_Handler {
      * (contact form) — gli utenti non loggati avrebbero sempre user_id = 0,
      * rendendo inutile il binding per-session. Il token è protetto da:
      * - HMAC con salt unico per sito (wp_salt)
-     * - Scadenza temporale (12h)
+     * - Scadenza lunga, che segue la cache di pagina (vedi token_ttl())
      * - Binding al config del form (impedisce mass-assignment del payload server-side)
      * - Rate limiting per IP (configurabile)
      */
     private static function get_token_secret() {
         return wp_salt( 'auth' ) . '|olo_form_token';
+    }
+
+    /**
+     * Validità del token del form, in secondi.
+     *
+     * Il token è stampato nella pagina al render: deve durare più a lungo di quanto la
+     * pagina può restare in cache, più il tempo di chi la apre e compila con calma. Con
+     * 12 ore fisse una pagina servita dalla cache per più tempo rispondeva 403 a ogni
+     * invio, e «Ricarica la pagina» non serviva: tornava lo stesso token scaduto.
+     *
+     *  - base 7 giorni (copre il TTL pubblico predefinito di LiteSpeed Cache);
+     *  - con la cache di pagina di Olobuild attiva, almeno il suo TTL (full_page_ttl in ore,
+     *    stesso calcolo di Olobuild_FullPage_Cache::write_config; predefinito 8, non
+     *    esposto nella Configurazione, tetto di 720 solo dal vecchio form options.php);
+     *  - più 1 giorno di margine per la scheda rimasta aperta.
+     * Cache esterne più lunghe (es. Cloudflare «Cache Everything»): filtro
+     * `olobuild_form_token_ttl` (secondi), mai sotto le 12 ore.
+     *
+     * La scadenza NON va tolta: honeypot, limite di invii, reCAPTCHA, risposta automatica
+     * e webhook stanno DENTRO il config firmato, e la scadenza è l'unico modo per ritirare
+     * un config archiviato dopo che il proprietario ha stretto le difese del form.
+     *
+     * @return int
+     */
+    public static function token_ttl() {
+        $ttl = 7 * DAY_IN_SECONDS;
+
+        $perf = get_option( 'olobuild_performance', [] );
+        if ( is_array( $perf ) && ! empty( $perf['full_page_cache'] ) ) {
+            $fpc_hours = isset( $perf['full_page_ttl'] ) ? max( 1, (int) $perf['full_page_ttl'] ) : 8;
+            $ttl       = max( $ttl, $fpc_hours * HOUR_IN_SECONDS );
+        }
+
+        $ttl += DAY_IN_SECONDS;
+
+        return max( 12 * HOUR_IN_SECONDS, (int) apply_filters( 'olobuild_form_token_ttl', $ttl ) );
     }
 
     /**
@@ -29,7 +65,7 @@ class Olobuild_Form_Handler {
      * (es. da una pagina contact pubblica) e riusarlo modificando email_to/subject/
      * auto_reply_message per trasformare il sito in relay phishing.
      *
-     * Valid for 12 hours.
+     * Valid for token_ttl() seconds.
      *
      * @param string $config_b64 Il payload base64-encoded del form config (lo stesso
      *                            che finisce in `_olo_form_config`). Stringa vuota per
@@ -48,8 +84,7 @@ class Olobuild_Form_Handler {
      *
      * I token v1 legacy (senza binding al config) vengono rifiutati: dopo l'aggiornamento
      * gli utenti con form aperti vedranno "Ricarica la pagina" — accettabile per il fix
-     * di sicurezza (relay email arbitrarie). TTL form: 12h → la finestra di disagio
-     * è limitata.
+     * di sicurezza (relay email arbitrarie). La durata dei v2 è token_ttl().
      */
     private function validate_token( $token, $config_b64 = '' ) {
         if ( empty( $token ) || ! is_string( $token ) ) {
@@ -64,8 +99,8 @@ class Olobuild_Form_Handler {
         $timestamp = (int) $parts[1];
         $hmac      = $parts[2];
 
-        // Check expiration (12 hours)
-        if ( abs( time() - $timestamp ) > 12 * HOUR_IN_SECONDS ) {
+        // Check expiration (vedi token_ttl)
+        if ( abs( time() - $timestamp ) > self::token_ttl() ) {
             return false;
         }
 
