@@ -28,6 +28,8 @@ Niente di questa cartella entra nel pacchetto del plugin (`scripts/` è escluso 
 | `golden-shots.mjs` | in locale: screenshot con Playwright (non è una dipendenza del repo) e confronto pixel |
 | `tema-prova/` | tema classico minimo: `a{color:red} h2{margin:2em 0} .entry-content p{margin-bottom:1.5em}` |
 | `prova-banco.mjs` | prova in locale normalizzazione e `confronta.sh` (senza WordPress) |
+| `esporta-preset-postmeta.mjs` | in locale: i casi di `prova-postmeta-preset.php` (12 preset di postmeta + 7 casi limite, con il padding dei chip reso dal gemello Vue) |
+| `prova-postmeta-preset.php` | `wp eval-file`: la tile postmeta resa sui casi con il renderer PHP vero; uscita 1 su qualunque errore PHP o padding diverso dal Vue |
 
 ## Comandi
 
@@ -156,6 +158,38 @@ node scripts/golden/golden-shots.mjs --compare D:\TECNICA\olo-golden\shots\A D:\
 ```bash
 node scripts/golden/prova-banco.mjs          # normalizzazione + confronta.sh su snapshot finti
 node scripts/audit-ui-standard.mjs --list    # le regole nuove con le occorrenze
+```
+
+### 6. Postmeta: i 12 preset su PHP 8
+
+La tile postmeta non ha istanze su mosaic, quindi L1 non la vede mai: questo controllo la rende
+sui suoi 12 preset e su 7 casi limite del «Padding chip» (scheda
+`tile-dinamici-postmeta-chip-fatale`: fino alla 1.4.481 i preset a chip erano un errore fatale su
+PHP 8). I casi nascono dai sorgenti (in locale), il render dalla tile PHP vera (su mosaic):
+
+```powershell
+node scripts/golden/esporta-preset-postmeta.mjs --out "$env:TEMP\postmeta-casi.json"
+& $SCP -i $K "$env:TEMP\postmeta-casi.json" "${M}:/root/olo-golden/"
+```
+
+```bash
+php -d memory_limit=512M /usr/local/bin/wp --allow-root --path=/var/www/wordpress \
+  eval-file /root/olo-golden/prova-postmeta-preset.php casi=/root/olo-golden/postmeta-casi.json
+```
+
+L'esportatore esce con 0 e scrive 19 casi, 8 con chip «Nessuno» (l'avviso di Browserslist sui
+dati vecchi di caniuse-lite è innocuo). Uscita dello script PHP: 0 = 19 casi resi senza errori,
+warning, notice né deprecazioni di olobuild, con il padding dei chip uguale a quello del gemello
+Vue (`PostmetaTile.vue`, reso dall'esportatore); 1 = almeno un caso KO (motivo in fondo alla riga).
+
+Su STDOUT (`> pm.tsv`) la prima riga è l'intestazione (PHP, versione, articolo) e, se tutto va bene,
+l'ultima è il `Success:`; l'`Error:` finale va su STDERR. Le righe dei casi hanno 6 colonne separate
+da tabulazione: id · OK/KO · chip_style · padding PHP (atteso dal Vue) · md5 · motivi. Per il
+prima/dopo di una modifica:
+
+```bash
+awk -F'\t' 'NF>=5 && $2=="KO"' pm.tsv | wc -l     # casi falliti (senza intestazione né Success)
+awk -F'\t' '$3=="none"{print $1, $5}' pm.tsv      # id e md5 delle righe senza chip
 ```
 
 ## Che cosa rende il banco, e come lo rende ripetibile

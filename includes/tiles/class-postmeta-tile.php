@@ -122,8 +122,13 @@ class Olobuild_PostMeta_Tile extends Olobuild_Tile_Base {
             [ 'y' => $s['chip_padding_y'] ?? null, 'x' => $s['chip_padding_x'] ?? null ],
             [ 0, 0, 0, 0 ]
         );
-        $chip_px     = max( 0, $chip_pad['left'] );
-        $chip_py     = max( 0, $chip_pad['top'] );
+        // Nessun lato negativo (prima della 1.4.436 c'era absint()); nessun tetto: l'inspector arriva a 40.
+        $chip_pad    = [
+            'top'    => max( 0, $chip_pad['top'] ),
+            'right'  => max( 0, $chip_pad['right'] ),
+            'bottom' => max( 0, $chip_pad['bottom'] ),
+            'left'   => max( 0, $chip_pad['left'] ),
+        ];
         // Dual-format: numero legacy O oggetto {tl,tr,br,bl}; '' se zero/vuoto (storico: nessuna regola).
         $chip_radius = $this->build_border_radius_css( $s['chip_radius'] ?? 0 );
 
@@ -262,7 +267,7 @@ class Olobuild_PostMeta_Tile extends Olobuild_Tile_Base {
                 if ( $i > 0 && $sep_html ) {
                     echo $sep_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- separator span built above from safe_color_css()'d color and esc_html()'d separator text
                 }
-                echo $this->wrap_meta_item( $item_html, $chip_style, $chip_bg, $chip_px, $chip_py, $chip_radius ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- item HTML built by build_meta_item()/wrap_meta_item() from esc_html()/esc_url()'d content, safe_color_css()'d colors, absint()'d paddings and static SVG icons
+                echo $this->wrap_meta_item( $item_html, $chip_style, $chip_bg, $chip_pad, $chip_radius ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- item HTML built by build_meta_item()/wrap_meta_item() from esc_html()/esc_url()'d content, safe_color_css()'d colors, paddings clamped to >= 0 and intval()'d by sides_css(), and static SVG icons
             }
             ?>
         </div>
@@ -297,8 +302,10 @@ class Olobuild_PostMeta_Tile extends Olobuild_Tile_Base {
 
     /**
      * Wrap meta item with chip styling (if applicable).
+     *
+     * @param array $chip_pad [ top, right, bottom, left ] da spacing_sides(), già >= 0.
      */
-    private function wrap_meta_item( $item_html, $chip_style, $chip_bg, $chip_px, $chip_py, $chip_radius ) {
+    private function wrap_meta_item( $item_html, $chip_style, $chip_bg, $chip_pad, $chip_radius ) {
         if ( $chip_style === 'none' ) {
             return $item_html;
         }

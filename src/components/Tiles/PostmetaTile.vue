@@ -14,6 +14,7 @@
 <script setup>
 import { computed } from 'vue';
 import { radiusToCss as radiusToCssRaw } from '@/composables/useRadius';
+import { toSpacingSides, sidesCss } from '@/composables/useBoxModel';
 const radiusToCss = (r) => radiusToCssRaw(r, { fallback: '0', zero: '0' });
 
 const props = defineProps({
@@ -158,9 +159,11 @@ function itemStyle(idx) {
   };
   if (chipStyle.value !== 'none') {
     if (s.value.chip_bg) base.background = s.value.chip_bg;
-    const px = parseInt(s.value.chip_padding_x) || 0;
-    const py = parseInt(s.value.chip_padding_y) || 0;
-    if (px || py) base.padding = `${py}px ${px}px`;
+    // Padding chip a 4 lati come il sito (spacing_sides): prima il controllo
+    // standard chip_padding, in ripiego le chiavi piatte chip_padding_y/x.
+    const raw = toSpacingSides(s.value.chip_padding, { legacy: { y: s.value.chip_padding_y, x: s.value.chip_padding_x } });
+    const pad = { top: Math.max(0, raw.top), right: Math.max(0, raw.right), bottom: Math.max(0, raw.bottom), left: Math.max(0, raw.left) };
+    if (pad.top + pad.right + pad.bottom + pad.left > 0) base.padding = sidesCss(pad);
     // Dual-format: numero legacy O oggetto {tl,tr,br,bl}.
     const rCss = radiusToCssRaw(s.value.chip_radius, { fallback: '0px', zero: '0px' });
     if (rCss !== '0px') base.borderRadius = rCss;
