@@ -240,6 +240,7 @@ import { useDragDrop } from '@/composables/useDragDrop';
 import { vOloDraggable, makeSidebarPayload, makeGlobalWidgetPayload, setCustomNativeDragPreview } from '@/composables/useDnD';
 import { createSection, createRow, createColumn, generateId, CONTAINER_TYPES } from '@/stores/tiles';
 import { requestScrollToTile } from '@/utils/scrollToTileChannel';
+import { postToPreview } from '@/utils/previewOrigin';
 import StructureTree from './StructureTree.vue';
 import { t } from '@/i18n';
 
@@ -938,9 +939,7 @@ function draggableTileOpts(tileType) {
       dndStore.startDrag(makeSidebarPayload(tileType));
       // Richiedi layout snapshot fresh dall'iframe
       const iframe = document.querySelector('.olo-live-iframe');
-      if (iframe && iframe.contentWindow) {
-        iframe.contentWindow.postMessage({ type: 'olo:request-layout' }, '*');
-      }
+      postToPreview(iframe, { type: 'olo:request-layout' });
     },
     onDrop: () => {
       if (!dndStore.isIdle) dndStore.endDrag();
@@ -974,9 +973,7 @@ function draggableGlobalWidgetOpts(globalId) {
     onDragStart: () => {
       dndStore.startDrag(makeGlobalWidgetPayload(globalId));
       const iframe = document.querySelector('.olo-live-iframe');
-      if (iframe && iframe.contentWindow) {
-        iframe.contentWindow.postMessage({ type: 'olo:request-layout' }, '*');
-      }
+      postToPreview(iframe, { type: 'olo:request-layout' });
     },
     onDrop: () => {
       if (!dndStore.isIdle) dndStore.endDrag();

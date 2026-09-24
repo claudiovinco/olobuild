@@ -584,6 +584,7 @@ import { useHistory } from '@/composables/useHistory';
 import { useToast } from '@/composables/useToast';
 import { useTileActions } from '@/composables/useTileActions';
 import { useFocusTrap } from '@/composables/useFocusTrap';
+import { isFromPreview } from '@/utils/previewOrigin';
 import { t } from '@/i18n';
 
 const emit = defineEmits(['back', 'open-revisions', 'open-finder', 'open-ai', 'open-library', 'open-themes']);
@@ -815,11 +816,13 @@ onBeforeUnmount(() => {
 });
 
 function onIframeKey(e) {
-  if (e.data && e.data.type === 'olo:keydown') {
-    // Create a fake event with preventDefault
-    const fakeEvent = { ...e.data, target: { tagName: 'DIV', isContentEditable: false }, preventDefault() {} };
-    onGlobalKeydown(fakeEvent);
-  }
+  if (!e.data || e.data.type !== 'olo:keydown') return;
+  // Solo i tasti inoltrati dall'anteprima del builder (finestra e origine): un'altra
+  // finestra (window.open, opener) non deve poter premere Canc, Ctrl+Z o Ctrl+S.
+  if (!isFromPreview(e, document.querySelector('iframe.olo-live-iframe'))) return;
+  // Create a fake event with preventDefault
+  const fakeEvent = { ...e.data, target: { tagName: 'DIV', isContentEditable: false }, preventDefault() {} };
+  onGlobalKeydown(fakeEvent);
 }
 
 // ─── Template Import/Export ───

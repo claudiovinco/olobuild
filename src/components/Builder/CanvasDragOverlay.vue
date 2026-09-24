@@ -42,6 +42,7 @@ import { useDnDStore } from '@/stores/dnd';
 import { useDragDrop } from '@/composables/useDragDrop';
 import { useHistory } from '@/composables/useHistory';
 import { vOloDropTarget, isOloData } from '@/composables/useDnD';
+import { postToPreview } from '@/utils/previewOrigin';
 
 const props = defineProps({
   /** Ref al DOM <iframe> target. Obbligatorio per il hit-test. */
@@ -82,10 +83,7 @@ function onNativeDragStart() {
   }
   if (!layoutRefreshTimer) {
     layoutRefreshTimer = setInterval(() => {
-      const iframe = getIframeEl();
-      if (iframe && iframe.contentWindow) {
-        iframe.contentWindow.postMessage({ type: 'olo:request-layout' }, '*');
-      }
+      postToPreview(getIframeEl(), { type: 'olo:request-layout' });
     }, 400);
   }
 }
@@ -170,16 +168,11 @@ function stopAutoScroll() {
   autoScrollActive = false;
   autoScrollDir = 0;
   autoScrollStrength = 0;
-  const iframe = getIframeEl();
-  if (iframe && iframe.contentWindow) {
-    iframe.contentWindow.postMessage({ type: 'olo:auto-scroll-stop' }, '*');
-  }
+  postToPreview(getIframeEl(), { type: 'olo:auto-scroll-stop' });
 }
 
 function postScroll(delta) {
-  const iframe = getIframeEl();
-  if (!iframe || !iframe.contentWindow) return;
-  iframe.contentWindow.postMessage({ type: 'olo:auto-scroll', delta }, '*');
+  postToPreview(getIframeEl(), { type: 'olo:auto-scroll', delta });
 }
 
 // Listener scroll dentro l'iframe: forza re-render degli overlay positions.

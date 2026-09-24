@@ -97,11 +97,50 @@
     hideHoverToolbar();
   }
 
+  // ── Origine dei messaggi ──
+  // L'anteprima parla SOLO con la finestra del builder che la incornicia:
+  // e.source === window.parent e un'origine ammessa = la propria (caso normale:
+  // admin e sito sulla stessa origine) più quella dell'admin passata dal PHP
+  // (window.OLO_BUILDER_ORIGINS). Mai '*': una pagina esterna che apre
+  // l'anteprima con window.open, o la raggiunge dentro il builder (w[0]),
+  // non può mandarle HTML da eseguire né leggere le sue risposte.
+  var IN_FRAME = window.parent !== window;
+  var ALLOWED_ORIGINS = (function() {
+    var list = [window.location.origin].concat(window.OLO_BUILDER_ORIGINS || []);
+    var out = [];
+    for (var i = 0; i < list.length; i++) {
+      var o = '';
+      try { o = new URL(String(list[i])).origin; } catch (err) { o = ''; }
+      if (o && o !== 'null' && out.indexOf(o) === -1) out.push(o);
+    }
+    return out;
+  })();
+  var parentOrigin = null;   // origine del builder, nota dal primo messaggio valido
+  var originWarned = false;
+
+  function fromBuilder(e) {
+    if (!IN_FRAME || e.source !== window.parent) return false;
+    if (ALLOWED_ORIGINS.indexOf(e.origin) === -1) {
+      // Un'origine calcolata male spegnerebbe il canvas in silenzio: lo si dice.
+      if (!originWarned && e.data && typeof e.data.type === 'string' && e.data.type.indexOf('olo:') === 0) {
+        originWarned = true;
+        console.warn('[bridge] messaggio del builder scartato: origine', e.origin, '- ammesse:', ALLOWED_ORIGINS.join(', '));
+      }
+      return false;
+    }
+    parentOrigin = e.origin;
+    return true;
+  }
+
   // ── Helpers ──
 
   function post(type, data) {
-    if (window.parent !== window) {
-      window.parent.postMessage(Object.assign({ type: type }, data || {}), '*');
+    if (!IN_FRAME) return;
+    var msg = Object.assign({ type: type }, data || {});
+    // Il browser consegna solo all'origine che coincide con quella del builder.
+    var targets = parentOrigin ? [parentOrigin] : ALLOWED_ORIGINS;
+    for (var i = 0; i < targets.length; i++) {
+      window.parent.postMessage(msg, targets[i]);
     }
   }
 
@@ -1170,6 +1209,7 @@
   // ── Message handler ──
 
   function onMessage(e) {
+    if (!fromBuilder(e)) return;
     var d = e.data;
     if (!d || typeof d.type !== 'string' || d.type.indexOf('olo:') !== 0) return;
 
@@ -1527,7 +1567,7 @@
     // Ctrl+D incluso anche per fare preventDefault (altrimenti Chrome apre "Aggiungi preferito").
     if (e.key === 'Delete' || e.key === 'Backspace' || (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'z' || e.key === 's' || e.key === 'd' || e.code === 'KeyC' || e.code === 'KeyV' || e.code === 'KeyD')) || (e.altKey && !e.ctrlKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown'))) {
       e.preventDefault();
-      parent.postMessage({ type: 'olo:keydown', key: e.key, code: e.code, ctrlKey: e.ctrlKey, shiftKey: e.shiftKey, altKey: e.altKey, metaKey: e.metaKey }, '*');
+      post('olo:keydown', { key: e.key, code: e.code, ctrlKey: e.ctrlKey, shiftKey: e.shiftKey, altKey: e.altKey, metaKey: e.metaKey });
     }
   });
 

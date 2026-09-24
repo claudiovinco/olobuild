@@ -306,6 +306,7 @@ class Olobuild_Builder {
         }
         // Bridge: deve caricarsi DOPO ogni runtime → dipende da tutti gli handle sopra.
         wp_enqueue_script( 'olo-ifr-bridge', OLOBUILD_URL . 'assets/js/iframe-bridge.js', $scripts, $v, true );
+        wp_add_inline_script( 'olo-ifr-bridge', self::builder_origins_script(), 'before' );
         $scripts[] = 'olo-ifr-bridge';
 
         $this->iframe_script_handles = $scripts;
@@ -442,7 +443,45 @@ class Olobuild_Builder {
         wp_enqueue_script( 'olo-iframe-bridge', OLOBUILD_URL . 'assets/js/iframe-bridge.js', [], OLOBUILD_VERSION, true );
         // Mode flag letto dal bridge.js → segnala al parent (Vue useIframeBridge) che
         // questa è una pagina WP reale, header/footer NON vanno re-iniettati.
-        wp_add_inline_script( 'olo-iframe-bridge', "window.OLO_IFRAME_MODE='inline';", 'before' );
+        // + origini da cui il bridge accetta i messaggi del builder.
+        wp_add_inline_script( 'olo-iframe-bridge', "window.OLO_IFRAME_MODE='inline';" . self::builder_origins_script(), 'before' );
+    }
+
+    /**
+     * Origine (schema://host[:porta]) dell'admin, cioè della finestra del builder,
+     * scritta come il browser la riporta in MessageEvent.origin: minuscole e porta
+     * omessa quando è quella predefinita ('https://x:443' e 'https://x' sono la
+     * stessa origine). Stringa vuota se admin_url() non è analizzabile.
+     *
+     * @return string
+     */
+    private static function builder_parent_origin() {
+        $parts = wp_parse_url( admin_url() );
+        if ( empty( $parts['scheme'] ) || empty( $parts['host'] ) ) {
+            return '';
+        }
+        $scheme = strtolower( $parts['scheme'] );
+        $origin = $scheme . '://' . strtolower( $parts['host'] );
+        if ( ! empty( $parts['port'] ) ) {
+            $port         = (int) $parts['port'];
+            $default_port = ( 'http' === $scheme && 80 === $port ) || ( 'https' === $scheme && 443 === $port );
+            if ( ! $default_port ) {
+                $origin .= ':' . $port;
+            }
+        }
+        return $origin;
+    }
+
+    /**
+     * Script stampato PRIMA di iframe-bridge.js (anteprima standalone e inline):
+     * le origini, oltre alla propria, da cui il bridge accetta i messaggi del
+     * builder e a cui manda le risposte (mai '*').
+     *
+     * @return string
+     */
+    private static function builder_origins_script() {
+        $origin = self::builder_parent_origin();
+        return 'window.OLO_BUILDER_ORIGINS=' . wp_json_encode( $origin ? [ $origin ] : [] ) . ';';
     }
 
     /** @internal Stile inline per la modalità preview (mirror del builder-iframe.php). */

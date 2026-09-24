@@ -8,6 +8,7 @@ import { useDragDrop } from '@/composables/useDragDrop';
 import { useTileActions } from '@/composables/useTileActions';
 import { onScrollToTileRequest } from '@/utils/scrollToTileChannel';
 import { loadScrollFlashPrefs } from '@/utils/scrollFlashPrefs';
+import { isFromPreview, postToPreview, resetPreviewOrigin } from '@/utils/previewOrigin';
 
 let debounceTimer = null;
 let patchTimer = null;
@@ -45,9 +46,8 @@ export function useIframeBridge(iframeRef) {
   let iframeMode = 'standalone';
 
   function postToIframe(type, data) {
-    const iframe = iframeRef.value;
-    if (!iframe || !iframe.contentWindow) return;
-    iframe.contentWindow.postMessage(Object.assign({ type }, data || {}), '*');
+    // Solo all'origine dell'anteprima, mai '*' (utils/previewOrigin.js).
+    postToPreview(iframeRef.value, Object.assign({ type }, data || {}));
   }
 
   // ── Full render via REST ──
@@ -347,6 +347,10 @@ export function useIframeBridge(iframeRef) {
   // ── Message handler ──
 
   function onMessage(event) {
+    // Solo dall'anteprima: finestra dell'iframe E origine ammessa. Un'altra
+    // finestra (window.open, opener) o un sito esterno caricato nell'iframe non
+    // deve pilotare il builder.
+    if (!isFromPreview(event, iframeRef.value)) return;
     const d = event.data;
     if (!d || typeof d.type !== 'string' || d.type.indexOf('olo:') !== 0) return;
 
@@ -621,6 +625,7 @@ export function useIframeBridge(iframeRef) {
       delete window.__oloBridgePostToIframe;
     }
     if (unsubScroll) unsubScroll();
+    resetPreviewOrigin();
     clearTimeout(debounceTimer);
     clearTimeout(patchTimer);
   });

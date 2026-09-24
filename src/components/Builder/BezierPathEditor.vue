@@ -242,6 +242,7 @@
 <script setup>
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import { postToPreview } from '@/utils/previewOrigin';
 import NumberScrubber from './fields/NumberScrubber.vue';
 
 const props = defineProps({
@@ -806,10 +807,7 @@ function animLoop(ts) {
 }
 
 function postToPreviewIframe(data) {
-  const iframe = document.querySelector('.olo-live-iframe');
-  if (iframe && iframe.contentWindow) {
-    iframe.contentWindow.postMessage(Object.assign({ type: 'olo:bezier-preview' }, data), window.location.origin);
-  }
+  postToPreview(document.querySelector('.olo-live-iframe'), Object.assign({ type: 'olo:bezier-preview' }, data));
 }
 
 function applyPreviewToTile(state) {
