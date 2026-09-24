@@ -277,6 +277,60 @@ class Olobuild_Builder {
         return 0;
     }
 
+    /**
+     * Quante pagine (post di qualunque tipo, esclusi cestino e bozze automatiche)
+     * hanno lo stesso header o footer assegnato dal meta `_olo_header_id` /
+     * `_olo_footer_id`: «assegnato a questa pagina» non vuol dire «solo a lei».
+     *
+     * @param string $zone        'header' | 'footer'
+     * @param int    $template_id
+     * @return int
+     */
+    private static function pages_with_zone( $zone, $template_id ) {
+        global $wpdb;
+        $meta_key = ( 'footer' === $zone ) ? '_olo_footer_id' : '_olo_header_id';
+        // Conteggio su core posts/postmeta: i valori passano da prepare(); gli unici
+        // token interpolati sono i nomi tabella core. Volatile, quindi non in cache.
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+        $count = $wpdb->get_var( $wpdb->prepare(
+            "SELECT COUNT(DISTINCT p.ID) FROM {$wpdb->posts} p
+             INNER JOIN {$wpdb->postmeta} m ON m.post_id = p.ID AND m.meta_key = %s
+             WHERE m.meta_value = %s AND p.post_status NOT IN ('trash', 'auto-draft', 'inherit')",
+            $meta_key,
+            (string) (int) $template_id
+        ) );
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+        return (int) $count;
+    }
+
+    /**
+     * Se una regola di visualizzazione abilitata (option `olobuild_template_conditions`,
+     * stesso contesto) usa questo header o footer: allora lo mostrano anche le pagine
+     * a cui la regola si applica, e «assegnato a questa pagina» non vuol dire «solo
+     * a lei» anche se nessun'altra ha lo stesso meta. Stesso filtro di
+     * Olobuild_Template_Conditions::resolve_by_conditions() (context + enabled).
+     *
+     * @param string $zone        'header' | 'footer'
+     * @param int    $template_id
+     * @return bool
+     */
+    private static function zone_in_rules( $zone, $template_id ) {
+        $assignments = get_option( 'olobuild_template_conditions', [] );
+        if ( empty( $assignments ) || ! is_array( $assignments ) ) {
+            return false;
+        }
+        foreach ( $assignments as $assignment ) {
+            if ( is_array( $assignment )
+                && ( $assignment['context'] ?? '' ) === $zone
+                && ! empty( $assignment['enabled'] )
+                && (int) ( $assignment['template_id'] ?? 0 ) === (int) $template_id
+            ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /** Handles registrati per il documento standalone builder-iframe.php. */
     private $iframe_style_handles  = [];
     private $iframe_script_handles = [];
@@ -1156,6 +1210,15 @@ class Olobuild_Builder {
             'header' => Olobuild_Template_Conditions::resolve_zone( 'header', $context_post_id ),
             'footer' => Olobuild_Template_Conditions::resolve_zone( 'footer', $context_post_id ),
         ];
+        // Un header «assegnato a questa pagina» può esserlo anche ad altre (pages),
+        // o darlo anche una regola di visualizzazione (rules): il chip di zona lo
+        // dice e l'avviso della prima modifica parte (utils/zoneOrigin.js).
+        foreach ( [ 'header', 'footer' ] as $zone_key ) {
+            $zone_now = $resolved_zones[ $zone_key ];
+            $of_page  = ( 'page' === $zone_now['source'] && $zone_now['id'] > 0 );
+            $resolved_zones[ $zone_key ]['pages'] = $of_page ? self::pages_with_zone( $zone_key, $zone_now['id'] ) : 0;
+            $resolved_zones[ $zone_key ]['rules'] = $of_page && self::zone_in_rules( $zone_key, $zone_now['id'] );
+        }
 
         wp_localize_script( 'olobuilder-js', 'oloData', [
             // Con lo slash finale, come ovunque: la pagina builder era l'unica
@@ -1185,7 +1248,7 @@ class Olobuild_Builder {
             'wpMenus'        => $this->get_wp_menus(),
             'activeHeaderId' => (int) get_option( 'olobuild_active_header', 0 ),
             'activeFooterId' => (int) get_option( 'olobuild_active_footer', 0 ),
-            // { postId, header: { id, source }, footer: { id, source } }: vedi sopra.
+            // { postId, header: { id, source, pages, rules }, footer: { … } }: vedi sopra.
             // id -1 = la pagina non ha header/footer; source 'page'|'rule'|'global'.
             'resolvedZones'  => $resolved_zones,
             'active404Id'    => (int) get_option( 'olobuild_active_404', 0 ),

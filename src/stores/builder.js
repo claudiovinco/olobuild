@@ -207,6 +207,9 @@ export const useBuilderStore = defineStore('builder', {
     footerTemplate: null,        // Full template object for the active footer
     headerDirty: false,
     footerDirty: false,
+    // Da dove vengono header e footer caricati (oloData.resolvedZones), per zona:
+    // { source: 'page' | 'rule' | 'global' | null, pages, rules }. Lo legge utils/zoneOrigin.js.
+    zoneOrigin: { header: null, footer: null },
     unifiedMode: false,          // True when editing H+B+F together
     insertAfterTileId: null,     // When set, next element added from sidebar goes after this tile
     canvasZoom: 100,              // Canvas zoom percentage (25-200)
@@ -543,6 +546,15 @@ export const useBuilderStore = defineStore('builder', {
       };
       const headerId = idZona('header', olo.activeHeaderId);
       const footerId = idZona('footer', olo.activeFooterId);
+      // Provenienza per il chip di zona e l'avviso (utils/zoneOrigin.js): senza
+      // resolvedZones si è caricato il globale. pages = pagine con la stessa
+      // assegnazione, rules = lo usa anche una regola (solo per 'page').
+      const provenienza = (zona) => {
+        const r = risolte && risolte[zona];
+        if (!r || typeof r !== 'object') return { source: risolte ? null : 'global', pages: 0, rules: false };
+        return { source: typeof r.source === 'string' ? r.source : null, pages: parseInt(r.pages, 10) || 0, rules: r.rules === true };
+      };
+      this.zoneOrigin = { header: provenienza('header'), footer: provenienza('footer') };
 
       // Load header template
       if (headerId > 0) {

@@ -102,6 +102,76 @@ footer.olo-site-footer {
   margin: 0 !important;
 }
 
+/* ── Zone condivise (header/footer): linea sul confine + chip con la provenienza ──
+   Un solo elemento appeso a body (iframe-bridge.js, showZoneMarker): alto 0, sta sul
+   bordo inferiore dell'header o superiore del footer. Il chip sta dal lato della zona
+   opposto al contenuto: sotto la linea per l'header, sopra per il footer. */
+.olo-zone-marker {
+  display: none;
+  position: absolute;
+  z-index: 1002;
+  height: 0;
+  pointer-events: none;
+}
+.olo-zone-marker-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed color-mix(in srgb, var(--olo-ui-accent, #e8622a) 40%, transparent);
+}
+.olo-zone-chip {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: calc(100% - 16px);
+  padding: 3px 4px 3px 10px;
+  background: #ffffff;
+  color: #1f2937;
+  border: 1px solid color-mix(in srgb, var(--olo-ui-accent, #e8622a) 40%, transparent);
+  border-radius: 999px;
+  font: 500 11px/1.4 system-ui, -apple-system, sans-serif;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(15, 23, 42, 0.08);
+  white-space: nowrap;
+  pointer-events: auto;
+}
+.olo-zone-marker--footer .olo-zone-chip {
+  top: auto;
+  bottom: 6px;
+}
+.olo-zone-chip-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.olo-zone-chip-open {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 2px 8px;
+  background: none;
+  border: 0;
+  border-radius: 999px;
+  color: var(--olo-ui-accent, #e8622a);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.olo-zone-chip-open:hover {
+  background: color-mix(in srgb, var(--olo-ui-accent, #e8622a) 10%, transparent);
+}
+.olo-zone-chip-open:focus-visible {
+  outline: 2px solid var(--olo-ui-accent, #e8622a);
+  outline-offset: 2px;
+}
+body.olo-preview-mode .olo-zone-marker {
+  display: none !important;
+}
+
 /* ── Add section buttons (overlay, no layout shift) ── */
 .olo-iframe-add-btn {
   display: flex;

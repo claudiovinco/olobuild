@@ -9,8 +9,14 @@ import { useTileActions } from '@/composables/useTileActions';
 import { onScrollToTileRequest } from '@/utils/scrollToTileChannel';
 import { loadScrollFlashPrefs } from '@/utils/scrollFlashPrefs';
 import { isFromPreview, postToPreview, resetPreviewOrigin } from '@/utils/previewOrigin';
+import { zoneOrigin } from '@/utils/zoneOrigin';
+import { useToast } from '@/composables/useToast';
+import { t } from '@/i18n';
 
 let debounceTimer = null;
+// Zone condivise già segnalate alla prima modifica ('header:12'): una volta per
+// template finché la pagina del builder resta aperta.
+const zoneAvvisate = new Set();
 let patchTimer = null;
 const patchQueue = new Set();   // tile da patchare allo scadere di patchTimer
 const patchPending = new Set(); // patch chieste mentre una richiesta era in volo
@@ -48,6 +54,24 @@ export function useIframeBridge(iframeRef) {
   function postToIframe(type, data) {
     // Solo all'origine dell'anteprima, mai '*' (utils/previewOrigin.js).
     postToPreview(iframeRef.value, Object.assign({ type }, data || {}));
+  }
+
+  // ── Zone condivise: il chip dell'anteprima dice da dove vengono header e footer ──
+  // I testi li prepara il builder (t(), utils/zoneOrigin.js), anche per il badge
+  // dell'inspector: il bridge li mostra e basta. Zona null = nessun chip.
+  function zoneInfoPayload() {
+    const zones = { header: null, footer: null };
+    if (builderStore.unifiedMode) {
+      ['header', 'footer'].forEach((z) => {
+        const o = zoneOrigin(builderStore, z);
+        if (o) zones[z] = { text: o.text, canOpen: o.id > 0 };
+      });
+    }
+    return { zones, openLabel: t('Apri il template') };
+  }
+
+  function sendZoneInfo() {
+    if (iframeReady.value) postToIframe('olo:zone-info', zoneInfoPayload());
   }
 
   // ── Full render via REST ──
@@ -359,7 +383,22 @@ export function useIframeBridge(iframeRef) {
         iframeMode = (d.mode === 'inline') ? 'inline' : 'standalone';
         iframeReady.value = true;
         renderFull();
+        // A ogni caricamento dell'iframe (anche dopo un salvataggio, che lo ricarica).
+        sendZoneInfo();
         break;
+
+      case 'olo:open-zone-template': {
+        // «Apri il template» del chip di zona. L'id lo decide il builder (il template
+        // che qui si modifica), mai l'iframe. Stessa scheda: con modifiche non
+        // salvate il browser chiede conferma (beforeunload in App.vue).
+        const zt = d.zone === 'footer' ? builderStore.footerTemplate
+          : (d.zone === 'header' ? builderStore.headerTemplate : null);
+        const zid = parseInt(zt && zt.id, 10) || 0;
+        if (builderStore.unifiedMode && zid > 0) {
+          window.location.href = 'admin.php?page=olobuilder-templates&template_id=' + zid;
+        }
+        break;
+      }
 
       case 'olo:tile-click':
         if (d.tileId) {
@@ -532,10 +571,34 @@ export function useIframeBridge(iframeRef) {
   watch(() => builderStore.selectedTileIds.join('|'), () => {
     const ids = builderStore.selectedTileIds.slice();
     if (ids.length) {
-      postToIframe('olo:select-set', { ids });
+      // zone = dove sta la tile primaria: con una tile di header o footer il chip
+      // di zona resta visibile (in modalità inline quelle tile non stanno nel DOM
+      // che il bridge conosce, quindi glielo dice il builder).
+      const zone = builderStore.unifiedMode ? tilesStore.getZoneForTile(ids[ids.length - 1]) : null;
+      postToIframe('olo:select-set', { ids, zone });
     } else {
       postToIframe('olo:deselect');
     }
+  });
+
+  // Il chip segue ciò che il builder sa: template caricati, titoli, provenienza.
+  watch(() => JSON.stringify(zoneInfoPayload()), sendZoneInfo);
+
+  // Prima modifica di una zona condivisa (globale, da regola, assegnata a più
+  // pagine): un avviso che non blocca niente, una volta per template.
+  const toast = useToast();
+  ['header', 'footer'].forEach((z) => {
+    watch(() => builderStore[z + 'Dirty'], (ora, prima) => {
+      if (!ora || prima || !builderStore.unifiedMode) return;
+      const o = zoneOrigin(builderStore, z);
+      if (!o || !o.shared) return;
+      const chiave = z + ':' + o.id;
+      if (zoneAvvisate.has(chiave)) return;
+      zoneAvvisate.add(chiave);
+      toast.info(z === 'header'
+        ? t("Stai modificando l'header usato anche da altre pagine")
+        : t('Stai modificando il footer usato anche da altre pagine'), 6000);
+    });
   });
 
   // Use tilesVersion counter instead of deep watchers for better performance

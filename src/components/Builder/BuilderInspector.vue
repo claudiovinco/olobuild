@@ -15,15 +15,9 @@
       <template v-else-if="selectedTile">
       <!-- ─── HEAD (sticky) ────────────────────────────────────── -->
       <div class="v2i-head">
-        <!-- Zone badge (unified editing) -->
-        <div v-if="builderStore.unifiedMode && tileZone" class="mb-mb-2 mb-flex mb-items-center mb-gap-1.5">
-          <span class="mb-text-[10px] mb-font-semibold mb-uppercase mb-tracking-wide mb-px-1.5 mb-py-0.5 mb-rounded"
-            :class="{
-              'mb-bg-blue-500/15 mb-text-blue-400': tileZone === 'header',
-              'mb-bg-purple-500/15 mb-text-purple-400': tileZone === 'body',
-              'mb-bg-emerald-500/15 mb-text-emerald-400': tileZone === 'footer',
-            }"
-          >{{ tileZone === 'body' ? 'Body' : tileZone === 'header' ? 'Header' : 'Footer' }}</span>
+        <!-- Zone badge (unified editing): stessa provenienza del chip del canvas -->
+        <div v-if="builderStore.unifiedMode && tileZone" class="mb-mb-2 mb-flex mb-items-center mb-gap-1.5 mb-min-w-0">
+          <span class="v2i-zone-badge" :title="zoneBadge.title">{{ zoneBadge.label }}</span>
         </div>
         <!-- Breadcrumb -->
         <div v-if="ancestorPath.length > 1" class="mb-mb-2 mb-flex mb-items-center mb-flex-wrap mb-gap-0.5 mb-text-[10px]">
@@ -1402,6 +1396,7 @@ import { useBuilderStore } from '@/stores/builder';
 import { useTilesStore } from '@/stores/tiles';
 import { getElementDef, getElementFields, getElementDefaults } from '@/config/elementRegistry';
 import { heroConvertTarget, convertHeroTile } from '@/utils/heroConvert';
+import { zoneOrigin } from '@/utils/zoneOrigin';
 import PageSettingsPanel from './PageSettingsPanel.vue';
 import ContentItemsEditor from './ContentItemsEditor.vue';
 import InspectorField from './InspectorField.vue';
@@ -2274,6 +2269,19 @@ const tileZone = computed(() => {
   return tilesStore.getZoneForTile(builderStore.selectedTileId);
 });
 
+// Badge di zona: gli stessi nomi del messaggio di salvataggio («Pagina») e del chip
+// del canvas (provenienza di header e footer); nel title il testo completo.
+const zoneBadge = computed(() => {
+  const z = tileZone.value;
+  if (z === 'header' || z === 'footer') {
+    const o = zoneOrigin(builderStore, z);
+    if (o) return { label: o.label, title: o.text };
+    const nome = z === 'header' ? t('Header') : t('Footer');
+    return { label: nome, title: nome };
+  }
+  return { label: t('Pagina'), title: t('Pagina') };
+});
+
 const ancestorPath = computed(() => {
   if (!builderStore.selectedTileId) return [];
   return tilesStore.getAncestorPath(builderStore.selectedTileId);
@@ -3108,6 +3116,21 @@ function updateDynamicItemMap(itemMap) {
 .slide-leave-to {
   transform: translateX(100%);
   opacity: 0;
+}
+
+/* Badge di zona: accento del chrome, come il chip di zona del canvas (mai il primario del cliente). */
+.v2i-zone-badge {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--olo-ui-accent, #e8622a);
+  background: color-mix(in srgb, var(--olo-ui-accent, #e8622a) 12%, transparent);
 }
 
 /* Modale dei pannelli globali (tipografia) — aperto dai campi che li usano */

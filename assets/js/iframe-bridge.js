@@ -1215,6 +1215,155 @@
     }
   }
 
+  // ── Zone condivise: linea sul confine e chip con la provenienza ──
+  // Header e footer possono essere condivisi con altre pagine: al passaggio (o con
+  // una loro tile selezionata) una linea tratteggiata sul confine e un chip dicono
+  // quale template si modifica e da dove arriva. I testi li manda il builder già
+  // tradotti (olo:zone-info): qui non si decide niente. In modalità inline header
+  // e footer li disegna il tema FUORI da root, senza data-olo-zone: si ascolta su
+  // document e si riconosce anche il wrapper del tema (come olo:render-zone). Il
+  // chip sta su body, fuori dalla zona: non copre logo e menu e non passa dal clic
+  // in cattura delle tile; il titolo si scrive con textContent (è dell'utente).
+  var ZONE_SEL = {
+    header: '[data-olo-zone="header"], header.olo-site-header',
+    footer: '[data-olo-zone="footer"], footer.olo-site-footer'
+  };
+  var zoneInfo = { header: null, footer: null };
+  var zoneOpenLabel = '';
+  var zoneMarker = null;
+  var zoneMarkerTimer = null;
+  var zoneMarkerRaf = null;
+  var markedZone = null;     // zona su cui il chip è mostrato
+  var selectedZone = null;   // zona della tile selezionata (il chip resta)
+
+  function zoneOf(el) {
+    if (!el || !el.closest) return null;
+    if (el.closest(ZONE_SEL.header)) return 'header';
+    if (el.closest(ZONE_SEL.footer)) return 'footer';
+    return null;
+  }
+
+  function findZoneEl(zone) {
+    return ZONE_SEL[zone] ? document.querySelector(ZONE_SEL[zone]) : null;
+  }
+
+  // Rettangolo della zona: anche un header in sovrimpressione (wrapper alto 0,
+  // contenuto posizionato) ha il suo ingombro.
+  function zoneRect(el) {
+    var r = el.getBoundingClientRect();
+    var top = r.top, bottom = r.bottom, left = r.left, right = r.right;
+    for (var i = 0; i < el.children.length; i++) {
+      var c = el.children[i];
+      if (c.tagName === 'STYLE' || c.tagName === 'SCRIPT') continue;
+      var cr = c.getBoundingClientRect();
+      if (!cr.width && !cr.height) continue;
+      if (r.width || r.height) {
+        top = Math.min(top, cr.top); bottom = Math.max(bottom, cr.bottom);
+        left = Math.min(left, cr.left); right = Math.max(right, cr.right);
+      } else {
+        top = cr.top; bottom = cr.bottom; left = cr.left; right = cr.right;
+        r = cr;
+      }
+    }
+    return { top: top, bottom: bottom, left: left, width: right - left, height: bottom - top };
+  }
+
+  function getZoneMarker() {
+    if (zoneMarker) return zoneMarker;
+    zoneMarker = document.createElement('div');
+    zoneMarker.className = 'olo-zone-marker';
+    zoneMarker.innerHTML =
+      '<div class="olo-zone-marker-line"></div>' +
+      '<div class="olo-zone-chip" role="note">' +
+        '<span class="olo-zone-chip-label"></span>' +
+        '<button type="button" class="olo-zone-chip-open"></button>' +
+      '</div>';
+    document.body.appendChild(zoneMarker);
+    zoneMarker.querySelector('.olo-zone-chip-open').addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (markedZone) post('olo:open-zone-template', { zone: markedZone });
+    });
+    var chip = zoneMarker.querySelector('.olo-zone-chip');
+    chip.addEventListener('mouseenter', cancelZoneHide);
+    chip.addEventListener('mouseleave', function() { hideZoneMarker(300); });
+    return zoneMarker;
+  }
+
+  // zoneMarkerTimer non nullo = un «nascondi» in attesa (azzerato quando parte o si annulla).
+  function cancelZoneHide() {
+    clearTimeout(zoneMarkerTimer);
+    zoneMarkerTimer = null;
+  }
+
+  function showZoneMarker(zone) {
+    cancelZoneHide();
+    placeZoneMarker(zone);
+  }
+
+  // Testo e posizione del chip sulla zona; false (e chip tolto) se la zona non c'è.
+  // Non tocca il timer: un riposizionamento non annulla un «nascondi» in attesa.
+  function placeZoneMarker(zone) {
+    var info = zoneInfo[zone];
+    var el = findZoneEl(zone);
+    if (previewMode || !info || !el) { hideZoneMarker(0, true); return false; }
+    var rect = zoneRect(el);
+    if (!rect.width || !rect.height) { hideZoneMarker(0, true); return false; }
+    var m = getZoneMarker();
+    m.querySelector('.olo-zone-chip-label').textContent = info.text || '';
+    var btn = m.querySelector('.olo-zone-chip-open');
+    btn.textContent = zoneOpenLabel;
+    btn.style.display = (zoneOpenLabel && info.canOpen) ? '' : 'none';
+    m.classList.toggle('olo-zone-marker--footer', zone === 'footer');
+    m.style.left = (rect.left + window.scrollX) + 'px';
+    m.style.width = rect.width + 'px';
+    m.style.top = ((zone === 'footer' ? rect.top : rect.bottom) + window.scrollY) + 'px';
+    m.style.display = 'block';
+    markedZone = zone;
+    return true;
+  }
+
+  // ms = 0: subito. La zona della selezione resta, salvo force (anteprima, zona sparita).
+  function hideZoneMarker(ms, force) {
+    cancelZoneHide();
+    var hide = function() {
+      zoneMarkerTimer = null;
+      if (!force && selectedZone && selectedZone === markedZone && zoneInfo[selectedZone] && !previewMode) return;
+      if (zoneMarker) zoneMarker.style.display = 'none';
+      markedZone = null;
+    };
+    if (ms) zoneMarkerTimer = setTimeout(hide, ms);
+    else hide();
+  }
+
+  // Dopo un render, uno scroll o un resize: il chip segue la zona (e torna su quella
+  // della selezione, se c'è). Solo posizione e testo: il ritardo di uscita resta.
+  function refreshZoneMarker() {
+    if (zoneMarkerRaf) return;
+    zoneMarkerRaf = requestAnimationFrame(function() {
+      zoneMarkerRaf = null;
+      if (markedZone) placeZoneMarker(markedZone);
+      else if (selectedZone && zoneInfo[selectedZone] && !previewMode) showZoneMarker(selectedZone);
+    });
+  }
+
+  function onZoneMouseOver(e) {
+    if (previewMode || gripDragging) return;
+    var tgt = e.target;
+    if (tgt && tgt.closest && tgt.closest('.olo-zone-marker')) { cancelZoneHide(); return; }
+    var z = zoneOf(tgt);
+    if (z && zoneInfo[z]) {
+      if (z !== markedZone) showZoneMarker(z);
+      else cancelZoneHide();
+    } else if (selectedZone && zoneInfo[selectedZone]) {
+      if (markedZone !== selectedZone) showZoneMarker(selectedZone);
+    } else if (markedZone && !zoneMarkerTimer) {
+      // Un'uscita già in attesa non riparte a ogni elemento attraversato: il chip
+      // sparisce 300 ms dopo aver lasciato la zona, anche col mouse in movimento.
+      hideZoneMarker(300);
+    }
+  }
+
   // ── Message handler ──
 
   function onMessage(e) {
@@ -1281,6 +1430,7 @@
         setTimeout(function() {
           post('olo:height', { height: root.scrollHeight });
           sendLayoutSnapshot();
+          refreshZoneMarker();
         }, 150);
         break;
 
@@ -1344,7 +1494,7 @@
               requestAnimationFrame(function() {
                 requestAnimationFrame(function() {
                   executeInlineScripts(zoneEl);
-                  setTimeout(function() { reinitUIkit(); reinitTileScripts(); }, 30);
+                  setTimeout(function() { reinitUIkit(); reinitTileScripts(); refreshZoneMarker(); }, 30);
                 });
               });
             }
@@ -1353,16 +1503,33 @@
         break;
       }
 
+      case 'olo:zone-info':
+        // Testi del chip di zona, già tradotti dal builder: { zones: { header, footer }, openLabel }.
+        zoneInfo = {
+          header: (d.zones && d.zones.header) || null,
+          footer: (d.zones && d.zones.footer) || null
+        };
+        zoneOpenLabel = typeof d.openLabel === 'string' ? d.openLabel : '';
+        if (markedZone && !zoneInfo[markedZone]) hideZoneMarker(0, true);
+        else refreshZoneMarker();
+        break;
+
       case 'olo:select':
         selectTile(d.tileId || null);
         break;
 
       case 'olo:select-set':
         applySelectionSet(d.ids || []);
+        // zone (dal builder): con una tile di header/footer selezionata il chip resta.
+        selectedZone = (d.zone === 'header' || d.zone === 'footer') ? d.zone : null;
+        if (selectedZone && zoneInfo[selectedZone]) showZoneMarker(selectedZone);
+        else if (markedZone) hideZoneMarker(0);
         break;
 
       case 'olo:deselect':
         selectTile(null);
+        selectedZone = null;
+        if (markedZone) hideZoneMarker(0);
         break;
 
       case 'olo:scroll-to':
@@ -1436,6 +1603,8 @@
         if (previewMode) {
           selectTile(null);
           if (hoveredEl) { hoveredEl.classList.remove('olo-builder-hover'); hoveredEl = null; }
+          selectedZone = null;
+          hideZoneMarker(0, true);
         }
         break;
 
@@ -1554,6 +1723,11 @@
   document.addEventListener('pointerup', onEdgeMouseUp, true);
   document.addEventListener('pointercancel', onEdgeMouseUp, true);
   document.addEventListener('click', blockLinks, true);
+  // Chip di zona: su document, perché in modalità inline header e footer stanno fuori da root.
+  document.addEventListener('mouseover', onZoneMouseOver, true);
+  document.documentElement.addEventListener('mouseleave', function() { if (markedZone && !zoneMarkerTimer) hideZoneMarker(300); });
+  window.addEventListener('scroll', refreshZoneMarker, { passive: true });
+  window.addEventListener('resize', refreshZoneMarker);
   // (HTML5 drag già bloccato al top del modulo, vedi commento v3.55.29.)
   window.addEventListener('message', onMessage, false);
 
