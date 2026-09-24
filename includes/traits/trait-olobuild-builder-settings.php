@@ -871,6 +871,17 @@ trait Olobuild_Builder_Settings_Trait {
                 'callback'            => function ( $req ) {
                     $p = $req->get_json_params();
                     $allowed = [ 'olobuild_woo_tpl_product_single', 'olobuild_woo_tpl_product_archive', 'olobuild_woo_tpl_product_category', 'olobuild_woo_tpl_cart', 'olobuild_woo_tpl_checkout', 'olobuild_woo_tpl_myaccount' ];
+                    // Configurazione di una versione precedente: manda solo i vecchi nomi
+                    // olo_woo_tpl_* (con 0 dove non ha letto niente). Niente alias, che
+                    // azzererebbe le assegnazioni vere: 409 e il salvataggio non avviene.
+                    if ( is_array( $p ) && ! array_intersect_key( $p, array_flip( $allowed ) )
+                        && preg_grep( '/^olo_woo_tpl_/', array_map( 'strval', array_keys( $p ) ) ) ) {
+                        return new WP_Error(
+                            'olobuild_chiavi_obsolete',
+                            __( 'Questa pagina è di una versione precedente di Olobuild: ricaricala e salva di nuovo.', 'olobuild' ),
+                            [ 'status' => 409 ]
+                        );
+                    }
                     foreach ( $allowed as $k ) {
                         if ( isset( $p[ $k ] ) ) update_option( $k, (int) $p[ $k ] );
                     }
@@ -1078,7 +1089,10 @@ trait Olobuild_Builder_Settings_Trait {
             'olobuild_convertkit_key'     => 'convertkit',
             'olobuild_brevo_key'          => 'brevo',
         ];
-        $body = $request->get_json_params();
+        // Le chiavi dei media stock servono solo a chi cerca nel builder: fuori
+        // dall'autoload, come le scriveva la rotta /api-keys prima della scheda Stock media.
+        $stock = [ 'olobuild_pexels_api_key', 'olobuild_pixabay_api_key', 'olobuild_unsplash_api_key', 'olobuild_freesound_api_key' ];
+        $body  = $request->get_json_params();
         foreach ( $allowed as $k ) {
             if ( isset( $body[ $k ] ) && is_scalar( $body[ $k ] ) ) {
                 $val = (string) $body[ $k ];
@@ -1098,7 +1112,7 @@ trait Olobuild_Builder_Settings_Trait {
                     $val = sanitize_text_field( $val );
                 }
                 // update_option() è true solo se il valore è cambiato.
-                if ( update_option( $k, $val ) && isset( $form_service[ $k ] ) && class_exists( 'Olobuild_Form_Handler' ) ) {
+                if ( update_option( $k, $val, in_array( $k, $stock, true ) ? false : null ) && isset( $form_service[ $k ] ) && class_exists( 'Olobuild_Form_Handler' ) ) {
                     Olobuild_Form_Handler::forget_integration_error( $form_service[ $k ] );
                 }
             }

@@ -19,7 +19,7 @@ class Olobuild_Pixabay {
      * Restituisce la API key Pixabay.
      *
      * Ordine di risoluzione: costante OLO_PIXABAY_API_KEY (definibile in wp-config.php)
-     * → opzione olo_pixabay_api_key. Nessuna chiave hardcoded: l'utente deve
+     * → opzione olobuild_pixabay_api_key. Nessuna chiave hardcoded: l'utente deve
      * configurare la propria chiave (requisito wordpress.org).
      */
     public static function get_api_key() {

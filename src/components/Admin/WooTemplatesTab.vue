@@ -36,38 +36,49 @@
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
-import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
+import { okOrThrow, cfgJob, assertLoaded, reloadJob, conIniziali, salvaERileggi } from './cfgSave';
 
 const TAB_ID = 'wootemplates';
 const shellDirty = inject('setDirty', () => {});
 const setDirty = (v) => shellDirty(v, TAB_ID);
 const loaded = ref(false);
 
+// Le option che legge Olobuild_Woo_Template_Integration, stessi nomi della rotta
+// /woo-templates (trait-olobuild-builder-settings.php). Con i vecchi nomi olo_* la
+// scheda mostrava «Default WooCommerce» ovunque e il server ignorava il salvataggio.
 const pageTypes = [
-  { key: 'product_single',   optionKey: 'olo_woo_tpl_product_single',   label: 'Singolo prodotto',   hint: 'Pagina del singolo prodotto (is_product).' },
-  { key: 'product_archive',  optionKey: 'olo_woo_tpl_product_archive',  label: 'Archivio prodotti',  hint: 'Pagina Shop (is_shop).' },
-  { key: 'product_category', optionKey: 'olo_woo_tpl_product_category', label: 'Categoria prodotto', hint: 'Archivi categoria/tag prodotto. Nella griglia usa la categoria "current". Se vuoto: vale Archivio prodotti.' },
-  { key: 'cart',             optionKey: 'olo_woo_tpl_cart',             label: 'Carrello',           hint: 'Pagina /cart.' },
-  { key: 'checkout',         optionKey: 'olo_woo_tpl_checkout',         label: 'Checkout',           hint: 'Pagina /checkout.' },
-  { key: 'myaccount',        optionKey: 'olo_woo_tpl_myaccount',        label: 'My Account',         hint: 'Area cliente loggato.' },
+  { key: 'product_single',   optionKey: 'olobuild_woo_tpl_product_single',   label: 'Singolo prodotto',   hint: 'Pagina del singolo prodotto (is_product).' },
+  { key: 'product_archive',  optionKey: 'olobuild_woo_tpl_product_archive',  label: 'Archivio prodotti',  hint: 'Pagina Shop (is_shop).' },
+  { key: 'product_category', optionKey: 'olobuild_woo_tpl_product_category', label: 'Categoria prodotto', hint: 'Archivi categoria/tag prodotto. Nella griglia usa la categoria "current". Se vuoto: vale Archivio prodotti.' },
+  { key: 'cart',             optionKey: 'olobuild_woo_tpl_cart',             label: 'Carrello',           hint: 'Pagina /cart.' },
+  { key: 'checkout',         optionKey: 'olobuild_woo_tpl_checkout',         label: 'Checkout',           hint: 'Pagina /checkout.' },
+  { key: 'myaccount',        optionKey: 'olobuild_woo_tpl_myaccount',        label: 'My Account',         hint: 'Area cliente loggato.' },
 ];
 
-const form = ref({
-  olo_woo_tpl_product_single: 0,
-  olo_woo_tpl_product_archive: 0,
-  olo_woo_tpl_product_category: 0,
-  olo_woo_tpl_cart: 0,
-  olo_woo_tpl_checkout: 0,
-  olo_woo_tpl_myaccount: 0,
-});
+const INIZIALE = Object.fromEntries(pageTypes.map((pt) => [pt.optionKey, 0]));
+const CHIAVI = Object.keys(INIZIALE);
+const form = ref({ ...INIZIALE });
 
 const templates = ref([]);
 const wooActive = ref(true);
 
-const templateOptions = computed(() => [
-  { value: 0, label: t('Default WooCommerce') },
-  ...templates.value.map(tpl => ({ value: tpl.id, label: tpl.title })),
-]);
+const templateOptions = computed(() => {
+  const opts = [
+    { value: 0, label: t('Default WooCommerce') },
+    ...templates.value.map(tpl => ({ value: tpl.id, label: tpl.title })),
+  ];
+  // Un template assegnato fuori dall'elenco (ne arrivano 200, i più recenti) resta
+  // visibile col suo numero invece di «—»: il valore salvato non sparisce dalla vista.
+  const presenti = new Set(opts.map((o) => String(o.value)));
+  CHIAVI.forEach((k) => {
+    const id = form.value[k];
+    if (id && !presenti.has(String(id))) {
+      presenti.add(String(id));
+      opts.push({ value: id, label: t('Template #{id}').replace('{id}', id) });
+    }
+  });
+  return opts;
+});
 
 function set(k, v) { form.value[k] = v; setDirty(true); }
 
@@ -82,14 +93,17 @@ async function loadTemplates() {
   } catch (e) { /* keep empty */ }
 }
 
-async function loadSettings() {
+async function loadSettings(invariato) {
   try {
     const res = await fetch(`${window.oloData.restUrl}woo-templates`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (res.ok) {
       const data = await res.json();
-      for (const k of Object.keys(form.value)) {
-        if (data && data[k] !== undefined) form.value[k] = parseInt(data[k]) || 0;
-      }
+      // Rilettura dopo un salvataggio: una scelta fatta nel frattempo resta a video.
+      if (invariato && !invariato()) return;
+      // Si riparte dai default: «Annulla modifiche» riporta anche le righe cambiate a video.
+      const nostre = {};
+      CHIAVI.forEach((k) => { if (data && data[k] !== undefined) nostre[k] = parseInt(data[k]) || 0; });
+      form.value = conIniziali(INIZIALE, nostre);
       if (typeof data?.woo_active === 'boolean') wooActive.value = data.woo_active;
       loaded.value = true;
     }
@@ -98,11 +112,13 @@ async function loadSettings() {
 
 async function saveSettings() {
   assertLoaded(loaded);
-  await okOrThrow(fetch(`${window.oloData.restUrl}woo-templates`, {
+  // Rilettura: a video resta ciò che il server ha scritto davvero, tranne le scelte
+  // fatte mentre la richiesta era in volo, che restano da salvare (salvaERileggi).
+  await salvaERileggi(() => JSON.stringify(form.value), () => okOrThrow(fetch(`${window.oloData.restUrl}woo-templates`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
     body: JSON.stringify(form.value),
-  }));
+  })), loadSettings);
 }
 
 const onSave = cfgJob(TAB_ID, saveSettings);

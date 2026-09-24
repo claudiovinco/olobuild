@@ -17,7 +17,7 @@ class Olobuild_Unsplash {
      * Restituisce la Access Key Unsplash.
      *
      * Ordine di risoluzione: costante OLO_UNSPLASH_API_KEY (definibile in wp-config.php)
-     * → opzione olo_unsplash_api_key. Nessuna chiave hardcoded: l'utente deve
+     * → opzione olobuild_unsplash_api_key. Nessuna chiave hardcoded: l'utente deve
      * configurare la propria chiave (requisito wordpress.org).
      */
     public static function get_access_key() {

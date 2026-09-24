@@ -10,11 +10,12 @@
  * - My Account
  *
  * Options:
- *   olo_woo_tpl_product_single  → template ID per singolo prodotto
- *   olo_woo_tpl_product_archive → template ID per archivio prodotti / shop
- *   olo_woo_tpl_cart            → template ID per pagina carrello
- *   olo_woo_tpl_checkout        → template ID per pagina checkout
- *   olo_woo_tpl_myaccount       → template ID per pagina My Account
+ *   olobuild_woo_tpl_product_single   → template ID per singolo prodotto
+ *   olobuild_woo_tpl_product_archive  → template ID per archivio prodotti / shop
+ *   olobuild_woo_tpl_product_category → template ID per categorie/tag prodotto (se 0: vale l'archivio)
+ *   olobuild_woo_tpl_cart             → template ID per pagina carrello
+ *   olobuild_woo_tpl_checkout         → template ID per pagina checkout
+ *   olobuild_woo_tpl_myaccount        → template ID per pagina My Account
  */
 if ( ! defined( 'ABSPATH' ) ) exit;
 

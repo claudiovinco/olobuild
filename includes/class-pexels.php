@@ -19,7 +19,7 @@ class Olobuild_Pexels {
      * Restituisce la API key Pexels.
      *
      * Ordine di risoluzione: costante OLO_PEXELS_API_KEY (definibile in wp-config.php)
-     * → opzione olo_pexels_api_key. Nessuna chiave hardcoded: l'utente deve
+     * → opzione olobuild_pexels_api_key. Nessuna chiave hardcoded: l'utente deve
      * configurare la propria chiave (requisito wordpress.org).
      */
     public static function get_api_key() {

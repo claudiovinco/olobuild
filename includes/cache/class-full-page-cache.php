@@ -66,6 +66,13 @@ class Olobuild_FullPage_Cache {
         // Banner cookie acceso/spento, blocco script e iframe: le pagine in cache li
         // hanno già scritti. Il primo salvataggio dei cookie è un add_option.
         add_action( 'add_option_olobuild_cookie_settings', [ __CLASS__, 'purge_all' ] );
+        // Template assegnati alle pagine WooCommerce (Configurazione → Template WooCommerce):
+        // prodotti, shop e categorie sono in cache col layout vecchio. La prima
+        // assegnazione di una pagina è un add_option.
+        foreach ( [ 'product_single', 'product_archive', 'product_category', 'cart', 'checkout', 'myaccount' ] as $woo_page ) {
+            add_action( 'update_option_olobuild_woo_tpl_' . $woo_page, [ __CLASS__, 'purge_all' ] );
+            add_action( 'add_option_olobuild_woo_tpl_' . $woo_page, [ __CLASS__, 'purge_all' ] );
+        }
     }
 
     /* ── stato ─────────────────────────────────────────────── */

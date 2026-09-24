@@ -76,3 +76,21 @@ export function reloadJob(loaded, load) {
     if (!ok) throw new Error(t('rilettura non riuscita'));
   };
 }
+
+/**
+ * Salvataggio seguito dalla rilettura dal server, che però non cancella quello che
+ * l'utente cambia mentre le richieste sono in volo. `foto()` fotografa lo stato a
+ * video (una stringa) ed è presa appena prima di `invia()`, che deve comporre i corpi
+ * prima del suo primo await. `load(invariato)` rilegge la scheda e richiama
+ * `invariato()` dopo la lettura, prima di scrivere a video.
+ * Se lo stato è cambiato non si rilegge: la modifica resta a video e la shell lascia
+ * acceso il puntino della scheda (clearDone in SettingsApp.vue), così il «Salva»
+ * successivo la manda. Rileggere l'avrebbe cancellata, e il secondo «Salva» avrebbe
+ * riscritto il valore vecchio senza avviso.
+ */
+export async function salvaERileggi(foto, invia, load) {
+  const inviato = foto();
+  await invia();
+  const invariato = () => foto() === inviato;
+  if (invariato()) await load(invariato);
+}

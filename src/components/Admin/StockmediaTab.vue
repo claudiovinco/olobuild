@@ -30,22 +30,14 @@
             <div class="stock-name">{{ s.name }}</div>
             <div class="stock-desc">{{ t(s.desc) }}</div>
           </div>
-          <div v-if="s.key" class="cfg-input mono stock-key">
-            <input
-              :type="s.reveal ? 'text' : 'password'"
-              :value="s.key"
-              @input="onKeyInput(s.id, $event.target.value)"
-              autocomplete="off"
-              spellcheck="false"
-              :name="'olo-stock-' + s.id"
-              data-1p-ignore
-              data-lpignore="true"
-            />
-            <button class="reveal" type="button" :title="s.reveal ? t('Nascondi') : t('Mostra')" @click="s.reveal = !s.reveal">
-              <svg v-if="!s.reveal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
-              <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l18 18M10.6 6.1A10.5 10.5 0 0 1 12 6c6.5 0 10 6 10 6a17.3 17.3 0 0 1-4 4.5M6.6 6.6A17.3 17.3 0 0 0 2 12s3.5 6 10 6c1.3 0 2.5-.3 3.6-.7"/></svg>
-            </button>
-          </div>
+          <CfgSecret
+            v-if="s.key"
+            class="stock-key"
+            :model-value="s.key"
+            :name="'olo-stock-' + s.id"
+            :label="t('{nome} — API key').replace('{nome}', s.name)"
+            @update:model-value="onKeyInput(s.id, $event)"
+          />
           <button v-else class="cfg-btn cfg-btn-secondary stock-add-key" @click="focusKey(s.id)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="14" r="4"/><path d="m11 12 9-9 3 3-3 3-2-2-2 2-2-2-3 3"/></svg>
             {{ t('Aggiungi chiave') }}
@@ -107,18 +99,23 @@
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
-import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
+import CfgSecret from './controls/CfgSecret.vue';
+import { okOrThrow, cfgJob, assertLoaded, reloadJob, salvaERileggi } from './cfgSave';
 
 const TAB_ID = 'stockmedia';
 const shellDirty = inject('setDirty', () => {});
 const setDirty = (v) => shellDirty(v, TAB_ID);
 const loaded = ref(false);
 
+// Le option che leggono class-unsplash/pexels/pixabay/freesound, stessi nomi della rotta
+// settings/api-keys (come «Integrazioni form»): le chiavi salvate tornano mascherate
+// («****abcd») e, rimandate così, il server le lascia com'erano; un campo svuotato
+// cancella la chiave. `saved` = la chiave c'è sul server: è quello che dice «Connesso».
 const services = ref([
-  { id: 'unsplash',  name: 'Unsplash',  desc: '3M+ foto royalty-free, alta qualità editoriale', key: '', reveal: false, optionKey: 'olo_unsplash_api_key', docUrl: 'https://unsplash.com/developers' },
-  { id: 'pexels',    name: 'Pexels',    desc: '1M+ foto e video, license CC0',                  key: '', reveal: false, optionKey: 'olo_pexels_api_key',   docUrl: 'https://www.pexels.com/api/' },
-  { id: 'pixabay',   name: 'Pixabay',   desc: '4M+ media, anche illustrazioni e vector',        key: '', reveal: false, optionKey: 'olo_pixabay_api_key',  docUrl: 'https://pixabay.com/api/docs/' },
-  { id: 'freesound', name: 'Freesound', desc: 'Audio creative-commons, effetti, loop',          key: '', reveal: false, optionKey: 'olo_freesound_api_key',docUrl: 'https://freesound.org/help/developers/' },
+  { id: 'unsplash',  name: 'Unsplash',  desc: '3M+ foto royalty-free, alta qualità editoriale', key: '', saved: false, optionKey: 'olobuild_unsplash_api_key',  docUrl: 'https://unsplash.com/developers' },
+  { id: 'pexels',    name: 'Pexels',    desc: '1M+ foto e video, license CC0',                  key: '', saved: false, optionKey: 'olobuild_pexels_api_key',    docUrl: 'https://www.pexels.com/api/' },
+  { id: 'pixabay',   name: 'Pixabay',   desc: '4M+ media, anche illustrazioni e vector',        key: '', saved: false, optionKey: 'olobuild_pixabay_api_key',   docUrl: 'https://pixabay.com/api/docs/' },
+  { id: 'freesound', name: 'Freesound', desc: 'Audio creative-commons, effetti, loop',          key: '', saved: false, optionKey: 'olobuild_freesound_api_key', docUrl: 'https://freesound.org/help/developers/' },
 ]);
 
 const behavior = ref({
@@ -131,18 +128,18 @@ const behavior = ref({
 const providerOptions = computed(() => services.value.map(s => ({ value: s.id, label: s.name })));
 
 const providerSummary = computed(() => {
-  const connected = services.value.filter(s => !!s.key).length;
+  const connected = services.value.filter(s => s.saved).length;
   const total = services.value.length;
   return t('{c} di {t} provider connessi. Click per inserire/aggiornare la chiave.')
     .replace('{c}', connected).replace('{t}', total);
 });
 
 function statusClass(s) {
-  if (!s.key) return 'off';
+  if (!s.saved) return 'off';
   return 'ok';
 }
 function statusLabel(s) {
-  if (!s.key) return 'Non connesso';
+  if (!s.saved) return 'Non connesso';
   return 'Connesso';
 }
 
@@ -165,41 +162,55 @@ function openDocs(s) {
 
 function setBehavior(k, v) { behavior.value[k] = v; setDirty(true); }
 
-async function loadKeys() {
+async function loadKeys(invariato) {
   // Le chiavi vuote a video si salverebbero sopra quelle vere: servono entrambe le letture.
-  let keysOk = false;
-  let behaviorOk = false;
+  let chiavi = null;
+  let comportamento = null;
   try {
-    const res = await fetch(`${window.oloData.restUrl}api-keys`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
-    if (res.ok) {
-      const data = await res.json();
-      services.value.forEach(s => {
-        s.key = data[s.optionKey] || ''; // vuota sul server = vuota a video, anche dopo «Annulla»
-      });
-      keysOk = true;
-    }
+    const res = await fetch(`${window.oloData.restUrl}settings/api-keys`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
+    if (res.ok) chiavi = (await res.json()) || {};
   } catch (e) { /* defaults */ }
   try {
     const res2 = await fetch(`${window.oloData.restUrl}stockmedia-behavior`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
-    if (res2.ok) { Object.assign(behavior.value, await res2.json()); behaviorOk = true; }
+    if (res2.ok) comportamento = (await res2.json()) || {};
   } catch (e) { /* defaults */ }
-  if (keysOk && behaviorOk) loaded.value = true;
+  // Rilettura dopo un salvataggio: una modifica fatta nel frattempo resta a video.
+  // Per questo si scrive a video solo dopo entrambe le letture.
+  if (invariato && !invariato()) return;
+  if (chiavi) {
+    services.value.forEach(s => {
+      // Vuota sul server = vuota a video, anche dopo «Annulla».
+      s.key = typeof chiavi[s.optionKey] === 'string' ? chiavi[s.optionKey] : '';
+      s.saved = s.key.trim() !== '';
+    });
+  }
+  if (comportamento) Object.assign(behavior.value, comportamento);
+  if (chiavi && comportamento) loaded.value = true;
 }
+
+// Ciò che la scheda manda: chiavi e comportamento.
+const fotoStato = () => JSON.stringify([services.value.map(s => s.key), behavior.value]);
 
 async function saveKeys() {
   assertLoaded(loaded);
-  const body = {};
-  services.value.forEach(s => { body[s.optionKey] = (s.key || '').trim(); });
-  await okOrThrow(fetch(`${window.oloData.restUrl}api-keys`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-    body: JSON.stringify(body),
-  }));
-  await okOrThrow(fetch(`${window.oloData.restUrl}stockmedia-behavior`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-    body: JSON.stringify(behavior.value),
-  }));
+  // Rilettura: le chiavi appena scritte tornano mascherate e i badge dicono cosa c'è sul server.
+  // Il salvataggio è già riuscito: se la rilettura non va, restano a video i valori inviati.
+  // Una modifica fatta mentre le richieste sono in volo non si rilegge: resta da salvare.
+  await salvaERileggi(fotoStato, async () => {
+    const body = {};
+    services.value.forEach(s => { body[s.optionKey] = (s.key || '').trim(); });
+    const comportamento = JSON.stringify(behavior.value);
+    await okOrThrow(fetch(`${window.oloData.restUrl}settings/api-keys`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+      body: JSON.stringify(body),
+    }));
+    await okOrThrow(fetch(`${window.oloData.restUrl}stockmedia-behavior`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+      body: comportamento,
+    }));
+  }, loadKeys);
 }
 
 const onSave = cfgJob(TAB_ID, saveKeys);

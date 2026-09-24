@@ -332,6 +332,18 @@ trait Olobuild_Rest_Config_Trait {
     public function save_api_keys( $request ) {
         $b    = $request->get_json_params();
         $keys = [ 'olobuild_unsplash_api_key', 'olobuild_pexels_api_key', 'olobuild_pixabay_api_key', 'olobuild_freesound_api_key' ];
+        // Una Configurazione di una versione precedente (scheda rimasta aperta durante
+        // l'aggiornamento) manda solo i vecchi nomi olo_*: non si scrive niente e lo si dice,
+        // invece di rispondere 200 a un salvataggio che non avviene. Nessun alias: quel
+        // corpo porta '' per le chiavi che non ha saputo leggere e cancellerebbe quelle vere.
+        if ( is_array( $b ) && ! array_intersect_key( $b, array_flip( $keys ) )
+            && preg_grep( '/^olo_[a-z]+_api_key$/', array_map( 'strval', array_keys( $b ) ) ) ) {
+            return new WP_Error(
+                'olobuild_chiavi_obsolete',
+                __( 'Questa pagina è di una versione precedente di Olobuild: ricaricala e salva di nuovo.', 'olobuild' ),
+                [ 'status' => 409 ]
+            );
+        }
         foreach ( $keys as $k ) {
             if ( is_array( $b ) && array_key_exists( $k, $b ) ) {
                 update_option( $k, sanitize_text_field( $b[ $k ] ?? '' ), false );
