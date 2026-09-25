@@ -303,12 +303,15 @@ import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgNumber from './controls/CfgNumber.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob, conIniziali } from './cfgSave';
+import { useCfgLettura } from './composables/useCfgLettura';
 
 const TAB_ID = 'performance';
 const showToast = inject('showToast', () => {});
 const shellDirty = inject('setDirty', () => {});
 const setDirty = (v) => shellDirty(v, TAB_ID);
 const loaded = ref(false);
+// Prima lettura: finché non riesce la shell mostra scheletro o errore al posto della scheda.
+const lettura = useCfgLettura(TAB_ID, loaded, () => loadSettings());
 
 const purging = ref(false);
 
@@ -404,7 +407,7 @@ async function regenerateCache() {
 
 async function loadSettings() {
   try {
-    const res = await fetch(`${window.oloData.restUrl}performance`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
+    const res = await lettura.fetch(`${window.oloData.restUrl}performance`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (res.ok) { form.value = conIniziali(INIZIALE, await res.json()); loaded.value = true; }
   } catch (e) { /* defaults */ }
 }
@@ -429,7 +432,7 @@ const onSave = cfgJob(TAB_ID, saveSettings);
 const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadSettings));
 
 onMounted(() => {
-  loadSettings();
+  lettura.leggi();
   loadStats();
   window.addEventListener('olo-cfg-save', onSave);
   window.addEventListener('olo-cfg-discard', onDiscard);

@@ -132,11 +132,14 @@ import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgSecret from './controls/CfgSecret.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob, conIniziali } from './cfgSave';
+import { useCfgLettura } from './composables/useCfgLettura';
 
 const TAB_ID = 'integrazioni';
 const shellDirty = inject('setDirty', () => {});
 const setDirty = (v) => shellDirty(v, TAB_ID);
 const loaded = ref(false);
+// Prima lettura: finché non riesce la shell mostra scheletro o errore al posto della scheda.
+const lettura = useCfgLettura(TAB_ID, loaded, () => loadKeys());
 
 // Le option che leggono il render del Form e Olobuild_Form_Handler; stessi nomi di
 // rest_get_api_keys()/rest_put_api_keys() (trait-olobuild-builder-settings.php).
@@ -190,7 +193,7 @@ const riepilogo = computed(() => t('{c} di {t} servizi pronti')
 
 async function loadKeys() {
   try {
-    const res = await fetch(`${window.oloData.restUrl}settings/api-keys`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
+    const res = await lettura.fetch(`${window.oloData.restUrl}settings/api-keys`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (res.ok) {
       const data = await res.json();
       // Solo le chiavi di questa scheda: la stessa rotta rimanda anche quelle degli stock media.
@@ -222,7 +225,7 @@ const onSave = cfgJob(TAB_ID, saveKeys);
 const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadKeys));
 
 onMounted(() => {
-  loadKeys();
+  lettura.leggi();
   window.addEventListener('olo-cfg-save', onSave);
   window.addEventListener('olo-cfg-discard', onDiscard);
 });

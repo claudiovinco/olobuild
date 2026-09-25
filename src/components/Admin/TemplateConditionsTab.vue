@@ -114,6 +114,7 @@ import CfgNumber from './controls/CfgNumber.vue';
 import TemplateListError from './controls/TemplateListError.vue';
 import CondValue from './controls/CondValue.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
+import { useCfgLettura } from './composables/useCfgLettura';
 import { useTemplateOptions } from './composables/useTemplateOptions';
 import { SCELTE, TIPI_SENZA_VALORE, valoreMostrato, etichettaValore } from './composables/useConditionChoices';
 
@@ -121,6 +122,8 @@ const TAB_ID = 'tplconditions';
 const shellDirty = inject('setDirty', () => {});
 const setDirty = (v) => shellDirty(v, TAB_ID);
 const loaded = ref(false);
+// Prima lettura: finché non riesce la shell mostra scheletro o errore al posto della scheda.
+const lettura = useCfgLettura(TAB_ID, loaded, () => loadRules());
 
 const rules = ref([]);
 const { list: templateList, load: loadTemplates, optionsFor } = useTemplateOptions();
@@ -242,7 +245,7 @@ function riassunto(rule) {
 
 async function loadRules() {
   try {
-    const res = await fetch(`${window.oloData.restUrl}template-conditions`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
+    const res = await lettura.fetch(`${window.oloData.restUrl}template-conditions`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (res.ok) {
       const data = await res.json();
       rules.value = Array.isArray(data) ? data : (data?.rules || []);
@@ -264,7 +267,7 @@ const onSave = cfgJob(TAB_ID, saveRules);
 const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadRules));
 
 onMounted(() => {
-  loadRules();
+  lettura.leggi();
   loadTemplates();
   window.addEventListener('olo-cfg-save', onSave);
   window.addEventListener('olo-cfg-discard', onDiscard);

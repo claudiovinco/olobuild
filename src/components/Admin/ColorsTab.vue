@@ -374,6 +374,7 @@ import { t } from '@/i18n';
 import { HARMONY_RULES, harmonize, paletteToRoles, neutralsFromSeed, readableText, contrastRatio, isValidHex } from '@/utils/colorHarmony';
 import CfgSelect from './controls/CfgSelect.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
+import { useCfgLettura } from './composables/useCfgLettura';
 import { ripristinaIstantanea, descriviSaltati } from '@/utils/styleSnapshots';
 
 const TAB_ID = 'colori';
@@ -381,6 +382,8 @@ const showToast = inject('showToast', () => {});
 const shellDirty = inject('setDirty', () => {});
 const setDirty = (v) => shellDirty(v, TAB_ID);
 const loaded = ref(false);
+// Prima lettura: finché non riesce la shell mostra scheletro o errore al posto della scheda.
+const lettura = useCfgLettura(TAB_ID, loaded, () => loadStyles());
 
 const BRAND_ROLES = [
   { key: 'primary',   name: 'Primary',   role: 'Brand · CTA · pulsanti' },
@@ -644,25 +647,28 @@ function importFromCoolors() {
 
 // ── Load / Save (endpoint REALE /styles) ──
 async function loadStyles() {
+  let stiliLetti = false;
+  let globaliLetti = false;
   try {
-    const res = await fetch(`${window.oloData.restUrl}styles`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
+    const res = await lettura.fetch(`${window.oloData.restUrl}styles`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (res.ok) {
       const data = await res.json();
       const s = data.styles || {};
       colors.value = { ...DEFAULT_COLORS, ...(s.colors || {}) };
       if (s.neutrals) neutrals.value = { mode: s.neutrals.mode || 'auto', tint: s.neutrals.tint || 'zinc', scale: (s.neutrals.scale && s.neutrals.scale.length) ? [...s.neutrals.scale] : [...NEUTRAL_PRESETS[s.neutrals.tint || 'zinc']] };
       if (s.dark_mode) darkMode.value = { enabled: s.dark_mode.enabled !== false, strategy: s.dark_mode.strategy || 'auto' };
-      loaded.value = true;
+      stiliLetti = true;
     }
   } catch (e) { /* defaults */ }
   // Global colors: per i ruoli core (primary/secondary/...) il global color VINCE nel CSS
   // (è emesso dopo in generate_css). Il pannello deve quindi MOSTRARE quel valore effettivo
   // e ri-sincronizzarlo al save, altrimenti il cambio sembra non applicarsi al frontend.
   try {
-    const rg = await fetch(`${window.oloData.restUrl}global-colors`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
+    const rg = await lettura.fetch(`${window.oloData.restUrl}global-colors`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (rg.ok) {
       const g = await rg.json();
       globalColors.value = Array.isArray(g) ? g : [];
+      globaliLetti = Array.isArray(g);
       globalColors.value.forEach((gc) => {
         if (gc && gc.value && copreRuolo(gc)) {
           colors.value[gc.id] = gc.value.toUpperCase ? gc.value.toUpperCase() : gc.value;
@@ -670,6 +676,10 @@ async function loadStyles() {
       });
     }
   } catch (e) { /* no global colors */ }
+  // Pronta solo con tutte e due: al «Salva» syncGlobalColors riallinea i colori globali dei
+  // ruoli (primary…) a quelli a video; senza averli letti, a video ci sarebbe il primario
+  // dello stile e il salvataggio lo scriverebbe sopra quello che il sito usa davvero.
+  loaded.value = stiliLetti && globaliLetti;
   if (colors.value.primary) seed1.value = colors.value.primary.toUpperCase();
   if (colors.value.secondary) seed2.value = colors.value.secondary.toUpperCase();
   try {
@@ -939,7 +949,7 @@ const onSave = cfgJob(TAB_ID, async () => { await saveStyles(); caricaVersioni()
 const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadStyles));
 
 onMounted(() => {
-  loadStyles();
+  lettura.leggi();
   caricaVersioni();
   window.addEventListener('olo-cfg-save', onSave);
   window.addEventListener('olo-cfg-discard', onDiscard);

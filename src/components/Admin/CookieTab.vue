@@ -179,11 +179,14 @@ import { ref, inject, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgNumber from './controls/CfgNumber.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
+import { useCfgLettura } from './composables/useCfgLettura';
 
 const TAB_ID = 'cookie';
 const shellDirty = inject('setDirty', () => {});
 const setDirty = (v) => shellDirty(v, TAB_ID);
 const loaded = ref(false);
+// Prima lettura: finché non riesce la shell mostra scheletro o errore al posto della scheda.
+const lettura = useCfgLettura(TAB_ID, loaded, () => loadSettings());
 // Esito della lettura fallita (stato HTTP o «nessuna risposta valida»): con la
 // scheda bloccata, senza questa riga non si capiva perché nulla rispondesse.
 const loadError = ref('');
@@ -279,7 +282,7 @@ async function loadSettings() {
   loadError.value = '';
   try {
     // okOrThrow: un 403 (nonce scaduto, plugin di sicurezza) o un 500 diventa un errore con lo stato.
-    const res = await okOrThrow(fetch(`${window.oloData.restUrl}cookie-consent`, { headers: { 'X-WP-Nonce': window.oloData.nonce } }));
+    const res = await okOrThrow(lettura.fetch(`${window.oloData.restUrl}cookie-consent`, { headers: { 'X-WP-Nonce': window.oloData.nonce } }));
     const data = await res.json();
     // Si riparte dai valori iniziali: l'option mai salvata vale [] e i rami qui
     // sotto non toccherebbero niente, lasciando a video ciò che «Annulla» deve togliere.
@@ -323,7 +326,7 @@ const onSave = cfgJob(TAB_ID, saveSettings);
 const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadSettings));
 
 onMounted(() => {
-  loadSettings();
+  lettura.leggi();
   window.addEventListener('olo-cfg-save', onSave);
   window.addEventListener('olo-cfg-discard', onDiscard);
 });

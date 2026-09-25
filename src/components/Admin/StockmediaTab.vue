@@ -101,11 +101,14 @@ import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
 import CfgSecret from './controls/CfgSecret.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob, salvaERileggi } from './cfgSave';
+import { useCfgLettura } from './composables/useCfgLettura';
 
 const TAB_ID = 'stockmedia';
 const shellDirty = inject('setDirty', () => {});
 const setDirty = (v) => shellDirty(v, TAB_ID);
 const loaded = ref(false);
+// Prima lettura: finché non riesce la shell mostra scheletro o errore al posto della scheda.
+const lettura = useCfgLettura(TAB_ID, loaded, () => loadKeys());
 
 // Le option che leggono class-unsplash/pexels/pixabay/freesound, stessi nomi della rotta
 // settings/api-keys (come «Integrazioni form»): le chiavi salvate tornano mascherate
@@ -167,11 +170,11 @@ async function loadKeys(invariato) {
   let chiavi = null;
   let comportamento = null;
   try {
-    const res = await fetch(`${window.oloData.restUrl}settings/api-keys`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
+    const res = await lettura.fetch(`${window.oloData.restUrl}settings/api-keys`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (res.ok) chiavi = (await res.json()) || {};
   } catch (e) { /* defaults */ }
   try {
-    const res2 = await fetch(`${window.oloData.restUrl}stockmedia-behavior`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
+    const res2 = await lettura.fetch(`${window.oloData.restUrl}stockmedia-behavior`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (res2.ok) comportamento = (await res2.json()) || {};
   } catch (e) { /* defaults */ }
   // Rilettura dopo un salvataggio: una modifica fatta nel frattempo resta a video.
@@ -217,7 +220,7 @@ const onSave = cfgJob(TAB_ID, saveKeys);
 const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadKeys));
 
 onMounted(() => {
-  loadKeys();
+  lettura.leggi();
   window.addEventListener('olo-cfg-save', onSave);
   window.addEventListener('olo-cfg-discard', onDiscard);
 });

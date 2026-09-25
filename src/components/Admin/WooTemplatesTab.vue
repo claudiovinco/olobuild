@@ -39,12 +39,15 @@ import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
 import TemplateListError from './controls/TemplateListError.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob, conIniziali, salvaERileggi } from './cfgSave';
+import { useCfgLettura } from './composables/useCfgLettura';
 import { useTemplateOptions } from './composables/useTemplateOptions';
 
 const TAB_ID = 'wootemplates';
 const shellDirty = inject('setDirty', () => {});
 const setDirty = (v) => shellDirty(v, TAB_ID);
 const loaded = ref(false);
+// Prima lettura: finché non riesce la shell mostra scheletro o errore al posto della scheda.
+const lettura = useCfgLettura(TAB_ID, loaded, () => loadSettings());
 
 // Le option che legge Olobuild_Woo_Template_Integration, stessi nomi della rotta
 // /woo-templates (trait-olobuild-builder-settings.php). Con i vecchi nomi olo_* la
@@ -75,7 +78,7 @@ function set(k, v) { form.value[k] = v; setDirty(true); }
 
 async function loadSettings(invariato) {
   try {
-    const res = await fetch(`${window.oloData.restUrl}woo-templates`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
+    const res = await lettura.fetch(`${window.oloData.restUrl}woo-templates`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (res.ok) {
       const data = await res.json();
       // Rilettura dopo un salvataggio: una scelta fatta nel frattempo resta a video.
@@ -105,7 +108,7 @@ const onSave = cfgJob(TAB_ID, saveSettings);
 const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadSettings));
 
 onMounted(() => {
-  loadSettings();
+  lettura.leggi();
   loadTemplates();
   window.addEventListener('olo-cfg-save', onSave);
   window.addEventListener('olo-cfg-discard', onDiscard);

@@ -93,6 +93,7 @@ import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
 import TemplateListError from './controls/TemplateListError.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
+import { useCfgLettura } from './composables/useCfgLettura';
 import { useTemplateOptions } from './composables/useTemplateOptions';
 
 const TAB_ID = 'maintenance';
@@ -100,6 +101,8 @@ const showToast = inject('showToast', () => {});
 const shellDirty = inject('setDirty', () => {});
 const setDirty = (v) => shellDirty(v, TAB_ID);
 const loaded = ref(false);
+// Prima lettura: finché non riesce la shell mostra scheletro o errore al posto della scheda.
+const lettura = useCfgLettura(TAB_ID, loaded, () => loadSettings());
 
 const form = ref({
   mode: 'off',
@@ -173,7 +176,7 @@ async function generateTemplate(kind) {
 
 async function loadSettings() {
   try {
-    const res = await fetch(`${window.oloData.restUrl}maintenance`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
+    const res = await lettura.fetch(`${window.oloData.restUrl}maintenance`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (res.ok) { Object.assign(form.value, await res.json()); loaded.value = true; }
   } catch (e) { /* defaults */ }
 }
@@ -191,7 +194,7 @@ const onSave = cfgJob(TAB_ID, saveSettings);
 const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadSettings));
 
 onMounted(() => {
-  loadSettings();
+  lettura.leggi();
   loadTemplates();
   window.addEventListener('olo-cfg-save', onSave);
   window.addEventListener('olo-cfg-discard', onDiscard);

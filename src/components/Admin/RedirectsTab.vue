@@ -139,12 +139,15 @@ import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
+import { useCfgLettura } from './composables/useCfgLettura';
 
 const TAB_ID = 'redirects';
 const showToast = inject('showToast', () => {});
 const shellDirty = inject('setDirty', () => {});
 const setDirty = (v) => shellDirty(v, TAB_ID);
 const loaded = ref(false);
+// Prima lettura: finché non riesce la shell mostra scheletro o errore al posto della scheda.
+const lettura = useCfgLettura(TAB_ID, loaded, () => loadRedirects());
 
 const REDIRECT_TYPE_OPTIONS = [
   { value: 301, label: '301' },
@@ -165,7 +168,7 @@ const newRow = ref({ from_url: '', to_url: '', type: 301 });
 // valore del server la perdeva, e il «Salva» successivo mandava quello vecchio.
 async function loadRedirects(soloElenchi = false) {
   try {
-    const res = await fetch(`${window.oloData.restUrl}redirects`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
+    const res = await lettura.fetch(`${window.oloData.restUrl}redirects`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (res.ok) {
       const data = await res.json();
       redirects.value = data?.redirects || [];
@@ -258,7 +261,7 @@ const onSave = cfgJob(TAB_ID, saveSettings);
 const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadRedirects));
 
 onMounted(() => {
-  loadRedirects();
+  lettura.leggi();
   window.addEventListener('olo-cfg-save', onSave);
   window.addEventListener('olo-cfg-discard', onDiscard);
 });

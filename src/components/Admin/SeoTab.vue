@@ -188,12 +188,15 @@ import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob, conIniziali } from './cfgSave';
+import { useCfgLettura } from './composables/useCfgLettura';
 
 const TAB_ID = 'seo';
 const showToast = inject('showToast', () => {});
 const shellDirty = inject('setDirty', () => {});
 const setDirty = (v) => shellDirty(v, TAB_ID);
 const loaded = ref(false);
+// Prima lettura: finché non riesce la shell mostra scheletro o errore al posto della scheda.
+const lettura = useCfgLettura(TAB_ID, loaded, () => loadSettings());
 
 const SEPARATOR_OPTIONS = [
   { value: '—', label: t('— (em dash)') },
@@ -274,10 +277,10 @@ async function loadSettings() {
     const headers = { 'X-WP-Nonce': window.oloData.nonce };
     const base = `${window.oloData.restUrl}seo/`;
     const [tRes, sRes, smRes, schRes] = await Promise.all([
-      fetch(base + 'titles', { headers }).then(r => r.ok ? r.json() : null).catch(() => null),
-      fetch(base + 'social', { headers }).then(r => r.ok ? r.json() : null).catch(() => null),
-      fetch(base + 'sitemap', { headers }).then(r => r.ok ? r.json() : null).catch(() => null),
-      fetch(base + 'advanced', { headers }).then(r => r.ok ? r.json() : null).catch(() => null),
+      lettura.fetch(base + 'titles', { headers }).then(r => r.ok ? r.json() : null).catch(() => null),
+      lettura.fetch(base + 'social', { headers }).then(r => r.ok ? r.json() : null).catch(() => null),
+      lettura.fetch(base + 'sitemap', { headers }).then(r => r.ok ? r.json() : null).catch(() => null),
+      lettura.fetch(base + 'advanced', { headers }).then(r => r.ok ? r.json() : null).catch(() => null),
     ]);
     if (tRes)   titles.value  = conIniziali(INIZIALE_TITLES, tRes);
     if (sRes)   social.value  = conIniziali(INIZIALE_SOCIAL, sRes);
@@ -304,7 +307,7 @@ const onSave = cfgJob(TAB_ID, saveSettings);
 const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadSettings));
 
 onMounted(() => {
-  loadSettings();
+  lettura.leggi();
   window.addEventListener('olo-cfg-save', onSave);
   window.addEventListener('olo-cfg-discard', onDiscard);
 });

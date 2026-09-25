@@ -122,12 +122,15 @@ import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
 import CfgNumber from './controls/CfgNumber.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
+import { useCfgLettura } from './composables/useCfgLettura';
 
 const TAB_ID = 'tipografia';
 const showToast = inject('showToast', () => {});
 const shellDirty = inject('setDirty', () => {});
 const setDirty = (v) => shellDirty(v, TAB_ID);
 const loaded = ref(false);
+// Prima lettura: finché non riesce la shell mostra scheletro o errore al posto della scheda.
+const lettura = useCfgLettura(TAB_ID, loaded, () => loadSettings());
 
 // Display: serif prima, poi le famiglie senza grazie (etichettate · sans) —
 // css2 tollera pesi/assi mancanti, quindi ogni famiglia Google è caricabile
@@ -249,7 +252,7 @@ function uploadCustomFont() {
 
 async function loadSettings() {
   try {
-    const res = await fetch(`${window.oloData.restUrl}styles`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
+    const res = await lettura.fetch(`${window.oloData.restUrl}styles`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (res.ok) {
       const data = await res.json();
       fullStyles.value = data.styles || {};
@@ -306,10 +309,10 @@ async function saveSettings() {
 const onSave = cfgJob(TAB_ID, saveSettings);
 const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadSettings));
 
+// Niente font caricati prima della lettura: si caricano quelli che arrivano dal
+// server (loadSettings), non i default mostrati prima (Instrument Serif, Work Sans).
 onMounted(() => {
-  ensureFontLoaded('Instrument Serif');
-  ensureFontLoaded('Work Sans');
-  loadSettings();
+  lettura.leggi();
   window.addEventListener('olo-cfg-save', onSave);
   window.addEventListener('olo-cfg-discard', onDiscard);
 });

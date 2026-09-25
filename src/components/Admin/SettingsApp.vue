@@ -149,9 +149,33 @@
           </button>
         </div>
       </div>
+      <!-- Prima lettura della scheda (useCfgLettura): finché non riesce, al posto
+           della scheda lo scheletro o il motivo con «Riprova», mai i valori scritti
+           nel codice. La scheda resta montata (v-show qui sotto). -->
+      <div v-if="!searchActive && statoScheda === 'loading'" class="cfg-tab-wait" role="status" aria-busy="true">
+        <div class="cfg-page-head"><div><h1>{{ t(currentItem?.label || '') }}</h1></div></div>
+        <div v-for="n in 2" :key="'sk-' + n" class="cfg-card">
+          <div class="cfg-card-body">
+            <span v-for="r in 4" :key="'sk-' + n + '-' + r" class="sk-line"></span>
+          </div>
+        </div>
+        <span class="screen-reader-text">{{ t('Caricamento impostazioni…') }}</span>
+      </div>
+      <div v-else-if="!searchActive && statoScheda === 'error'" class="cfg-tab-wait">
+        <div class="cfg-page-head"><div><h1>{{ t(currentItem?.label || '') }}</h1></div></div>
+        <div class="cfg-card cfg-tab-error" role="alert">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+          <div>
+            <p class="tit">{{ t('Impostazioni non caricate') }}</p>
+            <p>{{ testoErroreScheda }}</p>
+            <p class="mute">{{ t('Finché i dati non arrivano la scheda resta chiusa: niente viene mostrato né salvato al posto dei valori veri.') }}</p>
+            <button type="button" class="cfg-btn cfg-btn-secondary" @click="riprovaScheda">{{ t('Riprova') }}</button>
+          </div>
+        </div>
+      </div>
       <!-- v-show (non v-else): il KeepAlive deve restare montato durante la
            ricerca, o la cache dei tab (e le modifiche non salvate) si perde. -->
-      <div v-show="!searchActive" class="cfg-tab-host">
+      <div v-show="!searchActive && statoScheda === 'ready'" class="cfg-tab-host">
         <KeepAlive>
           <component :is="currentTabComponent" v-bind="currentTabProps" @dirty="onTabDirty" />
         </KeepAlive>
@@ -208,7 +232,7 @@
 </template>
 
 <script setup>
-import { ref, computed, provide, watch, onMounted, nextTick } from 'vue';
+import { ref, computed, provide, watch, onMounted, nextTick, shallowReactive } from 'vue';
 import { t } from '@/i18n';
 import { SETTINGS_FIELD_INDEX } from '@/config/settingsSearchIndex';
 
@@ -460,6 +484,30 @@ const currentItem    = computed(() => ALL_ITEMS.find(i => i.id === activeTab.val
 const currentTabComponent = computed(() => currentItem.value?.component || ColorsTab);
 const currentTabProps = computed(() => ({}));
 
+// ─── Prima lettura delle schede (composables/useCfgLettura.js) ──────
+// Ogni scheda che legge dal server si registra qui nel suo setup; chi non si
+// registra (Spaziature legge oloData, Permessi ha il suo stato) vale 'ready'.
+const letture = shallowReactive({});
+provide('cfgLettura', (id, api) => { letture[id] = api; });
+const letturaAttiva = computed(() => letture[activeTab.value] || null);
+const statoScheda = computed(() => (letturaAttiva.value ? letturaAttiva.value.stato.value : 'ready'));
+const testoErroreScheda = computed(() => {
+  const l = letturaAttiva.value;
+  if (!l) return '';
+  const codice = String(l.codice.value || '');
+  switch (l.motivo.value) {
+    case 'nonce':    return t('La sessione è scaduta: «Riprova» la rinnova; se non basta, ricarica la pagina.');
+    case 'permessi': return t('Il server ha rifiutato la lettura ({codice}): permessi insufficienti o un plugin di sicurezza blocca la richiesta.').replace('{codice}', codice);
+    case 'troppe':   return t('Troppe richieste in poco tempo (429): attendi qualche minuto e riprova.');
+    case 'server':   return t('Il server ha risposto con un errore ({codice}).').replace('{codice}', codice);
+    case 'rete':     return t('Nessuna risposta dal server: controlla la connessione.');
+    default:         return t('Il server ha risposto con dati non validi.');
+  }
+});
+function riprovaScheda() {
+  if (letturaAttiva.value) letturaAttiva.value.riprova();
+}
+
 // ─── Icon mapping (Lucide-style inline SVG) ─────────────────────────
 const ICONS = {
   layers:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 17 9 5 9-5"/><path d="m3 12 9 5 9-5"/></svg>',
@@ -519,10 +567,20 @@ function openField(item, entry) {
   filterQuery.value = '';
   // I tab montano subito (import statici) ma alcuni idratano async: pochi
   // tentativi distanziati, poi ci si arrende in silenzio (la scheda è comunque aperta).
+  // Finché la scheda legge i suoi dati (scheletro) si aspetta, fino a un minuto;
+  // se la lettura fallisce non c'è un campo da illuminare.
   let tries = 0;
+  let attese = 0;
   const attempt = () => {
+    if (findAndFlash(entry)) return;
+    if (statoScheda.value === 'loading' && attese < 400) {
+      attese++;
+      setTimeout(attempt, 150);
+      return;
+    }
+    if (statoScheda.value === 'error') return;
     tries++;
-    if (findAndFlash(entry) || tries >= 10) return;
+    if (tries >= 10) return;
     setTimeout(attempt, 150);
   };
   nextTick(attempt);
@@ -536,6 +594,8 @@ function findAndFlash(entry) {
   const nodes = host.querySelectorAll(selector);
   for (const node of nodes) {
     if (node.textContent.trim() !== wanted) continue;
+    // Una scheda nascosta (ancora in lettura, o un'altra nel KeepAlive) non conta.
+    if (!node.getClientRects().length) continue;
     const target = node.closest('.cfg-row') || node.closest('.cfg-card') || node;
     // Scroll SOLO del pannello contenuti (mai scrollIntoView: scrolla anche
     // gli antenati della pagina admin).
@@ -1468,4 +1528,32 @@ onMounted(() => {
 @media (prefers-reduced-motion: reduce) {
   .cfg-field-flash { animation: none; box-shadow: 0 0 0 3px rgba(245,158,11,.55); background: #fef3c7; }
 }
+
+/* ═══ Prima lettura della scheda: scheletro ed errore (useCfgLettura) ═══ */
+.cfg-tab-wait .sk-line {
+  display: block;
+  height: 12px;
+  margin: 12px 0;
+  border-radius: 6px;
+  background: var(--c-line-soft);
+  animation: cfg-sk-pulse 1.4s ease-in-out infinite;
+}
+.cfg-tab-wait .sk-line:nth-child(4n+1) { width: 90%; }
+.cfg-tab-wait .sk-line:nth-child(4n+2) { width: 70%; }
+.cfg-tab-wait .sk-line:nth-child(4n+3) { width: 80%; }
+.cfg-tab-wait .sk-line:nth-child(4n)   { width: 50%; }
+@keyframes cfg-sk-pulse { 50% { opacity: .55; } }
+@media (prefers-reduced-motion: reduce) {
+  .cfg-tab-wait .sk-line { animation: none; }
+}
+.cfg-tab-error {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 22px;
+  border-color: var(--c-red-soft-2);
+}
+.cfg-tab-error .ic { width: 22px; height: 22px; flex-shrink: 0; color: var(--c-red); margin-top: 1px; }
+.cfg-tab-error p { margin: 0 0 8px; font-size: 13.5px; line-height: 1.55; color: var(--c-text); }
+.cfg-tab-error p.tit { font-size: 15px; font-weight: 700; color: var(--c-navy); }
+.cfg-tab-error p.mute { font-size: 12.5px; color: var(--c-text-mute); margin-bottom: 14px; }
+.cfg-tab-error .cfg-btn:focus-visible { outline: 2px solid var(--c-red); outline-offset: 2px; }
 </style>
