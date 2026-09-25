@@ -138,6 +138,7 @@ import { useTilesStore, createRow, createColumn, createSection } from '@/stores/
 import { useBuilderStore } from '@/stores/builder';
 import { useDragDrop } from '@/composables/useDragDrop';
 import { columns as gridColumns, multirow, masonry, sidebar, TEMPLATES_MAP } from '@/config/gridTemplates';
+import { requestScrollToTile } from '@/utils/scrollToTileChannel';
 import { t } from '@/i18n';
 
 const tilesStore = useTilesStore();
@@ -152,6 +153,7 @@ const searchQuery = ref('');
 const searchRef = ref(null);
 const panelRef = ref(null);
 const insertAtIndex = ref(null); // section index to insert at
+const insertZone = ref('body');  // zona del «+»: 'header' | 'body' | 'footer'
 
 const tabs = [
   { key: 'module', label: 'Nuovo modulo' },
@@ -542,8 +544,13 @@ function moduleIcon(type) {
   return svg;
 }
 
-function open(sectionIndex, initialTab) {
-  insertAtIndex.value = sectionIndex != null ? sectionIndex : tilesStore.canvasTiles.length;
+// zone: la zona del «+» cliccato. Header e footer valgono solo in modalità unificata;
+// altrimenti il canvas è il template aperto (canvasTiles), anche se è un header.
+function open(sectionIndex, initialTab, zone) {
+  insertZone.value = builderStore.unifiedMode && (zone === 'header' || zone === 'footer') ? zone : 'body';
+  const arr = tilesStore.getZoneTiles(insertZone.value);
+  const n = Number.isInteger(sectionIndex) ? sectionIndex : arr.length;
+  insertAtIndex.value = Math.min(Math.max(n, 0), arr.length);
   activeTab.value = (initialTab === 'row' || initialTab === 'library') ? initialTab : 'module';
   searchQuery.value = '';
   visible.value = true;
@@ -557,17 +564,27 @@ function close() {
   visible.value = false;
 }
 
+// La sezione nuova va nella zona del «+» e alla sua posizione. L'array si legge ora e
+// non all'apertura: un annulla nel frattempo sostituisce headerTiles/footerTiles.
+// markDirtyForTile DOPO lo splice (deve trovare il nodo): segna la zona giusta e fa
+// partire l'avviso di zona condivisa, come il Finder.
+function inserisciSezione(section, selectId) {
+  const arr = tilesStore.getZoneTiles(insertZone.value);
+  const idx = Math.min(Math.max(insertAtIndex.value ?? arr.length, 0), arr.length);
+  arr.splice(idx, 0, section);
+  builderStore.markDirtyForTile(section.id);
+  builderStore.selectTile(selectId);
+  requestScrollToTile(selectId);
+  close();
+}
+
 function insertModule(tileType) {
   const newTile = createTileFromType(tileType);
   if (!newTile) return;
   const col = createColumn('1-1', [newTile]);
   const row = createRow('100', [col]);
   const section = createSection([row]);
-  const idx = insertAtIndex.value != null ? insertAtIndex.value : tilesStore.canvasTiles.length;
-  tilesStore.canvasTiles.splice(idx, 0, section);
-  builderStore.isDirty = true;
-  builderStore.selectTile(newTile.id);
-  close();
+  inserisciSezione(section, newTile.id);
 }
 
 const layoutColWidths = {
@@ -587,11 +604,7 @@ function insertRow(layoutKey) {
   const cols = widths.map(w => createColumn(w, []));
   const row = createRow(layoutKey, cols);
   const section = createSection([row]);
-  const idx = insertAtIndex.value != null ? insertAtIndex.value : tilesStore.canvasTiles.length;
-  tilesStore.canvasTiles.splice(idx, 0, section);
-  builderStore.isDirty = true;
-  builderStore.selectTile(row.id);
-  close();
+  inserisciSezione(section, row.id);
 }
 
 // Grid template categories
@@ -628,11 +641,7 @@ function insertGridRow(templateId) {
     grid_rows: tpl.gridTemplateRows,
   };
   const section = createSection([row]);
-  const idx = insertAtIndex.value != null ? insertAtIndex.value : tilesStore.canvasTiles.length;
-  tilesStore.canvasTiles.splice(idx, 0, section);
-  builderStore.isDirty = true;
-  builderStore.selectTile(row.id);
-  close();
+  inserisciSezione(section, row.id);
 }
 
 function gridPreviewSvg(tpl) {

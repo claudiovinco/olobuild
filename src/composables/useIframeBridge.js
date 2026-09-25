@@ -468,16 +468,28 @@ export function useIframeBridge(iframeRef) {
         }
         break;
 
-      case 'olo:add-section':
-        if (d.index !== undefined) {
-          const openInsertPanel = window.__oloOpenInsertPanel;
-          if (openInsertPanel) {
-            openInsertPanel(d.index);
-          } else {
-            handleDropFromSidebar('section', d.index);
-          }
+      case 'olo:add-section': {
+        // Il «+» inserisce nella sua zona. Header e footer valgono solo in modalità
+        // unificata: altrimenti il canvas è il template aperto, reso come body.
+        const zone = builderStore.unifiedMode && (d.zone === 'header' || d.zone === 'footer') ? d.zone : 'body';
+        const arr = tilesStore.getZoneTiles(zone);
+        let index = Number.isInteger(d.index) ? Math.min(Math.max(d.index, 0), arr.length) : undefined;
+        // Gli id delle sezioni accanto al «+» valgono più dell'indice del DOM, che non
+        // conta le sezioni nascoste da una condizione.
+        const posizione = (id) => (id ? arr.findIndex((n) => n && n.id === id) : -1);
+        const sotto = posizione(d.beforeId);
+        const sopra = posizione(d.afterId);
+        if (sotto >= 0) index = sotto;
+        else if (sopra >= 0) index = sopra + 1;
+        if (index === undefined) break;
+        const openInsertPanel = window.__oloOpenInsertPanel;
+        if (openInsertPanel) {
+          openInsertPanel(index, undefined, zone);
+        } else if (zone === 'body') {
+          handleDropFromSidebar('section', index);
         }
         break;
+      }
 
       case 'olo:empty-action': {
         const openInsertPanel = window.__oloOpenInsertPanel;

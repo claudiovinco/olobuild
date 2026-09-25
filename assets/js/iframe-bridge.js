@@ -870,14 +870,23 @@
 
     // Find all zones
     var zones = root.querySelectorAll('[data-olo-zone]');
-    zones.forEach(function(zone) {
+    zones.forEach(function(zone, zi) {
       var grid = zone.querySelector('.olo-frontend-grid');
       if (!grid) return;
       var sections = grid.querySelectorAll(':scope > section[data-olo-tile-id], :scope > [data-olo-tile-id]');
+      // Il «+» inserisce nella SUA zona (header, body o footer), accanto alle sezioni
+      // che ha sopra e sotto: gli id valgono più dell'indice, perché nel DOM mancano le
+      // sezioni nascoste da una condizione.
+      var zoneName = zone.getAttribute('data-olo-zone') || 'body';
 
       // "+" between each section
       for (var i = 0; i <= sections.length; i++) {
-        var btn = createAddSectionButton(i);
+        var btn = createAddSectionButton(i, zoneName, sectionIdAt(sections, i), sectionIdAt(sections, i - 1));
+        // Sul confine fra due zone i due «+» cadrebbero sulla stessa linea e ne
+        // resterebbe cliccabile uno solo: restano sulla linea, ma ognuno tiene fascia
+        // sensibile e cerchio dal lato della propria zona (iframe-builder.css).
+        if (sections.length && i === 0 && zi > 0) btn.classList.add('olo-iframe-add-btn--zone-start');
+        if (sections.length && i === sections.length && zi < zones.length - 1) btn.classList.add('olo-iframe-add-btn--zone-end');
         if (i < sections.length) {
           sections[i].parentNode.insertBefore(btn, sections[i]);
         } else {
@@ -885,8 +894,13 @@
         }
       }
 
-      // "+" between rows inside each section
-      sections.forEach(injectRowButtons);
+      // "+" between rows inside each section. Il «+» dopo l'ultima riga della sezione che
+      // chiude la zona tiene la fascia solo dal proprio lato: senza padding cade sulla
+      // linea e, nel contesto dell'header, accenderebbe il cerchio verde nel body sotto
+      // quello di sezione (iframe-builder.css).
+      sections.forEach(function(sectionEl, si) {
+        injectRowButtons(sectionEl, si === sections.length - 1 && zi < zones.length - 1);
+      });
     });
 
     // If no zones (body-only), add to the main grid
@@ -895,14 +909,15 @@
       if (grid) {
         var sections = grid.querySelectorAll(':scope > section[data-olo-tile-id]');
         for (var i = 0; i <= sections.length; i++) {
-          var btn = createAddSectionButton(i);
+          var btn = createAddSectionButton(i, 'body', sectionIdAt(sections, i), sectionIdAt(sections, i - 1));
           if (i < sections.length) {
             sections[i].parentNode.insertBefore(btn, sections[i]);
           } else {
             grid.appendChild(btn);
           }
         }
-        sections.forEach(injectRowButtons);
+        // Chiamata esplicita: forEach passerebbe l'indice come chiudeZona.
+        sections.forEach(function(sectionEl) { injectRowButtons(sectionEl); });
       }
     }
   }
@@ -910,8 +925,10 @@
   /**
    * Insert "+" buttons between top-level rows inside a given section element.
    * Top-level: rows that are NOT nested inside another row/column/inner-columns.
+   * chiudeZona: la sezione è l'ultima di header o body prima di un'altra zona (il suo
+   * ultimo «+» prende la classe --zone-end, come quello di sezione).
    */
-  function injectRowButtons(sectionEl) {
+  function injectRowButtons(sectionEl, chiudeZona) {
     var sectionId = sectionEl.getAttribute('data-olo-tile-id');
     if (!sectionId) return;
     var allRows = sectionEl.querySelectorAll('[data-olo-tile-type="row"]');
@@ -929,6 +946,7 @@
 
     for (var i = 0; i <= topRows.length; i++) {
       var btn = createAddRowButton(sectionId, i);
+      if (chiudeZona && i === topRows.length) btn.classList.add('olo-iframe-add-btn--zone-end');
       if (i < topRows.length) {
         topRows[i].parentNode.insertBefore(btn, topRows[i]);
       } else if (topRows.length > 0) {
@@ -938,16 +956,25 @@
     }
   }
 
-  function createAddSectionButton(index) {
+  // Id della sezione radice in posizione i ('' fuori dai limiti).
+  function sectionIdAt(sections, i) {
+    return (i >= 0 && i < sections.length) ? (sections[i].getAttribute('data-olo-tile-id') || '') : '';
+  }
+
+  // zone: 'header' | 'body' | 'footer'. beforeId = sezione sotto il «+», afterId =
+  // sezione sopra: il builder li cerca nell'array della zona e usa index come riserva.
+  function createAddSectionButton(index, zone, beforeId, afterId) {
+    zone = zone || 'body';
     var wrap = document.createElement('div');
     wrap.className = 'olo-iframe-add-btn olo-iframe-add-btn--section';
     wrap.setAttribute('data-index', index);
+    wrap.setAttribute('data-zone', zone);
     wrap.innerHTML = '<button class="olo-iframe-add-circle" title="Aggiungi sezione">' +
       '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="2" x2="7" y2="12"/><line x1="2" y1="7" x2="12" y2="7"/></svg>' +
       '</button>';
     wrap.querySelector('button').addEventListener('click', function(e) {
       e.stopPropagation();
-      post('olo:add-section', { index: index });
+      post('olo:add-section', { index: index, zone: zone, beforeId: beforeId || '', afterId: afterId || '' });
     });
     return wrap;
   }
@@ -1534,12 +1561,13 @@
 
       case 'olo:scroll-to':
         if (d.tileId) {
-          // Retry: dopo un inserimento il re-render del body è asincrono
-          // (~300ms debounce + fetch REST), quindi l'elemento può non esistere
-          // ancora al primo tentativo. Riprova per ~1.2s poi rinuncia.
+          // Retry: dopo un inserimento il re-render è asincrono (~300ms debounce +
+          // fetch REST; con header e footer nel canvas è il render completo),
+          // quindi l'elemento può non esistere ancora al primo tentativo.
+          // Riprova per ~3s poi rinuncia.
           (function(tileId, flash) {
             var attempts = 0;
-            var MAX = 24; // 24 × 50ms ≈ 1.2s
+            var MAX = 60; // 60 × 50ms ≈ 3s
             var tryScroll = function() {
               var scrollEl = findTileEl(tileId);
               if (scrollEl) {

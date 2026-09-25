@@ -243,6 +243,51 @@ body.olo-preview-mode .olo-zone-marker {
 .olo-iframe-add-btn:hover::before {
   opacity: 1;
 }
+/* Confine fra due zone (header/body, body/footer): l'ultimo «+» di una zona e il
+   primo della successiva cadrebbero sulla stessa linea e ne resterebbe cliccabile
+   uno solo (iframe-bridge.js, injectAddButtons). Il contenitore resta sulla linea:
+   ognuno tiene la fascia sensibile e il cerchio SOLO dal lato della propria zona.
+   Chi chiude la zona: fascia di 14 px sopra la linea, cerchio già sopra (il
+   translateY(-50%) di base). Chi la apre: fascia di 14 px sotto, cerchio sotto.
+   Spostare il contenitore allargava la fascia dentro le tile (niente clic, barra né
+   trascinamento lì) e metteva il cerchio a cavallo della linea, sotto l'header.
+   In una sezione senza padding anche i «+» di RIGA di bordo cadono sulla linea: sul
+   confine vince sempre il «+» di sezione (z-index sotto). Quello dopo l'ultima riga
+   della sezione che chiude la zona prende --zone-end (injectRowButtons): con la fascia
+   intera, nel contesto dell'header, accenderebbe il cerchio verde nei primi 14 px del
+   body, sotto il cerchio arancione che riceveva il clic. */
+.olo-iframe-add-btn--section.olo-iframe-add-btn--zone-start,
+.olo-iframe-add-btn--section.olo-iframe-add-btn--zone-end {
+  z-index: 101;
+}
+/* Il «+» acceso sta sopra gli altri «+» (dopo la regola qui sopra: stessa specificità).
+   Dove due cerchi si sovrappongono (sezione bassa, riga senza padding) il clic va al
+   cerchio che si vede, non a uno trasparente sopra di lui. */
+.olo-iframe-add-btn:hover {
+  z-index: 102;
+}
+/* Lo z-index non esce da un contesto di sovrapposizione: la prima sezione con uno
+   sfondo (immagine, video, galleria: uk-position-relative con z-index 1) chiude i suoi
+   «+» di riga sotto il «+» di sezione di inizio zona. Mentre un «+» è acceso, gli altri
+   della griglia non prendono il puntatore: il clic va sempre a quello acceso. */
+.olo-frontend-grid:has(.olo-iframe-add-btn:hover) .olo-iframe-add-btn:not(:hover)::after,
+.olo-frontend-grid:has(.olo-iframe-add-btn:hover) .olo-iframe-add-btn:not(:hover) .olo-iframe-add-circle {
+  pointer-events: none;
+}
+.olo-iframe-add-btn--zone-end::after {
+  top: -14px;
+  height: 14px;
+}
+.olo-iframe-add-btn--zone-start::after {
+  top: 0;
+  height: 14px;
+}
+.olo-iframe-add-btn--zone-start .olo-iframe-add-circle {
+  transform: translateY(50%);
+}
+.olo-iframe-add-btn--zone-start .olo-iframe-add-circle:hover {
+  transform: translateY(50%) scale(1.08);
+}
 /* Always show when it's the only element (empty page) */
 .olo-frontend-grid > .olo-iframe-add-btn:only-child {
   height: 60px;
@@ -595,6 +640,13 @@ body.olo-preview-mode .olo-iframe-toolbar {
   pointer-events: none;
   white-space: nowrap;
   z-index: 2;
+}
+/* Nell'header frontend.css nasconde le sezioni senza tile: nel canvas (anteprima
+   con header e footer dentro #olo-iframe-root) una «Nuova riga» o una griglia
+   aggiunte col «+» dell'header sparirebbero. Qui si vedono come nel body; in
+   anteprima e sul sito restano nascoste. */
+body:not(.olo-preview-mode) #olo-iframe-root header.olo-site-header .uk-section[data-olo-empty="1"][data-olo-tile-type="section"] {
+  display: flow-root !important;
 }
 /* Preview mode: niente outline né min-height forzato */
 body.olo-preview-mode [data-olo-empty="1"] {
