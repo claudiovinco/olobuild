@@ -218,6 +218,7 @@ lancia un `wp eval-file` per chiave (`WP_CLI::runcommand`, che ripete `--path`, 
 | fine riga CRLF di PHP salvati su Windows (`\r` nell'HTML e nello Style System) | `normalizza.json` «a-capo» → LF, come fa il browser; `_style-system.css` scritto con LF. Uno snapshot preso prima di una regola nuova si allinea con `php rinormalizza.php <snapshot>` (senza WordPress) |
 | pari merito di `ORDER BY` (post con la stessa data: la mappa dei servizi) | `posts_orderby` + `ID DESC` come ultimo criterio: stesse righe, ordine fisso |
 | id e credenziali a orologio dei plugin fratelli (`oa-…-<md5(uniqid())>` di olo-booking, `otfaq-<md5(microtime())>` di olo-tutor, credenziali TURN di olotour) | `normalizza.json` → `UID`, `TS`, `CRED` |
+| campi data che partono da oggi (`<input type="date" min="…">` della ricerca alloggi di olo-booking) | `normalizza.json` «data-odierna-input» → `DATA` |
 | rete (miniature YouTube/Vimeo della video tile, feed) | `pre_http_request` → errore: sempre il ripiego (miniatura hq) |
 | transient | solo in memoria (`wp_using_ext_object_cache(true)`, gruppi non persistenti) |
 | cache CSS su file (`uploads/olobuild-cache`, `<link …?v=VERSIONE>`) | `css_cache_files=false` solo nel processo del banco: il CSS di hover e dispositivo resta inline |

@@ -57,6 +57,9 @@ verifica(normalizza(crlf) === normalizza(crlf.replace(/\r\n?/g, '\n')), 'fine ri
 verifica(!normalizza(crlf).includes('\r'), 'nessun CR resta nell\'HTML normalizzato');
 verifica(normalizza(fratelli('aaaaaa', '1790290765', 'gH8DX\\/CVvXZ8wcHElkgXE6nDiTE=')) === f1, 'credenziale TURN con lo slash scritto \\/ (JSON dentro un attributo)');
 verifica(normalizza('<p class="oa-grid is-lift">oa-note-12345z</p>') === '<p class="oa-grid is-lift">oa-note-12345z</p>', 'una classe oa- senza uid esadecimale non viene toccata');
+const dataIn = (d1, d2) => `<input type="date" data-filter="checkin" min="${d1}" value="" aria-label="Check-in" /><input type="date" data-filter="checkout" min="${d2}" value="" aria-label="Check-out" />`;
+verifica(normalizza(dataIn('2026-09-24', '2026-09-25')) === normalizza(dataIn('2026-09-25', '2026-09-26')), 'campi data che partono da oggi: due giorni diversi danno lo stesso HTML');
+verifica(normalizza('<input class="opj-range" type="range" min="2000" max="50000">') === '<input class="opj-range" type="range" min="2000" max="50000">', 'un min numerico di un range non viene toccato');
 
 // ── 2. confronta.sh ──────────────────────────────────────────────────────────
 const bash = process.env.OLO_BASH || 'bash';

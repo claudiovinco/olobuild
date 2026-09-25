@@ -42,6 +42,12 @@
       "cerca": "((?:&quot;|\")credential(?:&quot;|\"):(?:&quot;|\"))[A-Za-z0-9+/\\\\]{20,90}={0,2}",
       "sostituisci": "$1CRED",
       "perche": "La credenziale TURN di olotour è un HMAC del timestamp (base64, con lo slash scritto \\/ quando è JSON dentro un attributo): cambia con lui."
+    },
+    {
+      "nome": "data-odierna-input",
+      "cerca": "(<input\\b[^>]*\\btype=\"date\"[^>]*\\bmin=\")\\d{4}-\\d{2}-\\d{2}\"",
+      "sostituisci": "$1DATA\"",
+      "perche": "I campi data dei plugin fratelli partono da oggi (olo-booking, class-acsearchresults-tile.php: min=\"$today_str\" per il check-in, domani per il check-out): cambiano a mezzanotte, non col codice."
     }
   ]
 }
