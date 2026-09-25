@@ -961,8 +961,8 @@ function updateParallaxData(newData) {
 <style scoped>
 /* ════════════════════════════════════════════════════════════════════
    Pannello Sfondo — tema CHIARO coerente (handoff "Redesign pannello Sfondo").
-   Card autosufficiente: leggibile sia nell'inspector chiaro (tile/sezione)
-   sia nel PageSettingsPanel scuro. Accento = arancio CHROME (--olo-ui-accent),
+   Card autosufficiente: leggibile nell'inspector delle tile e nelle Impostazioni
+   pagina, sulla stessa superficie chiara. Accento = arancio CHROME (--olo-ui-accent),
    contenuti = token cliente (FieldColor). Vedi commento nel <template>.
    ════════════════════════════════════════════════════════════════════ */
 .olo-bg2 {

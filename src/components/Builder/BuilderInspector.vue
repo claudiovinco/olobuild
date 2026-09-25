@@ -4,9 +4,23 @@
       v-if="selectedTile || builderStore.pageSettingsOpen"
       class="v2i-root mb-shrink-0"
     >
-      <!-- Page Settings (no tile selected): plain scroll, no rail -->
+      <!-- Page Settings (no tile selected): stessa testata (.v2i-head) e stesso corpo
+           chiaro (.v2i-content) dell'inspector delle tile, niente rail. La testata resta
+           ferma, il corpo scorre. -->
       <div v-if="builderStore.pageSettingsOpen && !selectedTile" class="v2i-page-only">
-        <div class="mb-p-4">
+        <div class="v2i-head">
+          <div class="mb-flex mb-items-center mb-justify-between">
+            <h3 class="mb-text-sm mb-font-semibold mb-text-gray-200 mb-flex-1 mb-truncate">{{ t('Impostazioni pagina') }}</h3>
+            <button
+              type="button"
+              @click="builderStore.togglePageSettings()"
+              class="v2i-close"
+              :title="t('Chiudi')"
+              :aria-label="t('Chiudi')"
+            >&times;</button>
+          </div>
+        </div>
+        <div class="v2i-content v2i-page-body">
           <PageSettingsPanel />
         </div>
       </div>
@@ -89,7 +103,7 @@
             </div>
             <button
               @click="builderStore.deselectTile()"
-              class="mb-text-gray-500 hover:mb-text-gray-300 mb-text-lg mb-px-1"
+              class="v2i-close"
               :title="t('Chiudi')"
             >&times;</button>
           </div>
@@ -3370,12 +3384,18 @@ function updateDynamicItemMap(itemMap) {
   font-size: 12px;
 }
 
-/* Page settings (no tile) — plain scrollable */
+/* Page settings (no tile): testata .v2i-head ferma + corpo .v2i-content che scorre,
+   sulla stessa superficie chiara dell'inspector delle tile (non più la colonna
+   grafite #1f2937, su cui i testi rimappati scuri da main.scss erano a 1,2:1). */
 .v2i-page-only {
   flex: 1;
-  overflow-y: auto;
-  background: #1f2937;     /* keep dark for PageSettingsPanel which is built dark */
-  color: #e5e7eb;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.v2i-page-body {
+  flex: 1;
+  min-height: 0;
 }
 
 /* HEAD (sticky) */
@@ -3386,6 +3406,26 @@ function updateDynamicItemMap(itemMap) {
   border-bottom: 1px solid #f1f5f9;
 }
 .v2i-head :deep(h3) { color: #1e293b; }
+
+/* × di chiusura delle due testate (tile e Impostazioni pagina). Classe propria: la
+   mb-text-gray-500 di prima era rimappata da main.scss a #aaa (2,2:1 sul #f9fafb). */
+.v2i-close {
+  flex-shrink: 0;
+  padding: 0 4px;
+  font-size: 18px;
+  line-height: 28px; /* come mb-text-lg di prima */
+  color: #64748b; /* 4,5:1 sul #f9fafb */
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 0.12s;
+}
+.v2i-close:hover { color: #1e293b; }
+.v2i-close:focus-visible {
+  outline: 2px solid var(--olo-ui-accent, #e8622a);
+  outline-offset: 1px;
+}
 
 /* Override dark inspector chrome inside .v2i-head */
 .v2i-head :deep(.mb-text-gray-200) { color: #1e293b !important; }

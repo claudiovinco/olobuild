@@ -19,6 +19,12 @@ export function loadScrollFlashPrefs() {
   return Object.assign({}, DEFAULTS);
 }
 
+// I predefiniti, da qui e da nessun altro posto: servono al doppio clic che
+// riporta un valore al suo default nei controlli delle preferenze.
+export function scrollFlashDefaults() {
+  return Object.assign({}, DEFAULTS);
+}
+
 export function saveScrollFlashPrefs(prefs) {
   try {
     localStorage.setItem(KEY, JSON.stringify(prefs));
