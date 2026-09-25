@@ -161,7 +161,7 @@ export const SETTINGS_FIELD_INDEX = {
 		{
 			"kind": "field",
 			"label": "Template",
-			"hint": "1-999. Più basso = vince. Default 10.",
+			"hint": "",
 			"section": ""
 		},
 		{
