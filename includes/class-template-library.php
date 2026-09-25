@@ -94,19 +94,24 @@ class Olobuild_Template_Library {
 
     /**
      * Save a section as a user template.
+     *
+     * @param string $description Descrizione breve, mostrata al passaggio del mouse nella
+     *                            libreria e usata dalla ricerca (stessa chiave dei blocchi
+     *                            di serie: preview_description). Facoltativa.
      */
-    public function save_user_template( $name, $category, $content ) {
+    public function save_user_template( $name, $category, $content, $description = '' ) {
         $templates = get_option( 'olobuild_user_templates', [] );
         if ( ! is_array( $templates ) ) $templates = [];
 
         $id = 'user-' . wp_generate_password( 8, false );
         $templates[] = [
-            'id'         => $id,
-            'name'       => sanitize_text_field( $name ),
-            'category'   => sanitize_text_field( $category ),
-            'content'    => $content,
-            'created_at' => current_time( 'mysql' ),
-            'is_user'    => true,
+            'id'                  => $id,
+            'name'                => sanitize_text_field( $name ),
+            'category'            => sanitize_text_field( $category ),
+            'preview_description' => sanitize_text_field( $description ),
+            'content'             => $content,
+            'created_at'          => current_time( 'mysql' ),
+            'is_user'             => true,
         ];
 
         update_option( 'olobuild_user_templates', $templates, false );

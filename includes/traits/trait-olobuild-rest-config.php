@@ -688,13 +688,30 @@ trait Olobuild_Rest_Config_Trait {
         $body = $request->get_json_params();
         $name     = sanitize_text_field( $body['name'] ?? '' );
         $category = sanitize_text_field( $body['category'] ?? 'custom' );
+        // Descrizione facoltativa: senza, al ricaricamento la card restava muta e la
+        // ricerca non la trovava. sanitize_text_field dà '' anche per array e oggetti.
+        $description = sanitize_text_field( $body['description'] ?? '' );
         $content  = $body['content'] ?? [];
+        if ( ! is_array( $content ) ) {
+            return new WP_Error( 'invalid_content', __( 'Dati non validi.', 'olobuild' ), [ 'status' => 400 ] );
+        }
+        // Stesso filtro kses di create_template/update_template, dei widget globali e
+        // dell'import REST: la libreria personale sta in un'option condivisa e chi la apre
+        // inserisce questi nodi nel canvas. Chi ha unfiltered_html salva come prima.
+        $content  = $this->sanitize_unfiltered_tile_fields( $content );
         if ( empty( $name ) || empty( $content ) ) {
             return new WP_Error( 'invalid', 'Nome e contenuto richiesti.', [ 'status' => 400 ] );
         }
         $lib = Olobuild_Template_Library::instance();
-        $id  = $lib->save_user_template( $name, $category, $content );
-        return rest_ensure_response( [ 'id' => $id, 'success' => true ] );
+        $id  = $lib->save_user_template( $name, $category, $content, $description );
+        // Valori SALVATI (sanificati): la lista locale del builder mostra subito ciò che
+        // mostrerà dopo il ricaricamento.
+        return rest_ensure_response( [
+            'id'                  => $id,
+            'success'             => true,
+            'name'                => $name,
+            'preview_description' => $description,
+        ] );
     }
 
     public function delete_user_template( $request ) {

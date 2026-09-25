@@ -787,6 +787,18 @@ function getSvgElements(tpl) {
   return els;
 }
 
+// Nome e descrizione passano dal sanitize_text_field del PHP, che salva un «<» che non
+// apre un tag come «&lt;» (e da lì in poi & e virgolette come entità): «Prezzi < 10»
+// si leggeva «Prezzi &lt; 10» e la ricerca con «<» non lo trovava. Si rileggono come
+// sono stati scritti; l'interpolazione di Vue fa l'escape. Caso limite: un'entità scritta
+// alla lettera («R&amp;D») si legge decodificata («R&D»). Solo lettura: il dato resta com'è.
+function testoLeggibile(v) {
+  return String(v ?? '')
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"').replace(/&#0?39;/g, "'")
+    .replace(/&amp;/g, '&');
+}
+
 async function fetchTemplates() {
   loading.value = true;
   try {
@@ -794,7 +806,14 @@ async function fetchTemplates() {
       headers: { 'X-WP-Nonce': oloData.nonce },
     });
     if (res.ok) {
-      templates.value = await res.json();
+      const lista = await res.json();
+      templates.value = Array.isArray(lista)
+        ? lista.map((tpl) => ({
+            ...tpl,
+            name: testoLeggibile(tpl.name),
+            preview_description: testoLeggibile(tpl.preview_description),
+          }))
+        : [];
     }
   } catch (err) {
     console.error('fetchTemplates error:', err);
@@ -963,22 +982,29 @@ async function doSave() {
       body: JSON.stringify({
         name: saveName.value.trim(),
         category: saveCategory.value,
+        description: saveDescription.value.trim(),
         content: content,
       }),
     });
     if (!res.ok) throw new Error('Save failed');
     const result = await res.json();
+    // Lista non ancora scaricata (salvataggio dal menu prima di aprire la libreria):
+    // una voce sola la renderebbe «già caricata» e open() mostrerebbe solo quella.
+    const listaCaricata = templates.value.length > 0;
     toast.success(t('Template salvato!'));
     closeSaveDialog();
-    // Add to local list
-    templates.value.push({
-      id: result.id,
-      name: saveName.value.trim(),
-      category: saveCategory.value,
-      preview_description: saveDescription.value,
-      is_user: true,
-      content: content,
-    });
+    // Add to local list, coi valori salvati dal server (sanificati) quando li dà, letti
+    // come in fetchTemplates(): subito ciò che si vedrà dopo il ricaricamento.
+    if (listaCaricata) {
+      templates.value.push({
+        id: result.id,
+        name: testoLeggibile(result.name ?? saveName.value.trim()),
+        category: saveCategory.value,
+        preview_description: testoLeggibile(result.preview_description ?? saveDescription.value.trim()),
+        is_user: true,
+        content: content,
+      });
+    }
   } catch (err) {
     console.error('doSave error:', err);
     toast.error(t('Errore nel salvataggio del template'));
