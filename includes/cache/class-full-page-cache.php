@@ -63,6 +63,11 @@ class Olobuild_FullPage_Cache {
             add_action( 'update_option_' . $opt, [ __CLASS__, 'purge_all' ] );
             add_action( 'add_option_' . $opt, [ __CLASS__, 'purge_all' ] );
         }
+        // Regole di Assegnazione template: decidono header e footer di ogni pagina, e
+        // una regola salvata si vedeva da anonimi solo alla scadenza della cache.
+        // La prima regola è un add_option.
+        add_action( 'update_option_olobuild_template_conditions', [ __CLASS__, 'purge_all' ] );
+        add_action( 'add_option_olobuild_template_conditions', [ __CLASS__, 'purge_all' ] );
         // Banner cookie acceso/spento, blocco script e iframe: le pagine in cache li
         // hanno già scritti. Il primo salvataggio dei cookie è un add_option.
         add_action( 'add_option_olobuild_cookie_settings', [ __CLASS__, 'purge_all' ] );

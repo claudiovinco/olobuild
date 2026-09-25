@@ -29,9 +29,10 @@ class Olobuild_Template_Conditions {
         // (terzo argomento facoltativo: la pagina su cui valutarle, vedi resolve_zone()).
         add_filter( 'olobuild_resolve_template_id', [ $this, 'resolve_by_conditions' ], 10, 3 );
 
-        // Admin UI: pagina dedicata sotto Olobuild
+        // Admin UI: la pagina storica è ritirata (vedi register_admin_page()); il suo
+        // salvataggio non è più agganciato: riscriveva l'option con una sola condizione,
+        // senza esclusioni e in AND, e bastava edit_others_posts.
         add_action( 'admin_menu', [ $this, 'register_admin_page' ], 30 );
-        add_action( 'admin_post_olo_save_template_conditions', [ $this, 'handle_admin_save' ] );
     }
 
     /* ─────────────────────────────────────────────
@@ -180,13 +181,25 @@ class Olobuild_Template_Conditions {
                 break;
 
             case 'page':
-                $result = empty( $value ) || $value === 'all' ? is_page() : is_page( intval( $value ) );
+                if ( empty( $value ) || $value === 'all' ) {
+                    $result = is_page();
+                } elseif ( is_numeric( $value ) ) {
+                    $result = is_page( intval( $value ) );
+                } else {
+                    $result = is_page( self::candidati( $value ) );
+                }
                 break;
 
             case 'post':
-                $result = empty( $value ) || $value === 'all'
-                    ? is_singular( 'post' )
-                    : ( is_singular( 'post' ) && get_the_ID() === intval( $value ) );
+                if ( empty( $value ) || $value === 'all' ) {
+                    $result = is_singular( 'post' );
+                } elseif ( is_numeric( $value ) ) {
+                    $result = is_singular( 'post' ) && get_the_ID() === intval( $value );
+                } else {
+                    // is_single() vale per ogni tipo che non sia pagina o allegato: la
+                    // regola «post» resta sugli articoli, come con l'ID.
+                    $result = is_singular( 'post' ) && is_single( self::candidati( $value ) );
+                }
                 break;
 
             case 'post_type':
@@ -201,9 +214,9 @@ class Olobuild_Template_Conditions {
 
             case 'category':
                 if ( is_singular() ) {
-                    $result = has_category( $value ? intval( $value ) : null );
+                    $result = has_category( self::rif_categoria( $value ) );
                 } else {
-                    $result = is_category( $value ? intval( $value ) : null );
+                    $result = is_category( self::rif_categoria( $value ) );
                 }
                 break;
 
@@ -318,18 +331,35 @@ class Olobuild_Template_Conditions {
                     && (int) get_option( 'page_on_front' ) === $post_id;
 
             case 'page':
-                // is_page( 0 ) vale per qualunque pagina: stesso esito per un ID non numerico.
-                $page_id = intval( $value );
-                return 'page' === $post_type
-                    && ( empty( $value ) || 'all' === $value || 0 === $page_id || $page_id === $post_id );
+                if ( 'page' !== $post_type ) {
+                    return false;
+                }
+                if ( empty( $value ) || 'all' === $value ) {
+                    return true;
+                }
+                if ( is_numeric( $value ) ) {
+                    // Come is_page( 0 ) sul sito: un numero che vale 0 è «qualunque pagina».
+                    $page_id = intval( $value );
+                    return 0 === $page_id || $page_id === $post_id;
+                }
+                return self::post_corrisponde( $post_id, self::candidati( $value ) );
 
             case 'post':
-                return 'post' === $post_type
-                    && ( empty( $value ) || 'all' === $value || intval( $value ) === $post_id );
+                if ( 'post' !== $post_type ) {
+                    return false;
+                }
+                if ( empty( $value ) || 'all' === $value ) {
+                    return true;
+                }
+                if ( is_numeric( $value ) ) {
+                    return intval( $value ) === $post_id;
+                }
+                return self::post_corrisponde( $post_id, self::candidati( $value ) );
 
             case 'post_type':
+                // Come is_singular( '0' ) sul sito: un valore vuoto per empty() è «qualsiasi tipo».
                 $wanted = sanitize_text_field( $value );
-                return '' === $wanted || $post_type === $wanted;
+                return empty( $wanted ) || $post_type === $wanted;
 
             case 'archive':
             case '404':
@@ -337,7 +367,7 @@ class Olobuild_Template_Conditions {
                 return false;
 
             case 'category':
-                return (bool) has_category( $value ? intval( $value ) : null, $post_id );
+                return (bool) has_category( self::rif_categoria( $value ), $post_id );
 
             case 'tag':
                 return (bool) has_tag( sanitize_text_field( $value ), $post_id );
@@ -377,6 +407,82 @@ class Olobuild_Template_Conditions {
         return null;
     }
 
+    /**
+     * Il bersaglio di una condizione page / post / category scritta come testo:
+     * il testo così com'è (slug, titolo o percorso «genitore/figlio», che
+     * is_page(), is_single(), has_category() e is_category() del core confrontano
+     * da sé) più il numero con cui comincia, se ce n'è uno.
+     *
+     * Prima il testo passava da intval(): uno slug valeva 0, che per il core è
+     * «qualunque» (page: tutte le pagine; category: ogni articolo con una
+     * categoria e ogni archivio di categoria) o «nessuno» (post). Il numero in
+     * testa ('12-chi-siamo' → 12) tiene le corrispondenze che intval() dava già.
+     * I valori numerici non passano di qui: restano ID, come sempre.
+     *
+     * @param mixed $value
+     * @return array
+     */
+    private static function candidati( $value ) {
+        $testo = is_scalar( $value ) ? trim( (string) $value ) : '';
+        $voci  = [ $testo ];
+        $id    = intval( $testo );
+        if ( $id > 0 ) {
+            $voci[] = $id;
+        }
+        return $voci;
+    }
+
+    /**
+     * Argomento di has_category() / is_category() per una condizione category:
+     * null = qualsiasi categoria (valore vuoto, '0' o 'all', come prima), un numero
+     * = ID come prima, un testo = slug o nome (vedi candidati()).
+     *
+     * @param mixed $value
+     * @return int|array|null
+     */
+    private static function rif_categoria( $value ) {
+        if ( empty( $value ) || 'all' === $value ) {
+            return null;
+        }
+        if ( is_numeric( $value ) ) {
+            return intval( $value );
+        }
+        return self::candidati( $value );
+    }
+
+    /**
+     * Gemello di is_page() / is_single() del core per il builder, su un post dato
+     * invece che sulla richiesta corrente: corrisponde se un candidato è il suo ID,
+     * il suo titolo, il suo slug o il suo percorso («genitore/figlio»).
+     *
+     * @param int   $post_id
+     * @param array $candidati
+     * @return bool
+     */
+    private static function post_corrisponde( $post_id, $candidati ) {
+        $post = get_post( $post_id );
+        if ( ! $post ) {
+            return false;
+        }
+        $voci = array_map( 'strval', (array) $candidati );
+        if ( in_array( (string) $post->ID, $voci, true )
+            || in_array( (string) $post->post_title, $voci, true )
+            || in_array( (string) $post->post_name, $voci, true ) ) {
+            return true;
+        }
+        foreach ( $voci as $percorso ) {
+            // Come il core: un percorso ha una «/» dopo il primo carattere.
+            if ( ! strpos( $percorso, '/' ) ) {
+                continue;
+            }
+            $trovato = get_page_by_path( $percorso, OBJECT, $post->post_type );
+            if ( $trovato && (int) $trovato->ID === (int) $post->ID ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /* ─────────────────────────────────────────────
      * REST API
      * ───────────────────────────────────────────── */
@@ -407,6 +513,364 @@ class Olobuild_Template_Conditions {
                 },
             ],
         ] );
+
+        // Voci dei menu del «Valore» in Assegnazione template (TemplateConditionsTab):
+        // gli stessi valori che il valutatore legge (ID per page, post e category;
+        // slug per tag, o l'ID se lo slug ha ottetti %xx; slug per tipi e ruoli).
+        // Sulla radice REST del plugin: /wp/v2 non elenca i ruoli, né i tipi senza
+        // show_in_rest, né le bozze.
+        register_rest_route( 'olobuild/v1', '/template-conditions/choices', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'get_choices' ],
+            'permission_callback' => function () {
+                return current_user_can( 'manage_options' );
+            },
+            'args'                => [
+                'kind'    => [ 'type' => 'string', 'required' => true ],
+                'search'  => [ 'type' => 'string', 'default' => '' ],
+                'include' => [ 'type' => 'string', 'default' => '' ],
+            ],
+        ] );
+    }
+
+    /** Voci restituite per una ricerca (pagine, articoli, categorie, tag). */
+    const LIMITE_SCELTE = 50;
+
+    /**
+     * GET template-conditions/choices?kind=page|post|category|tag|post_type|archive|role
+     * &search=<testo> — le voci [{ value, label }] per il menu del valore.
+     * &include=<valore salvato> — una sola voce, con value uguale al valore salvato
+     * e per label ciò che quel valore indica sul sito, trovato col confronto esatto
+     * del valutatore (vedi scelta_post / scelta_termine; più voci separate da « / »);
+     * nessuna voce se non indica niente. Il menu mostra il titolo senza riscrivere il
+     * valore.
+     */
+    public function get_choices( $request ) {
+        $kind    = sanitize_key( (string) $request->get_param( 'kind' ) );
+        $search  = sanitize_text_field( (string) $request->get_param( 'search' ) );
+        $include = sanitize_text_field( (string) $request->get_param( 'include' ) );
+
+        switch ( $kind ) {
+            case 'page':
+            case 'post':
+                $items = '' !== $include ? self::scelta_post( $kind, $include ) : self::scelte_post( $kind, $search );
+                break;
+            case 'category':
+            case 'tag':
+                $tax   = 'category' === $kind ? 'category' : 'post_tag';
+                $items = '' !== $include ? self::scelta_termine( $tax, $include ) : self::scelte_termini( $tax, $search );
+                break;
+            case 'post_type':
+            case 'archive':
+                $items = self::scelte_tipi( 'archive' === $kind );
+                break;
+            case 'role':
+                $items = self::scelte_ruoli();
+                break;
+            default:
+                return new WP_Error( 'rest_invalid_param', __( 'Tipo di scelta non valido.', 'olobuild' ), [ 'status' => 400 ] );
+        }
+
+        return rest_ensure_response( [ 'items' => $items ] );
+    }
+
+    /** Stati in cui una pagina o un articolo si possono scegliere (una regola può precederne la pubblicazione). */
+    private static function stati_sceglibili() {
+        return [ 'publish', 'future', 'draft', 'pending', 'private' ];
+    }
+
+    private static function testo_semplice( $s ) {
+        return trim( html_entity_decode( wp_strip_all_tags( (string) $s ), ENT_QUOTES, 'UTF-8' ) );
+    }
+
+    private static function voce_post( $p ) {
+        $title = self::testo_semplice( $p->post_title );
+        if ( '' === $title ) {
+            /* translators: %d: ID della pagina o dell'articolo */
+            $title = sprintf( __( 'Senza titolo #%d', 'olobuild' ), (int) $p->ID );
+        }
+        if ( 'publish' !== $p->post_status ) {
+            $stato = get_post_status_object( $p->post_status );
+            if ( $stato && ! empty( $stato->label ) ) {
+                $title .= ' · ' . $stato->label;
+            }
+        }
+        return [ 'value' => (string) $p->ID, 'label' => $title ];
+    }
+
+    private static function scelte_post( $post_type, $search ) {
+        $args = [
+            'post_type'           => $post_type,
+            'post_status'         => self::stati_sceglibili(),
+            'posts_per_page'      => self::LIMITE_SCELTE,
+            'no_found_rows'       => true,
+            'ignore_sticky_posts' => true,
+        ];
+        if ( '' !== $search ) {
+            $args['s']       = $search;
+            $args['orderby'] = 'relevance';
+        } elseif ( 'page' === $post_type ) {
+            $args['orderby'] = 'title';
+            $args['order']   = 'ASC';
+        } else {
+            $args['orderby'] = 'date';
+            $args['order']   = 'DESC';
+        }
+
+        $items = [];
+        // Un numero cercato è anche un ID.
+        if ( '' !== $search && is_numeric( $search ) && intval( $search ) > 0 ) {
+            $by_id = get_post( intval( $search ) );
+            if ( $by_id && $post_type === $by_id->post_type && in_array( $by_id->post_status, self::stati_sceglibili(), true ) ) {
+                $items[ (int) $by_id->ID ] = self::voce_post( $by_id );
+            }
+        }
+        foreach ( get_posts( $args ) as $p ) {
+            if ( ! isset( $items[ (int) $p->ID ] ) ) {
+                $items[ (int) $p->ID ] = self::voce_post( $p );
+            }
+        }
+        return array_values( $items );
+    }
+
+    /** Titoli nominati al massimo nell'etichetta di un valore che indica più voci. */
+    const LIMITE_CORRISPONDENZE = 5;
+
+    /**
+     * La voce di un valore salvato: value = il valore così com'è (il menu non lo
+     * riscrive), label = ciò che indica; più voci separate da « / ».
+     *
+     * @param mixed $value
+     * @param array $etichette
+     * @return array
+     */
+    private static function voce_valore( $value, $etichette ) {
+        $mostrate = array_slice( $etichette, 0, self::LIMITE_CORRISPONDENZE );
+        $label    = implode( ' / ', $mostrate );
+        $altre    = count( $etichette ) - count( $mostrate );
+        if ( $altre > 0 ) {
+            /* translators: %d: quante altre voci indica il valore */
+            $label .= ' ' . sprintf( _n( '+ %d altra', '+ altre %d', $altre, 'olobuild' ), $altre );
+        }
+        return [ 'value' => (string) $value, 'label' => $label ];
+    }
+
+    /**
+     * Ciò che il valore salvato indica sul sito, con lo STESSO confronto del
+     * valutatore: is_page() / is_single() del core, di cui post_corrisponde() è il
+     * gemello (ID, titolo e slug uguali alla lettera; percorso solo con una «/» dopo
+     * il primo carattere). Le query qui sotto sono più larghe (lo slug passa da
+     * sanitize_title_for_query, il titolo dalla collation, che ignora maiuscole e
+     * accenti): raccolgono i candidati, e resta solo ciò che il confronto esatto
+     * accetta. Così 'chi siamo', 'Chi-Siamo' o '/chi-siamo/' risultano «non trovato»,
+     * come sul sito, e 'team' trova anche la pagina figlia con quello slug. Un testo
+     * può indicare più voci (l'ID in testa e uno slug, due pagine figlie con lo
+     * stesso slug): la regola vale per tutte e l'etichetta ne nomina fino a
+     * LIMITE_CORRISPONDENZE, poi «+ N altre» (voce_valore).
+     */
+    private static function scelta_post( $post_type, $value ) {
+        $trovati = [];
+        if ( is_numeric( $value ) ) {
+            $p = intval( $value ) > 0 ? get_post( intval( $value ) ) : null;
+            if ( $p && $post_type === $p->post_type ) {
+                $trovati[] = $p;
+            }
+        } else {
+            $voci     = self::candidati( $value );
+            $testo    = $voci[0];
+            $raccolti = [];
+            // Il numero in testa ('12-chi-siamo' → 12): l'ID che intval() dava già.
+            if ( isset( $voci[1] ) ) {
+                $p = get_post( $voci[1] );
+                if ( $p ) {
+                    $raccolti[ (int) $p->ID ] = $p;
+                }
+            }
+            // Slug con qualsiasi genitore, poi titolo.
+            foreach ( [ 'post_name__in' => [ $testo ], 'title' => $testo ] as $campo => $cerca ) {
+                $args = [
+                    'post_type'      => $post_type,
+                    'post_status'    => self::stati_sceglibili(),
+                    'posts_per_page' => 20,
+                    'no_found_rows'  => true,
+                    'orderby'        => 'ID',
+                    'order'          => 'ASC',
+                ];
+                $args[ $campo ] = $cerca;
+                foreach ( get_posts( $args ) as $p ) {
+                    $raccolti[ (int) $p->ID ] = $p;
+                }
+            }
+            if ( strpos( $testo, '/' ) ) {
+                $p = get_page_by_path( $testo, OBJECT, $post_type );
+                if ( $p ) {
+                    $raccolti[ (int) $p->ID ] = $p;
+                }
+            }
+            foreach ( $raccolti as $p ) {
+                if ( $post_type === $p->post_type && self::post_corrisponde( (int) $p->ID, $voci ) ) {
+                    $trovati[] = $p;
+                }
+            }
+        }
+        if ( ! $trovati ) {
+            return [];
+        }
+        $etichette = [];
+        foreach ( $trovati as $p ) {
+            $voce        = self::voce_post( $p );
+            $etichette[] = $voce['label'];
+        }
+        return [ self::voce_valore( $value, $etichette ) ];
+    }
+
+    /**
+     * Il valore che il menu salva: l'ID per le categorie; per i tag lo slug, salvo
+     * gli slug con ottetti %xx (tag in cirillico, greco, CJK, emoji: remove_accents
+     * non li traslittera). Il salvataggio e il valutatore passano il valore da
+     * sanitize_text_field(), che toglie ogni %xx: uno slug tutto codificato diventava
+     * '', cioè «qualsiasi tag». Per quei tag si salva l'ID come stringa: has_tag() e
+     * is_tag() confrontano una stringa numerica con term_id.
+     */
+    private static function voce_termine( $term, $taxonomy ) {
+        $slug = (string) $term->slug;
+        if ( 'category' === $taxonomy || false !== strpos( $slug, '%' ) ) {
+            $value = (string) $term->term_id;
+        } else {
+            $value = $slug;
+        }
+        return [
+            'value' => $value,
+            'label' => self::testo_semplice( $term->name ),
+        ];
+    }
+
+    private static function scelte_termini( $taxonomy, $search ) {
+        $args = [
+            'taxonomy'   => $taxonomy,
+            'hide_empty' => false,
+            'number'     => self::LIMITE_SCELTE,
+            'orderby'    => 'name',
+            'order'      => 'ASC',
+        ];
+        if ( '' !== $search ) {
+            $args['search'] = $search;
+        }
+        $terms = get_terms( $args );
+        if ( is_wp_error( $terms ) || ! is_array( $terms ) ) {
+            return [];
+        }
+        $items = [];
+        foreach ( $terms as $term ) {
+            if ( is_object( $term ) ) {
+                $items[] = self::voce_termine( $term, $taxonomy );
+            }
+        }
+        return $items;
+    }
+
+    /**
+     * La categoria o il tag che il valore salvato indica sul sito, con lo STESSO
+     * confronto del valutatore: category passa da rif_categoria() (un numero è un
+     * ID; un testo è testo + numero in testa), tag va a has_tag() / is_tag() così
+     * com'è. get_terms() per slug normalizza e per nome ignora maiuscole e accenti
+     * (collation): raccoglie i candidati, e resta solo ciò che termine_corrisponde()
+     * accetta. Più voci: l'etichetta ne nomina fino a LIMITE_CORRISPONDENZE, poi
+     * «+ N altre» (voce_valore); nessuna: [].
+     */
+    private static function scelta_termine( $taxonomy, $value ) {
+        if ( 'category' === $taxonomy ) {
+            $voci = is_numeric( $value ) ? [ intval( $value ) ] : self::candidati( $value );
+        } else {
+            $voci = [ trim( (string) $value ) ];
+        }
+        $raccolti = [];
+        foreach ( $voci as $voce ) {
+            if ( ( is_int( $voce ) || is_numeric( $voce ) ) && intval( $voce ) > 0 ) {
+                $term = get_term( intval( $voce ), $taxonomy );
+                if ( $term && ! is_wp_error( $term ) ) {
+                    $raccolti[ (int) $term->term_id ] = $term;
+                }
+            }
+            if ( is_int( $voce ) || '' === $voce ) {
+                continue;
+            }
+            foreach ( [ 'slug', 'name' ] as $campo ) {
+                $terms = get_terms( [
+                    'taxonomy'               => $taxonomy,
+                    'hide_empty'             => false,
+                    'number'                 => 20,
+                    'update_term_meta_cache' => false,
+                    $campo                   => $voce,
+                ] );
+                if ( ! is_array( $terms ) ) {
+                    continue;
+                }
+                foreach ( $terms as $term ) {
+                    if ( is_object( $term ) ) {
+                        $raccolti[ (int) $term->term_id ] = $term;
+                    }
+                }
+            }
+        }
+        $etichette = [];
+        foreach ( $raccolti as $term ) {
+            if ( self::termine_corrisponde( $term, $voci ) ) {
+                $etichette[] = self::testo_semplice( $term->name );
+            }
+        }
+        return $etichette ? [ self::voce_valore( $value, $etichette ) ] : [];
+    }
+
+    /**
+     * Gemello di is_object_in_term() (has_category / has_tag) del core: un intero
+     * è un ID; una stringa numerica vale come ID, e come ogni stringa è confrontata
+     * alla lettera con nome e slug. is_category() (archivi) fa lo stesso, salvo un
+     * caso limite: rende stringa anche l'intero, e is_category( 12 ) accetta pure
+     * una categoria che abbia nome o slug «12».
+     *
+     * @param WP_Term $term
+     * @param array   $voci
+     * @return bool
+     */
+    private static function termine_corrisponde( $term, $voci ) {
+        foreach ( $voci as $voce ) {
+            if ( ( is_int( $voce ) || is_numeric( $voce ) ) && (int) $term->term_id === intval( $voce ) ) {
+                return true;
+            }
+            if ( is_int( $voce ) ) {
+                continue;
+            }
+            $s = (string) $voce;
+            if ( (string) $term->name === $s || (string) $term->slug === $s ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Tipi di contenuto pubblici (per gli archivi: solo quelli che ne hanno uno). */
+    private static function scelte_tipi( $solo_con_archivio ) {
+        $items = [];
+        foreach ( get_post_types( [ 'public' => true ], 'objects' ) as $slug => $obj ) {
+            if ( $solo_con_archivio && empty( $obj->has_archive ) ) {
+                continue;
+            }
+            $nome    = $solo_con_archivio ? $obj->labels->name : $obj->labels->singular_name;
+            $items[] = [
+                'value' => (string) $slug,
+                'label' => self::testo_semplice( $nome ) . ' (' . $slug . ')',
+            ];
+        }
+        return $items;
+    }
+
+    private static function scelte_ruoli() {
+        $items = [];
+        foreach ( wp_roles()->get_names() as $slug => $name ) {
+            $items[] = [ 'value' => (string) $slug, 'label' => translate_user_role( $name ) ];
+        }
+        return $items;
     }
 
     public function get_conditions( $request ) {
@@ -461,14 +925,11 @@ class Olobuild_Template_Conditions {
      * ───────────────────────────────────────────── */
 
     public function register_admin_page() {
-        add_submenu_page(
-            'admin.php?page=olobuild',
-            __( 'Regole di visualizzazione', 'olobuild' ),
-            __( 'Regole di visualizzazione', 'olobuild' ),
-            'edit_others_posts',
-            'olobuilder-template-rules',
-            [ $this, 'render_admin_page' ]
-        );
+        // Pagina migrata in ?page=olobuilder-settings&tab=tplconditions (Assegnazione
+        // template). La vecchia «Regole di visualizzazione» (olobuilder-template-rules)
+        // salvava una sola condizione per regola, senza esclusioni e in AND:
+        // salvandola si perdevano le condizioni impostate dalla Configurazione.
+        // render_admin_page() e handle_admin_save() restano, non più agganciati.
     }
 
     public function render_admin_page() {

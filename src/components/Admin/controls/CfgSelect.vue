@@ -51,7 +51,9 @@
             <span class="csel-item-label">{{ opt.label }}</span>
             <svg v-if="isSelected(opt)" class="csel-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
           </button>
-          <div v-if="noMatch" class="csel-empty">{{ t('Nessun risultato') }}</div>
+          <div v-if="remoteSearch && remoteState === 'loading'" class="csel-empty" role="status">{{ t('Ricerca…') }}</div>
+          <div v-else-if="remoteSearch && remoteState === 'error'" class="csel-empty" role="alert">{{ t('Ricerca non riuscita: scrivi di nuovo o riapri il menu.') }}</div>
+          <div v-else-if="noMatch" class="csel-empty">{{ t('Nessun risultato') }}</div>
         </div>
       </div>
     </Teleport>
@@ -74,10 +76,15 @@ const props = defineProps({
   // Campo di ricerca in testa al menu quando le voci sono più di SEARCH_MIN
   // (es. i template). Spento di serie: gli altri menu restano come sono.
   searchable: { type: Boolean, default: false },
+  // Ricerca sul server, facoltativa: async (testo) => [{ value, label }]. Chiamata
+  // all'apertura (testo '') e a ogni ricerca; i risultati seguono le voci di
+  // `options` (la voce vuota e quella scelta), senza doppioni. Senza, come prima.
+  remoteSearch: { type: Function, default: null },
 });
 const emit = defineEmits(['update:modelValue']);
 
 const SEARCH_MIN = 12;
+const REMOTE_DELAY = 250;
 
 const open = ref(false);
 const highlight = ref(-1);
@@ -89,7 +96,12 @@ const popStyle = ref({});
 const query = ref('');
 let openUp = false;
 
-const showSearch = computed(() => props.searchable && props.options.length > SEARCH_MIN);
+const remote = ref([]);          // voci della ricerca sul server
+const remoteState = ref('idle'); // 'idle' | 'loading' | 'ready' | 'error'
+let remoteSeq = 0;
+let remoteTimer = null;
+
+const showSearch = computed(() => !!props.remoteSearch || (props.searchable && props.options.length > SEARCH_MIN));
 // Confronto senza maiuscole né accenti («perché» trova «Perche»).
 function fold(s) {
   return String(s ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
@@ -100,12 +112,49 @@ function isEmptyValue(v) {
 }
 const filtered = computed(() => {
   const q = fold(query.value).trim();
-  if (!showSearch.value || !q) return props.options;
-  return props.options.filter((o, i) => (i === 0 && isEmptyValue(o.value)) || fold(o.label).includes(q));
+  const base = (!showSearch.value || !q)
+    ? props.options
+    : props.options.filter((o, i) => (i === 0 && isEmptyValue(o.value)) || fold(o.label).includes(q));
+  if (!props.remoteSearch) return base;
+  const seen = new Set(base.map(o => String(o.value)));
+  return base.concat(remote.value.filter(o => !seen.has(String(o.value))));
 });
 const noMatch = computed(() =>
   showSearch.value && fold(query.value).trim() !== '' && !filtered.value.some(o => !isEmptyValue(o.value))
 );
+
+// Una risposta superata da una ricerca più recente (o dalla chiusura) si scarta.
+function runRemote(q) {
+  clearTimeout(remoteTimer);
+  const mine = ++remoteSeq;
+  remoteState.value = 'loading';
+  Promise.resolve()
+    .then(() => props.remoteSearch(q))
+    .then((items) => {
+      if (mine !== remoteSeq) return;
+      remote.value = Array.isArray(items) ? items : [];
+      remoteState.value = 'ready';
+      if (fold(query.value).trim()) {
+        const first = filtered.value.findIndex(o => !isEmptyValue(o.value));
+        highlight.value = first >= 0 ? first : -1;
+      }
+    })
+    .catch(() => {
+      if (mine !== remoteSeq) return;
+      remote.value = [];
+      remoteState.value = 'error';
+    })
+    .then(() => {
+      if (mine === remoteSeq && open.value) nextTick(() => position(true));
+    });
+}
+
+function stopRemote() {
+  clearTimeout(remoteTimer);
+  remoteSeq++;
+  remote.value = [];
+  remoteState.value = 'idle';
+}
 
 const sizeClass = computed(() => (props.size ? `cfg-w-${props.size}` : ''));
 const selectedOption = computed(() =>
@@ -125,6 +174,7 @@ function toggle() {
 async function openPop() {
   open.value = true;
   highlight.value = Math.max(0, props.options.findIndex(o => isSelected(o)));
+  if (props.remoteSearch) runRemote('');
   await nextTick();
   position();
   popEl.value?.focus?.();
@@ -144,6 +194,7 @@ function close(refocus = true) {
   if (!open.value) return;
   open.value = false;
   query.value = '';
+  if (props.remoteSearch) stopRemote();
   if (refocus) rootEl.value?.querySelector('.csel-trigger')?.focus();
 }
 
@@ -153,6 +204,14 @@ function close(refocus = true) {
 // e azzerare la scelta (resta sceglibile con le frecce o col clic).
 watch(query, (q) => {
   if (!open.value) return;
+  if (props.remoteSearch) {
+    // I risultati della ricerca precedente non valgono per questa: via subito.
+    clearTimeout(remoteTimer);
+    remoteSeq++;
+    remote.value = [];
+    remoteState.value = 'loading';
+    remoteTimer = setTimeout(() => runRemote(String(q ?? '').trim()), REMOTE_DELAY);
+  }
   const list = filtered.value;
   if (fold(q).trim()) {
     const first = list.findIndex(o => !isEmptyValue(o.value));
@@ -226,7 +285,7 @@ function onPopKeydown(e) {
   }
 }
 
-onBeforeUnmount(() => close(false));
+onBeforeUnmount(() => { close(false); clearTimeout(remoteTimer); });
 </script>
 
 <style scoped>
