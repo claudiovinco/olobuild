@@ -13,6 +13,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 trait Olobuild_Renderer_Structure_Trait {
     /**
+     * Una voce per ogni riga a griglia in corso di render (righe annidate): true se
+     * le sue colonne devono portare la classe olo-gc-* della «Larghezza responsive».
+     *
+     * @var bool[]
+     */
+    private $griglia_pila = [];
+
+    /**
      * Render a Section container using UIkit classes.
      */
     private function render_section_node( $node, $manager, $template_id, &$hover_css_rules, &$tile_counter ) {
@@ -718,12 +726,26 @@ trait Olobuild_Renderer_Structure_Trait {
             $grid_extra_attrs = $needs_wrapper ? '' : $row_fx_attrs;
             $grid_class_list = [];
             if ( $stack ) $grid_class_list[] = 'olo-grid-stack';
+            // «Larghezza responsive» delle colonne (grid_width_*): con almeno una
+            // larghezza la classe olo-g-* va sul div PRIMA di stamparlo (il
+            // preg_replace del Load More cerca questo stesso attributo). Senza
+            // larghezze $grid_colonne e' vuoto e la riga resta quella di sempre.
+            $grid_id      = '';
+            $grid_colonne = $this->griglia_colonne_con_larghezze( $node, ! empty( $s['loop_enabled'] ) );
+            if ( $grid_colonne ) {
+                $grid_id = 'olo-g-' . substr( md5( $node['id'] ?? wp_rand() ), 0, 6 );
+                $grid_class_list[] = $grid_id;
+            }
             $grid_class_attr = ! empty( $grid_class_list ) ? ' class="' . esc_attr( implode( ' ', $grid_class_list ) ) . '"' : '';
             $html .= '<div' . $grid_class_attr . ' style="' . esc_attr( implode( '; ', $grid_css_parts ) ) . '"' . $grid_extra_attrs . '>';
 
             // Loop mode: repeat children for each post from WP_Query
             $loop_enabled = ! empty( $s['loop_enabled'] );
             $loop_pagination_html = '';
+            // Le colonne di QUESTA riga prendono la classe olo-gc-* (pila: una riga
+            // a griglia dentro una colonna ha la sua). In loop no: le copie hanno lo
+            // stesso id e quelle del Load More arrivano senza, vale la regola sulla riga.
+            $this->griglia_pila[] = ( ! empty( $grid_colonne ) && ! $loop_enabled );
             if ( $loop_enabled ) {
                 $row_id_short = substr( md5( $node['id'] ?? wp_rand() ), 0, 8 );
                 // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per paginazione del Row Loop; nessuna modifica di stato; valore forzato a intero.
@@ -745,16 +767,25 @@ trait Olobuild_Renderer_Structure_Trait {
                     $html .= $this->render_node( $child, $manager, $template_id, $hover_css_rules, $tile_counter, true );
                 }
             }
+            array_pop( $this->griglia_pila );
 
             $html .= '</div>';
             $html .= $loop_pagination_html;
 
             // Stack on mobile: override grid to 1 column
             if ( $stack ) {
-                $grid_id = 'olo-g-' . substr( md5( $node['id'] ?? wp_rand() ), 0, 6 );
-                $html = str_replace( '<div' . $grid_class_attr, '<div class="' . esc_attr( trim( implode( ' ', $grid_class_list ) . ' ' . $grid_id ) ) . '"', $html );
+                // Con le larghezze la classe e' gia' sul div: niente secondo str_replace.
+                if ( $grid_id === '' ) {
+                    $grid_id = 'olo-g-' . substr( md5( $node['id'] ?? wp_rand() ), 0, 6 );
+                    $html = str_replace( '<div' . $grid_class_attr, '<div class="' . esc_attr( trim( implode( ' ', $grid_class_list ) . ' ' . $grid_id ) ) . '"', $html );
+                }
                 $bp_mobile = intval( $this->breakpoints['tablet'] ?? 960 );
                 $html .= '<style>@media(max-width:' . $bp_mobile . 'px){.' . $grid_id . '{grid-template-columns:1fr!important;grid-template-rows:auto!important}.' . $grid_id . '>*{grid-column:auto!important;grid-row:auto!important}}</style>';
+            }
+            // Dopo il div e dopo lo stack, mai in testa: render_node mette
+            // data-olo-tile-id sul PRIMO tag dell'HTML della riga.
+            if ( $grid_colonne ) {
+                $html .= $this->css_larghezze_griglia( $s, $grid_colonne, $grid_id, $stack, $gap, $loop_enabled );
             }
         } else {
             // === Classic Flexbox mode ===
@@ -796,6 +827,699 @@ trait Olobuild_Renderer_Structure_Trait {
         }
 
         return $html;
+    }
+
+    // =========================================================================
+    // «Larghezza responsive» delle colonne in una riga a griglia (grid_width_*)
+    // =========================================================================
+
+    /**
+     * Le colonne che contano per la «Larghezza responsive» di una riga a griglia:
+     * quelle che verranno rese davvero (in loop solo la prima, il modello che si
+     * ripete), se almeno una ha una grid_width_* valida. Altrimenti [] e la riga
+     * resta quella di sempre, byte per byte.
+     *
+     * I width_* delle colonne (misure della riga Flex) qui non si leggono: righe a
+     * griglia salvate con width_* vecchi (Footer repeat(4, 1fr)...) non cambiano.
+     *
+     * @param array $node Nodo riga.
+     * @param bool  $loop Riga in modalita' loop.
+     * @return array Figli in ordine di resa (indici 0..n-1).
+     */
+    private function griglia_colonne_con_larghezze( $node, $loop ) {
+        $figli = ( isset( $node['children'] ) && is_array( $node['children'] ) ) ? $node['children'] : [];
+        if ( $loop ) {
+            $figli = ( isset( $figli[0] ) && is_array( $figli[0] ) ) ? [ $figli[0] ] : [];
+        }
+        $ha_larghezze = false;
+        foreach ( $figli as $figlio ) {
+            if ( is_array( $figlio ) && $this->griglia_frazioni_colonna( $figlio ) ) {
+                $ha_larghezze = true;
+                break;
+            }
+        }
+        if ( ! $ha_larghezze ) {
+            return [];
+        }
+        if ( $loop ) {
+            return $figli;
+        }
+        // Solo i figli che render_node rendera' (ruolo, date, post...): uno nascosto
+        // non deve spostare posizione e quota degli altri.
+        $resi = [];
+        foreach ( $figli as $figlio ) {
+            if ( is_array( $figlio ) && $this->should_render_node( $figlio ) ) {
+                $resi[] = $figlio;
+            }
+        }
+        foreach ( $resi as $figlio ) {
+            if ( $this->griglia_frazioni_colonna( $figlio ) ) {
+                return $resi;
+            }
+        }
+        return [];
+    }
+
+    /**
+     * Le grid_width_* valide di una colonna, per misura: [ 'small' => [ 1, 2 ] ].
+     * Frazione esatta dalla chiave 'n-d': fraction_map fa solo da elenco dei
+     * valori ammessi (i suoi 33.33 e 66.66 sono arrotondati).
+     */
+    private function griglia_frazioni_colonna( $col ) {
+        $s   = ( isset( $col['settings'] ) && is_array( $col['settings'] ) ) ? $col['settings'] : [];
+        $out = [];
+        foreach ( [ 'default', 'small', 'medium', 'large' ] as $misura ) {
+            $v = $s[ 'grid_width_' . $misura ] ?? '';
+            if ( is_string( $v ) && $v !== '' && isset( $this->fraction_map[ $v ] ) ) {
+                $p = explode( '-', $v );
+                $out[ $misura ] = [ intval( $p[0] ), intval( $p[1] ) ];
+            }
+        }
+        return $out;
+    }
+
+    /** Classe di una colonna nel <style> della sua riga a griglia. */
+    private function griglia_classe_colonna( $id ) {
+        return 'olo-gc-' . substr( md5( (string) $id ), 0, 6 );
+    }
+
+    /**
+     * Margine sinistro + destro di una colonna in px, nella fascia che comincia a
+     * $min px. In griglia il margine sta DENTRO la cella; in flex si somma alla
+     * base: va tolto da li'. Per lato, come lo rende la pagina:
+     *   - in linea (apply_common_box_styles(): intval, solo se non vuoto) vince
+     *     sulle regole #id, in ogni fascia;
+     *   - se no quello per dispositivo, margin_<lato>_<bp> (stesso test di
+     *     collect_responsive_css(), che lo scrive in @media(max-width:X) senza
+     *     !important): delle soglie che valgono nella fascia (X >= $min; le fasce
+     *     si spezzano subito oltre ogni X) vince l'ultima stampata;
+     *   - se no 0.
+     *
+     * @param array     $col    Colonna.
+     * @param int|float $min    Inizio della fascia in px.
+     * @param int[]     $soglie bp => X, in ordine di stampa (griglia_soglie_margini()).
+     * @return int
+     */
+    private function griglia_margini_colonna( $col, $min = 0, $soglie = [] ) {
+        $st  = ( isset( $col['style'] ) && is_array( $col['style'] ) ) ? $col['style'] : [];
+        $tot = 0;
+        foreach ( [ 'left', 'right' ] as $lato ) {
+            if ( ! empty( $st[ 'margin_' . $lato ] ) ) {
+                $tot += intval( $st[ 'margin_' . $lato ] );
+                continue;
+            }
+            $m = 0;
+            foreach ( $soglie as $bp => $x ) {
+                $k = 'margin_' . $lato . '_' . $bp;
+                if ( $min <= $x && isset( $st[ $k ] ) && $st[ $k ] !== '' && $st[ $k ] !== null ) {
+                    $m = intval( $st[ $k ] );
+                }
+            }
+            $tot += $m;
+        }
+        return $tot;
+    }
+
+    /**
+     * Le soglie dei margini per dispositivo, bp => X px, nell'ordine in cui la
+     * pagina ne stampa i blocchi @media(max-width:X) (collect_responsive_css()):
+     * quello delle chiavi di responsive_css_rules, cioe' della prima comparsa di
+     * ogni soglia (di solito dalla piu' larga), gia' deciso per le colonne di una
+     * riga quando la riga scrive il suo CSS (le rende prima); a pari X, l'ordine
+     * di collect_responsive_css(). Dove valgono piu' soglie vince l'ultima.
+     *
+     * @return int[]
+     */
+    private function griglia_soglie_margini() {
+        $pos    = array_flip( array_keys( $this->responsive_css_rules ) );
+        $soglie = [];
+        $ordine = [];
+        $i      = 0;
+        foreach ( [ 'tablet_landscape' => 1200, 'tablet' => 960, 'mobile_landscape' => 640, 'mobile' => 480 ] as $bp => $def ) {
+            $x             = intval( $this->breakpoints[ $bp ] ?? $def );
+            $soglie[ $bp ] = $x;
+            $ordine[ $bp ] = [ $pos[ $x . 'px' ] ?? PHP_INT_MAX, $i++ ];
+        }
+        uksort(
+            $soglie,
+            function ( $a, $b ) use ( $ordine ) {
+                return $ordine[ $a ] <=> $ordine[ $b ];
+            }
+        );
+        return $soglie;
+    }
+
+    /**
+     * Il <style> della «Larghezza responsive» di una riga a griglia.
+     *
+     * La griglia NON si ridisegna con piu' tracce: il gap della riga sta fra ogni
+     * coppia di tracce, e con 60 tracce 59 gap facevano sfondare la riga. Nelle
+     * fasce di schermo in cui almeno una colonna ha una larghezza il div diventa
+     * un flex che va a capo (gap invariato) e ogni colonna prende
+     *     flex: 0 1 f·100% − G·(1−f) − M
+     * con G il gap fra le colonne e M i suoi margini sinistro + destro: una fila
+     * di frazioni che somma 1 si riempie esattamente, come le uk-width-* di una
+     * riga Flex, e il margine resta dentro la parte della colonna come nella
+     * cella della griglia (sommato alla base farebbe andare a capo la fila e,
+     * dove la riga si impila, sfondare la pagina). M e' quello della fascia,
+     * margini per dispositivo compresi (margin_*_tablet/_mobile...,
+     * griglia_margini_colonna()): per loro le fasce si spezzano anche subito
+     * oltre ogni soglia @media(max-width:X). box-sizing:border-box tiene
+     * dentro padding e bordo; l'altezza minima della colonna, li', comprende il
+     * padding come in una riga Flex. flex-shrink 1 (in linea la colonna ha gia'
+     * min-width:0) resta come rete per cio' che la base non conosce
+     * (margin_*_widescreen, in @media min-width, che l'inspector non scrive):
+     * stringe la colonna che supera DA SOLA la fila, come la cella della
+     * griglia, invece di far scorrere la pagina. Gli a capo li decide la base
+     * (flex-wrap), quindi le file sono le stesse di flex-shrink 0. f e':
+     *   - la larghezza della colonna, a cascata dalla misura piu' piccola
+     *     (telefono → tablet → desktop → schermo grande: una misura vuota prende
+     *     la piu' vicina impostata fra quelle piu' piccole), sulle soglie fisse di
+     *     UIkit 0/640/960/1200 delle classi uk-width-*@s/@m/@l;
+     *   - senza larghezza, 1 se la fascia e' impilata («Impila su mobile»);
+     *   - se no la sua quota della griglia della riga: i pesi fr della sua
+     *     cella, quella di grid_column o, per una colonna senza (incollata o
+     *     duplicata), quella in cui la mette la griglia (griglia_celle()).
+     * In flex grid-column, grid-row e le altezze di grid-template-rows non valgono:
+     * niente sovrapposizioni, le colonne vanno in ordine. Nelle fasce senza nessuna
+     * larghezza la griglia resta quella di sempre.
+     *
+     * Confine dello stack: una riga con larghezze e' impilata ESATTAMENTE dove lo
+     * e' lo <style> dello stack, @media(max-width:bp) con bp = breakpoints[tablet]
+     * (960 di serie), estremo incluso. Fino a bp compreso le colonne ad «Auto»
+     * restano al 100%; da oltre bp prendono la loro quota, con la media
+     * complementare «not all and (max-width:bp)», non con min-width bp+1: con un
+     * viewport frazionario (zoom, scala di Windows), fra bp e bp+1, la riga con
+     * larghezze resterebbe impilata e le altre no. Le
+     * colonne con una larghezza seguono invece sempre le soglie UIkit: a 960 px
+     * esatti prendono la misura desktop (uk-width-*@m, min-width 960) dentro una
+     * riga ancora impilata. Conta perche' l'anteprima «Tablet» del builder e' un
+     * iframe largo proprio breakpoints[tablet] (iframeStyle di BuilderCanvas.vue):
+     * li' la riga si impila come le righe senza larghezze e le altre colonne non
+     * si spostano quando se ne tocca una; la colonna toccata mostra la misura
+     * desktop, come le uk-width-*@m delle righe Flex nella stessa anteprima. Una
+     * soglia tablet diversa (es. 1024) da' una fascia 960-1024 con la misura
+     * desktop e la riga impilata.
+     *
+     * Nel calc() solo il segno meno; numeri col punto (number_format: con la
+     * virgola di una locale, in PHP 7.4, la dichiarazione verrebbe scartata); la
+     * percentuale arrotondata per difetto e i px per eccesso, perche' una fila
+     * piena non vada a capo per un decimillesimo.
+     *
+     * @param array  $s       Impostazioni della riga.
+     * @param array  $colonne Figli resi (griglia_colonne_con_larghezze()).
+     * @param string $gid     Classe olo-g-* del div della griglia.
+     * @param bool   $stack   «Impila su mobile».
+     * @param int    $gap     Gap della riga in px.
+     * @param bool   $loop    Riga in loop: una regola sola per tutte le copie.
+     * @return string
+     */
+    private function css_larghezze_griglia( $s, $colonne, $gid, $stack, $gap, $loop ) {
+        $bande  = [ 'default' => 0, 'small' => 640, 'medium' => 960, 'large' => 1200 ];
+        $g_col  = $s['grid_column_gap'] ?? '';
+        $g      = ( $g_col !== '' ) ? max( 0, intval( $g_col ) ) : intval( $gap );
+        $bp     = $stack ? intval( $this->breakpoints['tablet'] ?? 960 ) : 0;
+        $soglie = $this->griglia_soglie_margini();
+        // Fasce: [ inizio, media query ], per inizio. Oltre alle soglie di UIkit,
+        // una fascia subito oltre ogni soglia X delle @media(max-width:X) della
+        // pagina (margini per dispositivo; con X = bp la fine dello stack): inizio
+        // X + 0.5, solo per ordinarla e per le cascate, e la media complementare
+        // «not all and (max-width:X)». Una fascia uguale alla precedente non si
+        // stampa: senza margini per dispositivo restano le fasce di sempre.
+        $fasce = [];
+        foreach ( $bande as $da ) {
+            $fasce[ (string) $da ] = [ $da, $da > 0 ? '(min-width:' . $da . 'px)' : '' ];
+        }
+        foreach ( $soglie as $x ) {
+            if ( $x > 0 ) {
+                $fasce[ (string) ( $x + 0.5 ) ] = [ $x + 0.5, 'not all and (max-width:' . $x . 'px)' ];
+            }
+        }
+        usort(
+            $fasce,
+            function ( $x, $y ) {
+                return $x[0] <=> $y[0];
+            }
+        );
+        $frazioni = [];
+        foreach ( $colonne as $i => $col ) {
+            $frazioni[ $i ] = $this->griglia_frazioni_colonna( $col );
+        }
+        $quote = $this->griglia_quote_base( $s, $colonne );
+        $n     = count( $colonne );
+        $sel   = '.' . $gid;
+        $css   = '';
+        $prima = true;
+        $prec  = '';
+        foreach ( $fasce as $fascia ) {
+            list( $min, $media ) = $fascia;
+            $impila   = ( $bp > 0 && $min <= $bp );
+            $per_w    = []; // flex-basis => selettori
+            $attiva   = false;
+            $senza_cl = false;
+            foreach ( $colonne as $i => $col ) {
+                $f = null;
+                foreach ( $bande as $misura => $da ) {
+                    if ( $da <= $min && isset( $frazioni[ $i ][ $misura ] ) ) {
+                        $f = $frazioni[ $i ][ $misura ];
+                    }
+                }
+                // In loop la colonna e' il modello: le copie hanno gli stessi margini.
+                $m = $this->griglia_margini_colonna( $col, $min, $soglie );
+                if ( $f !== null ) {
+                    $attiva = true;
+                    $w = $this->griglia_flex_basis( $f[0] / $f[1], $g, $m );
+                } else {
+                    $w = $this->griglia_flex_basis( $impila ? 1 : $quote[ $i ], $g, $m );
+                }
+                if ( $loop ) {
+                    $per_w[ $w ][] = $sel . '>*';
+                } elseif ( ( $col['type'] ?? '' ) === 'column' && ! empty( $col['id'] ) ) {
+                    $per_w[ $w ][] = $sel . '>.' . $this->griglia_classe_colonna( $col['id'] );
+                } else {
+                    $senza_cl = true;
+                }
+            }
+            if ( ! $attiva ) {
+                continue;
+            }
+            $regole = '';
+            if ( $senza_cl ) {
+                // Figli senza classe (senza id, o non colonne): parti uguali.
+                $regole .= $sel . '>*{flex:0 1 ' . $this->griglia_flex_basis( $impila ? 1 : 1 / max( 1, $n ), $g ) . '!important}';
+            }
+            foreach ( $per_w as $w => $selettori ) {
+                $regole .= implode( ',', $selettori ) . '{flex:0 1 ' . $w . '!important}';
+            }
+            // Media a cascata (in ordine di inizio: vince l'ultima che vale): una
+            // fascia uguale alla precedente non serve.
+            if ( ! $prima && $regole === $prec ) {
+                continue;
+            }
+            $blocco = $prima
+                ? $sel . '{display:flex!important;flex-wrap:wrap!important}' . $sel . '>*{box-sizing:border-box!important}' . $regole
+                : $regole;
+            $css  .= $media !== '' ? '@media ' . $media . '{' . $blocco . '}' : $blocco;
+            $prima = false;
+            $prec  = $regole;
+        }
+        return $css === '' ? '' : '<style>' . $css . '</style>';
+    }
+
+    /**
+     * flex-basis di una colonna larga $f (0..1] in una fila con gap $g px, con
+     * $m px di margini sinistro + destro: f·100% − g·(1−f) − m, scritto col solo
+     * segno meno (margini negativi: «- -Npx»). Con $m = 0 l'uscita e' quella di
+     * sempre: '100%', 'P%' o 'calc(P% - Npx)'.
+     */
+    private function griglia_flex_basis( $f, $g, $m = 0 ) {
+        if ( $f >= 1 ) {
+            $pct = '100';
+            $px  = $m;
+        } else {
+            $pct = rtrim( rtrim( number_format( floor( $f * 1000000 + 0.000001 ) / 10000, 4, '.', '' ), '0' ), '.' );
+            $px  = $g * ( 1 - $f ) + $m;
+        }
+        // Per eccesso (verso lo zero se negativo): la base resta per difetto.
+        $px = ceil( $px * 10000 - 0.000001 ) / 10000;
+        if ( $px == 0 ) {
+            return $pct . '%';
+        }
+        $num = rtrim( rtrim( number_format( abs( $px ), 4, '.', '' ), '0' ), '.' );
+        return 'calc(' . $pct . '% - ' . ( $px < 0 ? '-' : '' ) . $num . 'px)';
+    }
+
+    /**
+     * La quota (0..1] di ogni colonna nella griglia della riga: i pesi fr delle
+     * tracce della sua cella (griglia_celle()). Tracce implicite, oltre quelle
+     * del template, non hanno un peso: conta la traccia del bordo. Template non
+     * calcolabile (px, auto, auto-fill...): parti uguali fra le colonne rese,
+     * tranne quelle da «1 / -1», che coprono tutta la griglia esplicita con
+     * qualunque template: fila intera.
+     *
+     * @param array $s       Impostazioni della riga.
+     * @param array $colonne Figli resi.
+     * @return float[]
+     */
+    private function griglia_quote_base( $s, $colonne ) {
+        $quote    = [];
+        $template = $s['grid_columns'] ?? '';
+        $pesi     = $this->griglia_pesi_tracce( is_string( $template ) ? $template : '' );
+        if ( ! $pesi ) {
+            $parte = 1 / max( 1, count( $colonne ) );
+            foreach ( $colonne as $i => $col ) {
+                $gc          = $col['settings']['grid_column'] ?? '';
+                $quote[ $i ] = $this->griglia_da_prima_a_ultima( is_scalar( $gc ) ? (string) $gc : '' ) ? 1 : $parte;
+            }
+            return $quote;
+        }
+        $n      = count( $pesi );
+        $totale = array_sum( $pesi );
+        $celle  = $this->griglia_celle( $s, $colonne, $n );
+        foreach ( $colonne as $i => $col ) {
+            $da    = max( 1, min( $celle[ $i ][0], $n ) );
+            $a     = max( $da + 1, min( $celle[ $i ][1], $n + 1 ) );
+            $somma = 0;
+            for ( $t = $da; $t < $a; $t++ ) {
+                $somma += $pesi[ $t - 1 ];
+            }
+            $quote[ $i ] = $somma / $totale;
+        }
+        return $quote;
+    }
+
+    /**
+     * La cella di ogni colonna come la mette la griglia CSS (auto-posizionamento,
+     * css-grid-1 §8.5), con la direzione della riga (grid_auto_flow row/column) e
+     * «dense»: 1. le colonne con riga e colonna definite; 2. quelle con la sola
+     * posizione della fila (la riga, nel flusso per righe), nel primo posto libero
+     * di quella fila (sparse: dopo quelle messe li' da questo passo); 3. le altre
+     * in ordine DOM col cursore: il primo posto libero dopo la precedente (dense:
+     * dall'inizio), a capo quando la fila non basta. Una colonna senza grid_column
+     * (incollata o duplicata: il posto della cella d'origine non viaggia con la
+     * copia) prende cosi' la cella in cui la mette la griglia, non la traccia che
+     * segue la sorella precedente nel DOM. Linee prima della prima: la prima (li'
+     * la griglia aggiungerebbe tracce in testa); linee e span oltre 1000: 1000.
+     *
+     * @param array $s       Impostazioni della riga.
+     * @param array $colonne Figli resi.
+     * @param int   $n       Tracce di grid-template-columns.
+     * @return array i => [ inizio, fine ]: linee di colonna, fine esclusa.
+     */
+    private function griglia_celle( $s, $colonne, $n ) {
+        $flusso = ( isset( $s['grid_auto_flow'] ) && is_string( $s['grid_auto_flow'] ) ) ? strtolower( $s['grid_auto_flow'] ) : '';
+        $percol = ( strpos( $flusso, 'column' ) !== false );
+        $dense  = ! empty( $s['grid_auto_flow_dense'] ) || ( strpos( $flusso, 'dense' ) !== false );
+        $righe  = $this->griglia_conta_tracce( $s['grid_rows'] ?? '' );
+        // Ogni voce: [ p, q ], p lungo la fila (le colonne nel flusso per righe,
+        // le righe in quello per colonne) e q fra le file; ciascuna [ inizio, fine ]
+        // se definita, [ null, span ] se automatica.
+        $voci = [];
+        foreach ( $colonne as $i => $col ) {
+            $st         = ( isset( $col['settings'] ) && is_array( $col['settings'] ) ) ? $col['settings'] : [];
+            $gc         = $st['grid_column'] ?? '';
+            $gr         = $st['grid_row'] ?? '';
+            $c          = $this->griglia_posizione( is_scalar( $gc ) ? (string) $gc : '', $n );
+            $r          = $this->griglia_posizione( is_scalar( $gr ) ? (string) $gr : '', $righe );
+            $voci[ $i ] = $percol ? [ $r, $c ] : [ $c, $r ];
+        }
+        $posto  = []; // i => [ p0, p1, q0, q1 ]
+        $libera = function ( $p0, $p1, $q0, $q1 ) use ( &$posto ) {
+            foreach ( $posto as $x ) {
+                if ( $p0 < $x[1] && $x[0] < $p1 && $q0 < $x[3] && $x[2] < $q1 ) {
+                    return false;
+                }
+            }
+            return true;
+        };
+        // 1. Definite su entrambi gli assi.
+        foreach ( $voci as $i => $v ) {
+            if ( $v[0][0] !== null && $v[1][0] !== null ) {
+                $posto[ $i ] = [ $v[0][0], $v[0][1], $v[1][0], $v[1][1] ];
+            }
+        }
+        // 2. Bloccate a una fila.
+        $dopo = [];
+        foreach ( $voci as $i => $v ) {
+            if ( $v[0][0] === null && $v[1][0] !== null ) {
+                $p = $dense ? 1 : ( $dopo[ $v[1][0] ] ?? 1 );
+                while ( ! $libera( $p, $p + $v[0][1], $v[1][0], $v[1][1] ) ) {
+                    $p++;
+                }
+                $posto[ $i ]       = [ $p, $p + $v[0][1], $v[1][0], $v[1][1] ];
+                $dopo[ $v[1][0] ] = $p + $v[0][1];
+            }
+        }
+        // 3. Posti della fila: quelli del template, piu' quelli impliciti che
+        //    servono alle colonne con posizione e allo span piu' lungo.
+        $pn = $percol ? $righe : $n;
+        foreach ( $voci as $i => $v ) {
+            if ( isset( $posto[ $i ] ) ) {
+                $pn = max( $pn, $posto[ $i ][1] - 1 );
+            } else {
+                $pn = max( $pn, $v[0][0] !== null ? $v[0][1] - 1 : $v[0][1] );
+            }
+        }
+        // 4. Le altre, in ordine DOM, col cursore [ fila $cq, posto $cp ].
+        $cq = 1;
+        $cp = 1;
+        foreach ( $voci as $i => $v ) {
+            if ( isset( $posto[ $i ] ) ) {
+                continue;
+            }
+            $alta = $v[1][1]; // span fra le file: qui la posizione e' automatica
+            if ( $v[0][0] !== null ) {
+                if ( $dense ) {
+                    $cq = 1;
+                } elseif ( $v[0][0] < $cp ) {
+                    $cq++;
+                }
+                $cp = $v[0][0];
+                while ( ! $libera( $v[0][0], $v[0][1], $cq, $cq + $alta ) ) {
+                    $cq++;
+                }
+                $posto[ $i ] = [ $v[0][0], $v[0][1], $cq, $cq + $alta ];
+            } else {
+                $span = $v[0][1];
+                if ( $dense ) {
+                    $cq = 1;
+                    $cp = 1;
+                }
+                while ( true ) {
+                    if ( $cp + $span - 1 > $pn ) {
+                        $cq++;
+                        $cp = 1;
+                    } elseif ( $libera( $cp, $cp + $span, $cq, $cq + $alta ) ) {
+                        break;
+                    } else {
+                        $cp++;
+                    }
+                }
+                $posto[ $i ] = [ $cp, $cp + $span, $cq, $cq + $alta ];
+            }
+        }
+        $celle = [];
+        foreach ( $posto as $i => $x ) {
+            $celle[ $i ] = $percol ? [ $x[2], $x[3] ] : [ $x[0], $x[1] ];
+        }
+        return $celle;
+    }
+
+    /**
+     * Quante tracce ha una lista di tracce (grid_rows): repeat(N, …) espanso,
+     * repeat(auto-fill/auto-fit, …) una volta, vuoto o 'none' 0.
+     */
+    private function griglia_conta_tracce( $template ) {
+        $template = is_string( $template ) ? trim( $template ) : '';
+        if ( $template === '' || strtolower( $template ) === 'none' ) {
+            return 0;
+        }
+        $tot = 0;
+        foreach ( $this->griglia_token( $template ) as $tok ) {
+            if ( $tok[0] === '[' ) {
+                continue; // nomi di linea
+            }
+            if ( preg_match( '/^repeat\((.*)\)$/is', $tok, $m ) ) {
+                $parti = $this->griglia_prima_virgola( $m[1] );
+                $volte = trim( $parti[0] );
+                $k     = 0;
+                if ( count( $parti ) === 2 ) {
+                    foreach ( $this->griglia_token( $parti[1] ) as $t2 ) {
+                        if ( $t2[0] !== '[' ) {
+                            $k++;
+                        }
+                    }
+                }
+                $tot += ( preg_match( '/^\d+$/', $volte ) ? min( intval( $volte ), 1000 ) : 1 ) * $k;
+                continue;
+            }
+            $tot++;
+        }
+        return min( $tot, 1000 );
+    }
+
+    /**
+     * I pesi delle tracce di grid-template-columns ('1fr 2fr 1fr' → [1, 2, 1];
+     * repeat(N, …) espanso; minmax(x, Nfr) → N). Vuoto = una traccia sola, come
+     * la griglia senza template. null se una traccia non e' in fr (px, auto,
+     * auto-fill/auto-fit...): la quota non si puo' calcolare.
+     */
+    private function griglia_pesi_tracce( $template ) {
+        $template = trim( $template );
+        if ( $template === '' ) {
+            return [ 1 ];
+        }
+        $pesi = [];
+        foreach ( $this->griglia_token( $template ) as $tok ) {
+            if ( $tok[0] === '[' ) {
+                continue; // nomi di linea
+            }
+            if ( preg_match( '/^repeat\((.*)\)$/is', $tok, $m ) ) {
+                $parti = $this->griglia_prima_virgola( $m[1] );
+                $volte = trim( $parti[0] );
+                if ( count( $parti ) !== 2 || ! preg_match( '/^\d+$/', $volte ) || intval( $volte ) < 1 || intval( $volte ) > 60 ) {
+                    return null;
+                }
+                $interni = [];
+                foreach ( $this->griglia_token( $parti[1] ) as $t2 ) {
+                    if ( $t2[0] === '[' ) {
+                        continue;
+                    }
+                    $w = $this->griglia_peso_traccia( $t2 );
+                    if ( $w === null ) {
+                        return null;
+                    }
+                    $interni[] = $w;
+                }
+                if ( ! $interni ) {
+                    return null;
+                }
+                for ( $k = 0; $k < intval( $volte ); $k++ ) {
+                    foreach ( $interni as $w ) {
+                        $pesi[] = $w;
+                    }
+                }
+                continue;
+            }
+            $w = $this->griglia_peso_traccia( $tok );
+            if ( $w === null ) {
+                return null;
+            }
+            $pesi[] = $w;
+        }
+        return ( $pesi && count( $pesi ) <= 240 ) ? $pesi : null;
+    }
+
+    /** Peso di una traccia: '2fr' → 2, 'minmax(0, 1fr)' → 1; altrimenti null. */
+    private function griglia_peso_traccia( $tok ) {
+        if ( preg_match( '/^minmax\((.*)\)$/is', $tok, $m ) ) {
+            $parti = $this->griglia_prima_virgola( $m[1] );
+            if ( count( $parti ) !== 2 ) {
+                return null;
+            }
+            $tok = trim( $parti[1] );
+        }
+        if ( preg_match( '/^(\d+(?:\.\d+)?|\.\d+)fr$/i', $tok, $m ) && floatval( $m[1] ) > 0 ) {
+            return floatval( $m[1] );
+        }
+        return null;
+    }
+
+    /** Divide una lista di tracce sugli spazi di primo livello (fuori da () e []). */
+    private function griglia_token( $str ) {
+        $out = [];
+        $cur = '';
+        $liv = 0;
+        $len = strlen( $str );
+        for ( $i = 0; $i < $len; $i++ ) {
+            $c = $str[ $i ];
+            if ( $c === '(' || $c === '[' ) {
+                $liv++;
+            } elseif ( ( $c === ')' || $c === ']' ) && $liv > 0 ) {
+                $liv--;
+            }
+            if ( $liv === 0 && in_array( $c, [ ' ', "\t", "\n", "\r" ], true ) ) {
+                if ( $cur !== '' ) {
+                    $out[] = $cur;
+                    $cur   = '';
+                }
+                continue;
+            }
+            $cur .= $c;
+        }
+        if ( $cur !== '' ) {
+            $out[] = $cur;
+        }
+        return $out;
+    }
+
+    /** Divide sulla prima virgola di primo livello: [ prima, resto ] oppure [ tutto ]. */
+    private function griglia_prima_virgola( $str ) {
+        $liv = 0;
+        $len = strlen( $str );
+        for ( $i = 0; $i < $len; $i++ ) {
+            $c = $str[ $i ];
+            if ( $c === '(' ) {
+                $liv++;
+            } elseif ( $c === ')' && $liv > 0 ) {
+                $liv--;
+            } elseif ( $c === ',' && $liv === 0 ) {
+                return [ substr( $str, 0, $i ), substr( $str, $i + 1 ) ];
+            }
+        }
+        return [ $str ];
+    }
+
+    /**
+     * La posizione di una colonna su un asse di $n tracce esplicite, da
+     * grid_column o grid_row: 'a', 'a / b' (negativi contati dalla fine: -1 =
+     * ultima linea), 'span k', 'a / span k', 'span k / b'. Definita: [ inizio,
+     * fine ] (linee, fine esclusa); vuota, 'auto' o non leggibile: [ null, span ],
+     * la mette l'auto-posizionamento (griglia_celle()).
+     */
+    private function griglia_posizione( $valore, $n ) {
+        $parti = explode( '/', strtolower( trim( $valore ) ), 2 );
+        $a     = $this->griglia_linea( $parti[0] );
+        $b     = isset( $parti[1] ) ? $this->griglia_linea( $parti[1] ) : [ 'auto', 0 ];
+        if ( $a[0] === 'linea' ) {
+            $inizio = $this->griglia_linea_n( $a[1], $n );
+            if ( $b[0] === 'linea' ) {
+                $fine = $this->griglia_linea_n( $b[1], $n );
+            } elseif ( $b[0] === 'span' ) {
+                $fine = $inizio + $b[1];
+            } else {
+                $fine = $inizio + 1;
+            }
+        } elseif ( $b[0] === 'linea' ) {
+            $fine   = $this->griglia_linea_n( $b[1], $n );
+            $inizio = $fine - ( $a[0] === 'span' ? $a[1] : 1 );
+        } else {
+            $span = ( $a[0] === 'span' ) ? $a[1] : ( ( $b[0] === 'span' ) ? $b[1] : 1 );
+            return [ null, min( $span, 1000 ) ];
+        }
+        if ( $fine < $inizio ) {
+            list( $inizio, $fine ) = [ $fine, $inizio ];
+        }
+        $inizio = min( max( 1, $inizio ), 1000 );
+        $fine   = min( max( $inizio + 1, $fine ), 1001 );
+        return [ $inizio, $fine ];
+    }
+
+    /** Una meta' di grid-column o grid-row: [ 'linea', a ] | [ 'span', k ] | [ 'auto', 0 ]. */
+    private function griglia_linea( $parte ) {
+        $parte = trim( $parte );
+        if ( preg_match( '/^-?\d+$/', $parte ) && intval( $parte ) !== 0 ) {
+            return [ 'linea', intval( $parte ) ];
+        }
+        if ( preg_match( '/^span\s+(\d+)$/', $parte, $m ) && intval( $m[1] ) > 0 ) {
+            return [ 'span', intval( $m[1] ) ];
+        }
+        return [ 'auto', 0 ];
+    }
+
+    /** Numero di linea: i negativi contano dalla fine (-1 = linea n+1). */
+    private function griglia_linea_n( $linea, $n ) {
+        return $linea < 0 ? $n + 2 + $linea : $linea;
+    }
+
+    /**
+     * True se grid_column va dalla prima all'ultima linea esplicita («1 / -1», o
+     * «-1 / 1», che il CSS rigira): la colonna copre tutta la griglia anche quando
+     * il numero di tracce non si conosce (auto-fill, px...).
+     */
+    private function griglia_da_prima_a_ultima( $valore ) {
+        $parti = explode( '/', strtolower( trim( $valore ) ), 2 );
+        if ( count( $parti ) !== 2 ) {
+            return false;
+        }
+        $a = $this->griglia_linea( $parti[0] );
+        $b = $this->griglia_linea( $parti[1] );
+        if ( $a[0] !== 'linea' || $b[0] !== 'linea' ) {
+            return false;
+        }
+        $linee = [ $a[1], $b[1] ];
+        sort( $linee );
+        return $linee === [ -1, 1 ];
     }
 
     /**
@@ -1012,6 +1736,11 @@ trait Olobuild_Renderer_Structure_Trait {
                 $inline_styles[] = 'grid-row: ' . esc_attr( $s['grid_row'] );
             }
             $inline_styles[] = 'min-width: 0';
+            // La riga ha colonne con «Larghezza responsive»: il suo <style> la trova
+            // da questa classe (css_larghezze_griglia). I width_* restano spenti.
+            if ( end( $this->griglia_pila ) === true && ! empty( $node['id'] ) ) {
+                $classes[] = $this->griglia_classe_colonna( $node['id'] );
+            }
         } else {
             // === Classic Flexbox: UIkit width classes ===
             $width_custom  = $s['width_custom'] ?? '';

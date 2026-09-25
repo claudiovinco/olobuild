@@ -2229,16 +2229,23 @@ const selectedTile = computed(() => {
 });
 
 /*
- * LA COLONNA DENTRO UNA GRIGLIA NON HA UNA LARGHEZZA SUA.
+ * LA COLONNA HA SEMPRE LA SUA «LARGHEZZA RESPONSIVE».
  *
- * Una riga in modalita' CSS Grid distribuisce le colonne con
- * `grid-template-columns`: la larghezza la decide la RIGA, e i quattro campi
- * «Larghezza telefono/tablet/desktop/schermo grande» della colonna appartengono
- * all'altra modalita', quella Flex. Restavano visibili lo stesso, e toccarne
- * uno dava a quella colonna una larghezza fissa dentro la cella: il blocco si
- * scomponeva, senza che niente dicesse perche'. Su una pagina con dieci
- * colonne in griglia il risultato e' che «si rompe tutto appena si tocca la
- * larghezza», che e' esattamente come e' stato segnalato.
+ * Riga Flex: i quattro width_* di sempre (classi uk-width-*). Riga a griglia:
+ * gli stessi quattro campi, stesse etichette e opzioni, su chiavi proprie
+ * grid_width_* (column.js li marca `soloFlex` / `soloGriglia`: la fonte resta
+ * una, qui si sceglie il gruppo). Il PHP le rende nel <style> della riga
+ * (css_larghezze_griglia): nelle misure con una larghezza la griglia va a capo
+ * come un flex. I width_* salvati in una riga a griglia restano spenti: non
+ * hanno mai agito sul sito e non devono cominciare adesso.
+ *
+ * Prima qui i quattro campi sparivano in griglia, e con loro la sezione:
+ * «in qualche colonna non c'e'». Il motivo era un «si scompone appena si tocca
+ * la larghezza», che veniva dall'anteprima e non dal sito: la patch di una sola
+ * colonna (builder/render-tile) la rendeva senza sapere di stare in una griglia,
+ * cioe' da colonna Flex con le uk-width-* dei width_* vecchi dentro la cella.
+ * Ora una colonna in griglia va al render completo (isPatchable in
+ * useIframeBridge.js), che rigenera anche il CSS della riga.
  *
  * Il percorso degli antenati include l'elemento stesso in fondo, quindi il
  * genitore e' il penultimo. Le colonne legacy (`columns_data`) sono nodi
@@ -2252,16 +2259,13 @@ const colonnaInGriglia = computed(() => {
   return !!riga && riga.type === 'row' && (riga.settings?.layout_mode === 'grid');
 });
 
-const LARGHEZZE_COLONNA = ['width_default', 'width_small', 'width_medium', 'width_large'];
-
-/*
- * Tolti i quattro campi, il separatore «Larghezza responsive» resta senza
- * niente sotto e sparisce da solo: groupBySeparator scarta le sezioni vuote.
- */
+// Un gruppo solo alla volta: anche il conteggio della ricerca (searchTabCounts)
+// legge questo elenco e conta i quattro campi, non otto.
 const campiStileElemento = computed(() => {
   const base = elementDef.value?.styleFields || [];
-  if (!colonnaInGriglia.value) return base;
-  return base.filter(f => !LARGHEZZE_COLONNA.includes(f.key));
+  if (selectedTile.value?.type !== 'column') return base;
+  const griglia = colonnaInGriglia.value;
+  return base.filter(f => !(griglia ? f.soloFlex : f.soloGriglia));
 });
 
 const tileZone = computed(() => {

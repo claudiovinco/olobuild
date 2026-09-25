@@ -170,6 +170,14 @@ export function useIframeBridge(iframeRef) {
     if (s.widget_template_id || s.tile_template_id) return false; // espande template esterno
     if (s.loop_enabled)                              return false; // ripete tile N volte
     if (node.advanced?.html_id)                      return false; // ID custom: full render aggiorna tutti i selettori CSS
+    // Colonna di una riga a griglia: render-tile la renderebbe da colonna Flex
+    // (niente grid-column, uk-width-* dei width_* vecchi) e il CSS della sua
+    // «Larghezza responsive» sta nella RIGA, che una patch non rigenera.
+    if (node.type === 'column') {
+      const percorso = tilesStore.getAncestorPath(node.id);
+      const riga = percorso[percorso.length - 2];
+      if (riga && riga.type === 'row' && riga.settings?.layout_mode === 'grid') return false;
+    }
     return true;
   }
 

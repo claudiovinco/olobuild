@@ -20,6 +20,10 @@ function datiMaster(tile) {
   return dati;
 }
 
+// Le quattro misure della «Larghezza responsive» di una colonna: width_<m> nelle
+// righe Flex, grid_width_<m> nelle righe a griglia (column.js).
+const LARGHEZZE_MISURE = ['default', 'small', 'medium', 'large'];
+
 // Re-export tree utilities so existing imports from tiles.js keep working
 export { generateId, createSection, createRow, createColumn, createInnerColumn, CONTAINER_TYPES, migrateLegacyContent, isLegacyFormat, deepCloneWithNewIds };
 
@@ -491,6 +495,20 @@ export const useTilesStore = defineStore('tiles', {
           style: JSON.parse(JSON.stringify(tile.style || {})),
           settings: JSON.parse(JSON.stringify(tile.settings || {})),
         };
+        // Colonna: la «Larghezza responsive» che MOSTRA (width_* in una riga Flex,
+        // grid_width_* in una riga a griglia; l'altro gruppo è nascosto e spento)
+        // e il tipo della riga, perché si incolla solo su una riga dello stesso tipo.
+        // Colonna di una riga Flex con misure personalizzate (width_custom > 0): la
+        // larghezza gliela dà width_custom e render_column_node ignora i width_*
+        // (quelli che mostra sono un residuo, applyCustomWidths scrive width_medium
+        // '1-1'): nessuna larghezza «vista» da copiare, il bersaglio resta com'è.
+        const griglia = tile.type === 'column' && this._colonnaInGriglia(tileId);
+        if (tile.type === 'column' && (griglia || !(parseFloat(tile.settings?.width_custom) > 0))) {
+          const pre = griglia ? 'grid_width_' : 'width_';
+          this.clipboardStyle.larghezze = Object.fromEntries(
+            LARGHEZZE_MISURE.map(m => [m, tile.settings?.[pre + m] ?? '']));
+          this.clipboardStyle.larghezzeGriglia = griglia;
+        }
         try { localStorage.setItem('olo_clipboard_style', JSON.stringify(this.clipboardStyle)); } catch(e) {}
       }
     },
@@ -532,14 +550,40 @@ export const useTilesStore = defineStore('tiles', {
           'embed', 'shortcode', 'icon', 'label', 'caption', 'alt',
           'post_type', 'posts_per_page', 'query', 'taxonomy', 'terms',
           'service_id', 'source_type', 'wp_menu_id',
+          // Posto della colonna nella griglia di ORIGINE, non stile: incollato su
+          // un'altra colonna ne metteva due nella stessa cella.
+          'grid_column', 'grid_row',
         ];
+        // Colonna: la larghezza si incolla com'è VISTA, e solo fra righe dello
+        // stesso tipo (Flex→Flex, griglia→griglia). Le chiavi grezze non passano
+        // mai: i width_* spenti di una griglia, su una Flex, si accenderebbero, e
+        // width_custom è il posto della colonna nelle misure personalizzate della
+        // riga Flex di origine (con un valore la colonna va al 100%). Fra tipi
+        // diversi nessuno dei due gruppi cambia: il width_medium che il layout dà a
+        // ogni colonna Flex, su una griglia, la farebbe andare a capo TUTTA. Una
+        // copia salvata da una versione precedente non ha `larghezze`: nessuna.
+        const colonna = tile.type === 'column';
         for (const key of Object.keys(srcSettings)) {
+          if (colonna && /^((grid_)?width_(default|small|medium|large)|width_custom)$/.test(key)) continue;
           if (!contentKeys.includes(key)) {
             tgtSettings[key] = JSON.parse(JSON.stringify(srcSettings[key]));
           }
         }
+        const larghezze = this.clipboardStyle.larghezze;
+        const griglia = colonna && this._colonnaInGriglia(tileId);
+        if (colonna && larghezze && this.clipboardStyle.larghezzeGriglia === griglia) {
+          const pre = griglia ? 'grid_width_' : 'width_';
+          for (const m of LARGHEZZE_MISURE) tgtSettings[pre + m] = larghezze[m] ?? '';
+        }
         tile.settings = { ...tgtSettings };
       }
+    },
+
+    // La colonna sta in una riga a griglia? (il genitore è il penultimo del percorso)
+    _colonnaInGriglia(colonnaId) {
+      const percorso = this.getAncestorPath(colonnaId);
+      const riga = percorso[percorso.length - 2];
+      return !!riga && riga.type === 'row' && riga.settings?.layout_mode === 'grid';
     },
 
     moveUp(tileId) {
@@ -898,6 +942,9 @@ export const useTilesStore = defineStore('tiles', {
           grid_column: cell.gridColumn || '',
           grid_row: cell.gridRow || '',
         };
+        // Nuovo template = nuova disposizione: le «Larghezza responsive» della
+        // griglia precedente la scavalcherebbero nelle misure in cui erano impostate.
+        LARGHEZZE_MISURE.forEach(m => { delete col.settings['grid_width_' + m]; });
         return col;
       });
 
