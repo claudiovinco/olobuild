@@ -3655,6 +3655,15 @@ msgstr "WordPressに戻る"
 msgid "Torna ai template"
 msgstr "テンプレートに戻る"
 
+msgid "Torna a «%s»"
+msgstr "「%s」に戻る"
+
+msgid "Riapri «%s», la pagina da cui hai aperto questo header"
+msgstr "このヘッダーを開いたページ「%s」を再び開く"
+
+msgid "Riapri «%s», la pagina da cui hai aperto questo footer"
+msgstr "このフッターを開いたページ「%s」を再び開く"
+
 msgid "Totali carrello"
 msgstr "カート合計"
 

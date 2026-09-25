@@ -2821,6 +2821,15 @@ msgstr "Wróć do WordPress"
 msgid "Torna ai template"
 msgstr "Wróć do szablonów"
 
+msgid "Torna a «%s»"
+msgstr "Wróć do „%s”"
+
+msgid "Riapri «%s», la pagina da cui hai aperto questo header"
+msgstr "Otwórz ponownie „%s”, stronę, z której otwarto ten header"
+
+msgid "Riapri «%s», la pagina da cui hai aperto questo footer"
+msgstr "Otwórz ponownie „%s”, stronę, z której otwarto ten footer"
+
 msgid "Totali carrello"
 msgstr "Sumy koszyka"
 

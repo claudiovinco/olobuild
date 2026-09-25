@@ -578,6 +578,19 @@
       </button>
     </div>
   </div>
+  <!-- Header o footer aperto dal chip «Apri il template»: riporta alla pagina di partenza.
+       Sta in una riga sua sotto la barra, che nel builder di header e footer non ha spazio. -->
+  <div v-if="ritorno" class="olo-tb-ritorno-riga mb-flex mb-items-center mb-h-7 mb-px-4 mb-bg-gray-800 mb-border-b mb-border-gray-700 mb-shrink-0">
+    <a
+      :href="ritorno.url"
+      class="olo-tb-ritorno mb-inline-flex mb-items-center mb-gap-1 mb-px-2 mb-py-0.5 mb-rounded-md mb-border mb-border-gray-600 mb-text-xs mb-text-gray-300 hover:mb-text-white hover:mb-bg-gray-700 mb-transition-colors mb-no-underline"
+      :title="ritornoTitolo"
+      :aria-label="ritornoEtichetta"
+    >
+      <svg class="mb-shrink-0" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+      <span class="olo-tb-ritorno__testo">{{ ritornoEtichetta }}</span>
+    </a>
+  </div>
 </template>
 
 <script setup>
@@ -589,6 +602,7 @@ import { useToast } from '@/composables/useToast';
 import { useTileActions } from '@/composables/useTileActions';
 import { useFocusTrap } from '@/composables/useFocusTrap';
 import { isFromPreview } from '@/utils/previewOrigin';
+import { ritornoPer } from '@/utils/ritornoZona';
 import { t } from '@/i18n';
 
 const emit = defineEmits(['back', 'open-revisions', 'open-finder', 'open-ai', 'open-library', 'open-themes']);
@@ -927,6 +941,21 @@ const templateType = computed(() => builderStore.currentTemplate?.type || 'page'
 const oloData = window.oloData || {};
 const wpAdminUrl = (oloData.restUrl || '').replace('/wp-json/olobuild/v1', '/wp-admin/');
 
+// ─── Ritorno alla pagina di partenza ───
+// Header o footer aperto dal chip «Apri il template» di una pagina (utils/ritornoZona.js).
+// È un vero link: clic centrale e tastiera funzionano, e con modifiche non salvate
+// chiede conferma il beforeunload di App.vue. Il nome entra con una funzione di
+// sostituzione: passato come stringa, un «$&» nel titolo verrebbe interpretato.
+const ritorno = ritornoPer(builderStore.currentTemplate?.id);
+const ritornoNome = ritorno ? (ritorno.titolo || t('Senza titolo')) : '';
+const ritornoEtichetta = ritorno ? t('Torna a «%s»').replace('%s', () => ritornoNome) : '';
+const ritornoTitolo = ritorno
+  ? (ritorno.zona === 'footer'
+    ? t('Riapri «%s», la pagina da cui hai aperto questo footer')
+    : t('Riapri «%s», la pagina da cui hai aperto questo header')
+  ).replace('%s', () => ritornoNome)
+  : '';
+
 const activeHeaderId = ref(parseInt(oloData.activeHeaderId) || 0);
 const isActiveHeader = computed(() => {
   const tplId = builderStore.currentTemplate?.id;
@@ -1124,5 +1153,25 @@ async function regenerateThumbnail() {
   color: #fff;
   background: var(--olo-color-primary, #e1474f);
   border-color: transparent;
+}
+/* «Torna a «…»»: un nome di pagina lungo si tronca, non allarga la riga. */
+.olo-tb-ritorno {
+  max-width: 100%;
+  min-width: 0;
+}
+.olo-tb-ritorno__testo {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* common.css di wp-admin dà ad a:focus un anello blu (box-shadow): resta solo il nostro,
+   che sta nei 28px della riga. */
+.olo-tb-ritorno:focus {
+  box-shadow: none;
+}
+.olo-tb-ritorno:focus-visible {
+  outline: 2px solid var(--olo-ui-accent, #e8622a);
+  outline-offset: 1px;
 }
 </style>

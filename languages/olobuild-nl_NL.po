@@ -2821,6 +2821,15 @@ msgstr "Terug naar WordPress"
 msgid "Torna ai template"
 msgstr "Terug naar templates"
 
+msgid "Torna a «%s»"
+msgstr "Terug naar \"%s\""
+
+msgid "Riapri «%s», la pagina da cui hai aperto questo header"
+msgstr "Open \"%s\" opnieuw, de pagina van waaruit je deze header hebt geopend"
+
+msgid "Riapri «%s», la pagina da cui hai aperto questo footer"
+msgstr "Open \"%s\" opnieuw, de pagina van waaruit je deze footer hebt geopend"
+
 msgid "Totali carrello"
 msgstr "Winkelwagentotalen"
 

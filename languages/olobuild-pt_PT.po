@@ -3977,6 +3977,15 @@ msgstr "Voltar para WordPress"
 msgid "Torna ai template"
 msgstr "Voltar aos templates"
 
+msgid "Torna a «%s»"
+msgstr "Voltar para \"%s\""
+
+msgid "Riapri «%s», la pagina da cui hai aperto questo header"
+msgstr "Reabrir \"%s\", a página a partir da qual abriu este header"
+
+msgid "Riapri «%s», la pagina da cui hai aperto questo footer"
+msgstr "Reabrir \"%s\", a página a partir da qual abriu este footer"
+
 msgid "Totali carrello"
 msgstr "Totais do carrinho"
 

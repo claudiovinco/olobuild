@@ -10,6 +10,7 @@ import { onScrollToTileRequest } from '@/utils/scrollToTileChannel';
 import { loadScrollFlashPrefs } from '@/utils/scrollFlashPrefs';
 import { isFromPreview, postToPreview, resetPreviewOrigin } from '@/utils/previewOrigin';
 import { zoneOrigin } from '@/utils/zoneOrigin';
+import { ricordaRitorno } from '@/utils/ritornoZona';
 import { useToast } from '@/composables/useToast';
 import { t } from '@/i18n';
 
@@ -403,6 +404,13 @@ export function useIframeBridge(iframeRef) {
           : (d.zone === 'header' ? builderStore.headerTemplate : null);
         const zid = parseInt(zt && zt.id, 10) || 0;
         if (builderStore.unifiedMode && zid > 0) {
+          // Il builder del template di zona offrirà «Torna a «…»» (utils/ritornoZona.js).
+          ricordaRitorno({
+            verso: zid,
+            url: window.location.href,
+            titolo: (builderStore.currentTemplate && builderStore.currentTemplate.title) || '',
+            zona: d.zone,
+          });
           window.location.href = 'admin.php?page=olobuilder-templates&template_id=' + zid;
         }
         break;

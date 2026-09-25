@@ -3655,6 +3655,15 @@ msgstr "Zurück zu WordPress"
 msgid "Torna ai template"
 msgstr "Zurück zu den Templates"
 
+msgid "Torna a «%s»"
+msgstr "Zurück zu „%s“"
+
+msgid "Riapri «%s», la pagina da cui hai aperto questo header"
+msgstr "„%s“ wieder öffnen, die Seite, von der aus du diesen Header geöffnet hast"
+
+msgid "Riapri «%s», la pagina da cui hai aperto questo footer"
+msgstr "„%s“ wieder öffnen, die Seite, von der aus du diesen Footer geöffnet hast"
+
 msgid "Totali carrello"
 msgstr "Warenkorb-Summen"
 

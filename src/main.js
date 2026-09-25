@@ -3,6 +3,15 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import './assets/styles/main.scss';
 import { guardStaleBundle } from './utils/staleBundleGuard';
+import { ritornoPer } from './utils/ritornoZona';
+
+// Header o footer aperto dal chip «Apri il template»: la voce del «Torna a «…»» si
+// controlla qui, prima di ogni ricarica (bundle vecchio qui sotto, nuovo tentativo di
+// App.vue se il template non si carica), perché dopo una ricarica il referrer è la
+// pagina stessa. La barra riceve lo stesso esito (utils/ritornoZona.js). Solo nel
+// builder di un template: l'elenco la voce non la tocca.
+const idAperto = parseInt(window.oloData && window.oloData.templateId, 10) || 0;
+if (idAperto > 0) ritornoPer(idAperto);
 
 // Bundle vecchio rimasto in una scheda aperta = funzioni nuove che "spariscono".
 // Se il codice in esecuzione non è quello del server, si ricarica prima di montare.
