@@ -601,7 +601,7 @@ const builderStore = useBuilderStore();
 const tilesStore = useTilesStore();
 const history = useHistory();
 const toast = useToast();
-const { removeTiles } = useTileActions();
+const { removeTiles, incolla } = useTileActions();
 
 // ─── Indicatore stato salvataggio ───
 const lastSavedAt = ref(null);
@@ -783,9 +783,8 @@ function onGlobalKeydown(e) {
   if ((e.ctrlKey || e.metaKey) && e.key === 'v' && !e.altKey && !e.shiftKey && !isEditing) {
     if (tilesStore.clipboardTile) {
       e.preventDefault();
-      const id = builderStore.selectedTileId;
-      const clone = tilesStore.pasteAfterTile(id);
-      builderStore.markDirtyForTile(clone ? clone.id : id);
+      // Stessa azione dell'«Incolla» del menu contestuale (useTileActions.incolla).
+      incolla(builderStore.selectedTileId);
     }
   }
   // Ctrl+D → Duplica la/le tile selezionate (multi-selezione inclusa)

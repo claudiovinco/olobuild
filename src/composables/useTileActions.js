@@ -11,11 +11,16 @@
  *   5. toast "Eliminato — Annulla" (undo esplicito, cruciale perché il Canc
  *      non ha conferma e può eliminare più tile insieme): annulla solo finché
  *      l'eliminazione è l'ultimo passo, altrimenti lo dice
+ *
+ * E l'INCOLLA (menu contestuale e Ctrl+V, anche dall'anteprima): stessa posizione
+ * (tilesStore.pasteAfterTile), un passo di annullo suo, la zona giusta da salvare,
+ * la copia selezionata e portata in vista.
  */
 import { useTilesStore } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
 import { useHistory } from '@/composables/useHistory';
 import { useToast } from '@/composables/useToast';
+import { requestScrollToTile } from '@/utils/scrollToTileChannel';
 import { t } from '@/i18n';
 
 export function useTileActions() {
@@ -64,5 +69,29 @@ export function useTileActions() {
     });
   }
 
-  return { removeTiles };
+  /**
+   * Incolla gli appunti rispetto alla tile targetId (null = nessuna selezione).
+   * @returns {object|null} la copia incollata, null se non incollata
+   */
+  function incolla(targetId) {
+    if (!tilesStore.clipboardTile) return null;
+    // Checkpoint prima e dopo, come l'eliminazione: l'incolla è un passo suo.
+    history.pushStateNow();
+    const clone = tilesStore.pasteAfterTile(targetId || null);
+    if (!clone) {
+      // Solo una colonna interna fuori da un blocco Colonne interne: niente cambia,
+      // niente da salvare.
+      toast.info(t('Qui non si può incollare: una colonna interna va dentro un blocco Colonne interne'), 5000);
+      return null;
+    }
+    // Dopo l'inserimento (la zona si legge dal nodo): segna header, footer o pagina
+    // e fa partire l'avviso di zona condivisa.
+    builderStore.markDirtyForTile(clone.id);
+    history.pushStateNow();
+    builderStore.selectTile(clone.id);
+    requestScrollToTile(clone.id);
+    return clone;
+  }
+
+  return { removeTiles, incolla };
 }

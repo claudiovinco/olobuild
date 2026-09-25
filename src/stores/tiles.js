@@ -4,7 +4,7 @@ import {
   generateId, createSection, createRow, createColumn, createInnerColumn,
   CONTAINER_TYPES, migrateLegacyContent, isLegacyFormat, deepCloneWithNewIds,
   findNodeById, findAncestorPath, findParentAndIndex, findNodeWithChildrenArray,
-  normalizeNodes, countNodes,
+  normalizeNodes, countNodes, posizioneIncolla, liberaPostoGriglia,
 } from './treeUtils.js';
 import { migrateTreeBackgrounds } from '@/utils/bgMigrate';
 import { getElementDef } from '@/config/elementRegistry';
@@ -443,7 +443,7 @@ export const useTilesStore = defineStore('tiles', {
         || findParentAndIndex(this.footerTiles, tileId);
       if (!result) return;
       const original = result.parent[result.index];
-      const clone = deepCloneWithNewIds(original);
+      const clone = liberaPostoGriglia(deepCloneWithNewIds(original));
       result.parent.splice(result.index + 1, 0, clone);
       this._bumpVersion();
       return clone;
@@ -468,18 +468,19 @@ export const useTilesStore = defineStore('tiles', {
       return clone;
     },
 
+    // Incolla accanto alla tile (o dentro, se è il contenitore giusto), nella SUA zona:
+    // un pulsante su una sezione va nella prima colonna, una sezione su un pulsante dopo
+    // la sua sezione, mai un non-sezione alla radice (posizioneIncolla in treeUtils).
+    // Senza tile: avvolto fino a sezione in fondo al body. Restituisce la copia (non
+    // l'eventuale involucro) oppure null se lì non si può incollare.
     pasteAfterTile(tileId) {
       if (!this.clipboardTile) return null;
-      const result = findParentAndIndex(this.canvasTiles, tileId)
-        || findParentAndIndex(this.headerTiles, tileId)
-        || findParentAndIndex(this.footerTiles, tileId);
-      if (result) {
-        const clone = deepCloneWithNewIds(this.clipboardTile);
-        result.parent.splice(result.index + 1, 0, clone);
-        this._bumpVersion();
-        return clone;
-      }
-      return this.pasteTile(null);
+      const clone = liberaPostoGriglia(deepCloneWithNewIds(this.clipboardTile));
+      const spot = posizioneIncolla([this.canvasTiles, this.headerTiles, this.footerTiles], tileId || null, clone);
+      if (!spot) return null;
+      spot.list.splice(spot.index, 0, spot.node);
+      this._bumpVersion();
+      return clone;
     },
 
     copyStyle(tileId) {

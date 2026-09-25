@@ -116,7 +116,7 @@ import { columns as gridColumns, multirow as gridMultirow, masonry as gridMasonr
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
-const { removeTiles } = useTileActions();
+const { removeTiles, incolla } = useTileActions();
 
 const visible = ref(false);
 const x = ref(0);
@@ -249,11 +249,9 @@ function doPaste() {
   if (!tilesStore.clipboardTile || !tileId.value) { close(); return; }
   const tile = tilesStore.getTileById(tileId.value);
   if (!tile) { close(); return; }
-  // Incolla subito dopo la tile, nella SUA zona (header, pagina o footer), come
-  // Ctrl+V: prima il genitore si cercava solo nel corpo e l'incolla su una tile
-  // dell'header finiva in fondo alla pagina.
-  const clone = tilesStore.pasteAfterTile(tileId.value);
-  builderStore.markDirtyForTile(clone ? clone.id : tileId.value);
+  // Stessa azione di Ctrl+V (useTileActions.incolla): nella zona della tile, nel
+  // contenitore compatibile più vicino, copia selezionata e in vista.
+  incolla(tileId.value);
   close();
 }
 
