@@ -46,6 +46,7 @@
               type="text"
               :placeholder="searchPlaceholder"
               class="ip-search-input"
+              @keydown.enter="activeTab === 'library' && openLibrary()"
             />
           </div>
 
@@ -658,9 +659,14 @@ function gridPreviewSvg(tpl) {
   return '<svg width="'+cw+'" height="'+ch+'" viewBox="0 0 '+cw+' '+ch+'">'+rects+'</svg>';
 }
 
+// La libreria inserisce il blocco dove inserirebbe questo pannello: posizione e zona
+// del «+» (normalizzate in open()). Nella scheda «Da libreria» il campo di ricerca
+// («Cerca in libreria») filtra la libreria: il testo diventa la sua ricerca, e Invio
+// nel campo la apre.
 function openLibrary() {
+  const pos = { index: insertAtIndex.value, zone: insertZone.value, query: searchQuery.value.trim() };
   close();
-  emit('open-library');
+  emit('open-library', pos);
 }
 
 defineExpose({ open, close });

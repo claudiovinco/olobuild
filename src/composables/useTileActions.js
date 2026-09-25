@@ -34,7 +34,11 @@ export function useTileActions() {
    * @param {string|string[]} idsOrId
    */
   function removeTiles(idsOrId) {
-    const ids = (Array.isArray(idsOrId) ? idsOrId : [idsOrId]).filter(Boolean);
+    // Solo i nodi che esistono: un id rimasto da un nodo già tolto (una selezione
+    // superata) non crea passi di annullo e non fa dire «Elemento eliminato» a un
+    // gesto che non elimina niente.
+    const ids = (Array.isArray(idsOrId) ? idsOrId : [idsOrId])
+      .filter((id) => id && tilesStore.getTileById(id));
     if (!ids.length) return;
 
     // Checkpoint PRIMA della mutazione: separa questa eliminazione da eventuali

@@ -24,6 +24,17 @@ function datiMaster(tile) {
 // righe Flex, grid_width_<m> nelle righe a griglia (column.js).
 const LARGHEZZE_MISURE = ['default', 'small', 'medium', 'large'];
 
+// Preparazione del caricamento di una pagina, UNICA per chi porta nodi da fuori
+// (template aperto, header, footer, blocchi della libreria): il contenuto legacy si
+// avvolge in sezioni, i {} che json_decode del PHP rende [] tornano oggetti coi
+// default del config (normalizeNodes) e i campi sfondo legacy si uniscono in media_bg.
+function preparaContenuto(content) {
+  const nodi = isLegacyFormat(content) ? migrateLegacyContent(content) : (content || []);
+  normalizeNodes(nodi);
+  migrateTreeBackgrounds(nodi);
+  return nodi;
+}
+
 // Re-export tree utilities so existing imports from tiles.js keep working
 export { generateId, createSection, createRow, createColumn, createInnerColumn, CONTAINER_TYPES, migrateLegacyContent, isLegacyFormat, deepCloneWithNewIds };
 
@@ -164,40 +175,53 @@ export const useTilesStore = defineStore('tiles', {
     setCanvasTiles(content) {
       if (isLegacyFormat(content)) {
         console.log('[OlobuilderBuilder] Migrating legacy content to tree format');
-        this.canvasTiles = migrateLegacyContent(content);
-      } else {
-        this.canvasTiles = content || [];
       }
       // Fix PHP json_decode round-trip: {} → [] → Array (named props lost in JSON.stringify)
-      normalizeNodes(this.canvasTiles);
-      // Unifica i campi sfondo legacy nell'oggetto media_bg (non distruttivo).
-      migrateTreeBackgrounds(this.canvasTiles);
+      this.canvasTiles = preparaContenuto(content);
     },
 
     /**
      * Set header tiles for unified editing
      */
     setHeaderTiles(content) {
-      if (isLegacyFormat(content)) {
-        this.headerTiles = migrateLegacyContent(content);
-      } else {
-        this.headerTiles = content || [];
-      }
-      normalizeNodes(this.headerTiles);
-      migrateTreeBackgrounds(this.headerTiles);
+      this.headerTiles = preparaContenuto(content);
     },
 
     /**
      * Set footer tiles for unified editing
      */
     setFooterTiles(content) {
-      if (isLegacyFormat(content)) {
-        this.footerTiles = migrateLegacyContent(content);
+      this.footerTiles = preparaContenuto(content);
+    },
+
+    /**
+     * Inserisce nodi venuti da fuori (i blocchi della libreria) nella zona e alla
+     * posizione date, come se arrivassero col caricamento della pagina: copia con id
+     * nuovi, la stessa preparazione di setCanvasTiles e, come al caricamento, i widget
+     * globali riallineati al master (un'istanza vecchia salvata in un template
+     * personale lo riscriverebbe al primo salvataggio). replace = sostituisce tutta la
+     * zona. L'indice si limita alla lunghezza dell'array letto ORA (assente = in fondo).
+     * Restituisce i nodi inseriti.
+     */
+    inserisciContenuto(content, { zone = 'body', index, replace = false } = {}) {
+      const copie = (Array.isArray(content) ? content : [])
+        .filter((n) => n && typeof n === 'object')
+        .map((n) => deepCloneWithNewIds(n));
+      const nodi = preparaContenuto(copie);
+      // Niente da inserire: la zona resta com'è (anche con replace).
+      if (!nodi.length) return nodi;
+      this.syncGlobalWidgetsOnLoad([nodi]);
+      const arr = this.getZoneTiles(zone);
+      if (replace) {
+        arr.splice(0, arr.length, ...nodi);
       } else {
-        this.footerTiles = content || [];
+        const i = Number.isInteger(index) ? Math.min(Math.max(index, 0), arr.length) : arr.length;
+        arr.splice(i, 0, ...nodi);
       }
-      normalizeNodes(this.footerTiles);
-      migrateTreeBackgrounds(this.footerTiles);
+      // Anche per svuotare la cache degli indici: dopo «Sostituisci» getTileById non
+      // deve più trovare i nodi staccati (l'inspector resterebbe su una tile sparita).
+      this._bumpVersion();
+      return nodi;
     },
 
     /**
@@ -1299,8 +1323,9 @@ export const useTilesStore = defineStore('tiles', {
 
     /**
      * Al caricamento: sostituisci i dati locali con quelli del master dal DB.
+     * radici: gli array di nodi da riallineare (predefinito: body, header e footer).
      */
-    syncGlobalWidgetsOnLoad() {
+    syncGlobalWidgetsOnLoad(radici) {
       if (!this.globalWidgets.length) return;
       const gwMap = {};
       for (const gw of this.globalWidgets) {
@@ -1329,9 +1354,7 @@ export const useTilesStore = defineStore('tiles', {
           if (Array.isArray(n.children)) walk(n.children);
         }
       };
-      walk(this.canvasTiles);
-      walk(this.headerTiles);
-      walk(this.footerTiles);
+      (radici || [this.canvasTiles, this.headerTiles, this.footerTiles]).forEach(walk);
     },
   },
 });

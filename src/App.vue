@@ -55,7 +55,7 @@
     <!-- Temi -->
     <ThemeSelector ref="themeSelectorRef" />
     <!-- Insert Panel (clean mode) -->
-    <InsertPanel ref="insertPanelRef" @open-library="templateLibraryRef?.open()" />
+    <InsertPanel ref="insertPanelRef" @open-library="pos => templateLibraryRef?.open(pos)" />
   </div>
 </template>
 
@@ -257,8 +257,9 @@ function onSaveSection(e) {
   if (section) templateLibraryRef.value?.openSaveDialog(section);
 }
 
-function onLoadTemplate() {
-  templateLibraryRef.value?.open();
+// Dal menu contestuale di una sezione: il blocco va subito dopo quella sezione.
+function onLoadTemplate(e) {
+  templateLibraryRef.value?.open(e && e.detail ? e.detail : undefined);
 }
 
 onMounted(async () => {

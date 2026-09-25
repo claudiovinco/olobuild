@@ -62,14 +62,19 @@
             </div>
 
             <div :style="gridStyle">
+              <!-- Card = pulsante: si raggiunge col Tab e si sceglie con Invio o Spazio.
+                   Non un <button> perché contiene il cestino; .self: Invio sul cestino
+                   non inserisce il template. -->
               <div
                 v-for="tpl in filteredTemplates"
                 :key="tpl.id"
                 class="olo-tpl-card"
-                style="background:#1f2937;border-radius:12px;border:1px solid #374151;cursor:pointer;overflow:hidden;transition:border-color .18s ease, box-shadow .18s ease, transform .18s ease"
+                role="button"
+                tabindex="0"
+                :aria-label="tpl.name"
                 @click="onCardClick(tpl)"
-                @mouseenter="$event.currentTarget.style.borderColor='var(--olo-ui-accent)';$event.currentTarget.style.boxShadow='0 12px 28px -10px rgba(0,0,0,.5)';$event.currentTarget.style.transform='translateY(-3px)'"
-                @mouseleave="$event.currentTarget.style.borderColor='#374151';$event.currentTarget.style.boxShadow='none';$event.currentTarget.style.transform='none'"
+                @keydown.enter.self.prevent="onCardClick(tpl)"
+                @keydown.space.self.prevent="onCardClick(tpl)"
               >
                 <!-- Thumbnail image (for page templates with thumbnail) -->
                 <div v-if="tpl.thumbnail" style="position:relative;overflow:hidden;border-bottom:1px solid #4B5563" @mouseenter="$event.currentTarget.querySelector('.olo-tpl-hover').style.opacity='1'" @mouseleave="$event.currentTarget.querySelector('.olo-tpl-hover').style.opacity='0'">
@@ -97,7 +102,7 @@
                   <div style="min-width:0;flex:1">
                     <div style="display:flex;align-items:center;gap:4px">
                       <span style="font-size:11px;font-weight:500;color:#E5E7EB;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ tpl.name }}</span>
-                      <span v-if="tpl.category === 'page'" style="font-size:8px;padding:1px 5px;background:rgba(232,98,42,0.15);color:#F6A06B;border-radius:3px;flex-shrink:0">{{ t('Pagina') }}</span>
+                      <span v-if="isPagina(tpl)" style="font-size:8px;padding:1px 5px;background:rgba(232,98,42,0.15);color:#F6A06B;border-radius:3px;flex-shrink:0">{{ t('Pagina') }}</span>
                       <span v-if="tpl.is_user" style="font-size:8px;padding:1px 4px;background:rgba(245,158,11,0.15);color:#FCD34D;border-radius:3px;flex-shrink:0">{{ t('Personale') }}</span>
                     </div>
                     <span style="font-size:9px;text-transform:capitalize" :style="{ color: getCategoryColor(tpl.category) }">{{ getCategoryLabel(tpl.category) }}</span>
@@ -105,10 +110,10 @@
                   <!-- Delete button for user templates -->
                   <button
                     v-if="tpl.is_user"
+                    type="button"
+                    class="olo-tpl-del"
                     :title="t('Elimina template')"
-                    style="flex-shrink:0;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:4px;border:none;background:transparent;color:#EF4444;cursor:pointer;opacity:0.5;transition:opacity 0.15s"
-                    @mouseenter="$event.currentTarget.style.opacity='1';$event.currentTarget.style.background='rgba(239,68,68,0.1)'"
-                    @mouseleave="$event.currentTarget.style.opacity='0.5';$event.currentTarget.style.background='transparent'"
+                    :aria-label="t('Elimina template')"
                     @click.stop="confirmDelete(tpl)"
                   >
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
@@ -245,9 +250,16 @@
     </transition>
 
     <!-- Page template insert confirmation dialog -->
+    <!-- Il secondo clic di un doppio clic sulla card cade già nel dialogo, sullo sfondo
+         o su un pulsante: non chiude e non sceglie (detail = numero del clic; Invio e
+         Spazio sui pulsanti danno 0). Il mousedown sullo sfondo non toglie il focus al
+         riquadro, così Esc chiude anche dopo un clic lì. Il riquadro prende il focus, non
+         un pulsante: lo Spazio che ha scelto la card si rilascia qui e non preme
+         «Sostituisci tutto». Da lì il Tab gira fra i tre pulsanti senza uscire (la
+         trappola della libreria è spenta mentre il dialogo è aperto); Esc chiude. -->
     <transition name="fade">
-      <div v-if="pageInsertMode === 'ask'" style="position:fixed;inset:0;z-index:99500;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center" @click.self="cancelPageInsert">
-        <div style="background:#1F2937;border:1px solid #374151;border-radius:12px;padding:24px;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.5)" @click.stop>
+      <div v-if="pageInsertMode === 'ask'" style="position:fixed;inset:0;z-index:99500;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center" @mousedown.self.prevent @click.self="onPageCancelClick" @keydown.esc.stop="cancelPageInsert">
+        <div ref="pageDialogRef" tabindex="-1" role="dialog" aria-modal="true" :aria-label="t('Inserisci pagina completa')" style="background:#1F2937;border:1px solid #374151;border-radius:12px;padding:24px;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.5);outline:none" @click.stop @keydown.tab="tabNelDialogoPagina">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F6A06B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
             <span style="color:#E5E7EB;font-size:14px;font-weight:600">{{ t('Inserisci pagina completa') }}</span>
@@ -256,13 +268,13 @@
             {{ t('Il canvas contiene già del contenuto. Come vuoi procedere con il template') }} <strong style="color:#E5E7EB">{{ pendingPageTpl?.name }}</strong>?
           </p>
           <div style="display:flex;gap:8px">
-            <button @click="confirmPageInsert('replace')" style="flex:1;padding:8px 12px;background:var(--olo-ui-accent);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;transition:filter 0.15s" @mouseenter="$event.target.style.filter='brightness(0.9)'" @mouseleave="$event.target.style.filter='none'">
+            <button @click="confirmPageInsert('replace', $event)" style="flex:1;padding:8px 12px;background:var(--olo-ui-accent);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;transition:filter 0.15s" @mouseenter="$event.target.style.filter='brightness(0.9)'" @mouseleave="$event.target.style.filter='none'">
               {{ t('Sostituisci tutto') }}
             </button>
-            <button @click="confirmPageInsert('append')" style="flex:1;padding:8px 12px;background:#374151;color:#E5E7EB;border:1px solid #4B5563;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;transition:background 0.15s" @mouseenter="$event.target.style.background='#4B5563'" @mouseleave="$event.target.style.background='#374151'">
+            <button @click="confirmPageInsert('append', $event)" style="flex:1;padding:8px 12px;background:#374151;color:#E5E7EB;border:1px solid #4B5563;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;transition:background 0.15s" @mouseenter="$event.target.style.background='#4B5563'" @mouseleave="$event.target.style.background='#374151'">
               {{ t('Aggiungi in fondo') }}
             </button>
-            <button @click="cancelPageInsert" style="padding:8px 12px;background:transparent;color:#9CA3AF;border:1px solid #4B5563;border-radius:6px;font-size:12px;cursor:pointer;transition:color 0.15s" @mouseenter="$event.target.style.color='#E5E7EB'" @mouseleave="$event.target.style.color='#9CA3AF'">
+            <button @click="onPageCancelClick" style="padding:8px 12px;background:transparent;color:#9CA3AF;border:1px solid #4B5563;border-radius:6px;font-size:12px;cursor:pointer;transition:color 0.15s" @mouseenter="$event.target.style.color='#E5E7EB'" @mouseleave="$event.target.style.color='#9CA3AF'">
               {{ t('Annulla') }}
             </button>
           </div>
@@ -276,19 +288,29 @@ import { t } from '@/i18n';
 import { ref, computed, nextTick, watch } from 'vue';
 import { useFocusTrap } from '@/composables/useFocusTrap';
 import { useTilesStore } from '@/stores/tiles';
+import { findNodeById } from '@/stores/treeUtils';
 import { useBuilderStore } from '@/stores/builder';
 import { useToast } from '@/composables/useToast.js';
+import { useHistory } from '@/composables/useHistory';
+import { requestScrollToTile } from '@/utils/scrollToTileChannel';
 import FieldSelect from './fields/FieldSelect.vue';
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
 const toast = useToast();
+const history = useHistory();
 
 const oloData = window.oloData || {};
 
 const visible = ref(false);
 const loading = ref(false);
 const templates = ref([]);
+// Dove va un blocco: { zone, index, afterId } dal «+» o dal menu contestuale, null = in
+// fondo al body (pulsante della toolbar). Si riazzera a ogni apertura.
+const posizione = ref(null);
+const inserendo = ref(false);
+// Aperture della libreria: un blocco scaricato per un'apertura precedente non si inserisce.
+let aperture = 0;
 const activeCategory = ref('all');
 const searchQuery = ref('');
 
@@ -384,24 +406,56 @@ const gridStyle = computed(() => {
 
 const pageInsertMode = ref(null); // null, 'replace', 'append'
 const pendingPageTpl = ref(null);
+const pageDialogRef = ref(null);
+
+// Pagina intera = un template di serie della categoria «Pagine complete». Un template
+// personale è sempre una sezione (il builder salva la sezione cliccata), anche se chi
+// l'ha salvato ha scelto quella categoria: va dove è stata aperta la libreria e non
+// sostituisce il body. La categoria salvata resta com'è.
+function isPagina(tpl) {
+  return !!tpl && tpl.category === 'page' && !tpl.is_user;
+}
 
 function onCardClick(tpl) {
-  if (tpl.category === 'page') {
+  // Libreria che sta sparendo (dissolvenza di chiusura), blocco ancora in arrivo o
+  // dialogo della pagina aperto sopra (una card dietro di lui non sceglie): un clic o
+  // un Invio qui non sceglie niente.
+  if (!visible.value || inserendo.value || pageInsertMode.value === 'ask') return;
+  if (isPagina(tpl)) {
     // Pagina completa: con canvas già pieno chiedi (sostituisci/accoda),
     // su canvas vuoto sostituisci direttamente.
     if (tilesStore.canvasTiles.length > 0) {
       pendingPageTpl.value = tpl;
       pageInsertMode.value = 'ask';
+      nextTick(() => pageDialogRef.value?.focus());
     } else {
       insertTemplate(tpl, 'replace');
     }
   } else {
-    // Blocco/sezione: si accoda in fondo alla pagina, non la sostituisce.
+    // Blocco/sezione: va dove è stata aperta la libreria (vedi destinazione()), non
+    // sostituisce niente.
     insertTemplate(tpl, 'append');
   }
 }
 
-function confirmPageInsert(mode) {
+// Secondo (o terzo) clic di un doppio clic sulla card: arriva nel dialogo perché si è
+// appena aperto sotto il puntatore, sullo sfondo o su un pulsante. Non va preso per una
+// scelta: «Sostituisci tutto» sotto il puntatore sostituiva la pagina. Invio e Spazio sui
+// pulsanti danno detail 0 e passano.
+function secondoClic(e) {
+  return !!e && e.detail > 1;
+}
+
+// Clic sullo sfondo del dialogo o su «Annulla»: chiude, tranne il secondo clic di un
+// doppio clic sulla card.
+function onPageCancelClick(e) {
+  if (secondoClic(e)) return;
+  cancelPageInsert();
+}
+
+function confirmPageInsert(mode, e) {
+  if (secondoClic(e)) return;
+  if (!visible.value) { cancelPageInsert(); return; }
   if (pendingPageTpl.value) {
     insertTemplate(pendingPageTpl.value, mode);
   }
@@ -412,6 +466,26 @@ function confirmPageInsert(mode) {
 function cancelPageInsert() {
   pendingPageTpl.value = null;
   pageInsertMode.value = null;
+}
+
+// Il Tab resta nel dialogo della pagina (aria-modal): dall'ultimo pulsante torna al
+// primo, Shift+Tab dal primo o dal riquadro va all'ultimo; negli altri casi il Tab fa
+// il suo corso fra i pulsanti. Non useFocusTrap: activate() metterebbe il focus su
+// «Sostituisci tutto», e il rilascio dello Spazio che ha scelto la card lo premerebbe.
+function tabNelDialogoPagina(e) {
+  const box = pageDialogRef.value;
+  if (!box) return;
+  const pulsanti = box.querySelectorAll('button:not([disabled])');
+  if (!pulsanti.length) return;
+  const primo = pulsanti[0];
+  const ultimo = pulsanti[pulsanti.length - 1];
+  const attivo = document.activeElement;
+  if (e.shiftKey) {
+    if (attivo === primo || attivo === box) { e.preventDefault(); ultimo.focus(); }
+  } else if (attivo === ultimo) {
+    e.preventDefault();
+    primo.focus();
+  }
 }
 
 function getCategoryColor(cat) {
@@ -729,13 +803,47 @@ async function fetchTemplates() {
   }
 }
 
+// Zona e indice dove va il template. La posizione chiesta (p) è quella del clic sulla
+// card; gli array delle zone si leggono AL MOMENTO dell'inserimento (dopo la fetch:
+// intanto un Ctrl+Z può averli sostituiti). Le pagine complete vanno sempre
+// nel body, anche dal «+» di header o footer: «Sostituisci tutto» e «Aggiungi in
+// fondo» parlano della pagina, e una pagina intera in un header condiviso sarebbe un
+// danno. Header e footer valgono solo in modalità unificata, altrimenti il canvas è
+// il template aperto. Il menu contestuale dà la sezione cliccata (afterId): si
+// inserisce subito dopo, nella sua zona; se non c'è più, in fondo alla zona.
+function destinazione(tpl, mode, p = posizione.value) {
+  if (isPagina(tpl) || !p) {
+    return { zone: 'body', index: undefined, replace: mode === 'replace' };
+  }
+  const zonaValida = (z) => (builderStore.unifiedMode && (z === 'header' || z === 'footer') ? z : 'body');
+  const zonaCliccata = p.afterId ? tilesStore.getZoneForTile(p.afterId) : null;
+  const zone = zonaValida(zonaCliccata || p.zone);
+  const arr = tilesStore.getZoneTiles(zone);
+  if (zonaCliccata) {
+    const i = arr.findIndex((r) => r && (r.id === p.afterId || findNodeById([r], p.afterId)));
+    if (i >= 0) return { zone, index: i + 1, replace: false };
+  }
+  if (!p.afterId && Number.isInteger(p.index)) {
+    return { zone, index: Math.min(Math.max(p.index, 0), arr.length), replace: false };
+  }
+  return { zone, index: undefined, replace: false };
+}
+
 async function insertTemplate(tpl, mode = 'append') {
+  // Un doppio clic sulla card farebbe due fetch e due blocchi.
+  if (inserendo.value) return;
+  inserendo.value = true;
+  // Letti al clic. Se la libreria si chiude e si riapre mentre il blocco si scarica,
+  // vale la nuova apertura (altra posizione, altra scelta): questo non inserisce più.
+  const apertura = aperture;
+  const p = posizione.value;
   try {
     const res = await fetch(`${oloData.restUrl}template-library/${tpl.id}`, {
       headers: { 'X-WP-Nonce': oloData.nonce },
     });
     if (!res.ok) throw new Error('Fetch failed');
     const fullTpl = await res.json();
+    if (apertura !== aperture) return;
 
     // Support both array and object content
     let content = fullTpl.content;
@@ -748,39 +856,53 @@ async function insertTemplate(tpl, mode = 'append') {
       return;
     }
 
-    const nodes = regenerateIds(content);
+    const dest = destinazione(tpl, mode, p);
+    const inFondoAlBody = dest.zone === 'body' && !dest.replace
+      && (dest.index === undefined || dest.index >= tilesStore.canvasTiles.length);
 
-    if (mode === 'replace') {
-      // Clear existing canvas content
-      tilesStore.canvasTiles.splice(0, tilesStore.canvasTiles.length);
+    // Un passo di annullo suo, come l'eliminazione e l'incolla: checkpoint prima e dopo.
+    history.pushStateNow();
+    const prima = history.puntoAttuale();
+    // Copia con id nuovi + la preparazione del caricamento di una pagina (i {} del PHP
+    // tornano oggetti: la rinomina dall'albero non si perde più al salvataggio).
+    const nodes = tilesStore.inserisciContenuto(content, dest);
+    if (!nodes.length) {
+      toast.error(t('Template vuoto o non valido'));
+      return;
+    }
+    // Dopo l'inserimento (la zona si legge dal nodo): segna header, footer o pagina e
+    // fa partire l'avviso di zona condivisa.
+    builderStore.markDirtyForTile(nodes[0].id);
+    history.pushStateNow();
+    const dopo = history.puntoAttuale();
+
+    if (dest.replace) {
+      // Le tile di prima non esistono più: l'inspector si chiude.
+      builderStore.deselectTile();
+    } else {
+      builderStore.selectTile(nodes[0].id);
+      requestScrollToTile(nodes[0].id);
     }
 
-    for (const node of nodes) {
-      tilesStore.canvasTiles.push(node);
-    }
-    builderStore.isDirty = true;
-    toast.success(mode === 'append'
-      ? t(`"${tpl.name}" aggiunto in fondo`)
-      : t(`"${tpl.name}" caricato`));
+    const modello = dest.replace
+      ? t('«%s» caricato')
+      : (inFondoAlBody ? t('«%s» aggiunto in fondo alla pagina') : t('«%s» inserito'));
+    const nome = String(tpl.name || '');
+    toast.action(modello.replace('%s', () => nome), t('Annulla'), () => {
+      if (!history.annullaSeUltimo(prima, dopo)) {
+        toast.info(t("L'inserimento non è più l'ultimo passo: usa Ctrl+Z per tornare indietro un passo alla volta"), 5000);
+      }
+    }, 6000, 'success');
     close();
   } catch (err) {
     console.error('insertTemplate error:', err);
-    toast.error(t('Errore nell\'inserimento del template'));
+    // Scelta superata da una nuova apertura: l'errore non riguarda più l'utente.
+    if (apertura === aperture) toast.error(t('Errore nell\'inserimento del template'));
+  } finally {
+    // Dopo una riapertura il blocco appartiene alla nuova apertura (open() l'ha già
+    // liberato, e una nuova scelta può essere in volo): non va toccato.
+    if (apertura === aperture) inserendo.value = false;
   }
-}
-
-function regenerateIds(nodes) {
-  return nodes.map(node => {
-    const newNode = { ...node, id: generateId() };
-    if (node.children && Array.isArray(node.children)) {
-      newNode.children = regenerateIds(node.children);
-    }
-    return newNode;
-  });
-}
-
-function generateId() {
-  return 'tl-' + Math.random().toString(36).substring(2, 10);
 }
 
 // ═══ Count elements recursively ═══
@@ -893,7 +1015,25 @@ async function doDelete() {
   }
 }
 
-function open() {
+// pos: { zone, index, query } dal «+», { afterId, zone } dal menu contestuale; senza (o
+// con un Event, dalla toolbar) il blocco va in fondo al body. Sempre riazzerata: la
+// libreria resta montata e la posizione di un «+» precedente non va riusata.
+// query = ciò che c'è nel campo «Cerca in libreria» del pannello Inserisci (anche vuoto):
+// diventa la ricerca della libreria. Senza, la ricerca resta quella di prima.
+function open(pos) {
+  const semplice = !!pos && typeof pos === 'object' && Object.getPrototypeOf(pos) === Object.prototype;
+  posizione.value = semplice
+    ? {
+        zone: typeof pos.zone === 'string' ? pos.zone : 'body',
+        index: Number.isInteger(pos.index) ? pos.index : null,
+        afterId: pos.afterId || null,
+      }
+    : null;
+  if (semplice && typeof pos.query === 'string') searchQuery.value = pos.query;
+  // Nuova apertura: un blocco ancora in arrivo da quella di prima non si inserisce più
+  // (insertTemplate confronta il contatore) e le card tornano cliccabili.
+  aperture++;
+  inserendo.value = false;
   visible.value = true;
   if (templates.value.length === 0) {
     fetchTemplates();
@@ -929,5 +1069,59 @@ defineExpose({ open, close, visible, openSaveDialog });
    colore del builder toccato. */
 .olo-tpl-search {
   padding-left: 2rem !important;
+}
+/* Card: stesso rilievo al passaggio del mouse e al focus da tastiera, più il contorno
+   con l'accento del chrome sul focus-visible. Al focus compare anche la descrizione
+   (lo strato .olo-tpl-hover, che il mouse accende da sé).
+   L'accento del chrome è locale (come in BuilderSidebar): la libreria sta fuori dalla
+   sidebar e nessun suo antenato lo definisce. Senza, var() non si risolve, il contorno
+   diventa «none» e toglie anche l'anello di focus del browser. Il cestino sta dentro
+   la card e lo eredita da qui. */
+.olo-tpl-card {
+  --olo-ui-accent: #e8622a;
+  background: #1f2937;
+  border-radius: 12px;
+  border: 1px solid #374151;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.olo-tpl-card:hover,
+.olo-tpl-card:focus-visible {
+  border-color: var(--olo-ui-accent);
+  box-shadow: 0 12px 28px -10px rgba(0, 0, 0, .5);
+  transform: translateY(-3px);
+}
+.olo-tpl-card:focus-visible {
+  outline: 2px solid var(--olo-ui-accent);
+  outline-offset: 2px;
+}
+.olo-tpl-card:focus-visible .olo-tpl-hover {
+  opacity: 1 !important;
+}
+/* Cestino dei template personali */
+.olo-tpl-del {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: #EF4444;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.15s, background-color 0.15s;
+}
+.olo-tpl-del:hover,
+.olo-tpl-del:focus-visible {
+  opacity: 1;
+  background: rgba(239, 68, 68, 0.1);
+}
+.olo-tpl-del:focus-visible {
+  outline: 2px solid var(--olo-ui-accent);
+  outline-offset: 1px;
 }
 </style>

@@ -135,6 +135,25 @@ export function useHistory() {
     }
   }
 
+  /**
+   * La selezione non resta su nodi che l'annulla o il ripeti hanno tolto (Ctrl+Z di un
+   * inserimento): l'inspector si chiudeva da sé, ma Canc diceva «Elemento eliminato»
+   * senza eliminare niente. Primaria sparita (o già azzerata dal getter selectedTile)
+   * = niente selezione; altrimenti escono dalla multi-selezione solo gli id spariti.
+   * Un ripeti rimette il nodo con lo stesso id, non la selezione.
+   */
+  function potaSelezione() {
+    const primaria = builderStore.selectedTileId;
+    const ids = Array.isArray(builderStore.selectedTileIds) ? builderStore.selectedTileIds : [];
+    if (!primaria && !ids.length) return;
+    if (!primaria || !tilesStore.getTileById(primaria)) {
+      builderStore.deselectTile();
+      return;
+    }
+    const vivi = ids.filter((id) => tilesStore.getTileById(id));
+    if (vivi.length !== ids.length) builderStore.selectedTileIds = vivi;
+  }
+
   function restore(state) {
     isProgrammatic = true;
     passi++;
@@ -159,6 +178,8 @@ export function useHistory() {
       // Header/footer non hanno un deep watch dedicato nell'iframe bridge:
       // il bump forza il re-render del live preview per tutte le zone.
       tilesStore._bumpVersion();
+      // Dopo il bump (la cache degli indici troverebbe ancora i nodi staccati).
+      potaSelezione();
       // La fotografia è ciò che c'è davvero: se le impostazioni differiscono da
       // quelle del passo (ordine delle chiavi), il ⌘Z dopo non crea un passo fantasma.
       const tpl = builderStore.currentTemplate;

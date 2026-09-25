@@ -300,8 +300,13 @@ function doSaveAsTemplate() {
   close();
 }
 
+// La libreria inserisce il blocco subito dopo la sezione cliccata, nella sua zona
+// (si legge prima di close(), che azzera tileId).
 function doLoadTemplate() {
-  document.dispatchEvent(new CustomEvent('olo:load-template'));
+  const id = tileId.value;
+  document.dispatchEvent(new CustomEvent('olo:load-template', {
+    detail: id ? { afterId: id, zone: tilesStore.getZoneForTile(id) || 'body' } : null,
+  }));
   close();
 }
 
