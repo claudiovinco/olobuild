@@ -100,6 +100,10 @@ class Olobuild_Tagcloud_Tile extends Olobuild_Tile_Base {
         $hover_color      = $this->safe_color_css( $s['hover_color'] ) ?: 'var(--olo-color-on-primary, #ffffff)';
         $bg_color         = $this->safe_color_css( $s['background_color'] ) ?: 'var(--olo-color-surface-alt, #f3f4f6)';
         $hover_bg         = $this->safe_color_css( $s['hover_background'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        // Transizione del tag: `all .2s`, più la «Durata» dello Sfondo in hover se salvata. La regola
+        // del Raggio in hover la ripete: in CSS vince UNA sola `transition`.
+        $bg_dur           = Olobuild_Tile_Utils::durata_hover( $s, 'background_color_hover_duration', '' );
+        $tag_tr           = 'all .2s ease' . ( $bg_dur !== '' ? ', background ' . $bg_dur . ' ease' : '' );
 
         // Padding — supporta sia string legacy "6 14" che object spacing { top, right, bottom, left }
         $padding_raw = $s['padding'];
@@ -145,10 +149,10 @@ class Olobuild_Tagcloud_Tile extends Olobuild_Tile_Base {
                 display: inline-flex;
                 align-items: center;
                 gap: 4px;
-                transition: all .2s ease;
+                transition: <?php echo $tag_tr; ?>;
                 line-height: 1.4;
             }
-            <?php if ( $radius_hover_css !== '' ) : ?>#<?php echo $uid; ?> .olo-tagcloud-tag{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo $uid; ?> .olo-tagcloud-tag:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
+            <?php if ( $radius_hover_css !== '' ) : ?>#<?php echo $uid; ?> .olo-tagcloud-tag{transition:<?php echo $tag_tr; ?>,border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo $uid; ?> .olo-tagcloud-tag:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             #<?php echo $uid; ?> .olo-tagcloud-tag:hover {
                 color: <?php echo $hover_color; ?>;
                 background: <?php echo $hover_bg; ?>;

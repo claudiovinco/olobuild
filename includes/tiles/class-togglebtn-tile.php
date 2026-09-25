@@ -77,6 +77,17 @@ class Olobuild_ToggleBtn_Tile extends Olobuild_Tile_Base {
         $bc          = $this->safe_color_css( $s['btn_border_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $radius      = Olobuild_Tile_Utils::border_radius( $s['btn_border_radius'] ?? 0 );
         $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['btn_border_radius_hover'] ?? null );
+        // Bordo in hover del sistema bordi (sul pulsante): dichiarazioni e transizione separate,
+        // così la sua transizione si accoda a quella del pulsante invece di finire in una regola
+        // `.uid{transition:border …}` stampata dopo, che spegneva sfondo, pressione e raggio.
+        $border_hover_props = $this->build_border_hover_props( $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        // Transizione del pulsante con la «Durata» dello Sfondo in hover (senza chiave 0.2s come
+        // sempre) più quella del Bordo in hover. La regola del Raggio in hover la ripete: in CSS
+        // vince UNA sola `transition`.
+        $btn_tr = 'background ' . Olobuild_Tile_Utils::durata_hover( $s, 'btn_bg_hover_duration', '0.2s' ) . ', transform 0.15s';
+        if ( $border_hover_props['transition'] !== '' ) {
+            $btn_tr .= ', ' . $border_hover_props['transition'];
+        }
         // Padding pulsante: controllo unico a 4 lati (tile_padding), ripiego legacy x/y.
         $btn_pad = Olobuild_Tile_Utils::spacing_sides(
             $s['tile_padding'] ?? null,
@@ -112,12 +123,12 @@ class Olobuild_ToggleBtn_Tile extends Olobuild_Tile_Base {
                 <?php if ( $bw > 0 ) : ?>border: <?php echo (int) $bw; ?>px solid <?php echo $bc; ?>;<?php endif; ?>
                 <?php if ( $radius && $radius !== '0px' ) : ?>border-radius: <?php echo $radius; ?>;<?php endif; ?>
                 cursor: pointer;
-                transition: background 0.2s, transform 0.15s;
+                transition: <?php echo $btn_tr; ?>;
                 user-select: none;
                 -webkit-user-select: none;
                 <?php if ( $full_width ) : ?>width: 100%; justify-content: center;<?php endif; ?>
             }
-            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
+            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?>{transition:<?php echo $btn_tr; ?>, border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
 
             .<?php echo $uid; ?>:hover {
                 background: <?php echo $hover_bg; ?>;
@@ -261,7 +272,8 @@ class Olobuild_ToggleBtn_Tile extends Olobuild_Tile_Base {
         // NON al wrapper esterno {uid}-wrap.
         $btn_sel           = ".{$uid}";
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
-        $border_hover_css  = $this->build_border_hover_css( $btn_sel, $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        // Bordo in hover: la sua transizione è già in $btn_tr (sopra), qui solo le dichiarazioni.
+        $border_hover_css  = $border_hover_props['decls'] !== '' ? "{$btn_sel}:hover{{$border_hover_props['decls']}}" : '';
         $border_effect_css = $this->build_border_effect_css( $btn_sel, $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';

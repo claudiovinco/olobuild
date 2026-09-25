@@ -235,7 +235,8 @@ class Olobuild_Button_Tile extends Olobuild_Tile_Base {
         // `transform` va incluso nella stessa regola SOLO se il target è .olo-btn-link;
         // altrimenti il blocco "Transform effects" più sotto applica una transition
         // separata sul wrap (selettore diverso, niente conflitto di overrideing).
-        $base_transitions = [ 'border-color 0.25s ease', 'box-shadow 0.25s ease' ];
+        // L'Ombra ha il toggle Normale/Hover: la sua «Durata» (senza chiave 0.25s come sempre).
+        $base_transitions = [ 'border-color 0.25s ease', 'box-shadow ' . Olobuild_Tile_Utils::durata_hover( $s, 'shadow_hover_duration', '0.25s' ) . ' ease' ];
         if ( $transform_sel === '.olo-btn-link' ) {
             $base_transitions[] = 'transform 0.25s ease';
         }

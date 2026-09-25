@@ -563,11 +563,14 @@
 
       <!-- Stato Hover: il CONTROLLO sopra mostra e scrive già il valore hover (pilotato dal
            toggle Normale/Hover). Qui resta solo la durata della transizione + reset. NIENTE
-           striscia arancione né controllo duplicato (era il "vecchio sistema"). -->
+           striscia arancione né controllo duplicato (era il "vecchio sistema").
+           Senza durata (withHover noDuration: il renderer non ha una transizione da regolare)
+           la riga resta solo per «Azzera», quando un valore hover c'è. -->
       <div
-        v-if="field.hoverable && hoverOpen"
+        v-if="field.hoverable && hoverOpen && (hoverDurationKey || hasHoverValue)"
         class="mb-mt-2 mb-flex mb-items-center mb-gap-2"
       >
+        <template v-if="hoverDurationKey">
         <span class="mb-text-[10px] mb-font-semibold mb-text-gray-400 mb-uppercase mb-tracking-wide">{{ t('Durata') }}</span>
         <div class="mb-inline-flex mb-items-center mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-overflow-hidden">
           <input
@@ -581,6 +584,7 @@
           />
           <span class="mb-px-2 mb-py-1 mb-text-[10px] mb-text-gray-400 mb-bg-gray-50 mb-border-l mb-border-gray-200">ms</span>
         </div>
+        </template>
         <button
           v-if="hasHoverValue"
           @click="resetHoverValue"
@@ -769,7 +773,7 @@ const hoverKey = computed(() => {
 });
 
 const hoverDurationKey = computed(() => {
-  if (!props.field.hoverable) return '';
+  if (!props.field.hoverable || props.field.hoverNoDuration) return '';
   if (props.hoverNested) return props.field.hoverDurationKey || `${props.field.key}_hover_duration`;
   return props.field.hoverDurationKey || `${props.field.key}_hover_duration`;
 });

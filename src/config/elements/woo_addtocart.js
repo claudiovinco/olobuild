@@ -88,8 +88,8 @@ export default {
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
 
     { type: 'separator', label: t('Colori') },
-    withHover({ key: 'bg_color', label: t('Sfondo'), type: 'color' }, { hoverKey: 'hover_bg' }),
-    withHover({ key: 'text_color', label: t('Colore testo'), type: 'color' }, { hoverKey: 'hover_text' }),
+    withHover({ key: 'bg_color', label: t('Sfondo'), type: 'color' }, { hoverKey: 'hover_bg', defaultDuration: 200 }),
+    withHover({ key: 'text_color', label: t('Colore testo'), type: 'color' }, { hoverKey: 'hover_text', defaultDuration: 200 }),
     ...borderFields(),
   ],
 };

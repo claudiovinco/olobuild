@@ -92,7 +92,7 @@ export default {
     withHover({ key: 'border_radius', label: t('Raggio card'), type: 'border-radius' }),
 
     { type: 'separator', label: t('Colori') },
-    withHover({ key: 'link_color', label: t('Colore link'), type: 'color' }, { hoverKey: 'hover_color' }),
+    withHover({ key: 'link_color', label: t('Colore link'), type: 'color' }, { hoverKey: 'hover_color', defaultDuration: 0 }),
     { key: 'background_color', label: t('Sfondo card'), type: 'color' },
 
     ...shadowField,

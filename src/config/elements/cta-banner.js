@@ -112,8 +112,8 @@ export default {
     { type: 'typography', label: t('Sottotitolo'), responsiveKeys: [], keys: { size: 'subtitle_size', color: 'subtitle_color' }, sizeMin: 11, sizeMax: 22 },
 
     { type: 'separator', label: t('CTA stile') },
-    withHover({ key: 'cta_bg',    label: t('Sfondo'),       type: 'color' }, { hoverKey: 'cta_bg_hover' }),
-    withHover({ key: 'cta_color', label: t('Colore testo'), type: 'color' }, { hoverKey: 'cta_color_hover' }),
+    withHover({ key: 'cta_bg',    label: t('Sfondo'),       type: 'color' }, { hoverKey: 'cta_bg_hover', defaultDuration: 200 }),
+    withHover({ key: 'cta_color', label: t('Colore testo'), type: 'color' }, { hoverKey: 'cta_color_hover', defaultDuration: 200 }),
     { type: 'typography', label: t('Pulsante'), responsiveKeys: [], keys: { size: 'cta_size' }, sizeMin: 12, sizeMax: 22 },
     { key: 'cta_padding',   label: t('Padding bottoni'), type: 'spacing', min: 0, max: 80 },
     withHover({ key: 'cta_radius', label: t('Raggio CTA'), type: 'border-radius' }, { hoverKey: 'cta_radius_hover', hoverDurationKey: 'cta_radius_hover_duration' }),

@@ -173,12 +173,14 @@ export default {
     ...textEffectsFields([ { value: 'caption', label: t('Solo Didascalia') } ]),
 
     { type: 'separator', label: t('Filtri CSS') },
-    withHover({ key: 'filter_blur',       label: t('Sfocatura'),       type: 'range', min: 0, max: 20,  step: 1 }, { hoverKey: 'hover_filter_blur' }),
-    withHover({ key: 'filter_brightness', label: t('Luminosità'),       type: 'range', min: 0, max: 200, step: 5 }, { hoverKey: 'hover_filter_brightness' }),
-    withHover({ key: 'filter_contrast',   label: t('Contrasto'),        type: 'range', min: 0, max: 200, step: 5 }, { hoverKey: 'hover_filter_contrast' }),
-    withHover({ key: 'filter_saturate',   label: t('Saturazione'),      type: 'range', min: 0, max: 200, step: 5 }, { hoverKey: 'hover_filter_saturate' }),
-    withHover({ key: 'filter_grayscale',  label: t('Scala di grigi'),   type: 'range', min: 0, max: 100, step: 5 }, { hoverKey: 'hover_filter_grayscale' }),
-    withHover({ key: 'filter_sepia',      label: t('Seppia'),           type: 'range', min: 0, max: 100, step: 5 }, { hoverKey: 'hover_filter_sepia' }),
+    // I sei filtri finiscono in UNA sola `filter` (class-image-tile.php): una sola «Durata»,
+    // condivisa, letta dal PHP; senza chiave 0,4 s come sempre.
+    withHover({ key: 'filter_blur',       label: t('Sfocatura'),       type: 'range', min: 0, max: 20,  step: 1 }, { hoverKey: 'hover_filter_blur', hoverDurationKey: 'hover_filter_duration', defaultDuration: 400 }),
+    withHover({ key: 'filter_brightness', label: t('Luminosità'),       type: 'range', min: 0, max: 200, step: 5 }, { hoverKey: 'hover_filter_brightness', hoverDurationKey: 'hover_filter_duration', defaultDuration: 400 }),
+    withHover({ key: 'filter_contrast',   label: t('Contrasto'),        type: 'range', min: 0, max: 200, step: 5 }, { hoverKey: 'hover_filter_contrast', hoverDurationKey: 'hover_filter_duration', defaultDuration: 400 }),
+    withHover({ key: 'filter_saturate',   label: t('Saturazione'),      type: 'range', min: 0, max: 200, step: 5 }, { hoverKey: 'hover_filter_saturate', hoverDurationKey: 'hover_filter_duration', defaultDuration: 400 }),
+    withHover({ key: 'filter_grayscale',  label: t('Scala di grigi'),   type: 'range', min: 0, max: 100, step: 5 }, { hoverKey: 'hover_filter_grayscale', hoverDurationKey: 'hover_filter_duration', defaultDuration: 400 }),
+    withHover({ key: 'filter_sepia',      label: t('Seppia'),           type: 'range', min: 0, max: 100, step: 5 }, { hoverKey: 'hover_filter_sepia', hoverDurationKey: 'hover_filter_duration', defaultDuration: 400 }),
 
     { type: 'separator', label: t('Animazione hover') },
     { key: 'hover_animation', label: t('Animazione hover'), type: 'select', options: [

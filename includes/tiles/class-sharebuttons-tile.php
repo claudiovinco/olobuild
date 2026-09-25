@@ -88,6 +88,8 @@ class Olobuild_Sharebuttons_Tile extends Olobuild_Tile_Base {
         $gap       = absint( $s['gap'] );
         $icon_clr  = $this->safe_color_css( $s['icon_color'] ) ?: '#ffffff';
         $hover_clr = $this->safe_color_css( $s['icon_hover_color'] ) ?: '#ffffff';
+        // «Durata» del Colore icona in hover: senza chiave il colore cambia di scatto, come sempre
+        $icon_dur  = Olobuild_Tile_Utils::durata_hover( $s, 'icon_color_hover_duration', '' );
         $bg_clr    = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $labels    = self::platform_labels();
 
@@ -104,7 +106,7 @@ class Olobuild_Sharebuttons_Tile extends Olobuild_Tile_Base {
         <style>
             #<?php echo $uid; ?> .olo-share-btn { transition: opacity 0.2s ease; text-decoration: none; cursor: pointer; }
             #<?php echo $uid; ?> .olo-share-btn:hover { opacity: 0.85; }
-            #<?php echo $uid; ?> .olo-share-btn:hover svg { color: <?php echo esc_attr( $hover_clr ); ?>; }
+            <?php if ( $icon_dur !== '' ) echo '#' . $uid . ' .olo-share-btn svg { transition: color ' . $icon_dur . ' ease; } '; ?>#<?php echo $uid; ?> .olo-share-btn:hover svg { color: <?php echo esc_attr( $hover_clr ); ?>; }
             #<?php echo $uid; ?> .olo-share-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>

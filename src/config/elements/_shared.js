@@ -986,7 +986,11 @@ export const cssGridDefaults = {
  * @param {Object} [opts]
  * @param {string} [opts.hoverKey]         - Chiave hover custom (default: `${key}_hover`)
  * @param {string} [opts.hoverDurationKey] - Chiave durata custom (default: `${key}_hover_duration`)
- * @param {number} [opts.defaultDuration]  - Durata di fallback (default: 300)
+ * @param {number} [opts.defaultDuration]  - Durata mostrata quando la chiave non è salvata (default: 300).
+ *   Va messa uguale a quella che il renderer PHP usa senza la chiave: altrimenti l'inspector dice
+ *   300 ms e il sito anima in un altro tempo.
+ * @param {boolean} [opts.noDuration]      - true: niente «Durata» (il renderer non ha una transizione
+ *   da regolare). InspectorField non mostra la riga; «Azzera» resta.
  */
 export function withHover(field, opts = {}) {
   return {
@@ -995,6 +999,7 @@ export function withHover(field, opts = {}) {
     hoverKey: opts.hoverKey || `${field.key}_hover`,
     hoverDurationKey: opts.hoverDurationKey || `${field.key}_hover_duration`,
     hoverDefaultDuration: opts.defaultDuration ?? 300,
+    ...(opts.noDuration ? { hoverNoDuration: true } : {}),
   };
 }
 

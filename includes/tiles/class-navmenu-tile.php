@@ -430,7 +430,9 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
             $v_icon_size  = max( 14, intval( $s['v_icon_size'] ) );
 
             $rules[] = "{$sel} .olo-vnav-list { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:{$v_spacing}px; }";
-            $rules[] = "{$sel} .olo-vnav-link { display:flex; align-items:center; gap:8px; padding:{$v_pad_css}; border-radius:{$v_radius}px; text-decoration:none; transition:background .15s,color .15s" . ( $v_rad_h ? ', ' . $v_rad_h['transition'] : '' ) . "; }";
+            // «Durata» dello Sfondo in hover (senza chiave .15s come sempre)
+            $v_bg_dur = Olobuild_Tile_Utils::durata_hover( $s, 'v_active_bg_hover_duration', '.15s' );
+            $rules[] = "{$sel} .olo-vnav-link { display:flex; align-items:center; gap:8px; padding:{$v_pad_css}; border-radius:{$v_radius}px; text-decoration:none; transition:background {$v_bg_dur},color .15s" . ( $v_rad_h ? ', ' . $v_rad_h['transition'] : '' ) . "; }";
             // a11y tastiera: anello di focus visibile sulle voci di menu verticale
             $rules[] = "{$sel} .olo-vnav-link:focus-visible { outline:none; box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }";
 

@@ -248,7 +248,7 @@ export default {
     { type: 'separator', label: t('CTA — Aspetto') },
     { key: 'cta_width', label: t('Larghezza'), type: 'range', min: 30, max: 100, step: 5 },
     withHover({ key: 'cta_radius', label: t('Raggio'), type: 'border-radius' }),
-    withHover({ key: 'cta_bg_color',   label: t('Sfondo'),       type: 'color' }, { hoverKey: 'cta_hover_bg_color' }),
+    withHover({ key: 'cta_bg_color',   label: t('Sfondo'),       type: 'color' }, { hoverKey: 'cta_hover_bg_color', defaultDuration: 300 }),
     { key: 'cta_hover_text_color', label: t('Colore testo hover'), type: 'color' },
     { key: 'cta_border', label: t('Bordo CTA'), type: 'border',
       legacyKeys: { width: 'cta_border_width', color: 'cta_border_color' } },

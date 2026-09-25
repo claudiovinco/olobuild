@@ -915,9 +915,12 @@ regolaC('chrome-nelle-tile', 'Le tile (PHP, Vue, config, frontend.css) non leggo
 }
 
 // «Durata» del toggle Normale/Hover: withHover() offre sempre il campo `{key}_hover_duration`
-// (o hoverDurationKey). Agisce solo se il renderer PHP della tile lo legge: per nome, con
-// build_hover_css() (la mappa lo deriva dalla chiave) o con radius_hover*() (lo deriva
-// dalla chiave hover). Debito del giorno: può solo scendere (D1 mostra «Durata» solo lì).
+// (o hoverDurationKey), salvo `noDuration: true` (InspectorField non mostra la riga). Agisce
+// solo se il renderer PHP della tile lo legge: per nome (anche con
+// Olobuild_Tile_Utils::durata_hover( $s, '<chiave>', … )), con build_hover_css() (la mappa lo
+// deriva dalla chiave: conta solo una chiave scritta DENTRO gli argomenti della chiamata, non
+// nei $defaults) o con radius_hover*() (lo deriva dalla chiave hover). Debito del giorno: può
+// solo scendere.
 {
   const trovate = [];
   for (const f of fs.readdirSync(ELEMENTS).filter((x) => x.endsWith('.js') && !x.startsWith('_'))) {
@@ -925,15 +928,23 @@ regolaC('chrome-nelle-tile', 'Le tile (PHP, Vue, config, frontend.css) non leggo
     const tipo = tipoConfig(src);
     const php = phpPerTipo[tipo];
     if (!tipo || php === undefined) continue; // renderer fuori da includes/tiles (offcanvas, olo_room_* di OLObooking)
+    const mappeHover = [];
+    for (let j = php.indexOf('build_hover_css('); j >= 0; j = php.indexOf('build_hover_css(', j + 1)) {
+      mappeHover.push(php.slice(j, matchParen(php, j + 'build_hover_css'.length) + 1));
+    }
+    const argomentiHover = mappeHover.join('\n');
     for (let i = src.indexOf('withHover('); i >= 0; i = src.indexOf('withHover(', i + 1)) {
       const call = src.slice(i, matchParen(src, i + 'withHover'.length) + 1);
       const key = (call.match(/key:\s*'([a-z0-9_]+)'/) || [])[1];
       if (!key) continue;
+      if (/noDuration:\s*true/.test(call)) continue; // nessuna «Durata» offerta
       const hk = (call.match(/hoverKey:\s*'([a-z0-9_]+)'/) || [])[1] || key + '_hover';
       const dk = (call.match(/hoverDurationKey:\s*'([a-z0-9_]+)'/) || [])[1] || key + '_hover_duration';
-      // letta = usata come indice ($s['…']) o passata come dur_key: stare nei $defaults non basta
-      const perNome = leggeChiave(php, dk) || new RegExp("'dur_key'\\s*=>\\s*'" + dk + "'").test(php);
-      const daMappa = dk === key + '_hover_duration' && /build_hover_css/.test(php) && new RegExp("'" + key + "'\\s*=>").test(php);
+      // letta = usata come indice ($s['…']), passata come dur_key o a durata_hover(): stare nei
+      // $defaults non basta
+      const perNome = leggeChiave(php, dk) || new RegExp("'dur_key'\\s*=>\\s*'" + dk + "'").test(php)
+        || new RegExp("durata_hover\\(\\s*\\$\\w+\\s*,\\s*'" + dk + "'").test(php);
+      const daMappa = dk === key + '_hover_duration' && new RegExp("'" + key + "'\\s*=>").test(argomentiHover);
       const daRaggio = dk === hk + '_duration' && /radius_hover(_rules)?\s*\(/.test(php) && php.includes("'" + hk + "'");
       if (!perNome && !daMappa && !daRaggio) trovate.push({ file: f.replace(/\.js$/, ''), type: 'durata', key: dk, label: '' });
     }

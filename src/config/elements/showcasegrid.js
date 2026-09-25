@@ -115,8 +115,8 @@ export default {
 
     { type: 'separator', label: t('Freccia') },
     { key: 'show_arrow', label: t('Mostra freccia'), type: 'toggle' },
-    withHover({ key: 'arrow_bg', label: t('Cerchio (hover vuoto = accento)'), type: 'color' }, { hoverKey: 'arrow_hover_bg' }),
-    withHover({ key: 'arrow_color', label: t('Freccia'), type: 'color' }, { hoverKey: 'arrow_hover_color' }),
+    withHover({ key: 'arrow_bg', label: t('Cerchio (hover vuoto = accento)'), type: 'color' }, { hoverKey: 'arrow_hover_bg', defaultDuration: 250 }),
+    withHover({ key: 'arrow_color', label: t('Freccia'), type: 'color' }, { hoverKey: 'arrow_hover_color', defaultDuration: 250 }),
 
     { type: 'separator', label: t('Sfondo') },
     { key: 'bg', label: t('Sfondo completo'), type: 'background', showParallax: false },

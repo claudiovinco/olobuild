@@ -116,7 +116,7 @@ export default {
 
     { key: 'link_underline', label: t('Sottolineatura link'), type: 'toggle' },
     { type: 'separator', label: t('Colori') },
-    withHover({ key: 'background_color', label: t('Sfondo tag'),   type: 'color' }, { hoverKey: 'hover_background' }),
+    withHover({ key: 'background_color', label: t('Sfondo tag'),   type: 'color' }, { hoverKey: 'hover_background', defaultDuration: 200 }),
 
     { type: 'separator', label: t('Stile tag') },
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),

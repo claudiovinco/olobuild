@@ -93,6 +93,7 @@ class Olobuild_Pagination_Tile extends Olobuild_Tile_Base {
         $bg_color        = $this->safe_color_css( $s['background_color'] );
         $active_bg       = $this->safe_color_css( $s['active_background'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $hover_bg        = $this->safe_color_css( $s['hover_background'] );
+        $hover_bg_dur    = Olobuild_Tile_Utils::durata_hover( $s, 'background_color_hover_duration', '0.2s' );
         $border_color    = $this->safe_color_css( $s['border_color'] ?: '#e5e7eb' );
 
         // Alignment map
@@ -111,7 +112,7 @@ class Olobuild_Pagination_Tile extends Olobuild_Tile_Base {
 
             ob_start();
             $this->render_styles( $uid, $justify, $gap, $font_size, $radius, $bw, $padding_css,
-                $text_color, $bg_color, $border_color, $active_text, $active_bg, $hover_bg, $radius_hover_css );
+                $text_color, $bg_color, $border_color, $active_text, $active_bg, $hover_bg, $radius_hover_css, $hover_bg_dur );
             ?>
             <nav class="olo-pagination <?php echo esc_attr( $uid ); ?> olo-pg-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" role="navigation" aria-label="<?php echo esc_attr( olobuild_t( 'Paginazione' ) ); ?>">
             <?php
@@ -178,7 +179,7 @@ class Olobuild_Pagination_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         $this->render_styles( $uid, $justify, $gap, $font_size, $radius, $bw, $padding_css,
-            $text_color, $bg_color, $border_color, $active_text, $active_bg, $hover_bg, $radius_hover_css );
+            $text_color, $bg_color, $border_color, $active_text, $active_bg, $hover_bg, $radius_hover_css, $hover_bg_dur );
         ?>
         <nav class="olo-pagination <?php echo esc_attr( $uid ); ?>" role="navigation" aria-label="<?php echo esc_attr( olobuild_t( 'Paginazione' ) ); ?>">
         <?php
@@ -264,9 +265,10 @@ class Olobuild_Pagination_Tile extends Olobuild_Tile_Base {
      * la regola veniva scritta sempre, con il valore vuoto, cioe'
      * `border-radius: !important` — una dichiarazione che il browser scarta. Il
      * raggio in evidenza impostato dal docente non si e' mai visto.
+     * $hover_bg_dur: la «Durata» dello Sfondo pulsanti in hover (durata_hover()).
      */
     private function render_styles( $uid, $justify, $gap, $font_size, $radius, $bw, $padding_css,
-        $text_color, $bg_color, $border_color, $active_text, $active_bg, $hover_bg, $radius_hover_css = '' ) {
+        $text_color, $bg_color, $border_color, $active_text, $active_bg, $hover_bg, $radius_hover_css = '', $hover_bg_dur = '0.2s' ) {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized in render(): colors via the safe_color_css() whitelist (with token fallbacks), integers via absint() with min()/max() clamps, alignment from a fixed map, padding/radius via absint() parts and Olobuild_Tile_Utils helpers; $uid is internally generated. ?>
         <style>
@@ -290,7 +292,7 @@ class Olobuild_Pagination_Tile extends Olobuild_Tile_Base {
                 text-align: center;
                 border-radius: <?php echo $radius; ?>;
                 text-decoration: none;
-                transition: background 0.2s ease, color 0.2s ease;
+                transition: background <?php echo $hover_bg_dur; ?> ease, color 0.2s ease;
                 box-sizing: border-box;
             }
             <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-pagination-dots{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-pagination-dots:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>

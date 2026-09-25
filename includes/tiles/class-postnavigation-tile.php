@@ -92,6 +92,8 @@ class Olobuild_Postnavigation_Tile extends Olobuild_Tile_Base {
         $text_clr   = $this->safe_color_css( $s['text_color'] ) ?: '#F3F4F6';
         $link_clr   = $this->safe_color_css( $s['link_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $hover_clr  = $this->safe_color_css( $s['hover_color'] ) ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 80%, #fff)';
+        // «Durata» del Colore link in hover: senza chiave il colore cambia di scatto, come sempre
+        $link_dur   = Olobuild_Tile_Utils::durata_hover( $s, 'link_color_hover_duration', '' );
         $bg_clr     = $this->safe_color_css( $s['background_color'] ) ?: 'var(--olo-color-muted, #F3F4F6)';
 
         ob_start();
@@ -137,7 +139,7 @@ class Olobuild_Postnavigation_Tile extends Olobuild_Tile_Base {
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
-                line-height: 1.3;
+                <?php if ( $link_dur !== '' ) echo 'transition: color ' . $link_dur . ' ease; '; ?>line-height: 1.3;
             }
             .<?php echo $uid; ?> .olo-pnav-card:hover .olo-pnav-title {
                 color: <?php echo $hover_clr; ?>;

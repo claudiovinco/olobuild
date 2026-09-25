@@ -92,7 +92,7 @@ export default {
       legacyKeys: { width: 'border_width', color: 'border_color' } },
 
     { type: 'separator', label: t('Colori') },
-    withHover({ key: 'background_color', label: t('Sfondo pulsanti'), type: 'color' }, { hoverKey: 'hover_background' }),
+    withHover({ key: 'background_color', label: t('Sfondo pulsanti'), type: 'color' }, { hoverKey: 'hover_background', defaultDuration: 200 }),
     { key: 'active_text_color', label: t('Testo pagina attiva'), type: 'color' },
     { key: 'active_background', label: t('Sfondo pagina attiva'), type: 'color' },
 

@@ -117,6 +117,11 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
         $hover   = $s['cta_hover_effect'] ?: 'none';
         $cta_w   = intval( $s['cta_width'] ) ?: 100;
         $h_bg    = $this->safe_color_css( $s['cta_hover_bg_color'] ) ?: '';
+        // Transizione della CTA: `all .3s`, più la «Durata» dello Sfondo in hover se salvata. La
+        // regola del Raggio in hover la ripete: in CSS vince UNA sola `transition`, e da sola
+        // `border-radius 400ms` spegneva sfondo, colore e sollevamento.
+        $cta_bg_dur = Olobuild_Tile_Utils::durata_hover( $s, 'cta_bg_color_hover_duration', '' );
+        $cta_tr     = 'all .3s ease' . ( $cta_bg_dur !== '' ? ', background ' . $cta_bg_dur . ' ease' : '' );
         $h_fg    = $this->safe_color_css( $s['cta_hover_text_color'] ) ?: '';
 
         // Background
@@ -305,12 +310,12 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
                 <?php else : ?>
                 border: none;
                 <?php endif; ?>
-                transition: all .3s ease;
+                transition: <?php echo $cta_tr; ?>;
                 <?php if ( $hover === 'shine' ) : ?>
                 position: relative; overflow: hidden;
                 <?php endif; ?>
             }
-            <?php if ( $cta_r_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-price-cta{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-price-cta:hover{border-radius:<?php echo $cta_r_hover_css; ?> !important}<?php endif; ?>
+            <?php if ( $cta_r_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-price-cta{transition:<?php echo $cta_tr; ?>,border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-price-cta:hover{border-radius:<?php echo $cta_r_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-price-cta:hover {
                 text-decoration: none !important;
                 <?php if ( $h_bg ) : ?>background: <?php echo $h_bg; ?>;<?php endif; ?>

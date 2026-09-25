@@ -178,7 +178,7 @@ export default {
         { value: 'bold', label: t('Grassetto') },
       ]},
     withHover({ key: 'v_active_bg', label: t('Sfondo attivo'), type: 'color',
-      show: s => s.style === 'vertical' }, { hoverKey: 'v_hover_bg' }),
+      show: s => s.style === 'vertical' }, { hoverKey: 'v_hover_bg', defaultDuration: 150 }),
     withHover({ key: 'v_border_radius', label: t('Raggio voci'), type: 'border-radius',
       show: s => s.style === 'vertical' }),
 

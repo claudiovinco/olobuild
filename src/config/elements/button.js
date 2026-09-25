@@ -151,7 +151,7 @@ export default {
       { value: 'lg',     label: t('Forte') },
       { value: 'xl',     label: t('Molto forte') },
       { value: 'custom', label: t('Personalizzata') },
-    ] }, { hoverKey: 'hover_shadow' }),
+    ] }, { hoverKey: 'hover_shadow', defaultDuration: 250 }),
     // custom — ombra NORMALE
     { key: 'shadow_custom', label: t('Ombra personalizzata'), type: 'box-shadow',
       legacyKeys: { h: 'shadow_h', v: 'shadow_v', blur: 'shadow_blur', spread: 'shadow_spread', color: 'shadow_color', inset: 'shadow_inset' },

@@ -110,7 +110,7 @@ export default {
 
     { type: 'separator', label: t('Stile pulsante') },
     // withHover: l'occhio scrive sulla chiave legacy btn_hover_bg (formato dati invariato).
-    withHover({ key: 'btn_bg', label: t('Sfondo'), type: 'color' }, { hoverKey: 'btn_hover_bg' }),
+    withHover({ key: 'btn_bg', label: t('Sfondo'), type: 'color' }, { hoverKey: 'btn_hover_bg', defaultDuration: 200 }),
     { key: 'btn_border', label: t('Bordo pulsante'), type: 'border',
       legacyKeys: { width: 'btn_border_width', color: 'btn_border_color' } },
     withHover({ key: 'btn_border_radius', label: t('Raggio'), type: 'border-radius' }),

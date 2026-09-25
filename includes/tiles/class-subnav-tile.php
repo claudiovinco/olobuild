@@ -98,6 +98,11 @@ class Olobuild_Subnav_Tile extends Olobuild_Tile_Base {
         // CSS
         $css = "#{$uid}{display:flex;flex-wrap:wrap;align-items:center;gap:{$gap}px;justify-content:{$justify};list-style:none;padding:0;margin:0}";
         $css .= "#{$uid} a{display:inline-block;padding:{$item_pad['top']}px {$item_pad['right']}px {$item_pad['bottom']}px {$item_pad['left']}px;border-radius:{$radius};font-size:{$fs}px;font-weight:{$fw};text-transform:{$tt};color:{$link_c};text-decoration:none;transition:all .2s ease";
+        // «Durata» dello Sfondo in hover: si aggiunge ad `all .2s` solo se salvata (HTML invariato senza)
+        $bg_dur = Olobuild_Tile_Utils::durata_hover( $s, 'bg_color_hover_duration', '' );
+        if ( $bg_dur !== '' ) {
+            $css .= ",background {$bg_dur} ease";
+        }
         if ( $bg_c ) {
             $css .= ";background:{$bg_c}";
         }

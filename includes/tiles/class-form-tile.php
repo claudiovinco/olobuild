@@ -184,6 +184,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
         $btn_bg      = $this->safe_color_css( $s['submit_bg'] );
         $btn_color   = $this->safe_color_css( $s['submit_color'] );
         $btn_hover   = $this->safe_color_css( $s['submit_hover_bg'] );
+        $btn_bg_dur  = Olobuild_Tile_Utils::durata_hover( $s, 'submit_bg_hover_duration', '0.2s' );
         $btn_radius  = $this->build_border_radius_css( $s["submit_radius"] );
         $btn_radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['submit_radius_hover'] ?? null );
         $btn_px      = absint( $s['submit_padding_x'] ) ?: 32;
@@ -371,7 +372,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
         }
 
         ob_start();
-        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, absint()/floatval() for sizes, in_array() whitelists for enums, charset-filtered font stacks, build_border_radius_css()/radius_force_css() helpers.
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, absint()/floatval() for sizes, in_array() whitelists for enums, charset-filtered font stacks, build_border_radius_css()/radius_force_css() helpers, durata_hover() (fixed literal or absint() ms).
         ?>
         <style>
             .<?php echo $uid; ?> .olo-f-label{color:<?php echo $label_color; ?>;font-size:<?php echo $label_size; ?>px;font-weight:<?php echo $label_weight; ?>;margin-bottom:6px;display:block<?php if ( $label_tt && $label_tt !== 'none' ) : ?>;text-transform:<?php echo $label_tt; ?><?php endif; ?><?php if ( $label_ls != 0 ) : ?>;letter-spacing:<?php echo $label_ls; ?>px<?php endif; ?><?php if ( $label_ff ) : ?>;font-family:<?php echo $label_ff; ?><?php endif; ?>}
@@ -390,7 +391,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .uk-select:-webkit-autofill{-webkit-box-shadow:0 0 0 1000px <?php echo $input_bg; ?> inset !important;-webkit-text-fill-color:<?php echo $input_color; ?> !important;transition:background-color 5000s ease-in-out 0s}
             .<?php echo $uid; ?> .uk-form-icon{color:<?php echo $input_color; ?>;opacity:0.5}
             .<?php echo $uid; ?> .uk-form-icon:hover{opacity:0.8}
-            .<?php echo $uid; ?> .olo-f-btn{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #e1474f)'; ?>;color:<?php echo $btn_color; ?>;<?php if ( $submit_ff ) : ?>font-family:<?php echo $submit_ff; ?>;<?php endif; ?>border:none<?php if ( $btn_border_css !== '' ) : ?>;<?php echo rtrim( $btn_border_css, ';' ); ?><?php endif; ?>;border-radius:<?php echo $btn_radius; ?>;padding:<?php echo $btn_py; ?>px <?php echo $btn_px; ?>px;font-size:<?php echo $btn_fs; ?>px;font-weight:<?php echo $btn_fw; ?>;cursor:pointer;transition:background 0.2s ease,<?php echo $btn_hover_border['transition'] ?: 'border-color 0.2s ease'; ?>,transform 0.15s ease;display:inline-flex;align-items:center;gap:8px<?php if ( $btn_ls > 0 ) : ?>;letter-spacing:<?php echo $btn_ls; ?>px<?php endif; ?><?php if ( $btn_tt !== 'none' ) : ?>;text-transform:<?php echo $btn_tt; ?><?php endif; ?><?php if ( $btn_full ) : ?>;width:100%;justify-content:center<?php endif; ?>}
+            .<?php echo $uid; ?> .olo-f-btn{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #e1474f)'; ?>;color:<?php echo $btn_color; ?>;<?php if ( $submit_ff ) : ?>font-family:<?php echo $submit_ff; ?>;<?php endif; ?>border:none<?php if ( $btn_border_css !== '' ) : ?>;<?php echo rtrim( $btn_border_css, ';' ); ?><?php endif; ?>;border-radius:<?php echo $btn_radius; ?>;padding:<?php echo $btn_py; ?>px <?php echo $btn_px; ?>px;font-size:<?php echo $btn_fs; ?>px;font-weight:<?php echo $btn_fw; ?>;cursor:pointer;transition:background <?php echo $btn_bg_dur; ?> ease,<?php echo $btn_hover_border['transition'] ?: 'border-color 0.2s ease'; ?>,transform 0.15s ease;display:inline-flex;align-items:center;gap:8px<?php if ( $btn_ls > 0 ) : ?>;letter-spacing:<?php echo $btn_ls; ?>px<?php endif; ?><?php if ( $btn_tt !== 'none' ) : ?>;text-transform:<?php echo $btn_tt; ?><?php endif; ?><?php if ( $btn_full ) : ?>;width:100%;justify-content:center<?php endif; ?>}
             .<?php echo $uid; ?> .olo-f-btn:hover{background:<?php echo $btn_hover ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 85%, #000)'; ?><?php if ( $btn_hover_border['decls'] !== '' ) : ?>;<?php echo rtrim( $btn_hover_border['decls'], ';' ); ?><?php endif; ?><?php if ( $btn_radius_hover_css !== '' ) : ?>;border-radius:<?php echo $btn_radius_hover_css; ?> !important<?php endif; ?>}
             .<?php echo $uid; ?> .olo-f-btn:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent)}
             .<?php echo $uid; ?> .olo-f-btn:active{transform:translateY(1px)}

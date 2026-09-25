@@ -122,7 +122,9 @@ class Olobuild_Nav_Tile extends Olobuild_Tile_Base {
         // Items base
         $css .= "#{$uid} .olo-nav-item{display:flex;align-items:center;gap:8px;padding:{$item_pad['top']}px {$item_pad['right']}px {$item_pad['bottom']}px {$item_pad['left']}px;";
         $css .= "border-radius:{$radius};font-size:{$fs}px;font-weight:{$fw};text-transform:{$tt};";
-        $css .= "letter-spacing:{$ls}px;color:{$link_color};text-decoration:none;transition:all .2s ease;position:relative}";
+        // «Durata» dello Sfondo in hover: si aggiunge ad `all .2s` solo se salvata (HTML invariato senza)
+        $bg_dur = Olobuild_Tile_Utils::durata_hover( $s, 'active_bg_hover_duration', '' );
+        $css .= "letter-spacing:{$ls}px;color:{$link_color};text-decoration:none;transition:all .2s ease" . ( $bg_dur !== '' ? ",background {$bg_dur} ease" : '' ) . ";position:relative}";
 
         // a11y tastiera: anello di focus visibile sulle voci di menu
         $css .= "#{$uid} .olo-nav-item:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent)}";

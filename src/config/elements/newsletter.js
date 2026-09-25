@@ -254,7 +254,7 @@ export default {
     { key: 'input_height', label: t('Altezza input'), type: 'range', min: 32, max: 56, step: 2 },
 
     { type: 'separator', label: t('Stile pulsante') },
-    withHover({ key: 'btn_bg', label: t('Sfondo pulsante'), type: 'color' }, { hoverKey: 'btn_hover_bg' }),
+    withHover({ key: 'btn_bg', label: t('Sfondo pulsante'), type: 'color' }, { hoverKey: 'btn_hover_bg', defaultDuration: 200 }),
     withHover({ key: 'btn_radius', label: t('Raggio pulsante'), type: 'border-radius'}),
 
     { type: 'separator', label: t('Messaggi & Privacy') },

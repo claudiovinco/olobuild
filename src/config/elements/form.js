@@ -416,7 +416,7 @@ export default {
         ]},
     ] },
     { type: 'separator', label: t('Stile pulsante') },
-    withHover({ key: 'submit_bg', label: t('Sfondo pulsante'), type: 'color' }, { hoverKey: 'submit_hover_bg' }),
+    withHover({ key: 'submit_bg', label: t('Sfondo pulsante'), type: 'color' }, { hoverKey: 'submit_hover_bg', defaultDuration: 200 }),
     { key: 'submit_color', label: t('Colore testo pulsante'), type: 'color' },
     withHover({ key: 'submit_radius', label: t('Raggio'), type: 'border-radius' }),
     { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 48 },

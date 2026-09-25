@@ -68,6 +68,10 @@ class Olobuild_Woo_Addtocart_Tile extends Olobuild_Tile_Base {
         $hover_text = $this->safe_color_css( $s['hover_text'] ) ?: 'var(--olo-color-on-primary, #ffffff)';
         $radius     = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
+        // Transizione del pulsante con la «Durata» di Sfondo e Colore testo in hover (senza chiave
+        // 0.2s come sempre). La regola del Raggio in hover la ripete: in CSS vince UNA sola `transition`.
+        $btn_tr = 'background-color ' . Olobuild_Tile_Utils::durata_hover( $s, 'bg_color_hover_duration', '0.2s' ) . ' ease, '
+            . 'color ' . Olobuild_Tile_Utils::durata_hover( $s, 'text_color_hover_duration', '0.2s' ) . ' ease, border-color 0.2s ease';
 
         // Size
         $size_map = [
@@ -113,7 +117,7 @@ class Olobuild_Woo_Addtocart_Tile extends Olobuild_Tile_Base {
                 border-radius: <?php echo $radius; ?>;
                 cursor: pointer;
                 text-decoration: none;
-                transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+                transition: <?php echo $btn_tr; ?>;
                 <?php if ( $full_w ) : ?>width: 100%;<?php endif; ?>
                 <?php if ( $btn_style === 'filled' ) : ?>
                 background: <?php echo $bg_color; ?>;
@@ -130,7 +134,7 @@ class Olobuild_Woo_Addtocart_Tile extends Olobuild_Tile_Base {
                 padding: <?php echo round( $sz['py'] / 2 ); ?>px 4px;
                 <?php endif; ?>
             }
-            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-atc-btn{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-atc-btn:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
+            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-atc-btn{transition:<?php echo $btn_tr; ?>, border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-atc-btn:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-atc-btn:hover {
                 <?php if ( $btn_style === 'filled' ) : ?>
                 background: <?php echo $hover_bg; ?>;

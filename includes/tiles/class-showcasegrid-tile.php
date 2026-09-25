@@ -106,6 +106,9 @@ class Olobuild_ShowcaseGrid_Tile extends Olobuild_Tile_Base {
         $arrcol = $this->safe_color_css( $s['arrow_color'] ?? '' ) ?: '#ffffff';
         $arrhbg = $this->safe_color_css( $s['arrow_hover_bg'] ?? '' ) ?: 'var(--olo-color-primary, #c8ff3c)';
         $arrhc  = $this->safe_color_css( $s['arrow_hover_color'] ?? '' ) ?: '#0a2a1e';
+        // «Durata» del Cerchio e della Freccia in hover (senza chiave .25s come sempre)
+        $arr_bg_dur  = Olobuild_Tile_Utils::durata_hover( $s, 'arrow_bg_hover_duration', '.25s' );
+        $arr_clr_dur = Olobuild_Tile_Utils::durata_hover( $s, 'arrow_color_hover_duration', '.25s' );
         $disp   = "var(--olo-font-family-heading, 'Archivo',-apple-system,sans-serif)";
         $sans   = "var(--olo-font-family, 'Work Sans',-apple-system,sans-serif)";
 
@@ -155,8 +158,8 @@ class Olobuild_ShowcaseGrid_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ocg-veil{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg, rgba(<?php echo $veilrgb; ?>,.05) 30%, rgba(<?php echo $veilrgb; ?>,.9) 100%);}
             .<?php echo $uid; ?> .ocg-k{position:relative;z-index:2;font-weight:700;font-size:<?php echo (int) $kicker_size; ?>px;letter-spacing:.12em;text-transform:uppercase;color:<?php echo $kick; ?>;}
             .<?php echo $uid; ?> .ocg-t{position:relative;z-index:2;font-family:<?php echo $disp; ?>;font-weight:<?php echo $title_wt; ?>;font-size:<?php echo (int) $title_size; ?>px;text-transform:<?php echo $title_tt; ?>;margin-top:6px;color:<?php echo $tcol; ?>;line-height:1;}
-            .<?php echo $uid; ?> .ocg-arr{position:absolute;z-index:2;top:24px;right:24px;width:44px;height:44px;border-radius:50%;background:<?php echo $arrbg; ?>;display:grid;place-items:center;transition:background .25s, transform .25s;}
-            .<?php echo $uid; ?> .ocg-arr svg{width:19px;height:19px;color:<?php echo $arrcol; ?>;transition:color .25s;}
+            .<?php echo $uid; ?> .ocg-arr{position:absolute;z-index:2;top:24px;right:24px;width:44px;height:44px;border-radius:50%;background:<?php echo $arrbg; ?>;display:grid;place-items:center;transition:background <?php echo $arr_bg_dur; ?>, transform .25s;}
+            .<?php echo $uid; ?> .ocg-arr svg{width:19px;height:19px;color:<?php echo $arrcol; ?>;transition:color <?php echo $arr_clr_dur; ?>;}
             .<?php echo $uid; ?> .ocg-card:hover .ocg-arr{background:<?php echo $arrhbg; ?>;transform:rotate(-45deg);}
             .<?php echo $uid; ?> .ocg-card:hover .ocg-arr svg{color:<?php echo $arrhc; ?>;}
             .<?php echo $uid; ?> .ocg-card:hover .ocg-media{transform:scale(1.04);}

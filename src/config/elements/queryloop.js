@@ -324,7 +324,7 @@ export default {
 
     { type: 'separator', label: t('Colori card') },
     { key: 'accent_color', label: t('Colore accento (badge, cat, hover)'), type: 'color' },
-    withHover({ key: 'bg_color', label: t('Sfondo card'), type: 'color' }, { hoverKey: 'hover_bg' }),
+    withHover({ key: 'bg_color', label: t('Sfondo card'), type: 'color' }, { hoverKey: 'hover_bg', noDuration: true }),
     { key: 'overlay_color', label: t('Colore overlay (magazine)'), type: 'color',
       condition: { field: 'layout', op: 'in', value: ['magazine-trio', 'magazine-hero', 'alternating'] } },
     { key: 'overlay_opacity', label: t('Opacità overlay'), type: 'range', min: 0, max: 100, step: 5,

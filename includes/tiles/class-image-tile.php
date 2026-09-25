@@ -121,6 +121,9 @@ class Olobuild_Image_Tile extends Olobuild_Tile_Base {
         if ( $hgray !== '' ) $hover_filters[] = 'grayscale(' . absint($hgray) . '%)';
         if ( $hsepia !== '' ) $hover_filters[] = 'sepia(' . absint($hsepia) . '%)';
         $hover_filter_css = $hover_filters ? implode( ' ', $hover_filters ) : '';
+        // I sei filtri finiscono in UNA sola `filter`: una sola «Durata», condivisa dai sei
+        // campi (hoverDurationKey 'hover_filter_duration'); senza chiave 0.4s come sempre.
+        $filter_dur = Olobuild_Tile_Utils::durata_hover( $s, 'hover_filter_duration', '0.4s' );
 
         // Hover animation
         $anim = $s['hover_animation'] ?? 'none';
@@ -374,7 +377,7 @@ class Olobuild_Image_Tile extends Olobuild_Tile_Base {
         if ( $filter_css || $hover_filter_css || $hover_transform || $anim === 'blur-in' || $has_hover_br ) {
             // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS built exclusively from values sanitized above (absint filters, fixed transform map, intval radii/duration); $uid is an internal generated class name.
             echo '<style>';
-            echo ".{$uid} img { transition: filter 0.4s ease, transform 0.4s ease;";
+            echo ".{$uid} img { transition: filter {$filter_dur} ease, transform 0.4s ease;";
             if ( $filter_css ) echo "filter:{$filter_css};";
             if ( $init_transform ) echo $init_transform;
             echo '}';

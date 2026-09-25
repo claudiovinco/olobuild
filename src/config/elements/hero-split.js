@@ -270,14 +270,14 @@ export default {
 
     { key: 'subhead_italic',  label: t('Corsivo'), type: 'toggle' },
     { type: 'separator', label: t('CTA primaria stile') },
-    withHover({ key: 'cta1_bg',    label: t('Sfondo'),       type: 'color' }, { hoverKey: 'cta1_bg_hover' }),
-    withHover({ key: 'cta1_color', label: t('Colore testo'), type: 'color' }, { hoverKey: 'cta1_color_hover' }),
+    withHover({ key: 'cta1_bg',    label: t('Sfondo'),       type: 'color' }, { hoverKey: 'cta1_bg_hover', defaultDuration: 200 }),
+    withHover({ key: 'cta1_color', label: t('Colore testo'), type: 'color' }, { hoverKey: 'cta1_color_hover', defaultDuration: 200 }),
     { type: 'typography', label: t('Pulsante 1'), responsiveKeys: [], keys: { size: 'cta1_size' }, sizeMin: 12, sizeMax: 22 },
     withHover({ key: 'cta1_radius', label: t('Raggio'), type: 'border-radius' }, { hoverKey: 'cta1_radius_hover', hoverDurationKey: 'cta1_radius_hover_duration' }),
 
     { type: 'separator', label: t('CTA secondaria stile') },
-    withHover({ key: 'cta2_bg',     label: t('Sfondo'),       type: 'color' }, { hoverKey: 'cta2_bg_hover' }),
-    withHover({ key: 'cta2_color',  label: t('Colore testo'), type: 'color' }, { hoverKey: 'cta2_color_hover' }),
+    withHover({ key: 'cta2_bg',     label: t('Sfondo'),       type: 'color' }, { hoverKey: 'cta2_bg_hover', defaultDuration: 200 }),
+    withHover({ key: 'cta2_color',  label: t('Colore testo'), type: 'color' }, { hoverKey: 'cta2_color_hover', defaultDuration: 200 }),
     { key: 'cta2_border', label: t('Colore bordo'),    type: 'color' },
     { type: 'typography', label: t('Pulsante 2'), responsiveKeys: [], keys: { size: 'cta2_size' }, sizeMin: 12, sizeMax: 22 },
     withHover({ key: 'cta2_radius', label: t('Raggio'), type: 'border-radius' }, { hoverKey: 'cta2_radius_hover', hoverDurationKey: 'cta2_radius_hover_duration' }),

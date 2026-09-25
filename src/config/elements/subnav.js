@@ -148,7 +148,7 @@ export default {
 
     { type: 'separator', label: t('Colori') },
     { key: 'active_color', label: t('Colore attivo'), type: 'color' },
-    withHover({ key: 'bg_color',   label: t('Sfondo'),     type: 'color' }, { hoverKey: 'hover_bg' }),
+    withHover({ key: 'bg_color',   label: t('Sfondo'),     type: 'color' }, { hoverKey: 'hover_bg', defaultDuration: 200 }),
     { key: 'active_bg', label: t('Sfondo attivo'), type: 'color' },
 
     ...textEffectsFields([

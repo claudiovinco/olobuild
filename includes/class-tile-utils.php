@@ -298,6 +298,27 @@ class Olobuild_Tile_Utils {
     }
 
     /**
+     * La «Durata» del toggle Normale/Hover di un campo (withHover() in _shared.js), pronta
+     * per una `transition`: `$chiave` è la sua {key}_hover_duration.
+     *
+     * Non salvata → `$predefinita` TALE E QUALE: il letterale CSS che il renderer scriveva
+     * prima ('.2s', '0.4s'…), così l'HTML dei template che non l'hanno mai toccata resta
+     * identico; '' = nessuna transizione (il chiamante non la scrive). Salvata → 0–3000 ms
+     * (l'input dell'inspector ha minimo 0 e un campo svuotato salva 0). Il risultato ha già
+     * l'unità: mai aggiungerne un'altra.
+     *
+     * @param array  $s           Settings del tile.
+     * @param string $chiave      Chiave della durata (es. 'cta_bg_hover_duration').
+     * @param string $predefinita Durata CSS quando la chiave non è salvata.
+     * @return string
+     */
+    public static function durata_hover( $s, $chiave, $predefinita = '' ) {
+        $v = is_array( $s ) ? ( $s[ $chiave ] ?? '' ) : '';
+        if ( $v === '' || $v === null || ! is_numeric( $v ) ) return (string) $predefinita;
+        return min( 3000, absint( $v ) ) . 'ms';
+    }
+
+    /**
     /**
      * Sanitize a hex color. Returns empty string if invalid.
      *
