@@ -626,6 +626,8 @@ class Olobuild_Builder {
         .olo-sticky-cover, .olo-sticky-reveal {
             position: relative !important; top: auto !important; z-index: auto !important;
         }
+        /* Header reso fisso in linea dal megamenu anche con olo-header-sticky spenta (in cima). */
+        header.olo-site-header[style*="sticky"] { position: relative !important; top: auto !important; }
         .olo-template { width: 100% !important; position: static !important; left: auto !important; transform: none !important; }
         .olo-floatingpanel, .olo-fp-wrapper { scroll-margin-top: 80px; }
         /* Hide WP admin bar gap if any */

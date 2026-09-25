@@ -38,6 +38,14 @@ body[data-olo-pagebg], html[data-olo-pagebg], body[data-olo-pagebg] #olo-iframe-
   top: auto !important;
   z-index: auto !important;
 }
+/* Il megamenu rende fisso l'header con uno stile in linea (position: sticky) anche in cima alla
+   pagina, dove olo-header-sticky resta spenta: la regola sopra non lo raggiunge e l'header
+   resterebbe fisso sopra il contenuto fino alla soglia. Lo z-index non si tocca;
+   l'header in modalità overlay (position: fixed da frontend.css) resta com'è. */
+header.olo-site-header[style*="sticky"] {
+  position: relative !important;
+  top: auto !important;
+}
 /* Builder mode: .olo-template is used (in REST render) to apply container max-width rules from frontend.css.
    Disable its break-out trick (width:100vw; transform) which is meant for theme escape, not iframe. */
 .olo-template {

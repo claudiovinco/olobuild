@@ -3384,12 +3384,60 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                 header.classList.remove("olo-header-overlay", "olo-header-classic");
                 header.classList.add("olo-header-" + headerMode);
                 function isDesktop() { return window.innerWidth > mmBreakpoint; }
+                /* Quanto si accorcia l'header entrando nello stato «pagina scorsa»
+                   (olo-header-sticky): la barra superiore che si nasconde, più quanto
+                   la barra può ridursi con sticky_shrink (fino alla sua altezza minima)
+                   o, senza riduzione, quanto è più basso il logo sticky. Si misura a
+                   stato spento: basta un limite superiore, mai un conto in difetto. */
+                var mmCalo = 0;
+                function misuraCalo() {
+                    mmCalo = 0;
+                    <?php if ( ! empty( $s['topbar_enabled'] ) ) : ?>
+                    <?php if ( ! empty( $s['topbar_hide_sticky'] ) ) : ?>
+                    var tb = root.querySelector(".olo-mm-topbar");
+                    if (tb) { mmCalo += tb.offsetHeight; }
+                    <?php endif; ?>
+                    <?php endif; ?>
+                    <?php if ( ! empty( $s['sticky_shrink'] ) ) : ?>
+                    /* Il logo sta nella barra: questo conto comprende anche il logo sticky. */
+                    var bar = root.querySelector(".olo-mm-bar");
+                    if (bar) { mmCalo += Math.max(0, bar.offsetHeight - <?php echo max( 40, ( intval( $s['nav_height'] ?? 0 ) ?: 60 ) - 16 ); ?>); }
+                    <?php elseif ( ! empty( $s['logo_sticky'] ) ) : ?>
+                    /* Il logo sticky segue la regola CSS del normale: a pari larghezza la
+                       sua altezza viene dalle proporzioni (con logo_min_height le altezze
+                       sono uguali e il conto resta per eccesso). Finché non è caricato si
+                       conta tutto il logo normale. */
+                    var lgD = root.querySelector(".olo-mm-logo img.olo-mm-logo-default");
+                    var lgS = root.querySelector(".olo-mm-logo img.olo-mm-logo-sticky");
+                    if (lgD) {
+                        var hS = 0;
+                        if (lgS) { if (lgS.naturalWidth) { hS = lgD.offsetWidth * lgS.naturalHeight / lgS.naturalWidth; } }
+                        mmCalo += Math.max(0, Math.ceil(lgD.offsetHeight - hS));
+                    }
+                    <?php endif; ?>
+                }
+                /* Lo stato si accende oltre 10 px più quel calo e si spegne a 10 px o meno
+                   (gestore scroll). Accorciandosi l'header il browser riporta indietro lo
+                   scroll dello stesso tanto: con una soglia sola, scorrendo a piccoli passi,
+                   lo stato si accendeva e spegneva senza fine. In cima resta spento: acceso
+                   al caricamento nascondeva la barra superiore. Nel canvas del builder lo
+                   script si riesegue a ogni modifica e le istanze precedenti restano in
+                   ascolto con il root staccato (misurerebbero 0): accende solo quella viva. */
+                function accendiSeScorsa() {
+                    if (!root.isConnected) { return; }
+                    if (!header.classList.contains("olo-header-sticky")) {
+                        misuraCalo();
+                        if ((window.pageYOffset || document.documentElement.scrollTop) > 10 + mmCalo) {
+                            header.classList.add("olo-header-sticky");
+                        }
+                    }
+                }
                 if (stickyEnabled) {
                     if (isDesktop()) {
                         header.style.position = "sticky";
                         header.style.top = "0";
                         header.style.zIndex = "1000";
-                        header.classList.add("olo-header-sticky");
+                        accendiSeScorsa();
                     }
                 }
                 if (stickyEnabled || showOnUp) {
@@ -3414,7 +3462,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                                 header.style.position = "sticky";
                                 header.style.top = "0";
                                 header.style.zIndex = "1000";
-                                header.classList.add("olo-header-sticky");
+                                accendiSeScorsa();
                             }
                         }
                     });
@@ -3427,7 +3475,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                             var y = window.pageYOffset || document.documentElement.scrollTop;
                             if (stickyEnabled) {
                                 if (y > 10) {
-                                    header.classList.add("olo-header-sticky");
+                                    accendiSeScorsa();
                                 } else {
                                     header.classList.remove("olo-header-sticky");
                                     if (hidden) { header.style.top = ""; header.style.transform = ""; hidden = false; }

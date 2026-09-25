@@ -574,18 +574,23 @@ html:has(.olo-frontend-grid) {
   position: sticky;
   top: 0;
 }
-/* Offset header below WP admin bar when logged in */
+/* Offset header below WP admin bar when logged in.
+   Il megamenu rende fisso l'header classic con uno stile in linea (position: sticky; top: 0)
+   già in cima alla pagina, dove olo-header-sticky resta spenta: senza la seconda forma
+   l'header scivolerebbe sotto la barra admin nei primi pixel di scorrimento. */
 .admin-bar .olo-site-header.olo-header-overlay {
   top: 32px !important;
 }
-.admin-bar .olo-site-header.olo-header-classic.olo-header-sticky {
+.admin-bar .olo-site-header.olo-header-classic.olo-header-sticky,
+.admin-bar .olo-site-header.olo-header-classic[style*="sticky"] {
   top: 32px !important;
 }
 @media (max-width: 782px) {
   .admin-bar .olo-site-header.olo-header-overlay {
     top: 46px !important;
   }
-  .admin-bar .olo-site-header.olo-header-classic.olo-header-sticky {
+  .admin-bar .olo-site-header.olo-header-classic.olo-header-sticky,
+  .admin-bar .olo-site-header.olo-header-classic[style*="sticky"] {
     top: 46px !important;
   }
 }
