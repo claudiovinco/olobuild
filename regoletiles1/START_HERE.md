@@ -1,5 +1,12 @@
 # ⛳ START HERE — Istruzioni operative per Claude Code
 
+> ⚠️⚠️ **Aggiornamento del 25 set 2026 (decisione del proprietario).** L'anteprima del builder È il
+> renderer PHP: il canvas mostra la pagina resa da `includes/tiles/` in un iframe, e i componenti
+> `src/components/Tiles/*Tile.vue` non vengono mai montati (saranno rimossi nell'ondata O4). Dove
+> questo pacchetto dice `*Tile.vue` leggi **il renderer PHP della tile** (`includes/tiles/class-*-tile.php`)
+> più il suo config (`src/config/elements/*.js`): le regole restano, si applicano lì. Il gemello Vue
+> NON si corregge più. Vedi la regola in `D:TECNICAolobuildCLAUDE.md` (sezione Regole).
+
 Questo file vive in `D:\TECNICA\olobuild\regoletiles1\` ed è il **punto di ingresso
 unico**. Tutti i file citati qui sotto sono nella stessa cartella. Leggilo per intero,
 poi esegui il protocollo. Obiettivo: rendere **tutte** le tile di OLObuild **belle e coerenti** come

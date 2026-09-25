@@ -27,8 +27,8 @@ src/stores/                 → Pinia stores (builder, tiles)
 src/config/elements/        → Definizioni JSON inspector per ogni elemento
 src/config/elementRegistry.js → Auto-discovery elementi via import.meta.glob
 src/components/Builder/     → Toolbar, Sidebar, Canvas, Inspector, StructureTree
-src/components/Grid/        → OlobuilderGrid, GridCell
-src/components/Tiles/       → Componenti Vue per ogni tile
+src/components/Grid/        → OlobuilderGrid, GridCell (canvas Vue classico: MAI montato, vedi sotto)
+src/components/Tiles/       → Componenti Vue delle tile (canvas Vue classico: MAI montato, da rimuovere)
 src/composables/            → useDragDrop, useHistory, etc.
 src/assets/styles/          → main.scss
 assets/                     → Build output (js + css) + vendor (UIkit)
@@ -147,7 +147,7 @@ padding/margine → `type:'spacing'` (4 lati) · raggio → `type:'border-radius
 - **Niente controlli fantasma** (audit `fantasma-*`): menu «Stile» senza preset registrati, toggle
   Hover su chiavi mai lette, selettore del dispositivo su valori mai letti (in PHP:
   `css_per_dispositivo()` di Olobuild_Tile_Base), «Bordo» ed «Effetti testo» condivisi mai resi. Per
-  ognuno si sceglie: farlo funzionare (PHP + gemello Vue) o toglierlo. Un campo che dipende da un
+  ognuno si sceglie: farlo funzionare (nel renderer PHP) o toglierlo. Un campo che dipende da un
   altro si nasconde quando non agisce (`condition`: «Posizione icona» senza icona).
 - **Il nome dice cosa fa**: «Colore sfondo» sul badge era il colore da cui la variante ricava la
   pillola (Soft = 12% di sfondo, 22% di bordo), non lo sfondo — e ha tratto in inganno chi l'ha usato.
@@ -156,6 +156,15 @@ padding/margine → `type:'spacing'` (4 lati) · raggio → `type:'border-radius
   label o nelle voci della select. ~206 descrizioni sono oggi invisibili (lotto da decidere).
 
 ## Regole
+- ⚠️⚠️ **L'anteprima del builder È il renderer PHP** (decisione del proprietario, 25 set 2026). Il
+  canvas mostra la pagina resa dal PHP in un iframe (`livePreviewMode: true` fisso in
+  `src/stores/builder.js`); il ramo che disegnava le tile con i componenti Vue
+  (`src/components/Tiles/`, `src/components/Grid/`) non si monta mai. Una tile è quindi **renderer
+  PHP (`includes/tiles/`) + config (`src/config/elements/`)**: NON si corregge più il «gemello Vue».
+  Il ramo morto si rimuove nell'ondata O4 (`prestazioni-canvas-vue-decisione`, dopo
+  `prestazioni-entry-minimo` e `prestazioni-canvas-vue-eager`). Fino ad allora restano da tenere
+  allineati solo gli elenchi che l'audit legge da `GridCell.vue` (`OMBRA_SUL_WRAPPER`,
+  `STILE_TIPOGRAFICO_PROPRIO`). Il Vue resta per tutto l'editor (toolbar, inspector, struttura…).
 - Tailwind prefix: `mb-` (evita conflitti con WordPress)
 - **Colori solo via token** `var(--olo-color-*)` + `resolveColor()` — **mai hardcodare hex**.
   Attenzione: nel codice convivono 4 "primari" storici da eliminare (`#6366F1` indaco,
@@ -165,9 +174,9 @@ padding/margine → `type:'spacing'` (4 lati) · raggio → `type:'border-radius
 
 ## 🎨 Tile — design coerente (pacchetto `regoletiles1`)
 Obiettivo permanente: le tile devono essere **belle e coerenti** come una sola famiglia.
-Quando tocchi una qualsiasi tile — sia il render **Vue** (`src/components/Tiles/*Tile.vue`),
-sia il render **PHP frontend** (`includes/tiles/`), sia il config inspector
-(`src/config/elements/*.js`) — applica le regole del pacchetto:
+Quando tocchi una qualsiasi tile — il render **PHP** (`includes/tiles/`, che è anche l'anteprima
+del builder) o il config inspector (`src/config/elements/*.js`) — applica le regole del pacchetto
+(scritto quando il canvas era in Vue: dove dice `*Tile.vue` leggi «il renderer PHP della tile»):
 
 - **Entry point / protocollo completo**: `D:\TECNICA\olobuild\regoletiles1\START_HERE.md`
 - **Le 10 regole**: `…\regoletiles1\DESIGN_LANGUAGE.md`
@@ -187,7 +196,9 @@ Regole sempre attive (sintesi):
 - **Chiavi salvate INVARIATE** (margin_*, padding_*, border_radius, hover.*, ecc.): cambia
   la UI/resa, non il formato dei dati. I template esistenti devono continuare a funzionare.
 - Non inventare nomi `--olo-color-*` che il `GlobalColorsPanel` non genera (vedi TOKEN_MAPPING).
-- Coerenza render: lo stesso aspetto va garantito sia in Vue (canvas) sia in PHP (frontend).
+- Coerenza render: c'è UN solo renderer, il PHP, che serve sia il sito sia il canvas del builder
+  (iframe). Le differenze fra canvas e sito vengono dal contesto dell'iframe (CSS/JS del builder,
+  script non accodati), non da un secondo render.
 - Dopo le modifiche: build (`node node_modules/vite/bin/vite.js build`) + bump `OLOBUILD_VERSION`.
 
 > Anche creando una **nuova** tile (vedi playbook *Aggiungere un tile OloBuild*), applica

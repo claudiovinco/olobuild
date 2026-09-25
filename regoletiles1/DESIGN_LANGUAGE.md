@@ -1,5 +1,12 @@
 # Tile Design Language — regole di "bello & coerente" per TUTTE le tile
 
+> ⚠️⚠️ **Aggiornamento del 25 set 2026 (decisione del proprietario).** L'anteprima del builder È il
+> renderer PHP: il canvas mostra la pagina resa da `includes/tiles/` in un iframe, e i componenti
+> `src/components/Tiles/*Tile.vue` non vengono mai montati (saranno rimossi nell'ondata O4). Dove
+> questo pacchetto dice `*Tile.vue` leggi **il renderer PHP della tile** (`includes/tiles/class-*-tile.php`)
+> più il suo config (`src/config/elements/*.js`): le regole restano, si applicano lì. Il gemello Vue
+> NON si corregge più. Vedi la regola in `D:TECNICAolobuildCLAUDE.md` (sezione Regole).
+
 Questo è lo standard visivo che **ogni** `*Tile.vue` deve rispettare. Lo scopo è che le
 240 tile sembrino **una sola famiglia**, non 240 micro-stili diversi. Claude Code deve
 applicare queste regole a ogni tile (vedi `TILE_AUDIT_CHECKLIST.md` per il processo).

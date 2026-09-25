@@ -1,5 +1,12 @@
 # Tile Audit Checklist — processo ripetibile su TUTTE le 240 tile
 
+> ⚠️⚠️ **Aggiornamento del 25 set 2026 (decisione del proprietario).** L'anteprima del builder È il
+> renderer PHP: il canvas mostra la pagina resa da `includes/tiles/` in un iframe, e i componenti
+> `src/components/Tiles/*Tile.vue` non vengono mai montati (saranno rimossi nell'ondata O4). Dove
+> questo pacchetto dice `*Tile.vue` leggi **il renderer PHP della tile** (`includes/tiles/class-*-tile.php`)
+> più il suo config (`src/config/elements/*.js`): le regole restano, si applicano lì. Il gemello Vue
+> NON si corregge più. Vedi la regola in `D:TECNICAolobuildCLAUDE.md` (sezione Regole).
+
 Claude Code deve passare ogni `*Tile.vue` attraverso questa checklist, applicando
 `DESIGN_LANGUAGE.md`. Obiettivo: belle **e** coerenti come famiglia, a chiavi salvate
 invariate.

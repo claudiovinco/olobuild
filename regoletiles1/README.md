@@ -1,5 +1,12 @@
 # Handoff: OLObuild — Rendere le Tile belle & coerenti (tutte le 240)
 
+> ⚠️⚠️ **Aggiornamento del 25 set 2026 (decisione del proprietario).** L'anteprima del builder È il
+> renderer PHP: il canvas mostra la pagina resa da `includes/tiles/` in un iframe, e i componenti
+> `src/components/Tiles/*Tile.vue` non vengono mai montati (saranno rimossi nell'ondata O4). Dove
+> questo pacchetto dice `*Tile.vue` leggi **il renderer PHP della tile** (`includes/tiles/class-*-tile.php`)
+> più il suo config (`src/config/elements/*.js`): le regole restano, si applicano lì. Il gemello Vue
+> NON si corregge più. Vedi la regola in `D:TECNICAolobuildCLAUDE.md` (sezione Regole).
+
 **Obiettivo:** le 240 `*Tile.vue` devono sembrare **una sola famiglia** — belle appena
 inserite e visivamente coerenti tra loro. Questo pacchetto dà a Claude Code lo standard
 visivo + il processo per agire e ragionare su **ogni** tile, più i composable/utility per
