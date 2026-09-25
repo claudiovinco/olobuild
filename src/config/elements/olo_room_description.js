@@ -29,6 +29,6 @@ export default {
   // ─── STILE ─────────────────────────────────────────────────
   styleFields: [
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
-    ...borderFields(),
+    ...borderFields({ effetti: false }), // reso da OLOspace, che non legge gli effetti bordo
   ],
 };

@@ -290,19 +290,10 @@ function sectionHasVisibleFields(section) {
 }
 
 const groupedSections   = computed(() => filterSectionsBySearch(groupBySeparator(styleFieldsBase(props.tileType))));
-const tileStyleSections = computed(() => {
-  // Nel tab Stile gli "Effetti bordo" del WRAPPER (groupedSections → borderEffectFields)
-  // sono già presenti. Rimuoviamo l'eventuale sezione effetti dai field-stile del tile
-  // (quando il config include `...borderFields()` nei styleFields) per evitare il doppione
-  // "Effetti bordo". Solo rendering: `borderFields()` e lo standard restano INVARIATI — il
-  // controllo "Bordo" del tile resta, sparisce solo la sezione effetti duplicata.
-  const fields = (props.tileFields || []).filter(f => {
-    if (f.type === 'separator' && f.label === t('Effetti bordo')) return false;
-    if (typeof f.key === 'string' && f.key.startsWith('border_effect')) return false;
-    return true;
-  });
-  return filterSectionsBySearch(groupBySeparator(fields));
-});
+// Nessun campo della tile viene tolto qui. Gli effetti del bordo dell'ELEMENTO (settings, sotto il
+// suo Bordo) e quelli del CONTENITORE (style) agiscono su oggetti diversi: non sono un doppione.
+// Quando si vedono lo decidono le loro condizioni (borderFields in _shared.js).
+const tileStyleSections = computed(() => filterSectionsBySearch(groupBySeparator(props.tileFields || [])));
 
 // Blocchi «Elemento» / «Contenitore» per ogni tile di contenuto. Per sezione, riga
 // e colonna l'elemento È il contenitore: un blocco solo, senza titoli.

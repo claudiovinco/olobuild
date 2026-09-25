@@ -215,6 +215,6 @@ export default {
     { key: 'btn_bg', label: t('Sfondo pulsante'), type: 'color' },
     { key: 'btn_color', label: t('Colore testo pulsante'), type: 'color' },
     withHover({ key: 'btn_radius', label: t('Raggio pulsante'), type: 'border-radius' }),
-    ...borderFields(),
+    ...borderFields({ effetti: false }), // reso da OLOspace, che non legge gli effetti bordo
   ],
 };

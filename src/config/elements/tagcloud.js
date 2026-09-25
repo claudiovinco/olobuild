@@ -122,6 +122,6 @@ export default {
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
     { key: 'padding', label: t('Padding'), type: 'spacing', max: 32 },
 
-    ...borderFields(),
+    ...borderFields({ effetti: false }), // il PHP scrive bordo ed effetti su un selettore che nel markup non c'è
   ],
 };

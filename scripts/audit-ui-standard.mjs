@@ -440,6 +440,16 @@ function matchParen(src, i) {
   }
   return -1;
 }
+// Il tipo della tile è il `type` di primo livello di `export default { … }`: il primo
+// «type:» del file può essere quello di un campo o di un commento (proslider, revealbox,
+// spacer), e la tile verrebbe saltata in silenzio.
+const tipoConfig = (src) => {
+  const i = src.search(/export\s+default\s*\{/);
+  if (i < 0) return null;
+  const a = src.indexOf('{', i);
+  const b = matchBrace(src, a);
+  return b > a ? topProp(src.slice(a, b + 1), 'type') : null;
+};
 const leggeChiave = (php, k) => new RegExp("\\[\\s*'" + k + "'\\s*\\]").test(php);
 const presetSrc = fs.readFileSync(path.join(ROOT, 'src/config/tilePresets.js'), 'utf8');
 const presetBody = presetSrc.slice(presetSrc.indexOf('export const TILE_PRESETS = {'));
@@ -496,6 +506,145 @@ violazioni['fantasma-bordo'] = fantasmi.bordo;
 RULES.push({ id: 'fantasma-bordo', titolo: 'Il controllo «Bordo» condiviso è disegnato dal renderer' });
 violazioni['fantasma-effetti-testo'] = fantasmi.effettiTesto;
 RULES.push({ id: 'fantasma-effetti-testo', titolo: 'Gli «Effetti testo» condivisi sono resi dal renderer' });
+
+// ─── effetti bordo dell'elemento: visibili dove il renderer li disegna, e solo lì ───
+// borderFields() monta sotto il Bordo dell'elemento gli effetti (neon, gradiente…) salvati in
+// settings.border_effect*. Da giugno a settembre 2026 un filtro di StyleFieldsRenderer li toglieva
+// a tutte le tile come doppione di quelli del Contenitore (style.border_effect*, un altro oggetto):
+// una funzione viva senza controllo, che sulle atomiche non si raggiungeva in nessun modo.
+//  a) StyleFieldsRenderer non toglie di nuovo quei campi;
+//  b) una tile che li offre ha un PHP che li disegna sul bordo della stessa chiave;
+//  c) una tile che li spegne (borderFields({ effetti: false })) ha un PHP che NON li disegna;
+//  d) il verso opposto: un PHP che li disegna sul bordo di una chiave ha nel config un
+//     borderFields() con quella chiave e con gli effetti accesi (salvo EFFETTI_SENZA_CONTROLLO).
+// «Li disegna» vuol dire che la regola colpisce un elemento: il selettore passato a
+// build_border_effect_css deve esistere nel markup (effettiDisegnati, sotto). In 23 tile (nav,
+// subnav, tagcloud, chart…) il selettore è di classe, '.{$uid}', ma nel markup quel valore è solo
+// un id (o un data-): la regola non trova nulla, né sul sito né nel builder, che è lo stesso PHP.
+// Lì gli effetti sono spenti; correggere il selettore cambierebbe la resa dei template salvati, e
+// va fatto insieme al loro Bordo, fantasma per la stessa ragione (debito a parte).
+// Eccezioni motivate di d): tile il cui PHP disegna ancora bordo ed effetti salvati, ma che di
+// proposito non offrono il Bordo.
+const EFFETTI_SENZA_CONTROLLO = new Set([
+  // decoratore a zero dimensioni dalla 1.2.96 (sul sito l'elemento è alto 0): il config non monta
+  // né il Bordo né gli effetti; il PHP ridisegna solo un bordo salvato prima di allora.
+  'goo:border',
+]);
+// Argomenti di una chiamata PHP, separati alle virgole di primo livello (fuori da stringhe e parentesi).
+function argomentiPhp(s) {
+  const a = [];
+  let prof = 0, cur = '', str = null;
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (str) { cur += c; if (c === BS) { cur += s[++i] ?? ''; continue; } if (c === str) str = null; continue; }
+    if (c === '"' || c === "'") { str = c; cur += c; continue; }
+    if ('([{'.includes(c)) prof++;
+    else if (')]}'.includes(c)) prof--;
+    if (c === ',' && prof === 0) { a.push(cur.trim()); cur = ''; continue; }
+    cur += c;
+  }
+  if (cur.trim()) a.push(cur.trim());
+  return a;
+}
+// Variabile PHP ($uid o $this->_uid) in una RegExp.
+const PHPVAR = String.raw`\$(?:this->)?\w+`;
+const reVarPhp = (n) => n.replace(/\$/g, BS + '$');
+// Primo selettore semplice di un'espressione PHP: ".{$uid} .x", "#{$uid}", '.' . $uid, "…$uid…", o
+// una variabile ($card_sel) assegnata a una di queste prima della chiamata. → { sigillo, v } | null
+// (null: '.$uid' fra apici semplici, un letterale, una forma non riconosciuta = non colpisce nulla).
+function selettorePhp(expr, php, finoA) {
+  let e = expr.trim();
+  const v = e.match(new RegExp('^(' + PHPVAR + ')$'));
+  if (v) {
+    let ultima = null;
+    for (const m of php.matchAll(new RegExp(reVarPhp(v[1]) + String.raw`\s*=(?!=)\s*([^;]+);`, 'g'))) {
+      if (m.index < finoA) ultima = m[1].trim();
+    }
+    if (!ultima) return null;
+    e = ultima;
+  }
+  const m = e.match(new RegExp(String.raw`^"([.#])\{(` + PHPVAR + String.raw`)\}[^"]*"$`))
+    || e.match(new RegExp(String.raw`^'([.#])'\s*\.\s*(` + PHPVAR + ')'))
+    || e.match(new RegExp(String.raw`^"([.#])(` + PHPVAR + ')[^"]*"$'));
+  return m ? { sigillo: m[1], v: m[2] } : null;
+}
+// Il valore v compare nel markup come classe (sigillo '.') o come id ('#')? Si segue anche dove
+// finisce: $cls = 'x ' . $uid, $classi[] = $uid, $uid = $this->_uid (fino a tre passaggi). Per ogni
+// occorrenza conta l'ultimo attributo aperto prima di lei (class="…, id="…, 'class' =>), se il suo
+// valore non si è già chiuso: class="olo-x <?php echo esc_attr( $uid ); ?>" sì, id="$uid" no.
+function nelMarkup(php, v, sigillo) {
+  const nomi = new Set([v]);
+  for (let giro = 0; giro < 3; giro++) {
+    for (const n of [...nomi]) {
+      // $Y = … n …;  $Y .= … n …;  $Y[] = n;  (non i confronti ==, ===, !=, <=, >=, né =>)
+      const re = new RegExp('(' + PHPVAR + String.raw`)(?:\[\])?\s*(?<![=!<>])\.?=(?![=>])[^;]*` + reVarPhp(n) + String.raw`(?![\w\[>-])[^;]*;`, 'g');
+      for (const m of php.matchAll(re)) nomi.add(m[1]);
+      const alias = new RegExp(reVarPhp(n) + String.raw`\s*=(?!=)\s*(\$this->\w+)\s*(?:\?\?[^;]*)?;`, 'g');
+      for (const m of php.matchAll(alias)) nomi.add(m[1]);
+    }
+  }
+  const voluto = sigillo === '.' ? 'class' : 'id';
+  for (const n of nomi) {
+    for (const m of php.matchAll(new RegExp(reVarPhp(n) + String.raw`(?![\w\[>-])`, 'g'))) {
+      const prima = php.slice(Math.max(0, m.index - 400), m.index);
+      const attr = [...prima.matchAll(/\b([a-zA-Z][\w-]*)\s*=\s*\\?(["'])|'(class|id)'\s*=>/g)].pop();
+      if (!attr) continue;
+      const tra = prima.slice(attr.index + attr[0].length);
+      if (attr[3]) { if (attr[3] === voluto && !/[\n;]/.test(tra)) return true; continue; }
+      if (attr[1] === voluto && !tra.split(BS + attr[2]).join('').includes(attr[2])) return true;
+    }
+  }
+  return false;
+}
+// Chiavi di bordo della tile ($s['k']) su cui il PHP chiama build_border_effect_css: vivi = con un
+// selettore che trova l'elemento, morti = solo su un selettore che nel markup non c'è.
+function effettiDisegnati(php) {
+  // senza commenti: i phpcs:ignore dentro <?php … ?> nominano $uid e allontanano l'attributo
+  const src = php.replace(/^\s*\/\*[\s\S]*?\*\//gm, '').replace(/(^|[\s;{}])\/\/.*?(?=\?>|$)/gm, '$1');
+  const vivi = new Set(), morti = new Set();
+  for (let i = src.indexOf('build_border_effect_css('); i >= 0; i = src.indexOf('build_border_effect_css(', i + 1)) {
+    if (/function\s+$/.test(src.slice(Math.max(0, i - 20), i))) continue;
+    const p = i + 'build_border_effect_css'.length;
+    const args = argomentiPhp(src.slice(p + 1, matchParen(src, p)));
+    const k = ((args[1] || '').match(/^\$\w+\[\s*'([a-z0-9_]+)'\s*\]/) || [])[1];
+    if (!k) continue;
+    const sel = selettorePhp(args[0], src, i);
+    (sel && nelMarkup(src, sel.v, sel.sigillo) ? vivi : morti).add(k);
+  }
+  for (const k of vivi) morti.delete(k);
+  return { vivi, morti };
+}
+{
+  const trovate = [];
+  const sfr = fs.readFileSync(path.join(ROOT, 'src/components/Builder/StyleFieldsRenderer.vue'), 'utf8');
+  if (/border_effect|'Effetti bordo'/.test(sfr)) trovate.push({ file: 'StyleFieldsRenderer', type: 'filtro', key: 'border_effect', label: '' });
+  const disegnatiPer = {};
+  for (const [tipo, php] of Object.entries(phpPerTipo)) disegnatiPer[tipo] = effettiDisegnati(php);
+  const offerti = {}; // tipo → chiavi di bordo con gli effetti offerti nel config
+  for (const f of fs.readdirSync(ELEMENTS).filter((x) => x.endsWith('.js') && !x.startsWith('_'))) {
+    const src = fs.readFileSync(path.join(ELEMENTS, f), 'utf8');
+    const tipo = tipoConfig(src);
+    for (let i = src.indexOf('...borderFields('); i >= 0; i = src.indexOf('...borderFields(', i + 1)) {
+      const call = src.slice(i, matchParen(src, i + '...borderFields'.length) + 1);
+      const k = (call.match(/key:\s*'([a-z0-9_]+)'/) || [])[1] || 'border';
+      const spenti = /effetti:\s*false/.test(call);
+      const d = disegnatiPer[tipo];
+      const disegnati = !!d?.vivi.has(k);
+      if (!spenti) (offerti[tipo] ||= new Set()).add(k);
+      // 'selettore': il PHP li scrive, ma su un selettore che nel markup non c'è
+      if (!spenti && !disegnati) trovate.push({ file: f.replace(/\.js$/, ''), type: d?.morti.has(k) ? 'selettore' : 'effetti', key: k, label: '' });
+      if (spenti && disegnati) trovate.push({ file: f.replace(/\.js$/, ''), type: 'nascosti', key: k, label: '' });
+    }
+  }
+  for (const [tipo, d] of Object.entries(disegnatiPer)) {
+    for (const k of d.vivi) {
+      if (offerti[tipo]?.has(k) || EFFETTI_SENZA_CONTROLLO.has(tipo + ':' + k)) continue;
+      trovate.push({ file: tipo, type: 'no-ctrl', key: k, label: '' });
+    }
+  }
+  violazioni['effetti-bordo-elemento'] = trovate;
+  RULES.push({ id: 'effetti-bordo-elemento', titolo: 'Gli Effetti bordo dell\'elemento si vedono dove il renderer li disegna, e solo lì' });
+}
 
 // ─── stile nel Contenuto ─────────────────────────────────────────────────────
 // «Ogni cosa che tocca stile e colore sta nel tab Stile» (utente, 23 set 2026): il
@@ -771,16 +920,6 @@ regolaC('chrome-nelle-tile', 'Le tile (PHP, Vue, config, frontend.css) non leggo
 // dalla chiave hover). Debito del giorno: può solo scendere (D1 mostra «Durata» solo lì).
 {
   const trovate = [];
-  // Il tipo della tile è il `type` di primo livello di `export default { … }`: il primo
-  // «type:» del file può essere quello di un campo o di un commento (proslider, revealbox,
-  // spacer), e la tile verrebbe saltata in silenzio.
-  const tipoConfig = (src) => {
-    const i = src.search(/export\s+default\s*\{/);
-    if (i < 0) return null;
-    const a = src.indexOf('{', i);
-    const b = matchBrace(src, a);
-    return b > a ? topProp(src.slice(a, b + 1), 'type') : null;
-  };
   for (const f of fs.readdirSync(ELEMENTS).filter((x) => x.endsWith('.js') && !x.startsWith('_'))) {
     const src = fs.readFileSync(path.join(ELEMENTS, f), 'utf8');
     const tipo = tipoConfig(src);

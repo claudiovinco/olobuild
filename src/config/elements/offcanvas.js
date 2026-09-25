@@ -79,6 +79,6 @@ export default {
       condition: { field: 'close_button', value: true } },
 
     ...shadowField,
-    ...borderFields(),
+    ...borderFields({ effetti: false }), // nessun renderer PHP in includes/tiles: gli effetti bordo non si disegnano
   ],
 };

@@ -444,7 +444,7 @@ export default {
     { key: 'carouselSideScale', label: t('Scala laterali'), type: 'number', min: 0.5, max: 1, step: 0.05,
       condition: { field: 'carousel', value: true } },
 
-    ...borderFields(),
+    ...borderFields({ effetti: false }), // il PHP scrive bordo ed effetti su un selettore che nel markup non c'è
     { type: 'separator', label: t('Parallax') },
     { key: 'parallax', label: t('Parallax'), type: 'toggle' },
   ],

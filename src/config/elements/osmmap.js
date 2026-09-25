@@ -114,6 +114,6 @@ export default {
       { value: 'gray', label: t('Grigio minimal') },
       { value: 'opentopomap', label: t('OpenTopoMap') },
     ]},
-    ...borderFields(),
+    ...borderFields({ effetti: false }), // il PHP scrive bordo ed effetti su un selettore che nel markup non c'è
   ],
 };

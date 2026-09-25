@@ -44,6 +44,6 @@ export default {
 
     { type: 'separator', label: t('Overlay') },
     { key: 'overlay_opacity', label: t('Opacità overlay'), type: 'range', min: 0, max: 100, step: 5 },
-    ...borderFields(),
+    ...borderFields({ effetti: false }), // reso da OLOspace, che non legge gli effetti bordo
   ],
 };

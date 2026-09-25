@@ -455,7 +455,7 @@ export default {
     { key: 'body_bg', label: t('Sfondo area testo'), type: 'color' },
     { key: 'body_bg_opacity', label: t('Opacita sfondo'), type: 'range', min: 0, max: 100, step: 5,
       condition: { field: 'body_bg', operator: '!=', value: '' } },
-    ...borderFields(),
+    ...borderFields({ effetti: false }), // reso da OLOspace, che non legge gli effetti bordo
     { type: 'separator', label: t('Paginazione') },
     { key: 'pagination_style', label: t('Stile navigazione'), type: 'select', options: [
       { value: 'numbers', label: t('Numeri pagina') },

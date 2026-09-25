@@ -116,6 +116,6 @@ export default {
 
     { type: 'separator', label: t('Aspetto') },
     ...shadowField,
-    ...borderFields(),
+    ...borderFields({ effetti: false }), // il PHP scrive bordo ed effetti su un selettore che nel markup non c'è
   ],
 };

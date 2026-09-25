@@ -56,6 +56,6 @@ export default {
     { key: 'columns', label: t('Colonne miniature'), type: 'range', min: 2, max: 8, step: 1 },
     { key: 'main_height', label: t('Altezza immagine principale'), type: 'range', min: 200, max: 800, step: 10 },
     { key: 'thumb_height', label: t('Altezza miniature'), type: 'range', min: 40, max: 150, step: 5 },
-    ...borderFields(),
+    ...borderFields({ effetti: false }), // reso da OLOspace, che non legge gli effetti bordo
   ],
 };

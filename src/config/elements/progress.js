@@ -81,7 +81,7 @@ export default {
     { key: 'animation_duration', label: t('Durata animazione'), type: 'range', min: 500, max: 3000, step: 100 },
 
     ...shadowField,
-    ...borderFields(),
+    ...borderFields({ effetti: false }), // il PHP scrive bordo ed effetti su un selettore che nel markup non c'è
     { type: 'separator', label: t('Disposizione') },
     { key: 'layout', label: t('Layout'), type: 'select', options: [
       { value: 'bar', label: t('Barra') },

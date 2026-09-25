@@ -40,6 +40,6 @@ export default {
       { value: 'card', label: t('Card con sfondo') },
       { value: 'flat', label: t('Piatto (senza sfondo)') },
     ]},
-    ...borderFields(),
+    ...borderFields({ effetti: false }), // reso da OLOspace, che non legge gli effetti bordo
   ],
 };

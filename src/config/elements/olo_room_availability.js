@@ -60,6 +60,6 @@ export default {
     { key: 'color_partial', label: t('Parzialmente occupato'), type: 'color' },
     { key: 'color_full', label: t('Occupato'), type: 'color' },
     { key: 'color_closed', label: t('Chiuso'), type: 'color' },
-    ...borderFields(),
+    ...borderFields({ effetti: false }), // reso da OLOspace, che non legge gli effetti bordo
   ],
 };

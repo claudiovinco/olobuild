@@ -80,6 +80,6 @@ export default {
     { type: 'separator', label: t('Colori') },
     { key: 'header_bg', label: t('Sfondo intestazione'), type: 'color' },
 
-    ...borderFields(),
+    ...borderFields({ effetti: false }), // il PHP scrive bordo ed effetti su un selettore che nel markup non c'è
   ],
 };

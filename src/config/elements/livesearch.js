@@ -173,7 +173,7 @@ export default {
       show: s => s.show_thumbnail !== false }),
 
     ...shadowField,
-    ...borderFields(),
+    ...borderFields({ effetti: false }), // il PHP scrive bordo ed effetti su un selettore che nel markup non c'è
     { type: 'separator', label: t('Disposizione') },
     { key: 'results_columns', label: t('Colonne risultati'), type: 'range', min: 1, max: 4, step: 1 },
   ],

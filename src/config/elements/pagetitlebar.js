@@ -153,7 +153,7 @@ export default {
 
     ...textEffectsFields([ { value: 'subtitle', label: t('Solo Sottotitolo') } ]),
     ...shadowField,
-    ...borderFields(),
+    ...borderFields({ effetti: false }), // il PHP scrive bordo ed effetti su un selettore che nel markup non c'è
     { key: 'border_bottom', label: t('Bordo inferiore'), type: 'toggle' },
   ],
 };

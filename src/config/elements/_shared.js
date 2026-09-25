@@ -1019,18 +1019,34 @@ export const borderEffectDefaults = {
 };
 
 /**
- * Restituisce l'array di fields per la sezione Bordo dell'inspector.
- * @param {Object} opts  { key, hoverKey, durationKey } — override chiavi default
+ * Il bordo disegna davvero? Gemello di parse_border() (class-tile-base.php): un oggetto con un
+ * colore e almeno un lato > 0. Senza colore, o salvato come stringa storica, per il PHP non c'è
+ * bordo, e senza bordo il neon non disegna niente.
  */
+function bordoAttivo(b) {
+  if (!b || typeof b !== 'object' || Array.isArray(b)) return false;
+  if (String(b.color ?? '').trim() === '') return false;
+  return ['top', 'right', 'bottom', 'left'].some((lato) => (parseInt(b[lato], 10) || 0) > 0);
+}
+
 /**
- * Solo la sezione "Effetti bordo" (neon/gradiente…). Estratta da borderFields()
- * così il tab Stile del wrapper può montare il CONTROLLO bordo dentro il pannello
- * "Spazi & Bordi" (StyleBoxStack) e tenere gli effetti come sezione separata,
- * senza duplicare le definizioni. Opera sulle chiavi border_effect_*.
+ * Gli effetti bordo (neon/gradiente…), chiavi border_effect_*.
+ *
+ * Senza argomenti: la sezione «Effetti bordo» del Contenitore (_styleFieldsBase.js), che monta il
+ * CONTROLLO bordo dentro «Spazi & Bordi» (StyleBoxStack) e tiene gli effetti come sezione a sé.
+ *
+ * Con { separatore: false, bordo: <chiave> }: gli effetti dell'ELEMENTO, dentro la sezione del suo
+ * Bordo (borderFields). Niente separatore: in alcune tile dopo il Bordo seguono campi senza
+ * intestazione propria (Colonne, Posizione ribbon…), che finirebbero sotto una sezione condizionata
+ * e sparirebbero con lei. Si vedono quando il bordo disegna (bordoAttivo) o quando un effetto è già
+ * salvato, così si può sempre riportarlo a «Nessuno».
+ *
+ * @param {Object}  [opts]
+ * @param {boolean} [opts.separatore=true] - false: senza il separatore «Effetti bordo»
+ * @param {string}  [opts.bordo]           - chiave del bordo dell'elemento da cui dipende la visibilità
  */
-export function borderEffectFields() {
-  return [
-    { type: 'separator', label: t('Effetti bordo') },
+export function borderEffectFields({ separatore = true, bordo = null } = {}) {
+  const campi = [
     { key: 'border_effect', label: t('Effetto'), type: 'select', options: [
       { value: 'none',          label: t('Nessuno') },
       { value: 'neon',          label: t('Neon glow') },
@@ -1057,8 +1073,33 @@ export function borderEffectFields() {
       min: 1, max: 20, step: 1, default: borderEffectDefaults.border_effect_speed,
       condition: { field: 'border_effect', op: '=', value: 'gradient-spin' } },
   ];
+  const sep = separatore ? [{ type: 'separator', label: t('Effetti bordo') }] : [];
+  if (!bordo) return [...sep, ...campi];
+  // `show` si somma alla `condition` dei campi (isFieldVisible fa l'AND). Senza la sezione, la
+  // ricerca «neon» o «effetti bordo» li trova dai searchTerms del menu.
+  const visibile = (s) => bordoAttivo(s[bordo]) || (!!s.border_effect && s.border_effect !== 'none');
+  return [...sep, ...campi.map((f) => ({
+    ...f,
+    ...(f.key === 'border_effect' ? { searchTerms: ['effetti bordo', 'effetto bordo', 'neon', 'glow', 'gradiente'] } : {}),
+    show: visibile,
+  }))];
 }
 
+/**
+ * Restituisce l'array di fields per la sezione Bordo dell'inspector (tab Stile, blocco Elemento).
+ * Sotto il controllo Bordo, nella stessa sezione, gli effetti bordo dell'elemento: compaiono solo
+ * quando il bordo ha uno spessore E un colore (senza colore parse_border() non disegna nulla),
+ * o quando un effetto è già salvato.
+ *
+ * @param {Object}  [opts]
+ * @param {string}  [opts.key='border']                    - chiave del bordo
+ * @param {string}  [opts.hoverKey='border_hover']          - chiave del bordo in hover
+ * @param {string}  [opts.durationKey='border_hover_duration']
+ * @param {boolean} [opts.effetti=true] - false per le tile il cui renderer NON disegna gli effetti
+ *   (build_border_effect_css sul bordo della tile, su un selettore che nel markup esiste): lì
+ *   sarebbero controlli che non fanno niente. Le chiavi border_effect_* dei default restano: cambia
+ *   solo l'inspector. L'audit effetti-bordo-elemento controlla i due versi.
+ */
 export function borderFields(opts = {}) {
   const key      = opts.key          ?? 'border';
   const hoverKey = opts.hoverKey     ?? 'border_hover';
@@ -1070,7 +1111,7 @@ export function borderFields(opts = {}) {
       { key, label: t('Bordo'), type: 'border' },
       { hoverKey, hoverDurationKey: durKey }
     ),
-    ...borderEffectFields(),
+    ...(opts.effetti === false ? [] : borderEffectFields({ separatore: false, bordo: key })),
   ];
 }
 

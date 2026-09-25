@@ -191,7 +191,7 @@ export default {
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
     { key: 'tile_padding', type: 'spacing', label: t('Padding') },
 
-    ...borderFields(),
+    ...borderFields({ effetti: false }), // il PHP scrive bordo ed effetti su un selettore che nel markup non c'è
     { type: 'separator', label: t('Sfondo globale') },
     { key: 'media', label: t('Sfondo entrambe le zone (immagine, video, gradiente…)'), type: 'background', showParallax: false },
   ],

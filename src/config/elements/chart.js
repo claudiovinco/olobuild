@@ -352,6 +352,6 @@ export default {
     { key: 'axis_color', label: t('Colore bordo assi'), type: 'color' },
 
     ...shadowField,
-    ...borderFields(),
+    ...borderFields({ effetti: false }), // il PHP scrive bordo ed effetti su un selettore che nel markup non c'è
   ],
 };
