@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 const props = defineProps({
   title: { type: String, required: true },
@@ -33,9 +33,33 @@ const props = defineProps({
   // forceOpen: tiene il body visibile a prescindere dallo stato del toggle
   // (usato durante la ricerca impostazioni per mostrare i match nelle sezioni chiuse)
   forceOpen: { type: Boolean, default: false },
+  // storageKey (facoltativa): se c'è, aperto/chiuso si ricorda in localStorage
+  // ('olo_collapse_<storageKey>'), letto e scritto in try/catch. Storage vuoto o
+  // bloccato = defaultOpen. Senza la prop nulla cambia per gli usi esistenti.
+  storageKey: { type: String, default: '' },
 });
 
-const open = ref(props.defaultOpen);
+const STORAGE_PREFIX = 'olo_collapse_';
+
+function statoIniziale() {
+  if (props.storageKey) {
+    try {
+      const v = localStorage.getItem(STORAGE_PREFIX + props.storageKey);
+      if (v === '1') return true;
+      if (v === '0') return false;
+    } catch (e) { /* storage non disponibile: vale defaultOpen */ }
+  }
+  return props.defaultOpen;
+}
+
+const open = ref(statoIniziale());
+
+watch(open, (v) => {
+  if (!props.storageKey) return;
+  try {
+    localStorage.setItem(STORAGE_PREFIX + props.storageKey, v ? '1' : '0');
+  } catch (e) { /* storage non disponibile: lo stato vale fino alla chiusura */ }
+});
 </script>
 
 <style scoped>

@@ -862,16 +862,27 @@ class Olobuild_Rest_Api {
                     else             delete_post_meta( $post_id, $def['meta'] );
                     break;
                 case 'faq':
-                    $clean = [];
+                    $clean    = [];
+                    $scartate = 0;
                     if ( is_array( $raw ) ) {
                         foreach ( $raw as $item ) {
                             $q = isset( $item['q'] ) ? sanitize_text_field( $item['q'] ) : '';
                             $a = isset( $item['a'] ) ? sanitize_textarea_field( $item['a'] ) : '';
                             if ( $q && $a ) $clean[] = [ 'q' => $q, 'a' => $a ];
+                            else            $scartate++;
                         }
                     }
                     if ( $clean ) update_post_meta( $post_id, $def['meta'], $clean );
                     else          delete_post_meta( $post_id, $def['meta'] );
+                    // Una voce senza domanda o risposta non si salva: lo si dice, altrimenti
+                    // il builder mostrerebbe «Salvato» e ricaricando la voce sparirebbe.
+                    if ( $scartate > 0 ) {
+                        $errors[ $key ] = sprintf(
+                            /* translators: %d: numero di voci FAQ non salvate */
+                            _n( '%d voce senza domanda o risposta non salvata', '%d voci senza domanda o risposta non salvate', $scartate, 'olobuild' ),
+                            $scartate
+                        );
+                    }
                     break;
                 case 'jsonld':
                     $s = is_string( $raw ) ? trim( $raw ) : '';

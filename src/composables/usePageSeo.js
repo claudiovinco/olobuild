@@ -6,6 +6,7 @@
 // non come state globale del builder).
 
 import { ref, watch, computed } from 'vue';
+import { t } from '@/i18n';
 
 const DEFAULT_DATA = {
   title: '',
@@ -29,8 +30,18 @@ export function usePageSeo(postIdRef) {
   const defaults = ref({ site_name: '', post_title: '', post_url: '', site_host: '' });
   const loading = ref(false);
   const saving = ref(false);
+  // Vero per qualche secondo dopo un salvataggio andato a buon fine PER INTERO: la SEO
+  // si salva da sola, e senza un «Salvato» non si sapeva se la modifica fosse arrivata.
+  // Un 200 con `errors` (page_seo_save scarta il JSON-LD non valido e lascia il valore
+  // di prima, e le voci FAQ senza domanda o risposta) non è «Salvato»: i campi scartati
+  // stanno in validationErrors.
+  const saved = ref(false);
   const lastError = ref(null);
+  // Da dove viene lastError: 'load' (GET iniziale) o 'save' (POST). Un caricamento
+  // fallito non è un salvataggio fallito, e la testata lo dice in modo diverso.
+  const errorKind = ref(null);
   const validationErrors = ref({});
+  let savedTimer = null;
 
   const oloData = window.oloData || {};
   const restRoot = oloData.restUrl || '/wp-json/';
@@ -53,6 +64,7 @@ export function usePageSeo(postIdRef) {
     }
     loading.value = true;
     lastError.value = null;
+    errorKind.value = null;
     try {
       const res = await fetch(url(id), {
         credentials: 'same-origin',
@@ -66,7 +78,8 @@ export function usePageSeo(postIdRef) {
       // Allow new state to settle before re-enabling auto-save.
       setTimeout(() => { suppressWatch = false; }, 50);
     } catch (e) {
-      lastError.value = String(e && e.message || e);
+      lastError.value = t('Caricamento non riuscito') + ': ' + String(e && e.message || e);
+      errorKind.value = 'load';
     } finally {
       loading.value = false;
     }
@@ -85,6 +98,8 @@ export function usePageSeo(postIdRef) {
     const id = unwrap(postIdRef);
     if (!id) return;
     saving.value = true;
+    saved.value = false;
+    clearTimeout(savedTimer);
     validationErrors.value = {};
     try {
       const res = await fetch(url(id), {
@@ -95,18 +110,33 @@ export function usePageSeo(postIdRef) {
       });
       const j = await res.json().catch(() => ({}));
       if (!res.ok) {
-        lastError.value = 'Salvataggio fallito: ' + (j.message || 'HTTP ' + res.status);
+        lastError.value = t('Salvataggio fallito') + ': ' + ((j && j.message) || 'HTTP ' + res.status);
+        errorKind.value = 'save';
         return;
       }
-      if (j && j.errors) validationErrors.value = j.errors;
+      // Arrivato: un errore di prima non resta a schermo come se valesse ancora.
+      lastError.value = null;
+      errorKind.value = null;
+      const scartati = (j && j.errors && typeof j.errors === 'object') ? j.errors : {};
+      validationErrors.value = scartati;
+      // Salvato in parte: niente «Salvato», la testata dice cosa è stato scartato.
+      if (Object.keys(scartati).length) return;
+      saved.value = true;
+      savedTimer = setTimeout(() => { saved.value = false; }, 2500);
     } catch (e) {
-      lastError.value = String(e && e.message || e);
+      lastError.value = t('Salvataggio fallito') + ': ' + String(e && e.message || e);
+      errorKind.value = 'save';
     } finally {
       saving.value = false;
     }
   }
 
   function schedulePush() {
+    // Una modifica non ancora inviata non è «Salvato»: senza questo il «Salvato» del
+    // push precedente restava a schermo per tutto il debounce, sopra un testo che il
+    // server non aveva ancora ricevuto.
+    saved.value = false;
+    clearTimeout(savedTimer);
     clearTimeout(saveTimer);
     saveTimer = setTimeout(push, 600);
   }
@@ -128,7 +158,9 @@ export function usePageSeo(postIdRef) {
     defaults,
     loading,
     saving,
+    saved,
     lastError,
+    errorKind,
     validationErrors,
     isReady,
     update,

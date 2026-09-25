@@ -1226,7 +1226,14 @@ class Olobuild_Builder {
             // Con lo slash finale, come ovunque: la pagina builder era l'unica
             // senza, e ogni `${oloData.restUrl}styles` diventava `v1styles` → 404.
             'restUrl'        => esc_url_raw( rest_url( 'olobuild/v1/' ) ),
+            // Radice REST di WordPress (wp/v2/…): rest_url() è giusta anche in una
+            // sottocartella e con i permalink semplici (?rest_route=/), dove un
+            // '/wp-json/' scritto a mano non arriva. La usa la favicon del sito.
+            'wpRestRoot'     => esc_url_raw( rest_url() ),
             'nonce'          => wp_create_nonce( 'wp_rest' ),
+            // wp/v2/settings (icona del sito) richiede manage_options: senza, il
+            // pannello lo dice invece di fallire in silenzio.
+            'canManageOptions' => current_user_can( 'manage_options' ),
             'importsDisabled' => olobuild_imports_disabled(),
             'userId'         => get_current_user_id(),
             'userName'       => wp_get_current_user()->display_name,
@@ -1292,6 +1299,9 @@ class Olobuild_Builder {
                 'tagline'  => get_bloginfo( 'description' ),
                 'logo_url' => $this->get_site_logo_url(),
                 'home_url' => home_url( '/' ),
+                // Favicon attuale: le Impostazioni pagina la mostrano senza chiederla
+                // alla REST a ogni apertura ('' = nessuna icona).
+                'icon_url' => esc_url_raw( get_site_icon_url( 64 ) ),
             ],
         ] );
 

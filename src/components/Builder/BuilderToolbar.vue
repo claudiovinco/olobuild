@@ -137,11 +137,17 @@
       <button
         @click="showShortcuts = !showShortcuts"
         class="mb-px-2 mb-py-1.5 mb-rounded-md mb-transition-colors mb-text-gray-400 hover:mb-text-gray-200 hover:mb-bg-gray-700 mb-text-xs mb-font-bold"
-        :title="t('Scorciatoie tastiera')"
-        :aria-label="t('Scorciatoie tastiera')"
+        :title="t('Scorciatoie tastiera e preferenze editor')"
+        :aria-label="t('Scorciatoie tastiera e preferenze editor')"
+        aria-haspopup="dialog"
       >
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M8 12h.001M12 12h.001M16 12h.001M7 16h10"/></svg>
       </button>
+      <!-- Preferenze dell'editor (solo per chi usa il builder, in questo browser: oggi
+           l'Evidenziazione dalla Struttura, prima in fondo alle Impostazioni pagina). Si
+           aprono dalla finestra delle Scorciatoie, non da un pulsante in più: la barra
+           trabocca già e un'icona in più tagliava «Salva» (canvas-toolbar-densita). -->
+      <EditorPrefsDialog :open="showEditorPrefs" @close="showEditorPrefs = false" />
       <!-- Controllo accessibilità (contrasto) -->
       <button
         @click="openA11y()"
@@ -313,8 +319,18 @@
               </div>
             </div>
           </div>
-          <div class="mb-mt-4 mb-pt-3 mb-border-t mb-border-gray-700">
+          <div class="mb-mt-4 mb-pt-3 mb-border-t mb-border-gray-700 mb-flex mb-items-center mb-justify-between mb-gap-3">
             <p class="mb-text-gray-500 mb-text-xs mb-m-0">Su Mac usa <kbd class="mb-bg-gray-700 mb-text-gray-400 mb-px-1.5 mb-py-0.5 mb-rounded mb-text-[10px] mb-font-mono mb-border mb-border-gray-600">Cmd</kbd> al posto di Ctrl</p>
+            <!-- Il posto delle preferenze dell'editor, finché la barra non avrà il suo menu «⋯» -->
+            <button
+              type="button"
+              class="olo-tb-prefs"
+              aria-haspopup="dialog"
+              @click="apriPreferenzeEditor"
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+              {{ t('Preferenze editor') }}
+            </button>
           </div>
         </div>
       </div>
@@ -601,6 +617,7 @@ import { useHistory } from '@/composables/useHistory';
 import { useToast } from '@/composables/useToast';
 import { useTileActions } from '@/composables/useTileActions';
 import { useFocusTrap } from '@/composables/useFocusTrap';
+import EditorPrefsDialog from './EditorPrefsDialog.vue';
 import { isFromPreview } from '@/utils/previewOrigin';
 import { ritornoPer } from '@/utils/ritornoZona';
 import { t } from '@/i18n';
@@ -677,6 +694,13 @@ const visibleViewports = computed(() => {
 
 // Shortcuts panel
 const showShortcuts = ref(false);
+// Preferenze dell'editor (EditorPrefsDialog), dalla finestra delle Scorciatoie: si
+// chiude quella (il focus torna al pulsante della tastiera) e si apre questa.
+const showEditorPrefs = ref(false);
+function apriPreferenzeEditor() {
+  showShortcuts.value = false;
+  showEditorPrefs.value = true;
+}
 
 // Pannello accessibilità: controllo contrasto colore del template (endpoint /contrast-check,
 // che ora risolve i token var(--olo-color-*) al valore reale). Cabla il checker prima orfano.
@@ -1171,6 +1195,32 @@ async function regenerateThumbnail() {
   box-shadow: none;
 }
 .olo-tb-ritorno:focus-visible {
+  outline: 2px solid var(--olo-ui-accent, #e8622a);
+  outline-offset: 1px;
+}
+/* «Preferenze editor» nella finestra delle Scorciatoie (teletrasportata nel body, fuori
+   da #olobuilder-app: colori scritti qui, sul grigio #1f2937 della finestra) */
+.olo-tb-prefs {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: #e5e7eb;
+  background: transparent;
+  border: 1px solid #6b7280; /* 3:1 sul #1f2937 */
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s;
+}
+.olo-tb-prefs:hover {
+  color: #fff;
+  border-color: var(--olo-ui-accent, #e8622a);
+}
+.olo-tb-prefs:focus-visible {
   outline: 2px solid var(--olo-ui-accent, #e8622a);
   outline-offset: 1px;
 }

@@ -1,158 +1,169 @@
 <template>
-  <!--
-    Impostazioni pagina: stesse superfici chiare dell'inspector delle tile. Testata
-    (.v2i-head) e corpo che scorre (.v2i-content, che schiarisce anche i CollapseSection)
-    li mette BuilderInspector. Qui solo classi proprie psp-*: le mb-text-gray-* sono
-    rimappate da main.scss con l'ID di #olobuilder-app e !important, e sul bianco
-    scendevano sotto 4,5:1 (#888, #aaa) senza che un override scoped potesse vincere.
-  -->
   <div class="psp mb-space-y-3">
-    <!-- Layout -->
-    <CollapseSection :title="t('Layout')" :defaultOpen="true">
-      <div class="psp-group">
-        <div v-if="isSingleTemplate" class="psp-field">
-          <span class="psp-label">{{ t('Post Type') }}</span>
-          <FieldSelect
-            ui="dropdown"
-            :aria-label="t('Post Type')"
-            :modelValue="pageSettings.single_post_type || ''"
-            :options="postTypes"
-            @update:modelValue="builderStore.updatePageSetting('single_post_type', $event)"
-          />
-        </div>
-        <div class="psp-field">
-          <span class="psp-label">{{ t('Larghezza max contenuto') }}</span>
-          <FieldSelect
-            ui="dropdown"
-            :aria-label="t('Larghezza max contenuto')"
-            :modelValue="pageSettings.content_max_width"
-            :options="contentWidthOptions"
-            @update:modelValue="builderStore.updatePageSetting('content_max_width', $event)"
-          />
-        </div>
-      </div>
-    </CollapseSection>
+    <!--
+      Impostazioni pagina: stesse superfici chiare dell'inspector delle tile. Testata
+      (.v2i-head) e corpo che scorre (.v2i-content, che schiarisce anche i CollapseSection)
+      li mette BuilderInspector. Qui solo classi proprie psp-*: le mb-text-gray-* sono
+      rimappate da main.scss con l'ID di #olobuilder-app e !important, e sul bianco
+      scendevano sotto 4,5:1 (#888, #aaa) senza che un override scoped potesse vincere.
 
-    <!-- Sfondo pagina: BackgroundControls è già una card chiara autosufficiente -->
-    <CollapseSection :title="t('Sfondo pagina')" :defaultOpen="true">
-      <div class="psp-group">
-        <BackgroundControls
-          :modelValue="pageSettings.page_bg"
-          :showParallax="true"
-          @update:modelValue="onBgUpdate"
-        />
-      </div>
-    </CollapseSection>
+      Tre gruppi, uno per modo di salvare, ciascuno detto nella sua nota: Pagina (col
+      template, Salva / Ctrl+S) · SEO (salvataggio automatico sul post collegato) · Sito
+      (opzione di WordPress, subito, solo con manage_options). Aperto/chiuso si ricorda
+      per utente. L'Evidenziazione scroll, preferenza di chi usa l'editor, sta in
+      «Preferenze editor» (EditorPrefsDialog, dalla finestra delle Scorciatoie), non qui.
+    -->
+    <CollapseSection macro :title="t('Pagina')" :defaultOpen="true" :storageKey="chiaveGruppo('pagina')">
+      <p class="psp-note">{{ t('Si salva con la pagina: Salva o Ctrl+S (⌘S su Mac).') }}</p>
 
-    <!-- Effetti di pagina: aperto da sé se un effetto è acceso (chiuso lo nasconderebbe) -->
-    <CollapseSection :title="t('Effetti di pagina')" :defaultOpen="effettiAttivi">
-      <div class="psp-group">
-        <div class="psp-row">
-          <label for="psp-crt" class="psp-label">{{ t('Overlay CRT (scanline + vignetta)') }}</label>
-          <FieldToggle
-            id="psp-crt"
-            class="psp-switch"
-            role="switch"
-            :aria-checked="String(pageSettings.page_crt_enabled === true)"
-            :modelValue="pageSettings.page_crt_enabled === true"
-            @update:modelValue="builderStore.updatePageSetting('page_crt_enabled', $event)"
-          />
-        </div>
-        <p class="psp-help">{{ t('Decoratore a tutta pagina in stile schermo CRT. Statico con riduzione del movimento.') }}</p>
-        <template v-if="pageSettings.page_crt_enabled">
-          <div v-for="r in CRT_RANGES" :key="r.key" class="psp-row">
-            <span class="psp-label">{{ t(r.label) }}</span>
-            <FieldRange
-              compact
-              :unit="r.unit"
-              :min="r.min"
-              :max="r.max"
-              :step="r.step"
-              :defaultValue="r.def"
-              :aria-label="t(r.label)"
-              :modelValue="pageNum(r)"
-              @update:modelValue="setPageInt(r, $event)"
-              @focusout="risincronizza($event, pageNum(r))"
+      <!-- Layout -->
+      <CollapseSection :title="t('Layout')" :defaultOpen="true">
+        <div class="psp-group">
+          <div v-if="isSingleTemplate" class="psp-field">
+            <span class="psp-label">{{ t('Post Type') }}</span>
+            <FieldSelect
+              ui="dropdown"
+              :aria-label="t('Post Type')"
+              :modelValue="pageSettings.single_post_type || ''"
+              :options="postTypes"
+              @update:modelValue="builderStore.updatePageSetting('single_post_type', $event)"
             />
           </div>
-          <div class="psp-row psp-row--fill">
-            <span class="psp-label">{{ t('Fusione') }}</span>
-            <FieldSelect ui="dropdown" :aria-label="t('Fusione')" :modelValue="pageSettings.page_crt_blend_mode || 'overlay'" :options="crtBlendOptions" @update:modelValue="builderStore.updatePageSetting('page_crt_blend_mode', $event)" />
+          <div class="psp-field">
+            <span class="psp-label">{{ t('Larghezza max contenuto') }}</span>
+            <FieldSelect
+              ui="dropdown"
+              :aria-label="t('Larghezza max contenuto')"
+              :modelValue="pageSettings.content_max_width"
+              :options="contentWidthOptions"
+              @update:modelValue="builderStore.updatePageSetting('content_max_width', $event)"
+            />
           </div>
+        </div>
+      </CollapseSection>
+
+      <!-- Sfondo pagina: BackgroundControls è già una card chiara autosufficiente -->
+      <CollapseSection :title="t('Sfondo pagina')" :defaultOpen="true">
+        <div class="psp-group">
+          <BackgroundControls
+            :modelValue="pageSettings.page_bg"
+            :showParallax="true"
+            @update:modelValue="onBgUpdate"
+          />
+        </div>
+      </CollapseSection>
+
+      <!-- Effetti di pagina: aperto da sé se un effetto è acceso (chiuso lo nasconderebbe) -->
+      <CollapseSection :title="t('Effetti di pagina')" :defaultOpen="effettiAttivi">
+        <div class="psp-group">
           <div class="psp-row">
-            <label for="psp-crt-flicker" class="psp-label">{{ t('Sfarfallio animato') }}</label>
+            <label for="psp-crt" class="psp-label">{{ t('Overlay CRT (scanline + vignetta)') }}</label>
             <FieldToggle
-              id="psp-crt-flicker"
+              id="psp-crt"
               class="psp-switch"
               role="switch"
-              :aria-checked="String(pageSettings.page_crt_flicker === true)"
-              :modelValue="pageSettings.page_crt_flicker === true"
-              @update:modelValue="builderStore.updatePageSetting('page_crt_flicker', $event)"
+              :aria-checked="String(pageSettings.page_crt_enabled === true)"
+              :modelValue="pageSettings.page_crt_enabled === true"
+              @update:modelValue="builderStore.updatePageSetting('page_crt_enabled', $event)"
             />
           </div>
-        </template>
+          <p class="psp-help">{{ t('Decoratore a tutta pagina in stile schermo CRT. Statico con riduzione del movimento.') }}</p>
+          <template v-if="pageSettings.page_crt_enabled">
+            <div v-for="r in CRT_RANGES" :key="r.key" class="psp-row">
+              <span class="psp-label">{{ t(r.label) }}</span>
+              <FieldRange
+                compact
+                :unit="r.unit"
+                :min="r.min"
+                :max="r.max"
+                :step="r.step"
+                :defaultValue="r.def"
+                :aria-label="t(r.label)"
+                :modelValue="pageNum(r)"
+                @update:modelValue="setPageInt(r, $event)"
+                @focusout="risincronizza($event, pageNum(r))"
+              />
+            </div>
+            <div class="psp-row psp-row--fill">
+              <span class="psp-label">{{ t('Fusione') }}</span>
+              <FieldSelect ui="dropdown" :aria-label="t('Fusione')" :modelValue="pageSettings.page_crt_blend_mode || 'overlay'" :options="crtBlendOptions" @update:modelValue="builderStore.updatePageSetting('page_crt_blend_mode', $event)" />
+            </div>
+            <div class="psp-row">
+              <label for="psp-crt-flicker" class="psp-label">{{ t('Sfarfallio animato') }}</label>
+              <FieldToggle
+                id="psp-crt-flicker"
+                class="psp-switch"
+                role="switch"
+                :aria-checked="String(pageSettings.page_crt_flicker === true)"
+                :modelValue="pageSettings.page_crt_flicker === true"
+                @update:modelValue="builderStore.updatePageSetting('page_crt_flicker', $event)"
+              />
+            </div>
+          </template>
 
-        <div class="psp-row">
-          <label for="psp-grain" class="psp-label">{{ t('Grana pellicola') }}</label>
-          <FieldToggle
-            id="psp-grain"
-            class="psp-switch"
-            role="switch"
-            :aria-checked="String(pageSettings.page_grain_enabled === true)"
-            :modelValue="pageSettings.page_grain_enabled === true"
-            @update:modelValue="builderStore.updatePageSetting('page_grain_enabled', $event)"
-          />
+          <div class="psp-row">
+            <label for="psp-grain" class="psp-label">{{ t('Grana pellicola') }}</label>
+            <FieldToggle
+              id="psp-grain"
+              class="psp-switch"
+              role="switch"
+              :aria-checked="String(pageSettings.page_grain_enabled === true)"
+              :modelValue="pageSettings.page_grain_enabled === true"
+              @update:modelValue="builderStore.updatePageSetting('page_grain_enabled', $event)"
+            />
+          </div>
+          <p class="psp-help">{{ t('Rumore organico a tutta pagina, animato a scatti come una pellicola. Statico con riduzione del movimento.') }}</p>
+          <template v-if="pageSettings.page_grain_enabled">
+            <div v-for="r in GRAIN_RANGES" :key="r.key" class="psp-row">
+              <span class="psp-label">{{ t(r.label) }}</span>
+              <FieldRange
+                compact
+                :unit="r.unit"
+                :min="r.min"
+                :max="r.max"
+                :step="r.step"
+                :defaultValue="r.def"
+                :aria-label="t(r.label)"
+                :modelValue="pageNum(r)"
+                @update:modelValue="setPageInt(r, $event)"
+                @focusout="risincronizza($event, pageNum(r))"
+              />
+            </div>
+            <!-- Chiave assente = animata, come il PHP (array_key_exists): da qui `?? true` -->
+            <div class="psp-row">
+              <label for="psp-grain-animate" class="psp-label">{{ t('Animazione a scatti') }}</label>
+              <FieldToggle
+                id="psp-grain-animate"
+                class="psp-switch"
+                role="switch"
+                :aria-checked="String((pageSettings.page_grain_animate ?? true) === true)"
+                :modelValue="(pageSettings.page_grain_animate ?? true) === true"
+                @update:modelValue="builderStore.updatePageSetting('page_grain_animate', $event)"
+              />
+            </div>
+            <div class="psp-row">
+              <label for="psp-grain-mobile" class="psp-label">{{ t('Mostra anche su touch/mobile') }}</label>
+              <FieldToggle
+                id="psp-grain-mobile"
+                class="psp-switch"
+                role="switch"
+                :aria-checked="String(pageSettings.page_grain_mobile === true)"
+                :modelValue="pageSettings.page_grain_mobile === true"
+                @update:modelValue="builderStore.updatePageSetting('page_grain_mobile', $event)"
+              />
+            </div>
+            <p class="psp-help">{{ t('Di default la grana è disattivata sui dispositivi touch: il layer in blend a tutto schermo può rendere lo scorrimento meno fluido.') }}</p>
+          </template>
         </div>
-        <p class="psp-help">{{ t('Rumore organico a tutta pagina, animato a scatti come una pellicola. Statico con riduzione del movimento.') }}</p>
-        <template v-if="pageSettings.page_grain_enabled">
-          <div v-for="r in GRAIN_RANGES" :key="r.key" class="psp-row">
-            <span class="psp-label">{{ t(r.label) }}</span>
-            <FieldRange
-              compact
-              :unit="r.unit"
-              :min="r.min"
-              :max="r.max"
-              :step="r.step"
-              :defaultValue="r.def"
-              :aria-label="t(r.label)"
-              :modelValue="pageNum(r)"
-              @update:modelValue="setPageInt(r, $event)"
-              @focusout="risincronizza($event, pageNum(r))"
-            />
-          </div>
-          <!-- Chiave assente = animata, come il PHP (array_key_exists): da qui `?? true` -->
-          <div class="psp-row">
-            <label for="psp-grain-animate" class="psp-label">{{ t('Animazione a scatti') }}</label>
-            <FieldToggle
-              id="psp-grain-animate"
-              class="psp-switch"
-              role="switch"
-              :aria-checked="String((pageSettings.page_grain_animate ?? true) === true)"
-              :modelValue="(pageSettings.page_grain_animate ?? true) === true"
-              @update:modelValue="builderStore.updatePageSetting('page_grain_animate', $event)"
-            />
-          </div>
-          <div class="psp-row">
-            <label for="psp-grain-mobile" class="psp-label">{{ t('Mostra anche su touch/mobile') }}</label>
-            <FieldToggle
-              id="psp-grain-mobile"
-              class="psp-switch"
-              role="switch"
-              :aria-checked="String(pageSettings.page_grain_mobile === true)"
-              :modelValue="pageSettings.page_grain_mobile === true"
-              @update:modelValue="builderStore.updatePageSetting('page_grain_mobile', $event)"
-            />
-          </div>
-          <p class="psp-help">{{ t('Di default la grana è disattivata sui dispositivi touch: il layer in blend a tutto schermo può rendere lo scorrimento meno fluido.') }}</p>
-        </template>
-      </div>
+      </CollapseSection>
     </CollapseSection>
 
     <!-- SEO: solo quando il template è collegato a un post -->
-    <CollapseSection v-if="seo.isReady.value" :title="t('SEO della pagina')">
+    <CollapseSection v-if="seo.isReady.value" macro :title="t('SEO')" :storageKey="chiaveGruppo('seo')">
       <template #header-right>
-        <span v-if="seo.saving.value" class="psp-status">{{ t('Salvataggio…') }}</span>
+        <span class="psp-status" :class="{ 'psp-status--err': seoStatoErrore }" aria-live="polite">{{ seoStato }}</span>
       </template>
+      <p class="psp-note">{{ t('Salvataggio automatico sul contenuto collegato: non serve Salva.') }}</p>
       <div class="psp-group">
         <FieldSelect
           ui="segmented"
@@ -336,6 +347,7 @@
               :aria-label="t('Risposta')"
               class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"></textarea>
           </div>
+          <p v-if="seo.validationErrors.value.faq" class="psp-help psp-err">{{ seo.validationErrors.value.faq }}</p>
           <button type="button" class="psp-btn psp-btn--full" @click="seoAddFaq">+ {{ t('Aggiungi FAQ') }}</button>
         </div>
 
@@ -343,56 +355,34 @@
       </div>
     </CollapseSection>
 
-    <!-- Favicon -->
-    <CollapseSection :title="t('Favicon del sito')">
+    <!-- Sito: opzioni di WordPress, valgono per tutte le pagine e si applicano subito -->
+    <CollapseSection macro :title="t('Sito')" :storageKey="chiaveGruppo('sito')">
+      <p class="psp-note">{{ t('Vale per tutto il sito e si applica subito, senza Salva.') }}</p>
       <div class="psp-group">
+        <span class="psp-label">{{ t('Favicon') }}</span>
         <div v-if="faviconUrl" class="psp-fav">
           <img :src="faviconUrl" alt="" class="psp-fav-img" />
-          <button type="button" class="psp-fav-del" :title="t('Rimuovi favicon')" :aria-label="t('Rimuovi favicon')" @click="removeFavicon">×</button>
+          <button
+            v-if="canManageSite"
+            type="button"
+            class="psp-fav-del"
+            :disabled="faviconBusy"
+            :title="t('Rimuovi favicon')"
+            :aria-label="t('Rimuovi favicon')"
+            @click="removeFavicon"
+          >×</button>
         </div>
-        <button type="button" class="psp-btn psp-btn--full" @click="pickFavicon">
+        <button
+          type="button"
+          class="psp-btn psp-btn--full"
+          :disabled="!canManageSite || faviconBusy"
+          aria-describedby="psp-favicon-help"
+          @click="pickFavicon"
+        >
           {{ faviconUrl ? t('Cambia favicon') : t('Seleziona favicon') }}
         </button>
-        <p class="psp-help">{{ t('Imposta la favicon del sito (salvata in WordPress).') }}</p>
-      </div>
-    </CollapseSection>
-
-    <!-- Evidenziazione scroll (preferenza dell'editor, in localStorage) -->
-    <CollapseSection :title="t('Evidenziazione scroll')">
-      <div class="psp-group">
-        <p class="psp-help">{{ t('Effetto visivo quando selezioni un tile dalla Struttura.') }}</p>
-        <div class="psp-row psp-row--fill">
-          <span class="psp-label">{{ t('Tipo effetto') }}</span>
-          <FieldSelect
-            ui="dropdown"
-            :aria-label="t('Tipo effetto')"
-            :modelValue="sf.effect"
-            :options="scrollEffectOptions"
-            @update:modelValue="updateSf('effect', $event)"
-          />
-        </div>
-        <div class="psp-row psp-row--fill">
-          <span class="psp-label">{{ t('Colore') }}</span>
-          <FieldColor :modelValue="sf.color" @update:modelValue="updateSf('color', $event)" />
-        </div>
-        <template v-for="r in SF_RANGES" :key="r.key">
-          <div v-if="!r.soloPulse || sf.effect === 'pulse'" class="psp-row">
-            <span class="psp-label">{{ t(r.label) }}</span>
-            <FieldRange
-              compact
-              :unit="r.unit"
-              :min="r.min"
-              :max="r.max"
-              :step="r.step"
-              :defaultValue="sfDefaults[r.key]"
-              :aria-label="t(r.label)"
-              :modelValue="sf[r.key]"
-              @update:modelValue="setSfInt(r, $event)"
-              @focusout="risincronizza($event, sf[r.key])"
-            />
-          </div>
-        </template>
-        <p class="psp-help">{{ t('Durata scorrimento: 0 = istantaneo.') }}</p>
+        <p v-if="canManageSite" id="psp-favicon-help" class="psp-help">{{ t('Imposta la favicon del sito (salvata in WordPress).') }}</p>
+        <p v-else id="psp-favicon-help" class="psp-help">{{ t("Solo un amministratore può cambiare la favicon del sito.") }}</p>
       </div>
     </CollapseSection>
   </div>
@@ -400,23 +390,28 @@
 
 <script setup>
 import { t } from '@/i18n';
-import { computed, reactive, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useBuilderStore } from '@/stores/builder';
 import BackgroundControls from './BackgroundControls.vue';
 import CollapseSection from './CollapseSection.vue';
-import { loadScrollFlashPrefs, saveScrollFlashPrefs, scrollFlashDefaults } from '@/utils/scrollFlashPrefs';
 import { useMediaPicker } from '@/composables/useMediaPicker';
 import { usePageSeo } from '@/composables/usePageSeo';
-import FieldColor from './fields/FieldColor.vue';
+import { useToast } from '@/composables/useToast';
+import { interoNelRange, risincronizzaNumero } from '@/utils/numeroIntero';
 import FieldSelect from './fields/FieldSelect.vue';
 import FieldToggle from './fields/FieldToggle.vue';
 import FieldRange from './fields/FieldRange.vue';
 
 const builderStore = useBuilderStore();
 const pageSettings = computed(() => builderStore.pageSettings);
-const sf = reactive(loadScrollFlashPrefs());
-const sfDefaults = scrollFlashDefaults();
 const { openSingleImage } = useMediaPicker();
+const toast = useToast();
+const oloData = window.oloData || {};
+
+// Aperto/chiuso dei tre gruppi, ricordato per utente (CollapseSection storageKey).
+function chiaveGruppo(nome) {
+  return 'pagina-' + (oloData.userId || 0) + '-' + nome;
+}
 
 // Opzioni dei dropdown custom (FieldSelect applica t() alle label).
 // Value numerici per content_max_width: FieldSelect emette il value originale,
@@ -448,10 +443,6 @@ const schemaTypeOptions = [
   { value: 'LocalBusiness', label: 'LocalBusiness' },
   { value: 'none', label: 'Nessuno' },
 ];
-const scrollEffectOptions = [
-  { value: 'flash', label: 'Flash (singolo)' },
-  { value: 'pulse', label: 'Pulse (ripetuto)' },
-];
 const seoTabOptions = [
   { value: 'seo', label: 'Base' },
   { value: 'social', label: 'Social' },
@@ -473,95 +464,93 @@ const GRAIN_RANGES = [
   { key: 'page_grain_opacity', label: 'Intensità grana', unit: '%', min: 1, max: 30, step: 1, def: 7 },
   { key: 'page_grain_size', label: 'Dimensione pattern', unit: 'px', min: 80, max: 480, step: 20, def: 240 },
 ];
-const SF_RANGES = [
-  { key: 'size', label: 'Dimensione effetto', unit: 'px', min: 2, max: 20, step: 1 },
-  { key: 'duration', label: 'Durata effetto', unit: 'ms', min: 300, max: 3000, step: 100 },
-  { key: 'pulse_count', label: 'Ripetizioni pulse', unit: '×', min: 1, max: 6, step: 1, soloPulse: true },
-  { key: 'scroll_ms', label: 'Durata scorrimento', unit: 'ms', min: 0, max: 1500, step: 50 },
-];
-
 const effettiAttivi = computed(() =>
   pageSettings.value.page_crt_enabled === true || pageSettings.value.page_grain_enabled === true
 );
 
-// FieldRange emette STRINGHE e non limita il numero digitato; i cursori nativi di
-// prima salvavano parseInt(...), cioè NUMERI dentro gli estremi. Qui si torna a
-// quel formato: intero, al massimo `max`. Vuoto, non numerico o sotto il minimo non
-// si scrive: è il caso di una digitazione a metà («1» verso «120»), e scrivere il
-// minimo lì farebbe saltare il numero sotto le dita.
-function intero(raw, r) {
-  const n = parseInt(raw, 10);
-  if (Number.isNaN(n) || n < r.min) return null;
-  return Math.min(r.max, n);
-}
+// FieldRange emette STRINGHE: si torna all'intero entro gli estremi (i cursori nativi
+// di prima salvavano parseInt), così le chiavi page_* restano numeri.
 function pageNum(r) {
   return pageSettings.value[r.key] ?? r.def;
 }
 function setPageInt(r, raw) {
-  const n = intero(raw, r);
+  const n = interoNelRange(raw, r.min, r.max);
   if (n !== null) builderStore.updatePageSetting(r.key, n);
 }
-function setSfInt(r, raw) {
-  const n = intero(raw, r);
-  if (n !== null) updateSf(r.key, n);
-}
-// Uscendo dal campo, il numero mostrato torna quello salvato (una digitazione
-// scartata, come un campo svuotato, non resta a schermo come se valesse).
-function risincronizza(e, valore) {
-  const el = e && e.target;
-  if (el && el.type === 'number' && el.value !== String(valore)) el.value = String(valore);
-}
+const risincronizza = risincronizzaNumero;
 
-function updateSf(key, value) {
-  sf[key] = value;
-  saveScrollFlashPrefs(sf);
-}
+// ── Favicon del sito ──
+// È l'opzione site_icon di WordPress, non un dato della pagina: vale per tutto il
+// sito e si applica subito. L'icona attuale arriva da oloData.siteInfo (niente GET a
+// ogni apertura del pannello), che un cambio riuscito aggiorna: è la fonte da cui il
+// pannello riparte quando si rimonta. Si scrive su wp/v2/settings dalla radice REST vera
+// (oloData.wpRestRoot = rest_url(): sottocartella e ?rest_route= compresi), che
+// richiede manage_options. Esito sempre detto: prima un 403 o un 404 passavano muti
+// e il pannello mostrava un'icona mai salvata.
+const canManageSite = !!oloData.canManageOptions;
+const faviconUrl = ref((oloData.siteInfo && oloData.siteInfo.icon_url) || '');
+const faviconBusy = ref(false);
 
-// ── Favicon ──
-const faviconUrl = ref('');
-
-// Load current favicon on mount
-(async () => {
-  try {
-    const res = await fetch('/wp-json/wp/v2/settings', { credentials: 'same-origin', headers: { 'X-WP-Nonce': window.oloData?.nonce || '' } });
-    const data = await res.json();
-    if (data.site_icon) {
-      const mediaRes = await fetch('/wp-json/wp/v2/media/' + data.site_icon, { credentials: 'same-origin' });
-      const media = await mediaRes.json();
-      faviconUrl.value = media.source_url || '';
-    }
-  } catch (e) { /* ignore */ }
-})();
-
-function pickFavicon() {
-  openSingleImage(({ url, id }) => {
-    faviconUrl.value = url;
-    // Save to WordPress via REST API
-    fetch('/wp-json/wp/v2/settings', {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-WP-Nonce': window.oloData?.nonce || '',
-      },
-      body: JSON.stringify({ site_icon: id }),
-    }).catch(() => {});
-  });
+function wpRestUrl(path) {
+  const root = String(oloData.wpRestRoot || '');
+  if (!root) throw new Error(t('indirizzo REST di WordPress mancante'));
+  return (root.endsWith('/') ? root : root + '/') + path;
 }
 
-function removeFavicon() {
-  faviconUrl.value = '';
-  fetch('/wp-json/wp/v2/settings', {
+async function salvaIconaSito(id) {
+  const res = await fetch(wpRestUrl('wp/v2/settings'), {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json',
-      'X-WP-Nonce': window.oloData?.nonce || '',
+      'X-WP-Nonce': oloData.nonce || '',
     },
-    body: JSON.stringify({ site_icon: 0 }),
-  }).catch(() => {});
+    body: JSON.stringify({ site_icon: id }),
+  });
+  const j = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(j.message || ('HTTP ' + res.status));
+  // Un 200 che non riporta l'icona chiesta non la dà per salvata.
+  if (Number(j.site_icon) !== Number(id)) throw new Error(t('WordPress non ha registrato la favicon'));
 }
-const oloData = window.oloData || {};
+
+async function cambiaIconaSito(id, url, domanda, esito) {
+  if (!canManageSite || faviconBusy.value) return;
+  if (!window.confirm(domanda)) return;
+  faviconBusy.value = true;
+  try {
+    await salvaIconaSito(id);
+    faviconUrl.value = url;
+    // Anche nella fonte condivisa: il pannello si smonta a ogni selezione di una
+    // tile e rinasce da oloData.siteInfo, che mostrerebbe l'icona di prima.
+    if (!oloData.siteInfo) oloData.siteInfo = {};
+    oloData.siteInfo.icon_url = url;
+    toast.success(esito);
+  } catch (e) {
+    toast.error(t('Favicon non salvata') + ': ' + (e && e.message ? e.message : String(e)), 6000);
+  } finally {
+    faviconBusy.value = false;
+  }
+}
+
+function pickFavicon() {
+  if (!canManageSite) return;
+  openSingleImage(({ url, id }) => cambiaIconaSito(
+    id,
+    url,
+    t('Usare questa immagine come favicon di tutto il sito? Si applica subito, senza Salva.'),
+    t('Favicon del sito aggiornata'),
+  ));
+}
+
+function removeFavicon() {
+  cambiaIconaSito(
+    0,
+    '',
+    t('Togliere la favicon del sito? Si applica subito a tutte le pagine.'),
+    t('Favicon del sito tolta'),
+  );
+}
+
 const postTypes = oloData.postTypes || [];
 const isSingleTemplate = computed(() => builderStore.currentTemplate?.type === 'single');
 
@@ -579,6 +568,26 @@ const seoPostId = computed(() => {
 });
 const seoTab = ref('seo'); // 'seo' | 'social' | 'advanced' | 'schema' | 'faq'
 const seo = usePageSeo(seoPostId);
+// Nella testata del gruppo, visibile anche a gruppo chiuso: la SEO si salva da sola.
+// «Salvato» solo se il server ha tenuto TUTTO; un campo scartato (JSON-LD non valido,
+// voci FAQ senza domanda o risposta: risposta 200 con errors) lo dice anche a gruppo
+// chiuso, dove l'errore sotto il campo non si vede. «Non salvato» è il POST fallito,
+// «Non caricato» il GET iniziale.
+const NOMI_CAMPI_SEO = { extra_jsonld: 'JSON-LD', faq: 'FAQ' };
+const seoScartati = computed(() =>
+  Object.keys(seo.validationErrors.value || {}).map((k) => NOMI_CAMPI_SEO[k] || k)
+);
+const seoStato = computed(() => {
+  if (seo.saving.value) return t('Salvataggio…');
+  if (seo.errorKind.value === 'save') return t('Non salvato');
+  if (seoScartati.value.length) return t('Salvato in parte, scartato:') + ' ' + seoScartati.value.join(', ');
+  if (seo.saved.value) return t('Salvato');
+  if (seo.errorKind.value === 'load') return t('Non caricato');
+  return '';
+});
+const seoStatoErrore = computed(() =>
+  !seo.saving.value && (!!seo.errorKind.value || seoScartati.value.length > 0)
+);
 
 function seoUpdate(key, value) { seo.update(key, value); }
 function seoToggle(key) { seoUpdate(key, !seo.data.value[key]); }
@@ -649,7 +658,6 @@ function onBgUpdate(newBg) {
   //  2. Chiamata diretta a scheduleFullRender → render REST completo (incluso style
   //     server-side, hover states, ecc.)
   //  3. CustomEvent come fallback se il bridge non ha ancora esposto le funzioni globali
-  console.log('[PageSettings] page_bg changed:', plainBg);
   try {
     if (typeof window.__oloBridgePostToIframe === 'function') {
       window.__oloBridgePostToIframe('olo:set-page-bg', { page_bg: plainBg });
@@ -731,14 +739,29 @@ label.psp-label { cursor: pointer; }
   padding-top: 12px;
 }
 
-/* «Salvataggio…» nella testata del gruppo SEO (che è maiuscola e spaziata) */
+/* «Salvataggio… / Salvato» nella testata del gruppo SEO (che è maiuscola e spaziata):
+   #475569 regge anche sul fondo della testata, #f1f5f9 chiusa e arancio tenue aperta */
 .psp-status {
   margin-right: 6px;
   font-size: 10px;
   font-weight: 500;
   letter-spacing: 0;
   text-transform: none;
-  color: #64748b;
+  color: #475569;
+}
+/* Non salvato / salvato in parte / non caricato: rosso del chrome, >= 5,2:1 sui fondi della testata */
+.psp-status--err { color: #b91c1c; }
+
+/* Come si salva il gruppo: la prima riga di ogni gruppo principale */
+.psp-note {
+  margin: 0;
+  padding: 6px 8px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #475569;
+  background: #f8fafc;
+  border-left: 2px solid var(--olo-ui-accent, #e8622a);
+  border-radius: 0 6px 6px 0;
 }
 
 /* Contatori e stati SEO */
@@ -769,7 +792,8 @@ label.psp-label { cursor: pointer; }
   cursor: pointer;
   transition: border-color 0.12s, color 0.12s;
 }
-.psp-btn:hover { border-color: var(--olo-ui-accent, #e8622a); color: #1e293b; }
+.psp-btn:hover:not(:disabled) { border-color: var(--olo-ui-accent, #e8622a); color: #1e293b; }
+.psp-btn:disabled { color: #64748b; background: #f8fafc; cursor: not-allowed; }
 .psp-btn--full { width: 100%; }
 
 /* Voce FAQ: card bianca sul fondo del gruppo */

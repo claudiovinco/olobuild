@@ -56,6 +56,10 @@ class Olobuild_FullPage_Cache {
         foreach ( [ 'olobuild_active_header', 'olobuild_active_footer', 'olobuild_styles', 'olobuild_cookie_settings' ] as $opt ) {
             add_action( 'update_option_' . $opt, [ __CLASS__, 'purge_all' ] );
         }
+        // Favicon del sito (Impostazioni pagina del builder → wp/v2/settings): ogni pagina
+        // in cache ha già scritto il suo <link rel="icon">. Solo il Customizer svuotava.
+        add_action( 'update_option_site_icon', [ __CLASS__, 'purge_all' ] );
+        add_action( 'add_option_site_icon', [ __CLASS__, 'purge_all' ] );
         // Colori globali e set tipografici: generate_css() li scrive inline in ogni
         // pagina (--olo-color-<id>, --olo-font-<id>-*). Un valore cambiato o un colore
         // eliminato si vedevano solo alla scadenza della cache. Il primo è un add_option.
