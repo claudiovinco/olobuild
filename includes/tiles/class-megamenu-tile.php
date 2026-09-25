@@ -148,6 +148,10 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         'mobile_bar_logo'    => true,
         'mobile_search'      => true,
         'mobile_search_overlay' => false,
+        // Pulsanti dei link extra nel menu mobile (Stile › «Menu mobile — Pulsanti»)
+        'mobile_btn_font_size' => '16',
+        'mobile_btn_gap'       => '12',
+        'mobile_btn_width'     => 'full',
         // Social Icons
         // Extra links
         'extra_link_1_label' => '',
@@ -379,6 +383,9 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         $btn_radius  = Olobuild_Tile_Utils::border_radius( $s['btn_radius'] ) ?: '0px';
         $btn_rad_h   = Olobuild_Tile_Utils::radius_hover( $s, 'btn_radius_hover' );
         $btn_hbg     = $this->safe_color( $s['btn_hover_bg'] );
+        // «Durata» dello stato Hover di «Sfondo pulsante» (withHover, btn_bg_hover_duration).
+        // Non salvata = la transizione di sempre, «.2s».
+        $btn_bg_dur  = ( ( $s['btn_bg_hover_duration'] ?? '' ) === '' ) ? '.2s' : max( 0, intval( $s['btn_bg_hover_duration'] ) ) . 'ms';
         // Padding interno: chiave unificata btn_padding (4 lati); fallback per i
         // template salvati con i legacy btn_padding_v/h — di cui pad_int leggeva
         // solo 'top', azzerando di fatto il padding orizzontale.
@@ -409,6 +416,15 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         $mob_hc      = $this->safe_color( $s['mobile_heading_color'] ) ?: 'rgba(255,255,255,.5)';
         $mob_acc     = $this->safe_color( $s['mobile_accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $mob_logo_h  = intval( $s['mobile_logo_height'] ) ?: 36;
+        // «Dimensione voci» di Off-canvas e Dropdown (il Fullscreen legge mobile_link_size).
+        $mob_fs      = intval( $s['mobile_font_size'] ?? 17 ) ?: 17;
+        // Pulsanti dei link extra nel menu mobile: le regole si emettono solo se ce ne sono.
+        $mob_btns    = $this->has_mobile_buttons( $s );
+        $mob_btn_fs  = intval( $s['mobile_btn_font_size'] ?? 16 ) ?: 16;
+        $mob_btn_gr  = $s['mobile_btn_gap'] ?? '';
+        $mob_btn_gap = ( $mob_btn_gr === '' || $mob_btn_gr === null ) ? 12 : max( 0, intval( $mob_btn_gr ) );
+        $mob_btn_w   = ( ( $s['mobile_btn_width'] ?? 'full' ) === 'auto' ) ? 'auto' : 'full';
+        $has_lang    = trim( (string) ( $s['lang_tile_id'] ?? '' ) ) !== '';
 
         // Toggle sottomenu
         $tgl_style   = $s['mob_toggle_style'] ?? 'chevron';
@@ -1116,7 +1132,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             <?php if ( $btn_lsp ) : ?>letter-spacing: <?php echo $btn_lsp; ?>px;<?php endif; ?>
             <?php if ( $btn_sh !== 'none' ) : ?>box-shadow: <?php echo $btn_sh; ?>;<?php endif; ?>
             text-decoration: none;
-            transition: background .2s, transform .15s, box-shadow .2s, color .2s<?php if ( $btn_rad_h ) echo ', ' . $btn_rad_h['transition']; ?>;
+            transition: background <?php echo $btn_bg_dur; ?>, transform .15s, box-shadow .2s, color .2s<?php if ( $btn_rad_h ) echo ', ' . $btn_rad_h['transition']; ?>;
             white-space: nowrap;
             <?php if ( $btn_bw > 0 ) : ?>border: <?php echo $btn_bw; ?>px solid <?php echo $btn_bc ?: $btn_color; ?>;<?php endif; ?>
         }
@@ -1129,6 +1145,27 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             <?php if ( $btn_rad_h ) : ?>border-radius: <?php echo $btn_rad_h['css']; ?> !important;<?php endif; ?>
         }
         .<?php echo $uid; ?> .olo-mm-btn::after { display: none; }
+<?php
+        // Barra desktop: i pulsanti stanno in .olo-mm-nav > li > a, la cui «transition: color .2s»
+        // (0,2,2) batte quella di .olo-mm-btn (0,2,0) e lo sfondo in hover scattava senza la Durata
+        // scelta. Regola alla forza giusta (0,3,2), emessa solo con la Durata salvata: le barre che
+        // non la usano restano identiche byte per byte (colonna 0, come i blocchi del menu mobile).
+        // Gli effetti hover delle voci che hanno una transizione propria la conservano: «Cornice»
+        // (bordo .3s), «Magnetic» (transform .2s ease). «Flip»: il giro di .5s all'entrata sta in
+        // una regola :hover (0,4,2) che batte quella dell'effetto (0,3,2), così anche la Durata
+        // agisce entrando; a riposo transform 0s, all'uscita il pulsante torna fermo di colpo come
+        // le altre voci invece di rigirare all'indietro.
+        if ( ( $s['btn_bg_hover_duration'] ?? '' ) !== '' ) :
+            $btn_nav_tf   = $he === 'flip' ? 'transform 0s' : ( $he === 'magnetic' ? 'transform .2s ease' : 'transform .15s' );
+            $btn_nav_coda = ', box-shadow .2s, color .2s' . ( $he === 'framed' ? ', border-color .3s' : '' ) . ( $btn_rad_h ? ', ' . $btn_rad_h['transition'] : '' );
+            ?>
+        .<?php echo $uid; ?> .olo-mm-nav > li > a.olo-mm-btn,
+        .<?php echo $uid; ?> .olo-mm-nav-left > li > a.olo-mm-btn,
+        .<?php echo $uid; ?> .olo-mm-nav-right > li > a.olo-mm-btn { transition: background <?php echo $btn_bg_dur; ?>, <?php echo $btn_nav_tf . $btn_nav_coda; ?>; }
+<?php if ( $he === 'flip' ) : ?>
+        .<?php echo $uid; ?> .olo-mm-nav > li > a.olo-mm-btn:hover { transition: background <?php echo $btn_bg_dur; ?>, transform .5s ease<?php echo $btn_nav_coda; ?>; }
+<?php endif; ?>
+<?php endif; ?>
 
         /* === Hamburger (SVG) === */
         <?php
@@ -1377,7 +1414,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             justify-content: space-between;
             padding: 14px 20px;
             color: <?php echo $mob_tc; ?>;
-            font-size: 16px;
+            font-size: <?php echo $mob_fs; ?>px;
             font-weight: 500;
             text-decoration: none;
             transition: background .15s;
@@ -1502,7 +1539,6 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
 
         /* === Mobile Dropdown Panel === */
         <?php
-        $mob_fs  = intval( $s['mobile_font_size'] ?? 17 ) ?: 17;
         $mob_ip  = $this->pad_int( $s['mobile_item_padding'] ?? null, 16 ) ?: 16;
         $mob_sep = ! empty( $s['mobile_separator'] ?? true );
         $mob_drop_bg = $this->safe_color_css( $s['panel_bg'] ?? '' ) ?: '#ffffff';
@@ -1669,6 +1705,88 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             color: <?php echo $mob_tc; ?>; opacity: .7;
             padding-left: 20px; font-size: 18px;
         }
+<?php
+        // I blocchi qui sotto partono dalla colonna 0: dove non servono non lasciano nemmeno
+        // uno spazio, e l'HTML delle tile che non li usano resta identico byte per byte.
+        // Fullscreen: niente scorrimento laterale col dito.
+        if ( $mob_style === 'fullscreen' ) : ?>
+        .<?php echo $uid; ?> .olo-mm-fullscreen { overflow-x: hidden; }
+<?php endif; ?>
+<?php
+        // Selettore lingua anche nel Fullscreen (riga propria sotto la testata: accanto a logo
+        // e X non entra a 320-375 px) e in cima al Dropdown, allineato alle voci. order 0:
+        // .olo-mm-lang ha order 89, nella colonna flex del Fullscreen lo porterebbe in fondo.
+        if ( $has_lang && $mob_style === 'fullscreen' ) : ?>
+        .<?php echo $uid; ?> .olo-mm-fullscreen > .olo-mm-lang { order: 0; margin: 0; padding: 16px 24px 0; }
+<?php elseif ( $has_lang && $mob_style === 'dropdown' ) : ?>
+        .<?php echo $uid; ?> .olo-mm-dropdown-panel > .olo-mm-lang { margin: 0; padding: <?php echo $mob_ip; ?>px <?php echo $mob_ip + 8; ?>px 0; }
+<?php endif; ?>
+<?php
+        // Pulsanti nel menu mobile (link extra con «Stile pulsante»). Le regole delle voci
+        // (0,2,2) vincevano su .olo-mm-btn (0,2,0): il pulsante prendeva grandezza, font e
+        // filetto delle voci e, senza andare a capo, usciva dallo schermo. Regola propria
+        // (0,3,2), uguale nei tre stili: font del pulsante, a capo e centrato, larghezza scelta,
+        // niente filetto né numero, margini laterali 0 (allineato alle voci), gap fra i pulsanti.
+        // Lo sfondo in hover va ridichiarato alla stessa forza (0,4,2): la regola del pannello
+        // batte .olo-mm-btn:hover (0,3,0), e nell'Off-canvas il velo chiaro delle voci lo copriva.
+        // gap .25em (uno spazio: 4 px a 16 px, come la barra): nel flex lo spazio fra «Carrello»
+        // e il conteggio (<span class="olo-mm-cart-count">) cade in coda al testo e sparirebbe.
+        if ( $mob_btns ) : ?>
+        /* === Pulsanti nel menu mobile === */
+        .<?php echo $uid; ?> .olo-mm-fs-nav > li.olo-mm-mob-btn-li,
+        .<?php echo $uid; ?> .olo-mm-mob-nav > li.olo-mm-mob-btn-li,
+        .<?php echo $uid; ?> .olo-mm-dropdown-panel .olo-mm-dp-nav > li.olo-mm-mob-btn-li {
+            margin-top: <?php echo $mob_btn_gap; ?>px;
+            border-bottom: 0;
+        }
+        .<?php echo $uid; ?> .olo-mm-mob-nav > li.olo-mm-mob-btn-li { padding: 0 20px; }
+        .<?php echo $uid; ?> .olo-mm-dropdown-panel .olo-mm-dp-nav > li.olo-mm-mob-btn-li { padding: 0 <?php echo $mob_ip + 8; ?>px; }
+        .<?php echo $uid; ?> .olo-mm-fs-nav > li.olo-mm-mob-btn-li:last-child,
+        .<?php echo $uid; ?> .olo-mm-mob-nav > li.olo-mm-mob-btn-li:last-child,
+        .<?php echo $uid; ?> .olo-mm-dropdown-panel .olo-mm-dp-nav > li.olo-mm-mob-btn-li:last-child { padding-bottom: <?php echo $mob_btn_gap; ?>px; }
+<?php if ( $sep_style === 'gradient' ) : ?>
+        .<?php echo $uid; ?> .olo-mm-mob-nav > li.olo-mm-mob-btn-li::after,
+        .<?php echo $uid; ?> .olo-mm-dropdown-panel .olo-mm-dp-nav > li.olo-mm-mob-btn-li::after { content: none; }
+<?php endif; ?>
+        .<?php echo $uid; ?> .olo-mm-fs-nav > li > a.olo-mm-btn,
+        .<?php echo $uid; ?> .olo-mm-dp-nav > li > a.olo-mm-btn,
+        .<?php echo $uid; ?> .olo-mm-mob-nav > li > a.olo-mm-btn {
+            display: <?php echo $mob_btn_w === 'auto' ? 'inline-flex' : 'flex'; ?>;
+            align-items: center;
+            justify-content: center;
+            gap: .25em;
+            box-sizing: border-box;
+            width: <?php echo $mob_btn_w === 'auto' ? 'auto' : '100%'; ?>;
+            max-width: 100%;
+            margin: 0;
+            background: <?php echo $btn_bg; ?>;
+            border: <?php echo $btn_bw > 0 ? $btn_bw . 'px solid ' . ( $btn_bc ?: $btn_color ) : '0'; ?>;
+            font-family: inherit;
+            font-size: <?php echo $mob_btn_fs; ?>px;
+            font-weight: <?php echo $btn_fw; ?>;
+            letter-spacing: <?php echo $btn_lsp ? $btn_lsp . 'px' : 'normal'; ?>;
+            text-transform: <?php echo $btn_tt; ?>;
+            line-height: 1.3;
+            text-align: center;
+            white-space: normal;
+            overflow-wrap: anywhere;
+            transition: background <?php echo $btn_bg_dur; ?>, transform .15s, box-shadow .2s, color .2s<?php if ( $btn_rad_h ) echo ', ' . $btn_rad_h['transition']; ?>;
+        }
+        .<?php echo $uid; ?> .olo-mm-fs-nav > li > a.olo-mm-btn:hover,
+        .<?php echo $uid; ?> .olo-mm-dp-nav > li > a.olo-mm-btn:hover,
+        .<?php echo $uid; ?> .olo-mm-mob-nav > li > a.olo-mm-btn:hover { background: <?php echo $btn_hbg ?: $btn_bg; ?>; }
+        .<?php echo $uid; ?> .olo-mm-fs-nav > li > a.olo-mm-btn:focus-visible,
+        .<?php echo $uid; ?> .olo-mm-dp-nav > li > a.olo-mm-btn:focus-visible,
+        .<?php echo $uid; ?> .olo-mm-mob-nav > li > a.olo-mm-btn:focus-visible {
+            outline: 2px solid <?php echo $mob_acc; ?>;
+            outline-offset: 2px;
+            border-radius: <?php echo $btn_radius; ?>;
+        }
+<?php if ( $mob_numbers ) : ?>
+        .<?php echo $uid; ?> .olo-mm-numbered .olo-mm-fs-nav > li.olo-mm-mob-btn-li { counter-increment: none; }
+        .<?php echo $uid; ?> .olo-mm-numbered .olo-mm-fs-nav > li > a.olo-mm-btn::before { content: none; }
+<?php endif; ?>
+<?php endif; ?>
 
         /* === Mobile bar extras (logo + search) === */
         .<?php echo $uid; ?> .olo-mm-mobile-logo {
@@ -2152,12 +2270,13 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
 
     /**
      * Rende la tile langswitcher referenziata da lang_tile_id dentro la barra
-     * (o nell'off-canvas mobile). Stesso pattern della search tile del navmenu:
-     * la tile vive nel template — configurabile con tutta la sua UI dal builder —
-     * e il renderer la sopprime nella posizione originale (referenced_tile_ids).
+     * (e nel menu mobile: Off-canvas, Fullscreen, Dropdown). Stesso pattern della
+     * search tile del navmenu: la tile vive nel template — configurabile con tutta
+     * la sua UI dal builder — e il renderer la sopprime nella posizione originale
+     * (referenced_tile_ids).
      *
      * @param array $s      Settings del megamenu.
-     * @param bool  $mobile Contesto off-canvas: forza il layout inline della tile.
+     * @param bool  $mobile Contesto menu mobile: forza il layout inline della tile.
      */
     private function render_referenced_lang( $s, $mobile = false ) {
         $tile_id = trim( (string) ( $s['lang_tile_id'] ?? '' ) );
@@ -2181,6 +2300,19 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         echo '</div>';
     }
 
+    /**
+     * Almeno un link extra esce come pulsante nel menu mobile (stesse condizioni di
+     * render_extra_links): le regole dei pulsanti mobili si emettono solo in quel caso.
+     */
+    private function has_mobile_buttons( $s ) {
+        for ( $i = 1; $i <= 4; $i++ ) {
+            if ( empty( $s["extra_link_{$i}_button"] ) ) continue;
+            if ( ! empty( $s["extra_link_{$i}_cart"] ) && function_exists( 'wc_get_cart_url' ) ) return true;
+            if ( trim( (string) ( $s["extra_link_{$i}_label"] ?? '' ) ) !== '' && trim( (string) ( $s["extra_link_{$i}_url"] ?? '' ) ) !== '' ) return true;
+        }
+        return false;
+    }
+
     private function render_extra_links( $s, $context = 'desktop' ) {
         // Timecode di scroll "sala di regia" — nella zona destra, PRIMA degli extra link.
         if ( $context !== 'mobile' && ! empty( $s['show_timecode'] ) ) {
@@ -2202,7 +2334,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             $tgt   = $blank ? ' target="_blank" rel="noopener noreferrer"' : '';
             $is_btn = ! empty( $s["extra_link_{$i}_button"] );
             if ( $context === 'mobile' ) : ?>
-                <li><a href="<?php echo esc_url( $url ); ?>"<?php echo $is_btn ? ' class="olo-mm-btn olo-mm-mob-btn"' : ''; ?><?php echo $tgt; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tgt is a fixed literal attribute string set above; URL/label escaped inline ?>><?php echo esc_html( $label ) . $cart_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $cart_html built above from a fixed literal + (int) cart count ?></a></li>
+                <li<?php echo $is_btn ? ' class="olo-mm-mob-btn-li"' : ''; ?>><a href="<?php echo esc_url( $url ); ?>"<?php echo $is_btn ? ' class="olo-mm-btn olo-mm-mob-btn"' : ''; ?><?php echo $tgt; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tgt is a fixed literal attribute string set above; URL/label escaped inline ?>><?php echo esc_html( $label ) . $cart_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $cart_html built above from a fixed literal + (int) cart count ?></a></li>
             <?php elseif ( $is_btn ) : ?>
                 <li><a class="olo-mm-btn" href="<?php echo esc_url( $url ); ?>"<?php echo $tgt; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tgt is a fixed literal attribute string set above; URL/label escaped inline ?>><?php echo esc_html( $label ) . $cart_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $cart_html built above from a fixed literal + (int) cart count ?></a></li>
             <?php else : ?>
@@ -2659,7 +2791,8 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                         <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>
                 </div>
-                <?php if ( $mob_search ) : ?>
+                <?php // Selettore lingua: la barra lo nasconde sotto il breakpoint, qui resta raggiungibile.
+                $this->render_referenced_lang( $s, true ); if ( $mob_search ) : ?>
                 <div class="olo-mm-fs-search">
                     <form action="<?php echo esc_url( home_url('/') ); ?>" method="get" role="search">
                         <input type="search" name="s" placeholder="<?php echo esc_attr( olobuild_t( 'Cerca...' ) ); ?>" autocomplete="off">
@@ -2667,7 +2800,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                     </form>
                 </div>
                 <?php endif; ?>
-                <?php endif; ?>
+                <?php endif; if ( $mob_style_val === 'dropdown' ) { $this->render_referenced_lang( $s, true ); } ?>
                 <nav aria-label="<?php echo esc_attr( olobuild_t( 'Mobile menu' ) ); ?>">
                     <ul class="<?php echo $mob_style_val === 'fullscreen' ? 'olo-mm-fs-nav' : 'olo-mm-dp-nav'; ?>">
                         <?php $dp_idx = 0; foreach ( $tree as $item ) :

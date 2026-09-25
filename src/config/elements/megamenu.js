@@ -18,12 +18,25 @@ const MEGAMENU_TEMPLATE_OPTIONS = [
 const showBtnAspect = (s) =>
   (s.button_mode ?? 'link') !== 'none' || !!s.extra_link_1_button || !!s.extra_link_2_button;
 
+// Menu mobile. Le condizioni leggono i settings grezzi: una chiave mai salvata vale il
+// default del PHP (mobile_style → 'offcanvas', mobile_bar_logo → true).
+const stileMobile = (s) => s.mobile_style || 'offcanvas';
+const ocSchermoIntero = (s) => stileMobile(s) === 'offcanvas' && !!s.offcanvas_fullscreen;
+// Le voci si animano nel Fullscreen, nel Dropdown e nell'Off-canvas a tutto schermo.
+const vociAnimabili = (s) => stileMobile(s) !== 'offcanvas' || !!s.offcanvas_fullscreen;
+// Il logo mobile sta nella barra (se attivo) e nella testata dell'Off-canvas.
+const logoMobileAgisce = (s) => s.mobile_bar_logo !== false || stileMobile(s) === 'offcanvas';
+// Link extra resi come pulsante (PHP: extra_link_N_button, N = 1…4).
+const haPulsantiMobili = (s) => [1, 2, 3, 4].some((n) => !!s[`extra_link_${n}_button`]);
+
 /**
  * Tile Mega Menu — split CONTENUTO/STILE (regola universale Olobuild).
  *   fields[]      → menu WP, logo asset, panel templates, mega mode, social URLs, extra links,
- *                   topbar contenuti + CTA, search tile, visibilità componenti, header mode
+ *                   topbar contenuti + CTA, search tile, visibilità componenti, header mode,
+ *                   «Menu mobile» (cosa mostra: logo, ricerca, numeri, testi in fondo)
  *   styleFields[] → preset, bg, typo, navbar aspect, bar spacing, hover effects, panel layout/typography,
- *                   CTA aspect, mobile aspect (animations, hamburger, panel)
+ *                   CTA aspect, «Menu mobile» (stile e breakpoint, poi Aspetto · Testo · Forma ·
+ *                   Pulsanti · Hamburger · Indicatore sottomenu · Animazione · Disposizione)
  *   AVANZATE      → meta tecnico
  */
 export default {
@@ -190,6 +203,10 @@ export default {
     mobile_bar_logo: true,
     mobile_search: true,
     mobile_search_overlay: false,
+    // Pulsanti dei link extra nel menu mobile (Stile › «Menu mobile — Pulsanti»)
+    mobile_btn_font_size: '16',
+    mobile_btn_gap: '12',
+    mobile_btn_width: 'full',
 
     extra_link_1_label: '',
     extra_link_1_url: '',
@@ -350,18 +367,29 @@ export default {
     { type: 'separator', label: t('Timecode & progresso') },
     { key: 'show_timecode', label: t('Timecode di scroll (TC 00:00:00:00)'), type: 'toggle',
       description: t('Contatore mono "sala di regia" nella zona destra della barra (desktop ≥880px): avanza con lo scroll della pagina a 25fps.') },
-    { key: 'timecode_duration', label: t('Durata virtuale (secondi)'), type: 'number', min: 1, max: 3600,
+    { key: 'timecode_duration', label: t('Durata virtuale'), type: 'number', min: 1, max: 3600, unit: 's',
       condition: { field: 'show_timecode', value: true } },
     { key: 'scroll_progress', label: t('Hairline di progresso scroll'), type: 'toggle',
       description: t('Linea sottile sul bordo inferiore della barra, larga quanto il progresso di scroll.') },
 
-    { type: 'separator', label: t('Mobile — Bar') },
+    // Menu mobile: un solo gruppo nel Contenuto (cosa mostra). Stile e breakpoint, colori,
+    // grandezze e pulsanti stanno nello Stile, zona «Menu mobile».
+    { type: 'separator', label: t('Menu mobile') },
     { key: 'mobile_bar_logo', label: t('Logo nella barra mobile'), type: 'toggle' },
-    { key: 'mobile_logo', label: t('Logo pannello mobile'), type: 'image' },
+    // Nella barra mobile (se attiva) e nella testata dell'Off-canvas: il Fullscreen usa il logo desktop.
+    { key: 'mobile_logo', label: t('Logo mobile'), type: 'image', show: logoMobileAgisce },
     { key: 'mobile_search', label: t('Icona ricerca mobile'), type: 'toggle' },
     { key: 'mobile_search_overlay', label: t('Ricerca mobile a tutta pagina'), type: 'toggle',
       condition: { field: 'mobile_search', value: true },
       description: t('La lente apre l\'overlay a schermo intero invece del pannello sotto la barra.') },
+    { key: 'mobile_numbers', label: t('Numeri progressivi (01, 02…)'), type: 'toggle',
+      show: (s) => stileMobile(s) === 'fullscreen' },
+    { key: 'mobile_footer_text', label: t('Testo in fondo'), type: 'text',
+      show: (s) => stileMobile(s) === 'fullscreen' },
+    { key: 'mobile_footer_cta_text', label: t('Link in fondo — testo'), type: 'text',
+      show: (s) => stileMobile(s) === 'fullscreen' },
+    { key: 'mobile_footer_cta_url', label: t('Link in fondo — URL'), type: 'link',
+      show: (s) => stileMobile(s) === 'fullscreen' && !!s.mobile_footer_cta_text },
 
     { type: 'separator', label: t('Header') },
     { key: 'header_mode', label: t('Modalità header'), type: 'select', options: [
@@ -406,21 +434,6 @@ export default {
       condition: { field: 'topbar_enabled', value: true } },
     { key: 'topbar_right_cta_url', label: t('Pulsante CTA — URL'), type: 'link', placeholder: t('https://...'),
       condition: { field: 'topbar_enabled', value: true } },
-
-    { type: 'separator', label: t('Mobile — Breakpoint & Stile') },
-    { key: 'mobile_breakpoint', label: t('Breakpoint'), type: 'select', options: [
-      { value: '768', label: t('768px (Tablet)') },
-      { value: '1024', label: t('1024px (Desktop)') },
-      { value: '1200', label: t('1200px (Desktop largo)') },
-    ]},
-    { key: 'mobile_numbers', label: t('Fullscreen — numeri progressivi (01, 02…)'), type: 'toggle',
-      condition: { field: 'mobile_style', value: 'fullscreen' } },
-    { key: 'mobile_footer_text', label: t('Fullscreen — testo footer'), type: 'text',
-      condition: { field: 'mobile_style', value: 'fullscreen' } },
-    { key: 'mobile_footer_cta_text', label: t('Fullscreen — footer CTA testo'), type: 'text',
-      condition: { field: 'mobile_style', value: 'fullscreen' } },
-    { key: 'mobile_footer_cta_url', label: t('Fullscreen — footer CTA link'), type: 'link',
-      condition: { field: 'mobile_style', value: 'fullscreen' } },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -488,26 +501,6 @@ export default {
         color: 'desc_color',
       },
       condition: { field: 'show_descriptions', value: true },
-    },
-    { type: 'typography', label: t('CTA pulsante'),
-      keys: {
-        color:      'btn_color',
-        colorHover: 'btn_hover_bg',
-      },
-      show: showBtnAspect,
-    },
-    { type: 'typography', label: t('Testo mobile'),
-      responsiveKeys: [],
-      keys: {
-        size:  'mobile_font_size',
-        color: 'mobile_text_color',
-      },
-      sizeMin: 14, sizeMax: 24, sizeStep: 1,
-    },
-    { type: 'typography', label: t('Intestazione mobile'),
-      keys: {
-        color: 'mobile_heading_color',
-      },
     },
     { type: 'typography', label: t('Top bar testo'),
       responsiveKeys: [],
@@ -650,8 +643,12 @@ export default {
     // I controlli btn_* stilano .olo-mm-btn, usata sia dalle voci CTA sia dai
     // link extra in modalità bottone: visibili se almeno uno dei due è attivo
     // (la vecchia condition su button_mode li nascondeva con solo link extra).
-    { key: 'btn_bg', label: t('Sfondo pulsante'), type: 'color',
-      show: showBtnAspect },
+    // Lo sfondo in hover (btn_hover_bg) è lo stato Hover di «Sfondo pulsante»: prima era il
+    // «colore hover» del vecchio controllo tipografia «CTA pulsante». La Durata la legge il
+    // PHP (btn_bg_hover_duration): nel menu mobile sempre (non salvata = 200 ms, la transizione
+    // di sempre), sulla barra desktop quando è salvata (prima lì lo sfondo cambiava di scatto).
+    withHover({ key: 'btn_bg', label: t('Sfondo pulsante'), type: 'color',
+      show: showBtnAspect }, { hoverKey: 'btn_hover_bg', defaultDuration: 200 }),
     withHover({ key: 'btn_radius', label: t('Raggio pulsante'), type: 'border-radius',
       show: showBtnAspect }),
     { key: 'btn_padding', label: t('Padding interno pulsante'), type: 'spacing', max: 60,
@@ -661,17 +658,23 @@ export default {
     { key: 'btn_margin_right', label: t('Margine destro pulsante'), type: 'spacing', max: 40,
       show: showBtnAspect },
     { key: 'btn_border', label: t('Bordo pulsante'), type: 'border',
-      legacyKeys: { width: 'btn_border_width', color: 'btn_border_color' } },
+      legacyKeys: { width: 'btn_border_width', color: 'btn_border_color' },
+      show: showBtnAspect },
+    // Un solo controllo tipografia per il pulsante (prima il colore stava in «Tipografia ›
+    // CTA pulsante»). Senza la dimensione: btn_font_size (chiave e valori salvati invariati) non
+    // agisce in nessun punto. Sulla barra vince .olo-mm-nav > li > a (dimensione, peso e maiuscolo
+    // delle voci), nel pannello del menu mobile i link extra con «Stile pulsante» prendono la
+    // dimensione da «Menu mobile — Pulsanti» (zona visibile solo se ce ne sono), le voci CTA sul
+    // mobile restano nella barra a 13 px. Torna qui quando la barra la leggerà.
     { type: 'typography', label: t('Testo pulsante'),
       keys: {
-        size:          'btn_font_size',
         weight:        'btn_font_weight',
         transform:     'btn_transform',
         letterSpacing: 'btn_letter_spacing',
+        color:         'btn_color',
         colorHover:    'btn_hover_color',
       },
-      sizeMin: 0, sizeMax: 24, sizeStep: 1,
-      description: t('Dimensione 0 = come le voci nav.'),
+      description: t('Sulla barra desktop i pulsanti hanno per ora dimensione, peso e maiuscolo delle voci nav; nella barra mobile le voci CTA sono a 13 px. Nel pannello del menu mobile i link extra con «Stile pulsante» prendono la dimensione da «Menu mobile — Pulsanti».'),
       show: showBtnAspect },
     { key: 'btn_shadow', label: t('Ombra pulsante'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
@@ -716,46 +719,82 @@ export default {
       { value: 'rounded', label: t('Rettangolo arrotondato') },
     ]},
 
-    { type: 'separator', label: t('Mobile — Animazioni') },
-    { key: 'mobile_side', label: t('Lato off-canvas'), type: 'select',
-      condition: { field: 'mobile_style', op: 'eq', value: 'offcanvas' },
-      options: [
-        { value: 'left', label: t('Sinistra') },
-        { value: 'right', label: t('Destra') },
-      ]},
-    { key: 'mobile_slide_direction', label: t('Direzione apertura'), type: 'select',
-      condition: { field: 'mobile_style', op: 'eq', value: 'offcanvas' },
-      options: [
-        { value: 'left', label: t('Da sinistra') },
-        { value: 'right', label: t('Da destra') },
-        { value: 'top', label: t('Dall\'alto') },
-      ]},
-    { key: 'offcanvas_fullscreen', label: t('Off-canvas a tutto schermo'), type: 'toggle',
-      condition: { field: 'mobile_style', op: 'eq', value: 'offcanvas' } },
-    { key: 'fullscreen_animation', label: t('Animazione fullscreen'), type: 'select',
-      condition: { field: 'mobile_style', op: 'eq', value: 'fullscreen' },
-      options: [
-        { value: 'fade', label: t('Dissolvenza') },
-        { value: 'slide-left', label: t('Scorre da sinistra') },
-        { value: 'slide-right', label: t('Scorre da destra') },
-        { value: 'slide-up', label: t('Scorre dal basso') },
-        { value: 'curtain', label: t('Sipario (dal centro)') },
-        { value: 'circular', label: t('Cerchio (dal burger)') },
-        { value: 'diagonal', label: t('Diagonale (wipe)') },
-      ]},
-    { key: 'menu_items_animation', label: t('Animazione voci menu'), type: 'select', options: [
-      { value: 'none', label: t('Nessuna') },
-      { value: 'fade-down', label: t('Fade dall\'alto') },
-      { value: 'fade-up', label: t('Fade dal basso') },
-      { value: 'slide-left', label: t('Slide da sinistra') },
-      { value: 'slide-right', label: t('Slide da destra') },
-      { value: 'scale', label: t('Scala') },
-      { value: 'blur', label: t('Sfocatura') },
+    // ─── Menu mobile ─────────────────────────────────────────────
+    // Una sola zona, in testa lo stile e il breakpoint, poi le zone standard. Un campo che
+    // nello stile scelto non agisce si nasconde (show con il default del PHP, vedi stileMobile).
+    { type: 'separator', label: t('Menu mobile') },
+    { key: 'mobile_style', label: t('Stile menu mobile'), type: 'select', options: [
+      { value: 'offcanvas', label: t('Off-canvas (pannello laterale)') },
+      { value: 'dropdown', label: t('Dropdown (scende dalla barra)') },
+      { value: 'fullscreen', label: t('Fullscreen (overlay completo)') },
     ]},
-    { key: 'menu_items_stagger', label: t('Ritardo stagger'), type: 'range', min: 30, max: 200, step: 10,
-      condition: { field: 'menu_items_animation', operator: '!=', value: 'none' } },
+    // Variante dell'Off-canvas: sta qui, prima dei campi che ne dipendono (Animazione, Disposizione).
+    { key: 'offcanvas_fullscreen', label: t('Off-canvas a tutto schermo'), type: 'toggle',
+      show: (s) => stileMobile(s) === 'offcanvas' },
+    { key: 'mobile_breakpoint', label: t('Breakpoint'), type: 'select', options: [
+      { value: '768', label: t('768px (Tablet)') },
+      { value: '1024', label: t('1024px (Desktop)') },
+      { value: '1200', label: t('1200px (Desktop largo)') },
+    ]},
 
-    { type: 'separator', label: t('Hamburger') },
+    { type: 'separator', label: t('Menu mobile — Aspetto') },
+    // Sfondo dell'Off-canvas e del Fullscreen. La stessa chiave colora anche il pulsante del
+    // pannello di ricerca che la lente apre sotto la barra, in ogni stile, se «Sfondo navbar»
+    // (nav_bg) è vuoto. Il pannello del Dropdown prende lo sfondo del mega panel: lì il campo
+    // resta solo finché colora quel pulsante (ricerca attiva e non a tutta pagina).
+    { key: 'mobile_bg', label: t('Sfondo pannello mobile'), type: 'color',
+      show: (s) => stileMobile(s) !== 'dropdown'
+        || (s.mobile_search !== false && !s.mobile_search_overlay && !s.nav_bg) },
+    { key: 'mobile_accent_color', label: t('Colore accento mobile'), type: 'color' },
+    // Nel Fullscreen il filetto fra le voci è fisso.
+    { key: 'mob_separator_style', label: t('Separatore tra voci'), type: 'select', options: [
+      { value: 'line', label: t('Linea solida') },
+      { value: 'dotted', label: t('Puntinata') },
+      { value: 'dashed', label: t('Tratteggiata') },
+      { value: 'gradient', label: t('Sfumatura') },
+      { value: 'none', label: t('Nessuno') },
+    ], show: (s) => stileMobile(s) !== 'fullscreen' },
+
+    { type: 'separator', label: t('Menu mobile — Testo') },
+    // «Dimensione voci»: un solo posto per i tre stili. Dietro ci sono le due chiavi storiche,
+    // con condizioni complementari (se ne vede sempre una): Off-canvas e Dropdown leggono
+    // mobile_font_size, il Fullscreen mobile_link_size (vuoto o 0 = 22 px). `default: ''`: il
+    // doppio clic svuota e torna il segnaposto 22 (il default del PHP, 0, mostrerebbe «0 px»).
+    // Lo 0 già salvato (il vecchio «0 = auto») si mostra vuoto, col segnaposto 22 che il sito rende.
+    { key: 'mobile_font_size', label: t('Dimensione voci'), type: 'range', min: 12, max: 32, step: 1, unit: 'px',
+      show: (s) => stileMobile(s) !== 'fullscreen' },
+    { key: 'mobile_link_size', label: t('Dimensione voci'), type: 'range', min: 12, max: 48, step: 1, unit: 'px',
+      default: '', placeholder: '22', valoriStorici: { '0': '' }, show: (s) => stileMobile(s) === 'fullscreen' },
+    { key: 'mobile_link_font', label: t('Font voci'), type: 'font-family',
+      show: (s) => stileMobile(s) === 'fullscreen' },
+    { key: 'mobile_text_color', label: t('Colore voci'), type: 'color' },
+    // mobile_heading_color colora i titoli dei gruppi nei sottomenu dell'Off-canvas e, nel
+    // Fullscreen, il testo in fondo: stessa chiave, il nome dice cosa colora in quello stile.
+    { type: 'typography', label: t('Titoli sottomenu'),
+      keys: { color: 'mobile_heading_color' },
+      show: (s) => stileMobile(s) === 'offcanvas' },
+    { type: 'typography', label: t('Testo in fondo'),
+      keys: { color: 'mobile_heading_color' },
+      show: (s) => stileMobile(s) === 'fullscreen' && !!s.mobile_footer_text },
+
+    { type: 'separator', label: t('Menu mobile — Forma') },
+    // Off-canvas: padding fisso. Fullscreen: agisce su sottovoci e indicatore, le voci di
+    // primo livello restano 14/0. Dropdown: voci, sottovoci e indicatore.
+    { key: 'mobile_item_padding', label: t('Padding voci'), type: 'spacing', max: 30,
+      show: (s) => stileMobile(s) !== 'offcanvas' },
+    { key: 'mobile_logo_height', label: t('Altezza logo mobile'), type: 'range', min: 20, max: 120, step: 2, unit: 'px',
+      show: logoMobileAgisce },
+
+    // I link extra con «Stile pulsante» nel pannello mobile, nei tre stili.
+    { type: 'separator', label: t('Menu mobile — Pulsanti'), show: haPulsantiMobili },
+    { key: 'mobile_btn_font_size', label: t('Dimensione testo'), type: 'range', min: 12, max: 28, step: 1, unit: 'px' },
+    { key: 'mobile_btn_gap', label: t('Gap pulsanti'), type: 'range', min: 0, max: 40, step: 1, unit: 'px' },
+    { key: 'mobile_btn_width', label: t('Larghezza pulsanti'), type: 'select', options: [
+      { value: 'full', label: t('Piena') },
+      { value: 'auto', label: t('Adattata al testo') },
+    ]},
+
+    { type: 'separator', label: t('Menu mobile — Hamburger') },
     { key: 'hamburger_style', label: t('Stile hamburger'), type: 'select', options: [
       { value: 'classic', label: t('Classic (3 linee → X)') },
       { value: 'squeeze', label: t('Squeeze (comprime → X)') },
@@ -768,23 +807,10 @@ export default {
       { value: 'morph', label: t('Morph (trasformazione fluida)') },
       { value: 'magnetic', label: t('Magnetic (2 step → X)') },
     ]},
-    { key: 'hamburger_size', label: t('Dimensione hamburger'), type: 'range', min: 20, max: 44, step: 2 },
+    { key: 'hamburger_size', label: t('Dimensione hamburger'), type: 'range', min: 20, max: 44, step: 2, unit: 'px' },
     { key: 'hamburger_color', label: t('Colore hamburger'), type: 'color' },
 
-    { type: 'separator', label: t('Mobile — Pannello') },
-    { key: 'mobile_bg', label: t('Sfondo pannello mobile'), type: 'color' },
-    { key: 'mobile_accent_color', label: t('Colore accento mobile'), type: 'color' },
-    { key: 'mob_separator_style', label: t('Separatore tra voci'), type: 'select', options: [
-      { value: 'line', label: t('Linea solida') },
-      { value: 'dotted', label: t('Puntinata') },
-      { value: 'dashed', label: t('Tratteggiata') },
-      { value: 'gradient', label: t('Sfumatura') },
-      { value: 'none', label: t('Nessuno') },
-    ]},
-    { key: 'mobile_item_padding', label: t('Padding voci'), type: 'spacing', max: 30 },
-    { key: 'mobile_logo_height', label: t('Altezza logo mobile'), type: 'range', min: 20, max: 120, step: 2 },
-
-    { type: 'separator', label: t('Mobile — Indicatore sottomenu') },
+    { type: 'separator', label: t('Menu mobile — Indicatore sottomenu') },
     { key: 'mob_toggle_style', label: t('Stile indicatore'), type: 'select', options: [
       { value: 'chevron', label: t('Chevron (∨/∧)') },
       { value: 'plus-minus', label: t('Plus / Minus (+/−)') },
@@ -799,8 +825,52 @@ export default {
       { value: 'right', label: t('Destra') },
       { value: 'left', label: t('Sinistra') },
     ]},
-    { key: 'mob_toggle_size', label: t('Dimensione'), type: 'range', min: 12, max: 32, step: 1 },
-    { key: 'mob_toggle_color', label: t('Colore indicatore'), type: 'color' },
+    { key: 'mob_toggle_size', label: t('Dimensione'), type: 'range', min: 12, max: 32, step: 1, unit: 'px' },
+    // Nel Fullscreen il colore dell'indicatore è fisso.
+    { key: 'mob_toggle_color', label: t('Colore indicatore'), type: 'color',
+      show: (s) => stileMobile(s) !== 'fullscreen' },
+
+    { type: 'separator', label: t('Menu mobile — Animazione') },
+    // Agisce sul Fullscreen e sull'Off-canvas a tutto schermo.
+    { key: 'fullscreen_animation', label: t('Animazione apertura'), type: 'select',
+      show: (s) => stileMobile(s) === 'fullscreen' || ocSchermoIntero(s),
+      options: [
+        { value: 'fade', label: t('Dissolvenza') },
+        { value: 'slide-left', label: t('Scorre da sinistra') },
+        { value: 'slide-right', label: t('Scorre da destra') },
+        { value: 'slide-up', label: t('Scorre dal basso') },
+        { value: 'curtain', label: t('Sipario (dal centro)') },
+        { value: 'circular', label: t('Cerchio (dal burger)') },
+        { value: 'diagonal', label: t('Diagonale (wipe)') },
+      ]},
+    { key: 'menu_items_animation', label: t('Animazione voci menu'), type: 'select', show: vociAnimabili, options: [
+      { value: 'none', label: t('Nessuna') },
+      { value: 'fade-down', label: t('Fade dall\'alto') },
+      { value: 'fade-up', label: t('Fade dal basso') },
+      { value: 'slide-left', label: t('Slide da sinistra') },
+      { value: 'slide-right', label: t('Slide da destra') },
+      { value: 'scale', label: t('Scala') },
+      { value: 'blur', label: t('Sfocatura') },
+    ]},
+    { key: 'menu_items_stagger', label: t('Ritardo stagger'), type: 'range', min: 30, max: 200, step: 10, unit: 'ms',
+      show: (s) => vociAnimabili(s) && (s.menu_items_animation || 'none') !== 'none' },
+
+    // Solo l'Off-canvas ha lato e direzione; a tutto schermo li decide «Animazione apertura».
+    { type: 'separator', label: t('Menu mobile — Disposizione'), show: (s) => stileMobile(s) === 'offcanvas' },
+    // Il PHP distingue solo «dall'alto» dal resto: il lato lo decide «Lato off-canvas». Chi
+    // aveva scelto la vecchia «Da destra» ha salvato 'right': si mostra come «Di lato».
+    { key: 'mobile_slide_direction', label: t('Direzione apertura'), type: 'select',
+      show: (s) => !s.offcanvas_fullscreen, valoriStorici: { right: 'left' },
+      options: [
+        { value: 'left', label: t('Di lato') },
+        { value: 'top', label: t('Dall\'alto') },
+      ]},
+    { key: 'mobile_side', label: t('Lato off-canvas'), type: 'select',
+      show: (s) => !s.offcanvas_fullscreen && s.mobile_slide_direction !== 'top',
+      options: [
+        { value: 'left', label: t('Sinistra') },
+        { value: 'right', label: t('Destra') },
+      ]},
 
     { type: 'separator', label: t('Sticky — Aspetto') },
     { key: 'sticky_show_on_up', label: t('Mostra su scroll up'), type: 'toggle' },
@@ -820,7 +890,7 @@ export default {
       condition: { field: 'topbar_enabled', value: true } },
     { key: 'topbar_border_color', label: t('Colore bordo'), type: 'color',
       condition: { field: 'topbar_enabled', value: true } },
-    { key: 'topbar_ticker_speed', label: t('Velocità ticker (sec)'), type: 'range', min: 2, max: 15, step: 1,
+    { key: 'topbar_ticker_speed', label: t('Velocità ticker'), type: 'range', min: 2, max: 15, step: 1, unit: 's',
       condition: { field: 'topbar_left_content', value: 'ticker' } },
     { key: 'topbar_right_cta_bg', label: t('Pulsante CTA — sfondo'), type: 'color',
       condition: { field: 'topbar_enabled', value: true } },
@@ -837,15 +907,5 @@ export default {
       condition: { field: 'scroll_progress', value: true } },
     { key: 'progress_height', label: t('Spessore hairline'), type: 'number', min: 1, max: 8,
       condition: { field: 'scroll_progress', value: true } },
-    { type: 'separator', label: t('Mobile — Breakpoint & Stile') },
-    { key: 'mobile_style', label: t('Stile menu mobile'), type: 'select', options: [
-      { value: 'offcanvas', label: t('Off-canvas (pannello laterale)') },
-      { value: 'dropdown', label: t('Dropdown (scende dalla barra)') },
-      { value: 'fullscreen', label: t('Fullscreen (overlay completo)') },
-    ]},
-    { key: 'mobile_link_font', label: t('Fullscreen — font voci'), type: 'font-family',
-      condition: { field: 'mobile_style', value: 'fullscreen' } },
-    { key: 'mobile_link_size', label: t('Fullscreen — dim. voci (px, 0 = auto)'), type: 'range', min: 0, max: 48, step: 1,
-      condition: { field: 'mobile_style', value: 'fullscreen' } },
   ],
 };

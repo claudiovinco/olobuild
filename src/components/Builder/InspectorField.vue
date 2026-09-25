@@ -1007,6 +1007,14 @@ function normalValue() {
     const seed = seedBorderFromColor(v, props.field.legacyWidth ?? 1);
     if (seed !== undefined) return seed;
   }
+  // Valori salvati che il controllo non offre più: si MOSTRANO come il loro equivalente
+  // (`valoriStorici: { vecchio: mostrato }`, stessa resa nel PHP). Il valore salvato non
+  // cambia finché non lo si modifica: senza, una select non evidenziava nessuna opzione e
+  // un range mostrava un numero che il sito non rende.
+  const storici = props.field.valoriStorici;
+  if (storici && v != null && typeof v !== 'object' && Object.prototype.hasOwnProperty.call(storici, String(v))) {
+    return storici[String(v)];
+  }
   return v;
 }
 // `hoverOpen`/`hoverKey`/`hoverValue` sono definiti più sotto (const): vengono usati qui solo
