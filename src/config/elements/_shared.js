@@ -472,7 +472,8 @@ export const textEffectsFields = (targetOptions = [
       { field: 'text_effect', op: 'eq', value: 'typewriter' },
       { field: 'text_effect_cursor', op: 'eq', value: true },
     ] },
-  { key: 'text_effect_phrases', label: t('Frasi (una per riga)'), type: 'textarea',
+  // Le frasi sono parole della tile: «Incolla stile» porta l'effetto, non le frasi.
+  { key: 'text_effect_phrases', label: t('Frasi (una per riga)'), type: 'textarea', incollaStile: false,
     description: t('Mostrate in loop. Se vuoto, vengono usate le righe del testo del tile.'),
     condition: { field: 'text_effect', op: 'eq', value: 'typewriter-loop' } },
   { key: 'text_effect_pause', label: t('Pausa tra frasi (ms)'), type: 'range', min: 500, max: 5000, step: 100,

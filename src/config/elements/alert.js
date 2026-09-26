@@ -53,7 +53,8 @@ export default {
   // ─── STILE ─────────────────────────────────────────────────
   styleFields: [
     // PRIMARIO: editing testi via popup (titolo + messaggio separati).
-    { type: 'content-popup', label: t('Testi'), fields: [
+    // «Incolla stile» non li porta da un avviso all'altro (incollaStile: false).
+    { type: 'content-popup', label: t('Testi'), incollaStile: false, fields: [
       { key: 'title',   label: t('Titolo'),    type: 'text' },
       { key: 'message', label: t('Messaggio'), type: 'textarea' },
     ]},

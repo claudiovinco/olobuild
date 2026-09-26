@@ -211,13 +211,13 @@ export default {
     { type: 'separator', label: t('Note & Roast meter') },
     { key: 'notes_color', label: t('Note — colore'), type: 'color' },
     { key: 'notes_mono', label: t('Note in monospace'), type: 'toggle' },
-    { key: 'roast_label', label: t('Roast meter — etichetta'), type: 'text' },
+    { key: 'roast_label', label: t('Roast meter — etichetta'), type: 'text', incollaStile: false },
     { key: 'roast_on_color', label: t('Roast meter — pallino attivo (vuoto = accento)'), type: 'color' },
     { key: 'roast_off_color', label: t('Roast meter — pallino spento'), type: 'color' },
 
     { type: 'separator', label: t('Pulsante "Add" (footer)') },
     { key: 'add_button', label: t('Mostra pulsante Add accanto al prezzo'), type: 'toggle' },
-    { key: 'add_label', label: t('Testo pulsante'), type: 'text', condition: { field: 'add_button', value: true } },
+    { key: 'add_label', label: t('Testo pulsante'), type: 'text', incollaStile: false, condition: { field: 'add_button', value: true } },
     { key: 'add_bg', label: t('Add — sfondo (vuoto = cream/testo tema)'), type: 'color', condition: { field: 'add_button', value: true } },
     { key: 'add_color', label: t('Add — testo'), type: 'color', condition: { field: 'add_button', value: true } },
 

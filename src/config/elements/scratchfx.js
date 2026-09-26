@@ -105,7 +105,7 @@ export default {
       condition: { field: 'cover_type', op: 'eq', value: 'gradient' } },
     { key: 'cover_image', label: t('Immagine copertura'), type: 'image',
       condition: { field: 'cover_type', op: 'eq', value: 'image' } },
-    { key: 'cover_text', label: t('Testo stampigliato'), type: 'text',
+    { key: 'cover_text', label: t('Testo stampigliato'), type: 'text', incollaStile: false,
       description: t('Ripetuto sulla copertura (es. "GRATTA"). Lascia vuoto per nessuno.') },
     { key: 'cover_text_color', label: t('Colore testo stampigliato'), type: 'color',
       condition: { field: 'cover_text', op: 'neq', value: '' } },

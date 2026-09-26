@@ -127,6 +127,12 @@ padding/margine → `type:'spacing'` (4 lati) · raggio → `type:'border-radius
   zona di disposizione che la tile ha già, se no «Disposizione» in fondo; 3) una sezione che
   nomina una parte senza zona → zona con quel nome; 4) il resto per famiglia (Aspetto · Testo ·
   Forma), riusando la zona della famiglia che la tile ha già.
+- **Incolla stile** porta SOLO lo Stile (`src/utils/incollaStile.js`, 26 set 2026): il contenitore
+  (`tile.style`) intero e, fra tile dello stesso tipo, le chiavi dei `styleFields` con le loro
+  varianti (dispositivi, hover, legacy, tipografia); delle voci dei ripetitori ciò che lo specchio
+  mostra. Il Contenuto non si tocca (prima passava tutto tranne un elenco fisso: occhiello e titolo
+  del Section Header venivano sovrascritti). Un campo rimasto nello Stile che porta le parole della
+  tile (testi dell'avviso, frasi degli effetti testo) si marca `incollaStile: false`.
 - **Condizione di sezione**: la `condition`/`show` di un separatore vale per TUTTA la sezione, nel
   Contenuto, nello Stile e nelle voci dei ripetitori (`isSectionVisible()` in `fieldCondition.js`,
   dal 1.4.479: prima nessun tab la leggeva). ⚠️ Un campo che vale anche in altri casi NON va sotto un

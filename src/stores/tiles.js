@@ -8,6 +8,7 @@ import {
 } from './treeUtils.js';
 import { migrateTreeBackgrounds } from '@/utils/bgMigrate';
 import { getElementDef } from '@/config/elementRegistry';
+import { incollaImpostazioni } from '@/utils/incollaStile';
 
 const oloData = window.oloData || {};
 
@@ -543,41 +544,19 @@ export const useTilesStore = defineStore('tiles', {
         try { const s = localStorage.getItem('olo_clipboard_style'); if (s) this.clipboardStyle = JSON.parse(s); } catch(e) {}
       }
       if (!tile || !this.clipboardStyle) return;
+      const clip = this.clipboardStyle;
 
-      // Always paste style properties (margin, padding, bg, border, shadow, etc.)
-      const s = this.clipboardStyle.style || this.clipboardStyle;
-      const existing = (!tile.style || Array.isArray(tile.style)) ? {} : { ...tile.style };
-      const styleKeys = [
-        'margin_top', 'margin_right', 'margin_bottom', 'margin_left',
-        'padding_top', 'padding_right', 'padding_bottom', 'padding_left',
-        'bg_type', 'bg_color', 'bg_gradient_from', 'bg_gradient_to', 'bg_gradient_angle',
-        'bg_image_url', 'bg_image_size', 'bg_image_position',
-        'border_width', 'border_style', 'border_color', 'border_radius',
-        'shadow', 'opacity', 'hover', 'transition',
-        'custom_css',
-      ];
-      for (const key of styleKeys) {
-        if (s[key] !== undefined) {
-          existing[key] = JSON.parse(JSON.stringify(s[key]));
-        }
-      }
-      tile.style = existing;
+      // Contenitore: tile.style è tutto Stile › Contenitore (lo scrive solo quel blocco
+      // dell'inspector), quindi la destinazione prende quello della sorgente, intero.
+      // Prima passava un elenco fisso di chiavi storiche (bg_color, border_width…) e
+      // sfondo, bordo, trasformazione di oggi restavano indietro. Le copie vecchie
+      // erano lo stile e basta, senza type/settings.
+      const s = (clip.type !== undefined || clip.settings !== undefined) ? clip.style : clip;
+      tile.style = (s && typeof s === 'object' && !Array.isArray(s)) ? JSON.parse(JSON.stringify(s)) : {};
 
-      // If same tile type, also paste settings (except content-specific ones)
-      if (this.clipboardStyle.type === tile.type && this.clipboardStyle.settings) {
-        const srcSettings = this.clipboardStyle.settings;
-        const tgtSettings = tile.settings || {};
-        // Keys to NEVER paste (content, not style)
-        const contentKeys = [
-          'images', 'items', 'slides', 'content', 'text', 'title', 'subtitle',
-          'description', 'html', 'url', 'link', 'href', 'video_url', 'file_url',
-          'embed', 'shortcode', 'icon', 'label', 'caption', 'alt',
-          'post_type', 'posts_per_page', 'query', 'taxonomy', 'terms',
-          'service_id', 'source_type', 'wp_menu_id',
-          // Posto della colonna nella griglia di ORIGINE, non stile: incollato su
-          // un'altra colonna ne metteva due nella stessa cella.
-          'grid_column', 'grid_row',
-        ];
+      // Stessa tile: anche lo stile dell'elemento, cioè SOLO le chiavi dei campi del tab
+      // Stile; il Contenuto resta com'è (utils/incollaStile.js).
+      if (clip.type === tile.type && clip.settings) {
         // Colonna: la larghezza si incolla com'è VISTA, e solo fra righe dello
         // stesso tipo (Flex→Flex, griglia→griglia). Le chiavi grezze non passano
         // mai: i width_* spenti di una griglia, su una Flex, si accenderebbero, e
@@ -587,19 +566,15 @@ export const useTilesStore = defineStore('tiles', {
         // ogni colonna Flex, su una griglia, la farebbe andare a capo TUTTA. Una
         // copia salvata da una versione precedente non ha `larghezze`: nessuna.
         const colonna = tile.type === 'column';
-        for (const key of Object.keys(srcSettings)) {
-          if (colonna && /^((grid_)?width_(default|small|medium|large)|width_custom)$/.test(key)) continue;
-          if (!contentKeys.includes(key)) {
-            tgtSettings[key] = JSON.parse(JSON.stringify(srcSettings[key]));
-          }
-        }
-        const larghezze = this.clipboardStyle.larghezze;
+        const larghezzaGrezza = (key) => colonna && /^((grid_)?width_(default|small|medium|large)|width_custom)$/.test(key);
+        const tgtSettings = incollaImpostazioni(tile.settings, clip.settings, tile.type, larghezzaGrezza);
+        const larghezze = clip.larghezze;
         const griglia = colonna && this._colonnaInGriglia(tileId);
-        if (colonna && larghezze && this.clipboardStyle.larghezzeGriglia === griglia) {
+        if (colonna && larghezze && clip.larghezzeGriglia === griglia) {
           const pre = griglia ? 'grid_width_' : 'width_';
           for (const m of LARGHEZZE_MISURE) tgtSettings[pre + m] = larghezze[m] ?? '';
         }
-        tile.settings = { ...tgtSettings };
+        tile.settings = tgtSettings;
       }
     },
 

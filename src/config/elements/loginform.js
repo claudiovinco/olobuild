@@ -218,7 +218,7 @@ export default {
     ], condition: { field: 'mode', value: 'both' } },
 
     { type: 'separator', label: t('Divisore social') },
-    { key: 'social_divider_text', label: t('Testo divisore'), type: 'text',
+    { key: 'social_divider_text', label: t('Testo divisore'), type: 'text', incollaStile: false,
       condition: { field: 'show_social_divider', value: true } },
 
     { type: 'separator', label: t('Colori — form & testo') },
