@@ -744,6 +744,12 @@ export const SETTINGS_FIELD_INDEX = {
 		},
 		{
 			"kind": "field",
+			"label": "Modello immagini",
+			"hint": "Le immagini si generano con OpenAI: serve la sua chiave (scegli OpenAI qui sopra per inserirla).",
+			"section": "Provider"
+		},
+		{
+			"kind": "field",
 			"label": "Budget mensile",
 			"hint": "Soglia di spesa oltre la quale le funzioni AI vengono disattivate.",
 			"section": "Provider"
