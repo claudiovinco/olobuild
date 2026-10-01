@@ -25,6 +25,233 @@ class Olobuild_AI_Assistant {
     /**
      * Registra tutti gli endpoint REST AI
      */
+    // ──────────────────────────────────────────────────
+    //  MODELLI — fonte unica: la scheda AI della Configurazione li legge da
+    //  GET /ai/settings e il salvataggio accetta solo questi. Prima la tendina
+    //  offriva modelli che il salvataggio scartava in silenzio (restava sempre
+    //  quello di prima) e OpenAI/Mistral non venivano mai chiamati.
+    //  Aggiornati al 1 ott 2026 dalle pagine ufficiali dei tre fornitori.
+    // ──────────────────────────────────────────────────
+
+    /**
+     * Modelli di testo per fornitore: id => [ etichetta, $ input/MTok, $ output/MTok ].
+     * Il primo di ogni elenco è il predefinito. Prezzi null = non noti: la spesa
+     * stimata conta solo le chiamate di cui si conosce il prezzo.
+     */
+    const MODELLI = [
+        'anthropic' => [
+            'claude-sonnet-5-5'         => [ 'Claude Sonnet 5.5 · equilibrato (consigliato)', 2, 10 ],
+            'claude-opus-5-5'           => [ 'Claude Opus 5.5 · qualità alta', 4, 20 ],
+            'claude-fable-5-1'          => [ 'Claude Fable 5.1 · ragionamento più profondo, costo alto', 10, 50 ],
+            'claude-haiku-4-5-20251001' => [ 'Claude Haiku 4.5 · veloce, economico', 1, 5 ],
+        ],
+        'openai'    => [
+            'gpt-6.1-sol' => [ 'GPT-6.1 Sol · equilibrato (consigliato)', null, null ],
+            'gpt-6-astra' => [ 'GPT-6 Astra · qualità massima', null, null ],
+            'gpt-6-luna'  => [ 'GPT-6 Luna · veloce, economico', null, null ],
+        ],
+        'mistral'   => [
+            // Alias «-latest»: seguono da soli il modello corrente di ogni fascia.
+            'mistral-medium-latest' => [ 'Mistral Medium 3.5 · equilibrato (consigliato)', null, null ],
+            'mistral-large-latest'  => [ 'Mistral Large 3 · qualità alta', null, null ],
+            'mistral-small-latest'  => [ 'Mistral Small 4 · veloce, economico', null, null ],
+        ],
+    ];
+
+    /** Generazioni precedenti ancora servite: chi le ha salvate continua a usarle. */
+    const MODELLI_PRECEDENTI = [
+        'anthropic' => [
+            'claude-sonnet-4-6' => [ 'Claude Sonnet 4.6', 3, 15 ],
+            'claude-opus-4-6'   => [ 'Claude Opus 4.6', 5, 25 ],
+        ],
+    ];
+
+    /** Claude senza il parametro effort (Haiku 4.5): gli altri lo ricevono basso. */
+    const SENZA_EFFORT = [ 'claude-haiku-4-5-20251001' ];
+
+    /**
+     * Modelli immagine (OpenAI). DALL·E 2 e 3 sono spenti dal 12 maggio 2026: un
+     * valore salvato con quei nomi passa al predefinito.
+     */
+    const MODELLI_IMMAGINE = [
+        'gpt-image-2.5-flare'    => 'GPT Image 2.5 Flare · veloce (consigliato)',
+        'gpt-image-2.5-sunburst' => 'GPT Image 2.5 Sunburst · qualità massima',
+    ];
+
+    const NOMI_FORNITORE = [ 'anthropic' => 'Anthropic', 'openai' => 'OpenAI', 'mistral' => 'Mistral' ];
+
+    /** Cambio indicativo per la spesa stimata in euro (i listini sono in dollari). */
+    const EUR_PER_USD = 0.92;
+
+    /** Fornitore scelto (chi non l'ha mai salvato usa Anthropic, come prima). */
+    public static function fornitore() {
+        $p = get_option( 'olobuild_ai_provider', 'anthropic' );
+        return isset( self::MODELLI[ $p ] ) ? $p : 'anthropic';
+    }
+
+    private static function info_modello( $fornitore, $modello ) {
+        if ( isset( self::MODELLI[ $fornitore ][ $modello ] ) ) {
+            return self::MODELLI[ $fornitore ][ $modello ];
+        }
+        if ( isset( self::MODELLI_PRECEDENTI[ $fornitore ][ $modello ] ) ) {
+            return self::MODELLI_PRECEDENTI[ $fornitore ][ $modello ];
+        }
+        return null;
+    }
+
+    /** Modello salvato se appartiene al fornitore, altrimenti il predefinito del fornitore. */
+    public static function modello( $fornitore = null ) {
+        $fornitore = $fornitore ?: self::fornitore();
+        $m = get_option( 'olobuild_ai_model', '' );
+        if ( self::info_modello( $fornitore, $m ) ) {
+            return $m;
+        }
+        $ids = array_keys( self::MODELLI[ $fornitore ] );
+        return $ids[0];
+    }
+
+    public static function modello_immagine() {
+        $m = get_option( 'olobuild_ai_image_model', '' );
+        if ( isset( self::MODELLI_IMMAGINE[ $m ] ) ) {
+            return $m;
+        }
+        $ids = array_keys( self::MODELLI_IMMAGINE );
+        return $ids[0];
+    }
+
+    private static function chiave( $fornitore ) {
+        return (string) get_option( 'olobuild_ai_' . $fornitore . '_key', '' );
+    }
+
+    /** C'è la chiave del fornitore scelto (il builder mostra l'assistente solo così). */
+    public static function ha_chiave() {
+        return '' !== self::chiave( self::fornitore() );
+    }
+
+    /**
+     * Una chiamata di testo (con un'immagine facoltativa) al fornitore scelto.
+     *
+     * @param string     $system   Istruzioni di sistema.
+     * @param string     $testo    Messaggio dell'utente.
+     * @param array|null $immagine [ 'mime' => 'image/png', 'b64' => '...' ] oppure null.
+     * @param int        $massimo  Limite dei token in uscita, ragionamento compreso.
+     * @return string|WP_Error
+     */
+    private static function chiama_modello( $system, $testo, $immagine = null, $massimo = 4096 ) {
+        $fornitore = self::fornitore();
+        $nome      = self::NOMI_FORNITORE[ $fornitore ];
+        $api_key   = self::chiave( $fornitore );
+        if ( '' === $api_key ) {
+            return new WP_Error( 'no_api_key', 'Chiave API ' . $nome . ' non configurata. Vai nelle impostazioni AI.', [ 'status' => 400 ] );
+        }
+        $modello = self::modello( $fornitore );
+
+        if ( 'anthropic' === $fornitore ) {
+            $contenuto = [];
+            if ( $immagine ) {
+                $contenuto[] = [ 'type' => 'image', 'source' => [ 'type' => 'base64', 'media_type' => $immagine['mime'], 'data' => $immagine['b64'] ] ];
+            }
+            $contenuto[] = [ 'type' => 'text', 'text' => $testo ];
+            $corpo = [
+                'model'      => $modello,
+                'max_tokens' => $massimo,
+                'system'     => $system,
+                'messages'   => [ [ 'role' => 'user', 'content' => $contenuto ] ],
+            ];
+            // Testi brevi: poco ragionamento. Sui modelli col ragionamento sempre acceso
+            // (Opus 5.5, Fable 5.1) il ragionamento consuma max_tokens.
+            if ( ! in_array( $modello, self::SENZA_EFFORT, true ) ) {
+                $corpo['output_config'] = [ 'effort' => 'low' ];
+            }
+            $url   = 'https://api.anthropic.com/v1/messages';
+            $intes = [ 'x-api-key' => $api_key, 'anthropic-version' => '2023-06-01' ];
+        } else {
+            // OpenAI e Mistral: stessa forma «chat completions».
+            $parti = [ [ 'type' => 'text', 'text' => $testo ] ];
+            if ( $immagine ) {
+                $dati    = 'data:' . $immagine['mime'] . ';base64,' . $immagine['b64'];
+                $parti[] = 'openai' === $fornitore
+                    ? [ 'type' => 'image_url', 'image_url' => [ 'url' => $dati ] ]
+                    : [ 'type' => 'image_url', 'image_url' => $dati ];
+            }
+            $corpo = [
+                'model'    => $modello,
+                'messages' => [
+                    [ 'role' => 'system', 'content' => $system ],
+                    [ 'role' => 'user', 'content' => $immagine ? $parti : $testo ],
+                ],
+            ];
+            if ( 'openai' === $fornitore ) {
+                // max_completion_tokens comprende il ragionamento; «low» vale per tutti i GPT-6.
+                $corpo['max_completion_tokens'] = $massimo;
+                $corpo['reasoning_effort']      = 'low';
+                $url = 'https://api.openai.com/v1/chat/completions';
+            } else {
+                $corpo['max_tokens'] = $massimo;
+                $url = 'https://api.mistral.ai/v1/chat/completions';
+            }
+            $intes = [ 'Authorization' => 'Bearer ' . $api_key ];
+        }
+
+        $started  = microtime( true );
+        $response = wp_remote_post( $url, [
+            'timeout' => 90,
+            'headers' => array_merge( [ 'Content-Type' => 'application/json' ], $intes ),
+            'body'    => wp_json_encode( $corpo ),
+        ] );
+        $elapsed_ms = (int) ( ( microtime( true ) - $started ) * 1000 );
+
+        if ( is_wp_error( $response ) ) {
+            return new WP_Error( 'api_error', 'Errore nella chiamata API: ' . $response->get_error_message(), [ 'status' => 500 ] );
+        }
+        $status_code = (int) wp_remote_retrieve_response_code( $response );
+        $resp_body   = json_decode( wp_remote_retrieve_body( $response ), true );
+        if ( 200 !== $status_code ) {
+            $msg = isset( $resp_body['error']['message'] ) ? $resp_body['error']['message']
+                : ( isset( $resp_body['message'] ) && is_string( $resp_body['message'] ) ? $resp_body['message']
+                : 'Errore dall\'API ' . $nome . ' (HTTP ' . $status_code . ')' );
+            return new WP_Error( 'api_error', $msg, [ 'status' => $status_code ] );
+        }
+
+        $risposta = '';
+        if ( 'anthropic' === $fornitore ) {
+            // Con il ragionamento il primo blocco può essere «thinking»: si prende il testo.
+            foreach ( (array) ( $resp_body['content'] ?? [] ) as $blocco ) {
+                if ( isset( $blocco['type'], $blocco['text'] ) && 'text' === $blocco['type'] ) {
+                    $risposta .= $blocco['text'];
+                }
+            }
+            $in_tok  = (int) ( $resp_body['usage']['input_tokens'] ?? 0 );
+            $out_tok = (int) ( $resp_body['usage']['output_tokens'] ?? 0 );
+        } else {
+            $c = $resp_body['choices'][0]['message']['content'] ?? '';
+            if ( is_array( $c ) ) {
+                // Mistral con ragionamento: pezzi tipizzati, si tiene il testo.
+                foreach ( $c as $pezzo ) {
+                    if ( isset( $pezzo['type'], $pezzo['text'] ) && 'text' === $pezzo['type'] ) {
+                        $risposta .= $pezzo['text'];
+                    }
+                }
+            } else {
+                $risposta = (string) $c;
+            }
+            $in_tok  = (int) ( $resp_body['usage']['prompt_tokens'] ?? 0 );
+            $out_tok = (int) ( $resp_body['usage']['completion_tokens'] ?? 0 );
+        }
+
+        $info = self::info_modello( $fornitore, $modello );
+        $cost = ( $info && null !== $info[1] )
+            ? ( ( $in_tok * $info[1] + $out_tok * $info[2] ) / 1000000 ) * self::EUR_PER_USD
+            : 0.0;
+        self::log_usage( $in_tok + $out_tok, $cost, $elapsed_ms );
+
+        $risposta = trim( $risposta );
+        if ( '' === $risposta ) {
+            return new WP_Error( 'empty_response', 'L\'API non ha restituito alcun contenuto.', [ 'status' => 500 ] );
+        }
+        return $risposta;
+    }
+
     public static function register_routes() {
         // Genera testo
         register_rest_route( self::$namespace, '/ai/generate-text', [
@@ -259,7 +486,7 @@ class Olobuild_AI_Assistant {
     // ──────────────────────────────────────────────────
 
     public static function generate_image( $request ) {
-        // Cap dedicato: la generazione immagini (DALL-E) e' l'endpoint a costo unitario piu' alto.
+        // Cap dedicato: la generazione immagini e' l'endpoint a costo unitario piu' alto.
         $img_guard = self::rate_limit_guard(
             'img',
             apply_filters( 'olobuild_ai_image_rate_limit', 10 ),
@@ -277,7 +504,12 @@ class Olobuild_AI_Assistant {
             return new WP_Error( 'missing_prompt', 'Il prompt è obbligatorio.', [ 'status' => 400 ] );
         }
 
-        $allowed_sizes = [ '1024x1024', '1792x1024', '1024x1792' ];
+        // Formati di GPT Image; quelli di DALL·E (1792) passano al più vicino.
+        $vecchi = [ '1792x1024' => '1536x1024', '1024x1792' => '1024x1536' ];
+        if ( isset( $vecchi[ $size ] ) ) {
+            $size = $vecchi[ $size ];
+        }
+        $allowed_sizes = [ '1024x1024', '1536x1024', '1024x1536' ];
         if ( ! in_array( $size, $allowed_sizes, true ) ) {
             $size = '1024x1024';
         }
@@ -292,19 +524,20 @@ class Olobuild_AI_Assistant {
             return new WP_Error( 'no_api_key', 'Chiave API OpenAI non configurata. Vai nelle impostazioni AI.', [ 'status' => 400 ] );
         }
 
-        $image_model = get_option( 'olobuild_ai_image_model', 'dall-e-3' );
+        $image_model = self::modello_immagine();
 
-        $body = [
-            'model'  => $image_model,
-            'prompt' => $prompt,
-            'n'      => 1,
-            'size'   => $size,
+        // GPT Image non ha il parametro «style» di DALL·E: lo stile scelto entra nel prompt.
+        $stili = [
+            'vivid'   => 'Stile: colori vividi, contrasto deciso, resa d\'impatto.',
+            'natural' => 'Stile: naturale e fotografico, colori realistici.',
         ];
-
-        // DALL-E 3 supporta lo stile, DALL-E 2 no
-        if ( $image_model === 'dall-e-3' ) {
-            $body['style'] = $style;
-        }
+        $body = [
+            'model'         => $image_model,
+            'prompt'        => $prompt . "\n\n" . $stili[ $style ],
+            'n'             => 1,
+            'size'          => $size,
+            'output_format' => 'png',
+        ];
 
         $started = microtime( true );
         $response = wp_remote_post( 'https://api.openai.com/v1/images/generations', [
@@ -331,25 +564,33 @@ class Olobuild_AI_Assistant {
             return new WP_Error( 'api_error', $error_msg, [ 'status' => $status_code ] );
         }
 
-        if ( empty( $resp_body['data'][0]['url'] ) ) {
+        // GPT Image restituisce l'immagine in base64 (b64_json); un url resta accettato.
+        $b64       = $resp_body['data'][0]['b64_json'] ?? '';
+        $image_url = $resp_body['data'][0]['url'] ?? '';
+        if ( '' === $b64 && '' === $image_url ) {
             return new WP_Error( 'no_image', 'Nessuna immagine generata.', [ 'status' => 500 ] );
         }
 
-        // Log usage: DALL-E 3 standard 1024 → ~€0.037, HD ~€0.075 (stima fissa per chiamata)
+        // Stima fissa per chiamata (il costo reale dipende da qualità e formato).
         $img_cost = ( $size === '1024x1024' ) ? 0.037 : 0.075;
         self::log_usage( 0, $img_cost, $elapsed_ms );
 
-        $image_url = $resp_body['data'][0]['url'];
-
-        // Scarica e salva nella Media Library WP
+        // Salva nella Media Library WP
         require_once ABSPATH . 'wp-admin/includes/media.php';
         require_once ABSPATH . 'wp-admin/includes/file.php';
         require_once ABSPATH . 'wp-admin/includes/image.php';
 
-        // Scarica il file temporaneo
-        $tmp_file = download_url( $image_url );
-        if ( is_wp_error( $tmp_file ) ) {
-            return new WP_Error( 'download_error', 'Impossibile scaricare l\'immagine generata.', [ 'status' => 500 ] );
+        if ( '' !== $b64 ) {
+            $png      = base64_decode( $b64, true );
+            $tmp_file = wp_tempnam( 'olo-ai-img' );
+            if ( false === $png || ! $tmp_file || false === file_put_contents( $tmp_file, $png ) ) {
+                return new WP_Error( 'download_error', 'Impossibile leggere l\'immagine generata.', [ 'status' => 500 ] );
+            }
+        } else {
+            $tmp_file = download_url( $image_url );
+            if ( is_wp_error( $tmp_file ) ) {
+                return new WP_Error( 'download_error', 'Impossibile scaricare l\'immagine generata.', [ 'status' => 500 ] );
+            }
         }
 
         $file_array = [
@@ -490,19 +731,16 @@ class Olobuild_AI_Assistant {
         ];
         $lang = isset( $lang_names[ $language ] ) ? $lang_names[ $language ] : 'italiano';
 
-        $api_key = get_option( 'olobuild_ai_anthropic_key', '' );
-        if ( empty( $api_key ) ) {
-            return new WP_Error( 'no_api_key', 'Chiave API Anthropic non configurata.', [ 'status' => 400 ] );
+        if ( ! self::ha_chiave() ) {
+            return new WP_Error( 'no_api_key', 'Chiave API ' . self::NOMI_FORNITORE[ self::fornitore() ] . ' non configurata.', [ 'status' => 400 ] );
         }
-
-        $model = get_option( 'olobuild_ai_model', 'claude-sonnet-4-6' );
 
         // Validate URL to prevent SSRF (no internal IPs, only http/https)
         if ( ! wp_http_validate_url( $image_url ) ) {
             return new WP_Error( 'invalid_url', 'URL immagine non valido.', [ 'status' => 400 ] );
         }
 
-        // Scarica l'immagine e convertila in base64 per Claude Vision
+        // Scarica l'immagine e convertila in base64 (tutti e tre i fornitori la leggono così)
         $img_response = wp_remote_get( $image_url, [ 'timeout' => 30 ] );
         if ( is_wp_error( $img_response ) ) {
             return new WP_Error( 'download_error', 'Impossibile scaricare l\'immagine: ' . $img_response->get_error_message(), [ 'status' => 500 ] );
@@ -530,67 +768,16 @@ class Olobuild_AI_Assistant {
                        . "Scrivi in {$lang}. L'alt text deve essere conciso (max 125 caratteri), descrittivo e ottimizzato per i motori di ricerca. "
                        . "Rispondi SOLO con l'alt text, senza virgolette.";
 
-        $started = microtime( true );
-        $response = wp_remote_post( 'https://api.anthropic.com/v1/messages', [
-            'timeout' => 60,
-            'headers' => [
-                'Content-Type'      => 'application/json',
-                'x-api-key'         => $api_key,
-                'anthropic-version'  => '2023-06-01',
-            ],
-            'body' => wp_json_encode( [
-                'model'      => $model,
-                'max_tokens' => 200,
-                'system'     => $system_prompt,
-                'messages'   => [
-                    [
-                        'role'    => 'user',
-                        'content' => [
-                            [
-                                'type'   => 'image',
-                                'source' => [
-                                    'type'         => 'base64',
-                                    'media_type'   => $media_type,
-                                    'data'         => $base64_img,
-                                ],
-                            ],
-                            [
-                                'type' => 'text',
-                                'text' => 'Genera un alt text SEO per questa immagine.',
-                            ],
-                        ],
-                    ],
-                ],
-            ] ),
-        ] );
-        $elapsed_ms = (int) ( ( microtime( true ) - $started ) * 1000 );
-
-        if ( is_wp_error( $response ) ) {
-            return new WP_Error( 'api_error', 'Errore nella chiamata API: ' . $response->get_error_message(), [ 'status' => 500 ] );
+        $alt_text = self::chiama_modello(
+            $system_prompt,
+            'Genera un alt text SEO per questa immagine.',
+            [ 'mime' => $media_type, 'b64' => $base64_img ],
+            1024
+        );
+        if ( is_wp_error( $alt_text ) ) {
+            return $alt_text;
         }
 
-        $status_code = wp_remote_retrieve_response_code( $response );
-        $resp_body   = json_decode( wp_remote_retrieve_body( $response ), true );
-
-        if ( $status_code !== 200 ) {
-            $error_msg = isset( $resp_body['error']['message'] )
-                ? $resp_body['error']['message']
-                : 'Errore API Anthropic (HTTP ' . $status_code . ')';
-            return new WP_Error( 'api_error', $error_msg, [ 'status' => $status_code ] );
-        }
-
-        if ( empty( $resp_body['content'][0]['text'] ) ) {
-            return new WP_Error( 'empty_response', 'L\'API non ha restituito alcun contenuto.', [ 'status' => 500 ] );
-        }
-
-        // Log usage (vision call includes image tokens — più costosa)
-        $in_tok  = (int) ( $resp_body['usage']['input_tokens']  ?? 0 );
-        $out_tok = (int) ( $resp_body['usage']['output_tokens'] ?? 0 );
-        $tokens  = $in_tok + $out_tok;
-        $cost    = ( $in_tok * 0.0000028 ) + ( $out_tok * 0.0000139 );
-        self::log_usage( $tokens, $cost, $elapsed_ms );
-
-        $alt_text = trim( $resp_body['content'][0]['text'] );
         $alt_text = trim( $alt_text, "\"'" );
 
         return rest_ensure_response( [
@@ -641,66 +828,87 @@ class Olobuild_AI_Assistant {
     //  SETTINGS
     // ──────────────────────────────────────────────────
 
+    private static function maschera( $chiave ) {
+        $chiave = (string) $chiave;
+        return '' === $chiave ? '' : str_repeat( '*', max( 0, strlen( $chiave ) - 4 ) ) . substr( $chiave, -4 );
+    }
+
+    /** Elenchi per la tendina: [ { value, label } ], col modello salvato se di una generazione precedente. */
+    private static function elenchi_modelli() {
+        $out = [];
+        foreach ( self::MODELLI as $fornitore => $modelli ) {
+            $out[ $fornitore ] = [];
+            foreach ( $modelli as $id => $info ) {
+                $out[ $fornitore ][] = [ 'value' => $id, 'label' => $info[0] ];
+            }
+        }
+        $salvato = get_option( 'olobuild_ai_model', '' );
+        foreach ( self::MODELLI_PRECEDENTI as $fornitore => $modelli ) {
+            if ( isset( $modelli[ $salvato ] ) ) {
+                $out[ $fornitore ][] = [ 'value' => $salvato, 'label' => $modelli[ $salvato ][0] . ' · versione precedente' ];
+            }
+        }
+        return $out;
+    }
+
     public static function get_settings( $request ) {
-        $anthropic_key = get_option( 'olobuild_ai_anthropic_key', '' );
-        $openai_key    = get_option( 'olobuild_ai_openai_key', '' );
-        $model         = get_option( 'olobuild_ai_model', 'claude-sonnet-4-6' );
-        $image_model   = get_option( 'olobuild_ai_image_model', 'dall-e-3' );
-
-        // Maschera le key: mostra solo gli ultimi 4 caratteri
-        $masked_anthropic = '';
-        if ( ! empty( $anthropic_key ) ) {
-            $masked_anthropic = str_repeat( '*', max( 0, strlen( $anthropic_key ) - 4 ) ) . substr( $anthropic_key, -4 );
+        $fornitore = self::fornitore();
+        $immagini  = [];
+        foreach ( self::MODELLI_IMMAGINE as $id => $label ) {
+            $immagini[] = [ 'value' => $id, 'label' => $label ];
         }
-        $masked_openai = '';
-        if ( ! empty( $openai_key ) ) {
-            $masked_openai = str_repeat( '*', max( 0, strlen( $openai_key ) - 4 ) ) . substr( $openai_key, -4 );
-        }
-
         return rest_ensure_response( [
-            'anthropic_key' => $masked_anthropic,
-            'openai_key'    => $masked_openai,
-            'has_key'       => ! empty( $anthropic_key ),
-            'has_openai_key' => ! empty( $openai_key ),
-            'model'         => $model,
-            'image_model'   => $image_model,
+            'provider'         => $fornitore,
+            'anthropic_key'    => self::maschera( self::chiave( 'anthropic' ) ),
+            'openai_key'       => self::maschera( self::chiave( 'openai' ) ),
+            'mistral_key'      => self::maschera( self::chiave( 'mistral' ) ),
+            'has_key'          => self::ha_chiave(),
+            'has_openai_key'   => '' !== self::chiave( 'openai' ),
+            'model'            => self::modello( $fornitore ),
+            'image_model'      => self::modello_immagine(),
+            'modelli'          => self::elenchi_modelli(),
+            'modelli_immagine' => $immagini,
         ] );
     }
 
     public static function save_settings( $request ) {
-        $anthropic_key = $request->get_param( 'anthropic_key' );
-        $openai_key    = $request->get_param( 'openai_key' );
-        $model         = sanitize_text_field( $request->get_param( 'model' ) ?: 'claude-sonnet-4-6' );
-        $image_model   = sanitize_text_field( $request->get_param( 'image_model' ) ?: 'dall-e-3' );
-
-        // Chiave Anthropic: salva se nuova, cancella se vuota
-        if ( empty( $anthropic_key ) ) {
-            delete_option( 'olobuild_ai_anthropic_key' );
-        } elseif ( ! str_contains( $anthropic_key, '*' ) ) {
-            update_option( 'olobuild_ai_anthropic_key', sanitize_text_field( $anthropic_key ) );
+        // Chiavi: una nuova si salva, una vuota si cancella, una mascherata (***) resta.
+        foreach ( [ 'anthropic', 'openai', 'mistral' ] as $f ) {
+            $k = $request->get_param( $f . '_key' );
+            if ( null === $k ) {
+                continue; // non inviata: resta com'è
+            }
+            if ( '' === $k ) {
+                delete_option( 'olobuild_ai_' . $f . '_key' );
+            } elseif ( false === strpos( $k, '*' ) ) {
+                update_option( 'olobuild_ai_' . $f . '_key', sanitize_text_field( $k ) );
+            }
         }
 
-        // Chiave OpenAI: salva se nuova, cancella se vuota
-        if ( empty( $openai_key ) ) {
-            delete_option( 'olobuild_ai_openai_key' );
-        } elseif ( ! str_contains( $openai_key, '*' ) ) {
-            update_option( 'olobuild_ai_openai_key', sanitize_text_field( $openai_key ) );
+        $fornitore = sanitize_key( (string) $request->get_param( 'provider' ) );
+        if ( ! isset( self::MODELLI[ $fornitore ] ) ) {
+            $fornitore = self::fornitore();
         }
+        update_option( 'olobuild_ai_provider', $fornitore );
 
-        $allowed_models = [ 'claude-sonnet-4-6', 'claude-haiku-4-5-20251001', 'claude-opus-4-6' ];
-        if ( in_array( $model, $allowed_models, true ) ) {
-            update_option( 'olobuild_ai_model', $model );
+        // Il modello deve essere del fornitore scelto, se no il suo predefinito.
+        $model = sanitize_text_field( (string) $request->get_param( 'model' ) );
+        if ( ! self::info_modello( $fornitore, $model ) ) {
+            $ids   = array_keys( self::MODELLI[ $fornitore ] );
+            $model = $ids[0];
         }
+        update_option( 'olobuild_ai_model', $model );
 
-        $allowed_image_models = [ 'dall-e-3', 'dall-e-2' ];
-        if ( in_array( $image_model, $allowed_image_models, true ) ) {
+        $image_model = sanitize_text_field( (string) $request->get_param( 'image_model' ) );
+        if ( isset( self::MODELLI_IMMAGINE[ $image_model ] ) ) {
             update_option( 'olobuild_ai_image_model', $image_model );
         }
 
         return rest_ensure_response( [
             'success'     => true,
-            'model'       => get_option( 'olobuild_ai_model', 'claude-sonnet-4-6' ),
-            'image_model' => get_option( 'olobuild_ai_image_model', 'dall-e-3' ),
+            'provider'    => $fornitore,
+            'model'       => $model,
+            'image_model' => self::modello_immagine(),
         ] );
     }
 
@@ -749,61 +957,10 @@ class Olobuild_AI_Assistant {
     }
 
     /**
-     * Chiama l'API Messages di Anthropic (Claude)
+     * Testo dal fornitore scelto (vedi chiama_modello()).
      */
     private static function call_chat_api( $system_prompt, $user_message ) {
-        $api_key = get_option( 'olobuild_ai_anthropic_key', '' );
-        if ( empty( $api_key ) ) {
-            return new WP_Error( 'no_api_key', 'Chiave API Anthropic non configurata. Vai nelle impostazioni AI.', [ 'status' => 400 ] );
-        }
-
-        $model = get_option( 'olobuild_ai_model', 'claude-sonnet-4-6' );
-
-        $started = microtime( true );
-        $response = wp_remote_post( 'https://api.anthropic.com/v1/messages', [
-            'timeout' => 60,
-            'headers' => [
-                'Content-Type'      => 'application/json',
-                'x-api-key'         => $api_key,
-                'anthropic-version'  => '2023-06-01',
-            ],
-            'body' => wp_json_encode( [
-                'model'      => $model,
-                'max_tokens' => 2000,
-                'system'     => $system_prompt,
-                'messages'   => [
-                    [ 'role' => 'user', 'content' => $user_message ],
-                ],
-            ] ),
-        ] );
-        $elapsed_ms = (int) ( ( microtime( true ) - $started ) * 1000 );
-
-        if ( is_wp_error( $response ) ) {
-            return new WP_Error( 'api_error', 'Errore nella chiamata API: ' . $response->get_error_message(), [ 'status' => 500 ] );
-        }
-
-        $status_code = wp_remote_retrieve_response_code( $response );
-        $resp_body   = json_decode( wp_remote_retrieve_body( $response ), true );
-
-        if ( $status_code !== 200 ) {
-            $error_msg = isset( $resp_body['error']['message'] )
-                ? $resp_body['error']['message']
-                : 'Errore dall\'API Anthropic (HTTP ' . $status_code . ')';
-            return new WP_Error( 'api_error', $error_msg, [ 'status' => $status_code ] );
-        }
-
-        if ( empty( $resp_body['content'][0]['text'] ) ) {
-            return new WP_Error( 'empty_response', 'L\'API non ha restituito alcun contenuto.', [ 'status' => 500 ] );
-        }
-
-        // Log usage: Sonnet ~$3/MTok input + $15/MTok output → media €4/MTok ≈ €0.000004/token
-        $in_tok  = (int) ( $resp_body['usage']['input_tokens']  ?? 0 );
-        $out_tok = (int) ( $resp_body['usage']['output_tokens'] ?? 0 );
-        $tokens  = $in_tok + $out_tok;
-        $cost    = ( $in_tok * 0.0000028 ) + ( $out_tok * 0.0000139 ); // EUR
-        self::log_usage( $tokens, $cost, $elapsed_ms );
-
-        return trim( $resp_body['content'][0]['text'] );
+        return self::chiama_modello( $system_prompt, $user_message, null, 4096 );
     }
 
     /**

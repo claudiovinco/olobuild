@@ -31,14 +31,13 @@
             <button :class="{ 'is-on': form.provider === 'anthropic' }" @click="setField('provider', 'anthropic')">Anthropic</button>
             <button :class="{ 'is-on': form.provider === 'openai' }"    @click="setField('provider', 'openai')">OpenAI</button>
             <button :class="{ 'is-on': form.provider === 'mistral' }"   @click="setField('provider', 'mistral')">Mistral</button>
-            <button :class="{ 'is-on': form.provider === 'selfhost' }"  @click="setField('provider', 'selfhost')">Self-hosted</button>
           </div>
         </div>
       </div>
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('API key') }} <span class="req">*</span></label>
-          <div class="hint">{{ t('La chiave è criptata nel database. Inseriscila una sola volta.') }}</div>
+          <div class="hint">{{ t('Salvata nel sito e mai mostrata per intero. Inseriscila una sola volta.') }}</div>
         </div>
         <div class="control-col">
           <div class="cfg-input mono">
@@ -70,6 +69,15 @@
         </div>
         <div class="control-col">
           <CfgSelect :model-value="form.model" :options="availableModels" @update:model-value="setField('model', $event)" />
+        </div>
+      </div>
+      <div class="cfg-row">
+        <div class="label-col">
+          <label>{{ t('Modello immagini') }}</label>
+          <div class="hint">{{ t('Le immagini si generano con OpenAI: serve la sua chiave (scegli OpenAI qui sopra per inserirla).') }}</div>
+        </div>
+        <div class="control-col">
+          <CfgSelect :model-value="form.image_model" :options="modelliImmagine" @update:model-value="setField('image_model', $event)" />
         </div>
       </div>
       <div class="cfg-row no-divider">
@@ -189,8 +197,8 @@ const INIZIALE = {
   anthropic_key: '',
   openai_key: '',
   mistral_key: '',
-  selfhost_key: '',
-  model: 'claude-sonnet-4-5',
+  model: 'claude-sonnet-5-5',
+  image_model: 'gpt-image-2.5-flare',
   budget: 50,
   language: 'it',
   temperature: 0.35,
@@ -199,25 +207,12 @@ const INIZIALE = {
 };
 const form = ref({ ...INIZIALE });
 
-const MODELS = {
-  anthropic: [
-    { value: 'claude-sonnet-4-5',  label: 'Claude Sonnet 4.5 · ' + 'equilibrato' },
-    { value: 'claude-haiku-4-5',   label: 'Claude Haiku 4.5 · veloce' },
-    { value: 'claude-opus-4-1',    label: 'Claude Opus 4.1 · qualità massima' },
-  ],
-  openai: [
-    { value: 'gpt-4o',       label: 'gpt-4o · qualità/prezzo equilibrato' },
-    { value: 'gpt-4o-mini',  label: 'gpt-4o-mini · economico, veloce' },
-    { value: 'o1',           label: 'o1 · ragionamento avanzato' },
-  ],
-  mistral: [
-    { value: 'mistral-large', label: 'mistral-large' },
-    { value: 'mistral-small', label: 'mistral-small' },
-  ],
-  selfhost: [
-    { value: 'custom', label: 'Custom endpoint' },
-  ],
-};
+// Modelli dal server (Olobuild_AI_Assistant::MODELLI, GET ai/settings): fonte unica con
+// ciò che il salvataggio accetta e che le chiamate usano. Prima l'elenco stava qui, con
+// nomi che il server scartava (il modello scelto non si salvava mai), e OpenAI, Mistral
+// e «Self-hosted» non venivano mai chiamati.
+const MODELS = ref({});
+const modelliImmagine = ref([]);
 
 const LANGUAGE_OPTIONS = [
   { value: 'it',   label: t('Italiano') },
@@ -226,17 +221,16 @@ const LANGUAGE_OPTIONS = [
 ];
 
 const revealKey = ref(false);
-const availableModels = computed(() => MODELS[form.value.provider] || []);
+const availableModels = computed(() => MODELS.value[form.value.provider] || []);
 const currentKey = computed(() => form.value[form.value.provider + '_key'] || '');
 const placeholderKey = computed(() => {
   switch (form.value.provider) {
     case 'anthropic': return 'sk-ant-...';
     case 'openai':    return 'sk-proj-...';
-    case 'mistral':   return 'mst-...';
-    default:          return 'https://your-endpoint';
+    default:          return '';
   }
 });
-const anyKey = computed(() => !!(form.value.anthropic_key || form.value.openai_key || form.value.mistral_key || form.value.selfhost_key));
+const anyKey = computed(() => !!(form.value.anthropic_key || form.value.openai_key || form.value.mistral_key));
 const systemPromptPlaceholder = t('Es. Sei l’assistente di scrittura per un hotel boutique sul lago di Como. Tono caldo, professionale.');
 
 const usageStats = ref([
@@ -249,7 +243,7 @@ const usageStats = ref([
 function setField(k, v) {
   form.value[k] = v;
   if (k === 'provider') {
-    const list = MODELS[v] || [];
+    const list = MODELS.value[v] || [];
     if (list.length && !list.find(m => m.value === form.value.model)) {
       form.value.model = list[0].value;
     }
@@ -264,7 +258,14 @@ function updateKey(val) {
 async function loadSettings() {
   try {
     const res = await lettura.fetch(`${window.oloData.restUrl}ai/settings`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
-    if (res.ok) { form.value = conIniziali(INIZIALE, await res.json()); loaded.value = true; }
+    if (res.ok) {
+      const data = await res.json();
+      const { modelli, modelli_immagine: immagini, ...impostazioni } = data || {};
+      MODELS.value = modelli || {};
+      modelliImmagine.value = immagini || [];
+      form.value = conIniziali(INIZIALE, impostazioni);
+      loaded.value = true;
+    }
   } catch (e) { /* defaults */ }
   try {
     const res2 = await fetch(`${window.oloData.restUrl}ai/usage`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });

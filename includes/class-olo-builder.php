@@ -1281,7 +1281,8 @@ class Olobuild_Builder {
             'iframeEmptyHtml' => self::get_iframe_empty_html(),
             // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per debug bootstrap builder admin; nessuna modifica di stato; valore sanitizzato via absint.
             '_debug_tpl_id'   => absint( wp_unslash( $_GET['template_id'] ?? 0 ) ),
-            'hasAiKey'       => ! empty( get_option( 'olobuild_ai_anthropic_key', '' ) ),
+            // La chiave del fornitore scelto nella scheda AI (prima solo Anthropic).
+            'hasAiKey'       => class_exists( 'Olobuild_AI_Assistant' ) && Olobuild_AI_Assistant::ha_chiave(),
             'breakpointsEnabled' => wp_parse_args( get_option( 'olobuild_breakpoints_enabled', [] ), [
                 'widescreen'       => true,
                 'tablet_landscape' => false,

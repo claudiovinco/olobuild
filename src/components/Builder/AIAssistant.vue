@@ -581,8 +581,8 @@ const LANGUAGE_OPTS = [
 
 const IMG_SIZE_OPTS = [
   { value: '1024x1024', label: 'Quadrata (1024x1024)' },
-  { value: '1792x1024', label: 'Orizzontale (1792x1024)' },
-  { value: '1024x1792', label: 'Verticale (1024x1792)' },
+  { value: '1536x1024', label: 'Orizzontale (1536x1024)' },
+  { value: '1024x1536', label: 'Verticale (1024x1536)' },
 ];
 
 const IMG_STYLE_OPTS = [
