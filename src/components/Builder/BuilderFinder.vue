@@ -123,7 +123,9 @@ import { useTilesStore, deepCloneWithNewIds, generateId as oloGenerateId } from 
 import { useBuilderStore } from '../../stores/builder';
 import { useDragDrop } from '../../composables/useDragDrop';
 import { requestScrollToTile } from '../../utils/scrollToTileChannel';
-import { getAllElements, getElementDef } from '../../config/elementRegistry';
+import { getElementDef } from '../../config/elementRegistry';
+import { STRUCTURE_CATEGORY, paletteCategory } from '../../config/paletteCategories';
+import { useToast } from '../../composables/useToast';
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
@@ -138,22 +140,20 @@ const targetColumnId = ref(null);
 // Tile strutturali da escludere dalla ricerca
 const STRUCTURAL = new Set(['section', 'row', 'column', 'inner-columns']);
 
-const categoryLabels = {
-  essential: 'Essenziale',
-  layout: 'Layout',
-  text: 'Testo',
-  media: 'Media',
-  marketing: 'Marketing',
-  interactive: 'Interattivo',
-  navigation: 'Navigazione',
-  dynamic: 'Dinamico',
-  booking: 'Olo Booking',
-  'olo-space': 'Olo Space',
-};
-
 // ─── Elementi disponibili (per "Aggiungi") ───
+// Il catalogo sono le tile davvero registrate e non ritirate (paletteTiles), la stessa
+// fonte della sidebar, con nome dal config. Prima veniva dai file di config JS: proponeva
+// tile che il PHP non registra (Off-Canvas, le «Sale» di olo-space senza il plugin) e che
+// scelte non facevano nulla, e non trovava quelle registrate senza config (CRT).
 const availableElements = computed(() => {
-  return getAllElements().filter(el => !STRUCTURAL.has(el.type));
+  return (tilesStore.paletteTiles || [])
+    .filter(el => el.category !== STRUCTURE_CATEGORY && !STRUCTURAL.has(el.type))
+    .map(el => ({
+      type: el.type,
+      name: getElementDef(el.type)?.name || t(el.name || el.type),
+      nomePhp: el.name || '',
+      categoryLabel: t(paletteCategory(el.category).label),
+    }));
 });
 
 const addResults = computed(() => {
@@ -163,14 +163,8 @@ const addResults = computed(() => {
   const matched = [];
   for (const el of availableElements.value) {
     if (matched.length >= 8) break;
-    const searchText = `${el.type} ${el.name} ${el.category || ''}`.toLowerCase();
-    if (searchText.includes(q)) {
-      matched.push({
-        type: el.type,
-        name: el.name,
-        categoryLabel: categoryLabels[el.category] || el.category || '',
-      });
-    }
+    const searchText = `${el.type} ${el.name} ${el.nomePhp} ${el.categoryLabel}`.toLowerCase();
+    if (searchText.includes(q)) matched.push(el);
   }
   return matched;
 });
@@ -266,6 +260,12 @@ function typeIcon(type) {
 
 // ─── Azioni ───
 function addElement(tileType) {
+  // Rete di sicurezza: una tile che non si può creare (tipo non registrato) lo dice,
+  // invece di chiudere il Finder e scorrere alla tile già selezionata in silenzio.
+  if (!tilesStore.registeredTiles.some(r => r.type === tileType)) {
+    useToast().warning(t('Elemento non disponibile'));
+    return;
+  }
   const afterId = builderStore.insertAfterTileId;
   let newId = null;
 
