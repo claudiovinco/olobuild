@@ -34,37 +34,52 @@ class Olobuild_AI_Assistant {
     // ──────────────────────────────────────────────────
 
     /**
-     * Modelli di testo per fornitore: id => [ etichetta, $ input/MTok, $ output/MTok ].
-     * Il primo di ogni elenco è il predefinito. Prezzi null = non noti: la spesa
-     * stimata conta solo le chiamate di cui si conosce il prezzo.
+     * Modelli di testo per fornitore: id => [ etichetta, $ input/MTok, $ output/MTok, temperatura ].
+     * Il primo di ogni elenco è il predefinito. Prezzi dai listini ufficiali (1 ott 2026):
+     * servono alla spesa stimata e quindi al budget mensile. «temperatura» = il modello
+     * la accetta: Claude Sonnet/Opus 5.5 e Fable 5.1 la rifiutano con un 400, di GPT-6
+     * non è documentata; la scheda la mostra solo dove agisce.
      */
     const MODELLI = [
         'anthropic' => [
-            'claude-sonnet-5-5'         => [ 'Claude Sonnet 5.5 · equilibrato (consigliato)', 2, 10 ],
-            'claude-opus-5-5'           => [ 'Claude Opus 5.5 · qualità alta', 4, 20 ],
-            'claude-fable-5-1'          => [ 'Claude Fable 5.1 · ragionamento più profondo, costo alto', 10, 50 ],
-            'claude-haiku-4-5-20251001' => [ 'Claude Haiku 4.5 · veloce, economico', 1, 5 ],
+            'claude-sonnet-5-5'         => [ 'Claude Sonnet 5.5 · equilibrato (consigliato)', 2, 10, false ],
+            'claude-opus-5-5'           => [ 'Claude Opus 5.5 · qualità alta', 4, 20, false ],
+            'claude-fable-5-1'          => [ 'Claude Fable 5.1 · ragionamento più profondo, costo alto', 10, 50, false ],
+            'claude-haiku-4-5-20251001' => [ 'Claude Haiku 4.5 · veloce, economico', 1, 5, true ],
         ],
         'openai'    => [
-            'gpt-6.1-sol' => [ 'GPT-6.1 Sol · equilibrato (consigliato)', null, null ],
-            'gpt-6-astra' => [ 'GPT-6 Astra · qualità massima', null, null ],
-            'gpt-6-luna'  => [ 'GPT-6 Luna · veloce, economico', null, null ],
+            'gpt-6.1-sol' => [ 'GPT-6.1 Sol · equilibrato (consigliato)', 2, 10, false ],
+            'gpt-6-astra' => [ 'GPT-6 Astra · qualità massima, costo alto', 10, 50, false ],
+            'gpt-6-luna'  => [ 'GPT-6 Luna · veloce, economico', 0.1, 0.5, false ],
         ],
         'mistral'   => [
             // Alias «-latest»: seguono da soli il modello corrente di ogni fascia.
-            'mistral-medium-latest' => [ 'Mistral Medium 3.5 · equilibrato (consigliato)', null, null ],
-            'mistral-large-latest'  => [ 'Mistral Large 3 · qualità alta', null, null ],
-            'mistral-small-latest'  => [ 'Mistral Small 4 · veloce, economico', null, null ],
+            'mistral-large-latest'  => [ 'Mistral Large 3 · equilibrato (consigliato)', 0.5, 1.5, true ],
+            'mistral-medium-latest' => [ 'Mistral Medium 3.5 · qualità più alta', 1.5, 7.5, true ],
+            'mistral-small-latest'  => [ 'Mistral Small 4 · veloce, economico', 0.15, 0.6, true ],
         ],
     ];
 
     /** Generazioni precedenti ancora servite: chi le ha salvate continua a usarle. */
     const MODELLI_PRECEDENTI = [
         'anthropic' => [
-            'claude-sonnet-4-6' => [ 'Claude Sonnet 4.6', 3, 15 ],
-            'claude-opus-4-6'   => [ 'Claude Opus 4.6', 5, 25 ],
+            'claude-sonnet-4-6' => [ 'Claude Sonnet 4.6', 3, 15, false ],
+            'claude-opus-4-6'   => [ 'Claude Opus 4.6', 5, 25, false ],
         ],
     ];
+
+    /** GPT Image: prezzi a token ($/MTok) del testo in ingresso e dell'immagine in uscita. */
+    const PREZZO_IMMAGINE = [ 'testo' => 5, 'immagine' => 30 ];
+
+    /** Comportamento (scheda AI → Comportamento): valori ammessi e predefiniti. */
+    const LINGUE = [ 'it' => 'italiano', 'en' => 'inglese', 'de' => 'tedesco', 'fr' => 'francese', 'es' => 'spagnolo' ];
+    const TONI   = [
+        'neutral'   => '',
+        'warm'      => 'caldo, accogliente e vicino a chi legge',
+        'technical' => 'tecnico, preciso e documentato',
+        'editorial' => 'editoriale, curato e narrativo',
+    ];
+    const COMPORTAMENTO = [ 'budget' => 50, 'language' => 'it', 'tone' => 'neutral', 'temperature' => 0.35, 'system_prompt' => '' ];
 
     /** Claude senza il parametro effort (Haiku 4.5): gli altri lo ricevono basso. */
     const SENZA_EFFORT = [ 'claude-haiku-4-5-20251001' ];
@@ -123,6 +138,78 @@ class Olobuild_AI_Assistant {
         return (string) get_option( 'olobuild_ai_' . $fornitore . '_key', '' );
     }
 
+    /** Un valore del Comportamento, salvato o predefinito. */
+    public static function comportamento( $chiave ) {
+        $v = get_option( 'olobuild_ai_' . $chiave, null );
+        return null === $v ? self::COMPORTAMENTO[ $chiave ] : $v;
+    }
+
+    /** Lingua predefinita, con «auto» risolta sulla lingua del sito (ripiego inglese). */
+    public static function lingua_predefinita() {
+        $l = (string) self::comportamento( 'language' );
+        if ( 'auto' === $l ) {
+            $l = substr( (string) get_locale(), 0, 2 );
+        }
+        return isset( self::LINGUE[ $l ] ) ? $l : ( 'auto' === self::comportamento( 'language' ) ? 'en' : 'it' );
+    }
+
+    /** Tono di base e istruzioni del sito, aggiunti a ogni istruzione di sistema. */
+    private static function contesto_sito() {
+        $out  = '';
+        $tono = self::TONI[ (string) self::comportamento( 'tone' ) ] ?? '';
+        if ( '' !== $tono ) {
+            $out .= "\n\nTono di voce di base del sito (quando il compito non ne chiede un altro): " . $tono . '.';
+        }
+        $istr = trim( (string) self::comportamento( 'system_prompt' ) );
+        if ( '' !== $istr ) {
+            $out .= "\n\nContesto del sito, indicato dal proprietario (valido per ogni testo che scrivi):\n" . $istr;
+        }
+        return $out;
+    }
+
+    /** Inizio del mese corrente (fuso del sito). */
+    private static function inizio_mese() {
+        return ( new DateTimeImmutable( 'first day of this month 00:00:00', wp_timezone() ) )->getTimestamp();
+    }
+
+    /** Chiamate, token, spesa stimata (€) e latenza totale dal 1° del mese. */
+    public static function utilizzo_mese() {
+        $log  = get_option( 'olobuild_ai_usage', [] );
+        $da   = self::inizio_mese();
+        $out  = [ 'calls' => 0, 'tokens' => 0, 'cost' => 0.0, 'ms' => 0 ];
+        foreach ( is_array( $log ) ? $log : [] as $e ) {
+            if ( ! is_array( $e ) || ( $e['ts'] ?? 0 ) < $da ) {
+                continue;
+            }
+            $out['calls']++;
+            $out['tokens'] += (int) ( $e['tokens'] ?? 0 );
+            $out['cost']   += (float) ( $e['cost'] ?? 0 );
+            $out['ms']     += (int) ( $e['ms'] ?? 0 );
+        }
+        return $out;
+    }
+
+    /** Budget mensile superato: le funzioni AI si fermano fino al mese dopo (0 = nessun limite). */
+    private static function controlla_budget() {
+        $budget = (float) self::comportamento( 'budget' );
+        if ( $budget <= 0 ) {
+            return true;
+        }
+        $speso = self::utilizzo_mese()['cost'];
+        if ( $speso >= $budget ) {
+            return new WP_Error(
+                'olo_ai_budget',
+                sprintf(
+                    'Budget mensile AI raggiunto: spesa stimata %s € su %s €. Le funzioni AI ripartono il 1° del mese, oppure alza il budget nella Configurazione → AI Assistant.',
+                    number_format_i18n( $speso, 2 ),
+                    number_format_i18n( $budget, 2 )
+                ),
+                [ 'status' => 429 ]
+            );
+        }
+        return true;
+    }
+
     /** C'è la chiave del fornitore scelto (il builder mostra l'assistente solo così). */
     public static function ha_chiave() {
         return '' !== self::chiave( self::fornitore() );
@@ -144,7 +231,13 @@ class Olobuild_AI_Assistant {
         if ( '' === $api_key ) {
             return new WP_Error( 'no_api_key', 'Chiave API ' . $nome . ' non configurata. Vai nelle impostazioni AI.', [ 'status' => 400 ] );
         }
+        $budget = self::controlla_budget();
+        if ( is_wp_error( $budget ) ) {
+            return $budget;
+        }
         $modello = self::modello( $fornitore );
+        $info    = self::info_modello( $fornitore, $modello );
+        $system .= self::contesto_sito();
 
         if ( 'anthropic' === $fornitore ) {
             $contenuto = [];
@@ -162,6 +255,9 @@ class Olobuild_AI_Assistant {
             // (Opus 5.5, Fable 5.1) il ragionamento consuma max_tokens.
             if ( ! in_array( $modello, self::SENZA_EFFORT, true ) ) {
                 $corpo['output_config'] = [ 'effort' => 'low' ];
+            }
+            if ( $info && ! empty( $info[3] ) ) {
+                $corpo['temperature'] = (float) self::comportamento( 'temperature' );
             }
             $url   = 'https://api.anthropic.com/v1/messages';
             $intes = [ 'x-api-key' => $api_key, 'anthropic-version' => '2023-06-01' ];
@@ -188,6 +284,9 @@ class Olobuild_AI_Assistant {
                 $url = 'https://api.openai.com/v1/chat/completions';
             } else {
                 $corpo['max_tokens'] = $massimo;
+                if ( $info && ! empty( $info[3] ) ) {
+                    $corpo['temperature'] = (float) self::comportamento( 'temperature' );
+                }
                 $url = 'https://api.mistral.ai/v1/chat/completions';
             }
             $intes = [ 'Authorization' => 'Bearer ' . $api_key ];
@@ -239,7 +338,6 @@ class Olobuild_AI_Assistant {
             $out_tok = (int) ( $resp_body['usage']['completion_tokens'] ?? 0 );
         }
 
-        $info = self::info_modello( $fornitore, $modello );
         $cost = ( $info && null !== $info[1] )
             ? ( ( $in_tok * $info[1] + $out_tok * $info[2] ) / 1000000 ) * self::EUR_PER_USD
             : 0.0;
@@ -384,7 +482,7 @@ class Olobuild_AI_Assistant {
         $prompt     = sanitize_textarea_field( $request->get_param( 'prompt' ) );
         $type       = sanitize_text_field( $request->get_param( 'type' ) ?: 'paragraph' );
         $tone       = sanitize_text_field( $request->get_param( 'tone' ) ?: 'professionale' );
-        $language   = sanitize_text_field( $request->get_param( 'language' ) ?: 'it' );
+        $language   = sanitize_text_field( $request->get_param( 'language' ) ?: self::lingua_predefinita() );
         $max_length = absint( $request->get_param( 'max_length' ) ?: 150 );
 
         if ( empty( $prompt ) ) {
@@ -496,6 +594,11 @@ class Olobuild_AI_Assistant {
             return $img_guard;
         }
 
+        $budget = self::controlla_budget();
+        if ( is_wp_error( $budget ) ) {
+            return $budget;
+        }
+
         $prompt = sanitize_textarea_field( $request->get_param( 'prompt' ) );
         $size   = sanitize_text_field( $request->get_param( 'size' ) ?: '1024x1024' );
         $style  = sanitize_text_field( $request->get_param( 'style' ) ?: 'vivid' );
@@ -571,9 +674,16 @@ class Olobuild_AI_Assistant {
             return new WP_Error( 'no_image', 'Nessuna immagine generata.', [ 'status' => 500 ] );
         }
 
-        // Stima fissa per chiamata (il costo reale dipende da qualità e formato).
-        $img_cost = ( $size === '1024x1024' ) ? 0.037 : 0.075;
-        self::log_usage( 0, $img_cost, $elapsed_ms );
+        // Costo dai token che GPT Image dichiara (testo in ingresso, immagine in uscita);
+        // senza «usage» una stima fissa per formato.
+        $u_in  = (int) ( $resp_body['usage']['input_tokens'] ?? 0 );
+        $u_out = (int) ( $resp_body['usage']['output_tokens'] ?? 0 );
+        if ( $u_in || $u_out ) {
+            $img_cost = ( ( $u_in * self::PREZZO_IMMAGINE['testo'] + $u_out * self::PREZZO_IMMAGINE['immagine'] ) / 1000000 ) * self::EUR_PER_USD;
+        } else {
+            $img_cost = ( $size === '1024x1024' ) ? 0.04 : 0.06;
+        }
+        self::log_usage( $u_in + $u_out, $img_cost, $elapsed_ms );
 
         // Salva nella Media Library WP
         require_once ABSPATH . 'wp-admin/includes/media.php';
@@ -716,7 +826,7 @@ class Olobuild_AI_Assistant {
 
     public static function generate_alt( $request ) {
         $image_url = esc_url_raw( $request->get_param( 'image_url' ) );
-        $language  = sanitize_text_field( $request->get_param( 'language' ) ?: 'it' );
+        $language  = sanitize_text_field( $request->get_param( 'language' ) ?: self::lingua_predefinita() );
 
         if ( empty( $image_url ) ) {
             return new WP_Error( 'missing_url', 'L\'URL dell\'immagine è obbligatorio.', [ 'status' => 400 ] );
@@ -839,13 +949,13 @@ class Olobuild_AI_Assistant {
         foreach ( self::MODELLI as $fornitore => $modelli ) {
             $out[ $fornitore ] = [];
             foreach ( $modelli as $id => $info ) {
-                $out[ $fornitore ][] = [ 'value' => $id, 'label' => $info[0] ];
+                $out[ $fornitore ][] = [ 'value' => $id, 'label' => $info[0], 'temperatura' => ! empty( $info[3] ) ];
             }
         }
         $salvato = get_option( 'olobuild_ai_model', '' );
         foreach ( self::MODELLI_PRECEDENTI as $fornitore => $modelli ) {
             if ( isset( $modelli[ $salvato ] ) ) {
-                $out[ $fornitore ][] = [ 'value' => $salvato, 'label' => $modelli[ $salvato ][0] . ' · versione precedente' ];
+                $out[ $fornitore ][] = [ 'value' => $salvato, 'label' => $modelli[ $salvato ][0] . ' · versione precedente', 'temperatura' => ! empty( $modelli[ $salvato ][3] ) ];
             }
         }
         return $out;
@@ -868,6 +978,12 @@ class Olobuild_AI_Assistant {
             'image_model'      => self::modello_immagine(),
             'modelli'          => self::elenchi_modelli(),
             'modelli_immagine' => $immagini,
+            'budget'           => (float) self::comportamento( 'budget' ),
+            'language'         => (string) self::comportamento( 'language' ),
+            'tone'             => (string) self::comportamento( 'tone' ),
+            'temperature'      => (float) self::comportamento( 'temperature' ),
+            'system_prompt'    => (string) self::comportamento( 'system_prompt' ),
+            'spesa_mese'       => round( self::utilizzo_mese()['cost'], 2 ),
         ] );
     }
 
@@ -902,6 +1018,30 @@ class Olobuild_AI_Assistant {
         $image_model = sanitize_text_field( (string) $request->get_param( 'image_model' ) );
         if ( isset( self::MODELLI_IMMAGINE[ $image_model ] ) ) {
             update_option( 'olobuild_ai_image_model', $image_model );
+        }
+
+        // Comportamento: solo i valori ammessi; un parametro non inviato resta com'è.
+        // Un budget negativo si scarta: arrotondato a 0 diventerebbe «nessun limite».
+        $b = $request->get_param( 'budget' );
+        if ( null !== $b && is_numeric( $b ) && (float) $b >= 0 ) {
+            update_option( 'olobuild_ai_budget', round( min( 100000, (float) $b ), 2 ) );
+        }
+        $l = $request->get_param( 'language' );
+        if ( null !== $l && ( isset( self::LINGUE[ $l ] ) || 'auto' === $l ) ) {
+            update_option( 'olobuild_ai_language', $l );
+        }
+        $tn = $request->get_param( 'tone' );
+        if ( null !== $tn && isset( self::TONI[ $tn ] ) ) {
+            update_option( 'olobuild_ai_tone', $tn );
+        }
+        $tp = $request->get_param( 'temperature' );
+        if ( null !== $tp && is_numeric( $tp ) ) {
+            update_option( 'olobuild_ai_temperature', round( min( 1, max( 0, (float) $tp ) ), 2 ) );
+        }
+        $sp = $request->get_param( 'system_prompt' );
+        if ( null !== $sp ) {
+            $sp = sanitize_textarea_field( (string) $sp );
+            update_option( 'olobuild_ai_system_prompt', function_exists( 'mb_substr' ) ? mb_substr( $sp, 0, 500 ) : substr( $sp, 0, 500 ) );
         }
 
         return rest_ensure_response( [

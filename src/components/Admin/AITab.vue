@@ -83,10 +83,11 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Budget mensile') }}</label>
-          <div class="hint">{{ t('Soglia di spesa oltre la quale le funzioni AI vengono disattivate.') }}</div>
+          <div class="hint">{{ t('Spesa stimata dal 1° del mese oltre la quale le funzioni AI si fermano fino al mese dopo. 0 = nessun limite.') }}</div>
         </div>
         <div class="control-col">
           <CfgNumber size="sm" :model-value="form.budget" :min="0" :step="5" :suffix="'€ / ' + t('mese')" @update:model-value="setField('budget', $event)" />
+          <div class="text-xs mt-2" style="color:var(--c-text-faint);">{{ t('Speso questo mese (stima)') }}: {{ spesaMese }} €</div>
         </div>
       </div>
     </div>
@@ -113,7 +114,9 @@
           <CfgSelect size="md" :model-value="form.language" :options="LANGUAGE_OPTIONS" @update:model-value="setField('language', $event)" />
         </div>
       </div>
-      <div class="cfg-row">
+      <!-- Solo dove il modello la accetta: Claude Sonnet/Opus 5.5 e Fable 5.1 la rifiutano,
+           di GPT-6 non è documentata (il server non la manda). -->
+      <div v-if="temperaturaAgisce" class="cfg-row">
         <div class="label-col">
           <label>{{ t('Temperatura') }}</label>
           <div class="hint">{{ t('0 = preciso e ripetibile · 1 = creativo e variabile.') }}</div>
@@ -162,7 +165,7 @@
       </div>
       <div>
         <h3>{{ t('Utilizzo questo mese') }}</h3>
-        <p>{{ t('Statistiche delle chiamate API negli ultimi 30 giorni.') }}</p>
+        <p>{{ t('Statistiche delle chiamate API dal 1° del mese (lo stesso periodo del budget).') }}</p>
       </div>
     </div>
     <div class="cfg-card-body">
@@ -202,7 +205,7 @@ const INIZIALE = {
   budget: 50,
   language: 'it',
   temperature: 0.35,
-  tone: 'warm',
+  tone: 'neutral',
   system_prompt: '',
 };
 const form = ref({ ...INIZIALE });
@@ -213,15 +216,22 @@ const form = ref({ ...INIZIALE });
 // e «Self-hosted» non venivano mai chiamati.
 const MODELS = ref({});
 const modelliImmagine = ref([]);
+const spesaMese = ref('0,00');
 
+// Le stesse lingue dell'assistente nel builder.
 const LANGUAGE_OPTIONS = [
   { value: 'it',   label: t('Italiano') },
   { value: 'en',   label: t('Inglese') },
+  { value: 'de',   label: t('Tedesco') },
+  { value: 'fr',   label: t('Francese') },
+  { value: 'es',   label: t('Spagnolo') },
   { value: 'auto', label: t('Auto (lingua del sito)') },
 ];
 
 const revealKey = ref(false);
 const availableModels = computed(() => MODELS.value[form.value.provider] || []);
+// La temperatura agisce solo sui modelli che la accettano (flag del server).
+const temperaturaAgisce = computed(() => !!(availableModels.value.find(m => m.value === form.value.model) || {}).temperatura);
 const currentKey = computed(() => form.value[form.value.provider + '_key'] || '');
 const placeholderKey = computed(() => {
   switch (form.value.provider) {
@@ -260,9 +270,10 @@ async function loadSettings() {
     const res = await lettura.fetch(`${window.oloData.restUrl}ai/settings`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (res.ok) {
       const data = await res.json();
-      const { modelli, modelli_immagine: immagini, ...impostazioni } = data || {};
+      const { modelli, modelli_immagine: immagini, spesa_mese: spesa, ...impostazioni } = data || {};
       MODELS.value = modelli || {};
       modelliImmagine.value = immagini || [];
+      spesaMese.value = Number(spesa || 0).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       form.value = conIniziali(INIZIALE, impostazioni);
       loaded.value = true;
     }

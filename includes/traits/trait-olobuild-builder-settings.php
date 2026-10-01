@@ -506,42 +506,21 @@ trait Olobuild_Builder_Settings_Trait {
             ],
         ] );
 
-        // AI usage — rolling stats degli ultimi 30 giorni
+        // AI usage — dal 1° del mese, lo stesso periodo del budget mensile (scheda AI)
         register_rest_route( $ns, '/ai/usage', [
             [
                 'methods'             => 'GET',
                 'callback'            => function () {
-                    $log = get_option( 'olobuild_ai_usage', [] );
-                    if ( ! is_array( $log ) ) $log = [];
-
-                    // Filter ultimi 30 giorni
-                    $cutoff = time() - 30 * DAY_IN_SECONDS;
-                    $recent = array_filter( $log, function ( $e ) use ( $cutoff ) {
-                        return is_array( $e ) && ( $e['ts'] ?? 0 ) >= $cutoff;
-                    } );
-
-                    if ( empty( $recent ) ) {
-                        return rest_ensure_response( [
-                            'calls'         => 0,
-                            'tokens'        => '0',
-                            'cost_estimate' => '0.00',
-                            'latency_avg'   => '0',
-                        ] );
-                    }
-
-                    $calls = count( $recent );
-                    $tokens = 0; $cost = 0.0; $latency_sum = 0;
-                    foreach ( $recent as $e ) {
-                        $tokens      += (int) ( $e['tokens']  ?? 0 );
-                        $cost        += (float) ( $e['cost']  ?? 0 );
-                        $latency_sum += (int) ( $e['ms']      ?? 0 );
-                    }
-                    $latency_avg = $calls > 0 ? round( ( $latency_sum / $calls ) / 1000, 1 ) : 0;
-
+                    $u = class_exists( 'Olobuild_AI_Assistant' )
+                        ? Olobuild_AI_Assistant::utilizzo_mese()
+                        : [ 'calls' => 0, 'tokens' => 0, 'cost' => 0.0, 'ms' => 0 ];
+                    $calls       = (int) $u['calls'];
+                    $tokens      = (int) $u['tokens'];
+                    $latency_avg = $calls > 0 ? round( ( $u['ms'] / $calls ) / 1000, 1 ) : 0;
                     return rest_ensure_response( [
                         'calls'         => $calls,
                         'tokens'        => $tokens >= 1000 ? round( $tokens / 1000, 1 ) . 'k' : (string) $tokens,
-                        'cost_estimate' => number_format_i18n( $cost, 2 ),
+                        'cost_estimate' => number_format_i18n( (float) $u['cost'], 2 ),
                         'latency_avg'   => (string) $latency_avg,
                     ] );
                 },

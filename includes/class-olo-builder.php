@@ -1283,6 +1283,8 @@ class Olobuild_Builder {
             '_debug_tpl_id'   => absint( wp_unslash( $_GET['template_id'] ?? 0 ) ),
             // La chiave del fornitore scelto nella scheda AI (prima solo Anthropic).
             'hasAiKey'       => class_exists( 'Olobuild_AI_Assistant' ) && Olobuild_AI_Assistant::ha_chiave(),
+            // Lingua predefinita della scheda AI («auto» già risolta): la scelta iniziale dell'assistente.
+            'aiLingua'       => class_exists( 'Olobuild_AI_Assistant' ) ? Olobuild_AI_Assistant::lingua_predefinita() : 'it',
             'breakpointsEnabled' => wp_parse_args( get_option( 'olobuild_breakpoints_enabled', [] ), [
                 'widescreen'       => true,
                 'tablet_landscape' => false,

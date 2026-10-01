@@ -623,10 +623,12 @@ const improveActions = [
 ];
 
 // Form state
+// Lingua predefinita della Configurazione → AI Assistant (il PHP risolve «auto»).
+const LINGUA_PREDEFINITA = (window.oloData && window.oloData.aiLingua) || 'it';
 const gen = reactive({
   type: 'paragraph',
   tone: 'professionale',
-  language: 'it',
+  language: LINGUA_PREDEFINITA,
   prompt: '',
   maxLength: 150,
 });
@@ -658,7 +660,7 @@ const styleSuggest = reactive({
 
 const alt = reactive({
   imageUrl: '',
-  language: 'it',
+  language: LINGUA_PREDEFINITA,
 });
 
 const css = reactive({
