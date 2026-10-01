@@ -23,7 +23,9 @@
           :title="peek.margin ? t('Nascondi anteprima') : t('Mostra anteprima')" :aria-pressed="peek.margin"
           v-html="peek.margin ? EYE : EYE_OFF"></button>
       </div>
-      <FieldBox mode="sides" preview="none" :sliderMax="200" :modelValue="spacingModel('margin')" @update:modelValue="onSpacing('margin', $event)" />
+      <!-- Margine: negativi ammessi (il renderer stampa margin-* con intval) per sovrapporre
+           una tile a quella sopra; il Padding resta ≥ 0. -->
+      <FieldBox mode="sides" preview="none" :sliderMax="200" allow-negative :modelValue="spacingModel('margin')" @update:modelValue="onSpacing('margin', $event)" />
       <div v-if="peek.margin" class="olo-bs-pv">
         <div class="olo-bs-pv-box"><div class="olo-bs-pv-inner" :style="spacingPreviewStyle('margin')"></div></div>
       </div>

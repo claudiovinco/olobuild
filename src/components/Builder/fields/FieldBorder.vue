@@ -118,11 +118,13 @@ const val = computed(() => {
    {top,right,bottom,left} quando "separato": combacia 1:1 col nostro modello. */
 const widthModel = computed(() => {
   const { top, right, bottom, left, linked } = val.value;
-  return linked ? top : { top, right, bottom, left };
+  // linked:false esplicito: FieldBox apre «collegato» anche quattro spessori uguali,
+  // ma qui l'utente li ha separati.
+  return linked ? top : { top, right, bottom, left, linked: false };
 });
 function onWidth(v) {
   if (v && typeof v === 'object') {
-    emit({ ...v, linked: false });
+    emit({ top: v.top, right: v.right, bottom: v.bottom, left: v.left, linked: v.linked === true });
   } else {
     const n = Math.max(0, parseInt(v) || 0);
     emit({ top: n, right: n, bottom: n, left: n, linked: true });

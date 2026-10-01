@@ -263,6 +263,8 @@
         preview="none"
         :modelValue="effectiveValue"
         :sliderMax="Number(field.max ?? 200)"
+        :allowNegative="Number(field.min) < 0"
+        :sliderMin="Number(field.min) < 0 ? Number(field.min) : null"
         :units="unitaCampo ? [unitaCampo] : ['px']"
         :defaultUnit="unitaCampo || 'px'"
         @update:modelValue="onFieldUpdate($event)"

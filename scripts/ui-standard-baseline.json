@@ -41,6 +41,7 @@
     "densita-token-in-tile-esistenti": 0,
     "densita-letterali": 1926,
     "componente-orfano": 0,
-    "campo-orfano": 0
+    "campo-orfano": 0,
+    "fieldbox-celle": 0
   }
 }

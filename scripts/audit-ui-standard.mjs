@@ -1105,6 +1105,40 @@ for (const ti of [...tipiDispatcher].sort()) {
 violazioni['campo-orfano'] = campoOrfano;
 RULES.push({ id: 'campo-orfano', titolo: 'Ogni controllo di fields/ è usato e ogni tipo dei dispatcher è dichiarato da un campo' });
 
+// ─── FieldBox: ogni cella scrive l'angolo (o il lato) che disegna, dove sta ──
+// Fino alla 1.4.491 la griglia del Raggio si riempiva nell'ordine dei dati
+// (tl, tr, br, bl) e l'icona di base disegnava l'angolo in alto a DESTRA: la cella in
+// basso a sinistra scriveva br, e ogni icona mostrava l'angolo accanto. Qui si
+// controlla che per ogni cella chiave = icona (base + rotazione) = posizione, e che il
+// template collochi le celle per posizione e non per ordine dei dati.
+const fieldBoxCelle = [];
+{
+  const fb = fs.readFileSync(path.join(SRC, 'components/Builder/fields/FieldBox.vue'), 'utf8');
+  const ATTESE = {
+    tl: [0, 1, 1], tr: [90, 1, 2], br: [180, 2, 2], bl: [270, 2, 1],
+    top: [0, 1, 1], right: [90, 1, 2], bottom: [180, 1, 3], left: [270, 1, 4],
+  };
+  const viste = new Set();
+  for (const m of fb.matchAll(/\{\s*k:\s*'(\w+)',\s*r:\s*'(\d+)deg',\s*row:\s*(\d+),\s*col:\s*(\d+)/g)) {
+    const [, k, r, row, col] = m;
+    viste.add(k);
+    const a = ATTESE[k];
+    if (!a) { fieldBoxCelle.push({ file: 'FieldBox', type: 'chiave', key: k, label: '' }); continue; }
+    if (+r !== a[0]) fieldBoxCelle.push({ file: 'FieldBox', type: 'icona', key: `${k} ruota ${r}°, atteso ${a[0]}°`, label: '' });
+    if (+row !== a[1] || +col !== a[2]) fieldBoxCelle.push({ file: 'FieldBox', type: 'posto', key: `${k} in ${row},${col}, atteso ${a[1]},${a[2]}`, label: '' });
+  }
+  for (const k of Object.keys(ATTESE)) if (!viste.has(k)) fieldBoxCelle.push({ file: 'FieldBox', type: 'manca', key: k, label: '' });
+  // Le rotazioni valgono solo se l'icona di base disegna l'angolo in ALTO A SINISTRA
+  // (parte in basso a sinistra, sale e curva verso destra) e il lato ALTO.
+  if (!/const CORNER_SVG = '[^']*<path d="M4 20v-7a9 9 0 0 1 9-9h7"\/>/.test(fb)) fieldBoxCelle.push({ file: 'FieldBox', type: 'icona', key: 'CORNER_SVG non è l\'angolo in alto a sinistra', label: '' });
+  if (!/const EDGE_SVG = '[^']*<line x1="4" y1="4" x2="20" y2="4"/.test(fb)) fieldBoxCelle.push({ file: 'FieldBox', type: 'icona', key: 'EDGE_SVG non è il lato alto', label: '' });
+  if (!/v-for="c in celle"/.test(fb) || !/gridRow:\s*c\.row/.test(fb) || !/gridColumn:\s*c\.col/.test(fb)) {
+    fieldBoxCelle.push({ file: 'FieldBox', type: 'griglia', key: 'le celle non sono collocate per riga/colonna', label: '' });
+  }
+}
+violazioni['fieldbox-celle'] = fieldBoxCelle;
+RULES.push({ id: 'fieldbox-celle', titolo: 'FieldBox: ogni cella scrive l\'angolo/lato che disegna, nella sua posizione' });
+
 // ─── confronto con la baseline ──────────────────────────────────────────────
 const args = process.argv.slice(2);
 const conteggi = Object.fromEntries(Object.entries(violazioni).map(([k, v]) => [k, v.length]));
