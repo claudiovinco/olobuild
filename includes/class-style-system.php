@@ -1489,24 +1489,20 @@ class Olobuild_Style_System {
 
         $css = '';
 
-        // Google Fonts import
-        $fonts_import = $this->generate_google_fonts_import( $s['google_fonts'] );
+        // Google Fonts import. Tre elenchi, ognuno passato da famiglie_google():
+        // quello scelto a mano (google_fonts), le famiglie dei set tipografici e
+        // quelle della tipografia base (testo/titoli/mono, che il pannello cfg →
+        // Typography salva solo nel blocco typography).
+        $existing_fonts = self::famiglie_google( $s['google_fonts'] ?? [] );
+        $fonts_import = $this->generate_google_fonts_import( $existing_fonts );
         if ( $fonts_import ) {
             $css .= $fonts_import . "\n";
         }
 
         // Global typography Google Fonts import
         $global_typo = $this->get_global_typography();
-        $global_font_families = [];
-        foreach ( $global_typo as $set ) {
-            $family = $set['family'] ?? '';
-            if ( $family !== '' ) {
-                $global_font_families[] = $family;
-            }
-        }
-        $global_font_families = array_unique( $global_font_families );
+        $global_font_families = self::famiglie_google( array_column( $global_typo, 'family' ) );
         // Filter out families already in main google_fonts
-        $existing_fonts = $s['google_fonts'] ?? [];
         $extra_families = array_diff( $global_font_families, $existing_fonts );
         if ( ! empty( $extra_families ) ) {
             $extra_import = $this->generate_google_fonts_import( array_values( $extra_families ) );
@@ -1515,25 +1511,8 @@ class Olobuild_Style_System {
             }
         }
 
-        // Famiglie della typography base (testo/titoli/mono): vanno self-hostate
-        // anche quando non compaiono in google_fonts (es. scelte dal pannello cfg
-        // → Typography, che salva solo il blocco typography). I generici di
-        // sistema vengono saltati; Font_Host fallisce comunque in modo pulito
-        // sui nomi non-Google.
-        $system_families = [ 'system-ui', 'sans-serif', 'serif', 'monospace', 'ui-monospace', 'inherit', 'georgia', 'arial', 'verdana', 'tahoma', 'consolas', 'menlo', 'courier new', 'times new roman' ];
-        $typo_families = [];
-        foreach ( [ 'font_family', 'font_family_heading', 'font_family_mono' ] as $tk ) {
-            $val = trim( (string) ( $t[ $tk ] ?? '' ) );
-            if ( $val === '' || strpos( $val, 'var(' ) !== false ) {
-                continue;
-            }
-            $first = trim( explode( ',', $val )[0], " '\"" );
-            if ( $first === '' || in_array( strtolower( $first ), $system_families, true ) ) {
-                continue;
-            }
-            $typo_families[] = $first;
-        }
-        $typo_extra = array_diff( array_unique( $typo_families ), $existing_fonts, $global_font_families );
+        $typo_families = self::famiglie_google( [ $t['font_family'] ?? '', $t['font_family_heading'] ?? '', $t['font_family_mono'] ?? '' ] );
+        $typo_extra = array_diff( $typo_families, $existing_fonts, $global_font_families );
         if ( ! empty( $typo_extra ) ) {
             $typo_import = $this->generate_google_fonts_import( array_values( $typo_extra ) );
             if ( $typo_import ) {
@@ -1960,6 +1939,55 @@ class Olobuild_Style_System {
 
         $memo = $css;
         return $memo;
+    }
+
+    /**
+     * Le famiglie da chiedere a Google, ricavate dai valori salvati.
+     *
+     * Google rifiuta l'INTERA richiesta css2 (400) se anche una sola famiglia
+     * non esiste, e con lei saltano i font veri chiesti insieme. Nei campi
+     * Famiglia però finiscono cose che Google non ha: i ruoli del tema
+     * (`var(--olo-font-family-heading)`), gli stack di sistema («Arial,
+     * Helvetica, sans-serif»), i font caricati dall'utente e, nei temi
+     * importati, la sintassi delle variabili di Google
+     * («Hedvig+Letters+Serif:opsz@12..24»). Di ogni valore resta il nome di una
+     * famiglia che Google può avere, una volta sola.
+     *
+     * @param array $valori Valori salvati (nomi, stack, var()).
+     * @return string[]
+     */
+    public static function famiglie_google( $valori ) {
+        static $di_sistema = [
+            'system-ui', '-apple-system', 'blinkmacsystemfont', 'segoe ui', 'ui-sans-serif', 'ui-serif', 'ui-monospace',
+            'sans-serif', 'serif', 'monospace', 'cursive', 'fantasy', 'inherit', 'initial', 'unset',
+            'arial', 'helvetica', 'helvetica neue', 'georgia', 'verdana', 'tahoma', 'trebuchet ms', 'times', 'times new roman',
+            'courier', 'courier new', 'consolas', 'menlo', 'monaco', 'lucida console',
+        ];
+        $personali = [];
+        if ( class_exists( 'Olobuild_Custom_Fonts' ) ) {
+            foreach ( (array) Olobuild_Custom_Fonts::get_fonts() as $cf ) {
+                if ( is_array( $cf ) && ! empty( $cf['name'] ) ) {
+                    $personali[] = strtolower( trim( (string) $cf['name'] ) );
+                }
+            }
+        }
+        $famiglie = [];
+        foreach ( (array) $valori as $valore ) {
+            $valore = trim( (string) $valore );
+            if ( $valore === '' || strpos( $valore, 'var(' ) !== false ) {
+                continue;
+            }
+            $nome = trim( explode( ',', $valore )[0], " '\"" );
+            $nome = trim( str_replace( '+', ' ', explode( ':', $nome )[0] ) );
+            $chiave = strtolower( $nome );
+            if ( $nome === '' || in_array( $chiave, $di_sistema, true ) || in_array( $chiave, $personali, true ) ) {
+                continue;
+            }
+            if ( ! isset( $famiglie[ $chiave ] ) ) {
+                $famiglie[ $chiave ] = $nome;
+            }
+        }
+        return array_values( $famiglie );
     }
 
     /**

@@ -40,19 +40,45 @@ class Olobuild_Font_Host {
             return $cached;
         }
 
-        $css = self::build( $families, $weights );
+        $rifiutata = false;
+        $css    = self::build( $families, $weights, $rifiutata );
         // L'esito vuoto (Google irraggiungibile) viene cachato solo per poco,
         // così i retry riprendono presto; l'esito valido dura un mese.
-        set_transient( $key, $css, '' === $css ? 5 * MINUTE_IN_SECONDS : MONTH_IN_SECONDS );
+        $durata = '' === $css ? 5 * MINUTE_IN_SECONDS : MONTH_IN_SECONDS;
+
+        // Google rifiuta TUTTA la richiesta (400) se anche una sola famiglia non
+        // esiste: allora si chiede una famiglia per volta, e un nome sbagliato non
+        // si porta dietro gli altri. Solo sul rifiuto: con Google irraggiungibile
+        // una richiesta per famiglia moltiplicherebbe le attese.
+        if ( $rifiutata && count( $families ) > 1 ) {
+            $parti  = [];
+            $dubbio = false;
+            foreach ( $families as $f ) {
+                $no    = false;
+                $parte = self::build( [ $f ], $weights, $no );
+                if ( '' !== $parte ) {
+                    $parti[] = $parte;
+                } elseif ( ! $no ) {
+                    $dubbio = true; // errore di rete o file non salvato: si ritenta presto
+                }
+            }
+            $css    = implode( "\n", $parti );
+            $durata = ( '' === $css || $dubbio ) ? 5 * MINUTE_IN_SECONDS : MONTH_IN_SECONDS;
+        }
+
+        set_transient( $key, $css, $durata );
         return $css;
     }
 
     /**
      * Scarica il CSS da Google, salva localmente i woff2 e riscrive gli URL.
      *
+     * @param array  $families  Famiglie.
+     * @param string $weights   Pesi css2.
+     * @param bool   $rifiutata Diventa true se Google ha risposto 400 (famiglia inesistente).
      * @return string CSS con URL locali, o '' in caso di errore.
      */
-    private static function build( $families, $weights ) {
+    private static function build( $families, $weights, &$rifiutata = false ) {
         $req = [];
         foreach ( $families as $f ) {
             $req[] = 'family=' . rawurlencode( $f ) . ':wght@' . $weights;
@@ -62,6 +88,7 @@ class Olobuild_Font_Host {
         // User-agent moderno per ottenere la variante woff2.
         $resp = wp_remote_get( $url, [ 'timeout' => 15, 'user-agent' => self::UA ] );
         if ( is_wp_error( $resp ) || 200 !== (int) wp_remote_retrieve_response_code( $resp ) ) {
+            $rifiutata = ! is_wp_error( $resp ) && 400 === (int) wp_remote_retrieve_response_code( $resp );
             return '';
         }
         $remote_css = wp_remote_retrieve_body( $resp );
