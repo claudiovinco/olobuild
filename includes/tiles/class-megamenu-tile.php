@@ -1428,6 +1428,12 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-mm-mob-nav > li > .olo-mm-mob-toggle:hover {
             background: rgba(255,255,255,.05);
         }
+        /* Voce della pagina corrente (anche la madre di una sottopagina): accento mobile */
+        .<?php echo $uid; ?> .olo-mm-mob-nav > li.olo-mm-dp-active > a,
+        .<?php echo $uid; ?> .olo-mm-mob-nav > li.olo-mm-dp-active > .olo-mm-mob-toggle,
+        .<?php echo $uid; ?> .olo-mm-mob-nav a[aria-current="page"] {
+            color: <?php echo $mob_acc; ?>;
+        }
         .<?php echo $uid; ?> .olo-mm-mob-cta-item {
             padding: 8px 20px;
         }
@@ -1682,6 +1688,12 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             font-size: <?php echo $mob_link_size > 0 ? $mob_link_size : 22; ?>px;
             <?php if ( $mob_link_fam !== '' ) : ?>font-family: <?php echo $mob_link_fam; ?>; font-weight: 400; letter-spacing: .02em;<?php else : ?>font-weight: 600;<?php endif; ?>
             border-bottom: 1px solid rgba(255,255,255,.1);
+        }
+        /* Voce della pagina corrente (anche la madre di una sottopagina): accento mobile */
+        .<?php echo $uid; ?> .olo-mm-fs-nav li.olo-mm-dp-active > a,
+        .<?php echo $uid; ?> .olo-mm-fs-nav li.olo-mm-dp-active > .olo-mm-dp-item > a,
+        .<?php echo $uid; ?> .olo-mm-fs-nav a[aria-current="page"] {
+            color: <?php echo $mob_acc; ?>;
         }
         .<?php echo $uid; ?> .olo-mm-numbered .olo-mm-fs-nav > li { counter-increment: olommfs; }
         .<?php echo $uid; ?> .olo-mm-numbered .olo-mm-fs-nav > li > a::before,
@@ -2382,10 +2394,86 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         echo '</div>';
     }
 
+    /* ─── Pagina corrente ─── */
+
+    /**
+     * La voce porta alla pagina che si sta guardando? Si confrontano i PERCORSI, non gli URL
+     * interi: le voci possono essere relative («/una-scuola-intera/», come vogliono i link
+     * portabili) mentre home_url() è assoluto, e la lingua di OLOlang viaggia in ?lang=, che
+     * non cambia pagina. Prima il confronto era trailingslashit( url ) === home_url( richiesta ):
+     * con voci relative non era mai vero, e con ?lang= la barra finiva dopo la query.
+     * Non sono «correnti» le ancore (#…), mailto:/tel: e i link verso un altro sito.
+     */
+    private function e_pagina_corrente( $url ) {
+        static $corrente = null;
+        if ( $corrente === null ) {
+            $req = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '/'; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- only parsed and compared, never output
+            $p   = wp_parse_url( (string) $req );
+            $q   = [];
+            if ( is_array( $p ) && ! empty( $p['query'] ) ) {
+                wp_parse_str( $p['query'], $q );
+            }
+            $corrente = [ 'path' => $this->percorso_normale( is_array( $p ) ? ( $p['path'] ?? '/' ) : '/' ), 'query' => $q ];
+        }
+        $url = trim( (string) $url );
+        if ( $url === '' || $url[0] === '#' ) return false;
+        $v = wp_parse_url( $url );
+        if ( ! is_array( $v ) ) return false;
+        if ( ! empty( $v['scheme'] ) && ! in_array( strtolower( $v['scheme'] ), [ 'http', 'https' ], true ) ) return false;
+        if ( ! empty( $v['host'] ) ) {
+            $casa = (string) wp_parse_url( home_url( '/' ), PHP_URL_HOST );
+            if ( strcasecmp( $v['host'], $casa ) !== 0 ) return false;
+        }
+        $path = (string) ( $v['path'] ?? '/' );
+        if ( $path === '' ) $path = '/';
+        if ( $path[0] !== '/' ) {
+            // Relativo alla home («pagina/»): si risolve sotto la cartella del sito.
+            $path = trailingslashit( (string) ( wp_parse_url( home_url( '/' ), PHP_URL_PATH ) ?: '/' ) ) . $path;
+        }
+        if ( $this->percorso_normale( $path ) !== $corrente['path'] ) return false;
+        // ?page_id=73 e simili: i parametri della voce (tranne la lingua) devono esserci uguali,
+        // e un parametro che sceglie la pagina presente solo nella richiesta esclude la voce
+        // (con i permalink semplici «/» non è anche la pagina ?page_id=73).
+        $vq = [];
+        if ( ! empty( $v['query'] ) ) {
+            wp_parse_str( $v['query'], $vq );
+            unset( $vq['lang'] );
+            foreach ( $vq as $k => $val ) {
+                if ( ! isset( $corrente['query'][ $k ] ) || (string) $corrente['query'][ $k ] !== (string) $val ) return false;
+            }
+        }
+        foreach ( [ 'page_id', 'p', 'cat', 'tag', 's', 'author', 'post_type', 'name', 'pagename', 'm' ] as $k ) {
+            if ( isset( $corrente['query'][ $k ] ) && ! isset( $vq[ $k ] ) ) return false;
+        }
+        return true;
+    }
+
+    /** Percorso confrontabile: decodificato, con una sola barra in testa e in coda. */
+    private function percorso_normale( $p ) {
+        $p = '/' . trim( rawurldecode( (string) $p ), '/' );
+        return $p === '/' ? '/' : $p . '/';
+    }
+
+    /** Una sottovoce (o una sua sottovoce) è la pagina corrente: la voce madre resta accesa. */
+    private function ramo_corrente( $subs, $grandchildren ) {
+        foreach ( (array) $subs as $sub ) {
+            if ( ! is_object( $sub ) ) continue;
+            if ( $this->e_pagina_corrente( $sub->url ?? '' ) ) return true;
+            foreach ( (array) ( $grandchildren[ $sub->ID ?? 0 ] ?? [] ) as $gc ) {
+                if ( is_object( $gc ) && $this->e_pagina_corrente( $gc->url ?? '' ) ) return true;
+            }
+        }
+        return false;
+    }
+
+    /** ' aria-current="page"' sul link della pagina corrente. */
+    private function aria_corrente( $url ) {
+        return $this->e_pagina_corrente( $url ) ? ' aria-current="page"' : '';
+    }
+
     /* ─── HTML ─── */
 
     private function render_html( $tree, $children, $grandchildren, $s, $uid ) {
-        $current_url = trailingslashit( home_url( add_query_arg( [], false ) ) );
         $total       = count( $tree );
         $show_desc   = ! empty( $s['show_descriptions'] );
         ?>
@@ -2589,7 +2677,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                 <ul class="olo-mm-nav olo-mm-nav-left">
                     <?php foreach ( $left_items as $idx => $item ) :
                         $subs       = $children[ $item->ID ] ?? [];
-                        $is_current = trailingslashit( $item->url ) === $current_url;
+                        $is_current = $this->e_pagina_corrente( $item->url ) || $this->ramo_corrente( $subs, $grandchildren );
                         $is_button  = $this->is_button_item( $item, $idx, $total, $s );
                         $is_mega    = ! $is_button && $this->is_mega_item( $item, $subs, $grandchildren, $s );
                         $has_panel_tpl = ! $is_button && $this->get_panel_template_id( $item->ID, $s ) > 0;
@@ -2607,7 +2695,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                     <?php foreach ( $right_items as $idx => $item ) :
                         $real_idx   = $idx + $split_point;
                         $subs       = $children[ $item->ID ] ?? [];
-                        $is_current = trailingslashit( $item->url ) === $current_url;
+                        $is_current = $this->e_pagina_corrente( $item->url ) || $this->ramo_corrente( $subs, $grandchildren );
                         $is_button  = $this->is_button_item( $item, $real_idx, $total, $s );
                         $is_mega    = ! $is_button && $this->is_mega_item( $item, $subs, $grandchildren, $s );
                         $has_panel_tpl = ! $is_button && $this->get_panel_template_id( $item->ID, $s ) > 0;
@@ -2627,7 +2715,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                 <ul class="olo-mm-nav"<?php echo $is_split ? ' style="display:none!important"' : ''; ?>>
                     <?php foreach ( $tree as $idx => $item ) :
                         $subs       = $children[ $item->ID ] ?? [];
-                        $is_current = trailingslashit( $item->url ) === $current_url;
+                        $is_current = $this->e_pagina_corrente( $item->url ) || $this->ramo_corrente( $subs, $grandchildren );
                         $is_button  = $this->is_button_item( $item, $idx, $total, $s );
                         $is_mega    = ! $is_button && $this->is_mega_item( $item, $subs, $grandchildren, $s );
                         $has_panel_tpl = ! $is_button && $this->get_panel_template_id( $item->ID, $s ) > 0;
@@ -2639,11 +2727,11 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                     ?>
                         <li<?php echo $li_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute string built with esc_attr() above ?>>
                             <?php if ( $is_button ) : ?>
-                                <a href="<?php echo esc_url( $item->url ); ?>" class="olo-mm-btn"<?php echo $item->target ? ' target="' . esc_attr( $item->target ) . '"' : ''; ?>>
+                                <a href="<?php echo esc_url( $item->url ); ?>" class="olo-mm-btn"<?php echo $item->target ? ' target="' . esc_attr( $item->target ) . '"' : ''; ?><?php echo $this->aria_corrente( $item->url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute ?>>
                                     <?php echo esc_html( $item->title ); ?>
                                 </a>
                             <?php else : ?>
-                                <a href="<?php echo esc_url( $item->url ); ?>" data-text="<?php echo esc_attr( $item->title ); ?>"<?php echo $item->target ? ' target="' . esc_attr( $item->target ) . '"' : ''; ?><?php echo $has_subs ? ' aria-haspopup="true" aria-expanded="false"' : ''; ?>>
+                                <a href="<?php echo esc_url( $item->url ); ?>" data-text="<?php echo esc_attr( $item->title ); ?>"<?php echo $item->target ? ' target="' . esc_attr( $item->target ) . '"' : ''; ?><?php echo $has_subs ? ' aria-haspopup="true" aria-expanded="false"' : ''; ?><?php echo $this->aria_corrente( $item->url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute ?>>
                                     <?php echo esc_html( $item->title ); ?>
                                     <?php $item_badge = $this->get_item_badge( $item ); if ( $item_badge !== '' ) : ?><span class="olo-mm-badge"><?php echo esc_html( $item_badge ); ?></span><?php endif; ?>
                                     <?php if ( $has_subs ) : ?>
@@ -2731,7 +2819,8 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                         $subs    = $children[ $item->ID ] ?? [];
                         $has_sub = ! empty( $subs );
                     ?>
-                        <li<?php echo $has_sub ? ' class="olo-mm-mob-parent"' : ''; ?>>
+                        <?php $mob_cls = array_filter( [ $has_sub ? 'olo-mm-mob-parent' : '', ( $this->e_pagina_corrente( $item->url ) || $this->ramo_corrente( $subs, $grandchildren ) ) ? 'olo-mm-dp-active' : '' ] ); ?>
+                        <li<?php echo $mob_cls ? ' class="' . esc_attr( implode( ' ', $mob_cls ) ) . '"' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute string built with esc_attr() ?>>
                             <?php if ( $has_sub ) : ?>
                                 <button class="olo-mm-mob-toggle" type="button" aria-expanded="false">
                                     <?php echo esc_html( $item->title ); ?>
@@ -2740,7 +2829,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                                 <div class="olo-mm-mob-sub">
                                     <?php // If item itself has a URL, show as first link ?>
                                     <?php if ( $item->url && $item->url !== '#' ) : ?>
-                                        <a href="<?php echo esc_url( $item->url ); ?>"><?php echo esc_html( $item->title ); ?></a>
+                                        <a href="<?php echo esc_url( $item->url ); ?>"<?php echo $this->aria_corrente( $item->url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute ?>><?php echo esc_html( $item->title ); ?></a>
                                     <?php endif; ?>
                                     <?php foreach ( $subs as $sub ) :
                                         $gc = $grandchildren[ $sub->ID ] ?? [];
@@ -2748,15 +2837,15 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                                         <?php if ( ! empty( $gc ) ) : ?>
                                             <div class="olo-mm-mob-heading"><?php echo esc_html( $sub->title ); ?></div>
                                             <?php foreach ( $gc as $gci ) : ?>
-                                                <a href="<?php echo esc_url( $gci->url ); ?>"><?php echo esc_html( $gci->title ); ?></a>
+                                                <a href="<?php echo esc_url( $gci->url ); ?>"<?php echo $this->aria_corrente( $gci->url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute ?>><?php echo esc_html( $gci->title ); ?></a>
                                             <?php endforeach; ?>
                                         <?php else : ?>
-                                            <a href="<?php echo esc_url( $sub->url ); ?>"><?php echo esc_html( $sub->title ); ?></a>
+                                            <a href="<?php echo esc_url( $sub->url ); ?>"<?php echo $this->aria_corrente( $sub->url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute ?>><?php echo esc_html( $sub->title ); ?></a>
                                         <?php endif; ?>
                                     <?php endforeach; ?>
                                 </div>
                             <?php else : ?>
-                                <a href="<?php echo esc_url( $item->url ); ?>"><?php echo esc_html( $item->title ); ?></a>
+                                <a href="<?php echo esc_url( $item->url ); ?>"<?php echo $this->aria_corrente( $item->url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute ?>><?php echo esc_html( $item->title ); ?></a>
                             <?php endif; ?>
                         </li>
                     <?php endforeach; ?>
@@ -2808,7 +2897,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                             $dp_idx++;
                             $subs    = $children[ $item->ID ] ?? [];
                             $has_sub = ! empty( $subs );
-                            $is_cur  = trailingslashit( $item->url ) === $current_url;
+                            $is_cur  = $this->e_pagina_corrente( $item->url ) || $this->ramo_corrente( $subs, $grandchildren );
                             $cls     = [];
                             if ( $is_cur ) $cls[] = 'olo-mm-dp-active';
                             if ( $has_sub ) $cls[] = 'olo-mm-dp-has-children';
@@ -2817,13 +2906,13 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                             <li<?php echo $li_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute string built with esc_attr() above ?>>
                                 <?php if ( $has_sub ) : ?>
                                 <div class="olo-mm-dp-item">
-                                    <a href="<?php echo esc_url( $item->url ); ?>"><?php echo esc_html( $item->title ); ?></a>
+                                    <a href="<?php echo esc_url( $item->url ); ?>"<?php echo $this->aria_corrente( $item->url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute ?>><?php echo esc_html( $item->title ); ?></a>
                                     <button class="olo-mm-dp-chevron" type="button" aria-label="<?php echo esc_attr( olobuild_t( 'Espandi' ) ); ?>" aria-expanded="false"><?php echo $toggle_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from get_toggle_svg() (hardcoded strings + intval size) ?></button>
                                 </div>
                                 <ul class="olo-mm-dp-sub">
                                     <?php foreach ( $subs as $sub ) :
                                         $gc = $grandchildren[ $sub->ID ] ?? [];
-                                        $sub_cur = trailingslashit( $sub->url ) === $current_url;
+                                        $sub_cur = $this->e_pagina_corrente( $sub->url ) || $this->ramo_corrente( $grandchildren[ $sub->ID ] ?? [], [] );
                                         $sub_cls = [];
                                         if ( $sub_cur ) $sub_cls[] = 'olo-mm-dp-active';
                                         if ( ! empty($gc) ) $sub_cls[] = 'olo-mm-dp-has-children';
@@ -2832,22 +2921,22 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                                         <li<?php echo $sc; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute string built with esc_attr() above ?>>
                                             <?php if ( ! empty($gc) ) : ?>
                                             <div class="olo-mm-dp-item">
-                                                <a href="<?php echo esc_url( $sub->url ); ?>"><?php echo esc_html( $sub->title ); ?></a>
+                                                <a href="<?php echo esc_url( $sub->url ); ?>"<?php echo $this->aria_corrente( $sub->url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute ?>><?php echo esc_html( $sub->title ); ?></a>
                                                 <button class="olo-mm-dp-chevron" type="button" aria-label="<?php echo esc_attr( olobuild_t( 'Espandi sottomenu' ) ); ?>" aria-expanded="false"><?php echo $toggle_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from get_toggle_svg() (hardcoded strings + intval size) ?></button>
                                             </div>
                                             <ul class="olo-mm-dp-sub">
                                                 <?php foreach ( $gc as $gci ) : ?>
-                                                <li><a href="<?php echo esc_url( $gci->url ); ?>"><?php echo esc_html( $gci->title ); ?></a></li>
+                                                <li><a href="<?php echo esc_url( $gci->url ); ?>"<?php echo $this->aria_corrente( $gci->url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute ?>><?php echo esc_html( $gci->title ); ?></a></li>
                                                 <?php endforeach; ?>
                                             </ul>
                                             <?php else : ?>
-                                            <a href="<?php echo esc_url( $sub->url ); ?>"><?php echo esc_html( $sub->title ); ?></a>
+                                            <a href="<?php echo esc_url( $sub->url ); ?>"<?php echo $this->aria_corrente( $sub->url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute ?>><?php echo esc_html( $sub->title ); ?></a>
                                             <?php endif; ?>
                                         </li>
                                     <?php endforeach; ?>
                                 </ul>
                                 <?php else : ?>
-                                <a href="<?php echo esc_url( $item->url ); ?>"><?php echo esc_html( $item->title ); ?></a>
+                                <a href="<?php echo esc_url( $item->url ); ?>"<?php echo $this->aria_corrente( $item->url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute ?>><?php echo esc_html( $item->title ); ?></a>
                                 <?php endif; ?>
                             </li>
                         <?php endforeach; ?>
@@ -2916,7 +3005,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                     <div class="olo-mm-col">
                         <div class="olo-mm-heading">
                             <?php if ( $sub->url && $sub->url !== '#' ) : ?>
-                                <a href="<?php echo esc_url( $sub->url ); ?>"><?php echo esc_html( $sub->title ); ?></a>
+                                <a href="<?php echo esc_url( $sub->url ); ?>"<?php echo $this->aria_corrente( $sub->url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute ?>><?php echo esc_html( $sub->title ); ?></a>
                             <?php else : ?>
                                 <?php echo esc_html( $sub->title ); ?>
                             <?php endif; ?>
@@ -3778,11 +3867,11 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
 
     private function render_nav_item_content( $item, $subs, $grandchildren, $s, $show_desc, $is_button, $is_mega, $has_panel_tpl, $has_subs ) {
         if ( $is_button ) : ?>
-            <a href="<?php echo esc_url( $item->url ); ?>" class="olo-mm-btn"<?php echo $item->target ? ' target="' . esc_attr( $item->target ) . '"' : ''; ?>>
+            <a href="<?php echo esc_url( $item->url ); ?>" class="olo-mm-btn"<?php echo $item->target ? ' target="' . esc_attr( $item->target ) . '"' : ''; ?><?php echo $this->aria_corrente( $item->url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute ?>>
                 <?php echo esc_html( $item->title ); ?>
             </a>
         <?php else : ?>
-            <a href="<?php echo esc_url( $item->url ); ?>" data-text="<?php echo esc_attr( $item->title ); ?>"<?php echo $item->target ? ' target="' . esc_attr( $item->target ) . '"' : ''; ?><?php echo $has_subs ? ' aria-haspopup="true" aria-expanded="false"' : ''; ?>>
+            <a href="<?php echo esc_url( $item->url ); ?>" data-text="<?php echo esc_attr( $item->title ); ?>"<?php echo $item->target ? ' target="' . esc_attr( $item->target ) . '"' : ''; ?><?php echo $has_subs ? ' aria-haspopup="true" aria-expanded="false"' : ''; ?><?php echo $this->aria_corrente( $item->url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute ?>>
                 <?php echo esc_html( $item->title ); ?>
                 <?php $item_badge = $this->get_item_badge( $item ); if ( $item_badge !== '' ) : ?><span class="olo-mm-badge"><?php echo esc_html( $item_badge ); ?></span><?php endif; ?>
                 <?php if ( $has_subs ) : ?>
