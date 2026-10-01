@@ -378,6 +378,10 @@ export const useBuilderStore = defineStore('builder', {
 
     async togglePreview() {
       this.previewMode = !this.previewMode;
+      // Canvas live (l'iframe col render PHP): header e footer ci sono già, e i fogli di
+      // stile del sito non vanno nel documento del builder. Il render qui sotto serve
+      // solo al canvas classico.
+      if (this.livePreviewMode) return;
       if (this.previewMode) {
         // Carica HTML renderizzato di header e footer attivi
         const olo = getOloData();

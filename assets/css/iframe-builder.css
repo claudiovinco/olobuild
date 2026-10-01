@@ -680,3 +680,29 @@ body.olo-preview-mode [data-olo-empty="1"][data-olo-tile-type="section"]::after 
 .olo-tile-pulse {
   animation: olo-sf-pulse var(--sf-cycle, 500ms) ease-in-out var(--sf-count, 2);
 }
+
+/* Anteprima: cartellino al clic su un link (i link restano bloccati, se no l'iframe
+   uscirebbe dal builder). Chiaro come la barra flottante, accento del chrome. */
+.olo-preview-linknote {
+  position: fixed;
+  z-index: 2147483000;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #1f2937;
+  border-left: 3px solid #e8622a;
+  font: 500 12px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.14), 0 0 0 1px rgba(15, 23, 42, 0.06);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.olo-preview-linknote.is-on {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .olo-preview-linknote { transition: none; }
+}

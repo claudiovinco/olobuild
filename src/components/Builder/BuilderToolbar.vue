@@ -1,7 +1,7 @@
 <template>
-  <div class="mb-flex mb-items-center mb-justify-between mb-h-12 mb-px-4 mb-bg-gray-800 mb-border-b mb-border-gray-700 mb-shrink-0" role="toolbar" :aria-label="t('Barra strumenti builder')">
-    <!-- Left: Navigation + Logo -->
-    <div class="mb-flex mb-items-center mb-gap-2">
+  <div class="mb-flex mb-items-center mb-h-12 mb-px-4 mb-bg-gray-800 mb-border-b mb-border-gray-700 mb-shrink-0" :class="builderStore.previewMode ? 'mb-justify-center' : 'mb-justify-between'" role="toolbar" :aria-label="t('Barra strumenti builder')">
+    <!-- Left: Navigation + Logo — in Anteprima la barra tiene solo dispositivo, zoom e «Esci» -->
+    <div v-show="!builderStore.previewMode" class="mb-flex mb-items-center mb-gap-2">
       <a
         :href="wpAdminUrl"
         class="mb-px-2 mb-py-1 mb-text-gray-500 hover:mb-text-gray-200 mb-text-xs mb-transition-colors mb-no-underline"
@@ -51,6 +51,7 @@
     <!-- Center: Page Settings + Viewport controls -->
     <div class="mb-flex mb-items-center mb-gap-2">
       <button
+        v-show="!builderStore.previewMode"
         @click="builderStore.togglePageSettings()"
         :class="[
           'mb-px-2 mb-py-1.5 mb-rounded-md mb-transition-colors',
@@ -105,6 +106,28 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
         </button>
       </div>
+      <!-- Anteprima: l'unica uscita a vista (oltre a Esc e Ctrl+Alt+P) -->
+      <button
+        v-if="builderStore.previewMode"
+        @click="builderStore.togglePreview()"
+        class="olo-tb-esci-anteprima mb-ml-2 mb-px-3 mb-py-1 mb-text-xs mb-rounded-full mb-flex mb-items-center mb-gap-1.5 mb-transition-colors"
+        :title="t('Torna alla modifica (Esc)')"
+      >
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+        {{ t('Esci dall’anteprima') }}
+        <kbd class="olo-tb-esci-kbd">Esc</kbd>
+      </button>
+      <!-- In Anteprima i link sono bloccati (l'iframe uscirebbe dal builder): per seguirli
+           c'è la pagina vera, che il cartellino nell'iframe nomina. -->
+      <button
+        v-if="builderStore.previewMode && realPreviewUrl"
+        @click="openRealPreview"
+        class="mb-px-3 mb-py-1 mb-text-xs mb-rounded-md mb-border mb-border-emerald-600 mb-text-emerald-400 hover:mb-bg-emerald-600/20 mb-transition-colors mb-flex mb-items-center mb-gap-1"
+        :title="t('Apri la pagina reale in un nuovo tab')"
+      >
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
+        {{ t('Reale') }}
+      </button>
       <!-- Zoom dropdown -->
       <Teleport to="body">
         <div v-if="showZoomMenu" class="mb-fixed mb-inset-0 mb-z-[9999]" @click="showZoomMenu = false">
@@ -119,7 +142,7 @@
     </div>
 
     <!-- Right: Actions -->
-    <div class="mb-flex mb-items-center mb-gap-2">
+    <div v-show="!builderStore.previewMode" class="mb-flex mb-items-center mb-gap-2">
       <!--
         VERSIONE DEL CODICE IN ESECUZIONE, sempre a schermo.
         Non è vezzo da changelog: quando una funzione "sparisce" la prima cosa da
@@ -200,6 +223,16 @@
                 <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">Ctrl</kbd>
                 <span class="mb-text-gray-500 mb-text-xs">+</span>
                 <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">S</kbd>
+              </div>
+            </div>
+            <div class="mb-flex mb-items-center mb-justify-between">
+              <span class="mb-text-gray-300 mb-text-sm">{{ t('Anteprima (Esc per uscire)') }}</span>
+              <div class="mb-flex mb-gap-1">
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">Ctrl</kbd>
+                <span class="mb-text-gray-500 mb-text-xs">+</span>
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">Alt</kbd>
+                <span class="mb-text-gray-500 mb-text-xs">+</span>
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">P</kbd>
               </div>
             </div>
             <div class="mb-flex mb-items-center mb-justify-between">
@@ -468,16 +501,20 @@
       >
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13"/></svg>
       </button>
+      <!-- Anteprima: la pagina com'è, senza contorni, pulsanti né pannelli. Prima l'occhio
+           accendeva cleanMode, che legge solo il canvas classico (mai montato): si
+           illuminava e il canvas restava identico. -->
       <button
-        @click="builderStore.cleanMode = !builderStore.cleanMode"
+        @click="builderStore.togglePreview()"
         :class="[
           'mb-px-2 mb-py-1.5 mb-rounded-md mb-transition-colors',
-          builderStore.cleanMode
+          builderStore.previewMode
             ? 'mb-bg-primary-600/20 mb-text-primary-300'
             : 'mb-text-gray-400 hover:mb-text-gray-200 hover:mb-bg-gray-700'
         ]"
-        :title="t('Modalità pulita (WYSIWYG)')"
-        :aria-label="t('Modalità pulita')"
+        :title="t('Anteprima (Ctrl+Alt+P)')"
+        :aria-label="t('Anteprima')"
+        :aria-pressed="builderStore.previewMode ? 'true' : 'false'"
       >
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
       </button>
@@ -756,6 +793,23 @@ function isTextEntry(el) {
 function onGlobalKeydown(e) {
   const tag = e.target?.tagName || 'DIV';
   const isEditing = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || e.target?.isContentEditable;
+
+  // Ctrl/⌘+Alt+P → Anteprima (non Ctrl+Shift+P: su Firefox apre la finestra anonima e la
+  // pagina non può fermarlo). Col codice del tasto: con Alt su Mac e.key è un altro segno.
+  if ((e.ctrlKey || e.metaKey) && e.altKey && !e.shiftKey && e.code === 'KeyP') {
+    e.preventDefault();
+    builderStore.togglePreview();
+    return;
+  }
+  // In Anteprima: Esc torna alla modifica; le altre scorciatoie (Canc, Ctrl+V…) non
+  // agiscono su una pagina che non si sta modificando.
+  if (builderStore.previewMode) {
+    if (e.key === 'Escape' && !e.defaultPrevented) {
+      e.preventDefault();
+      builderStore.togglePreview();
+    }
+    return;
+  }
 
   // Ctrl+Z → Undo / Ctrl+Shift+Z → Redo
   if ((e.ctrlKey || e.metaKey) && (e.key === 'z' || e.code === 'KeyZ')) {
@@ -1223,5 +1277,19 @@ async function regenerateThumbnail() {
 .olo-tb-prefs:focus-visible {
   outline: 2px solid var(--olo-ui-accent, #e8622a);
   outline-offset: 1px;
+}
+/* «Esci dall'anteprima»: pillola nel colore del chrome, sempre a vista in Anteprima. */
+.olo-tb-esci-anteprima {
+  color: #fff;
+  background: var(--olo-ui-accent, #e8622a);
+  border: 1px solid transparent;
+}
+.olo-tb-esci-anteprima:hover { filter: brightness(1.08); }
+.olo-tb-esci-anteprima:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.olo-tb-esci-kbd {
+  font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.22);
 }
 </style>

@@ -599,7 +599,8 @@ export function useIframeBridge(iframeRef) {
 
   // Sincronizza l'INTERO set di selezione verso l'iframe (multi-selezione ctrl-click).
   // selectedTileIds cambia insieme a selectedTileId, quindi questo copre anche il singolo.
-  watch(() => builderStore.selectedTileIds.join('|'), () => {
+  watch(() => builderStore.selectedTileIds.join('|'), () => inviaSelezione());
+  function inviaSelezione() {
     const ids = builderStore.selectedTileIds.slice();
     if (ids.length) {
       // zone = dove sta la tile primaria: con una tile di header o footer il chip
@@ -610,7 +611,7 @@ export function useIframeBridge(iframeRef) {
     } else {
       postToIframe('olo:deselect');
     }
-  });
+  }
 
   // Il chip segue ciò che il builder sa: template caricati, titoli, provenienza.
   watch(() => JSON.stringify(zoneInfoPayload()), sendZoneInfo);
@@ -663,6 +664,9 @@ export function useIframeBridge(iframeRef) {
 
   watch(() => builderStore.previewMode, (val) => {
     postToIframe('olo:preview-mode', { enabled: val });
+    // Entrando l'iframe toglie la selezione dalla vista; uscendo la si rimanda (nello
+    // store non è mai cambiata), così si riprende a modificare da dove si era.
+    if (!val) inviaSelezione();
   });
 
   watch(() => builderStore.wireframeMode, (val) => {

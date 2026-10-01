@@ -406,6 +406,8 @@ watch(() => builderStore.previewMode, (active) => {
   // Cleanup previous
   previewCssEls.forEach(el => el.remove());
   previewCssEls.length = 0;
+  // Canvas live: la pagina è nell'iframe, coi suoi stili; qui toccherebbero il builder.
+  if (builderStore.livePreviewMode) return;
 
   if (active) {
     // Inject external CSS URLs from server

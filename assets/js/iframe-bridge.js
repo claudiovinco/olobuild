@@ -766,7 +766,30 @@
     var a = e.target.closest('a[href]');
     if (a && a.getAttribute('href') !== '#' && a.getAttribute('href') !== 'javascript:void(0)') {
       e.preventDefault();
+      // In Anteprima il clic su un link sembrerebbe rotto: lo si dice. I link restano
+      // bloccati anche qui, se no l'iframe uscirebbe dal builder.
+      if (previewMode && a.getAttribute('href').charAt(0) !== '#') linkNote(e.clientX, e.clientY);
     }
+  }
+
+  var linkNoteEl = null;
+  var linkNoteTimer = null;
+  function linkNote(x, y) {
+    if (!linkNoteEl) {
+      linkNoteEl = document.createElement('div');
+      linkNoteEl.className = 'olo-preview-linknote';
+      linkNoteEl.setAttribute('role', 'status');
+      // «Reale» (la pagina pubblicata) c'è solo se il template ne ha una: il testo vale sempre.
+      linkNoteEl.textContent = 'I link sono disattivati nell\u2019anteprima: si seguono sulla pagina pubblicata.';
+      document.body.appendChild(linkNoteEl);
+    }
+    var w = Math.min(280, window.innerWidth - 16);
+    linkNoteEl.style.left = Math.max(8, Math.min(x - w / 2, window.innerWidth - w - 8)) + 'px';
+    linkNoteEl.style.top = Math.max(8, y - 52) + 'px';
+    linkNoteEl.style.width = w + 'px';
+    linkNoteEl.classList.add('is-on');
+    clearTimeout(linkNoteTimer);
+    linkNoteTimer = setTimeout(function () { if (linkNoteEl) linkNoteEl.classList.remove('is-on'); }, 2400);
   }
 
   // ── Reinit UIkit + execute inline scripts after DOM update ──
@@ -1769,6 +1792,14 @@
       e.preventDefault();
       e.stopPropagation();
       endGripDrag(false);
+      return;
+    }
+    // Anteprima: Esc torna alla modifica e Ctrl/⌘+Alt+P la chiude, anche col fuoco
+    // dentro la pagina (un accordion, un campo di un modulo).
+    if ((previewMode && e.key === 'Escape' && !e.defaultPrevented) ||
+        ((e.ctrlKey || e.metaKey) && e.altKey && !e.shiftKey && e.code === 'KeyP')) {
+      e.preventDefault();
+      post('olo:keydown', { key: e.key, code: e.code, ctrlKey: e.ctrlKey, shiftKey: e.shiftKey, altKey: e.altKey, metaKey: e.metaKey });
       return;
     }
     // Skip if editing text
