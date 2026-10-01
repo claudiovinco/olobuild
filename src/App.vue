@@ -6,8 +6,9 @@
     @create="createAndOpenBuilder"
   />
 
-  <!-- Builder View -->
-  <div v-else class="mb-flex mb-flex-col mb-h-screen mb-bg-gray-900 mb-text-gray-100 mb-overflow-hidden">
+  <!-- Builder View — data-olo-builder-editor: segnale «editor montato» per la palette
+       globale (olo-palette.js), che qui cede Ctrl+K al Finder. -->
+  <div v-else data-olo-builder-editor class="mb-flex mb-flex-col mb-h-screen mb-bg-gray-900 mb-text-gray-100 mb-overflow-hidden">
     <!-- Skip link per accessibilità -->
     <a href="#olo-canvas" class="mb-sr-only focus:mb-not-sr-only focus:mb-fixed focus:mb-top-2 focus:mb-left-2 focus:mb-z-50 focus:mb-bg-gray-800 focus:mb-text-white focus:mb-px-4 focus:mb-py-2 focus:mb-rounded">
       {{ t('Salta al contenuto') }}

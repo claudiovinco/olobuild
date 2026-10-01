@@ -11,7 +11,8 @@
  * e lo illumina.
  *
  * Nella pagina Configurazione la scorciatoia ⌘K resta alla ricerca interna
- * (più ricca lì): questo script la cede quando trova .cfg-root nel DOM.
+ * (più ricca lì): questo script la cede quando trova .cfg-root nel DOM. Allo
+ * stesso modo la cede al Finder nell'editor del builder ([data-olo-builder-editor]).
  */
 (function () {
     'use strict';
@@ -281,8 +282,11 @@
         document.addEventListener('keydown', function (e) {
             if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
                 // Nella Configurazione ⌘K appartiene alla ricerca interna (a
-                // livello di campo): la palette lì si apre solo dal trigger.
-                if (document.querySelector('.cfg-root')) return;
+                // livello di campo), nell'editor del builder al Finder (che inserisce
+                // elementi): lì la palette si apre solo dal trigger. Il segnale è
+                // l'editor MONTATO, non #olobuilder-app, che c'è anche nella lista
+                // dei template dove il Finder non esiste. Prima si aprivano tutte e due.
+                if (document.querySelector('.cfg-root, [data-olo-builder-editor]')) return;
                 e.preventDefault();
                 open();
                 return;
