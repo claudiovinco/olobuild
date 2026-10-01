@@ -706,3 +706,52 @@ body.olo-preview-mode [data-olo-empty="1"][data-olo-tile-type="section"]::after 
 @media (prefers-reduced-motion: reduce) {
   .olo-preview-linknote { transition: none; }
 }
+
+/* Modifica in linea (doppio clic su un testo): contorno e barra nella lingua del chrome,
+   chiari come la barra flottante. Prima: contorno blu, barra scura, lettere al posto
+   delle icone, conferma verde. */
+.olo-inline-editing {
+  outline: 2px solid var(--olo-ui-accent) !important;
+  outline-offset: 2px;
+  border-radius: 2px;
+  min-height: 1em;
+  cursor: text !important;
+}
+.olo-inline-toolbar {
+  position: fixed;
+  z-index: 2147483000;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 32px;
+  padding: 0 4px;
+  box-sizing: border-box;
+  background: #ffffff;
+  color: #1f2937;
+  border-radius: 8px;
+  font: 500 11px/1 system-ui, -apple-system, "Segoe UI", sans-serif;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.06);
+}
+.olo-inline-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #334155;
+  cursor: pointer;
+}
+.olo-inline-btn:hover { background: #f1f5f9; color: #0f172a; }
+.olo-inline-btn:focus-visible { outline: 2px solid var(--olo-ui-accent); outline-offset: 1px; }
+.olo-inline-ok { background: var(--olo-ui-accent); color: #fff; margin-left: 2px; }
+.olo-inline-ok:hover { background: var(--olo-ui-accent); color: #fff; filter: brightness(1.08); }
+.olo-inline-hint {
+  padding: 0 6px;
+  color: #64748b;
+  white-space: nowrap;
+}

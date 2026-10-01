@@ -492,31 +492,69 @@
 
     e.preventDefault();
     e.stopPropagation();
-    startInlineEdit(editEl, tileId, field);
+    startInlineEdit(editEl, tileId, field, e.clientX, e.clientY);
   }
 
-  function startInlineEdit(el, tileId, field) {
+  // Modifica in linea. Il doppio clic seleziona la PAROLA cliccata (prima tutto il testo:
+  // alla prima lettera il titolo spariva); Esc ANNULLA e rimette il testo com'era, senza
+  // avvisare il builder; Invio (campi a una riga), ✓ o il clic fuori confermano. Grassetto,
+  // corsivo e sottolineato solo sul testo ricco ('content'): sui titoli e sui testi semplici
+  // si salva il testo puro, quindi la barra lì non li offre. Barra chiara come quella
+  // flottante, accento del chrome (CSS in iframe-builder.css, .olo-inline-*).
+  function valoreInLinea(el, field) {
+    // Il testo si legge senza le icone: l'SVG di un'icona personalizzata (es. nel
+    // pulsante) può avere <title>, <desc>, <style> o <text>, e il loro testo finirebbe
+    // nella chiave salvata («Asset 1Vai»).
+    if (field === 'content') return el.innerHTML;
+    var senzaIcone = el.cloneNode(true);
+    senzaIcone.querySelectorAll('svg,[uk-icon],.olo-button-icon').forEach(function(n) { n.remove(); });
+    return senzaIcone.textContent.trim();
+  }
+
+  // Mette il cursore dove si è cliccato e seleziona la parola lì sotto.
+  function selezionaParolaAl(el, x, y) {
+    var sel = window.getSelection();
+    var r = null;
+    if (typeof x === 'number') {
+      if (document.caretRangeFromPoint) r = document.caretRangeFromPoint(x, y);
+      else if (document.caretPositionFromPoint) {
+        var p = document.caretPositionFromPoint(x, y);
+        if (p) { r = document.createRange(); r.setStart(p.offsetNode, p.offset); r.collapse(true); }
+      }
+    }
+    if (!r || !el.contains(r.startContainer)) {
+      r = document.createRange();
+      r.selectNodeContents(el);
+      r.collapse(false);
+    } else if (r.startContainer.nodeType === 3) {
+      var testo = r.startContainer.data;
+      var lettera = /[0-9A-Za-z\u00C0-\u024F\u0370-\u03FF\u0400-\u04FF_'\u2019-]/;
+      var a = r.startOffset, b = r.startOffset;
+      if (!lettera.test(testo.charAt(a)) && a > 0 && lettera.test(testo.charAt(a - 1))) { a--; b--; }
+      if (lettera.test(testo.charAt(b))) {
+        while (a > 0 && lettera.test(testo.charAt(a - 1))) a--;
+        while (b < testo.length && lettera.test(testo.charAt(b))) b++;
+        r.setStart(r.startContainer, a);
+        r.setEnd(r.startContainer, b);
+      }
+    }
+    sel.removeAllRanges();
+    sel.addRange(r);
+  }
+
+  function startInlineEdit(el, tileId, field, x, y) {
     // End previous edit
     if (activeEditEl) endInlineEdit();
 
     activeEditEl = el;
+    el._oloInline = { html: el.innerHTML, valore: valoreInLinea(el, field) };
     el.setAttribute('contenteditable', 'true');
-    el.style.outline = '2px solid #3B82F6';
-    el.style.outlineOffset = '2px';
-    el.style.borderRadius = '2px';
-    el.style.minHeight = '1em';
-    el.style.cursor = 'text';
+    el.classList.add('olo-inline-editing');
     el.focus();
-
-    // Select all text
-    var range = document.createRange();
-    range.selectNodeContents(el);
-    var sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(range);
+    selezionaParolaAl(el, x, y);
 
     // Show edit toolbar
-    showEditToolbar(el);
+    showEditToolbar(el, field);
 
     // Save on blur
     function onBlur(e) {
@@ -530,41 +568,36 @@
     el._oloBlur = onBlur;
     el.addEventListener('blur', onBlur);
 
-    // Save on Enter (for single-line fields like headings, buttons)
-    el.addEventListener('keydown', function onKey(e) {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        if (field === 'heading' || field === 'text') {
-          e.preventDefault();
-          endInlineEdit();
-        }
-      }
-      if (e.key === 'Escape') {
+    function onKey(e) {
+      // Invio conferma i campi a una riga (titoli, pulsanti); nel testo ricco va a capo.
+      if (e.key === 'Enter' && !e.shiftKey && field !== 'content') {
         e.preventDefault();
         endInlineEdit();
       }
-    });
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        endInlineEdit(true);
+      }
+    }
+    el._oloKey = onKey;
+    el.addEventListener('keydown', onKey);
 
     // Hide hover toolbar while editing
     if (hoverToolbar) hoverToolbar.style.display = 'none';
   }
 
-  function endInlineEdit() {
+  // annulla = true (Esc): il testo torna com'era e il builder non riceve niente.
+  function endInlineEdit(annulla) {
     if (!activeEditEl) return;
     var el = activeEditEl;
+    activeEditEl = null;
     var tileId = findTileId(el);
     var field = el.dataset.oloEditable;
+    var prima = el._oloInline || null;
 
-    // Get edited content. Il testo si legge senza le icone: l'SVG di un'icona
-    // personalizzata (es. nel pulsante) può avere <title>, <desc>, <style> o <text>, e il
-    // loro testo finirebbe nella chiave salvata («Asset 1Vai»).
-    var newValue;
-    if (field === 'content') {
-      newValue = el.innerHTML;
-    } else {
-      var senzaIcone = el.cloneNode(true);
-      senzaIcone.querySelectorAll('svg,[uk-icon],.olo-button-icon').forEach(function(n) { n.remove(); });
-      newValue = senzaIcone.textContent.trim();
-    }
+    if (annulla && prima) el.innerHTML = prima.html;
+    var newValue = valoreInLinea(el, field);
 
     el.removeAttribute('contenteditable');
     // Se l'attributo data-olo-editable era stato auto-assegnato dal doppio-click
@@ -574,13 +607,15 @@
       el.removeAttribute('data-olo-editable');
       delete el.dataset.oloEditableAuto;
     }
-    el.style.outline = '';
-    el.style.outlineOffset = '';
-    el.style.cursor = '';
-    if (el._oloBlur) el.removeEventListener('blur', el._oloBlur);
+    el.classList.remove('olo-inline-editing');
+    if (el._oloBlur) { el.removeEventListener('blur', el._oloBlur); el._oloBlur = null; }
+    if (el._oloKey) { el.removeEventListener('keydown', el._oloKey); el._oloKey = null; }
+    el._oloInline = null;
+    try { window.getSelection().removeAllRanges(); } catch (err) { /* niente */ }
 
-    // Send updated value to parent
-    if (tileId && field) {
+    // Al builder solo una modifica vera: niente pagina «modificata» per Esc o per un
+    // testo confermato uguale a prima.
+    if (!annulla && tileId && field && (!prima || newValue !== prima.valore)) {
       post('olo:inline-edit', { tileId: tileId, field: field, value: newValue });
     }
 
@@ -589,48 +624,70 @@
       editToolbar.remove();
       editToolbar = null;
     }
-
-    activeEditEl = null;
+    // La barra della tile selezionata torna, nascosta per la modifica.
+    var selEl = selectedId ? findTileEl(selectedId) : null;
+    if (selEl && !gripDragging) showHoverToolbar(selEl, selectedId);
   }
 
-  function showEditToolbar(el) {
+  var ICONE_INLINE = {
+    bold: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 12h9a4 4 0 0 1 0 8H6V4h8a4 4 0 0 1 0 8"/></svg>',
+    italic: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="4" x2="10" y2="4"/><line x1="14" y1="20" x2="5" y2="20"/><line x1="15" y1="4" x2="9" y2="20"/></svg>',
+    underline: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4v6a6 6 0 0 0 12 0V4"/><line x1="4" y1="20" x2="20" y2="20"/></svg>',
+    ok: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>'
+  };
+
+  function showEditToolbar(el, field) {
     if (editToolbar) editToolbar.remove();
 
     editToolbar = document.createElement('div');
-    editToolbar.style.cssText = 'position:fixed;z-index:999999;display:flex;gap:2px;padding:4px 6px;background:#1F2937;border:1px solid #374151;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.3);font-size:12px';
+    editToolbar.className = 'olo-inline-toolbar';
+    editToolbar.setAttribute('role', 'toolbar');
+    editToolbar.setAttribute('aria-label', 'Modifica testo');
 
-    var buttons = [
-      { cmd: 'bold', icon: 'B', style: 'font-weight:bold' },
-      { cmd: 'italic', icon: 'I', style: 'font-style:italic' },
-      { cmd: 'underline', icon: 'U', style: 'text-decoration:underline' },
-    ];
+    if (field === 'content') {
+      [
+        { cmd: 'bold', label: 'Grassetto' },
+        { cmd: 'italic', label: 'Corsivo' },
+        { cmd: 'underline', label: 'Sottolineato' }
+      ].forEach(function(b) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'olo-inline-btn';
+        btn.innerHTML = ICONE_INLINE[b.cmd];
+        btn.title = b.label;
+        btn.setAttribute('aria-label', b.label);
+        btn.onmousedown = function(e) {
+          e.preventDefault();
+          document.execCommand(b.cmd, false, null);
+        };
+        editToolbar.appendChild(btn);
+      });
+    }
 
-    buttons.forEach(function(b) {
-      var btn = document.createElement('button');
-      btn.innerHTML = b.icon;
-      btn.style.cssText = 'width:28px;height:28px;border:none;background:transparent;color:#D1D5DB;cursor:pointer;border-radius:4px;display:flex;align-items:center;justify-content:center;' + (b.style || '');
-      btn.onmousedown = function(e) {
-        e.preventDefault();
-        document.execCommand(b.cmd, false, null);
-      };
-      btn.onmouseover = function() { btn.style.background = '#374151'; };
-      btn.onmouseout = function() { btn.style.background = 'transparent'; };
-      editToolbar.appendChild(btn);
-    });
+    var hint = document.createElement('span');
+    hint.className = 'olo-inline-hint';
+    hint.textContent = field === 'content' ? 'Esc annulla' : 'Invio conferma \u00b7 Esc annulla';
+    editToolbar.appendChild(hint);
 
-    // Done button
+    // Conferma
     var done = document.createElement('button');
-    done.textContent = '✓';
-    done.style.cssText = 'width:28px;height:28px;border:none;background:#22C55E;color:#fff;cursor:pointer;border-radius:4px;margin-left:4px;font-size:14px;display:flex;align-items:center;justify-content:center';
+    done.type = 'button';
+    done.className = 'olo-inline-btn olo-inline-ok';
+    done.innerHTML = ICONE_INLINE.ok;
+    done.title = 'Conferma';
+    done.setAttribute('aria-label', 'Conferma');
     done.onmousedown = function(e) { e.preventDefault(); endInlineEdit(); };
     editToolbar.appendChild(done);
 
     document.body.appendChild(editToolbar);
 
-    // Position above element
+    // Sopra il testo; sotto se in alto non c'è posto.
     var rect = el.getBoundingClientRect();
-    editToolbar.style.left = Math.max(4, rect.left) + 'px';
-    editToolbar.style.top = Math.max(4, rect.top - 44) + 'px';
+    var h = editToolbar.offsetHeight || 32;
+    var top = rect.top - h - 8;
+    if (top < 4) top = rect.bottom + 8;
+    editToolbar.style.left = Math.max(4, Math.min(rect.left, window.innerWidth - editToolbar.offsetWidth - 4)) + 'px';
+    editToolbar.style.top = top + 'px';
   }
 
   // ── Context menu ──
@@ -1197,7 +1254,9 @@
   // funziona, niente "manina pixelata" di Windows del drag HTML5 nativo.
 
   function showHoverToolbar(el, tileId) {
-    if (previewMode) return;
+    // Durante una modifica in linea la barra della tile coprirebbe il testo che si
+    // scrive (arriva anche dopo, con la selezione che il builder rimanda al clic).
+    if (previewMode || activeEditEl) return;
     clearTimeout(hoverToolbarTimeout);
     var tb = getHoverToolbar();
     var rect = el.getBoundingClientRect();
