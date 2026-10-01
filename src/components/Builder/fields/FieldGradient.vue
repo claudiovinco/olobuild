@@ -9,7 +9,7 @@
         v-for="(stop, i) in stops"
         :key="'m' + i"
         class="fg-marker"
-        :style="{ left: clampPos(stop.position) + '%', background: stop.color }"
+        :style="{ left: clampPos(stop.position) + '%', background: pinta(stop.color) }"
         :title="clampPos(stop.position) + '%'"
       ></span>
     </div>
@@ -33,7 +33,7 @@
     <div class="mb-space-y-2">
       <div v-for="(stop, i) in stops" :key="i" class="mb-space-y-1">
         <div class="mb-flex mb-items-center mb-gap-1.5">
-          <span class="fg-dot" :style="{ background: stop.color }"></span>
+          <span class="fg-dot" :style="{ background: pinta(stop.color) }"></span>
           <span class="mb-text-[10px] mb-text-gray-500">{{ t('Posizione') }}</span>
           <input type="number" :value="stop.position" @input="updateStop(i, 'position', $event.target.value)"
             min="0" max="100" class="mb-w-14 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-1.5 mb-py-1 mb-text-[10px] mb-text-gray-200" />
@@ -55,30 +55,44 @@
 import { computed } from 'vue';
 import FieldColor from './FieldColor.vue';
 import { t } from '@/i18n';
+import { useStylesStore } from '@/stores/styles';
+import { resolveColorToken } from '@/utils/colorToken';
+
+// Gradiente nuovo = i colori del sito (primario → secondario), come la mattonella dello
+// Sfondo: prima partiva dall'indaco→rosa storico. Il secondario ha la riserva nel var().
+const STOPS_PREDEFINITI = () => [
+  { color: 'var(--olo-color-primary)', position: 0 },
+  { color: 'var(--olo-color-secondary, var(--olo-color-primary))', position: 100 },
+];
+
+// Nel pannello i token del template non esistono (sono definiti nel canvas): le
+// anteprime li risolvono in JS, come la pastiglia di FieldColor.
+let stylesStore = null;
+try { stylesStore = useStylesStore(); } catch (e) { stylesStore = null; }
+const pinta = (c) => resolveColorToken(c, stylesStore) || c;
 
 const props = defineProps({
-  modelValue: { type: Object, default: () => ({
-    type: 'linear', angle: 180,
-    stops: [{ color: '#6366f1', position: 0 }, { color: '#ec4899', position: 100 }]
-  })}
+  // Gli stessi colori di STOPS_PREDEFINITI (defineProps non può leggere costanti locali).
+  modelValue: { type: Object, default: () => ({ type: 'linear', angle: 135, stops: [
+    { color: 'var(--olo-color-primary)', position: 0 },
+    { color: 'var(--olo-color-secondary, var(--olo-color-primary))', position: 100 },
+  ] }) }
 });
 const emit = defineEmits(['update:modelValue']);
 
 const type = computed(() => props.modelValue?.type || 'linear');
 const angle = computed(() => props.modelValue?.angle ?? 180);
-const stops = computed(() => props.modelValue?.stops || [
-  { color: '#6366f1', position: 0 }, { color: '#ec4899', position: 100 }
-]);
+const stops = computed(() => props.modelValue?.stops || STOPS_PREDEFINITI());
 
 const previewGradient = computed(() => {
-  const s = stops.value.map(st => `${st.color} ${st.position}%`).join(', ');
+  const s = stops.value.map(st => `${pinta(st.color)} ${st.position}%`).join(', ');
   return type.value === 'radial' ? `radial-gradient(circle, ${s})` : `linear-gradient(${angle.value}deg, ${s})`;
 });
 
 // Rampa orizzontale fissa (90°) per la barra con i marker: le posizioni %
 // corrispondono visivamente, indipendentemente dall'angolo reale.
 const rampGradient = computed(() => {
-  const s = stops.value.map(st => `${st.color} ${clampPos(st.position)}%`).join(', ');
+  const s = stops.value.map(st => `${pinta(st.color)} ${clampPos(st.position)}%`).join(', ');
   return `linear-gradient(90deg, ${s})`;
 });
 

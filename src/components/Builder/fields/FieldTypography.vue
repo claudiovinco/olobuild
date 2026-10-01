@@ -376,7 +376,7 @@
           <!-- Ombra testo preset -->
           <div v-if="keys.shadow" class="typo-row">
             <label class="typo-label">{{ t('Ombra testo') }}</label>
-            <FieldSelect ui="dropdown" :model-value="values[keys.shadow] || ''" :options="SHADOW_OPTIONS" @update:model-value="emitKey(keys.shadow, $event)" />
+            <FieldSelect ui="dropdown" :model-value="values[keys.shadow] || ''" :options="shadowOptions" @update:model-value="emitKey(keys.shadow, $event)" />
           </div>
 
           <!-- Anteprima: il pannello elencava proprietà senza mai mostrare il
@@ -464,10 +464,14 @@ const SHADOW_OPTIONS = [
   { value: '3px 3px 8px rgba(0,0,0,0.5)', label: 'Media+' },
   { value: '4px 4px 10px rgba(0,0,0,0.5)', label: 'Forte' },
   { value: '4px 4px 12px rgba(0,0,0,0.6)', label: 'Forte+' },
-  { value: '0 0 10px rgba(99,102,241,0.6)', label: 'Bagliore primario' },
+  // Il bagliore del brand segue il primario del tema (prima: un indaco fisso chiamato «primario»).
+  { value: '0 0 10px color-mix(in srgb, var(--olo-color-primary) 60%, transparent)', label: 'Bagliore brand' },
   { value: '0 0 20px rgba(0,0,0,0.8)', label: 'Alone scuro' },
   { value: '0 0 30px rgba(255,255,255,0.6)', label: 'Alone chiaro' },
 ];
+// Il vecchio «Bagliore primario» indaco: non si offre più, ma un testo che lo ha salvato
+// lo ritrova nella lista col suo nome vero, invece di un campo che sembra vuoto.
+const OMBRA_INDACO_STORICA = '0 0 10px rgba(99,102,241,0.6)';
 
 const props = defineProps({
   keys: { type: Object, default: () => ({}) },
@@ -794,6 +798,10 @@ function perDispositivo(logicalKey) {
   if (ha(base + '_mobile')) s += ' · M ' + fmt(v[base + '_mobile']);
   return s;
 }
+
+const shadowOptions = computed(() => (props.keys?.shadow && props.values?.[props.keys.shadow] === OMBRA_INDACO_STORICA)
+  ? [...SHADOW_OPTIONS, { value: OMBRA_INDACO_STORICA, label: 'Bagliore indaco (storico)' }]
+  : SHADOW_OPTIONS);
 
 const summaryParts = computed(() => {
   const out = [];

@@ -664,7 +664,20 @@ const currentTypeLabel = computed(() => (allTypes.find((it) => it.value === bg.v
 // esistenti: il seme si applica solo quando il tipo cambia davvero e solo alle
 // chiavi non ancora salvate. Bagliori: a 70 l'alone riempie il riquadro come una
 // macchia piena, intorno a 46 si vede l'alone vero e proprio.
+// Tinta unita e Gradiente: i colori del sito, gli stessi che la loro mattonella dipinge
+// (prima la mattonella mostrava il primario e la scelta salvava #ffffff, o #ffffff→#000000).
+// Token, così seguono il tema. Il secondario ha la riserva dentro il var(): un var() che
+// non risolve farebbe cadere l'intero background, non solo quella tappa.
+const C_PRIMARIO = 'var(--olo-color-primary)';
+const C_SECONDARIO = 'var(--olo-color-secondary, var(--olo-color-primary))';
 const TYPE_SEEDS = {
+  solid: { color: C_PRIMARIO },
+  gradient: {
+    gradient: { type: 'linear', angle: 135, stops: [{ color: C_PRIMARIO, position: 0 }, { color: C_SECONDARIO, position: 100 }] },
+    gradient_angle: 135,
+    gradient_from: C_PRIMARIO,
+    gradient_to: C_SECONDARIO,
+  },
   glow: { glow_size: 46 },
 };
 
@@ -686,9 +699,25 @@ const typeTileStyle = {
 function selectType(value) {
   if (value === bg.value.type) return;
   const saved = props.modelValue || {};
+  const vuota = (k) => saved[k] === undefined || saved[k] === null || saved[k] === '';
+  const seme = TYPE_SEEDS[value] || {};
   const patch = {};
-  for (const [k, v] of Object.entries(TYPE_SEEDS[value] || {})) {
-    if (saved[k] === undefined || saved[k] === null || saved[k] === '') patch[k] = v;
+  // Scegliere un tipo scrive TUTTI i default (sotto), compresi color #ffffff e il
+  // gradiente #ffffff→#000000: dopo un primo tipo qualsiasi quelle chiavi risultano
+  // «salvate» senza che nessuno le abbia scelte. Il vecchio default conta quindi come
+  // mai scelto — il tipo che si sta scegliendo non è quello attuale (selectType esce
+  // prima), quindi l'utente quel colore non lo stava vedendo come suo.
+  const soloDefaultStorico = value === 'gradient'
+    ? vuota('gradient') && (vuota('gradient_from') || saved.gradient_from === '#ffffff') && (vuota('gradient_to') || saved.gradient_to === '#000000')
+    : value === 'solid' && (vuota('color') || saved.color === '#ffffff');
+  // Il gradiente si semina tutto o niente: con un gradiente già salvato (anche nel
+  // formato storico from/to) un seme parziale ne sostituirebbe i colori.
+  if (value === 'gradient' || value === 'solid') {
+    if (soloDefaultStorico) Object.assign(patch, seme);
+  } else {
+    for (const [k, v] of Object.entries(seme)) {
+      if (vuota(k)) patch[k] = v;
+    }
   }
   emit('update:modelValue', { ...bg.value, ...patch, type: value });
 }
@@ -945,10 +974,12 @@ function toggleParallax() {
     updateField('parallax', false);
   } else {
     // Enable with default bgy
+    // nomobile:false — gli effetti non si spengono sui telefoni di default (lo fa solo
+    // prefers-reduced-motion); spegnerli resta una scelta esplicita dell'utente.
     updateField('parallax', {
       bgx: [], bgy: [{ value: -200, position: 0 }, { value: 0, position: 100 }],
       scale: [], opacity: [], blur: [],
-      nomobile: true, easing: null, start: '', end: '',
+      nomobile: false, easing: null, start: '', end: '',
     });
   }
 }
@@ -1108,7 +1139,7 @@ function updateParallaxData(newData) {
 .p-solid { background: var(--olo-color-primary, #e1474f); }
 /* Due ruoli DIVERSI: «accent» ora è definito (alias del primario), quindi la
    vecchia coppia primario→accento disegnava una tinta piatta, non un gradiente. */
-.p-grad { background: linear-gradient(118deg, var(--olo-color-primary, #e1474f) 0%, var(--olo-color-secondary, #16263d) 100%); }
+.p-grad { background: linear-gradient(135deg, var(--olo-color-primary, #e1474f) 0%, var(--olo-color-secondary, #16263d) 100%); }
 .p-img { background: repeating-linear-gradient(45deg, #e7ebf0 0 8px, #dde3ea 8px 16px); }
 .p-video { background: var(--navy); }
 .p-gallery { background: #eef1f5; }
