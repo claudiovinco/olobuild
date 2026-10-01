@@ -432,11 +432,14 @@ export function useIframeBridge(iframeRef) {
           builderStore.selectTile(d.tileId);
           const iframe = iframeRef.value;
           if (iframe) {
+            // d.x/d.y sono coordinate dell'iframe, che è scalato dallo zoom del canvas:
+            // senza la scala il menu compariva lontano dal puntatore a zoom ≠ 100%.
             const rect = iframe.getBoundingClientRect();
+            const zoom = (builderStore.canvasZoom || 100) / 100;
             builderStore._iframeContextMenu = {
               tileId: d.tileId,
-              x: d.x + rect.left,
-              y: d.y + rect.top,
+              x: d.x * zoom + rect.left,
+              y: d.y * zoom + rect.top,
             };
           }
         }

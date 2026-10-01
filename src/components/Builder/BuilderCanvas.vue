@@ -1,7 +1,7 @@
 <template>
   <div class="mb-flex mb-flex-col mb-flex-1 mb-overflow-hidden">
     <!-- ═══ LIVE IFRAME PREVIEW ═══ -->
-    <div v-if="builderStore.livePreviewMode" class="mb-flex-1 mb-relative mb-overflow-hidden" style="background: #f3f4f6">
+    <div v-if="builderStore.livePreviewMode" ref="liveWrapRef" class="mb-flex-1 mb-relative mb-overflow-hidden" style="background: #f3f4f6">
       <iframe
         ref="iframeRef"
         :src="iframeSrc"
@@ -256,6 +256,21 @@ import CanvasDragOverlay from '@/components/Builder/CanvasDragOverlay.vue';
 const canvasRef = ref(null);
 const iframeRef = ref(null);
 const iframeContextMenuRef = ref(null);
+// Contenitore dell'iframe: la sua misura serve a dare all'iframe una larghezza in px
+// e a centrarlo a mano (vedi iframeStyle).
+const liveWrapRef = ref(null);
+const liveWrap = ref({ w: 0, h: 0 });
+let liveWrapObserver = null;
+watch(liveWrapRef, (el) => {
+  if (liveWrapObserver) { liveWrapObserver.disconnect(); liveWrapObserver = null; }
+  if (!el) return;
+  const misura = () => { liveWrap.value = { w: el.clientWidth, h: el.clientHeight }; };
+  misura();
+  if (typeof ResizeObserver !== 'undefined') {
+    liveWrapObserver = new ResizeObserver(misura);
+    liveWrapObserver.observe(el);
+  }
+}, { flush: 'post' });
 const emit = defineEmits(['zone-click']);
 useInlineEdit(canvasRef);
 
@@ -263,6 +278,15 @@ const builderStore = useBuilderStore();
 const tilesStore = useTilesStore();
 const stylesStore = useStylesStore();
 const dndStore = useDnDStore();
+// La transizione solo quando cambiano dispositivo o zoom: mentre si trascina il bordo
+// di un pannello la larghezza segue il contenitore a ogni frame e non deve inseguirlo.
+const animaGeometria = ref(false);
+let animaTimer = null;
+watch(() => [builderStore.viewMode, builderStore.canvasZoom], () => {
+  animaGeometria.value = true;
+  clearTimeout(animaTimer);
+  animaTimer = setTimeout(() => { animaGeometria.value = false; }, 350);
+});
 const { applyPragmaticDrop } = useDragDrop();
 
 // Safety net globale DnD: Esc, blur, visibilitychange, pagehide, pointercancel
@@ -315,41 +339,42 @@ const iframeSrc = computed(() => {
   return base + '?olo_builder_iframe=1' + (tplId ? '&olo_tpl=' + tplId : '') + post + buster;
 });
 
+// Una sola geometria per l'iframe, a ogni zoom e dispositivo: larghezza in px, scala da
+// in alto a sinistra e posizione esplicita (centrato). Prima scalava attorno al centro
+// mentre in Desktop stava a sinistra: a 200% il primo quarto della pagina usciva dal
+// contenitore (tagliato), e sotto il 100% maxWidth impediva di vedere una pagina più
+// larga. Overlay di drop e menu contestuale leggono la posizione vera dell'iframe.
 const iframeStyle = computed(() => {
   const mode = builderStore.viewMode;
-  // Le larghezze provengono dai breakpoints del design system (page settings),
-  // così l'iframe replica esattamente i breakpoint a cui rispondono le media query.
-  // Desktop = full-width (no breakpoint, è la default base).
-  const bp = (builderStore.pageSettings && builderStore.pageSettings.breakpoints) || {};
-  let w;
-  if (mode === 'desktop') {
-    w = '100%';
-  } else if (bp[mode] != null) {
-    // Sottraiamo 1px per garantire che le media query "max-width: Npx" siano attive
-    // a una larghezza esattamente = breakpoint (es. tablet 960px → iframe 959px).
-    w = (parseInt(bp[mode], 10)) + 'px';
-  } else {
-    w = '100%';
-  }
   const zoom = builderStore.canvasZoom / 100;
-  const style = {
-    width: w,
-    height: '100%',
-    maxWidth: '100%',
+  const { w: cw, h: ch } = liveWrap.value;
+  // Le larghezze dei dispositivi sono i breakpoint della pagina (le stesse soglie delle
+  // media query del renderer). Desktop = tutto lo spazio del canvas.
+  const bp = (builderStore.pageSettings && builderStore.pageSettings.breakpoints) || {};
+  const base = {
+    position: 'absolute',
+    top: '0',
     border: 'none',
     display: 'block',
-    margin: w === '100%' ? '0' : '0 auto',
-    transition: 'width 0.3s ease, transform 0.2s ease',
+    transition: animaGeometria.value ? 'width 0.3s ease, left 0.3s ease, height 0.3s ease, transform 0.3s ease' : 'none',
     background: '#fff',
   };
+  if (!cw) {
+    // Prima della prima misura del contenitore: tutto lo spazio, senza scala.
+    return { ...base, left: '0', width: '100%', height: '100%' };
+  }
+  const spazio = cw / zoom; // larghezza logica che riempie il canvas alla scala attuale
+  let w = spazio;
+  if (mode !== 'desktop' && bp[mode] != null) {
+    // Mai più larga dello spazio (come prima a zoom 100%); a zoom ridotto il
+    // dispositivo si vede alla sua larghezza vera.
+    w = Math.min(parseInt(bp[mode], 10) || spazio, spazio);
+  }
+  const left = Math.max(0, (cw - w * zoom) / 2);
+  const style = { ...base, left: left + 'px', width: w + 'px', height: (ch / zoom) + 'px' };
   if (zoom !== 1) {
     style.transform = `scale(${zoom})`;
-    style.transformOrigin = 'top center';
-    // Compensate width so scaled iframe fills/fits its container
-    if (w === '100%') {
-      style.width = (100 / zoom) + '%';
-    }
-    style.height = (100 / zoom) + '%';
+    style.transformOrigin = 'top left';
   }
   return style;
 });
@@ -425,6 +450,7 @@ watch(() => builderStore.previewMode, (active) => {
 });
 
 onUnmounted(() => {
+  if (liveWrapObserver) liveWrapObserver.disconnect();
   styleEl.remove();
   previewCssEls.forEach(el => el.remove());
   previewCssEls.length = 0;

@@ -232,22 +232,38 @@ const showColumnHi = computed(() => hasHit.value && !!hit.value.columnId);
 const scrollTick = ref(0); // forza reattività
 function readScroll() { return hit.value?.scroll || getIframeScroll(); }
 
+// Dove sta l'iframe dentro l'overlay (che copre tutto il contenitore): in Tablet e
+// Mobile e con lo zoom l'iframe è centrato, quindi gli indicatori vanno spostati di
+// quanto. Prima si misuravano dal bordo sinistro del contenitore: in Mobile il riquadro
+// «Inserisci qui» compariva ~100 px a sinistra della colonna in cui poi cadeva il drop.
+function iframeOffset() {
+  const iframe = getIframeEl();
+  const ov = overlayEl.value;
+  if (!iframe || !ov || typeof iframe.getBoundingClientRect !== 'function') return { x: 0, y: 0, w: 0 };
+  const ir = iframe.getBoundingClientRect();
+  const or = ov.getBoundingClientRect();
+  return { x: ir.left - or.left - ov.clientLeft, y: ir.top - or.top - ov.clientTop, w: ir.width };
+}
+
 const dropLineStyle = computed(() => {
   if (!hit.value || lineYDoc.value == null) return {};
   void scrollTick.value;
   const zoom = builderStore.canvasZoom / 100;
   const cur = getIframeScroll();
-  const top = (lineYDoc.value - cur.y) * zoom;
+  const off = iframeOffset();
+  const top = (lineYDoc.value - cur.y) * zoom + off.y;
   // Dentro una colonna la dropline è larga quanto la colonna (non full-width).
   if (hit.value.columnId && hit.value.colRect) {
     const r = hit.value.colRect;
     return {
       top: `${top}px`,
-      left: `${(r.left - cur.x) * zoom}px`,
+      left: `${(r.left - cur.x) * zoom + off.x}px`,
       width: `${(r.right - r.left) * zoom}px`,
       right: 'auto',
     };
   }
+  // Fra le sezioni: larga quanto la pagina, non quanto il contenitore.
+  if (off.w) return { top: `${top}px`, left: `${off.x}px`, width: `${off.w}px`, right: 'auto' };
   return { top: `${top}px` };
 });
 
@@ -256,10 +272,11 @@ const columnHiStyle = computed(() => {
   void scrollTick.value;
   const zoom = builderStore.canvasZoom / 100;
   const cur = getIframeScroll();
+  const off = iframeOffset();
   const r = hit.value.colRect;
   return {
-    top: `${(r.top - cur.y) * zoom}px`,
-    left: `${(r.left - cur.x) * zoom}px`,
+    top: `${(r.top - cur.y) * zoom + off.y}px`,
+    left: `${(r.left - cur.x) * zoom + off.x}px`,
     width: `${(r.right - r.left) * zoom}px`,
     height: `${(r.bottom - r.top) * zoom}px`,
   };
@@ -279,9 +296,16 @@ const labelStyle = computed(() => {
   void scrollTick.value;
   const zoom = builderStore.canvasZoom / 100;
   const cur = getIframeScroll();
+  const off = iframeOffset();
   const yDoc = hit.value.columnId ? hit.value.colRect.top : hit.value.lineY;
-  const y = (yDoc - cur.y) * zoom;
-  return { top: `${Math.max(8, y - 28)}px`, left: '50%' };
+  const y = (yDoc - cur.y) * zoom + off.y;
+  // Centrata sulla colonna (o sulla pagina), dove cadrà il drop.
+  let x = off.w ? off.x + off.w / 2 : null;
+  if (hit.value.columnId && hit.value.colRect) {
+    const r = hit.value.colRect;
+    x = ((r.left + r.right) / 2 - cur.x) * zoom + off.x;
+  }
+  return { top: `${Math.max(8, y - 28)}px`, left: x == null ? '50%' : `${x}px` };
 });
 
 // ── Hit-test contro iframeLayout snapshot ─────────────────────
