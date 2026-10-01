@@ -9,7 +9,7 @@ class Olobuild_Textmask_Tile extends Olobuild_Tile_Base {
     protected $type     = 'textmask';
     protected $name     = 'Text Mask Video';
     protected $icon     = 'dashicons-editor-textcolor';
-    protected $category = 'creative';
+    protected $category = 'text';
     protected $defaults = [
         'text'               => "WELCOME\nTO THE WORLD",
         'multiline'          => true,

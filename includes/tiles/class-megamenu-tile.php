@@ -9,7 +9,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
     protected $type     = 'megamenu';
     protected $name     = 'Mega Menu';
     protected $icon     = 'dashicons-menu-alt3';
-    protected $category = 'header';
+    protected $category = 'navigation';
     protected $defaults = [
         // Menu
         'menu_id'            => 0,

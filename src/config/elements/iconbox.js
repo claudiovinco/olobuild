@@ -10,7 +10,7 @@ export default {
   type: 'iconbox',
   name: t('Icon Box'),
   icon: 'dashicons-star-filled',
-  category: 'content',
+  category: 'marketing',
 
   // Unificazione sfondo box icona: i campi legacy bg_type/bg_color/bg_image (+size/focal)
   // confluiscono nel pannello unico media_bg (immagine/video/gradiente/colore…).

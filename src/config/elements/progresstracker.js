@@ -11,7 +11,7 @@ export default {
   type: 'progresstracker',
   name: t('Progress tracker'),
   icon: 'dashicons-editor-ol',
-  category: 'content',
+  category: 'marketing',
   defaults: {
     bg: { type: 'none' },
     typography_preset: '',

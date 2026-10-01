@@ -28,7 +28,7 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
     protected $type     = 'oloheader';
     protected $name     = 'Mega Menu / Site Header';
     protected $icon     = 'dashicons-menu-alt3';
-    protected $category = 'header';
+    protected $category = 'navigation';
 
     /** Traccia il caricamento (una volta per richiesta) dei font della demo. */
     private static $fonts_loaded = false;

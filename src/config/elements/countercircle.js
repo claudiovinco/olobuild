@@ -10,7 +10,7 @@ export default {
   type: 'countercircle',
   name: t('Counter Circle'),
   icon: 'dashicons-marker',
-  category: 'content',
+  category: 'marketing',
   defaults: {
     bg: { type: 'none' },
     typography_preset: '',

@@ -141,6 +141,7 @@ import { useDragDrop } from '@/composables/useDragDrop';
 import { columns as gridColumns, multirow, masonry, sidebar, TEMPLATES_MAP } from '@/config/gridTemplates';
 import { requestScrollToTile } from '@/utils/scrollToTileChannel';
 import { t } from '@/i18n';
+import { paletteCategory } from '@/config/paletteCategories';
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
@@ -168,59 +169,26 @@ const searchPlaceholder = computed(() => {
   return t('Cerca in libreria');
 });
 
-// Structural types to exclude
-const STRUCTURAL = new Set(['section', 'row', 'column', 'inner-columns']);
-
-// Available modules
-const availableModules = computed(() => {
-  const all = [];
-  for (const t of tilesStore.paletteTiles) {
-    if (!STRUCTURAL.has(t.type)) {
-      all.push(t);
-    }
-  }
-  return all.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-});
-
-const filteredModules = computed(() => {
-  const q = searchQuery.value.trim().toLowerCase();
-  if (!q) return availableModules.value;
-  return availableModules.value.filter(el => {
-    const text = `${el.type} ${el.name} ${el.category || ''}`.toLowerCase();
-    return text.includes(q);
-  });
-});
-
-// Raggruppamento per categoria (stesso ordine/etichette della BuilderSidebar).
-const moduleCategoryOrder = [
-  'essential', 'layout', 'text', 'media', 'marketing',
-  'interactive', 'atmosphere', 'navigation', 'dynamic', 'woocommerce', 'booking', 'olo-space',
-];
-const moduleCategoryLabels = {
-  essential: 'Essenziale', layout: 'Layout', text: 'Testo', media: 'Media',
-  marketing: 'Marketing', interactive: 'Interattivo', navigation: 'Navigazione',
-  dynamic: 'Dinamico', booking: 'Olo Booking', 'olo-space': 'Olo Space',
-  atmosphere: 'Atmosfera', woocommerce: 'WooCommerce',
-};
+// Moduli raggruppati per categoria dal getter dello store (tilesByCategory): stesso
+// ordine, stesse etichette e stessa rete «Altro» del rail della sidebar. Prima qui c'era
+// un elenco a parte e le categorie fuori elenco comparivano in coda con la chiave inglese
+// grezza («content», «header»…).
+function testoRicerca(el, catLabel) {
+  return `${el.type} ${el.name} ${t(el.name)} ${catLabel}`.toLowerCase();
+}
 const filteredModuleCategories = computed(() => {
-  const groups = {};
-  for (const el of filteredModules.value) {
-    const cat = el.category || 'other';
-    (groups[cat] = groups[cat] || []).push(el);
+  const q = searchQuery.value.trim().toLowerCase();
+  const out = [];
+  for (const [key, tiles] of Object.entries(tilesStore.tilesByCategory)) {
+    const label = t(paletteCategory(key).label);
+    const modules = tiles
+      .filter(el => !q || testoRicerca(el, label).includes(q))
+      .sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+    if (modules.length) out.push({ key, label, modules });
   }
-  const ordered = [];
-  for (const key of moduleCategoryOrder) {
-    if (groups[key] && groups[key].length) {
-      ordered.push({ key, label: t(moduleCategoryLabels[key] || key), modules: groups[key] });
-      delete groups[key];
-    }
-  }
-  // Eventuali categorie non previste, in coda (etichetta = chiave).
-  for (const key of Object.keys(groups)) {
-    ordered.push({ key, label: t(moduleCategoryLabels[key] || key), modules: groups[key] });
-  }
-  return ordered;
+  return out;
 });
+const filteredModules = computed(() => filteredModuleCategories.value.flatMap(c => c.modules));
 
 // Row layouts
 const rowLayouts = [

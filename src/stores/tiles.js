@@ -9,6 +9,7 @@ import {
 import { migrateTreeBackgrounds } from '@/utils/bgMigrate';
 import { getElementDef } from '@/config/elementRegistry';
 import { incollaImpostazioni } from '@/utils/incollaStile';
+import { PALETTE_CATEGORIES, STRUCTURE_CATEGORY, paletteCategoryOf } from '@/config/paletteCategories';
 
 const oloData = window.oloData || {};
 
@@ -79,27 +80,19 @@ export const useTilesStore = defineStore('tiles', {
       });
     },
 
+    // Tile della palette per categoria, nell'ordine di PALETTE_CATEGORIES: la fonte del
+    // rail della sidebar e del pannello Inserisci. Una categoria fuori elenco finisce in
+    // «Altro» (paletteCategoryOf), così nessuna tile resta irraggiungibile.
     tilesByCategory() {
-      const unordered = {};
+      const perCategoria = {};
       for (const tile of this.paletteTiles) {
-        // Don't show structure tiles (section, column) in the palette
-        if (tile.category === 'structure') continue;
-        const cat = tile.category || 'general';
-        if (!unordered[cat]) unordered[cat] = [];
-        unordered[cat].push(tile);
+        if (tile.category === STRUCTURE_CATEGORY) continue;
+        const cat = paletteCategoryOf(tile.category);
+        (perCategoria[cat] = perCategoria[cat] || []).push(tile);
       }
-      // Return in fixed order
-      const order = [
-        'essential', 'layout', 'text', 'media', 'marketing',
-        'interactive', 'atmosphere', 'navigation', 'dynamic', 'woocommerce', 'booking', 'olo-space',
-      ];
       const groups = {};
-      for (const cat of order) {
-        if (unordered[cat]) groups[cat] = unordered[cat];
-      }
-      // Append any remaining categories not in the order list
-      for (const cat in unordered) {
-        if (!groups[cat]) groups[cat] = unordered[cat];
+      for (const { key } of PALETTE_CATEGORIES) {
+        if (perCategoria[key]) groups[key] = perCategoria[key];
       }
       return groups;
     },

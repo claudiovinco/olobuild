@@ -11,7 +11,7 @@ export default {
   type: 'textmask',
   name: t('Text Mask Video'),
   icon: 'dashicons-editor-textcolor',
-  category: 'creative',
+  category: 'text',
   defaults: {
     preset: 'custom',
     bg: { type: 'none' },

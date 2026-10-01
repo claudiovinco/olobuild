@@ -23,7 +23,7 @@ export default {
   type: 'oloheader',
   name: t('Mega Menu / Site Header'),
   icon: 'dashicons-menu-alt3',
-  category: 'header',
+  category: 'navigation',
 
   defaults: {
     // ── Brand ──

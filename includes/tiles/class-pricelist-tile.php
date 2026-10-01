@@ -9,7 +9,7 @@ class Olobuild_Pricelist_Tile extends Olobuild_Tile_Base {
     protected $type     = 'pricelist';
     protected $name     = 'Lista prezzi';
     protected $icon     = 'dashicons-list-view';
-    protected $category = 'content';
+    protected $category = 'marketing';
     protected $defaults = [
         'items' => [
             [ 'title' => 'Bruschetta', 'description' => 'Pomodoro fresco, basilico e olio EVO', 'price' => '€8', 'image_url' => '', 'highlighted' => false, 'badge' => '' ],

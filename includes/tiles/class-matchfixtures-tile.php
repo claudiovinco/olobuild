@@ -11,7 +11,7 @@ class Olobuild_MatchFixtures_Tile extends Olobuild_Tile_Base {
     protected $type     = 'matchfixtures';
     protected $name     = 'Match Fixtures';
     protected $icon     = 'dashicons-calendar-alt';
-    protected $category = 'content';
+    protected $category = 'marketing';
     protected $defaults = [
         'items' => [
             [ 'day' => 'Sat, 14.03', 'time_place' => '15:00 · Verdano Park', 'league' => 'Super League', 'matchday' => 'Matchday 04', 'home_crest' => 'VF', 'home_crest_bg' => '#15543c', 'home_name' => 'Verdano FC', 'away_crest' => 'RA', 'away_crest_bg' => '#7a2230', 'away_name' => 'Real Alta', 'score' => '', 'venue' => "First Men's Team" ],

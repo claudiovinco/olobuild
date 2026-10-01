@@ -15,7 +15,7 @@ export default {
   type: 'pagetitlebar',
   name: t('Page Title Bar'),
   icon: 'dashicons-format-aside',
-  category: 'structure',
+  category: 'dynamic',
 
   // Unificazione sfondo: il campo asset legacy bg_image (+ posizione focal bg_position)
   // confluisce nel pannello unico media_bg (immagine/video/gradiente/colore…). Non

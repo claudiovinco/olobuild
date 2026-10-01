@@ -14,7 +14,7 @@ class Olobuild_Pagetitlebar_Tile extends Olobuild_Tile_Base {
     protected $type     = 'pagetitlebar';
     protected $name     = 'Page Title Bar';
     protected $icon     = 'dashicons-format-aside';
-    protected $category = 'structure';
+    protected $category = 'dynamic';
     protected $defaults = [
         'media_bg'          => [ 'type' => 'none' ],
         'title_tag'         => 'h1',

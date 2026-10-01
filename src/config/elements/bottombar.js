@@ -11,7 +11,7 @@ export default {
   type: 'bottombar',
   name: t('Barra fissa in basso'),
   icon: 'dashicons-minus',
-  category: 'content',
+  category: 'navigation',
   defaults: {
     content_html: '',
     align: 'center',

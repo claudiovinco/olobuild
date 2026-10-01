@@ -11,7 +11,7 @@ export default {
   type: 'matchfixtures',
   name: t('Match Fixtures'),
   icon: 'dashicons-calendar-alt',
-  category: 'content',
+  category: 'marketing',
 
   defaults: {
     items: [

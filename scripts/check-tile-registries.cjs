@@ -12,10 +12,13 @@
  *   - config senza classe PHP      → configurabile ma NON renderizzabile in frontend
  *   - Vue senza config             → componente morto nel bundle (nessun inspector)
  *   - PHP senza config             → renderer irraggiungibile dal builder
+ *   - categoria fuori elenco       → la tile non sta in nessuna voce della palette
+ *                                    (chiavi in src/config/paletteCategories.js)
  *
  * Uso:  node scripts/check-tile-registries.cjs [--strict]
  *   --strict  esce con codice 1 se ci sono config senza PHP o senza Vue
  *             (le classi di anomalie che rompono l'esperienza utente).
+ * La regola categoria-fuori-elenco deve restare a 0: esce con 1 anche senza --strict.
  * Pensato per il flusso pre-release: npm run check:registries
  */
 const fs = require('fs');
@@ -34,7 +37,8 @@ for (const f of fs.readdirSync(configDir)) {
   // libero prenderebbe anche i type dei valori nei defaults (media_bg: {type:'none'}…).
   const m = /^  type:\s*['"]([^'"]+)['"]/m.exec(src);
   if (!m) continue;
-  configs.set(m[1], { hidden: /^\s{2}hidden:\s*true/m.test(src), file: f });
+  const cat = /^  category:\s*['"]([^'"]+)['"]/m.exec(src);
+  configs.set(m[1], { hidden: /^\s{2}hidden:\s*true/m.test(src), file: f, category: cat ? cat[1] : '' });
 }
 
 /* ── 2. componenti Vue (mappa tileComponents in TileBase.vue) ── */
@@ -51,12 +55,22 @@ if (mapMatch) {
 /* ── 3. classi PHP ── */
 const phpDir = path.join(ROOT, 'includes', 'tiles');
 const phpTypes = new Set();
+const phpCategories = new Map(); // type → $category
 for (const f of fs.readdirSync(phpDir)) {
   if (!f.endsWith('.php')) continue;
   const src = fs.readFileSync(path.join(phpDir, f), 'utf8');
   const m = /protected\s+\$type\s*=\s*['"]([^'"]+)['"]/.exec(src);
-  if (m) phpTypes.add(m[1]);
+  if (!m) continue;
+  phpTypes.add(m[1]);
+  const c = /protected\s+\$category\s*=\s*['"]([^'"]+)['"]/.exec(src);
+  if (c) phpCategories.set(m[1], c[1]);
 }
+
+/* ── 4. categorie della palette ── */
+// Chiavi di PALETTE_CATEGORIES + 'structure' (sezione/colonna: fuori dalla palette per scelta).
+const paletteSrc = fs.readFileSync(path.join(ROOT, 'src', 'config', 'paletteCategories.js'), 'utf8');
+const paletteKeys = new Set(['structure']);
+for (const m of paletteSrc.matchAll(/\{\s*key:\s*'([^']+)'/g)) paletteKeys.add(m[1]);
 
 /* ── confronto ── */
 // Tipi risolti fuori dal plugin (verticali esterni via oloExternalData) o
@@ -65,7 +79,7 @@ const NO_PHP_EXPECTED_PREFIXES = ['olo_room_'];
 const NO_PHP_EXPECTED = new Set(['offcanvas']);
 
 const sort = (a) => [...a].sort();
-const report = { configNoVue: [], configNoPhp: [], vueNoConfig: [], phpNoConfig: [] };
+const report = { configNoVue: [], configNoPhp: [], vueNoConfig: [], phpNoConfig: [], categoriaFuoriElenco: [] };
 
 for (const [type, meta] of configs) {
   if (!vueTypes.has(type)) report.configNoVue.push(type + (meta.hidden ? ' (hidden)' : ''));
@@ -75,6 +89,16 @@ for (const [type, meta] of configs) {
 }
 for (const type of vueTypes) {
   if (!configs.has(type)) report.vueNoConfig.push(type);
+}
+// La categoria di una tile (PHP, che guida la palette, e config JS) deve stare
+// nell'elenco della palette: fuori elenco la tile finirebbe in «Altro».
+for (const [type, cat] of phpCategories) {
+  if (!paletteKeys.has(cat)) report.categoriaFuoriElenco.push(`${type}: PHP '${cat}'`);
+}
+for (const [type, meta] of configs) {
+  if (meta.category && !paletteKeys.has(meta.category)) report.categoriaFuoriElenco.push(`${type}: config '${meta.category}'`);
+  const pc = phpCategories.get(type);
+  if (meta.category && pc && pc !== meta.category) report.categoriaFuoriElenco.push(`${type}: PHP '${pc}' ≠ config '${meta.category}'`);
 }
 for (const type of phpTypes) {
   if (!configs.has(type)) report.phpNoConfig.push(type);
@@ -90,7 +114,8 @@ line('Config SENZA componente Vue (nessuna anteprima nel canvas)', report.config
 line('Config SENZA classe PHP (NON renderizzabile in frontend)', report.configNoPhp);
 line('Componenti Vue SENZA config (peso morto nel bundle)', report.vueNoConfig);
 line('Classi PHP SENZA config (irraggiungibili dal builder)', report.phpNoConfig);
+line('categoria-fuori-elenco (categoria assente da paletteCategories.js o diversa fra PHP e config)', report.categoriaFuoriElenco);
 
 const critical = report.configNoVue.length + report.configNoPhp.length;
 console.log(`\nTotale anomalie: ${critical + report.vueNoConfig.length + report.phpNoConfig.length} (critiche: ${critical})`);
-process.exit(strict && critical > 0 ? 1 : 0);
+process.exit((strict && critical > 0) || report.categoriaFuoriElenco.length > 0 ? 1 : 0);

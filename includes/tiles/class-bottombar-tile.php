@@ -14,7 +14,7 @@ class Olobuild_Bottombar_Tile extends Olobuild_Tile_Base {
     protected $type     = 'bottombar';
     protected $name     = 'Barra fissa in basso';
     protected $icon     = 'dashicons-minus';
-    protected $category = 'content';
+    protected $category = 'navigation';
     protected $defaults = [
         'content_html'   => '',
         'align'          => 'center',

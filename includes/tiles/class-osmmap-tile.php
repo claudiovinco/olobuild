@@ -9,7 +9,7 @@ class Olobuild_Osmmap_Tile extends Olobuild_Tile_Base {
     protected $type     = 'osmmap';
     protected $name     = 'Mappa';
     protected $icon     = 'dashicons-location-alt';
-    protected $category = 'content';
+    protected $category = 'media';
     protected $defaults = [
         'latitude'          => '45.4642',
         'longitude'         => '9.1900',

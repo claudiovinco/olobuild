@@ -10,7 +10,7 @@ export default {
   type: 'blendtext',
   name: t('Blend Text'),
   icon: 'dashicons-editor-textcolor',
-  category: 'creative',
+  category: 'text',
   defaults: {
     preset: 'custom',
     bg: { type: 'none' },

@@ -114,7 +114,7 @@
               <div
                 v-if="tileSearch.trim() && tile.cat"
                 class="bdg"
-                :style="{ background: catColor(tile.cat) + '22', color: catColor(tile.cat) }"
+                :style="{ background: 'color-mix(in srgb, ' + catColor(tile.cat) + ' 13%, transparent)', color: catColor(tile.cat) }"
               >{{ categoryLabel(tile.cat) }}</div>
               <span
                 v-if="!tileSearch.trim() && activeCategory !== '_recent' && activeCategory !== '_favorites'"
@@ -243,6 +243,7 @@ import { requestScrollToTile } from '@/utils/scrollToTileChannel';
 import { postToPreview } from '@/utils/previewOrigin';
 import StructureTree from './StructureTree.vue';
 import { t } from '@/i18n';
+import { PALETTE_CATEGORIES, paletteCategory, paletteCategoryOf } from '@/config/paletteCategories';
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
@@ -256,7 +257,7 @@ const searchResults = computed(() => {
   const all = tilesStore.paletteTiles || [];
   return all
     .filter(t => (t.name || '').toLowerCase().includes(q) || (t.type || '').toLowerCase().includes(q))
-    .map(t => ({ ...t, cat: t.category }));
+    .map(t => ({ ...t, cat: paletteCategoryOf(t.category) }));
 });
 
 import { onUnmounted } from 'vue';
@@ -339,77 +340,30 @@ function isCategoryOpen(category) {
   return !collapsedCategories.value.has(category);
 }
 
-const categoryColors = {
-  essential: 'var(--olo-ui-accent, #e8622a)',
-  layout: '#3B82F6',
-  text: '#22C55E',
-  media: '#A855F7',
-  marketing: '#F59E0B',
-  interactive: '#06B6D4',
-  navigation: '#F43F5E',
-  dynamic: '#F97316',
-  booking: '#EAB308',
-  'olo-space': '#14B8A6',
-  atmosphere: '#38BDF8',
-  woocommerce: '#7F54B3',
-};
-
-// Ordine fisso delle categorie nella sidebar
-const categoryOrder = [
-  'essential', 'layout', 'text', 'media', 'marketing',
-  'interactive', 'atmosphere', 'navigation', 'dynamic', 'woocommerce', 'booking', 'olo-space',
-];
-
-const categoryLabels = {
-  essential: 'Essenziale',
-  layout: 'Layout',
-  text: 'Testo',
-  media: 'Media',
-  marketing: 'Marketing',
-  interactive: 'Interattivo',
-  navigation: 'Navigazione',
-  dynamic: 'Dinamico',
-  booking: 'Olo Booking',
-  'olo-space': 'Olo Space',
-  atmosphere: 'Atmosfera',
-  woocommerce: 'WooCommerce',
-};
-
+// Categorie della palette (etichette, colori, icone, ordine): src/config/paletteCategories.js.
 function categoryLabel(category) {
   if (category === '_recent') return t('Recenti');
   if (category === '_favorites') return t('Preferiti');
   if (category === '_global') return t('Globali');
-  return t(categoryLabels[category] || category);
+  return t(paletteCategory(category).label);
 }
 
 function catColor(category) {
   if (category === '_recent') return '#8B5CF6';
   if (category === '_favorites') return '#EAB308';
   if (category === '_global') return '#D97706';
-  return categoryColors[category] || '#6B7280';
+  return paletteCategory(category).color;
 }
 
-// ── V2 Rail icons (per category) ──
+// ── V2 Rail icons: le tre voci speciali (le categorie le prendono dal config) ──
 const catIcons = {
   '_recent':    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',
   '_favorites': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
   '_global':    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
-  'essential':  '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',
-  'layout':     '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>',
-  'text':       '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>',
-  'media':      '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>',
-  'marketing':  '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-8v18L3 13z"/><path d="M11.6 16.8a3 3 0 11-5.8-1.6"/></svg>',
-  'interactive':'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8H20l-4.9 3.6 1.9 5.8L12 14.6 7 18.2l1.9-5.8L4 8.8h6.1z"/></svg>',
-  'navigation': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>',
-  'dynamic':    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>',
-  'booking':    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14l3 3 5-5"/></svg>',
-  'olo-space':  '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg>',
-  'atmosphere': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.4 4.1L17.5 8.5 13.4 9.9 12 14l-1.4-4.1L6.5 8.5l4.1-1.4z"/><path d="M5 14l.8 2.2L8 17l-2.2.8L5 20l-.8-2.2L2 17l2.2-.8z"/><path d="M18.5 13l.6 1.6 1.6.6-1.6.6-.6 1.6-.6-1.6-1.6-.6 1.6-.6z"/></svg>',
-  'woocommerce': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>',
 };
 
 function catIcon(category) {
-  return catIcons[category] || catIcons['essential'];
+  return catIcons[category] || paletteCategory(category).icon;
 }
 
 const globeIcon = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>';
@@ -433,10 +387,10 @@ const railCategories = computed(() => {
   if (favoriteTilesList.value.length) {
     out.push({ id: '_favorites', label: t('Preferiti'), count: favoriteTilesList.value.length });
   }
-  for (const cid of categoryOrder) {
-    const tiles = (tilesByCategory.value || {})[cid] || [];
+  for (const { key } of PALETTE_CATEGORIES) {
+    const tiles = (tilesByCategory.value || {})[key] || [];
     if (!tiles.length) continue;
-    out.push({ id: cid, label: t(categoryLabels[cid] || cid), count: tiles.length });
+    out.push({ id: key, label: categoryLabel(key), count: tiles.length });
   }
   if ((tilesStore.globalWidgets || []).length) {
     out.push({ id: '_global', label: t('Globali'), count: tilesStore.globalWidgets.length });

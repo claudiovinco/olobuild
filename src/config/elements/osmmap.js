@@ -12,7 +12,7 @@ export default {
   type: 'osmmap',
   name: t('Mappa'),
   icon: 'dashicons-location-alt',
-  category: 'content',
+  category: 'media',
   defaults: {
     preset: 'custom',
     typography_preset: '',

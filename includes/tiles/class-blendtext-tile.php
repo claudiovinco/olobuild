@@ -9,7 +9,7 @@ class Olobuild_Blendtext_Tile extends Olobuild_Tile_Base {
     protected $type     = 'blendtext';
     protected $name     = 'Blend Text';
     protected $icon     = 'dashicons-editor-textcolor';
-    protected $category = 'creative';
+    protected $category = 'text';
     protected $defaults = [
         'text'            => 'BLEND',
         'tag'             => 'div',

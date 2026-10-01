@@ -9,7 +9,7 @@ class Olobuild_Revealbox_Tile extends Olobuild_Tile_Base {
     protected $type     = 'revealbox';
     protected $name     = 'Reveal Box';
     protected $icon     = 'dashicons-arrow-up-alt';
-    protected $category = 'general';
+    protected $category = 'interactive';
 
     protected $defaults = [
         // Sfondi unificati sul pannello media universale, PER ZONA (chiavi legacy tenute sotto come fallback).

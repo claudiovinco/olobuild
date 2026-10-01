@@ -9,7 +9,7 @@ class Olobuild_Countercircle_Tile extends Olobuild_Tile_Base {
     protected $type     = 'countercircle';
     protected $name     = 'Counter Circle';
     protected $icon     = 'dashicons-marker';
-    protected $category = 'content';
+    protected $category = 'marketing';
     protected $defaults = [
         'preset' => 'custom',
         'value'          => '75',

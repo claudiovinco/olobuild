@@ -15,7 +15,7 @@ export default {
   type: 'pricelist',
   name: t('Lista prezzi'),
   icon: 'dashicons-list-view',
-  category: 'content',
+  category: 'marketing',
   defaults: {
     preset: 'custom',
     bg: { type: 'none' },
