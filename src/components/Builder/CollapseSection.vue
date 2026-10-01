@@ -1,29 +1,43 @@
 <template>
   <div :class="['olo-collapse-section', macro ? 'olo-collapse-section--macro' : '']">
-    <button
-      @click="open = !open"
-      :aria-expanded="open"
-      class="collapse-head mb-flex mb-items-center mb-justify-between mb-w-full mb-rounded-md mb-transition-colors mb-px-3 mb-py-2 mb-text-[11px] mb-font-bold mb-uppercase mb-tracking-wider"
+    <!-- Testata: tutta la riga apre e chiude, il PULSANTE è il titolo (aria-expanded, Tab).
+         Non è più un unico <button>: dentro ci stanno la (i) della spiegazione e, nello
+         slot header-right, interruttori che sono pulsanti a loro volta (un pulsante dentro
+         un pulsante non è HTML valido). Gli spaziatori ai lati tengono il titolo centrato. -->
+    <div
+      class="collapse-head mb-flex mb-items-center mb-w-full mb-rounded-md mb-transition-colors mb-px-3 mb-py-2 mb-text-[11px] mb-font-bold mb-uppercase mb-tracking-wider"
       :class="open ? 'collapse-head--open' : ''"
+      @click="open = !open"
     >
-      <span class="mb-flex-1">{{ title }}</span>
+      <span class="collapse-spacer" aria-hidden="true"></span>
+      <button
+        type="button"
+        class="collapse-toggle"
+        :aria-expanded="open"
+        :aria-controls="bodyId"
+        @click.stop="open = !open"
+      >{{ title }}</button>
+      <InfoTip v-if="testiInfo.length" class="collapse-info" :testo="testiInfo" :titolo="title" />
+      <span class="collapse-spacer" aria-hidden="true"></span>
       <slot name="header-right" />
       <svg
         :class="['mb-transition-transform mb-duration-200', open ? 'mb-rotate-180' : '']"
         width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
         style="color: rgba(255,255,255,0.6)"
+        aria-hidden="true"
       >
         <path d="M3 4.5L6 7.5L9 4.5" />
       </svg>
-    </button>
-    <div v-show="open || forceOpen" :class="['mb-pt-3 mb-pb-1 mb-space-y-3', macro ? 'olo-collapse-body--macro' : '']">
+    </div>
+    <div :id="bodyId" v-show="open || forceOpen" :class="['mb-pt-3 mb-pb-1 mb-space-y-3', macro ? 'olo-collapse-body--macro' : '']">
       <slot />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, computed, provide, reactive } from 'vue';
+import InfoTip from './InfoTip.vue';
 
 const props = defineProps({
   title: { type: String, required: true },
@@ -37,6 +51,31 @@ const props = defineProps({
   // ('olo_collapse_<storageKey>'), letto e scritto in try/catch. Storage vuoto o
   // bloccato = defaultOpen. Senza la prop nulla cambia per gli usi esistenti.
   storageKey: { type: String, default: '' },
+  // Spiegazione della sezione (stringa o paragrafi, già tradotti): va nella (i) accanto
+  // al titolo, MAI in linea (regola utente 1 ott 2026: le spiegazioni lunghe stanno in
+  // un popup). Vi si aggiungono da sole quelle dei campi `type:'description'` visibili
+  // nella sezione (InspectorField le registra qui, vedi provide sotto).
+  info: { type: [String, Array], default: '' },
+});
+
+const bodyId = 'olo-sec-' + Math.random().toString(36).slice(2, 10);
+
+// Spiegazioni registrate dai campi `description` della sezione, nell'ordine dei campi.
+// Un campo nascosto dalla sua condizione non è montato, quindi la sua spiegazione non c'è.
+const registrate = reactive(new Map());
+let ordine = 0;
+provide('oloSezioneInfo', {
+  registra(testo) {
+    const chiave = ++ordine;
+    registrate.set(chiave, testo);
+    return () => registrate.delete(chiave);
+  },
+  aggiorna(chiave, testo) { if (registrate.has(chiave)) registrate.set(chiave, testo); },
+});
+const testiInfo = computed(() => {
+  const propri = Array.isArray(props.info) ? props.info : [props.info];
+  const daiCampi = [...registrate.entries()].sort((a, b) => a[0] - b[0]).map(([, v]) => (typeof v === 'function' ? v() : v));
+  return [...propri, ...daiCampi].map((x) => String(x || '').trim()).filter(Boolean);
 });
 
 const STORAGE_PREFIX = 'olo_collapse_';
@@ -67,7 +106,31 @@ watch(open, (v) => {
 .collapse-head {
   background: rgba(0, 0, 0, 0.32);
   color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  gap: 4px;
 }
+.collapse-spacer { flex: 1 1 0; min-width: 0; }
+/* Il titolo è il pulsante: eredita tipografia e colore della testata */
+.collapse-toggle {
+  flex: 0 1 auto;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+.collapse-toggle:focus-visible {
+  outline: 2px solid var(--olo-ui-accent, #e8622a);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+.collapse-info { margin-left: 2px; }
 .collapse-head:hover {
   background: rgba(0, 0, 0, 0.42);
   color: #fff;

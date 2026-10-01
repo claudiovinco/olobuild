@@ -157,9 +157,14 @@ padding/margine → `type:'spacing'` (4 lati) · raggio → `type:'border-radius
   altro si nasconde quando non agisce (`condition`: «Posizione icona» senza icona).
 - **Il nome dice cosa fa**: «Colore sfondo» sul badge era il colore da cui la variante ricava la
   pillola (Soft = 12% di sfondo, 22% di bordo), non lo sfondo — e ha tratto in inganno chi l'ha usato.
-- ⚠️ La `description` di un campo **in linea** (select, colore, testo, interruttore, numero…:
-  `INLINE_COMPACT`/`INLINE_FILL` in InspectorField) **non viene mostrata**: la spiegazione va nella
-  label o nelle voci della select. ~206 descrizioni sono oggi invisibili (lotto da decidere).
+- ⚠️⚠️ **Spiegazioni MAI in linea** (utente, 1 ott 2026: «non vanno scritte lì… crea delle (i) a
+  fianco del titolo e usa dei popup»). Ogni testo d'aiuto più lungo di un'etichetta si apre da una
+  (i) (`InfoTip.vue`, popup nel body, Esc/clic fuori): la `description` di un campo → (i) accanto
+  all'etichetta (in linea e a blocco, anche nelle voci dei ripetitori); un campo `type:'description'`
+  → (i) accanto al titolo della sua sezione (CollapseSection la raccoglie via provide/inject, e
+  sparisce se la condizione del campo lo nasconde; fuori sezione: riga «Come funziona»); note di
+  gruppo → prop `info` di CollapseSection. In linea restano solo etichette e avvisi di stato brevi
+  (errori, «Salvato»). Audit `spiegazione-in-linea` = 0, `chrome-descrizione-invisibile` = 0.
 
 ## Regole
 - ⚠️⚠️ **L'anteprima del builder È il renderer PHP** (decisione del proprietario, 25 set 2026). Il

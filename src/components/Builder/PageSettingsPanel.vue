@@ -13,8 +13,7 @@
       per utente. L'Evidenziazione scroll, preferenza di chi usa l'editor, sta in
       «Preferenze editor» (EditorPrefsDialog, dalla finestra delle Scorciatoie), non qui.
     -->
-    <CollapseSection macro :title="t('Pagina')" :defaultOpen="true" :storageKey="chiaveGruppo('pagina')">
-      <p class="psp-note">{{ t('Si salva con la pagina: Salva o Ctrl+S (⌘S su Mac).') }}</p>
+    <CollapseSection macro :title="t('Pagina')" :defaultOpen="true" :storageKey="chiaveGruppo('pagina')" :info="t('Si salva con la pagina: Salva o Ctrl+S (⌘S su Mac).')">
 
       <!-- Layout -->
       <CollapseSection :title="t('Layout')" :defaultOpen="true">
@@ -57,7 +56,7 @@
       <CollapseSection :title="t('Effetti di pagina')" :defaultOpen="effettiAttivi">
         <div class="psp-group">
           <div class="psp-row">
-            <label for="psp-crt" class="psp-label">{{ t('Overlay CRT (scanline + vignetta)') }}</label>
+            <label for="psp-crt" class="psp-label">{{ t('Overlay CRT (scanline + vignetta)') }}<InfoTip class="psp-info" :testo="t('Decoratore a tutta pagina in stile schermo CRT. Statico con riduzione del movimento.')" :titolo="t('Overlay CRT (scanline + vignetta)')" /></label>
             <FieldToggle
               id="psp-crt"
               class="psp-switch"
@@ -67,7 +66,6 @@
               @update:modelValue="builderStore.updatePageSetting('page_crt_enabled', $event)"
             />
           </div>
-          <p class="psp-help">{{ t('Decoratore a tutta pagina in stile schermo CRT. Statico con riduzione del movimento.') }}</p>
           <template v-if="pageSettings.page_crt_enabled">
             <div v-for="r in CRT_RANGES" :key="r.key" class="psp-row">
               <span class="psp-label">{{ t(r.label) }}</span>
@@ -102,7 +100,7 @@
           </template>
 
           <div class="psp-row">
-            <label for="psp-grain" class="psp-label">{{ t('Grana pellicola') }}</label>
+            <label for="psp-grain" class="psp-label">{{ t('Grana pellicola') }}<InfoTip class="psp-info" :testo="t('Rumore organico a tutta pagina, animato a scatti come una pellicola. Statico con riduzione del movimento.')" :titolo="t('Grana pellicola')" /></label>
             <FieldToggle
               id="psp-grain"
               class="psp-switch"
@@ -112,7 +110,6 @@
               @update:modelValue="builderStore.updatePageSetting('page_grain_enabled', $event)"
             />
           </div>
-          <p class="psp-help">{{ t('Rumore organico a tutta pagina, animato a scatti come una pellicola. Statico con riduzione del movimento.') }}</p>
           <template v-if="pageSettings.page_grain_enabled">
             <div v-for="r in GRAIN_RANGES" :key="r.key" class="psp-row">
               <span class="psp-label">{{ t(r.label) }}</span>
@@ -142,7 +139,7 @@
               />
             </div>
             <div class="psp-row">
-              <label for="psp-grain-mobile" class="psp-label">{{ t('Mostra anche su touch/mobile') }}</label>
+              <label for="psp-grain-mobile" class="psp-label">{{ t('Mostra anche su touch/mobile') }}<InfoTip class="psp-info" :testo="t('Di default la grana è disattivata sui dispositivi touch: il layer in blend a tutto schermo può rendere lo scorrimento meno fluido.')" :titolo="t('Mostra anche su touch/mobile')" /></label>
               <FieldToggle
                 id="psp-grain-mobile"
                 class="psp-switch"
@@ -152,18 +149,16 @@
                 @update:modelValue="builderStore.updatePageSetting('page_grain_mobile', $event)"
               />
             </div>
-            <p class="psp-help">{{ t('Di default la grana è disattivata sui dispositivi touch: il layer in blend a tutto schermo può rendere lo scorrimento meno fluido.') }}</p>
           </template>
         </div>
       </CollapseSection>
     </CollapseSection>
 
     <!-- SEO: solo quando il template è collegato a un post -->
-    <CollapseSection v-if="seo.isReady.value" macro :title="t('SEO')" :storageKey="chiaveGruppo('seo')">
+    <CollapseSection v-if="seo.isReady.value" macro :title="t('SEO')" :storageKey="chiaveGruppo('seo')" :info="t('Salvataggio automatico sul contenuto collegato: non serve Salva.')">
       <template #header-right>
         <span class="psp-status" :class="{ 'psp-status--err': seoStatoErrore }" aria-live="polite">{{ seoStato }}</span>
       </template>
-      <p class="psp-note">{{ t('Salvataggio automatico sul contenuto collegato: non serve Salva.') }}</p>
       <div class="psp-group">
         <FieldSelect
           ui="segmented"
@@ -265,13 +260,12 @@
         <!-- TAB: Robots (canonical + noindex + nofollow) -->
         <div v-else-if="seoTab === 'advanced'" class="psp-stack">
           <div class="psp-field">
-            <label for="psp-canonical" class="psp-label">{{ t('Canonical URL') }}</label>
+            <label for="psp-canonical" class="psp-label">{{ t('Canonical URL') }}<InfoTip class="psp-info" :testo="t('Lascia vuoto per usare l\'URL della pagina.')" :titolo="t('Canonical URL')" /></label>
             <input id="psp-canonical" type="text"
               :value="seo.data.value.canonical"
               @input="seoUpdate('canonical', $event.target.value)"
               :placeholder="seo.defaults.value.post_url"
               class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900" />
-            <p class="psp-help">{{ t('Lascia vuoto per usare l\'URL della pagina.') }}</p>
           </div>
           <div class="psp-row">
             <label for="psp-noindex" class="psp-label"><code>noindex</code> — {{ t('non indicizzare') }}</label>
@@ -311,7 +305,7 @@
           </div>
           <div class="psp-field">
             <label for="psp-jsonld" class="psp-label psp-label--split">
-              <span>{{ t('JSON-LD personalizzato') }}</span>
+              <span>{{ t('JSON-LD personalizzato') }}<InfoTip class="psp-info" :testo="t('Iniettato come <script type=&quot;application/ld+json&quot;> nel <head>. Tag <script> facoltativi, vengono ripuliti server-side. JSON deve essere parsabile.')" :titolo="t('JSON-LD personalizzato')" /></span>
               <span v-if="seoJsonldStatus.ok === true" class="psp-ok">✓ {{ seoJsonldStatus.msg }}</span>
               <span v-else-if="seoJsonldStatus.ok === false" class="psp-err">✗ {{ seoJsonldStatus.msg }}</span>
             </label>
@@ -321,7 +315,6 @@
               :placeholder="'{ &quot;@context&quot;: &quot;https://schema.org&quot;, &quot;@graph&quot;: [ … ] }'"
               class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-xs mb-text-gray-900 mb-font-mono"
               style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; tab-size: 2"></textarea>
-            <p class="psp-help">{{ t('Iniettato come <script type=\"application/ld+json\"> nel <head>. Tag <script> facoltativi, vengono ripuliti server-side. JSON deve essere parsabile.') }}</p>
             <p v-if="seo.validationErrors.value.extra_jsonld" class="psp-help psp-err">{{ seo.validationErrors.value.extra_jsonld }}</p>
           </div>
         </div>
@@ -356,8 +349,7 @@
     </CollapseSection>
 
     <!-- Sito: opzioni di WordPress, valgono per tutte le pagine e si applicano subito -->
-    <CollapseSection macro :title="t('Sito')" :storageKey="chiaveGruppo('sito')">
-      <p class="psp-note">{{ t('Vale per tutto il sito e si applica subito, senza Salva.') }}</p>
+    <CollapseSection macro :title="t('Sito')" :storageKey="chiaveGruppo('sito')" :info="t('Vale per tutto il sito e si applica subito, senza Salva.')">
       <div class="psp-group">
         <span class="psp-label">{{ t('Favicon') }}</span>
         <div v-if="faviconUrl" class="psp-fav">
@@ -394,6 +386,7 @@ import { computed, ref } from 'vue';
 import { useBuilderStore } from '@/stores/builder';
 import BackgroundControls from './BackgroundControls.vue';
 import CollapseSection from './CollapseSection.vue';
+import InfoTip from './InfoTip.vue';
 import { useMediaPicker } from '@/composables/useMediaPicker';
 import { usePageSeo } from '@/composables/usePageSeo';
 import { useToast } from '@/composables/useToast';
@@ -734,6 +727,8 @@ label.psp-label { cursor: pointer; }
   line-height: 1.4;
   color: #64748b;
 }
+/* Spiegazioni: (i) accanto all'etichetta o al titolo del gruppo, mai in linea */
+.psp-info { margin-left: 4px; color: #64748b; text-transform: none; letter-spacing: normal; font-weight: 400; }
 .psp-sep {
   border-top: 1px solid #e5e7eb;
   padding-top: 12px;

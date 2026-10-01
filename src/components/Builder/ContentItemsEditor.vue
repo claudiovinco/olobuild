@@ -56,7 +56,7 @@
           <!-- Expanded editor -->
           <div v-if="expandedId === element.id" class="cie-body">
             <div v-for="(field, fi) in itemFields" :key="(field.key || '') + ':' + (field.type || '') + ':' + (field.label || '')" v-show="campoVisibileNellaVoce(field, fi, element)" class="cie-field" :class="{ 'cie-field--inline': field.type === 'number' || field.type === 'range' }">
-              <label v-if="field.type !== 'separator' && !isDelegated(field)" class="cie-label">{{ etichettaDi(field).testo }}</label>
+              <label v-if="field.type !== 'separator' && !isDelegated(field)" class="cie-label">{{ etichettaDi(field).testo }}<InfoTip v-if="field.description" class="cie-info" :testo="t(field.description)" :titolo="etichettaDi(field).testo" /></label>
 
               <!-- separator (intestazione di sezione, nessun input) -->
               <div v-if="field.type === 'separator'" class="cie-separator">{{ field.label }}</div>
@@ -259,8 +259,6 @@
                 :placeholder="field.placeholder || ''"
               />
 
-              <!-- Testo di aiuto: reso anche qui, come nell'inspector della tile. -->
-              <p v-if="field.description && !isDelegated(field)" class="cie-desc">{{ t(field.description) }}</p>
             </div>
           </div>
         </div>
@@ -327,7 +325,8 @@
 
 <script setup>
 import { t } from '@/i18n';
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, provide } from 'vue';
+import InfoTip from './InfoTip.vue';
 import { vOloDraggable, vOloDropTarget } from '@/composables/useDnD';
 import { useListSort } from '@/composables/useListSort';
 import RichTextEditor from './RichTextEditor.vue';
@@ -401,6 +400,10 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update:modelValue', 'update:dynamic-query', 'update:dynamic-item-map']);
+
+// Le spiegazioni dei campi `description` delle voci restano nelle voci (riga con la (i)):
+// senza questo salirebbero nella (i) della sezione che contiene l'editor, una per voce.
+provide('oloSezioneInfo', null);
 
 const stylesStore = useStylesStore();
 const { openTypography } = useGlobalPanels();
@@ -955,14 +958,9 @@ function removeItem(index) {
   letter-spacing: 0.05em;
 }
 
-/* Testo di aiuto del campo — stessa resa dell'inspector (.olo-field-desc). */
-.cie-desc {
-  margin: 3px 0 0;
-  font-size: 10px;
-  line-height: 1.35;
-  font-style: italic;
-  color: #6b7280;
-}
+/* Spiegazione del campo: una (i) accanto all'etichetta (InfoTip), come nell'inspector. */
+.cie-info { margin-left: 3px; color: #94a3b8; text-transform: none; letter-spacing: normal; }
+
 
 .cie-separator {
   margin-top: 6px;

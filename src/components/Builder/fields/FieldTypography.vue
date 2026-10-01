@@ -196,7 +196,7 @@
 
           <!-- Dimensione fluida: scala da sola fra i due estremi (clamp) -->
           <div v-if="keys.fluidMin || keys.fluidMax" class="typo-row">
-            <label class="typo-label">{{ t('Dimensione fluida') }}</label>
+            <label class="typo-label">{{ t('Dimensione fluida') }}<InfoTip class="typo-info" :testo="t('Il testo scala da sé fra i due valori, secondo la larghezza dello schermo.')" :titolo="t('Dimensione fluida')" /></label>
             <div class="typo-fluid-row">
               <div v-if="keys.fluidMin" class="typo-fluid-cell">
                 <NumberScrubber
@@ -225,12 +225,11 @@
                 <span class="typo-sub">{{ t('massima') }}</span>
               </div>
             </div>
-            <p class="typo-hint">{{ t('Il testo scala da sé fra i due valori, secondo la larghezza dello schermo.') }}</p>
           </div>
 
           <!-- Misura della riga, in caratteri -->
           <div v-if="keys.maxWidth" class="typo-row">
-            <label class="typo-label">{{ t('Larghezza massima') }}</label>
+            <label class="typo-label">{{ t('Larghezza massima') }}<InfoTip class="typo-info" :testo="t('In caratteri: quante lettere stanno su una riga prima di andare a capo.')" :titolo="t('Larghezza massima')" /></label>
             <div class="typo-range-row">
               <NumberScrubber
                 class="typo-scrubber"
@@ -244,7 +243,6 @@
                 @update:modelValue="emitKey(keys.maxWidth, $event)"
               />
             </div>
-            <p class="typo-hint">{{ t('In caratteri: quante lettere stanno su una riga prima di andare a capo.') }}</p>
           </div>
 
           <!-- Peso -->
@@ -411,6 +409,7 @@ import FieldColor from './FieldColor.vue';
 import FieldSelect from './FieldSelect.vue';
 import FieldToggle from './FieldToggle.vue';
 import NumberScrubber from './NumberScrubber.vue';
+import InfoTip from '../InfoTip.vue';
 
 // Opzioni dei select del popover. Label RAW: FieldSelect applica t() internamente.
 // I value (incluse le stringhe CSS dell'ombra) restano IDENTICI al vecchio select.
@@ -1088,6 +1087,8 @@ watch(presetOpen, (val) => {
   font-weight: 500;
   color: #6b7280;
 }
+/* Spiegazione della riga: (i) accanto all'etichetta, mai in linea */
+.typo-info { margin-left: 3px; color: #94a3b8; }
 /* Indicatore del dispositivo (segue la barra in alto): non si clicca */
 .typo-bp-toggle {
   position: relative;

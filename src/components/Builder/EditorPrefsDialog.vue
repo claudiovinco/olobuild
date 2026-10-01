@@ -11,8 +11,7 @@
         <p class="olo-ep-note">{{ t('Solo per te, in questo browser: la pagina non cambia.') }}</p>
 
         <section class="olo-ep-sec" aria-labelledby="olo-ep-flash">
-          <h4 id="olo-ep-flash" class="olo-ep-sec-title">{{ t('Evidenziazione dalla Struttura') }}</h4>
-          <p class="olo-ep-help">{{ t('Effetto visivo quando selezioni un tile dalla Struttura.') }}</p>
+          <h4 id="olo-ep-flash" class="olo-ep-sec-title">{{ t('Evidenziazione dalla Struttura') }}<InfoTip class="olo-ep-info" :titolo="t('Evidenziazione dalla Struttura')" :testo="[t('Effetto visivo quando selezioni un tile dalla Struttura.'), t('Durata scorrimento: 0 = istantaneo.')]" /></h4>
           <div class="olo-ep-row olo-ep-row--fill">
             <span class="olo-ep-label">{{ t('Tipo effetto') }}</span>
             <FieldSelect
@@ -44,7 +43,6 @@
               />
             </div>
           </template>
-          <p class="olo-ep-help">{{ t('Durata scorrimento: 0 = istantaneo.') }}</p>
         </section>
       </div>
     </div>
@@ -67,6 +65,7 @@ import { interoNelRange, risincronizzaNumero } from '@/utils/numeroIntero';
 import FieldColor from './fields/FieldColor.vue';
 import FieldSelect from './fields/FieldSelect.vue';
 import FieldRange from './fields/FieldRange.vue';
+import InfoTip from './InfoTip.vue';
 
 const props = defineProps({
   open: { type: Boolean, default: false },

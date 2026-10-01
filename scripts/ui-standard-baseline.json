@@ -28,7 +28,7 @@
     "effetti-bordo-elemento": 0,
     "stile-nel-contenuto": 0,
     "chrome-nelle-tile": 0,
-    "chrome-descrizione-invisibile": 240,
+    "chrome-descrizione-invisibile": 0,
     "fantasma-durata": 51,
     "css-layer-tile": 0,
     "css-container-senza-nome": 0,
@@ -42,6 +42,7 @@
     "densita-letterali": 1926,
     "componente-orfano": 0,
     "campo-orfano": 0,
-    "fieldbox-celle": 0
+    "fieldbox-celle": 0,
+    "spiegazione-in-linea": 0
   }
 }

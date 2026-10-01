@@ -85,10 +85,9 @@
     </template>
 
     <div v-if="conBlocchi && groupedSections.length" class="olo-sfr-blocco">
-      <span class="olo-sfr-blocco-titolo">{{ t('Contenitore') }}</span>
-      <span class="olo-sfr-blocco-nota">{{ atomica
+      <span class="olo-sfr-blocco-titolo">{{ t('Contenitore') }}<InfoTip class="olo-sfr-blocco-info" :titolo="t('Contenitore')" :testo="atomica
         ? t('Lo spazio attorno all\'elemento nella griglia resta trasparente: lo Sfondo qui sotto si disegna sull\'elemento.')
-        : t('Il riquadro che contiene la tile nella griglia.') }}</span>
+        : t('Il riquadro che contiene la tile nella griglia.')" /></span>
     </div>
     <!-- Wrapper style sections (universali — letti/scritti su tile.style) -->
     <template v-for="section in groupedSections" :key="'sec-' + section.idx">
@@ -187,6 +186,7 @@
 import { computed } from 'vue';
 import { styleFieldsBase } from '@/config/elements/_styleFieldsBase.js';
 import CollapseSection from './CollapseSection.vue';
+import InfoTip from './InfoTip.vue';
 import InspectorField from './InspectorField.vue';
 import ContentItemsEditor from './ContentItemsEditor.vue';
 import { getElementDefaults, getElementFields } from '@/config/elementRegistry';
@@ -342,9 +342,7 @@ function emitSetting(key, value) {
   background: currentColor;
   opacity: 0.25;
 }
-.olo-sfr-blocco-nota {
-  font-size: 12px;
-  line-height: 1.45;
-  color: #6b7280;
-}
+/* La spiegazione del blocco sta nella (i) accanto al titolo, non in linea. */
+.olo-sfr-blocco-info { order: 0; color: #94a3b8; letter-spacing: normal; }
+.olo-sfr-blocco-titolo::after { order: 1; }
 </style>

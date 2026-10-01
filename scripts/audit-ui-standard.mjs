@@ -911,7 +911,29 @@ regolaC('chrome-nelle-tile', 'Le tile (PHP, Vue, config, frontend.css) non leggo
     }
     trovate.push({ file: r.file, type: r.type, key: r.key, label: '' });
   }
-  regolaC('chrome-descrizione-invisibile', 'Nessuna description su un campo reso in linea (lì InspectorField non la mostra)', trovate);
+  // Dal 1 ott 2026 la description di un campo in linea si legge dalla (i) accanto
+  // all'etichetta (InfoTip): se InspectorField la mette lì, nessuna è più invisibile.
+  const sorgenteIF = fs.readFileSync(path.join(ROOT, 'src/components/Builder/InspectorField.vue'), 'utf8');
+  const infoInLinea = /<label class="olo-fi-label"[^>]*>[\s\S]{0,400}?<InfoTip v-if="field\.description"/.test(sorgenteIF);
+  regolaC('chrome-descrizione-invisibile', 'Nessuna description su un campo reso in linea senza la (i) che la mostra', infoInLinea ? [] : trovate);
+}
+
+// Spiegazioni MAI in linea (regola dell'utente, 1 ott 2026): le description dei campi e dei
+// campi «type:'description'» si leggono da una (i) con popup (InfoTip), non come paragrafo
+// nel pannello. Qui si cercano i template del builder che tornano a scriverle come testo.
+{
+  const trovate = [];
+  const dir = path.join(ROOT, 'src/components/Builder');
+  const vue = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => e.isDirectory() ? vue(path.join(d, e.name)) : e.name.endsWith('.vue') ? [path.join(d, e.name)] : []);
+  for (const file of vue(dir)) {
+    const src = fs.readFileSync(file, 'utf8');
+    const fineTpl = src.indexOf('<script');
+    const tpl = fineTpl > 0 ? src.slice(0, fineTpl) : src;
+    for (const m of tpl.matchAll(/\{\{\s*t\(\s*(?:field|f|campo)\.description\b/g)) {
+      trovate.push({ file: path.relative(dir, file).split(path.sep).join('/'), type: 'testo', key: tpl.slice(Math.max(0, m.index - 40), m.index + 30).replace(/\s+/g, ' '), label: '' });
+    }
+  }
+  regolaC('spiegazione-in-linea', 'Le description si aprono dalla (i) (InfoTip), non si scrivono in linea nel pannello', trovate);
 }
 
 // «Durata» del toggle Normale/Hover: withHover() offre sempre il campo `{key}_hover_duration`

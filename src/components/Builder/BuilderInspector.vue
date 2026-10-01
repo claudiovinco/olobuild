@@ -2026,14 +2026,14 @@ function onRailClick(sec) {
     if (!el) return;
 
     // If the section is a CollapseSection and is currently closed, open it.
-    // CollapseSection root has class "olo-collapse-section" and the first
-    // child is the toggle <button class="collapse-head" aria-expanded="…">.
+    // CollapseSection root has class "olo-collapse-section"; its header row
+    // (.collapse-head) holds the title button (.collapse-toggle, aria-expanded).
     if (el.classList.contains('olo-collapse-section')) {
       const head = el.firstElementChild;
-      if (head && head.classList && head.classList.contains('collapse-head')) {
-        if (head.getAttribute('aria-expanded') === 'false') {
-          head.click();
-        }
+      const toggle = head && head.classList && head.classList.contains('collapse-head')
+        ? head.querySelector('.collapse-toggle') : null;
+      if (toggle && toggle.getAttribute('aria-expanded') === 'false') {
+        toggle.click();
       }
     }
 
@@ -3655,7 +3655,7 @@ function updateDynamicItemMap(itemMap) {
   background: transparent !important;
   color: #1e293b !important;
 }
-.v2i-content :deep(.olo-collapse-section:not(.olo-collapse-section--macro) .collapse-head svg) {
+.v2i-content :deep(.olo-collapse-section:not(.olo-collapse-section--macro) .collapse-head > svg) {
   color: #94a3b8 !important;
 }
 
@@ -3672,10 +3672,10 @@ function updateDynamicItemMap(itemMap) {
   background: rgba(232, 98, 42, 0.08) !important;
   color: #b04217 !important;
 }
-.v2i-content :deep(.olo-collapse-section--macro .collapse-head svg) {
+.v2i-content :deep(.olo-collapse-section--macro .collapse-head > svg) {
   color: #64748b !important;
 }
-.v2i-content :deep(.olo-collapse-section--macro .collapse-head--open svg) {
+.v2i-content :deep(.olo-collapse-section--macro .collapse-head--open > svg) {
   color: #b04217 !important;
 }
 

@@ -16,10 +16,14 @@
       <!-- Separator — now handled by CollapseSection in BuilderInspector -->
       <template v-if="field.type === 'separator'" />
 
-      <!-- Description: testo informativo, no input -->
-      <p v-else-if="field.type === 'description'" class="mb-text-[10px] mb-text-gray-400 mb-italic mb-leading-snug mb-py-0.5">
-        {{ t(field.description || field.label || '') }}
-      </p>
+      <!-- Description: spiegazione, no input. Mai in linea (regola utente 1 ott 2026):
+           dentro una sezione va nella (i) accanto al titolo della sezione (registrata via
+           inject, qui non si disegna niente); fuori da una sezione resta una riga con la (i). -->
+      <div v-else-if="field.type === 'description' && !sezioneInfo" class="olo-desc-row">
+        <InfoTip :testo="testoDescrizione" :titolo="field.label ? t(field.label) : t('Come funziona')" />
+        <span class="olo-desc-row-label">{{ field.label ? t(field.label) : t('Come funziona') }}</span>
+      </div>
+      <template v-else-if="field.type === 'description'" />
 
       <template v-else>
       <!-- Layout INLINE compatto: per i campi numerici a dominio noto (range/number)
@@ -29,6 +33,7 @@
       <div v-if="renderInline" :class="inlineFill ? 'olo-field-inline-fill' : 'olo-field-inline'">
         <label class="olo-fi-label" :title="etichetta.testo">
           <span class="olo-fi-text">{{ etichetta.testo }}</span>
+          <InfoTip v-if="field.description" class="olo-field-info" :testo="t(field.description)" :titolo="etichetta.testo" />
           <span
             v-if="field.responsive && respBp !== 'desktop'"
             class="mb-text-[9px] mb-bg-primary-700 mb-text-primary-200 mb-px-1.5 mb-py-0.5 mb-rounded mb-font-medium mb-ml-1"
@@ -191,7 +196,12 @@
       </template>
       <label v-else-if="field.type !== 'typography' && field.type !== 'content-popup' && !field.reveal" class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">
         {{ etichetta.testo }}
+        <InfoTip v-if="field.description" class="olo-field-info" :testo="t(field.description)" :titolo="etichetta.testo" />
       </label>
+      <!-- Campi che l'etichetta la disegnano da sé: la (i) sta sopra, allineata a destra. -->
+      <div v-else-if="field.description" class="olo-field-info-row">
+        <InfoTip class="olo-field-info" :testo="t(field.description)" :titolo="t(field.label || '')" />
+      </div>
 
       <FieldToggle
         v-if="field.type === 'toggle'"
@@ -595,10 +605,6 @@
         >{{ t('Azzera') }}</button>
       </div>
 
-      <!-- Testo di aiuto del campo. Era dichiarato in 86 config (308 occorrenze) ma
-           veniva reso SOLO per i field `type:'description'`: su tutti gli altri
-           spariva in silenzio. Ora ogni campo può spiegarsi, ovunque e allo stesso modo. -->
-      <p v-if="field.description" class="olo-field-desc">{{ t(field.description) }}</p>
       </template>
       </template>
     </template>
@@ -606,7 +612,8 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, inject, onMounted, onBeforeUnmount } from 'vue';
+import InfoTip from './InfoTip.vue';
 import { useBuilderStore } from '@/stores/builder';
 import FieldText from './fields/FieldText.vue';
 import FieldTextarea from './fields/FieldTextarea.vue';
@@ -671,6 +678,15 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update:modelValue', 'update:dynamic', 'update:attachmentId', 'confirm', 'update:responsiveValue', 'update:hoverValue', 'update:settingKey']);
+
+// Campo `type:'description'` dentro una sezione: la sua spiegazione va nella (i) accanto al
+// titolo della sezione (CollapseSection la raccoglie), non in linea. Fuori da una sezione
+// sezioneInfo è null e il campo disegna una riga con la sua (i).
+const sezioneInfo = props.field.type === 'description' ? inject('oloSezioneInfo', null) : null;
+const testoDescrizione = computed(() => t(props.field.description || props.field.label || ''));
+let togliInfo = null;
+onMounted(() => { if (sezioneInfo) togliInfo = sezioneInfo.registra(() => testoDescrizione.value); });
+onBeforeUnmount(() => { if (togliInfo) togliInfo(); });
 
 // ── Responsive per-field breakpoint ──
 const respBreakpoints = [
@@ -1355,13 +1371,16 @@ function onDynamicUpdate(dynamicUpdate, isRemove) {
 .olo-reveal-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--olo-ui-accent); margin-left: auto; }
 .olo-reveal-body { margin-top: 8px; }
 
-/* Testo di aiuto sotto al campo — stessa resa del field type:'description',
-   così l'aiuto ha UN SOLO aspetto in tutto l'inspector. */
-.olo-field-desc {
-  margin: 3px 0 0;
-  font-size: 10px;
-  line-height: 1.35;
-  font-style: italic;
-  color: #6b7280;
+/* Spiegazioni: una (i) accanto all'etichetta che apre un popup (InfoTip), mai testo in linea. */
+.olo-field-info { margin-left: 3px; color: #94a3b8; }
+.olo-fi-label .olo-field-info { flex: none; }
+.olo-field-info-row { display: flex; justify-content: flex-end; margin-bottom: -4px; }
+.olo-desc-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #64748b;
 }
+.olo-desc-row :deep(.olo-info-btn) { color: #64748b; }
 </style>
