@@ -751,7 +751,7 @@ export const SETTINGS_FIELD_INDEX = {
 		{
 			"kind": "field",
 			"label": "Budget mensile",
-			"hint": "Soglia di spesa oltre la quale le funzioni AI vengono disattivate.",
+			"hint": "Spesa stimata dal 1° del mese oltre la quale le funzioni AI si fermano fino al mese dopo. 0 = nessun limite.",
 			"section": "Provider"
 		},
 		{
@@ -786,7 +786,7 @@ export const SETTINGS_FIELD_INDEX = {
 		{
 			"kind": "section",
 			"label": "Utilizzo questo mese",
-			"hint": "Statistiche delle chiamate API negli ultimi 30 giorni."
+			"hint": "Statistiche delle chiamate API dal 1° del mese (lo stesso periodo del budget)."
 		}
 	],
 	"stockmedia": [
