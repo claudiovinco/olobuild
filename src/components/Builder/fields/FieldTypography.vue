@@ -170,14 +170,14 @@
           <div v-if="keys.size" class="typo-row">
             <div class="typo-row-head">
               <label class="typo-label">{{ t('Dimensione') }}</label>
-              <button
+              <span
                 v-if="isResponsive('size')"
-                type="button"
                 class="typo-bp-toggle"
+                role="img"
                 :class="{ active: bpFor.size !== 'desktop', 'typo-bp-toggle--valori': haValoriDispositivo(keys.size) }"
-                @click="cycleBp('size')"
                 :title="bpTitolo(bpFor.size)"
-              ><span class="typo-bp-ico" v-html="BP_ICONE[bpFor.size]"></span><span v-if="bpFor.size !== 'desktop'" class="typo-bp-txt">{{ t(BP_NOME[bpFor.size]) }}</span></button>
+                :aria-label="bpTitolo(bpFor.size)"
+              ><span class="typo-bp-ico" v-html="BP_ICONE[bpFor.size]"></span><span v-if="bpFor.size !== 'desktop'" class="typo-bp-txt">{{ t(BP_NOME[bpFor.size]) }}</span></span>
             </div>
             <div class="typo-range-row">
               <NumberScrubber
@@ -286,14 +286,14 @@
           <div v-if="keys.lineHeight && !governata('lineHeight')" class="typo-row">
             <div class="typo-row-head">
               <label class="typo-label">{{ t('Interlinea') }}</label>
-              <button
+              <span
                 v-if="isResponsive('lineHeight')"
-                type="button"
                 class="typo-bp-toggle"
+                role="img"
                 :class="{ active: bpFor.lineHeight !== 'desktop', 'typo-bp-toggle--valori': haValoriDispositivo(keys.lineHeight) }"
-                @click="cycleBp('lineHeight')"
                 :title="bpTitolo(bpFor.lineHeight)"
-              ><span class="typo-bp-ico" v-html="BP_ICONE[bpFor.lineHeight]"></span><span v-if="bpFor.lineHeight !== 'desktop'" class="typo-bp-txt">{{ t(BP_NOME[bpFor.lineHeight]) }}</span></button>
+                :aria-label="bpTitolo(bpFor.lineHeight)"
+              ><span class="typo-bp-ico" v-html="BP_ICONE[bpFor.lineHeight]"></span><span v-if="bpFor.lineHeight !== 'desktop'" class="typo-bp-txt">{{ t(BP_NOME[bpFor.lineHeight]) }}</span></span>
             </div>
             <div class="typo-range-row">
               <NumberScrubber
@@ -313,14 +313,14 @@
           <div v-if="keys.letterSpacing && !governata('letterSpacing')" class="typo-row">
             <div class="typo-row-head">
               <label class="typo-label">{{ lsRange.label }}</label>
-              <button
+              <span
                 v-if="isResponsive('letterSpacing')"
-                type="button"
                 class="typo-bp-toggle"
+                role="img"
                 :class="{ active: bpFor.letterSpacing !== 'desktop', 'typo-bp-toggle--valori': haValoriDispositivo(keys.letterSpacing) }"
-                @click="cycleBp('letterSpacing')"
                 :title="bpTitolo(bpFor.letterSpacing)"
-              ><span class="typo-bp-ico" v-html="BP_ICONE[bpFor.letterSpacing]"></span><span v-if="bpFor.letterSpacing !== 'desktop'" class="typo-bp-txt">{{ t(BP_NOME[bpFor.letterSpacing]) }}</span></button>
+                :aria-label="bpTitolo(bpFor.letterSpacing)"
+              ><span class="typo-bp-ico" v-html="BP_ICONE[bpFor.letterSpacing]"></span><span v-if="bpFor.letterSpacing !== 'desktop'" class="typo-bp-txt">{{ t(BP_NOME[bpFor.letterSpacing]) }}</span></span>
             </div>
             <div class="typo-range-row">
               <NumberScrubber
@@ -400,8 +400,9 @@
 
 <script setup>
 import { t } from '@/i18n';
-import { ref, reactive, computed, watch, nextTick } from 'vue';
+import { ref, computed, watch, nextTick } from 'vue';
 import { useStylesStore } from '@/stores/styles';
+import { useBuilderStore } from '@/stores/builder';
 import { resolveColorToken, describeColor } from '@/utils/colorToken';
 import { resolveFontToken, assicuraFontPreview } from '@/utils/fontToken';
 import { useGlobalPanels } from '@/composables/useGlobalPanels';
@@ -518,16 +519,29 @@ const presetPopEl = ref(null);
 const popPos = ref({});
 const presetPopPos = ref({});
 
-// Stato breakpoint per ogni chiave logica supportata
-const bpFor = reactive({
-  size: 'desktop',
-  lineHeight: 'desktop',
-  letterSpacing: 'desktop',
-});
+// Il dispositivo lo decide la barra in alto (builderStore.viewMode), come per ogni altro
+// campo dell'inspector. Prima era uno stato della riga che partiva sempre da «computer»:
+// con la barra su Telefono si riscriveva il valore del desktop senza accorgersene.
+// Il componente conosce solo tre suffissi: '' (computer), _tablet, _mobile.
+const builderStore = useBuilderStore();
+const BP_DA_BARRA = {
+  widescreen: 'desktop', desktop: 'desktop',
+  tablet_landscape: 'tablet', tablet: 'tablet',
+  mobile_landscape: 'mobile', mobile: 'mobile',
+};
+const bpBarra = computed(() => BP_DA_BARRA[builderStore.viewMode] || 'desktop');
 
 function isResponsive(logicalKey) {
   return props.responsiveKeys.includes(logicalKey);
 }
+
+// Dispositivo di ogni riga: quello della barra dove la tile legge i valori per
+// dispositivo (responsiveKeys), altrimenti sempre la chiave base.
+const bpFor = computed(() => ({
+  size: isResponsive('size') ? bpBarra.value : 'desktop',
+  lineHeight: isResponsive('lineHeight') ? bpBarra.value : 'desktop',
+  letterSpacing: isResponsive('letterSpacing') ? bpBarra.value : 'desktop',
+}));
 
 // Il selettore del dispositivo: icone SVG (erano emoji) e il nome scritto
 // accanto quando non si sta regolando il computer, così si vede per quale
@@ -539,9 +553,9 @@ const BP_ICONE = {
 };
 const BP_NOME = { desktop: 'computer', tablet: 'tablet', mobile: 'telefono' };
 function bpTitolo(bp) {
-  if (bp === 'tablet') return t('Valore per il tablet — clic per il telefono');
-  if (bp === 'mobile') return t('Valore per il telefono — clic per tornare al computer');
-  return t('Valore per il computer — clic per tablet e telefono');
+  if (bp === 'tablet') return t('Valore per il tablet — il dispositivo si cambia dalla barra in alto');
+  if (bp === 'mobile') return t('Valore per il telefono — il dispositivo si cambia dalla barra in alto');
+  return t('Valore per il computer — tablet e telefono si scelgono dalla barra in alto');
 }
 // Il pallino sul selettore dice che per tablet o telefono c'è già un valore proprio.
 function haValoriDispositivo(baseKey) {
@@ -550,23 +564,19 @@ function haValoriDispositivo(baseKey) {
   return [baseKey + '_tablet', baseKey + '_mobile'].some(k => v[k] !== undefined && v[k] !== null && v[k] !== '');
 }
 
-function cycleBp(logicalKey) {
-  const order = ['desktop', 'tablet', 'mobile'];
-  const cur = bpFor[logicalKey] || 'desktop';
-  const idx = order.indexOf(cur);
-  bpFor[logicalKey] = order[(idx + 1) % order.length];
-}
-
 function suffixForBp(bp) {
   return bp === 'desktop' ? '' : '_' + bp;
 }
 
+// Valore mostrato: quello del dispositivo, altrimenti quello che la pagina gli dà davvero —
+// la stessa cascata del CSS (telefono → tablet → computer).
 function readResp(baseKey, bp) {
   if (!baseKey) return '';
-  const k = baseKey + suffixForBp(bp);
-  if (k in (props.values || {})) return props.values[k];
-  // fallback al desktop se mancante
-  return props.values?.[baseKey] ?? '';
+  const v = props.values || {};
+  const ha = (k) => v[k] !== undefined && v[k] !== null && v[k] !== '';
+  const catena = bp === 'mobile' ? ['_mobile', '_tablet', ''] : bp === 'tablet' ? ['_tablet', ''] : [''];
+  for (const suf of catena) if (ha(baseKey + suf)) return v[baseKey + suf];
+  return v[baseKey] ?? '';
 }
 
 function writeResp(baseKey, bp, value) {
@@ -772,6 +782,19 @@ function familyLabel(value) {
   return v.split(',')[0].replace(/['"]/g, '').trim();
 }
 
+// «46px · T 32 · M 24»: nella sintesi anche i valori propri di tablet e telefono, dove la
+// tile li legge — si vedono senza aprire il popover né cambiare dispositivo.
+function perDispositivo(logicalKey) {
+  const base = props.keys?.[logicalKey];
+  if (!base || !isResponsive(logicalKey)) return '';
+  const v = props.values || {};
+  const ha = (k) => v[k] !== undefined && v[k] !== null && v[k] !== '';
+  let s = '';
+  if (ha(base + '_tablet')) s += ' · T ' + fmt(v[base + '_tablet']);
+  if (ha(base + '_mobile')) s += ' · M ' + fmt(v[base + '_mobile']);
+  return s;
+}
+
 const summaryParts = computed(() => {
   const out = [];
 
@@ -791,12 +814,12 @@ const summaryParts = computed(() => {
     const hi = filled('fluidMax') ? fmt(raw('fluidMax')) : '·';
     out.push(`${lo}–${hi}px`);
   } else if (filled('size')) {
-    out.push(fmt(raw('size'), 'px'));
+    out.push(fmt(raw('size'), 'px') + perDispositivo('size'));
   }
   if (filled('maxWidth')) out.push(fmt(raw('maxWidth'), props.maxWidthUnit));
 
   if (filled('weight') && !governata('weight')) out.push(String(raw('weight')));
-  if (filled('lineHeight') && !governata('lineHeight')) out.push(fmt(raw('lineHeight')));
+  if (filled('lineHeight') && !governata('lineHeight')) out.push(fmt(raw('lineHeight')) + perDispositivo('lineHeight'));
   if (filled('letterSpacing') && !governata('letterSpacing')) out.push(fmt(raw('letterSpacing'), props.letterSpacingUnit));
   if (filled('wordSpacing')) out.push(fmt(raw('wordSpacing'), 'px') + ' ' + t('parole'));
 
@@ -1057,6 +1080,7 @@ watch(presetOpen, (val) => {
   font-weight: 500;
   color: #6b7280;
 }
+/* Indicatore del dispositivo (segue la barra in alto): non si clicca */
 .typo-bp-toggle {
   position: relative;
   display: inline-flex;
@@ -1064,8 +1088,8 @@ watch(presetOpen, (val) => {
   gap: 4px;
   background: transparent;
   border: 1px solid transparent;
-  color: #9ca3af;
-  cursor: pointer;
+  color: #6b7280;
+  cursor: default;
   font-size: 10.5px;
   font-weight: 500;
   line-height: 1;
@@ -1074,10 +1098,6 @@ watch(presetOpen, (val) => {
   transition: all 0.12s;
 }
 .typo-bp-ico { display: inline-flex; }
-.typo-bp-toggle:focus-visible {
-  outline: 2px solid var(--olo-ui-accent, #e8622a);
-  outline-offset: 1px;
-}
 /* Pallino: per tablet o telefono esiste già un valore proprio */
 .typo-bp-toggle--valori::after {
   content: '';
@@ -1088,10 +1108,6 @@ watch(presetOpen, (val) => {
   height: 5px;
   border-radius: 50%;
   background: var(--olo-ui-accent, #e8622a);
-}
-.typo-bp-toggle:hover {
-  background: #f3f4f6;
-  color: #1f2937;
 }
 .typo-bp-toggle.active {
   color: var(--olo-ui-accent, #e8622a);
