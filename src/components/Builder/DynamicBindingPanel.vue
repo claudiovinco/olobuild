@@ -37,10 +37,11 @@
     </div>
 
     <!-- Preview -->
-    <div v-if="previewValue !== null" class="dbp-preview">
+    <div v-if="previewLoading || previewValue !== null" class="dbp-preview">
       <label class="dbp-label">{{ t('Anteprima') }}</label>
-      <div class="dbp-preview-value">
-        <img v-if="previewIsImage" :src="previewValue" alt="" class="dbp-preview-img" />
+      <div class="dbp-preview-value" aria-live="polite">
+        <span v-if="previewLoading" class="dbp-preview-loading">{{ t('Carico…') }}</span>
+        <img v-else-if="previewIsImage" :src="previewValue" alt="" class="dbp-preview-img" />
         <span v-else>{{ previewDisplayValue }}</span>
       </div>
     </div>
@@ -132,10 +133,29 @@ const isGroupedFields = computed(() => {
   return Array.isArray(f) && f.length > 0 && f[0]?.group_label;
 });
 
+// Il campo scelto, come lo descrive il server ({ key, label, type }), anche
+// dentro i gruppi ACF. Il campo libero (custom_field) non ha descrizione.
+const selectedFieldMeta = computed(() => {
+  const f = fieldsForSource.value;
+  if (!Array.isArray(f) || !selectedField.value) return null;
+  for (const x of f) {
+    if (x?.key === selectedField.value) return x;
+    const g = (x?.fields || []).find(y => y.key === selectedField.value);
+    if (g) return g;
+  }
+  return null;
+});
+
+// Un'immagine solo se il campo lo è, o se l'indirizzo finisce con l'estensione
+// di un'immagine. Prima bastava che cominciasse per «http»: il Permalink e ogni
+// campo URL diventavano un'immagine rotta.
 const previewIsImage = computed(() => {
-  if (!previewValue.value || typeof previewValue.value !== 'string') return false;
-  return /\.(jpg|jpeg|png|gif|webp|svg)(\?|$)/i.test(previewValue.value)
-    || previewValue.value.startsWith('http');
+  const v = previewValue.value;
+  if (!v || typeof v !== 'string') return false;
+  const haEstensione = /\.(jpe?g|png|gif|webp|avif|svg)(\?|#|$)/i.test(v);
+  const tipo = selectedFieldMeta.value?.type;
+  if (tipo) return tipo === 'image' && (haEstensione || /^(https?:)?\/\//i.test(v));
+  return haEstensione;
 });
 
 const previewDisplayValue = computed(() => {
@@ -149,17 +169,23 @@ onMounted(() => {
   fetchSources();
 });
 
-// Auto-preview when source+field change
+// Auto-preview when source+field change, e subito all'apertura di un
+// collegamento già fatto. Vale l'ultima richiesta: una risposta lenta del campo
+// di prima non copre quella del campo scelto adesso.
+let richiesta = 0;
 watch([selectedSource, selectedField], async () => {
+  const mia = ++richiesta;
   if (!selectedSource.value || !selectedField.value) {
     previewValue.value = null;
+    previewLoading.value = false;
     return;
   }
   previewLoading.value = true;
   const result = await previewBinding(selectedSource.value, selectedField.value);
+  if (mia !== richiesta) return;
   previewValue.value = result?.value ?? null;
   previewLoading.value = false;
-});
+}, { immediate: true });
 
 function applyBinding() {
   if (!selectedSource.value || !selectedField.value) return;
@@ -259,6 +285,11 @@ function applyBinding() {
   word-break: break-all;
   max-height: 80px;
   overflow: auto;
+}
+
+.dbp-preview-loading {
+  color: #9ca3af;
+  font-style: italic;
 }
 
 .dbp-preview-img {

@@ -3,25 +3,22 @@
     <!-- Toggle -->
     <div class="dqp-toggle-row">
       <label class="dqp-toggle-label">
-        <button
+        <FieldToggle
           type="button"
-          @click="toggleEnabled"
-          :class="[
-            'dqp-switch',
-            isEnabled ? 'dqp-switch--on' : ''
-          ]"
-        >
-          <span class="dqp-switch-thumb"></span>
-        </button>
+          role="switch"
+          :aria-checked="isEnabled ? 'true' : 'false'"
+          :model-value="isEnabled"
+          @update:model-value="toggleEnabled"
+        />
         <span>{{ t('Sorgente dinamica') }}</span>
       </label>
     </div>
 
     <!-- Query config -->
     <div v-if="isEnabled" class="dqp-config">
-      <!-- Post Type -->
+      <!-- Tipo di contenuto -->
       <div class="dqp-field">
-        <label class="dqp-label">{{ t('Post Type') }}</label>
+        <label class="dqp-label">{{ t('Tipo di contenuto') }}</label>
         <FieldSelect ui="dropdown" theme="dark" :model-value="localQuery.post_type" :options="postTypes" @update:model-value="updateQuery('post_type', $event)" />
       </div>
 
@@ -43,9 +40,10 @@
           <label class="dqp-label">{{ t('Ordina per') }}</label>
           <FieldSelect ui="dropdown" theme="dark" :model-value="localQuery.orderby" :options="ORDERBY_OPTS" @update:model-value="updateQuery('orderby', $event)" />
         </div>
-        <div class="dqp-field dqp-field--half">
+        <!-- In ordine casuale la direzione non conta: il controllo si nasconde -->
+        <div v-if="localQuery.orderby !== 'rand'" class="dqp-field dqp-field--half">
           <label class="dqp-label">{{ t('Ordine') }}</label>
-          <FieldSelect ui="dropdown" theme="dark" :model-value="localQuery.order" :options="ORDER_OPTS" @update:model-value="updateQuery('order', $event)" />
+          <FieldSelect ui="dropdown" theme="dark" :model-value="localQuery.order" :options="orderOpts" @update:model-value="updateQuery('order', $event)" />
         </div>
       </div>
 
@@ -70,9 +68,18 @@
         </div>
       </div>
 
+      <!-- Primo risultato della query: dice subito se i filtri trovano qualcosa -->
+      <div class="dqp-primo" aria-live="polite">
+        <template v-if="primo.stato === 'carico'">{{ t('Carico…') }}</template>
+        <template v-else-if="primo.stato === 'trovato'">{{ t('Primo risultato:') }} <strong>{{ primo.titolo || t('(senza titolo)') }}</strong></template>
+        <template v-else-if="primo.stato === 'vuoto'">{{ t('Nessun contenuto con questi filtri') }}</template>
+      </div>
+
       <!-- Field Mapping -->
       <div class="dqp-mapping">
         <label class="dqp-label dqp-label--section">{{ t('Mappatura campi') }}</label>
+        <!-- Sorgente accesa senza campi collegati: il sito mostra ancora le voci scritte a mano -->
+        <button v-if="puoCollegare" type="button" class="dqp-automappa" @click="collegaPerNome">{{ t('Collega i campi per nome') }}</button>
         <div v-for="field in itemFields" :key="field.key" class="dqp-map-row">
           <span class="dqp-map-key">{{ field.label }}</span>
           <FieldSelect
@@ -91,9 +98,10 @@
 
 <script setup>
 import { t } from '@/i18n';
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import { useDynamicContent } from '@/composables/useDynamicContent';
 import FieldSelect from './fields/FieldSelect.vue';
+import FieldToggle from './fields/FieldToggle.vue';
 import NumberScrubber from './fields/NumberScrubber.vue';
 
 const props = defineProps({
@@ -104,7 +112,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:query', 'update:itemMap']);
 
-const { fetchSources, sources } = useDynamicContent();
+const { fetchSources, sources, previewQuery } = useDynamicContent();
 
 const defaultQuery = {
   enabled: false,
@@ -144,10 +152,18 @@ const ORDERBY_OPTS = [
   { value: 'menu_order', label: 'Ordine menu' },
 ];
 
-const ORDER_OPTS = [
-  { value: 'DESC', label: 'DESC' },
-  { value: 'ASC', label: 'ASC' },
-];
+// La direzione detta con le parole del criterio scelto. I valori salvati restano
+// 'DESC' e 'ASC'.
+const ORDER_LABELS = {
+  date: ['Più recenti prima', 'Più vecchi prima'],
+  modified: ['Modificati di recente prima', 'Modificati da più tempo prima'],
+  title: ['Dalla Z alla A', 'Dalla A alla Z'],
+  menu_order: ['Dal numero più alto', 'Dal numero più basso'],
+};
+const orderOpts = computed(() => {
+  const [disc, asc] = ORDER_LABELS[localQuery.value.orderby] || ['Decrescente', 'Crescente'];
+  return [{ value: 'DESC', label: disc }, { value: 'ASC', label: asc }];
+});
 
 const WP_FIELD_OPTS = [
   { value: '', label: '— Non mappato —' },
@@ -173,10 +189,82 @@ watch(() => props.itemMap, (val) => {
   localItemMap.value = { ...val };
 }, { deep: true });
 
+// Il campo di WordPress che una voce del ripetitore riceve, dedotto dal tipo e
+// dal nome del campo: il link va al permalink, l'immagine all'immagine in
+// evidenza, il testo lungo all'estratto, il titolo al titolo. Ogni campo di
+// WordPress si usa una volta sola (la seconda immagine, quella al passaggio del
+// mouse, resta da scegliere).
+function campoPerNome(f) {
+  const key = String(f.key || '').toLowerCase();
+  if (f.type === 'link') return 'permalink';
+  if (f.type === 'image') return 'featured_image';
+  if (f.type === 'textarea' || /^(text|testo|description|descrizione|excerpt|estratto|content|definition|body)$/.test(key)) return 'post_excerpt';
+  if (f.type !== 'text') return '';
+  if (/^(title|titolo|heading|name|nome|term)$/.test(key)) return 'post_title';
+  if (/^(tag|category|categoria)$/.test(key)) return 'first_term';
+  if (/^(date|data)$/.test(key)) return 'post_date';
+  if (/^(author|autore)$/.test(key)) return 'author_name';
+  return '';
+}
+
+function mappaPerNome() {
+  const mappa = {};
+  const usati = new Set();
+  for (const f of props.itemFields || []) {
+    const wp = campoPerNome(f);
+    if (wp && !usati.has(wp)) {
+      mappa[f.key] = wp;
+      usati.add(wp);
+    }
+  }
+  return mappa;
+}
+
+// Con la mappatura vuota il PHP non usa la query e il sito resta sulle voci
+// scritte a mano, mentre qui le voci spariscono: accendendo la sorgente i
+// campi si collegano per nome, se nessuno l'ha ancora fatto.
+const mappaVuota = computed(() => Object.keys(localItemMap.value || {}).length === 0);
+const puoCollegare = computed(() => mappaVuota.value && Object.keys(mappaPerNome()).length > 0);
+
+function collegaPerNome() {
+  const mappa = mappaPerNome();
+  if (!Object.keys(mappa).length) return;
+  localItemMap.value = mappa;
+  emit('update:itemMap', { ...mappa });
+}
+
 function toggleEnabled() {
   localQuery.value.enabled = !localQuery.value.enabled;
   emitQuery();
+  if (localQuery.value.enabled && mappaVuota.value) collegaPerNome();
 }
+
+// ── Primo risultato ──
+// Si chiede al server il titolo del primo contenuto che la query trova, a
+// ogni cambio dei filtri (con una piccola attesa, per non chiederlo a ogni
+// passo dello scrubber). Vale l'ultima risposta.
+const primo = ref({ stato: '', titolo: '' });
+let attesaPrimo = null;
+let richiestaPrimo = 0;
+function aggiornaPrimo() {
+  clearTimeout(attesaPrimo);
+  if (!isEnabled.value) { primo.value = { stato: '', titolo: '' }; return; }
+  primo.value = { stato: 'carico', titolo: '' };
+  attesaPrimo = setTimeout(async () => {
+    const mia = ++richiestaPrimo;
+    const r = await previewQuery({ ...localQuery.value });
+    if (mia !== richiestaPrimo) return;
+    if (!r) primo.value = { stato: '', titolo: '' };
+    else if (!r.post_id) primo.value = { stato: 'vuoto', titolo: '' };
+    else primo.value = { stato: 'trovato', titolo: String(r.value ?? '') };
+  }, 300);
+}
+watch(
+  () => [isEnabled.value, localQuery.value.post_type, localQuery.value.orderby, localQuery.value.order, localQuery.value.taxonomy, (localQuery.value.terms || []).join(',')],
+  aggiornaPrimo,
+  { immediate: true },
+);
+onBeforeUnmount(() => clearTimeout(attesaPrimo));
 
 function updateQuery(key, value) {
   localQuery.value[key] = value;
@@ -237,37 +325,6 @@ function emitQuery() {
   font-weight: 600;
   color: #d1d5db;
   cursor: pointer;
-}
-
-.dqp-switch {
-  position: relative;
-  width: 34px;
-  height: 18px;
-  border-radius: 9px;
-  border: none;
-  background: #4b5563;
-  cursor: pointer;
-  transition: background 0.2s;
-  padding: 0;
-}
-
-.dqp-switch--on {
-  background: var(--olo-ui-accent, #e8622a);
-}
-
-.dqp-switch-thumb {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #fff;
-  transition: transform 0.2s;
-}
-
-.dqp-switch--on .dqp-switch-thumb {
-  transform: translateX(16px);
 }
 
 .dqp-config {
@@ -340,6 +397,41 @@ function emitQuery() {
   font-size: 11px;
   color: #d1d5db;
   cursor: pointer;
+}
+
+.dqp-primo {
+  font-size: 11px;
+  color: #9ca3af;
+  min-height: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dqp-primo strong {
+  color: #e5e7eb;
+  font-weight: 600;
+}
+
+.dqp-automappa {
+  align-self: flex-start;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #e5e7eb;
+  background: #111827;
+  border: 1px solid #374151;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.dqp-automappa:hover {
+  border-color: var(--olo-ui-accent, #e8622a);
+}
+
+.dqp-automappa:focus-visible {
+  outline: 2px solid var(--olo-ui-accent, #e8622a);
+  outline-offset: 2px;
 }
 
 .dqp-mapping {

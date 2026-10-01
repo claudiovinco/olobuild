@@ -114,6 +114,23 @@ export function useDynamicContent() {
   }
 
   /**
+   * Il titolo del primo risultato di una query di ripetitore.
+   * { value: titolo, post_id } oppure { value: null, post_id: 0 } se non trova niente;
+   * null se la richiesta fallisce.
+   */
+  async function previewQuery(query) {
+    try {
+      return await apiFetch('dynamic-preview', {
+        method: 'POST',
+        body: JSON.stringify({ source: 'current_post', field: 'post_title', query }),
+      });
+    } catch (err) {
+      console.error('[OlobuilderBuilder] Query preview failed:', err);
+      return null;
+    }
+  }
+
+  /**
    * Get available source keys (for binding, not post_types/taxonomies).
    */
   function getBindingSources() {
@@ -135,5 +152,6 @@ export function useDynamicContent() {
     getBindingLabel,
     getBindingSources,
     previewBinding,
+    previewQuery,
   };
 }

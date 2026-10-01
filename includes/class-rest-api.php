@@ -1541,6 +1541,19 @@ class Olobuild_Rest_Api {
             return new WP_Error( 'missing_params', 'source and field are required.', [ 'status' => 400 ] );
         }
 
+        // Il primo risultato della query di un ripetitore («Sorgente dinamica»): chi
+        // la imposta vede subito se i filtri trovano qualcosa, e che cosa.
+        if ( ! empty( $body['query'] ) && is_array( $body['query'] ) ) {
+            $q                   = $body['query'];
+            $q['enabled']        = true;
+            $q['posts_per_page'] = 1;
+            $trovati             = ( new Olobuild_Dynamic_Content() )->resolve_query( $q );
+            $post_id             = empty( $trovati ) ? 0 : (int) $trovati[0]->ID;
+            if ( ! $post_id || ! current_user_can( 'read_post', $post_id ) ) {
+                return rest_ensure_response( [ 'value' => null, 'post_id' => 0 ] );
+            }
+        }
+
         // If no post_id provided, use the latest published post for preview
         if ( ! $post_id && in_array( $source, [ 'current_post', 'custom_field', 'acf', 'taxonomy_field', 'author' ], true ) ) {
             $recent = get_posts( [ 'numberposts' => 1, 'post_status' => 'publish' ] );
