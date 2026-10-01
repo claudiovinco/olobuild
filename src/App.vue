@@ -264,6 +264,8 @@ function onLoadTemplate(e) {
 
 onMounted(async () => {
   tilesStore.fetchRegisteredTiles();
+  // «Incolla stile» con una copia fatta in un'altra scheda del builder.
+  tilesStore.collegaCopiaStileFraSchede();
   initHistory();
   // Un import di tema ha appena ricaricato la pagina: toast con «Ripristina».
   annunciaStileSostituito();

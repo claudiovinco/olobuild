@@ -12,6 +12,21 @@ import { incollaImpostazioni } from '@/utils/incollaStile';
 
 const oloData = window.oloData || {};
 
+// «Copia stile» vale fra le schede del browser: la copia sta in localStorage (stessa
+// origine = stesso sito), e ogni scheda la legge all'avvio e quando un'altra la cambia.
+// Prima la scheda la teneva solo in memoria: nell'altra «Incolla stile» restava grigio
+// (il menu guarda clipboardStyle) e, con una copia vecchia in memoria, incollava quella.
+const CHIAVE_COPIA_STILE = 'olo_clipboard_style';
+function leggiCopiaStile() {
+  try {
+    const s = localStorage.getItem(CHIAVE_COPIA_STILE);
+    const v = s ? JSON.parse(s) : null;
+    return v && typeof v === 'object' ? v : null;
+  } catch (e) {
+    return null;
+  }
+}
+
 // Dati del master di un widget globale: la tile senza id, figli e global_id.
 function datiMaster(tile) {
   const dati = JSON.parse(JSON.stringify(tile));
@@ -46,7 +61,7 @@ export const useTilesStore = defineStore('tiles', {
     headerTiles: [],    // Array of Section nodes — header zone (unified editing)
     footerTiles: [],    // Array of Section nodes — footer zone (unified editing)
     clipboardTile: null,   // Deep-cloned tile for copy/paste
-    clipboardStyle: null,  // Copied style object for paste-style
+    clipboardStyle: leggiCopiaStile(),  // Copia di «Copia stile», condivisa fra le schede (localStorage)
     globalWidgets: [],     // Global widgets from DB
     tilesVersion: 0,       // Incremented on structural changes — watchers use this instead of deep watch
     _tileIndex: new Map(), // id → node index for O(1) lookups
@@ -534,15 +549,15 @@ export const useTilesStore = defineStore('tiles', {
             LARGHEZZE_MISURE.map(m => [m, tile.settings?.[pre + m] ?? '']));
           this.clipboardStyle.larghezzeGriglia = griglia;
         }
-        try { localStorage.setItem('olo_clipboard_style', JSON.stringify(this.clipboardStyle)); } catch(e) {}
+        try { localStorage.setItem(CHIAVE_COPIA_STILE, JSON.stringify(this.clipboardStyle)); } catch(e) {}
       }
     },
 
     pasteStyle(tileId) {
       const tile = this.getTileById(tileId);
-      if (!this.clipboardStyle) {
-        try { const s = localStorage.getItem('olo_clipboard_style'); if (s) this.clipboardStyle = JSON.parse(s); } catch(e) {}
-      }
+      // La copia più recente, anche se fatta in un'altra scheda.
+      const ultima = leggiCopiaStile();
+      if (ultima) this.clipboardStyle = ultima;
       if (!tile || !this.clipboardStyle) return;
       const clip = this.clipboardStyle;
 
@@ -576,6 +591,16 @@ export const useTilesStore = defineStore('tiles', {
         }
         tile.settings = tgtSettings;
       }
+    },
+
+    // Tiene la copia di «Copia stile» allineata con le altre schede: l'evento 'storage'
+    // arriva quando un'altra scheda dello stesso sito scrive in localStorage.
+    collegaCopiaStileFraSchede() {
+      if (this._copiaStileCollegata || typeof window === 'undefined') return;
+      this._copiaStileCollegata = true;
+      window.addEventListener('storage', (e) => {
+        if (e.key === CHIAVE_COPIA_STILE || e.key === null) this.clipboardStyle = leggiCopiaStile();
+      });
     },
 
     // La colonna sta in una riga a griglia? (il genitore è il penultimo del percorso)
