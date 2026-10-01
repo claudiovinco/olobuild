@@ -18,7 +18,7 @@
  * - Spaziature/raggi da una scala coerente (SPACE 8pt / RADIUS).
  * - Un'unica fonte per i default delle tile (`buildDefaults`).
  *
- * ⚠️ NON inventare nomi di variabile che il GlobalColorsPanel non produce: legati
+ * ⚠️ NON inventare nomi di variabile che la Palette non produce: legati
  *    SOLO ai 6 ruoli globali (GLOBAL) + ai 4 semantici globali + ai token di SYSTEM.
  *
  * Riuso: l'ombra è gestita da `useShadowMap` (SHADOW_MAP) e il radius da
@@ -26,9 +26,10 @@
  */
 
 /* ════════════════════════════════════════════════════════════════════
-   TOKEN GLOBALI — legati alla palette del cliente (GlobalColorsPanel).
-   Il pannello emette var(--olo-color-<id>) dai 6 ruoli seed: primary,
-   secondary, accent, dark, light, text. I fallback qui = SEED del pannello
+   TOKEN GLOBALI — legati alla palette del cliente (la Palette della
+   Configurazione, scritta da Olobuild_Style_System::generate_css()): i 6 ruoli
+   primary, secondary, accent, dark, light, text arrivano come
+   var(--olo-color-<id>). I fallback qui = i valori di partenza della Palette
    (decisione cliente: primario = ROSSO BRAND #e1474f).
    ════════════════════════════════════════════════════════════════════ */
 export const GLOBAL = {

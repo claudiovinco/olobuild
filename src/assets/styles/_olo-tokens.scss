@@ -3,12 +3,13 @@
  *
  * Adattamento di `regoletiles1/prototype/tokens-brand.css`. Vedi TOKEN_MAPPING.md.
  *
- * Qui stanno SOLO i token che il GlobalColorsPanel NON produce: neutri fini,
+ * Qui stanno SOLO i token che la Palette NON produce: neutri fini,
  * on-primary (calcolato a runtime dallo store/PHP) e i 4 semantici. Sono
  * fallback: il sito (`.olo-template`) e il backend li possono sovrascrivere.
  *
  * I 6 ruoli GLOBALI (primary/secondary/accent/dark/light/text) NON sono
- * ridefiniti qui: arrivano dal GlobalColorsPanel/store e hanno già un fallback
+ * ridefiniti qui: arrivano dalla Palette (Olobuild_Style_System::generate_css,
+ * e nel builder dallo store stili) e hanno già un fallback
  * brand nei `var(--olo-color-x, …)` lato componente (vedi oloTileDefaults.js).
  * Ridefinirli qui interferirebbe con la chrome dell'editor (#e8622a).
  */

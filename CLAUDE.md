@@ -206,7 +206,8 @@ Regole sempre attive (sintesi):
 - Scale condivise `SPACE` (8pt) e `RADIUS`: una tile = un raggio, una lingua d'ombra.
 - **Chiavi salvate INVARIATE** (margin_*, padding_*, border_radius, hover.*, ecc.): cambia
   la UI/resa, non il formato dei dati. I template esistenti devono continuare a funzionare.
-- Non inventare nomi `--olo-color-*` che il `GlobalColorsPanel` non genera (vedi TOKEN_MAPPING).
+- Non inventare nomi `--olo-color-*` che la Palette non genera (`Olobuild_Style_System::generate_css()`,
+  vedi TOKEN_MAPPING).
 - Coerenza render: c'è UN solo renderer, il PHP, che serve sia il sito sia il canvas del builder
   (iframe). Le differenze fra canvas e sito vengono dal contesto dell'iframe (CSS/JS del builder,
   script non accodati), non da un secondo render.

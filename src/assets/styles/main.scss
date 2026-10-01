@@ -1,5 +1,5 @@
 // Token di SISTEMA (fallback globali): on-primary, neutri fini, semantici.
-// I 6 ruoli globali arrivano dal GlobalColorsPanel/store. Vedi _olo-tokens.scss.
+// I 6 ruoli globali arrivano dalla Palette (Olobuild_Style_System::generate_css). Vedi _olo-tokens.scss.
 // @use (obbligatoriamente in testa al file): solo custom properties su :root,
 // nessuna variabile Sass consumata qui → nessun namespace necessario.
 @use 'olo-tokens';
@@ -1172,7 +1172,7 @@ body.olo-dragging * {
 
   // ── GLOBAL dark color remap for ALL scoped components ──
   // These catch hardcoded dark colors in ContentItemsEditor,
-  // GlobalTypographyPanel, GlobalColorsPanel, DynamicQueryPanel,
+  // GlobalTypographyPanel, DynamicQueryPanel,
   // DynamicBindingPanel, FieldIcon, FieldFontFamily, FieldRange,
   // FieldMultiPills, FieldLottiePicker, FieldBoxShadow, etc.
 
@@ -1278,16 +1278,16 @@ body.olo-dragging * {
     }
   }
 
-  // ── GlobalTypographyPanel / GlobalColorsPanel ──
-  .gtp-input, .gcp-input {
+  // ── GlobalTypographyPanel ──
+  .gtp-input {
     background: #fff !important;
     color: #1a1a1a !important;
     border-color: rgba(0,0,0,0.12) !important;
   }
-  .gtp-row, .gcp-row {
+  .gtp-row {
     border-color: rgba(0,0,0,0.06) !important;
   }
-  .gtp-swatch, .gcp-swatch {
+  .gtp-swatch {
     border-color: rgba(0,0,0,0.12) !important;
   }
 

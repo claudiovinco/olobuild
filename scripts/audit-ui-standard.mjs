@@ -1058,16 +1058,18 @@ regolaC('densita-letterali', 'px di spazio e raggio scritti a mano in includes/t
 
 for (const r of nuoveRegole) RULES.push(r);
 
-// ─── componenti orfani dell'area inspector ──────────────────────────────────
+// ─── componenti e composable orfani ─────────────────────────────────────────
 // Un componente che nessuno importa non gira mai, ma va comunque mantenuto e al
 // prossimo intervento si rischia di aggiornare lui invece di quello vivo (StylePanel,
-// ResponsiveFieldWrap: 400 righe tolte nel 2026-09). Gli import si risolvono sul
-// percorso ('./', '../', '@/'), non sul solo nome del file. ESCLUSI: orfani che
-// un'altra scheda del report deve ancora riusare o togliere — chi lo fa, li leva da qui.
+// ResponsiveFieldWrap: 400 righe tolte nel 2026-09; GlobalColorsPanel, AISettingsPanel,
+// DesignPresets e due composable: 1.100 righe tolte il 1 ott 2026). Gli import si
+// risolvono sul percorso ('./', '../', '@/', anche senza estensione), non sul solo
+// nome del file. Fuori: components/Tiles, il ramo del canvas Vue classico che non si
+// monta mai e si toglie intero in O4. ESCLUSI: orfani che un'altra scheda del report
+// deve ancora riusare o togliere — chi lo fa, li leva da qui.
 const ESCLUSI_ORFANI = new Set([
-  'AISettingsPanel.vue', 'GlobalColorsPanel.vue', // globali-orfani
-  'DesignPresets.vue',                            // inserimento-designpresets-orfano
-  'DeviceSwitch.vue',                             // canvas-desktop-non-desktop
+  'DeviceSwitch.vue', // canvas-desktop-non-desktop
+  'useAutosave.js',   // la copia di recupero della scheda sul salvataggio (canvas-salvataggio-zone)
 ]);
 function fileDi(dir, ok, acc = []) {
   for (const f of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -1079,16 +1081,23 @@ function fileDi(dir, ok, acc = []) {
 const SRC = path.join(ROOT, 'src');
 const importati = new Set();
 for (const f of fileDi(SRC, (n) => /\.(vue|js|ts|mjs)$/.test(n))) {
-  for (const m of fs.readFileSync(f, 'utf8').matchAll(/(?:\bfrom\s*|\bimport\s*\(?\s*)['"]([^'"]+\.vue)['"]/g)) {
+  for (const m of fs.readFileSync(f, 'utf8').matchAll(/(?:\bfrom\s*|\bimport\s*\(?\s*)['"]([^'"]+)['"]/g)) {
     const spec = m[1];
     const abs = spec.startsWith('@/') ? path.join(SRC, spec.slice(2)) : spec.startsWith('.') ? path.resolve(path.dirname(f), spec) : null;
-    if (abs && path.normalize(abs) !== path.normalize(f)) importati.add(path.normalize(abs));
+    if (!abs) continue;
+    for (const c of [abs, abs + '.js', abs + '.vue', path.join(abs, 'index.js')]) {
+      if (path.normalize(c) !== path.normalize(f)) importati.add(path.normalize(c));
+    }
   }
 }
-violazioni['componente-orfano'] = fileDi(path.join(SRC, 'components/Builder'), (n) => n.endsWith('.vue'))
+const TILES_VUE = path.join(SRC, 'components/Tiles');
+violazioni['componente-orfano'] = [
+  ...fileDi(path.join(SRC, 'components'), (n) => n.endsWith('.vue')).filter((c) => !c.startsWith(TILES_VUE)),
+  ...fileDi(path.join(SRC, 'composables'), (n) => /\.(js|ts)$/.test(n)),
+]
   .filter((c) => !importati.has(path.normalize(c)) && !ESCLUSI_ORFANI.has(path.basename(c)))
-  .map((c) => ({ file: 'Builder', type: '', key: path.relative(SRC, c).split(path.sep).join('/'), label: '' }));
-RULES.push({ id: 'componente-orfano', titolo: 'Ogni componente di src/components/Builder è importato da un altro file' });
+  .map((c) => ({ file: path.relative(SRC, path.dirname(c)).split(path.sep)[0], type: '', key: path.relative(SRC, c).split(path.sep).join('/'), label: '' }));
+RULES.push({ id: 'componente-orfano', titolo: 'Ogni componente di src/components (Tiles escluse) e ogni composable è importato da un altro file' });
 
 // ─── controlli orfani: un ramo dei dispatcher che nessun campo raggiunge ─────
 // FieldBorderLegacy, FieldTransform e FieldBackdropFilter restavano montabili da

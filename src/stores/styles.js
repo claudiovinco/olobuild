@@ -83,8 +83,6 @@ function cssRadius(val, fallback = '4px') {
 export const useStylesStore = defineStore('styles', {
   state: () => ({
     styles: JSON.parse(JSON.stringify(oloData.styles || {})),
-    presets: oloData.presets || {},
-    customPresets: [],
     generatedCss: oloData.stylesCss || '',
     isDirty: false,
     isSaving: false,
@@ -98,8 +96,6 @@ export const useStylesStore = defineStore('styles', {
     // i set alle tile: un set mai salvato darebbe loro un var(--olo-font-<id>-family)
     // che sul sito non esiste. Solo in memoria, come ogni modifica non salvata.
     globalTypographyDraft: null,
-    globalColorsDirty: false,
-    globalTypographyDirty: false,
   }),
 
   getters: {
@@ -355,24 +351,6 @@ export const useStylesStore = defineStore('styles', {
   },
 
   actions: {
-    updateColor(key, value) {
-      if (!this.styles.colors) this.styles.colors = {};
-      this.styles.colors[key] = value;
-      this.isDirty = true;
-    },
-
-    updateDarkColor(key, value) {
-      if (!this.styles.dark_colors) this.styles.dark_colors = {};
-      this.styles.dark_colors[key] = value;
-      this.isDirty = true;
-    },
-
-    updateTypography(key, value) {
-      if (!this.styles.typography) this.styles.typography = {};
-      this.styles.typography[key] = value;
-      this.isDirty = true;
-    },
-
     updateLayout(key, value) {
       if (!this.styles.layout) this.styles.layout = {};
       this.styles.layout[key] = value;
@@ -382,18 +360,6 @@ export const useStylesStore = defineStore('styles', {
     updateSpacing(key, value) {
       if (!this.styles.spacing) this.styles.spacing = {};
       this.styles.spacing[key] = value;
-      this.isDirty = true;
-    },
-
-    updateRadiusScale(key, value) {
-      if (!this.styles.border_radius_scale) this.styles.border_radius_scale = {};
-      this.styles.border_radius_scale[key] = value;
-      this.isDirty = true;
-    },
-
-    updateShadow(key, value) {
-      if (!this.styles.shadows) this.styles.shadows = {};
-      this.styles.shadows[key] = value;
       this.isDirty = true;
     },
 
@@ -415,62 +381,6 @@ export const useStylesStore = defineStore('styles', {
       this.isDirty = true;
     },
 
-    updateGrain(key, value) {
-      if (!this.styles.grain) this.styles.grain = {};
-      this.styles.grain[key] = value;
-      this.isDirty = true;
-    },
-
-    exportDesignTokens() {
-      const tokens = {
-        colors: this.styles.colors || {},
-        dark_colors: this.styles.dark_colors || {},
-        typography: this.styles.typography || {},
-        layout: this.styles.layout || {},
-        spacing: this.styles.spacing || {},
-        border_radius_scale: this.styles.border_radius_scale || {},
-        shadows: this.styles.shadows || {},
-        google_fonts: this.styles.google_fonts || [],
-        global_colors: this.globalColors || [],
-        global_typography: this.globalTypography || [],
-      };
-      const blob = new Blob([JSON.stringify(tokens, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'olobuild-design-tokens.json';
-      a.click();
-      URL.revokeObjectURL(url);
-    },
-
-    importDesignTokens(tokens) {
-      if (tokens.colors) this.styles.colors = { ...tokens.colors };
-      if (tokens.dark_colors) this.styles.dark_colors = { ...tokens.dark_colors };
-      if (tokens.typography) this.styles.typography = { ...tokens.typography };
-      if (tokens.layout) this.styles.layout = { ...tokens.layout };
-      if (tokens.spacing) this.styles.spacing = { ...tokens.spacing };
-      if (tokens.border_radius_scale) this.styles.border_radius_scale = { ...tokens.border_radius_scale };
-      if (tokens.shadows) this.styles.shadows = { ...tokens.shadows };
-      if (tokens.google_fonts) this.styles.google_fonts = [...tokens.google_fonts];
-      if (tokens.global_colors) this.globalColors = [...tokens.global_colors];
-      if (tokens.global_typography) this.globalTypography = [...tokens.global_typography];
-      this.isDirty = true;
-      this.globalColorsDirty = true;
-      this.globalTypographyDirty = true;
-    },
-
-    applyPreset(presetKey) {
-      const preset = this.presets[presetKey];
-      if (!preset) return;
-      this.styles.colors = { ...preset.colors };
-      this.styles.typography = { ...preset.typography };
-      this.styles.layout = { ...preset.layout };
-      if (preset.spacing) this.styles.spacing = { ...preset.spacing };
-      if (preset.border_radius_scale) this.styles.border_radius_scale = { ...preset.border_radius_scale };
-      if (preset.shadows) this.styles.shadows = { ...preset.shadows };
-      this.isDirty = true;
-    },
-
     addGoogleFont(fontName) {
       if (!fontName) return;
       if (!this.styles.google_fonts) this.styles.google_fonts = [];
@@ -478,12 +388,6 @@ export const useStylesStore = defineStore('styles', {
         this.styles.google_fonts.push(fontName);
         this.isDirty = true;
       }
-    },
-
-    removeGoogleFont(fontName) {
-      if (!this.styles.google_fonts) return;
-      this.styles.google_fonts = this.styles.google_fonts.filter(f => f !== fontName);
-      this.isDirty = true;
     },
 
     async saveStyles() {
@@ -507,81 +411,14 @@ export const useStylesStore = defineStore('styles', {
       }
     },
 
-    async resetStyles() {
-      if (this.isSaving) return inCorso();
-      this.isSaving = true;
-      try {
-        const res = await chiedi(`${oloData.restUrl}styles/reset`, { method: 'POST' });
-        const data = await res.json();
-        this.styles = data.styles;
-        this.generatedCss = data.css;
-        this.isDirty = false;
-        return { ok: true };
-      } catch (err) {
-        console.error('resetStyles error:', err);
-        return { ok: false, motivo: motivoErrore(err) };
-      } finally {
-        this.isSaving = false;
-      }
-    },
-
     // === Global Colors ===
-
-    setGlobalColors(colors) {
-      this.globalColors = colors;
-      this.globalColorsDirty = true;
-    },
-
-    // `lista` è la palette da scrivere: diventa quella dello store (e delle swatch)
-    // SOLO se il server l'ha scritta. Il «+» la passava allo store prima dell'esito,
-    // e la swatch nuova, cliccata durante il volo, legava la tile a un token che
-    // un salvataggio fallito lasciava inesistente.
-    // La fusione riprende dal server ogni colore che `lista` non ha: nessun colore
-    // si cancella da qui, perché le tile che usano var(--olo-color-<id>) in altre
-    // pagine, in header e footer lo perderebbero in silenzio. Il «+» e la «×» del
-    // builder passano da mutaGlobalColors (la «×» nasconde, non cancella).
-    async saveGlobalColors(lista = this.globalColors) {
-      // Flag DEDICATO (non this.isSaving, condiviso con saveStyles): aggiungere un colore
-      // globale non deve essere saltato durante un salvataggio stili/autosave.
-      if (this.savingColors) return inCorso();
-      this.savingColors = true;
-      try {
-        // Merge-safe: rileggi dal server e unisci, per non perdere colori aggiunti altrove
-        // (es. dal pannello admin) con uno store stale del builder.
-        // Se la rilettura non riesce, o non restituisce una lista, non si scrive: la
-        // lista locale, forse vecchia, sostituirebbe quella del server cancellando i
-        // colori aggiunti altrove.
-        const rr = await chiedi(`${oloData.restUrl}global-colors`);
-        const server = await rr.json();
-        if (!Array.isArray(server)) throw new ErroreRest(t('risposta non valida del server'));
-        const byId = new Map();
-        for (const g of (lista || [])) { if (g && g.id) byId.set(g.id, g); }
-        for (const sg of server) { if (sg && sg.id && !byId.has(sg.id)) byId.set(sg.id, sg); }
-        const merged = Array.from(byId.values());
-        const res = await chiedi(`${oloData.restUrl}global-colors`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(merged),
-        });
-        const data = await res.json();
-        this.globalColors = data;
-        this.globalColorsDirty = false;
-        return { ok: true };
-      } catch (err) {
-        console.error('saveGlobalColors error:', err);
-        return { ok: false, motivo: motivoErrore(err) };
-      } finally {
-        this.savingColors = false;
-      }
-    },
 
     // Una modifica alla palette applicata alla lista del SERVER, come fa la
     // Configurazione (persistGlobalColors): si rilegge, `modifica` riceve una
     // copia di quella lista e restituisce la nuova, che si scrive. La lista del
     // builder, caricata all'apertura, non ricopre così ciò che l'admin ha cambiato
     // nel frattempo: un colore nascosto tornava visibile, un valore tornava vecchio.
-    // Esito { ok } / { ok: false, motivo } come saveGlobalColors; senza rilettura
-    // non si scrive niente.
+    // Esito { ok } / { ok: false, motivo }; senza rilettura non si scrive niente.
     async mutaGlobalColors(modifica) {
       if (this.savingColors) return inCorso();
       this.savingColors = true;
@@ -597,7 +434,6 @@ export const useStylesStore = defineStore('styles', {
         });
         const data = await res.json();
         this.globalColors = Array.isArray(data) ? data : next;
-        this.globalColorsDirty = false;
         return { ok: true };
       } catch (err) {
         console.error('mutaGlobalColors error:', err);
@@ -607,25 +443,7 @@ export const useStylesStore = defineStore('styles', {
       }
     },
 
-    async loadGlobalColors() {
-      try {
-        const res = await fetch(`${oloData.restUrl}global-colors`, {
-          headers: { 'X-WP-Nonce': oloData.nonce },
-        });
-        if (res.ok) {
-          this.globalColors = await res.json();
-        }
-      } catch (err) {
-        console.error('loadGlobalColors error:', err);
-      }
-    },
-
     // === Global Typography ===
-
-    setGlobalTypography(sets) {
-      this.globalTypography = sets;
-      this.globalTypographyDirty = true;
-    },
 
     // I set passati diventano quelli dello store (offerti alle tile) SOLO se il
     // server li ha scritti. La bozza (globalTypographyDraft) la scrive il pannello
@@ -644,7 +462,6 @@ export const useStylesStore = defineStore('styles', {
         });
         const data = await res.json();
         this.globalTypography = data;
-        this.globalTypographyDirty = false;
         if (this.globalTypographyDraft && JSON.stringify(this.globalTypographyDraft) === inviato) {
           this.globalTypographyDraft = null;
         }
@@ -654,87 +471,6 @@ export const useStylesStore = defineStore('styles', {
         return { ok: false, motivo: motivoErrore(err) };
       } finally {
         this.savingTypography = false;
-      }
-    },
-
-    // === Custom Presets ===
-
-    async loadCustomPresets() {
-      try {
-        const res = await fetch(`${oloData.restUrl}design-presets`, {
-          headers: { 'X-WP-Nonce': oloData.nonce },
-        });
-        if (res.ok) {
-          this.customPresets = await res.json();
-        }
-      } catch (err) {
-        console.error('loadCustomPresets error:', err);
-      }
-    },
-
-    async saveCurrentAsPreset(name) {
-      try {
-        const style = {
-          colors: { ...(this.styles.colors || {}) },
-          typography: { ...(this.styles.typography || {}) },
-          layout: { ...(this.styles.layout || {}) },
-          spacing: { ...(this.styles.spacing || {}) },
-          border_radius_scale: { ...(this.styles.border_radius_scale || {}) },
-          shadows: { ...(this.styles.shadows || {}) },
-        };
-        const res = await fetch(`${oloData.restUrl}design-presets`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-WP-Nonce': oloData.nonce,
-          },
-          body: JSON.stringify({ name, style }),
-        });
-        if (!res.ok) throw new Error('Failed to save preset');
-        const newPreset = await res.json();
-        this.customPresets.push(newPreset);
-        return newPreset;
-      } catch (err) {
-        console.error('saveCurrentAsPreset error:', err);
-        throw err;
-      }
-    },
-
-    async deleteCustomPreset(id) {
-      try {
-        const res = await fetch(`${oloData.restUrl}design-presets/${id}`, {
-          method: 'DELETE',
-          headers: { 'X-WP-Nonce': oloData.nonce },
-        });
-        if (!res.ok) throw new Error('Failed to delete preset');
-        this.customPresets = this.customPresets.filter(p => p.id !== id);
-      } catch (err) {
-        console.error('deleteCustomPreset error:', err);
-        throw err;
-      }
-    },
-
-    applyCustomPreset(preset) {
-      const s = preset.style || {};
-      if (s.colors) this.styles.colors = { ...s.colors };
-      if (s.typography) this.styles.typography = { ...s.typography };
-      if (s.layout) this.styles.layout = { ...s.layout };
-      if (s.spacing) this.styles.spacing = { ...s.spacing };
-      if (s.border_radius_scale) this.styles.border_radius_scale = { ...s.border_radius_scale };
-      if (s.shadows) this.styles.shadows = { ...s.shadows };
-      this.isDirty = true;
-    },
-
-    async loadGlobalTypography() {
-      try {
-        const res = await fetch(`${oloData.restUrl}global-typography`, {
-          headers: { 'X-WP-Nonce': oloData.nonce },
-        });
-        if (res.ok) {
-          this.globalTypography = await res.json();
-        }
-      } catch (err) {
-        console.error('loadGlobalTypography error:', err);
       }
     },
   },
