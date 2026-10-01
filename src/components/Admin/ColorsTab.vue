@@ -470,7 +470,10 @@ const presetList = computed(() => {
     const c = (p.style && p.style.colors) || {};
     return { key: p.id, id: p.id, name: p.name || 'Preset', colors: c, swatches: [c.primary, c.secondary, c.success, c.warning].filter(Boolean), custom: true };
   });
-  return [...builtin, ...mine];
+  // Un preset senza colori (salvato in passato dagli stili delle tile, senza
+  // style.colors) qui non ha niente da applicare: senza swatch e con un
+  // «Preset applicato» che non cambiava nulla. Resta nell'opzione, non si mostra.
+  return [...builtin, ...mine].filter((p) => Object.keys(p.colors || {}).length > 0);
 });
 
 // Un globale che copre un ruolo della Palette (copreRuolo: primary, text…) si modifica
@@ -595,7 +598,7 @@ function setDark(k, v) { darkMode.value = { ...darkMode.value, [k]: v }; setDirt
 
 // ── Preset ──
 function applyPreset(p) {
-  if (!p.colors) return;
+  if (!p.colors || !Object.keys(p.colors).length) return;
   colors.value = { ...colors.value, ...p.colors };
   recomputeContrasts();
   if (p.colors.primary) seed1.value = p.colors.primary.toUpperCase();
