@@ -116,6 +116,12 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         'lang_tile_id'       => '',
         // Nel menu mobile: come appare (inline = la tile in linea, come prima) e dove.
         'mobile_lang_format' => 'inline',
+        // Sottomenu nel pannello mobile: accordion (fisarmonica) | drill (a pannelli) | open.
+        'mobile_submenu'      => 'accordion',
+        // Voce genitore: toggle = apre il sottomenu (la pagina è la prima voce), link = porta
+        // alla pagina e la freccia apre.
+        'mobile_parent_click' => 'toggle',
+        'mobile_open_current' => true,
         'mobile_lang_pos'    => 'top',
         // Mobile
         'mobile_breakpoint'  => '1024',
@@ -431,6 +437,8 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
 
         // Toggle sottomenu
         $tgl_style   = $s['mob_toggle_style'] ?? 'chevron';
+        // Aperto: chevron (∨→∧) e parentesi (〉→〈) girano di 180°, freccia e triangolo di 90° (→↓, ▸▾).
+        $tgl_rot     = in_array( $tgl_style, [ 'chevron', 'bracket' ], true ) ? 180 : 90;
         $tgl_pos     = $s['mob_toggle_position'] ?? 'right';
         $tgl_size    = intval( $s['mob_toggle_size'] ?? 20 );
         $tgl_color   = $this->safe_color( $s['mob_toggle_color'] ?? '' );
@@ -1468,7 +1476,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-mm-mob-chevron .olo-mm-toggle-close { display: flex; }
         <?php if ( in_array( $tgl_style, [ 'chevron', 'arrow', 'caret', 'bracket' ] ) ) : ?>
         .<?php echo $uid; ?> .olo-mm-mob-open > .olo-mm-mob-toggle .olo-mm-mob-chevron .olo-mm-toggle-icon {
-            transform: rotate(90deg);
+            transform: rotate(<?php echo $tgl_rot; ?>deg);
         }
         <?php else : ?>
         .<?php echo $uid; ?> .olo-mm-mob-open > .olo-mm-mob-toggle .olo-mm-mob-chevron .olo-mm-toggle-open { display: none !important; }
@@ -1620,7 +1628,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-mm-dp-chevron .olo-mm-toggle-close { display: flex; }
         <?php if ( in_array( $tgl_style, [ 'chevron', 'arrow', 'caret', 'bracket' ] ) ) : ?>
         .<?php echo $uid; ?> li.olo-mm-dp-sub-open > .olo-mm-dp-item > .olo-mm-dp-chevron .olo-mm-toggle-icon {
-            transform: rotate(90deg);
+            transform: rotate(<?php echo $tgl_rot; ?>deg);
         }
         <?php else : ?>
         .<?php echo $uid; ?> li.olo-mm-dp-sub-open > .olo-mm-dp-item > .olo-mm-dp-chevron .olo-mm-toggle-open { display: none !important; }
@@ -1652,6 +1660,61 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-mm-fullscreen { padding-bottom: env(safe-area-inset-bottom, 0px); }
         .<?php echo $uid; ?> .olo-mm-oc-header,
         .<?php echo $uid; ?> .olo-mm-fs-header { margin-top: env(safe-area-inset-top, 0px); }
+
+        /* Sottomenu chiusi: anche invisibili, non solo alti 0 (Tab ci entrava). */
+        .<?php echo $uid; ?> .olo-mm-mob-sub,
+        .<?php echo $uid; ?> .olo-mm-dp-sub { visibility: hidden; transition: max-height .35s ease, visibility 0s linear .35s; }
+        .<?php echo $uid; ?> .olo-mm-mob-open > .olo-mm-mob-sub,
+        .<?php echo $uid; ?> li.olo-mm-dp-sub-open > .olo-mm-dp-sub { visibility: visible; transition: max-height .35s ease, visibility 0s; }
+        /* Voce genitore come link (la freccia a parte apre il sottomenu) */
+        .<?php echo $uid; ?> .olo-mm-mob-item { display: flex; align-items: stretch; }
+        .<?php echo $uid; ?> .olo-mm-mob-item > a {
+            flex: 1; display: flex; align-items: center; padding: 14px 20px; min-height: 44px;
+            color: <?php echo $mob_tc; ?>; font-size: <?php echo $mob_fs; ?>px; font-weight: 500; text-decoration: none;
+        }
+        .<?php echo $uid; ?> li.olo-mm-dp-active > .olo-mm-mob-item > a { color: <?php echo $mob_acc; ?>; }
+        .<?php echo $uid; ?> .olo-mm-mob-item > .olo-mm-mob-toggle {
+            display: flex; align-items: center; justify-content: center; min-width: 52px; padding: 0 16px;
+            background: none; border: 0; color: <?php echo $mob_tc; ?>; cursor: pointer;
+        }
+        .<?php echo $uid; ?> .olo-mm-mob-item > .olo-mm-mob-toggle .olo-mm-mob-chevron { margin: 0; order: 0; }
+        <?php if ( in_array( $tgl_style, [ 'chevron', 'arrow', 'caret', 'bracket' ], true ) ) : ?>
+        .<?php echo $uid; ?> .olo-mm-mob-open > .olo-mm-mob-item .olo-mm-toggle-icon { transform: rotate(<?php echo $tgl_rot; ?>deg); }
+        <?php else : ?>
+        .<?php echo $uid; ?> .olo-mm-mob-open > .olo-mm-mob-item .olo-mm-toggle-open { display: none !important; }
+        .<?php echo $uid; ?> .olo-mm-mob-open > .olo-mm-mob-item .olo-mm-toggle-close { display: flex !important; }
+        <?php endif; ?>
+        /* Sottomenu sempre aperti: niente frecce, i genitori sono link o titoli */
+        .<?php echo $uid; ?>.olo-mm-sub-open .olo-mm-mob-sub,
+        .<?php echo $uid; ?>.olo-mm-sub-open .olo-mm-dp-sub { max-height: none; visibility: visible; }
+        .<?php echo $uid; ?>.olo-mm-sub-open .olo-mm-mob-chevron,
+        .<?php echo $uid; ?>.olo-mm-sub-open .olo-mm-dp-chevron { display: none !important; }
+        .<?php echo $uid; ?>.olo-mm-sub-open .olo-mm-mob-toggle { pointer-events: none; }
+        .<?php echo $uid; ?>.olo-mm-sub-open .olo-mm-mob-item > .olo-mm-mob-toggle { display: none; }
+        <?php if ( 'drill' === ( $s['mobile_submenu'] ?? 'accordion' ) ) :
+            $drill_tc   = 'dropdown' === ( $s['mobile_style'] ?? 'offcanvas' ) ? $mob_drop_tc : $mob_tc;
+            $drill_side = 'dropdown' === ( $s['mobile_style'] ?? 'offcanvas' ) ? ( $mob_ip + 8 ) : ( 'fullscreen' === ( $s['mobile_style'] ?? 'offcanvas' ) ? 24 : 20 );
+        ?>
+        /* Sottomenu a pannelli: il livello entra da destra, «Indietro» torna su */
+        .<?php echo $uid; ?> .olo-mm-drill { color: <?php echo $drill_tc; ?>; animation: olo-mm-drill-in-<?php echo $uid; ?> .28s cubic-bezier(.2,.7,.2,1); }
+        .<?php echo $uid; ?> .olo-mm-drill-ritorno { animation: olo-mm-drill-back-<?php echo $uid; ?> .28s cubic-bezier(.2,.7,.2,1); }
+        @keyframes olo-mm-drill-in-<?php echo $uid; ?> { from { transform: translateX(32px); opacity: 0; } to { transform: none; opacity: 1; } }
+        @keyframes olo-mm-drill-back-<?php echo $uid; ?> { from { transform: translateX(-32px); opacity: 0; } to { transform: none; opacity: 1; } }
+        @media (prefers-reduced-motion: reduce) { .<?php echo $uid; ?> .olo-mm-drill, .<?php echo $uid; ?> .olo-mm-drill-ritorno { animation: none; } }
+        .<?php echo $uid; ?> .olo-mm-drill-back {
+            display: inline-flex; align-items: center; gap: 6px; min-height: 44px; margin: 4px 0 0; padding: 0 <?php echo $drill_side; ?>px;
+            background: none; border: 0; color: inherit; font: inherit; font-size: 14px; opacity: .75; cursor: pointer;
+        }
+        .<?php echo $uid; ?> .olo-mm-drill-back:hover { opacity: 1; }
+        .<?php echo $uid; ?> .olo-mm-drill-back svg { width: 18px; height: 18px; flex: none; }
+        .<?php echo $uid; ?> .olo-mm-drill-title {
+            padding: 2px <?php echo $drill_side; ?>px 10px; font-size: 12px; font-weight: 700; letter-spacing: .08em;
+            text-transform: uppercase; color: <?php echo $mob_acc; ?>;
+        }
+        .<?php echo $uid; ?> .olo-mm-drill-heading {
+            padding: 14px <?php echo $drill_side; ?>px 4px; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; opacity: .65;
+        }
+        <?php endif; ?>
 
         /* === Fullscreen Mobile === */
         .<?php echo $uid; ?> .olo-mm-fullscreen {
@@ -2610,6 +2673,11 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         $tgl_style   = $s['mob_toggle_style'] ?? 'chevron';
         $tgl_size    = intval( $s['mob_toggle_size'] ?? 20 );
         $toggle_svg  = $this->get_toggle_svg( $tgl_style, $tgl_size );
+        // Sottomenu nel pannello mobile. Sempre aperti: la voce genitore è un link.
+        $sub_mode     = in_array( $s['mobile_submenu'] ?? 'accordion', [ 'accordion', 'drill', 'open' ], true ) ? $s['mobile_submenu'] : 'accordion';
+        $parent_link  = 'open' === $sub_mode || 'link' === ( $s['mobile_parent_click'] ?? 'toggle' );
+        // La sezione della pagina in cui si è parte aperta (solo a fisarmonica).
+        $open_current = 'accordion' === $sub_mode && ! empty( $s['mobile_open_current'] ?? true );
 
         // Hamburger SVG icons — ogni stile ha un SVG dedicato per stato aperto/chiuso
         $hamburger_svgs = [
@@ -2634,7 +2702,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             }
         }
         ?>
-        <div class="olo-megamenu <?php echo esc_attr( $uid ); ?>" data-uid="<?php echo esc_attr( $uid ); ?>">
+        <div class="olo-megamenu <?php echo esc_attr( $uid ); ?> olo-mm-sub-<?php echo esc_attr( $sub_mode ); ?><?php echo $parent_link ? ' olo-mm-parent-link' : ''; ?>" data-uid="<?php echo esc_attr( $uid ); ?>"<?php echo 'drill' === $sub_mode ? ' data-label-back="' . esc_attr( olobuild_t( 'Indietro' ) ) . '" data-label-vai="' . esc_attr( olobuild_t( 'Vai a %s' ) ) . '"' : ''; ?>>
                         <?php if ( ! empty( $s['topbar_enabled'] ) ) : ?>
             <div class="olo-mm-topbar">
                 <div class="olo-mm-topbar-left">
@@ -2921,17 +2989,28 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                         $subs    = $children[ $item->ID ] ?? [];
                         $has_sub = ! empty( $subs );
                     ?>
-                        <?php $mob_cls = array_filter( [ $has_sub ? 'olo-mm-mob-parent' : '', ( $this->e_pagina_corrente( $item->url ) || $this->ramo_corrente( $subs, $grandchildren ) ) ? 'olo-mm-dp-active' : '' ] ); ?>
+                        <?php
+                        $mob_cur    = $this->e_pagina_corrente( $item->url ) || $this->ramo_corrente( $subs, $grandchildren );
+                        $mob_aperto = $has_sub && $open_current && $mob_cur;
+                        $mob_glink  = $parent_link && $item->url && '#' !== $item->url;
+                        $mob_cls    = array_filter( [ $has_sub ? 'olo-mm-mob-parent' : '', $mob_cur ? 'olo-mm-dp-active' : '', $mob_aperto ? 'olo-mm-mob-open' : '' ] ); ?>
                         <li<?php echo $mob_cls ? ' class="' . esc_attr( implode( ' ', $mob_cls ) ) . '"' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute string built with esc_attr() ?>>
                             <?php if ( $has_sub ) : ?>
-                                <button class="olo-mm-mob-toggle" type="button" aria-expanded="false">
+                                <?php if ( $mob_glink ) : ?>
+                                <div class="olo-mm-mob-item">
+                                    <a href="<?php echo esc_url( $item->url ); ?>"<?php echo $this->aria_corrente( $item->url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute ?>><?php echo esc_html( $item->title ); ?></a>
+                                    <button class="olo-mm-mob-toggle" type="button" aria-expanded="<?php echo $mob_aperto ? 'true' : 'false'; ?>" aria-label="<?php echo esc_attr( sprintf( olobuild_t( 'Apri %s' ), $item->title ) ); ?>"><span class="olo-mm-mob-chevron"><?php echo $toggle_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from get_toggle_svg() (hardcoded strings + intval size) ?></span></button>
+                                </div>
+                                <?php else : ?>
+                                <button class="olo-mm-mob-toggle" type="button" aria-expanded="<?php echo $mob_aperto ? 'true' : 'false'; ?>">
                                     <?php echo esc_html( $item->title ); ?>
                                     <span class="olo-mm-mob-chevron"><?php echo $toggle_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from get_toggle_svg() (hardcoded strings + intval size) ?></span>
                                 </button>
+                                <?php endif; ?>
                                 <div class="olo-mm-mob-sub">
                                     <?php // If item itself has a URL, show as first link ?>
-                                    <?php if ( $item->url && $item->url !== '#' ) : ?>
-                                        <a href="<?php echo esc_url( $item->url ); ?>"<?php echo $this->aria_corrente( $item->url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute ?>><?php echo esc_html( $item->title ); ?></a>
+                                    <?php if ( ! $mob_glink && $item->url && $item->url !== '#' ) : ?>
+                                        <a class="olo-mm-mob-parent-link" href="<?php echo esc_url( $item->url ); ?>"<?php echo $this->aria_corrente( $item->url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute ?>><?php echo esc_html( $item->title ); ?></a>
                                     <?php endif; ?>
                                     <?php foreach ( $subs as $sub ) :
                                         $gc = $grandchildren[ $sub->ID ] ?? [];
@@ -3005,30 +3084,40 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                             $cls     = [];
                             if ( $is_cur ) $cls[] = 'olo-mm-dp-active';
                             if ( $has_sub ) $cls[] = 'olo-mm-dp-has-children';
+                            $dp_aperto = $has_sub && $open_current && $is_cur;
+                            if ( $dp_aperto ) $cls[] = 'olo-mm-dp-sub-open';
                             $li_cls = $cls ? ' class="' . esc_attr( implode(' ', $cls) ) . '"' : '';
                         ?>
                             <li<?php echo $li_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute string built with esc_attr() above ?>>
                                 <?php if ( $has_sub ) : ?>
                                 <div class="olo-mm-dp-item">
                                     <a href="<?php echo esc_url( $item->url ); ?>"<?php echo $this->aria_corrente( $item->url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute ?>><?php echo esc_html( $item->title ); ?></a>
-                                    <button class="olo-mm-dp-chevron" type="button" aria-label="<?php echo esc_attr( olobuild_t( 'Espandi' ) ); ?>" aria-expanded="false"><?php echo $toggle_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from get_toggle_svg() (hardcoded strings + intval size) ?></button>
+                                    <button class="olo-mm-dp-chevron" type="button" aria-label="<?php echo esc_attr( olobuild_t( 'Espandi' ) ); ?>" aria-expanded="<?php echo $dp_aperto ? 'true' : 'false'; ?>"><?php echo $toggle_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from get_toggle_svg() (hardcoded strings + intval size) ?></button>
                                 </div>
                                 <ul class="olo-mm-dp-sub">
+                                    <?php if ( ! $parent_link && $item->url && '#' !== $item->url ) : ?>
+                                    <li class="olo-mm-dp-parent-link"><a href="<?php echo esc_url( $item->url ); ?>"<?php echo $this->aria_corrente( $item->url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute ?>><?php echo esc_html( $item->title ); ?></a></li>
+                                    <?php endif; ?>
                                     <?php foreach ( $subs as $sub ) :
                                         $gc = $grandchildren[ $sub->ID ] ?? [];
                                         $sub_cur = $this->e_pagina_corrente( $sub->url ) || $this->ramo_corrente( $grandchildren[ $sub->ID ] ?? [], [] );
                                         $sub_cls = [];
                                         if ( $sub_cur ) $sub_cls[] = 'olo-mm-dp-active';
                                         if ( ! empty($gc) ) $sub_cls[] = 'olo-mm-dp-has-children';
+                                        $dp_sub_aperto = ! empty( $gc ) && $open_current && $sub_cur;
+                                        if ( $dp_sub_aperto ) $sub_cls[] = 'olo-mm-dp-sub-open';
                                         $sc = $sub_cls ? ' class="' . esc_attr(implode(' ',$sub_cls)) . '"' : '';
                                     ?>
                                         <li<?php echo $sc; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute string built with esc_attr() above ?>>
                                             <?php if ( ! empty($gc) ) : ?>
                                             <div class="olo-mm-dp-item">
                                                 <a href="<?php echo esc_url( $sub->url ); ?>"<?php echo $this->aria_corrente( $sub->url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute ?>><?php echo esc_html( $sub->title ); ?></a>
-                                                <button class="olo-mm-dp-chevron" type="button" aria-label="<?php echo esc_attr( olobuild_t( 'Espandi sottomenu' ) ); ?>" aria-expanded="false"><?php echo $toggle_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from get_toggle_svg() (hardcoded strings + intval size) ?></button>
+                                                <button class="olo-mm-dp-chevron" type="button" aria-label="<?php echo esc_attr( olobuild_t( 'Espandi sottomenu' ) ); ?>" aria-expanded="<?php echo $dp_sub_aperto ? 'true' : 'false'; ?>"><?php echo $toggle_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from get_toggle_svg() (hardcoded strings + intval size) ?></button>
                                             </div>
                                             <ul class="olo-mm-dp-sub">
+                                                <?php if ( ! $parent_link && $sub->url && '#' !== $sub->url ) : ?>
+                                                <li class="olo-mm-dp-parent-link"><a href="<?php echo esc_url( $sub->url ); ?>"<?php echo $this->aria_corrente( $sub->url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute ?>><?php echo esc_html( $sub->title ); ?></a></li>
+                                                <?php endif; ?>
                                                 <?php foreach ( $gc as $gci ) : ?>
                                                 <li><a href="<?php echo esc_url( $gci->url ); ?>"<?php echo $this->aria_corrente( $gci->url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute ?>><?php echo esc_html( $gci->title ); ?></a></li>
                                                 <?php endforeach; ?>
@@ -3561,6 +3650,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                 hamburger.classList.remove("olo-mm-ham-open");
                 hamburger.setAttribute("aria-expanded", "false");
                 if (hamOpen) hamburger.setAttribute("aria-label", hamOpen);
+                if (typeof drillChiudi === "function") setTimeout(drillChiudi, 400);
                 var tornaAlBurger = mpanel ? mpanel.contains(document.activeElement) : false;
                 unlockScroll();
                 if (tornaAlBurger) { try { hamburger.focus({ preventScroll: true }); } catch (err) { hamburger.focus(); } }
@@ -3585,7 +3675,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             /* ── Accordion Mobile (offcanvas) ── */
             root.querySelectorAll(".olo-mm-mob-toggle").forEach(function(btn) {
                 btn.addEventListener("click", function() {
-                    var open = btn.parentElement.classList.toggle("olo-mm-mob-open");
+                    var open = btn.closest("li").classList.toggle("olo-mm-mob-open");
                     btn.setAttribute("aria-expanded", open ? "true" : "false");
                 });
             });
@@ -3603,8 +3693,10 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                 });
             });
 
-            /* Parent items: click on text toggles submenu instead of navigating */
-            root.querySelectorAll(".olo-mm-dp-item > a").forEach(function(link) {
+            /* Voce genitore: apre il sottomenu invece di navigare, salvo «porta alla pagina»
+               (o sottomenu sempre aperti): lì è un link e la freccia apre. */
+            var parentLink = root.classList.contains("olo-mm-parent-link");
+            if (!parentLink) root.querySelectorAll(".olo-mm-dp-item > a").forEach(function(link) {
                 var li = link.closest("li");
                 if (li) {
                     link.addEventListener("click", function(e) {
@@ -3623,7 +3715,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                 mpanel.addEventListener("click", function(e) {
                     var a = e.target.closest ? e.target.closest("a[href]") : null;
                     if (!a) return;
-                    if (a.closest(".olo-mm-dp-item")) return;
+                    if (a.closest(".olo-mm-dp-item")) { if (!parentLink) return; }
                     var u = null;
                     try { u = new URL(a.href, location.href); } catch (err) { return; }
                     var stessa = u.origin === location.origin ? (u.pathname === location.pathname ? u.search === location.search : false) : false;
@@ -3640,6 +3732,96 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                     }
                     closeMobile();
                 });
+            }
+
+            /* ── Sottomenu a pannelli (drill-down) ──
+               Il livello aperto prende il posto dell'elenco: «Indietro» e il titolo in cima,
+               la pagina della voce come prima riga («Vai a …»). Le voci si clonano: gli stili
+               dell'elenco valgono anche qui, e i link chiudono il pannello come gli altri. */
+            var drillStack = [];
+            function drillTop() { return mpanel ? mpanel.querySelector(".olo-mm-mob-nav, .olo-mm-dp-nav, .olo-mm-fs-nav") : null; }
+            function drillApri(li) {
+                var subEl = null;
+                for (var c = 0; c < li.children.length; c++) {
+                    if (li.children[c].classList.contains("olo-mm-mob-sub") || li.children[c].classList.contains("olo-mm-dp-sub")) subEl = li.children[c];
+                }
+                var top = drillTop();
+                if (!subEl || !top) return;
+                var tEl = li.querySelector(".olo-mm-mob-item > a, .olo-mm-mob-toggle, .olo-mm-dp-item > a");
+                var titolo = tEl ? tEl.textContent.trim() : "";
+                var layer = document.createElement("div");
+                layer.className = "olo-mm-drill";
+                layer.setAttribute("role", "group");
+                layer.setAttribute("aria-label", titolo);
+                var back = document.createElement("button");
+                back.type = "button";
+                back.className = "olo-mm-drill-back";
+                back.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg><span></span>';
+                back.lastChild.textContent = root.getAttribute("data-label-back") || "";
+                back.addEventListener("click", drillIndietro);
+                var tit = document.createElement("div");
+                tit.className = "olo-mm-drill-title";
+                tit.textContent = titolo;
+                var list = document.createElement("ul");
+                list.className = top.className.replace("olo-mm-drill-list", "").trim() + " olo-mm-drill-list";
+                Array.prototype.forEach.call(subEl.children, function(n) {
+                    var it;
+                    if (n.tagName === "LI") {
+                        it = n.cloneNode(true);
+                    } else if (n.tagName === "A") {
+                        it = document.createElement("li");
+                        it.appendChild(n.cloneNode(true));
+                    } else {
+                        it = document.createElement("li");
+                        it.className = "olo-mm-drill-heading";
+                        it.textContent = n.textContent;
+                    }
+                    it.classList.remove("olo-mm-dp-sub-open");
+                    list.appendChild(it);
+                });
+                /* I pulsanti (link extra) restano sotto le voci anche dentro un livello. */
+                Array.prototype.forEach.call(top.children, function(n) {
+                    if (n.classList.contains("olo-mm-mob-btn-li")) list.appendChild(n.cloneNode(true));
+                });
+                var primo = list.querySelector(".olo-mm-dp-parent-link a, a.olo-mm-mob-parent-link");
+                if (primo) primo.textContent = (root.getAttribute("data-label-vai") || "%s").replace("%s", titolo);
+                layer.appendChild(back);
+                layer.appendChild(tit);
+                layer.appendChild(list);
+                var corrente = drillStack.length ? drillStack[drillStack.length - 1] : top;
+                corrente.style.display = "none";
+                corrente.parentNode.insertBefore(layer, corrente.nextSibling);
+                drillStack.push(layer);
+                try { back.focus({ preventScroll: true }); } catch (err) { back.focus(); }
+            }
+            function drillIndietro() {
+                var layer = drillStack.pop();
+                if (!layer) return;
+                var prima = drillStack.length ? drillStack[drillStack.length - 1] : drillTop();
+                layer.parentNode.removeChild(layer);
+                if (!prima) return;
+                prima.style.display = "";
+                prima.classList.add("olo-mm-drill-ritorno");
+                setTimeout(function() { prima.classList.remove("olo-mm-drill-ritorno"); }, 320);
+                var torna = prima.querySelector("a[href], button");
+                if (torna) { try { torna.focus({ preventScroll: true }); } catch (err) { torna.focus(); } }
+            }
+            function drillChiudi() {
+                while (drillStack.length) { var l = drillStack.pop(); if (l.parentNode) l.parentNode.removeChild(l); }
+                var top = drillTop();
+                if (top) top.style.display = "";
+            }
+            if (root.classList.contains("olo-mm-sub-drill")) {
+                if (mpanel) mpanel.addEventListener("click", function(e) {
+                    var t = e.target.closest ? e.target.closest(".olo-mm-mob-toggle, .olo-mm-dp-chevron, .olo-mm-dp-item > a") : null;
+                    if (!t) return;
+                    if (t.tagName === "A") { if (parentLink) return; }
+                    var li = t.closest("li");
+                    if (!li) return;
+                    e.preventDefault();
+                    e.stopPropagation();
+                    drillApri(li);
+                }, true);
             }
 
             /* ── Desktop search toggle ── */

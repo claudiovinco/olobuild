@@ -153,6 +153,9 @@ export default {
     // resa dentro la barra (dopo gli extra link) e nell'off-canvas mobile.
     lang_tile_id: '',
     mobile_lang_format: 'inline',
+    mobile_submenu: 'accordion',
+    mobile_parent_click: 'toggle',
+    mobile_open_current: true,
     mobile_lang_pos: 'top',
 
     // Predefiniti '#' SOLO sui principali (Facebook/Instagram/X/LinkedIn): le icone
@@ -826,7 +829,17 @@ export default {
     { key: 'hamburger_size', label: t('Dimensione hamburger'), type: 'range', min: 20, max: 44, step: 2, unit: 'px' },
     { key: 'hamburger_color', label: t('Colore hamburger'), type: 'color' },
 
-    { type: 'separator', label: t('Menu mobile — Indicatore sottomenu') },
+    { type: 'separator', label: t('Menu mobile — Sottomenu') },
+    { key: 'mobile_submenu', label: t('Sottomenu'), type: 'select', options: [
+      { value: 'accordion', label: t('A fisarmonica') },
+      { value: 'drill', label: t('A pannelli, con «Indietro»') },
+      { value: 'open', label: t('Sempre aperti') },
+    ] },
+    { key: 'mobile_parent_click', label: t('Voce con sottomenu'), type: 'select', show: (s) => (s.mobile_submenu || 'accordion') !== 'open', options: [
+      { value: 'toggle', label: t('Apre il sottomenu (la pagina è la prima voce)') },
+      { value: 'link', label: t('Porta alla pagina, la freccia apre') },
+    ] },
+    { key: 'mobile_open_current', label: t('Apri la sezione corrente'), type: 'toggle', show: (s) => (s.mobile_submenu || 'accordion') === 'accordion' },
     { key: 'mob_toggle_style', label: t('Stile indicatore'), type: 'select', options: [
       { value: 'chevron', label: t('Chevron (∨/∧)') },
       { value: 'plus-minus', label: t('Plus / Minus (+/−)') },
