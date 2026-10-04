@@ -70,7 +70,35 @@ alimentato dagli stessi file e i video.
   e CSS, con i colori della shell.
 - Ogni lotto che cambia un'interfaccia descritta aggiorna la guida relativa e il `CHANGELOG.md`.
 
-## 5. olotheme.com (sito in produzione, da fare su richiesta)
+## 5. Difetti trovati scrivendo le guide
+
+Le guide descrivono solo ciò che agisce. Questi difetti restano da correggere, e le guide li segnalano
+come «in revisione» dove l'utente li incontrerebbe.
+
+1. **La full-page cache non si svuota al salvataggio nel builder.** `do_action( 'olo_template_saved' )`
+   non viene mai lanciato. Ne dipendono anche l'invalidazione del Critical CSS, il nuovo apprendimento
+   del subset UIkit e la pulizia dei vecchi file `olo-{tpl}-*.css`. È la correzione più urgente.
+2. **SEO globale**: su 11 controlli agiscono solo Separatore e Sitemap XML. Il Vue salva chiavi che il
+   PHP non legge (`og_image` contro `og_default_image`, `twitter_handle` contro `twitter_user`, `card_type`
+   contro `twitter_card_type`, `advanced.schema.type` contro `titles.kg_type`). Il link «Vedi sitemap»
+   porta alla sitemap di WordPress, non a quella di Olobuild.
+3. **Performance & Cache**: Defer JavaScript (handle sbagliati), Durata cache, Sezioni above-the-fold,
+   Preload font custom, Video facade YouTube/Vimeo, fetchpriority hero image, Lazy loading immagini
+   below-fold non agiscono. «Svuota tutto» svuota solo il Critical CSS. Le statistiche (pagine in
+   cache, score) non misurano ciò che dicono. Se c'è già un altro drop-in di cache, la full-page cache
+   non si attiva e non lo dice.
+4. **White Label**: «Nascondi changelog & roadmap» e «Link Documentazione custom» non vengono salvati.
+   Con la pagina Guida possono agire davvero: nascondere le Novità, puntare la Guida a un indirizzo
+   proprio.
+5. **Configurazione**: la scheda «Breakpoint responsive» salva un'opzione che nessuno legge. La scheda
+   Popup parla di template «di tipo Popup», che non esiste.
+6. **Bacheca**: «Sfoglia template · Pronti all'uso» apre i template del sito, non una libreria. Il
+   template 404 non ha un'interfaccia per attivarlo. La home di partenza del wizard nomina uno «Style
+   Manager» che non esiste.
+7. **Redirect & 404**: IndexNow richiede il file `<chiave>.txt` nella radice, che Olobuild non crea.
+8. **Stock media**: il link di aiuto per le chiavi punta a olotheme.com/docs/stock-media-keys/ (404).
+
+## 6. olotheme.com (sito in produzione, da fare su richiesta)
 
 - Pagine /docs, /docs/onboarding, /docs/templates, /docs/seo, /docs/performance, /support, /community,
   /roadmap: date «Q3 2026» scadute, emoji, link a github.com/olotheme (404).
