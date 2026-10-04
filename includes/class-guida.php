@@ -82,6 +82,25 @@ class Olobuild_Guida {
 		];
 	}
 
+	/** Le Novità si vedono, salvo «Nascondi changelog» del White Label. */
+	public static function novita_visibili() {
+		return ! ( class_exists( 'Olobuild_White_Label' ) && Olobuild_White_Label::nascondi_novita() );
+	}
+
+	/** Documentazione dell'agenzia (White Label) al posto delle guide di Olobuild. */
+	public static function aiuto_esterno() {
+		return class_exists( 'Olobuild_White_Label' ) && '' !== Olobuild_White_Label::doc_url();
+	}
+
+	/** Dove porta il (?) della barra in alto: la Guida, o la documentazione dell'agenzia. */
+	public static function url_aiuto() {
+		return self::aiuto_esterno() ? Olobuild_White_Label::doc_url() : self::url();
+	}
+
+	private static function marchio() {
+		return (string) apply_filters( 'olobuild_brand_name', 'Olobuild' );
+	}
+
 	public static function url( $slug = '' ) {
 		$args = [ 'page' => self::SLUG ];
 		if ( $slug ) {
@@ -130,8 +149,9 @@ class Olobuild_Guida {
 		$a     = apply_filters( 'olobuild_support_email', 'info@olotheme.com' );
 		$tema  = wp_get_theme();
 		$corpo = sprintf(
-			"%s\n\n\n---\nOlobuild %s\nWordPress %s\nPHP %s\n%s %s\n%s",
+			"%s\n\n\n---\n%s %s\nWordPress %s\nPHP %s\n%s %s\n%s",
 			__( 'Descrivi il problema: cosa hai fatto, cosa ti aspettavi, cosa è successo.', 'olobuild' ),
+			self::marchio(),
 			OLOBUILD_VERSION,
 			$wp_version,
 			PHP_VERSION,
@@ -140,7 +160,7 @@ class Olobuild_Guida {
 			home_url( '/' )
 		);
 		return 'mailto:' . $a
-			. '?subject=' . rawurlencode( sprintf( __( 'Supporto Olobuild %s', 'olobuild' ), OLOBUILD_VERSION ) )
+			. '?subject=' . rawurlencode( sprintf( __( 'Supporto %1$s %2$s', 'olobuild' ), self::marchio(), OLOBUILD_VERSION ) )
 			. '&body=' . rawurlencode( $corpo );
 	}
 
@@ -171,7 +191,7 @@ class Olobuild_Guida {
 	public static function render_contenuto() {
 		$guide = self::guide();
 		$g     = isset( $_GET['g'] ) ? sanitize_key( wp_unslash( $_GET['g'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- sola lettura: sceglie quale guida mostrare.
-		if ( 'novita' !== $g && ! isset( $guide[ $g ] ) ) {
+		if ( ! isset( $guide[ $g ] ) && ! ( 'novita' === $g && self::novita_visibili() ) ) {
 			$g = '';
 		}
 		?>
@@ -187,9 +207,11 @@ class Olobuild_Guida {
 				</a>
 				<?php endforeach; ?>
 				<div class="sep"></div>
+				<?php if ( self::novita_visibili() ) : ?>
 				<a href="<?php echo esc_url( self::url( 'novita' ) ); ?>" class="<?php echo 'novita' === $g ? 'on' : ''; ?>"<?php echo 'novita' === $g ? ' aria-current="page"' : ''; ?>>
 					<span class="ic"><?php echo self::icona( 'novita', 16 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di icona(). ?></span><?php esc_html_e( 'Novità', 'olobuild' ); ?>
 				</a>
+				<?php endif; ?>
 				<a href="<?php echo esc_attr( self::mailto_supporto() ); ?>">
 					<span class="ic"><?php echo self::icona( 'posta', 16 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di icona(). ?></span><?php esc_html_e( 'Scrivi al supporto', 'olobuild' ); ?>
 				</a>
@@ -212,9 +234,9 @@ class Olobuild_Guida {
 	private static function render_indice() {
 		?>
 		<header class="olo-guida-head">
-			<p class="kick"><?php echo esc_html( sprintf( __( 'Olobuild %s', 'olobuild' ), OLOBUILD_VERSION ) ); ?></p>
+			<p class="kick"><?php echo esc_html( self::marchio() . ' ' . OLOBUILD_VERSION ); ?></p>
 			<h1><?php esc_html_e( 'Guida', 'olobuild' ); ?></h1>
-			<p class="lead"><?php esc_html_e( 'Le guide di Olobuild, scritte per la versione installata. Ognuna si legge in pochi minuti e rimanda alle schermate che descrive.', 'olobuild' ); ?></p>
+			<p class="lead"><?php echo esc_html( sprintf( __( 'Le guide di %s, scritte per la versione installata. Ognuna si legge in pochi minuti e rimanda alle schermate che descrive.', 'olobuild' ), self::marchio() ) ); ?></p>
 		</header>
 		<div class="olo-guida-cards">
 			<?php foreach ( self::guide() as $slug => $info ) : ?>
@@ -229,7 +251,7 @@ class Olobuild_Guida {
 		<div class="olo-guida-aiuto">
 			<div class="tx">
 				<strong><?php esc_html_e( 'Non trovi la risposta?', 'olobuild' ); ?></strong>
-				<span><?php esc_html_e( "Scrivi al supporto. L'email parte già con la versione di Olobuild, WordPress e PHP, così possiamo rispondere senza chiedertele.", 'olobuild' ); ?></span>
+				<span><?php echo esc_html( sprintf( __( "Scrivi al supporto. L'email parte già con la versione di %s, WordPress e PHP, così possiamo rispondere senza chiedertele.", 'olobuild' ), self::marchio() ) ); ?></span>
 			</div>
 			<a class="olo-btn olo-btn-sec" href="<?php echo esc_attr( self::mailto_supporto() ); ?>"><?php echo self::icona( 'posta', 14 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di icona(). ?> <?php esc_html_e( 'Scrivi al supporto', 'olobuild' ); ?></a>
 		</div>
@@ -251,7 +273,7 @@ class Olobuild_Guida {
 				<p class="lead"><?php echo esc_html( $guide[ $slug ]['desc'] ); ?></p>
 				<p class="meta">
 					<span><?php echo self::icona( 'documento', 13 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di icona(). ?> <?php echo esc_html( sprintf( _n( '%d minuto di lettura', '%d minuti di lettura', self::minuti( $slug ), 'olobuild' ), self::minuti( $slug ) ) ); ?></span>
-					<span><?php echo esc_html( sprintf( __( 'Scritta per Olobuild %s', 'olobuild' ), self::VERIFICATA ) ); ?></span>
+					<span><?php echo esc_html( sprintf( __( 'Scritta per %1$s %2$s', 'olobuild' ), self::marchio(), self::VERIFICATA ) ); ?></span>
 				</p>
 			</header>
 			<?php

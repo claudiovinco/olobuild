@@ -1043,6 +1043,9 @@ class Olobuild_Builder {
                 'siteUrl'           => home_url( '/' ),
                 // La sitemap di WordPress (scheda SEO globale): con i permalink semplici non è /wp-sitemap.xml.
                 'sitemapUrl'        => function_exists( 'get_sitemap_url' ) ? (string) get_sitemap_url( 'index' ) : '',
+                // Link «Guida» della barra: la documentazione dell'agenzia, se il White Label ne ha una.
+                'docsUrl'           => Olobuild_Guida::url_aiuto(),
+                'docsEsterno'       => Olobuild_Guida::aiuto_esterno(),
                 'pluginUrl'         => OLOBUILD_URL,
                 'version'           => OLOBUILD_VERSION,
                 'locale'            => olobuild_current_locale(),

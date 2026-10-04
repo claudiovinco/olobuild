@@ -1316,7 +1316,7 @@ class Olobuild_Cookie_Consent {
         }
 
         ?>
-        <!-- Olobuild Cookie Consent -->
+        <?php echo Olobuild_White_Label::commento( 'Cookie Consent' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- commento HTML fisso, testo con esc_html() ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (sanitize_hex_color with fallbacks, intval, fixed position/layout literals). ?>
         <style>
         .olo-cc-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999998;display:none}

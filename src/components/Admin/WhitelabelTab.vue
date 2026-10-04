@@ -2,10 +2,7 @@
   <div class="cfg-page-head">
     <div>
       <h1>White <em>Label</em></h1>
-      <p>{{ t('Personalizza nome, logo e branding del plugin per consegnarlo ai clienti senza riferimenti a Olobuild.') }}</p>
-    </div>
-    <div class="head-actions">
-      <span class="cfg-pill ok"><span class="dot"></span> {{ t('Licenza Agency') }}</span>
+      <p>{{ t('Nome, logo, documentazione e supporto: per consegnare il sito al cliente con il tuo marchio. Ogni campo agisce da solo, quelli vuoti lasciano Olobuild.') }}</p>
     </div>
   </div>
 
@@ -24,7 +21,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Nome plugin') }}</label>
-          <div class="hint">{{ t('Sostituisce "Olobuild" nelle voci di menu WP, nell\'editor e nei messaggi di sistema.') }}</div>
+          <div class="hint">{{ t('Sostituisce "Olobuild" nel menu di WordPress, nell\'elenco dei plugin, nell\'editor, nella Guida e nel wizard.') }}</div>
         </div>
         <div class="control-col">
           <div class="cfg-input cfg-w-md"><input type="text" :value="form.plugin_name" @input="set('plugin_name', $event.target.value)" :placeholder="t('Es. Studio Builder')" /></div>
@@ -33,7 +30,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Nome agenzia') }}</label>
-          <div class="hint">{{ t('Visibile in footer di alcune schermate e nei meta dei file esportati.') }}</div>
+          <div class="hint">{{ t('Autore del plugin nell\'elenco dei plugin di WordPress.') }}</div>
         </div>
         <div class="control-col">
           <div class="cfg-input cfg-w-md"><input type="text" :value="form.author_name" @input="set('author_name', $event.target.value)" :placeholder="t('Es. Studio Conti & Associati')" /></div>
@@ -42,7 +39,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Logo (chiaro)') }}</label>
-          <div class="hint">{{ t('32×32px. Visibile in voce di menu WordPress.') }}</div>
+          <div class="hint">{{ t('Icona della voce nel menu di WordPress. Quadrata, almeno 32×32 px.') }}</div>
         </div>
         <div class="control-col logo-row">
           <div class="logo-preview light" :style="logoLightStyle">
@@ -60,7 +57,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Logo (scuro)') }}</label>
-          <div class="hint">{{ t('Usato in barre scure dell\'editor.') }}</div>
+          <div class="hint">{{ t('Al posto del logo Olobuild nella barra scura della bacheca e nel wizard.') }}</div>
         </div>
         <div class="control-col logo-row">
           <div class="logo-preview dark" :style="logoDarkStyle">
@@ -78,7 +75,7 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('URL sito agenzia') }}</label>
-          <div class="hint">{{ t('Link "Powered by" nei file esportati (se attivo).') }}</div>
+          <div class="hint">{{ t('Link dell\'autore nell\'elenco dei plugin di WordPress.') }}</div>
         </div>
         <div class="control-col">
           <div class="cfg-input mono"><input type="url" :value="form.author_url" @input="set('author_url', $event.target.value)" placeholder="https://miaagenzia.it" /></div>
@@ -100,33 +97,42 @@
     <div class="cfg-card-body tight">
       <div class="cfg-row">
         <div class="label-col">
-          <label>{{ t('Nascondi "Powered by Olobuild"') }}</label>
-          <div class="hint">{{ t('Toglie attribuzione nel footer dell\'editor e nei file generati.') }}</div>
+          <label>{{ t('Nascondi "Olobuild" nel codice del sito') }}</label>
+          <div class="hint">{{ t('Toglie i commenti HTML con il nome Olobuild dal codice personalizzato e dal banner cookie.') }}</div>
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.hide_credits }" @click="set('hide_credits', !form.hide_credits)" role="switch"></button></div>
       </div>
       <div class="cfg-row">
         <div class="label-col">
-          <label>{{ t('Nascondi changelog & roadmap') }}</label>
-          <div class="hint">{{ t('Il cliente non vede comunicazioni del team Olobuild.') }}</div>
+          <label>{{ t('Nascondi le novità') }}</label>
+          <div class="hint">{{ t('Toglie le note di versione dalla bacheca e dalla Guida.') }}</div>
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.hide_changelog }" @click="set('hide_changelog', !form.hide_changelog)" role="switch"></button></div>
       </div>
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Nascondi a non-admin') }}</label>
-          <div class="hint">{{ t('Gli utenti senza ruolo amministratore non vedono il menu Olobuild in admin.') }}</div>
+          <div class="hint">{{ t('Chi non è amministratore non vede la voce Olobuild nel menu di WordPress.') }}</div>
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.hide_for_non_admins }" @click="set('hide_for_non_admins', !form.hide_for_non_admins)" role="switch"></button></div>
       </div>
-      <div class="cfg-row no-divider">
+      <div class="cfg-row">
         <div class="label-col">
-          <label>{{ t('Link Documentazione custom') }}</label>
-          <div class="hint">{{ t('Sostituisci il link "Documentazione" con uno tuo.') }}</div>
+          <label>{{ t('Documentazione tua') }}</label>
+          <div class="hint">{{ t('Il pulsante Guida e il pannello Centro risorse aprono il tuo indirizzo al posto delle guide di Olobuild.') }}</div>
         </div>
         <div class="control-col" style="display:flex; gap:8px; align-items:center;">
           <button class="cfg-switch" :class="{ 'is-on': form.custom_doc_enabled }" @click="set('custom_doc_enabled', !form.custom_doc_enabled)" role="switch"></button>
           <div class="cfg-input" style="flex:1;"><input type="url" :value="form.custom_doc_url" @input="set('custom_doc_url', $event.target.value)" placeholder="https://miaagenzia.it/guida" :disabled="!form.custom_doc_enabled" /></div>
+        </div>
+      </div>
+      <div class="cfg-row no-divider">
+        <div class="label-col">
+          <label>{{ t('Email del supporto') }}</label>
+          <div class="hint">{{ t('«Scrivi al supporto» apre un\'email a questo indirizzo. Vuoto: il supporto Olobuild.') }}</div>
+        </div>
+        <div class="control-col">
+          <div class="cfg-input cfg-w-md"><input type="email" :value="form.support_email" @input="set('support_email', $event.target.value)" placeholder="supporto@miaagenzia.it" /></div>
         </div>
       </div>
     </div>
@@ -148,7 +154,6 @@ const loaded = ref(false);
 const lettura = useCfgLettura(TAB_ID, loaded, () => loadSettings());
 
 const INIZIALE = {
-  enabled: true,
   plugin_name: '',
   plugin_description: '',
   plugin_logo_light: '',
@@ -160,6 +165,7 @@ const INIZIALE = {
   hide_for_non_admins: false,
   custom_doc_enabled: false,
   custom_doc_url: '',
+  support_email: '',
 };
 const form = ref({ ...INIZIALE });
 

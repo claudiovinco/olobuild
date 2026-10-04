@@ -347,6 +347,9 @@ trait Olobuild_Rest_Dashboard_Trait {
      * (lo stesso file che la pagina Guida mostra intero).
      */
     public function dashboard_changelog( $request ) {
+        if ( ! Olobuild_Guida::novita_visibili() ) {
+            return rest_ensure_response( [] ); // «Nascondi changelog» del White Label
+        }
         $limit = max( 1, min( 10, (int) $request->get_param( 'limit' ) ) );
         $entries = self::changelog_voci( $limit );
 

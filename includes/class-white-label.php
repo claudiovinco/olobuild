@@ -24,10 +24,10 @@ class Olobuild_White_Label {
         add_action( 'rest_api_init', [ $this, 'register_routes' ] );
         add_action( 'admin_menu', [ $this, 'add_admin_page' ] );
 
+        // Niente interruttore generale: la scheda non lo mostra (il server lo
+        // teneva spento e nessun campo agiva). Ogni filtro guarda il suo campo:
+        // vuoto = comportamento di serie.
         $settings = $this->get_settings();
-        if ( empty( $settings['enabled'] ) ) {
-            return;
-        }
 
         // Rename plugin in admin
         add_filter( 'all_plugins', [ $this, 'rename_plugin' ] );
@@ -35,10 +35,14 @@ class Olobuild_White_Label {
         // Change admin menu
         add_action( 'admin_menu', [ $this, 'modify_admin_menu' ], 999 );
 
-        // Hide for non-admins
+        // Hide for non-admins: su admin_head, come admin_menu_trim, così le pagine
+        // restano raggiungibili dai link (builder, «Modifica con Olobuild»).
         if ( ! empty( $settings['hide_for_non_admins'] ) ) {
-            add_action( 'admin_menu', [ $this, 'hide_menu_for_non_admins' ], 1000 );
+            add_action( 'admin_head', [ $this, 'hide_menu_for_non_admins' ] );
         }
+
+        // «Scrivi al supporto» (Guida, bacheca): l'email dell'agenzia, se c'è.
+        add_filter( 'olobuild_support_email', [ $this, 'email_supporto' ] );
 
         // Filter builder brand name
         add_filter( 'olobuild_brand_name', [ $this, 'get_brand_name' ] );
@@ -55,10 +59,12 @@ class Olobuild_White_Label {
         $settings = $this->get_settings();
         $key = 'olobuild/olobuild.php';
 
-        if ( isset( $plugins[ $key ] ) && ! empty( $settings['plugin_name'] ) ) {
-            $plugins[ $key ]['Name']   = $settings['plugin_name'];
-            $plugins[ $key ]['Title']  = $settings['plugin_name'];
-
+        // Ogni campo agisce da sé: prima autore e URL contavano solo col nome impostato.
+        if ( isset( $plugins[ $key ] ) ) {
+            if ( ! empty( $settings['plugin_name'] ) ) {
+                $plugins[ $key ]['Name']  = $settings['plugin_name'];
+                $plugins[ $key ]['Title'] = $settings['plugin_name'];
+            }
             if ( ! empty( $settings['plugin_description'] ) ) {
                 $plugins[ $key ]['Description'] = $settings['plugin_description'];
             }
@@ -75,29 +81,58 @@ class Olobuild_White_Label {
     }
 
     public function modify_admin_menu() {
-        global $menu, $submenu;
+        global $menu;
         $settings = $this->get_settings();
 
-        if ( empty( $settings['plugin_name'] ) ) {
-            return;
-        }
-
-        // Rename main menu item
-        foreach ( $menu as &$item ) {
+        // Nome e icona (logo chiaro, 32×32) della voce Olobuild nel menu di WordPress.
+        foreach ( (array) $menu as &$item ) {
             if ( isset( $item[2] ) && $item[2] === 'olobuild' ) {
-                $item[0] = esc_html( $settings['plugin_name'] );
+                if ( ! empty( $settings['plugin_name'] ) ) {
+                    $item[0] = esc_html( $settings['plugin_name'] );
+                }
+                if ( ! empty( $settings['plugin_logo_light'] ) ) {
+                    $item[6] = esc_url( $settings['plugin_logo_light'] );
+                }
                 break;
             }
         }
     }
 
+    /**
+     * Toglie la voce Olobuild dal menu di WordPress a chi non è amministratore.
+     * Prima nascondeva via CSS il link a una pagina che non esiste più dalla v1.0.30.
+     */
     public function hide_menu_for_non_admins() {
-        // Non-admins: hide from WP menu via CSS (don't remove — breaks page registration)
         if ( ! current_user_can( 'manage_options' ) ) {
-            add_action( 'admin_head', function () {
-                echo '<style>#adminmenu a[href*="olo-white-label"] { display: none !important; }</style>';
-            } );
+            remove_menu_page( 'olobuild' );
         }
+    }
+
+    public function email_supporto( $email ) {
+        $e = (string) $this->get_settings()['support_email'];
+        return is_email( $e ) ? $e : $email;
+    }
+
+    /** «Nascondi changelog»: le Novità spariscono da bacheca e Guida. */
+    public static function nascondi_novita() {
+        return ! empty( self::instance()->get_settings()['hide_changelog'] );
+    }
+
+    /** L'indirizzo della documentazione dell'agenzia, se attivo; '' altrimenti. */
+    public static function doc_url() {
+        $s = self::instance()->get_settings();
+        return ( ! empty( $s['custom_doc_enabled'] ) && ! empty( $s['custom_doc_url'] ) ) ? (string) $s['custom_doc_url'] : '';
+    }
+
+    /**
+     * Commento HTML con il nome Olobuild nel codice delle pagine (codice
+     * personalizzato, banner cookie): niente se «Nascondi i crediti» è attivo.
+     */
+    public static function commento( $che_cosa ) {
+        if ( ! empty( self::instance()->get_settings()['hide_credits'] ) ) {
+            return '';
+        }
+        return '<!-- Olobuild ' . esc_html( $che_cosa ) . " -->\n";
     }
 
     public function get_brand_name( $default ) {
@@ -105,8 +140,12 @@ class Olobuild_White_Label {
         return ! empty( $settings['plugin_name'] ) ? $settings['plugin_name'] : $default;
     }
 
+    /** Il logo per le barre scure (bacheca, wizard): il «Logo (scuro)» della scheda. */
     public function get_logo_url( $default ) {
         $settings = $this->get_settings();
+        if ( ! empty( $settings['plugin_logo_dark'] ) ) {
+            return $settings['plugin_logo_dark'];
+        }
         return ! empty( $settings['plugin_logo_url'] ) ? $settings['plugin_logo_url'] : $default;
     }
 
@@ -124,6 +163,12 @@ class Olobuild_White_Label {
             'author_url'         => '',
             'hide_for_non_admins' => false,
             'hide_credits'       => false,
+            'plugin_logo_light'  => '',
+            'plugin_logo_dark'   => '',
+            'hide_changelog'     => false,
+            'custom_doc_enabled' => false,
+            'custom_doc_url'     => '',
+            'support_email'      => '',
         ];
         // Merge coi default: opzioni salvate prima di nuove chiavi (es. plugin_logo_url)
         // non devono generare undefined-key notice.
@@ -162,8 +207,9 @@ class Olobuild_White_Label {
             return new WP_Error( 'invalid', 'Dati non validi', [ 'status' => 400 ] );
         }
 
+        // Prima il salvataggio buttava via loghi, «Nascondi changelog» e documentazione.
         $clean = [
-            'enabled'             => ! empty( $data['enabled'] ),
+            'enabled'             => true,
             'plugin_name'         => sanitize_text_field( $data['plugin_name'] ?? '' ),
             'plugin_description'  => sanitize_text_field( $data['plugin_description'] ?? '' ),
             'plugin_logo_url'     => esc_url_raw( $data['plugin_logo_url'] ?? '' ),
@@ -171,6 +217,12 @@ class Olobuild_White_Label {
             'author_url'          => esc_url_raw( $data['author_url'] ?? '' ),
             'hide_for_non_admins' => ! empty( $data['hide_for_non_admins'] ),
             'hide_credits'        => ! empty( $data['hide_credits'] ),
+            'plugin_logo_light'   => esc_url_raw( $data['plugin_logo_light'] ?? '' ),
+            'plugin_logo_dark'    => esc_url_raw( $data['plugin_logo_dark'] ?? '' ),
+            'hide_changelog'      => ! empty( $data['hide_changelog'] ),
+            'custom_doc_enabled'  => ! empty( $data['custom_doc_enabled'] ),
+            'custom_doc_url'      => esc_url_raw( $data['custom_doc_url'] ?? '', [ 'http', 'https' ] ),
+            'support_email'       => sanitize_email( $data['support_email'] ?? '' ),
         ];
 
         update_option( 'olobuild_white_label', $clean );

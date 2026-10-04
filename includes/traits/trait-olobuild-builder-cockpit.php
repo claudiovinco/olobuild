@@ -394,7 +394,7 @@ trait Olobuild_Builder_Cockpit_Trait {
      * traslocate qui (Fase 3): il deep-link ?tab= le apre come sempre.
      */
     public static function cockpit_areas() {
-        return [
+        $areas = [
             'costruisci' => [
                 'label'  => __( 'Costruisci', 'olobuild' ),
                 'icon'   => '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>',
@@ -444,10 +444,15 @@ trait Olobuild_Builder_Cockpit_Trait {
                 'subnav' => [
                     [ 'label' => __( 'Configurazione', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olobuilder-settings' ), 'screen' => 'olobuild_page_olobuilder-settings' ],
                     [ 'label' => __( 'Strumenti', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olo-tools' ), 'screen' => 'olobuild_page_olo-tools' ],
-                    [ 'label' => __( 'Guida', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olo-guida' ), 'screen' => 'olobuild_page_olo-guida' ],
                 ],
             ],
         ];
+        // La Guida sta nella sub-nav come pagina della shell. Con la documentazione
+        // dell'agenzia (White Label) la apre il (?) in alto, in una nuova scheda.
+        if ( ! Olobuild_Guida::aiuto_esterno() ) {
+            $areas['sistema']['subnav'][] = [ 'label' => __( 'Guida', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olo-guida' ), 'screen' => 'olobuild_page_olo-guida' ];
+        }
+        return $areas;
     }
 
     /**
@@ -566,7 +571,7 @@ trait Olobuild_Builder_Cockpit_Trait {
                 <a class="ico-btn" href="<?php echo esc_url( admin_url( 'admin.php?page=olo-form-submissions' ) ); ?>" title="<?php esc_attr_e( 'Notifiche', 'olobuild' ); ?>">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0112 0v5l2 2H4l2-2zM10 20a2 2 0 004 0"/></svg>
                 </a>
-                <a class="ico-btn" href="<?php echo esc_url( Olobuild_Guida::url() ); ?>" title="<?php esc_attr_e( 'Guida', 'olobuild' ); ?>" aria-label="<?php esc_attr_e( 'Guida', 'olobuild' ); ?>">
+                <a class="ico-btn" href="<?php echo esc_url( Olobuild_Guida::url_aiuto() ); ?>"<?php echo Olobuild_Guida::aiuto_esterno() ? ' target="_blank" rel="noopener"' : ''; ?> title="<?php esc_attr_e( 'Guida', 'olobuild' ); ?>" aria-label="<?php esc_attr_e( 'Guida', 'olobuild' ); ?>">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 015 0c0 1.5-2.5 2-2.5 4M12 17h.01"/></svg>
                 </a>
                 <a class="ico-btn" href="<?php echo esc_url( get_edit_user_link() ); ?>" title="<?php esc_attr_e( 'Profilo', 'olobuild' ); ?>">
@@ -1128,19 +1133,30 @@ trait Olobuild_Builder_Cockpit_Trait {
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg>
                         </button>
                     </div>
+                    <?php
+                    // White Label: «Nascondi le novità» toglie la sezione; la documentazione
+                    // dell'agenzia prende il posto delle guide di Olobuild.
+                    $rail_novita = Olobuild_Guida::novita_visibili();
+                    $rail_guide  = ! Olobuild_Guida::aiuto_esterno();
+                    ?>
                     <?php /* Barra del pannello compresso: un'icona per sezione, il clic riapre il pannello su quella. */ ?>
                     <div class="olo-rail-mini">
+                        <?php if ( $rail_novita ) : ?>
                         <button type="button" data-olo-rail-sec="novita" title="<?php esc_attr_e( 'Cosa c\'è di nuovo', 'olobuild' ); ?>" aria-label="<?php esc_attr_e( 'Cosa c\'è di nuovo', 'olobuild' ); ?>">
                             <?php echo Olobuild_Guida::icona( 'novita', 18 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di Olobuild_Guida::icona(). ?>
                         </button>
+                        <?php endif; ?>
+                        <?php if ( $rail_guide ) : ?>
                         <button type="button" data-olo-rail-sec="guide" title="<?php esc_attr_e( 'Impara Olobuild', 'olobuild' ); ?>" aria-label="<?php esc_attr_e( 'Impara Olobuild', 'olobuild' ); ?>">
                             <?php echo Olobuild_Guida::icona( 'libro', 18 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di Olobuild_Guida::icona(). ?>
                         </button>
+                        <?php endif; ?>
                         <button type="button" data-olo-rail-sec="aiuto" title="<?php esc_attr_e( 'Aiuto e supporto', 'olobuild' ); ?>" aria-label="<?php esc_attr_e( 'Aiuto e supporto', 'olobuild' ); ?>">
                             <?php echo Olobuild_Guida::icona( 'aiuto', 18 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di Olobuild_Guida::icona(). ?>
                         </button>
                     </div>
                     <div class="rail-body">
+                        <?php if ( $rail_novita ) : ?>
                         <div class="olo-rail-section" data-olo-rail-sec="novita">
                             <h3>
                                 <?php esc_html_e( 'Cosa c\'è di nuovo', 'olobuild' ); ?>
@@ -1149,6 +1165,8 @@ trait Olobuild_Builder_Cockpit_Trait {
                             <div data-olo-changelog></div>
                             <a class="olo-rail-more" href="<?php echo esc_url( Olobuild_Guida::url( 'novita' ) ); ?>"><?php esc_html_e( 'Tutte le novità', 'olobuild' ); ?> <?php echo Olobuild_Guida::icona( 'freccia', 12 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di Olobuild_Guida::icona(). ?></a>
                         </div>
+                        <?php endif; ?>
+                        <?php if ( $rail_guide ) : ?>
                         <div class="olo-rail-section" data-olo-rail-sec="guide">
                             <h3><?php esc_html_e( 'Impara Olobuild', 'olobuild' ); ?></h3>
                             <?php /* Guide scritte del pacchetto (pagina Guida), con i minuti di lettura veri. Niente emoji né video che non esistono. */ ?>
@@ -1159,21 +1177,33 @@ trait Olobuild_Builder_Cockpit_Trait {
                             </a>
                             <?php endforeach; ?>
                         </div>
+                        <?php endif; ?>
                         <div class="olo-rail-section" data-olo-rail-sec="aiuto">
                             <h3><?php esc_html_e( 'Aiuto e supporto', 'olobuild' ); ?></h3>
                             <div class="olo-help-row">
+                                <?php if ( $rail_guide ) : ?>
                                 <a href="<?php echo esc_url( Olobuild_Guida::url() ); ?>">
                                     <span class="ic"><?php echo Olobuild_Guida::icona( 'libro', 13 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di Olobuild_Guida::icona(). ?></span>
                                     <?php esc_html_e( 'Tutte le guide', 'olobuild' ); ?>
                                 </a>
+                                <?php else : ?>
+                                <a href="<?php echo esc_url( Olobuild_Guida::url_aiuto() ); ?>" target="_blank" rel="noopener">
+                                    <span class="ic"><?php echo Olobuild_Guida::icona( 'libro', 13 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di Olobuild_Guida::icona(). ?></span>
+                                    <?php esc_html_e( 'Documentazione', 'olobuild' ); ?>
+                                </a>
+                                <?php endif; ?>
+                                <?php if ( $rail_novita ) : ?>
                                 <a href="<?php echo esc_url( Olobuild_Guida::url( 'novita' ) ); ?>">
                                     <span class="ic"><?php echo Olobuild_Guida::icona( 'novita', 13 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di Olobuild_Guida::icona(). ?></span>
                                     <?php esc_html_e( 'Novità', 'olobuild' ); ?>
                                 </a>
+                                <?php endif; ?>
+                                <?php if ( $rail_guide ) : ?>
                                 <a href="<?php echo esc_url( Olobuild_Guida::url( 'primi-passi' ) . '#scorciatoie' ); ?>">
                                     <span class="ic"><?php echo Olobuild_Guida::icona( 'tastiera', 13 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di Olobuild_Guida::icona(). ?></span>
                                     <?php esc_html_e( 'Scorciatoie', 'olobuild' ); ?>
                                 </a>
+                                <?php endif; ?>
                                 <a href="<?php echo esc_attr( Olobuild_Guida::mailto_supporto() ); ?>">
                                     <span class="ic"><?php echo Olobuild_Guida::icona( 'posta', 13 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di Olobuild_Guida::icona(). ?></span>
                                     <?php esc_html_e( 'Scrivi al supporto', 'olobuild' ); ?>
