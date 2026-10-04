@@ -110,6 +110,10 @@ export default {
     { key: 'cover_text_color', label: t('Colore testo stampigliato'), type: 'color',
       condition: { field: 'cover_text', op: 'neq', value: '' } },
 
+    // Adattamento e punto focale sono dell'immagine PREMIO (sotto la copertura): stavano
+    // in «Aspetto copertura» e sembravano agire sulla copertura, mostrando un'altra foto.
+    { type: 'separator', label: t('Immagine premio'),
+      condition: { field: 'image', op: 'neq', value: '' } },
     { key: 'object_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI,
       condition: { field: 'image', op: 'neq', value: '' } },
     // Il punto focale serve solo dove c'e' un ritaglio da spostare, e si nasconde

@@ -384,6 +384,11 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
             var W = 0, H = 0;                 // dimensioni backing store (px * dpr)
             var painted = false, cleared = false, hintHidden = false, revealed = false;
             var coverImgEl = null;
+            // booted = la copertura è partita (immagine richiesta o colori dipinti).
+            // Prima l'avvio guardava `painted`: il ResizeObserver dipingeva per primo,
+            // segnava painted, e l'IntersectionObserver non chiedeva mai l'immagine
+            // di copertura (restava il colore di riserva).
+            var booted = false;
 
             // Converte angolo (deg) in punti start/end per il gradiente lineare sul box WxH.
             function gradPoints( deg ) {
@@ -397,8 +402,17 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
             function fillCover() {
                 ctx.globalCompositeOperation = 'source-over';
                 ctx.globalAlpha = 1;
-                if ( COVER_TYPE === 'image' && coverImgEl ) {
-                    ctx.drawImage( coverImgEl, 0, 0, W, H );
+                if ( COVER_TYPE === 'image' ) {
+                    // Finché l'immagine non c'è, il primo colore copre il premio.
+                    ctx.fillStyle = COVER_C1;
+                    ctx.fillRect( 0, 0, W, H );
+                    if ( coverImgEl && coverImgEl.complete && coverImgEl.naturalWidth ) {
+                        // Riempie senza deformare (come object-fit: cover), centrata.
+                        var iw = coverImgEl.naturalWidth, ih = coverImgEl.naturalHeight;
+                        var k = Math.max( W / iw, H / ih );
+                        var dw = iw * k, dh = ih * k;
+                        ctx.drawImage( coverImgEl, ( W - dw ) / 2, ( H - dh ) / 2, dw, dh );
+                    }
                 } else if ( COVER_TYPE === 'gradient' ) {
                     var p = gradPoints( COVER_ANG );
                     var g = ctx.createLinearGradient( p[0], p[1], p[2], p[3] );
@@ -547,19 +561,22 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
             // ResizeObserver: ridipinge solo finché l'utente non ha iniziato a grattare
             if ( 'ResizeObserver' in window ) {
                 var ro = new ResizeObserver( function(){
-                    if ( ! cleared && ! revealed ) { sizeAndPaint(); }
+                    if ( booted && ! cleared && ! revealed ) { sizeAndPaint(); }
                 });
                 ro.observe( canvas );
             }
 
             // Performance: dipingi la copertura solo quando il canvas entra nel viewport.
             function bootPaint() {
+                if ( booted ) { return; }
+                booted = true;
                 if ( COVER_TYPE === 'image' && COVER_IMG ) {
                     coverImgEl = new Image();
                     coverImgEl.crossOrigin = 'anonymous';
                     coverImgEl.onload  = function(){ sizeAndPaint(); };
                     coverImgEl.onerror = function(){ COVER_TYPE = 'gradient'; sizeAndPaint(); };
                     coverImgEl.src = COVER_IMG;
+                    sizeAndPaint(); // il colore copre subito, l'immagine arriva con onload
                 } else {
                     sizeAndPaint();
                 }
@@ -567,7 +584,7 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
             if ( 'IntersectionObserver' in window ) {
                 var io = new IntersectionObserver( function( entries ){
                     for ( var i = 0; i < entries.length; i++ ) {
-                        if ( entries[i].isIntersecting && ! painted ) {
+                        if ( entries[i].isIntersecting && ! booted ) {
                             bootPaint();
                             io.disconnect();
                             break;
