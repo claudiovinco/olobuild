@@ -46,6 +46,10 @@
         v-if="templateType === 'single'"
         class="mb-ml-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-amber-600/20 mb-text-amber-300 mb-border mb-border-amber-500/30"
       >Single: {{ singlePostType }}</span>
+      <span
+        v-if="templateType === '404'"
+        class="mb-ml-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-gray-600/30 mb-text-gray-300 mb-border mb-border-gray-500/40"
+      >404</span>
     </div>
 
     <!-- Center: Page Settings + Viewport controls -->
@@ -629,6 +633,22 @@
       >
         {{ isActiveSingle ? t('Disattiva') : t('Attiva') }}
       </button>
+      <!-- Activate 404: la pagina che il sito mostra per gli indirizzi inesistenti
+           (olobuild_active_404, letta da Olobuild_404_Integration). Prima mancava:
+           una 404 si attivava solo importando un tema. -->
+      <button
+        v-if="templateType === '404' && isPublished"
+        @click="toggleActivate404"
+        :title="isActive404 ? t('Il sito usa questa pagina per gli indirizzi che non esistono') : t('Usa questa pagina per gli indirizzi che non esistono')"
+        :class="[
+          'mb-px-4 mb-py-1.5 mb-text-xs mb-font-medium mb-rounded-md mb-border mb-transition-colors',
+          isActive404
+            ? 'mb-border-gray-400 mb-text-gray-200 mb-bg-gray-600/30 hover:mb-bg-red-600/20 hover:mb-text-red-300 hover:mb-border-red-500/30'
+            : 'mb-border-gray-500/60 mb-text-gray-300 hover:mb-bg-gray-600/30'
+        ]"
+      >
+        {{ isActive404 ? t('Disattiva') : t('Attiva') }}
+      </button>
     </div>
   </div>
   <!-- Header o footer aperto dal chip «Apri il template»: riporta alla pagina di partenza.
@@ -1053,6 +1073,28 @@ const isActiveSingle = computed(() => {
   const pt = singlePostType.value;
   return pt && activeSingles.value[pt] === tplId;
 });
+
+const active404Id = ref(parseInt(oloData.active404Id) || 0);
+const isActive404 = computed(() => {
+  const tplId = builderStore.currentTemplate?.id;
+  return !!tplId && tplId === active404Id.value;
+});
+
+async function toggleActivate404() {
+  const tplId = builderStore.currentTemplate?.id;
+  if (!tplId) return;
+  try {
+    const spegni = isActive404.value;
+    const res = await fetch(`${oloData.restUrl}404/activate`, {
+      method: spegni ? 'DELETE' : 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': oloData.nonce },
+      body: spegni ? undefined : JSON.stringify({ id: tplId }),
+    });
+    if (res.ok) active404Id.value = spegni ? 0 : tplId;
+  } catch (err) {
+    console.error('Toggle 404 activation error:', err);
+  }
+}
 
 async function toggleActivateHeader() {
   const tplId = builderStore.currentTemplate?.id;

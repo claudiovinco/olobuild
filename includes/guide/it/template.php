@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<tr><td><strong>Single</strong></td><td>Il modello comune a tutti i contenuti di un tipo, per esempio ogni articolo o ogni prodotto. Si crea da Template Single, scegliendo il tipo di contenuto.</td></tr>
 		<tr><td><strong>Mega Panel</strong></td><td>Il contenuto di un pannello del megamenu.</td></tr>
 		<tr><td><strong>Widget</strong></td><td>Un contenuto riusabile dentro schede, tab e slider.</td></tr>
-		<tr><td><strong>404</strong></td><td>La pagina che compare quando un indirizzo non esiste. Oggi diventa attiva con il tema che la contiene.</td></tr>
+		<tr><td><strong>404</strong></td><td>La pagina che compare quando un indirizzo non esiste.</td></tr>
 	</tbody>
 </table>
 
@@ -59,7 +59,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 	<figcaption>Con «Predefinito (globale)» nel riquadro della pagina, decidono le regole o, in mancanza, l'header e il footer attivi.</figcaption>
 </figure>
-<p>Per rendere attivo un header o un footer, aprilo nel builder, pubblicalo e premi <span class="ui">Attiva</span> nella barra in alto. Lo stesso vale per un template Single.</p>
+<p>Per rendere attivo un header o un footer, aprilo nel builder, pubblicalo e premi <span class="ui">Attiva</span> nella barra in alto. Lo stesso vale per un template Single e per la pagina 404.</p>
 <p>Nel canvas di una pagina, header e footer dicono da quale template vengono e se li usano anche altre pagine. <span class="ui">Apri il template</span> li apre nel builder, e un pulsante riporta poi alla pagina da cui sei partito.</p>
 
 <h2 id="regole">5. Regole di assegnazione</h2>
