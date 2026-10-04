@@ -40,9 +40,11 @@ class Olobuild_Seo_Redirects {
         add_action( 'wp_ajax_olobuild_seo_clear_404_log', [ $this, 'ajax_clear_404_log' ] );
         add_action( 'wp_ajax_olobuild_seo_404_to_redirect', [ $this, 'ajax_404_to_redirect' ] );
 
-        // IndexNow on publish/update
-        add_action( 'publish_post', [ $this, 'indexnow_ping' ], 20 );
-        add_action( 'publish_page', [ $this, 'indexnow_ping' ], 20 );
+        // IndexNow: il file della chiave (senza, i motori rifiutano ogni avviso) e
+        // l'avviso quando un contenuto pubblicato cambia, anche dal builder.
+        add_action( 'parse_request', [ $this, 'servi_chiave_indexnow' ], 0 );
+        add_action( 'wp_after_insert_post', [ $this, 'indexnow_dopo_salvataggio' ], 20, 2 );
+        add_action( 'olo_template_saved', [ $this, 'indexnow_template' ], 20, 2 );
 
         // Admin styles
         add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_assets' ] );
@@ -284,31 +286,88 @@ class Olobuild_Seo_Redirects {
      * IndexNow
      * ═══════════════════════════════════════════════════ */
 
-    public function indexnow_ping( $post_id ) {
-        $general = get_option( 'olobuild_seo_advanced', [] );
-        if ( empty( $general['indexnow_key'] ) ) {
+    /** La chiave salvata, se valida (8-128 caratteri: lettere, cifre, trattini). */
+    public static function chiave_indexnow() {
+        $adv = get_option( 'olobuild_seo_advanced', [] );
+        $k   = is_array( $adv ) ? (string) ( $adv['indexnow_key'] ?? '' ) : '';
+        return preg_match( '/^[A-Za-z0-9-]{8,128}$/', $k ) ? $k : '';
+    }
+
+    /** L'indirizzo del file che prova ai motori che la chiave è del sito. */
+    public static function url_chiave_indexnow() {
+        $k = self::chiave_indexnow();
+        return '' === $k ? '' : home_url( '/' . $k . '.txt' );
+    }
+
+    /**
+     * Serve <chiave>.txt nella radice del sito (anche in sottocartella, /try/…).
+     * Prima nessuno lo serviva e api.indexnow.org rifiutava ogni avviso.
+     */
+    public function servi_chiave_indexnow() {
+        $k = self::chiave_indexnow();
+        if ( '' === $k ) {
             return;
         }
+        $path = (string) wp_parse_url( esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ?? '' ) ), PHP_URL_PATH );
+        if ( $path !== (string) wp_parse_url( home_url( '/' . $k . '.txt' ), PHP_URL_PATH ) ) {
+            return;
+        }
+        status_header( 200 );
+        header( 'Content-Type: text/plain; charset=utf-8' );
+        header( 'X-Robots-Tag: noindex' );
+        echo $k; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- validata [A-Za-z0-9-]
+        exit;
+    }
 
-        $key = sanitize_text_field( $general['indexnow_key'] );
+    /** Un contenuto pubblicato salvato in WordPress (qualunque tipo visibile). */
+    public function indexnow_dopo_salvataggio( $post_id, $post ) {
+        if ( $post && 'publish' === $post->post_status && ! wp_is_post_revision( $post_id ) && is_post_type_viewable( $post->post_type ) ) {
+            $this->indexnow_ping( $post_id );
+        }
+    }
+
+    /** Un template salvato nel builder: avvisa per la sua pagina, se è pubblicata. */
+    public function indexnow_template( $id, $op = 'update' ) {
+        if ( 'delete' === $op || '' === self::chiave_indexnow() ) {
+            return;
+        }
+        $tpl = ( new Olobuild_Database() )->get_template( $id );
+        $pid = $tpl ? (int) ( $tpl['settings']['post_id'] ?? 0 ) : 0;
+        if ( $pid && 'published' === ( $tpl['status'] ?? '' ) && 'publish' === get_post_status( $pid ) ) {
+            $this->indexnow_ping( $pid );
+        }
+    }
+
+    public function indexnow_ping( $post_id ) {
+        $k = self::chiave_indexnow();
+        if ( '' === $k || ! get_option( 'blog_public' ) || get_post_meta( $post_id, '_olo_seo_noindex', true ) ) {
+            return;
+        }
         $url = get_permalink( $post_id );
         if ( ! $url ) {
             return;
         }
+        // Un avviso ogni 10 minuti per pagina: Gutenberg salva due volte, e un
+        // lavoro nel builder salva spesso.
+        $lock = 'olo_indexnow_' . md5( $url );
+        if ( get_transient( $lock ) ) {
+            return;
+        }
+        set_transient( $lock, 1, 10 * MINUTE_IN_SECONDS );
 
-        $host = wp_parse_url( home_url(), PHP_URL_HOST );
-
-        // Fire and forget — non-blocking
-        wp_remote_post( 'https://api.indexnow.org/IndexNow', [
+        // Fire and forget — non-blocking. keyLocation: il file sta sotto la cartella
+        // del sito, anche quando il sito non è nella radice dell'host.
+        wp_remote_post( 'https://api.indexnow.org/indexnow', [
             'timeout'  => 5,
             'blocking' => false,
             'body'     => wp_json_encode( [
-                'host'    => $host,
-                'key'     => $key,
-                'urlList' => [ $url ],
+                'host'        => wp_parse_url( home_url(), PHP_URL_HOST ),
+                'key'         => $k,
+                'keyLocation' => home_url( '/' . $k . '.txt' ),
+                'urlList'     => [ $url ],
             ] ),
             'headers'  => [
-                'Content-Type' => 'application/json',
+                'Content-Type' => 'application/json; charset=utf-8',
             ],
         ] );
     }

@@ -993,8 +993,12 @@ trait Olobuild_Builder_Settings_Trait {
                     }
                     // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
                     if ( $action === 'save_indexnow' ) {
+                        $k = trim( (string) ( $p['indexnow_key'] ?? '' ) );
+                        if ( '' !== $k && ! preg_match( '/^[A-Za-z0-9-]{8,128}$/', $k ) ) {
+                            return new WP_Error( 'indexnow_key', __( 'La chiave va da 8 a 128 caratteri: lettere, cifre e trattini.', 'olobuild' ), [ 'status' => 400 ] );
+                        }
                         $adv = (array) get_option( 'olobuild_seo_advanced', [] );
-                        $adv['indexnow_key'] = sanitize_text_field( $p['indexnow_key'] ?? '' );
+                        $adv['indexnow_key'] = $k;
                         update_option( 'olobuild_seo_advanced', $adv );
                         update_option( 'olobuild_settings_last_saved', time() );
                         return rest_ensure_response( [ 'ok' => true ] );

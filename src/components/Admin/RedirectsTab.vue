@@ -118,16 +118,29 @@
       <div class="head-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7l3 2.7"/><path d="M21 3v6h-6"/></svg></div>
       <div>
         <h3>IndexNow</h3>
-        <p>{{ t('Notifica Bing/Yandex quando pubblichi/aggiorni un post. Genera la chiave da indexnow.org.') }}</p>
+        <p>{{ t('Avvisa Bing, Yandex e gli altri motori aderenti quando pubblichi o aggiorni una pagina.') }}</p>
       </div>
     </div>
     <div class="cfg-card-body">
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('API Key IndexNow') }}</label></div>
-        <div class="control-col">
-          <div class="cfg-input mono">
+        <div class="label-col">
+          <label>{{ t('API Key IndexNow') }}</label>
+          <div class="hint">{{ t('Da 8 a 128 caratteri: lettere, cifre e trattini.') }}</div>
+        </div>
+        <div class="control-col" style="display:flex; gap:8px; align-items:center;">
+          <div class="cfg-input mono" :class="{ 'is-error': indexNowKey && !chiaveValida }">
             <input type="text" :value="indexNowKey" @input="onIndexNowChange($event.target.value)" placeholder="abcd1234efgh5678..." />
           </div>
+          <button type="button" class="cfg-btn cfg-btn-secondary" @click="generaChiave">{{ t('Genera') }}</button>
+        </div>
+      </div>
+      <div v-if="chiaveValida" class="cfg-row no-divider">
+        <div class="label-col">
+          <label>{{ t('File di verifica') }}</label>
+          <div class="hint">{{ t('Olobuild lo serve da sé. Dopo aver salvato, aprilo: deve mostrare la chiave.') }}</div>
+        </div>
+        <div class="control-col">
+          <a class="text-xs mono" :href="fileChiave" target="_blank" rel="noopener" style="color:var(--c-red); text-decoration:none;">{{ fileChiave }}</a>
         </div>
       </div>
     </div>
@@ -135,7 +148,7 @@
 </template>
 
 <script setup>
-import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
@@ -243,8 +256,18 @@ function promote404(row) {
 }
 
 function onIndexNowChange(v) {
-  indexNowKey.value = v;
+  indexNowKey.value = v.trim();
   setDirty(true);
+}
+
+// La chiave deve essere servita come <chiave>.txt nella cartella del sito:
+// Olobuild_Seo_Redirects::servi_chiave_indexnow() lo fa da sé.
+const chiaveValida = computed(() => /^[A-Za-z0-9-]{8,128}$/.test(indexNowKey.value || ''));
+const fileChiave = computed(() => (window.oloData?.siteUrl || '/') + indexNowKey.value + '.txt');
+function generaChiave() {
+  const b = new Uint8Array(16);
+  crypto.getRandomValues(b);
+  onIndexNowChange(Array.from(b, (x) => x.toString(16).padStart(2, '0')).join(''));
 }
 
 async function saveSettings() {
@@ -272,6 +295,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+.cfg-input.is-error { border-color: var(--c-red); }
 .cfg-redirect-table {
   width: 100%; border-collapse: collapse; font-size: 13px;
 }

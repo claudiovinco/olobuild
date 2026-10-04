@@ -72,7 +72,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </ol>
 <p>Per spostare un gruppo di indirizzi, comincia <span class="ui">Da URL</span> con <code>~</code> e scrivi un'espressione regolare. <code>$1</code> nella destinazione riprende la parte catturata.</p>
 <div class="nota attenzione"><p>Un redirect vale anche quando l'indirizzo di partenza è una pagina che esiste. Prima di crearne uno su un indirizzo in uso, controlla che quella pagina non serva più.</p></div>
-<p>La vista IndexNow avvisa Bing e gli altri motori che aderiscono quando pubblichi una pagina o un articolo. Oltre alla chiave serve un file di testo con lo stesso nome della chiave nella cartella principale del sito: Olobuild non lo crea da solo.</p>
+<p>La vista IndexNow avvisa Bing e gli altri motori che aderiscono quando pubblichi o aggiorni una pagina, anche dal builder. <span class="ui">Genera</span> crea una chiave, e Olobuild pubblica da sé il file di verifica che i motori controllano: il link compare sotto la chiave dopo il salvataggio.</p>
 
 <h2 id="sitemap">7. Sitemap</h2>
 <p>La sitemap elenca le pagine del sito per i motori di ricerca. È quella di WordPress, all'indirizzo <code>/wp-sitemap.xml</code>: Olobuild ne toglie le pagine in noindex, e l'interruttore Sitemap XML della scheda SEO globale la spegne. Indicala in Google Search Console. Se usi un plugin SEO, vale la sua.</p>
