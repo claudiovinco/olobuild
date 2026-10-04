@@ -175,7 +175,7 @@
             return '<div class="olo-cl-item ' + (i > 0 ? 'old' : '') + '">' +
                 '<div class="v">' + escapeHtml(c.v) +
                 (c.date ? ' <span class="date">· ' + escapeHtml(c.date) + '</span>' : '') +
-                (c.tag ? ' <span class="tag ' + tagCls + '">' + escapeHtml(c.tag) + '</span>' : '') +
+                (c.tag ? ' <span class="tag ' + tagCls + '">' + escapeHtml(c.label || c.tag) + '</span>' : '') +
                 '</div>' +
                 (items ? '<ul>' + items + '</ul>' : '') +
             '</div>';
@@ -247,14 +247,19 @@
         root.addEventListener('click', e => {
             const tg = e.target.closest('.olo-rail .toggle, .olo-rail-mini button');
             if (!tg) return;
-            // mini buttons espandono il rail
-            if (tg.matches('.olo-rail-mini button')) {
+            // Le icone del rail compresso lo riaprono sulla loro sezione.
+            const sec = tg.matches('.olo-rail-mini button') ? tg.getAttribute('data-olo-rail-sec') : '';
+            if (sec !== '') {
                 prefs.rail = 'expanded';
             } else {
                 prefs.rail = prefs.rail === 'collapsed' ? 'expanded' : 'collapsed';
             }
             applyRail();
             savePrefs();
+            if (sec) {
+                const target = root.querySelector('.olo-rail-section[data-olo-rail-sec="' + sec + '"]');
+                if (target) target.scrollIntoView({ block: 'start', behavior: 'smooth' });
+            }
         });
     }
 
@@ -354,7 +359,7 @@
         // Refresh in background per dati freschi
         api('dashboard/kpis').then(renderKpis).catch(() => {});
         api('dashboard/recent?limit=6').then(renderRecent).catch(() => {});
-        api('dashboard/changelog?limit=3').then(renderChangelog).catch(() => {});
+        api('dashboard/changelog?limit=2').then(renderChangelog).catch(() => {});
 
         applyPinSort();
         applyRail();

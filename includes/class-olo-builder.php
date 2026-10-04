@@ -927,7 +927,7 @@ class Olobuild_Builder {
             $req_recent = new WP_REST_Request( 'GET' );
             $req_recent->set_query_params( [ 'limit' => 6 ] );
             $req_changelog = new WP_REST_Request( 'GET' );
-            $req_changelog->set_query_params( [ 'limit' => 3 ] );
+            $req_changelog->set_query_params( [ 'limit' => 2 ] );
 
             $boot_kpis      = $rest->dashboard_kpis( null );
             $boot_recent    = $rest->dashboard_recent( $req_recent );

@@ -1128,67 +1128,55 @@ trait Olobuild_Builder_Cockpit_Trait {
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg>
                         </button>
                     </div>
-                    <div class="rail-mini">
-                        <button type="button" title="<?php esc_attr_e( 'Cosa c\'è di nuovo', 'olobuild' ); ?>">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19l3-3a4 4 0 015.7 0l.3.3 4-9-9 4 .3.3a4 4 0 010 5.7L5 19zM4 14a3 3 0 00-1 6 3 3 0 006-1"/></svg>
-                            <span class="dot-new"></span>
+                    <?php /* Barra del pannello compresso: un'icona per sezione, il clic riapre il pannello su quella. */ ?>
+                    <div class="olo-rail-mini">
+                        <button type="button" data-olo-rail-sec="novita" title="<?php esc_attr_e( 'Cosa c\'è di nuovo', 'olobuild' ); ?>" aria-label="<?php esc_attr_e( 'Cosa c\'è di nuovo', 'olobuild' ); ?>">
+                            <?php echo Olobuild_Guida::icona( 'novita', 18 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di Olobuild_Guida::icona(). ?>
                         </button>
-                        <button type="button" title="<?php esc_attr_e( 'Tutorial', 'olobuild' ); ?>">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5l12 7-12 7z"/></svg>
+                        <button type="button" data-olo-rail-sec="guide" title="<?php esc_attr_e( 'Impara Olobuild', 'olobuild' ); ?>" aria-label="<?php esc_attr_e( 'Impara Olobuild', 'olobuild' ); ?>">
+                            <?php echo Olobuild_Guida::icona( 'libro', 18 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di Olobuild_Guida::icona(). ?>
                         </button>
-                        <button type="button" title="<?php esc_attr_e( 'Documentazione', 'olobuild' ); ?>">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 015 0c0 1.5-2.5 2-2.5 4M12 17h.01"/></svg>
-                        </button>
-                        <button type="button" title="<?php esc_attr_e( 'Notifiche', 'olobuild' ); ?>">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0112 0v5l2 2H4l2-2zM10 20a2 2 0 004 0"/></svg>
+                        <button type="button" data-olo-rail-sec="aiuto" title="<?php esc_attr_e( 'Aiuto e supporto', 'olobuild' ); ?>" aria-label="<?php esc_attr_e( 'Aiuto e supporto', 'olobuild' ); ?>">
+                            <?php echo Olobuild_Guida::icona( 'aiuto', 18 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di Olobuild_Guida::icona(). ?>
                         </button>
                     </div>
                     <div class="rail-body">
-                        <div class="olo-rail-section">
+                        <div class="olo-rail-section" data-olo-rail-sec="novita">
                             <h3>
                                 <?php esc_html_e( 'Cosa c\'è di nuovo', 'olobuild' ); ?>
                                 <span class="pill">v<?php echo esc_html( OLOBUILD_VERSION ); ?></span>
                             </h3>
                             <div data-olo-changelog></div>
+                            <a class="olo-rail-more" href="<?php echo esc_url( Olobuild_Guida::url( 'novita' ) ); ?>"><?php esc_html_e( 'Tutte le novità', 'olobuild' ); ?> <?php echo Olobuild_Guida::icona( 'freccia', 12 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di Olobuild_Guida::icona(). ?></a>
                         </div>
-                        <div class="olo-rail-section">
+                        <div class="olo-rail-section" data-olo-rail-sec="guide">
                             <h3><?php esc_html_e( 'Impara Olobuild', 'olobuild' ); ?></h3>
-                            <?php /* Niente emoji né gradient: icone SVG stroke su fondo neutro, la firma dei prodotti OLO. */ ?>
-                            <a class="olo-learn-card" href="https://olotheme.com/docs/onboarding" target="_blank" rel="noopener">
-                                <div class="th" style="background: var(--olo-bg-muted); color: var(--olo-text-soft);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg></div>
-                                <div class="info"><span class="t"><?php esc_html_e( 'Onboarding 60 secondi', 'olobuild' ); ?></span><span class="d"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg> 1:02</span></div>
+                            <?php /* Guide scritte del pacchetto (pagina Guida), con i minuti di lettura veri. Niente emoji né video che non esistono. */ ?>
+                            <?php foreach ( Olobuild_Guida::guide() as $slug => $g ) : ?>
+                            <a class="olo-learn-card" href="<?php echo esc_url( Olobuild_Guida::url( $slug ) ); ?>">
+                                <div class="th"><?php echo Olobuild_Guida::icona( $g['icona'], 18 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di Olobuild_Guida::icona(). ?></div>
+                                <div class="info"><span class="t"><?php echo esc_html( $g['titolo'] ); ?></span><span class="d"><?php echo Olobuild_Guida::icona( 'documento', 11 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di Olobuild_Guida::icona(). ?> <?php echo esc_html( sprintf( _n( 'Guida · %d minuto', 'Guida · %d minuti', Olobuild_Guida::minuti( $slug ), 'olobuild' ), Olobuild_Guida::minuti( $slug ) ) ); ?></span></div>
                             </a>
-                            <a class="olo-learn-card" href="https://olotheme.com/docs/templates" target="_blank" rel="noopener">
-                                <div class="th" style="background: var(--olo-bg-muted); color: var(--olo-text-soft);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-                                <div class="info"><span class="t"><?php esc_html_e( 'Template come pro', 'olobuild' ); ?></span><span class="d"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg> 4:18</span></div>
-                            </a>
-                            <a class="olo-learn-card" href="https://olotheme.com/docs/seo" target="_blank" rel="noopener">
-                                <div class="th" style="background: var(--olo-bg-muted); color: var(--olo-text-soft);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div>
-                                <div class="info"><span class="t"><?php esc_html_e( 'SEO e Open Graph', 'olobuild' ); ?></span><span class="d"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg> 3:45</span></div>
-                            </a>
-                            <a class="olo-learn-card" href="https://olotheme.com/docs/performance" target="_blank" rel="noopener">
-                                <div class="th" style="background: var(--olo-bg-muted); color: var(--olo-text-soft);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14 8 10"/><circle cx="12" cy="14" r="9"/><path d="M3 14a9 9 0 0 1 18 0"/></svg></div>
-                                <div class="info"><span class="t"><?php esc_html_e( 'Performance: punteggio 100', 'olobuild' ); ?></span><span class="d"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg> 5:30</span></div>
-                            </a>
+                            <?php endforeach; ?>
                         </div>
-                        <div class="olo-rail-section">
-                            <h3><?php esc_html_e( 'Aiuto & supporto', 'olobuild' ); ?></h3>
+                        <div class="olo-rail-section" data-olo-rail-sec="aiuto">
+                            <h3><?php esc_html_e( 'Aiuto e supporto', 'olobuild' ); ?></h3>
                             <div class="olo-help-row">
-                                <a href="https://olotheme.com/docs" target="_blank" rel="noopener">
-                                    <span class="ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 015 0c0 1.5-2.5 2-2.5 4M12 17h.01"/></svg></span>
-                                    <?php esc_html_e( 'Documentazione', 'olobuild' ); ?>
+                                <a href="<?php echo esc_url( Olobuild_Guida::url() ); ?>">
+                                    <span class="ic"><?php echo Olobuild_Guida::icona( 'libro', 13 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di Olobuild_Guida::icona(). ?></span>
+                                    <?php esc_html_e( 'Tutte le guide', 'olobuild' ); ?>
                                 </a>
-                                <a href="https://olotheme.com/support" target="_blank" rel="noopener">
-                                    <span class="ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>
-                                    <?php esc_html_e( 'Apri ticket', 'olobuild' ); ?>
+                                <a href="<?php echo esc_url( Olobuild_Guida::url( 'novita' ) ); ?>">
+                                    <span class="ic"><?php echo Olobuild_Guida::icona( 'novita', 13 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di Olobuild_Guida::icona(). ?></span>
+                                    <?php esc_html_e( 'Novità', 'olobuild' ); ?>
                                 </a>
-                                <a href="https://olotheme.com/community" target="_blank" rel="noopener">
-                                    <span class="ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0112 0"/><circle cx="17" cy="9" r="2.5"/><path d="M14 20a5 5 0 017-4.5"/></svg></span>
-                                    <?php esc_html_e( 'Community', 'olobuild' ); ?>
+                                <a href="<?php echo esc_url( Olobuild_Guida::url( 'primi-passi' ) . '#scorciatoie' ); ?>">
+                                    <span class="ic"><?php echo Olobuild_Guida::icona( 'tastiera', 13 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di Olobuild_Guida::icona(). ?></span>
+                                    <?php esc_html_e( 'Scorciatoie', 'olobuild' ); ?>
                                 </a>
-                                <a href="https://olotheme.com/roadmap" target="_blank" rel="noopener">
-                                    <span class="ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-8 8M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4"/></svg></span>
-                                    <?php esc_html_e( 'Roadmap', 'olobuild' ); ?>
+                                <a href="<?php echo esc_attr( Olobuild_Guida::mailto_supporto() ); ?>">
+                                    <span class="ic"><?php echo Olobuild_Guida::icona( 'posta', 13 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di Olobuild_Guida::icona(). ?></span>
+                                    <?php esc_html_e( 'Scrivi al supporto', 'olobuild' ); ?>
                                 </a>
                             </div>
                         </div>

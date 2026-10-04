@@ -941,7 +941,7 @@ body.olobuild-cockpit .olo-cockpit-legacy .error {
 }
 .olo-cl-item .v .tag.novità,
 .olo-cl-item .v .tag.novita { background: var(--olo-primary-100); color: var(--olo-primary-dark); }
-.olo-cl-item .v .tag.fix    { background: #dbeafe; color: #1d4ed8; }
+.olo-cl-item .v .tag.fix    { background: var(--olo-bg-muted); color: var(--olo-text-soft); } /* niente blu nelle pagine Olobuild */
 .olo-cl-item ul {
     margin: 4px 0 0; padding: 0; list-style: none;
     font-size: 11px; color: var(--olo-text-muted); line-height: 1.5;
@@ -966,11 +966,20 @@ body.olobuild-cockpit .olo-cockpit-legacy .error {
 .olo-learn-card .th {
     height: 100%; min-height: 48px;
     display: grid; place-items: center;
-    font-size: 22px;
+    background: var(--olo-bg-muted); color: var(--olo-text-soft);
 }
+.olo-learn-card:hover .th { color: var(--olo-primary); }
 .olo-learn-card .info { padding: 8px 10px 8px 0; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .olo-learn-card .info .t { font-size: 12px; font-weight: 600; color: var(--olo-text); line-height: 1.3; }
 .olo-learn-card .info .d { font-size: 10px; color: var(--olo-text-muted); display: inline-flex; align-items: center; gap: 4px; }
+
+/* «Tutte le novità»: link in fondo al registro del rail */
+.olo-rail-more {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 600; color: var(--olo-primary-dark);
+    text-decoration: none; margin: 2px 0 0 14px;
+}
+.olo-rail-more:hover { color: var(--olo-primary-hover); text-decoration: underline; }
 
 /* Help row */
 .olo-help-row {
