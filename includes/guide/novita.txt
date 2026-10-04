@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.505 - 2026-10-05 (novità)
+- La tile «Ricerca con filtri» (prima Trip Finder) cerca davvero: testo, categoria, tag, tipo di contenuto o un parametro per una pagina a scelta, con le opzioni prese dal sito.
+- Nella pagina dei risultati la barra ripropone le scelte fatte, e i testi di partenza sono in italiano.
+
 ## v1.4.504 - 2026-10-04 (novità)
 - Nuovo sfondo «Geometrie»: anelli concentrici, uno in evidenza, e una trama di puntini o di griglia che sfuma, con un controllo per ogni parte e i colori del tema.
 - Il menu mobile parla anche inglese, tedesco, francese e le altre lingue del plugin.
