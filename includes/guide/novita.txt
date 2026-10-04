@@ -3,6 +3,14 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.503 - 2026-10-04 (novità)
+- Menu mobile più moderno: il pannello si usa anche da tastiera, la pagina dietro resta ferma e ogni link lo chiude, anche un'ancora della stessa pagina.
+- Sottomenu a fisarmonica, a pannelli con «Indietro» o sempre aperti, e la pagina di una voce con sottomenu si raggiunge sempre.
+- Nuovo pannello dal basso, swipe per chiudere, fondo sfocato, larghezza del pannello, pulsanti fissi in fondo.
+- L'hamburger può avere un'etichetta («Menu») e un fondo a cerchio, quadrato o pillola.
+- Le lingue nel menu mobile: bandiere senza casella, pillole con il codice, elenco con i nomi o tendina, in testa o in fondo.
+- Nel builder il menu mobile si può vedere aperto mentre lo si modifica.
+
 ## v1.4.502 - 2026-10-04 (fix)
 - Salvare nel builder svuota la cache a pagina intera, il Critical CSS e il subset UIkit: i visitatori vedono subito la pagina nuova.
 - Nella scheda Performance & Cache agiscono Defer JavaScript, Preload font, fetchpriority, Durata cache e Sezioni above-the-fold; Svuota tutto svuota tutto e le statistiche contano pagine e file veri.
