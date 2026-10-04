@@ -466,6 +466,43 @@
           <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_accent_opacity')" :min="0" :max="100" :step="1" :defaultValue="GEO_DEFAULTS.geo_accent_opacity" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Opacità evidenza')" @update:modelValue="commitInt('geo_accent_opacity', $event, GEO_DEFAULTS.geo_accent_opacity)" />
         </div>
 
+        <div class="row">
+          <span class="rowlab">{{ t('Punto al centro') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_dot')" :min="0" :max="40" :step="1" :defaultValue="GEO_DEFAULTS.geo_dot" emitAs="number" unit="px" :sliderOnFocus="false" :ariaLabel="t('Punto al centro')" @update:modelValue="commitInt('geo_dot', $event, GEO_DEFAULTS.geo_dot)" />
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Opacità punto') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_dot_opacity')" :min="0" :max="100" :step="1" :defaultValue="GEO_DEFAULTS.geo_dot_opacity" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Opacità punto')" @update:modelValue="commitInt('geo_dot_opacity', $event, GEO_DEFAULTS.geo_dot_opacity)" />
+        </div>
+
+        <div class="subhead"><span class="t2">{{ t('Secondo gruppo') }}</span></div>
+        <div class="row">
+          <span class="rowlab">{{ t('Numero') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_rings2')" :min="0" :max="8" :step="1" :defaultValue="GEO_DEFAULTS.geo_rings2" emitAs="number" unit="" :sliderOnFocus="false" :ariaLabel="t('Numero')" @update:modelValue="commitInt('geo_rings2', $event, GEO_DEFAULTS.geo_rings2)" />
+        </div>
+        <template v-if="geoVal('geo_rings2') > 0">
+        <div class="row">
+          <span class="rowlab">{{ t('Centro X') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_rings2_x')" :min="-50" :max="150" :step="1" :defaultValue="GEO_DEFAULTS.geo_rings2_x" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Centro X')" @update:modelValue="commitInt('geo_rings2_x', $event, GEO_DEFAULTS.geo_rings2_x)" />
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Centro Y') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_rings2_y')" :min="-50" :max="150" :step="1" :defaultValue="GEO_DEFAULTS.geo_rings2_y" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Centro Y')" @update:modelValue="commitInt('geo_rings2_y', $event, GEO_DEFAULTS.geo_rings2_y)" />
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Primo raggio') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_rings2_r')" :min="4" :max="1200" :step="2" :defaultValue="GEO_DEFAULTS.geo_rings2_r" emitAs="number" unit="px" :sliderOnFocus="false" :ariaLabel="t('Primo raggio')" @update:modelValue="commitInt('geo_rings2_r', $event, GEO_DEFAULTS.geo_rings2_r)" />
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Distanza') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_rings2_step')" :min="4" :max="600" :step="2" :defaultValue="GEO_DEFAULTS.geo_rings2_step" emitAs="number" unit="px" :sliderOnFocus="false" :ariaLabel="t('Distanza')" @update:modelValue="commitInt('geo_rings2_step', $event, GEO_DEFAULTS.geo_rings2_step)" />
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Opacità') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_rings2_opacity')" :min="0" :max="100" :step="1" :defaultValue="GEO_DEFAULTS.geo_rings2_opacity" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Opacità')" @update:modelValue="commitInt('geo_rings2_opacity', $event, GEO_DEFAULTS.geo_rings2_opacity)" />
+        </div>
+        </template>
+
         <div class="subhead"><span class="t2">{{ t('Trama') }}</span></div>
         <div class="row">
           <span class="rowlab">{{ t('Trama') }}</span>

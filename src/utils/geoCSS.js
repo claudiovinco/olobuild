@@ -21,6 +21,9 @@
  * geo_accent_opacity (%), geo_texture (none|dots|grid), geo_tex_gap (px), geo_tex_size
  * (px: diametro dei puntini, spessore delle linee), geo_tex_color, geo_tex_opacity (%),
  * geo_fade (bool), geo_fade_x/y (%), geo_fade_r (%).
+ * Secondo gruppo di anelli (stesso colore e spessore): geo_rings2 (0 = nessuno),
+ * geo_rings2_x/y, geo_rings2_r, geo_rings2_step, geo_rings2_opacity. Punto al centro
+ * del primo gruppo, col colore in evidenza: geo_dot (raggio px, 0 = nessuno), geo_dot_opacity.
  */
 
 export const GEO_DEFAULTS = {
@@ -45,6 +48,14 @@ export const GEO_DEFAULTS = {
   geo_fade_x: 16,
   geo_fade_y: 88,
   geo_fade_r: 55,
+  geo_rings2: 0,
+  geo_rings2_x: 8,
+  geo_rings2_y: 90,
+  geo_rings2_r: 112,
+  geo_rings2_step: 80,
+  geo_rings2_opacity: 5,
+  geo_dot: 0,
+  geo_dot_opacity: 50,
 };
 
 export const geoTextures = [
@@ -101,6 +112,11 @@ export function getGeoCSS(bg = {}) {
   const imgs = [], reps = [], sizes = [], poss = [];
   const strato = (img, rep = 'no-repeat', size = '100% 100%') => { imgs.push(img); reps.push(rep); sizes.push(size); poss.push('0 0'); };
 
+  const dot = num(val(bg, 'geo_dot'), 0, 0, 40);
+  if (n > 0 && dot > 0) {
+    const col = geoColor(val(bg, 'geo_accent_color'), num(val(bg, 'geo_dot_opacity'), 50, 0, 100) / 100);
+    strato(`radial-gradient(circle at ${x}% ${y}%, ${col} ${dot}px, transparent ${r1(dot + 0.5)}px)`);
+  }
   if (n > 0 && acc > 0 && acc <= n) {
     const col = geoColor(val(bg, 'geo_accent_color'), num(val(bg, 'geo_accent_opacity'), 18, 0, 100) / 100);
     strato(`radial-gradient(circle at ${x}% ${y}%, ${anello(r + (acc - 1) * step, w, col)})`);
@@ -109,6 +125,16 @@ export function getGeoCSS(bg = {}) {
     const tappe = ['transparent 0'];
     for (let i = 0; i < n; i++) tappe.push(anello(r + i * step, w, ringCol));
     strato(`radial-gradient(circle at ${x}% ${y}%, ${tappe.join(', ')})`);
+  }
+  const n2 = Math.round(num(val(bg, 'geo_rings2'), 0, 0, 8));
+  if (n2 > 0) {
+    const x2 = num(val(bg, 'geo_rings2_x'), 8, -50, 150), y2 = num(val(bg, 'geo_rings2_y'), 90, -50, 150);
+    const ra = Math.max(w + 1, Math.round(num(val(bg, 'geo_rings2_r'), 112, 4, 2000)));
+    const st = Math.round(num(val(bg, 'geo_rings2_step'), 80, 4, 1000));
+    const col = geoColor(val(bg, 'geo_rings_color'), num(val(bg, 'geo_rings2_opacity'), 5, 0, 100) / 100);
+    const tappe = ['transparent 0'];
+    for (let i = 0; i < n2; i++) tappe.push(anello(ra + i * st, w, col));
+    strato(`radial-gradient(circle at ${x2}% ${y2}%, ${tappe.join(', ')})`);
   }
   if (tex !== 'none') {
     const gap  = Math.round(num(val(bg, 'geo_tex_gap'), 30, 4, 400));

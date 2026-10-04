@@ -187,7 +187,8 @@ class Olobuild_CSS_Builder {
             'geo_rings_opacity' => 6, 'geo_accent' => 2, 'geo_accent_color' => 'var(--olo-color-primary)',
             'geo_accent_opacity' => 18, 'geo_texture' => 'dots', 'geo_tex_gap' => 30, 'geo_tex_size' => 3,
             'geo_tex_color' => '#ffffff', 'geo_tex_opacity' => 12, 'geo_fade' => true, 'geo_fade_x' => 16,
-            'geo_fade_y' => 88, 'geo_fade_r' => 55,
+            'geo_fade_y' => 88, 'geo_fade_r' => 55, 'geo_rings2' => 0, 'geo_rings2_x' => 8, 'geo_rings2_y' => 90,
+            'geo_rings2_r' => 112, 'geo_rings2_step' => 80, 'geo_rings2_opacity' => 5, 'geo_dot' => 0, 'geo_dot_opacity' => 50,
         ];
         $v = function ( $k ) use ( $bg, $d ) {
             return ( ! isset( $bg[ $k ] ) || '' === $bg[ $k ] ) ? $d[ $k ] : $bg[ $k ];
@@ -223,6 +224,11 @@ class Olobuild_CSS_Builder {
         $strato = function ( $img, $rep = 'no-repeat', $size = '100% 100%' ) use ( &$imgs, &$reps, &$sizes, &$poss ) {
             $imgs[] = $img; $reps[] = $rep; $sizes[] = $size; $poss[] = '0 0';
         };
+        $dot = $num( 'geo_dot', 0, 40 );
+        if ( $n > 0 && $dot > 0 ) {
+            $col = $this->glow_color_to_css( $v( 'geo_accent_color' ), $num( 'geo_dot_opacity', 0, 100 ) / 100 );
+            $strato( "radial-gradient(circle at {$x}% {$y}%, {$col} {$dot}px, transparent " . $r1( $dot + 0.5 ) . 'px)' );
+        }
         if ( $n > 0 && $acc > 0 && $acc <= $n ) {
             $col = $this->glow_color_to_css( $v( 'geo_accent_color' ), $num( 'geo_accent_opacity', 0, 100 ) / 100 );
             $strato( "radial-gradient(circle at {$x}% {$y}%, " . $anello( $r + ( $acc - 1 ) * $step, $col ) . ')' );
@@ -233,6 +239,19 @@ class Olobuild_CSS_Builder {
                 $tappe[] = $anello( $r + $i * $step, $ring );
             }
             $strato( "radial-gradient(circle at {$x}% {$y}%, " . implode( ', ', $tappe ) . ')' );
+        }
+        $n2 = (int) round( $num( 'geo_rings2', 0, 8 ) );
+        if ( $n2 > 0 ) {
+            $x2  = $num( 'geo_rings2_x', -50, 150 );
+            $y2  = $num( 'geo_rings2_y', -50, 150 );
+            $ra  = max( $w + 1, (int) round( $num( 'geo_rings2_r', 4, 2000 ) ) );
+            $st  = (int) round( $num( 'geo_rings2_step', 4, 1000 ) );
+            $col = $this->glow_color_to_css( $v( 'geo_rings_color' ), $num( 'geo_rings2_opacity', 0, 100 ) / 100 );
+            $tappe = [ 'transparent 0' ];
+            for ( $i = 0; $i < $n2; $i++ ) {
+                $tappe[] = $anello( $ra + $i * $st, $col );
+            }
+            $strato( "radial-gradient(circle at {$x2}% {$y2}%, " . implode( ', ', $tappe ) . ')' );
         }
         if ( 'none' !== $tex ) {
             $gap  = (int) round( $num( 'geo_tex_gap', 4, 400 ) );
