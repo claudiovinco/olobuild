@@ -52,7 +52,7 @@ Airbnb provati a 375 px. I segni di un menu mobile moderno:
 - **lingua**: fino a 4 lingue una riga di pillole con il codice, oltre un elenco con i nomi nella
   lingua stessa e la spunta; in testa o in fondo al pannello; niente redirect automatico.
 
-## 3. Cosa si fa
+## 3. Cosa si fa (fatto nella 1.4.503: M1, M2, M3)
 
 Le chiavi salvate restano quelle di oggi: i template esistenti continuano a funzionare, i controlli
 nuovi partono dal comportamento attuale dove cambierebbero l'aspetto.
@@ -72,6 +72,7 @@ nuovi partono dal comportamento attuale dove cambierebbero l'aspetto.
 - **Apri la sezione corrente**: il sottomenu della pagina in cui si è parte aperto.
 
 ### M3 — Pannello, contenuti, aspetto
+(Allineamento delle voci lasciato fuori: con le frecce a destra il centrato non regge.)
 - **Larghezza pannello** (Off-canvas), **Fondo**: colore e **sfocatura**.
 - **Dal basso** (bottom sheet, con maniglia) come direzione dell'Off-canvas; **swipe per chiudere**
   sui pannelli laterali e dal basso.

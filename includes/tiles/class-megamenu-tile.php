@@ -122,6 +122,20 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         // alla pagina e la freccia apre.
         'mobile_parent_click' => 'toggle',
         'mobile_open_current' => true,
+        // Pannello: larghezza dell'Off-canvas laterale (px), fondo dietro (colore, sfocatura).
+        'mobile_panel_width'   => 320,
+        'mobile_overlay_color' => '',
+        'mobile_overlay_blur'  => 0,
+        // Pulsanti (link extra) fissi in fondo al pannello.
+        'mobile_btn_sticky'    => false,
+        // Hamburger: etichetta accanto all'icona e fondo (none | circle | square | pill).
+        'hamburger_label'      => '',
+        'hamburger_box'        => 'none',
+        'hamburger_box_bg'     => '',
+        // Voci del menu mobile: peso ('' = quello dello stile).
+        'mobile_link_weight'   => '',
+        // Solo nell'anteprima del builder: il pannello mobile si vede aperto.
+        'mobile_preview_open'  => false,
         'mobile_lang_pos'    => 'top',
         // Mobile
         'mobile_breakpoint'  => '1024',
@@ -1661,6 +1675,51 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-mm-oc-header,
         .<?php echo $uid; ?> .olo-mm-fs-header { margin-top: env(safe-area-inset-top, 0px); }
 
+<?php
+        // Pannello, fondo, pulsanti fissi, hamburger, voci: solo ciò che è impostato esce.
+        $oc_w      = absint( $s['mobile_panel_width'] ?? 320 );
+        $ov_col    = $this->safe_color_css( $s['mobile_overlay_color'] ?? '' );
+        $ov_blur   = min( 30, absint( $s['mobile_overlay_blur'] ?? 0 ) );
+        $lk_weight = in_array( (string) ( $s['mobile_link_weight'] ?? '' ), [ '300', '400', '500', '600', '700', '800' ], true ) ? (string) $s['mobile_link_weight'] : '';
+        $hb_box    = in_array( $s['hamburger_box'] ?? 'none', [ 'circle', 'square', 'pill' ], true ) ? $s['hamburger_box'] : '';
+        $hb_bg     = $this->safe_color_css( $s['hamburger_box_bg'] ?? '' ) ?: 'color-mix(in srgb, currentColor 12%, transparent)';
+        if ( $oc_w && 320 !== $oc_w ) : ?>
+        .<?php echo $uid; ?> .olo-mm-offcanvas { width: <?php echo max( 240, min( 560, $oc_w ) ); ?>px; }
+<?php endif; if ( $ov_col || $ov_blur ) : ?>
+        .<?php echo $uid; ?> .olo-mm-overlay {<?php if ( $ov_col ) : ?> background: <?php echo $ov_col; ?>;<?php endif; ?><?php if ( $ov_blur ) : ?> -webkit-backdrop-filter: blur(<?php echo $ov_blur; ?>px); backdrop-filter: blur(<?php echo $ov_blur; ?>px);<?php endif; ?> }
+<?php endif; if ( ! empty( $s['mobile_btn_sticky'] ) ) : ?>
+        /* Pulsanti fissi in fondo al pannello (lo script li impila: ognuno sopra i seguenti) */
+        .<?php echo $uid; ?>.olo-mm-btn-fissi li.olo-mm-mob-btn-li { position: sticky; z-index: 2; }
+        .<?php echo $uid; ?>.olo-mm-btn-fissi .olo-mm-offcanvas li.olo-mm-mob-btn-li,
+        .<?php echo $uid; ?>.olo-mm-btn-fissi .olo-mm-fullscreen li.olo-mm-mob-btn-li { background: <?php echo $mob_bg; ?>; }
+        .<?php echo $uid; ?>.olo-mm-btn-fissi .olo-mm-dropdown-panel li.olo-mm-mob-btn-li { background: <?php echo $mob_drop_bg; ?>; }
+        .<?php echo $uid; ?>.olo-mm-btn-fissi li.olo-mm-btn-primo { box-shadow: 0 -12px 16px -12px rgba(0,0,0,.35); }
+<?php endif; if ( $lk_weight ) : ?>
+        .<?php echo $uid; ?> .olo-mm-mob-nav > li > a, .<?php echo $uid; ?> .olo-mm-mob-nav > li > .olo-mm-mob-toggle, .<?php echo $uid; ?> .olo-mm-mob-item > a,
+        .<?php echo $uid; ?> .olo-mm-dp-nav > li > a, .<?php echo $uid; ?> .olo-mm-dp-nav > li > .olo-mm-dp-item > a,
+        .<?php echo $uid; ?> .olo-mm-fs-nav > li > a, .<?php echo $uid; ?> .olo-mm-fs-nav > li > .olo-mm-dp-item > a { font-weight: <?php echo $lk_weight; ?>; }
+<?php endif; if ( '' !== $mob_link_fam && 'fullscreen' !== ( $s['mobile_style'] ?? 'offcanvas' ) ) : ?>
+        .<?php echo $uid; ?> .olo-mm-mob-nav > li > a, .<?php echo $uid; ?> .olo-mm-mob-nav > li > .olo-mm-mob-toggle, .<?php echo $uid; ?> .olo-mm-mob-item > a,
+        .<?php echo $uid; ?> .olo-mm-dp-nav > li > a, .<?php echo $uid; ?> .olo-mm-dp-nav > li > .olo-mm-dp-item > a { font-family: <?php echo $mob_link_fam; ?>; }
+<?php endif; if ( '' !== trim( (string) ( $s['hamburger_label'] ?? '' ) ) ) : ?>
+        /* Hamburger con etichetta: l'icona tiene la sua misura, il testo segue */
+        .<?php echo $uid; ?> .olo-mm-hamburger.olo-mm-ham-con-label { width: auto; gap: 8px; color: <?php echo $ham_color; ?>; }
+        .<?php echo $uid; ?> .olo-mm-ham-con-label .olo-mm-ham-svg { width: <?php echo $ham_sz; ?>px; height: <?php echo $ham_sz; ?>px; flex: none; }
+        .<?php echo $uid; ?> .olo-mm-ham-label { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; line-height: 1; }
+<?php endif; if ( $hb_box ) : ?>
+        /* Hamburger con fondo */
+        .<?php echo $uid; ?> .olo-mm-hamburger.olo-mm-ham-box,
+        .<?php echo $uid; ?> .olo-mm-hamburger.olo-mm-ham-box:hover,
+        .<?php echo $uid; ?> .olo-mm-hamburger.olo-mm-ham-box:focus,
+        .<?php echo $uid; ?> .olo-mm-hamburger.olo-mm-ham-box:active { background: <?php echo $hb_bg; ?> !important; color: <?php echo $ham_color; ?>; box-sizing: content-box; padding: <?php echo 'pill' === $hb_box ? '8px 14px' : '8px'; ?>; border-radius: <?php echo 'circle' === $hb_box || 'pill' === $hb_box ? '999px' : '10px'; ?>; }
+<?php endif; ?>
+        /* Fuoco da tastiera sull'hamburger (le regole sopra lo toglievano a ogni stato) */
+        .<?php echo $uid; ?> .olo-mm-hamburger:focus-visible { outline: 2px solid currentColor !important; outline-offset: 3px; }
+        <?php if ( self::anteprima_aperta( $s ) ) : ?>
+        /* Anteprima del builder: il pannello resta aperto senza animazioni */
+        .<?php echo $uid; ?>.olo-mm-anteprima .olo-mm-offcanvas, .<?php echo $uid; ?>.olo-mm-anteprima .olo-mm-fullscreen,
+        .<?php echo $uid; ?>.olo-mm-anteprima .olo-mm-dropdown-panel, .<?php echo $uid; ?>.olo-mm-anteprima .olo-mm-overlay { transition: none !important; }
+        <?php endif; ?>
         /* Sottomenu chiusi: anche invisibili, non solo alti 0 (Tab ci entrava). */
         .<?php echo $uid; ?> .olo-mm-mob-sub,
         .<?php echo $uid; ?> .olo-mm-dp-sub { visibility: hidden; transition: max-height .35s ease, visibility 0s linear .35s; }
@@ -2113,6 +2172,19 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             transform: translateY(-100%);
         }
         .<?php echo $uid; ?> .olo-mm-offcanvas.olo-mm-vis { transform: translateY(0); }
+        <?php elseif ( $mob_slide_dir === 'bottom' ) : ?>
+        /* Dal basso (bottom sheet): alto quanto serve, fino all'85% dello schermo, maniglia in cima */
+        .<?php echo $uid; ?> .olo-mm-offcanvas {
+            left: 0; right: 0; top: auto; bottom: 0;
+            width: 100%; max-width: none; height: auto; max-height: 85vh; max-height: 85dvh;
+            border-radius: 18px 18px 0 0;
+            transform: translateY(100%);
+        }
+        .<?php echo $uid; ?> .olo-mm-offcanvas.olo-mm-vis { transform: translateY(0); }
+        .<?php echo $uid; ?> .olo-mm-offcanvas::before {
+            content: ""; display: block; flex: none; width: 40px; height: 4px; border-radius: 2px;
+            margin: 10px auto 0; background: color-mix(in srgb, <?php echo $mob_tc; ?> 35%, transparent);
+        }
         <?php endif; ?>
         <?php if ( $oc_fullscreen ) : ?>
         .<?php echo $uid; ?> .olo-mm-offcanvas {
@@ -2436,6 +2508,17 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         echo '</div>';
     }
 
+    /**
+     * Il pannello mobile si vede aperto: solo nel render dell'anteprima del builder
+     * (REST builder/render), con «Anteprima: menu aperto». Il sito non lo vede mai.
+     */
+    private static function anteprima_aperta( $s ) {
+        if ( empty( $s['mobile_preview_open'] ) || ! defined( 'REST_REQUEST' ) || ! REST_REQUEST ) {
+            return false;
+        }
+        return false !== strpos( (string) ( $_SERVER['REQUEST_URI'] ?? '' ), 'builder/render' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput -- solo confronto con una costante
+    }
+
     /** Formato del selettore lingua nel menu mobile (valori ammessi, default «inline»). */
     private static function formato_lingue_mobile( $s ) {
         $f = (string) ( $s['mobile_lang_format'] ?? 'inline' );
@@ -2678,6 +2761,13 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         $parent_link  = 'open' === $sub_mode || 'link' === ( $s['mobile_parent_click'] ?? 'toggle' );
         // La sezione della pagina in cui si è parte aperta (solo a fisarmonica).
         $open_current = 'accordion' === $sub_mode && ! empty( $s['mobile_open_current'] ?? true );
+        $preview_open = self::anteprima_aperta( $s );
+        $mob_style_r  = $s['mobile_style'] ?? 'offcanvas';
+        $ham_label    = trim( (string) ( $s['hamburger_label'] ?? '' ) );
+        $ham_box      = in_array( $s['hamburger_box'] ?? 'none', [ 'circle', 'square', 'pill' ], true ) ? $s['hamburger_box'] : '';
+        // Swipe per chiudere: verso il lato del pannello laterale, in giù per quello dal basso.
+        $oc_dir       = $s['mobile_slide_direction'] ?? 'left';
+        $swipe        = ! empty( $s['offcanvas_fullscreen'] ) || 'top' === $oc_dir ? '' : ( 'bottom' === $oc_dir ? 'down' : ( 'right' === ( $s['mobile_side'] ?? 'left' ) ? 'right' : 'left' ) );
 
         // Hamburger SVG icons — ogni stile ha un SVG dedicato per stato aperto/chiuso
         $hamburger_svgs = [
@@ -2702,7 +2792,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             }
         }
         ?>
-        <div class="olo-megamenu <?php echo esc_attr( $uid ); ?> olo-mm-sub-<?php echo esc_attr( $sub_mode ); ?><?php echo $parent_link ? ' olo-mm-parent-link' : ''; ?>" data-uid="<?php echo esc_attr( $uid ); ?>"<?php echo 'drill' === $sub_mode ? ' data-label-back="' . esc_attr( olobuild_t( 'Indietro' ) ) . '" data-label-vai="' . esc_attr( olobuild_t( 'Vai a %s' ) ) . '"' : ''; ?>>
+        <div class="olo-megamenu <?php echo esc_attr( $uid ); ?> olo-mm-sub-<?php echo esc_attr( $sub_mode ); ?><?php echo $parent_link ? ' olo-mm-parent-link' : ''; ?><?php echo ! empty( $s['mobile_btn_sticky'] ) ? ' olo-mm-btn-fissi' : ''; ?><?php echo $preview_open ? ' olo-mm-anteprima' . ( 'offcanvas' !== $mob_style_r ? ' olo-mm-mob-active' : '' ) : ''; ?>" data-uid="<?php echo esc_attr( $uid ); ?>"<?php echo 'drill' === $sub_mode ? ' data-label-back="' . esc_attr( olobuild_t( 'Indietro' ) ) . '" data-label-vai="' . esc_attr( olobuild_t( 'Vai a %s' ) ) . '"' : ''; ?>>
                         <?php if ( ! empty( $s['topbar_enabled'] ) ) : ?>
             <div class="olo-mm-topbar">
                 <div class="olo-mm-topbar-left">
@@ -2810,8 +2900,9 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                 </div>
                 <?php endif; ?>
 
-                <button class="olo-mm-hamburger olo-mm-ham-<?php echo esc_attr( $ham_style_val ); ?>" type="button" aria-label="<?php echo esc_attr( olobuild_t( 'Apri il menu' ) ); ?>" data-label-open="<?php echo esc_attr( olobuild_t( 'Apri il menu' ) ); ?>" data-label-close="<?php echo esc_attr( olobuild_t( 'Chiudi il menu' ) ); ?>" aria-expanded="false" aria-controls="<?php echo esc_attr( $uid ); ?>-mpanel">
+                <button class="olo-mm-hamburger olo-mm-ham-<?php echo esc_attr( $ham_style_val ); ?><?php echo '' !== $ham_label ? ' olo-mm-ham-con-label' : ''; ?><?php echo $ham_box ? ' olo-mm-ham-box olo-mm-ham-box--' . esc_attr( $ham_box ) : ''; ?><?php echo $preview_open ? ' olo-mm-ham-open' : ''; ?>" type="button" aria-label="<?php echo esc_attr( olobuild_t( 'Apri il menu' ) ); ?>" data-label-open="<?php echo esc_attr( olobuild_t( 'Apri il menu' ) ); ?>" data-label-close="<?php echo esc_attr( olobuild_t( 'Chiudi il menu' ) ); ?>" aria-expanded="false" aria-controls="<?php echo esc_attr( $uid ); ?>-mpanel">
                     <?php echo $ham_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from the hardcoded $hamburger_svgs map above ?>
+                    <?php if ( '' !== $ham_label ) : ?><span class="olo-mm-ham-label" aria-hidden="true"><?php echo esc_html( $ham_label ); ?></span><?php endif; ?>
                 </button>
 
                 <?php // Desktop logo ?>
@@ -2955,8 +3046,8 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             $mob_style_val = $s['mobile_style'] ?? 'offcanvas';
             if ( 'offcanvas' === $mob_style_val ) : ?>
             <!-- Off-Canvas Mobile -->
-            <div class="olo-mm-overlay"></div>
-            <div class="olo-mm-offcanvas" id="<?php echo esc_attr( $uid ); ?>-mpanel" role="dialog" aria-modal="true" aria-label="<?php echo esc_attr( olobuild_t( 'Menu' ) ); ?>" tabindex="-1">
+            <div class="olo-mm-overlay<?php echo $preview_open ? ' olo-mm-vis' : ''; ?>"></div>
+            <div class="olo-mm-offcanvas<?php echo $preview_open ? ' olo-mm-vis' : ''; ?>" id="<?php echo esc_attr( $uid ); ?>-mpanel"<?php echo $swipe ? ' data-swipe="' . esc_attr( $swipe ) . '"' : ''; ?> role="dialog" aria-modal="true" aria-label="<?php echo esc_attr( olobuild_t( 'Menu' ) ); ?>" tabindex="-1">
                 <div class="olo-mm-oc-header">
                     <?php if ( ! empty( $s['mobile_logo'] ) ) : ?>
                         <div class="olo-mm-oc-logo"><img src="<?php echo esc_url( $s['mobile_logo'] ); ?>" alt="<?php echo esc_attr( olobuild_t( 'Logo' ) ); ?>" loading="lazy" /></div>
@@ -3636,7 +3727,21 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                 hamburger.setAttribute("aria-expanded", "true");
                 if (hamClose) hamburger.setAttribute("aria-label", hamClose);
                 lockScroll();
-                if (mpanel) setTimeout(function() { try { mpanel.focus({ preventScroll: true }); } catch (err) { mpanel.focus(); } }, 50);
+                if (mpanel) setTimeout(function() { try { mpanel.focus({ preventScroll: true }); } catch (err) { mpanel.focus(); } fissaPulsanti(); }, 50);
+            }
+            /* Pulsanti fissi in fondo: ognuno si ferma sopra quelli che lo seguono. */
+            function fissaPulsanti() {
+                if (!mpanel) return;
+                if (!root.classList.contains("olo-mm-btn-fissi")) return;
+                Array.prototype.forEach.call(mpanel.querySelectorAll("ul"), function(ul) {
+                    var lis = Array.prototype.filter.call(ul.children, function(li) { return li.classList.contains("olo-mm-mob-btn-li"); });
+                    var b = 0;
+                    for (var i = lis.length - 1; i >= 0; i--) {
+                        lis[i].style.bottom = b + "px";
+                        lis[i].classList.toggle("olo-mm-btn-primo", i === 0);
+                        b += lis[i].offsetHeight;
+                    }
+                });
             }
             function closeMobile() {
                 var osp = root.querySelector(".olo-mm-oc-search");
@@ -3792,6 +3897,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                 corrente.style.display = "none";
                 corrente.parentNode.insertBefore(layer, corrente.nextSibling);
                 drillStack.push(layer);
+                fissaPulsanti();
                 try { back.focus({ preventScroll: true }); } catch (err) { back.focus(); }
             }
             function drillIndietro() {
@@ -3822,6 +3928,37 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                     e.stopPropagation();
                     drillApri(li);
                 }, true);
+            }
+
+            /* ── Swipe per chiudere: il pannello segue il dito verso il suo lato (o in giù,
+               dal basso); oltre 80 px si chiude, sotto torna al suo posto. ── */
+            if (offcanvas) {
+                var swDir = offcanvas.getAttribute("data-swipe") || "";
+                var swX = 0, swY = 0, swD = 0, swAsse = "";
+                if (swDir) {
+                    offcanvas.addEventListener("touchstart", function(e) {
+                        if (e.touches.length !== 1) return;
+                        swX = e.touches[0].clientX; swY = e.touches[0].clientY; swD = 0; swAsse = "";
+                    }, { passive: true });
+                    offcanvas.addEventListener("touchmove", function(e) {
+                        var dx = e.touches[0].clientX - swX, dy = e.touches[0].clientY - swY, d = 0;
+                        if (!swAsse) { if (Math.abs(dx) > 8 || Math.abs(dy) > 8) swAsse = Math.abs(dx) > Math.abs(dy) ? "x" : "y"; }
+                        if (swDir === "left") { if (swAsse === "x") d = Math.min(0, dx); }
+                        else if (swDir === "right") { if (swAsse === "x") d = Math.max(0, dx); }
+                        else if (swAsse === "y") { if (offcanvas.scrollTop <= 0) d = Math.max(0, dy); }
+                        if (!d) return;
+                        swD = d;
+                        offcanvas.style.transition = "none";
+                        offcanvas.style.transform = swDir === "down" ? "translateY(" + d + "px)" : "translateX(" + d + "px)";
+                    }, { passive: true });
+                    offcanvas.addEventListener("touchend", function() {
+                        if (!swD) return;
+                        offcanvas.style.transition = "";
+                        offcanvas.style.transform = "";
+                        if (Math.abs(swD) > 80) closeMobile();
+                        swD = 0;
+                    });
+                }
             }
 
             /* ── Desktop search toggle ── */

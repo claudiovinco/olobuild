@@ -156,6 +156,15 @@ export default {
     mobile_submenu: 'accordion',
     mobile_parent_click: 'toggle',
     mobile_open_current: true,
+    mobile_panel_width: 320,
+    mobile_overlay_color: '',
+    mobile_overlay_blur: 0,
+    mobile_btn_sticky: false,
+    hamburger_label: '',
+    hamburger_box: 'none',
+    hamburger_box_bg: '',
+    mobile_link_weight: '',
+    mobile_preview_open: false,
     mobile_lang_pos: 'top',
 
     // Predefiniti '#' SOLO sui principali (Facebook/Instagram/X/LinkedIn): le icone
@@ -381,6 +390,7 @@ export default {
     // grandezze e pulsanti stanno nello Stile, zona «Menu mobile».
     { type: 'separator', label: t('Menu mobile') },
     { key: 'mobile_bar_logo', label: t('Logo nella barra mobile'), type: 'toggle' },
+    { key: 'hamburger_label', label: t('Etichetta dell\'hamburger'), type: 'text', placeholder: t('Es. Menu') },
     // Nella barra mobile (se attiva) e nella testata dell'Off-canvas: il Fullscreen usa il logo desktop.
     { key: 'mobile_logo', label: t('Logo mobile'), type: 'image', show: logoMobileAgisce },
     { key: 'mobile_search', label: t('Icona ricerca mobile'), type: 'toggle' },
@@ -736,6 +746,8 @@ export default {
     // Variante dell'Off-canvas: sta qui, prima dei campi che ne dipendono (Animazione, Disposizione).
     { key: 'offcanvas_fullscreen', label: t('Off-canvas a tutto schermo'), type: 'toggle',
       show: (s) => stileMobile(s) === 'offcanvas' },
+    { key: 'mobile_preview_open', label: t('Anteprima: menu aperto'), type: 'toggle',
+      description: t('Solo nel builder, con il dispositivo Tablet o Mobile: il pannello resta aperto mentre lo modifichi. Sul sito il menu parte chiuso.') },
     { key: 'mobile_breakpoint', label: t('Breakpoint'), type: 'select', options: [
       { value: '768', label: t('768px (Tablet)') },
       { value: '1024', label: t('1024px (Desktop)') },
@@ -751,6 +763,8 @@ export default {
       show: (s) => stileMobile(s) !== 'dropdown'
         || (s.mobile_search !== false && !s.mobile_search_overlay && !s.nav_bg) },
     { key: 'mobile_accent_color', label: t('Colore accento mobile'), type: 'color' },
+    { key: 'mobile_overlay_color', label: t('Fondo dietro al pannello'), type: 'color', show: (s) => stileMobile(s) === 'offcanvas' && !s.offcanvas_fullscreen },
+    { key: 'mobile_overlay_blur', label: t('Sfocatura del fondo'), type: 'range', min: 0, max: 20, step: 1, unit: 'px', show: (s) => stileMobile(s) === 'offcanvas' && !s.offcanvas_fullscreen },
     // Nel Fullscreen il filetto fra le voci è fisso.
     { key: 'mob_separator_style', label: t('Separatore tra voci'), type: 'select', options: [
       { value: 'line', label: t('Linea solida') },
@@ -770,8 +784,15 @@ export default {
       show: (s) => stileMobile(s) !== 'fullscreen' },
     { key: 'mobile_link_size', label: t('Dimensione voci'), type: 'range', min: 12, max: 48, step: 1, unit: 'px',
       default: '', placeholder: '22', valoriStorici: { '0': '' }, show: (s) => stileMobile(s) === 'fullscreen' },
-    { key: 'mobile_link_font', label: t('Font voci'), type: 'font-family',
-      show: (s) => stileMobile(s) === 'fullscreen' },
+    { key: 'mobile_link_font', label: t('Font voci'), type: 'font-family' },
+    { key: 'mobile_link_weight', label: t('Peso voci'), type: 'select', options: [
+      { value: '', label: t('Dello stile') },
+      { value: '300', label: t('Leggero (300)') },
+      { value: '400', label: t('Normale (400)') },
+      { value: '500', label: t('Medio (500)') },
+      { value: '600', label: t('Semi-grassetto (600)') },
+      { value: '700', label: t('Grassetto (700)') },
+    ] },
     { key: 'mobile_text_color', label: t('Colore voci'), type: 'color' },
     // mobile_heading_color colora i titoli dei gruppi nei sottomenu dell'Off-canvas e, nel
     // Fullscreen, il testo in fondo: stessa chiave, il nome dice cosa colora in quello stile.
@@ -785,6 +806,8 @@ export default {
     { type: 'separator', label: t('Menu mobile — Forma') },
     // Off-canvas: padding fisso. Fullscreen: agisce su sottovoci e indicatore, le voci di
     // primo livello restano 14/0. Dropdown: voci, sottovoci e indicatore.
+    { key: 'mobile_panel_width', label: t('Larghezza pannello'), type: 'range', min: 240, max: 560, step: 10, unit: 'px',
+      show: (s) => stileMobile(s) === 'offcanvas' && !s.offcanvas_fullscreen && !['top', 'bottom'].includes(s.mobile_slide_direction) },
     { key: 'mobile_item_padding', label: t('Padding voci'), type: 'spacing', max: 30,
       show: (s) => stileMobile(s) !== 'offcanvas' },
     { key: 'mobile_logo_height', label: t('Altezza logo mobile'), type: 'range', min: 20, max: 120, step: 2, unit: 'px',
@@ -792,6 +815,7 @@ export default {
 
     // I link extra con «Stile pulsante» nel pannello mobile, nei tre stili.
     { type: 'separator', label: t('Menu mobile — Pulsanti'), show: haPulsantiMobili },
+    { key: 'mobile_btn_sticky', label: t('Fissi in fondo al pannello'), type: 'toggle' },
     { key: 'mobile_btn_font_size', label: t('Dimensione testo'), type: 'range', min: 12, max: 28, step: 1, unit: 'px' },
     { key: 'mobile_btn_gap', label: t('Gap pulsanti'), type: 'range', min: 0, max: 40, step: 1, unit: 'px' },
     { key: 'mobile_btn_width', label: t('Larghezza pulsanti'), type: 'select', options: [
@@ -828,6 +852,13 @@ export default {
     ]},
     { key: 'hamburger_size', label: t('Dimensione hamburger'), type: 'range', min: 20, max: 44, step: 2, unit: 'px' },
     { key: 'hamburger_color', label: t('Colore hamburger'), type: 'color' },
+    { key: 'hamburger_box', label: t('Fondo hamburger'), type: 'select', options: [
+      { value: 'none', label: t('Nessuno') },
+      { value: 'circle', label: t('Cerchio') },
+      { value: 'square', label: t('Quadrato arrotondato') },
+      { value: 'pill', label: t('Pillola') },
+    ] },
+    { key: 'hamburger_box_bg', label: t('Colore fondo hamburger'), type: 'color', show: (s) => (s.hamburger_box || 'none') !== 'none' },
 
     { type: 'separator', label: t('Menu mobile — Sottomenu') },
     { key: 'mobile_submenu', label: t('Sottomenu'), type: 'select', options: [
@@ -893,9 +924,10 @@ export default {
       options: [
         { value: 'left', label: t('Di lato') },
         { value: 'top', label: t('Dall\'alto') },
+        { value: 'bottom', label: t('Dal basso (bottom sheet)') },
       ]},
     { key: 'mobile_side', label: t('Lato off-canvas'), type: 'select',
-      show: (s) => !s.offcanvas_fullscreen && s.mobile_slide_direction !== 'top',
+      show: (s) => !s.offcanvas_fullscreen && !['top', 'bottom'].includes(s.mobile_slide_direction),
       options: [
         { value: 'left', label: t('Sinistra') },
         { value: 'right', label: t('Destra') },
