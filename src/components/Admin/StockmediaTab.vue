@@ -126,8 +126,8 @@ const services = ref([
 // La guida alle chiavi stava su una pagina di olotheme.com che non esiste (404): ogni provider
 // spiega la sua, e l'icona della riga apre quella pagina.
 const infoChiavi = [
-  t('Ogni provider dà una chiave gratuita: apri il suo sito con l'icona in fondo alla riga, registrati e crea un'applicazione.'),
-  t('Unsplash: la Access Key dell'applicazione. Pexels e Pixabay: la chiave compare nella pagina API dopo l'accesso. Freesound: la chiave API della richiesta.'),
+  t("Ogni provider dà una chiave gratuita: apri il suo sito con l'icona in fondo alla riga, registrati e crea un'applicazione."),
+  t("Unsplash: la Access Key dell'applicazione. Pexels e Pixabay: la chiave compare nella pagina API dopo l'accesso. Freesound: la chiave API della richiesta."),
   t('Incollala nel campo e salva: lo stato passa a «Connesso».'),
 ];
 
