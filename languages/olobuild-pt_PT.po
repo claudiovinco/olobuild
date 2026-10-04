@@ -17076,3 +17076,25 @@ msgstr "Ver o site →"
 
 msgid "Salta configurazione"
 msgstr "Pular configuração"
+
+#: includes/tiles/class-megamenu-tile.php
+msgid "Apri il menu"
+msgstr "Abrir menu"
+
+#: includes/tiles/class-megamenu-tile.php
+msgid "Chiudi il menu"
+msgstr "Fechar menu"
+
+#: includes/tiles/class-megamenu-tile.php
+msgid "Indietro"
+msgstr "Voltar"
+
+#: includes/tiles/class-megamenu-tile.php
+#, php-format
+msgid "Vai a %s"
+msgstr "Ir para %s"
+
+#: includes/tiles/class-megamenu-tile.php
+#, php-format
+msgid "Apri %s"
+msgstr "Abrir %s"

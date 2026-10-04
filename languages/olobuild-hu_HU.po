@@ -2158,3 +2158,25 @@ msgstr "Webhely megtekintése →"
 
 msgid "Salta configurazione"
 msgstr "Beállítás kihagyása"
+
+#: includes/tiles/class-megamenu-tile.php
+msgid "Apri il menu"
+msgstr "Menü megnyitása"
+
+#: includes/tiles/class-megamenu-tile.php
+msgid "Chiudi il menu"
+msgstr "Menü bezárása"
+
+#: includes/tiles/class-megamenu-tile.php
+msgid "Indietro"
+msgstr "Vissza"
+
+#: includes/tiles/class-megamenu-tile.php
+#, php-format
+msgid "Vai a %s"
+msgstr "Ugrás ide: %s"
+
+#: includes/tiles/class-megamenu-tile.php
+#, php-format
+msgid "Apri %s"
+msgstr "%s megnyitása"

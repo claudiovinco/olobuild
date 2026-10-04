@@ -2158,3 +2158,25 @@ msgstr "Zobrazit web →"
 
 msgid "Salta configurazione"
 msgstr "Přeskočit konfiguraci"
+
+#: includes/tiles/class-megamenu-tile.php
+msgid "Apri il menu"
+msgstr "Otevřít menu"
+
+#: includes/tiles/class-megamenu-tile.php
+msgid "Chiudi il menu"
+msgstr "Zavřít menu"
+
+#: includes/tiles/class-megamenu-tile.php
+msgid "Indietro"
+msgstr "Zpět"
+
+#: includes/tiles/class-megamenu-tile.php
+#, php-format
+msgid "Vai a %s"
+msgstr "Přejít na %s"
+
+#: includes/tiles/class-megamenu-tile.php
+#, php-format
+msgid "Apri %s"
+msgstr "Otevřít %s"

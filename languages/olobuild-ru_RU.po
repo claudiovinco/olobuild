@@ -2158,3 +2158,25 @@ msgstr "Открыть сайт →"
 
 msgid "Salta configurazione"
 msgstr "Пропустить настройку"
+
+#: includes/tiles/class-megamenu-tile.php
+msgid "Apri il menu"
+msgstr "Открыть меню"
+
+#: includes/tiles/class-megamenu-tile.php
+msgid "Chiudi il menu"
+msgstr "Закрыть меню"
+
+#: includes/tiles/class-megamenu-tile.php
+msgid "Indietro"
+msgstr "Назад"
+
+#: includes/tiles/class-megamenu-tile.php
+#, php-format
+msgid "Vai a %s"
+msgstr "Перейти: %s"
+
+#: includes/tiles/class-megamenu-tile.php
+#, php-format
+msgid "Apri %s"
+msgstr "Открыть %s"

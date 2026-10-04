@@ -16644,3 +16644,25 @@ msgstr "Ver el sitio →"
 
 msgid "Salta configurazione"
 msgstr "Saltar configuración"
+
+#: includes/tiles/class-megamenu-tile.php
+msgid "Apri il menu"
+msgstr "Abrir el menú"
+
+#: includes/tiles/class-megamenu-tile.php
+msgid "Chiudi il menu"
+msgstr "Cerrar el menú"
+
+#: includes/tiles/class-megamenu-tile.php
+msgid "Indietro"
+msgstr "Atrás"
+
+#: includes/tiles/class-megamenu-tile.php
+#, php-format
+msgid "Vai a %s"
+msgstr "Ir a %s"
+
+#: includes/tiles/class-megamenu-tile.php
+#, php-format
+msgid "Apri %s"
+msgstr "Abrir %s"

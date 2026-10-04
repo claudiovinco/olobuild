@@ -16644,3 +16644,25 @@ msgstr "サイトを見る →"
 
 msgid "Salta configurazione"
 msgstr "セットアップをスキップ"
+
+#: includes/tiles/class-megamenu-tile.php
+msgid "Apri il menu"
+msgstr "メニューを開く"
+
+#: includes/tiles/class-megamenu-tile.php
+msgid "Chiudi il menu"
+msgstr "メニューを閉じる"
+
+#: includes/tiles/class-megamenu-tile.php
+msgid "Indietro"
+msgstr "戻る"
+
+#: includes/tiles/class-megamenu-tile.php
+#, php-format
+msgid "Vai a %s"
+msgstr "%sへ移動"
+
+#: includes/tiles/class-megamenu-tile.php
+#, php-format
+msgid "Apri %s"
+msgstr "%sを開く"
