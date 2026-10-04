@@ -23,7 +23,7 @@ const showBtnAspect = (s) =>
 const stileMobile = (s) => s.mobile_style || 'offcanvas';
 const ocSchermoIntero = (s) => stileMobile(s) === 'offcanvas' && !!s.offcanvas_fullscreen;
 // Le voci si animano nel Fullscreen, nel Dropdown e nell'Off-canvas a tutto schermo.
-const vociAnimabili = (s) => stileMobile(s) !== 'offcanvas' || !!s.offcanvas_fullscreen;
+const vociAnimabili = () => true;
 // Il logo mobile sta nella barra (se attivo) e nella testata dell'Off-canvas.
 const logoMobileAgisce = (s) => s.mobile_bar_logo !== false || stileMobile(s) === 'offcanvas';
 // Link extra resi come pulsante (PHP: extra_link_N_button, N = 1…4).
@@ -152,6 +152,8 @@ export default {
     // Selettore lingua referenziato: id di una tile langswitcher nel template,
     // resa dentro la barra (dopo gli extra link) e nell'off-canvas mobile.
     lang_tile_id: '',
+    mobile_lang_format: 'inline',
+    mobile_lang_pos: 'top',
 
     // Predefiniti '#' SOLO sui principali (Facebook/Instagram/X/LinkedIn): le icone
     // compaiono come punto di partenza (link no-op da sostituire). Gli altri restano
@@ -793,6 +795,20 @@ export default {
       { value: 'full', label: t('Piena') },
       { value: 'auto', label: t('Adattata al testo') },
     ]},
+
+    // Il selettore lingua collegato, nel pannello mobile: formato e posto.
+    { type: 'separator', label: t('Menu mobile — Lingue'), show: (s) => !!s.lang_tile_id },
+    { key: 'mobile_lang_format', label: t('Formato'), type: 'select', options: [
+      { value: 'inline', label: t('Come la tile, in una riga') },
+      { value: 'plain', label: t('Bandiere senza casella') },
+      { value: 'codes', label: t('Pillole con il codice') },
+      { value: 'names', label: t('Elenco con bandiera e nome') },
+      { value: 'dropdown', label: t('Tendina') },
+    ] },
+    { key: 'mobile_lang_pos', label: t('Posizione'), type: 'select', options: [
+      { value: 'top', label: t('In testa') },
+      { value: 'bottom', label: t('In fondo, dopo le voci') },
+    ] },
 
     { type: 'separator', label: t('Menu mobile — Hamburger') },
     { key: 'hamburger_style', label: t('Stile hamburger'), type: 'select', options: [

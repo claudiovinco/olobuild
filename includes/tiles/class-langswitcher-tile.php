@@ -537,10 +537,11 @@ class Olobuild_LangSwitcher_Tile extends Olobuild_Tile_Base {
                 menu.style.minWidth = r.width + "px";
                 // Bandiere in colonna: quelle del menu sotto quella del pulsante.
                 var f = trigger.querySelector(".olsb-flag"), mf = menu.querySelector(".olsb-flag");
-                if (f && mf) {
-                    var dx = f.getBoundingClientRect().left - mf.getBoundingClientRect().left;
-                    menu.style.left = Math.max(4, r.left + dx) + "px";
-                }
+                var left = r.left;
+                if (f) { if (mf) { left = r.left + f.getBoundingClientRect().left - mf.getBoundingClientRect().left; } }
+                // Dentro lo schermo: col pulsante sul bordo destro (menu mobile) usciva fuori.
+                left = Math.min(left, window.innerWidth - menu.offsetWidth - 4);
+                menu.style.left = Math.max(4, left) + "px";
             }
             document.querySelectorAll(".olsb-dropdown").forEach(function(el){
                 if(el._olsInit) return; el._olsInit = true;
