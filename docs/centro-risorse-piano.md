@@ -26,7 +26,7 @@ Materiali che esistono già ma che il Centro risorse non usa:
 Tre livelli, ognuno con un compito solo.
 
 1. **Nel plugin**, sempre disponibile e legato alla versione installata.
-   - **Novità**: `CHANGELOG.md` nel pacchetto, scritto per chi usa Olobuild. La bacheca mostra le ultime
+   - **Novità**: `includes/guide/novita.txt` nel pacchetto (formato Markdown), scritto per chi usa Olobuild. La bacheca mostra le ultime
      2 versioni, la pagina Guida le mostra tutte.
    - **Guida**: pagina della shell (stessa barra in alto, stessa sotto-navigazione) con le guide scritte.
      Le guide sono file del pacchetto (`guide/it/*.php`), una per argomento, e dicono la versione su cui
@@ -43,10 +43,10 @@ Nel Centro risorse compare solo ciò che esiste. Una voce senza destinazione ver
 
 ## 3. Piano dei materiali
 
-**Fase 1 (versione 1.4.500)**
+**Fase 1 (versione 1.4.501)**
 
 - Barra delle icone riparata: compare solo a pannello compresso, ogni icona riapre la sua sezione.
-- `CHANGELOG.md` dalle versioni 1.4.481-1.4.500.
+- Registro delle novità (`includes/guide/novita.txt`) dalle versioni 1.4.481-1.4.501.
 - Pagina Guida con indice e 4 guide: Primi passi, Template, SEO e Open Graph, Prestazioni.
 - Centro risorse e icona (?) della barra in alto puntano alla Guida. Community e Roadmap escono finché
   non esistono.
@@ -68,7 +68,7 @@ alimentato dagli stessi file e i video.
   («punteggio 100») né date di lancio.
 - Niente emoji. Le icone vengono dal set SVG della shell. Le illustrazioni sono schemi semplici in HTML
   e CSS, con i colori della shell.
-- Ogni lotto che cambia un'interfaccia descritta aggiorna la guida relativa e il `CHANGELOG.md`.
+- Ogni lotto che cambia un'interfaccia descritta aggiorna la guida relativa e il registro delle novità.
 
 ## 5. Difetti trovati scrivendo le guide
 
