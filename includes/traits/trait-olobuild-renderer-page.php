@@ -359,13 +359,7 @@ trait Olobuild_Renderer_Page_Trait {
         $page_bg           = $page_settings['page_bg'] ?? [ 'type' => 'none' ];
 
         // Custom responsive breakpoints
-        $this->breakpoints = wp_parse_args( $page_settings['breakpoints'] ?? [], [
-            'widescreen'       => 1400,
-            'tablet_landscape' => 1200,
-            'tablet'           => 960,
-            'mobile_landscape' => 640,
-            'mobile'           => 480,
-        ] );
+        $this->breakpoints = wp_parse_args( $page_settings['breakpoints'] ?? [], self::SOGLIE_DISPOSITIVI );
 
         $safe_mode = get_option( 'olobuild_safe_mode', false );
 

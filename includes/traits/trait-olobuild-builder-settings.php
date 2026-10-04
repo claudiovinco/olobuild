@@ -1099,53 +1099,52 @@ trait Olobuild_Builder_Settings_Trait {
         return rest_ensure_response( [ 'success' => true ] );
     }
 
-    public function rest_get_breakpoints() {
-        $defaults_bps = [
-            [ 'id' => 'desktop_xl', 'name' => 'Desktop XL', 'min' => '1440', 'max' => '∞',    'icon' => '🖥️', 'is_default' => false ],
-            [ 'id' => 'desktop',    'name' => 'Desktop',    'min' => '1200', 'max' => '1439', 'icon' => '🖥️', 'is_default' => true  ],
-            [ 'id' => 'laptop',     'name' => 'Laptop',     'min' => '992',  'max' => '1199', 'icon' => '💻', 'is_default' => false ],
-            [ 'id' => 'tablet',     'name' => 'Tablet',     'min' => '768',  'max' => '991',  'icon' => '📱', 'is_default' => false ],
-            [ 'id' => 'mobile_l',   'name' => 'Mobile L',   'min' => '576',  'max' => '767',  'icon' => '📱', 'is_default' => false ],
-            [ 'id' => 'mobile',     'name' => 'Mobile',     'min' => '0',    'max' => '575',  'icon' => '📱', 'is_default' => false ],
+    /**
+     * I dispositivi dell'editor accesi di serie. Desktop c'è sempre e non sta qui.
+     * Fonte unica per la scheda «Dispositivi dell'editor» e per oloData.breakpointsEnabled.
+     */
+    public static function breakpoints_enabled_defaults() {
+        return [
+            'widescreen'       => true,
+            'tablet_landscape' => false,
+            'tablet'           => true,
+            'mobile_landscape' => false,
+            'mobile'           => true,
         ];
-        $defaults_adv = [ 'strategy' => 'mobile' ];
+    }
 
-        $bps = get_option( 'olobuild_breakpoints_v2', $defaults_bps );
-        $adv = get_option( 'olobuild_breakpoints_advanced', $defaults_adv );
+    public static function breakpoints_enabled() {
+        $saved = (array) get_option( 'olobuild_breakpoints_enabled', [] );
+        $on    = [];
+        foreach ( self::breakpoints_enabled_defaults() as $k => $def ) {
+            $on[ $k ] = isset( $saved[ $k ] ) ? (bool) $saved[ $k ] : $def;
+        }
+        return $on;
+    }
 
-        if ( ! is_array( $bps ) || empty( $bps ) ) $bps = $defaults_bps;
-        if ( ! is_array( $adv ) ) $adv = $defaults_adv;
-
+    /**
+     * Scheda «Dispositivi dell'editor»: quali anteprime compaiono nella barra del
+     * builder e fra le scelte dei controlli per dispositivo. Prima la scheda salvava
+     * soglie e strategia che nessun renderer leggeva (le media query del sito sono
+     * fisse, Olobuild_Frontend_Renderer::SOGLIE_DISPOSITIVI).
+     */
+    public function rest_get_breakpoints() {
         return rest_ensure_response( [
-            'breakpoints' => array_values( $bps ),
-            'advanced'    => wp_parse_args( $adv, $defaults_adv ),
+            'enabled' => self::breakpoints_enabled(),
+            'widths'  => Olobuild_Frontend_Renderer::SOGLIE_DISPOSITIVI,
         ] );
     }
 
     public function rest_put_breakpoints( $request ) {
         $body = $request->get_json_params();
-
-        if ( isset( $body['breakpoints'] ) && is_array( $body['breakpoints'] ) ) {
-            $clean = [];
-            foreach ( $body['breakpoints'] as $b ) {
-                if ( ! is_array( $b ) ) continue;
-                $clean[] = [
-                    'id'         => sanitize_key( $b['id']   ?? 'bp_' . wp_generate_password( 6, false ) ),
-                    'name'       => sanitize_text_field( $b['name'] ?? '' ),
-                    'min'        => sanitize_text_field( (string) ( $b['min'] ?? '0' ) ),
-                    'max'        => sanitize_text_field( (string) ( $b['max'] ?? '∞' ) ),
-                    'icon'       => sanitize_text_field( $b['icon'] ?? '📱' ),
-                    'is_default' => ! empty( $b['is_default'] ),
-                ];
-            }
-            update_option( 'olobuild_breakpoints_v2', $clean );
+        if ( ! isset( $body['enabled'] ) || ! is_array( $body['enabled'] ) ) {
+            return new WP_Error( 'invalid', __( 'Dati non validi.', 'olobuild' ), [ 'status' => 400 ] );
         }
-
-        if ( isset( $body['advanced'] ) && is_array( $body['advanced'] ) ) {
-            $strategy = in_array( $body['advanced']['strategy'] ?? '', [ 'mobile', 'desktop' ], true ) ? ( $body['advanced']['strategy'] ?? '' ) : 'mobile';
-            update_option( 'olobuild_breakpoints_advanced', [ 'strategy' => $strategy ] );
+        $clean = [];
+        foreach ( self::breakpoints_enabled_defaults() as $k => $def ) {
+            $clean[ $k ] = isset( $body['enabled'][ $k ] ) ? ! empty( $body['enabled'][ $k ] ) : $def;
         }
-
+        update_option( 'olobuild_breakpoints_enabled', $clean );
         update_option( 'olobuild_settings_last_saved', time() );
         return rest_ensure_response( [ 'success' => true ] );
     }

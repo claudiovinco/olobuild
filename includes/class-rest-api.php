@@ -2012,13 +2012,7 @@ class Olobuild_Rest_Api {
         $renderer = new Olobuild_Frontend_Renderer();
         $renderer->builder_mode = true;
 
-        $renderer->breakpoints = wp_parse_args( $page_settings['breakpoints'] ?? [], [
-            'widescreen'       => 1400,
-            'tablet_landscape' => 1200,
-            'tablet'           => 960,
-            'mobile_landscape' => 640,
-            'mobile'           => 480,
-        ] );
+        $renderer->breakpoints = wp_parse_args( $page_settings['breakpoints'] ?? [], Olobuild_Frontend_Renderer::SOGLIE_DISPOSITIVI );
 
         $manager = Olobuild_Tile_Manager::instance();
         $hover_css = [];

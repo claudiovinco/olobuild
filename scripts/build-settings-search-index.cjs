@@ -20,7 +20,7 @@ const TAB_META = {
 	colori:        { label: 'Palette & Stili',         group: 'Design' },
 	tipografia:    { label: 'Tipografia',              group: 'Design' },
 	spaziature:    { label: 'Spaziature & layout',     group: 'Design' },
-	responsive:    { label: 'Breakpoint responsive',   group: 'Design' },
+	responsive:    { label: "Dispositivi dell'editor", group: 'Design' },
 	tplconditions: { label: 'Assegnazione template',   group: 'Contenuti & Template' },
 	wootemplates:  { label: 'WooCommerce template',    group: 'Contenuti & Template' },
 	// Le tre schede traslocate nelle aree (restyling Fase 3) dichiarano la

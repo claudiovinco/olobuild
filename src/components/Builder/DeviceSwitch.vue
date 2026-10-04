@@ -27,13 +27,16 @@ import { t } from '@/i18n';
 
 const builderStore = useBuilderStore();
 
+// I dispositivi spenti nella scheda «Dispositivi dell'editor» non si offrono (Desktop c'è sempre),
+// come nella barra in alto (BuilderToolbar) e nell'inspector.
+const _bpEnabled = (window.oloData || {}).breakpointsEnabled || {};
 const devices = [
   { key: 'desktop', label: 'Desktop', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>' },
   { key: 'tablet_landscape', label: 'Tablet orizzontale', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><line x1="12" x2="12.01" y1="12" y2="12"/></svg>' },
   { key: 'tablet', label: 'Tablet', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="12" x2="12.01" y1="18" y2="18"/></svg>' },
   { key: 'mobile_landscape', label: 'Mobile orizzontale', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="12" x2="12.01" y1="12" y2="12"/></svg>' },
   { key: 'mobile', label: 'Mobile', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2"/><line x1="12" x2="12.01" y1="18" y2="18"/></svg>' },
-];
+].filter((d) => d.key === 'desktop' || _bpEnabled[d.key] !== false);
 
 // widescreen condivide i valori "desktop": evidenzia Desktop.
 const activeKey = computed(() => (builderStore.viewMode === 'widescreen' ? 'desktop' : builderStore.viewMode));

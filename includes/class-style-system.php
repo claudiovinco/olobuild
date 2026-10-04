@@ -168,16 +168,6 @@ class Olobuild_Style_System {
                 'enabled'  => true,
                 'strategy' => 'auto',
             ],
-            // Breakpoint responsive — pagina admin "Breakpoint responsive"
-            'breakpoints' => [
-                [ 'id' => 'desktop_xl', 'name' => 'Desktop XL', 'min' => '1440', 'max' => '∞',    'icon' => '🖥️', 'is_default' => false ],
-                [ 'id' => 'desktop',    'name' => 'Desktop',    'min' => '1200', 'max' => '1439', 'icon' => '🖥️', 'is_default' => true  ],
-                [ 'id' => 'laptop',     'name' => 'Laptop',     'min' => '992',  'max' => '1199', 'icon' => '💻', 'is_default' => false ],
-                [ 'id' => 'tablet',     'name' => 'Tablet',     'min' => '768',  'max' => '991',  'icon' => '📱', 'is_default' => false ],
-                [ 'id' => 'mobile_l',   'name' => 'Mobile L',   'min' => '576',  'max' => '767',  'icon' => '📱', 'is_default' => false ],
-                [ 'id' => 'mobile',     'name' => 'Mobile',     'min' => '0',    'max' => '575',  'icon' => '📱', 'is_default' => false ],
-            ],
-            'breakpoint_strategy' => 'mobile',
         ];
     }
 
@@ -204,8 +194,6 @@ class Olobuild_Style_System {
             'grain'           => wp_parse_args( $saved['grain'] ?? [], $defaults['grain'] ),
             'neutrals'        => wp_parse_args( $saved['neutrals'] ?? [], $defaults['neutrals'] ),
             'dark_mode'       => wp_parse_args( $saved['dark_mode'] ?? [], $defaults['dark_mode'] ),
-            'breakpoints'         => ( isset( $saved['breakpoints'] ) && is_array( $saved['breakpoints'] ) ) ? $saved['breakpoints'] : $defaults['breakpoints'],
-            'breakpoint_strategy' => $saved['breakpoint_strategy'] ?? $defaults['breakpoint_strategy'],
         ];
     }
 
@@ -1138,30 +1126,6 @@ class Olobuild_Style_System {
                 'enabled'  => ! empty( $dm['enabled'] ),
                 'strategy' => in_array( $strategy, $strategies, true ) ? $strategy : 'auto',
             ];
-        }
-
-        // Breakpoints (lista device) + strategia — pagina admin "Breakpoint responsive"
-        if ( isset( $styles['breakpoints'] ) && is_array( $styles['breakpoints'] ) ) {
-            $clean_bps = [];
-            foreach ( $styles['breakpoints'] as $bp ) {
-                if ( ! is_array( $bp ) ) {
-                    continue;
-                }
-                $clean_bps[] = [
-                    'id'         => sanitize_key( $bp['id'] ?? '' ),
-                    'name'       => sanitize_text_field( $bp['name'] ?? '' ),
-                    'min'        => sanitize_text_field( (string) ( $bp['min'] ?? '0' ) ),
-                    'max'        => sanitize_text_field( (string) ( $bp['max'] ?? '∞' ) ), // stringa: accetta '∞'
-                    'icon'       => sanitize_text_field( $bp['icon'] ?? '' ),
-                    'is_default' => ! empty( $bp['is_default'] ),
-                ];
-            }
-            if ( $clean_bps ) {
-                $sanitized['breakpoints'] = $clean_bps;
-            }
-        }
-        if ( isset( $styles['breakpoint_strategy'] ) ) {
-            $sanitized['breakpoint_strategy'] = in_array( $styles['breakpoint_strategy'], [ 'mobile', 'desktop' ], true ) ? $styles['breakpoint_strategy'] : 'mobile';
         }
 
         return $sanitized;

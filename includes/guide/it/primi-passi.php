@@ -102,7 +102,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p><span class="ui">Anteprima</span> nasconde i pannelli e mostra la pagina come la vede il visitatore. <span class="ui">Reale</span> apre la pagina vera in una nuova scheda. <kbd>Esc</kbd> riporta alla modifica.</p>
 
 <h2 id="dispositivi">7. Computer, tablet e telefono</h2>
-<p>I pulsanti dei dispositivi nella barra in alto ridimensionano il canvas: Widescreen, Desktop, Tablet e Mobile. Molti controlli hanno un valore per ogni dispositivo. Quando ne modifichi uno, cambi il valore del dispositivo scelto nella barra.</p>
+<p>I pulsanti dei dispositivi nella barra in alto ridimensionano il canvas: Widescreen, Desktop, Tablet e Mobile. Tablet orizzontale e Mobile orizzontale si accendono in <span class="ui">Sistema</span> › <span class="ui">Configurazione</span> › <span class="ui">Dispositivi dell'editor</span>. Molti controlli hanno un valore per ogni dispositivo. Quando ne modifichi uno, cambi il valore del dispositivo scelto nella barra.</p>
 <p>Lo zoom, accanto ai dispositivi, rimpicciolisce o ingrandisce il canvas senza cambiare la pagina.</p>
 
 <h2 id="scorciatoie">8. Scorciatoie da tastiera</h2>

@@ -1286,13 +1286,7 @@ class Olobuild_Builder {
             'hasAiKey'       => class_exists( 'Olobuild_AI_Assistant' ) && Olobuild_AI_Assistant::ha_chiave(),
             // Lingua predefinita della scheda AI («auto» già risolta): la scelta iniziale dell'assistente.
             'aiLingua'       => class_exists( 'Olobuild_AI_Assistant' ) ? Olobuild_AI_Assistant::lingua_predefinita() : 'it',
-            'breakpointsEnabled' => wp_parse_args( get_option( 'olobuild_breakpoints_enabled', [] ), [
-                'widescreen'       => true,
-                'tablet_landscape' => false,
-                'tablet'           => true,
-                'mobile_landscape' => false,
-                'mobile'           => true,
-            ] ),
+            'breakpointsEnabled' => self::breakpoints_enabled(),
             'userRestrictions' => Olobuild_Role_Manager::instance()->get_current_user_restrictions(),
             'isContentOnly'    => Olobuild_Role_Manager::instance()->is_content_only(),
             'isDesignOnly'     => Olobuild_Role_Manager::instance()->is_design_only(),

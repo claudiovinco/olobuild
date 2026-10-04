@@ -12,6 +12,20 @@ class Olobuild_Frontend_Renderer {
     use Olobuild_Renderer_Structure_Trait;
     use Olobuild_Renderer_Page_Trait;
 
+    /**
+     * Le soglie (px) dei dispositivi: larghezza massima di ognuno. Fonte unica per
+     * i default del renderer, dell'anteprima REST e della scheda «Dispositivi
+     * dell'editor». Molto CSS del sito (UIkit @s/@m/@l, frontend.css, tile) usa
+     * ancora 1200/960/640 scritti a mano: per questo non sono modificabili.
+     */
+    const SOGLIE_DISPOSITIVI = [
+        'widescreen'       => 1400,
+        'tablet_landscape' => 1200,
+        'tablet'           => 960,
+        'mobile_landscape' => 640,
+        'mobile'           => 480,
+    ];
+
     private $fraction_map = [
         '1-1' => 100, '1-2' => 50, '1-3' => 33.33, '2-3' => 66.66,
         '1-4' => 25, '3-4' => 75, '1-5' => 20, '2-5' => 40,
@@ -1645,13 +1659,7 @@ class Olobuild_Frontend_Renderer {
 
         $content_max_width = intval( $page_settings['content_max_width'] ?? 1200 );
 
-        $this->breakpoints = wp_parse_args( $page_settings['breakpoints'] ?? [], [
-            'widescreen'       => 1400,
-            'tablet_landscape' => 1200,
-            'tablet'           => 960,
-            'mobile_landscape' => 640,
-            'mobile'           => 480,
-        ] );
+        $this->breakpoints = wp_parse_args( $page_settings['breakpoints'] ?? [], self::SOGLIE_DISPOSITIVI );
 
         $manager = Olobuild_Tile_Manager::instance();
         $hover_css_rules = [];
