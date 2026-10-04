@@ -48,9 +48,9 @@
         <span class="kbd">⌘ K</span>
       </div>
       <div class="top-actions">
-        <a class="doc-link" :href="docsUrl" target="_blank" rel="noopener">
+        <a class="doc-link" :href="docsUrl">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2zM22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"/></svg>
-          {{ t('Documentazione') }}
+          {{ t('Guida') }}
         </a>
         <a class="doc-link" :href="siteUrl" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -352,7 +352,8 @@ const buildId = computed(() => {
 });
 
 const dashboardUrl = computed(() => (window.oloData?.adminUrl || '') + 'admin.php?page=olobuild');
-const docsUrl = 'https://olotheme.com/docs/olobuild/';
+// La Guida della shell (area Sistema): guide scritte per la versione installata.
+const docsUrl = computed(() => (window.oloData?.adminUrl || '') + 'admin.php?page=olo-guida');
 const siteUrl = computed(() => window.oloData?.siteUrl || '/');
 
 // Le 4 aree della shell (dal localize PHP, single source = cockpit_areas()).
