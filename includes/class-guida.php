@@ -23,7 +23,7 @@ class Olobuild_Guida {
 	 * una guida viene riletta sul codice, NON a ogni rilascio: dice al lettore
 	 * da quando il testo corrisponde all'interfaccia.
 	 */
-	const VERIFICATA = '1.4.500';
+	const VERIFICATA = '1.4.501';
 
 	public static function init() {
 		// Dopo admin_menu di Olobuild_Builder, che crea il menu padre «olobuild».
@@ -112,8 +112,12 @@ class Olobuild_Guida {
 		if ( isset( $memo[ $slug ] ) ) {
 			return $memo[ $slug ];
 		}
-		$f      = self::file( $slug );
-		$parole = $f ? str_word_count( wp_strip_all_tags( (string) file_get_contents( $f ) ) ) : 0;
+		$f = self::file( $slug );
+		// Via i blocchi PHP prima dei tag: strip_tags davanti a «<?php» butta tutto il
+		// file. E le parole si contano sugli spazi, perché str_word_count spezza le
+		// parole accentate.
+		$testo  = $f ? wp_strip_all_tags( preg_replace( '/<\?php.*?\?>/s', ' ', (string) file_get_contents( $f ) ) ) : '';
+		$parole = '' === trim( $testo ) ? 0 : count( preg_split( '/\s+/u', trim( $testo ) ) );
 		return $memo[ $slug ] = max( 1, (int) round( $parole / 200 ) );
 	}
 

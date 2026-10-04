@@ -3,7 +3,7 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
-## v1.4.500 - 2026-10-04 (novità)
+## v1.4.501 - 2026-10-04 (novità)
 - Nuova pagina Guida dentro Olobuild, con 4 guide scritte per la versione installata: Primi passi, Template, SEO e Open Graph, Prestazioni.
 - Il Centro risorse della bacheca apre le guide e le novità vere di ogni versione, con la data di uscita.
 - Con il pannello compresso restano visibili le sue icone, e ogni icona riapre la sezione che indica.
