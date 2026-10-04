@@ -3,6 +3,17 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.502 - 2026-10-04 (fix)
+- Salvare nel builder svuota la cache a pagina intera, il Critical CSS e il subset UIkit: i visitatori vedono subito la pagina nuova.
+- Nella scheda Performance & Cache agiscono Defer JavaScript, Preload font, fetchpriority, Durata cache e Sezioni above-the-fold; Svuota tutto svuota tutto e le statistiche contano pagine e file veri.
+- I titoli delle pagine non finiscono più con un separatore, canonical e robots escono una volta sola, e la scheda SEO globale salva ciò che il sito usa.
+- IndexNow funziona: Olobuild pubblica il file della chiave e avvisa i motori anche quando salvi nel builder.
+- White Label: nome, logo, documentazione, email del supporto e Nascondi le novità agiscono ognuno da solo.
+- La scheda Dispositivi dell'editor sceglie quali dispositivi compaiono nella barra del builder.
+- Il template 404 si attiva dalla barra del builder.
+- Gratta e scopri mostra l'immagine di copertura.
+- Selettore lingua: voci senza casella, con la sola bandiera, e menu a tendina stretto sulle bandiere.
+
 ## v1.4.501 - 2026-10-04 (novità)
 - Nuova pagina Guida dentro Olobuild, con 4 guide scritte per la versione installata: Primi passi, Template, SEO e Open Graph, Prestazioni.
 - Il Centro risorse della bacheca apre le guide e le novità vere di ogni versione, con la data di uscita.

@@ -125,24 +125,8 @@ export const SETTINGS_FIELD_INDEX = {
 	"responsive": [
 		{
 			"kind": "section",
-			"label": "Visualizzazione scala",
-			"hint": "Anteprima della copertura dei tuoi breakpoint sulle larghezze reali."
-		},
-		{
-			"kind": "section",
-			"label": "Breakpoint configurati",
-			"hint": "Trascina per riordinare. Il primo dall'alto è il device di default in cui si apre l'editor."
-		},
-		{
-			"kind": "section",
-			"label": "Comportamento avanzato",
-			"hint": ""
-		},
-		{
-			"kind": "field",
-			"label": "Strategia generazione CSS",
-			"hint": "Mobile-first usa min-width, desktop-first usa max-width.",
-			"section": "Comportamento avanzato"
+			"label": "Dispositivi accesi",
+			"hint": "Desktop c'è sempre."
 		}
 	],
 	"tplconditions": [
@@ -272,14 +256,8 @@ export const SETTINGS_FIELD_INDEX = {
 		},
 		{
 			"kind": "field",
-			"label": "Lingua sito",
-			"hint": "Attributo lang dell'HTML.",
-			"section": "Default site-wide"
-		},
-		{
-			"kind": "field",
 			"label": "Robots default",
-			"hint": "Comportamento di default per i motori di ricerca.",
+			"hint": "È la stessa scelta di Impostazioni › Lettura di WordPress. Le pagine si escludono una per una dall'editor.",
 			"section": "Default site-wide"
 		},
 		{
@@ -313,19 +291,13 @@ export const SETTINGS_FIELD_INDEX = {
 		{
 			"kind": "field",
 			"label": "Sitemap XML",
-			"hint": "Generato automaticamente a /sitemap.xml.",
+			"hint": "La sitemap di WordPress, senza le pagine in noindex.",
 			"section": "Sitemap & schema.org"
 		},
 		{
 			"kind": "field",
 			"label": "Tipo organizzazione",
 			"hint": "Schema.org markup iniettato in ogni pagina.",
-			"section": "Sitemap & schema.org"
-		},
-		{
-			"kind": "field",
-			"label": "Auto-ping search engines",
-			"hint": "Notifica Google e Bing ad ogni pubblicazione.",
 			"section": "Sitemap & schema.org"
 		}
 	],
@@ -343,7 +315,13 @@ export const SETTINGS_FIELD_INDEX = {
 		{
 			"kind": "field",
 			"label": "API Key IndexNow",
-			"hint": "",
+			"hint": "Da 8 a 128 caratteri: lettere, cifre e trattini.",
+			"section": "Pagine non trovate"
+		},
+		{
+			"kind": "field",
+			"label": "File di verifica",
+			"hint": "Olobuild lo serve da sé. Dopo aver salvato, aprilo: deve mostrare la chiave.",
 			"section": "Pagine non trovate"
 		}
 	],
@@ -522,7 +500,7 @@ export const SETTINGS_FIELD_INDEX = {
 		{
 			"kind": "section",
 			"label": "Stato cache",
-			"hint": "Ultima generazione"
+			"hint": "Ultimo svuotamento"
 		},
 		{
 			"kind": "section",
@@ -602,19 +580,13 @@ export const SETTINGS_FIELD_INDEX = {
 		{
 			"kind": "field",
 			"label": "DNS prefetch & preconnect automatici",
-			"hint": "dns-prefetch + preconnect per Google Fonts, YouTube, Vimeo e altri domini esterni rilevati.",
+			"hint": "dns-prefetch verso YouTube e Vimeo nelle pagine che li contengono. I domini scritti più sotto escono sempre.",
 			"section": "Resource hints & loading"
 		},
 		{
 			"kind": "field",
 			"label": "Preload font custom",
-			"hint": "Precarica i font usati come body/heading per evitare FOUT (Flash of Unstyled Text).",
-			"section": "Resource hints & loading"
-		},
-		{
-			"kind": "field",
-			"label": "Video facade YouTube/Vimeo",
-			"hint": "Mostra una preview statica, l'iframe carica solo al click. ~500 KB risparmiati per video.",
+			"hint": "Precarica i file dei caratteri di testo e titoli, al peso usato: il testo compare subito con il suo carattere.",
 			"section": "Resource hints & loading"
 		},
 		{
@@ -626,13 +598,7 @@ export const SETTINGS_FIELD_INDEX = {
 		{
 			"kind": "field",
 			"label": "fetchpriority hero image",
-			"hint": "Aggiunge fetchpriority=\"high\" alla prima immagine e rimuove lazy dagli elementi above-fold.",
-			"section": "Resource hints & loading"
-		},
-		{
-			"kind": "field",
-			"label": "Lazy loading immagini below-fold",
-			"hint": "Aggiunge loading=\"lazy\" alle immagini sotto la fold. Riduce il peso iniziale della pagina.",
+			"hint": "La prima immagine della prima sezione parte subito e con priorità alta. Le altre restano pigre.",
 			"section": "Resource hints & loading"
 		},
 		{
@@ -888,31 +854,31 @@ export const SETTINGS_FIELD_INDEX = {
 		{
 			"kind": "field",
 			"label": "Nome plugin",
-			"hint": "Sostituisce \"Olobuild\" nelle voci di menu WP, nell'editor e nei messaggi di sistema.",
+			"hint": "Sostituisce \"Olobuild\" nel menu di WordPress, nell'elenco dei plugin, nell'editor, nella Guida e nel wizard.",
 			"section": "Identità del plugin"
 		},
 		{
 			"kind": "field",
 			"label": "Nome agenzia",
-			"hint": "Visibile in footer di alcune schermate e nei meta dei file esportati.",
+			"hint": "Autore del plugin nell'elenco dei plugin di WordPress.",
 			"section": "Identità del plugin"
 		},
 		{
 			"kind": "field",
 			"label": "Logo (chiaro)",
-			"hint": "32×32px. Visibile in voce di menu WordPress.",
+			"hint": "Icona della voce nel menu di WordPress. Quadrata, almeno 32×32 px.",
 			"section": "Identità del plugin"
 		},
 		{
 			"kind": "field",
 			"label": "Logo (scuro)",
-			"hint": "Usato in barre scure dell'editor.",
+			"hint": "Al posto del logo Olobuild nella barra scura della bacheca e nel wizard.",
 			"section": "Identità del plugin"
 		},
 		{
 			"kind": "field",
 			"label": "URL sito agenzia",
-			"hint": "Link \"Powered by\" nei file esportati (se attivo).",
+			"hint": "Link dell'autore nell'elenco dei plugin di WordPress.",
 			"section": "Identità del plugin"
 		},
 		{
@@ -922,26 +888,32 @@ export const SETTINGS_FIELD_INDEX = {
 		},
 		{
 			"kind": "field",
-			"label": "Nascondi \"Powered by Olobuild\"",
-			"hint": "Toglie attribuzione nel footer dell'editor e nei file generati.",
+			"label": "Nascondi \"Olobuild\" nel codice del sito",
+			"hint": "Toglie i commenti HTML con il nome Olobuild dal codice personalizzato e dal banner cookie.",
 			"section": "Visibilità"
 		},
 		{
 			"kind": "field",
-			"label": "Nascondi changelog & roadmap",
-			"hint": "Il cliente non vede comunicazioni del team Olobuild.",
+			"label": "Nascondi le novità",
+			"hint": "Toglie le note di versione dalla bacheca e dalla Guida.",
 			"section": "Visibilità"
 		},
 		{
 			"kind": "field",
 			"label": "Nascondi a non-admin",
-			"hint": "Gli utenti senza ruolo amministratore non vedono il menu Olobuild in admin.",
+			"hint": "Chi non è amministratore non vede la voce Olobuild nel menu di WordPress.",
 			"section": "Visibilità"
 		},
 		{
 			"kind": "field",
-			"label": "Link Documentazione custom",
-			"hint": "Sostituisci il link \"Documentazione\" con uno tuo.",
+			"label": "Documentazione tua",
+			"hint": "Il pulsante Guida e il pannello Centro risorse aprono il tuo indirizzo al posto delle guide di Olobuild.",
+			"section": "Visibilità"
+		},
+		{
+			"kind": "field",
+			"label": "Email del supporto",
+			"hint": "«Scrivi al supporto» apre un'email a questo indirizzo. Vuoto: il supporto Olobuild.",
 			"section": "Visibilità"
 		}
 	],
