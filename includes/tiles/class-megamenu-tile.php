@@ -1433,7 +1433,8 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         <?php endif; ?>
         <?php endif; ?>
         .<?php echo $uid; ?> .olo-mm-mob-nav > li > a,
-        .<?php echo $uid; ?> .olo-mm-mob-nav > li > .olo-mm-mob-toggle {
+        .<?php echo $uid; ?> .olo-mm-mob-nav > li > .olo-mm-mob-toggle,
+        .<?php echo $uid; ?> .olo-mm-mob-nav > li > .olo-mm-mob-item > a {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -1703,7 +1704,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-mm-dp-nav > li > a, .<?php echo $uid; ?> .olo-mm-dp-nav > li > .olo-mm-dp-item > a { font-family: <?php echo $mob_link_fam; ?>; }
 <?php endif; if ( '' !== trim( (string) ( $s['hamburger_label'] ?? '' ) ) ) : ?>
         /* Hamburger con etichetta: l'icona tiene la sua misura, il testo segue */
-        .<?php echo $uid; ?> .olo-mm-hamburger.olo-mm-ham-con-label { width: auto; gap: 8px; color: <?php echo $ham_color; ?>; }
+        .<?php echo $uid; ?> .olo-mm-hamburger.olo-mm-ham-con-label { width: auto; gap: .5rem; color: <?php echo $ham_color; ?>; }
         .<?php echo $uid; ?> .olo-mm-ham-con-label .olo-mm-ham-svg { width: <?php echo $ham_sz; ?>px; height: <?php echo $ham_sz; ?>px; flex: none; }
         .<?php echo $uid; ?> .olo-mm-ham-label { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; line-height: 1; }
 <?php endif; if ( $hb_box ) : ?>
@@ -1727,13 +1728,10 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> li.olo-mm-dp-sub-open > .olo-mm-dp-sub { visibility: visible; transition: max-height .35s ease, visibility 0s; }
         /* Voce genitore come link (la freccia a parte apre il sottomenu) */
         .<?php echo $uid; ?> .olo-mm-mob-item { display: flex; align-items: stretch; }
-        .<?php echo $uid; ?> .olo-mm-mob-item > a {
-            flex: 1; display: flex; align-items: center; padding: 14px 20px; min-height: 44px;
-            color: <?php echo $mob_tc; ?>; font-size: <?php echo $mob_fs; ?>px; font-weight: 500; text-decoration: none;
-        }
+        .<?php echo $uid; ?> .olo-mm-mob-item > a { flex: 1; min-height: 44px; }
         .<?php echo $uid; ?> li.olo-mm-dp-active > .olo-mm-mob-item > a { color: <?php echo $mob_acc; ?>; }
         .<?php echo $uid; ?> .olo-mm-mob-item > .olo-mm-mob-toggle {
-            display: flex; align-items: center; justify-content: center; min-width: 52px; padding: 0 16px;
+            display: flex; align-items: center; justify-content: center; min-width: 52px; padding: 0 1rem;
             background: none; border: 0; color: <?php echo $mob_tc; ?>; cursor: pointer;
         }
         .<?php echo $uid; ?> .olo-mm-mob-item > .olo-mm-mob-toggle .olo-mm-mob-chevron { margin: 0; order: 0; }
@@ -1761,7 +1759,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         @keyframes olo-mm-drill-back-<?php echo $uid; ?> { from { transform: translateX(-32px); opacity: 0; } to { transform: none; opacity: 1; } }
         @media (prefers-reduced-motion: reduce) { .<?php echo $uid; ?> .olo-mm-drill, .<?php echo $uid; ?> .olo-mm-drill-ritorno { animation: none; } }
         .<?php echo $uid; ?> .olo-mm-drill-back {
-            display: inline-flex; align-items: center; gap: 6px; min-height: 44px; margin: 4px 0 0; padding: 0 <?php echo $drill_side; ?>px;
+            display: inline-flex; align-items: center; gap: .25rem; min-height: 44px; margin: .25rem 0 0; padding: 0 <?php echo $drill_side; ?>px;
             background: none; border: 0; color: inherit; font: inherit; font-size: 14px; opacity: .75; cursor: pointer;
         }
         .<?php echo $uid; ?> .olo-mm-drill-back:hover { opacity: 1; }
@@ -1771,7 +1769,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             text-transform: uppercase; color: <?php echo $mob_acc; ?>;
         }
         .<?php echo $uid; ?> .olo-mm-drill-heading {
-            padding: 14px <?php echo $drill_side; ?>px 4px; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; opacity: .65;
+            padding: 1rem <?php echo $drill_side; ?>px 4px; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; opacity: .65;
         }
         <?php endif; ?>
 
@@ -1883,17 +1881,17 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-mm-offcanvas .olo-mm-lang, .<?php echo $uid; ?> .olo-mm-fullscreen .olo-mm-lang { color: <?php echo $mob_tc; ?>; }
         .<?php echo $uid; ?> .olo-mm-dropdown-panel .olo-mm-lang { color: <?php echo $mob_drop_tc; ?>; }
         .<?php echo $uid; ?> .olo-mm-lang--plain .olsb-item, .<?php echo $uid; ?> .olo-mm-lang--dropdown .olsb-trigger { color: inherit; }
-        .<?php echo $uid; ?> .olo-mm-lang--codes .olsb-switcher { gap: 8px; }
-        .<?php echo $uid; ?> .olo-mm-lang--codes .olsb-item { background: transparent; color: inherit; border: 1px solid color-mix(in srgb, currentColor 30%, transparent); border-radius: 999px; padding: 8px 14px; min-height: 36px; }
+        .<?php echo $uid; ?> .olo-mm-lang--codes .olsb-switcher { gap: .5rem; }
+        .<?php echo $uid; ?> .olo-mm-lang--codes .olsb-item { background: transparent; color: inherit; border: 1px solid color-mix(in srgb, currentColor 30%, transparent); border-radius: 100vmax; padding: .5rem 1rem; min-height: 36px; }
         .<?php echo $uid; ?> .olo-mm-lang--codes .olsb-item.olsb-active { background: <?php echo $mob_acc; ?>; border-color: <?php echo $mob_acc; ?>; color: var(--olo-color-primary-contrast, #ffffff); }
         .<?php echo $uid; ?> .olo-mm-lang--codes .olsb-item:hover, .<?php echo $uid; ?> .olo-mm-lang--names .olsb-item:hover { transform: none; box-shadow: none; }
         .<?php echo $uid; ?> .olo-mm-lang--names { flex: 1 1 100%; }
         .<?php echo $uid; ?> .olo-mm-lang--names .olsb-switcher { display: flex; flex-direction: column; align-items: stretch; gap: 0; width: 100%; }
-        .<?php echo $uid; ?> .olo-mm-lang--names .olsb-item { opacity: 1; padding: 12px 0; min-height: 44px; border-bottom: 1px solid color-mix(in srgb, currentColor 12%, transparent); border-radius: 0; color: inherit; font-size: 16px; }
+        .<?php echo $uid; ?> .olo-mm-lang--names .olsb-item { opacity: 1; padding: .5rem 0; min-height: 44px; border-bottom: 1px solid color-mix(in srgb, currentColor 12%, transparent); border-radius: 0; color: inherit; font-size: 16px; }
         .<?php echo $uid; ?> .olo-mm-lang--names .olsb-item:not(.olsb-active) { opacity: .8; }
-        .<?php echo $uid; ?> .olo-mm-lang--names .olsb-label { font-size: inherit; opacity: 1; margin-left: 6px; flex: 1; }
-        .<?php echo $uid; ?> .olo-mm-lang--names .olsb-item.olsb-active { color: <?php echo $mob_acc; ?>; font-weight: 700; }
-        .<?php echo $uid; ?> .olo-mm-lang--names .olsb-item.olsb-active::after { content: ""; width: 12px; height: 6px; margin-right: 4px; border: solid currentColor; border-width: 0 0 2px 2px; transform: translateY(-2px) rotate(-45deg); }
+        .<?php echo $uid; ?> .olo-mm-lang--names .olsb-label { font-size: inherit; opacity: 1; margin-left: .25rem; flex: 1; }
+        .<?php echo $uid; ?> .olo-mm-lang.olo-mm-lang--names .olsb-item.olsb-active { color: <?php echo $mob_acc; ?>; font-weight: 700; }
+        .<?php echo $uid; ?> .olo-mm-lang--names .olsb-item.olsb-active::after { content: ""; width: 12px; height: 6px; margin-right: .25rem; border: solid currentColor; border-width: 0 0 2px 2px; transform: translateY(-2px) rotate(-45deg); }
         .<?php echo $uid; ?> .olo-mm-offcanvas > .olo-mm-lang, .<?php echo $uid; ?> .olo-mm-fullscreen > .olo-mm-lang.olo-mm-lang--bottom, .<?php echo $uid; ?> .olo-mm-dropdown-panel > .olo-mm-lang.olo-mm-lang--bottom { order: 0; margin: 0; padding: <?php echo $lang_pad; ?>; }
 <?php endif; ?>
 <?php
@@ -2177,13 +2175,13 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-mm-offcanvas {
             left: 0; right: 0; top: auto; bottom: 0;
             width: 100%; max-width: none; height: auto; max-height: 85vh; max-height: 85dvh;
-            border-radius: 18px 18px 0 0;
+            border-radius: 1.25rem 1.25rem 0 0;
             transform: translateY(100%);
         }
         .<?php echo $uid; ?> .olo-mm-offcanvas.olo-mm-vis { transform: translateY(0); }
         .<?php echo $uid; ?> .olo-mm-offcanvas::before {
             content: ""; display: block; flex: none; width: 40px; height: 4px; border-radius: 2px;
-            margin: 10px auto 0; background: color-mix(in srgb, <?php echo $mob_tc; ?> 35%, transparent);
+            margin: .5rem auto 0; background: color-mix(in srgb, <?php echo $mob_tc; ?> 35%, transparent);
         }
         <?php endif; ?>
         <?php if ( $oc_fullscreen ) : ?>

@@ -323,11 +323,11 @@ class Olobuild_LangSwitcher_Tile extends Olobuild_Tile_Base {
             . '.olsb-option:hover{background:var(--olsb-active-bg,var(--olo-color-surface-alt,#f1f3f5));color:var(--olsb-active-color,var(--olsb-color,var(--olo-color-text,#1f2937)))}'
             // Solo bandiera: padding quadrato (prima 6px 12px, una casella larga attorno
             // a una bandiera) e menu stretto sulle bandiere (prima almeno 160px).
-            . '.olsb-solo-bandiera .olsb-item{padding:5px}.olsb-solo-bandiera .olsb-trigger{padding:5px 7px 5px 8px}'
-            . '.olsb-menu.olsb-solo-bandiera{padding:3px}.olsb-menu.olsb-solo-bandiera .olsb-option{padding:5px}'
+            . '.olsb-solo-bandiera .olsb-item{padding:.25rem}.olsb-solo-bandiera .olsb-trigger{padding:.25rem .5rem}'
+            . '.olsb-menu.olsb-solo-bandiera{padding:.25rem}.olsb-menu.olsb-solo-bandiera .olsb-option{padding:.25rem}'
             // Senza casella: la voce è la bandiera (o il testo) e basta. La lingua attiva
             // è piena, le altre attenuate; il menu a tendina resta una card leggibile.
-            . '.olsb-switcher.olsb-plain .olsb-item,.olsb-switcher.olsb-plain .olsb-trigger{background:transparent;border-color:transparent;padding:3px;box-shadow:none}'
+            . '.olsb-switcher.olsb-plain .olsb-item,.olsb-switcher.olsb-plain .olsb-trigger{background:transparent;border-color:transparent;padding:.25rem;box-shadow:none}'
             . '.olsb-switcher.olsb-plain .olsb-item:hover,.olsb-switcher.olsb-plain .olsb-trigger:hover{box-shadow:none}'
             . '.olsb-switcher.olsb-plain .olsb-item{opacity:.55}'
             . '.olsb-switcher.olsb-plain .olsb-item:hover,.olsb-switcher.olsb-plain .olsb-item:focus-visible,.olsb-switcher.olsb-plain .olsb-item.olsb-active{opacity:1}'
