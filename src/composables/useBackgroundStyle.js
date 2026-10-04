@@ -16,6 +16,7 @@ import { getPatternCSS } from '@/utils/patternCSS';
 import { getGlowCSS } from '@/utils/glowCSS';
 import { getMeshCSS } from '@/utils/meshCSS';
 import { getCrtCSS } from '@/utils/crtCSS';
+import { getGeoCSS } from '@/utils/geoCSS';
 
 // v1.0.55 — Tile ATOMICHE: il loro wrapper esterno (sezione/colonna container)
 // NON deve MAI ricevere bg_color/border-radius/shadow dal preset/settings/style della
@@ -30,7 +31,7 @@ export const ATOMIC_TILE_TYPES = new Set(['button', 'icon', 'divider', 'spacer',
 // `solid`. Il layer separato `.olo-bg-preview` è pensato per i tipi con un asset
 // (image/gradient/gallery) e ha un proprio z-index: usarlo anche qui significava
 // che sezioni e righe con Aurora/Bagliori/Trama/CRT non disegnavano nulla.
-export const CSS_ONLY_BG_TYPES = new Set(['solid', 'pattern', 'mesh', 'glow', 'crt']);
+export const CSS_ONLY_BG_TYPES = new Set(['solid', 'pattern', 'mesh', 'glow', 'crt', 'geo']);
 
 /** true se il bg del nodo va reso inline sul blocco (vedi CSS_ONLY_BG_TYPES). */
 export function isInlineBg(bgOrType) {
@@ -149,6 +150,10 @@ export function buildBgStyle(bg) {
 
   if (bg.type === 'crt') {
     return getCrtCSS(bg);
+  }
+
+  if (bg.type === 'geo') {
+    return getGeoCSS(bg);
   }
 
   if (bg.type === 'gallery') {

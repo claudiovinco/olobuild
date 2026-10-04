@@ -417,6 +417,101 @@
         </div>
       </div>
 
+      <!-- Geometrie (anelli concentrici + trama che sfuma) -->
+      <div v-else-if="bg.type === 'geo'" class="type-body">
+        <div class="pv" :style="[tokenStyle, geoPreviewStyle]"><span class="pv-tag">{{ t('anteprima live') }}</span></div>
+        <div class="grid2">
+          <div class="cell"><span class="cl">{{ t('Colore base') }}</span><FieldColor :modelValue="geoVal('geo_base')" @update:modelValue="updateField('geo_base', $event)" /></div>
+        </div>
+
+        <div class="subhead"><span class="t2">{{ t('Anelli') }}</span></div>
+        <div class="row">
+          <span class="rowlab">{{ t('Numero') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_rings')" :min="0" :max="8" :step="1" :defaultValue="GEO_DEFAULTS.geo_rings" emitAs="number" unit="" :sliderOnFocus="false" :ariaLabel="t('Numero')" @update:modelValue="commitInt('geo_rings', $event, GEO_DEFAULTS.geo_rings)" />
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Centro X') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_rings_x')" :min="-50" :max="150" :step="1" :defaultValue="GEO_DEFAULTS.geo_rings_x" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Centro X')" @update:modelValue="commitInt('geo_rings_x', $event, GEO_DEFAULTS.geo_rings_x)" />
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Centro Y') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_rings_y')" :min="-50" :max="150" :step="1" :defaultValue="GEO_DEFAULTS.geo_rings_y" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Centro Y')" @update:modelValue="commitInt('geo_rings_y', $event, GEO_DEFAULTS.geo_rings_y)" />
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Primo raggio') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_rings_r')" :min="4" :max="1200" :step="2" :defaultValue="GEO_DEFAULTS.geo_rings_r" emitAs="number" unit="px" :sliderOnFocus="false" :ariaLabel="t('Primo raggio')" @update:modelValue="commitInt('geo_rings_r', $event, GEO_DEFAULTS.geo_rings_r)" />
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Distanza') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_rings_step')" :min="4" :max="600" :step="2" :defaultValue="GEO_DEFAULTS.geo_rings_step" emitAs="number" unit="px" :sliderOnFocus="false" :ariaLabel="t('Distanza')" @update:modelValue="commitInt('geo_rings_step', $event, GEO_DEFAULTS.geo_rings_step)" />
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Spessore') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_rings_width')" :min="1" :max="12" :step="1" :defaultValue="GEO_DEFAULTS.geo_rings_width" emitAs="number" unit="px" :sliderOnFocus="false" :ariaLabel="t('Spessore')" @update:modelValue="commitInt('geo_rings_width', $event, GEO_DEFAULTS.geo_rings_width)" />
+        </div>
+        <div class="grid2">
+          <div class="cell"><span class="cl">{{ t('Colore anelli') }}</span><FieldColor :modelValue="geoVal('geo_rings_color')" @update:modelValue="updateField('geo_rings_color', $event)" /></div>
+          <div class="cell"><span class="cl">{{ t('Colore in evidenza') }}</span><FieldColor :modelValue="geoVal('geo_accent_color')" @update:modelValue="updateField('geo_accent_color', $event)" /></div>
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Opacità anelli') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_rings_opacity')" :min="0" :max="100" :step="1" :defaultValue="GEO_DEFAULTS.geo_rings_opacity" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Opacità anelli')" @update:modelValue="commitInt('geo_rings_opacity', $event, GEO_DEFAULTS.geo_rings_opacity)" />
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('In evidenza') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_accent')" :min="0" :max="8" :step="1" :defaultValue="GEO_DEFAULTS.geo_accent" emitAs="number" unit="" :sliderOnFocus="false" :ariaLabel="t('In evidenza')" @update:modelValue="commitInt('geo_accent', $event, GEO_DEFAULTS.geo_accent)" />
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Opacità evidenza') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_accent_opacity')" :min="0" :max="100" :step="1" :defaultValue="GEO_DEFAULTS.geo_accent_opacity" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Opacità evidenza')" @update:modelValue="commitInt('geo_accent_opacity', $event, GEO_DEFAULTS.geo_accent_opacity)" />
+        </div>
+
+        <div class="subhead"><span class="t2">{{ t('Trama') }}</span></div>
+        <div class="row">
+          <span class="rowlab">{{ t('Trama') }}</span>
+          <div class="selwrap">
+            <FieldSelect ui="dropdown" :model-value="geoVal('geo_texture')" :options="geoTextureOpts" @update:model-value="updateField('geo_texture', $event)" />
+          </div>
+        </div>
+        <template v-if="geoVal('geo_texture') !== 'none'">
+          <div class="grid2">
+            <div class="cell"><span class="cl">{{ t('Colore trama') }}</span><FieldColor :modelValue="geoVal('geo_tex_color')" @update:modelValue="updateField('geo_tex_color', $event)" /></div>
+          </div>
+          <div class="row">
+          <span class="rowlab">{{ t('Opacità trama') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_tex_opacity')" :min="0" :max="100" :step="1" :defaultValue="GEO_DEFAULTS.geo_tex_opacity" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Opacità trama')" @update:modelValue="commitInt('geo_tex_opacity', $event, GEO_DEFAULTS.geo_tex_opacity)" />
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Passo') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_tex_gap')" :min="4" :max="200" :step="1" :defaultValue="GEO_DEFAULTS.geo_tex_gap" emitAs="number" unit="px" :sliderOnFocus="false" :ariaLabel="t('Passo')" @update:modelValue="commitInt('geo_tex_gap', $event, GEO_DEFAULTS.geo_tex_gap)" />
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Dimensione') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_tex_size')" :min="1" :max="20" :step="1" :defaultValue="GEO_DEFAULTS.geo_tex_size" emitAs="number" unit="px" :sliderOnFocus="false" :ariaLabel="t('Dimensione')" @update:modelValue="commitInt('geo_tex_size', $event, GEO_DEFAULTS.geo_tex_size)" />
+        </div>
+          <div class="row tgl-inline">
+            <div class="tgl-row">
+              <button type="button" class="tgl" :class="{ on: geoVal('geo_fade') !== false }" :aria-pressed="geoVal('geo_fade') !== false" @click="updateField('geo_fade', geoVal('geo_fade') === false)"><b></b></button>
+              <span class="tl">{{ t('Dissolvenza') }}</span>
+            </div>
+          </div>
+          <template v-if="geoVal('geo_fade') !== false">
+        <div class="row">
+          <span class="rowlab">{{ t('Fuoco X') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_fade_x')" :min="-50" :max="150" :step="1" :defaultValue="GEO_DEFAULTS.geo_fade_x" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Fuoco X')" @update:modelValue="commitInt('geo_fade_x', $event, GEO_DEFAULTS.geo_fade_x)" />
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Fuoco Y') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_fade_y')" :min="-50" :max="150" :step="1" :defaultValue="GEO_DEFAULTS.geo_fade_y" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Fuoco Y')" @update:modelValue="commitInt('geo_fade_y', $event, GEO_DEFAULTS.geo_fade_y)" />
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Ampiezza') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="geoVal('geo_fade_r')" :min="5" :max="200" :step="1" :defaultValue="GEO_DEFAULTS.geo_fade_r" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Ampiezza')" @update:modelValue="commitInt('geo_fade_r', $event, GEO_DEFAULTS.geo_fade_r)" />
+        </div>
+          </template>
+        </template>
+      </div>
+
       <!-- ───────── SOVRAPPOSIZIONE — sotto-sezione con occhio ───────── -->
       <div class="subhead">
         <span class="t2">{{ t('Sovrapposizione') }}</span>
@@ -455,6 +550,7 @@ import { patternList, getPatternCSS } from '@/utils/patternCSS';
 import { getGlowCSS, getGlowColors, glowPresets } from '@/utils/glowCSS';
 import { getMeshCSS, getMeshColors, meshPresets } from '@/utils/meshCSS';
 import { getCrtCSS, crtModels } from '@/utils/crtCSS';
+import { getGeoCSS, GEO_DEFAULTS, geoTextures } from '@/utils/geoCSS';
 import ParallaxEditor from './ParallaxEditor.vue';
 import FieldGradient from './fields/FieldGradient.vue';
 import FieldColor from './fields/FieldColor.vue';
@@ -648,6 +744,7 @@ const typeGroups = [
     { value: 'glow',    label: 'Bagliori' },
     { value: 'pattern', label: 'Pattern' },
     { value: 'crt',     label: 'CRT scanline' },
+    { value: 'geo',     label: 'Geometrie' },
   ] },
   { cat: 'Media', items: [
     { value: 'image',   label: 'Immagine',      prev: 'p-img' },
@@ -693,6 +790,7 @@ const typeTileStyle = {
   glow:    getGlowCSS({}),
   pattern: getPatternCSS('dots', '#000000', '#ffffff', 20, 0.5),
   crt:     getCrtCSS({}),
+  geo:     getGeoCSS({}),
 };
 
 /** Sceglie il tipo di sfondo. Ri-cliccare il tipo già attivo non riscrive nulla. */
@@ -818,6 +916,14 @@ const patternPreviewStyle = computed(() => {
 
 // CRT preview: stesso util getCrtCSS della resa canvas/PHP (WYSIWYG).
 const crtPreviewStyle = computed(() => bg.value.type === 'crt' ? getCrtCSS(bg.value) : {});
+// Geometrie: stesso util della resa (getGeoCSS ↔ build_geo_css). Le chiavi non salvate
+// valgono il default del generatore: non si scrivono nel template finché non si toccano.
+const geoPreviewStyle = computed(() => bg.value.type === 'geo' ? getGeoCSS(bg.value) : {});
+const geoTextureOpts = geoTextures.map((o) => ({ value: o.value, label: t(o.label) }));
+function geoVal(k) {
+  const v = bg.value[k];
+  return v === undefined || v === null || v === '' ? GEO_DEFAULTS[k] : v;
+}
 
 // v1.0.77 — preview usa direttamente bg.color (può essere #hex, rgba(...) o var(--olo-color-*)),
 // l'Alfa è già parte del valore emesso da FieldColor. color_opacity è legacy no-op.

@@ -714,7 +714,7 @@ abstract class Olobuild_Tile_Base {
         }
         // Solo gli sfondi senza asset: image/video/gallery vanno al wrapper.
         $type = $bg['type'];
-        if ( ! in_array( $type, [ 'solid', 'gradient', 'pattern', 'mesh', 'glow', 'crt' ], true ) ) {
+        if ( ! in_array( $type, [ 'solid', 'gradient', 'pattern', 'mesh', 'glow', 'crt', 'geo' ], true ) ) {
             return '';
         }
         static $css_builder = null;

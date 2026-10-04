@@ -97,6 +97,9 @@ class Olobuild_CSS_Builder {
         if ( $bg['type'] === 'crt' ) {
             return $this->build_crt_css( $bg );
         }
+        if ( $bg['type'] === 'geo' ) {
+            return $this->build_geo_css( $bg );
+        }
         if ( $bg['type'] === 'image' && ! empty( $bg['image_url'] ) ) {
             $url      = esc_url_raw( $bg['image_url'] );
             $position = sanitize_text_field( $bg['image_position'] ?? 'center center' );
@@ -164,6 +167,101 @@ class Olobuild_CSS_Builder {
         }
 
         return '';
+    }
+
+    /**
+     * Build "Geometrie" background CSS — anelli concentrici (uno in evidenza) e una trama
+     * di puntini o di griglia che sfuma verso un punto, su un colore di base. Gemello JS:
+     * src/utils/geoCSS.js (getGeoCSS), stesse stringhe. Nato per gli sfondi che i temi
+     * portavano come SVG statici (colore, anelli e puntini disegnati nel file, nessun
+     * controllo li cambiava). Layer dall'alto: anello in evidenza, anelli, velo della
+     * dissolvenza (il colore di base sopra la trama, lontano dal fuoco), trama.
+     *
+     * @param array $bg
+     * @return string
+     */
+    public function build_geo_css( $bg ) {
+        $d = [
+            'geo_base' => 'var(--olo-color-dark, #0f172a)', 'geo_rings' => 3, 'geo_rings_x' => 90, 'geo_rings_y' => 18,
+            'geo_rings_r' => 120, 'geo_rings_step' => 110, 'geo_rings_width' => 1, 'geo_rings_color' => '#ffffff',
+            'geo_rings_opacity' => 6, 'geo_accent' => 2, 'geo_accent_color' => 'var(--olo-color-primary)',
+            'geo_accent_opacity' => 18, 'geo_texture' => 'dots', 'geo_tex_gap' => 30, 'geo_tex_size' => 3,
+            'geo_tex_color' => '#ffffff', 'geo_tex_opacity' => 12, 'geo_fade' => true, 'geo_fade_x' => 16,
+            'geo_fade_y' => 88, 'geo_fade_r' => 55,
+        ];
+        $v = function ( $k ) use ( $bg, $d ) {
+            return ( ! isset( $bg[ $k ] ) || '' === $bg[ $k ] ) ? $d[ $k ] : $bg[ $k ];
+        };
+        $num = function ( $k, $lo, $hi ) use ( $v, $d ) {
+            $x = $v( $k );
+            $x = is_numeric( $x ) ? (float) $x : (float) $d[ $k ];
+            return max( $lo, min( $hi, $x ) );
+        };
+        $r1 = function ( $x ) {
+            return round( $x, 1 );
+        };
+        // Il colore di base finisce anche dentro un gradiente: niente caratteri che
+        // chiudono la regola (come glow_color_to_css()).
+        $base = (string) $v( 'geo_base' );
+        if ( preg_match( '/[<>;{}]/', $base ) ) {
+            $base = $d['geo_base'];
+        }
+        $n    = (int) round( $num( 'geo_rings', 0, 8 ) );
+        $x    = $num( 'geo_rings_x', -50, 150 );
+        $y    = $num( 'geo_rings_y', -50, 150 );
+        $w    = (int) round( $num( 'geo_rings_width', 1, 12 ) );
+        $r    = max( $w + 1, (int) round( $num( 'geo_rings_r', 4, 2000 ) ) );
+        $step = (int) round( $num( 'geo_rings_step', 4, 1000 ) );
+        $ring = $this->glow_color_to_css( $v( 'geo_rings_color' ), $num( 'geo_rings_opacity', 0, 100 ) / 100 );
+        $acc  = (int) round( $num( 'geo_accent', 0, 8 ) );
+        $tex  = in_array( $v( 'geo_texture' ), [ 'dots', 'grid' ], true ) ? $v( 'geo_texture' ) : 'none';
+        $anello = function ( $raggio, $col ) use ( $w, $r1 ) {
+            return 'transparent ' . $r1( $raggio - $w - 0.5 ) . 'px, ' . $col . ' ' . $r1( $raggio - $w ) . 'px ' . $raggio . 'px, transparent ' . $r1( $raggio + 0.5 ) . 'px';
+        };
+
+        $imgs = []; $reps = []; $sizes = []; $poss = [];
+        $strato = function ( $img, $rep = 'no-repeat', $size = '100% 100%' ) use ( &$imgs, &$reps, &$sizes, &$poss ) {
+            $imgs[] = $img; $reps[] = $rep; $sizes[] = $size; $poss[] = '0 0';
+        };
+        if ( $n > 0 && $acc > 0 && $acc <= $n ) {
+            $col = $this->glow_color_to_css( $v( 'geo_accent_color' ), $num( 'geo_accent_opacity', 0, 100 ) / 100 );
+            $strato( "radial-gradient(circle at {$x}% {$y}%, " . $anello( $r + ( $acc - 1 ) * $step, $col ) . ')' );
+        }
+        if ( $n > 0 ) {
+            $tappe = [ 'transparent 0' ];
+            for ( $i = 0; $i < $n; $i++ ) {
+                $tappe[] = $anello( $r + $i * $step, $ring );
+            }
+            $strato( "radial-gradient(circle at {$x}% {$y}%, " . implode( ', ', $tappe ) . ')' );
+        }
+        if ( 'none' !== $tex ) {
+            $gap  = (int) round( $num( 'geo_tex_gap', 4, 400 ) );
+            $size = $num( 'geo_tex_size', 1, 40 );
+            $col  = $this->glow_color_to_css( $v( 'geo_tex_color' ), $num( 'geo_tex_opacity', 0, 100 ) / 100 );
+            if ( false !== $v( 'geo_fade' ) && 'false' !== $v( 'geo_fade' ) ) {
+                $fx = $num( 'geo_fade_x', -50, 150 );
+                $fy = $num( 'geo_fade_y', -50, 150 );
+                $fr = $num( 'geo_fade_r', 5, 200 );
+                // Ellisse in % di larghezza e altezza (come un radialGradient SVG sul riquadro).
+                $strato( "radial-gradient({$fr}% {$fr}% at {$fx}% {$fy}%, transparent 0, {$base} 100%)" );
+            }
+            if ( 'dots' === $tex ) {
+                $strato( 'radial-gradient(circle, ' . $col . ' ' . $r1( $size / 2 ) . 'px, transparent ' . $r1( $size / 2 + 0.6 ) . 'px)', 'repeat', "{$gap}px {$gap}px" );
+            } else {
+                $t = max( 1, (int) round( $size ) );
+                $strato( "linear-gradient({$col} {$t}px, transparent {$t}px)", 'repeat', "{$gap}px {$gap}px" );
+                $strato( "linear-gradient(90deg, {$col} {$t}px, transparent {$t}px)", 'repeat', "{$gap}px {$gap}px" );
+            }
+        }
+
+        $css = 'background-color:' . $base;
+        if ( $imgs ) {
+            $css .= ';background-image:' . implode( ', ', $imgs )
+                  . ';background-repeat:' . implode( ', ', $reps )
+                  . ';background-size:' . implode( ', ', $sizes )
+                  . ';background-position:' . implode( ', ', $poss );
+        }
+        return $css;
     }
 
     /**
