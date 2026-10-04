@@ -2,6 +2,10 @@
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
 import { t } from '@/i18n';
 
+// Sfondo, bordo e colori della lingua attiva agiscono sulla casella delle voci e
+// sul menu a tendina: senza casella e senza tendina non c'è niente da colorare.
+const conCasella = (s) => s.item_box !== 'none' || s.layout === 'dropdown' || s.layout === 'tabs';
+
 /**
  * Tile Lang Switcher — split CONTENUTO/STILE (regola universale Olobuild).
  *   fields[]      → stile contenutistico (bandiere/codici/nomi), layout (inline/dropdown/tabs/floating), posizione fluttuante,
@@ -36,6 +40,7 @@ export default {
     border_color: '',
     border_radius: 8,
     show_dropdown_arrow: true,
+    item_box: 'box',
     // Tabs (linguette)
     tabs_edge: 'top',
     tabs_offset: 20,
@@ -128,6 +133,11 @@ export default {
       { value: 'names', label: t('Nomi (Italiano/English)') },
       { value: 'flags_text', label: t('Bandiere + codice') },
     ]},
+    // Senza casella la voce è la sola bandiera (o il testo), senza sfondo né bordo.
+    { key: 'item_box', label: t('Casella'), type: 'select', options: [
+      { value: 'box', label: t('Con sfondo e bordo') },
+      { value: 'none', label: t('Senza: trasparente') },
+    ], show: s => s.layout !== 'tabs' },
     { type: 'separator', label: t('Dimensioni linguette'), show: s => s.layout === 'tabs' },
     { key: 'tabs_offset', label: t('Distanza dal bordo'), type: 'range', min: 0, max: 200, step: 5,
       show: s => s.layout === 'tabs' },
@@ -159,12 +169,12 @@ export default {
     { key: 'gap', label: t('Gap elementi'), type: 'range', min: 0, max: 24 },
 
     { type: 'separator', label: t('Colori') },
-    { key: 'active_bg', label: t('Sfondo lingua attiva'), type: 'color' },
-    { key: 'active_color', label: t('Testo lingua attiva'), type: 'color' },
-    { key: 'bg', label: t('Sfondo'), type: 'color' },
+    { key: 'active_bg', label: t('Sfondo lingua attiva'), type: 'color', show: conCasella },
+    { key: 'active_color', label: t('Testo lingua attiva'), type: 'color', show: conCasella },
+    { key: 'bg', label: t('Sfondo'), type: 'color', show: conCasella },
     { key: 'color', label: t('Testo'), type: 'color' },
-    { key: 'border_color', label: t('Bordo'), type: 'color' },
-    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
+    { key: 'border_color', label: t('Bordo'), type: 'color', show: conCasella },
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius', show: (s) => s.item_box !== 'none' }),
     ...borderFields(),
     { type: 'separator', label: t('Disposizione') },
     { key: 'layout', label: t('Layout'), type: 'select', options: [
