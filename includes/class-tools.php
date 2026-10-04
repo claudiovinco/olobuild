@@ -809,31 +809,12 @@ class Olobuild_Tools {
             wp_send_json_error( 'Permesso negato.' );
         }
 
-        $count = 0;
-
-        // Asset optimizer cache
-        if ( class_exists( 'Olobuild_Asset_Optimizer' ) ) {
-            Olobuild_Asset_Optimizer::flush_all_cache();
-            $count++;
-        }
-
-        // Critical CSS
-        if ( class_exists( 'Olobuild_Critical_CSS' ) ) {
-            $purged = Olobuild_Critical_CSS::purge_all();
-            $count += (int) $purged;
-        }
-
-        // DB transients matching %olo_%
-        global $wpdb;
-        // Pulizia transient del plugin: il LIKE è una stringa letterale (nessun input utente), interpolato solo $wpdb->options (nome tabella core); operazione di flush cache una-tantum non cacheabile.
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
-        $deleted = $wpdb->query(
-            "DELETE FROM {$wpdb->options} WHERE option_name LIKE '%\_transient\_%olo\_%'"
-        );
-        $count += max( 0, (int) $deleted );
-
+        // Stessa pulizia di «Svuota tutto» (Performance): file CSS, Critical CSS,
+        // transient di Olobuild, subset UIkit e, per ultima, la cache a pagina intera.
+        $r = Olobuild_Performance_Settings::svuota_tutto();
         wp_send_json_success( [
-            'message' => sprintf( 'Cache svuotata. %d elementi rimossi.', $count ),
+            /* translators: 1: pages, 2: CSS files, 3: critical CSS entries */
+            'message' => sprintf( __( 'Cache svuotata: %1$d pagine, %2$d file CSS, %3$d Critical CSS.', 'olobuild' ), $r['pagine'], $r['file_css'], $r['critical'] ),
         ] );
     }
 

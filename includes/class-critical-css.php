@@ -18,6 +18,18 @@ class Olobuild_Critical_CSS {
     const CACHE_TTL = 604800;
 
     /**
+     * Durata (secondi) e sezioni iniziali scelte nella scheda Performance.
+     * Prima valevano sempre 7 giorni e 2 sezioni, qualunque valore si salvasse.
+     */
+    private static function opz() {
+        $o = class_exists( 'Olobuild_Performance_Settings' ) ? Olobuild_Performance_Settings::get_option() : [];
+        return [
+            'ttl' => max( 1, min( 30, (int) ( $o['critical_css_ttl'] ?? 7 ) ) ) * DAY_IN_SECONDS,
+            'sez' => max( 1, min( 5, (int) ( $o['critical_css_sections'] ?? 2 ) ) ),
+        ];
+    }
+
+    /**
      * Initialize hooks.
      */
     public static function init() {
@@ -75,8 +87,8 @@ class Olobuild_Critical_CSS {
         // Base critical CSS reset
         $css_parts[] = self::get_base_critical_css();
 
-        // Take only the first 2 section/row nodes (above the fold)
-        $above_fold_nodes = array_slice( $content, 0, 2 );
+        // Solo le prime sezioni (sopra la piega), quante ne dice la scheda Performance
+        $above_fold_nodes = array_slice( $content, 0, self::opz()['sez'] );
 
         // Generate CSS for above-fold nodes
         foreach ( $above_fold_nodes as $node ) {
@@ -98,7 +110,7 @@ class Olobuild_Critical_CSS {
         $critical_css = self::minify_css( $critical_css );
 
         // Save in transient
-        set_transient( 'olo_critical_css_' . $post_id, $critical_css, self::CACHE_TTL );
+        set_transient( 'olo_critical_css_' . $post_id, $critical_css, self::opz()['ttl'] );
 
         return $critical_css;
     }
@@ -271,7 +283,7 @@ class Olobuild_Critical_CSS {
         return [
             'enabled'        => (bool) get_option( 'olobuild_critical_css_enabled', false ),
             'cached_count'   => $cached_count,
-            'last_generated' => $last_generated ? wp_date( 'Y-m-d H:i:s', intval( $last_generated ) - self::CACHE_TTL ) : null,
+            'last_generated' => $last_generated ? wp_date( 'Y-m-d H:i:s', intval( $last_generated ) - self::opz()['ttl'] ) : null,
         ];
     }
 

@@ -5,7 +5,6 @@
       <p>{{ t('Ottimizzazioni che migliorano i Core Web Vitals senza toccare il design. Critical CSS, defer JS, lazy load, resource hints.') }}</p>
     </div>
     <div class="head-actions">
-      <span class="cfg-pill" :class="scoreClass"><span class="dot"></span> {{ t('Score') }} {{ stats.score }}/100</span>
       <button class="cfg-btn cfg-btn-secondary" @click="purgeAll" :disabled="purging">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7l3 2.7"/><path d="M21 3v6h-6"/></svg>
         {{ t('Svuota tutto') }}
@@ -21,7 +20,7 @@
       </div>
       <div>
         <h3>{{ t('Stato cache') }}</h3>
-        <p>{{ t('Ultima generazione') }}: {{ stats.last_purge || '—' }}</p>
+        <p>{{ t('Ultimo svuotamento') }}: {{ stats.last_purge || '—' }}</p>
       </div>
       <div class="head-actions">
         <button class="cfg-btn cfg-btn-secondary" @click="regenerateCache">
@@ -33,24 +32,24 @@
     <div class="cfg-card-body">
       <div class="usage-grid">
         <div class="usage-card">
-          <div class="usage-label">{{ t('Pagine cachate') }}</div>
-          <div class="usage-value">{{ stats.pages_cached }}</div>
-          <div class="usage-trend">{{ t('di') }} {{ stats.pages_total }} {{ t('totali') }}</div>
+          <div class="usage-label">{{ t('Pagine in cache') }}</div>
+          <div class="usage-value">{{ stats.fpc.pagine }}</div>
+          <div class="usage-trend">{{ stats.fpc.attiva ? stats.fpc_size : t('Full-page cache non attiva') }}</div>
         </div>
         <div class="usage-card">
-          <div class="usage-label">{{ t('Dimensione cache CSS') }}</div>
-          <div class="usage-value">{{ stats.size }}</div>
-          <div class="usage-trend">{{ t('limite') }} {{ stats.size_max }}</div>
+          <div class="usage-label">{{ t('File CSS') }}</div>
+          <div class="usage-value">{{ stats.css_files }}</div>
+          <div class="usage-trend">{{ stats.css_size }}</div>
+        </div>
+        <div class="usage-card">
+          <div class="usage-label">{{ t('Critical CSS') }}</div>
+          <div class="usage-value">{{ stats.critical_pages }}</div>
+          <div class="usage-trend">{{ form.critical_css_enabled ? t('pagine generate') : t('spento') }}</div>
         </div>
         <div class="usage-card">
           <div class="usage-label">{{ t('Flag attivi') }}</div>
           <div class="usage-value">{{ activeFlags }}<span class="of-total">/{{ FLAG_KEYS.length }}</span></div>
           <div class="usage-trend">{{ t('configurati') }}</div>
-        </div>
-        <div class="usage-card">
-          <div class="usage-label">{{ t('Score performance') }}</div>
-          <div class="usage-value">{{ stats.score }}<span class="of-total">/100</span></div>
-          <div class="usage-trend">{{ scoreLabel }}</div>
         </div>
       </div>
     </div>
@@ -113,7 +112,10 @@
           <label>{{ t('Full-page cache') }}</label>
           <div class="hint">{{ t('Salva l\'HTML generato e lo serve prima di WordPress: abbatte il tempo di risposta (TTFB). Esclude automaticamente utenti loggati, carrello/checkout WooCommerce e richieste POST. Installa il drop-in advanced-cache.php e attiva WP_CACHE; si svuota a ogni modifica di contenuto.') }}</div>
         </div>
-        <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.full_page_cache }" @click="set('full_page_cache', !form.full_page_cache)" role="switch"></button></div>
+        <div class="control-col">
+          <span v-if="form.full_page_cache && motivoCache" class="cfg-pill warn"><span class="dot"></span> {{ motivoCache }}</span>
+          <button class="cfg-switch" :class="{ 'is-on': form.full_page_cache }" @click="set('full_page_cache', !form.full_page_cache)" role="switch"></button>
+        </div>
       </div>
       <div class="cfg-row">
         <div class="label-col">
@@ -175,23 +177,16 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('DNS prefetch & preconnect automatici') }}</label>
-          <div class="hint">{{ t('dns-prefetch + preconnect per Google Fonts, YouTube, Vimeo e altri domini esterni rilevati.') }}</div>
+          <div class="hint">{{ t('dns-prefetch verso YouTube e Vimeo nelle pagine che li contengono. I domini scritti più sotto escono sempre.') }}</div>
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.resource_hints }" @click="set('resource_hints', !form.resource_hints)" role="switch"></button></div>
       </div>
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Preload font custom') }}</label>
-          <div class="hint">{{ t('Precarica i font usati come body/heading per evitare FOUT (Flash of Unstyled Text).') }}</div>
+          <div class="hint">{{ t('Precarica i file dei caratteri di testo e titoli, al peso usato: il testo compare subito con il suo carattere.') }}</div>
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.font_preload }" @click="set('font_preload', !form.font_preload)" role="switch"></button></div>
-      </div>
-      <div class="cfg-row">
-        <div class="label-col">
-          <label>{{ t('Video facade YouTube/Vimeo') }}</label>
-          <div class="hint">{{ t('Mostra una preview statica, l\'iframe carica solo al click. ~500 KB risparmiati per video.') }}</div>
-        </div>
-        <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.video_facade }" @click="set('video_facade', !form.video_facade)" role="switch"></button></div>
       </div>
       <div class="cfg-row">
         <div class="label-col">
@@ -200,19 +195,12 @@
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.lazy_videos }" @click="set('lazy_videos', !form.lazy_videos)" role="switch"></button></div>
       </div>
-      <div class="cfg-row">
-        <div class="label-col">
-          <label>{{ t('fetchpriority hero image') }}</label>
-          <div class="hint">{{ t('Aggiunge fetchpriority="high" alla prima immagine e rimuove lazy dagli elementi above-fold.') }}</div>
-        </div>
-        <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.fetchpriority }" @click="set('fetchpriority', !form.fetchpriority)" role="switch"></button></div>
-      </div>
       <div class="cfg-row no-divider">
         <div class="label-col">
-          <label>{{ t('Lazy loading immagini below-fold') }}</label>
-          <div class="hint">{{ t('Aggiunge loading="lazy" alle immagini sotto la fold. Riduce il peso iniziale della pagina.') }}</div>
+          <label>{{ t('fetchpriority hero image') }}</label>
+          <div class="hint">{{ t('La prima immagine della prima sezione parte subito e con priorità alta. Le altre restano pigre.') }}</div>
         </div>
-        <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.lazy_images }" @click="set('lazy_images', !form.lazy_images)" role="switch"></button></div>
+        <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.fetchpriority }" @click="set('fetchpriority', !form.fetchpriority)" role="switch"></button></div>
       </div>
     </div>
   </div>
@@ -330,9 +318,7 @@ const INIZIALE = {
   // Performance Hints
   resource_hints: true,
   font_preload: true,
-  video_facade: true,
   fetchpriority: true,
-  lazy_images: true,
   lazy_videos: true,
   browser_cache_headers: false,
   // Head cleanup
@@ -347,32 +333,33 @@ const INIZIALE = {
 const form = ref({ ...INIZIALE });
 
 const stats = ref({
-  score: 0,
-  last_purge: '—',
-  pages_cached: 0,
-  pages_total: 0,
-  size: '—',
-  size_max: '500 MB',
+  fpc: { attiva: false, motivo: '', pagine: 0 },
+  fpc_size: '—',
+  css_files: 0,
+  css_size: '—',
+  critical_pages: 0,
+  last_purge: '',
+});
+
+// Perché la full-page cache, accesa, non lavora (Olobuild_FullPage_Cache::stato()).
+const MOTIVI_CACHE = {
+  foreign_dropin: 'Un altro plugin di cache usa già advanced-cache.php: disattivalo',
+  wp_cache_off: 'wp-config.php non è scrivibile: aggiungi define(\'WP_CACHE\', true)',
+  dropin_missing: 'Il file advanced-cache.php non è stato installato',
+};
+const motivoCache = computed(() => {
+  const m = stats.value.fpc && stats.value.fpc.motivo;
+  return m ? t(MOTIVI_CACHE[m] || m) : '';
 });
 
 const FLAG_KEYS = [
   'critical_css_enabled', 'full_page_cache', 'defer_js', 'css_cache_files', 'minify_css',
-  'css_per_tile', 'uikit_subset', 'resource_hints', 'font_preload', 'video_facade',
-  'fetchpriority', 'lazy_images', 'lazy_videos', 'browser_cache_headers',
+  'css_per_tile', 'uikit_subset', 'resource_hints', 'font_preload',
+  'fetchpriority', 'lazy_videos', 'browser_cache_headers',
   'remove_jquery_migrate', 'remove_emoji_scripts',
 ];
 const activeFlags = computed(() => FLAG_KEYS.filter(k => !!form.value[k]).length);
 
-const scoreClass = computed(() => {
-  if (stats.value.score >= 85) return 'ok';
-  if (stats.value.score >= 70) return 'warn';
-  return 'off';
-});
-const scoreLabel = computed(() => {
-  if (stats.value.score >= 85) return t('ottimo');
-  if (stats.value.score >= 70) return t('buono');
-  return t('da migliorare');
-});
 
 function set(k, v) { form.value[k] = v; setDirty(true); }
 
@@ -381,7 +368,7 @@ async function purgeAll() {
   purging.value = true;
   try {
     const body = new FormData();
-    body.append('action', 'olobuild_perf_purge_critical');
+    body.append('action', 'olobuild_perf_purge_all');
     body.append('_nonce', window.oloData.perfNonce);
     const res = await fetch(window.oloData.ajaxUrl, { method: 'POST', body, credentials: 'same-origin' });
     const d = res.ok ? await res.json() : null;
@@ -425,7 +412,7 @@ async function saveSettings() {
     headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
     body: JSON.stringify(form.value),
   }));
-  await loadStats(); // refresh score dopo save (non fa fallire il salvataggio)
+  await loadStats(); // stato della cache dopo il salvataggio (non fa fallire il salvataggio)
 }
 
 const onSave = cfgJob(TAB_ID, saveSettings);

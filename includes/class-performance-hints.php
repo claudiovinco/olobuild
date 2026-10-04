@@ -12,9 +12,6 @@ class Olobuild_Performance_Hints {
 
     private static $instance = null;
 
-    /** @var bool Has hero image been marked with fetchpriority */
-    private $hero_marked = false;
-
     /** @var int Number of <video> tags converted to lazy by the output buffer */
     private $lazy_video_count = 0;
 
@@ -24,6 +21,9 @@ class Olobuild_Performance_Hints {
 
     /** @var array Fonts that need preloading */
     private $preload_fonts = [];
+
+    /** @var bool DNS prefetch automatico per i video della pagina */
+    private $hint_automatici = true;
 
     public static function instance() {
         if ( null === self::$instance ) {
@@ -35,31 +35,20 @@ class Olobuild_Performance_Hints {
     public function init() {
         $opt = class_exists( 'Olobuild_Performance_Settings' )
             ? Olobuild_Performance_Settings::get_option()
-            : [
-                'resource_hints' => true, 'font_preload' => true, 'fetchpriority' => true,
-                'video_facade' => true, 'lazy_images' => true,
-            ];
+            : [ 'resource_hints' => true, 'font_preload' => true ];
 
-        if ( ! empty( $opt['resource_hints'] ) ) {
-            add_action( 'wp_head', [ $this, 'output_resource_hints' ], 2 );
-        }
+        // I domini scritti a mano escono sempre; l'interruttore comanda la parte
+        // automatica (YouTube e Vimeo quando la pagina li contiene).
+        add_action( 'wp_head', [ $this, 'output_resource_hints' ], 2 );
+        $this->hint_automatici = ! empty( $opt['resource_hints'] );
 
         if ( ! empty( $opt['font_preload'] ) ) {
             add_action( 'wp_head', [ $this, 'output_font_preload' ], 3 );
         }
 
-        if ( ! empty( $opt['fetchpriority'] ) ) {
-            add_filter( 'olo_image_attributes', [ $this, 'add_fetchpriority' ], 10, 2 );
-        }
-
-        if ( ! empty( $opt['video_facade'] ) ) {
-            add_filter( 'olo_video_embed', [ $this, 'video_facade' ], 10, 2 );
-        }
-
-        // Lazy loading: filter to add/remove loading="lazy" on below-fold images.
-        if ( ! empty( $opt['lazy_images'] ) ) {
-            add_filter( 'olo_image_attributes', [ $this, 'add_lazy_loading' ], 9, 2 );
-        }
+        // «fetchpriority hero image» agisce nel renderer (Olobuild_Tile_Utils::arma_lcp),
+        // la facciata dei video sta nella tile Video, le immagini sono già pigre di serie:
+        // i filtri olo_image_attributes / olo_video_embed non li chiamava nessuno.
 
         // Buffer dell'output frontend, condiviso da due feature:
         // - lazy_videos: <video autoplay muted> → preload="none" + IntersectionObserver
@@ -104,16 +93,6 @@ class Olobuild_Performance_Hints {
         }
     }
 
-    /**
-     * Add loading="lazy" to below-fold images (preserves fetchpriority hero override).
-     */
-    public function add_lazy_loading( $attrs, $context = [] ) {
-        if ( $this->hero_marked && empty( $attrs['loading'] ) ) {
-            $attrs['loading'] = 'lazy';
-        }
-        return $attrs;
-    }
-
     /* ─────────────────────────────────────────────
      * Resource Hints
      * ───────────────────────────────────────────── */
@@ -125,7 +104,7 @@ class Olobuild_Performance_Hints {
         // I Google Fonts sono self-hosted (Olobuild_Font_Host), serviti da /uploads.
 
         // YouTube/Vimeo preconnect only if video tiles detected
-        if ( $this->page_has_video_tile() ) {
+        if ( $this->hint_automatici && $this->page_has_video_tile() ) {
             $hints[] = '<link rel="dns-prefetch" href="//www.youtube.com" />';
             $hints[] = '<link rel="dns-prefetch" href="//player.vimeo.com" />';
             $hints[] = '<link rel="dns-prefetch" href="//i.ytimg.com" />';
@@ -144,6 +123,9 @@ class Olobuild_Performance_Hints {
             if ( $d ) $hints[] = '<link rel="preconnect" href="' . esc_url( $d ) . '" crossorigin />';
         }
 
+        if ( ! $hints ) {
+            return;
+        }
         echo implode( "\n", $hints ) . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- <link> hint tags built above from fixed literals plus esc_attr()/esc_url()'d user domains
     }
 
@@ -151,142 +133,101 @@ class Olobuild_Performance_Hints {
      * Font Preload
      * ───────────────────────────────────────────── */
 
+    /**
+     * Precarica i file dei due caratteri principali (testo e titoli), al peso usato.
+     * Prima leggeva olobuild_styles['body_font'], che nessuno scrive: non usciva mai
+     * niente. I file sono quelli self-hosted che lo Style System scrive nel CSS
+     * globale (blocco «latin»), oppure quelli dei font caricati a mano. Massimo 2.
+     */
     public function output_font_preload() {
-        // Preload custom fonts that are used in the global style system
-        $styles = get_option( 'olobuild_styles', [] );
-        if ( ! is_array( $styles ) ) {
+        if ( ! wp_style_is( 'olo-frontend-css', 'enqueued' ) || ! class_exists( 'Olobuild_Style_System' ) ) {
             return;
         }
+        $ss  = Olobuild_Style_System::instance();
+        $t   = $ss->get_styles()['typography'] ?? [];
+        $css = $ss->generate_css();
+        $set = [];
+        foreach ( (array) $ss->get_global_typography() as $g ) {
+            if ( ! empty( $g['id'] ) && ! empty( $g['family'] ) ) {
+                $set[ $g['id'] ] = $g['family'];
+            }
+        }
+        $urls = [];
+        $coppie = [
+            [ $t['font_family'] ?? '', (int) ( $t['font_weight_body'] ?? 400 ) ],
+            [ $t['font_family_heading'] ?? '', (int) ( $t['font_weight_heading'] ?? 700 ) ],
+        ];
+        foreach ( $coppie as $c ) {
+            $valore = (string) $c[0];
+            $peso   = $c[1] ?: 400;
+            if ( preg_match( '/--olo-font-([a-z0-9_-]+)-family/', $valore, $m ) && isset( $set[ $m[1] ] ) ) {
+                $valore = $set[ $m[1] ];
+            }
+            $fam = trim( explode( ',', $valore )[0], " '\"" );
+            if ( '' === $fam || false !== strpos( $fam, 'var(' ) ) {
+                continue;
+            }
+            $u = self::woff2_latin( $css, $fam, $peso );
+            if ( ! $u ) {
+                $u = self::woff2_caricato( $fam, $peso );
+            }
+            if ( $u ) {
+                $urls[ $u ] = true;
+            }
+        }
+        foreach ( array_slice( array_keys( $urls ), 0, 2 ) as $u ) {
+            echo '<link rel="preload" href="' . esc_url( $u ) . '" as="font" type="font/woff2" crossorigin />' . "\n";
+        }
+    }
 
-        $body_font    = $styles['body_font'] ?? '';
-        $heading_font = $styles['heading_font'] ?? '';
+    /** Il woff2 «latin», non corsivo, col peso più vicino, fra gli @font-face del CSS globale. */
+    private static function woff2_latin( $css, $fam, $peso ) {
+        preg_match_all( '#/\*\s*latin\s*\*/\s*@font-face\s*\{([^}]*)\}#i', (string) $css, $m );
+        $best = '';
+        $dist = PHP_INT_MAX;
+        foreach ( $m[1] as $b ) {
+            if ( ! preg_match( '/font-family:\s*[\'"]?([^;\'"]+)/i', $b, $f ) || 0 !== strcasecmp( trim( $f[1] ), $fam ) ) {
+                continue;
+            }
+            if ( false !== stripos( $b, 'italic' ) || ! preg_match( '/url\(([^)]+\.woff2)\)/i', $b, $u ) ) {
+                continue;
+            }
+            preg_match( '/font-weight:\s*(\d+)(?:\s+(\d+))?/', $b, $w );
+            $lo = (int) ( $w[1] ?? 400 );
+            $hi = (int) ( $w[2] ?? $lo );
+            $d  = ( $peso >= $lo && $peso <= $hi ) ? 0 : min( abs( $peso - $lo ), abs( $peso - $hi ) );
+            if ( $d < $dist ) {
+                $dist = $d;
+                $best = trim( $u[1], '\'"' );
+            }
+        }
+        return $best;
+    }
 
-        // If custom fonts are woff2 URLs, preload them
-        $custom_fonts = get_option( 'olobuild_custom_fonts', [] );
-        if ( is_array( $custom_fonts ) ) {
-            foreach ( $custom_fonts as $font ) {
-                $name = $font['name'] ?? '';
-                $url  = $font['url'] ?? '';
-                if ( empty( $url ) ) {
+    /** Fra i font caricati a mano (Olobuild_Custom_Fonts), la variante woff2 col peso più vicino. */
+    private static function woff2_caricato( $fam, $peso ) {
+        if ( ! class_exists( 'Olobuild_Custom_Fonts' ) ) {
+            return '';
+        }
+        $best = '';
+        $dist = PHP_INT_MAX;
+        foreach ( (array) Olobuild_Custom_Fonts::get_fonts() as $font ) {
+            if ( 0 !== strcasecmp( (string) ( $font['name'] ?? '' ), $fam ) ) {
+                continue;
+            }
+            foreach ( (array) ( $font['variants'] ?? [] ) as $v ) {
+                $file = (string) ( $v['file'] ?? $v['url'] ?? '' );
+                if ( '' === $file || ! preg_match( '/\.woff2(\?|$)/i', $file ) || 'italic' === ( $v['style'] ?? '' ) ) {
                     continue;
                 }
-                // Only preload fonts that are actually used as body or heading
-                if ( $name === $body_font || $name === $heading_font ) {
-                    $type = 'font/woff2';
-                    if ( str_contains( $url, '.woff2' ) ) {
-                        $type = 'font/woff2';
-                    } elseif ( str_contains( $url, '.woff' ) ) {
-                        $type = 'font/woff';
-                    } elseif ( str_contains( $url, '.ttf' ) ) {
-                        $type = 'font/ttf';
-                    }
-                    echo '<link rel="preload" href="' . esc_url( $url ) . '" as="font" type="' . esc_attr( $type ) . '" crossorigin />' . "\n";
+                $d = abs( (int) ( $v['weight'] ?? 400 ) - $peso );
+                if ( $d < $dist ) {
+                    $dist = $d;
+                    $best = $file;
                 }
             }
         }
-    }
-
-    /* ─────────────────────────────────────────────
-     * fetchpriority for hero images
-     * ───────────────────────────────────────────── */
-
-    /**
-     * Add fetchpriority="high" to the first (hero) image on the page.
-     * Remove loading="lazy" from above-fold images.
-     *
-     * @param array $attrs Image attributes
-     * @param array $context ['position' => int, 'is_hero' => bool]
-     * @return array Modified attributes
-     */
-    public function add_fetchpriority( $attrs, $context = [] ) {
-        $is_hero = ! empty( $context['is_hero'] );
-        $pos     = $context['position'] ?? 99;
-
-        // First image or explicitly hero
-        if ( ! $this->hero_marked ) {
-            if ( $is_hero || $pos <= 1 ) {
-                $attrs['fetchpriority'] = 'high';
-                // Remove lazy loading from above-fold content
-                unset( $attrs['loading'] );
-                $this->hero_marked = true;
-            }
-        }
-
-        return $attrs;
-    }
-
-    /* ─────────────────────────────────────────────
-     * Video Facade (lazy-load iframes)
-     * ───────────────────────────────────────────── */
-
-    /**
-     * Replace video iframe with a facade (thumbnail + play button).
-     * The iframe loads only when user clicks play.
-     *
-     * @param string $html   Original iframe HTML
-     * @param array  $settings Video settings (url, thumbnail, etc.)
-     * @return string Facade HTML or original
-     */
-    public function video_facade( $html, $settings = [] ) {
-        $url = $settings['url'] ?? '';
-        if ( empty( $url ) ) {
-            return $html;
-        }
-
-        // Only facade YouTube and Vimeo
-        $thumb = '';
-        $embed_url = '';
-
-        if ( preg_match( '/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $url, $m ) ) {
-            $video_id  = $m[1];
-            $thumb     = "https://i.ytimg.com/vi/{$video_id}/hqdefault.jpg";
-            $embed_url = "https://www.youtube.com/embed/{$video_id}?autoplay=1";
-        } elseif ( preg_match( '/vimeo\.com\/(\d+)/', $url, $m ) ) {
-            $video_id = $m[1];
-            // Vimeo requires API call for thumbnail, use placeholder
-            $embed_url = "https://player.vimeo.com/video/{$video_id}?autoplay=1";
-        }
-
-        // If custom thumbnail provided, use it
-        if ( ! empty( $settings['thumbnail'] ) ) {
-            $thumb = $settings['thumbnail'];
-        }
-
-        // If no thumbnail available, return original iframe
-        if ( empty( $thumb ) || empty( $embed_url ) ) {
-            return $html;
-        }
-
-        $uid = 'olo-vf-' . wp_unique_id();
-
-        ob_start();
-        ?>
-        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-video-facade" style="position:relative;cursor:pointer;aspect-ratio:16/9;background:#000;overflow:hidden" role="button" aria-label="<?php echo esc_attr__( 'Riproduci video', 'olobuild' ); ?>" tabindex="0">
-            <img src="<?php echo esc_url( $thumb ); ?>" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;opacity:.85" />
-            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
-                <svg width="68" height="48" viewBox="0 0 68 48" aria-hidden="true"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55C3.97 2.33 2.27 4.81 1.48 7.74.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/><path d="M45 24L27 14v20" fill="white"/></svg>
-            </div>
-        </div>
-        <script>
-        (function(){
-            var el=document.getElementById('<?php echo esc_js( $uid ); ?>');
-            if(!el)return;
-            function load(){
-                var iframe=document.createElement('iframe');
-                iframe.src='<?php echo esc_js( $embed_url ); ?>';
-                iframe.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:0';
-                iframe.allow='accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture';
-                iframe.allowFullscreen=true;
-                el.innerHTML='';
-                el.style.position='relative';
-                el.appendChild(iframe);
-            }
-            el.addEventListener('click',load);
-            el.addEventListener('keydown',function(e){if(e.key==='Enter'){load()}});
-        })();
-        </script>
-        <?php
-        return ob_get_clean();
+        return $best;
     }
 
     /* ─────────────────────────────────────────────
@@ -418,20 +359,22 @@ class Olobuild_Performance_Hints {
      * Check if current page has video tiles (for preconnect hints).
      */
     private function page_has_video_tile() {
-        global $post;
-        if ( ! is_a( $post, 'WP_Post' ) ) {
+        if ( ! is_singular() ) {
             return false;
         }
-
-        // Quick check in post content for video-related shortcodes/meta
-        $template_id = get_post_meta( $post->ID, '_olo_template_id', true );
-        if ( ! $template_id ) {
-            return false;
+        $pid = get_queried_object_id();
+        $db  = new Olobuild_Database();
+        $ids = array_filter( [
+            (int) get_post_meta( $pid, '_olo_template_id', true ),
+            (int) get_option( 'olobuild_active_single_' . get_post_type( $pid ), 0 ),
+        ] );
+        foreach ( $ids as $id ) {
+            $t = $db->get_template( $id );
+            if ( $t && preg_match( '#youtu(?:\.be|be\.com)|vimeo\.com#i', (string) wp_json_encode( $t['content'] ?? [] ) ) ) {
+                return true;
+            }
         }
-
-        // Check cached flag (set during rendering)
-        $has_video = get_transient( "olo_has_video_{$template_id}" );
-        return ! empty( $has_video );
+        return false;
     }
 
     /**

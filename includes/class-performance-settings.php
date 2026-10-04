@@ -29,6 +29,7 @@ class Olobuild_Performance_Settings {
         add_action( 'wp_ajax_olobuild_perf_regenerate_critical', [ $this, 'ajax_regenerate_critical' ] );
         add_action( 'wp_ajax_olobuild_perf_purge_critical', [ $this, 'ajax_purge_critical' ] );
         add_action( 'wp_ajax_olobuild_perf_flush_css_cache', [ $this, 'ajax_flush_css_cache' ] );
+        add_action( 'wp_ajax_olobuild_perf_purge_all', [ $this, 'ajax_purge_all' ] );
 
         // Sync regole cache browser in .htaccess quando l'opzione cambia
         // (sia dal form options.php sia dal POST REST /performance).
@@ -42,6 +43,15 @@ class Olobuild_Performance_Settings {
         $now = is_array( $value ) && ! empty( $value['browser_cache_headers'] );
         if ( $was !== $now ) {
             self::sync_htaccess_rules( $now );
+        }
+        // Durata e sezioni del Critical CSS cambiate: quello già generato è vecchio.
+        foreach ( [ 'critical_css_ttl', 'critical_css_sections' ] as $k ) {
+            $prima = is_array( $old_value ) ? (int) ( $old_value[ $k ] ?? 0 ) : 0;
+            $dopo  = is_array( $value ) ? (int) ( $value[ $k ] ?? 0 ) : 0;
+            if ( $prima !== $dopo && class_exists( 'Olobuild_Critical_CSS' ) ) {
+                Olobuild_Critical_CSS::purge_all();
+                break;
+            }
         }
     }
 
@@ -129,9 +139,7 @@ class Olobuild_Performance_Settings {
             // Performance Hints
             'resource_hints'        => true,
             'font_preload'          => true,
-            'video_facade'          => true,
             'fetchpriority'         => true,
-            'lazy_images'           => true,
             'lazy_videos'           => true,
             // Browser cache (.htaccess) — opt-in: scrive regole Expires/Cache-Control
             'browser_cache_headers' => false,
@@ -181,8 +189,8 @@ class Olobuild_Performance_Settings {
         // Booleans
         $bools = [
             'critical_css_enabled', 'defer_js', 'css_cache_files', 'minify_css',
-            'css_per_tile', 'uikit_subset', 'resource_hints', 'font_preload', 'video_facade',
-            'fetchpriority', 'lazy_images', 'lazy_videos', 'browser_cache_headers', 'full_page_cache',
+            'css_per_tile', 'uikit_subset', 'resource_hints', 'font_preload',
+            'fetchpriority', 'lazy_videos', 'browser_cache_headers', 'full_page_cache',
             'remove_jquery_migrate', 'remove_emoji_scripts',
             'remove_block_css', 'remove_classic_theme',
         ];
@@ -606,31 +614,11 @@ class Olobuild_Performance_Settings {
                 </div>
                 <div class="olo-field-row">
                     <div class="olo-field-info">
-                        <label><?php esc_html_e( 'Video facade', 'olobuild' ); ?></label>
-                        <span class="olo-field-hint"><?php esc_html_e( 'Mostra un\'anteprima statica dei video YouTube/Vimeo. L\'iframe si carica solo al click. Risparmia ~500KB per video.', 'olobuild' ); ?></span>
-                    </div>
-                    <label class="olo-toggle">
-                        <input type="checkbox" name="<?php echo esc_attr( $n ); ?>[video_facade]" value="1" <?php checked( $opt['video_facade'] ); ?> />
-                        <span class="olo-toggle-slider"></span>
-                    </label>
-                </div>
-                <div class="olo-field-row">
-                    <div class="olo-field-info">
                         <label><?php esc_html_e( 'fetchpriority hero image', 'olobuild' ); ?></label>
                         <span class="olo-field-hint"><?php esc_html_e( 'Aggiunge fetchpriority="high" alla prima immagine della pagina e rimuove lazy loading dagli elementi above-fold.', 'olobuild' ); ?></span>
                     </div>
                     <label class="olo-toggle">
                         <input type="checkbox" name="<?php echo esc_attr( $n ); ?>[fetchpriority]" value="1" <?php checked( $opt['fetchpriority'] ); ?> />
-                        <span class="olo-toggle-slider"></span>
-                    </label>
-                </div>
-                <div class="olo-field-row">
-                    <div class="olo-field-info">
-                        <label><?php esc_html_e( 'Lazy loading immagini', 'olobuild' ); ?></label>
-                        <span class="olo-field-hint"><?php esc_html_e( 'Aggiunge loading="lazy" alle immagini below-the-fold. Riduce il peso iniziale della pagina.', 'olobuild' ); ?></span>
-                    </div>
-                    <label class="olo-toggle">
-                        <input type="checkbox" name="<?php echo esc_attr( $n ); ?>[lazy_images]" value="1" <?php checked( $opt['lazy_images'] ); ?> />
                         <span class="olo-toggle-slider"></span>
                     </label>
                 </div>
@@ -769,6 +757,53 @@ class Olobuild_Performance_Settings {
         wp_send_json_success( [
             /* translators: %d: number of purged transients */
             'message' => sprintf( __( 'Svuotati %d transient Critical CSS', 'olobuild' ), $purged ),
+        ] );
+    }
+
+    /**
+     * Svuota tutto ciò che Olobuild tiene in cache, in un posto solo: lo usano
+     * «Svuota tutto» della scheda Performance e «Cancella file e dati» di Strumenti.
+     * Prima la scheda svuotava solo il Critical CSS, e Strumenti cancellava i file
+     * CSS lasciando la cache a pagina intera, che poi puntava a file spariti (404).
+     * La cache a pagina intera si svuota PER ULTIMA: una visita nel mezzo rimetterebbe
+     * in cache HTML con i file appena cancellati. I font scaricati restano: rifarli
+     * costerebbe una richiesta a Google al visitatore successivo.
+     *
+     * @return array{pagine:int,file_css:int,critical:int,transient:int}
+     */
+    public static function svuota_tutto() {
+        global $wpdb;
+        $dir  = trailingslashit( wp_upload_dir()['basedir'] ) . 'olobuild-cache/';
+        $file = glob( $dir . 'olo-*.css' ) ?: [];
+        if ( class_exists( 'Olobuild_Asset_Optimizer' ) ) {
+            Olobuild_Asset_Optimizer::flush_all_cache();
+        }
+        if ( class_exists( 'Olobuild_Uikit_Subset' ) ) {
+            Olobuild_Uikit_Subset::reset();
+        }
+        $cc = class_exists( 'Olobuild_Critical_CSS' ) ? (int) Olobuild_Critical_CSS::purge_all() : 0;
+        // Solo i transient di Olobuild (olo_…): il vecchio LIKE '%olo%' prendeva anche
+        // quelli di altri plugin (solo_, polo_…). Fuori i font scaricati.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- pulizia una tantum dei transient del plugin, valori passati da prepare().
+        $tr = (int) $wpdb->query( $wpdb->prepare(
+            "DELETE FROM {$wpdb->options} WHERE ( option_name LIKE %s OR option_name LIKE %s ) AND option_name NOT LIKE %s",
+            $wpdb->esc_like( '_transient_olo_' ) . '%',
+            $wpdb->esc_like( '_transient_timeout_olo_' ) . '%',
+            '%' . $wpdb->esc_like( 'olo_fonthost_' ) . '%'
+        ) );
+        $pag = class_exists( 'Olobuild_FullPage_Cache' ) ? (int) Olobuild_FullPage_Cache::purge_all() : 0;
+        return [ 'pagine' => $pag, 'file_css' => count( $file ), 'critical' => $cc, 'transient' => $tr ];
+    }
+
+    public function ajax_purge_all() {
+        check_ajax_referer( 'olo_perf_action', '_nonce' );
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( 'Permesso negato' );
+        }
+        $r = self::svuota_tutto();
+        wp_send_json_success( [
+            /* translators: 1: pages, 2: CSS files, 3: critical CSS entries */
+            'message' => sprintf( __( 'Cache svuotata: %1$d pagine, %2$d file CSS, %3$d Critical CSS.', 'olobuild' ), $r['pagine'], $r['file_css'], $r['critical'] ),
         ] );
     }
 

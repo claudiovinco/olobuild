@@ -655,8 +655,18 @@ trait Olobuild_Renderer_Page_Trait {
 
             <div class="olo-frontend-grid olo-tile-content" style="--olo-content-width: <?php echo $content_max_width >= 9999 ? '100%' : (int) $content_max_width . 'px'; ?>; --olo-container-max-width: <?php echo $content_max_width >= 9999 ? 'none' : (int) $content_max_width . 'px'; ?>"><?php // per-template override of global container width ?>
                 <?php
+                // «fetchpriority hero image»: la prima immagine della prima sezione di una
+                // pagina (non header, footer o widget) parte subito e con priorità alta.
+                $lcp = empty( $is_widget )
+                    && ! in_array( $template['type'] ?? 'page', [ 'header', 'footer', 'popup', 'widget', 'megapanel' ], true )
+                    && class_exists( 'Olobuild_Performance_Settings' )
+                    && ! empty( Olobuild_Performance_Settings::get_option()['fetchpriority'] );
+                $prima_sezione = true;
                 foreach ( $tiles as $section ) {
+                    Olobuild_Tile_Utils::arma_lcp( $lcp && $prima_sezione );
                     echo $this->render_node( $section, $manager, $id, $hover_css_rules, $tile_counter ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- section/row/tile HTML assembled by render_node(); escaping is performed by the node renderers and each tile's render()
+                    Olobuild_Tile_Utils::arma_lcp( false );
+                    $prima_sezione = false;
                 }
                 ?>
             </div>

@@ -379,7 +379,27 @@ class Olobuild_Tile_Utils {
      * @param string $extra_attrs  Additional HTML attributes string.
      * @return string <img> HTML tag.
      */
+    /** @var bool La prossima immagine è la candidata LCP (prima della prima sezione). */
+    private static $lcp_armato = false;
+    /** @var bool La candidata LCP di questa pagina è già stata data. */
+    private static $lcp_usato = false;
+
+    /**
+     * «fetchpriority hero image» (scheda Performance): il renderer arma la prima
+     * sezione della pagina, e la prima immagine che esce senza scelte proprie
+     * parte subito (eager) con priorità alta. Una sola per pagina.
+     */
+    public static function arma_lcp( $on ) {
+        self::$lcp_armato = $on && ! self::$lcp_usato;
+    }
+
     public static function img_srcset( $attachment_id, $url, $alt = '', $class = '', $size = 'full', $extra_attrs = '', $options = [] ) {
+        if ( self::$lcp_armato && empty( $options['loading'] ) && empty( $options['fetchpriority'] ) ) {
+            $options['loading']       = 'eager';
+            $options['fetchpriority'] = 'high';
+            self::$lcp_armato         = false;
+            self::$lcp_usato          = true;
+        }
         $att_id = absint( $attachment_id );
         $src    = esc_url( $url );
         $alt_s  = esc_attr( $alt );

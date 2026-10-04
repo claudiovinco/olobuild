@@ -396,6 +396,10 @@ trait Olobuild_Builder_Settings_Trait {
                     $payload  = $req->get_json_params();
                     if ( ! is_array( $payload ) ) $payload = [];
                     $merged = array_merge( $existing, $payload );
+                    // register_setting sanifica solo da options.php: dal REST passava tutto com'era.
+                    if ( class_exists( 'Olobuild_Performance_Settings' ) ) {
+                        $merged = Olobuild_Performance_Settings::instance()->sanitize( $merged );
+                    }
                     update_option( 'olobuild_performance', $merged );
                     // Olobuild_Critical_CSS::init() si attiva sulla legacy option: va tenuta in sync
                     // (la vecchia pagina lo faceva nel sanitize di register_setting).
@@ -407,68 +411,34 @@ trait Olobuild_Builder_Settings_Trait {
             ],
         ] );
 
-        // Performance stats — read-only, dati reali da Critical CSS + CSS cache
+        // Performance stats — read-only. Prima «Pagine cachate» sommava file CSS e
+        // transient, il «limite 500 MB» non esisteva e lo «Score» era 60 più gli
+        // interruttori accesi. Ora: pagine vere della cache, file CSS, Critical CSS,
+        // e lo stato della cache a pagina intera con il motivo se non è attiva.
         register_rest_route( $ns, '/performance/stats', [
             [
                 'methods'             => 'GET',
                 'callback'            => function () {
-                    // get_option() della classe = defaults-aware (i flag attivi di default contano)
-                    $opt = class_exists( 'Olobuild_Performance_Settings' )
-                        ? Olobuild_Performance_Settings::get_option()
-                        : get_option( 'olobuild_performance', [] );
-                    if ( ! is_array( $opt ) ) $opt = [];
-
-                    // Critical CSS pages cached
-                    $ccss_count = 0;
-                    $ccss_last  = '';
-                    if ( class_exists( 'Olobuild_Critical_CSS' ) && method_exists( 'Olobuild_Critical_CSS', 'get_status' ) ) {
+                    $fpc = class_exists( 'Olobuild_FullPage_Cache' )
+                        ? Olobuild_FullPage_Cache::stato()
+                        : [ 'attiva' => false, 'motivo' => '', 'pagine' => 0, 'byte' => 0, 'ultimo' => 0 ];
+                    $css = glob( trailingslashit( wp_upload_dir()['basedir'] ) . 'olobuild-cache/olo-*.css' ) ?: [];
+                    $css_byte = 0;
+                    foreach ( $css as $f ) {
+                        $css_byte += (int) filesize( $f );
+                    }
+                    $cc = 0;
+                    if ( class_exists( 'Olobuild_Critical_CSS' ) ) {
                         $st = Olobuild_Critical_CSS::get_status();
-                        if ( is_array( $st ) ) {
-                            $ccss_count = (int) ( $st['cached_count'] ?? 0 );
-                            $ccss_last  = (string) ( $st['last_generated'] ?? '' );
-                        }
+                        $cc = is_array( $st ) ? (int) ( $st['cached_count'] ?? 0 ) : 0;
                     }
-
-                    // CSS cache files dir
-                    $upload_dir = wp_upload_dir();
-                    $cache_dir  = trailingslashit( $upload_dir['basedir'] ) . 'olobuild-cache/';
-                    $cache_count = 0;
-                    $cache_size  = 0;
-                    if ( is_dir( $cache_dir ) ) {
-                        $files = glob( $cache_dir . 'olo-*.css' ) ?: [];
-                        $cache_count = count( $files );
-                        foreach ( $files as $f ) $cache_size += filesize( $f ) ?: 0;
-                    }
-
-                    // Templates totali (proxy per "pages_total")
-                    global $wpdb;
-                    $t_templates = Olobuild_Database::table( 'templates' );
-                    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Tabella custom del plugin ({prefix}olobuild_templates); nessun equivalente WP_Query. Interpolato solo il nome tabella da $wpdb->prefix; il valore 'published' passa da $wpdb->prepare con %s; conteggio non cacheabile.
-                    $pages_total = (int) $wpdb->get_var( $wpdb->prepare(
-                        "SELECT COUNT(*) FROM {$t_templates} WHERE status = %s",
-                        'published'
-                    ) );
-
-                    // Score derivato dai flag performance attivi
-                    $flag_keys = [
-                        'critical_css_enabled', 'defer_js', 'minify_css', 'css_cache_files',
-                        'css_per_tile', 'uikit_subset', 'resource_hints', 'font_preload', 'video_facade',
-                        'fetchpriority', 'lazy_images', 'lazy_videos', 'browser_cache_headers',
-                        'remove_jquery_migrate', 'remove_emoji_scripts',
-                    ];
-                    $on = 0;
-                    foreach ( $flag_keys as $k ) if ( ! empty( $opt[ $k ] ) ) $on++;
-                    $score = (int) round( 60 + ( $on / count( $flag_keys ) ) * 40 ); // 60-100
-
                     return rest_ensure_response( [
-                        'score'           => $score,
-                        'pages_cached'    => $ccss_count + $cache_count,
-                        'pages_total'     => max( $pages_total, $ccss_count + $cache_count ),
-                        'hit_rate'        => '—', // no log layer yet
-                        'size'            => size_format( $cache_size, 1 ),
-                        'size_max'        => '500 MB',
-                        'bandwidth_saved' => '—',
-                        'last_purge'      => $ccss_last ?: '—',
+                        'fpc'            => $fpc,
+                        'fpc_size'       => size_format( $fpc['byte'], 1 ) ?: '0 B',
+                        'css_files'      => count( $css ),
+                        'css_size'       => size_format( $css_byte, 1 ) ?: '0 B',
+                        'critical_pages' => $cc,
+                        'last_purge'     => $fpc['ultimo'] ? wp_date( 'j M Y H:i', $fpc['ultimo'] ) : '',
                     ] );
                 },
                 'permission_callback' => function () { return current_user_can( 'manage_options' ); },

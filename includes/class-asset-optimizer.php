@@ -34,25 +34,41 @@ class Olobuild_Asset_Optimizer {
     }
 
     /**
-     * Add defer attribute to non-critical script tags.
+     * Gli script del sito che possono partire dopo il parsing della pagina: tutti
+     * aspettano DOMContentLoaded o cercano la libreria con un timer. Prima l'elenco
+     * nominava handle che non esistono (olo-map invece di olo-map-js…) e il
+     * «Defer JavaScript» non cambiava niente. UIkit resta fuori: i popup globali lo
+     * chiamano dagli script stampati subito dopo.
+     */
+    const DEFER_HANDLES = [
+        'olo-row-loop-js', 'olo-map-js', 'olo-livesearch-js', 'olo-serviceresults-js',
+        'olo-pdfviewer-js', 'olo-pdfpro-js', 'olo-viewer360-js', 'olo-pagebg-parallax-js', 'olox-js',
+        'leaflet-js', 'leaflet', 'leaflet-markercluster-js', 'pdfjs', 'pageflip-js', 'chartjs', 'lottie-web',
+    ];
+
+    /**
+     * WordPress 6.3+: strategia «defer» sugli script registrati. Il core la rifiuta
+     * da solo se uno script ha codice inline «after» o un dipendente non differibile.
+     */
+    public static function defer_strategy() {
+        $s = wp_scripts();
+        foreach ( self::DEFER_HANDLES as $h ) {
+            if ( isset( $s->registered[ $h ] ) && ! $s->get_data( $h, 'strategy' ) ) {
+                $s->add_data( $h, 'strategy', 'defer' );
+            }
+        }
+    }
+
+    /**
+     * WordPress prima della 6.3: attributo defer sul tag.
      *
      * @param string $tag Script HTML tag
      * @param string $handle WP script handle
      * @return string Modified tag
      */
     public static function defer_scripts( $tag, $handle ) {
-        // Only defer olobuild frontend scripts (not builder scripts)
-        $defer_handles = [
-            'olo-frontend',
-            'olo-map',
-            'olo-livesearch',
-            'olo-serviceresults',
-            'olo-pdfviewer',
-        ];
-        if ( in_array( $handle, $defer_handles, true ) ) {
-            if ( false === strpos( $tag, 'defer' ) ) {
-                $tag = str_replace( ' src=', ' defer src=', $tag );
-            }
+        if ( in_array( $handle, self::DEFER_HANDLES, true ) && false === strpos( $tag, ' defer' ) ) {
+            $tag = str_replace( ' src=', ' defer src=', $tag );
         }
         return $tag;
     }
@@ -292,7 +308,14 @@ class Olobuild_Asset_Optimizer {
 
         // Defer frontend scripts solo se l'utente ha il flag attivo
         if ( ! empty( $opt['defer_js'] ) ) {
-            add_filter( 'script_loader_tag', [ __CLASS__, 'defer_scripts' ], 10, 2 );
+            if ( version_compare( get_bloginfo( 'version' ), '6.3', '>=' ) ) {
+                // Gli script delle tile si accodano mentre la pagina si disegna:
+                // la strategia si mette subito prima di stamparli.
+                add_action( 'wp_print_scripts', [ __CLASS__, 'defer_strategy' ], 1 );
+                add_action( 'wp_print_footer_scripts', [ __CLASS__, 'defer_strategy' ], 1 );
+            } else {
+                add_filter( 'script_loader_tag', [ __CLASS__, 'defer_scripts' ], 10, 2 );
+            }
         }
 
         // Servi frontend.css minificato/per-tile e uikit subset (decisione dentro swap_static_css)

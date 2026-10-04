@@ -276,12 +276,58 @@ class Olobuild_FullPage_Cache {
         }
         $n = 0;
         foreach ( (array) glob( $dir . '*.html' ) as $f ) {
+            if ( 'index.html' === basename( $f ) ) {
+                continue; // segnaposto contro l'elenco della cartella, non una pagina
+            }
             wp_delete_file( $f );
             if ( ! file_exists( $f ) ) {
                 $n++;
             }
         }
+        update_option( 'olo_fpc_last_purge', time(), false );
         return $n;
+    }
+
+    /**
+     * Lo stato vero della cache a pagina intera, per la scheda Performance: se è
+     * accesa ma non lavora dice perché (un altro plugin di cache ha già il suo
+     * advanced-cache.php, wp-config.php non scrivibile, drop-in mancante), quante
+     * pagine ci sono e quando è stata svuotata l'ultima volta.
+     *
+     * @return array{attiva:bool,motivo:string,pagine:int,byte:int,ultimo:int}
+     */
+    public static function stato() {
+        $head = file_exists( self::dropin_path() ) ? (string) @file_get_contents( self::dropin_path(), false, null, 0, 600 ) : '';
+        $mot  = '';
+        if ( self::is_enabled() ) {
+            if ( '' !== $head && false === strpos( $head, self::DROPIN_SIG ) ) {
+                $mot = 'foreign_dropin';
+            } elseif ( '' === $head ) {
+                $mot = 'dropin_missing';
+            } elseif ( ! ( defined( 'WP_CACHE' ) && WP_CACHE ) ) {
+                $mot = 'wp_cache_off';
+            }
+        }
+        $o   = get_option( self::OPT, [] );
+        $ttl = max( 1, (int) ( is_array( $o ) ? ( $o['full_page_ttl'] ?? 8 ) : 8 ) ) * HOUR_IN_SECONDS;
+        $n   = 0;
+        $b   = 0;
+        foreach ( (array) glob( self::cache_dir() . '*.html' ) as $f ) {
+            if ( 'index.html' === basename( $f ) ) {
+                continue;
+            }
+            $b += (int) filesize( $f );
+            if ( time() - (int) filemtime( $f ) < $ttl ) {
+                $n++;
+            }
+        }
+        return [
+            'attiva' => self::is_enabled() && '' === $mot,
+            'motivo' => $mot,
+            'pagine' => $n,
+            'byte'   => $b,
+            'ultimo' => (int) get_option( 'olo_fpc_last_purge', 0 ),
+        ];
     }
 
     /** @var bool Pulizia già prenotata per questa richiesta. */
