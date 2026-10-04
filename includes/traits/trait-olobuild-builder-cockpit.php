@@ -1069,7 +1069,7 @@ trait Olobuild_Builder_Cockpit_Trait {
                             </a>
                             <a class="olo-quick-card tone-purple" href="<?php echo esc_url( admin_url( 'admin.php?page=olobuilder-templates' ) ); ?>">
                                 <div class="ic-box"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-                                <div class="lab"><span class="t"><?php esc_html_e( 'Sfoglia template', 'olobuild' ); ?></span><span class="h"><?php esc_html_e( 'Pronti all\'uso', 'olobuild' ); ?></span></div>
+                                <div class="lab"><span class="t"><?php esc_html_e( 'I tuoi template', 'olobuild' ); ?></span><span class="h"><?php esc_html_e( 'Pagine, header e footer del sito', 'olobuild' ); ?></span></div>
                                 <span class="arr"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
                             </a>
                             <a class="olo-quick-card tone-neutral" href="<?php echo esc_url( admin_url( 'admin.php?page=olo-import-export' ) ); ?>">

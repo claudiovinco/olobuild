@@ -716,10 +716,12 @@ class Olobuild_Setup_Wizard {
      */
     private function get_starter_home_content() {
         $builder_url = admin_url( 'admin.php?page=olobuild' );
+        // Colori e font stanno in Configurazione › Design › Palette & Stili.
+        $stili_url   = admin_url( 'admin.php?page=olobuilder-settings&tab=colori' );
 
         return [
             $this->build_hero_section( $builder_url ),
-            $this->build_checklist_section( $builder_url ),
+            $this->build_checklist_section( $builder_url, $stili_url ),
             $this->build_ideas_section(),
         ];
     }
@@ -795,7 +797,7 @@ class Olobuild_Setup_Wizard {
         ];
     }
 
-    private function build_checklist_section( $builder_url ) {
+    private function build_checklist_section( $builder_url, $stili_url ) {
         return [
             'id' => $this->uid(), 'type' => 'section',
             'settings' => [ 'style' => 'default', 'width' => 'expand', 'padding' => 'large' ],
@@ -835,7 +837,7 @@ class Olobuild_Setup_Wizard {
                         $this->build_step_column( '1', __( 'Personalizza la home', 'olobuild' ), __( 'Sostituisci questo contenuto temporaneo.', 'olobuild' ), __( 'Apri builder', 'olobuild' ), $builder_url ),
                         $this->build_step_column( '2', __( 'Modifica l\'Header', 'olobuild' ), __( 'Logo, menu di navigazione, selettore lingua.', 'olobuild' ), __( 'Modifica', 'olobuild' ), $builder_url ),
                         $this->build_step_column( '3', __( 'Modifica il Footer', 'olobuild' ), __( 'Colonne, link legali, recapiti.', 'olobuild' ), __( 'Modifica', 'olobuild' ), $builder_url ),
-                        $this->build_step_column( '4', __( 'Imposta colori e font', 'olobuild' ), __( 'Style Manager globale del sito.', 'olobuild' ), __( 'Apri Style Manager', 'olobuild' ), $builder_url ),
+                        $this->build_step_column( '4', __( 'Imposta colori e font', 'olobuild' ), __( 'Palette e tipografia del sito, in Sistema › Configurazione.', 'olobuild' ), __( 'Apri Palette & Stili', 'olobuild' ), $stili_url ),
                     ],
                 ],
             ],
