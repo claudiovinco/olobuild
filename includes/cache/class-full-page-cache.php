@@ -46,41 +46,51 @@ class Olobuild_FullPage_Cache {
         add_action( 'update_option_' . self::OPT, [ __CLASS__, 'on_settings_change' ], 10, 2 );
         add_action( 'add_option_' . self::OPT, [ __CLASS__, 'on_settings_add' ], 10, 2 );
 
-        // Invalidazione: ogni modifica di contenuto/struttura svuota la cache.
-        add_action( 'olo_template_saved', [ __CLASS__, 'purge_all' ] );
+        // Invalidazione: ogni modifica di contenuto/struttura svuota la cache, una
+        // volta sola a fine richiesta (purge_soon): un import di tema scrive decine
+        // di template e una pulizia per ognuno non serviva.
+        add_action( 'olo_template_saved', [ __CLASS__, 'purge_soon' ] );
         add_action( 'save_post', [ __CLASS__, 'on_save_post' ], 20, 2 );
-        add_action( 'wp_trash_post', [ __CLASS__, 'purge_all' ] );
-        add_action( 'wp_update_nav_menu', [ __CLASS__, 'purge_all' ] );
-        add_action( 'switch_theme', [ __CLASS__, 'purge_all' ] );
-        add_action( 'customize_save_after', [ __CLASS__, 'purge_all' ] );
+        add_action( 'wp_trash_post', [ __CLASS__, 'purge_soon' ] );
+        add_action( 'wp_update_nav_menu', [ __CLASS__, 'purge_soon' ] );
+        add_action( 'switch_theme', [ __CLASS__, 'purge_soon' ] );
+        add_action( 'customize_save_after', [ __CLASS__, 'purge_soon' ] );
         foreach ( [ 'olobuild_active_header', 'olobuild_active_footer', 'olobuild_styles', 'olobuild_cookie_settings' ] as $opt ) {
-            add_action( 'update_option_' . $opt, [ __CLASS__, 'purge_all' ] );
+            add_action( 'update_option_' . $opt, [ __CLASS__, 'purge_soon' ] );
         }
         // Favicon del sito (Impostazioni pagina del builder → wp/v2/settings): ogni pagina
         // in cache ha già scritto il suo <link rel="icon">. Solo il Customizer svuotava.
-        add_action( 'update_option_site_icon', [ __CLASS__, 'purge_all' ] );
-        add_action( 'add_option_site_icon', [ __CLASS__, 'purge_all' ] );
+        add_action( 'update_option_site_icon', [ __CLASS__, 'purge_soon' ] );
+        add_action( 'add_option_site_icon', [ __CLASS__, 'purge_soon' ] );
         // Colori globali e set tipografici: generate_css() li scrive inline in ogni
         // pagina (--olo-color-<id>, --olo-font-<id>-*). Un valore cambiato o un colore
         // eliminato si vedevano solo alla scadenza della cache. Il primo è un add_option.
         foreach ( [ 'olobuild_global_colors', 'olobuild_global_typography' ] as $opt ) {
-            add_action( 'update_option_' . $opt, [ __CLASS__, 'purge_all' ] );
-            add_action( 'add_option_' . $opt, [ __CLASS__, 'purge_all' ] );
+            add_action( 'update_option_' . $opt, [ __CLASS__, 'purge_soon' ] );
+            add_action( 'add_option_' . $opt, [ __CLASS__, 'purge_soon' ] );
         }
         // Regole di Assegnazione template: decidono header e footer di ogni pagina, e
         // una regola salvata si vedeva da anonimi solo alla scadenza della cache.
         // La prima regola è un add_option.
-        add_action( 'update_option_olobuild_template_conditions', [ __CLASS__, 'purge_all' ] );
-        add_action( 'add_option_olobuild_template_conditions', [ __CLASS__, 'purge_all' ] );
+        add_action( 'update_option_olobuild_template_conditions', [ __CLASS__, 'purge_soon' ] );
+        add_action( 'add_option_olobuild_template_conditions', [ __CLASS__, 'purge_soon' ] );
         // Banner cookie acceso/spento, blocco script e iframe: le pagine in cache li
         // hanno già scritti. Il primo salvataggio dei cookie è un add_option.
-        add_action( 'add_option_olobuild_cookie_settings', [ __CLASS__, 'purge_all' ] );
+        add_action( 'add_option_olobuild_cookie_settings', [ __CLASS__, 'purge_soon' ] );
         // Template assegnati alle pagine WooCommerce (Configurazione → Template WooCommerce):
         // prodotti, shop e categorie sono in cache col layout vecchio. La prima
         // assegnazione di una pagina è un add_option.
+        // Attivazione e disattivazione di header, footer, single, archivi, 404:
+        // il primo è un add_option, lo spegnimento un delete_option, e prima
+        // nessuno dei due svuotava.
+        add_action( 'added_option', [ __CLASS__, 'on_option_changed' ] );
+        add_action( 'updated_option', [ __CLASS__, 'on_option_changed' ] );
+        add_action( 'deleted_option', [ __CLASS__, 'on_option_changed' ] );
+        // Elementi globali: compaiono in ogni pagina che li usa.
+        add_action( 'olo_global_widget_saved', [ __CLASS__, 'purge_soon' ] );
         foreach ( [ 'product_single', 'product_archive', 'product_category', 'cart', 'checkout', 'myaccount' ] as $woo_page ) {
-            add_action( 'update_option_olobuild_woo_tpl_' . $woo_page, [ __CLASS__, 'purge_all' ] );
-            add_action( 'add_option_olobuild_woo_tpl_' . $woo_page, [ __CLASS__, 'purge_all' ] );
+            add_action( 'update_option_olobuild_woo_tpl_' . $woo_page, [ __CLASS__, 'purge_soon' ] );
+            add_action( 'add_option_olobuild_woo_tpl_' . $woo_page, [ __CLASS__, 'purge_soon' ] );
         }
     }
 
@@ -274,6 +284,30 @@ class Olobuild_FullPage_Cache {
         return $n;
     }
 
+    /** @var bool Pulizia già prenotata per questa richiesta. */
+    private static $in_coda = false;
+
+    /**
+     * Svuota la cache a fine richiesta, una volta sola anche se gli avvisi sono molti.
+     */
+    public static function purge_soon() {
+        if ( self::$in_coda ) {
+            return;
+        }
+        self::$in_coda = true;
+        if ( did_action( 'shutdown' ) ) {
+            self::purge_all();
+            return;
+        }
+        add_action( 'shutdown', [ __CLASS__, 'purge_all' ], 20 );
+    }
+
+    public static function on_option_changed( $name ) {
+        if ( 0 === strpos( (string) $name, 'olobuild_active_' ) ) {
+            self::purge_soon();
+        }
+    }
+
     public static function on_save_post( $post_id, $post ) {
         if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) {
             return;
@@ -281,7 +315,7 @@ class Olobuild_FullPage_Cache {
         if ( is_object( $post ) && isset( $post->post_status ) && $post->post_status === 'auto-draft' ) {
             return;
         }
-        self::purge_all();
+        self::purge_soon();
     }
 
     /* ── ciclo di vita del plugin ──────────────────────────── */

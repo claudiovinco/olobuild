@@ -181,6 +181,7 @@ trait Olobuild_Rest_Config_Trait {
         // format array (valori escaped da WP). Scrittura → niente cache.
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $wpdb->update( $table, $data, [ 'id' => $id ], $formats, [ '%d' ] );
+        do_action( 'olo_global_widget_saved', $id );
         return new WP_REST_Response( [ 'success' => true ], 200 );
     }
 
@@ -192,6 +193,7 @@ trait Olobuild_Rest_Config_Trait {
         // format array. Scrittura → niente cache.
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $wpdb->delete( $table, [ 'id' => $id ], [ '%d' ] );
+        do_action( 'olo_global_widget_saved', $id );
         return new WP_REST_Response( [ 'success' => true ], 200 );
     }
 

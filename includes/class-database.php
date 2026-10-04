@@ -152,6 +152,35 @@ class Olobuild_Database {
         dbDelta( $sql_ab_tests );
     }
 
+    /**
+     * Avvisa che un template è cambiato: olo_template_saved( $id, $op, $campi ),
+     * op = create | update | delete. Lo ascoltano la cache a pagina intera, il
+     * Critical CSS, il subset UIkit e i file CSS dei template. Prima nessuno lo
+     * lanciava: salvare nel builder non svuotava la cache e il sito restava vecchio
+     * fino alla scadenza (8 ore). Si avvisa da qui, dopo una scrittura riuscita,
+     * così ogni percorso è coperto (REST, import, tema, wizard, OLOlang, rollback).
+     * La sola miniatura non cambia il sito e non avvisa.
+     */
+    public static function notifica( $id, $op, $campi = [] ) {
+        if ( 'update' === $op && [ 'thumbnail' ] === array_values( $campi ) ) {
+            return;
+        }
+        do_action( 'olo_template_saved', (int) $id, $op, $campi );
+        if ( 'delete' === $op ) {
+            do_action( 'olo_template_deleted', (int) $id );
+        }
+    }
+
+    /**
+     * Per chi scrive sulla tabella senza passare da qui (import del sito,
+     * «Sostituisci URL»): stessa pulizia della cache e stesso avviso.
+     */
+    public function dopo_scrittura_diretta( $id, $op = 'update' ) {
+        wp_cache_delete( 'olo_template_' . (int) $id, $this->cache_group );
+        $this->flush_list_cache();
+        self::notifica( $id, $op );
+    }
+
     public function create_template( $data ) {
         global $wpdb;
         // Tabella custom del plugin (olo_templates); nessun equivalente WP_Query; scrittura non cacheabile (la cache lista viene invalidata da flush_list_cache()).
@@ -172,7 +201,13 @@ class Olobuild_Database {
 
         $this->flush_list_cache();
 
-        return $wpdb->insert_id;
+        // Prima di avvisare: i listener possono scrivere opzioni e cambiare insert_id.
+        $new_id = (int) $wpdb->insert_id;
+        if ( $new_id ) {
+            self::notifica( $new_id, 'create' );
+        }
+
+        return $new_id;
     }
 
     public function get_template( $id ) {
@@ -258,6 +293,10 @@ class Olobuild_Database {
         if ( false !== $result ) {
             wp_cache_delete( 'olo_template_' . (int) $id, $this->cache_group );
             $this->flush_list_cache();
+            // 0 righe cambiate = salvataggio identico: niente da svuotare.
+            if ( $result ) {
+                self::notifica( $id, 'update', array_keys( $update ) );
+            }
         }
 
         return $result;
@@ -277,6 +316,7 @@ class Olobuild_Database {
             $wpdb->query( 'COMMIT' );
             wp_cache_delete( 'olo_template_' . (int) $id, $this->cache_group );
             $this->flush_list_cache();
+            self::notifica( $id, 'delete' );
         } else {
             $wpdb->query( 'ROLLBACK' );
         }

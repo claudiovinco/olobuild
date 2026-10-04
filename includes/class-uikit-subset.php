@@ -69,8 +69,20 @@ class Olobuild_Uikit_Subset {
     /** @var int Wrapper @media duplicati emessi dal parser (per la validazione graffe). */
     private static $extra_wrappers = 0;
 
+    private static $reset_fatto = false;
+
+    public static function reset_una_volta() {
+        if ( self::$reset_fatto ) {
+            return;
+        }
+        self::$reset_fatto = true;
+        self::reset();
+    }
+
     public static function init() {
-        add_action( 'olo_template_saved', [ __CLASS__, 'reset' ] );
+        // Un template cambiato può usare componenti nuovi: si ri-apprende. Un reset
+        // per richiesta basta anche quando un import scrive decine di template.
+        add_action( 'olo_template_saved', [ __CLASS__, 'reset_una_volta' ] );
     }
 
     /* ─────────────────────────────────────────────

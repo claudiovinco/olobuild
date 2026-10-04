@@ -259,22 +259,10 @@ class Olobuild_Asset_Optimizer {
      * @param int $template_id Template ID.
      */
     public static function warm_cache( $template_id ) {
-        // Clean old cached files first
-        self::clean_cache( $template_id );
-
-        // Pre-render the template to generate CSS
-        if ( ! class_exists( 'Olobuild_Database' ) ) return;
-        $db  = new Olobuild_Database();
-        $tpl = $db->get_template( $template_id );
-        if ( ! $tpl || empty( $tpl->content ) ) return;
-
-        $content = json_decode( $tpl->content, true );
-        if ( empty( $content ) || ! is_array( $content ) ) return;
-
-        // The actual CSS will be cached on first page view.
-        // We just ensure old cache is cleared so fresh CSS is generated.
-        // Full pre-rendering requires WP context (shortcodes, widgets) which
-        // may not be available during REST save. Clearing is sufficient.
+        // Basta togliere i file vecchi: il CSS nuovo si genera alla prima visita.
+        // (Il resto leggeva $tpl->content su un array: avviso PHP 8 dentro la
+        // risposta REST.)
+        self::clean_cache( absint( $template_id ) );
     }
 
     /**

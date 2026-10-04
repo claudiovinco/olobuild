@@ -907,6 +907,7 @@ class Olobuild_Tools {
                     [ '%s' ],
                     [ '%d' ]
                 );
+                $db->dopo_scrittura_diretta( (int) $row->id );
                 $modified++;
             }
         }

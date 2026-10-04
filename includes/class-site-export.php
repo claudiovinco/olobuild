@@ -65,6 +65,7 @@ class Olobuild_Site_Export {
 
         $id_map = []; // old_id => new_id
         $count  = 0;
+        $db     = new Olobuild_Database();
 
         // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabelle custom del plugin (olo_templates, olo_global_widgets); nessun equivalente WP_Query; insert di import una tantum, nessuna cache da invalidare.
         foreach ($data['templates'] as $tpl) {
@@ -87,6 +88,7 @@ class Olobuild_Site_Export {
             if ($new_id) {
                 $id_map[$old_id] = $new_id;
                 $count++;
+                $db->dopo_scrittura_diretta($new_id, 'create');
             }
         }
 
