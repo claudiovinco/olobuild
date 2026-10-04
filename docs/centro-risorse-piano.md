@@ -70,33 +70,33 @@ alimentato dagli stessi file e i video.
   e CSS, con i colori della shell.
 - Ogni lotto che cambia un'interfaccia descritta aggiorna la guida relativa e il registro delle novità.
 
-## 5. Difetti trovati scrivendo le guide
+## 5. Difetti trovati scrivendo le guide (corretti nella 1.4.502)
 
-Le guide descrivono solo ciò che agisce. Questi difetti restano da correggere, e le guide li segnalano
-come «in revisione» dove l'utente li incontrerebbe.
+Le guide descrivono solo ciò che agisce. Questi difetti sono stati corretti nella 1.4.502, e le guide
+non li segnalano più come «in revisione».
 
-1. **La full-page cache non si svuota al salvataggio nel builder.** `do_action( 'olo_template_saved' )`
-   non viene mai lanciato. Ne dipendono anche l'invalidazione del Critical CSS, il nuovo apprendimento
-   del subset UIkit e la pulizia dei vecchi file `olo-{tpl}-*.css`. È la correzione più urgente.
-2. **SEO globale**: su 11 controlli agiscono solo Separatore e Sitemap XML. Il Vue salva chiavi che il
-   PHP non legge (`og_image` contro `og_default_image`, `twitter_handle` contro `twitter_user`, `card_type`
-   contro `twitter_card_type`, `advanced.schema.type` contro `titles.kg_type`). Il link «Vedi sitemap»
-   porta alla sitemap di WordPress, non a quella di Olobuild.
-3. **Performance & Cache**: Defer JavaScript (handle sbagliati), Durata cache, Sezioni above-the-fold,
-   Preload font custom, Video facade YouTube/Vimeo, fetchpriority hero image, Lazy loading immagini
-   below-fold non agiscono. «Svuota tutto» svuota solo il Critical CSS. Le statistiche (pagine in
-   cache, score) non misurano ciò che dicono. Se c'è già un altro drop-in di cache, la full-page cache
-   non si attiva e non lo dice.
-4. **White Label**: «Nascondi changelog & roadmap» e «Link Documentazione custom» non vengono salvati.
-   Con la pagina Guida possono agire davvero: nascondere le Novità, puntare la Guida a un indirizzo
-   proprio.
-5. **Configurazione**: la scheda «Breakpoint responsive» salva un'opzione che nessuno legge. La scheda
-   Popup parla di template «di tipo Popup», che non esiste.
-6. **Bacheca**: «Sfoglia template · Pronti all'uso» apre i template del sito, non una libreria. Il
-   template 404 non ha un'interfaccia per attivarlo. La home di partenza del wizard nomina uno «Style
-   Manager» che non esiste.
-7. **Redirect & 404**: IndexNow richiede il file `<chiave>.txt` nella radice, che Olobuild non crea.
-8. **Stock media**: il link di aiuto per le chiavi punta a olotheme.com/docs/stock-media-keys/ (404).
+1. **Full-page cache e salvataggio nel builder.** `Olobuild_Database::notifica()` lancia
+   `olo_template_saved` a ogni creazione, modifica ed eliminazione (anche da import ed export): si
+   svuotano full-page cache, Critical CSS, subset UIkit, cache di Autoptimize e file `olo-{tpl}-*.css`,
+   e parte l'avviso IndexNow.
+2. **SEO globale**: la scheda scrive le chiavi che `Olobuild_Seo_Head` legge (`Olobuild_Seo_Settings::normalizza()`
+   riprende quelle vecchie). Titoli senza separatore finale, un solo canonical e un solo meta robots,
+   «Robots default» = `blog_public`, sitemap di WordPress senza le pagine in noindex. Via «Lingua sito»
+   e «Auto-ping», che non facevano niente.
+3. **Performance & Cache**: Defer JavaScript, Durata cache, Sezioni above-the-fold, Preload font custom
+   e fetchpriority hero image agiscono; Video facade e Lazy loading immagini below-fold tolti (già
+   fatti dalle tile). «Svuota tutto» svuota tutto, le statistiche contano pagine, file e Critical CSS,
+   e la scheda dice perché la full-page cache non parte.
+4. **White Label**: ogni campo agisce da solo. Novità nascoste da bacheca, pannello e Guida;
+   documentazione dell'agenzia al posto delle guide; email del supporto; commenti col nome Olobuild
+   tolti dal codice del sito.
+5. **Configurazione**: «Breakpoint responsive» è diventata «Dispositivi dell'editor» (sceglie i
+   dispositivi della barra del builder; le larghezze sono quelle fisse del renderer). Testi della
+   scheda Popup corretti.
+6. **Bacheca**: «I tuoi template» al posto di «Sfoglia template · Pronti all'uso»; il template 404 si
+   attiva dalla barra del builder; il wizard porta a «Palette & Stili».
+7. **Redirect & 404**: Olobuild serve il file `<chiave>.txt` di IndexNow e lo indica con `keyLocation`.
+8. **Stock media**: ogni servizio porta alla sua pagina per le chiavi.
 
 ## 6. olotheme.com (sito in produzione, da fare su richiesta)
 
