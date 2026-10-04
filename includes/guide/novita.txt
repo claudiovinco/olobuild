@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.504 - 2026-10-04 (novità)
+- Nuovo sfondo «Geometrie»: anelli concentrici, uno in evidenza, e una trama di puntini o di griglia che sfuma, con un controllo per ogni parte e i colori del tema.
+- Il menu mobile parla anche inglese, tedesco, francese e le altre lingue del plugin.
+
 ## v1.4.503 - 2026-10-04 (novità)
 - Menu mobile più moderno: il pannello si usa anche da tastiera, la pagina dietro resta ferma e ogni link lo chiude, anche un'ancora della stessa pagina.
 - Sottomenu a fisarmonica, a pannelli con «Indietro» o sempre aperti, e la pagina di una voce con sottomenu si raggiunge sempre.
