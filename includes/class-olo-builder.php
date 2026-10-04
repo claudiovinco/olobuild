@@ -725,6 +725,7 @@ class Olobuild_Builder {
         remove_submenu_page( 'olobuild', 'olo-import-export' );  // → sub-nav Costruisci
         remove_submenu_page( 'olobuild', 'olo-global-popups' );  // → sub-nav Costruisci
         remove_submenu_page( 'olobuild', 'olo-analytics' );      // → sub-nav Raccolta
+        remove_submenu_page( 'olobuild', 'olo-guida' );          // → sub-nav Sistema
     }
 
     /**
@@ -1370,6 +1371,7 @@ class Olobuild_Builder {
             'olobuild_page_olo-white-label',
             'olobuild_page_olo-import-export',
             'olobuild_page_olo-woo-templates',
+            'olobuild_page_olo-guida',
         ];
     }
 

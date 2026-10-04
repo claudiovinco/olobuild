@@ -509,6 +509,7 @@ Olobuild_FullPage_Cache::init();
 require_once OLOBUILD_PATH . 'includes/class-white-label.php';
 require_once OLOBUILD_PATH . 'includes/class-site-import-export.php';
 require_once OLOBUILD_PATH . 'includes/class-tools.php';
+require_once OLOBUILD_PATH . 'includes/class-guida.php';
 require_once OLOBUILD_PATH . 'includes/class-olo-lang-bridge.php';
 Olobuild_Lang_Bridge::init();
 require_once OLOBUILD_PATH . 'includes/class-debug-bar.php';
@@ -860,6 +861,9 @@ add_action( 'plugins_loaded', function () {
 
     // Tools page (unified Strumenti)
     Olobuild_Tools::instance()->init();
+
+    // Guida (guide e novità, area Sistema)
+    Olobuild_Guida::init();
 
     // Debug bar (template tracking in admin toolbar)
     Olobuild_Debug_Bar::init();

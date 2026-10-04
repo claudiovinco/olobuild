@@ -1,0 +1,85 @@
+# Novità di Olobuild
+
+Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
+La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
+
+## v1.4.500 - 2026-10-04 (novità)
+- Nuova pagina Guida dentro Olobuild, con 4 guide scritte per la versione installata: Primi passi, Template, SEO e Open Graph, Prestazioni.
+- Il Centro risorse della bacheca apre le guide e le novità vere di ogni versione, con la data di uscita.
+- Con il pannello compresso restano visibili le sue icone, e ogni icona riapre la sezione che indica.
+
+## v1.4.499 - 2026-10-01 (fix)
+- I font Google si caricano anche quando un set tipografico usa un font di sistema, un ruolo o un nome sbagliato.
+- L'anteprima di un collegamento dinamico mostra un'immagine solo se il campo è un'immagine.
+- Attivando la sorgente dinamica di una griglia, i campi si collegano da soli e compare il primo risultato trovato.
+- I preset della Palette senza colori non compaiono più.
+
+## v1.4.498 - 2026-10-01 (fix)
+- Nella scheda AI budget mensile, lingua, tono, temperatura e istruzioni agiscono davvero sulle risposte.
+
+## v1.4.497 - 2026-10-01 (novità)
+- La scheda AI propone i modelli attuali di ogni fornitore e usa quello scelto.
+
+## v1.4.496 - 2026-10-01 (fix)
+- La modifica in linea cambia la parola cliccata, Esc annulla e il grassetto resta.
+- L'icona a occhio apre l'anteprima vera della pagina, Esc riporta alla modifica.
+- A ogni livello di zoom la pagina resta intera, e trascinamenti e menu cadono dove si vedono.
+
+## v1.4.495 - 2026-10-01 (fix)
+- Nell'editor Ctrl+K apre il Finder, che propone solo le tile inseribili e avvisa se una manca.
+- Ogni tile compare nella sua categoria della palette.
+
+## v1.4.494 - 2026-10-01 (novità)
+- Le spiegazioni dei controlli si aprono da una (i) accanto al titolo e non occupano più il pannello.
+- «Incolla stile» funziona anche con una copia fatta in un'altra scheda del browser.
+
+## v1.4.493 - 2026-10-01 (fix)
+- Nel megamenu si evidenzia la voce della pagina aperta, anche nel menu mobile.
+
+## v1.4.492 - 2026-10-01 (fix)
+- Tinta unita e Gradiente salvano i colori mostrati nel campione, e la parallasse resta attiva sui telefoni.
+- Il dispositivo della tipografia lo sceglie la barra in alto: un valore per telefono non riscrive più quello per computer.
+- Il Raggio modifica l'angolo che mostra e i margini accettano valori negativi.
+
+## v1.4.491 - 2026-09-29 (fix)
+- Le Impostazioni pagina sono divise per modo di salvare, e la favicon dice se è stata salvata.
+- La Durata dell'hover agisce sul sito in 28 campi.
+
+## v1.4.490 - 2026-09-26 (fix)
+- «Incolla stile» incolla solo lo stile: testi e contenuti della tile restano com'erano.
+
+## v1.4.489 - 2026-09-25 (fix)
+- Nel megamenu la barra superiore si vede già al caricamento, e nel menu mobile i pulsanti hanno misure proprie.
+
+## v1.4.488 - 2026-09-25 (novità)
+- Dopo «Apri il template» dell'header o del footer, un pulsante riporta alla pagina di partenza.
+- I blocchi della libreria si inseriscono nel punto scelto, e la descrizione di un template resta dopo il ricaricamento.
+
+## v1.4.487 - 2026-09-25 (fix)
+- Le regole di assegnazione scelgono il valore da un menu e permettono di escludere.
+- Le schede della Configurazione mostrano caricamento ed errori al posto di valori inventati.
+- Incolla mette la copia nel contenitore giusto, e il «+» dell'header e del footer inserisce nella sua zona.
+
+## v1.4.485 - 2026-09-24 (fix)
+- Assegnazione template, Manutenzione e Popup elencano di nuovo i template.
+- L'import di un tema, i salvataggi e i ripristini degli stili si possono annullare.
+- Un colore globale in uso si nasconde invece di essere cancellato.
+
+## v1.4.484 - 2026-09-24 (fix)
+- Ctrl+Z annulla anche sfondo, titolo e impostazioni della pagina.
+- Nel canvas header e footer sono quelli della pagina, e dicono se li usano anche altre pagine.
+
+## v1.4.483 - 2026-09-24 (fix)
+- Header e footer si salvano davvero, e un salvataggio non riuscito lo dice.
+- WooCommerce: il prezzo dei prodotti variabili e raggruppati è corretto.
+- I form inviano i contatti a HubSpot, ActiveCampaign, ConvertKit e Brevo.
+
+## v1.4.482 - 2026-09-24 (fix)
+- I form nelle pagine in cache tornano a inviare.
+- Il checkout a passaggi di WooCommerce arriva fino all'ordine completato.
+- La pagina Cookie mostra lo stato vero del banner e non lo attiva più da sola.
+
+## v1.4.481 - 2026-09-24 (fix)
+- Permessi mostra i ruoli veri, e «Salva impostazioni» salva solo le schede modificate avvisando se non riesce.
+- Ctrl+Z subito dopo l'apertura non svuota più la pagina.
+- Il doppio clic su un controllo lo riporta al valore predefinito.

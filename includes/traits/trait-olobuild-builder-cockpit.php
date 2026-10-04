@@ -444,6 +444,7 @@ trait Olobuild_Builder_Cockpit_Trait {
                 'subnav' => [
                     [ 'label' => __( 'Configurazione', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olobuilder-settings' ), 'screen' => 'olobuild_page_olobuilder-settings' ],
                     [ 'label' => __( 'Strumenti', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olo-tools' ), 'screen' => 'olobuild_page_olo-tools' ],
+                    [ 'label' => __( 'Guida', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olo-guida' ), 'screen' => 'olobuild_page_olo-guida' ],
                 ],
             ],
         ];
@@ -476,6 +477,7 @@ trait Olobuild_Builder_Cockpit_Trait {
             'olobuild_page_olo-newsletter'       => 'raccolta',
             'olobuild_page_olo-analytics'        => 'raccolta',
             'olobuild_page_olo-tools'            => 'sistema',
+            'olobuild_page_olo-guida'            => 'sistema',
             'olobuild_page_olo-cookie-consent'   => 'sistema',
             'olobuild_page_olo-role-manager'     => 'sistema',
             'olobuild_page_olo-seo'              => 'sistema',
@@ -564,7 +566,7 @@ trait Olobuild_Builder_Cockpit_Trait {
                 <a class="ico-btn" href="<?php echo esc_url( admin_url( 'admin.php?page=olo-form-submissions' ) ); ?>" title="<?php esc_attr_e( 'Notifiche', 'olobuild' ); ?>">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0112 0v5l2 2H4l2-2zM10 20a2 2 0 004 0"/></svg>
                 </a>
-                <a class="ico-btn" href="https://olotheme.com/docs" target="_blank" rel="noopener" title="<?php esc_attr_e( 'Documentazione', 'olobuild' ); ?>">
+                <a class="ico-btn" href="<?php echo esc_url( Olobuild_Guida::url() ); ?>" title="<?php esc_attr_e( 'Guida', 'olobuild' ); ?>" aria-label="<?php esc_attr_e( 'Guida', 'olobuild' ); ?>">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 015 0c0 1.5-2.5 2-2.5 4M12 17h.01"/></svg>
                 </a>
                 <a class="ico-btn" href="<?php echo esc_url( get_edit_user_link() ); ?>" title="<?php esc_attr_e( 'Profilo', 'olobuild' ); ?>">

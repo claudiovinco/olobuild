@@ -343,54 +343,63 @@ trait Olobuild_Rest_Dashboard_Trait {
     }
 
     /**
-     * Changelog: ultime N versioni del plugin (recent commit / readme).
-     * Per ora lettura statica da array hardcoded — TODO: leggere da CHANGELOG.md.
+     * Changelog: ultime N versioni, lette da includes/guide/novita.txt (formato Markdown, estensione .txt perché i .md restano fuori dal pacchetto)
+     * (lo stesso file che la pagina Guida mostra intero).
      */
     public function dashboard_changelog( $request ) {
         $limit = max( 1, min( 10, (int) $request->get_param( 'limit' ) ) );
+        $entries = self::changelog_voci( $limit );
 
-        // Lettura del CHANGELOG.md se esiste
-        $changelog_file = OLOBUILD_PATH . 'CHANGELOG.md';
-        $entries = [];
-        if ( file_exists( $changelog_file ) ) {
-            $entries = self::parse_changelog_md( $changelog_file, $limit );
-        }
-
-        // Fallback: ultima versione dall'header del plugin
+        // Senza file resta la sola versione installata: niente data inventata
+        // (prima era quella di oggi) né rimandi a un repository.
         if ( empty( $entries ) ) {
             $entries = [ [
                 'v'     => 'v' . OLOBUILD_VERSION,
-                'date'  => date_i18n( 'j M', time() ),
-                'tag'   => 'novità',
-                'items' => [ __( 'Vedi changelog completo nel repository.', 'olobuild' ) ],
+                'date'  => '',
+                'tag'   => '',
+                'items' => [],
             ] ];
         }
 
         return rest_ensure_response( $entries );
     }
 
+    /**
+     * Le versioni del registro delle novità, dalla più recente. $limit 0 = tutte.
+     */
+    public static function changelog_voci( $limit = 0 ) {
+        $file = OLOBUILD_PATH . 'includes/guide/novita.txt';
+        return file_exists( $file ) ? self::parse_changelog_md( $file, (int) $limit ) : [];
+    }
+
     private static function parse_changelog_md( $file, $limit ) {
         $content = @file_get_contents( $file );
         if ( ! $content ) return [];
-        $lines = explode( "\n", $content );
+        $lines = explode( "\n", str_replace( "\r", '', $content ) );
         $entries = [];
         $current = null;
         foreach ( $lines as $line ) {
-            // ## v3.34.6 — 2026-05-09 (novità)
-            if ( preg_match( '/^##\s+(v[\d.]+)(?:\s*[—\-]\s*([\d-]+))?(?:\s*\(([^)]+)\))?/', $line, $m ) ) {
+            // ## v1.4.500 - 2026-10-04 (novità) — il trattino può essere anche lungo (/u).
+            if ( preg_match( '/^##\s+(v[\d.]+)(?:\s*[—–\-]\s*(\d{4}-\d{2}-\d{2}))?(?:\s*\(([^)]+)\))?/u', $line, $m ) ) {
                 if ( $current ) $entries[] = $current;
-                if ( count( $entries ) >= $limit ) break;
+                if ( $limit && count( $entries ) >= $limit ) { $current = null; break; }
                 $current = [
                     'v'     => $m[1],
-                    'date'  => ! empty( $m[2] ) ? date_i18n( 'j M', strtotime( $m[2] ) ) : '',
-                    'tag'   => ! empty( $m[3] ) ? strtolower( trim( $m[3] ) ) : 'novità',
+                    'date'  => ! empty( $m[2] ) ? date_i18n( 'j M Y', strtotime( $m[2] ) ) : '',
+                    'tag'   => ! empty( $m[3] ) ? mb_strtolower( trim( $m[3] ) ) : '',
                     'items' => [],
                 ];
-            } elseif ( $current && preg_match( '/^[\-\*]\s+(.+)/', $line, $m ) ) {
+            } elseif ( $current && preg_match( '/^[\-\*]\s+(.+)/u', $line, $m ) ) {
                 $current['items'][] = trim( $m[1] );
             }
         }
-        if ( $current && count( $entries ) < $limit ) $entries[] = $current;
+        if ( $current && ( ! $limit || count( $entries ) < $limit ) ) $entries[] = $current;
+        // L'etichetta che si legge: «fix» è gergo, per l'utente sono correzioni.
+        $etichette = [ 'novità' => __( 'Novità', 'olobuild' ), 'fix' => __( 'Correzioni', 'olobuild' ) ];
+        foreach ( $entries as &$e ) {
+            $e['label'] = $etichette[ $e['tag'] ] ?? $e['tag'];
+        }
+        unset( $e );
         return $entries;
     }
 
