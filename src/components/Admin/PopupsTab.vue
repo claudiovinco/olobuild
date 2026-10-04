@@ -2,7 +2,7 @@
   <div class="cfg-page-head">
     <div>
       <h1>{{ t('Popup globali') }}</h1>
-      <p>{{ t('Popup riusabili che appaiono su una o più pagine, con regole condizionali e trigger (page load, scroll, exit intent, timer).') }}</p>
+      <p>{{ t('Popup riusabili che appaiono su una o più pagine, con trigger e frequenza (caricamento, scorrimento, uscita, timer).') }}</p>
     </div>
     <div class="head-actions">
       <button class="cfg-btn cfg-btn-primary" @click="addPopup">
@@ -17,7 +17,7 @@
       <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--c-text-faint); margin-bottom:12px;"><rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 10h18"/></svg>
       <h3 style="font-size:16px; color:var(--c-navy); margin:0 0 8px;">{{ t('Nessun popup configurato') }}</h3>
       <p style="color:var(--c-text-mute); font-size:13px; max-width:48ch; margin:0 auto 16px;">
-        {{ t('Crea un template Olobuild di tipo "Popup", poi associalo qui con le tue regole di visualizzazione.') }}
+        {{ t('Il contenuto di un popup è un template Olobuild qualsiasi: crealo in Blocchi & Pagine, poi sceglilo qui e decidi quando appare.') }}
       </p>
       <button class="cfg-btn cfg-btn-primary" @click="addPopup">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>

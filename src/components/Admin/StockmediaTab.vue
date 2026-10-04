@@ -4,12 +4,6 @@
       <h1>{{ t('Stock') }} <em>{{ t('media') }}</em></h1>
       <p>{{ t('Connetti i provider di immagini gratuite per cercarli e inserirli direttamente dall\'editor — senza scaricare/ricaricare a mano.') }}</p>
     </div>
-    <div class="head-actions">
-      <a class="cfg-btn cfg-btn-secondary" href="https://olotheme.com/docs/stock-media-keys/" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2zM22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"/></svg>
-        {{ t('Come ottenere le chiavi') }}
-      </a>
-    </div>
   </div>
 
   <div class="cfg-card">
@@ -18,7 +12,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>
       </div>
       <div>
-        <h3>{{ t('Provider connessi') }}</h3>
+        <h3>{{ t('Provider connessi') }} <InfoTip :titolo="t('Come ottenere le chiavi')" :testo="infoChiavi" /></h3>
         <p>{{ providerSummary }}</p>
       </div>
     </div>
@@ -46,9 +40,16 @@
             <span class="dot"></span>
             {{ t(statusLabel(s)) }}
           </span>
-          <button class="cfg-btn-icon cfg-btn-ghost" :title="t('Dettagli')" @click="openDocs(s)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-          </button>
+          <a
+            class="cfg-btn-icon cfg-btn-ghost"
+            :href="s.docUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            :title="t('Ottieni la chiave su {nome}').replace('{nome}', s.name)"
+            :aria-label="t('Ottieni la chiave su {nome}').replace('{nome}', s.name)"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3h7v7M10 14 21 3M21 14v7H3V3h7"/></svg>
+          </a>
         </div>
       </div>
     </div>
@@ -96,6 +97,7 @@
 </template>
 
 <script setup>
+import InfoTip from '@/components/Builder/InfoTip.vue';
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
@@ -118,8 +120,16 @@ const services = ref([
   { id: 'unsplash',  name: 'Unsplash',  desc: '3M+ foto royalty-free, alta qualità editoriale', key: '', saved: false, optionKey: 'olobuild_unsplash_api_key',  docUrl: 'https://unsplash.com/developers' },
   { id: 'pexels',    name: 'Pexels',    desc: '1M+ foto e video, license CC0',                  key: '', saved: false, optionKey: 'olobuild_pexels_api_key',    docUrl: 'https://www.pexels.com/api/' },
   { id: 'pixabay',   name: 'Pixabay',   desc: '4M+ media, anche illustrazioni e vector',        key: '', saved: false, optionKey: 'olobuild_pixabay_api_key',   docUrl: 'https://pixabay.com/api/docs/' },
-  { id: 'freesound', name: 'Freesound', desc: 'Audio creative-commons, effetti, loop',          key: '', saved: false, optionKey: 'olobuild_freesound_api_key', docUrl: 'https://freesound.org/help/developers/' },
+  { id: 'freesound', name: 'Freesound', desc: 'Audio creative-commons, effetti, loop',          key: '', saved: false, optionKey: 'olobuild_freesound_api_key', docUrl: 'https://freesound.org/apiv2/apply/' },
 ]);
+
+// La guida alle chiavi stava su una pagina di olotheme.com che non esiste (404): ogni provider
+// spiega la sua, e l'icona della riga apre quella pagina.
+const infoChiavi = [
+  t('Ogni provider dà una chiave gratuita: apri il suo sito con l'icona in fondo alla riga, registrati e crea un'applicazione.'),
+  t('Unsplash: la Access Key dell'applicazione. Pexels e Pixabay: la chiave compare nella pagina API dopo l'accesso. Freesound: la chiave API della richiesta.'),
+  t('Incollala nel campo e salva: lo stato passa a «Connesso».'),
+];
 
 const behavior = ref({
   preferred: 'unsplash',
@@ -157,10 +167,6 @@ function focusKey(id) {
   const s = services.value.find(x => x.id === id);
   if (s) s.key = ' ';
   setDirty(true);
-}
-
-function openDocs(s) {
-  if (s.docUrl) window.open(s.docUrl, '_blank', 'noopener');
 }
 
 function setBehavior(k, v) { behavior.value[k] = v; setDirty(true); }
