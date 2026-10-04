@@ -116,15 +116,69 @@ class Olobuild_Seo_Settings {
 
     /* ─── Helpers per opzioni ─── */
 
+    /** Tipi di chi pubblica il sito offerti dalla scheda SEO globale. */
+    const KG_TYPES = [ 'Organization', 'Person', 'LocalBusiness', 'Hotel', 'Restaurant', 'Store', 'ProfessionalService' ];
+
     public static function get( $option_key, $field = null, $default = '' ) {
         $opts = get_option( $option_key, [] );
-        if ( ! is_array( $opts ) ) {
-            $opts = [];
-        }
+        $opts = self::normalizza( $option_key, is_array( $opts ) ? $opts : [] );
         if ( $field === null ) {
             return $opts;
         }
         return $opts[ $field ] ?? $default;
+    }
+
+    /**
+     * Le chiavi che la scheda «SEO globale» ha scritto fino alla 1.4.501 erano
+     * diverse da quelle che Olobuild_Seo_Head legge (og_image, twitter_handle,
+     * card_type, advanced.schema.type): i controlli non agivano. Qui diventano
+     * quelle giuste, in lettura (siti già salvati) e in scrittura.
+     */
+    public static function normalizza( $option_key, array $o ) {
+        if ( self::OPT_SOCIAL === $option_key ) {
+            foreach ( [ 'og_image' => 'og_default_image', 'twitter_handle' => 'twitter_user', 'card_type' => 'twitter_card_type' ] as $da => $a ) {
+                if ( ! array_key_exists( $da, $o ) ) {
+                    continue;
+                }
+                if ( empty( $o[ $a ] ) && '' !== (string) $o[ $da ] ) {
+                    $o[ $a ] = ( 'card_type' === $da && 'summary' !== $o[ $da ] ) ? 'summary_large_image' : $o[ $da ];
+                }
+                unset( $o[ $da ] );
+            }
+            if ( isset( $o['twitter_user'] ) ) {
+                $o['twitter_user'] = ltrim( sanitize_text_field( $o['twitter_user'] ), '@' );
+            }
+            if ( isset( $o['og_default_image'] ) ) {
+                $o['og_default_image'] = esc_url_raw( $o['og_default_image'] );
+            }
+            if ( isset( $o['twitter_card_type'] ) && ! in_array( $o['twitter_card_type'], [ 'summary', 'summary_large_image' ], true ) ) {
+                unset( $o['twitter_card_type'] );
+            }
+        }
+        if ( self::OPT_TITLES === $option_key ) {
+            // «Lingua sito» (la lingua è quella di WordPress e di OLOlang) e «Robots
+            // default» (è blog_public, Impostazioni › Lettura) non stanno più qui.
+            unset( $o['language'], $o['robots'] );
+            if ( empty( $o['kg_type'] ) ) {
+                $adv = get_option( self::OPT_ADVANCED, [] );
+                if ( is_array( $adv ) && ! empty( $adv['schema']['type'] ) ) {
+                    $o['kg_type'] = $adv['schema']['type'];
+                }
+            }
+            if ( isset( $o['kg_type'] ) && ! in_array( $o['kg_type'], self::KG_TYPES, true ) ) {
+                $o['kg_type'] = 'Organization';
+            }
+            if ( isset( $o['description'] ) ) {
+                $o['description'] = mb_substr( sanitize_textarea_field( $o['description'] ), 0, 160 );
+            }
+            if ( isset( $o['pattern'] ) ) {
+                $o['pattern'] = sanitize_text_field( $o['pattern'] );
+            }
+            if ( isset( $o['separator'] ) ) {
+                $o['separator'] = sanitize_text_field( $o['separator'] );
+            }
+        }
+        return $o;
     }
 
     /* ═══════════════════════════════════════════════════

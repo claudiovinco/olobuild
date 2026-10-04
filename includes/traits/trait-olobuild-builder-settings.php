@@ -511,18 +511,35 @@ trait Olobuild_Builder_Settings_Trait {
             register_rest_route( $ns, '/seo/' . $route, [
                 [
                     'methods'             => 'GET',
-                    'callback'            => function () use ( $option_key ) {
-                        return rest_ensure_response( get_option( $option_key, [] ) );
+                    'callback'            => function () use ( $route, $option_key ) {
+                        $o = Olobuild_Seo_Settings::get( $option_key );
+                        // «Robots default» è l'impostazione di WordPress (Impostazioni › Lettura).
+                        if ( 'titles' === $route ) {
+                            $o['robots'] = get_option( 'blog_public' ) ? 'index' : 'noindex';
+                        }
+                        return rest_ensure_response( (object) $o );
                     },
                     'permission_callback' => function () { return current_user_can( 'manage_options' ); },
                 ],
                 [
                     'methods'             => 'POST',
-                    'callback'            => function ( $req ) use ( $option_key ) {
-                        $existing = get_option( $option_key, [] );
-                        $payload  = $req->get_json_params();
+                    'callback'            => function ( $req ) use ( $route, $option_key ) {
+                        $payload = $req->get_json_params();
                         if ( ! is_array( $payload ) ) $payload = [];
-                        update_option( $option_key, array_merge( $existing, $payload ) );
+                        if ( 'titles' === $route && isset( $payload['robots'] ) && in_array( $payload['robots'], [ 'index', 'noindex' ], true ) ) {
+                            update_option( 'blog_public', 'noindex' === $payload['robots'] ? '0' : '1' );
+                        }
+                        // Le chiavi che la scheda non mostra (modelli per tipo, Knowledge
+                        // Graph, verifiche…) restano: si fonde sul valore già normalizzato.
+                        $merged = array_merge( Olobuild_Seo_Settings::get( $option_key ), $payload );
+                        update_option( $option_key, Olobuild_Seo_Settings::normalizza( $option_key, $merged ) );
+                        if ( 'titles' === $route ) {
+                            $adv = get_option( 'olobuild_seo_advanced', [] );
+                            if ( is_array( $adv ) && isset( $adv['schema'] ) ) {
+                                unset( $adv['schema'] ); // tipo organizzazione e auto-ping: ora in titles.kg_type / via
+                                update_option( 'olobuild_seo_advanced', $adv );
+                            }
+                        }
                         update_option( 'olobuild_settings_last_saved', time() );
                         return rest_ensure_response( [ 'ok' => true ] );
                     },

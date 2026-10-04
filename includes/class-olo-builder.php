@@ -1041,6 +1041,8 @@ class Olobuild_Builder {
                 'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
                 'adminUrl'          => admin_url(),
                 'siteUrl'           => home_url( '/' ),
+                // La sitemap di WordPress (scheda SEO globale): con i permalink semplici non è /wp-sitemap.xml.
+                'sitemapUrl'        => function_exists( 'get_sitemap_url' ) ? (string) get_sitemap_url( 'index' ) : '',
                 'pluginUrl'         => OLOBUILD_URL,
                 'version'           => OLOBUILD_VERSION,
                 'locale'            => olobuild_current_locale(),

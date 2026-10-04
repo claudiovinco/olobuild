@@ -32,8 +32,18 @@ class Olobuild_Seo_Head {
         add_action( 'wp_head', [ $this, 'output_jsonld' ], 6 );
         // REST API for heading checker
         add_action( 'rest_api_init', [ $this, 'register_routes' ] );
-        // Sitemap XML
-        add_action( 'init', [ $this, 'register_sitemap' ] );
+        // Sitemap: quella di WordPress (wp-sitemap.xml), che comprende tutto il sito.
+        // La vecchia /?olo_sitemap=1 elencava solo le pagine fatte con Olobuild.
+        add_filter( 'wp_sitemaps_enabled', [ $this, 'sitemap_attiva' ] );
+        add_filter( 'wp_sitemaps_posts_query_args', [ $this, 'sitemap_senza_noindex' ], 10, 2 );
+        add_filter( 'wp_sitemaps_post_types', [ $this, 'sitemap_tipi' ] );
+        add_action( 'template_redirect', [ $this, 'vecchia_sitemap' ], 0 );
+        // Separatore del titolo, robots e canonical passano dai filtri di WordPress:
+        // prima il separatore finiva in coda al titolo («Pagina – Sito – –») e
+        // canonical e meta robots uscivano due volte.
+        add_filter( 'document_title_separator', [ $this, 'filter_title_separator' ], 20 );
+        add_filter( 'wp_robots', [ $this, 'filter_wp_robots' ], 20 );
+        add_filter( 'get_canonical_url', [ $this, 'filter_canonical' ], 10, 2 );
         // Head cleanup
         add_action( 'init', [ $this, 'cleanup_head' ] );
         // Robots.txt customization
@@ -85,10 +95,7 @@ class Olobuild_Seo_Head {
         }
 
         $titles = $this->opt( 'olo_seo_titles' );
-        $sep    = $titles['separator'] ?? '-';
-
-        // Replace the separator
-        $parts['sep'] = $sep;
+        $sep    = $this->filter_title_separator( '-' );
 
         // Apply templates based on context
         $template = '';
@@ -116,10 +123,53 @@ class Olobuild_Seo_Head {
                 // Override the title completely
                 $parts['title'] = $resolved;
                 unset( $parts['site'], $parts['tagline'] );
+                return $parts;
             }
         }
 
+        // Schema globale della scheda SEO: {page} è il titolo che WordPress ha già
+        // calcolato per questa vista. Senza {page} non si applica (ogni pagina
+        // avrebbe lo stesso titolo). Il valore di serie dà il titolo di WordPress.
+        $pattern = trim( (string) ( $titles['pattern'] ?? '' ) );
+        if ( ! is_front_page() && false !== strpos( $pattern, '{page}' ) && ! empty( $parts['title'] ) ) {
+            $parts['title'] = trim( strtr( $pattern, [
+                '{page}' => $parts['title'],
+                '{sep}'  => $sep,
+                '{site}' => get_bloginfo( 'name', 'display' ),
+            ] ) );
+            unset( $parts['site'], $parts['tagline'] );
+        }
+
         return $parts;
+    }
+
+    public function filter_title_separator( $sep ) {
+        if ( $this->seo_plugin_active() ) {
+            return $sep;
+        }
+        $t = $this->opt( 'olo_seo_titles' );
+        return ( isset( $t['separator'] ) && '' !== trim( (string) $t['separator'] ) ) ? $t['separator'] : $sep;
+    }
+
+    public function filter_wp_robots( $robots ) {
+        if ( $this->seo_plugin_active() ) {
+            return $robots;
+        }
+        foreach ( $this->get_robots_directives() as $d ) {
+            if ( 'follow' === $d && ! empty( $robots['nofollow'] ) ) {
+                continue;
+            }
+            $robots[ $d ] = true;
+        }
+        return $robots;
+    }
+
+    public function filter_canonical( $url, $post ) {
+        if ( $this->seo_plugin_active() || ! $post ) {
+            return $url;
+        }
+        $c = get_post_meta( $post->ID, '_olo_seo_canonical', true );
+        return $c ? esc_url_raw( $c ) : $url;
     }
 
     private function resolve_title_vars( $template, $sep ) {
@@ -159,11 +209,7 @@ class Olobuild_Seo_Head {
             echo '<meta name="description" content="' . esc_attr( $desc ) . '" />' . "\n";
         }
 
-        // Robots meta
-        $robots = $this->get_robots_directives();
-        if ( ! empty( $robots ) ) {
-            echo '<meta name="robots" content="' . esc_attr( implode( ', ', $robots ) ) . '" />' . "\n";
-        }
+        // Robots: nel meta del core (filter_wp_robots), non in un secondo meta.
     }
 
     private function get_robots_directives() {
@@ -260,8 +306,9 @@ class Olobuild_Seo_Head {
 
         $social = $this->opt( 'olo_seo_social' );
 
-        // Canonical
-        if ( $url ) {
+        // Canonical: sulle pagine singole lo scrive WordPress (rel_canonical, con il
+        // valore della pagina via filter_canonical); qui archivi e home.
+        if ( $url && ! is_singular() ) {
             echo '<link rel="canonical" href="' . esc_url( $url ) . '" />' . "\n";
         }
 
@@ -295,7 +342,10 @@ class Olobuild_Seo_Head {
         }
 
         // Twitter Card
-        $tw_card_type = $social['twitter_card_type'] ?? ( $image ? 'summary_large_image' : 'summary' );
+        $tw_card_type = $social['twitter_card_type'] ?? '';
+        if ( '' === $tw_card_type || ( 'summary_large_image' === $tw_card_type && ! $image ) ) {
+            $tw_card_type = $image ? 'summary_large_image' : 'summary';
+        }
         echo '<meta name="twitter:card" content="' . esc_attr( $tw_card_type ) . '" />' . "\n";
 
         // Twitter username
@@ -342,6 +392,7 @@ class Olobuild_Seo_Head {
         }
 
         // 2. Organization or Person (from Knowledge Graph settings)
+        $kg_index  = count( $schemas );
         $schemas[] = $this->schema_knowledge_graph();
 
         // 3. BreadcrumbList (non homepage)
@@ -391,7 +442,7 @@ class Olobuild_Seo_Head {
         }
 
         // Social profiles sameAs
-        $this->add_same_as( $schemas );
+        $this->add_same_as( $schemas, $kg_index );
 
         foreach ( $schemas as $schema ) {
             if ( ! empty( $schema ) ) {
@@ -779,7 +830,7 @@ class Olobuild_Seo_Head {
     /**
      * Add sameAs social profiles to Organization/Person schema.
      */
-    private function add_same_as( &$schemas ) {
+    private function add_same_as( &$schemas, $kg_index ) {
         $social = $this->opt( 'olo_seo_social' );
         $urls   = [];
 
@@ -798,12 +849,9 @@ class Olobuild_Seo_Head {
             return;
         }
 
-        // Add sameAs to the Organization/Person schema
-        foreach ( $schemas as &$schema ) {
-            if ( isset( $schema['@type'] ) && in_array( $schema['@type'], [ 'Organization', 'Person' ], true ) ) {
-                $schema['sameAs'] = $urls;
-                break;
-            }
+        // Al soggetto del sito, qualunque tipo abbia (anche Hotel o Restaurant).
+        if ( isset( $schemas[ $kg_index ] ) && ! empty( $schemas[ $kg_index ] ) ) {
+            $schemas[ $kg_index ]['sameAs'] = $urls;
         }
     }
 
@@ -846,38 +894,12 @@ class Olobuild_Seo_Head {
      * Helpers
      * ═══════════════════════════════════════════════════ */
 
+    /**
+     * Il titolo per Open Graph e X: lo stesso di <title>, con modelli, schema e
+     * separatore. Prima lo ricalcolava a parte, con un altro separatore.
+     */
     private function get_seo_title() {
-        global $post;
-
-        if ( is_singular() && $post ) {
-            $custom = get_post_meta( $post->ID, '_olo_seo_title', true );
-            if ( $custom ) {
-                return $custom;
-            }
-        }
-
-        $titles = $this->opt( 'olo_seo_titles' );
-        $sep    = $titles['separator'] ?? '-';
-
-        if ( is_front_page() || is_home() ) {
-            $tpl = $titles['homepage_title'] ?? '';
-            if ( $tpl ) return $this->resolve_title_vars( $tpl, $sep );
-            return get_bloginfo( 'name' ) . " {$sep} " . get_bloginfo( 'description' );
-        }
-
-        if ( is_singular() && $post ) {
-            return get_the_title( $post ) . " {$sep} " . get_bloginfo( 'name' );
-        }
-
-        if ( is_category() ) {
-            return single_cat_title( '', false ) . " {$sep} " . get_bloginfo( 'name' );
-        }
-
-        if ( is_search() ) {
-            return 'Ricerca: ' . get_search_query() . " {$sep} " . get_bloginfo( 'name' );
-        }
-
-        return get_bloginfo( 'name' ) . " {$sep} " . get_bloginfo( 'description' );
+        return html_entity_decode( wp_get_document_title(), ENT_QUOTES, get_bloginfo( 'charset' ) );
     }
 
     private function get_seo_description() {
@@ -919,6 +941,11 @@ class Olobuild_Seo_Head {
             if ( $excerpt ) {
                 return wp_trim_words( wp_strip_all_tags( $excerpt ), 30 );
             }
+        }
+
+        // «Meta description default» della scheda SEO globale, prima dello slogan.
+        if ( ! empty( $titles['description'] ) ) {
+            return $titles['description'];
         }
 
         return get_bloginfo( 'description' );
@@ -1305,149 +1332,46 @@ class Olobuild_Seo_Head {
      * Sitemap XML
      * ═══════════════════════════════════════════════════ */
 
-    public function register_sitemap() {
-        $sitemap_opts = $this->opt( 'olo_seo_sitemap' );
-
-        // Check if sitemap is enabled (default: yes)
-        if ( isset( $sitemap_opts['enabled'] ) && ! $sitemap_opts['enabled'] ) {
-            return;
+    public function sitemap_attiva( $on ) {
+        if ( $this->seo_plugin_active() ) {
+            return $on;
         }
-
-        add_action( 'template_redirect', [ $this, 'serve_olo_sitemap' ] );
+        $sm = $this->opt( 'olo_seo_sitemap' );
+        return ( isset( $sm['enabled'] ) && ! $sm['enabled'] ) ? false : $on;
     }
 
-    public function serve_olo_sitemap() {
-        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only di $_GET per routing della sitemap pubblica (rilevazione richiesta /?olo_sitemap=1); nessuna modifica di stato, valore usato solo come flag empty() e mai come dato.
-        if ( empty( $_GET['olo_sitemap'] ) ) {
+    /** Le pagine in noindex escono dalla sitemap. */
+    public function sitemap_senza_noindex( $args, $post_type ) {
+        $args['meta_query']   = (array) ( $args['meta_query'] ?? [] ); // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- la sitemap del core interroga comunque per tipo, una pagina alla volta
+        $args['meta_query'][] = [
+            'relation' => 'OR',
+            [ 'key' => '_olo_seo_noindex', 'compare' => 'NOT EXISTS' ],
+            [ 'key' => '_olo_seo_noindex', 'value' => '1', 'compare' => '!=' ],
+        ];
+        return $args;
+    }
+
+    /** I tipi di contenuto messi in noindex escono dalla sitemap. */
+    public function sitemap_tipi( $tipi ) {
+        $a = $this->opt( 'olobuild_seo_advanced' );
+        foreach ( array_keys( (array) $tipi ) as $pt ) {
+            if ( ! empty( $a['noindex_pt'][ $pt ] ) ) {
+                unset( $tipi[ $pt ] );
+            }
+        }
+        return $tipi;
+    }
+
+    /** Chi aveva inviato la vecchia /?olo_sitemap=1 arriva alla sitemap di WordPress. */
+    public function vecchia_sitemap() {
+        if ( empty( $_GET['olo_sitemap'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- sola lettura: reindirizza un indirizzo pubblico
             return;
         }
-
-        $sitemap_opts = $this->opt( 'olo_seo_sitemap' );
-        $max_urls     = intval( $sitemap_opts['max_urls'] ?? 1000 );
-        $db           = new Olobuild_Database();
-        $templates    = $db->get_templates();
-        $urls         = [];
-
-        foreach ( $templates as $tpl ) {
-            if ( $tpl->type === 'header' || $tpl->type === 'footer' || $tpl->type === 'megapanel' ) {
-                continue;
-            }
-
-            $tpl_id = intval( $tpl->id );
-            $posts = get_posts( [
-                'post_type'      => 'any',
-                'post_status'    => 'publish',
-                'posts_per_page' => $max_urls,
-                // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- query per sitemap: trova i post associati al template OloBuild via meta _olo_template_id; meta query necessaria alla funzione, volume limitato (cap posts_per_page).
-                'meta_query'     => [
-                    [
-                        'key'     => '_olo_template_id',
-                        'value'   => $tpl_id,
-                        'compare' => '=',
-                    ],
-                ],
-                'fields' => 'ids',
-            ] );
-
-            foreach ( $posts as $pid ) {
-                // Check noindex
-                $noindex = get_post_meta( $pid, '_olo_seo_noindex', true );
-                if ( $noindex ) continue;
-
-                $url = get_permalink( $pid );
-                if ( $url ) {
-                    $mod = get_the_modified_date( 'c', $pid );
-                    $urls[ $url ] = [ 'lastmod' => $mod, 'post_id' => $pid ];
-                }
-            }
-        }
-
-        // Pages with [olo_template] shortcode
-        $sc_posts = get_posts( [
-            'post_type'      => [ 'page', 'post' ],
-            'post_status'    => 'publish',
-            'posts_per_page' => $max_urls,
-            's'              => '[olo_template',
-            'fields'         => 'ids',
-        ] );
-
-        foreach ( $sc_posts as $pid ) {
-            $noindex = get_post_meta( $pid, '_olo_seo_noindex', true );
-            if ( $noindex ) continue;
-            $url = get_permalink( $pid );
-            if ( $url ) {
-                $urls[ $url ] = [ 'lastmod' => get_the_modified_date( 'c', $pid ), 'post_id' => $pid ];
-            }
-        }
-
-        // Single templates
-        $public_pts = get_post_types( [ 'public' => true ], 'names' );
-        foreach ( $public_pts as $pt ) {
-            // Check if this post type is included in sitemap
-            if ( isset( $sitemap_opts['pt'] ) && empty( $sitemap_opts['pt'][ $pt ] ) ) {
-                continue;
-            }
-
-            $single_tpl = get_option( "olobuild_active_single_{$pt}", 0 );
-            if ( $single_tpl ) {
-                $pt_posts = get_posts( [
-                    'post_type'      => $pt,
-                    'post_status'    => 'publish',
-                    'posts_per_page' => min( 100, $max_urls ),
-                    'fields'         => 'ids',
-                ] );
-                foreach ( $pt_posts as $pid ) {
-                    $noindex = get_post_meta( $pid, '_olo_seo_noindex', true );
-                    if ( $noindex ) continue;
-                    $url = get_permalink( $pid );
-                    if ( $url ) {
-                        $urls[ $url ] = [ 'lastmod' => get_the_modified_date( 'c', $pid ), 'post_id' => $pid ];
-                    }
-                }
-            }
-        }
-
-        // Include images?
-        $include_images = ! empty( $sitemap_opts['include_images'] );
-
-        header( 'Content-Type: application/xml; charset=UTF-8' );
-        header( 'X-Robots-Tag: noindex' );
-
-        echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-        if ( $include_images ) {
-            echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">' . "\n";
-        } else {
-            echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
-        }
-
-        $count = 0;
-        foreach ( $urls as $url => $info ) {
-            if ( $count >= $max_urls ) break;
-            echo "  <url>\n";
-            echo '    <loc>' . esc_url( $url ) . "</loc>\n";
-            if ( $info['lastmod'] ) {
-                echo '    <lastmod>' . esc_html( $info['lastmod'] ) . "</lastmod>\n";
-            }
-            // Add featured image
-            if ( $include_images && ! empty( $info['post_id'] ) ) {
-                $thumb = get_the_post_thumbnail_url( $info['post_id'], 'large' );
-                if ( $thumb ) {
-                    echo "    <image:image>\n";
-                    echo '      <image:loc>' . esc_url( $thumb ) . "</image:loc>\n";
-                    echo "    </image:image>\n";
-                }
-            }
-            echo "  </url>\n";
-            $count++;
-        }
-
-        echo '</urlset>' . "\n";
+        $dest = function_exists( 'get_sitemap_url' ) ? get_sitemap_url( 'index' ) : '';
+        wp_safe_redirect( $dest ? $dest : home_url( '/' ), 301 );
         exit;
     }
 
-    /**
-     * Check if a major SEO plugin is active (to avoid duplicate tags).
-     */
     private function seo_plugin_active() {
         if ( defined( 'WPSEO_VERSION' ) ) return true;       // Yoast SEO
         if ( class_exists( 'RankMath' ) ) return true;       // Rank Math

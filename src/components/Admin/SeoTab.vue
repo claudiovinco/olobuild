@@ -54,25 +54,15 @@
           <div class="text-xs mt-2" style="color:var(--c-text-faint);">{{ (titles.description || '').length }} / 160</div>
         </div>
       </div>
-      <div class="cfg-row">
-        <div class="label-col">
-          <label>{{ t('Lingua sito') }}</label>
-          <div class="hint">{{ t('Attributo lang dell\'HTML.') }}</div>
-        </div>
-        <div class="control-col">
-          <CfgSelect size="md" :model-value="titles.language" :options="LANGUAGE_OPTIONS" @update:model-value="setT('language', $event)" />
-        </div>
-      </div>
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Robots default') }}</label>
-          <div class="hint">{{ t('Comportamento di default per i motori di ricerca.') }}</div>
+          <div class="hint">{{ t('È la stessa scelta di Impostazioni › Lettura di WordPress. Le pagine si escludono una per una dall\'editor.') }}</div>
         </div>
         <div class="control-col">
           <div class="cfg-segment">
-            <button :class="{ 'is-on': titles.robots === 'index_follow' }"   @click="setT('robots', 'index_follow')">{{ t('Index, Follow') }}</button>
-            <button :class="{ 'is-on': titles.robots === 'noindex' }"        @click="setT('robots', 'noindex')">NoIndex</button>
-            <button :class="{ 'is-on': titles.robots === 'nofollow' }"       @click="setT('robots', 'nofollow')">NoFollow</button>
+            <button :class="{ 'is-on': titles.robots === 'index' }"   @click="setT('robots', 'index')">{{ t('Indicizza') }}</button>
+            <button :class="{ 'is-on': titles.robots === 'noindex' }" @click="setT('robots', 'noindex')">{{ t('Non indicizzare') }}</button>
           </div>
         </div>
       </div>
@@ -99,15 +89,15 @@
         <div class="control-col">
           <div class="og-preview-wrap">
             <div class="og-preview" :style="ogPreviewStyle">
-              <span v-if="!social.og_image">{{ t('Anteprima OG') }}</span>
+              <span v-if="!social.og_default_image">{{ t('Anteprima OG') }}</span>
             </div>
             <div class="og-actions">
               <button class="cfg-btn cfg-btn-secondary" @click="pickOgImage">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-                {{ social.og_image ? t('Sostituisci') : t('Carica immagine') }}
+                {{ social.og_default_image ? t('Sostituisci') : t('Carica immagine') }}
               </button>
-              <div class="text-xs mt-2" style="color:var(--c-text-faint);" v-if="social.og_image">
-                {{ social.og_image.split('/').pop() }}
+              <div class="text-xs mt-2" style="color:var(--c-text-faint);" v-if="social.og_default_image">
+                {{ social.og_default_image.split('/').pop() }}
               </div>
             </div>
           </div>
@@ -121,7 +111,7 @@
         <div class="control-col">
           <div class="cfg-input mono with-prefix cfg-w-sm">
             <span class="prefix">@</span>
-            <input type="text" :value="(social.twitter_handle || '').replace(/^@/, '')" @input="setS('twitter_handle', $event.target.value)" placeholder="hotelcomo" />
+            <input type="text" :value="(social.twitter_user || '').replace(/^@/, '')" @input="setS('twitter_user', $event.target.value.replace(/^@/, ''))" placeholder="hotelcomo" />
           </div>
         </div>
       </div>
@@ -132,8 +122,8 @@
         </div>
         <div class="control-col">
           <div class="cfg-segment">
-            <button :class="{ 'is-on': social.card_type === 'summary' }"       @click="setS('card_type', 'summary')">Summary</button>
-            <button :class="{ 'is-on': social.card_type === 'summary_large' }" @click="setS('card_type', 'summary_large')">Summary Large Image</button>
+            <button :class="{ 'is-on': social.twitter_card_type === 'summary' }"             @click="setS('twitter_card_type', 'summary')">Summary</button>
+            <button :class="{ 'is-on': social.twitter_card_type === 'summary_large_image' }" @click="setS('twitter_card_type', 'summary_large_image')">Summary Large Image</button>
           </div>
         </div>
       </div>
@@ -154,29 +144,20 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Sitemap XML') }}</label>
-          <div class="hint">{{ t('Generato automaticamente a /sitemap.xml.') }}</div>
+          <div class="hint">{{ t('La sitemap di WordPress, senza le pagine in noindex.') }}</div>
         </div>
         <div class="control-col" style="display:flex; align-items:center; gap:12px;">
           <button class="cfg-switch" :class="{ 'is-on': sitemap.enabled }" @click="setSM('enabled', !sitemap.enabled)" role="switch"></button>
           <a v-if="sitemap.enabled" class="text-xs" :href="sitemapUrl" target="_blank" rel="noopener" style="color:var(--c-red); text-decoration:none;">{{ t('Vedi sitemap →') }}</a>
         </div>
       </div>
-      <div class="cfg-row">
+      <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Tipo organizzazione') }}</label>
           <div class="hint">{{ t('Schema.org markup iniettato in ogni pagina.') }}</div>
         </div>
         <div class="control-col">
-          <CfgSelect size="md" :model-value="schema.type" :options="SCHEMA_TYPE_OPTIONS" @update:model-value="setSch('type', $event)" />
-        </div>
-      </div>
-      <div class="cfg-row no-divider">
-        <div class="label-col">
-          <label>{{ t('Auto-ping search engines') }}</label>
-          <div class="hint">{{ t('Notifica Google e Bing ad ogni pubblicazione.') }}</div>
-        </div>
-        <div class="control-col">
-          <button class="cfg-switch" :class="{ 'is-on': schema.auto_ping }" @click="setSch('auto_ping', !schema.auto_ping)" role="switch"></button>
+          <CfgSelect size="md" :model-value="titles.kg_type" :options="SCHEMA_TYPE_OPTIONS" @update:model-value="setT('kg_type', $event)" />
         </div>
       </div>
     </div>
@@ -204,15 +185,9 @@ const SEPARATOR_OPTIONS = [
   { value: '·', label: '·' },
   { value: '-', label: '-' },
 ];
-const LANGUAGE_OPTIONS = [
-  { value: 'it_IT', label: t('Italiano (it_IT)') },
-  { value: 'en_US', label: t('English (en_US)') },
-  { value: 'es_ES', label: t('Español (es_ES)') },
-  { value: 'fr_FR', label: t('Français (fr_FR)') },
-  { value: 'de_DE', label: t('Deutsch (de_DE)') },
-];
 const SCHEMA_TYPE_OPTIONS = [
   { value: 'Organization',        label: 'Organization' },
+  { value: 'Person',              label: 'Person' },
   { value: 'LocalBusiness',       label: 'LocalBusiness' },
   { value: 'Hotel',               label: 'Hotel' },
   { value: 'Restaurant',          label: 'Restaurant' },
@@ -222,41 +197,41 @@ const SCHEMA_TYPE_OPTIONS = [
 
 // Valori di partenza: una sezione mai salvata torna [] dal server, e «Annulla modifiche»
 // deve riportare a QUESTI, non lasciare a video quelli annullati.
+// Le chiavi sono quelle che Olobuild_Seo_Head legge (fino alla 1.4.501 la scheda ne
+// scriveva altre e i controlli non agivano). «Robots default» arriva SEMPRE dal server:
+// è blog_public, e un valore inventato qui lo cambierebbe al primo salvataggio.
 const INIZIALE_TITLES = {
   pattern: '{page} {sep} {site}',
   separator: '—',
   description: '',
-  language: 'it_IT',
-  robots: 'index_follow',
+  robots: 'index',
+  kg_type: 'Organization',
 };
 const INIZIALE_SOCIAL = {
-  twitter_handle: '',
-  card_type: 'summary_large',
-  og_image: '',
+  twitter_user: '',
+  twitter_card_type: 'summary_large_image',
+  og_default_image: '',
 };
 const INIZIALE_SITEMAP = { enabled: true };
-const INIZIALE_SCHEMA  = { type: 'Organization', auto_ping: true };
 const titles  = ref({ ...INIZIALE_TITLES });
 const social  = ref({ ...INIZIALE_SOCIAL });
 const sitemap = ref({ ...INIZIALE_SITEMAP });
-const schema  = ref({ ...INIZIALE_SCHEMA });
 
-const sitemapUrl = computed(() => (window.oloData?.siteUrl || '/') + 'sitemap.xml');
+const sitemapUrl = computed(() => window.oloData?.sitemapUrl || ((window.oloData?.siteUrl || '/') + 'wp-sitemap.xml'));
 const googleSearchConsole = 'https://search.google.com/search-console';
 
 const ogPreviewStyle = computed(() => ({
   width: '160px', height: '84px', borderRadius: '8px',
   display: 'grid', placeItems: 'center',
   color: '#fff', fontFamily: 'Instrument Serif, serif', fontSize: '18px',
-  background: social.value.og_image
-    ? `center / cover no-repeat url(${social.value.og_image})`
+  background: social.value.og_default_image
+    ? `center / cover no-repeat url(${social.value.og_default_image})`
     : 'linear-gradient(135deg, #e1474f, #7a1d23)',
 }));
 
 function setT(k, v)   { titles.value[k]  = v; setDirty(true); }
 function setS(k, v)   { social.value[k]  = v; setDirty(true); }
 function setSM(k, v)  { sitemap.value[k] = v; setDirty(true); }
-function setSch(k, v) { schema.value[k]  = v; setDirty(true); }
 
 function pickOgImage() {
   if (!window.wp || !window.wp.media) {
@@ -266,7 +241,7 @@ function pickOgImage() {
   const frame = window.wp.media({ title: t('Scegli immagine OG'), button: { text: t('Usa questa immagine') }, multiple: false });
   frame.on('select', () => {
     const att = frame.state().get('selection').first().toJSON();
-    social.value.og_image = att.url;
+    social.value.og_default_image = att.url;
     setDirty(true);
   });
   frame.open();
@@ -276,18 +251,16 @@ async function loadSettings() {
   try {
     const headers = { 'X-WP-Nonce': window.oloData.nonce };
     const base = `${window.oloData.restUrl}seo/`;
-    const [tRes, sRes, smRes, schRes] = await Promise.all([
+    const [tRes, sRes, smRes] = await Promise.all([
       lettura.fetch(base + 'titles', { headers }).then(r => r.ok ? r.json() : null).catch(() => null),
       lettura.fetch(base + 'social', { headers }).then(r => r.ok ? r.json() : null).catch(() => null),
       lettura.fetch(base + 'sitemap', { headers }).then(r => r.ok ? r.json() : null).catch(() => null),
-      lettura.fetch(base + 'advanced', { headers }).then(r => r.ok ? r.json() : null).catch(() => null),
     ]);
     if (tRes)   titles.value  = conIniziali(INIZIALE_TITLES, tRes);
     if (sRes)   social.value  = conIniziali(INIZIALE_SOCIAL, sRes);
     if (smRes)  sitemap.value = conIniziali(INIZIALE_SITEMAP, smRes);
-    if (schRes) schema.value  = conIniziali(INIZIALE_SCHEMA, schRes.schema);
-    // Si salvano tutte e quattro: basta una lettura mancata per spedire i default.
-    if (tRes && sRes && smRes && schRes) loaded.value = true;
+    // Si salvano tutte e tre: basta una lettura mancata per spedire i default.
+    if (tRes && sRes && smRes) loaded.value = true;
   } catch (e) { /* defaults */ }
 }
 
@@ -299,7 +272,6 @@ async function saveSettings() {
     okOrThrow(fetch(base + 'titles',  { method: 'POST', headers, body: JSON.stringify(titles.value) })),
     okOrThrow(fetch(base + 'social',  { method: 'POST', headers, body: JSON.stringify(social.value) })),
     okOrThrow(fetch(base + 'sitemap', { method: 'POST', headers, body: JSON.stringify(sitemap.value) })),
-    okOrThrow(fetch(base + 'advanced',{ method: 'POST', headers, body: JSON.stringify({ schema: schema.value }) })),
   ]);
 }
 
