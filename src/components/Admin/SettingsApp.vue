@@ -263,7 +263,7 @@ const IA_GROUPS = [
       { id: 'colori',     label: 'Palette & Stili',       icon: 'palette', component: ColorsTab },
       { id: 'tipografia', label: 'Tipografia',            icon: 'type',    component: TypographyTab },
       { id: 'spaziature', label: 'Spaziature & layout',   icon: 'layers',  component: SpaziatureTab },
-      { id: 'responsive', label: 'Dispositivi dell'editor', icon: 'devices', component: BreakpointsTab },
+      { id: 'responsive', label: "Dispositivi dell'editor", icon: 'devices', component: BreakpointsTab },
     ],
   },
   {
