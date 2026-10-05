@@ -86,7 +86,7 @@ in un caso comune · **L** = dettaglio, colore fuori tema, testo in inglese.
 
 ### Media
 - **progallery** — G: «Nastro automatico», «Nastro doppio» e Coverflow rotti: ai selettori si aggiunge la classe del preset invece dell'uid `:941, :1010, :1141, :1180, :1818`; «Sollevamento», shimmer e cornici mettono `position:relative` e fanno esplodere gli schemi assoluti (lo «Sparso» diventa alto 5000 px) `:574, :670, :702`.
-- **proslider** — G: vedi A2 (sotto la piega non parte) · M: titolo di partenza `var(--olo-color-dark, #ffffff)` `:53`; pulsante senza colore blu `#2563eb` `:703`; 12 preset senza effetti visivi.
+- **proslider** — G ✅ 1.4.517 (A2): vedi A2 (sotto la piega non parte) · M: titolo di partenza `var(--olo-color-dark, #ffffff)` `:53`; pulsante senza colore blu `#2563eb` `:703`; 12 preset senza effetti visivi.
 - **overlaygrid / overlayslider** — G: la tipografia del titolo non arriva sulle card con foto (CSS su `.uk-overlay h1…h4`, il markup ha `uk-overlay-primary`) `overlaygrid:271-285`, `overlayslider:303-322` · L: gap «Predefinito» di overlayslider = spazio zero.
 - **slideshow** — M: radice `position:static` (frecce e pausa ai bordi della sezione) `:135`; pulsante pausa «⏸» su nero fisso; «Glow sul titolo» cerca una classe che non c'è; velo fisso a 0,45.
 - **overlay** — M: l'opacità del velo si applica anche al testo `:122`; comportamento del velo diverso fra Fade/Zoom e Slide Up.
@@ -134,7 +134,7 @@ in un caso comune · **L** = dettaglio, colore fuori tema, testo in inglese.
 
 ### Interattivo
 - **finder** — G: titolo, voci e risultato hanno colore fisso `--olo-color-text` `:175, :179, :197`: coi preset Neon e Retro Terminal il testo è illeggibile.
-- **popup** — G: vedi A11 · M: raggio, maiuscolo, spaziatura e peso del pulsante inerti (`.olo-template .uk-button` vince) `:474`; `alt` dell'immagine da una chiave `title` inesistente `:888`.
+- **popup** — G ✅ 1.4.529 (A11): vedi A11 · M: raggio, maiuscolo, spaziatura e peso del pulsante inerti (`.olo-template .uk-button` vince) `:474`; `alt` dell'immagine da una chiave `title` inesistente `:888`.
 - **accordion** — M: colore delle icone fisso sul primario `:284`; due controlli «Bordo» sulla stessa chiave (doppia riga); bordo della voce aperta forzato sul primario `:414`; prompt del terminale annullato `:263`.
 - **timeline** — M: le famiglie `var(--…)` perdono le parentesi `:188`; «Colore filo» inerte col filo «solid» (vince `timeline-super.css`); polaroid alta 148 px fissa.
 - **chart** — M: appena inserito quattro barre arancio identiche `:16-19`; area polare con etichette in riquadri bianchi; Chart.js col suo font; il radar ignora min/max.
@@ -148,7 +148,7 @@ in un caso comune · **L** = dettaglio, colore fuori tema, testo in inglese.
 
 ### Navigazione e Atmosfera
 - **sitelogo** — G: «Centro» e «Destra» non fanno niente (`frontend.css:477` allinea a sinistra).
-- **megamenu** — G: appena inserito il builder mette il segnaposto grigio in `logo_image`, `logo_sticky`, `mobile_logo` · M: messo nel corpo cambia la classe dell'header del sito e lo rende sticky; il pannello aperto finisce sotto le sezioni dopo.
+- **megamenu** — G ✅ 1.4.535 (segnaposto che salta i loghi): appena inserito il builder mette il segnaposto grigio in `logo_image`, `logo_sticky`, `mobile_logo` · M: messo nel corpo cambia la classe dell'header del sito e lo rende sticky; il pannello aperto finisce sotto le sezioni dopo.
 - **navmenu** — M: come megamenu, e `olo-header-overlay` nasconde il primo blocco nei temi a blocchi; verticale senza «Sottovoci espandibili» = sottomenu irraggiungibili `:1083`.
 - **oloheader** — M: CTA blu, Manrope e icone fissi fuori tema; `brand_logo_white` mai letto; pannello sotto le sezioni dopo.
 - **particlefx** — M: contenuto, padding, larghezza, allineamenti, sfondo, ombra e bordo calcolati e mai stampati `:124-153`; `resolveVarColor()` ignora la riserva di `var()` (particelle nere).
@@ -165,7 +165,7 @@ in un caso comune · **L** = dettaglio, colore fuori tema, testo in inglese.
 
 ### Dinamico
 - **queryloop** — G: «CPT slug» non funziona mai («Tipo di contenuto "custom" non trovato») `:614` · M: «Sfondo card» colora anche il blocco `:484, :679` · L: raggio 0 diventa 6 px `:810`.
-- **postgrid** — G: vedi A2 (filtri e pagine) · M: velo con bordo netto a metà card (`inset:0` contro `height:N%`) `:456, :839`.
+- **postgrid** — G ✅ 1.4.517 (A2): vedi A2 (filtri e pagine) · M: velo con bordo netto a metà card (`inset:0` contro `height:N%`) `:456, :839`.
 - **pagetitlebar** — G: lo sfondo media rompe lo stile (CSS senza `;` finale, si perdono `position:relative` e l'ultima dichiarazione) `class-tile-base.php:559-567`, `:104, :118`.
 - **sitemap** — G: padding del contenitore perso coi tipi personalizzati (variabile sovrascritta dal ciclo) `:197, :351, :386` · M: con la ricerca nelle griglie il campo diventa una cella.
 - **newsticker** — M: in slide e fade l'icona esce come testo («bolt») `:576`; titoli troncati nel verticale.
