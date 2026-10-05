@@ -754,6 +754,12 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
 
             <?php if ( ! empty( $s['cursor_label_enabled'] ) ) : ?>
             var cursor = root.querySelector('.<?php echo esc_js( $uid ); ?>-cursor');
+            <?php if ( empty( $settings['_builder_mode'] ) ) : ?>
+            /* L'etichetta è fixed e segue clientX/clientY: dentro il template (transform) le
+               coordinate partivano dall'angolo del template, e l'etichetta finiva lontano dal
+               puntatore (anche fuori schermo). Sul sito va nel body. */
+            (<?php echo self::js_nel_body(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- costante JS interna ?>)(cursor);
+            <?php endif; ?>
             if(cursor){
                 var raf = null, mx = 0, my = 0;
                 function move(){ cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; raf = null; }
