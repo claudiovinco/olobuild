@@ -69,8 +69,8 @@ in un caso comune · **L** = dettaglio, colore fuori tema, testo in inglese.
 - **grid** — M: con «Testo su immagine» il raggio resta solo sugli angoli alti (gli angoli bassi della foto sono vivi); la pillola attiva del filtro è blu UIkit; etichetta «Tutti» di default «All».
 
 ### Testo
-- **variablespecimen** — G: il font scelto non si applica mai (`font-family: Inter, inherit` scartato) `:127`; il filtro della riga 126 toglie le parentesi ai `var(--…)`.
-- **textmask** — G: «Video dietro al testo» mostra il video intero e il testo resta invisibile `:149`; «Testo rivela il video» calcola la luminosità solo da esadecimali `:136`; senza video è un rettangolo nero alto 100vh.
+- **variablespecimen** — G ✅ 1.4.547: il font scelto non si applica mai (`font-family: Inter, inherit` scartato) `:127`; il filtro della riga 126 toglie le parentesi ai `var(--…)`.
+- **textmask** — G ✅ 1.4.548: «Video dietro al testo» mostra il video intero e il testo resta invisibile `:149`; «Testo rivela il video» calcola la luminosità solo da esadecimali `:136`; senza video è un rettangolo nero alto 100vh.
 - **textpath** — G: «Scorrimento una volta» finisce al 100% e il testo sparisce `:165`; «Continuo» lo fa uscire e rientrare `:161`; la spirale esce dal riquadro `:62`; un testo più lungo del tracciato viene troncato senza avviso.
 - **list** — G: se tutte le voci sono «Numero» i numeri spariscono (`<ol class="uk-list">`) `:96`; preset con icone sconosciute; icona verde «successo» di default.
 - **quotation** — M: niente controlli colore (illeggibile su scuro); la barra a sinistra di `frontend.css:350` resta anche centrata o a destra; 12 preset che cambiano due chiavi.
