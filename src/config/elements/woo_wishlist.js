@@ -62,8 +62,12 @@ export default {
     ]},
     { key: 'show_count', label: t('Mostra conteggio'), type: 'toggle' },
 
+    // show_grid il PHP lo leggeva da sempre, ma nessun controllo lo accendeva: la lista dei
+    // prodotti salvati non si poteva mostrare, e le voci qui sotto non agivano mai.
+    { type: 'separator', label: t('Lista dei salvati') },
+    { key: 'show_grid', label: t('Mostra lista'), type: 'toggle' },
 
-    { type: 'separator', label: t('Elementi visibili') },
+    { type: 'separator', label: t('Elementi visibili'), condition: { field: 'show_grid', op: 'notEmpty' } },
     { key: 'show_price', label: t('Mostra prezzo'), type: 'toggle' },
     { key: 'show_add_to_cart', label: t('Mostra aggiungi al carrello'), type: 'toggle' },
     { key: 'show_remove', label: t('Mostra rimuovi'), type: 'toggle' },
@@ -90,7 +94,7 @@ export default {
     ] },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
-    { type: 'separator', label: t('Card') },
+    { type: 'separator', label: t('Card'), condition: { field: 'show_grid', op: 'notEmpty' } },
     { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 4 },
     { key: 'card_style', label: t('Stile card'), type: 'select', options: [
       { value: 'default', label: t('Default') },
@@ -101,21 +105,23 @@ export default {
     { type: 'separator', label: t('Colori') },
     { key: 'icon_color', label: t('Colore icona'), type: 'color' },
     { key: 'icon_color_active', label: t('Colore icona attiva'), type: 'color' },
-    { key: 'title_color', label: t('Colore titolo'), type: 'color' },
-    { key: 'price_color', label: t('Colore prezzo'), type: 'color' },
-    { key: 'empty_color', label: t('Colore testo vuoto'), type: 'color' },
-    { key: 'button_color', label: t('Colore testo pulsante'), type: 'color' },
-    { key: 'button_bg', label: t('Sfondo pulsante'), type: 'color' },
+    { key: 'title_color', label: t('Colore titolo'), type: 'color', condition: { field: 'show_grid', op: 'notEmpty' } },
+    { key: 'price_color', label: t('Colore prezzo'), type: 'color', condition: { field: 'show_grid', op: 'notEmpty' } },
+    { key: 'empty_color', label: t('Colore testo vuoto'), type: 'color', condition: { field: 'show_grid', op: 'notEmpty' } },
+    // Il pulsante «Aggiungi al carrello» delle card e lo stile «Pulsante» del cuore.
+    { key: 'button_color', label: t('Colore testo pulsante'), type: 'color', show: (s) => !!s.show_grid || s.style === 'button' },
+    { key: 'button_bg', label: t('Sfondo pulsante'), type: 'color', show: (s) => !!s.show_grid || s.style === 'button' },
 
     ...shadowField,
     ...borderFields(),
     { type: 'separator', label: t('Pulsante wishlist') },
+    // 'outline', il default storico del PHP, si è sempre disegnato come «Solo icona».
     { key: 'style', label: t('Stile'), type: 'select', options: [
       { value: 'icon', label: t('Solo icona') },
       { value: 'icon-text', label: t('Icona + testo') },
       { value: 'button', label: t('Pulsante') },
-    ]},
-    { type: 'separator', label: t('Disposizione') },
+    ], valoriStorici: { outline: 'icon' } },
+    { type: 'separator', label: t('Disposizione'), condition: { field: 'show_grid', op: 'notEmpty' } },
     { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1 },
     { key: 'columns_tablet', label: t('Colonne tablet'), type: 'range', min: 1, max: 4, step: 1 },
     { key: 'columns_mobile', label: t('Colonne mobile'), type: 'range', min: 1, max: 2, step: 1 },
