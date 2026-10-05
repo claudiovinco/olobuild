@@ -163,7 +163,9 @@ class Olobuild_OverlaySlider_Tile extends Olobuild_Tile_Base {
 
         // Padding
         $pad = $s['overlay_padding'] ?? 'medium';
-        $pad_class = '';
+        // «Medio» (il default) non aggiungeva nessuna classe: la didascalia aveva padding 0 e il
+        // titolo toccava il bordo della card. Ora sta fra Piccolo (15px) e Grande (30-40px).
+        $pad_class = ' olo-os-pad';
         if ( $pad === 'small' )  $pad_class = ' uk-padding-small';
         if ( $pad === 'large' )  $pad_class = ' uk-padding';
 
@@ -319,6 +321,8 @@ class Olobuild_OverlaySlider_Tile extends Olobuild_Tile_Base {
                 margin: 6px 0 0;
             }
             /* Didascalia sotto l'immagine: nel flusso, senza velo, sul fondo della pagina */
+            /* Padding «Medio» della didascalia sull'immagine */
+            .<?php echo $uid; ?> .olo-os-pad { padding: 1.5rem; }
             .<?php echo $uid; ?> .olo-os-caption--below { position: relative; background: none; color: <?php echo $title_clr; ?>; padding: .9em 0 0; }
             .<?php echo $uid; ?> .olo-os-caption--below.olo-os-caption--pad-small { padding-top: .6em; }
             .<?php echo $uid; ?> .olo-os-caption--below.olo-os-caption--pad-large { padding-top: 1.4em; }

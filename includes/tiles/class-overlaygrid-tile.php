@@ -179,7 +179,9 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
 
         // Padding
         $pad = $s['overlay_padding'] ?? 'medium';
-        $pad_class = '';
+        // «Medio» (il default) non aggiungeva nessuna classe: la didascalia aveva padding 0 e il
+        // titolo toccava il bordo della card. Ora sta fra Piccolo (15px) e Grande (30-40px).
+        $pad_class = ' olo-og-pad';
         if ( $pad === 'small' )  $pad_class = ' uk-padding-small';
         if ( $pad === 'large' )  $pad_class = ' uk-padding';
 
@@ -293,6 +295,8 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> a.uk-display-block:focus-visible { outline: 2px solid var(--olo-color-primary, #e1474f); outline-offset: 2px; }
 
             /* Card non-immagine (text/icon/graphic) — niente placeholder grigio */
+            /* Padding «Medio» della didascalia */
+            .<?php echo $uid; ?> .olo-og-pad { padding: 1.5rem; }
             .<?php echo $uid; ?> .olo-og-card { display:flex; flex-direction:column; align-items:flex-start; padding:24px; border:1px solid rgba(255,255,255,0.12); box-sizing:border-box; }
             /* Overlay "bare" (card non-immagine): nessun fondo scuro, eredita i colori titolo/sottotitolo */
             .<?php echo $uid; ?> .olo-og-overlay--bare { background:transparent; color: <?php echo $title_clr; ?>; }
