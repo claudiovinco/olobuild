@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.544 - 2026-10-05 (fix)
+- Colonne interne: le sotto-colonne stanno una accanto all'altra sul computer anche con le impostazioni di partenza (prima andavano sempre a capo); sul telefono si impilano come prima.
+
 ## v1.4.543 - 2026-10-05 (fix)
 - Hero: il «Bordo inferiore ad arco» (e il preset «Masked Arch») disegna davvero l'arco in fondo alla scena; prima non tagliava nulla.
 
