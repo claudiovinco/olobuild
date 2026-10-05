@@ -961,7 +961,11 @@ class Olobuild_Frontend_Renderer {
         // quindi viene salvato in node.settings — non in node.style come per le sezioni.
         // Merge: se settings.bg/bg_color è settato e style non lo è, usa quello dei settings.
         $bg_source = $style;
-        if ( empty( $bg_source['bg'] ) && ! empty( $settings['bg'] ) )            $bg_source['bg']       = $settings['bg'];
+        // Tile che disegnano da sé lo Sfondo dei settings sul proprio elemento (pannello media unico):
+        // il contenitore non lo ridipinge. Sotto un elemento arrotondato se ne vedevano gli angoli vivi
+        // (CTA Banner), una foto o un velo comparivano due volte e un video di sfondo partiva due volte.
+        $SFONDO_PROPRIO = [ 'announcementbar', 'audiohero', 'beforeafter', 'categoryrail', 'chathero', 'cta-banner', 'featuredstory', 'filmreel', 'glowgallery', 'glowhero', 'imagehero', 'introsplit', 'marquee', 'masthead', 'matchfixtures', 'mediacta', 'northquoteslider', 'northvideohero', 'particlefx', 'photocover', 'productgrid', 'producthero', 'scrubtext', 'searchhero', 'showcasegrid', 'smearhero', 'studiohero', 'terminalhero', 'themedemos', 'tripfinder' ];
+        if ( empty( $bg_source['bg'] ) && ! empty( $settings['bg'] ) && ! in_array( $type, $SFONDO_PROPRIO, true ) ) $bg_source['bg'] = $settings['bg'];
         if ( empty( $bg_source['bg_color'] ) && ! empty( $settings['bg_color'] ) ) $bg_source['bg_color'] = $settings['bg_color'];
 
         // v1.0.55 — Tile ATOMICHE (button/icon/divider/spacer/togglebtn): wrapper SEMPRE
