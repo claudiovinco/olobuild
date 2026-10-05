@@ -481,8 +481,8 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
                 transition: all 0.25s ease;
             }
             /* «Dimensione pulsante»: il padding globale dei pulsanti copriva .uk-button-small/large */
-            .olo-popup-<?php echo esc_attr( $uid ); ?> > button.uk-button-small { font-size: .875rem; padding: 6px 16px; line-height: 1.4; }
-            .olo-popup-<?php echo esc_attr( $uid ); ?> > button.uk-button-large { font-size: 1.0625rem; padding: 16px 36px; line-height: 1.4; }
+            .olo-popup-<?php echo esc_attr( $uid ); ?> > button.uk-button-small { font-size: .875rem; padding: .45em 1.15em; line-height: 1.4; }
+            .olo-popup-<?php echo esc_attr( $uid ); ?> > button.uk-button-large { font-size: 1.0625rem; padding: .95em 2.1em; line-height: 1.4; }
 
             <?php
             // Effetti avanzati che richiedono CSS dinamico (animation keyframes, ::before/::after,
