@@ -10,6 +10,9 @@ export default {
   name: t('Mixer (blend colore)'),
   icon: 'dashicons-art',
   category: 'interactive',
+  // Correttamente ritirata dalla palette (5 ott 2026): resta per i 5 temi che la usano
+  // (canvas, kiln, loft, prisma, velour — homepage.json).
+  hidden: true,
 
   defaults: {
     eyebrow: t('Prova'),
