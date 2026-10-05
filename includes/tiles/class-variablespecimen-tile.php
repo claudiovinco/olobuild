@@ -163,7 +163,7 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist colours, intval()-clamped sizes, in_array() whitelisted enums, a charset-filtered font stack and the internally generated $uid. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist colours, intval()-clamped sizes, in_array() whitelisted enums, a font stack validated by Olobuild_Tile_Base::resolve_font_family() and the internally generated $uid. ?>
         <style>
             .<?php echo $uid; ?> {
                 <?php echo $bg_decl; ?>
