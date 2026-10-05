@@ -1,5 +1,6 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField } from './_shared';
 import { shadowField } from './_shared.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -58,6 +59,28 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Come nasce dalla palette: il titolo della pagina, grande e chiaro, su una foto velata di scuro,
+  // con un sottotitolo e il percorso di breadcrumbs sotto. Più alta e ariosa della barra di serie.
+  // Il velo è quello dello Sfondo (dentro media_bg), non «Opacità overlay» della tile: il suo strato
+  // assoluto esce dalla barra finché il renderer perde il position:relative (vedi il resoconto).
+  partenza: {
+    subtitle: t('Tutto quello che c\'è da sapere, in una pagina'),
+    media_bg: {
+      type: 'image', image_url: demo('ufficio'), image_size: 'cover', image_position: 'center center',
+      overlay_color: 'var(--olo-color-dark, #16263d)', overlay_opacity: 55,
+    },
+    bg_overlay: '0',
+    bg_overlay_color: 'var(--olo-color-dark, #16263d)',
+    title_color: 'var(--olo-color-light, #ffffff)',
+    title_size: '44',
+    subtitle_color: 'color-mix(in srgb, var(--olo-color-light, #ffffff) 85%, transparent)',
+    subtitle_size: '18',
+    breadcrumb_color: 'color-mix(in srgb, var(--olo-color-light, #ffffff) 70%, transparent)',
+    breadcrumb_separator: '›',
+    min_height: '300',
+    tile_padding: { top: 64, right: 24, bottom: 64, left: 24 },
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

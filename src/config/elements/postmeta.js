@@ -55,6 +55,19 @@ export default {
     ...wowEffectsDefaults,
   },
 
+  // Come nasce dalla palette: la riga di meta di un articolo con l'icona davanti a ogni voce (nel
+  // colore del sito), data per esteso, autore, categorie e tempo di lettura, separati da un punto e
+  // ben distanziati (di serie le voci si toccavano).
+  partenza: {
+    show_reading_time: true,
+    date_format: 'j F Y',
+    icon_style: 'before',
+    icon_color: 'var(--olo-color-primary)',
+    item_gap: 10,
+    text_color: 'var(--olo-color-text-muted)',
+    link_color: 'var(--olo-color-text)',
+  },
+
   fields: [
     { type: 'separator', label: t('Elementi da mostrare') },
     { key: 'show_date', label: t('Mostra data'), type: 'toggle' },

@@ -102,6 +102,27 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: gli ultimi sei articoli del sito in card arrotondate a tre colonne,
+  // tutte alte uguali: foto 4:3 che si avvicina al passaggio, badge della categoria, data e autore,
+  // estratto tenue e «Leggi l'articolo» come link. I colori dei nastri e del velo sono token (risolve
+  // il disaccordo fra i default del PHP e del config).
+  partenza: {
+    posts_per_page: '6',
+    match_height: true,
+    image_ratio: '4/3',
+    card_radius: '14',
+    hover_effect: 'zoom',
+    excerpt_length: '18',
+    link_style: 'text',
+    link_text: t('Leggi l\'articolo'),
+    title_size: '1.15',
+    excerpt_color: 'var(--olo-color-text-muted)',
+    tile_padding: { top: 18, right: 20, bottom: 20, left: 20 },
+    opening_bg_annual: 'var(--olo-color-success, #15803d)',
+    opening_bg_seasonal: 'var(--olo-color-accent, #f4a23b)',
+    overlay_color: 'var(--olo-color-dark, #16263d)',
+  },
+
   fields: [
     { type: 'separator', label: t('Query') },
     { key: 'post_type', label: t('Tipo di contenuto'), type: 'select', optionsSource: 'postTypes', options: [] },

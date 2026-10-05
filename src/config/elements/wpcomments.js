@@ -43,6 +43,18 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: i commenti dell'articolo con avatar tondo, autore in colore testo, data
+  // tenue (di serie era un grigio fisso), «Rispondi» nel colore del sito e il modulo in un riquadro
+  // appena tinto.
+  partenza: {
+    avatar_size: '52',
+    title_color: 'var(--olo-color-text)',
+    author_color: 'var(--olo-color-text)',
+    date_color: 'var(--olo-color-text-muted)',
+    link_color: 'var(--olo-color-primary)',
+    form_background: 'color-mix(in srgb, var(--olo-color-primary) 5%, transparent)',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { type: 'separator', label: t('Titolo') },

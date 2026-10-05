@@ -1,6 +1,7 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, wowEffectsFields, wowEffectsDefaults } from './_shared';
 import { shadowField, focalField } from './_shared.js';
 import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -108,6 +109,30 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
     ...wowEffectsDefaults,
+  },
+
+  // Come nasce dalla palette: i lavori di uno studio (architettura, interni, fotografia) con le foto
+  // del pacchetto demo, la barra dei filtri a pillole per categoria, titolo e categoria sempre in
+  // vista sul velo della foto, zoom al passaggio e il nastro «In evidenza» sui due lavori di punta.
+  partenza: {
+    items: [
+      { id: 'pf-1', title: t('Residenza Le Terrazze'), image_url: demo('architettura'), category: t('Architettura'), description: t('Dodici appartamenti con terrazze a sbalzo.'), link_url: '', year: '2026', featured: true },
+      { id: 'pf-2', title: t('Uffici in città'), image_url: demo('ufficio'), category: t('Interni'), description: t('Un open space luminoso affacciato sul centro.'), link_url: '', year: '2026', featured: false },
+      { id: 'pf-3', title: t('Torri sul fiume'), image_url: demo('facciata-vetro'), category: t('Architettura'), description: t('Facciate in vetro per un nuovo quartiere.'), link_url: '', year: '2025', featured: false },
+      { id: 'pf-4', title: t('Ceramiche da tavola'), image_url: demo('vaso'), category: t('Fotografia'), description: t('Still life per il catalogo di un laboratorio.'), link_url: '', year: '2025', featured: true },
+      { id: 'pf-5', title: t('Trattoria del Borgo'), image_url: demo('tavola'), category: t('Interni'), description: t('Sala e arredi di un ristorante di paese.'), link_url: '', year: '2024', featured: false },
+      { id: 'pf-6', title: t('La costa d\'estate'), image_url: demo('mare-costa'), category: t('Fotografia'), description: t('Reportage per un ente del turismo.'), link_url: '', year: '2024', featured: false },
+    ],
+    caption_position: 'always',
+    hover_effect: 'zoom',
+    filter_style: 'pills',
+    filter_active_color: 'var(--olo-color-primary)',
+    featured_ribbon: true,
+    featured_ribbon_text: t('In evidenza'),
+    border_radius: '12',
+    gap: '16',
+    overlay_color: 'var(--olo-color-dark, #16263d)',
+    overlay_opacity: '70',
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

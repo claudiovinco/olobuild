@@ -43,6 +43,21 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: tre articoli della stessa categoria in card chiare arrotondate, con la
+  // foto 3:2, la categoria in maiuscoletto, il titolo, la data e due righe d'estratto; ombra al
+  // passaggio. Su una pagina senza categorie mostra il testo di ripiego.
+  partenza: {
+    show_excerpt: true,
+    excerpt_length: '16',
+    show_category: true,
+    image_ratio: '3/2',
+    card_background: 'var(--olo-color-light, #ffffff)',
+    card_border_radius: '14',
+    title_color: 'var(--olo-color-text)',
+    text_color: 'var(--olo-color-text-muted)',
+    date_color: 'var(--olo-color-text-muted)',
+  },
+
   fields: [
     { type: 'separator', label: t('Query') },
     { key: 'source', label: t('Correlazione per'), type: 'select', options: [

@@ -49,6 +49,24 @@ export default {
     text_align: 'left',
   },
 
+  // Come nasce dalla palette: la scheda dell'autore dell'articolo in un riquadro appena tinto del
+  // colore del sito, avatar grande con l'anello colorato, nome, ruolo, biografia, numero di articoli
+  // e sito web.
+  partenza: {
+    show_role: true,
+    show_post_count: true,
+    show_website: true,
+    avatar_size: '88',
+    avatar_border_width: '3',
+    avatar_border_color: 'var(--olo-color-primary)',
+    background_color: 'color-mix(in srgb, var(--olo-color-primary) 6%, var(--olo-color-light, #ffffff))',
+    name_color: 'var(--olo-color-text)',
+    bio_color: 'var(--olo-color-text-muted)',
+    border_radius: '18',
+    tile_padding: { top: 28, right: 28, bottom: 28, left: 28 },
+    gap: '24',
+  },
+
   fields: [
     { type: 'separator', label: t('Contenuto') },
     { key: 'show_avatar', label: t('Mostra avatar'), type: 'toggle' },

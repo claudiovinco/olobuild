@@ -71,6 +71,29 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: una striscia chiara appena tinta del colore del sito con l'etichetta
+  // «Ultime notizie» piena (di serie era «Breaking» in rosso fisso su fondo scuro), tre avvisi veri di
+  // un'attività che salgono uno alla volta, ognuno con icona, badge e quando; frecce per sfogliarli.
+  partenza: {
+    items: [
+      { id: 'nt-1', title: t('Nuovi orari: dal 1° giugno aperti anche il sabato mattina'), url: '', logo: '', badge: t('Novità'), icon: 'clock', badge_bg: '', timestamp: t('oggi') },
+      { id: 'nt-2', title: t('Aperte le iscrizioni ai corsi di settembre: posti limitati'), url: '', logo: '', badge: t('Eventi'), icon: 'calendar', badge_bg: '', timestamp: t('ieri') },
+      { id: 'nt-3', title: t('Chiusura per ferie dal 10 al 24 agosto, il negozio online resta attivo'), url: '', logo: '', badge: t('Avviso'), icon: 'info', badge_bg: '', timestamp: t('3 giorni fa') },
+    ],
+    label_text: t('Ultime notizie'),
+    label_icon: 'bell',
+    label_bg: 'var(--olo-color-primary)',
+    label_color: 'var(--olo-color-primary-contrast)',
+    bg_color: 'color-mix(in srgb, var(--olo-color-primary) 8%, var(--olo-color-light, #ffffff))',
+    text_color: 'var(--olo-color-text)',
+    badge_bg: 'color-mix(in srgb, var(--olo-color-primary) 16%, transparent)',
+    badge_color: 'var(--olo-color-primary)',
+    height: '48',
+    font_size: 15,
+    border_radius: { tl: 12, tr: 12, br: 12, bl: 12 },
+    show_controls: true,
+  },
+
   fields: [
     { key: 'items', label: t('Notizie'), type: 'content-items',
       itemFields: [

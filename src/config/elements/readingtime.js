@@ -32,6 +32,15 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: «5 min di lettura» col quadrante nel colore del sito e il testo tenue,
+  // la forma breve che si mette sotto il titolo di un articolo.
+  partenza: {
+    format: 'short',
+    icon_color: 'var(--olo-color-primary)',
+    text_color: 'var(--olo-color-text-muted)',
+    font_weight: '500',
+  },
+
   fields: [
     { type: 'separator', label: t('Calcolo') },
     { key: 'words_per_minute', label: t('Parole al minuto'), type: 'number', min: 50, max: 500 },

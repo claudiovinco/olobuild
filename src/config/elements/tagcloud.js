@@ -47,6 +47,24 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: gli argomenti del sito come nuvola pesata (i più usati più grandi), in
+  // pillole appena velate col conteggio, che al passaggio si riempiono del colore del sito. Parte
+  // dalle Categorie, che ogni sito WordPress ha: coi Tag, su un sito che non ne usa, nasceva vuota.
+  partenza: {
+    taxonomy: 'category',
+    orderby: 'count',
+    order: 'DESC',
+    show_count: true,
+    min_font: '13',
+    max_font: '22',
+    text_color: 'var(--olo-color-text)',
+    hover_color: 'var(--olo-color-primary-contrast)',
+    background_color: 'color-mix(in srgb, var(--olo-color-text) 6%, transparent)',
+    hover_background: 'var(--olo-color-primary)',
+    border_radius: '999',
+    padding: { top: 7, right: 16, bottom: 7, left: 16 },
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'taxonomy', label: t('Tassonomia'), type: 'select', options: [

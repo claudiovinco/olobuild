@@ -87,6 +87,30 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: la squadra di un'attività qualunque con chi è disponibile adesso, sei
+  // card chiare con l'iniziale nel cerchio, il reparto sotto il nome e lo stato scritto oltre che col
+  // pallino. Ruolo e stato «assente» in testo tenue (di serie usavano il colore delle superfici e su
+  // fondo chiaro non si leggevano).
+  partenza: {
+    members: [
+      { id: 'pg-1', name: 'Giulia', avatar: '', role: t('Assistenza clienti'), online: true, color: '' },
+      { id: 'pg-2', name: 'Marco', avatar: '', role: t('Commerciale'), online: true, color: '' },
+      { id: 'pg-3', name: 'Sara', avatar: '', role: t('Amministrazione'), online: false, color: '' },
+      { id: 'pg-4', name: 'Luca', avatar: '', role: t('Supporto tecnico'), online: true, color: '' },
+      { id: 'pg-5', name: 'Elena', avatar: '', role: t('Progettazione'), online: true, color: '' },
+      { id: 'pg-6', name: 'Paolo', avatar: '', role: t('Logistica'), online: false, color: '' },
+    ],
+    columns_tablet: 3,
+    online_label: t('Disponibile'),
+    offline_label: t('Assente'),
+    card_bg: 'var(--olo-color-light, #ffffff)',
+    card_color: 'var(--olo-color-text)',
+    role_color: 'var(--olo-color-text-muted)',
+    offline_color: 'var(--olo-color-text-muted)',
+    name_size: 15,
+    role_size: 12,
+  },
+
   // ═══ CONTENUTO ═══════════════════════════════════════════════
   fields: [
     { type: 'separator', label: t('Origine dati') },

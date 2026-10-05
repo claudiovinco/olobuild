@@ -34,6 +34,15 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: l'occhio nel colore del sito, il numero di visite della pagina in
+  // grassetto e l'etichetta tenue, un po' più grandi della riga di meta di serie.
+  partenza: {
+    icon_color: 'var(--olo-color-primary)',
+    text_color: 'var(--olo-color-text-muted)',
+    font_size: '15',
+    icon_size: '18',
+  },
+
   fields: [
     { key: 'show_icon', label: t('Mostra icona'), type: 'toggle' },
     { key: 'label', label: t('Etichetta'), type: 'text' },

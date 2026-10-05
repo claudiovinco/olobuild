@@ -98,6 +98,18 @@ export default {
     ...wowEffectsDefaults,
   },
 
+  // Come nasce dalla palette: gli ultimi articoli del sito in griglia (preset Magazine Trio), con
+  // categoria, data e autore, estratto, «Leggi tutto» e la foto che si avvicina al passaggio; il
+  // badge «Nuovo» segna quelli dell'ultimo mese (di serie diceva «New»).
+  partenza: {
+    show_author: true,
+    new_badge: true,
+    new_badge_days: 30,
+    new_badge_text: t('Nuovo'),
+    hover_effect: 'image-zoom',
+    overlay_color: 'var(--olo-color-dark, #16263d)',
+  },
+
   fields: [
     { type: 'separator', label: t('Query') },
     { key: 'post_type', label: t('Tipo contenuto'), type: 'select', options: [

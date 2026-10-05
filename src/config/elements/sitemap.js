@@ -80,6 +80,22 @@ export default {
     ...wowEffectsDefaults,
   },
 
+  // Come nasce dalla palette: la mappa del sito a schede (pagine, articoli, categorie), con l'icona
+  // del tipo davanti al titolo di ogni sezione e il numero delle voci; le voci in colore testo che
+  // prendono il colore del sito al passaggio.
+  partenza: {
+    layout_mode: 'cards',
+    columns: '3',
+    list_style: 'none',
+    indent: '0',
+    show_icons: true,
+    show_counter: true,
+    title_color: 'var(--olo-color-text)',
+    link_color: 'var(--olo-color-text)',
+    hover_color: 'var(--olo-color-primary)',
+    accent_color: 'var(--olo-color-primary)',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { type: 'separator', label: t('Contenuto') },
