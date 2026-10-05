@@ -2180,3 +2180,15 @@ msgstr "Ugrás ide: %s"
 #, php-format
 msgid "Apri %s"
 msgstr "%s megnyitása"
+
+#: includes/tiles/class-timezone-tile.php
+msgid "Orario di lavoro"
+msgstr "Munkaidő"
+
+#: includes/tiles/class-timezone-tile.php
+msgid "Ai limiti"
+msgstr "Határeset"
+
+#: includes/tiles/class-timezone-tile.php
+msgid "Notte"
+msgstr "Éjszaka"

@@ -16666,3 +16666,15 @@ msgstr "%sへ移動"
 #, php-format
 msgid "Apri %s"
 msgstr "%sを開く"
+
+#: includes/tiles/class-timezone-tile.php
+msgid "Orario di lavoro"
+msgstr "勤務時間"
+
+#: includes/tiles/class-timezone-tile.php
+msgid "Ai limiti"
+msgstr "ぎりぎり"
+
+#: includes/tiles/class-timezone-tile.php
+msgid "Notte"
+msgstr "夜間"

@@ -2180,3 +2180,15 @@ msgstr "Přejít na %s"
 #, php-format
 msgid "Apri %s"
 msgstr "Otevřít %s"
+
+#: includes/tiles/class-timezone-tile.php
+msgid "Orario di lavoro"
+msgstr "Pracovní doba"
+
+#: includes/tiles/class-timezone-tile.php
+msgid "Ai limiti"
+msgstr "Na hraně"
+
+#: includes/tiles/class-timezone-tile.php
+msgid "Notte"
+msgstr "Noc"

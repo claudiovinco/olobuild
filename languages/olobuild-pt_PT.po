@@ -17098,3 +17098,15 @@ msgstr "Ir para %s"
 #, php-format
 msgid "Apri %s"
 msgstr "Abrir %s"
+
+#: includes/tiles/class-timezone-tile.php
+msgid "Orario di lavoro"
+msgstr "Horário de trabalho"
+
+#: includes/tiles/class-timezone-tile.php
+msgid "Ai limiti"
+msgstr "No limite"
+
+#: includes/tiles/class-timezone-tile.php
+msgid "Notte"
+msgstr "Noite"

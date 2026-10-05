@@ -16666,3 +16666,15 @@ msgstr "Przejdź do: %s"
 #, php-format
 msgid "Apri %s"
 msgstr "Otwórz %s"
+
+#: includes/tiles/class-timezone-tile.php
+msgid "Orario di lavoro"
+msgstr "Godziny pracy"
+
+#: includes/tiles/class-timezone-tile.php
+msgid "Ai limiti"
+msgstr "Na granicy"
+
+#: includes/tiles/class-timezone-tile.php
+msgid "Notte"
+msgstr "Noc"

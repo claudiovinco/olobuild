@@ -3,8 +3,14 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 /**
  * Tile Timezone — slider ora (città base) → orari locali + stato lavoro/limite/notte.
- * Estratto dai demo OLOthemes (setupTimezone). Render == Vue (TimezoneTile.vue).
+ * Estratto dai demo OLOthemes (setupTimezone).
  * Stati orari precomputati lato PHP (stringa 24 char w/o/s) → JS senza '&&' né '<'/'>'.
+ *
+ * Fuso di ogni città (1.4.506): `tz` = fuso IANA (Europe/Rome…), da cui il browser ricava
+ * lo scarto di OGGI, ora legale compresa. Senza `tz` vale `offset` (ore da UTC, anche
+ * 5.5); le città salvate prima con una sigla nota (PDT, BST, CEST…) vengono ricondotte al
+ * loro fuso, e la sigla segue l'ora legale. Prima gli scarti erano fissi: d'inverno ogni
+ * ora era sbagliata di un'ora, e i fusi da mezz'ora venivano arrotondati.
  */
 class Olobuild_Timezone_Tile extends Olobuild_Tile_Base {
 
@@ -21,10 +27,10 @@ class Olobuild_Timezone_Tile extends Olobuild_Tile_Base {
         'work_start'  => 9,
         'work_end'    => 18,
         'items'       => [
-            [ 'city' => 'San Francisco', 'offset' => -7, 'label' => 'PDT' ],
-            [ 'city' => 'London', 'offset' => 1, 'label' => 'BST' ],
-            [ 'city' => 'Berlin', 'offset' => 2, 'label' => 'CEST' ],
-            [ 'city' => 'Singapore', 'offset' => 8, 'label' => 'SGT' ],
+            [ 'city' => 'Milano', 'tz' => 'Europe/Rome', 'offset' => 1, 'label' => '' ],
+            [ 'city' => 'Londra', 'tz' => 'Europe/London', 'offset' => 0, 'label' => '' ],
+            [ 'city' => 'New York', 'tz' => 'America/New_York', 'offset' => -5, 'label' => '' ],
+            [ 'city' => 'Tokyo', 'tz' => 'Asia/Tokyo', 'offset' => 9, 'label' => '' ],
         ],
         'zone_accent' => '',
         'work_color'  => '',
@@ -53,7 +59,6 @@ class Olobuild_Timezone_Tile extends Olobuild_Tile_Base {
 
         $items = is_array( $s['items'] ) ? array_values( $s['items'] ) : [];
         if ( empty( $items ) ) return '';
-        $base_off = floatval( $items[0]['offset'] ?? 0 );
         $start    = intval( $s['input_value'] ?? 14 );
 
         // Precompute 24-hour state string (server-side; JS only indexes it).
@@ -96,7 +101,7 @@ class Olobuild_Timezone_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .otz-city[data-state="s"] .otz-dot{background:<?php echo $sleep; ?>;}
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-        <div class="olo-timezone <?php echo esc_attr( $uid ); ?>" data-timezone data-baseoff="<?php echo esc_attr( $base_off ); ?>" data-states="<?php echo esc_attr( $states ); ?>">
+        <div class="olo-timezone <?php echo esc_attr( $uid ); ?>" data-timezone data-states="<?php echo esc_attr( $states ); ?>">
             <?php if ( $s['eyebrow'] !== '' ) : ?><span class="otz-eyebrow"><?php echo esc_html( $s['eyebrow'] ); ?></span><?php endif; ?>
             <?php if ( $s['heading'] !== '' ) : ?><h2 class="otz-h"><?php echo esc_html( $s['heading'] ); ?></h2><?php endif; ?>
             <?php if ( $s['intro'] !== '' ) : ?><p class="otz-intro"><?php echo esc_html( $s['intro'] ); ?></p><?php endif; ?>
@@ -107,10 +112,10 @@ class Olobuild_Timezone_Tile extends Olobuild_Tile_Base {
             <input class="otz-range" type="range" data-tz-input min="0" max="23" step="1" value="<?php echo esc_attr( $start ); ?>" aria-label="<?php echo esc_attr( $s['base_label'] ?: 'hour' ); ?>"/>
             <div class="otz-grid">
                 <?php foreach ( $items as $it ) : ?>
-                    <div class="otz-city" data-tz-city data-tz-off="<?php echo esc_attr( floatval( $it['offset'] ?? 0 ) ); ?>" data-state="s">
+                    <div class="otz-city" data-tz-city data-tz-off="<?php echo esc_attr( floatval( $it['offset'] ?? 0 ) ); ?>" data-tz="<?php echo esc_attr( preg_replace( '/[^A-Za-z0-9_\/+\-]/', '', (string) ( $it['tz'] ?? '' ) ) ); ?>" data-state="s">
                         <div class="otz-city__c"><?php echo esc_html( $it['city'] ?? '' ); ?></div>
-                        <?php if ( ! empty( $it['label'] ) ) : ?><div class="otz-city__o"><?php echo esc_html( $it['label'] ); ?></div><?php endif; ?>
-                        <div class="otz-city__t"><span class="otz-dot"></span><span data-tz-clock>—</span></div>
+                        <div class="otz-city__o" data-tz-label><?php echo esc_html( $it['label'] ?? '' ); ?></div>
+                        <div class="otz-city__t"><span class="otz-dot" role="img"></span><span data-tz-clock>—</span></div>
                     </div>
                 <?php endforeach; ?>
             </div>
@@ -118,26 +123,66 @@ class Olobuild_Timezone_Tile extends Olobuild_Tile_Base {
         <script>
         (function(){
             var root=document.querySelector('.<?php echo esc_js( $uid ); ?>[data-timezone]'); if(!root){return;}
-            var baseOff=parseFloat(root.getAttribute('data-baseoff'))||0;
             var states=root.getAttribute('data-states')||'';
             var input=root.querySelector('[data-tz-input]');
             var disp=root.querySelector('[data-tz-disp]');
             var cities=[].slice.call(root.querySelectorAll('[data-tz-city]'));
-            function wrap(n){ n=Math.round(n); return ((n%24)+24)%24; }
-            function hh(n){ var h=wrap(n); var x=String(h); return (x.length===1?('0'+x):x)+':00'; }
+            var NOMI={w:'<?php echo esc_js( olobuild_t( 'Orario di lavoro' ) ); ?>',o:'<?php echo esc_js( olobuild_t( 'Ai limiti' ) ); ?>',s:'<?php echo esc_js( olobuild_t( 'Notte' ) ); ?>'};
+            /* Sigle con l'ora legale salvate nelle città senza fuso: [fuso, inverno, estate]. Solo
+               quelle che non si confondono con zone senza ora legale (niente EST, CST, GMT, AEST). */
+            var SIGLE={PST:['America/Los_Angeles','PST','PDT'],PDT:['America/Los_Angeles','PST','PDT'],MDT:['America/Denver','MST','MDT'],CDT:['America/Chicago','CST','CDT'],EDT:['America/New_York','EST','EDT'],BST:['Europe/London','GMT','BST'],WEST:['Europe/Lisbon','WET','WEST'],CET:['Europe/Berlin','CET','CEST'],CEST:['Europe/Berlin','CET','CEST'],EEST:['Europe/Athens','EET','EEST'],AEDT:['Australia/Sydney','AEST','AEDT'],NZST:['Pacific/Auckland','NZST','NZDT'],NZDT:['Pacific/Auckland','NZST','NZDT']};
+            var anno=new Date().getFullYear();
+            /* Minuti da UTC del fuso nel giorno dato (null se il browser non conosce il fuso). */
+            function scartoIn(tz,giorno){
+                try{
+                    var d=new Date(giorno.getTime()); d.setSeconds(0,0);
+                    var parti=new Intl.DateTimeFormat('en-US',{timeZone:tz,hourCycle:'h23',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric'}).formatToParts(d);
+                    var o={}; parti.forEach(function(p){ o[p.type]=p.value; });
+                    return Math.round((Date.UTC(+o.year,+o.month-1,+o.day,(+o.hour)%24,+o.minute)-d.getTime())/60000);
+                }catch(e){ return null; }
+            }
+            function estivo(tz,ora){
+                var gen=scartoIn(tz,new Date(Date.UTC(anno,0,1))), lug=scartoIn(tz,new Date(Date.UTC(anno,6,1)));
+                if(gen===lug){ return false; }
+                return ora===Math.max(gen,lug);
+            }
+            function due(n){ var x=String(n); return x.length===1?('0'+x):x; }
+            function utc(m){ var a=Math.abs(m); var s=(m===a)?'+':'−'; var mi=a%60; return 'UTC'+s+Math.floor(a/60)+(mi?(':'+due(mi)):''); }
+            /* Lo scarto di ogni città, oggi; aggiorna anche la sigla se segue l'ora legale. */
+            var scarti=cities.map(function(c){
+                var tz=c.getAttribute('data-tz')||'';
+                var lab=c.querySelector('[data-tz-label]');
+                var sigla=lab?lab.textContent.replace(/\s+/g,''):'';
+                var coppia=SIGLE[sigla.toUpperCase()]||null;
+                var fisso=Math.round((parseFloat(c.getAttribute('data-tz-off'))||0)*60);
+                if(!tz){
+                    if(coppia){
+                        var g=scartoIn(coppia[0],new Date(Date.UTC(anno,0,1))), l=scartoIn(coppia[0],new Date(Date.UTC(anno,6,1)));
+                        if(fisso===g){ tz=coppia[0]; } else if(fisso===l){ tz=coppia[0]; }
+                    }
+                }
+                var ora=tz?scartoIn(tz,new Date()):null;
+                if(ora===null){ ora=fisso; tz=''; }
+                if(lab){
+                    if(coppia){ if(tz){ lab.textContent=estivo(tz,ora)?coppia[2]:coppia[1]; } }
+                    else if(!sigla){ if(tz){ lab.textContent=utc(ora); } }
+                }
+                return ora;
+            });
+            var base=scarti.length?scarti[0]:0;
             function recalc(){
                 var h=parseFloat(input.value)||0;
-                if(disp){ disp.textContent=hh(h); }
-                var utc=h-baseOff;
-                cities.forEach(function(c){
-                    var off=parseFloat(c.getAttribute('data-tz-off'))||0;
-                    var local=wrap(utc+off);
-                    var t=c.querySelector('[data-tz-clock]'); if(t){ t.textContent=hh(local); }
-                    var st=states.charAt(local)||'s';
+                if(disp){ disp.textContent=due(h)+':00'; }
+                var minUtc=h*60-base;
+                cities.forEach(function(c,i){
+                    var locale=((minUtc+scarti[i])%1440+1440)%1440;
+                    var ore=Math.floor(locale/60);
+                    var t=c.querySelector('[data-tz-clock]'); if(t){ t.textContent=due(ore)+':'+due(locale%60); }
+                    var st=states.charAt(ore)||'s';
                     c.setAttribute('data-state', st);
+                    var dot=c.querySelector('.otz-dot'); if(dot){ dot.setAttribute('aria-label',NOMI[st]); dot.setAttribute('title',NOMI[st]); }
                 });
-                var mn=0,mx=23;
-                input.style.setProperty('--pct',((h-mn)/(mx-mn)*100)+'%');
+                input.style.setProperty('--pct',(h/23*100)+'%');
             }
             if(input){ input.addEventListener('input',recalc); recalc(); }
         })();
