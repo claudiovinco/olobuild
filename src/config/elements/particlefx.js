@@ -72,6 +72,23 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: una costellazione discreta dietro alla sezione, punti nel primario
+  // legati da linee sottili nel secondario che derivano piano, senza seguire il cursore. I colori
+  // vengono dal tema (la palette dei preset è fissa).
+  partenza: {
+    preset: 'stars',
+    count: 70,
+    size: 10,
+    speed: 0.6,
+    wind: 0.4,
+    gravity: 0.6,
+    connect_lines: true,
+    connect_distance: 120,
+    palette_1: 'var(--olo-color-primary)',
+    palette_2: 'var(--olo-color-secondary)',
+    particle_opacity: 70,
+  },
+
   fields: [
     { type: 'separator', label: t('Ambito') },
     { key: 'scope', label: t('Riempi'), type: 'select', options: [

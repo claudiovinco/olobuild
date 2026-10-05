@@ -1,4 +1,5 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -91,6 +92,26 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Come nasce dalla palette: un pulsante primario grande con l'icona del regalo che apre (solo al
+  // clic) la finestra dell'offerta di benvenuto, con la foto a sinistra del testo, raggio morbido e
+  // un'apertura a zoom sulla pagina appena sfocata.
+  partenza: {
+    // Conflitti PHP/config: vince il config (testo, stile, raggio, colori del dialogo).
+    button_text: t('Scopri l\'offerta'),
+    button_style: 'primary',
+    modal_radius: '16',
+    modal_text_color: 'var(--olo-color-text, #1f2937)',
+    modal_title_color: 'var(--olo-color-text, #1f2937)',
+    button_size: 'large',
+    button_icon: 'gift',
+    modal_title: t('Offerta di benvenuto'),
+    image: demo('vaso'),
+    image_position: 'left',
+    modal_bg: 'var(--olo-color-background, #ffffff)',
+    popup_overlay_blur: 4,
+    popup_animation: 'zoom',
   },
 
   fields: [

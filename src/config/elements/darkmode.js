@@ -27,6 +27,13 @@ export default {
     transition_duration: 300,
   },
 
+  // Come nasce dalla palette: l'interruttore con il sole nel cursore, un po' più grande e col
+  // binario nel primario del tema (al buio diventa oro e mostra la luna).
+  partenza: {
+    icon_size: 30,
+    toggle_color: 'var(--olo-color-primary)',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
 

@@ -1,5 +1,6 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, widgetTemplateField, wowEffectsFields, wowEffectsDefaults } from './_shared';
 import { shadowField, shadowDefaults } from './_shared.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -56,6 +57,32 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
     ...wowEffectsDefaults,
+  },
+
+  // Come nasce dalla palette: tre schede con icona in una barra a pillola tinta col primario (la
+  // scheda attiva si stacca con la sua ombra, come dice il preset «Pill Sliding»); ogni pannello
+  // ha il testo e la foto accanto.
+  partenza: {
+    items: [
+      { id: 'sw-1', title: t('Chi siamo'), icon: 'users', content: t('<p><strong>Una squadra piccola, una cura grande.</strong> Lavoriamo insieme dal 2015 e seguiamo ogni cliente dall\'inizio alla fine, con un referente unico.</p>'), image: demo('ufficio'), link_text: '', link_url: '', widget_template_id: 0 },
+      { id: 'sw-2', title: t('Cosa facciamo'), icon: 'lightbulb', content: t('<p><strong>Progetti su misura.</strong> Ascoltiamo le tue esigenze, proponiamo una soluzione chiara e la realizziamo nei tempi concordati.</p>'), image: demo('scrivania'), link_text: '', link_url: '', widget_template_id: 0 },
+      { id: 'sw-3', title: t('Dove trovarci'), icon: 'location', content: t('<p><strong>In centro, a due passi dalla stazione.</strong> Riceviamo su appuntamento dal lunedì al venerdì, dalle 9 alle 18.</p>'), image: demo('citta-tetti'), link_text: '', link_url: '', widget_template_id: 0 },
+    ],
+    indicator_type: 'pill',
+    tab_padding_x: '22',
+    tab_font_size: '15',
+    tab_font_weight: '600',
+    tab_radius: '999',
+    container_padding: '6',
+    container_radius: '999',
+    active_bg: 'var(--olo-color-background, #ffffff)',
+    hover_bg: 'color-mix(in srgb, var(--olo-color-primary) 8%, transparent)',
+    content_padding_y: '28',
+    // Conflitti PHP/config, risolti coi token veri (surface e text-soft la Palette non li genera).
+    container_bg: 'color-mix(in srgb, var(--olo-color-primary) 10%, transparent)',
+    active_color: 'var(--olo-color-primary)',
+    inactive_color: 'var(--olo-color-text-muted)',
+    content_color: 'var(--olo-color-text)',
   },
 
   fields: [

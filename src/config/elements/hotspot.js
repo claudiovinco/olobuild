@@ -1,5 +1,6 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared';
 import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
+import { demo, demoAlt } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -47,6 +48,24 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Come nasce dalla palette: la foto di uno spazio di lavoro in 16:9 con tre punti numerati che
+  // pulsano (la vista, la postazione, lo schermo); ogni numero apre il suo fumetto.
+  partenza: {
+    image: demo('ufficio'),
+    image_alt: demoAlt('ufficio'),
+    aspect_ratio: '16/9',
+    border_radius: '16',
+    markers: [
+      { id: 'hs-1', pos_x: '37', pos_y: '46', title: t('Vista sulla città'), description: t('Vetrate dal pavimento al soffitto: luce naturale per tutta la giornata.'), icon: 'pin', tooltip_position: 'bottom' },
+      { id: 'hs-2', pos_x: '45', pos_y: '80', title: t('Postazione ergonomica'), description: t('Sedia regolabile e scrivania ampia, per lavorare comodi anche tutto il giorno.'), icon: 'pin', tooltip_position: 'top' },
+      { id: 'hs-3', pos_x: '77', pos_y: '62', title: t('Schermo da 27 pollici'), description: t('In ogni postazione, con tastiera, mouse e connessione in fibra.'), icon: 'pin', tooltip_position: 'left' },
+    ],
+    marker_style: 'number',
+    marker_color: 'var(--olo-color-primary)',
+    marker_text_color: 'var(--olo-color-primary-contrast)',
+    marker_size: '30',
   },
 
   fields: [

@@ -23,6 +23,13 @@ export default {
     transition_ms: 800,
   },
 
+  // Come nasce dalla palette: la luce scende dall'alto della finestra invece di stare al centro,
+  // dietro ai testi, e un po' più tenue: un alone del primario che non disturba la lettura.
+  partenza: {
+    position: 'top',
+    intensity: 20,
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
   ],

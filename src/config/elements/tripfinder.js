@@ -52,6 +52,17 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: la ricerca vera nel sito dei default (testo libero, categorie del
+  // sito, tipo di contenuto) in una barra a pillola con ombra, etichette nel primario e il
+  // pulsante pieno con il testo in contrasto.
+  partenza: {
+    accent_on: 'var(--olo-color-primary-contrast, #ffffff)',
+    label_color: 'var(--olo-color-primary)',
+    radius_corners: { tl: 999, tr: 999, br: 999, bl: 999 },
+    field_padding: { top: 10, right: 22, bottom: 10, left: 22 },
+    shadow: 'lg',
+  },
+
   fields: [
     { type: 'separator', label: t('Campi') },
     { key: 'fields', label: t('Campi della barra'), type: 'content-items',

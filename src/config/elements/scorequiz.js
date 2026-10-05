@@ -39,6 +39,22 @@ export default {
     align: 'left',
   },
 
+  // Come nasce dalla palette: un quiz vero per scegliere fra tre pacchetti di assistenza, con
+  // domande concrete, risposte che valgono 1-3 punti e tre esiti con il loro prezzo al mese.
+  partenza: {
+    intro: t('Tre domande, meno di un minuto: ti consigliamo da dove partire.'),
+    questions: [
+      { text: t('Quanto spesso ti serve il nostro aiuto?'), options: t('Una volta ogni tanto') + '|1\n' + t('Qualche volta al mese') + '|2\n' + t('Ogni settimana') + '|3' },
+      { text: t('Quante persone lavorano con te?'), options: t('Lavoro da solo') + '|1\n' + t('Da 2 a 10') + '|2\n' + t('Più di 10') + '|3' },
+      { text: t('Cosa conta di più per te?'), options: t('Spendere il giusto') + '|1\n' + t('Un referente fisso') + '|2\n' + t('Risposte in giornata') + '|3' },
+    ],
+    results: [
+      { min: 0, title: 'Base', text: t('Due interventi al mese e assistenza via email entro 48 ore. Da 29 € al mese.'), link_text: '', link_url: '' },
+      { min: 5, title: 'Plus', text: t('Un referente dedicato, interventi senza limiti e risposta in giornata. Da 59 € al mese.'), link_text: '', link_url: '' },
+      { min: 8, title: t('Completo'), text: t('Tutto il Plus, con una revisione ogni mese e assistenza anche il sabato. Da 99 € al mese.'), link_text: '', link_url: '' },
+    ],
+  },
+
   fields: [
     { key: 'eyebrow', label: t('Occhiello'), type: 'text' },
     { key: 'heading', label: t('Titolo'), type: 'text' },

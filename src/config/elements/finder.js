@@ -4,6 +4,7 @@ import {
   wowEffectsFields, wowEffectsDefaults,
 } from './_shared';
 import { imageFrameFields } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -71,6 +72,21 @@ export default {
     ...textEffectsDefaults,
     text_effect_target: 'heading',
     ...wowEffectsDefaults,
+  },
+
+  // Come nasce dalla palette: «Di cosa hai bisogno?» con tre chip a pillola con icona; ogni chip
+  // mostra la sua card risultato con la foto verticale, l'occhiello, il testo e il prezzo.
+  partenza: {
+    eyebrow: t('Trova la soluzione'),
+    heading: t('Di cosa hai <em>bisogno</em>?'),
+    intro: t('Scegli una voce: ti mostriamo subito la soluzione più adatta.'),
+    items: [
+      { option: t('Un consiglio'), icon: 'comment', kicker: t('Consulenza'), title: t('Un\'ora con un esperto'), text: t('Ci racconti il tuo caso e usciamo con un piano chiaro: priorità, tempi e costi.'), meta: t('Da 60 € · in sede o online'), cta_text: '', cta_url: '', image: demo('caffe'), media_label: '' },
+      { option: t('Un progetto'), icon: 'lightbulb', kicker: t('Su misura'), title: t('Dall\'idea alla consegna'), text: t('Ti seguiamo passo per passo, con un referente unico e un calendario condiviso.'), meta: t('Preventivo gratuito in 48 ore'), cta_text: '', cta_url: '', image: demo('scrivania'), media_label: '' },
+      { option: t('Un supporto continuo'), icon: 'users', kicker: t('Abbonamento'), title: t('Sempre al tuo fianco'), text: t('Assistenza ogni mese, interventi prioritari e un controllo trimestrale dei risultati.'), meta: t('Da 90 € al mese'), cta_text: '', cta_url: '', image: demo('ufficio'), media_label: '' },
+    ],
+    zone_on: 'var(--olo-color-primary-contrast, #ffffff)',
+    shadow: 'sm',
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

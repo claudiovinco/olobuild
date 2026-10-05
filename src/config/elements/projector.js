@@ -47,6 +47,12 @@ export default {
     shadow: 'sm',
   },
 
+  // Come nasce dalla palette: il calcolatore del costo di un evento dei default (ospiti × 35 €),
+  // con l'introduzione che dice la tariffa, così si capisce subito da dove viene il totale.
+  partenza: {
+    intro: t('Sposta il cursore sul numero di ospiti: il menu completo costa 35 € a persona.'),
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'eyebrow', label: t('Occhiello'), type: 'text' },

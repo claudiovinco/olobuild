@@ -1,5 +1,6 @@
 
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -79,6 +80,37 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Come nasce dalla palette: la foto di una tavola apparecchiata con il nome della serata su un
+  // velo leggero; al passaggio del mouse il riquadro scorre in su e svela, su una seconda foto
+  // velata, il menu con il prezzo. Raggio morbido e transizione fluida.
+  partenza: {
+    visible_height: '340',
+    border_radius: { tl: 16, tr: 16, br: 16, bl: 16 },
+    top_media: { type: 'image', image_url: demo('tavola'), image_size: 'cover', image_position: 'center center' },
+    // Paragrafi e non un titolo: il colore del testo della zona non arriva ai titoli (h1-h6), che
+    // prendono quello del tema e sulla foto non si leggevano.
+    top_content: t('<p><strong>La cena in terrazza</strong></p><p>Il venerdì e il sabato sera</p>'),
+    top_font_size: '20',
+    top_padding: '28',
+    overlay_opacity: '30',
+    bottom_media: { type: 'image', image_url: demo('piatti-alto'), image_size: 'cover', image_position: 'center center' },
+    bottom_content: t('<p><strong>Menu degustazione · 45 €</strong></p><p>Cinque portate con i vini abbinati, dalle 20. Prenota entro il giovedì.</p>'),
+    reveal_overlay_opacity: '70',
+    bottom_align: 'center',
+    bottom_justify: 'center',
+    bottom_padding: '32',
+    transition_speed: '0.6',
+    transition_easing: 'cubic-bezier(0.4,0,0.2,1)',
+    // Conflitti PHP/config: vince il config (riserve del tema chiaro/scuro).
+    top_icon_color: 'var(--olo-color-light, #f8f9fa)',
+    bottom_icon_color: 'var(--olo-color-light, #f8f9fa)',
+    top_text_color: 'var(--olo-color-light, #f8f9fa)',
+    bottom_text_color: 'var(--olo-color-light, #f8f9fa)',
+    text_color: 'var(--olo-color-light, #f8f9fa)',
+    overlay_color: 'var(--olo-color-dark, #16263d)',
+    reveal_overlay_color: 'var(--olo-color-dark, #16263d)',
   },
 
   fields: [

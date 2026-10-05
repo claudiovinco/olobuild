@@ -64,6 +64,15 @@ export default {
     align: 'left',
   },
 
+  // Come nasce dalla palette: quattro città con il fuso vero (ora legale compresa) e il cursore
+  // sull'ora di Milano; il pallino dice chi è in ufficio, chi è ai limiti e chi dorme.
+  partenza: {
+    eyebrow: t('Fusi orari'),
+    intro: t('Sposta il cursore sull\'ora di Milano: vedi subito chi è in ufficio, chi è ai limiti dell\'orario e chi dorme.'),
+    // Conflitto PHP/config: vince il config.
+    ok_color: 'var(--olo-color-accent, #f4a23b)',
+  },
+
   fields: [
     { type: 'separator', label: t('Testi') },
     { key: 'eyebrow', label: t('Occhiello'), type: 'text' },

@@ -1,5 +1,6 @@
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
 import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -75,6 +76,21 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Come nasce dalla palette: un coupon da grattare con la pellicola a gradiente primario-accento
+  // e la parola GRATTA stampigliata, in formato 2:1; sotto, su una foto chiara (il testo resta
+  // quello scuro del tema), lo sconto con il codice da copiare.
+  partenza: {
+    image: demo('vaso'),
+    cover_type: 'gradient',
+    cover_color: 'var(--olo-color-primary)',
+    cover_color2: 'var(--olo-color-accent)',
+    cover_angle: 120,
+    cover_text: t('GRATTA'),
+    cover_text_color: 'color-mix(in srgb, var(--olo-color-primary-contrast) 35%, transparent)',
+    aspect: '2/1',
+    max_width: 600,
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

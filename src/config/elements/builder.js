@@ -46,6 +46,21 @@ export default {
     item_price_color: '',
   },
 
+  // Come nasce dalla palette: il preventivo di un servizio professionale con quattro voci con la
+  // nota, due già scelte (il totale parte da 150 €), i più e meno e il pulsante che apre un'email
+  // già scritta (compare sul sito quando si scrive l'indirizzo che la riceve).
+  partenza: {
+    intro: t('Scegli le voci che ti servono: il totale si aggiorna da solo e la richiesta ci arriva già compilata.'),
+    items: [
+      { name: t('Sopralluogo e consulenza'), price: '60', note: t('Un\'ora, nella tua sede o online'), start: 1 },
+      { name: t('Ore di lavoro'), price: '45', note: t('Il prezzo è per ora'), start: 2 },
+      { name: t('Materiali'), price: '25', note: t('Forfait per ogni intervento'), start: 0 },
+      { name: t('Trasferta fuori città'), price: '30', note: t('Oltre i 20 km dalla sede'), start: 0 },
+    ],
+    currency: '€ ',
+    zone_on: 'var(--olo-color-primary-contrast, #ffffff)',
+  },
+
   fields: [
     { key: 'eyebrow', label: t('Occhiello'), type: 'text' },
     { key: 'heading', label: t('Titolo'), type: 'text' },

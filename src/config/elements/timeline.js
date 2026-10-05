@@ -1,5 +1,6 @@
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 import { ratioOptions } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -67,6 +68,19 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Come nasce dalla palette: la storia di un'attività in quattro tappe alternate, ognuna con la
+  // sua foto 16:9 nella card, l'icona nel nodo, l'etichetta colorata per categoria e l'ultima
+  // tappa segnata «In corso».
+  partenza: {
+    items: [
+      { id: 'tl-1', title: t('La fondazione'), tag: t('Inizio'), description: t('Il progetto prende forma: un\'idea, poche persone e tanta voglia di fare.'), date: '2015', image: demo('scrivania'), video: '', icon: 'star', category: 'primary', icon_color: '', status: '' },
+      { id: 'tl-2', title: t('La prima sede'), tag: t('Crescita'), description: t('Uno spazio tutto nostro per accogliere clienti e collaboratori.'), date: '2018', image: demo('architettura'), video: '', icon: 'location', category: 'accent', icon_color: '', status: '' },
+      { id: 'tl-3', title: t('Un nuovo servizio'), tag: t('Novità'), description: t('L\'offerta si amplia per rispondere a nuove esigenze.'), date: '2021', image: demo('ufficio'), video: '', icon: 'bolt', category: 'success', icon_color: '', status: '' },
+      { id: 'tl-4', title: t('Oggi'), tag: t('Presente'), description: t('Un gruppo affiatato e lo sguardo rivolto ai prossimi traguardi.'), date: '2024', image: demo('citta-tetti'), video: '', icon: 'flag', category: 'secondary', icon_color: '', status: 'current' },
+    ],
+    tl_media_ratio: '16/9',
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

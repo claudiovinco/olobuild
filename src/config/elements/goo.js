@@ -81,6 +81,18 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: un'aurora discreta dietro alla sezione, aloni sfocati nei colori del
+  // tema che derivano piano, a metà opacità; niente gocce che inseguono il cursore (la modalità Goo
+  // resta a un clic nel menu Modalità).
+  partenza: {
+    mode: 'aurora',
+    blob_size_min: 260,
+    blob_size_max: 460,
+    aurora_blur: 100,
+    drift_speed: 0.35,
+    layer_opacity: 45,
+  },
+
   fields: [
     { type: 'separator', label: t('Ambito') },
     { key: 'scope', label: t('Riempi'), type: 'select', options: [
