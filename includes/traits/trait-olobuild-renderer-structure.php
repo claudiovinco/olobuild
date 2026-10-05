@@ -1912,11 +1912,10 @@ trait Olobuild_Renderer_Structure_Trait {
             'align-items: ' . $align_css,
         ];
 
-        if ( ! $stack ) {
-            $inline_styles[] = 'flex-wrap: nowrap';
-        } else {
-            $inline_styles[] = 'flex-wrap: wrap';
-        }
+        // Sempre su una riga: le sotto-colonne (50% + 50% di serie) più il gap superano il 100% e con
+        // flex-wrap andavano a capo anche sul desktop, cioè non stavano mai affiancate. Così si stringono
+        // del gap; l'impilamento sul telefono lo fa la regola @container qui sotto.
+        $inline_styles[] = 'flex-wrap: nowrap';
 
         // Margin & Padding from style tab
         // intval() previene CSS injection via tile settings (es. "10;background:url(...)").
