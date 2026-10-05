@@ -102,12 +102,12 @@ export default {
 
     { type: 'separator', label: t('Zona visibile — Contenuto') },
     { key: 'top_icon', label: t('Icona'), type: 'icon' },
-    { key: 'top_content', label: t('Contenuto visibile'), type: 'richtext' },
+    { key: 'top_content', label: t('Contenuto visibile'), type: 'editor', mode: 'block' },
 
 
     { type: 'separator', label: t('Zona rivelata — Contenuto') },
     { key: 'bottom_icon', label: t('Icona'), type: 'icon' },
-    { key: 'bottom_content', label: t('Contenuto rivelato'), type: 'richtext' },
+    { key: 'bottom_content', label: t('Contenuto rivelato'), type: 'editor', mode: 'block' },
   ],
 
   styleFields: [
@@ -189,9 +189,10 @@ export default {
       { value: 'linear', label: t('Lineare') },
     ]},
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
-    { key: 'tile_padding', type: 'spacing', label: t('Padding') },
+    // `tile_padding` resta nei defaults ma non ha più un campo: nessun renderer lo leggeva
+    // (il padding delle zone è nei loro «Padding», quello del riquadro nel Contenitore).
 
-    ...borderFields({ effetti: false }), // il PHP scrive bordo ed effetti su un selettore che nel markup non c'è
+    ...borderFields(), // bordo, hover ed effetti sul riquadro (ora ha la classe $uid che il PHP usa)
     { type: 'separator', label: t('Sfondo globale') },
     { key: 'media', label: t('Sfondo entrambe le zone (immagine, video, gradiente…)'), type: 'background', showParallax: false },
   ],
