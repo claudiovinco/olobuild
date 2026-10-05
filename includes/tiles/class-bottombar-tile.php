@@ -99,11 +99,10 @@ class Olobuild_Bottombar_Tile extends Olobuild_Tile_Base {
         </style>
         <script>
         (function(){
-            /* I wrapper del template (transform/container) creano un containing
-               block che intrappola i position:fixed: la barra si sposta in
-               document.body cosi' resta davvero ancorata alla viewport. */
-            var el=document.getElementById('<?php echo esc_js( $uid ); ?>');
-            if(el&&el.parentNode!==document.body){document.body.appendChild(el);}
+            /* Il transform del template intrappola i position:fixed: la barra si sposta in
+               document.body cosi' resta davvero ancorata alla viewport, coi token del template
+               (nel body sfondo e testo prendevano i ripieghi o i colori di :root). */
+            (<?php echo self::js_nel_body(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- costante JS interna ?>)(document.getElementById('<?php echo esc_js( $uid ); ?>'));
         })();
         </script>
         <?php
