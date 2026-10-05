@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.524 - 2026-10-05 (fix)
+- Il Carousel appena inserito mostra le sue tre slide con un'immagine segnaposto: prima era vuoto finché non si sceglievano le immagini.
+
 ## v1.4.523 - 2026-10-05 (fix)
 - Menu, Sottomenu, Link social, Condivisione, Icon List, Carousel, Portfolio, Link in bio, Programma, Stack Scroll, Scorrimento orizzontale, citazioni North e i campi di registrazione del Login nascono con voci d'esempio: prima, appena inserite, erano vuote.
 - Il Divisore sagomato appena inserito prende il colore dello sfondo del sito invece del bianco.
