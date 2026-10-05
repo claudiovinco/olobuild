@@ -17,7 +17,7 @@ class Olobuild_Shapedivider_Tile extends Olobuild_Tile_Base {
         'flip_vertical'              => false,
         'width'                      => '100',
         'height'                     => '80',
-        'color'                      => '#ffffff',
+        'color'                      => '', // come il config: '' = token della superficie (prima una banda bianca su ogni sfondo)
         'z_index'                    => '1',
         'responsive_height_tablet'   => '',
         'responsive_height_mobile'   => '',

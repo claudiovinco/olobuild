@@ -50,6 +50,13 @@ export function useDragDrop() {
     // v3.55.36 — applica placeholder universali (Lorem ipsum, immagine segnaposto)
     // ai field testo lunghi/immagine vuoti, leggendo i fields[] dall'elementRegistry.
     const def = getElementDef(tileType);
+    // Una lista vuota nei default PHP non copre le voci d'esempio del config: senza, nav,
+    // social, carousel, portfolio, iconlist… nascevano vuote e non mostravano nulla.
+    for (const [k, v] of Object.entries(def?.defaults || {})) {
+      if (Array.isArray(v) && v.length && Array.isArray(defaults[k]) && defaults[k].length === 0) {
+        defaults[k] = JSON.parse(JSON.stringify(v));
+      }
+    }
     applyContentPlaceholders(defaults, def?.fields);
 
     const tile = {
