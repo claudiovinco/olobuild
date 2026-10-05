@@ -420,6 +420,9 @@ class Olobuild_Image_Tile extends Olobuild_Tile_Base {
         <?php
         // ── Dimensioni & fit (controlli professionali) ──
         $figure_style = 'margin: 0;';
+        // La CORNICE dell'immagine (proporzione, raggio, ombra) sta in $frame_style: senza didascalia è la
+        // figure stessa, con la didascalia un riquadro dentro la figure (vedi sotto).
+        $frame_style  = '';
         $img_width   = trim( (string) ( $s['image_width'] ?? '100%' ) );
         $img_height  = trim( (string) ( $s['height'] ?? '300px' ) );
         $img_maxw    = trim( (string) ( $s['max_width'] ?? '' ) );
@@ -446,7 +449,7 @@ class Olobuild_Image_Tile extends Olobuild_Tile_Base {
         }
         // Aspect ratio sul figure (se settato, l'altezza segue il rapporto)
         if ( $aspect_css !== '' ) {
-            $figure_style .= ' aspect-ratio: ' . esc_attr( $aspect_css ) . ';';
+            $frame_style .= ' aspect-ratio: ' . esc_attr( $aspect_css ) . ';';
         }
         // Allineamento: margin auto per left/center/right
         if ( $align === 'center' ) {
@@ -458,9 +461,9 @@ class Olobuild_Image_Tile extends Olobuild_Tile_Base {
         }
 
         if ( $br_css ) {
-            $figure_style .= ' border-radius: ' . esc_attr( $br_css ) . '; overflow: hidden;';
+            $frame_style .= ' border-radius: ' . esc_attr( $br_css ) . '; overflow: hidden;';
         } elseif ( $has_hover_br ) {
-            $figure_style .= ' border-radius: 0; overflow: hidden;';
+            $frame_style .= ' border-radius: 0; overflow: hidden;';
         }
 
         // Shadow: applicata al figure. Quando c'è border-radius + overflow:hidden,
@@ -481,7 +484,7 @@ class Olobuild_Image_Tile extends Olobuild_Tile_Base {
             if ( $shadow_value === 'none' ) $shadow_value = '';
         }
         if ( $shadow_value ) {
-            $figure_style .= ' box-shadow: ' . esc_attr( $shadow_value ) . ';';
+            $frame_style .= ' box-shadow: ' . esc_attr( $shadow_value ) . ';';
         }
 
         // Posizione verticale nella colonna: usa :has() per rendere flex la column
@@ -500,8 +503,8 @@ class Olobuild_Image_Tile extends Olobuild_Tile_Base {
             if ( $align_in_col === 'bottom' ) $tile_margin = 'margin-top:auto;';
             // Cerca la column UIkit (class che contiene "uk-width-") che ha il figure come descendant
             $align_css_block = '<style>'
-                . '[class*="uk-width-"]:has(figure.olo-image.' . $uid . '[data-olo-align-col]){display:flex;flex-direction:column;}'
-                . '.olo-frontend-tile:has(> figure.olo-image.' . $uid . '[data-olo-align-col]){' . $tile_margin . '}'
+                . '[class*="uk-width-"]:has(figure.' . $uid . '[data-olo-align-col]){display:flex;flex-direction:column;}'
+                . '.olo-frontend-tile:has(> figure.' . $uid . '[data-olo-align-col]){' . $tile_margin . '}'
                 . '</style>';
         }
         echo $align_css_block; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS built above from internal $uid class and fixed margin declarations.
@@ -528,7 +531,21 @@ class Olobuild_Image_Tile extends Olobuild_Tile_Base {
                 . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $uid è generato internamente, $obj_fit viene da una whitelist di cinque valori e $hover_pos da Olobuild_Tile_Utils::css_pos(), che scarta i caratteri di breakout CSS.
         }
         ?>
-        <figure class="olo-image <?php echo esc_attr( $uid ); ?>"<?php echo $align_data_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute string built above with esc_attr() on a whitelisted value ?><?php if ( ! empty( $s['lightbox'] ) && empty( $s['link_url'] ) ) echo ' data-uk-lightbox'; ?> style="<?php echo esc_attr( $figure_style ); ?>">
+        <?php
+        // Con la didascalia la cornice (proporzione, raggio con overflow:hidden, ombra, bordo) va su un
+        // riquadro INTERNO e la didascalia le sta sotto: dentro la stessa cornice, con una proporzione,
+        // finiva fuori dall'area visibile e non si vedeva mai. La figure esterna porta la classe uid
+        // (effetti testo della didascalia, filtri, allineamento); il riquadro è `.olo-image.{uid}`
+        // come la figure senza didascalia, così bordo, raggio in hover ed effetti lo trovano uguale.
+        $has_caption = ! empty( $s['caption'] );
+        $lightbox_attr = ( ! empty( $s['lightbox'] ) && empty( $s['link_url'] ) ) ? ' data-uk-lightbox' : '';
+        if ( $has_caption ) :
+        ?>
+        <figure class="olo-image-fig <?php echo esc_attr( $uid ); ?>"<?php echo $align_data_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute string built above with esc_attr() on a whitelisted value ?> style="<?php echo esc_attr( $figure_style ); ?>">
+        <div class="olo-image <?php echo esc_attr( $uid ); ?>"<?php echo $lightbox_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal ?> style="<?php echo esc_attr( 'position: relative;' . $frame_style ); ?>">
+        <?php else : ?>
+        <figure class="olo-image <?php echo esc_attr( $uid ); ?>"<?php echo $align_data_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute string built above with esc_attr() on a whitelisted value ?><?php echo $lightbox_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal ?> style="<?php echo esc_attr( $figure_style . $frame_style ); ?>">
+        <?php endif; ?>
             <?php
             if ( ! empty( $s['image_url'] ) ) :
             $att_id = absint( $s['image_url_id'] ?? 0 );
@@ -596,7 +613,8 @@ class Olobuild_Image_Tile extends Olobuild_Tile_Base {
             // SpotlightFX overlay (decorativo, sopra l'immagine, sotto la didascalia)
             echo $spot_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed markup built above with esc_attr() on the class name.
             ?>
-            <?php if ( ! empty( $s['caption'] ) ) : ?>
+            <?php if ( $has_caption ) : ?>
+        </div>
                 <?php list( $ic_cls, $ic_data ) = $this->tfx_attrs( $s, 'caption', wp_strip_all_tags( $s['caption'] ) ); ?>
                 <figcaption class="olo-img-caption<?php echo $ic_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- class/data attrs generated by Olobuild_Text_Effects helpers which escape internally ?>" style="padding: 8px 0; font-size: 0.875em; color: var(--olo-color-text-muted, #9CA3AF); text-align: center;"<?php echo $ic_data; ?>>
                     <?php echo esc_html( wp_strip_all_tags( $s['caption'] ) ); ?>

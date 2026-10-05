@@ -80,8 +80,8 @@ export default {
   },
 
   // Appena nata: una foto vera in formato 16:9, angoli morbidi, testo alternativo, zoom lento al
-  // passaggio e ingrandimento a tutto schermo al clic. Niente didascalia: con una proporzione il
-  // PHP la mette dentro la <figure> ritagliata (aspect-ratio + overflow:hidden) e non si vede.
+  // passaggio, ingrandimento a tutto schermo al clic e la didascalia sotto (dalla 1.4.538 resta fuori
+  // dalla cornice ritagliata e si vede).
   partenza: {
     image_url: demo('montagna-lago'),
     alt_text: demoAlt('montagna-lago'),
@@ -89,6 +89,7 @@ export default {
     border_radius: '12',
     hover_animation: 'zoom-in',
     lightbox: true,
+    caption: t('Il lago in quota, al mattino'),
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────
