@@ -152,7 +152,8 @@ class Olobuild_CategoryRail_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ocr-hint{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:<?php echo $hint; ?>;}
             .<?php echo $uid; ?> .ocr-track{display:flex;gap:<?php echo $gap; ?>;overflow-x:auto;scroll-snap-type:x proximity;cursor:grab;padding-bottom:6px;-ms-overflow-style:none;scrollbar-width:none;}
             .<?php echo $uid; ?> .ocr-track::-webkit-scrollbar{display:none;}
-            .<?php echo $uid; ?> .ocr-track.dragging{cursor:grabbing;}
+            .<?php echo $uid; ?> .ocr-track.dragging{cursor:grabbing;scroll-snap-type:none;user-select:none;}
+            .<?php echo $uid; ?> .ocr-card{-webkit-user-drag:none;}
             .<?php echo $uid; ?> .ocr-card{flex:0 0 <?php echo $w; ?>;width:<?php echo $w; ?>;aspect-ratio:<?php echo $asp; ?>;scroll-snap-align:start;position:relative;border-radius:<?php echo $rad; ?>;<?php if ( $card_radius_css ) { echo 'border-radius:' . $card_radius_css . ';'; } ?>overflow:hidden;text-decoration:none;display:block;background:<?php echo $mbg; ?>;}
             .<?php echo $uid; ?> .ocr-media{position:absolute;inset:0;background-size:cover;background-position:<?php echo esc_attr( Olobuild_Tile_Utils::css_pos( $s, 'object_position' ) ); ?>;transition:transform .5s ease;}
             .<?php echo $uid; ?> .ocr-card:hover .ocr-media{transform:scale(1.05);}
@@ -185,13 +186,27 @@ class Olobuild_CategoryRail_Tile extends Olobuild_Tile_Base {
         <script>
         (function(){
             var t=document.querySelector('.<?php echo esc_js( $uid ); ?> [data-ocr-track]'); if(!t){return;}
-            var down=false,sx=0,sl=0,moved=0;
-            t.addEventListener('pointerdown',function(e){down=true;sx=e.pageX;sl=t.scrollLeft;moved=0;t.classList.add('dragging');});
-            t.addEventListener('pointermove',function(e){ if(down){ var dx=e.pageX-sx; moved=Math.max(moved,Math.abs(dx)); t.scrollLeft=sl-dx; } });
-            function up(){ down=false; t.classList.remove('dragging'); }
+            var down=false,sx=0,sl=0,moved=0,pid=null;
+            /* Le card sono link: senza questo il browser avvia il trascinamento nativo del
+               link (dragstart, poi pointercancel) e la fila non si muove col mouse. */
+            t.addEventListener('dragstart',function(e){ e.preventDefault(); });
+            t.addEventListener('pointerdown',function(e){
+                if(e.pointerType!=='mouse'){return;} /* col dito scorre da sola */
+                if(e.button!==0){return;}
+                down=true;sx=e.clientX;sl=t.scrollLeft;moved=0;pid=e.pointerId;
+            });
+            t.addEventListener('pointermove',function(e){
+                if(!down){return;}
+                var dx=e.clientX-sx;
+                /* sotto i 4px e' un clic: la card resta un link */
+                if(!moved){ if(Math.abs(dx)<4){return;} t.classList.add('dragging'); try{ t.setPointerCapture(pid); }catch(_){} }
+                moved=Math.max(moved,Math.abs(dx)); t.scrollLeft=sl-dx;
+            });
+            function up(){ if(!down){return;} down=false; t.classList.remove('dragging'); try{ t.releasePointerCapture(pid); }catch(_){} }
             t.addEventListener('pointerup',up);
-            t.addEventListener('pointerleave',up);
-            t.addEventListener('click',function(e){ if(Math.max(0,moved-6)){ e.preventDefault(); } }, true);
+            t.addEventListener('pointercancel',up);
+            t.addEventListener('lostpointercapture',up);
+            t.addEventListener('click',function(e){ if(Math.max(0,moved-6)){ e.preventDefault(); e.stopPropagation(); } moved=0; }, true);
         })();
         </script>
         <?php
