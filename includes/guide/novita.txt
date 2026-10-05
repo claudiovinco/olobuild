@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.538 - 2026-10-05 (fix)
+- Immagine: la didascalia si vede anche quando l'immagine ha una proporzione (16:9, 4:3…), angoli arrotondati o un'ombra; bordo e ombra incorniciano solo la foto.
+
 ## v1.4.537 - 2026-10-05 (fix)
 - Video: il bordo e gli angoli arrotondati incorniciano solo il video, non più anche la didascalia sotto.
 
