@@ -11,10 +11,11 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
     protected $icon     = 'dashicons-list-view';
     protected $category = 'interactive';
     protected $defaults = [
+        // Stesse tre domande dei default del config (accordion.js).
         'panels'            => [
-            [ 'title' => 'Prima voce', 'content' => 'Contenuto della prima voce dell\'accordion.', 'children' => [] ],
-            [ 'title' => 'Seconda voce', 'content' => 'Contenuto della seconda voce dell\'accordion.', 'children' => [] ],
-            [ 'title' => 'Terza voce', 'content' => 'Contenuto della terza voce dell\'accordion.', 'children' => [] ],
+            [ 'title' => 'Quali sono gli orari?', 'content' => 'Siamo disponibili dal lunedì al venerdì, dalle 9:00 alle 18:00. Nei giorni festivi restiamo chiusi.', 'children' => [] ],
+            [ 'title' => 'Come posso prenotare o ordinare?', 'content' => 'Puoi farlo direttamente dal sito oppure contattandoci: ti confermiamo tutto via email entro un giorno lavorativo.', 'children' => [] ],
+            [ 'title' => 'Come posso contattarvi?', 'content' => 'Scrivici dal modulo contatti o chiamaci negli orari indicati: rispondiamo a tutte le richieste entro 24 ore.', 'children' => [] ],
         ],
         'preset'            => 'card-soft',
         'toggle_mode'       => false,
@@ -49,6 +50,8 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
         'border_radius'     => '8',
         'faq_schema'        => false,
         'separator_style'   => 'border',
+        // «Ombra» (shadowField): senza la chiave nessuna ombra, come è sempre stato.
+        'shadow'            => 'none',
         'backdrop_blur'     => '0',
         'backdrop_saturate' => '100',
         'icon_shape'        => 'none',
@@ -141,21 +144,28 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
         $gap         = intval( $s['gap'] );
         $speed       = intval( $s['animation_speed'] );
 
-        // V3.23.1 — preset is applied JS-side at the moment the user picks it
-        // (BuilderInspector.applyPreset). The PHP renderer just reads the
-        // already-populated fields, so manual edits on top of a preset win.
-        $preset_id = $s['preset'] ?? 'card-soft';
+        // Il preset («Stile») lo applica l'inspector quando lo si sceglie
+        // (TILE_PRESETS.accordion): qui si leggono solo i campi già riempiti, così
+        // le modifiche fatte a mano dopo il preset vincono.
 
         $header_bg     = $this->safe_color_css( $s['header_bg'] );
         $header_active = $this->safe_color_css( $s['header_bg_active'] );
         $header_text   = $this->safe_color_css( $s['header_text_color'] );
         $content_bg    = $this->safe_color_css( $s['content_bg'] );
         $text_clr      = $this->safe_color_css( $s['text_color'] );
-        // V3.21: separator border falls back to a light gray so old templates
-        // without an explicit border_color still render a visible separator.
+        // V3.21: senza border_color il separatore ripiega sul token del bordo, così
+        // i template vecchi senza colore esplicito mostrano comunque il separatore.
         $border_clr    = $this->safe_color_css( $s['border_color'] );
         if ( ! $border_clr && ( $s['separator_style'] ?? 'border' ) === 'border' ) {
-            $border_clr = '#e5e7eb';
+            $border_clr = 'var(--olo-color-border, #e5e7eb)';
+        }
+
+        // «Ombra» (shadowField: Leggera/Media/Forte/Molto forte/Personalizzata) sui
+        // PANNELLI: sulle singole voci quando sono staccate (gap), sulla lista quando
+        // sono unite in un solo blocco — come il raggio. '' = nessuna ombra.
+        $panel_shadow = Olobuild_Tile_Utils::shadow_value( $s, 'shadow' );
+        if ( $panel_shadow === 'none' ) {
+            $panel_shadow = '';
         }
 
         $icon_pos = $s['icon_position'];
@@ -195,9 +205,18 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
         );
         $header_fs    = max( 10, intval( $s['header_font_size'] ?? 15 ) );
         $header_fw    = preg_match( '/^[1-9]00$/', (string) ($s['header_font_weight'] ?? '600') ) ? $s['header_font_weight'] : '600';
-        $header_ff    = $s['header_font_family'] ?? 'sans';
-        $header_ff_css = $header_ff === 'mono' ? 'ui-monospace, SFMono-Regular, Menlo, monospace'
-                       : ($header_ff === 'serif' ? "Georgia, 'Times New Roman', serif" : 'inherit');
+        // Famiglia dell'intestazione: il controllo tipografia salva CSS pronto
+        // (var(--olo-font-family…) o una famiglia precisa) e il resolver condiviso lo
+        // accetta come in tutte le tile. 'sans'/'serif'/'mono' sono i valori storici
+        // della tile e tengono gli stack di sempre ('sans' = eredita).
+        $header_ff_css = $this->resolve_font_family( $s['header_font_family'] ?? 'sans', [
+            'sans'  => 'inherit',
+            'serif' => "Georgia, 'Times New Roman', serif",
+            'mono'  => 'ui-monospace, SFMono-Regular, Menlo, monospace',
+        ] );
+        if ( $header_ff_css === '' ) {
+            $header_ff_css = 'inherit';
+        }
         $content_pad   = Olobuild_Tile_Utils::spacing_sides(
             $s['content_padding'] ?? null,
             [ 'y' => $s['content_padding_y'] ?? null, 'x' => $s['content_padding_x'] ?? null ],
@@ -360,6 +379,9 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
             .<?php echo esc_attr( $uid ); ?> > li {
                 <?php if ( $s['separator_style'] === 'border' && $border_clr && $bw > 0 ) : ?>
                 <?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['border'] ?? null, [ 'width' => $bw, 'color' => $border_clr ] ) ); ?>
+                <?php endif; ?>
+                <?php if ( $gap > 0 && $panel_shadow !== '' ) : /* voci staccate: l'Ombra scelta prende il posto del separatore a ombra */ ?>
+                box-shadow: <?php echo $panel_shadow; ?>;
                 <?php elseif ( $s['separator_style'] === 'shadow' ) : ?>
                 box-shadow: 0 1px 2px rgba(16,24,40,0.05), 0 1px 3px rgba(16,24,40,0.06);
                 <?php endif; ?>
@@ -390,7 +412,8 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
             <?php if ( $gap > 0 && $s['separator_style'] === 'border' && $border_clr && $bw > 0 ) : ?>
             .<?php echo esc_attr( $uid ); ?> > li.uk-open {
                 border-color: <?php echo $brand_accent; ?>;
-                box-shadow: 0 1px 2px rgba(232,98,42,0.05), 0 4px 12px rgba(232,98,42,0.08);
+                <?php /* Alone del pannello aperto ricavato dal primario; l'Ombra scelta resta sotto. */ ?>
+                box-shadow: <?php if ( $panel_shadow !== '' ) echo $panel_shadow . ', '; ?>0 1px 2px color-mix(in srgb, var(--olo-color-primary, #e1474f) 5%, transparent), 0 4px 12px color-mix(in srgb, var(--olo-color-primary, #e1474f) 8%, transparent);
             }
             <?php endif; ?>
 
@@ -417,6 +440,7 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
             .<?php echo esc_attr( $uid ); ?> {
                 border-radius: <?php echo $radius_css; ?>;
                 overflow: hidden;
+                <?php if ( $panel_shadow !== '' ) : /* voci unite: l'ombra è del blocco intero */ ?>box-shadow: <?php echo $panel_shadow; ?>;<?php endif; ?>
             }
             .<?php echo esc_attr( $uid ); ?> > li + li {
                 border-top: none;
@@ -424,13 +448,10 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
 
             <?php
-            // v1.0.73 — refactor profondo: get_preset_extra_css è ora noop. Tutti i
-            // valori dei preset audaci (colori, bordi, ombra, tipografia) sono nei
-            // field standard tramite TILE_PRESETS.accordion in BuilderInspector.vue.
-            // Gli effetti speciali (backdrop blur, font monospace, rotation, glow
-            // pulse, title glow, scanlines, terminal prompt) sono nei field wow_*
-            // dell'helper condiviso wowEffectsFields(). Nessun !important: ogni
-            // singola proprietà è personalizzabile dall'inspector.
+            // I valori dei preset (colori, bordi, ombra, tipografia) arrivano nei campi
+            // standard tramite TILE_PRESETS.accordion; gli effetti speciali (backdrop
+            // blur, font monospace, rotazione, glow, scanlines, prompt) dai campi wow_*
+            // di wowEffectsFields(). Nessun !important: tutto si modifica dall'inspector.
             echo $this->build_wow_effects_css( $s, '.' . esc_attr( $uid ) . ' > li', '.uk-accordion-title' );
             ?>
         </style>
@@ -600,173 +621,6 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
         $mime_map = [ 'mp4' => 'video/mp4', 'webm' => 'video/webm', 'ogg' => 'video/ogg' ];
         $mime = $mime_map[ $ext ] ?? 'video/mp4';
         return '<video controls preload="metadata"><source src="' . esc_url( $url ) . '" type="' . esc_attr( $mime ) . '"></video>';
-    }
-
-    /**
-     * V3.22: Return per-preset style overrides. Each preset is a curated
-     * combo of header/border/radius/shadow tuned for a specific aesthetic.
-     */
-    private function get_preset_styles( $preset_id ) {
-        $presets = [
-            'card-soft' => [
-                'header_bg'         => '#ffffff',
-                'header_bg_active'  => 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 8%, #fff)',
-                'header_text_color' => '#1e293b',
-                'header_text_color_active' => '',
-                'header_padding_y'  => 16,
-                'header_padding_x'  => 20,
-                'header_font_size'  => 15,
-                'header_font_weight' => '600',
-                'header_font_family' => 'sans',
-                'content_bg'        => '#ffffff',
-                'content_padding_y' => 20,
-                'content_padding_x' => 20,
-                'content_font_size' => 14,
-                'text_color'        => '#475569',
-                'border_color'      => '#e5e7eb',
-                'border_width'      => 1,
-                'gap'               => 12,
-                'border_radius'     => 10,
-                'icon_style'        => 'plus',
-                'icon_shape'        => 'none',
-                'separator_style'   => 'border',
-                'shadow'            => 'sm',
-                'backdrop_blur'     => 0,
-                'backdrop_saturate' => 100,
-                'panel_hover_lift'  => false,
-                'panel_hover_shadow' => 'none',
-            ],
-            'minimal-underline' => [
-                'header_bg'         => '',
-                'header_bg_active'  => '',
-                'header_text_color' => '#0f172a',
-                'header_text_color_active' => '#e1474f',
-                'header_padding_y'  => 22,
-                'header_padding_x'  => 0,
-                'header_font_size'  => 17,
-                'header_font_weight' => '600',
-                'header_font_family' => 'sans',
-                'content_bg'        => '',
-                'content_padding_y' => 0,
-                'content_padding_x' => 0,
-                'content_font_size' => 15,
-                'text_color'        => '#475569',
-                'border_color'      => '#e5e7eb',
-                'border_width'      => 1,
-                'gap'               => 0,
-                'border_radius'     => 0,
-                'icon_style'        => 'plus',
-                'icon_shape'        => 'none',
-                'separator_style'   => 'border',
-                'shadow'            => 'none',
-                'backdrop_blur'     => 0,
-                'backdrop_saturate' => 100,
-                'panel_hover_lift'  => false,
-                'panel_hover_shadow' => 'none',
-            ],
-            'pill-brand' => [
-                'header_bg'         => '#ffffff',
-                'header_bg_active'  => '#e1474f',
-                'header_text_color' => '#1e293b',
-                'header_text_color_active' => '#ffffff',
-                'header_padding_y'  => 16,
-                'header_padding_x'  => 22,
-                'header_font_size'  => 15,
-                'header_font_weight' => '600',
-                'header_font_family' => 'sans',
-                'content_bg'        => '#ffffff',
-                'content_padding_y' => 18,
-                'content_padding_x' => 22,
-                'content_font_size' => 14,
-                'text_color'        => '#475569',
-                'border_color'      => '',
-                'border_width'      => 0,
-                'gap'               => 8,
-                'border_radius'     => 14,
-                'icon_style'        => 'chevron',
-                'icon_shape'        => 'none',
-                'separator_style'   => 'shadow',
-                'shadow'            => 'sm',
-                'backdrop_blur'     => 0,
-                'backdrop_saturate' => 100,
-                'panel_hover_lift'  => true,
-                'panel_hover_shadow' => 'md',
-            ],
-            'outline-sharp' => [
-                'header_bg'         => '#ffffff',
-                'header_bg_active'  => 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 8%, #fff)',
-                'header_text_color' => '#0f172a',
-                'header_text_color_active' => '#0f172a',
-                'header_padding_y'  => 14,
-                'header_padding_x'  => 18,
-                'header_font_size'  => 14,
-                'header_font_weight' => '600',
-                'header_font_family' => 'mono',
-                'content_bg'        => '#ffffff',
-                'content_padding_y' => 18,
-                'content_padding_x' => 18,
-                'content_font_size' => 13,
-                'text_color'        => '#475569',
-                'border_color'      => '#e1474f',
-                'border_width'      => 2,
-                'gap'               => 0,
-                'border_radius'     => 6,
-                'icon_style'        => 'plus',
-                'icon_shape'        => 'pill',
-                'icon_shape_size'   => 32,
-                'icon_shape_bg'     => 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 8%, #fff)',
-                'separator_style'   => 'border',
-                'shadow'            => 'none',
-                'backdrop_blur'     => 0,
-                'backdrop_saturate' => 100,
-                'panel_hover_lift'  => false,
-                'panel_hover_shadow' => 'none',
-            ],
-            'glass-soft' => [
-                'header_bg'         => 'rgba(255,255,255,0.55)',
-                'header_bg_active'  => 'rgba(255,255,255,0.75)',
-                'header_text_color' => '#0f172a',
-                'header_text_color_active' => '#0f172a',
-                'header_padding_y'  => 18,
-                'header_padding_x'  => 22,
-                'header_font_size'  => 15,
-                'header_font_weight' => '600',
-                'header_font_family' => 'sans',
-                'content_bg'        => 'rgba(255,255,255,0.85)',
-                'content_padding_y' => 20,
-                'content_padding_x' => 22,
-                'content_font_size' => 14,
-                'text_color'        => '#475569',
-                'border_color'      => 'rgba(255,255,255,0.6)',
-                'border_width'      => 1,
-                'gap'               => 14,
-                'border_radius'     => 16,
-                'icon_style'        => 'plus',
-                'icon_shape'        => 'none',
-                'separator_style'   => 'border',
-                'shadow'            => 'lg',
-                'backdrop_blur'     => 12,
-                'backdrop_saturate' => 160,
-                'panel_hover_lift'  => false,
-                'panel_hover_shadow' => 'none',
-            ],
-        ];
-        return $presets[ $preset_id ] ?? null;
-    }
-
-    /**
-     * V3.28.0 — Extra CSS rules per preset.
-     * - 5 sicuri (card-soft, minimal-underline, pill-brand, outline-sharp, glass-soft):
-     *   piccoli ritocchi standard.
-     * - 7 audaci (liquid-glass, neon-cyber, brutalist-block, magnetic-liquid,
-     *   sticker, retro-terminal, 3d-tilt): parametrici su effect_color /
-     *   effect_intensity / effect_speed.
-     */
-    private function get_preset_extra_css( $preset_id, $uid, $brand_accent, $speed, $s = [] ) {
-        // @deprecated v1.0.73 — refactor profondo: i preset audaci settano direttamente i
-        // field standard (header_bg, header_text_color, border_*, shadow, ecc.) tramite
-        // TILE_PRESETS.accordion in BuilderInspector.vue, e i field wow_* (build_wow_effects_css).
-        return '';
     }
 
     /**

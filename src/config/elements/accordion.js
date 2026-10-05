@@ -17,9 +17,10 @@ export default {
     bg: { type: 'none' },
     typography_preset: '',
     panels: [
-      { id: 'p-1', title: t('Cos\'è Olobuild?'), content: 'Olobuild è il page builder olonico che ti consente di costruire siti professionali con drag & drop, tile riutilizzabili e un controllo granulare di stile e responsive.', image: '', video: '', icon: '' },
-      { id: 'p-2', title: t('Come aggiungo un nuovo elemento?'), content: 'Apri la sidebar Elementi a sinistra, scegli una categoria nella rail laterale e trascina il tile sul canvas. In alternativa fai click sul tile per inserirlo nella sezione attiva.', image: '', video: '', icon: '' },
-      { id: 'p-3', title: t('È compatibile con il mio tema WordPress?'), content: 'Sì, Olobuild funziona con qualsiasi tema WordPress moderno (block-theme inclusi). Supporta header, footer e template singoli completamente personalizzabili.', image: '', video: '', icon: '' },
+      // Tre domande frequenti neutre, adatte a un sito qualunque (stesse del PHP).
+      { id: 'p-1', title: t('Quali sono gli orari?'), content: t('Siamo disponibili dal lunedì al venerdì, dalle 9:00 alle 18:00. Nei giorni festivi restiamo chiusi.'), image: '', video: '', icon: '' },
+      { id: 'p-2', title: t('Come posso prenotare o ordinare?'), content: t('Puoi farlo direttamente dal sito oppure contattandoci: ti confermiamo tutto via email entro un giorno lavorativo.'), image: '', video: '', icon: '' },
+      { id: 'p-3', title: t('Come posso contattarvi?'), content: t('Scrivici dal modulo contatti o chiamaci negli orari indicati: rispondiamo a tutte le richieste entro 24 ore.'), image: '', video: '', icon: '' },
     ],
     preset: 'card-soft',
     toggle_mode: false,
@@ -99,7 +100,8 @@ export default {
       condition: { field: 'aspect_ratio', op: 'neq', value: 'auto' } }),
 
     { type: 'separator', label: t('Comportamento') },
-    { key: 'toggle_mode', label: t('Modalità alternata'), type: 'toggle' },
+    // Chiave storica `toggle_mode`: accesa, il renderer passa `multiple: true` a UIkit.
+    { key: 'toggle_mode', label: t('Più pannelli aperti insieme'), type: 'toggle' },
     { key: 'default_open', label: t('Aperto di default'), type: 'select', options: [
       { value: 'first', label: t('Primo pannello') },
       { value: 'all', label: t('Tutti i pannelli') },
