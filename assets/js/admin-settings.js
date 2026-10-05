@@ -36,6 +36,7 @@
 `;let h=`-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif`;o+=`.olo-template { background-color: var(--olo-color-background); font-size: var(--olo-font-size-base); line-height: var(--olo-line-height); color: var(--olo-color-text); font-family: var(--olo-font-family, ${h}); }\n`;for(let e=1;e<=6;e++)o+=`.olo-template h${e}, .olo-template .uk-h${e} { font-size: var(--olo-font-size-h${e}); }\n`;o+=`.olo-template h1, .olo-template h2, .olo-template h3, .olo-template h4, .olo-template h5, .olo-template h6 { font-weight: var(--olo-font-weight-heading); font-family: var(--olo-font-family-heading, var(--olo-font-family, ${h})); }\n`,o+=`.olo-template a { color: var(--olo-color-link); }
 `,o+=`.olo-template .uk-text-muted { color: var(--olo-color-text-muted) !important; }
 `,o+=`.olo-template :where(em) { color: inherit; }
+`,o+=`.olo-template :where(:not(pre) > code) { color: inherit; }
 `,o+=`.olo-template :where(ins) { background: none; color: inherit; text-decoration: none; }
 `,o+=`.olo-template .uk-button-primary { background-color: var(--olo-color-primary) !important; color: var(--olo-color-primary-contrast) !important; border-radius: var(--olo-border-radius); }
 `,o+=`.olo-template .uk-button-secondary { background-color: var(--olo-color-secondary) !important; color: var(--olo-color-secondary-contrast) !important; border-radius: var(--olo-border-radius); }
