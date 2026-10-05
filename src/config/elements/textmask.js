@@ -61,6 +61,14 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nata: il testo in italiano e un'altezza da sezione, non da schermo intero. Il video
+  // che il testo ritaglia lo sceglie chi costruisce (il pacchetto demo non ne ha): fino ad
+  // allora il riquadro resta scuro.
+  partenza: {
+    text: t('SCOPRI\nIL NOSTRO MONDO'),
+    min_height: '60vh',
+  },
+
   fields: [
     { key: 'text', label: t('Testo'), type: 'textarea', rows: 3, placeholder: t('WELCOME\nTO THE WORLD') },
     { key: 'multiline', label: t('Testo su più righe'), type: 'toggle' },

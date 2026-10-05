@@ -43,6 +43,14 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nato: una parola gigante in fusione «Differenza» con ciò che ha sotto (su un fondo
+  // chiaro diventa scura, su una foto ne inverte i colori). Colori come nel config.
+  partenza: {
+    text: t('Creatività'),
+    text_color: 'var(--olo-color-light, #f8f9fa)',
+    spotlight_color: 'var(--olo-color-light, #f8f9fa)',
+  },
+
   fields: [
     { key: 'text', label: t('Testo'), type: 'text' },
     { key: 'tag', label: t('Tag HTML'), type: 'select', options: [

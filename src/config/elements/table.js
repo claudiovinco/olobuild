@@ -41,6 +41,21 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nata: il listino di un'attività — intestazione nel colore secondario con il testo
+  // che ci contrasta, prima colonna in grassetto, righe alternate e prezzi in €.
+  partenza: {
+    table_data: [
+      [t('Servizio'), t('Durata'), t('Prezzo')],
+      [t('Prima consulenza'), t('30 minuti'), t('Gratuita')],
+      [t('Incontro singolo'), t('60 minuti'), '70 €'],
+      [t('Pacchetto da 5 incontri'), t('5 × 60 minuti'), '320 €'],
+      [t('Pacchetto da 10 incontri'), t('10 × 60 minuti'), '600 €'],
+    ],
+    first_col_bold: true,
+    header_bg: 'var(--olo-color-secondary)',
+    header_text_color: 'var(--olo-color-secondary-contrast)',
+  },
+
   fields: [
     {
       key: '_table_info',

@@ -28,6 +28,13 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nato: un frammento breve e leggibile, commentato in italiano, con i numeri di riga,
+  // l'etichetta del linguaggio e il pulsante per copiarlo.
+  partenza: {
+    code: '// Prezzo finale con l\'IVA al 22%\nfunction prezzoConIva(imponibile) {\n  const iva = imponibile * 0.22;\n  return Math.round((imponibile + iva) * 100) / 100;\n}\n\nconsole.log(prezzoConIva(100)); // 122',
+    show_line_numbers: true,
+  },
+
   fields: [
     { key: 'code', label: t('Codice'), type: 'textarea' },
     { key: 'language', label: t('Linguaggio'), type: 'text' },

@@ -51,6 +51,17 @@ export default {
     border: { ...borderDefault },
   },
 
+  // Appena nato: una fila di etichette — «Novità» con l'icona nel colore primario, poi due
+  // pillole gemelle (verde «Disponibile subito», neutra «Spedizione gratuita»).
+  partenza: {
+    text: t('Novità'),
+    icon: 'sparkles',
+    extra_items: [
+      { text: t('Disponibile subito'), color: 'var(--olo-color-success)', text_color: '' },
+      { text: t('Spedizione gratuita'), color: '', text_color: '' },
+    ],
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'text', label: t('Testo'), type: 'text' },

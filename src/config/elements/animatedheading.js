@@ -35,6 +35,16 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nato: un titolo che alterna tre promesse, evidenziate da una pillola tinta del colore
+  // primario che si scambia con una dissolvenza.
+  partenza: {
+    before_text: t('Ti aiutiamo a'),
+    animated_words: t('risparmiare tempo\nlavorare meglio\ncrescere davvero'),
+    animation: 'highlight',
+    highlight_style: 'background',
+    font_size: '40',
+  },
+
   fields: [
     { key: 'before_text', label: t('Testo prima'), type: 'text' },
     { key: 'animated_words', label: t('Parole animate (una per riga)'), type: 'textarea' },

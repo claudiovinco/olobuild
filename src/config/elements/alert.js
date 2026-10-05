@@ -34,6 +34,15 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nato: un avviso vero di un'attività — orari estivi, con l'icona del calendario, un
+  // titolo, il messaggio e la crocetta per chiuderlo.
+  partenza: {
+    title: t('Orari estivi'),
+    message: t('Dal 5 al 25 agosto siamo aperti dal lunedì al venerdì, dalle 9:00 alle 13:00. Le richieste arrivate in quei giorni ricevono risposta entro il 27 agosto.'),
+    custom_icon: 'calendar',
+    dismissible: true,
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   // Solo opzioni strutturali del messaggio (tipo, icona, chiudibilità).
   // I testi (titolo + messaggio) si modificano nella zona STILE via popup

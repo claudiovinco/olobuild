@@ -36,6 +36,14 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nato: una frase breve sull'arco, nel colore primario, che riempie il tracciato senza
+  // essere tagliata (quella di prima era più lunga del tracciato e si interrompeva a metà).
+  partenza: {
+    text: t('Fatto a mano, con cura'),
+    font_size: '22',
+    text_color: 'var(--olo-color-primary)',
+  },
+
   fields: [
     { key: 'text', label: t('Testo'), type: 'text' },
 

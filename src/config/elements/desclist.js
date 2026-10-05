@@ -44,6 +44,17 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nata: la scheda di un servizio — voce e dettaglio in coppia, con un'icona per voce
+  // e il filo fra le righe (al posto delle voci tecniche di prima: framework, linguaggio…).
+  partenza: {
+    items: [
+      { id: 'dl-1', term: t('Durata'), definition: t('60 minuti, su appuntamento'), icon: 'clock' },
+      { id: 'dl-2', term: t('Dove'), definition: t('In studio oppure online, in videochiamata'), icon: 'location' },
+      { id: 'dl-3', term: t('Prezzo'), definition: t('70 € a incontro, 320 € il pacchetto da cinque'), icon: 'tag' },
+      { id: 'dl-4', term: t('Disdetta'), definition: t('Gratuita fino a 24 ore prima'), icon: 'calendar' },
+    ],
+  },
+
   fields: [
     { key: 'items', label: t('Elementi'), type: 'content-items', supportsDynamic: true,
       itemFields: [

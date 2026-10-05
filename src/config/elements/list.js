@@ -38,6 +38,16 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nata: i punti di forza di un'attività, ognuno con la spunta.
+  partenza: {
+    items: [
+      { text: t('Prima consulenza gratuita e senza impegno'), icon: 'check' },
+      { text: t('Preventivo chiaro entro 48 ore'), icon: 'check' },
+      { text: t('Un referente unico per tutto il progetto'), icon: 'check' },
+      { text: t('Assistenza anche dopo la consegna'), icon: 'check' },
+    ],
+  },
+
   fields: [
     { key: 'items', label: t('Elementi'), type: 'content-items',
       itemFields: [

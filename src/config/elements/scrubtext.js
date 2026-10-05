@@ -45,6 +45,12 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nato: il manifesto con le due parole d'accento e un paragrafo lead adatto a
+  // qualunque attività (quello di prima parlava in prima persona di una consulenza).
+  partenza: {
+    lead: t('Ogni progetto parte dall\'ascolto: capiamo cosa ti serve davvero, poi lo realizziamo con cura, un passo alla volta, con tempi e costi chiari fin dal primo giorno.'),
+  },
+
   fields: [
     { key: 'text', label: t('Testo manifesto'), type: 'textarea',
       description: t('HTML consentito: gli <em> diventano parole accento (colore primario), <br/> va a capo.') },

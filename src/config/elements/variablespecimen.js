@@ -59,6 +59,13 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nato: la coppia di lettere gigante che respira fra i pesi, gli slider dei due assi e
+  // un suggerimento in parole semplici (prima: «X = primo asse · Y = secondo asse»).
+  partenza: {
+    sample_text: 'Aa',
+    drag_hint: t('Trascina la lettera: in orizzontale cambia il peso, in verticale l\'inclinazione'),
+  },
+
   fields: [
     { key: 'font_family', label: t('Font variabile'), type: 'font-family',
       placeholder: t('es. Recursive, "Roboto Flex"'),

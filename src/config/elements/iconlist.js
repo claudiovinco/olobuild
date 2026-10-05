@@ -41,6 +41,21 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nata: i recapiti di un'attività — un'icona diversa per voce, nel colore primario
+  // dentro un cerchio tinto, con il filo fra le righe.
+  partenza: {
+    items: [
+      { id: 'il-1', icon: 'location', text: t('Via Roma 24, 40121 Bologna'), color: '', link: '' },
+      { id: 'il-2', icon: 'phone', text: t('051 123 4567'), color: '', link: '' },
+      { id: 'il-3', icon: 'mail', text: t('info@tuosito.it'), color: '', link: '' },
+      { id: 'il-4', icon: 'clock', text: t('Lunedì – venerdì, 9:00 – 18:00'), color: '', link: '' },
+    ],
+    icon_color: 'var(--olo-color-primary)',
+    icon_shape: 'circle',
+    icon_bg_color: 'color-mix(in srgb, var(--olo-color-primary) 12%, transparent)',
+    divider: true,
+  },
+
   fields: [
     { key: 'items', label: t('Voci lista'), type: 'content-items',
       itemFields: [

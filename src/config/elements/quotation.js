@@ -29,6 +29,13 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nata: la frase di un cliente con nome e da quanto tempo lo è — l'uso più comune di
+  // una citazione sul sito di un'attività.
+  partenza: {
+    content: t('Ci hanno seguito dal primo sopralluogo all\'ultima consegna, sempre puntuali e disponibili. Li consiglierei a chiunque cerchi un lavoro fatto bene.'),
+    author: t('Giulia Ferri, cliente dal 2019'),
+  },
+
   fields: [
     { key: 'content', label: t('Citazione'), type: 'textarea' },
     { key: 'author', label: t('Autore'), type: 'text' },
