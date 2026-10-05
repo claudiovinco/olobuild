@@ -120,7 +120,7 @@ class Olobuild_Scaler_Tile extends Olobuild_Tile_Base {
             /* Il totale somma solo le quantità nell'unità del totale (prima sommava g, pezzi e
                ml insieme); in modalità percentuale conta anche la base (la farina). */
             var totUnit=root.getAttribute('data-total-unit')||'';
-            function fmt(n){ var r=Math.round(n*10)/10; return new Intl.NumberFormat(document.documentElement.lang||undefined,{maximumFractionDigits:1}).format(r); }
+            function fmt(n){ var r=Math.round(n*10)/10; return new Intl.NumberFormat(document.documentElement.lang||undefined,{useGrouping:'always',maximumFractionDigits:1}).format(r); }
             function recalc(){
                 var cur=parseFloat(input.value)||0;
                 if(disp){ disp.textContent=cur; }

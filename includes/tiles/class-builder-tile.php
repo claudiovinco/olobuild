@@ -260,7 +260,7 @@ class Olobuild_Builder_Tile extends Olobuild_Tile_Base {
             var items=[].slice.call(root.querySelectorAll('[data-bd-item]'));
             /* Formato della lingua della pagina; i decimali solo se un prezzo li ha. */
             var decimali=items.some(function(it){ return (it.getAttribute('data-price')||'').indexOf('.')!==-1; });
-            var fmt=new Intl.NumberFormat(document.documentElement.lang||undefined,{minimumFractionDigits:decimali?2:0,maximumFractionDigits:2});
+            var fmt=new Intl.NumberFormat(document.documentElement.lang||undefined,{useGrouping:'always',minimumFractionDigits:decimali?2:0,maximumFractionDigits:2});
             var totalEl=root.querySelector('[data-bd-total]');
             var countEl=root.querySelector('[data-bd-count-out]');
             var cta=root.querySelector('[data-bd-cta]');

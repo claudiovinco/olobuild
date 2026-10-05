@@ -174,11 +174,12 @@ class Olobuild_Projector_Tile extends Olobuild_Tile_Base {
             var unit=p.getAttribute('data-unit')||'',suf=p.getAttribute('data-suffix')||'';
             var dec=parseInt(p.getAttribute('data-decimals'),10)||0,lbase=parseFloat(p.getAttribute('data-list-base'))||1;
             var righe=[].slice.call(p.querySelectorAll('[data-project-row]'));
-            /* Il formato dei numeri della lingua della pagina (prima sempre en-US: «12,000»). */
+            /* Il formato dei numeri della lingua della pagina (prima sempre en-US: «12,000»), col separatore
+               delle migliaia anche a quattro cifre: in italiano Intl lo omette («1400»). */
             var lingua=document.documentElement.lang||undefined;
-            var fmt=new Intl.NumberFormat(lingua,{minimumFractionDigits:dec,maximumFractionDigits:dec});
-            var fmtLista=new Intl.NumberFormat(lingua,{maximumFractionDigits:Math.max(dec,1)});
-            var fmtIn=new Intl.NumberFormat(lingua,{maximumFractionDigits:2});
+            var fmt=new Intl.NumberFormat(lingua,{useGrouping:'always',minimumFractionDigits:dec,maximumFractionDigits:dec});
+            var fmtLista=new Intl.NumberFormat(lingua,{useGrouping:'always',maximumFractionDigits:Math.max(dec,1)});
+            var fmtIn=new Intl.NumberFormat(lingua,{useGrouping:'always',maximumFractionDigits:2});
             function render(){
                 var c=parseFloat(input.value)||0;
                 var fv=rate===0?c*years:c*(Math.pow(1+rate,years)-1)/rate;
