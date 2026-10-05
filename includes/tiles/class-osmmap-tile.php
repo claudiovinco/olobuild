@@ -57,20 +57,55 @@ class Olobuild_Osmmap_Tile extends Olobuild_Tile_Base {
         $map_id = 'olo-osm-' . wp_rand( 10000, 99999 );
 
         // Tile layer URLs
+        // Positron, Voyager e Dark Matter erano i raster CARTO: oggi senza chiave disegnano
+        // solo «API KEY REQUIRED». Stesse chiavi, servizi liberi dall'aspetto equivalente (come
+        // in Mappa Pro): tela grigio chiaro/scuro Esri con le etichette su un livello a parte,
+        // Voyager = OpenStreetMap attenuato da un filtro.
+        $esri      = 'https://server.arcgisonline.com/ArcGIS/rest/services/';
         $tile_urls = [
             'standard'    => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             'hot'         => 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
-            'positron'    => 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-            'voyager'     => 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-            'dark'        => 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-            'satellite'   => 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-            'topo'        => 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
-            'esri_street' => 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
-            'gray'        => 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+            'positron'    => $esri . 'Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+            'voyager'     => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            'dark'        => $esri . 'Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+            'satellite'   => $esri . 'World_Imagery/MapServer/tile/{z}/{y}/{x}',
+            'topo'        => $esri . 'World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+            'esri_street' => $esri . 'World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+            'gray'        => $esri . 'Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
             'opentopomap' => 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
         ];
 
-        $tile_url = esc_js( $tile_urls[ $tile_layer ] );
+        // Attribuzione dello stile scelto (era sempre «OpenStreetMap», anche con Esri).
+        $attr_osm    = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+        $attr_esri   = 'Tiles &copy; Esri';
+        $attr_canvas = $attr_esri . ' &mdash; Esri, HERE, Garmin, ' . $attr_osm;
+        $tile_attrs  = [
+            'hot'         => $attr_osm . ' | HOT',
+            'positron'    => $attr_canvas,
+            'dark'        => $attr_canvas,
+            'gray'        => $attr_canvas,
+            'satellite'   => $attr_esri,
+            'topo'        => $attr_esri,
+            'esri_street' => $attr_esri,
+            'opentopomap' => $attr_osm . ', SRTM | &copy; <a href="https://opentopomap.org">OpenTopoMap</a>',
+        ];
+
+        // La tela Esri arriva allo zoom 16 (oltre: «Map data not yet available», lo zoom qui va a
+        // 19): Leaflet ingrandisce i tasselli del 16. Le etichette della tela stanno a parte.
+        $tile_extras = [
+            'positron' => [ 'labels' => $esri . 'Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}', 'maxNative' => 16 ],
+            'dark'     => [ 'labels' => $esri . 'Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', 'maxNative' => 16 ],
+            'gray'     => [ 'maxNative' => 16 ],
+            'voyager'  => [ 'filter' => 'saturate(.6) contrast(.92) brightness(1.04)' ],
+        ];
+
+        $tile_cfg = array_merge(
+            [
+                'url'  => $tile_urls[ $tile_layer ],
+                'attr' => $tile_attrs[ $tile_layer ] ?? $attr_osm,
+            ],
+            $tile_extras[ $tile_layer ] ?? []
+        );
         $scroll_zoom_js = $scroll_zoom ? 'true' : 'false';
         $dragging_js    = $dragging ? 'true' : 'false';
 
@@ -86,7 +121,7 @@ class Olobuild_Osmmap_Tile extends Olobuild_Tile_Base {
 
         <div id="<?php echo esc_attr( $map_id ); ?>" class="olo-osmmap" style="height:<?php echo (int) $height; ?>px; border-radius:<?php echo $radius; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- absint-built radius from Olobuild_Tile_Utils::border_radius() ?>; overflow:hidden;"></div>
 
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JS below is built exclusively from values sanitized above: esc_js()'d map id/tile URL/popup text, floatval() coordinates, absint() zoom/sizes, round() of those integers, fixed 'true'/'false' literals, esc_url()'d marker image, and SVG markup assembled from fixed literals + absint sizes + safe_color_css()+esc_attr() colour. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JS below is built exclusively from values sanitized above: esc_js()'d map id/popup text, wp_json_encode()'d tile config (fixed whitelist URLs/attributions, HEX flags), floatval() coordinates, absint() zoom/sizes, round() of those integers, fixed 'true'/'false' literals, esc_url()'d marker image, and SVG markup assembled from fixed literals + absint sizes + safe_color_css()+esc_attr() colour. ?>
         <script>
         (function(){
             var mapEl = document.getElementById('<?php echo esc_js( $map_id ); ?>');
@@ -103,10 +138,12 @@ class Olobuild_Osmmap_Tile extends Olobuild_Tile_Base {
                     dragging: <?php echo $dragging_js; ?>
                 }).setView([<?php echo $lat; ?>, <?php echo $lng; ?>], <?php echo $zoom; ?>);
 
-                L.tileLayer('<?php echo $tile_url; ?>', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                    maxZoom: 19
-                }).addTo(map);
+                var T = <?php echo wp_json_encode( $tile_cfg, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ); ?>;
+                var tileOpts = { attribution: T.attr, maxZoom: 19 };
+                if (T.maxNative) { tileOpts.maxNativeZoom = T.maxNative; }
+                var baseLayer = L.tileLayer(T.url, tileOpts).addTo(map);
+                if (T.filter) { baseLayer.getContainer().style.filter = T.filter; }
+                if (T.labels) { L.tileLayer(T.labels, { maxZoom: 19, maxNativeZoom: T.maxNative || 19, zIndex: 2 }).addTo(map); }
 
                 <?php if ( $show_marker ) : ?>
                 var markerIcon;

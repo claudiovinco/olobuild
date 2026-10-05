@@ -39,7 +39,8 @@ export default {
 
   // Come nasce dalla palette: la sede in piazza del Duomo a Milano con lo zoom di quartiere, marker
   // a goccia nel colore del sito con l'indirizzo nel popup, angoli arrotondati. Stile «Standard»
-  // (OpenStreetMap): gli stili CARTO (Positron, Voyager, Dark Matter) oggi chiedono una chiave.
+  // (OpenStreetMap). Positron, Voyager e Dark Matter non sono più i raster CARTO (oggi chiedono una
+  // chiave): il renderer li disegna con servizi liberi equivalenti (class-osmmap-tile.php).
   partenza: {
     address: 'Piazza del Duomo, Milano',
     zoom: '15',
