@@ -96,8 +96,11 @@ class Olobuild_PdfPro_Tile extends Olobuild_Tile_Base {
         }
 
         // JSON config for data attribute
+        // Gli URL vanno al JS come proprietà (src, href, getDocument), non in HTML: esc_url_raw,
+        // perché il JSON qui sotto non passa più per la decodifica delle entità dell'attributo
+        // e il «&#038;» di esc_url() resterebbe nell'indirizzo.
         $config = [
-            'url'       => $pdf_url,
+            'url'       => esc_url_raw( $s['pdf_url'] ),
             'mode'      => $mode,
             'startPage' => max( 1, (int) $s['start_page'] ),
             'zoom'      => sanitize_text_field( $s['initial_zoom'] ),
@@ -142,10 +145,17 @@ class Olobuild_PdfPro_Tile extends Olobuild_Tile_Base {
             $style_parts[] = 'border:' . $bw . 'px solid ' . $bc;
         }
 
+        // Il JSON sta in un attributo fra apici singoli: un apostrofo in un testo d'hotspot
+        // («L'offerta») chiudeva l'attributo e JSON.parse falliva, bloccando l'intera tile.
+        // Con i flag HEX nessun ' " < > & resta letterale (diventano sequenze \u0027…): l'attributo
+        // non si spezza e il browser non decodifica entità nel testo (un «&lt;» scritto
+        // nella descrizione non torna markup). Per questo gli URL sono esc_url_raw (sopra).
+        $config_json = wp_json_encode( $config, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP );
+
         ob_start();
         ?>
         <div class="<?php echo esc_attr( $uid ); ?>"
-             data-olo-pdfpro='<?php echo wp_json_encode( $config ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON attribute built by wp_json_encode() from esc_url()'d URL, whitelisted enums, sanitize_text_field()'d zoom, (bool)/(int) casts and sanitize_hotspots()'d hotspot data ?>'
+             data-olo-pdfpro='<?php echo $config_json; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON attribute built by wp_json_encode() with JSON_HEX_TAG|APOS|QUOT|AMP (no quote, angle bracket or ampersand survives literally) from esc_url_raw()'d URLs, whitelisted enums, sanitize_text_field()'d zoom, (bool)/(int) casts and sanitize_hotspots()'d hotspot data ?>'
              style="<?php echo esc_attr( implode( ';', $style_parts ) ); ?>">
         </div>
         <?php
@@ -198,15 +208,15 @@ class Olobuild_PdfPro_Tile extends Olobuild_Tile_Base {
                 // (il JS lo usa al posto di uk-icon). UIkit e personalizzate restano come prima.
                 'icon_svg'   => $this->origine_icona( (string) ( $hs['icon'] ?? '' ) ) === 'lucide' ? (string) ( self::libreria_icone( 'lucide' )[ (string) $hs['icon'] ] ?? '' ) : '',
                 'description'=> wp_kses_post( $hs['description'] ?? '' ),
-                'image_url'  => esc_url( $hs['image_url'] ?? '' ),
+                'image_url'  => esc_url_raw( $hs['image_url'] ?? '' ),
                 'image_ratio'=> $img_ratio,
                 'image_fit'  => $img_fit,
                 // Il punto focale è salvato con la convenzione di focalField()
                 // (<chiave immagine>_object_position); al runtime arriva più corto.
                 'image_pos'  => Olobuild_Tile_Utils::css_pos( $hs, 'image_url_object_position' ),
-                'video_url'  => esc_url( $hs['video_url'] ?? '' ),
+                'video_url'  => esc_url_raw( $hs['video_url'] ?? '' ),
                 'btn_label'        => sanitize_text_field( $hs['btn_label'] ?? '' ),
-                'btn_url'          => esc_url( $hs['btn_url'] ?? '' ),
+                'btn_url'          => esc_url_raw( $hs['btn_url'] ?? '' ),
                 'btn_target'       => (bool) ( $hs['btn_target'] ?? false ),
                 'btn_font_size'    => absint( $hs['btn_font_size'] ?? 0 ),
                 'btn_font_weight'  => sanitize_text_field( $hs['btn_font_weight'] ?? '' ),
