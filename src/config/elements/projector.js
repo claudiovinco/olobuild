@@ -32,7 +32,7 @@ export default {
     out_caption: t('Totale stimato'),
     result_suffix: '',
     decimals: 0,
-    note: t('Prezzo indicativo a persona, IVA inclusa.'),
+    note: t('Stima indicativa, IVA inclusa.'),
     show_contrib: true,
     list_base: 1,
     list_items: [],

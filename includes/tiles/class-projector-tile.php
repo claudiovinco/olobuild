@@ -35,7 +35,7 @@ class Olobuild_Projector_Tile extends Olobuild_Tile_Base {
         'out_caption'  => 'Totale stimato',
         'result_suffix'=> '',
         'decimals'     => 0,
-        'note'         => 'Prezzo indicativo a persona, IVA inclusa.',
+        'note'         => 'Stima indicativa, IVA inclusa.',
         'show_contrib' => true,
         'list_base'    => 1,
         'list_items'   => [],
