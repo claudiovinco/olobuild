@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.543 - 2026-10-05 (fix)
+- Hero: il «Bordo inferiore ad arco» (e il preset «Masked Arch») disegna davvero l'arco in fondo alla scena; prima non tagliava nulla.
+
 ## v1.4.542 - 2026-10-05 (fix)
 - Hours Strip: sul telefono gli orari vanno su due colonne (e su una negli schermi più stretti) invece di restare quattro colonne schiacciate.
 
