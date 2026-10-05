@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.510 - 2026-10-05 (fix)
+- Overlay Grid e Overlay Slider: con il padding «Medio» la didascalia non tocca più il bordo della card.
+- Gratta e Scopri: dopo aver grattato resta solo «Copia il codice».
+
 ## v1.4.509 - 2026-10-05 (fix)
 - La Barra Scroll resta ferma in cima alla finestra mentre si scorre la pagina.
 - Calcolatore a slider, Preventivo e Scaler mostrano il punto delle migliaia anche nei numeri di quattro cifre (1.400).
