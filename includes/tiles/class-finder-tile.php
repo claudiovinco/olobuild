@@ -84,6 +84,54 @@ class Olobuild_Finder_Tile extends Olobuild_Tile_Base {
 
     public function get_controls() { return []; }
 
+    /**
+     * Luminanza relativa (WCAG) di un fondo, coi token della Palette risolti; null se il
+     * fondo non è pieno (vuoto, trasparente, velato sotto il 50%) o non si risolve: lì il
+     * testo sta di fatto sulla pagina e resta com'era.
+     */
+    private function luminanza_fondo( $c ) {
+        $c = trim( (string) $c );
+        if ( '' === $c || 'transparent' === strtolower( $c ) ) {
+            return null;
+        }
+        $alfa = 1.0;
+        if ( preg_match( '/^#[0-9a-f]{6}([0-9a-f]{2})$/i', $c, $m ) ) {
+            $alfa = hexdec( $m[1] ) / 255;
+        } elseif ( preg_match( '/^rgba?\(\s*[\d.]+%?\s*[,\s]\s*[\d.]+%?\s*[,\s]\s*[\d.]+%?\s*[,\/]\s*([\d.]+)(%?)\s*\)$/i', $c, $m ) ) {
+            $alfa = (float) $m[1] / ( '%' === $m[2] ? 100 : 1 );
+        } elseif ( preg_match( '/^color-mix\(.+\s([\d.]+)%\s*,\s*transparent\s*\)$/is', $c, $m ) ) {
+            $alfa = (float) $m[1] / 100;
+        }
+        $hex = Olobuild_Tile_Utils::colore_hex( $c );
+        if ( $alfa < 0.5 || '' === $hex ) {
+            return null;
+        }
+        $l = 0.0;
+        foreach ( [ 1 => 0.2126, 3 => 0.7152, 5 => 0.0722 ] as $i => $k ) {
+            $v  = hexdec( substr( $hex, $i, 2 ) ) / 255;
+            $l += $k * ( $v <= 0.03928 ? $v / 12.92 : pow( ( $v + 0.055 ) / 1.055, 2.4 ) );
+        }
+        return $l;
+    }
+
+    /**
+     * Il colore di un testo che sta su un fondo disegnato dalla tile: $colore se si legge
+     * (contrasto almeno 3:1), altrimenti il chiaro o lo scuro della Palette secondo il fondo.
+     * Prima titolo, chip e card avevano --olo-color-text fisso: coi preset Neon e Retro
+     * Terminal (card quasi nera) il titolo e il testo del risultato erano scuro su scuro.
+     */
+    private function testo_su( $fondo, $colore ) {
+        $lf = $this->luminanza_fondo( $fondo );
+        $lc = $this->luminanza_fondo( $colore );
+        if ( null === $lf || null === $lc ) {
+            return $colore;
+        }
+        if ( ( max( $lf, $lc ) + 0.05 ) / ( min( $lf, $lc ) + 0.05 ) >= 3 ) {
+            return $colore;
+        }
+        return $lf < 0.18 ? 'var(--olo-color-light, #fdfcfa)' : 'var(--olo-color-dark, #14161c)';
+    }
+
     public function render( $settings, $style = [] ) {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'ofn-' . wp_rand( 10000, 99999 );
@@ -93,6 +141,28 @@ class Olobuild_Finder_Tile extends Olobuild_Tile_Base {
         $cardbg = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #f6f7f9)';
         $cardbd = Olobuild_Tile_Utils::border_color( $s['card_border'] ?? null, 'var(--olo-color-border, #e5e7eb)' );
         $chipbg = $this->safe_color_css( $s['chip_bg'] ?? '' ) ?: 'transparent';
+        // Testi che seguono il fondo su cui stanno: titolo, introduzione e chip sul fondo
+        // pieno del contenitore della tile (se c'è, sennò la pagina: com'era), le chip sul
+        // proprio sfondo, titolo e testo del risultato sullo sfondo della card. Dove si
+        // leggevano già escono identici.
+        $testo_def  = 'var(--olo-color-text,#111827)';
+        $fondo_zona = '';
+        if ( is_array( $style ) && class_exists( 'Olobuild_CSS_Builder' ) ) {
+            $eff = ( new Olobuild_CSS_Builder() )->get_effective_bg( $style );
+            if ( 'solid' === ( $eff['type'] ?? '' ) && intval( $eff['color_opacity'] ?? 100 ) >= 50 ) {
+                $fondo_zona = $this->safe_color_css( $eff['color'] ?? '' );
+            }
+        }
+        $testo_zona = $this->testo_su( $fondo_zona, $testo_def );
+        $testo_chip = $this->testo_su( $chipbg, $testo_zona );
+        $testo_card = $this->testo_su( $cardbg, $testo_def );
+        // Il colore va sulla radice solo se il contenitore non ha un colore del testo suo
+        // (style.text_color, che il renderer mette sul wrapper): l'introduzione lo ereditava
+        // e lo eredita ancora. Su un contenitore scuro la card riceve sempre il suo colore:
+        // sennò il testo del risultato ereditava il chiaro della zona (o il text_color
+        // chiaro del contenitore) anche sulla card chiara: chiaro su chiaro, invisibile.
+        $colore_radice = ( $testo_zona !== $testo_def && ( ! is_array( $style ) || empty( $style['text_color'] ) ) ) ? $testo_zona : '';
+        $colore_card   = ( $testo_card !== $testo_def || $testo_zona !== $testo_def ) ? $testo_card : '';
         // Riserva = quella del token (alias di --olo-color-muted), come lo sfondo card qui sopra.
         $media_bg = $this->safe_color_css( $s['media_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #f6f7f9)';
         $center = ( ( $s['align'] ?? 'center' ) === 'center' );
@@ -170,19 +240,19 @@ class Olobuild_Finder_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/intval/sanitize_key/build_border_radius_css/Olobuild_Tile_Utils::image_frame() strict ratio whitelist/fixed literals/generated uid). ?>
         <style>
-            .<?php echo $uid; ?>{ --fn-accent:<?php echo $accent; ?>; --fn-on:<?php echo $on; ?>; font-family:<?php echo $sans; ?>; <?php echo $typo_css; ?><?php if ( $center ) echo 'text-align:center;'; ?><?php echo $tile_pad_css; ?> }
+            .<?php echo $uid; ?>{ --fn-accent:<?php echo $accent; ?>; --fn-on:<?php echo $on; ?>; font-family:<?php echo $sans; ?>; <?php echo $typo_css; ?><?php if ( $center ) echo 'text-align:center;'; ?><?php echo $tile_pad_css; ?><?php if ( '' !== $colore_radice ) echo 'color:' . $colore_radice . ';'; ?> }
             .<?php echo $uid; ?> .ofn-eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--fn-accent);display:block;margin-bottom:10px;}
-            .<?php echo $uid; ?> .ofn-h{font-family:<?php echo $serif; ?>;font-size:clamp(26px,3.6vw,42px);line-height:1.12;margin:0;color:var(--olo-color-text,#111827);}
+            .<?php echo $uid; ?> .ofn-h{font-family:<?php echo $serif; ?>;font-size:clamp(26px,3.6vw,42px);line-height:1.12;margin:0;color:<?php echo $testo_zona; ?>;}
             .<?php echo $uid; ?> .ofn-h em{font-style:italic;color:var(--fn-accent);}
             .<?php echo $uid; ?> .ofn-intro{font-size:15.5px;line-height:1.6;opacity:.8;margin:14px auto 0;max-width:560px;<?php echo $center ? '' : 'margin-left:0;'; ?>}
             .<?php echo $uid; ?> .ofn-chips{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0 24px;<?php echo $center ? 'justify-content:center;' : ''; ?>}
-            .<?php echo $uid; ?> .ofn-chip{font-family:<?php echo $sans; ?>;font-weight:600;font-size:13.5px;color:var(--olo-color-text,#111827);background:<?php echo $chipbg; ?>;border:1px solid var(--olo-color-border,#e5e7eb);border-radius:<?php echo $chip_r; ?>;padding:10px 18px;cursor:pointer;transition:all .18s;display:inline-flex;align-items:center;gap:8px;}
+            .<?php echo $uid; ?> .ofn-chip{font-family:<?php echo $sans; ?>;font-weight:600;font-size:13.5px;color:<?php echo $testo_chip; ?>;background:<?php echo $chipbg; ?>;border:1px solid var(--olo-color-border,#e5e7eb);border-radius:<?php echo $chip_r; ?>;padding:10px 18px;cursor:pointer;transition:all .18s;display:inline-flex;align-items:center;gap:8px;}
             .<?php echo $uid; ?> .ofn-chip:hover{border-color:var(--fn-accent);color:var(--fn-accent);}
             .<?php echo $uid; ?> .ofn-chip.on{background:var(--fn-accent);border-color:var(--fn-accent);color:var(--fn-on);}
             .<?php echo $uid; ?> .ofn-chip:focus-visible{outline:2px solid var(--fn-accent);outline-offset:3px;}
             .<?php echo $uid; ?> .ofn-chip .ofn-ic{width:16px;height:16px;display:inline-flex;}
             .<?php echo $uid; ?> .ofn-chip .ofn-ic svg{width:100%;height:100%;}
-            .<?php echo $uid; ?> .ofn-res{display:none;background:<?php echo $cardbg; ?>;<?php echo $card_border_decl; ?><?php echo $card_radius_css; ?>padding:<?php echo $card_pad; ?>;text-align:left;max-width:<?php echo $card_mw; ?>px;<?php echo $center ? 'margin:0 auto;' : ''; ?><?php echo $shadow_css; ?>}
+            .<?php echo $uid; ?> .ofn-res{display:none;background:<?php echo $cardbg; ?>;<?php echo $card_border_decl; ?><?php echo $card_radius_css; ?>padding:<?php echo $card_pad; ?>;text-align:left;max-width:<?php echo $card_mw; ?>px;<?php echo $center ? 'margin:0 auto;' : ''; ?><?php echo $shadow_css; ?><?php if ( '' !== $colore_card ) echo 'color:' . $colore_card . ';'; ?>}
             .<?php echo $uid; ?> .ofn-res.show{display:block;animation:ofnfade .35s ease;}
             @keyframes ofnfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
             .<?php echo $uid; ?> .ofn-res__meta{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--fn-accent);}
@@ -194,7 +264,7 @@ class Olobuild_Finder_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ofn-kicker{display:block;font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--fn-accent);margin-bottom:6px;}
             .<?php echo $uid; ?> .ofn-res--media .ofn-res__meta{margin-top:14px;}
             @media(max-width:600px){.<?php echo $uid; ?> .ofn-res--media{flex-direction:column;}.<?php echo $uid; ?> .ofn-media{width:100%;aspect-ratio:auto;height:240px;}}
-            .<?php echo $uid; ?> .ofn-res__t{font-family:<?php echo $serif; ?>;font-size:clamp(22px,3vw,30px);line-height:1.15;margin:8px 0 0;color:var(--olo-color-text,#111827);}
+            .<?php echo $uid; ?> .ofn-res__t{font-family:<?php echo $serif; ?>;font-size:clamp(22px,3vw,30px);line-height:1.15;margin:8px 0 0;color:<?php echo $testo_card; ?>;}
             .<?php echo $uid; ?> .ofn-res__x{font-size:15.5px;line-height:1.6;opacity:.8;margin:12px 0 0;}
             .<?php echo $uid; ?> .ofn-res__cta{display:inline-flex;align-items:center;gap:8px;margin-top:20px;font-weight:600;font-size:14px;color:var(--fn-on);background:var(--fn-accent);padding:11px 22px;border-radius:999px;text-decoration:none;transition:transform .18s;}
             .<?php echo $uid; ?> .ofn-res__cta:hover{transform:translateY(-1px);}
