@@ -18,6 +18,29 @@ abstract class Olobuild_Tile_Base {
     /** Librerie di icone già lette in questa richiesta (vedi libreria_icone()). */
     private static $librerie_icone = [];
 
+    /**
+     * L'id del nodo (la tile nel template) che il renderer sta per rendere: lo imposta
+     * Olobuild_Frontend_Renderer subito prima di render(). Le tile lo leggono all'inizio
+     * di render(), prima di rendere altro (un template annidato lo cambierebbe).
+     */
+    public static $nodo_in_resa = '';
+
+    /**
+     * Un identificativo della tile che resta uguale fra un caricamento e l'altro, per
+     * ciò che il browser deve ricordare (un popup già visto). L'id casuale dei selettori
+     * cambia a ogni pagina: usato come chiave, «una volta per sessione» non limitava niente.
+     * Senza id del nodo (anteprime fuori template) ripiega sulle impostazioni.
+     */
+    protected function chiave_stabile( $settings ) {
+        $nodo = (string) self::$nodo_in_resa;
+        if ( '' === $nodo ) {
+            $s = is_array( $settings ) ? $settings : [];
+            unset( $s['_builder_mode'] );
+            $nodo = (string) wp_json_encode( $s );
+        }
+        return substr( md5( $this->type . '|' . $nodo ), 0, 12 );
+    }
+
     public function get_type() {
         return $this->type;
     }

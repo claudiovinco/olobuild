@@ -73,6 +73,8 @@ class Olobuild_Hiddenpop_Tile extends Olobuild_Tile_Base {
 
     public function render( $settings ) {
         $s = wp_parse_args( $settings, $this->defaults );
+        // Per ricordare «già visto»: l'id casuale di $uid cambia a ogni pagina.
+        $chiave = $this->chiave_stabile( $settings );
 
         // ── Server-side display rules ──
         $display_logged = $s['display_logged'] ?? '';
@@ -378,7 +380,7 @@ class Olobuild_Hiddenpop_Tile extends Olobuild_Tile_Base {
             var threshold = <?php echo intval( $threshold ); ?>;
             var direction = '<?php echo esc_js( $direction ); ?>';
             var retrigger = <?php echo $retrigger ? 'true' : 'false'; ?>;
-            var popupKey  = 'olo_hp_<?php echo esc_js( $uid ); ?>';
+            var popupKey  = 'olo_hp_<?php echo esc_js( $chiave ); ?>';
             var freq      = '<?php echo esc_js( $freq ); ?>';
             var maxTimes  = <?php echo intval( $max_times ); ?>;
             var exitIntent = <?php echo $exit_intent ? 'true' : 'false'; ?>;

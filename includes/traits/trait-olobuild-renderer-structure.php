@@ -2078,6 +2078,7 @@ trait Olobuild_Renderer_Structure_Trait {
         }
 
         // Render opening wrapper (panel div with styles, trigger button, close button)
+        Olobuild_Tile_Base::$nodo_in_resa = (string) ( $node['id'] ?? '' );
         $html = Olobuild_Tile_Utils::process_dynamic_tags( $tile_instance->render( $settings, $node['style'] ?? [] ) );
 
         $children = $node['children'] ?? [];

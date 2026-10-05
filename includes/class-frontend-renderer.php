@@ -1328,6 +1328,7 @@ class Olobuild_Frontend_Renderer {
             <?php endif; ?>
 
             <?php if ( $this->builder_mode ) $settings['_builder_mode'] = true; ?>
+            <?php Olobuild_Tile_Base::$nodo_in_resa = (string) ( $node['id'] ?? '' ); ?>
             <?php if ( $has_bg_image || $has_bg_video || $has_bg_gallery || $has_overlay ) : ?>
                 <div class="uk-position-relative" style="z-index: 1">
                     <?php echo Olobuild_Tile_Utils::process_dynamic_tags( $tile_instance->render( $settings, $node['style'] ?? [] ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tile HTML assembled by the tile's own render() (each tile escapes its output); process_dynamic_tags() substitutes sanitized dynamic values ?>

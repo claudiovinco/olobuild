@@ -120,6 +120,8 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
 
     public function render( $settings ) {
         $s   = wp_parse_args( $settings, $this->defaults );
+        // Per ricordare «già visto»: l'id casuale di $uid cambia a ogni pagina.
+        $chiave = $this->chiave_stabile( $settings );
 
         // ── Display Rules (server-side gating) ──
         // Logged in/out check
@@ -540,7 +542,7 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
             <?php if ( $is_auto_trigger ) : ?>
             /* Advanced popup trigger: <?php echo esc_js( $trigger ); ?> */
             var oloTriggered = false;
-            var popupKey = 'olo_popup_<?php echo esc_js( $uid ); ?>';
+            var popupKey = 'olo_popup_<?php echo esc_js( $chiave ); ?>';
             var maxTimes = <?php echo intval( $s['show_max_times'] ); ?>;
             var onceSession = <?php echo ! empty( $s['show_once_per_session'] ) ? 'true' : 'false'; ?>;
             var popupFreq = '<?php echo esc_js( $popup_frequency ); ?>';
