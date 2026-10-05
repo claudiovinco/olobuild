@@ -63,10 +63,12 @@ class Olobuild_CSS_Builder {
     /**
      * Generate inline background CSS from a bg config.
      *
-     * @param array $bg Background config.
+     * @param array $bg       Background config.
+     * @param bool  $con_velo Disegna anche il velo (overlay_color/opacity) sopra la foto: per gli
+     *                        sfondi INTERNI alle tile. Il contenitore ha il suo div del velo.
      * @return string CSS declaration or empty string.
      */
-    public function get_bg_inline_css( $bg ) {
+    public function get_bg_inline_css( $bg, $con_velo = false ) {
         if ( $bg['type'] === 'solid' && ! empty( $bg['color'] ) ) {
             $color   = $bg['color'];
             $opacity = isset( $bg['color_opacity'] ) ? intval( $bg['color_opacity'] ) : 100;
@@ -106,6 +108,15 @@ class Olobuild_CSS_Builder {
             $size     = sanitize_text_field( $bg['image_size']     ?? 'cover' );
             $repeat   = sanitize_text_field( $bg['image_repeat']   ?? 'no-repeat' );
             $attach   = ! empty( $bg['image_parallax'] ) ? 'fixed' : 'scroll';
+            // Velo dello Sfondo sopra la foto: un livello in più nella stessa stringa (le tile
+            // che usano lo sfondo dentro di sé non hanno il div del velo del contenitore).
+            $velo = $con_velo ? self::velo_sfondo( $bg ) : '';
+            if ( '' !== $velo ) {
+                return "background-image:linear-gradient({$velo},{$velo}),url('{$url}');background-position:0 0," . esc_attr( $position )
+                    . ';background-size:100% 100%,' . esc_attr( $size )
+                    . ';background-repeat:no-repeat,' . esc_attr( $repeat )
+                    . ';background-attachment:scroll,' . esc_attr( $attach );
+            }
             return "background-image:url('{$url}');background-position:" . esc_attr( $position )
                 . ';background-size:' . esc_attr( $size )
                 . ';background-repeat:' . esc_attr( $repeat )
@@ -125,7 +136,7 @@ class Olobuild_CSS_Builder {
      * @param string $scope  Classe CSS univoca del tile (per scoping). Opzionale.
      * @return string HTML markup da iniettare dentro il wrapper del tile.
      */
-    public function get_bg_html_markup( $bg, $scope = '' ) {
+    public function get_bg_html_markup( $bg, $scope = '', $con_velo = false ) {
         if ( empty( $bg['type'] ) ) return '';
         $type = sanitize_key( $bg['type'] );
 
@@ -144,7 +155,8 @@ class Olobuild_CSS_Builder {
                    . ';z-index:0;pointer-events:none';
             return '<video class="olo-bg-video" src="' . $url . '"'
                 . $poster . $autoplay . $muted . $loop . $controls
-                . ' playsinline preload="metadata" style="' . esc_attr( $style ) . '"></video>';
+                . ' playsinline preload="metadata" style="' . esc_attr( $style ) . '"></video>'
+                . ( $con_velo ? self::velo_markup( $bg ) : '' );
         }
 
         if ( $type === 'gallery' && ! empty( $bg['gallery_images'] ) && is_array( $bg['gallery_images'] ) ) {
@@ -163,10 +175,35 @@ class Olobuild_CSS_Builder {
                  . '.' . $uid . ' .olo-bg-gallery-img.is-active{opacity:1}'
                  . '</style>';
             $js = '<script>(function(){var c=document.querySelector(".' . $uid . '");if(!c)return;var imgs=c.querySelectorAll(".olo-bg-gallery-img");if(imgs.length<2)return;var i=0;setInterval(function(){imgs[i].classList.remove("is-active");i=(i+1)%imgs.length;imgs[i].classList.add("is-active")},' . $duration . ');})();</script>';
-            return $css . '<div class="' . esc_attr( $uid ) . '">' . $imgs . '</div>' . $js;
+            return $css . '<div class="' . esc_attr( $uid ) . '">' . $imgs . '</div>' . ( $con_velo ? self::velo_markup( $bg ) : '' ) . $js;
         }
 
         return '';
+    }
+
+    /**
+     * Il velo dello Sfondo (overlay_color + overlay_opacity, come il div del contenitore nel
+     * renderer) come colore CSS, o '' se non c'è.
+     *
+     * @param array $bg
+     * @return string
+     */
+    public static function velo_sfondo( $bg ) {
+        $op = isset( $bg['overlay_opacity'] ) ? (int) $bg['overlay_opacity'] : 0;
+        if ( $op <= 0 ) {
+            return '';
+        }
+        $c = Olobuild_Tile_Utils::safe_color( (string) ( $bg['overlay_color'] ?? '' ) );
+        if ( '' === $c ) {
+            $c = '#000000';
+        }
+        return 'color-mix(in srgb, ' . $c . ' ' . min( 100, $op ) . '%, transparent)';
+    }
+
+    /** Il velo sopra un video o una galleria di sfondo (dopo il media, sotto il contenuto). */
+    private static function velo_markup( $bg ) {
+        $velo = self::velo_sfondo( $bg );
+        return '' === $velo ? '' : '<div class="olo-bg-velo" aria-hidden="true" style="position:absolute;inset:0;z-index:0;pointer-events:none;background:' . esc_attr( $velo ) . '"></div>';
     }
 
     /**

@@ -227,7 +227,7 @@ class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
                 $rowbg_cls = '';
                 $row_bg    = $it['row_bg'] ?? null;
                 if ( is_array( $row_bg ) && ! empty( $row_bg['type'] ) && $row_bg['type'] !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
-                    $rowbg_decl = trim( ( new Olobuild_CSS_Builder() )->get_bg_inline_css( $row_bg ) );
+                    $rowbg_decl = trim( ( new Olobuild_CSS_Builder() )->get_bg_inline_css( $row_bg, true ) );
                     if ( $rowbg_decl !== '' ) {
                         $rowbg_cls = ' olo-hoverlist__row--' . intval( $idx );
                         $rowbg_rules[ intval( $idx ) ] = rtrim( $rowbg_decl, ';' ) . ';';

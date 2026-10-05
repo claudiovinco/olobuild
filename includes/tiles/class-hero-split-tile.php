@@ -191,7 +191,7 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
         $sc_bg_obj = $s['showcase_bg'] ?? [ 'type' => 'none' ];
         if ( is_array( $sc_bg_obj ) && ( $sc_bg_obj['type'] ?? 'none' ) !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
             $cssb = new Olobuild_CSS_Builder();
-            $showcase_bg_css = $cssb->get_bg_inline_css( $sc_bg_obj );
+            $showcase_bg_css = $cssb->get_bg_inline_css( $sc_bg_obj, true ); // true: col velo dello Sfondo
         } elseif ( ! is_array( $sc_bg_obj ) ) {
             // Backward-compat: legacy string color
             $sc_clr = $this->safe_color_css( $sc_bg_obj );
@@ -372,7 +372,7 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
                                     $card_bg_obj = $it['bg'] ?? [ 'type' => 'solid', 'color' => '#ffffff' ];
                                     if ( is_array( $card_bg_obj ) && ( $card_bg_obj['type'] ?? 'none' ) !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
                                         $cssb        = new Olobuild_CSS_Builder();
-                                        $card_bg_css = $cssb->get_bg_inline_css( $card_bg_obj );
+                                        $card_bg_css = $cssb->get_bg_inline_css( $card_bg_obj, true );
                                         $cb_type     = $card_bg_obj['type'] ?? '';
                                         if ( $cb_type === 'video' && ! empty( $card_bg_obj['video_url'] ) ) {
                                             // <video> reale: un background CSS non riproduce video. Chiavi del
@@ -386,7 +386,7 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
                                                 . ' style="position:absolute;inset:0;width:100%;height:100%;object-fit:' . $cv_fit
                                                 . ';object-position:' . $cv_pos . ';z-index:0;pointer-events:none"></video>';
                                         } elseif ( $cb_type === 'gallery' && ! empty( $card_bg_obj['gallery_images'] ) ) {
-                                            $card_media = $cssb->get_bg_html_markup( $card_bg_obj, $uid . '-c' . (int) $idx );
+                                            $card_media = $cssb->get_bg_html_markup( $card_bg_obj, $uid . '-c' . (int) $idx, true );
                                         }
                                     }
                                     $shadow_css = $card_shadow ? 'box-shadow:' . $card_shadow . ';' : '';

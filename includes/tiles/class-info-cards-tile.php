@@ -150,7 +150,7 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
         $cbg = $s['container_bg'] ?? [ 'type' => 'none' ];
         if ( is_array( $cbg ) && ( $cbg['type'] ?? 'none' ) !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
             $cssb = new Olobuild_CSS_Builder();
-            $container_bg_css = $cssb->get_bg_inline_css( $cbg );
+            $container_bg_css = $cssb->get_bg_inline_css( $cbg, true ); // true: col velo dello Sfondo
         }
 
         // Card bg (applicato a ogni card; se ogni card vuole bg singolo, si fa per item)
@@ -158,7 +158,7 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
         $cardbg = $s['card_bg'] ?? [ 'type' => 'none' ];
         if ( is_array( $cardbg ) && ( $cardbg['type'] ?? 'none' ) !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
             $cssb = new Olobuild_CSS_Builder();
-            $card_bg_css_default = $cssb->get_bg_inline_css( $cardbg );
+            $card_bg_css_default = $cssb->get_bg_inline_css( $cardbg, true );
         }
 
         $items = is_array( $s['items'] ) ? $s['items'] : [];

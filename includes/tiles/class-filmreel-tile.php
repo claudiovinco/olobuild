@@ -242,7 +242,7 @@ class Olobuild_FilmReel_Tile extends Olobuild_Tile_Base {
                         <?php if ( $mbg_kind === 'video' ) : ?>
                             <video class="ofr-img" src="<?php echo esc_url( $mbg['video_url'] ); ?>"<?php echo ! empty( $mbg['video_poster'] ) ? ' poster="' . esc_url( $mbg['video_poster'] ) . '"' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url() inline above ?> autoplay muted loop playsinline aria-hidden="true"></video>
                         <?php elseif ( $mbg_kind === 'bg' && class_exists( 'Olobuild_CSS_Builder' ) ) : ?>
-                            <span class="ofr-img" style="<?php echo esc_attr( ( new Olobuild_CSS_Builder() )->get_bg_inline_css( $mbg ) ); ?>"></span>
+                            <span class="ofr-img" style="<?php echo esc_attr( ( new Olobuild_CSS_Builder() )->get_bg_inline_css( $mbg, true ) ); ?>"></span>
                         <?php elseif ( $img !== '' ) : ?>
                             <img class="ofr-img" src="<?php echo esc_url( $img ); ?>" alt="<?php echo esc_attr( $name ); ?>" loading="lazy" />
                         <?php else : ?>

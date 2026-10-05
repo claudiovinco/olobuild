@@ -539,7 +539,7 @@ abstract class Olobuild_Tile_Base {
         if ( ! $bg || ( $bg['type'] ?? 'none' ) === 'none' ) {
             return $vuoto;
         }
-        $p = $this->bg_media_parts( $bg, $scope . '-bg' );
+        $p = $this->bg_media_parts( $bg, $scope . '-bg', false ); // il velo lo aggiunge qui sotto
         $livelli = $p['markup'];
         $op = intval( $bg['overlay_opacity'] ?? 0 );
         if ( $op > 0 ) {
@@ -561,12 +561,13 @@ abstract class Olobuild_Tile_Base {
         return $out;
     }
 
-    protected function bg_media_parts( $bg, $scope = '' ) {
+    protected function bg_media_parts( $bg, $scope = '', $con_velo = true ) {
         $out = [ 'has' => false, 'css' => '', 'markup' => '' ];
         if ( is_array( $bg ) && ! empty( $bg['type'] ) && $bg['type'] !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
             $cssb = new Olobuild_CSS_Builder();
-            $out['css']    = (string) $cssb->get_bg_inline_css( $bg );
-            $out['markup'] = (string) $cssb->get_bg_html_markup( $bg, $scope );
+            // con_velo: il velo dello Sfondo (overlay) sopra foto, video e galleria dello slot
+            $out['css']    = (string) $cssb->get_bg_inline_css( $bg, $con_velo );
+            $out['markup'] = (string) $cssb->get_bg_html_markup( $bg, $scope, $con_velo );
             $out['has']    = ( $out['css'] !== '' || $out['markup'] !== '' );
         }
         return $out;

@@ -124,7 +124,7 @@ class Olobuild_CtaBanner_Tile extends Olobuild_Tile_Base {
         $bg = $s['bg'] ?? [ 'type' => 'solid', 'color' => '#0f172a' ];
         if ( is_array( $bg ) && ( $bg['type'] ?? 'none' ) !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
             $cssb = new Olobuild_CSS_Builder();
-            $bg_css = $cssb->get_bg_inline_css( $bg );
+            $bg_css = $cssb->get_bg_inline_css( $bg, true ); // true: col velo dello Sfondo (il banner copre quello del contenitore)
         }
         if ( ! $bg_css ) $bg_css = 'background:#0f172a';
 
