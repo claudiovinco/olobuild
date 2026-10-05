@@ -56,15 +56,27 @@ class Olobuild_Starrating_Tile extends Olobuild_Tile_Base {
                 </div>
             <?php endif; ?>
             <div style="display:inline-flex;gap:4px;">
-                <?php for ( $i = 1; $i <= $max; $i++ ) :
+                <?php
+                // Mezza stella: ceil() restituisce un float e il confronto stretto con
+                // l'intero $i non era mai vero, così con 4.5 la quinta stella restava vuota.
+                $half_at  = (int) ceil( $rating );
+                $has_half = fmod( $rating, 1 ) > 0;
+                for ( $i = 1; $i <= $max; $i++ ) :
                     $fill = $i <= floor($rating) ? $clr : $empty;
-                    $is_half = ($i === ceil($rating)) && (fmod($rating, 1) !== 0.0);
+                    $is_half = $has_half && $i === $half_at;
                     ?>
                     <svg width="<?php echo (int) $size; ?>" height="<?php echo (int) $size; ?>" viewBox="0 0 24 24">
-                        <?php if ( $is_half ) : ?>
-                            <defs><clipPath id="olo-half-<?php echo (int) $i; ?>"><rect x="0" y="0" width="12" height="24"/></clipPath></defs>
-                            <path d="<?php echo $star_d; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $star_d is a hardcoded SVG path literal; colours validated by safe_color_css() whitelist or fixed var() fallbacks ?>" fill="<?php echo $empty; ?>" <?php if ($is_outline) echo 'stroke="' . $empty . '" stroke-width="1.5" fill="none"'; ?>/>
-                            <path d="<?php echo $star_d; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $star_d is a hardcoded SVG path literal; $clr validated by safe_color_css() whitelist or fixed var() fallback ?>" fill="<?php echo $clr; ?>" clip-path="url(#olo-half-<?php echo (int) $i; ?>)"/>
+                        <?php if ( $is_half ) :
+                            // id legato alla tile: con due valutazioni nella pagina gli id
+                            // «olo-half-5» si ripetevano. Col Contorno il primo path aveva due
+                            // attributi fill e vinceva il primo: la stella si riempiva.
+                            $half_id    = $sr_uid . '-half-' . $i;
+                            $half_base  = $is_outline ? 'fill="none" stroke="' . esc_attr( $empty ) . '" stroke-width="1.5"' : 'fill="' . esc_attr( $empty ) . '"';
+                            $half_piena = $is_outline ? 'fill="none" stroke="' . esc_attr( $clr ) . '" stroke-width="1.5"' : 'fill="' . esc_attr( $clr ) . '"';
+                            ?>
+                            <defs><clipPath id="<?php echo esc_attr( $half_id ); ?>"><rect x="0" y="0" width="12" height="24"/></clipPath></defs>
+                            <path d="<?php echo $star_d; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $star_d is a hardcoded SVG path literal; $half_base built from esc_attr() colours ?>" <?php echo $half_base; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributi costruiti qui sopra con esc_attr() ?>/>
+                            <path d="<?php echo $star_d; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $star_d is a hardcoded SVG path literal ?>" <?php echo $half_piena; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributi costruiti qui sopra con esc_attr() ?> clip-path="url(#<?php echo esc_attr( $half_id ); ?>)"/>
                         <?php else : ?>
                             <path d="<?php echo $star_d; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $star_d is a hardcoded SVG path literal; $fill validated by safe_color_css() whitelist or fixed var() fallbacks ?>" fill="<?php echo $is_outline ? 'none' : $fill; ?>" <?php if ($is_outline) echo 'stroke="' . $fill . '" stroke-width="1.5"'; ?>/>
                         <?php endif; ?>
