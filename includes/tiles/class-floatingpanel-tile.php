@@ -38,6 +38,7 @@ class Olobuild_Floatingpanel_Tile extends Olobuild_Tile_Base {
         'trigger_color'     => '',
         'trigger_radius'    => '50',
         'trigger_shadow'    => true,
+        // In «Sempre visibile» la X riduce il pannello al pulsante (trigger_*), che lo riapre.
         'show_close'        => true,
         'close_color'       => '',
         'close_size'        => '20',
@@ -59,6 +60,15 @@ class Olobuild_Floatingpanel_Tile extends Olobuild_Tile_Base {
         'border_effect_angle'     => 135,
         'border_effect_speed'     => 4,
     ];
+
+    /**
+     * Stato passato da render() a render_closing(): una pila, così un pannello annidato
+     * in un altro non scambia il proprio uid con quello del contenitore.
+     */
+    private $aperti = [];
+
+    /** Uid già dati in questa richiesta: lo stesso nodo reso due volte resta distinto. */
+    private static $uid_usati = [];
 
     public function get_controls() {
         return [];
@@ -96,12 +106,30 @@ class Olobuild_Floatingpanel_Tile extends Olobuild_Tile_Base {
     }
 
     /**
+     * Un id per istanza: dall'id del nodo in resa (stabile fra un caricamento e l'altro e
+     * fra il render completo del canvas e quello della sola tile), non dalle impostazioni,
+     * con cui due pannelli identici prendevano lo stesso id. Va chiamato per primo in
+     * render(): i figli del pannello cambiano $nodo_in_resa.
+     */
+    private function uid_istanza( $settings ) {
+        $uid = 'olo-fp-' . $this->chiave_stabile( $settings );
+        if ( isset( self::$uid_usati[ $uid ] ) ) {
+            self::$uid_usati[ $uid ]++;
+            $uid .= '-' . self::$uid_usati[ $uid ];
+        } else {
+            self::$uid_usati[ $uid ] = 1;
+        }
+        return $uid;
+    }
+
+    /**
      * Render the floating panel opening wrapper.
      * The frontend renderer injects children, then calls render_closing().
      */
     public function render( $settings ) {
-        $s   = wp_parse_args( $settings, $this->defaults );
-        $uid = 'olo-fp-' . substr( md5( wp_json_encode( $s ) ), 0, 8 );
+        $uid     = $this->uid_istanza( $settings );
+        $s       = wp_parse_args( $settings, $this->defaults );
+        $builder = ! empty( $s['_builder_mode'] );
 
         // --- Position ---
         $pos       = in_array( $s['position'], [ 'fixed', 'absolute', 'sticky', 'relative', 'static' ], true ) ? $s['position'] : 'fixed';
@@ -131,7 +159,8 @@ class Olobuild_Floatingpanel_Tile extends Olobuild_Tile_Base {
         // --- Visual ---
         $bg = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-surface, #ffffff)';
         $pos_css .= "background:{$bg};";
-        $pos_css .= 'border-radius:' . Olobuild_Tile_Utils::radius_int( $s['border_radius'] ) . 'px;';
+        // Raggio a 4 angoli (prima si usava solo il più grande dei quattro).
+        $pos_css .= 'border-radius:' . ( $this->build_border_radius_css( $s['border_radius'] ) ?: '0px' ) . ';';
         $pos_css .= 'padding:' . Olobuild_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 20, 20 ) . ';';
         $pos_css .= 'box-sizing:border-box;';
 
@@ -161,13 +190,22 @@ class Olobuild_Floatingpanel_Tile extends Olobuild_Tile_Base {
         $pos_css .= "display:flex;flex-direction:{$dir};gap:{$gap}px;align-items:{$align};";
 
         // --- Responsive visibility classes ---
+        // Non nel canvas: lì il pannello deve restare visibile e modificabile a ogni larghezza.
         $resp_class = '';
-        if ( empty( $s['visible_desktop'] ) || $s['visible_desktop'] === 'false' ) $resp_class .= ' olo-fp-hide-desktop';
-        if ( empty( $s['visible_tablet'] ) || $s['visible_tablet'] === 'false' )   $resp_class .= ' olo-fp-hide-tablet';
-        if ( empty( $s['visible_mobile'] ) || $s['visible_mobile'] === 'false' )   $resp_class .= ' olo-fp-hide-mobile';
+        if ( ! $builder ) {
+            if ( empty( $s['visible_desktop'] ) || $s['visible_desktop'] === 'false' ) $resp_class .= ' olo-fp-hide-desktop';
+            if ( empty( $s['visible_tablet'] ) || $s['visible_tablet'] === 'false' )   $resp_class .= ' olo-fp-hide-tablet';
+            if ( empty( $s['visible_mobile'] ) || $s['visible_mobile'] === 'false' )   $resp_class .= ' olo-fp-hide-mobile';
+        }
 
         // --- Trigger mode ---
-        $is_trigger  = ( $s['trigger_mode'] === 'button' );
+        // Nel canvas il pannello è sempre aperto (lo script che lo apre lì non gira): con la
+        // classe olo-fp-hidden resterebbe invisibile e non cliccabile.
+        $is_trigger  = ! $builder && ( $s['trigger_mode'] === 'button' );
+        $show_close  = ( ! empty( $s['show_close'] ) && $s['show_close'] !== 'false' );
+        // «Sempre visibile» con la X: la X riduce il pannello al pulsante, che lo riapre
+        // (prima lo chiudeva per sempre, anche con Esc premuto ovunque nella pagina).
+        $collapsible = ! $builder && ! $is_trigger && $show_close;
         $anim        = in_array( $s['animation'], [ 'fade', 'slide-up', 'slide-down', 'slide-left', 'slide-right', 'scale' ], true ) ? $s['animation'] : 'fade';
         $dur         = intval( $s['animation_duration'] );
 
@@ -175,7 +213,7 @@ class Olobuild_Floatingpanel_Tile extends Olobuild_Tile_Base {
 
         // --- Trigger button ---
         $trigger_html = '';
-        if ( $is_trigger ) :
+        if ( $is_trigger || $collapsible ) :
             $t_size   = intval( $s['trigger_size'] );
             $t_bg     = $this->safe_color_css( $s['trigger_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
             $t_color  = $this->safe_color_css( $s['trigger_color'] ) ?: 'var(--olo-color-on-primary, #ffffff)';
@@ -190,15 +228,17 @@ class Olobuild_Floatingpanel_Tile extends Olobuild_Tile_Base {
                 $t_pos_css .= $map[ $placement ] ?? $map['bottom-right'];
             }
 
-            $icon_svg = $this->get_trigger_icon( $s['trigger_icon'], $t_color );
+            $icon_svg  = $this->get_trigger_icon( $s['trigger_icon'], $t_color );
+            // Pannello sempre visibile: il pulsante c'è ma resta nascosto finché la X non lo riduce.
+            $t_classes = $uid . '-trigger ' . trim( $resp_class ) . ( $collapsible ? ' olo-fp-trigger-off' : '' );
             ob_start();
             ?>
-            <button class="<?php echo esc_attr( $uid ); ?>-trigger <?php echo esc_attr( trim( $resp_class ) ); ?>"
+            <button type="button" class="<?php echo esc_attr( trim( $t_classes ) ); ?>"
                     style="<?php echo $t_pos_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style attribute assembled above from whitelisted position/placement literals, intval()'d offsets and safe_color_css() colours; sizes are int-cast, $t_shadow is a fixed literal ?>width:<?php echo (int) $t_size; ?>px;height:<?php echo (int) $t_size; ?>px;background:<?php echo $t_bg; ?>;color:<?php echo $t_color; ?>;border:none;border-radius:<?php echo (int) $t_radius; ?>%;cursor:pointer;display:flex;align-items:center;justify-content:center;<?php echo $t_shadow; ?>"
                     data-olo-fp-trigger="<?php echo esc_attr( $uid ); ?>"
                     aria-haspopup="dialog"
                     aria-controls="<?php echo esc_attr( $uid ); ?>-panel"
-                    aria-expanded="false"
+                    aria-expanded="<?php echo $collapsible ? 'true' : 'false'; ?>"
                     aria-label="<?php echo esc_attr( olobuild_t( 'Apri pannello' ) ); ?>">
                 <?php echo $icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed SVG markup from the hardcoded icon map in get_trigger_icon() ?>
             </button>
@@ -207,7 +247,7 @@ class Olobuild_Floatingpanel_Tile extends Olobuild_Tile_Base {
         endif;
 
         // Everything inside a single wrapper div that gets moved to body
-        $wrapper_style = ! empty( $s['_builder_mode'] ) ? 'scroll-margin-top:140px;' : 'display:none;';
+        $wrapper_style = $builder ? 'scroll-margin-top:140px;' : 'display:none;';
         ?>
         <div class="olo-fp-wrapper" data-olo-fp-wrapper="<?php echo esc_attr( $uid ); ?>" style="<?php echo esc_attr( $wrapper_style ); ?>">
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from the internally generated $uid, the int-cast animation duration and fixed transform literals. ?>
@@ -222,11 +262,14 @@ class Olobuild_Floatingpanel_Tile extends Olobuild_Tile_Base {
             .olo-fp-hide-mobile { display: none !important; }
         }
         .<?php echo $uid; ?>-panel {
-            transition: opacity <?php echo (int) $dur; ?>ms ease, transform <?php echo (int) $dur; ?>ms ease;
+            transition: opacity <?php echo (int) $dur; ?>ms ease, transform <?php echo (int) $dur; ?>ms ease, visibility 0s linear 0s;
         }
+        /* Chiuso: anche fuori dal giro del Tab (visibility), dopo la dissolvenza. */
         .<?php echo $uid; ?>-panel.olo-fp-hidden {
             pointer-events: none;
             opacity: 0;
+            visibility: hidden;
+            transition: opacity <?php echo (int) $dur; ?>ms ease, transform <?php echo (int) $dur; ?>ms ease, visibility 0s linear <?php echo (int) $dur; ?>ms;
             <?php
             if ( $anim === 'slide-up' )    echo 'transform: translateY(20px);';
             elseif ( $anim === 'slide-down' ) echo 'transform: translateY(-20px);';
@@ -234,6 +277,17 @@ class Olobuild_Floatingpanel_Tile extends Olobuild_Tile_Base {
             elseif ( $anim === 'slide-right' ) echo 'transform: translateX(-20px);';
             elseif ( $anim === 'scale' )       echo 'transform: scale(0.85);';
             ?>
+        }
+        /* Il pulsante nascosto vince anche sulle classi di visibilità per dispositivo (display:flex !important). */
+        .<?php echo $uid; ?>-trigger.olo-fp-trigger-off { display: none !important; }
+        .<?php echo $uid; ?>-trigger:focus-visible {
+            outline: 2px solid var(--olo-color-primary, #e1474f);
+            outline-offset: 3px;
+        }
+        .<?php echo $uid; ?>-panel .olo-fp-close:focus-visible {
+            outline: 2px solid currentColor;
+            outline-offset: 2px;
+            border-radius: 2px;
         }
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
@@ -244,31 +298,32 @@ class Olobuild_Floatingpanel_Tile extends Olobuild_Tile_Base {
              aria-modal="<?php echo $is_trigger ? 'true' : 'false'; ?>"
              aria-label="<?php echo esc_attr( olobuild_t( 'Pannello flottante' ) ); ?>"
              tabindex="-1"
-             style="<?php echo $pos_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style attribute assembled above from whitelisted position/placement/flex literals, intval()'d numbers, esc_attr()'d custom offsets, radius_int()/spacing_css() helpers and safe_color_css() colours ?>"
+             style="<?php echo $pos_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style attribute assembled above from whitelisted position/placement/flex literals, intval()'d numbers, esc_attr()'d custom offsets, build_border_radius_css()/spacing_css() helpers and safe_color_css() colours ?>"
              data-olo-fp-id="<?php echo esc_attr( $uid ); ?>">
 
             <?php
-            $show_close = ( ! empty( $s['show_close'] ) && $s['show_close'] !== 'false' );
-            // Hide close button in builder mode (panel must stay visible for editing)
-            if ( $show_close && empty( $s['_builder_mode'] ) ) :
+            // La X non nel canvas: lì il pannello resta aperto (e la X coprirebbe l'etichetta del builder).
+            if ( $show_close && ! $builder ) :
                 $cc = $this->safe_color_css( $s['close_color'] ) ?: 'var(--olo-color-text-soft, #666666)';
                 $cs = intval( $s['close_size'] );
             ?>
-            <button class="olo-fp-close"
+            <button type="button" class="olo-fp-close"
                     style="position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;padding:4px;line-height:0;color:<?php echo $cc; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>;z-index:2;"
                     data-olo-fp-close="<?php echo esc_attr( $uid ); ?>"
                     aria-label="<?php echo esc_attr( olobuild_t( 'Chiudi' ) ); ?>">
-                <svg width="<?php echo (int) $cs; ?>" height="<?php echo (int) $cs; ?>" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <svg width="<?php echo (int) $cs; ?>" height="<?php echo (int) $cs; ?>" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
             <?php endif; ?>
 
         <?php
         $html = ob_get_clean();
 
-        // Store state for render_closing()
-        $this->_uid           = $uid;
-        $this->_is_trigger    = $is_trigger;
-        $this->_close_outside = ( ! empty( $s['close_outside'] ) && $s['close_outside'] !== 'false' );
+        // Stato per render_closing()
+        $this->aperti[] = [
+            'uid'           => $uid,
+            'is_trigger'    => $is_trigger,
+            'close_outside' => ( ! empty( $s['close_outside'] ) && $s['close_outside'] !== 'false' ),
+        ];
 
         return $html;
     }
@@ -277,103 +332,127 @@ class Olobuild_Floatingpanel_Tile extends Olobuild_Tile_Base {
      * Render closing wrapper + JS to move elements to body.
      */
     public function render_closing( $settings ) {
-        $s   = wp_parse_args( $settings, $this->defaults );
-        $uid = $this->_uid ?? 'olo-fp-' . substr( md5( wp_json_encode( $s ) ), 0, 8 );
-        $is_trigger    = $this->_is_trigger ?? ( $s['trigger_mode'] === 'button' );
-        $close_outside = $this->_close_outside ?? ( ! empty( $s['close_outside'] ) && $s['close_outside'] !== 'false' );
+        $s     = wp_parse_args( $settings, $this->defaults );
+        $stato = array_pop( $this->aperti );
+        if ( ! is_array( $stato ) ) {
+            // render() non chiamato prima: si ricostruisce lo stato dalle impostazioni.
+            $stato = [
+                'uid'           => $this->uid_istanza( $settings ),
+                'is_trigger'    => empty( $s['_builder_mode'] ) && ( $s['trigger_mode'] === 'button' ),
+                'close_outside' => ( ! empty( $s['close_outside'] ) && $s['close_outside'] !== 'false' ),
+            ];
+        }
+        $uid           = $stato['uid'];
+        $is_trigger    = $stato['is_trigger'];
+        $close_outside = $stato['close_outside'];
         $dur           = intval( $s['animation_duration'] );
 
-        // In builder mode: skip body-move JS (panel must stay in canvas iframe flow).
-        if ( ! empty( $s['_builder_mode'] ) ) {
-            return '</div><!-- .olo-floatingpanel --></div><!-- .olo-fp-wrapper -->';
-        }
-
         ob_start();
+        if ( ! empty( $s['_builder_mode'] ) ) {
+            // Nel canvas niente script che sposta il pannello nel body: resta nel flusso
+            // dell'iframe per essere modificato. Bordo, effetti e raggio in hover sì (sotto).
+            echo '</div><!-- .olo-floatingpanel --></div><!-- .olo-fp-wrapper -->';
+        } else {
         ?>
         </div><!-- .olo-floatingpanel -->
 
         <script>
         (function(){
-            var wrapper = document.querySelector('[data-olo-fp-wrapper="<?php echo esc_js( $uid ); ?>"]');
-            if (!wrapper) return;
+            function init(){
+                var wrapper = document.querySelector('[data-olo-fp-wrapper="<?php echo esc_js( $uid ); ?>"]');
+                if (!wrapper) return false;
+                if (wrapper.getAttribute('data-olo-fp-ready')) return true;
+                wrapper.setAttribute('data-olo-fp-ready', '1');
 
-            /* Move the entire wrapper (style + trigger + panel) to body and make visible */
-            document.body.appendChild(wrapper);
-            wrapper.style.display = "contents";
+                /* Move the entire wrapper (style + trigger + panel) to body and make visible */
+                document.body.appendChild(wrapper);
+                wrapper.style.display = "contents";
 
-            var panel = wrapper.querySelector('[data-olo-fp-id="<?php echo esc_js( $uid ); ?>"]');
-            var trigger = wrapper.querySelector('[data-olo-fp-trigger="<?php echo esc_js( $uid ); ?>"]');
+                var panel = wrapper.querySelector('[data-olo-fp-id="<?php echo esc_js( $uid ); ?>"]');
+                var trigger = wrapper.querySelector('[data-olo-fp-trigger="<?php echo esc_js( $uid ); ?>"]');
+                if (!panel) return true;
 
-            function showPanel() {
-                panel.classList.remove("olo-fp-hidden");
-                if (trigger) {
-                    trigger.style.display = "none";
-                    trigger.setAttribute("aria-expanded", "true");
-                }
-                /* Move focus into the dialog for keyboard/AT users */
-                var focusTarget = panel.querySelector('[data-olo-fp-close], a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])') || panel;
-                if (focusTarget && typeof focusTarget.focus === "function") {
-                    try { focusTarget.focus(); } catch (e) {}
-                }
-            }
-            function hidePanel() {
-                panel.classList.add("olo-fp-hidden");
-                if (trigger) {
-                    trigger.style.display = "flex";
-                    trigger.setAttribute("aria-expanded", "false");
-                    /* Return focus to the trigger that opened the panel */
-                    if (typeof trigger.focus === "function") {
-                        try { trigger.focus(); } catch (e) {}
+                function showPanel() {
+                    panel.classList.remove("olo-fp-hidden");
+                    if (trigger) {
+                        trigger.classList.add("olo-fp-trigger-off");
+                        trigger.setAttribute("aria-expanded", "true");
+                    }
+                    /* Move focus into the dialog for keyboard/AT users */
+                    var focusTarget = panel.querySelector('[data-olo-fp-close], a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])') || panel;
+                    if (focusTarget) {
+                        if (typeof focusTarget.focus === "function") {
+                            try { focusTarget.focus(); } catch (e) {}
+                        }
                     }
                 }
-            }
-
-            /* Close on Escape key */
-            document.addEventListener("keydown", function(e) {
-                if (e.key !== "Escape" && e.keyCode !== 27) return;
-                if (panel.classList.contains("olo-fp-hidden")) return;
-                hidePanel();
-            });
-
-            <?php if ( $is_trigger ) : ?>
-            if (trigger) {
-                trigger.addEventListener("click", function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    showPanel();
-                });
-            }
-            <?php if ( $close_outside ) : ?>
-            document.addEventListener("click", function(e) {
-                if (panel.classList.contains("olo-fp-hidden")) return;
-                if (panel.contains(e.target)) return;
-                if (trigger) {
-                    if (trigger.contains(e.target)) return;
+                function hidePanel() {
+                    panel.classList.add("olo-fp-hidden");
+                    if (trigger) {
+                        trigger.classList.remove("olo-fp-trigger-off");
+                        trigger.setAttribute("aria-expanded", "false");
+                        /* Return focus to the trigger that opened the panel */
+                        if (typeof trigger.focus === "function") {
+                            try { trigger.focus(); } catch (e) {}
+                        }
+                    }
                 }
-                hidePanel();
-            });
-            <?php endif; ?>
-            <?php endif; ?>
 
-            // Close button (works in both 'always' and 'button' trigger modes)
-            var closeBtn = panel.querySelector('[data-olo-fp-close="<?php echo esc_js( $uid ); ?>"]');
-            if (closeBtn) {
-                closeBtn.addEventListener("click", function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
+                <?php if ( $is_trigger ) : ?>
+                /* Esc chiude il pannello aperto dal pulsante. In «Sempre visibile» no: non è un dialogo. */
+                document.addEventListener("keydown", function(e) {
+                    var isEsc = e.key === "Escape" || e.keyCode === 27;
+                    if (!isEsc) return;
+                    if (panel.classList.contains("olo-fp-hidden")) return;
                     hidePanel();
                 });
+                <?php endif; ?>
+
+                if (trigger) {
+                    trigger.addEventListener("click", function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        showPanel();
+                    });
+                }
+                <?php if ( $is_trigger ) : ?>
+                <?php if ( $close_outside ) : ?>
+                document.addEventListener("click", function(e) {
+                    if (panel.classList.contains("olo-fp-hidden")) return;
+                    if (panel.contains(e.target)) return;
+                    if (trigger) {
+                        if (trigger.contains(e.target)) return;
+                    }
+                    hidePanel();
+                });
+                <?php endif; ?>
+                <?php endif; ?>
+
+                /* La X: con il pulsante richiude; in «Sempre visibile» riduce il pannello al pulsante. */
+                var closeBtn = panel.querySelector('[data-olo-fp-close="<?php echo esc_js( $uid ); ?>"]');
+                if (closeBtn) {
+                    closeBtn.addEventListener("click", function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        hidePanel();
+                    });
+                }
+                return true;
+            }
+            if (!init()) {
+                if (document.readyState === "loading") { document.addEventListener("DOMContentLoaded", init); }
             }
         })();
         </script>
         </div><!-- .olo-fp-wrapper -->
         <?php
+        }
         // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
         $border_hover_css  = $this->build_border_hover_css( ".{$uid}-panel", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
         $border_effect_css = $this->build_border_effect_css( ".{$uid}-panel", $s['border'] ?? [], $s );
         // La transition del bordo in hover sostituiva quella di comparsa del pannello (opacity/transform): si ricompongono insieme, col raggio in hover.
-        $tr_pannello       = 'opacity ' . (int) $dur . 'ms ease, transform ' . (int) $dur . 'ms ease';
+        $tr_pannello       = 'opacity ' . (int) $dur . 'ms ease, transform ' . (int) $dur . 'ms ease, visibility 0s linear 0s';
         $tr_bordo          = Olobuild_Tile_Utils::transizione_di( $border_hover_css );
         $tr_insieme        = $tr_pannello . ( $tr_bordo !== '' ? ', ' . $tr_bordo : '' );
         $radius_hover_css  = Olobuild_Tile_Utils::radius_hover_rules( ".{$uid}-panel", $s, 'border_radius_hover', $tr_insieme );

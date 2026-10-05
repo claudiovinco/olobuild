@@ -1,6 +1,10 @@
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
 import { t } from '@/i18n';
 
+// Il pulsante trigger esiste in «Con pulsante trigger» e, in «Sempre visibile», quando la X
+// può ridurre il pannello: i suoi controlli (e l'animazione di apertura) servono in entrambi i casi.
+const conPulsante = (s) => s.trigger_mode === 'button' || !(s.show_close === false || s.show_close === 'false');
+
 /**
  * Tile FloatingPanel — split CONTENUTO/STILE (regola universale Olobuild).
  *   fields[]      → posizionamento, dimensioni, layout figli, trigger/visibilità, chiusura, animazione, responsive
@@ -131,13 +135,13 @@ export default {
         { value: 'heart', label: t('♥ Cuore') },
         { value: 'settings', label: t('⚙ Impostazioni') },
       ],
-      condition: { field: 'trigger_mode', value: 'button' },
+      show: conPulsante,
     },
 
     // ─── Chiusura ───
     { type: 'separator', label: t('Chiusura') },
     { key: 'show_close', label: t('Mostra pulsante chiudi'), type: 'toggle',
-      condition: { field: 'trigger_mode', value: 'button' } },
+      description: t('In «Sempre visibile» la X riduce il pannello al pulsante (vedi «Stile pulsante trigger»), che lo riapre. Con il pulsante trigger la X richiude il pannello.') },
     { key: 'close_outside', label: t('Chiudi cliccando fuori'), type: 'toggle',
       condition: { field: 'trigger_mode', value: 'button' } },
 
@@ -155,7 +159,7 @@ export default {
         { value: 'slide-right', label: t('Scorrimento da sinistra') },
         { value: 'scale', label: t('Scala') },
       ],
-      condition: { field: 'trigger_mode', value: 'button' },
+      show: conPulsante,
     },
 
     // ─── Responsive ───
@@ -186,15 +190,15 @@ export default {
     // ─── Stile trigger ───
     { type: 'separator', label: t('Stile pulsante trigger') },
     { key: 'trigger_size', label: t('Dimensione trigger'), type: 'range', min: 32, max: 80, step: 2,
-      condition: { field: 'trigger_mode', value: 'button' } },
+      show: conPulsante },
     { key: 'trigger_bg', label: t('Sfondo trigger'), type: 'color',
-      condition: { field: 'trigger_mode', value: 'button' } },
+      show: conPulsante },
     { key: 'trigger_color', label: t('Colore icona trigger'), type: 'color',
-      condition: { field: 'trigger_mode', value: 'button' } },
+      show: conPulsante },
     { key: 'trigger_radius', label: t('Arrotondamento trigger'), type: 'range', min: 0, max: 50, step: 5,
-      condition: { field: 'trigger_mode', value: 'button' } },
+      show: conPulsante },
     { key: 'trigger_shadow', label: t('Ombra trigger'), type: 'toggle',
-      condition: { field: 'trigger_mode', value: 'button' } },
+      show: conPulsante },
 
     // ─── Stile chiusura ───
     { type: 'separator', label: t('Stile pulsante chiudi') },
@@ -206,13 +210,16 @@ export default {
     // ─── Durata animazione ───
     { type: 'separator', label: t('Durata animazione') },
     { key: 'animation_duration', label: t('Durata'), type: 'range', min: 100, max: 800, step: 50,
-      condition: { field: 'trigger_mode', value: 'button' } },
+      show: conPulsante },
 
     ...borderFields(),
     { type: 'separator', label: t('Forma') },
     { key: 'width', label: t('Larghezza (px o %)'), type: 'text' },
     { key: 'height', label: t('Altezza (vuoto = auto)'), type: 'text' },
     { type: 'separator', label: t('Disposizione') },
+    // «Appiccicoso» (sticky) tolto: il pannello viene spostato in fondo al body, dove sticky
+    // si comporta come un blocco normale a fine pagina. Il PHP accetta ancora il valore,
+    // così le pagine che l'avevano salvato si vedono come prima.
     {
       key: 'position',
       label: t('Tipo posizione'),
@@ -220,7 +227,6 @@ export default {
       options: [
         { value: 'fixed', label: t('Fisso (viewport)') },
         { value: 'absolute', label: t('Assoluto (pagina)') },
-        { value: 'sticky', label: t('Appiccicoso') },
       ],
     },
     { key: 'layout_gap', label: t('Gap figli'), type: 'range', min: 0, max: 40, step: 2 },
