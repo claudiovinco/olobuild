@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.513 - 2026-10-05 (fix)
+- Nav Menu «Schermo intero» con l'hamburger fisso: mentre il menu è aperto l'hamburger non copre più la X di chiusura.
+
 ## v1.4.512 - 2026-10-05 (fix)
 - Nav Menu: il menu mobile «Schermo intero» si apre (prima non compariva mai); si chiude con la X, con Esc o scegliendo una voce, e finché è aperto il fuoco resta dentro.
 - «Vai al contenuto principale» porta al contenuto della pagina: header, footer e template incorporati non si presentano più come contenuto principale.
