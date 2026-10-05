@@ -22,14 +22,15 @@ export default {
     button_fullwidth: false,
     modal_size: '',
     modal_close_button: true,
-    modal_title: 'Offerta esclusiva',
+    modal_title: 'Offerta di benvenuto',
     modal_shadow: 'lg',
     modal_overlay: '60',
     modal_radius: '16',
     modal_border_width: '0',
     modal_border_color: '',
-    content: '<p>Iscriviti alla nostra newsletter per ricevere offerte esclusive e contenuti riservati.</p>',
-    image: 'https://images.unsplash.com/photo-1759563867665-f93d66272338?w=1200&q=75&auto=format&fit=crop',
+    // Testo neutro, senza promettere moduli che il popup non ha (stesso default del PHP).
+    content: '<p>Per i nuovi clienti, il primo ordine ha uno sconto del 10%. Contattaci per sapere come richiederlo.</p>',
+    image: '',
     image_position: 'top',
     preset: 'modal-classic',
     modal_bg: 'var(--olo-color-surface, #ffffff)',
@@ -73,6 +74,7 @@ export default {
     scroll_percent: '50',
     timer_delay: '5',
     inactivity_delay: '30',
+    key_sequence_keys: '',
     show_max_times: '0',
     show_once_per_session: false,
     display_device: '',
@@ -113,14 +115,21 @@ export default {
     { key: 'popup_close_overlay', label: t('Chiudi su click overlay'), type: 'toggle' },
 
     { type: 'separator', label: t('Trigger avanzati') },
-    { key: 'popup_trigger', label: t('Attivazione'), type: 'select', options: [
+    { key: 'popup_trigger', label: t('Attivazione'), type: 'select',
+      description: t('Nel builder i trigger automatici non partono: il popup si apre con il suo pulsante. Sul sito il pulsante compare solo con «Click».'),
+      options: [
       { value: 'click', label: t('Click (default)') },
       { value: 'page_load', label: t('Caricamento pagina') },
       { value: 'scroll_percent', label: t('Scroll percentuale') },
       { value: 'exit_intent', label: t('Exit Intent') },
       { value: 'time_delay', label: t('Timer (secondi)') },
       { value: 'inactivity', label: t('Inattività utente') },
+      { value: 'reach', label: t('Arrivo a questo punto della pagina') },
+      { value: 'key_sequence', label: t('Sequenza di tasti') },
     ]},
+    { key: 'key_sequence_keys', label: t('Sequenza'), type: 'text',
+      condition: { field: 'popup_trigger', op: 'eq', value: 'key_sequence' },
+      description: t('I tasti da premere in fila; le frecce si scrivono ↑ ↓ ← →. Vuoto: il codice Konami (↑↑↓↓←→←→ba).') },
     { key: 'popup_delay', label: t('Ritardo (secondi)'), type: 'range', min: 0, max: 30, step: 1,
       condition: { field: 'popup_trigger', op: 'in', value: ['page_load', 'time_delay'] } },
     { key: 'popup_scroll_percent', label: t('Scroll'), type: 'range', min: 10, max: 100, step: 10,
@@ -138,9 +147,12 @@ export default {
     { key: 'show_once_per_session', label: t('Solo una volta per sessione'), type: 'toggle' },
 
     { type: 'separator', label: t('Regole di visualizzazione') },
-    { key: 'display_device', label: t('Dispositivo'), type: 'select', options: [
+    { key: 'display_device', label: t('Dispositivo'), type: 'select',
+      description: t('Si decide dalla larghezza della finestra: telefono sotto 640 px, tablet da 640 a 959 px, desktop da 960 px.'),
+      options: [
       { value: '', label: t('Tutti') },
       { value: 'desktop', label: t('Solo desktop') },
+      { value: 'tablet', label: t('Solo tablet') },
       { value: 'mobile', label: t('Solo mobile') },
     ]},
     { key: 'display_logged', label: t('Stato utente'), type: 'select', options: [
@@ -150,13 +162,15 @@ export default {
     ]},
     { key: 'display_date_from', label: t('Mostra dal'), type: 'date' },
     { key: 'display_date_to', label: t('Mostra fino al'), type: 'date' },
-    { key: 'display_referrer', label: t('Solo da referrer (contiene)'), type: 'text', placeholder: t('google.com') },
+    { key: 'display_referrer', label: t('Solo da referrer (contiene)'), type: 'text', placeholder: t('google.com'),
+      description: t('Il popup compare solo a chi arriva da un indirizzo che contiene questo testo. Vale per tutta la visita, non solo per la prima pagina.') },
     { key: 'display_woo_cart', label: t('Carrello WooCommerce'), type: 'select', options: [
       { value: '', label: t('Ignora') },
       { value: 'has_items', label: t('Solo se ha prodotti') },
       { value: 'empty', label: t('Solo se vuoto') },
     ]},
-    { key: 'display_page_views', label: t('Dopo N pagine visitate (0=ignora)'), type: 'range', min: 0, max: 20 },
+    { key: 'display_page_views', label: t('Dopo N pagine visitate (0=ignora)'), type: 'range', min: 0, max: 20,
+      description: t('Conta le pagine viste nella visita, compresa quella attuale. Si contano le pagine che contengono un popup: per contarle tutte mettilo in un modello globale, per esempio il footer.') },
   ],
 
   styleFields: [
@@ -178,17 +192,14 @@ export default {
     ]},
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
+    // Condizione = i preset in cui almeno uno dei due campi sotto compare (Liquid Glass
+    // ne aveva solo «Intensità effetto», tolta: la sezione sarebbe rimasta vuota).
     { type: 'separator', label: t('Tweak effetto preset'),
-      condition: { field: 'preset', op: 'in', value: ['liquid-glass','neon-cyber','brutalist-block','magnetic-liquid','sticker','retro-terminal','3d-tilt'] } },
+      condition: { field: 'preset', op: 'in', value: ['neon-cyber','brutalist-block','magnetic-liquid','sticker','retro-terminal','3d-tilt'] } },
     { key: 'effect_color', label: t('Colore effetto'), type: 'color',
       condition: { field: 'preset', op: 'in', value: ['neon-cyber','brutalist-block','magnetic-liquid','sticker','retro-terminal'] } },
-    { key: 'effect_intensity', label: t('Intensità effetto'), type: 'select',
-      options: [
-        { value: 'low',    label: t('Bassa') },
-        { value: 'medium', label: t('Media (default)') },
-        { value: 'high',   label: t('Alta') },
-      ],
-      condition: { field: 'preset', op: 'in', value: ['liquid-glass','neon-cyber','brutalist-block','magnetic-liquid','sticker','retro-terminal','3d-tilt'] } },
+    // «Intensità effetto» (effect_intensity) qui non c'è: il popup disegna i suoi effetti
+    // da sé, non con gli effetti wow condivisi che la leggono. La chiave resta nei default.
     { key: 'effect_speed', label: t('Velocità animazioni'), type: 'range',
       min: 0, max: 4000, step: 100,
       condition: { field: 'preset', op: 'in', value: ['neon-cyber','magnetic-liquid','retro-terminal','3d-tilt'] } },
@@ -232,10 +243,14 @@ export default {
       legacyKeys: { h: 'modal_shadow_h', v: 'modal_shadow_v', blur: 'modal_shadow_blur', spread: 'modal_shadow_spread', color: 'modal_shadow_color', inset: 'modal_shadow_inset' },
       condition: { field: 'modal_shadow', op: 'eq', value: 'custom' } },
     withHover({ key: 'modal_radius', label: t('Raggio'), type: 'border-radius' }),
-    { key: 'modal_border', label: t('Bordo modale'), type: 'border',
-      legacyKeys: { width: 'modal_border_width', style: 'modal_border_style', color: 'modal_border_color' } },
-
-
+    // UN solo bordo per il dialogo: «Bordo modale» con hover ed effetti (borderFields
+    // sulla chiave `modal_border`). Il vecchio «Bordo» condiviso in fondo al tab salvava
+    // `border` su un selettore inesistente e non disegnava niente: il renderer lo legge
+    // ancora come riserva. `legacyKeys`: le chiavi piatte dei preset restano in sincronia.
+    ...borderFields({ key: 'modal_border' })
+      .filter((f) => f.type !== 'separator')
+      .map((f) => (f.key === 'modal_border' ? { ...f, label: t('Bordo modale'),
+        legacyKeys: { width: 'modal_border_width', style: 'modal_border_style', color: 'modal_border_color' } } : f)),
 
     { key: 'modal_bg', label: t('Sfondo modale'), type: 'color' },
     { key: 'modal_text_color', label: t('Colore testo modale'), type: 'color' },
@@ -285,7 +300,6 @@ export default {
     { key: 'modal_scanlines', label: t('Effetto scanlines (CRT)'), type: 'toggle' },
     { key: 'modal_terminal_prompt', label: t('Prompt terminale (> + cursore)'), type: 'toggle' },
 
-    ...borderFields(),
     { type: 'separator', label: t('Disposizione') },
     { key: 'image_position', label: t('Posizione immagine'), type: 'select', options: [
       { value: 'top', label: t('Sopra') },

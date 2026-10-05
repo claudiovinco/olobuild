@@ -13,6 +13,9 @@ export default {
   name: t('Popup Nascosto'),
   icon: 'dashicons-flag',
   category: 'interactive',
+  // Ritirata dalla palette (I3, 1.4.508): «Arrivo a questo punto della pagina» e «Sequenza
+  // di tasti» ora sono attivazioni del Popup. Resta per le pagine che la usano.
+  hidden: true,
   defaults: {
     typography_preset: '',
     // Contenuto

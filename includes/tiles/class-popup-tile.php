@@ -25,7 +25,8 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
         'modal_radius'          => '12',
         'modal_border_width'    => '0',
         'modal_border_color'    => '',
-        'content'               => '<p>Contenuto del popup...</p>',
+        // Stesso testo neutro del default del config (popup.js).
+        'content'               => '<p>Per i nuovi clienti, il primo ordine ha uno sconto del 10%. Contattaci per sapere come richiederlo.</p>',
         'image'                 => '',
         'image_position'        => 'top',
 
@@ -73,6 +74,7 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
         'scroll_percent'        => '50',
         'timer_delay'           => '5',
         'inactivity_delay'      => '30',
+        'key_sequence_keys'     => '',
         'show_max_times'        => '0',
         'show_once_per_session' => false,
         'display_device'        => '',
@@ -146,9 +148,17 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
 
         $uid = 'mpopup-' . wp_rand( 10000, 99999 );
 
-        // Build data attributes for JS display rules
+        // Nel canvas del builder niente trigger automatici né regole lato browser: il
+        // popup si apre solo con il suo pulsante (anche se sul sito parte da solo).
+        $in_builder = ! empty( $s['_builder_mode'] );
+
+        // Regole di visualizzazione lato browser (dispositivo, referrer, pagine viste):
+        // le applica lo script qui sotto. Gli attributi data-* restano come descrizione.
         $display_attrs = '';
         $display_device = sanitize_text_field( $s['display_device'] ?? '' );
+        if ( ! in_array( $display_device, [ 'desktop', 'tablet', 'mobile' ], true ) ) {
+            $display_device = '';
+        }
         if ( $display_device ) {
             $display_attrs .= ' data-olo-popup-device="' . esc_attr( $display_device ) . '"';
         }
@@ -156,14 +166,27 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
         if ( $display_referrer ) {
             $display_attrs .= ' data-olo-popup-referrer="' . esc_attr( $display_referrer ) . '"';
         }
-        $display_pvs = intval( $s['display_page_views'] ?? 0 );
+        $display_pvs = max( 0, intval( $s['display_page_views'] ?? 0 ) );
         if ( $display_pvs > 0 ) {
             $display_attrs .= ' data-olo-popup-pageviews="' . $display_pvs . '"';
         }
 
         // Advanced trigger settings
         $trigger         = $s['popup_trigger'] ?: 'click';
-        $is_auto_trigger = ( $trigger !== 'click' );
+        $is_auto_trigger = ( $trigger !== 'click' ) && ! $in_builder;
+        // Sequenza di tasti (dalla 1.4.508, era di Popup Nascosto): le frecce si scrivono ↑ ↓ ← →.
+        $sequenza = [];
+        if ( 'key_sequence' === $trigger ) {
+            $frecce = [ '↑' => 'ArrowUp', '↓' => 'ArrowDown', '←' => 'ArrowLeft', '→' => 'ArrowRight' ];
+            $testo  = (string) ( $s['key_sequence_keys'] ?? '' );
+            if ( '' === trim( $testo ) ) {
+                $testo = '↑↑↓↓←→←→ba';
+            }
+            foreach ( preg_split( '//u', $testo, -1, PREG_SPLIT_NO_EMPTY ) as $c ) {
+                if ( ' ' === $c ) { continue; }
+                $sequenza[] = isset( $frecce[ $c ] ) ? $frecce[ $c ] : $c;
+            }
+        }
 
         // New advanced fields
         $popup_delay          = max( 0, intval( $s['popup_delay'] ?? 5 ) );
@@ -212,8 +235,9 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
         // Button text
         $btn_text = esc_html( $s['button_text'] ?: 'Apri' );
 
-        // Shadow
-        $shadow = Olobuild_Tile_Utils::shadow( $s['modal_shadow'] ?? 'lg' );
+        // Ombra: preset o «Personalizzata» (modal_shadow_h/v/blur/spread/color/inset,
+        // scritte dal controllo box-shadow). Prima la personalizzata diventava 'none'.
+        $shadow = Olobuild_Tile_Utils::shadow_value( $s, 'modal_shadow' );
 
         // Overlay opacity (0-100 -> 0.0-1.0)
         $overlay_pct = max( 0, min( 100, intval( $s['modal_overlay'] ?? 60 ) ) );
@@ -228,10 +252,31 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
         $border_c = $this->safe_color_css( $s['modal_border_color'] ?? '' ) ?: 'var(--olo-color-border, #E5E7EB)';
         $border_style_allowed = [ 'solid', 'dashed', 'dotted', 'double' ];
         $border_style = in_array( $s['modal_border_style'] ?? 'solid', $border_style_allowed, true ) ? ( $s['modal_border_style'] ?? 'solid' ) : 'solid';
-        $modal_border_decl = Olobuild_Tile_Utils::border_css(
-            $s['modal_border'] ?? null,
-            [ 'width' => $border_w, 'style' => $border_style, 'color' => $border_c ]
-        );
+        // ── Bordo del dialogo: UN controllo («Bordo modale», con hover ed effetti) ──
+        // Scrive `modal_border`; il ponte legacy tiene in sincronia le chiavi piatte
+        // modal_border_width/style/color, quelle che scrivono i preset. Il vecchio
+        // «Bordo» condiviso salvava `border` e lo applicava a `.{$uid}`, un selettore che
+        // nel markup non c'è ($uid è l'id del modale): non ha mai disegnato niente. Resta
+        // letto come riserva, solo quando né modal_border né le chiavi piatte danno un bordo.
+        $mb_raw = $s['modal_border'] ?? null;
+        if ( is_array( $mb_raw ) && Olobuild_Tile_Utils::border_is_set( $mb_raw ) ) {
+            $modal_border_decl = Olobuild_Tile_Utils::border_css( $mb_raw );
+            $modal_border_base = $mb_raw;
+        } elseif ( $border_w > 0 ) {
+            $modal_border_decl = Olobuild_Tile_Utils::border_css( null, [ 'width' => $border_w, 'style' => $border_style, 'color' => $border_c ] );
+            $modal_border_base = [ 'top' => $border_w, 'right' => $border_w, 'bottom' => $border_w, 'left' => $border_w, 'style' => $border_style, 'color' => $border_c ];
+        } elseif ( $this->parse_border( $s['border'] ?? null ) ) {
+            $modal_border_decl = $this->build_border_css( $s['border'] );
+            $modal_border_base = $s['border'];
+        } else {
+            $modal_border_decl = '';
+            $modal_border_base = is_array( $mb_raw ) ? $mb_raw : [];
+        }
+        // Hover ed effetti del bordo sul dialogo, partendo dal bordo che si vede.
+        $bordo             = [ 'modal_border' => $modal_border_base ];
+        $dialog_sel        = "#{$uid} .uk-modal-dialog";
+        $border_hover_css  = $this->build_border_hover_css( $dialog_sel, $bordo['modal_border'], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( $dialog_sel, $bordo['modal_border'], $s );
 
         // Effetti avanzati modale (v1.0.60+)
         $backdrop_blur     = max( 0, min( 40, intval( $s['modal_backdrop_blur'] ?? 0 ) ) );
@@ -334,7 +379,6 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
                 <?php if ( $shadow !== 'none' ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>
                 <?php echo esc_attr( $modal_border_decl ); ?>
             }
-            <?php if ( $radius_hover_css !== '' ) : ?>#<?php echo esc_attr( $uid ); ?> .uk-modal-dialog{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?> .uk-modal-dialog:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             /* Animation keyframes */
             <?php if ( $popup_animation === 'slide-up' ) : ?>
             #<?php echo esc_attr( $uid ); ?> .uk-modal-dialog { animation: oloPopSlideUp 0.3s ease-out; }
@@ -477,6 +521,17 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
                 animation: olo-pop-cursor-<?php echo esc_attr( $uid ); ?> <?php echo (int) $blink_ms; ?>ms steps(1) infinite;
             }
             <?php endif; ?>
+            <?php
+            // Bordo in hover ed effetti bordo sul dialogo: DOPO le regole del dialogo
+            // (anche quella a schermo intero), così vincono a parità di selettore. Poi
+            // il raggio in hover, che riprende la transizione del bordo: in CSS vince
+            // una sola `transition`.
+            echo $border_hover_css . $border_effect_css;
+            if ( $radius_hover_css !== '' ) :
+                $tr_bordo = Olobuild_Tile_Utils::transizione_di( $border_hover_css );
+                ?>
+            #<?php echo esc_attr( $uid ); ?> .uk-modal-dialog{transition:<?php echo $tr_bordo !== '' ? $tr_bordo . ', ' : ''; ?>border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?> .uk-modal-dialog:hover{border-radius:<?php echo $radius_hover_css; ?> !important}
+            <?php endif; ?>
         </style>
         <?php
         // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -485,6 +540,7 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
         if ( $s['modal_size'] === 'full' ) :
         ?>
         <div class="olo-popup olo-pop--preset-<?php echo esc_attr( $preset_id ); ?> olo-popup-<?php echo esc_attr( $uid ); ?>"<?php echo $data_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute string built above exclusively from esc_attr()/intval() values ?>>
+            <?php if ( 'reach' === $trigger ) : ?><div data-olo-pp-punto style="height:1px"></div><?php endif; ?>
             <?php if ( ! $is_auto_trigger ) : ?>
             <button class="<?php echo esc_attr( $btn_class ); ?>" type="button" uk-toggle="target: #<?php echo esc_attr( $uid ); ?>">
                 <?php echo $icon_html; ?><?php echo $btn_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon built with esc_attr() and text escaped with esc_html() above ?>
@@ -504,6 +560,7 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
         </div>
         <?php else : ?>
         <div class="olo-popup olo-pop--preset-<?php echo esc_attr( $preset_id ); ?> olo-popup-<?php echo esc_attr( $uid ); ?>"<?php echo $data_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute string built above exclusively from esc_attr()/intval() values ?>>
+            <?php if ( 'reach' === $trigger ) : ?><div data-olo-pp-punto style="height:1px"></div><?php endif; ?>
             <?php if ( ! $is_auto_trigger ) : ?>
             <button class="<?php echo esc_attr( $btn_class ); ?>" type="button" uk-toggle="target: #<?php echo esc_attr( $uid ); ?>">
                 <?php echo $icon_html; ?><?php echo $btn_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon built with esc_attr() and text escaped with esc_html() above ?>
@@ -539,6 +596,50 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
                 var iframes = el.querySelectorAll('.olo-map iframe');
                 iframes.forEach(function(f) { f.src = f.src; });
             });
+            <?php if ( ! $in_builder ) : ?>
+            /* Pagine viste nella sessione: contate UNA volta per pagina anche con più popup,
+               in sessionStorage con una chiave fissa del sito. Alla prima si ricorda anche
+               il referrer d'ingresso della visita. */
+            var oloPagine = window.oloPopupPagine;
+            if (typeof oloPagine !== 'number') {
+                oloPagine = 1;
+                try {
+                    oloPagine = (parseInt(sessionStorage.getItem('olo_popup_pagine'), 10) || 0) + 1;
+                    sessionStorage.setItem('olo_popup_pagine', String(oloPagine));
+                    if (sessionStorage.getItem('olo_popup_referrer') === null) {
+                        sessionStorage.setItem('olo_popup_referrer', document.referrer || '');
+                    }
+                } catch(e){}
+                window.oloPopupPagine = oloPagine;
+            }
+            /* Regole di visualizzazione lato browser. Dispositivo per larghezza:
+               telefono sotto 640px, tablet sotto 960px, desktop da 960px. */
+            function oloRegoleOk() {
+                var dev = '<?php echo esc_js( $display_device ); ?>';
+                if (dev) {
+                    var w = window.innerWidth || document.documentElement.clientWidth;
+                    var ora = w < 640 ? 'mobile' : (w < 960 ? 'tablet' : 'desktop');
+                    if (ora !== dev) return false;
+                }
+                var ref = '<?php echo esc_js( $display_referrer ); ?>'.toLowerCase();
+                if (ref) {
+                    var da = document.referrer || '';
+                    try { da += ' ' + (sessionStorage.getItem('olo_popup_referrer') || ''); } catch(e){}
+                    if (da.toLowerCase().indexOf(ref) < 0) return false;
+                }
+                var minPagine = <?php echo (int) $display_pvs; ?>;
+                if (minPagine > 0) {
+                    if (oloPagine < minPagine) return false;
+                }
+                return true;
+            }
+            if (!oloRegoleOk()) {
+                /* Come le regole lato server: niente pulsante, niente apertura. */
+                var oloRadice = document.querySelector('.olo-popup-<?php echo esc_js( $uid ); ?>');
+                if (oloRadice) oloRadice.style.display = 'none';
+                return;
+            }
+            <?php endif; ?>
             <?php if ( $is_auto_trigger ) : ?>
             /* Advanced popup trigger: <?php echo esc_js( $trigger ); ?> */
             var oloTriggered = false;
@@ -558,6 +659,9 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
             }
 
             function oloCanShow() {
+                /* Le regole di visualizzazione valgono anche al momento dell'apertura
+                   (la finestra può essere stata ridimensionata). */
+                if (!oloRegoleOk()) return false;
                 /* Legacy once-per-session check */
                 if (onceSession) {
                     try { if (sessionStorage.getItem(popupKey + '_shown')) return false; } catch(e){}
@@ -668,6 +772,40 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
             }
             <?php endif; ?>
 
+            <?php if ( $trigger === 'reach' ) : ?>
+            /* Quando si arriva al punto della pagina dove sta la tile (era di Popup Nascosto,
+               che con una finestra di 100px saltava gli scroll veloci e i salti ad ancora). */
+            var oloPunto = document.querySelector('.olo-popup-<?php echo esc_js( $uid ); ?> [data-olo-pp-punto]');
+            if (oloPunto) {
+                if ('IntersectionObserver' in window) {
+                    var oloIo = new IntersectionObserver(function(voci){
+                        voci.forEach(function(v){
+                            if (v.isIntersecting) { oloOpenPopup(); oloIo.disconnect(); return; }
+                            if (v.boundingClientRect.top < 0) { oloOpenPopup(); oloIo.disconnect(); }
+                        });
+                    }, { rootMargin: '0px 0px -25% 0px' });
+                    oloIo.observe(oloPunto);
+                }
+            }
+            <?php endif; ?>
+
+            <?php if ( $trigger === 'key_sequence' ) : ?>
+            /* Sequenza di tasti, es. il codice Konami. */
+            var oloSeq = <?php echo wp_json_encode( $sequenza ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_json_encode() of single characters / fixed Arrow* key names ?>;
+            var oloPos = 0;
+            document.addEventListener('keydown', function(e){
+                if (!e.key) return;
+                if (!oloSeq.length) return;
+                var t = String(e.key).toLowerCase();
+                if (t === String(oloSeq[oloPos]).toLowerCase()) {
+                    oloPos++;
+                    if (oloPos === oloSeq.length) { oloPos = 0; oloOpenPopup(); }
+                } else {
+                    oloPos = (t === String(oloSeq[0]).toLowerCase()) ? 1 : 0;
+                }
+            });
+            <?php endif; ?>
+
             <?php if ( $trigger === 'inactivity' ) : ?>
             /* Inactivity trigger: open after <?php echo intval( $s['inactivity_delay'] ); ?>s without activity */
             var inactDelay = <?php echo intval( $s['inactivity_delay'] ); ?>;
@@ -702,15 +840,7 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
         if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Text_Effects::css() from fixed effect definitions
         $this->tfx_print_script();
 
-                // Border system
-        $border_css        = $this->build_border_css( $s['border'] ?? [] );
-        $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
-        $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
-        if ( $border_css || $border_hover_css || $border_effect_css ) {
-            echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base::build_border_css() from sanitized border settings
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base border helpers from sanitized border settings
-        }
+        // Il bordo (base, hover, effetti) è nel <style> principale, sul dialogo.
         return ob_get_clean();
     }
 
