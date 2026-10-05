@@ -144,14 +144,8 @@ class Olobuild_Lightbox_Tile extends Olobuild_Tile_Base {
         if ( $tfx_css ) $html .= '<style>' . $tfx_css . '</style>';
         ob_start(); $this->tfx_print_script(); $html .= ob_get_clean();
 
-        $border_css        = $this->build_border_css( [] );
-        $border_hover_css  = $this->build_border_hover_css( '.$uid', [], [], 300 );
-        $border_effect_css = $this->build_border_effect_css( '.$uid', [], $settings );
-        if ( $border_css || $border_hover_css || $border_effect_css ) {
-            $html .= '<style>';
-            if ( $border_css ) $html .= '.' . $uid . '{' . $border_css . '}';
-            $html .= $border_hover_css . $border_effect_css . '</style>';
-        }
+        // Bordo condiviso sulla griglia (prima passava array vuoti: il controllo non faceva niente)
+        $html .= $this->stile_bordo( $settings, '.' . $uid );
         return $html;
     }
 }

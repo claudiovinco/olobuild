@@ -157,6 +157,6 @@ export default {
       { value: 'all', label: t('Tutti gli elementi testuali') },
     ]),
     ...shadowField,
-    ...borderFields({ effetti: false }), // il PHP scrive bordo ed effetti su un selettore che nel markup non c'è
+    ...borderFields(),
   ],
 };

@@ -144,6 +144,6 @@ export default {
     { type: 'separator', label: t('Spaziatura') },
     { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 200 },
 
-    ...borderFields({ effetti: false }), // il PHP scrive bordo ed effetti su un selettore che nel markup non c'è
+    ...borderFields(),
   ],
 };

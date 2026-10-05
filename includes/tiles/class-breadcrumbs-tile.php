@@ -71,9 +71,11 @@ class Olobuild_Breadcrumbs_Tile extends Olobuild_Tile_Base {
             return '';
         }
 
+        $uid = 'olo-bc-' . wp_unique_id();
+
         ob_start();
         ?>
-        <nav class="olo-breadcrumbs olo-bc-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" aria-label="<?php echo esc_attr( olobuild_t( 'Breadcrumb' ) ); ?>">
+        <nav class="olo-breadcrumbs <?php echo esc_attr( $uid ); ?> olo-bc-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" aria-label="<?php echo esc_attr( olobuild_t( 'Breadcrumb' ) ); ?>">
             <ul class="uk-breadcrumb">
                 <?php echo implode( "\n", $items ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- each list item is assembled above exclusively from esc_url()/esc_html()/esc_html__() output and literal markup. ?>
             </ul>
@@ -87,6 +89,7 @@ class Olobuild_Breadcrumbs_Tile extends Olobuild_Tile_Base {
             }
         </style>
         <?php
+        echo $this->stile_bordo( $s, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS da Olobuild_Tile_Base::stile_bordo() (impostazioni sanificate, uid interno)
         return ob_get_clean();
     }
 }

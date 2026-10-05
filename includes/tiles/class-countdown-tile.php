@@ -287,6 +287,7 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
         })();
         </script>
         <?php
+        echo $this->stile_bordo( $s, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS da Olobuild_Tile_Base::stile_bordo() (impostazioni sanificate, uid interno)
         return ob_get_clean();
     }
 

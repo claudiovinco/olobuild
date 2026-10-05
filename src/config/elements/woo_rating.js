@@ -65,6 +65,6 @@ export default {
     { key: 'star_color', label: t('Colore stelle piene'), type: 'color' },
     { key: 'empty_star_color', label: t('Colore stelle vuote'), type: 'color' },
 
-    ...borderFields({ effetti: false }), // il PHP della tile non disegna gli effetti bordo
+    ...borderFields(),
   ],
 };

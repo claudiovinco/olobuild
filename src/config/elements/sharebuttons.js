@@ -91,6 +91,6 @@ export default {
     withHover({ key: 'icon_color', label: t('Colore icona'), type: 'color' }, { hoverKey: 'icon_hover_color', defaultDuration: 0 }),
     { key: 'bg_color', label: t('Colore sfondo'), type: 'color' },
 
-    ...borderFields({ effetti: false }), // il PHP scrive bordo ed effetti su un selettore che nel markup non c'è
+    ...borderFields(),
   ],
 };

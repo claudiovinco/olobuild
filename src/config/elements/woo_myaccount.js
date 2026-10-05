@@ -80,7 +80,7 @@ export default {
     { key: 'border_color', label: t('Bordi'), type: 'border', legacyWidth: 1 },
     { key: 'button_bg', label: t('Sfondo pulsante'), type: 'color' },
     { key: 'button_color', label: t('Colore testo pulsante'), type: 'color' },
-    ...borderFields({ effetti: false }), // il PHP scrive bordo ed effetti su un selettore che nel markup non c'è
+    ...borderFields(),
     { type: 'separator', label: t('Disposizione') },
     { key: 'layout', label: t('Layout'), type: 'select', options: [
       { value: 'default', label: t('Default') },

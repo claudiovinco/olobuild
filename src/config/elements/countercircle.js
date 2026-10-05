@@ -91,7 +91,7 @@ export default {
     { type: 'separator', label: t('Animazione') },
     { key: 'duration', label: t('Durata animazione'), type: 'range', min: 0, max: 5000, step: 100 },
 
-    ...borderFields({ effetti: false }), // il PHP scrive bordo ed effetti su un selettore che nel markup non c'è
+    ...borderFields(),
     { type: 'separator', label: t('Disposizione') },
     { key: 'title_position', label: t('Posizione titolo'), type: 'select', options: [
       { value: 'below', label: t('Sotto') },

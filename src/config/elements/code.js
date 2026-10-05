@@ -61,6 +61,6 @@ export default {
     { key: 'max_height', label: t('Altezza massima (px, vuoto = auto)'), type: 'number', min: 0 },
 
     ...shadowField,
-    ...borderFields({ effetti: false }), // il PHP scrive bordo ed effetti su un selettore che nel markup non c'è
+    ...borderFields(),
   ],
 };

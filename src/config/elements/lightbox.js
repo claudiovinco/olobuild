@@ -134,6 +134,6 @@ export default {
     ] },
 
     ...shadowField,
-    ...borderFields({ effetti: false }), // il PHP della tile non disegna gli effetti bordo
+    ...borderFields(),
   ],
 };

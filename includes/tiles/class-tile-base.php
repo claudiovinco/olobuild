@@ -756,6 +756,20 @@ abstract class Olobuild_Tile_Base {
         return '';
     }
 
+    /**
+     * Il Bordo condiviso (chiavi `border`, `border_hover`, `border_hover_duration`, effetti) come
+     * blocco <style> per l'elemento che la tile disegna, o ''. $sel = selettore di quell'elemento
+     * così com'è nel markup: '#' . $uid se l'uid è un id, '.' . $uid se è una classe.
+     * Va chiamato in OGNI ramo del render che restituisce markup (le tile a più modalità).
+     */
+    protected function stile_bordo( $s, $sel ) {
+        $border_css        = $this->build_border_css( $s['border'] ?? [] );
+        $border_hover_css  = $this->build_border_hover_css( $sel, $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( $sel, $s['border'] ?? [], $s );
+        if ( ! $border_css && ! $border_hover_css && ! $border_effect_css ) return '';
+        return '<style>' . ( $border_css ? $sel . '{' . $border_css . '}' : '' ) . $border_hover_css . $border_effect_css . '</style>';
+    }
+
     /** Converte un colore hex in rgba(r,g,b,alpha). */
     private function hex_to_rgba( $hex, $alpha ) {
         $hex = ltrim( $hex, '#' );

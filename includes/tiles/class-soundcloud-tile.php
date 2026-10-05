@@ -41,11 +41,12 @@ class Olobuild_Soundcloud_Tile extends Olobuild_Tile_Base {
         $radius = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $height = absint( $s['height'] ) ?: 166;
+        // Per TUTTI i rami (prima nasceva solo nel segnaposto: con un URL la classe restava vuota)
+        $uid    = 'olo-sc-' . wp_rand( 10000, 99999 );
 
         // Nessun URL — mostra placeholder
         if ( empty( $url ) ) {
-                    $uid = 'olo-sc-' . wp_rand( 10000, 99999 );
-ob_start();
+            ob_start();
             ?>
             <div class="olo-soundcloud <?php echo esc_attr( $uid ); ?>" style="text-align: center; padding: 40px 20px; background: linear-gradient(135deg, rgba(255,85,0,0.08) 0%, rgba(255,136,0,0.08) 100%); border: 2px dashed rgba(255,85,0,0.3); border-radius: <?php echo esc_attr( $radius ); ?>;">
                 <div style="color: #ff5500; opacity: .8; font-size: 14px;">
@@ -76,6 +77,7 @@ ob_start();
                 <?php echo $oembed_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- embed HTML returned by wp_oembed_get() (WordPress core oEmbed, whitelisted providers) ?>
             </div>
             <?php
+            echo $this->stile_bordo( $s, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS da Olobuild_Tile_Base::stile_bordo() (impostazioni sanificate, uid interno)
             return ob_get_clean();
         }
 

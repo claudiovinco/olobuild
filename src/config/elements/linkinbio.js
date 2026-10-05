@@ -139,7 +139,7 @@ export default {
     { key: 'background_gradient', label: t('Gradiente CSS'), type: 'text', placeholder: t('linear-gradient(135deg, #667eea, #764ba2)') },
 
     ...shadowField,
-    ...borderFields({ effetti: false }), // il PHP scrive bordo ed effetti su un selettore che nel markup non c'è
+    ...borderFields(),
     { type: 'separator', label: t('Link') },
     { key: 'items', type: 'content-items', label: t('Link'), etichettaDa: 'title', miniaturaDa: 'image_url', itemFields: [
         { key: 'style', label: t('Stile'), type: 'select', options: [

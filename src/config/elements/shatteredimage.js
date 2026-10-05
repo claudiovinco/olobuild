@@ -145,7 +145,7 @@ export default {
     withHover({ key: 'border_radius_outer', label: t('Raggio'), type: 'border-radius' }),
 
     ...shadowField,
-    ...borderFields({ effetti: false }), // il PHP scrive bordo ed effetti su un selettore che nel markup non c'è
+    ...borderFields(),
     { type: 'separator', label: t('Ken Burns') },
     { key: 'kenburns_style', label: t('Stile movimento'), type: 'select',
       show: s => !!s.kenburns,

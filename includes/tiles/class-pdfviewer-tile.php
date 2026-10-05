@@ -122,11 +122,15 @@ class Olobuild_PdfViewer_Tile extends Olobuild_Tile_Base {
         $style_parts = [
             'height:'        . $height . 'px',
             'background:'    . $bg,
-            'border:'        . $bw . 'px solid ' . $bc,
             'border-radius:' . $rad_css,
             'overflow:hidden',
             'position:relative',
         ];
+        // Bordo storico (border_width, senza controllo nell'inspector): solo se salvato e senza il
+        // Bordo condiviso, che sta nel <style> e un border in linea (anche a 0px) coprirebbe.
+        if ( $bw > 0 && ! $this->parse_border( $s['border'] ?? [] ) ) {
+            $style_parts[] = 'border:' . $bw . 'px solid ' . $bc;
+        }
 
         ob_start();
         ?>

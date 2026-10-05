@@ -59,8 +59,10 @@ class Olobuild_Woo_Rating_Tile extends Olobuild_Tile_Base {
 
         $star_path = 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z';
 
+        $uid = 'olo-woo-rt-' . wp_unique_id();
+
         ob_start();
-        echo '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">';
+        echo '<div class="olo-woo-rating ' . esc_attr( $uid ) . '" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">';
         echo '<div style="display:flex;gap:2px;align-items:center">';
         for ( $i = 0; $i < $full_stars; $i++ ) {
             echo '<svg width="' . (int) $size . '" height="' . (int) $size . '" viewBox="0 0 24 24" fill="' . $fill . '" stroke="none"><path d="' . $star_path . '"/></svg>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $fill safe_color_css()'d above; $star_path is a static literal
@@ -84,6 +86,7 @@ class Olobuild_Woo_Rating_Tile extends Olobuild_Tile_Base {
             echo '<span style="color:' . $txt . ';font-size:' . (int) $t_size . 'px">' . implode( ' ', $meta_parts ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $txt safe_color_css()'d above; $meta_parts built from number_format(), (int) count and esc_html()'d label
         }
         echo '</div>';
+        echo $this->stile_bordo( $s, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS da Olobuild_Tile_Base::stile_bordo() (impostazioni sanificate, uid interno)
 
         return ob_get_clean();
     }

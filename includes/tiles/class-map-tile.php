@@ -445,6 +445,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
         </style>
 
         <?php
+        echo $this->stile_bordo( $s, '#' . $map_id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS da Olobuild_Tile_Base::stile_bordo() (impostazioni sanificate, uid interno)
         return ob_get_clean();
     }
 
@@ -636,6 +637,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
 
         <?php echo $this->build_plm_js( $js_data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- self-contained script tag built by build_plm_js(); data is passed through wp_json_encode() and the script body is base64-wrapped ?>
         <?php
+        echo $this->stile_bordo( $s, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS da Olobuild_Tile_Base::stile_bordo() (impostazioni sanificate, uid interno)
         return ob_get_clean();
     }
 
@@ -1047,6 +1049,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
 
         <?php echo $this->build_plm_js( $js_data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- self-contained script tag built by build_plm_js(); data is passed through wp_json_encode() and the script body is base64-wrapped ?>
         <?php
+        echo $this->stile_bordo( $s, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS da Olobuild_Tile_Base::stile_bordo() (impostazioni sanificate, uid interno)
         return ob_get_clean();
     }
 

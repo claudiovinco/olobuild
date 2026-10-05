@@ -168,7 +168,7 @@ export default {
     { key: 'overlay_opacity', label: t('Opacità overlay'), type: 'range', min: 0, max: 100, step: 5 },
 
     ...shadowField,
-    ...borderFields({ effetti: false }), // il PHP scrive bordo ed effetti su un selettore che nel markup non c'è
+    ...borderFields(),
     { type: 'separator', label: t('Video') },
     { key: 'video_opacity', label: t('Opacità video'), type: 'range', min: 10, max: 100, step: 5 },
     { type: 'separator', label: t('Animazione Scroll') },

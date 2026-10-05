@@ -56,6 +56,6 @@ export default {
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     ...shadowField,
-    ...borderFields({ effetti: false }), // il PHP della tile non disegna gli effetti bordo
+    ...borderFields(),
   ],
 };

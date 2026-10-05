@@ -489,7 +489,8 @@ for (const f of fs.readdirSync(ELEMENTS).filter((x) => x.endsWith('.js') && !x.s
     if (/function\s+$/.test(src.slice(Math.max(0, i - 9), i))) continue;
     const call = src.slice(i, matchParen(src, i + 'borderFields'.length) + 1);
     const k = (call.match(/key:\s*'([a-z0-9_]+)'/) || [])[1] || 'border';
-    if (!leggeChiave(php, k)) fantasmi.bordo.push({ file: nome, type: 'border', key: k, label: '' });
+    // stile_bordo() (Olobuild_Tile_Base) legge la chiave `border`
+    if (!leggeChiave(php, k) && !(k === 'border' && /stile_bordo\(/.test(php))) fantasmi.bordo.push({ file: nome, type: 'border', key: k, label: '' });
   }
   // 5. «Effetti testo» condivisi: il renderer deve usare Olobuild_Text_Effects
   if (/textEffectsFields\(/.test(src) && !/Olobuild_Text_Effects|tfx_/.test(php)) {
@@ -518,11 +519,10 @@ RULES.push({ id: 'fantasma-effetti-testo', titolo: 'Gli «Effetti testo» condiv
 //  d) il verso opposto: un PHP che li disegna sul bordo di una chiave ha nel config un
 //     borderFields() con quella chiave e con gli effetti accesi (salvo EFFETTI_SENZA_CONTROLLO).
 // «Li disegna» vuol dire che la regola colpisce un elemento: il selettore passato a
-// build_border_effect_css deve esistere nel markup (effettiDisegnati, sotto). In 23 tile (nav,
-// subnav, tagcloud, chart…) il selettore è di classe, '.{$uid}', ma nel markup quel valore è solo
-// un id (o un data-): la regola non trova nulla, né sul sito né nel builder, che è lo stesso PHP.
-// Lì gli effetti sono spenti; correggere il selettore cambierebbe la resa dei template salvati, e
-// va fatto insieme al loro Bordo, fantasma per la stessa ragione (debito a parte).
+// build_border_effect_css (o stile_bordo) deve esistere nel markup (effettiDisegnati, sotto). Fino
+// alla 1.4.520 in 21 tile (nav, subnav, tagcloud…) il selettore era di classe, '.{$uid}', ma nel
+// markup quel valore era solo un id: né il Bordo né gli effetti si vedevano, e gli effetti erano
+// spenti nel config. Corretti i selettori, gli effetti sono tornati accesi.
 // Eccezioni motivate di d): tile il cui PHP disegna ancora bordo ed effetti salvati, ma che di
 // proposito non offrono il Bordo.
 const EFFETTI_SENZA_CONTROLLO = new Set([
@@ -563,11 +563,24 @@ function selettorePhp(expr, php, finoA) {
     if (!ultima) return null;
     e = ultima;
   }
+  // con un prefisso letterale (".olo-navmenu--{$nav_id}"): il markup deve avere quel prefisso
+  // attaccato alla variabile (prefissoNelMarkup)
+  const p = e.match(new RegExp(String.raw`^"([.#])([\w-]+)\{(` + PHPVAR + String.raw`)\}[^"]*"$`));
+  if (p) return { sigillo: p[1], prefisso: p[2], v: p[3] };
   const m = e.match(new RegExp(String.raw`^"([.#])\{(` + PHPVAR + String.raw`)\}[^"]*"$`))
     || e.match(new RegExp(String.raw`^'([.#])'\s*\.\s*(` + PHPVAR + ')'))
     || e.match(new RegExp(String.raw`^"([.#])(` + PHPVAR + ')[^"]*"$'));
   return m ? { sigillo: m[1], v: m[2] } : null;
 }
+// class="olo-navmenu olo-navmenu--<?php echo esc_attr( $nav_id ); ?>": il prefisso seguito dalla
+// variabile, dentro l'attributo voluto.
+function prefissoNelMarkup(php, sel) {
+  const voluto = sel.sigillo === '.' ? 'class' : 'id';
+  const re = new RegExp(String.raw`\b` + voluto + String.raw`="[^"]*` + sel.prefisso.replace(/[-]/g, BS + '-')
+    + String.raw`(?:<\?php echo (?:esc_attr\(\s*)?|\{)` + reVarPhp(sel.v) + String.raw`(?![\w\[>-])`);
+  return re.test(php);
+}
+const selettoreVivo = (php, sel) => !!sel && (sel.prefisso ? prefissoNelMarkup(php, sel) : nelMarkup(php, sel.v, sel.sigillo));
 // Il valore v compare nel markup come classe (sigillo '.') o come id ('#')? Si segue anche dove
 // finisce: $cls = 'x ' . $uid, $classi[] = $uid, $uid = $this->_uid (fino a tre passaggi). Per ogni
 // occorrenza conta l'ultimo attributo aperto prima di lei (class="…, id="…, 'class' =>), se il suo
@@ -609,7 +622,14 @@ function effettiDisegnati(php) {
     const k = ((args[1] || '').match(/^\$\w+\[\s*'([a-z0-9_]+)'\s*\]/) || [])[1];
     if (!k) continue;
     const sel = selettorePhp(args[0], src, i);
-    (sel && nelMarkup(src, sel.v, sel.sigillo) ? vivi : morti).add(k);
+    (selettoreVivo(src, sel) ? vivi : morti).add(k);
+  }
+  // stile_bordo( $s, $sel ) di Olobuild_Tile_Base: Bordo + effetti della chiave `border`
+  for (let i = src.indexOf('stile_bordo('); i >= 0; i = src.indexOf('stile_bordo(', i + 1)) {
+    if (/function\s+$/.test(src.slice(Math.max(0, i - 20), i))) continue;
+    const p = i + 'stile_bordo'.length;
+    const args = argomentiPhp(src.slice(p + 1, matchParen(src, p)));
+    (selettoreVivo(src, selettorePhp(args[1] || '', src, i)) ? vivi : morti).add('border');
   }
   for (const k of vivi) morti.delete(k);
   return { vivi, morti };
