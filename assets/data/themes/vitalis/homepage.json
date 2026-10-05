@@ -608,6 +608,7 @@
         "id": "vt-team-32",
         "type": "team",
         "settings": {
+         "info_padding": {"top": 0, "right": 0, "bottom": 0, "left": 0},
          "photo": "",
          "name": "Dr. Anika Rao",
          "role": "Clinical lead",
@@ -654,6 +655,7 @@
         "id": "vt-team-34",
         "type": "team",
         "settings": {
+         "info_padding": {"top": 0, "right": 0, "bottom": 0, "left": 0},
          "photo": "",
          "name": "Sam Becker",
          "role": "Physiotherapist",
@@ -700,6 +702,7 @@
         "id": "vt-team-36",
         "type": "team",
         "settings": {
+         "info_padding": {"top": 0, "right": 0, "bottom": 0, "left": 0},
          "photo": "",
          "name": "Lina Ferri",
          "role": "Recovery coach",
@@ -746,6 +749,7 @@
         "id": "vt-team-38",
         "type": "team",
         "settings": {
+         "info_padding": {"top": 0, "right": 0, "bottom": 0, "left": 0},
          "photo": "",
          "name": "Dr. Omar Haddad",
          "role": "Longevity",

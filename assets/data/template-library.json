@@ -3427,6 +3427,7 @@
            "id": "team-4-grid-member1",
            "type": "team",
            "settings": {
+            "info_padding": {"top": 16, "right": 16, "bottom": 16, "left": 16},
             "photo": "",
             "name": "Laura Marchetti",
             "role": "Direttrice Creativa",
@@ -3466,6 +3467,7 @@
            "id": "team-4-grid-member2",
            "type": "team",
            "settings": {
+            "info_padding": {"top": 16, "right": 16, "bottom": 16, "left": 16},
             "photo": "",
             "name": "Marco Bianchi",
             "role": "Sviluppatore Senior",
@@ -3505,6 +3507,7 @@
            "id": "team-4-grid-member3",
            "type": "team",
            "settings": {
+            "info_padding": {"top": 16, "right": 16, "bottom": 16, "left": 16},
             "photo": "",
             "name": "Giulia Ferrari",
             "role": "Project Manager",
@@ -3544,6 +3547,7 @@
            "id": "team-4-grid-member4",
            "type": "team",
            "settings": {
+            "info_padding": {"top": 16, "right": 16, "bottom": 16, "left": 16},
             "photo": "",
             "name": "Davide Romano",
             "role": "Specialista Marketing",
@@ -3654,6 +3658,7 @@
            "id": "team-3-grid-member1",
            "type": "team",
            "settings": {
+            "info_padding": {"top": 16, "right": 16, "bottom": 16, "left": 16},
             "photo": "",
             "name": "Laura Marchetti",
             "role": "Direttrice Creativa",
@@ -3697,6 +3702,7 @@
            "id": "team-3-grid-member2",
            "type": "team",
            "settings": {
+            "info_padding": {"top": 16, "right": 16, "bottom": 16, "left": 16},
             "photo": "",
             "name": "Marco Bianchi",
             "role": "Sviluppatore Frontend",
@@ -3740,6 +3746,7 @@
            "id": "team-3-grid-member3",
            "type": "team",
            "settings": {
+            "info_padding": {"top": 16, "right": 16, "bottom": 16, "left": 16},
             "photo": "",
             "name": "Giulia Ferrari",
             "role": "Project Manager",
@@ -3925,6 +3932,7 @@
            "id": "team-leadership-leader1",
            "type": "team",
            "settings": {
+            "info_padding": {"top": 16, "right": 16, "bottom": 16, "left": 16},
             "photo": "",
             "name": "Marco Bianchi",
             "role": "Amministratore Delegato",
@@ -3964,6 +3972,7 @@
            "id": "team-leadership-leader2",
            "type": "team",
            "settings": {
+            "info_padding": {"top": 16, "right": 16, "bottom": 16, "left": 16},
             "photo": "",
             "name": "Giulia Conti",
             "role": "Direttrice Operativa",

@@ -214,6 +214,7 @@
                   "id": "tpl-ft-534",
                   "type": "team",
                   "settings": {
+                    "info_padding": {"top": 16, "right": 16, "bottom": 16, "left": 16},
                     "name": "Alessandra Fabbri",
                     "role": "Head of Marketing",
                     "bio": "Strategie di crescita e posizionamento brand.",
@@ -246,6 +247,7 @@
                   "id": "tpl-ft-536",
                   "type": "team",
                   "settings": {
+                    "info_padding": {"top": 16, "right": 16, "bottom": 16, "left": 16},
                     "name": "Lorenzo Sala",
                     "role": "Content Writer",
                     "bio": "Copywriting persuasivo e storytelling.",
@@ -278,6 +280,7 @@
                   "id": "tpl-ft-538",
                   "type": "team",
                   "settings": {
+                    "info_padding": {"top": 16, "right": 16, "bottom": 16, "left": 16},
                     "name": "Giulia Parisi",
                     "role": "Social Media",
                     "bio": "Gestione canali social e community.",
@@ -382,6 +385,7 @@
                   "id": "tpl-ft-546",
                   "type": "team",
                   "settings": {
+                    "info_padding": {"top": 16, "right": 16, "bottom": 16, "left": 16},
                     "name": "Riccardo Testa",
                     "role": "Lead Developer",
                     "bio": "Architetture scalabili e codice pulito.",
@@ -414,6 +418,7 @@
                   "id": "tpl-ft-548",
                   "type": "team",
                   "settings": {
+                    "info_padding": {"top": 16, "right": 16, "bottom": 16, "left": 16},
                     "name": "Elisa Montanari",
                     "role": "Frontend Dev",
                     "bio": "Vue.js, React e CSS art.",
@@ -446,6 +451,7 @@
                   "id": "tpl-ft-550",
                   "type": "team",
                   "settings": {
+                    "info_padding": {"top": 16, "right": 16, "bottom": 16, "left": 16},
                     "name": "Stefano Gentile",
                     "role": "Backend Dev",
                     "bio": "API, database e microservizi.",

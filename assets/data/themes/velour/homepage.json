@@ -461,6 +461,7 @@
         "id": "ve-team-17",
         "type": "team",
         "settings": {
+         "info_padding": {"top": 0, "right": 0, "bottom": 0, "left": 0},
          "photo": "",
          "name": "Noor",
          "role": "Colour director",
@@ -513,6 +514,7 @@
         "id": "ve-team-19",
         "type": "team",
         "settings": {
+         "info_padding": {"top": 0, "right": 0, "bottom": 0, "left": 0},
          "photo": "",
          "name": "Théo",
          "role": "Senior cutter",
@@ -565,6 +567,7 @@
         "id": "ve-team-21",
         "type": "team",
         "settings": {
+         "info_padding": {"top": 0, "right": 0, "bottom": 0, "left": 0},
          "photo": "",
          "name": "Bea",
          "role": "Balayage",
@@ -617,6 +620,7 @@
         "id": "ve-team-23",
         "type": "team",
         "settings": {
+         "info_padding": {"top": 0, "right": 0, "bottom": 0, "left": 0},
          "photo": "",
          "name": "Sami",
          "role": "Beauty & brows",

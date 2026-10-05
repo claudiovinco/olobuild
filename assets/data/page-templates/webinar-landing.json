@@ -675,6 +675,7 @@
                   "id": "tpl-ft-362",
                   "type": "team",
                   "settings": {
+                    "info_padding": {"top": 16, "right": 16, "bottom": 16, "left": 16},
                     "name": "Pietro Lombardi",
                     "role": "Direttore Creativo",
                     "bio": "Ha diretto campagne per brand internazionali.",
@@ -707,6 +708,7 @@
                   "id": "tpl-ft-364",
                   "type": "team",
                   "settings": {
+                    "info_padding": {"top": 16, "right": 16, "bottom": 16, "left": 16},
                     "name": "Marta Esposito",
                     "role": "Data Scientist",
                     "bio": "Trasforma i dati in decisioni strategiche.",
@@ -739,6 +741,7 @@
                   "id": "tpl-ft-366",
                   "type": "team",
                   "settings": {
+                    "info_padding": {"top": 16, "right": 16, "bottom": 16, "left": 16},
                     "name": "Tommaso Bruno",
                     "role": "DevOps Engineer",
                     "bio": "Infrastrutture scalabili e sicure.",

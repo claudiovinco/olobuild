@@ -662,6 +662,7 @@
         "id": "pu-team-36",
         "type": "team",
         "settings": {
+         "info_padding": {"top": 0, "right": 0, "bottom": 0, "left": 0},
          "photo": "",
          "name": "Rae Okafor",
          "role": "Conditioning lead",
@@ -708,6 +709,7 @@
         "id": "pu-team-38",
         "type": "team",
         "settings": {
+         "info_padding": {"top": 0, "right": 0, "bottom": 0, "left": 0},
          "photo": "",
          "name": "Devi Sharma",
          "role": "Strength lead",
@@ -754,6 +756,7 @@
         "id": "pu-team-40",
         "type": "team",
         "settings": {
+         "info_padding": {"top": 0, "right": 0, "bottom": 0, "left": 0},
          "photo": "",
          "name": "Yuki Tan",
          "role": "Weightlifting",
@@ -800,6 +803,7 @@
         "id": "pu-team-42",
         "type": "team",
         "settings": {
+         "info_padding": {"top": 0, "right": 0, "bottom": 0, "left": 0},
          "photo": "",
          "name": "Milo Bennett",
          "role": "Foundations",

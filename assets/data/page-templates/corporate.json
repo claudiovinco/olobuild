@@ -754,6 +754,7 @@
                   "id": "tpl-ft-348",
                   "type": "team",
                   "settings": {
+                    "info_padding": {"top": 16, "right": 16, "bottom": 16, "left": 16},
                     "name": "Andrea Galli",
                     "role": "CEO",
                     "bio": "Visionario e stratega.",
@@ -785,6 +786,7 @@
                   "id": "tpl-ft-350",
                   "type": "team",
                   "settings": {
+                    "info_padding": {"top": 16, "right": 16, "bottom": 16, "left": 16},
                     "name": "Chiara Rizzo",
                     "role": "Marketing Manager",
                     "bio": "Esperta di growth hacking.",
@@ -816,6 +818,7 @@
                   "id": "tpl-ft-352",
                   "type": "team",
                   "settings": {
+                    "info_padding": {"top": 16, "right": 16, "bottom": 16, "left": 16},
                     "name": "Davide Colombo",
                     "role": "Backend Developer",
                     "bio": "Maestro delle API.",
@@ -847,6 +850,7 @@
                   "id": "tpl-ft-354",
                   "type": "team",
                   "settings": {
+                    "info_padding": {"top": 16, "right": 16, "bottom": 16, "left": 16},
                     "name": "Valentina Costa",
                     "role": "Frontend Developer",
                     "bio": "Pixel-perfect sempre.",

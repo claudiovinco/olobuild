@@ -675,6 +675,7 @@
         "id": "st-team-26",
         "type": "team",
         "settings": {
+         "info_padding": {"top": 0, "right": 0, "bottom": 0, "left": 0},
          "photo": "",
          "name": "Eleanor Vance",
          "role": "Managing partner",
@@ -721,6 +722,7 @@
         "id": "st-team-28",
         "type": "team",
         "settings": {
+         "info_padding": {"top": 0, "right": 0, "bottom": 0, "left": 0},
          "photo": "",
          "name": "James Okonkwo",
          "role": "Head of planning",
@@ -767,6 +769,7 @@
         "id": "st-team-30",
         "type": "team",
         "settings": {
+         "info_padding": {"top": 0, "right": 0, "bottom": 0, "left": 0},
          "photo": "",
          "name": "Priya Anand",
          "role": "Investment director",
@@ -813,6 +816,7 @@
         "id": "st-team-32",
         "type": "team",
         "settings": {
+         "info_padding": {"top": 0, "right": 0, "bottom": 0, "left": 0},
          "photo": "",
          "name": "Hugo Bexcell",
          "role": "Estates & legacy",

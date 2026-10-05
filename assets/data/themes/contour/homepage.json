@@ -731,6 +731,7 @@
         "id": "co-team-36",
         "type": "team",
         "settings": {
+         "info_padding": {"top": 0, "right": 0, "bottom": 0, "left": 0},
          "photo": "",
          "name": "Ana Reyes",
          "role": "Studio lead",
@@ -779,6 +780,7 @@
         "id": "co-team-38",
         "type": "team",
         "settings": {
+         "info_padding": {"top": 0, "right": 0, "bottom": 0, "left": 0},
          "photo": "",
          "name": "Jo Park",
          "role": "Mat & breath",
@@ -827,6 +829,7 @@
         "id": "co-team-40",
         "type": "team",
         "settings": {
+         "info_padding": {"top": 0, "right": 0, "bottom": 0, "left": 0},
          "photo": "",
          "name": "Lena Voss",
          "role": "Reformer",
@@ -875,6 +878,7 @@
         "id": "co-team-42",
         "type": "team",
         "settings": {
+         "info_padding": {"top": 0, "right": 0, "bottom": 0, "left": 0},
          "photo": "",
          "name": "Marco Sala",
          "role": "Rehab & private",

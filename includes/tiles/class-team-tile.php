@@ -88,7 +88,9 @@ class Olobuild_Team_Tile extends Olobuild_Tile_Base {
             $s['photo_border'] ?? null,
             [ 'width' => $ph_bw, 'color' => $ph_bc ]
         );
-        $ph_gap    = max( intval( $s['photo_gap'] ), 0 );
+        // Il controllo va da -40 a 40: un gap negativo fa salire la scheda sotto la foto
+        // (avatar a cavallo del bordo). Il max( …, 0 ) lo azzerava in silenzio.
+        $ph_gap    = max( -400, min( 400, intval( $s['photo_gap'] ) ) );
         // Elenco canonico delle proporzioni. La LARGHEZZA resta $ph_size: qui si ricava
         // solo l'altezza, e con '1/1' (il default) torna identica alla larghezza, cioè
         // il riquadro quadrato che la tile ha sempre disegnato.
@@ -140,9 +142,20 @@ class Olobuild_Team_Tile extends Olobuild_Tile_Base {
 
         // Info
         $info_bg  = $this->safe_color_css( $s['info_bg_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
-        $info_pad = Olobuild_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['info_padding'] ?? 24, 24 );
+        // «Padding contenitore» è info_padding: prima si leggeva tile_padding, che
+        // c'è sempre (default), e il controllo non faceva niente.
+        $info_pad = Olobuild_Tile_Utils::spacing_css( $s['info_padding'] ?? 24, 24 );
         $info_w   = intval( $s['info_width'] ) ?: 100;
-        $info_m   = intval( $s['info_margin'] );
+        // «Margine dal tile» è un controllo a 4 lati: intval() sull'array valeva 1 e
+        // dava 1px. Il valore storico a numero singolo resta «0 m m m» (niente sopra).
+        $info_m_raw = $s['info_margin'] ?? 0;
+        if ( is_array( $info_m_raw ) ) {
+            $info_m_sides = Olobuild_Tile_Utils::spacing_sides( $info_m_raw );
+        } else {
+            $info_m       = max( 0, intval( $info_m_raw ) );
+            $info_m_sides = [ 'top' => 0, 'right' => $info_m, 'bottom' => $info_m, 'left' => $info_m ];
+        }
+        $info_m_css = array_filter( $info_m_sides ) ? Olobuild_Tile_Utils::sides_css( $info_m_sides ) : '';
         $info_r   = Olobuild_Tile_Utils::border_radius( $s['info_radius'] ?? 0 );
         $info_r_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['info_radius_hover'] ?? null );
         $info_bw  = intval( $s['info_border_width'] );
@@ -187,7 +200,12 @@ class Olobuild_Team_Tile extends Olobuild_Tile_Base {
                 display: flex;
                 justify-content: <?php echo $jc; ?>;
                 margin-bottom: <?php echo $ph_gap; ?>px;
+                <?php if ( $ph_gap < 0 ) : ?>
+                <?php // Gap negativo: la foto resta SOPRA la scheda che le sale sotto; la fascia vuota ai lati lascia passare i clic. ?>
+                position: relative; z-index: 1; pointer-events: none;
+                <?php endif; ?>
             }
+            <?php if ( $ph_gap < 0 ) : ?>.<?php echo $uid; ?> .olo-team-photo-outer { pointer-events: auto; }<?php endif; ?>
             .<?php echo $uid; ?> .olo-team-photo-outer {
                 width: <?php echo $outer_sz; ?>px;
                 height: <?php echo $outer_h; ?>px;
@@ -235,8 +253,8 @@ class Olobuild_Team_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-team-info-wrap {
                 display: flex;
                 justify-content: <?php echo $jc; ?>;
-                <?php if ( $info_m > 0 ) : ?>
-                padding: 0 <?php echo $info_m; ?>px <?php echo $info_m; ?>px;
+                <?php if ( $info_m_css !== '' ) : ?>
+                padding: <?php echo $info_m_css; ?>;
                 <?php endif; ?>
             }
             .<?php echo $uid; ?> .olo-team-info {
