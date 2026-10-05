@@ -23,10 +23,11 @@ class Olobuild_Finder_Tile extends Olobuild_Tile_Base {
         'eyebrow' => 'Trova il tuo',
         'heading' => 'Da dove vuoi partire?',
         'intro'   => '',
+        // cta_url vuoto: senza un link vero il pulsante non compare.
         'items'   => [
-            [ 'option' => 'Opzione A', 'title' => 'Risultato A', 'text' => 'Descrizione del risultato.', 'meta' => '', 'cta_text' => '', 'cta_url' => '#', 'icon' => '' ],
-            [ 'option' => 'Opzione B', 'title' => 'Risultato B', 'text' => 'Descrizione del risultato.', 'meta' => '', 'cta_text' => '', 'cta_url' => '#', 'icon' => '' ],
-            [ 'option' => 'Opzione C', 'title' => 'Risultato C', 'text' => 'Descrizione del risultato.', 'meta' => '', 'cta_text' => '', 'cta_url' => '#', 'icon' => '' ],
+            [ 'option' => 'Opzione A', 'title' => 'Risultato A', 'text' => 'Descrizione del risultato.', 'meta' => '', 'cta_text' => '', 'cta_url' => '', 'icon' => '' ],
+            [ 'option' => 'Opzione B', 'title' => 'Risultato B', 'text' => 'Descrizione del risultato.', 'meta' => '', 'cta_text' => '', 'cta_url' => '', 'icon' => '' ],
+            [ 'option' => 'Opzione C', 'title' => 'Risultato C', 'text' => 'Descrizione del risultato.', 'meta' => '', 'cta_text' => '', 'cta_url' => '', 'icon' => '' ],
         ],
         'zone_accent' => '',
         'zone_on'     => 'var(--olo-color-surface, #ffffff)',
@@ -92,7 +93,8 @@ class Olobuild_Finder_Tile extends Olobuild_Tile_Base {
         $cardbg = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #f6f7f9)';
         $cardbd = Olobuild_Tile_Utils::border_color( $s['card_border'] ?? null, 'var(--olo-color-border, #e5e7eb)' );
         $chipbg = $this->safe_color_css( $s['chip_bg'] ?? '' ) ?: 'transparent';
-        $media_bg = $this->safe_color_css( $s['media_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #1e1e1e)';
+        // Riserva = quella del token (alias di --olo-color-muted), come lo sfondo card qui sopra.
+        $media_bg = $this->safe_color_css( $s['media_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #f6f7f9)';
         $center = ( ( $s['align'] ?? 'center' ) === 'center' );
         // Punto focale globale (object-position) — applicato a OGNI immagine card (ramo image).
         // Default 'center center' = comportamento storico (background-position:center). I temi
@@ -133,12 +135,33 @@ class Olobuild_Finder_Tile extends Olobuild_Tile_Base {
         $tp_key  = sanitize_key( $s['typography_preset'] ?? '' );
         $typo_css = $tp_key ? "font-family:var(--olo-font-{$tp_key}-family);font-weight:var(--olo-font-{$tp_key}-weight);letter-spacing:var(--olo-font-{$tp_key}-letter-spacing);" : '';
 
-        // bordo card: 'border' avanzato (se impostato) sostituisce il card_border semplice
-        $border_css        = $this->build_border_css( $s['border'] ?? [] );
-        $card_border_decl  = $border_css ? $border_css : ( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $cardbd ] ) );
+        // ── Bordo card: UN solo controllo, sulla chiave dei temi `card_border` ──
+        // Prima c'erano due controlli per lo stesso bordo («Bordo card» e «Bordo») e il
+        // secondo, `border`, scavalcava il primo. Ora l'inspector offre solo card_border
+        // (con hover ed effetti); `border` resta letto come riserva storica:
+        //  · card_border nel formato del controllo (oggetto con qualcosa impostato) → vince;
+        //  · altrimenti, se il vecchio `border` disegna → `border`, come prima;
+        //  · altrimenti la stringa colore dei temi / il bordo 1px di sempre.
+        // Così le pagine salvate non cambiano finché non si tocca il controllo (salvo chi
+        // aveva riempito ENTRAMBI i vecchi controlli: lì ora vince card_border).
+        $cb_raw = $s['card_border'] ?? '';
+        $cb_obj = is_array( $cb_raw ) && Olobuild_Tile_Utils::border_is_set( $cb_raw );
+        $legacy = $cb_obj ? null : $this->parse_border( $s['border'] ?? null );
+        if ( $cb_obj ) {
+            $card_border_decl = Olobuild_Tile_Utils::border_css( $cb_raw, [ 'width' => 1, 'color' => $cardbd ] );
+            $card_border_base = $cb_raw;
+        } elseif ( $legacy ) {
+            $card_border_decl = $this->build_border_css( $s['border'] );
+            $card_border_base = $s['border'];
+        } else {
+            $card_border_decl = Olobuild_Tile_Utils::border_css( null, [ 'width' => 1, 'color' => $cardbd ] );
+            $card_border_base = [ 'top' => 1, 'right' => 1, 'bottom' => 1, 'left' => 1, 'style' => 'solid', 'color' => $cardbd ];
+        }
+        // Hover ed effetti partono dal bordo che si vede davvero.
+        $bordo             = [ 'card_border' => $card_border_base ];
         $card_sel          = ".{$uid} .ofn-res";
-        $border_hover_css  = $this->build_border_hover_css( $card_sel, $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
-        $border_effect_css = $this->build_border_effect_css( $card_sel, $s['border'] ?? [], $s );
+        $border_hover_css  = $this->build_border_hover_css( $card_sel, $bordo['card_border'], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( $card_sel, $bordo['card_border'], $s );
 
         // text effects
         list( $h_cls, $h_data ) = $this->tfx_attrs( $s, 'heading', wp_strip_all_tags( $s['heading'] ?? '' ) );
@@ -204,6 +227,10 @@ class Olobuild_Finder_Tile extends Olobuild_Tile_Base {
                 $f_kicker = $it['kicker'] ?? '';
                 $f_mb     = $this->bg_media_parts( $it['media_bg'] ?? null, $uid . '-i' . $i );
                 $f_media  = ( $f_img !== '' || $f_mlabel !== '' || $f_mb['has'] );
+                // Pulsante solo con un testo E un link: senza link sarebbe un pulsante che non
+                // porta da nessuna parte (prima ripiegava su '#'). Un '#' scritto a mano resta.
+                $f_cta_url = is_string( $it['cta_url'] ?? null ) ? trim( $it['cta_url'] ) : '';
+                $f_cta     = ( ! empty( $it['cta_text'] ) && $f_cta_url !== '' );
                 if ( $f_mb['has'] ) {
                     // ramo media_bg: conserva la sua background-position propria (no focal globale).
                     $f_mstyle = $f_mb['css'] !== '' ? ' style="' . esc_attr( $f_mb['css'] ) . '"' : '';
@@ -222,14 +249,14 @@ class Olobuild_Finder_Tile extends Olobuild_Tile_Base {
                             <?php if ( ! empty( $it['title'] ) ) : ?><h3 class="ofn-res__t<?php echo $t_cls; ?>"<?php echo $t_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attrs built by Olobuild_Text_Effects (sanitize_html_class/esc_attr applied internally) ?>><?php echo esc_html( $it['title'] ); ?></h3><?php endif; ?>
                             <?php if ( ! empty( $it['text'] ) ) : ?><p class="ofn-res__x"><?php echo esc_html( $it['text'] ); ?></p><?php endif; ?>
                             <?php if ( ! empty( $it['meta'] ) ) : ?><div class="ofn-res__meta"><?php echo esc_html( $it['meta'] ); ?></div><?php endif; ?>
-                            <?php if ( ! empty( $it['cta_text'] ) ) : ?><a class="ofn-res__cta" href="<?php echo esc_url( $it['cta_url'] ?: '#' ); ?>"><?php echo esc_html( $it['cta_text'] ); ?></a><?php endif; ?>
+                            <?php if ( $f_cta ) : ?><a class="ofn-res__cta" href="<?php echo esc_url( $f_cta_url ); ?>"><?php echo esc_html( $it['cta_text'] ); ?></a><?php endif; ?>
                         </div>
                     <?php else : ?>
                         <?php if ( $f_kicker !== '' ) : ?><span class="ofn-kicker"><?php echo esc_html( $f_kicker ); ?></span><?php endif; ?>
                         <?php if ( ! empty( $it['meta'] ) ) : ?><div class="ofn-res__meta"><?php echo esc_html( $it['meta'] ); ?></div><?php endif; ?>
                         <?php if ( ! empty( $it['title'] ) ) : ?><h3 class="ofn-res__t<?php echo $t_cls; ?>"<?php echo $t_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attrs built by Olobuild_Text_Effects (sanitize_html_class/esc_attr applied internally) ?>><?php echo esc_html( $it['title'] ); ?></h3><?php endif; ?>
                         <?php if ( ! empty( $it['text'] ) ) : ?><p class="ofn-res__x"><?php echo esc_html( $it['text'] ); ?></p><?php endif; ?>
-                        <?php if ( ! empty( $it['cta_text'] ) ) : ?><a class="ofn-res__cta" href="<?php echo esc_url( $it['cta_url'] ?: '#' ); ?>"><?php echo esc_html( $it['cta_text'] ); ?></a><?php endif; ?>
+                        <?php if ( $f_cta ) : ?><a class="ofn-res__cta" href="<?php echo esc_url( $f_cta_url ); ?>"><?php echo esc_html( $it['cta_text'] ); ?></a><?php endif; ?>
                     <?php endif; ?>
                 </div>
             <?php endforeach; ?>

@@ -33,15 +33,18 @@ export default {
     eyebrow: t('Trova il tuo'),
     heading: t('Da dove vuoi partire?'),
     intro: '',
+    // cta_url vuoto: il pulsante compare solo quando c'è un link (e un testo).
     items: [
-      { option: 'Opzione A', title: 'Risultato A', text: 'Descrizione del risultato consigliato.', meta: '', cta_text: '', cta_url: '#', icon: '' },
-      { option: 'Opzione B', title: 'Risultato B', text: 'Descrizione del risultato consigliato.', meta: '', cta_text: '', cta_url: '#', icon: '' },
-      { option: 'Opzione C', title: 'Risultato C', text: 'Descrizione del risultato consigliato.', meta: '', cta_text: '', cta_url: '#', icon: '' },
+      { option: 'Opzione A', title: 'Risultato A', text: 'Descrizione del risultato consigliato.', meta: '', cta_text: '', cta_url: '', icon: '' },
+      { option: 'Opzione B', title: 'Risultato B', text: 'Descrizione del risultato consigliato.', meta: '', cta_text: '', cta_url: '', icon: '' },
+      { option: 'Opzione C', title: 'Risultato C', text: 'Descrizione del risultato consigliato.', meta: '', cta_text: '', cta_url: '', icon: '' },
     ],
     zone_accent: '',
     zone_on: 'var(--olo-color-surface, #ffffff)',
     card_bg: '',
-    card_border: '',
+    // Il bordo 1px che il renderer disegna comunque quando la chiave è vuota, scritto
+    // per esteso: così il controllo «Bordo card» mostra ciò che si vede (resa identica).
+    card_border: 'var(--olo-color-border, #e5e7eb)',
     media_bg: '',
     // Il riquadro media era ritagliato 190/240 e basta (larghezza fissa 190px +
     // aspect-ratio nel CSS): il default RIPETE quel rapporto, così i 18 temi che
@@ -80,7 +83,7 @@ export default {
     { type: 'separator', label: t('Opzioni e risultati') },
     { key: 'items', label: t('Voci'), type: 'content-items',
       itemLabel: t('Opzione'),
-      defaults: { option: 'Nuova opzione', kicker: '', title: 'Risultato', text: 'Descrizione.', meta: '', cta_text: '', cta_url: '#', icon: '', image: '', media_bg: { type: 'none' }, media_label: '' },
+      defaults: { option: 'Nuova opzione', kicker: '', title: 'Risultato', text: 'Descrizione.', meta: '', cta_text: '', cta_url: '', icon: '', image: '', media_bg: { type: 'none' }, media_label: '' },
       itemFields: [
         { key: 'option', label: t('Etichetta chip'), type: 'text' },
         { key: 'icon', label: t('Icona (opzionale)'), type: 'icon' },
@@ -90,7 +93,8 @@ export default {
         { key: 'text', label: t('Testo risultato'), type: 'textarea' },
         { key: 'meta', label: t('Meta in basso (prezzo, durata…)'), type: 'text' },
         { key: 'cta_text', label: t('Testo CTA (opzionale)'), type: 'text' },
-        { key: 'cta_url', label: t('URL CTA'), type: 'link' },
+        { key: 'cta_url', label: t('URL CTA'), type: 'link',
+          description: t('Senza un link il pulsante non compare.') },
         { type: 'separator', label: t('Media card (opzionale)') },
         { key: 'image', label: t('Immagine (vuoto = placeholder)'), type: 'image' },
         { key: 'media_bg', label: t('Sfondo / media (ogni tipo)'), type: 'background', showParallax: false },
@@ -146,8 +150,14 @@ export default {
 
     { type: 'separator', label: t('Card risultato') },
     { key: 'card_bg', label: t('Sfondo card'), type: 'color' },
-    { key: 'card_border', label: t('Bordo card (semplice)'), type: 'border', legacyWidth: 1,
-      description: t('Bordo 1px rapido. Per bordi avanzati (spessore, lati, effetti) usa la sezione Bordo.') },
+    // UN solo controllo per il bordo della card, sulla chiave dei temi (`card_border`),
+    // con hover ed effetti. Il vecchio secondo controllo (`border`) scavalcava questo:
+    // il renderer lo legge ancora come riserva storica. Senza il separatore «Bordo»:
+    // il bordo è della card e sta nella sua zona. `legacyWidth`: la sola stringa
+    // colore dei temi si mostra come bordo 1px, come la disegna il renderer.
+    ...borderFields({ key: 'card_border' })
+      .filter((f) => f.type !== 'separator')
+      .map((f) => (f.key === 'card_border' ? { ...f, label: t('Bordo card'), legacyWidth: 1 } : f)),
     { key: 'media_bg', label: t('Sfondo media (card con immagine)'), type: 'color' },
     // Proporzioni del riquadro media. Niente voce «auto»: l'immagine è un
     // background-image su un box largo 190px senza altezza propria — tolto il
@@ -176,7 +186,6 @@ export default {
     { type: 'separator', label: t('Aspetto tile') },
     { key: 'tile_padding', label: t('Padding tile'), type: 'spacing', min: 0, max: 96 },
 
-    ...borderFields(),
     ...wowEffectsFields(),
   ],
 };
