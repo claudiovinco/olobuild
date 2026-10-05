@@ -518,6 +518,11 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
             <?php if ( $enable_lb ) : ?>
             /* Lightbox logic */
             var lb      = document.querySelector('.<?php echo $uid; ?>-lb');
+            <?php if ( empty( $settings['_builder_mode'] ) ) : ?>
+            /* Dentro il template (transform) il lightbox copriva il template intero e l'immagine
+               stava al suo centro, anche sotto la piega con lo scorrimento bloccato. Sul sito va nel body. */
+            (<?php echo self::js_nel_body(); ?>)(lb);
+            <?php endif; ?>
             var lbImg   = lb ? lb.querySelector('[data-olo-gs-lb-img]') : null;
             var lbClose = lb ? lb.querySelector('[data-olo-gs-lb-close]') : null;
             var lbPrev  = lb ? lb.querySelector('[data-olo-gs-lb-prev]') : null;
