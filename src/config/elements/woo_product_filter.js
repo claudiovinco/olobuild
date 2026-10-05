@@ -42,8 +42,10 @@ export default {
   // Come nasce dalla palette: il pannello dei filtri del negozio (prezzo, categorie col conteggio,
   // disponibilità) con «Applica filtri» nel colore del sito. Scioglie il disaccordo sul testo del
   // pulsante fra PHP («Filtra») e config.
+  // Attributi vuoti = tutti quelli del negozio (il default PHP, pa_color,pa_size, li fissava).
   partenza: {
     button_text: t('Applica filtri'),
+    attributes: '',
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────
@@ -52,17 +54,23 @@ export default {
     { key: 'show_price_range', label: t('Filtro prezzo'), type: 'toggle' },
     { key: 'show_categories', label: t('Filtro categorie'), type: 'toggle' },
     { key: 'show_attributes', label: t('Filtro attributi'), type: 'toggle' },
+    { key: 'attributes', label: t('Attributi'), type: 'text', placeholder: t('es. color, size'),
+      description: t('Gli attributi WooCommerce da offrire, separati da virgola (color oppure pa_color). Vuoto = tutti gli attributi del negozio.'),
+      condition: { field: 'show_attributes', value: true } },
     { key: 'show_stock', label: t('Filtro disponibilita'), type: 'toggle' },
     { key: 'show_count', label: t('Mostra conteggio prodotti'), type: 'toggle' },
 
+    // «Prezzo minimo/massimo» (price_range_min/max) non ci sono più: il cursore prende sempre
+    // il prezzo più basso e più alto dei prodotti del negozio, e quei due campi non agivano.
     { type: 'separator', label: t('Range prezzo') },
-    { key: 'price_range_min', label: t('Prezzo minimo'), type: 'range', min: 0, max: 1000, step: 10 },
-    { key: 'price_range_max', label: t('Prezzo massimo'), type: 'range', min: 10, max: 10000, step: 10 },
-    { key: 'price_step', label: t('Step prezzo'), type: 'range', min: 1, max: 100, step: 1 },
+    { key: 'price_step', label: t('Step prezzo'), type: 'range', min: 1, max: 100, step: 1,
+      condition: { field: 'show_price_range', value: true } },
 
     { type: 'separator', label: t('Pulsante') },
-    { key: 'apply_button', label: t('Mostra pulsante applica'), type: 'toggle' },
-    { key: 'button_text', label: t('Testo pulsante'), type: 'text' },
+    { key: 'apply_button', label: t('Mostra pulsante applica'), type: 'toggle',
+      description: t('Spento: i filtri si applicano a ogni scelta, senza premere il pulsante.') },
+    { key: 'button_text', label: t('Testo pulsante'), type: 'text',
+      condition: { field: 'apply_button', value: true } },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -99,12 +107,16 @@ export default {
       { value: 'horizontal', label: t('Orizzontale') },
       { value: 'dropdown', label: t('Dropdown') },
     ]},
-    { key: 'collapsible', label: t('Sezioni richiudibili'), type: 'toggle' },
+    // A tendina le sezioni si aprono sempre una alla volta: l'interruttore lì non agisce.
+    { key: 'collapsible', label: t('Sezioni richiudibili'), type: 'toggle',
+      condition: { field: 'filter_style', op: 'neq', value: 'dropdown' } },
 
     { type: 'separator', label: t('Colori') },
     { key: 'active_color', label: t('Colore filtro attivo'), type: 'color' },
-    { key: 'button_color', label: t('Colore testo pulsante'), type: 'color' },
-    { key: 'button_bg', label: t('Sfondo pulsante'), type: 'color' },
+    { key: 'button_color', label: t('Colore testo pulsante'), type: 'color',
+      condition: { field: 'apply_button', value: true } },
+    { key: 'button_bg', label: t('Sfondo pulsante'), type: 'color',
+      condition: { field: 'apply_button', value: true } },
 
     ...shadowField,
     ...borderFields(),
