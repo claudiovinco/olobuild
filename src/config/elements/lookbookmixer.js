@@ -44,6 +44,33 @@ export default {
     mono_font_family: '',
   },
 
+  // Appena nata: «componi il tuo menu» di un locale — quattro portate con due o tre scelte
+  // ciascuna (le frecce cambiano piatto) e la card che somma il totale, nei colori del tema.
+  partenza: {
+    items: [
+      { step: t('Antipasto'), name: t('Insalata di stagione'), price: '9', color: 'var(--olo-color-secondary, #16263d)' },
+      { step: t('Antipasto'), name: t('Tagliere del territorio'), price: '12', color: 'var(--olo-color-accent, #f4a23b)' },
+      { step: t('Primo'), name: t('Tagliatelle al ragù'), price: '14', color: 'var(--olo-color-primary, #e1474f)' },
+      { step: t('Primo'), name: t('Risotto ai funghi'), price: '15', color: 'var(--olo-color-muted, #f6f7f9)' },
+      { step: t('Primo'), name: t('Gnocchi al pesto'), price: '13', color: 'var(--olo-color-secondary, #16263d)' },
+      { step: t('Secondo'), name: t('Orata al forno'), price: '19', color: 'var(--olo-color-light, #f8f9fa)' },
+      { step: t('Secondo'), name: t('Filetto ai ferri'), price: '22', color: 'var(--olo-color-primary, #e1474f)' },
+      { step: t('Dolce'), name: t('Tiramisù della casa'), price: '6', color: 'var(--olo-color-accent, #f4a23b)' },
+      { step: t('Dolce'), name: t('Panna cotta'), price: '5', color: 'var(--olo-color-light, #f8f9fa)' },
+    ],
+    card_title: t('Il tuo menu'),
+    card_steps_label: t('portate'),
+    card_sub: t('Quattro portate a scelta: cambia ogni piatto finché il menu è come lo vuoi.'),
+    cta_text: t('Prenota un tavolo'),
+    panel_bg: 'var(--olo-color-dark, #16263d)',
+    slot_bg: 'color-mix(in srgb, var(--olo-color-light, #f8f9fa) 5%, var(--olo-color-dark, #16263d))',
+    accent: 'var(--olo-color-primary, #e1474f)',
+    accent_ink: 'var(--olo-color-primary-contrast, #ffffff)',
+    name_color: 'var(--olo-color-light, #f8f9fa)',
+    price_color: 'color-mix(in srgb, var(--olo-color-light, #f8f9fa) 62%, transparent)',
+    line_color: 'color-mix(in srgb, var(--olo-color-light, #f8f9fa) 13%, transparent)',
+  },
+
   // ═══ CONTENUTO ════════════════════════════════════════════════
   fields: [
     { type: 'separator', label: t('Opzioni (campo "step" = gruppo/slot)') },

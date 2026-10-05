@@ -47,6 +47,24 @@ export default {
     mono_font_family: '',
   },
 
+  // Appena nata: l'indice dei lavori di uno studio, quattro righe (numero · titolo · categoria
+  // · anno) con i colori del tema; al passaggio la riga rientra, si colora e mostra la freccia.
+  partenza: {
+    items: [
+      { number: '01', title: t('Residenza Aurora'), category: t('Architettura'), year: '2026', link_url: '' },
+      { number: '02', title: t('Bottega Marini'), category: t('Identità visiva'), year: '2025', link_url: '' },
+      { number: '03', title: t('Studio Ferri'), category: t('Interni · arredo'), year: '2025', link_url: '' },
+      { number: '04', title: t('Caffè Centrale'), category: t('Sito web'), year: '2024', link_url: '' },
+    ],
+    divider_color: 'var(--olo-color-border, #e5e7eb)',
+    row_hover_bg: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 6%, transparent)',
+    number_color: 'var(--olo-color-primary, #e1474f)',
+    title_color: 'var(--olo-color-text, #1f2937)',
+    category_color: 'var(--olo-color-text-soft, #6b7280)',
+    year_color: 'var(--olo-color-text, #1f2937)',
+    arrow_color: 'var(--olo-color-primary, #e1474f)',
+  },
+
   // ═══ CONTENUTO ════════════════════════════════════════════════
   fields: [
     { type: 'separator', label: t('Voci') },

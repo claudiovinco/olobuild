@@ -1,4 +1,5 @@
 import { ratioOptions } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -44,6 +45,23 @@ export default {
     desc_size:  15,
 
     mono_font_family: '',
+  },
+
+  // Appena nata: i lavori scelti di uno studio, quattro foto vere su due colonne — una fila in
+  // formato alto e una orizzontale (le alte stanno nella stessa fila: la griglia non lascia buchi)
+  // — con titolo, anno e categoria, descrizione e zoom al passaggio.
+  partenza: {
+    items: [
+      { image: demo('ufficio'), media_label: '', title: t('Studio Ferri'), meta: t('\'25 — Interni'), description: t('Uffici luminosi per quaranta persone, con sale riunioni e spazi comuni.'), link_url: '', tall: true },
+      { image: demo('citta-tetti'), media_label: '', title: t('Palazzo Ricci'), meta: t('\'25 — Restauro'), description: t('Un palazzo dell\'Ottocento restituito al centro storico, tetti compresi.'), link_url: '', tall: true },
+      { image: demo('architettura'), media_label: '', title: t('Residenza Aurora'), meta: t('\'26 — Architettura'), description: t('Dodici appartamenti affacciati sul verde, disegnati attorno alla luce naturale.'), link_url: '', tall: false },
+      { image: demo('facciata-vetro'), media_label: '', title: t('Torre Levante'), meta: t('\'24 — Concorso'), description: t('La proposta per una sede direzionale: vetro, acciaio e un giardino in quota.'), link_url: '', tall: false },
+    ],
+    media_bg: 'var(--olo-color-surface-alt, #f6f7f9)',
+    media_label_color: 'var(--olo-color-text, #1f2937)',
+    title_color: 'var(--olo-color-text, #1f2937)',
+    meta_color: 'var(--olo-color-text-soft, #6b7280)',
+    desc_color: 'var(--olo-color-text-soft, #6b7280)',
   },
 
   // ═══ CONTENUTO ════════════════════════════════════════════════

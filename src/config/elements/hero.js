@@ -1,5 +1,6 @@
 import { textEffectsFields, textEffectsDefaults, withHover } from './_shared';
 import { imageFrameFields } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -144,6 +145,40 @@ export default {
     // Effetti testo
     ...textEffectsDefaults,
     text_effect_target: 'all',
+  },
+
+  // Appena nata: la scena editoriale — foto a tutto campo con velo scuro del tema in basso e
+  // di lato, blocco in basso a sinistra con occhiello a pallino, titolo con la parola accento in
+  // corsivo, sottotitolo, due pulsanti (pieno nel primario e contorno chiaro) e la riga di servizio.
+  partenza: {
+    eyebrow_text: t('Benvenuti'),
+    eyebrow_dot: true,
+    title: t('Il tuo prossimo progetto <em>inizia qui</em>'),
+    subtitle: t('Raccontaci cosa hai in mente: ti aiutiamo a trasformarlo in qualcosa di concreto, curato in ogni dettaglio.'),
+    media_bg: { type: 'image', image_url: demo('montagna-lago'), image_size: 'cover', image_position: 'center center' },
+    overlay_color: 'var(--olo-color-dark, #16263d)',
+    overlay_top: 0.25,
+    overlay_bottom: 0.85,
+    overlay_sides: true,
+    accent: 'color-mix(in srgb, var(--olo-color-accent, #f4a23b) 70%, var(--olo-color-light, #f8f9fa))',
+    text_color: 'var(--olo-color-light, #f8f9fa)',
+    title_font_size: '60',
+    title_font_weight: '600',
+    title_line_height: '1.05',
+    subtitle_font_size: '19',
+    subtitle_max_width: '540',
+    min_height: '620px',
+    content_max_width: '680',
+    vertical_align: 'bottom',
+    horizontal_align: 'left',
+    text_align: 'left',
+    tile_padding: { top: 80, right: 56, bottom: 72, left: 56 },
+    cta_text: t('Scopri di più'),
+    cta_bg_color: 'var(--olo-color-primary, #e1474f)',
+    cta_text_color: 'var(--olo-color-primary-contrast, #ffffff)',
+    cta2_text: t('Contattaci'),
+    cta2_text_color: 'var(--olo-color-light, #f8f9fa)',
+    meta_text: t('Su appuntamento · dal lunedì al sabato'),
   },
 
   // ─────────────────────────────────────────────────────────────────

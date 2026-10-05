@@ -29,6 +29,22 @@ export default {
     align: 'left',
   },
 
+  // Appena nata: l'orario settimanale dei corsi di una scuola o di uno studio, sei giorni e
+  // quattro fasce, con occhiello e titolo e le lezioni del corso base evidenziate nel colore primario.
+  partenza: {
+    eyebrow: t('Orari dei corsi'),
+    heading: t('La settimana tipo'),
+    days: t('Lun, Mar, Mer, Gio, Ven, Sab'),
+    corner_label: t('Ora'),
+    rows: [
+      { time: '09:00', cells: t('!Corso base | Intermedio | !Corso base | Intermedio | !Corso base | Lezione aperta') },
+      { time: '12:30', cells: t('Avanzato | | Avanzato | | Avanzato | ') },
+      { time: '18:00', cells: t('Intermedio | !Corso base | Laboratorio | !Corso base | Intermedio | ') },
+      { time: '20:00', cells: t('Avanzato | Laboratorio | Avanzato | Laboratorio | | ') },
+    ],
+    zone_on: 'var(--olo-color-primary-contrast, #ffffff)',
+  },
+
   fields: [
     { key: 'eyebrow', label: t('Occhiello'), type: 'text' },
     { key: 'heading', label: t('Titolo'), type: 'text' },

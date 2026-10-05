@@ -1,6 +1,7 @@
 import { t } from '@/i18n';
 import { withHover, focalField } from './_shared.js';
 import { ratioOptions } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 
 /**
  * Hover List — lista a righe con pastiglia colore (swatch), nome e sotto-etichetta,
@@ -81,6 +82,28 @@ export default {
     peek_ratio: '4/5',
     object_position: 'center center',
     mono_font_family: '',
+  },
+
+  // Appena nata: l'elenco dei servizi di uno studio nel layout numerato — numero, nome grande
+  // e descrizione a destra, nei colori del tema su fondo chiaro; al passaggio la riga si tinge
+  // del primario e accanto al cursore compare la foto del servizio.
+  partenza: {
+    items: [
+      { name: t('Consulenza'), sub: '', desc: t('Un primo incontro per capire obiettivi, tempi e budget.'), number: '', image: demo('ufficio'), link_url: '' },
+      { name: t('Progettazione'), sub: '', desc: t('Una proposta chiara, con fasi e costi definiti fin dall\'inizio.'), number: '', image: demo('scrivania'), link_url: '' },
+      { name: t('Realizzazione'), sub: '', desc: t('Seguiamo ogni dettaglio fino alla consegna, senza sorprese.'), number: '', image: demo('architettura'), link_url: '' },
+      { name: t('Assistenza'), sub: '', desc: t('Restiamo al tuo fianco anche dopo, ogni volta che serve.'), number: '', image: demo('caffe'), link_url: '' },
+    ],
+    lead_mode: 'number',
+    number_color: 'var(--olo-color-text-muted, #6b7280)',
+    name_color: 'var(--olo-color-dark, #16263d)',
+    name_size: 40,
+    sub_color: 'var(--olo-color-text-soft, #6b7280)',
+    desc_color: 'var(--olo-color-text-muted, #6b7280)',
+    desc_size: 15,
+    hover_bg: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 7%, transparent)',
+    line_color: 'var(--olo-color-border, #e5e7eb)',
+    peek_width: 200,
   },
 
   // ═══ CONTENUTO ════════════════════════════════════════════════

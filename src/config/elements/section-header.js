@@ -75,6 +75,25 @@ export default {
     vertical_align: 'end',
   },
 
+  // Appena nata: l'apertura di una sezione «servizi» — occhiello col pallino, titolo su due
+  // righe con la seconda in corsivo nel colore primario, sottotitolo e didascalia a destra.
+  partenza: {
+    eyebrow_text: t('I nostri servizi'),
+    eyebrow_separator: '· ',
+    eyebrow_color: 'var(--olo-color-primary, #e1474f)',
+    eyebrow_dot_color: 'var(--olo-color-primary, #e1474f)',
+    headline_lines: [
+      { text: t('Tutto ciò che serve,'), color: 'var(--olo-color-dark, #16263d)', italic: false },
+      { text: t('in un solo posto.'), color: 'var(--olo-color-primary, #e1474f)', italic: true },
+    ],
+    headline_font_size: 72,
+    headline_line_height: 1.05,
+    tagline_text: t('Dalla prima idea al risultato finito, ti seguiamo passo dopo passo.'),
+    tagline_text_size: 20,
+    tagline_text_color: 'var(--olo-color-dark, #16263d)',
+    tagline_caption: t('Consulenza · Progetto · Assistenza'),
+  },
+
   // ═══ CONTENUTO ════════════════════════════════════════════════
   fields: [
     { type: 'separator', label: t('Occhiello') },

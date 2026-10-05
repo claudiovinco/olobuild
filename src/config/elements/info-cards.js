@@ -72,6 +72,24 @@ export default {
     card_hover_effect: 'none',
   },
 
+  // Appena nata: le tre promesse di un'attività in una banda scura del tema — numero ed
+  // etichetta, cifra grande in corsivo nel primario, descrizione e invito «Scopri di più»;
+  // la card si solleva al passaggio. Su telefono le card vanno una sotto l'altra.
+  partenza: {
+    items: [
+      { counter: '01', counter_label: t('Preventivo'), title: t('Gratis'), title_accent: '', title_accent_italic: true, description: t('Sopralluogo e preventivo <strong>senza impegno</strong>: sai subito quanto spendi, prima di decidere.'), icon: '', footer_dot_color: 'var(--olo-color-accent, #f4a23b)', footer_text: '', link_url: '', link_text: t('Scopri di più'), media_image: '', media_label: '' },
+      { counter: '02', counter_label: t('Consegna'), title: '48', title_accent: t('ore'), title_accent_italic: true, description: t('Dalla conferma alla consegna in <strong>due giorni lavorativi</strong> per tutti gli ordini standard.'), icon: '', footer_dot_color: 'var(--olo-color-accent, #f4a23b)', footer_text: '', link_url: '', link_text: t('Scopri di più'), media_image: '', media_label: '' },
+      { counter: '03', counter_label: t('Garanzia'), title: '2', title_accent: t('anni'), title_accent_italic: true, description: t('Ogni lavoro è <strong>coperto da garanzia</strong>: se qualcosa non va, interveniamo noi.'), icon: '', footer_dot_color: 'var(--olo-color-accent, #f4a23b)', footer_text: '', link_url: '', link_text: t('Scopri di più'), media_image: '', media_label: '' },
+    ],
+    items_gap: 12,
+    card_bg: { type: 'solid', color: 'color-mix(in srgb, var(--olo-color-light, #f8f9fa) 5%, var(--olo-color-dark, #16263d))' },
+    card_color: 'var(--olo-color-surface-alt, #f6f7f9)',
+    card_accent_color: 'var(--olo-color-primary, #e1474f)',
+    show_link_text: true,
+    card_hover_effect: 'lift',
+    columns_mobile_landscape: 1,
+  },
+
   // ═══ CONTENUTO ════════════════════════════════════════════════
   fields: [
     { type: 'separator', label: t('Card items') },

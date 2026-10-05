@@ -39,6 +39,21 @@ export default {
     mono_font_family: '',
   },
 
+  // Appena nata: la banda degli orari di apertura di un negozio o di uno studio, quattro fasce
+  // coerenti fra loro (giorni · orario · nota) con i divisori e i colori del tema.
+  partenza: {
+    items: [
+      { day: t('Lun — Ven'), time: '9 — 19', note: t('Orario continuato') },
+      { day: t('Sabato'), time: '9 — 13', note: t('Pomeriggio su appuntamento') },
+      { day: t('Domenica'), time: t('Chiuso'), note: t('Riposo settimanale') },
+      { day: t('Festivi'), time: '10 — 13', note: t('Verifica sul calendario') },
+    ],
+    divider_color: 'var(--olo-color-border, #e5e7eb)',
+    day_color: 'var(--olo-color-text-soft, #6b7280)',
+    time_color: 'var(--olo-color-text, #1f2937)',
+    note_color: 'var(--olo-color-text-soft, #6b7280)',
+  },
+
   // ═══ CONTENUTO ════════════════════════════════════════════════
   fields: [
     { type: 'separator', label: t('Orari') },

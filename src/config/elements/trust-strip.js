@@ -39,6 +39,20 @@ export default {
     badge_color: 'var(--olo-color-dark, #16263d)',
   },
 
+  // Appena nata: la riga delle garanzie di un negozio o di un'attività, cinque voci con
+  // un'icona diversa per ciascuna (nel colore primario), il punto chiave in grassetto e i separatori.
+  partenza: {
+    items: [
+      { icon: 'truck', icon_color: 'var(--olo-color-primary, #e1474f)', text: t('Spedizione <b>gratuita</b> da 49 €') },
+      { icon: 'rotate-ccw', icon_color: 'var(--olo-color-primary, #e1474f)', text: t('Reso <b>entro 30 giorni</b>') },
+      { icon: 'lock', icon_color: 'var(--olo-color-primary, #e1474f)', text: t('Pagamenti <b>sicuri</b>') },
+      { icon: 'headphones', icon_color: 'var(--olo-color-primary, #e1474f)', text: t('Assistenza <b>in italiano</b>') },
+      { icon: 'badge-check', icon_color: 'var(--olo-color-primary, #e1474f)', text: t('Garanzia <b>di 2 anni</b>') },
+    ],
+    badge_bg: 'var(--olo-color-surface-alt, #f6f7f9)',
+    badge_color: 'var(--olo-color-dark, #16263d)',
+  },
+
   // ═══ CONTENUTO ════════════════════════════════════════════════
   fields: [
     { type: 'separator', label: t('Items') },

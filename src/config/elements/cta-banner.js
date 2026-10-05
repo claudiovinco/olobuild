@@ -66,6 +66,23 @@ export default {
     banner_padding:                 { top: 40, right: 40, bottom: 40, left: 40 },
   },
 
+  // Appena nata: il banner d'invito all'azione di un'attività qualunque, scuro del tema, con
+  // la parola accento in corsivo, sottotitolo leggibile e due pulsanti (pieno nel primario e contorno).
+  partenza: {
+    headline: t('Hai un progetto in mente?'),
+    headline_accent: t('Parliamone.'),
+    subtitle: t('Raccontaci di cosa hai bisogno: ti rispondiamo entro un giorno lavorativo con una proposta su misura, senza impegno.'),
+    cta_text: t('Richiedi un preventivo'),
+    cta2_text: t('Chiamaci'),
+    cta2_color: 'var(--olo-color-light, #f8f9fa)',
+    cta2_border: 'color-mix(in srgb, var(--olo-color-light, #f8f9fa) 35%, transparent)',
+    text_color: 'var(--olo-color-light, #f8f9fa)',
+    subtitle_color: 'color-mix(in srgb, var(--olo-color-light, #f8f9fa) 72%, transparent)',
+    cta_color: 'var(--olo-color-primary-contrast, #ffffff)',
+    cta_color_hover: 'var(--olo-color-primary-contrast, #ffffff)',
+    subtitle_size: 15,
+  },
+
   // ═══ CONTENUTO ═══════════════════════════════════════════════
   fields: [
     { type: 'separator', label: t('Headline') },

@@ -1,6 +1,7 @@
 import { t } from '@/i18n';
 import { withHover } from './_shared';
 import { ratioOptions } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 
 const R = (n) => ({ tl: n, tr: n, br: n, bl: n, linked: true });
 
@@ -142,6 +143,20 @@ export default {
     columns:    3,
     gap:        32,
     items_align: 'start',
+  },
+
+  // Appena nata: «come funziona» in tre passi (scegli · prenota · goditi) sulla linea del
+  // tempo coi pallini — numero grande in corsivo, foto, titolo con la parola accento, metrica
+  // col tempo e la freccia verso il passo dopo.
+  partenza: {
+    items: [
+      { counter: '01', tag_text: t('Online'), tag_dot_color: 'var(--olo-color-primary, #e1474f)', media_label: t('Scegli'), media_type: 'image', media_content: '', media_image: demo('scrivania'), media_bg: 'var(--olo-color-muted, #f6f7f9)', media_color: 'var(--olo-color-primary, #e1474f)', pre_title: t('Scegli'), title: t('Trovi'), title_accent: t('la proposta giusta'), title_accent_italic: true, title_after: t('per te.'), title_after_italic: false, description: t('Sfoglia le proposte, confronta i dettagli e scegli con calma quella che fa al caso tuo.'), footer_value: t('5 min'), footer_label: t('Per scegliere'), separator_text: t('→ Poi') },
+      { counter: '02', tag_text: t('In pochi clic'), tag_dot_color: 'var(--olo-color-primary, #e1474f)', media_label: t('Prenota'), media_type: 'image', media_content: '', media_image: demo('ufficio'), media_bg: 'var(--olo-color-muted, #f6f7f9)', media_color: 'var(--olo-color-primary, #e1474f)', pre_title: t('Prenota'), title: t('Confermi'), title_accent: t('online'), title_accent_italic: true, title_after: t('o con una telefonata.'), title_after_italic: false, description: t('Pagamento sicuro e conferma immediata via email, con tutti i dettagli a portata di mano.'), footer_value: t('24 h'), footer_label: t('Conferma'), separator_text: t('→ Poi') },
+      { counter: '03', tag_text: t('Pronto'), tag_dot_color: 'var(--olo-color-success, #10b981)', media_label: t('Goditi'), media_type: 'image', media_content: '', media_image: demo('tavola'), media_bg: 'var(--olo-color-muted, #f6f7f9)', media_color: 'var(--olo-color-primary, #e1474f)', pre_title: t('Goditi'), title: t('Al resto'), title_accent: t('pensiamo noi'), title_accent_italic: true, title_after: t('dall\'inizio alla fine.'), title_after_italic: false, description: t('Ti aspettiamo nel giorno scelto: se qualcosa cambia, ti basta scriverci per spostare tutto.'), footer_value: t('7 su 7'), footer_label: t('Assistenza'), separator_text: '' },
+    ],
+    show_media_label: false,
+    media_aspect_ratio: '4/3',
+    title_size: 26,
   },
 
   // ═══ CONTENUTO ════════════════════════════════════════════════

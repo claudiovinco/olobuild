@@ -1,4 +1,5 @@
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -67,6 +68,19 @@ export default {
       { eyebrow: '', title: 'Terzo gesto', accent: '', text: 'Il terzo passaggio. Ogni card sale sopra la precedente creando la pila.', media: '', media_label: 'Immagine', color: '', text_color: '' },
       { eyebrow: '', title: 'Quarto gesto', accent: '', text: 'L\'ultimo passaggio resta in cima. Aggiungi, rimuovi o riordina le card a piacere.', media: '', media_label: 'Immagine', color: '', text_color: '' },
     ],
+  },
+
+  // Appena nata: «perché sceglierci» in quattro card con foto che si impilano scorrendo —
+  // numero, etichetta, titolo con l'accento attenuato e testo; le card alternano il fondo del
+  // tema e una sua tinta tenue, così la pila si legge anche da ferma.
+  partenza: {
+    cards: [
+      { eyebrow: t('Ascolto'), title: t('Partiamo'), accent: t('da te'), text: t('Prima di proporre qualsiasi cosa ascoltiamo: obiettivi, gusti, tempi e budget.'), media: demo('ufficio'), media_label: '', color: '', text_color: '' },
+      { eyebrow: t('Qualità'), title: t('Curiamo'), accent: t('ogni dettaglio'), text: t('Materiali scelti, fornitori di fiducia e controlli a ogni fase del lavoro.'), media: demo('architettura'), media_label: '', color: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 7%, var(--olo-color-background, #ffffff))', text_color: '' },
+      { eyebrow: t('Puntualità'), title: t('Tempi'), accent: t('chiari'), text: t('Un calendario condiviso fin dal primo giorno: sai sempre a che punto siamo.'), media: demo('scrivania'), media_label: '', color: '', text_color: '' },
+      { eyebrow: t('Assistenza'), title: t('Sempre'), accent: t('con te'), text: t('Anche dopo la consegna restiamo raggiungibili, per ogni domanda o modifica.'), media: demo('caffe'), media_label: '', color: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 7%, var(--olo-color-background, #ffffff))', text_color: '' },
+    ],
+    title_display: true,
   },
 
   fields: [

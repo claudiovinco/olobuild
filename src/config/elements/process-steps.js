@@ -43,6 +43,23 @@ export default {
     card_padding: 0,
   },
 
+  // Appena nata: i quattro passi con cui lavora uno studio o un'attività di servizi, in
+  // italiano, col numero dentro un cerchio tinto del colore primario e più respiro fra le colonne.
+  partenza: {
+    items: [
+      { number: '01', title: t('Ascolto'), description: t('Un primo incontro, anche online, per capire obiettivi, tempi e budget.') },
+      { number: '02', title: t('Proposta'), description: t('Ti presentiamo un progetto chiaro, con fasi e costi definiti fin dall\'inizio.') },
+      { number: '03', title: t('Realizzazione'), description: t('Seguiamo ogni dettaglio e ti aggiorniamo a ogni passaggio importante.') },
+      { number: '04', title: t('Assistenza'), description: t('Restiamo al tuo fianco anche dopo la consegna, ogni volta che serve.') },
+    ],
+    gap: 32,
+    item_gap: 12,
+    number_style: 'circle',
+    number_bg: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 14%, transparent)',
+    number_size: 36,
+    number_weight: '600',
+  },
+
   fields: [
     { type: 'separator', label: t('Passi') },
     { key: 'items', label: t('Passi'), type: 'content-items',

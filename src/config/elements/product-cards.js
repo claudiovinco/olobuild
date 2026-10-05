@@ -1,6 +1,7 @@
 import { t } from '@/i18n';
 import { withHover } from './_shared';
 import { ratioOptions } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 
 const R = (n) => ({ tl: n, tr: n, br: n, bl: n, linked: true });
 
@@ -63,6 +64,24 @@ export default {
 
     // Hover
     card_hover_effect: 'lift',
+  },
+
+  // Appena nata: quattro schede prodotto di un negozio di oggetti per la casa — foto in alto,
+  // categoria nel colore primario, un badge «Novità», nome con la seconda parola in corsivo,
+  // descrizione col prezzo e invito testuale; la card si solleva al passaggio.
+  partenza: {
+    columns: 4,
+    items: [
+      { letter: '', letter_color: 'var(--olo-color-primary, #e1474f)', logo_image: '', top_bg: { type: 'image', image_url: demo('vaso'), image_size: 'cover', image_position: 'center center' }, screenshot_label: '', brand_label: t('Ceramica'), brand_color: 'var(--olo-color-primary, #e1474f)', show_badge: true, badge_text: t('Novità'), badge_bg: 'var(--olo-color-primary, #e1474f)', badge_color: 'var(--olo-color-primary-contrast, #ffffff)', title: t('Vaso '), title_accent: t('Neve'), title_accent_italic: true, description: t('Ceramica bianca lavorata a mano, alto 28 cm. 48 €'), cta_text: t('Scopri'), cta_url: '#' },
+      { letter: '', letter_color: 'var(--olo-color-primary, #e1474f)', logo_image: '', top_bg: { type: 'image', image_url: demo('ciotola'), image_size: 'cover', image_position: 'center center' }, screenshot_label: '', brand_label: t('Porcellana'), brand_color: 'var(--olo-color-primary, #e1474f)', show_badge: false, badge_text: '', badge_bg: 'var(--olo-color-primary, #e1474f)', badge_color: 'var(--olo-color-primary-contrast, #ffffff)', title: t('Ciotola '), title_accent: t('Mare'), title_accent_italic: true, description: t('Porcellana dipinta a mano, diametro 16 cm. 26 €'), cta_text: t('Scopri'), cta_url: '#' },
+      { letter: '', letter_color: 'var(--olo-color-primary, #e1474f)', logo_image: '', top_bg: { type: 'image', image_url: demo('tavola'), image_size: 'cover', image_position: 'center center' }, screenshot_label: '', brand_label: t('Tavola'), brand_color: 'var(--olo-color-primary, #e1474f)', show_badge: false, badge_text: '', badge_bg: 'var(--olo-color-primary, #e1474f)', badge_color: 'var(--olo-color-primary-contrast, #ffffff)', title: t('Servizio '), title_accent: t('Terra'), title_accent_italic: true, description: t('Due piatti e un calice in gres smaltato. 64 €'), cta_text: t('Scopri'), cta_url: '#' },
+      { letter: '', letter_color: 'var(--olo-color-primary, #e1474f)', logo_image: '', top_bg: { type: 'image', image_url: demo('caffe'), image_size: 'cover', image_position: 'center center' }, screenshot_label: '', brand_label: t('Colazione'), brand_color: 'var(--olo-color-primary, #e1474f)', show_badge: false, badge_text: '', badge_bg: 'var(--olo-color-primary, #e1474f)', badge_color: 'var(--olo-color-primary-contrast, #ffffff)', title: t('Tazza '), title_accent: t('Aurora'), title_accent_italic: true, description: t('Tazza da cappuccino con piattino, 250 ml. 18 €'), cta_text: t('Scopri'), cta_url: '#' },
+    ],
+    card_bg: { type: 'solid', color: 'var(--olo-color-surface, #ffffff)' },
+    card_color: 'var(--olo-color-dark, #16263d)',
+    top_aspect_ratio: '4/3',
+    show_screenshot_label: false,
+    title_size: 26,
   },
 
   // ═══ CONTENUTO ═══════════════════════════════════════════════

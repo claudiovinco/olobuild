@@ -41,6 +41,23 @@ export default {
     mono_font_family: '',
   },
 
+  // Appena nata: quattro numeri credibili di un'attività, centrati, col valore nel colore
+  // primario e l'etichetta in maiuscoletto, separati dai divisori del tema.
+  partenza: {
+    items: [
+      { value: '15+', label: t('Anni di esperienza') },
+      { value: '1.200', label: t('Clienti seguiti') },
+      { value: '98%', label: t('Clienti soddisfatti') },
+      { value: '24 h', label: t('Tempo medio di risposta') },
+    ],
+    align: 'center',
+    divider_color: 'var(--olo-color-border, #e5e7eb)',
+    value_color: 'var(--olo-color-primary, #e1474f)',
+    label_color: 'var(--olo-color-text-soft, #6b7280)',
+    label_uppercase: true,
+    label_size: 12,
+  },
+
   // ═══ CONTENUTO ════════════════════════════════════════════════
   fields: [
     { type: 'separator', label: t('Statistiche') },

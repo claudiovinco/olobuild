@@ -1,4 +1,5 @@
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -111,6 +112,22 @@ export default {
       { title: 'Terzo progetto', subtitle: 'Categoria · luogo', text: 'Su mobile e con “meno movimento” attivo la traccia diventa uno scroll orizzontale nativo.', media: '', media_label: 'Immagine', color: '', text_color: '' },
       { title: 'Quarto progetto', subtitle: 'Categoria · luogo', text: 'Riordina, rimuovi o personalizza i singoli item dal pannello a destra.', media: '', media_label: 'Immagine', color: '', text_color: '' },
       { title: 'Quinto progetto', subtitle: 'Categoria · luogo', text: 'La scrubbar in basso mostra il progresso dello scorrimento.', media: '', media_label: 'Immagine', color: '', text_color: '' },
+    ],
+  },
+
+  // Appena nata: il nastro dei progetti recenti di uno studio — cinque foto a tutto bordo con
+  // numero, titolo, luogo e una riga di testo sulla sfumatura, frecce e pallini; scendendo
+  // nella pagina il nastro scorre in orizzontale (pin su due schermi, il minimo).
+  partenza: {
+    heading: t('Progetti recenti'),
+    kicker: t('Portfolio'),
+    scroll_length: 2,
+    items: [
+      { title: t('Rifugio sul lago'), subtitle: t('Ristrutturazione · Trentino'), text: t('Una baita del Novecento riaperta alla luce, con la vista sul lago in ogni stanza.'), media: demo('montagna-lago'), media_label: '', color: '', text_color: '' },
+      { title: t('Villa sulla baia'), subtitle: t('Nuova costruzione · Sardegna'), text: t('Volumi bassi e terrazze verso il mare, costruiti con la pietra del posto.'), media: demo('mare-costa'), media_label: '', color: '', text_color: '' },
+      { title: t('Casa nel bosco'), subtitle: t('Interni · Valle d\'Aosta'), text: t('Legno, lana e grandi finestre: una casa che si scalda guardando gli alberi.'), media: demo('bosco-luce'), media_label: '', color: '', text_color: '' },
+      { title: t('Attico sui tetti'), subtitle: t('Restauro · Bologna'), text: t('Un sottotetto recuperato, con la terrazza affacciata sui coppi del centro.'), media: demo('citta-tetti'), media_label: '', color: '', text_color: '' },
+      { title: t('Casale in collina'), subtitle: t('Recupero · Toscana'), text: t('Un vecchio fienile diventato casa, in fondo alla strada bianca fra i campi.'), media: demo('strada-colline'), media_label: '', color: '', text_color: '' },
     ],
   },
 

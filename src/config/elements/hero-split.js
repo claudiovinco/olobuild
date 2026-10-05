@@ -1,5 +1,6 @@
 import { t } from '@/i18n';
 import { withHover } from './_shared';
+import { demo } from '../demoMedia.js';
 
 // Standard radius: 4 angoli indipendenti con link/unlink + hover
 const RADIUS_999 = { tl: 999, tr: 999, br: 999, bl: 999, linked: true };
@@ -150,6 +151,53 @@ export default {
     // Fallback interno (lo style.padding del wrapper esterno ha priorità).
     tile_padding: { top: 80, right: 80, bottom: 60, left: 80 },
     tile_margin:  { top: 0, right: 0, bottom: 0, left: 0 },
+  },
+
+  // Appena nata: l'apertura di uno studio o di un'attività — a sinistra occhiello, titolo su
+  // tre righe con quella centrale in corsivo nel primario, sottotitolo, due pulsanti e tre numeri;
+  // a destra la foto in 4:5 col badge d'angolo nel colore primario.
+  partenza: {
+    eyebrow_text: t('Studio · dal 2010'),
+    eyebrow_dot_color: 'var(--olo-color-primary, #e1474f)',
+    eyebrow_color: 'var(--olo-color-text-muted, #6b7280)',
+    headline_lines: [
+      { text: t('Idee chiare.'), color: 'var(--olo-color-dark, #16263d)', italic: false },
+      { text: t('Lavoro curato.'), color: 'var(--olo-color-primary, #e1474f)', italic: true },
+      { text: t('Risultati veri.'), color: 'var(--olo-color-dark, #16263d)', italic: false },
+    ],
+    headline_font_size: 72,
+    headline_line_height: 1.02,
+    headline_font_weight: '600',
+    subhead: t('Un solo interlocutore dalla prima idea alla consegna: ascoltiamo, proponiamo e realizziamo, con tempi e costi chiari fin dall\'inizio.'),
+    subhead_italic: false,
+    subhead_size: 18,
+    subhead_max_width: 480,
+    cta1_text: t('Richiedi un preventivo'),
+    cta1_bg: 'var(--olo-color-primary, #e1474f)',
+    cta1_color: 'var(--olo-color-primary-contrast, #ffffff)',
+    cta1_bg_hover: 'var(--olo-color-dark, #16263d)',
+    cta1_color_hover: 'var(--olo-color-light, #f8f9fa)',
+    cta2_text: t('I nostri lavori'),
+    cta2_bg_hover: 'var(--olo-color-dark, #16263d)',
+    cta2_color: 'var(--olo-color-dark, #16263d)',
+    cta2_color_hover: 'var(--olo-color-light, #f8f9fa)',
+    cta2_border: 'var(--olo-color-dark, #16263d)',
+    stats: [
+      { value: '15+', value_color: 'var(--olo-color-dark, #16263d)', label: t('Anni di esperienza') },
+      { value: '320', value_color: 'var(--olo-color-primary, #e1474f)', label: t('Progetti consegnati') },
+      { value: '4,9', value_color: 'var(--olo-color-dark, #16263d)', label: t('Voto medio dei clienti') },
+    ],
+    panel: 'media',
+    panel_media: { type: 'image', image_url: demo('ufficio'), image_size: 'cover', image_position: 'center center' },
+    panel_media_label: '',
+    panel_badge_number: '15',
+    panel_badge_label: t('anni al tuo fianco'),
+    showcase_badge_dot: 'var(--olo-color-primary, #e1474f)',
+    showcase_badge_bg: 'var(--olo-color-light, #f8f9fa)',
+    split_ratio: '1.2fr 1fr',
+    gap: 72,
+    min_height: 0,
+    tile_padding: { top: 64, right: 48, bottom: 56, left: 48 },
   },
 
   // ═══ CONTENUTO ════════════════════════════════════════════════

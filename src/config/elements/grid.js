@@ -1,6 +1,7 @@
 import { textEffectsFields, textEffectsDefaults, withHover } from './_shared';
 import { shadowField } from './_shared.js';
 import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -56,6 +57,34 @@ export default {
     image_animation_speed: '3',
     ...textEffectsDefaults,
     text_effect_target: 'title',
+  },
+
+  // Appena nata: «cosa vedere nei dintorni» di una struttura o di un'agenzia — sei card con
+  // foto 4:3, titolo e testo, un badge «Da non perdere», la barra filtro a pillole per categoria
+  // (Tutti · Natura · Cultura · Mare), card del tema con ombra leggera, zoom e sollevamento al passaggio.
+  partenza: {
+    items: [
+      { id: 'g-1', title: t('Il lago in quota'), content: t('Un sentiero facile tra i larici porta alla riva: due ore fra andata e ritorno.'), image: demo('montagna-lago'), tag: t('Natura'), badge: t('Da non perdere'), badge_color: '', link: '', link_target: false, icon: '' },
+      { id: 'g-2', title: t('Il centro storico'), content: t('Vicoli, botteghe e la terrazza panoramica sui tetti, a dieci minuti a piedi.'), image: demo('citta-tetti'), tag: t('Cultura'), badge: '', badge_color: '', link: '', link_target: false, icon: '' },
+      { id: 'g-3', title: t('La baia'), content: t('Acqua turchese e sabbia chiara, raggiungibile in barca o con una breve camminata.'), image: demo('mare-costa'), tag: t('Mare'), badge: '', badge_color: '', link: '', link_target: false, icon: '' },
+      { id: 'g-4', title: t('Il bosco'), content: t('All\'alba i raggi filtrano fra gli alberi: il momento migliore per una passeggiata.'), image: demo('bosco-luce'), tag: t('Natura'), badge: '', badge_color: '', link: '', link_target: false, icon: '' },
+      { id: 'g-5', title: t('Architetture moderne'), content: t('Il quartiere nuovo, con le sue facciate firmate e i giardini pensili.'), image: demo('architettura'), tag: t('Cultura'), badge: '', badge_color: '', link: '', link_target: false, icon: '' },
+      { id: 'g-6', title: t('La spiaggia degli scogli'), content: t('Una caletta fra le rocce, perfetta nelle mattine di sole e nei giorni senza vento.'), image: demo('spiaggia-alto'), tag: t('Mare'), badge: '', badge_color: '', link: '', link_target: false, icon: '' },
+    ],
+    gap: 'medium',
+    show_filter: true,
+    filter_all_label: t('Tutti'),
+    card_style: 'default',
+    card_bg_color: 'var(--olo-color-background, #ffffff)',
+    card_border_color: 'var(--olo-color-border, #e5e7eb)',
+    shadow: 'sm',
+    card_hover: 'lift',
+    card_radius: '12',
+    image_ratio: '4/3',
+    image_zoom: true,
+    equal_height: true,
+    title_size: '20',
+    content_color: 'var(--olo-color-text-muted, #6b7280)',
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────
