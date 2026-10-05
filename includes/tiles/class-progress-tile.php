@@ -180,7 +180,7 @@ class Olobuild_Progress_Tile extends Olobuild_Tile_Base {
                         stroke-linecap="round" transform="rotate(-90 <?php echo (float) $cx; ?> <?php echo (float) $cx; ?>)"
                         style="transition:stroke-dashoffset 1s ease;"<?php if ( $animate_fill ) : ?> data-olo-ring="<?php echo (float) $offset; ?>" data-olo-circ="<?php echo (float) $circumference; ?>"<?php endif; ?> />
                     <text x="<?php echo (float) $cx; ?>" y="<?php echo (float) $cx; ?>" text-anchor="middle" dominant-baseline="central"
-                        fill="<?php echo esc_attr( $prog_fg ? $prog_fg : 'var(--olo-color-border, #E5E7EB)' ); ?>" font-size="<?php echo (int) $font_size; ?>px" font-weight="600"
+                        fill="<?php echo esc_attr( $prog_fg ? $prog_fg : 'var(--olo-color-text, #1F2937)' ); /* era il colore dei bordi: numero grigio chiarissimo, quasi invisibile */ ?>" font-size="<?php echo (int) $font_size; ?>px" font-weight="600"
                         <?php if ( $animate && $inner_text === '' ) : ?>data-olo-counter="<?php echo (int) $val; ?>"<?php endif; ?>><?php
                         echo $inner_text ? esc_html( $inner_text ) : (int) $val . '%';
                     ?></text>
@@ -223,13 +223,16 @@ class Olobuild_Progress_Tile extends Olobuild_Tile_Base {
                 $pct_dentro = $this->testo_chiaro( $prog_fg );
             }
         }
+        // Con la percentuale dentro la barra il colore chiaro e' di quella: le etichette in
+        // testa, su pagina chiara, restavano bianche e invisibili. Prendono il colore del testo.
+        $head_fg = $pct_dentro ? '' : $prog_fg;
         ?>
         <div id="<?php echo esc_attr( $uid ); ?>" class="olo-progress olo-pr-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="padding:16px;display:flex;flex-direction:column;gap:16px;">
             <?php foreach ( $bars as $bar ) :
                 $val = min( max( intval( $bar['value'] ), 0 ), 100 );
             ?>
                 <div>
-                    <div style="display:flex;justify-content:space-between;margin-bottom:6px;<?php if ( $prog_fg ) echo 'color:' . $prog_fg . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>font-size:0.875em;">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:6px;<?php if ( $head_fg ) echo 'color:' . $head_fg . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>font-size:0.875em;">
                         <span style="font-weight:600;"><?php echo esc_html( $bar['label'] ); ?></span>
                         <?php if ( $s['show_percentage'] && ! $pct_dentro ) : ?>
                             <span<?php if ( $animate ) : ?> data-olo-counter="<?php echo (int) $val; ?>"<?php endif; ?>><?php echo (int) $val; ?>%</span>
@@ -249,8 +252,17 @@ class Olobuild_Progress_Tile extends Olobuild_Tile_Base {
                     <div role="progressbar" aria-valuenow="<?php echo (int) $val; ?>" aria-valuemin="0" aria-valuemax="100" aria-label="<?php echo esc_attr( $bar['label'] ); ?>" style="position:relative;<?php if ( $track_bg !== '' ) echo 'background:' . esc_attr( $track_bg ) . ';'; ?><?php if ( $has_radius ) echo 'border-radius:' . $radius_css . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- absint/intval-built radius and (int) height only ?>height:<?php echo (int) $bar_height; ?>px;overflow:hidden;">
                         <div style="height:100%;width:<?php echo (int) $val; ?>%;background:<?php echo esc_attr( $fill_bg ); ?>;<?php if ( $has_radius ) echo 'border-radius:' . $radius_css . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- absint/intval-built radius only ?>transition:width 1s ease;"<?php if ( $animate_fill ) : ?> data-olo-fill="<?php echo (int) $val; ?>"<?php endif; ?>></div>
                         <?php // Dentro la barra: il testo interno, oppure la percentuale coi tre preset di $pct_dentro. ?>
-                        <?php if ( $inner_text !== '' || $pct_dentro ) : ?>
-                            <span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:10px;font-weight:600;<?php if ( $prog_fg ) echo 'color:' . $prog_fg . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>"<?php if ( $pct_dentro && $animate ) : ?> data-olo-counter="<?php echo (int) $val; ?>"<?php endif; ?>><?php echo $pct_dentro ? (int) $val . '%' : esc_html( $inner_text ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- (int) value or esc_html() text ?></span>
+                        <?php if ( $pct_dentro ) :
+                            // La percentuale sta sul riempimento, allineata alla sua fine: centrata
+                            // sulla traccia, sotto il 50% cadeva sulla parte chiara (bianco su grigio
+                            // chiarissimo). Con poco riempimento non ci sta: va subito dopo, nel
+                            // colore del testo della pagina.
+                            $pct_fuori = $val < 15;
+                            $pct_pos   = $pct_fuori ? 'left:calc(' . (int) $val . '% + 6px);transform:translateY(-50%);' : 'left:calc(' . (int) $val . '% - 8px);transform:translate(-100%,-50%);';
+                        ?>
+                            <span style="position:absolute;top:50%;<?php echo $pct_pos; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from (int) $val and fixed literals ?>white-space:nowrap;font-size:10px;font-weight:600;<?php if ( ! $pct_fuori ) { if ( $prog_fg ) echo 'color:' . $prog_fg . ';'; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>"<?php if ( $animate ) : ?> data-olo-counter="<?php echo (int) $val; ?>"<?php endif; ?>><?php echo (int) $val; ?>%</span>
+                        <?php elseif ( $inner_text !== '' ) : ?>
+                            <span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:10px;font-weight:600;<?php if ( $prog_fg ) echo 'color:' . $prog_fg . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>"><?php echo esc_html( $inner_text ); ?></span>
                         <?php endif; ?>
                     </div>
                 </div>
