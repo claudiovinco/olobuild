@@ -1,5 +1,6 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField } from './_shared';
 import { shadowField } from './_shared.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -62,11 +63,12 @@ export default {
   },
 
   // Appena nata: il testo in italiano e un'altezza da sezione, non da schermo intero. Il video
-  // che il testo ritaglia lo sceglie chi costruisce (il pacchetto demo non ne ha): fino ad
-  // allora il riquadro resta scuro.
+  // lo sceglie chi costruisce (il pacchetto demo non ne ha): fino ad allora le lettere rivelano
+  // la foto demo messa come poster, che il renderer usa quando il video manca.
   partenza: {
     text: t('SCOPRI\nIL NOSTRO MONDO'),
     min_height: '60vh',
+    video_poster: demo('mare-costa'),
   },
 
   fields: [

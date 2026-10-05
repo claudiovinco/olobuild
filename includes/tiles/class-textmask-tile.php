@@ -118,9 +118,13 @@ class Olobuild_Textmask_Tile extends Olobuild_Tile_Base {
         $text_css = "font-size:{$fs}px;font-weight:{$fw};font-family:{$ff};text-transform:{$tt};letter-spacing:{$ls}px;line-height:{$lh};text-align:{$ta};width:100%;white-space:{$ws};will-change:transform,opacity;transform-origin:center center";
 
         // Base container CSS
-        $css  = "#{$uid}{position:relative;overflow:hidden;min-height:{$min_h};background:{$bg_color}}";
+        // isolation: le fusioni delle maschere avvengono solo fra i livelli della tile.
+        $css  = "#{$uid}{position:relative;overflow:hidden;min-height:{$min_h};background:{$bg_color};isolation:isolate}";
         $tm_obj_pos = Olobuild_Tile_Utils::css_pos( $s, 'object_position' );
         $css .= "#{$uid} .olo-tm-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{$tm_obj_pos};opacity:" . ( $vid_opacity / 100 ) . "}";
+        // Senza video (ne' poster) le lettere rivelano la palette invece del vuoto:
+        // prima la tile appena inserita era un rettangolo nero.
+        $css .= "#{$uid} .olo-tm-vid--tinta{background:linear-gradient(135deg,var(--olo-color-primary, #e1474f),var(--olo-color-accent, #f4a23b))}";
 
         // Responsive
         $css .= "@media(max-width:960px){#{$uid} .olo-tm-text{font-size:{$fs_tablet}px !important}}";
@@ -145,9 +149,19 @@ class Olobuild_Textmask_Tile extends Olobuild_Tile_Base {
             $css .= "#{$uid} .olo-tm-mask{position:absolute;inset:0;z-index:2;background:{$bg_color};display:flex;align-items:{$va_css};justify-content:center;padding:{$py}px {$px}px;isolation:isolate;mix-blend-mode:{$mask_blend}}";
             $css .= "#{$uid} .olo-tm-text{color:{$text_color};mix-blend-mode:{$text_blend};{$text_css};position:relative}";
         } elseif ( $mode === 'video_behind_text' ) {
-            // background-clip: text approach — video plays, text clips it
-            $css .= "#{$uid} .olo-tm-mask{position:absolute;inset:0;z-index:2;display:flex;align-items:{$va_css};justify-content:center;padding:{$py}px {$px}px}";
-            $css .= "#{$uid} .olo-tm-text{color:transparent;-webkit-background-clip:text;background-clip:text;{$text_css};position:relative}";
+            // Ritaglio esatto, in due livelli con lo stesso testo. Prima si usava
+            // background-clip:text, che un video non lo puo' ritagliare: il testo
+            // restava trasparente e il video si vedeva intero.
+            //  1) fondo bianco + lettere nere in «screen»: fuori dalle lettere tutto
+            //     bianco, dentro il video pieno;
+            //  2) fondo del colore scelto + lettere bianche in «multiply»: il bianco
+            //     diventa il colore pieno, il video dentro le lettere resta intatto.
+            // A differenza di «Testo rivela il video» il colore intorno e' pieno,
+            // qualunque sia, e il video nelle lettere non e' velato.
+            $css .= "#{$uid} .olo-tm-mask{position:absolute;inset:0;z-index:2;display:flex;align-items:{$va_css};justify-content:center;padding:{$py}px {$px}px;background:#fff;mix-blend-mode:screen}";
+            $css .= "#{$uid} .olo-tm-mask--fondo{z-index:3;background:{$bg_color};mix-blend-mode:multiply}";
+            $css .= "#{$uid} .olo-tm-text{color:#000;{$text_css};position:relative}";
+            $css .= "#{$uid} .olo-tm-mask--fondo .olo-tm-text{color:#fff}";
         } else {
             // Simple blend mode — blend on mask layer so it composites with sibling video
             $css .= "#{$uid} .olo-tm-mask{position:absolute;inset:0;display:flex;align-items:{$va_css};justify-content:center;padding:{$py}px {$px}px;mix-blend-mode:{$blend}}";
@@ -169,6 +183,10 @@ class Olobuild_Textmask_Tile extends Olobuild_Tile_Base {
                 $ext = pathinfo( wp_parse_url( $vid_url, PHP_URL_PATH ) ?: '', PATHINFO_EXTENSION );
                 $mime = $ext === 'webm' ? 'video/webm' : 'video/mp4';
                 ?><source src="<?php echo $vid_url; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url()'d above ?>" type="<?php echo esc_attr( $mime ); ?>"></video>
+            <?php elseif ( $vid_poster ) : ?>
+            <img class="olo-tm-vid" src="<?php echo $vid_poster; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url()'d above ?>" alt="" decoding="async">
+            <?php elseif ( $mode !== 'blend' ) : ?>
+            <div class="olo-tm-vid olo-tm-vid--tinta"></div>
             <?php endif; ?>
 
             <?php if ( $ov_color && $ov_opacity > 0 ) : ?>
@@ -179,6 +197,11 @@ class Olobuild_Textmask_Tile extends Olobuild_Tile_Base {
             <div class="olo-tm-mask">
                 <div class="olo-tm-text<?php echo $tm_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally; text esc_html()'d above (nl2br only adds <br /> tags) ?>"<?php echo $tm_data; ?>><?php echo $text; ?></div>
             </div>
+            <?php if ( $mode === 'video_behind_text' ) : ?>
+            <div class="olo-tm-mask olo-tm-mask--fondo" aria-hidden="true">
+                <div class="olo-tm-text<?php echo $tm_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- as above ?>"<?php echo $tm_data; ?>><?php echo $text; ?></div>
+            </div>
+            <?php endif; ?>
         </div>
         <?php
 
@@ -189,9 +212,11 @@ class Olobuild_Textmask_Tile extends Olobuild_Tile_Base {
         (function(){
             var el = document.getElementById('<?php echo esc_js( $uid ); ?>');
             if(!el) return;
-            var mask = el.querySelector('.olo-tm-mask');
-            var txt = el.querySelector('.olo-tm-text');
-            if(!txt) return;
+            /* in «Video dietro al testo» i livelli sono due: si muovono insieme */
+            var masks = el.querySelectorAll('.olo-tm-mask');
+            var txts = el.querySelectorAll('.olo-tm-text');
+            if(!txts.length) return;
+            function each(list, fn){ for(var i = 0; i < list.length; i++){ fn(list[i]); } }
 
             var rangeStart = <?php echo (int) $scroll_start; ?> / 100;
             var rangeEnd   = <?php echo (int) $scroll_end; ?> / 100;
@@ -227,21 +252,20 @@ class Olobuild_Textmask_Tile extends Olobuild_Tile_Base {
                 if(doScale){
                     tf = 'scale(' + lerp(sFrom, sTo, progress) + ')';
                 }
-                if(tf){ txt.style.transform = tf; }
+                if(tf){ each(txts, function(t){ t.style.transform = tf; }); }
 
                 if(doOpacity){
                     var op = lerp(oFrom, oTo, progress);
-                    if(mask){ mask.style.opacity = op; }
+                    each(masks, function(m){ m.style.opacity = op; });
                 }
 
                 if(doBlur){
                     var bl = lerp(bFrom, bTo, progress);
-                    txt.style.filter = 'blur(' + bl + 'px)';
+                    each(txts, function(t){ t.style.filter = 'blur(' + bl + 'px)'; });
                 }
             }
 
-            txt.style.willChange = 'transform, opacity, filter';
-            txt.style.transformOrigin = 'center center';
+            each(txts, function(t){ t.style.willChange = 'transform, opacity, filter'; t.style.transformOrigin = 'center center'; });
             var ticking = false;
             window.addEventListener('scroll', function(){
                 if(!ticking){ requestAnimationFrame(function(){ update(); ticking = false; }); ticking = true; }
@@ -252,7 +276,7 @@ class Olobuild_Textmask_Tile extends Olobuild_Tile_Base {
         <?php
         endif;
 
-        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        $tfx_css = $this->tfx_css( $s, '#' . $uid ); // l'uid e' un id: con «.» gli effetti testo non si applicavano
         if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
         $this->tfx_print_script();
                 // Border system
