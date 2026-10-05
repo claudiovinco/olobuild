@@ -40,6 +40,15 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: il logo vero del sito (quello di Aspetto → Personalizza, o il nome del
+  // sito se manca) col motto sotto, che si attenua al passaggio. Senza immagine scelta non c'è il
+  // riquadro grigio: la tile mostra già il marchio di chi la usa.
+  partenza: {
+    source: 'auto',
+    show_tagline: true,
+    hover_opacity: '80',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'source', label: t('Origine'), type: 'select',
@@ -49,9 +58,9 @@ export default {
         { value: 'svg', label: t('SVG personalizzato') },
         { value: 'auto', label: t('Auto (logo del tema WordPress)') },
       ]},
-    { key: 'custom_image', label: t('Logo principale'), type: 'image',
+    { key: 'custom_image', label: t('Logo principale'), type: 'image', segnaposto: false,
       condition: { field: 'source', value: 'custom_image' } },
-    { key: 'retina_image', label: t('Logo Retina (2x)'), type: 'image',
+    { key: 'retina_image', label: t('Logo Retina (2x)'), type: 'image', segnaposto: false,
       condition: { field: 'source', value: 'custom_image' } },
     { key: 'svg_logo', label: t('Logo SVG'), type: 'image',
       condition: { field: 'source', value: 'svg' } },
@@ -63,7 +72,7 @@ export default {
       { value: 'class', label: t('Con classe .olo-dark') },
       { value: 'sticky', label: t('Quando header diventa sticky') },
     ]},
-    { key: 'dark_image', label: t('Logo versione chiara (per sfondo scuro)'), type: 'image',
+    { key: 'dark_image', label: t('Logo versione chiara (per sfondo scuro)'), type: 'image', segnaposto: false,
       condition: { field: 'dark_mode', operator: '!=', value: 'none' } },
 
     { type: 'separator', label: t('Link') },

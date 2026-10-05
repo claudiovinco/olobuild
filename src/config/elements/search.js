@@ -49,6 +49,25 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: un campo di ricerca grande a pillola, chiaro con filo e ombra leggera,
+  // la lente a sinistra e il pulsante «Cerca» pieno nel colore del sito. I colori sono tutti token
+  // con la stessa riserva del PHP (risolve il disaccordo fra i default dei due lati).
+  partenza: {
+    placeholder: t('Cerca nel sito…'),
+    style: 'pill',
+    size: 'large',
+    show_button: true,
+    button_text: t('Cerca'),
+    button_radius: '999',
+    input_shadow: true,
+    bg_color: 'var(--olo-color-light, #ffffff)',
+    text_color: 'var(--olo-color-text, #1f2937)',
+    placeholder_color: 'var(--olo-color-text-muted, #94a3b8)',
+    icon_color: 'var(--olo-color-text-muted, #6b7280)',
+    border_color: 'var(--olo-color-border, #e5e7eb)',
+    button_color: 'var(--olo-color-primary-contrast, #ffffff)',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'placeholder', label: t('Placeholder'), type: 'text' },

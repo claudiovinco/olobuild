@@ -29,6 +29,15 @@ export default {
     z_index: 92,
   },
 
+  // Come nasce dalla palette: una barra discreta in fondo alla finestra, scura, in maiuscoletto
+  // spaziato, coi crediti del sito e due link chiari (privacy e contatti).
+  partenza: {
+    content_html: t('© 2026 · Tutti i diritti riservati · <a href="/privacy-policy/">Privacy</a> · <a href="/contatti/">Contatti</a>'),
+    bg_color: 'var(--olo-color-dark, #1f2937)',
+    text_color: 'color-mix(in srgb, var(--olo-color-light, #ffffff) 70%, transparent)',
+    link_color: 'var(--olo-color-light, #ffffff)',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'content_html', label: t('Contenuto (HTML)'), type: 'textarea',

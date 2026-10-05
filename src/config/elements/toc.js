@@ -39,6 +39,16 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: l'indice dei titoli della pagina, numerato, con il titolo nel colore
+  // del sito e un filo verticale a sinistra; le voci in colore testo, quella in vista in grassetto.
+  partenza: {
+    title: t('In questa pagina'),
+    link_color: 'var(--olo-color-text)',
+    title_color: 'var(--olo-color-primary)',
+    indent: '16',
+    border: { top: 0, right: 0, bottom: 0, left: 3, linked: false, style: 'solid', color: 'var(--olo-color-primary)' },
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { type: 'separator', label: t('Contenuto') },

@@ -2,6 +2,8 @@
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 import { t } from '@/i18n';
 
+import { logoDelSito, primoMenu } from '../demoMedia.js';
+
 /**
  * Tile MobileBar — split CONTENUTO/STILE (regola universale Olobuild).
  *   fields[]      → sorgenti dati (logo image, logo link, menu WP), toggle visibilità (ricerca, separatori), placeholder ricerca, breakpoint
@@ -42,6 +44,21 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Come nasce dalla palette: la barra chiara del telefono, con ombra, il primo menu e il logo DEL
+  // SITO (senza logo, il nome del sito), lente e hamburger «squeeze» nel colore del testo e il
+  // pannello del menu chiaro. Si vede sotto i 1024 px.
+  partenza: {
+    menu_id: primoMenu() || '',
+    logo_image: logoDelSito(),
+    bar_bg: 'var(--olo-color-light, #ffffff)',
+    hamburger_style: 'squeeze',
+    hamburger_color: 'var(--olo-color-text, #222222)',
+    search_icon_color: 'var(--olo-color-text, #222222)',
+    panel_bg: 'var(--olo-color-background, #ffffff)',
+    panel_text_color: 'var(--olo-color-text, #222222)',
+    search_placeholder: t('Cerca nel sito…'),
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

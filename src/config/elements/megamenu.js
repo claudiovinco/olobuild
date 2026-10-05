@@ -2,6 +2,7 @@
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
 import { t } from '@/i18n';
 import { MEGAMENU_TEMPLATES } from '../megamenuTemplates.js';
+import { logoDelSito, nomeDelSito, primoMenu } from '../demoMedia.js';
 
 // Opzioni del selettore "Template pronti": placeholder + 40 template raggruppati
 // per famiglia. La selezione NON è una chiave salvata: il valore arriva alla
@@ -11,6 +12,7 @@ const MEGAMENU_TEMPLATE_OPTIONS = [
   { value: '', label: t('— Applica un template… —') },
   ...MEGAMENU_TEMPLATES.map(tpl => ({ value: tpl.id, label: `${tpl.family} · ${tpl.name}` })),
 ];
+
 
 // Visibilità sezione "CTA — Aspetto": i controlli btn_* stilano .olo-mm-btn,
 // usata sia dalle voci CTA (button_mode) sia dai link extra in modalità
@@ -281,6 +283,29 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Come nasce dalla palette: il primo menu e il logo DEL SITO (senza logo, il suo nome come logo
+  // testuale), voci in colore testo con la sottolineatura che nasce dal centro nel colore del sito,
+  // l'ultima voce come pulsante a pillola, pannelli mega a tre colonne col filo e i titoli di colonna
+  // colorati.
+  partenza: {
+    menu_id: primoMenu(),
+    logo_image: logoDelSito(),
+    logo_text: logoDelSito() ? '' : nomeDelSito(),
+    text_color: 'var(--olo-color-text)',
+    hover_color: 'var(--olo-color-primary)',
+    hover_effect: 'underline',
+    hover_effect_color: 'var(--olo-color-primary)',
+    button_mode: 'last',
+    btn_bg: 'var(--olo-color-primary)',
+    btn_color: 'var(--olo-color-primary-contrast)',
+    btn_radius: { tl: 999, tr: 999, br: 999, bl: 999 },
+    panel_columns: '3',
+    panel_border_color: 'var(--olo-color-primary)',
+    heading_color: 'var(--olo-color-primary)',
+    link_hover_color: 'var(--olo-color-primary)',
+    topbar_link_color: 'var(--olo-color-light, #f8f9fa)',
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

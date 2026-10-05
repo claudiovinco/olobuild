@@ -61,6 +61,23 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: il campo esteso a pillola, alto e chiaro, con la lente nel colore del
+  // sito; mentre scrivi i risultati scendono sotto in un pannello arrotondato, con miniatura ed
+  // estratto, e la voce sotto il mouse si tinge appena.
+  partenza: {
+    placeholder: t('Cerca articoli e pagine…'),
+    input_height: '52',
+    input_font_size: '16',
+    input_border_radius: '999',
+    input_bg: 'var(--olo-color-light, #ffffff)',
+    icon_color: 'var(--olo-color-primary)',
+    results_bg: 'var(--olo-color-light, #ffffff)',
+    results_border_radius: '16',
+    item_hover_bg: 'color-mix(in srgb, var(--olo-color-primary) 8%, transparent)',
+    excerpt_color: 'var(--olo-color-text-muted, #6b7280)',
+    thumb_radius: '8',
+  },
+
   fields: [
     { key: 'placeholder', label: t('Placeholder'), type: 'text' },
     { key: 'animated_placeholder', label: t('Placeholder animato'), type: 'toggle' },

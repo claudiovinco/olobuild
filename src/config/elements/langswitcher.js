@@ -57,6 +57,21 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: le lingue del sito (da OLOlang, nessuna inventata) in pillole chiare
+  // con filo, bandiera tonda e codice; la lingua aperta è piena del colore del sito. Senza OLOlang la
+  // tile non mostra nulla finché non si sceglie la sorgente «Manuale».
+  partenza: {
+    style: 'flags_text',
+    flag_size: 20,
+    border_radius: 999,
+    gap: 6,
+    bg: 'var(--olo-color-light, #ffffff)',
+    color: 'var(--olo-color-text)',
+    border_color: 'var(--olo-color-border)',
+    active_bg: 'var(--olo-color-primary)',
+    active_color: 'var(--olo-color-primary-contrast)',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { type: 'separator', label: t('Sorgente lingue') },

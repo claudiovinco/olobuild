@@ -38,6 +38,18 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: numeri in pillole con filo, la pagina corrente piena del colore del
+  // sito, tinta tenue al passaggio. Compare solo dove ci sono più pagine (archivio, blog, ricerca).
+  partenza: {
+    prev_text: t('‹ Precedenti'),
+    next_text: t('Successivi ›'),
+    gap: '6',
+    border_radius: '999',
+    text_color: 'var(--olo-color-text)',
+    border_color: 'var(--olo-color-border)',
+    hover_background: 'color-mix(in srgb, var(--olo-color-primary) 12%, transparent)',
+  },
+
   fields: [
     { key: 'show_first_last', label: t('Mostra Primo/Ultimo'), type: 'toggle' },
     { key: 'prev_text', label: t('Testo Precedente'), type: 'text' },

@@ -55,6 +55,26 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: la sotto-navigazione di una pagina, cinque pillole che portano alle sue
+  // sezioni; fondo appena velato, al passaggio si tingono del colore del sito.
+  partenza: {
+    items: [
+      { id: 'sn-1', title: t('Panoramica'), content: '#panoramica' },
+      { id: 'sn-2', title: t('Servizi'), content: '#servizi' },
+      { id: 'sn-3', title: t('Prezzi'), content: '#prezzi' },
+      { id: 'sn-4', title: t('Domande frequenti'), content: '#domande' },
+      { id: 'sn-5', title: t('Contatti'), content: '#contatti' },
+    ],
+    style: 'pill',
+    font_size: '15',
+    font_weight: '600',
+    link_color: 'var(--olo-color-text)',
+    hover_color: 'var(--olo-color-primary)',
+    bg_color: 'color-mix(in srgb, var(--olo-color-text) 6%, transparent)',
+    hover_bg: 'color-mix(in srgb, var(--olo-color-primary) 12%, transparent)',
+    tile_padding: { top: 9, right: 18, bottom: 9, left: 18 },
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { type: 'separator', label: t('Sorgente') },

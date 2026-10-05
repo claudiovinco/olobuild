@@ -39,6 +39,22 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: le due card «articolo precedente / successivo» affiancate, con
+  // l'etichetta tenue e il titolo in colore testo che al passaggio prende il colore del sito e solleva
+  // la card (di serie l'etichetta era quasi bianca e non si leggeva su fondo chiaro). Senza miniatura:
+  // dove l'articolo non ha l'immagine in evidenza il renderer mette un quadrato scuro fisso.
+  partenza: {
+    show_thumbnail: false,
+    prev_label: t('Articolo precedente'),
+    next_label: t('Articolo successivo'),
+    title_length: '45',
+    text_color: 'var(--olo-color-text-muted)',
+    link_color: 'var(--olo-color-text)',
+    hover_color: 'var(--olo-color-primary)',
+    border_radius: '14',
+    tile_padding: { top: 20, right: 24, bottom: 20, left: 24 },
+  },
+
   fields: [
     { key: 'show_thumbnail', label: t('Mostra miniatura'), type: 'toggle' },
     { key: 'show_label', label: t('Mostra etichetta'), type: 'toggle' },

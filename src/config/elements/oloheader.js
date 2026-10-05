@@ -1,4 +1,5 @@
 import { t } from '@/i18n';
+import { logoDelSito } from '../demoMedia.js';
 
 /**
  * Tile «Mega Menu / Site Header» (slug: oloheader) — famiglia Header / Navigation.
@@ -133,6 +134,63 @@ export default {
     open_mega_on:  'hover',   // hover | click
     mega_animation: 'fade-slide', // fade-slide | none
     close_on_esc:  true,
+  },
+
+  // Come nasce dalla palette: la barra a pillola di un sito qualunque, NEL FLUSSO della pagina (non
+  // agganciata in cima: «Sticky» si accende nello Stile), coi colori del sito. «Servizi» apre il
+  // pannello mega (presentazione + due colonne di servizi + invito in fondo), poi il link in
+  // evidenza, la ricerca con le scorciatoie, le lingue e il pulsante «Contattaci». Il logo resta
+  // quello di serie, da sostituire col proprio.
+  partenza: {
+    brand_logo: logoDelSito() || LOGO('olotheme-orizz.png'), // il logo del sito, se c'è
+    bar_sticky: false,
+    bar_bg: 'var(--olo-color-light, #ffffff)',
+    bar_text: 'var(--olo-color-text, #5A6076)',
+    bar_text_hover: 'var(--olo-color-primary, #1F2330)',
+    nav_items: [
+      { label: t('Servizi'), url: '#', type: 'mega' },
+      { label: t('Chi siamo'), url: '/chi-siamo/', type: 'link' },
+      { label: t('Progetti'), url: '/progetti/', type: 'link' },
+      { label: t('Blog'), url: '/blog/', type: 'link' },
+    ],
+    rail_badge: t('Su misura'),
+    rail_title: t('Un solo referente, dall\'idea alla consegna'),
+    rail_text: t('Ascoltiamo, progettiamo e ti seguiamo anche dopo: ogni servizio parte da un primo incontro gratuito.'),
+    rail_cta1_label: t('Scopri i servizi'),
+    rail_cta1_url: '/servizi/',
+    rail_cta2_label: t('Richiedi un preventivo'),
+    rail_cta2_url: '/preventivo/',
+    rail_bg: 'color-mix(in srgb, var(--olo-color-primary) 7%, var(--olo-color-light, #ffffff))',
+    mega_products: [
+      { group: t('Per le aziende'), logo: '', name: t('Consulenza'), desc: t('Analisi e piano su misura'), url: '/servizi/consulenza/', soon: false },
+      { group: t('Per le aziende'), logo: '', name: t('Progettazione'), desc: t('Dall\'idea al progetto esecutivo'), url: '/servizi/progettazione/', soon: false },
+      { group: t('Per le aziende'), logo: '', name: t('Assistenza'), desc: t('Un tecnico dedicato, anche il sabato'), url: '/servizi/assistenza/', soon: false },
+      { group: t('Per i privati'), logo: '', name: t('Primo incontro'), desc: t('Gratuito, in sede o in videochiamata'), url: '/servizi/primo-incontro/', soon: false },
+      { group: t('Per i privati'), logo: '', name: t('Preventivi'), desc: t('Chiari, senza costi nascosti'), url: '/preventivo/', soon: false },
+      { group: t('Per i privati'), logo: '', name: t('Corsi'), desc: t('Laboratori pratici in piccoli gruppi'), url: '/servizi/corsi/', soon: true },
+    ],
+    mega_footer_logos: [],
+    mega_footer_title: t('Hai un progetto in mente?'),
+    mega_footer_text: t('Raccontacelo: ti rispondiamo entro un giorno lavorativo.'),
+    mega_footer_cta_label: t('Scrivici'),
+    mega_footer_cta_url: '/contatti/',
+    featured_icon: 'tag',
+    featured_label: t('Offerte'),
+    featured_url: '/offerte/',
+    search_placeholder: t('Cerca servizi, pagine, articoli…'),
+    search_url: '/',
+    search_shortcuts: [
+      { label: t('Servizi'), url: '/servizi/' },
+      { label: t('Prezzi'), url: '/prezzi/' },
+      { label: t('Domande frequenti'), url: '/domande-frequenti/' },
+      { label: t('Contatti'), url: '/contatti/' },
+    ],
+    languages: [
+      { code: 'it', label: 'Italiano', url: '/' },
+      { code: 'en', label: 'English', url: '/en/' },
+    ],
+    cta_label: t('Contattaci'),
+    cta_url: '/contatti/',
   },
 
   // ═══ CONTENUTO ════════════════════════════════════════════════════════════

@@ -1,6 +1,7 @@
 
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
 import { t } from '@/i18n';
+import { primoMenu } from '../demoMedia.js';
 
 /**
  * Tile NavMenu — split CONTENUTO/STILE (regola universale Olobuild).
@@ -86,6 +87,18 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Come nasce dalla palette: il primo menu del sito, voci in colore testo con una sottolineatura che
+  // cresce nel colore del sito al passaggio e l'ultima voce («Contatti», di solito) come pulsante.
+  partenza: {
+    menu_id: primoMenu(),
+    text_color: 'var(--olo-color-text)',
+    hover_color: 'var(--olo-color-primary)',
+    menu_pointer: 'underline',
+    menu_pointer_animation: 'grow',
+    menu_pointer_color: 'var(--olo-color-primary)',
+    button_items: 'last',
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

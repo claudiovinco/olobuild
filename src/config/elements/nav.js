@@ -58,6 +58,29 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: le voci di un sito qualunque in riga, a pillola, con l'icona davanti;
+  // al passaggio la voce si tinge del colore del sito, e quella della pagina aperta («Home» sulla
+  // home) resta piena di tinta.
+  partenza: {
+    items: [
+      { id: 'n-1', title: t('Home'), content: '/', tag: 'home' },
+      { id: 'n-2', title: t('Chi siamo'), content: '/chi-siamo/', tag: 'users' },
+      { id: 'n-3', title: t('Servizi'), content: '/servizi/', tag: 'star' },
+      { id: 'n-4', title: t('Contatti'), content: '/contatti/', tag: 'mail' },
+    ],
+    direction: 'horizontal',
+    style: 'pill',
+    active_style: 'background',
+    font_size: '15',
+    font_weight: '600',
+    link_color: 'var(--olo-color-text)',
+    link_hover_color: 'var(--olo-color-primary)',
+    icon_color: 'var(--olo-color-primary)',
+    hover_bg: 'color-mix(in srgb, var(--olo-color-primary) 10%, transparent)',
+    gap: '6',
+    tile_padding: { top: 10, right: 18, bottom: 10, left: 18 },
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'items', label: t('Elementi'), type: 'content-items', supportsDynamic: true,
