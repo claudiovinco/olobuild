@@ -110,12 +110,17 @@ dall'id del nodo che il renderer imposta in `$nodo_in_resa` prima di `render()`.
 - Timezone: ora legale vera (fusi IANA con `Intl`), oppure `hidden` finché non è riscritta.
 - Mixer: legge il colore calcolato dal browser (i temi che lo usano tornano giusti).
 
-**I2 — Correggere le tile utili** (una versione per gruppo)
+**I2 — Correggere le tile utili** — **FATTA nella 1.4.508-510** (5 ott 2026, una sola versione per
+tutte e tre le ondate I2-I4, poi due giri di correzioni dalla prova d'uso: Barra Scroll intrappolata
+dal `transform` di `.olo-template` → spostata in `document.body`; padding «Medio» di Overlay Grid e
+Slider che valeva 0; separatore delle migliaia a quattro cifre; «Scopri» inutile dopo aver grattato).
 - Fisarmonica, Finder, Popup, Overlay Grid, Overlay Slider, Timeline, Switcher, Hotspot, Reveal Box,
   Pannello flottante, Dark Mode, Barra Scroll, Pulsante Toggle: i difetti delle schede sopra, testi di
   partenza neutri in italiano, colori a token, via i controlli che non agiscono.
 
-**I3 — Una tile per funzione** (fusioni, con migrazione dei dati salvati)
+**I3 — Una tile per funzione** — **FATTA nella 1.4.508**, ma SENZA migrazione: la tile che riceve
+prende le capacità dell'altra, quella assorbita diventa `hidden` (fuori dalla palette) e le pagine
+salvate che la usano restano com'erano. La migrazione dei dati resta un passo a parte, se servirà.
 - Marker su immagine: Hotspot ← Popover, Hotspots.
 - Schede: Switcher ← Switcher Panel, Tab a Icone.
 - Slider: Overlay Slider ← Panel Slider (poi Carousel e Slideshow, già nel piano
@@ -123,7 +128,8 @@ dall'id del nodo che il renderer imposta in `$nodo_in_resa` prima di `render()`.
 - Popup ← Popup Nascosto (attivazioni «a questo punto della pagina» e «sequenza di tasti»).
 - Calcolatore a slider ← Projector, Scaler.
 
-**I4 — Trasformare in strumenti veri**
+**I4 — Trasformare in strumenti veri** — **FATTA nella 1.4.508** (Availability ritirata dalla palette;
+il Quiz è una tile nuova, `scorequiz`).
 - Builder → **Preventivo**: la scelta arriva a un modulo, a WhatsApp, a una mail o al carrello.
 - Availability → **Quiz a punteggio**: domande, punteggio, un esito con il suo link.
 - Gratta e Scopri → **Coupon da grattare**: codice, pulsante copia, ricorda se è già grattato.
