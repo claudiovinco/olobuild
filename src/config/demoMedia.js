@@ -50,3 +50,20 @@ export const demoAlt = (nome) => DEMO_FOTO[nome] || '';
 export function demoObj(nome, caption = '') {
   return { url: demo(nome), alt: demoAlt(nome), caption };
 }
+
+// ── Dati del sito in cui si costruisce (oloData del builder) ──────────────────────────────────
+// Le tile di navigazione nascono col logo e il menu DEL SITO, non con un logo di serie: un header
+// appena trascinato deve già essere quello del sito. Fuori dal builder (catalogo) restano vuoti.
+const datiBuilder = () => (typeof window !== 'undefined' && window.oloData) || {};
+
+/** URL del logo del sito (Personalizza → Identità del sito), '' se non c'è. */
+export const logoDelSito = () => (datiBuilder().siteInfo || {}).logo_url || '';
+
+/** Nome del sito. */
+export const nomeDelSito = () => (datiBuilder().siteInfo || {}).name || '';
+
+/** Il primo menu di WordPress che ha delle voci (id), 0 se il sito non ne ha. */
+export function primoMenu() {
+  const m = (datiBuilder().wpMenus || []).find((x) => x && Array.isArray(x.items) && x.items.length);
+  return m ? m.id : 0;
+}

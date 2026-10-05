@@ -45,7 +45,11 @@ export function useDragDrop() {
     );
     if (!registered) return null;
 
-    const defaults = JSON.parse(JSON.stringify(registered.defaults || {}));
+    // Una classe PHP senza $defaults arriva dal REST come [] (json_encode di un array vuoto): sopra
+    // un Array le chiavi della partenza e dei segnaposto diventavano proprietà che il JSON perde, e
+    // la tile (lightbox, paymentbuttons, killnextprev) nasceva vuota fino al primo ritocco.
+    const reg = registered.defaults;
+    const defaults = reg && typeof reg === 'object' && !Array.isArray(reg) ? JSON.parse(JSON.stringify(reg)) : {};
 
     // v3.55.36 — applica placeholder universali (Lorem ipsum, immagine segnaposto)
     // ai field testo lunghi/immagine vuoti, leggendo i fields[] dall'elementRegistry.

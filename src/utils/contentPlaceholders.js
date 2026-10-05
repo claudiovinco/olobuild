@@ -41,7 +41,12 @@ const TEXT_PROTECTED_RE = /(_url$|^url$|_href|^href$|_id$|_target|^target$|_clas
 // Field image SECONDARI (hover, fallback, alt) che restano vuoti — il placeholder va
 // solo sul campo principale, non su quelli "opzionali". Senza questo: trascini un'immagine
 // e vedi il placeholder al passaggio del mouse invece che nello stato base.
-const IMAGE_SECONDARY_RE = /(hover|secondary|alternate|fallback|backup|^alt_image|_alt$)/i;
+// Anche il POSTER di un video (poster_image, video_poster) è secondario: la miniatura la dà il video
+// (YouTube, Vimeo) e un riquadro grigio lì la copriva appena si incollava l'URL (1.4.535).
+// E nemmeno un LOGO: un riquadro grigio al posto del logo è peggio del ripiego della tile (il nome del
+// sito, il logo della Personalizzazione). Un campo immagine può rinunciare al segnaposto anche da sé
+// con `segnaposto: false` (le varianti del Logo del sito: retina, versione chiara).
+const IMAGE_SECONDARY_RE = /(hover|secondary|alternate|fallback|backup|poster|logo|brand|^alt_image|_alt$)/i;
 
 /** Il campo (lungo) riceve il Lorem ipsum quando è vuoto? */
 export function riceveLorem(field) {
@@ -79,7 +84,7 @@ export function applyContentPlaceholders(settings, fields) {
     if (!isEmpty) continue;
     if (riceveLorem(f)) {
       settings[f.key] = PLACEHOLDER_LOREM;
-    } else if (f.type === 'image' && !IMAGE_SECONDARY_RE.test(f.key)) {
+    } else if (f.type === 'image' && f.segnaposto !== false && !IMAGE_SECONDARY_RE.test(f.key)) {
       settings[f.key] = immagine;
     }
   }
