@@ -1806,11 +1806,11 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
     private function build_cluster_css( $uid, $color ) {
         $c = $this->safe_hex( $color, '#e1474f' );
         $sel = '.' . $uid;
-        return $sel . ' .marker-cluster-small { background-color: ' . $c . '33; }'
+        return $sel . ' .marker-cluster-small { background-color: ' . Olobuild_Tile_Utils::con_alfa( $c, '33' ) . '; }'
              . $sel . ' .marker-cluster-small div { background-color: ' . $c . '; color: #fff; }'
-             . $sel . ' .marker-cluster-medium { background-color: ' . $c . '44; }'
+             . $sel . ' .marker-cluster-medium { background-color: ' . Olobuild_Tile_Utils::con_alfa( $c, '44' ) . '; }'
              . $sel . ' .marker-cluster-medium div { background-color: ' . $c . '; color: #fff; }'
-             . $sel . ' .marker-cluster-large { background-color: ' . $c . '55; }'
+             . $sel . ' .marker-cluster-large { background-color: ' . Olobuild_Tile_Utils::con_alfa( $c, '55' ) . '; }'
              . $sel . ' .marker-cluster-large div { background-color: ' . $c . '; color: #fff; }';
     }
 
@@ -1931,7 +1931,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
         <?php echo $sel; ?> .plm-filter-group--full { grid-column: 1 / -1; }
         <?php echo $sel; ?> .plm-filter-label { font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.04em; }
         <?php echo $sel; ?> .plm-filter-input, <?php echo $sel; ?> .plm-filter-select { padding: 8px 10px; border: 1px solid #D1D5DB; border-radius: 6px; font-size: 13px; color: #374151; background: #fff; width: 100%; box-sizing: border-box; font-family: inherit; transition: border-color 0.15s; }
-        <?php echo $sel; ?> .plm-filter-input:focus, <?php echo $sel; ?> .plm-filter-select:focus { outline: none; border-color: <?php echo $color; ?>; box-shadow: 0 0 0 3px <?php echo $color; ?>22; }
+        <?php echo $sel; ?> .plm-filter-input:focus, <?php echo $sel; ?> .plm-filter-select:focus { outline: none; border-color: <?php echo $color; ?>; box-shadow: 0 0 0 3px <?php echo Olobuild_Tile_Utils::con_alfa( $color, '22' ); ?>; }
         <?php echo $sel; ?> .plm-radius-wrap { display: flex; align-items: center; gap: 8px; }
         <?php echo $sel; ?> .plm-radius-wrap input[type="range"] { flex: 1; accent-color: <?php echo $color; ?>; height: 4px; }
         <?php echo $sel; ?> .plm-radius-val { font-size: 12px; font-weight: 600; color: #374151; min-width: 40px; text-align: right; }
@@ -1995,11 +1995,11 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
         <?php echo $sel; ?> .plm-popup .plm-popup-price { font-size: 15px; font-weight: 700; color: <?php echo $color; ?>; margin: 0 0 6px; }
         <?php echo $sel; ?> .plm-popup a.plm-popup-link { display: inline-block; padding: 4px 12px; background: <?php echo $color; ?>; color: #fff; border-radius: 4px; font-size: 11px; font-weight: 600; text-decoration: none; }
         <?php echo $sel; ?> .plm-marker-icon { background: none !important; border: none !important; }
-        <?php echo $sel; ?> .marker-cluster-small { background-color: <?php echo $color; ?>33; }
+        <?php echo $sel; ?> .marker-cluster-small { background-color: <?php echo Olobuild_Tile_Utils::con_alfa( $color, '33' ); ?>; }
         <?php echo $sel; ?> .marker-cluster-small div { background-color: <?php echo $color; ?>; color: #fff; }
-        <?php echo $sel; ?> .marker-cluster-medium { background-color: <?php echo $color; ?>44; }
+        <?php echo $sel; ?> .marker-cluster-medium { background-color: <?php echo Olobuild_Tile_Utils::con_alfa( $color, '44' ); ?>; }
         <?php echo $sel; ?> .marker-cluster-medium div { background-color: <?php echo $color; ?>; color: #fff; }
-        <?php echo $sel; ?> .marker-cluster-large { background-color: <?php echo $color; ?>55; }
+        <?php echo $sel; ?> .marker-cluster-large { background-color: <?php echo Olobuild_Tile_Utils::con_alfa( $color, '55' ); ?>; }
         <?php echo $sel; ?> .marker-cluster-large div { background-color: <?php echo $color; ?>; color: #fff; }
         @media (max-width: 900px) {
             <?php echo $sel; ?> {
@@ -2590,7 +2590,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
         }
         <?php echo $uid_sel; ?> .olo-map-search-input:focus {
             outline: none; border-color: <?php echo $c; ?>;
-            box-shadow: 0 0 0 3px <?php echo $c; ?>22;
+            box-shadow: 0 0 0 3px <?php echo Olobuild_Tile_Utils::con_alfa( $c, '22' ); ?>;
         }
         <?php echo $uid_sel; ?> .olo-map-ac-list {
             display: none; position: absolute; z-index: 1100; top: 100%; left: 0; right: 0;

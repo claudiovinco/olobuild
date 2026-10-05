@@ -95,7 +95,7 @@ class Olobuild_LookbookMixer_Tile extends Olobuild_Tile_Base {
                     </div>
                 <?php endforeach; ?>
             </div>
-            <div class="olo-lbmix__card" style="text-align:center;border:1px solid <?php echo esc_attr( $acc ); ?>;border-radius:20px;padding:clamp(28px,4vw,40px);background:linear-gradient(150deg,<?php echo esc_attr( $acc ); ?>28,<?php echo esc_attr( $acc ); ?>0a);">
+            <div class="olo-lbmix__card" style="text-align:center;border:1px solid <?php echo esc_attr( $acc ); ?>;border-radius:20px;padding:clamp(28px,4vw,40px);background:linear-gradient(150deg,<?php echo esc_attr( Olobuild_Tile_Utils::con_alfa( $acc, '28' ) ); ?>,<?php echo esc_attr( Olobuild_Tile_Utils::con_alfa( $acc, '0a' ) ); ?>);">
                 <span style="font-family:<?php echo esc_attr( $mono ); ?>;font-weight:700;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:<?php echo esc_attr( $acc ); ?>;"><?php echo esc_html( $s['card_title'] ); ?> · <?php echo intval( $n_steps ); ?> <?php echo esc_html( $s['card_steps_label'] ); ?></span>
                 <div class="olo-lbmix__total" data-total style="font-family:<?php echo esc_attr( $nfam ); ?>;font-size:clamp(46px,7vw,68px);color:<?php echo esc_attr( $namec ); ?>;line-height:1;margin:12px 0 10px;"><?php echo esc_html( $cur ); ?>0</div>
                 <span style="display:block;font-size:14px;color:<?php echo esc_attr( $pricec ); ?>;margin-bottom:22px;line-height:1.55;"><?php echo esc_html( $s['card_sub'] ); ?></span>

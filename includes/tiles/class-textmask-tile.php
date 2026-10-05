@@ -129,10 +129,8 @@ class Olobuild_Textmask_Tile extends Olobuild_Tile_Base {
         // Mode-specific CSS
         if ( $mode === 'text_reveals_video' ) {
             // Detect if bg is dark or light to pick correct blend modes
-            $hex = ltrim( $bg_color, '#' );
-            if ( strlen( $hex ) === 3 ) {
-                $hex = $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2];
-            }
+            // un token della Palette si risolve nel suo colore (prima: hexdec di «var(» = scuro a caso)
+            $hex = ltrim( Olobuild_Tile_Utils::colore_hex( $bg_color ) ?: '#000000', '#' );
             $r = hexdec( substr( $hex, 0, 2 ) );
             $g = hexdec( substr( $hex, 2, 2 ) );
             $b = hexdec( substr( $hex, 4, 2 ) );

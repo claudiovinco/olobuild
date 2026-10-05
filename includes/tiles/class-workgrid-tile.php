@@ -154,10 +154,7 @@ class Olobuild_WorkGrid_Tile extends Olobuild_Tile_Base {
 
     /** Aggiunge un alpha hex (es. '0d', '66') a un colore #rrggbb; passa attraverso non-hex. */
     private function _hex_alpha( $hex, $alpha ) {
-        $h = ltrim( (string) $hex, '#' );
-        if ( strlen( $h ) === 6 && ctype_xdigit( $h ) ) {
-            return '#' . $h . $alpha;
-        }
-        return $hex; // rgba/var/ecc.: lascia invariato
+        // Un token restava a piena opacità: la striscia al 5% diventava una banda piena.
+        return Olobuild_Tile_Utils::con_alfa( $hex, $alpha );
     }
 }

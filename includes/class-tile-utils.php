@@ -341,6 +341,95 @@ class Olobuild_Tile_Utils {
     }
 
     /**
+     * Un colore con l'alfa scritta come le due cifre esadecimali che le tile attaccavano in coda
+     * ('40' = 25%). Con un esadecimale a 6 cifre il risultato è la stessa stringa di sempre
+     * (#e1474f40, pagine invariate); con #rgb si espande; con un token var(--olo-color-*), rgb() o
+     * color-mix() passa da color-mix(), perché `var(--x)40` non è CSS e la dichiarazione cadeva.
+     *
+     * @param string $color Colore già sanificato.
+     * @param string $hex2  Alfa in due cifre esadecimali ('00'…'ff').
+     * @return string
+     */
+    public static function con_alfa( $color, $hex2 ) {
+        $c = trim( (string) $color );
+        $h = strtolower( (string) $hex2 );
+        if ( '' === $c || ! preg_match( '/^[0-9a-f]{2}$/', $h ) ) {
+            return $c;
+        }
+        if ( preg_match( '/^#[0-9a-f]{6}$/i', $c ) ) {
+            return $c . $h;
+        }
+        if ( preg_match( '/^#([0-9a-f])([0-9a-f])([0-9a-f])$/i', $c, $m ) ) {
+            return '#' . $m[1] . $m[1] . $m[2] . $m[2] . $m[3] . $m[3] . $h;
+        }
+        $pct = round( hexdec( $h ) / 255 * 100, 1 );
+        return 'color-mix(in srgb, ' . $c . ' ' . $pct . '%, transparent)';
+    }
+
+    /**
+     * Un colore come #rrggbb, risolvendo i token della Palette sul server: per i calcoli che
+     * vogliono numeri (matrice SVG del duotone, rgba() costruiti da una terna). Accetta #rgb,
+     * #rrggbb, #rrggbbaa, rgb()/rgba() e var(--olo-color-x[, riserva]) anche annidati, con i
+     * valori che generate_css() scrive nella regola .olo-template (colori dello stile, poi i
+     * colori globali che vincono, poi gli alias). '' se non si risolve.
+     * Dove basta il CSS, meglio color-mix() (con_alfa()): segue anche una palette ridefinita.
+     *
+     * @param string $color
+     * @return string '#rrggbb' o ''.
+     */
+    public static function colore_hex( $color, $prof = 0 ) {
+        $c = trim( (string) $color );
+        if ( '' === $c || $prof > 5 ) {
+            return '';
+        }
+        if ( preg_match( '/^#([0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i', $c, $m ) ) {
+            $h = strtolower( $m[1] );
+            if ( 3 === strlen( $h ) ) {
+                $h = $h[0] . $h[0] . $h[1] . $h[1] . $h[2] . $h[2];
+            }
+            return '#' . substr( $h, 0, 6 );
+        }
+        if ( preg_match( '/^rgba?\(\s*(\d{1,3})\s*[, ]\s*(\d{1,3})\s*[, ]\s*(\d{1,3})/i', $c, $m ) ) {
+            return sprintf( '#%02x%02x%02x', min( 255, (int) $m[1] ), min( 255, (int) $m[2] ), min( 255, (int) $m[3] ) );
+        }
+        if ( preg_match( '/^var\(\s*--olo-color-([a-z0-9_-]+)\s*(?:,\s*(.+))?\)$/is', $c, $m ) ) {
+            $token = self::token_colori();
+            $hex   = isset( $token[ $m[1] ] ) ? self::colore_hex( $token[ $m[1] ], $prof + 1 ) : '';
+            if ( '' === $hex && isset( $m[2] ) ) {
+                $hex = self::colore_hex( $m[2], $prof + 1 );
+            }
+            return $hex;
+        }
+        return '';
+    }
+
+    /** I token --olo-color-* come li scrive Olobuild_Style_System::generate_css(), per richiesta. */
+    private static function token_colori() {
+        static $mappa = null;
+        if ( null !== $mappa ) {
+            return $mappa;
+        }
+        $mappa = [];
+        if ( ! class_exists( 'Olobuild_Style_System' ) ) {
+            return $mappa;
+        }
+        $ss  = Olobuild_Style_System::instance();
+        $sty = $ss->get_styles();
+        foreach ( (array) ( $sty['colors'] ?? [] ) as $k => $v ) {
+            $mappa[ str_replace( '_', '-', (string) $k ) ] = (string) $v;
+        }
+        foreach ( (array) $ss->get_global_colors() as $gc ) {
+            if ( ! empty( $gc['id'] ) && ! empty( $gc['value'] ) ) {
+                $mappa[ sanitize_html_class( $gc['id'] ) ] = (string) $gc['value'];
+            }
+        }
+        foreach ( Olobuild_Style_System::ALIAS_COLORI as $alias => $valore ) {
+            $mappa[ $alias ] = $valore;
+        }
+        return $mappa;
+    }
+
+    /**
      * Convert a hex color + opacity (0-100) to rgba().
      *
      * @param string    $hex     Hex color (e.g. #ff0000).
@@ -656,9 +745,14 @@ class Olobuild_Tile_Utils {
         if ( $v === '' ) {
             return $fallback;
         }
-        // Token con riserva: si prende l'hex scritto dopo la virgola.
-        if ( stripos( $v, 'var(' ) === 0 && preg_match( '/#([0-9a-fA-F]{3,8})\s*\)\s*$/', $v, $m ) ) {
-            $v = '#' . $m[1];
+        // Token: il colore della Palette (colore_hex), se no l'hex della riserva dopo la virgola.
+        if ( stripos( $v, 'var(' ) === 0 ) {
+            $risolto = self::colore_hex( $v );
+            if ( '' !== $risolto ) {
+                $v = $risolto;
+            } elseif ( preg_match( '/#([0-9a-fA-F]{3,8})\s*\)\s*$/', $v, $m ) ) {
+                $v = '#' . $m[1];
+            }
         }
         $hex = ltrim( $v, '#' );
         if ( strlen( $hex ) === 3 ) {

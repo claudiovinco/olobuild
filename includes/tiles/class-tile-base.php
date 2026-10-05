@@ -323,6 +323,11 @@ abstract class Olobuild_Tile_Base {
         if ( preg_match( '/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i', $color, $m ) ) {
             return "{$m[1]},{$m[2]},{$m[3]}";
         }
+        // Token della Palette (var(--olo-color-*)): il suo colore, non più un grigio a caso
+        $hex = Olobuild_Tile_Utils::colore_hex( $color );
+        if ( '' !== $hex ) {
+            return hexdec( substr( $hex, 1, 2 ) ) . ',' . hexdec( substr( $hex, 3, 2 ) ) . ',' . hexdec( substr( $hex, 5, 2 ) );
+        }
         return '128,128,128';
     }
 
@@ -772,7 +777,8 @@ abstract class Olobuild_Tile_Base {
 
     /** Converte un colore hex in rgba(r,g,b,alpha). */
     private function hex_to_rgba( $hex, $alpha ) {
-        $hex = ltrim( $hex, '#' );
+        // un token della Palette dà il suo colore (prima: rosso brand fisso)
+        $hex = ltrim( Olobuild_Tile_Utils::colore_hex( $hex ) ?: (string) $hex, '#' );
         if ( strlen( $hex ) === 3 ) $hex = $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2];
         if ( strlen( $hex ) !== 6 ) return "rgba(225,71,79,{$alpha})";
         $r = hexdec( substr( $hex, 0, 2 ) );

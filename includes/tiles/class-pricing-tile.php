@@ -329,7 +329,7 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
                         echo 'transform: scale(1.05);';
                         break;
                     case 'glow':
-                        echo "box-shadow: 0 0 20px {$cta_bg}80, 0 0 40px {$cta_bg}40;";
+                        echo 'box-shadow: 0 0 20px ' . Olobuild_Tile_Utils::con_alfa( $cta_bg, '80' ) . ', 0 0 40px ' . Olobuild_Tile_Utils::con_alfa( $cta_bg, '40' ) . ';';
                         break;
                     case 'pulse':
                         echo "animation: olo-pulse-{$uid} .6s ease;";

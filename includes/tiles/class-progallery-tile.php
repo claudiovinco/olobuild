@@ -287,6 +287,9 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         $dr = $dg = $db = $lr = $lg = $lb = '0.000';
         $duo_k2 = '0.800'; $duo_k3 = '0.200';
         if ( $filter === 'duotone' ) {
+            // la matrice SVG vuole numeri: un token della Palette si risolve qui (prima hexdec di «var(»)
+            $duo_dark  = Olobuild_Tile_Utils::colore_hex( $duo_dark ) ?: '#1a1a2e';
+            $duo_light = Olobuild_Tile_Utils::colore_hex( $duo_light ) ?: '#e94560';
             $dr = number_format( hexdec( substr( $duo_dark, 1, 2 ) ) / 255, 3, '.', '' );
             $dg = number_format( hexdec( substr( $duo_dark, 3, 2 ) ) / 255, 3, '.', '' );
             $db = number_format( hexdec( substr( $duo_dark, 5, 2 ) ) / 255, 3, '.', '' );
@@ -578,10 +581,11 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
             echo ".{$uid} .olo-pg-item img,.{$uid} .olo-pg-item video{transition:transform .4s ease}";
             // JS tilt handled by shared script
         } elseif ( $hover === 'glow' ) {
-            // Convert hex to rgba for glow
-            $gr = hexdec( substr( $glow_color, 1, 2 ) );
-            $gg = hexdec( substr( $glow_color, 3, 2 ) );
-            $gb = hexdec( substr( $glow_color, 5, 2 ) );
+            // Convert hex to rgba for glow (un token della Palette si risolve nel suo colore)
+            $glow_hex = Olobuild_Tile_Utils::colore_hex( $glow_color ) ?: '#e1474f';
+            $gr = hexdec( substr( $glow_hex, 1, 2 ) );
+            $gg = hexdec( substr( $glow_hex, 3, 2 ) );
+            $gb = hexdec( substr( $glow_hex, 5, 2 ) );
             echo ".{$uid} .olo-pg-item{box-shadow:0 0 0 0 rgba({$gr},{$gg},{$gb},0);transition:box-shadow .4s ease}";
             echo ".{$uid} .olo-pg-item:hover{box-shadow:0 0 {$glow_spread}px 4px rgba({$gr},{$gg},{$gb},.45)}";
         } elseif ( $hover === 'blur-peers' ) {

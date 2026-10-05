@@ -198,7 +198,7 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
                         <?php if ( ! empty( $s['show_media'] ) ) :
                             $media_img = $it['media_image'] ?? '';
                             $media_lbl = $it['media_label'] ?? '';
-                            $media_inner_style = 'width:100%;aspect-ratio:' . esc_attr( $media_aspect ) . ';' . ( $media_radius ? 'border-radius:' . esc_attr( $media_radius ) . ';' : '' ) . 'overflow:hidden;background:' . esc_attr( $card_color ) . '14;border:1px solid ' . esc_attr( $card_color ) . '22;display:flex;align-items:center;justify-content:center;margin-bottom:28px;' . ( $media_radius_h ? 'transition:border-radius ' . $media_rdur . 'ms ease;' : '' );
+                            $media_inner_style = 'width:100%;aspect-ratio:' . esc_attr( $media_aspect ) . ';' . ( $media_radius ? 'border-radius:' . esc_attr( $media_radius ) . ';' : '' ) . 'overflow:hidden;background:' . esc_attr( Olobuild_Tile_Utils::con_alfa( $card_color, '14' ) ) . ';border:1px solid ' . esc_attr( Olobuild_Tile_Utils::con_alfa( $card_color, '22' ) ) . ';display:flex;align-items:center;justify-content:center;margin-bottom:28px;' . ( $media_radius_h ? 'transition:border-radius ' . $media_rdur . 'ms ease;' : '' );
                         ?>
                             <div class="olo-icards__media" style="<?php echo esc_attr( $media_inner_style ); ?>">
                                 <?php if ( $media_img ) : ?>
@@ -228,7 +228,7 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
                                         <span style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $counter_size; ?>px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $counter_color ); ?>;opacity:.85"><span data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.counter'; ?>"><?php echo esc_html( $counter ); ?></span><?php if ( ! empty( $s['show_counter_label'] ) && $counter_label ) : ?> / <span data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.counter_label'; ?>"><?php echo esc_html( $counter_label ); ?></span><?php endif; ?></span>
                                     <?php endif; ?>
                                     <?php if ( ! empty( $s['show_arrow'] ) ) : ?>
-                                        <span style="width:34px;height:34px;border-radius:50%;border:1px solid <?php echo esc_attr( $card_color ); ?>33;display:inline-flex;align-items:center;justify-content:center;color:<?php echo esc_attr( $card_color ); ?>;font-size:14px;opacity:.7">→</span>
+                                        <span style="width:34px;height:34px;border-radius:50%;border:1px solid <?php echo esc_attr( Olobuild_Tile_Utils::con_alfa( $card_color, '33' ) ); ?>;display:inline-flex;align-items:center;justify-content:center;color:<?php echo esc_attr( $card_color ); ?>;font-size:14px;opacity:.7">→</span>
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -249,7 +249,7 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
                         <?php endif; ?>
 
                         <?php if ( ! empty( $s['show_divider'] ) ) : ?>
-                            <div style="height:1px;background:<?php echo esc_attr( $card_color ); ?>1a;margin:24px 0 18px"></div>
+                            <div style="height:1px;background:<?php echo esc_attr( Olobuild_Tile_Utils::con_alfa( $card_color, '1a' ) ); ?>;margin:24px 0 18px"></div>
                         <?php endif; ?>
 
                         <!-- FOOTER -->

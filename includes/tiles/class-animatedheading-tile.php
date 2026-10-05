@@ -72,7 +72,7 @@ class Olobuild_Animatedheading_Tile extends Olobuild_Tile_Base {
             if ($hstyle === 'underline') {
                 echo ".{$uid} .olo-ah-word { border-bottom: 3px solid {$hclr}; }";
             } elseif ($hstyle === 'background') {
-                echo ".{$uid} .olo-ah-word { background: {$hclr}30; padding: 0 8px; border-radius: 4px; }";
+                echo ".{$uid} .olo-ah-word { background: " . Olobuild_Tile_Utils::con_alfa( $hclr, '30' ) . "; padding: 0 8px; border-radius: 4px; }";
             } elseif ($hstyle === 'strikethrough') {
                 echo ".{$uid} .olo-ah-word { text-decoration: line-through {$hclr}; }";
             }

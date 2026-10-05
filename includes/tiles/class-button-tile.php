@@ -323,7 +323,7 @@ class Olobuild_Button_Tile extends Olobuild_Tile_Base {
                     break;
                 case 'glow':
                     $glow_color = $hover_bg ?: $bg;
-                    $transform_hover_css = 'box-shadow: 0 0 20px ' . $glow_color . '80;';
+                    $transform_hover_css = 'box-shadow: 0 0 20px ' . Olobuild_Tile_Utils::con_alfa( $glow_color, '80' ) . ';';
                     break;
             }
             if ( $transform_hover_css ) : ?>

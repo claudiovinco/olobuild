@@ -94,8 +94,8 @@ class Olobuild_Progresstracker_Tile extends Olobuild_Tile_Base {
             }
 
             @keyframes olo-pt-pulse-<?php echo $uid; ?> {
-                0%, 100% { box-shadow: 0 0 0 4px <?php echo $act_clr; ?>40; }
-                50% { box-shadow: 0 0 0 8px <?php echo $act_clr; ?>20; }
+                0%, 100% { box-shadow: 0 0 0 4px <?php echo Olobuild_Tile_Utils::con_alfa( $act_clr, '40' ); ?>; }
+                50% { box-shadow: 0 0 0 8px <?php echo Olobuild_Tile_Utils::con_alfa( $act_clr, '20' ); ?>; }
             }
 
             .<?php echo $uid; ?> .olo-pt-circle {

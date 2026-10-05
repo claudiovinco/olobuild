@@ -141,7 +141,7 @@ ob_start();
         $blur1 = $thick * 3;
         $blur2 = $thick * 2;
         $radius = $thick > 1 ? 'border-radius:' . round( $thick / 2 ) . 'px;' : '';
-        echo '<div style="width:' . (int) $w . '%;"><div style="height:' . (int) $thick . 'px;background:' . $line_clr . ';box-shadow:0 2px ' . (int) $blur1 . 'px ' . $line_clr . '40, 0 1px ' . (int) $blur2 . 'px ' . $line_clr . '25;' . $radius . '"></div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $line_clr from the safe_color_css() whitelist (may be a var() token, not esc_attr-safe), $radius built from integer round(); sizes cast inline
+        echo '<div style="width:' . (int) $w . '%;"><div style="height:' . (int) $thick . 'px;background:' . $line_clr . ';box-shadow:0 2px ' . (int) $blur1 . 'px ' . Olobuild_Tile_Utils::con_alfa( $line_clr, '40' ) . ', 0 1px ' . (int) $blur2 . 'px ' . Olobuild_Tile_Utils::con_alfa( $line_clr, '25' ) . ';' . $radius . '"></div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $line_clr from the safe_color_css() whitelist (may be a var() token, not esc_attr-safe), $radius built from integer round(); sizes cast inline
     }
 
     private function render_decorative( $style_type, $w, $thick, $line_clr ) {
