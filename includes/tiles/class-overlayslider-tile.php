@@ -300,10 +300,16 @@ class Olobuild_OverlaySlider_Tile extends Olobuild_Tile_Base {
                 <?php endif; ?>
                 color: <?php echo $title_clr; ?>;
             }
-            .<?php echo $uid; ?> .uk-overlay h1,
-            .<?php echo $uid; ?> .uk-overlay h2,
-            .<?php echo $uid; ?> .uk-overlay h3,
-            .<?php echo $uid; ?> .uk-overlay h4,
+            <?php // La didascalia sulla foto ha la classe uk-overlay-primary/-default, MAI
+                  // «uk-overlay»: con `.uk-overlay h2` colore, peso, spaziatura e maiuscolo del
+                  // titolo (e colore e corpo del sottotitolo) non arrivavano, e restavano il bianco
+                  // e il peso 400 di UIkit. Il titolo si prende per classe (.olo-os-title), non i
+                  // testi del widget incorporato nella slide (.olo-item-widget). Peso, spaziatura e
+                  // maiuscolo a (0,2,0): sotto lo «Stile tipografico» (0,2,1), come prima. Il colore,
+                  // che il preset non tocca, sta più in alto per battere `.uk-section-primary h2` di
+                  // UIkit. Il sottotitolo sulla foto prende solo colore e corpo: un margine qui
+                  // avrebbe stretto lo spazio verso la CTA dei template salvati (da 32 a 12 px). ?>
+            .<?php echo $uid; ?> .olo-os-title,
             .<?php echo $uid; ?> .olo-os-caption h1,
             .<?php echo $uid; ?> .olo-os-caption h2,
             .<?php echo $uid; ?> .olo-os-caption h3,
@@ -314,7 +320,15 @@ class Olobuild_OverlaySlider_Tile extends Olobuild_Tile_Base {
                 <?php if ( $title_upper ) : ?>text-transform: uppercase;<?php endif; ?>
                 margin: 0;
             }
-            .<?php echo $uid; ?> .uk-overlay p,
+            .<?php echo $uid; ?> .uk-overlay-primary > .olo-os-title,
+            .<?php echo $uid; ?> .uk-overlay-default > .olo-os-title {
+                color: <?php echo $title_clr; ?>;
+            }
+            .<?php echo $uid; ?> .uk-overlay-primary > p,
+            .<?php echo $uid; ?> .uk-overlay-default > p {
+                color: <?php echo $subtitle_clr; ?>;
+                font-size: <?php echo (int) $subtitle_sz; ?>px;
+            }
             .<?php echo $uid; ?> .olo-os-caption p {
                 color: <?php echo $subtitle_clr; ?>;
                 font-size: <?php echo (int) $subtitle_sz; ?>px;
