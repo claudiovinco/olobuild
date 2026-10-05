@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.527 - 2026-10-05 (fix)
+- Popup: le dimensioni piccola e grande del pulsante sono proporzionali al testo.
+
 ## v1.4.526 - 2026-10-05 (fix)
 - I controlli dei campi di Form, Login e Newsletter agiscono su tutti i campi: prima le caselle di testo seguivano lo stile globale dei Moduli e le aree di testo quello della tile.
 - Il corsivo segue il colore del testo (era rosa) e i prezzi scontati non hanno più il fondo giallo.
