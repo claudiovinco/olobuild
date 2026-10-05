@@ -33,6 +33,15 @@ class Olobuild_Woo_Quickview_Tile extends Olobuild_Tile_Base {
         'border_effect_speed'     => 4,
     ];
 
+    /**
+     * Le tile si istanziano a ogni richiesta (plugins_loaded): qui la registrazione arriva anche
+     * alle richieste che non rendono la tile (REST, wc-ajax). Fatta solo nel render, la rotta non
+     * esisteva proprio nelle chiamate AJAX della tile e rispondeva 404.
+     */
+    public function __construct() {
+        $this->register_qv_endpoint();
+    }
+
     public function get_controls() {
         return [];
     }
