@@ -7,6 +7,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Tile ScratchFX — "gratta e scopri" (famiglia C, bucket C).
  *
+ * Dalla 1.4.508 è un coupon vero: un codice (`coupon_code`) con il pulsante «Copia», che
+ * compare solo dopo aver grattato; il browser ricorda chi ha già grattato (`remember`,
+ * chiave stabile per tile) e alla visita dopo mostra il premio scoperto. Il premio resta
+ * nell'HTML (serve senza JS e ai lettori di schermo): non è un segreto, è un invito.
+ *
  * Riferimenti visivi: handoff-tile-speciali/temi/44-tema-tattoo.html (hint + foil texture,
  * brush destination-out) e 45-tema-gelateria.html (scaling coordinate dpr-corretto + reset).
  *
@@ -37,20 +42,23 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
         // ('object-fit: cover'): il campo nasce con quel valore.
         'object_fit'      => 'cover',
         'object_position' => 'center center',
-        'prize_eyebrow' => 'Edizione limitata',
-        'prize_title'   => 'Gusto a sorpresa',
-        'prize_text'    => 'Gratta via la pellicola per scoprire la sorpresa.',
+        'prize_eyebrow' => 'Solo per te',
+        'prize_title'   => '-15%',
+        'prize_text'    => "Usa il codice al momento dell'acquisto.",
+        'coupon_code'   => 'BENVENUTO15',
+        'copy_label'    => 'Copia il codice',
+        'remember'      => true,
         'text_color'    => '',
         'accent_color'  => '',
         'under_bg'      => '',
-        'hint'          => 'Gratta con il dito o il mouse per scoprire',
+        'hint'          => 'Gratta per scoprire il tuo sconto',
         'show_button'   => true,
         'reveal_label'  => 'Scopri',
 
         // Aspetto copertura
         'cover_type'       => 'gradient',
         'cover_color'      => 'var(--olo-color-text-faint, #C9C2CC)',
-        'cover_color2'     => 'var(--olo-color-text-faint, #9A93A0)',
+        'cover_color2'     => 'var(--olo-color-text-muted, #9A93A0)',
         'cover_angle'      => 135,
         'cover_image'      => '',
         'cover_text'       => '',
@@ -118,6 +126,15 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
         $hint     = esc_html( wp_strip_all_tags( $s['hint'] ) );
         $show_btn = ! empty( $s['show_button'] );
         $btn_lbl  = esc_html( wp_strip_all_tags( $s['reveal_label'] ) ) ?: esc_html__( 'Scopri', 'olobuild' );
+        $codice   = trim( wp_strip_all_tags( (string) ( $s['coupon_code'] ?? '' ) ) );
+        $copia    = trim( wp_strip_all_tags( (string) ( $s['copy_label'] ?? '' ) ) );
+        if ( '' === $copia ) {
+            $copia = olobuild_t( 'Copia il codice' );
+        }
+        // Ricordare chi ha già grattato: non nel canvas del builder, e non con «Ricopri
+        // all'uscita», che chiede l'opposto.
+        $ricorda  = ! empty( $s['remember'] ) && empty( $s['reset_on_leave'] ) && empty( $s['_builder_mode'] );
+        $chiave   = 'olo_scratch_' . $this->chiave_stabile( $settings );
 
         $text_color   = $this->safe_color_css( $s['text_color'] )   ?: 'var(--olo-color-text, #2b2230)';
         $accent_color = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
@@ -303,10 +320,46 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
                 outline: 2px solid <?php echo $accent_color; ?>;
                 outline-offset: 2px;
             }
+            /* Codice del coupon e pulsante «Copia» (compare dopo aver grattato) */
+            .<?php echo $uid; ?> .olo-scratch-code {
+                display: inline-block;
+                margin: 0.375rem 0 0;
+                padding: 0.375rem 0.875rem;
+                border: 2px dashed <?php echo $accent_color; ?>;
+                border-radius: 0.625rem;
+                font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+                font-size: 20px;
+                font-weight: 700;
+                letter-spacing: .08em;
+                color: <?php echo $text_color; ?>;
+                user-select: all;
+            }
+            .<?php echo $uid; ?> .olo-scratch-copy {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                margin: 1rem 0.5rem 0;
+                background: <?php echo $accent_color; ?>;
+                border: 1px solid <?php echo $accent_color; ?>;
+                color: var(--olo-color-primary-contrast, #fff);
+                border-radius: 6.25rem;
+                padding: 0.5625rem 1.125rem;
+                font: inherit;
+                font-size: 12px;
+                letter-spacing: .06em;
+                text-transform: uppercase;
+                cursor: pointer;
+            }
+            .<?php echo $uid; ?> .olo-scratch-copy[hidden] { display: none; }
+            .<?php echo $uid; ?> .olo-scratch-copy:focus-visible {
+                outline: 2px solid <?php echo $accent_color; ?>;
+                outline-offset: 2px;
+            }
             /* Reduced motion: nessuna copertura — il contenuto è subito visibile */
             @media (prefers-reduced-motion: reduce) {
                 .<?php echo $uid; ?> .<?php echo $cv; ?>,
                 .<?php echo $uid; ?> .olo-scratch-hint { display: none !important; }
+                .<?php echo $uid; ?> .olo-scratch-copy[hidden] { display: inline-flex; }
             }
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
@@ -320,6 +373,7 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
                     <?php if ( $eyebrow ) : ?><p class="olo-scratch-eyebrow"><?php echo $eyebrow; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() above ?></p><?php endif; ?>
                     <?php if ( $title ) : ?><p class="olo-scratch-title"><?php echo $title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() above ?></p><?php endif; ?>
                     <?php if ( $text ) : ?><p class="olo-scratch-desc"><?php echo $text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() above ?></p><?php endif; ?>
+                    <?php if ( '' !== $codice ) : ?><p class="olo-scratch-code" data-olo-code><?php echo esc_html( $codice ); ?></p><?php endif; ?>
                 </div>
                 <canvas class="<?php echo esc_attr( $cv ); ?>" aria-hidden="true"></canvas>
                 <?php if ( $hint ) : ?>
@@ -328,6 +382,9 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
             </div>
             <?php if ( $show_btn ) : ?>
                 <button type="button" class="olo-scratch-reveal" data-olo-reveal aria-label="<?php echo esc_attr( $btn_lbl ); ?>"><?php echo $btn_lbl; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() above ?></button>
+            <?php endif; ?>
+            <?php if ( '' !== $codice ) : ?>
+                <button type="button" class="olo-scratch-copy" data-olo-copy data-olo-copied="<?php echo esc_attr( olobuild_t( 'Copiato' ) ); ?>" hidden><?php echo esc_html( $copia ); ?></button>
             <?php endif; ?>
         </div>
 
@@ -342,6 +399,38 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
             var canvas = root.querySelector('.<?php echo esc_js( $cv ); ?>');
             var hint   = root.querySelector('[data-olo-hint]');
             var revealBtn = root.querySelector('[data-olo-reveal]');
+            var copyBtn = root.querySelector('[data-olo-copy]');
+            var CHIAVE = <?php echo $ricorda ? wp_json_encode( $chiave ) : 'null'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_json_encode() of an internal md5-based key, or the fixed literal null ?>;
+
+            /* Il codice si copia solo a premio scoperto: prima il pulsante non c'è. */
+            function mostraCopia() {
+                if ( copyBtn ) { copyBtn.hidden = false; }
+            }
+            if ( copyBtn ) {
+                copyBtn.addEventListener( 'click', function(){
+                    var el = root.querySelector('[data-olo-code]');
+                    var codice = el ? el.textContent : '';
+                    var fatto = function(){ var t = copyBtn.textContent; copyBtn.textContent = copyBtn.getAttribute('data-olo-copied') || t; setTimeout( function(){ copyBtn.textContent = t; }, 1600 ); };
+                    if ( navigator.clipboard ) {
+                        if ( navigator.clipboard.writeText ) { navigator.clipboard.writeText( codice ).then( fatto, function(){} ); return; }
+                    }
+                    if ( el ) {
+                        var r = document.createRange(); r.selectNodeContents( el );
+                        var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange( r );
+                        try { document.execCommand( 'copy' ); fatto(); } catch ( err ) {}
+                    }
+                });
+            }
+            /* Già grattato in una visita precedente: il premio resta scoperto. */
+            var giaVisto = false;
+            if ( CHIAVE ) { try { giaVisto = localStorage.getItem( CHIAVE ) === '1'; } catch ( err ) {} }
+            if ( giaVisto ) {
+                if ( canvas ) { canvas.style.display = 'none'; }
+                if ( hint ) { hint.style.display = 'none'; }
+                if ( revealBtn ) { revealBtn.style.display = 'none'; }
+                mostraCopia();
+                return;
+            }
 
             // prefers-reduced-motion → nessuna copertura: il contenuto è già visibile (SSR).
             var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -349,6 +438,7 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
                 if ( canvas ) { canvas.style.display = 'none'; }
                 if ( hint ) { hint.style.display = 'none'; }
                 if ( revealBtn ) { revealBtn.style.display = 'none'; } // niente da rivelare
+                mostraCopia();
                 return;
             }
 
@@ -357,15 +447,21 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
 
             /* I color picker token-first salvano var(--olo-color-*): valide nel CSS
                ma NON sul canvas 2D (fillStyle le ignora). Risolviamo via computed style. */
+            /* Il colore come lo vede il browser, riserva compresa: prima si leggeva solo il
+               token, e se mancava la pellicola diventava nera. */
             function resolveVarColor( c ) {
-                if ( typeof c === 'string' && c.indexOf( 'var(' ) !== -1 ) {
-                    var m = c.match( /var\(\s*(--[A-Za-z0-9_-]+)/ );
-                    if ( m ) {
-                        var v = getComputedStyle( canvas.parentElement || document.documentElement ).getPropertyValue( m[1] ).trim();
-                        if ( v ) { return v; }
-                    }
+                if ( typeof c !== 'string' ) { return c; }
+                if ( c.indexOf( 'var(' ) === -1 ) {
+                    if ( c.indexOf( 'color-mix(' ) === -1 ) { return c; }
                 }
-                return c;
+                var sonda = document.createElement( 'span' );
+                sonda.style.color = c;
+                if ( ! sonda.style.color ) { return c; }
+                sonda.style.display = 'none';
+                ( canvas.parentElement || document.body ).appendChild( sonda );
+                var v = getComputedStyle( sonda ).color;
+                sonda.parentNode.removeChild( sonda );
+                return v || c;
             }
             <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JS config: every value is passed through json_encode() (escapes quotes and slashes, so it cannot break out of the script context); sources are sanitized above (whitelist/safe_color_css/intval/esc_url); RESET is a fixed literal ternary. ?>
             var COVER_TYPE = <?php echo json_encode( $cover_type ); ?>;
@@ -501,6 +597,8 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
             function revealAll() {
                 if ( revealed ) { return; }
                 revealed = true;
+                mostraCopia();
+                if ( CHIAVE ) { try { localStorage.setItem( CHIAVE, '1' ); } catch ( err ) {} }
                 cleared = true;
                 if ( hint && ! hintHidden ) { hint.style.opacity = '0'; hintHidden = true; }
                 canvas.style.transition = 'opacity .4s ease';

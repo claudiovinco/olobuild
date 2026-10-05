@@ -12,6 +12,9 @@ import { t } from '@/i18n';
  *                   comportamento (brushSize, revealThreshold, resetOnLeave),
  *                   layout (altezza/aspect, raggio bordi), allineamento, shadow + bordi
  *
+ * Coupon (1.4.508): `coupon_code` + pulsante «Copia» (dopo aver grattato) e `remember`
+ * (il browser ricorda chi ha già grattato). I testi di partenza sono quelli di uno sconto.
+ *
  * Contratto §2: ogni numero/colore/testo è un campo con default; nessun hardcode.
  * SSR: il contenuto sotto è già visibile (l'immagine/testo premio sono nel DOM).
  * Il canvas di copertura viene dipinto e gestito dal runtime inline (Pointer Events,
@@ -30,21 +33,24 @@ export default {
     // il campo nasce con lo stesso valore, nessuna pagina pubblicata si sposta.
     object_fit: 'cover',
     object_position: 'center center',
-    prize_eyebrow: t('Edizione limitata'),
-    prize_title: t('Gusto a sorpresa'),
-    prize_text: t('Gratta via la pellicola per scoprire la sorpresa.'),
+    prize_eyebrow: t('Solo per te'),
+    prize_title: '-15%',
+    prize_text: t("Usa il codice al momento dell'acquisto."),
+    coupon_code: 'BENVENUTO15',
+    copy_label: t('Copia il codice'),
+    remember: true,
     text_color: '',
     accent_color: '',
     under_bg: '',
     // Suggerimento + pulsante tastiera
-    hint: t('Gratta con il dito o il mouse per scoprire'),
+    hint: t('Gratta per scoprire il tuo sconto'),
     show_button: true,
     reveal_label: t('Scopri'),
 
     // ── Aspetto copertura ──
     cover_type: 'gradient',
-    cover_color: 'var(--olo-color-text-faint, #94a3b8)',
-    cover_color2: 'var(--olo-color-text-faint, #94a3b8)',
+    cover_color: 'var(--olo-color-text-faint, #C9C2CC)',
+    cover_color2: 'var(--olo-color-text-muted, #9A93A0)',
     cover_angle: 135,
     cover_image: '',
     cover_text: '',
@@ -80,11 +86,20 @@ export default {
     { key: 'prize_title', label: t('Titolo premio'), type: 'text' },
     { key: 'prize_text', label: t('Descrizione'), type: 'textarea' },
 
+    { type: 'separator', label: t('Coupon') },
+    { key: 'coupon_code', label: t('Codice'), type: 'text',
+      description: t('Il codice che il visitatore scopre grattando. Vuoto: nessun codice, solo il premio.') },
+    { key: 'copy_label', label: t('Etichetta «Copia»'), type: 'text',
+      condition: { field: 'coupon_code', op: 'notEmpty' },
+      description: t('Il pulsante che copia il codice compare solo a premio scoperto.') },
+    { key: 'remember', label: t('Ricorda chi ha già grattato'), type: 'toggle',
+      description: t("Alla visita successiva il premio è già scoperto, come un vero gratta e vinci. Non vale con «Ricopri all'uscita del mouse».") },
+
     { type: 'separator', label: t('Suggerimento & accessibilità') },
     { key: 'hint', label: t('Testo suggerimento'), type: 'text',
       description: t('Scompare al primo tocco. Lascia vuoto per nasconderlo.') },
     { key: 'show_button', label: t('Pulsante "Scopri" (alternativa tastiera)'), type: 'toggle',
-      description: t('Mostra un pulsante per rivelare tutto senza grattare. Sempre attivo come fallback no-JS.') },
+      description: t('Mostra un pulsante per scoprire tutto senza grattare, utile da tastiera. Senza JavaScript o con il movimento ridotto il premio è già visibile.') },
     { key: 'reveal_label', label: t('Etichetta pulsante'), type: 'text',
       condition: { field: 'show_button', op: 'eq', value: true } },
   ],
