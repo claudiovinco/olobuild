@@ -49,7 +49,10 @@ export default {
   fields: [
     { key: 'bars', label: t('Barre (etichetta|valore per riga)'), type: 'textarea' },
     { key: 'show_percentage', label: t('Mostra percentuale'), type: 'toggle' },
-    { key: 'inner_text', label: t('Testo interno (vuoto = percentuale)'), type: 'text' },
+    // L'etichetta diceva «vuoto = percentuale»: nella barra non è più vero (la percentuale
+    // compariva due volte), la regola completa sta nella (i).
+    { key: 'inner_text', label: t('Testo interno'), type: 'text',
+      description: t('Il testo al centro della barra o del cerchio. Se è vuoto, nel cerchio compare la percentuale; nella barra la percentuale sta in testa con «Mostra percentuale», e dentro la barra solo coi preset Thick Bold, Gradient Bar e Gradient Aurora e un colore del testo chiaro.') },
 
 
     { type: 'separator', label: t('Animazione') },
