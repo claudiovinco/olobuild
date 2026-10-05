@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared';
+import { textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared';
 import { shadowField } from './_shared.js';
 import { t } from '@/i18n';
 
@@ -9,7 +9,7 @@ import { t } from '@/i18n';
  *                   posizione/allineamento legenda, comportamento dati (animate, stacked,
  *                   stepped_line, fill_area, point_style, asse Y min/max/step, etichette assi,
  *                   formato valori), toggle griglia/bordi assi/begin_at_zero
- *   styleFields[] → preset, bg, typography_preset, textEffectsFields, altezza grafico,
+ *   styleFields[] → preset, bg, altezza grafico,
  *                   colori/dimensioni/spaziature di legenda/titolo/sottotitolo/tooltip,
  *                   border_radius tooltip, bordi e raggi barre/punti, doughnut_cutout,
  *                   colori griglia/assi/testi, tension, shadow + borderFields
@@ -226,9 +226,8 @@ export default {
       { value: 'tilt-3d',         label: t('3D Tilt') },
       { value: 'custom',          label: t('Personalizzato') },
     ] },
-    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
-
-    ...textEffectsFields([ { value: 'label', label: t('Solo Etichetta') } ]),
+    // Niente «Stile tipografico» né «Effetti testo»: il grafico è disegnato su un canvas,
+    // dove né l'uno né gli altri possono agire (erano due controlli che non facevano niente).
     { key: 'chart_height', label: t('Altezza'), type: 'range', min: 200, max: 800, step: 10 },
 
     // ── Tipografia ──
@@ -352,6 +351,6 @@ export default {
     { key: 'axis_color', label: t('Colore bordo assi'), type: 'color' },
 
     ...shadowField,
-    ...borderFields({ effetti: false }), // il PHP scrive bordo ed effetti su un selettore che nel markup non c'è
+    ...borderFields(), // bordo ed effetti sul riquadro del grafico: dalla 1.4.506 il selettore .{uid} c'è
   ],
 };

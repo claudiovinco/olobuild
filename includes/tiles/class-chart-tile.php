@@ -128,21 +128,26 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
         $values = [];
         $bg_colors = [];
         $border_colors = [];
+        $data_bw       = max( 0, intval( $s['border_width'] ) );
+        $border_widths = [];
         foreach ( $items as $item ) {
             $labels[]        = esc_js( $item['label'] );
             $values[]        = floatval( $item['value'] );
-            $item_color      = $this->safe_color_css( $item['color'] ) ?: '#e1474f';
+            $item_color      = $this->safe_color_css( $item['color'] ) ?: 'var(--olo-color-primary, #e1474f)';
             $bg_colors[]     = $item_color;
             $border_colors[] = $border_override ?: ( $this->safe_color_css( $item['border_color'] ?? '' ) ?: $item_color );
+            // Lo spessore del Bordo di ogni dato (il ponte legacy lo tiene in `border_width`);
+            // senza, quello generale.
+            $border_widths[] = ( isset( $item['border_width'] ) && '' !== $item['border_width'] ) ? max( 0, intval( $item['border_width'] ) ) : $data_bw;
         }
 
         $labels_js  = '["' . implode( '","', $labels ) . '"]';
         $values_js  = '[' . implode( ',', $values ) . ']';
         $bg_js      = '["' . implode( '","', $bg_colors ) . '"]';
         $border_js  = '["' . implode( '","', $border_colors ) . '"]';
+        $bw_js      = '[' . implode( ',', $border_widths ) . ']';
 
         $has_grid    = in_array( $chart_type, [ 'bar', 'line' ], true );
-        $data_bw     = max( 0, intval( $s['border_width'] ) );
         $animate     = ! empty( $s['animate'] );
         $tension     = max( 0, min( 1, floatval( $s['tension'] ) ) );
         $index_axis  = $s['index_axis'] === 'y' ? 'y' : 'x';
@@ -216,15 +221,52 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-chart" style="<?php if ( $bg_color ) echo 'background:' . $bg_color . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- background colour validated by safe_color_css() above ?>padding:16px;">
+        <div class="olo-chart <?php echo esc_attr( $uid ); ?>" style="<?php if ( $bg_color ) echo 'background:' . $bg_color . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- background colour validated by safe_color_css() above ?>padding:16px;">
             <canvas id="<?php echo esc_attr( $uid ); ?>" style="width:100%;height:<?php echo (int) $chart_height; ?>px;max-height:<?php echo (int) $chart_height; ?>px;"></canvas>
         </div>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline Chart.js config below is built exclusively from values sanitized above: esc_js()'d strings, safe_color_css() colours, intval()/floatval() clamps, in_array() whitelists and fixed 'true'/'false' ternaries. ?>
         <script>
         (function(){
+            var tentativi = 0;
+            /* Chart.js arriva in fondo alla pagina (wp_enqueue). Nel canvas del builder
+               quell'accodamento non c'è: dopo il primo giro a vuoto lo si carica da qui. */
+            function caricaChartJs(){
+                if (window.__oloChartJsInArrivo) return;
+                window.__oloChartJsInArrivo = true;
+                if (document.querySelector('script[src*="chartjs/chart.umd"]')) return;
+                var sc = document.createElement('script');
+                sc.src = '<?php echo esc_js( OLOBUILD_URL . 'assets/vendor/chartjs/chart.umd.min.js?ver=4.5.1' ); ?>';
+                document.head.appendChild(sc);
+            }
+            /* Il canvas non conosce le variabili CSS: «var(--olo-color-primary)» va
+               tradotto nel colore vero, letto dal browser nel contesto del grafico. */
+            function colore(c, dove){
+                if (typeof c !== 'string') return c;
+                if (c.indexOf('var(') === -1) {
+                    if (c.indexOf('color-mix(') === -1) return c;
+                }
+                var sonda = document.createElement('span');
+                sonda.style.color = c;
+                if (!sonda.style.color) return c;
+                sonda.style.display = 'none';
+                dove.appendChild(sonda);
+                var vero = getComputedStyle(sonda).color;
+                dove.removeChild(sonda);
+                return vero || c;
+            }
+            function risolviColori(o, dove){
+                if (!o || typeof o !== 'object') return;
+                Object.keys(o).forEach(function(k){
+                    var v = o[k];
+                    if (typeof v === 'string') { o[k] = colore(v, dove); }
+                    else if (v) { if (typeof v === 'object') risolviColori(v, dove); }
+                });
+            }
             function initChart(){
                 if(typeof Chart === 'undefined'){
-                    setTimeout(initChart, 100);
+                    tentativi++;
+                    if (tentativi === 2) caricaChartJs();
+                    if (tentativi < 150) setTimeout(initChart, 100);
                     return;
                 }
                 var canvas = document.getElementById('<?php echo esc_js( $uid ); ?>');
@@ -247,7 +289,7 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
                         data: values,
                         backgroundColor: bgColors,
                         borderColor: borderColors,
-                        borderWidth: <?php echo $data_bw; ?>
+                        borderWidth: <?php echo $bw_js; ?>
                     };
 
                     <?php if ( $chart_type === 'bar' ) : ?>
@@ -342,9 +384,12 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
                                     <?php if ( $tt_prefix || $tt_suffix || $num_format ) : ?>
                                     ,callbacks: {
                                         label: function(ctx) {
-                                            var v = ctx.parsed.y !== undefined ? ctx.parsed.y : ctx.parsed;
+                                            /* ctx.raw è il dato così com'è in ogni tipo di grafico
+                                               (parsed.y era l'indice nelle barre orizzontali e un
+                                               oggetto nel radar). */
+                                            var v = ctx.raw;
                                             <?php if ( $num_format ) : ?>
-                                            v = v.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                                            v = Number(v).toLocaleString(document.documentElement.lang || undefined);
                                             <?php endif; ?>
                                             var lbl = ctx.dataset.label ? ctx.dataset.label + ': ' : '';
                                             return lbl + '<?php echo $tt_prefix; ?>' + v + '<?php echo $tt_suffix; ?>';
@@ -387,6 +432,7 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
                         }
                     };
 
+                    risolviColori(config, canvas.parentNode);
                     new Chart(ctx, config);
                 }
 
