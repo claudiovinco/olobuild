@@ -192,6 +192,18 @@ in un caso comune · **L** = dettaglio, colore fuori tema, testo in inglese.
 
 ---
 
+## D. Trovati scrivendo le impostazioni di partenza (5 ottobre, sera; righe della 1.4.535)
+Solo ciò che non è già nella sezione B. Fra parentesi la gravità.
+- **Essenziale/Testo** — table (M): l'intestazione ricade su `on-primary` mentre lo sfondo è il secondario `:70`, «No table data» `:61` · headline (L): le linee decorative spariscono quando il titolo va a capo · textmask (L): default «WELCOME…», `bg_color #000000` `:14, :32` · spacer (L): forme `#ffffff`/`#000000` fisse.
+- **Layout** — grid (M): le etichette del filtro, ricavate dallo slug, perdono gli accenti `:119-131`; l'icona di una voce non disegna niente `:211`; card con `#fff`/`#e5e7eb` fissi `:284-312` · info-cards (M): `card_bg #0f172a` e `#10b981` nei default PHP `:32-36`; nessun ripiego delle colonne sul telefono · workgrid (L): il default alto/normale/normale/alto lascia buchi `:94`.
+- **Media** — map, osmmap (M): attribuzione sempre «OpenStreetMap» anche con Esri o CARTO `osmmap:107, map:390` · themedemos (M): «Saffron» scuro su scuro `:23` · showcasegrid (M): `hex_rgb()` legge la riserva del token, il velo non segue la palette `:102`; default inglesi · svganimator (M): il segnaposto PNG finisce in `svg_url` e il PHP lo scarica; «Replay» `:38, :152` · videoplaylist (L): testo `primary-contrast` su fondo `secondary` `:69` · viewer360 (L): fondo `#111` fisso; con una sola foto a 180° si vede a specchio · marquee (L): testo col contrasto del secondario su fondo scuro `:108` · imgcompare, osmmap, audio (L): `#1F2937`, `#e74c3c`, play bianco fissi; «Seleziona un file audio» non tradotto.
+- **Marketing** — loginform (M): nel canvas l'amministratore vede «Bentornato… Esci» al posto del modulo `:461` · countdown (M): la chiave del localStorage cambia a ogni caricamento, il conto riparte `:225` · pricelist (L): con «Mostra immagine» e voci senza foto restano quadrati grigi `:143` · buildermock (L): sottotitolo di default tagliato.
+- **Interattivo** — switcher (L): di serie il preset «Pill Sliding» con `indicator_type none`.
+- **Navigazione/Dinamico** — mobilebar (M): il nome del sito di ripiego è `#fff` fisso `:484` (invisibile sulla barra chiara) · readingtime (M): `icon` non letto `:124`, `font_size` senza unità `:106` · wpcomments (M): `get_comments_number() === 0` stringa contro intero `:68`; `#888`, `#fff` · pagination (M): la chiave `border` vale per due controlli `:248` · toc (L): `text_color` calcolato e mai usato `:42` · newsticker (L): `#dc2626` e «Breaking» nei default `:21-33` · queryloop (L): tempo di lettura `rgba(0,0,0,.55)` fisso `:266` · portfolio (L): **emoji** 🖼 per l'immagine mancante `:829`; postnavigation/relatedposts `#1F2937` `:153, :179` · presencegrid (L): `@` fissa `:418`, hover `#8B5CF6` · authorbox (L): il segnaposto legge `padding` invece di `tile_padding` `:85`.
+- **WooCommerce** — colori vuoti senza riserva (G) anche in sale_badge `:65`, categories `:79`, checkout `:56-61`, related/upsells · sale_badge (M): «Posizione» non agisce `:154` · checkout_multistep (M): «Stile step» e «Mostra riepilogo» inerti, `active_color` mai usato `:62` · gallery_slider (M): larghezza massima fissa 600 px `:30` · cross_sells, recently_viewed (L): `heading_tag` inerte · rating (L): «(1 recensioni)» `:83` · myaccount, comparison (L): «Ciao, » e «WooCommerce non attivo» senza traduzione.
+
+---
+
 ## C. Doppioni e tile da ripensare
 - **Frammento**: da ritirare (div vuoto; ID e classe li danno già le Avanzate e l'Ancora menu).
 - **Hours Strip ≈ Statstrip**: unibili in una Statstrip con «nota».
