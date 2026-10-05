@@ -239,15 +239,21 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
 
     /**
      * Get tile layer URL by key.
+     *
+     * Positron, Voyager e Dark Matter erano i raster CARTO (basemaps.cartocdn.com): oggi
+     * CARTO li serve solo con una chiave e senza disegna su ogni tassello «API KEY REQUIRED».
+     * Le chiavi salvate restano; ognuna punta a un servizio libero dall'aspetto equivalente:
+     * Positron e Dark Matter = tela grigio chiaro/scuro Esri (+ etichette, vedi
+     * get_tile_layer_extra()), Voyager = OpenStreetMap attenuato da un filtro.
      */
     private function get_tile_layer_url( $key ) {
         $urls = [
             'standard'    => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             'osm'         => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             'hot'         => 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
-            'positron'    => 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-            'voyager'     => 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-            'dark'        => 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+            'positron'    => 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+            'voyager'     => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            'dark'        => 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
             'satellite'   => 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
             'topo'        => 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
             'esri_street' => 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
@@ -261,24 +267,43 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
      * Return the correct attribution string for a given tile layer key.
      */
     private function get_tile_layer_attr( $key ) {
-        $osm   = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
-        $carto = $osm . ' &copy; <a href="https://carto.com/">CARTO</a>';
+        $osm   = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
         $esri  = 'Tiles &copy; Esri';
+        $canvas = $esri . ' &mdash; Esri, HERE, Garmin, ' . $osm;
         $topo  = $osm . ', SRTM | &copy; <a href="https://opentopomap.org">OpenTopoMap</a>';
         $attrs = [
             'standard'    => $osm,
             'osm'         => $osm,
             'hot'         => $osm . ' | HOT',
-            'positron'    => $carto,
-            'voyager'     => $carto,
-            'dark'        => $carto,
+            'positron'    => $canvas,
+            'voyager'     => $osm,
+            'dark'        => $canvas,
             'satellite'   => $esri,
             'topo'        => $esri,
             'esri_street' => $esri,
-            'gray'        => $esri,
+            'gray'        => $canvas,
             'opentopomap' => $topo,
         ];
         return $attrs[ $key ] ?? $osm;
+    }
+
+    /**
+     * Cio' che un tassello da solo non basta a dare, per gli stili che lo chiedono:
+     * - labels: le etichette, che la tela Esri serve su un livello a parte (sopra la base);
+     * - maxNative: la tela Esri arriva al 16, oltre risponde «Map data not yet available»
+     *   (lo zoom della tile va fino a 19): Leaflet ingrandisce i tasselli del 16;
+     * - filter: Voyager e' OpenStreetMap coi colori attenuati.
+     * Letto dagli script di render_single() e build_plm_js().
+     */
+    private function get_tile_layer_extra( $key ) {
+        $ref   = 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/';
+        $extra = [
+            'positron' => [ 'labels' => $ref . 'World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}', 'maxNative' => 16 ],
+            'dark'     => [ 'labels' => $ref . 'World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', 'maxNative' => 16 ],
+            'gray'     => [ 'maxNative' => 16 ],
+            'voyager'  => [ 'filter' => 'saturate(.6) contrast(.92) brightness(1.04)' ],
+        ];
+        return $extra[ $key ] ?? [];
     }
 
     /**
@@ -299,7 +324,16 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
         $marker_type  = sanitize_key( $s['marker_type'] ?? 'pin' );
         $marker_image = esc_url( $s['marker_image'] ?? '' );
         $marker_size  = absint( $s['marker_size'] ?? 36 ) ?: 36;
-        $tile_url     = $this->get_tile_layer_url( $s['tile_layer'] ?? 'standard' ); // fixed whitelist URL, esc_js()'d at output.
+        $tile_key     = (string) ( $s['tile_layer'] ?? 'standard' );
+        // Livello di sfondo intero (url, attribuzione dello stile scelto, etichette/zoom/filtro):
+        // l'attribuzione era sempre «OpenStreetMap» anche con Esri. Solo valori dalle whitelist.
+        $tile_cfg     = array_merge(
+            [
+                'url'  => $this->get_tile_layer_url( $tile_key ),
+                'attr' => $this->get_tile_layer_attr( $tile_key ),
+            ],
+            $this->get_tile_layer_extra( $tile_key )
+        );
 
         // If user didn't override marker_type but set marker_shape, adopt it
         $shape_override = sanitize_key( $s['marker_shape'] ?? 'pin' );
@@ -386,10 +420,12 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
                     dragging: <?php echo $dragging_js; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'true'/'false' literal from boolean ternary above ?>
                 }).setView([<?php echo (float) $lat; ?>, <?php echo (float) $lng; ?>], <?php echo (int) $zoom; ?>);
 
-                L.tileLayer('<?php echo esc_js( $tile_url ); ?>', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                    maxZoom: 19
-                }).addTo(map);
+                var T = <?php echo wp_json_encode( $tile_cfg, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON of fixed whitelist URLs/attributions from get_tile_layer_url()/attr()/extra(); HEX flags keep & < ' " out of the inline script ?>;
+                var tileOpts = { attribution: T.attr, maxZoom: 19 };
+                if (T.maxNative) { tileOpts.maxNativeZoom = T.maxNative; }
+                var baseLayer = L.tileLayer(T.url, tileOpts).addTo(map);
+                if (T.filter) { baseLayer.getContainer().style.filter = T.filter; }
+                if (T.labels) { L.tileLayer(T.labels, { maxZoom: 19, maxNativeZoom: T.maxNative || 19, zIndex: 2 }).addTo(map); }
 
                 <?php if ( $show_marker ) : ?>
                 var markerIcon;
@@ -526,6 +562,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
             'showFilters'   => $show_filters,
             'tileUrl'       => $tile_url,
             'tileAttr'      => $tile_attr,
+            'tileExtra'     => $this->get_tile_layer_extra( $tile_key ),
             'markerSvg'     => $marker_info['svg'],
             'markerW'       => $marker_info['w'],
             'markerH'       => $marker_info['h'],
@@ -948,6 +985,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
             'viewMode'      => $view_mode,
             'tileUrl'       => $tile_url,
             'tileAttr'      => $tile_attr,
+            'tileExtra'     => $this->get_tile_layer_extra( $tile_key ),
             'markerSvg'     => $marker_info['svg'],
             'markerW'       => $marker_info['w'],
             'markerH'       => $marker_info['h'],
@@ -1916,10 +1954,12 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
             $grid_template = 'grid-template-columns: 100%; grid-template-rows: ' . $map_w . ' ' . $filter_w . '; grid-template-areas: "M" "R";';
         }
 
+        // Il pannello eredita il carattere del sito: l'elenco fisso di font di sistema lo staccava
+        // dal resto della pagina (i campi e i pulsanti seguono, hanno già font-family: inherit).
         ob_start();
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS template below is built exclusively from values sanitized by the callers: $sel/$grid_template from internally generated uid + whitelisted enums and normalize_dim() percentages, colors from safe_hex(), ints from absint()/clamps.
         ?>
-        <?php echo $sel; ?> { display: grid; <?php echo $grid_template; ?> width: 100%; max-width: 100%; height: <?php echo (int) $height; ?>px; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, sans-serif; box-sizing: border-box; }
+        <?php echo $sel; ?> { display: grid; <?php echo $grid_template; ?> width: 100%; max-width: 100%; height: <?php echo (int) $height; ?>px; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06); font-family: inherit; box-sizing: border-box; }
         <?php echo $sel; ?> .plm-map-panel { position: relative; grid-area: M; min-height: 0; min-width: 0; }
         <?php echo $sel; ?> .plm-map { width: 100%; height: 100%; z-index: 1; }
         <?php echo $sel; ?> .plm-fullscreen-btn { position: absolute; top: 10px; right: 10px; z-index: 1000; width: 34px; height: 34px; background: #fff; border: 2px solid rgba(0,0,0,0.2); border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; color: #374151; }
@@ -2075,7 +2115,13 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
                 var activeAmenities = [];
 
                 var map = L.map(mapEl, { scrollWheelZoom: true }).setView(CENTER, ZOOM);
-                L.tileLayer(D.tileUrl, { attribution: D.tileAttr, maxZoom: 19 }).addTo(map);
+                // Etichette, zoom nativo e filtro dello stile: get_tile_layer_extra().
+                var TX = D.tileExtra || {};
+                var tileOpts = { attribution: D.tileAttr, maxZoom: 19 };
+                if (TX.maxNative) { tileOpts.maxNativeZoom = TX.maxNative; }
+                var baseLayer = L.tileLayer(D.tileUrl, tileOpts).addTo(map);
+                if (TX.filter) { baseLayer.getContainer().style.filter = TX.filter; }
+                if (TX.labels) { L.tileLayer(TX.labels, { maxZoom: 19, maxNativeZoom: TX.maxNative || 19, zIndex: 2 }).addTo(map); }
                 // Force recompute once layout is settled, avoids 400x200 default when
                 // the grid assigns the panel size after Leaflet has already measured.
                 setTimeout(function(){ try { map.invalidateSize(); } catch(e) {} }, 100);
@@ -2520,9 +2566,12 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
         // (e.g. `if (a && b)` becomes `if (a &#038;&#038; b)` — SyntaxError).
         // Extract the script body and wrap it with a base64 bootstrap so no character
         // passes through any HTML-encoding filter.
+        // atob() restituisce un byte per carattere: da solo trasformava l'UTF-8 dei dati
+        // (accenti, «€» dei prezzi) in «â‚¬». I byte tornano testo con TextDecoder; il
+        // bootstrap resta senza & né < (i filtri che lo hanno reso necessario li toccherebbero).
         if ( preg_match( '/<script>([\s\S]*?)<\/script>/', $raw, $m ) ) {
             $encoded = base64_encode( $m[1] );
-            return '<script>(new Function(atob("' . $encoded . '")))();</script>';
+            return '<script>(new Function(new TextDecoder().decode(Uint8Array.from(atob("' . $encoded . '"), function(c){ return c.charCodeAt(0); }))))();</script>';
         }
 
         return $raw;
