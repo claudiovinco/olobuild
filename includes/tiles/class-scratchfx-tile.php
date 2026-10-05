@@ -598,6 +598,13 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
                 if ( revealed ) { return; }
                 revealed = true;
                 mostraCopia();
+                /* «Scopri» non ha più niente da scoprire (come alla visita successiva): via, e il
+                   fuoco da tastiera passa a «Copia il codice». */
+                if ( revealBtn ) {
+                    var aveva = document.activeElement === revealBtn;
+                    revealBtn.style.display = 'none';
+                    if ( aveva && copyBtn ) { copyBtn.focus(); }
+                }
                 if ( CHIAVE ) { try { localStorage.setItem( CHIAVE, '1' ); } catch ( err ) {} }
                 cleared = true;
                 if ( hint && ! hintHidden ) { hint.style.opacity = '0'; hintHidden = true; }
