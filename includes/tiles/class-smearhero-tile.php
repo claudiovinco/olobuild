@@ -123,6 +123,7 @@ class Olobuild_SmearHero_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist, min-height via intval() with min()/max() clamp, padding integer-forced or a fixed clamp() literal, fixed font-stack literals, background/radius/shadow/border via the Olobuild_CSS_Builder/Olobuild_Tile_Base shared helpers (sanitized internally); $uid is internally generated. ?>
         <style>
+            <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{position:relative;overflow:hidden;min-height:<?php echo $mh; ?>vh;display:flex;align-items:center;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;<?php echo $bg_block; ?><?php echo $radius_css; ?><?php echo $kit_decl; ?>}
             .<?php echo $uid; ?>::before{content:"";position:absolute;inset:0;z-index:1;background:radial-gradient(80% 90% at 70% 20%,<?php echo $glow; ?>,transparent 60%);pointer-events:none;}
             .<?php echo $uid; ?> .sh-smear{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:auto;}

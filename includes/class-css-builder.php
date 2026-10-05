@@ -892,15 +892,16 @@ class Olobuild_CSS_Builder {
                 break;
         }
 
-        // Ramo MASK (pattern SVG con colore-token): la forma dall'SVG nero, il colore vero
-        // (token via color-mix in $c) da background-color. Prefisso -webkit- per Safari.
+        // Ramo STRATO (pattern SVG con colore-token): la forma dall'SVG nero, il colore vero
+        // (token via color-mix in $c) su uno strato SOTTO il contenuto. Prima la maschera
+        // stava sull'elemento stesso e ritagliava TUTTO: di una sezione con le onde si
+        // vedevano solo i pezzi di testo e di tile che cadevano dentro le onde, e il colore
+        // di fondo del motivo andava perso. Ora l'elemento tiene il suo fondo e passa forma,
+        // colore, misura e posizione in variabili: lo strato lo disegna la regola di
+        // frontend.css (sfondo nello stile in linea) o pattern_layer_css() (sfondo in un <style>).
         if ( $use_mask ) {
             $mp = $bg_pos ? $bg_pos : '0 0';
-            return "background-color:{$c}"
-                . ";-webkit-mask-image:{$mask_uri};mask-image:{$mask_uri}"
-                . ";-webkit-mask-size:{$bg_size};mask-size:{$bg_size}"
-                . ";-webkit-mask-repeat:repeat;mask-repeat:repeat"
-                . ";-webkit-mask-position:{$mp};mask-position:{$mp}";
+            return "background-color:{$bg_clr};--olo-pat-c:{$c};--olo-pat-m:{$mask_uri};--olo-pat-s:{$bg_size};--olo-pat-p:{$mp}";
         }
 
         $css = "background-color:{$bg_clr};background-image:{$bg_image};background-size:{$bg_size}";
@@ -908,6 +909,31 @@ class Olobuild_CSS_Builder {
             $css .= ";background-position:{$bg_pos}";
         }
         return $css;
+    }
+
+    /**
+     * Strato del motivo SVG con colore-token per uno sfondo scritto in una regola <style>.
+     *
+     * Il ramo STRATO di build_pattern_css() mette forma e colore in variabili (--olo-pat-*):
+     * dove lo sfondo finisce nello stile in linea lo strato lo disegna frontend.css, che
+     * riconosce le variabili nell'attributo `style`. Le tile che scrivono lo sfondo in un
+     * <style> (`.uid{…}`) passano qui la dichiarazione e il selettore della radice.
+     * `:where()` = specificità zero: se la tile posiziona già la radice, vince lei.
+     *
+     * @param string $decl     Dichiarazione restituita da get_bg_inline_css().
+     * @param string $selector Selettore dell'elemento che porta lo sfondo.
+     * @return string Regole CSS, o '' se lo sfondo non è un motivo SVG con colore-token.
+     */
+    public static function pattern_layer_css( $decl, $selector ) {
+        $selector = trim( (string) $selector );
+        if ( '' === $selector || false === strpos( (string) $decl, '--olo-pat-m:' ) ) {
+            return '';
+        }
+        return ':where(' . $selector . '){position:relative;isolation:isolate}'
+            . $selector . '::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;border-radius:inherit;'
+            . 'background-color:var(--olo-pat-c);-webkit-mask-image:var(--olo-pat-m);mask-image:var(--olo-pat-m);'
+            . '-webkit-mask-size:var(--olo-pat-s);mask-size:var(--olo-pat-s);-webkit-mask-repeat:repeat;mask-repeat:repeat;'
+            . '-webkit-mask-position:var(--olo-pat-p);mask-position:var(--olo-pat-p)}';
     }
 
     /**

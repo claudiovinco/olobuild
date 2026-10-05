@@ -154,6 +154,7 @@ class Olobuild_GlowHero_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/intval/floatval/whitelist ternaries/fixed font stacks); escaping would corrupt valid CSS quotes. ?>
         <style>
+            <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{position:relative;overflow:hidden;min-height:<?php echo (int) $mh; ?>vh;display:flex;flex-direction:column;justify-content:center;background:<?php echo $bg; ?>;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;padding:<?php echo $pad_decl; ?>;<?php echo $kit_extra; ?>}
             .<?php echo $uid; ?> .glw-glow{position:absolute;top:<?php echo (int) $gy; ?>%;left:<?php echo (int) $gx; ?>%;transform:translate(-50%,-30%);width:<?php echo (int) $gw; ?>px;height:<?php echo (int) $gh; ?>px;border-radius:50%;filter:blur(<?php echo (int) $gblur; ?>px);pointer-events:none;background:radial-gradient(circle, <?php echo $glow; ?>, transparent 70%);z-index:0;}
             .<?php echo $uid; ?> .glw-in{position:relative;z-index:2;width:100%;max-width:<?php echo (int) $mw; ?>px;margin:0 auto;padding:0 28px;display:flex;flex-direction:column;align-items:<?php echo $alignI; ?>;text-align:<?php echo $txtAl; ?>;}

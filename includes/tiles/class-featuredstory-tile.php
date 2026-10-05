@@ -164,6 +164,7 @@ class Olobuild_FeaturedStory_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, intval()/max() clamps for sizes and padding, preg_match() whitelists for col_ratio/cover_aspect, resolve_font_family() whitelist for fonts, esc_url()/esc_attr() for cover image and label, fixed rgba placeholder literals, build_border_*_css()/fs_uniform_radius()/build_shadow_decl()/Olobuild_CSS_Builder helpers; $uid is internally generated. ?>
         <style>
+            <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{padding:<?php echo $root_pad; ?>;<?php echo $root_bg_css; ?>;font-family:<?php echo $sans; ?>;position:relative;<?php echo $border_css; ?><?php echo $shadow_css !== '' ? 'box-shadow:' . $shadow_css . ';' : ''; ?>}
             .<?php echo $uid; ?> .fs-in{max-width:1200px;margin:0 auto;padding:0 30px;display:grid;grid-template-columns:<?php echo esc_attr( $grid_ratio ); ?>;gap:48px;align-items:center;}
             .<?php echo $uid; ?> .fs-media{order:<?php echo $media_order; ?>;}

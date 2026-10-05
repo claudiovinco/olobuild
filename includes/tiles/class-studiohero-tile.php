@@ -262,6 +262,7 @@ class Olobuild_StudioHero_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist or fixed var()/color-mix() literals, sizes via intval()/floatval() with clamps, fixed font-stack literals, background/shadow/border via the Olobuild_CSS_Builder/Olobuild_Tile_Base shared helpers (sanitized internally); $uid is internally generated. ?>
         <style>
+            <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{position:relative;padding:<?php echo $vpad; ?>;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;line-height:1.55;<?php echo $bg_block; ?><?php echo $kit_decl; ?>}
             .<?php echo $uid; ?> .sth-wrap{max-width:1280px;margin:0 auto;padding-left:clamp(20px,5vw,72px);padding-right:clamp(20px,5vw,72px);}
             .<?php echo $uid; ?> .sth-meta{display:flex;gap:26px;flex-wrap:wrap;border-bottom:1px solid <?php echo $line; ?>;padding-bottom:20px;margin-bottom:clamp(28px,4vw,46px);}

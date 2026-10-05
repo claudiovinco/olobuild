@@ -191,6 +191,7 @@ class Olobuild_Marquee_Tile extends Olobuild_Tile_Base {
                 100% { transform: translateX(-50%); }
             }
 
+            <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?> {
                 display: flex;
                 align-items: center;

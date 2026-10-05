@@ -157,6 +157,7 @@ class Olobuild_BeforeAfter_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist (with fixed var() fallbacks), columns/gap/radii/padding via intval() clamps, aspect ratio via preg_replace() character whitelist, background-size picked from a fixed map, fixed font-stack literals, kit decorations via the Olobuild_CSS_Builder/Olobuild_Tile_Base shared helpers (sanitized internally); $uid is internally generated. ?>
         <style>
+            <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{font-family:<?php echo $sans; ?>;display:grid;grid-template-columns:repeat(<?php echo $cols; ?>,1fr);gap:<?php echo $gap; ?>;<?php echo $kit_decl; ?>}
             .<?php echo $uid; ?> .oba-card{background:<?php echo $cbg; ?>;border-radius:<?php echo $card_rad_css; ?>;overflow:hidden;}
             .<?php echo $uid; ?> .oba-pair{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:2px;}

@@ -112,6 +112,7 @@ class Olobuild_NorthQuoteSlider_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS built only from values sanitized above: safe_color_css() whitelist for every colour, intval() clamps for sizes, esc_attr() for SVG path data, fixed font-stack literals, internal wp_rand() uid. ?>
         <style>
+            <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{position:relative;background:<?php echo $bgCol; ?>;font-family:<?php echo $sans; ?>;<?php echo $kit_bg_css . $kit_shadow_css; ?>}
             .<?php echo $uid; ?> .nqs-in{max-width:1280px;margin:0 auto;padding:0 40px;}
             .<?php echo $uid; ?> .nqs-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin:0 0 42px;}

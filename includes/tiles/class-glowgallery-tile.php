@@ -158,6 +158,7 @@ class Olobuild_GlowGallery_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, intval()/floatval() with max() clamps for numbers, build_border_radius_css()/build_border_css()/build_shadow_decl()/Olobuild_CSS_Builder::get_bg_inline_css() helpers, fixed font-stack literals; $uid is internally generated. ?>
         <style>
+            <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{position:relative;overflow:hidden;text-align:center;background:<?php echo $bg; ?>;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;padding:clamp(64px,9vw,120px) 0;<?php echo $kit_decl; ?>}
             .<?php echo $uid; ?> .evh-glow{position:absolute;top:<?php echo $gy; ?>px;left:50%;transform:translateX(-50%);width:<?php echo $gw; ?>px;height:<?php echo $gh; ?>px;border-radius:50%;filter:blur(<?php echo $gblur; ?>px);pointer-events:none;background:radial-gradient(circle, <?php echo $glow; ?>, transparent 70%);z-index:0;}
             .<?php echo $uid; ?> .evh-in{position:relative;z-index:2;max-width:<?php echo $mw; ?>px;margin:0 auto;padding:<?php echo $in_pad; ?>;}

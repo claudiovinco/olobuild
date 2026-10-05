@@ -146,6 +146,7 @@ class Olobuild_CategoryRail_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, intval()/max()/min() clamps for sizes, preg_replace() whitelisted aspect ratio, fixed font-stack literals, Olobuild_Tile_Base/Olobuild_CSS_Builder shared helpers (sanitized internally) and the internally generated $uid. ?>
         <style>
+            <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{font-family:<?php echo $sans; ?>;<?php echo $box_decl; ?>}
             .<?php echo $uid; ?> .ocr-head{display:flex;justify-content:flex-end;margin-bottom:12px;}
             .<?php echo $uid; ?> .ocr-hint{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:<?php echo $hint; ?>;}

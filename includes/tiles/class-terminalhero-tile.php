@@ -171,6 +171,7 @@ class Olobuild_TerminalHero_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/intval/floatval/whitelist ternaries/fixed font stacks); escaping would corrupt valid CSS quotes. ?>
         <style>
+            <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{position:relative;overflow:hidden;box-sizing:border-box;min-height:<?php echo (int) $mh; ?>vh;display:flex;flex-direction:column;justify-content:center;background:<?php echo $bg; ?>;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;padding:<?php echo $pad_decl; ?>;<?php echo $kit_extra; ?>}
             .<?php echo $uid; ?> *,.<?php echo $uid; ?> *::before,.<?php echo $uid; ?> *::after{box-sizing:border-box;}
             .<?php echo $uid; ?> .tph-cross{position:absolute;width:11px;height:11px;pointer-events:none;z-index:3;}

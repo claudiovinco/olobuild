@@ -113,6 +113,7 @@ class Olobuild_MatchFixtures_Tile extends Olobuild_Tile_Base {
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist (incl. the color-mix() badge derived from $accent), integers via intval()+min()/max() clamps, card padding/radius integer-forced, font stacks are fixed literals, KIT declarations via Olobuild_CSS_Builder::get_bg_inline_css()/build_shadow_decl()/build_border_css(); $uid is internally generated.
         ?>
         <style>
+            <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{display:grid;grid-template-columns:repeat(<?php echo $cols; ?>,1fr);gap:<?php echo $gap; ?>;font-family:<?php echo $sans; ?>;<?php echo $kit_pos; ?><?php echo $kit_extra; ?>}
             .<?php echo $uid; ?> .omf-fix{background:<?php echo $cbg; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $cbd ] ) ); ?>border-radius:<?php echo $card_rad; ?>;padding:<?php echo $card_pad; ?>;display:flex;flex-direction:column;gap:18px;transition:border-color .2s,transform .3s;}
             .<?php echo $uid; ?> .omf-fix:hover{transform:translateY(-4px);border-color:color-mix(in srgb, <?php echo $accent; ?> 40%, transparent);}

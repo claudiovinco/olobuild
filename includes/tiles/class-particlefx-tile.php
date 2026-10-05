@@ -176,6 +176,7 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from the internally generated $uid and a fixed-literal ternary on the boolean $hover. ?>
         <style>
             /* Tile a ZERO dimensioni: non occupa spazio nel flusso. */
+            <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?> { display: block; height: 0; line-height: 0; }
             /* Il canvas viene spostato dal runtime come sfondo del contenitore (section/colonna). */
             .olo-particles-<?php echo $uid; ?> {

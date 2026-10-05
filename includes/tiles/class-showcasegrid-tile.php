@@ -151,6 +151,7 @@ class Olobuild_ShowcaseGrid_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/intval/whitelists/hex_rgb/Olobuild_CSS_Builder which escapes internally/generated uid). ?>
         <style>
+            <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{display:grid;grid-template-columns:<?php echo $grid_tpl; ?>;gap:<?php echo $gap; ?>;<?php echo $grid_align; ?>font-family:<?php echo $sans; ?>;<?php echo $kit_pos . $kit_decl; ?>}
             .<?php echo $uid; ?> .ocg-card{position:relative;border-radius:<?php echo $card_rad; ?>;overflow:hidden;aspect-ratio:<?php echo $asp; ?>;display:flex;flex-direction:column;justify-content:flex-end;padding:<?php echo $card_pad; ?>;color:#fff;text-decoration:none;background:<?php echo $mbg; ?>;}
             .<?php echo $uid; ?> .ocg-media{position:absolute;inset:0;z-index:0;background:<?php echo $mbg; ?>;background-size:<?php echo $bg_size; ?>;background-position:<?php echo esc_attr( $obj_pos ); ?>;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 18px, rgba(255,255,255,0) 18px 36px);}

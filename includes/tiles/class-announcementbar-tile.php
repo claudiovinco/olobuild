@@ -71,6 +71,7 @@ class Olobuild_AnnouncementBar_Tile extends Olobuild_Tile_Base {
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: background via Olobuild_CSS_Builder::get_bg_inline_css() or the safe_color_css() whitelist, colours via safe_color_css(), $fs/$bb via intval() clamps, $fw/$tt/$align via in_array() whitelists, $ls via preg_replace() character whitelist, padding integer-forced, font stack fixed literal; $uid is internally generated.
         ?>
         <style>
+            <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{<?php echo $bg; ?>;color:<?php echo $tcol; ?>;text-align:<?php echo $align; ?>;font-family:<?php echo $sans; ?>;font-size:<?php echo $fs; ?>px;font-weight:<?php echo $fw; ?>;letter-spacing:<?php echo $ls; ?>;text-transform:<?php echo $tt; ?>;padding:<?php echo $pad; ?>;<?php if ( $bb > 0 ) : ?>border-bottom:<?php echo $bb; ?>px solid <?php echo $bc; ?>;<?php endif; ?>position:relative;line-height:1.4;}
             .<?php echo $uid; ?> b{color:<?php echo $acol; ?>;font-weight:<?php echo $fw; ?>;}
             .<?php echo $uid; ?> a.oab-link{color:inherit;text-decoration:none;}

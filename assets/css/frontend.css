@@ -3157,3 +3157,30 @@ html:has(.olo-frontend-grid) {
 .olo-text-block li > p + p {
   margin-top: 0.4em;
 }
+
+/* Motivo SVG con un colore del tema (Olobuild_CSS_Builder::build_pattern_css, ramo STRATO):
+ * il motivo è uno strato SOTTO il contenuto, non una maschera sull'elemento (che ritagliava
+ * testi e tile). Qui vale per gli sfondi nello stile in linea (sezioni, righe, colonne,
+ * contenitori delle tile); quelli scritti in un <style> usano pattern_layer_css().
+ * :where() = specificità zero: chi posiziona già l'elemento (sticky, absolute) vince. */
+:where([style*="--olo-pat-m:"]) {
+  position: relative;
+  isolation: isolate;
+}
+[style*="--olo-pat-m:"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: inherit;
+  background-color: var(--olo-pat-c);
+  -webkit-mask-image: var(--olo-pat-m);
+  mask-image: var(--olo-pat-m);
+  -webkit-mask-size: var(--olo-pat-s);
+  mask-size: var(--olo-pat-s);
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+  -webkit-mask-position: var(--olo-pat-p);
+  mask-position: var(--olo-pat-p);
+}

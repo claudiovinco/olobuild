@@ -126,6 +126,7 @@ class Olobuild_Masthead_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist (or fixed literal fallback), sizes via intval() with min()/max() clamps and round(), padding/radius from intval()'d sides or fixed clamp() literals, fixed font-stack literals, $root_extra from Olobuild_CSS_Builder::get_bg_inline_css()/build_shadow_decl(), border via build_border_css(); $uid is internally generated. ?>
         <style>
+            <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{position:relative;background:<?php echo $bg; ?>;color:<?php echo $ink; ?>;font-family:<?php echo $sans; ?>;-webkit-font-smoothing:antialiased;<?php echo $root_extra; ?><?php echo $this->build_border_css( $s['border'] ?? [] ); ?>}
             .<?php echo $uid; ?> .mst-wrap{max-width:1200px;margin:0 auto;padding:0 28px;}
             .<?php echo $uid; ?> .mst-mast{border-bottom:1px solid <?php echo $rule; ?>;}

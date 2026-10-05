@@ -161,6 +161,7 @@ class Olobuild_ChatHero_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, intval()/floatval() with max()/min() clamps for sizes, fixed font-stack literals, build_border_radius_css()/Olobuild_CSS_Builder/build_shadow_decl() helpers; $uid is internally generated. ?>
         <style>
+            <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{position:relative;overflow:hidden;background:<?php echo $bg; ?>;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;padding:clamp(56px,8vw,104px) 0 0;text-align:center;<?php if ( $bg_decl ) { echo $bg_decl . ';'; } ?><?php if ( $shadow_css ) { echo 'box-shadow:' . $shadow_css . ';'; } ?>}
             .<?php echo $uid; ?> .cht-glow{position:absolute;top:<?php echo $gy; ?>px;left:<?php echo $gx; ?>%;transform:translateX(-50%);width:<?php echo $gw; ?>px;height:<?php echo $gh; ?>px;border-radius:50%;filter:blur(<?php echo $gblur; ?>px);pointer-events:none;background:radial-gradient(circle, <?php echo $glow; ?>, transparent 70%);z-index:0;}
             .<?php echo $uid; ?> .cht-in{position:relative;z-index:2;max-width:<?php echo $mw; ?>px;margin:0 auto;padding:<?php echo $in_pad; ?>;}

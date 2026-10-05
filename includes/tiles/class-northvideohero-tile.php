@@ -143,6 +143,7 @@ class Olobuild_NorthVideoHero_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, intval() clamps for sizes/percent, Olobuild_Tile_Utils::spacing_css()/build_border_radius_css() integer-built values, esc_url() for image URLs, internal Olobuild_CSS_Builder/build_shadow_decl() helpers, fixed font-stack literals, internal wp_rand() uid. ?>
         <style>
+            <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{position:relative;overflow:hidden;background:<?php echo $bg; ?>;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;<?php echo $kit_bg_css . $kit_shadow_css; ?>}
             <?php if ( $grass !== '' ) : ?>
             .<?php echo $uid; ?> .nvh-grass{position:absolute;inset:0;z-index:0;background-image:url('<?php echo esc_url( $grass ); ?>');background-attachment:fixed;background-size:cover;background-position:<?php echo esc_attr( Olobuild_Tile_Utils::focal_pos( $s, 'bg_fixed_image' ) ); ?>;-webkit-mask:linear-gradient(180deg,transparent 0%,transparent <?php echo $grassFrom; ?>%,#000 100%);mask:linear-gradient(180deg,transparent 0%,transparent <?php echo $grassFrom; ?>%,#000 100%);pointer-events:none;}

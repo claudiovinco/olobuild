@@ -113,6 +113,7 @@ class Olobuild_TripFinder_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist (with fixed var() fallbacks), radius/padding via intval() helpers, box decorations via the Olobuild_CSS_Builder/Olobuild_Tile_Base shared helpers (sanitized internally), fixed font-stack literal; $uid is internally generated. ?>
         <style>
+            <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{font-family:<?php echo $sans; ?>;<?php echo $box_decl; ?>}
             .<?php echo $uid; ?> .otf-bar{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;background:<?php echo $barbg; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['field_border'] ?? null, [ 'width' => 1, 'color' => $fbd ] ) ); ?>border-radius:<?php echo $rad_eff; ?>;padding:<?php echo $bar_pad; ?>;box-shadow:0 18px 50px -28px rgba(0,0,0,.35);}
             .<?php echo $uid; ?> .otf-f{flex:1 1 160px;display:flex;flex-direction:column;gap:4px;padding:<?php echo $field_pad; ?>;background:<?php echo $fbg; ?>;border-left:1px solid <?php echo $fbd; ?>;min-width:0;}

@@ -283,6 +283,7 @@ class Olobuild_ProductGrid_Tile extends Olobuild_Tile_Base {
         ?>
 <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist (with fixed var() fallbacks) for every colour, intval()/max()/min() clamps for numbers, preg_replace() charset filter plus a "W/H" whitelist for $asp, a fixed lookup map for $bsize, resolve_font_family() whitelist for fonts, fixed font-stack literals, Olobuild_Tile_Base/Olobuild_CSS_Builder helpers for the kit declarations; $uid is internally generated. Column 0 + closing tag so this line emits zero bytes. ?>
         <style>
+            <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{font-family:<?php echo $sans; ?>;<?php echo $kit_pos . $kit_decl; ?>}
             .<?php echo $uid; ?> .opg-grid{display:grid;grid-template-columns:repeat(<?php echo (int) $cols; ?>,1fr);gap:<?php echo $gap; ?>;}
             .<?php echo $uid; ?> .opg-filters{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:48px;}

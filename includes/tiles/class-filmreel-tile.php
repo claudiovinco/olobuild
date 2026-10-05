@@ -148,6 +148,7 @@ class Olobuild_FilmReel_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist (o fallback var() letterali), padding integer-forced o clamp() letterale, fixed font-stack/clamp literals, background/ombra/bordo via gli helper condivisi Olobuild_CSS_Builder/Olobuild_Tile_Base (sanitizzati internamente); $uid è generato internamente. ?>
         <style>
+            <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{position:relative;color:<?php echo $text; ?>;font-family:<?php echo $sans; ?>;border-top:1px solid <?php echo $line2; ?>;border-bottom:1px solid <?php echo $line2; ?>;padding:<?php echo $root_pad; ?>;overflow:hidden;<?php echo $bg_block; ?><?php echo $kit_decl; ?>}
             .<?php echo $uid; ?> .ofr-bar{display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding:0 <?php echo $pad; ?>;flex-wrap:wrap;}
             .<?php echo $uid; ?> .ofr-title{font-family:<?php echo $disp; ?>;font-weight:800;font-size:clamp(40px,6vw,82px);line-height:.92;letter-spacing:-.01em;text-transform:uppercase;color:<?php echo $text; ?>;margin:0;}
