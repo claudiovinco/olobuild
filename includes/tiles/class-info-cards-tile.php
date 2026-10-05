@@ -184,15 +184,18 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
                     $desc_raw       = $it['description'] ?? '';
                     $desc           = preg_match( '/<[a-z!\/][^>]*>/i', $desc_raw ) ? $this->safe_richtext_content( $desc_raw ) : nl2br( esc_html( $desc_raw ) );
                     $icon_name      = $it['icon'] ?? '';
-                    $foot_dot       = $this->safe_color_css( $it['footer_dot_color'] ?? '' ) ?: '#10b981';
+                    $foot_dot       = $this->safe_color_css( $it['footer_dot_color'] ?? '' ) ?: 'var(--olo-color-success, #10b981)';
                     $foot_text      = $it['footer_text'] ?? '';
                     $link_url       = $it['link_url'] ?? '';
                     $link_text      = $it['link_text'] ?? '';
                     $is_link        = ! empty( $link_url );
                     $tag            = $is_link ? 'a' : 'div';
-                    $tag_attrs      = $is_link ? ' href="' . esc_url( $link_url ) . '" style="text-decoration:none;color:inherit;"' : '';
+                    // Un solo attributo style: col link ce n'erano due e il browser teneva il primo, quello del
+                    // link, perdendo fondo, bordo, padding e raggio della card.
+                    $tag_attrs      = $is_link ? ' href="' . esc_url( $link_url ) . '"' : '';
+                    $card_style     = $card_style_base . ( $is_link ? 'text-decoration:none;' : '' );
                 ?>
-                    <<?php echo $tag . $tag_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed a/div tag plus attributes built above with esc_url(); item index is an internal array key ?> class="olo-icards__card olo-icards__card--<?php echo $idx; ?>" style="<?php echo esc_attr( $card_style_base ); ?>">
+                    <<?php echo $tag . $tag_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed a/div tag plus attributes built above with esc_url(); item index is an internal array key ?> class="olo-icards__card olo-icards__card--<?php echo $idx; ?>" style="<?php echo esc_attr( $card_style ); ?>">
 
                         <!-- MEDIA (top, opzionale) -->
                         <?php if ( ! empty( $s['show_media'] ) ) :
