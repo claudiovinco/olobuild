@@ -1634,6 +1634,7 @@ class Olobuild_Frontend_Renderer {
                 'flicker'          => ! empty( $page_settings['page_crt_flicker'] ),
                 'flicker_speed'    => intval( $page_settings['page_crt_flicker_speed'] ?? 8 ),
                 'z_index'          => intval( $page_settings['page_crt_z_index'] ?? 200 ),
+                '_builder_mode'    => $this->builder_mode,
             ] );
         }
 
@@ -1644,6 +1645,7 @@ class Olobuild_Frontend_Renderer {
                 'z_index' => intval( $page_settings['page_grain_z_index'] ?? 95 ),
                 'animate' => array_key_exists( 'page_grain_animate', $page_settings ) ? ! empty( $page_settings['page_grain_animate'] ) : true,
                 'mobile'  => ! empty( $page_settings['page_grain_mobile'] ),
+                '_builder_mode' => $this->builder_mode,
             ] );
         }
 

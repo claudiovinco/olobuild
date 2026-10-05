@@ -148,6 +148,17 @@ class Olobuild_Crtoverlay_Tile extends Olobuild_Tile_Base {
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-crtoverlay <?php echo esc_attr( $uid ); ?>-vig" aria-hidden="true" role="presentation"></div>
         <div class="olo-crtoverlay <?php echo esc_attr( $uid ); ?>-scan" aria-hidden="true" role="presentation"></div>
+        <?php if ( empty( $s['_builder_mode'] ) ) : ?>
+        <script>
+        (function(){
+            /* Il transform del template faceva da riferimento ai layer fixed: coprivano il template
+               intero (la vignetta scuriva i bordi della pagina, non dello schermo). Sul sito vanno nel body. */
+            var porta = <?php echo self::js_nel_body(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- costante JS interna ?>;
+            porta(document.querySelector('.<?php echo esc_js( $uid ); ?>-vig'));
+            porta(document.querySelector('.<?php echo esc_js( $uid ); ?>-scan'));
+        })();
+        </script>
+        <?php endif; ?>
         <?php
         return ob_get_clean();
     }
@@ -173,6 +184,7 @@ class Olobuild_Crtoverlay_Tile extends Olobuild_Tile_Base {
             // Su touch/coarse la grana è OFF di default: layer fixed full-viewport con
             // mix-blend-mode (+ animazione) = composite costoso → scroll a scatti su mobile.
             'mobile'  => false,
+            '_builder_mode' => false,
         ] );
 
         $op      = round( max( 0, min( 100, intval( $s['opacity'] ) ) ) / 100, 3 );
@@ -217,6 +229,14 @@ class Olobuild_Crtoverlay_Tile extends Olobuild_Tile_Base {
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-pagegrain <?php echo esc_attr( $uid ); ?>" aria-hidden="true" role="presentation"></div>
+        <?php if ( empty( $s['_builder_mode'] ) ) : ?>
+        <script>
+        (function(){
+            /* Come l'Overlay CRT: dentro il template il layer era alto quanto la pagina. */
+            (<?php echo self::js_nel_body(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- costante JS interna ?>)(document.querySelector('.<?php echo esc_js( $uid ); ?>'));
+        })();
+        </script>
+        <?php endif; ?>
         <?php
         return ob_get_clean();
     }
