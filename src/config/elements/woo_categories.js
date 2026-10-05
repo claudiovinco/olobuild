@@ -45,6 +45,16 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: le categorie del negozio in tessere 4:3 arrotondate, con un velo
+  // scuro appena tinto del colore del sito e il nome chiaro col numero di prodotti (sulle foto
+  // delle categorie resta leggibile, e senza foto la tessera non è un riquadro grigio col testo scuro).
+  partenza: {
+    image_ratio: '4-3',
+    border_radius: '14',
+    overlay_color: 'color-mix(in srgb, color-mix(in srgb, var(--olo-color-primary) 35%, var(--olo-color-dark)) 72%, transparent)',
+    text_color: 'var(--olo-color-light)',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { type: 'separator', label: t('Query') },

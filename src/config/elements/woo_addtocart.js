@@ -37,6 +37,16 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette (in una scheda prodotto): quantità coi pulsanti − e + accanto a un
+  // pulsante grande nel colore del sito con l'icona della borsa, che al passaggio si scurisce.
+  partenza: {
+    quantity_style: 'stepper',
+    icon: 'bag',
+    size: 'large',
+    border_radius: '10',
+    hover_bg: 'color-mix(in srgb, var(--olo-color-primary) 80%, var(--olo-color-dark))',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'button_text', label: t('Testo pulsante'), type: 'text' },

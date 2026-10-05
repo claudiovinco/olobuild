@@ -39,6 +39,15 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: compare solo con prodotti nel carrello; allora due colonne (dati a
+  // sinistra, riepilogo e pagamento a destra) con accento, filetti dei titoli, focus dei campi e
+  // pulsante «Effettua ordine» nel colore del sito (coi colori vuoti dei default restavano spenti).
+  partenza: {
+    accent_color: 'var(--olo-color-primary)',
+    button_bg: 'var(--olo-color-primary)',
+    button_color: 'var(--olo-color-primary-contrast)',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
 

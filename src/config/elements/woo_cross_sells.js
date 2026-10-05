@@ -52,6 +52,19 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: compare solo con prodotti nel carrello (o in una scheda prodotto con
+  // cross-sell); allora mostra «Completa il tuo acquisto» con quattro card quadrate in ombra, bollo
+  // dello sconto scuro e pulsante del sito. Scioglie i disaccordi fra PHP e config (stile card,
+  // stelle, titolo, numero di prodotti).
+  partenza: {
+    heading: t('Completa il tuo acquisto'),
+    limit: '4',
+    card_style: 'shadow',
+    show_rating: false,
+    image_ratio: '1-1',
+    badge_bg: 'var(--olo-color-dark)',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { type: 'separator', label: t('Intestazione') },

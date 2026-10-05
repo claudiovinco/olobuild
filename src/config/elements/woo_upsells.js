@@ -35,6 +35,14 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette (in una scheda prodotto): i prodotti «upsell» scelti nel prodotto in
+  // card quadrate, nome nel colore del testo e prezzo in quello del sito, come i Prodotti Correlati
+  // (senza colori i nomi prendevano il colore dei link).
+  partenza: {
+    title_color: 'var(--olo-color-text)',
+    price_color: 'var(--olo-color-primary)',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { type: 'separator', label: t('Intestazione') },

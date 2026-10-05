@@ -34,6 +34,15 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette (in una scheda prodotto): la foto quadrata con angoli morbidi, zoom
+  // al passaggio e lightbox al clic, e sotto le miniature della galleria.
+  partenza: {
+    lightbox: true,
+    border_radius: '14',
+    thumb_size: '72',
+    thumb_border_radius: '6',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'show_gallery', label: t('Mostra miniature galleria'), type: 'toggle' },

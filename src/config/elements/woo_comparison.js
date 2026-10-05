@@ -34,6 +34,14 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: una tabella per tre prodotti, con intestazione e prima colonna appena
+  // tinte del colore del sito. Si riempie col pulsante «Confronta» delle card prodotto; finché è
+  // vuota mostra la frase che lo spiega.
+  partenza: {
+    max_products: 3,
+    header_bg: 'color-mix(in srgb, var(--olo-color-primary) 10%, var(--olo-color-background))',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'max_products', label: t('Massimo prodotti'), type: 'range', min: 2, max: 6 },

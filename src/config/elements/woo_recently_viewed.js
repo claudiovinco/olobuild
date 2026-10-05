@@ -48,6 +48,15 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: quattro card quadrate in ombra coi prodotti appena guardati; finché
+  // la lista è vuota scrive una frase che dice cosa comparirà lì (senza, la tile non disegnava nulla).
+  partenza: {
+    limit: '4',
+    image_ratio: '1-1',
+    card_style: 'shadow',
+    empty_text: t('Qui ritroverai i prodotti che hai guardato di recente.'),
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { type: 'separator', label: t('Intestazione') },

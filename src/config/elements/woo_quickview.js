@@ -41,6 +41,14 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: da sola non disegna nulla, aggiunge il pulsante alle card prodotto
+  // della pagina. Qui solo i disaccordi fra PHP e config: l'etichetta in italiano («Quick View»
+  // era inglese) e lo stile contornato, quello che il renderer disegna davvero.
+  partenza: {
+    button_text: t('Vista rapida'),
+    button_style: 'outline',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { type: 'separator', label: t('Pulsante trigger') },

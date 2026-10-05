@@ -35,6 +35,16 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: l'icona del carrello col contatore nel colore del sito e il totale
+  // accanto; al passaggio si apre la tendina col contenuto. Coi colori vuoti dei default l'icona
+  // era invisibile (tratto vuoto) e il contatore senza fondo.
+  partenza: {
+    icon_color: 'var(--olo-color-text)',
+    text_color: 'var(--olo-color-text)',
+    badge_bg: 'var(--olo-color-primary)',
+    badge_color: 'var(--olo-color-primary-contrast)',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'icon', label: t('Icona'), type: 'select', options: [

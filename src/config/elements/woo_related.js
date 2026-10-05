@@ -36,6 +36,15 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette (in una scheda prodotto): un titolo che parla al cliente e quattro
+  // prodotti della stessa categoria in card quadrate, nome nel colore del testo e prezzo in
+  // quello del sito (senza colori i nomi prendevano il colore dei link).
+  partenza: {
+    heading_text: t('Potrebbero piacerti anche'),
+    title_color: 'var(--olo-color-text)',
+    price_color: 'var(--olo-color-primary)',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { type: 'separator', label: t('Intestazione') },

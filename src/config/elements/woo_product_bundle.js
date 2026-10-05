@@ -43,6 +43,16 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: mostra i prodotti scritti negli ID, che dipendono dal negozio (appena
+  // inserita chiede di scriverli). Qui solo i disaccordi fra PHP e config: titolo, pulsante,
+  // disposizione e gap.
+  partenza: {
+    bundle_title: t('Acquista insieme e risparmia'),
+    button_text: t('Aggiungi tutto al carrello'),
+    layout: 'grid',
+    gap: '24',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { type: 'separator', label: t('Prodotti bundle') },

@@ -63,6 +63,20 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: gli ultimi otto prodotti in due righe di card quadrate, col bollo
+  // dello sconto scuro sulla foto, il prezzo in saldo nel colore del sito e il pulsante
+  // «Aggiungi al carrello» pieno (i colori vuoti dei default lasciavano bollo e pulsante invisibili).
+  partenza: {
+    posts_per_page: '8',
+    image_ratio: '1-1',
+    title_color: 'var(--olo-color-text)',
+    price_color: 'var(--olo-color-text)',
+    sale_color: 'var(--olo-color-primary)',
+    badge_bg: 'var(--olo-color-dark)',
+    button_bg: 'var(--olo-color-primary)',
+    button_color: 'var(--olo-color-primary-contrast)',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { type: 'separator', label: t('Query prodotti') },

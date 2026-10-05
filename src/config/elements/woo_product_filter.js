@@ -39,6 +39,13 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: il pannello dei filtri del negozio (prezzo, categorie col conteggio,
+  // disponibilità) con «Applica filtri» nel colore del sito. Scioglie il disaccordo sul testo del
+  // pulsante fra PHP («Filtra») e config.
+  partenza: {
+    button_text: t('Applica filtri'),
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { type: 'separator', label: t('Filtri visibili') },

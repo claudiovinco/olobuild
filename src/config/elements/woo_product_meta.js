@@ -34,6 +34,13 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette (in una scheda prodotto): codice, categorie e tag su una riga sola,
+  // separati da un punto, con le etichette in evidenza e i link nel colore dei link.
+  partenza: {
+    layout: 'inline',
+    separator: '·',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'show_sku', label: t('Mostra SKU'), type: 'toggle' },

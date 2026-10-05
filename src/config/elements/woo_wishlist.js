@@ -43,6 +43,15 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: il cuore nel colore del sito col contatore dei prodotti salvati.
+  // Scioglie i disaccordi fra PHP e config (stile del pulsante, testo della lista vuota, card, gap).
+  partenza: {
+    style: 'icon',
+    empty_text: t('La tua wishlist è vuota'),
+    card_style: 'shadow',
+    gap: '24',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { type: 'separator', label: t('Pulsante wishlist') },

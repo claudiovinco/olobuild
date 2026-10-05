@@ -47,6 +47,14 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette (in una scheda prodotto): la foto principale su un fondo tenue con il
+  // bollo dello sconto, frecce, zoom e lightbox, e le miniature della galleria sotto. Scioglie il
+  // disaccordo sulla misura delle miniature fra PHP (72) e config (80).
+  partenza: {
+    thumbnail_size: '80',
+    border_radius: '14',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { type: 'separator', label: t('Immagine principale') },

@@ -29,6 +29,12 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: il percorso della pagina (Home » Negozio » Categoria » Prodotto) col
+  // separatore a doppia freccia, link nel colore dei link e pagina corrente più tenue.
+  partenza: {
+    separator: '>>',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'separator', label: t('Separatore'), type: 'select', options: [

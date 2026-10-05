@@ -35,6 +35,15 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette (in una scheda prodotto): il prezzo grande, quello pieno barrato
+  // quando è in saldo, lo scontato nel colore del sito (non nel rosso d'errore) e «IVA inclusa».
+  partenza: {
+    font_size: '28',
+    sale_color: 'var(--olo-color-primary)',
+    show_suffix: true,
+    suffix: t('IVA inclusa'),
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'show_regular', label: t('Mostra prezzo originale'), type: 'toggle' },

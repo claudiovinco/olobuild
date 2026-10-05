@@ -31,6 +31,12 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: il modulo numero d'ordine + email con un titolo nella voce del
+  // cliente, campi morbidi e pulsante nel colore del sito.
+  partenza: {
+    title: t('Dov\'è il mio ordine?'),
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'title', label: t('Titolo'), type: 'text' },

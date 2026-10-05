@@ -31,6 +31,13 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette (in una scheda prodotto in saldo): la pillola con lo sconto calcolato
+  // («-21%») nel colore del sito. Coi colori vuoti dei default era solo testo, senza fondo.
+  partenza: {
+    badge_bg: 'var(--olo-color-primary)',
+    badge_color: 'var(--olo-color-primary-contrast)',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'badge_text', label: t('Testo badge'), type: 'select', options: [

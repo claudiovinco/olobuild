@@ -34,6 +34,12 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette (in una scheda prodotto): il pallino verde con «Disponibile» e i pezzi
+  // in magazzino; sotto i 10 pezzi diventa «Solo N rimasti» nel colore d'avviso.
+  partenza: {
+    low_stock_threshold: '10',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'show_quantity', label: t('Mostra quantita'), type: 'toggle' },

@@ -38,6 +38,14 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: chi non ha fatto l'accesso vede il modulo di WooCommerce; da
+  // autenticato il saluto con l'avatar e l'area clienti con le voci in schede orizzontali (attiva
+  // nel colore del sito) sopra il contenuto. Non «Con sidebar»: la sua griglia a due colonne
+  // stringe in 260 px anche il modulo d'accesso di chi visita.
+  partenza: {
+    layout: 'tabs',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
   ],
