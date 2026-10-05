@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.516 - 2026-10-05 (fix)
+- Gli sfondi a motivo disegnato (onde, triangoli, esagoni, stelle, mattoni…) con un colore del tema non nascondono più il contenuto: il motivo sta sotto testi e tile, sopra il suo colore di fondo, che prima andava perso.
+
 ## v1.4.515 - 2026-10-05 (fix)
 - Inserendo una tile, il testo d'esempio (Lorem ipsum) va solo nei testi lunghi da leggere, come introduzioni e sottotitoli: non più in ID, chiavi API, prefissi o posizioni. Il Popup appena inserito torna a comparire, e il Counter Circle mostra il numero invece del testo d'esempio.
 
