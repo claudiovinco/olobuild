@@ -18,14 +18,17 @@ export default {
   type: 'overlaygrid',
   name: t('Overlay Grid'),
   icon: 'dashicons-grid-view',
-  category: 'interactive',
+  // Griglia di immagini con didascalia: con galleria e showcase in «Media».
+  category: 'media',
   defaults: {
     typography_preset: '',
     bg: { type: 'none' },
+    // Testi neutri e nessuna foto esterna (stessi default del PHP): senza immagine
+    // la card mostra il fondo scuro della palette e il testo resta leggibile.
     items: [
-      { id: 'og-1', image: 'https://images.unsplash.com/photo-1774192621035-20d11389f781?w=1200&q=75&auto=format&fit=crop', title: t('Suite & Camere'), subtitle: 'Eleganza in ogni dettaglio', link: '' },
-      { id: 'og-2', image: 'https://images.unsplash.com/photo-1760463502141-2b5166df169e?w=1200&q=75&auto=format&fit=crop', title: t('Bar & Lounge'), subtitle: 'Mixology d\'autore', link: '' },
-      { id: 'og-3', image: 'https://images.unsplash.com/photo-1731941465921-eb4285693713?w=1200&q=75&auto=format&fit=crop', title: t('Restaurant'), subtitle: 'Cucina contemporanea', link: '' },
+      { id: 'og-1', image: '', title: t('Servizi'), subtitle: t('Cosa possiamo fare per te'), link: '' },
+      { id: 'og-2', image: '', title: t('Progetti'), subtitle: t('Alcuni lavori recenti'), link: '' },
+      { id: 'og-3', image: '', title: t('Chi siamo'), subtitle: t('Persone, metodo, valori'), link: '' },
     ],
     columns: '3',
     columns_mobile: '1',
@@ -139,7 +142,8 @@ export default {
       { value: 'editorial-grid',   label: t('Editorial Grid (default)') },
       { value: 'minimal-square',   label: t('Minimal Square (1:1)') },
       { value: 'magazine-mosaic',  label: t('Magazine Mosaic') },
-      { value: 'card-modern',      label: t('Card Modern (caption sotto)') },
+      // Il testo resta sopra la foto: «(caption sotto)» prometteva un'altra cosa.
+      { value: 'card-modern',      label: t('Card Modern') },
       { value: 'duotone-portfolio',label: t('Duotone Portfolio (b/n→colore)') },
       { value: 'liquid-glass',     label: t('Liquid Glass (Vision Pro)') },
       { value: 'neon-cyber',       label: t('Neon Cyberpunk (Tron)') },
@@ -264,7 +268,7 @@ export default {
           condition: { field: 'card_type', op: 'eq', value: 'icon' } },
         { key: 'card_bg', label: t('Sfondo card'), type: 'color',
           condition: { field: 'card_type', op: 'in', value: ['text', 'icon', 'graphic'] },
-          description: t('Sfondo della card non-immagine. Vuoto = navy scuro.') },
+          description: t('Sfondo della card non-immagine. Vuoto = colore scuro della palette.') },
         { key: 'item_title_color', label: t('Colore titolo (override)'), type: 'color',
           description: t('Vuoto = usa il colore globale impostato sotto.') },
         { key: 'item_subtitle_color', label: t('Colore sottotitolo (override)'), type: 'color',
@@ -301,8 +305,10 @@ export default {
       ]},
 
     { type: 'separator', label: t('Ribbon — colori') },
-    { key: 'ribbon_bg', label: t('Sfondo ribbon'), type: 'color' },
-    { key: 'ribbon_color', label: t('Testo ribbon'), type: 'color' },
+    { key: 'ribbon_bg', label: t('Sfondo ribbon'), type: 'color',
+      description: t('Vuoto = colore primario della palette.') },
+    { key: 'ribbon_color', label: t('Testo ribbon'), type: 'color',
+      description: t('Vuoto = colore di contrasto del primario.') },
 
     ...shadowField,
     ...wowEffectsFields(),

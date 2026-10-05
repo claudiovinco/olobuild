@@ -9,12 +9,15 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
     protected $type     = 'overlaygrid';
     protected $name     = 'Overlay Grid';
     protected $icon     = 'dashicons-grid-view';
-    protected $category = 'interactive';
+    // Griglia di immagini con didascalia: sta in «Media» con galleria e showcase
+    // (prima in «Interattivo», dove non la cercava nessuno).
+    protected $category = 'media';
+    // Stessi testi di partenza del config (overlaygrid.js): neutri, senza foto.
     protected $defaults = [
         'items' => [
-            [ 'id' => 'og-1', 'image' => '', 'title' => 'Elemento 1', 'subtitle' => '', 'link' => '' ],
-            [ 'id' => 'og-2', 'image' => '', 'title' => 'Elemento 2', 'subtitle' => '', 'link' => '' ],
-            [ 'id' => 'og-3', 'image' => '', 'title' => 'Elemento 3', 'subtitle' => '', 'link' => '' ],
+            [ 'id' => 'og-1', 'image' => '', 'title' => 'Servizi', 'subtitle' => 'Cosa possiamo fare per te', 'link' => '' ],
+            [ 'id' => 'og-2', 'image' => '', 'title' => 'Progetti', 'subtitle' => 'Alcuni lavori recenti', 'link' => '' ],
+            [ 'id' => 'og-3', 'image' => '', 'title' => 'Chi siamo', 'subtitle' => 'Persone, metodo, valori', 'link' => '' ],
         ],
         'columns'             => '3',
         'columns_mobile'      => '1',
@@ -31,8 +34,9 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
         'hover_effect'        => 'zoom',
         'hover_overlay'       => 'always',
         'ribbon_position'     => 'top-right',
-        'ribbon_bg'           => '#e11d48',
-        'ribbon_color'        => '#ffffff',
+        // Vuoti = colori della palette (primario + il suo contrasto), come il config.
+        'ribbon_bg'           => '',
+        'ribbon_color'        => '',
         'shadow'              => 'sm',
 
         'preset'              => 'editorial-grid',
@@ -101,7 +105,11 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
 
         $items = is_array( $s['items'] ) ? $s['items'] : [];
         if ( empty( $items ) ) {
-            return '<div class="olo-overlaygrid" style="padding:40px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);">No items added</div>';
+            // L'avviso serve solo a chi costruisce la pagina: ai visitatori niente.
+            if ( empty( $s['_builder_mode'] ) ) {
+                return '';
+            }
+            return '<div class="olo-overlaygrid" style="padding:2.5em;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);">' . esc_html( olobuild_t( 'Nessun elemento aggiunto' ) ) . '</div>';
         }
 
         $columns   = absint( $s['columns'] ) ?: 3;
@@ -196,8 +204,10 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
 
         // Ribbon
         $ribbon_position = esc_attr( $s['ribbon_position'] ?? 'top-right' );
-        $ribbon_bg       = $this->safe_color_css( $s['ribbon_bg'] ?? '#e11d48' );
-        $ribbon_color    = $this->safe_color_css( $s['ribbon_color'] ?? '#ffffff' );
+        // Vuoto (il default del config) = colori della palette. Prima usciva
+        // `background: ;` e il nastrino delle tile nuove restava senza fondo.
+        $ribbon_bg       = $this->safe_color_css( $s['ribbon_bg'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
+        $ribbon_color    = $this->safe_color_css( $s['ribbon_color'] ?? '' ) ?: 'var(--olo-color-primary-contrast, #ffffff)';
 
         $uid = 'mos-og-' . wp_rand( 10000, 99999 );
 
@@ -278,7 +288,9 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-og-cta--arrow .olo-og-cta__arrow { transition: transform 0.25s ease; }
             .<?php echo $uid; ?> .uk-panel:hover .olo-og-cta--arrow .olo-og-cta__arrow,
             .<?php echo $uid; ?> a:hover .olo-og-cta--arrow .olo-og-cta__arrow { transform: translateX(4px); }
-            .<?php echo $uid; ?> .olo-og-cta--pill { background: var(--olo-color-primary, #e1474f); color: #fff; border-radius: 999px; padding: 8px 18px; }
+            .<?php echo $uid; ?> .olo-og-cta--pill { background: var(--olo-color-primary, #e1474f); color: var(--olo-color-primary-contrast, #fff); border-radius: 999px; padding: 8px 18px; }
+            /* Card con link: il fuoco da tastiera si vede */
+            .<?php echo $uid; ?> a.uk-display-block:focus-visible { outline: 2px solid var(--olo-color-primary, #e1474f); outline-offset: 2px; }
 
             /* Card non-immagine (text/icon/graphic) — niente placeholder grigio */
             .<?php echo $uid; ?> .olo-og-card { display:flex; flex-direction:column; align-items:flex-start; padding:24px; border:1px solid rgba(255,255,255,0.12); box-sizing:border-box; }
@@ -295,12 +307,12 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
                 margin: 0;
             }
             .<?php echo $uid; ?> .olo-og-overlay--bare p { color: <?php echo $subtitle_clr; ?>; font-size: <?php echo (int) $subtitle_sz; ?>px; margin: 6px 0 0; }
-            .<?php echo $uid; ?> .olo-og-card__icon { display:inline-flex; align-items:center; justify-content:center; color:#B9FBE7; }
+            .<?php echo $uid; ?> .olo-og-card__icon { display:inline-flex; align-items:center; justify-content:center; color:var(--olo-color-accent, #B9FBE7); }
             .<?php echo $uid; ?> .olo-og-card__icon svg { width:32px; height:32px; }
             .<?php echo $uid; ?> .olo-og-card__icon [uk-icon], .<?php echo $uid; ?> .olo-og-card__icon .olo-lucide-icon { color:inherit; }
             .<?php echo $uid; ?> .olo-og-card__graphic { display:grid; grid-template-columns:repeat(4, 1fr); gap:6px; width:120px; }
-            .<?php echo $uid; ?> .olo-og-card__graphic > span { display:block; aspect-ratio:1/1; border-radius:3px; background:#B9FBE7; }
-            .<?php echo $uid; ?> .olo-og-card__graphic > span:nth-child(3n+2) { background:#9DF5D6; }
+            .<?php echo $uid; ?> .olo-og-card__graphic > span { display:block; aspect-ratio:1/1; border-radius:3px; background:var(--olo-color-accent, #B9FBE7); }
+            .<?php echo $uid; ?> .olo-og-card__graphic > span:nth-child(3n+2) { background:color-mix(in srgb, var(--olo-color-accent, #B9FBE7) 88%, var(--olo-color-dark, #0E1B2E)); }
             .<?php echo $uid; ?> .olo-og-card__graphic > span:nth-child(4n+1) { opacity:0.55; }
             .<?php echo $uid; ?> .olo-og-card__body { color: <?php echo $subtitle_clr; ?>; font-size: <?php echo (int) $subtitle_sz; ?>px; line-height:1.5; margin:6px 0 0; }
 
@@ -312,7 +324,9 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
             <?php
             // V3.26.0 — preset extras
             echo $this->get_preset_extra_css( $preset_id, '.' . $uid, $s );
-            echo $this->build_wow_effects_css( $s, '.' . $uid, '.olo-grid-title' );
+            // Il selettore del titolo deve esistere nel markup (classe olo-og-title sul
+            // titolo di ogni card): con '.olo-grid-title' bagliore e prompt non comparivano.
+            echo $this->build_wow_effects_css( $s, '.' . $uid, '.olo-og-title' );
             ?>
             <?php if ( $masonry ) :
                 $gap_px = [ 'collapse' => 0, 'small' => 15, 'medium' => 30, 'large' => 40 ];
@@ -339,9 +353,11 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
                     $link_url    = $has_link ? esc_url( $item['link'] ) : '';
                     $toggle_cls  = $needs_toggle ? ' uk-transition-toggle' : '';
                     $wrapper_tag = $has_link ? 'a' : 'div';
+                    // Focalizzabile solo la card con link (il link lo è già di suo):
+                    // una card senza link non è un comando, il tab non deve fermarcisi.
                     $wrapper_attr = $has_link
-                        ? 'href="' . $link_url . '" class="uk-link-reset uk-display-block' . $toggle_cls . '" style="overflow:hidden;position:relative;" tabindex="0"'
-                        : 'class="uk-panel' . $toggle_cls . '" style="overflow:hidden;position:relative;" tabindex="0"';
+                        ? 'href="' . $link_url . '" class="uk-link-reset uk-display-block' . $toggle_cls . '" style="overflow:hidden;position:relative;"'
+                        : 'class="uk-panel' . $toggle_cls . '" style="overflow:hidden;position:relative;"';
                     $cell_cls = $masonry ? trim( ( ! empty( $item['tall'] ) ? 'olo-og-tall ' : '' ) . ( ! empty( $item['wide'] ) ? 'olo-og-wide' : '' ) ) : '';
                 ?>
                     <div<?php echo $cell_cls ? ' class="' . esc_attr( $cell_cls ) . '"' : ''; ?>>
@@ -362,11 +378,11 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
                                           // cornice, altrimenti con una proporzione scelta le celle
                                           // senza foto resterebbero alte quanto prima e sfalserebbero
                                           // la griglia. ?>
-                                    <div class="olo-og-ph" style="<?php echo esc_attr( $img_box ); ?>background:#1F2937;width:100%;"></div>
+                                    <div class="olo-og-ph" style="<?php echo esc_attr( $img_box ); ?>background:var(--olo-color-dark, #1F2937);width:100%;"></div>
                                 <?php endif; ?>
                             <?php else :
                                 // Card piena (text/icon/graphic): sfondo card + contenuto in alto.
-                                $card_bg_css = $this->safe_color_css( $item['card_bg'] ?? '' ) ?: '#0E1B2E';
+                                $card_bg_css = $this->safe_color_css( $item['card_bg'] ?? '' ) ?: 'var(--olo-color-dark, #0E1B2E)';
                             ?>
                                 <?php // Anche le card non-immagine seguono la cornice: in una griglia
                                       // mista, se solo le foto prendessero la proporzione le celle
@@ -405,7 +421,7 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
                             $ov_bg_class = ( $card_type === 'image' ) ? 'uk-' . esc_attr( $style ) : 'olo-og-overlay--bare';
                             ?>
                             <div class="<?php echo $ov_bg_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- 'uk-overlay-primary'|'uk-overlay-default' (esc_attr) for image cards, fixed literal otherwise. ?> uk-position-<?php echo $position; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $position esc_attr()'d at assignment; $text_class/$pad_class/$overlay_class are fixed UIkit class literals (esc_attr()'d parts). ?> uk-panel<?php echo $text_class . $pad_class . $overlay_class; ?>">
-                                <<?php echo $title_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $title_tag whitelisted via in_array() above; tfx_attrs() returns internally-built class/data fragments; $item_t_style built with esc_attr() above. ?> class="uk-margin-remove<?php echo $ogt_cls; ?>"<?php echo $ogt_data; ?><?php echo $item_t_style; ?>><?php echo esc_html( $item['title'] ?? '' ); ?></<?php echo $title_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- whitelisted via in_array() above. ?>>
+                                <<?php echo $title_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $title_tag whitelisted via in_array() above; tfx_attrs() returns internally-built class/data fragments; $item_t_style built with esc_attr() above. ?> class="olo-og-title uk-margin-remove<?php echo $ogt_cls; ?>"<?php echo $ogt_data; ?><?php echo $item_t_style; ?>><?php echo esc_html( $item['title'] ?? '' ); ?></<?php echo $title_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- whitelisted via in_array() above. ?>>
                                 <?php if ( ! empty( $item['subtitle'] ) ) : ?>
                                     <p class="uk-margin-small-top<?php echo $ogs_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() returns internally-built class/data fragments; $item_s_style built with esc_attr() above. ?>"<?php echo $ogs_data; ?><?php echo $item_s_style; ?>><?php echo esc_html( $item['subtitle'] ); ?></p>
                                 <?php endif; ?>
