@@ -86,17 +86,29 @@ class Olobuild_Shapedivider_Tile extends Olobuild_Tile_Base {
         $resp_mobile = trim( $s['responsive_height_mobile'] );
 
         // Build CSS transforms
+        //
+        // I tracciati riempiono la parte BASSA del viewBox: la forma piena sta
+        // contro il lato inferiore del disegno. In «Alto» il divisore esce sopra
+        // la sezione e quel lato tocca la sezione: giusto cosi'. In «Basso» esce
+        // sotto, il lato che tocca la sezione e' quello alto, e senza ribaltarlo
+        // la forma restava staccata dalla sua sezione, a testa in giu'. In
+        // «Basso» il ribaltamento e' quindi la posizione normale, e «Specchia
+        // verticale» lo toglie.
+        $flip_y     = ( $position === 'bottom' ) ? ! $flip_v : $flip_v;
         $transforms = [];
         if ( $flip_h ) {
             $transforms[] = 'scaleX(-1)';
         }
-        if ( $flip_v ) {
+        if ( $flip_y ) {
             $transforms[] = 'scaleY(-1)';
         }
         $transform_css = ! empty( $transforms ) ? 'transform:' . implode( ' ', $transforms ) . ';' : '';
 
-        // Width offset for >100%
-        $left_offset = '';
+        // Bordo sinistro SEMPRE dichiarato: senza, un divisore largo 100% partiva
+        // dalla sua posizione statica (dentro il padding del genitore) e
+        // sporgeva a destra lasciando un gradino a sinistra. Oltre il 100% si
+        // centra.
+        $left_offset = 'left:0;';
         if ( $width > 100 ) {
             $offset_pct = -( $width - 100 ) / 2;
             $left_offset = 'left:' . $offset_pct . '%;';
