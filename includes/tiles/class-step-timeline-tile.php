@@ -239,7 +239,7 @@ class Olobuild_StepTimeline_Tile extends Olobuild_Tile_Base {
                                 <?php if ( $m_type === 'image' && $m_image ) : ?>
                                     <img src="<?php echo esc_url( $m_image ); ?>" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:<?php echo esc_attr( $obj_pos ); ?>" />
                                 <?php elseif ( $m_type === 'terminal' && $m_content ) : ?>
-                                    <pre style="margin:0;width:100%;font-family:<?php echo esc_attr( $mono ); ?>;font-size:11px;line-height:1.6;color:<?php echo esc_attr( $m_color ); ?>;white-space:pre-wrap"><?php echo esc_html( $m_content ); ?></pre>
+                                    <pre style="margin:0;width:100%;font-family:<?php echo esc_attr( $mono ); ?>;font-size:11px;line-height:1.6;color:<?php echo esc_attr( $m_color ); ?>;white-space:pre-wrap;padding:0;border:0;border-radius:0;background:none"><?php echo esc_html( $m_content ); ?></pre>
                                 <?php else : ?>
                                     <!-- Placeholder visivo: 3 barre stilizzate -->
                                     <div style="width:100%;display:flex;flex-direction:column;gap:8px;opacity:.7">

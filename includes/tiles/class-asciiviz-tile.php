@@ -173,6 +173,10 @@ class Olobuild_Asciiviz_Tile extends Olobuild_Tile_Base {
                 color: <?php echo $color; ?>;
                 white-space: pre;
                 margin: 0;
+                /* il <pre> di UIkit porta bordo, fondo bianco e raggio */
+                border: 0;
+                border-radius: 0;
+                background: none;
                 padding: <?php echo (int) $pad_sides['top']; ?>px <?php echo (int) $pad_sides['right']; ?>px 8px <?php echo (int) $pad_sides['left']; ?>px;
                 overflow: hidden;
                 <?php if ( $glow > 0 ) : ?>

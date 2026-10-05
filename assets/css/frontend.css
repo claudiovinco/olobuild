@@ -1543,6 +1543,11 @@ html:has(.olo-frontend-grid) {
   border-color: var(--olo-color-primary, #6366F1);
   color: #fff;
 }
+/* Grid filter: Pills (uk-subnav-pill) — la pillola attiva di UIkit è blu #1e87f0 */
+.olo-grid .uk-subnav-pill > .uk-active > a {
+  background-color: var(--olo-color-primary, #e1474f);
+  color: var(--olo-color-primary-contrast, #fff);
+}
 
 /* ── Minimal card style (Grid + PostGrid) ── */
 .olo-card-minimal {

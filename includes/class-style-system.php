@@ -1810,6 +1810,11 @@ class Olobuild_Style_System {
             $css .= ".olo-template a:hover { text-decoration: var(--olo-link-hover-decoration); }\n";
         }
         $css .= ".olo-template .uk-text-muted { color: var(--olo-color-text-muted) !important; }\n";
+        // UIkit colora em (rosa #f0506e, un quarto «primario») e ins (fondo giallo, i prezzi
+        // scontati di Woo): nel template seguono il testo. :where() = una classe sola, quindi una
+        // tile che colora il suo corsivo (accento del titolo…) vince sempre. Gemello in styles.js.
+        $css .= ".olo-template :where(em) { color: inherit; }\n";
+        $css .= ".olo-template :where(ins) { background: none; color: inherit; text-decoration: none; }\n";
 
         // Buttons
         $css .= "\n/* Button overrides */\n";
@@ -1822,7 +1827,11 @@ class Olobuild_Style_System {
 
         // Form fields
         $css .= "\n/* Form field overrides */\n";
-        $css .= ".olo-template input[type=\"text\"],\n.olo-template input[type=\"email\"],\n.olo-template input[type=\"tel\"],\n.olo-template input[type=\"number\"],\n.olo-template input[type=\"password\"],\n.olo-template input[type=\"url\"],\n.olo-template input[type=\"date\"],\n.olo-template input[type=\"time\"],\n.olo-template textarea,\n.olo-template select {\n";
+        // :where(): specificità di una classe. Lo stile dei Moduli vale per i campi che la tile
+        // non stila; quelli di una tile (Form, Login, Newsletter…) seguono i suoi controlli.
+        // Prima input[type=…] (0,2,1) batteva la tile (0,2,0) mentre textarea e select (0,1,1)
+        // perdevano: lo stesso modulo usciva con due stili e i controlli dei campi non agivano.
+        $css .= ".olo-template :where(input[type=\"text\"], input[type=\"email\"], input[type=\"tel\"], input[type=\"number\"], input[type=\"password\"], input[type=\"url\"], input[type=\"date\"], input[type=\"time\"], textarea, select) {\n";
         $css .= "  background: var(--olo-form-field-bg);\n";
         $css .= "  border: var(--olo-form-field-border);\n";
         $css .= "  border-radius: var(--olo-form-field-radius);\n";
@@ -1842,6 +1851,8 @@ class Olobuild_Style_System {
 
         // Alerts
         $css .= "\n/* Alert overrides */\n";
+        // primary = l'avviso «Info» della tile Avviso: UIkit lo fa blu #1e87f0 su #d8eafc
+        $css .= ".olo-template .uk-alert-primary { background: color-mix(in srgb, var(--olo-color-info) 10%, transparent); color: var(--olo-color-info); }\n";
         $css .= ".olo-template .uk-alert-success { color: var(--olo-color-success); }\n";
         $css .= ".olo-template .uk-alert-warning { color: var(--olo-color-warning); }\n";
         $css .= ".olo-template .uk-alert-danger { color: var(--olo-color-danger); }\n";

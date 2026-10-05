@@ -286,10 +286,14 @@ export const useStylesStore = defineStore('styles', {
       // Links, buttons, etc.
       css += '.olo-template a { color: var(--olo-color-link); }\n';
       css += '.olo-template .uk-text-muted { color: var(--olo-color-text-muted) !important; }\n';
+      // em rosa e ins giallo di UIkit: seguono il testo (gemello di generate_css)
+      css += '.olo-template :where(em) { color: inherit; }\n';
+      css += '.olo-template :where(ins) { background: none; color: inherit; text-decoration: none; }\n';
       css += '.olo-template .uk-button-primary { background-color: var(--olo-color-primary) !important; color: var(--olo-color-primary-contrast) !important; border-radius: var(--olo-border-radius); }\n';
       css += '.olo-template .uk-button-secondary { background-color: var(--olo-color-secondary) !important; color: var(--olo-color-secondary-contrast) !important; border-radius: var(--olo-border-radius); }\n';
       css += '.olo-template .uk-button-danger { background-color: var(--olo-color-danger) !important; color: #fff !important; border-radius: var(--olo-border-radius); }\n';
       css += '.olo-template .uk-button-default { border-radius: var(--olo-border-radius); }\n';
+      css += '.olo-template .uk-alert-primary { background: color-mix(in srgb, var(--olo-color-info) 10%, transparent); color: var(--olo-color-info); }\n';
       css += '.olo-template .uk-alert-success { color: var(--olo-color-success); }\n';
       css += '.olo-template .uk-alert-warning { color: var(--olo-color-warning); }\n';
       css += '.olo-template .uk-alert-danger { color: var(--olo-color-danger); }\n';

@@ -198,6 +198,8 @@ class Olobuild_Switcher_Tile extends Olobuild_Tile_Base {
                 font-weight: <?php echo $tab_fw; ?>;
                 line-height: 1.4;
                 color: <?php echo $tab_color_inact; ?>;
+                /* la scheda attiva di UIkit ha il bordo blu: qui lo colora solo l'indicatore scelto */
+                border-color: transparent;
                 text-transform: none;
                 text-decoration: none;
                 border-radius: <?php echo $tab_rad_css; ?>;

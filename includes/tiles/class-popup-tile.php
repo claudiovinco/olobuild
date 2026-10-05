@@ -356,11 +356,11 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
             // del tema può renderlo invisibile sul fondo della pagina).
             $btn_color = $this->safe_color_css( $s['button_color'] ?? '' );
             if ( $btn_color || ! empty( $s['button_underline'] ) ) : ?>
-            .olo-popup-<?php echo esc_attr( $uid ); ?> > button {
+            .olo-popup-<?php echo esc_attr( $uid ); ?> > button.uk-button {
                 <?php if ( $btn_color ) : ?>color: <?php echo $btn_color; ?>;<?php endif; ?>
                 <?php if ( ! empty( $s['button_underline'] ) ) : ?>text-decoration: underline; text-underline-offset: 3px;<?php endif; ?>
             }
-            .olo-popup-<?php echo esc_attr( $uid ); ?> > button:hover {
+            .olo-popup-<?php echo esc_attr( $uid ); ?> > button.uk-button:hover {
                 <?php if ( $btn_color ) : ?>color: <?php echo $btn_color; ?>; opacity: .85;<?php endif; ?>
             }
             <?php endif; ?>
@@ -471,13 +471,18 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
                 text-shadow: 0 0 8px rgba(<?php echo $glow_rgb; ?>,0.6);
                 <?php endif; ?>
             }
-            .olo-popup-<?php echo esc_attr( $uid ); ?> > button {
+            /* .uk-button nel selettore: la regola globale .olo-template .uk-button (0,2,0) batteva
+               raggio, maiuscolo e spaziatura scelti qui (prima (0,1,1)). */
+            .olo-popup-<?php echo esc_attr( $uid ); ?> > button.uk-button {
                 border-radius: <?php echo $btn_radius_css; ?>;
                 font-weight: <?php echo $btn_weight; ?>;
                 <?php if ( $btn_upper ) : ?>text-transform: uppercase;<?php endif; ?>
                 letter-spacing: <?php echo (float) $btn_ls; ?>em;
                 transition: all 0.25s ease;
             }
+            /* «Dimensione pulsante»: il padding globale dei pulsanti copriva .uk-button-small/large */
+            .olo-popup-<?php echo esc_attr( $uid ); ?> > button.uk-button-small { font-size: .875rem; padding: 6px 16px; line-height: 1.4; }
+            .olo-popup-<?php echo esc_attr( $uid ); ?> > button.uk-button-large { font-size: 1.0625rem; padding: 16px 36px; line-height: 1.4; }
 
             <?php
             // Effetti avanzati che richiedono CSS dinamico (animation keyframes, ::before/::after,
