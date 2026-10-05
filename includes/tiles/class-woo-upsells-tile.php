@@ -70,9 +70,13 @@ class Olobuild_Woo_Upsells_Tile extends Olobuild_Tile_Base {
         $cols_mobile  = max( 1, min( 2, absint( $s['columns_mobile'] ) ) );
         $gap          = absint( $s['gap'] );
 
-        // Colors
-        $title_color = $this->safe_color_css( $s['title_color'] );
-        $price_color = $this->safe_color_css( $s['price_color'] );
+        // Colors — vuoti nei default: senza riserva usciva «color: ;», scartato dal browser, e i
+        // nomi dei prodotti prendevano il colore dei link del tema. Riserva: il testo del sito (il
+        // prezzo restava già di quel colore, ereditandolo). Il titolo della sezione (un h2) teneva
+        // il colore dei titoli del tema: per lui niente riserva, il colore si scrive solo se c'è.
+        $heading_color = $this->safe_color_css( $s['title_color'] );
+        $title_color   = $heading_color ?: 'var(--olo-color-text, #111827)';
+        $price_color   = $this->safe_color_css( $s['price_color'] ) ?: 'var(--olo-color-text, #111827)';
 
         // Card style
         $card_style = $s['card_style'];
@@ -104,7 +108,7 @@ class Olobuild_Woo_Upsells_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-ups-heading {
                 font-size: 22px;
                 font-weight: 700;
-                color: <?php echo $title_color; ?>;
+                <?php if ( $heading_color !== '' ) : ?>color: <?php echo $heading_color; ?>;<?php endif; ?>
                 margin: 0 0 20px;
             }
             .<?php echo $uid; ?> .olo-ups-grid {
