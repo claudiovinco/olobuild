@@ -29,12 +29,12 @@ export default {
     typography_preset: '',
 
     // ── Items ──
+    // Tappe neutre, uguali ai default del PHP. Nessuno stato: lo dichiara la tappa.
     items: [
-      { id: 'tl-1', title: t('Prima riga di codice'), tag: t('Fondazione'), description: t('Il prototipo del builder: drag-and-drop nativo in WordPress, senza shortcode.'), date: '2019', image: '', video: '', icon: 'star', category: 'primary', icon_color: '' },
-      { id: 'tl-2', title: t('Libreria tile v1'), tag: t('Prodotto'), description: t('40 tile native e il sistema di colori globali. Pubblicati i primi mille siti.'), date: '2021', image: '', video: '', icon: 'grid', category: 'accent', icon_color: '' },
-      { id: 'tl-3', title: t('Aurora, bagliori, animazioni'), tag: t('Effetti'), description: t('Sfondi generativi e transizioni native. La libreria supera le 150 tile.'), date: '2023', image: '', video: '', icon: 'star', category: 'success', icon_color: '' },
-      { id: 'tl-4', title: t('Linguaggio "bello & coerente"'), tag: t('Sistema'), description: t('Token globali, controlli inspector e tile allineati a un\'unica grammatica.'), date: '2025', image: '', video: '', icon: 'settings', category: 'secondary', icon_color: '' },
-      { id: 'tl-5', title: t('240 tile, un solo standard'), tag: t('Futuro'), description: t('Ogni categoria curata, ogni controllo coerente. La libreria completa.'), date: '2026', image: '', video: '', icon: 'flag', category: 'primary', icon_color: '' },
+      { id: 'tl-1', title: t('La fondazione'), tag: t('Inizio'), description: t('Il progetto prende forma: un\'idea, poche persone e tanta voglia di fare.'), date: '2015', image: '', video: '', icon: 'star', category: 'primary', icon_color: '', status: '' },
+      { id: 'tl-2', title: t('La prima sede'), tag: t('Crescita'), description: t('Uno spazio tutto nostro per accogliere clienti e collaboratori.'), date: '2018', image: '', video: '', icon: 'location', category: 'accent', icon_color: '', status: '' },
+      { id: 'tl-3', title: t('Un nuovo servizio'), tag: t('Novità'), description: t('L\'offerta si amplia per rispondere a nuove esigenze.'), date: '2021', image: '', video: '', icon: 'bolt', category: 'success', icon_color: '', status: '' },
+      { id: 'tl-4', title: t('Oggi'), tag: t('Presente'), description: t('Un gruppo affiatato e lo sguardo rivolto ai prossimi traguardi.'), date: '2024', image: '', video: '', icon: 'flag', category: 'secondary', icon_color: '', status: '' },
     ],
 
     // ── 10 dimensioni SUPER ──
@@ -47,7 +47,7 @@ export default {
     tl_color: 'cat',        // cat · mono
     tl_media: 'on',         // on · off
     tl_density: 'comfy',    // comfy · compact
-    tl_line: 'scroll',      // scroll (roadmap) · solid (statico)
+    tl_line: 'solid',       // solid (statico) · scroll (si riempie scorrendo, senza stati)
     tl_transparent: false,  // sfondo blocco trasparente (ignora il bg del tema)
 
     // ── Personalizzazione (override; '' o 0 = usa il default della variante/tema) ──
@@ -79,8 +79,18 @@ export default {
         { key: 'tag', label: t('Etichetta / fase'), type: 'text' },
         { key: 'description', label: t('Descrizione'), type: 'textarea' },
         { key: 'date', label: t('Data / anno'), type: 'text' },
-        { key: 'image', label: t('Immagine'), type: 'image' },
-        { key: 'video', label: t('Video'), type: 'media' },
+        // Lo stato lo dichiara la tappa: prima «Fatto / In corso / In arrivo» si
+        // calcolava dalla posizione di scorrimento della pagina.
+        { key: 'status', label: t('Stato'), type: 'select', options: [
+          { value: '',        label: t('Nessuno') },
+          { value: 'done',    label: t('Fatto') },
+          { value: 'current', label: t('In corso') },
+          { value: 'next',    label: t('In arrivo') },
+        ], description: t('Etichetta accanto alla data, in ogni disposizione. «Nessuno» non mostra niente.') },
+        { key: 'image', label: t('Immagine'), type: 'image',
+          description: t('Compare in ogni disposizione tranne la Scaletta; in Alternato, Una colonna e Orizzontale solo con «Media nelle card» su Immagini.') },
+        { key: 'video', label: t('Video'), type: 'media',
+          description: t('YouTube, Vimeo o file video: prende il posto dell\'immagine. Non compare nella Scaletta.') },
         { key: 'icon', label: t('Icona nodo'), type: 'icon' },
         { key: 'category', label: t('Categoria (colore)'), type: 'select', options: [
           { value: 'primary',   label: t('Primario') },
@@ -91,7 +101,7 @@ export default {
           { value: 'info',      label: t('Info') },
         ]},
       ],
-      newItemDefaults: { title: t('Nuovo evento'), tag: t('Tappa'), description: t('Descrizione evento.'), date: '', image: '', video: '', icon: 'star', category: 'primary', icon_color: '' },
+      newItemDefaults: { title: t('Nuovo evento'), tag: t('Tappa'), description: t('Descrizione evento.'), date: '', image: '', video: '', icon: 'star', category: 'primary', icon_color: '', status: '' },
       itemLabel: 'Evento',
     },
 
@@ -127,10 +137,11 @@ export default {
 
     // ── Stato linea / Ingresso ──
     { type: 'separator', label: t('Animazione') },
-    { key: 'tl_line', label: t('Filo + stato'), type: 'select', options: [
-      { value: 'scroll', label: t('Scroll + roadmap (Fatto/In corso/In arrivo)') },
+    { key: 'tl_line', label: t('Riempimento del filo'), type: 'select', options: [
       { value: 'solid',  label: t('Statico') },
-    ]},
+      { value: 'scroll', label: t('Si riempie scorrendo') },
+    ], description: t('«Si riempie scorrendo» colora filo e nodi man mano che la pagina scorre (solo Alternato e Una colonna). Gli stati delle tappe si scelgono in ogni voce.'),
+      condition: { field: 'tl_layout', op: 'in', value: ['alt', 'one', '', null, undefined] } },
     { key: 'tl_reveal', label: t('Ingresso card'), type: 'select', options: [
       { value: 'sides',   label: t('Lati') },
       { value: 'bloom',   label: t('Sboccia') },

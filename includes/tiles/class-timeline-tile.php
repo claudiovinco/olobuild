@@ -11,7 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * (sides·bloom·unroll·slot) · Tema (paper·night·neon·blue) · Card
  * (bubble·glass·polaroid·ticket) · Filo (solid2·dash·dot·comet) · Nodo
  * (icon·dot·num·year) · Colore (cat·mono) · Media (on·off) · Densità
- * (comfy·compact) · Stato (scroll-roadmap·solid).
+ * (comfy·compact) · Riempimento del filo (solid·scroll). Lo stato (fatto · in corso ·
+ * in arrivo) lo dichiara ogni tappa nel campo `status`: non si calcola dallo scorrimento.
  *
  * CSS condiviso col canvas Vue: assets/css/timeline-super.css (namespace .olo-tlsuper),
  * stampato una sola volta per pagina. Runtime JS scoped per istanza (no &&/|| —
@@ -24,13 +25,13 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
     protected $icon     = 'dashicons-backup';
     protected $category = 'interactive';
 
+    // Tappe neutre, uguali al config (timeline.js). Nessuno stato: lo dichiara la tappa.
     protected $defaults = [
         'items' => [
-            [ 'title' => 'Prima riga di codice', 'tag' => 'Fondazione', 'description' => 'Il prototipo del builder: drag-and-drop nativo in WordPress.', 'date' => '2019', 'image' => '', 'video' => '', 'icon' => 'star', 'category' => 'primary', 'icon_color' => '' ],
-            [ 'title' => 'Libreria tile v1', 'tag' => 'Prodotto', 'description' => '40 tile native e il sistema di colori globali.', 'date' => '2021', 'image' => '', 'video' => '', 'icon' => 'grid', 'category' => 'accent', 'icon_color' => '' ],
-            [ 'title' => 'Aurora, bagliori, animazioni', 'tag' => 'Effetti', 'description' => 'Sfondi generativi e transizioni native.', 'date' => '2023', 'image' => '', 'video' => '', 'icon' => 'star', 'category' => 'success', 'icon_color' => '' ],
-            [ 'title' => 'Linguaggio bello & coerente', 'tag' => 'Sistema', 'description' => 'Token globali e controlli inspector allineati.', 'date' => '2025', 'image' => '', 'video' => '', 'icon' => 'settings', 'category' => 'secondary', 'icon_color' => '' ],
-            [ 'title' => '240 tile, un solo standard', 'tag' => 'Futuro', 'description' => 'Ogni categoria curata, un solo standard.', 'date' => '2026', 'image' => '', 'video' => '', 'icon' => 'flag', 'category' => 'primary', 'icon_color' => '' ],
+            [ 'title' => 'La fondazione', 'tag' => 'Inizio', 'description' => 'Il progetto prende forma: un\'idea, poche persone e tanta voglia di fare.', 'date' => '2015', 'image' => '', 'video' => '', 'icon' => 'star', 'category' => 'primary', 'icon_color' => '', 'status' => '' ],
+            [ 'title' => 'La prima sede', 'tag' => 'Crescita', 'description' => 'Uno spazio tutto nostro per accogliere clienti e collaboratori.', 'date' => '2018', 'image' => '', 'video' => '', 'icon' => 'location', 'category' => 'accent', 'icon_color' => '', 'status' => '' ],
+            [ 'title' => 'Un nuovo servizio', 'tag' => 'Novità', 'description' => 'L\'offerta si amplia per rispondere a nuove esigenze.', 'date' => '2021', 'image' => '', 'video' => '', 'icon' => 'bolt', 'category' => 'success', 'icon_color' => '', 'status' => '' ],
+            [ 'title' => 'Oggi', 'tag' => 'Presente', 'description' => 'Un gruppo affiatato e lo sguardo rivolto ai prossimi traguardi.', 'date' => '2024', 'image' => '', 'video' => '', 'icon' => 'flag', 'category' => 'secondary', 'icon_color' => '', 'status' => '' ],
         ],
         'tl_layout'  => 'alt',
         'tl_reveal'  => 'sides',
@@ -41,7 +42,9 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
         'tl_color'   => 'cat',
         'tl_media'   => 'on',
         'tl_density' => 'comfy',
-        'tl_line'    => 'scroll',
+        // 'solid' come il config: le tile nuove non si colorano allo scorrimento. 'scroll'
+        // resta disponibile ma non scrive più stati: lo stato è un campo della tappa.
+        'tl_line'    => 'solid',
         'tl_transparent' => false,
         // Personalizzazione (override; '' o 0 = default variante)
         'tl_rail_color' => '', 'tl_rail_w' => 0, 'tl_fill_from' => '', 'tl_fill_to' => '',
@@ -107,9 +110,55 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
                 'icon'        => $item['icon'] ?? 'star',
                 'category'    => $item['category'] ?? 'primary',
                 'icon_color'  => $item['icon_color'] ?? '',
+                // Stato dichiarato dalla tappa ('' = nessuno). Le tappe salvate prima non
+                // hanno la chiave: niente stato (prima lo si inventava dallo scorrimento).
+                'status'      => in_array( $item['status'] ?? '', [ 'done', 'current', 'next' ], true ) ? $item['status'] : '',
             ];
         }
         return $items;
+    }
+
+    /** Etichetta tradotta dello stato di una tappa ('' = nessuno stato). */
+    private function status_label( $status ) {
+        switch ( $status ) {
+            case 'done':
+                return olobuild_t( 'Fatto' );
+            case 'current':
+                return olobuild_t( 'In corso' );
+            case 'next':
+                return olobuild_t( 'In arrivo' );
+        }
+        return '';
+    }
+
+    /** Pill dello stato dichiarato dalla tappa ('' se la tappa non ne dichiara). */
+    private function status_html( $item ) {
+        $label = $this->status_label( $item['status'] );
+        if ( $label === '' ) {
+            return '';
+        }
+        return '<span class="tl-st tl-st--' . esc_attr( $item['status'] ) . '">' . esc_html( $label ) . '</span>';
+    }
+
+    /**
+     * Sorgente riproducibile di un video: [ 'iframe'|'file', url ]. YouTube (senza
+     * cookie) e Vimeo diventano un player incorporato; il resto è un file video.
+     */
+    private function video_source( $url ) {
+        if ( ! is_string( $url ) ) {
+            return null;
+        }
+        $url = trim( $url );
+        if ( $url === '' ) {
+            return null;
+        }
+        if ( preg_match( '/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $url, $m ) ) {
+            return [ 'iframe', 'https://www.youtube-nocookie.com/embed/' . $m[1] ];
+        }
+        if ( preg_match( '/vimeo\.com\/(\d+)/', $url, $m ) ) {
+            return [ 'iframe', 'https://player.vimeo.com/video/' . $m[1] . '?dnt=1' ];
+        }
+        return [ 'file', $url ];
     }
 
     private function cat_class( $cat ) {
@@ -190,8 +239,15 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
         return $svg . '<span class="pip"></span><span class="lab">' . $lab . '</span>';
     }
 
-    /** Blocco media della card (immagine/video o placeholder a strisce). */
-    private function media_html( $item, $obj_pos = 'center center' ) {
+    /**
+     * Blocco media della card (immagine/video). Senza media il riquadro a strisce
+     * compare solo nel canvas, come segnaposto per chi costruisce: sul sito la card
+     * resta di solo testo (prima i visitatori vedevano 128px di righe vuote).
+     */
+    private function media_html( $item, $obj_pos = 'center center', $canvas = false ) {
+        if ( empty( $item['video'] ) && empty( $item['image'] ) && ! $canvas ) {
+            return '';
+        }
         $pos_style = ' style="object-position:' . esc_attr( $obj_pos ) . ';"';
         $html = '<div class="it-media"><span class="bar"></span>';
         if ( ! empty( $item['video'] ) ) {
@@ -206,15 +262,15 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
     }
 
     private function get_video_embed( $url, $obj_pos = 'center center' ) {
-        $url = trim( $url );
         $pos_style = ' style="object-position:' . esc_attr( $obj_pos ) . ';"';
-        if ( preg_match( '/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $url, $m ) ) {
-            return '<iframe src="https://www.youtube-nocookie.com/embed/' . esc_attr( $m[1] ) . '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"' . $pos_style . '></iframe>';
+        $src       = $this->video_source( $url );
+        if ( ! $src ) {
+            return '';
         }
-        if ( preg_match( '/vimeo\.com\/(\d+)/', $url, $m ) ) {
-            return '<iframe src="https://player.vimeo.com/video/' . esc_attr( $m[1] ) . '?dnt=1" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"' . $pos_style . '></iframe>';
+        if ( $src[0] === 'iframe' ) {
+            return '<iframe src="' . esc_url( $src[1] ) . '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"' . $pos_style . '></iframe>';
         }
-        return '<video controls preload="metadata"' . $pos_style . '><source src="' . esc_url( $url ) . '" type="video/mp4"></video>';
+        return '<video controls preload="metadata"' . $pos_style . '><source src="' . esc_url( $src[1] ) . '" type="video/mp4"></video>';
     }
 
     public function render( $settings ) {
@@ -228,6 +284,8 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
         $theme  = in_array( $s['tl_theme'], [ 'paper', 'night', 'neon', 'blue' ], true ) ? $s['tl_theme'] : 'paper';
         $mono   = ( $s['tl_color'] === 'mono' );
         $uid    = 'olo-tl-' . wp_rand( 10000, 99999 );
+        // Nel canvas i media mancanti restano come segnaposto; sul sito no.
+        $canvas = ! empty( $s['_builder_mode'] );
 
         // Punto focale globale (object-position) applicato a OGNI immagine/video della timeline.
         $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
@@ -248,13 +306,13 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
         echo '<div class="' . esc_attr( $root_cls . ' ' . $uid ) . '" id="' . esc_attr( $uid ) . '"' . ( $cstyle ? ' style="' . esc_attr( $cstyle ) . '"' : '' ) . '>';
 
         if ( $layout === 'horizontal' ) {
-            $this->render_horizontal( $items, $s, $mono );
+            $this->render_horizontal( $items, $s, $mono, $obj_pos );
         } elseif ( $layout === 'navigator' ) {
-            $this->render_navigator( $items, $s, $obj_pos );
+            $this->render_navigator( $items, $s, $obj_pos, $canvas );
         } elseif ( $layout === 'schedule' ) {
             $this->render_schedule( $items, $s, $uid );
         } else {
-            $this->render_vertical( $items, $s, $layout, $mono, $obj_pos );
+            $this->render_vertical( $items, $s, $layout, $mono, $obj_pos, $canvas );
         }
 
         echo '</div>';
@@ -273,7 +331,7 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
     }
 
     /* ───────── VERTICALE (alt · one) ───────── */
-    private function render_vertical( $items, $s, $layout, $mono, $obj_pos = 'center center' ) {
+    private function render_vertical( $items, $s, $layout, $mono, $obj_pos = 'center center', $canvas = false ) {
         $cls = 'super js';
         $cls .= ( $s['tl_line'] === 'solid' ) ? ' line-solid' : ' line-scroll';
         $cls .= ' ing-' . sanitize_html_class( $s['tl_reveal'] );
@@ -293,11 +351,14 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
         foreach ( $items as $i => $item ) {
             $cat   = $mono ? 'primary' : $this->cat_class( $item['category'] );
             $style = ( ! $mono && ! empty( $item['icon_color'] ) ) ? ' style="--cat:' . esc_attr( $this->safe_color_css( $item['icon_color'] ) ) . '"' : '';
-            echo '<div class="it cat-' . esc_attr( $cat ) . '"' . $style . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $style built above from a literal CSS prefix plus an esc_attr( safe_color_css() ) value
+            $it_cls = 'it cat-' . $cat . ( $item['status'] === 'current' ? ' is-current' : '' );
+            echo '<div class="' . esc_attr( $it_cls ) . '"' . $style . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $style built above from a literal CSS prefix plus an esc_attr( safe_color_css() ) value
             echo '<span class="it-node">' . $this->node_inner( $item, $i, $node, $mono ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- node markup from node_inner(): render_icon_html() helper output plus sprintf('%02d')/esc_html() label
-            echo '<div class="it-date"><span class="yr">' . esc_html( $item['date'] ) . '</span><span class="ph">' . esc_html( $item['tag'] ) . '</span><span class="st" data-st>&mdash;</span></div>';
+            // Lo stato esce solo se la tappa lo dichiara (prima «Fatto / In corso / In arrivo»
+            // veniva calcolato dalla posizione di scorrimento: uno stato inventato).
+            echo '<div class="it-date"><span class="yr">' . esc_html( $item['date'] ) . '</span><span class="ph">' . esc_html( $item['tag'] ) . '</span>' . $this->status_html( $item ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- status_html() escapes label and class internally
             echo '<div class="it-card">';
-            echo $this->media_html( $item, $obj_pos ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- media markup built by media_html() exclusively from esc_url()/esc_attr()/esc_html() values
+            echo $this->media_html( $item, $obj_pos, $canvas ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- media markup built by media_html() exclusively from esc_url()/esc_attr()/esc_html() values
             echo '<div class="it-body">';
             if ( $item['tag'] !== '' )         { echo '<span class="it-tag">' . esc_html( $item['tag'] ) . '</span>'; }
             if ( $item['title'] !== '' )       { echo '<h4>' . esc_html( $item['title'] ) . '</h4>'; }
@@ -339,11 +400,9 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
                     its[i].classList.remove('active');
                     if(on){ last = i; }
                 }
-                for(var j=0;j<its.length;j++){
-                    var st = its[j].querySelector('[data-st]');
-                    if(st){ if(j < last){ st.textContent='Fatto'; } else if(j === last){ st.textContent='Fatto'; } else { st.textContent='In arrivo'; } }
-                }
-                if(last>=0){ its[last].classList.add('active'); var sl=its[last].querySelector('[data-st]'); if(sl){ sl.textContent='In corso'; } }
+                // Solo il riempimento visivo segue lo scorrimento: le etichette di stato
+                // le scrive il PHP quando la tappa le dichiara.
+                if(last>=0){ its[last].classList.add('active'); }
             }
             window.addEventListener('scroll', update, {passive:true});
             window.addEventListener('resize', update);
@@ -354,11 +413,15 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
 
     /* ───────── SCHEDULE / RUN-OF-SHOW (orario a sx · filo · nodo) ───────── */
     private function render_schedule( $items, $s, $uid ) {
-        $accent = $this->safe_color_css( $s['tl_yr_color'] ?? '' ) ?: 'var(--olo-color-primary, #e0afca)';
-        $title  = $this->safe_color_css( $s['tl_title_color'] ?? '' ) ?: 'var(--olo-color-text-emphasis, #f3e9ef)';
-        $text   = $this->safe_color_css( $s['tl_text_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #94809a)';
-        $rail   = $this->safe_color_css( $s['tl_rail_color'] ?? '' ) ?: 'var(--olo-color-border, rgba(255,255,255,.16))';
-        $halo   = 'var(--olo-color-background, #241430)';
+        // Ruoli della palette con riserve chiare: prima le riserve erano i colori di un
+        // tema scuro (rosa, testo quasi bianco, alone viola) e, senza i token, su una
+        // pagina chiara titolo e testo sparivano. --olo-color-text-emphasis non esiste
+        // nella Palette: il titolo prende il colore del testo.
+        $accent = $this->safe_color_css( $s['tl_yr_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
+        $title  = $this->safe_color_css( $s['tl_title_color'] ?? '' ) ?: 'var(--olo-color-text, #1f2937)';
+        $text   = $this->safe_color_css( $s['tl_text_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #6b7280)';
+        $rail   = $this->safe_color_css( $s['tl_rail_color'] ?? '' ) ?: 'var(--olo-color-border, #e5e7eb)';
+        $halo   = 'var(--olo-color-background, #ffffff)';
         $disp   = 'var(--olo-font-family-heading, Georgia, "Times New Roman", serif)';
 
         echo '<div class="olo-tl-sched">';
@@ -366,6 +429,7 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
             echo '<div class="olo-tl-slot">';
             echo '<div class="olo-tl-slot__t">' . esc_html( $item['date'] ) . '</div>';
             echo '<div class="olo-tl-slot__c">';
+            echo $this->status_html( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- status_html() escapes label and class internally
             if ( $item['title'] !== '' )       { echo '<h3>' . esc_html( $item['title'] ) . '</h3>'; }
             if ( $item['description'] !== '' ) { echo '<p>' . esc_html( $item['description'] ) . '</p>'; }
             echo '</div></div>';
@@ -389,8 +453,11 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
     }
 
     /* ───────── ORIZZONTALE ───────── */
-    private function render_horizontal( $items, $s, $mono ) {
+    private function render_horizontal( $items, $s, $mono, $obj_pos = 'center center' ) {
         $cw = intval( $s['h_card_width'] ) ?: 268;
+        // Immagine o video della tappa anche qui (prima l'orizzontale li ignorava),
+        // salvo «Solo testo». Niente segnaposto: una tappa senza media resta di testo.
+        $show_media = ( ( $s['tl_media'] ?? 'on' ) !== 'off' );
         echo '<div class="hwrap">';
         echo '<div class="hbar"><span class="ht"></span><div class="hnav">';
         echo '<button class="prev" type="button" aria-label="' . esc_attr( olobuild_t( 'Precedente' ) ) . '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>';
@@ -405,6 +472,14 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
             echo '<span class="hit-node">' . $this->render_icon_html( $item['icon'] ?: 'star', 0.8 ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup generated by the render_icon_html() helper (sanitized SVG / esc_attr()'d uk-icon attrs)
             echo '<span class="hit-date">' . esc_html( $item['date'] ) . '</span>';
             echo '<div class="hit-card">';
+            if ( $show_media ) {
+                if ( ! empty( $item['video'] ) ) {
+                    echo '<div class="hit-media">' . $this->get_video_embed( $item['video'], $obj_pos ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- embed markup built by get_video_embed() from esc_url()/esc_attr() values
+                } elseif ( ! empty( $item['image'] ) ) {
+                    echo '<div class="hit-media"><img src="' . esc_url( $item['image'] ) . '" alt="' . esc_attr( wp_strip_all_tags( $item['title'] ) ) . '" loading="lazy" style="object-position:' . esc_attr( $obj_pos ) . ';" /></div>';
+                }
+            }
+            echo $this->status_html( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- status_html() escapes label and class internally
             if ( $item['tag'] !== '' )   { echo '<span class="t">' . esc_html( $item['tag'] ) . '</span>'; }
             if ( $item['title'] !== '' ) { echo '<h4>' . esc_html( $item['title'] ) . '</h4>'; }
             if ( $item['description'] !== '' ) { echo '<p>' . esc_html( $item['description'] ) . '</p>'; }
@@ -415,38 +490,61 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
         <script>(function(){
             var root = document.currentScript.parentNode;
             var hs = root.querySelector('.hscroll'); if(!hs){return;}
+            var tr = root.querySelector('.htrack');
             function step(){ var c=hs.querySelector('.hit'); if(c){ return c.getBoundingClientRect().width; } return 280; }
             var p = root.querySelector('.hnav .prev'), n = root.querySelector('.hnav .next');
             if(p){ p.addEventListener('click', function(){ hs.scrollBy({left:-step(), behavior:'smooth'}); }); }
             if(n){ n.addEventListener('click', function(){ hs.scrollBy({left:step(), behavior:'smooth'}); }); }
+            /* Le card stanno sopra e sotto il filo, fuori dal flusso: lo spazio attorno al
+               filo si adatta alla card piu alta (con un'immagine 150px non bastano). */
+            function fit(){
+                if(!tr){ return; }
+                var cs = tr.querySelectorAll('.hit-card'), mx = 0;
+                for(var i=0;i<cs.length;i++){ if(cs[i].offsetHeight > mx){ mx = cs[i].offsetHeight; } }
+                var pad = Math.max(150, mx + 56);
+                tr.style.paddingTop = pad + 'px';
+                tr.style.paddingBottom = pad + 'px';
+            }
+            var ims = root.querySelectorAll('.hit-media img');
+            for(var k=0;k<ims.length;k++){ ims[k].addEventListener('load', fit); }
+            window.addEventListener('resize', fit);
+            fit();
         })();</script>
         <?php
     }
 
     /* ───────── NAVIGATORE (asse date + post singolo) ───────── */
-    private function render_navigator( $items, $s, $obj_pos = 'center center' ) {
-        echo '<div class="navd">';
+    private function render_navigator( $items, $s, $obj_pos = 'center center', $canvas = false ) {
+        // is-canvas: senza media il riquadro a strisce resta come segnaposto solo nel canvas.
+        echo '<div class="navd' . ( $canvas ? ' is-canvas' : '' ) . '">';
         echo '<div class="nv-nav">';
         echo '<button class="nv-arrow nv-prev" type="button" aria-label="' . esc_attr( olobuild_t( 'Precedente' ) ) . '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>';
         echo '<div class="nv-viewport"><div class="nv-track"><span class="nv-base"></span><span class="nv-fill"></span>';
         foreach ( $items as $i => $item ) {
             $nv_name = trim( $item['title'] . ' ' . $item['date'] );
             if ( $nv_name === '' ) { $nv_name = sprintf( olobuild_t( 'Tappa %d' ), $i + 1 ); }
+            // Il video della tappa (prima ignorato qui): sorgente già risolta (player
+            // YouTube/Vimeo o file), il player lo crea lo script solo per la tappa scelta.
+            $nv_vid = $this->video_source( $item['video'] );
             echo '<div class="nv-step" role="button" tabindex="0"'
                 . ' aria-label="' . esc_attr( $nv_name ) . '"'
                 . ' data-yr="' . esc_attr( $item['date'] ) . '"'
                 . ' data-tag="' . esc_attr( $item['tag'] ) . '"'
                 . ' data-title="' . esc_attr( $item['title'] ) . '"'
                 . ' data-text="' . esc_attr( $item['description'] ) . '"'
-                . ' data-img="' . esc_attr( esc_url( $item['image'] ) ) . '">'
+                . ' data-img="' . esc_attr( esc_url( $item['image'] ) ) . '"'
+                . ' data-video="' . esc_attr( $nv_vid ? esc_url( $nv_vid[1] ) : '' ) . '"'
+                . ' data-vkind="' . esc_attr( $nv_vid ? $nv_vid[0] : '' ) . '"'
+                . ' data-st="' . esc_attr( $item['status'] ) . '"'
+                . ' data-stl="' . esc_attr( $this->status_label( $item['status'] ) ) . '">'
                 . '<span class="l">' . esc_html( $item['date'] ) . '</span><span class="d"></span></div>';
         }
         echo '</div></div>';
         echo '<button class="nv-arrow nv-next" type="button" aria-label="' . esc_attr( olobuild_t( 'Successivo' ) ) . '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>';
         echo '</div>';
         echo '<div class="nv-stage"><div class="nv-post">';
-        echo '<div class="nv-media"><img alt="" style="object-position:' . esc_attr( $obj_pos ) . ';" /><span class="nyr nv-yr"></span><span class="nph nv-ph"></span></div>';
-        echo '<div class="nv-body"><div class="m"><span class="tg nv-tag"></span><span class="dt nv-date"></span></div>';
+        echo '<div class="nv-media"><img alt="" style="object-position:' . esc_attr( $obj_pos ) . ';" /><span class="nyr nv-yr"></span></div>';
+        echo '<div class="nv-body"><div class="m"><span class="tg nv-tag"></span><span class="dt nv-date"></span><span class="tl-st nv-st" hidden></span></div>';
         echo '<h2 class="nv-title"></h2><p class="nv-text"></p></div>';
         echo '</div></div>';
         echo '<div class="nv-counter"></div>';
@@ -459,6 +557,8 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
             var steps = [].slice.call(root.querySelectorAll('.nv-step'));
             var post = root.querySelector('.nv-post');
             var STEP = 168, idx = 0, n = steps.length;
+            var canvas = root.querySelector('.navd.is-canvas') ? true : false;
+            var media = root.querySelector('.nv-media');
             function set(sel, val){ var e=root.querySelector(sel); if(e){ e.textContent = val ? val : ''; } }
             function layout(){
                 var vp = track.parentElement, vpW = vp.clientWidth, trackW = n*STEP;
@@ -472,13 +572,35 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
             function render(){
                 var st = steps[idx]; if(!st){return;}
                 set('.nv-yr', st.getAttribute('data-yr'));
-                set('.nv-ph', 'archivio · ' + st.getAttribute('data-yr'));
                 set('.nv-tag', st.getAttribute('data-tag'));
                 set('.nv-date', st.getAttribute('data-yr'));
                 set('.nv-title', st.getAttribute('data-title'));
                 set('.nv-text', st.getAttribute('data-text'));
+                /* Stato: solo se la tappa lo dichiara. */
+                var stEl = root.querySelector('.nv-st'); var stK = st.getAttribute('data-st');
+                if(stEl){ if(stK){ stEl.textContent = st.getAttribute('data-stl'); stEl.className = 'tl-st nv-st tl-st--' + stK; stEl.hidden = false; } else { stEl.textContent = ''; stEl.hidden = true; } }
+                /* Media: il video della tappa (player creato qui, tolto cambiando tappa), se no l'immagine. */
                 var img = root.querySelector('.nv-media img'); var src = st.getAttribute('data-img');
-                if(img){ if(src){ img.src = src; img.style.display='block'; } else { img.removeAttribute('src'); img.style.display='none'; } }
+                var vsrc = st.getAttribute('data-video'); var has = false;
+                if(media){
+                    var old = media.querySelector('.nv-vid'); if(old){ old.parentNode.removeChild(old); }
+                    if(vsrc){
+                        var el;
+                        if(st.getAttribute('data-vkind') === 'file'){ el = document.createElement('video'); el.controls = true; el.preload = 'metadata'; el.setAttribute('playsinline', ''); }
+                        else { el = document.createElement('iframe'); el.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen'); el.setAttribute('allowfullscreen', ''); el.setAttribute('title', st.getAttribute('data-title')); }
+                        el.className = 'nv-vid'; el.src = vsrc;
+                        media.insertBefore(el, media.firstChild);
+                        has = true;
+                    }
+                }
+                if(img){
+                    img.alt = st.getAttribute('data-title');
+                    if(src){ if(vsrc){ img.style.display='none'; } else { img.src = src; img.style.display='block'; has = true; } }
+                    else { img.removeAttribute('src'); img.style.display='none'; }
+                }
+                /* Senza media: segnaposto a strisce solo nel canvas, sul sito il testo occupa tutto. */
+                if(media){ if(has){ media.hidden = false; } else { media.hidden = canvas ? false : true; } }
+                if(post){ post.classList.toggle('nv-post--solo', media ? media.hidden : true); }
                 var cnt = root.querySelector('.nv-counter'); if(cnt){ cnt.innerHTML = '<b>' + (idx+1) + '</b> / ' + n; }
             }
             function go(i){
