@@ -43,8 +43,64 @@ class Olobuild_Woo_Recently_Viewed_Tile extends Olobuild_Tile_Base {
         'border_effect_speed'     => 4,
     ];
 
+    /** Opzione col momento (timestamp) dell'ultima resa della tile: dice se il sito la usa. */
+    const OPZIONE_IN_USO = 'olobuild_recently_viewed_in_uso';
+
+    /** Per quanto tempo dopo l'ultima resa si continuano a registrare i prodotti visti. */
+    const DURATA_IN_USO = 30 * DAY_IN_SECONDS;
+
+    /**
+     * Le tile si istanziano a ogni richiesta (plugins_loaded): l'hook arriva così anche alle
+     * pagine prodotto, dove la tile di solito non c'è.
+     */
+    public function __construct() {
+        static $agganciato = false;
+        if ( $agganciato ) {
+            return;
+        }
+        $agganciato = true;
+        add_action( 'template_redirect', [ $this, 'registra_prodotto_visto' ], 21 );
+    }
+
     public function get_controls() {
         return [];
+    }
+
+    /**
+     * Scrive il cookie dei prodotti visti sulle pagine prodotto.
+     *
+     * La tile legge woocommerce_recently_viewed, ma WooCommerce lo scrive (wc_track_product_view(),
+     * template_redirect 20) solo se nel sito è attivo il suo vecchio widget «Prodotti visti di
+     * recente»: senza widget il cookie non nasceva mai e la tile restava vuota per tutti. Qui la
+     * stessa logica, e come WooCommerce solo dove serve: se la tile è stata resa negli ultimi 30
+     * giorni (un cookie nella risposta può togliere la pagina dalla cache), e non due volte se il
+     * widget c'è. Ordine come WooCommerce: dal più vecchio al più recente, al massimo 15.
+     */
+    public function registra_prodotto_visto() {
+        if ( ! function_exists( 'wc_setcookie' ) || ! is_singular( 'product' ) ) {
+            return;
+        }
+        if ( is_active_widget( false, false, 'woocommerce_recently_viewed_products', true ) ) {
+            return;
+        }
+        $in_uso = (int) get_option( self::OPZIONE_IN_USO, 0 );
+        if ( $in_uso < time() - self::DURATA_IN_USO ) {
+            return;
+        }
+        $pid = (int) get_queried_object_id();
+        if ( $pid <= 0 ) {
+            return;
+        }
+        $visti = isset( $_COOKIE['woocommerce_recently_viewed'] ) && is_string( $_COOKIE['woocommerce_recently_viewed'] )
+            ? array_filter( wp_parse_id_list( explode( '|', sanitize_text_field( wp_unslash( $_COOKIE['woocommerce_recently_viewed'] ) ) ) ) )
+            : [];
+        $visti   = array_values( array_diff( $visti, [ $pid ] ) );
+        $visti[] = $pid;
+        if ( count( $visti ) > 15 ) {
+            $visti = array_slice( $visti, -15 );
+        }
+        // Solo per la sessione, come WooCommerce.
+        wc_setcookie( 'woocommerce_recently_viewed', implode( '|', $visti ) );
     }
 
     public function render( $settings ) {
@@ -56,19 +112,41 @@ class Olobuild_Woo_Recently_Viewed_Tile extends Olobuild_Tile_Base {
 
         $s = wp_parse_args( $settings, $this->defaults );
 
+        // La lista è di chi visita (il suo cookie): una cache di pagina la congelerebbe e la
+        // mostrerebbe a tutti, per ore, la cronologia di chi ha generato la copia (o la lista
+        // vuota a chi ne ha una). Si chiede di non mettere in cache la pagina, anche nello stato
+        // vuoto: la cache di Olobuild, WP Rocket, W3TC e LiteSpeed leggono DONOTCACHEPAGE,
+        // LiteSpeed anche la sua azione. Nel builder non serve.
+        if ( empty( $settings['_builder_mode'] ) ) {
+            if ( ! defined( 'DONOTCACHEPAGE' ) ) {
+                define( 'DONOTCACHEPAGE', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- costante standard dei plugin di cache.
+            }
+            do_action( 'litespeed_control_set_nocache', 'olobuild: prodotti visti di recente' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- azione di LiteSpeed Cache.
+        }
+
+        // Segna che il sito usa la tile (registra_prodotto_visto() lo legge): al più una
+        // scrittura al giorno, anche dall'anteprima del builder, così si parte appena la si aggiunge.
+        if ( (int) get_option( self::OPZIONE_IN_USO, 0 ) < time() - DAY_IN_SECONDS ) {
+            update_option( self::OPZIONE_IN_USO, time(), true );
+        }
+
         // Get recently viewed product IDs from WooCommerce cookie.
         // Read-only render: the pipe-separated cookie is sanitized to a list of
         // positive integers via sanitize_text_field() + per-element absint().
         $viewed_products = [];
-        if ( isset( $_COOKIE['woocommerce_recently_viewed'] ) ) {
+        if ( isset( $_COOKIE['woocommerce_recently_viewed'] ) && is_string( $_COOKIE['woocommerce_recently_viewed'] ) ) {
             $rv_cookie       = sanitize_text_field( wp_unslash( $_COOKIE['woocommerce_recently_viewed'] ) );
-            $viewed_products = array_filter( array_map( 'absint', explode( '|', $rv_cookie ) ) );
+            // Il cookie va dal più vecchio al più recente: si mostra prima l'ultimo visto, come
+            // il widget di WooCommerce (prima il limite tagliava via proprio i più recenti).
+            $viewed_products = array_reverse( array_values( array_filter( array_map( 'absint', explode( '|', $rv_cookie ) ) ) ) );
         }
 
         if ( empty( $viewed_products ) ) {
             $empty_text = sanitize_text_field( $s['empty_text'] );
             if ( $empty_text !== '' ) {
-                return '<div style="padding:30px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px">'
+                // «Colore testo vuoto» dell'inspector: prima il PHP non lo leggeva.
+                $empty_color = $this->safe_color_css( $s['empty_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #9CA3AF)';
+                return '<div style="padding:30px;text-align:center;color:' . esc_attr( $empty_color ) . ';font-size:14px">'
                      . esc_html( $empty_text )
                      . '</div>';
             }
@@ -129,6 +207,9 @@ class Olobuild_Woo_Recently_Viewed_Tile extends Olobuild_Tile_Base {
 
         $hover_effect = $s['hover_effect'];
         $heading_text = sanitize_text_field( $s['heading'] );
+        // «Tag heading» dell'inspector: prima il titolo usciva sempre come h3.
+        $heading_tag  = (string) ( $s['heading_tag'] ?? 'h3' );
+        $heading_tag  = in_array( $heading_tag, [ 'h2', 'h3', 'h4', 'div' ], true ) ? $heading_tag : 'h3';
 
         // Star SVGs
         $star_full  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="var(--olo-color-warning, #F59E0B)" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
@@ -214,7 +295,7 @@ class Olobuild_Woo_Recently_Viewed_Tile extends Olobuild_Tile_Base {
 
         <?php if ( $heading_text !== '' ) : ?>
         <?php list( $rv_cls, $rv_data ) = $this->tfx_attrs( $s, 'heading', $heading_text ); ?>
-        <h3 class="<?php echo esc_attr( $uid ); ?>-heading<?php echo $rv_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); heading escaped inline via esc_html() ?>"<?php echo $rv_data; ?>><?php echo esc_html( $heading_text ); ?></h3>
+        <<?php echo $heading_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- whitelisted via in_array() above ?> class="<?php echo esc_attr( $uid ); ?>-heading<?php echo $rv_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); heading escaped inline via esc_html() ?>"<?php echo $rv_data; ?>><?php echo esc_html( $heading_text ); ?></<?php echo $heading_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- whitelisted via in_array() above ?>>
         <?php endif; ?>
 
         <div class="<?php echo esc_attr( $uid ); ?>">
