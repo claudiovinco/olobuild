@@ -4,6 +4,8 @@ import { t } from '@/i18n';
  * Tile ScrollProgress — split CONTENUTO/STILE (regola universale Olobuild).
  *   fields[]      → posizione (top/bottom), toggle mostra percentuale
  *   styleFields[] → colori barra/sfondo/percentuale, altezza barra, z-index
+ * La percentuale è una pillola del colore della barra accanto alla barra (in una barra di
+ * 2-12px non si leggeva); in alto la barra sta sotto la barra di amministrazione di WordPress.
  *   AVANZATE      → meta tecnico (id/class/condizioni)
  */
 export default {
@@ -28,16 +30,19 @@ export default {
 
   // ─── STILE ─────────────────────────────────────────────────
   styleFields: [
+    { type: 'separator', label: t('Aspetto') },
     { key: 'bar_color', label: t('Colore barra'), type: 'color' },
     { key: 'bar_bg', label: t('Colore sfondo'), type: 'color' },
-    { key: 'bar_height', label: t('Altezza barra'), type: 'range', min: 2, max: 12, step: 1 },
-    { key: 'percentage_color', label: t('Colore percentuale'), type: 'color',
+    { key: 'percentage_color', label: t('Colore testo percentuale'), type: 'color',
+      description: t('La percentuale compare in una pillola del colore della barra, accanto alla barra. Vuoto: il colore del testo sul primario.'),
       condition: { field: 'show_percentage', operator: '==', value: true } },
-    { key: 'z_index', label: t('Z-index'), type: 'range', min: 100, max: 10000, step: 100 },
+    { type: 'separator', label: t('Forma') },
+    { key: 'bar_height', label: t('Altezza barra'), type: 'range', min: 2, max: 12, step: 1, unit: 'px' },
     { type: 'separator', label: t('Disposizione') },
     { key: 'position', label: t('Posizione'), type: 'select', options: [
       { value: 'top',    label: t('In alto') },
       { value: 'bottom', label: t('In basso') },
     ]},
+    { key: 'z_index', label: t('Z-index'), type: 'range', min: 100, max: 10000, step: 100 },
   ],
 };
