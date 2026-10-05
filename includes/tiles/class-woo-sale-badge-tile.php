@@ -61,9 +61,11 @@ class Olobuild_Woo_Sale_Badge_Tile extends Olobuild_Tile_Base {
 
         $uid = 'olo-woo-sb-' . wp_rand( 10000, 99999 );
 
-        // Colors
-        $badge_bg    = $this->safe_color_css( $s['badge_bg'] );
-        $badge_color = $this->safe_color_css( $s['badge_color'] );
+        // Colors — vuoti nei default: senza riserva uscivano «background: ;» e «color: ;», che il
+        // browser scarta, e il badge restava testo nudo senza pillola. La riserva è quella della
+        // partenza del config: pillola nel colore del sito col suo contrasto.
+        $badge_bg    = $this->safe_color_css( $s['badge_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $badge_color = $this->safe_color_css( $s['badge_color'] ) ?: 'var(--olo-color-primary-contrast, #ffffff)';
 
         // Font
         $font_size   = max( 10, min( 32, absint( $s['font_size'] ) ) );
