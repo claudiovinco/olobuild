@@ -62,6 +62,20 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena trascinata: la web radio di un locale su un fondo chiaro (il testo del player usa i
+  // colori del testo del sito, che sul fondo scuro di riserva non si leggevano), equalizzatore
+  // largo quanto la tile nel colore primario, senza bagliore, che ondeggia anche in pausa.
+  partenza: {
+    track_label: t('Ora in onda'),
+    track_name: t('La playlist del mattino'),
+    listeners_count: 312,
+    bg_color: 'var(--olo-color-light, #ffffff)',
+    glow: 0,
+    cols: 128,
+    rows: 6,
+    idle_amplitude: 0.3,
+  },
+
   fields: [
     { type: 'separator', label: t('Sorgente') },
     { key: 'react_to', label: t('Reagisce a'), type: 'select', options: [

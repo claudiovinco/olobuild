@@ -1,5 +1,6 @@
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField } from './_shared.js';
 import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -92,6 +93,27 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Come nasce dalla palette: quattro prodotti di un negozio di casa e tavola con le foto demo,
+  // il badge d'angolo («Novità», «Ultimi pezzi»), categoria, nome e prezzo in euro, la barra
+  // «Aggiungi al carrello» al passaggio, i filtri per categoria sopra e il link a tutto il catalogo.
+  partenza: {
+    items: [
+      { image: demo('vaso'), media_label: t('vaso'), tag: t('Novità'), category: t('Vasi'), title: t('Vaso Luna in gres'), price: '48,00 €', link: '#', quick_add: t('Aggiungi al carrello') },
+      { image: demo('ciotola'), media_label: t('ciotola'), tag: '', category: t('Ciotole'), title: t('Ciotola Onda dipinta a mano'), price: '32,00 €', link: '#', quick_add: t('Aggiungi al carrello') },
+      { image: demo('caffe'), media_label: t('tazza'), tag: '', category: t('Tazze'), title: t('Tazza da cappuccino'), price: '18,00 €', link: '#', quick_add: t('Aggiungi al carrello') },
+      { image: demo('tavola'), media_label: t('piatti'), tag: t('Ultimi pezzi'), category: t('Piatti'), title: t('Set di piatti in ceramica'), price: '64,00 €', link: '#', quick_add: t('Aggiungi al carrello') },
+    ],
+    media_aspect: '4/5',
+    show_filters: true,
+    filter_all_label: t('Tutti'),
+    filter_active_color: 'var(--olo-color-primary-contrast, #ffffff)',
+    footer_text: t('Vedi tutti i 36 prodotti'),
+    // Testi che compaiono solo cambiando sorgente o accendendo il pulsante: in italiano anche loro.
+    woo_quick_add: t('Aggiungi al carrello'),
+    add_label: t('Aggiungi'),
+    roast_label: t('Tostatura'),
   },
 
   fields: [

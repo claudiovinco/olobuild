@@ -1,6 +1,7 @@
 import { t } from '@/i18n';
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField } from './_shared.js';
 import { ratioOptions } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 
 // Default no-op per i nuovi controlli additivi Spaziatura + Forma.
 // Identici alla resa attuale: caption padding 16px 18px, card radius 14px.
@@ -58,6 +59,22 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Come nasce dalla palette: le categorie di un negozio di casa e tavola, sei tessere con foto,
+  // velo scuro dal basso, nome e numero di prodotti; la fila esce dalla colonna e si trascina,
+  // come dice il suggerimento in alto a destra.
+  partenza: {
+    items: [
+      { image: demo('vaso'), title: t('Ceramiche'), subtitle: t('48 prodotti'), link: '#' },
+      { image: demo('ciotola'), title: t('Cucina'), subtitle: t('36 prodotti'), link: '#' },
+      { image: demo('caffe'), title: t('Caffè e tè'), subtitle: t('22 prodotti'), link: '#' },
+      { image: demo('tavola'), title: t('La tavola'), subtitle: t('40 prodotti'), link: '#' },
+      { image: demo('foglie'), title: t('Piante'), subtitle: t('25 prodotti'), link: '#' },
+      { image: demo('scrivania'), title: t('Ufficio'), subtitle: t('18 prodotti'), link: '#' },
+    ],
+    hint_text: t('← Trascina →'),
+    title_color: 'var(--olo-color-light, #f8f9fa)',
   },
 
   fields: [

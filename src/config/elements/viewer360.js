@@ -1,5 +1,6 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared';
 import { shadowField } from './_shared.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -60,6 +61,18 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Appena trascinata: la modalità «Oggetto girevole» su un prodotto (le foto demo non sono
+  // panorami equirettangolari: in «Panorama 360°» si vedrebbero stirate). Si ruota trascinando o
+  // con le frecce, l'angolo è scritto in basso e la didascalia spiega il gesto.
+  partenza: {
+    mode: 'object-rotate',
+    object_image: demo('ciotola'),
+    autorotate: false,
+    height: '420',
+    border_radius: { tl: 16, tr: 16, br: 16, bl: 16 },
+    caption: t('Ciotola in porcellana dipinta a mano · trascinala per farla girare'),
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

@@ -1,6 +1,19 @@
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 import { t } from '@/i18n';
 
+// Il disegno della partenza: un paesaggio a linea (cime con neve, sole, sentiero con la bandierina
+// d'arrivo e due uccelli), tutto a tratto senza riempimento, così l'animazione lo traccia pezzo per pezzo.
+const SVG_PARTENZA = `<svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="512" cy="62" r="28"/>
+<polyline points="0,214 86,130 132,170 226,66 296,150 346,108 432,196 512,138 640,206"/>
+<polyline points="204,92 226,66 250,96 238,90 226,102 214,90"/>
+<polyline points="330,124 346,108 362,126"/>
+<path d="M36 248 C116 228 168 244 228 220 S338 194 380 208 S470 198 548 150"/>
+<line x1="548" y1="150" x2="548" y2="104"/><polygon points="548,104 576,115 548,126"/>
+<circle cx="36" cy="248" r="5"/>
+<path d="M380 66 q9 -9 18 0 q9 -9 18 0"/><path d="M424 46 q7 -7 14 0 q7 -7 14 0"/>
+</svg>`;
+
 /**
  * Tile SVG Animator — split CONTENUTO/STILE (regola universale Olobuild).
  *   fields[]      → source_type, svg_url, svg_code, anim_type, anim_sequence, trigger,
@@ -51,6 +64,23 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Appena trascinata: un paesaggio a linea scritto nel campo «Codice SVG», che il colore primario
+  // traccia un pezzo dopo l'altro quando entra in vista (tratto spesso, terminazioni tonde).
+  partenza: {
+    source_type: 'code',
+    svg_code: SVG_PARTENZA,
+    duration: 1800,
+    stagger_delay: 180,
+    easing: 'ease-in-out',
+    stroke_color: 'var(--olo-color-primary)',
+    stroke_width: '3',
+    stroke_linecap: 'round',
+    stroke_linejoin: 'round',
+    show_fill: false,
+    max_width: '640px',
+    replay_button_label: t('Rivedi'),
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

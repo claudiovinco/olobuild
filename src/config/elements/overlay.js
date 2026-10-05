@@ -1,5 +1,6 @@
 import { textEffectsFields, textEffectsDefaults, filterFields, filterDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
 import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 // L'elenco delle proporzioni, e in separata sede i soli valori che un ritaglio lo
@@ -58,6 +59,20 @@ export default {
     ...textEffectsDefaults,
     text_effect_target: 'title',
     ...filterDefaults,
+  },
+
+  // Come nasce dalla palette: la foto di un progetto in 16:9 con gli angoli arrotondati; al
+  // passaggio sale dal basso il velo scuro con titolo e descrizione in chiaro (effetto «Slide Up»).
+  partenza: {
+    image_url: demo('architettura'),
+    aspect_ratio: '16/9',
+    title: t('Residenza Aria'),
+    description: t('Progetto e direzione lavori · Milano, 2025'),
+    overlay_color: 'var(--olo-color-dark, #16263d)',
+    text_color: 'var(--olo-color-light, #f8f9fa)',
+    overlay_opacity: '80',
+    hover_effect: 'slide-up',
+    border_radius: '12',
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

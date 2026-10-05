@@ -1,6 +1,7 @@
 
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
 import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -47,6 +48,19 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Come nasce dalla palette: il prima e dopo di uno spazio di lavoro, una foto sopra l'altra in
+  // formato panoramico con la maniglia al centro da trascinare, le etichette agli angoli, raggio
+  // morbido e ombra.
+  partenza: {
+    before_image: demo('scrivania'),
+    after_image: demo('ufficio'),
+    aspect_ratio: '21/9',
+    handle_color: 'var(--olo-color-light, #ffffff)',
+    handle_size: '46',
+    border_radius: '16',
+    card_shadow: 'md',
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

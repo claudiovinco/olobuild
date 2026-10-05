@@ -1,5 +1,6 @@
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
 import { ratioOptions } from './_imageFrame.js';
+import { demoObj } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -125,6 +126,33 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Appena trascinata: undici foto nello schema «Metro», celle di misure miste (2×2, 2×1, 1×2) che
+  // si incastrano senza buchi in quattro righe; angoli morbidi, zoom leggero e didascalia che sale
+  // dal basso al passaggio, lightbox con le didascalie.
+  partenza: {
+    images: [
+      demoObj('montagna-lago', t('Il lago in quota')),
+      demoObj('caffe', t('La pausa caffè')),
+      demoObj('vaso', t('Ceramica bianca')),
+      demoObj('spiaggia-alto', t('La spiaggia dall\'alto')),
+      demoObj('foglie', t('Dopo la pioggia')),
+      demoObj('facciata-vetro', t('Vetro e acciaio')),
+      demoObj('insalata', t('Pranzo leggero')),
+      demoObj('citta-tetti', t('I tetti del centro')),
+      demoObj('ciotola', t('Porcellana blu')),
+      demoObj('bosco-luce', t('Il sentiero nel bosco')),
+      demoObj('strada-colline', t('La strada nella valle')),
+    ],
+    layout: 'metro',
+    columns: '5',
+    metro_cell_height: '150',
+    gap: '10',
+    thumb_radius: '12',
+    hover_zoom_scale: '1.05',
+    hover_caption: 'slide-up',
+    show_caption: true,
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

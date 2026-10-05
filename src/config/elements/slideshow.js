@@ -1,6 +1,7 @@
 import { textEffectsFields, textEffectsDefaults, filterFields, filterDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, widgetTemplateField, wowEffectsFields, wowEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -49,6 +50,19 @@ export default {
     effect_color: '',
     effect_intensity: 'medium',
     effect_speed: 0,
+  },
+
+  // Appena trascinata: tre diapositive con foto vere che si dissolvono una nell'altra, velo scuro
+  // della palette e titolo e sottotitolo chiari al centro, con frecce e puntini.
+  partenza: {
+    slides: [
+      { id: 's-1', image: demo('montagna-lago'), title: t('Il lago a due passi'), subtitle: t('Escursioni guidate ogni fine settimana, da maggio a ottobre'), link: '' },
+      { id: 's-2', image: demo('mare-costa'), title: t('Il mare a un\'ora'), subtitle: t('Uscite in barca verso le calette più tranquille'), link: '' },
+      { id: 's-3', image: demo('strada-colline'), title: t('Le colline in bicicletta'), subtitle: t('Itinerari di mezza giornata con pranzo in cantina'), link: '' },
+    ],
+    transition: 'fade',
+    overlay_color: 'var(--olo-color-dark, #16263d)',
+    text_color: 'var(--olo-color-light, #f8f9fa)',
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

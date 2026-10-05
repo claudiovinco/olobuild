@@ -1,5 +1,6 @@
 import { t } from '@/i18n';
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { demo } from '../demoMedia.js';
 
 /**
  * Film Reel — reel orizzontale cinematografico di progetti ("Lavori").
@@ -61,6 +62,22 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Come nasce dalla palette: il portfolio di uno studio come una pellicola — introduzione a
+  // sinistra, sei fotogrammi con le foto demo a tre altezze diverse, nome e categoria in basso,
+  // barra di avanzamento; al passaggio l'overlay REC col timecode.
+  partenza: {
+    intro_eyebrow: t('Selezione · foto e video'),
+    intro_text: t('Sei progetti tra architettura, ristorazione e paesaggio. Trascina per scorrere i fotogrammi.'),
+    items: [
+      { image: demo('architettura'), media_label: t('Residenza Aria'), name: t('Residenza Aria'), tag: t('Architettura · Foto'), size: 'tall', link: '' },
+      { image: demo('piatti-alto'), media_label: t('Osteria del Ponte'), name: t('Osteria del Ponte'), tag: t('Ristorazione · Video'), size: 'short', link: '' },
+      { image: demo('montagna-lago'), media_label: t('Lago in quota'), name: t('Lago in quota'), tag: t('Turismo · Foto'), size: 'normal', link: '' },
+      { image: demo('ufficio'), media_label: t('Studio Ferri'), name: t('Studio Ferri'), tag: t('Interni · Foto'), size: 'short', link: '' },
+      { image: demo('strada-colline'), media_label: t('La valle'), name: t('La valle'), tag: t('Paesaggio · Video'), size: 'tall', link: '' },
+      { image: demo('caffe'), media_label: t('Caffè Centrale'), name: t('Caffè Centrale'), tag: t('Ristorazione · Foto'), size: 'normal', link: '' },
+    ],
   },
 
   fields: [

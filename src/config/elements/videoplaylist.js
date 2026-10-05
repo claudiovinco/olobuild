@@ -44,6 +44,15 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena trascinata: i video d'esempio della tile (le sorgenti restano quelle) con la playlist
+  // scura accanto al player nero, testo chiaro che si legge per costruzione e la voce attiva
+  // segnata nel colore primario.
+  partenza: {
+    sidebar_bg: 'var(--olo-color-dark, #16263d)',
+    text_color: 'var(--olo-color-light, #f8f9fa)',
+    thumbnail_ratio: '16/9',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'videos', label: t('Video'), type: 'content-items',

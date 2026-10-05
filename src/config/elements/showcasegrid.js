@@ -1,5 +1,6 @@
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
 import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -57,6 +58,24 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Appena trascinata: tre card-foto linkate (le esperienze di un'agenzia), velo scuro dal basso,
+  // occhiello chiaro e titolo grande maiuscolo; la freccia sta su un cerchio scuro, leggibile
+  // anche sulle foto chiare, e al passaggio si accende nel colore primario.
+  partenza: {
+    items: [
+      { image: demo('bosco-luce'), media_label: '', kicker: t('12 percorsi · tutti i livelli'), title: t('Trekking'), link: '#' },
+      { image: demo('spiaggia-alto'), media_label: '', kicker: t('Kayak e snorkeling'), title: t('Mare'), link: '#' },
+      { image: demo('alba-nuvole'), media_label: '', kicker: t('Rifugi e albe in vetta'), title: t('Alta quota'), link: '#' },
+    ],
+    media_bg: 'var(--olo-color-dark, #16263d)',
+    veil_color: 'var(--olo-color-dark, #16263d)',
+    kicker_color: 'color-mix(in srgb, var(--olo-color-light, #f8f9fa) 85%, transparent)',
+    title_color: 'var(--olo-color-light, #f8f9fa)',
+    arrow_bg: 'color-mix(in srgb, var(--olo-color-dark, #16263d) 45%, transparent)',
+    arrow_color: 'var(--olo-color-light, #f8f9fa)',
+    arrow_hover_color: 'var(--olo-color-primary-contrast, #ffffff)',
   },
 
   fields: [

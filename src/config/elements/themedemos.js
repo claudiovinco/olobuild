@@ -39,6 +39,18 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: quattro modelli di sito per attività diverse, ognuno con la sua
+  // mini-anteprima disegnata (colori presi dalla palette del sito in combinazioni diverse, un
+  // carattere di sistema diverso, il badge della sezione più importante) e nome + categoria sotto.
+  partenza: {
+    items: [
+      { name: t('Bottega'), category: t('Negozi e artigiani'), zone_label: t('Catalogo'), bg: 'var(--olo-color-dark, #16263d)', ink: 'var(--olo-color-light, #f8f9fa)', accent: 'var(--olo-color-primary, #e1474f)', font_label: 'Georgia', light: false, link: '' },
+      { name: t('Studio'), category: t('Professionisti'), zone_label: t('Prenota'), bg: 'var(--olo-color-primary, #e1474f)', ink: 'var(--olo-color-primary-contrast, #ffffff)', accent: 'var(--olo-color-dark, #16263d)', font_label: 'Trebuchet MS', light: false, link: '' },
+      { name: t('Trattoria'), category: t('Ristoranti'), zone_label: t('Menù'), bg: 'color-mix(in srgb, var(--olo-color-accent, #f4a23b) 22%, var(--olo-color-light, #fdfcfa))', ink: 'var(--olo-color-dark, #16263d)', accent: 'var(--olo-color-primary, #e1474f)', font_label: 'Palatino Linotype', light: true, link: '' },
+      { name: t('Atelier'), category: t('Moda e design'), zone_label: t('Lookbook'), bg: 'var(--olo-color-secondary, #3d5a80)', ink: 'var(--olo-color-secondary-contrast, #ffffff)', accent: 'var(--olo-color-accent, #f4a23b)', font_label: 'Impact', light: false, link: '' },
+    ],
+  },
+
   fields: [
     { type: 'separator', label: t('Temi') },
     { key: 'items', label: t('Card demo'), type: 'content-items',

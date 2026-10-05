@@ -1,6 +1,7 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared';
 import { shadowField } from './_shared.js';
 import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -42,6 +43,21 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Come nasce dalla palette: sei foto di un progetto di architettura in tre colonne 4:3, con la
+  // didascalia sulla miniatura e la lente al passaggio; al clic la foto si apre a schermo intero.
+  partenza: {
+    items: [
+      { id: 'lb-1', title: t('La facciata'), type: 'image', url: demo('architettura'), thumb: '', caption: t('La facciata sul parco') },
+      { id: 'lb-2', title: t('Gli interni'), type: 'image', url: demo('ufficio'), thumb: '', caption: t('Gli interni con vista') },
+      { id: 'lb-3', title: t('Le torri'), type: 'image', url: demo('facciata-vetro'), thumb: '', caption: t('Le torri di vetro') },
+      { id: 'lb-4', title: t('Il quartiere'), type: 'image', url: demo('citta-tetti'), thumb: '', caption: t('Il quartiere dall\'alto') },
+      { id: 'lb-5', title: t('Lo studio'), type: 'image', url: demo('scrivania'), thumb: '', caption: t('Lo studio di progetto') },
+      { id: 'lb-6', title: t('I dettagli'), type: 'image', url: demo('vaso'), thumb: '', caption: t('I dettagli d\'arredo') },
+    ],
+    thumb_ratio: '4:3',
+    thumb_radius: '12',
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

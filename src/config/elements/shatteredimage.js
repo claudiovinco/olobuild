@@ -1,5 +1,6 @@
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
 import { ratioOptions } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -46,6 +47,15 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Appena trascinata: una foto di paesaggio spezzata nei cinque frammenti della maschera
+  // «Frantumi», con fessure di 6 px, angoli morbidi e il lento Ken Burns della tile.
+  partenza: {
+    image_url: demo('montagna-lago'),
+    gap: 6,
+    border_radius_outer: { tl: 16, tr: 16, br: 16, bl: 16 },
+    overlay_color: 'var(--olo-color-dark, #16263d)',
   },
 
   fields: [

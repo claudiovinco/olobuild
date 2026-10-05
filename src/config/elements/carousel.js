@@ -1,5 +1,6 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, widgetTemplateField } from './_shared.js';
 import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
+import { demo, demoAlt } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -54,6 +55,26 @@ export default {
     mobile_slides: '1',
     ...textEffectsDefaults,
     text_effect_target: 'caption',
+  },
+
+  // Come nasce dalla palette: sei foto di un locale, tre per volta in formato 4:3 con la didascalia
+  // sul velo scuro, le frecce chiare nel colore del sito e i puntini per sfogliare i gruppi.
+  partenza: {
+    slides: [
+      { id: 'cs-1', image_url: demo('caffe'), image_alt: demoAlt('caffe'), link_url: '', caption: t('Colazione · dalle 7:30') },
+      { id: 'cs-2', image_url: demo('insalata'), image_alt: demoAlt('insalata'), link_url: '', caption: t('Pranzo · piatto del giorno a 12 €') },
+      { id: 'cs-3', image_url: demo('tavola'), image_alt: demoAlt('tavola'), link_url: '', caption: t('Cena · su prenotazione') },
+      { id: 'cs-4', image_url: demo('piatti-alto'), image_alt: demoAlt('piatti-alto'), link_url: '', caption: t('Piatti da condividere') },
+      { id: 'cs-5', image_url: demo('mare-costa'), image_alt: demoAlt('mare-costa'), link_url: '', caption: t('La terrazza sul mare') },
+      { id: 'cs-6', image_url: demo('citta-tetti'), image_alt: demoAlt('citta-tetti'), link_url: '', caption: t('Nel cuore del centro storico') },
+    ],
+    aspect_ratio: '4/3',
+    border_radius: '12',
+    show_caption: true,
+    caption_color: 'var(--olo-color-light, #f8f9fa)',
+    caption_bg: 'color-mix(in srgb, var(--olo-color-dark, #16263d) 70%, transparent)',
+    arrow_bg: 'var(--olo-color-background, #ffffff)',
+    arrow_color: 'var(--olo-color-primary, #e1474f)',
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

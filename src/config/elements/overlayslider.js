@@ -1,6 +1,7 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, widgetTemplateField, wowEffectsFields, wowEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 import { ratioOptions } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -77,6 +78,25 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
     ...wowEffectsDefaults,
+  },
+
+  // Appena trascinato: i progetti di uno studio, due slide per volta su quattro (frecce e puntini
+  // servono davvero), foto 3:2 con angoli morbidi, velo scuro sfumato e un nastrino sul più recente.
+  partenza: {
+    slides: [
+      { id: 'os-1', image: demo('architettura'), title: t('Residenze sul parco'), subtitle: t('Milano · 24 appartamenti in classe A'), link: '', ribbon: t('Nuovo') },
+      { id: 'os-2', image: demo('facciata-vetro'), title: t('Torre per uffici'), subtitle: t('Torino · facciata in vetro e acciaio'), link: '', ribbon: '' },
+      { id: 'os-3', image: demo('citta-tetti'), title: t('Recupero nel centro storico'), subtitle: t('Bologna · sei case in un palazzo del Seicento'), link: '', ribbon: '' },
+      { id: 'os-4', image: demo('ufficio'), title: t('Uffici con vista'), subtitle: t('Genova · open space di 400 m²'), link: '', ribbon: '' },
+    ],
+    columns: '2',
+    image_ratio: '3/2',
+    gap: 'medium',
+    slide_radius: 16,
+    title_size: 'h3',
+    overlay_color: 'color-mix(in srgb, var(--olo-color-dark, #16263d) 85%, transparent)',
+    title_color: 'var(--olo-color-light, #f8f9fa)',
+    shadow: 'md',
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

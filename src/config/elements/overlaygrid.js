@@ -1,6 +1,7 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, wowEffectsFields, wowEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -80,6 +81,22 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
     ...wowEffectsDefaults,
+  },
+
+  // Appena trascinata: le tre proposte di un locale in card verticali con foto, velo scuro
+  // sfumato, titolo e sottotitolo chiari, un nastrino «Nuovo menù» e il link «Scopri il menù».
+  partenza: {
+    items: [
+      { id: 'og-1', card_type: 'image', image: demo('caffe'), title: t('Colazione'), subtitle: t('Dalle 7:30, con i cornetti sfornati da noi'), link: '', ribbon: '' },
+      { id: 'og-2', card_type: 'image', image: demo('insalata'), title: t('Pranzo'), subtitle: t('Il piatto del giorno a 14 €, anche da asporto'), link: '', ribbon: '' },
+      { id: 'og-3', card_type: 'image', image: demo('tavola'), title: t('Cena'), subtitle: t('Su prenotazione, dal giovedì alla domenica'), link: '', ribbon: t('Nuovo menù') },
+    ],
+    image_ratio: '4/5',
+    item_radius: 16,
+    overlay_color: 'color-mix(in srgb, var(--olo-color-dark, #16263d) 85%, transparent)',
+    title_color: 'var(--olo-color-light, #f8f9fa)',
+    show_cta: true,
+    cta_text: t('Scopri il menù'),
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

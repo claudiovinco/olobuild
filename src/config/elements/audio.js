@@ -1,4 +1,5 @@
 import { textEffectsFields, textEffectsDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -36,6 +37,20 @@ export default {
     shadow: 'none',
     ...textEffectsDefaults,
     text_effect_target: 'title',
+  },
+
+  // Come nasce dalla palette: il player «Personalizzato» completo — copertina, titolo e autore della
+  // puntata, pulsante tondo nel colore del sito, avanzamento e volume — in una card chiara con ombra.
+  // La sorgente resta vuota (il pacchetto demo non ha audio): si sceglie il file dal Contenuto.
+  partenza: {
+    player_style: 'custom',
+    title: t('Puntata 1 · Come nasce un progetto'),
+    artist: t('Il podcast dello studio · 18 min'),
+    cover_image: demo('scrivania'),
+    bg_color: 'var(--olo-color-background, #ffffff)',
+    border_radius: { tl: 16, tr: 16, br: 16, bl: 16 },
+    border: { top: 1, right: 1, bottom: 1, left: 1, linked: true, style: 'solid', color: 'var(--olo-color-border, #e5e7eb)' },
+    shadow: 'md',
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

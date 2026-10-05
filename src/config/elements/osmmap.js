@@ -37,6 +37,19 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: la sede in piazza del Duomo a Milano con lo zoom di quartiere, marker
+  // a goccia nel colore del sito con l'indirizzo nel popup, angoli arrotondati. Stile «Standard»
+  // (OpenStreetMap): gli stili CARTO (Positron, Voyager, Dark Matter) oggi chiedono una chiave.
+  partenza: {
+    address: 'Piazza del Duomo, Milano',
+    zoom: '15',
+    marker_popup: t('La nostra sede · Piazza del Duomo, Milano'),
+    marker_type: 'drop',
+    marker_color: 'var(--olo-color-primary, #e1474f)',
+    marker_size: '40',
+    border_radius: '16',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     // ── Posizione ──

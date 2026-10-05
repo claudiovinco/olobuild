@@ -62,6 +62,17 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: una fascia nel colore del sito con quattro messaggi di servizio che
+  // scorrono separati da un punto, il testo nel contrasto del primario (leggibile per costruzione)
+  // e la pausa al passaggio del mouse.
+  partenza: {
+    text_items: t('Prenota online in un minuto|Aperti dal lunedì al sabato|Consegna gratuita da 50 €|Oltre 500 clienti soddisfatti'),
+    separator: '•',
+    bg_color: 'var(--olo-color-primary, #e1474f)',
+    text_color: 'var(--olo-color-primary-contrast, #ffffff)',
+    height: '56',
+  },
+
   fields: [
     { key: 'content_type', label: t('Tipo contenuto'), type: 'select', options: [
       { value: 'text', label: t('Testo') },

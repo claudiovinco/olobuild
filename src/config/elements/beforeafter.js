@@ -1,5 +1,6 @@
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField } from './_shared.js';
 import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -48,6 +49,19 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Come nasce dalla palette: tre lavori di uno studio raccontati col prima e dopo — due foto
+  // affiancate per card con le pillole «Prima» (velo scuro) e «Dopo» (colore del sito), titolo e
+  // risultato sotto. L'etichetta «Dopo» usa il contrasto del primario, che le sta sotto.
+  partenza: {
+    items: [
+      { before_image: demo('vaso'), after_image: demo('ciotola'), before_label: t('Prima'), after_label: t('Dopo'), title: t('Ceramiche Riva · 3 settimane'), text: t('Dal pezzo bianco alla linea decorata a mano: foto nuove e un catalogo che vende anche online.') },
+      { before_image: demo('scrivania'), after_image: demo('ufficio'), before_label: t('Prima'), after_label: t('Dopo'), title: t('Studio Ferri · 6 settimane'), text: t('Dalla scrivania di casa a un ufficio luminoso in centro, arredato su misura.') },
+      { before_image: demo('tavola'), after_image: demo('piatti-alto'), before_label: t('Prima'), after_label: t('Dopo'), title: t('Osteria del Ponte · 2 mesi'), text: t('Nuova mise en place e un menù da condividere: coperti raddoppiati il sabato sera.') },
+    ],
+    before_label_color: 'var(--olo-color-light, #f8f9fa)',
+    after_label_color: 'var(--olo-color-primary-contrast, #ffffff)',
   },
 
   fields: [

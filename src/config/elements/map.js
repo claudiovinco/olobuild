@@ -124,6 +124,23 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: un indirizzo singolo (piazza Maggiore a Bologna), pin nel colore del
+  // sito con l'indirizzo nel popup, pulsante schermo intero, angoli arrotondati e ombra. Le
+  // modalità Sedi e Servizi leggono i dati del sito: si scelgono dopo.
+  partenza: {
+    address: 'Piazza Maggiore, Bologna',
+    latitude: '44.4938',
+    longitude: '11.3426',
+    zoom: '16',
+    marker_popup: t('Il negozio in centro · Piazza Maggiore, Bologna'),
+    marker_color: 'var(--olo-color-primary, #e1474f)',
+    marker_size: '42',
+    border_radius: '16',
+    shadow: 'md',
+    btn_bg: 'var(--olo-color-primary, #e1474f)',
+    btn_color: 'var(--olo-color-primary-contrast, #ffffff)',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     {

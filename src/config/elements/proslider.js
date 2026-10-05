@@ -1,5 +1,6 @@
 
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 /**
  * Tile Pro Slider — split CONTENUTO/STILE (regola universale Olobuild).
@@ -227,6 +228,26 @@ export function resolveHeightPx(h, canvasWidth) {
   }
 }
 
+// ── Impostazioni di PARTENZA ──────────────────────────────────────────────────────────────
+// Livelli e diapositive completi come quelli che crea l'editor (stesse chiavi), ma con i colori
+// della palette al posto degli esadecimali di defaultLayer/defaultSlide.
+const SCURO = 'var(--olo-color-dark, #16263d)';
+const CHIARO = 'var(--olo-color-light, #ffffff)';
+function livelloPartenza(type, p = {}) {
+  return { ...defaultLayer(type), color: CHIARO, bgColor: '', borderColor: CHIARO, textStrokeColor: SCURO, ...p };
+}
+function diapositivaPartenza(foto, layers, sfondo = {}) {
+  const base = defaultSlide();
+  return {
+    ...base,
+    background: {
+      ...base.background, type: 'image', image: demo(foto), color: SCURO, gradientFrom: SCURO, gradientTo: SCURO,
+      overlay: SCURO, overlayOpacity: 0.5, kenBurns: true, kenBurnsScale: 1.12, kenBurnsDuration: 9000, ...sfondo,
+    },
+    layers,
+  };
+}
+
 export default {
   type: 'proslider',
   name: t('Pro Slider'),
@@ -301,6 +322,30 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Appena trascinato: l'hero di uno studio in due diapositive con foto che zoomano piano (Ken
+  // Burns) sotto un velo scuro; ogni diapositiva ha occhiello, titolo, testo e pulsante che entrano
+  // in sequenza. Frecce tonde e indicatori a barre.
+  partenza: {
+    slides: [
+      diapositivaPartenza('ufficio', [
+        livelloPartenza('text', { content: t('Studio di consulenza · dal 2010'), tag: 'p', x: 8, y: 22, width: 60, fontSize: 15, fontWeight: '600', letterSpacing: 3, textTransform: 'uppercase', color: 'color-mix(in srgb, var(--olo-color-light, #ffffff) 85%, transparent)' }),
+        livelloPartenza('text', { content: t('Idee chiare per far crescere la tua attività'), tag: 'h2', x: 8, y: 30, width: 62, fontSize: 60, lineHeight: 1.1, animInDelay: 350 }),
+        livelloPartenza('text', { content: t('Conti, strategia e marketing con un solo interlocutore, dal primo incontro ai risultati.'), tag: 'p', x: 8, y: 60, width: 46, fontSize: 21, fontWeight: '400', lineHeight: 1.5, animInDelay: 500 }),
+        livelloPartenza('button', { content: t('Prenota una consulenza'), x: 8, y: 76, fontSize: 17, fontWeight: '600', bgColor: 'var(--olo-color-primary)', color: 'var(--olo-color-primary-contrast)', borderRadius: 999, padding: 14, buttonUrl: '#', animInDelay: 700 }),
+      ]),
+      diapositivaPartenza('citta-tetti', [
+        livelloPartenza('text', { content: t('Dove lavoriamo'), tag: 'p', x: 8, y: 22, width: 60, fontSize: 15, fontWeight: '600', letterSpacing: 3, textTransform: 'uppercase', color: 'color-mix(in srgb, var(--olo-color-light, #ffffff) 85%, transparent)' }),
+        livelloPartenza('text', { content: t('Oltre 300 imprese seguite in tutta Italia'), tag: 'h2', x: 8, y: 30, width: 62, fontSize: 60, lineHeight: 1.1, animInDelay: 350 }),
+        livelloPartenza('text', { content: t('Incontri in studio oppure online, nei giorni e negli orari che preferisci.'), tag: 'p', x: 8, y: 60, width: 46, fontSize: 21, fontWeight: '400', lineHeight: 1.5, animInDelay: 500 }),
+        livelloPartenza('button', { content: t('Leggi le loro storie'), x: 8, y: 76, fontSize: 17, fontWeight: '600', bgColor: 'var(--olo-color-primary)', color: 'var(--olo-color-primary-contrast)', borderRadius: 999, padding: 14, buttonUrl: '#', animInDelay: 700 }),
+      ], { kenBurnsDirection: 'out' }),
+    ],
+    height: { mode: 'px', value: 540 },
+    autoplaySpeed: 7000,
+    arrowStyle: 'rounded',
+    dotStyle: 'bars',
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────
