@@ -343,6 +343,13 @@ abstract class Olobuild_Tile_Base {
         $color_in = $s['effect_color'] ?? '';
         $color    = $color_in ? $this->safe_color_css( $color_in ) : '';
         $uid      = $this->preset_uid( $sel );
+        // «Intensità effetto» (effect_intensity, 14 tile): prima nessun renderer la leggeva.
+        // Scala bagliori e linee di scansione; «medio» = i valori di sempre.
+        $int_map  = [ 'subtle' => 0.6, 'low' => 0.6, 'medium' => 1.0, 'high' => 1.6, 'intense' => 1.6, 'strong' => 1.6 ];
+        $k        = $int_map[ $s['effect_intensity'] ?? 'medium' ] ?? 1.0;
+        // Con «medio» si riscrive il valore di sempre, carattere per carattere.
+        $px       = function ( $v ) use ( $k ) { return 1.0 === $k ? $v : (string) round( floatval( $v ) * $k, 1 ); };
+        $al       = function ( $v ) use ( $k ) { return 1.0 === $k ? $v : (string) round( min( 1, floatval( $v ) * $k ), 3 ); };
 
         $css = '';
 
@@ -370,7 +377,8 @@ abstract class Olobuild_Tile_Base {
         if ( $scan ) {
             $sc_c   = $color ?: '#00ff8c';
             $sc_rgb = $this->color_to_rgb( $sc_c );
-            $css   .= $sel . "{background-image:repeating-linear-gradient(0deg,transparent 0,transparent 2px,rgba({$sc_rgb},0.06) 2px,rgba({$sc_rgb},0.06) 3px);}";
+            $sc_a   = $al( '0.06' );
+            $css   .= $sel . "{background-image:repeating-linear-gradient(0deg,transparent 0,transparent 2px,rgba({$sc_rgb},{$sc_a}) 2px,rgba({$sc_rgb},{$sc_a}) 3px);}";
         }
 
         if ( $glow ) {
@@ -378,7 +386,9 @@ abstract class Olobuild_Tile_Base {
             $g_rgb = $this->color_to_rgb( $g_c );
             $pulse = $speed > 0 ? $speed : 2200;
             $kf    = "olo-wow-glow-{$uid}";
-            $css  .= "@keyframes {$kf}{0%,100%{box-shadow:0 0 12px rgba({$g_rgb},0.5),inset 0 0 12px rgba({$g_rgb},0.15)}50%{box-shadow:0 0 24px rgba({$g_rgb},0.85),inset 0 0 24px rgba({$g_rgb},0.30)}}";
+            $g12 = $px( '12' ); $g24 = $px( '24' );
+            $a05 = $al( '0.5' ); $a015 = $al( '0.15' ); $a085 = $al( '0.85' ); $a030 = $al( '0.30' );
+            $css  .= "@keyframes {$kf}{0%,100%{box-shadow:0 0 {$g12}px rgba({$g_rgb},{$a05}),inset 0 0 {$g12}px rgba({$g_rgb},{$a015})}50%{box-shadow:0 0 {$g24}px rgba({$g_rgb},{$a085}),inset 0 0 {$g24}px rgba({$g_rgb},{$a030})}}";
             $css  .= $sel . "{animation:{$kf} {$pulse}ms ease-in-out infinite;}";
         }
 
@@ -386,7 +396,8 @@ abstract class Olobuild_Tile_Base {
             $tg_c   = $color ?: '';
             $tg_c   = $tg_c ?: '#ff6a2a';
             $tg_rgb = $this->color_to_rgb( $tg_c );
-            $css   .= $sel . ' ' . $title . "{text-shadow:0 0 8px rgba({$tg_rgb},0.6);}";
+            $t8     = $px( '8' ); $a06 = $al( '0.6' );
+            $css   .= $sel . ' ' . $title . "{text-shadow:0 0 {$t8}px rgba({$tg_rgb},{$a06});}";
         }
 
         if ( ! empty( $s['wow_terminal_prompt'] ) && $title !== '' ) {
