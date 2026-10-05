@@ -121,10 +121,12 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
         $axes = $this->normalize_axes( $s['axes'] ?? [] );
 
         // ── Stile ──────────────────────────────────────────────────
-        $font_family = trim( (string) $s['font_family'] );
-        // family CSS safe: lettere, cifre, spazi, virgole, trattini, apici/doppi apici
-        $font_family = preg_replace( '/[^A-Za-z0-9 ,"\'\-]/', '', $font_family );
-        $font_css    = $font_family !== '' ? $font_family . ', inherit' : 'inherit';
+        // Il filtro di base accetta i token del campo font (var(--olo-font-…)) e gli
+        // elenchi di famiglie. Prima il filtro locale toglieva le parentesi ai
+        // var() e aggiungeva «, inherit» in coda: inherit e' una parola chiave che
+        // non puo' stare in un elenco, il browser scartava la dichiarazione intera
+        // e il font scelto non si applicava mai.
+        $font_css = $this->resolve_font_family( $s['font_family'] ) ?: 'inherit';
 
         $text_color  = $this->safe_color_css( $s['text_color'] )  ?: 'var(--olo-color-text, #111827)';
         $accent      = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
