@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.525 - 2026-10-05 (fix)
+- Il bordo del Contenitore con un colore trasparente della Palette (per esempio «primario al 40%») si vede del colore scelto: prima usciva grigio scuro.
+
 ## v1.4.524 - 2026-10-05 (fix)
 - Il Carousel appena inserito mostra le sue tre slide con un'immagine segnaposto: prima era vuoto finché non si sceglievano le immagini.
 
