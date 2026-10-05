@@ -1429,6 +1429,7 @@ import HeightModeSelector from '../ProSlider/HeightModeSelector.vue';
 import { TILE_PRESETS, BASE_THEME_PRESETS } from '@/config/tilePresets';
 import { ATOMIC_TILE_TYPES } from '@/composables/useBackgroundStyle';
 import { MEGAMENU_TEMPLATES } from '@/config/megamenuTemplates';
+import { sfondoDaPreset } from '@/utils/sfondoDaPreset';
 
 // Pannello degli stili tipografici globali, aperto dai campi che li usano.
 const { typographyOpen, closeTypography } = useGlobalPanels();
@@ -2958,6 +2959,14 @@ function applyTilePresetTheme(tile, presetId) {
     const WRAPPER_KEYS = ['bg_color', 'border_radius', 'shadow'];
     const wrapperPatch = {};
     WRAPPER_KEYS.forEach(k => { if (k in mapped) wrapperPatch[k] = mapped[k]; });
+    // Lo sfondo del preset va nel formato di oggi (style.bg). Come colore piatto (style.bg_color)
+    // perdeva contro lo «Sfondo: Nessuno» che quasi ogni tile ha di partenza (settings.bg): il
+    // renderer prende quello e il contenitore restava trasparente («Retro Terminal» verde su
+    // crema, «Underline Dark» illeggibile). Le tile già salvate non cambiano.
+    if ('bg_color' in wrapperPatch) {
+      wrapperPatch.bg = sfondoDaPreset(wrapperPatch.bg_color);
+      wrapperPatch.bg_color = '';
+    }
     if (Object.keys(wrapperPatch).length) {
       tilesStore.applyStylePreset(tile.id, wrapperPatch);
     }
