@@ -57,6 +57,24 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nata: un conto alla rovescia che non scade mai (evergreen di 3 giorni che riparte
+  // da solo), con giorni, ore, minuti e secondi in card tenui nel colore primario.
+  partenza: {
+    countdown_type: 'evergreen',
+    evergreen_hours: '72',
+    evergreen_minutes: '0',
+    evergreen_loop: true,
+    separator: '',
+    number_font_size: '52',
+    number_font_weight: '700',
+    label_font_size: '12',
+    label_font_weight: '600',
+    item_min_width: '96',
+    item_bg_color: 'color-mix(in srgb, var(--olo-color-primary) 10%, transparent)',
+    item_radius: { tl: 16, tr: 16, br: 16, bl: 16 },
+    item_padding: { top: 18, right: 12, bottom: 16, left: 12 },
+  },
+
   fields: [
     { key: 'countdown_type', label: t('Tipo countdown'), type: 'select', options: [
       { value: 'date', label: t('Data fissa') },

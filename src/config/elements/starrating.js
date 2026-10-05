@@ -36,6 +36,13 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: il voto medio dei clienti (quattro stelle su cinque) con un titolo sopra
+  // e il numero di recensioni sotto.
+  partenza: {
+    title: t('Il voto dei nostri clienti'),
+    subtitle: t('Media di 248 recensioni verificate'),
+  },
+
   fields: [
     { key: 'rating', label: t('Valutazione'), type: 'range', min: 0, max: 5, step: 0.5 },
     { key: 'max_stars', label: t('Stelle massime'), type: 'range', min: 1, max: 10, step: 1 },

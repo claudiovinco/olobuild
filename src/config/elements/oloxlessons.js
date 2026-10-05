@@ -23,6 +23,19 @@ export default {
     ],
   },
 
+  // Come nasce dalla palette: il programma di un corso in quattro lezioni lungo il percorso
+  // tratteggiato, coi nodi numerati, i punti di ogni lezione e il lucchetto che si apre scendendo.
+  partenza: {
+    kicker: t('Corso base · 4 lezioni'),
+    title_html: t('Si impara <em>una lezione</em> alla volta'),
+    items: [
+      { xp: '+80 xp', title: t('Le basi'), text_html: t('Gli strumenti, le parole del mestiere e un primo esercizio guidato da fare subito.') },
+      { xp: '+120 xp', title: t('La pratica'), text_html: t('Tre esercizi con le soluzioni commentate passo per passo.') },
+      { xp: '+150 xp', title: t('Il progetto'), text_html: t('Metti insieme quello che hai imparato in un lavoro tutto tuo.') },
+      { xp: '+200 xp', title: t('La verifica finale'), text_html: t('Dieci domande e l\'attestato da scaricare.') },
+    ],
+  },
+
   fields: [
     { key: 'kicker', label: t('Kicker'), type: 'text' },
     { key: 'title_html', label: t('Titolo (HTML)'), type: 'textarea' },

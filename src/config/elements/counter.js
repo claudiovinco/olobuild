@@ -53,6 +53,24 @@ export default {
     text_effect_target: 'label',
   },
 
+  // Appena nata: un numero da vetrina in un riquadro tenue nel colore primario, con icona,
+  // cifra grande col suffisso colorato ed etichetta; raggio morbido.
+  partenza: {
+    number: '1.250',
+    icon_emoji: 'users',
+    icon_size: '32',
+    text_color: 'var(--olo-color-text)',
+    number_font_size: '56',
+    number_font_weight: '800',
+    label_color: 'var(--olo-color-text-muted)',
+    label_font_size: '15',
+    label_font_weight: '500',
+    media_bg: { type: 'solid', color: 'color-mix(in srgb, var(--olo-color-primary) 8%, transparent)' },
+    overlay_color: 'var(--olo-color-dark, #16263d)',
+    tile_padding: { top: 36, right: 28, bottom: 36, left: 28 },
+    border_radius: '20',
+  },
+
   fields: [
     { key: 'number', label: t('Numero'), type: 'text' },
     { key: 'label', label: t('Etichetta'), type: 'text' },

@@ -136,6 +136,22 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nata: un modulo contatti completo — nome, email, telefono e motivo affiancati a
+  // due a due, il messaggio, il consenso privacy e il pulsante d'invio con la freccia.
+  partenza: {
+    fields: [
+      { id: 'f-1', field_type: 'text', label: t('Nome e cognome'), placeholder: t('Mario Rossi'), name: 'nome', required: true, width: '1-2', options: '', icon: 'user', condition_field: '', condition_operator: 'equals', condition_value: '' },
+      { id: 'f-2', field_type: 'email', label: t('Email'), placeholder: t('nome@esempio.it'), name: 'email', required: true, width: '1-2', options: '', icon: 'mail', condition_field: '', condition_operator: 'equals', condition_value: '' },
+      { id: 'f-3', field_type: 'tel', label: t('Telefono'), placeholder: t('+39 333 123 4567'), name: 'telefono', required: false, width: '1-2', options: '', icon: 'phone', condition_field: '', condition_operator: 'equals', condition_value: '' },
+      { id: 'f-4', field_type: 'select', label: t('Motivo del contatto'), placeholder: t('Scegli un motivo'), name: 'motivo', required: false, width: '1-2', options: t('Richiesta di informazioni\nPreventivo\nPrenotazione\nAltro'), icon: '', condition_field: '', condition_operator: 'equals', condition_value: '' },
+      { id: 'f-5', field_type: 'textarea', label: t('Messaggio'), placeholder: t('Raccontaci come possiamo aiutarti'), name: 'messaggio', required: true, width: '1-1', options: '', icon: '', condition_field: '', condition_operator: 'equals', condition_value: '' },
+    ],
+    submit_text: t('Invia la richiesta'),
+    submit_icon: 'arrow-right',
+    submit_icon_pos: 'right',
+    privacy_checkbox: true,
+  },
+
   fields: [
     { key: 'fields', label: t('Campi del form'), type: 'content-items',
       itemFields: [

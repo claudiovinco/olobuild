@@ -52,6 +52,30 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: il calendario di una squadra in tre card scure, l'ultimo risultato e le
+  // due partite in arrivo («vs»), con data, campo, campionato e giornata, le sigle delle squadre nei
+  // colori del sito e la riga sotto.
+  partenza: {
+    items: [
+      { day: t('Dom 12.10'), time_place: t('Finale · Campo Comunale'), league: t('Campionato'), matchday: t('Giornata 5'),
+        home_crest: 'SP', home_crest_bg: 'var(--olo-color-primary)', home_name: t('Sporting Pievese'),
+        away_crest: 'AR', away_crest_bg: 'var(--olo-color-secondary)', away_name: t('Atletico Rivalta'), score: '3 : 1', venue: t('Prima squadra · tre punti in casa') },
+      { day: t('Sab 18.10'), time_place: t('15:00 · Stadio dei Pini'), league: t('Campionato'), matchday: t('Giornata 6'),
+        home_crest: 'RM', home_crest_bg: 'color-mix(in srgb, var(--olo-color-accent) 55%, var(--olo-color-dark, #16263d))', home_name: t('Real Montebello'),
+        away_crest: 'SP', away_crest_bg: 'var(--olo-color-primary)', away_name: t('Sporting Pievese'), score: '', venue: t('Trasferta · pullman alle 12') },
+      { day: t('Dom 26.10'), time_place: t('15:00 · Campo Comunale'), league: t('Coppa provinciale'), matchday: t('Ottavi'),
+        home_crest: 'SP', home_crest_bg: 'var(--olo-color-primary)', home_name: t('Sporting Pievese'),
+        away_crest: 'UV', away_crest_bg: 'color-mix(in srgb, var(--olo-color-secondary) 55%, var(--olo-color-dark, #16263d))', away_name: t('US Valdera'), score: '', venue: t('Ingresso libero') },
+    ],
+    card_bg: 'var(--olo-color-dark, #16263d)',
+    card_border: 'color-mix(in srgb, var(--olo-color-light, #f8f9fa) 12%, transparent)',
+    day_color: 'var(--olo-color-light, #f8f9fa)',
+    meta_color: 'color-mix(in srgb, var(--olo-color-light, #f8f9fa) 62%, transparent)',
+    name_color: 'var(--olo-color-light, #f8f9fa)',
+    score_color: 'var(--olo-color-light, #f8f9fa)',
+    crest_text_color: 'var(--olo-color-light, #f8f9fa)',
+  },
+
   fields: [
     { type: 'separator', label: t('Partite') },
     { key: 'items', label: t('Fixtures'), type: 'content-items',

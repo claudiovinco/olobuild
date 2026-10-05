@@ -64,6 +64,22 @@ export default {
     text_effect_target: 'name',
   },
 
+  // Come nasce dalla palette: la scheda di una persona dello staff, con l'avatar che la tile disegna
+  // da sé (il pacchetto demo non ha ritratti), ruolo nel colore del sito, due righe di presentazione
+  // e il link per scriverle, su una scheda tinta appena del primario.
+  partenza: {
+    name: t('Giulia Ferri'),
+    role: t('Responsabile clienti'),
+    bio: t('Da dodici anni segue clienti e progetti dal primo incontro alla consegna. Risponde a ogni messaggio entro un giorno lavorativo.'),
+    link_text: t('Scrivile'),
+    link_url: '#',
+    photo_border_color: 'var(--olo-color-background)',
+    info_bg_color: 'color-mix(in srgb, var(--olo-color-primary) 7%, var(--olo-color-background))',
+    info_text_color: 'var(--olo-color-text)',
+    role_color: 'var(--olo-color-primary)',
+    name_size: '22',
+  },
+
   fields: [
     { type: 'separator', label: t('Media') },
     { key: 'photo', label: t('Foto / Video'), type: 'media' },

@@ -1,5 +1,6 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
 import { t } from '@/i18n';
+import { demo } from '../demoMedia.js';
 
 /**
  * Tile FlipCard — split CONTENUTO/STILE.
@@ -87,6 +88,32 @@ export default {
     desc_size: '14',
     ...textEffectsDefaults,
     text_effect_target: 'all',
+  },
+
+  // Appena nata: davanti una foto con velo scuro e il nome del servizio in chiaro in basso;
+  // al passaggio la card gira e mostra, sul colore primario, cosa comprende e il pulsante.
+  partenza: {
+    front_media: { type: 'image', image_url: demo('scrivania'), image_size: 'cover', image_position: 'center center', overlay_color: 'var(--olo-color-dark, #16263d)', overlay_opacity: 50 },
+    front_icon: '',
+    front_title: t('Consulenza su misura'),
+    front_description: t('Passa sopra la card per scoprire cosa comprende'),
+    front_text_color: 'var(--olo-color-light, #ffffff)',
+    front_text_align: 'left',
+    front_valign: 'bottom',
+    back_title: t('Consulenza su misura'),
+    back_description: t('Un primo incontro gratuito per capire le tue esigenze, poi un piano chiaro con tempi e costi definiti per iscritto.'),
+    back_bg: 'var(--olo-color-primary)',
+    back_text_color: 'var(--olo-color-primary-contrast)',
+    back_text_align: 'left',
+    back_cta_text: t('Prenota un incontro'),
+    back_cta_url: '#',
+    back_cta_bg: 'var(--olo-color-primary-contrast)',
+    back_cta_color: 'var(--olo-color-primary)',
+    back_cta_radius: '999',
+    card_height: '360',
+    card_border_radius: '16',
+    title_size: '24',
+    desc_size: '15',
   },
 
   fields: [

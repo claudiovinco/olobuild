@@ -55,6 +55,27 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: tre parole di clienti che scorrono con frecce e trattini, il nome del
+  // cliente nel primario sopra la citazione, e a destra la card del primario con le linee punteggiate
+  // che cambia forma a ogni voce. Sul fondo del sito, testi nei colori della Palette.
+  partenza: {
+    heading: t('Perché i clienti ci scelgono'),
+    items: [
+      { quote: t('In sei mesi abbiamo dimezzato i tempi di consegna. Ci hanno ascoltato, hanno proposto soluzioni concrete e le hanno portate fino in fondo.'), author_name: t('Elena Martini'), author_role: t('Direttrice operativa, Officine Martini'), logo_text: t('Officine Martini') },
+      { quote: t('Un unico referente, risposte in giornata e nessuna sorpresa in fattura. È raro trovare un partner così affidabile.'), author_name: t('Davide Costa'), author_role: t('Titolare, Hotel Belvedere'), logo_text: t('Hotel Belvedere') },
+      { quote: t('Dal primo mese le richieste di preventivo sono raddoppiate. Ora lavoriamo insieme anche sulla comunicazione.'), author_name: t('Sara Lombardi'), author_role: t('Socia, Studio Lombardi & Neri'), logo_text: t('Lombardi & Neri') },
+    ],
+    bg_color: 'transparent',
+    heading_color: 'var(--olo-color-text)',
+    quote_color: 'var(--olo-color-text)',
+    author_color: 'var(--olo-color-text)',
+    role_color: 'var(--olo-color-text-muted)',
+    logo_color: 'var(--olo-color-primary)',
+    arrow_color: 'var(--olo-color-text)',
+    graphic_color: 'var(--olo-color-primary)',
+    graphic_line_color: 'var(--olo-color-primary-contrast)',
+  },
+
   fields: [
     { key: 'heading', label: t('Titolo sezione'), type: 'text' },
     {

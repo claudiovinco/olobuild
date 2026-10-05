@@ -83,6 +83,17 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: accesso e registrazione insieme, con le due schede in alto, su un
+  // riquadro tinto appena del primario (icone nei campi, occhio della password, «Ricordami»).
+  // Nel canvas del builder chi è collegato vede il saluto «Bentornato!», non il modulo.
+  partenza: {
+    mode: 'both',
+    login_subtitle: t('Accedi per vedere ordini, prenotazioni e preferenze'),
+    register_subtitle: t('Bastano un nome utente, un\'email e una password'),
+    form_bg: 'color-mix(in srgb, var(--olo-color-primary) 6%, var(--olo-color-background))',
+    border_radius: '16',
+  },
+
   fields: [
     { key: 'mode', label: t('Modalità'), type: 'select', options: [
       { value: 'login', label: t('Solo Login') },

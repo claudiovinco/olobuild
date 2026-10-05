@@ -32,6 +32,20 @@ export default {
     bg: { type: 'none' },
   },
 
+  // Appena nata: una striscia nel colore primario del sito con un avviso vero (spedizioni e
+  // novità), la parte in evidenza piena e il resto appena velato, in maiuscolo spaziato.
+  partenza: {
+    text: t('Spedizione gratuita sopra i 50 € · '),
+    accent_text: t('Scopri la nuova collezione'),
+    bg_color: 'var(--olo-color-primary)',
+    text_color: 'color-mix(in srgb, var(--olo-color-primary-contrast) 78%, transparent)',
+    accent_color: 'var(--olo-color-primary-contrast)',
+    font_size: '12',
+    font_weight: '600',
+    letter_spacing: '0.16em',
+    tile_padding: { top: 12, right: 20, bottom: 12, left: 20 },
+  },
+
   fields: [
     { key: 'text', label: t('Testo'), type: 'text' },
     { key: 'accent_text', label: t('Testo evidenziato (accento)'), type: 'text' },

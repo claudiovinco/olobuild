@@ -36,6 +36,22 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nata: i pulsanti per condividere la pagina sui canali più usati, con icona e nome,
+  // nel colore primario del sito (copia link compreso).
+  partenza: {
+    buttons: [
+      { id: 'sh-1', platform: 'whatsapp', custom_label: '' },
+      { id: 'sh-2', platform: 'facebook', custom_label: '' },
+      { id: 'sh-3', platform: 'linkedin', custom_label: '' },
+      { id: 'sh-4', platform: 'email', custom_label: '' },
+      { id: 'sh-5', platform: 'copylink', custom_label: '' },
+    ],
+    style: 'icon-text',
+    icon_color: 'var(--olo-color-primary-contrast)',
+    icon_hover_color: 'var(--olo-color-primary-contrast)',
+    bg_color: 'var(--olo-color-primary)',
+  },
+
   fields: [
     { key: 'buttons', label: t('Pulsanti'), type: 'content-items',
       itemFields: [

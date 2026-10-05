@@ -40,6 +40,37 @@ export default {
     ],
   },
 
+  // Come nasce dalla palette: la variante «Giornata», con l'orario grande che avanza scorrendo e gli
+  // appuntamenti di uno studio che si confermano col timbro; anche l'«Assembler» ha testi generici.
+  partenza: {
+    variant: 'day',
+    kicker: t('Una giornata in studio'),
+    day_label: t('agenda piena'),
+    day_hint: t('scorri per far passare le ore'),
+    day_slots: [
+      { hh: '09:00', what: t('Primo colloquio con un nuovo cliente'), who: t('consulenza') },
+      { hh: '10:30', what: t('Sopralluogo in via Garibaldi 12'), who: t('sopralluogo') },
+      { hh: '12:30', what: t('Pranzo di lavoro con i fornitori'), who: t('riunione') },
+      { hh: '14:30', what: t('Videochiamata di aggiornamento'), who: t('online') },
+      { hh: '16:00', what: t('Consegna del progetto finito'), who: t('consegna') },
+      { hh: '18:00', what: t('Corso serale in sede'), who: t('formazione') },
+    ],
+    browser_url: 'https://iltuosito.it',
+    asm_hint: t('continua a scorrere'),
+    asm_blocks: [
+      { text: t('menu e logo') }, { text: t('foto in evidenza') }, { text: t('i servizi') },
+      { text: t('le recensioni') }, { text: t('mappa e contatti') },
+    ],
+    asm_steps: [
+      { text: t('Scorri: il sito si <em>monta da solo</em>.') },
+      { text: t('Fase 1 · <em>menu</em> e logo al loro posto.') },
+      { text: t('Fase 2 · la <em>foto</em> in evidenza entra in scena.') },
+      { text: t('Fase 3 · i <em>servizi</em> in tre colonne.') },
+      { text: t('Fase 4 · le <em>recensioni</em> dei clienti.') },
+      { text: t('Fase 5 · <em>mappa</em> e contatti: il sito è online.') },
+    ],
+  },
+
   fields: [
     { key: 'kicker', label: t('Kicker'), type: 'text' },
     { key: 'anchor', label: t('Ancora (id)'), type: 'text' },

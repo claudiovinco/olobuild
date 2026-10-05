@@ -1,6 +1,7 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, focalField } from './_shared';
 import { shadowField } from './_shared.js';
 import { t } from '@/i18n';
+import { demo } from '../demoMedia.js';
 
 /**
  * Tile Link in Bio — split CONTENUTO/STILE (regola universale Olobuild).
@@ -51,6 +52,27 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Appena nata: la pagina «link in bio» di un locale — foto profilo, nome e una riga di
+  // presentazione, poi i link a pillola con le loro icone (menu, prenotazione, mappa,
+  // Instagram) e l'ultimo a contorno, su un fondo tenue nel colore primario.
+  partenza: {
+    items: [
+      { id: 'lib-1', title: t('Il nostro menu'), url: '#', icon: 'file-text', image_url: '', style: 'filled' },
+      { id: 'lib-2', title: t('Prenota un tavolo'), url: '#', icon: 'calendar', image_url: '', style: 'filled' },
+      { id: 'lib-3', title: t('Come arrivare'), url: '#', icon: 'location', image_url: '', style: 'filled' },
+      { id: 'lib-4', title: t('Seguici su Instagram'), url: 'https://www.instagram.com/', icon: 'instagram', image_url: '', style: 'filled' },
+      { id: 'lib-5', title: t('Scrivici'), url: 'mailto:info@example.com', icon: 'mail', image_url: '', style: 'outline' },
+    ],
+    profile_image: demo('caffe'),
+    profile_name: t('Caffè Centrale'),
+    profile_bio: t('Colazioni, pranzi veloci e aperitivi in centro'),
+    link_bg: 'var(--olo-color-background)',
+    link_hover_bg: 'color-mix(in srgb, var(--olo-color-primary) 12%, var(--olo-color-background))',
+    link_border_radius: '999',
+    bio_color: 'var(--olo-color-text-muted)',
+    background_color: 'color-mix(in srgb, var(--olo-color-primary) 9%, var(--olo-color-background))',
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

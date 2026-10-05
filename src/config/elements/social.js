@@ -38,6 +38,20 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nata: i quattro social più usati da un'attività come cerchi pieni nel colore
+  // primario del sito (non nei colori dei marchi), che si sollevano al passaggio.
+  partenza: {
+    links: [
+      { id: 's-1', platform: 'instagram', url: 'https://www.instagram.com/' },
+      { id: 's-2', platform: 'facebook',  url: 'https://www.facebook.com/' },
+      { id: 's-3', platform: 'linkedin',  url: 'https://www.linkedin.com/' },
+      { id: 's-4', platform: 'youtube',   url: 'https://www.youtube.com/' },
+    ],
+    size: '44',
+    use_brand_colors: false,
+    icon_color: 'var(--olo-color-primary)',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { type: 'separator', label: t('Piattaforme') },

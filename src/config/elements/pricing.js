@@ -99,6 +99,32 @@ export default {
     shadow: 'none',
   },
 
+  // Come nasce dalla palette: il piano «Più scelto» di un listino (la tile è una card per piano: le
+  // sorelle si affiancano duplicandola). Card sul fondo del sito col filo e il bagliore del primario,
+  // badge in alto, prezzo in €, vantaggi con la spunta, pulsante a pillola e una nota sotto.
+  partenza: {
+    plan_name: t('Professionale'),
+    price: '49',
+    currency_position: 'after',
+    currency_size: '22',
+    period: t('/mese'),
+    features: t('Fino a 10 utenti\n100 GB di spazio\nAssistenza prioritaria in chat\nReport mensile dei risultati\nDisdici quando vuoi'),
+    feature_dividers: false,
+    is_popular: true,
+    badge_text: t('Più scelto'),
+    badge_top: '-4',
+    badge_text_color: 'var(--olo-color-primary-contrast)',
+    bg_color: 'var(--olo-color-background)',
+    text_color: 'var(--olo-color-text)',
+    accent_color: 'var(--olo-color-primary)',
+    cta_text: t('Scegli Professionale'),
+    cta_text_color: 'var(--olo-color-primary-contrast)',
+    cta_radius: '999',
+    additional_info: t('IVA inclusa · 14 giorni di prova gratuita'),
+    border_radius: '20',
+    overlay_color: 'var(--olo-color-dark, #16263d)',
+  },
+
   fields: [
     { key: 'plan_name', label: t('Nome piano'), type: 'text' },
     { key: 'price', label: t('Prezzo'), type: 'text' },

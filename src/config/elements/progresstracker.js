@@ -43,6 +43,19 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: le tappe di un ordine con le icone al posto dei numeri (pacco, furgone,
+  // casa), la prima completata con la spunta, la seconda attiva con l'alone e le altre in attesa.
+  partenza: {
+    items: [
+      { id: 'pt-1', title: t('Ordine ricevuto'), description: t('Confermato martedì alle 9:12.'), icon: 'check', status: 'completed' },
+      { id: 'pt-2', title: t('In preparazione'), description: t('Stiamo imballando il tuo ordine.'), icon: 'package', status: 'active' },
+      { id: 'pt-3', title: t('Spedito'), description: t('Il corriere lo ritira in giornata.'), icon: 'truck', status: 'pending' },
+      { id: 'pt-4', title: t('Consegnato'), description: t('Previsto entro venerdì.'), icon: 'home', status: 'pending' },
+    ],
+    show_numbers: false,
+    pending_color: 'var(--olo-color-text-muted)',
+  },
+
   fields: [
     { key: 'items', label: t('Passaggi'), type: 'content-items',
       itemFields: [

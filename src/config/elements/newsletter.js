@@ -99,6 +99,23 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: un riquadro tinto appena del primario con l'icona della busta,
+  // l'occhiello, il titolo con la parola in corsivo nel colore del sito, una riga che dice cosa si
+  // riceve e il modulo in linea (email + pulsante con la freccia).
+  partenza: {
+    eyebrow: t('Newsletter'),
+    title: t('Le novità, <em>una volta al mese</em>'),
+    subtitle: t('Consigli, anteprime e offerte riservate agli iscritti. Niente spam: ti cancelli con un clic.'),
+    icon_type: 'icon',
+    icon_color: 'var(--olo-color-primary)',
+    bg_color: 'color-mix(in srgb, var(--olo-color-primary) 7%, var(--olo-color-background))',
+    border_radius: 20,
+    input_bg: 'var(--olo-color-background)',
+    input_color: 'var(--olo-color-text)',
+    input_border: 'var(--olo-color-border)',
+    btn_color: 'var(--olo-color-primary-contrast)',
+  },
+
   fields: [
     { key: 'eyebrow', label: t('Occhiello (sopra il titolo)'), type: 'text' },
     { key: 'title', label: t('Titolo'), type: 'text',

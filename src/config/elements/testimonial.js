@@ -65,6 +65,26 @@ export default {
     text_effect_target: 'quote',
   },
 
+  // Come nasce dalla palette: tre recensioni di clienti in griglia, con le stelle, la linea del colore
+  // del sito accanto alla citazione e nome e città sotto, su card tinte appena del primario. Niente
+  // ritratti (il pacchetto demo non ne ha). In «Singola» si vede la prima recensione.
+  partenza: {
+    layout: 'grid',
+    grid_columns: 3,
+    quote: t('Gentili, puntuali e sempre chiari sui costi. Ci hanno seguito passo passo e il risultato è andato oltre le aspettative.'),
+    author_name: t('Laura Conti'),
+    author_role: t('Cliente da Bologna'),
+    items: [
+      { quote: t('Gentili, puntuali e sempre chiari sui costi. Ci hanno seguito passo passo e il risultato è andato oltre le aspettative.'), logo: '', author_name: t('Laura Conti'), author_role: t('Cliente da Bologna'), avatar: '', rating: '5' },
+      { quote: t('Ho scritto un sabato sera e lunedì mattina avevo già la risposta. Un servizio così attento non è scontato.'), logo: '', author_name: t('Marco Gallo'), author_role: t('Cliente da Torino'), avatar: '', rating: '5' },
+      { quote: t('Ottimo rapporto fra qualità e prezzo, e tanta disponibilità. L\'ho già consigliato a due amici.'), logo: '', author_name: t('Chiara Esposito'), author_role: t('Cliente da Napoli'), avatar: '', rating: '4' },
+    ],
+    bg_color: 'color-mix(in srgb, var(--olo-color-primary) 6%, var(--olo-color-background))',
+    text_color: 'var(--olo-color-text)',
+    star_color: 'var(--olo-color-accent)',
+    border_radius: '16',
+  },
+
   fields: [
     { key: 'quote', label: t('Citazione'), type: 'textarea' },
     { key: 'logo', label: t('Logo cliente (in alto nella card)'), type: 'image' },

@@ -36,6 +36,20 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nata: un anello nel colore primario su traccia della stessa tinta che si riempie
+  // fino al 92% contando, con un titolo vero sotto.
+  partenza: {
+    value: '92',
+    title: t('Clienti che ci consigliano'),
+    size: '180',
+    stroke_width: '12',
+    stroke_color: 'var(--olo-color-primary)',
+    track_color: 'color-mix(in srgb, var(--olo-color-primary) 14%, transparent)',
+    text_color: 'var(--olo-color-text)',
+    title_color: 'var(--olo-color-text)',
+    duration: '1800',
+  },
+
   fields: [
     { key: 'value', label: t('Valore'), type: 'range', min: 0, max: 1000, step: 1 },
     { key: 'max_value', label: t('Valore massimo'), type: 'range', min: 1, max: 1000, step: 1 },

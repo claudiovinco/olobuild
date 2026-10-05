@@ -1,6 +1,7 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared';
 import { shadowField } from './_shared.js';
 import { t } from '@/i18n';
+import { demo } from '../demoMedia.js';
 
 /**
  * Tile PriceList — split CONTENUTO/STILE (regola universale Olobuild).
@@ -55,6 +56,20 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Appena nata: il listino di un locale con le foto dei piatti, descrizioni vere, prezzi in
+  // euro e una voce in evidenza col badge «Il più scelto»; le card si sollevano al passaggio.
+  partenza: {
+    items: [
+      { id: 'pl-1', title: t('Colazione completa'), description: t('Cappuccino, spremuta d\'arancia e cornetto appena sfornato'), price: '6,50 €', image_url: demo('caffe'), highlighted: false, badge: '' },
+      { id: 'pl-2', title: t('Insalata dell\'orto'), description: t('Verdure di stagione, carote a nastro e semi tostati'), price: '9 €', image_url: demo('insalata'), highlighted: false, badge: '' },
+      { id: 'pl-3', title: t('Piatto del giorno'), description: t('La proposta della cucina con gli ingredienti del mercato'), price: '14 €', image_url: demo('piatti-alto'), highlighted: true, badge: t('Il più scelto') },
+      { id: 'pl-4', title: t('Cena per due'), description: t('Antipasto, due portate e un calice di vino a testa'), price: '48 €', image_url: demo('tavola'), highlighted: false, badge: '' },
+    ],
+    image_size: '64',
+    image_border_radius: '10',
+    badge_color: 'var(--olo-color-primary-contrast)',
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

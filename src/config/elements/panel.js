@@ -1,5 +1,6 @@
 import { textEffectsFields, textEffectsDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, wowEffectsFields, wowEffectsDefaults } from './_shared.js';
 import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -70,6 +71,23 @@ export default {
     ...wowEffectsDefaults,
     ...textEffectsDefaults,
     text_effect_target: 'all',
+  },
+
+  // Come nasce dalla palette: la card di un servizio con la foto 16:9 a filo che si ingrandisce al
+  // passaggio, l'occhiello nel colore del sito, il titolo, due righe di testo e il link in fondo.
+  partenza: {
+    image: demo('ufficio'),
+    title: t('Un progetto su misura'),
+    meta: t('Servizi · consulenza'),
+    content: t('Partiamo da un incontro per capire obiettivi, tempi e budget, poi ti proponiamo un piano chiaro con i costi definiti fin dall\'inizio.'),
+    link_url: '#',
+    link_label: t('Scopri di più'),
+    image_ratio: '16/9',
+    image_zoom: true,
+    card_radius: '16',
+    shadow: 'md',
+    title_color: 'var(--olo-color-text)',
+    meta_color: 'var(--olo-color-primary)',
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

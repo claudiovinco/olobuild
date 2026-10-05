@@ -28,6 +28,23 @@ export default {
     bonus: 90,
   },
 
+  // Come nasce dalla palette: una domanda di cultura generale con tre risposte cliccabili; quella
+  // giusta diventa verde e lancia i coriandoli col bonus di punti, quella sbagliata mostra il verdetto.
+  partenza: {
+    kicker: t('Mettiti alla prova'),
+    title_html: t('Quanto ne <em>sai</em>?'),
+    question_html: t('Quante sono le <em>regioni</em> italiane?'),
+    answers: [
+      { text: t('Diciotto'), ok: false },
+      { text: t('Venti'), ok: true },
+      { text: t('Ventidue'), ok: false },
+    ],
+    hint: t('rispondi per guadagnare +50 xp'),
+    ok_html: t('esatto · <b>+50 xp</b> · badge sbloccato'),
+    ko_text: t('non proprio: contale da nord a sud e riprova'),
+    bonus: 50,
+  },
+
   fields: [
     { key: 'kicker', label: t('Kicker'), type: 'text' },
     { key: 'title_html', label: t('Titolo (HTML)'), type: 'textarea' },

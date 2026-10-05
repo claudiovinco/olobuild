@@ -35,6 +35,14 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Come nasce dalla palette: l'editor inclinato con la tile «Titolo» che viene trascinata sul canvas
+  // in loop; nell'anteprima il sito di un hotel, con un sottotitolo che sta tutto nel riquadro.
+  partenza: {
+    url_text: 'iltuosito.it/editor',
+    canvas_title: t('Benvenuti all\'Hotel Belvedere'),
+    canvas_sub: t('Camere sul lago, a due passi dal centro.'),
+  },
+
   fields: [
     { type: 'separator', label: t('Contenuto mockup') },
     { key: 'url_text', label: t('Barra indirizzo'), type: 'text' },

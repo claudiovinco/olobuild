@@ -60,6 +60,21 @@ export default {
     text_effect_target: 'all',
   },
 
+  // Appena nata: un servizio presentato come si deve — icona nel colore primario dentro un
+  // cerchio della stessa tinta, titolo, descrizione vera e il link «Scopri…» con la freccia.
+  partenza: {
+    icon_emoji: 'lifesaver',
+    title: t('Assistenza dedicata'),
+    description: t('Un referente unico ti segue dal primo contatto alla consegna e risponde entro un giorno lavorativo.'),
+    link_url: '#',
+    link_text: t('Scopri come lavoriamo'),
+    icon_size: '2',
+    icon_color: 'var(--olo-color-primary)',
+    icon_bg_color: 'color-mix(in srgb, var(--olo-color-primary) 12%, transparent)',
+    title_font_size: '22',
+    icon_gap: '20',
+  },
+
   fields: [
     { key: 'icon_emoji', label: t('Icona / Emoji'), type: 'icon' },
     { key: 'title', label: t('Titolo'), type: 'text' },

@@ -35,6 +35,17 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nata: quattro indicatori di un'attività qualunque in barre sottili e arrotondate
+  // nel colore primario, su una traccia della stessa tinta; le barre si riempiono entrando.
+  partenza: {
+    bars: t('Clienti soddisfatti|98\nProgetti consegnati nei tempi|95\nClienti che tornano|87\nRisposte entro 24 ore|92'),
+    bar_color: 'var(--olo-color-primary)',
+    bar_bg: 'color-mix(in srgb, var(--olo-color-primary) 14%, transparent)',
+    text_color: 'var(--olo-color-text)',
+    height: '10',
+    show_percentage: false,
+  },
+
   fields: [
     { key: 'bars', label: t('Barre (etichetta|valore per riga)'), type: 'textarea' },
     { key: 'show_percentage', label: t('Mostra percentuale'), type: 'toggle' },

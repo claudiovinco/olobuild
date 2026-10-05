@@ -76,6 +76,30 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nata: la classifica dei punti di una raccolta fedeltà, con nomi veri, il livello
+  // in un badge, le prime tre posizioni evidenziate e le barre nel colore primario, su righe
+  // chiare velate dal colore del testo (leggibili con qualunque palette).
+  partenza: {
+    rows: [
+      { name: t('Giulia Ferri'), role: t('Oro'), value: 4820, max: 5000 },
+      { name: t('Marco Bellini'), role: t('Oro'), value: 4310, max: 5000 },
+      { name: t('Sara Conti'), role: t('Argento'), value: 3640, max: 5000 },
+      { name: t('Luca Moretti'), role: t('Argento'), value: 2950, max: 5000 },
+      { name: t('Elena Galli'), role: t('Bronzo'), value: 2180, max: 5000 },
+    ],
+    name_prefix: '',
+    value_suffix: t('punti'),
+    row_bg: 'color-mix(in srgb, var(--olo-color-text) 5%, transparent)',
+    text_color: 'var(--olo-color-text)',
+    role_color: 'var(--olo-color-text-muted)',
+    position_color: 'var(--olo-color-text-muted)',
+    badge_bg: 'color-mix(in srgb, var(--olo-color-primary) 14%, transparent)',
+    badge_color: 'color-mix(in srgb, var(--olo-color-primary) 65%, var(--olo-color-text))',
+    bar_track_color: 'color-mix(in srgb, var(--olo-color-text) 10%, transparent)',
+    bar_gradient_from: 'color-mix(in srgb, var(--olo-color-primary) 55%, transparent)',
+    bar_gradient_to: 'var(--olo-color-primary)',
+  },
+
   // ═══ CONTENUTO ════════════════════════════════════════════════
   fields: [
     { type: 'separator', label: t('Sorgente dati') },
