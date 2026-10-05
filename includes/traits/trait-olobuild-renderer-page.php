@@ -1085,9 +1085,33 @@ trait Olobuild_Renderer_Page_Trait {
               }
               function vaiA(target, liscio){
                 idrataFinoA(target);
-                var margine = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
-                var y = target.getBoundingClientRect().top + window.scrollY - Math.max(altezzaTesta(), margine);
-                window.scrollTo({ top: Math.max(0, Math.round(y)), behavior: liscio ? 'smooth' : 'auto' });
+                function distanza(){ return Math.max(altezzaTesta(), parseFloat(getComputedStyle(target).scrollMarginTop) || 0); }
+                function posa(come){
+                  var y = target.getBoundingClientRect().top + window.scrollY - distanza();
+                  window.scrollTo({ top: Math.max(0, Math.round(y)), behavior: come });
+                }
+                function scarto(){ return Math.abs(target.getBoundingClientRect().top - distanza()); }
+                /* Le griglie UIkit e le immagini appena idratate si assestano nei fotogrammi
+                   successivi: si parte dopo due fotogrammi e, finito lo scorrimento, se il
+                   bersaglio si e' spostato si corregge (non se intanto si scorre da se'). */
+                var annullato = false;
+                function annulla(){ annullato = true; }
+                window.addEventListener('wheel', annulla, { once: true, passive: true });
+                window.addEventListener('touchstart', annulla, { once: true, passive: true });
+                window.addEventListener('keydown', annulla, { once: true });
+                requestAnimationFrame(function(){ requestAnimationFrame(function(){
+                  posa(liscio ? 'smooth' : 'auto');
+                  var fatto = false;
+                  function correggi(){
+                    if(fatto) return;
+                    fatto = true;
+                    if(annullato) return;
+                    if(scarto() > 2) posa('auto');
+                    setTimeout(function(){ if(!annullato){ if(scarto() > 2) posa('auto'); } }, 400);
+                  }
+                  if('onscrollend' in window){ window.addEventListener('scrollend', correggi, { once: true }); }
+                  setTimeout(correggi, liscio ? 1500 : 120);
+                }); });
               }
               function bersaglioDi(hash){
                 if(!hash) return null;
