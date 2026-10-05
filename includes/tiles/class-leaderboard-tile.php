@@ -87,6 +87,57 @@ class Olobuild_Leaderboard_Tile extends Olobuild_Tile_Base {
         return [];
     }
 
+    /**
+     * Luminanza relativa (WCAG) di un fondo, coi token della Palette risolti; null se il
+     * fondo non è pieno (vuoto, trasparente, velato sotto il 50%) o non si risolve.
+     */
+    private function luminanza_fondo( $c ) {
+        $c = trim( (string) $c );
+        if ( '' === $c || 'transparent' === strtolower( $c ) ) {
+            return null;
+        }
+        $alfa = 1.0;
+        if ( preg_match( '/^#[0-9a-f]{6}([0-9a-f]{2})$/i', $c, $m ) ) {
+            $alfa = hexdec( $m[1] ) / 255;
+        } elseif ( preg_match( '/^rgba?\(\s*[\d.]+%?\s*[,\s]\s*[\d.]+%?\s*[,\s]\s*[\d.]+%?\s*[,\/]\s*([\d.]+)(%?)\s*\)$/i', $c, $m ) ) {
+            $alfa = (float) $m[1] / ( '%' === $m[2] ? 100 : 1 );
+        } elseif ( preg_match( '/^color-mix\(.+\s([\d.]+)%\s*,\s*transparent\s*\)$/is', $c, $m ) ) {
+            $alfa = (float) $m[1] / 100;
+        }
+        $hex = Olobuild_Tile_Utils::colore_hex( $c );
+        if ( $alfa < 0.5 || '' === $hex ) {
+            return null;
+        }
+        $l = 0.0;
+        foreach ( [ 1 => 0.2126, 3 => 0.7152, 5 => 0.0722 ] as $i => $k ) {
+            $v  = hexdec( substr( $hex, $i, 2 ) ) / 255;
+            $l += $k * ( $v <= 0.03928 ? $v / 12.92 : pow( ( $v + 0.055 ) / 1.055, 2.4 ) );
+        }
+        return $l;
+    }
+
+    /**
+     * Il colore di riserva di un testo che sta su una riga SCURA: $colore se si legge
+     * (contrasto almeno 3:1), altrimenti il chiaro della Palette ($tenue: velato al 70%, per
+     * unità e posizione). Le righe di default sono --olo-color-dark e i testi di default
+     * --olo-color-text: con una Palette dal testo scuro (quasi tutte) la classifica appena
+     * inserita era scuro su scuro. Vale solo per i colori NON scelti. Le righe chiare restano
+     * come sono: lì il grigio tenue e l'accento della Palette sono una scelta di resa, e
+     * cambiarli avrebbe ridipinto classifiche salvate e leggibili.
+     */
+    private function testo_su( $fondo, $colore, $tenue = false ) {
+        $lf = $this->luminanza_fondo( $fondo );
+        $lc = $this->luminanza_fondo( $colore );
+        if ( null === $lf || null === $lc || $lf >= 0.18 ) {
+            return $colore;
+        }
+        if ( ( max( $lf, $lc ) + 0.05 ) / ( min( $lf, $lc ) + 0.05 ) >= 3 ) {
+            return $colore;
+        }
+        $nuovo = 'var(--olo-color-light, #EDEAFB)';
+        return $tenue ? 'color-mix(in srgb, ' . $nuovo . ' 70%, transparent)' : $nuovo;
+    }
+
     public function render( $settings ) {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'olo-lb-' . wp_rand( 10000, 99999 );
@@ -107,10 +158,12 @@ class Olobuild_Leaderboard_Tile extends Olobuild_Tile_Base {
         $hl_top    = max( 0, min( 3, intval( $s['highlight_top'] ?? 3 ) ) );
 
         // ── Colori (token-first: fallback su var(--olo-color-*) coerenti) ──
+        // Testi senza colore scelto: seguono la riga (testo_su), così la riga scura di
+        // default non porta più il testo scuro della Palette.
         $row_bg      = $this->safe_color_css( $s['row_bg'] ?? '' ) ?: 'var(--olo-color-dark, #1A1233)';
-        $text_color  = $this->safe_color_css( $s['text_color'] ?? '' ) ?: 'var(--olo-color-text, #EDEAFB)';
-        $role_color  = $this->safe_color_css( $s['role_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #948CC4)';
-        $pos_color   = $this->safe_color_css( $s['position_color'] ?? '' ) ?: 'var(--olo-color-text-faint, #94a3b8)';
+        $text_color  = $this->safe_color_css( $s['text_color'] ?? '' ) ?: $this->testo_su( $row_bg, 'var(--olo-color-text, #EDEAFB)' );
+        $role_color  = $this->safe_color_css( $s['role_color'] ?? '' ) ?: $this->testo_su( $row_bg, 'var(--olo-color-text-muted, #948CC4)', true );
+        $pos_color   = $this->safe_color_css( $s['position_color'] ?? '' ) ?: $this->testo_su( $row_bg, 'var(--olo-color-text-faint, #94a3b8)', true );
         $badge_bg    = $this->safe_color_css( $s['badge_bg'] ?? '' ) ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 20%, transparent)';
         $badge_color = $this->safe_color_css( $s['badge_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
         $track_color = $this->safe_color_css( $s['bar_track_color'] ?? '' ) ?: 'var(--olo-color-border, rgba(237,234,251,0.08))';
@@ -120,6 +173,9 @@ class Olobuild_Leaderboard_Tile extends Olobuild_Tile_Base {
         $grad_to     = $this->safe_color_css( $s['bar_gradient_to'] ?? '' ) ?: 'var(--olo-color-secondary, #16263d)';
         $grad_angle  = max( 0, min( 360, intval( $s['bar_gradient_angle'] ?? 90 ) ) );
         $bar_grad    = "linear-gradient({$grad_angle}deg,{$grad_from},{$grad_to})";
+        // Il numero del valore prende il secondo colore del gradiente; quello di riserva
+        // (il secondario, spesso scuro) segue la riga come gli altri testi.
+        $pts_color   = $this->safe_color_css( $s['bar_gradient_to'] ?? '' ) ? $grad_to : $this->testo_su( $row_bg, $grad_to );
 
         // ── Dimensioni ──
         $bar_h       = max( 4, min( 28, intval( $s['bar_height'] ?? 8 ) ) );
@@ -232,7 +288,7 @@ class Olobuild_Leaderboard_Tile extends Olobuild_Tile_Base {
                 font-variant-numeric: tabular-nums;
                 white-space: nowrap;
             }
-            .<?php echo $uid; ?> .olo-lb-pts b { color: <?php echo $grad_to; ?>; }
+            .<?php echo $uid; ?> .olo-lb-pts b { color: <?php echo $pts_color; ?>; }
             .<?php echo $uid; ?> .olo-lb-pts .olo-lb-unit { color: <?php echo $role_color; ?>; font-weight: 500; }
             <?php endif; ?>
             /* reduced-motion → barre statiche al valore finale, niente transizione */
