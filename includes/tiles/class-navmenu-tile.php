@@ -513,8 +513,11 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
             <nav class="olo-nav-bar" role="navigation" aria-label="<?php echo esc_attr__( 'Main menu', 'olobuild' ); ?>">
                 <?php if ( $mobile ) :
                     $h_sz = max( 16, intval( $s['hamburger_size'] ) );
+                    // «Schermo intero» lo apre il suo script: con uk-toggle lo stesso clic metteva anche
+                    // `hidden` sul pannello (uk-open + hidden = invisibile) e il menu non si apriva mai.
+                    $fullscreen = ( $s['mobile_type'] ?? 'dropdown' ) === 'fullscreen';
                 ?>
-                    <a id="<?php echo esc_attr( $nav_id ); ?>-btn" class="uk-hidden@m olo-nav-toggle" href="#<?php echo esc_attr( $nav_id ); ?>" uk-toggle aria-label="<?php echo esc_attr__( 'Open menu', 'olobuild' ); ?>" aria-expanded="false">
+                    <a id="<?php echo esc_attr( $nav_id ); ?>-btn" class="uk-hidden@m olo-nav-toggle" href="#<?php echo esc_attr( $nav_id ); ?>"<?php echo $fullscreen ? ' aria-controls="' . esc_attr( $nav_id ) . '" aria-haspopup="dialog"' : ' uk-toggle'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributi fissi, $nav_id passato da esc_attr() ?> aria-label="<?php echo esc_attr__( 'Open menu', 'olobuild' ); ?>" aria-expanded="false">
                         <svg width="<?php echo (int) $h_sz; ?>" height="<?php echo (int) $h_sz; ?>" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
                     </a>
                 <?php endif; ?>
@@ -580,8 +583,8 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
                 $mobile_type = $s['mobile_type'] ?? 'dropdown';
                 // Fullscreen mobile menu
                 if ( $mobile_type === 'fullscreen' ) : ?>
-                    <div id="<?php echo esc_attr( $nav_id ); ?>" class="olo-nav-fullscreen" role="dialog" aria-label="<?php echo esc_attr__( 'Mobile menu', 'olobuild' ); ?>">
-                        <button class="uk-close uk-close-large" type="button" uk-close aria-label="<?php echo esc_attr__( 'Close menu', 'olobuild' ); ?>" onclick="this.parentElement.classList.remove('uk-open')"></button>
+                    <div id="<?php echo esc_attr( $nav_id ); ?>" class="olo-nav-fullscreen" role="dialog" aria-modal="true" tabindex="-1" aria-label="<?php echo esc_attr__( 'Mobile menu', 'olobuild' ); ?>">
+                        <button class="uk-close uk-close-large" type="button" uk-close data-olo-nav-close aria-label="<?php echo esc_attr__( 'Close menu', 'olobuild' ); ?>"></button>
                         <div>
                             <ul class="uk-nav uk-nav-default uk-nav-parent-icon" uk-nav>
                                 <?php $this->render_mobile_items( $tree, $children, $grandchildren ); ?>
@@ -593,14 +596,55 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
                     (function(){
                         var btn = document.getElementById('<?php echo esc_js( $nav_id ); ?>-btn');
                         var panel = document.getElementById('<?php echo esc_js( $nav_id ); ?>');
-                        if (btn) {
-                            if (panel) {
-                                btn.addEventListener('click', function(e) {
-                                    e.preventDefault();
-                                    panel.classList.toggle('uk-open');
-                                });
-                            }
+                        if (!btn) { return; }
+                        if (!panel) { return; }
+                        var aperto = false;
+                        var html = document.documentElement;
+                        /* Un dialog: il fuoco entra (sulla X), Tab resta dentro, Esc o la X chiudono
+                           e il fuoco torna all'hamburger; la pagina sotto non scorre. */
+                        function focusabili() {
+                            return Array.prototype.filter.call(panel.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex="0"]'), function (el) {
+                                return el.getClientRects().length > 0;
+                            });
                         }
+                        function apri() {
+                            aperto = true;
+                            panel.classList.add('uk-open');
+                            btn.setAttribute('aria-expanded', 'true');
+                            html.style.overflow = 'hidden';
+                            document.body.style.overflow = 'hidden';
+                            var x = panel.querySelector('[data-olo-nav-close]');
+                            setTimeout(function () { (x || panel).focus(); }, 60);
+                        }
+                        function chiudi(ridai) {
+                            if (!aperto) { return; }
+                            aperto = false;
+                            panel.classList.remove('uk-open');
+                            btn.setAttribute('aria-expanded', 'false');
+                            html.style.overflow = '';
+                            document.body.style.overflow = '';
+                            if (ridai) { btn.focus(); }
+                        }
+                        btn.addEventListener('click', function (e) {
+                            e.preventDefault();
+                            if (aperto) { chiudi(true); } else { apri(); }
+                        });
+                        panel.addEventListener('click', function (e) {
+                            if (e.target.closest('[data-olo-nav-close]')) { chiudi(true); return; }
+                            /* Una voce scelta chiude il menu (anche i link ad ancore della stessa pagina). */
+                            if (e.target.closest('a[href]')) { chiudi(false); }
+                        });
+                        document.addEventListener('keydown', function (e) {
+                            if (!aperto) { return; }
+                            if (e.key === 'Escape') { chiudi(true); return; }
+                            if (e.key !== 'Tab') { return; }
+                            var f = focusabili();
+                            if (!f.length) { return; }
+                            var primo = f[0], ultimo = f[f.length - 1];
+                            if (e.shiftKey) {
+                                if (document.activeElement === primo) { e.preventDefault(); ultimo.focus(); }
+                            } else if (document.activeElement === ultimo) { e.preventDefault(); primo.focus(); }
+                        });
                     })();
                     </script>
                 <?php elseif ( $mob_style === 'offcanvas' ) : ?>
