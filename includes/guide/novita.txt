@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.530 - 2026-10-05 (fix)
+- La sovrapposizione (velo) scelta negli sfondi interni delle tile si vede: sfondo/media di hero, contatori, prezzi, Iconbox, Flip Card, Product Grid, CTA Banner, card di Info Cards e Hero Split, righe della Hover List. Prima la foto restava senza velo.
+
 ## v1.4.529 - 2026-10-05 (fix)
 - La finestra del Popup usa i colori e il font del sito: prima, aperta, prendeva un blu di sistema e il font del browser.
 
