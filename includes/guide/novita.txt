@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.550 - 2026-10-05 (fix)
+- Testo su Tracciato: sul cerchio lo «Scorrimento continuo» distribuisce davvero le ripetizioni, e in alto non resta una giuntura (nella 1.4.549 Chrome la mostrava ancora).
+
 ## v1.4.549 - 2026-10-05 (fix)
 - Testo su Tracciato: «Scorrimento una volta» fa entrare il testo quando la tile si vede e lo ferma al suo posto (prima scorreva fino in fondo e spariva).
 - Testo su Tracciato: «Scorrimento continuo» è un nastro: la frase si ripete e gira senza interruzioni, anche sul cerchio (prima usciva e rientrava).
