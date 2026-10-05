@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.509 - 2026-10-05 (fix)
+- La Barra Scroll resta ferma in cima alla finestra mentre si scorre la pagina.
+- Calcolatore a slider, Preventivo e Scaler mostrano il punto delle migliaia anche nei numeri di quattro cifre (1.400).
+
 ## v1.4.508 - 2026-10-05 (novità)
 - Nuova tile «Quiz a punteggio»: una domanda alla volta, e alla fine l'esito giusto con il suo link.
 - Il Builder diventa «Preventivo»: la scelta parte per email, su WhatsApp, verso una pagina o nel carrello WooCommerce.
