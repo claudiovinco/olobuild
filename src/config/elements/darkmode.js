@@ -2,8 +2,10 @@ import { t } from '@/i18n';
 
 /**
  * Tile Dark Mode Toggle — split CONTENUTO/STILE (regola universale Olobuild).
- *   fields[]      → stile UI (toggle/icon/button), icone scelte, testi pulsante, comportamento (salva preferenza, rispetta sistema)
- *   styleFields[] → dimensione icona, colori toggle, durata transizione
+ *   fields[]      → icone scelte (lette dal PHP: «sun»/«moon» = disegni storici), testi pulsante,
+ *                   comportamento (salva preferenza, rispetta sistema)
+ *   styleFields[] → Aspetto (stile toggle/icona/pulsante, colori, durata), Forma (dimensione icona)
+ * La preferenza si riapplica in testa alla pagina in ogni tema: Olobuild_Darkmode_Tile::stampa_script_testa().
  *   AVANZATE      → meta tecnico (id/class/condizioni)
  */
 export default {
@@ -44,20 +46,19 @@ export default {
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
+  // Colori vuoti = token nel renderer PHP: testo del sito in chiaro, «warning» (oro) in scuro.
   styleFields: [
-    { type: 'separator', label: t('Dimensioni') },
-    { key: 'icon_size', label: t('Dimensione icona'), type: 'range', min: 16, max: 48, step: 2 },
-
-    { type: 'separator', label: t('Colori') },
-    { key: 'toggle_color', label: t('Colore toggle'), type: 'color' },
-    { key: 'toggle_active_color', label: t('Colore toggle attivo'), type: 'color' },
-
+    { type: 'separator', label: t('Aspetto') },
     { key: 'style', label: t('Stile'), type: 'select', options: [
       { value: 'toggle', label: t('Toggle switch') },
       { value: 'icon', label: t('Icona singola') },
       { value: 'button', label: t('Pulsante con testo') },
     ]},
-    { type: 'separator', label: t('Transizione') },
-    { key: 'transition_duration', label: t('Durata transizione'), type: 'range', min: 0, max: 1000, step: 50 },
+    { key: 'toggle_color', label: t('Colore in modalità chiara'), type: 'color' },
+    { key: 'toggle_active_color', label: t('Colore in modalità scura'), type: 'color' },
+    { key: 'transition_duration', label: t('Durata transizione'), type: 'range', min: 0, max: 1000, step: 50, unit: 'ms' },
+
+    { type: 'separator', label: t('Forma') },
+    { key: 'icon_size', label: t('Dimensione icona'), type: 'range', min: 16, max: 48, step: 2, unit: 'px' },
   ],
 };
