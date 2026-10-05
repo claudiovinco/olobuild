@@ -116,9 +116,8 @@ ob_start();
                 ?>
                 <li style="<?php echo $li_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- assembled from absint()'d gap/spacing and fixed CSS literals ?>"><?php echo $inner_open; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- opening <a> assembled above from fixed markup, esc_url()'d link and absint()'d gap ?>
                     <?php if ( $icon === 'number' ) : ?>
-                        <?php if ( ! $is_ordered ) : ?>
+                        <?php // Il numero si disegna anche nell'<ol>: uk-list toglie i marcatori nativi e il <li> e' un flex, quindi senza questo i numeri sparivano. Lo span e' aria-hidden: l'ordine lo dice gia' l'<ol>. ?>
                         <span aria-hidden="true" style="flex-shrink:0;font-weight:700;line-height:normal;font-size:<?php echo (int) $isize; ?>px;min-width:<?php echo (int) $isize; ?>px;text-align:center;color:<?php echo esc_attr( $this->safe_color_css( $s['icon_color'] ) ?: 'var(--olo-color-success, #15803d)' ); ?>;"><?php echo (int) ( $i + 1 ); ?>.</span>
-                        <?php endif; ?>
                     <?php else : ?>
                         <span aria-hidden="true" style="flex-shrink:0;display:flex;align-items:center;line-height:1;"><?php echo $this->get_icon_svg( $icon, $s['icon_color'], $isize ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from the hardcoded get_icon_svg() map with safe_color_css()'d color and intval()'d size ?></span>
                         <?php if ( $icon === 'x' ) : ?>
