@@ -215,7 +215,11 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
                 var layer = document.createElement('div');
                 layer.className = 'olo-particles-page';
                 layer.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:99990;overflow:hidden';
-                document.body.appendChild( layer );
+                // Il layer nasce accanto al canvas per ereditare i token --olo-* del template e va
+                // nel body portandoli con sé: resolveVarColor() legge i colori dal layer, e nel body
+                // valevano quelli di :root.
+                canvas.parentNode.insertBefore( layer, canvas );
+                ( <?php echo self::js_nel_body(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- costante JS interna ?> )( layer );
                 layer.appendChild( canvas );
                 canvas.style.pointerEvents = 'none';   // su tutta la pagina non blocca mai i click
                 host = layer;

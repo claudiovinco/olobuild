@@ -296,7 +296,11 @@ class Olobuild_Goo_Tile extends Olobuild_Tile_Base {
                 var layer = document.createElement('div');
                 layer.className = 'olo-goo-page';
                 layer.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:99988;overflow:hidden;mix-blend-mode:' + ( CFG.pageBlend || 'screen' );
-                document.body.appendChild( layer );
+                // Il layer nasce dentro la tile per ereditare i token --olo-* del template e va
+                // nel body portandoli con sé: i blob usano var(--olo-color-*) senza ripiego, e nel
+                // body valevano i colori di :root (o nessuno, e il blob spariva).
+                wrap.appendChild( layer );
+                ( <?php echo self::js_nel_body(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- costante JS interna ?> )( layer );
                 layer.appendChild( stage );
                 host = layer;
                 // Movimento relativo allo scroll: lo stage copre l'INTERA pagina (FH) e viene
