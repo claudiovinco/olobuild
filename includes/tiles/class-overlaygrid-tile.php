@@ -268,20 +268,29 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
                 <?php endif; ?>
                 color: <?php echo $title_clr; ?>;
             }
-            .<?php echo $uid; ?> .uk-overlay h1,
-            .<?php echo $uid; ?> .uk-overlay h2,
-            .<?php echo $uid; ?> .uk-overlay h3,
-            .<?php echo $uid; ?> .uk-overlay h4 {
-                color: <?php echo $title_clr; ?>;
+            <?php // La didascalia delle card con foto ha la classe uk-overlay-primary/-default, MAI
+                  // «uk-overlay»: con `.uk-overlay h3` colore, peso, spaziatura e maiuscolo del
+                  // titolo (e colore e corpo del sottotitolo) non arrivavano, e restavano il bianco
+                  // e il peso 400 di UIkit. Peso, spaziatura e maiuscolo stanno a (0,2,0): sotto lo
+                  // «Stile tipografico» (.olo-typo-x.olo-typo-x h3, 0,2,1), che deve continuare a
+                  // vincere come prima. Il colore, che il preset non tocca, sta più in alto per
+                  // battere `.uk-section-primary h3` (0,2,1) di UIkit. Il sottotitolo prende solo
+                  // colore e corpo: un margine qui avrebbe stretto lo spazio verso la CTA dei
+                  // template salvati (da 30 a 10 px). ?>
+            .<?php echo $uid; ?> .olo-og-title {
                 font-weight: <?php echo $title_w; ?>;
                 letter-spacing: <?php echo (float) $title_ls; ?>em;
                 <?php if ( $title_upper ) : ?>text-transform: uppercase;<?php endif; ?>
                 margin: 0;
             }
-            .<?php echo $uid; ?> .uk-overlay p {
+            .<?php echo $uid; ?> .uk-overlay-primary > .olo-og-title,
+            .<?php echo $uid; ?> .uk-overlay-default > .olo-og-title {
+                color: <?php echo $title_clr; ?>;
+            }
+            .<?php echo $uid; ?> .uk-overlay-primary > p,
+            .<?php echo $uid; ?> .uk-overlay-default > p {
                 color: <?php echo $subtitle_clr; ?>;
                 font-size: <?php echo (int) $subtitle_sz; ?>px;
-                margin: 6px 0 0;
             }
 
             /* CTA */
