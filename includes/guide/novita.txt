@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.533 - 2026-10-05 (fix)
+- Niente più emoji nelle tile: Query Loop (tendenza, tempo di lettura, commenti), OLOX Lessons (lucchetto) e Newsletter usano icone del set; la Newsletter offre l'icona dal selettore.
+- In italiano le scritte fisse: «Copia» nel Codice, «Offerta» nella Product Grid, i giorni della Schedule, il messaggio del Menu WordPress senza menu.
+
 ## v1.4.532 - 2026-10-05 (fix)
 - WooCommerce: la Vista rapida e la Wishlist caricano i prodotti (prima rispondevano «percorso non trovato») e il Mini Cart si aggiorna quando aggiungi al carrello.
 
