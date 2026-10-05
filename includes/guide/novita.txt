@@ -3,6 +3,11 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.549 - 2026-10-05 (fix)
+- Testo su Tracciato: «Scorrimento una volta» fa entrare il testo quando la tile si vede e lo ferma al suo posto (prima scorreva fino in fondo e spariva).
+- Testo su Tracciato: «Scorrimento continuo» è un nastro: la frase si ripete e gira senza interruzioni, anche sul cerchio (prima usciva e rientrava).
+- Testo su Tracciato: un testo più lungo del tracciato si rimpicciolisce finché ci sta invece di essere tagliato; la spirale resta dentro il suo riquadro.
+
 ## v1.4.548 - 2026-10-05 (fix)
 - Text Mask: «Video dietro al testo» funziona: il video si vede solo dentro le lettere e intorno resta il colore di sfondo pieno (prima il testo spariva e il video si vedeva intero).
 - Text Mask: senza video le lettere rivelano l'immagine poster o, se manca anche quella, un gradiente dei colori del tema, invece di un rettangolo nero. Appena inserita la tile mostra già l'effetto con una foto d'esempio.
