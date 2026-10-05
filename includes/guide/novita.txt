@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.522 - 2026-10-05 (fix)
+- I colori Scuro, Chiaro e Accento seguono la palette del sito quando non li hai impostati fra i colori globali: Scuro e Chiaro sono un quasi-nero e un quasi-bianco tinti del colore primario, Accento è il primario. Prima un centinaio di tile usavano un blu notte, un bianco e un arancio fissi. Se li imposti nei colori globali, valgono i tuoi.
+
 ## v1.4.521 - 2026-10-05 (fix)
 - I colori della Palette scelti in Info Cards, Lookbook Mixer, Progress Tracker, Mappa, Divisore, Pulsante e Prezzi (bagliore), Titolo animato e Work Grid si vedono con la loro trasparenza: prima bordi, sfondi tenui, aloni e bagliori sparivano.
 - Duotone e bagliore della Pro Gallery, effetti scanline e bagliore, neon del bordo e le sovrapposizioni degli hero prendono il colore vero della Palette (prima un grigio, un rosso fisso o un colore a caso).
