@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.536 - 2026-10-05 (fix)
+- Icona: il padding delle viste «Con sfondo» e «Cornice» funziona (prima l'icona restava stretta nel cerchio) e un'icona con link mantiene il suo colore invece di quello dei link del tema.
+
 ## v1.4.535 - 2026-10-05 (novità)
 - Le tile nascono già pronte: trascinata nel canvas, una tile mostra subito a cosa serve, con testi in italiano, foto, icone e la sua impostazione più rappresentativa (la Galleria con otto foto e il «+2», il Listino prezzi col piano più scelto, la Timeline con le tappe e le foto, l'Hero con la foto e il velo…). Vale per 163 tile; le tile già nelle pagine non cambiano.
 - 18 foto demo nel pubblico dominio accompagnano il plugin e si possono usare liberamente.
