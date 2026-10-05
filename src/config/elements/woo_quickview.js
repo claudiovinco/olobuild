@@ -108,12 +108,14 @@ export default {
     },
 
     { type: 'separator', label: t('Stile pulsante') },
+    // Gli stessi valori del renderer PHP (prima «Default» e «Solo icona» non esistevano lì e
+    // ricadevano sul contornato, «Pieno» c'era solo lì). 'default' salvato resta contornato.
     { key: 'button_style', label: t('Stile pulsante'), type: 'select', options: [
-      { value: 'default', label: t('Default') },
-      { value: 'outline', label: t('Outline') },
-      { value: 'icon-only', label: t('Solo icona') },
+      { value: 'outline', label: t('Contornato') },
+      { value: 'filled', label: t('Pieno') },
       { value: 'text', label: t('Solo testo') },
-    ]},
+      { value: 'icon-only', label: t('Solo icona') },
+    ], valoriStorici: { default: 'outline' } },
 
     { type: 'separator', label: t('Colori') },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color' },
