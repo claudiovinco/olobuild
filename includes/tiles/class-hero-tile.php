@@ -230,7 +230,11 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
         $frame_on    = ! empty( $s['frame_on'] );
         $frame_inset = max( 0, absint( $s['frame_inset'] ?? 24 ) );
         $scene_inset = $frame_on ? ( $frame_inset . 'px' ) : '0';
-        $arch_mask   = ! empty( $s['arch'] ) ? 'radial-gradient(150% 125% at 50% 0%, #000 87%, transparent 87.5%)' : '';
+        // Arco sul bordo inferiore della scena: un'ellisse alta quanto la scena e larga 130%, centrata in
+        // alto, tocca il fondo al centro e lo lascia salire verso gli angoli (circa l'8% dell'altezza).
+        // La maschera di prima (150% × 125%, piena fino all'87%) conteneva tutto il riquadro: il punto più
+        // lontano, l'angolo, cadeva a 0,866 del raggio e l'arco non tagliava mai.
+        $arch_mask   = ! empty( $s['arch'] ) ? 'radial-gradient(130% 100% at 50% 0%, #000 99.5%, transparent 100%)' : '';
         $wm_color    = $this->safe_color_css( $s['watermark_color'] ?? '' ) ?: 'rgba(255,255,255,.06)';
 
         // ── Modulo sotto il contenuto (unificazione hero, Fase 1) ──
