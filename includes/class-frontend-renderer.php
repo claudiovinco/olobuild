@@ -1327,8 +1327,7 @@ class Olobuild_Frontend_Renderer {
                 <div class="uk-position-cover" style="background-color: <?php echo $ov_color; ?>; opacity: <?php echo $ov_opacity; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $ov_color esc_attr()'d at assignment above; $ov_opacity is intval()/100 ?>; pointer-events: none" aria-hidden="true"></div>
             <?php endif; ?>
 
-            <?php if ( $this->builder_mode ) $settings['_builder_mode'] = true; ?>
-            <?php Olobuild_Tile_Base::$nodo_in_resa = (string) ( $node['id'] ?? '' ); ?>
+            <?php if ( $this->builder_mode ) $settings['_builder_mode'] = true; Olobuild_Tile_Base::$nodo_in_resa = (string) ( $node['id'] ?? '' ); // sulla stessa riga: una riga in più finirebbe come spazi nell'HTML di ogni tile ?>
             <?php if ( $has_bg_image || $has_bg_video || $has_bg_gallery || $has_overlay ) : ?>
                 <div class="uk-position-relative" style="z-index: 1">
                     <?php echo Olobuild_Tile_Utils::process_dynamic_tags( $tile_instance->render( $settings, $node['style'] ?? [] ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tile HTML assembled by the tile's own render() (each tile escapes its output); process_dynamic_tags() substitutes sanitized dynamic values ?>
