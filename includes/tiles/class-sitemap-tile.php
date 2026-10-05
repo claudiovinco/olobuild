@@ -348,11 +348,14 @@ class Olobuild_Sitemap_Tile extends Olobuild_Tile_Base {
         // CPT
         if ( ! empty( $s['show_cpt'] ) && ! empty( $s['cpt_names'] ) ) {
             $cpt_list = array_map( 'sanitize_key', array_filter( array_map( 'trim', explode( ',', $s['cpt_names'] ) ) ) );
-            foreach ( $cpt_list as $cpt ) {
-                if ( ! post_type_exists( $cpt ) ) continue;
-                $cpt_obj = get_post_type_object( $cpt );
+            // $cpt_name, non $cpt: $cpt è il padding superiore del contenitore (sopra) e il
+            // ciclo lo sovrascriveva col nome del tipo → «padding:productpx …», dichiarazione
+            // scartata e contenitore senza padding appena si sceglievano tipi personalizzati.
+            foreach ( $cpt_list as $cpt_name ) {
+                if ( ! post_type_exists( $cpt_name ) ) continue;
+                $cpt_obj = get_post_type_object( $cpt_name );
                 $cpt_posts = get_posts( [
-                    'post_type'      => $cpt,
+                    'post_type'      => $cpt_name,
                     'posts_per_page' => $limit,
                     'post_status'    => 'publish',
                     'orderby'        => $order_args['orderby'],
@@ -362,10 +365,10 @@ class Olobuild_Sitemap_Tile extends Olobuild_Tile_Base {
                 ] );
                 if ( $cpt_posts ) {
                     $items = [];
-                    foreach ( $cpt_posts as $cp ) {
-                        $items[] = $this->build_item( $cp, 'cpt', 0, $show_icons, $show_date, $show_excerpt, $excerpt_len, $show_thumb );
+                    foreach ( $cpt_posts as $cpt_post ) {
+                        $items[] = $this->build_item( $cpt_post, 'cpt', 0, $show_icons, $show_date, $show_excerpt, $excerpt_len, $show_thumb );
                     }
-                    $heading = $cpt_obj ? $cpt_obj->labels->name : ucfirst( $cpt );
+                    $heading = $cpt_obj ? $cpt_obj->labels->name : ucfirst( $cpt_name );
                     $sections[] = [ 'heading' => $heading, 'type' => 'cpt', 'items' => $items ];
                 }
             }
