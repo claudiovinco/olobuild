@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.512 - 2026-10-05 (fix)
+- Nav Menu: il menu mobile «Schermo intero» si apre (prima non compariva mai); si chiude con la X, con Esc o scegliendo una voce, e finché è aperto il fuoco resta dentro.
+- «Vai al contenuto principale» porta al contenuto della pagina: header, footer e template incorporati non si presentano più come contenuto principale.
+
 ## v1.4.511 - 2026-10-05 (fix)
 - Overlay CRT e Grana (effetti di pagina) coprono lo schermo e non l'intera pagina: la vignetta scurisce i bordi dello schermo.
 - Evo Notes: il pulsante e il suggerimento restano in basso sullo schermo, non in fondo alla pagina.
