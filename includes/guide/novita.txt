@@ -3,6 +3,13 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.506 - 2026-10-05 (fix)
+- Popup e Popup Nascosto rispettano davvero le frequenze: una volta per sessione, al giorno, alla settimana, per sempre, numero massimo.
+- Il Grafico si vede anche mentre lo modifichi, con i colori del tema; il valore nel suggerimento è giusto anche nelle barre orizzontali e nel radar, e il Bordo agisce.
+- Timezone segue l'ora legale di ogni città e i fusi da mezz'ora: si sceglie il fuso dall'elenco.
+- Il Mixer mescola anche i colori del tema, che prima diventavano neri.
+- Off-Canvas, Scena minigioco, Evo Notes, Cesto Fisico e Pallini Cover non compaiono più fra le tile da inserire; le pagine che le usano restano com'erano.
+
 ## v1.4.505 - 2026-10-05 (novità)
 - La tile «Ricerca con filtri» (prima Trip Finder) cerca davvero: testo, categoria, tag, tipo di contenuto o un parametro per una pagina a scelta, con le opzioni prese dal sito.
 - Nella pagina dei risultati la barra ripropone le scelte fatte, e i testi di partenza sono in italiano.
