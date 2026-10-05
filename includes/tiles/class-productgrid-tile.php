@@ -140,7 +140,7 @@ class Olobuild_ProductGrid_Tile extends Olobuild_Tile_Base {
 
             $tag = '';
             if ( $p->is_on_sale() ) {
-                $tag = __( 'Sale', 'olobuild' );
+                $tag = olobuild_t( 'Offerta' );
             } else {
                 $ptags = get_the_terms( $pid, 'product_tag' );
                 if ( $ptags && ! is_wp_error( $ptags ) ) { $tag = $ptags[0]->name; }

@@ -15,7 +15,7 @@ class Olobuild_Schedule_Tile extends Olobuild_Tile_Base {
     protected $defaults = [
         'eyebrow'      => '',
         'heading'      => '',
-        'days'         => 'Mon, Tue, Wed, Thu, Fri',
+        'days'         => 'Lun, Mar, Mer, Gio, Ven',
         'corner_label' => '',
         'rows'         => [],
         'zone_accent'  => '',

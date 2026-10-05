@@ -19,7 +19,8 @@ class Olobuild_Newsletter_Tile extends Olobuild_Tile_Base {
         'title'             => 'Iscriviti alla newsletter',
         'subtitle'          => 'Ricevi aggiornamenti e contenuti esclusivi direttamente nella tua casella email.',
         'icon_type'         => 'none',
-        'icon_name'         => '📧',
+        'icon'              => 'mail',
+        'icon_name'         => '',
         'icon_image'        => '',
         'show_name'         => false,
         'name_placeholder'  => 'Il tuo nome',
@@ -206,6 +207,8 @@ class Olobuild_Newsletter_Tile extends Olobuild_Tile_Base {
           <div class="olo-nl-box">
             <?php if ( $s['icon_type'] === 'emoji' ) : ?>
               <div class="olo-nl-icon"><?php echo esc_html( $s['icon_name'] ); ?></div>
+            <?php elseif ( $s['icon_type'] === 'icon' && '' !== (string) ( $s['icon'] ?? '' ) ) : ?>
+              <div class="olo-nl-icon"><?php echo $this->render_icon_html( (string) $s['icon'], 1.6 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icona del set (nome e SVG dalla libreria) ?></div>
             <?php elseif ( $s['icon_type'] === 'image' ) : ?>
               <div class="olo-nl-icon"><img src="<?php echo esc_url( $s['icon_image'] ); ?>" alt="" loading="lazy" /></div>
             <?php endif; ?>

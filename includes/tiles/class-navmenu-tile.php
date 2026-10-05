@@ -156,7 +156,7 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
 
         $menu_id = absint( $s['menu_id'] );
         if ( ! $menu_id ) {
-            return '<div class="olo-navmenu"><p class="uk-text-muted uk-text-center">Select a menu in the Inspector panel.</p></div>';
+            return '<div class="olo-navmenu"><p class="uk-text-muted uk-text-center">' . esc_html( olobuild_t( 'Scegli un menu nelle impostazioni della tile.' ) ) . '</p></div>';
         }
 
         $items = wp_get_nav_menu_items( $menu_id );

@@ -240,6 +240,19 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
         return '';
     }
 
+    /**
+     * Un'icona Lucide come ::before (maschera SVG col colore del testo): al posto delle emoji
+     * 🔥 ⏱ 💬 che il CSS stampava sul sito (regola: icone dal set, mai emoji).
+     */
+    private function icona_css( $nome ) {
+        $svg = (string) ( self::libreria_icone( 'lucide' )[ $nome ] ?? '' );
+        if ( '' === $svg ) {
+            return "content:''";
+        }
+        $uri = 'data:image/svg+xml,' . rawurlencode( $svg );
+        return "content:'';display:inline-block;width:1.1em;height:1.1em;flex:none;background:currentColor;-webkit-mask:url(\"{$uri}\") center/contain no-repeat;mask:url(\"{$uri}\") center/contain no-repeat";
+    }
+
     private function get_magic_css( $s, $uid, $accent ) {
         $css = '';
         if ( ! empty( $s['new_badge'] ) ) {
@@ -247,15 +260,15 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
         }
         if ( ! empty( $s['trending_badge'] ) ) {
             $css .= "#{$uid} .olo-ql-card .olo-ql-trend-badge{position:absolute;top:12px;right:12px;background:#0f172a;color:#fff;padding:3px 10px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;z-index:3;display:inline-flex;align-items:center;gap:4px}";
-            $css .= "#{$uid} .olo-ql-card .olo-ql-trend-badge::before{content:'🔥';font-size:10px}";
+            $css .= "#{$uid} .olo-ql-card .olo-ql-trend-badge::before{" . $this->icona_css( 'flame' ) . "}";
         }
         if ( ! empty( $s['show_reading_time'] ) ) {
             $css .= "#{$uid} .olo-ql-rt{display:inline-flex;align-items:center;gap:4px;font-size:0.8em;color:rgba(0,0,0,0.55);margin-left:8px}";
-            $css .= "#{$uid} .olo-ql-rt::before{content:'⏱';font-size:11px}";
+            $css .= "#{$uid} .olo-ql-rt::before{" . $this->icona_css( 'clock' ) . "}";
         }
         if ( ! empty( $s['show_comment_count'] ) ) {
             $css .= "#{$uid} .olo-ql-cc{display:inline-flex;align-items:center;gap:4px;font-size:0.8em;color:rgba(0,0,0,0.55);margin-left:8px}";
-            $css .= "#{$uid} .olo-ql-cc::before{content:'💬';font-size:11px}";
+            $css .= "#{$uid} .olo-ql-cc::before{" . $this->icona_css( 'message-circle' ) . "}";
         }
         // Card relative positioning per badges
         $css .= "#{$uid} .olo-ql-card{position:relative}";

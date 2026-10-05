@@ -21,7 +21,7 @@ class Olobuild_TrustStrip_Tile extends Olobuild_Tile_Base {
             [ 'icon' => 'check', 'icon_color' => '', 'text' => '<b>WCAG 2.2 AA</b>' ],
             [ 'icon' => 'check', 'icon_color' => '', 'text' => 'Hosting <b>a scelta tua</b>' ],
             [ 'icon' => 'check', 'icon_color' => '', 'text' => 'Export <b>HTML/JSON</b> totale' ],
-            [ 'icon' => 'check', 'icon_color' => '', 'text' => 'Trento, <b>Italia 🇮🇹</b>' ],
+            [ 'icon' => 'check', 'icon_color' => '', 'text' => 'Trento, <b>Italia</b>' ],
         ],
         'separator_char'  => '·',
         'separator_color' => '',

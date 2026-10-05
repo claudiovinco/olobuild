@@ -44,7 +44,7 @@ class Olobuild_OloxLessons_Tile extends Olobuild_Olox_Base_Tile {
                     <div class="lez"><span class="node"><?php echo (int) $n; ?></span>
                         <div class="box"><span class="xp"><?php echo esc_html( $it['xp'] ?? '' ); ?></span><h3><?php echo $this->olox_rich( $it['title'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></h3>
                         <p><?php echo $this->olox_rich( $it['text_html'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
-                        <div class="lockveil">🔒 <span><?php echo esc_html( $s['lock_text'] ); ?></span></div></div></div>
+                        <div class="lockveil"><?php echo $this->render_icon_html( 'lock', 1 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icona del set ?> <span><?php echo esc_html( $s['lock_text'] ); ?></span></div></div></div>
                     <?php endforeach; ?>
                 </div>
             </div>

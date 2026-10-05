@@ -117,11 +117,11 @@ export default {
       { value: 'editorial-serif', label: t('◆ Editorial Serif') },
       { value: 'compact',         label: t('◆ Compact') },
       // 7 audaci
-      { value: 'glass',           label: t('✨ Glass') },
-      { value: 'neon',            label: t('⚡ Neon Cyber') },
+      { value: 'glass',           label: t('Glass') },
+      { value: 'neon',            label: t('Neon Cyber') },
       { value: 'brutalist',       label: t('⬛ Brutalist') },
-      { value: 'gradient',        label: t('🌊 Vivid Duotone') },
-      { value: 'sticker',         label: t('🏷 Sticker') },
+      { value: 'gradient',        label: t('Vivid Duotone') },
+      { value: 'sticker',         label: t('Sticker') },
       { value: 'retro-terminal',  label: t('▌ Retro Terminal') },
       { value: 'tilt-3d',         label: t('🃏 3D Tilt') },
       // libertà totale
