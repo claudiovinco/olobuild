@@ -57,6 +57,11 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
+    // Il prodotto di cui mostrare la galleria: senza, la tile funzionava solo nella scheda prodotto.
+    { type: 'separator', label: t('Prodotto') },
+    { key: 'product_id', label: t('ID prodotto'), type: 'number', min: 0, step: 1,
+      description: t('Il prodotto di cui mostrare le foto. Vuoto o 0 = il prodotto della pagina (nella scheda prodotto).') },
+
     { type: 'separator', label: t('Immagine principale') },
     { key: 'enable_zoom', label: t('Abilita zoom'), type: 'toggle' },
     { key: 'enable_lightbox', label: t('Abilita lightbox'), type: 'toggle' },
@@ -71,7 +76,7 @@ export default {
     ]},
     { key: 'autoplay', label: t('Autoplay'), type: 'toggle' },
     { key: 'arrows', label: t('Mostra frecce'), type: 'toggle' },
-    { key: 'dots', label: t('Mostra dots'), type: 'toggle' },
+    { key: 'dots', label: t('Mostra pallini'), type: 'toggle' },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -108,7 +113,9 @@ export default {
       { value: 'right', label: t('Destra') },
     ]},
     { type: 'separator', label: t('Slider') },
-    { key: 'autoplay_speed', label: t('Velocita autoplay'), type: 'range', min: 1000, max: 10000, step: 500 },
+    // Il tempo fra una foto e la successiva: senza autoplay non agisce, quindi si nasconde.
+    { key: 'autoplay_speed', label: t('Intervallo autoplay'), type: 'range', min: 1000, max: 10000, step: 500, unit: 'ms',
+      condition: { field: 'autoplay', value: true } },
 
     { type: 'separator', label: t('Colori') },
     { key: 'main_bg', label: t('Sfondo immagine'), type: 'color' },
@@ -116,8 +123,8 @@ export default {
     { key: 'thumbnail_active_border', label: t('Bordo miniatura attiva'), type: 'color' },
     { key: 'arrow_color', label: t('Colore frecce'), type: 'color' },
     { key: 'arrow_bg', label: t('Sfondo frecce'), type: 'color' },
-    { key: 'dot_color', label: t('Colore dots'), type: 'color' },
-    { key: 'dot_active_color', label: t('Colore dot attivo'), type: 'color' },
+    { key: 'dot_color', label: t('Colore pallini'), type: 'color', condition: { field: 'dots', value: true } },
+    { key: 'dot_active_color', label: t('Colore pallino attivo'), type: 'color', condition: { field: 'dots', value: true } },
 
     ...shadowField,
     ...borderFields(),

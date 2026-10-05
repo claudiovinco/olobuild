@@ -51,13 +51,23 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
 
         $s = wp_parse_args( $settings, $this->defaults );
 
-        // Get product
-        global $product;
-        if ( ! is_a( $product, 'WC_Product' ) ) {
-            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- global $product di WooCommerce, non un global definito da olobuild
-            $product = wc_get_product( get_the_ID() );
+        // Get product. Senza un campo prodotto la tile funzionava solo dentro la scheda di un
+        // prodotto: altrove (una pagina, una landing) diceva «Nessun prodotto disponibile».
+        // «ID prodotto» vuoto = il prodotto della pagina, come prima.
+        $prod = null;
+        $pid  = absint( $s['product_id'] ?? 0 );
+        if ( $pid ) {
+            $prod = wc_get_product( $pid );
         }
-        if ( ! $product ) {
+        if ( ! $prod ) {
+            global $product;
+            if ( ! is_a( $product, 'WC_Product' ) ) {
+                // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- global $product di WooCommerce, non un global definito da olobuild
+                $product = wc_get_product( get_the_ID() );
+            }
+            $prod = $product;
+        }
+        if ( ! $prod ) {
             return '<div style="padding:20px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;">'
                  . esc_html( olobuild_t( 'Nessun prodotto disponibile in questo contesto' ) )
                  . '</div>';
@@ -65,11 +75,11 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
 
         // Collect gallery images: featured first, then gallery
         $image_ids = [];
-        $featured_id = $product->get_image_id();
+        $featured_id = $prod->get_image_id();
         if ( $featured_id ) {
             $image_ids[] = $featured_id;
         }
-        $gallery_ids = $product->get_gallery_image_ids();
+        $gallery_ids = $prod->get_gallery_image_ids();
         if ( ! empty( $gallery_ids ) ) {
             $image_ids = array_merge( $image_ids, $gallery_ids );
         }
@@ -93,13 +103,23 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
         $radius_raw  = Olobuild_Tile_Utils::radius_int( $s['border_radius'] ?? 0 );
         $max_width   = max( 200, min( 1200, absint( $s['max_width'] ) ) );
         $show_thumbs = ! empty( $s['show_thumbnails'] );
-        $thumb_pos   = in_array( $s['thumbnail_position'], [ 'bottom', 'left' ], true ) ? $s['thumbnail_position'] : 'bottom';
+        // «Destra» stava nella tendina ma non nell'elenco ammesso: ricadeva in basso.
+        $thumb_pos   = in_array( $s['thumbnail_position'], [ 'bottom', 'left', 'right' ], true ) ? $s['thumbnail_position'] : 'bottom';
         $enable_zoom = ! empty( $s['enable_zoom'] );
         $enable_lb   = ! empty( $s['enable_lightbox'] );
         $show_arrows = ! empty( $s['arrows'] );
         $show_badge  = ! empty( $s['show_badge'] );
         $is_left     = ( $thumb_pos === 'left' );
-        $on_sale     = $product->is_on_sale();
+        $is_side     = ( $thumb_pos !== 'bottom' ); // miniature in colonna, a sinistra o a destra
+        $on_sale     = $prod->is_on_sale();
+
+        // Transizione, autoplay, intervallo e pallini: nell'inspector da sempre, mai letti dal PHP.
+        // Assenti (template importati) valgono come i default del config: slide, niente autoplay,
+        // 3 secondi, niente pallini.
+        $is_fade     = ( ( $s['transition'] ?? 'slide' ) === 'fade' );
+        $autoplay    = filter_var( $s['autoplay'] ?? false, FILTER_VALIDATE_BOOLEAN );
+        $auto_speed  = max( 1000, min( 20000, absint( $s['autoplay_speed'] ?? 3000 ) ) );
+        $show_dots   = filter_var( $s['dots'] ?? false, FILTER_VALIDATE_BOOLEAN );
 
         // Colors
         $main_bg   = $this->safe_color_css( $s['main_bg'] ) ?: 'var(--olo-color-surface-alt, #f6f7f9)';
@@ -108,6 +128,8 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
         $arrow_c   = $this->safe_color_css( $s['arrow_color'] ) ?: 'var(--olo-color-text, #374151)';
         $arrow_bg  = $this->safe_color_css( $s['arrow_bg'] ) ?: 'rgba(255,255,255,0.9)';
         $badge_bg  = $this->safe_color_css( $s['badge_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $dot_c     = $this->safe_color_css( $s['dot_color'] ?? '' ) ?: 'var(--olo-color-border, #e5e7eb)';
+        $dot_ac    = $this->safe_color_css( $s['dot_active_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
 
         // Build image data for template and JS
         $images = [];
@@ -121,7 +143,7 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
                     'full'  => $full ?: $large,
                     'large' => $large,
                     'thumb' => $thumb ?: $large,
-                    'alt'   => $alt ?: $product->get_name(),
+                    'alt'   => $alt ?: $prod->get_name(),
                 ];
             }
         }
@@ -141,7 +163,7 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
             }
             .<?php echo $uid; ?>-wrap {
                 display: flex;
-                <?php if ( $is_left ) : ?>
+                <?php if ( $is_side ) : ?>
                 flex-direction: row;
                 <?php else : ?>
                 flex-direction: column;
@@ -153,15 +175,22 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
                 overflow: hidden;
                 border-radius: <?php echo $radius; ?>;
                 background: <?php echo $main_bg; ?>;
-                <?php if ( $is_left ) : ?>
+                <?php if ( $is_side ) : ?>
                 flex: 1;
+                min-width: 0;
+                <?php endif; ?>
+                <?php if ( $is_left ) : ?>
                 order: 2;
                 <?php endif; ?>
             }
             <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?>-main{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>-main:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?>-track {
+                <?php if ( $is_fade ) : ?>
+                display: grid;
+                <?php else : ?>
                 display: flex;
                 transition: transform 0.4s ease;
+                <?php endif; ?>
                 height: <?php echo $main_h; ?>;
             }
             .<?php echo $uid; ?>-slide {
@@ -170,6 +199,68 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                <?php if ( $is_fade ) : ?>
+                /* Dissolvenza: le foto una sull'altra nella stessa cella, si vede quella attiva. */
+                grid-area: 1 / 1;
+                min-height: 0;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+                <?php endif; ?>
+            }
+            <?php if ( $is_fade ) : ?>
+            .<?php echo $uid; ?>-slide.is-active {
+                opacity: 1;
+                visibility: visible;
+                transition: opacity 0.5s ease, visibility 0s;
+            }
+            <?php endif; ?>
+            <?php if ( $show_dots ) : ?>
+            .<?php echo $uid; ?>-dots {
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: 8px;
+                z-index: 3;
+                display: flex;
+                justify-content: center;
+                gap: 2px;
+            }
+            .<?php echo $uid; ?>-dot {
+                width: 24px;
+                height: 24px;
+                padding: 0;
+                border: none;
+                border-radius: 50%;
+                background: transparent;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+            }
+            .<?php echo $uid; ?>-dot::before {
+                content: "";
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: <?php echo $dot_c; ?>;
+                box-shadow: 0 0 0 1px rgba(0,0,0,0.08);
+                transition: background 0.2s ease, transform 0.2s ease;
+            }
+            .<?php echo $uid; ?>-dot[aria-current="true"]::before {
+                background: <?php echo $dot_ac; ?>;
+                transform: scale(1.25);
+            }
+            <?php endif; ?>
+            .<?php echo $uid; ?>-arrow:focus-visible,
+            .<?php echo $uid; ?>-dot:focus-visible {
+                outline: 2px solid var(--olo-color-primary, #e1474f);
+                outline-offset: 2px;
+            }
+            @media (prefers-reduced-motion: reduce) {
+                .<?php echo $uid; ?>-track,
+                .<?php echo $uid; ?>-slide,
+                .<?php echo $uid; ?>-slide.is-active { transition: none; }
             }
             .<?php echo $uid; ?>-slide img {
                 max-width: 100%;
@@ -227,9 +318,9 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
                 display: flex;
                 gap: <?php echo $thumb_gap; ?>px;
                 scrollbar-width: thin;
-                <?php if ( $is_left ) : ?>
+                <?php if ( $is_side ) : ?>
                 flex-direction: column;
-                order: 1;
+                <?php if ( $is_left ) : ?>order: 1;<?php endif; ?>
                 max-height: <?php echo $main_h; ?>;
                 overflow-y: auto;
                 overflow-x: hidden;
@@ -359,8 +450,8 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
                 <!-- Main Image Area -->
                 <div class="<?php echo esc_attr( $uid ); ?>-main" data-olo-gs-main>
                     <div class="<?php echo esc_attr( $uid ); ?>-track" data-olo-gs-track>
-                        <?php foreach ( $images as $img ) : ?>
-                        <div class="<?php echo esc_attr( $uid ); ?>-slide">
+                        <?php foreach ( $images as $si => $img ) : ?>
+                        <div class="<?php echo esc_attr( $uid ); ?>-slide<?php echo $si === 0 ? ' is-active' : ''; ?>">
                             <img src="<?php echo esc_url( $img['large'] ); ?>" alt="<?php echo esc_attr( $img['alt'] ); ?>" data-full="<?php echo esc_url( $img['full'] ); ?>" loading="lazy" />
                         </div>
                         <?php endforeach; ?>
@@ -368,8 +459,8 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
                     <?php
                     if ( $show_badge ) {
                         if ( $on_sale ) {
-                            $regular = (float) $product->get_regular_price();
-                            $sale    = (float) $product->get_sale_price();
+                            $regular = (float) $prod->get_regular_price();
+                            $sale    = (float) $prod->get_sale_price();
                             if ( $regular > 0 ) {
                                 $pct = round( ( ( $regular - $sale ) / $regular ) * 100 );
                                 echo '<div class="' . esc_attr( $uid ) . '-badge">-' . absint( $pct ) . '%</div>';
@@ -378,12 +469,19 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
                     }
                     ?>
                     <?php if ( $show_arrows ) { if ( $total > 1 ) { ?>
-                    <button class="<?php echo esc_attr( $uid ); ?>-arrow <?php echo esc_attr( $uid ); ?>-prev" data-olo-gs-prev>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="<?php echo esc_attr( $arrow_c ); ?>" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                    <button type="button" class="<?php echo esc_attr( $uid ); ?>-arrow <?php echo esc_attr( $uid ); ?>-prev" data-olo-gs-prev aria-label="<?php echo esc_attr( olobuild_t( 'Immagine precedente' ) ); ?>">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="<?php echo esc_attr( $arrow_c ); ?>" stroke-width="2" aria-hidden="true" focusable="false"><polyline points="15 18 9 12 15 6"/></svg>
                     </button>
-                    <button class="<?php echo esc_attr( $uid ); ?>-arrow <?php echo esc_attr( $uid ); ?>-next" data-olo-gs-next>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="<?php echo esc_attr( $arrow_c ); ?>" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                    <button type="button" class="<?php echo esc_attr( $uid ); ?>-arrow <?php echo esc_attr( $uid ); ?>-next" data-olo-gs-next aria-label="<?php echo esc_attr( olobuild_t( 'Immagine successiva' ) ); ?>">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="<?php echo esc_attr( $arrow_c ); ?>" stroke-width="2" aria-hidden="true" focusable="false"><polyline points="9 18 15 12 9 6"/></svg>
                     </button>
+                    <?php } } ?>
+                    <?php if ( $show_dots ) { if ( $total > 1 ) { ?>
+                    <div class="<?php echo esc_attr( $uid ); ?>-dots">
+                        <?php foreach ( $images as $di => $img ) : ?>
+                        <button type="button" class="<?php echo esc_attr( $uid ); ?>-dot" data-olo-gs-dot="<?php echo (int) $di; ?>" data-olo-interactive<?php echo $di === 0 ? ' aria-current="true"' : ''; ?> aria-label="<?php echo esc_attr( olobuild_t( 'Immagine' ) . ' ' . ( $di + 1 ) ); ?>"></button>
+                        <?php endforeach; ?>
+                    </div>
                     <?php } } ?>
                 </div>
 
@@ -435,12 +533,26 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
             var nextBtn = root.querySelector('[data-olo-gs-next]');
             var enableZoom = <?php echo $enable_zoom ? 'true' : 'false'; ?>;
             var enableLb   = <?php echo $enable_lb ? 'true' : 'false'; ?>;
+            var isFade     = <?php echo $is_fade ? 'true' : 'false'; ?>;
+            var autoplay   = <?php echo $autoplay ? 'true' : 'false'; ?>;
+            var autoSpeed  = <?php echo (int) $auto_speed; ?>;
+            var slideEls   = track ? track.children : [];
+            var dots       = root.querySelectorAll('[data-olo-gs-dot]');
 
             function goTo(idx){
                 if(idx < 0){ idx = total - 1; }
                 if(idx >= total){ idx = 0; }
                 current = idx;
-                if(track){ track.style.transform = 'translateX(-' + (idx * 100) + '%)'; }
+                if(isFade){
+                    for(var si = 0; si < slideEls.length; si++){
+                        if(si === idx){ slideEls[si].classList.add('is-active'); }
+                        else { slideEls[si].classList.remove('is-active'); }
+                    }
+                } else if(track){ track.style.transform = 'translateX(-' + (idx * 100) + '%)'; }
+                dots.forEach(function(d){
+                    if(parseInt(d.getAttribute('data-olo-gs-dot'), 10) === idx){ d.setAttribute('aria-current', 'true'); }
+                    else { d.removeAttribute('aria-current'); }
+                });
                 thumbs.forEach(function(t){
                     var ti = parseInt(t.getAttribute('data-olo-gs-thumb'));
                     if(ti === idx){ t.classList.add('is-active'); }
@@ -462,6 +574,37 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
             /* Arrow clicks */
             if(prevBtn){ prevBtn.addEventListener('click', function(e){ e.stopPropagation(); goTo(current - 1); }); }
             if(nextBtn){ nextBtn.addEventListener('click', function(e){ e.stopPropagation(); goTo(current + 1); }); }
+
+            /* Pallini */
+            dots.forEach(function(d){
+                d.addEventListener('click', function(e){
+                    e.stopPropagation();
+                    goTo(parseInt(d.getAttribute('data-olo-gs-dot'), 10) || 0);
+                });
+            });
+
+            /* Autoplay: fermo con prefers-reduced-motion, sotto il mouse, col fuoco dentro, a scheda
+               nascosta e col lightbox aperto. */
+            if(autoplay){
+                if(total > 1){
+                    var reduce = false;
+                    if(window.matchMedia){ reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+                    if(!reduce){
+                        var paused = false;
+                        root.addEventListener('mouseenter', function(){ paused = true; });
+                        root.addEventListener('mouseleave', function(){ paused = false; });
+                        root.addEventListener('focusin', function(){ paused = true; });
+                        root.addEventListener('focusout', function(e){ if(!root.contains(e.relatedTarget)){ paused = false; } });
+                        setInterval(function(){
+                            if(paused){return}
+                            if(document.hidden){return}
+                            var lbEl = document.querySelector('.<?php echo $uid; ?>-lb.is-open');
+                            if(lbEl){return}
+                            goTo(current + 1);
+                        }, autoSpeed);
+                    }
+                }
+            }
 
             /* Zoom on hover */
             if(enableZoom){
@@ -500,6 +643,7 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
                         mainEl.addEventListener('click', function(e){
                             if(e.target.closest('[data-olo-gs-prev]')){return}
                             if(e.target.closest('[data-olo-gs-next]')){return}
+                            if(e.target.closest('[data-olo-gs-dot]')){return}
                             openLightbox(current);
                         });
                     }
@@ -510,6 +654,7 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
                     mainEl.addEventListener('click', function(e){
                         if(e.target.closest('[data-olo-gs-prev]')){return}
                         if(e.target.closest('[data-olo-gs-next]')){return}
+                        if(e.target.closest('[data-olo-gs-dot]')){return}
                         openLightbox(current);
                     });
                 }
