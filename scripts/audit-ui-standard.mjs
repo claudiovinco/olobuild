@@ -565,6 +565,10 @@ function selettorePhp(expr, php, finoA) {
   }
   // con un prefisso letterale (".olo-navmenu--{$nav_id}"): il markup deve avere quel prefisso
   // attaccato alla variabile (prefissoNelMarkup)
+  // classi in catena (".olo-video.{$v_uid}"): la variabile è una delle classi dello STESSO
+  // elemento, quindi basta che stia in un class="…" (la classe letterale non conta)
+  const catena = e.match(new RegExp(String.raw`^"\.(?:[\w-]+\.)+\{(` + PHPVAR + String.raw`)\}[^"]*"$`));
+  if (catena) return { sigillo: '.', v: catena[1] };
   const p = e.match(new RegExp(String.raw`^"([.#])([\w-]+)\{(` + PHPVAR + String.raw`)\}[^"]*"$`));
   if (p) return { sigillo: p[1], prefisso: p[2], v: p[3] };
   const m = e.match(new RegExp(String.raw`^"([.#])\{(` + PHPVAR + String.raw`)\}[^"]*"$`))
