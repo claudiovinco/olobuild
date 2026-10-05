@@ -141,8 +141,15 @@ class Olobuild_Woo_Sale_Badge_Tile extends Olobuild_Tile_Base {
                 text-align: center;
                 white-space: nowrap;
                 <?php if ( $is_circle ) : ?>
-                width: <?php echo (int) ( $font_size * 3 ); ?>px;
-                height: <?php echo (int) ( $font_size * 3 ); ?>px;
+                /* Il cerchio si allarga col testo (che va a capo dentro), sempre tondo: a misura
+                   fissa un'etichetta lunga come «Ultimi pezzi» usciva dal bollo. */
+                min-width: <?php echo (int) ( $font_size * 3 ); ?>px;
+                max-width: <?php echo (int) ( $font_size * 6 ); ?>px;
+                aspect-ratio: 1;
+                padding: <?php echo (int) round( $font_size * 0.5 ); ?>px;
+                box-sizing: border-box;
+                white-space: normal;
+                line-height: 1.05;
                 display: flex;
                 align-items: center;
                 justify-content: center;
