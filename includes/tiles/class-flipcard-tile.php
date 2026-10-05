@@ -461,7 +461,7 @@ class Olobuild_FlipCard_Tile extends Olobuild_Tile_Base {
             if ( $icon_color ) {
                 $icon_style .= "color:{$icon_color};";
             }
-            $html .= '<div class="olo-fc-icon"><span uk-icon="icon: ' . esc_attr( $icon ) . '; width: ' . $icon_size . '; height: ' . $icon_size . '" style="' . esc_attr( $icon_style ) . '"></span></div>';
+            $html .= '<div class="olo-fc-icon">' . $this->render_icon_html( $icon, $icon_size / 20, 'style="' . esc_attr( $icon_style ) . '"' ) . '</div>';
         }
 
         // Title

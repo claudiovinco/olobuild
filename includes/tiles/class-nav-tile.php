@@ -246,12 +246,12 @@ class Olobuild_Nav_Tile extends Olobuild_Tile_Base {
                     <span style="width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0"></span>
                     <?php endif; ?>
                     <?php if ( $icon && $s['icon_position'] !== 'right' ) : ?>
-                    <span class="olo-nav-icon" uk-icon="icon: <?php echo esc_attr( $icon ); ?>; width: <?php echo (int) $icon_s; ?>; height: <?php echo (int) $icon_s; ?>"></span>
+                    <?php echo $this->render_icon_html( $icon, (int) $icon_s / 20, 'class="olo-nav-icon"' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html(): nome e attributi passati da esc_attr, SVG dalla libreria delle icone ?>
                     <?php endif; ?>
                     <?php list( $nv_cls, $nv_data ) = $this->tfx_attrs( $s, 'title', $label ); ?>
                     <span class="olo-nav-text<?php echo $nv_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); label esc_html()'d ?>"<?php echo $nv_data; ?>><?php echo esc_html( $label ); ?></span>
                     <?php if ( $icon && $s['icon_position'] === 'right' ) : ?>
-                    <span class="olo-nav-icon" uk-icon="icon: <?php echo esc_attr( $icon ); ?>; width: <?php echo (int) $icon_s; ?>; height: <?php echo (int) $icon_s; ?>"></span>
+                    <?php echo $this->render_icon_html( $icon, (int) $icon_s / 20, 'class="olo-nav-icon"' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html(): nome e attributi passati da esc_attr, SVG dalla libreria delle icone ?>
                     <?php endif; ?>
                 </a>
             <?php

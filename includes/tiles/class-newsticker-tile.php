@@ -80,7 +80,7 @@ class Olobuild_Newsticker_Tile extends Olobuild_Tile_Base {
         $val = trim( (string) $val );
         if ( $val === '' ) return '';
         if ( preg_match( '/^[a-z][a-z0-9-]*$/', $val ) ) {
-            return '<span uk-icon="icon: ' . esc_attr( $val ) . '; ratio: ' . esc_attr( $ratio ) . '"></span>';
+            return $this->render_icon_html( $val, $ratio );
         }
         return esc_html( $val );
     }
@@ -573,7 +573,7 @@ class Olobuild_Newsticker_Tile extends Olobuild_Tile_Base {
                             <?php endif; ?>
                         <?php else : ?>
                             <?php if ( ! empty( $item['icon'] ) ) : ?>
-                                <span class="olo-nt-icon"><?php echo $item['icon']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitize_text_field()'d (tag-stripped) when built above ?></span>
+                                <span class="olo-nt-icon"><?php echo $this->render_icon( $item['icon'], 0.9 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icona da render_icon() (render_icon_html(), oppure esc_html() per un'emoji) ?></span>
                             <?php endif; ?>
                             <?php if ( ! empty( $item['badge'] ) ) : ?>
                                 <span class="olo-nt-badge"<?php echo $bbg ? ' style="background:' . esc_attr( $bbg ) . ';"' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- badge esc_html()'d and $bbg safe_color_css()'d when built above, esc_attr()'d here ?>><?php echo $item['badge']; ?></span>

@@ -470,7 +470,7 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
                     <?php if ( ! empty( $panel_icon ) ) : ?>
                         <span class="macc-panel-icon">
                             <?php if ( preg_match( '/^[a-z][a-z0-9-]*$/', $panel_icon ) ) : ?>
-                                <span uk-icon="icon: <?php echo esc_attr( $panel_icon ); ?>"></span>
+                                <?php echo $this->render_icon_html( $panel_icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html(): nome e attributi passati da esc_attr, SVG dalla libreria delle icone ?>
                             <?php else : ?>
                                 <?php echo esc_html( $panel_icon ); ?>
                             <?php endif; ?>

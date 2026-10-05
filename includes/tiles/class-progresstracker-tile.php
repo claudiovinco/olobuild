@@ -240,7 +240,7 @@ class Olobuild_Progresstracker_Tile extends Olobuild_Tile_Base {
                             <?php elseif ( $show_nums ) : ?>
                                 <?php echo (int) ( $i + 1 ); ?>
                             <?php elseif ( ! empty( $item['icon'] ) ) : ?>
-                                <span uk-icon="icon: <?php echo esc_attr( $item['icon'] ); ?>; ratio: <?php echo (float) round( $icon_size / 20, 2 ); ?>"></span>
+                                <?php echo $this->render_icon_html( $item['icon'], round( $icon_size / 20, 2 ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html(): nome e attributi passati da esc_attr, SVG dalla libreria delle icone ?>
                             <?php endif; ?>
                         </div>
 
@@ -274,7 +274,7 @@ class Olobuild_Progresstracker_Tile extends Olobuild_Tile_Base {
                         <?php elseif ( $show_nums ) : ?>
                             <?php echo (int) ( $i + 1 ); ?>
                         <?php elseif ( ! empty( $item['icon'] ) ) : ?>
-                            <span uk-icon="icon: <?php echo esc_attr( $item['icon'] ); ?>; ratio: <?php echo (float) round( $icon_size / 20, 2 ); ?>"></span>
+                            <?php echo $this->render_icon_html( $item['icon'], round( $icon_size / 20, 2 ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html(): nome e attributi passati da esc_attr, SVG dalla libreria delle icone ?>
                         <?php endif; ?>
                     </div>
                     <?php if ( $i < $count - 1 ) : ?>

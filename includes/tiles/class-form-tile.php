@@ -569,7 +569,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                                     <div class="olo-f-float">
                                         <?php if ( $ficon ) : ?>
                                         <div class="uk-inline uk-width-1-1">
-                                            <span class="uk-form-icon" uk-icon="icon: <?php echo esc_attr( $ficon ); ?>"></span>
+                                            <?php echo $this->render_icon_html( $ficon, 1, 'class="uk-form-icon"' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html(): nome e attributi passati da esc_attr, SVG dalla libreria delle icone ?>
                                             <input type="<?php echo esc_attr( $html_type ); ?>" id="<?php echo esc_attr( $field_id ); ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder=" "<?php echo $req_attr; ?><?php echo $extra_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- required/size-class are fixed internal strings; extra_attrs holds hardcoded pattern/title attributes only ?> />
                                             <?php if ( $flabel ) : ?>
                                                 <label for="<?php echo esc_attr( $field_id ); ?>" class="olo-f-float-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
@@ -588,7 +588,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                                     <?php endif; ?>
                                     <?php if ( $ficon ) : ?>
                                     <div class="uk-inline uk-width-1-1">
-                                        <span class="uk-form-icon" uk-icon="icon: <?php echo esc_attr( $ficon ); ?>"></span>
+                                        <?php echo $this->render_icon_html( $ficon, 1, 'class="uk-form-icon"' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html(): nome e attributi passati da esc_attr, SVG dalla libreria delle icone ?>
                                         <input type="<?php echo esc_attr( $html_type ); ?>" id="<?php echo esc_attr( $field_id ); ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder="<?php echo esc_attr( $fplaceholder ); ?>"<?php echo $req_attr; ?><?php echo $extra_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- required/size-class are fixed internal strings; extra_attrs holds hardcoded pattern/title attributes only ?> />
                                     </div>
                                     <?php else : ?>
@@ -617,7 +617,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                                 <?php endif; ?>
                                 <?php if ( $ficon ) : ?>
                                 <div class="uk-inline uk-width-1-1">
-                                    <span class="uk-form-icon" uk-icon="icon: <?php echo esc_attr( $ficon ); ?>"></span>
+                                    <?php echo $this->render_icon_html( $ficon, 1, 'class="uk-form-icon"' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html(): nome e attributi passati da esc_attr, SVG dalla libreria delle icone ?>
                                     <select id="<?php echo esc_attr( $field_id ); ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-select<?php echo esc_attr( $size_class ); ?>"<?php echo esc_attr( $req_attr ); ?>>
                                         <option value=""><?php echo esc_html( $fplaceholder ?: 'Seleziona...' ); ?></option>
                                         <?php foreach ( $this->parse_options( $foptions ) as $opt ) : ?>
@@ -753,7 +753,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                                 <?php endif; ?>
                                 <div class="uk-inline uk-width-1-1" style="position:relative">
                                     <?php if ( $ficon ) : ?>
-                                        <span class="uk-form-icon" uk-icon="icon: <?php echo esc_attr( $ficon ); ?>"></span>
+                                        <?php echo $this->render_icon_html( $ficon, 1, 'class="uk-form-icon"' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html(): nome e attributi passati da esc_attr, SVG dalla libreria delle icone ?>
                                     <?php endif; ?>
                                     <input type="password" id="<?php echo esc_attr( $field_id ); ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo esc_attr( $size_class ); ?>" placeholder="<?php echo esc_attr( $fplaceholder ); ?>"<?php echo esc_attr( $req_attr ); ?> autocomplete="new-password" />
                                     <a class="uk-form-icon uk-form-icon-flip" style="cursor:pointer" onclick="var i=this.previousElementSibling;i.type=i.type==='password'?'text':'password'" uk-icon="icon: eye"></a>
@@ -836,9 +836,9 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                 <div class="uk-margin-top olo-f-submit-row" data-olo-submit style="text-align:<?php echo esc_attr( $s['submit_alignment'] ?: 'left' ); ?><?php if ( $is_multistep ) : ?>;display:none<?php endif; ?>">
                     <button type="submit" class="olo-f-btn">
                         <span class="olo-f-btn-text">
-                            <?php if ( $btn_icon && $btn_icon_pos === 'left' ) : ?><span uk-icon="icon: <?php echo esc_attr( $btn_icon ); ?>"></span><?php endif; ?>
+                            <?php if ( $btn_icon && $btn_icon_pos === 'left' ) : ?><?php echo $this->render_icon_html( $btn_icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html(): nome e attributi passati da esc_attr, SVG dalla libreria delle icone ?><?php endif; ?>
                             <?php echo esc_html( $s['submit_text'] ?: 'Invia' ); ?>
-                            <?php if ( $btn_icon && $btn_icon_pos === 'right' ) : ?><span uk-icon="icon: <?php echo esc_attr( $btn_icon ); ?>"></span><?php endif; ?>
+                            <?php if ( $btn_icon && $btn_icon_pos === 'right' ) : ?><?php echo $this->render_icon_html( $btn_icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html(): nome e attributi passati da esc_attr, SVG dalla libreria delle icone ?><?php endif; ?>
                         </span>
                         <span class="olo-f-btn-loading"><span uk-spinner="ratio: 0.6"></span> Invio in corso…</span>
                     </button>

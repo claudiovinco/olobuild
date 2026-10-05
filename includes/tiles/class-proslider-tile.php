@@ -929,7 +929,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                     $icon_style .= '--icon-stroke-dash:' . $icon_sd . ';';
                 }
                 // bgColor, padding, borderRadius sono ora sul wrapper (render_layer)
-                return '<span class="mps-icon-wrap" style="' . esc_attr( $icon_style ) . '" uk-icon="icon: ' . $icon_name . '; ratio: ' . $ratio . '"></span>';
+                return $this->render_icon_html( (string) ( $layer['iconName'] ?? 'star' ), $ratio, 'class="mps-icon-wrap" style="' . esc_attr( $icon_style ) . '"' );
 
             case 'video':
                 $video_src = $layer['videoSrc'] ?? '';

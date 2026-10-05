@@ -104,7 +104,7 @@ class Olobuild_Iconlist_Tile extends Olobuild_Tile_Base {
                 <?php echo $tag_open; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- anchor/div opener built above with esc_url() and a style string assembled from absint() sizes and safe_color_css() colours ?>
                     <span style="<?php echo $icon_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style assembled above from safe_color_css() colours, absint() sizes and fixed-literal radius ?>">
                         <?php if (preg_match('/^[a-z][a-z0-9-]*$/', $item_icon)) : ?>
-                            <span uk-icon="icon: <?php echo esc_attr($item_icon); ?>; ratio: <?php echo (float) $ratio; ?>"></span>
+                            <?php echo $this->render_icon_html( $item_icon, (float) $ratio ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html(): nome e attributi passati da esc_attr, SVG dalla libreria delle icone ?>
                         <?php else : ?>
                             <?php echo esc_html($item_icon); ?>
                         <?php endif; ?>

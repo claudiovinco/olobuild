@@ -115,7 +115,7 @@ ob_start();
 
         if ( ! empty( $s['icon_emoji'] ) ) {
             if ( preg_match( '/^[a-z][a-z0-9-]*$/', $s['icon_emoji'] ) ) {
-                echo '<span uk-icon="icon: ' . esc_attr( $s['icon_emoji'] ) . '"></span> ';
+                echo $this->render_icon_html( $s['icon_emoji'] ) . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html(): nome e attributi passati da esc_attr, SVG dalla libreria delle icone
             } else {
                 echo esc_html( $s['icon_emoji'] ) . ' ';
             }

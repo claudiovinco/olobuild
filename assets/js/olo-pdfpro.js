@@ -143,6 +143,19 @@
     return e;
   }
 
+  /* Icona di un hotspot: l'SVG Lucide preparato dal PHP (icon_svg) oppure uk-icon (UIkit). */
+  function iconaHotspot(hs, px) {
+    var s = document.createElement('span');
+    if (hs.icon_svg) {
+      s.innerHTML = hs.icon_svg;
+      var svg = s.querySelector('svg');
+      if (svg) { svg.setAttribute('width', px); svg.setAttribute('height', px); }
+    } else {
+      s.setAttribute('uk-icon', 'icon: ' + hs.icon + '; ratio: ' + (Math.round(px / 20 * 100) / 100));
+    }
+    return s;
+  }
+
   function btn(icon, title) {
     var b = el('button', '', ICONS[icon] || icon);
     b.title = title || '';
@@ -1422,9 +1435,7 @@
     dot.title = hs.title || '';
 
     if (hasIcon) {
-      var iconRatio = Math.round((dotSize * 0.6) / 20 * 100) / 100;
-      var iconSpan = document.createElement('span');
-      iconSpan.setAttribute('uk-icon', 'icon: ' + hs.icon + '; ratio: ' + iconRatio);
+      var iconSpan = iconaHotspot(hs, Math.round(dotSize * 0.6));
       iconSpan.style.cssText = 'color:#fff;display:flex;align-items:center;justify-content:center;width:100%;height:100%;line-height:1;';
       dot.appendChild(iconSpan);
     }
@@ -1613,8 +1624,7 @@
     if (hs.title) {
       var title = el('h4', '', '');
       if (hs.icon) {
-        var popupIcon = document.createElement('span');
-        popupIcon.setAttribute('uk-icon', 'icon: ' + hs.icon + '; ratio: 0.9');
+        var popupIcon = iconaHotspot(hs, 18);
         popupIcon.style.cssText = 'margin-right:6px;vertical-align:-2px;display:inline-block;';
         title.appendChild(popupIcon);
       }

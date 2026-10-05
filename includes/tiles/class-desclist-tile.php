@@ -255,7 +255,7 @@ class Olobuild_DescList_Tile extends Olobuild_Tile_Base {
     private function render_icon( $icon, $size = 20 ) {
         if ( preg_match( '/^[a-z][a-z0-9-]*$/', $icon ) ) {
             $ratio = round( $size / 20, 2 );
-            return '<span uk-icon="icon: ' . esc_attr( $icon ) . '; ratio: ' . $ratio . '"></span>';
+            return $this->render_icon_html( $icon, $ratio );
         }
         return '<span style="font-size:' . absint( $size ) . 'px;line-height:1;">' . esc_html( $icon ) . '</span>';
     }

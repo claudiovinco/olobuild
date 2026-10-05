@@ -98,9 +98,9 @@ class Olobuild_Alert_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
             <div style="display: flex; align-items: flex-start; gap: 12px;">
                 <?php if ( ! empty( $s['custom_icon'] ) ) : ?>
-                    <span style="flex-shrink: 0;" uk-icon="icon: <?php echo esc_attr( $s['custom_icon'] ); ?>; ratio: 1.2"></span>
+                    <?php echo $this->render_icon_html( $s['custom_icon'], 1.2, 'style="flex-shrink: 0;"' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html(): nome e attributi passati da esc_attr, SVG dalla libreria delle icone ?>
                 <?php elseif ( $s['show_icon'] ) : ?>
-                    <span style="flex-shrink: 0;" uk-icon="icon: <?php echo esc_attr( $icon ); ?>; ratio: 1.2"></span>
+                    <?php echo $this->render_icon_html( $icon, 1.2, 'style="flex-shrink: 0;"' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html(): nome e attributi passati da esc_attr, SVG dalla libreria delle icone ?>
                 <?php endif; ?>
                 <div style="flex: 1;">
                     <?php if ( ! empty( $s['title'] ) ) : ?>

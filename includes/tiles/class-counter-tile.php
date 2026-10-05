@@ -164,7 +164,7 @@ class Olobuild_Counter_Tile extends Olobuild_Tile_Base {
                 <?php if ( ! empty( $s['icon_emoji'] ) ) : ?>
                     <div class="olo-cnt-icon">
                         <?php if ( preg_match( '/^[a-z][a-z0-9-]*$/', $s['icon_emoji'] ) ) : ?>
-                            <span style="color:inherit;" uk-icon="icon: <?php echo esc_attr( $s['icon_emoji'] ); ?>; ratio: <?php echo (float) round( $icon_sz / 20, 1 ); ?>"></span>
+                            <?php echo $this->render_icon_html( $s['icon_emoji'], round( $icon_sz / 20, 2 ), 'style="color:inherit;"' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html(): nome e attributi passati da esc_attr, SVG dalla libreria delle icone ?>
                         <?php else : ?>
                             <?php echo esc_html( $s['icon_emoji'] ); ?>
                         <?php endif; ?>

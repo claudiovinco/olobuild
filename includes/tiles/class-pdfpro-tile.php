@@ -190,6 +190,9 @@ class Olobuild_PdfPro_Tile extends Olobuild_Tile_Base {
                 'title'      => sanitize_text_field( $hs['title'] ?? '' ),
                 'color'      => $this->safe_color_css( $hs['color'] ?? '' ),
                 'icon'       => sanitize_text_field( $hs['icon'] ?? '' ),
+                // Le icone Lucide del selettore non le conosce uk-icon: l'SVG arriva già pronto
+                // (il JS lo usa al posto di uk-icon). UIkit e personalizzate restano come prima.
+                'icon_svg'   => $this->origine_icona( (string) ( $hs['icon'] ?? '' ) ) === 'lucide' ? (string) ( self::libreria_icone( 'lucide' )[ (string) $hs['icon'] ] ?? '' ) : '',
                 'description'=> wp_kses_post( $hs['description'] ?? '' ),
                 'image_url'  => esc_url( $hs['image_url'] ?? '' ),
                 'image_ratio'=> $img_ratio,

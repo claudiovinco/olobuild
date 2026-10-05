@@ -976,7 +976,28 @@ abstract class Olobuild_Tile_Base {
      * @return string  HTML for the icon
      */
     protected function render_icon_html( $icon_name, $ratio = 1, $extra_attr = '' ) {
-        if ( empty( $icon_name ) ) return '';
+        $icon_name = trim( (string) $icon_name );
+        if ( $icon_name === '' ) return '';
+        // `class` e `style` passati in $extra_attr si FONDONO con quelli dell'icona: due
+        // attributi uguali sullo stesso tag, e il browser tiene il primo e scarta l'altro
+        // (la classe della tile o il suo colore sparivano proprio sulle icone Lucide).
+        $cls = '';
+        $sty = '';
+        if ( preg_match( '/\sclass="([^"]*)"|^class="([^"]*)"/', (string) $extra_attr, $m ) ) {
+            $cls        = trim( $m[1] !== '' ? $m[1] : ( $m[2] ?? '' ) );
+            $extra_attr = str_replace( $m[0], '', $extra_attr );
+        }
+        if ( preg_match( '/\sstyle="([^"]*)"|^style="([^"]*)"/', (string) $extra_attr, $m ) ) {
+            $sty        = trim( $m[1] !== '' ? $m[1] : ( $m[2] ?? '' ) );
+            $extra_attr = str_replace( $m[0], '', $extra_attr );
+        }
+        $extra_attr = trim( (string) $extra_attr );
+        $attr = function ( $classe, $stile ) use ( $cls, $sty, $extra_attr ) {
+            $c = trim( $classe . ' ' . $cls );
+            $s = trim( rtrim( $stile, ';' ) . ( $stile !== '' && $sty !== '' ? ';' : '' ) . $sty );
+            // Valori già pronti per l'attributo (chi chiama li ha già passati da esc_attr): qui si uniscono soltanto.
+            return ( $c !== '' ? ' class="' . $c . '"' : '' ) . ( $s !== '' ? ' style="' . $s . '"' : '' ) . ( $extra_attr !== '' ? ' ' . $extra_attr : '' );
+        };
         if ( str_starts_with( $icon_name, 'custom:' ) ) {
             $name = substr( $icon_name, 7 );
             $icons = get_option( 'olobuild_custom_icons', [] );
@@ -984,7 +1005,7 @@ abstract class Olobuild_Tile_Base {
                 $size = round( 20 * $ratio );
                 // Sanitize SVG output to prevent stored XSS
                 $safe_svg = function_exists( 'olobuild_sanitize_svg' ) ? olobuild_sanitize_svg( $icons[ $name ] ) : wp_kses_post( $icons[ $name ] );
-                return '<span class="olo-custom-icon" style="display:inline-flex;width:' . $size . 'px;height:' . $size . 'px;" ' . $extra_attr . '>' . $safe_svg . '</span>';
+                return '<span' . $attr( 'olo-custom-icon', 'display:inline-flex;width:' . $size . 'px;height:' . $size . 'px' ) . '>' . $safe_svg . '</span>';
             }
             return '';
         }
@@ -993,7 +1014,7 @@ abstract class Olobuild_Tile_Base {
         // Lucide (~1700 icone, ISC) coprono il resto via SVG inline server-side.
         $uikit_lib = self::libreria_icone( 'uikit' );
         if ( isset( $uikit_lib[ $icon_name ] ) ) {
-            return '<span ' . $extra_attr . ' uk-icon="icon: ' . esc_attr( $icon_name ) . '; ratio: ' . esc_attr( $ratio ) . '"></span>';
+            return '<span' . $attr( '', '' ) . ' uk-icon="icon: ' . esc_attr( $icon_name ) . '; ratio: ' . esc_attr( $ratio ) . '"></span>';
         }
         $lucide_lib = self::libreria_icone( 'lucide' );
         if ( isset( $lucide_lib[ $icon_name ] ) ) {
@@ -1001,11 +1022,11 @@ abstract class Olobuild_Tile_Base {
             $svg = $lucide_lib[ $icon_name ];
             $svg = preg_replace( '/width="\d+"/', 'width="' . $size . '"', $svg, 1 );
             $svg = preg_replace( '/height="\d+"/', 'height="' . $size . '"', $svg, 1 );
-            return '<span class="olo-lucide-icon" style="display:inline-flex" ' . $extra_attr . '>' . $svg . '</span>';
+            return '<span' . $attr( 'olo-lucide-icon', 'display:inline-flex' ) . '>' . $svg . '</span>';
         }
         // Fallback: il nome non è in nessuno dei due dict — lascia che UIkit JS provi
         // (potrebbe essere un'icona nuova di una versione UIkit più recente).
-        return '<span ' . $extra_attr . ' uk-icon="icon: ' . esc_attr( $icon_name ) . '; ratio: ' . esc_attr( $ratio ) . '"></span>';
+        return '<span' . $attr( '', '' ) . ' uk-icon="icon: ' . esc_attr( $icon_name ) . '; ratio: ' . esc_attr( $ratio ) . '"></span>';
     }
 
     /**

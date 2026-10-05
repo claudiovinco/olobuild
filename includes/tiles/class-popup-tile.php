@@ -229,7 +229,7 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
         // Button icon
         $icon_html = '';
         if ( ! empty( $s['button_icon'] ) && preg_match( '/^[a-z][a-z0-9-]*$/', $s['button_icon'] ) ) {
-            $icon_html = '<span uk-icon="icon: ' . esc_attr( $s['button_icon'] ) . '"></span> ';
+            $icon_html = $this->render_icon_html( $s['button_icon'] ) . ' ';
         }
 
         // Button text
