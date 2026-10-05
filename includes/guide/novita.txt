@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.529 - 2026-10-05 (fix)
+- La finestra del Popup usa i colori e il font del sito: prima, aperta, prendeva un blu di sistema e il font del browser.
+
 ## v1.4.528 - 2026-10-05 (fix)
 - Il codice in linea nei testi segue il colore del testo: prima era rosa.
 
