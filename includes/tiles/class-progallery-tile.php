@@ -2057,14 +2057,14 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         if ( ! $tilt && ! $magnetic && ! $entrance && ! $filmstrip && ! $expand && ! $strip && ! $parallax && ! $drift && ! $cascade ) return;
         self::$script_output = true;
 
-        echo '<script>';
+        echo '<script data-olo-pg>';
         echo '(function(){';
         echo 'if(window._oloPGscript)return;window._oloPGscript=1;';
         echo 'var rm=window.matchMedia("(prefers-reduced-motion:reduce)").matches;';
 
         // ── Entrance reveal (IntersectionObserver) ──
-        echo 'function initReveal(){';
-        echo 'var els=document.querySelectorAll("[data-pg-reveal]");';
+        echo 'function initReveal(r){';
+        echo 'var els=(r||document).querySelectorAll("[data-pg-reveal]");';
         echo 'if(!els.length)return;';
         echo 'if(rm){els.forEach(function(el){el.classList.add("olo-pg-visible")});return}';
         echo 'var obs=new IntersectionObserver(function(entries){';
@@ -2074,9 +2074,9 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         echo '}';
 
         // ── Tilt 3D (mousemove) ──
-        echo 'function initTilt(){';
+        echo 'function initTilt(r){';
         echo 'if(rm)return;';
-        echo 'document.querySelectorAll("[data-pg-tilt]").forEach(function(container){';
+        echo '(r||document).querySelectorAll("[data-pg-tilt]").forEach(function(container){';
         echo 'var angle=parseInt(container.dataset.pgTilt)||10;';
         echo 'container.querySelectorAll(".olo-pg-item").forEach(function(item){';
         echo 'item.addEventListener("mousemove",function(e){';
@@ -2090,9 +2090,9 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         echo '}';
 
         // ── Magnetic (mousemove) ──
-        echo 'function initMagnetic(){';
+        echo 'function initMagnetic(r){';
         echo 'if(rm)return;';
-        echo 'document.querySelectorAll("[data-pg-magnetic]").forEach(function(container){';
+        echo '(r||document).querySelectorAll("[data-pg-magnetic]").forEach(function(container){';
         echo 'var str=parseInt(container.dataset.pgMagnetic)||24;';
         echo 'container.querySelectorAll(".olo-pg-item").forEach(function(item){';
         echo 'item.addEventListener("mousemove",function(e){';
@@ -2107,8 +2107,8 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         echo '}';
 
         // ── Filmstrip Coverflow ──
-        echo 'function initFilmstrip(){';
-        echo 'document.querySelectorAll("[data-pg-filmstrip]").forEach(function(el){';
+        echo 'function initFilmstrip(r){';
+        echo '(r||document).querySelectorAll("[data-pg-filmstrip]").forEach(function(el){';
         echo 'var zoom=parseFloat(el.dataset.pgFilmZoom)||1.15;';
         echo 'var tilt=parseFloat(el.dataset.pgFilmTilt)||8;';
         echo 'var iw=parseFloat(el.dataset.pgFilmWidth)||280;';
@@ -2272,9 +2272,9 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         echo '}';
 
         // ── Expand spotlight ──
-        echo 'function initExpand(){';
+        echo 'function initExpand(r){';
         echo 'if(rm||window.innerWidth<=640)return;';
-        echo 'document.querySelectorAll("[data-pg-expand]").forEach(function(container){';
+        echo '(r||document).querySelectorAll("[data-pg-expand]").forEach(function(container){';
         echo 'var ratio=parseFloat(container.dataset.pgExpandRatio)||4;';
         echo 'var shrink=parseFloat(container.dataset.pgExpandShrink)||0.5;';
         echo 'var items=container.querySelectorAll(".olo-pg-item");';
@@ -2298,9 +2298,9 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         echo '}';
 
         // ── Strip kinetic drag-to-scroll con momentum ──
-        echo 'function initStrip(){';
+        echo 'function initStrip(r){';
         echo 'if(rm)return;';
-        echo 'document.querySelectorAll("[data-pg-strip]").forEach(function(el){';
+        echo '(r||document).querySelectorAll("[data-pg-strip]").forEach(function(el){';
         echo 'var pressed=false,startX=0,startScroll=0,vel=0,amp=0,frame=0,ts=0,tgt=0,tick=0,raf=0,wasDrag=false;';
         echo 'var TC=325;';
         echo 'function track(){var now=Date.now();var elapsed=now-ts;var delta=el.scrollLeft-frame;ts=now;frame=el.scrollLeft;var v=1000*delta/(1+elapsed);vel=0.8*v+0.2*vel}';
@@ -2315,8 +2315,8 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         echo '}';
 
         // ── Strip arrows click ──
-        echo 'function initStripArrows(){';
-        echo 'document.querySelectorAll("[data-sa-dir]").forEach(function(btn){';
+        echo 'function initStripArrows(r){';
+        echo '(r||document).querySelectorAll("[data-sa-dir]").forEach(function(btn){';
         echo 'btn.addEventListener("click",function(e){';
         echo 'e.preventDefault();';
         echo 'var wrap=btn.closest("[style]");if(!wrap)return;';
@@ -2331,9 +2331,9 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         echo '}';
 
         // ── Parallax (scroll-driven depth) ──
-        echo 'function initParallax(){';
+        echo 'function initParallax(r){';
         echo 'if(rm)return;';
-        echo 'document.querySelectorAll("[data-pg-parallax]").forEach(function(container){';
+        echo '(r||document).querySelectorAll("[data-pg-parallax]").forEach(function(container){';
         echo 'var intensity=parseFloat(container.dataset.pgPlxIntensity)||50;';
         echo 'var items=container.querySelectorAll(".olo-pg-item[data-speed]");';
         echo 'if(!items.length)return;';
@@ -2358,9 +2358,9 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         echo '}';
 
         // ── Drift (multi-directional scroll parallax) ──
-        echo 'function initDrift(){';
+        echo 'function initDrift(r){';
         echo 'if(rm)return;';
-        echo 'document.querySelectorAll("[data-pg-drift]").forEach(function(container){';
+        echo '(r||document).querySelectorAll("[data-pg-drift]").forEach(function(container){';
         echo 'var items=container.querySelectorAll(".olo-pg-item[data-drift-sx]");';
         echo 'if(!items.length)return;';
         echo 'items.forEach(function(it){if(!it.dataset.baseTransform){it.dataset.baseTransform=it.style.transform||""}});';
@@ -2387,9 +2387,9 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         echo '}';
 
         // ── Cascade (stacked cards that spread on scroll) ──
-        echo 'function initCascade(){';
+        echo 'function initCascade(r){';
         echo 'if(rm)return;';
-        echo 'document.querySelectorAll("[data-pg-cascade]").forEach(function(container){';
+        echo '(r||document).querySelectorAll("[data-pg-cascade]").forEach(function(container){';
         echo 'var spread=parseFloat(container.dataset.pgCascadeSpread)||60;';
         echo 'var items=container.querySelectorAll(".olo-pg-item[data-cascade-idx]");';
         echo 'if(!items.length)return;';
@@ -2417,8 +2417,13 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         echo '}';
 
         // ── Init ──
-        echo 'function init(){initReveal();initTilt();initMagnetic();initFilmstrip();initExpand();initStrip();initStripArrows();initParallax();initDrift();initCascade()}';
+        echo 'function init(r){initReveal(r);initTilt(r);initMagnetic(r);initFilmstrip(r);initExpand(r);initStrip(r);initStripArrows(r);initParallax(r);initDrift(r);initCascade(r)}';
         echo 'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init)}else{init()}';
+        // Lo script si scrive una volta sola per pagina: le gallerie che nascono DOPO dal
+        // caricamento pigro (il <template> di una tile sotto la piega) non le avvia nessuno.
+        // All'idratazione si avviano quelle del blocco appena nato; se il blocco contiene
+        // questo stesso script, e' lui ad avviarle (niente doppio avvio).
+        echo 'document.addEventListener("olo:lazy-hydrated",function(ev){var t=ev.detail?ev.detail.target:null;if(!t)return;if(t.querySelector("script[data-olo-pg]"))return;init(t)});';
         echo '})();';
         echo '</script>';
     }
