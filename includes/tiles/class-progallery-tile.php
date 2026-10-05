@@ -425,22 +425,30 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
             echo ".{$uid}-next{right:8px}";
             echo ".{$uid}-wrap:hover .{$uid}-prev,.{$uid}-wrap:hover .{$uid}-next{opacity:1}";
             echo ".{$uid}-prev:hover,.{$uid}-next:hover{background:rgba(0,0,0,.7)}";
-            // Indicatore posizione
+            // Da tastiera le frecce compaiono col fuoco, non solo al passaggio del mouse.
+            echo ".{$uid}-prev:focus-visible,.{$uid}-next:focus-visible{opacity:1;outline:2px solid var(--olo-color-primary,#e1474f);outline-offset:2px}";
+            // Indicatore posizione. I pallini e le lineette li crea lo script come <button>
+            // (prima le regole cercavano degli <span>, e appena lo script li trovava uscivano
+            // come pulsanti di sistema): `>*` li prende tutti e due, il reset toglie il pulsante.
+            $dot_reset = 'border:0;padding:0;margin:0;-webkit-appearance:none;appearance:none;flex:0 0 auto;';
+            $dot_focus = ".{$uid}-dots>*:focus-visible{outline:2px solid var(--olo-color-primary,#e1474f);outline-offset:3px}";
             $dot_clr = $film_dots_c ?: '';
             if ( $film_dots === 'dots' ) {
                 $da = $dot_clr ?: 'rgba(0,0,0,.65)';
                 $di = $dot_clr ?: 'rgba(0,0,0,.22)';
                 $di_op = $dot_clr ? 'opacity:.35;' : '';
                 echo ".{$uid}-dots{display:flex;justify-content:center;gap:10px;padding:12px 0;width:80%;max-width:600px;margin:0 auto;position:relative;z-index:11}";
-                echo ".{$uid}-dots span{width:12px;height:12px;border-radius:50%;background:{$di};{$di_op}cursor:pointer;transition:transform .2s ease,background .2s ease,opacity .2s ease}";
-                echo ".{$uid}-dots span.active{background:{$da};opacity:1;transform:scale(1.25)}";
+                echo ".{$uid}-dots>*{{$dot_reset}width:12px;height:12px;border-radius:50%;background:{$di};{$di_op}cursor:pointer;transition:transform .2s ease,background .2s ease,opacity .2s ease}";
+                echo ".{$uid}-dots>.active{background:{$da};opacity:1;transform:scale(1.25)}";
+                echo $dot_focus;
             } elseif ( $film_dots === 'lines' ) {
                 $da = $dot_clr ?: 'rgba(0,0,0,.65)';
                 $di = $dot_clr ?: 'rgba(0,0,0,.22)';
                 $di_op = $dot_clr ? 'opacity:.35;' : '';
                 echo ".{$uid}-dots{display:flex;justify-content:center;gap:6px;padding:12px 0;width:80%;max-width:600px;margin:0 auto;position:relative;z-index:11;align-items:center}";
-                echo ".{$uid}-dots span{width:20px;height:3px;border-radius:2px;background:{$di};{$di_op}cursor:pointer;transition:width .3s ease,background .3s ease,opacity .3s ease}";
-                echo ".{$uid}-dots span.active{width:36px;background:{$da};opacity:1}";
+                echo ".{$uid}-dots>*{{$dot_reset}width:20px;height:3px;border-radius:2px;background:{$di};{$di_op}cursor:pointer;transition:width .3s ease,background .3s ease,opacity .3s ease}";
+                echo ".{$uid}-dots>.active{width:36px;background:{$da};opacity:1}";
+                echo $dot_focus;
             } elseif ( $film_dots === 'progress' ) {
                 $da = $dot_clr ?: 'rgba(0,0,0,.55)';
                 $di = $dot_clr ?: 'rgba(0,0,0,.15)';
@@ -514,7 +522,9 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
             $fade_css = $strip_fade ? "mask-image:linear-gradient(to right,transparent,black 6%,black 94%,transparent);-webkit-mask-image:linear-gradient(to right,transparent,black 6%,black 94%,transparent);" : '';
             $dir_css = ( $strip_dir === 'right' ) ? 'animation-direction:reverse;' : '';
             echo ".{$uid}{overflow:hidden;{$fade_css}}";
-            echo ".{$uid}-track{display:flex;gap:{$gap}px;width:max-content;animation:{$uid}-marquee {$strip_speed}s linear infinite;{$dir_css}}";
+            // padding-right = gap: il nastro (voci + copie) misura 2×N×(voce+gap) e il -50% del giro
+            // cade esattamente sulla prima copia. Senza, mancava mezzo gap e il nastro saltava a ogni giro.
+            echo ".{$uid}-track{display:flex;gap:{$gap}px;padding-right:{$gap}px;width:max-content;animation:{$uid}-marquee {$strip_speed}s linear infinite;{$dir_css}}";
             if ( $strip_pause ) {
                 echo ".{$uid}:hover .{$uid}-track{animation-play-state:paused}";
             }
@@ -532,7 +542,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
             $fade_css = $strip_fade ? "mask-image:linear-gradient(to right,transparent,black 6%,black 94%,transparent);-webkit-mask-image:linear-gradient(to right,transparent,black 6%,black 94%,transparent);" : '';
             echo ".{$uid}{display:flex;flex-direction:column;gap:{$gap}px}";
             echo ".{$uid}-row{overflow:hidden;{$fade_css}}";
-            echo ".{$uid}-track{display:flex;gap:{$gap}px;width:max-content;animation:{$uid}-marquee {$strip_speed}s linear infinite}";
+            echo ".{$uid}-track{display:flex;gap:{$gap}px;padding-right:{$gap}px;width:max-content;animation:{$uid}-marquee {$strip_speed}s linear infinite}";
             echo ".{$uid}-track-rev{animation-direction:reverse}";
             if ( $strip_pause ) {
                 echo ".{$uid}:hover .{$uid}-track{animation-play-state:paused}";
@@ -573,8 +583,18 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
             echo ".{$uid} .olo-pg-item img,.{$uid} .olo-pg-item video{transition:transform .5s cubic-bezier(.25,.46,.45,.94)}";
             echo ".{$uid} .olo-pg-item:hover img,.{$uid} .olo-pg-item:hover video{transform:scale({$hz_scale})}";
         } elseif ( $hover === 'lift' ) {
-            echo ".{$uid}{overflow:visible}";
-            echo ".{$uid} .olo-pg-item{transition:transform .4s ease,box-shadow .4s ease;position:relative;z-index:0}";
+            // Niente `position` qui (né nel luccichio e nelle cornici più sotto): ogni schema la dà
+            // già all'item, e un `position:relative` scritto DOPO scavalcava l'`absolute` di Sparso,
+            // Parallasse, Deriva, Cascata, Esagoni e Puzzle. Gli item tornavano in colonna con le
+            // misure in % pensate per stare sovrapposti: lo Sparso arrivava a migliaia di px.
+            // L'overflow visibile (per non tagliare sollevamento e ombra) solo fuori dai nastri: scritto
+            // dopo lo schema toglieva il taglio del Nastro automatico (il binario usciva dalla colonna
+            // su tutta la pagina) e lo scorrimento di Coverflow e Nastro (frecce, pallini e trascinamento
+            // non facevano più niente, le foto uscivano dalla colonna).
+            if ( ! $is_strip ) {
+                echo ".{$uid}{overflow:visible}";
+            }
+            echo ".{$uid} .olo-pg-item{transition:transform .4s ease,box-shadow .4s ease;z-index:0}";
             echo ".{$uid} .olo-pg-item:hover{transform:translateY(-8px);box-shadow:0 14px 32px rgba(0,0,0,.25);z-index:2}";
         } elseif ( $hover === 'tilt3d' ) {
             echo ".{$uid} .olo-pg-item{perspective:600px;transform-style:preserve-3d;transition:transform .4s ease}";
@@ -671,7 +691,8 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
                     $img_anim = "{$uid}-kb {$cont_speed}s ease-in-out infinite";
                 } elseif ( $ce === 'shimmer' && ! $has_shimmer ) {
                     echo "@keyframes {$uid}-shimmer{0%{transform:translateX(-100%) rotate(25deg)}35%{transform:translateX(200%) rotate(25deg)}100%{transform:translateX(200%) rotate(25deg)}}";
-                    echo ".{$uid} .olo-pg-item{position:relative;overflow:hidden}";
+                    // L'item è già posizionato dallo schema (vedi «lift»): qui basta tagliare il riflesso.
+                    echo ".{$uid} .olo-pg-item{overflow:hidden}";
                     echo ".{$uid} .olo-pg-item::after{content:'';position:absolute;inset:-50%;z-index:2;background:linear-gradient(90deg,transparent 30%,rgba(255,255,255,.12) 50%,transparent 70%);animation:{$uid}-shimmer {$cont_speed}s ease-in-out infinite;pointer-events:none}";
                     $has_shimmer = true;
                 }
@@ -703,11 +724,10 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         } elseif ( $frame === 'torn' ) {
             echo ".{$uid} .olo-pg-item{clip-path:polygon(0 2%,4% 0,10% 3%,18% 0,24% 2%,32% 0,40% 1%,48% 0,56% 2%,64% 0,72% 1%,80% 0,88% 2%,94% 0,100% 3%,97% 10%,100% 18%,97% 26%,100% 34%,97% 42%,100% 50%,97% 58%,100% 66%,97% 74%,100% 82%,97% 90%,100% 97%,96% 100%,90% 97%,82% 100%,76% 97%,68% 100%,60% 99%,52% 100%,44% 97%,36% 100%,28% 99%,20% 100%,12% 97%,6% 100%,0 97%,3% 90%,0 82%,3% 74%,0 66%,3% 58%,0 50%,3% 42%,0 34%,3% 26%,0 18%,3% 10%)}";
         } elseif ( $frame === 'tape' ) {
-            echo ".{$uid} .olo-pg-item{position:relative}";
+            // Nastro e cornice interna: l'item è già posizionato dallo schema (vedi «lift»).
             echo ".{$uid} .olo-pg-item::after{content:'';position:absolute;top:-6px;left:50%;transform:translateX(-50%);width:50px;height:18px;background:rgba(255,255,200,.7);border-radius:2px;z-index:4;box-shadow:0 1px 3px rgba(0,0,0,.1)}";
         } elseif ( $frame === 'inset' ) {
             $inset_pad = max( 3, min( 40, absint( $s['frame_inset_padding'] ) ) );
-            echo ".{$uid} .olo-pg-item{position:relative}";
             echo ".{$uid} .olo-pg-item::before{content:'';position:absolute;inset:{$inset_pad}px;border:1px solid {$frame_color};border-radius:" . max( 0, $radius_raw - $inset_pad ) . "px;z-index:5;pointer-events:none}";
         }
 
@@ -943,6 +963,13 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
 
         // ─── Container attrs ───
         $container_class = esc_attr( $uid ) . ' olo-pgal-preset-' . esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) );
+        // Le parti attorno e dentro la galleria (cornice del coverflow, frecce, indicatore, righe e
+        // nastri che scorrono) prendono la classe dall'uid DA SOLO. Costruite da $container_class
+        // ricevevano «olo-pg-N olo-pgal-preset-custom-track»: l'uid intero, che le trattava tutte da
+        // galleria (cornice e frecce in fila nel flex del coverflow, il nastro doppio impilato in
+        // colonna), e un «-track» attaccato al preset, che nessuna regola .olo-pg-N-track trovava
+        // (nastro automatico fermo, script del coverflow senza frecce né indicatore).
+        $uid_attr = esc_attr( $uid );
         $data_attrs = '';
         if ( $needs_entrance ) {
             $data_attrs .= ' data-pg-reveal="1"';
@@ -1011,7 +1038,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
 
         // Coverflow wrapper (outside lightbox container)
         if ( $is_coverflow ) {
-            echo '<div class="' . $container_class . '-wrap" tabindex="0">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_class is sanitized via esc_attr()/sanitize_key() above.
+            echo '<div class="' . $uid_attr . '-wrap" tabindex="0">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $uid_attr is esc_attr()'d above.
         }
 
         // ─── Strip arrows wrapper ───
@@ -1142,7 +1169,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
             if ( $layout === 'strip_marquee' ) {
                 // Marquee: container → track → items + duplicati
                 echo '<div class="' . $container_class . '"' . $lb_attr . $data_attrs . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_class/$lb_attr are esc_attr()-built above; $data_attrs holds numeric clamped values only.
-                echo '<div class="' . $container_class . '-track">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_class is sanitized via esc_attr()/sanitize_key() above.
+                echo '<div class="' . $uid_attr . '-track">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $uid_attr is esc_attr()'d above.
                 foreach ( $visible_imgs as $k => $img ) {
                     $render_strip_item( $img, $k, false );
                 }
@@ -1181,14 +1208,14 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
 
                 echo '<div class="' . $container_class . '"' . $lb_attr . $data_attrs . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_class/$lb_attr are esc_attr()-built above; $data_attrs holds numeric clamped values only.
                 // Row 1 (scorre a sinistra)
-                echo '<div class="' . $container_class . '-row">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_class is sanitized via esc_attr()/sanitize_key() above.
-                echo '<div class="' . $container_class . '-track">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_class is sanitized via esc_attr()/sanitize_key() above.
+                echo '<div class="' . $uid_attr . '-row">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $uid_attr is esc_attr()'d above.
+                echo '<div class="' . $uid_attr . '-track">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $uid_attr is esc_attr()'d above.
                 foreach ( $row1 as $item ) { $render_strip_item( $item['img'], $item['idx'], false ); }
                 foreach ( $row1 as $item ) { $render_strip_item( $item['img'], $item['idx'], true ); }
                 echo '</div></div>';
                 // Row 2 (scorre a destra — reverse)
-                echo '<div class="' . $container_class . '-row">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_class is sanitized via esc_attr()/sanitize_key() above.
-                echo '<div class="' . $container_class . '-track ' . $container_class . '-track-rev">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_class is sanitized via esc_attr()/sanitize_key() above.
+                echo '<div class="' . $uid_attr . '-row">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $uid_attr is esc_attr()'d above.
+                echo '<div class="' . $uid_attr . '-track ' . $uid_attr . '-track-rev">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $uid_attr is esc_attr()'d above.
                 foreach ( $row2 as $item ) { $render_strip_item( $item['img'], $item['idx'], false ); }
                 foreach ( $row2 as $item ) { $render_strip_item( $item['img'], $item['idx'], true ); }
                 echo '</div></div>';
@@ -1819,14 +1846,14 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
 
         // Coverflow: frecce + indicatore + chiusura wrapper
         if ( $is_coverflow ) {
-            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_class is sanitized via esc_attr()/sanitize_key() above; button labels are escaped inline.
-            echo '<button class="' . $container_class . '-prev" aria-label="' . esc_attr( olobuild_t( 'Precedente' ) ) . '">&#8249;</button>';
-            echo '<button class="' . $container_class . '-next" aria-label="' . esc_attr( olobuild_t( 'Successivo' ) ) . '">&#8250;</button>';
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- $uid_attr is esc_attr()'d above; button labels are escaped inline.
+            echo '<button type="button" class="' . $uid_attr . '-prev" aria-label="' . esc_attr( olobuild_t( 'Precedente' ) ) . '">&#8249;</button>';
+            echo '<button type="button" class="' . $uid_attr . '-next" aria-label="' . esc_attr( olobuild_t( 'Successivo' ) ) . '">&#8250;</button>';
             if ( $film_dots !== 'none' ) {
                 if ( $film_dots === 'progress' ) {
-                    echo '<div class="' . $container_class . '-dots"><div class="pg-prog-track" tabindex="0" role="slider" aria-label="' . esc_attr( olobuild_t( 'Avanzamento galleria' ) ) . '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="pg-prog-fill"></div></div></div>';
+                    echo '<div class="' . $uid_attr . '-dots"><div class="pg-prog-track" tabindex="0" role="slider" aria-label="' . esc_attr( olobuild_t( 'Avanzamento galleria' ) ) . '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="pg-prog-fill"></div></div></div>';
                 } else {
-                    echo '<div class="' . $container_class . '-dots"></div>';
+                    echo '<div class="' . $uid_attr . '-dots"></div>';
                 }
             }
             // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
