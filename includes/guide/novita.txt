@@ -3,6 +3,13 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.552 - 2026-10-05 (fix)
+- Link a una sezione della stessa pagina (#ancora, per esempio da un menu o da un indice): si arriva nel punto giusto anche sulle pagine lunghe, dove le tile più in basso si caricano dopo, e l'header fisso non copre l'inizio della sezione (prima si atterrava più su o più giù).
+- Category Rail: la fila si trascina col mouse; un clic semplice apre ancora la tessera (prima il browser trascinava il link e la fila restava ferma).
+- Pro Gallery: Coverflow, nastri ed effetti funzionano anche nelle gallerie più in basso nella pagina (prima partiva solo la prima).
+- Wishlist WC: «Aggiungi al carrello» nella lista dei salvati aggiunge il prodotto e resta nel sito (prima apriva una pagina di dati).
+- Barra progresso: coi preset Thick Bold, Gradient Bar e Gradient Aurora le etichette si leggono su pagina chiara e la percentuale sta sulla parte colorata della barra; nel cerchio il numero ha il colore del testo.
+
 ## v1.4.551 - 2026-10-05 (fix)
 - Lista: con tutte le voci «Numero» i numeri si vedono (prima sparivano).
 - Pro Gallery: Nastro automatico e Nastro doppio scorrono, e il Coverflow ha di nuovo frecce e indicatore (prima il nastro restava fermo o impilato in colonna, e il coverflow metteva frecce e pallini in fila accanto alle foto). Sollevamento, Shimmer e le cornici Nastro adesivo e Interna non scompongono più gli schemi Sparso, Esagoni incastro, Puzzle, Parallasse, Deriva e Cascata (prima lo Sparso arrivava a migliaia di pixel di altezza). Col Sollevamento i nastri restano dentro la colonna e scorrono (prima il coverflow non scorreva e le foto uscivano dalla pagina).
