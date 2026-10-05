@@ -155,6 +155,13 @@ class Olobuild_EvoNotes_Tile extends Olobuild_Tile_Base {
             if(!root){return;}
             var toggle=root.querySelector('[data-evn-toggle]');
             if(!toggle){return;}
+            <?php if ( empty( $settings['_builder_mode'] ) ) : ?>
+            /* Pulsante e suggerimento sono fissi in basso: dentro il template (transform) stavano in
+               fondo alla pagina invece che allo schermo. Sul sito vanno nel body. */
+            var porta=<?php echo self::js_nel_body(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- costante JS interna ?>;
+            porta(toggle);
+            porta(root.querySelector('.evn-hint'));
+            <?php endif; ?>
             var lab=toggle.querySelector('.evn-lab');
             var pool=root.querySelector('[data-evn-pool]');
             var pairs=[];
