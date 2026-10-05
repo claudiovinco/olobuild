@@ -75,6 +75,15 @@ class Olobuild_Textpath_Tile extends Olobuild_Tile_Base {
 
         // ViewBox based on preset
         $viewbox = ( $preset === 'circle' ) ? '0 0 300 300' : '0 0 300 100';
+        if ( $preset === 'spiral' ) {
+            // La spirale occupa x 124,5-261,3 e y 13,7-145,3: nel riquadro 300x100 usciva
+            // sotto di quasi meta' altezza e stava spostata a destra. Stessa larghezza
+            // (la scala resta quella degli altri tracciati), centrata, alta quanto serve
+            // piu' lo spazio per le lettere, che stanno a cavallo del tracciato.
+            $m       = (int) ceil( $fsize * 0.6 ) + 4;
+            $viewbox = '43 ' . ( 13.7 - $m ) . ' 300 ' . ( 131.6 + 2 * $m );
+        }
+        $chiuso = ( $preset === 'circle' ) || (bool) preg_match( '/z\s*$/i', $path_d );
 
         $path_id = $uid . '-path';
 
@@ -110,12 +119,6 @@ class Olobuild_Textpath_Tile extends Olobuild_Tile_Base {
             }
             <?php endif; ?>
 
-            <?php if ( $anim === 'continuous' ) : ?>
-            @keyframes <?php echo $uid; ?>-offset {
-                0%   { /* start */ }
-                100% { /* end */ }
-            }
-            <?php endif; ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
@@ -143,37 +146,107 @@ class Olobuild_Textpath_Tile extends Olobuild_Tile_Base {
             </svg>
         </div>
 
-        <?php if ( $anim !== 'none' ) : ?>
         <script>
         (function(){
+            /*
+             * Un testo piu' lungo del tracciato si rimpicciolisce finche' ci sta (prima
+             * veniva troncato senza avviso). «Scorrimento una volta» entra dalla fine del
+             * tracciato e si ferma dov'e' il testo fermo, quando la tile si vede (prima
+             * arrivava al 100% e spariva). «Scorrimento continuo» e' un nastro: la frase
+             * si ripete e scorre senza fine (prima usciva e rientrava); sul cerchio le
+             * ripetizioni si distribuiscono in modo che la giuntura non si veda.
+             * Con prefers-reduced-motion il testo resta fermo.
+             */
+            var root = document.getElementById('<?php echo esc_js( $uid ); ?>');
             var tp = document.getElementById('<?php echo esc_js( $uid ); ?>-tp');
-            if (!tp) { return; }
-            var offset = 0;
-            var speed = <?php echo (int) $speed; ?>;
-            var step = 50 / (speed * 60);
-            var isContinuous = <?php echo $anim === 'continuous' ? 'true' : 'false'; ?>;
-            var raf;
+            if (!root || !tp) { return; }
+            var svg = root.querySelector('svg');
+            var path = root.querySelector('path');
+            var text = root.querySelector('text');
+            var modo = '<?php echo esc_js( $anim ); ?>';
+            var durata = <?php echo (int) $speed; ?> * 1000;
+            var chiuso = <?php echo $chiuso ? 'true' : 'false'; ?>;
+            var corpo = <?php echo (int) $fsize; ?>;
+            var fermo = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false;
+            var frase = tp.textContent;
 
-            function tick() {
-                offset += step;
-                if (isContinuous) {
-                    if (offset > 100) {
-                        offset = -50;
-                    }
-                } else {
-                    if (offset > 100) {
-                        tp.setAttribute('startOffset', '100%');
-                        return;
-                    }
-                }
-                tp.setAttribute('startOffset', offset + '%');
-                raf = requestAnimationFrame(tick);
+            function misura(str) {
+                var m = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                m.setAttribute('font-size', text.getAttribute('font-size'));
+                m.setAttribute('letter-spacing', text.getAttribute('letter-spacing'));
+                m.setAttribute('visibility', 'hidden');
+                m.textContent = str;
+                svg.appendChild(m);
+                var l = m.getComputedTextLength();
+                svg.removeChild(m);
+                return l;
             }
 
-            raf = requestAnimationFrame(tick);
+            function adatta() {
+                text.setAttribute('font-size', corpo);
+                var giro = path.getTotalLength();
+                var lungo = misura(frase);
+                if (lungo > giro) { text.setAttribute('font-size', (corpo * giro / lungo * 0.97).toFixed(2)); }
+            }
+
+            function entra() {
+                if (fermo) { return; }
+                var t0 = null;
+                function passo(t) {
+                    if (t0 === null) { t0 = t; }
+                    var p = Math.min(1, (t - t0) / durata);
+                    var e = 1 - Math.pow(1 - p, 3);
+                    tp.setAttribute('startOffset', ((1 - e) * 100).toFixed(2) + '%');
+                    if (p < 1) { requestAnimationFrame(passo); }
+                }
+                requestAnimationFrame(passo);
+            }
+
+            function nastro() {
+                var giro = path.getTotalLength();
+                var sep = '\u00a0\u00b7\u00a0';
+                var unita = misura(frase + sep);
+                if (!(unita > 0)) { return; }
+                var k = Math.max(1, Math.round(giro / unita));
+                var n = chiuso ? k + 1 : Math.ceil(giro / unita) + 1;
+                var periodo = chiuso ? giro / k : unita;
+                var tutto = '';
+                for (var i = 0; i < n; i++) { tutto += frase + sep; }
+                tp.textContent = tutto;
+                if (chiuso) {
+                    text.setAttribute('textLength', (periodo * n).toFixed(2));
+                    text.setAttribute('lengthAdjust', 'spacing');
+                }
+                if (fermo) { return; }
+                var velocita = giro / durata;
+                var t0 = null;
+                function passo(t) {
+                    if (t0 === null) { t0 = t; }
+                    tp.setAttribute('startOffset', (-((t - t0) * velocita % periodo)).toFixed(2));
+                    requestAnimationFrame(passo);
+                }
+                requestAnimationFrame(passo);
+            }
+
+            function avvia() {
+                if (modo === 'continuous') { nastro(); return; }
+                adatta();
+                if (modo !== 'scroll') { return; }
+                if (!('IntersectionObserver' in window)) { entra(); return; }
+                var io = new IntersectionObserver(function (voci) {
+                    for (var i = 0; i < voci.length; i++) {
+                        if (voci[i].isIntersecting) { io.disconnect(); entra(); return; }
+                    }
+                }, { threshold: 0.3 });
+                io.observe(root);
+            }
+
+            if (modo === 'scroll') {
+                if (!fermo) { tp.setAttribute('startOffset', '100%'); }
+            }
+            if (document.fonts) { document.fonts.ready.then(avvia); } else { avvia(); }
         })();
         </script>
-        <?php endif; ?>
 
         <?php
         $tfx_css = $this->tfx_css( $s, '#' . $uid );
