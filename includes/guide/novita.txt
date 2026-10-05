@@ -3,6 +3,11 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.548 - 2026-10-05 (fix)
+- Text Mask: «Video dietro al testo» funziona: il video si vede solo dentro le lettere e intorno resta il colore di sfondo pieno (prima il testo spariva e il video si vedeva intero).
+- Text Mask: senza video le lettere rivelano l'immagine poster o, se manca anche quella, un gradiente dei colori del tema, invece di un rettangolo nero. Appena inserita la tile mostra già l'effetto con una foto d'esempio.
+- Text Mask: gli effetti testo si applicano.
+
 ## v1.4.547 - 2026-10-05 (fix)
 - Variable Specimen: il «Font variabile» scelto si applica davvero, anche quando è un font del tema (Testo, Titoli, Mono o un set tipografico); prima il campione restava sempre nel font della pagina.
 
