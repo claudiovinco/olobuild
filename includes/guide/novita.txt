@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.521 - 2026-10-05 (fix)
+- I colori della Palette scelti in Info Cards, Lookbook Mixer, Progress Tracker, Mappa, Divisore, Pulsante e Prezzi (bagliore), Titolo animato e Work Grid si vedono con la loro trasparenza: prima bordi, sfondi tenui, aloni e bagliori sparivano.
+- Duotone e bagliore della Pro Gallery, effetti scanline e bagliore, neon del bordo e le sovrapposizioni degli hero prendono il colore vero della Palette (prima un grigio, un rosso fisso o un colore a caso).
+
 ## v1.4.520 - 2026-10-05 (fix)
 - Il controllo Bordo nello Stile funziona in tutte le tile che lo offrono: in Social, Menu, Sottomenu, Menu WordPress, Slideshow, Barra di avanzamento, Codice, Pro Slider, Ricerca live, Immagine frantumata, Testo maschera, Testo in fusione, Lottie, Condivisione, Contatore circolare, Mappa OSM, Nuvola di tag, Link in bio, Barra del titolo, Viewer 360, Breadcrumb, Lightbox e nelle tile WooCommerce (vista rapida, wishlist, confronto, account, valutazione) non si vedeva. Ora si vedono anche gli effetti del bordo (neon, gradiente).
 - Mappa, Countdown, SoundCloud, Paginazione e Pro Gallery mostrano il Bordo in tutte le loro modalità; in PDF Viewer, PDF Pro e Codice il bordo scelto non viene più coperto da quello predefinito.
