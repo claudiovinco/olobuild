@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.520 - 2026-10-05 (fix)
+- Il controllo Bordo nello Stile funziona in tutte le tile che lo offrono: in Social, Menu, Sottomenu, Menu WordPress, Slideshow, Barra di avanzamento, Codice, Pro Slider, Ricerca live, Immagine frantumata, Testo maschera, Testo in fusione, Lottie, Condivisione, Contatore circolare, Mappa OSM, Nuvola di tag, Link in bio, Barra del titolo, Viewer 360, Breadcrumb, Lightbox e nelle tile WooCommerce (vista rapida, wishlist, confronto, account, valutazione) non si vedeva. Ora si vedono anche gli effetti del bordo (neon, gradiente).
+- Mappa, Countdown, SoundCloud, Paginazione e Pro Gallery mostrano il Bordo in tutte le loro modalità; in PDF Viewer, PDF Pro e Codice il bordo scelto non viene più coperto da quello predefinito.
+
 ## v1.4.519 - 2026-10-05 (fix)
 - Le icone scelte dalla libreria Lucide compaiono in Icon List, Accordion, Avviso, Contatore, Divisore, Menu, News Ticker, Popup, Progress Tracker, Flip Card, Description List, Form, Icon Tabs, Pro Slider e negli hotspot del PDF Pro: prima restavano vuote. Le icone UIkit non cambiano.
 
