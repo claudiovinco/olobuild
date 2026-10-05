@@ -35,9 +35,9 @@ in un caso comune · **L** = dettaglio, colore fuori tema, testo in inglese.
 ## B. Difetti per tile
 
 ### Essenziale
-- **icon** — G: padding scritto `16pxpx` (viste «Con sfondo» e «Cornice» senza padding) `:70, :91-93` · M: con un link il colore è quello dei link del tema `:135`.
-- **video** — G: bordo e raggio anche attorno alla didascalia (classe condivisa) `:142, :480` · M: proporzioni solo 16:9/4:3/1:1/cover (il preset «Cinema Wide» chiede un 21:9 che non c'è) `:458`; testo sovrapposto sempre al centro; opzioni del play inerti con un file · L: `#1F2937` e bianco fissi.
-- **image** — G: con proporzione e raggio la didascalia sparisce (`overflow:hidden`) · M: `uk-border-rounded` sempre sull'`<img>` (5 px anche con raggio 0) `:544`; colore e misura della didascalia fissi.
+- **icon** — G ✅ 1.4.536: padding scritto `16pxpx` (viste «Con sfondo» e «Cornice» senza padding) `:70, :91-93` · M: con un link il colore è quello dei link del tema `:135`.
+- **video** — G ✅ 1.4.537: bordo e raggio anche attorno alla didascalia (classe condivisa) `:142, :480` · M: proporzioni solo 16:9/4:3/1:1/cover (il preset «Cinema Wide» chiede un 21:9 che non c'è) `:458`; testo sovrapposto sempre al centro; opzioni del play inerti con un file · L: `#1F2937` e bianco fissi.
+- **image** — G ✅ 1.4.538: con proporzione e raggio la didascalia sparisce (`overflow:hidden`) · M: `uk-border-rounded` sempre sull'`<img>` (5 px anche con raggio 0) `:544`; colore e misura della didascalia fissi.
 - **button** — M: con «Gradient animato» l'icona sparisce `:398`; glitch con magenta/ciano fissi `class-text-effects.php:144`.
 - **divider** — M: due divisori a diamanti/puntini nella pagina condividono l'ID del motivo `:181, :189`; puntini e diamanti deformati (`preserveAspectRatio="none"`); «Stile tipografico» inerte.
 - **text-block** — M: «Larghezza max» non centra il blocco `:130-132`; cursore della macchina da scrivere su una riga sua `class-text-effects.php:210`; «Reveal parola» e «Macchina da scrivere» trasformano i paragrafi in `<br>`.
@@ -45,19 +45,19 @@ in un caso comune · **L** = dettaglio, colore fuori tema, testo in inglese.
 - **spacer** — M: «Secondo livello» spostato sotto la forma `:135, :153`; «Inverti direzione» della forma sotto inerte `:113`; riga chiara fra fascia e forme.
 
 ### Layout
-- **cta-banner** — G: lo sfondo della tile (`bg`) è ridipinto anche sul contenitore ad angoli vivi: il raggio non si vede mai `class-frontend-renderer.php:955-956` · L: testo di default fuori luogo («una sigaretta a testa di pausa»).
-- **info-cards** — G: una card con link ha due attributi `style` e perde fondo, bordo, padding e raggio `:193-195` · M: `title_color`, `counter_color`, `icon_color`, `icon_bg_color`, `counter_shape`, `counter_bg` letti dal PHP ma senza controllo; `media_position` mai letto; freccia come carattere di testo.
-- **hoursstrip** — G: sul telefono restano 4 colonne schiacciate (regola mobile senza `!important`) `:103-108` · doppione di statstrip.
-- **hero** — G: «Bordo inferiore ad arco» non taglia mai (soglia 0,87 contro 0,866) `:233`, quindi il preset «Masked Arch» non ha l'arco · M: esempio 1 con testo bianco su crema `:140`; pillole e campo della ricerca bianchi fissi `:319, :327`; famiglia del titolo `serif` dei preset = serif generico `:491`.
+- **cta-banner** — G ✅ 1.4.539: lo sfondo della tile (`bg`) è ridipinto anche sul contenitore ad angoli vivi: il raggio non si vede mai `class-frontend-renderer.php:955-956` · L: testo di default fuori luogo («una sigaretta a testa di pausa»).
+- **info-cards** — G ✅ 1.4.541: una card con link ha due attributi `style` e perde fondo, bordo, padding e raggio `:193-195` · M: `title_color`, `counter_color`, `icon_color`, `icon_bg_color`, `counter_shape`, `counter_bg` letti dal PHP ma senza controllo; `media_position` mai letto; freccia come carattere di testo.
+- **hoursstrip** — G ✅ 1.4.542: sul telefono restano 4 colonne schiacciate (regola mobile senza `!important`) `:103-108` · doppione di statstrip.
+- **hero** — G ✅ 1.4.543: «Bordo inferiore ad arco» non taglia mai (soglia 0,87 contro 0,866) `:233`, quindi il preset «Masked Arch» non ha l'arco · M: esempio 1 con testo bianco su crema `:140`; pillole e campo della ricerca bianchi fissi `:319, :327`; famiglia del titolo `serif` dei preset = serif generico `:491`.
 - **hero-split** — M: etichette delle statistiche grigie e filo scuro fissi (invisibili su scuro) `:309, :317`; lettore audio illeggibile col preset scuro `:340`; corsivo forzato solo se il valore è «Gratis» `:316`; colore del badge vetrina senza controllo `:107`.
 - **section-header** — M: in colonna allineata a destra il sottotitolo non segue `:191-192`; colonna destra sempre allineata a destra `:213`; `headline_inline` senza controllo · L: seconda riga di default `#b3261e`.
 - **step-timeline** — M: alone `#fff` fisso attorno ai pallini `:182`; il `<pre>` del terminale diventa un riquadro bianco `:242`; la scritta fra due step si sovrappone al numero successivo `:288`.
 - **statstrip** — M: con più voci che colonne niente spazio fra le righe e divisore a inizio riga `:114`.
 - **product-cards** — L: default arcobaleno in esadecimale e testi di marketing OLOtheme; manca un campo prezzo.
 - **trust-strip** — L: niente misura delle icone; badge lime `#D8FF4A` di riserva.
-- **inner-columns** — G: con le impostazioni di fabbrica le sotto-colonne non stanno mai affiancate (larghezze 100% + gap con `flex-wrap`) `trait-olobuild-renderer-structure.php:1918, :1991` · M: ignorati direzione/giustificazione Flex, «Impila su tablet», sfondi immagine e video, ombra del contenitore (`render_inner_columns_node` da :1899).
-- **templateembed** — G: il template incluso si allarga a tutta la finestra (`.olo-template` in `assets/css/frontend.css:198-206`): in una colonna esce dai bordi, in un contenitore arrotondato viene tagliato.
-- **shapedivider** — G: colore di fabbrica `#ffffff` (banda bianca sulla sezione dopo, z-index 1); in «Basso» senza «Specchia» la forma è capovolta; manca `left:0` a larghezza 100% (gradino a sinistra) `:99-100` · L: offre «Bordo».
+- **inner-columns** — G ✅ 1.4.544: con le impostazioni di fabbrica le sotto-colonne non stanno mai affiancate (larghezze 100% + gap con `flex-wrap`) `trait-olobuild-renderer-structure.php:1918, :1991` · M: ignorati direzione/giustificazione Flex, «Impila su tablet», sfondi immagine e video, ombra del contenitore (`render_inner_columns_node` da :1899).
+- **templateembed** — G ✅ 1.4.545: il template incluso si allarga a tutta la finestra (`.olo-template` in `assets/css/frontend.css:198-206`): in una colonna esce dai bordi, in un contenitore arrotondato viene tagliato.
+- **shapedivider** — G ✅ 1.4.546: colore di fabbrica `#ffffff` (banda bianca sulla sezione dopo, z-index 1); in «Basso» senza «Specchia» la forma è capovolta; manca `left:0` a larghezza 100% (gradino a sinistra) `:99-100` · L: offre «Bordo».
 - **row** — M: il «Gap» non è in px ma diventa una classe UIkit (16 ≈ 30-40 px) `:488`.
 - **worklist** — M: «Indentazione hover» inerte (padding inline batte `:hover`) `:93, :125`.
 - **workgrid** — M: strisce ed etichetta del segnaposto opache coi colori del tema `:83-84` · L: niente raggio né stile delle card.
