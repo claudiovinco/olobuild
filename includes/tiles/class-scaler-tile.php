@@ -82,7 +82,7 @@ class Olobuild_Scaler_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .osl-tot b{font-family:<?php echo $serif; ?>;font-size:24px;color:var(--sl-accent);}
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-        <div class="olo-scaler <?php echo esc_attr( $uid ); ?>" data-scaler data-mode="<?php echo esc_attr( $mode ); ?>" data-base="<?php echo esc_attr( $base ); ?>">
+        <div class="olo-scaler <?php echo esc_attr( $uid ); ?>" data-scaler data-mode="<?php echo esc_attr( $mode ); ?>" data-base="<?php echo esc_attr( $base ); ?>" data-total-unit="<?php echo esc_attr( $s['total_unit'] ?? '' ); ?>">
             <?php if ( $s['eyebrow'] !== '' ) : ?><span class="osl-eyebrow"><?php echo esc_html( $s['eyebrow'] ); ?></span><?php endif; ?>
             <?php if ( $s['heading'] !== '' ) : ?><h2 class="osl-h"><?php echo esc_html( $s['heading'] ); ?></h2><?php endif; ?>
             <?php if ( $s['intro'] !== '' ) : ?><p class="osl-intro"><?php echo esc_html( $s['intro'] ); ?></p><?php endif; ?>
@@ -95,7 +95,7 @@ class Olobuild_Scaler_Tile extends Olobuild_Tile_Base {
                 <?php foreach ( $items as $it ) :
                     $amt = floatval( $it['amount'] ?? 0 );
                 ?>
-                    <div class="osl-row" data-sc-row data-amount="<?php echo esc_attr( $amt ); ?>">
+                    <div class="osl-row" data-sc-row data-amount="<?php echo esc_attr( $amt ); ?>" data-unit="<?php echo esc_attr( $it['unit'] ?? '' ); ?>">
                         <span class="osl-row__n"><?php echo esc_html( $it['name'] ?? '' ); ?></span>
                         <span class="osl-row__v"><span data-sc-out>—</span><?php if ( ! empty( $it['unit'] ) ) : ?><u><?php echo esc_html( $it['unit'] ); ?></u><?php endif; ?></span>
                     </div>
@@ -117,16 +117,20 @@ class Olobuild_Scaler_Tile extends Olobuild_Tile_Base {
             var disp=root.querySelector('[data-sc-disp]');
             var rows=[].slice.call(root.querySelectorAll('[data-sc-row]'));
             var totalEl=root.querySelector('[data-sc-total]');
-            function fmt(n){ var r=Math.round(n*10)/10; return new Intl.NumberFormat('en-US',{maximumFractionDigits:1}).format(r); }
+            /* Il totale somma solo le quantità nell'unità del totale (prima sommava g, pezzi e
+               ml insieme); in modalità percentuale conta anche la base (la farina). */
+            var totUnit=root.getAttribute('data-total-unit')||'';
+            function fmt(n){ var r=Math.round(n*10)/10; return new Intl.NumberFormat(document.documentElement.lang||undefined,{maximumFractionDigits:1}).format(r); }
             function recalc(){
                 var cur=parseFloat(input.value)||0;
                 if(disp){ disp.textContent=cur; }
-                var total=0;
+                var total=mode==='percent'?cur:0;
                 rows.forEach(function(r){
                     var a=parseFloat(r.getAttribute('data-amount'))||0;
                     var v= mode==='percent' ? (cur*a/100) : (a*(base===0?0:(cur/base)));
                     var out=r.querySelector('[data-sc-out]'); if(out){ out.textContent=fmt(v); }
-                    total+=v;
+                    var u=r.getAttribute('data-unit')||'';
+                    if(!totUnit){ total+=v; } else if(u===totUnit){ total+=v; }
                 });
                 if(totalEl){ totalEl.textContent=fmt(Math.round(total)); }
                 var mn=parseFloat(input.min)||0,mx=parseFloat(input.max)||100;

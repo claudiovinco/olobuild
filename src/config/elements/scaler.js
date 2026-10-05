@@ -11,6 +11,9 @@ export default {
   name: t('Scaler (porzioni/peso → quantità)'),
   icon: 'dashicons-calculator',
   category: 'interactive',
+  // Ritirata dalla palette (I3, 1.4.508): la lista scalata ora sta nel «Calcolatore a
+  // slider» (projector). Resta per i 2 temi che la usano (honeycomb, tavola).
+  hidden: true,
 
   defaults: {
     eyebrow: '',
