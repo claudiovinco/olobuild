@@ -162,6 +162,8 @@ class Olobuild_Newsletter_Tile extends Olobuild_Tile_Base {
         $br_h        = Olobuild_Tile_Utils::radius_hover( $s, 'btn_radius_hover' );
         $is_h        = $s['layout'] === 'horizontal';
         $is_minimal  = $s['layout'] === 'minimal';
+        // Verticale e minimale impilano i campi in colonna: lì il «flex:1» dei campi (base 0) prende
+        // il posto dell'altezza scritta e li schiacciava a 18 px. In colonna i campi non si allungano.
         $eyebrow_col = $this->safe_color_css( $s['eyebrow_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
         $accent_col  = $this->safe_color_css( $s['title_accent_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
 
@@ -179,7 +181,7 @@ class Olobuild_Newsletter_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-nl-icon img{width:<?php echo absint($s['icon_size']); ?>px;height:auto;display:inline-block}
         .<?php echo $uid; ?> .olo-nl-form{display:flex;<?php echo $is_h ? 'flex-direction:row;gap:8px;align-items:stretch' : 'flex-direction:column;gap:10px'; ?>}
         .<?php echo $uid; ?> .olo-nl-form input[type="text"],
-        .<?php echo $uid; ?> .olo-nl-form input[type="email"]{height:<?php echo $ih; ?>px;padding:0 14px;background:<?php echo esc_attr($s['input_bg']); ?>;color:<?php echo esc_attr($s['input_color']); ?>;border:1px solid <?php echo esc_attr($s['input_border']); ?>;border-radius:<?php echo $ir; ?>px;font-size:14px;outline:none;transition:border-color 0.2s<?php if ( $ir_h ) echo ', ' . $ir_h['transition']; ?>;flex:1;min-width:0}<?php if ( $ir_h ) : ?>.<?php echo $uid; ?> .olo-nl-form input[type="email"]:hover{border-radius:<?php echo $ir_h['css']; ?> !important}<?php endif; ?>
+        .<?php echo $uid; ?> .olo-nl-form input[type="email"]{height:<?php echo $ih; ?>px;padding:0 14px;background:<?php echo esc_attr($s['input_bg']); ?>;color:<?php echo esc_attr($s['input_color']); ?>;border:1px solid <?php echo esc_attr($s['input_border']); ?>;border-radius:<?php echo $ir; ?>px;font-size:14px;outline:none;transition:border-color 0.2s<?php if ( $ir_h ) echo ', ' . $ir_h['transition']; ?>;<?php echo $is_h ? 'flex:1;min-width:0' : 'flex:none;width:100%;box-sizing:border-box'; ?>}<?php if ( $ir_h ) : ?>.<?php echo $uid; ?> .olo-nl-form input[type="email"]:hover{border-radius:<?php echo $ir_h['css']; ?> !important}<?php endif; ?>
         .<?php echo $uid; ?> .olo-nl-form input:focus{border-color:<?php echo esc_attr($focus_b); ?>;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent)}
         <?php if ( ! empty( $s['input_placeholder_color'] ) ) : ?>.<?php echo $uid; ?> .olo-nl-form input::placeholder{color:<?php echo esc_attr($s['input_placeholder_color']); ?>;opacity:1}<?php endif; ?>
         .<?php echo $uid; ?> .olo-nl-btn{height:<?php echo $ih; ?>px;padding:0 <?php echo $is_minimal ? '16' : '24'; ?>px;background:<?php echo esc_attr($btn_bg); ?>;color:<?php echo esc_attr($s['btn_color']); ?>;border:none;border-radius:<?php echo $br; ?>px;font-size:<?php echo absint($s['btn_font_size']); ?>px;font-weight:<?php echo esc_attr($s['btn_font_weight']); ?>;cursor:pointer;transition:background <?php echo esc_attr( $btn_bg_dur ); ?>,transform 0.15s<?php if ( $br_h ) echo ', ' . $br_h['transition']; ?>;display:inline-flex;align-items:center;gap:6px;justify-content:center;white-space:nowrap;<?php echo $is_h ? '' : 'width:100%'; ?>}
