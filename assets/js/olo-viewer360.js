@@ -276,6 +276,9 @@
     initAll();
   }
 
+  // Tile nata dopo il caricamento (contenuto differito sotto la piega): avvia le nuove istanze.
+  document.addEventListener('olo:lazy-hydrated', initAll);
+
   // Expose for builder iframe reinit
   window.__oloV360Init = function() {
     document.querySelectorAll('[data-olo-v360]').forEach(function(el) {

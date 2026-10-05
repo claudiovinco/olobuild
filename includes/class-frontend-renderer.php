@@ -46,6 +46,16 @@ class Olobuild_Frontend_Renderer {
      */
     public $builder_mode = false;
 
+    /**
+     * Tile già rese nel template in corso, per maybe_lazy_wrap(): le prime 3 di OGNI
+     * template nascono subito. Prima il contatore era statico su tutta la richiesta e
+     * contava anche l'header: le tile in cima al contenuto nascevano differite.
+     * render_shortcode() lo azzera e lo ripristina (i template incorporati sono annidati).
+     *
+     * @var int
+     */
+    private $lazy_contatore = 0;
+
     /** @var Olobuild_CSS_Builder */
     private $css;
 
@@ -729,10 +739,9 @@ class Olobuild_Frontend_Renderer {
             return $html;
         }
 
-        // Skip lazy for the first 3 element tiles (above the fold)
-        static $element_counter = 0;
-        $element_counter++;
-        if ( $element_counter <= 3 ) {
+        // Le prime 3 tile del template nascono subito (sopra la piega).
+        $this->lazy_contatore++;
+        if ( $this->lazy_contatore <= 3 ) {
             return $html;
         }
 

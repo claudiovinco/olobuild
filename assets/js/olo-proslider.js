@@ -830,3 +830,5 @@ if (document.readyState === 'loading') {
 
 // Re-init when builder iframe injects new HTML
 document.addEventListener('olo:iframe-render', initAll);
+// Tile nata dopo il caricamento (contenuto differito sotto la piega): avvia le nuove istanze.
+document.addEventListener('olo:lazy-hydrated', initAll);

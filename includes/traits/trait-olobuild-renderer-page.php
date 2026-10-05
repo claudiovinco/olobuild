@@ -665,12 +665,17 @@ trait Olobuild_Renderer_Page_Trait {
                     && class_exists( 'Olobuild_Performance_Settings' )
                     && ! empty( Olobuild_Performance_Settings::get_option()['fetchpriority'] );
                 $prima_sezione = true;
+                // Il contatore delle tile «subito» riparte per ogni template e torna com'era
+                // dopo (un Template Embed è un template annidato dentro un altro).
+                $lazy_prima = $this->lazy_contatore;
+                $this->lazy_contatore = 0;
                 foreach ( $tiles as $section ) {
                     Olobuild_Tile_Utils::arma_lcp( $lcp && $prima_sezione );
                     echo $this->render_node( $section, $manager, $id, $hover_css_rules, $tile_counter ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- section/row/tile HTML assembled by render_node(); escaping is performed by the node renderers and each tile's render()
                     Olobuild_Tile_Utils::arma_lcp( false );
                     $prima_sezione = false;
                 }
+                $this->lazy_contatore = $lazy_prima;
                 ?>
             </div>
             <?php
@@ -1023,6 +1028,14 @@ trait Olobuild_Renderer_Page_Trait {
                     runScripts(list, parent);
                   }
                 })(pending, target);
+                // Le tile appena nate dal <template>: gli script che partono al caricamento
+                // della pagina (Pro Slider, Post Grid, Viewer 360, PDF) ascoltano l'evento e
+                // avviano le istanze nuove; gli SDK di Facebook, X e Instagram, già caricati,
+                // rileggono la parte nuova. Niente && (WordPress lo rovina negli script in linea).
+                try { document.dispatchEvent(new CustomEvent('olo:lazy-hydrated', { detail: { target: target } })); } catch(_){}
+                try { if (window.FB) { if (window.FB.XFBML) { window.FB.XFBML.parse(target); } } } catch(_){}
+                try { if (window.twttr) { if (window.twttr.widgets) { window.twttr.widgets.load(target); } } } catch(_){}
+                try { if (window.instgrm) { if (window.instgrm.Embeds) { window.instgrm.Embeds.process(); } } } catch(_){}
               }
               var obs = new IntersectionObserver(function(entries){
                 entries.forEach(function(e){

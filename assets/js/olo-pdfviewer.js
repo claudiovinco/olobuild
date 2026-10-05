@@ -1201,6 +1201,9 @@
 
   window.OloPdfViewer = { initAll: initAll };
 
+  // Tile nata dopo il caricamento (contenuto differito sotto la piega): avvia le nuove istanze.
+  document.addEventListener('olo:lazy-hydrated', initAll);
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initAll);
   } else {

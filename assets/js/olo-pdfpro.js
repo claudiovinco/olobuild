@@ -1803,6 +1803,9 @@
   // Esporta per chiamate manuali (es. re-init dopo render dinamico nell'iframe builder)
   window.OloPdfPro = { initAll: initAll };
 
+  // Tile nata dopo il caricamento (contenuto differito sotto la piega): avvia le nuove istanze.
+  document.addEventListener('olo:lazy-hydrated', initAll);
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initAll);
   } else {
