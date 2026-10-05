@@ -545,13 +545,21 @@ class Olobuild_Woo_Wishlist_Tile extends Olobuild_Tile_Base {
             if ( $product->get_status() !== 'publish' ) {
                 continue;
             }
+            // add_to_cart_url() si costruisce sull'indirizzo della richiesta in corso: qui e'
+            // la rotta REST, e il clic aggiungeva al carrello lasciando il visitatore su una
+            // pagina di JSON. Si parte dalla scheda del prodotto (per i prodotti variabili
+            // add_to_cart_url() porta gia' li', senza add-to-cart).
+            $atc = $product->add_to_cart_url();
+            if ( false !== strpos( $atc, 'add-to-cart=' ) ) {
+                $atc = add_query_arg( 'add-to-cart', $pid, get_permalink( $pid ) );
+            }
             $products[] = [
                 'id'               => $pid,
                 'title'            => $product->get_name(),
                 'url'              => get_permalink( $pid ),
                 'image'            => get_the_post_thumbnail_url( $pid, 'woocommerce_thumbnail' ) ?: '',
                 'price_html'       => $product->get_price_html(),
-                'add_to_cart_url'  => $product->add_to_cart_url(),
+                'add_to_cart_url'  => $atc,
             ];
         }
 
