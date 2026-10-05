@@ -41,6 +41,63 @@ abstract class Olobuild_Tile_Base {
         return substr( md5( $this->type . '|' . $nodo ), 0, 12 );
     }
 
+    /**
+     * Funzione JS (un'espressione, da chiamare subito) che sposta un elemento in document.body.
+     *
+     * Il contenitore del template (.olo-template) esce a tutta larghezza con un transform, e un
+     * antenato con transform fa da riferimento a ogni position:fixed che contiene: un velo «a
+     * tutto schermo» copriva il template intero e scorreva con la pagina. Nel body il fixed torna
+     * alla finestra. Fuori dal template però i token --olo-* non valgono, o vale quello di :root
+     * (su mosaic un altro primario): l'elemento se li porta dietro, col font che ereditava.
+     * Solo sul sito: nel canvas del builder l'elemento resta dov'è.
+     *
+     * Nello script della tile: (<?php echo self::js_nel_body(); ?>)(el);
+     */
+    public static function js_nel_body() {
+        return 'function(el){'
+            . 'if(!el){return;}'
+            . 'if(el.parentNode===document.body){return;}'
+            . 'var cs=getComputedStyle(el),i,p,v;'
+            // Tutti i token che il browser elenca, poi i principali per chi non elenca le custom property.
+            . 'for(i=0;i<cs.length;i++){p=cs[i];if(p.indexOf("--olo-")===0){el.style.setProperty(p,cs.getPropertyValue(p));}}'
+            . 'p=["--olo-color-primary","--olo-color-primary-contrast","--olo-color-text","--olo-color-text-muted","--olo-color-background","--olo-color-surface","--olo-color-border","--olo-color-muted","--olo-font-family","--olo-font-family-heading"];'
+            . 'for(i=0;i<p.length;i++){v=cs.getPropertyValue(p[i]);if(v){el.style.setProperty(p[i],v);}}'
+            . 'el.style.fontFamily=cs.fontFamily;'
+            . 'document.body.appendChild(el);'
+            . '}';
+    }
+
+    /**
+     * Funzione JS (un'espressione, da chiamare subito) che toglie il transform ai template che
+     * contengono l'elemento, a parità di posizione: left:50% + translateX(-50%) diventano due
+     * margini negativi (stesso conto, anche contro i margin:auto !important dei temi a blocchi)
+     * e isolation:isolate tiene il contesto di sovrapposizione che il transform creava.
+     *
+     * Per i menu messi nel corpo della pagina: barra sticky, pannello mobile, velo e ricerca
+     * sono position:fixed legati alla radice della tile da CSS e da stati (.uid.olo-mm-mob-active),
+     * quindi non si possono spostare nel body come gli altri. Se il template non torna allo
+     * stesso rettangolo, lo stile si ripristina. Nella zona header il template non ha transform:
+     * nessun effetto. Solo sul sito.
+     *
+     * Nello script della tile: (<?php echo self::js_sgancia_template(); ?>)(root);
+     */
+    public static function js_sgancia_template() {
+        return 'function(el){'
+            . 'var t=el?el.closest(".olo-template"):null,s,prima,r0,r1;'
+            . 'while(t){'
+            . 'if(getComputedStyle(t).transform!=="none"){'
+            . 'prima=t.getAttribute("style");r0=t.getBoundingClientRect();s=t.style;'
+            . 's.setProperty("transform","none","important");s.setProperty("left","auto","important");s.setProperty("width","auto","important");'
+            . 's.setProperty("margin-left","calc(50% - 50vw)","important");s.setProperty("margin-right","calc(50% - 50vw)","important");'
+            . 's.setProperty("isolation","isolate");'
+            . 'r1=t.getBoundingClientRect();'
+            . 'if(Math.abs(r1.left-r0.left)>1||Math.abs(r1.width-r0.width)>1){if(prima===null){t.removeAttribute("style");}else{t.setAttribute("style",prima);}}'
+            . '}'
+            . 't=t.parentElement?t.parentElement.closest(".olo-template"):null;'
+            . '}'
+            . '}';
+    }
+
     public function get_type() {
         return $this->type;
     }
