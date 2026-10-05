@@ -11,13 +11,16 @@ export default {
   name: t('Tab a Icone'),
   icon: 'dashicons-menu-alt',
   category: 'interactive',
+  // Ritirata dalla palette (I3, 1.4.508): l'icona per scheda ora è delle Schede (switcher).
+  // Resta per le pagine salvate.
+  hidden: true,
   defaults: {
     bg: { type: 'none' },
     typography_preset: '',
     items: [
-      { id: 'it-1', icon: 'location', label: t('Viaggi'), heading: 'HeyConad Viaggi', title: t('Catalogo vacanze di primavera ed estate'), content: 'Destinazioni da sogno? Prenota subito la tua vacanza ideale.', link_text: 'Scopri tutte le offerte', link_url: '#' },
-      { id: 'it-2', icon: 'tablet',   label: t('Mobile'), heading: 'HeyConad Mobile',  title: t('Tariffe mobile esclusive'),            content: 'Naviga e chiama senza pensieri a prezzi vantaggiosi.', link_text: 'Scopri le tariffe',       link_url: '#' },
-      { id: 'it-3', icon: 'lock',     label: t('Tutela'), heading: 'HeyConad Tutela',  title: t('Assicurazioni pensate per te'),        content: 'Protezione per casa, persona e animali.',             link_text: 'Scopri i prodotti',       link_url: '#' },
+      { id: 'it-1', icon: 'location', label: t('Dove siamo'), heading: t('La sede'), title: t('Vieni a trovarci'), content: t('Siamo in centro, a due passi dalla stazione.'), link_text: '', link_url: '' },
+      { id: 'it-2', icon: 'clock',    label: t('Orari'),      heading: t('Quando'),  title: t('Aperti sei giorni su sette'), content: t('Dal lunedì al sabato, dalle 9 alle 19.'), link_text: '', link_url: '' },
+      { id: 'it-3', icon: 'mail',     label: t('Contatti'),   heading: t('Scrivici'), title: t('Rispondiamo in giornata'), content: t('Per ogni domanda scrivici: ti rispondiamo entro sera.'), link_text: '', link_url: '' },
     ],
     preset: 'pill-default',
     pill_bg: 'var(--olo-color-surface, #ffffff)',

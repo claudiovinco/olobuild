@@ -1,11 +1,12 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, widgetTemplateField, wowEffectsFields, wowEffectsDefaults } from './_shared';
-import { shadowField } from './_shared.js';
+import { shadowField, shadowDefaults } from './_shared.js';
 import { t } from '@/i18n';
 
 /**
  * Tile Switcher — split CONTENUTO/STILE.
  *   fields[]      → items (title+content), vertical, animation+duration
- *   styleFields[] → preset, bg, typo, effetti, nav_style legacy, tab typo & spacing, container, colori tab, indicator, contenuto pannello, text-effects, shadow, border
+ *   styleFields[] → preset, bg, typo, effetti, tab typo & spacing, container, colori tab, indicator, contenuto pannello, text-effects, shadow, border
+ *   (nav_style resta nei defaults: lo stile della barra lo decidono preset e «Tipo indicatore»)
  */
 export default {
   type: 'switcher',
@@ -44,7 +45,7 @@ export default {
     content_color: 'var(--olo-color-text, #1f2937)',
     content_padding_y: '20',
     content_padding_x: '0',
-    shadow: 'none',
+    ...shadowDefaults,
     effect_color: '',
     effect_intensity: 'medium',
     effect_speed: 0,
@@ -61,10 +62,17 @@ export default {
     { key: 'items', label: t('Elementi'), type: 'content-items', supportsDynamic: true,
       itemFields: [
         { key: 'title', label: t('Titolo'), type: 'text' },
+        { key: 'icon', label: t('Icona'), type: 'icon',
+          description: t('Facoltativa: compare prima del titolo della scheda.') },
         widgetTemplateField,
-        { key: 'content', label: t('Contenuto'), type: 'textarea' },
+        { key: 'content', label: t('Contenuto'), type: 'editor', mode: 'block' },
+        { key: 'image', label: t('Immagine'), type: 'image',
+          description: t('Facoltativa: compare accanto al testo del pannello (sotto, sui telefoni).') },
+        { key: 'link_text', label: t('Testo del pulsante'), type: 'text' },
+        { key: 'link_url', label: t('Collegamento del pulsante'), type: 'link',
+          description: t('Il pulsante compare sotto il testo quando ci sono sia il testo sia il collegamento.') },
       ],
-      newItemDefaults: { title: t('Nuova scheda'), content: 'Contenuto della scheda.', widget_template_id: 0 },
+      newItemDefaults: { title: t('Nuova scheda'), content: 'Contenuto della scheda.', widget_template_id: 0, icon: '', image: '', link_text: '', link_url: '' },
       itemLabel: 'Scheda',
     },
 
@@ -116,14 +124,6 @@ export default {
     { key: 'effect_speed', label: t('Velocità animazioni'), type: 'range',
       min: 0, max: 4000, step: 100,
       condition: { field: 'preset', op: 'in', value: ['neon-cyber','magnetic-liquid','retro-terminal','3d-tilt'] } },
-
-    { type: 'separator', label: t('Stile navigazione (legacy)') },
-    { key: 'nav_style', label: t('Stile'), type: 'select', options: [
-      { value: 'tab', label: t('Tab') },
-      { value: 'tab-underline', label: t('Tab Underline') },
-      { value: 'subnav', label: t('Subnav') },
-      { value: 'subnav-pill', label: t('Subnav Pill') },
-    ]},
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Tab'),

@@ -12,6 +12,9 @@ export default {
   name: t('Switcher Panel'),
   icon: 'dashicons-images-alt',
   category: 'interactive',
+  // Ritirata dalla palette (I3, 1.4.508): immagine e pulsante nel pannello ora sono delle
+  // Schede (switcher). Resta per le pagine salvate.
+  hidden: true,
 
   // Unificazione hero: la vecchia immagine hero (hero_image + focal hero_object_position)
   // confluisce nel pannello unico media_bg (immagine/video/gradiente/colore…). Migrazione

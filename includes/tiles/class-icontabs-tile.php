@@ -12,9 +12,9 @@ class Olobuild_IconTabs_Tile extends Olobuild_Tile_Base {
     protected $category = 'interactive';
     protected $defaults = [
         'items' => [
-            [ 'icon' => 'location', 'label' => 'Viaggi', 'heading' => 'HeyConad Viaggi', 'title' => 'Catalogo vacanze di primavera ed estate', 'content' => 'Destinazioni da sogno? Prenota subito la tua vacanza ideale.', 'link_text' => 'Scopri tutte le offerte', 'link_url' => '#' ],
-            [ 'icon' => 'tablet',   'label' => 'Mobile', 'heading' => 'HeyConad Mobile',  'title' => 'Tariffe mobile esclusive',            'content' => 'Naviga e chiama senza pensieri a prezzi vantaggiosi.', 'link_text' => 'Scopri le tariffe',       'link_url' => '#' ],
-            [ 'icon' => 'lock',     'label' => 'Tutela', 'heading' => 'HeyConad Tutela',  'title' => 'Assicurazioni pensate per te',        'content' => 'Protezione per la casa, la persona e i tuoi animali.', 'link_text' => 'Scopri i prodotti',       'link_url' => '#' ],
+            [ 'icon' => 'location', 'label' => 'Dove siamo', 'heading' => 'La sede', 'title' => 'Vieni a trovarci', 'content' => 'Siamo in centro, a due passi dalla stazione.', 'link_text' => '', 'link_url' => '' ],
+            [ 'icon' => 'clock',    'label' => 'Orari',      'heading' => 'Quando',  'title' => 'Aperti sei giorni su sette', 'content' => 'Dal lunedì al sabato, dalle 9 alle 19.', 'link_text' => '', 'link_url' => '' ],
+            [ 'icon' => 'mail',     'label' => 'Contatti',   'heading' => 'Scrivici', 'title' => 'Rispondiamo in giornata', 'content' => 'Per ogni domanda scrivici: ti rispondiamo entro sera.', 'link_text' => '', 'link_url' => '' ],
         ],
         'preset'         => 'pill-default',
         'pill_bg'        => 'var(--olo-color-surface, #F5F2EB)',

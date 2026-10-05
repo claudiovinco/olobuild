@@ -40,6 +40,13 @@ class Olobuild_Switcher_Tile extends Olobuild_Tile_Base {
         'content_padding_y'  => '20',
         'content_padding_x'  => '0',
         'shadow'             => 'none',
+        // Ombra «Personalizzata» (controllo box-shadow condiviso): le sei chiavi storiche.
+        'shadow_h'           => '0',
+        'shadow_v'           => '4',
+        'shadow_blur'        => '10',
+        'shadow_spread'      => '0',
+        'shadow_color'       => 'rgba(0,0,0,0.15)',
+        'shadow_inset'       => false,
         'effect_color'       => '',
         'effect_intensity'   => 'medium',
         'effect_speed'       => 0,
@@ -68,103 +75,6 @@ class Olobuild_Switcher_Tile extends Olobuild_Tile_Base {
 
     public function get_controls() {
         return [];
-    }
-
-    /**
-     * V3.27.0 — Extra CSS for "audacious" presets, parametric on
-     * effect_color / effect_intensity / effect_speed.
-     */
-    private function get_preset_extra_css( $preset_id, $uid, $vertical, $s = [] ) {
-        // @deprecated v1.0.73 — refactor profondo: i preset audaci ora settano direttamente
-        // i field standard tramite TILE_PRESETS in BuilderInspector.vue, e i field wow_* via
-        // build_wow_effects_css(). Nessun !important, ogni proprietà personalizzabile.
-        return '';
-    }
-
-    /**
-     * V3.23.0 — Curated visual presets for the Switcher tile, inspired by
-     * common modern design patterns (Linear, Stripe, Spotify, Apple).
-     */
-    private function get_preset_styles( $preset_id ) {
-        $presets = [
-            'pill-slide' => [
-                'tab_padding_y'     => 10, 'tab_padding_x' => 18,
-                'tab_font_size'     => 14, 'tab_font_weight' => '500',
-                'tab_gap'           => 4,  'tab_radius' => 8,
-                'container_bg'      => '#f1f5f9',
-                'container_padding' => 4,
-                'container_radius'  => 10,
-                'active_bg'         => '#ffffff',
-                'active_color'      => '#1e293b',
-                'inactive_color'    => '#64748b',
-                'hover_bg'          => 'rgba(0,0,0,0.03)',
-                'indicator_type'    => 'pill',
-                'indicator_color'   => '#e1474f',
-                'shadow'            => 'none',
-            ],
-            'underline-animated' => [
-                'tab_padding_y'     => 12, 'tab_padding_x' => 20,
-                'tab_font_size'     => 15, 'tab_font_weight' => '600',
-                'tab_gap'           => 8,  'tab_radius' => 0,
-                'container_bg'      => '',
-                'container_padding' => 0,
-                'container_radius'  => 0,
-                'active_bg'         => '',
-                'active_color'      => '#e1474f',
-                'inactive_color'    => '#64748b',
-                'hover_bg'          => '',
-                'indicator_type'    => 'underline',
-                'indicator_color'   => '#e1474f',
-                'shadow'            => 'none',
-            ],
-            'card-tabs' => [
-                'tab_padding_y'     => 10, 'tab_padding_x' => 18,
-                'tab_font_size'     => 14, 'tab_font_weight' => '500',
-                'tab_gap'           => 8,  'tab_radius' => 8,
-                'container_bg'      => '',
-                'container_padding' => 0,
-                'container_radius'  => 0,
-                'active_bg'         => '#fdf2ec',
-                'active_color'      => '#b04217',
-                'inactive_color'    => '#64748b',
-                'hover_bg'          => '#f8fafc',
-                'indicator_type'    => 'none',
-                'indicator_color'   => '#e1474f',
-                'shadow'            => 'sm',
-            ],
-            'minimal-text' => [
-                'tab_padding_y'     => 8,  'tab_padding_x' => 14,
-                'tab_font_size'     => 14, 'tab_font_weight' => '500',
-                'tab_gap'           => 4,  'tab_radius' => 6,
-                'container_bg'      => '',
-                'container_padding' => 0,
-                'container_radius'  => 0,
-                'active_bg'         => '#fdf2ec',
-                'active_color'      => '#b04217',
-                'inactive_color'    => '#64748b',
-                'hover_bg'          => 'rgba(0,0,0,0.03)',
-                'indicator_type'    => 'none',
-                'indicator_color'   => '#e1474f',
-                'shadow'            => 'none',
-            ],
-            'vertical-sidebar' => [
-                'tab_padding_y'     => 10, 'tab_padding_x' => 14,
-                'tab_font_size'     => 14, 'tab_font_weight' => '500',
-                'tab_gap'           => 2,  'tab_radius' => 6,
-                'container_bg'      => '',
-                'container_padding' => 0,
-                'container_radius'  => 0,
-                'active_bg'         => '#fdf2ec',
-                'active_color'      => '#b04217',
-                'inactive_color'    => '#64748b',
-                'hover_bg'          => 'rgba(0,0,0,0.03)',
-                'indicator_type'    => 'left-bar',
-                'indicator_color'   => '#e1474f',
-                'shadow'            => 'none',
-                'vertical'          => true,
-            ],
-        ];
-        return $presets[ $preset_id ] ?? null;
     }
 
     public function render( $settings ) {
@@ -224,13 +134,23 @@ class Olobuild_Switcher_Tile extends Olobuild_Tile_Base {
         ) );
         $indicator = $s['indicator_type'] ?? 'none';
 
+        // Ombra della barra schede. sm/md/lg: i valori di sempre. «Molto forte» (xl) e
+        // «Personalizzata» (custom, che il preset Brutalist imposta) prima erano ignorate.
+        $shadow_key = (string) ( $s['shadow'] ?? 'none' );
         $shadow_css = '';
-        if ( ($s['shadow'] ?? 'none') === 'sm' ) {
+        if ( $shadow_key === 'sm' ) {
             $shadow_css = 'box-shadow: 0 1px 2px rgba(16,24,40,0.06), 0 1px 3px rgba(16,24,40,0.08);';
-        } elseif ( ($s['shadow'] ?? 'none') === 'md' ) {
+        } elseif ( $shadow_key === 'md' ) {
             $shadow_css = 'box-shadow: 0 4px 6px rgba(16,24,40,0.08), 0 2px 4px rgba(16,24,40,0.06);';
-        } elseif ( ($s['shadow'] ?? 'none') === 'lg' ) {
+        } elseif ( $shadow_key === 'lg' ) {
             $shadow_css = 'box-shadow: 0 12px 24px rgba(16,24,40,0.10), 0 4px 8px rgba(16,24,40,0.08);';
+        } elseif ( $shadow_key === 'xl' ) {
+            $shadow_css = 'box-shadow: ' . Olobuild_Tile_Utils::shadow( 'xl' ) . ';';
+        } elseif ( $shadow_key === 'custom' ) {
+            $sh_color   = $this->safe_color_css( $s['shadow_color'] ?? '' ) ?: 'rgba(0,0,0,0.15)';
+            $sh_inset   = ( ! empty( $s['shadow_inset'] ) && $s['shadow_inset'] !== 'false' ) ? 'inset ' : '';
+            $shadow_css = 'box-shadow: ' . $sh_inset . intval( $s['shadow_h'] ?? 0 ) . 'px ' . intval( $s['shadow_v'] ?? 4 ) . 'px '
+                        . max( 0, intval( $s['shadow_blur'] ?? 10 ) ) . 'px ' . intval( $s['shadow_spread'] ?? 0 ) . 'px ' . $sh_color . ';';
         }
 
         ob_start();
@@ -385,48 +305,61 @@ class Olobuild_Switcher_Tile extends Olobuild_Tile_Base {
                 align-items: center;
             }
             <?php endif; ?>
+            /* Icona prima del testo della scheda; immagine accanto al testo del pannello */
+            .<?php echo esc_attr( $uid ); ?> .olo-sw-icon { display: inline-flex; margin-right: 0.5rem; vertical-align: -0.15em; }
+            .<?php echo esc_attr( $uid ); ?> .olo-sw-media { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(1rem, 3vw, 2rem); align-items: center; }
+            .<?php echo esc_attr( $uid ); ?> .olo-sw-img { display: block; width: 100%; height: auto; border-radius: 0.75rem; object-fit: cover; }
+            .<?php echo esc_attr( $uid ); ?> .olo-sw-cta { margin: 1rem 0 0; }
+            @media (max-width: 640px) { .<?php echo esc_attr( $uid ); ?> .olo-sw-media { grid-template-columns: 1fr; } }
+            /* Testo formattato nei pannelli: niente margine esterno sul primo e sull'ultimo blocco */
+            .<?php echo esc_attr( $uid ); ?> .olo-switcher-content > li > :first-child { margin-top: 0; }
+            .<?php echo esc_attr( $uid ); ?> .olo-switcher-content > li > :last-child { margin-bottom: 0; }
             <?php
-            // V3.23.2 — emit preset-specific CSS for the audacious presets
-            // v1.0.73 — refactor profondo: get_preset_extra_css svuotato, ora i preset audaci
-            // settano i field standard tramite TILE_PRESETS.switcher + helper wow_*.
-            echo $this->build_wow_effects_css( $s, '.' . esc_attr( $uid ), '.olo-switcher-title' );
+            // Effetti wow (i preset audaci impostano i campi wow_* via TILE_PRESETS.switcher).
+            // Il «titolo» del bagliore e del prompt terminale è il testo di ogni scheda.
+            echo $this->build_wow_effects_css( $s, '.' . esc_attr( $uid ), '.olo-sw-label' );
             ?>
         </style>
         <?php
         // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 
-        if ( $vertical ) :
-            ?>
-            <div class="olo-switcher olo-switcher--vert <?php echo esc_attr( $uid ); ?>">
-                <ul class="uk-tab-left olo-sw-nav" uk-tab="connect: .<?php echo esc_attr( $uid ); ?>-content; <?php echo esc_attr( $switcher_attr ); ?>">
-                    <?php foreach ( $items as $i => $item ) : ?>
-                    <li<?php echo $i === 0 ? ' class="uk-active"' : ''; ?>><?php list( $swt_cls, $swt_data ) = $this->tfx_attrs( $s, "title", wp_strip_all_tags( $item["title"] ) ); ?><a href="#" class="<?php echo trim( $swt_cls ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); title is esc_html()'d ?>"<?php echo $swt_data; ?>><?php echo esc_html( wp_strip_all_tags( $item["title"] ) ); ?></a></li>
-                    <?php endforeach; ?>
-                </ul>
-                <ul class="uk-switcher olo-switcher-content <?php echo esc_attr( $uid ); ?>-content">
-                    <?php foreach ( $items as $i => $item ) : ?>
-                    <?php list( $swc_cls, $swc_data ) = $this->tfx_attrs( $s, "content", wp_strip_all_tags( $item["content"] ) ); $widget_html = $this->render_widget_template( $item['widget_template_id'] ?? 0 ); $active_cls = $i === 0 ? ' uk-active' : ''; ?><li class="<?php echo trim( $swc_cls . $active_cls ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); widget HTML from render_widget_template() (escapes its own output); content is esc_html()'d (nl2br only adds <br /> tags) ?>"<?php echo $swc_data; ?>><?php if ( $widget_html ) echo '<div class="olo-item-widget">' . $widget_html . '</div>'; echo nl2br( esc_html( wp_strip_all_tags( $item["content"] ) ) ); ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-            <?php
-        else :
-            // Horizontal — usa uk-tab per il connect (e per il toggle automatico via .uk-active)
-            ?>
-            <div class="olo-switcher <?php echo esc_attr( $uid ); ?>">
-                <ul class="uk-tab olo-sw-nav" uk-tab="connect: .<?php echo esc_attr( $uid ); ?>-content; <?php echo esc_attr( $switcher_attr ); ?>">
-                    <?php foreach ( $items as $i => $item ) : ?>
-                    <li<?php echo $i === 0 ? ' class="uk-active"' : ''; ?>><?php list( $swt_cls, $swt_data ) = $this->tfx_attrs( $s, "title", wp_strip_all_tags( $item["title"] ) ); ?><a href="#" class="<?php echo trim( $swt_cls ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); title is esc_html()'d ?>"<?php echo $swt_data; ?>><?php echo esc_html( wp_strip_all_tags( $item["title"] ) ); ?></a></li>
-                    <?php endforeach; ?>
-                </ul>
-                <ul class="uk-switcher olo-switcher-content <?php echo esc_attr( $uid ); ?>-content">
-                    <?php foreach ( $items as $i => $item ) : ?>
-                    <?php list( $swc_cls, $swc_data ) = $this->tfx_attrs( $s, "content", wp_strip_all_tags( $item["content"] ) ); $widget_html = $this->render_widget_template( $item['widget_template_id'] ?? 0 ); $active_cls = $i === 0 ? ' uk-active' : ''; ?><li class="<?php echo trim( $swc_cls . $active_cls ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); widget HTML from render_widget_template() (escapes its own output); content is esc_html()'d (nl2br only adds <br /> tags) ?>"<?php echo $swc_data; ?>><?php if ( $widget_html ) echo '<div class="olo-item-widget">' . $widget_html . '</div>'; echo nl2br( esc_html( wp_strip_all_tags( $item["content"] ) ) ); ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-            <?php
-        endif;
+        // Voci della barra e pannelli, costruiti una volta sola per i due layout.
+        $nav_html  = '';
+        $pane_html = '';
+        foreach ( $items as $i => $item ) {
+            $titolo = wp_strip_all_tags( $item['title'] );
+            list( $swt_cls, $swt_data ) = $this->tfx_attrs( $s, 'title', $titolo );
+            // Il testo della scheda sta in uno span .olo-sw-label: è il «titolo» degli effetti
+            // wow (bagliore, prompt terminale) e degli effetti testo, che ne riscrivono il
+            // contenuto senza toccare il link di UIkit.
+            // Icona della scheda (dalla 1.4.508, era della tile Tab a Icone): prima del testo.
+            $icona = '' !== $item['icon'] ? $this->render_icon_html( $item['icon'], 0.9, 'aria-hidden="true"' ) : '';
+            $nav_html .= '<li' . ( $i === 0 ? ' class="uk-active"' : '' ) . '><a href="#">' . ( $icona ? '<span class="olo-sw-icon">' . $icona . '</span>' : '' ) . '<span class="olo-sw-label' . $swt_cls . '"' . $swt_data . '>' . esc_html( $titolo ) . '</span></a></li>';
+
+            list( $swc_cls, $swc_data ) = $this->tfx_attrs( $s, 'content', wp_strip_all_tags( (string) $item['content'] ) );
+            $widget_html = $this->render_widget_template( $item['widget_template_id'] ?? 0 );
+            // Immagine e pulsante del pannello (dalla 1.4.508, erano della tile Switcher Panel).
+            $img_html = '' !== $item['image'] ? '<img class="olo-sw-img" src="' . esc_url( $item['image'] ) . '" alt="" loading="lazy">' : '';
+            $btn_html = ( '' !== $item['link_text'] && '' !== $item['link_url'] )
+                ? '<p class="olo-sw-cta"><a class="uk-button uk-button-primary" href="' . esc_url( $item['link_url'] ) . '">' . esc_html( $item['link_text'] ) . '</a></p>'
+                : '';
+            $corpo = $this->contenuto_scheda( $item['content'] ) . $btn_html;
+            if ( $img_html ) {
+                $corpo = '<div class="olo-sw-media">' . $img_html . '<div class="olo-sw-text">' . $corpo . '</div></div>';
+            }
+            $pane_html  .= '<li class="' . trim( $swc_cls . ( $i === 0 ? ' uk-active' : '' ) ) . '"' . $swc_data . '>'
+                . ( $widget_html ? '<div class="olo-item-widget">' . $widget_html . '</div>' : '' )
+                . $corpo
+                . '</li>';
+        }
+        // Verticale: uk-tab-left; orizzontale: uk-tab (connect + .uk-active automatico).
+        $nav_class = $vertical ? 'uk-tab-left olo-sw-nav' : 'uk-tab olo-sw-nav';
+        ?>
+        <div class="olo-switcher<?php echo $vertical ? ' olo-switcher--vert' : ''; ?> <?php echo esc_attr( $uid ); ?>">
+            <ul class="<?php echo esc_attr( $nav_class ); ?>" uk-tab="connect: .<?php echo esc_attr( $uid ); ?>-content; <?php echo esc_attr( $switcher_attr ); ?>"><?php echo $nav_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tab titles esc_html()'d above; tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr) ?></ul>
+            <ul class="uk-switcher olo-switcher-content <?php echo esc_attr( $uid ); ?>-content"><?php echo $pane_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- panes built above: contenuto_scheda() returns esc_html()'d plain text or wp_kses_post()'d HTML; widget HTML from render_widget_template() (escapes its own output); tfx_attrs() fragments escaped internally ?></ul>
+        </div>
+        <?php
 
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
         if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
@@ -456,11 +389,36 @@ class Olobuild_Switcher_Tile extends Olobuild_Tile_Base {
                         'title'              => $item['title'],
                         'content'            => $item['content'] ?? '',
                         'widget_template_id' => absint( $item['widget_template_id'] ?? 0 ),
+                        'icon'               => sanitize_text_field( (string) ( $item['icon'] ?? '' ) ),
+                        'image'              => (string) ( $item['image'] ?? '' ),
+                        'link_text'          => trim( wp_strip_all_tags( (string) ( $item['link_text'] ?? '' ) ) ),
+                        'link_url'           => trim( (string) ( $item['link_url'] ?? '' ) ),
                     ];
                 }
             }
             return $items;
         }
         return [];
+    }
+
+    /**
+     * Il testo di una scheda, nei due formati che può avere.
+     * Testo semplice (come lo salvava il campo storico): resa di sempre, a capo → <br>.
+     * Testo formattato (l'editor salva HTML): HTML pulito via wp_kses_post(); se ha solo
+     * marcatori in linea (grassetto, link…) gli a capo scritti a mano restano.
+     *
+     * @param string $raw Contenuto salvato.
+     * @return string HTML sicuro.
+     */
+    private function contenuto_scheda( $raw ) {
+        $raw = (string) $raw;
+        if ( ! preg_match( '/<\/?(?:p|br|strong|b|em|i|u|s|a|span|mark|small|sub|sup|code|ul|ol|li|h[1-6]|blockquote|pre|hr|div|img|figure|table)\b/i', $raw ) ) {
+            return nl2br( esc_html( wp_strip_all_tags( $raw ) ) );
+        }
+        $html = $this->safe_richtext_content( $raw );
+        if ( ! preg_match( '/<(?:p|div|ul|ol|li|h[1-6]|blockquote|pre|hr|figure|table)\b/i', $html ) ) {
+            $html = nl2br( $html );
+        }
+        return $html;
     }
 }
