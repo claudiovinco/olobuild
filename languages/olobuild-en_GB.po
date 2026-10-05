@@ -16406,3 +16406,56 @@ msgstr "Borderline"
 #: includes/tiles/class-timezone-tile.php
 msgid "Notte"
 msgstr "Night"
+
+#: includes/tiles
+msgid "Aggiungi almeno una domanda con le sue risposte."
+msgstr "Add at least one question with its answers."
+
+#: includes/tiles
+msgid "Copia il codice"
+msgstr "Copy the code"
+
+#: includes/tiles
+msgid "Copiato"
+msgstr "Copied"
+
+#: includes/tiles
+#, php-format
+msgid "Domanda %1$d di %2$d"
+msgstr "Question %1$d of %2$d"
+
+#: includes/tiles
+msgid "Fatto"
+msgstr "Done"
+
+#: includes/tiles
+msgid "In arrivo"
+msgstr "Coming up"
+
+#: includes/tiles
+msgid "In corso"
+msgstr "In progress"
+
+#: includes/tiles
+msgid "Modalità scura"
+msgstr "Dark mode"
+
+#: includes/tiles
+msgid "Nessun elemento aggiunto"
+msgstr "No items added"
+
+#: includes/tiles
+msgid "Nessuna slide aggiunta"
+msgstr "No slides added"
+
+#: includes/tiles
+msgid "Pulsante Toggle: scrivi nel Contenuto l'ID della sezione da mostrare e nascondere (lo stesso del campo ID nelle Avanzate della sezione)."
+msgstr "Toggle button: in Content, enter the ID of the section to show and hide (the same as the ID field in the section's Advanced tab)."
+
+#: includes/tiles
+msgid "Punteggio"
+msgstr "Score"
+
+#: includes/tiles
+msgid "Scrivi dove inviare la scelta (indirizzo, numero o pagina): finché manca, il pulsante non compare sul sito."
+msgstr "Enter where to send the selection (address, number or page): until then, the button won't appear on the site."

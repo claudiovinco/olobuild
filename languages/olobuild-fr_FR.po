@@ -16678,3 +16678,56 @@ msgstr "Limite"
 #: includes/tiles/class-timezone-tile.php
 msgid "Notte"
 msgstr "Nuit"
+
+#: includes/tiles
+msgid "Aggiungi almeno una domanda con le sue risposte."
+msgstr "Ajoutez au moins une question avec ses réponses."
+
+#: includes/tiles
+msgid "Copia il codice"
+msgstr "Copier le code"
+
+#: includes/tiles
+msgid "Copiato"
+msgstr "Copié"
+
+#: includes/tiles
+#, php-format
+msgid "Domanda %1$d di %2$d"
+msgstr "Question %1$d sur %2$d"
+
+#: includes/tiles
+msgid "Fatto"
+msgstr "Fait"
+
+#: includes/tiles
+msgid "In arrivo"
+msgstr "À venir"
+
+#: includes/tiles
+msgid "In corso"
+msgstr "En cours"
+
+#: includes/tiles
+msgid "Modalità scura"
+msgstr "Mode sombre"
+
+#: includes/tiles
+msgid "Nessun elemento aggiunto"
+msgstr "Aucun élément ajouté"
+
+#: includes/tiles
+msgid "Nessuna slide aggiunta"
+msgstr "Aucune diapositive ajoutée"
+
+#: includes/tiles
+msgid "Pulsante Toggle: scrivi nel Contenuto l'ID della sezione da mostrare e nascondere (lo stesso del campo ID nelle Avanzate della sezione)."
+msgstr "Bouton bascule : saisissez dans Contenu l’ID de la section à afficher et masquer (le même que le champ ID dans les réglages avancés de la section)."
+
+#: includes/tiles
+msgid "Punteggio"
+msgstr "Score"
+
+#: includes/tiles
+msgid "Scrivi dove inviare la scelta (indirizzo, numero o pagina): finché manca, il pulsante non compare sul sito."
+msgstr "Indiquez où envoyer la sélection (adresse, numéro ou page) : tant qu’elle manque, le bouton n’apparaît pas sur le site."

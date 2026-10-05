@@ -2192,3 +2192,56 @@ msgstr "Határeset"
 #: includes/tiles/class-timezone-tile.php
 msgid "Notte"
 msgstr "Éjszaka"
+
+#: includes/tiles
+msgid "Aggiungi almeno una domanda con le sue risposte."
+msgstr "Adj hozzá legalább egy kérdést a válaszaival."
+
+#: includes/tiles
+msgid "Copia il codice"
+msgstr "Kód másolása"
+
+#: includes/tiles
+msgid "Copiato"
+msgstr "Másolva"
+
+#: includes/tiles
+#, php-format
+msgid "Domanda %1$d di %2$d"
+msgstr "%1$d. kérdés / %2$d"
+
+#: includes/tiles
+msgid "Fatto"
+msgstr "Kész"
+
+#: includes/tiles
+msgid "In arrivo"
+msgstr "Hamarosan"
+
+#: includes/tiles
+msgid "In corso"
+msgstr "Folyamatban"
+
+#: includes/tiles
+msgid "Modalità scura"
+msgstr "Sötét mód"
+
+#: includes/tiles
+msgid "Nessun elemento aggiunto"
+msgstr "Nincs hozzáadott elem"
+
+#: includes/tiles
+msgid "Nessuna slide aggiunta"
+msgstr "Nincs hozzáadott dia"
+
+#: includes/tiles
+msgid "Pulsante Toggle: scrivi nel Contenuto l'ID della sezione da mostrare e nascondere (lo stesso del campo ID nelle Avanzate della sezione)."
+msgstr "Váltógomb: a Tartalomban add meg a megjelenítendő és elrejtendő szakasz azonosítóját (ugyanaz, mint a szakasz Speciális lapján az ID mező)."
+
+#: includes/tiles
+msgid "Punteggio"
+msgstr "Pontszám"
+
+#: includes/tiles
+msgid "Scrivi dove inviare la scelta (indirizzo, numero o pagina): finché manca, il pulsante non compare sul sito."
+msgstr "Add meg, hová küldjük a választást (cím, szám vagy oldal): amíg hiányzik, a gomb nem jelenik meg az oldalon."

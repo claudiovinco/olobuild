@@ -16678,3 +16678,56 @@ msgstr "Na granicy"
 #: includes/tiles/class-timezone-tile.php
 msgid "Notte"
 msgstr "Noc"
+
+#: includes/tiles
+msgid "Aggiungi almeno una domanda con le sue risposte."
+msgstr "Dodaj co najmniej jedno pytanie z odpowiedziami."
+
+#: includes/tiles
+msgid "Copia il codice"
+msgstr "Skopiuj kod"
+
+#: includes/tiles
+msgid "Copiato"
+msgstr "Skopiowano"
+
+#: includes/tiles
+#, php-format
+msgid "Domanda %1$d di %2$d"
+msgstr "Pytanie %1$d z %2$d"
+
+#: includes/tiles
+msgid "Fatto"
+msgstr "Zrobione"
+
+#: includes/tiles
+msgid "In arrivo"
+msgstr "Wkrótce"
+
+#: includes/tiles
+msgid "In corso"
+msgstr "W toku"
+
+#: includes/tiles
+msgid "Modalità scura"
+msgstr "Tryb ciemny"
+
+#: includes/tiles
+msgid "Nessun elemento aggiunto"
+msgstr "Nie dodano elementów"
+
+#: includes/tiles
+msgid "Nessuna slide aggiunta"
+msgstr "Nie dodano slajdów"
+
+#: includes/tiles
+msgid "Pulsante Toggle: scrivi nel Contenuto l'ID della sezione da mostrare e nascondere (lo stesso del campo ID nelle Avanzate della sezione)."
+msgstr "Przycisk przełączania: w Treści wpisz ID sekcji do pokazania i ukrycia (to samo co pole ID w ustawieniach zaawansowanych sekcji)."
+
+#: includes/tiles
+msgid "Punteggio"
+msgstr "Wynik"
+
+#: includes/tiles
+msgid "Scrivi dove inviare la scelta (indirizzo, numero o pagina): finché manca, il pulsante non compare sul sito."
+msgstr "Wpisz, dokąd wysłać wybór (adres, numer lub strona): dopóki go brak, przycisk nie pojawi się na stronie."

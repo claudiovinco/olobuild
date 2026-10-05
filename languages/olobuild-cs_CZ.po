@@ -2192,3 +2192,56 @@ msgstr "Na hraně"
 #: includes/tiles/class-timezone-tile.php
 msgid "Notte"
 msgstr "Noc"
+
+#: includes/tiles
+msgid "Aggiungi almeno una domanda con le sue risposte."
+msgstr "Přidejte alespoň jednu otázku s odpověďmi."
+
+#: includes/tiles
+msgid "Copia il codice"
+msgstr "Zkopírovat kód"
+
+#: includes/tiles
+msgid "Copiato"
+msgstr "Zkopírováno"
+
+#: includes/tiles
+#, php-format
+msgid "Domanda %1$d di %2$d"
+msgstr "Otázka %1$d z %2$d"
+
+#: includes/tiles
+msgid "Fatto"
+msgstr "Hotovo"
+
+#: includes/tiles
+msgid "In arrivo"
+msgstr "Brzy"
+
+#: includes/tiles
+msgid "In corso"
+msgstr "Probíhá"
+
+#: includes/tiles
+msgid "Modalità scura"
+msgstr "Tmavý režim"
+
+#: includes/tiles
+msgid "Nessun elemento aggiunto"
+msgstr "Žádné položky"
+
+#: includes/tiles
+msgid "Nessuna slide aggiunta"
+msgstr "Žádné snímky"
+
+#: includes/tiles
+msgid "Pulsante Toggle: scrivi nel Contenuto l'ID della sezione da mostrare e nascondere (lo stesso del campo ID nelle Avanzate della sezione)."
+msgstr "Přepínací tlačítko: v Obsahu zadejte ID sekce, kterou chcete zobrazit a skrýt (stejné jako pole ID v Pokročilém nastavení sekce)."
+
+#: includes/tiles
+msgid "Punteggio"
+msgstr "Skóre"
+
+#: includes/tiles
+msgid "Scrivi dove inviare la scelta (indirizzo, numero o pagina): finché manca, il pulsante non compare sul sito."
+msgstr "Zadejte, kam výběr odeslat (adresa, číslo nebo stránka): dokud chybí, tlačítko se na webu nezobrazí."

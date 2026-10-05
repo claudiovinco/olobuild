@@ -16678,3 +16678,56 @@ msgstr "Grenzwertig"
 #: includes/tiles/class-timezone-tile.php
 msgid "Notte"
 msgstr "Nacht"
+
+#: includes/tiles
+msgid "Aggiungi almeno una domanda con le sue risposte."
+msgstr "Füge mindestens eine Frage mit ihren Antworten hinzu."
+
+#: includes/tiles
+msgid "Copia il codice"
+msgstr "Code kopieren"
+
+#: includes/tiles
+msgid "Copiato"
+msgstr "Kopiert"
+
+#: includes/tiles
+#, php-format
+msgid "Domanda %1$d di %2$d"
+msgstr "Frage %1$d von %2$d"
+
+#: includes/tiles
+msgid "Fatto"
+msgstr "Erledigt"
+
+#: includes/tiles
+msgid "In arrivo"
+msgstr "Demnächst"
+
+#: includes/tiles
+msgid "In corso"
+msgstr "Läuft"
+
+#: includes/tiles
+msgid "Modalità scura"
+msgstr "Dunkelmodus"
+
+#: includes/tiles
+msgid "Nessun elemento aggiunto"
+msgstr "Keine Elemente hinzugefügt"
+
+#: includes/tiles
+msgid "Nessuna slide aggiunta"
+msgstr "Keine Folien hinzugefügt"
+
+#: includes/tiles
+msgid "Pulsante Toggle: scrivi nel Contenuto l'ID della sezione da mostrare e nascondere (lo stesso del campo ID nelle Avanzate della sezione)."
+msgstr "Toggle-Button: Trage im Inhalt die ID des Abschnitts ein, der ein- und ausgeblendet werden soll (dieselbe wie im Feld ID unter Erweitert des Abschnitts)."
+
+#: includes/tiles
+msgid "Punteggio"
+msgstr "Punktzahl"
+
+#: includes/tiles
+msgid "Scrivi dove inviare la scelta (indirizzo, numero o pagina): finché manca, il pulsante non compare sul sito."
+msgstr "Gib an, wohin die Auswahl gesendet wird (Adresse, Nummer oder Seite): solange das fehlt, erscheint der Button nicht auf der Website."

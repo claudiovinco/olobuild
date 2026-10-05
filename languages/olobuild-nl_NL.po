@@ -16678,3 +16678,56 @@ msgstr "Randgeval"
 #: includes/tiles/class-timezone-tile.php
 msgid "Notte"
 msgstr "Nacht"
+
+#: includes/tiles
+msgid "Aggiungi almeno una domanda con le sue risposte."
+msgstr "Voeg minstens één vraag met antwoorden toe."
+
+#: includes/tiles
+msgid "Copia il codice"
+msgstr "Code kopiëren"
+
+#: includes/tiles
+msgid "Copiato"
+msgstr "Gekopieerd"
+
+#: includes/tiles
+#, php-format
+msgid "Domanda %1$d di %2$d"
+msgstr "Vraag %1$d van %2$d"
+
+#: includes/tiles
+msgid "Fatto"
+msgstr "Klaar"
+
+#: includes/tiles
+msgid "In arrivo"
+msgstr "Binnenkort"
+
+#: includes/tiles
+msgid "In corso"
+msgstr "Bezig"
+
+#: includes/tiles
+msgid "Modalità scura"
+msgstr "Donkere modus"
+
+#: includes/tiles
+msgid "Nessun elemento aggiunto"
+msgstr "Geen items toegevoegd"
+
+#: includes/tiles
+msgid "Nessuna slide aggiunta"
+msgstr "Geen slides toegevoegd"
+
+#: includes/tiles
+msgid "Pulsante Toggle: scrivi nel Contenuto l'ID della sezione da mostrare e nascondere (lo stesso del campo ID nelle Avanzate della sezione)."
+msgstr "Schakelknop: vul bij Inhoud de ID in van de sectie die getoond en verborgen wordt (dezelfde als het ID-veld bij Geavanceerd van de sectie)."
+
+#: includes/tiles
+msgid "Punteggio"
+msgstr "Score"
+
+#: includes/tiles
+msgid "Scrivi dove inviare la scelta (indirizzo, numero o pagina): finché manca, il pulsante non compare sul sito."
+msgstr "Geef aan waarheen de keuze gaat (adres, nummer of pagina): zolang dat ontbreekt, verschijnt de knop niet op de site."

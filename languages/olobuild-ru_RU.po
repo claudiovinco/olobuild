@@ -2192,3 +2192,56 @@ msgstr "На грани"
 #: includes/tiles/class-timezone-tile.php
 msgid "Notte"
 msgstr "Ночь"
+
+#: includes/tiles
+msgid "Aggiungi almeno una domanda con le sue risposte."
+msgstr "Добавьте хотя бы один вопрос с ответами."
+
+#: includes/tiles
+msgid "Copia il codice"
+msgstr "Скопировать код"
+
+#: includes/tiles
+msgid "Copiato"
+msgstr "Скопировано"
+
+#: includes/tiles
+#, php-format
+msgid "Domanda %1$d di %2$d"
+msgstr "Вопрос %1$d из %2$d"
+
+#: includes/tiles
+msgid "Fatto"
+msgstr "Готово"
+
+#: includes/tiles
+msgid "In arrivo"
+msgstr "Скоро"
+
+#: includes/tiles
+msgid "In corso"
+msgstr "В процессе"
+
+#: includes/tiles
+msgid "Modalità scura"
+msgstr "Тёмный режим"
+
+#: includes/tiles
+msgid "Nessun elemento aggiunto"
+msgstr "Элементы не добавлены"
+
+#: includes/tiles
+msgid "Nessuna slide aggiunta"
+msgstr "Слайды не добавлены"
+
+#: includes/tiles
+msgid "Pulsante Toggle: scrivi nel Contenuto l'ID della sezione da mostrare e nascondere (lo stesso del campo ID nelle Avanzate della sezione)."
+msgstr "Кнопка-переключатель: во вкладке «Содержимое» укажите ID раздела, который нужно показывать и скрывать (тот же, что в поле ID в дополнительных настройках раздела)."
+
+#: includes/tiles
+msgid "Punteggio"
+msgstr "Баллы"
+
+#: includes/tiles
+msgid "Scrivi dove inviare la scelta (indirizzo, numero o pagina): finché manca, il pulsante non compare sul sito."
+msgstr "Укажите, куда отправить выбор (адрес, номер или страница): пока его нет, кнопка на сайте не появится."

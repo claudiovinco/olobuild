@@ -16678,3 +16678,56 @@ msgstr "ぎりぎり"
 #: includes/tiles/class-timezone-tile.php
 msgid "Notte"
 msgstr "夜間"
+
+#: includes/tiles
+msgid "Aggiungi almeno una domanda con le sue risposte."
+msgstr "回答付きの質問を少なくとも1つ追加してください。"
+
+#: includes/tiles
+msgid "Copia il codice"
+msgstr "コードをコピー"
+
+#: includes/tiles
+msgid "Copiato"
+msgstr "コピーしました"
+
+#: includes/tiles
+#, php-format
+msgid "Domanda %1$d di %2$d"
+msgstr "質問 %1$d / %2$d"
+
+#: includes/tiles
+msgid "Fatto"
+msgstr "完了"
+
+#: includes/tiles
+msgid "In arrivo"
+msgstr "予定"
+
+#: includes/tiles
+msgid "In corso"
+msgstr "進行中"
+
+#: includes/tiles
+msgid "Modalità scura"
+msgstr "ダークモード"
+
+#: includes/tiles
+msgid "Nessun elemento aggiunto"
+msgstr "項目がありません"
+
+#: includes/tiles
+msgid "Nessuna slide aggiunta"
+msgstr "スライドがありません"
+
+#: includes/tiles
+msgid "Pulsante Toggle: scrivi nel Contenuto l'ID della sezione da mostrare e nascondere (lo stesso del campo ID nelle Avanzate della sezione)."
+msgstr "トグルボタン：コンテンツに、表示・非表示にするセクションのIDを入力してください（セクションの詳細設定のIDと同じ）。"
+
+#: includes/tiles
+msgid "Punteggio"
+msgstr "スコア"
+
+#: includes/tiles
+msgid "Scrivi dove inviare la scelta (indirizzo, numero o pagina): finché manca, il pulsante non compare sul sito."
+msgstr "選択内容の送信先（アドレス、番号、ページ）を入力してください。未入力の間はサイトにボタンが表示されません。"
