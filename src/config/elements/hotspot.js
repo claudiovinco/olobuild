@@ -4,8 +4,8 @@ import { t } from '@/i18n';
 
 /**
  * Tile Hotspot — split CONTENUTO/STILE.
- *   fields[]      → immagine, markers (pos_x+pos_y+title+description+icon+tooltip_position)
- *   styleFields[] → preset, bg, typo, image height + radius, text-effects, marker color/size/pulse, tooltip colori/width, border
+ *   fields[]      → immagine + testo alternativo, markers (pos_x+pos_y+title+description+icon+link+link_label)
+ *   styleFields[] → preset, bg, typo, image height + radius, text-effects, marker tipo/color/size/pulse, tooltip_position (specchio), tooltip colori/width, border
  */
 export default {
   type: 'hotspot',
@@ -17,6 +17,7 @@ export default {
     typography_preset: '',
     preset: 'custom',
     image: '',
+    image_alt: '',
     image_height: '400',
     // 'auto' = la resa di sempre: il contenitore tiene l'altezza fissa di
     // `image_height` (400px) e il ritaglio dipende dalla larghezza della colonna.
@@ -32,7 +33,9 @@ export default {
       { id: 'hs-2', pos_x: '65', pos_y: '55', title: t('Secondo punto'), description: t('Descrizione del secondo hotspot.'), icon: 'pin', tooltip_position: 'bottom' },
     ],
     border_radius: '0',
+    marker_style: 'icon',
     marker_color: '',
+    marker_text_color: '',
     marker_size: '24',
     pulse_animation: true,
     tooltip_bg: '',
@@ -48,15 +51,24 @@ export default {
 
   fields: [
     { key: 'image', label: t('Immagine'), type: 'image' },
+    { key: 'image_alt', label: t('Testo alternativo'), type: 'text',
+      description: t('Descrive l’immagine a chi non la vede. Vuoto = il testo alternativo dell’immagine nella libreria media.') },
     { key: 'markers', label: t('Marker'), type: 'content-items',
       itemFields: [
         { key: 'pos_x', label: t('Posizione X'), type: 'range', min: 0, max: 100, step: 1 },
         { key: 'pos_y', label: t('Posizione Y'), type: 'range', min: 0, max: 100, step: 1 },
         { key: 'title', label: t('Titolo'), type: 'text' },
         { key: 'description', label: t('Descrizione'), type: 'text' },
-        { key: 'icon', label: t('Icona'), type: 'icon' },
+        { key: 'icon', label: t('Icona'), type: 'icon',
+          description: t('Usata quando il Tipo marker (nello Stile) è «Icona».') },
+        { key: 'image', label: t('Immagine nel fumetto'), type: 'image',
+          description: t('Facoltativa: una foto in cima al fumetto, sopra il titolo.') },
+        { key: 'link', label: t('Link'), type: 'link',
+          description: t('Facoltativo: compare nel fumetto come collegamento sotto la descrizione.') },
+        { key: 'link_label', label: t('Testo del link'), type: 'text', placeholder: t('Scopri di più'),
+          condition: { field: 'link', op: 'notEmpty' } },
       ],
-      newItemDefaults: { pos_x: '50', pos_y: '50', title: t('Nuovo punto'), description: t('Descrizione.'), icon: 'pin', tooltip_position: 'top' },
+      newItemDefaults: { pos_x: '50', pos_y: '50', title: t('Nuovo punto'), description: t('Descrizione.'), icon: 'pin', tooltip_position: 'top', link: '', link_label: '' },
       itemLabel: 'Marker',
     },
   ],
@@ -70,12 +82,12 @@ export default {
       { value: 'pulse-ring',      label: t('Pulse Ring') },
       { value: 'tooltip-card',    label: t('Tooltip Card') },
       { value: 'glass-pin',       label: t('Glass Pin') },
-      { value: 'neon-glow',       label: t('Neon Glow') },
+      { value: 'neon-glow',       label: t('Neon Cyan') },
       { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
-      { value: 'gradient-pulse',  label: t('Gradient Pulse') },
+      { value: 'gradient-pulse',  label: t('Pink Pulse') },
       { value: 'sticker-pin',     label: t('Sticker Pin') },
       { value: 'retro-marker',    label: t('Retro Marker') },
-      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'tilt-3d',         label: t('Indigo Pin') },
       { value: 'custom',          label: t('Personalizzato') },
     ]},
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
@@ -108,7 +120,14 @@ export default {
     ]),
 
     { type: 'separator', label: t('Stile marker') },
+    { key: 'marker_style', label: t('Tipo marker'), type: 'select', options: [
+      { value: 'icon',   label: t('Icona') },
+      { value: 'number', label: t('Numero') },
+      { value: 'dot',    label: t('Punto') },
+    ]},
     { key: 'marker_color', label: t('Colore marker'), type: 'color' },
+    { key: 'marker_text_color', label: t('Colore numero'), type: 'color',
+      condition: { field: 'marker_style', op: 'eq', value: 'number' } },
     { key: 'marker_size', label: t('Dimensione marker'), type: 'range', min: 16, max: 40, step: 2 },
     { key: 'pulse_animation', label: t('Animazione pulse'), type: 'toggle' },
 

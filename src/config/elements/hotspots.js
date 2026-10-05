@@ -11,6 +11,9 @@ export default {
   name: t('Hotspots (marker interattivi)'),
   icon: 'dashicons-location',
   category: 'interactive',
+  // Ritirata dalla palette (I3, 1.4.508): i marker su immagine sono la tile Hotspot (questa
+  // non aveva né immagine né link). Resta per i 5 temi che la usano.
+  hidden: true,
 
   defaults: {
     eyebrow: '',

@@ -46,8 +46,9 @@ class Olobuild_Popover_Tile extends Olobuild_Tile_Base {
         $markers          = is_array( $s['markers'] ) ? $s['markers'] : [];
         $color            = $this->safe_color_css( $s['marker_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
         $image_height     = absint( $s['image_height'] ?? 0 );
-        $popup_bg         = $this->safe_color_css( $s['popup_bg'] ?? '#ffffff' );
-        $popup_color      = $this->safe_color_css( $s['popup_color'] ?? '#333333' );
+        // Il config salva '' come default: prima usciva «background: ;» e il fumetto nasceva trasparente.
+        $popup_bg         = $this->safe_color_css( $s['popup_bg'] ?? '' ) ?: 'var(--olo-color-surface, #ffffff)';
+        $popup_color      = $this->safe_color_css( $s['popup_color'] ?? '' ) ?: 'var(--olo-color-text, #333333)';
         $popup_radius     = $this->build_border_radius_css( $s["popup_radius"] ?? 8 );
         $popup_radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['popup_radius_hover'] ?? null );
         $popup_img_height = absint( $s['popup_img_height'] ?? 120 );
@@ -142,8 +143,8 @@ class Olobuild_Popover_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
 
             <?php foreach ( $markers as $i => $marker ) :
-                $x = floatval( $marker['x'] ?? 50 );
-                $y = floatval( $marker['y'] ?? 50 );
+                $x = max( 0, min( 100, floatval( $marker['x'] ?? 50 ) ) );
+                $y = max( 0, min( 100, floatval( $marker['y'] ?? 50 ) ) );
                 $marker_img = $marker['image'] ?? '';
                 $drop_id    = $uid . '-drop-' . $i;
             ?>

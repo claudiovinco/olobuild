@@ -15,6 +15,9 @@ export default {
   name: t('Popover'),
   icon: 'dashicons-location-alt',
   category: 'interactive',
+  // Ritirata dalla palette (I3, 1.4.508): i marker su immagine con fumetto sono la tile
+  // Hotspot, che ora ha anche l'immagine e il link nel fumetto. Resta per le pagine salvate.
+  hidden: true,
   defaults: {
     preset: 'custom',
     bg: { type: 'none' },
