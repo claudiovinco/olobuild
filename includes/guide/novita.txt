@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.528 - 2026-10-05 (fix)
+- Il codice in linea nei testi segue il colore del testo: prima era rosa.
+
 ## v1.4.527 - 2026-10-05 (fix)
 - Popup: le dimensioni piccola e grande del pulsante sono proporzionali al testo.
 
