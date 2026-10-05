@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.539 - 2026-10-05 (fix)
+- CTA Banner: gli angoli arrotondati si vedono (prima sotto il banner restava un riquadro ad angoli vivi dello stesso colore). Vale per tutte le tile che disegnano da sé il loro Sfondo: il video di sfondo non parte più due volte.
+
 ## v1.4.538 - 2026-10-05 (fix)
 - Immagine: la didascalia si vede anche quando l'immagine ha una proporzione (16:9, 4:3…), angoli arrotondati o un'ombra; bordo e ombra incorniciano solo la foto.
 
