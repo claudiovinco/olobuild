@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.517 - 2026-10-05 (fix)
+- Pro Slider, Viewer 360, PDF Viewer, PDF Pro e i filtri della Post Grid funzionano anche più in basso nella pagina (restavano vuoti o fermi su «Caricamento»); Facebook Page, X e Instagram compaiono anche quando non sono in cima.
+- Le prime tile del contenuto si caricano subito anche nelle pagine con l'header.
+
 ## v1.4.516 - 2026-10-05 (fix)
 - Gli sfondi a motivo disegnato (onde, triangoli, esagoni, stelle, mattoni…) con un colore del tema non nascondono più il contenuto: il motivo sta sotto testi e tile, sopra il suo colore di fondo, che prima andava perso.
 
