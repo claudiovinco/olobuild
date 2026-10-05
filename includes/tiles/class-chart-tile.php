@@ -389,7 +389,9 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
                                                oggetto nel radar). */
                                             var v = ctx.raw;
                                             <?php if ( $num_format ) : ?>
-                                            v = Number(v).toLocaleString(document.documentElement.lang || undefined);
+                                            /* 'always': in italiano anche 1234 diventa 1.234 (di norma il
+                                               separatore parte da 10.000). */
+                                            v = Number(v).toLocaleString(document.documentElement.lang || undefined, { useGrouping: 'always' });
                                             <?php endif; ?>
                                             var lbl = ctx.dataset.label ? ctx.dataset.label + ': ' : '';
                                             return lbl + '<?php echo $tt_prefix; ?>' + v + '<?php echo $tt_suffix; ?>';
