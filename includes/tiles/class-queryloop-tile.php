@@ -283,15 +283,26 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
     }
 
     /**
-     * Build WP_Query args from settings.
+     * Il tipo di contenuto da interrogare: con «Custom Post Type» è lo slug scritto in
+     * «CPT slug» (vuoto = articoli). Un solo punto per la query e per il controllo in
+     * render(), che prima verificava la parola «custom» invece dello slug e rispondeva
+     * sempre «Tipo di contenuto "custom" non trovato».
      */
-    private function build_query_args( $s, $paged = 1 ) {
-        // Post type: support custom post types
+    private function tipo_contenuto( $s ) {
         $post_type = sanitize_key( $s['post_type'] ?? 'post' );
         if ( $post_type === 'custom' ) {
             $cpt = sanitize_key( $s['custom_post_type'] ?? '' );
             $post_type = $cpt !== '' ? $cpt : 'post';
         }
+        return $post_type;
+    }
+
+    /**
+     * Build WP_Query args from settings.
+     */
+    private function build_query_args( $s, $paged = 1 ) {
+        // Post type: support custom post types
+        $post_type = $this->tipo_contenuto( $s );
 
         $args = [
             'post_type'      => $post_type,
@@ -624,8 +635,9 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
     public function render( $settings ) {
         $s = wp_parse_args( $settings, $this->defaults );
 
-        if ( ! post_type_exists( sanitize_key( $s['post_type'] ) ) ) {
-            return '<p style="color:var(--olo-color-text-muted, #9CA3AF);text-align:center;">Tipo di contenuto "' . esc_html( $s['post_type'] ) . '" non trovato.</p>';
+        $post_type = $this->tipo_contenuto( $s );
+        if ( ! post_type_exists( $post_type ) ) {
+            return '<p style="color:var(--olo-color-text-muted, #9CA3AF);text-align:center;">Tipo di contenuto "' . esc_html( $post_type ) . '" non trovato.</p>';
         }
 
         $paged = 1;
