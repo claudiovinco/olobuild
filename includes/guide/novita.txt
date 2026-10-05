@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.545 - 2026-10-05 (fix)
+- Template incorporato: il template incluso resta largo quanto la sua colonna invece di allargarsi a tutta la finestra.
+
 ## v1.4.544 - 2026-10-05 (fix)
 - Colonne interne: le sotto-colonne stanno una accanto all'altra sul computer anche con le impostazioni di partenza (prima andavano sempre a capo); sul telefono si impilano come prima.
 
