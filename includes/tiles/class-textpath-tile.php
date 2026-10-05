@@ -214,8 +214,9 @@ class Olobuild_Textpath_Tile extends Olobuild_Tile_Base {
                 for (var i = 0; i < n; i++) { tutto += frase + sep; }
                 tp.textContent = tutto;
                 if (chiuso) {
-                    text.setAttribute('textLength', (periodo * n).toFixed(2));
-                    text.setAttribute('lengthAdjust', 'spacing');
+                    /* sul textPath: sul <text> Chrome lo ignora */
+                    tp.setAttribute('textLength', (periodo * n).toFixed(2));
+                    tp.setAttribute('lengthAdjust', 'spacing');
                 }
                 if (fermo) { return; }
                 var velocita = giro / durata;
