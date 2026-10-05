@@ -95,6 +95,11 @@ class Olobuild_Scrollprogress_Tile extends Olobuild_Tile_Base {
             var box = document.getElementById('<?php echo esc_js( $uid ); ?>');
             var bar = document.getElementById('<?php echo esc_js( $uid ); ?>-bar');
             if(!bar) return;
+            <?php if ( empty( $settings['_builder_mode'] ) ) : ?>
+            /* Il contenitore del template (transform + container-type) intrappola i position:fixed:
+               la barra scorreva via con la pagina. Sul sito va in document.body, come la Bottom Bar. */
+            if(box && box.parentNode !== document.body){ document.body.appendChild(box); }
+            <?php endif; ?>
             <?php if ( $show_pct ) : ?>
             var pctEl = document.getElementById('<?php echo esc_js( $uid ); ?>-pct');
             <?php endif; ?>
