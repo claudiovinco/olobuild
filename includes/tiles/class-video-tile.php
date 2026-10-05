@@ -101,8 +101,10 @@ class Olobuild_Video_Tile extends Olobuild_Tile_Base {
         // Border system
         $v_uid = $this->_v_uid;
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
-        $border_hover_css  = $this->build_border_hover_css( ".{$v_uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
-        $border_effect_css = $this->build_border_effect_css( ".{$v_uid}", $s['border'] ?? [], $s );
+        // Il riquadro del video è `.olo-video.{uid}`: la didascalia, sotto, porta la stessa classe uid (per
+        // gli effetti testo) e prendeva anche bordo e raggio, che finivano attorno al video E alla didascalia.
+        $border_hover_css  = $this->build_border_hover_css( ".olo-video.{$v_uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( ".olo-video.{$v_uid}", $s['border'] ?? [], $s );
 
         // L'utente si aspetta che il valore del raggio coincida con la curvatura del VIDEO
         // (= curvatura interna del bordo). In CSS standard `border-radius: X` produce
@@ -139,7 +141,7 @@ class Olobuild_Video_Tile extends Olobuild_Tile_Base {
             if ( $outer_radius_css ) {
                 $outer_rules .= 'border-radius:' . $outer_radius_css . ';';
             }
-            if ( $outer_rules ) $border_block .= ".{$v_uid}{{$outer_rules}}";
+            if ( $outer_rules ) $border_block .= ".olo-video.{$v_uid}{{$outer_rules}}";
             $border_block .= $border_hover_css . $border_effect_css . '</style>';
         }
 
@@ -154,7 +156,7 @@ class Olobuild_Video_Tile extends Olobuild_Tile_Base {
             $u = $this->_v_uid;
             $hover_prefix = '<style>'
                           . '.' . $u . '.olo-video-cover:hover{border-radius:' . $_br_css_hover_css . ' !important}'
-                          . '.' . $u . ':not(.olo-video-cover):hover>div{border-radius:' . $_br_css_hover_css . ' !important}'
+                          . '.olo-video.' . $u . ':not(.olo-video-cover):hover>div{border-radius:' . $_br_css_hover_css . ' !important}'
                           . '</style>';
         }
 
@@ -228,14 +230,14 @@ class Olobuild_Video_Tile extends Olobuild_Tile_Base {
                         loading="lazy"
                     ></iframe>
                 <?php else : ?>
-                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #1F2937; display: flex; align-items: center; justify-content: center; color: var(--olo-color-text-muted, #9CA3AF);">
+                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--olo-color-dark, #1F2937); display: flex; align-items: center; justify-content: center; color: var(--olo-color-text-muted, #9CA3AF);">
                         <?php echo esc_html__( 'Inserisci un URL video', 'olobuild' ); ?>
                     </div>
                 <?php endif; ?>
                 <?php echo $this->render_overlay_layers( $s ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- overlay HTML built internally with esc_attr()/esc_html()/safe_color_css()/absint() ?>
             </div>
-            <?php $this->render_caption( $s ); ?>
         </div>
+        <?php $this->render_caption( $s ); ?>
         <?php
         return ob_get_clean();
     }
@@ -259,7 +261,7 @@ class Olobuild_Video_Tile extends Olobuild_Tile_Base {
         ob_start();
         ?>
         <div class="olo-video uk-responsive-width <?php echo esc_attr( $this->_v_uid ); ?>">
-            <div style="position: relative; padding-bottom: <?php echo esc_attr( $padding ); ?>; overflow: hidden; <?php echo $this->_vbr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built internally from build_border_radius_css() integer radii, Olobuild_Tile_Utils::shadow_value() and fixed literals ?> background: #1F2937;">
+            <div style="position: relative; padding-bottom: <?php echo esc_attr( $padding ); ?>; overflow: hidden; <?php echo $this->_vbr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built internally from build_border_radius_css() integer radii, Olobuild_Tile_Utils::shadow_value() and fixed literals ?> background: var(--olo-color-dark, #1F2937);">
                 <?php if ( $src ) : ?>
                     <video
                         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: <?php echo esc_attr( $obj_pos ); ?>;"
@@ -280,8 +282,8 @@ class Olobuild_Video_Tile extends Olobuild_Tile_Base {
                 <?php endif; ?>
                 <?php echo $this->render_overlay_layers( $s ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- overlay HTML built internally with esc_attr()/esc_html()/safe_color_css()/absint() ?>
             </div>
-            <?php $this->render_caption( $s ); ?>
         </div>
+        <?php $this->render_caption( $s ); ?>
         <?php
         return ob_get_clean();
     }
@@ -359,7 +361,7 @@ class Olobuild_Video_Tile extends Olobuild_Tile_Base {
                     ></iframe>
                 <?php endif; ?>
             <?php else : ?>
-                <div style="width: 100%; height: 100%; background: #1F2937; display: flex; align-items: center; justify-content: center; color: var(--olo-color-text-muted, #9CA3AF);">
+                <div style="width: 100%; height: 100%; background: var(--olo-color-dark, #1F2937); display: flex; align-items: center; justify-content: center; color: var(--olo-color-text-muted, #9CA3AF);">
                     <?php echo esc_html__( 'Seleziona una sorgente video', 'olobuild' ); ?>
                 </div>
             <?php endif; ?>
