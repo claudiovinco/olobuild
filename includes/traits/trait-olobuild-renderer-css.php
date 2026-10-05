@@ -29,7 +29,9 @@ trait Olobuild_Renderer_Css_Trait {
         // Un token può portare la riserva, var(--olo-color-x, #hex): è la forma
         // che FieldColor salva per i colori globali, e il bordo del Contenitore la
         // scartava in #374151. Nella riserva niente ; { } < > né virgolette.
-        if ( preg_match( '/^(#[0-9a-fA-F]{3,8}|rgba?\([^)]+\)|hsla?\([^)]+\)|var\(\s*--[\w-]+(?:\s*,\s*[^;{}<>"\']+)?\)|[a-zA-Z]+)$/', $val ) ) {
+        // Anche color-mix(), che i campi colore delle tile accettano (safe_color_css): il
+        // bordo del Contenitore lo scartava in #374151 (grigio scuro al posto del colore scelto).
+        if ( preg_match( '/^(#[0-9a-fA-F]{3,8}|rgba?\([^)]+\)|hsla?\([^)]+\)|var\(\s*--[\w-]+(?:\s*,\s*[^;{}<>"\']+)?\)|color-mix\([^;{}<>"\']*\)|[a-zA-Z]+)$/', $val ) ) {
             return $val;
         }
         return '#374151';
