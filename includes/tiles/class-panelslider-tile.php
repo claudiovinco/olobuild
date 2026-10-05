@@ -275,9 +275,12 @@ class Olobuild_PanelSlider_Tile extends Olobuild_Tile_Base {
         $card_bcol   = $this->safe_color_css( $s['card_border_color'] ?? 'transparent' );
         $card_bw     = max( 0, intval( $s['card_border_width'] ?? 0 ) );
         $card_bs     = in_array( $s['card_border_style'] ?? 'solid', [ 'solid', 'dashed', 'dotted', 'double' ], true ) ? ( $s['card_border_style'] ?? 'solid' ) : 'solid';
-        $card_border_decl = ( $card_bw > 0 && $card_bcol && $card_bcol !== 'transparent' )
-            ? Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => $card_bw, 'style' => $card_bs, 'color' => $card_bcol ] )
-            : 'border: 0;';
+        // «Bordo card» (composito, 4 lati) vince sulle chiavi piatte: prima il bordo si disegnava
+        // solo se le chiavi storiche avevano spessore e colore, e il controllo sembrava non agire.
+        $card_border_decl = Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => $card_bw, 'style' => $card_bs, 'color' => ( $card_bcol === 'transparent' ? '' : $card_bcol ) ] );
+        if ( '' === $card_border_decl ) {
+            $card_border_decl = 'border: 0;';
+        }
 
         // Shadow
         $shadow_val = Olobuild_Tile_Utils::shadow_value( $s, 'shadow' );

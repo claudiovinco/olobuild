@@ -20,6 +20,9 @@ export default {
   name: t('Panel Slider'),
   icon: 'dashicons-slides',
   category: 'interactive',
+  // Ritirata dalla palette (I3, 1.4.508): le card con la didascalia sotto la foto sono
+  // l'Overlay Slider con «Sotto l'immagine». Resta per le pagine salvate.
+  hidden: true,
   defaults: {
     bg: { type: 'none' },
     typography_preset: '',
