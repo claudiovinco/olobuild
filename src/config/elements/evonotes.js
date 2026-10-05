@@ -15,6 +15,9 @@ export default {
   name: t('Evo Notes (layer annotazioni)'),
   icon: 'dashicons-info',
   category: 'interactive',
+  // Ritirata dalla palette (I1, 1.4.506): le note e le ancore di partenza sono del redesign
+  // di un solo sito. Resta per il tema che la usa.
+  hidden: true,
 
   defaults: {
     toggle_label: 'Perché questa evoluzione',

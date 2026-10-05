@@ -11,6 +11,9 @@ export default {
   name: t('Off-Canvas'),
   icon: 'dashicons-slides',
   category: 'interactive',
+  // Ritirata dalla palette (I1, 1.4.506): non ha un renderer PHP, sulla pagina non usciva
+  // niente. Il cassetto laterale lo fa il Pannello flottante. Resta per i template salvati.
+  hidden: true,
   hasChildren: true,
   defaults: {
     trigger_selector: '',

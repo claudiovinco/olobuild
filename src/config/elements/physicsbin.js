@@ -18,6 +18,9 @@ export default {
   name: t('Cesto Fisico'),
   icon: 'dashicons-games',
   category: 'interactive',
+  // Ritirata dalla palette (I1, 1.4.506): un giocattolo senza un uso in un sito vero.
+  // Resta per i template salvati.
+  hidden: true,
   defaults: {
     preset: 'custom',
     bg: { type: 'none' },

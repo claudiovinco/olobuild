@@ -13,6 +13,9 @@ export default {
   name: t('OLOX — Scena minigioco'),
   icon: 'dashicons-games',
   category: 'interactive',
+  // Ritirata dalla palette (I1, 1.4.506): i giochi e i testi sono del sito olotheme.com e non
+  // si adattano a un'altra attività. Resta per le pagine che la usano.
+  hidden: true,
 
   defaults: {
     scene: 'wall',

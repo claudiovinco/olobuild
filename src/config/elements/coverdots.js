@@ -14,6 +14,9 @@ export default {
   name: t('Pallini Cover'),
   icon: 'dashicons-ellipsis',
   category: 'interactive',
+  // Ritirata dalla palette (I1, 1.4.506): serve solo al motore «Sticky → Cover orizzontale»,
+  // usato da una pagina, ed è invisibile nel canvas. Resta per i template salvati.
+  hidden: true,
   defaults: {
     items: [],
     hide_without_group: true,
