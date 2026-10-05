@@ -595,6 +595,10 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
         (function(){
             var el = document.getElementById('<?php echo esc_js( $uid ); ?>');
             if (!el) return;
+            /* UIkit porta la modale nel body, fuori da .olo-template: senza i token del template
+               usciva col primario blu di :root, il testo #333 e il font di sistema. Ce li porta
+               adesso, mentre è ancora nel template (gli stili puntano a #uid, il pulsante a target: #uid). */
+            (<?php echo self::js_nel_body(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- costante JS interna ?>)(el);
             el.addEventListener('shown', function() {
                 var maps = el.querySelectorAll('.olo-map-canvas');
                 maps.forEach(function(c) { if (c._oloMap) c._oloMap.invalidateSize(); });
