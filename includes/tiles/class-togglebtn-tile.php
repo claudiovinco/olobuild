@@ -51,13 +51,30 @@ class Olobuild_ToggleBtn_Tile extends Olobuild_Tile_Base {
     public function render( $settings, $style = [] ) {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'olo-tb-' . wp_rand( 10000, 99999 );
+        // Canvas del builder: la sezione comandata resta aperta e modificabile (niente regole
+        // che la comprimono, niente script) e il clic sul pulsante seleziona la tile. Vale anche
+        // per un pulsante dell'header o del footer reso nell'iframe dell'anteprima.
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- sola lettura del flag di routing dell'iframe del builder; nessuna modifica di stato.
+        $in_canvas = ! empty( $s['_builder_mode'] ) || ! empty( $_GET['olo_builder_iframe'] );
         // Sfondo del tab Stile disegnato sul pulsante (il contenitore resta trasparente).
         $sfondo = $this->sfondo_elemento( $style, $uid );
 
         $target_id   = sanitize_html_class( $s['target_id'] );
         if ( empty( $target_id ) ) {
-            return '<p style="color:var(--olo-color-danger, #EF4444);font-size:13px;text-align:center;">⚠ Toggle Button: imposta l\'ID della sezione target nell\'inspector.</p>';
+            // Senza sezione da comandare il pulsante non farebbe niente: ai visitatori non si
+            // mostra; all'autore, solo nel canvas, si dice cosa manca.
+            if ( ! $in_canvas ) {
+                return '';
+            }
+            return '<p class="olo-tb-avviso" style="margin:0;padding:.6em .9em;border:1px dashed var(--olo-color-danger, #EF4444);border-radius:.6em;color:var(--olo-color-danger, #EF4444);font-size:13px;line-height:1.4;text-align:center;">'
+                . esc_html( olobuild_t( 'Pulsante Toggle: scrivi nel Contenuto l\'ID della sezione da mostrare e nascondere (lo stesso del campo ID nelle Avanzate della sezione).' ) )
+                . '</p>';
         }
+
+        // Bordo del pulsante: UN solo controllo nell'inspector, «Bordo» (btn_border, con hover ed
+        // effetti); prima ce n'erano due sullo stesso pulsante. Da qui in poi $s['btn_border'] è il
+        // bordo effettivo, già normalizzato: lo leggono bordo, hover ed effetti.
+        $s['btn_border'] = $this->bordo_pulsante( $s );
 
         $text_show   = esc_html( $s['text_show'] );
         $text_hide   = esc_html( $s['text_hide'] );
@@ -73,14 +90,11 @@ class Olobuild_ToggleBtn_Tile extends Olobuild_Tile_Base {
         $bg          = $this->safe_color_css( $s['btn_bg'] ) ?: 'transparent';
         $color       = $this->safe_color_css( $s['btn_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $hover_bg    = $this->safe_color_css( $s['btn_hover_bg'] ) ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 10%, transparent)';
-        $bw          = max( 0, intval( $s['btn_border_width'] ) );
-        $bc          = $this->safe_color_css( $s['btn_border_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $radius      = Olobuild_Tile_Utils::border_radius( $s['btn_border_radius'] ?? 0 );
-        $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['btn_border_radius_hover'] ?? null );
         // Bordo in hover del sistema bordi (sul pulsante): dichiarazioni e transizione separate,
         // così la sua transizione si accoda a quella del pulsante invece di finire in una regola
         // `.uid{transition:border …}` stampata dopo, che spegneva sfondo, pressione e raggio.
-        $border_hover_props = $this->build_border_hover_props( $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_hover_props = $this->build_border_hover_props( $s['btn_border'], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
         // Transizione del pulsante con la «Durata» dello Sfondo in hover (senza chiave 0.2s come
         // sempre) più quella del Bordo in hover. La regola del Raggio in hover la ripete: in CSS
         // vince UNA sola `transition`.
@@ -88,6 +102,10 @@ class Olobuild_ToggleBtn_Tile extends Olobuild_Tile_Base {
         if ( $border_hover_props['transition'] !== '' ) {
             $btn_tr .= ', ' . $border_hover_props['transition'];
         }
+        // Raggio in hover: legge anche la sua «Durata» (btn_border_radius_hover_duration, 300 ms
+        // come l'inspector); prima erano 400 ms fissi e il campo non agiva.
+        $radius_hover_rules = Olobuild_Tile_Utils::radius_hover_rules( '.' . $uid, $s, 'btn_border_radius_hover', $btn_tr );
+        $border_css         = $this->build_border_css( $s['btn_border'] );
         // Padding pulsante: controllo unico a 4 lati (tile_padding), ripiego legacy x/y.
         $btn_pad = Olobuild_Tile_Utils::spacing_sides(
             $s['tile_padding'] ?? null,
@@ -120,7 +138,7 @@ class Olobuild_ToggleBtn_Tile extends Olobuild_Tile_Base {
                 font-weight: <?php echo $fweight; ?>;
                 line-height: 1.2;
                 padding: <?php echo esc_attr( Olobuild_Tile_Utils::sides_css( $btn_pad ) ); ?>;
-                <?php if ( $bw > 0 ) : ?>border: <?php echo (int) $bw; ?>px solid <?php echo $bc; ?>;<?php endif; ?>
+                <?php echo $border_css; ?>
                 <?php if ( $radius && $radius !== '0px' ) : ?>border-radius: <?php echo $radius; ?>;<?php endif; ?>
                 cursor: pointer;
                 transition: <?php echo $btn_tr; ?>;
@@ -128,7 +146,7 @@ class Olobuild_ToggleBtn_Tile extends Olobuild_Tile_Base {
                 -webkit-user-select: none;
                 <?php if ( $full_width ) : ?>width: 100%; justify-content: center;<?php endif; ?>
             }
-            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?>{transition:<?php echo $btn_tr; ?>, border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
+            <?php echo $radius_hover_rules; ?>
 
             .<?php echo $uid; ?>:hover {
                 background: <?php echo $hover_bg; ?>;
@@ -153,6 +171,7 @@ class Olobuild_ToggleBtn_Tile extends Olobuild_Tile_Base {
                 transition: transform 0.3s;
             }
 
+            <?php if ( ! $in_canvas ) : ?>
             /* Hide target before JS takes over (no flash) */
             <?php if ( ! $is_open ) : ?>
             #<?php echo esc_attr( $target_id ); ?>:not(.olo-tb-ready) {
@@ -189,6 +208,7 @@ class Olobuild_ToggleBtn_Tile extends Olobuild_Tile_Base {
                 transform: translateY(0);
                 pointer-events: auto;
             }
+            <?php endif; ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="<?php echo esc_attr( $uid ); ?>-wrap">
@@ -206,21 +226,29 @@ class Olobuild_ToggleBtn_Tile extends Olobuild_Tile_Base {
             >
                 <?php echo $sfondo['markup']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- background layers built by sfondo_elemento() from Olobuild_CSS_Builder::get_bg_html_markup() (esc_url/esc_attr inside) and a safe_color_css()-whitelisted overlay ?>
                 <?php if ( $icon_pos === 'left' ) : ?>
-                    <span class="olo-tb-icon olo-tb-icon-show" style="<?php echo $is_open ? 'display:none' : ''; ?>"><?php echo $icon_show; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG from the hardcoded get_svg_icon() map ?></span>
-                    <span class="olo-tb-icon olo-tb-icon-hide" style="<?php echo $is_open ? '' : 'display:none'; ?>"><?php echo $icon_hide; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG from the hardcoded get_svg_icon() map ?></span>
+                    <span class="olo-tb-icon olo-tb-icon-show" aria-hidden="true" style="<?php echo $is_open ? 'display:none' : ''; ?>"><?php echo $icon_show; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG from the hardcoded get_svg_icon() map ?></span>
+                    <span class="olo-tb-icon olo-tb-icon-hide" aria-hidden="true" style="<?php echo $is_open ? '' : 'display:none'; ?>"><?php echo $icon_hide; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG from the hardcoded get_svg_icon() map ?></span>
                 <?php endif; ?>
                 <span class="olo-tb-label"><?php echo $is_open ? $text_hide : $text_show; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- both branches escaped via esc_html() at assignment above ?></span>
                 <?php if ( $icon_pos === 'right' ) : ?>
-                    <span class="olo-tb-icon olo-tb-icon-show" style="<?php echo $is_open ? 'display:none' : ''; ?>"><?php echo $icon_show; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG from the hardcoded get_svg_icon() map ?></span>
-                    <span class="olo-tb-icon olo-tb-icon-hide" style="<?php echo $is_open ? '' : 'display:none'; ?>"><?php echo $icon_hide; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG from the hardcoded get_svg_icon() map ?></span>
+                    <span class="olo-tb-icon olo-tb-icon-show" aria-hidden="true" style="<?php echo $is_open ? 'display:none' : ''; ?>"><?php echo $icon_show; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG from the hardcoded get_svg_icon() map ?></span>
+                    <span class="olo-tb-icon olo-tb-icon-hide" aria-hidden="true" style="<?php echo $is_open ? '' : 'display:none'; ?>"><?php echo $icon_hide; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG from the hardcoded get_svg_icon() map ?></span>
                 <?php endif; ?>
             </button>
         </div>
+        <?php if ( ! $in_canvas ) : ?>
         <script>
-        document.addEventListener('DOMContentLoaded', function(){
+        (function(){
+          function avvia() {
           document.querySelectorAll('.<?php echo $uid; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- internal 'olo-tb-' . wp_rand() identifier ?>').forEach(function(btn){
+            if (btn.getAttribute('data-olo-tb-pronto') === '1') return;
+            btn.setAttribute('data-olo-tb-pronto', '1');
             var target = document.getElementById(btn.dataset.target);
-            if (!target) return;
+            if (!target) {
+              // La sezione non è in questa pagina: un pulsante che non fa niente non si mostra.
+              if (btn.parentNode) btn.parentNode.style.display = 'none';
+              return;
+            }
             var textShow = btn.dataset.textShow;
             var textHide = btn.dataset.textHide;
             var duration = parseInt(btn.dataset.duration) || 400;
@@ -265,22 +293,64 @@ class Olobuild_ToggleBtn_Tile extends Olobuild_Tile_Base {
               updateUI();
             });
           });
-        });
+          }
+          // Nel sito lo script si legge mentre la pagina si carica; dove il DOM è già pronto
+          // (script rieseguiti dopo il caricamento) DOMContentLoaded non arriverebbe più.
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', avvia);
+          } else {
+            avvia();
+          }
+        })();
         </script>
+        <?php endif; ?>
         <?php
-        // Border system — applicato al <button class="{uid}"> (pulsante visibile),
-        // NON al wrapper esterno {uid}-wrap.
+        // Bordo in hover ed effetti — sul <button class="{uid}"> (pulsante visibile), NON sul
+        // wrapper esterno {uid}-wrap. Il bordo base è già nella regola del pulsante (sopra).
         $btn_sel           = ".{$uid}";
-        $border_css        = $this->build_border_css( $s['border'] ?? [] );
         // Bordo in hover: la sua transizione è già in $btn_tr (sopra), qui solo le dichiarazioni.
         $border_hover_css  = $border_hover_props['decls'] !== '' ? "{$btn_sel}:hover{{$border_hover_props['decls']}}" : '';
-        $border_effect_css = $this->build_border_effect_css( $btn_sel, $s['border'] ?? [], $s );
-        if ( $border_css || $border_hover_css || $border_effect_css ) {
-            echo '<style>';
-            if ( $border_css ) echo "{$btn_sel}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_css() from sanitized border settings; selector from internal uid
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base border helpers from sanitized border settings
+        $border_effect_css = $this->build_border_effect_css( $btn_sel, $s['btn_border'], $s );
+        if ( $border_hover_css || $border_effect_css ) {
+            echo '<style>' . $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base border helpers from the border normalized by bordo_pulsante() (safe_color_css() colour, whitelisted style, integer sides); selector from internal uid
         }
         return ob_get_clean();
+    }
+
+    /**
+     * Il bordo del pulsante, normalizzato per parse_border()/build_border_css(): lati interi,
+     * stile ammesso, colore passato da safe_color_css() (vuoto = primario, come sempre).
+     * Fonti, dalla più recente:
+     *  1. `btn_border`, salvato dal controllo «Bordo» (lati, stile, colore);
+     *  2. `border`, il secondo controllo «Bordo» che il pulsante aveva fino al 5 ott 2026, se
+     *     disegna (prima veniva stampato dopo e vinceva sul bordo storico);
+     *  3. le chiavi storiche btn_border_width / btn_border_color (2px primario di serie), che il
+     *     ponte legacy del controllo tiene in sincronia con `btn_border`.
+     *
+     * @param array $s Settings del tile.
+     * @return array{top:int,right:int,bottom:int,left:int,style:string,color:string}
+     */
+    private function bordo_pulsante( $s ) {
+        if ( is_array( $s['btn_border'] ?? null ) ) {
+            $b = $s['btn_border'];
+        } elseif ( is_array( $s['border'] ?? null ) && $this->parse_border( $s['border'] ) ) {
+            $b = $s['border'];
+        } else {
+            $w = max( 0, intval( $s['btn_border_width'] ?? 0 ) );
+            $b = [ 'top' => $w, 'right' => $w, 'bottom' => $w, 'left' => $w, 'style' => 'solid', 'color' => $s['btn_border_color'] ?? '' ];
+        }
+        $stile = (string) ( $b['style'] ?? 'solid' );
+        if ( ! in_array( $stile, [ 'solid', 'dashed', 'dotted', 'double', 'groove', 'ridge', 'inset', 'outset' ], true ) ) {
+            $stile = 'solid';
+        }
+        return [
+            'top'    => max( 0, intval( $b['top'] ?? 0 ) ),
+            'right'  => max( 0, intval( $b['right'] ?? 0 ) ),
+            'bottom' => max( 0, intval( $b['bottom'] ?? 0 ) ),
+            'left'   => max( 0, intval( $b['left'] ?? 0 ) ),
+            'style'  => $stile,
+            'color'  => $this->safe_color_css( $b['color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)',
+        ];
     }
 
     private function get_svg_icon( $name ) {
