@@ -104,6 +104,7 @@ trait Olobuild_Builder_Tiles_Trait {
         require_once OLOBUILD_PATH . 'includes/tiles/class-scaler-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-timezone-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-availability-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-scorequiz-tile.php';
 
         require_once OLOBUILD_PATH . 'includes/tiles/class-social-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-map-tile.php';
@@ -372,6 +373,7 @@ trait Olobuild_Builder_Tiles_Trait {
         $manager->register_tile( new Olobuild_Scaler_Tile() );
         $manager->register_tile( new Olobuild_Timezone_Tile() );
         $manager->register_tile( new Olobuild_Availability_Tile() );
+        $manager->register_tile( new Olobuild_ScoreQuiz_Tile() );
 
         $manager->register_tile( new Olobuild_Social_Tile() );
         $manager->register_tile( new Olobuild_Map_Tile() );

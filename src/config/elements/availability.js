@@ -11,6 +11,10 @@ export default {
   name: t('Availability (griglia → verdetto)'),
   icon: 'dashicons-calendar',
   category: 'interactive',
+  // Ritirata dalla palette (I4, 1.4.508): il verdetto non portava da nessuna parte; al suo
+  // posto il «Quiz a punteggio» (scorequiz), con un esito e un link per fascia. Resta per il
+  // tema che la usa (cadence).
+  hidden: true,
 
   defaults: {
     eyebrow: '',
