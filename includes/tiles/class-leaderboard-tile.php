@@ -107,11 +107,11 @@ class Olobuild_Leaderboard_Tile extends Olobuild_Tile_Base {
         $hl_top    = max( 0, min( 3, intval( $s['highlight_top'] ?? 3 ) ) );
 
         // ── Colori (token-first: fallback su var(--olo-color-*) coerenti) ──
-        $row_bg      = $this->safe_color_css( $s['row_bg'] ?? '' ) ?: 'var(--olo-color-surface-2, #1A1233)';
+        $row_bg      = $this->safe_color_css( $s['row_bg'] ?? '' ) ?: 'var(--olo-color-dark, #1A1233)';
         $text_color  = $this->safe_color_css( $s['text_color'] ?? '' ) ?: 'var(--olo-color-text, #EDEAFB)';
         $role_color  = $this->safe_color_css( $s['role_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #948CC4)';
         $pos_color   = $this->safe_color_css( $s['position_color'] ?? '' ) ?: 'var(--olo-color-text-faint, #94a3b8)';
-        $badge_bg    = $this->safe_color_css( $s['badge_bg'] ?? '' ) ?: 'var(--olo-color-primary-soft, rgba(225,71,79,0.2))';
+        $badge_bg    = $this->safe_color_css( $s['badge_bg'] ?? '' ) ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 20%, transparent)';
         $badge_color = $this->safe_color_css( $s['badge_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
         $track_color = $this->safe_color_css( $s['bar_track_color'] ?? '' ) ?: 'var(--olo-color-border, rgba(237,234,251,0.08))';
         $hl_color    = $this->safe_color_css( $s['highlight_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';

@@ -115,7 +115,7 @@ class Olobuild_Physicsbin_Tile extends Olobuild_Tile_Base {
                 <?php if ( $bg ) : ?>
                 background: <?php echo $bg; ?>;
                 <?php else : ?>
-                background: repeating-linear-gradient(135deg, var(--olo-color-surface-2, #F6E9CE) 0 22px, var(--olo-color-surface, #F1E2C2) 22px 44px);
+                background: repeating-linear-gradient(135deg, var(--olo-color-surface-alt, #F6E9CE) 0 22px, var(--olo-color-surface, #F1E2C2) 22px 44px);
                 <?php endif; ?>
                 <?php if ( $radius ) : ?>border-radius: <?php echo $radius; ?>;<?php endif; ?>
                 box-shadow: inset 0 -10px 0 rgba(0,0,0,.06);

@@ -226,7 +226,7 @@ class Olobuild_ProductGrid_Tile extends Olobuild_Tile_Base {
         // Add button (footer)
         $add_on  = ! empty( $s['add_button'] );
         $add_lbl = (string) ( $s['add_label'] ?? 'Add' ); if ( $add_lbl === '' ) { $add_lbl = 'Add'; }
-        $add_bg  = $this->safe_color_css( $s['add_bg'] ?? '' ) ?: 'var(--olo-color-text-emphasis, #f6e9ec)';
+        $add_bg  = $this->safe_color_css( $s['add_bg'] ?? '' ) ?: 'var(--olo-color-light, #f6e9ec)';
         $add_col = $this->safe_color_css( $s['add_color'] ?? '' ) ?: 'var(--olo-color-text, #111111)';
         $mw_mb   = $has_card ? '0' : '16px';
 

@@ -90,7 +90,7 @@ class Olobuild_Asciiviz_Tile extends Olobuild_Tile_Base {
 
         // ── Aspetto ──
         $color   = $this->safe_color_css( $s['color'] )    ?: 'var(--olo-color-primary, #FF9B3D)';
-        $bg      = $this->safe_color_css( $s['bg_color'] ) ?: 'linear-gradient(180deg, var(--olo-color-bg-soft, #13100C), var(--olo-color-bg, #0B0907))';
+        $bg      = $this->safe_color_css( $s['bg_color'] ) ?: 'linear-gradient(180deg, var(--olo-color-dark, #13100C), var(--olo-color-dark, #0B0907))';
         $glow    = max( 0, min( 30, intval( $s['glow'] ) ) );
         $fsize   = max( 6, min( 24, intval( $s['font_size'] ) ) );
         $lh      = max( 0.8, min( 1.6, floatval( $s['line_height'] ) ) );
@@ -193,7 +193,7 @@ class Olobuild_Asciiviz_Tile extends Olobuild_Tile_Base {
                 border-radius: 50%;
                 background: <?php echo $color; ?>;
                 border: none; cursor: pointer;
-                color: var(--olo-color-bg, #0B0907);
+                color: var(--olo-color-dark, #0B0907);
                 display: flex; align-items: center; justify-content: center;
                 flex-shrink: 0;
                 transition: transform .15s ease;

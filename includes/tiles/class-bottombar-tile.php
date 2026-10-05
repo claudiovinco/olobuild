@@ -58,7 +58,7 @@ class Olobuild_Bottombar_Tile extends Olobuild_Tile_Base {
         $align   = in_array( $s['align'], [ 'left', 'center', 'right' ], true ) ? $s['align'] : 'center';
         $bg      = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-surface, rgba(12,14,19,.92))';
         $text    = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text-muted, #8B90A0)';
-        $link    = $this->safe_color_css( $s['link_color'] ) ?: 'var(--olo-color-heading, #FAF7F2)';
+        $link    = $this->safe_color_css( $s['link_color'] ) ?: 'var(--olo-color-light, #FAF7F2)';
         $fsize   = max( 9, min( 16, absint( $s['font_size'] ) ) );
         $lspace  = max( 0, min( 6, floatval( $s['letter_spacing'] ) ) );
         $upper   = ! empty( $s['uppercase'] );

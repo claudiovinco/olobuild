@@ -84,12 +84,12 @@ class Olobuild_FeaturedStory_Tile extends Olobuild_Tile_Base {
 
         $bg      = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-surface, #f3f0e9)';
         $kicker  = $this->safe_color_css( $s['kicker_color'] ) ?: 'var(--olo-color-primary, #9a2b22)';
-        $hcol    = $this->safe_color_css( $s['headline_color'] ) ?: 'var(--olo-color-heading, #16161a)';
+        $hcol    = $this->safe_color_css( $s['headline_color'] ) ?: 'var(--olo-color-dark, #16161a)';
         $accent  = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #9a2b22)';
         $stand   = $this->safe_color_css( $s['standfirst_color'] ) ?: 'var(--olo-color-text, #2c2c30)';
         $byline  = $this->safe_color_css( $s['byline_color'] ) ?: 'var(--olo-color-muted, #76746e)';
         $bname   = $this->safe_color_css( $s['byline_name_color'] ) ?: $hcol;
-        $mediabg = $this->safe_color_css( $s['media_bg'] ) ?: 'var(--olo-color-surface-2, #e9e4d8)';
+        $mediabg = $this->safe_color_css( $s['media_bg'] ) ?: 'var(--olo-color-surface-alt, #e9e4d8)';
         $csolid  = $this->safe_color_css( $s['cta_solid_bg'] ) ?: $hcol;
         $csoltxt = $this->safe_color_css( $s['cta_solid_text'] ) ?: $bg;
 

@@ -252,7 +252,7 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
 
     /* Layout EDITORIALE: centrato — stelle · citazione serif (con <em> accento) · autore "Nome · Ruolo" */
     private function render_editorial( $uid, $s, $star_color ) {
-        $fg      = $this->safe_color_css( $s['text_color'] ?? '' ) ?: 'var(--olo-color-text-emphasis, #f6e9ec)';
+        $fg      = $this->safe_color_css( $s['text_color'] ?? '' ) ?: 'var(--olo-color-light, #f6e9ec)';
         $accent  = $this->safe_color_css( $s['quote_accent_color'] ?? '' ) ?: 'var(--olo-color-primary, #e7a0b4)';
         $authclr = $this->safe_color_css( $s['author_color'] ?? '' ) ?: $accent;
         $rating  = absint( $s['rating'] );

@@ -6,6 +6,14 @@ import { rinnovaNonce, nonceScaduto } from '@/utils/restNonce';
 
 const oloData = window.oloData || {};
 
+// Scuro, Chiaro e Accento quando il sito non li ha fra i colori globali: gemello di
+// Olobuild_Style_System::RUOLI_DERIVATI (stessi valori, stesso ordine).
+const RUOLI_DERIVATI = {
+  accent: 'var(--olo-color-primary)',
+  dark: 'color-mix(in srgb, var(--olo-color-primary) 12%, #14161c)',
+  light: 'color-mix(in srgb, var(--olo-color-primary) 5%, #fdfcfa)',
+};
+
 // Il nonce si legge a ogni richiesta: rinnovaNonce lo aggiorna dentro window.oloData.
 function nonceAttuale() {
   return (typeof window !== 'undefined' && window.oloData ? window.oloData : oloData).nonce;
@@ -185,6 +193,14 @@ export const useStylesStore = defineStore('styles', {
       const g = s.gutter || {};
       css += `  --olo-gutter: ${parseInt(g.desktop ?? 32, 10)}px;\n`;
       css += `  --olo-gutter-side: ${parseInt(g.side_desktop ?? 32, 10)}px;\n`;
+
+      // Scuro, Chiaro e Accento dalla palette quando il sito non li ha (gemello di
+      // Olobuild_Style_System::RUOLI_DERIVATI / ruoli_derivati_mancanti())
+      const presenti = new Set(Object.keys(c).map((k) => k.replace(/_/g, '-')));
+      for (const gc of state.globalColors || []) if (gc.id && gc.value) presenti.add(gc.id);
+      for (const [ruolo, valore] of Object.entries(RUOLI_DERIVATI)) {
+        if (!presenti.has(ruolo)) css += `  --olo-color-${ruolo}: ${valore};\n`;
+      }
 
       // Global Colors
       if (state.globalColors && state.globalColors.length > 0) {

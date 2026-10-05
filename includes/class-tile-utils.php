@@ -400,6 +400,20 @@ class Olobuild_Tile_Utils {
             }
             return $hex;
         }
+        // color-mix(in srgb, A P%, B): la media pesata dei due (Scuro e Chiaro ricavati dalla palette)
+        if ( preg_match( '/^color-mix\(\s*in\s+srgb\s*,\s*(.+?)\s+([\d.]+)%\s*,\s*(.+)\)$/is', $c, $m ) ) {
+            $a = self::colore_hex( $m[1], $prof + 1 );
+            $b = 'transparent' === strtolower( trim( $m[3] ) ) ? $a : self::colore_hex( $m[3], $prof + 1 );
+            if ( '' === $a || '' === $b ) {
+                return '';
+            }
+            $p   = max( 0, min( 100, (float) $m[2] ) ) / 100;
+            $mix = [];
+            for ( $i = 1; $i <= 5; $i += 2 ) {
+                $mix[] = (int) round( hexdec( substr( $a, $i, 2 ) ) * $p + hexdec( substr( $b, $i, 2 ) ) * ( 1 - $p ) );
+            }
+            return vsprintf( '#%02x%02x%02x', $mix );
+        }
         return '';
     }
 
@@ -417,6 +431,9 @@ class Olobuild_Tile_Utils {
         $sty = $ss->get_styles();
         foreach ( (array) ( $sty['colors'] ?? [] ) as $k => $v ) {
             $mappa[ str_replace( '_', '-', (string) $k ) ] = (string) $v;
+        }
+        foreach ( Olobuild_Style_System::ruoli_derivati_mancanti( $sty['colors'] ?? [], $ss->get_global_colors() ) as $ruolo => $valore ) {
+            $mappa[ $ruolo ] = $valore;
         }
         foreach ( (array) $ss->get_global_colors() as $gc ) {
             if ( ! empty( $gc['id'] ) && ! empty( $gc['value'] ) ) {

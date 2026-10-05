@@ -1176,6 +1176,42 @@ class Olobuild_Style_System {
     const RUOLI_LETTI_DAI_DEFAULT = [ 'accent', 'dark', 'light' ];
 
     /**
+     * Gli stessi tre ruoli quando il sito NON li ha fra i colori globali (nessuno degli 8 siti li
+     * aveva): li ricava dalla palette, così le ~100 tile che li leggono seguono il cliente invece
+     * delle riserve fisse (blu notte, quasi-bianco, ambra). Scelta dell'utente del 5 ott 2026.
+     * Accento = primario (come sync_global_palette() per un accento esistente); Scuro e Chiaro
+     * sono un quasi-nero e un quasi-bianco tinti dal primario, scuro e chiaro in ogni palette,
+     * anche in quelle a fondo scuro. Un colore globale con lo stesso id vince sempre.
+     * Gemello: RUOLI_DERIVATI in src/stores/styles.js.
+     */
+    const RUOLI_DERIVATI = [
+        'accent' => 'var(--olo-color-primary)',
+        'dark'   => 'color-mix(in srgb, var(--olo-color-primary) 12%, #14161c)',
+        'light'  => 'color-mix(in srgb, var(--olo-color-primary) 5%, #fdfcfa)',
+    ];
+
+    /**
+     * I RUOLI_DERIVATI da scrivere: quelli che né i colori dello stile né i colori globali
+     * definiscono.
+     *
+     * @param array $colors        blocco colori dello stile.
+     * @param array $global_colors olobuild_global_colors.
+     * @return array [ ruolo => valore ]
+     */
+    public static function ruoli_derivati_mancanti( $colors, $global_colors ) {
+        $presenti = [];
+        foreach ( (array) $global_colors as $gc ) {
+            if ( is_array( $gc ) && ! empty( $gc['id'] ) && ! empty( $gc['value'] ) ) {
+                $presenti[ sanitize_html_class( $gc['id'] ) ] = true;
+            }
+        }
+        foreach ( array_keys( (array) $colors ) as $k ) {
+            $presenti[ str_replace( '_', '-', (string) $k ) ] = true;
+        }
+        return array_diff_key( self::RUOLI_DERIVATI, $presenti );
+    }
+
+    /**
      * Gli id dei colori globali la cui variabile il CSS emette GIÀ dallo stile:
      * le chiavi dei colori dello stile passato più i predefiniti, che
      * get_styles() aggiunge sempre, col nome che prendono nella variabile
@@ -1493,6 +1529,10 @@ class Olobuild_Style_System {
         }
         // Global custom colors (user-defined swatches)
         $global_colors = $this->get_global_colors();
+        // Scuro, Chiaro e Accento dalla palette quando il sito non li ha (RUOLI_DERIVATI)
+        foreach ( self::ruoli_derivati_mancanti( $c, $global_colors ) as $ruolo => $valore ) {
+            $css .= "  --olo-color-{$ruolo}: {$valore};\n";
+        }
         foreach ( $global_colors as $gc ) {
             if ( ! empty( $gc['id'] ) && ! empty( $gc['value'] ) ) {
                 $css .= "  --olo-color-" . sanitize_html_class( $gc['id'] ) . ": " . esc_attr( $gc['value'] ) . ";\n";
