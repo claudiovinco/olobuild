@@ -35,6 +35,9 @@ export default {
     slant: true,
     autoplay: false,
     autoplay_speed: 6,
+    // Etichetta in basso sulla grafica (era una scritta fissa nel renderer): il default
+    // ripete quella di prima, i template salvati non cambiano.
+    graphic_label: 'North · enterprise AI',
 
     bg_color: 'var(--olo-color-light, #f8f9fa)',
     heading_color: 'var(--olo-color-text, #1f2937)',
@@ -65,6 +68,7 @@ export default {
       { quote: t('Un unico referente, risposte in giornata e nessuna sorpresa in fattura. È raro trovare un partner così affidabile.'), author_name: t('Davide Costa'), author_role: t('Titolare, Hotel Belvedere'), logo_text: t('Hotel Belvedere') },
       { quote: t('Dal primo mese le richieste di preventivo sono raddoppiate. Ora lavoriamo insieme anche sulla comunicazione.'), author_name: t('Sara Lombardi'), author_role: t('Socia, Studio Lombardi & Neri'), logo_text: t('Lombardi & Neri') },
     ],
+    graphic_label: t('Le voci dei clienti'),
     bg_color: 'transparent',
     heading_color: 'var(--olo-color-text)',
     quote_color: 'var(--olo-color-text)',
@@ -89,6 +93,9 @@ export default {
         { key: 'logo_text', label: t('Logo / cliente (testo)'), type: 'text' },
       ],
     },
+
+    { type: 'separator', label: t('Grafica') },
+    { key: 'graphic_label', label: t('Etichetta sulla grafica'), type: 'text', placeholder: t('Vuoto = nessuna etichetta') },
 
     { type: 'separator', label: t('Animazione') },
     { key: 'slant', label: t('Morph rettangolo → parallelogramma'), type: 'toggle' },

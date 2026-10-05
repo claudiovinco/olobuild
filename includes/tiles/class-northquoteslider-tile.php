@@ -21,6 +21,9 @@ class Olobuild_NorthQuoteSlider_Tile extends Olobuild_Tile_Base {
         'slant'          => true,
         'autoplay'       => false,
         'autoplay_speed' => 6,
+        // Etichetta in basso sulla grafica: era la scritta fissa «North · enterprise AI» del
+        // blueprint Cohere. Il default la ripete, così i template salvati non cambiano.
+        'graphic_label'  => 'North · enterprise AI',
 
         'bg_color'           => 'var(--olo-color-light, #ffffff)',
         'heading_color'      => 'var(--olo-color-text, #212121)',
@@ -106,7 +109,11 @@ class Olobuild_NorthQuoteSlider_Tile extends Olobuild_Tile_Base {
         $shadow_css     = $this->build_shadow_decl( $s );
         $kit_shadow_css = $shadow_css ? "box-shadow:{$shadow_css};" : '';
 
-        $topo = $this->topo_paths();
+        $topo   = $this->topo_paths();
+        $glabel = trim( (string) ( $s['graphic_label'] ?? '' ) );
+        // Bordo delle frecce e puntini spenti sono il colore delle frecce velato (prima nero
+        // al 16-18% fisso: su una sezione scura frecce e puntini sparivano). La colonna di
+        // sinistra va in verticale: in riga i puntini finivano accanto alla citazione.
 
         ob_start();
         ?>
@@ -118,20 +125,20 @@ class Olobuild_NorthQuoteSlider_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .nqs-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin:0 0 42px;}
             .<?php echo $uid; ?> .nqs-title{font-family:<?php echo $disp; ?>;font-weight:500;font-size:clamp(28px,3.4vw,44px);line-height:1.05;letter-spacing:-.02em;color:<?php echo $headCol; ?>;margin:0;max-width:760px;}
             .<?php echo $uid; ?> .nqs-nav{display:flex;gap:10px;flex:0 0 auto;}
-            .<?php echo $uid; ?> .nqs-arrow{width:48px;height:48px;border-radius:999px;border:1px solid rgba(0,0,0,.16);background:transparent;color:<?php echo $arrCol; ?>;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s,transform .15s;}
-            .<?php echo $uid; ?> .nqs-arrow:hover{background:rgba(0,0,0,.05);transform:translateY(-1px);}
+            .<?php echo $uid; ?> .nqs-arrow{width:48px;height:48px;border-radius:999px;border:1px solid color-mix(in srgb, <?php echo $arrCol; ?> 16%, transparent);background:transparent;color:<?php echo $arrCol; ?>;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s,transform .15s;}
+            .<?php echo $uid; ?> .nqs-arrow:hover{background:color-mix(in srgb, <?php echo $arrCol; ?> 5%, transparent);transform:translateY(-1px);}
             .<?php echo $uid; ?> .nqs-arrow:focus-visible{outline:2px solid <?php echo $arrCol; ?>;outline-offset:3px;}
             .<?php echo $uid; ?> .nqs-arrow svg{width:20px;height:20px;display:block;}
             .<?php echo $uid; ?> .nqs-grid{display:grid;grid-template-columns:1.45fr .9fr;gap:clamp(28px,4vw,56px);align-items:stretch;}
-            .<?php echo $uid; ?> .nqs-left{position:relative;min-height:380px;display:flex;}
+            .<?php echo $uid; ?> .nqs-left{position:relative;min-height:380px;display:flex;flex-direction:column;}
             .<?php echo $uid; ?> .nqs-slide{position:absolute;inset:0;opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease;display:flex;flex-direction:column;}
-            .<?php echo $uid; ?> .nqs-slide.is-active{position:relative;opacity:1;visibility:visible;transform:none;}
+            .<?php echo $uid; ?> .nqs-slide.is-active{position:relative;flex:1 1 auto;opacity:1;visibility:visible;transform:none;}
             .<?php echo $uid; ?> .nqs-logo{font-family:<?php echo $disp; ?>;font-weight:700;font-size:22px;letter-spacing:.02em;color:<?php echo $logoCol; ?>;margin:0 0 24px;min-height:1px;}
             .<?php echo $uid; ?> .nqs-quote{font-family:<?php echo $disp; ?>;font-weight:500;font-size:<?php echo $qSize; ?>px;line-height:1.34;letter-spacing:-.01em;color:<?php echo $quoteCol; ?>;margin:0 0 28px;}
             .<?php echo $uid; ?> .nqs-author{font-weight:600;font-size:16px;color:<?php echo $authCol; ?>;margin:auto 0 2px;}
             .<?php echo $uid; ?> .nqs-role{font-size:15px;color:<?php echo $roleCol; ?>;margin:0;}
             .<?php echo $uid; ?> .nqs-dots{display:flex;gap:8px;margin-top:30px;}
-            .<?php echo $uid; ?> .nqs-dot{height:8px;width:8px;border-radius:999px;border:0;background:rgba(0,0,0,.18);cursor:pointer;padding:0;transition:width .3s,background .3s;}
+            .<?php echo $uid; ?> .nqs-dot{height:8px;width:8px;border-radius:999px;border:0;background:color-mix(in srgb, <?php echo $arrCol; ?> 18%, transparent);cursor:pointer;padding:0;transition:width .3s,background .3s;}
             .<?php echo $uid; ?> .nqs-dot.is-active{background:<?php echo $arrCol; ?>;width:24px;}
             .<?php echo $uid; ?> .nqs-right{position:relative;min-height:500px;}
             .<?php echo $uid; ?> .nqs-graphic{position:absolute;inset:0;background:<?php echo $grCol; ?>;border-radius:22px;overflow:hidden;clip-path:polygon(0 0,100% 0,100% 100%,0 100%);transition:clip-path .85s cubic-bezier(.66,0,.34,1);will-change:clip-path;}
@@ -182,7 +189,7 @@ class Olobuild_NorthQuoteSlider_Tile extends Olobuild_Tile_Base {
                     <div class="nqs-right">
                         <div class="nqs-graphic" aria-hidden="true">
                             <svg viewBox="0 0 400 640" preserveAspectRatio="xMidYMid slice"><g class="nqs-lines"><?php echo $topo; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $topo is SVG <path> markup generated internally by topo_paths() (numeric coordinates only) ?></g></svg>
-                            <span class="nqs-glabel">North · enterprise AI</span>
+                            <?php if ( '' !== $glabel ) : ?><span class="nqs-glabel"><?php echo esc_html( $glabel ); ?></span><?php endif; ?>
                         </div>
                     </div>
                 </div>
