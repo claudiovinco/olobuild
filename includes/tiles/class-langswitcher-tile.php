@@ -527,8 +527,12 @@ class Olobuild_LangSwitcher_Tile extends Olobuild_Tile_Base {
         // Il menu viene PORTATO nel <body> all\'apertura (position:fixed sotto il
         // trigger): così esce da qualsiasi antenato con overflow:hidden / stacking
         // context (header, sezioni con sfondo) — niente menu tagliato o nascosto.
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- script statico + costante JS interna js_nel_body()
         echo '<script>
         (function(){
+            /* Nel body il menu porta con sé i token --olo-* del template: senza, sfondo e voce
+               attiva prendevano i ripieghi o i colori di :root. */
+            var porta = ' . self::js_nel_body() . ';
             function place(menu, trigger){
                 var r = trigger.getBoundingClientRect();
                 menu.style.position = "fixed";
@@ -549,7 +553,7 @@ class Olobuild_LangSwitcher_Tile extends Olobuild_Tile_Base {
                 var menu = el.querySelector(".olsb-menu");
                 if(!trigger || !menu) return;
                 function open(){
-                    document.body.appendChild(menu);
+                    porta(menu);
                     place(menu, trigger);
                     el.classList.add("olsb-open"); menu.classList.add("olsb-open");
                     trigger.setAttribute("aria-expanded", "true");
