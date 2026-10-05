@@ -611,6 +611,8 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
                             aperto = true;
                             panel.classList.add('uk-open');
                             btn.setAttribute('aria-expanded', 'true');
+                            /* L'hamburger fisso (z-index sopra il pannello) finiva sopra la X. */
+                            btn.style.visibility = 'hidden';
                             html.style.overflow = 'hidden';
                             document.body.style.overflow = 'hidden';
                             var x = panel.querySelector('[data-olo-nav-close]');
@@ -621,6 +623,7 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
                             aperto = false;
                             panel.classList.remove('uk-open');
                             btn.setAttribute('aria-expanded', 'false');
+                            btn.style.visibility = '';
                             html.style.overflow = '';
                             document.body.style.overflow = '';
                             if (ridai) { btn.focus(); }
