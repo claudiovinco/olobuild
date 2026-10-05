@@ -1046,34 +1046,40 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                 });
             }
 
+            // ─── Valore di un campo (condizioni e campi calcolati) ───
+            // Sta fuori da «if (hasConditions)»: dichiarata lì dentro, a condizioni spente restava
+            // undefined e il Campo calcolato andava in errore a ogni battuta, fermo a 0.
+            // Un gruppo radio si legge dalla voce scelta: querySelector dava la prima, scelta o no.
+            function getFieldValue(name) {
+                // Try standard input/textarea/select
+                var el = wrapper.querySelector('[name="fields[' + name + ']"]');
+                if (el) {
+                    if (el.tagName === 'SELECT') { return el.value; }
+                    if (el.tagName === 'TEXTAREA') { return el.value; }
+                    if (el.tagName === 'INPUT') {
+                        if (el.type !== 'radio') { return el.value; }
+                    }
+                }
+                // Check radio buttons
+                var radios = wrapper.querySelectorAll('[name="fields[' + name + ']"]');
+                for (var r = 0; r < radios.length; r++) {
+                    if (radios[r].type === 'radio') {
+                        if (radios[r].checked) { return radios[r].value; }
+                    }
+                }
+                // Check checkboxes (multi-value)
+                var checks = wrapper.querySelectorAll('[name="fields[' + name + '][]"]');
+                var vals = [];
+                for (var c = 0; c < checks.length; c++) {
+                    if (checks[c].checked) { vals.push(checks[c].value); }
+                }
+                if (vals.length) { return vals.join(','); }
+                return '';
+            }
+
             // ─── Conditional logic ───
             if (hasConditions) {
                 var condFields = wrapper.querySelectorAll('[data-cond-field]');
-
-                function getFieldValue(name) {
-                    // Try standard input/textarea/select
-                    var el = wrapper.querySelector('[name="fields[' + name + ']"]');
-                    if (el) {
-                        if (el.tagName === 'SELECT') { return el.value; }
-                        if (el.tagName === 'TEXTAREA') { return el.value; }
-                        if (el.tagName === 'INPUT') { return el.value; }
-                    }
-                    // Check radio buttons
-                    var radios = wrapper.querySelectorAll('[name="fields[' + name + ']"]');
-                    for (var r = 0; r < radios.length; r++) {
-                        if (radios[r].type === 'radio') {
-                            if (radios[r].checked) { return radios[r].value; }
-                        }
-                    }
-                    // Check checkboxes (multi-value)
-                    var checks = wrapper.querySelectorAll('[name="fields[' + name + '][]"]');
-                    var vals = [];
-                    for (var c = 0; c < checks.length; c++) {
-                        if (checks[c].checked) { vals.push(checks[c].value); }
-                    }
-                    if (vals.length) { return vals.join(','); }
-                    return '';
-                }
 
                 function evalCondition(field, op, value) {
                     var current = getFieldValue(field);
@@ -1263,8 +1269,9 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                         form.querySelectorAll('.olo-f-field-error').forEach(function(el) { el.remove(); });
                         // Reset multi-step to first step
                         if (isMultistep) { showStep(0); }
-                        // Re-evaluate conditions after reset
-                        if (hasConditions) {
+                        // Re-evaluate conditions after reset (e i campi calcolati, che restavano
+                        // sul totale di prima con il modulo già vuoto)
+                        if (hasConditions || calcFields.length) {
                             var evt = new Event('change', {bubbles: true});
                             wrapper.dispatchEvent(evt);
                         }
