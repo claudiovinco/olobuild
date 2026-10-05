@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.531 - 2026-10-05 (fix)
+- Le colonne scelte per tablet e telefono funzionano in Griglia, Work Grid (anche lo spazio fra le voci), Stat Strip, Process Steps, Hours Strip, Showcase Grid, Before/After, Match Fixtures, Product Grid e Panel Slider: prima valeva solo il desktop. Se non le imposti, restano le colonne automatiche di prima.
+
 ## v1.4.530 - 2026-10-05 (fix)
 - La sovrapposizione (velo) scelta negli sfondi interni delle tile si vede: sfondo/media di hero, contatori, prezzi, Iconbox, Flip Card, Product Grid, CTA Banner, card di Info Cards e Hero Split, righe della Hover List. Prima la foto restava senza velo.
 
