@@ -52,13 +52,20 @@ class Olobuild_Woo_Checkout_Tile extends Olobuild_Tile_Base {
 
         $uid = 'olo-woo-co-' . wp_rand( 10000, 99999 );
 
-        // Colors
-        $accent_color  = $this->safe_color_css( $s['accent_color'] );
+        // Colors — tutti vuoti nei default: senza riserva uscivano «background: ;», «color: ;» e
+        // color-mix() con un colore mancante, che il browser scarta. «Effettua ordine» e il
+        // pulsante del coupon restavano col fondo del tema, il focus dei campi senza anello, i
+        // campi senza bordo. Le riserve sono quelle della partenza del config. Testo e titoli
+        // invece non hanno riserva: vuoti, la dichiarazione non si scrive e restano i colori di
+        // tema e WooCommerce (un «inherit» ridipingeva gli h3 e il riquadro del pagamento).
+        $accent_color  = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $text_color    = $this->safe_color_css( $s['text_color'] );
         $heading_color = $this->safe_color_css( $s['heading_color'] );
-        $border_color  = Olobuild_Tile_Utils::border_color( $s['border_color'] ?? null, '' );
-        $btn_color     = $this->safe_color_css( $s['button_color'] );
-        $btn_bg        = $this->safe_color_css( $s['button_bg'] );
+        $text_decl     = ( $text_color !== '' ) ? 'color: ' . $text_color . ';' : '';
+        $heading_decl  = ( $heading_color !== '' ) ? 'color: ' . $heading_color . ';' : '';
+        $border_color  = Olobuild_Tile_Utils::border_color( $s['border_color'] ?? null, 'var(--olo-color-border, #e5e7eb)' );
+        $btn_color     = $this->safe_color_css( $s['button_color'] ) ?: 'var(--olo-color-primary-contrast, #ffffff)';
+        $btn_bg        = $this->safe_color_css( $s['button_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
 
         $layout    = in_array( $s['layout'], [ 'one_column', 'two_columns' ], true ) ? $s['layout'] : 'two_columns';
         $form_style = in_array( $s['form_style'], [ 'modern', 'classic' ], true ) ? $s['form_style'] : 'modern';
@@ -79,13 +86,16 @@ class Olobuild_Woo_Checkout_Tile extends Olobuild_Tile_Base {
         $panel_bg     = $this->safe_color_css( $s['panel_bg'] ?? '' ) ?: 'var(--olo-color-muted, #F3F4F6)';
         $notice_bg    = $this->safe_color_css( $s['notice_bg'] ?? '' ) ?: 'var(--olo-color-muted, #F3F4F6)';
         $notice_text  = $this->safe_color_css( $s['notice_text'] ?? '' ) ?: ( $text_color ?: 'inherit' );
+        // Il segnaposto è il testo dei campi al 45%: con «inherit» il color-mix() non valeva e il
+        // browser lo scartava, quindi in quel caso si parte dal colore del testo del sito.
+        $placeholder  = ( $input_text === 'inherit' ) ? 'var(--olo-color-text, #111827)' : $input_text;
 
         ob_start();
         ?>
 <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from safe_color_css()-validated colors, fixed literal ternaries ($border_radius/$input_padding) gated by in_array() whitelists, and the internally generated $uid. Column 0 + closing tag so this line emits zero bytes. ?>
         <style>
             .<?php echo $uid; ?> .woocommerce {
-                color: <?php echo $text_color; ?>;
+                <?php echo $text_decl; ?>
             }
             <?php if ( $layout === 'two_columns' ) : ?>
             /* Due colonne vere: dati cliente | riepilogo+pagamento (sticky) */
@@ -154,7 +164,7 @@ class Olobuild_Woo_Checkout_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .woocommerce h3 {
                 font-size: 20px;
                 font-weight: 700;
-                color: <?php echo $heading_color; ?>;
+                <?php echo $heading_decl; ?>
                 margin: 0 0 20px;
                 padding-bottom: 12px;
                 border-bottom: 2px solid <?php echo $accent_color; ?>;
@@ -163,7 +173,7 @@ class Olobuild_Woo_Checkout_Tile extends Olobuild_Tile_Base {
                 display: block;
                 font-size: 13px;
                 font-weight: 600;
-                color: <?php echo $heading_color; ?>;
+                <?php echo $heading_decl; ?>
                 margin-bottom: 6px;
             }
             .<?php echo $uid; ?> .woocommerce .form-row input[type="text"],
@@ -183,7 +193,7 @@ class Olobuild_Woo_Checkout_Tile extends Olobuild_Tile_Base {
             }
             .<?php echo $uid; ?> .woocommerce .form-row input::placeholder,
             .<?php echo $uid; ?> .woocommerce .form-row textarea::placeholder {
-                color: color-mix(in srgb, <?php echo $input_text; ?> 45%, transparent);
+                color: color-mix(in srgb, <?php echo $placeholder; ?> 45%, transparent);
             }
             .<?php echo $uid; ?> .woocommerce .form-row input:focus-visible,
             .<?php echo $uid; ?> .woocommerce .form-row select:focus-visible,
@@ -198,7 +208,7 @@ class Olobuild_Woo_Checkout_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .woocommerce #order_review_heading {
                 font-size: 20px;
                 font-weight: 700;
-                color: <?php echo $heading_color; ?>;
+                <?php echo $heading_decl; ?>
                 margin: 32px 0 20px;
                 padding-bottom: 12px;
                 border-bottom: 2px solid <?php echo $accent_color; ?>;
@@ -213,7 +223,7 @@ class Olobuild_Woo_Checkout_Tile extends Olobuild_Tile_Base {
             }
             .<?php echo $uid; ?> .woocommerce table.shop_table th {
                 background: <?php echo $panel_bg; ?>;
-                color: <?php echo $heading_color; ?>;
+                <?php echo $heading_decl; ?>
                 font-weight: 600;
                 font-size: 13px;
                 padding: 12px 16px;
@@ -228,7 +238,7 @@ class Olobuild_Woo_Checkout_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .woocommerce table.shop_table .order-total td {
                 font-size: 18px;
                 font-weight: 700;
-                color: <?php echo $heading_color; ?>;
+                <?php echo $heading_decl; ?>
             }
             .<?php echo $uid; ?> .woocommerce #place_order {
                 display: block;
@@ -255,7 +265,7 @@ class Olobuild_Woo_Checkout_Tile extends Olobuild_Tile_Base {
             }
             .<?php echo $uid; ?> .woocommerce .wc_payment_methods .payment_box {
                 background: transparent;
-                color: <?php echo $text_color; ?>;
+                <?php echo $text_decl; ?>
                 padding: 10px 0 0;
                 font-size: 13px;
             }
@@ -274,7 +284,7 @@ class Olobuild_Woo_Checkout_Tile extends Olobuild_Tile_Base {
             }
             .<?php echo $uid; ?> .woocommerce .wc_payment_methods li label {
                 font-weight: 600;
-                color: <?php echo $heading_color; ?>;
+                <?php echo $heading_decl; ?>
                 cursor: pointer;
             }
         </style>
