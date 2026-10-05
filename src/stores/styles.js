@@ -288,6 +288,7 @@ export const useStylesStore = defineStore('styles', {
       css += '.olo-template .uk-text-muted { color: var(--olo-color-text-muted) !important; }\n';
       // em rosa e ins giallo di UIkit: seguono il testo (gemello di generate_css)
       css += '.olo-template :where(em) { color: inherit; }\n';
+      css += '.olo-template :where(:not(pre) > code) { color: inherit; }\n';
       css += '.olo-template :where(ins) { background: none; color: inherit; text-decoration: none; }\n';
       css += '.olo-template .uk-button-primary { background-color: var(--olo-color-primary) !important; color: var(--olo-color-primary-contrast) !important; border-radius: var(--olo-border-radius); }\n';
       css += '.olo-template .uk-button-secondary { background-color: var(--olo-color-secondary) !important; color: var(--olo-color-secondary-contrast) !important; border-radius: var(--olo-border-radius); }\n';

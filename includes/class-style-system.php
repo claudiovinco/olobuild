@@ -1814,6 +1814,7 @@ class Olobuild_Style_System {
         // scontati di Woo): nel template seguono il testo. :where() = una classe sola, quindi una
         // tile che colora il suo corsivo (accento del titolo…) vince sempre. Gemello in styles.js.
         $css .= ".olo-template :where(em) { color: inherit; }\n";
+        $css .= ".olo-template :where(:not(pre) > code) { color: inherit; }\n"; // anche il code in linea è rosa in UIkit
         $css .= ".olo-template :where(ins) { background: none; color: inherit; text-decoration: none; }\n";
 
         // Buttons
