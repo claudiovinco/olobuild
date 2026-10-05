@@ -964,7 +964,9 @@ class Olobuild_Frontend_Renderer {
         // Tile che disegnano da sé lo Sfondo dei settings sul proprio elemento (pannello media unico):
         // il contenitore non lo ridipinge. Sotto un elemento arrotondato se ne vedevano gli angoli vivi
         // (CTA Banner), una foto o un velo comparivano due volte e un video di sfondo partiva due volte.
-        $SFONDO_PROPRIO = [ 'announcementbar', 'audiohero', 'beforeafter', 'categoryrail', 'chathero', 'cta-banner', 'featuredstory', 'filmreel', 'glowgallery', 'glowhero', 'imagehero', 'introsplit', 'marquee', 'masthead', 'matchfixtures', 'mediacta', 'northquoteslider', 'northvideohero', 'particlefx', 'photocover', 'productgrid', 'producthero', 'scrubtext', 'searchhero', 'showcasegrid', 'smearhero', 'studiohero', 'terminalhero', 'themedemos', 'tripfinder' ];
+        // Fuori dall'elenco il Trip Finder: la barra copre tutto il suo elemento, e il suo «Sfondo
+        // completo» si vede solo nel padding del contenitore.
+        $SFONDO_PROPRIO = [ 'announcementbar', 'audiohero', 'beforeafter', 'categoryrail', 'chathero', 'cta-banner', 'featuredstory', 'filmreel', 'glowgallery', 'glowhero', 'imagehero', 'introsplit', 'marquee', 'masthead', 'matchfixtures', 'mediacta', 'northquoteslider', 'northvideohero', 'particlefx', 'photocover', 'productgrid', 'producthero', 'scrubtext', 'searchhero', 'showcasegrid', 'smearhero', 'studiohero', 'terminalhero', 'themedemos' ];
         if ( empty( $bg_source['bg'] ) && ! empty( $settings['bg'] ) && ! in_array( $type, $SFONDO_PROPRIO, true ) ) $bg_source['bg'] = $settings['bg'];
         if ( empty( $bg_source['bg_color'] ) && ! empty( $settings['bg_color'] ) ) $bg_source['bg_color'] = $settings['bg_color'];
 
