@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.554 - 2026-10-05 (fix)
+- Titolo prodotto (WooCommerce): scrive il nome del prodotto che mostra, con il suo link, anche in una vista rapida o in una pagina che presenta un prodotto (prima scriveva il titolo della pagina).
+
 ## v1.4.553 - 2026-10-05 (fix)
 - Link a una sezione della stessa pagina: l'arrivo è preciso anche quando le griglie e le immagini appena caricate si assestano durante lo scorrimento.
 
