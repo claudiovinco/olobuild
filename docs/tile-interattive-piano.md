@@ -97,7 +97,11 @@ meglio come stile del modulo contatti.
 
 ## Piano a ondate
 
-**I1 — Togliere ciò che inganna** (una versione, rischio basso)
+**I1 — Togliere ciò che inganna** (una versione, rischio basso) — **FATTA nella 1.4.506-507** (5 ott
+2026): provata nel browser su mosaic (popup una volta per sessione; grafico disegnato anche senza
+Chart.js precaricato, come nel canvas; Timezone giusta a ottobre e a gennaio simulato, Mumbai alla
+mezz'ora; Mixer con i colori del tema). La chiave stabile è `Olobuild_Tile_Base::chiave_stabile()`,
+dall'id del nodo che il renderer imposta in `$nodo_in_resa` prima di `render()`.
 - `hidden` per Off-Canvas, Scena minigioco, Evo Notes, Cesto Fisico, Pallini Cover: spariscono dalla
   palette, le pagine che le usano restano uguali.
 - Popup e Popup Nascosto: id stabile (quello della tile) per ricordare «già visto», così le frequenze
