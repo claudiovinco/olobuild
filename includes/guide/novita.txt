@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.532 - 2026-10-05 (fix)
+- WooCommerce: la Vista rapida e la Wishlist caricano i prodotti (prima rispondevano «percorso non trovato») e il Mini Cart si aggiorna quando aggiungi al carrello.
+
 ## v1.4.531 - 2026-10-05 (fix)
 - Le colonne scelte per tablet e telefono funzionano in Griglia, Work Grid (anche lo spazio fra le voci), Stat Strip, Process Steps, Hours Strip, Showcase Grid, Before/After, Match Fixtures, Product Grid e Panel Slider: prima valeva solo il desktop. Se non le imposti, restano le colonne automatiche di prima.
 
