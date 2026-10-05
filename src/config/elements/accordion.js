@@ -1,6 +1,7 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, widgetTemplateField, wowEffectsFields, wowEffectsDefaults, focalField } from './_shared';
 import { shadowField } from './_shared.js';
 import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -77,6 +78,21 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
     ...wowEffectsDefaults,
+  },
+
+  // Come nasce dalla palette: le stesse domande dei default, con un'icona per voce nel cerchio tinto
+  // e una foto accanto alla risposta aperta (i pannelli possono contenere immagini e video).
+  partenza: {
+    panels: [
+      { id: 'p-1', title: t('Quali sono gli orari?'), content: t('Siamo disponibili dal lunedì al venerdì, dalle 9:00 alle 18:00. Nei giorni festivi restiamo chiusi.'), image: demo('ufficio'), video: '', icon: 'clock' },
+      { id: 'p-2', title: t('Come posso prenotare o ordinare?'), content: t('Puoi farlo direttamente dal sito oppure contattandoci: ti confermiamo tutto via email entro un giorno lavorativo.'), image: '', video: '', icon: 'calendar' },
+      { id: 'p-3', title: t('Come posso contattarvi?'), content: t('Scrivici dal modulo contatti o chiamaci negli orari indicati: rispondiamo a tutte le richieste entro 24 ore.'), image: '', video: '', icon: 'mail' },
+    ],
+    icon_shape: 'circle',
+    icon_shape_size: '34',
+    icon_shape_bg: 'color-mix(in srgb, var(--olo-color-primary) 14%, transparent)',
+    aspect_ratio: '4/3',
+    media_width: '40',
   },
 
   fields: [

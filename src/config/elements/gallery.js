@@ -1,5 +1,6 @@
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
 import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
+import { demoObj } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -58,6 +59,30 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Come nasce dalla palette (createTileFromType): otto foto con didascalia in una griglia 4:3 di due
+  // righe, così si vedono subito il ritaglio, le didascalie, lo zoom al passaggio e il «+2» che apre
+  // il resto nel lightbox.
+  partenza: {
+    images: [
+      demoObj('montagna-lago', t('Il lago in quota')),
+      demoObj('mare-costa', t('La baia')),
+      demoObj('bosco-luce', t('Il sentiero nel bosco')),
+      demoObj('citta-tetti', t('I tetti del centro')),
+      demoObj('strada-colline', t('La strada nella valle')),
+      demoObj('alba-nuvole', t('Sopra le nuvole')),
+      demoObj('spiaggia-alto', t('La spiaggia dall\'alto')),
+      demoObj('architettura', t('Architettura')),
+    ],
+    columns: '3',
+    rows: '2',
+    img_ratio: '4/3',
+    gap: '12',
+    thumb_radius: '12',
+    show_caption: true,
+    more_bg: 'color-mix(in srgb, var(--olo-color-primary) 82%, transparent)',
+    more_color: 'var(--olo-color-primary-contrast, #ffffff)',
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

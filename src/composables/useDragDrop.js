@@ -57,6 +57,12 @@ export function useDragDrop() {
         defaults[k] = JSON.parse(JSON.stringify(v));
       }
     }
+    // Le impostazioni di PARTENZA del config (`partenza`): ciò con cui la tile nasce dalla palette,
+    // perché mostri già un uso vero (testi, foto demo, varianti). Valgono SOLO qui: i `defaults`
+    // restano i valori di riserva che normalizeNodes dà alle tile salvate, che quindi non cambiano.
+    if (def?.partenza && typeof def.partenza === 'object') {
+      Object.assign(defaults, JSON.parse(JSON.stringify(def.partenza)));
+    }
     applyContentPlaceholders(defaults, def?.fields);
 
     const tile = {

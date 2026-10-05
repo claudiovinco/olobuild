@@ -1,0 +1,115 @@
+Olobuild - foto demo per le impostazioni di partenza delle tile
+
+Tutte le immagini sono nel pubblico dominio (CC0 1.0 o Public Domain Mark):
+liberamente utilizzabili, modificabili e ridistribuibili senza obbligo di attribuzione.
+I crediti sono indicati per correttezza verso gli autori e le fonti.
+Convertite in WebP (larghezza max 1200 px) per Olobuild.
+
+alba-nuvole.webp
+  Titolo:  Above The Clouds
+  Autore:  non indicato
+  Fonte:   rawpixel (raccolta pubblico dominio) - https://www.rawpixel.com/image/5970427/above-the-clouds
+  Licenza: CC0 1.0 (pubblico dominio)
+
+architettura.webp
+  Titolo:  Modern building facade
+  Autore:  non indicato
+  Fonte:   rawpixel (raccolta pubblico dominio) - https://www.rawpixel.com/image/6029556/photo-image-public-domain-construction-free
+  Licenza: CC0 1.0 (pubblico dominio)
+
+bosco-luce.webp
+  Titolo:  Sun hits the foggy forest
+  Autore:  non indicato
+  Fonte:   rawpixel (raccolta pubblico dominio) - https://www.rawpixel.com/image/5939670/sun-hits-the-foggy-forest
+  Licenza: CC0 1.0 (pubblico dominio)
+
+caffe.webp
+  Titolo:  Free coffee cup wooden table
+  Autore:  non indicato
+  Fonte:   rawpixel (raccolta pubblico dominio) - https://www.rawpixel.com/image/5927231/photo-image-heart-public-domain-art
+  Licenza: CC0 1.0 (pubblico dominio)
+
+ciotola.webp
+  Titolo:  Bowl with powder blue and six fish in underglaze red, anonymous, c. 1700
+  Autore:  anonymous
+  Fonte:   Rijksmuseum - https://www.rijksmuseum.nl/en/collection/AK-RBK-15842
+  Licenza: CC0 1.0 (pubblico dominio)
+
+citta-tetti.webp
+  Titolo:  Drone view red-roofed houses crowded
+  Autore:  non indicato
+  Fonte:   rawpixel (raccolta pubblico dominio) - https://www.rawpixel.com/image/3299638/free-photo-image-old-photos-prague-city-aerial-view
+  Licenza: CC0 1.0 (pubblico dominio)
+
+facciata-vetro.webp
+  Titolo:  Urban City Architecture
+  Autore:  non indicato
+  Fonte:   rawpixel (raccolta pubblico dominio) - https://www.rawpixel.com/image/5969293/urban-city-architecture
+  Licenza: CC0 1.0 (pubblico dominio)
+
+foglie.webp
+  Titolo:  Free green leaves image
+  Autore:  non indicato
+  Fonte:   rawpixel (raccolta pubblico dominio) - https://www.rawpixel.com/image/5908301/image-texture-public-domain-leaf
+  Licenza: CC0 1.0 (pubblico dominio)
+
+insalata.webp
+  Titolo:  Free close carrot slices food
+  Autore:  non indicato
+  Fonte:   rawpixel (raccolta pubblico dominio) - https://www.rawpixel.com/image/5909246/image-background-public-domain-table
+  Licenza: CC0 1.0 (pubblico dominio)
+
+mare-costa.webp
+  Titolo:  An aerial view of a turquoise bay bordered by rocky coastal cliffs and tree-covered hills. A small sandy beach appears at the edge of the water, with distant islands and mountains visible under a clear blue sky.
+  Autore:  Pablo Jimenez
+  Fonte:   WordPress Photo Directory - https://wordpress.org/photos/photo/9256a2b821/
+  Licenza: CC0 1.0 (pubblico dominio)
+
+montagna-lago.webp
+  Titolo:  Free mountain, lake landscape image
+  Autore:  non indicato
+  Fonte:   rawpixel (raccolta pubblico dominio) - https://www.rawpixel.com/image/5904011/photo-image-public-domain-tree-green
+  Licenza: CC0 1.0 (pubblico dominio)
+
+piatti-alto.webp
+  Titolo:  Cuisine Dinner in Restaurant
+  Autore:  non indicato
+  Fonte:   rawpixel (raccolta pubblico dominio) - https://www.rawpixel.com/image/5968190/cuisine-dinner-restaurant
+  Licenza: CC0 1.0 (pubblico dominio)
+
+scrivania.webp
+  Titolo:  Workspace laptop wireless mouse
+  Autore:  Markus Spiske
+  Fonte:   rawpixel (raccolta pubblico dominio) - https://www.rawpixel.com/image/537539/free-photo-image-notebook-desk-laptop
+  Licenza: CC0 1.0 (pubblico dominio)
+
+spiaggia-alto.webp
+  Titolo:  Aerial view of Diamond Beach, Nusa Penida, showing turquoise waves washing onto a sandy shore. Large rocks and cliffs surround the beach, with visitors walking along the shoreline.
+  Autore:  Hardeep Asrani
+  Fonte:   WordPress Photo Directory - https://wordpress.org/photos/photo/38467d171c/
+  Licenza: CC0 1.0 (pubblico dominio)
+
+strada-colline.webp
+  Titolo:  Beautiful nature landscape background
+  Autore:  non indicato
+  Fonte:   rawpixel (raccolta pubblico dominio) - https://www.rawpixel.com/image/6032649/photo-image-background-clouds-public-domain
+  Licenza: CC0 1.0 (pubblico dominio)
+
+tavola.webp
+  Titolo:  table seafood salad, wine, cutlery
+  Autore:  non indicato
+  Fonte:   rawpixel (raccolta pubblico dominio) - https://www.rawpixel.com/image/3283098/free-photo-image-wine-healthy-food-creative-commons
+  Licenza: CC0 1.0 (pubblico dominio)
+
+ufficio.webp
+  Titolo:  Home Office, Interior design
+  Autore:  non indicato
+  Fonte:   rawpixel (raccolta pubblico dominio) - https://www.rawpixel.com/image/5916279/photo-image-background-design-public-domain
+  Licenza: CC0 1.0 (pubblico dominio)
+
+vaso.webp
+  Titolo:  Elegant minimalist white ceramic vase
+  Autore:  lacma
+  Fonte:   rawpixel (raccolta pubblico dominio) - https://www.rawpixel.com/image/11800244/jarlet
+  Licenza: CC0 1.0 (pubblico dominio)
+

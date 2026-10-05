@@ -85,6 +85,10 @@ under assets/vendor/ — no library is loaded from a CDN:
 * Pannellum (MIT)
 * StPageFlip (MIT)
 
+The demo photos used by the tiles' starting settings (assets/img/demo/) are public domain
+(CC0 1.0) images from rawpixel, the WordPress Photo Directory and the Rijksmuseum; sources and
+authors are listed in assets/img/demo/CREDITS.txt.
+
 == Development ==
 
 The Olobuild admin builder is a single-page application written in Vue 3 and bundled with
