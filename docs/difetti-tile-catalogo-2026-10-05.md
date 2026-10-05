@@ -72,7 +72,7 @@ in un caso comune · **L** = dettaglio, colore fuori tema, testo in inglese.
 - **variablespecimen** — G ✅ 1.4.547: il font scelto non si applica mai (`font-family: Inter, inherit` scartato) `:127`; il filtro della riga 126 toglie le parentesi ai `var(--…)`.
 - **textmask** — G ✅ 1.4.548: «Video dietro al testo» mostra il video intero e il testo resta invisibile `:149`; «Testo rivela il video» calcola la luminosità solo da esadecimali `:136`; senza video è un rettangolo nero alto 100vh.
 - **textpath** — G ✅ 1.4.549-550: «Scorrimento una volta» finisce al 100% e il testo sparisce `:165`; «Continuo» lo fa uscire e rientrare `:161`; la spirale esce dal riquadro `:62`; un testo più lungo del tracciato viene troncato senza avviso.
-- **list** — G: se tutte le voci sono «Numero» i numeri spariscono (`<ol class="uk-list">`) `:96`; preset con icone sconosciute; icona verde «successo» di default.
+- **list** — G ✅ 1.4.551: se tutte le voci sono «Numero» i numeri spariscono (`<ol class="uk-list">`) `:96`; preset con icone sconosciute; icona verde «successo» di default.
 - **quotation** — M: niente controlli colore (illeggibile su scuro); la barra a sinistra di `frontend.css:350` resta anche centrata o a destra; 12 preset che cambiano due chiavi.
 - **scrubtext (Manifesto)** — M: misura fluida fissa a 4,2vw `:123` (il massimo di 96 px arriva a 2280 px di schermo); niente allineamento.
 - **animatedheading** — M: evidenziazione «Sfondo» solo con esadecimali `:75`; stile «Cerchio» senza CSS; in «Clip» la parola si alza.
@@ -85,17 +85,17 @@ in un caso comune · **L** = dettaglio, colore fuori tema, testo in inglese.
 - **list, desclist, iconlist** — L: gli effetti testo usano un selettore senza id, valido per tutte le liste della pagina.
 
 ### Media
-- **progallery** — G: «Nastro automatico», «Nastro doppio» e Coverflow rotti: ai selettori si aggiunge la classe del preset invece dell'uid `:941, :1010, :1141, :1180, :1818`; «Sollevamento», shimmer e cornici mettono `position:relative` e fanno esplodere gli schemi assoluti (lo «Sparso» diventa alto 5000 px) `:574, :670, :702`.
+- **progallery** — G ✅ 1.4.551 (rifinito 1.4.552): «Nastro automatico», «Nastro doppio» e Coverflow rotti: ai selettori si aggiunge la classe del preset invece dell'uid `:941, :1010, :1141, :1180, :1818`; «Sollevamento», shimmer e cornici mettono `position:relative` e fanno esplodere gli schemi assoluti (lo «Sparso» diventa alto 5000 px) `:574, :670, :702`.
 - **proslider** — G ✅ 1.4.517 (A2): vedi A2 (sotto la piega non parte) · M: titolo di partenza `var(--olo-color-dark, #ffffff)` `:53`; pulsante senza colore blu `#2563eb` `:703`; 12 preset senza effetti visivi.
-- **overlaygrid / overlayslider** — G: la tipografia del titolo non arriva sulle card con foto (CSS su `.uk-overlay h1…h4`, il markup ha `uk-overlay-primary`) `overlaygrid:271-285`, `overlayslider:303-322` · L: gap «Predefinito» di overlayslider = spazio zero.
+- **overlaygrid / overlayslider** — G ✅ 1.4.551: la tipografia del titolo non arriva sulle card con foto (CSS su `.uk-overlay h1…h4`, il markup ha `uk-overlay-primary`) `overlaygrid:271-285`, `overlayslider:303-322` · L: gap «Predefinito» di overlayslider = spazio zero.
 - **slideshow** — M: radice `position:static` (frecce e pausa ai bordi della sezione) `:135`; pulsante pausa «⏸» su nero fisso; «Glow sul titolo» cerca una classe che non c'è; velo fisso a 0,45.
 - **overlay** — M: l'opacità del velo si applica anche al testo `:122`; comportamento del velo diverso fra Fade/Zoom e Slide Up.
 - **filmreel** — M: testo fisso su `--olo-color-text` (illeggibile sui fotogrammi scuri) `:92`; «Colore linee» salvato come oggetto diventa `solid Array` `:90`.
 - **gallery** — M: la barra filtro usa `category`, che il campo galleria non permette di impostare `:361`.
-- **map (Mappa Pro)** — G: accenti ed € diventano «â‚¬» (`atob` senza UTF-8) `:2521`; i tre stili CARTO (Positron, Voyager, Dark Matter) disegnano solo «API KEY REQUIRED» `:53, :907` · M: «Sopra/Sotto» porta nella fascia anche elenco e paginazione; pannello con grigi e font di sistema fissi `:1919`.
-- **osmmap** — G: stili CARTO come sopra `:63` · doppione di Mappa Pro in «Indirizzo singolo».
-- **pdfpro** — G: un apostrofo in un testo d'hotspot blocca tutta la tile (JSON in attributo fra apici singoli) `:144`.
-- **asciiviz** — G: riquadro dei caratteri bianco (il `<pre>` di UIkit) `:168`; titolo e testi quasi illeggibili sul fondo scuro di default `:210`; «Simulato» resta piatto senza player `:350`.
+- **map (Mappa Pro)** — G ✅ 1.4.551: accenti ed € diventano «â‚¬» (`atob` senza UTF-8) `:2521`; i tre stili CARTO (Positron, Voyager, Dark Matter) disegnano solo «API KEY REQUIRED» `:53, :907` · M: «Sopra/Sotto» porta nella fascia anche elenco e paginazione; pannello con grigi e font di sistema fissi `:1919`.
+- **osmmap** — G ✅ 1.4.551: stili CARTO come sopra `:63` · doppione di Mappa Pro in «Indirizzo singolo».
+- **pdfpro** — G ✅ 1.4.551: un apostrofo in un testo d'hotspot blocca tutta la tile (JSON in attributo fra apici singoli) `:144`.
+- **asciiviz** — G ✅ 1.4.551: riquadro dei caratteri bianco (il `<pre>` di UIkit) `:168`; titolo e testi quasi illeggibili sul fondo scuro di default `:210`; «Simulato» resta piatto senza player `:350`.
 - **soundcloud** — M: con l'oEmbed colore, autoplay, copertina, autore e «Player visuale» sono ignorati, iframe fisso a 500 px; `$uid` non definito `:75` (avviso PHP).
 - **audio** — M: «Mostra controlli» solo nel predefinito; il minimale ignora titolo e artista; copertina solo nel personalizzato.
 - **viewer360** — M: nel builder gli «Oggetto girevole» diventano neri dopo ogni render `olo-viewer360.js:280`.
@@ -104,8 +104,8 @@ in un caso comune · **L** = dettaglio, colore fuori tema, testo in inglese.
 - **productgrid** — L: con la sorgente WooCommerce il tag è «SALE» in inglese.
 
 ### Marketing
-- **form** — G: il «Campo calcolato» resta a 0 con errore JS se «Abilita condizioni» è spento (`getFieldValue` dentro `if (hasConditions)`) `:1050, :1147` · M: le opzioni si dividono anche sulle virgole `:1443`; il font «Titoli (tema)» delle etichette perde le parentesi `:153`; pulsante e campi in Arial; «Padding» sotto «Stile pulsante» imbottisce tutto il modulo; bordo sottolineato non sceglibile.
-- **newsletter** — G: nei layout verticale e minimale i campi si schiacciano a 18 px `:181` · M: integrazioni, chiavi API, reCAPTCHA e redirect non fanno nulla (il JS manda solo email e nome); «Content Lock» disegna un riquadro sfocato vuoto `:357`.
+- **form** — G ✅ 1.4.551: il «Campo calcolato» resta a 0 con errore JS se «Abilita condizioni» è spento (`getFieldValue` dentro `if (hasConditions)`) `:1050, :1147` · M: le opzioni si dividono anche sulle virgole `:1443`; il font «Titoli (tema)» delle etichette perde le parentesi `:153`; pulsante e campi in Arial; «Padding» sotto «Stile pulsante» imbottisce tutto il modulo; bordo sottolineato non sceglibile.
+- **newsletter** — G ✅ 1.4.551: nei layout verticale e minimale i campi si schiacciano a 18 px `:181` · M: integrazioni, chiavi API, reCAPTCHA e redirect non fanno nulla (il JS manda solo email e nome); «Content Lock» disegna un riquadro sfocato vuoto `:357`.
 - **loginform** — M: con le schede «Pillola» la scheda inattiva sparisce su form scuro; il social login sono solo link.
 - **social** — M: etichette «Tiktok», «Youtube», «Whatsapp»; X col blu del vecchio Twitter `:82`; icona piena sempre bianca.
 - **linkinbio** — M: «Mostra icone social» inerte; il raggio non ritaglia lo sfondo.
@@ -117,14 +117,14 @@ in un caso comune · **L** = dettaglio, colore fuori tema, testo in inglese.
 - **matchfixtures** — L: appena inserita una sola partita, in inglese, card verde scuro con stemmi in esadecimale.
 - **buildermock** — M: a 0° resta inclinato (`rotateX(7deg)` fisso) `:82`; colonne interne fisse 300+268 px `:87`.
 - **olox (lessons, quiz, sticky)** — M: testo chiaro su fondo trasparente (illeggibile su tema chiaro); «OLOtour (ambra)» esce verde acqua (`olox.css:15` contro `_oloxShared.js`) · L: colori solo fra i 7 dei prodotti.
-- **flipcard** — G: il «Flip diagonale» mostra il retro capovolto a riposo `:502, :516`; velo perso quando la foto passa nel pannello Sfondo `:436`; ombra tagliata da `overflow:hidden` `:166` · M: in Tipografia «Titolo» colora il fronte e «Descrizione» il retro.
-- **starrating** — G: le mezze stelle non si disegnano mai (`$i === ceil($rating)` fra intero e decimale) `:61` · M: stile «Arrotondato» inerte; il cursore arriva a 5 anche con 10 stelle; «4.5 / 5» col punto e non nascondibile; preset cuori e diamanti disegnano stelle.
-- **progress** — G: senza colori le barre sono invisibili `:214`; con «Mostra percentuale» il numero compare due volte `:217`; «Animata» non è letto.
-- **counter** — G: il numero non conta (nessuna animazione); il colore del suffisso legge `number_color`, che non esiste `:133`.
-- **team** — G: «Padding contenitore» inerte (vince `tile_padding`) `:143`; «Margine dal tile» = `intval(array)` = 1 `:145`; gap negativo azzerato `:91`.
+- **flipcard** — G ✅ 1.4.551: il «Flip diagonale» mostra il retro capovolto a riposo `:502, :516`; velo perso quando la foto passa nel pannello Sfondo `:436`; ombra tagliata da `overflow:hidden` `:166` · M: in Tipografia «Titolo» colora il fronte e «Descrizione» il retro.
+- **starrating** — G ✅ 1.4.551: le mezze stelle non si disegnano mai (`$i === ceil($rating)` fra intero e decimale) `:61` · M: stile «Arrotondato» inerte; il cursore arriva a 5 anche con 10 stelle; «4.5 / 5» col punto e non nascondibile; preset cuori e diamanti disegnano stelle.
+- **progress** — G ✅ 1.4.551 (rifinito 1.4.552): senza colori le barre sono invisibili `:214`; con «Mostra percentuale» il numero compare due volte `:217`; «Animata» non è letto.
+- **counter** — G ✅ 1.4.551: il numero non conta (nessuna animazione); il colore del suffisso legge `number_color`, che non esiste `:133`.
+- **team** — G ✅ 1.4.551: «Padding contenitore» inerte (vince `tile_padding`) `:143`; «Margine dal tile» = `intval(array)` = 1 `:145`; gap negativo azzerato `:91`.
 - **team, testimonial** — M: i «Filtri CSS» non li legge nessuno.
-- **northquoteslider** — G: «North · enterprise AI» fisso nel codice `:184`, titolo su Cohere in inglese; puntini accanto alla citazione `:125`; frecce e puntini scuri fissi `:120, :133`.
-- **leaderboard** — G: righe di default viola scuro `#1A1233` con testo scuro: l'esempio 1 è illeggibile `:110` · M: «Ruolo» colora l'unità `:236`; «Query (in arrivo)» inerte.
+- **northquoteslider** — G ✅ 1.4.551: «North · enterprise AI» fisso nel codice `:184`, titolo su Cohere in inglese; puntini accanto alla citazione `:125`; frecce e puntini scuri fissi `:120, :133`.
+- **leaderboard** — G ✅ 1.4.551: righe di default viola scuro `#1A1233` con testo scuro: l'esempio 1 è illeggibile `:110` · M: «Ruolo» colora l'unità `:236`; «Query (in arrivo)» inerte.
 - **testimonial** — M: misura, font e maiuscolo della citazione agiscono solo nell'Editoriale; colore di riserva rosa `:255`.
 - **pricing** — M: il badge «popolare» si allarga a tutta la card `:206, :237`; «Colore prezzo» solo con l'interruttore `:377`; separatori e binario bianchi fissi `:277, :366`; colori del countdown solo esadecimali `:481`; il periodo non cambia passando all'annuale; i preset scrivono `card_radius`, che il PHP non legge.
 - **pricelist** — M: «In evidenza» sostituisce il bordo con lo sfondo `:96, :129`; hover grigio fisso `:124`; misure dei testi fisse (badge 9 px).
@@ -133,7 +133,7 @@ in un caso comune · **L** = dettaglio, colore fuori tema, testo in inglese.
 - **announcementbar** — L: testi e aria-label in inglese; salvia su marrone poco contrastato.
 
 ### Interattivo
-- **finder** — G: titolo, voci e risultato hanno colore fisso `--olo-color-text` `:175, :179, :197`: coi preset Neon e Retro Terminal il testo è illeggibile.
+- **finder** — G ✅ 1.4.551: titolo, voci e risultato hanno colore fisso `--olo-color-text` `:175, :179, :197`: coi preset Neon e Retro Terminal il testo è illeggibile.
 - **popup** — G ✅ 1.4.529 (A11): vedi A11 · M: raggio, maiuscolo, spaziatura e peso del pulsante inerti (`.olo-template .uk-button` vince) `:474`; `alt` dell'immagine da una chiave `title` inesistente `:888`.
 - **accordion** — M: colore delle icone fisso sul primario `:284`; due controlli «Bordo» sulla stessa chiave (doppia riga); bordo della voce aperta forzato sul primario `:414`; prompt del terminale annullato `:263`.
 - **timeline** — M: le famiglie `var(--…)` perdono le parentesi `:188`; «Colore filo» inerte col filo «solid» (vince `timeline-super.css`); polaroid alta 148 px fissa.
@@ -147,7 +147,7 @@ in un caso comune · **L** = dettaglio, colore fuori tema, testo in inglese.
 - **projector, scorequiz, timezone** — L: sfondo e testi a colore fisso, niente versioni scure.
 
 ### Navigazione e Atmosfera
-- **sitelogo** — G: «Centro» e «Destra» non fanno niente (`frontend.css:477` allinea a sinistra).
+- **sitelogo** — G ✅ 1.4.551: «Centro» e «Destra» non fanno niente (`frontend.css:477` allinea a sinistra).
 - **megamenu** — G ✅ 1.4.535 (segnaposto che salta i loghi): appena inserito il builder mette il segnaposto grigio in `logo_image`, `logo_sticky`, `mobile_logo` · M: messo nel corpo cambia la classe dell'header del sito e lo rende sticky; il pannello aperto finisce sotto le sezioni dopo.
 - **navmenu** — M: come megamenu, e `olo-header-overlay` nasconde il primo blocco nei temi a blocchi; verticale senza «Sottovoci espandibili» = sottomenu irraggiungibili `:1083`.
 - **oloheader** — M: CTA blu, Manrope e icone fissi fuori tema; `brand_logo_white` mai letto; pannello sotto le sezioni dopo.
@@ -164,10 +164,10 @@ in un caso comune · **L** = dettaglio, colore fuori tema, testo in inglese.
 - **mobilebar** — L: font di sistema fisso; col padding il pannello è più largo della barra.
 
 ### Dinamico
-- **queryloop** — G: «CPT slug» non funziona mai («Tipo di contenuto "custom" non trovato») `:614` · M: «Sfondo card» colora anche il blocco `:484, :679` · L: raggio 0 diventa 6 px `:810`.
+- **queryloop** — G ✅ 1.4.551: «CPT slug» non funziona mai («Tipo di contenuto "custom" non trovato») `:614` · M: «Sfondo card» colora anche il blocco `:484, :679` · L: raggio 0 diventa 6 px `:810`.
 - **postgrid** — G ✅ 1.4.517 (A2): vedi A2 (filtri e pagine) · M: velo con bordo netto a metà card (`inset:0` contro `height:N%`) `:456, :839`.
-- **pagetitlebar** — G: lo sfondo media rompe lo stile (CSS senza `;` finale, si perdono `position:relative` e l'ultima dichiarazione) `class-tile-base.php:559-567`, `:104, :118`.
-- **sitemap** — G: padding del contenitore perso coi tipi personalizzati (variabile sovrascritta dal ciclo) `:197, :351, :386` · M: con la ricerca nelle griglie il campo diventa una cella.
+- **pagetitlebar** — G ✅ 1.4.551: lo sfondo media rompe lo stile (CSS senza `;` finale, si perdono `position:relative` e l'ultima dichiarazione) `class-tile-base.php:559-567`, `:104, :118`.
+- **sitemap** — G ✅ 1.4.551: padding del contenitore perso coi tipi personalizzati (variabile sovrascritta dal ciclo) `:197, :351, :386` · M: con la ricerca nelle griglie il campo diventa una cella.
 - **newsticker** — M: in slide e fade l'icona esce come testo («bolt») `:576`; titoli troncati nel verticale.
 - **presencegrid** — M: ruolo su `--olo-color-muted` (colore di superficie, invisibile) `:197`.
 - **portfolio** — M: buchi nella griglia (bento senza `dense`) `:118`; «caption-corner» lascia una striscia bianca `:215`; numeri sovrapposti nell'indice laterale `:245`.
@@ -175,14 +175,14 @@ in un caso comune · **L** = dettaglio, colore fuori tema, testo in inglese.
 - **shortcode** — L: appena inserito `[gallery]` non disegna nulla e nessun messaggio lo dice.
 
 ### WooCommerce
-- **woo_quickview** — G: vedi A14; decora solo le card già presenti all'avvio `:400`; lo stile `.olo-qv-trigger` è globale (l'ultima istanza decide per tutte) `:245`; «Stile pulsante» con valori diversi da quelli del PHP; quasi tutti i colori non letti.
-- **woo_wishlist** — G: vedi A14; `show_grid` senza controllo; icona, stile e 7 colori non letti.
-- **woo_recently_viewed** — G: legge un cookie che WooCommerce scrive solo col suo vecchio widget `:63`: senza widget è sempre vuota.
-- **woo_product_filter** — G: molte chiavi del config diverse da quelle del PHP; `filter_style`, `apply_button`, `show_count` e i colori non letti; scrive i filtri nell'indirizzo ma Prodotti WC non li legge `:538`; attributi fissi `pa_color,pa_size`.
-- **woo_product_bundle** — G: la tendina Layout dà sempre la lista verticale `:121`; `show_images/prices/descriptions` contro `show_image/price/description` del PHP.
-- **woo_product_gallery_slider** — G: niente campo prodotto; transizione, autoplay, velocità e pallini non letti; «Miniature a destra» ricade in basso `:96`.
-- **woo_products** — G: modalità «Carosello» e le sue 5 opzioni non lette · M: badge e pulsante senza colore di partenza (`background: ;`) `:242, :292`; attributo `class` doppio sul pulsante: l'aggiunta AJAX non parte `:400`; il Bordo incornicia la griglia e non le card; mancano raggio, padding e sfondo della card.
-- **woo_order_tracking** — G: il modulo invia a My Account, che non traccia nulla `:131`.
+- **woo_quickview** — G ✅ 1.4.551: vedi A14; decora solo le card già presenti all'avvio `:400`; lo stile `.olo-qv-trigger` è globale (l'ultima istanza decide per tutte) `:245`; «Stile pulsante» con valori diversi da quelli del PHP; quasi tutti i colori non letti.
+- **woo_wishlist** — G ✅ 1.4.551 (rifinito 1.4.552): vedi A14; `show_grid` senza controllo; icona, stile e 7 colori non letti.
+- **woo_recently_viewed** — G ✅ 1.4.551: legge un cookie che WooCommerce scrive solo col suo vecchio widget `:63`: senza widget è sempre vuota.
+- **woo_product_filter** — G ✅ 1.4.551: molte chiavi del config diverse da quelle del PHP; `filter_style`, `apply_button`, `show_count` e i colori non letti; scrive i filtri nell'indirizzo ma Prodotti WC non li legge `:538`; attributi fissi `pa_color,pa_size`.
+- **woo_product_bundle** — G ✅ 1.4.551: la tendina Layout dà sempre la lista verticale `:121`; `show_images/prices/descriptions` contro `show_image/price/description` del PHP.
+- **woo_product_gallery_slider** — G ✅ 1.4.551: niente campo prodotto; transizione, autoplay, velocità e pallini non letti; «Miniature a destra» ricade in basso `:96`.
+- **woo_products** — G ✅ 1.4.551: modalità «Carosello» e le sue 5 opzioni non lette · M: badge e pulsante senza colore di partenza (`background: ;`) `:242, :292`; attributo `class` doppio sul pulsante: l'aggiunta AJAX non parte `:400`; il Bordo incornicia la griglia e non le card; mancano raggio, padding e sfondo della card.
+- **woo_order_tracking** — G ✅ 1.4.551: il modulo invia a My Account, che non traccia nulla `:131`.
 - **woo_minicart** — M: con `icon_color` vuoto l'icona sparisce (`stroke=""`).
 - **woo_categories** — M: «Mostra immagine» non letto; default poco leggibile.
 - **woo_myaccount** — M: «Con sidebar» spezza il modulo d'accesso; per i visitatori nessun colore agisce.
