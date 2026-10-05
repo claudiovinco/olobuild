@@ -204,6 +204,14 @@ body:has(.olo-template) .wp-site-blocks {
   container-type: inline-size;
   container-name: olo-tpl;
 }
+/* Un template incluso con la tile «Template» sta nella sua colonna: senza questa regola si allargava a
+   tutta la finestra (100vw + traslazione) e in una colonna usciva dai bordi, in un riquadro arrotondato
+   veniva tagliato. Come il template nell'header (.olo-site-header .olo-template). */
+.olo-templateembed .olo-template {
+  width: 100%;
+  left: 0;
+  transform: none;
+}
 
 /* Grid wrapper (used at template level) */
 .olo-frontend-grid {
