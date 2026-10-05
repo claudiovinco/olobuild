@@ -1046,6 +1046,78 @@ trait Olobuild_Renderer_Page_Trait {
                 });
               }, {rootMargin: '200px'});
               lazys.forEach(function(el){ obs.observe(el); });
+              /* Salti a un'ancora della stessa pagina (#sezione). Il browser calcola il
+                 punto d'arrivo coi segnaposto da 50px ancora al posto delle tile: appena
+                 arrivati, quelle rimaste sopra si idratano, crescono e spingono giu' il
+                 bersaglio, e si atterra nel punto sbagliato. Prima si idrata tutto cio'
+                 che sta sopra il bersaglio (e il bersaglio stesso), poi si scorre tenendo
+                 conto dell'header fisso. Restano al loro gestore i link di UIkit (finestre,
+                 schede, interruttori) e le sezioni raggruppate in orizzontale. */
+              function idrataFinoA(target){
+                for(var giro = 0; giro < 4; giro++){
+                  var t = target.getBoundingClientRect().top;
+                  var lista = [];
+                  document.querySelectorAll('[data-olo-lazy]').forEach(function(el){
+                    if(!el.querySelector(':scope > template')) return;
+                    if(target.contains(el) || el.contains(target) || el.getBoundingClientRect().top <= t){ lista.push(el); }
+                  });
+                  if(!lista.length) return;
+                  lista.forEach(function(el){ hydrate(el); obs.unobserve(el); });
+                }
+              }
+              function altezzaTesta(){
+                var h = 0;
+                var pila = document.elementsFromPoint(Math.round(window.innerWidth / 2), 2);
+                for(var i = 0; i < pila.length; i++){
+                  var e = pila[i];
+                  while(e){
+                    if(e === document.body) break;
+                    var p = getComputedStyle(e).position;
+                    if(p === 'fixed' || p === 'sticky'){
+                      var r = e.getBoundingClientRect();
+                      if(r.top <= 2){ if(r.bottom < window.innerHeight * 0.4){ if(r.bottom > h) h = r.bottom; } }
+                      break;
+                    }
+                    e = e.parentElement;
+                  }
+                }
+                return h;
+              }
+              function vaiA(target, liscio){
+                idrataFinoA(target);
+                var margine = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+                var y = target.getBoundingClientRect().top + window.scrollY - Math.max(altezzaTesta(), margine);
+                window.scrollTo({ top: Math.max(0, Math.round(y)), behavior: liscio ? 'smooth' : 'auto' });
+              }
+              function bersaglioDi(hash){
+                if(!hash) return null;
+                if(hash === '#') return null;
+                var t = null;
+                try { t = document.getElementById(decodeURIComponent(hash.slice(1))); } catch(_){ return null; }
+                if(!t) return null;
+                if(t.closest('.olo-h-group')) return null;
+                if(getComputedStyle(t).position === 'fixed') return null;
+                return t;
+              }
+              document.addEventListener('click', function(ev){
+                if(ev.defaultPrevented) return;
+                var a = ev.target.closest ? ev.target.closest('a[href*="#"]') : null;
+                if(!a) return;
+                if(a.pathname !== location.pathname) return;
+                if(a.host !== location.host) return;
+                if(a.hasAttribute('uk-toggle') || a.hasAttribute('data-uk-toggle') || a.hasAttribute('uk-scroll') || a.hasAttribute('aria-controls')) return;
+                if(a.closest('.uk-tab, .uk-subnav, .uk-switcher, [uk-tab], [uk-switcher], [uk-accordion]')) return;
+                var target = bersaglioDi(a.hash);
+                if(!target) return;
+                ev.preventDefault();
+                vaiA(target, true);
+                if(location.hash !== a.hash){ try { history.pushState(null, '', a.hash); } catch(_){} }
+              });
+              if(location.hash){
+                var arrivo = function(){ var t = bersaglioDi(location.hash); if(t) vaiA(t, false); };
+                requestAnimationFrame(arrivo);
+                window.addEventListener('load', arrivo);
+              }
               /* Salti lunghi (trascinamento scrollbar, anchor): i blocchi lazy rimasti
                  SOPRA il viewport non intersecano mai l'observer → resterebbero
                  collassati a 50px, spostando tutto il layout sotto (atterraggi
