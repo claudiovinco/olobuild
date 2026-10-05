@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.537 - 2026-10-05 (fix)
+- Video: il bordo e gli angoli arrotondati incorniciano solo il video, non più anche la didascalia sotto.
+
 ## v1.4.536 - 2026-10-05 (fix)
 - Icona: il padding delle viste «Con sfondo» e «Cornice» funziona (prima l'icona restava stretta nel cerchio) e un'icona con link mantiene il suo colore invece di quello dei link del tema.
 
