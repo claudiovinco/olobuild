@@ -153,6 +153,12 @@ class Olobuild_ImageHero_Tile extends Olobuild_Tile_Base {
         $media_decl = ( $mb['has'] && $mb['css'] !== '' )
             ? $mb['css']
             : ( 'background-color:' . $bg . ';background-image:' . $imgCss . ';background-size:cover;background-position:' . esc_attr( Olobuild_Tile_Utils::focal_pos( $s, 'bg_image' ) ) . ';' );
+        // Con lo «Sfondo / media» il livello resta inset:0, cioe' l'hero. Fino alla 1.4.550
+        // l'aspect-ratio qui si perdeva, fuso con l'ultima dichiarazione dello sfondo (che
+        // finiva senza «;»). Riattivato insieme a min-height:100% allargava il livello (21/10
+        // dell'altezza: 1260 px su un telefono da 375) e spostava il fuoco della foto. Resta
+        // solo per il segnaposto e la foto storica bg_image, che l'hanno sempre avuto.
+        $media_ar = ( $mb['has'] && $mb['css'] !== '' ) ? '' : 'aspect-ratio:' . $ar . ';';
 
         // gradiente verticale (sempre) + laterale (opzionale, stile atelier)
         $gradV = 'linear-gradient(180deg, rgba(' . $orgb . ',' . $oTop . ') 0%, rgba(' . $orgb . ',' . $oMid . ') 38%, rgba(' . $orgb . ',' . $oBot . ') 100%)';
@@ -203,7 +209,7 @@ class Olobuild_ImageHero_Tile extends Olobuild_Tile_Base {
             <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{position:relative;overflow:hidden;background:<?php echo $bg; ?>;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;display:flex;flex-direction:column;justify-content:<?php echo $justifyV; ?>;min-height:<?php echo $mhCss; ?>;<?php echo $border_css; ?><?php if ( $wrap_radius_css ) { echo 'border-radius:' . $wrap_radius_css . ';'; } ?><?php if ( $shadow_css ) { echo 'box-shadow:' . $shadow_css . ';'; } ?>}
             <?php if ( $bg_decl ) : ?>.<?php echo $uid; ?>{<?php echo $bg_decl; ?>;}<?php endif; ?>
-            .<?php echo $uid; ?> .oih-media{position:absolute;inset:0;z-index:0;<?php echo $media_decl; ?>aspect-ratio:<?php echo $ar; ?>;min-height:100%;}
+            .<?php echo $uid; ?> .oih-media{position:absolute;inset:0;z-index:0;<?php echo $media_decl . $media_ar; ?>min-height:100%;}
             <?php if ( ! $mb['has'] && $img === '' && ! empty( $s['media_label'] ) ) : ?>
             .<?php echo $uid; ?> .oih-media::after{content:"<?php echo esc_attr( $s['media_label'] ); ?>";position:absolute;left:20px;bottom:16px;font-size:11px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;color:rgba(255,255,255,.42);max-width:60%;}
             <?php endif; ?>

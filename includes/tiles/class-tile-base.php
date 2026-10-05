@@ -586,7 +586,14 @@ abstract class Olobuild_Tile_Base {
         if ( is_array( $bg ) && ! empty( $bg['type'] ) && $bg['type'] !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
             $cssb = new Olobuild_CSS_Builder();
             // con_velo: il velo dello Sfondo (overlay) sopra foto, video e galleria dello slot
-            $out['css']    = (string) $cssb->get_bg_inline_css( $bg, $con_velo );
+            $out['css']    = trim( (string) $cssb->get_bg_inline_css( $bg, $con_velo ) );
+            // Chiusa sempre da «;»: get_bg_inline_css() finisce senza, e chi accodava altre
+            // dichiarazioni (Page Title Bar, Image Hero, Photo Cover col raggio) le fondeva con
+            // l'ultima («scrollposition:relative»): si perdevano entrambe, col velo che usciva
+            // dalla barra. Un «;» in più è innocuo in uno style e dentro una regola.
+            if ( $out['css'] !== '' ) {
+                $out['css'] = rtrim( $out['css'], '; ' ) . ';';
+            }
             $out['markup'] = (string) $cssb->get_bg_html_markup( $bg, $scope, $con_velo );
             $out['has']    = ( $out['css'] !== '' || $out['markup'] !== '' );
         }
