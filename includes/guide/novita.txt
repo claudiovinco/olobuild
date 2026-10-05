@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.534 - 2026-10-05 (fix)
+- I preset del menu Stile funzionano per intero: alcune scelte (stile delle icone social e di condivisione, forma della ricerca, card dei post, animazione della lightbox, effetto del pulsante e altre) venivano ignorate. I preset audaci usano il colore primario del sito al posto dell'arancio e dell'indaco fissi.
+
 ## v1.4.533 - 2026-10-05 (fix)
 - Niente più emoji nelle tile: Query Loop (tendenza, tempo di lettura, commenti), OLOX Lessons (lucchetto) e Newsletter usano icone del set; la Newsletter offre l'icona dal selettore.
 - In italiano le scritte fisse: «Copia» nel Codice, «Offerta» nella Product Grid, i giorni della Schedule, il messaggio del Menu WordPress senza menu.
