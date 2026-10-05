@@ -3,6 +3,17 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.508 - 2026-10-05 (novità)
+- Nuova tile «Quiz a punteggio»: una domanda alla volta, e alla fine l'esito giusto con il suo link.
+- Il Builder diventa «Preventivo»: la scelta parte per email, su WhatsApp, verso una pagina o nel carrello WooCommerce.
+- Projector diventa «Calcolatore a slider», con l'unità del cursore, i decimali e una lista di quantità che scala (al posto di Scaler).
+- Gratta e Scopri è un coupon: il codice si copia dopo aver grattato e il sito ricorda chi ha già grattato.
+- Popup: si apre anche arrivando a un punto della pagina o con una sequenza di tasti, le regole per dispositivo, provenienza e pagine viste agiscono, e nel builder non si apre da solo.
+- Le Schede hanno icona, immagine e pulsante; l'Hotspot ha immagine e link nel fumetto, icone vere e fumetti che non vengono più tagliati.
+- Timeline: lo stato di ogni tappa si sceglie (non è più indovinato dallo scorrimento) e immagini e video compaiono anche nel layout orizzontale.
+- Fisarmonica, Overlay Grid, Overlay Slider, Pannello, Reveal Box, Pannello flottante, Dark Mode, Barra Scroll e Pulsante Toggle: ogni controllo ora agisce, testi di partenza in italiano.
+- Fuori dalla palette, perché confluite in altre tile: Popup Nascosto, Popover, Hotspots, Switcher Panel, Tab a Icone, Panel Slider, Scaler, Availability e Mixer. Le pagine che le usano restano com'erano.
+
 ## v1.4.507 - 2026-10-05 (fix)
 - Grafico: con «Separatore migliaia» anche i numeri di quattro cifre hanno il punto (1.234).
 
