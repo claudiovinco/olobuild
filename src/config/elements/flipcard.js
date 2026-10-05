@@ -184,6 +184,9 @@ export default {
     { key: 'front_icon_size', label: t('Dimensione icona'), type: 'range', min: 24, max: 80 },
     { key: 'front_icon_color', label: t('Colore icona'), type: 'color' },
     { key: 'front_bg', label: t('Colore sfondo'), type: 'color' },
+    // Il colore del testo vale per TUTTA la faccia (titolo, descrizione, icona senza colore):
+    // stava in Tipografia come «Titolo», e chi lo cambiava si trovava colorato il fronte intero.
+    { key: 'front_text_color', label: t('Colore testo'), type: 'color' },
     { key: 'front_image_fit', label: t('Adattamento immagine'), type: 'select', options: [
       { value: 'cover', label: t('Copri (taglia)') },
       { value: 'contain', label: t('Contieni (intera)') },
@@ -214,6 +217,8 @@ export default {
     { key: 'back_icon_size', label: t('Dimensione icona'), type: 'range', min: 24, max: 80 },
     { key: 'back_icon_color', label: t('Colore icona'), type: 'color' },
     { key: 'back_bg', label: t('Colore sfondo'), type: 'color' },
+    // Come sul fronte: stava in Tipografia come «Descrizione» e colorava tutto il retro.
+    { key: 'back_text_color', label: t('Colore testo'), type: 'color' },
     { key: 'back_image_fit', label: t('Adattamento immagine'), type: 'select', options: [
       { value: 'cover', label: t('Copri (taglia)') },
       { value: 'contain', label: t('Contieni (intera)') },
@@ -271,7 +276,6 @@ export default {
       keys: {
         size:   'title_size',
         weight: 'title_weight',
-        color:  'front_text_color',
       },
       sizeMin: 16, sizeMax: 40, sizeStep: 1,
     },
@@ -279,7 +283,6 @@ export default {
       responsiveKeys: [],
       keys: {
         size:  'desc_size',
-        color: 'back_text_color',
       },
       sizeMin: 12, sizeMax: 20, sizeStep: 1,
     },
