@@ -87,10 +87,12 @@ class Olobuild_Icon_Tile extends Olobuild_Tile_Base {
         if ( $rot !== 0 ) {
             $wrapper_style .= "transform:rotate({$rot}deg);";
         }
+        // spacing_css() restituisce già l'unità: con un «px» in più la dichiarazione era «16pxpx», il
+        // browser la scartava e le viste «Con sfondo» e «Cornice» stavano strette attorno all'icona.
         if ( $view === 'stacked' ) {
-            $wrapper_style .= "background:{$bg_clr};padding:{$pad}px;border-radius:{$radius};";
+            $wrapper_style .= "background:{$bg_clr};padding:{$pad};border-radius:{$radius};";
         } elseif ( $view === 'framed' ) {
-            $wrapper_style .= "border:2px solid {$bg_clr};padding:{$pad}px;border-radius:{$radius};";
+            $wrapper_style .= "border:2px solid {$bg_clr};padding:{$pad};border-radius:{$radius};";
         }
         $wrapper_style .= 'transition:transform 0.3s ease;';
 
@@ -132,7 +134,7 @@ class Olobuild_Icon_Tile extends Olobuild_Tile_Base {
             <span class="olo-icon-wrap" style="<?php echo $wrapper_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS assembled above from safe_color_css() whitelisted colours, intval()'d rotation, Olobuild_Tile_Utils::spacing_css() integer padding and fixed shape literals ?><?php echo $sfondo['has'] ? ';' . esc_attr( $sfondo['css_con_livelli'] ) : ''; ?>">
             <?php echo $sfondo['markup']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- background layers built by sfondo_elemento() from Olobuild_CSS_Builder::get_bg_html_markup() (esc_url/esc_attr inside) and a safe_color_css()-whitelisted overlay ?>
             <?php if ( ! empty( $s['link_url'] ) ) : ?>
-                <a href="<?php echo esc_url( $s['link_url'] ); ?>"<?php echo $target; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed ' target="_blank" rel="noopener"' literal from the ternary above ?><?php echo $aria_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- aria-label assembled above with esc_attr() on the accessible name ?>>
+                <a href="<?php echo esc_url( $s['link_url'] ); ?>" style="color:inherit"<?php echo $target; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed ' target="_blank" rel="noopener"' literal from the ternary above ?><?php echo $aria_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- aria-label assembled above with esc_attr() on the accessible name ?>>
                     <?php echo $this->render_icon_html( $icon_name, floatval( $ratio ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup built by Olobuild_Tile_Base::render_icon_html() with esc_attr()/sanitized SVG internally ?>
                 </a>
             <?php else : ?>
