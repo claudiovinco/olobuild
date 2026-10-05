@@ -68,13 +68,26 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
         $gap          = absint( $s['gap'] );
         $uid          = 'olo-woo-prod-' . wp_rand( 10000, 99999 );
 
-        // Colors
-        $title_color  = $this->safe_color_css( $s['title_color'] );
-        $price_color  = $this->safe_color_css( $s['price_color'] );
-        $sale_color   = $this->safe_color_css( $s['sale_color'] );
-        $btn_color    = $this->safe_color_css( $s['button_color'] );
-        $btn_bg       = $this->safe_color_css( $s['button_bg'] );
-        $badge_bg     = $this->safe_color_css( $s['badge_bg'] );
+        // Colors — tutti vuoti nei default: senza riserva uscivano «background: ;» e «color: ;»,
+        // che il browser scarta. Il bollo dello sconto restava testo bianco senza fondo (invisibile),
+        // il pulsante un link senza fondo, i nomi del colore dei link. Riserve = la partenza del config.
+        $title_color  = $this->safe_color_css( $s['title_color'] ) ?: 'var(--olo-color-text, #111827)';
+        $price_color  = $this->safe_color_css( $s['price_color'] ) ?: 'var(--olo-color-text, #111827)';
+        $sale_color   = $this->safe_color_css( $s['sale_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $btn_color    = $this->safe_color_css( $s['button_color'] ) ?: 'var(--olo-color-primary-contrast, #ffffff)';
+        $btn_bg       = $this->safe_color_css( $s['button_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $badge_bg     = $this->safe_color_css( $s['badge_bg'] ) ?: 'var(--olo-color-dark, #111827)';
+
+        // Modalità «Carosello» (config: layout + carousel_*): prima nessuna di queste chiavi era
+        // letta e la tile restava sempre una griglia. Il carosello è uno scorrimento orizzontale
+        // con aggancio (scroll-snap): si trascina col dito anche senza script, frecce e pallini
+        // lo comandano. Gli interruttori assenti valgono come i default del config.
+        $is_carousel  = ( ( $s['layout'] ?? 'grid' ) === 'carousel' );
+        $car_autoplay = filter_var( $s['carousel_autoplay'] ?? false, FILTER_VALIDATE_BOOLEAN );
+        $car_speed    = max( 1000, min( 20000, absint( $s['carousel_speed'] ?? 4000 ) ) );
+        $car_loop     = filter_var( $s['carousel_loop'] ?? true, FILTER_VALIDATE_BOOLEAN );
+        $car_arrows   = filter_var( $s['carousel_arrows'] ?? true, FILTER_VALIDATE_BOOLEAN );
+        $car_dots     = filter_var( $s['carousel_dots'] ?? true, FILTER_VALIDATE_BOOLEAN );
 
         // Ratio map — traduzione del rapporto in percentuale di padding-top (tecnica
         // storica di questa tile). E' anche la whitelist: cio' che non sta qui ricade
@@ -156,6 +169,49 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
                 'terms'    => 'featured',
             ];
         }
+        // Filtri dell'indirizzo: il «Filtro prodotti WC» li scrive con i nomi di WooCommerce
+        // (product_cat, filter_<attributo>, min_price/max_price, più in_stock), ma nessuno li
+        // leggeva fuori dagli archivi del negozio: «Filtra» ricaricava la pagina con la stessa
+        // griglia. Si sommano (AND) alla query della tile.
+        $meta_query = [ 'relation' => 'AND' ];
+        $url_cats   = $this->filtro_url_elenco( 'product_cat' );
+        if ( ! empty( $url_cats ) ) {
+            $tax_query[] = [
+                'taxonomy' => 'product_cat',
+                'field'    => 'slug',
+                'terms'    => $url_cats,
+            ];
+        }
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- sola lettura dei nomi dei parametri GET pubblici del filtro prodotti; nessuna modifica di stato; ogni valore passa da filtro_url_elenco().
+        foreach ( array_keys( $_GET ) as $param ) {
+            if ( ! is_string( $param ) || strpos( $param, 'filter_' ) !== 0 ) {
+                continue;
+            }
+            $attr_tax = 'pa_' . sanitize_title( substr( $param, 7 ) );
+            $terms    = $this->filtro_url_elenco( $param );
+            if ( ! empty( $terms ) && taxonomy_exists( $attr_tax ) ) {
+                $tax_query[] = [
+                    'taxonomy' => $attr_tax,
+                    'field'    => 'slug',
+                    'terms'    => $terms,
+                ];
+            }
+        }
+        $url_min = $this->filtro_url( 'min_price' );
+        $url_max = $this->filtro_url( 'max_price' );
+        if ( is_numeric( $url_min ) ) {
+            $meta_query[] = [ 'key' => '_price', 'value' => (float) $url_min, 'compare' => '>=', 'type' => 'DECIMAL(10,2)' ];
+        }
+        if ( is_numeric( $url_max ) ) {
+            $meta_query[] = [ 'key' => '_price', 'value' => (float) $url_max, 'compare' => '<=', 'type' => 'DECIMAL(10,2)' ];
+        }
+        if ( $this->filtro_url( 'in_stock' ) === '1' ) {
+            $meta_query[] = [ 'key' => '_stock_status', 'value' => 'instock' ];
+        }
+        if ( count( $meta_query ) > 1 ) {
+            $query_args['meta_query'] = $meta_query; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- prezzo e disponibilità scelti nel Filtro prodotti; meta query necessaria alla funzione del tile, volume limitato (posts_per_page)
+        }
+
         if ( count( $tax_query ) > 1 ) {
             $query_args['tax_query'] = $tax_query; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- filtro prodotti per categoria/tag/featured WooCommerce; tax query necessaria alla funzione del tile, volume limitato (posts_per_page)
         }
@@ -191,11 +247,111 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/absint/fixed maps/generated uid). ?>
         <style>
+            <?php if ( ! $is_carousel ) : ?>
             .<?php echo $uid; ?> {
                 display: grid;
                 grid-template-columns: repeat(<?php echo (int) $cols; ?>, 1fr);
                 gap: <?php echo (int) $gap; ?>px;
             }
+            <?php else : ?>
+            .<?php echo $uid; ?> .olo-woo-car-stage {
+                position: relative;
+                display: flow-root;
+            }
+            /* Spazio sopra e sotto (in em: ~6 e ~28 px), ripreso col margine negativo: lo
+               scorrimento orizzontale taglia anche in verticale, e l'ombra delle card (e quella
+               dell'hover) sarebbe rimasta mozzata. */
+            .<?php echo $uid; ?> .olo-woo-car-viewport {
+                overflow-x: auto;
+                overflow-y: hidden;
+                scroll-snap-type: x mandatory;
+                scroll-behavior: smooth;
+                overscroll-behavior-x: contain;
+                scrollbar-width: none;
+                padding: 0.4em 0 1.75em;
+                margin: -0.4em 0 -1.75em;
+            }
+            .<?php echo $uid; ?> .olo-woo-car-viewport::-webkit-scrollbar {
+                display: none;
+            }
+            .<?php echo $uid; ?> .olo-woo-car-viewport:focus-visible {
+                outline: 2px solid var(--olo-color-primary, #e1474f);
+                outline-offset: 4px;
+            }
+            .<?php echo $uid; ?> .olo-woo-car-track {
+                display: flex;
+                gap: <?php echo (int) $gap; ?>px;
+            }
+            .<?php echo $uid; ?> .olo-woo-car-track > .olo-woo-card {
+                flex: 0 0 calc((100% - <?php echo (int) ( $gap * ( $cols - 1 ) ); ?>px) / <?php echo (int) $cols; ?>);
+                min-width: 0;
+                scroll-snap-align: start;
+            }
+            .<?php echo $uid; ?> .olo-woo-car-arrow {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: 3;
+                width: 40px;
+                height: 40px;
+                padding: 0;
+                border: 1px solid var(--olo-color-border, #e5e7eb);
+                border-radius: 50%;
+                background: var(--olo-color-background, #ffffff);
+                color: var(--olo-color-text, #111827);
+                box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: opacity 0.2s ease;
+            }
+            .<?php echo $uid; ?> .olo-woo-car-prev { left: 8px; }
+            .<?php echo $uid; ?> .olo-woo-car-next { right: 8px; }
+            .<?php echo $uid; ?> .olo-woo-car-arrow:disabled {
+                opacity: 0.35;
+                cursor: default;
+            }
+            .<?php echo $uid; ?> .olo-woo-car-arrow:focus-visible,
+            .<?php echo $uid; ?> .olo-woo-car-dot:focus-visible {
+                outline: 2px solid var(--olo-color-primary, #e1474f);
+                outline-offset: 2px;
+            }
+            .<?php echo $uid; ?> .olo-woo-car-dots {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.25em;
+                margin-top: 1em;
+            }
+            .<?php echo $uid; ?> .olo-woo-car-dot {
+                width: 24px;
+                height: 24px;
+                padding: 0;
+                border: none;
+                border-radius: 50%;
+                background: transparent;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+            }
+            .<?php echo $uid; ?> .olo-woo-car-dot::before {
+                content: "";
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: var(--olo-color-border, #e5e7eb);
+                transition: background 0.2s ease, transform 0.2s ease;
+            }
+            .<?php echo $uid; ?> .olo-woo-car-dot[aria-current="true"]::before {
+                background: var(--olo-color-primary, #e1474f);
+                transform: scale(1.25);
+            }
+            @media (prefers-reduced-motion: reduce) {
+                .<?php echo $uid; ?> .olo-woo-car-viewport { scroll-behavior: auto; }
+            }
+            <?php endif; ?>
             .<?php echo $uid; ?> .olo-woo-card {
                 background: var(--olo-color-background, #FFFFFF);
                 border-radius: 8px;
@@ -240,7 +396,7 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
                 top: 8px;
                 left: 8px;
                 background: <?php echo $badge_bg; ?>;
-                color: #fff;
+                color: var(--olo-color-light, #ffffff);
                 font-size: 11px;
                 font-weight: 700;
                 padding: 3px 8px;
@@ -307,15 +463,32 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
                 .<?php echo $uid; ?> {
                     grid-template-columns: repeat(<?php echo (int) $cols_tablet; ?>, 1fr);
                 }
+                <?php if ( $is_carousel ) : ?>
+                .<?php echo $uid; ?> .olo-woo-car-track > .olo-woo-card {
+                    flex-basis: calc((100% - <?php echo (int) ( $gap * ( $cols_tablet - 1 ) ); ?>px) / <?php echo (int) $cols_tablet; ?>);
+                }
+                <?php endif; ?>
             }
             @media (max-width: 640px) {
                 .<?php echo $uid; ?> {
                     grid-template-columns: repeat(<?php echo (int) $cols_mobile; ?>, 1fr);
                 }
+                <?php if ( $is_carousel ) : ?>
+                .<?php echo $uid; ?> .olo-woo-car-track > .olo-woo-card {
+                    flex-basis: calc((100% - <?php echo (int) ( $gap * ( $cols_mobile - 1 ) ); ?>px) / <?php echo (int) $cols_mobile; ?>);
+                }
+                <?php endif; ?>
             }
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+        <?php if ( $is_carousel ) : ?>
+        <div class="<?php echo esc_attr( $uid ); ?>" id="<?php echo esc_attr( $uid ); ?>">
+        <div class="olo-woo-car-stage">
+        <div class="olo-woo-car-viewport" tabindex="0" role="region" aria-roledescription="<?php echo esc_attr( olobuild_t( 'carosello' ) ); ?>" aria-label="<?php echo esc_attr( olobuild_t( 'Prodotti' ) ); ?>">
+        <div class="olo-woo-car-track">
+        <?php else : ?>
         <div class="<?php echo esc_attr( $uid ); ?>">
+        <?php endif; ?>
         <?php
         while ( $products->have_posts() ) :
             $products->the_post();
@@ -391,13 +564,17 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
                     <?php
                     $add_url = $product->add_to_cart_url();
                     $add_text = $product->is_type( 'simple' ) ? olobuild_t( 'Aggiungi al carrello' ) : olobuild_t( 'Seleziona opzioni' );
+                    // Un solo attributo class: il secondo (con le classi AJAX di WooCommerce) era
+                    // ignorato dal browser e il clic ricaricava la pagina invece di aggiungere al
+                    // carrello. Le classi AJAX solo dove WooCommerce le usa (semplice, acquistabile,
+                    // disponibile): per gli altri il link porta alla scheda.
+                    $ajax_ok = $product->is_type( 'simple' ) && $product->supports( 'ajax_add_to_cart' ) && $product->is_purchasable() && $product->is_in_stock();
                     ?>
-                    <a href="<?php echo esc_url( $add_url ); ?>" class="olo-woo-btn"
+                    <a href="<?php echo esc_url( $add_url ); ?>" class="olo-woo-btn<?php echo $ajax_ok ? ' ajax_add_to_cart add_to_cart_button' : ''; ?>"
                        data-product_id="<?php echo absint( $product->get_id() ); ?>"
                        data-quantity="1"
                        <?php if ( $product->is_type( 'simple' ) ) : ?>
                        data-product_sku="<?php echo esc_attr( $product->get_sku() ); ?>"
-                       class="olo-woo-btn ajax_add_to_cart add_to_cart_button"
                        <?php endif; ?>
                     ><?php echo esc_html( $add_text ); ?></a>
                     <?php endif; ?>
@@ -409,7 +586,146 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
                 </div>
             </div>
         <?php endwhile; ?>
+        <?php if ( $is_carousel ) : ?>
+        </div><?php // .olo-woo-car-track ?>
+        </div><?php // .olo-woo-car-viewport ?>
+        <?php if ( $car_arrows ) : ?>
+        <button type="button" class="olo-woo-car-arrow olo-woo-car-prev" data-olo-car-prev data-olo-interactive aria-label="<?php echo esc_attr( olobuild_t( 'Precedente' ) ); ?>">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button type="button" class="olo-woo-car-arrow olo-woo-car-next" data-olo-car-next data-olo-interactive aria-label="<?php echo esc_attr( olobuild_t( 'Successivo' ) ); ?>">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <?php endif; ?>
+        </div><?php // .olo-woo-car-stage ?>
+        <?php if ( $car_dots ) : ?>
+        <div class="olo-woo-car-dots" data-olo-car-dots></div>
+        <?php endif; ?>
         </div>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JS below only echoes esc_js()'d strings, (int) numbers and 'true'/'false' literals from fixed ternaries. ?>
+        <script>
+        (function(){
+            /* Carosello dei Prodotti WC. Le pagine sono gruppi di card visibili insieme (quante
+               dipende dalla larghezza: colonne, tablet, mobile), i pallini si rifanno al ridimensionamento.
+               Autoplay fermo con prefers-reduced-motion, sotto il mouse, col fuoco dentro e a scheda nascosta. */
+            var root = document.getElementById('<?php echo esc_js( $uid ); ?>');
+            if(!root){return}
+            var vp = root.querySelector('.olo-woo-car-viewport');
+            if(!vp){return}
+            var track = vp.querySelector('.olo-woo-car-track');
+            var prevBtn = root.querySelector('[data-olo-car-prev]');
+            var nextBtn = root.querySelector('[data-olo-car-next]');
+            var dotsWrap = root.querySelector('[data-olo-car-dots]');
+            var loop = <?php echo $car_loop ? 'true' : 'false'; ?>;
+            var autoplay = <?php echo $car_autoplay ? 'true' : 'false'; ?>;
+            var speed = <?php echo (int) $car_speed; ?>;
+            var dotLabel = '<?php echo esc_js( olobuild_t( 'Vai al gruppo' ) ); ?>';
+            var reduce = false;
+            if(window.matchMedia){ reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+            var timer = null, paused = false, dotCount = -1;
+
+            function cards(){ return track ? track.children : []; }
+            function step(){
+                var c = cards();
+                if(c.length < 2){ return vp.clientWidth || 1; }
+                return (c[1].offsetLeft - c[0].offsetLeft) || 1;
+            }
+            function perView(){
+                var c = cards();
+                if(!c.length){ return 1; }
+                var gap = step() - c[0].offsetWidth;
+                return Math.max(1, Math.round((vp.clientWidth + gap) / step()));
+            }
+            function pageCount(){ return Math.max(1, Math.ceil(cards().length / perView())); }
+            function maxLeft(){ return Math.max(0, vp.scrollWidth - vp.clientWidth); }
+            function currentPage(){
+                if(vp.scrollLeft >= maxLeft() - 2){ return pageCount() - 1; }
+                return Math.min(pageCount() - 1, Math.round(vp.scrollLeft / step() / perView()));
+            }
+            function goPage(p){
+                var n = pageCount();
+                if(p >= n){ p = loop ? 0 : n - 1; }
+                if(p < 0){ p = loop ? n - 1 : 0; }
+                var left = Math.min(maxLeft(), p * perView() * step());
+                if(vp.scrollTo){ vp.scrollTo({ left: left, behavior: reduce ? 'auto' : 'smooth' }); }
+                else { vp.scrollLeft = left; }
+            }
+            function buildDots(){
+                if(!dotsWrap){return}
+                var n = pageCount();
+                if(n === dotCount){return}
+                dotCount = n;
+                dotsWrap.innerHTML = '';
+                dotsWrap.style.display = n > 1 ? '' : 'none';
+                for(var i = 0; i < n; i++){
+                    var b = document.createElement('button');
+                    b.type = 'button';
+                    b.className = 'olo-woo-car-dot';
+                    b.setAttribute('data-olo-interactive', '');
+                    b.setAttribute('data-page', String(i));
+                    b.setAttribute('aria-label', dotLabel + ' ' + (i + 1));
+                    dotsWrap.appendChild(b);
+                }
+            }
+            function sync(){
+                var p = currentPage(), n = pageCount();
+                if(dotsWrap){
+                    var d = dotsWrap.children;
+                    for(var i = 0; i < d.length; i++){
+                        if(i === p){ d[i].setAttribute('aria-current', 'true'); }
+                        else { d[i].removeAttribute('aria-current'); }
+                    }
+                }
+                var scrollable = maxLeft() > 2;
+                if(prevBtn){ prevBtn.style.display = scrollable ? '' : 'none'; prevBtn.disabled = loop ? false : (vp.scrollLeft <= 2); }
+                if(nextBtn){ nextBtn.style.display = scrollable ? '' : 'none'; nextBtn.disabled = loop ? false : (p >= n - 1); }
+            }
+            if(prevBtn){ prevBtn.addEventListener('click', function(){ goPage(currentPage() - 1); }); }
+            if(nextBtn){ nextBtn.addEventListener('click', function(){ goPage(currentPage() + 1); }); }
+            if(dotsWrap){
+                dotsWrap.addEventListener('click', function(e){
+                    var b = e.target.closest('.olo-woo-car-dot');
+                    if(!b){return}
+                    goPage(parseInt(b.getAttribute('data-page'), 10) || 0);
+                });
+            }
+            var raf = 0;
+            vp.addEventListener('scroll', function(){
+                if(raf){return}
+                raf = window.requestAnimationFrame(function(){ raf = 0; sync(); });
+            }, { passive: true });
+            var rt;
+            window.addEventListener('resize', function(){
+                clearTimeout(rt);
+                rt = setTimeout(function(){ buildDots(); sync(); }, 150);
+            });
+            buildDots();
+            sync();
+
+            if(autoplay){
+                if(!reduce){
+                    root.addEventListener('mouseenter', function(){ paused = true; });
+                    root.addEventListener('mouseleave', function(){ paused = false; });
+                    root.addEventListener('focusin', function(){ paused = true; });
+                    root.addEventListener('focusout', function(e){ if(!root.contains(e.relatedTarget)){ paused = false; } });
+                    timer = setInterval(function(){
+                        if(paused){return}
+                        if(document.hidden){return}
+                        if(maxLeft() <= 2){return}
+                        var p = currentPage();
+                        if(p >= pageCount() - 1){
+                            if(!loop){ clearInterval(timer); return; }
+                        }
+                        goPage(p + 1);
+                    }, speed);
+                }
+            }
+        })();
+        </script>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+        <?php else : ?>
+        </div>
+        <?php endif; ?>
         <?php
         // Pagination
         if ( ! empty( $s['pagination'] ) ) {
@@ -435,5 +751,17 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
             echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base border helpers from sanitized values
         }
         return ob_get_clean();
+    }
+
+    /** Un parametro dell'indirizzo come testo pulito ('' se assente o non scalare). */
+    private function filtro_url( $nome ) {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- sola lettura dei filtri pubblici scritti dal Filtro prodotti WC nell'indirizzo; nessuna modifica di stato; valore sanitizzato.
+        return isset( $_GET[ $nome ] ) && is_scalar( $_GET[ $nome ] ) ? sanitize_text_field( wp_unslash( $_GET[ $nome ] ) ) : '';
+    }
+
+    /** Un parametro «a,b,c» dell'indirizzo come elenco di slug (massimo 50). */
+    private function filtro_url_elenco( $nome ) {
+        $voci = array_filter( array_map( 'sanitize_title', explode( ',', $this->filtro_url( $nome ) ) ) );
+        return array_slice( array_values( array_unique( $voci ) ), 0, 50 );
     }
 }

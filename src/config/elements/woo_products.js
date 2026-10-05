@@ -183,8 +183,10 @@ export default {
       { value: 'zoom', label: t('Zoom') },
       { value: 'shadow', label: t('Ombra') },
     ]},
-    { key: 'carousel_speed', label: t('Velocità'), type: 'range', min: 1000, max: 10000, step: 500,
-      condition: { field: 'layout', value: 'carousel' } },
+    // Il tempo fra un gruppo di card e il successivo con l'autoplay: senza autoplay non agisce,
+    // quindi si nasconde.
+    { key: 'carousel_speed', label: t('Intervallo autoplay'), type: 'range', min: 1000, max: 10000, step: 500, unit: 'ms',
+      condition: [{ field: 'layout', value: 'carousel' }, { field: 'carousel_autoplay', value: true }] },
 
     { key: 'layout', label: t('Modalità'), type: 'select', options: [
       { value: 'grid', label: t('Griglia') },
