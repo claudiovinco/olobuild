@@ -70,8 +70,11 @@ class Olobuild_Woo_Product_Title_Tile extends Olobuild_Tile_Base {
         $text_align  = in_array( $s['text_align'], [ 'left', 'center', 'right' ], true ) ? $s['text_align'] : 'left';
         $line_height = in_array( $s['line_height'], [ '1', '1.1', '1.2', '1.3', '1.4', '1.5', '1.6' ], true ) ? $s['line_height'] : '1.2';
 
-        $title     = get_the_title();
-        $permalink = get_permalink();
+        // Il nome e il link del prodotto letto qui sopra, non della pagina: in una scheda prodotto
+        // coincidono, ma in una vista rapida o in una pagina che fa vedere un prodotto la tile
+        // scriveva il titolo della pagina.
+        $title     = $product->get_name();
+        $permalink = $product->get_permalink();
 
         ob_start();
         ?>
