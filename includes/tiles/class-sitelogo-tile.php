@@ -54,9 +54,12 @@ class Olobuild_SiteLogo_Tile extends Olobuild_Tile_Base {
         $has_dark   = $dark_mode !== 'none' && ! empty( $s['dark_image'] );
         $trans_dur  = floatval( $s['transition_duration'] ) ?: 0.3;
 
-        // Alignment
+        // Allineamento: il blocco è una colonna (logo sopra, motto sotto, frontend.css), quindi
+        // l'asse orizzontale è align-items. Prima si scriveva justify-content, che in colonna
+        // agisce in verticale: «Centro» e «Destra» non spostavano il logo.
         $align_map = [ 'left' => 'flex-start', 'center' => 'center', 'right' => 'flex-end' ];
-        $align_css = $align_map[ $s['alignment'] ] ?? 'flex-start';
+        $align_key = isset( $align_map[ $s['alignment'] ] ) ? $s['alignment'] : 'left';
+        $align_css = $align_map[ $align_key ];
 
         // Build main logo image style
         $img_style = 'max-height:' . $max_height . 'px;width:auto;display:block;transition:opacity ' . $trans_dur . 's ease,max-height ' . $trans_dur . 's ease';
@@ -92,10 +95,10 @@ class Olobuild_SiteLogo_Tile extends Olobuild_Tile_Base {
         }
 
         ob_start();
-        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: $align_css from a fixed literal map, $max_height/max_width/hover_opacity/max_height_sticky via absint(), $trans_dur via floatval(), dark-mode branches gated by fixed string comparisons; $uid is internally generated.
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: $align_css/$align_key from a fixed literal map, $max_height/max_width/hover_opacity/max_height_sticky via absint(), $trans_dur via floatval(), dark-mode branches gated by fixed string comparisons; $uid is internally generated.
         ?>
         <style>
-        .<?php echo $uid; ?>{display:flex;justify-content:<?php echo $align_css; ?>}
+        .olo-sitelogo.<?php echo $uid; ?>{display:flex;flex-direction:column;align-items:<?php echo $align_css; ?><?php echo $align_key !== 'left' ? ';text-align:' . $align_key : ''; ?>}
         .<?php echo $uid; ?> .olo-sitelogo-link{display:inline-block;line-height:0}
         .<?php echo $uid; ?> .olo-sitelogo-link:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);border-radius:4px}
         .<?php echo $uid; ?> img,.<?php echo $uid; ?> svg{max-height:<?php echo $max_height; ?>px;width:auto;display:block;transition:opacity <?php echo $trans_dur; ?>s ease,max-height <?php echo $trans_dur; ?>s ease}
