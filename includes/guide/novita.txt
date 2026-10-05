@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.553 - 2026-10-05 (fix)
+- Link a una sezione della stessa pagina: l'arrivo è preciso anche quando le griglie e le immagini appena caricate si assestano durante lo scorrimento.
+
 ## v1.4.552 - 2026-10-05 (fix)
 - Link a una sezione della stessa pagina (#ancora, per esempio da un menu o da un indice): si arriva nel punto giusto anche sulle pagine lunghe, dove le tile più in basso si caricano dopo, e l'header fisso non copre l'inizio della sezione (prima si atterrava più su o più giù).
 - Category Rail: la fila si trascina col mouse; un clic semplice apre ancora la tessera (prima il browser trascinava il link e la fila restava ferma).
