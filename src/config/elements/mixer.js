@@ -50,7 +50,7 @@ export default {
   styleFields: [
     { type: 'separator', label: t('Zona') },
     { key: 'zone_accent', label: t('Colore zona (accento)'), type: 'color' },
-    { key: 'zone_on', label: t('Testo su accento'), type: 'color' },
+    // Niente «Testo su accento»: nel Mixer nessun testo sta sul colore d'accento.
     { key: 'card_bg', label: t('Sfondo pannello'), type: 'color' },
     { key: 'card_border', label: t('Bordo pannello'), type: 'border', legacyWidth: 1 },
     { key: 'align', label: t('Allineamento'), type: 'select', options: [

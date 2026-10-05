@@ -96,13 +96,25 @@ class Olobuild_Mixer_Tile extends Olobuild_Tile_Base {
             var prev=root.querySelector('[data-mx-preview]');
             var out=root.querySelector('[data-mx-out]');
             var sel=[];
-            function hexToRgb(h){ h=String(h).replace('#',''); if(h.length===3){ h=h.charAt(0)+h.charAt(0)+h.charAt(1)+h.charAt(1)+h.charAt(2)+h.charAt(2); } return [parseInt(h.substr(0,2),16)||0,parseInt(h.substr(2,2),16)||0,parseInt(h.substr(4,2),16)||0]; }
+            /* Il colore del campione come lo vede il browser: legge esadecimali, rgb() e anche i
+               colori del tema (var(--olo-color-…)), che prima venivano contati come nero. */
+            function rgbDi(el){
+                var sonda=document.createElement('span');
+                sonda.style.display='none';
+                sonda.style.color=el.getAttribute('data-mx')||'';
+                root.appendChild(sonda);
+                var c=getComputedStyle(sonda).color||'';
+                root.removeChild(sonda);
+                var n=(c.match(/[\d.]+/g)||[]).map(parseFloat);
+                if(c.indexOf('color(')===0){ return [(n[0]||0)*255,(n[1]||0)*255,(n[2]||0)*255]; }
+                return [n[0]||0,n[1]||0,n[2]||0];
+            }
             function toHex(n){ var v=Math.round(n).toString(16); return v.length===1?('0'+v):v; }
             function render(){
                 sw.forEach(function(el){ el.classList.toggle('on', sel.indexOf(el)!==-1); });
                 if(sel.length===0){ if(prev){prev.style.background='transparent';} if(out){out.textContent=empty;} return; }
                 var r=0,g=0,b=0;
-                sel.forEach(function(el){ var c=hexToRgb(el.getAttribute('data-mx')); r+=c[0]; g+=c[1]; b+=c[2]; });
+                sel.forEach(function(el){ var c=rgbDi(el); r+=c[0]; g+=c[1]; b+=c[2]; });
                 var n=sel.length;
                 if(prev){ prev.style.background='#'+toHex(r/n)+toHex(g/n)+toHex(b/n); }
                 if(out){ out.textContent=sel.map(function(el){ return el.getAttribute('data-mx-name')||''; }).join(' + '); }
