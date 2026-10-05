@@ -4,76 +4,10 @@ import { useDnDStore } from '@/stores/dnd';
 import { useHistory } from '@/composables/useHistory';
 import { extractClosestEdge, isOloData } from '@/composables/useDnD';
 import { getElementDef } from '@/config/elementRegistry';
+import { applyContentPlaceholders } from '@/utils/contentPlaceholders';
 
-// v3.55.36 — placeholder universali per nuove tile.
-// Quando si trascina una tile dalla sidebar, i field testo lunghi (textarea/rich-text)
-// e i field immagine vuoti vengono popolati con un Lorem ipsum standard / un'immagine
-// segnaposto grigia. Pensato per dare contesto visivo immediato senza che l'utente
-// debba scrivere/uploadare prima di vedere la tile renderizzata.
-const PLACEHOLDER_LOREM = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
-
-// Rettangolo grigio 800×450 PNG — file statico servito dal plugin.
-// PNG (non SVG) perché molti server WP hanno upload SVG disabilitato per sicurezza
-// e alcuni filtri sanitize_url/wp_check_filetype potrebbero rifiutare data: URI o
-// SVG inline. Il PNG è il formato universale più sicuro.
-function _placeholderImageUrl() {
-  const base = (typeof window !== 'undefined' && window.oloData && window.oloData.pluginUrl)
-    ? window.oloData.pluginUrl
-    : '/wp-content/plugins/olobuild/';
-  return base.replace(/\/$/, '') + '/assets/img/placeholder-image.png';
-}
-const PLACEHOLDER_IMAGE = _placeholderImageUrl();
-
-// Field text "lunghi" (descrizioni, contenuti rich) → Lorem ipsum se vuoto o default banale.
-const LONG_TEXT_TYPES = new Set(['textarea', 'rich-text', 'wysiwyg']);
-
-// Field text che NON ricevono Lorem ipsum (URL, ID, target, alt-text, didascalia, link).
-// `_url$` invece di `_url` per non escludere `image_url` (che è image, non text).
-// Inclusi anche heading/title/name/label: sono testi CORTI per natura — il Lorem ipsum
-// lungo li trasforma in paragrafi illeggibili nel builder. Il default del tile (es.
-// "Nuovo Titolo") è già appropriato come placeholder.
-// v1.0.58 — ampliata copertura:
-//   - _time$, _seconds: campi numerici di durata (start_time, end_time, pause_time)
-//   - overlay_text|overlay: testi opzionali che se vuoti devono restare vuoti (no overlay)
-//   - code|html|css|js$|expression: codice tecnico, mai testo libero
-//   - _date|_date_format|count|index|value|min|max|step|font_size: numerici/select
-//   - search|placeholder: input UI (placeholder è già il proprio "valore")
-//   - _from|_to|_after|_before: range temporali/numerici
-const TEXT_PROTECTED_RE = /(_url$|^url$|_href|^href$|_id$|_target|^target$|_class|email|phone|^slug$|^icon|_icon|font_family|font_weight|color|align|width|height|size|radius|padding|margin|border|shadow|effect|preset|opacity|^tag|layout|columns|gap|speed|duration|delay|enabled|visible|show|hide|type$|kind|mode|style$|^alt$|alt_text|caption|^link|_link|^heading$|^title$|^name$|^label$|^cta_text$|^button_text$|_time$|^time$|_seconds$|_overlay_text$|^overlay_text$|^overlay$|_overlay$|^code$|_code$|^html$|_html$|^css$|_css$|^js$|_js$|^expression$|^script$|_format$|count|^index$|^value$|^min$|^max$|^step$|font_size|placeholder|^search$|_search$|_from$|_to$|_after$|_before$|^path$|_path$|custom_path|^date$|_date$|target_date|_message$|expired_message)/i;
-
-// Field image SECONDARI (hover, fallback, alt) che restano vuoti — il placeholder va
-// solo sul campo principale, non su quelli "opzionali". Senza questo: trascini un'immagine
-// e vedi il placeholder al passaggio del mouse invece che nello stato base.
-const IMAGE_SECONDARY_RE = /(hover|secondary|alternate|fallback|backup|^alt_image|_alt$)/i;
-
-/**
- * Applica placeholder ai field "vuoti" della tile appena creata.
- * - textarea / rich-text → Lorem ipsum
- * - text vuoto (escluse label tecniche/URL/alt/caption) → Lorem ipsum
- * - image vuota PRINCIPALE → PNG segnaposto grigio (NO hover_image, alt_image, ecc.)
- *
- * Mantiene intatti i default già configurati dal tile (es. cta_text='Inizia ora').
- */
-function applyContentPlaceholders(settings, fields) {
-  if (!Array.isArray(fields) || !settings) return;
-  for (const f of fields) {
-    if (!f || !f.key || !f.type) continue;
-
-    const cur = settings[f.key];
-    const isEmpty = cur === '' || cur === undefined || cur === null;
-
-    if (LONG_TEXT_TYPES.has(f.type) && isEmpty) {
-      if (TEXT_PROTECTED_RE.test(f.key)) continue;
-      settings[f.key] = PLACEHOLDER_LOREM;
-    } else if (f.type === 'text' && isEmpty) {
-      if (TEXT_PROTECTED_RE.test(f.key)) continue;
-      settings[f.key] = PLACEHOLDER_LOREM;
-    } else if (f.type === 'image' && isEmpty) {
-      if (IMAGE_SECONDARY_RE.test(f.key)) continue;
-      settings[f.key] = PLACEHOLDER_IMAGE;
-    }
-  }
-}
+// Segnaposto delle tile appena inserite (immagine grigia, Lorem ipsum nei soli testi lunghi da
+// leggere): src/utils/contentPlaceholders.js, fonte unica anche per il catalogo delle tile.
 
 // Guard di idempotenza del SOLO dispatcher monitor (applyPragmaticDrop):
 // cintura di sicurezza contro un eventuale doppio fire dello stesso drop.
