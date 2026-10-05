@@ -585,13 +585,16 @@ trait Olobuild_Renderer_Page_Trait {
         $this->responsive_css_rules = [];
         $tile_counter = 0;
 
-        // Quando il template è di tipo 'widget' è renderizzato dentro un altro
-        // template (via render_widget_template). Evitiamo l'`id="olo-main-content"`
-        // (deve essere unico per pagina) e `role="main"` (semantica per il main
-        // wrapper della pagina, non per un sub-template embedded).
-        $is_widget = ( $template['type'] ?? '' ) === 'widget';
-        $wrapper_id_attr   = $is_widget ? '' : ' id="olo-main-content"';
-        $wrapper_role_attr = $is_widget ? '' : ' role="main"';
+        // `id="olo-main-content"` (bersaglio di «Vai al contenuto principale», unico per
+        // pagina) e `role="main"` spettano solo al template del contenuto. Header, footer,
+        // popup, pannelli del mega menu, widget e template incorporati (Template Embed) sono
+        // resi dallo stesso metodo: prima ricevevano anche loro id e role, e lo skip link
+        // portava all'header (il primo #olo-main-content della pagina).
+        $is_widget  = ( $template['type'] ?? '' ) === 'widget';
+        $principale = ! in_array( $template['type'] ?? 'page', [ 'header', 'footer', 'popup', 'widget', 'megapanel' ], true )
+            && ! ( class_exists( 'Olobuild_Templateembed_Tile' ) && Olobuild_Templateembed_Tile::in_resa() );
+        $wrapper_id_attr   = $principale ? ' id="olo-main-content"' : '';
+        $wrapper_role_attr = $principale ? ' role="main"' : '';
 
         ob_start();
         ?>

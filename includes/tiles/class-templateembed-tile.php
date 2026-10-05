@@ -18,6 +18,14 @@ class Olobuild_TemplateEmbed_Tile extends Olobuild_Tile_Base {
     /** Static depth counter to prevent infinite recursion. */
     private static $render_depth = 0;
 
+    /**
+     * Vero mentre si rende un template incorporato: il renderer non gli dà l'id e il role
+     * del contenuto principale, che spettano al template della pagina.
+     */
+    public static function in_resa() {
+        return self::$render_depth > 0;
+    }
+
     /** Maximum nesting depth for embedded templates. */
     const MAX_DEPTH = 3;
 
