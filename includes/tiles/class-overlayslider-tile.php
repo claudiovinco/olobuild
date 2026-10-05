@@ -9,11 +9,13 @@ class Olobuild_OverlaySlider_Tile extends Olobuild_Tile_Base {
     protected $type     = 'overlayslider';
     protected $name     = 'Overlay Slider';
     protected $icon     = 'dashicons-format-gallery';
-    protected $category = 'interactive';
+    protected $category = 'media';
+    // Stessi testi di partenza del config (overlayslider.js): neutri, senza foto.
     protected $defaults = [
         'slides' => [
-            [ 'id' => 'os-1', 'image' => '', 'title' => 'Prima slide', 'subtitle' => '', 'link' => '' ],
-            [ 'id' => 'os-2', 'image' => '', 'title' => 'Seconda slide', 'subtitle' => '', 'link' => '' ],
+            [ 'id' => 'os-1', 'image' => '', 'title' => 'Benvenuti', 'subtitle' => 'Una breve presentazione di chi siamo', 'link' => '' ],
+            [ 'id' => 'os-2', 'image' => '', 'title' => 'I nostri servizi', 'subtitle' => 'Soluzioni pensate per ogni esigenza', 'link' => '' ],
+            [ 'id' => 'os-3', 'image' => '', 'title' => 'Parliamone', 'subtitle' => 'Scrivici per un primo incontro senza impegno', 'link' => '' ],
         ],
         'columns'             => '1',
         'gap'                 => 'default',
@@ -32,8 +34,9 @@ class Olobuild_OverlaySlider_Tile extends Olobuild_Tile_Base {
         'show_arrows'         => true,
         'show_dots'           => true,
         'ribbon_position'     => 'top-right',
-        'ribbon_bg'           => '#e11d48',
-        'ribbon_color'        => '#ffffff',
+        // Vuoti = colori della palette (primario + il suo contrasto), come il config.
+        'ribbon_bg'           => '',
+        'ribbon_color'        => '',
         'shadow'              => 'lg',
 
         'preset'              => 'cinematic-overlay',
@@ -105,10 +108,23 @@ class Olobuild_OverlaySlider_Tile extends Olobuild_Tile_Base {
 
         $slides = is_array( $s['slides'] ) ? $s['slides'] : [];
         if ( empty( $slides ) ) {
-            return '<div class="olo-overlayslider" style="padding:40px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);">No slides added</div>';
+            // L'avviso serve solo a chi costruisce la pagina: ai visitatori niente.
+            if ( empty( $s['_builder_mode'] ) ) {
+                return '';
+            }
+            return '<div class="olo-overlayslider" style="padding:2.5em;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);">' . esc_html( olobuild_t( 'Nessuna slide aggiunta' ) ) . '</div>';
         }
 
-        $columns  = absint( $s['columns'] ) ?: 1;
+        $columns  = min( 6, absint( $s['columns'] ) ?: 1 );
+        // Colonne per dispositivo (il campo ha il selettore tablet/telefono, che prima
+        // salvava valori mai letti: usciva solo la classe desktop @m). Valori validi o
+        // '' (= eredita dal dispositivo più largo, come nel canvas).
+        $cols_dev = [];
+        foreach ( [ 'tablet_landscape', 'tablet', 'mobile_landscape', 'mobile' ] as $dev ) {
+            $v = absint( $s[ 'columns_' . $dev ] ?? 0 );
+            $cols_dev[ 'columns_' . $dev ] = $v > 0 ? (string) min( 6, $v ) : '';
+        }
+        $has_cols_dev = (bool) array_filter( $cols_dev );
         $gap      = in_array( $s['gap'] ?? 'default', [ 'collapse', 'small', 'default', 'medium', 'large' ], true ) ? ( $s['gap'] ?? 'default' ) : 'default';
         $img_ratio  = $s['image_ratio'] ?? 'auto';
         $img_fit    = in_array( $s['image_fit'] ?? 'cover', [ 'cover', 'contain', 'fill' ], true ) ? ( $s['image_fit'] ?? 'cover' ) : 'cover';
@@ -116,6 +132,9 @@ class Olobuild_OverlaySlider_Tile extends Olobuild_Tile_Base {
         if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
         $height   = absint( $s['image_height'] ?? $s['height'] ?? 400 ) ?: 400;
         $position = esc_attr( $s['overlay_position'] ?: 'bottom' );
+        // «Sotto l'immagine»: la didascalia esce dalla foto e segue nel flusso, senza
+        // velo (preset «Minimal Caption»). Tutte le altre posizioni restano sovrapposte.
+        $below    = ( $position === 'below' );
         $style    = in_array( $s['overlay_style'], [ 'overlay-primary', 'overlay-default' ], true ) ? $s['overlay_style'] : 'overlay-primary';
         $count    = count( $slides );
 
@@ -169,10 +188,45 @@ class Olobuild_OverlaySlider_Tile extends Olobuild_Tile_Base {
 
         // Ribbon
         $ribbon_position = esc_attr( $s['ribbon_position'] ?? 'top-right' );
-        $ribbon_bg       = $this->safe_color_css( $s['ribbon_bg'] ?? '#e11d48' );
-        $ribbon_color    = $this->safe_color_css( $s['ribbon_color'] ?? '#ffffff' );
+        // Vuoto (il default del config) = colori della palette. Prima usciva
+        // `background: ;` e il nastrino delle tile nuove restava senza fondo.
+        $ribbon_bg       = $this->safe_color_css( $s['ribbon_bg'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
+        $ribbon_color    = $this->safe_color_css( $s['ribbon_color'] ?? '' ) ?: 'var(--olo-color-primary-contrast, #ffffff)';
 
         $uid = 'mos-os-' . wp_rand( 10000, 99999 );
+
+        // ── Colonne per dispositivo ──
+        // Sopra i 960px comanda la classe UIkit @m (desktop). Sotto, senza alcun valore
+        // per dispositivo, una slide per volta: è la resa di sempre (la slide prendeva la
+        // larghezza della foto, cioè tutto lo schermo) e non lascia più collassare le
+        // slide senza immagine. Con almeno un valore vale la cascata del canvas: i
+        // dispositivi non impostati ereditano dal più largo, fino al desktop.
+        $items_sel = '.' . $uid . ' .uk-slider-items>*';
+        $nav_sel   = '.' . $uid . ' .olo-os-nav';
+        $base_mob  = $has_cols_dev ? $columns : 1;
+        $cols_css  = '@media (max-width:959px){' . $items_sel . '{width:calc(100% / ' . (int) $base_mob . ');}}';
+        $cols_css .= $this->css_per_dispositivo( $cols_dev, 'columns', $items_sel, static function ( $v ) {
+            return 'width:calc(100% / ' . max( 1, min( 6, absint( $v ) ) ) . ');';
+        } );
+        // Frecce e indicatori: nel markup se su almeno un dispositivo le slide non stanno
+        // tutte in vista; nascosti (visibility, che li toglie anche dal tab) dove ci stanno.
+        $min_cols = $base_mob;
+        foreach ( $cols_dev as $v ) {
+            if ( $v !== '' ) {
+                $min_cols = min( $min_cols, (int) $v );
+            }
+        }
+        $min_cols  = min( $min_cols, $columns );
+        $nav_any   = $count > $min_cols;
+        $nav_css   = '';
+        if ( $nav_any ) {
+            $vis       = function ( $n ) use ( $count ) {
+                return $count > (int) $n ? 'visibility:visible;' : 'visibility:hidden;';
+            };
+            $nav_css  .= $nav_sel . '{' . $vis( $columns ) . '}';
+            $nav_css  .= '@media (max-width:959px){' . $nav_sel . '{' . $vis( $base_mob ) . '}}';
+            $nav_css  .= $this->css_per_dispositivo( $cols_dev, 'columns', $nav_sel, $vis );
+        }
 
         $wrap_class = 'olo-overlayslider olo-os--preset-' . esc_attr( $preset_id ) . ' ' . $uid;
 
@@ -247,18 +301,30 @@ class Olobuild_OverlaySlider_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .uk-overlay h1,
             .<?php echo $uid; ?> .uk-overlay h2,
             .<?php echo $uid; ?> .uk-overlay h3,
-            .<?php echo $uid; ?> .uk-overlay h4 {
+            .<?php echo $uid; ?> .uk-overlay h4,
+            .<?php echo $uid; ?> .olo-os-caption h1,
+            .<?php echo $uid; ?> .olo-os-caption h2,
+            .<?php echo $uid; ?> .olo-os-caption h3,
+            .<?php echo $uid; ?> .olo-os-caption h4 {
                 color: <?php echo $title_clr; ?>;
                 font-weight: <?php echo $title_w; ?>;
                 letter-spacing: <?php echo (float) $title_ls; ?>em;
                 <?php if ( $title_upper ) : ?>text-transform: uppercase;<?php endif; ?>
                 margin: 0;
             }
-            .<?php echo $uid; ?> .uk-overlay p {
+            .<?php echo $uid; ?> .uk-overlay p,
+            .<?php echo $uid; ?> .olo-os-caption p {
                 color: <?php echo $subtitle_clr; ?>;
                 font-size: <?php echo (int) $subtitle_sz; ?>px;
                 margin: 6px 0 0;
             }
+            /* Didascalia sotto l'immagine: nel flusso, senza velo, sul fondo della pagina */
+            .<?php echo $uid; ?> .olo-os-caption--below { position: relative; background: none; color: <?php echo $title_clr; ?>; padding: .9em 0 0; }
+            .<?php echo $uid; ?> .olo-os-caption--below.olo-os-caption--pad-small { padding-top: .6em; }
+            .<?php echo $uid; ?> .olo-os-caption--below.olo-os-caption--pad-large { padding-top: 1.4em; }
+            /* Slide con link: il fuoco da tastiera si vede */
+            .<?php echo $uid; ?> .uk-slider-items a.uk-display-block:focus-visible { outline: 2px solid var(--olo-color-primary, #e1474f); outline-offset: -2px; }
+            <?php echo $cols_css . $nav_css; ?>
 
             /* CTA */
             .<?php echo $uid; ?> .olo-os-cta {
@@ -275,7 +341,7 @@ class Olobuild_OverlaySlider_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-os-cta--underline { border-bottom: 1.5px solid currentColor; padding-bottom: 2px; }
             .<?php echo $uid; ?> .olo-os-cta--arrow .olo-os-cta__arrow { transition: transform 0.25s ease; }
             .<?php echo $uid; ?> li:hover .olo-os-cta--arrow .olo-os-cta__arrow { transform: translateX(4px); }
-            .<?php echo $uid; ?> .olo-os-cta--pill { background: var(--olo-color-primary, #e1474f); color: #fff; border-radius: 999px; padding: 8px 18px; }
+            .<?php echo $uid; ?> .olo-os-cta--pill { background: var(--olo-color-primary, #e1474f); color: var(--olo-color-primary-contrast, #fff); border-radius: 999px; padding: 8px 18px; }
 
             /* Ribbon */
             .<?php echo $uid; ?> .mos-os-ribbon { position: absolute; z-index: 2; font-size: 11px; font-weight: 700; padding: 4px 12px; text-transform: uppercase; letter-spacing: 0.5px; background: <?php echo $ribbon_bg; ?>; color: <?php echo $ribbon_color; ?>; }
@@ -285,7 +351,9 @@ class Olobuild_OverlaySlider_Tile extends Olobuild_Tile_Base {
             <?php
             // V3.26.0 — preset-specific extras (audacious presets)
             echo $this->get_preset_extra_css( $preset_id, '.' . $uid, $s );
-            echo $this->build_wow_effects_css( $s, '.' . $uid, '.olo-overlay-title' );
+            // Il selettore del titolo deve esistere nel markup (classe olo-os-title sul
+            // titolo di ogni slide): con '.olo-overlay-title' bagliore e prompt non comparivano.
+            echo $this->build_wow_effects_css( $s, '.' . $uid, '.olo-os-title' );
             ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
@@ -301,9 +369,10 @@ class Olobuild_OverlaySlider_Tile extends Olobuild_Tile_Base {
                         ?>
                             <li>
                                 <?php if ( $has_link ) : ?>
-                                <a href="<?php echo $link_url; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_url() at assignment above; toggle class is a fixed internal literal ?>" class="uk-link-reset uk-display-block<?php echo $toggle_cls; ?>" style="overflow:hidden;position:relative;" tabindex="0">
+                                <a href="<?php echo $link_url; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_url() at assignment above; toggle class is a fixed internal literal ?>" class="uk-link-reset uk-display-block<?php echo $toggle_cls; ?>" style="overflow:hidden;position:relative;">
                                 <?php else : ?>
-                                <div class="uk-panel<?php echo esc_attr( $toggle_cls ); ?>" style="overflow:hidden;" tabindex="0">
+                                <?php // Senza link la slide non è un comando: niente tabindex. ?>
+                                <div class="uk-panel<?php echo esc_attr( $toggle_cls ); ?>" style="overflow:hidden;">
                                 <?php endif; ?>
                                     <div class="mos-os-frame">
                                     <?php if ( ! empty( $slide['image'] ) ) : ?>
@@ -312,7 +381,7 @@ class Olobuild_OverlaySlider_Tile extends Olobuild_Tile_Base {
                                         echo $this->render_hover_wrap( $os_img, $slide['hover_image'] ?? '', $slide['hover_video'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- <img> markup built above with esc_url()/esc_attr(); hover wrapper generated by Olobuild_Tile_Base::render_hover_wrap() with esc_url()'d media
                                         ?>
                                     <?php else : ?>
-                                        <div style="width:100%;height:100%;background:#1F2937;"></div>
+                                        <div style="width:100%;height:100%;background:var(--olo-color-dark, #1F2937);"></div>
                                     <?php endif; ?>
                                     </div>
                                     <?php if ( ! empty( $slide['ribbon'] ) ) : ?>
@@ -322,12 +391,16 @@ class Olobuild_OverlaySlider_Tile extends Olobuild_Tile_Base {
                                     list( $ost_cls, $ost_data ) = $this->tfx_attrs( $s, 'title', $slide['title'] ?? '' );
                                     list( $oss_cls, $oss_data ) = $this->tfx_attrs( $s, 'subtitle', $slide['subtitle'] ?? '' );
                                     ?>
+                                    <?php if ( $below ) : ?>
+                                    <div class="olo-os-caption olo-os-caption--below olo-os-caption--pad-<?php echo esc_attr( in_array( $pad, [ 'small', 'large' ], true ) ? $pad : 'medium' ); ?> uk-panel<?php echo $text_class . $overlay_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- text/overlay class fragments escaped via esc_attr() at assignment above ?>">
+                                    <?php else : ?>
                                     <div class="uk-<?php echo esc_attr( $style ); ?> uk-position-<?php echo $position; ?> uk-panel<?php echo $text_class . $pad_class . $overlay_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- position/text/overlay class fragments escaped via esc_attr() at assignment above; padding class is a fixed internal literal ?>">
+                                    <?php endif; ?>
                                         <?php $widget_html = $this->render_widget_template( $slide['widget_template_id'] ?? 0 ); ?>
                                         <?php if ( $widget_html ) : ?>
                                             <div class="olo-item-widget"><?php echo $widget_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- widget template HTML rendered by Olobuild_Tile_Base::render_widget_template(); each tile escapes its own output at build time ?></div>
                                         <?php endif; ?>
-                                        <<?php echo $title_tag; ?> class="uk-margin-remove<?php echo $ost_cls; ?>"<?php echo $ost_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- title tag whitelisted via in_array() above; tfx class/data attrs built by Olobuild_Text_Effects with sanitize_html_class()/esc_attr()'d values ?>><?php echo esc_html( $slide['title'] ?? '' ); ?></<?php echo $title_tag; ?>>
+                                        <<?php echo $title_tag; ?> class="olo-os-title uk-margin-remove<?php echo $ost_cls; ?>"<?php echo $ost_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- title tag whitelisted via in_array() above; tfx class/data attrs built by Olobuild_Text_Effects with sanitize_html_class()/esc_attr()'d values ?>><?php echo esc_html( $slide['title'] ?? '' ); ?></<?php echo $title_tag; ?>>
                                         <?php if ( ! empty( $slide['subtitle'] ) ) : ?>
                                             <p class="uk-margin-small-top<?php echo $oss_cls; ?>"<?php echo $oss_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx class/data attrs built by Olobuild_Text_Effects with sanitize_html_class()/esc_attr()'d values ?>><?php echo esc_html( $slide['subtitle'] ); ?></p>
                                         <?php endif; ?>
@@ -341,13 +414,14 @@ class Olobuild_OverlaySlider_Tile extends Olobuild_Tile_Base {
                     </ul>
                 </div>
 
-                <?php if ( ! empty( $s['show_arrows'] ) && $count > $columns ) : ?>
-                    <a class="uk-position-center-left-out" href uk-slidenav-previous uk-slider-item="previous" role="button" aria-label="<?php esc_attr_e( 'Slide precedente', 'olobuild' ); ?>"></a>
-                    <a class="uk-position-center-right-out" href uk-slidenav-next uk-slider-item="next" role="button" aria-label="<?php esc_attr_e( 'Slide successiva', 'olobuild' ); ?>"></a>
+                <?php // $nav_any: su almeno un dispositivo le slide non stanno tutte in vista ($nav_css nasconde frecce e indicatori dove ci stanno). ?>
+                <?php if ( ! empty( $s['show_arrows'] ) && $nav_any ) : ?>
+                    <a class="olo-os-nav uk-position-center-left-out" href uk-slidenav-previous uk-slider-item="previous" role="button" aria-label="<?php esc_attr_e( 'Slide precedente', 'olobuild' ); ?>"></a>
+                    <a class="olo-os-nav uk-position-center-right-out" href uk-slidenav-next uk-slider-item="next" role="button" aria-label="<?php esc_attr_e( 'Slide successiva', 'olobuild' ); ?>"></a>
                 <?php endif; ?>
 
-                <?php if ( ! empty( $s['show_dots'] ) && $count > $columns ) : ?>
-                    <ul class="uk-slider-nav uk-dotnav uk-flex-center uk-margin" role="tablist" aria-label="<?php esc_attr_e( 'Navigazione slide', 'olobuild' ); ?>"></ul>
+                <?php if ( ! empty( $s['show_dots'] ) && $nav_any ) : ?>
+                    <ul class="olo-os-nav uk-slider-nav uk-dotnav uk-flex-center uk-margin" role="tablist" aria-label="<?php esc_attr_e( 'Navigazione slide', 'olobuild' ); ?>"></ul>
                 <?php endif; ?>
             </div>
         </div>

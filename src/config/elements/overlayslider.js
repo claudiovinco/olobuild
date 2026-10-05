@@ -18,14 +18,16 @@ export default {
   type: 'overlayslider',
   name: t('Overlay Slider'),
   icon: 'dashicons-format-gallery',
-  category: 'interactive',
+  category: 'media',
   defaults: {
     typography_preset: '',
     bg: { type: 'none' },
+    // Testi neutri e nessuna foto esterna (stessi default del PHP): senza immagine
+    // la slide mostra il fondo scuro della palette e il testo resta leggibile.
     slides: [
-      { id: 'os-1', image: 'https://images.unsplash.com/photo-1776763018972-588e27bf6511?w=1600&q=75&auto=format&fit=crop', title: t('Suite Royale'), subtitle: 'Spazi privati con vista panoramica', link: '' },
-      { id: 'os-2', image: 'https://images.unsplash.com/photo-1758448755969-8791367cf5c5?w=1600&q=75&auto=format&fit=crop', title: t('Camera Deluxe'), subtitle: 'Comfort raffinato e dettagli curati', link: '' },
-      { id: 'os-3', image: 'https://images.unsplash.com/photo-1765434670017-c0d28ecde29a?w=1600&q=75&auto=format&fit=crop', title: t('Junior Suite'), subtitle: 'Il design contemporaneo che cercavi', link: '' },
+      { id: 'os-1', image: '', title: t('Benvenuti'), subtitle: t('Una breve presentazione di chi siamo'), link: '' },
+      { id: 'os-2', image: '', title: t('I nostri servizi'), subtitle: t('Soluzioni pensate per ogni esigenza'), link: '' },
+      { id: 'os-3', image: '', title: t('Parliamone'), subtitle: t('Scrivici per un primo incontro senza impegno'), link: '' },
     ],
     columns: '1',
     gap: 'default',
@@ -176,7 +178,10 @@ export default {
       { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
     ]},
-    { key: 'overlay_style', label: t('Stile overlay'), type: 'select', options: [
+    // Con la didascalia «Sotto l'immagine» non c'è velo: stile e colore del velo non agiscono.
+    { key: 'overlay_style', label: t('Stile overlay'), type: 'select',
+      condition: { field: 'overlay_position', op: 'neq', value: 'below' },
+      options: [
       { value: 'overlay-primary', label: t('Primary') },
       { value: 'overlay-default', label: t('Predefinito') },
     ]},
@@ -186,8 +191,11 @@ export default {
       { value: 'large', label: t('Grande') },
     ]},
 
-    { key: 'overlay_position', label: t('Posizione verticale'), type: 'select', options: [
+    { key: 'overlay_position', label: t('Posizione verticale'), type: 'select',
+      description: t('«Sotto l\'immagine» porta il testo fuori dalla foto, senza velo: titolo e sottotitolo prendono i colori scelti in Tipografia.'),
+      options: [
       { value: 'bottom', label: t('In basso') },
+      { value: 'below', label: t('Sotto l\'immagine') },
       { value: 'top', label: t('In alto') },
       { value: 'center', label: t('Centro') },
       { value: 'cover', label: t('Copertura') },
@@ -208,10 +216,14 @@ export default {
     ]},
     { type: 'separator', label: t('Stile slide') },
     { key: 'slide_radius', label: t('Raggio slide'), type: 'border-radius' },
-    { key: 'overlay_color', label: t('Colore overlay'), type: 'color' },
-    { key: 'overlay_gradient', label: t('Overlay gradiente (alto→basso)'), type: 'toggle' },
+    { key: 'overlay_color', label: t('Colore overlay'), type: 'color',
+      condition: { field: 'overlay_position', op: 'neq', value: 'below' } },
+    { key: 'overlay_gradient', label: t('Overlay gradiente (alto→basso)'), type: 'toggle',
+      condition: { field: 'overlay_position', op: 'neq', value: 'below' } },
 
-    { key: 'columns', label: t('Colonne'), type: 'select', responsive: true, options: [
+    { key: 'columns', label: t('Colonne'), type: 'select', responsive: true,
+      description: t('Slide visibili insieme. Senza valori per tablet e telefono, sotto i 960px si vede una slide per volta; appena ne imposti uno, i dispositivi non impostati ereditano dal più largo.'),
+      options: [
       { value: '1', label: t('1 colonna') },
       { value: '2', label: t('2 colonne') },
       { value: '3', label: t('3 colonne') },
@@ -263,8 +275,10 @@ export default {
       ]},
 
     { type: 'separator', label: t('Ribbon — colori') },
-    { key: 'ribbon_bg', label: t('Sfondo ribbon'), type: 'color' },
-    { key: 'ribbon_color', label: t('Testo ribbon'), type: 'color' },
+    { key: 'ribbon_bg', label: t('Sfondo ribbon'), type: 'color',
+      description: t('Vuoto = colore primario della palette.') },
+    { key: 'ribbon_color', label: t('Testo ribbon'), type: 'color',
+      description: t('Vuoto = colore di contrasto del primario.') },
 
     ...shadowField,
     ...wowEffectsFields(),
