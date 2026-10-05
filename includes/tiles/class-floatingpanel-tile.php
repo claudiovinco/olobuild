@@ -364,8 +364,9 @@ class Olobuild_Floatingpanel_Tile extends Olobuild_Tile_Base {
                 if (wrapper.getAttribute('data-olo-fp-ready')) return true;
                 wrapper.setAttribute('data-olo-fp-ready', '1');
 
-                /* Move the entire wrapper (style + trigger + panel) to body and make visible */
-                document.body.appendChild(wrapper);
+                /* Move the entire wrapper (style + trigger + panel) to body and make visible,
+                   coi token --olo-* del template (nel body valevano quelli di :root o i ripieghi). */
+                (<?php echo self::js_nel_body(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- costante JS interna ?>)(wrapper);
                 wrapper.style.display = "contents";
 
                 var panel = wrapper.querySelector('[data-olo-fp-id="<?php echo esc_js( $uid ); ?>"]');
