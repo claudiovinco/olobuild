@@ -134,7 +134,7 @@ export default {
     { key: 'items', label: t('Dati'), type: 'content-items',
       itemFields: [
         { key: 'label', label: t('Etichetta'), type: 'text' },
-        { key: 'value', label: t('Valore'), type: 'number', step: 'any' },
+        { key: 'value', label: t('Valore'), type: 'number', step: 0.01 },
 
       ],
       newItemDefaults: { label: t('Nuovo'), value: '50', color: '#e1474f', border_color: '' },
