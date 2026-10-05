@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.546 - 2026-10-05 (fix)
+- Shape Divider: in posizione «Basso» la forma parte dal bordo della sua sezione invece di comparire capovolta e staccata («Specchia verticale» la ribalta come prima); a larghezza 100% il divisore non sporge più a destra lasciando un gradino a sinistra.
+
 ## v1.4.545 - 2026-10-05 (fix)
 - Template incorporato: il template incluso resta largo quanto la sua colonna invece di allargarsi a tutta la finestra.
 
