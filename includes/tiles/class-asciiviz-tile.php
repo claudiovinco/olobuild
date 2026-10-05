@@ -90,7 +90,37 @@ class Olobuild_Asciiviz_Tile extends Olobuild_Tile_Base {
 
         // ── Aspetto ──
         $color   = $this->safe_color_css( $s['color'] )    ?: 'var(--olo-color-primary, #FF9B3D)';
-        $bg      = $this->safe_color_css( $s['bg_color'] ) ?: 'linear-gradient(180deg, var(--olo-color-dark, #13100C), var(--olo-color-dark, #0B0907))';
+        $bg_set  = $this->safe_color_css( $s['bg_color'] );
+        $bg      = $bg_set ?: 'linear-gradient(180deg, var(--olo-color-dark, #13100C), var(--olo-color-dark, #0B0907))';
+        // Testi e filetti seguono il fondo che la tile dipinge: sul fondo scuro di riserva (e su
+        // uno scuro scelto) il titolo e le etichette prendevano i colori del testo del sito,
+        // scuri anche loro, e non si leggevano. Fondo chiaro o non risolvibile: come prima.
+        $su_scuro = true;
+        if ( $bg_set !== '' ) {
+            $bg_hex   = Olobuild_Tile_Utils::colore_hex( $bg_set );
+            $su_scuro = false;
+            // Un fondo quasi trasparente (rgba o #rrggbbaa sotto il 50%) lascia vedere la sezione:
+            // conta quella, quindi restano i colori del sito come prima.
+            $alfa = 1.0;
+            if ( preg_match( '/^rgba?\(\s*[\d.]+%?\s*[,\s]\s*[\d.]+%?\s*[,\s]\s*[\d.]+%?\s*[,\/]\s*([\d.]+)(%?)\s*\)$/i', $bg_set, $am ) ) {
+                $alfa = floatval( $am[1] ) / ( $am[2] === '%' ? 100 : 1 );
+            } elseif ( preg_match( '/^#[0-9a-f]{6}([0-9a-f]{2})$/i', $bg_set, $am ) ) {
+                $alfa = hexdec( $am[1] ) / 255;
+            }
+            if ( $bg_hex !== '' && $alfa >= 0.5 ) {
+                $lum      =( 0.2126 * hexdec( substr( $bg_hex, 1, 2 ) ) + 0.7152 * hexdec( substr( $bg_hex, 3, 2 ) ) + 0.0722 * hexdec( substr( $bg_hex, 5, 2 ) ) ) / 255;
+                $su_scuro = $lum < 0.5;
+            }
+        }
+        if ( $su_scuro ) {
+            $txt_col   = 'var(--olo-color-light, #F1E8D8)';
+            $muted_col = 'color-mix(in srgb, var(--olo-color-light, #F1E8D8) 62%, transparent)';
+            $line_col  = 'color-mix(in srgb, var(--olo-color-light, #F1E8D8) 14%, transparent)';
+        } else {
+            $txt_col   = 'var(--olo-color-text, #1F2937)';
+            $muted_col = 'var(--olo-color-text-muted, #6A5E4C)';
+            $line_col  = 'var(--olo-color-border, rgba(127,127,127,.2))';
+        }
         $glow    = max( 0, min( 30, intval( $s['glow'] ) ) );
         $fsize   = max( 6, min( 24, intval( $s['font_size'] ) ) );
         $lh      = max( 0.8, min( 1.6, floatval( $s['line_height'] ) ) );
@@ -156,11 +186,11 @@ class Olobuild_Asciiviz_Tile extends Olobuild_Tile_Base {
         ];
 
         ob_start();
-        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist, integers/floats via intval()/floatval() with min()/max() clamps, radius via build_border_radius_css(); $uid is internally generated.
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist (text/line colors are fixed token literals chosen above), integers/floats via intval()/floatval() with min()/max() clamps, radius via build_border_radius_css(); $uid is internally generated.
         ?>
         <style>
             .<?php echo $uid; ?>-wrap {
-                border: 1px solid var(--olo-color-border, rgba(241,232,216,.12));
+                border: 1px solid <?php echo $line_col; ?>;
                 border-radius: <?php echo $radius; ?>;
                 background: <?php echo $bg; ?>;
                 overflow: hidden;
@@ -189,7 +219,7 @@ class Olobuild_Asciiviz_Tile extends Olobuild_Tile_Base {
                 align-items: center;
                 gap: 20px;
                 padding: 18px <?php echo max( 16, $pad ); ?>px;
-                border-top: 1px solid var(--olo-color-border, rgba(241,232,216,.12));
+                border-top: 1px solid <?php echo $line_col; ?>;
                 flex-wrap: wrap;
             }
             .<?php echo $uid; ?>-play {
@@ -209,14 +239,14 @@ class Olobuild_Asciiviz_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?>-np .lab {
                 font-family: ui-monospace, monospace; font-size: 10px;
                 letter-spacing: .16em; text-transform: uppercase;
-                color: var(--olo-color-text-muted, #6A5E4C);
+                color: <?php echo $muted_col; ?>;
             }
             .<?php echo $uid; ?>-np .tr {
                 font-weight: 800; font-size: 24px; line-height: 1.05; margin-top: 2px;
-                color: var(--olo-color-text, #F1E8D8);
+                color: <?php echo $txt_col; ?>;
             }
             .<?php echo $uid; ?>-np .state {
-                font-size: 13px; color: var(--olo-color-text-muted, #A99A82); margin-top: 2px;
+                font-size: 13px; color: <?php echo $muted_col; ?>; margin-top: 2px;
             }
             <?php if ( $show_progress ) : ?>
             .<?php echo $uid; ?>-prog {
@@ -232,7 +262,7 @@ class Olobuild_Asciiviz_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?>-list {
                 display: flex; align-items: center; gap: 9px;
                 font-family: ui-monospace, monospace; font-size: 12px;
-                color: var(--olo-color-text, #F1E8D8); white-space: nowrap;
+                color: <?php echo $txt_col; ?>; white-space: nowrap;
             }
             .<?php echo $uid; ?>-list .dot {
                 width: 9px; height: 9px; border-radius: 50%;
@@ -426,6 +456,11 @@ class Olobuild_Asciiviz_Tile extends Olobuild_Tile_Base {
                     }
                     setPlay(next);
                 });
+            } else if ( REACT === 'simulated' || ! audio ) {
+                // Senza barra player non c'è un play da premere: «Simulato» (o l'audio reale senza
+                // file, che ripiega sul simulato) restava fermo sull'onda a riposo. Così anima da
+                // sé; con prefers-reduced-motion targetFor() resta sull'onda lenta.
+                playing = true;
             }
             // Sincronizza lo stato se l'audio reale parte/ferma da solo (es. autoplay riuscito)
             if ( REACT === 'real-audio' && audio ) {

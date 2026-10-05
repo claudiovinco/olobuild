@@ -62,9 +62,9 @@ export default {
     ...borderEffectDefaults,
   },
 
-  // Appena trascinata: la web radio di un locale su un fondo chiaro (il testo del player usa i
-  // colori del testo del sito, che sul fondo scuro di riserva non si leggevano), equalizzatore
-  // largo quanto la tile nel colore primario, senza bagliore, che ondeggia anche in pausa.
+  // Appena trascinata: la web radio di un locale su un fondo chiaro (sul fondo scuro di riserva il
+  // renderer ora schiarisce da sé titolo ed etichette), equalizzatore largo quanto la tile nel
+  // colore primario, senza bagliore, che ondeggia anche in pausa.
   partenza: {
     track_label: t('Ora in onda'),
     track_name: t('La playlist del mattino'),
