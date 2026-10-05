@@ -102,6 +102,8 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
         // Build scoped CSS
         $scoped_css = $this->build_scoped_css( $uid, $s );
 
+        // Colonne per dispositivo (uk-child-width-1-N@m legge solo il desktop)
+        $scoped_css .= $this->css_per_dispositivo( $s, 'columns', '.' . $uid . ' .js-filter > *', $this->decl_larghezza_figli( 6 ) );
         ob_start();
 
         echo '<style>' . $scoped_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS assembled in build_scoped_css() exclusively from absint/intval-clamped numbers, esc_attr()'d colours, shared radius/spacing helpers, Olobuild_Tile_Utils::image_frame() (which validates aspect ratio, object-fit and focal point with its own whitelists) and fixed literal maps

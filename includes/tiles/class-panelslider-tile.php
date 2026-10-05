@@ -155,6 +155,8 @@ class Olobuild_PanelSlider_Tile extends Olobuild_Tile_Base {
             . ' olo-ps--preset-' . esc_attr( $preset_id )
             . ' olo-ps--img-' . esc_attr( $img_position );
 
+        // Colonne per dispositivo (uk-child-width-1-N@m legge solo il desktop)
+        $css .= $this->css_per_dispositivo( $s, 'columns', '.' . $uid . ' .uk-slider-items > *', $this->decl_larghezza_figli( 6 ) );
         ob_start();
         ?>
         <style><?php echo $css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- scoped CSS built by build_scoped_css()/build_wow_effects_css() from absint()/intval()/floatval() numerics, safe_color_css()/esc_attr()'d colors and in_array()/preg_match() whitelisted enums ?></style>

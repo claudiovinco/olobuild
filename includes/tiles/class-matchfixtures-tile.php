@@ -133,6 +133,7 @@ class Olobuild_MatchFixtures_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .omf-venue svg{width:14px;height:14px;flex:none;opacity:.85;}
             @media(max-width:960px){.<?php echo $uid; ?>{grid-template-columns:repeat(2,1fr);}}
             @media(max-width:620px){.<?php echo $uid; ?>{grid-template-columns:1fr;}}
+            <?php echo $this->css_per_dispositivo( $s, 'columns', '.' . $uid, $this->decl_colonne( 4 ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colonne per dispositivo (interi limitati) ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-matchfixtures <?php echo esc_attr( $uid ); ?>">

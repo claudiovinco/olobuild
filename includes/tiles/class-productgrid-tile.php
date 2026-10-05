@@ -319,6 +319,7 @@ class Olobuild_ProductGrid_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .opg-foot a:hover{opacity:.7;}
             .<?php echo $uid; ?> .opg-mw:focus-visible{outline:2px solid <?php echo $pcol; ?>;outline-offset:3px;}
             @media(max-width:900px){.<?php echo $uid; ?> .opg-grid{grid-template-columns:1fr 1fr;}}
+            <?php echo $this->css_per_dispositivo( $s, 'columns', '.' . $uid . ' .opg-grid', $this->decl_colonne( 5 ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colonne per dispositivo (interi limitati) ?>
         </style>
 <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped -- column 0 + closing tag so this line emits zero bytes ?>
         <div class="olo-productgrid <?php echo esc_attr( $uid ); ?>">

@@ -170,6 +170,7 @@ class Olobuild_BeforeAfter_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .oba-t{font-family:<?php echo $serif; ?>;font-size:19px;line-height:1.25;margin:0;color:<?php echo $tc; ?>;}
             .<?php echo $uid; ?> .oba-x{font-size:14px;line-height:1.55;margin:8px 0 0;color:<?php echo $xc; ?>;}
             @media (max-width:780px){.<?php echo $uid; ?>{grid-template-columns:1fr;}}
+            <?php echo $this->css_per_dispositivo( $s, 'columns', '.' . $uid, $this->decl_colonne( 4 ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colonne per dispositivo (interi limitati) ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-beforeafter <?php echo esc_attr( $uid ); ?>">

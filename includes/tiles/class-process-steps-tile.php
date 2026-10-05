@@ -115,6 +115,7 @@ class Olobuild_Process_Steps_Tile extends Olobuild_Tile_Base {
         <style>
             @media (max-width:860px){ .<?php echo $uid; ?>{grid-template-columns:repeat(2,1fr) !important} }
             @media (max-width:480px){ .<?php echo $uid; ?>{grid-template-columns:1fr !important} }
+            <?php echo $this->css_per_dispositivo( $s, 'columns', '.' . $uid, $this->decl_colonne( 6 ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colonne per dispositivo (interi limitati) ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php

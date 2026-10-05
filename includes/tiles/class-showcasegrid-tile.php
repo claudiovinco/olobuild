@@ -167,6 +167,7 @@ class Olobuild_ShowcaseGrid_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ocg-media{transition:transform .5s ease;}
             .<?php echo $uid; ?> .ocg-card:focus-visible{outline:2px solid <?php echo $arrhbg; ?>;outline-offset:3px;}
             @media(max-width:880px){.<?php echo $uid; ?>{grid-template-columns:1fr;}}
+            <?php echo $this->css_per_dispositivo( $s, 'columns', '.' . $uid, $this->decl_colonne( 4 ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colonne per dispositivo (interi limitati) ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-showcasegrid <?php echo esc_attr( $uid ); ?>">

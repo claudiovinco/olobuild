@@ -114,6 +114,7 @@ class Olobuild_HoursStrip_Tile extends Olobuild_Tile_Base {
                 .<?php echo $uid; ?> .olo-hoursstrip__grid { grid-template-columns: 1fr; }
                 <?php if ( $dividers ) : ?>.<?php echo $uid; ?> .olo-hoursstrip__cell { border-left: 0 !important; }<?php endif; ?>
             }
+            <?php echo $this->css_per_dispositivo( $s, 'columns', '.' . $uid . ' .olo-hoursstrip__grid', $this->decl_colonne( 6 ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colonne per dispositivo (interi limitati) ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php

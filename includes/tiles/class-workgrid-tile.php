@@ -146,6 +146,8 @@ class Olobuild_WorkGrid_Tile extends Olobuild_Tile_Base {
             @media (max-width: 680px) {
                 .<?php echo $uid; ?> { grid-template-columns: 1fr !important; }
             }
+            <?php echo $this->css_per_dispositivo( $s, 'columns', '.' . $uid, $this->decl_colonne( 4 ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colonne per dispositivo (interi limitati) ?>
+            <?php echo $this->css_per_dispositivo( $s, 'items_gap', '.' . $uid, function ( $v ) { return 'gap:' . absint( $v ) . 'px !important'; } ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- intero ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php

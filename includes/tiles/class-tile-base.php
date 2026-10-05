@@ -298,6 +298,26 @@ abstract class Olobuild_Tile_Base {
     }
 
     /**
+     * Per css_per_dispositivo() sulle «Colonne» di una griglia CSS: N colonne uguali (1…$max).
+     * !important: le tile hanno ripieghi responsive fissi (e a volte la griglia in linea), e il
+     * valore scelto per il dispositivo deve vincere su quelli. Senza valore restano i ripieghi.
+     */
+    protected function decl_colonne( $max ) {
+        return function ( $v ) use ( $max ) {
+            $n = max( 1, min( (int) $max, absint( $v ) ) );
+            return 'grid-template-columns:repeat(' . $n . ',minmax(0,1fr)) !important';
+        };
+    }
+
+    /** Come decl_colonne() per le griglie UIkit (uk-child-width-1-N): la larghezza dei figli. */
+    protected function decl_larghezza_figli( $max ) {
+        return function ( $v ) use ( $max ) {
+            $n = max( 1, min( (int) $max, absint( $v ) ) );
+            return 'width:calc(100% * 1 / ' . $n . '.001) !important';
+        };
+    }
+
+    /**
      * Convert a color (hex, rgb, rgba) to "r,g,b" triplet for use inside rgba().
      * V3.26.0 — shared helper used by audacious preset extra CSS.
      *
