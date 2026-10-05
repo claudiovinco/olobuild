@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.514 - 2026-10-05 (fix)
+- Bottom Bar, Pannello flottante, menu del selettore lingue, Goo e Particle FX a tutta pagina tengono i colori e i font del tema (prendevano colori di ripiego o un altro primario).
+
 ## v1.4.513 - 2026-10-05 (fix)
 - Nav Menu «Schermo intero» con l'hamburger fisso: mentre il menu è aperto l'hamburger non copre più la X di chiusura.
 
