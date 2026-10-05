@@ -130,6 +130,10 @@ class Olobuild_Counter_Tile extends Olobuild_Tile_Base {
                 letter-spacing: -0.02em;
                 font-variant-numeric: tabular-nums;
             }
+            <?php
+            // Il colore del suffisso è la chiave storica `number_color` (i temi la salvano):
+            // l'inspector non la offriva, ora c'è «Colore suffisso» che la scrive.
+            ?>
             .<?php echo $uid; ?> .olo-cnt-suffix { color: <?php echo $this->safe_color_css( $s['number_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)'; ?>; }
             .<?php echo $uid; ?> .olo-cnt-label {
                 font-size: <?php echo (int) $lbl_fs; ?>px;
@@ -171,7 +175,7 @@ class Olobuild_Counter_Tile extends Olobuild_Tile_Base {
                     </div>
                 <?php endif; ?>
                 <div class="olo-cnt-number">
-                    <?php echo esc_html( $s['prefix'] ); ?><?php echo esc_html( $s['number'] ); ?><?php if ( $s['suffix'] !== '' ) : ?><span class="olo-cnt-suffix"><?php echo esc_html( $s['suffix'] ); ?></span><?php endif; ?>
+                    <?php echo esc_html( $s['prefix'] ); ?><span class="olo-cnt-value"><?php echo esc_html( $s['number'] ); ?></span><?php if ( $s['suffix'] !== '' ) : ?><span class="olo-cnt-suffix"><?php echo esc_html( $s['suffix'] ); ?></span><?php endif; ?>
                 </div>
                 <?php if ( ! empty( $s['label'] ) ) : ?>
                     <?php list( $l_tfx_cls, $l_tfx_data ) = $this->tfx_attrs( $s, 'label', wp_strip_all_tags( $s['label'] ) ); ?>
@@ -179,6 +183,88 @@ class Olobuild_Counter_Tile extends Olobuild_Tile_Base {
                 <?php endif; ?>
             </div>
         </div>
+        <?php if ( preg_match( '/\d/', (string) $s['number'] ) ) : ?>
+        <script>
+        (function(){
+            /* Il numero del contatore non contava: era scritto fermo. Ora sale da zero
+               quando la tile entra nello schermo. L'HTML porta il valore finale: senza
+               JS, senza IntersectionObserver o con «riduci movimento» resta quello.
+               Conta un numero solo («1.250», «4,9», «98%»): «24/7» resta fermo. */
+            var el = document.querySelector('.<?php echo esc_js( $uid ); ?> .olo-cnt-value');
+            if(!el) return;
+            if(!('IntersectionObserver' in window)) return;
+            if(window.matchMedia){
+                if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            }
+            var testo = el.textContent;
+            var m = testo.match(/\d+(?:[.,'’   ]\d+)*/);
+            if(!m) return;
+            var prima = testo.slice(0, m.index);
+            var dopo = testo.slice(m.index + m[0].length);
+            if(/\d/.test(dopo)) return;
+            /* Separatori: misti = l'ultimo è il decimale (1.250,5); uno solo seguito da
+               tre cifre = migliaia (1.250), altrimenti decimale (4,9 · 0.125). */
+            var gruppi = m[0].split(/\D/);
+            var sep = m[0].match(/\D/g) || [];
+            var dec = '';
+            if(sep.length){
+                var u = sep[sep.length - 1];
+                var misti = sep.some(function(c){ return c !== u; });
+                if(misti){
+                    dec = u;
+                } else if(sep.length === 1){
+                    if(u === '.' || u === ','){
+                        if(gruppi[1].length !== 3 || gruppi[0] === '0') dec = u;
+                    }
+                }
+            }
+            var mil = '';
+            sep.forEach(function(c){ if(c !== dec){ if(!mil) mil = c; } });
+            var decimali = dec ? gruppi[gruppi.length - 1].length : 0;
+            var valore = parseFloat(dec ? gruppi.slice(0, -1).join('') + '.' + gruppi[gruppi.length - 1] : gruppi.join(''));
+            if(!(valore > 0)) return;
+            function forma(v){
+                var p = v.toFixed(decimali).split('.');
+                var i = mil ? p[0].replace(/\B(?=(\d{3})+(?!\d))/g, mil) : p[0];
+                return prima + i + (decimali ? dec + p[1] : '') + dopo;
+            }
+            /* Larghezza del valore finale bloccata: le cifre crescono verso sinistra e
+               prefisso, suffisso ed etichetta non ballano. */
+            var w = el.getBoundingClientRect().width;
+            el.style.display = 'inline-block';
+            el.style.minWidth = w + 'px';
+            el.style.textAlign = 'right';
+            el.textContent = forma(0);
+            var dur = 2000;
+            function parti(){
+                var t0 = null;
+                function step(ts){
+                    if(t0 === null) t0 = ts;
+                    var p = Math.min((ts - t0) / dur, 1);
+                    if(p < 1){
+                        el.textContent = forma(valore * (1 - Math.pow(1 - p, 4)));
+                        requestAnimationFrame(step);
+                    } else {
+                        el.textContent = testo;
+                        el.style.display = '';
+                        el.style.minWidth = '';
+                        el.style.textAlign = '';
+                    }
+                }
+                requestAnimationFrame(step);
+            }
+            var obs = new IntersectionObserver(function(entries){
+                entries.forEach(function(entry){
+                    if(entry.isIntersecting){
+                        obs.disconnect();
+                        parti();
+                    }
+                });
+            }, {threshold: 0.3});
+            obs.observe(el);
+        })();
+        </script>
+        <?php endif; ?>
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
         if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated internally by Olobuild_Text_Effects::css() from sanitized settings.

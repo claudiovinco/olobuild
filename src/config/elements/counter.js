@@ -116,6 +116,10 @@ export default {
       },
       sizeMin: 20, sizeMax: 120, sizeStep: 2,
     },
+    // Il PHP colorava il suffisso con `number_color`, che i temi salvano ma l'inspector
+    // non offriva: vuoto = primario, come prima.
+    { key: 'number_color', label: t('Colore suffisso'), type: 'color',
+      condition: { field: 'suffix', op: 'neq', value: '' } },
     { type: 'typography', label: t('Etichetta'),
       responsiveKeys: [],
       keys: {
