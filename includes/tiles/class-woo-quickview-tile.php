@@ -293,6 +293,11 @@ class Olobuild_Woo_Quickview_Tile extends Olobuild_Tile_Base {
         (function(){
             var overlay = document.querySelector('.<?php echo $uid; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- internal 'olo-woo-qv-' . wp_rand() identifier. ?>-overlay');
             if(!overlay){return}
+            <?php if ( empty( $settings['_builder_mode'] ) ) : ?>
+            /* Dentro il template (transform) il velo copriva il template intero e la finestra stava
+               al suo centro: all'apertura la pagina saltava lì. Sul sito il velo va nel body. */
+            (<?php echo self::js_nel_body(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- costante JS interna ?>)(overlay);
+            <?php endif; ?>
             var loading = overlay.querySelector('[data-olo-qv-loading]');
             var content = overlay.querySelector('[data-olo-qv-content]');
             var closeBtn = overlay.querySelector('[data-olo-qv-close]');
