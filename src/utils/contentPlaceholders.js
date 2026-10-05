@@ -61,6 +61,20 @@ export function applyContentPlaceholders(settings, fields) {
   for (const f of fields) {
     if (!f || !f.key || !f.type) continue;
     const cur = settings[f.key];
+    // Voci d'esempio di un ripetitore che senza immagine non si vedono (`segnapostoVoci: true`
+    // sul campo, es. le slide del carousel, che il renderer salta): l'immagine PRINCIPALE vuota
+    // prende il segnaposto. Solo su richiesta: in accordion, timeline, listini… l'immagine
+    // della voce è facoltativa e un riquadro grigio in ogni voce sarebbe sbagliato.
+    if (Array.isArray(cur) && Array.isArray(f.itemFields)) {
+      if (!f.segnapostoVoci) continue;
+      const img = f.itemFields.find((x) => x && x.type === 'image' && x.key && !IMAGE_SECONDARY_RE.test(x.key));
+      if (img) {
+        for (const voce of cur) {
+          if (voce && typeof voce === 'object' && (voce[img.key] === '' || voce[img.key] == null)) voce[img.key] = immagine;
+        }
+      }
+      continue;
+    }
     const isEmpty = cur === '' || cur === undefined || cur === null;
     if (!isEmpty) continue;
     if (riceveLorem(f)) {
