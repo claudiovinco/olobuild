@@ -106,19 +106,50 @@ class Olobuild_Woo_Product_Bundle_Tile extends Olobuild_Tile_Base {
         $discount_amount = $total_price * ( $discount_pct / 100 );
         $bundle_price    = $total_price - $discount_amount;
 
-        // Colors
+        // Colors — l'inspector salva savings_color, bundle_bg e divider_color, il PHP leggeva solo
+        // discount_color, bg_color e border_color: i tre colori dell'inspector non agivano. Si legge
+        // prima la chiave del config, poi quella storica (i template salvati restano come sono).
         $title_color    = $this->safe_color_css( $s['title_color'] ) ?: 'var(--olo-color-text, #374151)';
         $price_color    = $this->safe_color_css( $s['price_color'] ) ?: 'var(--olo-color-text, #374151)';
-        $discount_color = $this->safe_color_css( $s['discount_color'] ) ?: 'var(--olo-color-success, #15803d)';
+        $discount_color = $this->safe_color_css( $s['savings_color'] ?? '' ) ?: ( $this->safe_color_css( $s['discount_color'] ) ?: 'var(--olo-color-success, #15803d)' );
         $savings_bg     = $this->safe_color_css( $s['savings_bg'] ) ?: 'color-mix(in srgb, var(--olo-color-success, #15803d) 12%, #fff)';
         $btn_bg         = $this->safe_color_css( $s['button_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $btn_color      = $this->safe_color_css( $s['button_color'] ) ?: 'var(--olo-color-on-primary, #ffffff)';
-        $bg_color       = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-surface, #ffffff)';
+        $bg_color       = $this->safe_color_css( $s['bundle_bg'] ?? '' ) ?: ( $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-surface, #ffffff)' );
         $border_color   = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #e5e7eb)';
+        $divider_color  = $this->safe_color_css( $s['divider_color'] ?? '' ) ?: $border_color;
         $radius         = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $gap            = absint( $s['gap'] );
-        $is_horizontal  = ( $s['layout'] === 'horizontal' );
+
+        // Disposizione. La tendina dell'inspector offre Griglia/Lista/Compatto, il PHP conosceva solo
+        // 'horizontal' (fila con i «+», il default storico, usato dai template importati): qualsiasi
+        // altro valore — anche «Griglia», la scelta di partenza — dava la lista verticale. Ora:
+        // grid = colonne vere (`columns`), card con il «+» fra una e l'altra; list = la lista di
+        // sempre; compact = la lista con miniature piccole e prezzo sulla riga del nome. I valori
+        // sconosciuti restano la lista, come prima.
+        $layout = isset( $s['layout'] ) ? (string) $s['layout'] : 'horizontal';
+        if ( ! in_array( $layout, [ 'horizontal', 'grid', 'list', 'compact' ], true ) ) {
+            $layout = 'list';
+        }
+        $is_horizontal = ( $layout === 'horizontal' );
+        $is_grid       = ( $layout === 'grid' );
+        $is_compact    = ( $layout === 'compact' );
+        $is_card       = ( $is_horizontal || $is_grid ); // immagine sopra, testo centrato
+        $cols          = max( 1, min( 6, absint( $s['columns'] ?? 3 ) ) );
+        $thumb_px      = $is_compact ? 48 : 80;
+
+        // Visibilità: l'inspector salva show_images/show_prices/show_descriptions, il PHP leggeva
+        // show_image/show_price/show_description — gli interruttori non spegnevano nulla.
+        $show_img   = $this->scelta( $s, 'show_images', 'show_image' );
+        $show_price = $this->scelta( $s, 'show_prices', 'show_price' );
+        $show_desc  = $this->scelta( $s, 'show_descriptions', 'show_description' );
+
+        // Tag del titolo dall'inspector (prima sempre h3).
+        $title_tag = (string) ( $s['title_tag'] ?? 'h3' );
+        if ( ! in_array( $title_tag, [ 'h2', 'h3', 'h4', 'div' ], true ) ) {
+            $title_tag = 'h3';
+        }
 
         $bundle_title = sanitize_text_field( $s['bundle_title'] );
         $btn_text     = esc_html( $s['button_text'] ?: olobuild_t( 'Aggiungi bundle al carrello' ) );
@@ -155,6 +186,11 @@ class Olobuild_Woo_Product_Bundle_Tile extends Olobuild_Tile_Base {
                 margin: 0 0 20px;
             }
             .<?php echo $uid; ?>-items {
+                <?php if ( $is_grid ) : ?>
+                display: grid;
+                grid-template-columns: repeat(<?php echo (int) $cols; ?>, minmax(0, 1fr));
+                align-items: stretch;
+                <?php else : ?>
                 display: flex;
                 <?php if ( $is_horizontal ) : ?>
                 flex-direction: row;
@@ -163,6 +199,7 @@ class Olobuild_Woo_Product_Bundle_Tile extends Olobuild_Tile_Base {
                 flex-direction: column;
                 <?php endif; ?>
                 align-items: center;
+                <?php endif; ?>
                 gap: <?php echo (int) $gap; ?>px;
             }
             .<?php echo $uid; ?>-item {
@@ -175,34 +212,76 @@ class Olobuild_Woo_Product_Bundle_Tile extends Olobuild_Tile_Base {
                 flex: 1;
                 min-width: 120px;
                 max-width: 200px;
+                <?php elseif ( $is_grid ) : ?>
+                flex: 1;
+                min-width: 0;
                 <?php else : ?>
                 width: 100%;
                 display: flex;
                 align-items: center;
-                gap: 16px;
+                gap: <?php echo $is_compact ? 12 : 16; ?>px;
                 text-align: left;
                 <?php endif; ?>
             }
             .<?php echo $uid; ?>-item-img {
-                <?php if ( $is_horizontal ) : ?>
+                <?php if ( $is_card ) : ?>
                 width: 100%;
                 <?php else : ?>
-                width: 80px;
-                height: 80px;
+                width: <?php echo (int) $thumb_px; ?>px;
+                height: <?php echo (int) $thumb_px; ?>px;
                 flex-shrink: 0;
                 <?php endif; ?>
                 overflow: hidden;
             }
             .<?php echo $uid; ?>-item-img img {
                 width: 100%;
-                height: <?php echo $is_horizontal ? 'auto' : '80px'; ?>;
+                height: <?php echo $is_card ? 'auto' : (int) $thumb_px . 'px'; ?>;
                 object-fit: cover;
                 display: block;
             }
             .<?php echo $uid; ?>-item-info {
-                padding: <?php echo $is_horizontal ? '10px' : '0'; ?>;
-                <?php if ( ! $is_horizontal ) : ?>flex: 1;<?php endif; ?>
+                padding: <?php echo $is_card ? '10px' : '0'; ?>;
+                <?php if ( ! $is_card ) : ?>flex: 1;<?php endif; ?>
+                <?php if ( $is_compact ) : ?>
+                display: flex;
+                flex-wrap: wrap;
+                align-items: baseline;
+                justify-content: space-between;
+                column-gap: 0.9em;
+                padding-right: 0.9em;
+                <?php endif; ?>
             }
+            <?php if ( $is_compact ) : ?>
+            .<?php echo $uid; ?>-item-info .<?php echo $uid; ?>-item-name { margin: 0; }
+            .<?php echo $uid; ?>-item-info .<?php echo $uid; ?>-item-desc { flex-basis: 100%; }
+            .<?php echo $uid; ?>-plus svg { width: 16px; height: 16px; }
+            <?php endif; ?>
+            <?php if ( $is_grid ) : ?>
+            /* Griglia: ogni card sta in una cella col suo «+» a cavallo dello spazio a sinistra;
+               la prima card di ogni riga non lo mostra. */
+            .<?php echo $uid; ?>-cell {
+                position: relative;
+                display: flex;
+                min-width: 0;
+            }
+            .<?php echo $uid; ?>-cell-plus {
+                position: absolute;
+                top: 50%;
+                left: <?php echo (int) round( -$gap / 2 ); ?>px;
+                transform: translate(-50%, -50%);
+                z-index: 2;
+                width: 28px;
+                height: 28px;
+                border-radius: 50%;
+                background: var(--olo-color-background, #FFFFFF);
+                border: 1px solid <?php echo $border_color; ?>;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .<?php echo $uid; ?>-cell-plus svg { width: 16px; height: 16px; }
+            .<?php echo $uid; ?>-cell:nth-child(<?php echo (int) $cols; ?>n+1) .<?php echo $uid; ?>-cell-plus { display: none; }
+            <?php endif; ?>
             .<?php echo $uid; ?>-item-name {
                 font-size: 13px;
                 font-weight: 600;
@@ -237,7 +316,7 @@ class Olobuild_Woo_Product_Bundle_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?>-summary {
                 margin-top: 24px;
                 padding-top: 20px;
-                border-top: 1px solid <?php echo $border_color; ?>;
+                border-top: 1px solid <?php echo $divider_color; ?>;
             }
             .<?php echo $uid; ?>-price-row {
                 display: flex;
@@ -293,6 +372,7 @@ class Olobuild_Woo_Product_Bundle_Tile extends Olobuild_Tile_Base {
             @media (max-width: 640px) {
                 .<?php echo $uid; ?>-items {
                     flex-direction: column;
+                    <?php if ( $is_grid ) : ?>grid-template-columns: 1fr;<?php endif; ?>
                 }
                 .<?php echo $uid; ?>-item {
                     max-width: 100%;
@@ -302,6 +382,7 @@ class Olobuild_Woo_Product_Bundle_Tile extends Olobuild_Tile_Base {
                     gap: 12px;
                     text-align: left;
                 }
+                <?php if ( ! $is_compact ) : ?>
                 .<?php echo $uid; ?>-item-img {
                     width: 70px;
                     height: 70px;
@@ -310,13 +391,23 @@ class Olobuild_Woo_Product_Bundle_Tile extends Olobuild_Tile_Base {
                 .<?php echo $uid; ?>-item-img img {
                     height: 70px;
                 }
+                <?php endif; ?>
+                <?php if ( $is_grid ) : ?>
+                /* Una colonna: il «+» passa nello spazio sopra ogni card tranne la prima. */
+                .<?php echo $uid; ?>-cell:nth-child(n) .<?php echo $uid; ?>-cell-plus {
+                    display: flex;
+                    top: <?php echo (int) round( -$gap / 2 ); ?>px;
+                    left: 50%;
+                }
+                .<?php echo $uid; ?>-cell:first-child .<?php echo $uid; ?>-cell-plus { display: none; }
+                <?php endif; ?>
             }
         </style>
 <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped -- column 0 + closing tag so this line emits zero bytes ?>
 
         <div class="<?php echo esc_attr( $uid ); ?>">
             <?php if ( $bundle_title !== '' ) : ?>
-            <h3 class="<?php echo esc_attr( $uid ); ?>-title"><?php echo esc_html( $bundle_title ); ?></h3>
+            <<?php echo tag_escape( $title_tag ); ?> class="<?php echo esc_attr( $uid ); ?>-title"><?php echo esc_html( $bundle_title ); ?></<?php echo tag_escape( $title_tag ); ?>>
             <?php endif; ?>
 
             <div class="<?php echo esc_attr( $uid ); ?>-items">
@@ -325,8 +416,14 @@ class Olobuild_Woo_Product_Bundle_Tile extends Olobuild_Tile_Base {
                 foreach ( $products as $idx => $p ) :
                     $prod = $p['product'];
                 ?>
+                <?php if ( $is_grid ) : ?>
+                <div class="<?php echo esc_attr( $uid ); ?>-cell">
+                    <?php if ( $idx > 0 ) : ?>
+                    <span class="<?php echo esc_attr( $uid ); ?>-cell-plus" aria-hidden="true"><?php echo $plus_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above in this method ?></span>
+                    <?php endif; ?>
+                <?php endif; ?>
                 <div class="<?php echo esc_attr( $uid ); ?>-item">
-                    <?php if ( ! empty( $s['show_image'] ) ) : ?>
+                    <?php if ( $show_img ) : ?>
                     <div class="<?php echo esc_attr( $uid ); ?>-item-img">
                         <?php if ( $p['image_id'] ) : ?>
                         <a href="<?php echo esc_url( $p['url'] ); ?>">
@@ -343,17 +440,19 @@ class Olobuild_Woo_Product_Bundle_Tile extends Olobuild_Tile_Base {
                         <div class="<?php echo esc_attr( $uid ); ?>-item-name">
                             <a href="<?php echo esc_url( $p['url'] ); ?>"><?php echo esc_html( $p['title'] ); ?></a>
                         </div>
-                        <?php if ( ! empty( $s['show_price'] ) ) : ?>
+                        <?php if ( $show_price ) : ?>
                         <div class="<?php echo esc_attr( $uid ); ?>-item-price"><?php echo $p['price_html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- price HTML generated by WooCommerce WC_Product::get_price_html() ?></div>
                         <?php endif; ?>
-                        <?php if ( ! empty( $s['show_description'] ) ) : ?>
+                        <?php if ( $show_desc ) : ?>
                         <?php if ( $p['excerpt'] ) : ?>
                         <div class="<?php echo esc_attr( $uid ); ?>-item-desc"><?php echo wp_kses_post( wp_trim_words( $p['excerpt'], 15 ) ); ?></div>
                         <?php endif; ?>
                         <?php endif; ?>
                     </div>
                 </div>
-                <?php if ( $idx < $count - 1 ) : ?>
+                <?php if ( $is_grid ) : ?>
+                </div>
+                <?php elseif ( $idx < $count - 1 ) : ?>
                 <div class="<?php echo esc_attr( $uid ); ?>-plus"><?php echo $plus_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above in this method ?></div>
                 <?php endif; ?>
                 <?php endforeach; ?>
@@ -432,5 +531,14 @@ class Olobuild_Woo_Product_Bundle_Tile extends Olobuild_Tile_Base {
             echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
         return ob_get_clean();
+    }
+
+    /**
+     * Un interruttore che ha due nomi: quello dell'inspector ($nuova) vince quando c'è, altrimenti
+     * vale quello storico del PHP ($vecchia), che i template importati portano ancora.
+     */
+    private function scelta( $s, $nuova, $vecchia ) {
+        $v = array_key_exists( $nuova, $s ) ? $s[ $nuova ] : ( $s[ $vecchia ] ?? false );
+        return filter_var( $v, FILTER_VALIDATE_BOOLEAN );
     }
 }

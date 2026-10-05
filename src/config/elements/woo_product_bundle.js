@@ -99,12 +99,16 @@ export default {
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     { type: 'separator', label: t('Layout') },
+    // 'horizontal' è il default storico del PHP (card in fila col «+», senza colonne fisse): lo
+    // portano i template importati, e qui compare col suo nome invece di una tendina vuota.
     { key: 'layout', label: t('Layout'), type: 'select', options: [
       { value: 'grid', label: t('Griglia') },
+      { value: 'horizontal', label: t('In fila') },
       { value: 'list', label: t('Lista') },
       { value: 'compact', label: t('Compatto') },
     ]},
-    { key: 'columns', label: t('Colonne (griglia)'), type: 'range', min: 1, max: 6, step: 1 },
+    { key: 'columns', label: t('Colonne (griglia)'), type: 'range', min: 1, max: 6, step: 1,
+      condition: { field: 'layout', value: 'grid' } },
     { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 4 },
     { key: 'card_style', label: t('Stile card'), type: 'select', options: [
       { value: 'default', label: t('Default') },
