@@ -106,12 +106,14 @@ class Olobuild_HoursStrip_Tile extends Olobuild_Tile_Base {
             <?php if ( $dividers ) : ?>
             .<?php echo $uid; ?> .olo-hoursstrip__cell:not(:first-child) { border-left: 1px solid <?php echo $line; ?>; }
             <?php endif; ?>
+            <?php // !important: le colonne del desktop sono in linea e battevano queste regole (4 colonne schiacciate
+                  // sul telefono). Le colonne scelte per dispositivo, stampate dopo, vincono comunque. ?>
             @media (max-width: 760px) {
-                .<?php echo $uid; ?> .olo-hoursstrip__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 0; }
+                .<?php echo $uid; ?> .olo-hoursstrip__grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 26px 0; }
                 <?php if ( $dividers ) : ?>.<?php echo $uid; ?> .olo-hoursstrip__cell:nth-child(odd) { border-left: 0; }<?php endif; ?>
             }
             @media (max-width: 420px) {
-                .<?php echo $uid; ?> .olo-hoursstrip__grid { grid-template-columns: 1fr; }
+                .<?php echo $uid; ?> .olo-hoursstrip__grid { grid-template-columns: 1fr !important; }
                 <?php if ( $dividers ) : ?>.<?php echo $uid; ?> .olo-hoursstrip__cell { border-left: 0 !important; }<?php endif; ?>
             }
             <?php echo $this->css_per_dispositivo( $s, 'columns', '.' . $uid . ' .olo-hoursstrip__grid', $this->decl_colonne( 6 ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colonne per dispositivo (interi limitati) ?>
