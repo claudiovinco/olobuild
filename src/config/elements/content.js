@@ -1,6 +1,7 @@
 
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
 import { ratioOptions } from './_imageFrame.js';
+import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -71,6 +72,24 @@ export default {
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
+  },
+
+  // Appena nata: la scheda di presentazione di un'attività — foto a sinistra ritagliata 3:2 con
+  // angoli morbidi e zoom al passaggio, titolo e due paragrafi veri a destra; sul telefono la
+  // foto torna sopra il testo.
+  partenza: {
+    heading: t('Uno studio che lavora al tuo fianco'),
+    text: t('<p>Da oltre quindici anni seguiamo persone e imprese nei progetti che contano: ascoltiamo prima di proporre e ogni lavoro parte da un incontro <strong>senza impegno</strong>.</p><p>Un referente unico dall\'inizio alla fine, preventivi chiari e tempi di consegna concordati per iscritto.</p>'),
+    image: demo('ufficio'),
+    image_position: 'left',
+    image_position_mobile: 'top',
+    image_width: '40',
+    aspect_ratio: '3/2',
+    image_radius: '12',
+    image_gap: '32',
+    heading_size: 'lg',
+    heading_gap: '12',
+    hover_effect: 'zoom',
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

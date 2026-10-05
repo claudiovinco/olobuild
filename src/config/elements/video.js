@@ -51,6 +51,17 @@ export default {
     text_effect_target: 'all',
   },
 
+  // Appena nato: il riquadro 16:9 con angoli morbidi, ombra leggera e una didascalia. Il video
+  // lo sceglie chi costruisce (il pacchetto demo non ne ha): fino ad allora resta il riquadro
+  // «Inserisci un URL video». Overlay con i colori del config (prima PHP e config divergevano).
+  partenza: {
+    border_radius: 12,
+    shadow: 'md',
+    caption: t('Due minuti per conoscerci: chi siamo e come lavoriamo.'),
+    overlay_color: 'var(--olo-color-dark, #16263d)',
+    overlay_text_color: 'var(--olo-color-light, #f8f9fa)',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'source_type', label: t('Sorgente'), type: 'select', options: [

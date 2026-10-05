@@ -27,6 +27,16 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nata: un'icona da elenco di servizi, grande e del colore primario, che si ingrandisce
+  // al passaggio. Non «Con sfondo»: oggi class-icon-tile.php scrive `padding:{$pad}px` con un
+  // $pad che ha già l'unità (16pxpx), e la forma resta stretta attorno all'icona.
+  partenza: {
+    icon: 'sparkles',
+    size: 48,
+    color: 'var(--olo-color-primary)',
+    hover_animation: 'grow',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'icon', label: t('Nome icona'), type: 'icon' },

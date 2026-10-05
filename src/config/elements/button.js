@@ -53,6 +53,16 @@ export default {
     text_effect_target: 'text',
   },
 
+  // Appena nato: un invito all'azione vero — pieno del colore primario, raggio della scala
+  // condivisa, ombra leggera, freccia dopo il testo e sollevamento al passaggio.
+  partenza: {
+    text: t('Richiedi un preventivo'),
+    icon: 'arrow-right',
+    icon_position: 'after',
+    border_radius: 10,
+    shadow: 'sm',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'text', label: t('Testo pulsante'), type: 'text' },

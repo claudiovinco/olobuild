@@ -25,6 +25,16 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nato: un divisore decorativo — linea sottile tinta del colore primario, al 60% della
+  // colonna, con una stellina piena del primario al centro.
+  partenza: {
+    width: '60',
+    color: 'color-mix(in srgb, var(--olo-color-primary) 50%, transparent)',
+    icon_emoji: 'star',
+    text_color: 'var(--olo-color-primary)',
+    spacing: '24',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'text', label: t('Testo centrale'), type: 'text' },

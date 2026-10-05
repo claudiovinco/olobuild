@@ -54,6 +54,16 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nato: un titolo di sezione vero e breve (le linee decorative ai lati restano
+  // visibili) con le parole d'accento nel colore primario e in corsivo, e un sottotitolo.
+  partenza: {
+    heading: t('Progetti su misura'),
+    accent_text: t('su misura'),
+    accent_italic: true,
+    subtitle: t('Dall\'idea alla consegna: ascoltiamo, progettiamo e realizziamo ogni dettaglio, con tempi e costi chiari fin dal primo giorno.'),
+    subtitle_font_size: '18',
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'heading', label: t('Titolo'), type: 'textarea' },

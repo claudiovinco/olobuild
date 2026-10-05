@@ -40,6 +40,12 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // Appena nato: un testo vero con quello che l'editor sa fare — paragrafo con grassetto,
+  // elenco puntato e un link nella chiusa.
+  partenza: {
+    content: t('<p>Ogni progetto parte da un incontro: ci racconti cosa ti serve, noi ti spieghiamo come lavoriamo e in quanto tempo. <strong>La prima consulenza è gratuita</strong> e senza impegno.</p><ul><li>Un referente unico dall\'inizio alla fine</li><li>Preventivi chiari, senza costi nascosti</li><li>Assistenza anche dopo la consegna</li></ul><p>Hai una domanda? <a href="#">Scrivici</a>: rispondiamo entro un giorno lavorativo.</p>'),
+  },
+
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'content', label: t('Contenuto'), type: 'editor', mode: 'block' },

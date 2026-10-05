@@ -1,5 +1,6 @@
 import { textEffectsFields, textEffectsDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
 import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
+import { demo, demoAlt } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -76,6 +77,18 @@ export default {
     ...borderEffectDefaults,
     ...textEffectsDefaults,
     text_effect_target: 'caption',
+  },
+
+  // Appena nata: una foto vera in formato 16:9, angoli morbidi, testo alternativo, zoom lento al
+  // passaggio e ingrandimento a tutto schermo al clic. Niente didascalia: con una proporzione il
+  // PHP la mette dentro la <figure> ritagliata (aspect-ratio + overflow:hidden) e non si vede.
+  partenza: {
+    image_url: demo('montagna-lago'),
+    alt_text: demoAlt('montagna-lago'),
+    aspect_ratio: '16/9',
+    border_radius: '12',
+    hover_animation: 'zoom-in',
+    lightbox: true,
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────
