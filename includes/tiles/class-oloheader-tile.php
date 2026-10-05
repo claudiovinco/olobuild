@@ -754,6 +754,11 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
           var root = document.querySelector('.<?php echo esc_js( $uid ); ?>');
           if (!root || root.dataset.oloshInit) return;
           root.dataset.oloshInit = '1';
+          <?php if ( empty( $s['_builder_mode'] ) ) : ?>
+          // Nel corpo della pagina il transform del template intrappolava la barra sticky (scorreva
+          // via), il pannello mobile e il velo. Sul sito il template si sgancia.
+          (<?php echo self::js_sgancia_template(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- costante JS interna ?>)(root);
+          <?php endif; ?>
 
           var bar = root.querySelector('[data-bar]');
           var openMega = root.dataset.openMega || 'hover';

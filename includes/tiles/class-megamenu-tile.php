@@ -3419,6 +3419,11 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             var uid = "<?php echo esc_js( $uid ); ?>";
             var root = document.querySelector("." + uid);
             if (!root) return;
+            <?php if ( empty( $s['_builder_mode'] ) ) : ?>
+            /* Nel corpo della pagina il transform del template intrappolava pannello mobile, velo,
+               ricerca a tutto schermo e pannelli «sotto la sezione». Sul sito il template si sgancia. */
+            (<?php echo self::js_sgancia_template(); ?>)(root);
+            <?php endif; ?>
 
             /* ── Hover Intent Desktop ── */
             var timers = {};

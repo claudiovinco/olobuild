@@ -628,6 +628,11 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
         <script>
         (function(){
             var nav = document.querySelector('.olo-navmenu--<?php echo esc_js( $nav_id ); ?>');
+            <?php if ( empty( $s['_builder_mode'] ) ) : ?>
+            /* Nel corpo della pagina il transform del template intrappolava hamburger fisso e
+               offcanvas (alti quanto la pagina, dal suo inizio). Sul sito il template si sgancia. */
+            (<?php echo self::js_sgancia_template(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- costante JS interna ?>)(nav);
+            <?php endif; ?>
             if (!nav || !window.UIkit) return;
             nav.querySelectorAll('[aria-haspopup="true"][aria-controls]').forEach(function(trigger){
                 var drop = document.getElementById(trigger.getAttribute('aria-controls'));
