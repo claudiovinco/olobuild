@@ -12,14 +12,15 @@ export default {
   type: 'panel',
   name: t('Pannello'),
   icon: 'dashicons-id-alt',
-  category: 'interactive',
+  // Una card di contenuto: con le sorelle (Riquadro icona, Flip card) in «Marketing».
+  category: 'marketing',
   defaults: {
     typography_preset: '',
     preset: 'card-classic',
     style: 'default',
-    title: t('Titolo Provvisorio'),
-    meta: 'Scritto da Autore',
-    content: 'Il contenuto del pannello va qui. Aggiungi testo, immagini o qualsiasi altro contenuto.',
+    title: t('Titolo del pannello'),
+    meta: t('Scritto dall\'autore'),
+    content: t('Contenuto del pannello. Aggiungi testo, immagini o altri elementi.'),
     media_type: 'image',
     image: '',
     effect_color: '',
@@ -42,8 +43,11 @@ export default {
     meta_color: '',
     content_size: '',
     content_color: '',
-    link_label: '',
+    // Le tile nuove escono col link in fondo; svuotata l'etichetta resta il solo titolo cliccabile.
+    link_label: t('Leggi di più'),
     link_color: '',
+    card_bg: '',
+    text_on_media: false,
     hover_image: '',
     hover_video: '',
     video: '',
@@ -106,7 +110,7 @@ export default {
       { value: '_blank', label: t('Nuova finestra') },
     ]},
     { key: 'link_label', label: t('Etichetta link'), type: 'text',
-      description: 'Vuoto = "Read more →"',
+      description: t('Il link in fondo al pannello, seguito da una freccia. Vuoto = nessun link in fondo: resta cliccabile il titolo.'),
       condition: { field: 'link_url', op: 'notEmpty' } },
   ],
 
@@ -159,6 +163,9 @@ export default {
     ]),
 
     { type: 'separator', label: t('Dimensioni media') },
+    { key: 'text_on_media', label: t('Testo sopra il media'), type: 'toggle',
+      description: t('Il media riempie la card e il testo scende in fondo, su un velo scuro. Le proporzioni (o l\'altezza fissa) diventano quelle della card.'),
+      condition: { field: 'media_type', op: 'neq', value: 'none' } },
     // Elenco canonico: la tile ne offriva 7 su 9 (mancavano 4:5 e 9:16). Qui il
     // rapporto finisce tale e quale nel CSS del media, nessuna tabella da allargare.
     { key: 'image_ratio', label: t('Proporzioni'), type: 'select',
@@ -200,11 +207,18 @@ export default {
       ] },
     { key: 'image_zoom', label: t('Zoom al hover'), type: 'toggle',
       condition: { field: 'media_type', op: 'neq', value: 'none' } },
+    // Con «Testo sopra il media» il media è la card: padding e raggio del media non agiscono.
     { key: 'media_padding', label: t('Padding attorno al media'), type: 'spacing', max: 60,
       description: t('Aggiunge uno spazio bianco attorno al media'),
-      condition: { field: 'media_type', op: 'neq', value: 'none' } },
+      condition: [
+        { field: 'media_type', op: 'neq', value: 'none' },
+        { field: 'text_on_media', op: 'neq', value: true },
+      ] },
     withHover({ key: 'border_radius', label: t('Raggio media'), type: 'border-radius',
-      condition: { field: 'media_type', op: 'neq', value: 'none' } }),
+      condition: [
+        { field: 'media_type', op: 'neq', value: 'none' },
+        { field: 'text_on_media', op: 'neq', value: true },
+      ] }),
 
     { type: 'separator', label: t('Tipografia') },
     { key: 'text_align', label: t('Allineamento testo'), type: 'select', options: [
@@ -247,6 +261,8 @@ export default {
     },
 
     { type: 'separator', label: t('Stile card') },
+    { key: 'card_bg', label: t('Sfondo card'), type: 'color',
+      description: t('Vuoto = lo sfondo dello stile UIkit scelto.') },
     { key: 'card_padding', label: t('Padding'), type: 'spacing', max: 60 },
     withHover({ key: 'card_radius', label: t('Raggio card'), type: 'border-radius'}),
     ...shadowField,
