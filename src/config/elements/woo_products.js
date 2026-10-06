@@ -56,6 +56,9 @@ export default {
     carousel_dots: true,
     columns_tablet: '2',
     columns_mobile: '1',
+    card_bg: '',
+    card_radius: 8,
+    card_padding: 14,
     shadow: 'none',
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
@@ -173,6 +176,19 @@ export default {
     // se aggiungi una voce qui, aggiungila anche li' o ritagliera' 4:3.
     { key: 'image_ratio', label: t('Proporzioni immagine'), type: 'select',
       options: ratioOptions({ sep: '-', auto: true }) },
+    // Il tempo fra un gruppo di card e il successivo con l'autoplay: senza autoplay non agisce,
+    // quindi si nasconde.
+    { key: 'carousel_speed', label: t('Intervallo autoplay'), type: 'range', min: 1000, max: 10000, step: 500, unit: 'ms',
+      condition: [{ field: 'layout', value: 'carousel' }, { field: 'carousel_autoplay', value: true }] },
+
+    { key: 'layout', label: t('Modalità'), type: 'select', options: [
+      { value: 'grid', label: t('Griglia') },
+      { value: 'carousel', label: t('Carosello') },
+    ]},
+
+    // La card di ogni prodotto: prima sfondo, raggio e padding erano fissi nel renderer.
+    // Il Bordo in fondo al tab disegna anch'esso la card (non più la griglia intera).
+    { type: 'separator', label: t('Card') },
     { key: 'card_style', label: t('Stile card'), type: 'select', options: [
       { value: 'none', label: t('Nessuno') },
       { value: 'shadow', label: t('Ombra') },
@@ -183,15 +199,11 @@ export default {
       { value: 'zoom', label: t('Zoom') },
       { value: 'shadow', label: t('Ombra') },
     ]},
-    // Il tempo fra un gruppo di card e il successivo con l'autoplay: senza autoplay non agisce,
-    // quindi si nasconde.
-    { key: 'carousel_speed', label: t('Intervallo autoplay'), type: 'range', min: 1000, max: 10000, step: 500, unit: 'ms',
-      condition: [{ field: 'layout', value: 'carousel' }, { field: 'carousel_autoplay', value: true }] },
+    { key: 'card_bg', label: t('Sfondo card'), type: 'color' },
+    { key: 'card_radius', label: t('Raggio card'), type: 'border-radius' },
+    { key: 'card_padding', label: t('Padding card'), type: 'spacing', max: 48,
+      description: t('Lo spazio attorno a nome, prezzo e pulsante: la foto resta a filo della card.') },
 
-    { key: 'layout', label: t('Modalità'), type: 'select', options: [
-      { value: 'grid', label: t('Griglia') },
-      { value: 'carousel', label: t('Carosello') },
-    ]},
     { type: 'separator', label: t('Colori') },
     { key: 'sale_color', label: t('Colore saldo'), type: 'color' },
     { key: 'button_bg', label: t('Sfondo pulsante'), type: 'color' },

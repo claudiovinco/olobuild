@@ -39,6 +39,9 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
         'pagination'      => false,
         'columns_tablet'  => 2,
         'columns_mobile'  => 1,
+        'card_bg'         => '',
+        'card_radius'     => 8,
+        'card_padding'    => 14,
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -77,6 +80,22 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
         $btn_color    = $this->safe_color_css( $s['button_color'] ) ?: 'var(--olo-color-primary-contrast, #ffffff)';
         $btn_bg       = $this->safe_color_css( $s['button_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $badge_bg     = $this->safe_color_css( $s['badge_bg'] ) ?: 'var(--olo-color-dark, #111827)';
+
+        // La card: sfondo, raggio e padding erano fissi nel CSS (fondo pagina, 8 px, 14 px) senza
+        // un controllo. Le riserve sono quei valori, così le griglie già pubblicate non cambiano.
+        // Il padding è lo spazio del testo (nome, prezzo, pulsante): la foto resta a filo.
+        $card_bg     = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-background, #FFFFFF)';
+        $card_radius = Olobuild_Tile_Utils::border_radius( $s['card_radius'] ?? 8 ) ?: '0';
+        $card_pad    = Olobuild_Tile_Utils::spacing_css( $s['card_padding'] ?? 14, 14 );
+
+        // Il Bordo (con hover ed effetti) è delle CARD: la regola puntava al contenitore .{uid} e
+        // incorniciava tutta la griglia (o il carosello) in un solo rettangolo. La transizione del
+        // bordo in hover si aggiunge a quella della card: una seconda «transition» avrebbe spento
+        // l'ombra e lo zoom al passaggio.
+        $bordo_card    = $this->build_border_css( $s['border'] ?? [] );
+        $bordo_hover   = $this->build_border_hover_props( $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $bordo_effetti = $this->build_border_effect_css( ".{$uid} .olo-woo-card", $s['border'] ?? [], $s );
+        $card_trans    = 'box-shadow 0.3s ease, transform 0.3s ease' . ( $bordo_hover['transition'] !== '' ? ', ' . $bordo_hover['transition'] : '' );
 
         // Modalità «Carosello» (config: layout + carousel_*): prima nessuna di queste chiavi era
         // letta e la tile restava sempre una griglia. Il carosello è uno scorrimento orizzontale
@@ -245,7 +264,7 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/absint/fixed maps/generated uid). ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/absint/fixed maps/generated uid, Olobuild_Tile_Utils radius/spacing helpers, Olobuild_Tile_Base border helpers). ?>
         <style>
             <?php if ( ! $is_carousel ) : ?>
             .<?php echo $uid; ?> {
@@ -353,12 +372,19 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
             }
             <?php endif; ?>
             .<?php echo $uid; ?> .olo-woo-card {
-                background: var(--olo-color-background, #FFFFFF);
-                border-radius: 8px;
+                background: <?php echo $card_bg; ?>;
+                border-radius: <?php echo $card_radius; ?>;
                 overflow: hidden;
                 <?php echo $card_extra; ?>
-                transition: box-shadow 0.3s ease, transform 0.3s ease;
+                <?php echo $bordo_card; ?>
+                transition: <?php echo $card_trans; ?>;
             }
+            <?php if ( $bordo_hover['decls'] !== '' ) : ?>
+            .<?php echo $uid; ?> .olo-woo-card:hover {
+                <?php echo $bordo_hover['decls']; ?>
+            }
+            <?php endif; ?>
+            <?php echo $bordo_effetti; ?>
             <?php if ( $hover_effect === 'shadow' ) : ?>
             .<?php echo $uid; ?> .olo-woo-card:hover {
                 box-shadow: 0 10px 25px rgba(0,0,0,0.15);
@@ -404,7 +430,7 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
                 z-index: 2;
             }
             .<?php echo $uid; ?> .olo-woo-card-body {
-                padding: 14px;
+                padding: <?php echo $card_pad; ?>;
             }
             .<?php echo $uid; ?> .olo-woo-card-title {
                 margin: 0 0 6px;
@@ -741,15 +767,6 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
         }
 
         wp_reset_postdata();
-                // Border system
-        $border_css        = $this->build_border_css( $s['border'] ?? [] );
-        $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
-        $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
-        if ( $border_css || $border_hover_css || $border_effect_css ) {
-            echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base::build_border_css() from sanitized values (intval/safe color whitelist)
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base border helpers from sanitized values
-        }
         return ob_get_clean();
     }
 
