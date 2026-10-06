@@ -65,6 +65,9 @@ export default {
     placeholder_color: 'var(--olo-color-text-muted, #94a3b8)',
     icon_color: 'var(--olo-color-text-muted, #6b7280)',
     border_color: 'var(--olo-color-border, #e5e7eb)',
+    // Il filo che il campo mostra, anche nel controllo Bordo (che prima, a zero, nascondeva il
+    // filo da 1px disegnato dalle chiavi piatte: cambiarne il solo colore lo faceva sparire).
+    border: { top: 1, right: 1, bottom: 1, left: 1, linked: true, style: 'solid', color: 'var(--olo-color-border, #e5e7eb)' },
     button_color: 'var(--olo-color-primary-contrast, #ffffff)',
   },
 
@@ -151,9 +154,6 @@ export default {
     { key: 'bg_color', label: t('Sfondo input'), type: 'color' },
     { key: 'placeholder_color', label: t('Colore placeholder'), type: 'color' },
     { key: 'icon_color', label: t('Colore icona'), type: 'color' },
-    { key: 'border', label: t('Bordo'), type: 'border',
-      legacyKeys: { width: 'border_width', color: 'border_color' } },
-
     { key: 'focus_border_color', label: t('Colore bordo focus'), type: 'color' },
     { key: 'button_bg', label: t('Sfondo pulsante'), type: 'color', show: s => s.show_button },
     { key: 'button_color', label: t('Colore testo pulsante'), type: 'color', show: s => s.show_button },
@@ -169,6 +169,11 @@ export default {
     { key: 'focus_shadow', label: t('Ombra su focus'), type: 'toggle' },
 
     ...shadowField,
-    ...borderFields(),
+    // Il Bordo del campo: UN controllo. Prima la chiave `border` era offerta due volte (qui e in
+    // «Colori») e il PHP la disegnava due volte, sul campo e sul contenitore attorno. Il ponte
+    // legacy tiene in sincronia border_width/border_color, che il renderer legge ancora.
+    ...borderFields().map((f) => (f.key === 'border'
+      ? { ...f, legacyKeys: { width: 'border_width', color: 'border_color' } }
+      : f)),
   ],
 };
