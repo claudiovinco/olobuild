@@ -258,6 +258,15 @@ class Olobuild_Media_Search {
                 font: inherit; font-size: 15px; color: var(--olo-text);
                 min-width: 0;
             }
+            /* Il focus si vede solo sulla casella (:focus-within qui sopra), come nella tile Cerca: il
+               forms.css di WordPress (input[type=text]:focus, più specifico della regola sopra) ridisegnava
+               bordo e anello sul campo e dentro la casella compariva un secondo rettangolo. */
+            .olo-ms-search-field input[type="text"]:focus,
+            .olo-ms-search-field input[type="search"]:focus,
+            .olo-ms-search-field input[type="text"]:focus-visible,
+            .olo-ms-search-field input[type="search"]:focus-visible {
+                border: 0; outline: 0; box-shadow: none;
+            }
             .olo-ms-search-field input::placeholder { color: var(--olo-text-faint); }
             .olo-ms-search-field .clr {
                 border: 0; background: transparent; cursor: pointer; color: var(--olo-text-light);
