@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 class Olobuild_AnnouncementBar_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'announcementbar';
-    protected $name     = 'Announcement Bar';
+    protected $name     = 'Barra Annuncio';
     protected $icon     = 'dashicons-megaphone';
     protected $category = 'marketing';
     protected $defaults = [
@@ -48,7 +48,14 @@ class Olobuild_AnnouncementBar_Tile extends Olobuild_Tile_Base {
         }
         $bgcol = $this->safe_color_css( $s['bg_color'] ?? '' ) ?: 'var(--olo-color-text, #0c0c0c)';
         $bg    = $bg_decl !== '' ? $bg_decl : ( 'background:' . $bgcol );
-        $tcol  = $this->safe_color_css( $s['text_color'] ?? '' ) ?: 'var(--olo-color-secondary, #efe9de)';
+        // Testo di riserva sulla barra di riserva: il colore di fondo del sito, l'inverso del
+        // colore del testo che la colora — si legge con ogni palette. Era il secondario: sui temi
+        // con secondario salvia e testo marrone, salvia su marrone, poco contrastato.
+        // Con uno sfondo scelto (bg o bg_color) resta il secondario di sempre: il fondo del sito
+        // su una barra chiara, o uguale al fondo del sito, sarebbe illeggibile o invisibile.
+        $bg_scelto = ( $bg_decl !== '' || $this->safe_color_css( $s['bg_color'] ?? '' ) !== '' );
+        $tcol  = $this->safe_color_css( $s['text_color'] ?? '' )
+            ?: ( $bg_scelto ? 'var(--olo-color-secondary, #efe9de)' : 'var(--olo-color-background, #efe9de)' );
         $acol  = $this->safe_color_css( $s['accent_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
         $fs    = max( 8, intval( $s['font_size'] ?? 11 ) );
         $fw    = in_array( (string) ( $s['font_weight'] ?? '500' ), [ '400', '500', '600', '700' ], true ) ? (string) ( $s['font_weight'] ?? '500' ) : '500';
@@ -59,7 +66,8 @@ class Olobuild_AnnouncementBar_Tile extends Olobuild_Tile_Base {
         $cp    = is_array( $s['tile_padding'] ?? null ) ? $s['tile_padding'] : [];
         $pad   = intval( $cp['top'] ?? 10 ) . 'px ' . intval( $cp['right'] ?? 20 ) . 'px ' . intval( $cp['bottom'] ?? 10 ) . 'px ' . intval( $cp['left'] ?? 20 ) . 'px';
         $bb    = max( 0, intval( $s['border_bottom'] ?? 0 ) );
-        $bc    = $this->safe_color_css( $s['border_color'] ?? '' ) ?: 'rgba(239,233,222,.12)';
+        // Filo di riserva: dal colore del testo (era un crema fisso, invisibile sulle barre chiare).
+        $bc    = $this->safe_color_css( $s['border_color'] ?? '' ) ?: 'color-mix(in srgb, ' . $tcol . ' 12%, transparent)';
         $sans  = "var(--olo-font-family, -apple-system, sans-serif)";
         $link  = trim( (string) ( $s['link_url'] ?? '' ) );
         $dismiss = ! empty( $s['dismissible'] );
@@ -82,7 +90,7 @@ class Olobuild_AnnouncementBar_Tile extends Olobuild_Tile_Base {
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-annbar <?php echo esc_attr( $uid ); ?>">
             <?php if ( $link !== '' ) : ?><a class="oab-link" href="<?php echo esc_url( $link ); ?>"><?php echo $inner; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above from esc_html()'d text/accent plus a literal <b> wrapper ?></a><?php else : ?><span><?php echo $inner; ?></span><?php endif; ?>
-            <?php if ( $dismiss ) : ?><button class="oab-close" type="button" aria-label="<?php echo esc_attr( __( 'Close', 'olobuild' ) ); ?>">&times;</button><?php endif; ?>
+            <?php if ( $dismiss ) : ?><button class="oab-close" type="button" aria-label="<?php echo esc_attr( olobuild_t( 'Chiudi' ) ); ?>">&times;</button><?php endif; ?>
         </div>
         <?php if ( $dismiss ) :
             $key = 'olo_annbar_' . substr( md5( $text . $accent ), 0, 8 );
