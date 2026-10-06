@@ -81,9 +81,11 @@ class Olobuild_Pagelight_Tile extends Olobuild_Tile_Base {
            non hanno z-index e un layer a z:0 coprirebbe i testi). */
         #<?php echo esc_attr( $uid ); ?>{position:fixed;inset:0;pointer-events:none;z-index:-1;}
         .olo-frontend-grid:has(> .olo-pagelight){position:relative;z-index:0;}
-        /* Il wrapper del template full-bleed usa transform/container: creerebbe
-           un containing block che "sgancia" il layer fixed dalla viewport. */
-        .olo-template:has(.olo-pagelight){transform:none;container:none;left:auto;margin-left:0;width:100%;}
+        /* Il wrapper del template full-bleed usa transform: creerebbe un containing
+           block che "sgancia" il layer fixed dalla viewport. Il container (olo-tpl)
+           invece resta: container-type inline-size non aggancia i fixed (misurato), e
+           toglierlo spegneva ogni @container della pagina, come «Impila su mobile». */
+        .olo-template:has(.olo-pagelight){transform:none;left:auto;margin-left:0;width:100%;}
         <?php if ( $base ) : ?>
         #<?php echo esc_attr( $uid ); ?>::before{content:'';position:absolute;inset:0;background:<?php echo esc_html( $base ); ?>;}
         <?php endif; ?>
