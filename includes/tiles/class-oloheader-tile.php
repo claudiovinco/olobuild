@@ -252,6 +252,12 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
         $bg        = $this->safe_color_css( $s['bar_bg'] ) ?: '#FFFFFF';
         $text      = $this->safe_color_css( $s['bar_text'] ) ?: '#5A6076';
         $text_h    = $this->safe_color_css( $s['bar_text_hover'] ) ?: '#1F2330';
+        // Barra scura: le pillole al passaggio sulla barra (voci, icone, lingua) sono un velo del suo testo e
+        // il testo resta quello hover scelto. Erano #F0F2F6 fisse, pensate per la barra chiara: sul fondo
+        // scuro col testo chiaro, al passaggio il testo spariva (catalogo, 6 ott 2026). Barra chiara: com'era.
+        $barra_scura = $this->fondo_scuro( $s['bar_bg'] ?? '' );
+        $pill_h      = $barra_scura ? 'color-mix(in srgb, ' . $text . ' 16%, transparent)' : 'var(--sh-line-2)';
+        $ink_h       = $barra_scura ? $text_h : 'var(--sh-ink)';
         $is_pill   = ( ( $s['bar_style'] ?? 'pill' ) === 'pill' );
         $sticky    = ! empty( $s['bar_sticky'] );
         $blur      = ! empty( $s['bar_blur'] );
@@ -388,7 +394,7 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-sh-item{position:relative}
         .<?php echo $uid; ?> .olo-sh-item[data-mega]{position:static}/* mega ancorato alla barra */
         .<?php echo $uid; ?> .olo-sh-link{display:inline-flex;align-items:center;gap:6px;padding:10px 14px;border-radius:100px;font-size:14.5px;font-weight:600;color:var(--sh-ink-2);background:transparent;border:none;transition:background .14s,color .14s;white-space:nowrap}
-        .<?php echo $uid; ?> .olo-sh-link:hover,.<?php echo $uid; ?> .olo-sh-link[aria-expanded="true"]{color:<?php echo $text_h; ?>;background:var(--sh-line-2)}
+        .<?php echo $uid; ?> .olo-sh-link:hover,.<?php echo $uid; ?> .olo-sh-link[aria-expanded="true"]{color:<?php echo $text_h; ?>;background:<?php echo $pill_h; ?>}
         .<?php echo $uid; ?> .olo-sh-chev{width:10px;height:10px;transition:transform .2s}
         .<?php echo $uid; ?> .olo-sh-link[aria-expanded="true"] .olo-sh-chev{transform:rotate(180deg)}
 
@@ -403,9 +409,9 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
         /* right cluster */
         .<?php echo $uid; ?> .olo-sh-right{margin-left:auto;display:flex;align-items:center;gap:6px;padding-left:8px}
         .<?php echo $uid; ?> .olo-sh-iconbtn{width:40px;height:40px;border-radius:100px;border:none;background:transparent;color:var(--sh-ink-2);display:grid;place-items:center;transition:background .14s,color .14s}
-        .<?php echo $uid; ?> .olo-sh-iconbtn:hover{background:var(--sh-line-2);color:var(--sh-ink)}
+        .<?php echo $uid; ?> .olo-sh-iconbtn:hover{background:<?php echo $pill_h; ?>;color:<?php echo $ink_h; ?>}
         .<?php echo $uid; ?> .olo-sh-langbtn{display:inline-flex;align-items:center;gap:7px;padding:9px 12px;border-radius:100px;border:none;background:transparent;font-size:14px;font-weight:700;color:var(--sh-ink-2);transition:background .14s,color .14s}
-        .<?php echo $uid; ?> .olo-sh-langbtn:hover,.<?php echo $uid; ?> .olo-sh-langbtn[aria-expanded="true"]{background:var(--sh-line-2);color:var(--sh-ink)}
+        .<?php echo $uid; ?> .olo-sh-langbtn:hover,.<?php echo $uid; ?> .olo-sh-langbtn[aria-expanded="true"]{background:<?php echo $pill_h; ?>;color:<?php echo $ink_h; ?>}
         .<?php echo $uid; ?> .olo-sh-langbtn .olo-sh-chev{width:9px;height:9px}
         .<?php echo $uid; ?> .olo-sh-cta{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:100px;font-weight:700;font-size:14.5px;border:none;transition:transform .14s,background .14s,box-shadow .14s;white-space:nowrap}
         <?php if ( $cta_style === 'royal' ) : ?>
