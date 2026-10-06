@@ -62,7 +62,7 @@ export default {
   },
 
   // Come nasce dalla palette: la foto di un progetto in 16:9 con gli angoli arrotondati; al
-  // passaggio sale dal basso il velo scuro con titolo e descrizione in chiaro (effetto «Slide Up»).
+  // passaggio sale dal basso il velo scuro con titolo e descrizione in chiaro («Sale al passaggio»).
   partenza: {
     image_url: demo('architettura'),
     aspect_ratio: '16/9',
@@ -106,10 +106,14 @@ export default {
       { value: 'custom',          label: t('Personalizzato') },
     ] },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    // Le etichette dicono cosa fa davvero il renderer: 'fade' (il default dei template
+    // salvati) e 'zoom' tengono velo e testi sempre visibili, come hanno sempre reso;
+    // «Fade» e «Zoom» facevano credere a una comparsa al passaggio. 'fade-in' è quella.
     { key: 'hover_effect', label: t('Effetto hover'), type: 'select', options: [
-      { value: 'fade', label: t('Fade') },
-      { value: 'slide-up', label: t('Slide Up') },
-      { value: 'zoom', label: t('Zoom') },
+      { value: 'fade', label: t('Sempre visibile') },
+      { value: 'zoom', label: t('Sempre visibile, zoom al passaggio') },
+      { value: 'slide-up', label: t('Sale al passaggio') },
+      { value: 'fade-in', label: t('Compare al passaggio') },
     ]},
     { type: 'separator', label: t('Aspetto') },
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),

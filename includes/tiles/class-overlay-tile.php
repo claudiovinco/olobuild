@@ -89,20 +89,32 @@ class Olobuild_Overlay_Tile extends Olobuild_Tile_Base {
         // 'auto' — il default, e quindi tutte le pagine già pubblicate — esce la
         // stessa `height:<n>px` di sempre.
         $box_css = $frame['contenitore'] !== '' ? $frame['contenitore'] : 'height:' . (int) $h . 'px;';
-        $effect = in_array( $s['hover_effect'], [ 'fade', 'slide-up', 'zoom' ], true ) ? $s['hover_effect'] : 'fade';
+        $effect = in_array( $s['hover_effect'], [ 'fade', 'slide-up', 'zoom', 'fade-in' ], true ) ? $s['hover_effect'] : 'fade';
 
+        // Le classi di UIkit tengono il velo a opacity:0 e lo mostrano al passaggio. Fino
+        // alla 1.4.555 l'opacità del velo stava inline sullo stesso elemento e le scavalcava:
+        // con 'fade' (il default, quindi quasi tutti gli overlay salvati) e 'zoom' velo e testo
+        // erano SEMPRE visibili, e i template ci contano. Si tiene quella resa e la si chiama
+        // col suo nome: 'fade' = sempre visibile (nessuna transizione), 'zoom' = sempre
+        // visibile con lo zoom al passaggio (opacity:1 sul contenitore scavalca solo lo 0 della
+        // classe), 'slide-up' sale al passaggio come prima. Chi vuole il velo che compare al
+        // passaggio ha 'fade-in'.
         $effect_map = [
-            'fade'     => 'uk-transition-fade',
+            'fade'     => '',
             'slide-up' => 'uk-transition-slide-bottom',
             'zoom'     => 'uk-transition-scale-up',
+            'fade-in'  => 'uk-transition-fade',
         ];
-        $uk_effect = $effect_map[ $effect ] ?? 'uk-transition-fade';
+        $uk_effect = $effect_map[ $effect ] ?? '';
+        $sempre_visibile = 'zoom' === $effect ? 'opacity:1;' : '';
 
         $has_link = ! empty( $s['link_url'] );
         $link_open = '';
         $link_close = '';
         if ( $has_link ) {
-            $link_open  = '<a href="' . esc_url( $s['link_url'] ) . '" target="' . esc_attr( $s['link_target'] ) . '" rel="noopener noreferrer" style="display:block;width:100%;text-decoration:none;color:inherit;">';
+            // uk-transition-toggle anche sul link: col fuoco da tastiera (:focus) il velo
+            // compare come al passaggio del mouse.
+            $link_open  = '<a class="uk-transition-toggle" href="' . esc_url( $s['link_url'] ) . '" target="' . esc_attr( $s['link_target'] ) . '" rel="noopener noreferrer" style="display:block;width:100%;text-decoration:none;color:inherit;">';
             $link_close = '</a>';
         }
 
@@ -118,9 +130,17 @@ class Olobuild_Overlay_Tile extends Olobuild_Tile_Base {
             <?php else : ?>
                 <div style="background:#1F2937;" uk-cover></div>
             <?php endif; ?>
-            <?php $ov_bg = $this->safe_color_css( $s['overlay_color'] ); $ov_fg = $this->safe_color_css( $s['text_color'] ); ?>
-            <div class="uk-overlay uk-overlay-primary uk-position-cover <?php echo esc_attr( $uk_effect ); ?>" style="<?php if ( $ov_bg ) echo 'background:' . $ov_bg . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist; opacity is absint()/100 ?>opacity:<?php echo (float) $opa; ?>;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;">
-                <div style="<?php if ( $ov_fg ) echo 'color:' . $ov_fg . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist ?>">
+            <?php
+            $ov_bg = $this->safe_color_css( $s['overlay_color'] );
+            $ov_fg = $this->safe_color_css( $s['text_color'] );
+            // Senza colore valido resta il fondo di .uk-overlay-primary di UIkit (grigio scuro
+            // all'80%), qui scritto coi token: il velo è ora un livello a sé.
+            $velo_bg = $ov_bg ?: 'color-mix(in srgb, var(--olo-color-dark, #222222) 80%, transparent)';
+            ?>
+            <div class="uk-overlay uk-overlay-primary uk-position-cover<?php echo $uk_effect ? ' ' . esc_attr( $uk_effect ) : ''; ?>" style="background:none;<?php echo $sempre_visibile; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal 'opacity:1;' or empty string ?>display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;">
+                <?php // L'opacità vale solo per il VELO: messa sul contenitore schiariva anche titolo e descrizione. ?>
+                <div class="olo-overlay-velo" aria-hidden="true" style="position:absolute;inset:0;background:<?php echo $velo_bg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist or fixed var() literal ?>;opacity:<?php echo (float) $opa; ?>;"></div>
+                <div style="position:relative;<?php if ( $ov_fg ) echo 'color:' . $ov_fg . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist ?>">
                     <?php
                     list( $ovt_cls, $ovt_data ) = $this->tfx_attrs( $s, 'title', wp_strip_all_tags( $s['title'] ?? '' ) );
                     list( $ovd_cls, $ovd_data ) = $this->tfx_attrs( $s, 'description', wp_strip_all_tags( $s['description'] ?? '' ) );
