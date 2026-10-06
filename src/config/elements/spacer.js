@@ -45,6 +45,7 @@ function shapeFields(prefix, label, condField) {
     { key: prefix + '_layer2', label: t('Secondo livello'), type: 'toggle',
       condition: { field: prefix, operator: '!=', value: 'none' } },
     { key: prefix + '_layer2_color', label: t('Colore 2° livello'), type: 'color',
+      description: t('Vuoto: lo stesso colore della forma, all\'opacità del livello.'),
       condition: { field: prefix + '_layer2', value: true } },
     { key: prefix + '_layer2_opacity', label: t('Opacità 2° livello'), type: 'range', min: 5, max: 100, step: 5,
       condition: { field: prefix + '_layer2', value: true } },
@@ -110,6 +111,16 @@ export default {
     divider_color: '',
     divider_width: '100',
     divider_thickness: '1',
+  },
+
+  // Appena nato: le forme, quando se ne sceglie una, hanno il colore primario del tema e il
+  // secondo livello ne ripete la tinta (vuoto = colore della forma). Prima il builder metteva i
+  // default del PHP, bianco e nero fissi: una forma bianca su ogni pagina non bianca.
+  partenza: {
+    shape_top_color: 'var(--olo-color-primary)',
+    shape_bottom_color: 'var(--olo-color-primary)',
+    shape_top_layer2_color: '',
+    shape_bottom_layer2_color: '',
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────

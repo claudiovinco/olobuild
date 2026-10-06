@@ -90,35 +90,43 @@ class Olobuild_Spacer_Tile extends Olobuild_Tile_Base {
         $path     = $paths[ $shape_key ];
         $shape_h  = absint( $s[ $prefix . '_height' ] ) ?: 80;
         $fill     = $s[ $prefix . '_fill' ] ?? 'color';
-        $color    = $this->safe_color_css( $s[ $prefix . '_color' ] ) ?: '#ffffff';
+        // Riserve dal tema (prima bianco e nero fissi): la forma senza colore prende lo sfondo della
+        // pagina, il secondo livello senza colore ripete quello della forma (all'opacità del livello).
+        $color    = $this->safe_color_css( $s[ $prefix . '_color' ] ) ?: 'var(--olo-color-background, #ffffff)';
         $opacity  = max( 0.1, min( 1, absint( $s[ $prefix . '_opacity' ] ) / 100 ) );
         $flip     = ! empty( $s[ $prefix . '_flip' ] );
         $invert   = ! empty( $s[ $prefix . '_invert' ] );
         $scale_x  = absint( $s[ $prefix . '_scale_x' ] ?? 100 ) ?: 100;
         $layer2   = ! empty( $s[ $prefix . '_layer2' ] );
-        $l2_color = $this->safe_color_css( $s[ $prefix . '_layer2_color' ] ) ?: '#000000';
+        $l2_color = $this->safe_color_css( $s[ $prefix . '_layer2_color' ] ) ?: $color;
         $l2_opacity = max( 0.05, min( 1, absint( $s[ $prefix . '_layer2_opacity' ] ) / 100 ) );
         $fill_image = $s[ $prefix . '_fill_image' ] ?? '';
         $fill_video = $s[ $prefix . '_fill_video' ] ?? '';
 
-        // SVG transforms
+        // SVG transforms. La forma sotto è già capovolta (scaleY(-1)): «Inverti direzione» la
+        // raddrizza. Prima le si aggiungeva uno scaleY(1), che non cambia niente, e il comando
+        // sulla forma sotto restava inerte.
         $transforms = [];
-        if ( $position === 'bottom' ) {
+        if ( ( $position === 'bottom' ) !== $invert ) {
             $transforms[] = 'scaleY(-1)';
         }
         if ( $flip ) {
             $transforms[] = 'scaleX(-1)';
-        }
-        if ( $invert ) {
-            $transforms[] = ( $position === 'bottom' ) ? 'scaleY(1)' : 'scaleY(-1)';
         }
         if ( $scale_x !== 100 ) {
             $transforms[] = 'scaleX(' . ( $scale_x / 100 ) . ')';
         }
         $transform_css = ! empty( $transforms ) ? 'transform:' . implode( ' ', $transforms ) . ';' : '';
 
-        $pos_css = ( $position === 'top' ) ? 'bottom: 100%;' : 'top: 100%; transform-origin: top center;';
+        // La forma entra di 1 px nella fascia: attaccata al bordo esatto, l'antialiasing dell'ultima
+        // riga dell'SVG (con la fascia a una coordinata frazionaria) lasciava una riga chiara fra
+        // fascia e forma.
+        $pos_css = ( $position === 'top' ) ? 'bottom: calc(100% - 1px);' : 'top: calc(100% - 1px); transform-origin: top center;';
         $block_id = $uid . '-' . $position;
+        // Secondo livello: la stessa sagoma, un po' più ampia e più ALTA, con la base ferma sul bordo
+        // della fascia, così spunta oltre il profilo della forma. Prima era spostata di 8 in basso
+        // (translate(-30, 8)) e finiva nascosta sotto la forma.
+        $l2_transform = 'translate(-30, -24) scale(1.05, 1.2)';
 
         ob_start();
         ?>
@@ -132,7 +140,7 @@ class Olobuild_Spacer_Tile extends Olobuild_Tile_Base {
                     </clipPath>
                 </defs>
                 <?php if ( $layer2 ) : ?>
-                <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo $l2_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>" opacity="<?php echo esc_attr( $l2_opacity ); ?>" transform="translate(-30, 8) scale(1.05, 1)" />
+                <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo $l2_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>" opacity="<?php echo esc_attr( $l2_opacity ); ?>" transform="<?php echo esc_attr( $l2_transform ); ?>" />
                 <?php endif; ?>
                 <foreignObject x="0" y="0" width="1200" height="120" clip-path="url(#<?php echo esc_attr( $block_id ); ?>-clip)">
                     <video xmlns="http://www.w3.org/1999/xhtml"
@@ -150,7 +158,7 @@ class Olobuild_Spacer_Tile extends Olobuild_Tile_Base {
                     </clipPath>
                 </defs>
                 <?php if ( $layer2 ) : ?>
-                <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo $l2_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>" opacity="<?php echo esc_attr( $l2_opacity ); ?>" transform="translate(-30, 8) scale(1.05, 1)" />
+                <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo $l2_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>" opacity="<?php echo esc_attr( $l2_opacity ); ?>" transform="<?php echo esc_attr( $l2_transform ); ?>" />
                 <?php endif; ?>
                 <image href="<?php echo esc_url( $fill_image ); ?>" x="0" y="0" width="1200" height="120" preserveAspectRatio="xMidYMid slice" clip-path="url(#<?php echo esc_attr( $block_id ); ?>-clip)" />
             </svg>
@@ -158,7 +166,7 @@ class Olobuild_Spacer_Tile extends Olobuild_Tile_Base {
             <svg preserveAspectRatio="none" viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg"
                  style="width:100%;height:<?php echo (int) $shape_h; ?>px;display:block;<?php echo esc_attr( $transform_css ); ?>">
                 <?php if ( $layer2 ) : ?>
-                <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo $l2_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>" opacity="<?php echo esc_attr( $l2_opacity ); ?>" transform="translate(-30, 8) scale(1.05, 1)" />
+                <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo $l2_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>" opacity="<?php echo esc_attr( $l2_opacity ); ?>" transform="<?php echo esc_attr( $l2_transform ); ?>" />
                 <?php endif; ?>
                 <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo $color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>" opacity="<?php echo esc_attr( $opacity ); ?>" />
             </svg>
@@ -265,8 +273,8 @@ class Olobuild_Spacer_Tile extends Olobuild_Tile_Base {
                 pointer-events: none;
                 overflow: hidden;
             }
-            .<?php echo $uid; ?> .olo-sp-shape--top { bottom: 100%; }
-            .<?php echo $uid; ?> .olo-sp-shape--bottom { top: 100%; }
+            .<?php echo $uid; ?> .olo-sp-shape--top { bottom: calc(100% - 1px); }
+            .<?php echo $uid; ?> .olo-sp-shape--bottom { top: calc(100% - 1px); }
             <?php if ( ! empty( $custom_svg ) ) : ?>
             .<?php echo $uid; ?> .olo-sp-custom-svg {
                 display: flex;
