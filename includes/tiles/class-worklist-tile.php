@@ -59,11 +59,12 @@ class Olobuild_WorkList_Tile extends Olobuild_Tile_Base {
         $mono    = $mono_fam !== '' ? $mono_fam : $mono_fb;
         $tfam    = $this->resolve_font_family( $s['title_font_family'] ?? '', [ 'heading' => $heading, 'body' => $body, 'mono' => $mono ] ) ?: $heading;
 
-        $row_pad_css = Olobuild_Tile_Utils::sides_css( Olobuild_Tile_Utils::spacing_sides(
+        $row_pad     = Olobuild_Tile_Utils::spacing_sides(
             $s['row_padding'] ?? null,
             [ 'y' => $s['row_padding_y'] ?? null ],
             [ 26, 8, 26, 8 ]
-        ) );
+        );
+        $row_pad_css = Olobuild_Tile_Utils::sides_css( $row_pad );
         $indent      = max( 0, min( 48, absint( $s['hover_indent'] ) ) );
         $number_size = max( 10, min( 20, absint( $s['number_size'] ) ) );
         $title_size  = max( 20, min( 72, absint( $s['title_size'] ) ) );
@@ -88,9 +89,20 @@ class Olobuild_WorkList_Tile extends Olobuild_Tile_Base {
         if ( $show_cat )   $cols .= ' auto';
         if ( $show_year )  $cols .= ' auto';
         if ( $show_arrow ) $cols .= ' auto';
+        // Telefono: la categoria si nasconde, restano numero, titolo e le colonne accese.
+        $cols_m = '32px 1fr';
+        if ( $show_year )  $cols_m .= ' auto';
+        if ( $show_arrow ) $cols_m .= ' auto';
+
+        // Griglia e padding della riga stanno nel <style> sotto, non in linea: in linea battevano
+        // sia il :hover (l'«Indentazione hover» non spostava niente) sia la regola del telefono
+        // (colonne e spazi restavano quelli del desktop). In linea resta solo la linea divisoria.
+        // L'indentazione si AGGIUNGE al padding della riga: 0 = la riga non si muove.
+        $hover_pad_l = (int) $row_pad['left'] + $indent;
+        $hover_pad_r = (int) $row_pad['right'] + $indent;
 
         $items    = is_array( $s['items'] ) ? $s['items'] : [];
-        $row_base = 'display:grid;grid-template-columns:' . $cols . ';gap:24px;align-items:center;padding:' . $row_pad_css . ';border-bottom:1px solid ' . $line . ';';
+        $row_base = 'border-bottom:1px solid ' . $line . ';';
 
         ob_start();
         ?>
@@ -119,17 +131,17 @@ class Olobuild_WorkList_Tile extends Olobuild_Tile_Base {
                 </<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'a'/'div' literal from the ternary above ?>>
             <?php endforeach; ?>
         </div>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colours via the safe_color_css() whitelist, indent via absint() with min()/max() clamps, cursor a fixed-literal ternary; $uid is internally generated. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colours via the safe_color_css() whitelist, indent and paddings via absint()/intval() with min()/max() clamps, grid columns from fixed literals, cursor a fixed-literal ternary; $uid is internally generated. ?>
         <style>
-            .<?php echo $uid; ?> .olo-worklist__row { cursor: <?php echo $items && ! empty( $items[0]['link_url'] ) ? 'pointer' : 'default'; ?>; transition: padding .25s ease, background .25s ease; color: inherit; text-decoration: none; }
-            .<?php echo $uid; ?> .olo-worklist__row:hover { padding-left: <?php echo $indent; ?>px; padding-right: <?php echo $indent; ?>px; background: <?php echo $hover_bg; ?>; }
+            .<?php echo $uid; ?> .olo-worklist__row { display: grid; grid-template-columns: <?php echo $cols; ?>; gap: 24px; align-items: center; padding: <?php echo $row_pad_css; ?>; cursor: <?php echo $items && ! empty( $items[0]['link_url'] ) ? 'pointer' : 'default'; ?>; transition: padding .25s ease, background .25s ease; color: inherit; text-decoration: none; }
+            .<?php echo $uid; ?> .olo-worklist__row:hover { padding-left: <?php echo $hover_pad_l; ?>px; padding-right: <?php echo $hover_pad_r; ?>px; background: <?php echo $hover_bg; ?>; }
             .<?php echo $uid; ?> .olo-worklist__t { transition: transform .25s ease; }
             .<?php echo $uid; ?> .olo-worklist__row:hover .olo-worklist__t { transform: translateX(6px); }
             .<?php echo $uid; ?> .olo-worklist__arrow { width: 20px; height: 20px; opacity: 0; transform: translateX(-6px); transition: opacity .25s ease, transform .25s ease; justify-self: end; }
             .<?php echo $uid; ?> .olo-worklist__row:hover .olo-worklist__arrow { opacity: 1; transform: none; }
             .<?php echo $uid; ?> a.olo-worklist__row:focus-visible { outline: 2px solid <?php echo $arrow_c; ?>; outline-offset: -2px; }
             @media (max-width: 640px) {
-                .<?php echo $uid; ?> .olo-worklist__row { grid-template-columns: 32px 1fr auto; gap: 14px; }
+                .<?php echo $uid; ?> .olo-worklist__row { grid-template-columns: <?php echo $cols_m; ?>; gap: 14px; }
                 .<?php echo $uid; ?> .olo-worklist__cat { display: none; }
             }
         </style>
