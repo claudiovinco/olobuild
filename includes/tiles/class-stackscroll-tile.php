@@ -281,7 +281,14 @@ class Olobuild_Stackscroll_Tile extends Olobuild_Tile_Base {
                 $ss_card_decls = '';
                 $ss_txt_decls  = '';
                 if ( $ss_mh !== '' )  { $ss_card_decls .= 'min-height:' . max( 0, min( 900, absint( $ss_mh ) ) ) . 'px;'; }
-                if ( $ss_pad !== '' ) { $ss_txt_decls  .= 'padding:' . max( 8, min( 120, absint( $ss_pad ) ) ) . 'px;'; }
+                // Il padding per dispositivo arriva dal controllo Padding (4 lati: numero se
+                // collegati, oggetto se separati) o dal vecchio cursore (numero). absint() su
+                // un oggetto dava 1 → 8 px su tutti i lati, qualunque valore fosse scelto.
+                if ( $ss_pad !== '' && $ss_pad !== null && $ss_pad !== [] ) {
+                    $ss_lati = Olobuild_Tile_Utils::spacing_sides( $ss_pad, [], $pad_sides );
+                    foreach ( $ss_lati as $ss_lato => $ss_v ) { $ss_lati[ $ss_lato ] = max( 0, min( 120, $ss_v ) ); }
+                    $ss_txt_decls .= 'padding:' . Olobuild_Tile_Utils::sides_css( $ss_lati ) . ';';
+                }
                 ?>
             @media (max-width: <?php echo intval( $ss_w ); ?>px) {
                 <?php if ( $ss_card_decls ) : ?>.<?php echo $uid; ?> .scard { <?php echo $ss_card_decls; ?> }<?php endif; ?>
@@ -291,7 +298,7 @@ class Olobuild_Stackscroll_Tile extends Olobuild_Tile_Base {
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
-        <div class="olo-stack <?php echo esc_attr( $uid ); ?>">
+        <div class="olo-stack <?php echo esc_attr( $uid ); ?>"<?php if ( $do_scale && $total > 1 ) : ?> data-scale="<?php echo esc_attr( number_format( $scale_amt, 4, '.', '' ) ); ?>"<?php endif; ?>>
             <div class="olo-stack__list" role="list">
                 <?php if ( $total === 0 ) : ?>
                     <div class="scard" style="top:<?php echo (int) $top_offset; ?>px;" role="listitem">
@@ -323,19 +330,11 @@ class Olobuild_Stackscroll_Tile extends Olobuild_Tile_Base {
                         // top per-istanza/per-card: offset base + scalino * indice
                         $card_top = $top_offset + ( $top_step * $i );
 
-                        // Scala impilamento (solo CSS, niente JS): le card più "in basso" nella pila
-                        // (indice minore) si riducono; l'ultima (in cima) resta a scala 1.
-                        $inline_tf = '';
-                        if ( $do_scale && $total > 1 ) {
-                            $depth = $total - 1 - $i;                 // 0 = card in cima
-                            $scale = 1 - ( $depth * $scale_amt );
-                            if ( $scale < 0.85 ) { $scale = 0.85; }   // clamp di sicurezza
-                            if ( $scale < 1 ) {
-                                $inline_tf = 'transform:scale(' . rtrim( rtrim( number_format( $scale, 4, '.', '' ), '0' ), '.' ) . ');';
-                            }
-                        }
-
-                        $card_style = 'top:' . $card_top . 'px;' . $inline_tf;
+                        // Scala impilamento: la calcola lo script sotto, in base a quante card
+                        // sono GIÀ salite sopra questa. Scritta qui una volta per tutte, ogni card
+                        // nasceva già rimpicciolita (la prima del 12% con 4 card) anche quando
+                        // non aveva ancora niente sopra, cioè mentre la si leggeva.
+                        $card_style = 'top:' . $card_top . 'px;';
                         if ( $card_bg )  { $card_style .= 'background:' . $card_bg . ';'; }
                         if ( $card_txt ) { $card_style .= 'color:' . $card_txt . ';'; }
 
@@ -379,9 +378,12 @@ class Olobuild_Stackscroll_Tile extends Olobuild_Tile_Base {
         <script>
         /* StackScroll — runtime minimo, scoped per istanza, idempotente.
            Le card sono già impilate via CSS `position:sticky` (stato base SSR).
-           Questo IIFE degrada SOLO quando serve: niente sticky supportato → flusso
-           verticale; prefers-reduced-motion → niente scala impilamento (la regola CSS
-           già azzera top/transform, qui togliamo anche la scala inline). Nessun rAF. */
+           Niente sticky supportato o prefers-reduced-motion → flusso verticale, niente scala.
+           «Rimpicciolisci»: ogni card si riduce di data-scale per ogni card che le è GIÀ
+           salita sopra (contata a frazioni mentre arriva), quindi una card ancora da sola
+           resta a scala 1. Un rAF per scroll, solo se la scala è attiva.
+           Condizioni annidate e niente AND logico: WordPress ne trasforma la «e commerciale»
+           in entità e lo script si rompe. */
         (function(){
             var root = document.querySelector('.<?php echo esc_js( $uid ); ?>');
             if ( ! root ) { return; }
@@ -391,16 +393,17 @@ class Olobuild_Stackscroll_Tile extends Olobuild_Tile_Base {
             var cards = root.querySelectorAll('.scard');
             if ( ! cards.length ) { return; }
 
-            var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
-            var reduce = !!( rm && rm.matches );
+            var reduce = false;
+            if ( window.matchMedia ) { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
 
             // Sticky supportato?
             var stickySupported = false;
             try {
-                stickySupported = CSS && CSS.supports && (
-                    CSS.supports('position', 'sticky') ||
-                    CSS.supports('position', '-webkit-sticky')
-                );
+                if ( window.CSS ) {
+                    if ( CSS.supports ) {
+                        stickySupported = CSS.supports('position', 'sticky') || CSS.supports('position', '-webkit-sticky');
+                    }
+                }
             } catch ( e ) { stickySupported = false; }
 
             if ( reduce || ! stickySupported ) {
@@ -412,7 +415,47 @@ class Olobuild_Stackscroll_Tile extends Olobuild_Tile_Base {
                     c.style.transform = 'none';
                     c.style.willChange = 'auto';
                 }
+                return;
             }
+
+            var amt = parseFloat( root.getAttribute('data-scale') || '0' );
+            if ( ! ( amt > 0 ) ) { return; }
+            if ( cards.length < 2 ) { return; }
+            var n = cards.length;
+            var quota = [];   // la quota sticky (top) di ogni card
+            for ( var q = 0; q < n; q++ ) { quota[q] = parseFloat( cards[q].style.top ) || 0; }
+            var attesa = false;
+            function aggiorna() {
+                attesa = false;
+                // arrivo[j]: 0 = la card j è ancora un'altezza sotto la sua quota, 1 = è arrivata.
+                var arrivo = [];
+                for ( var j = 0; j < n; j++ ) {
+                    var r = cards[j].getBoundingClientRect();
+                    var a = 1 - ( r.top - quota[j] ) / ( r.height || 1 );
+                    arrivo[j] = a < 0 ? 0 : ( a > 1 ? 1 : a );
+                }
+                var sopra = 0;
+                for ( var k = n - 1; k >= 0; k-- ) {
+                    var s = 1 - sopra * amt;
+                    if ( s < 0.85 ) { s = 0.85; }   // stesso limite di sempre
+                    cards[k].style.transform = s < 0.9995 ? 'scale(' + s.toFixed(4) + ')' : '';
+                    sopra = sopra + arrivo[k];
+                }
+            }
+            function chiedi() {
+                // Tile tolta dalla pagina (il canvas del builder la ridisegna): si stacca.
+                if ( root.isConnected === false ) {
+                    window.removeEventListener( 'scroll', chiedi );
+                    window.removeEventListener( 'resize', chiedi );
+                    return;
+                }
+                if ( attesa ) { return; }
+                attesa = true;
+                window.requestAnimationFrame( aggiorna );
+            }
+            window.addEventListener( 'scroll', chiedi, { passive: true } );
+            window.addEventListener( 'resize', chiedi );
+            aggiorna();
         })();
         </script>
 

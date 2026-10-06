@@ -112,7 +112,10 @@ export default {
   styleFields: [
     { type: 'separator', label: t('Aspetto card') },
     { key: 'card_min_height', label: t('Altezza minima card'), type: 'range', min: 200, max: 700, step: 10, responsive: true },
-    { key: 'card_padding', label: t('Padding'), type: 'spacing', min: 0, max: 80 },
+    // Per dispositivo come l'altezza: il renderer legge card_padding_<dispositivo> (numero o
+    // 4 lati). Il selettore era sparito passando dal cursore al controllo Padding (1.4.436),
+    // e i valori per tablet/telefono già salvati restavano attivi senza poterli vedere.
+    { key: 'card_padding', label: t('Padding'), type: 'spacing', min: 0, max: 80, responsive: true },
     { key: 'round', label: t('Raggio angoli'), type: 'border-radius' },
     { key: 'media_position', label: t('Posizione immagine'), type: 'select', options: [
       { value: 'right', label: t('A destra del testo') },
