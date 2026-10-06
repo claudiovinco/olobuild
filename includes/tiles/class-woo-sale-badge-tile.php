@@ -42,13 +42,25 @@ class Olobuild_Woo_Sale_Badge_Tile extends Olobuild_Tile_Base {
 
         $s = wp_parse_args( $settings, $this->defaults );
 
-        // Get the current product
-        global $product;
-        if ( ! is_a( $product, 'WC_Product' ) ) {
-            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- global $product di WooCommerce, non un global definito da olobuild
-            $product = wc_get_product( get_the_ID() );
+        // Il prodotto: quello di «ID prodotto», se no quello della pagina (vuoto o 0, come prima).
+        // Senza il campo la tile funzionava solo nella scheda di un prodotto: in una pagina di
+        // lancio non c'era modo di dirle quale. Il prodotto scelto resta una variabile della tile:
+        // il $product globale è quello della pagina e serve alle tile che seguono.
+        $pid     = absint( $s['product_id'] ?? 0 );
+        $product = $pid ? wc_get_product( $pid ) : null;
+        if ( ! $product ) {
+            global $product;
+            if ( ! is_a( $product, 'WC_Product' ) ) {
+                // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- global $product di WooCommerce, non un global definito da olobuild
+                $product = wc_get_product( get_the_ID() );
+            }
         }
         if ( ! $product ) {
+            // L'avviso è per chi costruisce la pagina (canvas del builder, utenti che possono
+            // modificare): il visitatore se lo trovava scritto in pagina. A lui, niente.
+            if ( empty( $s['_builder_mode'] ) && ! current_user_can( 'edit_posts' ) ) {
+                return '';
+            }
             return '<div style="padding:20px;text-align:center;color:var(--olo-color-text-muted, #6B7280);font-size:14px;">'
                  . esc_html( olobuild_t( 'Nessun prodotto disponibile in questo contesto' ) )
                  . '</div>';
@@ -107,15 +119,22 @@ class Olobuild_Woo_Sale_Badge_Tile extends Olobuild_Tile_Base {
         $shape = isset( $s['badge_shape'] ) ? $s['badge_shape'] : 'pill';
         $border_radius = isset( $shape_map[ $shape ] ) ? $shape_map[ $shape ] : '999px';
 
-        // Position
+        // Posizione: l'angolo della cella in cui sta il badge. Prima la tendina non agiva: le
+        // coordinate assolute erano spente da .olo-sb-inline e il badge restava in alto a sinistra.
+        // Ora la cella (.olo-frontend-tile) lo allinea: destra/sinistra sempre, alto/basso quando
+        // la cella è più alta del badge (altezza minima del Contenitore). Con uno sfondo immagine,
+        // video, galleria o sovrapposizione nel Contenitore il renderer mette la tile in un
+        // .uk-position-relative interno: il secondo selettore lo prende, e quel contenitore
+        // diventa la voce flex che si stringe sul badge. [ verticale, orizzontale ]
         $pos_map = [
-            'top-left'     => 'top:8px;left:8px;',
-            'top-right'    => 'top:8px;right:8px;',
-            'bottom-left'  => 'bottom:8px;left:8px;',
-            'bottom-right'  => 'bottom:8px;right:8px;',
+            'top-left'     => [ 'flex-start', 'flex-start' ],
+            'top-right'    => [ 'flex-start', 'flex-end' ],
+            'bottom-left'  => [ 'flex-end', 'flex-start' ],
+            'bottom-right' => [ 'flex-end', 'flex-end' ],
         ];
         $position = in_array( $s['position'], array_keys( $pos_map ), true ) ? $s['position'] : 'top-left';
-        $pos_css  = $pos_map[ $position ];
+        $pos_v    = $pos_map[ $position ][0];
+        $pos_h    = $pos_map[ $position ][1];
 
         // Circle shape needs equal width/height
         $is_circle = ( $shape === 'circle' );
@@ -128,9 +147,18 @@ class Olobuild_Woo_Sale_Badge_Tile extends Olobuild_Tile_Base {
                 position: relative;
                 display: inline-block;
             }
+            .olo-frontend-tile:has(> .<?php echo $uid; ?>),
+            .olo-frontend-tile:has(> .uk-position-relative > .<?php echo $uid; ?>) {
+                display: flex;
+                flex-direction: column;
+                justify-content: <?php echo $pos_v; ?>;
+                align-items: <?php echo $pos_h; ?>;
+            }
+            .olo-frontend-tile.olo-tile-inline:has(> .<?php echo $uid; ?>),
+            .olo-frontend-tile.olo-tile-inline:has(> .uk-position-relative > .<?php echo $uid; ?>) {
+                display: inline-flex;
+            }
             .<?php echo $uid; ?> .olo-sb-badge {
-                position: absolute;
-                <?php echo $pos_css; ?>
                 background: <?php echo $badge_bg; ?>;
                 color: <?php echo $badge_color; ?>;
                 font-size: <?php echo (int) $font_size; ?>px;
@@ -159,9 +187,6 @@ class Olobuild_Woo_Sale_Badge_Tile extends Olobuild_Tile_Base {
                 align-items: center;
                 justify-content: center;
                 <?php endif; ?>
-            }
-            .<?php echo $uid; ?>.olo-sb-inline .olo-sb-badge {
-                position: static;
             }
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>

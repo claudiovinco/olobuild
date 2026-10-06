@@ -40,6 +40,12 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
+    // Il prodotto a cui si riferisce: senza, la tile funzionava solo nella scheda di un prodotto.
+    { type: 'separator', label: t('Prodotto') },
+    { key: 'product_id', label: t('ID prodotto'), type: 'number', min: 0, step: 1,
+      description: t("Il prodotto a cui si riferisce la tile, per usarla fuori dalla sua scheda (una pagina di lancio). L'ID si legge in Prodotti, passando sul nome. Vuoto o 0 = il prodotto della pagina.") },
+
+    { type: 'separator', label: t('Testo') },
     { key: 'badge_text', label: t('Testo badge'), type: 'select', options: [
       { value: 'auto', label: t('Automatico (%)') },
       { value: '%', label: t('Solo percentuale') },
@@ -89,7 +95,9 @@ export default {
       { value: 'rectangle', label: t('Rettangolo') },
     ]},
     { type: 'separator', label: t('Disposizione') },
-    { key: 'position', label: t('Posizione'), type: 'select', options: [
+    { key: 'position', label: t('Posizione'), type: 'select',
+      description: t("L'angolo della tile in cui sta il badge. Alto e basso si vedono quando la tile è più alta del badge: Contenitore → Layout → Altezza minima."),
+      options: [
       { value: 'top-left', label: t('Alto sinistra') },
       { value: 'top-right', label: t('Alto destra') },
       { value: 'bottom-left', label: t('Basso sinistra') },
