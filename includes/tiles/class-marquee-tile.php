@@ -67,6 +67,42 @@ class Olobuild_Marquee_Tile extends Olobuild_Tile_Base {
         return [];
     }
 
+    /**
+     * Il testo che si legge su $fondo: per un ruolo della Palette il suo testo (primario,
+     * secondario e attenuato → il loro «-contrast», Scuro → Chiaro, Chiaro e sfondo → testo),
+     * altrimenti chiaro o scuro secondo la luminanza (token risolti sul server da colore_hex).
+     * Fondo semitrasparente o ignoto: il contrasto del secondario, la riserva di sempre.
+     */
+    private function testo_leggibile( $fondo ) {
+        $fondo   = trim( (string) $fondo );
+        $riserva = 'var(--olo-color-secondary-contrast, #FFFFFF)';
+        if ( $fondo === '' ) {
+            return $riserva;
+        }
+        $ruoli = [
+            'primary'    => 'var(--olo-color-primary-contrast, #FFFFFF)',
+            'secondary'  => $riserva,
+            'muted'      => 'var(--olo-color-muted-contrast, #374151)',
+            'dark'       => 'var(--olo-color-light, #f8f9fa)',
+            'light'      => 'var(--olo-color-dark, #16263d)',
+            'background' => 'var(--olo-color-text, #1f2937)',
+            'surface'    => 'var(--olo-color-text, #1f2937)',
+        ];
+        if ( preg_match( '/^var\(\s*--olo-color-([a-z]+)\s*[,)]/', $fondo, $m ) && isset( $ruoli[ $m[1] ] ) ) {
+            return $ruoli[ $m[1] ];
+        }
+        $hex = preg_match( '/transparent|rgba\(|hsla\(|^#[0-9a-f]{8}$/i', $fondo ) ? '' : Olobuild_Tile_Utils::colore_hex( $fondo );
+        if ( '' === $hex ) {
+            return $riserva;
+        }
+        $l = 0.0;
+        foreach ( [ 1 => 0.2126, 3 => 0.7152, 5 => 0.0722 ] as $i => $k ) {
+            $v  = hexdec( substr( $hex, $i, 2 ) ) / 255;
+            $l += $k * ( $v <= 0.03928 ? $v / 12.92 : pow( ( $v + 0.055 ) / 1.055, 2.4 ) );
+        }
+        return $l < 0.18 ? 'var(--olo-color-light, #f8f9fa)' : 'var(--olo-color-dark, #16263d)';
+    }
+
     public function render( $settings ) {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'olo-mq-' . wp_rand( 10000, 99999 );
@@ -93,9 +129,17 @@ class Olobuild_Marquee_Tile extends Olobuild_Tile_Base {
         if ( is_array( $bg_obj ) && ! empty( $bg_obj['type'] ) && $bg_obj['type'] !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
             $bg_decl = ( new Olobuild_CSS_Builder() )->get_bg_inline_css( $bg_obj );
         }
-        if ( ! $bg_decl ) {
-            $color   = $this->safe_color_css( $s['bg_color'] ) ?: '#1F2937';
-            $bg_decl = 'background: ' . $color;
+        // Il colore su cui sta il testo: quello dello Sfondo creativo se è una tinta piena,
+        // altrimenti «Colore sfondo»; '' se è un gradiente o un motivo (non si sa).
+        $fondo_testo = '';
+        if ( $bg_decl ) {
+            if ( ( $bg_obj['type'] ?? '' ) === 'solid' && intval( $bg_obj['color_opacity'] ?? 100 ) >= 50 ) {
+                $fondo_testo = $this->safe_color_css( $bg_obj['color'] ?? '' );
+            }
+        } else {
+            $color       = $this->safe_color_css( $s['bg_color'] ) ?: '#1F2937';
+            $bg_decl     = 'background: ' . $color;
+            $fondo_testo = $color;
         }
         $bg = $bg_decl;
         $height      = max( 20, intval( $s['height'] ) );
@@ -105,7 +149,10 @@ class Olobuild_Marquee_Tile extends Olobuild_Tile_Base {
         $bc          = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-text, #374151)';
 
         // Text settings
-        $text_color  = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-secondary-contrast, #FFFFFF)';
+        // Testo vuoto: il colore che si legge sullo sfondo del nastro. Prima era sempre il
+        // contrasto del SECONDARIO, anche sul fondo Scuro di fabbrica: con un secondario chiaro
+        // (contrasto scuro) il testo spariva scuro su scuro.
+        $text_color  = $this->safe_color_css( $s['text_color'] ) ?: $this->testo_leggibile( $fondo_testo );
         $font_size   = max( 10, intval( $s['font_size'] ) );
         $font_weight = in_array( $s['font_weight'], [ '400', '500', '600', '700', '900' ] ) ? $s['font_weight'] : '500';
         $ls          = max( 0, intval( $s['letter_spacing'] ) );
