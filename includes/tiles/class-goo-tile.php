@@ -50,6 +50,7 @@ class Olobuild_Goo_Tile extends Olobuild_Tile_Base {
         'blob_size_min'    => 180,
         'blob_size_max'    => 340,
         'drift_speed'      => 0.5,
+        'drift_amplitude'  => 1,
         'goo_strength'     => 18,
         'follow_cursor'    => true,
         'cursor_blob_size' => 260,
@@ -109,7 +110,8 @@ class Olobuild_Goo_Tile extends Olobuild_Tile_Base {
         $smin    = max( 40, min( 700, intval( $s['blob_size_min'] ) ) );
         $smax    = max( 60, min( 800, intval( $s['blob_size_max'] ) ) );
         if ( $smax < $smin ) { $tmp = $smin; $smin = $smax; $smax = $tmp; }
-        $drift   = max( 0, min( 1, floatval( $s['drift_speed'] ) ) );
+        $drift   = max( 0, min( 2, floatval( $s['drift_speed'] ) ) );
+        $ampiezza = max( 1, min( 6, floatval( $s['drift_amplitude'] ?? 1 ) ) );
         $goo_k   = max( 8, min( 28, intval( $s['goo_strength'] ) ) );
         $follow  = ( $mode === 'goo' ) && ! empty( $s['follow_cursor'] );
         $cb_size = max( 80, min( 600, intval( $s['cursor_blob_size'] ) ) );
@@ -174,6 +176,7 @@ class Olobuild_Goo_Tile extends Olobuild_Tile_Base {
             'scope'     => $scope,
             'mode'      => $mode,
             'drift'     => $drift,
+            'amp'       => $ampiezza,
             'follow'    => $follow,
             // blend del layer in modalità "tutta la pagina": usa quello scelto (aurora) o
             // "screen" di default (illumina senza coprire il contenuto opaco sottostante).
@@ -382,6 +385,7 @@ class Olobuild_Goo_Tile extends Olobuild_Tile_Base {
 
             var rafId = null, running = false;
             var DRIFT = CFG.drift;
+            var AMP = CFG.amp || 1;   // «Ampiezza deriva»: 1 = lo spostamento di sempre
 
             function frame( t ) {
                 if ( ! running ) { return; }
@@ -389,8 +393,8 @@ class Olobuild_Goo_Tile extends Olobuild_Tile_Base {
                     for ( var i = 0; i < blobs.length; i++ ) {
                         var b = blobs[i];
                         var p = b.ph + t * b.sp * DRIFT;
-                        var dx = Math.cos( p ) * b.ax * DRIFT;
-                        var dy = Math.sin( p * 1.3 ) * b.ay * DRIFT;
+                        var dx = Math.cos( p ) * b.ax * DRIFT * AMP;
+                        var dy = Math.sin( p * 1.3 ) * b.ay * DRIFT * AMP;
                         b.el.style.transform = 'translate(' + dx.toFixed(2) + 'px,' + dy.toFixed(2) + 'px)';
                     }
                 }

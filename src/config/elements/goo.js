@@ -54,6 +54,7 @@ export default {
     blob_size_min: 180,
     blob_size_max: 340,
     drift_speed: 0.5,
+    drift_amplitude: 1,
     goo_strength: 18,
     follow_cursor: true,
     cursor_blob_size: 260,
@@ -112,8 +113,11 @@ export default {
 
     { type: 'separator', label: t('Blob') },
     { key: 'blob_count', label: t('Numero blob'), type: 'range', min: 3, max: 8, step: 1 },
-    { key: 'drift_speed', label: t('Velocità deriva'), type: 'range', min: 0, max: 1, step: 0.05,
+    { key: 'drift_speed', label: t('Velocità deriva'), type: 'range', min: 0, max: 2, step: 0.05,
       description: t('0 = blob fermi. La deriva è un movimento sinusoidale lento.') },
+    { key: 'drift_amplitude', label: t('Ampiezza deriva'), type: 'range', min: 1, max: 6, step: 0.5,
+      condition: { field: 'drift_speed', op: 'gt', value: 0 },
+      description: t('Quanto si spostano i blob mentre derivano: 1 è lo spostamento di sempre (pochi pixel), con blob grandi e molto sfocati servono valori alti perché il movimento si veda.') },
 
     { type: 'separator', label: t('Goo') },
     { key: 'goo_strength', label: t('Intensità fusione'), type: 'range', min: 8, max: 28, step: 1,
