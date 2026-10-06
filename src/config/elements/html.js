@@ -28,7 +28,7 @@ export default {
   fields: [
     { key: 'html_content', label: t('Contenuto HTML'), type: 'code' },
     { key: 'sandbox', label: t('Sandbox (iframe)'), type: 'toggle',
-      description: t('Esegue l\'HTML in un iframe isolato (più sicuro per codice esterno).') },
+      description: t('Esegue l\'HTML in un iframe isolato (più sicuro per codice esterno). L\'iframe prende l\'altezza del contenuto e dentro valgono caratteri, colori e token del tema.') },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
