@@ -85,7 +85,8 @@ export default {
 
   // Come nasce dalla palette: accesso e registrazione insieme, con le due schede in alto, su un
   // riquadro tinto appena del primario (icone nei campi, occhio della password, «Ricordami»).
-  // Nel canvas del builder chi è collegato vede il saluto «Bentornato!», non il modulo.
+  // Nel canvas del builder si vede sempre il modulo; il saluto «Bentornato!» a chi è collegato
+  // compare solo sul sito.
   partenza: {
     mode: 'both',
     login_subtitle: t('Accedi per vedere ordini, prenotazioni e preferenze'),
@@ -104,7 +105,8 @@ export default {
     { key: 'show_remember_me', label: 'Mostra "Ricordami"', type: 'toggle' },
     { key: 'show_lost_password', label: 'Mostra "Password dimenticata"', type: 'toggle' },
     { key: 'show_avatar', label: t('Mostra avatar se loggato'), type: 'toggle' },
-    { key: 'logged_in_message', label: t('Messaggio utente loggato'), type: 'text' },
+    { key: 'logged_in_message', label: t('Messaggio utente loggato'), type: 'text',
+      description: t('Il saluto con avatar e «Esci» compare sul sito a chi ha già fatto l\'accesso. Nel canvas del builder si vede sempre il modulo, anche se sei collegato.') },
     { key: 'logged_out_redirect', label: t('Redirect dopo logout'), type: 'link', placeholder: t('URL (vuoto = pagina corrente)') },
 
     { type: 'separator', label: t('Titoli e testi') },
@@ -149,19 +151,23 @@ export default {
       condition: { field: 'show_terms', value: true } },
 
     { type: 'separator', label: t('Social login') },
-    { key: 'show_social_divider', label: t('Mostra sezione social'), type: 'toggle' },
+    // Olobuild non fa l'accesso con Google/Facebook/Apple: i pulsanti portano all'indirizzo
+    // d'accesso di un plugin che lo fa. Col «#» di default erano pulsanti finti: ora un pulsante
+    // senza indirizzo non compare, e la (i) lo dice.
+    { key: 'show_social_divider', label: t('Mostra sezione social'), type: 'toggle',
+      description: t('I pulsanti portano all\'indirizzo d\'accesso di un plugin di social login (per esempio quello che il plugin indica per Google). Un pulsante senza indirizzo non compare, e senza pulsanti non compare nemmeno il divisore.') },
     { key: 'social_google', label: t('Google'), type: 'toggle',
       condition: { field: 'show_social_divider', value: true } },
     { key: 'social_google_url', label: t('URL Google'), type: 'link',
-      condition: { field: 'social_google', value: true } },
+      condition: [{ field: 'show_social_divider', value: true }, { field: 'social_google', value: true }] },
     { key: 'social_facebook', label: t('Facebook'), type: 'toggle',
       condition: { field: 'show_social_divider', value: true } },
     { key: 'social_facebook_url', label: t('URL Facebook'), type: 'link',
-      condition: { field: 'social_facebook', value: true } },
+      condition: [{ field: 'show_social_divider', value: true }, { field: 'social_facebook', value: true }] },
     { key: 'social_apple', label: t('Apple'), type: 'toggle',
       condition: { field: 'show_social_divider', value: true } },
     { key: 'social_apple_url', label: t('URL Apple'), type: 'link',
-      condition: { field: 'social_apple', value: true } },
+      condition: [{ field: 'show_social_divider', value: true }, { field: 'social_apple', value: true }] },
 
     { type: 'separator', label: t('Campi registrazione') },
     {

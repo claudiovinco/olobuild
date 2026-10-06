@@ -185,10 +185,10 @@ class Olobuild_Loginform_Tile extends Olobuild_Tile_Base {
             ];
         }
 
-        // Social providers
-        $has_google   = ! empty( $s['social_google'] );
-        $has_facebook = ! empty( $s['social_facebook'] );
-        $has_apple    = ! empty( $s['social_apple'] );
+        // Social providers: un pulsante compare solo se porta da qualche parte (vedi social_url()).
+        $has_google   = $this->social_url( $s, 'google' ) !== '';
+        $has_facebook = $this->social_url( $s, 'facebook' ) !== '';
+        $has_apple    = $this->social_url( $s, 'apple' ) !== '';
         $has_social   = $show_social && ( $has_google || $has_facebook || $has_apple );
 
         // SVG icons
@@ -331,11 +331,19 @@ class Olobuild_Loginform_Tile extends Olobuild_Tile_Base {
             }
             .<?php echo $uid; ?> .olo-lf-remember input { accent-color: <?php echo $submit_bg_val; ?>; }
             /* Tabs */
-            <?php if ( $mode === 'both' ) : ?>
+            <?php if ( $mode === 'both' ) :
+                // Pillola: la scheda inattiva sta sul binario. Il binario era lo sfondo input o il
+                // grigio chiaro del tema e la scheda prendeva il colore del testo del form: su un
+                // form scuro (testo chiaro) spariva. Ora il testo segue il binario: sul colore
+                // dell'input quello dell'input, se no un velo del colore del testo, che si legge
+                // sia su un form chiaro sia su uno scuro.
+                $tab_track     = $input_bg ?: 'color-mix(in srgb, ' . $text_color_val . ' 10%, transparent)';
+                $tab_track_txt = $input_bg ? $input_color_val : $text_color_val;
+                ?>
             .<?php echo $uid; ?> .olo-lf-tabs {
                 display: flex; margin-bottom: 24px;
                 <?php if ( $tab_style === 'pill' ) : ?>
-                background: <?php echo $input_bg ?: 'var(--olo-color-muted, #F3F4F6)'; ?>;
+                background: <?php echo $tab_track; ?>;
                 border-radius: <?php echo $input_radius; ?>; padding: 4px; gap: 4px;
                 <?php else : ?>
                 gap: 0; border-bottom: 2px solid <?php echo $input_border_val; ?>;
@@ -345,11 +353,14 @@ class Olobuild_Loginform_Tile extends Olobuild_Tile_Base {
                 flex: 1; padding: 10px 16px; font-size: 14px; font-weight: 500;
                 font-family: inherit; border: none; cursor: pointer; text-align: center;
                 transition: all 0.2s; background: transparent;
-                color: <?php echo $text_color_val; ?>;
                 <?php if ( $tab_style === 'underline' ) : ?>
+                color: <?php echo $text_color_val; ?>;
                 border-bottom: 2px solid transparent; margin-bottom: -2px;
                 <?php elseif ( $tab_style === 'pill' ) : ?>
+                color: <?php echo $tab_track_txt; ?>;
                 border-radius: calc(<?php echo $input_radius; ?> - 2px);
+                <?php else : ?>
+                color: <?php echo $text_color_val; ?>;
                 <?php endif; ?>
             }
             .<?php echo $uid; ?> .olo-lf-tab:hover { opacity: 0.8; }
@@ -458,7 +469,9 @@ class Olobuild_Loginform_Tile extends Olobuild_Tile_Base {
 
         <div class="olo-loginform <?php echo esc_attr( $uid ); ?> olo-lf-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" data-pw-str="0">
         <?php
-        if ( is_user_logged_in() ) :
+        // Nel canvas del builder chi lavora è sempre collegato: vedeva «Bentornato… Esci» al
+        // posto del modulo che sta componendo. Lì si mostra il modulo; il saluto resta al sito.
+        if ( is_user_logged_in() && empty( $s['_builder_mode'] ) ) :
             $current_user = wp_get_current_user();
             $logout_url   = $logout_redirect ? wp_logout_url( $logout_redirect ) : wp_logout_url( get_permalink() );
             ?>
@@ -1019,6 +1032,22 @@ class Olobuild_Loginform_Tile extends Olobuild_Tile_Base {
     }
 
     /**
+     * Indirizzo di un pulsante social, '' se non porta da nessuna parte. I pulsanti sono link
+     * all'accesso di un plugin di social login (Olobuild non fa l'OAuth): col «#» di default
+     * erano pulsanti finti, che sul sito non facevano niente. Senza indirizzo non compaiono.
+     */
+    private function social_url( $s, $rete ) {
+        if ( empty( $s[ 'social_' . $rete ] ) ) {
+            return '';
+        }
+        $url = trim( (string) ( $s[ 'social_' . $rete . '_url' ] ?? '' ) );
+        if ( $url === '' || $url[0] === '#' ) {
+            return '';
+        }
+        return esc_url( $url );
+    }
+
+    /**
      * Render social login buttons.
      */
     private function render_social_buttons( $s, $uid ) {
@@ -1028,20 +1057,20 @@ class Olobuild_Loginform_Tile extends Olobuild_Tile_Base {
         $divider_text = esc_html( $s['social_divider_text'] ?: 'oppure' );
         ?>
         <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:0;">
-            <?php if ( ! empty( $s['social_google'] ) ) : ?>
-            <a href="<?php echo esc_url( $s['social_google_url'] ?: '#' ); ?>" class="olo-lf-social-btn" style="background:<?php echo $input_bg; ?>;color:<?php echo $text_color; ?>;border:1px solid <?php echo $border; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS colors on this line sanitized via safe_color_css() whitelist above ?>;">
+            <?php $url_google = $this->social_url( $s, 'google' ); if ( $url_google !== '' ) : ?>
+            <a href="<?php echo $url_google; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url() in social_url() ?>" class="olo-lf-social-btn" style="background:<?php echo $input_bg; ?>;color:<?php echo $text_color; ?>;border:1px solid <?php echo $border; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS colors on this line sanitized via safe_color_css() whitelist above ?>;">
                 <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A10.96 10.96 0 0 0 1 12c0 1.77.42 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
                 <span><?php echo esc_html( olobuild_t( 'Continua con Google' ) ); ?></span>
             </a>
             <?php endif; ?>
-            <?php if ( ! empty( $s['social_facebook'] ) ) : ?>
-            <a href="<?php echo esc_url( $s['social_facebook_url'] ?: '#' ); ?>" class="olo-lf-social-btn" style="background:<?php echo $input_bg; ?>;color:<?php echo $text_color; ?>;border:1px solid <?php echo $border; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS colors on this line sanitized via safe_color_css() whitelist above ?>;">
+            <?php $url_facebook = $this->social_url( $s, 'facebook' ); if ( $url_facebook !== '' ) : ?>
+            <a href="<?php echo $url_facebook; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url() in social_url() ?>" class="olo-lf-social-btn" style="background:<?php echo $input_bg; ?>;color:<?php echo $text_color; ?>;border:1px solid <?php echo $border; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS colors on this line sanitized via safe_color_css() whitelist above ?>;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                 <span><?php echo esc_html( olobuild_t( 'Continua con Facebook' ) ); ?></span>
             </a>
             <?php endif; ?>
-            <?php if ( ! empty( $s['social_apple'] ) ) : ?>
-            <a href="<?php echo esc_url( $s['social_apple_url'] ?: '#' ); ?>" class="olo-lf-social-btn" style="background:#000;color:#FFF;border:1px solid #000;">
+            <?php $url_apple = $this->social_url( $s, 'apple' ); if ( $url_apple !== '' ) : ?>
+            <a href="<?php echo $url_apple; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url() in social_url() ?>" class="olo-lf-social-btn" style="background:#000;color:#FFF;border:1px solid #000;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="#FFF"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
                 <span><?php echo esc_html( olobuild_t( 'Continua con Apple' ) ); ?></span>
             </a>
