@@ -407,6 +407,9 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
                 display: flex;
                 flex: 1;
                 width: 100%;
+                /* il padding sta DENTRO il 100%: senza, dove il tema non mette border-box a tutto
+                   (il canvas del builder) il testo scivola a destra del padding e il bordo destro si taglia */
+                box-sizing: border-box;
                 align-items: <?php echo $v_align; ?>;
                 justify-content: <?php echo $h_align; ?>;
                 padding: <?php echo (int) $pad_t; ?>px <?php echo (int) $pad_r; ?>px <?php echo (int) $pad_b; ?>px <?php echo (int) $pad_l; ?>px;
