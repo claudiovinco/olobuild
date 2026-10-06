@@ -43,13 +43,25 @@ class Olobuild_Woo_Product_Image_Tile extends Olobuild_Tile_Base {
 
         $s = wp_parse_args( $settings, $this->defaults );
 
-        // Get the current product
-        global $product;
-        if ( ! is_a( $product, 'WC_Product' ) ) {
-            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- global $product di WooCommerce, non un global definito da olobuild
-            $product = wc_get_product( get_the_ID() );
+        // Il prodotto: quello di «ID prodotto», se no quello della pagina (vuoto o 0, come prima).
+        // Senza il campo la tile funzionava solo nella scheda di un prodotto: in una pagina di
+        // lancio non c'era modo di dirle quale. Il prodotto scelto resta una variabile della tile:
+        // il $product globale è quello della pagina e serve alle tile che seguono.
+        $pid     = absint( $s['product_id'] ?? 0 );
+        $product = $pid ? wc_get_product( $pid ) : null;
+        if ( ! $product ) {
+            global $product;
+            if ( ! is_a( $product, 'WC_Product' ) ) {
+                // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- global $product di WooCommerce, non un global definito da olobuild
+                $product = wc_get_product( get_the_ID() );
+            }
         }
         if ( ! $product ) {
+            // L'avviso è per chi costruisce la pagina (canvas del builder, utenti che possono
+            // modificare): il visitatore se lo trovava scritto in pagina. A lui, niente.
+            if ( empty( $s['_builder_mode'] ) && ! current_user_can( 'edit_posts' ) ) {
+                return '';
+            }
             return '<div style="padding:20px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;">'
                  . esc_html( olobuild_t( 'Nessun prodotto disponibile in questo contesto' ) )
                  . '</div>';

@@ -45,6 +45,12 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
+    // Il prodotto a cui si riferisce: senza, la tile funzionava solo nella scheda di un prodotto.
+    { type: 'separator', label: t('Prodotto') },
+    { key: 'product_id', label: t('ID prodotto'), type: 'number', min: 0, step: 1,
+      description: t("Il prodotto a cui si riferisce la tile, per usarla fuori dalla sua scheda (una pagina di lancio). L'ID si legge in Prodotti, passando sul nome. Vuoto o 0 = il prodotto della pagina.") },
+
+    { type: 'separator', label: t('Immagine') },
     { key: 'show_gallery', label: t('Mostra miniature galleria'), type: 'toggle' },
     { key: 'lightbox', label: t('Lightbox'), type: 'toggle' },
     { key: 'zoom_on_hover', label: t('Zoom al passaggio mouse'), type: 'toggle' },
