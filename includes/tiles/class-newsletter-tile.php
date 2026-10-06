@@ -103,46 +103,19 @@ class Olobuild_Newsletter_Tile extends Olobuild_Tile_Base {
         $s = wp_parse_args( $settings, $this->defaults );
 
         $uid = 'olo-nl-' . wp_rand( 10000, 99999 );
+        // Chiave stabile prima di rendere altro (un template annidato cambierebbe il nodo in resa).
+        $chiave = $this->chiave_stabile( $settings );
 
-        // Build form config for handler (reuses form handler)
-        $form_config = [
-            'form_name'    => 'Newsletter',
-            'integration'  => $s['integration'],
-            'success_msg'  => $s['success_message'],
-            'redirect_url' => $s['redirect_url'],
-            'honeypot'     => ! empty( $s['honeypot'] ),
-            'recaptcha'    => ! empty( $s['recaptcha'] ),
-        ];
-
-        // Add integration credentials
-        $int = $s['integration'];
-        if ( $int === 'mailchimp' ) {
-            $form_config['mailchimp_api']  = $s['mailchimp_api'];
-            $form_config['mailchimp_list'] = $s['mailchimp_list'];
-        } elseif ( $int === 'brevo' ) {
-            $form_config['brevo_api']  = $s['brevo_api'];
-            $form_config['brevo_list'] = $s['brevo_list'];
-        } elseif ( $int === 'activecampaign' ) {
-            $form_config['activecampaign_url']  = $s['activecampaign_url'];
-            $form_config['activecampaign_api']  = $s['activecampaign_api'];
-            $form_config['activecampaign_list'] = $s['activecampaign_list'];
-        } elseif ( $int === 'convertkit' ) {
-            $form_config['convertkit_api']  = $s['convertkit_api'];
-            $form_config['convertkit_form'] = $s['convertkit_form'];
-        } elseif ( $int === 'hubspot' ) {
-            $form_config['hubspot_portal'] = $s['hubspot_portal'];
-            $form_config['hubspot_form']   = $s['hubspot_form'];
-        } elseif ( $int === 'webhook' ) {
-            $form_config['webhook_url']    = $s['webhook_url'];
-            $form_config['webhook_method'] = $s['webhook_method'];
-        }
-
-        $config_b64 = base64_encode( wp_json_encode( $form_config ) );
-        // Token v2: legato al config — impedisce manomissione di email_to / api_keys
-        // / webhook_url che permetterebbe l'uso del sito come relay.
-        $token      = class_exists( 'Olobuild_Form_Handler' )
-            ? Olobuild_Form_Handler::generate_token( $config_b64 )
-            : ''; // fallback no-op: senza handler il form non è funzionante
+        // Provider (Mailchimp, Brevo…), chiavi API e reCAPTCHA NON sono collegati: l'iscrizione
+        // va a newsletter/subscribe (Olobuild_Newsletter), che salva l'iscritto nella lista di
+        // Olobuild e avvisa l'amministratore senza leggerli. Qui si preparava un config firmato
+        // che nessuno inviava; i controlli sono nascosti nell'inspector finché l'endpoint non li
+        // userà, e le chiavi salvate restano dove sono.
+        // Il reindirizzamento invece è della pagina: lo fa lo script qui sotto dopo l'iscrizione.
+        $redirect = esc_url_raw( (string) ( $s['redirect_url'] ?? '' ) );
+        // Content Lock: sfoca il primo blocco che segue la tile finché il visitatore non si
+        // iscrive. Non nel canvas del builder, dove quel blocco si deve poter modificare.
+        $lock_attivo = ! empty( $s['content_lock'] ) && empty( $s['_builder_mode'] );
 
         // Styles — TOKEN-FIRST: primary brand (era fallback #3B82F6 off-brand)
         $primary     = 'var(--olo-color-primary, #e1474f)';
@@ -193,13 +166,11 @@ class Olobuild_Newsletter_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-nl-msg.olo-nl-ok{background:<?php echo ! empty( $s['success_bg'] ) ? esc_attr( $s['success_bg'] ) : '#ECFDF5'; ?>;color:<?php echo ! empty( $s['success_color'] ) ? esc_attr( $s['success_color'] ) : '#065F46'; ?>}
         .<?php echo $uid; ?> .olo-nl-msg.olo-nl-err{background:<?php echo ! empty( $s['error_bg'] ) ? esc_attr( $s['error_bg'] ) : '#FEF2F2'; ?>;color:<?php echo ! empty( $s['error_color'] ) ? esc_attr( $s['error_color'] ) : '#991B1B'; ?>}
         .<?php echo $uid; ?> .olo-nl-loading{opacity:0.6;pointer-events:none}
-        <?php if ( ! empty( $s['content_lock'] ) ) : ?>
+        <?php if ( $lock_attivo ) : ?>
         .<?php echo $uid; ?>-lock{position:relative;overflow:hidden;max-height:<?php echo absint($s['lock_height']); ?>px}
-        .<?php echo $uid; ?>-lock>.olo-nl-lock-content{filter:blur(<?php echo absint($s['lock_blur']); ?>px);pointer-events:none;user-select:none}
-        .<?php echo $uid; ?>-lock>.olo-nl-lock-overlay{position:absolute;bottom:0;left:0;right:0;height:100%;background:linear-gradient(transparent 0%,rgba(255,255,255,0.95) 60%);display:flex;align-items:flex-end;justify-content:center;padding:20px}
-        .<?php echo $uid; ?>-unlocked{max-height:none!important}
-        .<?php echo $uid; ?>-unlocked>.olo-nl-lock-content{filter:none!important;pointer-events:auto!important;user-select:auto!important}
-        .<?php echo $uid; ?>-unlocked>.olo-nl-lock-overlay{display:none!important}
+        .<?php echo $uid; ?>-lock>:not(.olo-nl-lock-overlay){filter:blur(<?php echo absint($s['lock_blur']); ?>px);pointer-events:none;user-select:none}
+        .<?php echo $uid; ?>-lock>.olo-nl-lock-overlay{position:absolute;inset:0;z-index:5;background:linear-gradient(transparent 0%,color-mix(in srgb, var(--olo-color-background, #ffffff) 95%, transparent) 60%);display:flex;align-items:flex-end;justify-content:center;padding:1.25em}
+        .<?php echo $uid; ?>-lock>.olo-nl-lock-overlay p{margin:0;font-size:14px;font-weight:500;text-align:center;color:var(--olo-color-text, #374151)}
         <?php endif; ?>
         @media(max-width:768px){.<?php echo $uid; ?> .olo-nl-form{flex-direction:column}.<?php echo $uid; ?> .olo-nl-form input[type="text"],.<?php echo $uid; ?> .olo-nl-form input[type="email"]{flex:none;width:100%}.<?php echo $uid; ?> .olo-nl-btn{width:100%}}
         </style>
@@ -272,16 +243,55 @@ class Olobuild_Newsletter_Tile extends Olobuild_Tile_Base {
           if(!form)return;
           var okEl=document.getElementById(uid+'-ok');
           var errEl=document.getElementById(uid+'-err');
-          var lockId='<?php echo esc_js( $uid ); ?>-lock';
-          var contentLock=<?php echo ! empty( $s['content_lock'] ) ? 'true' : 'false'; ?>;
-          var lockKey='olo_nl_unlocked_'+uid.replace('olo-nl-','');
-
-          // Check if already unlocked (localStorage)
-          if(contentLock){
-            if(localStorage.getItem(lockKey)){
-              var lockWrap=document.querySelector('.'+uid+'-lock');
-              if(lockWrap){lockWrap.classList.add(uid+'-unlocked')}
+          var redirectUrl=<?php echo wp_json_encode( $redirect ); ?>;
+          var contentLock=<?php echo $lock_attivo ? 'true' : 'false'; ?>;
+          <?php
+          // Content Lock. Prima la tile disegnava un riquadro sfocato VUOTO sotto di sé: il blocco
+          // da nascondere non ci finiva mai dentro. Ora si sfoca il primo blocco che segue la tile
+          // nella pagina (la tile sotto nella stessa colonna, se no la colonna o la sezione dopo),
+          // da DOMContentLoaded perché quando lo script gira quel blocco non è ancora nel DOM. La
+          // chiave è stabile: con l'id casuale della tile lo sblocco valeva per un caricamento solo.
+          ?>
+          var lockKey=<?php echo wp_json_encode( 'olo_nl_unlocked_' . $chiave ); ?>;
+          var lockEl=null,lockOv=null;
+          function sbloccato(){try{return !!localStorage.getItem(lockKey)}catch(e){return false}}
+          function successivo(){
+            var cur=form.closest('.olo-frontend-tile')||form.closest('.'+uid),n;
+            while(cur){
+              if(cur===document.body){return null}
+              if(cur.classList.contains('olo-template')){return null}
+              n=cur.nextElementSibling;
+              while(n){
+                if(!/^(SCRIPT|STYLE|LINK|TEMPLATE|NOSCRIPT)$/.test(n.tagName)){return n}
+                n=n.nextElementSibling;
+              }
+              cur=cur.parentElement;
             }
+            return null;
+          }
+          function blocca(){
+            if(sbloccato()){return}
+            lockEl=successivo();
+            if(!lockEl){return}
+            lockEl.classList.add(uid+'-lock');
+            lockEl.setAttribute('inert','');
+            lockOv=document.createElement('div');
+            lockOv.className='olo-nl-lock-overlay';
+            var p=document.createElement('p');
+            p.textContent=<?php echo wp_json_encode( (string) $s['lock_message'] ); ?>;
+            lockOv.appendChild(p);
+            lockEl.appendChild(lockOv);
+          }
+          function sblocca(){
+            try{localStorage.setItem(lockKey,'1')}catch(e){}
+            if(!lockEl){return}
+            lockEl.classList.remove(uid+'-lock');
+            lockEl.removeAttribute('inert');
+            if(lockOv){if(lockOv.parentNode){lockOv.parentNode.removeChild(lockOv)}}
+            lockEl=null;lockOv=null;
+          }
+          if(contentLock){
+            if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',blocca)}else{blocca()}
           }
 
           form.addEventListener('submit',function(e){
@@ -327,17 +337,12 @@ class Olobuild_Newsletter_Tile extends Olobuild_Tile_Base {
                 okEl.textContent=msg||'<?php echo esc_js( $s['success_message'] ); ?>';
                 okEl.style.display='block';
 
-                // Unlock content
-                if(contentLock){
-                  localStorage.setItem(lockKey,'1');
-                  var lockWrap=document.querySelector('.'+uid+'-lock');
-                  if(lockWrap){lockWrap.classList.add(uid+'-unlocked')}
-                }
+                if(contentLock){sblocca()}
 
-                // Redirect
-                if(data.data&&data.data.redirect){
-                  setTimeout(function(){window.location.href=data.data.redirect},1500);
-                }
+                // Redirect: quello della tile (prima non si leggeva), se no quello della risposta.
+                var vai=redirectUrl;
+                if(!vai){if(data.data){vai=data.data.redirect||''}}
+                if(vai){setTimeout(function(){window.location.href=vai},1500)}
               }else{
                 errEl.textContent=msg||'Errore durante l\'iscrizione';
                 errEl.style.display='block';
@@ -357,15 +362,6 @@ class Olobuild_Newsletter_Tile extends Olobuild_Tile_Base {
         if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Text_Effects::css() from fixed effect definitions
         $this->tfx_print_script();
         $html = ob_get_clean();
-
-        // Content Lock: wrap the NEXT sibling content
-        if ( ! empty( $s['content_lock'] ) ) {
-            $html .= '<div class="' . esc_attr( $uid ) . '-lock"><div class="olo-nl-lock-content">';
-            // The locked content will be whatever comes after this tile in the template
-            // We close the lock wrapper after rendering (handled by frontend renderer hook)
-            // For now, we add a placeholder — actual implementation needs renderer support
-            $html .= '</div><div class="olo-nl-lock-overlay"><p style="font-size:14px;color:#374151;font-weight:500">' . esc_html( $s['lock_message'] ) . '</p></div></div>';
-        }
 
         // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );

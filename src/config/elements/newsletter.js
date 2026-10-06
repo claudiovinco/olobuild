@@ -150,40 +150,19 @@ export default {
     { key: 'redirect_url', label: t('Redirect dopo iscrizione'), type: 'link', placeholder: t('https://...') },
 
     { type: 'separator', label: t('Content Lock') },
-    { key: 'content_lock', label: t('Blocca contenuto successivo'), type: 'toggle' },
+    { key: 'content_lock', label: t('Blocca contenuto successivo'), type: 'toggle',
+      description: t('Sfoca il primo blocco che viene dopo la tile nella pagina (la tile sotto nella stessa colonna, altrimenti la colonna o la sezione che segue) finché il visitatore non si iscrive. Nel canvas del builder il blocco resta in chiaro per poterlo modificare.') },
     { key: 'lock_message', label: t('Messaggio blocco'), type: 'text',
       condition: { field: 'content_lock', value: true } },
 
-    { type: 'separator', label: t('Integrazione Email') },
-    { key: 'integration', label: t('Provider'), type: 'select', options: [
-      { value: 'none', label: t('Solo email (wp_mail)') },
-      { value: 'mailchimp', label: t('Mailchimp') },
-      { value: 'brevo', label: t('Brevo (ex Sendinblue)') },
-      { value: 'activecampaign', label: t('ActiveCampaign') },
-      { value: 'convertkit', label: t('ConvertKit') },
-      { value: 'hubspot', label: t('HubSpot') },
-      { value: 'webhook', label: t('Webhook personalizzato') },
-    ]},
-    { key: 'mailchimp_api', label: t('API Key'), type: 'text', condition: { field: 'integration', value: 'mailchimp' } },
-    { key: 'mailchimp_list', label: t('List ID'), type: 'text', condition: { field: 'integration', value: 'mailchimp' } },
-    { key: 'brevo_api', label: t('API Key'), type: 'text', condition: { field: 'integration', value: 'brevo' } },
-    { key: 'brevo_list', label: t('List IDs (virgola)'), type: 'text', condition: { field: 'integration', value: 'brevo' } },
-    { key: 'activecampaign_url', label: t('Account URL'), type: 'text', placeholder: t('https://account.api-us1.com'), condition: { field: 'integration', value: 'activecampaign' } },
-    { key: 'activecampaign_api', label: t('API Key'), type: 'text', condition: { field: 'integration', value: 'activecampaign' } },
-    { key: 'activecampaign_list', label: t('List ID'), type: 'text', condition: { field: 'integration', value: 'activecampaign' } },
-    { key: 'convertkit_api', label: t('API Key'), type: 'text', condition: { field: 'integration', value: 'convertkit' } },
-    { key: 'convertkit_form', label: t('Form ID'), type: 'text', condition: { field: 'integration', value: 'convertkit' } },
-    { key: 'hubspot_portal', label: t('Portal ID'), type: 'text', condition: { field: 'integration', value: 'hubspot' } },
-    { key: 'hubspot_form', label: t('Form GUID'), type: 'text', condition: { field: 'integration', value: 'hubspot' } },
-    { key: 'webhook_url', label: t('URL Webhook'), type: 'text', condition: { field: 'integration', value: 'webhook' } },
-    { key: 'webhook_method', label: t('Metodo'), type: 'select', options: [
-      { value: 'POST', label: t('POST') },
-      { value: 'PUT', label: t('PUT') },
-    ], condition: { field: 'integration', value: 'webhook' } },
-
+    // Provider (Mailchimp, Brevo, ActiveCampaign, ConvertKit, HubSpot, webhook), le loro chiavi
+    // API e reCAPTCHA non sono collegati: l'endpoint newsletter/subscribe salva l'iscritto nella
+    // lista di Olobuild (Olobuild → Newsletter) e avvisa l'amministratore, senza leggerli. I
+    // controlli che li offrivano non facevano niente e sono tolti; le chiavi salvate restano nei
+    // default. Tornano quando l'endpoint li userà, con le chiavi globali di Configurazione →
+    // Integrazioni form come il Form Contatti (mai chiavi API nella tile).
     { type: 'separator', label: t('Anti-spam') },
     { key: 'honeypot', label: t('Honeypot (consigliato)'), type: 'toggle' },
-    { key: 'recaptcha', label: t('reCAPTCHA v3'), type: 'toggle' },
   ],
 
   styleFields: [
