@@ -89,7 +89,9 @@ class Olobuild_Postnavigation_Tile extends Olobuild_Tile_Base {
         $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
         // TOKEN-FIRST: titolo link = primario brand (era #93C5FD/#60A5FA azzurri off-brand)
-        $text_clr   = $this->safe_color_css( $s['text_color'] ) ?: '#F3F4F6';
+        // Etichetta («← Precedente»): la riserva era #F3F4F6, quasi bianco sulla card chiara
+        // (var(--olo-color-muted)) e illeggibile. Ora il testo tenue del tema.
+        $text_clr   = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text-muted, #6b7280)';
         $link_clr   = $this->safe_color_css( $s['link_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $hover_clr  = $this->safe_color_css( $s['hover_color'] ) ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 80%, #fff)';
         // «Durata» del Colore link in hover: senza chiave il colore cambia di scatto, come sempre
@@ -150,7 +152,10 @@ class Olobuild_Postnavigation_Tile extends Olobuild_Tile_Base {
                 border-radius: <?php echo $radius; ?>;
                 overflow: hidden;
                 flex-shrink: 0;
-                background: #1F2937;
+                /* Riquadro dove l'articolo non ha l'immagine in evidenza: una velatura del colore
+                   dell'etichetta (chiara sulle card scure, scura su quelle chiare), non più il
+                   quadrato #1F2937 fisso, nero su ogni tema. */
+                background: color-mix(in srgb, <?php echo $text_clr; ?> 18%, transparent);
             }
             .<?php echo $uid; ?> .olo-pnav-thumb img {
                 width: 100%;
