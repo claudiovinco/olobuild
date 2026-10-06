@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.559 - 2026-10-06 (fix)
+- Luce di pagina: la luce cambia davvero colore quando arriva al centro una sezione con il suo «Colore luce». Prima la tile vedeva solo la sezione in cui si trovava e la luce restava sempre del colore di partenza.
+- Sezione: il «Colore luce» accetta anche le tinte della palette create dal selettore colore. Prima venivano scartate e la sezione non chiedeva nessun colore.
+
 ## v1.4.558 - 2026-10-06
 - Menu Nav: il menu mobile «Schermo intero» si regola dall'inspector. Nel Contenuto ci sono logo, numeri e descrizioni delle voci (si scrivono in Aspetto → Menu). Nello Stile ci sono fondo, allineamento, colore delle voci anche in Hover, tipografia (carattere, misura, peso, maiuscolo, spaziatura), colore dei numeri, linee fra le voci e colore della X. Prima era sempre fondo nero e voci bianche al centro. Le Voci pulsante restano pulsanti anche qui, e una voce che si apre in una nuova scheda lo fa anche su telefono.
 - Particelle: per i coriandoli su tutta la pagina c'è «Quando parte», all'apertura o quando la tile entra nello schermo, e c'è la «Durata» dello scoppio. Lo scoppio nasce nella parte di pagina che si sta guardando e i coriandoli planano invece di precipitare. Prima partiva sempre in cima al documento all'apertura e durava 3 secondi: più in basso non si vedeva.
