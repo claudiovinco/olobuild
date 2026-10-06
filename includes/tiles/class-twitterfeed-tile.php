@@ -119,12 +119,32 @@ class Olobuild_Twitterfeed_Tile extends Olobuild_Tile_Base {
                 if ( $width ) {
                     $data_attrs .= ' data-width="' . esc_attr( $width ) . '"';
                 }
+                // X mostra le timeline incorporate solo a chi ha fatto l'accesso a X: per gli
+                // altri visitatori widgets.js lascia l'iframe nascosto (0x0) e resta il link
+                // originale, che diceva solo «Tweets». Il link ora è una scheda del profilo
+                // (logo, @nome, invito), che widgets.js toglie quando la timeline si carica.
+                // L'handle si cerca solo sul dominio di X (prima fox.com/news dava «@news») e i
+                // percorsi riservati si escludono interi (prima x.com/HomeDepot perdeva il nome e
+                // x.com/explore diventava «@explore»).
+                $handle = '';
+                if ( preg_match( '#^(?:https?://)?(?:[a-z0-9-]+\.)?(?:twitter|x)\.com/(?!(?:i|search|hashtag|home|explore|intent|share|settings|messages|notifications)(?:[/?\#]|$))([A-Za-z0-9_]{1,15})(?:[/?\#]|$)#i', $url, $hm ) ) {
+                    $handle = '@' . $hm[1];
+                }
+                $card_dark = ( $theme === 'dark' );
+                $card_css  = 'display:flex;align-items:center;gap:0.875em;width:100%;max-width:' . ( $width ? (int) $width : 550 ) . 'px;box-sizing:border-box;padding:1.125em 1.25em;text-decoration:none;text-align:left;'
+                    . 'border-radius:' . ( $radius ?: '0px' ) . ';'
+                    . ( $card_dark
+                        ? 'background:var(--olo-color-dark, #15202b);color:var(--olo-color-light, #fdfcfa);border:1px solid color-mix(in srgb, var(--olo-color-light, #fdfcfa) 18%, transparent);'
+                        : 'background:var(--olo-color-background, #ffffff);color:var(--olo-color-text, #14161c);border:1px solid var(--olo-color-border, #e5e7eb);' );
                 ?>
+                <style>.<?php echo esc_attr( $tw_uid ); ?> .olo-tw-card:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 35%, transparent)}.<?php echo esc_attr( $tw_uid ); ?> .olo-tw-card:hover .olo-tw-card-cta{text-decoration:underline}</style>
                 <a
-                    class="twitter-timeline"
+                    class="twitter-timeline olo-tw-card"
                     <?php echo $data_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute string assembled above with esc_attr() on every value ?>
                     href="<?php echo esc_url( $url ); ?>"
-                ><?php echo esc_html( olobuild_t( 'Tweets' ) ); ?></a>
+                    target="_blank" rel="noopener noreferrer"
+                    style="<?php echo esc_attr( $card_css ); ?>"
+                ><span aria-hidden="true" style="flex:none;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;<?php echo $card_dark ? 'background:var(--olo-color-light, #fdfcfa);color:var(--olo-color-dark, #15202b);' : 'background:var(--olo-color-text, #14161c);color:var(--olo-color-background, #ffffff);'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- uno dei due letterali CSS fissi del ternario ?>"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" focusable="false"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></span><span style="display:flex;flex-direction:column;gap:2px;min-width:0;"><strong style="font-weight:700;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><?php echo esc_html( $handle !== '' ? $handle : olobuild_t( 'Profilo su X' ) ); ?></strong><span class="olo-tw-card-cta" style="font-size:0.9em;opacity:0.75;line-height:1.4;"><?php echo esc_html( olobuild_t( 'Guarda i post su X' ) ); ?></span></span></a>
                 <?php $this->enqueue_twitter_js(); ?>
             <?php endif; ?>
         </div>

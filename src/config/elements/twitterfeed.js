@@ -38,7 +38,8 @@ export default {
     { key: 'embed_type', label: t('Tipo embed'), type: 'select', options: [
       { value: 'timeline', label: t('Timeline') },
       { value: 'tweet', label: t('Tweet singolo') },
-    ]},
+    ],
+      description: t('X mostra le timeline incorporate solo a chi ha fatto l\'accesso a X: gli altri visitatori vedono una scheda del profilo che porta a X. Il tweet singolo si vede sempre, anche senza accesso.') },
     { key: 'chrome', label: t('Chrome (noheader,nofooter,...)'), type: 'multi_pills', options: [
       { value: 'noheader', label: t('Senza header') },
       { value: 'nofooter', label: t('Senza footer') },
