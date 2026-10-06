@@ -134,7 +134,8 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
         $desc_size    = max( 11, min( 22, absint( $s['description_size'] ) ) );
         $footer_size  = max( 9, min( 16, absint( $s['footer_size'] ) ) );
 
-        $card_color   = $this->safe_color_css( $s['card_color'] ) ?: '#e5e7eb';
+        // Riserva dal token, come il default: un esadecimale fisso non seguiva la palette.
+        $card_color   = $this->safe_color_css( $s['card_color'] ) ?: 'var(--olo-color-surface-alt, #e5e7eb)';
         $accent_color = $this->safe_color_css( $s['card_accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $card_border  = Olobuild_Tile_Utils::border_color( $s['card_border'] ?? null, '' );
         // Colori indipendenti (opzionali, fallback retro-compatibile):
@@ -144,6 +145,12 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
         $icon_bg       = $this->safe_color_css( $s['icon_bg_color'] ?? '' );
         $counter_shape = ( ( $s['counter_shape'] ?? 'plain' ) === 'circle' ) ? 'circle' : 'plain';
         $counter_bg    = $this->safe_color_css( $s['counter_bg'] ?? '' );
+        // «Posizione media»: la chiave era salvata da sempre ma nessuno la leggeva (il
+        // media stava solo in alto). 'bottom' lo porta in fondo alla card, dopo l'invito.
+        $media_bottom  = ( ( $s['media_position'] ?? 'top' ) === 'bottom' );
+        // Frecce dal set SVG (Lucide arrow-right), non il carattere «→»: con un font che
+        // non lo disegna bene cambiava misura e allineamento da un sito all'altro.
+        $arrow_svg     = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" style="display:block"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
 
         // Container bg
         $container_bg_css = '';
@@ -197,11 +204,16 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
                 ?>
                     <<?php echo $tag . $tag_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed a/div tag plus attributes built above with esc_url(); item index is an internal array key ?> class="olo-icards__card olo-icards__card--<?php echo $idx; ?>" style="<?php echo esc_attr( $card_style ); ?>">
 
-                        <!-- MEDIA (top, opzionale) -->
-                        <?php if ( ! empty( $s['show_media'] ) ) :
+                        <!-- MEDIA (in alto o in fondo, opzionale) -->
+                        <?php
+                        $media_html = '';
+                        if ( ! empty( $s['show_media'] ) ) :
                             $media_img = $it['media_image'] ?? '';
                             $media_lbl = $it['media_label'] ?? '';
-                            $media_inner_style = 'width:100%;aspect-ratio:' . esc_attr( $media_aspect ) . ';' . ( $media_radius ? 'border-radius:' . esc_attr( $media_radius ) . ';' : '' ) . 'overflow:hidden;background:' . esc_attr( Olobuild_Tile_Utils::con_alfa( $card_color, '14' ) ) . ';border:1px solid ' . esc_attr( Olobuild_Tile_Utils::con_alfa( $card_color, '22' ) ) . ';display:flex;align-items:center;justify-content:center;margin-bottom:28px;' . ( $media_radius_h ? 'transition:border-radius ' . $media_rdur . 'ms ease;' : '' );
+                            // In fondo la distanza sta sopra il media, in alto sotto.
+                            $media_space = ( $media_bottom ? 'margin-top' : 'margin-bottom' ) . ':28px;';
+                            $media_inner_style = 'width:100%;aspect-ratio:' . esc_attr( $media_aspect ) . ';' . ( $media_radius ? 'border-radius:' . esc_attr( $media_radius ) . ';' : '' ) . 'overflow:hidden;background:' . esc_attr( Olobuild_Tile_Utils::con_alfa( $card_color, '14' ) ) . ';border:1px solid ' . esc_attr( Olobuild_Tile_Utils::con_alfa( $card_color, '22' ) ) . ';display:flex;align-items:center;justify-content:center;' . $media_space . ( $media_radius_h ? 'transition:border-radius ' . $media_rdur . 'ms ease;' : '' );
+                            ob_start();
                         ?>
                             <div class="olo-icards__media" style="<?php echo esc_attr( $media_inner_style ); ?>">
                                 <?php if ( $media_img ) : ?>
@@ -210,7 +222,13 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
                                     <span style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:11px;letter-spacing:0.12em;color:<?php echo esc_attr( $card_color ); ?>;opacity:.45;text-transform:uppercase" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.media_label'; ?>"><?php echo esc_html( $media_lbl ); ?></span>
                                 <?php endif; ?>
                             </div>
-                        <?php endif; ?>
+                        <?php
+                            $media_html = ob_get_clean();
+                        endif;
+                        if ( ! $media_bottom ) {
+                            echo $media_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup del media composto qui sopra con esc_attr()/esc_url()/esc_html()
+                        }
+                        ?>
 
                         <!-- TOP ROW: icon ←→ counter/arrow -->
                         <?php if ( ! empty( $s['show_icon'] ) || ! empty( $s['show_counter'] ) || ! empty( $s['show_arrow'] ) ) : ?>
@@ -222,7 +240,12 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
                                         <span style="<?php echo $icon_box; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $icon_box is assembled above from fixed literals and an esc_attr()'d colour ?>line-height:1;color:<?php echo esc_attr( $icon_color ); ?>">
                                             <?php echo $this->render_icon_html( $icon_name, $icon_bg ? 1.2 : 1.8 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup built by Olobuild_Tile_Base::render_icon_html(), which sanitizes SVG internally ?>
                                         </span>
-                                    <?php elseif ( ! empty( $s['show_counter'] ) && $counter && $counter_shape === 'circle' ) : ?>
+                                    <?php endif; ?>
+                                    <?php
+                                    // Il cerchio del numero sta accanto all'icona, non al suo posto: in un
+                                    // elseif dopo l'icona, con «Mostra icona» acceso il numero spariva
+                                    // (e Colore numero / Sfondo cerchio non facevano niente).
+                                    if ( ! empty( $s['show_counter'] ) && $counter && $counter_shape === 'circle' ) : ?>
                                         <span style="width:36px;height:36px;border-radius:50%;background:<?php echo esc_attr( $counter_bg ?: 'rgba(127,127,127,.14)' ); ?>;display:inline-flex;align-items:center;justify-content:center;font-family:<?php echo esc_attr( $tfam ); ?>;font-weight:800;font-size:15px;color:<?php echo esc_attr( $counter_color ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.counter'; ?>"><?php echo esc_html( $counter ); ?></span>
                                     <?php endif; ?>
                                 </div>
@@ -231,7 +254,7 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
                                         <span style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $counter_size; ?>px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $counter_color ); ?>;opacity:.85"><span data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.counter'; ?>"><?php echo esc_html( $counter ); ?></span><?php if ( ! empty( $s['show_counter_label'] ) && $counter_label ) : ?> / <span data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.counter_label'; ?>"><?php echo esc_html( $counter_label ); ?></span><?php endif; ?></span>
                                     <?php endif; ?>
                                     <?php if ( ! empty( $s['show_arrow'] ) ) : ?>
-                                        <span style="width:34px;height:34px;border-radius:50%;border:1px solid <?php echo esc_attr( Olobuild_Tile_Utils::con_alfa( $card_color, '33' ) ); ?>;display:inline-flex;align-items:center;justify-content:center;color:<?php echo esc_attr( $card_color ); ?>;font-size:14px;opacity:.7">→</span>
+                                        <span style="width:34px;height:34px;border-radius:50%;border:1px solid <?php echo esc_attr( Olobuild_Tile_Utils::con_alfa( $card_color, '33' ) ); ?>;display:inline-flex;align-items:center;justify-content:center;color:<?php echo esc_attr( $card_color ); ?>;font-size:14px;opacity:.7" aria-hidden="true"><?php echo $arrow_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG letterale fisso definito sopra ?></span>
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -266,9 +289,15 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
                         <!-- CTA TESTUALE (Learn more →) -->
                         <?php if ( ! empty( $s['show_link_text'] ) && $link_text !== '' ) : ?>
                             <span class="olo-icards__cta" style="display:inline-flex;align-items:center;gap:8px;margin-top:24px;font-family:<?php echo esc_attr( $sans ); ?>;font-size:14px;font-weight:600;letter-spacing:0.01em;color:<?php echo esc_attr( $accent_color ); ?>">
-                                <span data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.link_text'; ?>"><?php echo esc_html( $link_text ); ?></span><span class="olo-icards__cta-arrow" aria-hidden="true" style="display:inline-block;transition:transform .3s ease">→</span>
+                                <span data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.link_text'; ?>"><?php echo esc_html( $link_text ); ?></span><span class="olo-icards__cta-arrow" aria-hidden="true" style="display:inline-block;transition:transform .3s ease"><?php echo $arrow_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG letterale fisso definito sopra ?></span>
                             </span>
                         <?php endif; ?>
+
+                        <?php
+                        if ( $media_bottom ) {
+                            echo $media_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup del media composto sopra con esc_attr()/esc_url()/esc_html()
+                        }
+                        ?>
                     </<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'a'/'div' literal from the ternary above ?>>
                 <?php endforeach; ?>
             </div>
@@ -321,6 +350,18 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
                 .<?php echo $uid; ?> .olo-icards__grid { <?php echo $ic_decls; ?> }
             }
             <?php endforeach; ?>
+            <?php
+            // Ripiego del telefono: senza colonne scelte per il telefono (orizzontale o
+            // verticale) le card vanno una sotto l'altra. Prima ereditavano le colonne del
+            // desktop o del tablet e a 390px restavano tre colonne di 90px col titolo a
+            // 72px che usciva dalla card. Stampato dopo le regole per dispositivo: sul
+            // telefono vince anche sulle colonne scelte per il tablet.
+            $ic_tel_c = (string) ( $s['columns_mobile_landscape'] ?? '' ) . (string) ( $s['columns_mobile'] ?? '' );
+            if ( $ic_tel_c === '' ) : ?>
+            @media (max-width: 640px) {
+                .<?php echo $uid; ?> .olo-icards__grid { grid-template-columns: minmax(0,1fr) !important; }
+            }
+            <?php endif; ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php

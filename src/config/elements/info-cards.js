@@ -95,7 +95,9 @@ export default {
     { type: 'separator', label: t('Card items') },
     { key: 'items', label: t('Cards'), type: 'content-items',
       itemLabel: t('Card'),
-      defaults: { counter: '00', counter_label: 'Label', title: 'Titolo', title_accent: '', title_accent_italic: false, description: 'Descrizione…', icon: '', footer_dot_color: '#10b981', footer_text: '', link_url: '', link_text: '', media_image: '', media_label: 'SCREENSHOT' },
+      // newItemDefaults (non `defaults`, che ContentItemsEditor non legge: la card aggiunta
+      // nasceva vuota, { id }). Testi d'esempio e pallino dal token come le card di partenza.
+      newItemDefaults: { counter: '00', counter_label: t('Etichetta'), title: t('Titolo'), title_accent: '', title_accent_italic: false, description: t('Descrizione della card.'), icon: '', footer_dot_color: 'var(--olo-color-accent, #f4a23b)', footer_text: '', link_url: '', link_text: t('Scopri di più'), media_image: '', media_label: '' },
       itemFields: [
         { type: 'separator', label: t('Media') },
         { key: 'media_image',         label: t('Immagine media'),          type: 'image' },
@@ -116,7 +118,7 @@ export default {
     },
 
     { type: 'separator', label: t('Visibilità elementi') },
-    { key: 'show_media',         label: t('Mostra media in alto'),                type: 'toggle' },
+    { key: 'show_media',         label: t('Mostra media'),                        type: 'toggle' },
     { key: 'show_icon',          label: t('Mostra icona'),                        type: 'toggle' },
     { key: 'show_counter',       label: t('Mostra counter'),                      type: 'toggle' },
     { key: 'show_counter_label', label: t('Mostra counter label'),                type: 'toggle' },
@@ -129,7 +131,8 @@ export default {
   // ═══ STILE ════════════════════════════════════════════════════
   styleFields: [
     { type: 'separator', label: t('Layout griglia') },
-    { key: 'columns',   label: t('Numero colonne'),    type: 'range', min: 1, max: 6, step: 1, responsive: true },
+    { key: 'columns',   label: t('Numero colonne'),    type: 'range', min: 1, max: 6, step: 1, responsive: true,
+      description: t('Sul telefono, se non scegli un numero di colonne per il telefono, le card vanno una sotto l\'altra.') },
     { key: 'items_gap', label: t('Gap card'), type: 'range', min: 0, max: 60, step: 2, responsive: true },
 
     { type: 'separator', label: t('Sfondo container') },
@@ -141,7 +144,8 @@ export default {
     { type: 'separator', label: t('Card stile') },
     { key: 'card_bg',           label: t('Sfondo card'),            type: 'background', showParallax: false },
     { key: 'card_color',        label: t('Colore testo'),           type: 'color' },
-    { key: 'card_accent_color', label: t('Colore accent (titolo)'), type: 'color' },
+    { key: 'card_accent_color', label: t('Colore accento'), type: 'color',
+      description: t('Colora l\'invito testuale, il bagliore al passaggio e il titolo, se al titolo non dai un colore suo.') },
     { key: 'card_padding',      label: t('Padding interno card'),   type: 'spacing' },
     { key: 'card_border',       label: t('Bordo (vuoto = nessuno)'), type: 'border', legacyWidth: 1 },
     withHover({ key: 'card_radius', label: t('Raggio card'), type: 'border-radius' }, { hoverKey: 'card_radius_hover', hoverDurationKey: 'card_radius_hover_duration' }),
@@ -150,7 +154,18 @@ export default {
         { key: 'title_accent_italic', label: t('Suffisso italico'),        type: 'toggle' },
         { key: 'footer_dot_color',    label: t('Footer pallino'),          type: 'color' },
     ] },
+    // Icona: i due colori li leggeva già il PHP, ma nessun controllo li offriva.
+    { type: 'separator', label: t('Icona'), condition: { field: 'show_icon', op: '=', value: true } },
+    { key: 'icon_color',    label: t('Colore icona'), type: 'color',
+      description: t('Vuoto = il colore del testo della card.') },
+    { key: 'icon_bg_color', label: t('Sfondo icona'), type: 'color',
+      description: t('Con un colore l\'icona sta in un riquadro arrotondato di quel colore; vuoto = icona libera.') },
+
     { type: 'separator', label: t('Media (immagine card)') },
+    { key: 'media_position', label: t('Posizione media'), type: 'select', options: [
+      { value: 'top',    label: t('In alto') },
+      { value: 'bottom', label: t('In fondo') },
+    ], valoriStorici: { '': 'top' }, condition: { field: 'show_media', op: '=', value: true } },
     // Elenco canonico: i 5 rapporti storici ('16/9','4/3','3/2','1/1','21/9') ci stanno
     // tutti dentro, quindi niente `extra`. NIENTE voce automatica: il riquadro media non
     // ha un'altezza propria (solo `aspect-ratio`, PHP :191 e mediaStyle nel .vue), senza
@@ -178,10 +193,27 @@ export default {
 
     { type: 'separator', label: t('Tipografia titolo') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
-    { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { size: 'title_size', weight: 'title_weight', italic: 'title_italic', family: 'title_font_family' }, sizeMin: 18, sizeMax: 160, sizeStep: 2 },
+    // Colore del titolo: vuoto = il Colore accento, come prima che il controllo esistesse.
+    { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { size: 'title_size', weight: 'title_weight', italic: 'title_italic', family: 'title_font_family', color: 'title_color' }, sizeMin: 18, sizeMax: 160, sizeStep: 2 },
+
+    // Numero: forma, colore e sfondo del cerchio li leggeva già il PHP senza un controllo.
+    // Nel cerchio il numero ha una misura sua (e niente etichetta): la dimensione del
+    // controllo tipografia non agirebbe, quindi lì resta solo il colore.
+    { type: 'separator', label: t('Numero'), condition: { field: 'show_counter', op: 'neq', value: false } },
+    // Le card salvate senza la chiave rendono «Testo con etichetta» (il PHP ripiega su
+    // 'plain'): valoriStorici le mostra così invece di una tendina senza voce scelta.
+    { key: 'counter_shape', label: t('Forma numero'), type: 'select', options: [
+      { value: 'plain',  label: t('Testo con etichetta') },
+      { value: 'circle', label: t('Cerchio') },
+    ], valoriStorici: { '': 'plain' } },
+    { type: 'typography', label: t('Numero'), responsiveKeys: [], keys: { size: 'counter_size', color: 'counter_color' }, sizeMin: 9, sizeMax: 22,
+      condition: { field: 'counter_shape', op: 'neq', value: 'circle' } },
+    { key: 'counter_color', label: t('Colore numero'), type: 'color',
+      condition: { field: 'counter_shape', op: 'eq', value: 'circle' } },
+    { key: 'counter_bg', label: t('Sfondo cerchio'), type: 'color',
+      condition: { field: 'counter_shape', op: 'eq', value: 'circle' } },
 
     { type: 'separator', label: t('Dimensioni secondarie') },
-    { type: 'typography', label: t('Numero'), responsiveKeys: [], keys: { size: 'counter_size' }, sizeMin: 9, sizeMax: 22 },
     { type: 'typography', label: t('Descrizione'), responsiveKeys: [], keys: { size: 'description_size' }, sizeMin: 11, sizeMax: 22 },
     { type: 'typography', label: t('Piè di pagina'), responsiveKeys: [], keys: { size: 'footer_size' }, sizeMin: 9, sizeMax: 16 },
 
