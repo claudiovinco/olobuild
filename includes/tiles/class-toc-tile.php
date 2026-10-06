@@ -39,7 +39,11 @@ class Olobuild_Toc_Tile extends Olobuild_Tile_Base {
         $list_style = $s['list_style'];
         $link_clr   = $this->safe_color_css($s['link_color']) ?: 'var(--olo-color-primary, #e1474f)';
         $title_clr  = $this->safe_color_css($s['title_color']) ?: 'var(--olo-color-text, #374151)';
-        $text_clr   = $this->safe_color_css($s['text_color']) ?: 'var(--olo-color-text, #374151)';
+        // Colore del controllo tipografia «Indice» (text_color): era calcolato e mai usato. Colora
+        // il testo dell'elenco che non è un link, cioè numeri e pallini delle voci (prima sempre
+        // nel colore dei link). Vuoto = come prima.
+        $text_set   = $this->safe_color_css($s['text_color']);
+        $mark_clr   = $text_set ?: $link_clr;
         $font_size  = absint($s['font_size']) ?: 15;
         $indent     = absint($s['indent']) ?: 20;
         $sticky     = !empty($s['sticky']);
@@ -57,6 +61,7 @@ class Olobuild_Toc_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> { padding: 16px; border-radius: 8px; <?php if ($sticky) echo 'position: sticky; top: 20px; z-index: 10;'; ?> }
         .<?php echo $uid; ?> .olo-toc-title { font-weight: 700; font-size: 16px; color: <?php echo $title_clr; ?>; margin-bottom: 12px; border-bottom: 1px solid var(--olo-color-border, #E5E7EB); padding-bottom: 8px; }
         .<?php echo $uid; ?> .olo-toc-item { margin-bottom: 6px; }
+        <?php if ( $text_set ) : ?>.<?php echo $uid; ?> .olo-toc-list { color: <?php echo $text_set; ?>; }<?php endif; ?>
         .<?php echo $uid; ?> .olo-toc-item a { color: <?php echo $link_clr; ?>; text-decoration: none; font-size: <?php echo $font_size; ?>px; transition: color 0.2s; }
         .<?php echo $uid; ?> .olo-toc-item a:hover { text-decoration: underline; }
         .<?php echo $uid; ?> .olo-toc-item a:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); border-radius: 3px; }
@@ -79,7 +84,7 @@ class Olobuild_Toc_Tile extends Olobuild_Tile_Base {
             var uid = '<?php echo esc_js( $uid ); ?>';
             var smooth = <?php echo $smooth ? 'true' : 'false'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'true'/'false' literal from the ternary ?>;
             var doHighlight = <?php echo $highlight ? 'true' : 'false'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'true'/'false' literal from the ternary ?>;
-            var linkClr = '<?php echo esc_js( $link_clr ); ?>';
+            var markClr = '<?php echo esc_js( $mark_clr ); ?>';
             var isSticky = <?php echo $sticky ? 'true' : 'false'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'true'/'false' literal from the ternary ?>;
 
             // Offset per header fissi del sito: lo sticky e i salti alle sezioni
@@ -129,13 +134,17 @@ class Olobuild_Toc_Tile extends Olobuild_Tile_Base {
                 var indent = parseInt(listEl.getAttribute('data-indent')) || 20;
                 var listStyle = listEl.getAttribute('data-list-style');
 
-                // Collect headings from all .olo-template elements, excluding those inside the TOC itself
+                // Collect headings from all .olo-template elements, excluding those inside the TOC itself.
+                // Solo i titoli del contenuto: anche header e footer del sito sono .olo-template, e
+                // l'indice finiva con i titoli delle colonne del footer. Fuori pure finestre e
+                // pannelli nascosti (popup, off-canvas).
+                var fuori = '.olo-site-header, .olo-site-footer, [data-olo-zone="header"], [data-olo-zone="footer"], [role="banner"], [role="contentinfo"], .uk-modal, .uk-offcanvas';
                 var sel = tags.map(function(t){ return '.olo-template ' + t; }).join(', ');
                 var allH = document.querySelectorAll(sel);
                 var headings = [];
                 for(var i = 0; i < allH.length; i++){
                     if(!container.contains(allH[i])){
-                        headings.push(allH[i]);
+                        if(!allH[i].closest(fuori)) headings.push(allH[i]);
                     }
                 }
 
@@ -160,9 +169,9 @@ class Olobuild_Toc_Tile extends Olobuild_Tile_Base {
                         for(var k = 0; k <= level; k++){
                             if(counter[k] > 0) parts.push(counter[k]);
                         }
-                        num = '<span style="color:' + linkClr + ';opacity:0.6;margin-right:6px;">' + parts.join('.') + '.</span>';
+                        num = '<span style="color:' + markClr + ';opacity:0.6;margin-right:6px;">' + parts.join('.') + '.</span>';
                     } else if(listStyle === 'bullets') {
-                        num = '<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:' + linkClr + ';margin-right:8px;vertical-align:middle;"></span>';
+                        num = '<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:' + markClr + ';margin-right:8px;vertical-align:middle;"></span>';
                     }
                     html += '<div class="olo-toc-item" style="padding-left:' + (level * indent) + 'px;">' + num + '<a href="#' + h.id + '">' + h.textContent + '</a></div>';
                 });
