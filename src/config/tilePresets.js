@@ -2692,18 +2692,59 @@ export const TILE_PRESETS = {
     'tilt-card':        { layout: 'single', bg_color: '#ffffff', text_color: '#0f172a' },
   },
   quotation: {
-    'editorial-classic': { style: 'default', alignment: 'left' },
-    'magazine-pull':     { style: 'default', alignment: 'center' },
-    'minimal-line':      { style: 'default', alignment: 'left' },
-    'big-mark':          { style: 'default', alignment: 'left' },
-    'centered-script':   { style: 'default', alignment: 'center' },
-    'glass-frosted':     { style: 'default', alignment: 'center' },
-    'neon-quote':        { style: 'default', alignment: 'center' },
-    'brutalist-stamp':   { style: 'default', alignment: 'left' },
-    'gradient-text':     { style: 'default', alignment: 'center' },
-    'sticky-note':       { style: 'default', alignment: 'left' },
-    'retro-typewriter':  { style: 'default', alignment: 'left' },
-    'tilt-card':         { style: 'default', alignment: 'left' },
+    // Preset veri (schema dual): prima ognuno cambiava solo «Stile» e «Allineamento», e
+    // «Neon», «Glass», «Brutalist» erano la stessa citazione grigia. Ognuno scrive TUTTE le
+    // chiavi che tocca (testo + contenitore), così passare da un preset all'altro non lascia
+    // residui. Colori solo da token; la virgoletta di «Big Mark» e la sfumatura di
+    // «Gradient Text» le disegna il renderer (class-quotation-tile.php, per preset).
+    'editorial-classic': {
+      settings: { style: 'footer', alignment: 'left', content_font_family: 'var(--olo-font-family-heading)', content_font_size: '24', content_font_weight: '400', content_font_style: 'italic', content_color: 'var(--olo-color-text)', author_font_family: '', author_font_size: '14', author_font_weight: '600', author_color: 'var(--olo-color-text-muted)' },
+      style: { bg: { type: 'none' }, padding_top: '', padding_right: '', padding_bottom: '', padding_left: '', border_radius: '', shadow: 'none', border: { top: 0, right: 0, bottom: 0, left: 0, style: 'solid', color: '' }, backdrop_blur: 0 },
+    },
+    'magazine-pull': {
+      settings: { style: 'default', alignment: 'center', content_font_family: 'var(--olo-font-family-heading)', content_font_size: '32', content_font_weight: '700', content_font_style: 'normal', content_color: 'var(--olo-color-text)', author_font_family: '', author_font_size: '13', author_font_weight: '700', author_color: 'var(--olo-color-primary)' },
+      style: { bg: { type: 'none' }, padding_top: 32, padding_right: '', padding_bottom: 32, padding_left: '', border_radius: '', shadow: 'none', border: { top: 3, right: 0, bottom: 3, left: 0, style: 'solid', color: 'var(--olo-color-text)' }, backdrop_blur: 0 },
+    },
+    'minimal-line': {
+      settings: { style: 'default', alignment: 'left', content_font_family: 'var(--olo-font-family)', content_font_size: '18', content_font_weight: '400', content_font_style: 'normal', content_color: 'var(--olo-color-text)', author_font_family: '', author_font_size: '13', author_font_weight: '400', author_color: 'var(--olo-color-text-muted)' },
+      style: { bg: { type: 'none' }, padding_top: '', padding_right: '', padding_bottom: '', padding_left: '', border_radius: '', shadow: 'none', border: { top: 0, right: 0, bottom: 0, left: 0, style: 'solid', color: '' }, backdrop_blur: 0 },
+    },
+    'big-mark': {
+      settings: { style: 'default', alignment: 'left', content_font_family: 'var(--olo-font-family-heading)', content_font_size: '26', content_font_weight: '500', content_font_style: 'normal', content_color: 'var(--olo-color-text)', author_font_family: '', author_font_size: '14', author_font_weight: '600', author_color: 'var(--olo-color-primary)' },
+      style: { bg: { type: 'none' }, padding_top: '', padding_right: '', padding_bottom: '', padding_left: '', border_radius: '', shadow: 'none', border: { top: 0, right: 0, bottom: 0, left: 0, style: 'solid', color: '' }, backdrop_blur: 0 },
+    },
+    'centered-script': {
+      settings: { style: 'footer', alignment: 'center', content_font_family: 'var(--olo-font-family-heading)', content_font_size: '26', content_font_weight: '400', content_font_style: 'italic', content_color: 'var(--olo-color-text)', author_font_family: '', author_font_size: '14', author_font_weight: '400', author_color: 'var(--olo-color-text-muted)' },
+      style: { bg: { type: 'none' }, padding_top: '', padding_right: '', padding_bottom: '', padding_left: '', border_radius: '', shadow: 'none', border: { top: 0, right: 0, bottom: 0, left: 0, style: 'solid', color: '' }, backdrop_blur: 0 },
+    },
+    'glass-frosted': {
+      settings: { style: 'default', alignment: 'center', content_font_family: 'var(--olo-font-family-heading)', content_font_size: '22', content_font_weight: '500', content_font_style: 'normal', content_color: 'var(--olo-color-text)', author_font_family: '', author_font_size: '14', author_font_weight: '600', author_color: 'var(--olo-color-text-muted)' },
+      style: { bg: { type: 'solid', color: 'color-mix(in srgb, var(--olo-color-background) 75%, transparent)' }, padding_top: 32, padding_right: 36, padding_bottom: 32, padding_left: 36, border_radius: 16, shadow: 'lg', border: { top: 1, right: 1, bottom: 1, left: 1, style: 'solid', color: 'color-mix(in srgb, var(--olo-color-light) 60%, transparent)' }, backdrop_blur: 12 },
+    },
+    'neon-quote': {
+      settings: { style: 'default', alignment: 'center', content_font_family: 'var(--olo-font-family)', content_font_size: '22', content_font_weight: '600', content_font_style: 'normal', content_color: 'var(--olo-color-accent)', author_font_family: '', author_font_size: '13', author_font_weight: '500', author_color: 'color-mix(in srgb, var(--olo-color-light) 72%, transparent)' },
+      style: { bg: { type: 'solid', color: 'var(--olo-color-dark)' }, padding_top: 32, padding_right: 36, padding_bottom: 32, padding_left: 36, border_radius: 12, shadow: 'custom', shadow_h: 0, shadow_v: 0, shadow_blur: 28, shadow_spread: 0, shadow_color: 'color-mix(in srgb, var(--olo-color-accent) 45%, transparent)', shadow_inset: false, border: { top: 1, right: 1, bottom: 1, left: 1, style: 'solid', color: 'var(--olo-color-accent)' }, backdrop_blur: 0 },
+    },
+    'brutalist-stamp': {
+      settings: { style: 'default', alignment: 'left', content_font_family: 'var(--olo-font-family)', content_font_size: '22', content_font_weight: '800', content_font_style: 'normal', content_color: 'var(--olo-color-dark)', author_font_family: '', author_font_size: '13', author_font_weight: '800', author_color: 'var(--olo-color-dark)' },
+      style: { bg: { type: 'solid', color: 'var(--olo-color-warning)' }, padding_top: 28, padding_right: 32, padding_bottom: 28, padding_left: 32, border_radius: '', shadow: 'custom', shadow_h: 6, shadow_v: 6, shadow_blur: 0, shadow_spread: 0, shadow_color: 'var(--olo-color-dark)', shadow_inset: false, border: { top: 3, right: 3, bottom: 3, left: 3, style: 'solid', color: 'var(--olo-color-dark)' }, backdrop_blur: 0 },
+    },
+    'gradient-text': {
+      settings: { style: 'default', alignment: 'center', content_font_family: 'var(--olo-font-family-heading)', content_font_size: '30', content_font_weight: '800', content_font_style: 'normal', content_color: '', author_font_family: '', author_font_size: '14', author_font_weight: '600', author_color: 'var(--olo-color-text-muted)' },
+      style: { bg: { type: 'none' }, padding_top: '', padding_right: '', padding_bottom: '', padding_left: '', border_radius: '', shadow: 'none', border: { top: 0, right: 0, bottom: 0, left: 0, style: 'solid', color: '' }, backdrop_blur: 0 },
+    },
+    'sticky-note': {
+      settings: { style: 'default', alignment: 'left', content_font_family: 'var(--olo-font-family)', content_font_size: '20', content_font_weight: '500', content_font_style: 'normal', content_color: 'var(--olo-color-text)', author_font_family: '', author_font_size: '14', author_font_weight: '600', author_color: 'var(--olo-color-text-muted)' },
+      style: { bg: { type: 'solid', color: 'color-mix(in srgb, var(--olo-color-warning) 28%, var(--olo-color-background))' }, padding_top: 28, padding_right: 28, padding_bottom: 28, padding_left: 28, border_radius: 2, shadow: 'md', border: { top: 0, right: 0, bottom: 0, left: 0, style: 'solid', color: '' }, backdrop_blur: 0 },
+    },
+    'retro-typewriter': {
+      settings: { style: 'default', alignment: 'left', content_font_family: 'var(--olo-font-family-mono)', content_font_size: '18', content_font_weight: '400', content_font_style: 'normal', content_color: 'var(--olo-color-text)', author_font_family: 'var(--olo-font-family-mono)', author_font_size: '13', author_font_weight: '400', author_color: 'var(--olo-color-text-muted)' },
+      style: { bg: { type: 'solid', color: 'color-mix(in srgb, var(--olo-color-text) 5%, transparent)' }, padding_top: 24, padding_right: 28, padding_bottom: 24, padding_left: 28, border_radius: 4, shadow: 'none', border: { top: 1, right: 1, bottom: 1, left: 1, style: 'dashed', color: 'var(--olo-color-border)' }, backdrop_blur: 0 },
+    },
+    'tilt-card': {
+      settings: { style: 'default', alignment: 'left', content_font_family: 'var(--olo-font-family-heading)', content_font_size: '22', content_font_weight: '600', content_font_style: 'normal', content_color: 'var(--olo-color-text)', author_font_family: '', author_font_size: '14', author_font_weight: '600', author_color: 'var(--olo-color-primary)' },
+      style: { bg: { type: 'solid', color: 'var(--olo-color-background)' }, padding_top: 32, padding_right: 36, padding_bottom: 32, padding_left: 36, border_radius: 16, shadow: 'xl', border: { top: 0, right: 0, bottom: 0, left: 0, style: 'solid', color: '' }, backdrop_blur: 0 },
+    },
   },
   team: {
     // v1.0.58 — preset self-contained: aggiunti info_text_color (name), role_color (job), info_bg_color (card).
