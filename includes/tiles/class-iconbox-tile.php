@@ -74,15 +74,14 @@ class Olobuild_IconBox_Tile extends Olobuild_Tile_Base {
         $mb     = $this->bg_media_parts( $s['media_bg'] ?? null, $uid );
         $has_mb = $mb['has'];
 
-        // Tile background (mutually exclusive via bg_type) — fallback su style.bg
-        // se settings.bg_type non è settato (utente preferisce tab Stile).
-        // Applicato SOLO se media_bg non è impostato (precedenza al pannello unico).
+        // Tile background (mutually exclusive via bg_type), applicato SOLO se media_bg non è
+        // impostato (precedenza al pannello unico). Lo Sfondo del tab Stile (style.bg) qui non
+        // si ripete: lo dipinge già il contenitore, e ridipinto sul box si vedeva due volte
+        // (un velo semitrasparente raddoppiato, un gradiente che ripartiva dentro il padding).
         $tile_bg_css = '';
         $bg_type = $s['bg_type'] ?? 'none';
         if ( $has_mb ) {
             $tile_bg_css = 'position:relative;overflow:hidden;';
-        } elseif ( $bg_type === 'none' && is_array( $style ) && isset( $style['bg'] ) && is_array( $style['bg'] ) ) {
-            $tile_bg_css = $this->build_bg_css_from_style_bg( $style['bg'] );
         } elseif ( $bg_type === 'color' ) {
             $c = $this->safe_color_css( $s['bg_color'] ?? '' );
             if ( $c ) $tile_bg_css = 'background-color:' . $c . ';';
