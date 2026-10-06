@@ -66,7 +66,9 @@ class Olobuild_Textmask_Tile extends Olobuild_Tile_Base {
 
         // Values
         $multiline  = ! empty( $s['multiline'] );
-        $raw_text   = $s['text'] ?: 'WELCOME';
+        // Testo svuotato: una parola segnaposto perché la maschera non resti un rettangolo
+        // pieno; in italiano e traducibile (prima «WELCOME» fisso).
+        $raw_text   = $s['text'] ?: olobuild_t( 'SCOPRI' );
         $text       = $multiline ? nl2br( esc_html( $raw_text ) ) : esc_html( $raw_text );
         $fs         = intval( $s['font_size'] ) ?: 120;
         $fs_tablet  = intval( $s['font_size_tablet'] ) ?: 80;

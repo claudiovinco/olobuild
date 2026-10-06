@@ -64,15 +64,17 @@ export default {
 
   // Appena nata: il testo in italiano e un'altezza da sezione, non da schermo intero. Il video
   // lo sceglie chi costruisce (il pacchetto demo non ne ha): fino ad allora le lettere rivelano
-  // la foto demo messa come poster, che il renderer usa quando il video manca.
+  // la foto demo messa come poster, che il renderer usa quando il video manca. Il fondo è lo
+  // Scuro della palette, non il nero assoluto che il renderer usa a campo vuoto.
   partenza: {
     text: t('SCOPRI\nIL NOSTRO MONDO'),
     min_height: '60vh',
     video_poster: demo('mare-costa'),
+    bg_color: 'var(--olo-color-dark, #14161c)',
   },
 
   fields: [
-    { key: 'text', label: t('Testo'), type: 'textarea', rows: 3, placeholder: t('WELCOME\nTO THE WORLD') },
+    { key: 'text', label: t('Testo'), type: 'textarea', rows: 3, placeholder: t('SCOPRI\nIL NOSTRO MONDO') },
     { key: 'multiline', label: t('Testo su più righe'), type: 'toggle' },
 
     { type: 'separator', label: t('Video') },
