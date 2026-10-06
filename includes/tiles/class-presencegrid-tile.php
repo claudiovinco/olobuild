@@ -53,6 +53,10 @@ class Olobuild_Presencegrid_Tile extends Olobuild_Tile_Base {
         'online_label'  => 'Online',
         'offline_label' => 'Offline',
 
+        // Davanti al nome: «@» è lo stile dei nickname (il default di sempre); vuoto per i nomi
+        // di persona di una squadra («@Giulia» non ha senso).
+        'name_prefix'   => '@',
+
         'show_ticker'  => false,
         'ticker_text'  => '@KiraByte ha sbloccato Diamante I · torneo FIFA Cup domenica 21:00 · @pixelmom ha vinto MVP · nuovo record clan: +18.000 XP',
         'ticker_speed' => 26,
@@ -185,6 +189,8 @@ class Olobuild_Presencegrid_Tile extends Olobuild_Tile_Base {
         // ── Etichette stato (testo a11y) ──
         $on_label  = $s['online_label']  !== '' ? sanitize_text_field( $s['online_label'] )  : 'Online';
         $off_label = $s['offline_label'] !== '' ? sanitize_text_field( $s['offline_label'] ) : 'Offline';
+        // Prima «@» era scritta nel markup per tutti: ora è il campo «Prefisso nome».
+        $name_pfx  = sanitize_text_field( (string) ( $s['name_prefix'] ?? '@' ) );
 
         // ── Ticker ──
         $show_ticker  = ! empty( $s['show_ticker'] );
@@ -194,11 +200,14 @@ class Olobuild_Presencegrid_Tile extends Olobuild_Tile_Base {
         // ── Colori / aspetto (token-first con fallback) ──
         $card_bg   = $this->safe_color_css( $s['card_bg'] )   ?: 'var(--olo-color-surface, #120C22)';
         $card_clr  = $this->safe_color_css( $s['card_color'] ) ?: 'var(--olo-color-text, #EDEAFB)';
-        $role_clr  = $this->safe_color_css( $s['role_color'] ) ?: 'var(--olo-color-muted, #948CC4)';
+        // Ruolo, stato «offline» e ticker ricadevano su --olo-color-muted, che nella palette è un
+        // colore di SUPERFICIE (#f6f7f9): sulla card chiara il testo spariva. Il testo tenue è
+        // --olo-color-text-muted.
+        $role_clr  = $this->safe_color_css( $s['role_color'] ) ?: 'var(--olo-color-text-muted, #6b7280)';
         $on_clr    = $this->safe_color_css( $s['online_color'] )  ?: 'var(--olo-color-success, #22C55E)';
-        $off_clr   = $this->safe_color_css( $s['offline_color'] ) ?: 'var(--olo-color-muted, #5E568C)';
+        $off_clr   = $this->safe_color_css( $s['offline_color'] ) ?: 'var(--olo-color-text-muted, #6b7280)';
         $ticker_bg = $this->safe_color_css( $s['ticker_bg'] )    ?: 'var(--olo-color-surface, #120C22)';
-        $ticker_cl = $this->safe_color_css( $s['ticker_color'] ) ?: 'var(--olo-color-muted, #948CC4)';
+        $ticker_cl = $this->safe_color_css( $s['ticker_color'] ) ?: 'var(--olo-color-text-muted, #6b7280)';
         $line_clr  = 'var(--olo-color-border, rgba(237,234,251,.12))';
 
         $av_size   = max( 32, min( 96, intval( $s['avatar_size'] ) ) );
@@ -269,12 +278,13 @@ class Olobuild_Presencegrid_Tile extends Olobuild_Tile_Base {
                 text-align: center;
                 transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease<?php if ( $card_rad_h ) : ?>, border-radius <?php echo $card_rdur; ?>ms ease<?php endif; ?>;
             }
+            <?php /* Riserva del primario = il rosso brand (era il viola #8B5CF6 del tema gamer di origine). */ ?>
             <?php if ( $hover_effect === 'lift' ) : ?>
-            .<?php echo $uid; ?> .olo-pg-card:hover { transform: translateY(-4px); border-color: var(--olo-color-primary, #8B5CF6); }
+            .<?php echo $uid; ?> .olo-pg-card:hover { transform: translateY(-4px); border-color: var(--olo-color-primary, #e1474f); }
             <?php elseif ( $hover_effect === 'scale' ) : ?>
-            .<?php echo $uid; ?> .olo-pg-card:hover { transform: scale(1.04); border-color: var(--olo-color-primary, #8B5CF6); }
+            .<?php echo $uid; ?> .olo-pg-card:hover { transform: scale(1.04); border-color: var(--olo-color-primary, #e1474f); }
             <?php elseif ( $hover_effect === 'glow' ) : ?>
-            .<?php echo $uid; ?> .olo-pg-card:hover { border-color: var(--olo-color-primary, #8B5CF6); box-shadow: 0 0 0 1px var(--olo-color-primary, #8B5CF6), 0 8px 28px rgba(0,0,0,.28); }
+            .<?php echo $uid; ?> .olo-pg-card:hover { border-color: var(--olo-color-primary, #e1474f); box-shadow: 0 0 0 1px var(--olo-color-primary, #e1474f), 0 8px 28px rgba(0,0,0,.28); }
             <?php endif; ?>
             <?php if ( $card_rad_h ) : ?>
             .<?php echo $uid; ?> .olo-pg-card:hover { border-radius: <?php echo $card_rad_h; ?>; }
@@ -343,7 +353,7 @@ class Olobuild_Presencegrid_Tile extends Olobuild_Tile_Base {
             }
 
             .<?php echo $uid; ?> .olo-pg-card:focus-visible {
-                outline: 2px solid var(--olo-color-primary, #8B5CF6);
+                outline: 2px solid var(--olo-color-primary, #e1474f);
                 outline-offset: 2px;
             }
 
@@ -399,10 +409,11 @@ class Olobuild_Presencegrid_Tile extends Olobuild_Tile_Base {
                     // aria-label completo: nome + ruolo + stato testuale → screen reader legge tutto.
                     // La base (nome + ruolo) è salvata a parte così il runtime ricostruisce l'aria
                     // senza regex su input utente quando lo stato cambia.
-                    $aria_base = '@' . $name . ( $role && $show_rank ? ', ' . $role : '' );
+                    $aria_base = $name_pfx . $name . ( $role && $show_rank ? ', ' . $role : '' );
                     $aria      = $aria_base . ', ' . $state_label;
                 ?>
                 <li class="olo-pg-card" data-online="<?php echo $online ? '1' : '0'; ?>"
+                    data-name="<?php echo esc_attr( $name ); ?>"
                     tabindex="0"
                     data-base-label="<?php echo esc_attr( $aria_base ); ?>"
                     aria-label="<?php echo esc_attr( $aria ); ?>">
@@ -415,7 +426,7 @@ class Olobuild_Presencegrid_Tile extends Olobuild_Tile_Base {
                         <?php endif; ?>
                         <span class="olo-pg-dot" aria-hidden="true"></span>
                     </div>
-                    <div class="olo-pg-name">@<?php echo esc_html( $name ); ?></div>
+                    <div class="olo-pg-name"><?php echo esc_html( $name_pfx . $name ); ?></div>
                     <?php if ( $role !== '' && $show_rank ) : ?>
                     <div class="olo-pg-role"><?php echo esc_html( $role ); ?></div>
                     <?php endif; ?>
@@ -479,7 +490,8 @@ class Olobuild_Presencegrid_Tile extends Olobuild_Tile_Base {
                 var map = {};
                 var list = root.querySelectorAll('.olo-pg-card');
                 for ( var i = 0; i < list.length; i++ ) {
-                    var nm = (list[i].querySelector('.olo-pg-name') || {}).textContent || '';
+                    /* Il nome senza prefisso sta in data-name: il testo visibile può avere un prefisso qualunque. */
+                    var nm = list[i].getAttribute('data-name') || (list[i].querySelector('.olo-pg-name') || {}).textContent || '';
                     map[ nm.replace(/^@/, '').trim().toLowerCase() ] = list[i];
                 }
                 return map;

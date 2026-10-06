@@ -54,6 +54,9 @@ export default {
     online_label: 'Online',
     offline_label: 'Offline',
 
+    // Davanti al nome (stile nickname); stesso default del PHP.
+    name_prefix: '@',
+
     // ── Ticker attività (opzionale) ──
     show_ticker: false,
     ticker_text: '@KiraByte ha sbloccato Diamante I · torneo FIFA Cup domenica 21:00 · @pixelmom ha vinto MVP · nuovo record clan: +18.000 XP',
@@ -101,6 +104,8 @@ export default {
       { id: 'pg-6', name: 'Paolo', avatar: '', role: t('Logistica'), online: false, color: '' },
     ],
     columns_tablet: 3,
+    // Nomi di persona, non nickname: niente «@» davanti.
+    name_prefix: '',
     online_label: t('Disponibile'),
     offline_label: t('Assente'),
     card_bg: 'var(--olo-color-light, #ffffff)',
@@ -140,6 +145,8 @@ export default {
       ],
       description: t('Usato come elenco (sorgente Manuale) oppure come stato demo/placeholder quando query/endpoint non rispondono.'),
     },
+    { key: 'name_prefix', label: t('Prefisso nome'), type: 'text', placeholder: '@',
+      description: t('Scritto davanti a ogni nome: «@» per i nickname di una community, vuoto per i nomi di persona.') },
 
     { type: 'separator', label: t('Stato (testo accessibile)') },
     { key: 'online_label',  label: t('Etichetta "online"'),  type: 'text',
