@@ -35,7 +35,18 @@ export default {
   // ─── STILE ─────────────────────────────────────────────────
   styleFields: [
     { type: 'separator', label: t('Spaziatura') },
-    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 4 },
+    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 4, unit: 'px',
+      // Il Layout Flex viene dopo nello style in linea: i suoi due gap (o la chiave storica
+      // flex_gap, da sola) sostituiscono questo su tutti e due gli assi, e qui non agirebbe.
+      // Con uno solo dei due impostato l'altro asse usa ancora questo.
+      show: (s) => {
+        const fcg = parseInt(s.flex_column_gap || 0);
+        const frg = parseInt(s.flex_row_gap || 0);
+        const flg = parseInt(s.flex_gap || 0);
+        if (!(fcg > 0) && !(frg > 0) && flg > 0) return false;
+        return !(fcg > 0 && frg > 0);
+      }
+    },
     { key: 'vertical_align', label: t('Allineamento verticale'), type: 'select', options: [
       { value: 'stretch', label: t('Stretch') },
       { value: 'start', label: t('Alto') },

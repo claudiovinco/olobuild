@@ -121,11 +121,19 @@ export default {
   // ─── STILE ─────────────────────────────────────────────────
   styleFields: [
     { type: 'separator', label: t('Sfondo & spaziatura') },
-    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 4,
+    // In px davvero (prima il renderer ne faceva la classe UIkit più vicina): fino a 96,
+    // perché le pagine importate salvano anche 56 e con max 48 il cursore non lo mostrava.
+    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 96, step: 4, unit: 'px',
+      // Nascosto solo quando i due gap del Layout Flex lo sostituiscono entrambi: con uno
+      // solo impostato, l'altro asse usa ancora questo (renderer: $gap_x/$gap_y della riga).
+      // Anche la chiave storica flex_gap (non più nell'inspector), se sopra 0 e senza i due
+      // gap del Layout Flex, vale su tutti e due gli assi al posto del Gap.
       show: (s) => {
         const fcg = parseInt(s.flex_column_gap || 0);
         const frg = parseInt(s.flex_row_gap || 0);
-        return !(fcg > 0 || frg > 0);
+        const flg = parseInt(s.flex_gap || 0);
+        if (!(fcg > 0) && !(frg > 0) && flg > 0) return false;
+        return !(fcg > 0 && frg > 0);
       }
     },
     { key: 'vertical_align', label: t('Allineamento verticale'), type: 'select', options: [

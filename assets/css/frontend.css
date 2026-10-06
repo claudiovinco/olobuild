@@ -370,6 +370,75 @@ body:has(.olo-template) .wp-site-blocks {
   box-sizing: border-box;
 }
 
+/* ─── Riga: «Gap» in px (render_row_node, classe olo-row-gap) ───
+ * Il Gap della riga Flex è un column-gap/row-gap vero: --olo-row-gap-x/-y stanno in linea
+ * sulla riga. Prima diventava la classe UIkit più vicina (16 = colonne attaccate, 48 = 70 px).
+ * Qui si azzera la grondaia di UIkit (margine negativo sulla riga, padding sinistro delle
+ * colonne, margine sopra le file a capo) e ogni uk-width-* n/d cede la sua parte di gap,
+ * G·(d−n)/d: così 50% + 50% + gap sta su una fila. Stesse soglie e stesso ordine di UIkit
+ * (vince la misura del dispositivo più grande); anche 1-1, che altrimenti perderebbe contro
+ * una misura più piccola riscritta qui. Regole fisse, non per riga: una colonna aggiornata
+ * da sola nel canvas trova già quella della sua nuova misura. «div.» davanti: vince sulle
+ * regole di UIkit senza !important. Niente «+» nei calc(): la minificazione di frontend.css
+ * toglie gli spazi attorno al «+» e il calc() non vale più. */
+div.olo-row-gap { margin-left: 0; column-gap: var(--olo-row-gap-x, 0px); row-gap: var(--olo-row-gap-y, 0px); }
+div.olo-row-gap > * { padding-left: 0; --olo-rg: var(--olo-row-gap-x, 0px); }
+div.olo-row-gap > .uk-grid-margin { margin-top: 0; }
+div.olo-row-gap > .uk-width-1-1 { width: 100%; }
+div.olo-row-gap > .uk-width-1-2 { width: calc(100% / 2 - var(--olo-rg) * 1 / 2); }
+div.olo-row-gap > .uk-width-1-3 { width: calc(100% / 3 - var(--olo-rg) * 2 / 3); }
+div.olo-row-gap > .uk-width-2-3 { width: calc(200% / 3 - var(--olo-rg) * 1 / 3); }
+div.olo-row-gap > .uk-width-1-4 { width: calc(100% / 4 - var(--olo-rg) * 3 / 4); }
+div.olo-row-gap > .uk-width-3-4 { width: calc(300% / 4 - var(--olo-rg) * 1 / 4); }
+div.olo-row-gap > .uk-width-1-5 { width: calc(100% / 5 - var(--olo-rg) * 4 / 5); }
+div.olo-row-gap > .uk-width-2-5 { width: calc(200% / 5 - var(--olo-rg) * 3 / 5); }
+div.olo-row-gap > .uk-width-3-5 { width: calc(300% / 5 - var(--olo-rg) * 2 / 5); }
+div.olo-row-gap > .uk-width-4-5 { width: calc(400% / 5 - var(--olo-rg) * 1 / 5); }
+div.olo-row-gap > .uk-width-1-6 { width: calc(100% / 6 - var(--olo-rg) * 5 / 6); }
+div.olo-row-gap > .uk-width-5-6 { width: calc(500% / 6 - var(--olo-rg) * 1 / 6); }
+@media (min-width: 640px) {
+  div.olo-row-gap > .uk-width-1-1\@s { width: 100%; }
+  div.olo-row-gap > .uk-width-1-2\@s { width: calc(100% / 2 - var(--olo-rg) * 1 / 2); }
+  div.olo-row-gap > .uk-width-1-3\@s { width: calc(100% / 3 - var(--olo-rg) * 2 / 3); }
+  div.olo-row-gap > .uk-width-2-3\@s { width: calc(200% / 3 - var(--olo-rg) * 1 / 3); }
+  div.olo-row-gap > .uk-width-1-4\@s { width: calc(100% / 4 - var(--olo-rg) * 3 / 4); }
+  div.olo-row-gap > .uk-width-3-4\@s { width: calc(300% / 4 - var(--olo-rg) * 1 / 4); }
+  div.olo-row-gap > .uk-width-1-5\@s { width: calc(100% / 5 - var(--olo-rg) * 4 / 5); }
+  div.olo-row-gap > .uk-width-2-5\@s { width: calc(200% / 5 - var(--olo-rg) * 3 / 5); }
+  div.olo-row-gap > .uk-width-3-5\@s { width: calc(300% / 5 - var(--olo-rg) * 2 / 5); }
+  div.olo-row-gap > .uk-width-4-5\@s { width: calc(400% / 5 - var(--olo-rg) * 1 / 5); }
+  div.olo-row-gap > .uk-width-1-6\@s { width: calc(100% / 6 - var(--olo-rg) * 5 / 6); }
+  div.olo-row-gap > .uk-width-5-6\@s { width: calc(500% / 6 - var(--olo-rg) * 1 / 6); }
+}
+@media (min-width: 960px) {
+  div.olo-row-gap > .uk-width-1-1\@m { width: 100%; }
+  div.olo-row-gap > .uk-width-1-2\@m { width: calc(100% / 2 - var(--olo-rg) * 1 / 2); }
+  div.olo-row-gap > .uk-width-1-3\@m { width: calc(100% / 3 - var(--olo-rg) * 2 / 3); }
+  div.olo-row-gap > .uk-width-2-3\@m { width: calc(200% / 3 - var(--olo-rg) * 1 / 3); }
+  div.olo-row-gap > .uk-width-1-4\@m { width: calc(100% / 4 - var(--olo-rg) * 3 / 4); }
+  div.olo-row-gap > .uk-width-3-4\@m { width: calc(300% / 4 - var(--olo-rg) * 1 / 4); }
+  div.olo-row-gap > .uk-width-1-5\@m { width: calc(100% / 5 - var(--olo-rg) * 4 / 5); }
+  div.olo-row-gap > .uk-width-2-5\@m { width: calc(200% / 5 - var(--olo-rg) * 3 / 5); }
+  div.olo-row-gap > .uk-width-3-5\@m { width: calc(300% / 5 - var(--olo-rg) * 2 / 5); }
+  div.olo-row-gap > .uk-width-4-5\@m { width: calc(400% / 5 - var(--olo-rg) * 1 / 5); }
+  div.olo-row-gap > .uk-width-1-6\@m { width: calc(100% / 6 - var(--olo-rg) * 5 / 6); }
+  div.olo-row-gap > .uk-width-5-6\@m { width: calc(500% / 6 - var(--olo-rg) * 1 / 6); }
+}
+@media (min-width: 1200px) {
+  div.olo-row-gap > .uk-width-1-1\@l { width: 100%; }
+  div.olo-row-gap > .uk-width-1-2\@l { width: calc(100% / 2 - var(--olo-rg) * 1 / 2); }
+  div.olo-row-gap > .uk-width-1-3\@l { width: calc(100% / 3 - var(--olo-rg) * 2 / 3); }
+  div.olo-row-gap > .uk-width-2-3\@l { width: calc(200% / 3 - var(--olo-rg) * 1 / 3); }
+  div.olo-row-gap > .uk-width-1-4\@l { width: calc(100% / 4 - var(--olo-rg) * 3 / 4); }
+  div.olo-row-gap > .uk-width-3-4\@l { width: calc(300% / 4 - var(--olo-rg) * 1 / 4); }
+  div.olo-row-gap > .uk-width-1-5\@l { width: calc(100% / 5 - var(--olo-rg) * 4 / 5); }
+  div.olo-row-gap > .uk-width-2-5\@l { width: calc(200% / 5 - var(--olo-rg) * 3 / 5); }
+  div.olo-row-gap > .uk-width-3-5\@l { width: calc(300% / 5 - var(--olo-rg) * 2 / 5); }
+  div.olo-row-gap > .uk-width-4-5\@l { width: calc(400% / 5 - var(--olo-rg) * 1 / 5); }
+  div.olo-row-gap > .uk-width-1-6\@l { width: calc(100% / 6 - var(--olo-rg) * 5 / 6); }
+  div.olo-row-gap > .uk-width-5-6\@l { width: calc(500% / 6 - var(--olo-rg) * 1 / 6); }
+}
+
 /* UIkit icons — ensure color cascades into injected SVG */
 .olo-template [uk-icon] > svg {
   fill: currentColor;
@@ -463,6 +532,12 @@ body:has(.olo-template) .wp-site-blocks {
  * queste l'utente vuole vedere il riquadro colorato intero, quindi il
  * padding-top deve essere preservato per non tagliare la parte alta. */
 .olo-site-header.olo-header-classic ~ main .olo-template > .olo-frontend-grid > section:first-child:not([style*="padding-top"]):not(.uk-section-large):not(.uk-section-xlarge):not(.uk-section-small):not(.uk-padding-remove-vertical):not(.olo-section-has-bg) {
+  padding-top: 0 !important;
+}
+/* Una sezione col solo Pannello flottante resta nella pagina (ID, sfondo, condizioni) ma,
+ * senza sfondo, è alta zero: in testa al template non deve togliere la regola qui sopra
+ * alla prima sezione vera. Prima la sezione non si rendeva affatto. */
+.olo-site-header.olo-header-classic ~ main .olo-template > .olo-frontend-grid > section.olo-sezione-solo-pannello:first-child + section:not([style*="padding-top"]):not(.uk-section-large):not(.uk-section-xlarge):not(.uk-section-small):not(.uk-padding-remove-vertical):not(.olo-section-has-bg) {
   padding-top: 0 !important;
 }
 

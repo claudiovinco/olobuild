@@ -24,13 +24,13 @@ trait Olobuild_Renderer_Structure_Trait {
      * Render a Section container using UIkit classes.
      */
     private function render_section_node( $node, $manager, $template_id, &$hover_css_rules, &$tile_counter ) {
-        // Floating panel bypass: if section contains only a floatingpanel (inside row>column),
-        // render the floatingpanel directly without section/row/column wrappers to avoid empty gap.
-        // Skipped in builder mode: bypass would lose data-olo-tile-id for the floatingpanel
-        // (it would inherit the section's id instead), breaking drop-target hit-testing.
-        if ( ! $this->builder_mode && $this->section_has_only_floatingpanel( $node ) ) {
-            return $this->extract_and_render_floatingpanel( $node, $manager, $template_id, $hover_css_rules, $tile_counter );
-        }
+        // Sezione che contiene solo un Pannello flottante (riga > colonna > pannello): sul
+        // sito lo script del pannello lo sposta nel body e la sezione resta vuota. Prima la
+        // si saltava del tutto e con lei l'ID (ancore), lo sfondo e le condizioni di riga,
+        // colonna e pannello (il pannello si rendeva senza passare da render_node). Ora si
+        // rende come le altre; senza uno sfondo suo perde solo il padding verticale, che
+        // altrimenti lascerebbe una fascia vuota (vedi $solo_pannello più sotto).
+        $solo_pannello = ! $this->builder_mode && $this->section_has_only_floatingpanel( $node );
 
         $s = $node['settings'] ?? [];
         $style    = $node['style'] ?? [];
@@ -133,6 +133,16 @@ trait Olobuild_Renderer_Structure_Trait {
         // azzera lo spazio sopra il contenuto e taglia il riquadro colorato.
         if ( $has_bg_any ) {
             $classes[] = 'olo-section-has-bg';
+        }
+
+        // Solo il Pannello flottante (che sul sito esce dalla sezione): niente fascia vuota.
+        // Il padding verticale si toglie se la sezione non ha uno sfondo suo (né colore,
+        // immagine, video… né lo stile Muted/Primary/Secondary) e non l'ha scelto a mano
+        // («Personalizzato»): chi ha dato uno sfondo alla sezione la vuole vedere.
+        if ( $solo_pannello && ! $has_bg_any && ! isset( $style_map[ $section_style ] ) && 'custom' !== $padding ) {
+            $classes[]       = 'olo-sezione-solo-pannello';
+            $inline_styles[] = 'padding-top: 0';
+            $inline_styles[] = 'padding-bottom: 0';
         }
 
         // Video cover height
@@ -484,7 +494,46 @@ trait Olobuild_Renderer_Structure_Trait {
         // UIkit grid classes
         $classes = [];
 
-        // Gap mapping to UIkit column-gap
+        // Il CSS della riga (impilamento, larghezze personalizzate) in un solo <style>: nel
+        // sito DAVANTI alla riga come fino alla 1.4.555, nel canvas DOPO (vedi in coda).
+        // render_node mette data-olo-tile-id sul PRIMO tag dell'HTML della riga: con lo
+        // <style> davanti (righe «Impila su mobile» spento, «Impila su tablet», larghezze
+        // personalizzate) nel canvas l'id finiva sullo <style>.
+        $row_css = '';
+
+        // «Gap» della riga Flex IN PX. Prima il numero diventava la classe UIkit più
+        // vicina (4-8 = 15 px, 24-32 = 30, 48 = 40/70) e il valore di serie 16 nessuna
+        // classe, cioè colonne attaccate: nel UIkit del plugin .uk-grid>* ha padding-left 0.
+        // Ora è un column-gap/row-gap vero, come nella riga a griglia: classe olo-row-gap +
+        // --olo-row-gap-x/-y in linea, e le regole in frontend.css («Riga: Gap in px»)
+        // azzerano la grondaia di UIkit (margine negativo sulla riga, padding sinistro alle
+        // colonne, margine sopra le file a capo) e tolgono a ogni uk-width-* la sua parte di
+        // gap, così 50% + 50% non va a capo. Regole fisse e non per riga: la colonna si
+        // aggiorna nel canvas da sola (patch) e una misura nuova deve già averle. Il gap non
+        // tocca padding, sfondo e bordo delle colonne: con la grondaia una colonna col
+        // padding suo perdeva lo spazio e una con lo sfondo sporgeva a sinistra della riga.
+        // «Gap orizzontale/verticale» del Layout Flex, se sopra 0, lo sostituiscono sul loro
+        // asse (0 = non impostato, come nel flex e nella riga a griglia): prima si SOMMAVANO
+        // alla grondaia e, con larghezze in %, mandavano a capo le colonne.
+        $fcg = intval( $s['flex_column_gap'] ?? 0 );
+        $frg = intval( $s['flex_row_gap'] ?? 0 );
+        $flg = intval( $s['flex_gap'] ?? 0 ); // chiave storica
+        if ( $fcg > 0 || $frg > 0 ) {
+            $gap_x = $fcg > 0 ? $fcg : $gap;
+            $gap_y = $frg > 0 ? $frg : $gap;
+        } elseif ( $flg > 0 ) {
+            $gap_x = $flg;
+            $gap_y = $flg;
+        } else {
+            $gap_x = $gap;
+            $gap_y = $gap;
+        }
+        $classes[] = 'olo-row-gap';
+        $gap_vars  = [ '--olo-row-gap-x: ' . $gap_x . 'px', '--olo-row-gap-y: ' . $gap_y . 'px' ];
+
+        // La classe UIkit più vicina al Gap resta SOLO per lo spazio sopra la riga quando
+        // ne segue un'altra (.uk-grid+.uk-grid-medium…): il gap fra le colonne e fra le file
+        // lo decide olo-row-gap. Così le pagine salvate non cambiano fra una riga e l'altra.
         $gap_map = [
             0  => 'uk-grid-collapse',
             4  => 'uk-grid-small',
@@ -538,11 +587,9 @@ trait Olobuild_Renderer_Structure_Trait {
 
         // No-stack CSS: prevent columns from stacking on mobile
         if ( ! $stack && $nostack_class ) {
-            $html .= '<style>';
-            $html .= '.' . $nostack_class . '{flex-wrap:nowrap!important}';
-            $html .= '.' . $nostack_class . '>*{flex:1 1 auto}';
-            $html .= '.' . $nostack_class . '>[class*="uk-width-expand"]{flex:1 1 0%}';
-            $html .= '</style>';
+            $row_css .= '.' . $nostack_class . '{flex-wrap:nowrap!important}';
+            $row_css .= '.' . $nostack_class . '>*{flex:1 1 auto}';
+            $row_css .= '.' . $nostack_class . '>[class*="uk-width-expand"]{flex:1 1 0%}';
         }
 
         // Stack on tablet: force columns to 100% width between 960px and 1200px
@@ -552,12 +599,10 @@ trait Olobuild_Renderer_Structure_Trait {
                 $classes[] = $stack_tab_class;
                 $pre_class_attr_classes[] = $stack_tab_class;
             }
-            $html .= '<style>';
-            $html .= '@container olo-tpl (max-width:1199px){';
-            $html .= '.' . $stack_tab_class . '{flex-wrap:wrap!important}';
-            $html .= '.' . $stack_tab_class . '>*{width:100%!important;flex:0 0 100%!important}';
-            $html .= '}';
-            $html .= '</style>';
+            $row_css .= '@container olo-tpl (max-width:1199px){';
+            $row_css .= '.' . $stack_tab_class . '{flex-wrap:wrap!important}';
+            $row_css .= '.' . $stack_tab_class . '>*{width:100%!important;flex:0 0 100%!important}';
+            $row_css .= '}';
         }
 
         // Custom widths: generate scoped <style> block
@@ -568,22 +613,22 @@ trait Olobuild_Renderer_Structure_Trait {
             $custom_class = 'olo-cw-' . $custom_id;
             $widths = array_filter( array_map( 'floatval', explode( ',', $s['custom_widths'] ) ), function( $v ) { return $v > 0; } );
             if ( ! empty( $widths ) ) {
-                $html .= '<style>';
+                // Anche qui ogni colonna cede la sua parte di gap (vedi $gap_x): 20+30+50
+                // più due gap non deve andare a capo.
                 // When nostack is active, apply custom widths at ALL breakpoints
                 if ( ! $stack ) {
                     foreach ( $widths as $i => $w ) {
                         $nth = $i + 1;
-                        $html .= '.' . $custom_class . '>:nth-child(' . $nth . '){width:' . $w . '%!important}';
+                        $row_css .= '.' . $custom_class . '>:nth-child(' . $nth . '){width:' . $this->griglia_flex_basis( $w / 100, $gap_x ) . '!important}';
                     }
                 } else {
-                    $html .= '@container olo-tpl (min-width:960px){';
+                    $row_css .= '@container olo-tpl (min-width:960px){';
                     foreach ( $widths as $i => $w ) {
                         $nth = $i + 1;
-                        $html .= '.' . $custom_class . '>:nth-child(' . $nth . '){width:' . $w . '%!important}';
+                        $row_css .= '.' . $custom_class . '>:nth-child(' . $nth . '){width:' . $this->griglia_flex_basis( $w / 100, $gap_x ) . '!important}';
                     }
-                    $html .= '}';
+                    $row_css .= '}';
                 }
-                $html .= '</style>';
             }
         }
 
@@ -661,11 +706,14 @@ trait Olobuild_Renderer_Structure_Trait {
         // Helper unificato — un eventuale `display: flex` aggiuntivo è no-op perché
         // .uk-grid ce l'ha già; gli altri decls (flex-direction/justify-content/...)
         // sono i veri override.
-        $row_flex_styles = $this->css->build_flex_container_css( $s );
+        // Senza i gap: li porta già olo-row-gap ($gap_x/$gap_y, vedi $gap_vars).
+        $row_flex_styles = array_values( array_filter( $this->css->build_flex_container_css( $s ), function ( $decl ) {
+            return ! preg_match( '/^(column-gap|row-gap|gap):/', $decl );
+        } ) );
 
         // Grid — if no wrapper, put scrollspy/parallax on the grid div itself
         $grid_extra_attrs = $needs_wrapper ? '' : $row_fx_attrs;
-        $grid_style_parts = $row_flex_styles;
+        $grid_style_parts = array_merge( $gap_vars, $row_flex_styles );
         if ( $needs_wrapper && ( $has_bg_image || $has_bg_video || $has_bg_gallery || $has_overlay ) ) {
             $grid_style_parts[] = 'position: relative';
             $grid_style_parts[] = 'z-index: 1';
@@ -824,6 +872,16 @@ trait Olobuild_Renderer_Structure_Trait {
         // Close row wrapper
         if ( $needs_wrapper ) {
             $html .= '</div>';
+        }
+
+        // Il CSS della riga (vedi $row_css in testa): solo classi interne e numeri. Nel sito
+        // lo <style> resta DAVANTI alla riga come fino alla 1.4.555: dopo, cambiava quali
+        // righe consecutive prendono il margine UIkit .uk-grid+.uk-grid (30/40 px). Nel
+        // canvas va dopo: render_node mette data-olo-tile-id sul primo tag, e lì il «+» che
+        // iframe-bridge inserisce fra le righe separa comunque le griglie.
+        if ( $row_css !== '' ) {
+            $row_style = '<style>' . $row_css . '</style>';
+            $html      = $this->builder_mode ? $html . $row_style : $row_style . $html;
         }
 
         return $html;
@@ -1917,37 +1975,55 @@ trait Olobuild_Renderer_Structure_Trait {
         // del gap; l'impilamento sul telefono lo fa la regola @container qui sotto.
         $inline_styles[] = 'flex-wrap: nowrap';
 
-        // Margin & Padding from style tab
-        // intval() previene CSS injection via tile settings (es. "10;background:url(...)").
-        // I valori margin/padding sono SEMPRE numeri interi (px) — qualsiasi cosa diversa
-        // viene troncata a 0.
-        if ( ! empty( $style['margin_top'] ) )     $inline_styles[] = 'margin-top: ' . intval( $style['margin_top'] ) . 'px';
-        if ( ! empty( $style['margin_right'] ) )   $inline_styles[] = 'margin-right: ' . intval( $style['margin_right'] ) . 'px';
-        if ( ! empty( $style['margin_bottom'] ) )  $inline_styles[] = 'margin-bottom: ' . intval( $style['margin_bottom'] ) . 'px';
-        if ( ! empty( $style['margin_left'] ) )    $inline_styles[] = 'margin-left: ' . intval( $style['margin_left'] ) . 'px';
-        if ( ! empty( $style['padding_top'] ) )    $inline_styles[] = 'padding-top: ' . intval( $style['padding_top'] ) . 'px';
-        if ( ! empty( $style['padding_right'] ) )  $inline_styles[] = 'padding-right: ' . intval( $style['padding_right'] ) . 'px';
-        if ( ! empty( $style['padding_bottom'] ) ) $inline_styles[] = 'padding-bottom: ' . intval( $style['padding_bottom'] ) . 'px';
-        if ( ! empty( $style['padding_left'] ) )   $inline_styles[] = 'padding-left: ' . intval( $style['padding_left'] ) . 'px';
-
-        // Background
-        $tile_bg = $this->css->get_effective_bg( $style );
-        if ( $tile_bg['type'] !== 'none' && $tile_bg['type'] !== 'image' && $tile_bg['type'] !== 'video' ) {
-            $bg_css = $this->css->get_bg_inline_css( $tile_bg );
-            if ( $bg_css ) $inline_styles[] = $bg_css;
-        }
-
-        // Border radius
-        if ( ! empty( $style['border_radius'] ) ) $inline_styles[] = $this->css->build_border_radius_css( $style['border_radius'] );
-
-        // Border (sistema unificato: oggetto 4-side + fallback legacy 3-key)
-        $border_css = $this->build_wrapper_border_css( $style );
-        if ( $border_css ) $inline_styles[] = $border_css;
-
         $classes = [ 'olo-inner-columns' ];
         if ( ! empty( $advanced['css_classes'] ) ) {
             $classes[] = esc_attr( $advanced['css_classes'] );
         }
+
+        // Sfondo, come la sezione: tinta e gradiente in linea; immagine, video e galleria
+        // (+ sovrapposizione) come livelli sotto le sotto-colonne. Prima immagine e video
+        // si scartavano in silenzio. I livelli stanno in un riquadro a z-index -1 dentro un
+        // contenitore isolato (isolation): sotto le sotto-colonne senza toccarle (sono
+        // elementi flex: avvolgerle come fa la colonna rompeva la fila).
+        $tile_bg        = $this->css->get_effective_bg( $style );
+        $has_bg_image   = ( $tile_bg['type'] === 'image' && ! empty( $tile_bg['image_url'] ) );
+        $has_bg_video   = ( $tile_bg['type'] === 'video' && ! empty( $tile_bg['video_url'] ) );
+        $has_bg_gallery = ( $tile_bg['type'] === 'gallery' && ! empty( $tile_bg['gallery_images'] ) && is_array( $tile_bg['gallery_images'] ) );
+        $has_overlay    = ( $tile_bg['type'] !== 'none' && ! empty( $tile_bg['overlay_opacity'] ) && intval( $tile_bg['overlay_opacity'] ) > 0 );
+        if ( $has_bg_image || $has_bg_video || $has_bg_gallery ) {
+            $inline_styles[] = 'overflow: clip';
+        } elseif ( $tile_bg['type'] !== 'none' ) {
+            $bg_css = $this->css->get_bg_inline_css( $tile_bg );
+            if ( $bg_css ) $inline_styles[] = $bg_css;
+        }
+        $bg_layers_html = $this->strati_sfondo_colonne_interne( $tile_bg, $has_bg_image, $has_bg_video, $has_bg_gallery, $has_overlay );
+        if ( $bg_layers_html !== '' ) {
+            // In linea e PRIMA dell'helper: una Posizione scelta nelle Avanzate vince.
+            $inline_styles[] = 'position: relative';
+            $inline_styles[] = 'isolation: isolate';
+        }
+
+        // Ombra del contenitore: la classe come sezione, riga e colonna (la dichiarazione
+        // in linea la scrive l'helper qui sotto). Prima non si leggeva.
+        if ( ! empty( $style['shadow'] ) ) {
+            $uk_shadow_map = [
+                'sm' => 'uk-box-shadow-small',
+                'md' => 'uk-box-shadow-medium',
+                'lg' => 'uk-box-shadow-large',
+                'xl' => 'uk-box-shadow-xlarge',
+            ];
+            if ( isset( $uk_shadow_map[ $style['shadow'] ] ) ) {
+                $classes[] = $uk_shadow_map[ $style['shadow'] ];
+            }
+        }
+
+        // Lo stesso helper di sezione, riga e colonna: margine, padding, raggio, bordo,
+        // opacità, Layout Flex (direzione, giustificazione, allineamento, a capo, gap
+        // orizzontale e verticale), trasformazione, ombra, ombra del testo, filtro sfondo,
+        // overflow, fusione, dimensioni, maschera, CSS e posizione delle Avanzate. Prima qui
+        // c'erano a mano solo margine, padding, raggio e bordo: il resto non faceva niente.
+        // Il Layout Flex viene dopo gap/align-items/flex-wrap di testa: se impostato, vince.
+        $this->apply_common_box_styles( $inline_styles, $style, $s, $advanced );
 
         // ID for hover CSS support
         $tile_counter++;
@@ -1955,25 +2031,104 @@ trait Olobuild_Renderer_Structure_Trait {
 
         // Hover CSS rules
         $this->collect_hover_css( $style, $ic_css_id, false, $hover_css_rules );
-        $this->collect_responsive_css( $style, $ic_css_id );
+        $this->collect_responsive_css( $style, $ic_css_id, $advanced );
+        $this->collect_custom_css( $s, $ic_css_id, $hover_css_rules );
 
-        $html = '';
+        // Animazione d'ingresso e attributi delle Avanzate, come la colonna.
+        $this->apply_entrance_animation( $s, $classes, $inline_styles );
+        $fx_attrs = $this->anim->build_scrollspy_attr( $advanced )
+            . $this->anim->build_element_parallax_attr( $advanced )
+            . $this->anim->build_mouse_attrs( $advanced )
+            . $this->anim->build_spotlight_attr( $advanced );
 
-        // Stack on mobile: responsive CSS
-        if ( $stack ) {
-            $ic_class = 'olo-ic-' . substr( md5( $node['id'] ?? wp_rand() ), 0, 6 );
+        // Impilare: le sotto-colonne a tutta larghezza una sotto l'altra. Sul telefono
+        // («Impila su mobile», come prima) e fino al tablet orizzontale («Impila su
+        // tablet», stessa soglia della riga: prima l'interruttore non faceva niente).
+        // flex-direction con !important: la Direzione del Layout Flex ora è in linea.
+        // Con Direzione Colonna le sotto-colonne vanno sempre a tutta larghezza: le loro
+        // misure (50/50, 25/75…) valgono solo affiancate.
+        $stack_tablet = ! empty( $s['stack_tablet'] );
+        $direzione    = $s['flex_direction'] ?? 'row';
+        $in_colonna   = in_array( $direzione, [ 'column', 'column-reverse' ], true );
+        $ic_css       = '';
+        if ( $stack || $stack_tablet || $in_colonna ) {
+            $ic_class  = 'olo-ic-' . substr( md5( $node['id'] ?? wp_rand() ), 0, 6 );
             $classes[] = $ic_class;
-            $html .= '<style>@container olo-tpl (max-width:640px){.' . $ic_class . '{flex-direction:column}.' . $ic_class . '>*{width:100%!important}}</style>';
+            $impila    = '.' . $ic_class . '{flex-direction:column!important}.' . $ic_class . '>*{width:100%!important}';
+            if ( $in_colonna ) {
+                $ic_css .= '.' . $ic_class . '>*{width:100%!important}';
+            }
+            if ( $stack_tablet ) {
+                $ic_css .= '@container olo-tpl (max-width:1199px){' . $impila . '}';
+            } elseif ( $stack ) {
+                $ic_css .= '@container olo-tpl (max-width:640px){' . $impila . '}';
+            }
         }
 
-        $html .= '<div id="' . esc_attr( $ic_css_id ) . '" class="' . esc_attr( implode( ' ', $classes ) ) . '" style="' . esc_attr( implode( '; ', $inline_styles ) ) . '">';
+        $html = '<div id="' . esc_attr( $ic_css_id ) . '" class="' . esc_attr( implode( ' ', $classes ) ) . '" style="' . esc_attr( implode( '; ', $inline_styles ) ) . '"' . $fx_attrs . '>';
+        $html .= $bg_layers_html;
 
         foreach ( $node['children'] ?? [] as $child ) {
             $html .= $this->render_node( $child, $manager, $template_id, $hover_css_rules, $tile_counter );
         }
 
         $html .= '</div>';
+
+        // Lo <style> DOPO il div, mai in testa: render_node mette data-olo-tile-id sul primo
+        // tag, e con «Impila su mobile» (di serie) nel canvas finiva sullo <style>.
+        if ( $ic_css !== '' ) {
+            $html .= '<style>' . $ic_css . '</style>';
+        }
         return $html;
+    }
+
+    /**
+     * I livelli di sfondo delle Colonne interne (immagine, video, galleria,
+     * sovrapposizione) in un riquadro sotto le sotto-colonne: assoluto, z-index -1
+     * nel contenitore isolato, senza clic. Stesso markup dei livelli della sezione.
+     * Stringa vuota se lo sfondo non ha livelli.
+     *
+     * @param array $bg          Sfondo effettivo (get_effective_bg()).
+     * @param bool  $has_image   Immagine con URL.
+     * @param bool  $has_video   Video con URL.
+     * @param bool  $has_gallery Galleria con immagini.
+     * @param bool  $has_overlay Sovrapposizione con opacità.
+     * @return string
+     */
+    private function strati_sfondo_colonne_interne( $bg, $has_image, $has_video, $has_gallery, $has_overlay ) {
+        if ( ! $has_image && ! $has_video && ! $has_gallery && ! $has_overlay ) {
+            return '';
+        }
+        $out = '';
+        if ( $has_image ) {
+            $bg_size = esc_attr( $bg['image_size'] ?? 'cover' );
+            $bg_pos  = esc_attr( $bg['image_position'] ?? 'center center' );
+            $out    .= '<div class="uk-position-cover" style="background-image: url(' . esc_url( $bg['image_url'] ) . '); background-size: ' . $bg_size . '; background-position: ' . $bg_pos . '; background-repeat: no-repeat"'
+                . $this->anim->build_uk_parallax_attr( $bg ) . '></div>';
+        }
+        if ( $has_video ) {
+            $vid_url    = esc_url( $bg['video_url'] );
+            $vid_poster = ! empty( $bg['video_poster'] ) ? esc_url( $bg['video_poster'] ) : '';
+            $vid_pos    = esc_attr( $bg['image_position'] ?? 'center center' );
+            $vid_fit    = esc_attr( $bg['video_fit'] ?? 'cover' );
+            $vid_scale  = ( ! empty( $bg['video_scale'] ) && intval( $bg['video_scale'] ) > 100 ) ? intval( $bg['video_scale'] ) / 100 : 0;
+            $scale_css  = $vid_scale ? '; transform: scale(' . $vid_scale . '); transform-origin: ' . $vid_pos : '';
+            $out       .= '<video aria-hidden="true" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: ' . $vid_fit . '; object-position: ' . $vid_pos . '; pointer-events: none' . $scale_css . '" autoplay muted loop playsinline';
+            if ( $vid_poster ) {
+                $out .= ' poster="' . $vid_poster . '"';
+            }
+            $out .= $this->anim->build_uk_parallax_attr( $bg );
+            $out .= '><source src="' . $vid_url . '" type="' . $this->get_video_mime( $vid_url ) . '"></video>';
+        }
+        if ( $has_gallery ) {
+            $out .= $this->render_bg_gallery( $bg );
+        }
+        if ( $has_overlay ) {
+            $ov_color   = ! empty( $bg['overlay_color'] ) ? esc_attr( $bg['overlay_color'] ) : 'var(--olo-color-dark, #000000)';
+            $ov_opacity = intval( $bg['overlay_opacity'] ) / 100;
+            $out       .= '<div class="uk-position-cover" style="background-color: ' . $ov_color . '; opacity: ' . $ov_opacity . '; pointer-events: none"></div>';
+        }
+        return '<div class="olo-ic-sfondo" aria-hidden="true" style="position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit; overflow: hidden">' . $out . '</div>';
     }
 
     /**
@@ -2138,15 +2293,6 @@ trait Olobuild_Renderer_Structure_Trait {
         if ( count( $tiles ) !== 1 ) return false;
 
         return ( $tiles[0]['type'] ?? '' ) === 'floatingpanel';
-    }
-
-    /**
-     * Extract and render only the floatingpanel from a section>row>column structure,
-     * skipping all parent wrappers to avoid empty section gap.
-     */
-    private function extract_and_render_floatingpanel( $node, $manager, $template_id, &$hover_css_rules, &$tile_counter ) {
-        $fp_node = $node['children'][0]['children'][0]['children'][0];
-        return $this->render_floatingpanel_node( $fp_node, $manager, $template_id, $hover_css_rules, $tile_counter );
     }
 
     /**
