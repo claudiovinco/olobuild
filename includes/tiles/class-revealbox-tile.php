@@ -153,8 +153,19 @@ class Olobuild_Revealbox_Tile extends Olobuild_Tile_Base {
         $bot_content_css = 'position:relative;z-index:2;padding:' . $bot_pad . ';color:' . $safe_bot_text_clr;
         if ( $bot_font_size > 0 ) { $bot_content_css .= ';font-size:' . $bot_font_size . 'px'; }
 
-        $top_inner = $top_bg . $top_overlay . '<div style="' . $top_content_css . '">' . $top_icon_html . $top_content . '</div>';
-        $bot_inner = $bot_bg . $bot_overlay . '<div style="' . $bot_content_css . '">' . $bot_icon_html . $bot_content . '</div>';
+        // Global background (behind everything): media object `media` (precedenza) →
+        // fallback legacy image_url. Stesso layer posizionato z-index:0 di render_face_bg.
+        $global_bg = $this->render_face_bg( $s['image_url'], $s['image_position'] ?? 'center center', $s['image_size'] ?? 'cover', '', $s['media'] ?? null, $uid . '-glob' );
+
+        // I titoli prendono il colore della zona (regola .olo-rb-content più sotto) solo dove la
+        // zona ha un fondo suo, un velo o lo sfondo comune: senza, il testo chiaro di serie sta
+        // sulla pagina chiara, e nei riquadri salvati senza foto il titolo («<h3>Titolo</h3>» di
+        // serie) si vedeva solo perché restava grigio scuro.
+        $top_cls = ( '' !== $top_bg || '' !== $top_overlay || '' !== $global_bg ) ? ' class="olo-rb-content"' : '';
+        $bot_cls = ( '' !== $bot_bg || '' !== $bot_overlay || '' !== $global_bg ) ? ' class="olo-rb-content"' : '';
+
+        $top_inner = $top_bg . $top_overlay . '<div' . $top_cls . ' style="' . $top_content_css . '">' . $top_icon_html . $top_content . '</div>';
+        $bot_inner = $bot_bg . $bot_overlay . '<div' . $bot_cls . ' style="' . $bot_content_css . '">' . $bot_icon_html . $bot_content . '</div>';
 
         // ── CSS delle transizioni (scoped all'UID) ──
         // $css   = stato di partenza; $rivela = [ selettore interno, dichiarazioni ] dello stato
@@ -254,12 +265,13 @@ class Olobuild_Revealbox_Tile extends Olobuild_Tile_Base {
             $css .= '@media (hover:hover){' . $hover . '}' . $stato . $has;
         }
         $css .= "#{$uid}:focus-visible{outline:2px solid var(--olo-color-primary, #e1474f);outline-offset:2px}";
+        // I titoli del contenuto prendono il «Colore testo» della loro zona (se ha un fondo, vedi
+        // $top_cls): prima li prendeva la regola dei titoli del tema (UIkit, grigio scuro) e su
+        // una foto velata non si leggevano. Un colore scelto nell'editor (inline) resta sopra.
+        $css .= "#{$uid} .olo-rb-content :is(h1,h2,h3,h4,h5,h6){color:inherit}";
 
         ob_start();
         echo '<style>' . $css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- reveal/transition CSS assembled above from the internally generated $uid, intval()'d heights/amounts, floatval()'d speed and a fixed easing map
-        // Global background (behind everything): media object `media` (precedenza) →
-        // fallback legacy image_url. Stesso layer posizionato z-index:0 di render_face_bg.
-        $global_bg = $this->render_face_bg( $s['image_url'], $s['image_position'] ?? 'center center', $s['image_size'] ?? 'cover', '', $s['media'] ?? null, $uid . '-glob' );
 
         // tabindex: da tastiera il riquadro si raggiunge e mostra la faccia nascosta (con i suoi link).
         echo '<div id="' . esc_attr( $uid ) . '" class="olo-revealbox ' . esc_attr( $uid ) . ' olo-reveal-' . $effect . '" tabindex="0" role="group" style="' . $container_css . '">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $effect is sanitize_html_class()'d above; $container_css is built from intval()'d height/perspective, build_border_radius_css() (integer px) and a colour passed through safe_color_css()

@@ -89,8 +89,8 @@ export default {
     visible_height: '340',
     border_radius: { tl: 16, tr: 16, br: 16, bl: 16 },
     top_media: { type: 'image', image_url: demo('tavola'), image_size: 'cover', image_position: 'center center' },
-    // Paragrafi e non un titolo: il colore del testo della zona non arriva ai titoli (h1-h6), che
-    // prendono quello del tema e sulla foto non si leggevano.
+    // Paragrafi e non un titolo: i titoli (h1-h6) prendono il colore del testo della zona solo
+    // dove la zona ha un fondo (foto, velo o sfondo comune); i paragrafi lo prendono sempre.
     top_content: t('<p><strong>La cena in terrazza</strong></p><p>Il venerdì e il sabato sera</p>'),
     top_font_size: '20',
     top_padding: '28',
