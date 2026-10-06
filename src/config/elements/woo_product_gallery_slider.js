@@ -25,6 +25,7 @@ export default {
     enable_zoom: true,
     enable_lightbox: true,
     main_height: '500px',
+    max_width: '600',
     thumbnail_size: '80',
     thumbnail_gap: '8',
     autoplay: false,
@@ -100,6 +101,9 @@ export default {
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     { type: 'separator', label: t('Immagine principale') },
+    // Il PHP la limitava da sempre a 600 px (suo default) senza un controllo per cambiarla.
+    { key: 'max_width', label: t('Larghezza massima'), type: 'range', min: 0, max: 1200, step: 10, unit: 'px',
+      description: t('La larghezza oltre la quale la galleria non cresce. 0 = tutta la larghezza della cella.') },
     { key: 'main_height', label: t('Altezza principale'), type: 'text', placeholder: t('es. 500px, 60vh') },
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
 

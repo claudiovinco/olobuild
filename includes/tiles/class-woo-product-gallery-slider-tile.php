@@ -68,6 +68,11 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
             $prod = $product;
         }
         if ( ! $prod ) {
+            // L'avviso è per chi costruisce la pagina (canvas del builder, utenti che possono
+            // modificare): il visitatore se lo trovava scritto in pagina. A lui, niente.
+            if ( empty( $s['_builder_mode'] ) && ! current_user_can( 'edit_posts' ) ) {
+                return '';
+            }
             return '<div style="padding:20px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;">'
                  . esc_html( olobuild_t( 'Nessun prodotto disponibile in questo contesto' ) )
                  . '</div>';
@@ -101,7 +106,11 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
         $radius      = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $radius_raw  = Olobuild_Tile_Utils::radius_int( $s['border_radius'] ?? 0 );
-        $max_width   = max( 200, min( 1200, absint( $s['max_width'] ) ) );
+        // Larghezza massima: nell'inspector non c'era e la galleria restava a 600 px anche in una
+        // colonna più larga. Ora è un controllo; 0 = tutta la larghezza della cella. Niente minimo:
+        // il vecchio 200 px faceva restare ferme le prime posizioni del cursore (10–190).
+        $max_width   = absint( $s['max_width'] );
+        $max_width   = $max_width ? min( 1200, $max_width ) . 'px' : 'none';
         $show_thumbs = ! empty( $s['show_thumbnails'] );
         // «Destra» stava nella tendina ma non nell'elenco ammesso: ricadeva in basso.
         $thumb_pos   = in_array( $s['thumbnail_position'], [ 'bottom', 'left', 'right' ], true ) ? $s['thumbnail_position'] : 'bottom';
@@ -159,7 +168,7 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
         ?>
         <style>
             .<?php echo $uid; ?> {
-                max-width: <?php echo $max_width; ?>px;
+                max-width: <?php echo $max_width; ?>;
             }
             .<?php echo $uid; ?>-wrap {
                 display: flex;
