@@ -90,6 +90,15 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
 
     private function render_custom( $s ) {
         $uid = 'mcd-' . wp_rand( 10000, 99999 );
+        // Chiave del conto «evergreen» nel localStorage: era costruita con l'uid casuale qui
+        // sopra, diverso a ogni caricamento, quindi il conto ripartiva da capo a ogni visita
+        // (e i valori vecchi si accumulavano). L'id del nodo resta uguale fra le pagine viste.
+        // Nella chiave entra anche la durata: senza, chi cambiava «Ore/Minuti evergreen» teneva
+        // la scadenza calcolata con quella vecchia. Nel builder niente memoria: l'anteprima deve
+        // seguire subito la durata scelta, e un conto scaduto non deve restare scaduto per sempre.
+        $chiave_eg  = 'olo_eg_' . $this->chiave_stabile( $s ) . '_' . ( absint( $s['evergreen_hours'] ) * 60 + absint( $s['evergreen_minutes'] ) );
+        $eg_memoria = empty( $s['_builder_mode'] );
+        $sep_color = $this->safe_color_css( $s['separator_color'] ?? '' );
 
         $num_fs  = absint( $s['number_font_size'] );
         $num_fw  = absint( $s['number_font_weight'] );
@@ -167,6 +176,8 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
                 font-weight: 700;
                 opacity: 0.45;
                 line-height: 1;
+                <?php // «Colore» del Separatore: prima lo leggeva solo lo stile UIkit. ?>
+                <?php if ( $sep_color ) : ?>color: <?php echo $sep_color; ?>;<?php endif; ?>
                 <?php if ( ! $is_inline ) : ?>
                 align-self: flex-start;
                 padding-top: <?php echo max( 0, round( $num_fs * 0.15 ) ); ?>px;
@@ -217,26 +228,29 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
             var expireMessage=el.getAttribute('data-olo-expire-message');
             var egLoop=el.getAttribute('data-olo-evergreen-loop')==='1';
             var target;
+            var storageKey=<?php echo $eg_memoria ? "'" . esc_js( $chiave_eg ) . "_'+location.pathname" : "''"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_js() sulla chiave interna, il resto sono letterali fissi ?>;
+            <?php // In navigazione privata o coi dati del sito bloccati il localStorage lancia: il conto va avanti lo stesso. ?>
+            function salva(v){if(!storageKey){return;}try{localStorage.setItem(storageKey,String(v));}catch(e){}}
 
             if(ctype==='evergreen'){
                 var egH=parseInt(el.getAttribute('data-olo-evergreen-hours'))||0;
                 var egM=parseInt(el.getAttribute('data-olo-evergreen-minutes'))||0;
                 var egDuration=(egH*3600+egM*60)*1000;
-                var storageKey='olo_eg_'+location.pathname+'_<?php echo esc_js( $uid ); ?>';
-                var stored=localStorage.getItem(storageKey);
+                var stored=null;
+                if(storageKey){try{stored=localStorage.getItem(storageKey);}catch(e){}}
                 if(stored){
                     target=parseInt(stored);
                     var remaining=target-Date.now();
                     if(remaining<=0){
                         if(egLoop){
                             target=Date.now()+egDuration;
-                            localStorage.setItem(storageKey,String(target));
+                            salva(target);
                         }
                     }
                 }
                 if(!target){
                     target=Date.now()+egDuration;
-                    localStorage.setItem(storageKey,String(target));
+                    salva(target);
                 }
             }else{
                 target=new Date(el.dataset.target).getTime();
@@ -271,8 +285,7 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
                             var egM2=parseInt(el.getAttribute('data-olo-evergreen-minutes'))||0;
                             var egDur2=(egH2*3600+egM2*60)*1000;
                             target=Date.now()+egDur2;
-                            var sKey='olo_eg_'+location.pathname+'_<?php echo esc_js( $uid ); ?>';
-                            localStorage.setItem(sKey,String(target));
+                            salva(target);
                             return;
                         }
                     }
