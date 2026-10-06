@@ -39,6 +39,11 @@ class Olobuild_Pricelist_Tile extends Olobuild_Tile_Base {
         'card_border_radius'   => '12',
         'card_border_color'    => '',
         'hover_lift'           => true,
+        // Dimensioni dei testi (popover Tipografia): '' = misura di sempre.
+        'title_size'           => '',
+        'description_size'     => '',
+        'price_size'           => '',
+        'badge_size'           => '',
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -93,7 +98,28 @@ class Olobuild_Pricelist_Tile extends Olobuild_Tile_Base {
         $card_radius_h = Olobuild_Tile_Utils::radius_hover( $s, 'card_border_radius_hover' );
         $card_border = Olobuild_Tile_Utils::border_color( $s['card_border_color'] ?? null, 'rgba(0, 0, 0, 0.06)' );
         $hover_lift  = filter_var( $s['hover_lift'] ?? true, FILTER_VALIDATE_BOOLEAN );
-        $hl_border   = $this->safe_color_css( $s['highlighted_bg'] ) ? $this->safe_color_css( $s['highlighted_bg'] ) : 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 20%, transparent)';
+        // Voce «In evidenza»: il filo è sempre il primario (20%, 35% al passaggio), qualunque sia
+        // lo «Sfondo evidenziato». Prima, con uno sfondo scelto, il bordo prendeva il colore dello
+        // sfondo e spariva dentro la card: scegliere lo sfondo toglieva l'evidenza.
+        // Bordo al passaggio: quello della card spinto verso il colore dei titoli (segue il
+        // tema anche sulle scene scure). Era un grigio fisso rgba(0,0,0,.12).
+        $hover_border = 'color-mix(in srgb, ' . $card_border . ', ' . $title_clr . ' 18%)';
+
+        // Dimensioni dei testi: i valori di sempre se il popover Tipografia non ne ha una.
+        $fs_title = absint( $s['title_size'] ?? 0 );
+        $fs_desc  = absint( $s['description_size'] ?? 0 );
+        $fs_price = absint( $s['price_size'] ?? 0 );
+        // Badge: 11 px di partenza (erano 9, sotto la soglia di lettura per un'etichetta in maiuscolo).
+        $fs_badge = absint( $s['badge_size'] ?? 0 ) ?: 11;
+
+        // Colonna delle foto solo se almeno una voce ne ha una: le voci senza foto mostravano
+        // un quadrato grigio vuoto. Con foto miste resta uno spazio trasparente (allineamento).
+        $any_img = false;
+        if ( $show_image ) {
+            foreach ( $items as $it ) {
+                if ( ! empty( $it['image_url'] ) ) { $any_img = true; break; }
+            }
+        }
 
         ob_start();
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/intval/whitelists/Olobuild_Tile_Utils helpers; $uid is internal).
@@ -121,19 +147,19 @@ class Olobuild_Pricelist_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-pl-card:hover {
                 transform: translateY(-2px);
                 box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
-                border-color: rgba(0, 0, 0, 0.12);
+                border-color: <?php echo $hover_border; ?>;
             }
             <?php endif; ?>
             .<?php echo $uid; ?> .olo-pl-card--hl {
                 background: <?php echo $hl_bg; ?>;
-                border-color: <?php echo $hl_border; ?>;
+                border-color: color-mix(in srgb, var(--olo-color-primary, #e1474f) 20%, transparent);
             }
             <?php if ( $hover_lift ) : ?>
             .<?php echo $uid; ?> .olo-pl-card--hl:hover {
                 border-color: color-mix(in srgb, var(--olo-color-primary, #e1474f) 35%, transparent);
             }
             <?php endif; ?>
-            <?php if ( $show_image ) : ?>
+            <?php if ( $any_img ) : ?>
             .<?php echo $uid; ?> .olo-pl-img {
                 width: <?php echo (int) $img_size; ?>px;
                 height: <?php echo (int) $img_size; ?>px;
@@ -142,6 +168,7 @@ class Olobuild_Pricelist_Tile extends Olobuild_Tile_Base {
                 flex-shrink: 0;
                 background: rgba(0, 0, 0, 0.03);
             }
+            .<?php echo $uid; ?> .olo-pl-img--vuota { background: transparent; }
             <?php if ( $img_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-pl-img{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-pl-img:hover{border-radius:<?php echo $img_radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-pl-img img {
                 width: 100%;
@@ -163,13 +190,13 @@ class Olobuild_Pricelist_Tile extends Olobuild_Tile_Base {
             }
             .<?php echo $uid; ?> .olo-pl-title {
                 font-weight: 600;
-                font-size: 15px;
+                font-size: <?php echo $fs_title ?: 15; ?>px;
                 color: <?php echo $title_clr; ?>;
                 display: inline;
                 letter-spacing: -0.01em;
             }
             .<?php echo $uid; ?> .olo-pl-desc {
-                font-size: 13px;
+                font-size: <?php echo $fs_desc ?: 13; ?>px;
                 color: <?php echo $desc_clr; ?>;
                 margin-top: 4px;
                 line-height: 1.5;
@@ -179,7 +206,7 @@ class Olobuild_Pricelist_Tile extends Olobuild_Tile_Base {
                 align-items: center;
                 background: <?php echo $badge_bg; ?>;
                 color: <?php echo $badge_clr; ?>;
-                font-size: 9px;
+                font-size: <?php echo (int) $fs_badge; ?>px;
                 font-weight: 700;
                 padding: 3px 7px;
                 border-radius: <?php echo (int) $badge_br; ?>px;
@@ -197,13 +224,13 @@ class Olobuild_Pricelist_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-pl-price {
                 color: <?php echo $price_clr; ?>;
                 font-weight: 700;
-                font-size: 17px;
+                font-size: <?php echo $fs_price ?: 17; ?>px;
                 white-space: nowrap;
                 flex-shrink: 0;
                 letter-spacing: -0.02em;
             }
             .<?php echo $uid; ?> .olo-pl-price--below {
-                font-size: 15px;
+                font-size: <?php echo $fs_price ?: 15; ?>px;
                 margin-top: 6px;
             }
             <?php if ( $sep_style !== 'none' ) : ?>
@@ -236,12 +263,14 @@ class Olobuild_Pricelist_Tile extends Olobuild_Tile_Base {
                 $hl_class    = $highlighted ? ' olo-pl-card--hl' : '';
             ?>
             <div class="olo-pl-card<?php echo $hl_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed class literal from boolean ternary above ?>">
-                <?php if ( $show_image ) : ?>
-                <div class="olo-pl-img">
+                <?php if ( $any_img ) : ?>
                     <?php if ( ! empty( $item['image_url'] ) ) : ?>
+                <div class="olo-pl-img">
                         <img src="<?php echo esc_url( $item['image_url'] ); ?>" alt="<?php echo esc_attr( $item['title'] ); ?>" loading="lazy" />
-                    <?php endif; ?>
                 </div>
+                    <?php else : ?>
+                <div class="olo-pl-img olo-pl-img--vuota" aria-hidden="true"></div>
+                    <?php endif; ?>
                 <?php endif; ?>
 
                 <div class="olo-pl-body">

@@ -49,6 +49,11 @@ export default {
     card_border_radius: '12',
     card_border_color: '',
     hover_lift: true,
+    // Dimensioni dei testi ('' = quelle di sempre: titolo 15, descrizione 13, prezzo 17/15, badge 11).
+    title_size: '',
+    description_size: '',
+    price_size: '',
+    badge_size: '',
     shadow: 'none',
     ...textEffectsDefaults,
     text_effect_target: 'title',
@@ -120,33 +125,38 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    // Dimensione e colore per ogni testo: le misure erano fisse nel renderer (badge a 9 px).
     { type: 'typography', label: t('Titolo'),
       responsiveKeys: [],
       keys: {
+        size: 'title_size',
         color: 'title_color',
       },
-      sizeMin: 12, sizeMax: 60,
+      sizeMin: 12, sizeMax: 40,
     },
     { type: 'typography', label: t('Descrizione'),
       responsiveKeys: [],
       keys: {
+        size: 'description_size',
         color: 'description_color',
       },
-      sizeMin: 12, sizeMax: 60,
+      sizeMin: 10, sizeMax: 28,
     },
     { type: 'typography', label: t('Prezzo'),
       responsiveKeys: [],
       keys: {
+        size: 'price_size',
         color: 'price_color',
       },
-      sizeMin: 12, sizeMax: 60,
+      sizeMin: 12, sizeMax: 48,
     },
     { type: 'typography', label: t('Badge'),
       responsiveKeys: [],
       keys: {
+        size: 'badge_size',
         color: 'badge_color',
       },
-      sizeMin: 12, sizeMax: 60,
+      sizeMin: 9, sizeMax: 20,
     },
 
     // ── Card ──
