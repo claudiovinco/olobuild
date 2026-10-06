@@ -172,11 +172,11 @@ class Olobuild_RelatedPosts_Tile extends Olobuild_Tile_Base {
             <?php while ( $query->have_posts() ) : $query->the_post(); ?>
             <a href="<?php the_permalink(); ?>" class="olo-rp-card">
                 <?php if ( ! empty( $s['show_image'] ) ) : ?>
-                <?php // Lo sfondo #1F2937 e' l'unico hex cablato rimasto qui: si vede solo
-                      // dietro le card senza copertina, e passarlo a token cambierebbe il
-                      // colore sulle pagine già pubblicate. Lo lascio a chi fara' il giro
-                      // token-first, che potra' verificarne la resa. ?>
-                <div style="<?php echo esc_attr( $image_box_css ); ?>overflow:hidden;background:#1F2937;">
+                <?php // Il riquadro dietro le card senza copertina: il ruolo Scuro del tema
+                      // (scuro in ogni palette, tinto dal primario) al posto del #1F2937
+                      // fisso, che resta come riserva: le card restano col riquadro scuro di
+                      // sempre, ma nei colori del sito. ?>
+                <div style="<?php echo esc_attr( $image_box_css ); ?>overflow:hidden;background:var(--olo-color-dark, #1F2937);">
                     <?php if ( has_post_thumbnail() ) : ?>
                         <?php the_post_thumbnail( 'medium_large', [ 'style' => 'width:100%;height:100%;object-fit:cover;display:block;' ] ); ?>
                     <?php endif; ?>
