@@ -161,6 +161,11 @@ export default {
         { key: 'italic', label: t('Corsivo'), type: 'toggle' },
         { key: 'color',  label: t('Colore'),  type: 'color' },
     ] },
+    // Il renderer lo leggeva già (righe una dopo l'altra sulla stessa riga, che vanno a capo
+    // da sole), ma nessun controllo lo offriva. Con una riga sola non cambia niente: sparisce.
+    { key: 'headline_inline', label: t('Righe di seguito'), type: 'toggle',
+      show: (s) => !Array.isArray(s?.headline_lines) || s.headline_lines.filter((l) => l && l.text).length > 1,
+      description: t('Le righe del titolo si susseguono nella stessa frase e vanno a capo da sole, invece di stare una per riga.') },
     { type: 'separator', label: t('Sottotitolo') },
     { type: 'typography', label: t('Sottotitolo'), show: conSottotitolo, responsiveKeys: [],
       keys: {
@@ -213,5 +218,14 @@ export default {
     ]},
     { key: 'gap', label: t('Gap colonne'), type: 'range', min: 0, max: 200, step: 4, unit: 'px',
       show: (s) => affiancata(s) && conSottotitolo(s) },
+    // La colonna di destra era sempre allineata a destra. Le tile salvate senza la chiave la
+    // tengono lì: la voce vuota vale «A destra» (il PHP ripiega su 'right').
+    { key: 'tagline_align', label: t('Allineamento colonna destra'), type: 'select',
+      show: (s) => affiancata(s) && conSottotitolo(s), options: [
+      { value: 'left',   label: t('Sinistra') },
+      { value: 'center', label: t('Centrato') },
+      { value: 'right',  label: t('Destra') },
+    ], valoriStorici: { '': 'right' },
+      description: t('Sul telefono la colonna va sotto il titolo e ne segue l\'allineamento.') },
   ],
 };

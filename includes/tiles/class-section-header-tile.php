@@ -132,8 +132,9 @@ class Olobuild_SectionHeader_Tile extends Olobuild_Tile_Base {
             . 'line-height:' . $h_lh_css . ';font-weight:' . $h_fw_css . ';letter-spacing:' . $h_ls_css . ';'
             . $h_tt_css . 'text-align:' . $halign . ';margin:0';
 
-        $eb_color = $this->safe_color_css( $s['eyebrow_color'] ) ?: '#b3261e';
-        $eb_dot   = $this->safe_color_css( $s['eyebrow_dot_color'] ) ?: '#b3261e';
+        // Riserve dal primario del tema, come i default: il rosso #b3261e fisso non seguiva la palette.
+        $eb_color = $this->safe_color_css( $s['eyebrow_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $eb_dot   = $this->safe_color_css( $s['eyebrow_dot_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $eb_sep   = $s['eyebrow_separator'] ?? '';
         $is_bullet = ( trim( $eb_sep ) === '·' );
         // Occhiello: mono 12px finché non si sceglie altro.
@@ -189,7 +190,16 @@ class Olobuild_SectionHeader_Tile extends Olobuild_Tile_Base {
                     $sub_italic = ! empty( $s['tagline_text_italic'] ) ? 'font-style:italic;' : '';
                     $sub_fw     = $tag_fw !== '' ? 'font-weight:' . $tag_fw . ';' : '';
                     $sub_align  = ( $layout === 'center' ) ? 'center' : $halign;
-                    $sub_mx     = ( $layout === 'center' ) ? 'margin-left:auto;margin-right:auto;' : '';
+                    // Il paragrafo è largo al massimo 62ch: allineato a destra va spinto a destra
+                    // anche come riquadro, altrimenti restava appoggiato a sinistra sotto un titolo
+                    // a destra (testo a destra dentro una colonna stretta a sinistra).
+                    if ( $layout === 'center' || $sub_align === 'center' ) {
+                        $sub_mx = 'margin-left:auto;margin-right:auto;';
+                    } elseif ( $sub_align === 'right' ) {
+                        $sub_mx = 'margin-left:auto;';
+                    } else {
+                        $sub_mx = '';
+                    }
                     $sub_mt     = max( 8, min( 80, $gap ) );
                 ?>
                     <p class="olo-sechead__sub" style="font-family:<?php echo esc_attr( $sub_fam ); ?>;font-size:<?php echo (int) $sub_size; ?>px;<?php echo esc_attr( $sub_fw ); ?>line-height:1.6;color:<?php echo esc_attr( $sub_clr ); ?>;<?php echo esc_attr( $sub_italic ); ?>max-width:62ch;<?php echo esc_attr( $sub_mx ); ?>margin-top:<?php echo (int) $sub_mt; ?>px;text-align:<?php echo esc_attr( $sub_align ); ?>" data-olo-editable="tagline_text"><?php echo esc_html( $s['tagline_text'] ); ?></p>
@@ -209,8 +219,12 @@ class Olobuild_SectionHeader_Tile extends Olobuild_Tile_Base {
                 $cap_fw      = $this->font_weight_css( $s['tagline_caption_font_weight'] );
                 $cap_fw_css  = $cap_fw !== '' ? 'font-weight:' . $cap_fw . ';' : '';
                 $tag_italic  = ! empty( $s['tagline_text_italic'] ) ? 'font-style:italic;' : '';
+                // Allineamento della colonna destra (Stile → Disposizione): era sempre a destra, senza
+                // controllo. Senza la chiave resta a destra. Sul telefono, impilata sotto il titolo,
+                // segue l'allineamento del titolo (--olo-sh-align-m, letto dalla regola sotto i 900px).
+                $tag_align   = in_array( $s['tagline_align'] ?? '', [ 'left', 'center', 'right' ], true ) ? $s['tagline_align'] : 'right';
             ?>
-                <div class="olo-sechead__right" style="text-align:right">
+                <div class="olo-sechead__right" style="text-align:<?php echo esc_attr( $tag_align ); ?>;--olo-sh-align-m:<?php echo esc_attr( $halign ); ?>">
                     <?php if ( ! empty( $s['tagline_text'] ) ) : ?>
                         <div class="olo-sechead__tag" style="font-family:<?php echo esc_attr( $tag_fam ); ?>;font-size:<?php echo (int) $tag_size; ?>px;<?php echo esc_attr( $tag_fw_css ); ?>color:<?php echo esc_attr( $tag_clr ); ?>;<?php echo esc_attr( $tag_italic ); ?>line-height:1.3;margin-bottom:10px" data-olo-editable="tagline_text"><?php echo esc_html( $s['tagline_text'] ); ?></div>
                     <?php endif; ?>
@@ -227,7 +241,7 @@ class Olobuild_SectionHeader_Tile extends Olobuild_Tile_Base {
             }
             @media (max-width:900px) {
                 .olo-sechead { grid-template-columns: 1fr !important; gap: 24px !important; text-align: left !important; }
-                .olo-sechead__right { text-align: left !important; }
+                .olo-sechead__right { text-align: var(--olo-sh-align-m, left) !important; }
                 .olo-sechead__headline { --olo-sh-fs-now: var(--olo-sh-fs-t, clamp(min(40px, var(--olo-sh-fs)), 10vw, min(72px, var(--olo-sh-fs)))); }
             }
             @media (max-width:480px) {
