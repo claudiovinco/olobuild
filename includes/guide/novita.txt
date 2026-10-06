@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.569 - 2026-10-07 (fix)
+- Prezzi: se lasci vuoto l'indirizzo del pulsante, il pulsante resta una scritta senza link, per esempio «Presto disponibile». Prima al clic ricaricava la pagina.
+
 ## v1.4.568 - 2026-10-06
 - Form: nuovo «Numero massimo di invii», nella sezione Archiviazione. Dai un nome al modulo, scegli quanti invii accetta e scrivi il messaggio a modulo chiuso: raggiunto il numero, al posto del modulo compare il messaggio e gli invii in più vengono rifiutati. Serve per posti limitati, prenotazioni e offerte riservate ai primi.
 - Form: gli invii di un modulo con un nome stanno insieme nella pagina Invii. Prima ogni caricamento della pagina dava al modulo un nome diverso.
