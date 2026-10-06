@@ -58,15 +58,6 @@ class Olobuild_ShowcaseGrid_Tile extends Olobuild_Tile_Base {
 
     public function get_controls() { return []; }
 
-    /** "#rrggbb" → "r,g,b". */
-    private function hex_rgb( $hex, $fallback = '10,42,30' ) {
-        // hex_digits legge anche la riserva dentro un token var(--x, #hex).
-        $hex = Olobuild_Tile_Utils::hex_digits( $hex );
-        if ( strlen( $hex ) === 3 ) { $hex = $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2]; }
-        if ( ! preg_match( '/^[0-9a-fA-F]{6}$/', $hex ) ) { return $fallback; }
-        return hexdec( substr($hex,0,2) ) . ',' . hexdec( substr($hex,2,2) ) . ',' . hexdec( substr($hex,4,2) );
-    }
-
     public function render( $settings, $style = [] ) {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'ocg-' . wp_rand( 10000, 99999 );
@@ -99,7 +90,10 @@ class Olobuild_ShowcaseGrid_Tile extends Olobuild_Tile_Base {
             ? "{$cpt}px"
             : "{$cpt}px {$cpr}px {$cpb}px {$cpl}px";
         $mbg    = $this->safe_color_css( $s['media_bg'] ?? '' ) ?: '#0f3a2a';
-        $veilrgb= $this->hex_rgb( $s['veil_color'] ?? '#0a2a1e' );
+        // Velo: il colore così com'è, sfumato con color-mix(). Prima una terna r,g,b calcolata
+        // sul server (hex_rgb(), tolta): non seguiva una palette ridefinita nel CSS e perdeva
+        // la trasparenza di un velo rgba() o color-mix(… transparent).
+        $veil   = $this->safe_color_css( $s['veil_color'] ?? '' ) ?: 'var(--olo-color-dark, #0a2a1e)';
         $kick   = $this->safe_color_css( $s['kicker_color'] ?? '' ) ?: 'var(--olo-color-primary, #c8ff3c)';
         $tcol   = $this->safe_color_css( $s['title_color'] ?? '' ) ?: '#ffffff';
         $arrbg  = $this->safe_color_css( $s['arrow_bg'] ?? '' ) ?: 'rgba(255,255,255,0.14)';
@@ -149,14 +143,14 @@ class Olobuild_ShowcaseGrid_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/intval/whitelists/hex_rgb/Olobuild_CSS_Builder which escapes internally/generated uid). ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/intval/whitelists/Olobuild_CSS_Builder which escapes internally/generated uid). ?>
         <style>
             <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{display:grid;grid-template-columns:<?php echo $grid_tpl; ?>;gap:<?php echo $gap; ?>;<?php echo $grid_align; ?>font-family:<?php echo $sans; ?>;<?php echo $kit_pos . $kit_decl; ?>}
             .<?php echo $uid; ?> .ocg-card{position:relative;border-radius:<?php echo $card_rad; ?>;overflow:hidden;aspect-ratio:<?php echo $asp; ?>;display:flex;flex-direction:column;justify-content:flex-end;padding:<?php echo $card_pad; ?>;color:#fff;text-decoration:none;background:<?php echo $mbg; ?>;}
             .<?php echo $uid; ?> .ocg-media{position:absolute;inset:0;z-index:0;background:<?php echo $mbg; ?>;background-size:<?php echo $bg_size; ?>;background-position:<?php echo esc_attr( $obj_pos ); ?>;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 18px, rgba(255,255,255,0) 18px 36px);}
             .<?php echo $uid; ?> .ocg-medialabel{position:absolute;left:14px;bottom:12px;font-size:11px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;color:rgba(255,255,255,.4);z-index:1;}
-            .<?php echo $uid; ?> .ocg-veil{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg, rgba(<?php echo $veilrgb; ?>,.05) 30%, rgba(<?php echo $veilrgb; ?>,.9) 100%);}
+            .<?php echo $uid; ?> .ocg-veil{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg, color-mix(in srgb, <?php echo $veil; ?> 5%, transparent) 30%, color-mix(in srgb, <?php echo $veil; ?> 90%, transparent) 100%);}
             .<?php echo $uid; ?> .ocg-k{position:relative;z-index:2;font-weight:700;font-size:<?php echo (int) $kicker_size; ?>px;letter-spacing:.12em;text-transform:uppercase;color:<?php echo $kick; ?>;}
             .<?php echo $uid; ?> .ocg-t{position:relative;z-index:2;font-family:<?php echo $disp; ?>;font-weight:<?php echo $title_wt; ?>;font-size:<?php echo (int) $title_size; ?>px;text-transform:<?php echo $title_tt; ?>;margin-top:6px;color:<?php echo $tcol; ?>;line-height:1;}
             .<?php echo $uid; ?> .ocg-arr{position:absolute;z-index:2;top:24px;right:24px;width:44px;height:44px;border-radius:50%;background:<?php echo $arrbg; ?>;display:grid;place-items:center;transition:background <?php echo $arr_bg_dur; ?>, transform .25s;}

@@ -17,6 +17,8 @@ export default {
 
   defaults: {
     typography_preset: '',
+    // Voci d'esempio storiche (in inglese) che i template salvati possono ereditare: restano.
+    // Una tile appena trascinata nasce dalla `partenza` qui sotto, in italiano.
     items: [
       { image: '', media_label: "Men's squad", kicker: '3 squads', title: 'Men', link: '#' },
       { image: '', media_label: "Women's squad", kicker: '1 squad', title: 'Women', link: '#' },
@@ -82,12 +84,14 @@ export default {
     { type: 'separator', label: t('Card') },
     { key: 'items', label: t('Voci'), type: 'content-items',
       itemLabel: t('Card'),
-      defaults: { image: '', media_bg: { type: 'none' }, media_label: 'Etichetta media', kicker: 'Kicker', title: 'Titolo', link: '#', span: 0, aspect: '' },
+      // La chiave che ContentItemsEditor legge è `newItemDefaults`: con `defaults` (com'era) una
+      // card aggiunta nasceva vuota, senza occhiello né titolo.
+      newItemDefaults: { image: '', media_bg: { type: 'none' }, media_label: '', kicker: t('Occhiello'), title: t('Titolo'), link: '#', span: 0, aspect: '' },
       itemFields: [
         { key: 'image', label: t('Immagine'), type: 'image' },
         { key: 'media_bg', label: t('Sfondo / media (ogni tipo)'), type: 'background', showParallax: false },
-        { key: 'media_label', label: t('Etichetta placeholder'), type: 'text' },
-        { key: 'kicker', label: t('Kicker (sopra il titolo)'), type: 'text' },
+        { key: 'media_label', label: t('Etichetta senza immagine'), type: 'text' },
+        { key: 'kicker', label: t('Occhiello (sopra il titolo)'), type: 'text' },
         { key: 'title', label: t('Titolo'), type: 'text' },
         { key: 'link', label: t('Link'), type: 'link' },
         { key: 'span', label: t('Colonne occupate (0 = uniforme; 1-12 = editoriale)'), type: 'range', min: 0, max: 12, step: 1 },
