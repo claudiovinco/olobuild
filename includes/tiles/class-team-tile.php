@@ -123,6 +123,7 @@ class Olobuild_Team_Tile extends Olobuild_Tile_Base {
         $outer_sz  = $ph_size + $ph_bw * 2;
         $outer_h   = $ph_h + $ph_bw * 2;
         $ph_shadow  = Olobuild_Tile_Utils::shadow( $s['photo_shadow'] ?? 'none', 'photo' );
+        $ph_filter  = $this->filtri_foto( $s );
 
         // Photo shape
         $hex_clip = 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)';
@@ -184,7 +185,7 @@ class Olobuild_Team_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: intval() for all sizes, safe_color_css() whitelist for every colour, in_array() whitelist for alignment, Olobuild_Tile_Utils helpers (border_radius/radius_force_css/shadow/spacing_css, all absint-based), fixed clip-path/justify-content literals and the internally generated uid. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: intval() for all sizes, safe_color_css() whitelist for every colour, in_array() whitelist for alignment, Olobuild_Tile_Utils helpers (border_radius/radius_force_css/shadow/spacing_css, all absint-based), filtri_foto() (fixed CSS functions with clamped integers), fixed clip-path/justify-content literals and the internally generated uid. ?>
         <style>
             .<?php echo $uid; ?> {
                 overflow: visible;
@@ -249,6 +250,7 @@ class Olobuild_Team_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-team-photo-inner img,
             .<?php echo $uid; ?> .olo-team-photo-inner video {
                 width: 100%; height: 100%; object-fit: <?php echo esc_attr( $ph_fit ); ?>; <?php if ( $ph_pos ) : ?>object-position: <?php echo esc_attr( $ph_pos ); ?>; <?php endif; ?>display: block;
+                <?php if ( $ph_filter !== '' ) : ?>filter: <?php echo $ph_filter; ?>;<?php endif; ?>
             }
             .<?php echo $uid; ?> .olo-team-info-wrap {
                 display: flex;
@@ -351,5 +353,38 @@ class Olobuild_Team_Tile extends Olobuild_Tile_Base {
         }
 
         return ob_get_clean();
+    }
+
+    /**
+     * Filtri della foto (sfocatura, luminosità, contrasto, saturazione, scala di grigi, seppia).
+     * I controlli c'erano nell'inspector ma nessun renderer li leggeva. Agiscono sulla foto e sul
+     * suo media in hover, non sulla scheda: sfocare o desaturare il testo non serve a nessuno.
+     * Valore vuoto = neutro (con intval() una luminosità vuota varrebbe 0, cioè foto nera).
+     *
+     * @param array $s Settings.
+     * @return string Valore per `filter:` o '' se tutti neutri.
+     */
+    private function filtri_foto( $s ) {
+        // chiave => [ funzione CSS, unità, neutro, minimo, massimo ] — come i cursori dell'inspector.
+        $filtri = [
+            'filter_blur'       => [ 'blur', 'px', 0, 0, 20 ],
+            'filter_brightness' => [ 'brightness', '%', 100, 0, 200 ],
+            'filter_contrast'   => [ 'contrast', '%', 100, 0, 200 ],
+            'filter_saturate'   => [ 'saturate', '%', 100, 0, 200 ],
+            'filter_grayscale'  => [ 'grayscale', '%', 0, 0, 100 ],
+            'filter_sepia'      => [ 'sepia', '%', 0, 0, 100 ],
+        ];
+        $parti = [];
+        foreach ( $filtri as $chiave => $f ) {
+            $v = $s[ $chiave ] ?? '';
+            if ( '' === $v || null === $v || ! is_numeric( $v ) ) {
+                continue;
+            }
+            $v = max( $f[3], min( $f[4], (int) round( (float) $v ) ) );
+            if ( $v !== $f[2] ) {
+                $parti[] = $f[0] . '(' . $v . $f[1] . ')';
+            }
+        }
+        return implode( ' ', $parti );
     }
 }

@@ -5,7 +5,7 @@ import { t } from '@/i18n';
 /**
  * Tile Team — split CONTENUTO/STILE.
  *   fields[]      → photo + hover_image/video, nome, ruolo, bio, link (text+url)
- *   styleFields[] → preset, bg, typo, text-effects, foto aspetto, contenitore info, tipografia, tile aspect, filtri
+ *   styleFields[] → preset, bg, typo, text-effects, foto aspetto (+ filtri), contenitore info, tipografia, tile aspect
  */
 export default {
   type: 'team',
@@ -152,6 +152,12 @@ export default {
       legacyKeys: { h: 'photo_shadow_h', v: 'photo_shadow_v', blur: 'photo_shadow_blur', spread: 'photo_shadow_spread', color: 'photo_shadow_color', inset: 'photo_shadow_inset' },
       condition: { field: 'photo_shadow', op: 'eq', value: 'custom' } },
     { key: 'photo_gap', label: t('Gap foto-contenitore'), type: 'range', min: -40, max: 40, step: 4 },
+    // Filtri CSS della foto: stavano in fondo, in una sezione a sé, e nessun renderer li leggeva.
+    // Ora agiscono sulla foto (e sul suo media in hover), quindi stanno nella zona Foto e si
+    // vedono solo quando una foto c'è: sull'avatar disegnato dalla tile non farebbero niente.
+    ...filterFields
+      .filter((f) => f.type !== 'separator')
+      .map((f) => ({ ...f, condition: { field: 'photo', op: 'notEmpty' } })),
 
     { type: 'separator', label: t('Contenitore info') },
     { key: 'info_bg_color', label: t('Sfondo contenitore'), type: 'color' },
@@ -200,6 +206,5 @@ export default {
     withHover({ key: 'border_radius', label: t('Raggio tile'), type: 'border-radius' }),
 
     ...borderFields(),
-    ...filterFields,
   ],
 };
