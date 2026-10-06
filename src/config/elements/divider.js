@@ -67,8 +67,12 @@ export default {
     ]},
     { key: 'spacing', label: t('Spaziatura'), type: 'range', min: 0, max: 80, step: 4 },
 
-    { type: 'separator', label: t('Testo centrale') },
-    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    // La sezione agisce solo se al centro c'è qualcosa; lo «Stile tipografico» solo sul testo
+    // (famiglia, peso, maiuscole, spaziatura: all'icona non arrivano). Con la sola linea, o con
+    // la sola stellina di partenza, si sceglieva uno stile e non cambiava niente.
+    { type: 'separator', label: t('Testo centrale'), show: (s) => !!(s.text || s.icon_emoji) },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography',
+      condition: { field: 'text', op: 'notEmpty' } },
     { type: 'typography', label: t('Testo'), responsiveKeys: [], keys: { size: 'text_size', color: 'text_color' }, sizeMin: 10, sizeMax: 32 },
 
     ...borderFields(),

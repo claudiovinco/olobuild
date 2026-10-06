@@ -84,7 +84,9 @@ ob_start();
         } else {
             // solid, dashed, dotted, double
             $radius = $thick > 1 ? 'border-radius:' . round( $thick / 2 ) . 'px;' : '';
-            echo '<span style="display:block;width:' . (int) $w . '%;border:none;border-top:' . (int) $thick . 'px ' . esc_attr( $style_type ) . ' ' . $line_clr . ';' . $radius . '"></span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $line_clr from the safe_color_css() whitelist (may be a var() token, not esc_attr-safe), $radius built from integer round(); other parts cast/escaped inline
+            // Lo style passa intero da esc_attr(): safe_color_css() lascia passare le virgolette nella
+            // riserva di un var() e dentro color-mix(), e un colore così chiudeva l'attributo.
+            echo '<span style="' . esc_attr( 'display:block;width:' . (int) $w . '%;border:none;border-top:' . (int) $thick . 'px ' . $style_type . ' ' . $line_clr . ';' . $radius ) . '"></span>';
         }
 
         echo '</div>';
@@ -129,19 +131,19 @@ ob_start();
 
     private function render_gradient( $w, $thick, $line_clr ) {
         $radius = $thick > 1 ? 'border-radius:' . round( $thick / 2 ) . 'px;' : '';
-        echo '<span style="display:block;width:' . (int) $w . '%;height:' . (int) $thick . 'px;background:linear-gradient(90deg, transparent, ' . $line_clr . ', transparent);' . $radius . '"></span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $line_clr from the safe_color_css() whitelist (may be a var() token, not esc_attr-safe), $radius built from integer round(); widths cast inline
+        echo '<span style="' . esc_attr( 'display:block;width:' . (int) $w . '%;height:' . (int) $thick . 'px;background:linear-gradient(90deg, transparent, ' . $line_clr . ', transparent);' . $radius ) . '"></span>';
     }
 
     private function render_fade( $w, $thick, $line_clr ) {
         $radius = $thick > 1 ? 'border-radius:' . round( $thick / 2 ) . 'px;' : '';
-        echo '<div style="width:' . (int) $w . '%;height:' . (int) $thick . 'px;background:linear-gradient(90deg, transparent, ' . $line_clr . ' 20%, ' . $line_clr . ' 80%, transparent);' . $radius . '"></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $line_clr from the safe_color_css() whitelist (may be a var() token, not esc_attr-safe), $radius built from integer round(); widths cast inline
+        echo '<div style="' . esc_attr( 'width:' . (int) $w . '%;height:' . (int) $thick . 'px;background:linear-gradient(90deg, transparent, ' . $line_clr . ' 20%, ' . $line_clr . ' 80%, transparent);' . $radius ) . '"></div>';
     }
 
     private function render_shadow( $w, $thick, $line_clr ) {
         $blur1 = $thick * 3;
         $blur2 = $thick * 2;
         $radius = $thick > 1 ? 'border-radius:' . round( $thick / 2 ) . 'px;' : '';
-        echo '<div style="width:' . (int) $w . '%;"><div style="height:' . (int) $thick . 'px;background:' . $line_clr . ';box-shadow:0 2px ' . (int) $blur1 . 'px ' . Olobuild_Tile_Utils::con_alfa( $line_clr, '40' ) . ', 0 1px ' . (int) $blur2 . 'px ' . Olobuild_Tile_Utils::con_alfa( $line_clr, '25' ) . ';' . $radius . '"></div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $line_clr from the safe_color_css() whitelist (may be a var() token, not esc_attr-safe), $radius built from integer round(); sizes cast inline
+        echo '<div style="width:' . (int) $w . '%;"><div style="' . esc_attr( 'height:' . (int) $thick . 'px;background:' . $line_clr . ';box-shadow:0 2px ' . (int) $blur1 . 'px ' . Olobuild_Tile_Utils::con_alfa( $line_clr, '40' ) . ', 0 1px ' . (int) $blur2 . 'px ' . Olobuild_Tile_Utils::con_alfa( $line_clr, '25' ) . ';' . $radius ) . '"></div></div>';
     }
 
     private function render_decorative( $style_type, $w, $thick, $line_clr ) {
@@ -176,31 +178,35 @@ ob_start();
             echo '</svg>';
 
         } elseif ( $style_type === 'dots' ) {
+            // Puntini e diamanti erano un <pattern> SVG dentro un viewBox di 1200 stirato con
+            // preserveAspectRatio="none": in ogni colonna più stretta di 1200 px i cerchi diventavano
+            // ovali e i rombi si schiacciavano. E l'id del motivo era lo stesso per tutti i divisori
+            // della pagina: il secondo prendeva il motivo (e il colore) del primo. Ora il motivo è uno
+            // sfondo di misura fissa ripetuto con «space»: forme sempre in proporzione, nessun id, e la
+            // fila comincia e finisce con una forma intera.
             $r = min( $thick, 5 );
-            echo '<svg viewBox="0 0 1200 12" preserveAspectRatio="none" style="width:100%;height:' . (int) max( $svg_h, 12 ) . 'px;display:block;">';
-            echo '<defs><pattern id="olo-dot-' . (int) $this->get_unique_id() . '" x="0" y="0" width="24" height="12" patternUnits="userSpaceOnUse">';
-            echo '<circle cx="6" cy="6" r="' . (int) $r . '" fill="' . esc_attr( $line_clr ) . '"/>';
-            echo '</pattern></defs>';
-            echo '<rect width="1200" height="12" fill="url(#olo-dot-' . (int) $this->get_unique_id() . ')"/>';
-            echo '</svg>';
+            $h = max( $svg_h, 12 );
+            $css = 'display:block;width:100%;height:' . (int) $h . 'px;background-image:radial-gradient(circle closest-side,' . $line_clr . ' calc(100% - 0.5px),transparent 100%);background-size:24px ' . (int) ( 2 * $r ) . 'px;background-position:center;background-repeat:space no-repeat;';
+            echo '<span aria-hidden="true" style="' . esc_attr( $css ) . '"></span>';
 
         } elseif ( $style_type === 'diamonds' ) {
-            echo '<svg viewBox="0 0 1200 16" preserveAspectRatio="none" style="width:100%;height:' . (int) max( $svg_h, 16 ) . 'px;display:block;">';
-            echo '<defs><pattern id="olo-dia-' . (int) $this->get_unique_id() . '" x="0" y="0" width="28" height="16" patternUnits="userSpaceOnUse">';
-            echo '<polygon points="14,1 27,8 14,15 1,8" fill="none" stroke="' . esc_attr( $line_clr ) . '" stroke-width="' . (int) max( $thick, 1 ) . '"/>';
-            echo '</pattern></defs>';
-            echo '<rect width="1200" height="16" fill="url(#olo-dia-' . (int) $this->get_unique_id() . ')"/>';
-            echo '</svg>';
+            // Il rombo si disegna con una maschera (il colore resta un token CSS, che dentro un'immagine
+            // SVG non si risolverebbe): cella 28×16 scalata all'altezza della riga, come prima.
+            // Il tratto è in px veri (Spessore) e il rombo rientra di mezzo tratto con giunti tondi:
+            // a tratto pari allo spessore in unità della cella, da 4 in su punte e lati uscivano dalla
+            // cella e venivano tagliati (esagoni, poi ottagoni pieni). sprintf %F: punto decimale
+            // anche con un locale che usa la virgola.
+            $h      = max( $svg_h, 16 );
+            $cell_w = (int) round( 28 * $h / 16 );
+            $sw     = max( $thick, 1 ) * 16 / $h;
+            $a      = $sw / 2 + 0.5;
+            $punti  = sprintf( '14,%1$.2F %2$.2F,8 14,%3$.2F %1$.2F,8', $a, 28 - $a, 16 - $a );
+            $rombo  = "<svg xmlns='http://www.w3.org/2000/svg' width='28' height='16' viewBox='0 0 28 16'><polygon points='" . $punti . "' fill='none' stroke='black' stroke-width='" . sprintf( '%.2F', $sw ) . "' stroke-linejoin='round'/></svg>";
+            $mask   = 'url(data:image/svg+xml,' . rawurlencode( $rombo ) . ') center/' . $cell_w . 'px ' . (int) $h . 'px space no-repeat';
+            $css    = 'display:block;width:100%;height:' . (int) $h . 'px;background:' . $line_clr . ';-webkit-mask:' . $mask . ';mask:' . $mask . ';';
+            echo '<span aria-hidden="true" style="' . esc_attr( $css ) . '"></span>';
         }
 
         echo '</div>';
-    }
-
-    private $unique_counter = 0;
-    private function get_unique_id() {
-        if ( ! $this->unique_counter ) {
-            $this->unique_counter = wp_rand( 1000, 9999 );
-        }
-        return $this->unique_counter;
     }
 }
