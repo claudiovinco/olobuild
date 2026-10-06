@@ -67,6 +67,12 @@ class Olobuild_Facebookpage_Tile extends Olobuild_Tile_Base {
         $flex_map  = [ 'left' => 'flex-start', 'center' => 'center', 'right' => 'flex-end' ];
         $flex_just = $flex_map[ $alignment ] ?? 'center';
 
+        // «Adatta al contenitore»: l'SDK misura la larghezza del .fb-page quando lo legge, ma
+        // dentro il flex (che serve all'allineamento) era un elemento vuoto largo 0 px, e la
+        // pagina usciva sempre alla Larghezza piena, oltre il contenitore. Largo quanto il
+        // contenitore fino alla Larghezza scelta, l'SDK ha una misura vera da adattare.
+        $fb_style = 'true' === $adapt_container ? 'width:100%;max-width:' . (int) $width . 'px;' : '';
+
         ob_start();
         ?>
         <div class="olo-facebookpage <?php echo esc_attr( $uid ); ?>" style="display:flex;justify-content:<?php echo esc_attr( $flex_just ); ?>;">
@@ -79,6 +85,7 @@ class Olobuild_Facebookpage_Tile extends Olobuild_Tile_Base {
                 <div id="fb-root"></div>
                 <div
                     class="fb-page"
+                    <?php if ( $fb_style ) : ?>style="<?php echo esc_attr( $fb_style ); ?>"<?php endif; ?>
                     data-href="<?php echo esc_url( $page_url ); ?>"
                     data-tabs="<?php echo esc_attr( $tabs ); ?>"
                     data-width="<?php echo esc_attr( $width ); ?>"
