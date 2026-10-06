@@ -733,9 +733,13 @@ class Olobuild_Frontend_Renderer {
             return $html;
         }
 
-        // Fixed/sticky positioned tiles: placeholder won't be in viewport flow
+        // Fixed/sticky positioned tiles: placeholder won't be in viewport flow.
+        // Anche «Scroll fisso» (advanced.sticky, storicamente settings.sticky): lo sticky resta fermo solo
+        // dentro il genitore diretto, e il div del lazy è alto quanto la tile → non restava fermo affatto.
+        // Il wrapper che porta position: sticky è il primo tag dell'html della tile.
         $pos = $advanced['position_mode'] ?? 'static';
-        if ( in_array( $pos, [ 'fixed', 'sticky' ], true ) ) {
+        if ( in_array( $pos, [ 'fixed', 'sticky' ], true ) || ! empty( $advanced['sticky'] )
+            || preg_match( '/^\s*<[^>]*\bposition:\s*sticky/', $html ) ) {
             return $html;
         }
 
