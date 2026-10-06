@@ -3,6 +3,12 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.563 - 2026-10-06 (fix)
+- Blocchi & Pagine: la finestra ha i colori chiari del resto del builder, con titolo, card, filtro e dialoghi (salva, elimina, inserisci pagina) leggibili. Prima mescolava parti chiare e parti scure e il titolo era bianco su bianco. Se la libreria non si può caricare, la finestra dice perché invece di «Nessun template trovato».
+- Cerca: il campo di ricerca non ha più il bordo blu di WordPress.
+- Temi: se l'elenco dei temi non arriva, la finestra mostra il motivo. Prima restava su «Caricamento temi…» per sempre.
+- Siti con l'importazione disattivata: il blocco vale di nuovo anche con il nome di impostazione usato prima della 1.4.301 (`OLO_DISABLE_IMPORTS`). Con il solo nome nuovo si era spento e nel builder ricomparivano i pulsanti Temi e Importa.
+
 ## v1.4.562 - 2026-10-06 (fix)
 - Luce di pagina: nelle pagine che la usano tornano a funzionare le regole che adattano le tile alla larghezza dello schermo, come «Impila su mobile» delle colonne interne. Prima la Luce le spegneva e sul telefono le colonne interne restavano affiancate.
 
