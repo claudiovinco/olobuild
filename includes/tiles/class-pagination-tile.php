@@ -94,7 +94,29 @@ class Olobuild_Pagination_Tile extends Olobuild_Tile_Base {
         $active_bg       = $this->safe_color_css( $s['active_background'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $hover_bg        = $this->safe_color_css( $s['hover_background'] );
         $hover_bg_dur    = Olobuild_Tile_Utils::durata_hover( $s, 'background_color_hover_duration', '0.2s' );
-        $border_color    = $this->safe_color_css( $s['border_color'] ?: '#e5e7eb' );
+        $border_color    = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #e5e7eb)';
+
+        // Bordo dei PULSANTI. Il controllo «Bordo pulsanti» salva su `button_border` (4 lati e
+        // stile) e il ponte legacy ricopia spessore e colore su border_width/border_color, che i
+        // preset scrivono direttamente. Prima salvava sulla chiave `border`, la stessa del bordo
+        // del contenitore (borderFields): un bordo scelto per i pulsanti incorniciava anche
+        // l'intera paginazione. L'oggetto vale finché è in pari con le chiavi storiche: un
+        // preset applicato dopo le cambia, e allora vincono loro.
+        $btn_border  = $s['button_border'] ?? null;
+        $btn_in_pari = false;
+        if ( is_array( $btn_border ) && Olobuild_Tile_Utils::border_is_set( $btn_border ) ) {
+            $btn_max     = max( intval( $btn_border['top'] ?? 0 ), intval( $btn_border['right'] ?? 0 ), intval( $btn_border['bottom'] ?? 0 ), intval( $btn_border['left'] ?? 0 ) );
+            $btn_in_pari = $btn_max === absint( $s['border_width'] )
+                && trim( (string) ( $btn_border['color'] ?? '' ) ) === trim( (string) $s['border_color'] );
+        }
+        if ( $btn_in_pari ) {
+            if ( '' === trim( (string) ( $btn_border['color'] ?? '' ) ) ) {
+                $btn_border['color'] = $border_color;
+            }
+            $btn_border_css = Olobuild_Tile_Utils::border_css( $btn_border );
+        } else {
+            $btn_border_css = $bw > 0 ? 'border:' . $bw . 'px solid ' . $border_color . ';' : '';
+        }
 
         // Alignment map
         $align_map = [ 'left' => 'flex-start', 'center' => 'center', 'right' => 'flex-end' ];
@@ -112,7 +134,7 @@ class Olobuild_Pagination_Tile extends Olobuild_Tile_Base {
 
             ob_start();
             $this->render_styles( $uid, $justify, $gap, $font_size, $radius, $bw, $padding_css,
-                $text_color, $bg_color, $border_color, $active_text, $active_bg, $hover_bg, $radius_hover_css, $hover_bg_dur );
+                $text_color, $bg_color, $border_color, $active_text, $active_bg, $hover_bg, $radius_hover_css, $hover_bg_dur, $btn_border_css );
             ?>
             <nav class="olo-pagination <?php echo esc_attr( $uid ); ?> olo-pg-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" role="navigation" aria-label="<?php echo esc_attr( olobuild_t( 'Paginazione' ) ); ?>">
             <?php
@@ -180,7 +202,7 @@ class Olobuild_Pagination_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         $this->render_styles( $uid, $justify, $gap, $font_size, $radius, $bw, $padding_css,
-            $text_color, $bg_color, $border_color, $active_text, $active_bg, $hover_bg, $radius_hover_css, $hover_bg_dur );
+            $text_color, $bg_color, $border_color, $active_text, $active_bg, $hover_bg, $radius_hover_css, $hover_bg_dur, $btn_border_css );
         ?>
         <nav class="olo-pagination <?php echo esc_attr( $uid ); ?>" role="navigation" aria-label="<?php echo esc_attr( olobuild_t( 'Paginazione' ) ); ?>">
         <?php
@@ -267,9 +289,14 @@ class Olobuild_Pagination_Tile extends Olobuild_Tile_Base {
      * `border-radius: !important` — una dichiarazione che il browser scarta. Il
      * raggio in evidenza impostato dal docente non si e' mai visto.
      * $hover_bg_dur: la «Durata» dello Sfondo pulsanti in hover (durata_hover()).
+     * $btn_border_css: il bordo dei pulsanti già composto in render() (Bordo pulsanti o chiavi
+     * storiche); null = solo le chiavi storiche, come prima.
      */
     private function render_styles( $uid, $justify, $gap, $font_size, $radius, $bw, $padding_css,
-        $text_color, $bg_color, $border_color, $active_text, $active_bg, $hover_bg, $radius_hover_css = '', $hover_bg_dur = '0.2s' ) {
+        $text_color, $bg_color, $border_color, $active_text, $active_bg, $hover_bg, $radius_hover_css = '', $hover_bg_dur = '0.2s', $btn_border_css = null ) {
+        if ( null === $btn_border_css ) {
+            $btn_border_css = $bw > 0 ? 'border:' . (int) $bw . 'px solid ' . $border_color . ';' : '';
+        }
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized in render(): colors via the safe_color_css() whitelist (with token fallbacks), integers via absint() with min()/max() clamps, alignment from a fixed map, padding/radius via absint() parts and Olobuild_Tile_Utils helpers; $uid is internally generated. ?>
         <style>
@@ -300,7 +327,8 @@ class Olobuild_Pagination_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-pagination-link {
                 <?php if ( $text_color ) : ?>color: <?php echo $text_color; ?>;<?php endif; ?>
                 <?php if ( $bg_color ) : ?>background: <?php echo $bg_color; ?>;<?php else : ?>background: transparent;<?php endif; ?>
-                <?php if ( $bw > 0 ) : ?>border: <?php echo (int) $bw; ?>px solid <?php echo $border_color; ?>;<?php else : ?>border: none;<?php endif; ?>
+                border: none;
+                <?php echo $btn_border_css; ?>
                 cursor: pointer;
             }
             <?php if ( $hover_bg ) : ?>
@@ -315,7 +343,10 @@ class Olobuild_Pagination_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-pagination-current {
                 color: <?php echo $active_text; ?>;
                 background: <?php echo $active_bg; ?>;
-                border: <?php echo (int) $bw; ?>px solid <?php echo $active_bg; ?>;
+                <?php // Stessi lati e stile dei pulsanti, nel colore della pagina attiva. ?>
+                border: none;
+                <?php echo $btn_border_css; ?>
+                border-color: <?php echo $active_bg; ?>;
                 font-weight: 600;
                 cursor: default;
             }
