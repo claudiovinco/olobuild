@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.562 - 2026-10-06 (fix)
+- Luce di pagina: nelle pagine che la usano tornano a funzionare le regole che adattano le tile alla larghezza dello schermo, come «Impila su mobile» delle colonne interne. Prima la Luce le spegneva e sul telefono le colonne interne restavano affiancate.
+
 ## v1.4.561 - 2026-10-06 (fix)
 - Avanzate: lo «Scroll fisso» funziona su tutte le tile della pagina. Prima funzionava solo sulle prime: le altre, caricate quando arrivano sullo schermo, scorrevano via con il resto.
 
