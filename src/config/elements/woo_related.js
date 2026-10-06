@@ -47,6 +47,11 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
+    // Il prodotto a cui si riferisce: senza, la tile funzionava solo nella scheda di un prodotto.
+    { type: 'separator', label: t('Prodotto') },
+    { key: 'product_id', label: t('ID prodotto'), type: 'number', min: 0, step: 1,
+      description: t("Il prodotto a cui si riferisce la tile, per usarla fuori dalla sua scheda (una pagina di lancio). L'ID si legge in Prodotti, passando sul nome. Vuoto o 0 = il prodotto della pagina.") },
+
     { type: 'separator', label: t('Intestazione') },
     { key: 'show_heading', label: t('Mostra titolo sezione'), type: 'toggle' },
     { key: 'heading_text', label: t('Testo titolo'), type: 'text', condition: { field: 'show_heading', value: true } },
