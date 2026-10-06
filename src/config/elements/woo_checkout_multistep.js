@@ -36,7 +36,8 @@ export default {
     // Una etichetta per RUOLO, non per posizione: la 2ª (Spedizione) sparisce col suo passo
     // quando il carrello non chiede un indirizzo; dalla 4ª in poi non si usano.
     { key: 'step_labels', label: t('Etichette passi: dati, spedizione, pagamento (virgola)'), type: 'text' },
-    { key: 'show_order_review', label: t('Mostra riepilogo ordine'), type: 'toggle' },
+    { key: 'show_order_review', label: t('Mostra riepilogo ordine'), type: 'toggle',
+      description: t("Spento: nel passo del pagamento non c'è l'elenco dei prodotti. I totali restano, con la scelta della spedizione e il totale da pagare.") },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -74,6 +75,7 @@ export default {
 
     { type: 'separator', label: t('Colori') },
     { key: 'accent_color', label: t('Colore accento'), type: 'color' },
+    // Il passo in corso; l'accento colora i passi già fatti, «Continua» e il focus.
     { key: 'active_color', label: t('Colore step attivo'), type: 'color' },
     { key: 'step_bg', label: t('Sfondo step'), type: 'color' },
 

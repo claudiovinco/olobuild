@@ -59,12 +59,23 @@ class Olobuild_Woo_Checkout_Multistep_Tile extends Olobuild_Tile_Base {
         $uid = 'olo-woo-ms-' . wp_rand( 10000, 99999 );
 
         $accent  = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        // Il colore del passo in corso: calcolato da sempre e mai usato, il passo attivo prendeva
+        // l'accento. Ora l'attivo è suo, l'accento resta ai passi fatti, a «Continua» e al focus.
         $active  = $this->safe_color_css( $s['active_color'] ) ?: $accent;
         $text_c  = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #1f2937)';
         $step_bg = $this->safe_color_css( $s['step_bg'] ) ?: 'var(--olo-color-surface-alt, #f6f7f9)';
         $on_c    = 'var(--olo-color-on-primary, #ffffff)';
         $radius  = Olobuild_Tile_Utils::border_radius( $s['card_radius'] ?? 0 );
         $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['card_radius_hover'] ?? null );
+
+        // «Stile step» (barra, schede, numeri) era nell'inspector ma il PHP disegnava sempre la
+        // barra. L'aspetto dei passi ora sta nel CSS di ogni stile e nelle classi di stato
+        // (olo-wms-active / olo-wms-done) che lo script cambia: prima lo script scriveva a mano
+        // sfondo e colore, e i pallini dei numeri restavano quelli del primo giro.
+        $step_style  = in_array( $s['step_style'], [ 'progress', 'tabs', 'numbered' ], true ) ? $s['step_style'] : 'progress';
+        // «Mostra riepilogo ordine» spento: via l'elenco dei prodotti (titolo «Il tuo ordine» e
+        // righe), restano i totali, che portano la scelta della spedizione e il totale da pagare.
+        $show_review = filter_var( $s['show_order_review'], FILTER_VALIDATE_BOOLEAN );
 
         // Passi per RUOLO, non per posizione: 1ª etichetta = dati, 2ª = spedizione,
         // 3ª = riepilogo e pagamento (#order_review intero: #payment e «Effettua ordine»
@@ -85,14 +96,14 @@ class Olobuild_Woo_Checkout_Multistep_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-woo-multistep" style="color:<?php echo $text_c; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- safe_color_css() whitelisted color or fixed var() fallback ?>">
+        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-woo-multistep olo-wms-s-<?php echo esc_attr( $step_style ); ?>" style="color:<?php echo $text_c; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- safe_color_css() whitelisted color or fixed var() fallback ?>">
 
             <!-- Progress Steps -->
             <div class="olo-wms-progress" style="display:flex;justify-content:center;gap:0;margin-bottom:30px">
                 <?php foreach ( array_keys( $parts ) as $i => $part ) : ?>
-                <div class="olo-wms-step<?php echo $i === 0 ? ' olo-wms-active' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal class ternary; colors via safe_color_css() with fixed fallbacks; radius absint-built by Olobuild_Tile_Utils::border_radius() ?>" data-step="<?php echo (int) $i; ?>" data-part="<?php echo esc_attr( $part ); ?>" data-live="<?php echo esc_attr( sprintf( olobuild_t( 'Passo %1$d di %2$d: %3$s' ), $i + 1, $last + 1, $parts[ $part ] ) ); ?>" role="button" tabindex="0"<?php echo $i === 0 ? ' aria-current="step"' : ''; ?> style="flex:1;text-align:center;padding:12px 16px;position:relative;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;background:<?php echo $i === 0 ? $accent : $step_bg; ?>;color:<?php echo $i === 0 ? $on_c : $text_c; ?>;<?php if ( $i === 0 ) echo 'border-radius:' . $radius . ';border-top-right-radius:0;border-bottom-right-radius:0;'; elseif ( $i === $last ) echo 'border-radius:' . $radius . ';border-top-left-radius:0;border-bottom-left-radius:0;'; ?>">
-                    <span class="olo-wms-num" style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:<?php echo $i === 0 ? 'color-mix(in srgb, var(--olo-color-on-primary, #ffffff) 30%, transparent)' : 'var(--olo-color-border, #E5E7EB)'; ?>;font-size:12px;margin-right:6px"><?php echo (int) ( $i + 1 ); ?></span>
-                    <?php echo esc_html( $parts[ $part ] ); ?>
+                <div class="olo-wms-step<?php echo $i === 0 ? ' olo-wms-active' : ''; ?>" data-step="<?php echo (int) $i; ?>" data-part="<?php echo esc_attr( $part ); ?>" data-live="<?php echo esc_attr( sprintf( olobuild_t( 'Passo %1$d di %2$d: %3$s' ), $i + 1, $last + 1, $parts[ $part ] ) ); ?>" role="button" tabindex="0"<?php echo $i === 0 ? ' aria-current="step"' : ''; ?>>
+                    <span class="olo-wms-num"><?php echo (int) ( $i + 1 ); ?></span>
+                    <span class="olo-wms-label"><?php echo esc_html( $parts[ $part ] ); ?></span>
                 </div>
                 <?php endforeach; ?>
             </div>
@@ -122,8 +133,33 @@ class Olobuild_Woo_Checkout_Multistep_Tile extends Olobuild_Tile_Base {
             #<?php echo $uid; ?> #payment,
             #<?php echo $uid; ?> .woocommerce-checkout-review-order{background:<?php echo $step_bg; ?>;padding:24px;border-radius:<?php echo $radius; ?>;margin-bottom:20px;transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}
             <?php if ( $radius_hover_css !== '' ) : ?>#<?php echo $uid; ?> .woocommerce-billing-fields:hover,#<?php echo $uid; ?> .woocommerce-shipping-fields:hover,#<?php echo $uid; ?> #payment:hover,#<?php echo $uid; ?> .woocommerce-checkout-review-order:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
+            <?php if ( ! $show_review ) : ?>#<?php echo $uid; ?> #order_review_heading,#<?php echo $uid; ?> .woocommerce-checkout-review-order-table thead,#<?php echo $uid; ?> .woocommerce-checkout-review-order-table tbody{display:none}<?php endif; ?>
+            #<?php echo $uid; ?> .olo-wms-step{flex:1;text-align:center;position:relative;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;color:<?php echo $text_c; ?>}
+            #<?php echo $uid; ?> .olo-wms-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--olo-color-border, #E5E7EB);font-size:12px;margin-right:6px;transition:all .2s}
             #<?php echo $uid; ?> .olo-wms-step:hover{opacity:.85}
-            #<?php echo $uid; ?> .olo-wms-step.olo-wms-done{background:<?php echo $accent; ?>;opacity:.6;color:<?php echo $on_c; ?>}
+<?php // Barra: segmenti pieni fino al passo in corso, angoli arrotondati solo agli estremi. Colonna 0 + chiusura: la riga non scrive nulla. ?>
+            #<?php echo $uid; ?>.olo-wms-s-progress .olo-wms-step{padding:12px 16px;background:<?php echo $step_bg; ?>}
+            #<?php echo $uid; ?>.olo-wms-s-progress .olo-wms-step:first-child{border-radius:<?php echo $radius; ?>;border-top-right-radius:0;border-bottom-right-radius:0}
+            #<?php echo $uid; ?>.olo-wms-s-progress .olo-wms-step:last-child{border-radius:<?php echo $radius; ?>;border-top-left-radius:0;border-bottom-left-radius:0}
+            #<?php echo $uid; ?>.olo-wms-s-progress .olo-wms-step.olo-wms-active{background:<?php echo $active; ?>;color:<?php echo $on_c; ?>}
+            #<?php echo $uid; ?>.olo-wms-s-progress .olo-wms-step.olo-wms-done{background:<?php echo $accent; ?>;opacity:.6;color:<?php echo $on_c; ?>}
+            #<?php echo $uid; ?>.olo-wms-s-progress .olo-wms-active .olo-wms-num,#<?php echo $uid; ?>.olo-wms-s-progress .olo-wms-done .olo-wms-num{background:color-mix(in srgb, var(--olo-color-on-primary, #ffffff) 30%, transparent)}
+<?php // Schede: una linea sotto, il passo in corso sottolineato nel suo colore, i fatti col numero pieno. ?>
+            #<?php echo $uid; ?>.olo-wms-s-tabs .olo-wms-progress{border-bottom:2px solid var(--olo-color-border, #E5E7EB)}
+            #<?php echo $uid; ?>.olo-wms-s-tabs .olo-wms-step{padding:12px 16px;margin-bottom:-2px;border-bottom:2px solid transparent;color:color-mix(in srgb, <?php echo $text_c; ?> 65%, transparent)}
+            #<?php echo $uid; ?>.olo-wms-s-tabs .olo-wms-step.olo-wms-active{color:<?php echo $active; ?>;border-bottom-color:<?php echo $active; ?>}
+            #<?php echo $uid; ?>.olo-wms-s-tabs .olo-wms-step.olo-wms-done{color:<?php echo $text_c; ?>}
+            #<?php echo $uid; ?>.olo-wms-s-tabs .olo-wms-active .olo-wms-num{background:<?php echo $active; ?>;color:<?php echo $on_c; ?>}
+            #<?php echo $uid; ?>.olo-wms-s-tabs .olo-wms-done .olo-wms-num{background:<?php echo $accent; ?>;color:<?php echo $on_c; ?>}
+<?php // Numeri: cerchi uniti da una linea, l'etichetta sotto; linea e cerchi colorati fino al passo in corso. ?>
+            #<?php echo $uid; ?>.olo-wms-s-numbered .olo-wms-step{display:flex;flex-direction:column;align-items:center;gap:8px;padding:0 8px;color:color-mix(in srgb, <?php echo $text_c; ?> 65%, transparent)}
+            #<?php echo $uid; ?>.olo-wms-s-numbered .olo-wms-num{position:relative;z-index:1;box-sizing:border-box;width:36px;height:36px;margin:0;font-size:14px;background:var(--olo-color-background, #FFFFFF);border:2px solid var(--olo-color-border, #E5E7EB);color:<?php echo $text_c; ?>}
+            #<?php echo $uid; ?>.olo-wms-s-numbered .olo-wms-step::before{content:"";position:absolute;top:17px;left:calc(-50% + 18px);right:calc(50% + 18px);height:2px;background:var(--olo-color-border, #E5E7EB);transition:background .2s}
+            #<?php echo $uid; ?>.olo-wms-s-numbered .olo-wms-step:first-child::before{content:none}
+            #<?php echo $uid; ?>.olo-wms-s-numbered .olo-wms-step.olo-wms-active,#<?php echo $uid; ?>.olo-wms-s-numbered .olo-wms-step.olo-wms-done{color:<?php echo $text_c; ?>}
+            #<?php echo $uid; ?>.olo-wms-s-numbered .olo-wms-step.olo-wms-active::before,#<?php echo $uid; ?>.olo-wms-s-numbered .olo-wms-step.olo-wms-done::before{background:<?php echo $accent; ?>}
+            #<?php echo $uid; ?>.olo-wms-s-numbered .olo-wms-active .olo-wms-num{background:<?php echo $active; ?>;border-color:<?php echo $active; ?>;color:<?php echo $on_c; ?>}
+            #<?php echo $uid; ?>.olo-wms-s-numbered .olo-wms-done .olo-wms-num{background:<?php echo $accent; ?>;border-color:<?php echo $accent; ?>;color:<?php echo $on_c; ?>}
             #<?php echo $uid; ?> .olo-wms-nav{display:flex;justify-content:space-between;gap:12px;margin-top:20px}
             #<?php echo $uid; ?> .olo-wms-nav[hidden],#<?php echo $uid; ?> .olo-wms-nav button[hidden]{display:none}
             #<?php echo $uid; ?> .olo-wms-nav button{padding:10px 24px;border-radius:6px;cursor:pointer}
@@ -145,7 +181,6 @@ class Olobuild_Woo_Checkout_Multistep_Tile extends Olobuild_Tile_Base {
             var steps=wrap.querySelectorAll('.olo-wms-step');
             var live=wrap.querySelector('.olo-wms-live');
             if(!bar||!nav||!prev||!next||!steps.length)return;
-            var ACC='<?php echo esc_js( $accent ); ?>',BG='<?php echo esc_js( $step_bg ); ?>',TXT='<?php echo esc_js( $text_c ); ?>',ON='<?php echo esc_js( $on_c ); ?>';
             var parts=[];
             steps.forEach(function(s){parts.push(s.getAttribute('data-part'))});
             var hasShip=parts.indexOf('shipping')!==-1;
@@ -178,8 +213,6 @@ class Olobuild_Woo_Checkout_Multistep_Tile extends Olobuild_Tile_Base {
                     s.classList.remove('olo-wms-active','olo-wms-done');
                     if(i===idx){s.classList.add('olo-wms-active');s.setAttribute('aria-current','step')}
                     else{s.removeAttribute('aria-current');if(i<idx){s.classList.add('olo-wms-done')}}
-                    s.style.background=i<=idx?ACC:BG;
-                    s.style.color=i<=idx?ON:TXT;
                 });
                 bar.style.display='flex';
                 nav.hidden=false;
