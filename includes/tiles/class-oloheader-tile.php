@@ -707,7 +707,7 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
                     <svg width="19" height="19" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.7"/><path d="m14 14 3.5 3.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
                   </button>
                   <div class="olo-sh-panel olo-sh-search-panel" id="<?php echo esc_attr( $sp_id ); ?>" data-panel="search" role="dialog" aria-label="<?php echo esc_attr__( 'Cerca nel sito', 'olobuild' ); ?>">
-                    <form class="olo-sh-search-field" action="<?php echo esc_url( $s['search_url'] ?: '/' ); ?>" method="get" role="search">
+                    <form class="olo-sh-search-field olo-casella" action="<?php echo esc_url( $s['search_url'] ?: '/' ); ?>" method="get" role="search">
                       <svg class="olo-sh-sfic" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.7"/><path d="m14 14 3.5 3.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
                       <input type="search" name="s" data-search-input placeholder="<?php echo esc_attr( $s['search_placeholder'] ); ?>" aria-label="<?php echo esc_attr( $s['search_placeholder'] ); ?>" />
                       <kbd>Esc</kbd>
