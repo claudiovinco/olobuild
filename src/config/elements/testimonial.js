@@ -1,10 +1,10 @@
-import { textEffectsFields, textEffectsDefaults, filterFields, filterDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, focalField } from './_shared.js';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, focalField } from './_shared.js';
 import { t } from '@/i18n';
 
 /**
  * Tile Testimonial — split CONTENUTO/STILE.
  *   fields[]      → quote, author, role, avatar, rating, items multiple, layout (single/carousel/grid) + autoplay/dots/arrows
- *   styleFields[] → preset, bg, typo, text-effects, colori, linea decorativa, posizione testimone, avatar aspetto/ombra/bordo/filtro, radius card, bordo, filtri
+ *   styleFields[] → preset, bg, typo, text-effects, colori, linea decorativa, posizione testimone, avatar aspetto/ombra/bordo/filtro, radius card, bordo
  */
 export default {
   type: 'testimonial',
@@ -15,7 +15,6 @@ export default {
     bg: { type: 'none' },
     typography_preset: '',
     preset: 'custom',
-    ...filterDefaults,
     quote: t('Un prodotto fantastico!'),
     logo: '',
     author_name: t('Mario Rossi'),
@@ -227,7 +226,8 @@ export default {
     ),
 
     ...borderFields(),
-    ...filterFields,
+    // Niente «Filtri CSS» (sfocatura, luminosità…): nessun renderer li leggeva, e l'unica immagine
+    // su cui avrebbero senso, l'avatar, ha già il suo «Filtro avatar» qui sopra.
     { type: 'separator', label: t('Disposizione') },
     { key: 'layout', label: t('Layout'), type: 'select', options: [
       { value: 'single', label: t('Singola') },

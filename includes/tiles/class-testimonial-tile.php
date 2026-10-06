@@ -126,7 +126,7 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
     }
 
     private function render_common_styles( $uid, $bg, $fg, $line_col, $show_line, $is_bottom, $position, $av_size, $av_radius, $tile_radius, $tile_radius_hover_css, $bottom_jc, $s ) {
-        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized in render() (safe_color_css() whitelist for colors, intval() ints, Olobuild_Tile_Utils border_radius/radius_force_css/shadow/focal_pos helpers, fixed literal maps/ternaries) and the internally generated $uid.
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized in render() (safe_color_css() whitelist for colors, intval() ints, resolve_font_family() whitelist for the quote font, Olobuild_Tile_Utils border_radius/radius_force_css/shadow/focal_pos helpers, fixed literal maps/ternaries) and the internally generated $uid.
         ?>
         <style>
             .<?php echo $uid; ?> .olo-test-card {
@@ -162,8 +162,17 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
                 display: flex;
                 gap: 2px;
             }
+            <?php
+            // Misura, font e maiuscolo della citazione (controllo «Citazione» in Tipografia): li
+            // leggeva solo l'Editoriale, qui restavano 1.1em, il font del testo e il minuscolo.
+            // 0 / 'inherit' = la resa di sempre.
+            $q_size   = intval( $s['quote_size'] ?? 0 );
+            $q_family = $this->resolve_font_family( $s['quote_font'] ?? '', $this->font_storici_citazione() );
+            ?>
             .<?php echo $uid; ?> blockquote {
-                font-size: 1.1em;
+                font-size: <?php echo $q_size > 0 ? $q_size . 'px' : '1.1em'; ?>;
+                <?php if ( $q_family !== '' && $q_family !== 'inherit' ) : ?>font-family: <?php echo $q_family; ?>;<?php endif; ?>
+                <?php if ( ! empty( $s['quote_uppercase'] ) ) : ?>text-transform: uppercase;<?php endif; ?>
                 font-style: italic;
                 margin: 0;
                 line-height: 1.6;
@@ -205,14 +214,22 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
             }
             <?php // Raggio avatar in hover: vale per l'avatar quadrato, come il raggio base (il tondo resta tondo). ?>
             <?php if ( ( $s['avatar_shape'] ?? '' ) === 'square' ) echo Olobuild_Tile_Utils::radius_hover_rules( ".{$uid} .olo-test-author img", $s, 'avatar_radius_hover' ); ?>
+            <?php
+            // Colore e maiuscolo dell'autore (controllo «Autore»): come per la citazione, valevano
+            // solo nell'Editoriale. Nome e ruolo insieme, come lì; il ruolo resta attenuato.
+            $auth_fg    = $this->safe_color_css( $s['author_color'] ?? '' ) ?: $fg;
+            $auth_upper = ! empty( $s['author_uppercase'] );
+            ?>
             .<?php echo $uid; ?> .olo-test-author-name {
                 font-weight: 600;
-                color: <?php echo $fg; ?>;
+                color: <?php echo $auth_fg; ?>;
+                <?php if ( $auth_upper ) : ?>text-transform: uppercase;<?php endif; ?>
             }
             .<?php echo $uid; ?> .olo-test-author-role {
                 font-size: 0.875em;
                 opacity: 0.7;
-                color: <?php echo $fg; ?>;
+                color: <?php echo $auth_fg; ?>;
+                <?php if ( $auth_upper ) : ?>text-transform: uppercase;<?php endif; ?>
             }
             <?php if ( ! $is_bottom ) : ?>
             .<?php echo $uid; ?> .olo-test-layout {
@@ -252,15 +269,18 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
 
     /* Layout EDITORIALE: centrato — stelle · citazione serif (con <em> accento) · autore "Nome · Ruolo" */
     private function render_editorial( $uid, $s, $star_color ) {
-        $fg      = $this->safe_color_css( $s['text_color'] ?? '' ) ?: 'var(--olo-color-light, #f6e9ec)';
-        $accent  = $this->safe_color_css( $s['quote_accent_color'] ?? '' ) ?: 'var(--olo-color-primary, #e7a0b4)';
+        // Le riserve erano i rosa del tema da cui il layout veniva (#f6e9ec, #e7a0b4): dove un
+        // token manca la citazione usciva rosata. Ora sono quelle della Palette: il chiaro
+        // (stessa base di --olo-color-light) e il primario del brand. Il ruolo non cambia: senza
+        // un colore scelto l'Editoriale resta chiaro, com'è nato (su sezione scura).
+        $fg      = $this->safe_color_css( $s['text_color'] ?? '' ) ?: 'var(--olo-color-light, #fdfcfa)';
+        $accent  = $this->safe_color_css( $s['quote_accent_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
         $authclr = $this->safe_color_css( $s['author_color'] ?? '' ) ?: $accent;
         $rating  = absint( $s['rating'] );
         $qfont   = $s['quote_font'] ?? 'inherit';
         // Valori legacy ('heading'/'body') → stack storici della tile;
         // valori nuovi (type 'font-family') → CSS pronto via resolver condiviso.
-        $qlegacy = [ 'heading' => 'var(--olo-font-family-heading, Georgia, serif)', 'body' => 'var(--olo-font-family, -apple-system, sans-serif)' ];
-        $qfam    = $this->resolve_font_family( $qfont, $qlegacy ) ?: 'inherit';
+        $qfam    = $this->resolve_font_family( $qfont, $this->font_storici_citazione() ) ?: 'inherit';
         $qsize   = intval( $s['quote_size'] ?? 0 );
         $qsize_css = $qsize > 0 ? ( $qsize . 'px' ) : 'clamp(24px,3.4vw,40px)';
         $upper   = ! empty( $s['author_uppercase'] );
@@ -448,6 +468,19 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
         }
         $out .= '</div>';
         return $out;
+    }
+
+    /**
+     * Stack storici della citazione per i valori legacy del font ('heading'/'body'): gli stessi
+     * per tutti i layout, così la citazione cambia font allo stesso modo ovunque.
+     *
+     * @return array
+     */
+    private function font_storici_citazione() {
+        return [
+            'heading' => 'var(--olo-font-family-heading, Georgia, serif)',
+            'body'    => 'var(--olo-font-family, -apple-system, sans-serif)',
+        ];
     }
 
     private function parse_items( $raw ) {
