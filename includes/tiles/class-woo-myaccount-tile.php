@@ -46,11 +46,23 @@ class Olobuild_Woo_Myaccount_Tile extends Olobuild_Tile_Base {
 
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
-            return '<p style="color:var(--olo-color-text-muted, #9CA3AF);text-align:center;padding:40px">WooCommerce non attivo</p>';
+            return '<p style="color:var(--olo-color-text-muted, #9CA3AF);text-align:center;padding:40px">' . esc_html( olobuild_t( 'WooCommerce non attivo' ) ) . '</p>';
         }
 
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'olo-wma-' . wp_rand( 10000, 99999 );
+
+        // Chi non ha fatto l'accesso non vede navigazione e contenuto dell'area clienti ma il modulo
+        // d'accesso (con la registrazione, o il recupero password). I colori puntavano solo a
+        // .woocommerce-MyAccount-content: per i visitatori nessuno agiva e «Accedi» restava il
+        // pulsante nudo del browser. I moduli prendono la stessa veste del contenuto.
+        $pannelli = static function ( $uid, $dopo = '' ) {
+            $out = [];
+            foreach ( [ '.woocommerce-MyAccount-content', 'form.woocommerce-form-login', 'form.woocommerce-form-register', 'form.woocommerce-ResetPassword' ] as $p ) {
+                $out[] = "#{$uid} {$p}{$dopo}";
+            }
+            return implode( ',', $out );
+        };
 
         $layout    = in_array( $s['layout'], [ 'default', 'tabs', 'sidebar' ], true ) ? $s['layout'] : 'default';
         $sb_bg     = $this->safe_color_css( $s['sidebar_bg'] ) ?: 'var(--olo-color-surface-alt, #f6f7f9)';
@@ -65,13 +77,13 @@ class Olobuild_Woo_Myaccount_Tile extends Olobuild_Tile_Base {
         $btn_c     = $this->safe_color_css( $s['button_color'] ) ?: 'var(--olo-color-on-primary, #ffffff)';
         $bdr_c     = Olobuild_Tile_Utils::border_color( $s['border_color'] ?? null, 'var(--olo-color-border, #e5e7eb)' );
         $radius_raw = max( 0, Olobuild_Tile_Utils::radius_int( $s['border_radius'] ) );
-        $radius    = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius    = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 ) ?: '0'; // 0 = angoli vivi (vuoto usciva «border-radius:;», scartato)
         $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $avatar_sz = max( 32, intval( $s['avatar_size'] ) );
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist (or fixed var() fallback literals), radius via the absint()-based Olobuild_Tile_Utils::border_radius()/radius_int()/radius_force_css() helpers, layout via in_array() whitelist; $uid is internally generated. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist (or fixed var() fallback literals), radius via the absint()-based Olobuild_Tile_Utils::border_radius()/radius_int()/radius_force_css() helpers, layout via in_array() whitelist; $uid is internally generated and $pannelli() joins it with fixed selectors. ?>
         <style>
         #<?php echo $uid; ?> .woocommerce-MyAccount-navigation{background:<?php echo $sb_bg; ?>;border-radius:<?php echo $radius; ?>;padding:20px}
         #<?php echo $uid; ?> .woocommerce-MyAccount-navigation ul{list-style:none;margin:0;padding:0}
@@ -79,19 +91,31 @@ class Olobuild_Woo_Myaccount_Tile extends Olobuild_Tile_Base {
         #<?php echo $uid; ?> .woocommerce-MyAccount-navigation li a{display:block;padding:10px 16px;color:<?php echo $sb_c; ?>;text-decoration:none;border-radius:<?php echo max(0,$radius_raw-4); ?>px;transition:all .2s}
         #<?php echo $uid; ?> .woocommerce-MyAccount-navigation li.is-active a,
         #<?php echo $uid; ?> .woocommerce-MyAccount-navigation li a:hover{background:<?php echo $sb_act_bg; ?>;color:<?php echo $sb_act_c; ?>}
-        #<?php echo $uid; ?> .woocommerce-MyAccount-content{background:<?php echo $cnt_bg; ?>;border-radius:<?php echo $radius; ?>;padding:24px;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['border_color'] ?? null, [ 'width' => 1, 'color' => $bdr_c ] ) ); ?>}
-        #<?php echo $uid; ?> .woocommerce-MyAccount-content h2,
-        #<?php echo $uid; ?> .woocommerce-MyAccount-content h3{color:<?php echo $h_color; ?>}
-        #<?php echo $uid; ?> .woocommerce-MyAccount-content{color:<?php echo $t_color; ?>}
-        #<?php echo $uid; ?> .woocommerce-MyAccount-content a{color:<?php echo $l_color; ?>}
-        #<?php echo $uid; ?> .woocommerce-MyAccount-content .button,
-        #<?php echo $uid; ?> .woocommerce-MyAccount-content button[type="submit"]{background:<?php echo $btn_bg; ?>;color:<?php echo $btn_c; ?>;border:none;border-radius:<?php echo max(0,$radius_raw-2); ?>px;padding:10px 24px;cursor:pointer;transition:opacity .2s}
-        #<?php echo $uid; ?> .woocommerce-MyAccount-content .button:hover{opacity:.85}
+        <?php /* Il bordo grigio che WooCommerce dà ai moduli cede al controllo «Bordi» (anche quando lo si toglie). */ ?>
+        #<?php echo $uid; ?> form.woocommerce-form-login,#<?php echo $uid; ?> form.woocommerce-form-register,#<?php echo $uid; ?> form.woocommerce-ResetPassword{border:0}
+        <?php echo $pannelli( $uid ); ?>{background:<?php echo $cnt_bg; ?>;border-radius:<?php echo $radius; ?>;padding:24px;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['border_color'] ?? null, [ 'width' => 1, 'color' => $bdr_c ] ) ); ?>}
+        #<?php echo $uid; ?> .woocommerce h2,
+        #<?php echo $uid; ?> .woocommerce h3{color:<?php echo $h_color; ?>}
+        <?php echo $pannelli( $uid ); ?>{color:<?php echo $t_color; ?>}
+        <?php echo $pannelli( $uid, ' a' ); ?>{color:<?php echo $l_color; ?>}
+        <?php echo $pannelli( $uid, ' .button' ); ?>,
+        <?php echo $pannelli( $uid, ' button[type="submit"]' ); ?>{background:<?php echo $btn_bg; ?>;color:<?php echo $btn_c; ?>;border:none;border-radius:<?php echo max(0,$radius_raw-2); ?>px;padding:10px 24px;font-family:inherit;font-size:inherit;cursor:pointer;transition:opacity .2s}
+        <?php echo $pannelli( $uid, ' .button:hover' ); ?>,
+        <?php echo $pannelli( $uid, ' button[type="submit"]:hover' ); ?>{opacity:.85}
         <?php if ( $layout === 'sidebar' ) : ?>
-        #<?php echo $uid; ?> .woocommerce{display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start}
-        @media(max-width:768px){#<?php echo $uid; ?> .woocommerce{grid-template-columns:1fr}}
+        <?php /* Due colonne solo per navigazione e contenuto (ci sono da autenticati): ogni altro figlio
+           (il titolo e il modulo d'accesso dei visitatori, le notifiche) occupa tutta la riga. Prima la
+           griglia prendeva tutti i figli e il modulo finiva stretto nei 260 px. float/width: sulla pagina
+           Account di WooCommerce il suo CSS (30% / 68% flottanti) stringeva anche le due colonne. */ ?>
+        #<?php echo $uid; ?> .woocommerce{display:grid;grid-template-columns:260px minmax(0,1fr);gap:24px;align-items:start}
+        #<?php echo $uid; ?> .woocommerce > *{grid-column:1 / -1}
+        #<?php echo $uid; ?> .woocommerce > .woocommerce-MyAccount-navigation{grid-column:1;float:none;width:auto}
+        #<?php echo $uid; ?> .woocommerce > .woocommerce-MyAccount-content{grid-column:2;float:none;width:auto}
+        #<?php echo $uid; ?> .woocommerce > .woocommerce-notices-wrapper:empty{display:none}
+        @media(max-width:768px){#<?php echo $uid; ?> .woocommerce{grid-template-columns:minmax(0,1fr)}#<?php echo $uid; ?> .woocommerce > .woocommerce-MyAccount-content{grid-column:1}}
         <?php endif; ?>
         <?php if ( $layout === 'tabs' ) : ?>
+        #<?php echo $uid; ?> .woocommerce-MyAccount-navigation,#<?php echo $uid; ?> .woocommerce-MyAccount-content{float:none;width:auto}
         #<?php echo $uid; ?> .woocommerce-MyAccount-navigation{background:transparent;padding:0;border-bottom:2px solid <?php echo $bdr_c; ?>;margin-bottom:20px;border-radius:0}
         #<?php echo $uid; ?> .woocommerce-MyAccount-navigation ul{display:flex;gap:4px;flex-wrap:wrap}
         #<?php echo $uid; ?> .woocommerce-MyAccount-navigation li a{border-radius:<?php echo $radius; ?>;border-bottom-left-radius:0;border-bottom-right-radius:0;padding:10px 20px}
@@ -113,7 +137,7 @@ class Olobuild_Woo_Myaccount_Tile extends Olobuild_Tile_Base {
                         echo get_avatar( $user->ID, $avatar_sz, '', '', [ 'style' => 'border-radius:50%' ] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- <img> markup generated by core get_avatar() (escaped internally)
                     }
                     echo '<div>';
-                    echo '<p style="margin:0;font-size:18px;font-weight:600;color:' . $h_color . '">Ciao, ' . esc_html( $user->display_name ) . '</p>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $h_color is safe_color_css()-whitelisted (may be a var() value with fallback that esc_attr() could alter); name is esc_html()'d
+                    echo '<p style="margin:0;font-size:18px;font-weight:600;color:' . $h_color . '">' . esc_html( sprintf( olobuild_t( 'Ciao, %s' ), $user->display_name ) ) . '</p>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $h_color is safe_color_css()-whitelisted (may be a var() value with fallback that esc_attr() could alter); name is esc_html()'d
                     echo '<p style="margin:4px 0 0;font-size:14px;color:' . $t_color . ';opacity:.7">' . esc_html( $user->user_email ) . '</p>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $t_color is safe_color_css()-whitelisted (may be a var() value with fallback that esc_attr() could alter); email is esc_html()'d
                     echo '</div></div>';
                 }
