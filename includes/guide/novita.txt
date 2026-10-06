@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.560 - 2026-10-06 (fix)
+- Avanzate: la «Maschera forma» ritaglia davvero tile, righe e colonne in cerchio, ellisse, triangolo, esagono, stella, diamante, blob o in una forma personalizzata. Prima agiva solo sulle sezioni: sulle tile non cambiava niente.
+- Builder: lavorando a lungo senza pause non compare più l'errore «troppe richieste». Il limite di 300 richieste al minuto si azzera davvero ogni minuto; prima il conteggio ripartiva a ogni richiesta e dopo 300 il builder si bloccava finché non si stava fermi un minuto.
+
 ## v1.4.559 - 2026-10-06 (fix)
 - Luce di pagina: la luce cambia davvero colore quando arriva al centro una sezione con il suo «Colore luce». Prima la tile vedeva solo la sezione in cui si trovava e la luce restava sempre del colore di partenza.
 - Sezione: il «Colore luce» accetta anche le tinte della palette create dal selettore colore. Prima venivano scartate e la sezione non chiedeva nessun colore.
