@@ -55,14 +55,17 @@ class Olobuild_MatchFixtures_Tile extends Olobuild_Tile_Base {
 
         $cols   = max( 1, min( 4, intval( $s['columns'] ) ) );
         $gap    = intval( $s['gap'] ) . 'px';
-        $accent = $this->safe_color_css( $s['accent'] ) ?: 'var(--olo-color-primary, #c8ff3c)';
-        $cbg    = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #0f3a2a)';
+        // Riserve per i colori lasciati vuoti: i ruoli del tema, come i default. Prima la card
+        // svuotata prendeva surface-alt (il grigio chiaro del tema) sotto testi bianchi fissi:
+        // card chiara e scritte invisibili. Card scura + testi chiari del tema restano leggibili.
+        $accent = $this->safe_color_css( $s['accent'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $cbg    = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-dark, #16263d)';
         $cbd    = Olobuild_Tile_Utils::border_color( $s['card_border'] ?? null, 'rgba(255,255,255,0.1)' );
-        $dayc   = $this->safe_color_css( $s['day_color'] ?? '' ) ?: '#ffffff';
+        $dayc   = $this->safe_color_css( $s['day_color'] ?? '' ) ?: 'var(--olo-color-light, #f8f9fa)';
         $meta   = $this->safe_color_css( $s['meta_color'] ?? '' ) ?: 'rgba(255,255,255,0.55)';
-        $namec  = $this->safe_color_css( $s['name_color'] ?? '' ) ?: '#ffffff';
-        $scorec = $this->safe_color_css( $s['score_color'] ?? '' ) ?: '#ffffff';
-        $crestc = $this->safe_color_css( $s['crest_text_color'] ?? '' ) ?: '#ffffff';
+        $namec  = $this->safe_color_css( $s['name_color'] ?? '' ) ?: 'var(--olo-color-light, #f8f9fa)';
+        $scorec = $this->safe_color_css( $s['score_color'] ?? '' ) ?: 'var(--olo-color-light, #f8f9fa)';
+        $crestc = $this->safe_color_css( $s['crest_text_color'] ?? '' ) ?: 'var(--olo-color-light, #f8f9fa)';
         $rad    = Olobuild_Tile_Utils::border_radius( $s['radius'] ?? 18 ) ?: '0';
 
         // ── Spaziatura card: padding da 'content_padding' (default 22px su 4 lati = invariato) ──
@@ -139,8 +142,10 @@ class Olobuild_MatchFixtures_Tile extends Olobuild_Tile_Base {
         <div class="olo-matchfixtures <?php echo esc_attr( $uid ); ?>">
             <?php foreach ( $items as $it ) :
                 $score = trim( (string) ( $it['score'] ?? '' ) );
-                $hbg = $this->safe_color_css( $it['home_crest_bg'] ?? '' ) ?: '#15543c';
-                $abg = $this->safe_color_css( $it['away_crest_bg'] ?? '' ) ?: '#7a2230';
+                // Stemma senza colore (es. una partita aggiunta prima che il «+» la riempisse): i colori
+                // del tema, non il verde e il bordeaux fissi del blueprint.
+                $hbg = $this->safe_color_css( $it['home_crest_bg'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
+                $abg = $this->safe_color_css( $it['away_crest_bg'] ?? '' ) ?: 'var(--olo-color-secondary, #16263d)';
             ?>
                 <article class="omf-fix">
                     <div class="omf-top">

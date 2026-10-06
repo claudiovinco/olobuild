@@ -78,13 +78,15 @@ export default {
 
   fields: [
     { type: 'separator', label: t('Partite') },
-    { key: 'items', label: t('Fixtures'), type: 'content-items',
+    // La partita aggiunta col «+»: il ripetitore legge `newItemDefaults` (la chiave `defaults` di
+    // prima non la leggeva nessuno), così nasceva vuota e il renderer ripiegava sugli stemmi esadecimali.
+    { key: 'items', label: t('Partite'), type: 'content-items',
       itemLabel: t('Partita'),
-      defaults: { day: 'Sab, 01.01', time_place: '15:00 · Stadio', league: 'Lega', matchday: 'Giornata 01',
-        home_crest: 'HM', home_crest_bg: '#15543c', home_name: 'Squadra Casa',
-        away_crest: 'AW', away_crest_bg: '#7a2230', away_name: 'Squadra Ospite', score: '', venue: 'Prima Squadra' },
+      newItemDefaults: { day: t('Dom 02.11'), time_place: t('15:00 · Campo Comunale'), league: t('Campionato'), matchday: t('Giornata 7'),
+        home_crest: 'CA', home_crest_bg: 'var(--olo-color-primary)', home_name: t('Squadra di casa'),
+        away_crest: 'OS', away_crest_bg: 'var(--olo-color-secondary)', away_name: t('Squadra ospite'), score: '', venue: t('Prima squadra') },
       itemFields: [
-        { key: 'day', label: t('Data (es. Sat, 14.03)'), type: 'text' },
+        { key: 'day', label: t('Data (es. Dom 12.10)'), type: 'text' },
         { key: 'time_place', label: t('Ora · luogo'), type: 'text' },
         { key: 'league', label: t('Lega'), type: 'text' },
         { key: 'matchday', label: t('Giornata'), type: 'text' },
@@ -129,7 +131,7 @@ export default {
     ...shadowField,
     ...borderFields(),
     { type: 'separator', label: t('Partite') },
-    { key: 'items', type: 'content-items', label: t('Fixtures'), itemLabel: t('Partita'), etichettaDa: 'home_name', itemFields: [
+    { key: 'items', type: 'content-items', label: t('Partite'), itemLabel: t('Partita'), etichettaDa: 'home_name', itemFields: [
         { key: 'home_crest_bg', label: t('Casa — colore crest'), type: 'color' },
         { key: 'away_crest_bg', label: t('Ospite — colore crest'), type: 'color' },
     ] },
