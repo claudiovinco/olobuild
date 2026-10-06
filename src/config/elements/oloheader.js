@@ -48,6 +48,8 @@ export default {
     bar_bg:            '#FFFFFF',
     bar_text:          '#5A6076',       // colore voci nav (ink-2 della demo)
     bar_text_hover:    '#1F2330',       // ink
+    accent_color:      '',              // vuoto = navy e blu della demo
+    font_family:       '',              // vuoto = Manrope della demo
     mobile_breakpoint: 1040,
 
     // ── Nav primaria (repeater) ──
@@ -147,6 +149,8 @@ export default {
     bar_bg: 'var(--olo-color-light, #ffffff)',
     bar_text: 'var(--olo-color-text, #5A6076)',
     bar_text_hover: 'var(--olo-color-primary, #1F2330)',
+    accent_color: 'var(--olo-color-primary)',
+    font_family: 'var(--olo-font-family)',
     nav_items: [
       { label: t('Servizi'), url: '#', type: 'mega' },
       { label: t('Chi siamo'), url: '/chi-siamo/', type: 'link' },
@@ -197,7 +201,8 @@ export default {
   fields: [
     { type: 'separator', label: t('Brand') },
     { key: 'brand_logo',       label: t('Logo'),                 type: 'image' },
-    { key: 'brand_logo_white', label: t('Logo bianco (barre scure)'), type: 'image' },
+    { key: 'brand_logo_white', label: t('Logo bianco (barre scure)'), type: 'image',
+      description: t('Prende il posto del Logo quando lo sfondo della barra è scuro, e nello stato agganciato quando è scuro lo «Sfondo quando agganciata». Su una barra chiara o trasparente resta il Logo.') },
     { key: 'brand_url',        label: t('Link logo'),            type: 'link' },
 
     { type: 'separator', label: t('Nav primaria') },
@@ -320,6 +325,10 @@ export default {
     { key: 'bar_bg',         label: t('Colore sfondo barra'), type: 'color' },
     { key: 'bar_text',       label: t('Colore testo voci'),   type: 'color' },
     { key: 'bar_text_hover', label: t('Colore testo (hover)'), type: 'color' },
+    { key: 'accent_color', label: t('Colore accento'), type: 'color',
+      description: t('Il colore del pulsante, dell\'icona in evidenza e dei link del pannello. Vuoto: il navy e il blu della demo.') },
+    { key: 'font_family', label: t('Famiglia font'), type: 'font-family',
+      description: t('Predefinito: Manrope, il font della demo.') },
     { key: 'mobile_breakpoint', label: t('Breakpoint mobile'), type: 'range', min: 768, max: 1280, step: 8 },
 
     { type: 'separator', label: t('Mega-menu') },
@@ -328,9 +337,9 @@ export default {
 
     { type: 'separator', label: t('CTA') },
     { key: 'cta_style', label: t('Stile CTA'), type: 'select', options: [
-      { value: 'navy',    label: t('Navy (pieno)') },
-      { value: 'royal',   label: t('Royal (blu)') },
-      { value: 'outline', label: t('Outline') },
+      { value: 'navy',    label: t('Pieno') },
+      { value: 'royal',   label: t('Pieno chiaro') },
+      { value: 'outline', label: t('Contorno') },
     ]},
 
     { type: 'separator', label: t('Interazioni') },

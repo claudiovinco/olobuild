@@ -83,6 +83,10 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
             'bar_bg'            => '#FFFFFF',
             'bar_text'          => '#5A6076',
             'bar_text_hover'    => '#1F2330',
+            // Vuoti = navy e blu della demo e Manrope (la resa di sempre); la partenza del config
+            // li lega al colore principale e al font del sito.
+            'accent_color'      => '',
+            'font_family'       => '',
             'mobile_breakpoint' => 1040,
             // Nav primaria
             'nav_items'         => [
@@ -172,12 +176,64 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
         }
     }
 
+    /**
+     * Luminanza relativa (WCAG) di un fondo, coi token della Palette risolti; null se il fondo
+     * non è pieno (vuoto, trasparente, velato sotto il 50%) o non si risolve.
+     */
+    private function luminanza_fondo( $c ) {
+        $c = trim( (string) $c );
+        if ( '' === $c || 'transparent' === strtolower( $c ) ) {
+            return null;
+        }
+        $alfa = 1.0;
+        if ( preg_match( '/^#[0-9a-f]{6}([0-9a-f]{2})$/i', $c, $m ) ) {
+            $alfa = hexdec( $m[1] ) / 255;
+        } elseif ( preg_match( '/^rgba?\(\s*[\d.]+%?\s*[,\s]\s*[\d.]+%?\s*[,\s]\s*[\d.]+%?\s*[,\/]\s*([\d.]+)(%?)\s*\)$/i', $c, $m ) ) {
+            $alfa = (float) $m[1] / ( '%' === $m[2] ? 100 : 1 );
+        } elseif ( preg_match( '/^color-mix\(.+\s([\d.]+)%\s*,\s*transparent\s*\)$/is', $c, $m ) ) {
+            $alfa = (float) $m[1] / 100;
+        }
+        $hex = Olobuild_Tile_Utils::colore_hex( $c );
+        if ( $alfa < 0.5 || '' === $hex ) {
+            return null;
+        }
+        $l = 0.0;
+        foreach ( [ 1 => 0.2126, 3 => 0.7152, 5 => 0.0722 ] as $i => $k ) {
+            $v  = hexdec( substr( $hex, $i, 2 ) ) / 255;
+            $l += $k * ( $v <= 0.03928 ? $v / 12.92 : pow( ( $v + 0.055 ) / 1.055, 2.4 ) );
+        }
+        return $l;
+    }
+
+    /** Fondo scuro: sotto 0.179 il bianco contrasta più del nero (soglia WCAG). */
+    private function fondo_scuro( $c ) {
+        $l = $this->luminanza_fondo( $c );
+        return null !== $l && $l < 0.179;
+    }
+
+    /**
+     * Il testo sul colore accento: il contrasto della Palette se l'accento è il primario,
+     * altrimenti scuro solo su un accento chiaro (soglia di contrastOn, oloTileDefaults.js).
+     * La demo aveva il bianco fisso.
+     */
+    private function testo_su_accento( $accent ) {
+        if ( preg_match( '/^var\(\s*--olo-color-primary\s*[,)]/', $accent ) ) {
+            return 'var(--olo-color-primary-contrast, #fff)';
+        }
+        $l = $this->luminanza_fondo( $accent );
+        return ( null !== $l && $l > 0.5 ) ? 'var(--olo-color-dark, #1F2330)' : 'var(--olo-color-light, #fff)';
+    }
+
     public function render( $settings ) {
         $s   = wp_parse_args( is_array( $settings ) ? $settings : [], $this->get_defaults() );
         $uid = 'olo-sh-' . wp_rand( 10000, 99999 );
 
         ob_start();
-        $this->render_fonts();
+        // Manrope e JetBrains Mono servono solo alla resa della demo: con un font scelto
+        // («Famiglia font») la tile usa quello e i font del tema, e non li scarica.
+        if ( '' === $this->resolve_font_family( $s['font_family'] ?? '' ) ) {
+            $this->render_fonts();
+        }
         $this->render_css( $s, $uid );
         $this->render_html( $s, $uid );
         $this->render_js( $s, $uid );
@@ -216,6 +272,12 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
         $hdr_pos   = $sticky ? 'fixed' : 'relative';
         $hdr_top   = $sticky ? ( $is_pill ? $offset : 0 ) : 0;
 
+        // Accento e font. Vuoti = la demo: navy e blu fissi, testo bianco, Manrope e JetBrains Mono
+        // (pulsante, icona in evidenza e link del pannello restavano blu su qualunque tema). Con un
+        // accento i blu ne diventano le sfumature, col testo che gli contrasta.
+        $accent = $this->safe_color_css( $s['accent_color'] ?? '' );
+        $font   = $this->resolve_font_family( $s['font_family'] ?? '' );
+
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS sotto è costruito solo da valori già sanitizzati: colori via safe_color_css(), interi via intval()/min/max, enum via ternari letterali; $uid è generato internamente.
         ?>
         <style>
@@ -229,10 +291,24 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
           --sh-shadow-sm:0 2px 6px -2px rgba(10,20,40,.06);
           --sh-shadow:<?php echo $shadow; ?>;
           --sh-shadow-lg:0 28px 70px -22px rgba(27,42,78,.40);
+          --sh-on:#fff; --sh-tint:#eef3ff; --sh-rail:linear-gradient(180deg,#f6f8ff,#eef3ff);
+          --sh-mono:"JetBrains Mono",monospace;
           color:var(--sh-ink);
           font-family:"Manrope",system-ui,-apple-system,sans-serif;
           -webkit-font-smoothing:antialiased;
         }
+        <?php if ( $accent ) : ?>
+        .<?php echo $uid; ?>{
+          --sh-navy:<?php echo $accent; ?>; --sh-navy-2:color-mix(in srgb, <?php echo $accent; ?> 82%, var(--olo-color-dark, #000));
+          --sh-royal:color-mix(in srgb, <?php echo $accent; ?> 78%, var(--olo-color-light, #fff)); --sh-royal-ink:color-mix(in srgb, <?php echo $accent; ?> 80%, var(--olo-color-dark, #000));
+          --sh-on:<?php echo $this->testo_su_accento( $accent ); ?>;
+          --sh-tint:color-mix(in srgb, <?php echo $accent; ?> 9%, var(--sh-paper-2));
+          --sh-rail:linear-gradient(180deg,color-mix(in srgb, <?php echo $accent; ?> 4%, var(--sh-paper-2)),var(--sh-tint));
+        }
+        <?php endif; ?>
+        <?php if ( $font ) : ?>
+        .<?php echo $uid; ?>{font-family:<?php echo $font; ?>;--sh-mono:var(--olo-font-family-mono, ui-monospace, monospace)}
+        <?php endif; ?>
         .<?php echo $uid; ?> *{box-sizing:border-box}
         .<?php echo $uid; ?> a{color:inherit;text-decoration:none}
         .<?php echo $uid; ?> button{font-family:inherit;cursor:pointer}
@@ -240,6 +316,26 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
         /* container per fixed: non clippare il pannello */
         section:has(.<?php echo $uid; ?>),
         header.olo-site-header:has(.<?php echo $uid; ?>){overflow:visible}
+        /* Nel corpo della pagina il pannello aperto finiva sotto le sezioni dopo: una sezione con
+           immagine di sfondo lo tagliava (overflow: clip in linea batte la regola qui sopra) e il
+           suo z-index valeva solo dentro il contesto della barra, sotto la sezione successiva.
+           Solo da aperto: da chiusa la sezione resta com'è, sfondi compresi. Il pannello mobile è
+           fisso, la sezione non lo taglia: gli basta lo z-index e il ritaglio degli sfondi resta.
+           Limite: mentre il pannello mega è aperto la sezione non ritaglia gli strati di sfondo più
+           grandi di lei (parallax, video in scala) né i suoi angoli arrotondati; si risolve
+           spostando il ritaglio sugli strati, nel renderer della sezione. */
+        section:has(.<?php echo $uid; ?> .olo-sh-panel.olo-sh-open){z-index:100000;overflow:visible !important}
+        section:has(.<?php echo $uid; ?> .olo-sh-sheet.olo-sh-open),
+        section:has(.<?php echo $uid; ?>.olo-sh-uscita){z-index:100000}
+        /* L'Ombra del riquadro della tile, su un wrapper trasparente, è un filter, e il filtro sfondo
+           degli Effetti un backdrop-filter: entrambi fanno da blocco contenitore ai position:fixed.
+           Pannello mobile e velo restavano grandi quanto la barra e la barra sticky scorreva via con
+           la tile. Si sospendono mentre il pannello è aperto e durante la sua uscita (olo-sh-uscita,
+           tolta a fine transizione), e mentre la barra è agganciata: lì l'ombra della barra è
+           «Ombra quando agganciata». */
+        .olo-frontend-tile:has(.<?php echo $uid; ?> .olo-sh-sheet.olo-sh-open),
+        .olo-frontend-tile:has(.<?php echo $uid; ?>.olo-sh-uscita),
+        .olo-frontend-tile:has(.<?php echo $uid; ?> .olo-sh-hdr.olo-sh-stuck){filter:none !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important}
 
         /* ── Header ── */
         .<?php echo $uid; ?> .olo-sh-hdr{
@@ -282,6 +378,10 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
         /* brand */
         .<?php echo $uid; ?> .olo-sh-brand{display:flex;align-items:center;gap:9px;padding-right:8px;flex-shrink:0}
         .<?php echo $uid; ?> .olo-sh-blogo{height:<?php echo max( 14, intval( $s['brand_height'] ) ?: 25 ); ?>px;width:auto;display:block}
+        /* Logo bianco solo nello stato agganciato (sfondo da agganciata scuro, barra chiara) o viceversa */
+        .<?php echo $uid; ?> .olo-sh-blogo-stuck,
+        .<?php echo $uid; ?> .olo-sh-hdr.olo-sh-stuck .olo-sh-blogo-base{display:none}
+        .<?php echo $uid; ?> .olo-sh-hdr.olo-sh-stuck .olo-sh-blogo-stuck{display:block}
 
         /* primary nav */
         .<?php echo $uid; ?> .olo-sh-nav{display:flex;align-items:center;gap:2px;margin-left:14px;list-style:none;padding:0}
@@ -297,7 +397,7 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
         /* featured */
         .<?php echo $uid; ?> .olo-sh-featured{display:inline-flex;align-items:center;gap:9px;padding:9px 14px;border-radius:100px;font-size:14.5px;font-weight:700;color:var(--sh-ink);transition:background .14s}
         .<?php echo $uid; ?> .olo-sh-featured:hover{background:var(--sh-line-2)}
-        .<?php echo $uid; ?> .olo-sh-fic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--sh-royal),var(--sh-navy));box-shadow:0 6px 16px -6px rgba(30,136,229,.6)}
+        .<?php echo $uid; ?> .olo-sh-fic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:var(--sh-on);background:linear-gradient(135deg,var(--sh-royal),var(--sh-navy));box-shadow:0 6px 16px -6px color-mix(in srgb, var(--sh-royal) 60%, transparent)}
         .<?php echo $uid; ?> .olo-sh-fic svg{width:15px;height:15px}
 
         /* right cluster */
@@ -309,13 +409,13 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-sh-langbtn .olo-sh-chev{width:9px;height:9px}
         .<?php echo $uid; ?> .olo-sh-cta{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:100px;font-weight:700;font-size:14.5px;border:none;transition:transform .14s,background .14s,box-shadow .14s;white-space:nowrap}
         <?php if ( $cta_style === 'royal' ) : ?>
-        .<?php echo $uid; ?> .olo-sh-cta{background:var(--sh-royal);color:#fff;box-shadow:var(--sh-shadow)}
+        .<?php echo $uid; ?> .olo-sh-cta{background:var(--sh-royal);color:var(--sh-on);box-shadow:var(--sh-shadow)}
         .<?php echo $uid; ?> .olo-sh-cta:hover{background:var(--sh-royal-ink);transform:translateY(-1px);box-shadow:var(--sh-shadow-lg)}
         <?php elseif ( $cta_style === 'outline' ) : ?>
         .<?php echo $uid; ?> .olo-sh-cta{background:transparent;color:var(--sh-navy);border:1.5px solid var(--sh-navy)}
-        .<?php echo $uid; ?> .olo-sh-cta:hover{background:var(--sh-navy);color:#fff;transform:translateY(-1px)}
+        .<?php echo $uid; ?> .olo-sh-cta:hover{background:var(--sh-navy);color:var(--sh-on);transform:translateY(-1px)}
         <?php else : ?>
-        .<?php echo $uid; ?> .olo-sh-cta{background:var(--sh-navy);color:#fff;box-shadow:var(--sh-shadow)}
+        .<?php echo $uid; ?> .olo-sh-cta{background:var(--sh-navy);color:var(--sh-on);box-shadow:var(--sh-shadow)}
         .<?php echo $uid; ?> .olo-sh-cta:hover{background:var(--sh-navy-2);transform:translateY(-1px);box-shadow:var(--sh-shadow-lg)}
         <?php endif; ?>
 
@@ -333,12 +433,12 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-sh-mega-grid{grid-template-columns:repeat(<?php echo max( 1, min( 3, intval( $s['mega_columns'] ) ?: 2 ) ); ?>,1fr)}
         <?php endif; ?>
 
-        .<?php echo $uid; ?> .olo-sh-rail{padding:30px 28px;background:<?php echo $rail_bg ? $rail_bg : 'linear-gradient(180deg,#f6f8ff,#eef3ff)'; ?>;border-right:1px solid var(--sh-line);display:flex;flex-direction:column}
+        .<?php echo $uid; ?> .olo-sh-rail{padding:30px 28px;background:<?php echo $rail_bg ? $rail_bg : 'var(--sh-rail)'; ?>;border-right:1px solid var(--sh-line);display:flex;flex-direction:column}
         .<?php echo $uid; ?> .olo-sh-rail .olo-sh-badge{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:100px;background:#fff;border:1px solid var(--sh-line);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--sh-royal-ink)}
         .<?php echo $uid; ?> .olo-sh-rail h3{font-size:23px;font-weight:800;letter-spacing:-.02em;margin:16px 0 0}
         .<?php echo $uid; ?> .olo-sh-rail p{font-size:13.5px;color:var(--sh-ink-2);margin:10px 0 0;line-height:1.5;font-weight:500}
         .<?php echo $uid; ?> .olo-sh-rail-cta{margin-top:auto;padding-top:22px;display:flex;flex-direction:column;gap:10px}
-        .<?php echo $uid; ?> .olo-sh-rail-cta a.olo-sh-solid{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 18px;border-radius:100px;background:var(--sh-navy);color:#fff;font-weight:700;font-size:14px}
+        .<?php echo $uid; ?> .olo-sh-rail-cta a.olo-sh-solid{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 18px;border-radius:100px;background:var(--sh-navy);color:var(--sh-on);font-weight:700;font-size:14px}
         .<?php echo $uid; ?> .olo-sh-rail-cta a.olo-sh-solid:hover{background:var(--sh-navy-2)}
         .<?php echo $uid; ?> .olo-sh-rail-cta a.olo-sh-link2{font-size:13px;font-weight:700;color:var(--sh-royal-ink);display:inline-flex;align-items:center;gap:6px}
         .<?php echo $uid; ?> .olo-sh-rail-cta a.olo-sh-link2:hover{gap:9px}
@@ -367,9 +467,9 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-sh-lang-menu .olo-sh-lh{padding:8px 12px 6px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--sh-ink-3)}
         .<?php echo $uid; ?> .olo-sh-lang-opt{display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:10px 12px;border-radius:11px;border:none;background:transparent;font-size:14px;font-weight:600;color:var(--sh-ink);transition:background .12s}
         .<?php echo $uid; ?> .olo-sh-lang-opt:hover{background:var(--sh-line-2)}
-        .<?php echo $uid; ?> .olo-sh-lang-opt .olo-sh-code{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:600;color:var(--sh-ink-3);width:22px}
+        .<?php echo $uid; ?> .olo-sh-lang-opt .olo-sh-code{font-family:var(--sh-mono);font-size:11px;font-weight:600;color:var(--sh-ink-3);width:22px}
         .<?php echo $uid; ?> .olo-sh-lang-opt .olo-sh-ck{margin-left:auto;color:var(--sh-royal);opacity:0;width:15px}
-        .<?php echo $uid; ?> .olo-sh-lang-opt[aria-current="true"]{background:#eef3ff}
+        .<?php echo $uid; ?> .olo-sh-lang-opt[aria-current="true"]{background:var(--sh-tint)}
         .<?php echo $uid; ?> .olo-sh-lang-opt[aria-current="true"] .olo-sh-ck{opacity:1}
         .<?php echo $uid; ?> .olo-sh-lang-opt[aria-current="true"] .olo-sh-code{color:var(--sh-royal-ink)}
 
@@ -377,14 +477,15 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-sh-search-panel{right:0;width:min(380px,calc(100vw - 44px));padding:16px}
         .<?php echo $uid; ?> .olo-sh-search-field{display:flex;align-items:center;gap:10px;padding:0 14px;border:1.5px solid var(--sh-line);border-radius:13px;height:48px;transition:border-color .14s}
         .<?php echo $uid; ?> .olo-sh-search-field:focus-within{border-color:var(--sh-royal)}
+        .<?php echo $uid; ?> .olo-sh-sfic{color:var(--sh-ink-3)}
         .<?php echo $uid; ?> .olo-sh-search-field input{flex:1;border:none;outline:none;font-family:inherit;font-size:15px;color:var(--sh-ink);background:transparent}
         .<?php echo $uid; ?> .olo-sh-search-field input::placeholder{color:var(--sh-ink-3)}
-        .<?php echo $uid; ?> .olo-sh-search-field kbd{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--sh-ink-3);border:1px solid var(--sh-line);border-radius:6px;padding:3px 6px}
+        .<?php echo $uid; ?> .olo-sh-search-field kbd{font-family:var(--sh-mono);font-size:10px;color:var(--sh-ink-3);border:1px solid var(--sh-line);border-radius:6px;padding:3px 6px}
         .<?php echo $uid; ?> .olo-sh-search-quick{margin-top:14px}
         .<?php echo $uid; ?> .olo-sh-search-quick .olo-sh-lh{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--sh-ink-3);padding:0 4px 8px}
         .<?php echo $uid; ?> .olo-sh-qrow{display:flex;flex-wrap:wrap;gap:7px;padding:0 4px}
         .<?php echo $uid; ?> .olo-sh-qchip{padding:7px 13px;border-radius:100px;background:var(--sh-line-2);font-size:13px;font-weight:600;color:var(--sh-ink-2);transition:background .12s,color .12s}
-        .<?php echo $uid; ?> .olo-sh-qchip:hover{background:var(--sh-navy);color:#fff}
+        .<?php echo $uid; ?> .olo-sh-qchip:hover{background:var(--sh-navy);color:var(--sh-on)}
 
         /* ── Mobile sheet ── */
         .<?php echo $uid; ?> .olo-sh-scrim{position:fixed;inset:0;background:rgba(13,20,40,.5);backdrop-filter:blur(2px);opacity:0;visibility:hidden;transition:.2s;z-index:55}
@@ -424,9 +525,9 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
           .<?php echo $uid; ?> .olo-sh-mprod .olo-sh-pd{font-size:12px}
           .<?php echo $uid; ?> .olo-sh-sheet-langs{display:flex;flex-wrap:wrap;gap:8px;padding:14px 0 4px}
           .<?php echo $uid; ?> .olo-sh-sheet-langs button{padding:9px 15px;border-radius:100px;border:1px solid var(--sh-line);background:#fff;font-size:14px;font-weight:600}
-          .<?php echo $uid; ?> .olo-sh-sheet-langs button[aria-current="true"]{background:var(--sh-navy);color:#fff;border-color:var(--sh-navy)}
+          .<?php echo $uid; ?> .olo-sh-sheet-langs button[aria-current="true"]{background:var(--sh-navy);color:var(--sh-on);border-color:var(--sh-navy)}
           .<?php echo $uid; ?> .olo-sh-sheet .olo-sh-cta{width:100%;justify-content:center;margin-top:20px;padding:16px}
-          .<?php echo $uid; ?> .olo-sh-sheet-lh{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--sh-ink-3);font-family:"JetBrains Mono",monospace;padding-top:16px}
+          .<?php echo $uid; ?> .olo-sh-sheet-lh{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--sh-ink-3);font-family:var(--sh-mono);padding-top:16px}
         }
         @media (prefers-reduced-motion: reduce){
           .<?php echo $uid; ?> .olo-sh-panel,
@@ -464,6 +565,23 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
 
     private function render_html( $s, $uid ) {
         $brand_logo = $s['brand_logo'] ?: ( OLOBUILD_URL . 'assets/img/menu/olotheme-orizz.png' );
+        // «Logo bianco (barre scure)» non lo leggeva nessuno: la barra mostrava sempre il logo
+        // normale, anche scuro su scuro. Va dove il fondo è scuro: la barra (e il pannello mobile,
+        // che ha lo stesso fondo) e, se diverso, lo stato agganciato con «Sfondo quando agganciata».
+        $logo_white = trim( (string) ( $s['brand_logo_white'] ?? '' ) );
+        $logo_bar   = $brand_logo;
+        $logo_stuck = '';
+        if ( '' !== $logo_white ) {
+            if ( $this->fondo_scuro( $s['bar_bg'] ?? '' ) ) {
+                $logo_bar = $logo_white;
+            }
+            if ( ! empty( $s['bar_sticky'] ) && null !== $this->luminanza_fondo( $s['sticky_bg'] ?? '' ) ) {
+                $logo_st = $this->fondo_scuro( $s['sticky_bg'] ) ? $logo_white : $brand_logo;
+                if ( $logo_st !== $logo_bar ) {
+                    $logo_stuck = $logo_st;
+                }
+            }
+        }
         $nav_items  = (array) ( $s['nav_items'] ?? [] );
         $columns    = $this->group_products( $s['mega_products'] ?? [] );
         $cur        = strtolower( (string) ( $s['lang_current'] ?? 'it' ) );
@@ -480,7 +598,8 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
             <div class="olo-sh-bar" data-bar>
               <!-- brand -->
               <a class="olo-sh-brand" href="<?php echo esc_url( $s['brand_url'] ?: '/' ); ?>" aria-label="<?php echo esc_attr__( 'Home', 'olobuild' ); ?>">
-                <img class="olo-sh-blogo" src="<?php echo esc_url( $brand_logo ); ?>" alt="" />
+                <img class="olo-sh-blogo<?php echo $logo_stuck ? ' olo-sh-blogo-base' : ''; ?>" src="<?php echo esc_url( $logo_bar ); ?>" alt="" />
+                <?php if ( $logo_stuck ) : ?><img class="olo-sh-blogo olo-sh-blogo-stuck" src="<?php echo esc_url( $logo_stuck ); ?>" alt="" /><?php endif; ?>
               </a>
 
               <!-- primary nav -->
@@ -589,7 +708,7 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
                   </button>
                   <div class="olo-sh-panel olo-sh-search-panel" id="<?php echo esc_attr( $sp_id ); ?>" data-panel="search" role="dialog" aria-label="<?php echo esc_attr__( 'Cerca nel sito', 'olobuild' ); ?>">
                     <form class="olo-sh-search-field" action="<?php echo esc_url( $s['search_url'] ?: '/' ); ?>" method="get" role="search">
-                      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="6" stroke="#8B91A1" stroke-width="1.7"/><path d="m14 14 3.5 3.5" stroke="#8B91A1" stroke-width="1.7" stroke-linecap="round"/></svg>
+                      <svg class="olo-sh-sfic" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.7"/><path d="m14 14 3.5 3.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
                       <input type="search" name="s" data-search-input placeholder="<?php echo esc_attr( $s['search_placeholder'] ); ?>" aria-label="<?php echo esc_attr( $s['search_placeholder'] ); ?>" />
                       <kbd>Esc</kbd>
                     </form>
@@ -650,7 +769,7 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
           <div class="olo-sh-scrim" data-scrim></div>
           <aside class="olo-sh-sheet" data-sheet aria-label="<?php echo esc_attr__( 'Menu mobile', 'olobuild' ); ?>">
             <div class="olo-sh-sheet-top">
-              <span class="olo-sh-brand"><img src="<?php echo esc_url( $brand_logo ); ?>" alt="" /></span>
+              <span class="olo-sh-brand"><img src="<?php echo esc_url( $logo_bar ); ?>" alt="" /></span>
               <button class="olo-sh-sheet-x" data-sheet-x aria-label="<?php echo esc_attr__( 'Chiudi', 'olobuild' ); ?>">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
               </button>
@@ -807,7 +926,21 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
           // ── mobile sheet ──
           var sheet = root.querySelector('[data-sheet]'), scrim = root.querySelector('[data-scrim]'), ham = root.querySelector('[data-ham]');
           function openSheet(){ if(!sheet) return; sheet.classList.add('olo-sh-open'); if(scrim) scrim.classList.add('olo-sh-open'); if(ham) ham.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
-          function closeSheet(){ if(!sheet) return; sheet.classList.remove('olo-sh-open'); if(scrim) scrim.classList.remove('olo-sh-open'); if(ham) ham.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+          // Durante l'uscita del pannello resta olo-sh-uscita sulla radice, che tiene sospesa l'Ombra
+          // del riquadro (CSS sopra): se tornasse subito, il pannello in chiusura ricadrebbe dentro
+          // la barra. Durata = la transizione più lunga fra pannello e velo.
+          var uscitaTimer = null;
+          function durataUscita(){
+            var max = 0;
+            [sheet, scrim].forEach(function(el){
+              if(!el) return;
+              var cs = getComputedStyle(el), dd = String(cs.transitionDuration || '0s').split(','), rr = String(cs.transitionDelay || '0s').split(',');
+              for (var i = 0; i < dd.length; i++) { var t = (parseFloat(dd[i]) || 0) + (parseFloat(rr[i % rr.length]) || 0); if (t > max) max = t; }
+            });
+            return Math.ceil(max * 1000) + 50;
+          }
+          function closeSheet(){ if(!sheet) return; var eraAperto = sheet.classList.contains('olo-sh-open'); sheet.classList.remove('olo-sh-open'); if(scrim) scrim.classList.remove('olo-sh-open'); if(ham) ham.setAttribute('aria-expanded','false'); document.body.style.overflow='';
+            if(eraAperto){ if(uscitaTimer) clearTimeout(uscitaTimer); root.classList.add('olo-sh-uscita'); uscitaTimer = setTimeout(function(){ uscitaTimer = null; root.classList.remove('olo-sh-uscita'); }, durataUscita()); } }
           if(ham) ham.addEventListener('click', openSheet);
           var sx = root.querySelector('[data-sheet-x]'); if(sx) sx.addEventListener('click', closeSheet);
           if(scrim) scrim.addEventListener('click', closeSheet);
