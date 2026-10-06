@@ -2859,18 +2859,21 @@ export const TILE_PRESETS = {
       wow_disable: false, wow_backdrop_blur: 0, wow_backdrop_saturate: 100, wow_border_style: 'solid', wow_font_family: 'inherit', wow_rotation: 0, wow_perspective: 1200, wow_tilt_x: -2, wow_glow_pulse: false, wow_title_glow: false, wow_scanlines: false, wow_terminal_prompt: false },
   },
   proslider: {
-    'cinema-hero':     { autoplay: true,  autoplaySpeed: 6000, transition: 'fade',  transitionDuration: 1000 },
-    'magazine-cover':  { autoplay: true,  autoplaySpeed: 7000, transition: 'fade',  transitionDuration: 800 },
-    'editorial-split': { autoplay: false, autoplaySpeed: 5000, transition: 'slide', transitionDuration: 700 },
-    'minimal-clean':   { autoplay: false, autoplaySpeed: 5000, transition: 'slide', transitionDuration: 500 },
-    'product-showcase':{ autoplay: true,  autoplaySpeed: 4500, transition: 'slide', transitionDuration: 600 },
-    'glass-overlay':   { autoplay: true,  autoplaySpeed: 5500, transition: 'fade',  transitionDuration: 900 },
-    'neon-tron':       { autoplay: true,  autoplaySpeed: 4000, transition: 'zoom',  transitionDuration: 700 },
-    'brutalist-mega':  { autoplay: false, autoplaySpeed: 5000, transition: 'slide', transitionDuration: 400 },
-    'gradient-aurora': { autoplay: true,  autoplaySpeed: 6000, transition: 'fade',  transitionDuration: 1200 },
-    'sticker-fun':     { autoplay: true,  autoplaySpeed: 4500, transition: 'slide', transitionDuration: 600 },
-    'retro-vhs':       { autoplay: true,  autoplaySpeed: 4000, transition: 'slide', transitionDuration: 500 },
-    'tilt-parallax':   { autoplay: true,  autoplaySpeed: 5500, transition: 'zoom',  transitionDuration: 1000 },
+    // La finitura visiva di ogni preset (cornice, velo, luce, trama) sta in olo-proslider.css
+    // sulla classe olo-ps-preset-<nome>; qui riproduzione e stile di frecce e punti, che
+    // restano poi modificabili a mano.
+    'cinema-hero':     { autoplay: true,  autoplaySpeed: 6000, transition: 'fade',  transitionDuration: 1000, arrowStyle: 'minimal', dotStyle: 'bars' },
+    'magazine-cover':  { autoplay: true,  autoplaySpeed: 7000, transition: 'fade',  transitionDuration: 800,  arrowStyle: 'outline', dotStyle: 'numbers' },
+    'editorial-split': { autoplay: false, autoplaySpeed: 5000, transition: 'slide', transitionDuration: 700,  arrowStyle: 'boxed',   dotStyle: 'dash' },
+    'minimal-clean':   { autoplay: false, autoplaySpeed: 5000, transition: 'slide', transitionDuration: 500,  arrowStyle: 'minimal', dotStyle: 'dash' },
+    'product-showcase':{ autoplay: true,  autoplaySpeed: 4500, transition: 'slide', transitionDuration: 600,  arrowStyle: 'rounded', dotStyle: 'circles' },
+    'glass-overlay':   { autoplay: true,  autoplaySpeed: 5500, transition: 'fade',  transitionDuration: 900,  arrowStyle: 'rounded', dotStyle: 'bars' },
+    'neon-tron':       { autoplay: true,  autoplaySpeed: 4000, transition: 'zoom',  transitionDuration: 700,  arrowStyle: 'outline', dotStyle: 'dash' },
+    'brutalist-mega':  { autoplay: false, autoplaySpeed: 5000, transition: 'slide', transitionDuration: 400,  arrowStyle: 'boxed',   dotStyle: 'numbers' },
+    'gradient-aurora': { autoplay: true,  autoplaySpeed: 6000, transition: 'fade',  transitionDuration: 1200, arrowStyle: 'rounded', dotStyle: 'bars' },
+    'sticker-fun':     { autoplay: true,  autoplaySpeed: 4500, transition: 'slide', transitionDuration: 600,  arrowStyle: 'rounded', dotStyle: 'circles' },
+    'retro-vhs':       { autoplay: true,  autoplaySpeed: 4000, transition: 'slide', transitionDuration: 500,  arrowStyle: 'boxed',   dotStyle: 'numbers' },
+    'tilt-parallax':   { autoplay: true,  autoplaySpeed: 5500, transition: 'zoom',  transitionDuration: 1000, arrowStyle: 'rounded', dotStyle: 'circles' },
   },
   table: {
     'modern-clean':       { has_header: true, striped: true,  bordered: true,  compact: false, header_bg: '#0ea5e9', header_text_color: '#fff', text_color: '#1f2937', border_color: '#e5e7eb', even_row_bg: '#f9fafb', shadow: 'sm' },

@@ -46,9 +46,11 @@ function defaultLayer(type = 'text') {
     fontSize: type === 'text' ? 48 : (type === 'button' ? 18 : 24),
     fontWeight: '700',
     fontStyle: 'normal', // normal | italic
-    color: '#ffffff',
+    // Il pulsante nasce sul primario della palette col suo contrasto (era un blu fisso #2563eb,
+    // estraneo a ogni tema): vale solo per i pulsanti aggiunti da qui in avanti.
+    color: type === 'button' ? 'var(--olo-color-primary-contrast, #ffffff)' : '#ffffff',
     textAlign: 'left',
-    bgColor: type === 'button' ? '#2563eb' : '',
+    bgColor: type === 'button' ? 'var(--olo-color-primary, #e1474f)' : '',
     borderRadius: type === 'button' ? 6 : 0,
     borderRadiusLinked: true, // true = tutti gli angoli uguali
     borderRadiusTL: 0,

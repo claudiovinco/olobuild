@@ -361,7 +361,8 @@ function layerStyle(l) {
       st.backgroundColor = l.bgColor || '#3b82f6';
     }
   } else if (l.type === 'button') {
-    st.backgroundColor = l.bgColor || '#2563eb';
+    // Come il PHP: senza colore il pulsante prende il primario del sito (prima un blu fisso).
+    st.backgroundColor = l.bgColor || 'var(--olo-color-primary, #e1474f)';
   } else if (l.type === 'icon') {
     if (l.bgColor) st.backgroundColor = l.bgColor;
     if (l.padding) st.padding = l.padding + 'px';
@@ -448,7 +449,7 @@ function buttonStyle(l) {
   const st = {
     fontSize: l.fontSize + 'px',
     fontWeight: l.fontWeight || '600',
-    color: l.color || '#fff',
+    color: l.color || (l.bgColor ? '#fff' : 'var(--olo-color-primary-contrast, #ffffff)'),
     display: 'inline-block',
     textAlign: 'center',
     lineHeight: l.lineHeight ?? 1.2,

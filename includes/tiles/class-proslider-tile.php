@@ -50,7 +50,9 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                         'height'         => 'auto',
                         'fontSize'       => 48,
                         'fontWeight'     => '700',
-                        'color'          => 'var(--olo-color-dark, #ffffff)',
+                        // Chiaro sul fondo scuro della diapositiva: era «dark» con riserva
+                        // bianca (una sostituzione meccanica), cioè titolo scuro su scuro.
+                        'color'          => 'var(--olo-color-light, #ffffff)',
                         'textAlign'      => 'left',
                         'bgColor'        => '',
                         'borderRadius'   => 0,
@@ -700,7 +702,10 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                 $style .= 'background-color:' . ( $layer_bg ?: 'var(--olo-color-primary, #e1474f)' ) . ';';
             }
         } elseif ( $type === 'button' ) {
-            $style .= 'background-color:' . ( $layer_bg ?: '#2563eb' ) . ';';
+            // Senza colore il pulsante prendeva un blu fisso (#2563eb) estraneo alla
+            // palette: ora il primario del sito, col suo contrasto per il testo
+            // (render_layer_content).
+            $style .= 'background-color:' . ( $layer_bg ?: 'var(--olo-color-primary, #e1474f)' ) . ';';
         } elseif ( $type === 'text' || $type === 'icon' ) {
             if ( $layer_bg ) { $style .= 'background-color:' . $layer_bg . ';'; }
         }
@@ -905,6 +910,11 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                 $target = esc_attr( $layer['buttonTarget'] ?? '_self' );
                 $label  = esc_html( $layer['content'] ?? 'Button' );
                 $btn_style = $base_style . 'display:inline-block;text-decoration:none;cursor:pointer;';
+                // Pulsante senza colori: il fondo è il primario (render_layer), il testo il suo
+                // contrasto. Senza, `color:;` veniva scartato e restava il colore dei link del tema.
+                if ( '' === $color && '' === $this->safe_color_css( $layer['bgColor'] ?? '' ) ) {
+                    $btn_style .= 'color:var(--olo-color-primary-contrast, #ffffff);';
+                }
                 return '<a href="' . $url . '" target="' . $target . '" style="' . esc_attr( $btn_style ) . '">' . $label . '</a>';
 
             case 'icon':

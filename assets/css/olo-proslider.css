@@ -892,3 +892,182 @@
   .olo-proslider-dot { width: 10px; height: 10px; }
   .olo-proslider-layer { font-size: 0.6em !important; }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Preset stilistici (menu «Stile» del tab Stile)
+   ═══════════════════════════════════════════════════════════
+   La classe olo-ps-preset-<nome> usciva nel markup ma nessuna regola la leggeva:
+   i 12 preset cambiavano solo riproduzione e transizione, e a vederli erano tutti
+   uguali. Ora ognuno è una FINITURA del riquadro sopra le diapositive dell'utente:
+   - velo, luce, tinta → ::after di .olo-proslider-bg, SOTTO i livelli (i testi non
+     si scuriscono);
+   - cornice, trama → ::after della radice (z 4), sopra i livelli e sotto frecce e
+     punti (z 10).
+   Livelli e colori salvati non si toccano: ombra, maiuscolo e spaziatura scritti sul
+   livello sono inline e vincono; il Bordo della tile (regola su #id) vince sulla
+   cornice. Colori solo dai token della palette. */
+.olo-ps-preset-cinema-hero::after,
+.olo-ps-preset-magazine-cover::after,
+.olo-ps-preset-glass-overlay::after,
+.olo-ps-preset-brutalist-mega::after,
+.olo-ps-preset-sticker-fun::after,
+.olo-ps-preset-retro-vhs::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  border-radius: inherit;
+}
+.olo-ps-preset-cinema-hero .olo-proslider-bg::after,
+.olo-ps-preset-magazine-cover .olo-proslider-bg::after,
+.olo-ps-preset-editorial-split .olo-proslider-bg::after,
+.olo-ps-preset-product-showcase .olo-proslider-bg::after,
+.olo-ps-preset-glass-overlay .olo-proslider-bg::after,
+.olo-ps-preset-neon-tron .olo-proslider-bg::after,
+.olo-ps-preset-gradient-aurora .olo-proslider-bg::after,
+.olo-ps-preset-retro-vhs .olo-proslider-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Cinema Hero — bande del formato cinema e vignettatura */
+.olo-ps-preset-cinema-hero::after {
+  background: linear-gradient(to bottom, var(--olo-color-dark, #0b0d12) 0 5%, transparent 5% 95%, var(--olo-color-dark, #0b0d12) 95%);
+}
+.olo-ps-preset-cinema-hero .olo-proslider-bg::after {
+  background: radial-gradient(ellipse at center, transparent 48%, color-mix(in srgb, var(--olo-color-dark, #0b0d12) 62%, transparent) 100%);
+}
+
+/* Magazine Cover — filetto interno da copertina, luce in testata e al piede */
+.olo-ps-preset-magazine-cover::after {
+  inset: clamp(10px, 2.2%, 22px);
+  border: 1px solid color-mix(in srgb, var(--olo-color-light, #ffffff) 72%, transparent);
+}
+.olo-ps-preset-magazine-cover .olo-proslider-bg::after {
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--olo-color-dark, #0b0d12) 45%, transparent) 0%, transparent 28%, transparent 62%, color-mix(in srgb, var(--olo-color-dark, #0b0d12) 55%, transparent) 100%);
+}
+
+/* Editorial Split — metà del testo in ombra, la foto libera a destra */
+.olo-ps-preset-editorial-split .olo-proslider-bg::after {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--olo-color-dark, #0b0d12) 82%, transparent) 0%, color-mix(in srgb, var(--olo-color-dark, #0b0d12) 55%, transparent) 42%, transparent 68%);
+}
+
+/* Minimal Clean — angoli morbidi e un'ombra appena accennata */
+.olo-proslider.olo-ps-preset-minimal-clean {
+  border-radius: 16px;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--olo-color-dark, #0b0d12) 8%, transparent), 0 14px 32px -20px color-mix(in srgb, var(--olo-color-dark, #0b0d12) 35%, transparent);
+}
+
+/* Product Showcase — palco con la luce al centro */
+.olo-proslider.olo-ps-preset-product-showcase {
+  border-radius: 24px;
+  box-shadow: 0 26px 60px -30px color-mix(in srgb, var(--olo-color-dark, #0b0d12) 60%, transparent);
+}
+.olo-ps-preset-product-showcase .olo-proslider-bg::after {
+  background: radial-gradient(ellipse 60% 55% at 50% 58%, color-mix(in srgb, var(--olo-color-light, #ffffff) 24%, transparent), transparent 72%);
+}
+
+/* Glass Overlay — riflesso di vetro in diagonale e bordo di luce */
+.olo-proslider.olo-ps-preset-glass-overlay {
+  border-radius: 20px;
+}
+.olo-ps-preset-glass-overlay::after {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--olo-color-light, #ffffff) 38%, transparent);
+}
+.olo-ps-preset-glass-overlay .olo-proslider-bg::after {
+  background: linear-gradient(125deg, color-mix(in srgb, var(--olo-color-light, #ffffff) 28%, transparent) 0%, color-mix(in srgb, var(--olo-color-light, #ffffff) 6%, transparent) 38%, transparent 56%);
+}
+
+/* Neon Tron — alone al neon, griglia luminosa e testi che brillano */
+.olo-proslider.olo-ps-preset-neon-tron {
+  box-shadow: 0 0 0 1px var(--olo-color-accent, #22d3ee), 0 0 18px color-mix(in srgb, var(--olo-color-accent, #22d3ee) 55%, transparent), 0 0 48px color-mix(in srgb, var(--olo-color-accent, #22d3ee) 28%, transparent);
+}
+.olo-ps-preset-neon-tron .olo-proslider-bg::after {
+  background:
+    linear-gradient(to top, color-mix(in srgb, var(--olo-color-accent, #22d3ee) 30%, transparent), transparent 38%),
+    repeating-linear-gradient(0deg, color-mix(in srgb, var(--olo-color-accent, #22d3ee) 16%, transparent) 0 1px, transparent 1px 48px),
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--olo-color-accent, #22d3ee) 16%, transparent) 0 1px, transparent 1px 48px);
+}
+.olo-ps-preset-neon-tron .olo-proslider-layer {
+  text-shadow: 0 0 6px color-mix(in srgb, var(--olo-color-accent, #22d3ee) 85%, transparent), 0 0 20px color-mix(in srgb, var(--olo-color-accent, #22d3ee) 50%, transparent);
+}
+
+/* Brutalist Mega — cornice spessa, ombra piena sfalsata, testi in maiuscolo */
+.olo-proslider.olo-ps-preset-brutalist-mega {
+  box-shadow: 12px 12px 0 0 var(--olo-color-primary, #e1474f);
+}
+.olo-ps-preset-brutalist-mega::after {
+  border: 4px solid var(--olo-color-dark, #0b0d12);
+}
+/* Anche sul figlio diretto: i titoli (h1-h6) ricevono text-transform e letter-spacing
+   dal sistema stile (.olo-template h2) e non li ereditano dal livello. Maiuscolo e
+   spaziatura scelti sul livello stanno inline sul figlio e vincono comunque. */
+.olo-ps-preset-brutalist-mega .olo-proslider-layer,
+.olo-ps-preset-brutalist-mega .olo-proslider-layer > * {
+  text-transform: uppercase;
+  letter-spacing: .02em;
+}
+
+/* Gradient Aurora — veli di colore della palette che scorrono piano */
+.olo-ps-preset-gradient-aurora .olo-proslider-bg::after {
+  background:
+    radial-gradient(60% 80% at 15% 20%, color-mix(in srgb, var(--olo-color-primary, #e1474f) 60%, transparent), transparent 70%),
+    radial-gradient(55% 75% at 85% 30%, color-mix(in srgb, var(--olo-color-accent, #f4a23b) 55%, transparent), transparent 70%),
+    radial-gradient(70% 70% at 50% 100%, color-mix(in srgb, var(--olo-color-secondary, #64748b) 55%, transparent), transparent 70%);
+  background-size: 160% 160%;
+  opacity: .6;
+  animation: mpsPresetAurora 16s ease-in-out infinite alternate;
+}
+@keyframes mpsPresetAurora { from { background-position: 0% 0%; } to { background-position: 100% 100%; } }
+
+/* Sticker Fun — bordo bianco da adesivo e ombra piena colorata */
+.olo-proslider.olo-ps-preset-sticker-fun {
+  border-radius: 28px;
+  box-shadow: 8px 10px 0 0 var(--olo-color-accent, #f4a23b);
+}
+.olo-ps-preset-sticker-fun::after {
+  border: 6px solid var(--olo-color-light, #ffffff);
+}
+
+/* Retro VHS — righe del nastro, colori spinti, testo sdoppiato in due colori */
+.olo-ps-preset-retro-vhs::after {
+  background: repeating-linear-gradient(to bottom, color-mix(in srgb, var(--olo-color-dark, #0b0d12) 24%, transparent) 0 1px, transparent 1px 3px);
+}
+.olo-ps-preset-retro-vhs .olo-proslider-bg::after {
+  background: radial-gradient(ellipse at center, transparent 55%, color-mix(in srgb, var(--olo-color-dark, #0b0d12) 50%, transparent) 100%);
+}
+.olo-ps-preset-retro-vhs .olo-proslider-bg img,
+.olo-ps-preset-retro-vhs .olo-proslider-bg video {
+  filter: saturate(1.3) contrast(1.08);
+}
+.olo-ps-preset-retro-vhs .olo-proslider-layer {
+  text-shadow: 2px 0 color-mix(in srgb, var(--olo-color-primary, #e1474f) 75%, transparent), -2px 0 color-mix(in srgb, var(--olo-color-accent, #22d3ee) 75%, transparent);
+}
+
+/* Tilt Parallax — il riquadro inclinato in prospettiva si raddrizza al passaggio.
+   Non in larghezza piena né a schermo intero: lì il transform serve già a
+   centrare (translateX(-50%)) e la regola lo cancellerebbe. */
+.olo-proslider.olo-ps-preset-tilt-parallax:not(.mps-fullwidth):not(.mps-fullscreen) {
+  border-radius: 14px;
+  transform: perspective(1200px) rotateX(2deg);
+  transform-origin: 50% 100%;
+  box-shadow: 0 30px 60px -32px color-mix(in srgb, var(--olo-color-dark, #0b0d12) 60%, transparent);
+  transition: transform .6s cubic-bezier(.2, .7, .2, 1), box-shadow .6s ease;
+}
+.olo-proslider.olo-ps-preset-tilt-parallax:not(.mps-fullwidth):not(.mps-fullscreen):hover {
+  transform: perspective(1200px) rotateX(0deg) translateY(-4px);
+  box-shadow: 0 40px 70px -34px color-mix(in srgb, var(--olo-color-dark, #0b0d12) 66%, transparent);
+}
+.olo-tile-fullwidth > .olo-proslider.olo-ps-preset-tilt-parallax:not(.mps-fullwidth):not(.mps-fullscreen),
+.olo-tile-fullwidth > .olo-proslider.olo-ps-preset-tilt-parallax:not(.mps-fullwidth):not(.mps-fullscreen):hover {
+  transform: translateX(-50%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .olo-ps-preset-gradient-aurora .olo-proslider-bg::after { animation: none; }
+  .olo-proslider.olo-ps-preset-tilt-parallax:not(.mps-fullwidth):not(.mps-fullscreen) { transition: none; }
+}
