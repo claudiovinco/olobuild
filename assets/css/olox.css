@@ -290,13 +290,16 @@
 .oloxp .browser .bar i:first-child{background:var(--c);}
 .oloxp .browser .url{margin-left:10px; font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--faint); letter-spacing:.08em;}
 .oloxp .browser .stage{position:absolute; inset:34px 0 0 0; padding:10px; display:flex; flex-direction:column; gap:8px;}
-.oloxp .blk{border-radius:6px; border:1px solid rgba(232,69,61,.4); background:rgba(232,69,61,.1);
+/* I blocchi dell'assembler e gli slot confermati della giornata seguono il colore scelto (--c):
+   erano rosso OLObuild e blu OLObooking fissi, e il timbro (già --c) usciva di un altro colore.
+   Identici a prima con OLObuild sui blocchi e OLObooking sugli slot. */
+.oloxp .blk{border-radius:6px; border:1px solid color-mix(in srgb, var(--c) 40%, transparent); background:color-mix(in srgb, var(--c) 10%, transparent);
   display:flex; align-items:center; justify-content:center; gap:10px;
   font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--dim);
   will-change:transform;}
 .oloxp .blk b{color:var(--c); font-weight:700;}
 .oloxp .blk[data-b="0"]{height:13%;}
-.oloxp .blk[data-b="1"]{height:30%; background:rgba(232,69,61,.22);}
+.oloxp .blk[data-b="1"]{height:30%; background:color-mix(in srgb, var(--c) 22%, transparent);}
 .oloxp .blk[data-b="2"]{height:22%;}
 .oloxp .blk[data-b="3"]{height:18%;}
 .oloxp .blk[data-b="4"]{height:11%;}
@@ -385,7 +388,7 @@
 .oloxp .slot .stamp{position:absolute; right:14px; top:50%; transform:translateY(-50%) rotate(-8deg) scale(2.6); opacity:0;
   font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; letter-spacing:.22em; text-transform:uppercase;
   color:var(--c); border:2px solid var(--c); border-radius:4px; padding:3px 8px; pointer-events:none;}
-.oloxp .slot.b{border-color:rgba(61,139,255,.5); background:linear-gradient(90deg, rgba(61,139,255,.12), var(--bg-2) 60%);}
+.oloxp .slot.b{border-color:color-mix(in srgb, var(--c) 50%, transparent); background:linear-gradient(90deg, color-mix(in srgb, var(--c) 12%, var(--bg-2)), var(--bg-2) 60%);}
 .oloxp .slot.b .who{opacity:0;}
 .oloxp .slot.b .stamp{opacity:1; transform:translateY(-50%) rotate(-8deg) scale(1);
   transition:transform .3s cubic-bezier(.2,1.6,.4,1), opacity .15s;}
@@ -595,24 +598,32 @@
 .oloxp .medal .orbit i{position:absolute; top:-5px; left:50%; width:10px; height:10px; border-radius:50%; background:var(--tutor);}
 @keyframes oloxorbit{to{transform:rotate(360deg);}}
 .oloxp .path{position:relative; max-width:760px; margin:0 auto;}
+/* Percorso, nodi e punti seguono il colore scelto (--c, di default OLOtutor): erano verde fisso.
+   Il numero sul nodo pieno è scuro sui colori chiari e chiaro su quelli scuri (sintassi relativa,
+   sotto @supports: chi non la conosce tiene lo scuro del design). */
 .oloxp .path::before{content:""; position:absolute; left:26px; top:0; bottom:0; width:2px;
-  background:repeating-linear-gradient(180deg, rgba(56,193,114,.5) 0 8px, transparent 8px 15px);}
+  background:repeating-linear-gradient(180deg, color-mix(in srgb, var(--c) 50%, transparent) 0 8px, transparent 8px 15px);}
 .oloxp .lez{position:relative; margin:0 0 22px; padding-left:74px;}
 .oloxp .lez .node{position:absolute; left:9px; top:14px; width:36px; height:36px; border-radius:50%;
-  background:var(--bg-2); border:2px solid var(--tutor); color:var(--tutor); display:flex; align-items:center; justify-content:center;
+  background:var(--bg-2); border:2px solid var(--c); color:var(--c); display:flex; align-items:center; justify-content:center;
   font-size:15px; font-weight:700; z-index:1; transition:all .4s;}
 .oloxp .lez .box{background:var(--bg-2); border:1px solid var(--line); border-radius:12px; padding:22px 26px; position:relative; overflow:hidden;}
 .oloxp .lez h3{font-family:'Fraunces',serif; font-weight:500; font-size:21px; margin:0 0 7px; letter-spacing:-.015em;}
 .oloxp .lez p{font-size:13.5px; line-height:1.6; color:var(--dim); margin:0;}
 .oloxp .lez .xp{position:absolute; top:16px; right:18px; font-family:'JetBrains Mono',monospace; font-size:10px;
-  font-weight:700; letter-spacing:.14em; color:var(--tutor);}
+  font-weight:700; letter-spacing:.14em; color:var(--c);}
 .oloxp .lez .lockveil{position:absolute; inset:0; background:rgba(10,12,16,.88); display:flex; align-items:center; justify-content:center;
   gap:12px; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.3em; text-transform:uppercase; color:var(--faint);
   transition:opacity .5s, transform .6s cubic-bezier(.6,0,.3,1);}
 .oloxp .lez.unlocked .lockveil{opacity:0; transform:translateX(101%); pointer-events:none;}
-.oloxp .lez.unlocked .node{background:var(--tutor); color:#0C0E13; box-shadow:0 0 18px rgba(56,193,114,.5);}
+.oloxp .lez.unlocked .node{background:var(--c); color:#0C0E13; box-shadow:0 0 18px color-mix(in srgb, var(--c) 50%, transparent);}
 .oloxp:not(.oloxp-live) .lez .lockveil{display:none;}
-.oloxp:not(.oloxp-live) .lez .node{background:var(--tutor); color:#0C0E13;}
+.oloxp:not(.oloxp-live) .lez .node{background:var(--c); color:#0C0E13;}
+/* Il colore relativo sta sotto @supports: scritto come seconda dichiarazione, contenendo var() veniva
+   sempre accettato e scartava lo scuro; dove la sintassi manca diventava unset e il numero ereditava il crema. */
+@supports (color: oklch(from red l c h)){
+  .oloxp .lez.unlocked .node, .oloxp:not(.oloxp-live) .lez .node{color:oklch(from var(--c) clamp(.16, (.62 - l) * 1000, .98) 0 0);}
+}
 .oloxp .quiz{max-width:640px; margin:0 auto; background:var(--bg-2); border:1px solid var(--line); border-radius:14px; padding:34px;}
 .oloxp .quiz .q{font-family:'Fraunces',serif; font-size:24px; letter-spacing:-.015em; margin:0 0 22px;}
 .oloxp .quiz .q em{font-style:italic; color:var(--c);}
@@ -626,6 +637,19 @@
   text-transform:uppercase; color:var(--faint); min-height:1.4em;}
 .oloxp .quiz .verdict b{color:var(--c);}
 .olox-confetti{position:fixed; width:8px; height:8px; z-index:99; pointer-events:none; border-radius:2px;}
+
+/* Testi che stanno direttamente sulla pagina (oloxlessons, oloxquiz, oloxsticky con «Testi sulla
+   pagina: colore del testo del tema» → .ox-tema sul wrapper). Il .oloxp è trasparente perché sotto
+   emerga lo sfondo della pagina, ma questi testi restavano nel crema del design scuro: su un tema
+   chiaro il titolo spariva. Qui prendono il testo del tema; le card scure non cambiano. */
+.oloxp.ox-tema{--ox-su:var(--olo-color-text, #374151); --ox-su-dim:var(--olo-color-text-muted, #6b7280);}
+.oloxp.oloxp.ox-tema .dsec .head h2.d,
+.oloxp.ox-tema .daytime,
+.oloxp.ox-tema .asm-copy .stepname{color:var(--ox-su);}
+.oloxp.ox-tema .dayocc,
+.oloxp.ox-tema .asm-copy .step,
+.oloxp.ox-tema .asm-hint{color:var(--ox-su-dim);}
+.oloxp.ox-tema .dsec{border-top-color:color-mix(in srgb, var(--ox-su) 12%, transparent);}
 
 /* ============================================================================
    HOME EXPERIENCE (index.html) — scoped .oloxp-home

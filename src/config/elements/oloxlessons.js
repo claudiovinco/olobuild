@@ -1,5 +1,5 @@
 import { t } from '@/i18n';
-import { oloxAccentField } from './_oloxShared.js';
+import { oloxAccentFields, oloxTestiPaginaField } from './_oloxShared.js';
 
 /**
  * OLOX Lessons — percorso lezioni che si sbloccano scendendo (pagina tutor).
@@ -13,6 +13,8 @@ export default {
 
   defaults: {
     accent: 'tutor',
+    accent_custom: '',
+    testi_pagina: 'chiari',
     anchor: 'lezioni',
     kicker: 'Il percorso',
     title_html: 'Le lezioni si <em>sbloccano</em> scendendo',
@@ -25,7 +27,9 @@ export default {
 
   // Come nasce dalla palette: il programma di un corso in quattro lezioni lungo il percorso
   // tratteggiato, coi nodi numerati, i punti di ogni lezione e il lucchetto che si apre scendendo.
+  // Il titolo sulla pagina prende il testo del tema: nel crema del design scuro spariva su un tema chiaro.
   partenza: {
+    testi_pagina: 'tema',
     kicker: t('Corso base · 4 lezioni'),
     title_html: t('Si impara <em>una lezione</em> alla volta'),
     items: [
@@ -50,5 +54,9 @@ export default {
       ] },
   ],
 
-  styleFields: [ oloxAccentField() ],
+  styleFields: [
+    { type: 'separator', label: t('Aspetto') },
+    ...oloxAccentFields(),
+    oloxTestiPaginaField(),
+  ],
 };

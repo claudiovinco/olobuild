@@ -1,5 +1,5 @@
 import { t } from '@/i18n';
-import { oloxAccentField } from './_oloxShared.js';
+import { oloxAccentFields, oloxTestiPaginaField } from './_oloxShared.js';
 
 /**
  * OLOX Sticky — sezioni sticky scroll-driven OLOtheme: assembler ("il sito si
@@ -14,6 +14,8 @@ export default {
 
   defaults: {
     accent: 'build',
+    accent_custom: '',
+    testi_pagina: 'chiari',
     variant: 'assembler',
     anchor: 'cantiere',
     kicker: 'Il cantiere',
@@ -42,7 +44,10 @@ export default {
 
   // Come nasce dalla palette: la variante «Giornata», con l'orario grande che avanza scorrendo e gli
   // appuntamenti di uno studio che si confermano col timbro; anche l'«Assembler» ha testi generici.
+  // Orario, fasi e titolo sulla pagina prendono il testo del tema: nel crema del design scuro
+  // sparivano su un tema chiaro.
   partenza: {
+    testi_pagina: 'tema',
     variant: 'day',
     kicker: t('Una giornata in studio'),
     day_label: t('agenda piena'),
@@ -104,11 +109,13 @@ export default {
       condition: { field: 'variant', op: 'eq', value: 'day' } },
   ],
 
-  styleFields: [ oloxAccentField(), 
+  styleFields: [
     { type: 'separator', label: t('Aspetto') },
     { key: 'variant', label: t('Variante'), type: 'select', options: [
       { value: 'assembler', label: t('Assembler — il sito si monta (build)') },
       { value: 'day', label: t('Giornata — agenda che si riempie (booking)') },
     ] },
-],
+    ...oloxAccentFields(),
+    oloxTestiPaginaField(),
+  ],
 };

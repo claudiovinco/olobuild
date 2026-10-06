@@ -1,5 +1,5 @@
 import { t } from '@/i18n';
-import { oloxAccentField } from './_oloxShared.js';
+import { oloxAccentFields, oloxTestiPaginaField } from './_oloxShared.js';
 
 /**
  * OLOX Quiz — quiz a risposta singola con confetti e bonus XP (pagina tutor).
@@ -13,6 +13,8 @@ export default {
 
   defaults: {
     accent: 'tutor',
+    accent_custom: '',
+    testi_pagina: 'chiari',
     anchor: 'quiz',
     kicker: 'Verifica finale',
     title_html: 'Un quiz <em>vero</em>, provalo',
@@ -30,7 +32,9 @@ export default {
 
   // Come nasce dalla palette: una domanda di cultura generale con tre risposte cliccabili; quella
   // giusta diventa verde e lancia i coriandoli col bonus di punti, quella sbagliata mostra il verdetto.
+  // Il titolo sulla pagina prende il testo del tema: nel crema del design scuro spariva su un tema chiaro.
   partenza: {
+    testi_pagina: 'tema',
     kicker: t('Mettiti alla prova'),
     title_html: t('Quanto ne <em>sai</em>?'),
     question_html: t('Quante sono le <em>regioni</em> italiane?'),
@@ -62,5 +66,9 @@ export default {
     { key: 'anchor', label: t('Ancora (id)'), type: 'text' },
   ],
 
-  styleFields: [ oloxAccentField() ],
+  styleFields: [
+    { type: 'separator', label: t('Aspetto') },
+    ...oloxAccentFields(),
+    oloxTestiPaginaField(),
+  ],
 };

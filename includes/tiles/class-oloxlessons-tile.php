@@ -14,6 +14,8 @@ class Olobuild_OloxLessons_Tile extends Olobuild_Olox_Base_Tile {
     protected $category = 'marketing';
     protected $defaults = [
         'accent'     => 'tutor',
+        'accent_custom' => '',
+        'testi_pagina'  => 'chiari', // salvate prima: come prima; le nuove 'tema' (partenza)
         'anchor'     => 'lezioni',
         'kicker'     => 'Il percorso',
         'title_html' => 'Le lezioni si <em>sbloccano</em> scendendo',
@@ -27,11 +29,16 @@ class Olobuild_OloxLessons_Tile extends Olobuild_Olox_Base_Tile {
     public function render( $settings, $style = [] ) {
         $s = wp_parse_args( $settings, $this->defaults );
         $this->olox_assets();
-        $accent = $this->olox_color( $s['accent'] );
+        // Colore: uno dei 7 prodotti (chiave di olox_color), un ruolo del tema (valore CSS già pronto)
+        // o «Personalizzato» (accent_custom). Prima si poteva scegliere solo fra i prodotti.
+        $accent = 'custom' === $s['accent'] ? ( $this->safe_color_css( $s['accent_custom'] ) ?: 'var(--olo)' ) : $this->olox_color( $s['accent'] );
+        // Titolo sulla pagina col testo del tema (.ox-tema in olox.css): nel crema del design scuro
+        // spariva su un tema chiaro. «Chiari» tiene il design per le pagine e le sezioni scure.
+        $tono   = 'tema' === $s['testi_pagina'] ? 'ox-tema' : '';
         $anchor = sanitize_html_class( (string) $s['anchor'] );
 
         ob_start();
-        echo $this->olox_open( '', '--c:' . $accent ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo $this->olox_open( $tono, '--c:' . $accent ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- olox_open() passa classe e stile da esc_attr()
         ?>
         <section class="dsec" data-olox="xp"<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?>>
             <div class="wrap">
