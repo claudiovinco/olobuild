@@ -165,7 +165,8 @@ trait Olobuild_Renderer_Structure_Trait {
 
         // Helper unificato: margin/padding/border-radius/border/opacity/flex/transform/
         // box-shadow inline/text-shadow/backdrop/overflow/dimensions/mask/custom_css/position.
-        $this->apply_common_box_styles( $inline_styles, $style, $s, $advanced );
+        // La «Maschera forma» delle Avanzate la sezione la applica più sotto (clip-path): qui niente doppione.
+        $this->apply_common_box_styles( $inline_styles, $style, $s, $advanced, [ 'mask_avanzate' => false ] );
 
         // CSS Grid layout (overrides flex se layout_mode=grid) — section-specific.
         $grid_css = $this->css->build_css_grid_css( $s );

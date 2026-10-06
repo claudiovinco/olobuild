@@ -272,8 +272,21 @@ trait Olobuild_Renderer_Css_Trait {
             if ( $v !== '' ) $inline_styles[] = $css_prop . ': ' . $v;
         }
 
-        // Mask
+        // Mask: dal contenitore (style.mask_type) oppure dal pannello «Maschera forma» delle Avanzate, che
+        // salva in advanced.mask_type. Prima qui si leggeva solo lo style e il pannello agiva solo sulle
+        // sezioni (che lo rendono da sé: render_section_node passa mask_avanzate=false) e nel vecchio
+        // canvas Vue, che leggeva entrambi: su tile, righe e colonne non faceva niente. Stessa maschera
+        // SVG del contenitore; «Personalizzata» = il clip-path scritto nel pannello.
         $mask_css = $this->css->build_mask_css( $style );
+        if ( ! $mask_css && ( $opts['mask_avanzate'] ?? true ) ) {
+            $mask_adv = (string) ( $advanced['mask_type'] ?? 'none' );
+            if ( 'custom' === $mask_adv ) {
+                $clip     = $this->anim->build_inline_mask_css( $advanced );
+                $mask_css = $clip ? [ $clip ] : [];
+            } elseif ( '' !== $mask_adv && 'none' !== $mask_adv ) {
+                $mask_css = $this->css->build_mask_css( [ 'mask_type' => $mask_adv ] );
+            }
+        }
         if ( $mask_css ) {
             foreach ( $mask_css as $decl ) $inline_styles[] = $decl;
         }
