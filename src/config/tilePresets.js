@@ -53,7 +53,7 @@ export const TILE_PRESETS = {
   video: {
     'modern-clean':    { shadow: 'sm',   border_radius: '12', display_mode: '16:9', play_icon_size: '80',  play_icon_color: '#ffffff', overlay_color: '#000000', overlay_opacity: '20' },
     'minimal-frame':   { shadow: 'none', border_radius: '0',  display_mode: '16:9', play_icon_size: '60',  play_icon_color: '#ffffff', overlay_color: '',        overlay_opacity: '0'  },
-    'cinema-wide':     { shadow: 'lg',   border_radius: '4',  display_mode: '16:9', play_icon_size: '100', play_icon_color: '#ffffff', overlay_color: '#000000', overlay_opacity: '35' },
+    'cinema-wide':     { shadow: 'lg',   border_radius: '4',  display_mode: '21:9', play_icon_size: '100', play_icon_color: '#ffffff', overlay_color: '#000000', overlay_opacity: '35' },
     'magazine-bold':   { shadow: 'none', border_radius: '0',  display_mode: '16:9', play_icon_size: '80',  play_icon_color: '#000000', overlay_color: '#ffffff', overlay_opacity: '10' },
     'centered-large':  { shadow: 'md',   border_radius: '20', display_mode: '4:3',  play_icon_size: '100', play_icon_color: '#ffffff', overlay_color: '#000000', overlay_opacity: '25' },
     'glass-frame':     { shadow: 'lg',   border_radius: '20', display_mode: '16:9', play_icon_size: '80',  play_icon_color: '#ffffff', overlay_color: 'rgba(255,255,255,0.15)', overlay_opacity: '60' },

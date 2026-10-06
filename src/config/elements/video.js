@@ -1,6 +1,13 @@
 import { textEffectsFields, textEffectsDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
 import { t } from '@/i18n';
 
+// File = Sorgente «File» oppure un «URL video» diretto (.mp4/.webm/.ogg), come is_direct_video() in
+// class-video-tile.php: guardare solo source_type lasciava facciata e privacy visibili e inerti.
+const isFile = (s) => s.source_type === 'file' || /\.(mp4|webm|ogg)(\?.*)?$/i.test(s.video_url || '');
+// Il pulsante play disegnato: sugli embed è la copertina della «facciata», sui file un pulsante
+// sopra il video che con la riproduzione automatica non c'è (class-video-tile.php, play_su_file()).
+const playDisegnato = (s) => (isFile(s) ? !s.autoplay : s.facade !== false);
+
 /**
  * Tile Video — split CONTENUTO/STILE (regola universale Olobuild).
  *   fields[]      → sorgente (YouTube/Vimeo/file), URL, poster, didascalia, overlay testo, opzioni privacy/playback (autoplay/mute/loop/controls/start/end/facade)
@@ -45,6 +52,7 @@ export default {
     overlay_text_color: 'var(--olo-color-light, #f8f9fa)',
     overlay_text_weight: '700',
     overlay_text_align: 'center',
+    overlay_text_valign: 'center',
     caption: '',
     shadow: 'none',
     ...textEffectsDefaults,
@@ -60,6 +68,8 @@ export default {
     caption: t('Due minuti per conoscerci: chi siamo e come lavoriamo.'),
     overlay_color: 'var(--olo-color-dark, #16263d)',
     overlay_text_color: 'var(--olo-color-light, #f8f9fa)',
+    // Vuoto = il chiaro del tema (il PHP ha ancora #ffffff fisso nei default).
+    play_icon_color: '',
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────
@@ -81,10 +91,11 @@ export default {
     { key: 'controls', label: t('Mostra controlli'), type: 'toggle' },
     { key: 'start_time', label: t('Inizio (secondi)'), type: 'number', min: 0, step: 1 },
     { key: 'end_time', label: t('Fine (secondi)'), type: 'number', min: 0, step: 1 },
-    { key: 'facade', label: t('Lazy Load (Facade)'), type: 'toggle' },
-    { key: 'show_play_icon', label: t('Mostra icona play'), type: 'toggle' },
+    // Facciata e modo privacy sono di YouTube e Vimeo: con un file non fanno niente.
+    { key: 'facade', label: t('Lazy Load (Facade)'), type: 'toggle', show: (s) => !isFile(s) },
+    { key: 'show_play_icon', label: t('Mostra icona play'), type: 'toggle', show: playDisegnato },
 
-    { type: 'separator', label: t('Privacy') },
+    { type: 'separator', label: t('Privacy'), show: (s) => !isFile(s) },
     { key: 'privacy_mode', label: t('Modo privacy (no-cookie)'), type: 'toggle' },
   ],
 
@@ -110,12 +121,17 @@ export default {
 
     { type: 'separator', label: t('Dimensioni') },
     { key: 'display_mode', label: t('Visualizzazione'), type: 'select', options: [
+      { value: '21:9', label: t('21:9 (cinema)') },
       { value: '16:9', label: '16:9' },
+      { value: '3:2', label: '3:2' },
       { value: '4:3', label: '4:3' },
       { value: '1:1', label: '1:1' },
+      { value: '4:5', label: '4:5' },
+      { value: '9:16', label: t('9:16 (verticale)') },
       { value: 'cover', label: t('Cover (altezza fissa)') },
     ]},
-    { key: 'cover_height', label: t('Altezza'), type: 'range', min: 100, max: 1200, step: 10 },
+    { key: 'cover_height', label: t('Altezza'), type: 'range', min: 100, max: 1200, step: 10,
+      condition: { field: 'display_mode', op: 'eq', value: 'cover' } },
     { key: 'object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
       contextKeys: { src: 'poster_image', ratio: 'display_mode', fit: 'cover' } },
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
@@ -126,7 +142,7 @@ export default {
       { value: 'all', label: t('Entrambi') },
     ]),
 
-    { type: 'separator', label: t('Icona play — Aspetto') },
+    { type: 'separator', label: t('Icona play — Aspetto'), show: (s) => playDisegnato(s) && s.show_play_icon !== false },
     { key: 'play_icon_size', label: t('Dimensione icona play'), type: 'range', min: 40, max: 160, step: 10 },
     { key: 'play_icon_color', label: t('Colore icona play'), type: 'color' },
 
@@ -138,6 +154,11 @@ export default {
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
+    ], condition: { field: 'overlay_text', op: 'notEmpty' } },
+    { key: 'overlay_text_valign', label: t('Posizione verticale'), type: 'select', options: [
+      { value: 'top', label: t('In alto') },
+      { value: 'center', label: t('Al centro') },
+      { value: 'bottom', label: t('In basso') },
     ], condition: { field: 'overlay_text', op: 'notEmpty' } },
 
     ...shadowField,

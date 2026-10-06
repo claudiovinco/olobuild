@@ -36,6 +36,7 @@ class Olobuild_Video_Tile extends Olobuild_Tile_Base {
         'overlay_text_color'  => 'var(--olo-color-light, #ffffff)',
         'overlay_text_weight' => '700',
         'overlay_text_align'  => 'center',
+        'overlay_text_valign' => 'center',
         'caption'             => '',
         'border_radius'       => 0,
         'shadow'              => 'none',
@@ -173,7 +174,11 @@ class Olobuild_Video_Tile extends Olobuild_Tile_Base {
         $tfx_block = $tfx_css ? '<style>' . $tfx_css . '</style>' : '';
         ob_start(); $this->tfx_print_script(); $tfx_block .= ob_get_clean();
 
-        return $hover_prefix . $body . $tfx_block . $border_block;
+        // Anello di focus del pulsante play (facciata degli embed e play sopra i file).
+        $con_play  = $is_file ? $this->play_su_file( $s ) : ! empty( $s['facade'] );
+        $play_css  = $con_play ? '<style>.' . $this->_v_uid . ' .olo-video-play:focus-visible{outline:2px solid var(--olo-color-primary, #e1474f);outline-offset:-4px;}</style>' : '';
+
+        return $hover_prefix . $body . $tfx_block . $border_block . $play_css;
     }
 
     // =========================================================================
@@ -203,19 +208,14 @@ class Olobuild_Video_Tile extends Olobuild_Tile_Base {
             <div style="position: relative; padding-bottom: <?php echo esc_attr( $padding ); ?>; overflow: hidden; <?php echo $this->_vbr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built internally from build_border_radius_css() integer radii, Olobuild_Tile_Utils::shadow_value() and fixed literals ?>">
                 <?php if ( $has_poster ) : ?>
                     <?php
-                    $icon_size  = absint( $s['play_icon_size'] ) ?: 80;
-                    $icon_color = $this->safe_color_css( $s['play_icon_color'] ) ?: '#fff';
                     $show_icon  = $s['show_play_icon'] !== false;
                     $uid        = 'olo-vp-' . wp_unique_id();
                     ?>
-                    <div id="<?php echo esc_attr( $uid ); ?>" role="button" tabindex="0" aria-label="<?php echo esc_attr__( 'Riproduci video', 'olobuild' ); ?>" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: pointer;" onkeydown="if(event.key==='Enter'||event.key===' '||event.key==='Spacebar'){event.preventDefault();this.click();}" onclick="(function(el){var p=el.parentNode;el.remove();var f=document.createElement('iframe');f.src='<?php echo esc_url( $embed_url . ( str_contains( $embed_url, '?' ) ? '&' : '?' ) . 'autoplay=1' ); ?>';f.style='position:absolute;top:0;left:0;width:100%;height:100%';f.frameBorder='0';f.allow='accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture';f.allowFullscreen=true;p.appendChild(f)})(this)">
+                    <div id="<?php echo esc_attr( $uid ); ?>" class="olo-video-play" role="button" tabindex="0" aria-label="<?php echo esc_attr__( 'Riproduci video', 'olobuild' ); ?>" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: pointer;" onkeydown="if(event.key==='Enter'||event.key===' '||event.key==='Spacebar'){event.preventDefault();this.click();}" onclick="(function(el){var p=el.parentNode;el.remove();var f=document.createElement('iframe');f.src='<?php echo esc_url( $embed_url . ( str_contains( $embed_url, '?' ) ? '&' : '?' ) . 'autoplay=1' ); ?>';f.style='position:absolute;top:0;left:0;width:100%;height:100%';f.frameBorder='0';f.allow='accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture';f.allowFullscreen=true;p.appendChild(f)})(this)">
                         <img src="<?php echo esc_url( $poster_url ); ?>" alt="" style="width:100%;height:100%;object-fit:cover;object-position:<?php echo esc_attr( $obj_pos ); ?>;display:block;" loading="lazy" />
                         <?php if ( $show_icon ) : ?>
                         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
-                            <svg width="<?php echo (int) $icon_size; ?>" height="<?php echo (int) $icon_size; ?>" viewBox="0 0 80 80">
-                                <circle cx="40" cy="40" r="38" fill="rgba(0,0,0,0.5)" stroke-width="2" stroke="<?php echo esc_attr( $icon_color ); ?>"/>
-                                <polygon points="32,24 32,56 58,40" fill="<?php echo esc_attr( $icon_color ); ?>"/>
-                            </svg>
+                            <?php echo $this->play_icon_svg( $s ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG built by play_icon_svg() from fixed literals, absint() size and esc_attr()'d safe_color_css() colours ?>
                         </div>
                         <?php endif; ?>
                     </div>
@@ -268,13 +268,14 @@ class Olobuild_Video_Tile extends Olobuild_Tile_Base {
                         preload="<?php echo esc_attr( $preload ); ?>"
                         <?php echo $autoplay ? 'autoplay' : ''; ?>
                         <?php echo $muted ? 'muted' : ''; ?>
-                        <?php echo ! empty( $s['loop'] ) ? 'loop' : ''; ?>
+                        <?php echo $this->loop_file_attr( $s ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- 'loop' or onended/ontimeupdate handlers built by loop_file_attr() from absint() integers and fixed literals ?>
                         <?php echo ( $is_builder || ! empty( $s['controls'] ) ) ? 'controls' : ''; ?>
                         <?php echo ! empty( $s['poster_image'] ) ? 'poster="' . esc_url( $s['poster_image'] ) . '"' : ''; ?>
                         playsinline
                     >
-                        <source src="<?php echo esc_url( $src ); ?>" type="<?php echo esc_attr( $this->get_video_mime( $src ) ); ?>">
+                        <source src="<?php echo esc_url( $src . $this->frammento_tempo( $s ) ); ?>" type="<?php echo esc_attr( $this->get_video_mime( $src ) ); ?>">
                     </video>
+                    <?php echo $this->play_file_html( $s ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- button markup built by play_file_html() from fixed literals, esc_attr__() label and play_icon_svg() ?>
                 <?php else : ?>
                     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--olo-color-text-muted, #9CA3AF);">
                         <?php echo esc_html__( 'Seleziona un file video', 'olobuild' ); ?>
@@ -309,8 +310,6 @@ class Olobuild_Video_Tile extends Olobuild_Tile_Base {
             $poster_url = ! empty( $s['poster_image'] ) ? $s['poster_image'] : $this->get_auto_thumbnail( $s['video_url'] ?? '' );
         }
         $has_poster  = $facade_on && ! empty( $poster_url );
-        $icon_size   = absint( $s['play_icon_size'] ) ?: 80;
-        $icon_color  = $this->safe_color_css( $s['play_icon_color'] ) ?: '#fff';
         $show_icon   = $s['show_play_icon'] !== false;
 
         $is_builder = ! empty( $s['_builder_mode'] );
@@ -321,31 +320,33 @@ class Olobuild_Video_Tile extends Olobuild_Tile_Base {
         ob_start();
         ?>
         <div class="olo-video olo-video-cover uk-position-relative uk-overflow-hidden <?php echo esc_attr( $this->_v_uid ); ?>" style="height: <?php echo (int) $height; ?>px; <?php echo $this->_vbr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built internally from build_border_radius_css() integer radii, Olobuild_Tile_Utils::shadow_value() and fixed literals ?>">
-            <?php if ( $src ) : ?>
+            <?php
+            // Con un file la copertina è l'Immagine poster, come nelle proporzioni fisse. Prima la
+            // decideva la «facciata», che è un comando degli embed e coi file non si mostra più.
+            if ( $src ) :
+            ?>
                 <video
                     class="uk-position-cover"
                     style="object-fit: cover; object-position: <?php echo esc_attr( $obj_pos ); ?>; width: 100%; height: 100%;"
                     preload="<?php echo esc_attr( $preload ); ?>"
                     <?php echo $autoplay ? 'autoplay' : ''; ?>
                     <?php echo $muted ? 'muted' : ''; ?>
-                    <?php echo ! empty( $s['loop'] ) ? 'loop' : ''; ?>
+                    <?php echo $this->loop_file_attr( $s ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- 'loop' or onended/ontimeupdate handlers built by loop_file_attr() from absint() integers and fixed literals ?>
                     <?php echo ( $is_builder || ! empty( $s['controls'] ) ) ? 'controls' : ''; ?>
-                    <?php echo $has_poster ? 'poster="' . esc_url( $poster_url ) . '"' : ''; ?>
+                    <?php echo ! empty( $s['poster_image'] ) ? 'poster="' . esc_url( $s['poster_image'] ) . '"' : ''; ?>
                     playsinline
                 >
-                    <source src="<?php echo esc_url( $src ); ?>" type="<?php echo esc_attr( $this->get_video_mime( $src ) ); ?>">
+                    <source src="<?php echo esc_url( $src . $this->frammento_tempo( $s ) ); ?>" type="<?php echo esc_attr( $this->get_video_mime( $src ) ); ?>">
                 </video>
+                <?php echo $this->play_file_html( $s ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- button markup built by play_file_html() from fixed literals, esc_attr__() label and play_icon_svg() ?>
             <?php elseif ( $embed ) : ?>
                 <?php if ( $has_poster ) : ?>
                     <?php $uid = 'olo-vp-' . wp_unique_id(); ?>
-                    <div id="<?php echo esc_attr( $uid ); ?>" role="button" tabindex="0" aria-label="<?php echo esc_attr__( 'Riproduci video', 'olobuild' ); ?>" style="position:absolute;top:0;left:0;width:100%;height:100%;cursor:pointer;z-index:3;" onkeydown="if(event.key==='Enter'||event.key===' '||event.key==='Spacebar'){event.preventDefault();this.click();}" onclick="(function(el){var p=el.parentNode;el.remove();var f=document.createElement('iframe');f.src='<?php echo esc_url( $embed . ( str_contains( $embed, '?' ) ? '&' : '?' ) . 'autoplay=1' ); ?>';f.style='position:absolute;top:50%;left:50%;width:200%;height:200%;transform:translate(-50%,-50%);pointer-events:none';f.frameBorder='0';f.allow='accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture';f.allowFullscreen=true;p.appendChild(f)})(this)">
+                    <div id="<?php echo esc_attr( $uid ); ?>" class="olo-video-play" role="button" tabindex="0" aria-label="<?php echo esc_attr__( 'Riproduci video', 'olobuild' ); ?>" style="position:absolute;top:0;left:0;width:100%;height:100%;cursor:pointer;z-index:3;" onkeydown="if(event.key==='Enter'||event.key===' '||event.key==='Spacebar'){event.preventDefault();this.click();}" onclick="(function(el){var p=el.parentNode;el.remove();var f=document.createElement('iframe');f.src='<?php echo esc_url( $embed . ( str_contains( $embed, '?' ) ? '&' : '?' ) . 'autoplay=1' ); ?>';f.style='position:absolute;top:50%;left:50%;width:200%;height:200%;transform:translate(-50%,-50%);pointer-events:none';f.frameBorder='0';f.allow='accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture';f.allowFullscreen=true;p.appendChild(f)})(this)">
                         <img src="<?php echo esc_url( $poster_url ); ?>" alt="" style="width:100%;height:100%;object-fit:cover;object-position:<?php echo esc_attr( $obj_pos ); ?>;display:block;" loading="lazy" />
                         <?php if ( $show_icon ) : ?>
                         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
-                            <svg width="<?php echo (int) $icon_size; ?>" height="<?php echo (int) $icon_size; ?>" viewBox="0 0 80 80">
-                                <circle cx="40" cy="40" r="38" fill="rgba(0,0,0,0.5)" stroke-width="2" stroke="<?php echo esc_attr( $icon_color ); ?>"/>
-                                <polygon points="32,24 32,56 58,40" fill="<?php echo esc_attr( $icon_color ); ?>"/>
-                            </svg>
+                            <?php echo $this->play_icon_svg( $s ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG built by play_icon_svg() from fixed literals, absint() size and esc_attr()'d safe_color_css() colours ?>
                         </div>
                         <?php endif; ?>
                     </div>
@@ -390,15 +391,19 @@ class Olobuild_Video_Tile extends Olobuild_Tile_Base {
         }
         if ( $has_text ) {
             $ov_size    = max( 8, absint( $s['overlay_text_size'] ?? 32 ) );
-            $ov_t_color = $this->safe_color_css( $s['overlay_text_color'] ?? '#ffffff' ) ?: '#ffffff';
+            $ov_t_color = $this->safe_color_css( $s['overlay_text_color'] ?? '' ) ?: 'var(--olo-color-light, #ffffff)';
             $ov_weight  = in_array( (string) ( $s['overlay_text_weight'] ?? '700' ), [ '300','400','500','600','700','800','900' ], true ) ? ( $s['overlay_text_weight'] ?? '700' ) : '700';
             $ov_align   = in_array( $s['overlay_text_align'] ?? 'center', [ 'left', 'center', 'right' ], true ) ? ( $s['overlay_text_align'] ?? 'center' ) : 'center';
+            $ov_valign  = in_array( $s['overlay_text_valign'] ?? 'center', [ 'top', 'center', 'bottom' ], true ) ? ( $s['overlay_text_valign'] ?? 'center' ) : 'center';
+            // Il blocco del testo si sposta davvero: prima stava sempre al centro del video e
+            // «Sinistra»/«Destra» allineavano solo le righe dentro un blocco centrato.
+            $ov_flex    = [ 'left' => 'flex-start', 'top' => 'flex-start', 'center' => 'center', 'right' => 'flex-end', 'bottom' => 'flex-end' ];
             $ov_text_style = sprintf(
                 'text-align:%s;color:%s;padding:24px;max-width:800px;pointer-events:auto;font-size:%dpx;font-weight:%s;line-height:1.25;',
                 esc_attr( $ov_align ), $ov_t_color, $ov_size, esc_attr( $ov_weight )
             );
             list( $ov_tfx_cls, $ov_tfx_data ) = $this->tfx_attrs( $s, 'overlay_text', wp_strip_all_tags( $s['overlay_text'] ) );
-            ?><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;pointer-events:none;"><div class="olo-video-overlay-text<?php echo $ov_tfx_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); style string built above via sprintf from esc_attr()'d enums, safe_color_css() colour and %d size; text esc_html()'d (nl2br only adds <br /> tags) ?>" style="<?php echo $ov_text_style; ?>"<?php echo $ov_tfx_data; ?>><?php echo nl2br( esc_html( wp_strip_all_tags( $s['overlay_text'] ) ) ); ?></div></div><?php
+            ?><div style="position:absolute;inset:0;display:flex;align-items:<?php echo esc_attr( $ov_flex[ $ov_valign ] ); ?>;justify-content:<?php echo esc_attr( $ov_flex[ $ov_align ] ); ?>;z-index:2;pointer-events:none;"><div class="olo-video-overlay-text<?php echo $ov_tfx_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); style string built above via sprintf from esc_attr()'d enums, safe_color_css() colour and %d size; text esc_html()'d (nl2br only adds <br /> tags) ?>" style="<?php echo $ov_text_style; ?>"<?php echo $ov_tfx_data; ?>><?php echo nl2br( esc_html( wp_strip_all_tags( $s['overlay_text'] ) ) ); ?></div></div><?php
         }
         return ob_get_clean();
     }
@@ -458,8 +463,105 @@ class Olobuild_Video_Tile extends Olobuild_Tile_Base {
     }
 
     private function get_aspect_padding( $mode ) {
-        $map = [ '16:9' => '56.25%', '4:3' => '75%', '1:1' => '100%' ];
+        // 21:9 (lo chiede il preset «Cinema Wide»), 3:2, 4:5 e il verticale 9:16 si aggiungono ai
+        // tre storici: prima ogni altro valore ricadeva in silenzio su 16:9.
+        $map = [
+            '21:9' => '42.8571%',
+            '16:9' => '56.25%',
+            '3:2'  => '66.6667%',
+            '4:3'  => '75%',
+            '1:1'  => '100%',
+            '4:5'  => '125%',
+            '9:16' => '177.7778%',
+        ];
         return $map[ $mode ] ?? '56.25%';
+    }
+
+    /**
+     * Il disegno del pulsante play, lo stesso sulla facciata degli embed e sopra i file.
+     * Colore vuoto = il chiaro del tema, disco dello scuro del tema al 50% (prima bianco e
+     * nero fissi). Colori nello style: un var() o un color-mix() negli attributi di
+     * presentazione SVG non sono garantiti in ogni browser.
+     */
+    private function play_icon_svg( $s ) {
+        $size  = absint( $s['play_icon_size'] ?? 80 ) ?: 80;
+        $color = $this->safe_color_css( $s['play_icon_color'] ?? '' ) ?: 'var(--olo-color-light, #ffffff)';
+        return '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 80 80" aria-hidden="true" focusable="false">'
+            . '<circle cx="40" cy="40" r="38" stroke-width="2" style="' . esc_attr( 'fill:color-mix(in srgb, var(--olo-color-dark, #000000) 50%, transparent);stroke:' . $color ) . '"/>'
+            . '<polygon points="32,24 32,56 58,40" style="' . esc_attr( 'fill:' . $color ) . '"/>'
+            . '</svg>';
+    }
+
+    /**
+     * Con un file il pulsante play c'è se «Mostra icona play» è acceso e il video non parte da
+     * solo. Prima il pulsante esisteva solo sulla facciata degli embed e le sue opzioni, con un
+     * file, non facevano niente (e senza controlli né autoplay il file non si poteva avviare).
+     */
+    private function play_su_file( $s ) {
+        return $s['show_play_icon'] !== false && empty( $s['autoplay'] );
+    }
+
+    private function play_file_html( $s ) {
+        if ( ! $this->play_su_file( $s ) ) {
+            return '';
+        }
+        // Niente && nello script in linea: WordPress lo trasformerebbe in &#038;.
+        return '<button type="button" class="olo-video-play" aria-label="' . esc_attr__( 'Riproduci video', 'olobuild' ) . '"'
+            . ' style="position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;width:100%;height:100%;padding:0;border:0;background:none;cursor:pointer;"'
+            . ' onclick="var v=this.parentNode.querySelector(\'video\');if(v){var p=v.play();if(p){p.catch(function(){});}}this.remove();">'
+            . $this->play_icon_svg( $s )
+            . '</button>';
+    }
+
+    /**
+     * Inizio e fine di un file in secondi interi; una Fine non oltre l'Inizio non vale.
+     */
+    private function tempi_file( $s ) {
+        $start = absint( $s['start_time'] ?? 0 );
+        $end   = absint( $s['end_time'] ?? 0 );
+        if ( $end > 0 && $end <= $start ) {
+            $end = 0;
+        }
+        return [ $start, $end ];
+    }
+
+    /**
+     * Inizio e fine anche per i file, come frammento temporale dell'indirizzo (#t=inizio,fine):
+     * prima valevano solo per YouTube e Vimeo, che li ricevono come parametri dell'embed.
+     * Con «Ripeti» la fine NON va nel frammento: Chrome si ferma lì e il loop non riparte più.
+     * Fine e ritorno all'Inizio li fa allora loop_file_attr().
+     */
+    private function frammento_tempo( $s ) {
+        list( $start, $end ) = $this->tempi_file( $s );
+        if ( ! empty( $s['loop'] ) ) {
+            $end = 0;
+        }
+        if ( ! $start && ! $end ) {
+            return '';
+        }
+        return '#t=' . $start . ( $end ? ',' . $end : '' );
+    }
+
+    /**
+     * «Ripeti» su un file. Senza Inizio né Fine basta l'attributo loop. Con uno dei due il loop
+     * nativo riparte da 0 (non dall'Inizio) e ignora la Fine: allora niente attributo loop, e il
+     * ritorno all'Inizio lo fanno onended (fine del file) e ontimeupdate (Fine raggiunta; un
+     * seek senza play, così una pausa resta pausa). Nei gestori in linea niente && < >:
+     * WordPress li altera (wptexturize); Math.max fa da «>=». Solo interi absint() e letterali.
+     */
+    private function loop_file_attr( $s ) {
+        if ( empty( $s['loop'] ) ) {
+            return '';
+        }
+        list( $start, $end ) = $this->tempi_file( $s );
+        if ( ! $start && ! $end ) {
+            return 'loop';
+        }
+        $attr = 'onended="this.currentTime=' . $start . ';var p=this.play();if(p){p.catch(function(){});}"';
+        if ( $end ) {
+            $attr .= ' ontimeupdate="if(Math.max(this.currentTime,' . $end . ')==this.currentTime){this.currentTime=' . $start . ';}"';
+        }
+        return $attr;
     }
 
     /**
