@@ -61,6 +61,8 @@ export default {
     description_size:        15,
     cta_size:                12,
     cta_arrow:               true,
+    price_size:              20,
+    price_color:             '',
 
     // Hover
     card_hover_effect: 'lift',
@@ -68,14 +70,14 @@ export default {
 
   // Appena nata: quattro schede prodotto di un negozio di oggetti per la casa — foto in alto,
   // categoria nel colore primario, un badge «Novità», nome con la seconda parola in corsivo,
-  // descrizione col prezzo e invito testuale; la card si solleva al passaggio.
+  // descrizione, prezzo e invito testuale nella riga in fondo; la card si solleva al passaggio.
   partenza: {
     columns: 4,
     items: [
-      { letter: '', letter_color: 'var(--olo-color-primary, #e1474f)', logo_image: '', top_bg: { type: 'image', image_url: demo('vaso'), image_size: 'cover', image_position: 'center center' }, screenshot_label: '', brand_label: t('Ceramica'), brand_color: 'var(--olo-color-primary, #e1474f)', show_badge: true, badge_text: t('Novità'), badge_bg: 'var(--olo-color-primary, #e1474f)', badge_color: 'var(--olo-color-primary-contrast, #ffffff)', title: t('Vaso '), title_accent: t('Neve'), title_accent_italic: true, description: t('Ceramica bianca lavorata a mano, alto 28 cm. 48 €'), cta_text: t('Scopri'), cta_url: '#' },
-      { letter: '', letter_color: 'var(--olo-color-primary, #e1474f)', logo_image: '', top_bg: { type: 'image', image_url: demo('ciotola'), image_size: 'cover', image_position: 'center center' }, screenshot_label: '', brand_label: t('Porcellana'), brand_color: 'var(--olo-color-primary, #e1474f)', show_badge: false, badge_text: '', badge_bg: 'var(--olo-color-primary, #e1474f)', badge_color: 'var(--olo-color-primary-contrast, #ffffff)', title: t('Ciotola '), title_accent: t('Mare'), title_accent_italic: true, description: t('Porcellana dipinta a mano, diametro 16 cm. 26 €'), cta_text: t('Scopri'), cta_url: '#' },
-      { letter: '', letter_color: 'var(--olo-color-primary, #e1474f)', logo_image: '', top_bg: { type: 'image', image_url: demo('tavola'), image_size: 'cover', image_position: 'center center' }, screenshot_label: '', brand_label: t('Tavola'), brand_color: 'var(--olo-color-primary, #e1474f)', show_badge: false, badge_text: '', badge_bg: 'var(--olo-color-primary, #e1474f)', badge_color: 'var(--olo-color-primary-contrast, #ffffff)', title: t('Servizio '), title_accent: t('Terra'), title_accent_italic: true, description: t('Due piatti e un calice in gres smaltato. 64 €'), cta_text: t('Scopri'), cta_url: '#' },
-      { letter: '', letter_color: 'var(--olo-color-primary, #e1474f)', logo_image: '', top_bg: { type: 'image', image_url: demo('caffe'), image_size: 'cover', image_position: 'center center' }, screenshot_label: '', brand_label: t('Colazione'), brand_color: 'var(--olo-color-primary, #e1474f)', show_badge: false, badge_text: '', badge_bg: 'var(--olo-color-primary, #e1474f)', badge_color: 'var(--olo-color-primary-contrast, #ffffff)', title: t('Tazza '), title_accent: t('Aurora'), title_accent_italic: true, description: t('Tazza da cappuccino con piattino, 250 ml. 18 €'), cta_text: t('Scopri'), cta_url: '#' },
+      { letter: '', letter_color: 'var(--olo-color-primary, #e1474f)', logo_image: '', top_bg: { type: 'image', image_url: demo('vaso'), image_size: 'cover', image_position: 'center center' }, screenshot_label: '', brand_label: t('Ceramica'), brand_color: 'var(--olo-color-primary, #e1474f)', show_badge: true, badge_text: t('Novità'), badge_bg: 'var(--olo-color-primary, #e1474f)', badge_color: 'var(--olo-color-primary-contrast, #ffffff)', title: t('Vaso '), title_accent: t('Neve'), title_accent_italic: true, description: t('Ceramica bianca lavorata a mano, alto 28 cm.'), price: '48 €', cta_text: t('Scopri'), cta_url: '#' },
+      { letter: '', letter_color: 'var(--olo-color-primary, #e1474f)', logo_image: '', top_bg: { type: 'image', image_url: demo('ciotola'), image_size: 'cover', image_position: 'center center' }, screenshot_label: '', brand_label: t('Porcellana'), brand_color: 'var(--olo-color-primary, #e1474f)', show_badge: false, badge_text: '', badge_bg: 'var(--olo-color-primary, #e1474f)', badge_color: 'var(--olo-color-primary-contrast, #ffffff)', title: t('Ciotola '), title_accent: t('Mare'), title_accent_italic: true, description: t('Porcellana dipinta a mano, diametro 16 cm.'), price: '26 €', cta_text: t('Scopri'), cta_url: '#' },
+      { letter: '', letter_color: 'var(--olo-color-primary, #e1474f)', logo_image: '', top_bg: { type: 'image', image_url: demo('tavola'), image_size: 'cover', image_position: 'center center' }, screenshot_label: '', brand_label: t('Tavola'), brand_color: 'var(--olo-color-primary, #e1474f)', show_badge: false, badge_text: '', badge_bg: 'var(--olo-color-primary, #e1474f)', badge_color: 'var(--olo-color-primary-contrast, #ffffff)', title: t('Servizio '), title_accent: t('Terra'), title_accent_italic: true, description: t('Due piatti e un calice in gres smaltato.'), price: '64 €', cta_text: t('Scopri'), cta_url: '#' },
+      { letter: '', letter_color: 'var(--olo-color-primary, #e1474f)', logo_image: '', top_bg: { type: 'image', image_url: demo('caffe'), image_size: 'cover', image_position: 'center center' }, screenshot_label: '', brand_label: t('Colazione'), brand_color: 'var(--olo-color-primary, #e1474f)', show_badge: false, badge_text: '', badge_bg: 'var(--olo-color-primary, #e1474f)', badge_color: 'var(--olo-color-primary-contrast, #ffffff)', title: t('Tazza '), title_accent: t('Aurora'), title_accent_italic: true, description: t('Tazza da cappuccino con piattino, 250 ml.'), price: '18 €', cta_text: t('Scopri'), cta_url: '#' },
     ],
     card_bg: { type: 'solid', color: 'var(--olo-color-surface, #ffffff)' },
     card_color: 'var(--olo-color-dark, #16263d)',
@@ -89,7 +91,8 @@ export default {
     { type: 'separator', label: t('Product cards') },
     { key: 'items', label: t('Cards'), type: 'content-items',
       itemLabel: t('Card'),
-      defaults: { letter: 'X', letter_color: '#0f172a', logo_image: '', top_bg: { type: 'solid', color: '#f5f5f5' }, screenshot_label: 'SCREENSHOT', brand_label: 'BRAND', brand_color: '#0f172a', show_badge: false, badge_text: '', badge_bg: '#0f172a', badge_color: '#ffffff', title: 'Titolo', title_accent: '', title_accent_italic: false, description: 'Descrizione…', cta_text: 'SCOPRI', cta_url: '#' },
+      // Card aggiunta: colori dal tema (primario, tinta tenue), testi neutri in italiano.
+      defaults: { letter: 'A', letter_color: 'var(--olo-color-primary, #e1474f)', logo_image: '', top_bg: { type: 'solid', color: 'var(--olo-color-muted, #f6f7f9)' }, screenshot_label: '', brand_label: t('Categoria'), brand_color: 'var(--olo-color-primary, #e1474f)', show_badge: false, badge_text: '', badge_bg: 'var(--olo-color-primary, #e1474f)', badge_color: 'var(--olo-color-primary-contrast, #ffffff)', title: t('Nuovo '), title_accent: t('prodotto'), title_accent_italic: true, description: t('Una riga che racconta il prodotto.'), price: '', cta_text: t('Scopri'), cta_url: '#' },
       itemFields: [
         { key: 'letter',              label: t('Lettera monogramma'), type: 'text' },
         { key: 'logo_image',          label: t('Logo prodotto (sostituisce la lettera)'), type: 'image' },
@@ -100,6 +103,7 @@ export default {
         { key: 'title',               label: t('Titolo (base)'),      type: 'text' },
         { key: 'title_accent',        label: t('Suffisso titolo'),    type: 'text' },
         { key: 'description',         label: t('Descrizione'),        type: 'editor', mode: 'inline' },
+        { key: 'price',               label: t('Prezzo'),             type: 'text' },
         { key: 'cta_text',            label: t('CTA testo'),          type: 'text' },
         { key: 'cta_url',             label: t('CTA URL'),            type: 'link' },
       ],
@@ -162,6 +166,8 @@ export default {
     { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { size: 'title_size', weight: 'title_weight', family: 'title_font_family' }, sizeMin: 16, sizeMax: 80, sizeStep: 2 },
 
     { type: 'typography', label: t('Descrizione'), responsiveKeys: [], keys: { size: 'description_size' }, sizeMin: 11, sizeMax: 22 },
+    // Vuoto = colore del testo della card.
+    { type: 'typography', label: t('Prezzo'), responsiveKeys: [], keys: { size: 'price_size', color: 'price_color' }, sizeMin: 12, sizeMax: 40 },
     { type: 'typography', label: t('Pulsante'), responsiveKeys: [], keys: { size: 'cta_size' }, sizeMin: 9, sizeMax: 16 },
 
     { type: 'separator', label: t('Hover card') },

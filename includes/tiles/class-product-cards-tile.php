@@ -57,6 +57,8 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
         'description_size'     => 15,
         'cta_size'             => 12,
         'cta_arrow'            => true,
+        'price_size'           => 20,
+        'price_color'          => '',
 
         'card_hover_effect'    => 'lift',
     ];
@@ -110,8 +112,9 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
         ];
         $card_shadow = $shadow_map[ $s['card_shadow'] ?? 'sm' ] ?? '';
 
-        $card_bg_css = $this->_bg_inline_css( $s['card_bg'] ?? [ 'type' => 'solid', 'color' => '#ffffff' ] );
-        if ( ! $card_bg_css ) $card_bg_css = 'background:#ffffff';
+        // Riserve dal tema (superficie, testo, tinta tenue, scuro) invece di bianco e blu notte fissi.
+        $card_bg_css = $this->_bg_inline_css( $s['card_bg'] ?? [ 'type' => 'solid', 'color' => 'var(--olo-color-surface, #ffffff)' ] );
+        if ( ! $card_bg_css ) $card_bg_css = 'background:var(--olo-color-surface, #ffffff)';
 
         $card_color    = $this->safe_color_css( $s['card_color'] ) ?: 'var(--olo-color-text, #374151)';
         $card_pad_css  = Olobuild_Tile_Utils::spacing_css( $s['card_padding'] ?? 28, 28 );
@@ -136,6 +139,8 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
         $title_w    = preg_match( '/^\d+$/', (string) $s['title_weight'] ) ? $s['title_weight'] : '500';
         $desc_size  = max( 11, min( 22, absint( $s['description_size'] ) ) );
         $cta_size   = max( 9, min( 16, absint( $s['cta_size'] ) ) );
+        $price_size = max( 12, min( 40, absint( $s['price_size'] ?? 20 ) ) );
+        $price_clr  = $this->safe_color_css( $s['price_color'] ?? '' ) ?: $card_color;
 
         $hover_effect = in_array( $s['card_hover_effect'] ?? 'lift', [ 'none', 'lift', 'scale', 'tilt' ], true ) ? ( $s['card_hover_effect'] ?? 'lift' ) : 'lift';
 
@@ -149,16 +154,16 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
             <?php foreach ( $items as $idx => $it ) :
                 $letter      = $it['letter'] ?? '';
                 $logo        = $it['logo_image'] ?? '';
-                $letter_clr  = $this->safe_color_css( $it['letter_color'] ?? '' ) ?: '#0f172a';
-                $top_bg_css  = $this->_bg_inline_css( $it['top_bg'] ?? [ 'type' => 'solid', 'color' => '#f5f5f5' ] );
-                if ( ! $top_bg_css ) $top_bg_css = 'background:#f5f5f5';
+                $letter_clr  = $this->safe_color_css( $it['letter_color'] ?? '' ) ?: 'var(--olo-color-text, #0f172a)';
+                $top_bg_css  = $this->_bg_inline_css( $it['top_bg'] ?? [ 'type' => 'solid', 'color' => 'var(--olo-color-muted, #f5f5f5)' ] );
+                if ( ! $top_bg_css ) $top_bg_css = 'background:var(--olo-color-muted, #f5f5f5)';
 
                 $screen_lbl  = $it['screenshot_label'] ?? '';
                 $brand_lbl   = $it['brand_label'] ?? '';
-                $brand_clr   = $this->safe_color_css( $it['brand_color'] ?? '' ) ?: '#0f172a';
+                $brand_clr   = $this->safe_color_css( $it['brand_color'] ?? '' ) ?: 'var(--olo-color-text, #0f172a)';
                 $show_badge  = ! empty( $it['show_badge'] );
                 $badge_txt   = $it['badge_text'] ?? '';
-                $badge_bg    = $this->safe_color_css( $it['badge_bg'] ?? '' ) ?: '#0f172a';
+                $badge_bg    = $this->safe_color_css( $it['badge_bg'] ?? '' ) ?: 'var(--olo-color-dark, #0f172a)';
                 $badge_clr   = $this->safe_color_css( $it['badge_color'] ?? '' ) ?: 'var(--olo-color-on-primary, #ffffff)';
 
                 $title       = $it['title'] ?? '';
@@ -170,6 +175,7 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
 
                 $cta_text    = $it['cta_text'] ?? '';
                 $cta_url     = $it['cta_url'] ?? '#';
+                $price       = trim( (string) ( $it['price'] ?? '' ) );
             ?>
                 <div class="olo-pcards__card" style="<?php echo esc_attr( $card_bg_css ); ?>;color:<?php echo esc_attr( $card_color ); ?>;<?php if ( $card_radius ) echo 'border-radius:' . esc_attr( $card_radius ) . ';'; ?><?php if ( $card_shadow ) echo 'box-shadow:' . esc_attr( $card_shadow ) . ';'; ?>overflow:hidden;display:flex;flex-direction:column;transition:transform .3s ease,box-shadow .3s ease<?php if ( $card_radius_h ) echo ',border-radius ' . (int) $card_rdur . 'ms ease'; ?>">
 
@@ -216,8 +222,22 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
                             <div style="font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo (int) $desc_size; ?>px;line-height:1.55;color:<?php echo esc_attr( $card_color ); ?>;flex:1" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.description'; ?>" data-olo-richtext><?php echo $desc; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized via safe_richtext_content() (wp_kses_post) or esc_html()+nl2br() above ?></div>
                         <?php endif; ?>
 
-                        <?php if ( $cta_text !== '' ) : ?>
-                            <a class="olo-pcards__cta" href="<?php echo esc_url( $cta_url ?: '#' ); ?>" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $cta_size; ?>px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $brand_clr ); ?>;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:6px;margin-top:auto" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.cta_text'; ?>"><?php echo esc_html( $cta_text ); ?><?php if ( ! empty( $s['cta_arrow'] ) ) echo ' →'; ?></a>
+                        <?php
+                        // Prezzo (campo proprio: prima finiva in coda alla descrizione o nella riga del
+                        // marchio). Con un prezzo, prezzo e invito stanno nella stessa riga in fondo
+                        // alla card; senza, l'invito resta com'era.
+                        $cta_html = '';
+                        if ( $cta_text !== '' ) {
+                            $cta_html = '<a class="olo-pcards__cta" href="' . esc_url( $cta_url ?: '#' ) . '" style="font-family:' . esc_attr( $mono ) . ';font-size:' . (int) $cta_size . 'px;letter-spacing:0.08em;text-transform:uppercase;color:' . esc_attr( $brand_clr ) . ';font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:6px;' . ( $price === '' ? 'margin-top:auto' : '' ) . '" data-olo-editable="items.' . intval( $idx ) . '.cta_text">' . esc_html( $cta_text ) . ( ! empty( $s['cta_arrow'] ) ? ' →' : '' ) . '</a>';
+                        }
+                        ?>
+                        <?php if ( $price !== '' ) : ?>
+                            <div class="olo-pcards__foot" style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:.4em 1em;margin-top:auto">
+                                <span class="olo-pcards__price" style="font-family:<?php echo esc_attr( $title_family ); ?>;font-size:<?php echo (int) $price_size; ?>px;font-weight:600;line-height:1.1;color:<?php echo esc_attr( $price_clr ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.price'; ?>"><?php echo esc_html( $price ); ?></span>
+                                <?php echo $cta_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above from esc_url()/esc_attr()/esc_html() pieces and integers ?>
+                            </div>
+                        <?php else : ?>
+                            <?php echo $cta_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above from esc_url()/esc_attr()/esc_html() pieces and integers ?>
                         <?php endif; ?>
                     </div>
                 </div>
