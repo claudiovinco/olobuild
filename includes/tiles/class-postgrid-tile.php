@@ -453,7 +453,10 @@ class Olobuild_PostGrid_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
             <?php if ( $overlay_on ) : ?>
             /* Overlay gradient */
-            .<?php echo $uid; ?> .olo-pg-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+            <?php /* Niente inset:0: lato e misura del velo li mette render_overlay_gradient()
+                      (es. bottom:0 + height:50%). Con inset:0 restava anche top:0, che vince su
+                      bottom: il velo «dal basso» finiva nella metà alta, col bordo netto a metà card. */ ?>
+            .<?php echo $uid; ?> .olo-pg-overlay { position: absolute; pointer-events: none; z-index: 1; }
             <?php endif; ?>
             <?php if ( ! empty( $s['match_height'] ) ) : ?>
             .<?php echo $uid; ?> .olo-postgrid-item > .uk-card { height: 100%; display: flex; flex-direction: column; }
