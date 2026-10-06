@@ -233,12 +233,14 @@ export default {
       condition: { field: 'chart_type', op: 'in', value: ['bar', 'line'] } },
     { key: 'begin_at_zero', label: t('Inizia da zero'), type: 'toggle',
       condition: { field: 'chart_type', op: 'in', value: ['bar', 'line'] } },
+    // Minimo, massimo e incremento valgono anche per la scala dei valori di radar e area
+    // polare (prima il radar li ignorava).
     { key: 'y_min', label: t('Y minimo'), type: 'number', placeholder: t('Auto'),
-      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line'] } },
+      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line', 'radar', 'polarArea'] } },
     { key: 'y_max', label: t('Y massimo'), type: 'number', placeholder: t('Auto'),
-      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line'] } },
+      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line', 'radar', 'polarArea'] } },
     { key: 'y_step_size', label: t('Incremento Y'), type: 'number', placeholder: t('Auto'),
-      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line'] } },
+      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line', 'radar', 'polarArea'] } },
     { key: 'x_label', label: t('Etichetta asse X'), type: 'text',
       condition: { field: 'chart_type', op: 'in', value: ['bar', 'line'] } },
     { key: 'y_label', label: t('Etichetta asse Y'), type: 'text',

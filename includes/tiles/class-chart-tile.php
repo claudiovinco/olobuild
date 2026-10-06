@@ -12,11 +12,14 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
     protected $category = 'interactive';
     protected $defaults = [
         'chart_type'           => 'bar',
+        // Stessi quattro colori del config (chart.js): le riserve (#e1474f, #16263d…) dicono
+        // che erano quattro ruoli diversi, ma il token era sempre «accent» e uscivano
+        // quattro barre identiche.
         'items'                => [
-            [ 'id' => 'c-1', 'label' => 'Gen', 'value' => '65', 'color' => 'var(--olo-color-accent, #e1474f)' ],
-            [ 'id' => 'c-2', 'label' => 'Feb', 'value' => '45', 'color' => 'var(--olo-color-accent, #16263d)' ],
+            [ 'id' => 'c-1', 'label' => 'Gen', 'value' => '65', 'color' => 'var(--olo-color-primary, #e1474f)' ],
+            [ 'id' => 'c-2', 'label' => 'Feb', 'value' => '45', 'color' => 'var(--olo-color-dark, #16263d)' ],
             [ 'id' => 'c-3', 'label' => 'Mar', 'value' => '80', 'color' => 'var(--olo-color-accent, #f4a23b)' ],
-            [ 'id' => 'c-4', 'label' => 'Apr', 'value' => '55', 'color' => 'var(--olo-color-accent, #15803d)' ],
+            [ 'id' => 'c-4', 'label' => 'Apr', 'value' => '55', 'color' => 'var(--olo-color-success, #15803d)' ],
         ],
         'chart_height'         => '400',
         'show_legend'          => true,
@@ -212,6 +215,19 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
         $y_min        = $s['y_min'];
         $y_max        = $s['y_max'];
         $y_step       = $s['y_step_size'];
+        // Scala radiale (radar, area polare): minimo, massimo e incremento dei valori. Prima
+        // valevano solo per barre e linee e il radar li ignorava.
+        $r_limiti = '';
+        if ( is_numeric( $y_min ) ) {
+            $r_limiti .= ', min: ' . floatval( $y_min );
+        }
+        if ( is_numeric( $y_max ) ) {
+            $r_limiti .= ', max: ' . floatval( $y_max );
+        }
+        $r_step = ( is_numeric( $y_step ) && floatval( $y_step ) > 0 ) ? ', stepSize: ' . floatval( $y_step ) : '';
+        // Colori scelti davvero (le riserve grigie fisse restano per barre, linee e radar).
+        $text_set = $this->safe_color_css( $s['text_color'] ) !== '';
+        $grid_set = $this->safe_color_css( $s['grid_color'] ) !== '';
 
         // Enqueue Chart.js
         if ( ! self::$chartjs_enqueued ) {
@@ -261,6 +277,32 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
                     if (typeof v === 'string') { o[k] = colore(v, dove); }
                     else if (v) { if (typeof v === 'object') risolviColori(v, dove); }
                 });
+            }
+            /* Chart.js disegna i testi col suo font (Helvetica): ogni oggetto «font» delle
+               opzioni prende la famiglia del testo attorno al grafico, quella del sito. */
+            function conFont(o, famiglia){
+                if (!o || typeof o !== 'object') return;
+                Object.keys(o).forEach(function(k){
+                    var v = o[k];
+                    if (!v || typeof v !== 'object') return;
+                    if (k === 'font' || k === 'titleFont' || k === 'bodyFont') {
+                        if (!v.family) v.family = famiglia;
+                        return;
+                    }
+                    conFont(v, famiglia);
+                });
+            }
+            /* Primo sfondo pieno risalendo dal grafico (trasparente se non ce n'è). */
+            function sfondoDi(el){
+                while (el) {
+                    var bg = getComputedStyle(el).backgroundColor || 'transparent';
+                    var vuoto = (bg === 'transparent');
+                    if (/^rgba\(.*,\s*0\)$/.test(bg)) vuoto = true;
+                    if (/\/\s*0\)$/.test(bg)) vuoto = true;
+                    if (!vuoto) return bg;
+                    el = el.parentElement;
+                }
+                return 'transparent';
             }
             function initChart(){
                 if(typeof Chart === 'undefined'){
@@ -407,7 +449,7 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
                                     ticks: { color: '<?php echo esc_js( $text_color ); ?>', font: { size: <?php echo $tick_fs; ?> } },
                                     grid: { display: <?php echo $show_x_grid ? 'true' : 'false'; ?>, color: '<?php echo esc_js( $grid_color ); ?>', lineWidth: <?php echo $grid_lw; ?> },
                                     border: { display: <?php echo $show_x_bdr ? 'true' : 'false'; ?>, color: '<?php echo esc_js( $axis_color ); ?>' }
-                                    <?php if ( $x_label ) : ?>,title: { display: true, text: '<?php echo $x_label; ?>', color: '<?php echo esc_js( $text_color ); ?>' }<?php endif; ?>
+                                    <?php if ( $x_label ) : ?>,title: { display: true, text: '<?php echo $x_label; ?>', color: '<?php echo esc_js( $text_color ); ?>', font: {} }<?php endif; ?>
                                 },
                                 y: {
                                     <?php if ( $stacked ) : ?>stacked: true,<?php endif; ?>
@@ -417,17 +459,33 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
                                     beginAtZero: <?php echo $begin_zero ? 'true' : 'false'; ?>
                                     <?php if ( $y_min !== '' ) echo ', min: ' . floatval( $y_min ); ?>
                                     <?php if ( $y_max !== '' ) echo ', max: ' . floatval( $y_max ); ?>
-                                    <?php if ( $y_label ) : ?>,title: { display: true, text: '<?php echo $y_label; ?>', color: '<?php echo esc_js( $text_color ); ?>' }<?php endif; ?>
+                                    <?php if ( $y_label ) : ?>,title: { display: true, text: '<?php echo $y_label; ?>', color: '<?php echo esc_js( $text_color ); ?>', font: {} }<?php endif; ?>
                                 }
                             }
                             <?php endif; ?>
                             <?php if ( $chart_type === 'radar' ) : ?>
                             ,scales: {
                                 r: {
-                                    ticks: { color: '<?php echo esc_js( $text_color ); ?>', font: { size: <?php echo $tick_fs; ?> }, backdropColor: 'transparent' },
+                                    ticks: { color: '<?php echo esc_js( $text_color ); ?>', font: { size: <?php echo $tick_fs; ?> }, backdropColor: 'transparent'<?php echo $r_step; ?> },
                                     grid: { color: '<?php echo esc_js( $grid_color ); ?>', lineWidth: <?php echo $grid_lw; ?> },
                                     angleLines: { color: '<?php echo esc_js( $grid_color ); ?>' },
                                     pointLabels: { color: '<?php echo esc_js( $text_color ); ?>', font: { size: <?php echo $tick_fs; ?> } }
+                                    <?php echo $r_limiti; ?>
+                                }
+                            }
+                            <?php endif; ?>
+                            <?php if ( $chart_type === 'polarArea' ) : ?>
+                            <?php /* Area polare: prima nessuna scala, quindi i numeri dei valori nei
+                                     riquadri bianchi di Chart.js (anche su card tinte o scure), mezzi
+                                     coperti dagli spicchi, e «Colore griglia» / colore degli assi senza
+                                     effetto. Ora il riquadro prende lo sfondo del grafico (nello script,
+                                     sfondoDi) e i numeri stanno sopra gli spicchi (z: 1). Colori di testo
+                                     e griglia solo se scelti: senza, quelli di sempre di Chart.js. */ ?>
+                            ,scales: {
+                                r: {
+                                    ticks: { <?php if ( $text_set ) : ?>color: '<?php echo esc_js( $text_color ); ?>', <?php endif; ?>font: { size: <?php echo $tick_fs; ?> }, backdropColor: 'transparent', z: 1<?php echo $r_step; ?> }
+                                    <?php if ( $grid_set ) : ?>,grid: { color: '<?php echo esc_js( $grid_color ); ?>', lineWidth: <?php echo $grid_lw; ?> }<?php endif; ?>
+                                    <?php echo $r_limiti; ?>
                                 }
                             }
                             <?php endif; ?>
@@ -435,6 +493,14 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
                     };
 
                     risolviColori(config, canvas.parentNode);
+                    var famiglia = getComputedStyle(canvas.parentNode).fontFamily;
+                    if (famiglia) conFont(config.options, famiglia);
+                    <?php if ( $chart_type === 'polarArea' ) : ?>
+                    /* Area polare: il riquadro sotto i numeri della scala prende il colore dello
+                       sfondo su cui sta il grafico (prima bianco fisso, anche su card tinte o
+                       scure); nasconde i cerchi della griglia dietro il numero. */
+                    config.options.scales.r.ticks.backdropColor = sfondoDi(canvas.parentNode);
+                    <?php endif; ?>
                     new Chart(ctx, config);
                 }
 
