@@ -103,7 +103,9 @@ class Olobuild_StepTimeline_Tile extends Olobuild_Tile_Base {
         $gap        = max( 0, min( 80, absint( $s['gap'] ) ) );
         $items_alig = $s['items_align'] === 'center' ? 'center' : 'flex-start';
 
-        $tl_line   = $this->safe_color_css( $s['timeline_line_color'] ) ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 18%, #fff)';
+        // Riserva mescolata col trasparente, non col bianco: su fondo chiaro e' la stessa linea
+        // di prima, su una sezione scura non diventa una riga rosata chiara.
+        $tl_line   = $this->safe_color_css( $s['timeline_line_color'] ) ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 18%, transparent)';
         $tl_dot    = $this->safe_color_css( $s['timeline_dot_color'] )  ?: 'var(--olo-color-primary, #e1474f)';
         $tl_dotsz  = max( 6, min( 24, absint( $s['timeline_dot_size'] ) ) );
         $tl_h      = max( 1, min( 8, absint( $s['timeline_height'] ) ) );
@@ -178,8 +180,11 @@ class Olobuild_StepTimeline_Tile extends Olobuild_Tile_Base {
                         if ( $d === $tl_dots - 1 && isset( $items[ $n_items - 1 ]['tag_dot_color'] ) ) {
                             $dot_c = $this->safe_color_css( $items[ $n_items - 1 ]['tag_dot_color'] ) ?: $tl_dot;
                         }
+                        // Alone nel colore del pallino, trasparente: l'anello bianco fisso di prima
+                        // (0 0 0 4px #fff) staccava il pallino dalla linea solo su fondo bianco, e su
+                        // una sezione scura o colorata disegnava un cerchio bianco attorno a ognuno.
                     ?>
-                        <span style="position:absolute;left:<?php echo (float) $pct; ?>%;top:50%;transform:translate(-50%,-50%);width:<?php echo (int) $tl_dotsz; ?>px;height:<?php echo (int) $tl_dotsz; ?>px;border-radius:50%;background:<?php echo esc_attr( $dot_c ); ?>;box-shadow:0 0 0 4px #fff,0 0 0 5px color-mix(in srgb, <?php echo esc_attr( $dot_c ); ?> 20%, transparent)"></span>
+                        <span style="position:absolute;left:<?php echo (float) $pct; ?>%;top:50%;transform:translate(-50%,-50%);width:<?php echo (int) $tl_dotsz; ?>px;height:<?php echo (int) $tl_dotsz; ?>px;border-radius:50%;background:<?php echo esc_attr( $dot_c ); ?>;box-shadow:0 0 0 4px color-mix(in srgb, <?php echo esc_attr( $dot_c ); ?> 18%, transparent)"></span>
                     <?php endfor; ?>
                 </div>
             <?php endif; ?>
@@ -211,7 +216,7 @@ class Olobuild_StepTimeline_Tile extends Olobuild_Tile_Base {
                     <div class="olo-stl__item" style="display:flex;flex-direction:column;gap:18px;position:relative">
 
                         <!-- Counter + tag (riga numero step) -->
-                        <div style="display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap">
+                        <div style="display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap;position:relative">
                             <?php if ( $counter !== '' ) : ?>
                                 <span class="olo-stl__counter" style="font-family:<?php echo esc_attr( $counter_family ); ?>;font-size:<?php echo (int) $counter_size; ?>px;line-height:.9;color:<?php echo esc_attr( $counter_clr ); ?>;font-style:<?php echo esc_attr( $counter_italic ); ?>;font-weight:<?php echo esc_attr( $counter_w ); ?>;letter-spacing:-0.02em" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.counter'; ?>"><?php echo esc_html( $counter ); ?></span>
                             <?php endif; ?>
@@ -220,6 +225,16 @@ class Olobuild_StepTimeline_Tile extends Olobuild_Tile_Base {
                                     <span style="width:8px;height:8px;border-radius:50%;background:<?php echo esc_attr( $tag_dot_clr ); ?>"></span>
                                     <span style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $tag_size; ?>px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $tag_color ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.tag_text'; ?>"><?php echo esc_html( $tag_text ); ?></span>
                                 </div>
+                            <?php endif; ?>
+                            <?php
+                            // Separatore verso lo step dopo (non sull'ultimo): in alto a destra della riga del
+                            // numero, DENTRO la colonna. Stava in assoluto a cavallo dello spazio fra due colonne,
+                            // e con lo spazio di 32 px una scritta di 50-80 px finiva sopra il numero dello step
+                            // successivo («→ VAI LIVE» sopra «03»). Resta fuori dal flusso: nel flusso andava a
+                            // capo nelle colonne strette e allungava solo quella riga, e il mockup dello step
+                            // scendeva di ~50 px rispetto agli altri della fila.
+                            if ( ! empty( $s['show_separator'] ) && ! $is_last && $sep_text !== '' ) : ?>
+                                <span class="olo-stl__sep" style="position:absolute;right:0;top:0;transform:rotate(-6deg);transform-origin:right bottom;font-family:<?php echo esc_attr( $mono ); ?>;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $sep_clr ); ?>;white-space:nowrap" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.separator_text'; ?>"><?php echo esc_html( $sep_text ); ?></span>
                             <?php endif; ?>
                         </div>
 
@@ -281,11 +296,6 @@ class Olobuild_StepTimeline_Tile extends Olobuild_Tile_Base {
                                     <span style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $fl_size; ?>px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $fl_clr ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.footer_label'; ?>"><?php echo esc_html( $f_lbl ); ?></span>
                                 <?php endif; ?>
                             </div>
-                        <?php endif; ?>
-
-                        <!-- Separator (mostrato tra step, dopo questo item ma non sull'ultimo) -->
-                        <?php if ( ! empty( $s['show_separator'] ) && ! $is_last && $sep_text !== '' ) : ?>
-                            <span class="olo-stl__sep" style="position:absolute;right:-<?php echo intval( $gap / 2 ); ?>px;top:50px;transform:translateX(50%) rotate(-6deg);font-family:<?php echo esc_attr( $mono ); ?>;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $sep_clr ); ?>;white-space:nowrap;pointer-events:none" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.separator_text'; ?>"><?php echo esc_html( $sep_text ); ?></span>
                         <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
