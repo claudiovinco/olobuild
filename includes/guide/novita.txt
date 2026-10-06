@@ -3,6 +3,12 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.566 - 2026-10-06 (fix)
+- CTA: se non scegli un colore per il testo del pulsante al passaggio del mouse, resta quello normale. Prima diventava chiaro: un pulsante chiaro col testo scuro, al passaggio, spariva.
+- Slider prodotti: le schede sotto lo slider si leggono con ogni tema. Prima, dove il tema non ripulisce i pulsanti, avevano il fondo grigio di sistema sotto il testo chiaro.
+- Finder: le scelte al passaggio del mouse si leggono anche con un colore d'accento chiaro, come il giallo. Prima il testo prendeva l'accento puro e sulle scelte chiare non si leggeva.
+- Ricerca media: mentre scrivi nel campo di ricerca c'è un solo bordo attorno alla casella. Prima dentro ne compariva un secondo, quello di WordPress.
+
 ## v1.4.565 - 2026-10-06
 - Blocchi & Pagine: 20 blocchi nuovi presi dagli esempi del catalogo delle tile, con le loro foto: hero, prezzi, team, FAQ, timeline, gallerie, grafici, card, titoli e testi. Quando inserisci un blocco, le sue foto si copiano nella Libreria media del sito. Le anteprime si vedono intere, alle loro proporzioni, una accanto all'altra a muratura. C'è anche una categoria nuova, «Testo e titoli».
 - Avanzate: l'animazione di ingresso parte quando la tile entra nello schermo. Prima le tile più in basso nella pagina si animavano al caricamento, fuori vista, e il visitatore non vedeva niente. Durante il ritardo la tile resta nascosta: prima si vedeva ferma, poi spariva e rientrava con l'animazione.
