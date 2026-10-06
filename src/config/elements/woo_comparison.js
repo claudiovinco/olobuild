@@ -28,6 +28,10 @@ export default {
     show_add_to_cart: true,
     header_bg: '',
     header_color: '',
+    border_color: '',
+    accent_color: '',
+    btn_bg: '',
+    btn_color: '',
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
@@ -45,6 +49,9 @@ export default {
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'max_products', label: t('Massimo prodotti'), type: 'range', min: 2, max: 6 },
+    // Prima solo nel PHP. Vuoto = la frase di partenza, tradotta nella lingua del visitatore.
+    { key: 'empty_text', label: t('Testo confronto vuoto'), type: 'text',
+      placeholder: t('Aggiungi prodotti da confrontare usando il pulsante "Confronta".') },
 
     { type: 'separator', label: t('Visibilita righe') },
     { key: 'show_image', label: t('Mostra immagine'), type: 'toggle' },
@@ -77,7 +84,8 @@ export default {
     ] },
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
-    { type: 'typography', label: t('Cells'),
+    // Il colore agisce sulle sole celle d'intestazione (nomi dei prodotti): «Cells» diceva altro.
+    { type: 'typography', label: t('Intestazione'),
       responsiveKeys: [],
       keys: {
         color: 'header_color',
@@ -85,8 +93,14 @@ export default {
       sizeMin: 12, sizeMax: 60,
     },
 
+    // Bordo delle celle, prezzo e pulsante: il renderer li leggeva già (con riserve dai token),
+    // ma nessun controllo li offriva.
     { type: 'separator', label: t('Colori') },
     { key: 'header_bg', label: t('Sfondo intestazione'), type: 'color' },
+    { key: 'border_color', label: t('Bordo celle'), type: 'border', legacyWidth: 1 },
+    { key: 'accent_color', label: t('Colore prezzo'), type: 'color' },
+    { key: 'btn_bg', label: t('Sfondo pulsante'), type: 'color' },
+    { key: 'btn_color', label: t('Colore testo pulsante'), type: 'color' },
 
     ...borderFields(),
   ],

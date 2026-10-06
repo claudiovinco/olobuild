@@ -112,7 +112,7 @@ class Olobuild_Woo_Comparison_Tile extends Olobuild_Tile_Base {
 
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
-            return '<p style="color:var(--olo-color-text-muted, #9CA3AF);text-align:center;padding:40px">WooCommerce non attivo</p>';
+            return '<p style="color:var(--olo-color-text-muted, #9CA3AF);text-align:center;padding:40px">' . esc_html( olobuild_t( 'WooCommerce non attivo' ) ) . '</p>';
         }
 
         $s   = wp_parse_args( $settings, $this->defaults );
@@ -121,11 +121,17 @@ class Olobuild_Woo_Comparison_Tile extends Olobuild_Tile_Base {
         $max        = max( 2, min( 6, intval( $s['max_products'] ) ) );
         $hdr_bg     = $this->safe_color_css( $s['header_bg'] ) ?: 'var(--olo-color-surface-alt, #f6f7f9)';
         $hdr_c      = $this->safe_color_css( $s['header_color'] ) ?: 'var(--olo-color-text, #374151)';
-        $bdr_c      = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #e5e7eb)';
+        // «Bordo celle» è ora il controllo Bordo completo (legacyWidth 1): la chiave può tenere la
+        // vecchia stringa colore o l'oggetto lati+stile+colore. Riserva = la riga di 1 px di sempre.
+        $bdr_c      = Olobuild_Tile_Utils::border_color( $s['border_color'] ?? null, 'var(--olo-color-border, #e5e7eb)' );
+        $cell_bdr   = Olobuild_Tile_Utils::border_css( $s['border_color'] ?? null, [ 'width' => 1, 'color' => $bdr_c ] ) ?: 'border:0;';
         $accent     = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $btn_bg     = $this->safe_color_css( $s['btn_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $btn_c      = $this->safe_color_css( $s['btn_color'] ) ?: 'var(--olo-color-on-primary, #ffffff)';
-        $empty_text = esc_html( $s['empty_text'] );
+        // Il testo della tabella vuota: vuoto (il campo lasciato com'è) o uguale alla frase di
+        // partenza esce tradotto; una frase scritta dall'utente resta la sua.
+        $empty_raw  = trim( (string) $s['empty_text'] );
+        $empty_text = esc_html( ( $empty_raw === '' || $empty_raw === $this->defaults['empty_text'] ) ? olobuild_t( 'Aggiungi prodotti da confrontare usando il pulsante "Confronta".' ) : $empty_raw );
 
         ob_start();
         ?>
@@ -133,8 +139,8 @@ class Olobuild_Woo_Comparison_Tile extends Olobuild_Tile_Base {
         <style>
         #<?php echo $uid; ?>{width:100%;overflow-x:auto}
         #<?php echo $uid; ?> table{width:100%;border-collapse:collapse;min-width:600px}
-        #<?php echo $uid; ?> th{background:<?php echo $hdr_bg; ?>;color:<?php echo $hdr_c; ?>;padding:12px 16px;text-align:left;font-weight:600;border:1px solid <?php echo $bdr_c; ?>;white-space:nowrap}
-        #<?php echo $uid; ?> td{padding:12px 16px;border:1px solid <?php echo $bdr_c; ?>;vertical-align:middle;text-align:center}
+        #<?php echo $uid; ?> th{background:<?php echo $hdr_bg; ?>;color:<?php echo $hdr_c; ?>;padding:12px 16px;text-align:left;font-weight:600;<?php echo $cell_bdr; ?>white-space:nowrap}
+        #<?php echo $uid; ?> td{padding:12px 16px;<?php echo $cell_bdr; ?>vertical-align:middle;text-align:center}
         #<?php echo $uid; ?> td:first-child{text-align:left;font-weight:500;background:<?php echo $hdr_bg; ?>}
         #<?php echo $uid; ?> .cmp-img{max-width:120px;height:auto;border-radius:6px}
         #<?php echo $uid; ?> .cmp-price{font-size:18px;font-weight:700;color:<?php echo $accent; ?>}
@@ -167,6 +173,16 @@ class Olobuild_Woo_Comparison_Tile extends Olobuild_Tile_Base {
             var showCart = <?php echo ! empty( $s['show_add_to_cart'] ) ? 'true' : 'false'; ?>;
 
             var KEY = 'olo_compare_ids';
+            // Le intestazioni delle righe erano scritte in italiano dentro lo script: niente traduzione.
+            var L = <?php echo wp_json_encode( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_json_encode() di stringhe tradotte, inserite nel markup solo attraverso esc() lato JS
+                'prezzo'        => olobuild_t( 'Prezzo' ),
+                'valutazione'   => olobuild_t( 'Valutazione' ),
+                'disponibilita' => olobuild_t( 'Disponibilità' ),
+                'disponibile'   => olobuild_t( 'Disponibile' ),
+                'esaurito'      => olobuild_t( 'Non disponibile' ),
+                'sku'           => olobuild_t( 'SKU' ),
+                'descrizione'   => olobuild_t( 'Descrizione' ),
+            ] ); ?>;
 
             function getIds() {
                 try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch(e) { return []; }
@@ -233,14 +249,14 @@ class Olobuild_Woo_Comparison_Tile extends Olobuild_Tile_Base {
 
                 // Price
                 if (showPrice) {
-                    html += '<tr><td>Prezzo</td>';
+                    html += '<tr><td>' + esc(L.prezzo) + '</td>';
                     products.forEach(function(p) { html += '<td class="cmp-price">' + p.price_html + '</td>'; });
                     html += '</tr>';
                 }
 
                 // Rating
                 if (showRating) {
-                    html += '<tr><td>Valutazione</td>';
+                    html += '<tr><td>' + esc(L.valutazione) + '</td>';
                     products.forEach(function(p) {
                         var stars = '';
                         for (var i = 1; i <= 5; i++) { stars += i <= Math.round(p.rating) ? '&#9733;' : '&#9734;'; }
@@ -251,24 +267,24 @@ class Olobuild_Woo_Comparison_Tile extends Olobuild_Tile_Base {
 
                 // Stock
                 if (showStock) {
-                    html += '<tr><td>Disponibilità</td>';
+                    html += '<tr><td>' + esc(L.disponibilita) + '</td>';
                     products.forEach(function(p) {
                         var cls = p.in_stock ? 'cmp-stock-in' : 'cmp-stock-out';
-                        html += '<td class="' + cls + '">' + (p.in_stock ? 'Disponibile' : 'Non disponibile') + '</td>';
+                        html += '<td class="' + cls + '">' + esc(p.in_stock ? L.disponibile : L.esaurito) + '</td>';
                     });
                     html += '</tr>';
                 }
 
                 // SKU
                 if (showSku) {
-                    html += '<tr><td>SKU</td>';
+                    html += '<tr><td>' + esc(L.sku) + '</td>';
                     products.forEach(function(p) { html += '<td>' + esc(p.sku || '—') + '</td>'; });
                     html += '</tr>';
                 }
 
                 // Description
                 if (showDesc) {
-                    html += '<tr><td>Descrizione</td>';
+                    html += '<tr><td>' + esc(L.descrizione) + '</td>';
                     products.forEach(function(p) { html += '<td style="font-size:13px;text-align:left">' + (p.short_description || '—') + '</td>'; });
                     html += '</tr>';
                 }
