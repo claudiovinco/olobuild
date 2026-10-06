@@ -399,6 +399,24 @@ defineExpose({ open, close, toggle });
 .finder-input::placeholder {
   color: #999;
 }
+/* Il Cerca vive nel body (Teleport), fuori da #olobuilder-app: forms.css di WordPress
+   gli disegnava bordo, padding e, al focus, il bordo blu (input[type=text]:focus,
+   0,2,1). Il campo è solo testo: il riquadro è la finestra, e il cursore che lampeggia
+   dice dove si scrive. */
+.finder-header .finder-input[type="text"],
+.finder-header .finder-input[type="text"]:focus {
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  outline: none;
+  font-size: 14px;
+  line-height: 1.5;
+}
 .finder-kbd {
   background: rgba(0, 0, 0, 0.06);
   color: #888;

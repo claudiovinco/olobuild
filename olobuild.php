@@ -104,9 +104,13 @@ function olobuild_csv_safe( $value ) {
  *
  * Si attiva con `define( 'OLOBUILD_DISABLE_IMPORTS', true );` in wp-config.php — per-sito
  * e non disattivabile dalla UI da un utente trial. Inerte ovunque non sia definita.
+ * Vale anche il nome di prima della 1.4.301, `OLO_DISABLE_IMPORTS`: try lo definisce
+ * ancora così e col solo nome nuovo il blocco si era spento in silenzio (pulsanti Temi e
+ * Importa JSON di nuovo nel builder della demo).
  */
 function olobuild_imports_disabled() {
-    return defined( 'OLOBUILD_DISABLE_IMPORTS' ) && OLOBUILD_DISABLE_IMPORTS;
+    return ( defined( 'OLOBUILD_DISABLE_IMPORTS' ) && OLOBUILD_DISABLE_IMPORTS )
+        || ( defined( 'OLO_DISABLE_IMPORTS' ) && OLO_DISABLE_IMPORTS );
 }
 
 /** WP_Error 403 standard per gli endpoint REST di import quando disabilitati. */

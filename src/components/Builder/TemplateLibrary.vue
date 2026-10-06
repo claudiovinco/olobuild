@@ -1,65 +1,70 @@
 <template>
+    <!-- Colori del chrome chiaro del builder (come Cerca e i pannelli): fondo bianco
+         vetro, testi grigio scuro, accento arancio locale (--olo-ui-accent). Prima la
+         libreria mescolava classi grigie Tailwind — che main.scss rimappa sul tema
+         chiaro — e colori scuri scritti a mano: titolo bianco su bianco, barra e card
+         scure dentro una finestra chiara. -->
     <transition name="fade">
       <div
         v-if="visible"
-        class="mb-flex mb-items-center mb-justify-center"
-        style="position:fixed;inset:0;z-index:99000;background:rgba(0,0,0,0.6)"
+        class="olo-tpl-overlay"
         @click.self="close"
       >
         <div
           ref="dialogRef"
-          class="mb-bg-gray-800 mb-border mb-border-gray-600 mb-rounded-xl mb-shadow-2xl mb-w-[900px] mb-max-h-[85vh] mb-flex mb-flex-col mb-overflow-hidden"
+          class="olo-tpl-dialog"
+          role="dialog"
+          aria-modal="true"
+          :aria-label="t('Blocchi & Pagine')"
           @click.stop
         >
           <!-- Header -->
-          <div class="mb-flex mb-items-center mb-justify-between mb-px-5 mb-py-3 mb-border-b mb-border-gray-700">
-            <div class="mb-flex mb-items-center mb-gap-2">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-text-primary-400">
+          <div class="olo-tpl-head">
+            <div class="olo-tpl-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/>
               </svg>
-              <h3 class="mb-text-white mb-text-sm mb-font-semibold mb-m-0">{{ t('Blocchi & Pagine') }}</h3>
+              <h3>{{ t('Blocchi & Pagine') }}</h3>
             </div>
             <!-- Search -->
-            <div class="mb-flex mb-items-center mb-gap-3">
-              <div class="mb-relative">
-                <svg class="mb-absolute mb-left-2 mb-top-1/2 mb--translate-y-1/2 mb-text-gray-500" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <div class="olo-tpl-tools">
+              <label class="olo-tpl-searchbox">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 <input
                   v-model="searchQuery"
                   type="text"
                   :placeholder="t('Cerca template...')"
-                  class="olo-tpl-search mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-text-xs mb-text-gray-200 mb-pl-8 mb-pr-3 mb-py-1.5 mb-w-48 focus:mb-outline-none focus:mb-border-primary-500 mb-placeholder-gray-500"
+                  :aria-label="t('Cerca template...')"
+                  class="olo-tpl-search"
                 />
-              </div>
-              <button @click="close" class="mb-text-gray-400 hover:mb-text-white mb-transition-colors" :aria-label="t('Chiudi')">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </label>
+              <button type="button" @click="close" class="olo-tpl-x" :aria-label="t('Chiudi')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               </button>
             </div>
           </div>
 
           <!-- Category filter -->
-          <div style="display:flex;align-items:center;gap:10px;padding:8px 20px;background:#111827;border-bottom:1px solid #374151">
-            <label style="color:#9CA3AF;font-size:11px;white-space:nowrap">{{ t('Categoria:') }}</label>
-            <div style="flex:1;max-width:220px">
+          <div class="olo-tpl-filter">
+            <label class="olo-tpl-filter-label">{{ t('Categoria:') }}</label>
+            <div class="olo-tpl-filter-select">
               <FieldSelect
                 ui="dropdown"
-                theme="dark"
                 :modelValue="activeCategory"
                 :options="categoryFilterOptions"
                 @update:modelValue="activeCategory = $event"
               />
             </div>
-            <span style="color:#6B7280;font-size:10px">{{ filteredTemplates.length }} {{ t('risultati') }}</span>
+            <span class="olo-tpl-count">{{ filteredTemplates.length }} {{ t('risultati') }}</span>
           </div>
 
           <!-- Templates grid -->
-          <div class="mb-flex-1 mb-overflow-y-auto mb-p-5">
-            <div v-if="loading" class="mb-text-center mb-py-8">
-              <span class="mb-text-sm mb-text-gray-400">{{ t('Caricamento template...') }}</span>
-            </div>
+          <div class="olo-tpl-body">
+            <div v-if="loading" class="olo-tpl-state">{{ t('Caricamento template...') }}</div>
 
-            <div v-else-if="filteredTemplates.length === 0" class="mb-text-center mb-py-8">
-              <p class="mb-text-sm mb-text-gray-500">{{ t('Nessun template trovato') }}</p>
-            </div>
+            <div v-else-if="erroreLista" class="olo-tpl-state">{{ erroreLista }}</div>
+
+            <div v-else-if="filteredTemplates.length === 0" class="olo-tpl-state">{{ t('Nessun template trovato') }}</div>
 
             <div :style="gridStyle">
               <!-- Card = pulsante: si raggiunge col Tab e si sceglie con Invio o Spazio.
@@ -77,14 +82,14 @@
                 @keydown.space.self.prevent="onCardClick(tpl)"
               >
                 <!-- Thumbnail image (for page templates with thumbnail) -->
-                <div v-if="tpl.thumbnail" style="position:relative;overflow:hidden;border-bottom:1px solid #4B5563" @mouseenter="$event.currentTarget.querySelector('.olo-tpl-hover').style.opacity='1'" @mouseleave="$event.currentTarget.querySelector('.olo-tpl-hover').style.opacity='0'">
-                  <img :src="oloData.pluginUrl + tpl.thumbnail" :alt="tpl.name" style="display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;object-position:top center;background:#0f1623" loading="lazy" @error="$event.target.style.display='none'" />
-                  <div class="olo-tpl-hover" style="position:absolute;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;padding:12px;opacity:0;transition:opacity 0.15s">
-                    <span style="color:#D1D5DB;font-size:11px;text-align:center;line-height:1.5">{{ tpl.preview_description }}</span>
+                <div v-if="tpl.thumbnail" class="olo-tpl-media">
+                  <img :src="oloData.pluginUrl + tpl.thumbnail" :alt="tpl.name" class="olo-tpl-img" loading="lazy" @error="$event.target.style.display='none'" />
+                  <div v-if="tpl.preview_description" class="olo-tpl-hover">
+                    <span>{{ tpl.preview_description }}</span>
                   </div>
                 </div>
                 <!-- SVG Preview (fallback) -->
-                <div v-else style="position:relative;overflow:hidden;border-bottom:1px solid #4B5563" @mouseenter="$event.currentTarget.querySelector('.olo-tpl-hover').style.opacity='1'" @mouseleave="$event.currentTarget.querySelector('.olo-tpl-hover').style.opacity='0'">
+                <div v-else class="olo-tpl-media">
                   <svg :viewBox="'0 0 260 120'" width="100%" style="display:block;background-color:var(--tpl-bg)" :style="{ '--tpl-bg': getPreviewBg(tpl) }">
                     <g v-for="(el, i) in getSvgElements(tpl)" :key="i">
                       <rect v-if="el.shape === 'rect'" :x="el.x" :y="el.y" :width="el.w" :height="el.h" :rx="el.rx || 0" :fill="el.fill" :opacity="el.opacity || 1" />
@@ -93,19 +98,21 @@
                     </g>
                   </svg>
                   <!-- Hover description -->
-                  <div class="olo-tpl-hover" style="position:absolute;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;padding:10px;opacity:0;transition:opacity 0.15s">
-                    <span style="color:#D1D5DB;font-size:10px;text-align:center;line-height:1.5">{{ tpl.preview_description }}</span>
+                  <div v-if="tpl.preview_description" class="olo-tpl-hover olo-tpl-hover--sm">
+                    <span>{{ tpl.preview_description }}</span>
                   </div>
                 </div>
                 <!-- Info -->
-                <div style="padding:6px 10px;display:flex;align-items:center;justify-content:space-between;gap:4px">
-                  <div style="min-width:0;flex:1">
-                    <div style="display:flex;align-items:center;gap:4px">
-                      <span style="font-size:11px;font-weight:500;color:#E5E7EB;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ tpl.name }}</span>
-                      <span v-if="isPagina(tpl)" style="font-size:8px;padding:1px 5px;background:rgba(232,98,42,0.15);color:#F6A06B;border-radius:3px;flex-shrink:0">{{ t('Pagina') }}</span>
-                      <span v-if="tpl.is_user" style="font-size:8px;padding:1px 4px;background:rgba(245,158,11,0.15);color:#FCD34D;border-radius:3px;flex-shrink:0">{{ t('Personale') }}</span>
+                <div class="olo-tpl-info">
+                  <div class="olo-tpl-info-text">
+                    <div class="olo-tpl-name-row">
+                      <span class="olo-tpl-name">{{ tpl.name }}</span>
+                      <span v-if="isPagina(tpl)" class="olo-tpl-badge olo-tpl-badge--page">{{ t('Pagina') }}</span>
+                      <span v-if="tpl.is_user" class="olo-tpl-badge olo-tpl-badge--user">{{ t('Personale') }}</span>
                     </div>
-                    <span style="font-size:9px;text-transform:capitalize" :style="{ color: getCategoryColor(tpl.category) }">{{ getCategoryLabel(tpl.category) }}</span>
+                    <!-- Il colore della categoria sta nel pallino: come testo, sul bianco,
+                         i toni chiari (lime, ambra, azzurro) non si leggevano. -->
+                    <span class="olo-tpl-cat"><span class="olo-tpl-dot" :style="{ background: getCategoryColor(tpl.category) }" aria-hidden="true"></span>{{ getCategoryLabel(tpl.category) }}</span>
                   </div>
                   <!-- Delete button for user templates -->
                   <button
@@ -116,7 +123,7 @@
                     :aria-label="t('Elimina template')"
                     @click.stop="confirmDelete(tpl)"
                   >
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
                   </button>
                 </div>
               </div>
@@ -124,9 +131,9 @@
           </div>
 
           <!-- Footer -->
-          <div class="mb-px-5 mb-py-2 mb-border-t mb-border-gray-700 mb-bg-gray-900/50 mb-flex mb-items-center mb-justify-between">
-            <span class="mb-text-[10px] mb-text-gray-500">{{ filteredTemplates.length }} / {{ templates.length }} {{ t('template') }}</span>
-            <button @click="close" class="mb-text-xs mb-text-gray-400 hover:mb-text-gray-200 mb-transition-colors">{{ t('Chiudi') }}</button>
+          <div class="olo-tpl-foot">
+            <span>{{ filteredTemplates.length }} / {{ templates.length }} {{ t('template') }}</span>
+            <button type="button" @click="close" class="olo-tpl-link">{{ t('Chiudi') }}</button>
           </div>
         </div>
       </div>
@@ -136,73 +143,61 @@
     <transition name="fade">
       <div
         v-if="saveDialogVisible"
-        class="mb-flex mb-items-center mb-justify-center"
-        style="position:fixed;inset:0;z-index:99500;background:rgba(0,0,0,0.7)"
+        class="olo-tpl-overlay olo-tpl-overlay--top"
         @click.self="closeSaveDialog"
       >
-        <div
-          style="background:#1F2937;border:1px solid #4B5563;border-radius:12px;width:420px;box-shadow:0 20px 40px rgba(0,0,0,0.5)"
-          @click.stop
-        >
+        <div class="olo-tpl-box olo-tpl-box--save" @click.stop>
           <!-- Header -->
-          <div style="padding:16px 20px;border-bottom:1px solid #374151;display:flex;align-items:center;gap:8px">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--olo-ui-accent)" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-            <span style="color:#F3F4F6;font-size:14px;font-weight:600">{{ t('Salva come template') }}</span>
+          <div class="olo-tpl-box-head">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="olo-tpl-accent" aria-hidden="true"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            <span class="olo-tpl-box-title">{{ t('Salva come template') }}</span>
           </div>
           <!-- Body -->
-          <div style="padding:20px">
-            <div style="margin-bottom:14px">
-              <label style="display:block;color:#9CA3AF;font-size:11px;margin-bottom:4px">{{ t('Nome template') }}</label>
+          <div class="olo-tpl-box-body">
+            <div class="olo-tpl-field">
+              <label class="olo-tpl-label">{{ t('Nome template') }}</label>
               <input
                 ref="saveNameInput"
                 v-model="saveName"
                 type="text"
                 :placeholder="t('es. Hero con video e CTA')"
-                style="width:100%;background:#374151;border:1px solid #4B5563;border-radius:6px;color:#E5E7EB;padding:8px 12px;font-size:13px;outline:none;box-sizing:border-box"
-                @focus="$event.target.style.borderColor='var(--olo-ui-accent)'"
-                @blur="$event.target.style.borderColor='#4B5563'"
+                class="olo-tpl-input"
                 @keydown.enter="doSave"
               />
             </div>
-            <div style="margin-bottom:14px">
-              <label style="display:block;color:#9CA3AF;font-size:11px;margin-bottom:4px">{{ t('Categoria') }}</label>
+            <div class="olo-tpl-field">
+              <label class="olo-tpl-label">{{ t('Categoria') }}</label>
               <FieldSelect
                 ui="dropdown"
-                theme="dark"
                 :modelValue="saveCategory"
                 :options="saveCategorySelectOptions"
                 @update:modelValue="saveCategory = $event"
               />
             </div>
-            <div style="margin-bottom:14px">
-              <label style="display:block;color:#9CA3AF;font-size:11px;margin-bottom:4px">{{ t('Descrizione (opzionale)') }}</label>
+            <div class="olo-tpl-field">
+              <label class="olo-tpl-label">{{ t('Descrizione (opzionale)') }}</label>
               <input
                 v-model="saveDescription"
                 type="text"
                 :placeholder="t('Breve descrizione del template')"
-                style="width:100%;background:#374151;border:1px solid #4B5563;border-radius:6px;color:#E5E7EB;padding:8px 12px;font-size:13px;outline:none;box-sizing:border-box"
-                @focus="$event.target.style.borderColor='var(--olo-ui-accent)'"
-                @blur="$event.target.style.borderColor='#4B5563'"
+                class="olo-tpl-input"
               />
             </div>
             <!-- Preview info -->
-            <div v-if="saveSection" style="padding:8px 10px;background:#111827;border-radius:6px;margin-bottom:16px">
-              <span style="color:#6B7280;font-size:10px">{{ t('Sezione:') }} </span>
-              <span style="color:#D1D5DB;font-size:11px">{{ saveSection.settings?._label || t('Sezione') }}</span>
-              <span style="color:#6B7280;font-size:10px;margin-left:8px">{{ countElements(saveSection) }} {{ t('elementi') }}</span>
+            <div v-if="saveSection" class="olo-tpl-note">
+              <span class="olo-tpl-note-k">{{ t('Sezione:') }}</span>
+              <span class="olo-tpl-note-v">{{ saveSection.settings?._label || t('Sezione') }}</span>
+              <span class="olo-tpl-note-k olo-tpl-note-gap">{{ countElements(saveSection) }} {{ countElements(saveSection) === 1 ? t('elemento') : t('elementi') }}</span>
             </div>
           </div>
           <!-- Footer -->
-          <div style="padding:12px 20px;border-top:1px solid #374151;display:flex;justify-content:flex-end;gap:8px">
+          <div class="olo-tpl-box-foot">
+            <button type="button" @click="closeSaveDialog" class="olo-tpl-btn">{{ t('Annulla') }}</button>
             <button
-              @click="closeSaveDialog"
-              style="padding:7px 16px;border-radius:6px;border:1px solid #4B5563;background:transparent;color:#9CA3AF;font-size:12px;cursor:pointer"
-            >{{ t('Annulla') }}</button>
-            <button
+              type="button"
               @click="doSave"
               :disabled="!saveName.trim() || saving"
-              style="padding:7px 16px;border-radius:6px;border:none;background:var(--olo-ui-accent);color:#fff;font-size:12px;font-weight:500;cursor:pointer;transition:opacity 0.15s"
-              :style="{ opacity: (!saveName.trim() || saving) ? '0.5' : '1' }"
+              class="olo-tpl-btn olo-tpl-btn--primary"
             >{{ saving ? t('Salvataggio...') : t('Salva template') }}</button>
           </div>
         </div>
@@ -213,36 +208,29 @@
     <transition name="fade">
       <div
         v-if="deleteDialogVisible"
-        class="mb-flex mb-items-center mb-justify-center"
-        style="position:fixed;inset:0;z-index:99500;background:rgba(0,0,0,0.7)"
+        class="olo-tpl-overlay olo-tpl-overlay--top"
         @click.self="deleteDialogVisible = false"
       >
-        <div
-          style="background:#1F2937;border:1px solid #4B5563;border-radius:12px;width:380px;box-shadow:0 20px 40px rgba(0,0,0,0.5)"
-          @click.stop
-        >
-          <div style="padding:20px">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-              <div style="width:36px;height:36px;border-radius:8px;background:rgba(239,68,68,0.1);display:flex;align-items:center;justify-content:center">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+        <div class="olo-tpl-box olo-tpl-box--del" @click.stop>
+          <div class="olo-tpl-box-body">
+            <div class="olo-tpl-del-head">
+              <div class="olo-tpl-del-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
               </div>
               <div>
-                <div style="color:#F3F4F6;font-size:14px;font-weight:600">{{ t('Elimina template') }}</div>
-                <div style="color:#9CA3AF;font-size:11px">{{ t('Questa azione non può essere annullata') }}</div>
+                <div class="olo-tpl-box-title">{{ t('Elimina template') }}</div>
+                <div class="olo-tpl-sub">{{ t('Questa azione non può essere annullata') }}</div>
               </div>
             </div>
-            <p style="color:#D1D5DB;font-size:12px;margin:0 0 4px">{{ t('Vuoi eliminare il template') }} <strong style="color:#FCD34D">{{ deleteTarget?.name }}</strong>?</p>
+            <p class="olo-tpl-text">{{ t('Vuoi eliminare il template') }} <strong>{{ deleteTarget?.name }}</strong>?</p>
           </div>
-          <div style="padding:12px 20px;border-top:1px solid #374151;display:flex;justify-content:flex-end;gap:8px">
+          <div class="olo-tpl-box-foot">
+            <button type="button" @click="deleteDialogVisible = false" class="olo-tpl-btn">{{ t('Annulla') }}</button>
             <button
-              @click="deleteDialogVisible = false"
-              style="padding:7px 16px;border-radius:6px;border:1px solid #4B5563;background:transparent;color:#9CA3AF;font-size:12px;cursor:pointer"
-            >{{ t('Annulla') }}</button>
-            <button
+              type="button"
               @click="doDelete"
               :disabled="deleting"
-              style="padding:7px 16px;border-radius:6px;border:none;background:#EF4444;color:#fff;font-size:12px;font-weight:500;cursor:pointer;transition:opacity 0.15s"
-              :style="{ opacity: deleting ? '0.5' : '1' }"
+              class="olo-tpl-btn olo-tpl-btn--danger"
             >{{ deleting ? t('Eliminazione...') : t('Elimina') }}</button>
           </div>
         </div>
@@ -258,23 +246,23 @@
          «Sostituisci tutto». Da lì il Tab gira fra i tre pulsanti senza uscire (la
          trappola della libreria è spenta mentre il dialogo è aperto); Esc chiude. -->
     <transition name="fade">
-      <div v-if="pageInsertMode === 'ask'" style="position:fixed;inset:0;z-index:99500;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center" @mousedown.self.prevent @click.self="onPageCancelClick" @keydown.esc.stop="cancelPageInsert">
-        <div ref="pageDialogRef" tabindex="-1" role="dialog" aria-modal="true" :aria-label="t('Inserisci pagina completa')" style="background:#1F2937;border:1px solid #374151;border-radius:12px;padding:24px;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.5);outline:none" @click.stop @keydown.tab="tabNelDialogoPagina">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F6A06B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-            <span style="color:#E5E7EB;font-size:14px;font-weight:600">{{ t('Inserisci pagina completa') }}</span>
+      <div v-if="pageInsertMode === 'ask'" class="olo-tpl-overlay olo-tpl-overlay--top" @mousedown.self.prevent @click.self="onPageCancelClick" @keydown.esc.stop="cancelPageInsert">
+        <div ref="pageDialogRef" tabindex="-1" role="dialog" aria-modal="true" :aria-label="t('Inserisci pagina completa')" class="olo-tpl-box olo-tpl-box--page" @click.stop @keydown.tab="tabNelDialogoPagina">
+          <div class="olo-tpl-page-head">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="olo-tpl-accent" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+            <span class="olo-tpl-box-title">{{ t('Inserisci pagina completa') }}</span>
           </div>
-          <p style="color:#9CA3AF;font-size:12px;line-height:1.5;margin:0 0 16px">
-            {{ t('Il canvas contiene già del contenuto. Come vuoi procedere con il template') }} <strong style="color:#E5E7EB">{{ pendingPageTpl?.name }}</strong>?
+          <p class="olo-tpl-text olo-tpl-text--page">
+            {{ t('Il canvas contiene già del contenuto. Come vuoi procedere con il template') }} <strong>{{ pendingPageTpl?.name }}</strong>?
           </p>
-          <div style="display:flex;gap:8px">
-            <button @click="confirmPageInsert('replace', $event)" style="flex:1;padding:8px 12px;background:var(--olo-ui-accent);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;transition:filter 0.15s" @mouseenter="$event.target.style.filter='brightness(0.9)'" @mouseleave="$event.target.style.filter='none'">
+          <div class="olo-tpl-page-actions">
+            <button type="button" @click="confirmPageInsert('replace', $event)" class="olo-tpl-btn olo-tpl-btn--primary olo-tpl-btn--grow">
               {{ t('Sostituisci tutto') }}
             </button>
-            <button @click="confirmPageInsert('append', $event)" style="flex:1;padding:8px 12px;background:#374151;color:#E5E7EB;border:1px solid #4B5563;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;transition:background 0.15s" @mouseenter="$event.target.style.background='#4B5563'" @mouseleave="$event.target.style.background='#374151'">
+            <button type="button" @click="confirmPageInsert('append', $event)" class="olo-tpl-btn olo-tpl-btn--soft olo-tpl-btn--grow">
               {{ t('Aggiungi in fondo') }}
             </button>
-            <button @click="onPageCancelClick" style="padding:8px 12px;background:transparent;color:#9CA3AF;border:1px solid #4B5563;border-radius:6px;font-size:12px;cursor:pointer;transition:color 0.15s" @mouseenter="$event.target.style.color='#E5E7EB'" @mouseleave="$event.target.style.color='#9CA3AF'">
+            <button type="button" @click="onPageCancelClick" class="olo-tpl-btn">
               {{ t('Annulla') }}
             </button>
           </div>
@@ -305,6 +293,9 @@ const oloData = window.oloData || {};
 const visible = ref(false);
 const loading = ref(false);
 const templates = ref([]);
+// Messaggio quando la lista non arriva (rete, permessi, sandbox): senza, la finestra
+// diceva «Nessun template trovato» come se la libreria fosse vuota.
+const erroreLista = ref('');
 // Dove va un blocco: { zone, index, afterId } dal «+» o dal menu contestuale, null = in
 // fondo al body (pulsante della toolbar). Si riazzera a ogni apertura.
 const posizione = ref(null);
@@ -799,8 +790,15 @@ function testoLeggibile(v) {
     .replace(/&amp;/g, '&');
 }
 
+// Il messaggio del server (WP_Error) quando c'è: dice perché non è andata, non solo che
+// non è andata (nella demo, per esempio, la libreria non si modifica).
+async function messaggioErrore(res) {
+  try { return (await res.json())?.message || ''; } catch (e) { return ''; }
+}
+
 async function fetchTemplates() {
   loading.value = true;
+  erroreLista.value = '';
   try {
     const res = await fetch(`${oloData.restUrl}template-library`, {
       headers: { 'X-WP-Nonce': oloData.nonce },
@@ -814,9 +812,12 @@ async function fetchTemplates() {
             preview_description: testoLeggibile(tpl.preview_description),
           }))
         : [];
+    } else {
+      erroreLista.value = (await messaggioErrore(res)) || t('Non è stato possibile caricare la libreria.');
     }
   } catch (err) {
     console.error('fetchTemplates error:', err);
+    erroreLista.value = t('Non è stato possibile caricare la libreria.');
   } finally {
     loading.value = false;
   }
@@ -986,7 +987,7 @@ async function doSave() {
         content: content,
       }),
     });
-    if (!res.ok) throw new Error('Save failed');
+    if (!res.ok) throw Object.assign(new Error('Save failed'), { messaggio: await messaggioErrore(res) });
     const result = await res.json();
     // Lista non ancora scaricata (salvataggio dal menu prima di aprire la libreria):
     // una voce sola la renderebbe «già caricata» e open() mostrerebbe solo quella.
@@ -1007,7 +1008,7 @@ async function doSave() {
     }
   } catch (err) {
     console.error('doSave error:', err);
-    toast.error(t('Errore nel salvataggio del template'));
+    toast.error(t('Errore nel salvataggio del template') + (err.messaggio ? ' — ' + err.messaggio : ''), err.messaggio ? 6000 : undefined);
   } finally {
     saving.value = false;
   }
@@ -1028,14 +1029,14 @@ async function doDelete() {
       method: 'DELETE',
       headers: { 'X-WP-Nonce': oloData.nonce },
     });
-    if (!res.ok) throw new Error('Delete failed');
+    if (!res.ok) throw Object.assign(new Error('Delete failed'), { messaggio: await messaggioErrore(res) });
     toast.success(t('Template eliminato'));
     templates.value = templates.value.filter(t => t.id !== deleteTarget.value.id);
     deleteDialogVisible.value = false;
     deleteTarget.value = null;
   } catch (err) {
     console.error('doDelete error:', err);
-    toast.error(t('Errore nell\'eliminazione'));
+    toast.error(t('Errore nell\'eliminazione') + (err.messaggio ? ' — ' + err.messaggio : ''), err.messaggio ? 6000 : undefined);
   } finally {
     deleting.value = false;
   }
@@ -1090,40 +1091,307 @@ defineExpose({ open, close, visible, openSaveDialog });
 .fade-leave-to {
   opacity: 0;
 }
-/* Campo ricerca: garantisce lo spazio a sinistra per l'icona-lente anche se
-   forms.css di WordPress azzera il padding dell'input. SOLO padding, nessun
-   colore del builder toccato. */
-.olo-tpl-search {
-  padding-left: 2rem !important;
-}
-/* Card: stesso rilievo al passaggio del mouse e al focus da tastiera, più il contorno
-   con l'accento del chrome sul focus-visible. Al focus compare anche la descrizione
-   (lo strato .olo-tpl-hover, che il mouse accende da sé).
-   L'accento del chrome è locale (come in BuilderSidebar): la libreria sta fuori dalla
-   sidebar e nessun suo antenato lo definisce. Senza, var() non si risolve, il contorno
-   diventa «none» e toglie anche l'anello di focus del browser. Il cestino sta dentro
-   la card e lo eredita da qui. */
-.olo-tpl-card {
+
+/* ── Chrome chiaro del builder ──
+   I colori stanno qui, sulla radice di ogni finestra (libreria e dialoghi): l'accento
+   del chrome è locale come in BuilderSidebar, perché nessun antenato della libreria lo
+   definisce e var() senza valore toglieva bordi e fondo dei pulsanti. */
+.olo-tpl-overlay {
   --olo-ui-accent: #e8622a;
-  background: #1f2937;
+  --tl-ink: #1a1a1a;
+  --tl-ink-2: #555;
+  --tl-mute: #888;
+  --tl-faint: #a3a3a3;
+  --tl-line: rgba(0, 0, 0, 0.08);
+  --tl-line-2: rgba(0, 0, 0, 0.12);
+  --tl-fill: rgba(0, 0, 0, 0.04);
+  --tl-ring: rgba(232, 98, 42, 0.18);
+  --tl-danger: #dc2626;
+  position: fixed;
+  inset: 0;
+  z-index: 99000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(17, 17, 17, 0.38);
+}
+.olo-tpl-overlay--top {
+  z-index: 99500;
+}
+
+.olo-tpl-dialog {
+  width: 900px;
+  max-width: 100%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--tl-line-2);
+  border-radius: 14px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  color: var(--tl-ink);
+}
+
+/* Intestazione */
+.olo-tpl-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--tl-line);
+}
+.olo-tpl-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  color: var(--olo-ui-accent);
+}
+.olo-tpl-title h3 {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--tl-ink);
+}
+.olo-tpl-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.olo-tpl-searchbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 230px;
+  height: 34px;
+  margin: 0;
+  padding: 0 11px;
+  background: #fff;
+  border: 1px solid var(--tl-line-2);
+  border-radius: 9px;
+  color: var(--tl-mute);
+  cursor: text;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.olo-tpl-searchbox:focus-within {
+  border-color: var(--olo-ui-accent);
+  box-shadow: 0 0 0 3px var(--tl-ring);
+}
+.olo-tpl-searchbox svg {
+  flex: none;
+}
+/* Il riquadro è la label: il campo è solo testo. forms.css di WordPress gli darebbe
+   bordo, padding e l'anello blu al focus (input[type=text]:focus, 0,2,1). */
+.olo-tpl-searchbox .olo-tpl-search[type="text"],
+.olo-tpl-searchbox .olo-tpl-search[type="text"]:focus {
+  flex: 1;
+  min-width: 0;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  outline: none;
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+.olo-tpl-search::placeholder {
+  color: var(--tl-faint);
+  opacity: 1;
+}
+.olo-tpl-x {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--tl-mute);
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+.olo-tpl-x:hover {
+  background: var(--tl-fill);
+  color: var(--tl-ink);
+}
+.olo-tpl-x:focus-visible {
+  outline: 2px solid var(--olo-ui-accent);
+  outline-offset: 1px;
+}
+
+/* Filtro categoria */
+.olo-tpl-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 20px;
+  background: rgba(0, 0, 0, 0.02);
+  border-bottom: 1px solid var(--tl-line);
+}
+.olo-tpl-filter-label {
+  margin: 0;
+  color: var(--tl-mute);
+  font-size: 11.5px;
+  white-space: nowrap;
+}
+.olo-tpl-filter-select {
+  flex: 1;
+  max-width: 220px;
+}
+.olo-tpl-count {
+  margin-left: auto;
+  color: var(--tl-faint);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Griglia */
+.olo-tpl-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.015);
+}
+.olo-tpl-state {
+  padding: 40px 16px;
+  text-align: center;
+  color: var(--tl-mute);
+  font-size: 13px;
+}
+
+/* Card: stesso rilievo al passaggio del mouse e al focus da tastiera, più il contorno
+   con l'accento del chrome sul focus-visible. Al passaggio e al focus compare anche la
+   descrizione (lo strato .olo-tpl-hover). Il cestino sta dentro la card. */
+.olo-tpl-card {
+  background: #fff;
+  border: 1px solid var(--tl-line-2);
   border-radius: 12px;
-  border: 1px solid #374151;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
   cursor: pointer;
   overflow: hidden;
-  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
 }
 .olo-tpl-card:hover,
 .olo-tpl-card:focus-visible {
   border-color: var(--olo-ui-accent);
-  box-shadow: 0 12px 28px -10px rgba(0, 0, 0, .5);
+  box-shadow: 0 14px 30px -14px rgba(0, 0, 0, 0.28);
   transform: translateY(-3px);
 }
 .olo-tpl-card:focus-visible {
   outline: 2px solid var(--olo-ui-accent);
   outline-offset: 2px;
 }
+.olo-tpl-media {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--tl-line);
+}
+.olo-tpl-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: top center;
+  background: #f3f4f6;
+}
+.olo-tpl-hover {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: rgba(20, 20, 20, 0.74);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.olo-tpl-hover span {
+  color: #fff;
+  font-size: 11px;
+  line-height: 1.5;
+  text-align: center;
+}
+.olo-tpl-hover--sm {
+  padding: 10px;
+}
+.olo-tpl-hover--sm span {
+  font-size: 10.5px;
+}
+.olo-tpl-card:hover .olo-tpl-hover,
 .olo-tpl-card:focus-visible .olo-tpl-hover {
-  opacity: 1 !important;
+  opacity: 1;
+}
+.olo-tpl-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 8px 10px 9px;
+}
+.olo-tpl-info-text {
+  flex: 1;
+  min-width: 0;
+}
+.olo-tpl-name-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.olo-tpl-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--tl-ink);
+  font-size: 12px;
+  font-weight: 500;
+}
+.olo-tpl-badge {
+  flex-shrink: 0;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+.olo-tpl-badge--page {
+  background: rgba(232, 98, 42, 0.12);
+  color: #b4451a;
+}
+.olo-tpl-badge--user {
+  background: rgba(245, 158, 11, 0.16);
+  color: #92400e;
+}
+.olo-tpl-cat {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 3px;
+  color: var(--tl-mute);
+  font-size: 10.5px;
+  text-transform: capitalize;
+}
+.olo-tpl-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
 }
 /* Cestino dei template personali */
 .olo-tpl-del {
@@ -1133,21 +1401,257 @@ defineExpose({ open, close, visible, openSaveDialog });
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
+  padding: 0;
+  border-radius: 6px;
   border: none;
   background: transparent;
-  color: #EF4444;
+  color: var(--tl-danger);
   cursor: pointer;
-  opacity: 0.5;
+  opacity: 0.55;
   transition: opacity 0.15s, background-color 0.15s;
 }
 .olo-tpl-del:hover,
 .olo-tpl-del:focus-visible {
   opacity: 1;
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(220, 38, 38, 0.08);
 }
 .olo-tpl-del:focus-visible {
   outline: 2px solid var(--olo-ui-accent);
   outline-offset: 1px;
+}
+
+/* Piede */
+.olo-tpl-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 20px;
+  border-top: 1px solid var(--tl-line);
+  background: rgba(0, 0, 0, 0.02);
+  color: var(--tl-faint);
+  font-size: 11px;
+}
+.olo-tpl-link {
+  margin: -4px -8px;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--tl-ink-2);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+.olo-tpl-link:hover {
+  background: var(--tl-fill);
+  color: var(--tl-ink);
+}
+.olo-tpl-link:focus-visible {
+  outline: 2px solid var(--olo-ui-accent);
+  outline-offset: 1px;
+}
+
+/* ── Dialoghi: salva, elimina, inserisci pagina ── */
+.olo-tpl-box {
+  max-width: 100%;
+  background: #fff;
+  border: 1px solid var(--tl-line-2);
+  border-radius: 12px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.22);
+  color: var(--tl-ink);
+}
+.olo-tpl-box--save {
+  width: 420px;
+}
+.olo-tpl-box--del {
+  width: 380px;
+}
+.olo-tpl-box--page {
+  width: 400px;
+  padding: 24px;
+  outline: none;
+}
+.olo-tpl-box-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--tl-line);
+}
+.olo-tpl-box-title {
+  color: var(--tl-ink);
+  font-size: 14px;
+  font-weight: 600;
+}
+.olo-tpl-accent {
+  flex: none;
+  color: var(--olo-ui-accent);
+}
+.olo-tpl-box-body {
+  padding: 20px;
+}
+.olo-tpl-field {
+  margin-bottom: 14px;
+}
+.olo-tpl-label {
+  display: block;
+  margin: 0 0 5px;
+  color: var(--tl-ink-2);
+  font-size: 11.5px;
+  font-weight: 500;
+}
+/* Fondo, testo e colore del bordo li impone main.scss a ogni campo del builder
+   (!important): il focus si disegna con l'ombra, che lì non è toccata. */
+.olo-tpl-box .olo-tpl-input[type="text"],
+.olo-tpl-box .olo-tpl-input[type="text"]:focus {
+  width: 100%;
+  box-sizing: border-box;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--tl-line-2);
+  border-radius: 8px;
+  outline: none;
+  font-size: 13px;
+  line-height: 1.4;
+  transition: box-shadow 0.15s;
+}
+.olo-tpl-box .olo-tpl-input[type="text"] {
+  box-shadow: none;
+}
+.olo-tpl-box .olo-tpl-input[type="text"]:focus {
+  box-shadow: 0 0 0 1px var(--olo-ui-accent), 0 0 0 4px var(--tl-ring);
+}
+.olo-tpl-input::placeholder {
+  color: var(--tl-faint);
+  opacity: 1;
+}
+.olo-tpl-note {
+  margin-bottom: 4px;
+  padding: 9px 11px;
+  border-radius: 8px;
+  background: var(--tl-fill);
+  font-size: 11px;
+}
+.olo-tpl-note-k {
+  color: var(--tl-mute);
+  font-size: 10.5px;
+}
+.olo-tpl-note-v {
+  margin-left: 4px;
+  color: var(--tl-ink);
+  font-weight: 500;
+}
+.olo-tpl-note-gap {
+  margin-left: 8px;
+}
+.olo-tpl-box-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--tl-line);
+}
+.olo-tpl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 16px;
+  border: 1px solid var(--tl-line-2);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--tl-ink-2);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s, filter 0.15s;
+}
+.olo-tpl-btn:hover {
+  background: var(--tl-fill);
+  color: var(--tl-ink);
+}
+.olo-tpl-btn:focus-visible {
+  outline: 2px solid var(--olo-ui-accent);
+  outline-offset: 2px;
+}
+.olo-tpl-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.olo-tpl-btn--primary,
+.olo-tpl-btn--primary:hover {
+  background: var(--olo-ui-accent);
+  border-color: var(--olo-ui-accent);
+  color: #fff;
+}
+.olo-tpl-btn--danger,
+.olo-tpl-btn--danger:hover {
+  background: var(--tl-danger);
+  border-color: var(--tl-danger);
+  color: #fff;
+}
+.olo-tpl-btn--primary:hover:not(:disabled),
+.olo-tpl-btn--danger:hover:not(:disabled) {
+  filter: brightness(0.93);
+}
+.olo-tpl-btn--soft {
+  background: var(--tl-fill);
+  border-color: var(--tl-line);
+  color: var(--tl-ink);
+}
+.olo-tpl-btn--soft:hover {
+  background: rgba(0, 0, 0, 0.07);
+}
+.olo-tpl-btn--grow {
+  flex: 1;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.olo-tpl-del-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.olo-tpl-del-icon {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: rgba(220, 38, 38, 0.08);
+  color: var(--tl-danger);
+}
+.olo-tpl-sub {
+  margin-top: 2px;
+  color: var(--tl-mute);
+  font-size: 11.5px;
+}
+.olo-tpl-text {
+  margin: 0;
+  color: var(--tl-ink-2);
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+.olo-tpl-text strong {
+  color: var(--tl-ink);
+  font-weight: 600;
+}
+.olo-tpl-page-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.olo-tpl-text--page {
+  margin-bottom: 18px;
+}
+.olo-tpl-page-actions {
+  display: flex;
+  gap: 8px;
 }
 </style>

@@ -30,6 +30,7 @@ const DEFAULT_I18N = {
   loading: 'Caricamento temi…',
   emptyFiltered: 'Nessun tema per questi filtri.',
   emptyNone: 'Nessun tema disponibile.',
+  loadError: 'Non è stato possibile caricare i temi.',
   closeLabel: 'Chiudi',
   themeWord: 'tema',
   themesWord: 'temi',
@@ -72,6 +73,9 @@ export function createThemePicker(opts = {}) {
   const blank = opts.blank || null;
 
   let themes = Array.isArray(opts.themes) ? opts.themes.slice() : [];
+  // Il server può rispondere con un errore ({ code, message }) invece dell'elenco: prima
+  // populate() si fermava su forEach e il modale restava su «Caricamento temi…» per sempre.
+  let loadError = '';
   let activeCat = 'Tutti';
   let query = '';
   let CATS = ['Tutti'];
@@ -217,7 +221,7 @@ export function createThemePicker(opts = {}) {
     const showBlank = blank && action === 'select' && activeCat === 'Tutti' && !query;
     const cards = list.map(cardHTML);
     if (showBlank) cards.push(cardHTML(Object.assign({ _blank: true }, blank)));
-    const emptyTxt = themes.length ? i18n.emptyFiltered : i18n.emptyNone;
+    const emptyTxt = themes.length ? i18n.emptyFiltered : (loadError || i18n.emptyNone);
     grid.innerHTML = cards.join('') + `<div class="otmp-empty${(list.length || showBlank) ? '' : ' show'}">${esc(emptyTxt)}</div>`;
 
     grid.querySelectorAll('[data-import]').forEach(btn => {
@@ -292,8 +296,13 @@ export function createThemePicker(opts = {}) {
 
   async function loadIfNeeded() {
     if (!themes.length && typeof opts.loadThemes === 'function') {
-      try { themes = (await opts.loadThemes()) || []; }
-      catch (e) { console.error('themePicker loadThemes error:', e); themes = []; }
+      loadError = '';
+      try {
+        const r = await opts.loadThemes();
+        themes = Array.isArray(r) ? r : [];
+        if (!Array.isArray(r)) loadError = (r && typeof r.message === 'string' && r.message) || i18n.loadError;
+      }
+      catch (e) { console.error('themePicker loadThemes error:', e); themes = []; loadError = i18n.loadError; }
     }
     populate();
   }
