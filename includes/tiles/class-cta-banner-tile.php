@@ -39,7 +39,9 @@ class Olobuild_CtaBanner_Tile extends Olobuild_Tile_Base {
         'cta_bg'                  => 'var(--olo-color-primary, #e1474f)',
         'cta_bg_hover'            => '',
         'cta_color'               => 'var(--olo-color-light, #ffffff)',
-        'cta_color_hover'         => 'var(--olo-color-light, #ffffff)',
+        // Vuoto = in hover il testo resta il suo colore (come il fondo, cta_bg_hover ''). Fisso chiaro, un
+        // pulsante chiaro col testo scuro in hover diventava chiaro su chiaro (catalogo, 6 ott 2026).
+        'cta_color_hover'         => '',
         'cta_radius'              => [ 'tl' => 999, 'tr' => 999, 'br' => 999, 'bl' => 999, 'linked' => true ],
         'cta_radius_hover'        => [ 'tl' => 999, 'tr' => 999, 'br' => 999, 'bl' => 999, 'linked' => true ],
         'cta_radius_hover_duration' => 300,

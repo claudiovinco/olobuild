@@ -42,7 +42,9 @@ export default {
     cta_bg:                  'var(--olo-color-primary, #e1474f)',
     cta_bg_hover:            '',
     cta_color:               'var(--olo-color-light, #f8f9fa)',
-    cta_color_hover:         'var(--olo-color-light, #f8f9fa)',
+    // Vuoto = in hover il testo resta il suo colore, come il fondo (cta_bg_hover ''): fisso chiaro, un
+    // pulsante chiaro col testo scuro diventava chiaro su chiaro (catalogo, 6 ott 2026).
+    cta_color_hover:         '',
     cta_radius:              { ...R(999) },
     cta_radius_hover:        { ...R(999) },
     cta_radius_hover_duration: 300,
