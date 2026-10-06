@@ -12,10 +12,15 @@
   width: 100%;
 }
 
-/* Compact: larghezza auto, solo l'icona, allineato a destra */
+/* Compact: larghezza auto, solo l'icona, allineato a destra.
+   Niente float: un elemento flottante esce dal flusso e la tile restava alta 0 (la lente
+   sbordava sotto, sopra la sezione dopo). Blocco largo quanto il contenuto e spinto a destra
+   dal margine: stessa posizione, e il campo che si apre cresce verso sinistra come prima. */
 .olo-livesearch--compact {
-  width: auto;
-  float: right;
+  display: block;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin-left: auto;
 }
 
 /* ─── Input wrap ─── */
