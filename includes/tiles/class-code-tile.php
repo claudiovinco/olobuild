@@ -19,6 +19,8 @@ class Olobuild_Code_Tile extends Olobuild_Tile_Base {
         'font_size'         => '14',
         'max_height'        => '',
         'wrap_lines'        => false,
+        // Raggio del riquadro (Stile › Forma): 8 è quello che il renderer scriveva fisso.
+        'border_radius'     => 8,
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -85,13 +87,21 @@ class Olobuild_Code_Tile extends Olobuild_Tile_Base {
             $max_height_style = 'max-height:' . intval( $s['max_height'] ) . 'px;overflow-y:auto;';
         }
 
+        // Raggio del riquadro: prima 8px fissi, e dentro un contenitore arrotondato d'altro
+        // raggio il fondo del tema sporgeva o lasciava gli angoli scoperti. Tutti gli angoli
+        // a 0 (o «Azzera») = angoli vivi; border_radius() dà già l'unità.
+        $radius = Olobuild_Tile_Utils::border_radius( $s['border_radius'] );
+        if ( '' === $radius ) {
+            $radius = '0';
+        }
+
         // Unique ID for copy functionality
         $uid = 'olo-code-' . wp_unique_id();
 
         ob_start();
         ?>
         <style>#<?php echo esc_attr( $uid ); ?> .olo-code-copy:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary,#e1474f) 30%, transparent)}</style>
-        <div class="olo-code" id="<?php echo esc_attr( $uid ); ?>" style="border-radius:8px;overflow:hidden;background:<?php echo esc_attr( $t['bg'] ); ?>;<?php if ( ! $this->parse_border( $s['border'] ?? [] ) ) : /* cornice del tema: in linea coprirebbe il Bordo */ ?>border:1px solid <?php echo esc_attr( $t['line'] ); ?>;<?php endif; ?>">
+        <div class="olo-code" id="<?php echo esc_attr( $uid ); ?>" style="border-radius:<?php echo esc_attr( $radius ); ?>;overflow:hidden;background:<?php echo esc_attr( $t['bg'] ); ?>;<?php if ( ! $this->parse_border( $s['border'] ?? [] ) ) : /* cornice del tema: in linea coprirebbe il Bordo */ ?>border:1px solid <?php echo esc_attr( $t['line'] ); ?>;<?php endif; ?>">
             <?php if ( ! empty( $s['language'] ) || ! empty( $s['show_copy_button'] ) ) : ?>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:<?php echo esc_attr( $t['header'] ); ?>;border-bottom:1px solid <?php echo esc_attr( $t['line'] ); ?>;">
                 <span style="font-size:12px;font-family:monospace;text-transform:uppercase;color:<?php echo esc_attr( $t['line'] ); ?>;"><?php echo esc_html( $s['language'] ); ?></span>

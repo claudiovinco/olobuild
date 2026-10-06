@@ -4,7 +4,7 @@ import { t } from '@/i18n';
 /**
  * Tile Code — split CONTENUTO/STILE.
  *   fields[]      → codice, linguaggio, show_line_numbers, show_copy_button, wrap_lines
- *   styleFields[] → tema, font size, max height, shadow, border
+ *   styleFields[] → tema, font size, raggio, max height, shadow, border
  */
 export default {
   type: 'code',
@@ -21,6 +21,7 @@ export default {
     font_size: '14',
     max_height: '',
     wrap_lines: false,
+    border_radius: { tl: 8, tr: 8, br: 8, bl: 8 },
     shadow: 'none',
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
@@ -29,10 +30,11 @@ export default {
   },
 
   // Appena nato: un frammento breve e leggibile, commentato in italiano, con i numeri di riga,
-  // l'etichetta del linguaggio e il pulsante per copiarlo.
+  // l'etichetta del linguaggio e il pulsante per copiarlo; angoli col raggio medio della scala.
   partenza: {
     code: '// Prezzo finale con l\'IVA al 22%\nfunction prezzoConIva(imponibile) {\n  const iva = imponibile * 0.22;\n  return Math.round((imponibile + iva) * 100) / 100;\n}\n\nconsole.log(prezzoConIva(100)); // 122',
     show_line_numbers: true,
+    border_radius: { tl: 10, tr: 10, br: 10, bl: 10 },
   },
 
   fields: [
@@ -64,7 +66,8 @@ export default {
       sizeMin: 10, sizeMax: 24,
     },
 
-    { type: 'separator', label: t('Dimensioni') },
+    { type: 'separator', label: t('Forma') },
+    { key: 'border_radius', label: t('Raggio'), type: 'border-radius' },
     { key: 'max_height', label: t('Altezza massima (px, vuoto = auto)'), type: 'number', min: 0 },
 
     ...shadowField,
