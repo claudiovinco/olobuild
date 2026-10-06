@@ -61,7 +61,10 @@ export default {
       itemFields: [
         { key: 'title', label: t('Titolo'), type: 'text' },
         { key: 'description', label: t('Descrizione'), type: 'text' },
-        { key: 'icon', label: t('Icona (UIkit)'), type: 'icon' },
+        // Il cerchio di un passaggio completato mostra sempre la spunta: lì l'icona non si vede.
+        { key: 'icon', label: t('Icona'), type: 'icon',
+          condition: { field: 'status', op: 'neq', value: 'completed' },
+          description: t('Si vede nel cerchio quando «Numeri nei cerchi» è spento; con i numeri accesi il cerchio mostra il numero del passaggio.') },
         { key: 'status', label: t('Stato'), type: 'select', options: [
           { value: 'completed', label: t('Completato') },
           { value: 'active', label: t('Attivo') },
@@ -73,7 +76,8 @@ export default {
     },
 
     { type: 'separator', label: t('Layout') },
-    { key: 'show_numbers', label: t('Mostra numeri'), type: 'toggle' },
+    { key: 'show_numbers', label: t('Numeri nei cerchi'), type: 'toggle',
+      description: t('Acceso: ogni cerchio mostra il numero del passaggio. Spento: mostra l\'icona scelta per il passaggio. I passaggi completati mostrano sempre la spunta.') },
     { key: 'show_description', label: t('Mostra descrizione'), type: 'toggle' },
   ],
 
@@ -113,7 +117,8 @@ export default {
 
     { type: 'separator', label: t('Dimensioni') },
     { key: 'circle_size', label: t('Dimensione cerchio'), type: 'range', min: 24, max: 60, step: 2 },
-    { key: 'gap', label: t('Gap aggiuntivo'), type: 'range', min: 0, max: 40, step: 4 },
+    { key: 'gap', label: t('Gap connettore'), type: 'range', min: 0, max: 40, step: 4, unit: 'px',
+      description: t('Spazio fra il cerchio e la linea che lo unisce ai passaggi vicini.') },
 
     { type: 'separator', label: t('Connettore') },
     { key: 'connector_style', label: t('Stile connettore'), type: 'select', options: [

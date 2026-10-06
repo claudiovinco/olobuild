@@ -66,6 +66,10 @@ class Olobuild_Progresstracker_Tile extends Olobuild_Tile_Base {
         $c_size     = max( 24, intval( $s['circle_size'] ) );
         $f_size     = intval( $s['font_size'] ) ?: 14;
         $icon_size  = intval( round( $c_size * 0.45 ) );
+        // «Gap connettore»: spazio fra il cerchio e la linea che lo unisce ai passaggi vicini. Il
+        // controllo c'era (0-40) ma nessuna regola lo leggeva: spostarlo non cambiava niente.
+        // Si somma ai 4 px che il connettore verticale ha già sopra e sotto.
+        $gap        = max( 0, min( 40, intval( $s['gap'] ) ) );
 
         ob_start();
         ?>
@@ -156,6 +160,16 @@ class Olobuild_Progresstracker_Tile extends Olobuild_Tile_Base {
                 border-top: 2px <?php echo $conn_css; ?> <?php echo $conn_clr; ?>;
                 align-self: center;
             }
+            <?php if ( $gap > 0 ) : ?>
+            /* Gap solo sul lato rivolto al cerchio: con «margin: 0 G» su tutti e due i lati la linea
+               fra due passaggi (metà nel primo, metà nel secondo) restava spezzata da un buco di 2G. */
+            .<?php echo $uid; ?> .olo-pt-h-circle-row > .olo-pt-h-conn:first-child {
+                margin-right: <?php echo (int) $gap; ?>px;
+            }
+            .<?php echo $uid; ?> .olo-pt-h-circle-row > .olo-pt-h-conn:last-child {
+                margin-left: <?php echo (int) $gap; ?>px;
+            }
+            <?php endif; ?>
             .<?php echo $uid; ?> .olo-pt-h-label {
                 text-align: center;
                 margin-top: 8px;
@@ -186,6 +200,18 @@ class Olobuild_Progresstracker_Tile extends Olobuild_Tile_Base {
                     flex: 1;
                     margin: 4px 0 4px <?php echo intval( $c_size / 2 ) - 1; ?>px;
                 }
+                <?php if ( $gap > 0 ) : ?>
+                /* In colonna il cerchio sta sotto il tratto che lo precede e sopra quello che lo segue:
+                   il gap va lì. Si azzerano i lati del desktop, che qui sposterebbero il tratto. */
+                .<?php echo $uid; ?> .olo-pt-h-circle-row > .olo-pt-h-conn:first-child {
+                    margin-right: 0;
+                    margin-bottom: <?php echo (int) ( 4 + $gap ); ?>px;
+                }
+                .<?php echo $uid; ?> .olo-pt-h-circle-row > .olo-pt-h-conn:last-child {
+                    margin-left: <?php echo intval( $c_size / 2 ) - 1; ?>px;
+                    margin-top: <?php echo (int) ( 4 + $gap ); ?>px;
+                }
+                <?php endif; ?>
                 .<?php echo $uid; ?> .olo-pt-h-label {
                     text-align: left;
                     margin-top: 0;
@@ -210,7 +236,7 @@ class Olobuild_Progresstracker_Tile extends Olobuild_Tile_Base {
                 flex: 1;
                 min-height: 24px;
                 border-left: 2px <?php echo $conn_css; ?> <?php echo $conn_clr; ?>;
-                margin: 4px 0 4px 0;
+                margin: <?php echo (int) ( 4 + $gap ); ?>px 0;
             }
             .<?php echo $uid; ?> .olo-pt-v-content {
                 padding-bottom: 24px;
