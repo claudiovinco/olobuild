@@ -457,7 +457,8 @@ class Olobuild_Sitemap_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?>.olo-sm-mode-compact li a:hover { background:<?php echo $accent; ?>; color:#fff; text-decoration:none; }
 
             <?php // Search filter ?>
-            .<?php echo $uid; ?> .olo-sm-search-wrap { margin-bottom:16px; }
+            <?php // Il campo è figlio del contenitore a griglia (colonne, card, chip): senza grid-column occupava la prima cella come una sezione. ?>
+            .<?php echo $uid; ?> .olo-sm-search-wrap { margin-bottom:16px; grid-column:1 / -1; }
             .<?php echo $uid; ?> .olo-sm-search {
                 width:100%; padding:10px 14px; border:1px solid rgba(0,0,0,0.15); border-radius:8px;
                 font-size:14px; box-sizing:border-box; background:rgba(255,255,255,0.6);
@@ -477,12 +478,15 @@ class Olobuild_Sitemap_Tile extends Olobuild_Tile_Base {
         $is_mindmap = ( $preset_id === 'mind-map' ) || ( $layout_mode === 'mindmap' );
         $mm_styles = '';
         if ( $is_mindmap && $sections_count > 0 ) {
+            // Col campo ricerca il primo figlio è il campo: senza scalare l'indice prendeva
+            // lui la posizione della prima sezione e l'ultima sezione restava senza.
+            $primo = ! empty( $s['enable_search'] ) ? 2 : 1;
             for ( $i = 0; $i < $sections_count; $i++ ) {
                 $angle = ( 360 / $sections_count ) * $i - 90;
                 $rad   = $angle * M_PI / 180;
                 $tx    = round( cos( $rad ) * 180 );
                 $ty    = round( sin( $rad ) * 180 );
-                $idx   = $i + 1;
+                $idx   = $i + $primo;
                 $mm_styles .= ".{$uid} .olo-sm-section:nth-child({$idx}){--olo-mm-tx:{$tx}px;--olo-mm-ty:{$ty}px;transform:translate(calc(-50% + {$tx}px),calc(-50% + {$ty}px))}";
             }
             echo '<style>' . $mm_styles . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built above only from the internally generated $uid and round()'d numeric offsets
