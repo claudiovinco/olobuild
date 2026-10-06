@@ -309,6 +309,14 @@ class Olobuild_Newsticker_Tile extends Olobuild_Tile_Base {
                 white-space: nowrap;
                 flex-shrink: 0;
             }
+            <?php if ( $is_vertical ) : ?>
+            <?php /* Verticale: le notizie scorrono una sotto l'altra, quindi vanno a capo.
+                      Larghe quanto la più lunga (max-content) e su una riga, uscivano dal
+                      riquadro e il titolo restava tagliato. */ ?>
+            .<?php echo $uid; ?> .olo-nt-marquee { width: 100%; }
+            .<?php echo $uid; ?> .olo-nt-marquee-item { white-space: normal; }
+            .<?php echo $uid; ?> .olo-nt-marquee-item .olo-nt-title { min-width: 0; overflow-wrap: anywhere; }
+            <?php endif; ?>
             <?php if ( $pause ) : ?>
             .<?php echo $uid; ?>:hover .olo-nt-marquee {
                 animation-play-state: paused;
@@ -371,6 +379,23 @@ class Olobuild_Newsticker_Tile extends Olobuild_Tile_Base {
                 transform: translateY(100%);
                 <?php endif; ?>
             }
+            <?php if ( $is_vertical ) : ?>
+            <?php /* Verticale: le notizie stanno impilate nella stessa cella di una griglia
+                      invece che assolute su una riga: il riquadro prende l'altezza della più
+                      lunga e il titolo va a capo. Prima, su una riga sola con nowrap, veniva
+                      tagliato appena la tile era stretta (telefono, colonna laterale). */ ?>
+            .<?php echo $uid; ?> .olo-nt-viewport { display: grid; }
+            .<?php echo $uid; ?> .olo-nt-item {
+                position: relative;
+                top: auto;
+                left: auto;
+                right: auto;
+                bottom: auto;
+                grid-area: 1 / 1;
+                white-space: normal;
+            }
+            .<?php echo $uid; ?> .olo-nt-item .olo-nt-title { min-width: 0; overflow-wrap: anywhere; }
+            <?php endif; ?>
             <?php endif; ?>
 
             .<?php echo $uid; ?> .olo-nt-item a,
