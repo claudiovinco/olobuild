@@ -323,11 +323,13 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             <?php // Campo e pillole tinti dal colore del testo della hero, non dal bianco fisso: su una scena
                   // chiara (testo scuro) il riquadro e i bordi delle pillole sparivano. Col testo bianco la
                   // resa è quella di prima (bianco al 7% e al 16%). ?>
-            .<?php echo $uid; ?> .olo-hero-searchbox{display:flex;gap:8px;align-items:center;max-width:560px;margin:<?php echo $sb_margin; ?>;background:<?php echo $mix( $fg, 0.07 ); ?>;border:1px solid <?php echo $mix( $accent_css, 0.4 ); ?>;border-radius:14px;padding:8px;}
+            .<?php echo $uid; ?> .olo-hero-searchbox{display:flex;gap:8px;align-items:center;max-width:560px;margin:<?php echo $sb_margin; ?>;background:<?php echo $mix( $fg, 0.07 ); ?>;border:1px solid <?php echo $mix( $accent_css, 0.4 ); ?>;border-radius:14px;padding:8px;transition:border-color .2s,box-shadow .2s;}
             .<?php echo $uid; ?> .olo-hero-searchbox input{flex:1;background:transparent;border:0;padding:12px 14px;font-size:15px;color:<?php echo $fg; ?>;min-width:0;font-family:inherit;}
             .<?php echo $uid; ?> .olo-hero-searchbox input::placeholder{color:<?php echo $fg; ?>;opacity:.55;}
             .<?php echo $uid; ?> .olo-hero-searchbox input:focus{outline:none;}
-            .<?php echo $uid; ?> .olo-hero-searchbox input:focus-visible{outline:2px solid <?php echo $accent_css; ?>;outline-offset:2px;border-radius:8px;}
+            <?php // Il focus si vede sulla casella intera, col suo raggio: sul campo, che è trasparente e
+            // senza bordo, il contorno diventava un rettangolo attaccato ai bordi della casella. ?>
+            .<?php echo $uid; ?> .olo-hero-searchbox:focus-within{border-color:<?php echo $accent_css; ?>;box-shadow:0 0 0 3px <?php echo $mix( $accent_css, 0.3 ); ?>;}
             .<?php echo $uid; ?> .olo-hero-searchbtn{cursor:pointer;white-space:nowrap;font-family:inherit;}
             .<?php echo $uid; ?> .olo-hero-searchbtn:focus-visible{outline:2px solid <?php echo $accent_css; ?>;outline-offset:2px;}
             .<?php echo $uid; ?> .olo-hero-chips{display:flex;gap:8px;flex-wrap:wrap;max-width:560px;margin:<?php echo $chip_margin; ?>;justify-content:<?php echo $chip_just; ?>;}
@@ -581,7 +583,7 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
                     <?php endforeach; ?>
                 </div>
                 <?php elseif ( 'search' === $module ) : ?>
-                <form class="olo-hero-searchbox" role="search" method="get" action="<?php echo esc_url( $search_url ); ?>">
+                <form class="olo-hero-searchbox olo-casella" role="search" method="get" action="<?php echo esc_url( $search_url ); ?>">
                     <input type="search" name="s" placeholder="<?php echo esc_attr( $s['search_placeholder'] ); ?>" aria-label="<?php echo esc_attr( $s['search_placeholder'] ?: 'Cerca' ); ?>"/>
                     <?php if ( ! empty( $s['search_button'] ) ) : ?>
                         <button type="submit" class="olo-hero-cta1 olo-hero-searchbtn"><?php echo esc_html( $s['search_button'] ); ?></button>

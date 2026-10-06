@@ -127,11 +127,13 @@ class Olobuild_SearchHero_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .sh-h{font-family:<?php echo $disp; ?>;font-weight:800;font-size:clamp(40px,6.6vw,80px);line-height:1.0;letter-spacing:-.02em;color:<?php echo $txt; ?>;margin:0;}
             .<?php echo $uid; ?> .sh-acc{color:<?php echo $accent; ?>;}
             .<?php echo $uid; ?> .sh-sub{font-size:18px;line-height:1.6;color:<?php echo $sub; ?>;max-width:460px;margin:20px auto 30px;}
-            .<?php echo $uid; ?> .sh-search{display:flex;gap:8px;max-width:560px;margin:0 auto;background:<?php echo $panel; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['search_border'] ?? null, [ 'width' => 1, 'color' => $sline ] ) ); ?>border-radius:<?php echo $search_radius; ?>;padding:8px;}
+            .<?php echo $uid; ?> .sh-search{display:flex;gap:8px;max-width:560px;margin:0 auto;background:<?php echo $panel; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['search_border'] ?? null, [ 'width' => 1, 'color' => $sline ] ) ); ?>border-radius:<?php echo $search_radius; ?>;padding:8px;transition:border-color .2s,box-shadow .2s;}
             .<?php echo $uid; ?> .sh-search input{flex:1;background:transparent;border:0;padding:12px 14px;font-family:<?php echo $sans; ?>;font-size:15px;color:<?php echo $txt; ?>;min-width:0;}
             .<?php echo $uid; ?> .sh-search input::placeholder{color:<?php echo $sub; ?>;}
             .<?php echo $uid; ?> .sh-search input:focus{outline:none;}
-            .<?php echo $uid; ?> .sh-search input:focus-visible{outline:2px solid <?php echo $accent; ?>;outline-offset:2px;border-radius:8px;}
+            <?php // Il focus si vede sulla casella intera, col suo raggio: sul campo, che è trasparente e
+            // senza bordo, il contorno diventava un rettangolo attaccato ai bordi della casella. ?>
+            .<?php echo $uid; ?> .sh-search:focus-within{border-color:<?php echo $accent; ?>;box-shadow:0 0 0 3px color-mix(in srgb, <?php echo $accent; ?> 30%, transparent);}
             .<?php echo $uid; ?> .sh-btn{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border-radius:10px;font-family:<?php echo $sans; ?>;font-weight:700;font-size:14px;text-decoration:none;cursor:pointer;border:0;background:<?php echo $accent; ?>;color:<?php echo $accOn; ?>;box-shadow:0 10px 28px -10px <?php echo $glow; ?>;transition:transform .15s,filter .2s,box-shadow .2s;white-space:nowrap;}
             .<?php echo $uid; ?> .sh-btn:hover{transform:translateY(-2px);filter:brightness(1.06);}
             .<?php echo $uid; ?> .sh-btn:focus-visible{outline:2px solid <?php echo $accOn; ?>;outline-offset:2px;}
@@ -149,7 +151,7 @@ class Olobuild_SearchHero_Tile extends Olobuild_Tile_Base {
                     if ( ! empty( $s['headline_line2'] ) ) { echo esc_html( $s['headline_line2'] ) . ' '; }
                     if ( ! empty( $s['accent_text'] ) ) : ?><span class="sh-acc"><?php echo esc_html( $s['accent_text'] ); ?></span><?php endif; ?></h1>
                 <?php if ( ! empty( $s['subhead'] ) ) : ?><p class="sh-sub"><?php echo esc_html( $s['subhead'] ); ?></p><?php endif; ?>
-                <div class="sh-search">
+                <div class="sh-search olo-casella">
                     <input type="search" placeholder="<?php echo esc_attr( $s['search_placeholder'] ); ?>" aria-label="<?php echo esc_attr( $s['search_placeholder'] ); ?>"/>
                     <?php if ( ! empty( $s['search_button'] ) ) : ?><a class="sh-btn" href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $s['search_button'] ); ?></a><?php endif; ?>
                 </div>

@@ -215,7 +215,7 @@ class Olobuild_Search_Tile extends Olobuild_Tile_Base {
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-search <?php echo esc_attr( $uid ); ?> olo-srch-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>"<?php if ( $wrapper_css ) echo ' style="' . esc_attr( $wrapper_css ) . '"'; ?>>
-            <form class="olo-srch-form" action="<?php echo esc_url( home_url( '/' ) ); ?>" method="get" role="search">
+            <form class="olo-srch-form olo-casella" action="<?php echo esc_url( home_url( '/' ) ); ?>" method="get" role="search">
                 <?php if ( $show_icon && $icon_pos === 'left' ) : ?>
                 <span style="display:flex;align-items:center;flex-shrink:0;padding-left:<?php echo $style === 'hero' ? '20px' : '14px'; ?>"><?php echo $icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed px literal from the ternary; SVG assembled above from static markup with esc_attr()'d stroke colour ?></span>
                 <?php endif; ?>

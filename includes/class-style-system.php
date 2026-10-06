@@ -1844,6 +1844,15 @@ class Olobuild_Style_System {
         $css .= "  box-shadow: var(--olo-form-focus-shadow);\n";
         $css .= "  outline: none;\n";
         $css .= "}\n";
+        // Un campo «annegato» in una casella che lo disegna (la pillola della ricerca con lente e
+        // pulsante, la barra del Trip Finder…) è trasparente e senza bordo: l'anello dei Moduli e il
+        // contorno di accessibilità finivano su di lui e diventavano un rettangolo attaccato ai bordi
+        // della pillola. La casella porta la classe olo-casella e mostra il focus da sé
+        // (:focus-within, col suo raggio); il campo dentro resta nudo. (0,3,1): vince su entrambe.
+        // Un campo di ricerca che si disegna da sé (barra mobile, ricerca a scomparsa del menu) tiene
+        // l'anello attorno a sé, ma nel colore del sito: quello dei Moduli è indaco di serie.
+        $css .= ".olo-template input[type=\"search\"]:focus { border-color: var(--olo-color-primary, #e1474f); box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 25%, transparent); outline: none; }\n";
+        $css .= ".olo-template .olo-casella :is(input, select, textarea):is(:focus, :focus-visible) { box-shadow: none; outline: none; }\n";
         $css .= ".olo-template label {\n";
         $css .= "  font-size: var(--olo-form-label-font-size);\n";
         $css .= "  font-weight: var(--olo-form-label-font-weight);\n";

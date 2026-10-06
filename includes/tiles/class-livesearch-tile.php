@@ -383,7 +383,7 @@ class Olobuild_LiveSearch_Tile extends Olobuild_Tile_Base {
                 <div class="olo-ls-overlay" style="<?php echo $css_vars; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built by Olobuild_Tile_Base::build_style() which esc_attr()s every value ?>">
                     <div class="olo-ls-backdrop"></div>
                     <div class="olo-ls-modal">
-                        <div class="olo-ls-field">
+                        <div class="olo-ls-field olo-casella">
                             <span class="olo-ls-field-icon"><?php echo $icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above ?></span>
                             <input type="search"
                                    class="olo-ls-input"
@@ -417,7 +417,7 @@ class Olobuild_LiveSearch_Tile extends Olobuild_Tile_Base {
                         </button>
                     <?php endif; ?>
 
-                    <div class="olo-ls-field<?php echo esc_attr( $mode === 'compact' ? ' olo-ls-field--hidden' : '' ); ?>">
+                    <div class="olo-ls-field olo-casella<?php echo esc_attr( $mode === 'compact' ? ' olo-ls-field--hidden' : '' ); ?>">
                         <span class="olo-ls-field-icon"><?php echo $icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above ?></span>
                         <input type="search"
                                class="olo-ls-input"

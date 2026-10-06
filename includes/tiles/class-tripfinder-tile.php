@@ -115,12 +115,15 @@ class Olobuild_TripFinder_Tile extends Olobuild_Tile_Base {
         <style>
             <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{font-family:<?php echo $sans; ?>;<?php echo $box_decl; ?>}
-            .<?php echo $uid; ?> .otf-bar{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;background:<?php echo $barbg; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['field_border'] ?? null, [ 'width' => 1, 'color' => $fbd ] ) ); ?>border-radius:<?php echo $rad_eff; ?>;padding:<?php echo $bar_pad; ?>;box-shadow:0 18px 50px -28px rgba(0,0,0,.35);}
+            .<?php echo $uid; ?> .otf-bar{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;background:<?php echo $barbg; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['field_border'] ?? null, [ 'width' => 1, 'color' => $fbd ] ) ); ?>border-radius:<?php echo $rad_eff; ?>;padding:<?php echo $bar_pad; ?>;box-shadow:0 18px 50px -28px rgba(0,0,0,.35);transition:box-shadow .2s;}
             .<?php echo $uid; ?> .otf-f{flex:1 1 160px;display:flex;flex-direction:column;gap:4px;padding:<?php echo $field_pad; ?>;background:<?php echo $fbg; ?>;border-left:1px solid <?php echo $fbd; ?>;min-width:0;}
             .<?php echo $uid; ?> .otf-f:first-child{border-left:0;}
             .<?php echo $uid; ?> .otf-lab{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:<?php echo $lab; ?>;}
             .<?php echo $uid; ?> .otf-sel{font-family:<?php echo $sans; ?>;font-size:15px;font-weight:600;color:<?php echo $val; ?>;background:transparent;border:0;padding:2px 0;cursor:pointer;width:100%;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right center;padding-right:18px;}
-            .<?php echo $uid; ?> .otf-sel:focus-visible{outline:2px solid <?php echo $accent; ?>;outline-offset:2px;}
+            <?php // Il focus si vede sulla barra intera (alone col suo raggio) e sull'etichetta del campo attivo:
+            // il contorno sul campo, trasparente e senza bordo, era un rettangolo dentro il segmento. ?>
+            .<?php echo $uid; ?> .otf-bar:focus-within{box-shadow:0 0 0 3px color-mix(in srgb, <?php echo $accent; ?> 30%, transparent),0 18px 50px -28px rgba(0,0,0,.35);}
+            .<?php echo $uid; ?> .otf-f:focus-within .otf-lab{color:<?php echo $accent; ?>;}
             .<?php echo $uid; ?> .otf-txt{background-image:none;padding-right:0;cursor:text;}
             .<?php echo $uid; ?> .otf-txt::placeholder{color:<?php echo $val; ?>;opacity:.5;}
             .<?php echo $uid; ?> .otf-btn{font-family:inherit;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;gap:8px;margin-left:8px;padding:0 26px;background:<?php echo $accent; ?>;color:<?php echo $on; ?>;font-weight:700;font-size:14px;letter-spacing:.02em;border:0;border-radius:<?php echo $rad_eff; ?>;text-decoration:none;cursor:pointer;transition:transform .18s,filter .18s;}
@@ -156,7 +159,7 @@ class Olobuild_TripFinder_Tile extends Olobuild_Tile_Base {
             <?php if ( $al_sito && ! $ha_testo ) : // senza `s` WordPress mostrerebbe un archivio, non i risultati ?>
                 <input type="hidden" name="s" value="">
             <?php endif; ?>
-            <div class="otf-bar">
+            <div class="otf-bar olo-casella">
                 <?php foreach ( $fields as $f ) :
                     $flabel = isset( $f['label'] ) ? (string) $f['label'] : '';
                     $fval   = isset( $f['value'] ) ? trim( (string) $f['value'] ) : '';

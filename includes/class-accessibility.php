@@ -54,14 +54,15 @@ class Olobuild_Accessibility {
 /* Skip navigation */
 .olo-skip-nav{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:100001;background:#000;color:#fff;padding:8px 16px;font-size:14px;text-decoration:none;border-radius:0 0 4px 0}
 .olo-skip-nav:focus{position:fixed;left:0;top:0;width:auto;height:auto;overflow:visible;outline:3px solid #4f46e5}
-/* Focus visible — all interactive elements */
+/* Focus visible — all interactive elements. Niente border-radius qui: il contorno segue già il
+   raggio dell'elemento, e il vecchio 2px rendeva quadrati pulsanti e campi arrotondati col focus. */
 .olo-template a:focus-visible,
 .olo-template button:focus-visible,
 .olo-template input:focus-visible,
 .olo-template select:focus-visible,
 .olo-template textarea:focus-visible,
 .olo-template [tabindex]:focus-visible,
-.olo-template summary:focus-visible{outline:2px solid var(--olo-color-primary,#4f46e5);outline-offset:2px;border-radius:2px}
+.olo-template summary:focus-visible{outline:2px solid var(--olo-color-primary,#e1474f);outline-offset:2px}
 /* Remove default outline for mouse users */
 .olo-template a:focus:not(:focus-visible),
 .olo-template button:focus:not(:focus-visible),
