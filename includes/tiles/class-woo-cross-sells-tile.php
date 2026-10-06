@@ -144,6 +144,9 @@ class Olobuild_Woo_Cross_Sells_Tile extends Olobuild_Tile_Base {
 
         $hover_effect = $s['hover_effect'];
         $heading_text = sanitize_text_field( $s['heading'] );
+        // «Tag heading» dell'inspector: prima il titolo usciva sempre come h3.
+        $heading_tag  = (string) ( $s['heading_tag'] ?? 'h3' );
+        $heading_tag  = in_array( $heading_tag, [ 'h2', 'h3', 'h4', 'div' ], true ) ? $heading_tag : 'h3';
 
         // Star SVGs
         $star_full  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="var(--olo-color-warning, #F59E0B)" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
@@ -234,7 +237,7 @@ class Olobuild_Woo_Cross_Sells_Tile extends Olobuild_Tile_Base {
 
         <?php if ( $heading_text !== '' ) : ?>
         <?php list( $cs_cls, $cs_data ) = $this->tfx_attrs( $s, 'heading', $heading_text ); ?>
-        <h3 class="<?php echo esc_attr( $uid ); ?>-heading<?php echo $cs_cls; ?>"<?php echo $cs_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attrs built by Olobuild_Text_Effects (sanitize_html_class/esc_attr applied internally) ?>><?php echo esc_html( $heading_text ); ?></h3>
+        <<?php echo $heading_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- whitelisted via in_array() above ?> class="<?php echo esc_attr( $uid ); ?>-heading<?php echo $cs_cls; ?>"<?php echo $cs_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attrs built by Olobuild_Text_Effects (sanitize_html_class/esc_attr applied internally) ?>><?php echo esc_html( $heading_text ); ?></<?php echo $heading_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- whitelisted via in_array() above ?>>
         <?php endif; ?>
 
         <div class="<?php echo esc_attr( $uid ); ?>">
