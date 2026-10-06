@@ -124,7 +124,9 @@ class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
         // Numero progressivo (lead_mode 'number') — token-first.
         $num_c   = $this->safe_color_css( $s['number_color'] ?? '' ) ?: 'var(--olo-color-text-faint, #6a6c64)';
         // Al hover il numero passa al primario se non specificato (blueprint sala di regia).
-        $num_hc  = $this->safe_color_css( $s['number_hover_color'] ?? '' ) ?: 'var(--olo-color-primary, #C6F24E)';
+        // Riserva = il rosso del brand: il lime del blueprint (#C6F24E) usciva dove il token
+        // non risolve, un colore che nessun tema del cliente ha scelto.
+        $num_hc  = $this->safe_color_css( $s['number_hover_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
         // Descrizione (colonna destra, layout numerato). Il type 'number' preserva '' → default 14.
         $desc_c   = $this->safe_color_css( $s['desc_color'] ?? '' ) ?: 'var(--olo-color-text-soft, #a0a298)';
         $desc_raw = $s['desc_size'] ?? 14;
@@ -137,7 +139,7 @@ class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
         $peek_ph   = 'var(--olo-color-muted, #2b2b2b)';
 
         // Monitor "sala di regia" — palette token-first (ink-3/ink-2/bone/signal del blueprint come fallback).
-        $acc        = 'var(--olo-color-primary, #C6F24E)';
+        $acc        = 'var(--olo-color-primary, #e1474f)';
         $mon_border = 'var(--olo-color-border, rgba(236,234,227,.2))';
         $mon_scr_bg = 'var(--olo-color-muted, #161922)';
         $mon_lab_bg = 'color-mix(in srgb, var(--olo-color-background, #0b0c0f) 55%, var(--olo-color-muted, #161922))';
