@@ -965,16 +965,24 @@ class Olobuild_Rest_Api {
             }
         }
 
-        // Rate limiting: max 300 requests per minute per user (higher for builder iframe renders)
+        // Rate limiting: max 300 requests per minute per user (higher for builder iframe renders).
+        // Finestra FISSA, col suo inizio nel valore: set_transient a ogni richiesta sposta la
+        // scadenza di un minuto, e lavorando senza pause il contatore non si azzerava mai —
+        // dopo 300 richieste il builder smetteva di rispondere finché non si stava fermi un minuto.
         $user_id = get_current_user_id();
         $key     = 'olo_api_rl_' . $user_id;
-        $count   = (int) get_transient( $key );
+        $now     = time();
+        $window  = get_transient( $key );
+        if ( ! is_array( $window ) || $now - (int) ( $window['t'] ?? 0 ) >= MINUTE_IN_SECONDS ) {
+            $window = [ 'n' => 0, 't' => $now ];
+        }
 
-        if ( $count > 300 ) {
+        if ( (int) $window['n'] >= 300 ) {
             return new WP_Error( 'rate_limited', 'Too many requests', array( 'status' => 429 ) );
         }
 
-        set_transient( $key, $count + 1, MINUTE_IN_SECONDS );
+        $window['n'] = (int) $window['n'] + 1;
+        set_transient( $key, $window, MINUTE_IN_SECONDS );
 
         return true;
     }
