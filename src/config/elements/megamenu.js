@@ -432,6 +432,7 @@ export default {
       show: (s) => stileMobile(s) === 'fullscreen' && !!s.mobile_footer_cta_text },
 
     { type: 'separator', label: t('Header') },
+    { type: 'description', description: t('Modalità e sticky agiscono sull\'header del sito: valgono quando il menu sta nel template Header. Messo nel corpo di una pagina, il menu resta dov\'è e l\'header del sito non cambia.') },
     { key: 'header_mode', label: t('Modalità header'), type: 'select', options: [
       { value: 'overlay', label: t('Sovrapposto (sopra la pagina)') },
       { value: 'classic', label: t('In linea (pagina inizia dopo)') },

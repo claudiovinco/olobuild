@@ -520,6 +520,36 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         section:has(.<?php echo $uid; ?>) {
             overflow: visible !important;
         }
+        /* Nel corpo della pagina il pannello aperto finiva sotto le sezioni dopo: lo z-index del
+           pannello vale solo dentro il contesto che lo contiene (un'Ombra sul riquadro della tile è
+           un filter, una sezione con sfondo ha il contenitore a z-index 1) e la sezione successiva,
+           più avanti nel documento, gli disegnava sopra; anche il menu di un'altra sezione (z-index
+           1000). Solo da aperto: da chiusa la sezione resta al suo posto nella pila. */
+        section:has(.<?php echo $uid; ?> .olo-mm-open),
+        section:has(.<?php echo $uid; ?>.olo-mm-mob-active),
+        section:has(.<?php echo $uid; ?> .olo-mm-vis),
+        section:has(.<?php echo $uid; ?>.olo-mm-search-active),
+        section:has(.<?php echo $uid; ?> .olo-mm-search-open),
+        section:has(.<?php echo $uid; ?> .olo-mm-search-overlay:not([hidden])),
+        section:has(.<?php echo $uid; ?> .olo-mm-topbar-dropdown[style*="block"]),
+        section:has(.<?php echo $uid; ?>.olo-mm-uscita) {
+            z-index: 100000;
+        }
+        /* L'Ombra del riquadro della tile, su un wrapper trasparente, è un filter, e il filtro sfondo
+           degli Effetti un backdrop-filter: entrambi fanno da blocco contenitore ai position:fixed, e
+           pannello mobile, velo e ricerca a tutto schermo restavano grandi quanto la barra (su
+           telefono l'off-canvas misurava 320x38). Si sospendono solo mentre sono in vista e durante
+           l'uscita (olo-mm-uscita, tolta a fine transizione: se tornassero subito il pannello in
+           chiusura ricadrebbe dentro la barra). Il pannello copre la pagina, l'effetto mancante non
+           si vede; da chiuso torna com'era. */
+        .olo-frontend-tile:has(.<?php echo $uid; ?> .olo-mm-offcanvas.olo-mm-vis),
+        .olo-frontend-tile:has(.<?php echo $uid; ?>.olo-mm-mob-active .olo-mm-fullscreen),
+        .olo-frontend-tile:has(.<?php echo $uid; ?>.olo-mm-uscita),
+        .olo-frontend-tile:has(.<?php echo $uid; ?> .olo-mm-search-overlay:not([hidden])) {
+            filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            backdrop-filter: none !important;
+        }
         header.olo-site-header {
             overflow: visible !important;
         }
@@ -3746,7 +3776,33 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                     }
                 });
             }
+            /* Uscita del pannello: finché scorre via resta olo-mm-uscita sulla radice, che tiene
+               sospesa l'Ombra del riquadro (CSS sopra). La durata è quella della transizione del
+               pannello chiuso (0,35 s l'off-canvas, fino a 0,6 s le animazioni a tutto schermo). */
+            var uscitaTimer = null;
+            function durataUscita() {
+                if (!mpanel) { return 0; }
+                var cs = getComputedStyle(mpanel);
+                var dd = String(cs.transitionDuration || "0s").split(",");
+                var rr = String(cs.transitionDelay || "0s").split(",");
+                var max = 0;
+                for (var i = 0; i < dd.length; i++) {
+                    var t = (parseFloat(dd[i]) || 0) + (parseFloat(rr[i % rr.length]) || 0);
+                    if (t > max) { max = t; }
+                }
+                return Math.ceil(max * 1000) + 50;
+            }
+            function segnaUscita() {
+                if (uscitaTimer) { clearTimeout(uscitaTimer); }
+                root.classList.add("olo-mm-uscita");
+                uscitaTimer = setTimeout(function() {
+                    uscitaTimer = null;
+                    root.classList.remove("olo-mm-uscita");
+                }, durataUscita());
+            }
             function closeMobile() {
+                /* Esc chiama closeMobile anche a menu chiuso: l'uscita si segna solo se era aperto. */
+                var eraAperto = isMobileOpen();
                 var osp = root.querySelector(".olo-mm-oc-search");
                 if (osp) osp.classList.remove("olo-mm-oc-search-vis");
                 if (mobileStyle === "offcanvas") {
@@ -3758,6 +3814,9 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                 hamburger.classList.remove("olo-mm-ham-open");
                 hamburger.setAttribute("aria-expanded", "false");
                 if (hamOpen) hamburger.setAttribute("aria-label", hamOpen);
+                if (eraAperto) {
+                    if (mobileStyle !== "dropdown") { segnaUscita(); }
+                }
                 if (typeof drillChiudi === "function") setTimeout(drillChiudi, 400);
                 var tornaAlBurger = mpanel ? mpanel.contains(document.activeElement) : false;
                 unlockScroll();
@@ -4111,7 +4170,10 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             var stickyEnabled = <?php echo $sticky; ?>;
             var showOnUp = <?php echo $show_on_up; ?>;
             var mmBreakpoint = <?php echo intval( $s['mobile_breakpoint'] ) ?: 1024; ?>;
-            var header = document.querySelector("header.olo-site-header");
+            /* Solo l'header del sito che CONTIENE il menu. Con querySelector un menu messo nel corpo
+               della pagina cambiava la modalità dell'header del sito (in sovrapposizione: fisso, e nei
+               temi a blocchi spariva il primo blocco della pagina) e lo rendeva sticky. */
+            var header = root.closest("header.olo-site-header");
             if (header) {
                 header.classList.remove("olo-header-overlay", "olo-header-classic");
                 header.classList.add("olo-header-" + headerMode);
