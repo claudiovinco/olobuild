@@ -174,7 +174,7 @@ class Olobuild_PostMeta_Tile extends Olobuild_Tile_Base {
                 }
             }
             if ( ! $author_name ) {
-                $author_name = 'Autore';
+                $author_name = olobuild_t( 'Autore' );
             }
             $items[] = $this->build_meta_item( $author_name, $author_url, $show_icons ? $icon_svg['author'] : '', $author_url ? $link_color : $text_color, $icon_color );
         }
@@ -194,7 +194,7 @@ class Olobuild_PostMeta_Tile extends Olobuild_Tile_Base {
                 }
             }
             if ( empty( $cats ) ) {
-                $cats[] = 'Senza categoria';
+                $cats[] = esc_html( olobuild_t( 'Senza categoria' ) );
             }
             $items[] = $this->build_meta_item( implode( ', ', $cats ), '', $show_icons ? $icon_svg['category'] : '', $text_color, $icon_color, true );
         }
@@ -226,9 +226,14 @@ class Olobuild_PostMeta_Tile extends Olobuild_Tile_Base {
         if ( ! empty( $s['show_reading_time'] ) ) {
             $minutes = 1;
             if ( $post ) {
-                $content    = get_the_content( null, false, $post );
-                $word_count = str_word_count( wp_strip_all_tags( $content ) );
-                $minutes    = max( 1, (int) ceil( $word_count / 200 ) );
+                // Stesso conteggio della tile Tempo di lettura: editor + tile del template della
+                // pagina. Contando solo post_content, sulle pagine fatte col builder era sempre 1.
+                if ( method_exists( 'Olobuild_Readingtime_Tile', 'minuti_di_lettura' ) ) {
+                    $minutes = Olobuild_Readingtime_Tile::minuti_di_lettura( $post, 200 );
+                } else {
+                    $word_count = str_word_count( wp_strip_all_tags( $post->post_content ) );
+                    $minutes    = max( 1, (int) ceil( $word_count / 200 ) );
+                }
             }
             $label = $minutes . ' ' . olobuild_t( 'min di lettura' );
             $items[] = $this->build_meta_item( $label, '', $show_icons ? $icon_svg['clock'] : '', $text_color, $icon_color );
@@ -240,7 +245,12 @@ class Olobuild_PostMeta_Tile extends Olobuild_Tile_Base {
 
         // Decide se mostrare separatori (chip style nasconde i separatori)
         $show_sep = ( $layout === 'inline' && $separator !== '' && $chip_style === 'none' );
-        $sep_html = $show_sep ? '<span class="olo-postmeta-sep" style="color:' . $text_color . ';">' . $separator . '</span>' : '';
+        // Senza «Gap elementi» la distanza fra le voci la danno gli spazi del separatore (« · »),
+        // ma in una riga flex gli spazi all'inizio e alla fine di una voce cadono: le voci
+        // uscivano attaccate («5/10/2026·Autore·Senza categoria»). white-space:pre li tiene.
+        // Con un gap impostato la distanza c'è già: lì resta com'era.
+        $sep_ws   = $item_gap === 0 ? 'white-space:pre;' : '';
+        $sep_html = $show_sep ? '<span class="olo-postmeta-sep" style="' . $sep_ws . 'color:' . $text_color . ';">' . $separator . '</span>' : '';
 
         // Container styles
         $wrap_style  = 'font-size:' . $font_size . 'px;line-height:1.6;';
