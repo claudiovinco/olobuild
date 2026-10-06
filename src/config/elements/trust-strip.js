@@ -37,6 +37,7 @@ export default {
     pill_text_color: '',
     badge_bg: 'var(--olo-color-surface-alt, #f6f7f9)',
     badge_color: 'var(--olo-color-dark, #16263d)',
+    icon_size: 18,
   },
 
   // Appena nata: la riga delle garanzie di un negozio o di un'attività, cinque voci con
@@ -120,6 +121,7 @@ export default {
       condition: { field: 'variant', value: 'pill' } },
 
     { type: 'separator', label: t('Items') },
+    { key: 'icon_size', label: t('Dimensione icone'), type: 'range', min: 10, max: 48, step: 1, unit: 'px' },
     { key: 'items', type: 'content-items', label: t('Voci'), itemLabel: t('Voce'), etichettaDa: 'text', miniaturaDa: 'logo', itemFields: [
         { key: 'icon_color', label: t('Colore icona'), type: 'color' },
     ] },

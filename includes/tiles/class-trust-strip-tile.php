@@ -38,6 +38,7 @@ class Olobuild_TrustStrip_Tile extends Olobuild_Tile_Base {
         'pill_text_color' => '',
         'badge_bg'        => 'var(--olo-color-surface-alt, #D8FF4A)',
         'badge_color'     => 'var(--olo-color-dark, #1B2A4E)',
+        'icon_size'       => 18,
     ];
 
     public function get_controls() { return []; }
@@ -61,6 +62,10 @@ class Olobuild_TrustStrip_Tile extends Olobuild_Tile_Base {
         $flow       = $s['flow'] === 'nowrap' ? 'nowrap' : 'wrap';
         $sep_char   = $s['separator_char'] ?? '';
         $variant    = ( $s['variant'] ?? 'inline' ) === 'pill' ? 'pill' : 'inline';
+        // Misura delle icone in px (prima fissa: rapporto 0.9 = 18 px, che resta il default).
+        // render_icon_html() lavora a rapporto sui 20 px delle icone del set.
+        $icon_px    = max( 10, min( 48, absint( $s['icon_size'] ?? 18 ) ?: 18 ) );
+        $icon_ratio = round( $icon_px / 20, 3 );
 
         $align_map = [
             'left'          => 'flex-start',
@@ -87,8 +92,10 @@ class Olobuild_TrustStrip_Tile extends Olobuild_Tile_Base {
             $pill_bg   = $this->safe_color_css( $s['pill_bg'] ?? '' ) ?: 'rgba(255,255,255,0.05)';
             $pill_bd   = $this->safe_color_css( $s['pill_border'] ?? '' ) ?: 'rgba(255,255,255,0.12)';
             $pill_txt  = $this->safe_color_css( $s['pill_text_color'] ?? '' ) ?: $text_color;
-            $badge_bg  = $this->safe_color_css( $s['badge_bg'] ?? '' ) ?: '#D8FF4A';
-            $badge_clr = $this->safe_color_css( $s['badge_color'] ?? '' ) ?: '#1B2A4E';
+            // Riserve dal tema (tinta tenue + scuro, come il config): prima un badge lime e
+            // blu notte fissi quando il colore veniva svuotato.
+            $badge_bg  = $this->safe_color_css( $s['badge_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #f6f7f9)';
+            $badge_clr = $this->safe_color_css( $s['badge_color'] ?? '' ) ?: 'var(--olo-color-dark, #16263d)';
             ob_start();
             ?>
             <div class="olo-tstrip olo-tstrip--pill" style="<?php echo esc_attr( $row_style ); ?>">
@@ -103,7 +110,7 @@ class Olobuild_TrustStrip_Tile extends Olobuild_Tile_Base {
                         <?php if ( $logo !== '' ) : ?>
                             <img src="<?php echo esc_url( $logo ); ?>" alt="<?php echo esc_attr( wp_strip_all_tags( $text ) ); ?>" style="height:<?php echo (int) $logo_h; ?>px;width:auto;display:block;flex-shrink:0" />
                         <?php elseif ( $icon !== '' ) : ?>
-                            <span style="display:inline-flex;align-items:center;color:<?php echo esc_attr( $this->safe_color_css( $it['icon_color'] ?? '' ) ?: $pill_txt ); ?>"><?php echo $this->render_icon_html( $icon, 0.9 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup built by render_icon_html() (esc_attr()'d UIkit attrs / sanitized SVG library) ?></span>
+                            <span style="display:inline-flex;align-items:center;color:<?php echo esc_attr( $this->safe_color_css( $it['icon_color'] ?? '' ) ?: $pill_txt ); ?>"><?php echo $this->render_icon_html( $icon, $icon_ratio ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup built by render_icon_html() (esc_attr()'d UIkit attrs / sanitized SVG library) ?></span>
                         <?php endif; ?>
                         <?php if ( $text !== '' ) : ?>
                             <span class="olo-tstrip__pill-txt" style="color:<?php echo esc_attr( $pill_txt ); ?>;<?php echo ( $logo !== '' || $icon !== '' ) ? 'border-left:1px solid ' . esc_attr( $pill_bd ) . ';padding-left:11px;' : ''; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.text'; ?>" data-olo-richtext><?php echo wp_kses_post( $text ); ?></span>
@@ -131,7 +138,7 @@ class Olobuild_TrustStrip_Tile extends Olobuild_Tile_Base {
                 <span class="olo-tstrip__item" style="display:inline-flex;align-items:center;gap:8px">
                     <?php if ( $icon ) : ?>
                         <span style="color:<?php echo esc_attr( $icon_color ); ?>;display:inline-flex;align-items:center">
-                            <?php echo $this->render_icon_html( $icon, 0.9 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup built by render_icon_html() (esc_attr()'d UIkit attrs / sanitized SVG library) ?>
+                            <?php echo $this->render_icon_html( $icon, $icon_ratio ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup built by render_icon_html() (esc_attr()'d UIkit attrs / sanitized SVG library) ?>
                         </span>
                     <?php endif; ?>
                     <?php if ( $text ) : ?>
