@@ -247,7 +247,8 @@ class Olobuild_Finder_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ofn-intro{font-size:15.5px;line-height:1.6;opacity:.8;margin:14px auto 0;max-width:560px;<?php echo $center ? '' : 'margin-left:0;'; ?>}
             .<?php echo $uid; ?> .ofn-chips{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0 24px;<?php echo $center ? 'justify-content:center;' : ''; ?>}
             .<?php echo $uid; ?> .ofn-chip{font-family:<?php echo $sans; ?>;font-weight:600;font-size:13.5px;color:<?php echo $testo_chip; ?>;background:<?php echo $chipbg; ?>;border:1px solid var(--olo-color-border,#e5e7eb);border-radius:<?php echo $chip_r; ?>;padding:10px 18px;cursor:pointer;transition:all .18s;display:inline-flex;align-items:center;gap:8px;}
-            .<?php echo $uid; ?> .ofn-chip:hover{border-color:var(--fn-accent);color:var(--fn-accent);}
+            <?php // In hover il testo è l'accento mescolato al testo della chip: puro, un accento chiaro (ambra) su chip chiare non si leggeva (1,97:1, catalogo 6 ott 2026). Il bordo resta l'accento. ?>
+            .<?php echo $uid; ?> .ofn-chip:hover{border-color:var(--fn-accent);color:color-mix(in srgb, var(--fn-accent) 60%, <?php echo $testo_chip; ?>);}
             .<?php echo $uid; ?> .ofn-chip.on{background:var(--fn-accent);border-color:var(--fn-accent);color:var(--fn-on);}
             .<?php echo $uid; ?> .ofn-chip:focus-visible{outline:2px solid var(--fn-accent);outline-offset:3px;}
             .<?php echo $uid; ?> .ofn-chip .ofn-ic{width:16px;height:16px;display:inline-flex;}
