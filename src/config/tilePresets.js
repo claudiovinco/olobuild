@@ -2664,18 +2664,20 @@ export const TILE_PRESETS = {
   },
   pricing: {
     // v1.0.58 — preset self-contained con cta colors espliciti (era #fff su brand orange ratio 3.63 fail).
-    'modern-clean':     { card_radius: '16', shadow: 'sm',   cta_bg_color: '#0ea5e9', cta_text_color: '#fff', cta_hover_bg_color: '#0284c7', text_color: '#0f172a', price_color: '#0f172a' },
-    'magazine-card':    { card_radius: '8',  shadow: 'lg',   cta_bg_color: '#000',    cta_text_color: '#fff', cta_hover_bg_color: '#1f2937', text_color: '#0f172a', price_color: '#000' },
-    'minimal-mono':     { card_radius: '0',  shadow: 'none', cta_bg_color: '#0f172a', cta_text_color: '#fff', cta_hover_bg_color: '#1e293b', text_color: '#374151', price_color: '#1f2937' },
-    'highlighted-pro':  { card_radius: '14', shadow: 'xl',   cta_bg_color: '#7c3aed', cta_text_color: '#fff', cta_hover_bg_color: '#6d28d9', text_color: '#0f172a', price_color: '#7c3aed' },
-    'dark-luxury':      { card_radius: '12', shadow: 'lg',   bg_color: '#0a0a0a', cta_bg_color: '#fbbf24', cta_text_color: '#0a0a0a', cta_hover_bg_color: '#fde047', text_color: '#fff', price_color: '#fbbf24' },
-    'glass-tier':       { card_radius: '20', shadow: 'lg',   bg_color: 'rgba(15,23,42,0.85)', cta_bg_color: '#fff', cta_text_color: '#0f172a', cta_hover_bg_color: '#f3f4f6', text_color: '#fff', price_color: '#fff' },
-    'neon-cyber':       { card_radius: '4',  shadow: 'none', bg_color: '#0a0a0a', cta_bg_color: '#00ffff', cta_text_color: '#0a0a0a', cta_hover_bg_color: '#22d3ee', text_color: '#00ffff', price_color: '#00ffff' },
-    'brutalist-stamp':  { card_radius: '0',  shadow: 'none', bg_color: '#fde047', cta_bg_color: '#000', cta_text_color: '#fde047', cta_hover_bg_color: '#1f2937', text_color: '#000', price_color: '#000' },
-    'gradient-aurora':  { card_radius: '24', shadow: 'lg',   bg_color: 'linear-gradient(135deg,#a855f7,#ec4899)', cta_bg_color: '#fff', cta_text_color: '#a855f7', cta_hover_bg_color: '#f3f4f6', text_color: '#fff', price_color: '#fff' },
-    'sticker-fun':      { card_radius: '20', shadow: 'md',   bg_color: '#fef3c7', cta_bg_color: '#fbbf24', cta_text_color: '#fff', cta_hover_bg_color: '#f59e0b', text_color: '#78350f', price_color: '#78350f' },
-    'retro-receipt':    { card_radius: '0',  shadow: 'sm',   bg_color: '#fafafa', cta_bg_color: '#1f2937', cta_text_color: '#fff', cta_hover_bg_color: '#0f172a', text_color: '#1f2937', price_color: '#000' },
-    'tilt-floating':    { card_radius: '12', shadow: 'xl',   bg_color: 'var(--olo-color-primary)', cta_bg_color: '#312e81', cta_text_color: '#fff', cta_hover_bg_color: '#1e1b4b', text_color: '#fff', price_color: '#fff' },
+    // 6 ott 2026 — il raggio con la chiave che il renderer legge (border_radius): card_radius non
+    // lo legge nessuno, e scegliendo un preset gli angoli della card non cambiavano.
+    'modern-clean':     { border_radius: '16', shadow: 'sm',   cta_bg_color: '#0ea5e9', cta_text_color: '#fff', cta_hover_bg_color: '#0284c7', text_color: '#0f172a', price_color: '#0f172a' },
+    'magazine-card':    { border_radius: '8',  shadow: 'lg',   cta_bg_color: '#000',    cta_text_color: '#fff', cta_hover_bg_color: '#1f2937', text_color: '#0f172a', price_color: '#000' },
+    'minimal-mono':     { border_radius: '0',  shadow: 'none', cta_bg_color: '#0f172a', cta_text_color: '#fff', cta_hover_bg_color: '#1e293b', text_color: '#374151', price_color: '#1f2937' },
+    'highlighted-pro':  { border_radius: '14', shadow: 'xl',   cta_bg_color: '#7c3aed', cta_text_color: '#fff', cta_hover_bg_color: '#6d28d9', text_color: '#0f172a', price_color: '#7c3aed' },
+    'dark-luxury':      { border_radius: '12', shadow: 'lg',   bg_color: '#0a0a0a', cta_bg_color: '#fbbf24', cta_text_color: '#0a0a0a', cta_hover_bg_color: '#fde047', text_color: '#fff', price_color: '#fbbf24' },
+    'glass-tier':       { border_radius: '20', shadow: 'lg',   bg_color: 'rgba(15,23,42,0.85)', cta_bg_color: '#fff', cta_text_color: '#0f172a', cta_hover_bg_color: '#f3f4f6', text_color: '#fff', price_color: '#fff' },
+    'neon-cyber':       { border_radius: '4',  shadow: 'none', bg_color: '#0a0a0a', cta_bg_color: '#00ffff', cta_text_color: '#0a0a0a', cta_hover_bg_color: '#22d3ee', text_color: '#00ffff', price_color: '#00ffff' },
+    'brutalist-stamp':  { border_radius: '0',  shadow: 'none', bg_color: '#fde047', cta_bg_color: '#000', cta_text_color: '#fde047', cta_hover_bg_color: '#1f2937', text_color: '#000', price_color: '#000' },
+    'gradient-aurora':  { border_radius: '24', shadow: 'lg',   bg_color: 'linear-gradient(135deg,#a855f7,#ec4899)', cta_bg_color: '#fff', cta_text_color: '#a855f7', cta_hover_bg_color: '#f3f4f6', text_color: '#fff', price_color: '#fff' },
+    'sticker-fun':      { border_radius: '20', shadow: 'md',   bg_color: '#fef3c7', cta_bg_color: '#fbbf24', cta_text_color: '#fff', cta_hover_bg_color: '#f59e0b', text_color: '#78350f', price_color: '#78350f' },
+    'retro-receipt':    { border_radius: '0',  shadow: 'sm',   bg_color: '#fafafa', cta_bg_color: '#1f2937', cta_text_color: '#fff', cta_hover_bg_color: '#0f172a', text_color: '#1f2937', price_color: '#000' },
+    'tilt-floating':    { border_radius: '12', shadow: 'xl',   bg_color: 'var(--olo-color-primary)', cta_bg_color: '#312e81', cta_text_color: '#fff', cta_hover_bg_color: '#1e1b4b', text_color: '#fff', price_color: '#fff' },
   },
   testimonial: {
     'modern-card':      { layout: 'single', bg_color: '#ffffff', text_color: '#0f172a' },

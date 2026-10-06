@@ -39,6 +39,7 @@ export default {
     toggle_label_2: t('Annuale'),
     toggle_color: '',
     price_yearly: '',
+    period_yearly: '',
     sale_price: '',
     sale_badge_text: t('OFFERTA'),
     sale_badge_color: '',
@@ -108,6 +109,8 @@ export default {
     currency_position: 'after',
     currency_size: '22',
     period: t('/mese'),
+    // Se si accende l'interruttore mensile/annuale, il periodo cambia con il prezzo.
+    period_yearly: t('/anno'),
     features: t('Fino a 10 utenti\n100 GB di spazio\nAssistenza prioritaria in chat\nReport mensile dei risultati\nDisdici quando vuoi'),
     feature_dividers: false,
     is_popular: true,
@@ -144,6 +147,10 @@ export default {
     { key: 'enable_toggle', label: t('Abilita toggle prezzo'), type: 'toggle' },
     { key: 'price_yearly', label: t('Prezzo alternativo'), type: 'text',
       condition: { field: 'enable_toggle', value: true } },
+    { key: 'period_yearly', label: t('Periodo alternativo'), type: 'text', placeholder: t('/anno'),
+      description: t('Il periodo mostrato con la seconda etichetta (es. «/anno»). Vale solo se c\'è il Prezzo alternativo. Vuoto: resta quello del prezzo principale.'),
+      // Senza prezzo alternativo il periodo non cambia (il PHP lo ignora): il campo si nasconde.
+      condition: [{ field: 'enable_toggle', value: true }, { field: 'price_yearly', op: 'notEmpty' }] },
     { key: 'toggle_label_1', label: t('Etichetta 1'), type: 'text',
       condition: { field: 'enable_toggle', value: true } },
     { key: 'toggle_label_2', label: t('Etichetta 2'), type: 'text',

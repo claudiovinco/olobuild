@@ -64,6 +64,8 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
         'toggle_label_2'        => 'Annuale',
         'toggle_color'          => '',
         'price_yearly'          => '',
+        // Periodo mostrato in «Annuale» ('' = resta quello mensile, come prima).
+        'period_yearly'         => '',
         'border_radius'           => '12',
         'border_width'            => '0',
         'border_color'            => '',
@@ -180,6 +182,18 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
         $toggle_color  = $this->safe_color_css( $s['toggle_color'] ) ?: $accent;
         $price_yearly  = esc_html( trim( $s['price_yearly'] ) );
         $price_monthly = esc_html( $s['price'] );
+        // Il periodo segue l'interruttore come il prezzo: passando ad «Annuale» restava «/mese».
+        // Solo se c'è anche il prezzo alternativo: senza, il prezzo resta quello mensile e
+        // cambiando il solo periodo si leggeva «49 € /anno» (il mensile spacciato per annuale).
+        $period_yearly = esc_html( wp_strip_all_tags( trim( (string) ( $s['period_yearly'] ?? '' ) ) ) );
+        $period_attrs  = ( $enable_toggle && $period_yearly !== '' && $price_yearly !== '' )
+            ? ' data-monthly="' . esc_attr( $period ) . '" data-yearly="' . esc_attr( $period_yearly ) . '"'
+            : '';
+
+        // Separatori delle voci e binario dell'interruttore: dal colore del testo della card.
+        // Erano bianchi fissi (rgba(255,255,255,.1/.15)) e sparivano sulle card chiare.
+        $line_clr  = 'color-mix(in srgb, ' . $fg . ' 14%, transparent)';
+        $track_clr = 'color-mix(in srgb, ' . $fg . ' 18%, transparent)';
 
         ob_start();
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/intval/whitelists/Olobuild_Tile_Utils helpers; $uid is internal).
@@ -233,8 +247,10 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
 
             /* Badge */
             <?php if ( $popular ) : ?>
+            /* align-self: la card è una colonna flex e il badge veniva stirato a tutta larghezza. */
             .<?php echo $uid; ?> .olo-price-badge {
-                position: relative; display: inline-block; margin-top: <?php echo (int) $badge_top; ?>px; margin-bottom: 18px;
+                position: relative; display: inline-block; align-self: center; max-width: 100%; box-sizing: border-box;
+                margin-top: <?php echo (int) $badge_top; ?>px; margin-bottom: 18px;
                 font-size: 0.75em; font-weight: 600; text-transform: uppercase; white-space: nowrap; z-index: 5;
                 color: <?php echo $badge_fg; ?>;
                 border-radius: <?php echo $badge_r; ?>;
@@ -274,9 +290,13 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-price-features li {
                 padding: 8px 0; font-size: 0.9em;
                 <?php if ( $feat_dividers ) : ?>
-                border-bottom: 1px solid rgba(255,255,255,.1);
+                border-bottom: 1px solid <?php echo $line_clr; ?>;
                 <?php endif; ?>
             }
+            <?php if ( $price_clr ) : ?>
+            /* «Colore prezzo»: valeva solo con l'interruttore mensile/annuale acceso. */
+            .<?php echo $uid; ?> .olo-pricing-amount { color: <?php echo $price_clr; ?>; }
+            <?php endif; ?>
             .<?php echo $uid; ?> .olo-price-check { margin-right: 8px; color: <?php echo $accent; ?>; font-size: <?php echo (int) $check_size; ?>px; }
 
             /* Sale badge */
@@ -363,7 +383,7 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-price-toggle-label.olo-active { opacity: 1; font-weight: 600; }
             .<?php echo $uid; ?> .olo-price-toggle {
                 position: relative; width: 48px; height: 26px; cursor: pointer;
-                background: rgba(255,255,255,0.15); border-radius: 13px; border: none;
+                background: <?php echo $track_clr; ?>; border-radius: 13px; border: none;
                 transition: background .3s ease; padding: 0;
             }
             .<?php echo $uid; ?> .olo-price-toggle::after {
@@ -374,10 +394,7 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?>.olo-pricing-yearly .olo-price-toggle::after {
                 transform: translateX(22px);
             }
-            .<?php echo $uid; ?> .olo-pricing-amount {
-                transition: opacity .3s ease;
-                <?php if ( $price_clr ) : ?>color: <?php echo $price_clr; ?>;<?php endif; ?>
-            }
+            .<?php echo $uid; ?> .olo-pricing-amount, .<?php echo $uid; ?> .olo-pricing-period { transition: opacity .3s ease; }
             <?php endif; ?>
         </style>
 <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
@@ -440,7 +457,7 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
                                 <span style="font-size:<?php echo (int) $cur_size; ?>px;opacity:.8;margin-left:2px"><?php echo $currency; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></span>
                             <?php endif; ?>
                         </div>
-                        <div style="font-size:.875em;opacity:.7;margin-top:8px"><?php echo $period; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></div>
+                        <div class="olo-pricing-period" style="font-size:.875em;opacity:.7;margin-top:8px"<?php echo $period_attrs; ?>><?php echo $period; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attrs built with esc_attr(), period escaped with esc_html() at assignment above ?></div>
                     <?php else : ?>
                         <?php echo $original_price_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above exclusively from esc_html() values ?>
                         <?php if ( $cur_pos === 'before' ) : ?>
@@ -450,7 +467,7 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
                         <?php if ( $cur_pos === 'after' ) : ?>
                             <span style="font-size:<?php echo (int) $cur_size; ?>px;opacity:.8;margin-left:2px"><?php echo $currency; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></span>
                         <?php endif; ?>
-                        <span style="font-size:.875em;opacity:.7"><?php echo $period; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></span>
+                        <span class="olo-pricing-period" style="font-size:.875em;opacity:.7"<?php echo $period_attrs; ?>><?php echo $period; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attrs built with esc_attr(), period escaped with esc_html() at assignment above ?></span>
                     <?php endif; ?>
                 </div>
 
@@ -478,13 +495,14 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
                     $cd_label        = esc_html( $s['countdown_label'] ?? 'Offerta scade tra:' );
                     $cd_expired_text = esc_html( $s['countdown_expired_text'] ?? 'Offerta scaduta' );
                     $cd_hide         = ! empty( $s['countdown_hide_on_expire'] );
-                    $cd_bg           = sanitize_hex_color( $s['countdown_bg_color'] ?? '' );
-                    $cd_color        = sanitize_hex_color( $s['countdown_text_color'] ?? '' );
+                    // Colori del tema ammessi: sanitize_hex_color() scartava ogni var(--olo-color-…).
+                    $cd_bg           = $this->safe_color_css( $s['countdown_bg_color'] ?? '' );
+                    $cd_color        = $this->safe_color_css( $s['countdown_text_color'] ?? '' );
                     $cd_style        = '';
                     if ( $cd_bg )    $cd_style .= 'background:' . $cd_bg . ';';
                     if ( $cd_color ) $cd_style .= 'color:' . $cd_color . ';';
                 ?>
-                <div class="olo-pricing-countdown <?php echo $uid; ?>-cd" style="text-align:center;padding:10px 12px;font-size:13px;margin-top:10px;border-radius:6px;<?php echo $cd_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $uid is internal; style built above from sanitize_hex_color() values only ?>">
+                <div class="olo-pricing-countdown <?php echo $uid; ?>-cd" style="text-align:center;padding:10px 12px;font-size:13px;margin-top:10px;border-radius:6px;<?php echo esc_attr( $cd_style ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $uid is internal; style built above from safe_color_css() values, escaped with esc_attr() ?>">
                     <div class="olo-cd-label" style="font-size:11px;opacity:0.8;margin-bottom:4px"><?php echo $cd_label; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></div>
                     <div class="olo-cd-timer" style="font-weight:700;font-variant-numeric:tabular-nums;font-size:16px" data-olo-countdown="<?php echo esc_attr( $cd_date ); ?>" data-expired="<?php echo $cd_expired_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() (ENT_QUOTES) at assignment above ?>" data-hide="<?php echo $cd_hide ? '1' : '0'; ?>">
                         --g --h --m --s
@@ -502,7 +520,8 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
             if(!btn) return;
             var l1 = wrap.querySelector('[data-olo-toggle-l1]');
             var l2 = wrap.querySelector('[data-olo-toggle-l2]');
-            var amounts = wrap.querySelectorAll('.olo-pricing-amount');
+            // Prezzo e periodo cambiano insieme (il periodo solo se ha la sua versione annuale).
+            var amounts = wrap.querySelectorAll('.olo-pricing-amount, .olo-pricing-period');
             btn.addEventListener('click', function(){
                 var isYearly = wrap.classList.contains('olo-pricing-yearly');
                 if(isYearly){
