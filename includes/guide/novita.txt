@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.557 - 2026-10-06 (fix)
+- Hero: sul telefono il titolo si riduce quanto serve e non esce più dalla tile (prima un titolo grande veniva tagliato, per esempio «SAGRA…»). Sul computer resta la misura scelta.
+- Hero split: sul telefono le statistiche stanno su due colonne e la parola grande delle card si legge intera (prima quattro statistiche allargavano la colonna oltre la tile e le parole delle card venivano tagliate).
+
 ## v1.4.556 - 2026-10-06 (fix)
 - Video: proporzioni 21:9, 3:2, 4:5 e 9:16 (il preset «Cinema Wide» torna 21:9). Il testo sovrapposto si posiziona a sinistra o a destra e in alto, al centro o in basso. Con un file video il pulsante play compare davvero, e Inizio e Fine agiscono anche con «Ripeti», che torna all'Inizio invece che a 0. Prima queste opzioni valevano solo per YouTube e Vimeo.
 - Immagine: con Raggio 0 la foto ha davvero gli angoli vivi (prima restavano arrotondati di 5 px), e la didascalia ha la sua misura e il suo colore nel tab Stile.
