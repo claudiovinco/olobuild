@@ -26,6 +26,7 @@ class Olobuild_Slideshow_Tile extends Olobuild_Tile_Base {
         'object_fit'     => 'cover',
         'object_position' => 'center center',
         'overlay_color'  => 'var(--olo-color-dark, #000000)',
+        'overlay_opacity' => '45',
         'text_color'     => '#FFFFFF',
         'transition'     => 'slide',
         'shadow'         => 'none',
@@ -121,6 +122,18 @@ class Olobuild_Slideshow_Tile extends Olobuild_Tile_Base {
         // Lista: rapporto + width:100%, cioè lettera per lettera quel che UIkit scriverà qui
         // all'init. Coincidendo i valori, all'init non si muove niente.
         $list_style = $has_ratio ? 'aspect-ratio:' . $ratio_css . ';width:100%;' : 'height:' . (int) $h . 'px;';
+        // La radice era position:static: frecce (uk-position-center-*) e pulsante Pausa
+        // (uk-position-bottom-right) sono assoluti e si appoggiavano al primo antenato
+        // posizionato, cioè la sezione — finivano ai bordi della pagina, fuori dalle foto.
+        // Ora stanno con la lista in un palco posizionato (.olo-ss-stage, lo schema di UIkit)
+        // e i pallini restano fuori, sotto: frecce centrate sulle foto e Pausa nel loro
+        // angolo anche quando la radice comprende la riga dei pallini (con le proporzioni).
+        $h_style   .= 'position:relative;';
+
+        // Velo: opacità scelta dall'utente (0-100). Prima era fissa a 0,45; 45 resta la
+        // riserva, così le slideshow già salvate (senza la chiave) rendono come prima.
+        $ov_raw     = $s['overlay_opacity'] ?? '';
+        $ov_opacity = ( is_numeric( $ov_raw ) ) ? max( 0, min( 100, (float) $ov_raw ) ) / 100 : 0.45;
 
         // Adattamento: inline sull'<img>, così scavalca l'object-fit:cover che UIkit
         // mette su [uk-cover] (regola in :where(), specificità zero).
@@ -133,6 +146,7 @@ class Olobuild_Slideshow_Tile extends Olobuild_Tile_Base {
         ob_start();
         ?>
         <div id="<?php echo esc_attr( $id ); ?>" class="olo-slideshow olo-ss-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" uk-slideshow="autoplay: <?php echo esc_attr( $s['autoplay'] ? 'true' : 'false' ); ?>; autoplay-interval: <?php echo (int) $speed; ?>; animation: <?php echo esc_attr( $transition ); ?><?php echo $uk_ratio ? '; ratio: ' . esc_attr( $uk_ratio ) : ''; ?>" style="<?php echo esc_attr( $h_style ); ?>">
+            <div class="olo-ss-stage" style="position:relative;">
             <div class="uk-slideshow-items" style="<?php echo esc_attr( $list_style ); ?>">
                 <?php foreach ( $slides as $slide ) : ?>
                     <div>
@@ -142,7 +156,7 @@ class Olobuild_Slideshow_Tile extends Olobuild_Tile_Base {
                             <div style="position:absolute;inset:0;background:#1F2937;" uk-cover></div>
                         <?php endif; ?>
                         <?php $sl_bg = $this->safe_color_css( $s['overlay_color'] ); $sl_fg = $this->safe_color_css( $s['text_color'] ); ?>
-                        <div class="uk-position-cover" style="<?php if ( $sl_bg ) echo 'background:' . $sl_bg . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist ?>opacity:0.45;"></div>
+                        <div class="uk-position-cover" style="<?php if ( $sl_bg ) echo 'background:' . $sl_bg . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist ?>opacity:<?php echo esc_attr( (string) $ov_opacity ); ?>;"></div>
                         <?php
                         list( $sst_cls, $sst_data ) = $this->tfx_attrs( $s, 'title', $slide['title'] ?? '' );
                         list( $sss_cls, $sss_data ) = $this->tfx_attrs( $s, 'subtitle', $slide['subtitle'] ?? '' );
@@ -167,6 +181,7 @@ class Olobuild_Slideshow_Tile extends Olobuild_Tile_Base {
                 <a class="uk-slidenav-large uk-position-center-left uk-position-small" href role="button" aria-label="<?php echo esc_attr__( 'Slide precedente', 'olobuild' ); ?>" uk-slidenav-previous uk-slideshow-item="previous"></a>
                 <a class="uk-slidenav-large uk-position-center-right uk-position-small" href role="button" aria-label="<?php echo esc_attr__( 'Slide successiva', 'olobuild' ); ?>" uk-slideshow-item="next" uk-slidenav-next></a>
             <?php endif; ?>
+            </div>
 
             <?php if ( $s['show_dots'] && $count > 1 ) : ?>
                 <ul class="uk-slideshow-nav uk-dotnav uk-flex-center uk-margin" role="tablist" aria-label="<?php echo esc_attr__( 'Naviga tra le slide', 'olobuild' ); ?>"></ul>
@@ -179,7 +194,9 @@ class Olobuild_Slideshow_Tile extends Olobuild_Tile_Base {
 
         // v1.0.73 — refactor profondo: get_preset_extra_css svuotato, ora i preset audaci
         // settano i field standard tramite TILE_PRESETS.slideshow + helper wow_*.
-        $preset_css = $this->build_wow_effects_css( $s, '#' . $id, '.olo-slide-title' );
+        // Il titolo nel markup ha la classe .olo-ss-title: con '.olo-slide-title' (che non
+        // esiste) «Glow sul titolo» non accendeva niente.
+        $preset_css = $this->build_wow_effects_css( $s, '#' . $id, '.olo-ss-title' );
         if ( $preset_css ) echo '<style>' . $preset_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by the Olobuild_Tile_Base::build_wow_effects_css() shared helper (sanitized internally)
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
@@ -197,6 +214,33 @@ class Olobuild_Slideshow_Tile extends Olobuild_Tile_Base {
         $lbl_dot   = __( 'Vai alla slide', 'olobuild' );
         $lbl_pause = __( 'Metti in pausa la presentazione', 'olobuild' );
         $lbl_play  = __( 'Riproduci la presentazione', 'olobuild' );
+        // Comandi sulla foto (frecce e Pausa) coi colori della slideshow stessa: fondo = colore
+        // del velo, segno = colore del testo, che è scelto per leggersi sul velo (riserve:
+        // scuro e chiaro della palette). Le frecce, ora dentro la foto, prendevano il colore
+        // dei link del tema, che sulla foto poteva sparire.
+        $pp_bg  = $this->safe_color_css( $s['overlay_color'] ) ?: 'var(--olo-color-dark, #16263d)';
+        $pp_fg  = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-light, #ffffff)';
+        $cmd_css = '';
+        if ( $s['show_arrows'] && $count > 1 ) {
+            $cmd_css .= '#' . $id . ' .uk-slidenav{color:' . $pp_fg . ';opacity:.85;}#' . $id . ' .uk-slidenav:hover,#' . $id . ' .uk-slidenav:focus-visible{color:' . $pp_fg . ';opacity:1;}';
+        }
+        if ( $a11y_autoplay ) {
+            // Pulsante Pausa/Riproduci: prima i glifi «⏸»/«▶» (resi come emoji su alcuni
+            // sistemi) su un nero fisso. Ora icone SVG, anello di fuoco visibile da tastiera.
+            // Il fondo prende il colore del velo a opacità .72 anche se il velo è già
+            // trasparente (rgb(from …)); dove la sintassi non c'è resta il color-mix.
+            $pp       = '#' . $id . ' .olo-ss-playpause';
+            $cmd_css .= $pp . '{position:absolute;z-index:2;display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;padding:0;border:0;border-radius:50%;cursor:pointer;line-height:1;'
+                . 'background:color-mix(in srgb, ' . $pp_bg . ' 72%, transparent);background:rgb(from ' . $pp_bg . ' r g b / .72);color:' . $pp_fg . ';transition:background .2s ease;}'
+                . $pp . ':hover{background:color-mix(in srgb, ' . $pp_bg . ' 92%, transparent);background:rgb(from ' . $pp_bg . ' r g b / .92);}'
+                . $pp . ':focus-visible{outline:2px solid ' . $pp_fg . ';outline-offset:2px;}'
+                . $pp . ' svg{width:14px;height:14px;display:block;}';
+        }
+        if ( $cmd_css ) {
+            echo '<style>' . $cmd_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colours validated by the safe_color_css() whitelist (or fixed var() literals); $id is internally generated
+        }
+        $svg_pause = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>';
+        $svg_play  = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8 5.14v13.72a1 1 0 0 0 1.52.85l10.8-6.86a1 1 0 0 0 0-1.7L9.52 4.29A1 1 0 0 0 8 5.14z"/></svg>';
         ?>
         <script>
         (function(){
@@ -227,17 +271,16 @@ class Olobuild_Slideshow_Tile extends Olobuild_Tile_Base {
                 var btn = document.createElement('button');
                 btn.type = 'button';
                 btn.className = 'olo-ss-playpause uk-position-bottom-right uk-position-small';
-                btn.style.cssText = 'position:absolute;z-index:2;background:rgba(0,0,0,.45);color:#fff;border:0;border-radius:4px;padding:4px 8px;font-size:12px;cursor:pointer;line-height:1.2;';
                 var paused = false;
                 function setState(p){
                     paused = p;
                     btn.setAttribute('aria-pressed', p ? 'true' : 'false');
                     btn.setAttribute('aria-label', p ? <?php echo wp_json_encode( $lbl_play ); ?> : <?php echo wp_json_encode( $lbl_pause ); ?>);
-                    btn.textContent = p ? '▶' : '⏸';
+                    btn.innerHTML = p ? <?php echo wp_json_encode( $svg_play ); ?> : <?php echo wp_json_encode( $svg_pause ); ?>;
                     try { if ( ss ) { if ( p ) ss.stopAutoplay(); else ss.startAutoplay(); } } catch(e){}
                 }
                 btn.addEventListener('click', function(){ setState(!paused); });
-                root.appendChild(btn);
+                ( root.querySelector('.olo-ss-stage') || root ).appendChild(btn);
                 setState( !!reduce );
             } catch(e){}
             <?php endif; ?>

@@ -36,6 +36,9 @@ export default {
     slide_height: '400',
     object_position: 'center center',
     overlay_color: 'var(--olo-color-dark, #16263d)',
+    // Opacità del velo (0-100): prima fissa a 0,45 nel renderer, che la usa ancora come
+    // riserva quando la chiave manca.
+    overlay_opacity: '45',
     text_color: '',
     transition: 'slide',
     shadow: 'none',
@@ -137,6 +140,7 @@ export default {
       // Con «Deforma per riempire» non c'è nessun ritaglio da spostare.
       condition: { field: 'object_fit', op: 'neq', value: 'fill' } },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color' },
+    { key: 'overlay_opacity', label: t('Opacità overlay'), type: 'range', min: 0, max: 100, step: 5 },
     { key: 'text_color', label: t('Colore testo'), type: 'color' },
 
     ...shadowField,
