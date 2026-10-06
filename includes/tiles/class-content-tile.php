@@ -19,7 +19,9 @@ class Olobuild_Content_Tile extends Olobuild_Tile_Base {
         'heading_color'      => '',
         'text'               => 'Aggiungi il tuo contenuto qui.',
         'text_color'         => '',
+        'text_align'         => '',
         'image'              => '',
+        'image_alt'          => '',
         'image_position'     => 'top',
         'image_width'        => '40',
         'image_height'       => 'auto',
@@ -133,6 +135,14 @@ class Olobuild_Content_Tile extends Olobuild_Tile_Base {
         if ( $hd_align ) { $hstyle .= 'text-align:' . $hd_align . ';'; }
         if ( $hd_clr ) { $hstyle .= 'color:' . $hd_clr . ';'; }
 
+        // Allineamento del testo (il titolo aveva il suo, il corpo nessuno). Regola nel
+        // <style> e non in linea: le media query per dispositivo devono poterla battere.
+        $txt_sel      = '.' . $uid . ' .olo-ct-text-body';
+        $txt_align    = in_array( $s['text_align'] ?? '', $allowed_align, true ) ? $s['text_align'] : '';
+        $txt_align_bp = $this->css_per_dispositivo( $s, 'text_align', $txt_sel, static function ( $a ) use ( $allowed_align ) {
+            return in_array( $a, $allowed_align, true ) ? 'text-align:' . $a : '';
+        } );
+
         $position     = $this->validate_position( $s['image_position'] ?? 'top' );
         $image_width  = max( 20, min( 80, absint( $s['image_width'] ) ) );
         $image_height = $s['image_height'];
@@ -141,6 +151,8 @@ class Olobuild_Content_Tile extends Olobuild_Tile_Base {
         if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
         $image_radius = Olobuild_Tile_Utils::border_radius( $s['image_radius'] ?? 0 );
         $image_radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['image_radius_hover'] ?? null );
+        // «Durata» del Raggio in hover: la transizione era fissa a 400 ms e il campo non agiva.
+        $image_radius_hover_dur = Olobuild_Tile_Utils::durata_hover( $s, 'image_radius_hover_duration', '400ms' );
         $border_width = absint( $s['image_border_width'] );
         $border_color = $this->safe_color_css( $s['image_border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
         $image_border_decl = Olobuild_Tile_Utils::border_css(
@@ -152,8 +164,10 @@ class Olobuild_Content_Tile extends Olobuild_Tile_Base {
         $link_url     = $s['link_url'] ?? '';
         $link_target  = $s['link_target'] === '_blank' ? '_blank' : '_self';
 
-        // Shadow
-        $shadow = Olobuild_Tile_Utils::shadow( $s['image_shadow'] ?? 'none' );
+        // Ombra dell'immagine. «Personalizzata» passava da shadow(), che conosce solo i
+        // preset sm…xl: restituiva 'none' e l'ombra disegnata nell'inspector non usciva mai.
+        $shadow_key = (string) ( $s['image_shadow'] ?? 'none' );
+        $shadow     = $shadow_key === 'custom' ? $this->ombra_personalizzata( $s ) : Olobuild_Tile_Utils::shadow( $shadow_key );
 
         // Image CSS class
         $img_class = 'olo-ct-img';
@@ -191,7 +205,7 @@ class Olobuild_Content_Tile extends Olobuild_Tile_Base {
         ];
 
         ob_start();
-        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist, integers via absint() with min()/max() clamps, line-height via floatval(), radius via Olobuild_Tile_Utils::border_radius()/radius_force_css(), position/fit/align from in_array() whitelists and the fixed $dir_map/$size_px_map/$bp_map maps, height numeric-checked or esc_attr()'d, object-position esc_attr()'d, aspect-ratio built by Olobuild_Tile_Utils::image_frame() behind its own regex whitelist; $uid is internally generated.
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist, integers via absint() with min()/max() clamps, line-height via floatval(), shadow from the fixed Olobuild_Tile_Utils::shadow() map or ombra_personalizzata() (intval() + safe_color_css()), text-align and the css_per_dispositivo() media queries from the $allowed_align whitelist, radius via Olobuild_Tile_Utils::border_radius()/radius_force_css() and its hover duration via durata_hover() (absint ms), position/fit/align from in_array() whitelists and the fixed $dir_map/$size_px_map/$bp_map maps, height numeric-checked or esc_attr()'d, object-position esc_attr()'d, aspect-ratio built by Olobuild_Tile_Utils::image_frame() behind its own regex whitelist; $uid is internally generated.
         ?>
         <style>
             .<?php echo $uid; ?> .olo-ct-layout {
@@ -208,10 +222,12 @@ class Olobuild_Content_Tile extends Olobuild_Tile_Base {
                 flex-shrink: 0;
                 <?php endif; ?>
             }
-            <?php if ( $image_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-ct-img-col{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-ct-img-col:hover{border-radius:<?php echo $image_radius_hover_css; ?> !important}<?php endif; ?>
+            <?php if ( $image_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-ct-img-col{transition:border-radius <?php echo $image_radius_hover_dur; ?> cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-ct-img-col:hover{border-radius:<?php echo $image_radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-ct-text {
                 <?php if ( $is_hz ) : ?>flex: 1; min-width: 0;<?php endif; ?>
             }
+            <?php if ( $txt_align !== '' ) : ?><?php echo $txt_sel; ?>{text-align:<?php echo $txt_align; ?>}<?php endif; ?>
+            <?php echo $txt_align_bp; ?>
             .<?php echo $uid; ?> .olo-ct-img {
                 transition: transform 0.5s ease, filter 0.5s ease;
                 width: 100%;
@@ -415,12 +431,12 @@ class Olobuild_Content_Tile extends Olobuild_Tile_Base {
         <style><?php echo $extra_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built above exclusively from safe_color_css() colors, intval()'d timings and fixed keyframe/selector literals ?></style>
         <?php endif; ?>
         <?php if ( $effect && $effect !== 'none' ) {
-            // Print inline once per page (guard via window.__oloTextFxInit).
-            // Inline (not wp_footer) so it works in builder iframe REST render too.
-            if ( ! self::$text_fx_inline_emitted ) {
-                self::$text_fx_inline_emitted = true;
-                self::print_text_fx_script();
-            }
+            // Il motore degli effetti testo è quello condiviso (Olobuild_Text_Effects), in
+            // linea una volta per pagina. Questa tile ne stampava una copia più vecchia con la
+            // stessa guardia window.__oloTextFxInit: sulla pagina partiva quella arrivata
+            // prima, e se era questa anche le altre tile perdevano gli a capo e lo scramble
+            // a frasi.
+            $this->tfx_print_script();
         } ?>
         <?php
                 // Border system
@@ -436,115 +452,41 @@ class Olobuild_Content_Tile extends Olobuild_Tile_Base {
     }
 
     /**
-     * Inline-emit guard: ensure the runner script is only printed once per render pass.
+     * Motore degli effetti testo: è quello condiviso (Olobuild_Text_Effects::print_script()).
+     * Resta come rinvio per chi lo chiamava da fuori; la copia che stava qui è stata tolta.
      */
-    protected static $text_fx_inline_emitted = false;
-
     public static function print_text_fx_script() {
-        ?>
-<script>
-(function(){
-  if (window.__oloTextFxInit) return; window.__oloTextFxInit = true;
-  function splitIntoChars(el){ var t = el.textContent; el.innerHTML = ''; var idx = 0; for (var i=0;i<t.length;i++){ var ch = t[i]; if (ch === ' ' || ch === '\t' || ch === '\n') { el.appendChild(document.createTextNode(' ')); continue; } var s=document.createElement('span'); s.className='olo-tfx-char'; s.style.setProperty('--i', idx++); s.textContent = ch; el.appendChild(s); } }
-  function splitIntoWords(el){ var t = el.textContent; el.innerHTML = ''; var w=t.split(/(\s+)/); for(var i=0;i<w.length;i++){ if(/^\s+$/.test(w[i])){ el.appendChild(document.createTextNode(w[i])); continue;} var s=document.createElement('span'); s.className='olo-tfx-word'; s.style.setProperty('--i',i); s.textContent=w[i]; el.appendChild(s); } }
-  function typewriter(el, opts){
-    var full = el.getAttribute('data-fx-original') || el.textContent.trim();
-    el.setAttribute('data-fx-original', full);
-    el.textContent = '';
-    var cursor = opts.cursor ? document.createElement('span') : null;
-    if (cursor){ cursor.className='olo-tfx-cursor'; cursor.textContent = opts.cursorCh || '|'; cursor.style.cssText='display:inline-block;animation:olo-tfx-blink 1s step-end infinite;'; el.parentElement.insertAdjacentElement('beforeend', cursor); }
-    var i=0;
-    function step(){ if (i<=full.length){ el.textContent = full.slice(0,i); i++; setTimeout(step, opts.speed); } else if (opts.loop){ setTimeout(function(){ i=0; el.textContent=''; setTimeout(step, opts.speed); }, opts.pause||1500); } }
-    setTimeout(step, opts.delay);
-  }
-  function typewriterLoop(el, opts){
-    var phrases = (opts.phrases||'').split(/\n+/).map(function(s){return s.trim();}).filter(Boolean);
-    if (!phrases.length) phrases = [el.textContent.trim()];
-    el.textContent = '';
-    var cursor = opts.cursor ? document.createElement('span') : null;
-    if (cursor){ cursor.className='olo-tfx-cursor'; cursor.textContent = opts.cursorCh || '|'; cursor.style.cssText='display:inline-block;animation:olo-tfx-blink 1s step-end infinite;'; el.parentElement.appendChild(cursor); }
-    var pi=0, ci=0, mode='type';
-    function step(){
-      var p = phrases[pi];
-      if (mode==='type'){ ci++; el.textContent = p.slice(0,ci); if (ci>=p.length){ mode='wait'; setTimeout(step, opts.pause); return; } setTimeout(step, opts.speed); }
-      else if (mode==='wait'){ mode='delete'; setTimeout(step, opts.speed); }
-      else if (mode==='delete'){ ci--; el.textContent = p.slice(0,ci); if (ci<=0){ mode='type'; pi=(pi+1)%phrases.length; setTimeout(step, opts.speed*4); return; } setTimeout(step, opts.speed/2); }
+        if ( class_exists( 'Olobuild_Text_Effects' ) ) {
+            Olobuild_Text_Effects::print_script();
+        }
     }
-    setTimeout(step, opts.delay);
-  }
-  function revealLetter(el, opts){
-    splitIntoChars(el);
-    var chars = el.querySelectorAll('.olo-tfx-char');
-    chars.forEach(function(c,i){ c.style.opacity='0'; c.style.transition='opacity .3s, transform .4s'; c.style.transform='translateY(8px)'; setTimeout(function(){ c.style.opacity='1'; c.style.transform='translateY(0)'; }, opts.delay + i*opts.speed); });
-    if (opts.loop){ setTimeout(function(){ chars.forEach(function(c,i){ setTimeout(function(){ c.style.opacity='0'; c.style.transform='translateY(8px)'; }, i*opts.speed/2); }); setTimeout(function(){ revealLetter(el, opts); }, chars.length*opts.speed + 800); }, chars.length*opts.speed + 2000);
-    }
-  }
-  function revealWord(el, opts){
-    splitIntoWords(el);
-    var ws = el.querySelectorAll('.olo-tfx-word');
-    ws.forEach(function(w,i){ w.style.opacity='0'; w.style.filter='blur(6px)'; w.style.transition='opacity .5s, filter .5s, transform .5s'; w.style.display='inline-block'; w.style.transform='translateY(10px)'; setTimeout(function(){ w.style.opacity='1'; w.style.filter='blur(0)'; w.style.transform='translateY(0)'; }, opts.delay + i*opts.speed); });
-  }
-  function scramble(el, opts){
-    var full = el.getAttribute('data-fx-original') || el.textContent.trim();
-    el.setAttribute('data-fx-original', full);
-    var chars = '!@#$%^&*()_+-=[]{}|;:,.<>?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var len = full.length, frame = 0, totalFrames = Math.ceil(len*opts.speed/30);
-    function step(){
-      var output = '';
-      for (var i=0;i<len;i++){
-        var revealAt = (i/len)*totalFrames;
-        if (frame >= revealAt){ output += full[i]; }
-        else { output += chars[Math.floor(Math.random()*chars.length)]; }
-      }
-      el.textContent = output;
-      frame++;
-      if (frame <= totalFrames + 5) requestAnimationFrame(step);
-      else if (opts.loop){ setTimeout(function(){ frame=0; step(); }, 2500); }
-    }
-    setTimeout(step, opts.delay);
-  }
-  function activateGrow(el){ el.classList.add('olo-tfx-active'); }
-  function activateWave(el){ if(!el.querySelector('.olo-tfx-char')) splitIntoChars(el); }
-  function run(el){
-    var fx = el.getAttribute('data-olo-text-fx');
-    var opts = {
-      speed: parseInt(el.getAttribute('data-fx-speed')||50),
-      delay: parseInt(el.getAttribute('data-fx-delay')||0),
-      loop: el.getAttribute('data-fx-loop')==='1',
-      cursor: el.getAttribute('data-fx-cursor')==='1',
-      cursorCh: el.getAttribute('data-fx-cursor-char')||'|',
-      phrases: el.getAttribute('data-fx-phrases')||'',
-      pause: parseInt(el.getAttribute('data-fx-pause')||1500),
-    };
-    if (fx==='typewriter') typewriter(el, opts);
-    else if (fx==='typewriter-loop') typewriterLoop(el, opts);
-    else if (fx==='reveal-letter') revealLetter(el, opts);
-    else if (fx==='reveal-word') revealWord(el, opts);
-    else if (fx==='scramble') scramble(el, opts);
-    else if (fx==='underline-grow' || fx==='highlight-grow') activateGrow(el);
-    else if (fx==='wave') activateWave(el);
-  }
-  // Inject keyframes for cursor
-  var st = document.createElement('style');
-  st.textContent = '@keyframes olo-tfx-blink{0%,50%{opacity:1}50.01%,100%{opacity:0}}';
-  document.head.appendChild(st);
-  // IntersectionObserver to trigger on viewport entry
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){ if (e.isIntersecting){ run(e.target); io.unobserve(e.target); } });
-  }, { threshold: 0.2 });
-  function init(){
-    document.querySelectorAll('[data-olo-text-fx]:not([data-olo-text-fx-init])').forEach(function(el){
-      el.setAttribute('data-olo-text-fx-init','1');
-      io.observe(el);
-    });
-  }
-  init();
-  // Re-init for dynamically loaded content (lazy templates)
-  var mo = new MutationObserver(init);
-  mo.observe(document.body, { childList:true, subtree:true });
-})();
-</script>
-        <?php
+
+    /**
+     * Ombra «Personalizzata» dell'immagine: X, Y, sfocatura, estensione, colore, interna.
+     * Il controllo (FieldBoxShadow) salva l'oggetto `image_shadow_custom` e, col ponte
+     * legacy, le sei chiavi piatte `image_shadow_*`: si legge prima l'oggetto, poi le
+     * chiavi piatte, poi i valori di partenza del controllo (0 4 10 0, nero al 15%).
+     *
+     * @param array $s Settings.
+     * @return string Valore di box-shadow, CSS-safe.
+     */
+    private function ombra_personalizzata( $s ) {
+        $obj   = ( isset( $s['image_shadow_custom'] ) && is_array( $s['image_shadow_custom'] ) ) ? $s['image_shadow_custom'] : [];
+        $leggi = function ( $k, $def ) use ( $obj, $s ) {
+            if ( isset( $obj[ $k ] ) && $obj[ $k ] !== '' ) {
+                return $obj[ $k ];
+            }
+            $flat = $s[ 'image_shadow_' . $k ] ?? '';
+            return ( $flat !== '' && $flat !== null ) ? $flat : $def;
+        };
+        $h      = intval( $leggi( 'h', 0 ) );
+        $v      = intval( $leggi( 'v', 4 ) );
+        $blur   = max( 0, intval( $leggi( 'blur', 10 ) ) );
+        $spread = intval( $leggi( 'spread', 0 ) );
+        $color  = $this->safe_color_css( (string) $leggi( 'color', '' ) ) ?: 'rgba(0,0,0,0.15)';
+        $in     = $leggi( 'inset', false );
+        $inset  = ( $in === true || $in === 1 || $in === '1' || $in === 'true' ) ? 'inset ' : '';
+        return $inset . $h . 'px ' . $v . 'px ' . $blur . 'px ' . $spread . 'px ' . $color;
     }
 
     private function validate_position( $pos ) {
@@ -556,8 +498,21 @@ class Olobuild_Content_Tile extends Olobuild_Tile_Base {
             return;
         }
 
-        $att_id   = absint( $s['image_id'] ?? 0 );
-        $img_html = Olobuild_Tile_Utils::img_srcset( $att_id, $s['image'], wp_strip_all_tags( $s['title'] ?? '' ), $img_class );
+        $att_id = absint( $s['image_id'] ?? 0 );
+        if ( ! $att_id ) {
+            $att_id = absint( attachment_url_to_postid( (string) $s['image'] ) );
+        }
+        // Testo alternativo: quello scritto nella tile, altrimenti quello della libreria
+        // media. Prima leggeva `title`, una chiave che questa tile non ha: l'alt usciva
+        // sempre vuoto (resta come seconda scelta per i dati di prima).
+        $alt = trim( wp_strip_all_tags( (string) ( $s['image_alt'] ?? '' ) ) );
+        if ( $alt === '' ) {
+            $alt = trim( wp_strip_all_tags( (string) ( $s['title'] ?? '' ) ) );
+        }
+        if ( $alt === '' && $att_id ) {
+            $alt = trim( (string) get_post_meta( $att_id, '_wp_attachment_image_alt', true ) );
+        }
+        $img_html = Olobuild_Tile_Utils::img_srcset( $att_id, $s['image'], $alt, $img_class );
         $img_html = $this->render_hover_wrap( $img_html, $s['hover_image'] ?? '', $s['hover_video'] ?? '' );
 
         if ( ! empty( $link_url ) ) {

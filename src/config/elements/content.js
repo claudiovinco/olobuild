@@ -1,7 +1,7 @@
 
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
 import { ratioOptions } from './_imageFrame.js';
-import { demo } from '../demoMedia.js';
+import { demo, demoAlt } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -31,10 +31,12 @@ export default {
     heading_font_weight: '',
     text: t('Aggiungi il tuo contenuto qui.'),
     text_color: '',
+    text_align: '',
     text_font_family: '',
     text_font_size: '',
     text_font_weight: '',
     image: '',
+    image_alt: '',
     image_position: 'top',
     image_width: '40',
     image_height: 'auto',
@@ -81,6 +83,7 @@ export default {
     heading: t('Uno studio che lavora al tuo fianco'),
     text: t('<p>Da oltre quindici anni seguiamo persone e imprese nei progetti che contano: ascoltiamo prima di proporre e ogni lavoro parte da un incontro <strong>senza impegno</strong>.</p><p>Un referente unico dall\'inizio alla fine, preventivi chiari e tempi di consegna concordati per iscritto.</p>'),
     image: demo('ufficio'),
+    image_alt: demoAlt('ufficio'),
     image_position: 'left',
     image_position_mobile: 'top',
     image_width: '40',
@@ -99,6 +102,9 @@ export default {
 
     { type: 'separator', label: t('Immagine') },
     { key: 'image', label: t('Immagine'), type: 'image' },
+    { key: 'image_alt', label: t('Testo alternativo'), type: 'text',
+      description: t('Descrive l’immagine a chi non la vede. Vuoto = il testo alternativo dell’immagine nella libreria media.'),
+      condition: { field: 'image', op: 'notEmpty' } },
     { key: 'hover_image', label: t('Immagine hover'), type: 'image' },
     { key: 'hover_video', label: t('Video hover (mp4)'), type: 'media' },
 
@@ -176,7 +182,7 @@ export default {
       sizeMin: 12, sizeMax: 60,
     },
 
-    { type: 'separator', label: t('Titolo') },
+    { type: 'separator', label: t('Titolo e testo') },
     { key: 'heading_size', label: t('Dim. titolo'), type: 'select', responsive: true, options: [
       { value: 'sm', label: t('Piccolo') },
       { value: 'md', label: t('Medio') },
@@ -191,6 +197,15 @@ export default {
       { value: 'justify', label: t('Giustifica') },
     ]},
     { key: 'heading_gap', label: t('Gap titolo-testo'), type: 'range', min: 0, max: 60, step: 2 },
+    // Il corpo del testo non aveva un allineamento suo: solo il titolo. «Predefinito» =
+    // eredita dal contenitore, come prima (class-content-tile.php, text_align).
+    { key: 'text_align', label: t('Allineamento testo'), type: 'select', responsive: true, options: [
+      { value: '', label: t('Predefinito') },
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
+      { value: 'justify', label: t('Giustifica') },
+    ]},
 
     { type: 'separator', label: t('Immagine') },
     { key: 'image_width', label: t('Larghezza immagine'), type: 'range', min: 20, max: 80, step: 5,
@@ -211,7 +226,7 @@ export default {
     ]},
     { key: 'object_position', label: t('Punto focale'), type: 'object-position',
       contextKeys: { src: 'image', fit: 'image_fit', ratio: 'aspect_ratio', ratioCustom: 'aspect_ratio_custom' } },
-    withHover({ key: 'image_radius', label: t('Raggio'), type: 'border-radius' }),
+    withHover({ key: 'image_radius', label: t('Raggio'), type: 'border-radius' }, { defaultDuration: 400 }),
     { key: 'image_border', label: t('Bordo immagine'), type: 'border',
       legacyKeys: { width: 'image_border_width', color: 'image_border_color' } },
     { key: 'image_shadow', label: t('Ombra'), type: 'select', options: [

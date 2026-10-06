@@ -3197,3 +3197,25 @@ html:has(.olo-frontend-grid) {
   -webkit-mask-position: var(--olo-pat-p);
   mask-position: var(--olo-pat-p);
 }
+/* ── Contenuto: liste nel corpo del testo ─────────────────────────
+ * Il testo della tile Contenuto viene dallo stesso editor della tile Testo, ma le
+ * regole qui sopra valevano solo per .olo-text-block: coi temi che azzerano
+ * list-style gli elenchi perdevano pallini e numeri. */
+.olo-ct-text-body ul {
+  list-style: disc outside;
+  padding-left: 1.5em;
+  margin: 0 0 0.8em;
+}
+.olo-ct-text-body ol {
+  list-style: decimal outside;
+  padding-left: 1.5em;
+  margin: 0 0 0.8em;
+}
+.olo-ct-text-body ul ul { list-style: circle outside; }
+.olo-ct-text-body ul ul ul { list-style: square outside; }
+.olo-ct-text-body ol ol { list-style: lower-alpha outside; }
+.olo-ct-text-body ol ol ol { list-style: lower-roman outside; }
+.olo-ct-text-body li { margin: 0.2em 0; }
+.olo-ct-text-body li > p { margin: 0; }
+.olo-ct-text-body li > p + p { margin-top: 0.4em; }
+
