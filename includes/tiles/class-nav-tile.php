@@ -77,7 +77,9 @@ class Olobuild_Nav_Tile extends Olobuild_Tile_Base {
 
         // Colors with fallbacks (safe_color_css validates; empty/invalid falls back as before)
         $link_color  = $this->safe_color_css( $s['link_color'] ) ?: 'var(--olo-color-text-muted, #9CA3AF)';
-        $hover_color = $this->safe_color_css( $s['link_hover_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
+        // Colore hover di riserva: era il colore dei BORDI (grigio chiarissimo) e al passaggio la
+        // voce spariva sullo sfondo chiaro. Ora il colore del sito, come l'indicatore attivo.
+        $hover_color = $this->safe_color_css( $s['link_hover_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $active_color = $this->safe_color_css( $s['active_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $icon_color  = $this->safe_color_css( $s['icon_color'] ) ?: '';
         $hover_bg    = $this->safe_color_css( $s['hover_bg'] ) ?: '';
