@@ -115,7 +115,10 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
         // si salvava da se' col suo :nth-child(1); bento e mosaic no.
         switch ( $layout ) {
             case 'bento':
-                return ".{$uid}-grid{display:grid;grid-template-columns:repeat({$cols},1fr);grid-auto-rows:minmax(160px,auto);gap:{$gap}px}"
+                // dense: le celle larghe e alte lasciavano buchi che nessuna card riempiva
+                // (con 7 lavori su 3 colonne restava un vuoto accanto alla grande); così le
+                // card successive risalgono a chiuderli, come nel mosaic.
+                return ".{$uid}-grid{display:grid;grid-template-columns:repeat({$cols},1fr);grid-auto-flow:dense;grid-auto-rows:minmax(160px,auto);gap:{$gap}px}"
                      . ".{$uid}-grid .olo-pf-item:nth-child(7n+1){grid-column:span 2;grid-row:span 2}"
                      . ".{$uid}-grid .olo-pf-item:nth-child(7n+4){grid-column:span 2}"
                      . ".{$uid}-grid .olo-pf-item:nth-child(7n+6){grid-row:span 2}"
@@ -213,15 +216,22 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
                 return "{$sel_card}:hover .olo-pf-img-wrap img{animation:olo-pf-cycle-{$uid} 1500ms ease-in-out infinite}"
                      . "@keyframes olo-pf-cycle-{$uid}{0%,100%{filter:hue-rotate(0deg)}33%{filter:hue-rotate(40deg)}66%{filter:hue-rotate(-40deg)}}";
             case 'caption-corner':
+                // I due lati opposti all'angolo vanno su auto: il velo di base ha inset:0, e
+                // senza azzerarli la «didascalia d'angolo» era un riquadro grande quanto la card
+                // (in hover copriva la foto).
                 $pos = [
-                    'bottom-left'  => 'left:0;bottom:0;transform:translateY(100%);transform-origin:left bottom',
-                    'bottom-right' => 'right:0;bottom:0;transform:translateY(100%);transform-origin:right bottom',
-                    'top-left'     => 'left:0;top:0;transform:translateY(-100%);transform-origin:left top',
-                    'top-right'    => 'right:0;top:0;transform:translateY(-100%);transform-origin:right top',
+                    'bottom-left'  => 'top:auto;right:auto;left:0;bottom:0;transform:translateY(100%);transform-origin:left bottom',
+                    'bottom-right' => 'top:auto;left:auto;right:0;bottom:0;transform:translateY(100%);transform-origin:right bottom',
+                    'top-left'     => 'bottom:auto;right:auto;left:0;top:0;transform:translateY(-100%);transform-origin:left top',
+                    'top-right'    => 'bottom:auto;left:auto;right:0;top:0;transform:translateY(-100%);transform-origin:right top',
                 ];
                 $css = isset( $pos[ $caption_corner ] ) ? $pos[ $caption_corner ] : $pos['bottom-left'];
-                $hidden_to = strpos( $caption_corner, 'top' ) !== false ? '-100%' : '100%';
-                return "{$sel_card} .olo-pf-overlay{position:absolute;{$css};width:auto;height:auto;max-width:80%;background:#fff;color:#0f172a;padding:14px 18px;display:block;text-align:left;transition:transform 300ms cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 8px 20px rgba(15,23,42,0.18);border-radius:6px;margin:12px;opacity:1}"
+                // A riposo la didascalia (margin 12px) scendeva solo della sua altezza: ne
+                // restava una striscia bianca di 12px sul bordo della foto, più l'ombra. La si
+                // porta fuori di margine + ombra; e i colori seguono la palette (erano #fff/#0f172a).
+                $fuori = strpos( $caption_corner, 'top' ) !== false ? 'calc(-100% - 40px)' : 'calc(100% + 40px)';
+                $css   = str_replace( [ 'translateY(-100%)', 'translateY(100%)' ], 'translateY(' . $fuori . ')', $css );
+                return "{$sel_card} .olo-pf-overlay{position:absolute;{$css};width:auto;height:auto;max-width:80%;background:var(--olo-color-background, #ffffff);color:var(--olo-color-text, #0f172a);padding:14px 18px;display:block;text-align:left;transition:transform 300ms cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 8px 20px rgba(15,23,42,0.18);border-radius:6px;margin:12px;opacity:1}"
                      . "{$sel_card}:hover .olo-pf-overlay{transform:translateY(0)}";
         }
         return '';
@@ -244,6 +254,14 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
         // Index numbering
         if ( ! empty( $s['index_numbering'] ) ) {
             $css .= ".{$uid}-grid .olo-pf-item .olo-pf-index{position:absolute;top:12px;left:16px;font-size:11px;font-weight:600;letter-spacing:2px;color:{$accent};font-family:ui-monospace,monospace;z-index:3;background:rgba(255,255,255,0.9);padding:3px 8px;border-radius:3px}";
+            // Nell'indice laterale (split-index) le voci sono righe di testo senza foto: il
+            // numero, assoluto in alto a sinistra, finiva sopra categoria e titolo. Lì va in una
+            // colonna sua, accanto al testo.
+            if ( ( $s['layout'] ?? '' ) === 'split-index' ) {
+                $css .= ".{$uid}-grid .olo-pf-list .olo-pf-item{grid-template-columns:auto 1fr;column-gap:14px;align-items:start}"
+                      . ".{$uid}-grid .olo-pf-list .olo-pf-item .olo-pf-index{position:static;grid-row:1 / span 2;padding:2px 0 0;background:none;border-radius:0;line-height:1.3}"
+                      . ".{$uid}-grid .olo-pf-list .olo-pf-item>.olo-pf-cat,.{$uid}-grid .olo-pf-list .olo-pf-item>.olo-pf-title{grid-column:2}";
+            }
         }
         // External link badge
         if ( ! empty( $s['external_link_badge'] ) ) {
@@ -606,6 +624,11 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
                 <?php elseif ( in_array( $layout, [ 'grid','bento','mosaic','polaroid','postcard-stack' ], true ) ) : ?>
                 .<?php echo $uid; ?>-grid { grid-template-columns: 1fr; }
                 <?php endif; ?>
+                <?php if ( $layout === 'bento' || $layout === 'mosaic' ) : ?>
+                /* Su una colonna le card larghe (span 2) creavano una seconda colonna implicita
+                   larga 0: uscivano più larghe delle altre di un gap. */
+                .<?php echo $uid; ?>-grid .olo-pf-item:nth-child(n) { grid-column: auto; }
+                <?php endif; ?>
             }
             @media (min-width: 641px) and (max-width: 1024px) {
                 <?php if ( $layout === 'masonry' || $layout === 'masonry-pin' ) : ?>
@@ -826,7 +849,9 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
         if ( ! empty( $item['image'] ) ) {
             echo '<img src="' . esc_url( $item['image'] ) . '" alt="' . esc_attr( $item['title'] ) . '" loading="lazy" style="object-position:' . esc_attr( $obj_pos ) . ';" />';
         } else {
-            echo '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#1F2937;min-height:120px;"><span style="font-size:32px;opacity:0.3;">&#x1F5BC;</span></div>';
+            // Lavoro senza foto: l'icona «immagine» del set SVG (era l'emoji del quadro, che ogni sistema
+            // disegna a modo suo) e il fondo dal ruolo Scuro della palette (era #1F2937 fisso).
+            echo '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--olo-color-dark, #1F2937);color:var(--olo-color-light, #ffffff);min-height:120px;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.35" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg></div>';
         }
 
         // Year stamp
