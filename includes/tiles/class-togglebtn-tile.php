@@ -105,7 +105,10 @@ class Olobuild_ToggleBtn_Tile extends Olobuild_Tile_Base {
         // Raggio in hover: legge anche la sua «Durata» (btn_border_radius_hover_duration, 300 ms
         // come l'inspector); prima erano 400 ms fissi e il campo non agiva.
         $radius_hover_rules = Olobuild_Tile_Utils::radius_hover_rules( '.' . $uid, $s, 'btn_border_radius_hover', $btn_tr );
-        $border_css         = $this->build_border_css( $s['btn_border'] );
+        // Si parte da «border:0»: build_border_css() non scrive niente coi lati a 0 e scrive solo
+        // i lati diversi da 0 quando non sono uguali, e sugli altri restava il «2px outset» che il
+        // browser dà a ogni <button> (lati a 0 = un bordo grigio in rilievo, non nessun bordo).
+        $border_css         = 'border:0;' . $this->build_border_css( $s['btn_border'] );
         // Padding pulsante: controllo unico a 4 lati (tile_padding), ripiego legacy x/y.
         $btn_pad = Olobuild_Tile_Utils::spacing_sides(
             $s['tile_padding'] ?? null,
@@ -134,6 +137,8 @@ class Olobuild_ToggleBtn_Tile extends Olobuild_Tile_Base {
                 background: <?php echo $bg; ?>;
                 <?php echo $sfondo['css_con_livelli']; ?>
                 color: <?php echo $color; ?>;
+                <?php // Il <button> non eredita il font: senza questa riga usciva in Arial, fuori tema. ?>
+                font-family: inherit;
                 font-size: <?php echo (int) $fsize; ?>px;
                 font-weight: <?php echo $fweight; ?>;
                 line-height: 1.2;
