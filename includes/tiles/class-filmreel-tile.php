@@ -87,11 +87,17 @@ class Olobuild_FilmReel_Tile extends Olobuild_Tile_Base {
         $accent = $this->safe_color_css( $s['accent'] ?? '' ) ?: 'var(--olo-color-primary, #C6F24E)';
         $bg     = $this->safe_color_css( $s['bg_color'] ?? '' ) ?: 'var(--olo-color-surface-alt, #101218)';
         $line   = Olobuild_Tile_Utils::border_color( $s['border_color'] ?? null, 'var(--olo-color-border, rgba(236,234,227,.10))' );
-        $line2  = $this->safe_color_css( $s['border_color'] ?? '' ) ?: 'rgba(236,234,227,.20)';
+        // «Colore linee» è un controllo Bordo: salvato come oggetto, safe_color_css() lo
+        // leggeva come la stringa «Array» e usciva `border-top:1px solid Array` (linee sparite).
+        $line2  = Olobuild_Tile_Utils::border_color( $s['border_color'] ?? null, 'rgba(236,234,227,.20)' );
         $prog   = $this->safe_color_css( $s['progress_color'] ?? '' ) ?: $accent;
         $text   = 'var(--olo-color-text, #ECEAE3)';
         $muted  = 'var(--olo-color-text-muted, #a0a298)';
         $itembg = 'var(--olo-color-muted, #161922)';
+        // Testo SUI fotogrammi (nome e progetto sopra la sfumatura scura del piede): sempre
+        // chiaro. Col testo della palette, scuro sui temi chiari, il nome era scuro su scuro.
+        $on_frame   = 'var(--olo-color-light, #ECEAE3)';
+        $frame_fade = 'color-mix(in srgb, var(--olo-color-dark, #08090c) 82%, transparent)';
 
         $disp = "var(--olo-font-family-heading, 'Big Shoulders Display',sans-serif)";
         $sans = "var(--olo-font-family, 'Hanken Grotesk',sans-serif)";
@@ -124,6 +130,9 @@ class Olobuild_FilmReel_Tile extends Olobuild_Tile_Base {
 
         // ── KIT standard: sfondo completo (override del bg di base SOLO se valorizzato) ──
         $bg_block = 'background:' . $bg . ';';
+        // Vuoto senza sfondo completo: pattern_layer_css() lo legge sempre (prima «Undefined
+        // variable» a ogni render con lo sfondo «nessuno»).
+        $bg_decl  = '';
         $bg_obj   = $s['bg'] ?? null;
         if ( is_array( $bg_obj ) && ! empty( $bg_obj['type'] ) && $bg_obj['type'] !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
             $bg_decl = ( new Olobuild_CSS_Builder() )->get_bg_inline_css( $bg_obj );
@@ -168,15 +177,15 @@ class Olobuild_FilmReel_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ofr-pcap{flex:0 0 clamp(220px,22vw,300px);display:flex;flex-direction:column;justify-content:center;padding-right:20px;align-self:center;}
             .<?php echo $uid; ?> .ofr-eyebrow{display:block;margin-bottom:16px;font-family:<?php echo $mono; ?>;font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;color:<?php echo $accent; ?>;}
             .<?php echo $uid; ?> .ofr-pcap p{color:<?php echo $muted; ?>;font-size:15px;line-height:1.6;margin:14px 0 0;max-width:30ch;}
-            .<?php echo $uid; ?> .ofr-item{position:relative;flex:0 0 clamp(260px,30vw,420px);height:clamp(320px,56vh,560px);overflow:hidden;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['border_color'] ?? null, [ 'width' => 1, 'color' => $line ] ) ); ?>background:<?php echo $itembg; ?>;scroll-snap-align:center;display:block;color:<?php echo $text; ?>;text-decoration:none;}
+            .<?php echo $uid; ?> .ofr-item{position:relative;flex:0 0 clamp(260px,30vw,420px);height:clamp(320px,56vh,560px);overflow:hidden;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['border_color'] ?? null, [ 'width' => 1, 'color' => $line ] ) ); ?>background:<?php echo $itembg; ?>;scroll-snap-align:center;display:block;color:<?php echo $on_frame; ?>;text-decoration:none;}
             .<?php echo $uid; ?> .ofr-item.tall{height:clamp(360px,62vh,610px);align-self:flex-start;}
             .<?php echo $uid; ?> .ofr-item.short{height:clamp(260px,46vh,460px);align-self:center;}
             .<?php echo $uid; ?> .ofr-item:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, <?php echo $accent; ?> 30%, transparent);}
             .<?php echo $uid; ?> .ofr-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:<?php echo esc_attr( $obj_pos ); ?>;background-position:<?php echo esc_attr( $obj_pos ); ?>;display:block;}
             .<?php echo $uid; ?> .ofr-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(236,234,227,.05);}
             .<?php echo $uid; ?> .ofr-ph span{font-family:<?php echo $mono; ?>;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:<?php echo $muted; ?>;text-align:center;padding:0 18px;}
-            .<?php echo $uid; ?> .ofr-meta{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:flex-end;justify-content:space-between;gap:10px;padding:14px 15px;background:linear-gradient(transparent,rgba(8,9,12,.82));pointer-events:none;z-index:5;}
-            .<?php echo $uid; ?> .ofr-name{font-family:<?php echo $disp; ?>;font-weight:700;font-size:22px;text-transform:uppercase;line-height:1;color:<?php echo $text; ?>;}
+            .<?php echo $uid; ?> .ofr-meta{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:flex-end;justify-content:space-between;gap:10px;padding:14px 15px;background:linear-gradient(transparent,<?php echo $frame_fade; ?>);pointer-events:none;z-index:5;}
+            .<?php echo $uid; ?> .ofr-name{font-family:<?php echo $disp; ?>;font-weight:700;font-size:22px;text-transform:uppercase;line-height:1;color:<?php echo $on_frame; ?>;}
             .<?php echo $uid; ?> .ofr-tag{font-family:<?php echo $mono; ?>;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:<?php echo $accent; ?>;white-space:nowrap;}
             <?php if ( $show_prog ) : ?>
             .<?php echo $uid; ?> .ofr-prog{margin:6px <?php echo $pad; ?> 0;height:2px;background:<?php echo $line; ?>;position:relative;}
