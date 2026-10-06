@@ -91,7 +91,9 @@ export default {
       { value: 'upload', label: t('Carica file SVG') },
       { value: 'code', label: t('Codice SVG') },
     ]},
-    { key: 'svg_url', label: t('File SVG'), type: 'image', condition: { field: 'source_type', value: 'upload' } },
+    // `segnaposto: false`: il PNG grigio che il builder mette nei campi immagine vuoti finiva qui,
+    // e il PHP lo scaricava a ogni render per poi scartarlo come «SVG non valido».
+    { key: 'svg_url', label: t('File SVG'), type: 'image', segnaposto: false, condition: { field: 'source_type', value: 'upload' } },
     { key: 'svg_code', label: t('Codice SVG'), type: 'textarea', rows: 8, placeholder: '<svg viewBox="0 0 100 100">...</svg>', condition: { field: 'source_type', value: 'code' } },
 
     // ── ANIMAZIONE (behavior) ──
