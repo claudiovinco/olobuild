@@ -3,6 +3,11 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.558 - 2026-10-06
+- Menu Nav: il menu mobile «Schermo intero» si regola dall'inspector. Nel Contenuto ci sono logo, numeri e descrizioni delle voci (si scrivono in Aspetto → Menu). Nello Stile ci sono fondo, allineamento, colore delle voci anche in Hover, tipografia (carattere, misura, peso, maiuscolo, spaziatura), colore dei numeri, linee fra le voci e colore della X. Prima era sempre fondo nero e voci bianche al centro. Le Voci pulsante restano pulsanti anche qui, e una voce che si apre in una nuova scheda lo fa anche su telefono.
+- Particelle: per i coriandoli su tutta la pagina c'è «Quando parte», all'apertura o quando la tile entra nello schermo, e c'è la «Durata» dello scoppio. Lo scoppio nasce nella parte di pagina che si sta guardando e i coriandoli planano invece di precipitare. Prima partiva sempre in cima al documento all'apertura e durava 3 secondi: più in basso non si vedeva.
+- Goo: la nuova «Ampiezza deriva» regola quanto si spostano i blob, e la Velocità deriva arriva a 2. Con blob grandi e sfocati, come nell'aurora, il movimento ora si vede; prima si spostavano di pochi pixel e la tile sembrava ferma. Le pagine già fatte restano come sono.
+
 ## v1.4.557 - 2026-10-06 (fix)
 - Hero: sul telefono il titolo si riduce quanto serve e non esce più dalla tile (prima un titolo grande veniva tagliato, per esempio «SAGRA…»). Sul computer resta la misura scelta.
 - Hero split: sul telefono le statistiche stanno su due colonne e la parola grande delle card si legge intera (prima quattro statistiche allargavano la colonna oltre la tile e le parole delle card venivano tagliate).
