@@ -282,6 +282,18 @@ class Olobuild_Form_Handler {
             }
         }
 
+        // 4a. Numero massimo di invii: il modulo col suo nome (firmato nel config) si chiude quando li ha
+        //     ricevuti tutti, prima di mandare email e servizi.
+        $nome_modulo = sanitize_text_field( $config['form_name'] ?? '' );
+        $limite      = absint( $config['submissions_limit'] ?? 0 );
+        if ( '' !== $nome_modulo && $limite > 0 && class_exists( 'Olobuild_Form_Submissions' )
+            && Olobuild_Form_Submissions::count_for( $nome_modulo ) >= $limite ) {
+            return new WP_REST_Response( [
+                'success' => false,
+                'data'    => [ 'message' => sanitize_text_field( $config['limit_message'] ?? '' ) ?: 'Il modulo è chiuso: sono arrivati tutti gli invii previsti.' ],
+            ], 409 );
+        }
+
         // 4b. reCAPTCHA v3 verification
         if ( ! empty( $config['recaptcha_enabled'] ) ) {
             $recaptcha_secret = get_option( 'olobuild_recaptcha_secret_key', '' );
@@ -600,8 +612,16 @@ class Olobuild_Form_Handler {
 
         // 14. Store in form submissions dashboard table
         if ( class_exists( 'Olobuild_Form_Submissions' ) ) {
-            $form_name = $form_id ?: sanitize_text_field( $config['email_subject'] ?? 'Form' );
+            // Col «Nome del modulo» gli invii stanno insieme; senza, il nome è l'id della resa, che cambia
+            // a ogni caricamento della pagina.
+            $form_name = '' !== $nome_modulo ? $nome_modulo : ( $form_id ?: sanitize_text_field( $config['email_subject'] ?? 'Form' ) );
             Olobuild_Form_Submissions::save_submission( $form_name, $sanitized, $this->get_client_ip() );
+            // L'invio che chiude il modulo svuota la cache delle pagine: chi arriva dopo vede il messaggio
+            // a modulo chiuso, non il modulo.
+            if ( '' !== $nome_modulo && $limite > 0 && Olobuild_Form_Submissions::count_for( $nome_modulo ) >= $limite
+                && class_exists( 'Olobuild_FullPage_Cache' ) ) {
+                Olobuild_FullPage_Cache::purge_all();
+            }
         }
 
         if ( $sent ) {

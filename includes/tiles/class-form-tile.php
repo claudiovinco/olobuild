@@ -110,6 +110,11 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
         'file_max_size'     => '5',
         'file_types'        => '.pdf,.doc,.docx,.jpg,.png',
         'store_submissions' => false,
+        // Nome del modulo (raggruppa gli invii) e Numero massimo di invii: raggiunto, al posto del modulo
+        // compare limit_message. 0 = nessun limite.
+        'form_name'         => '',
+        'submissions_limit' => 0,
+        'limit_message'     => 'Il modulo è chiuso: sono arrivati tutti gli invii previsti.',
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -131,6 +136,15 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
         $fields = is_array( $s['fields'] ) ? $s['fields'] : [];
         if ( empty( $fields ) ) {
             return '';
+        }
+
+        // Numero massimo di invii raggiunto: al posto del modulo il messaggio a modulo chiuso.
+        $nome_modulo = sanitize_text_field( (string) ( $s['form_name'] ?? '' ) );
+        $limite      = absint( $s['submissions_limit'] ?? 0 );
+        if ( '' !== $nome_modulo && $limite > 0 && class_exists( 'Olobuild_Form_Submissions' )
+            && Olobuild_Form_Submissions::count_for( $nome_modulo ) >= $limite ) {
+            return '<div class="olo-form-chiuso" role="status" style="padding:1.2em 1.35em;border-radius:.65em;border:1px solid color-mix(in srgb, currentColor 18%, transparent);font-size:15px;line-height:1.6">'
+                . esc_html( (string) ( $s['limit_message'] ?? '' ) ?: $this->defaults['limit_message'] ) . '</div>';
         }
 
         // ── Settings ──
@@ -335,6 +349,15 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
             'webhook_url'       => esc_url_raw( $s['webhook_url'] ?? '' ),
             'webhook_method'    => in_array( $s['webhook_method'] ?? 'POST', [ 'POST', 'PUT' ], true ) ? ( $s['webhook_method'] ?? 'POST' ) : 'POST',
         ];
+        // Nome e limite entrano nel config firmato solo se impostati: un modulo senza stampa lo stesso
+        // config (e lo stesso token) di prima. Firmati, nessuno li cambia dal browser per aggirare il limite.
+        if ( '' !== $nome_modulo ) {
+            $form_config_data['form_name'] = $nome_modulo;
+            if ( $limite > 0 ) {
+                $form_config_data['submissions_limit'] = $limite;
+                $form_config_data['limit_message']     = sanitize_text_field( (string) ( $s['limit_message'] ?? '' ) );
+            }
+        }
 
         // HubSpot, ActiveCampaign, ConvertKit e Brevo: l'inspector li offre e l'handler li
         // esegue, ma il config firmato non li portava e nessuno partiva mai. Entrano solo se

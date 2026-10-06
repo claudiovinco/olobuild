@@ -129,6 +129,9 @@ export default {
     file_max_size: '5',
     file_types: '.pdf,.doc,.docx,.jpg,.png',
     store_submissions: false,
+    form_name: '',
+    submissions_limit: 0,
+    limit_message: 'Il modulo è chiuso: sono arrivati tutti gli invii previsti.',
     privacy_checkbox: false,
     privacy_text: 'Accetto il trattamento dei dati personali secondo la <a href="/privacy-policy">Privacy Policy</a>',
     ...textEffectsDefaults,
@@ -273,6 +276,16 @@ export default {
 
     { type: 'separator', label: t('Archiviazione') },
     { key: 'store_submissions', label: t('Salva invii nel database'), type: 'toggle' },
+    { key: 'form_name', label: t('Nome del modulo'), type: 'text', placeholder: t('Es. Prenotazioni'),
+      description: t('Raggruppa gli invii di questo modulo nella pagina Invii e permette di fissarne un numero massimo. Due moduli con lo stesso nome contano insieme.') },
+    { key: 'submissions_limit', label: t('Numero massimo di invii'), type: 'number', min: 0, step: 1,
+      description: t('Raggiunto questo numero, al posto del modulo compare il messaggio a modulo chiuso. 0 = nessun limite. Contano gli invii ricevuti con questo nome: eliminarne uno nella pagina Invii riapre un posto.'),
+      condition: { field: 'form_name', op: 'notEmpty' } },
+    { key: 'limit_message', label: t('Messaggio a modulo chiuso'), type: 'textarea',
+      condition: [
+        { field: 'form_name', op: 'notEmpty' },
+        { field: 'submissions_limit', op: 'gt', value: 0 },
+      ] },
 
     { type: 'separator', label: t('Anti-spam') },
     { key: 'honeypot', label: t('Honeypot (consigliato)'), type: 'toggle' },

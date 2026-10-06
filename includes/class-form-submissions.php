@@ -87,6 +87,19 @@ class Olobuild_Form_Submissions {
     }
 
     /**
+     * Quanti invii ha ricevuto un modulo col suo «Nome del modulo» (Numero massimo di invii).
+     *
+     * @param string $form_name Nome del modulo.
+     * @return int
+     */
+    public static function count_for( $form_name ) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'olobuild_form_submissions';
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- tabella custom del plugin; $table da $wpdb->prefix; il nome passa da prepare; conteggio che deve essere sempre fresco.
+        return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $table WHERE form_name = %s", sanitize_text_field( $form_name ) ) );
+    }
+
+    /**
      * Mark a submission as read.
      */
     public static function mark_read( $id ) {
