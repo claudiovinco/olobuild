@@ -183,9 +183,9 @@ export default {
     cta2_color_hover: 'var(--olo-color-light, #f8f9fa)',
     cta2_border: 'var(--olo-color-dark, #16263d)',
     stats: [
-      { value: '15+', value_color: 'var(--olo-color-dark, #16263d)', label: t('Anni di esperienza') },
-      { value: '320', value_color: 'var(--olo-color-primary, #e1474f)', label: t('Progetti consegnati') },
-      { value: '4,9', value_color: 'var(--olo-color-dark, #16263d)', label: t('Voto medio dei clienti') },
+      { value: '15+', value_color: 'var(--olo-color-dark, #16263d)', label: t('Anni di esperienza'), italic: false },
+      { value: '320', value_color: 'var(--olo-color-primary, #e1474f)', label: t('Progetti consegnati'), italic: false },
+      { value: '4,9', value_color: 'var(--olo-color-dark, #16263d)', label: t('Voto medio dei clienti'), italic: false },
     ],
     panel: 'media',
     panel_media: { type: 'image', image_url: demo('ufficio'), image_size: 'cover', image_position: 'center center' },
@@ -194,6 +194,7 @@ export default {
     panel_badge_label: t('anni al tuo fianco'),
     showcase_badge_dot: 'var(--olo-color-primary, #e1474f)',
     showcase_badge_bg: 'var(--olo-color-light, #f8f9fa)',
+    showcase_badge_color: 'var(--olo-color-dark, #16263d)',
     split_ratio: '1.2fr 1fr',
     gap: 72,
     min_height: 0,
@@ -231,7 +232,9 @@ export default {
     { type: 'separator', label: t('Statistiche (fascia in fondo)') },
     { key: 'stats', label: t('Voci'), type: 'content-items',
       itemLabel: t('Stat'),
-      defaults: { value: '0', value_color: '#0f172a', label: 'LABEL' },
+      // newItemDefaults (non `defaults`, che ContentItemsEditor non legge): la voce aggiunta
+      // salva italic:false, così la regola storica «corsivo su Gratis» resta solo alle voci vecchie.
+      newItemDefaults: { value: '0', value_color: 'var(--olo-color-dark, #16263d)', label: t('Etichetta'), italic: false },
       itemFields: [
         { key: 'value',       label: t('Valore'),        type: 'text' },
         { key: 'label',       label: t('Etichetta'),     type: 'text' },
@@ -343,6 +346,9 @@ export default {
       condition: { field: 'panel', op: 'eq', value: 'showcase' } },
     { key: 'showcase_badge_bg',  label: t('Sfondo badge'),   type: 'color',
       condition: { field: 'panel', op: 'eq', value: 'showcase' } },
+    // Il PHP leggeva showcase_badge_color da sempre, ma nessun controllo lo offriva.
+    { key: 'showcase_badge_color', label: t('Colore testo badge'), type: 'color',
+      condition: { field: 'panel', op: 'eq', value: 'showcase' } },
 
     { type: 'separator', label: t('Showcase card'), condition: { field: 'panel', op: 'eq', value: 'showcase' } },
     withHover({ key: 'showcase_card_radius', label: t('Raggio card'), type: 'border-radius',
@@ -363,8 +369,11 @@ export default {
       condition: { field: 'panel', op: 'eq', value: 'showcase' } },
 
     { type: 'separator', label: t('Statistiche') },
+    // Corsivo per voce: prima il renderer lo metteva da sé solo sul valore «Gratis». Le voci salvate
+    // senza la chiave tengono quella regola finché non si tocca l'interruttore.
     { key: 'stats', type: 'content-items', label: t('Voci'), itemLabel: t('Stat'), etichettaDa: 'label', itemFields: [
         { key: 'value_color', label: t('Colore valore'), type: 'color' },
+        { key: 'italic',      label: t('Corsivo'),       type: 'toggle' },
     ] },
     { type: 'separator', label: t('Pannello destro') },
     { key: 'panel_aspect', label: t('Aspect ratio media (es. 4/5)'), type: 'text',

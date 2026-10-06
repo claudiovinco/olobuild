@@ -171,9 +171,14 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
         // ── Pannello destro (unificazione hero, Fase 1c) ──
         $panel = in_array( ( $s['panel'] ?? 'showcase' ), [ 'showcase', 'media', 'audio' ], true ) ? ( $s['panel'] ?? 'showcase' ) : 'showcase';
         $panel_visible = ( 'showcase' === $panel ) ? ! empty( $s['showcase_enabled'] ) : true;
-        // Pannelli media/audio: color-mix(currentColor) → si adattano a tile chiare/scure.
-        $mixp = static function ( $pct ) {
-            return 'color-mix(in srgb, currentColor ' . intval( $pct ) . '%, transparent)';
+        // Colore del testo della tile = quello del sottotitolo (il preset scuro lo porta al chiaro).
+        // Da qui filo ed etichette delle statistiche, il testo del pannello destro e le sue tinte:
+        // prima erano grigio e blu notte fissi, e il pannello ereditava il colore della pagina,
+        // così sul preset scuro il titolo del lettore audio era scuro su scuro. Un colore vero,
+        // non currentColor: dentro color-mix() currentColor può risolversi in nero.
+        $txt_base = $this->safe_color_css( $s['subhead_color'] ?? '' ) ?: 'var(--olo-color-text, #374151)';
+        $mixp = static function ( $pct ) use ( $txt_base ) {
+            return 'color-mix(in srgb, ' . $txt_base . ' ' . intval( $pct ) . '%, transparent)';
         };
         $panel_media = ( 'showcase' !== $panel ) ? $this->bg_media_parts( $s['panel_media'] ?? null, $uid . '-pm' ) : [ 'has' => false, 'css' => '', 'markup' => '' ];
         $panel_ar    = preg_match( '#^\d+\s*/\s*\d+$#', (string) ( $s['panel_aspect'] ?? '' ) ) ? str_replace( ' ', '', $s['panel_aspect'] ) : '4/5';
@@ -306,15 +311,18 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
                     $stats = is_array( $s['stats'] ) ? array_slice( $s['stats'], 0, 4 ) : [];
                     if ( $stats ) :
                     ?>
-                        <div class="olo-hsplit__stats" style="display:grid;grid-template-columns:repeat(<?php echo count( $stats ); ?>,1fr);gap:32px;padding-top:32px;border-top:1px solid rgba(15,23,42,0.12)">
+                        <div class="olo-hsplit__stats" style="display:grid;grid-template-columns:repeat(<?php echo count( $stats ); ?>,1fr);gap:32px;padding-top:32px;border-top:1px solid <?php echo esc_attr( $mixp( 14 ) ); ?>">
                             <?php foreach ( $stats as $sidx => $st ) :
                                 $val       = $st['value'] ?? '';
                                 $val_color = $this->safe_color_css( $st['value_color'] ?? '' ) ?: '#0f172a';
                                 $lbl       = $st['label'] ?? '';
+                                // Corsivo per voce (Stile → Statistiche). Le voci salvate prima del controllo
+                                // non hanno la chiave e tengono la regola di allora: corsivo solo su «Gratis».
+                                $st_italic = array_key_exists( 'italic', (array) $st ) ? ! empty( $st['italic'] ) : ( $val === 'Gratis' );
                             ?>
                                 <div class="olo-hsplit__stat">
-                                    <div style="font-family:<?php echo esc_attr( $headline_family ); ?>;font-size:36px;line-height:1;font-weight:600;color:<?php echo esc_attr( $val_color ); ?>;margin-bottom:10px;<?php echo $val === 'Gratis' ? 'font-style:italic;' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- both ternary branches are fixed literals ?>" data-olo-editable="<?php echo 'stats.' . intval( $sidx ) . '.value'; ?>"><?php echo esc_html( $val ); ?></div>
-                                    <div style="font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--olo-color-text-soft, #6b7280);line-height:1.4" data-olo-editable="<?php echo 'stats.' . intval( $sidx ) . '.label'; ?>"><?php echo esc_html( $lbl ); ?></div>
+                                    <div style="font-family:<?php echo esc_attr( $headline_family ); ?>;font-size:36px;line-height:1;font-weight:600;color:<?php echo esc_attr( $val_color ); ?>;margin-bottom:10px;<?php echo $st_italic ? 'font-style:italic;' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- both ternary branches are fixed literals ?>" data-olo-editable="<?php echo 'stats.' . intval( $sidx ) . '.value'; ?>"><?php echo esc_html( $val ); ?></div>
+                                    <div style="font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $mixp( 72 ) ); ?>;line-height:1.4" data-olo-editable="<?php echo 'stats.' . intval( $sidx ) . '.label'; ?>"><?php echo esc_html( $lbl ); ?></div>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -323,9 +331,9 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
 
                 <!-- RIGHT COLUMN: pannello (showcase | media+badge | cover+player audio) -->
                 <?php if ( $panel_visible && 'showcase' !== $panel ) : ?>
-                    <div class="olo-hsplit__right" style="position:relative;display:flex;flex-direction:column;justify-content:center">
+                    <div class="olo-hsplit__right" style="position:relative;display:flex;flex-direction:column;justify-content:center;color:<?php echo esc_attr( $txt_base ); ?>">
                         <div style="position:relative;aspect-ratio:<?php echo esc_attr( $panel_ar ); ?>">
-                            <div style="position:absolute;inset:0;border-radius:18px;overflow:hidden;border:1px solid <?php echo esc_attr( $mixp( 10 ) ); ?>;background-color:<?php echo esc_attr( $mixp( 5 ) ); ?>;background-image:repeating-linear-gradient(135deg, color-mix(in srgb, currentColor 4%, transparent) 0 16px, transparent 16px 32px);background-size:cover;background-position:center center;<?php echo esc_attr( $panel_media['has'] ? $panel_media['css'] : '' ); ?>">
+                            <div style="position:absolute;inset:0;border-radius:18px;overflow:hidden;border:1px solid <?php echo esc_attr( $mixp( 10 ) ); ?>;background-color:<?php echo esc_attr( $mixp( 5 ) ); ?>;background-image:repeating-linear-gradient(135deg, <?php echo esc_attr( $mixp( 4 ) ); ?> 0 16px, transparent 16px 32px);background-size:cover;background-position:center center;<?php echo esc_attr( $panel_media['has'] ? $panel_media['css'] : '' ); ?>">
                                 <?php if ( $panel_media['has'] && $panel_media['markup'] !== '' ) { echo $panel_media['markup']; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- media markup generated by Olobuild_CSS_Builder::get_bg_html_markup() which escapes its own attributes ?>
                                 <?php if ( ! $panel_media['has'] && ! empty( $s['panel_media_label'] ) ) : ?><span style="position:absolute;left:14px;bottom:12px;right:14px;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;opacity:.5;z-index:1"><?php echo esc_html( $s['panel_media_label'] ); ?></span><?php endif; ?>
                             </div>
