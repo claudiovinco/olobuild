@@ -354,11 +354,20 @@ class Olobuild_Gallery_Tile extends Olobuild_Tile_Base {
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php
-        // Build categories from image alt text for filter bar
+        // Categorie della barra filtro: la «Categoria» della foto e, dove manca, il suo testo
+        // alternativo (com'è sempre stato). Con `??` una categoria salvata VUOTA ('') non
+        // ricadeva sul testo alternativo: la foto restava fuori da ogni bottone.
+        $cat_di = static function ( $img ) {
+            if ( ! is_array( $img ) ) {
+                return '';
+            }
+            $c = trim( (string) ( $img['category'] ?? '' ) );
+            return '' !== $c ? $c : trim( (string) ( $img['alt'] ?? '' ) );
+        };
         $categories = [];
         if ( ! empty( $s['filter_bar'] ) ) {
             foreach ( $images as $img ) {
-                $cat = is_array( $img ) ? trim( $img['category'] ?? $img['alt'] ?? '' ) : '';
+                $cat = $cat_di( $img );
                 if ( $cat !== '' ) {
                     $categories[ $cat ] = true;
                 }
@@ -382,7 +391,7 @@ class Olobuild_Gallery_Tile extends Olobuild_Tile_Base {
                 $alt     = is_array( $img ) ? ( $img['alt'] ?? '' ) : '';
                 $caption = is_array( $img ) ? ( $img['caption'] ?? '' ) : '';
                 $att_id  = is_array( $img ) ? absint( $img['id'] ?? 0 ) : 0;
-                $cat_slug = ! empty( $s['filter_bar'] ) ? sanitize_title( is_array( $img ) ? trim( $img['category'] ?? $img['alt'] ?? '' ) : '' ) : '';
+                $cat_slug = ! empty( $s['filter_bar'] ) ? sanitize_title( $cat_di( $img ) ) : '';
                 if ( ! $url ) continue;
                 $i++;
 

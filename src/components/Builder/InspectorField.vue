@@ -364,6 +364,7 @@
         v-else-if="field.type === 'gallery'"
         :modelValue="effectiveValue"
         :righe-extra="!!field.righeExtra"
+        :categoria="!!field.categoria"
         :punto-focale="field.puntoFocale !== false"
         :fit-galleria="contestoGalleria.fit"
         :posizione-galleria="contestoGalleria.pos"

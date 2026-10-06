@@ -96,6 +96,19 @@
               />
             </template>
             <!--
+              La categoria della foto, per la barra filtro della Galleria: il PHP la
+              leggeva da `category` ma qui non c'era modo di scriverla, e il filtro
+              ripiegava sul testo alternativo. Compare solo dove il tile la chiede.
+            -->
+            <input
+              v-if="categoria"
+              type="text"
+              :value="img.category || ''"
+              @input="updateRiga(idx, 'category', $event.target.value)"
+              :placeholder="t('Categoria...')"
+              class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200 mb-placeholder-gray-500"
+            />
+            <!--
               Il comando primario non sta dentro un hover: chi non sa che
               l'anteprima si clicca non ci passa sopra il mouse per scoprirlo.
             -->
@@ -359,6 +372,8 @@ const props = defineProps({
   modelValue: { type: Array, default: () => [] },
   /** Accende sottotitolo e testo su ogni immagine. Lo chiede il tile, non il campo. */
   righeExtra: { type: Boolean, default: false },
+  /** Accende la categoria di ogni foto (filtro della Galleria). Lo chiede il tile. */
+  categoria: { type: Boolean, default: false },
   /*
    * L'inquadratura per singola foto.
    *

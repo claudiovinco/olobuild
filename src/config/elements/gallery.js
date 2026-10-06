@@ -87,8 +87,12 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'images', label: t('Immagini'), type: 'gallery' },
-    { key: 'filter_bar', label: t('Barra filtro'), type: 'toggle' },
+    // `categoria`: chiede al campo galleria la riga «Categoria» per ogni foto (chiave
+    // `category`, quella che la barra filtro legge nel renderer). Finché il campo non la
+    // disegna il filtro ricade sul testo alternativo di ogni foto.
+    { key: 'images', label: t('Immagini'), type: 'gallery', categoria: true },
+    { key: 'filter_bar', label: t('Barra filtro'), type: 'toggle',
+      description: t('Un bottone per ogni categoria delle foto, più «Tutti». Una foto senza categoria usa il suo testo alternativo (Libreria media): foto con lo stesso testo finiscono sotto lo stesso bottone.') },
     { key: 'random_order', label: t('Ordine casuale'), type: 'toggle' },
     { key: 'show_caption', label: t('Mostra didascalie'), type: 'toggle' },
   ],
