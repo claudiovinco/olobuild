@@ -404,7 +404,9 @@ export default {
     // Queste opzioni si applicano solo alle modalità multi-marker.
 
     { type: 'separator', label: t('Layout split-view'), condition: { field: 'mode', value: 'locations' } },
-    { key: 'filter_width', label: t('Dimensione blocco filtri (% — la mappa prende il resto)'), type: 'range', min: 20, max: 80, step: 1, condition: { field: 'mode', value: 'locations' } },
+    // Con i filtri Sopra/Sotto il valore fa la colonna dell'elenco accanto alla mappa (i filtri
+    // occupano tutta la riga): «blocco filtri» non diceva più cosa regola. Chiave invariata.
+    { key: 'filter_width', label: t('Larghezza pannello risultati'), unit: '%', type: 'range', min: 20, max: 80, step: 1, description: t('Filtri a destra o a sinistra: larghezza di filtri ed elenco. Filtri sopra o sotto: larghezza dell\'elenco accanto alla mappa, mentre i filtri occupano tutta la riga. La mappa prende il resto.'), condition: { field: 'mode', value: 'locations' } },
     { key: 'filter_position', label: t('Posizione filtri'), type: 'select', options: [
       { value: 'top',    label: t('Sopra (riga in alto)') },
       { value: 'bottom', label: t('Sotto (riga in basso)') },
@@ -423,7 +425,7 @@ export default {
 
     // ── Stessi controlli per modalità services ──
     { type: 'separator', label: t('Layout split-view'), condition: { field: 'mode', value: 'services' } },
-    { key: 'filter_width', label: t('Dimensione blocco filtri (% — la mappa prende il resto)'), type: 'range', min: 20, max: 80, step: 1, condition: { field: 'mode', value: 'services' } },
+    { key: 'filter_width', label: t('Larghezza pannello risultati'), unit: '%', type: 'range', min: 20, max: 80, step: 1, description: t('Filtri a destra o a sinistra: larghezza di filtri ed elenco. Filtri sopra o sotto: larghezza dell\'elenco accanto alla mappa, mentre i filtri occupano tutta la riga. La mappa prende il resto.'), condition: { field: 'mode', value: 'services' } },
     { key: 'filter_position', label: t('Posizione filtri'), type: 'select', options: [
       { value: 'top',    label: t('Sopra (riga in alto)') },
       { value: 'bottom', label: t('Sotto (riga in basso)') },
@@ -442,7 +444,7 @@ export default {
 
     // ── Condivisi ──
     { type: 'separator', label: t('Dimensioni') },
-    { key: 'height', label: t('Altezza'), type: 'range', min: 150, max: 800, step: 10 },
+    { key: 'height', label: t('Altezza'), type: 'range', min: 150, max: 800, step: 10, description: t('Altezza della mappa. Con i filtri sopra o sotto, la loro fascia si aggiunge a questa altezza.') },
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
     ...shadowField,
     ...borderFields(),

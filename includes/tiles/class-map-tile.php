@@ -320,7 +320,8 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
         $scroll_zoom  = filter_var( $s['scroll_wheel_zoom'] ?? false, FILTER_VALIDATE_BOOLEAN );
         $dragging     = filter_var( $s['dragging'] ?? true, FILTER_VALIDATE_BOOLEAN );
         $popup_text   = esc_js( wp_strip_all_tags( $s['marker_popup'] ?? '' ) );
-        $marker_color = $this->safe_color_css( $s['marker_color'] ?? '' ) ?: '#e74c3c';
+        // Colore vuoto = il primario del sito, come il default (prima il rosso #e74c3c fisso).
+        $marker_color = $this->safe_color_css( $s['marker_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
         $marker_type  = sanitize_key( $s['marker_type'] ?? 'pin' );
         $marker_image = esc_url( $s['marker_image'] ?? '' );
         $marker_size  = absint( $s['marker_size'] ?? 36 ) ?: 36;
@@ -1947,15 +1948,23 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
             $grid_template = 'grid-template-columns: ' . $map_w . ' ' . $filter_w . '; grid-template-rows: 100%; grid-template-areas: "M R";';
         } elseif ( $filter_pos === 'left' ) {
             $grid_template = 'grid-template-columns: ' . $filter_w . ' ' . $map_w . '; grid-template-rows: 100%; grid-template-areas: "R M";';
-        } elseif ( $filter_pos === 'top' ) {
-            $grid_template = 'grid-template-columns: 100%; grid-template-rows: ' . $filter_w . ' ' . $map_w . '; grid-template-areas: "R" "M";';
-        } else { // bottom
-            $filter_pos    = 'bottom';
-            $grid_template = 'grid-template-columns: 100%; grid-template-rows: ' . $map_w . ' ' . $filter_w . '; grid-template-areas: "M" "R";';
+        } else {
+            // Sopra/Sotto: nella fascia vanno SOLO i filtri (F); intestazione (H), elenco (L) e
+            // paginazione (P) restano in colonna accanto alla mappa, larga quanto il blocco.
+            // Prima l'intero pannello finiva nella fascia, alta quanto la sua %: l'elenco
+            // restava schiacciato in una striscia sopra o sotto la mappa.
+            $filter_pos    = $filter_pos === 'top' ? 'top' : 'bottom';
+            $areas         = $filter_pos === 'top' ? '"F F" "M H" "M L" "M P"' : '"M H" "M L" "M P" "F F"';
+            $rows          = $filter_pos === 'top' ? 'auto auto minmax(0, 1fr) auto' : 'auto minmax(0, 1fr) auto auto';
+            $grid_template = 'grid-template-columns: ' . $map_w . ' ' . $filter_w . '; grid-template-rows: ' . $rows . '; grid-template-areas: ' . $areas . ';';
         }
+        $fascia = $filter_pos === 'top' || $filter_pos === 'bottom';
 
         // Il pannello eredita il carattere del sito: l'elenco fisso di font di sistema lo staccava
         // dal resto della pagina (i campi e i pulsanti seguono, hanno già font-family: inherit).
+        // Fondi, bordi e testi del pannello dai token della Palette (prima grigi fissi: col tema
+        // scuro restava un pannello bianco). Restano fissi solo i comandi sopra la mappa e il
+        // fumetto di Leaflet, che hanno il fondo bianco della libreria.
         ob_start();
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS template below is built exclusively from values sanitized by the callers: $sel/$grid_template from internally generated uid + whitelisted enums and normalize_dim() percentages, colors from safe_hex(), ints from absint()/clamps.
         ?>
@@ -1964,38 +1973,38 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
         <?php echo $sel; ?> .plm-map { width: 100%; height: 100%; z-index: 1; }
         <?php echo $sel; ?> .plm-fullscreen-btn { position: absolute; top: 10px; right: 10px; z-index: 1000; width: 34px; height: 34px; background: #fff; border: 2px solid rgba(0,0,0,0.2); border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; color: #374151; }
         <?php echo $sel; ?> .plm-fullscreen-btn:hover { background: #f4f4f4; }
-        <?php echo $sel; ?> .plm-results-panel { grid-area: R; display: flex; flex-direction: column; overflow: hidden; background: #FAFBFC; min-height: 0; min-width: 0; }
-        <?php echo $sel; ?> .plm-filters { padding: 16px 20px; background: #fff; border-bottom: 1px solid #E5E7EB; flex-shrink: 0; min-width: 0; box-sizing: border-box; }
+        <?php echo $sel; ?> .plm-results-panel { grid-area: R; display: flex; flex-direction: column; overflow: hidden; background: color-mix(in srgb, var(--olo-color-muted, #F3F4F6) 50%, var(--olo-color-background, #fff)); min-height: 0; min-width: 0; }
+        <?php echo $sel; ?> .plm-filters { padding: 16px 20px; background: var(--olo-color-background, #fff); border-bottom: 1px solid var(--olo-color-border, #E5E7EB); flex-shrink: 0; min-width: 0; box-sizing: border-box; }
         <?php echo $sel; ?> .plm-filters-grid { display: grid; grid-template-columns: repeat(<?php echo (int) $f_cols; ?>, 1fr); gap: 10px; }
         <?php echo $sel; ?> .plm-filter-group { display: flex; flex-direction: column; gap: 3px; }
         <?php echo $sel; ?> .plm-filter-group--full { grid-column: 1 / -1; }
-        <?php echo $sel; ?> .plm-filter-label { font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.04em; }
-        <?php echo $sel; ?> .plm-filter-input, <?php echo $sel; ?> .plm-filter-select { padding: 8px 10px; border: 1px solid #D1D5DB; border-radius: 6px; font-size: 13px; color: #374151; background: #fff; width: 100%; box-sizing: border-box; font-family: inherit; transition: border-color 0.15s; }
+        <?php echo $sel; ?> .plm-filter-label { font-size: 11px; font-weight: 600; color: var(--olo-color-text-muted, #6B7280); text-transform: uppercase; letter-spacing: 0.04em; }
+        <?php echo $sel; ?> .plm-filter-input, <?php echo $sel; ?> .plm-filter-select { padding: 8px 10px; border: 1px solid var(--olo-color-border, #D1D5DB); border-radius: 6px; font-size: 13px; color: var(--olo-color-text, #374151); background: var(--olo-color-background, #fff); width: 100%; box-sizing: border-box; font-family: inherit; transition: border-color 0.15s; }
         <?php echo $sel; ?> .plm-filter-input:focus, <?php echo $sel; ?> .plm-filter-select:focus { outline: none; border-color: <?php echo $color; ?>; box-shadow: 0 0 0 3px <?php echo Olobuild_Tile_Utils::con_alfa( $color, '22' ); ?>; }
         <?php echo $sel; ?> .plm-radius-wrap { display: flex; align-items: center; gap: 8px; }
         <?php echo $sel; ?> .plm-radius-wrap input[type="range"] { flex: 1; accent-color: <?php echo $color; ?>; height: 4px; }
-        <?php echo $sel; ?> .plm-radius-val { font-size: 12px; font-weight: 600; color: #374151; min-width: 40px; text-align: right; }
+        <?php echo $sel; ?> .plm-radius-val { font-size: 12px; font-weight: 600; color: var(--olo-color-text, #374151); min-width: 40px; text-align: right; }
         <?php echo $sel; ?> .plm-amenities-pills { display: flex; flex-wrap: wrap; gap: 6px; }
-        <?php echo $sel; ?> .plm-amenity-pill { padding: 5px 10px; border: 1px solid #D1D5DB; border-radius: 999px; background: #fff; font-size: 11px; color: #374151; cursor: pointer; font-family: inherit; transition: all 0.15s; }
-        <?php echo $sel; ?> .plm-amenity-pill:hover { background: #F3F4F6; }
+        <?php echo $sel; ?> .plm-amenity-pill { padding: 5px 10px; border: 1px solid var(--olo-color-border, #D1D5DB); border-radius: 999px; background: var(--olo-color-background, #fff); font-size: 11px; color: var(--olo-color-text, #374151); cursor: pointer; font-family: inherit; transition: all 0.15s; }
+        <?php echo $sel; ?> .plm-amenity-pill:hover { background: var(--olo-color-muted, #F3F4F6); }
         <?php echo $sel; ?> .plm-amenity-pill.is-active { background: <?php echo $color; ?>; border-color: <?php echo $color; ?>; color: #fff; }
         <?php echo $sel; ?> .plm-actions { display: flex; gap: 8px; margin-top: 12px; align-items: center; }
         <?php echo $sel; ?> .plm-btn-search { flex: 1; padding: 10px 16px; background: <?php echo $btn_bg; ?>; color: <?php echo $btn_color; ?>; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; font-family: inherit; }
         <?php echo $sel; ?> .plm-btn-search:hover { opacity: 0.88; }
-        <?php echo $sel; ?> .plm-btn-reset { padding: 10px 14px; background: transparent; color: #6B7280; border: 1px solid #D1D5DB; border-radius: 6px; font-size: 13px; cursor: pointer; font-family: inherit; transition: background 0.15s; }
-        <?php echo $sel; ?> .plm-btn-reset:hover { background: #F3F4F6; }
-        <?php echo $sel; ?> .plm-results-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; background: #fff; border-bottom: 1px solid #E5E7EB; flex-shrink: 0; gap: 8px; flex-wrap: wrap; }
-        <?php echo $sel; ?> .plm-results-count { font-size: 13px; font-weight: 600; color: #374151; }
+        <?php echo $sel; ?> .plm-btn-reset { padding: 10px 14px; background: transparent; color: var(--olo-color-text-muted, #6B7280); border: 1px solid var(--olo-color-border, #D1D5DB); border-radius: 6px; font-size: 13px; cursor: pointer; font-family: inherit; transition: background 0.15s; }
+        <?php echo $sel; ?> .plm-btn-reset:hover { background: var(--olo-color-muted, #F3F4F6); }
+        <?php echo $sel; ?> .plm-results-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; background: var(--olo-color-background, #fff); border-bottom: 1px solid var(--olo-color-border, #E5E7EB); flex-shrink: 0; gap: 8px; flex-wrap: wrap; }
+        <?php echo $sel; ?> .plm-results-count { font-size: 13px; font-weight: 600; color: var(--olo-color-text, #374151); }
         <?php echo $sel; ?> .plm-results-count strong { color: <?php echo $color; ?>; }
         <?php echo $sel; ?> .plm-sort-wrap { display: flex; align-items: center; gap: 8px; }
-        <?php echo $sel; ?> .plm-sort-select { padding: 5px 8px; border: 1px solid #D1D5DB; border-radius: 4px; font-size: 12px; color: #374151; background: #fff; font-family: inherit; }
+        <?php echo $sel; ?> .plm-sort-select { padding: 5px 8px; border: 1px solid var(--olo-color-border, #D1D5DB); border-radius: 4px; font-size: 12px; color: var(--olo-color-text, #374151); background: var(--olo-color-background, #fff); font-family: inherit; }
         <?php echo $sel; ?> .plm-view-toggles { display: flex; gap: 2px; }
-        <?php echo $sel; ?> .plm-view-btn { width: 30px; height: 30px; border: 1px solid #D1D5DB; background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; color: #9CA3AF; transition: background 0.15s, color 0.15s; }
+        <?php echo $sel; ?> .plm-view-btn { width: 30px; height: 30px; border: 1px solid var(--olo-color-border, #D1D5DB); background: var(--olo-color-background, #fff); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; color: var(--olo-color-text-muted, #9CA3AF); transition: background 0.15s, color 0.15s; }
         <?php echo $sel; ?> .plm-view-btn:first-child { border-radius: 4px 0 0 4px; }
         <?php echo $sel; ?> .plm-view-btn:last-child { border-radius: 0 4px 4px 0; }
         <?php echo $sel; ?> .plm-view-btn.is-active { background: <?php echo $color; ?>; border-color: <?php echo $color; ?>; color: #fff; }
         <?php echo $sel; ?> .plm-results-list { flex: 1; overflow-y: auto; padding: 12px 16px; min-height: 0; }
-        <?php echo $sel; ?> .plm-card { display: grid; grid-template-columns: 38% 1fr; border: 1px solid #E5E7EB; border-radius: <?php echo (int) $card_r; ?>px; overflow: hidden;<?php if ( $card_mh > 0 ) echo ' max-height: ' . (int) $card_mh . 'px;'; ?> background: #fff; margin-bottom: 10px; transition: box-shadow 0.2s, transform 0.15s<?php if ( $card_r_h ) echo ', ' . $card_r_h['transition']; ?>; cursor: pointer; text-decoration: none; color: inherit; }
+        <?php echo $sel; ?> .plm-card { display: grid; grid-template-columns: 38% 1fr; border: 1px solid var(--olo-color-border, #E5E7EB); border-radius: <?php echo (int) $card_r; ?>px; overflow: hidden;<?php if ( $card_mh > 0 ) echo ' max-height: ' . (int) $card_mh . 'px;'; ?> background: var(--olo-color-background, #fff); margin-bottom: 10px; transition: box-shadow 0.2s, transform 0.15s<?php if ( $card_r_h ) echo ', ' . $card_r_h['transition']; ?>; cursor: pointer; text-decoration: none; color: inherit; }
         <?php echo $sel; ?> .plm-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-1px);<?php if ( $card_r_h ) echo ' border-radius: ' . $card_r_h['css'] . ' !important;'; ?> }
         <?php if ( $card_r_h ) : // In griglia il testo ripete gli angoli bassi della card: seguono l'hover. ?><?php echo $sel; ?> .plm-results-list.plm-grid-view .plm-card-body { transition: <?php echo $card_r_h['transition']; ?>; } <?php echo $sel; ?> .plm-results-list.plm-grid-view .plm-card:hover .plm-card-body { border-radius: 0 0 <?php echo (int) $card_r_h['br']; ?>px <?php echo (int) $card_r_h['bl']; ?>px !important; }<?php endif; ?>
         <?php echo $sel; ?> .plm-card.is-highlighted { box-shadow: 0 0 0 2px <?php echo $color; ?>, 0 4px 12px rgba(0,0,0,0.1); }
@@ -2006,28 +2015,28 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
         <?php echo $sel; ?> .plm-results-list.plm-grid-view .plm-card-title,
         <?php echo $sel; ?> .plm-results-list.plm-grid-view .plm-card-sub,
         <?php echo $sel; ?> .plm-results-list.plm-grid-view .plm-card-price { color: #fff; }
-        <?php echo $sel; ?> .plm-card-img { position: relative; overflow: hidden; background: #E5E7EB; min-height: 110px; }
+        <?php echo $sel; ?> .plm-card-img { position: relative; overflow: hidden; background: var(--olo-color-muted, #E5E7EB); min-height: 110px; }
         <?php echo $sel; ?> .plm-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
         <?php echo $sel; ?> .plm-card:hover .plm-card-img img { transform: scale(1.05); }
-        <?php echo $sel; ?> .plm-card-img-ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 28px; color: #9CA3AF; }
+        <?php echo $sel; ?> .plm-card-img-ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 28px; color: var(--olo-color-text-muted, #9CA3AF); }
         <?php echo $sel; ?> .plm-card-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-        <?php echo $sel; ?> .plm-card-title { font-size: 14px; font-weight: 700; color: #1F2937; margin: 0; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        <?php echo $sel; ?> .plm-card-sub { font-size: 12px; color: #6B7280; margin: 0; }
-        <?php echo $sel; ?> .plm-card-specs { display: flex; gap: 10px; font-size: 11px; color: #6B7280; flex-wrap: wrap; margin-top: 4px; }
+        <?php echo $sel; ?> .plm-card-title { font-size: 14px; font-weight: 700; color: var(--olo-color-text, #1F2937); margin: 0; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        <?php echo $sel; ?> .plm-card-sub { font-size: 12px; color: var(--olo-color-text-muted, #6B7280); margin: 0; }
+        <?php echo $sel; ?> .plm-card-specs { display: flex; gap: 10px; font-size: 11px; color: var(--olo-color-text-muted, #6B7280); flex-wrap: wrap; margin-top: 4px; }
         <?php echo $sel; ?> .plm-card-specs span { display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; }
         <?php echo $sel; ?> .plm-card-price { font-size: 16px; font-weight: 700; color: <?php echo $color; ?>; margin-top: auto; padding-top: 4px; text-align: right; }
-        <?php echo $sel; ?> .plm-pagination { display: flex; justify-content: center; align-items: center; gap: 8px; padding: 10px 20px; background: #fff; border-top: 1px solid #E5E7EB; flex-shrink: 0; }
-        <?php echo $sel; ?> .plm-page-btn { padding: 6px 14px; border: 1px solid #D1D5DB; border-radius: 4px; background: #fff; color: #374151; font-size: 13px; cursor: pointer; font-family: inherit; transition: background 0.15s; }
-        <?php echo $sel; ?> .plm-page-btn:hover { background: #F3F4F6; }
+        <?php echo $sel; ?> .plm-pagination { display: flex; justify-content: center; align-items: center; gap: 8px; padding: 10px 20px; background: var(--olo-color-background, #fff); border-top: 1px solid var(--olo-color-border, #E5E7EB); flex-shrink: 0; }
+        <?php echo $sel; ?> .plm-page-btn { padding: 6px 14px; border: 1px solid var(--olo-color-border, #D1D5DB); border-radius: 4px; background: var(--olo-color-background, #fff); color: var(--olo-color-text, #374151); font-size: 13px; cursor: pointer; font-family: inherit; transition: background 0.15s; }
+        <?php echo $sel; ?> .plm-page-btn:hover { background: var(--olo-color-muted, #F3F4F6); }
         <?php echo $sel; ?> .plm-page-btn:disabled { opacity: 0.4; cursor: default; }
-        <?php echo $sel; ?> .plm-page-info { font-size: 12px; color: #6B7280; }
-        <?php echo $sel; ?> .plm-no-results { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; color: #9CA3AF; text-align: center; gap: 8px; }
-        <?php echo $sel; ?> .plm-no-results-title { font-size: 15px; font-weight: 600; color: #6B7280; }
+        <?php echo $sel; ?> .plm-page-info { font-size: 12px; color: var(--olo-color-text-muted, #6B7280); }
+        <?php echo $sel; ?> .plm-no-results { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; color: var(--olo-color-text-muted, #9CA3AF); text-align: center; gap: 8px; }
+        <?php echo $sel; ?> .plm-no-results-title { font-size: 15px; font-weight: 600; color: var(--olo-color-text-muted, #6B7280); }
         <?php echo $sel; ?> .plm-autocomplete-wrap { position: relative; }
-        <?php echo $sel; ?> .plm-autocomplete-list { display: none; position: absolute; z-index: 1000; top: 100%; left: 0; right: 0; margin: 2px 0 0; padding: 4px 0; list-style: none; background: #fff; border: 1px solid #D1D5DB; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.12); max-height: 220px; overflow-y: auto; }
+        <?php echo $sel; ?> .plm-autocomplete-list { display: none; position: absolute; z-index: 1000; top: 100%; left: 0; right: 0; margin: 2px 0 0; padding: 4px 0; list-style: none; background: var(--olo-color-background, #fff); border: 1px solid var(--olo-color-border, #D1D5DB); border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.12); max-height: 220px; overflow-y: auto; }
         <?php echo $sel; ?> .plm-autocomplete-list.is-open { display: block; }
-        <?php echo $sel; ?> .plm-ac-item { padding: 8px 12px; font-size: 13px; color: #374151; cursor: pointer; line-height: 1.35; }
-        <?php echo $sel; ?> .plm-ac-item:hover, <?php echo $sel; ?> .plm-ac-item.is-active { background: #F3F4F6; }
+        <?php echo $sel; ?> .plm-ac-item { padding: 8px 12px; font-size: 13px; color: var(--olo-color-text, #374151); cursor: pointer; line-height: 1.35; }
+        <?php echo $sel; ?> .plm-ac-item:hover, <?php echo $sel; ?> .plm-ac-item.is-active { background: var(--olo-color-muted, #F3F4F6); }
         <?php echo $sel; ?> .plm-popup { font-family: inherit; min-width: 200px; }
         <?php echo $sel; ?> .plm-popup img { width: 100%; height: auto; object-fit: cover; border-radius: 4px; margin-bottom: 6px; display: block; }
         <?php echo $sel; ?> .plm-popup h4 { margin: 0 0 2px; font-size: 13px; font-weight: 700; color: #1F2937; }
@@ -2041,6 +2050,22 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
         <?php echo $sel; ?> .marker-cluster-medium div { background-color: <?php echo $color; ?>; color: #fff; }
         <?php echo $sel; ?> .marker-cluster-large { background-color: <?php echo Olobuild_Tile_Utils::con_alfa( $color, '55' ); ?>; }
         <?php echo $sel; ?> .marker-cluster-large div { background-color: <?php echo $color; ?>; color: #fff; }
+        <?php if ( $fascia ) : // Sopra/Sotto: il pannello si scioglie nella griglia, ogni parte nella sua area. ?>
+        <?php /* L'«Altezza» è quella della banda mappa + elenco e la fascia dei filtri si aggiunge sopra o
+                 sotto. Col blocco fermo all'Altezza i filtri alti (Servizi: sei filtri) si mangiavano la
+                 banda: a 400 px restavano solo i filtri, senza mappa né elenco. L'elenco scorre dentro la
+                 sua riga senza allungarla (altezza 0 + min-height 100%); a schermo intero la mappa torna
+                 a riempire le sue righe. */ ?>
+        <?php echo $sel; ?> { height: auto; }
+        <?php echo $sel; ?> .plm-map-panel { height: <?php echo (int) $height; ?>px; }
+        <?php echo $sel; ?>:fullscreen .plm-map-panel { height: auto; }
+        <?php echo $sel; ?>:-webkit-full-screen .plm-map-panel { height: auto; }
+        <?php echo $sel; ?> .plm-results-panel { display: contents; }
+        <?php echo $sel; ?> .plm-filters { grid-area: F;<?php if ( $filter_pos === 'bottom' ) echo ' border-bottom: 0; border-top: 1px solid var(--olo-color-border, #E5E7EB);'; ?> }
+        <?php echo $sel; ?> .plm-results-header { grid-area: H; min-width: 0; }
+        <?php echo $sel; ?> .plm-results-list { grid-area: L; min-width: 0; height: 0; min-height: 100%; background: color-mix(in srgb, var(--olo-color-muted, #F3F4F6) 50%, var(--olo-color-background, #fff)); }
+        <?php echo $sel; ?> .plm-pagination { grid-area: P; min-width: 0; }
+        <?php endif; ?>
         @media (max-width: 900px) {
             <?php echo $sel; ?> {
                 grid-template-columns: 1fr;
@@ -2051,6 +2076,12 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
             <?php echo $sel; ?> .plm-map-panel { height: 350px; }
             <?php echo $sel; ?> .plm-results-panel { height: 500px; }
             <?php echo $sel; ?> .plm-results-list.plm-grid-view { grid-template-columns: 1fr; }
+            <?php if ( $fascia ) : // telefono: tutto in colonna, i filtri in testa (Sopra) o in coda (Sotto) ?>
+            <?php echo $sel; ?> {
+                grid-template-rows: <?php echo $filter_pos === 'top' ? 'auto 350px auto 420px auto' : '350px auto 420px auto auto'; ?>;
+                grid-template-areas: <?php echo $filter_pos === 'top' ? '"F" "M" "H" "L" "P"' : '"M" "H" "L" "P" "F"'; ?>;
+            }
+            <?php endif; ?>
         }
         @media (max-width: 600px) {
             <?php echo $sel; ?> .plm-filters-grid { grid-template-columns: 1fr; }
