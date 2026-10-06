@@ -932,42 +932,78 @@ trait Olobuild_Renderer_Page_Trait {
             (function(){
               if(window.__oloEntranceInit) return;
               window.__oloEntranceInit = true;
-              function initEntrance(){
-                var els = document.querySelectorAll('[class*="olo-entrance-"]');
+              /* Animazione d'ingresso: parte quando la tile ENTRA nello schermo. Il PHP la manda già con
+                 olo-visible (senza script niente resta nascosto); qui una tile ancora sotto lo schermo torna
+                 in attesa (olo-in-attesa, invisibile) e si anima quando ci arriva. Prima partiva al
+                 caricamento o al montaggio a richiesta, 200px prima di vedersi: finiva fuori vista. Le tile
+                 già sullo schermo all'apertura non si toccano. Niente doppia e commerciale: WordPress la
+                 rovina negli script in linea. */
+              var SEL = '[class*="olo-entrance-"]';
+              var ridotto = false;
+              try { ridotto = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(_){}
+              var obs = null;
+              function entra(el){
+                if(el.classList.contains('olo-stagger-parent')){
+                  var delay = parseInt(getComputedStyle(el).getPropertyValue('--olo-stagger-delay')) || 100;
+                  var children = el.querySelectorAll('.olo-frontend-tile');
+                  if(!children.length){
+                    children = el.querySelectorAll('[uk-grid] > *, .uk-slider-items > *, .uk-accordion > li, .uk-list > li, .olo-tl-item, .olo-postgrid-item, .olo-gal-item, .olo-car-slide, .olo-pl-item, .olo-test-card');
+                  }
+                  children.forEach(function(child, i){
+                    child.style.transitionDelay = (i * delay) + 'ms';
+                    child.style.animationDelay = (i * delay) + 'ms';
+                  });
+                }
+                // Insieme, nello stesso istante: con fill-mode both la posa di partenza vale subito,
+                // anche durante il ritardo (nessun lampo della tile ferma prima dell'animazione)
+                el.classList.add('olo-visible');
+                el.classList.remove('olo-in-attesa');
+              }
+              if(!ridotto){
+                if('IntersectionObserver' in window){
+                  obs = new IntersectionObserver(function(entries){
+                    entries.forEach(function(e){
+                      if(e.isIntersecting){
+                        obs.unobserve(e.target);
+                        entra(e.target);
+                      }
+                    });
+                  }, { rootMargin: '0px 0px -12% 0px', threshold: 0 });
+                }
+              }
+              function prepara(radice){
+                if(!radice) return;
+                var els = [];
+                if(radice.matches){ if(radice.matches(SEL)) els.push(radice); }
+                if(radice.querySelectorAll){ radice.querySelectorAll(SEL).forEach(function(el){ els.push(el); }); }
                 if(!els.length) return;
-                if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-                  els.forEach(function(el){ el.classList.add('olo-visible'); });
+                if(!obs){
+                  els.forEach(function(el){ el.classList.add('olo-visible'); el.classList.remove('olo-in-attesa'); });
                   return;
                 }
-                var obs = new IntersectionObserver(function(entries){
-                  entries.forEach(function(e){
-                    if(e.isIntersecting){
-                      if(e.target.classList.contains('olo-stagger-parent')){
-                        var delay = parseInt(getComputedStyle(e.target).getPropertyValue('--olo-stagger-delay')) || 100;
-                        var children = e.target.querySelectorAll('.olo-frontend-tile');
-                        if(!children.length){
-                          children = e.target.querySelectorAll('[uk-grid] > *, .uk-slider-items > *, .uk-accordion > li, .uk-list > li, .olo-tl-item, .olo-postgrid-item, .olo-gal-item, .olo-car-slide, .olo-pl-item, .olo-test-card');
-                        }
-                        if(children.length){
-                          children.forEach(function(child, i){
-                            child.style.transitionDelay = (i * delay) + 'ms';
-                            child.style.animationDelay = (i * delay) + 'ms';
-                          });
-                        }
-                      }
-                      requestAnimationFrame(function(){
-                        e.target.classList.add('olo-visible');
-                      });
-                      obs.unobserve(e.target);
+                var vh = window.innerHeight || document.documentElement.clientHeight;
+                els.forEach(function(el){
+                  if(el.dataset.oloIngresso) return;
+                  el.dataset.oloIngresso = '1';
+                  // sotto la zona visibile: in attesa (una tile nascosta, alta 0, non si tocca)
+                  var r = el.getBoundingClientRect();
+                  if(r.height > 0){
+                    if(r.top > vh * 0.88){
+                      el.classList.remove('olo-visible');
+                      el.classList.add('olo-in-attesa');
                     }
-                  });
-                }, {threshold: 0.1});
-                els.forEach(function(el){ obs.observe(el); });
+                  }
+                  obs.observe(el);
+                });
               }
-              if(document.readyState === 'complete'){
-                requestAnimationFrame(initEntrance);
+              // Tile montate a richiesta (il loro HTML arriva da un template quando ci si avvicina)
+              document.addEventListener('olo:lazy-hydrated', function(ev){
+                if(ev.detail){ prepara(ev.detail.target); }
+              });
+              if(document.readyState === 'loading'){
+                document.addEventListener('DOMContentLoaded', function(){ prepara(document); });
               } else {
-                window.addEventListener('load', function(){ requestAnimationFrame(initEntrance); });
+                prepara(document);
               }
             })();
             </script>

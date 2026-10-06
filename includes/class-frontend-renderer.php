@@ -743,6 +743,15 @@ class Olobuild_Frontend_Renderer {
             return $html;
         }
 
+        // Effetti con uno script di pagina che raccoglie le tile UNA volta, al caricamento: inclinazione
+        // 3D, inseguimento del cursore, torcia, effetti allo scorrimento, assemblaggio, test A/B,
+        // galleria di sfondo. Una tile nata dopo da un <template> restava senza effetto (6 ott 2026:
+        // inclinazione e torcia ferme sulla pagina Opzioni avanzate). Anche quando l'effetto sta su
+        // una tile figlia: l'HTML qui contiene tutto il sottoalbero.
+        if ( preg_match( '/\sdata-olo-(?:tilt|tilt-items|track|spotlight|scroll-fx|assembly|ab-test|bg-gallery)[\s=>]/', $html ) ) {
+            return $html;
+        }
+
         // Le prime 3 tile del template nascono subito (sopra la piega).
         $this->lazy_contatore++;
         if ( $this->lazy_contatore <= 3 ) {

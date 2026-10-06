@@ -2739,41 +2739,41 @@ html:has(.olo-frontend-grid) {
  *
  * Le keyframes sono single-line per facilitare la rigenerazione via script.
  * ================================================================ */
-.olo-entrance-fade.olo-visible            { animation: olo-fx-fade var(--olo-e-dur, .6s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-slide-up.olo-visible        { animation: olo-fx-slide-up var(--olo-e-dur, .6s) var(--olo-e-ease, cubic-bezier(.4,0,.2,1)) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-slide-down.olo-visible      { animation: olo-fx-slide-down var(--olo-e-dur, .6s) var(--olo-e-ease, cubic-bezier(.4,0,.2,1)) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-slide-left.olo-visible      { animation: olo-fx-slide-left var(--olo-e-dur, .6s) var(--olo-e-ease, cubic-bezier(.4,0,.2,1)) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-slide-right.olo-visible     { animation: olo-fx-slide-right var(--olo-e-dur, .6s) var(--olo-e-ease, cubic-bezier(.4,0,.2,1)) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-zoom-in.olo-visible         { animation: olo-fx-zoom-in var(--olo-e-dur, .6s) var(--olo-e-ease, cubic-bezier(.34,1.56,.64,1)) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-zoom-out.olo-visible        { animation: olo-fx-zoom-out var(--olo-e-dur, .6s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-flip.olo-visible            { animation: olo-fx-flip var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-flip-x.olo-visible          { animation: olo-fx-flip-x var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-flip-y.olo-visible          { animation: olo-fx-flip-y var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-rotate-in.olo-visible       { animation: olo-fx-rotate-in var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-rotate-ccw.olo-visible      { animation: olo-fx-rotate-ccw var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-bounce.olo-visible          { animation: olo-fx-bounce var(--olo-e-dur, .9s) var(--olo-e-ease, cubic-bezier(.68,-.55,.27,1.55)) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-bounce-left.olo-visible     { animation: olo-fx-bounce-left var(--olo-e-dur, .9s) var(--olo-e-ease, cubic-bezier(.68,-.55,.27,1.55)) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-bounce-right.olo-visible    { animation: olo-fx-bounce-right var(--olo-e-dur, .9s) var(--olo-e-ease, cubic-bezier(.68,-.55,.27,1.55)) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-elastic.olo-visible         { animation: olo-fx-elastic var(--olo-e-dur, 1s) var(--olo-e-ease, cubic-bezier(.5,1.5,.5,.8)) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-blur-in.olo-visible         { animation: olo-fx-blur-in var(--olo-e-dur, .7s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-blur-zoom.olo-visible       { animation: olo-fx-blur-zoom var(--olo-e-dur, .8s) var(--olo-e-ease, cubic-bezier(.34,1.56,.64,1)) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-swing.olo-visible           { animation: olo-fx-swing var(--olo-e-dur, 1s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; transform-origin: top center; }
-.olo-entrance-rubber.olo-visible          { animation: olo-fx-rubber var(--olo-e-dur, 1s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-jello.olo-visible           { animation: olo-fx-jello var(--olo-e-dur, 1s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-back-in-left.olo-visible    { animation: olo-fx-back-in-left var(--olo-e-dur, .8s) var(--olo-e-ease, cubic-bezier(.34,1.56,.64,1)) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-back-in-right.olo-visible   { animation: olo-fx-back-in-right var(--olo-e-dur, .8s) var(--olo-e-ease, cubic-bezier(.34,1.56,.64,1)) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-typewriter.olo-visible      { animation: olo-fx-fade var(--olo-e-dur, .6s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-fade-up-big.olo-visible     { animation: olo-fx-fade-up-big var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-fade-down-big.olo-visible   { animation: olo-fx-fade-down-big var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-lightspeed-left.olo-visible { animation: olo-fx-lightspeed-left var(--olo-e-dur, .7s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-lightspeed-right.olo-visible{ animation: olo-fx-lightspeed-right var(--olo-e-dur, .7s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-roll-in.olo-visible         { animation: olo-fx-roll-in var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-jack-in-box.olo-visible     { animation: olo-fx-jack-in-box var(--olo-e-dur, .9s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; transform-origin: center bottom; }
-.olo-entrance-hinge.olo-visible           { animation: olo-fx-hinge var(--olo-e-dur, 2s) var(--olo-e-ease, ease-in) var(--olo-e-delay, 0s) forwards; transform-origin: top left; }
-.olo-entrance-zoom-in-down.olo-visible    { animation: olo-fx-zoom-in-down var(--olo-e-dur, .8s) var(--olo-e-ease, cubic-bezier(.175,.885,.32,1.275)) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-zoom-in-up.olo-visible      { animation: olo-fx-zoom-in-up var(--olo-e-dur, .8s) var(--olo-e-ease, cubic-bezier(.175,.885,.32,1.275)) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-skew-in.olo-visible         { animation: olo-fx-skew-in var(--olo-e-dur, .7s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
-.olo-entrance-curtain-reveal.olo-visible  { animation: olo-fx-curtain-reveal var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; transform-origin: top; }
+.olo-entrance-fade.olo-visible            { animation: olo-fx-fade var(--olo-e-dur, .6s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) both; }
+.olo-entrance-slide-up.olo-visible        { animation: olo-fx-slide-up var(--olo-e-dur, .6s) var(--olo-e-ease, cubic-bezier(.4,0,.2,1)) var(--olo-e-delay, 0s) both; }
+.olo-entrance-slide-down.olo-visible      { animation: olo-fx-slide-down var(--olo-e-dur, .6s) var(--olo-e-ease, cubic-bezier(.4,0,.2,1)) var(--olo-e-delay, 0s) both; }
+.olo-entrance-slide-left.olo-visible      { animation: olo-fx-slide-left var(--olo-e-dur, .6s) var(--olo-e-ease, cubic-bezier(.4,0,.2,1)) var(--olo-e-delay, 0s) both; }
+.olo-entrance-slide-right.olo-visible     { animation: olo-fx-slide-right var(--olo-e-dur, .6s) var(--olo-e-ease, cubic-bezier(.4,0,.2,1)) var(--olo-e-delay, 0s) both; }
+.olo-entrance-zoom-in.olo-visible         { animation: olo-fx-zoom-in var(--olo-e-dur, .6s) var(--olo-e-ease, cubic-bezier(.34,1.56,.64,1)) var(--olo-e-delay, 0s) both; }
+.olo-entrance-zoom-out.olo-visible        { animation: olo-fx-zoom-out var(--olo-e-dur, .6s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) both; }
+.olo-entrance-flip.olo-visible            { animation: olo-fx-flip var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) both; }
+.olo-entrance-flip-x.olo-visible          { animation: olo-fx-flip-x var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) both; }
+.olo-entrance-flip-y.olo-visible          { animation: olo-fx-flip-y var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) both; }
+.olo-entrance-rotate-in.olo-visible       { animation: olo-fx-rotate-in var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) both; }
+.olo-entrance-rotate-ccw.olo-visible      { animation: olo-fx-rotate-ccw var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) both; }
+.olo-entrance-bounce.olo-visible          { animation: olo-fx-bounce var(--olo-e-dur, .9s) var(--olo-e-ease, cubic-bezier(.68,-.55,.27,1.55)) var(--olo-e-delay, 0s) both; }
+.olo-entrance-bounce-left.olo-visible     { animation: olo-fx-bounce-left var(--olo-e-dur, .9s) var(--olo-e-ease, cubic-bezier(.68,-.55,.27,1.55)) var(--olo-e-delay, 0s) both; }
+.olo-entrance-bounce-right.olo-visible    { animation: olo-fx-bounce-right var(--olo-e-dur, .9s) var(--olo-e-ease, cubic-bezier(.68,-.55,.27,1.55)) var(--olo-e-delay, 0s) both; }
+.olo-entrance-elastic.olo-visible         { animation: olo-fx-elastic var(--olo-e-dur, 1s) var(--olo-e-ease, cubic-bezier(.5,1.5,.5,.8)) var(--olo-e-delay, 0s) both; }
+.olo-entrance-blur-in.olo-visible         { animation: olo-fx-blur-in var(--olo-e-dur, .7s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) both; }
+.olo-entrance-blur-zoom.olo-visible       { animation: olo-fx-blur-zoom var(--olo-e-dur, .8s) var(--olo-e-ease, cubic-bezier(.34,1.56,.64,1)) var(--olo-e-delay, 0s) both; }
+.olo-entrance-swing.olo-visible           { animation: olo-fx-swing var(--olo-e-dur, 1s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) both; transform-origin: top center; }
+.olo-entrance-rubber.olo-visible          { animation: olo-fx-rubber var(--olo-e-dur, 1s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) both; }
+.olo-entrance-jello.olo-visible           { animation: olo-fx-jello var(--olo-e-dur, 1s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) both; }
+.olo-entrance-back-in-left.olo-visible    { animation: olo-fx-back-in-left var(--olo-e-dur, .8s) var(--olo-e-ease, cubic-bezier(.34,1.56,.64,1)) var(--olo-e-delay, 0s) both; }
+.olo-entrance-back-in-right.olo-visible   { animation: olo-fx-back-in-right var(--olo-e-dur, .8s) var(--olo-e-ease, cubic-bezier(.34,1.56,.64,1)) var(--olo-e-delay, 0s) both; }
+.olo-entrance-typewriter.olo-visible      { animation: olo-fx-fade var(--olo-e-dur, .6s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) both; }
+.olo-entrance-fade-up-big.olo-visible     { animation: olo-fx-fade-up-big var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) both; }
+.olo-entrance-fade-down-big.olo-visible   { animation: olo-fx-fade-down-big var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) both; }
+.olo-entrance-lightspeed-left.olo-visible { animation: olo-fx-lightspeed-left var(--olo-e-dur, .7s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) both; }
+.olo-entrance-lightspeed-right.olo-visible{ animation: olo-fx-lightspeed-right var(--olo-e-dur, .7s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) both; }
+.olo-entrance-roll-in.olo-visible         { animation: olo-fx-roll-in var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) both; }
+.olo-entrance-jack-in-box.olo-visible     { animation: olo-fx-jack-in-box var(--olo-e-dur, .9s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) both; transform-origin: center bottom; }
+.olo-entrance-hinge.olo-visible           { animation: olo-fx-hinge var(--olo-e-dur, 2s) var(--olo-e-ease, ease-in) var(--olo-e-delay, 0s) both; transform-origin: top left; }
+.olo-entrance-zoom-in-down.olo-visible    { animation: olo-fx-zoom-in-down var(--olo-e-dur, .8s) var(--olo-e-ease, cubic-bezier(.175,.885,.32,1.275)) var(--olo-e-delay, 0s) both; }
+.olo-entrance-zoom-in-up.olo-visible      { animation: olo-fx-zoom-in-up var(--olo-e-dur, .8s) var(--olo-e-ease, cubic-bezier(.175,.885,.32,1.275)) var(--olo-e-delay, 0s) both; }
+.olo-entrance-skew-in.olo-visible         { animation: olo-fx-skew-in var(--olo-e-dur, .7s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) both; }
+.olo-entrance-curtain-reveal.olo-visible  { animation: olo-fx-curtain-reveal var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) both; transform-origin: top; }
 
 @keyframes olo-fx-fade            { from { opacity: 0; } to { opacity: 1; } }
 @keyframes olo-fx-slide-up        { from { opacity: 0; transform: translateY(calc(40px * var(--olo-e-int, 1))); } to { opacity: 1; transform: none; } }
@@ -2810,6 +2810,12 @@ html:has(.olo-frontend-grid) {
 @keyframes olo-fx-skew-in         { from { opacity: 0; transform: skewX(calc(-30deg * var(--olo-e-int, 1))) translateX(calc(-50px * var(--olo-e-int, 1))); } to { opacity: 1; transform: none; } }
 @keyframes olo-fx-curtain-reveal  { from { opacity: 0; transform: scaleY(0); } to { opacity: 1; transform: scaleY(1); } }
 
+/* fill-mode both (non forwards): durante il ritardo vale già la posa di partenza. Con forwards la tile si
+   vedeva ferma per tutto il ritardo, poi spariva e ripartiva dall'animazione (6 ott 2026). */
+/* In attesa (script della pagina, trait-olobuild-renderer-page.php): la tile era sotto lo schermo
+   all'apertura e parte quando ci entra. Senza script la classe non c'è e la tile resta visibile. */
+.olo-in-attesa { opacity: 0 !important; }
+
 @media (prefers-reduced-motion: reduce) {
   [class*="olo-entrance-"] { opacity: 1 !important; animation: none !important; transform: none !important; filter: none !important; }
 }
@@ -2827,7 +2833,8 @@ html:has(.olo-frontend-grid) {
    Quando l'utente disattiva "Attivo anche su mobile" nello sticky,
    forziamo position:static sotto i 640px cosi l'elemento scorre normalmente
    su mobile invece di restare fisso. */
-@media (max-width: 640px) {
+/* 639 (soglia del contratto, 640 − 1): a 640 px le colonne sono già affiancate (UIkit @s = min-width 640), lì lo sticky deve valere */
+@media (max-width: 639px) {
   .olo-sticky-desktop-only {
     position: static !important;
     top: auto !important;
