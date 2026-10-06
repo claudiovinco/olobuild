@@ -57,37 +57,37 @@ class Olobuild_Soundcloud_Tile extends Olobuild_Tile_Base {
             return ob_get_clean();
         }
 
-        // Sanitizza colore: rimuovi il # e accetta solo hex
-        $raw_color = ltrim( $s['color'], '#' );
-        if ( ! preg_match( '/^[0-9a-fA-F]{3,6}$/', $raw_color ) ) {
+        // Colore del player: il parametro dell'iframe vuole un esadecimale. Un colore della Palette
+        // (var(--olo-color-…)) si risolve nel suo hex (prima ricadeva sempre sull'arancio SoundCloud).
+        $raw_color = ltrim( Olobuild_Tile_Utils::colore_hex( $s['color'] ), '#' );
+        if ( ! preg_match( '/^[0-9a-fA-F]{6}$/', $raw_color ) ) {
             $raw_color = 'ff5500';
         }
 
-        // Prova oEmbed di WordPress
+        // L'oEmbed di WordPress serve SOLO a risolvere l'indirizzo canonico del brano
+        // (api.soundcloud.com/tracks/…, anche dai link brevi on.soundcloud.com) e il titolo. Prima si
+        // stampava il suo iframe: largo 500 px fissi e con i parametri di SoundCloud, così colore,
+        // riproduzione automatica, copertina, autore e «Player visuale» venivano ignorati.
+        $player_url = $url;
+        $title      = olobuild_t( 'SoundCloud Player' );
         $oembed_html = wp_oembed_get( $url, [ 'height' => $height ] );
-
-        if ( $oembed_html ) {
-            ob_start();
-            $sc_hash = $radius_hover_css !== '' ? substr( md5( $radius_hover_css ), 0, 6 ) : '';
-            ?>
-            <?php if ( $radius_hover_css !== '' ) : ?>
-            <style>.olo-sc-hr-<?php echo $sc_hash; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $sc_hash is an internally generated md5 fragment; hover radius CSS built by Olobuild_Tile_Utils::radius_force_css() (absint-forced px values) ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}</style>
-            <?php endif; ?>
-            <div class="olo-soundcloud <?php echo esc_attr( $uid ); ?><?php echo esc_attr( $radius_hover_css !== '' ? ' olo-sc-hr-' . $sc_hash : '' ); ?>" style="border-radius: <?php echo esc_attr( $radius ); ?>; overflow: hidden;<?php if ( $radius_hover_css !== '' ) echo 'transition:border-radius 400ms cubic-bezier(.4,0,.2,1);'; ?>">
-                <?php echo $oembed_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- embed HTML returned by wp_oembed_get() (WordPress core oEmbed, whitelisted providers) ?>
-            </div>
-            <?php
-            echo $this->stile_bordo( $s, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS da Olobuild_Tile_Base::stile_bordo() (impostazioni sanificate, uid interno)
-            return ob_get_clean();
+        if ( $oembed_html && preg_match( '/\ssrc="([^"]+)"/', $oembed_html, $src_m ) ) {
+            $query = wp_parse_url( html_entity_decode( $src_m[1] ), PHP_URL_QUERY );
+            parse_str( (string) $query, $src_args );
+            if ( ! empty( $src_args['url'] ) && is_string( $src_args['url'] ) ) {
+                $player_url = $src_args['url'];
+            }
+            if ( preg_match( '/\stitle="([^"]+)"/', $oembed_html, $title_m ) ) {
+                $title = html_entity_decode( $title_m[1], ENT_QUOTES );
+            }
         }
 
-        // Fallback: iframe manuale
         $auto_play    = ! empty( $s['auto_play'] )    ? 'true' : 'false';
         $show_artwork = ! empty( $s['show_artwork'] )  ? 'true' : 'false';
         $show_user    = ! empty( $s['show_user'] )     ? 'true' : 'false';
         $visual       = ! empty( $s['visual'] )        ? 'true' : 'false';
 
-        $iframe_url = 'https://w.soundcloud.com/player/?url=' . rawurlencode( $url )
+        $iframe_url = 'https://w.soundcloud.com/player/?url=' . rawurlencode( $player_url )
             . '&color=%23' . $raw_color
             . '&auto_play=' . $auto_play
             . '&show_artwork=' . $show_artwork
@@ -108,7 +108,7 @@ class Olobuild_Soundcloud_Tile extends Olobuild_Tile_Base {
                 scrolling="no"
                 frameborder="no"
                 allow="autoplay"
-                title="<?php echo esc_attr( olobuild_t( 'SoundCloud Player' ) ); ?>"
+                title="<?php echo esc_attr( $title ); ?>"
                 loading="lazy"
             ></iframe>
         </div>
