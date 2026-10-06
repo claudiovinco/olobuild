@@ -40,6 +40,7 @@ class Olobuild_Projector_Tile extends Olobuild_Tile_Base {
         'list_base'    => 1,
         'list_items'   => [],
         'zone_accent'  => '',
+        'card_bg'      => '',
         'align'        => 'left',
         'tile_padding' => [ 'top' => 48, 'right' => 48, 'bottom' => 48, 'left' => 48 ],
         'border_radius'=> '16',
@@ -59,12 +60,66 @@ class Olobuild_Projector_Tile extends Olobuild_Tile_Base {
         return [];
     }
 
+    /**
+     * Luminanza relativa (WCAG) di un fondo, coi token della Palette risolti; null se il
+     * fondo non è pieno (vuoto, trasparente, velato sotto il 50%) o non si risolve.
+     * Stesso calcolo di finder e leaderboard.
+     */
+    private function luminanza_fondo( $c ) {
+        $c = trim( (string) $c );
+        if ( '' === $c || 'transparent' === strtolower( $c ) ) {
+            return null;
+        }
+        $alfa = 1.0;
+        if ( preg_match( '/^#[0-9a-f]{6}([0-9a-f]{2})$/i', $c, $m ) ) {
+            $alfa = hexdec( $m[1] ) / 255;
+        } elseif ( preg_match( '/^rgba?\(\s*[\d.]+%?\s*[,\s]\s*[\d.]+%?\s*[,\s]\s*[\d.]+%?\s*[,\/]\s*([\d.]+)(%?)\s*\)$/i', $c, $m ) ) {
+            $alfa = (float) $m[1] / ( '%' === $m[2] ? 100 : 1 );
+        } elseif ( preg_match( '/^color-mix\(.+\s([\d.]+)%\s*,\s*transparent\s*\)$/is', $c, $m ) ) {
+            $alfa = (float) $m[1] / 100;
+        }
+        $hex = Olobuild_Tile_Utils::colore_hex( $c );
+        if ( $alfa < 0.5 || '' === $hex ) {
+            return null;
+        }
+        $l = 0.0;
+        foreach ( [ 1 => 0.2126, 3 => 0.7152, 5 => 0.0722 ] as $i => $k ) {
+            $v  = hexdec( substr( $hex, $i, 2 ) ) / 255;
+            $l += $k * ( $v <= 0.03928 ? $v / 12.92 : pow( ( $v + 0.055 ) / 1.055, 2.4 ) );
+        }
+        return $l;
+    }
+
+    /**
+     * Il colore di un testo sul fondo del pannello: $colore se si legge (contrasto almeno
+     * 3:1), altrimenti il chiaro o lo scuro della Palette secondo il fondo. Prima testi e
+     * fondo erano fissi (--olo-color-text su --olo-color-surface-alt): niente versione scura.
+     */
+    private function testo_su( $fondo, $colore ) {
+        $lf = $this->luminanza_fondo( $fondo );
+        $lc = $this->luminanza_fondo( $colore );
+        if ( null === $lf || null === $lc ) {
+            return $colore;
+        }
+        if ( ( max( $lf, $lc ) + 0.05 ) / ( min( $lf, $lc ) + 0.05 ) >= 3 ) {
+            return $colore;
+        }
+        return $lf < 0.18 ? 'var(--olo-color-light, #fdfcfa)' : 'var(--olo-color-dark, #14161c)';
+    }
+
     public function render( $settings, $style = [] ) {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'opj-' . wp_rand( 10000, 99999 );
 
         $accent = $this->safe_color_css( $s['zone_accent'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $center = ( ( $s['align'] ?? 'left' ) === 'center' );
+        // Sfondo del pannello (prima solo --olo-color-surface-alt) e testi che lo seguono: su un
+        // fondo scuro passano al chiaro, e i fili diventano una velatura del testo. Dove si
+        // leggevano già escono identici.
+        $testo_def = 'var(--olo-color-text, #1f2937)';
+        $fondo     = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #f6f7f9)';
+        $testo     = $this->testo_su( $fondo, $testo_def );
+        $filo      = $testo === $testo_def ? 'var(--olo-color-border, #e5e7eb)' : 'color-mix(in srgb, ' . $testo . ' 22%, transparent)';
 
         // box-model
         $tp = is_array( $s['tile_padding'] ?? null ) ? $s['tile_padding'] : [];
@@ -104,23 +159,24 @@ class Olobuild_Projector_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: $accent via the safe_color_css() whitelist (or fixed var() fallback), $pad from intval()'d sides, radius/shadow via build_border_radius_css()/Olobuild_Tile_Utils::shadow_value(), border via build_border_css(); $uid is internally generated. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: $accent and $fondo via the safe_color_css() whitelist (or fixed var() fallback), $testo/$filo fixed var()/color-mix() literals chosen by testo_su(), $pad from intval()'d sides, radius/shadow via build_border_radius_css()/Olobuild_Tile_Utils::shadow_value(), border via build_border_css(); $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?>{
                 --pj-accent: <?php echo $accent; ?>;
-                --pj-line: var(--olo-color-border, #e5e7eb);
+                --pj-line: <?php echo $filo; ?>;
                 --pj-surface: var(--olo-color-surface, #ffffff);
+                --pj-text: <?php echo $testo; ?>;
                 display:grid; grid-template-columns:1.15fr .85fr; gap:clamp(28px,4vw,64px); align-items:center;
-                color:var(--olo-color-text, #1f2937);
-                background:var(--olo-color-surface-alt, #f6f7f9);
-                border:1px solid var(--olo-color-border, #e5e7eb);
+                color:var(--pj-text);
+                background:<?php echo $fondo; ?>;
+                border:1px solid var(--pj-line);
                 padding:<?php echo $pad; ?>; <?php echo $radius_css . $shadow_css; ?>
                 <?php if ( $border_css ) echo $border_css; ?>
             }
             <?php if ( $center ) : ?>.<?php echo $uid; ?>{text-align:center;}<?php endif; ?>
             @media(max-width:820px){.<?php echo $uid; ?>{grid-template-columns:1fr;}}
             .<?php echo $uid; ?> .opj-eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--pj-accent);}
-            .<?php echo $uid; ?> .opj-h{font-size:clamp(28px,4vw,46px);line-height:1.1;margin:14px 0 0;color:var(--olo-color-text,#1f2937);}
+            .<?php echo $uid; ?> .opj-h{font-size:clamp(28px,4vw,46px);line-height:1.1;margin:14px 0 0;color:var(--pj-text);}
             .<?php echo $uid; ?> .opj-h em{font-style:italic;color:var(--pj-accent);}
             .<?php echo $uid; ?> .opj-intro{font-size:15.5px;line-height:1.6;opacity:.85;margin:14px 0 26px;max-width:460px;}
             .<?php echo $uid; ?> .opj-inlabel{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.7;margin-bottom:12px;}
@@ -128,7 +184,7 @@ class Olobuild_Projector_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .opj-range::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--pj-surface);border:2px solid var(--pj-accent);box-shadow:0 1px 4px rgba(16,24,40,.3);cursor:pointer;}
             .<?php echo $uid; ?> .opj-range::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--pj-surface);border:2px solid var(--pj-accent);cursor:pointer;}
             .<?php echo $uid; ?> .opj-range:focus-visible{outline:2px solid var(--pj-accent);outline-offset:4px;}
-            .<?php echo $uid; ?> .opj-contrib{font-size:26px;font-weight:600;margin-top:14px;color:var(--olo-color-text,#1f2937);}
+            .<?php echo $uid; ?> .opj-contrib{font-size:26px;font-weight:600;margin-top:14px;color:var(--pj-text);}
             .<?php echo $uid; ?> .opj-r{text-align:center;border-left:1px solid var(--pj-line);padding-left:clamp(18px,4vw,48px);}
             <?php if ( $center ) : ?>.<?php echo $uid; ?> .opj-r{border-left:0;}<?php endif; ?>
             @media(max-width:820px){.<?php echo $uid; ?> .opj-r{border-left:0;border-top:1px solid var(--pj-line);padding-left:0;padding-top:28px;}}

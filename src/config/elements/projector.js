@@ -37,6 +37,7 @@ export default {
     list_base: 1,
     list_items: [],
     zone_accent: '',
+    card_bg: '',
     align: 'left',
     tile_padding: { top: 48, right: 48, bottom: 48, left: 48 },
     border_radius: '16',
@@ -101,6 +102,9 @@ export default {
     { type: 'separator', label: t('Zona') },
     { key: 'zone_accent', label: t('Colore zona (accento)'), type: 'color',
       description: t("Il colore di cursore, occhiello e risultato.") },
+    // Prima il fondo era fisso (grigio chiaro della Palette): niente versione scura.
+    { key: 'card_bg', label: t('Sfondo pannello'), type: 'color',
+      description: t('Vuoto: il grigio chiaro della Palette. Su uno sfondo scuro i testi e i fili passano al chiaro da soli.') },
     { key: 'align', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
