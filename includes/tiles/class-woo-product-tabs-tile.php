@@ -41,12 +41,25 @@ class Olobuild_Woo_Product_Tabs_Tile extends Olobuild_Tile_Base {
 
         $s = wp_parse_args( $settings, $this->defaults );
 
-        global $product;
-        if ( ! is_a( $product, 'WC_Product' ) ) {
-            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- global $product di WooCommerce, non un global definito da olobuild
-            $product = wc_get_product( get_the_ID() );
+        // Il prodotto: quello di «ID prodotto», se no quello della pagina (vuoto o 0, come prima).
+        // Senza il campo la tile funzionava solo nella scheda di un prodotto: in una pagina di
+        // lancio non c'era modo di dirle quale. Il prodotto scelto resta una variabile della tile:
+        // il $product globale è quello della pagina e serve alle tile che seguono.
+        $pid     = absint( $s['product_id'] ?? 0 );
+        $product = $pid ? wc_get_product( $pid ) : null;
+        if ( ! $product ) {
+            global $product;
+            if ( ! is_a( $product, 'WC_Product' ) ) {
+                // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- global $product di WooCommerce, non un global definito da olobuild
+                $product = wc_get_product( get_the_ID() );
+            }
         }
         if ( ! $product ) {
+            // L'avviso è per chi costruisce la pagina (canvas del builder, utenti che possono
+            // modificare): il visitatore se lo trovava scritto in pagina. A lui, niente.
+            if ( empty( $s['_builder_mode'] ) && ! current_user_can( 'edit_posts' ) ) {
+                return '';
+            }
             return '<div style="padding:20px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;">'
                  . esc_html( olobuild_t( 'Nessun prodotto disponibile in questo contesto' ) )
                  . '</div>';
@@ -61,8 +74,25 @@ class Olobuild_Woo_Product_Tabs_Tile extends Olobuild_Tile_Base {
 
         $tab_style = in_array( $s['tab_style'], [ 'underline', 'pills', 'boxed' ], true ) ? $s['tab_style'] : 'underline';
 
-        // Get WooCommerce product tabs
-        setup_postdata( $product->get_id() );
+        // Le schede di WooCommerce leggono il post e il prodotto GLOBALI: la Descrizione è il
+        // contenuto del post (e c'è solo se il post ne ha), le Recensioni i suoi commenti. Con un
+        // prodotto scelto in una pagina di lancio sarebbero state quelle della pagina: per il tempo
+        // della tile diventano il post e il prodotto mostrati, poi tornano quelli di prima.
+        global $post;
+        $post_pagina     = $post;
+        $prodotto_pagina = $GLOBALS['product'] ?? null;
+        // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- scambio temporaneo, ripristinato da $ripristina
+        $post = get_post( $product->get_id() );
+        setup_postdata( $post );
+        $ripristina = static function () use ( $post_pagina, $prodotto_pagina ) {
+            // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- ripristino del post della pagina
+            $GLOBALS['post'] = $post_pagina;
+            if ( $post_pagina ) {
+                setup_postdata( $post_pagina );
+            }
+            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- global $product di WooCommerce, non un global definito da olobuild
+            $GLOBALS['product'] = $prodotto_pagina;
+        };
         // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- hook di terze parti (WooCommerce / WordPress core / OLOlang), non un hook di olobuild
         $tabs = apply_filters( 'woocommerce_product_tabs', [] );
 
@@ -78,6 +108,7 @@ class Olobuild_Woo_Product_Tabs_Tile extends Olobuild_Tile_Base {
         }
 
         if ( empty( $tabs ) ) {
+            $ripristina();
             return '<div style="padding:20px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;">'
                  . esc_html( olobuild_t( 'Nessuna tab disponibile per questo prodotto' ) )
                  . '</div>';
@@ -229,6 +260,7 @@ class Olobuild_Woo_Product_Tabs_Tile extends Olobuild_Tile_Base {
             ?>
         </div>
         <?php
+        $ripristina();
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
         $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
