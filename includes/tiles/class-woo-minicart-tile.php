@@ -60,11 +60,15 @@ class Olobuild_Woo_Minicart_Tile extends Olobuild_Tile_Base {
         $icon_size  = max( 16, min( 48, absint( $s['icon_size'] ) ) );
         $dd_width   = max( 240, min( 480, absint( $s['dropdown_width'] ) ) );
 
-        // Colors
-        $text_color  = $this->safe_color_css( $s['text_color'] );
-        $icon_color  = $this->safe_color_css( $s['icon_color'] );
-        $badge_bg    = $this->safe_color_css( $s['badge_bg'] );
-        $badge_color = $this->safe_color_css( $s['badge_color'] );
+        // Colors — tutti vuoti nei default. L'icona aveva il colore scritto nel tratto dell'SVG:
+        // vuoto dava stroke="" e l'icona spariva; il contatore usciva con «background: ;» (scartato),
+        // un numero senza bollo. Ora l'icona disegna col colore del testo (currentColor) e lo
+        // prende da «Colore icona» o, vuoto, dal contesto come il totale (una testata scura resta
+        // leggibile); il contatore ha le riserve della partenza del config.
+        $text_color  = $this->safe_color_css( $s['text_color'] ) ?: 'inherit';
+        $icon_color  = $this->safe_color_css( $s['icon_color'] ) ?: 'inherit';
+        $badge_bg    = $this->safe_color_css( $s['badge_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $badge_color = $this->safe_color_css( $s['badge_color'] ) ?: 'var(--olo-color-primary-contrast, #ffffff)';
 
         // Cart data
         $count = WC()->cart ? WC()->cart->get_cart_contents_count() : 0;
@@ -72,9 +76,9 @@ class Olobuild_Woo_Minicart_Tile extends Olobuild_Tile_Base {
 
         // SVG icons
         $icons = [
-            'cart'   => '<svg width="' . $icon_size . '" height="' . $icon_size . '" viewBox="0 0 24 24" fill="none" stroke="' . $icon_color . '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>',
-            'bag'    => '<svg width="' . $icon_size . '" height="' . $icon_size . '" viewBox="0 0 24 24" fill="none" stroke="' . $icon_color . '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>',
-            'basket' => '<svg width="' . $icon_size . '" height="' . $icon_size . '" viewBox="0 0 24 24" fill="none" stroke="' . $icon_color . '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9h20l-2 11H4L2 9z"/><path d="M8 9V5a4 4 0 018 0v4"/></svg>',
+            'cart'   => '<svg width="' . $icon_size . '" height="' . $icon_size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>',
+            'bag'    => '<svg width="' . $icon_size . '" height="' . $icon_size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>',
+            'basket' => '<svg width="' . $icon_size . '" height="' . $icon_size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9h20l-2 11H4L2 9z"/><path d="M8 9V5a4 4 0 018 0v4"/></svg>',
         ];
         $svg = isset( $icons[ $icon_type ] ) ? $icons[ $icon_type ] : $icons['cart'];
 
@@ -92,6 +96,7 @@ class Olobuild_Woo_Minicart_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-mc-icon-wrap {
                 position: relative;
                 display: inline-flex;
+                color: <?php echo $icon_color; ?>;
             }
             .<?php echo $uid; ?> .olo-mc-badge {
                 position: absolute;
@@ -138,7 +143,7 @@ class Olobuild_Woo_Minicart_Tile extends Olobuild_Tile_Base {
         <div class="<?php echo esc_attr( $uid ); ?> olo-woo-minicart-wrap">
             <?php if ( $style !== 'text' ) : ?>
             <div class="olo-mc-icon-wrap">
-                <?php echo $svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from the hardcoded icon map, with absint()-clamped size and safe_color_css()-whitelisted stroke colour ?>
+                <?php echo $svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from the hardcoded icon map, with absint()-clamped size and a fixed currentColor stroke ?>
                 <?php if ( ! empty( $s['show_count'] ) ) : ?>
                 <span class="olo-mc-badge olo-mc-badge-count"><?php echo absint( $count ); ?></span>
                 <?php endif; ?>
