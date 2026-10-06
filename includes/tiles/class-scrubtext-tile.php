@@ -34,6 +34,7 @@ class Olobuild_ScrubText_Tile extends Olobuild_Tile_Base {
         'lead_font_family'  => '',
         'lead_font_weight'  => '',
         'lead_max_width_ch' => 52,
+        'text_align'        => '',
 
         // KIT standard OLObuild — additivi, no-op coi default (sfondo none, ombra none, bordo 0)
         'bg'                      => [ 'type' => 'none' ],
@@ -70,6 +71,30 @@ class Olobuild_ScrubText_Tile extends Olobuild_Tile_Base {
         if ( $lch <= 0 ) { $lch = 52; }
         $dim_raw = floatval( $s['dim_opacity'] );
         $dim     = max( 0, min( 100, is_finite( $dim_raw ) ? $dim_raw : 13 ) ) / 100;
+
+        // Dimensione fluida: la pendenza del blueprint (4,2vw) porta il massimo di 56 px a
+        // 1333 px di schermo. Con un massimo più alto restava fissa e 96 px arrivavano solo a
+        // 2280 px, cioè mai: il valore «max» non agiva. Ora la pendenza sale quanto basta
+        // perché ogni massimo si raggiunga entro 1333 px (96 → 7,2vw); con max ≤ 56 resta
+        // 4,2vw e le tile salvate rendono come prima. Con max ≤ min vince il minimo (clamp).
+        $fluid = 'clamp(' . $this->fnum( $smin ) . 'px,' . $this->fnum( max( 4.2, $smax * 0.075 ) ) . 'vw,' . $this->fnum( $smax ) . 'px)';
+
+        // Allineamento di manifesto e lead ('' = a sinistra, come prima). Le due righe hanno
+        // una misura in caratteri: centrate o a destra devono spostarsi col margine, non
+        // solo col testo.
+        $allineamenti = [ 'left', 'center', 'right' ];
+        $decl_testo   = static function ( $a ) use ( $allineamenti ) {
+            return in_array( $a, $allineamenti, true ) ? 'text-align:' . $a : '';
+        };
+        $decl_misura  = static function ( $a ) {
+            $m = [ 'left' => 'margin-left:0;margin-right:0', 'center' => 'margin-left:auto;margin-right:auto', 'right' => 'margin-left:auto;margin-right:0' ];
+            return $m[ $a ] ?? '';
+        };
+        $align      = in_array( $s['text_align'] ?? '', $allineamenti, true ) ? $s['text_align'] : '';
+        $sel_righe  = '.' . $uid . ' .ost-p,.' . $uid . ' .ost-lead';
+        $align_css  = $align !== '' ? '.' . $uid . '{' . $decl_testo( $align ) . '}' . $sel_righe . '{' . $decl_misura( $align ) . '}' : '';
+        $align_css .= $this->css_per_dispositivo( $s, 'text_align', '.' . $uid, $decl_testo );
+        $align_css .= $this->css_per_dispositivo( $s, 'text_align', $sel_righe, $decl_misura );
 
         // Formattazione deterministica (PHP 7.4: l'echo di float rispetta LC_NUMERIC).
         $smin = $this->fnum( $smin );
@@ -117,13 +142,14 @@ class Olobuild_ScrubText_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist, sizes via floatval() with positive fallbacks, opacity clamped 0-1, fixed font-stack literals, background/shadow/border via the Olobuild_CSS_Builder/Olobuild_Tile_Base shared helpers (sanitized internally); $uid is internally generated. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist, sizes via floatval() with positive fallbacks (fluid clamp() formatted by fnum()), alignment from an in_array() whitelist and a fixed margin map, opacity clamped 0-1, fixed font-stack literals, background/shadow/border via the Olobuild_CSS_Builder/Olobuild_Tile_Base shared helpers (sanitized internally); $uid is internally generated. ?>
         <style>
             <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{font-family:<?php echo $sans; ?>;<?php echo $box_decl; ?>}
-            .<?php echo $uid; ?> .ost-p{font-family:<?php echo $p_fam; ?>;font-weight:<?php echo $p_fw; ?>;font-size:clamp(<?php echo $smin; ?>px,4.2vw,<?php echo $smax; ?>px);line-height:1.04;letter-spacing:-.01em;text-transform:none;max-width:<?php echo $mch; ?>ch;margin:0;color:<?php echo $txt; ?>;}
+            .<?php echo $uid; ?> .ost-p{font-family:<?php echo $p_fam; ?>;font-weight:<?php echo $p_fw; ?>;font-size:<?php echo $fluid; ?>;line-height:1.04;letter-spacing:-.01em;text-transform:none;max-width:<?php echo $mch; ?>ch;margin:0;color:<?php echo $txt; ?>;}
             .<?php echo $uid; ?> .ost-p em{font-style:normal;color:<?php echo $acc; ?>;}
             .<?php echo $uid; ?> .ost-lead{font-family:<?php echo $l_fam; ?>;font-weight:<?php echo $l_fw; ?>;font-size:<?php echo $lsz; ?>px;line-height:1.65;color:<?php echo $lcol; ?>;max-width:<?php echo $lch; ?>ch;margin:28px 0 0;}
+            <?php echo $align_css; ?>
             .<?php echo $uid; ?> .st-w{opacity:<?php echo $dim; ?>;transition:opacity .3s ease;}
             .<?php echo $uid; ?> .st-w.on{opacity:1;}
             @media(prefers-reduced-motion:reduce){.<?php echo $uid; ?> .st-w{opacity:1;}}

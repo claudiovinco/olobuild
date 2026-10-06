@@ -35,6 +35,7 @@ export default {
     text_font_weight: '',
     lead_font_family: '',
     lead_font_weight: '',
+    text_align: '',
 
     // KIT standard OLObuild — additivi, no-op coi default (sfondo none, ombra none, bordo 0)
     bg: { type: 'none' },
@@ -97,5 +98,15 @@ export default {
     { type: 'separator', label: t('Scrub allo scroll') },
     { key: 'dim_opacity', label: t('Opacità parole spente'), type: 'number', min: 0, max: 100,
       condition: { field: 'scroll_reveal', op: 'eq', value: true } },
+
+    // Manifesto e lead stavano sempre a sinistra. «Predefinito» = a sinistra, come prima;
+    // centrate o a destra le due righe (misurate in caratteri) si spostano col margine.
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'text_align', label: t('Allineamento'), type: 'select', responsive: true, options: [
+      { value: '', label: t('Predefinito') },
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
+    ]},
   ],
 };
