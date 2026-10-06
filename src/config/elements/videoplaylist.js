@@ -44,10 +44,16 @@ export default {
     ...borderEffectDefaults,
   },
 
-  // Appena trascinata: i video d'esempio della tile (le sorgenti restano quelle) con la playlist
-  // scura accanto al player nero, testo chiaro che si legge per costruzione e la voce attiva
-  // segnata nel colore primario.
+  // Appena trascinata: tre cortometraggi aperti del Blender Studio (licenza CC BY, durate vere)
+  // al posto dei video d'esempio dei default, che erano tre successi pop (Rick Astley, Gangnam
+  // Style, Despacito); la playlist scura accanto al player nero, testo chiaro che si legge per
+  // costruzione e la voce attiva segnata nel colore primario.
   partenza: {
+    videos: [
+      { id: 'vp-1', url: 'https://www.youtube.com/watch?v=WhWc3b3KhnY', title: 'Spring', duration: '7:44', thumbnail: '' },
+      { id: 'vp-2', url: 'https://www.youtube.com/watch?v=mN0zPOpADL4', title: 'Agent 327: Operation Barbershop', duration: '3:52', thumbnail: '' },
+      { id: 'vp-3', url: 'https://www.youtube.com/watch?v=SkVqJ1SGeL0', title: 'Caminandes 3: Llamigos', duration: '2:30', thumbnail: '' },
+    ],
     sidebar_bg: 'var(--olo-color-dark, #16263d)',
     text_color: 'var(--olo-color-light, #f8f9fa)',
     thumbnail_ratio: '16/9',
