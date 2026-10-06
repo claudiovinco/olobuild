@@ -31,18 +31,31 @@ class Olobuild_Woo_Rating_Tile extends Olobuild_Tile_Base {
                  . '</div>';
         }
 
-        global $product;
-        if ( ! is_a( $product, 'WC_Product' ) ) {
-            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- global $product di WooCommerce, non un global definito da olobuild
-            $product = wc_get_product( get_the_ID() );
+        $s = wp_parse_args( $settings, $this->defaults );
+
+        // Il prodotto: quello di «ID prodotto», se no quello della pagina (vuoto o 0, come prima).
+        // Senza il campo la tile funzionava solo nella scheda di un prodotto: in una pagina di
+        // lancio non c'era modo di dirle quale. Il prodotto scelto resta una variabile della tile:
+        // il $product globale è quello della pagina e serve alle tile che seguono.
+        $pid     = absint( $s['product_id'] ?? 0 );
+        $product = $pid ? wc_get_product( $pid ) : null;
+        if ( ! $product ) {
+            global $product;
+            if ( ! is_a( $product, 'WC_Product' ) ) {
+                // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- global $product di WooCommerce, non un global definito da olobuild
+                $product = wc_get_product( get_the_ID() );
+            }
         }
         if ( ! $product ) {
-            return '<div style="padding:20px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF)">'
-                 . esc_html( olobuild_t( 'Nessun prodotto trovato' ) )
+            // L'avviso è per chi costruisce la pagina (canvas del builder, utenti che possono
+            // modificare): il visitatore se lo trovava scritto in pagina. A lui, niente.
+            if ( empty( $s['_builder_mode'] ) && ! current_user_can( 'edit_posts' ) ) {
+                return '';
+            }
+            return '<div style="padding:20px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;">'
+                 . esc_html( olobuild_t( 'Nessun prodotto disponibile in questo contesto' ) )
                  . '</div>';
         }
-
-        $s = wp_parse_args( $settings, $this->defaults );
 
         $avg    = (float) $product->get_average_rating();
         $count  = (int) $product->get_review_count();
@@ -80,7 +93,15 @@ class Olobuild_Woo_Rating_Tile extends Olobuild_Tile_Base {
             $meta_parts[] = number_format( $avg, 1 );
         }
         if ( ! empty( $s['show_count'] ) ) {
-            $meta_parts[] = '(' . $count . ' ' . esc_html( olobuild_t( 'recensioni' ) ) . ')';
+            // Una recensione ha il singolare: prima usciva «(1 recensioni)». Il singolare si usa
+            // se è tradotto o se non lo è nemmeno il plurale (sito in italiano): con un catalogo
+            // che non ha ancora «recensione» un sito inglese scriverebbe la parola italiana, lì
+            // resta il plurale tradotto («1 reviews», come prima) finché la stringa non arriva.
+            $plurale      = olobuild_t( 'recensioni' );
+            $singolare    = olobuild_t( 'recensione' );
+            $singolare_ok = ( 'recensione' !== $singolare || 'recensioni' === $plurale );
+            $parola       = ( 1 === $count && $singolare_ok ) ? $singolare : $plurale;
+            $meta_parts[] = '(' . $count . ' ' . esc_html( $parola ) . ')';
         }
         if ( ! empty( $meta_parts ) ) {
             echo '<span style="color:' . $txt . ';font-size:' . (int) $t_size . 'px">' . implode( ' ', $meta_parts ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $txt safe_color_css()'d above; $meta_parts built from number_format(), (int) count and esc_html()'d label
