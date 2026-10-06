@@ -75,6 +75,15 @@ class Olobuild_Animatedheading_Tile extends Olobuild_Tile_Base {
                 echo ".{$uid} .olo-ah-word { background: " . Olobuild_Tile_Utils::con_alfa( $hclr, '30' ) . "; padding: 0 8px; border-radius: 4px; }";
             } elseif ($hstyle === 'strikethrough') {
                 echo ".{$uid} .olo-ah-word { text-decoration: line-through {$hclr}; }";
+            } elseif ($hstyle === 'circle') {
+                // «Cerchio» era nel menu senza una riga di CSS: la parola restava nuda.
+                // Un ovale tracciato attorno, leggermente inclinato come fatto a mano;
+                // inline-block senza overflow tiene la linea di base del testo.
+                echo ".{$uid} .olo-ah-word { position: relative; display: inline-block; padding: 0 .2em; margin: 0 .15em; }";
+                // Ai lati in % della parola (un ovale inscritto nel suo riquadro taglierebbe le
+                // lettere agli estremi delle parole lunghe), sopra e sotto in em: se la frase va
+                // a capo l'ovale non invade la riga di sopra.
+                echo ".{$uid} .olo-ah-word::after { content: ''; position: absolute; left: -5%; right: -5%; top: -.22em; bottom: -.22em; border: 3px solid {$hclr}; border-radius: 50%; transform: rotate(-2deg); pointer-events: none; }";
             }
         ?>
         <?php endif; ?>
@@ -97,9 +106,12 @@ class Olobuild_Animatedheading_Tile extends Olobuild_Tile_Base {
             // WCAG 2.2.2 / 2.3.3: rispetta prefers-reduced-motion.
             // Se l'utente preferisce ridurre il movimento, mostra staticamente
             // la prima parola senza avviare alcuna animazione/intervallo.
-            if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-                el.textContent = words[0];
-                return;
+            // If annidati, niente «&&»: WordPress lo trasforma in &#038; e rompe lo script.
+            if(window.matchMedia){
+                if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+                    el.textContent = words[0];
+                    return;
+                }
             }
             var idx = 0;
             var anim = '<?php echo esc_js($anim); ?>';
@@ -202,6 +214,9 @@ class Olobuild_Animatedheading_Tile extends Olobuild_Tile_Base {
             } else if(anim === 'clip'){
                 el.style.display = 'inline-block';
                 el.style.overflow = 'hidden';
+                // Un inline-block con overflow nascosto prende come linea di base il bordo
+                // inferiore: senza questo la parola si alzava sopra il resto del titolo.
+                el.style.verticalAlign = 'bottom';
                 el.style.borderRight = '2px solid currentColor';
                 el.style.whiteSpace = 'nowrap';
                 el.style.transition = 'width 0.8s cubic-bezier(.4,0,.2,1)';
