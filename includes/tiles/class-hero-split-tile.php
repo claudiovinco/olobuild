@@ -403,7 +403,7 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
                                         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup <video>/gallery generato sopra con esc_url/esc_attr
                                         echo $card_media; ?>
                                         <div style="position:relative;z-index:1;font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:11px;color:var(--olo-color-text-faint, #9ca3af);letter-spacing:0.05em" data-olo-editable="<?php echo 'showcase_items.' . intval( $idx ) . '.number'; ?>"><?php echo esc_html( $num ); ?></div>
-                                        <div style="position:relative;z-index:1;font-family:<?php echo esc_attr( $headline_family ); ?>;font-size:36px;font-weight:500;color:<?php echo esc_attr( $txt_clr ); ?>;text-align:center;<?php echo esc_attr( $italic ); ?>" data-olo-editable="<?php echo 'showcase_items.' . intval( $idx ) . '.text'; ?>"><?php echo esc_html( $txt ); ?></div>
+                                        <div class="olo-hsplit__card-word" style="position:relative;z-index:1;font-family:<?php echo esc_attr( $headline_family ); ?>;font-size:36px;font-weight:500;color:<?php echo esc_attr( $txt_clr ); ?>;text-align:center;<?php echo esc_attr( $italic ); ?>" data-olo-editable="<?php echo 'showcase_items.' . intval( $idx ) . '.text'; ?>"><?php echo esc_html( $txt ); ?></div>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
@@ -454,6 +454,13 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
             @media (max-width: 900px) {
                 .<?php echo $uid; ?> .olo-hsplit__grid { grid-template-columns: 1fr !important; gap: 40px !important; }
                 .<?php echo $uid; ?> .olo-hsplit__headline { font-size: clamp(48px, 12vw, 80px) !important; }
+            }
+            /* Telefono: le statistiche su due colonne (quattro allargavano la colonna oltre la tile e la
+               tagliavano) e la parola grande delle card in proporzione allo schermo (36 px fissi in una
+               card larga 110 px diventavano «squadr…»). */
+            @media (max-width: 640px) {
+                .<?php echo $uid; ?> .olo-hsplit__stats { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 20px 24px !important; }
+                .<?php echo $uid; ?> .olo-hsplit__card-word { font-size: clamp(18px, 6vw, 36px) !important; overflow-wrap: break-word; }
             }
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
