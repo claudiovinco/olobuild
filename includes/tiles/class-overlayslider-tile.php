@@ -230,6 +230,15 @@ class Olobuild_OverlaySlider_Tile extends Olobuild_Tile_Base {
             $nav_css  .= $this->css_per_dispositivo( $cols_dev, 'columns', $nav_sel, $vis );
         }
 
+        // Gap «Predefinito»: la classe uk-grid-default non esiste e l'UIkit del plugin ha il
+        // gutter base di .uk-grid a 0, quindi le slide si toccavano (identico a «Collassato»).
+        // Ora vale lo spazio fra le colonne del sito (--olo-gutter, Stili globali; 32px di base).
+        $gap_css = '';
+        if ( 'default' === $gap ) {
+            $g_sel   = '.' . $uid . ' .uk-slider-items.uk-grid';
+            $gap_css = $g_sel . '{margin-left:calc(-1 * var(--olo-gutter, 2rem));}' . $g_sel . '>*{padding-left:var(--olo-gutter, 2rem);}';
+        }
+
         $wrap_class = 'olo-overlayslider olo-os--preset-' . esc_attr( $preset_id ) . ' ' . $uid;
 
         // Shadow
@@ -342,7 +351,7 @@ class Olobuild_OverlaySlider_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-os-caption--below.olo-os-caption--pad-large { padding-top: 1.4em; }
             /* Slide con link: il fuoco da tastiera si vede */
             .<?php echo $uid; ?> .uk-slider-items a.uk-display-block:focus-visible { outline: 2px solid var(--olo-color-primary, #e1474f); outline-offset: -2px; }
-            <?php echo $cols_css . $nav_css; ?>
+            <?php echo $cols_css . $nav_css . $gap_css; ?>
 
             /* CTA */
             .<?php echo $uid; ?> .olo-os-cta {
