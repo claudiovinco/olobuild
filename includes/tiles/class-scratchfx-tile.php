@@ -302,7 +302,12 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
                 margin-top: 16px;
                 background: transparent;
                 border: 1px solid var(--olo-color-border, rgba(0,0,0,0.18));
-                color: <?php echo $text_color; ?>;
+                <?php
+                // Sta fuori dall'area premio, sulla pagina: prende il colore della pagina. Prima
+                // prendeva il «Colore testo» del premio, che sopra una foto scura è chiaro, e
+                // sulla pagina chiara il pulsante spariva.
+                ?>
+                color: inherit;
                 border-radius: 100px;
                 padding: 9px 18px;
                 font: inherit;

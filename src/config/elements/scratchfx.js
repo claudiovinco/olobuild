@@ -170,7 +170,8 @@ export default {
 
     { type: 'separator', label: t('Colori contenuto') },
     { key: 'under_bg', label: t('Sfondo area premio'), type: 'color' },
-    { key: 'text_color', label: t('Colore testo'), type: 'color' },
+    // Solo i testi dell'area premio (e il codice): il pulsante «Scopri», fuori dall'area, segue la pagina.
+    { key: 'text_color', label: t('Colore testo premio'), type: 'color' },
     { key: 'accent_color', label: t('Colore accento (sopra-titolo)'), type: 'color' },
 
     { type: 'separator', label: t('Layout') },
