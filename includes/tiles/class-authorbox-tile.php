@@ -81,9 +81,10 @@ class Olobuild_Authorbox_Tile extends Olobuild_Tile_Base {
             $bg      = $this->safe_color_css( $s['background_color'] ) ?: 'var(--olo-color-surface-alt, #F3F4F6)';
             $fg      = $this->safe_color_css( $s['name_color'] ) ?: 'var(--olo-color-text, #374151)';
             $rad     = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
-            $rad_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
-            $pad     = absint( $s['padding'] );
-            return '<div class="olo-authorbox" style="background:' . $bg . ';color:' . $fg . ';border-radius:' . $rad . ';padding:' . $pad . 'px;text-align:center;font-size:14px;">' . olobuild_t( 'Autore non disponibile in questo contesto' ) . '</div>';
+            // Stesso Padding della scheda vera (controllo `tile_padding`): il segnaposto leggeva
+            // la vecchia chiave `padding`, ferma ai 20px di serie qualunque valore si scegliesse.
+            $pad     = Olobuild_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 20, 20 );
+            return '<div class="olo-authorbox" style="background:' . $bg . ';color:' . $fg . ';border-radius:' . $rad . ';padding:' . $pad . ';text-align:center;font-size:14px;">' . esc_html( olobuild_t( 'Autore non disponibile in questo contesto' ) ) . '</div>';
         }
 
         // Gather author data
