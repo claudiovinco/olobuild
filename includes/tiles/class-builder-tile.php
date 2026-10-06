@@ -31,6 +31,7 @@ class Olobuild_Builder_Tile extends Olobuild_Tile_Base {
         ],
         'total_label' => 'Totale',
         'count_label' => 'voci',
+        'count_label_one' => '',
         'cta_text'    => 'Richiedi il preventivo',
         'cta_url'     => '',
         'send_mode'   => 'mail',
@@ -72,6 +73,28 @@ class Olobuild_Builder_Tile extends Olobuild_Tile_Base {
         $inm    = $this->safe_color_css( $s['item_name_color'] ?? '' ) ?: 'var(--olo-color-text,#111827)';
         $ipr    = $this->safe_color_css( $s['item_price_color'] ?? '' ) ?: $accent;
         $hacc   = (string) ( $s['heading_accent'] ?? '' );
+        // Il conteggio ha due forme: prima con una voce scelta usciva «1 voci». Senza la forma
+        // singolare (tile salvate prima, campo vuoto) la si ricava per le etichette comuni;
+        // per le altre resta il plurale, come prima.
+        $conta_molti = (string) ( $s['count_label'] ?? '' );
+        $conta_uno   = trim( (string) ( $s['count_label_one'] ?? '' ) );
+        if ( '' === $conta_uno ) {
+            $singolari = [
+                'voci' => 'voce', 'scelte' => 'scelta', 'articoli' => 'articolo', 'servizi' => 'servizio',
+                'prodotti' => 'prodotto', 'elementi' => 'elemento', 'pezzi' => 'pezzo', 'ospiti' => 'ospite',
+                'persone' => 'persona', 'notti' => 'notte', 'ore' => 'ora', 'giorni' => 'giorno', 'camere' => 'camera',
+                'posti' => 'posto', 'biglietti' => 'biglietto', 'lezioni' => 'lezione', 'items' => 'item',
+            ];
+            $chiave_conta = strtolower( trim( $conta_molti ) );
+            $conta_uno    = $conta_molti;
+            if ( isset( $singolari[ $chiave_conta ] ) ) {
+                $conta_uno = $singolari[ $chiave_conta ];
+                if ( preg_match( '/^[A-Z]/', trim( $conta_molti ) ) ) {
+                    $conta_uno = ucfirst( $conta_uno );
+                }
+            }
+        }
+        $conta_attr = ' data-bd-count-label data-uno="' . esc_attr( $conta_uno ) . '" data-molti="' . esc_attr( $conta_molti ) . '"';
 
         $items = is_array( $s['items'] ) ? array_values( $s['items'] ) : [];
         if ( empty( $items ) ) return '';
@@ -158,7 +181,7 @@ class Olobuild_Builder_Tile extends Olobuild_Tile_Base {
                     <?php if ( $s['intro'] !== '' ) : ?><p class="obds-intro"><?php echo esc_html( $s['intro'] ); ?></p><?php endif; ?>
                 </div>
                 <div class="obds-tally">
-                    <div class="cnt"><b data-bd-count-out>0</b> <span><?php echo esc_html( $s['count_label'] ?? '' ); ?></span></div>
+                    <div class="cnt"><b data-bd-count-out>0</b> <span<?php echo $conta_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributes built above with esc_attr() ?>><?php echo esc_html( $conta_molti ); ?></span></div>
                     <div class="tot" data-bd-total><?php echo esc_html( $cur . '0' ); ?></div>
                 </div>
             </div>
@@ -207,7 +230,8 @@ class Olobuild_Builder_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .obd-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:22px;padding-top:20px;border-top:2px solid <?php echo $cardbd; ?>;}
             .<?php echo $uid; ?> .obd-tot{font-family:<?php echo $serif; ?>;}
             .<?php echo $uid; ?> .obd-tot b{font-size:clamp(26px,3.4vw,38px);color:var(--olo-color-text,#111827);font-variant-numeric:tabular-nums;}
-            .<?php echo $uid; ?> .obd-tot span{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.6;display:block;}
+            <?php /* Solo la riga dell'etichetta va a capo: con «.obd-tot span» anche il numero e la parola dentro erano blocchi, e «Totale · 3 voci» stava su tre righe. */ ?>
+            .<?php echo $uid; ?> .obd-tot > span{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.6;display:block;}
             .<?php echo $uid; ?> .obd-cta{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14.5px;color:var(--bd-on);background:var(--bd-accent);padding:13px 26px;border-radius:999px;text-decoration:none;transition:transform .18s;}
             .<?php echo $uid; ?> .obd-cta:hover{transform:translateY(-1px);}
             .<?php echo $uid; ?> .obd-cta:focus-visible{outline:2px solid var(--bd-accent);outline-offset:3px;}
@@ -241,7 +265,7 @@ class Olobuild_Builder_Tile extends Olobuild_Tile_Base {
                 <?php endforeach; ?>
                 <div class="obd-foot">
                     <div class="obd-tot">
-                        <span><?php echo esc_html( $s['total_label'] ?? 'Totale' ); ?> · <span data-bd-count-out>0</span> <?php echo esc_html( $s['count_label'] ?? '' ); ?></span>
+                        <span><?php echo esc_html( $s['total_label'] ?? 'Totale' ); ?> · <span data-bd-count-out>0</span> <span<?php echo $conta_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributes built above with esc_attr() ?>><?php echo esc_html( $conta_molti ); ?></span></span>
                         <b data-bd-total><?php echo esc_html( $cur . '0' ); ?></b>
                     </div>
                     <?php if ( ! empty( $s['cta_text'] ) ) : ?>
@@ -263,6 +287,7 @@ class Olobuild_Builder_Tile extends Olobuild_Tile_Base {
             var fmt=new Intl.NumberFormat(document.documentElement.lang||undefined,{useGrouping:'always',minimumFractionDigits:decimali?2:0,maximumFractionDigits:2});
             var totalEl=root.querySelector('[data-bd-total]');
             var countEl=root.querySelector('[data-bd-count-out]');
+            var contaEl=root.querySelector('[data-bd-count-label]');
             var cta=root.querySelector('[data-bd-cta]');
             var base=cta?cta.getAttribute('href'):'';
             function getN(it){ return parseInt(it.getAttribute('data-n'))||0; }
@@ -305,6 +330,8 @@ class Olobuild_Builder_Tile extends Olobuild_Tile_Base {
                 });
                 if(totalEl){totalEl.textContent=cur+fmt.format(total);}
                 if(countEl){countEl.textContent=n;}
+                /* «1 voce», «0 voci», «3 voci». */
+                if(contaEl){contaEl.textContent=contaEl.getAttribute(n===1?'data-uno':'data-molti')||'';}
                 aggiornaCta(total,n);
             }
             /* WooCommerce: ogni riga con un prodotto va nel carrello, poi si apre il carrello. */

@@ -27,6 +27,7 @@ export default {
     ],
     total_label: t('Totale'),
     count_label: t('voci'),
+    count_label_one: '',
     cta_text: t('Richiedi il preventivo'),
     cta_url: '',
     send_mode: 'mail',
@@ -87,6 +88,9 @@ export default {
     { key: 'cap', label: t('Limite quantità totale (0 = nessuno)'), type: 'number' },
     { key: 'total_label', label: t('Etichetta totale'), type: 'text' },
     { key: 'count_label', label: t('Etichetta conteggio'), type: 'text' },
+    // Prima con una sola voce scelta usciva «1 voci».
+    { key: 'count_label_one', label: t('Etichetta conteggio, singolare'), type: 'text', placeholder: t('voce'),
+      description: t('Quando la quantità scelta è 1 («1 voce»). Vuota: per le etichette comuni (voci, scelte, ospiti, notti…) il singolare si ricava da solo, per le altre resta quella al plurale.') },
 
     { type: 'separator', label: t('Invio della scelta') },
     { key: 'send_mode', label: t('Dove va la scelta'), type: 'select', options: [
