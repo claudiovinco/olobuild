@@ -57,14 +57,18 @@ class Olobuild_Blendtext_Tile extends Olobuild_Tile_Base {
         $fs         = intval( $s['font_size'] ) ?: 120;
         $fs_tablet  = intval( $s['font_size_tablet'] ) ?: 80;
         $fs_mobile  = intval( $s['font_size_mobile'] ) ?: 50;
-        $fw         = esc_attr( $s['font_weight'] ) ?: '900';
-        $ff         = $s['font_family'] ? esc_attr( $s['font_family'] ) : 'inherit';
-        $tt         = esc_attr( $s['text_transform'] ) ?: 'uppercase';
+        $fw         = $this->font_weight_css( $s['font_weight'] ) ?: '900';
+        // Famiglia dal risolutore comune: esc_attr() trasformava gli apici di un font salvato
+        // come "'Playfair Display', serif" in &#039;, la dichiarazione non era più CSS valido
+        // e il testo tornava al font del tema.
+        $ff         = $this->resolve_font_family( (string) $s['font_family'] ) ?: 'inherit';
+        $tt         = in_array( $s['text_transform'], [ 'none', 'uppercase', 'lowercase', 'capitalize' ], true ) ? $s['text_transform'] : 'uppercase';
         $ls         = intval( $s['letter_spacing'] );
         $lh         = floatval( $s['line_height'] ) ?: 1;
-        $ta         = esc_attr( $s['text_align'] ) ?: 'center';
-        $color      = $this->safe_color_css( $s['text_color'] ) ?: '#ffffff';
-        $blend      = esc_attr( $s['blend_mode'] ) ?: 'difference';
+        $allineam   = [ 'left', 'center', 'right' ];
+        $ta         = in_array( $s['text_align'], $allineam, true ) ? $s['text_align'] : 'center';
+        $color      = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-light, #ffffff)';
+        $blend      = in_array( $s['blend_mode'], [ 'normal', 'multiply', 'screen', 'overlay', 'darken', 'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion', 'hue', 'saturation', 'color', 'luminosity' ], true ) ? $s['blend_mode'] : 'difference';
         $mode       = ( ( $s['mode'] ?? 'text' ) === 'spotlight' ) ? 'spotlight' : 'text';
         // Padding: tile_padding (standard) oppure bt_padding/legacy
         $pad_obj    = $s['tile_padding'] ?? $s['bt_padding'] ?? null;
@@ -94,6 +98,11 @@ class Olobuild_Blendtext_Tile extends Olobuild_Tile_Base {
         $css .= "#{$uid} .olo-bt-text{font-size:{$fs}px;font-weight:{$fw};font-family:{$ff};text-transform:{$tt};letter-spacing:{$ls}px;line-height:{$lh};text-align:{$ta};color:{$color};margin:0}";
         $css .= "@media(max-width:960px){#{$uid} .olo-bt-text{font-size:{$fs_tablet}px !important}}";
         $css .= "@media(max-width:640px){#{$uid} .olo-bt-text{font-size:{$fs_mobile}px !important}}";
+        // Allineamento per dispositivo: il campo lo offriva (tablet, telefono) ma i valori
+        // non li leggeva nessuno.
+        $css .= $this->css_per_dispositivo( $s, 'text_align', "#{$uid} .olo-bt-text", static function ( $a ) use ( $allineam ) {
+            return in_array( $a, $allineam, true ) ? 'text-align:' . $a : '';
+        } );
 
         // ── BlendText · Spotlight: disco-torcia che segue il cursore (rif. 63-tema-risograph.html) ──
         // Anatomia: <div#uid-flash> position:fixed, border-radius:50%, mix-blend-mode, pointer-events:none.
@@ -107,7 +116,7 @@ class Olobuild_Blendtext_Tile extends Olobuild_Tile_Base {
             $sp_soft  = max( 0, min( 100, intval( $s['spotlight_softness'] ?? 40 ) ) );
             $sp_inner = max( 0, min( 100, 100 - $sp_soft ) );  // softness alto → inner basso → bordo più sfumato
             $sp_blend = in_array( $s['spotlight_blend'] ?? 'difference', [ 'difference', 'exclusion', 'screen' ], true ) ? ( $s['spotlight_blend'] ?? 'difference' ) : 'difference';
-            $sp_color = $this->safe_color_css( $s['spotlight_color'] ?? '' ) ?: '#ffffff';
+            $sp_color = $this->safe_color_css( $s['spotlight_color'] ?? '' ) ?: 'var(--olo-color-light, #ffffff)';
             $sp_ease  = max( 5, min( 90, intval( $s['spotlight_easing'] ?? 22 ) ) ) / 100;
             $flash_id = $uid . '-flash';
 
@@ -152,7 +161,7 @@ class Olobuild_Blendtext_Tile extends Olobuild_Tile_Base {
         list( $bt_cls, $bt_data ) = $this->tfx_attrs( $s, 'text', wp_strip_all_tags( $s['text'] ) );
 
         ob_start();
-        echo '<style>' . $css . $flash_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS assembled above from intval()/floatval() clamped numerics, esc_attr()'d typography values, safe_color_css() whitelisted colors, in_array() whitelisted blend mode and the internally generated uid
+        echo '<style>' . $css . $flash_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS assembled above from intval()/floatval() clamped numerics, typography from resolve_font_family()/font_weight_css() and in_array() whitelists (transform, align, blend mode), safe_color_css() whitelisted colors, css_per_dispositivo() media queries from the same align whitelist and the internally generated uid
         ?>
         <div id="<?php echo esc_attr( $uid ); ?>">
             <<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tag is in_array() whitelisted; tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); $text is esc_html()'d above (nl2br only adds <br /> tags) ?> class="olo-bt-text<?php echo $bt_cls; ?>"<?php echo $bt_data; ?>><?php echo nl2br( $text ); ?></<?php echo $tag; ?>>
