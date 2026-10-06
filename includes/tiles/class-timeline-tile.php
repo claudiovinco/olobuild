@@ -184,11 +184,14 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
             $r = $this->build_border_radius_css( $s[ $k ] ?? 0 );
             if ( $r !== '' ) { $v[] = $css . ':' . $r; }
         };
-        // font-family: valore verbatim ripulito (no CSS injection); l'attributo style è poi esc_attr nel render.
+        // font-family dal controllo tipografia: CSS pronto, validato dal resolver condiviso
+        // (l'attributo style è poi esc_attr nel render). Prima una pulizia a caratteri
+        // toglieva le parentesi: «var(--olo-font-family-heading)» diventava
+        // «var--olo-font-family-heading», una famiglia inesistente. 'serif'/'sans-serif'
+        // salvati a mano restano le famiglie generiche di sempre.
         $str = function ( $k, $css ) use ( $s, &$v ) {
-            $raw = trim( (string) ( $s[ $k ] ?? '' ) );
-            $raw = preg_replace( '/[^A-Za-z0-9 ,"\'\-]/', '', $raw );
-            if ( $raw !== '' ) { $v[] = $css . ':' . $raw; }
+            $ff = $this->resolve_font_family( $s[ $k ] ?? '', [ 'serif' => 'serif', 'sans-serif' => 'sans-serif' ] );
+            if ( $ff !== '' ) { $v[] = $css . ':' . $ff; }
         };
         $color( 'tl_rail_color', '--tl-rail-color' );
         $px( 'tl_rail_w', '--tl-rail-w' );
