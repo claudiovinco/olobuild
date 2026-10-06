@@ -42,6 +42,12 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
+    // Il prodotto a cui si riferisce: senza, la tile funzionava solo nella scheda di un prodotto.
+    { type: 'separator', label: t('Prodotto') },
+    { key: 'product_id', label: t('ID prodotto'), type: 'number', min: 0, step: 1,
+      description: t("Il prodotto a cui si riferisce la tile, per usarla fuori dalla sua scheda (una pagina di lancio). L'ID si legge in Prodotti, passando sul nome. Vuoto o 0 = il prodotto della pagina.") },
+
+    { type: 'separator', label: t('Disponibilità') },
     { key: 'show_quantity', label: t('Mostra quantita'), type: 'toggle' },
     { key: 'show_icon', label: t('Mostra indicatore'), type: 'toggle' },
     { key: 'low_stock_threshold', label: t('Soglia scorte basse'), type: 'range', min: 1, max: 50, step: 1 },
