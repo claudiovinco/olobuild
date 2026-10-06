@@ -851,6 +851,16 @@
   background: rgba(0,0,0,0.7);
 }
 .olo-proslider-tab {
+  /* Sono <button>: senza questo azzeramento resta il fondo di sistema (ButtonFace, grigio chiaro) e il
+     testo chiaro delle schede non si legge, dove il tema non ripulisce i pulsanti (catalogo, 6 ott 2026). */
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+  font-family: inherit;
+  line-height: 1.3;
   padding: 12px 20px;
   color: rgba(255,255,255,0.6);
   font-size: 13px;
