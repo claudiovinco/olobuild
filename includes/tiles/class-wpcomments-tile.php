@@ -54,6 +54,30 @@ class Olobuild_Wpcomments_Tile extends Olobuild_Tile_Base {
         ];
     }
 
+    /**
+     * Il testo del pulsante «Invia commento» sul suo sfondo. Senza Colore link lo sfondo è il
+     * primario → il suo contrasto. Con Colore link lo sfondo è QUEL colore, e il contrasto del
+     * primario non c'entra: su un tema a primario chiaro (contrasto scuro) un link scuro dava
+     * testo scuro su scuro. Lì decide la luminanza (token risolti sul server da colore_hex);
+     * un colore che non si risolve tiene il testo chiaro di sempre (era #fff fisso).
+     */
+    private function testo_pulsante( $fondo ) {
+        $chiaro = 'var(--olo-color-light, #ffffff)';
+        if ( '' === $fondo || preg_match( '/^var\(\s*--olo-color-primary\s*[,)]/', $fondo ) ) {
+            return 'var(--olo-color-primary-contrast, #ffffff)';
+        }
+        $hex = preg_match( '/transparent|rgba\(|hsla\(|^#[0-9a-f]{8}$/i', $fondo ) ? '' : Olobuild_Tile_Utils::colore_hex( $fondo );
+        if ( '' === $hex ) {
+            return $chiaro;
+        }
+        $l = 0.0;
+        foreach ( [ 1 => 0.2126, 3 => 0.7152, 5 => 0.0722 ] as $i => $k ) {
+            $v  = hexdec( substr( $hex, $i, 2 ) ) / 255;
+            $l += $k * ( $v <= 0.03928 ? $v / 12.92 : pow( ( $v + 0.055 ) / 1.055, 2.4 ) );
+        }
+        return $l < 0.18 ? $chiaro : 'var(--olo-color-dark, #1f2937)';
+    }
+
     public function render( $settings ) {
         $s = wp_parse_args( $settings, $this->defaults );
 
@@ -64,9 +88,21 @@ class Olobuild_Wpcomments_Tile extends Olobuild_Tile_Base {
             return '';
         }
 
+        // Commenti chiusi e nessun commento: niente da mostrare. get_comments_number()
+        // restituisce di norma una STRINGA ('0', da comment_count): il confronto stretto
+        // con l'intero 0 non era mai vero e la tile mostrava «Commenti (0)» e «Nessun
+        // commento ancora.» su pagine dove non si può commentare. Nel canvas del builder
+        // (le pagine hanno i commenti chiusi di serie) la tile resta visibile, con un
+        // avviso: sparire del tutto sembrerebbe un guasto.
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- sola lettura del flag di routing dell'iframe del builder; nessuna modifica di stato.
+        $in_canvas     = ! empty( $s['_builder_mode'] ) || ! empty( $_GET['olo_builder_iframe'] );
+        $avviso_chiusi = '';
         if ( ! comments_open( $post->ID ) ) {
-            if ( get_comments_number( $post->ID ) === 0 ) {
-                return '';
+            if ( 0 === (int) get_comments_number( $post->ID ) ) {
+                if ( ! $in_canvas ) {
+                    return '';
+                }
+                $avviso_chiusi = olobuild_t( 'Commenti chiusi su questa pagina: sul sito la tile non compare.' );
             }
         }
 
@@ -146,7 +182,7 @@ class Olobuild_Wpcomments_Tile extends Olobuild_Tile_Base {
             }
             .<?php echo $uid; ?> .olo-comment-date {
                 font-size: 0.8em;
-                <?php if ( $date_color ) : ?>color: <?php echo $date_color; ?>;<?php else : ?>color: #888;<?php endif; ?>
+                <?php if ( $date_color ) : ?>color: <?php echo $date_color; ?>;<?php else : ?>color: var(--olo-color-text-muted, #888888);<?php endif; ?>
             }
             .<?php echo $uid; ?> .olo-comment-content {
                 font-size: 0.9em;
@@ -210,7 +246,9 @@ class Olobuild_Wpcomments_Tile extends Olobuild_Tile_Base {
                 cursor: pointer;
                 font-size: 0.9em;
                 font-weight: 500;
-                <?php if ( $link_color ) : ?>background: <?php echo $link_color; ?>; color: #fff;<?php else : ?>background: var(--olo-color-primary, #e1474f); color: #fff;<?php endif; ?>
+                <?php // Testo del pulsante leggibile sul SUO sfondo: contrasto del primario di serie, luminanza con Colore link (era #fff fisso). ?>
+                <?php if ( $link_color ) : ?>background: <?php echo $link_color; ?>;<?php else : ?>background: var(--olo-color-primary, #e1474f);<?php endif; ?>
+                color: <?php echo $this->testo_pulsante( $link_color ); ?>;
             }
             <?php endif; ?>
             .<?php echo $uid; ?> .olo-comment-reply a:focus-visible,
@@ -223,6 +261,9 @@ class Olobuild_Wpcomments_Tile extends Olobuild_Tile_Base {
 
         <div class="olo-wpcomments <?php echo esc_attr( $uid ); ?>">
         <?php
+        if ( '' !== $avviso_chiusi ) {
+            echo '<p class="olo-wpc-avviso" style="font-size:0.8em;opacity:0.7;margin:0 0 .5rem">' . esc_html( $avviso_chiusi ) . '</p>';
+        }
         // Title
         if ( $show_title ) {
             $title_style = $title_color ? ' style="color:' . $title_color . '"' : '';
