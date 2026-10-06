@@ -314,6 +314,8 @@ class Olobuild_LangSwitcher_Tile extends Olobuild_Tile_Base {
             . '.olsb-flag svg{display:block;width:100%;height:100%}'
             . '.olsb-flag-code{display:inline-flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:10px;font-weight:800;letter-spacing:.3px;color:var(--olo-color-text,#374151);background:var(--olo-color-surface-alt,#f1f3f5)}'
             . '.olsb-code{font-weight:700;font-size:12px;letter-spacing:.5px}.olsb-name{font-weight:500}.olsb-label{font-size:10px;opacity:.8;margin-left:2px}.olsb-arrow{opacity:.55;margin-left:2px}'
+            // Etichetta SOTTO la bandiera (render_item_content(): la pila esiste solo con «Mostra etichetta sotto»).
+            . '.olsb-pila{display:inline-flex;flex-direction:column;align-items:center;gap:.25rem}.olsb-pila .olsb-label{margin-left:0;line-height:1.1;white-space:nowrap}'
             . '.olsb-dropdown{position:relative;display:inline-block}'
             // Il menu consuma le --olsb-* della tile (fallback = token tema): senza,
             // i colori configurati valgono per il trigger ma il pannello resta chiaro.
@@ -375,6 +377,13 @@ class Olobuild_LangSwitcher_Tile extends Olobuild_Tile_Base {
     private function render_item_content( $lang, $flags, $s ) {
         $style_attr = $s['style'];
         $code       = $lang['code'];
+        // «Mostra etichetta sotto»: bandiera ed etichetta in una pila verticale. Prima erano
+        // sorelle nella voce, che è una riga flessibile, e l'etichetta finiva ACCANTO alla
+        // bandiera. La freccia del menu a tendina resta a lato della pila.
+        $sotto = ! empty( $s['show_label'] ) && ( $style_attr === 'flags' || $style_attr === 'flags_circle' );
+        if ( $sotto ) {
+            echo '<span class="olsb-pila">';
+        }
 
         // Bandiera SVG "a moneta"/rettangolo (no emoji: invisibili su Windows).
         if ( in_array( $style_attr, [ 'flags', 'flags_text', 'flags_circle' ], true ) ) {
@@ -386,9 +395,9 @@ class Olobuild_LangSwitcher_Tile extends Olobuild_Tile_Base {
         if ( $style_attr === 'names' ) {
             echo '<span class="olsb-name">' . esc_html( $lang['name'] ) . '</span>';
         }
-        if ( ! empty( $s['show_label'] ) && ( $style_attr === 'flags' || $style_attr === 'flags_circle' ) ) {
+        if ( $sotto ) {
             $label = $s['label_format'] === 'code' ? strtoupper( $code ) : $lang['name'];
-            echo '<span class="olsb-label">' . esc_html( $label ) . '</span>';
+            echo '<span class="olsb-label">' . esc_html( $label ) . '</span></span>';
         }
     }
 
