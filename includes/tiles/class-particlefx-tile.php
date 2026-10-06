@@ -20,7 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  *  - Runtime idempotente con guard su dataset; gira solo nel viewport (IO).
  *  - reduced-motion → canvas disegnato fermo (1 frame) o non avviato.
  *  - Pointer off su (hover:none)/(pointer:coarse).
- *  - Additivo: chiavi salvate invariate; include il sistema bordi standard.
+ *  - Additivo: chiavi salvate invariate. Decoratore a zero dimensioni: niente bordo,
+ *    ombra, sfondo o contenuto propri (li dà la sezione che ospita il canvas).
  */
 class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
 
@@ -120,40 +121,12 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
             $palette = $this->preset_palette( $preset );
         }
 
-        // ── Layout sezione ────────────────────────────────────────────────
-        $min_h     = max( 80,  intval( $s['min_height'] ) );
-        $pad_css   = Olobuild_Tile_Utils::sides_css( Olobuild_Tile_Utils::spacing_sides(
-            $s['padding'] ?? null,
-            [ 'y' => $s['padding_y'] ?? null ],
-            [ 0, 0, 0, 0 ]
-        ) );
-        $max_w     = max( 200, intval( $s['content_max_width'] ) );
-        $align_v   = in_array( $s['align_v'], [ 'flex-start', 'center', 'flex-end' ], true ) ? $s['align_v'] : 'center';
-        $align_h   = in_array( $s['align_h'], [ 'flex-start', 'center', 'flex-end' ], true ) ? $s['align_h'] : 'center';
-        $text_al   = in_array( $s['text_align'], [ 'left', 'center', 'right' ], true ) ? $s['text_align'] : 'center';
-        $full      = ! empty( $s['full_width'] );
-
-        // Bg: oggetto "bg" (Sfondo creativo) o bg_color semplice; default trasparente.
-        $bg_obj  = $s['bg'] ?? null;
-        $bg_decl = '';
-        if ( is_array( $bg_obj ) && ! empty( $bg_obj['type'] ) && $bg_obj['type'] !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
-            $bg_decl = ( new Olobuild_CSS_Builder() )->get_bg_inline_css( $bg_obj );
-        }
-        if ( ! $bg_decl ) {
-            $color = $this->safe_color_css( $s['bg_color'] ?? '' );
-            if ( $color !== '' ) {
-                $bg_decl = 'background: ' . $color;
-            }
-        }
-
-        // Shadow (preset/custom)
-        $shadow_css = $this->build_shadow_decl( $s );
-
-        // Contenuto: HTML rich-text editabile inline (sanitizzato). Sempre nel DOM (SSR).
-        $content_html = $this->safe_richtext_content( $s['content'] ?? '' );
-        if ( trim( wp_strip_all_tags( $content_html ) ) === '' && ! $content_html ) {
-            $content_html = '';
-        }
+        // Altezza data alla sezione ospite quando è vuota (vedi il runtime): è l'unica misura
+        // della «sezione» che la tile usa. Contenuto, padding, larghezza, allineamenti, sfondo,
+        // ombra e bordo erano calcolati e mai stampati (la tile è un decoratore a zero
+        // dimensioni: il canvas diventa lo sfondo della sezione) — i controlli sono stati tolti
+        // dall'inspector; le chiavi restano nei default per i template salvati.
+        $min_h = max( 80, intval( $s['min_height'] ) );
 
         // Dati runtime (JSON), tutti scoped all'istanza.
         $cfg = [
@@ -176,7 +149,6 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from the internally generated $uid and a fixed-literal ternary on the boolean $hover. ?>
         <style>
             /* Tile a ZERO dimensioni: non occupa spazio nel flusso. */
-            <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?> { display: block; height: 0; line-height: 0; }
             /* Il canvas viene spostato dal runtime come sfondo del contenitore (section/colonna). */
             .olo-particles-<?php echo $uid; ?> {
@@ -262,18 +234,24 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
             var ctx = canvas.getContext('2d');
             if ( ! ctx ) { return; }
 
-            /* I color picker token-first salvano var(--olo-color-*): valide nel CSS
-               ma NON sul canvas 2D (fillStyle le ignora → particelle col colore di
-               fallback). Risolviamo i token via computed style dell'host. */
+            /* I color picker token-first salvano var(--olo-color-*), anche con la riserva o
+               dentro color-mix(): validi nel CSS ma NON sul canvas 2D (fillStyle li ignora e
+               resta sul nero). Il colore lo risolve il browser: lo si assegna a un elemento
+               dentro l'host, che vede i token del template, e se ne legge il colore calcolato.
+               Prima si leggeva solo la variabile: con un token che non esiste la riserva di
+               var() veniva ignorata e le particelle uscivano nere. */
             function resolveVarColor( c ) {
-                if ( typeof c === 'string' && c.indexOf( 'var(' ) !== -1 ) {
-                    var m = c.match( /var\(\s*(--[A-Za-z0-9_-]+)/ );
-                    if ( m ) {
-                        var v = getComputedStyle( host ).getPropertyValue( m[1] ).trim();
-                        if ( v ) { return v; }
-                    }
+                if ( typeof c !== 'string' ) { return c; }
+                if ( c.indexOf( 'var(' ) === -1 ) {
+                    if ( c.indexOf( 'color-mix(' ) === -1 ) { return c; }
                 }
-                return c;
+                var probe = document.createElement( 'i' );
+                probe.style.display = 'none';
+                probe.style.color = c;
+                ( host || document.body ).appendChild( probe );
+                var v = getComputedStyle( probe ).color;
+                probe.parentNode.removeChild( probe );
+                return v || c;
             }
             if ( CFG.colors && CFG.colors.map ) { CFG.colors = CFG.colors.map( resolveVarColor ); }
 
@@ -606,44 +584,9 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
         })();
         </script>
         <?php
-        // ── Sistema bordi standard (come marquee) ─────────────────────────
-        $border_css        = $this->build_border_css( $s['border'] ?? [] );
-        $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
-        $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
-        if ( $border_css || $border_hover_css || $border_effect_css ) {
-            echo '<style>';
-            if ( $border_css ) {
-                echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_css() from sanitized settings; $uid is internally generated
-            }
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
-        }
+        // Niente Bordo né Ombra: sul segnaposto alto 0 il bordo diventava una riga orizzontale
+        // dove la tile era stata lasciata, e l'ombra non si vedeva. I controlli sono stati tolti
+        // dall'inspector, quindi un bordo già salvato non si potrebbe più levare: non si stampa.
         return ob_get_clean();
-    }
-
-    /**
-     * Restituisce la dichiarazione box-shadow (valore, senza "box-shadow:")
-     * dal setting shadow (preset sm/md/lg/xl o custom). '' se none.
-     */
-    private function build_shadow_decl( $s ) {
-        $preset = $s['shadow'] ?? 'none';
-        if ( $preset === 'none' || $preset === '' ) {
-            return '';
-        }
-        if ( $preset === 'custom' ) {
-            $h     = intval( $s['shadow_h'] ?? 0 );
-            $v     = intval( $s['shadow_v'] ?? 4 );
-            $blur  = max( 0, intval( $s['shadow_blur'] ?? 10 ) );
-            $spread = intval( $s['shadow_spread'] ?? 0 );
-            $color = $this->safe_color_css( $s['shadow_color'] ?? '' ) ?: 'rgba(0,0,0,0.15)';
-            $inset = ! empty( $s['shadow_inset'] ) ? 'inset ' : '';
-            return "{$inset}{$h}px {$v}px {$blur}px {$spread}px {$color}";
-        }
-        $map = [
-            'sm' => '0 1px 2px rgba(16,24,40,.06), 0 6px 16px -10px rgba(16,24,40,.18)',
-            'md' => '0 2px 4px rgba(16,24,40,.06), 0 14px 28px -12px rgba(22,38,61,.28)',
-            'lg' => '0 8px 24px -6px rgba(16,24,40,.18), 0 18px 40px -12px rgba(22,38,61,.30)',
-            'xl' => '0 12px 32px -8px rgba(16,24,40,.20), 0 28px 56px -14px rgba(22,38,61,.34)',
-        ];
-        return $map[ $preset ] ?? '';
     }
 }

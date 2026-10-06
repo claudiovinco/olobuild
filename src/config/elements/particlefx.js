@@ -1,4 +1,4 @@
-import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 import { t } from '@/i18n';
 
 /**
@@ -14,8 +14,8 @@ import { t } from '@/i18n';
  *
  * fields[]      → preset, conteggio, velocità, dimensione, vento, gravità,
  *                 connectLines (costellazioni), interactOnHover, contenuto slot
- * styleFields[] → palette (5 color picker), opacità, altezza minima sezione,
- *                 colore/sfondo, shadow, border
+ * styleFields[] → palette (5 color picker), opacità, dimensione, altezza minima
+ *                 della sezione vuota
  *
  * Contratto §2: ogni numero/colore è un campo; nessun hardcode. UID scoped per
  * istanza (CSS + classe canvas). Render PHP = stato base SSR (contenuto visibile,
@@ -123,8 +123,12 @@ export default {
       description: t('Con le costellazioni: collega le stelle al puntatore. Altrimenti le particelle si scostano leggermente dal cursore. Disattivato su touch.') },
   ],
 
+  // La tile è un decoratore a zero dimensioni: il canvas diventa lo sfondo della sezione che la
+  // ospita. Padding, larghezza del contenuto, allineamenti, colore di sfondo, ombra e bordo erano
+  // offerti qui ma il renderer non li stampava (non c'è un riquadro su cui disegnarli): tolti.
+  // Le chiavi restano nei defaults per i template salvati. Contenuto, sfondo e spazi li dà la sezione.
   styleFields: [
-    { type: 'separator', label: t('Palette particelle') },
+    { type: 'separator', label: t('Aspetto') },
     { type: 'description', description: t('Lascia vuoti gli slot per usare i colori del preset. I colori impostati hanno la precedenza.') },
     { key: 'palette_1', label: t('Colore 1'), type: 'color' },
     { key: 'palette_2', label: t('Colore 2'), type: 'color' },
@@ -133,32 +137,12 @@ export default {
     { key: 'palette_5', label: t('Colore 5'), type: 'color' },
     { key: 'particle_opacity', label: t('Opacità particelle'), type: 'range', min: 10, max: 100, step: 5 },
 
-    { type: 'separator', label: t('Sezione') },
-    { key: 'min_height', label: t('Altezza minima'), type: 'range', min: 80, max: 1000, step: 10 },
-    { key: 'padding', label: t('Padding'), type: 'spacing', min: 0, max: 200,
-      legacyKeys: { y: 'padding_y' } },
-    { key: 'content_max_width', label: t('Larghezza max contenuto'), type: 'range', min: 200, max: 1400, step: 10 },
-    { key: 'align_v', label: t('Allineamento verticale'), type: 'select', options: [
-      { value: 'flex-start', label: t('Alto') },
-      { value: 'center', label: t('Centro') },
-      { value: 'flex-end', label: t('Basso') },
-    ]},
-    { key: 'align_h', label: t('Allineamento orizzontale'), type: 'select', options: [
-      { value: 'flex-start', label: t('Sinistra') },
-      { value: 'center', label: t('Centro') },
-      { value: 'flex-end', label: t('Destra') },
-    ]},
-    { key: 'text_align', label: t('Allineamento testo'), type: 'select', options: [
-      { value: 'left', label: t('Sinistra') },
-      { value: 'center', label: t('Centro') },
-      { value: 'right', label: t('Destra') },
-    ]},
-    { key: 'bg_color', label: t('Colore sfondo'), type: 'color' },
-    { key: 'full_width', label: t('Larghezza piena'), type: 'toggle' },
-
-    ...shadowField,
-    ...borderFields(),
-    { type: 'separator', label: t('Sistema particelle') },
+    { type: 'separator', label: t('Forma') },
     { key: 'size', label: t('Dimensione'), type: 'range', min: 1, max: 24, step: 1 },
+    // Agisce solo nel ramo «Sezione» del runtime: con «Tutta la pagina» non c'è una sezione da
+    // allungare e il campo non farebbe niente.
+    { key: 'min_height', label: t('Altezza minima'), type: 'range', min: 80, max: 1000, step: 10,
+      condition: { field: 'scope', op: 'neq', value: 'page' },
+      description: t('Vale solo se la sezione che ospita le particelle è vuota: le dà questa altezza perché l\'effetto si veda. Contenuto, sfondo e spazi si impostano sulla sezione.') },
   ],
 };
