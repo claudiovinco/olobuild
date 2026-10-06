@@ -357,6 +357,8 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
                 }
                 ?>
             }
+            /* Senza link: niente passaggio del mouse né clic, il cursore resta quello del testo */
+            .<?php echo $uid; ?> .olo-price-cta--senza-link { cursor: default; pointer-events: none; }
             <?php if ( $hover === 'pulse' ) : ?>
             @keyframes olo-pulse-<?php echo $uid; ?> {
                 0%, 100% { transform: scale(1); }
@@ -479,10 +481,17 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
                     </ul>
                 <?php endif; ?>
 
+                <?php if ( '' === trim( (string) ( $s['cta_url'] ?? '' ) ) ) : ?>
+                <?php // Senza URL il pulsante è una scritta («Presto disponibile»): un <a href=""> ricaricava la pagina al clic. ?>
+                <span class="olo-price-cta olo-price-cta--senza-link">
+                    <?php echo $cta_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?>
+                </span>
+                <?php else : ?>
                 <a href="<?php echo esc_url( $s['cta_url'] ); ?>" class="olo-price-cta"
                    <?php if ( $s['cta_target'] === '_blank' ) echo 'target="_blank" rel="noopener"'; ?>>
                     <?php echo $cta_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?>
                 </a>
+                <?php endif; ?>
                 <?php if ( ! empty( $additional_info ) ) : ?>
                     <div class="olo-price-addinfo"><?php echo $additional_info; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></div>
                 <?php endif; ?>

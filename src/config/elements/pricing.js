@@ -167,7 +167,8 @@ export default {
 
     { type: 'separator', label: t('Pulsante CTA') },
     { key: 'cta_text', label: t('Testo'), type: 'text' },
-    { key: 'cta_url', label: t('URL'), type: 'link' },
+    { key: 'cta_url', label: t('URL'), type: 'link',
+      description: t('Vuoto: il pulsante resta una scritta senza link, per esempio «Presto disponibile».') },
     { key: 'cta_target', label: t('Apri in'), type: 'select', options: [
       { value: '_self', label: t('Stessa finestra') },
       { value: '_blank', label: t('Nuova scheda') },
