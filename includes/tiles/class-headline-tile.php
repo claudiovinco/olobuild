@@ -204,7 +204,8 @@ class Olobuild_Headline_Tile extends Olobuild_Tile_Base {
 
         ob_start();
 
-        $needs_style = $has_gradient || $dec_clr;
+        $is_line     = $s['decoration'] === 'line';
+        $needs_style = $has_gradient || $dec_clr || $is_line;
         if ( $needs_style ) :
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for gradient/decoration colors, absint() for the angle and the internally generated $uid. ?>
@@ -215,6 +216,9 @@ class Olobuild_Headline_Tile extends Olobuild_Tile_Base {
             $ga = absint( $s['gradient_angle'] ?? 90 );
         ?>
         .<?php echo $uid; ?> .olo-hl-grad { background: linear-gradient(<?php echo $ga; ?>deg, <?php echo $gf; ?>, <?php echo $gt; ?>); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        <?php endif; ?>
+        <?php if ( $is_line ) : // Le linee di UIkit stanno ai lati dello span e .uk-heading-line le ritaglia (overflow:hidden): quando il titolo va a capo lo span prende tutta la larghezza e le linee finivano fuori, sparite. Lo span si ferma prima e lascia a ogni lato almeno max(24px, 4%) di linea, ma mai sotto la parola più lunga: più stretto, sul telefono una parola lunga ne usciva e veniva tagliata (meglio rinunciare alle linee). ?>
+        .<?php echo $uid; ?> .uk-heading-line > span { max-width: calc(100% - 2 * (max(24px, 4%) + 5px + .3em)); min-width: min-content; }
         <?php endif; ?>
         <?php if ( $dec_clr ) : ?>
         .<?php echo $uid; ?> .uk-heading-line > span::before, .<?php echo $uid; ?> .uk-heading-line > span::after { border-color: <?php echo $dec_clr; ?>; }

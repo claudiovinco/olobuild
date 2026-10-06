@@ -141,8 +141,12 @@ class Olobuild_Text_Effects {
             $out .= '@keyframes olo-tfx-glitch-2{0%,100%{clip-path:inset(0 0 0 0);transform:translate(0)}25%{clip-path:inset(40% 0 30% 0);transform:translate(2px,-1px)}50%{clip-path:inset(10% 0 60% 0);transform:translate(-2px,1px)}75%{clip-path:inset(50% 0 20% 0);transform:translate(1px,2px)}}';
             $out .= $sel . ' .olo-tfx--glitch{position:relative;display:inline-block;}';
             $out .= $sel . ' .olo-tfx--glitch::before,' . $sel . ' .olo-tfx--glitch::after{content:attr(data-fx-text);position:absolute;left:0;top:0;width:100%;height:100%;}';
-            $out .= $sel . ' .olo-tfx--glitch::before{color:#ff00c1;animation:olo-tfx-glitch-1 2.5s infinite;mix-blend-mode:screen;}';
-            $out .= $sel . ' .olo-tfx--glitch::after{color:#00fff9;animation:olo-tfx-glitch-2 3s infinite;mix-blend-mode:screen;}';
+            // Le due copie sfasate prendono i colori del tema (primario e accento): prima erano
+            // magenta #ff00c1 e ciano #00fff9 fissi, uguali su ogni sito e fuori da ogni palette.
+            // I colori dell'effetto NON si leggono qui: l'inspector non li mostra per il glitch, e
+            // quelli rimasti da un gradient provato prima finivano sulle copie senza poterli vedere.
+            $out .= $sel . ' .olo-tfx--glitch::before{color:var(--olo-color-primary, #e1474f);animation:olo-tfx-glitch-1 2.5s infinite;mix-blend-mode:screen;}';
+            $out .= $sel . ' .olo-tfx--glitch::after{color:var(--olo-color-accent, #f4a23b);animation:olo-tfx-glitch-2 3s infinite;mix-blend-mode:screen;}';
         } elseif ( $effect === 'underline-grow' ) {
             $uc = $color1 ?: 'currentColor';
             $out .= $sel . ' .olo-tfx--underline-grow{display:inline-block;background-image:linear-gradient(' . $uc . ',' . $uc . ');background-position:0 100%;background-size:0 3px;background-repeat:no-repeat;transition:background-size 1s cubic-bezier(.4,0,.2,1) ' . $delay . 'ms;padding-bottom:4px;}';
@@ -157,6 +161,18 @@ class Olobuild_Text_Effects {
         } elseif ( $effect === 'wave' ) {
             $out .= '@keyframes olo-tfx-wave{0%,40%,100%{transform:translateY(0)}20%{transform:translateY(-30%)}}';
             $out .= $sel . ' .olo-tfx--wave .olo-tfx-char{display:inline-block;animation:olo-tfx-wave 2s ease-in-out infinite;animation-delay:calc(var(--i,0) * 80ms + ' . $delay . 'ms);}';
+        }
+
+        // Gradient, glitch e wave sono animazioni infinite che partono da sole: con «riduci
+        // movimento» si fermano (WCAG 2.2.2). Le copie del glitch spariscono: ferme sopra il
+        // testo lo tingerebbero di primario e accento, poco leggibile su fondo chiaro.
+        if ( in_array( $effect, [ 'gradient-anim', 'glitch', 'wave' ], true ) ) {
+            $out .= '@media (prefers-reduced-motion: reduce){'
+                . $sel . ' .olo-tfx--gradient-anim,'
+                . $sel . ' .olo-tfx--wave .olo-tfx-char{animation:none!important;}'
+                . $sel . ' .olo-tfx--glitch::before,'
+                . $sel . ' .olo-tfx--glitch::after{animation:none!important;display:none;}'
+                . '}';
         }
 
         return $out;
@@ -185,7 +201,7 @@ class Olobuild_Text_Effects {
 (function(){
   if (window.__oloTextFxInit) return; window.__oloTextFxInit = true;
   // Estrae il testo preservando i ritorni a capo: <br>, </p>, </div>, </h1-6>, </li>, </blockquote>
-  // diventano '\n' così gli effetti JS possono riprodurli con <br> durante l'animazione.
+  // diventano '\n'. Serve solo al loop di frasi, che usa le righe del contenuto come frasi.
   function getTextWithBreaks(el){
     var html = el.getAttribute('data-fx-original-html') || el.innerHTML;
     el.setAttribute('data-fx-original-html', html);
@@ -196,20 +212,99 @@ class Olobuild_Text_Effects {
     tmp.innerHTML = normalized;
     return tmp.textContent.replace(/\n{2,}/g, '\n').replace(/^\n+|\n+$/g, '');
   }
-  // Escape HTML + converte '\n' in '<br>' per il rendering durante typewriter/scramble
+  // Escape HTML + converte '\n' in '<br>' per lo scramble a frasi
   function htmlEscapeWithBreaks(s){
     return s.replace(/[&<>]/g, function(m){return ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]);}).replace(/\n/g,'<br>');
   }
-  function splitIntoChars(el){ var t = getTextWithBreaks(el); el.innerHTML = ''; var idx = 0; for (var i=0;i<t.length;i++){ var ch = t[i]; if (ch === '\n'){ el.appendChild(document.createElement('br')); continue; } if (ch === ' ' || ch === '\t') { el.appendChild(document.createTextNode(' ')); continue; } var s=document.createElement('span'); s.className='olo-tfx-char'; s.style.setProperty('--i', idx++); s.textContent = ch; el.appendChild(s); } }
-  function splitIntoWords(el){ var t = getTextWithBreaks(el); el.innerHTML = ''; var lines = t.split('\n'); for (var li=0; li<lines.length; li++){ var w = lines[li].split(/(\s+)/); for(var i=0;i<w.length;i++){ if(/^\s+$/.test(w[i])){ el.appendChild(document.createTextNode(w[i])); continue;} var s=document.createElement('span'); s.className='olo-tfx-word'; s.style.setProperty('--i', li*1000 + i); s.textContent=w[i]; el.appendChild(s); } if (li < lines.length - 1) el.appendChild(document.createElement('br')); } }
+  // Macchina da scrivere, reveal (lettera e parola), wave e scramble lavorano DENTRO il
+  // markup, sui soli nodi di testo: prima appiattivano tutto in testo + <br>, e i paragrafi
+  // del tile Testo (con grassetti, link ed elenchi) diventavano righe spezzate, l'icona del
+  // pulsante spariva e lo <span> delle linee del Titolo pure. Il markup originale si
+  // conserva per ripartire da capo nei giri in loop.
+  function restoreHtml(el){
+    var html = el.getAttribute('data-fx-original-html');
+    if (html === null){ el.setAttribute('data-fx-original-html', el.innerHTML); } else { el.innerHTML = html; }
+  }
+  function textNodes(el){
+    var out = [], w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null), n;
+    while ((n = w.nextNode())){
+      if (!/\S/.test(n.nodeValue)) continue;
+      if (n.parentNode.closest('svg,script,style,.olo-tfx-cursor')) continue;
+      out.push(n);
+    }
+    return out;
+  }
+  // Il carattere del cursore è un ::after (attributo data-ch), non un nodo di testo: ora che
+  // il cursore sta DENTRO il titolo o l'etichetta, la modifica in linea del canvas (che salva
+  // il textContent) altrimenti salverebbe anche la «|». In linea e non inline-block: prima
+  // di un inline-block il browser può andare a capo, e a fine riga la «|» scendeva da sola.
+  function cursorEl(opts){
+    var c = document.createElement('span');
+    c.className = 'olo-tfx-cursor'; c.setAttribute('aria-hidden', 'true');
+    c.setAttribute('data-ch', opts.cursorCh || '|');
+    c.style.cssText = 'display:inline;animation:olo-tfx-blink 1s step-end infinite;';
+    return c;
+  }
+  // Le lettere di una parola stanno in uno span che non va a capo: fra due lettere
+  // inline-block (wave) il browser può spezzare la riga, e le parole si dividevano a metà.
+  function splitIntoChars(el){
+    restoreHtml(el);
+    var idx = 0;
+    textNodes(el).forEach(function(n){
+      var t = n.nodeValue, frag = document.createDocumentFragment(), w = null;
+      for (var i=0;i<t.length;i++){
+        var ch = t.charAt(i);
+        if (/\s/.test(ch)){ w = null; frag.appendChild(document.createTextNode(ch)); continue; }
+        if (!w){ w = document.createElement('span'); w.style.whiteSpace = 'nowrap'; frag.appendChild(w); }
+        var s=document.createElement('span'); s.className='olo-tfx-char'; s.style.setProperty('--i', idx++); s.textContent = ch; w.appendChild(s);
+      }
+      n.parentNode.replaceChild(frag, n);
+    });
+  }
+  function splitIntoWords(el){
+    restoreHtml(el);
+    var idx = 0;
+    textNodes(el).forEach(function(n){
+      var w = n.nodeValue.split(/(\s+)/), frag = document.createDocumentFragment();
+      for (var i=0;i<w.length;i++){
+        if (w[i] === '') continue;
+        if (/^\s+$/.test(w[i])){ frag.appendChild(document.createTextNode(w[i])); continue; }
+        var s=document.createElement('span'); s.className='olo-tfx-word'; s.style.setProperty('--i', idx++); s.textContent=w[i]; frag.appendChild(s);
+      }
+      n.parentNode.replaceChild(frag, n);
+    });
+  }
   function typewriter(el, opts){
-    var full = el.getAttribute('data-fx-original') || getTextWithBreaks(el);
-    el.setAttribute('data-fx-original', full);
-    el.innerHTML = '';
-    var cursor = opts.cursor ? document.createElement('span') : null;
-    if (cursor){ cursor.className='olo-tfx-cursor'; cursor.textContent = opts.cursorCh || '|'; cursor.style.cssText='display:inline-block;animation:olo-tfx-blink 1s step-end infinite;'; el.parentElement.insertAdjacentElement('beforeend', cursor); }
-    var i=0;
-    function step(){ if (i<=full.length){ el.innerHTML = htmlEscapeWithBreaks(full.slice(0,i)); i++; setTimeout(step, opts.speed); } else if (opts.loop){ setTimeout(function(){ i=0; el.innerHTML=''; setTimeout(step, opts.speed); }, opts.pause||1500); } }
+    restoreHtml(el);
+    var nodes = textNodes(el), full = [];
+    nodes.forEach(function(n){ full.push(n.nodeValue); n.nodeValue = ''; });
+    // Il cursore segue l'ultimo carattere scritto, nel suo paragrafo: prima stava in coda al
+    // contenitore della tile e, su un blocco, finiva da solo su una riga sotto il testo.
+    var cursor = opts.cursor ? cursorEl(opts) : null, solo = null;
+    function place(k){
+      if (!cursor) return;
+      var n = nodes[k];
+      if (n){ n.parentNode.insertBefore(cursor, n.nextSibling); return; }
+      // Nessun testo da scrivere: il cursore va in un suo span, mai figlio diretto
+      // dell'elemento (sul Titolo a linee UIkit disegna una linea su ogni figlio diretto).
+      if (!solo){ solo = document.createElement('span'); el.appendChild(solo); }
+      solo.appendChild(cursor);
+    }
+    var ni=0, ci=0;
+    function step(){
+      if (ni < nodes.length){
+        var t = full[ni];
+        // Uno scatto = un carattere visibile: gli spazi (anche quelli dell'indentazione) passano insieme.
+        do { ci++; } while (ci < t.length ? /\s/.test(t.charAt(ci - 1)) : false);
+        nodes[ni].nodeValue = t.slice(0, ci);
+        place(ni);
+        if (ci >= t.length){ ni++; ci = 0; }
+        setTimeout(step, opts.speed);
+      } else if (opts.loop){
+        setTimeout(function(){ nodes.forEach(function(n){ n.nodeValue = ''; }); ni=0; ci=0; place(0); setTimeout(step, opts.speed); }, opts.pause||1500);
+      }
+    }
+    place(0);
     setTimeout(step, opts.delay);
   }
   function typewriterLoop(el, opts){
@@ -220,15 +315,21 @@ class Olobuild_Text_Effects {
       phrases = getTextWithBreaks(el).split('\n').map(function(s){return s.trim();}).filter(Boolean);
     }
     if (!phrases.length) phrases = [el.textContent.trim()];
+    // Frase e cursore dentro l'elemento, uno accanto all'altro (prima il cursore andava in
+    // coda al contenitore, su una riga sua quando l'elemento è un blocco). Tutti e due in
+    // UN solo span figlio: sul Titolo a linee la regola di UIkit «.uk-heading-line > *»
+    // trasformava un cursore figlio diretto in una linea da 2000px, e la «|» spariva.
     el.innerHTML = '';
-    var cursor = opts.cursor ? document.createElement('span') : null;
-    if (cursor){ cursor.className='olo-tfx-cursor'; cursor.textContent = opts.cursorCh || '|'; cursor.style.cssText='display:inline-block;animation:olo-tfx-blink 1s step-end infinite;'; el.parentElement.appendChild(cursor); }
+    var out = document.createElement('span'), txt = document.createTextNode('');
+    out.appendChild(txt);
+    if (opts.cursor) out.appendChild(cursorEl(opts));
+    el.appendChild(out);
     var pi=0, ci=0, mode='type';
     function step(){
       var p = phrases[pi];
-      if (mode==='type'){ ci++; el.textContent = p.slice(0,ci); if (ci>=p.length){ mode='wait'; setTimeout(step, opts.pause); return; } setTimeout(step, opts.speed); }
+      if (mode==='type'){ ci++; txt.nodeValue = p.slice(0,ci); if (ci>=p.length){ mode='wait'; setTimeout(step, opts.pause); return; } setTimeout(step, opts.speed); }
       else if (mode==='wait'){ mode='delete'; setTimeout(step, opts.speed); }
-      else if (mode==='delete'){ ci--; el.textContent = p.slice(0,ci); if (ci<=0){ mode='type'; pi=(pi+1)%phrases.length; setTimeout(step, opts.speed*4); return; } setTimeout(step, opts.speed/2); }
+      else if (mode==='delete'){ ci--; txt.nodeValue = p.slice(0,ci); if (ci<=0){ mode='type'; pi=(pi+1)%phrases.length; setTimeout(step, opts.speed*4); return; } setTimeout(step, opts.speed/2); }
     }
     setTimeout(step, opts.delay);
   }
@@ -275,8 +376,31 @@ class Olobuild_Text_Effects {
         setInterval(function(){ wi = (wi+1) % phrases.length; scrambleTo(phrases[wi]); }, Math.max(1200, opts.pause||2600));
       }, opts.delay);
     } else {
-      var full = el.getAttribute('data-fx-original') || getTextWithBreaks(el);
-      setTimeout(function(){ scrambleTo(full, opts.loop ? function(){ setTimeout(function(){ scrambleTo(full); }, 2500); } : null); }, opts.delay);
+      // Testo della tile: si mescolano i soli nodi di testo, il markup resta (paragrafi, link).
+      restoreHtml(el);
+      var nodes = textNodes(el), orig = [], tot = 0;
+      nodes.forEach(function(n){ orig.push(n.nodeValue); tot += n.nodeValue.length; });
+      var scrambleNodes = function(onDone){
+        var frame = 0, totalFrames = Math.ceil(tot*opts.speed/30) + 6;
+        (function step(){
+          var g = 0;
+          for (var k=0;k<nodes.length;k++){
+            var t = orig[k], o = '';
+            for (var i=0;i<t.length;i++){
+              var ch = t.charAt(i);
+              o += (/\s/.test(ch) || frame >= (g/tot)*totalFrames) ? ch : chars.charAt(Math.floor(Math.random()*chars.length));
+              g++;
+            }
+            nodes[k].nodeValue = o;
+          }
+          frame++;
+          if (frame <= totalFrames + 5) requestAnimationFrame(step);
+          else if (onDone) onDone();
+        })();
+      };
+      if (tot > 0){
+        setTimeout(function(){ scrambleNodes(opts.loop ? function(){ setTimeout(function(){ scrambleNodes(); }, 2500); } : null); }, opts.delay);
+      }
     }
   }
   function activateGrow(el){ el.classList.add('olo-tfx-active'); }
@@ -302,7 +426,7 @@ class Olobuild_Text_Effects {
   }
   // Inject keyframes for cursor
   var st = document.createElement('style');
-  st.textContent = '@keyframes olo-tfx-blink{0%,50%{opacity:1}50.01%,100%{opacity:0}}';
+  st.textContent = '@keyframes olo-tfx-blink{0%,50%{opacity:1}50.01%,100%{opacity:0}}.olo-tfx-cursor::after{content:attr(data-ch)}';
   document.head.appendChild(st);
   // IntersectionObserver to trigger on viewport entry
   var io = new IntersectionObserver(function(entries){
