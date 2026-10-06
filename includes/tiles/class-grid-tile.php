@@ -83,7 +83,11 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
         $uid          = 'mgrid-' . wp_rand( 10000, 99999 );
 
         // Collect unique tags for filter (support comma-separated)
-        $tags = [];
+        // L'etichetta del pulsante è il tag COME SCRITTO (prima occorrenza), con l'iniziale
+        // maiuscola: ricavarla dallo slug perdeva accenti e apostrofi («Città» → «Citta»,
+        // «Caffè d'autore» → «Caffe dautore»). Lo slug resta solo nella classe del filtro.
+        $tags       = [];
+        $tag_labels = [];
         $show_filter = ! empty( $s['show_filter'] );
         if ( $show_filter ) {
             foreach ( $items as $item ) {
@@ -93,6 +97,7 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
                     $slug = sanitize_title( $part );
                     if ( $slug && $slug !== 'all' && ! in_array( $slug, $tags, true ) ) {
                         $tags[] = $slug;
+                        $tag_labels[ $slug ] = function_exists( 'mb_strtoupper' ) ? mb_strtoupper( mb_substr( $part, 0, 1 ) ) . mb_substr( $part, 1 ) : $part;
                     }
                 }
             }
@@ -114,27 +119,28 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
                 $fa = $s['filter_align'] ?? 'left';
                 $fa_cls = $fa === 'center' ? ' olo-filter-center' : ( $fa === 'right' ? ' olo-filter-right' : '' );
                 $filter_style = $s['filter_style'] ?? 'pills';
-                $all_label = ! empty( $s['filter_all_label'] ) ? esc_html( $s['filter_all_label'] ) : 'All';
+                // Vuoto = «Tutti» (prima la scritta fissa era l'inglese «All»).
+                $all_label = ! empty( $s['filter_all_label'] ) ? esc_html( $s['filter_all_label'] ) : esc_html( olobuild_t( 'Tutti' ) );
             ?>
                 <?php if ( $filter_style === 'minimal' ) : ?>
                 <div class="olo-filter-minimal<?php echo esc_attr( $fa_cls ); ?>">
-                    <button class="olo-filter-minimal__btn" uk-filter-control><?php echo $all_label; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- pre-escaped via esc_html() at assignment above (or fixed 'All' literal) ?></button>
+                    <button class="olo-filter-minimal__btn" uk-filter-control><?php echo $all_label; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- pre-escaped via esc_html() at assignment above ?></button>
                     <?php foreach ( $tags as $tag ) : ?>
-                    <button class="olo-filter-minimal__btn" uk-filter-control=".tag-<?php echo esc_attr( $tag ); ?>"><?php echo esc_html( ucfirst( str_replace( '-', ' ', $tag ) ) ); ?></button>
+                    <button class="olo-filter-minimal__btn" uk-filter-control=".tag-<?php echo esc_attr( $tag ); ?>"><?php echo esc_html( $tag_labels[ $tag ] ); ?></button>
                     <?php endforeach; ?>
                 </div>
                 <?php elseif ( $filter_style === 'buttons' ) : ?>
                 <div class="olo-filter-buttons<?php echo esc_attr( $fa_cls ); ?>">
-                    <button class="olo-filter-btn" uk-filter-control><?php echo $all_label; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- pre-escaped via esc_html() at assignment above (or fixed 'All' literal) ?></button>
+                    <button class="olo-filter-btn" uk-filter-control><?php echo $all_label; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- pre-escaped via esc_html() at assignment above ?></button>
                     <?php foreach ( $tags as $tag ) : ?>
-                    <button class="olo-filter-btn" uk-filter-control=".tag-<?php echo esc_attr( $tag ); ?>"><?php echo esc_html( ucfirst( str_replace( '-', ' ', $tag ) ) ); ?></button>
+                    <button class="olo-filter-btn" uk-filter-control=".tag-<?php echo esc_attr( $tag ); ?>"><?php echo esc_html( $tag_labels[ $tag ] ); ?></button>
                     <?php endforeach; ?>
                 </div>
                 <?php else : ?>
                 <ul class="uk-subnav uk-subnav-pill<?php echo esc_attr( $fa_cls ); ?>">
-                    <li class="uk-active" uk-filter-control><a href="#"><?php echo $all_label; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- pre-escaped via esc_html() at assignment above (or fixed 'All' literal) ?></a></li>
+                    <li class="uk-active" uk-filter-control><a href="#"><?php echo $all_label; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- pre-escaped via esc_html() at assignment above ?></a></li>
                     <?php foreach ( $tags as $tag ) : ?>
-                    <li uk-filter-control=".tag-<?php echo esc_attr( $tag ); ?>"><a href="#"><?php echo esc_html( ucfirst( str_replace( '-', ' ', $tag ) ) ); ?></a></li>
+                    <li uk-filter-control=".tag-<?php echo esc_attr( $tag ); ?>"><a href="#"><?php echo esc_html( $tag_labels[ $tag ] ); ?></a></li>
                     <?php endforeach; ?>
                 </ul>
                 <?php endif; ?>
@@ -168,9 +174,12 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
 
                     $card_hover = $s['card_hover'] ?? 'none';
                     $card_style = $s['card_style'] ?? 'default';
+                    // Testo sulla foto: la card È la foto, quindi la foto prende il raggio su tutti
+                    // e quattro gli angoli (vedi .olo-grid-card--ov in build_scoped_css()).
+                    $ov_cls = ( ! empty( $s['overlay_text'] ) && ! empty( $item['image'] ) ) ? ' olo-grid-card--ov' : '';
                 ?>
                 <div<?php if ( $tag_class_str ) : ?> class="<?php echo esc_attr( $tag_class_str ); ?>"<?php endif; ?>>
-                    <<?php echo $link_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed a/div tag from ternary; $link_attrs is built above from esc_url() and fixed literals ?> class="olo-grid-card olo-grid-card--<?php echo esc_attr( $card_style ); ?><?php echo $card_hover !== 'none' ? ' olo-grid-hover--' . esc_attr( $card_hover ) : ''; ?>"<?php echo $link_attrs; ?>>
+                    <<?php echo $link_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed a/div tag from ternary; $link_attrs is built above from esc_url() and fixed literals ?> class="olo-grid-card olo-grid-card--<?php echo esc_attr( $card_style ); ?><?php echo $card_hover !== 'none' ? ' olo-grid-hover--' . esc_attr( $card_hover ) : ''; ?><?php echo esc_attr( $ov_cls ); ?>"<?php echo $link_attrs; ?>>
                         <?php
                         // Badge
                         if ( ! empty( $item['badge'] ) ) {
@@ -208,8 +217,16 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
                         // Content area (skip if overlay_text + has image)
                         if ( empty( $s['overlay_text'] ) || empty( $item['image'] ) ) {
                             echo '<div class="olo-grid-body">';
+                            // L'icona è un NOME del selettore (UIkit, Lucide, «custom:»): usato come
+                            // classe CSS non disegnava niente. Un valore con più parole è una classe
+                            // di un font di icone scritta a mano: quella resta com'era.
                             if ( ! empty( $item['icon'] ) ) {
-                                echo '<span class="olo-grid-icon ' . esc_attr( $item['icon'] ) . '"></span>';
+                                $icona = trim( (string) $item['icon'] );
+                                if ( strpos( $icona, ' ' ) !== false ) {
+                                    echo '<span class="olo-grid-icon ' . esc_attr( $icona ) . '"></span>';
+                                } else {
+                                    echo $this->render_icon_html( $icona, 1.4, 'class="olo-grid-icon" aria-hidden="true"' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html(): nome e attributi passati da esc_attr, SVG dalla libreria delle icone
+                                }
                             }
                             echo '<h3 class="olo-grid-title">' . esc_html( wp_strip_all_tags( $item['title'] ) ) . '</h3>';
                             if ( ! empty( $item['content'] ) ) {
@@ -239,10 +256,6 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
         $css = '';
 
         $radius  = $this->build_border_radius_css( $s["card_radius"] ?? 8 );
-        // Solo i due angoli superiori (media in cima alla card): serve lo SCALARE,
-        // build_border_radius_css() restituisce già la stringa con unita'.
-        $radius_int = Olobuild_Tile_Utils::radius_int( $s["card_radius"] ?? 8 );
-        $radius_top = $radius_int > 0 ? "{$radius_int}px {$radius_int}px 0 0" : "0";
         $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['card_radius_hover'] ?? null );
         $padding = Olobuild_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['card_padding'] ?? 16, 16 );
         $card_style   = $s['card_style'] ?? 'default';
@@ -281,19 +294,23 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
         }
 
         // Card styles
+        // Fondo e bordo seguono la Palette (fondo pagina, bordi, tinta tenue): il bianco e i
+        // grigi fissi restavano bianchi anche su un tema scuro o crema. Le riserve sono i
+        // valori di prima, usati solo fuori da un template che emette i token.
+        $card_bg  = 'var(--olo-color-background, #ffffff)';
         if ( $card_style === 'default' ) {
-            $bc = $border_color ? esc_attr( $border_color ) : '#e5e7eb';
-            $css .= $sel . ' .olo-grid-card--default{background:#fff;border:1px solid ' . $bc . ';}';
+            $bc = $border_color ? esc_attr( $border_color ) : 'var(--olo-color-border, #e5e7eb)';
+            $css .= $sel . ' .olo-grid-card--default{background:' . $card_bg . ';border:1px solid ' . $bc . ';}';
         } elseif ( $card_style === 'minimal' ) {
             $css .= $sel . ' .olo-grid-card--minimal{background:none;border:none;}';
             if ( $border_color ) {
                 $css .= $sel . ' .olo-grid-card--minimal{border:1px solid ' . esc_attr( $border_color ) . ';}';
             }
         } elseif ( $card_style === 'outlined' ) {
-            $bc = $border_color ? esc_attr( $border_color ) : '#d1d5db';
+            $bc = $border_color ? esc_attr( $border_color ) : 'var(--olo-color-border, #d1d5db)';
             $css .= $sel . ' .olo-grid-card--outlined{background:transparent;border:2px solid ' . $bc . ';}';
         } elseif ( $card_style === 'elevated' ) {
-            $css .= $sel . ' .olo-grid-card--elevated{background:#fff;border:none;box-shadow:0 4px 20px rgba(0,0,0,0.08);}';
+            $css .= $sel . ' .olo-grid-card--elevated{background:' . $card_bg . ';border:none;box-shadow:0 4px 20px rgba(0,0,0,0.08);}';
             if ( $border_color ) {
                 $css .= $sel . ' .olo-grid-card--elevated{border:1px solid ' . esc_attr( $border_color ) . ';}';
             }
@@ -302,12 +319,12 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
             $css .= $sel . ' .olo-grid-card--glass{background:rgba(255,255,255,0.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid ' . $bc . ';}';
         } elseif ( $card_style === 'gradient' ) {
             if ( $border_color ) {
-                $css .= $sel . ' .olo-grid-card--gradient{background:#fff;border:2px solid ' . esc_attr( $border_color ) . ';}';
+                $css .= $sel . ' .olo-grid-card--gradient{background:' . $card_bg . ';border:2px solid ' . esc_attr( $border_color ) . ';}';
             } else {
-                $css .= $sel . ' .olo-grid-card--gradient{background:#fff;border:2px solid transparent;background-image:linear-gradient(#fff,#fff),linear-gradient(135deg,var(--olo-color-primary, #e1474f),var(--olo-color-accent, #f4a23b),var(--olo-color-secondary, #16263d));background-origin:border-box;background-clip:padding-box,border-box;}';
+                $css .= $sel . ' .olo-grid-card--gradient{background:' . $card_bg . ';border:2px solid transparent;background-image:linear-gradient(' . $card_bg . ',' . $card_bg . '),linear-gradient(135deg,var(--olo-color-primary, #e1474f),var(--olo-color-accent, #f4a23b),var(--olo-color-secondary, #16263d));background-origin:border-box;background-clip:padding-box,border-box;}';
             }
         } elseif ( $card_style === 'flat' ) {
-            $css .= $sel . ' .olo-grid-card--flat{background:#f9fafb;border:none;}';
+            $css .= $sel . ' .olo-grid-card--flat{background:var(--olo-color-muted, #f9fafb);border:none;}';
             if ( $border_color ) {
                 $css .= $sel . ' .olo-grid-card--flat{border:1px solid ' . esc_attr( $border_color ) . ';}';
             }
@@ -357,7 +374,12 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
             'pos'   => $obj_pos,
         ] );
 
-        $css .= $sel . ' .olo-grid-media{position:relative;overflow:hidden;border-radius:' . $radius_top . ';}';
+        // Raggio della foto: gli angoli alti li EREDITA dalla card (anche quello in hover e i
+        // quattro angoli diversi, che lo scalare di prima appiattiva), i bassi restano vivi
+        // perché sotto c'è il corpo. Con il testo sulla foto la card è solo foto: prende
+        // tutti e quattro gli angoli — prima i due bassi restavano vivi e sporgevano.
+        $css .= $sel . ' .olo-grid-media{position:relative;overflow:hidden;border-top-left-radius:inherit;border-top-right-radius:inherit;}';
+        $css .= $sel . ' .olo-grid-card--ov .olo-grid-media{border-radius:inherit;}';
         if ( $img_frame['contenitore'] !== '' ) {
             $css .= $sel . ' .olo-grid-media{' . $img_frame['contenitore'] . '}';
         } elseif ( $img_height > 0 ) {
@@ -421,13 +443,16 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
 
         // Body padding
         if ( $card_style === 'minimal' ) {
-            $css .= $sel . ' .olo-grid-body{padding:' . max( 4, intval( $padding / 4 ) ) . 'px 0 0;}';
+            // Un quarto del lato ALTO: dividere la shorthand «16px 16px …» dava l'avviso PHP
+            // «non-numeric value» (e funzionava solo perché la stringa comincia con un numero).
+            $pad_top = Olobuild_Tile_Utils::spacing_sides( $s['tile_padding'] ?? $s['card_padding'] ?? 16, [], [ 16, 16, 16, 16 ] )['top'];
+            $css .= $sel . ' .olo-grid-body{padding:' . max( 4, intval( $pad_top / 4 ) ) . 'px 0 0;}';
         } else {
             $css .= $sel . ' .olo-grid-body{padding:' . $padding . ';}';
         }
 
         // Icon
-        $css .= $sel . ' .olo-grid-icon{font-size:1.5em;margin-bottom:8px;display:inline-block;color:var(--olo-color-primary, #e1474f);}';
+        $css .= $sel . ' .olo-grid-icon{font-size:1.5em;margin-bottom:8px;display:inline-flex;color:var(--olo-color-primary, #e1474f);}';
 
         // Title
         $title_size = absint( $s['title_size'] ?? 0 );
@@ -455,7 +480,7 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
         if ( $content_col ) {
             $css .= 'color:' . esc_attr( $content_col ) . ';';
         } else {
-            $css .= 'color:#666;';
+            $css .= 'color:var(--olo-color-text-muted, #666666);';
         }
         $css .= '}';
 

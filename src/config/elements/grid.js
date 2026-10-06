@@ -125,7 +125,7 @@ export default {
 
     { type: 'separator', label: t('Filtro') },
     { key: 'show_filter', label: t('Mostra filtro'), type: 'toggle' },
-    { key: 'filter_all_label', label: 'Etichetta "Tutti"', type: 'text', description: t('Vuoto = All'),
+    { key: 'filter_all_label', label: t('Etichetta "Tutti"'), type: 'text', placeholder: t('Tutti'),
       condition: { field: 'show_filter', value: true } },
 
     { type: 'separator', label: t('Avanzato') },
