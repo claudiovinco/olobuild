@@ -505,7 +505,9 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
                         $title_css .= 'font-family:' . esc_attr( $title_ff ) . ';';
                     }
                     if ( ! empty( $s['title_font_size'] ) ) {
-                        $title_css .= 'font-size:' . intval( $s['title_font_size'] ) . 'px;';
+                        // Mai più largo del 12% della finestra: la misura scelta resta sul computer, ma sul
+                        // telefono un titolo da 88-112 px usciva dalla tile e veniva tagliato («SAGRA…»).
+                        $title_css .= 'font-size:min(' . intval( $s['title_font_size'] ) . 'px,12vw);overflow-wrap:break-word;';
                     }
                     $title_css .= 'font-weight:' . esc_attr( $s['title_font_weight'] ?: '700' ) . ';';
                     $title_css .= 'line-height:' . esc_attr( $s['title_line_height'] ?: '1.2' ) . ';';
