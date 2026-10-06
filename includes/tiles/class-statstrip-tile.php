@@ -93,6 +93,10 @@ class Olobuild_StatStrip_Tile extends Olobuild_Tile_Base {
 
         $band_style = 'padding:' . $pad_css . ';';
         if ( $band_brd ) $band_style .= 'border-top:1px solid ' . $line . ';border-bottom:1px solid ' . $line . ';';
+        // Spazio fra le righe: con più voci che colonne la seconda riga stava incollata alla prima.
+        // Cresce col valore (48 px → 29 px); con una riga sola non cambia niente. Va nello <style>,
+        // non in linea: in linea batterebbe lo spazio fra le righe del telefono (media query qui sotto).
+        $row_gap    = max( 16, (int) round( $v_size * 0.6 ) );
         $grid_style = 'display:grid;grid-template-columns:repeat(' . $cols . ',minmax(0,1fr));';
         $cell_style = 'display:flex;flex-direction:column;gap:8px;text-align:' . $align . ';padding:4px 24px;'
             . ( $align === 'center' ? 'align-items:center;' : '' );
@@ -112,19 +116,25 @@ class Olobuild_StatStrip_Tile extends Olobuild_Tile_Base {
                 <?php endforeach; ?>
             </div>
         </div>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for $line and the internally generated 'olo-statstrip-' . wp_rand() $uid. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for $line, the (int) cast $row_gap and the internally generated 'olo-statstrip-' . wp_rand() $uid. ?>
         <style>
-            <?php if ( $dividers ) : ?>
-            .<?php echo $uid; ?> .olo-statstrip__cell:not(:first-child) { border-left: 1px solid <?php echo $line; ?>; }
+            .<?php echo $uid; ?> .olo-statstrip__grid { row-gap: <?php echo (int) $row_gap; ?>px; }
+            <?php
+            // Divisore a sinistra di OGNI cella, spostato di 1 px fuori dalla sua colonna, e la
+            // griglia che taglia ciò che esce dai suoi lati: il divisore della prima colonna di
+            // ogni riga cade fuori e sparisce, qualunque sia il numero di colonne (desktop, ripieghi
+            // del telefono, colonne per dispositivo). Prima `:not(:first-child)` lo toglieva solo
+            // alla prima cella: dalla seconda riga in poi ogni riga cominciava con una linea.
+            if ( $dividers ) : ?>
+            .<?php echo $uid; ?> .olo-statstrip__grid { overflow-x: clip; }
+            .<?php echo $uid; ?> .olo-statstrip__cell { border-left: 1px solid <?php echo $line; ?>; margin-left: -1px; }
             <?php endif; ?>
             <?php // !important: il grid-template-columns arriva inline su __grid, senza non vincerebbero mai. ?>
             @media (max-width: 760px) {
                 .<?php echo $uid; ?> .olo-statstrip__grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 28px 0; }
-                <?php if ( $dividers ) : ?>.<?php echo $uid; ?> .olo-statstrip__cell:nth-child(odd) { border-left: 0; }<?php endif; ?>
             }
             @media (max-width: 420px) {
                 .<?php echo $uid; ?> .olo-statstrip__grid { grid-template-columns: 1fr !important; }
-                <?php if ( $dividers ) : ?>.<?php echo $uid; ?> .olo-statstrip__cell { border-left: 0 !important; }<?php endif; ?>
             }
             <?php echo $this->css_per_dispositivo( $s, 'columns', '.' . $uid . ' .olo-statstrip__grid', $this->decl_colonne( 6 ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colonne per dispositivo (interi limitati) ?>
         </style>
