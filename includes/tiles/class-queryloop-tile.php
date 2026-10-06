@@ -262,12 +262,15 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
             $css .= "#{$uid} .olo-ql-card .olo-ql-trend-badge{position:absolute;top:12px;right:12px;background:#0f172a;color:#fff;padding:3px 10px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;z-index:3;display:inline-flex;align-items:center;gap:4px}";
             $css .= "#{$uid} .olo-ql-card .olo-ql-trend-badge::before{" . $this->icona_css( 'flame' ) . "}";
         }
+        // Tempo di lettura e commenti prendono il colore della riga meta (token «testo
+        // attenuato» o «Meta» dell'inspector): col nero al 55% fisso sparivano sulle card
+        // scure e nei layout col testo sopra la foto, e ignoravano il colore scelto.
         if ( ! empty( $s['show_reading_time'] ) ) {
-            $css .= "#{$uid} .olo-ql-rt{display:inline-flex;align-items:center;gap:4px;font-size:0.8em;color:rgba(0,0,0,0.55);margin-left:8px}";
+            $css .= "#{$uid} .olo-ql-rt{display:inline-flex;align-items:center;gap:4px;font-size:0.8em;color:inherit;margin-left:8px}";
             $css .= "#{$uid} .olo-ql-rt::before{" . $this->icona_css( 'clock' ) . "}";
         }
         if ( ! empty( $s['show_comment_count'] ) ) {
-            $css .= "#{$uid} .olo-ql-cc{display:inline-flex;align-items:center;gap:4px;font-size:0.8em;color:rgba(0,0,0,0.55);margin-left:8px}";
+            $css .= "#{$uid} .olo-ql-cc{display:inline-flex;align-items:center;gap:4px;font-size:0.8em;color:inherit;margin-left:8px}";
             $css .= "#{$uid} .olo-ql-cc::before{" . $this->icona_css( 'message-circle' ) . "}";
         }
         // Card relative positioning per badges
@@ -665,7 +668,6 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
 
         // TOKEN-FIRST: accento = primario brand (era #e1474f indaco off-brand)
         $accent_c   = $this->safe_color_css( $s['accent_color'] ) ?: ( $this->safe_color_css( $s['effect_color'] ) ?: ( $this->safe_color_css( $s['link_color'] ) ?: 'var(--olo-color-primary, #e1474f)' ) );
-        $bg_c       = $this->safe_color_css( $s['bg_color'] ?? '' );
         $font_family = $this->font_family_css( $s['font_family'] ?? 'inherit' );
         $title_weight = in_array( $s['title_weight'], [ '400','500','600','700','800' ], true ) ? $s['title_weight'] : '700';
         $tt           = in_array( $s['text_transform'], [ 'none','uppercase','lowercase','capitalize' ], true ) ? $s['text_transform'] : 'none';
@@ -677,7 +679,18 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
         $cpb = is_array( $cp ) ? absint( $cp['bottom'] ?? 0 ) : 0;
         $cpl = is_array( $cp ) ? absint( $cp['left']   ?? 0 ) : 0;
         $container_radius_css = $this->build_border_radius_css( $s['container_radius'] ?? [] );
-        $card_radius_css      = $this->build_border_radius_css( $s['card_radius'] ?? [] );
+        // Raggio card: 4 angoli a 0 sono una scelta (angoli vivi), non «nessun valore».
+        // build_border_radius_css() li rende '' e il CSS ricadeva sui 6 px storici: il
+        // raggio 0 non si poteva ottenere. I 6 px restano solo se la chiave è vuota.
+        $card_radius_raw = $s['card_radius'] ?? '';
+        if ( is_array( $card_radius_raw ) && ! empty( $card_radius_raw ) ) {
+            $card_radius_css = Olobuild_Tile_Utils::radius_force_css( $card_radius_raw );
+        } elseif ( is_numeric( $card_radius_raw ) ) {
+            $card_radius_css = absint( $card_radius_raw ) . 'px';
+        } else {
+            $card_radius_css = '6px';
+        }
+        $hover_bg_c = $this->safe_color_css( $s['hover_bg'] ?? '' );
 
         // Unique instance ID
         $instance_id = 'olo-ql-' . wp_unique_id();
@@ -701,7 +714,14 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
         $wrap_styles = "font-family:{$font_family};";
         if ( $tt !== 'none' ) $wrap_styles .= "text-transform:{$tt};";
         if ( $ls > 0 ) $wrap_styles .= "letter-spacing:{$ls}px;";
-        if ( $bg_c ) $wrap_styles .= "background:{$bg_c};";
+        // «Sfondo card» (bg_color) colora solo le card (render_card()): qui colorava anche il
+        // blocco intero, e gli spazi fra le card prendevano lo stesso colore. Lo sfondo
+        // del blocco è quello del contenitore (tab Stile › Contenitore › Sfondo).
+        // Eccezione «Lista rich»: lì le voci sono sempre trasparenti (get_layout_extra_css)
+        // e il blocco era l'unico posto dove il colore si vedeva; toglierlo anche lì
+        // spegneva il colore dei template già salvati. Nessun colore doppio: le voci non ne hanno.
+        $bg_blocco_c = $layout === 'list-rich' ? $this->safe_color_css( $s['bg_color'] ?? '' ) : '';
+        if ( $bg_blocco_c ) $wrap_styles .= "background:{$bg_blocco_c};";
         $wrap_styles .= "padding:{$cpt}px {$cpr}px {$cpb}px {$cpl}px;";
         if ( $container_radius_css ) $wrap_styles .= "border-radius:{$container_radius_css};";
 
@@ -829,10 +849,17 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
             ?>
         </div>
 
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: absint() for gap/columns, safe_color_css() whitelist for the accent colour, in_array() whitelists for layout/hover-effect/title-weight, build_border_radius_css() (integer-forced), the internally generated instance id, and CSS produced by the internal builders get_layout_extra_css()/get_hover_effect_css()/get_magic_css()/build_wow_effects_css() which only interpolate those same sanitized values. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: absint() for gap/columns, safe_color_css() whitelist for the accent colour, in_array() whitelists for layout/hover-effect/title-weight, build_border_radius_css()/radius_force_css()/absint() radii (integer-forced), safe_color_css() for the card hover background, the internally generated instance id, and CSS produced by the internal builders get_layout_extra_css()/get_hover_effect_css()/get_magic_css()/build_wow_effects_css() which only interpolate those same sanitized values. ?>
         <style>
             .olo-queryloop { width: 100%; }
-            .olo-ql-card { overflow: hidden; <?php echo $card_radius_css ? 'border-radius:' . $card_radius_css . ';' : 'border-radius: 6px;'; ?> }
+            .olo-ql-card { overflow: hidden; }
+            <?php // Raggio per istanza: come regola globale, con due Query Loop nella pagina vinceva il raggio dell'ultima. ?>
+            #<?php echo esc_attr( $instance_id ); ?> .olo-ql-card { border-radius: <?php echo $card_radius_css; ?>; }
+            <?php if ( $hover_bg_c && $layout !== 'list-rich' ) : // «Sfondo card» in Hover: prima finiva in un data-attributo che nessuno leggeva. !important perché lo sfondo normale è nello style della card. ?>
+            #<?php echo esc_attr( $instance_id ); ?> .olo-ql-card:hover { background-color: <?php echo $hover_bg_c; ?> !important; }
+            <?php elseif ( $hover_bg_c ) : // In «Lista rich» il colore sta sul blocco (voci trasparenti), e lì va anche quello in Hover. ?>
+            #<?php echo esc_attr( $instance_id ); ?>:hover { background-color: <?php echo $hover_bg_c; ?> !important; }
+            <?php endif; ?>
             .olo-ql-card--shadow { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
             .olo-ql-card--border { border: 1px solid var(--olo-color-border, #E5E7EB); }
             .olo-ql-card--filled { background: var(--olo-color-muted, #F3F4F6); }

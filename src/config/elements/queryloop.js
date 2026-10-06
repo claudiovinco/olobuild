@@ -336,7 +336,11 @@ export default {
 
     { type: 'separator', label: t('Colori card') },
     { key: 'accent_color', label: t('Colore accento (badge, cat, hover)'), type: 'color' },
-    withHover({ key: 'bg_color', label: t('Sfondo card'), type: 'color' }, { hoverKey: 'hover_bg', noDuration: true }),
+    // «Lista rich» disegna le voci senza sfondo (renderer PHP, background:transparent):
+    // lì il colore va sul blocco intero, come nei template già salvati. La (i) lo dice.
+    withHover({ key: 'bg_color', label: t('Sfondo card'), type: 'color',
+      description: t('Colora ogni card. In «Lista rich» le voci non hanno un fondo proprio: il colore, anche in Hover, va sul blocco intero.') },
+      { hoverKey: 'hover_bg', noDuration: true }),
     { key: 'overlay_color', label: t('Colore overlay (magazine)'), type: 'color',
       condition: { field: 'layout', op: 'in', value: ['magazine-trio', 'magazine-hero', 'alternating'] } },
     { key: 'overlay_opacity', label: t('Opacità overlay'), type: 'range', min: 0, max: 100, step: 5,
