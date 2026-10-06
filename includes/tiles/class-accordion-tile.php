@@ -57,6 +57,10 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
         'icon_shape'        => 'none',
         'icon_shape_size'   => '32',
         'icon_shape_bg'     => '',
+        // '' = come sempre: icone delle voci sul primario, freccia col testo dell'intestazione.
+        'icon_color'        => '',
+        // '' = come sempre: la voce aperta prende il bordo nel primario.
+        'border_color_active' => '',
         'panel_hover_lift'  => false,
         'panel_hover_shadow' => 'none',
         'effect_color'      => '',
@@ -233,6 +237,54 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
         $panel_lift    = ! empty( $s['panel_hover_lift'] );
         $panel_h_shadow = $s['panel_hover_shadow'] ?? 'none';
 
+        // «Colore icone»: vuoto = come sempre (icone delle voci sul primario, freccia che
+        // segue il testo dell'intestazione e, aperta, il colore attivo o il primario).
+        // Prima il primario era scritto fisso e non si poteva cambiare.
+        $icon_clr      = $this->safe_color_css( $s['icon_color'] ?? '' );
+        $icon_open_clr = $icon_clr ?: ( $header_text_active ?: $brand_accent );
+        // Bordo della voce aperta (voci staccate): vuoto = il primario di sempre.
+        $open_border   = $this->safe_color_css( $s['border_color_active'] ?? '' ) ?: $brand_accent;
+
+        // ── Bordo: UN controllo («Bordo», chiave `border`, con hover ed effetti) ──
+        // Prima la stessa chiave aveva due controlli e due rese, sulle voci (con le chiavi
+        // piatte border_width/border_color come riserva) e sulla lista intera: col
+        // separatore «Bordo» le due linee si sommavano (riga doppia in fondo e ai lati).
+        // Ora col separatore «Bordo» bordo, hover ed effetti stanno sulle voci; con gli
+        // altri separatori sulla lista intera, come prima.
+        $sep_bordo = ( $s['separator_style'] ?? 'border' ) === 'border';
+        $bordo_raw = $s['border'] ?? null;
+        if ( is_array( $bordo_raw ) && Olobuild_Tile_Utils::border_is_set( $bordo_raw )
+            && trim( (string) ( $bordo_raw['color'] ?? '' ) ) === '' && $border_clr ) {
+            // Spessori scelti senza colore: quello del separatore (prima il bordo spariva).
+            $bordo_raw['color'] = $border_clr;
+        }
+        $li_border_decl = '';
+        $li_border_base = [];
+        $li_border_h    = [ 'decls' => '', 'transition' => '' ];
+        if ( $sep_bordo ) {
+            $li_border_decl = Olobuild_Tile_Utils::border_css( $bordo_raw, [ 'width' => $bw, 'color' => $border_clr ] );
+            if ( is_array( $bordo_raw ) && Olobuild_Tile_Utils::border_is_set( $bordo_raw ) ) {
+                $li_border_base = $bordo_raw;
+            } elseif ( $li_border_decl !== '' ) {
+                $li_border_base = [ 'top' => $bw, 'right' => $bw, 'bottom' => $bw, 'left' => $bw, 'style' => 'solid', 'color' => $border_clr ];
+            }
+            // Hover del bordo sulle voci: la transizione entra nella lista della voce (in CSS
+            // vince una sola `transition`, e quella del bordo cancellava sollevamento e ombra).
+            $li_border_h = $this->build_border_hover_props( $li_border_base, $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        }
+        // Voci unite (gap 0) col bordo sulle voci: la lista arrotonda e ritaglia
+        // (overflow:hidden), le voci no, e negli angoli il loro bordo veniva tagliato
+        // lasciando il contorno aperto. Prima e ultima voce prendono gli angoli della
+        // lista, anche in hover se il Raggio ha lo stato Hover. [] = niente da emettere.
+        $li_angoli = [];
+        if ( $gap === 0 && $li_border_decl !== '' ) {
+            $li_angoli = $is_4corners ? [ $r_tl, $r_tr, $r_br, $r_bl ] : array_fill( 0, 4, max( 0, $radius ) );
+            if ( max( $li_angoli ) === 0 && ! $rad_h ) {
+                $li_angoli = [];
+            }
+        }
+        $effetto_bordo = (string) ( $s['border_effect'] ?? 'none' );
+
         ob_start();
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, intval()/absint()/max() clamps for numerics, preg_match()/in_array() whitelists and fixed-literal ternaries/maps for enums, Olobuild_Tile_Utils radius helpers, build_wow_effects_css(), and the internally generated $uid.
         ?>
@@ -259,8 +311,20 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
                 <?php endif; ?>
                 <?php endif; ?>
             }
+            <?php /* Il ::before di UIkit (il «+» disegnato come sfondo) si spegne senza
+                     !important: con !important annullava anche il «> » del prompt terminale
+                     (wow_terminal_prompt), che usa proprio questo pseudo-elemento. La forma e
+                     lo sfondo di UIkit si azzerano a parte, più specifici delle varianti
+                     .uk-open/.uk-light di UIkit, così il prompt esce come semplice testo. */ ?>
             .<?php echo esc_attr( $uid ); ?> .uk-accordion-title::before {
-                content: none !important;
+                content: none;
+            }
+            .olo-accordion.<?php echo esc_attr( $uid ); ?> > li > .uk-accordion-title::before {
+                background-image: none;
+                width: auto;
+                height: auto;
+                margin: 0;
+                float: none;
             }
             .<?php echo esc_attr( $uid ); ?> .uk-accordion-title:hover {
                 <?php if ( $header_bg ) : ?>filter: brightness(0.97);<?php else : ?>background: rgba(0,0,0,0.025);<?php endif; ?>
@@ -281,14 +345,19 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
                 display: inline-flex;
                 align-items: center;
                 margin-right: 4px;
-                color: <?php echo $brand_accent; ?>;
+                color: <?php echo $icon_clr ?: $brand_accent; ?>;
             }
+            <?php if ( $icon_clr ) : ?>
+            .<?php echo esc_attr( $uid ); ?> .macc-icon {
+                color: <?php echo $icon_clr; ?>;
+            }
+            <?php endif; ?>
             .<?php echo esc_attr( $uid ); ?> .uk-open .uk-accordion-title {
                 <?php if ( $header_active ) : ?>background: <?php echo $header_active; ?>;<?php endif; ?>
                 <?php if ( $header_text_active ) : ?>color: <?php echo $header_text_active; ?>;<?php endif; ?>
             }
             .<?php echo esc_attr( $uid ); ?> .uk-open .macc-icon {
-                color: <?php echo $header_text_active ?: $brand_accent; ?>;
+                color: <?php echo $icon_open_clr; ?>;
             }
             .<?php echo esc_attr( $uid ); ?> .uk-accordion-content {
                 <?php if ( $content_bg ) : ?>background: <?php echo $content_bg; ?>;<?php endif; ?>
@@ -377,9 +446,7 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
             <?php endif; ?>
             .<?php echo esc_attr( $uid ); ?> > li {
-                <?php if ( $s['separator_style'] === 'border' && $border_clr && $bw > 0 ) : ?>
-                <?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['border'] ?? null, [ 'width' => $bw, 'color' => $border_clr ] ) ); ?>
-                <?php endif; ?>
+                <?php echo esc_attr( $li_border_decl ); ?>
                 <?php if ( $gap > 0 && $panel_shadow !== '' ) : /* voci staccate: l'Ombra scelta prende il posto del separatore a ombra */ ?>
                 box-shadow: <?php echo $panel_shadow; ?>;
                 <?php elseif ( $s['separator_style'] === 'shadow' ) : ?>
@@ -388,9 +455,17 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
                 <?php if ( $gap > 0 ) : ?>
                 border-radius: <?php echo $radius_css; ?>;
                 <?php endif; ?>
-                transition: border-color <?php echo $speed; ?>ms ease, box-shadow <?php echo $speed; ?>ms ease, transform <?php echo $speed; ?>ms ease<?php if ( $rad_h && $gap > 0 ) echo ', ' . $rad_h['transition']; ?>;
+                transition: border-color <?php echo $speed; ?>ms ease, box-shadow <?php echo $speed; ?>ms ease, transform <?php echo $speed; ?>ms ease<?php if ( $li_border_h['transition'] !== '' ) echo ', ' . $li_border_h['transition']; ?><?php if ( $rad_h && ( $gap > 0 || $li_angoli ) ) echo ', ' . $rad_h['transition']; ?>;
                 overflow: hidden;
             }
+            <?php if ( $li_angoli ) : /* voci unite: gli angoli della lista che le ritaglia (vedi $li_angoli) */ ?>
+            .<?php echo esc_attr( $uid ); ?> > li:first-child { border-top-left-radius: <?php echo (int) $li_angoli[0]; ?>px; border-top-right-radius: <?php echo (int) $li_angoli[1]; ?>px; }
+            .<?php echo esc_attr( $uid ); ?> > li:last-child { border-bottom-right-radius: <?php echo (int) $li_angoli[2]; ?>px; border-bottom-left-radius: <?php echo (int) $li_angoli[3]; ?>px; }
+            <?php if ( $rad_h ) : ?>
+            .<?php echo esc_attr( $uid ); ?>:hover > li:first-child { border-top-left-radius: <?php echo (int) $rad_h['tl']; ?>px; border-top-right-radius: <?php echo (int) $rad_h['tr']; ?>px; }
+            .<?php echo esc_attr( $uid ); ?>:hover > li:last-child { border-bottom-right-radius: <?php echo (int) $rad_h['br']; ?>px; border-bottom-left-radius: <?php echo (int) $rad_h['bl']; ?>px; }
+            <?php endif; ?>
+            <?php endif; ?>
             <?php if ( $rad_h && $gap > 0 ) : ?>
             .<?php echo esc_attr( $uid ); ?> > li:hover { border-radius: <?php echo $rad_h['css']; ?> !important; }
             .<?php echo esc_attr( $uid ); ?> > li:hover > .uk-accordion-title { border-radius: <?php echo $rad_h['tl']; ?>px <?php echo $rad_h['tr']; ?>px 0 0 !important; }
@@ -409,12 +484,27 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
                 <?php if ( isset( $_h_shadow_map[ $panel_h_shadow ] ) ) : ?>box-shadow: <?php echo $_h_shadow_map[ $panel_h_shadow ]; ?>;<?php endif; ?>
             }
             <?php endif; ?>
-            <?php if ( $gap > 0 && $s['separator_style'] === 'border' && $border_clr && $bw > 0 ) : ?>
+            <?php if ( $gap > 0 && $li_border_decl !== '' ) : ?>
             .<?php echo esc_attr( $uid ); ?> > li.uk-open {
-                border-color: <?php echo $brand_accent; ?>;
-                <?php /* Alone del pannello aperto ricavato dal primario; l'Ombra scelta resta sotto. */ ?>
-                box-shadow: <?php if ( $panel_shadow !== '' ) echo $panel_shadow . ', '; ?>0 1px 2px color-mix(in srgb, var(--olo-color-primary, #e1474f) 5%, transparent), 0 4px 12px color-mix(in srgb, var(--olo-color-primary, #e1474f) 8%, transparent);
+                <?php /* «Colore bordo voce aperta» (vuoto = il primario di sempre: prima era
+                         l'unica possibilità e copriva il colore scelto per il bordo). */ ?>
+                border-color: <?php echo $open_border; ?>;
+                <?php /* Alone del pannello aperto ricavato dallo stesso colore; l'Ombra scelta resta sotto.
+                         Con l'effetto «Neon» no: questa regola è più specifica di quella dell'effetto
+                         e la voce aperta restava l'unica senza bagliore (il «Neon pulsante» è
+                         un'animazione e vince da solo). */ ?>
+                <?php if ( $effetto_bordo !== 'neon' ) : ?>
+                box-shadow: <?php if ( $panel_shadow !== '' ) echo $panel_shadow . ', '; ?>0 1px 2px color-mix(in srgb, <?php echo $open_border; ?> 5%, transparent), 0 4px 12px color-mix(in srgb, <?php echo $open_border; ?> 8%, transparent);
+                <?php endif; ?>
             }
+            <?php endif; ?>
+            <?php if ( $li_border_h['decls'] !== '' ) : /* dopo la voce aperta: in hover vince il bordo di hover */ ?>
+            .<?php echo esc_attr( $uid ); ?> > li:hover { <?php echo esc_attr( $li_border_h['decls'] ); ?> }
+            <?php if ( $gap === 0 ) : /* voci unite: l'hover (0,2,1) batteva `li + li { border-top:none }` e
+                     la voce sotto il puntatore riprendeva il lato alto, doppio e di un altro colore
+                     accanto al bordo basso della precedente, che resta il solo separatore */ ?>
+            .<?php echo esc_attr( $uid ); ?> > li + li:hover { border-top: none; }
+            <?php endif; ?>
             <?php endif; ?>
 
             <?php if ( $icon_shape !== 'none' ) :
@@ -454,6 +544,16 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
             // di wowEffectsFields(). Nessun !important: tutto si modifica dall'inspector.
             echo $this->build_wow_effects_css( $s, '.' . esc_attr( $uid ) . ' > li', '.uk-accordion-title' );
             ?>
+            <?php if ( ! empty( $s['wow_terminal_prompt'] ) && empty( $s['wow_disable'] ) ) : ?>
+            <?php /* Prompt terminale: l'intestazione è flex e il cursore (::after) finiva in fondo,
+                     dopo l'icona. Il titolo prende solo il suo spazio e il cursore lo segue;
+                     l'icona a destra resta in fondo (margin-right:auto del cursore). */ ?>
+            .<?php echo esc_attr( $uid ); ?> > li > .uk-accordion-title .macc-title-text { flex: 0 1 auto; }
+            .<?php echo esc_attr( $uid ); ?> > li > .uk-accordion-title::after { order: 1; margin-right: auto; }
+            <?php if ( $icon_pos === 'right' ) : ?>
+            .<?php echo esc_attr( $uid ); ?> > li > .uk-accordion-title .macc-icon { order: 2; }
+            <?php endif; ?>
+            <?php endif; ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
@@ -543,10 +643,21 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
         if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
         $this->tfx_print_script();
-                // Border system
-        $border_css        = $this->build_border_css( $s['border'] ?? [] );
-        $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
-        $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
+        // Bordo: col separatore «Bordo» base e hover sono già sulle voci (sopra) e qui
+        // restano solo gli effetti, sulle voci; con gli altri separatori tutto sulla lista.
+        // Il bagliore (neon, neon pulsante) a voci unite va sulla lista, come raggio e
+        // ombra: sulle voci l'overflow:hidden della lista lo tagliava e restava solo un
+        // alone nelle giunture. I gradienti (border-image) restano sulle voci, che hanno il bordo.
+        if ( $sep_bordo ) {
+            $border_css        = '';
+            $border_hover_css  = '';
+            $eff_sel           = ( $gap === 0 && in_array( $effetto_bordo, [ 'neon', 'neon-pulse' ], true ) ) ? ".{$uid}" : ".{$uid} > li";
+            $border_effect_css = $this->build_border_effect_css( $eff_sel, $li_border_base, $s );
+        } else {
+            $border_css        = $this->build_border_css( $s['border'] ?? [] );
+            $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+            $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
+        }
         // Raggio in hover a voci unite (gap 0) = sulla lista, che è anche l'elemento del bordo: ne riprende la transizione.
         $radius_hover_css  = $gap === 0 ? Olobuild_Tile_Utils::radius_hover_rules( ".{$uid}", $s, 'border_radius_hover', Olobuild_Tile_Utils::transizione_di( $border_hover_css ) ) : '';
         if ( $border_css || $border_hover_css || $border_effect_css || $radius_hover_css ) {

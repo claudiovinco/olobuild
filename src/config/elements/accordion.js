@@ -66,6 +66,8 @@ export default {
     icon_shape: 'none',
     icon_shape_size: '32',
     icon_shape_bg: '',
+    icon_color: '',
+    border_color_active: '',
     panel_hover_lift: false,
     panel_hover_shadow: 'none',
     effect_color: '',
@@ -171,6 +173,9 @@ export default {
       { value: 'caret', label: t('Triangolo ▼') },
     ]},
     { key: 'animate_icon', label: t('Anima icona'), type: 'toggle' },
+    // Prima le icone erano fisse sul primario.
+    { key: 'icon_color', label: t('Colore icone'), type: 'color',
+      description: t('Vale per le icone delle voci e per la freccia. Vuoto: icone delle voci nel colore primario, freccia del colore del titolo (sulla voce aperta il colore attivo del titolo o il primario).') },
     { key: 'icon_shape', label: t('Forma icona'), type: 'select', options: [
       { value: 'none', label: t('Nessuna (icona piatta)') },
       { value: 'pill', label: t('Pill (riquadro)') },
@@ -242,8 +247,21 @@ export default {
       { value: 'shadow', label: t('Ombra') },
       { value: 'none', label: t('Nessuno') },
     ]},
-    { key: 'border', label: t('Bordo'), type: 'border',
-      legacyKeys: { width: 'border_width', color: 'border_color' } },
+    // UN solo «Bordo» (con hover ed effetti): prima la stessa chiave `border` aveva due
+    // controlli, questo e il Bordo condiviso in fondo al tab, e due rese (voci + lista
+    // intera) che col separatore «Bordo» disegnavano la riga doppia. `legacyKeys`: le
+    // chiavi piatte dei preset restano in sincronia.
+    ...borderFields()
+      .filter((f) => f.type !== 'separator')
+      .flatMap((f) => (f.key !== 'border' ? [ f ] : [
+        { ...f, legacyKeys: { width: 'border_width', color: 'border_color' },
+          description: t('Con il separatore «Bordo» è il contorno di ogni voce; con gli altri separatori il contorno dell’intera fisarmonica.') },
+        { key: 'border_color_active', label: t('Colore bordo voce aperta'), type: 'color',
+          description: t('Vuoto = colore primario. Vale con le voci staccate (Gap maggiore di 0) e il separatore «Bordo».'),
+          // `show` e non `condition`: si valuta sui settings grezzi, e senza le chiavi il PHP
+          // usa separatore «Bordo» e Gap 0 (i suoi default).
+          show: (s) => (s.separator_style || 'border') === 'border' && (parseFloat(s.gap) || 0) > 0 },
+      ])),
 
     { type: 'separator', label: t('Effetti pannello (hover)') },
     { key: 'panel_hover_lift', label: t('Sollevamento al hover'), type: 'toggle' },
@@ -264,7 +282,6 @@ export default {
 
     ...shadowField,
     ...wowEffectsFields(),
-    ...borderFields(),
     // La cornice vale per TUTTE le immagini dei pannelli: una per pannello
     // renderebbe i media di larghezza uguale ma altezza diversa.
     { key: 'aspect_ratio', label: t('Proporzioni immagini'), type: 'select', options: ratioOptions(),
