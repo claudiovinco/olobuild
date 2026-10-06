@@ -234,10 +234,21 @@ class Olobuild_Panel_Tile extends Olobuild_Tile_Base {
         $css = '';
 
         // Outer card radius
-        $card_radius = Olobuild_Tile_Utils::radius_int( $s['card_radius'] ?? 0 );
+        // «Raggio card» a 0 scelto nell'inspector (numero 0 o quattro angoli) deve togliere anche
+        // il raggio che lo stile globale dà a ogni .uk-card: prima si scriveva solo sopra lo 0 e
+        // la card restava arrotondata. La stringa '0' è il valore di fabbrica mai toccato (config e
+        // $defaults): lì la card continua a seguire il raggio del tema, come sempre. I quattro
+        // angoli separati ora valgono uno per uno (prima vinceva il più grande su tutti).
+        $cr_raw   = $s['card_radius'] ?? '0';
+        $cr_fabbr = ( $cr_raw === '0' || $cr_raw === '' || $cr_raw === null );
+        if ( is_array( $cr_raw ) ) {
+            $cr_css = absint( $cr_raw['tl'] ?? 0 ) . 'px ' . absint( $cr_raw['tr'] ?? 0 ) . 'px ' . absint( $cr_raw['br'] ?? 0 ) . 'px ' . absint( $cr_raw['bl'] ?? 0 ) . 'px';
+        } else {
+            $cr_css = Olobuild_Tile_Utils::radius_int( $cr_raw ) . 'px';
+        }
         // Anche a raggio 0 se c'è il raggio in hover: il ritaglio deve esserci già.
-        if ( $card_radius > 0 || Olobuild_Tile_Utils::radius_hover( $s, 'card_radius_hover' ) ) {
-            $css .= $sel . '.olo-panel{border-radius:' . $card_radius . 'px;overflow:hidden;}';
+        if ( ! $cr_fabbr || Olobuild_Tile_Utils::radius_hover( $s, 'card_radius_hover' ) ) {
+            $css .= $sel . '.olo-panel{border-radius:' . $cr_css . ';overflow:hidden;}';
         }
 
         // Sfondo della card (elemento): batte quello dello stile UIkit (.uk-card-default…).
