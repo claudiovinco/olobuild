@@ -285,14 +285,17 @@ class Olobuild_ImgCompare_Tile extends Olobuild_Tile_Base {
                 <?php if ( $after_url ) : ?>
                     <img src="<?php echo $after_url; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_url() at assignment above ?>" alt="<?php echo esc_attr( $after_lbl ); ?>" draggable="false" loading="lazy" />
                 <?php else : ?>
-                    <div style="width:100%;height:100%;background:var(--olo-color-text, #374151);display:flex;align-items:center;justify-content:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;">Dopo</div>
+                    <div style="width:100%;height:100%;background:var(--olo-color-text, #374151);display:flex;align-items:center;justify-content:center;color:color-mix(in srgb, var(--olo-color-background, #ffffff) 85%, transparent);font-size:14px;"><?php echo esc_html( olobuild_t( 'Dopo' ) ); ?></div>
                 <?php endif; ?>
             </div>
             <div class="olo-ic-before">
                 <?php if ( $before_url ) : ?>
                     <img src="<?php echo $before_url; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_url() at assignment above ?>" alt="<?php echo esc_attr( $before_lbl ); ?>" draggable="false" loading="lazy" />
                 <?php else : ?>
-                    <div style="width:100%;height:100%;background:#1F2937;display:flex;align-items:center;justify-content:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;">Prima</div>
+                    <?php /* Segnaposti: la metà «Prima» è il colore del testo scurito (prima #1F2937 fisso, uguale
+                             su ogni tema), la scritta è il colore di fondo, che sul colore del testo si legge
+                             sempre (il grigio attenuato di prima, sul tema di mosaic, quasi spariva). */ ?>
+                    <div style="width:100%;height:100%;background:color-mix(in srgb, var(--olo-color-text, #374151) 70%, var(--olo-color-dark, #111827));display:flex;align-items:center;justify-content:center;color:color-mix(in srgb, var(--olo-color-background, #ffffff) 85%, transparent);font-size:14px;"><?php echo esc_html( olobuild_t( 'Prima' ) ); ?></div>
                 <?php endif; ?>
             </div>
             <div class="olo-ic-line"></div>
