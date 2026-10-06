@@ -5,7 +5,7 @@ import { t } from '@/i18n';
  * Tile Leaderboard — classifica con barre XP animate (famiglia E · bucket C).
  * Reference visiva: handoff-tile-speciali/temi/60-tema-community-gamer.html (#board).
  *
- *   fields[]      → source (manual/query), rows[] (nome|ruolo|valore|max), animateOnView,
+ *   fields[]      → rows[] (nome|ruolo|valore|max), animateOnView,
  *                   highlightTop, mostra valori/posizioni, etichetta unità.
  *   styleFields[] → colori (bg riga/barra-traccia/testo/posizione), barGradient (2 colori + angolo),
  *                   colori highlight, dimensioni (altezza barra, raggio, gap), velocità animazione,
@@ -102,14 +102,11 @@ export default {
 
   // ═══ CONTENUTO ════════════════════════════════════════════════
   fields: [
-    { type: 'separator', label: t('Sorgente dati') },
-    { key: 'source', label: t('Origine dati'), type: 'select', options: [
-      { value: 'manual', label: t('Manuale') },
-      { value: 'query',  label: t('Query (in arrivo)') },
-    ], description: t('Manuale usa le righe sotto. Query collegherà un endpoint olobuild/v1 (placeholder: usa le righe come demo).') },
-
+    // Niente più «Origine dati»: la voce «Query (in arrivo)» non era collegata a niente, la tile
+    // disegnava comunque le righe e intanto ne nascondeva l'editor. La chiave `source` resta nei
+    // template salvati e il renderer non la legge: le righe valgono sempre.
+    { type: 'separator', label: t('Righe') },
     { key: 'rows', label: t('Righe classifica'), type: 'content-items',
-      condition: { field: 'source', op: 'eq', value: 'manual' },
       itemLabel: t('Riga'),
       defaults: { name: 'Nuovo membro', role: 'Membro', value: 1000, max: 25000 },
       newItemDefaults: { name: 'Nuovo membro', role: 'Membro', value: 1000, max: 25000 },
@@ -158,8 +155,10 @@ export default {
     { key: 'text_color',     label: t('Colore nome'), type: 'color' },
     { key: 'badge_bg',       label: t('Sfondo badge ruolo'), type: 'color',
       condition: { field: 'show_role', op: 'eq', value: true } },
-    { key: 'badge_color',    label: t('Testo badge ruolo'), type: 'color',
-      condition: { field: 'show_role', op: 'eq', value: true } },
+    // `role_color` è il colore dell'UNITÀ accanto al valore («punti», «xp»): stava in Tipografia
+    // come colore del «Ruolo», che invece è il testo del badge (`badge_color`). Chiavi invariate.
+    { key: 'role_color',     label: t('Colore unità'), type: 'color',
+      condition: { field: 'show_value', op: 'eq', value: true } },
     { key: 'highlight_color', label: t('Colore evidenziazione (top)'), type: 'color',
       condition: { field: 'highlight_top', op: 'neq', value: 0 } },
 
@@ -173,7 +172,8 @@ export default {
       },
       sizeMin: 12, sizeMax: 32, sizeStep: 1,
     },
-    { type: 'typography', label: t('Ruolo'), responsiveKeys: [], keys: { size: 'role_size', color: 'role_color' }, sizeMin: 8, sizeMax: 18 },
+    { type: 'typography', label: t('Ruolo'), responsiveKeys: [], keys: { size: 'role_size', color: 'badge_color' }, sizeMin: 8, sizeMax: 18,
+      condition: { field: 'show_role', op: 'eq', value: true } },
     { type: 'typography', label: t('Posizione'), responsiveKeys: [], keys: { size: 'position_size', color: 'position_color' }, sizeMin: 14, sizeMax: 40 },
 
     { type: 'separator', label: t('Aspetto') },

@@ -29,7 +29,8 @@ class Olobuild_Leaderboard_Tile extends Olobuild_Tile_Base {
         'bg'                => [ 'type' => 'none' ],
         'typography_preset' => '',
 
-        // Dati
+        // Dati — `source` è solo una chiave storica: «Query» non è mai stata collegata e la tile
+        // disegna sempre le righe (l'inspector non la offre più).
         'source' => 'manual',
         'rows'   => [
             [ 'name' => 'KiraByte',  'role' => 'Capoclan', 'value' => 24810, 'max' => 25000 ],
@@ -162,6 +163,8 @@ class Olobuild_Leaderboard_Tile extends Olobuild_Tile_Base {
         // default non porta più il testo scuro della Palette.
         $row_bg      = $this->safe_color_css( $s['row_bg'] ?? '' ) ?: 'var(--olo-color-dark, #1A1233)';
         $text_color  = $this->safe_color_css( $s['text_color'] ?? '' ) ?: $this->testo_su( $row_bg, 'var(--olo-color-text, #EDEAFB)' );
+        // `role_color` (nome storico) colora l'UNITÀ accanto al valore; il testo del ruolo è il
+        // badge, con `badge_color` (nell'inspector: Tipografia › Ruolo).
         $role_color  = $this->safe_color_css( $s['role_color'] ?? '' ) ?: $this->testo_su( $row_bg, 'var(--olo-color-text-muted, #948CC4)', true );
         $pos_color   = $this->safe_color_css( $s['position_color'] ?? '' ) ?: $this->testo_su( $row_bg, 'var(--olo-color-text-faint, #94a3b8)', true );
         $badge_bg    = $this->safe_color_css( $s['badge_bg'] ?? '' ) ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 20%, transparent)';
