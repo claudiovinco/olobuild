@@ -65,7 +65,98 @@ class Olobuild_Social_Tile extends Olobuild_Tile_Base {
         ];
     }
 
-    private static function get_icon_svg( $platform ) {
+    /**
+     * Il nome della piattaforma come lo scrive il marchio. Prima era la chiave salvata
+     * passata da capitalize/ucfirst: sotto le icone e nei tooltip uscivano «Tiktok»,
+     * «Youtube», «Whatsapp», «Linkedin», «Github» e «Twitter» per X. Pubblico: lo usa
+     * anche la riga di icone del Link in Bio.
+     */
+    public static function nome_piattaforma( $platform ) {
+        $nomi = [
+            'facebook'  => 'Facebook',
+            'twitter'   => 'X',
+            'instagram' => 'Instagram',
+            'linkedin'  => 'LinkedIn',
+            'youtube'   => 'YouTube',
+            'tiktok'    => 'TikTok',
+            'github'    => 'GitHub',
+            'pinterest' => 'Pinterest',
+            'whatsapp'  => 'WhatsApp',
+            'telegram'  => 'Telegram',
+            'snapchat'  => 'Snapchat',
+            'discord'   => 'Discord',
+            'twitch'    => 'Twitch',
+            'spotify'   => 'Spotify',
+        ];
+        if ( isset( $nomi[ $platform ] ) ) {
+            return $nomi[ $platform ];
+        }
+        if ( 'email' === $platform ) {
+            return olobuild_t( 'Email' );
+        }
+        if ( 'website' === $platform ) {
+            return olobuild_t( 'Sito web' );
+        }
+        return ucfirst( (string) $platform );
+    }
+
+    /**
+     * Il colore dell'icona dentro il cerchio pieno. Era sempre bianco: su un colore
+     * personalizzato chiaro (il Chiaro o lo sfondo della palette, un pastello) e sul
+     * giallo di Snapchat l'icona spariva. Sul primario, sul secondario e sul tenue della
+     * palette vale il loro colore di contrasto; sugli altri colori personalizzati il
+     * bianco se si legge (almeno 3:1), sennò lo scuro. I colori dei marchi tengono il
+     * glifo bianco delle loro linee guida, tranne Snapchat (glifo scuro sul giallo).
+     */
+    private function icona_su( $fondo, $platform, $use_brand ) {
+        // Anche coi colori dei marchi: «Sito web» e le piattaforme senza colore usano il primario.
+        if ( preg_match( '/^var\(\s*--olo-color-(primary|secondary|muted)\s*[,)]/', (string) $fondo, $m ) ) {
+            return 'var(--olo-color-' . $m[1] . '-contrast, #fff)';
+        }
+        if ( $use_brand ) {
+            return 'snapchat' === $platform ? 'var(--olo-color-dark, #14161c)' : '#fff';
+        }
+        // Un fondo semitrasparente (il «vetro» bianco al 20% su una foto o una sezione scura)
+        // lascia vedere ciò che c'è dietro, che qui non si conosce: resta il bianco di prima.
+        // colore_hex() perde l'alfa e lo tratterebbe come opaco, dando scuro su scuro.
+        if ( self::alfa_colore( $fondo ) < 0.5 ) {
+            return '#fff';
+        }
+        $hex = Olobuild_Tile_Utils::colore_hex( $fondo );
+        if ( '' === $hex ) {
+            return '#fff';
+        }
+        $l = 0.0;
+        foreach ( [ 1 => 0.2126, 3 => 0.7152, 5 => 0.0722 ] as $i => $k ) {
+            $v  = hexdec( substr( $hex, $i, 2 ) ) / 255;
+            $l += $k * ( $v <= 0.03928 ? $v / 12.92 : pow( ( $v + 0.055 ) / 1.055, 2.4 ) );
+        }
+        return ( 1.05 / ( $l + 0.05 ) ) >= 3 ? '#fff' : 'var(--olo-color-dark, #14161c)';
+    }
+
+    /**
+     * L'opacità di un colore salvato (1 = pieno): rgba()/rgb() con la quarta componente
+     * (virgole o barra, anche in %), #rgba e #rrggbbaa, color-mix() con transparent.
+     */
+    private static function alfa_colore( $colore ) {
+        $c = trim( (string) $colore );
+        if ( preg_match( '/^rgba?\(([^)]*)\)$/i', $c, $m ) ) {
+            $parti = preg_split( '/[\s,\/]+/', trim( $m[1] ) );
+            if ( 4 === count( $parti ) ) {
+                return '%' === substr( $parti[3], -1 ) ? (float) $parti[3] / 100 : (float) $parti[3];
+            }
+            return 1.0;
+        }
+        if ( preg_match( '/^#(?:[0-9a-f]{3}([0-9a-f])|[0-9a-f]{6}([0-9a-f]{2}))$/i', $c, $m ) ) {
+            return isset( $m[2] ) && '' !== $m[2] ? hexdec( $m[2] ) / 255 : hexdec( $m[1] . $m[1] ) / 255;
+        }
+        if ( preg_match( '/^color-mix\(\s*in\s+srgb\s*,.*?([\d.]+)%\s*,\s*transparent\s*\)$/is', $c, $m ) ) {
+            return (float) $m[1] / 100;
+        }
+        return 1.0;
+    }
+
+    public static function get_icon_svg( $platform ) {
         $paths = self::icon_paths();
         $d = $paths[ $platform ] ?? '';
         if ( ! $d ) {
@@ -79,7 +170,9 @@ class Olobuild_Social_Tile extends Olobuild_Tile_Base {
 
         $brand_colors = [
             'facebook'  => '#1877F2',
-            'twitter'   => '#1DA1F2',
+            // X: il nero del marchio attuale (#1DA1F2 era il blu del vecchio Twitter,
+            // accanto al logo X).
+            'twitter'   => '#000000',
             'instagram' => '#E4405F',
             'linkedin'  => '#0A66C2',
             'youtube'   => '#FF0000',
@@ -129,11 +222,19 @@ class Olobuild_Social_Tile extends Olobuild_Tile_Base {
             <?php foreach ( $links as $link ) :
                 $icon  = self::get_icon_svg( $link['platform'] );
                 $color = $use_brand ? ( $brand_colors[ $link['platform'] ] ?? 'var(--olo-color-primary, #e1474f)' ) : $this->safe_color_css( $custom_color );
+                // X e TikTok: il marchio è nero o bianco secondo il fondo. Senza il cerchio pieno
+                // (Contorno, Minimale e gli stili storici «circle»/«rounded») il nero spariva
+                // sulle sezioni scure: prendono il colore del testo intorno.
+                if ( $use_brand && 'filled' !== $style && in_array( $link['platform'], [ 'twitter', 'tiktok' ], true ) ) {
+                    $color = 'currentColor';
+                }
+
+                $nome  = self::nome_piattaforma( $link['platform'] );
 
                 if ( $style === 'filled' ) {
                     $link_style = sprintf(
-                        'width:%dpx;height:%dpx;background:%s;color:#fff;border-radius:50%%;display:inline-flex;align-items:center;justify-content:center;font-size:%dpx;line-height:1;',
-                        $size, $size, $this->safe_color_css( $color ), intval( $size * 0.5 )
+                        'width:%dpx;height:%dpx;background:%s;color:%s;border-radius:50%%;display:inline-flex;align-items:center;justify-content:center;font-size:%dpx;line-height:1;',
+                        $size, $size, $this->safe_color_css( $color ), $this->icona_su( $this->safe_color_css( $color ), $link['platform'], $use_brand ), intval( $size * 0.5 )
                     );
                 } elseif ( $style === 'outline' ) {
                     $link_style = sprintf(
@@ -148,11 +249,11 @@ class Olobuild_Social_Tile extends Olobuild_Tile_Base {
                 }
             ?>
                 <div style="display:flex;flex-direction:column;align-items:center;<?php echo $show_labels ? 'gap:4px;' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'gap:4px;'/'' literal from the ternary ?>">
-                    <a href="<?php echo esc_url( $link['url'] ); ?>" target="_blank" rel="noopener noreferrer" class="olo-social-link" style="<?php echo $link_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style assembled above via sprintf() from %d-forced sizes and safe_color_css()-whitelisted colours (may be var() tokens, not esc_attr-safe inside style attr) ?>" title="<?php echo esc_attr( ucfirst( $link['platform'] ) ); ?>" aria-label="<?php echo esc_attr( ucfirst( $link['platform'] ) ); ?>">
+                    <a href="<?php echo esc_url( $link['url'] ); ?>" target="_blank" rel="noopener noreferrer" class="olo-social-link" style="<?php echo $link_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style assembled above via sprintf() from %d-forced sizes and safe_color_css()-whitelisted colours (may be var() tokens, not esc_attr-safe inside style attr) ?>" title="<?php echo esc_attr( $nome ); ?>" aria-label="<?php echo esc_attr( $nome ); ?>">
                         <?php echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from the hardcoded icon_paths() map ?>
                     </a>
                     <?php if ( $show_labels ) : ?>
-                        <span style="font-size:<?php echo (int) max( 10, intval( $size * 0.35 ) ); ?>px;color:var(--olo-color-text-muted, #9CA3AF);text-transform:capitalize;"><?php echo esc_html( $link['platform'] ); ?></span>
+                        <span style="font-size:<?php echo (int) max( 10, intval( $size * 0.35 ) ); ?>px;color:var(--olo-color-text-muted, #9CA3AF);"><?php echo esc_html( $nome ); ?></span>
                     <?php endif; ?>
                 </div>
             <?php endforeach; ?>

@@ -8,6 +8,28 @@ import { t } from '@/i18n';
  *                   icon_color, hover_effect, shadow, borderFields
  *   AVANZATE      → meta tecnico (id/class/condizioni)
  */
+
+// Le piattaforme che il renderer sa disegnare (icon_paths() in class-social-tile.php).
+// Elenco unico: lo usa anche la riga di icone del Link in Bio.
+export const PIATTAFORME_SOCIAL = [
+  { value: 'facebook',  label: t('Facebook') },
+  { value: 'twitter',   label: t('X / Twitter') },
+  { value: 'instagram', label: t('Instagram') },
+  { value: 'linkedin',  label: t('LinkedIn') },
+  { value: 'youtube',   label: t('YouTube') },
+  { value: 'tiktok',    label: t('TikTok') },
+  { value: 'whatsapp',  label: t('WhatsApp') },
+  { value: 'telegram',  label: t('Telegram') },
+  { value: 'pinterest', label: t('Pinterest') },
+  { value: 'discord',   label: t('Discord') },
+  { value: 'twitch',    label: t('Twitch') },
+  { value: 'spotify',   label: t('Spotify') },
+  { value: 'snapchat',  label: t('Snapchat') },
+  { value: 'github',    label: t('GitHub') },
+  { value: 'email',     label: t('Email') },
+  { value: 'website',   label: t('Sito web') },
+];
+
 export default {
   type: 'social',
   name: t('Link social'),
@@ -57,24 +79,7 @@ export default {
     { type: 'separator', label: t('Piattaforme') },
     { key: 'links', label: t('Piattaforme'), type: 'content-items',
       itemFields: [
-        { key: 'platform', label: t('Piattaforma'), type: 'select', options: [
-          { value: 'facebook',  label: t('Facebook') },
-          { value: 'twitter',   label: t('X / Twitter') },
-          { value: 'instagram', label: t('Instagram') },
-          { value: 'linkedin',  label: t('LinkedIn') },
-          { value: 'youtube',   label: t('YouTube') },
-          { value: 'tiktok',    label: t('TikTok') },
-          { value: 'whatsapp',  label: t('WhatsApp') },
-          { value: 'telegram',  label: t('Telegram') },
-          { value: 'pinterest', label: t('Pinterest') },
-          { value: 'discord',   label: t('Discord') },
-          { value: 'twitch',    label: t('Twitch') },
-          { value: 'spotify',   label: t('Spotify') },
-          { value: 'snapchat',  label: t('Snapchat') },
-          { value: 'github',    label: t('GitHub') },
-          { value: 'email',     label: t('Email') },
-          { value: 'website',   label: t('Sito web') },
-        ]},
+        { key: 'platform', label: t('Piattaforma'), type: 'select', options: PIATTAFORME_SOCIAL },
         { key: 'url', label: t('URL'), type: 'link', placeholder: t('https://...') },
       ],
     },
