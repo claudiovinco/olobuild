@@ -26,6 +26,7 @@ export default {
     cell_bg: '',
     card_border: '',
     head_color: '',
+    heading_color: '',
     align: 'left',
   },
 
@@ -62,13 +63,20 @@ export default {
     },
   ],
 
+  // Zone standard dello Stile (Aspetto · Testo · Disposizione; il bordo sta in Aspetto come
+  // nella tile pilota). Il colore del titolo prima non c'era: era fisso sul testo del tema
+  // e su una sezione scura spariva.
   styleFields: [
-    { type: 'separator', label: t('Stile') },
+    { type: 'separator', label: t('Aspetto') },
     { key: 'zone_accent', label: t('Colore evidenziato'), type: 'color' },
     { key: 'zone_on', label: t('Testo su evidenziato'), type: 'color' },
     { key: 'cell_bg', label: t('Sfondo celle'), type: 'color' },
     { key: 'card_border', label: t('Bordo griglia'), type: 'border', legacyWidth: 1 },
+    { type: 'separator', label: t('Testo') },
+    { key: 'heading_color', label: t('Colore titolo'), type: 'color',
+      condition: { field: 'heading', op: 'notEmpty' } },
     { key: 'head_color', label: t('Colore intestazioni'), type: 'color' },
+    { type: 'separator', label: t('Disposizione') },
     { key: 'align', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
