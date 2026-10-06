@@ -45,6 +45,10 @@ export default {
     desc_size:  15,
 
     mono_font_family: '',
+
+    card_style:  'none',
+    card_radius: { tl: 0, tr: 0, br: 0, bl: 0, linked: true },
+    card_bg:     '',
   },
 
   // Appena nata: i lavori scelti di uno studio, quattro foto vere su due colonne — una fila in
@@ -90,6 +94,20 @@ export default {
     { type: 'separator', label: t('Layout griglia') },
     { key: 'columns',   label: t('Numero colonne'),  type: 'range', min: 1, max: 4, step: 1, responsive: true },
     { key: 'items_gap', label: t('Gap'),        type: 'range', min: 8, max: 60, step: 2, responsive: true },
+
+    { type: 'separator', label: t('Card') },
+    // «Nessuno» = immagine e testo sul fondo della sezione (com'era); «Ombra» e «Bordo»
+    // chiudono immagine e testo in un riquadro. Il raggio va sull'immagine o sul riquadro.
+    { key: 'card_style', label: t('Stile card'), type: 'select', options: [
+      { value: 'none',   label: t('Nessuno') },
+      { value: 'shadow', label: t('Ombra') },
+      { value: 'border', label: t('Bordo') },
+    ]},
+    // Solo col riquadro: con «Nessuno» la card non ha un fondo suo.
+    { key: 'card_bg', label: t('Sfondo card'), type: 'color',
+      description: t('Vuoto: il colore della superficie del tema con «Ombra», nessun fondo con «Bordo». Su una sezione scura scegli un fondo che faccia leggere i testi.'),
+      condition: { field: 'card_style', operator: 'in', value: ['shadow', 'border'] } },
+    { key: 'card_radius', label: t('Raggio card'), type: 'border-radius' },
 
     { type: 'separator', label: t('Media') },
     // Niente voce «Auto» in queste due tendine: il contenitore del media non ha

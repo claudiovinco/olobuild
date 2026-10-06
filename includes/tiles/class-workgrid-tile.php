@@ -38,6 +38,9 @@ class Olobuild_WorkGrid_Tile extends Olobuild_Tile_Base {
         'desc_color'        => 'var(--olo-color-text-soft, #8d8a82)',
         'desc_size'         => 15,
         'mono_font_family'  => '',
+        'card_style'        => 'none',
+        'card_radius'       => [ 'tl' => 0, 'tr' => 0, 'br' => 0, 'bl' => 0, 'linked' => true ],
+        'card_bg'           => '',
     ];
 
     public function get_controls() { return []; }
@@ -90,6 +93,19 @@ class Olobuild_WorkGrid_Tile extends Olobuild_Tile_Base {
             $obj_pos = 'center center';
         }
 
+        // Stile e raggio delle card. «Nessuno» (il default) = immagine e testo sul fondo della
+        // sezione, come sempre: il raggio va sull'immagine. «Ombra» e «Bordo» = un riquadro che
+        // contiene immagine e testo: il raggio va sul riquadro (che ritaglia l'immagine), il testo
+        // prende un margine interno.
+        $card_style  = in_array( $s['card_style'] ?? 'none', [ 'none', 'shadow', 'border' ], true ) ? $s['card_style'] : 'none';
+        $card_radius = $this->build_border_radius_css( $s['card_radius'] ?? [] );
+        // Fondo del riquadro: «Sfondo card», se no la superficie del tema con l'ombra e nessun fondo
+        // col bordo (il bordo basta a chiudere la card). Un fondo chiaro fisso anche col bordo
+        // rendeva illeggibili i testi chiari scelti per una sezione scura.
+        $card_fill   = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: ( $card_style === 'shadow' ? 'var(--olo-color-surface, #ffffff)' : 'transparent' );
+        // Margine interno del testo nel riquadro: in proporzione allo spazio fra le card (32 → 19 px).
+        $card_pad    = max( 12, min( 28, (int) round( $gap * 0.6 ) ) );
+
         $items = is_array( $s['items'] ) ? $s['items'] : [];
         $grid_style = 'display:grid;grid-template-columns:repeat(' . $cols . ',minmax(0,1fr));gap:' . $gap . 'px;';
 
@@ -130,14 +146,22 @@ class Olobuild_WorkGrid_Tile extends Olobuild_Tile_Base {
                         <?php endif; ?>
                     </div>
                     <?php if ( $show_desc && $desc ) : ?>
-                        <p style="font-size:<?php echo (int) $desc_size; ?>px;line-height:1.5;color:<?php echo esc_attr( $desc_c ); ?>;margin:6px 0 0;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.description'; ?>" data-olo-richtext><?php echo $desc; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized above via safe_richtext_content() (wp_kses_post) for rich text, or esc_html()+nl2br() for plain text ?></p>
+                        <p class="olo-workgrid__d" style="font-size:<?php echo (int) $desc_size; ?>px;line-height:1.5;color:<?php echo esc_attr( $desc_c ); ?>;margin:6px 0 0;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.description'; ?>" data-olo-richtext><?php echo $desc; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized above via safe_richtext_content() (wp_kses_post) for rich text, or esc_html()+nl2br() for plain text ?></p>
                     <?php endif; ?>
                 </<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'a'/'div' literal from the ternary above ?>>
             <?php endforeach; ?>
         </div>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from the internally generated $uid and the safe_color_css()-validated $title_c. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from the internally generated $uid, the safe_color_css()-validated $title_c and $card_fill (or its fixed fallbacks), the in_array()-whitelisted $card_style and $card_radius from build_border_radius_css() (integer-forced). ?>
         <style>
             .<?php echo $uid; ?> .olo-workgrid__item { display: block; color: inherit; text-decoration: none; }
+            <?php if ( $card_style === 'none' ) : ?>
+                <?php if ( $card_radius ) : ?>
+            .<?php echo $uid; ?> .olo-workgrid__media { border-radius: <?php echo $card_radius; ?>; }
+                <?php endif; ?>
+            <?php else : ?>
+            .<?php echo $uid; ?> .olo-workgrid__item { background: <?php echo $card_fill; ?>; overflow: hidden; padding-bottom: <?php echo (int) $card_pad; ?>px;<?php echo $card_radius ? ' border-radius: ' . $card_radius . ';' : ''; ?><?php echo $card_style === 'shadow' ? ' box-shadow: 0 1px 2px rgba(16,24,40,.06), 0 8px 24px -12px rgba(16,24,40,.22);' : ' border: 1px solid var(--olo-color-border, #e5e7eb);'; ?> }
+            .<?php echo $uid; ?> .olo-workgrid__b, .<?php echo $uid; ?> .olo-workgrid__d { padding-left: <?php echo (int) $card_pad; ?>px; padding-right: <?php echo (int) $card_pad; ?>px; }
+            <?php endif; ?>
             .<?php echo $uid; ?> .olo-workgrid__media img, .<?php echo $uid; ?> .olo-workgrid__media .olo-workgrid__ph { transition: transform .6s cubic-bezier(.2,.7,.3,1); }
             <?php if ( $hover_zoom ) : ?>
             .<?php echo $uid; ?> .olo-workgrid__item:hover .olo-workgrid__media img, .<?php echo $uid; ?> .olo-workgrid__item:hover .olo-workgrid__media .olo-workgrid__ph { transform: scale(1.04); }
