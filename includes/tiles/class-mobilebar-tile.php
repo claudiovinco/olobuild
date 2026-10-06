@@ -54,7 +54,9 @@ class Olobuild_Mobilebar_Tile extends Olobuild_Tile_Base {
         // Padding del contenitore (controllo «Padding (px)», prima non collegato).
         $root_pad_sides = Olobuild_Tile_Utils::spacing_sides( $s['tile_padding'] ?? null, [], [ 0, 0, 0, 0 ] );
         $bar_shadow  = ! empty( $s['bar_shadow'] );
-        $ham_color   = $this->safe_color_css( $s['hamburger_color'] ) ?: '#fff';
+        // Colore delle icone sulla barra: lo prendono anche il nome del sito di ripiego e la
+        // lente del pulsante «Cerca» (render_css()). Ripiego = il default della tile, a token.
+        $ham_color   = $this->safe_color_css( $s['hamburger_color'] ) ?: 'var(--olo-color-light, #ffffff)';
         $ham_size    = intval( $s['hamburger_size'] ) ?: 28;
         $ham_style   = esc_attr( $s['hamburger_style'] ?: 'classic' );
         $logo_img    = esc_url( $s['logo_image'] );
@@ -79,13 +81,13 @@ class Olobuild_Mobilebar_Tile extends Olobuild_Tile_Base {
         $p_sep       = ! empty( $s['panel_separator'] );
         $p_chev      = $this->safe_color_css( $s['panel_chevron_color'] ) ?: 'var(--olo-color-text-faint, #94a3b8)';
         $search_on   = ! empty( $s['search_enabled'] );
-        $search_ic   = $this->safe_color_css( $s['search_icon_color'] ) ?: '#fff';
+        $search_ic   = $this->safe_color_css( $s['search_icon_color'] ) ?: 'var(--olo-color-light, #ffffff)';
         $search_ph   = esc_attr( $s['search_placeholder'] ?: 'Cerca...' );
 
         ob_start();
 
         // ─── CSS ───
-        $this->render_css( $uid, $bp, $bar_h, $bar_bg, $bar_pad, $bar_shadow, $ham_color, $ham_size, $p_bg, $p_color, $p_active, $p_fs, $p_pad, $p_sep, $p_chev, $search_ic, $p_pad_css );
+        $this->render_css( $uid, $bp, $bar_h, $bar_bg, $bar_pad, $bar_shadow, $ham_color, $ham_size, $p_bg, $p_color, $p_active, $p_fs, $p_pad, $p_sep, $p_chev, $search_ic, $p_pad_css, $root_pad_sides );
 
         // ─── HTML ───
         $this->render_html( $uid, $logo_img, $logo_w, $logo_link, $ham_style, $search_on, $search_ph, $menu_id, $bar_h, $root_pad_sides );
@@ -109,10 +111,18 @@ class Olobuild_Mobilebar_Tile extends Olobuild_Tile_Base {
        CSS
        ═══════════════════════════════════════════ */
 
-    private function render_css( $uid, $bp, $bar_h, $bar_bg, $bar_pad, $bar_shadow, $ham_color, $ham_size, $p_bg, $p_color, $p_active, $p_fs, $p_pad, $p_sep, $p_chev, $search_ic, $p_pad_css = '' ) {
+    /**
+     * @param array $root_pad Padding del contenitore a 4 lati (spacing_sides()). Il pannello
+     *                        del menu è assoluto sul contenitore, che col padding è più largo
+     *                        della barra: senza rientrare di quei lati sporgeva ai due fianchi.
+     */
+    private function render_css( $uid, $bp, $bar_h, $bar_bg, $bar_pad, $bar_shadow, $ham_color, $ham_size, $p_bg, $p_color, $p_active, $p_fs, $p_pad, $p_sep, $p_chev, $search_ic, $p_pad_css = '', $root_pad = [] ) {
         if ( ! $p_pad_css ) {
             $p_pad_css = $p_pad . 'px ' . ( $p_pad + 8 ) . 'px';
         }
+        $pad_r = max( 0, intval( $root_pad['right'] ?? 0 ) );
+        $pad_b = max( 0, intval( $root_pad['bottom'] ?? 0 ) );
+        $pad_l = max( 0, intval( $root_pad['left'] ?? 0 ) );
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized in render() (safe_color_css(), intval()/max()/round() numerics, Olobuild_Tile_Utils::spacing_css()) and the internally generated $uid.
         ?>
         <style>
@@ -123,7 +133,10 @@ class Olobuild_Mobilebar_Tile extends Olobuild_Tile_Base {
             top: 0;
             z-index: 1050;
             width: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            /* Il carattere del sito (era il font di sistema fisso, diverso dal resto della
+               pagina); con uno «Stile tipografico» la classe olo-typo-* sul wrapper ridefinisce
+               --olo-font-family e la barra lo segue. */
+            font-family: var(--olo-font-family, inherit);
         }
         @media (max-width: <?php echo (int) $bp; ?>px) {
             .<?php echo $uid; ?> { display: block; }
@@ -153,6 +166,13 @@ class Olobuild_Mobilebar_Tile extends Olobuild_Tile_Base {
             align-items: center;
             text-decoration: none;
             flex-shrink: 0;
+        }
+        /* Nome del sito al posto del logo: nel colore delle icone della barra (era #fff fisso,
+           invisibile sulla barra chiara con cui la tile nasce). */
+        .<?php echo $uid; ?> .olo-mb-logo-testo {
+            color: <?php echo $ham_color; ?>;
+            font-weight: 700;
+            font-size: 18px;
         }
         .<?php echo $uid; ?> .olo-mb-logo img {
             height: auto;
@@ -295,9 +315,9 @@ class Olobuild_Mobilebar_Tile extends Olobuild_Tile_Base {
         /* ── Dropdown Panel ── */
         .<?php echo $uid; ?> .olo-mb-dropdown {
             position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
+            top: calc(100% - <?php echo (int) $pad_b; ?>px);
+            left: <?php echo (int) $pad_l; ?>px;
+            right: <?php echo (int) $pad_r; ?>px;
             background: <?php echo $p_bg; ?>;
             max-height: 0;
             overflow: hidden;
@@ -446,7 +466,9 @@ class Olobuild_Mobilebar_Tile extends Olobuild_Tile_Base {
         }
         .<?php echo $uid; ?> .olo-mb-search-form button svg {
             width: 18px; height: 18px;
-            stroke: #fff; fill: none;
+            /* Il pulsante ha lo sfondo della barra: la lente prende il colore che le icone
+               hanno sulla barra (era #fff fisso, sparito sulla barra chiara). */
+            stroke: <?php echo $search_ic; ?>; fill: none;
             stroke-width: 2;
         }
         </style>
@@ -481,7 +503,7 @@ class Olobuild_Mobilebar_Tile extends Olobuild_Tile_Base {
                     <?php if ( $logo_img ) : ?>
                         <img src="<?php echo $logo_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_url() at assignment in render() ?>" alt="<?php echo esc_attr( olobuild_t( 'Logo' ) ); ?>" style="max-width:<?php echo (int) $logo_w; ?>px;">
                     <?php else : ?>
-                        <span style="color:#fff;font-weight:700;font-size:18px;">
+                        <span class="olo-mb-logo-testo">
                             <?php echo esc_html( get_bloginfo( 'name' ) ); ?>
                         </span>
                     <?php endif; ?>
