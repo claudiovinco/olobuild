@@ -138,7 +138,10 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
         $bw          = absint( $s['input_border_width'] );
         $radius      = $this->build_border_radius_css( $s["input_radius"] );
         $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['input_radius_hover'] ?? null );
-        $label_color = $this->safe_color_css( $s['label_color'] ) ?: 'var(--olo-color-text, #374151)';
+        // Il raggio in hover vale con «Riquadro» e con «Senza bordo» (dove il raggio di base agisce
+        // e con lo sfondo si vede): prima usciva solo col riquadro. Con «Solo linea sotto» no, lì
+        // i campi hanno angoli vivi.
+        $label_color =$this->safe_color_css( $s['label_color'] ) ?: 'var(--olo-color-text, #374151)';
         $label_size  = absint( $s['label_size'] ) ?: 14;
         $label_weight= (string) ( $s['label_weight'] ?: '500' );
         if ( ! preg_match( '/^[a-z0-9]+$/i', $label_weight ) ) {
@@ -146,17 +149,20 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
         }
         $label_tt    = in_array( $s['label_transform'] ?? '', [ 'none', 'uppercase', 'lowercase', 'capitalize' ], true ) ? ( $s['label_transform'] ?? '' ) : '';
         $label_ls    = floatval( $s['label_letter_spacing'] ?? 0 );
-        // Font-family: stack web-safe (con virgola/apici) usato as-is, nome singolo quotato con fallback.
+        // Font-family: ruoli del tema (var(--olo-font-family-…) e i codici storici), stack
+        // web-safe e nomi di font passano da resolve_font_family(). Il filtro di prima toglieva
+        // le parentesi: «Titoli (tema)» diventava «var--olo-font-family-heading» e il browser
+        // ripiegava su sans-serif. Il nome singolo resta quotato con la riserva, come prima.
         $mk_font = function( $v ) {
-            $v = trim( (string) $v );
-            if ( $v === '' ) return '';
-            $v = preg_replace( '/[^a-zA-Z0-9 ,\'"\-]/', '', $v );
-            if ( $v === '' ) return '';
-            return ( strpbrk( $v, ',\'"' ) !== false ) ? $v : "'" . $v . "', sans-serif";
+            $css = $this->resolve_font_family( $v );
+            if ( $css === '' || $css === 'inherit' ) return $css;
+            return ( strpbrk( $css, ',\'"(' ) !== false ) ? $css : "'" . $css . "', sans-serif";
         };
         $label_ff    = $mk_font( $s['label_font_family'] ?? '' );
-        $input_ff    = $mk_font( $s['input_font_family'] ?? '' );
-        $submit_ff   = $mk_font( $s['submit_font_family'] ?? '' );
+        // Pulsante e campi senza un font scelto ereditano quello della pagina: i controlli dei
+        // moduli non lo ereditano da soli, e il pulsante usciva in Arial accanto al testo del tema.
+        $input_ff    = $mk_font( $s['input_font_family'] ?? '' ) ?: 'inherit';
+        $submit_ff   = $mk_font( $s['submit_font_family'] ?? '' ) ?: 'inherit';
         // Stile bordo input: box (tutti i lati) | underline (solo sotto) | none.
         $border_style = in_array( $s['input_border_style'] ?? 'box', [ 'box', 'underline', 'none' ], true ) ? ( $s['input_border_style'] ?? 'box' ) : 'box';
         // In underline/none lo sfondo di default è trasparente (look editoriale su sezioni scure);
@@ -169,16 +175,38 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
         $input_bc    = $this->safe_color_css( $s['input_border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
         $focus_bc    = $this->safe_color_css( $s['input_focus_border'] );
         $focus_shadow= ! empty( $s['input_focus_shadow'] );
-        // Dichiarazione bordo input in base allo stile (box / underline / none).
+        // «Bordo campi» (controllo completo): spessore e colore arrivano dalle chiavi piatte, che
+        // il ponte tiene allineate e che i preset scrivono; dal controllo si leggono il tratto (tutti
+        // e sei, incasso e rilievo compresi) e i lati diversi, che le chiavi piatte non sanno dire
+        // (prima tratteggio e lati non agivano). Il tratto vale anche per pulsante file, selettore
+        // colore e riquadro del calcolo, che prendono spessore e colore dallo stesso bordo.
+        // I lati valgono solo se il più spesso coincide con lo spessore piatto: dopo un preset il
+        // controllo salvato è vecchio, e vince il preset.
+        $in_border = $s['input_border'] ?? null;
+        $in_set    = is_array( $in_border ) && Olobuild_Tile_Utils::border_is_set( $in_border );
+        $in_tratto = ( $in_set && preg_match( '/^(solid|dashed|dotted|double|groove|ridge)$/', (string) ( $in_border['style'] ?? '' ) ) ) ? $in_border['style'] : 'solid';
+        $in_lati   = '';
+        if ( $in_set ) {
+            $in_w = [];
+            foreach ( [ 'top', 'right', 'bottom', 'left' ] as $lato ) {
+                $in_w[ $lato ] = max( 0, intval( $in_border[ $lato ] ?? 0 ) );
+            }
+            if ( max( $in_w ) === $bw && count( array_unique( $in_w ) ) > 1 ) {
+                $in_lati = Olobuild_Tile_Utils::border_css( [ 'top' => $in_w['top'], 'right' => $in_w['right'], 'bottom' => $in_w['bottom'], 'left' => $in_w['left'], 'style' => $in_tratto, 'color' => $input_bc ] );
+            }
+        }
+        // Dichiarazione bordo input in base alla variante (box / underline / none).
         // !important su underline/none: il tile DEVE vincere su eventuali regole del tema che
         // stilano input[type=...] con sfondo/bordo (ma non le textarea → asimmetria visibile).
         $imp = ( $border_style === 'box' ) ? '' : ' !important';
         if ( $border_style === 'underline' ) {
-            $input_border_decl = 'border:0' . $imp . ';border-bottom:' . $bw . 'px solid ' . $input_bc . $imp . ';border-radius:0' . $imp . ';padding-left:0' . $imp . ';padding-right:0' . $imp;
+            $input_border_decl = 'border:0' . $imp . ';border-bottom:' . $bw . 'px ' . $in_tratto . ' ' . $input_bc . $imp . ';border-radius:0' . $imp . ';padding-left:0' . $imp . ';padding-right:0' . $imp;
         } elseif ( $border_style === 'none' ) {
             $input_border_decl = 'border:0' . $imp . ';border-radius:' . $radius . $imp;
+        } elseif ( $in_lati !== '' ) {
+            $input_border_decl = 'border:0;' . rtrim( $in_lati, ';' ) . ';border-radius:' . $radius;
         } else {
-            $input_border_decl = 'border:' . $bw . 'px solid ' . $input_bc . ';border-radius:' . $radius;
+            $input_border_decl = 'border:' . $bw . 'px ' . $in_tratto . ' ' . $input_bc . ';border-radius:' . $radius;
         }
         $ph_opacity  = floatval( $s['input_placeholder_opacity'] ) ?: 0.4;
         $btn_bg      = $this->safe_color_css( $s['submit_bg'] );
@@ -189,6 +217,10 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
         $btn_radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['submit_radius_hover'] ?? null );
         $btn_px      = absint( $s['submit_padding_x'] ) ?: 32;
         $btn_py      = absint( $s['submit_padding_y'] ) ?: 14;
+        // «Padding pulsante» (4 lati) sopra le due chiavi piatte storiche, che restano la
+        // ricaduta: prima il pulsante non aveva un controllo, e il «Padding» nella sua zona
+        // imbottiva l'intero modulo.
+        $btn_pad     = Olobuild_Tile_Utils::spacing_sides( $s['submit_padding'] ?? null, [ 'y' => $btn_py, 'x' => $btn_px ], [ 14, 32, 14, 32 ] );
         $btn_fs      = absint( $s['submit_font_size'] ) ?: 16;
         $btn_fw      = absint( $s['submit_font_weight'] ) ?: 600;
         $btn_full    = ! empty( $s['submit_full_width'] );
@@ -337,8 +369,8 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
 
         // Container style
         $container_style = '';
-        // Padding del contenitore form: il controllo «Padding (px)» esisteva
-        // nell'inspector ma non era collegato a nulla.
+        // Padding del contenitore form («Padding modulo», zona Contenitore). Stava sotto «Stile
+        // pulsante» e sembrava il padding del pulsante, mentre imbottisce tutto il modulo.
         $form_pad_sides  = Olobuild_Tile_Utils::spacing_sides( $s['tile_padding'] ?? null, [], [ 0, 0, 0, 0 ] );
         if ( array_sum( $form_pad_sides ) > 0 ) {
             $container_style .= 'padding:' . Olobuild_Tile_Utils::sides_css( $form_pad_sides ) . ';';
@@ -372,7 +404,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
         }
 
         ob_start();
-        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, absint()/floatval() for sizes, in_array() whitelists for enums, charset-filtered font stacks, build_border_radius_css()/radius_force_css() helpers, durata_hover() (fixed literal or absint() ms).
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, absint()/floatval() for sizes, in_array() whitelists for enums, font stacks whitelisted by resolve_font_family(), integer sides from spacing_sides()/sides_css() and border_css(), build_border_radius_css()/radius_force_css() helpers, durata_hover() (fixed literal or absint() ms).
         ?>
         <style>
             .<?php echo $uid; ?> .olo-f-label{color:<?php echo $label_color; ?>;font-size:<?php echo $label_size; ?>px;font-weight:<?php echo $label_weight; ?>;margin-bottom:6px;display:block<?php if ( $label_tt && $label_tt !== 'none' ) : ?>;text-transform:<?php echo $label_tt; ?><?php endif; ?><?php if ( $label_ls != 0 ) : ?>;letter-spacing:<?php echo $label_ls; ?>px<?php endif; ?><?php if ( $label_ff ) : ?>;font-family:<?php echo $label_ff; ?><?php endif; ?>}
@@ -380,7 +412,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .uk-input,
             .<?php echo $uid; ?> .uk-textarea,
             .<?php echo $uid; ?> .uk-select{background-color:<?php echo $input_bg; ?><?php echo $imp; ?>;color:<?php echo $input_color; ?>;<?php if ( $input_ff ) : ?>font-family:<?php echo $input_ff; ?>;<?php endif; ?><?php echo $input_border_decl; ?>;transition:border-radius 400ms cubic-bezier(.4,0,.2,1),border-color 0.15s ease}
-            <?php if ( $border_style === 'box' && $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .uk-input:hover,.<?php echo $uid; ?> .uk-textarea:hover,.<?php echo $uid; ?> .uk-select:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
+            <?php if ( $border_style !== 'underline' && $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .uk-input:hover,.<?php echo $uid; ?> .uk-textarea:hover,.<?php echo $uid; ?> .uk-select:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .uk-input:focus,
             .<?php echo $uid; ?> .uk-textarea:focus,
             .<?php echo $uid; ?> .uk-select:focus{border-color:<?php echo $focus_bc ?: 'var(--olo-color-primary, #e1474f)'; ?><?php echo $imp; ?>;outline:none<?php if ( $focus_shadow ) : ?>;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 15%, transparent)<?php endif; ?>}
@@ -391,7 +423,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .uk-select:-webkit-autofill{-webkit-box-shadow:0 0 0 1000px <?php echo $input_bg; ?> inset !important;-webkit-text-fill-color:<?php echo $input_color; ?> !important;transition:background-color 5000s ease-in-out 0s}
             .<?php echo $uid; ?> .uk-form-icon{color:<?php echo $input_color; ?>;opacity:0.5}
             .<?php echo $uid; ?> .uk-form-icon:hover{opacity:0.8}
-            .<?php echo $uid; ?> .olo-f-btn{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #e1474f)'; ?>;color:<?php echo $btn_color; ?>;<?php if ( $submit_ff ) : ?>font-family:<?php echo $submit_ff; ?>;<?php endif; ?>border:none<?php if ( $btn_border_css !== '' ) : ?>;<?php echo rtrim( $btn_border_css, ';' ); ?><?php endif; ?>;border-radius:<?php echo $btn_radius; ?>;padding:<?php echo $btn_py; ?>px <?php echo $btn_px; ?>px;font-size:<?php echo $btn_fs; ?>px;font-weight:<?php echo $btn_fw; ?>;cursor:pointer;transition:background <?php echo $btn_bg_dur; ?> ease,<?php echo $btn_hover_border['transition'] ?: 'border-color 0.2s ease'; ?>,transform 0.15s ease;display:inline-flex;align-items:center;gap:8px<?php if ( $btn_ls > 0 ) : ?>;letter-spacing:<?php echo $btn_ls; ?>px<?php endif; ?><?php if ( $btn_tt !== 'none' ) : ?>;text-transform:<?php echo $btn_tt; ?><?php endif; ?><?php if ( $btn_full ) : ?>;width:100%;justify-content:center<?php endif; ?>}
+            .<?php echo $uid; ?> .olo-f-btn{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #e1474f)'; ?>;color:<?php echo $btn_color; ?>;<?php if ( $submit_ff ) : ?>font-family:<?php echo $submit_ff; ?>;<?php endif; ?>border:none<?php if ( $btn_border_css !== '' ) : ?>;<?php echo rtrim( $btn_border_css, ';' ); ?><?php endif; ?>;border-radius:<?php echo $btn_radius; ?>;padding:<?php echo Olobuild_Tile_Utils::sides_css( $btn_pad ); ?>;font-size:<?php echo $btn_fs; ?>px;font-weight:<?php echo $btn_fw; ?>;cursor:pointer;transition:background <?php echo $btn_bg_dur; ?> ease,<?php echo $btn_hover_border['transition'] ?: 'border-color 0.2s ease'; ?>,transform 0.15s ease;display:inline-flex;align-items:center;gap:8px<?php if ( $btn_ls > 0 ) : ?>;letter-spacing:<?php echo $btn_ls; ?>px<?php endif; ?><?php if ( $btn_tt !== 'none' ) : ?>;text-transform:<?php echo $btn_tt; ?><?php endif; ?><?php if ( $btn_full ) : ?>;width:100%;justify-content:center<?php endif; ?>}
             .<?php echo $uid; ?> .olo-f-btn:hover{background:<?php echo $btn_hover ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 85%, #000)'; ?><?php if ( $btn_hover_border['decls'] !== '' ) : ?>;<?php echo rtrim( $btn_hover_border['decls'], ';' ); ?><?php endif; ?><?php if ( $btn_radius_hover_css !== '' ) : ?>;border-radius:<?php echo $btn_radius_hover_css; ?> !important<?php endif; ?>}
             .<?php echo $uid; ?> .olo-f-btn:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent)}
             .<?php echo $uid; ?> .olo-f-btn:active{transform:translateY(1px)}
@@ -679,7 +711,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                                 ?>
                                 <div class="olo-f-file-wrap" data-max-size="<?php echo (int) $f_max_size; ?>" data-max-files="<?php echo (int) $f_max_files; ?>" data-allowed="<?php echo $f_allowed; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_attr() at assignment above ?>">
                                     <input type="file" id="<?php echo $f_input_id; ?>" name="<?php echo $f_input_name; ?>" class="olo-f-file-input" accept="<?php echo $f_allowed; ?>"<?php echo $f_multiple; ?><?php echo $req_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- id/name/accept escaped via esc_attr() at assignment above; multiple/required are fixed internal strings ?> style="position:absolute;left:-9999px;opacity:0;" />
-                                    <label for="<?php echo $f_input_id; ?>" class="olo-f-file-btn" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:<?php echo $input_bg; ?>;color:<?php echo $input_color; ?>;border:<?php echo $bw; ?>px solid <?php echo $input_bc; ?>;border-radius:<?php echo $radius; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- id esc_attr()-escaped at assignment; style values sanitized above via safe_color_css()/absint()/build_border_radius_css() ?>;cursor:pointer;font-size:14px;transition:border-color 0.2s ease;">
+                                    <label for="<?php echo $f_input_id; ?>" class="olo-f-file-btn" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:<?php echo $input_bg; ?>;color:<?php echo $input_color; ?>;border:<?php echo $bw; ?>px <?php echo $in_tratto; ?> <?php echo $input_bc; ?>;border-radius:<?php echo $radius; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- id esc_attr()-escaped at assignment; style values sanitized above via safe_color_css()/absint()/build_border_radius_css(), stroke from the $in_tratto whitelist ?>;cursor:pointer;font-size:14px;transition:border-color 0.2s ease;">
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                                         <?php echo $f_btn_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() at assignment above ?>
                                     </label>
@@ -781,7 +813,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                                     <label for="<?php echo esc_attr( $field_id ); ?>" class="olo-f-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
                                 <?php endif; ?>
                                 <div style="display:flex;align-items:center;gap:10px">
-                                    <input type="color" id="<?php echo esc_attr( $field_id ); ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" value="<?php echo esc_attr( $fplaceholder ?: '#e1474f' ); ?>" style="width:48px;height:40px;padding:2px;border:<?php echo $bw; ?>px solid <?php echo $input_bc; ?>;border-radius:<?php echo $radius; ?>;background:<?php echo $input_bg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style values sanitized above via absint()/safe_color_css()/build_border_radius_css() ?>;cursor:pointer" oninput="this.nextElementSibling.textContent=this.value" />
+                                    <input type="color" id="<?php echo esc_attr( $field_id ); ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" value="<?php echo esc_attr( $fplaceholder ?: '#e1474f' ); ?>" style="width:48px;height:40px;padding:2px;border:<?php echo $bw; ?>px <?php echo $in_tratto; ?> <?php echo $input_bc; ?>;border-radius:<?php echo $radius; ?>;background:<?php echo $input_bg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style values sanitized above via absint()/safe_color_css()/build_border_radius_css(), stroke from the $in_tratto whitelist ?>;cursor:pointer" oninput="this.nextElementSibling.textContent=this.value" />
                                     <span style="font-size:14px;color:<?php echo $label_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized via safe_color_css() whitelist above ?>;font-family:monospace"><?php echo esc_html( $fplaceholder ?: '#e1474f' ); ?></span>
                                 </div>
 
@@ -794,7 +826,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                                 <?php if ( $flabel ) : ?>
                                     <label class="olo-f-label"><?php echo esc_html( $flabel ); ?></label>
                                 <?php endif; ?>
-                                <div class="olo-f-calc-display" data-calc-formula="<?php echo esc_attr( $calc_formula ); ?>" data-calc-decimals="<?php echo (int) $calc_decimals; ?>" data-calc-prefix="<?php echo esc_attr( $calc_prefix ); ?>" data-calc-suffix="<?php echo esc_attr( $calc_suffix ); ?>" style="font-size:20px;font-weight:600;padding:10px 16px;background:<?php echo $input_bg; ?>;color:<?php echo $input_color; ?>;border:<?php echo $bw; ?>px solid <?php echo $input_bc; ?>;border-radius:<?php echo $radius; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style values sanitized above via safe_color_css()/absint()/build_border_radius_css() ?>">
+                                <div class="olo-f-calc-display" data-calc-formula="<?php echo esc_attr( $calc_formula ); ?>" data-calc-decimals="<?php echo (int) $calc_decimals; ?>" data-calc-prefix="<?php echo esc_attr( $calc_prefix ); ?>" data-calc-suffix="<?php echo esc_attr( $calc_suffix ); ?>" style="font-size:20px;font-weight:600;padding:10px 16px;background:<?php echo $input_bg; ?>;color:<?php echo $input_color; ?>;border:<?php echo $bw; ?>px <?php echo $in_tratto; ?> <?php echo $input_bc; ?>;border-radius:<?php echo $radius; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style values sanitized above via safe_color_css()/absint()/build_border_radius_css(), stroke from the $in_tratto whitelist ?>">
                                     <?php echo $calc_prefix; ?><span class="olo-f-calc-value">0</span><?php echo $calc_suffix; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- both escaped via esc_html() at assignment above ?>
                                 </div>
                                 <input type="hidden" name="fields[<?php echo esc_attr( $fname ); ?>]" class="olo-f-calc-hidden" value="0" />
@@ -1441,13 +1473,18 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
     }
 
     /**
-     * Parse options string (newline or comma separated) into array.
+     * Opzioni di select, radio e checkbox: una per riga, come dice il campo.
+     * Si divideva anche sulle virgole, e «200 – 1,000 ha» diventava due voci («200 – 1» e
+     * «000 ha»). La virgola resta separatore solo per gli elenchi storici scritti su una
+     * riga sola («Sì, No»), che senza a-capo non avrebbero altro modo di dividersi.
      */
     private function parse_options( $raw ) {
         if ( empty( $raw ) ) {
             return [ 'Opzione 1', 'Opzione 2' ];
         }
-        $opts = array_filter( array_map( 'trim', preg_split( '/[\n,]+/', $raw ) ) );
+        $raw  = str_replace( "\r", '', (string) $raw );
+        $sep  = ( strpos( $raw, "\n" ) !== false ) ? '/\n+/' : '/,+/';
+        $opts = array_values( array_filter( array_map( 'trim', preg_split( $sep, $raw ) ), 'strlen' ) );
         return ! empty( $opts ) ? $opts : [ 'Opzione 1', 'Opzione 2' ];
     }
 }

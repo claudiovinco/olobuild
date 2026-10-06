@@ -79,6 +79,9 @@ export default {
     submit_color: '',
     submit_radius: '6',
     tile_padding: { top: 0, right: 0, bottom: 0, left: 0 },
+    // Gli stessi del PHP: servono al «Padding pulsante» per partire dai valori resi.
+    submit_padding_x: '32',
+    submit_padding_y: '14',
     submit_font_size: '16',
     submit_font_weight: '600',
     submit_hover_bg: '',
@@ -383,6 +386,8 @@ export default {
       { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
     ], condition: { field: 'form_max_width', operator: '>', value: 0 } },
+    // Imbottisce tutto il modulo: stava sotto «Stile pulsante» e sembrava il padding del pulsante.
+    { key: 'tile_padding', label: t('Padding modulo'), type: 'spacing', max: 48 },
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Etichetta'),
@@ -403,8 +408,21 @@ export default {
       { value: 'stacked', label: t('Label sopra (stacked)') },
       { value: 'floating', label: t('Label fluttuante') },
     ]},
+    // La variante dei campi (riquadro, sola linea sotto, senza bordo) torna un menu suo: dal
+    // 1.4.436 il Bordo completo ne aveva preso il posto e la «linea sotto», che i preset usano,
+    // non si poteva più scegliere, e il tratto scelto nel Bordo finiva in questa chiave («dashed»
+    // valeva «riquadro»). Ora il Bordo tiene tratto e lati per sé, e il PHP li legge.
+    // Bordo campi e Raggio input restano visibili in ogni variante: oltre ai campi disegnano il
+    // pulsante file, il selettore colore e il riquadro del calcolo, il colore del bordo fa il
+    // binario e i pallini del multi-step, il raggio i messaggi d'esito.
+    { key: 'input_border_style', label: t('Variante campi'), type: 'select', options: [
+      { value: 'box', label: t('Riquadro') },
+      { value: 'underline', label: t('Solo linea sotto') },
+      { value: 'none', label: t('Senza bordo') },
+    ], valoriStorici: { solid: 'box', dashed: 'box', dotted: 'box', double: 'box', groove: 'box', ridge: 'box' },
+      description: t('Solo linea sotto: i campi perdono riquadro e raggio, il testo si allinea all\'etichetta e lo sfondo è trasparente se non ne scegli uno; spessore, tratto e colore della linea vengono dal Bordo campi. In ogni variante Bordo campi e Raggio input disegnano anche pulsante file, selettore colore e riquadro del calcolo; il colore del bordo fa i passi del modulo a più pagine, il raggio i messaggi di invio.') },
     { key: 'input_border', label: t('Bordo campi'), type: 'border',
-      legacyKeys: { width: 'input_border_width', style: 'input_border_style', color: 'input_border_color' } },
+      legacyKeys: { width: 'input_border_width', color: 'input_border_color' } },
     { key: 'input_bg', label: t('Sfondo input'), type: 'color' },
     { key: 'input_color', label: t('Colore testo input'), type: 'color' },
     withHover({ key: 'input_radius', label: t('Raggio input'), type: 'border-radius' }),
@@ -435,7 +453,8 @@ export default {
     withHover({ key: 'submit_bg', label: t('Sfondo pulsante'), type: 'color' }, { hoverKey: 'submit_hover_bg', defaultDuration: 200 }),
     { key: 'submit_color', label: t('Colore testo pulsante'), type: 'color' },
     withHover({ key: 'submit_radius', label: t('Raggio'), type: 'border-radius' }),
-    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 48 },
+    { key: 'submit_padding', label: t('Padding pulsante'), type: 'spacing', max: 48,
+      legacyKeys: { y: 'submit_padding_y', x: 'submit_padding_x' } },
     { type: 'typography', label: t('Pulsante'),
       responsiveKeys: [],
       keys: {
