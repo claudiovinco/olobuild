@@ -2,6 +2,14 @@ import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, bo
 import { shadowField } from './_shared.js';
 import { t } from '@/i18n';
 
+// Voci del voto da 0 a `max` stelle, a mezzi punti, con la virgola dei decimali («4,5»).
+const votiFino = (max) => {
+  const n = Math.min(10, Math.max(1, Math.round(Number(max)) || 5));
+  const voci = [];
+  for (let v = 0; v <= n; v += 0.5) voci.push({ value: String(v), label: String(v).replace('.', ',') });
+  return voci;
+};
+
 /**
  * Tile StarRating — split CONTENUTO/STILE.
  *   fields[]      → rating, max_stars, title, subtitle
@@ -22,6 +30,8 @@ export default {
     star_color: '',
     empty_color: '',
     style: 'filled',
+    shape: '',
+    show_value: true,
     title: '',
     subtitle: '',
     title_color: '',
@@ -44,8 +54,14 @@ export default {
   },
 
   fields: [
-    { key: 'rating', label: t('Valutazione'), type: 'range', min: 0, max: 5, step: 0.5 },
+    // Il voto si sceglie fra 0 e le stelle che la tile disegna, a mezzi punti: il cursore andava
+    // sempre fino a 5, anche con 10 stelle (e con 3 si poteva dare 5). Le voci seguono
+    // «Stelle massime» (optionsFn); `options` resta per chi legge il config senza le impostazioni.
+    { key: 'rating', label: t('Valutazione'), type: 'select', ui: 'dropdown',
+      options: votiFino(5), optionsFn: (s) => votiFino(s.max_stars) },
     { key: 'max_stars', label: t('Stelle massime'), type: 'range', min: 1, max: 10, step: 1 },
+    { key: 'show_value', label: t('Mostra punteggio'), type: 'toggle',
+      description: t('Il voto in cifre sotto i simboli, per esempio «4,5 / 5».') },
     { key: 'title', label: t('Titolo'), type: 'text' },
     { key: 'subtitle', label: t('Sottotitolo'), type: 'text' },
   ],
@@ -78,6 +94,12 @@ export default {
       { value: 'outline', label: t('Contorno') },
       { value: 'rounded', label: t('Arrotondato') },
     ]},
+    { key: 'shape', label: t('Simbolo'), type: 'select', options: [
+      { value: '', label: t('Dal preset') },
+      { value: 'star', label: t('Stella') },
+      { value: 'heart', label: t('Cuore') },
+      { value: 'diamond', label: t('Diamante') },
+    ], description: t('«Dal preset» disegna cuori con Hearts Pink, diamanti con Diamonds Luxury e stelle con gli altri stili.') },
 
     { type: 'separator', label: t('Allineamento') },
     { key: 'alignment', label: t('Allineamento'), type: 'select', options: [

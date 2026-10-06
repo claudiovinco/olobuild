@@ -14,6 +14,11 @@ class Olobuild_Starrating_Tile extends Olobuild_Tile_Base {
         'star_color'     => '',
         'empty_color'    => '',
         'style'          => 'filled',
+        // '' = dal preset: cuori con «Hearts Pink», diamanti con «Diamonds Luxury», stelle negli
+        // altri. I due preset si chiamavano così ma disegnavano stelle.
+        'shape'          => '',
+        // Il punteggio in cifre («4,5 / 5») sotto i simboli: c'era sempre, senza modo di toglierlo.
+        'show_value'     => true,
         'title'          => '',
         'subtitle'       => '',
         'title_color'    => '',
@@ -33,14 +38,21 @@ class Olobuild_Starrating_Tile extends Olobuild_Tile_Base {
 
     public function render( $settings ) {
         $s = wp_parse_args( $settings, $this->defaults );
-        $rating = floatval( $s['rating'] );
         $max    = absint( $s['max_stars'] ) ?: 5;
+        // Il voto non supera le stelle: con un voto salvato più alto (prima il cursore andava
+        // sempre fino a 5) la tile scriveva «5 / 3» sotto tre stelle piene.
+        $rating = max( 0, min( $max, floatval( $s['rating'] ) ) );
         $size   = absint( $s['star_size'] ) ?: 32;
         $clr    = $this->safe_color_css( $s['star_color'] ) ?: 'var(--olo-color-accent, #f4a23b)';
         $empty  = $this->safe_color_css( $s['empty_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
         $align  = in_array( $s['alignment'], ['left','center','right'], true ) ? $s['alignment'] : 'center';
-        $is_outline = $s['style'] === 'outline';
-        $star_d = 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z';
+        $stile  = in_array( $s['style'], [ 'filled', 'outline', 'rounded' ], true ) ? $s['style'] : 'filled';
+        $star_d = $this->tracciato_simbolo( $s );
+
+        // Punteggio in cifre con la virgola della lingua del sito («4,5 / 5», non «4.5 / 5»).
+        $decimali   = round( $rating, 1 ) == round( $rating ) ? 0 : ( round( $rating, 2 ) == round( $rating, 1 ) ? 1 : 2 );
+        $voto_testo = number_format_i18n( $rating, $decimali );
+        $mostra_voto = ! isset( $s['show_value'] ) || filter_var( $s['show_value'], FILTER_VALIDATE_BOOLEAN );
 
         ob_start();
         ?>
@@ -55,7 +67,8 @@ class Olobuild_Starrating_Tile extends Olobuild_Tile_Base {
                     <?php echo esc_html( wp_strip_all_tags( $s['title'] ) ); ?>
                 </div>
             <?php endif; ?>
-            <div style="display:inline-flex;gap:4px;">
+            <?php // Il voto si legge anche senza il punteggio in cifre: i simboli sono un'unica immagine con l'etichetta. ?>
+            <div style="display:inline-flex;gap:4px;" role="img" aria-label="<?php echo esc_attr( sprintf( olobuild_t( 'Valutazione: %1$s su %2$s' ), $voto_testo, number_format_i18n( $max ) ) ); ?>">
                 <?php
                 // Mezza stella: ceil() restituisce un float e il confronto stretto con
                 // l'intero $i non era mai vero, così con 4.5 la quinta stella restava vuota.
@@ -65,27 +78,27 @@ class Olobuild_Starrating_Tile extends Olobuild_Tile_Base {
                     $fill = $i <= floor($rating) ? $clr : $empty;
                     $is_half = $has_half && $i === $half_at;
                     ?>
-                    <svg width="<?php echo (int) $size; ?>" height="<?php echo (int) $size; ?>" viewBox="0 0 24 24">
+                    <svg width="<?php echo (int) $size; ?>" height="<?php echo (int) $size; ?>" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                         <?php if ( $is_half ) :
                             // id legato alla tile: con due valutazioni nella pagina gli id
                             // «olo-half-5» si ripetevano. Col Contorno il primo path aveva due
                             // attributi fill e vinceva il primo: la stella si riempiva.
                             $half_id    = $sr_uid . '-half-' . $i;
-                            $half_base  = $is_outline ? 'fill="none" stroke="' . esc_attr( $empty ) . '" stroke-width="1.5"' : 'fill="' . esc_attr( $empty ) . '"';
-                            $half_piena = $is_outline ? 'fill="none" stroke="' . esc_attr( $clr ) . '" stroke-width="1.5"' : 'fill="' . esc_attr( $clr ) . '"';
                             ?>
                             <defs><clipPath id="<?php echo esc_attr( $half_id ); ?>"><rect x="0" y="0" width="12" height="24"/></clipPath></defs>
-                            <path d="<?php echo $star_d; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $star_d is a hardcoded SVG path literal; $half_base built from esc_attr() colours ?>" <?php echo $half_base; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributi costruiti qui sopra con esc_attr() ?>/>
-                            <path d="<?php echo $star_d; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $star_d is a hardcoded SVG path literal ?>" <?php echo $half_piena; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributi costruiti qui sopra con esc_attr() ?> clip-path="url(#<?php echo esc_attr( $half_id ); ?>)"/>
+                            <path d="<?php echo $star_d; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $star_d is a hardcoded SVG path literal from tracciato_simbolo() ?>" <?php echo $this->attributi_simbolo( $stile, $empty ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributi costruiti da attributi_simbolo() con esc_attr() ?>/>
+                            <path d="<?php echo $star_d; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $star_d is a hardcoded SVG path literal from tracciato_simbolo() ?>" <?php echo $this->attributi_simbolo( $stile, $clr ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributi costruiti da attributi_simbolo() con esc_attr() ?> clip-path="url(#<?php echo esc_attr( $half_id ); ?>)"/>
                         <?php else : ?>
-                            <path d="<?php echo $star_d; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $star_d is a hardcoded SVG path literal; $fill validated by safe_color_css() whitelist or fixed var() fallbacks ?>" fill="<?php echo $is_outline ? 'none' : $fill; ?>" <?php if ($is_outline) echo 'stroke="' . $fill . '" stroke-width="1.5"'; ?>/>
+                            <path d="<?php echo $star_d; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $star_d is a hardcoded SVG path literal from tracciato_simbolo() ?>" <?php echo $this->attributi_simbolo( $stile, $fill ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributi costruiti da attributi_simbolo() con esc_attr() ?>/>
                         <?php endif; ?>
                     </svg>
                 <?php endfor; ?>
             </div>
-            <div style="margin-top:4px;font-size:13px;color:<?php echo $clr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist or fixed var() fallback ?>;font-weight:600;">
-                <?php echo esc_html( $rating . ' / ' . $max ); ?>
+            <?php if ( $mostra_voto ) : ?>
+            <div style="margin-top:4px;font-size:13px;color:<?php echo $clr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist or fixed var() fallback ?>;font-weight:600;" aria-hidden="true">
+                <?php echo esc_html( $voto_testo . ' / ' . number_format_i18n( $max ) ); ?>
             </div>
+            <?php endif; ?>
             <?php if ( ! empty( $s['subtitle'] ) ) : ?>
                 <div class="olo-sr-subtitle<?php echo $srs_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); colour validated by safe_color_css() whitelist or fixed var() fallback ?>" style="margin-top:4px;font-size:13px;color:<?php echo $this->safe_color_css($s['subtitle_color']) ?: 'var(--olo-color-text-faint, #94a3b8)'; ?>;"<?php echo $srs_data; ?>>
                     <?php echo esc_html( wp_strip_all_tags( $s['subtitle'] ) ); ?>
@@ -106,5 +119,47 @@ class Olobuild_Starrating_Tile extends Olobuild_Tile_Base {
             echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
         return ob_get_clean();
+    }
+
+    /**
+     * Tracciato del simbolo (viewBox 24×24, simmetrico sull'asse verticale: la mezza stella si
+     * ritaglia a metà). «Simbolo» vuoto = quello del preset: «Hearts Pink» e «Diamonds Luxury»
+     * ne portavano il nome ma disegnavano stelle.
+     *
+     * @param array $s Settings.
+     * @return string
+     */
+    private function tracciato_simbolo( $s ) {
+        $tracciati = [
+            'star'    => 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z',
+            'heart'   => 'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z',
+            'diamond' => 'M6 3h12l4 6-10 12L2 9z',
+        ];
+        $forma = (string) ( $s['shape'] ?? '' );
+        if ( ! isset( $tracciati[ $forma ] ) ) {
+            $dal_preset = [ 'hearts-pink' => 'heart', 'diamonds-luxury' => 'diamond' ];
+            $forma      = $dal_preset[ (string) ( $s['preset'] ?? '' ) ] ?? 'star';
+        }
+        return $tracciati[ $forma ];
+    }
+
+    /**
+     * Attributi di riempimento del simbolo per lo «Stile» scelto. «Arrotondato» era nel menu ma
+     * disegnava come «Pieno»: ora il simbolo pieno ha un tratto dello stesso colore con gli
+     * spigoli tondi (stroke-linejoin round), che smussa le punte senza cambiarne la sagoma.
+     *
+     * @param string $stile  'filled' | 'outline' | 'rounded'.
+     * @param string $colore Colore già validato (safe_color_css o riserva var()).
+     * @return string
+     */
+    private function attributi_simbolo( $stile, $colore ) {
+        $c = esc_attr( $colore );
+        if ( 'outline' === $stile ) {
+            return 'fill="none" stroke="' . $c . '" stroke-width="1.5"';
+        }
+        if ( 'rounded' === $stile ) {
+            return 'fill="' . $c . '" stroke="' . $c . '" stroke-width="2.5" stroke-linejoin="round"';
+        }
+        return 'fill="' . $c . '"';
     }
 }
