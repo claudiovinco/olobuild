@@ -16,6 +16,25 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
         'alignment'      => 'left',
         'mobile_toggle'  => true,
         'mobile_style'   => 'offcanvas',
+        // Menu a schermo intero: vuoti = la resa di sempre (fondo nero, voci bianche al centro)
+        'fs_logo'                 => '',
+        'fs_numbers'              => false,
+        'fs_descriptions'         => false,
+        'fs_bg'                   => '',
+        'fs_align'                => 'center',
+        'fs_color'                => '',
+        'fs_color_hover'          => '',
+        'fs_color_hover_duration' => 200,
+        'fs_font_family'          => '',
+        'fs_font_size'            => '',
+        'fs_font_weight'          => '',
+        'fs_uppercase'            => false,
+        'fs_letter_spacing'       => '',
+        'fs_number_color'         => '',
+        'fs_desc_color'           => '',
+        'fs_dividers'             => false,
+        'fs_divider_color'        => '',
+        'fs_close_color'          => '',
         'text_color'     => '',
         'hover_color'    => '',
         'active_color'   => '',
@@ -402,10 +421,54 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
         // Fullscreen mobile overlay
         $mobile_type = $s['mobile_type'] ?? 'dropdown';
         if ( $mobile_type === 'fullscreen' ) {
-            $rules[] = "{$sel} .olo-nav-fullscreen { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.95); display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }";
-            $rules[] = "{$sel} .olo-nav-fullscreen.uk-open { opacity: 1; visibility: visible; }";
-            $rules[] = "{$sel} .olo-nav-fullscreen .uk-nav > li > a { color: var(--olo-color-primary-contrast, #FFFFFF); font-size: 1.5rem; text-align: center; padding: 8px 0; }";
-            $rules[] = "{$sel} .olo-nav-fullscreen .uk-close { position: absolute; top: 20px; right: 20px; color: var(--olo-color-primary-contrast, #FFFFFF); }";
+            $fs     = '.olo-nav-fullscreen';
+            $fs_bg  = $this->safe_color_css( $s['fs_bg'] ?? '' ) ?: 'rgba(0,0,0,0.95)';
+            $fs_col = $this->safe_color_css( $s['fs_color'] ?? '' ) ?: 'var(--olo-color-primary-contrast, #FFFFFF)';
+            $fs_hov = $this->safe_color_css( $s['fs_color_hover'] ?? '' );
+            $fs_dur = max( 0, intval( $s['fs_color_hover_duration'] ?? 200 ) );
+            $fs_sx  = ( $s['fs_align'] ?? 'center' ) === 'left';
+            $fs_fam = $this->resolve_font_family( $s['fs_font_family'] ?? '' );
+            $fs_sz  = floatval( $s['fs_font_size'] ?? 0 );
+            $fs_w   = preg_match( '/^[1-9]00$/', (string) ( $s['fs_font_weight'] ?? '' ) ) ? (string) $s['fs_font_weight'] : '';
+            $fs_ls  = is_numeric( $s['fs_letter_spacing'] ?? '' ) ? floatval( $s['fs_letter_spacing'] ) : null;
+            $mono   = "var(--olo-font-family-mono, ui-monospace, 'SF Mono', Menlo, Consolas, monospace)";
+
+            $voce  = "color: {$fs_col}; text-align: " . ( $fs_sx ? 'left' : 'center' ) . '; padding: 0.33em 0;';
+            $voce .= ' font-size: ' . ( $fs_sz > 0 ? $fs_sz . 'px' : '1.5rem' ) . ';';
+            if ( $fs_fam ) { $voce .= " font-family: {$fs_fam};"; }
+            if ( $fs_w ) { $voce .= " font-weight: {$fs_w};"; }
+            if ( ! empty( $s['fs_uppercase'] ) ) { $voce .= ' text-transform: uppercase;'; }
+            if ( null !== $fs_ls ) { $voce .= " letter-spacing: {$fs_ls}px;"; }
+            if ( $fs_hov ) { $voce .= " transition: color {$fs_dur}ms ease;"; }
+
+            $rules[] = "{$sel} {$fs} { position: fixed; inset: 0; z-index: 9999; background: {$fs_bg}; display: flex; align-items: center; justify-content: center; overflow-y: auto; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }";
+            $rules[] = "{$sel} {$fs}.uk-open { opacity: 1; visibility: visible; }";
+            $rules[] = "{$sel} {$fs} .olo-nav-fs-corpo { width: min(100% - 48px, 560px); margin: auto 0; padding: 5.25rem 0 3rem; }";
+            $rules[] = "{$sel} {$fs} .uk-nav > li > a { {$voce} }";
+            if ( $fs_hov ) {
+                $rules[] = "{$sel} {$fs} .uk-nav > li:not(.olo-nav-fs-btn) > a:hover, {$sel} {$fs} .uk-nav > li:not(.olo-nav-fs-btn) > a:focus-visible, {$sel} {$fs} .uk-nav > li.uk-active:not(.olo-nav-fs-btn) > a { color: {$fs_hov}; }";
+            }
+            $chiudi = $this->safe_color_css( $s['fs_close_color'] ?? '' ) ?: $fs_col;
+            $rules[] = "{$sel} {$fs} .uk-close { position: absolute; top: 20px; right: 20px; color: {$chiudi}; }";
+            $rules[] = "{$sel} {$fs} .olo-nav-fs-logo { position: absolute; top: 22px; left: 24px; height: 30px; width: auto; max-width: 55%; object-fit: contain; }";
+            // Voce a numeri o con descrizione: griglia (numero | nome, descrizione sotto al nome)
+            $rules[] = "{$sel} {$fs} .olo-nav-fs-nome, {$sel} {$fs} .olo-nav-fs-desc { display: block; }";
+            $rules[] = "{$sel} {$fs} .olo-nav-fs-desc { font-family: {$mono}; font-size: 11px; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; line-height: 1.5; margin-top: 0.35em; color: " . ( $this->safe_color_css( $s['fs_desc_color'] ?? '' ) ?: 'currentColor' ) . '; opacity: ' . ( $this->safe_color_css( $s['fs_desc_color'] ?? '' ) ? '1' : '0.65' ) . '; }';
+            if ( ! empty( $s['fs_numbers'] ) ) {
+                $num = $this->safe_color_css( $s['fs_number_color'] ?? '' ) ?: 'currentColor';
+                $rules[] = "{$sel} {$fs} .uk-nav { counter-reset: olo-fs; }";
+                $rules[] = "{$sel} {$fs} .uk-nav > li:not(.olo-nav-fs-btn) > a { display: grid; grid-template-columns: auto 1fr; column-gap: 0.75em; align-items: baseline; }";
+                $rules[] = "{$sel} {$fs} .uk-nav > li:not(.olo-nav-fs-btn) > a::before { counter-increment: olo-fs; content: counter(olo-fs, decimal-leading-zero); grid-row: 1 / span 2; font-family: {$mono}; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; color: {$num}; }";
+                $rules[] = "{$sel} {$fs} .uk-nav > li:not(.olo-nav-fs-btn) > a > span { grid-column: 2; }";
+            }
+            if ( ! empty( $s['fs_dividers'] ) ) {
+                $linea = $this->safe_color_css( $s['fs_divider_color'] ?? '' ) ?: 'color-mix(in srgb, currentColor 18%, transparent)';
+                $rules[] = "{$sel} {$fs} .uk-nav > li:not(.olo-nav-fs-btn) { border-bottom: 1px solid {$linea}; }";
+                $rules[] = "{$sel} {$fs} .uk-nav > li:not(.olo-nav-fs-btn) > a { padding: 0.45em 0; }";
+            }
+            // Voce pulsante (Voci pulsante): un pulsante vero anche qui, coi colori del tema
+            $rules[] = "{$sel} {$fs} .uk-nav > li.olo-nav-fs-btn { margin-top: 1.75rem; text-align: " . ( $fs_sx ? 'left' : 'center' ) . '; }';
+            $rules[] = "{$sel} {$fs} .uk-nav > li.olo-nav-fs-btn > a { display: inline-flex; align-items: center; justify-content: center; padding: 1.1em 2.15em; border-radius: 0.45em; background: var(--olo-color-primary, #e1474f); color: var(--olo-color-on-primary, #ffffff); font-family: {$mono}; font-size: 13px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; }";
         }
 
         // --- Vertical mode styles ---
@@ -616,9 +679,12 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
                 if ( $mobile_type === 'fullscreen' ) : ?>
                     <div id="<?php echo esc_attr( $nav_id ); ?>" class="olo-nav-fullscreen" role="dialog" aria-modal="true" tabindex="-1" aria-label="<?php echo esc_attr__( 'Mobile menu', 'olobuild' ); ?>">
                         <button class="uk-close uk-close-large" type="button" uk-close data-olo-nav-close aria-label="<?php echo esc_attr__( 'Close menu', 'olobuild' ); ?>"></button>
-                        <div>
+                        <?php if ( ! empty( $s['fs_logo'] ) ) : ?>
+                            <img class="olo-nav-fs-logo" src="<?php echo esc_url( $s['fs_logo'] ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" />
+                        <?php endif; ?>
+                        <div class="olo-nav-fs-corpo">
                             <ul class="uk-nav uk-nav-default uk-nav-parent-icon" uk-nav>
-                                <?php $this->render_mobile_items( $tree, $children, $grandchildren ); ?>
+                                <?php $this->render_mobile_items( $tree, $children, $grandchildren, [ 'fs' => true, 's' => $s ] ); ?>
                                 <?php if ( $has_search_ref ) { $this->render_referenced_search( $s['search_tile_id'], $s, true ); } elseif ( $has_search_legacy ) { $this->render_mobile_search( $s ); } ?>
                             </ul>
                         </div>
@@ -880,33 +946,59 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
     /**
      * Render mobile menu items with 3-level support.
      */
-    private function render_mobile_items( $tree, $children, $grandchildren ) {
-        foreach ( $tree as $item ) {
+    /**
+     * Voci del menu mobile. Il target della voce resta (prima «Provalo» in una nuova scheda su
+     * telefono si apriva nella stessa) e la voce della pagina corrente è marcata. Nello schermo
+     * intero ($opz['fs']) il nome sta in uno span, con la descrizione della voce sotto se
+     * «Mostra le descrizioni» è acceso, e le Voci pulsante prendono la classe del pulsante.
+     */
+    private function render_mobile_items( $tree, $children, $grandchildren, $opz = [] ) {
+        $fs    = ! empty( $opz['fs'] );
+        $s     = $opz['s'] ?? [];
+        $desc  = $fs && ! empty( $s['fs_descriptions'] );
+        $total = count( $tree );
+        $qui   = trailingslashit( home_url( add_query_arg( [], false ) ) );
+        $link  = function ( $it ) use ( $fs, $desc, $qui ) {
+            $html = '<a href="' . esc_url( $it->url ) . '"';
+            if ( $it->target ) {
+                $html .= ' target="' . esc_attr( $it->target ) . '"' . ( '_blank' === $it->target ? ' rel="noopener"' : '' );
+            }
+            if ( trailingslashit( $it->url ) === $qui ) { $html .= ' aria-current="page"'; }
+            $html .= '>';
+            if ( $fs ) {
+                $html .= '<span class="olo-nav-fs-nome">' . esc_html( $it->title ) . '</span>';
+                if ( $desc && '' !== trim( (string) ( $it->description ?? '' ) ) ) {
+                    $html .= '<span class="olo-nav-fs-desc">' . esc_html( $it->description ) . '</span>';
+                }
+            } else {
+                $html .= esc_html( $it->title );
+            }
+            return $html . '</a>';
+        };
+        foreach ( array_values( $tree ) as $idx => $item ) {
             $subs = $children[ $item->ID ] ?? [];
+            $cls  = [];
+            if ( ! empty( $subs ) ) { $cls[] = 'uk-parent'; }
+            if ( trailingslashit( $item->url ) === $qui ) { $cls[] = 'uk-active'; }
+            if ( $fs && $s && $this->is_button_item( $item, $idx, $total, $s ) ) { $cls[] = 'olo-nav-fs-btn'; }
+            echo '<li' . ( $cls ? ' class="' . esc_attr( implode( ' ', $cls ) ) . '"' : '' ) . '>' . $link( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $link() escapes url, target and text.
             if ( ! empty( $subs ) ) {
-                echo '<li class="uk-parent">';
-                echo '<a href="' . esc_url( $item->url ) . '">' . esc_html( $item->title ) . '</a>';
                 echo '<ul class="uk-nav-sub">';
                 foreach ( $subs as $sub ) {
                     $gc = $grandchildren[ $sub->ID ] ?? [];
+                    echo '<li' . ( ! empty( $gc ) ? ' class="uk-parent"' : '' ) . '>' . $link( $sub ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $link() escapes.
                     if ( ! empty( $gc ) ) {
-                        echo '<li class="uk-parent">';
-                        echo '<a href="' . esc_url( $sub->url ) . '">' . esc_html( $sub->title ) . '</a>';
                         echo '<ul class="uk-nav-sub">';
                         foreach ( $gc as $gci ) {
-                            echo '<li><a href="' . esc_url( $gci->url ) . '">' . esc_html( $gci->title ) . '</a></li>';
+                            echo '<li>' . $link( $gci ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $link() escapes.
                         }
                         echo '</ul>';
-                        echo '</li>';
-                    } else {
-                        echo '<li><a href="' . esc_url( $sub->url ) . '">' . esc_html( $sub->title ) . '</a></li>';
                     }
+                    echo '</li>';
                 }
                 echo '</ul>';
-                echo '</li>';
-            } else {
-                echo '<li><a href="' . esc_url( $item->url ) . '">' . esc_html( $item->title ) . '</a></li>';
             }
+            echo '</li>';
         }
     }
 

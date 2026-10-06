@@ -75,6 +75,25 @@ export default {
     search_hover_bg: '',
     mobile_type: 'dropdown',
     mobile_breakpoint: 960,
+    // Menu a schermo intero: vuoti = la resa di sempre (fondo nero, voci bianche al centro)
+    fs_logo: '',
+    fs_numbers: false,
+    fs_descriptions: false,
+    fs_bg: '',
+    fs_align: 'center',
+    fs_color: '',
+    fs_color_hover: '',
+    fs_color_hover_duration: 200,
+    fs_font_family: '',
+    fs_font_size: '',
+    fs_font_weight: '',
+    fs_uppercase: false,
+    fs_letter_spacing: '',
+    fs_number_color: '',
+    fs_desc_color: '',
+    fs_dividers: false,
+    fs_divider_color: '',
+    fs_close_color: '',
     hamburger_style: 'default',
     hamburger_position: 'inline',
     hamburger_offset_x: 16,
@@ -136,6 +155,13 @@ export default {
     { key: 'mobile_toggle', label: t('Hamburger mobile'), type: 'toggle' },
     { key: 'mobile_breakpoint', label: t('Breakpoint mobile'), type: 'range', min: 640, max: 1200, step: 10 },
     { key: 'menu_badge_support', label: t('Supporto badge voci'), type: 'toggle' },
+
+    // Solo col menu mobile «Schermo intero» (Stile → Mobile — Aspetto)
+    { type: 'separator', label: t('Menu a schermo intero'), condition: { field: 'mobile_type', value: 'fullscreen' } },
+    { key: 'fs_logo', label: t('Logo'), type: 'image' },
+    { key: 'fs_numbers', label: t('Mostra i numeri'), type: 'toggle' },
+    { key: 'fs_descriptions', label: t('Mostra le descrizioni'), type: 'toggle',
+      description: t('Sotto ogni voce compare la sua descrizione, che si scrive in Aspetto → Menu (se il campo non si vede, attivalo da «Impostazioni schermo» in alto).') },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -303,6 +329,20 @@ export default {
       { value: 'offcanvas', label: t('Offcanvas') },
       { value: 'fullscreen', label: t('Fullscreen') },
     ]},
+
+    { type: 'separator', label: t('Schermo intero — Aspetto'), condition: { field: 'mobile_type', value: 'fullscreen' } },
+    { key: 'fs_bg', label: t('Sfondo'), type: 'color' },
+    { key: 'fs_align', label: t('Allineamento'), type: 'select', options: [
+      { value: 'center', label: t('Centro') },
+      { value: 'left', label: t('Sinistra') },
+    ]},
+    withHover({ key: 'fs_color', label: t('Colore voci'), type: 'color' }, { defaultDuration: 200 }),
+    { type: 'typography', label: t('Voci'), responsiveKeys: [], keys: { family: 'fs_font_family', size: 'fs_font_size', weight: 'fs_font_weight', uppercase: 'fs_uppercase', letter: 'fs_letter_spacing' }, sizeMin: 16, sizeMax: 72 },
+    { key: 'fs_number_color', label: t('Colore numeri'), type: 'color', condition: { field: 'fs_numbers', value: true } },
+    { key: 'fs_desc_color', label: t('Colore descrizioni'), type: 'color', condition: { field: 'fs_descriptions', value: true } },
+    { key: 'fs_dividers', label: t('Linee fra le voci'), type: 'toggle' },
+    { key: 'fs_divider_color', label: t('Colore linee'), type: 'color', condition: { field: 'fs_dividers', value: true } },
+    { key: 'fs_close_color', label: t('Colore X'), type: 'color' },
 
     { type: 'separator', label: t('Hamburger') },
     { key: 'hamburger_style', label: t('Stile hamburger'), type: 'select', options: [
