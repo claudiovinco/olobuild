@@ -41,13 +41,25 @@ class Olobuild_Woo_Product_Navigation_Tile extends Olobuild_Tile_Base {
 
         $s = wp_parse_args( $settings, $this->defaults );
 
-        // Verify we are on a product
-        global $product;
-        if ( ! is_a( $product, 'WC_Product' ) ) {
-            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- global $product di WooCommerce, non un global definito da olobuild
-            $product = wc_get_product( get_the_ID() );
+        // Il prodotto: quello di «ID prodotto», se no quello della pagina (vuoto o 0, come prima).
+        // Senza il campo la tile funzionava solo nella scheda di un prodotto: in una pagina di
+        // lancio non c'era modo di dirle quale. Il prodotto scelto resta una variabile della tile:
+        // il $product globale è quello della pagina e serve alle tile che seguono.
+        $pid     = absint( $s['product_id'] ?? 0 );
+        $product = $pid ? wc_get_product( $pid ) : null;
+        if ( ! $product ) {
+            global $product;
+            if ( ! is_a( $product, 'WC_Product' ) ) {
+                // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- global $product di WooCommerce, non un global definito da olobuild
+                $product = wc_get_product( get_the_ID() );
+            }
         }
         if ( ! $product ) {
+            // L'avviso è per chi costruisce la pagina (canvas del builder, utenti che possono
+            // modificare): il visitatore se lo trovava scritto in pagina. A lui, niente.
+            if ( empty( $s['_builder_mode'] ) && ! current_user_can( 'edit_posts' ) ) {
+                return '';
+            }
             return '<div style="padding:20px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;">'
                  . esc_html( olobuild_t( 'Nessun prodotto disponibile in questo contesto' ) )
                  . '</div>';
@@ -60,8 +72,8 @@ class Olobuild_Woo_Product_Navigation_Tile extends Olobuild_Tile_Base {
         $hover_color = $this->safe_color_css( $s['hover_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
 
         // Adjacent products (within same category)
-        $prev_product = $this->get_adjacent_product( true );
-        $next_product = $this->get_adjacent_product( false );
+        $prev_product = $this->get_adjacent_product( true, $product );
+        $next_product = $this->get_adjacent_product( false, $product );
 
         // Labels
         $label_prev = sanitize_text_field( $s['label_prev'] );
@@ -205,13 +217,23 @@ class Olobuild_Woo_Product_Navigation_Tile extends Olobuild_Tile_Base {
     /**
      * Get adjacent product within the same product category.
      *
-     * @param bool $previous True for previous, false for next.
+     * @param bool       $previous True for previous, false for next.
+     * @param WC_Product $prodotto Il prodotto mostrato dalla tile.
      * @return WC_Product|null
      */
-    private function get_adjacent_product( $previous = true ) {
-        $post = get_adjacent_post( true, '', $previous, 'product_cat' );
-        if ( $post ) {
-            $adj_product = wc_get_product( $post->ID );
+    private function get_adjacent_product( $previous, $prodotto ) {
+        // get_adjacent_post() parte dal post globale: con un prodotto scelto in una pagina di
+        // lancio avrebbe cercato i vicini della pagina. Per il tempo della ricerca il post
+        // globale è quello del prodotto mostrato, poi torna quello di prima.
+        global $post;
+        $post_pagina = $post;
+        // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- scambio temporaneo, ripristinato subito sotto
+        $post = get_post( $prodotto->get_id() );
+        $adj  = get_adjacent_post( true, '', $previous, 'product_cat' );
+        // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- ripristino del post della pagina
+        $post = $post_pagina;
+        if ( $adj ) {
+            $adj_product = wc_get_product( $adj->ID );
             if ( $adj_product ) {
                 if ( $adj_product->is_visible() ) {
                     return $adj_product;
