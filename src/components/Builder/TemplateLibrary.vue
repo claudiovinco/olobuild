@@ -66,7 +66,10 @@
 
             <div v-else-if="filteredTemplates.length === 0" class="olo-tpl-state">{{ t('Nessun template trovato') }}</div>
 
-            <div :style="gridStyle">
+            <!-- Blocchi a muratura: ogni miniatura alle sue proporzioni, intera, senza tagli né
+                 bande (le miniature dei blocchi del catalogo non sono 16:10). Le pagine intere
+                 restano su due colonne con l'anteprima 16:10 dall'alto. -->
+            <div :class="['olo-tpl-elenco', activeCategory === 'page' ? 'olo-tpl-elenco--pagine' : 'olo-tpl-elenco--muro']">
               <!-- Card = pulsante: si raggiunge col Tab e si sceglie con Invio o Spazio.
                    Non un <button> perché contiene il cestino; .self: Invio sul cestino
                    non inserisce il template. -->
@@ -74,18 +77,25 @@
                 v-for="tpl in filteredTemplates"
                 :key="tpl.id"
                 class="olo-tpl-card"
+                :class="{ 'is-busy': inserendoId === tpl.id }"
                 role="button"
                 tabindex="0"
                 :aria-label="tpl.name"
+                :aria-busy="inserendoId === tpl.id ? 'true' : null"
                 @click="onCardClick(tpl)"
                 @keydown.enter.self.prevent="onCardClick(tpl)"
                 @keydown.space.self.prevent="onCardClick(tpl)"
               >
-                <!-- Thumbnail image (for page templates with thumbnail) -->
+                <!-- Miniatura: del plugin (indirizzo relativo) o della libreria remota (assoluto) -->
                 <div v-if="tpl.thumbnail" class="olo-tpl-media">
-                  <img :src="oloData.pluginUrl + tpl.thumbnail" :alt="tpl.name" class="olo-tpl-img" loading="lazy" @error="$event.target.style.display='none'" />
+                  <img :src="thumbSrc(tpl)" :alt="tpl.name" class="olo-tpl-img" :class="{ 'olo-tpl-img--naturale': tpl.thumbnail_ratio }" :style="tpl.thumbnail_ratio ? { aspectRatio: tpl.thumbnail_ratio } : null" loading="lazy" @error="$event.target.style.display='none'" />
                   <div v-if="tpl.preview_description" class="olo-tpl-hover">
                     <span>{{ tpl.preview_description }}</span>
+                  </div>
+                  <!-- In inserimento: le foto del blocco si copiano nella Libreria media (qualche secondo) -->
+                  <div v-if="inserendoId === tpl.id" class="olo-tpl-busy" aria-hidden="true">
+                    <span class="olo-tpl-spin"></span>
+                    <span>{{ tpl.source === 'catalogo' ? t('Copio le foto…') : t('Inserimento…') }}</span>
                   </div>
                 </div>
                 <!-- SVG Preview (fallback) -->
@@ -300,6 +310,8 @@ const erroreLista = ref('');
 // fondo al body (pulsante della toolbar). Si riazzera a ogni apertura.
 const posizione = ref(null);
 const inserendo = ref(false);
+// La card in inserimento: mostra l'attesa (la copia delle foto richiede qualche secondo)
+const inserendoId = ref(null);
 // Aperture della libreria: un blocco scaricato per un'apertura precedente non si inserisce.
 let aperture = 0;
 const activeCategory = ref('all');
@@ -338,6 +350,7 @@ const categoryDefs = [
   { key: 'portfolio',     label: 'Portfolio',      color: '#0EA5E9' },
   { key: 'video',         label: 'Video',          color: '#DC2626' },
   { key: 'timeline',      label: 'Timeline',       color: '#7C3AED' },
+  { key: 'text',          label: 'Testo e titoli', color: '#0369A1' },
   { key: 'newsletter',    label: 'Newsletter',     color: '#059669' },
   { key: 'logos',         label: 'Loghi',          color: '#78716C' },
   { key: 'coming-soon',   label: 'Coming Soon',    color: '#D946EF' },
@@ -385,15 +398,12 @@ const filteredTemplates = computed(() => {
   return list;
 });
 
-// Grid columns: 2 for page templates, 3 for others
-const gridStyle = computed(() => {
-  const isPage = activeCategory.value === 'page';
-  return {
-    display: 'grid',
-    gridTemplateColumns: isPage ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
-    gap: isPage ? '16px' : '12px',
-  };
-});
+// Miniatura: quelle del plugin hanno un indirizzo relativo (assets/img/…), quelle dei blocchi del
+// catalogo stanno nella libreria remota e arrivano con l'indirizzo intero.
+function thumbSrc(tpl) {
+  const src = String(tpl.thumbnail || '');
+  return /^https?:\/\//i.test(src) ? src : (oloData.pluginUrl || '') + src;
+}
 
 const pageInsertMode = ref(null); // null, 'replace', 'append'
 const pendingPageTpl = ref(null);
@@ -849,18 +859,36 @@ function destinazione(tpl, mode, p = posizione.value) {
   return { zone, index: undefined, replace: false };
 }
 
+// Il blocco da inserire. Quelli del catalogo passano dall'importazione: le loro foto, nella
+// libreria remota, si copiano nella Libreria media del sito (la pagina non dipende da
+// olotheme.com). Se non si può (demo, permessi, server più vecchio) si inserisce lo stesso,
+// con le foto all'indirizzo remoto.
+async function caricaBlocco(tpl) {
+  if (tpl.source === 'catalogo') {
+    try {
+      const r = await fetch(`${oloData.restUrl}template-library/${tpl.id}/import`, {
+        method: 'POST',
+        headers: { 'X-WP-Nonce': oloData.nonce },
+      });
+      if (r.ok) return r;
+    } catch (_) { /* si prova la lettura semplice */ }
+  }
+  return fetch(`${oloData.restUrl}template-library/${tpl.id}`, {
+    headers: { 'X-WP-Nonce': oloData.nonce },
+  });
+}
+
 async function insertTemplate(tpl, mode = 'append') {
   // Un doppio clic sulla card farebbe due fetch e due blocchi.
   if (inserendo.value) return;
   inserendo.value = true;
+  inserendoId.value = tpl.id;
   // Letti al clic. Se la libreria si chiude e si riapre mentre il blocco si scarica,
   // vale la nuova apertura (altra posizione, altra scelta): questo non inserisce più.
   const apertura = aperture;
   const p = posizione.value;
   try {
-    const res = await fetch(`${oloData.restUrl}template-library/${tpl.id}`, {
-      headers: { 'X-WP-Nonce': oloData.nonce },
-    });
+    const res = await caricaBlocco(tpl);
     if (!res.ok) throw new Error('Fetch failed');
     const fullTpl = await res.json();
     if (apertura !== aperture) return;
@@ -908,7 +936,10 @@ async function insertTemplate(tpl, mode = 'append') {
       ? t('«%s» caricato')
       : (inFondoAlBody ? t('«%s» aggiunto in fondo alla pagina') : t('«%s» inserito'));
     const nome = String(tpl.name || '');
-    toast.action(modello.replace('%s', () => nome), t('Annulla'), () => {
+    // Le foto copiate nella Libreria media (blocchi del catalogo): si dice dove sono finite
+    const copiate = Number(fullTpl.media?.copiate || 0);
+    const foto = copiate > 0 ? ' · ' + t('foto nella Libreria media') : '';
+    toast.action(modello.replace('%s', () => nome) + foto, t('Annulla'), () => {
       if (!history.annullaSeUltimo(prima, dopo)) {
         toast.info(t("L'inserimento non è più l'ultimo passo: usa Ctrl+Z per tornare indietro un passo alla volta"), 5000);
       }
@@ -921,7 +952,7 @@ async function insertTemplate(tpl, mode = 'append') {
   } finally {
     // Dopo una riapertura il blocco appartiene alla nuova apertura (open() l'ha già
     // liberato, e una nuova scelta può essere in volo): non va toccato.
-    if (apertura === aperture) inserendo.value = false;
+    if (apertura === aperture) { inserendo.value = false; inserendoId.value = null; }
   }
 }
 
@@ -1061,6 +1092,7 @@ function open(pos) {
   // (insertTemplate confronta il contatore) e le card tornano cliccabili.
   aperture++;
   inserendo.value = false;
+  inserendoId.value = null;
   visible.value = true;
   if (templates.value.length === 0) {
     fetchTemplates();
@@ -1309,6 +1341,58 @@ defineExpose({ open, close, visible, openSaveDialog });
   object-fit: cover;
   object-position: top center;
   background: #f3f4f6;
+}
+/* Miniatura alle sue proporzioni (aspect-ratio in linea, dalla lista): lo spazio è riservato
+   prima che l'immagine arrivi e niente si taglia */
+.olo-tpl-img--naturale {
+  object-position: center;
+}
+
+/* Elenco: blocchi a muratura (colonne CSS, ogni card intera), pagine su due colonne */
+.olo-tpl-elenco--muro {
+  columns: 3 220px;
+  column-gap: 12px;
+}
+.olo-tpl-elenco--muro > .olo-tpl-card {
+  display: block;
+  break-inside: avoid;
+  margin: 0 0 12px;
+}
+.olo-tpl-elenco--pagine {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+/* Inserimento in corso sulla card scelta */
+.olo-tpl-busy {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--tl-ink);
+  font-size: 12px;
+  font-weight: 600;
+}
+.olo-tpl-spin {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--tl-line);
+  border-top-color: var(--olo-ui-accent);
+  border-radius: 50%;
+  animation: olo-tpl-gira 0.8s linear infinite;
+}
+@keyframes olo-tpl-gira {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .olo-tpl-spin { animation-duration: 2.4s; }
+}
+.olo-tpl-card.is-busy {
+  pointer-events: none;
 }
 .olo-tpl-hover {
   position: absolute;

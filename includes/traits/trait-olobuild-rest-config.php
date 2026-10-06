@@ -658,12 +658,45 @@ trait Olobuild_Rest_Config_Trait {
             if ( ! empty( $t['thumbnail'] ) ) {
                 $row['thumbnail'] = $t['thumbnail'];
             }
+            // Blocchi del catalogo: miniatura alle sue proporzioni (la card riserva lo spazio prima
+            // che l'immagine arrivi) e niente content in lista, che serve solo all'anteprima SVG
+            // dei blocchi senza miniatura: si scarica all'inserimento.
+            if ( 'catalogo' === ( $t['source'] ?? '' ) ) {
+                $row['source'] = 'catalogo';
+                if ( ! empty( $t['thumbnail_ratio'] ) ) {
+                    $row['thumbnail_ratio'] = (string) $t['thumbnail_ratio'];
+                }
+                return $row;
+            }
             if ( ( $t['category'] ?? '' ) !== 'page' && isset( $t['content'] ) ) {
                 $row['content'] = $t['content'];
             }
             return $row;
         }, $templates );
         return rest_ensure_response( $list );
+    }
+
+    /**
+     * Un blocco di serie pronto per la pagina: le foto della libreria remota che usa vengono copiate
+     * nella Libreria media del sito (Olobuild_Template_Library::import_media), così la pagina non
+     * dipende da olotheme.com. Chi non può caricare file riceve il blocco con le foto remote, come
+     * dal GET. Solo blocchi di serie: quelli personali hanno già le foto nel sito.
+     */
+    public function import_library_template( $request ) {
+        $id  = sanitize_text_field( $request['id'] );
+        $lib = Olobuild_Template_Library::instance();
+        $tpl = $lib->get_template( $id );
+        if ( ! $tpl || ! empty( $tpl['is_user'] ) ) {
+            return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
+        }
+        $media = [ 'copiate' => 0, 'riusate' => 0, 'fallite' => 0 ];
+        if ( current_user_can( 'upload_files' ) && is_array( $tpl['content'] ?? null ) ) {
+            $esito          = $lib->import_media( $tpl['content'] );
+            $tpl['content'] = $esito['content'];
+            $media          = [ 'copiate' => $esito['copiate'], 'riusate' => $esito['riusate'], 'fallite' => $esito['fallite'] ];
+        }
+        $tpl['media'] = $media;
+        return rest_ensure_response( $tpl );
     }
 
     public function get_library_template( $request ) {

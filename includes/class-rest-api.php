@@ -442,6 +442,12 @@ class Olobuild_Rest_Api {
             'callback'            => [ $this, 'get_library_template' ],
             'permission_callback' => [ $this, 'check_permission' ],
         ] );
+        // Inserimento di un blocco di serie: le sue foto della libreria remota entrano nella Libreria media
+        register_rest_route( $this->namespace, '/template-library/(?P<id>[a-zA-Z0-9_-]+)/import', [
+            'methods'             => 'POST',
+            'callback'            => [ $this, 'import_library_template' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+        ] );
         register_rest_route( $this->namespace, '/template-library/save', [
             'methods'             => 'POST',
             'callback'            => [ $this, 'save_user_template' ],
