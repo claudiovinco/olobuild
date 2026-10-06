@@ -54,6 +54,24 @@ class Olobuild_BuilderMock_Tile extends Olobuild_Tile_Base {
         $accent = $this->safe_color_css( $s['accent'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
         $tilt   = max( 0, min( 22, intval( $s['tilt'] ) ) );
         $width  = max( 480, min( 1100, intval( $s['width'] ) ) );
+        // Il beccheggio (rotateX 7°) e il rollio (rotateZ .5°) erano fissi: con «Inclinazione» a 0
+        // l'editor restava storto. Crescono con l'inclinazione fino ai valori del design (raggiunti
+        // a 13°, il default) e oltre restano quelli: da 13° in su la resa è identica a prima.
+        $pitch  = round( 7 * min( $tilt, 13 ) / 13, 2 );
+        $roll   = round( 0.5 * min( $tilt, 13 ) / 13, 2 );
+        $stage_tf = $tilt > 0 ? "rotateY(-{$tilt}deg) rotateX({$pitch}deg) rotateZ({$roll}deg)" : 'none';
+        // Le colonne interne (rail + schede 300 px, inspector 268 px) sono quelle del design: sotto i
+        // 568 px non restava posto per il canvas e l'inspector usciva dal riquadro (Larghezza 480, o il
+        // telefono, dove una regola allargava il mockup al 100% e lo raddrizzava). Ora il mockup si
+        // disegna sempre largo almeno 840 px e si RIMPICCIOLISCE intero con `zoom`, come un'immagine:
+        // alla Larghezza scelta, e a scalini del 5% quando lo spazio della tile è più stretto
+        // (container query sul contenitore). Da 840 px in su nulla cambia.
+        $inner   = max( 840, $width );
+        $base    = $width / $inner;
+        $fit_css = $base < 1 ? '.' . $uid . ' .bm-stage{zoom:' . round( $base, 4 ) . '}' : '';
+        for ( $z = 95; $z >= 25; $z -= 5 ) {
+            $fit_css .= '@container ' . $uid . ' (max-width:' . ( (int) floor( $width * ( $z + 5 ) / 100 ) - 1 ) . 'px){.' . $uid . ' .bm-stage{zoom:' . round( $base * $z / 100, 4 ) . '}}';
+        }
         $anim   = ! empty( $s['animate_drag'] );
 
         $url    = esc_html( $s['url_text'] ?? '' );
@@ -75,11 +93,16 @@ class Olobuild_BuilderMock_Tile extends Olobuild_Tile_Base {
         ];
 
         ob_start();
-        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: $accent via the safe_color_css() whitelist, $width/$tilt via intval() with min()/max() clamps; $uid is internally generated.
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: $accent via the safe_color_css() whitelist, $width/$tilt via intval() with min()/max() clamps, $stage_tf built from those integers and round()ed floats; $uid is internally generated.
         ?>
         <style>
-        .<?php echo $uid; ?>{ --bm-accent:<?php echo $accent; ?>; display:block; perspective:2400px; width:100%; }
-        .<?php echo $uid; ?> .bm-stage{ position:relative; width:<?php echo $width; ?>px; max-width:none; transform:rotateY(-<?php echo $tilt; ?>deg) rotateX(7deg) rotateZ(.5deg); transform-origin:left center; }
+        .<?php echo $uid; ?>{ --bm-accent:<?php echo $accent; ?>; display:block; perspective:2400px; width:100%; container:<?php echo $uid; ?> / inline-size; }
+        /* Il contenitore delle query non ha larghezza propria (la prende da fuori): con «Larghezza elemento
+           adattata al contenuto» (.olo-tile-inline, fit-content) la tile collassava a 0 e il mockup scendeva
+           al 25%. Lì la larghezza la dà la Larghezza scelta, ridotta allo spazio che c'è. */
+        .olo-tile-inline .<?php echo $uid; ?>{ width:<?php echo (int) $width; ?>px; max-width:100%; }
+        .<?php echo $uid; ?> .bm-stage{ position:relative; width:<?php echo $inner; ?>px; max-width:none; transform:<?php echo $stage_tf; ?>; transform-origin:left center; }
+        <?php echo $fit_css; ?>
         .<?php echo $uid; ?> .bm-frame{ width:100%; background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 60px 120px -30px rgba(0,0,0,.7),0 30px 60px -40px color-mix(in srgb, var(--bm-accent) 45%, transparent); font-family:'Work Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; }
         .<?php echo $uid; ?> .bm-bar{ display:flex; align-items:center; gap:7px; padding:11px 14px; background:#fafbfc; border-bottom:1px solid #e9ecef; }
         .<?php echo $uid; ?> .bm-bar .d{ width:10px; height:10px; border-radius:50%; } .<?php echo $uid; ?> .bm-bar .d.r{background:#ff5f57}.<?php echo $uid; ?> .bm-bar .d.y{background:#febc2e}.<?php echo $uid; ?> .bm-bar .d.g{background:#28c840}
@@ -100,8 +123,10 @@ class Olobuild_BuilderMock_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .bm-tc .tl{ font-size:11px; font-weight:500; color:#1e293b; }
         .<?php echo $uid; ?> .bm-canvas{ background:#f3f4f6; padding:16px; }
         .<?php echo $uid; ?> .bm-cv{ background:#fff; border-radius:8px; height:100%; border:1px solid #e9ecef; overflow:hidden; }
-        .<?php echo $uid; ?> .bm-hero{ position:relative; height:150px; background:linear-gradient(135deg, var(--bm-accent), color-mix(in srgb, var(--bm-accent) 45%, #000)); color:#fff; padding:18px; }
-        .<?php echo $uid; ?> .bm-hero .eb{ font:600 9px/1 sans-serif; opacity:.7; text-transform:uppercase; letter-spacing:.1em; margin-bottom:8px; } .<?php echo $uid; ?> .bm-hero h4{ font:700 20px/1.15 'Work Sans',sans-serif; margin:0 0 5px; max-width:62%; } .<?php echo $uid; ?> .bm-hero p{ font:400 11px/1.4 'Work Sans',sans-serif; opacity:.85; max-width:52%; margin:0; }
+        /* Hero del canvas: alto almeno 150 px ma cresce col testo (a 150 fissi il sottotitolo usciva sul bianco e
+           sembrava tagliato); il titolo eredita il bianco, se no vinceva il colore scuro dei titoli del tema. */
+        .<?php echo $uid; ?> .bm-hero{ position:relative; min-height:150px; background:linear-gradient(135deg, var(--bm-accent), color-mix(in srgb, var(--bm-accent) 45%, #000)); color:#fff; padding:18px; }
+        .<?php echo $uid; ?> .bm-hero .eb{ font:600 9px/1 sans-serif; opacity:.7; text-transform:uppercase; letter-spacing:.1em; margin-bottom:8px; } .<?php echo $uid; ?> .bm-hero h4{ font:700 20px/1.15 'Work Sans',sans-serif; color:inherit; margin:0 0 5px; max-width:62%; } .<?php echo $uid; ?> .bm-hero p{ font:400 11px/1.4 'Work Sans',sans-serif; opacity:.85; max-width:52%; margin:0; }
         .<?php echo $uid; ?> .bm-hero .sel{ position:absolute; inset:6px; border:1.5px dashed rgba(255,255,255,.6); border-radius:6px; } .<?php echo $uid; ?> .bm-hero .tag{ position:absolute; top:0; left:14px; background:var(--bm-accent); color:#fff; font:700 9px/1 sans-serif; padding:3px 7px; border-radius:0 0 4px 4px; }
         .<?php echo $uid; ?> .bm-row3{ padding:16px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
         .<?php echo $uid; ?> .bm-row3 span{ border:1px dashed #d1d5db; border-radius:8px; min-height:78px; padding:12px; display:flex; flex-direction:column; gap:6px; } .<?php echo $uid; ?> .bm-row3 span::before{ content:""; height:8px; width:55%; background:#f1f5f9; border-radius:3px; } .<?php echo $uid; ?> .bm-row3 span::after{ content:""; height:5px; background:#f1f5f9; border-radius:2px; }
@@ -130,7 +155,6 @@ class Olobuild_BuilderMock_Tile extends Olobuild_Tile_Base {
         }
         @media (prefers-reduced-motion: reduce){ .<?php echo $uid; ?> .bm-chip{ animation:none; opacity:1; } }
         <?php endif; ?>
-        @media (max-width:940px){ .<?php echo $uid; ?> .bm-stage{ width:100%; transform:none; } .<?php echo $uid; ?> .bm-chip{ display:none; } }
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 

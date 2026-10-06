@@ -61,8 +61,10 @@ export default {
     { type: 'separator', label: t('Aspetto') },
     { key: 'accent', label: t('Colore accento'), type: 'color',
       description: t('Vuoto = primario del tema.') },
-    { key: 'tilt', label: t('Inclinazione 3D (gradi)'), type: 'range', min: 0, max: 22, step: 1 },
-    { key: 'width', label: t('Larghezza'), type: 'range', min: 480, max: 1100, step: 20 },
+    { key: 'tilt', label: t('Inclinazione 3D'), type: 'range', min: 0, max: 22, step: 1, unit: 'deg',
+      description: t('A 0 l\'editor è dritto, di fronte. Salendo ruota in prospettiva e si piega all\'indietro fino a 13°; oltre ruota soltanto di più.') },
+    { key: 'width', label: t('Larghezza'), type: 'range', min: 480, max: 1100, step: 20, unit: 'px',
+      description: t('Sotto gli 840 px l\'editor si rimpicciolisce intero, come un\'immagine. Se lo spazio della tile è più stretto (telefono, colonna) si riduce da solo per starci tutto.') },
 
     ...shadowField,
     ...borderFields(),
