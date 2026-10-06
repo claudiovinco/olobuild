@@ -3,6 +3,13 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.565 - 2026-10-06
+- Blocchi & Pagine: 20 blocchi nuovi presi dagli esempi del catalogo delle tile, con le loro foto: hero, prezzi, team, FAQ, timeline, gallerie, grafici, card, titoli e testi. Quando inserisci un blocco, le sue foto si copiano nella Libreria media del sito. Le anteprime si vedono intere, alle loro proporzioni, una accanto all'altra a muratura. C'è anche una categoria nuova, «Testo e titoli».
+- Avanzate: l'animazione di ingresso parte quando la tile entra nello schermo. Prima le tile più in basso nella pagina si animavano al caricamento, fuori vista, e il visitatore non vedeva niente. Durante il ritardo la tile resta nascosta: prima si vedeva ferma, poi spariva e rientrava con l'animazione.
+- Avanzate: inclinazione 3D, inseguimento del cursore, torcia, effetti allo scorrimento, assemblaggio, test A/B e galleria di sfondo funzionano anche sulle tile più in basso nella pagina. Prima funzionavano solo sulle prime: le altre, caricate quando arrivano sullo schermo, restavano ferme.
+- Avanzate: lo «Scroll fisso» vale già a 640 pixel di larghezza, dove le colonne sono affiancate. Prima partiva da 641.
+- Hero: nel builder il testo della hero è centrato come sul sito. Prima nell'anteprima scivolava a destra e, con l'anteprima stretta, il bordo destro si tagliava.
+
 ## v1.4.564 - 2026-10-06
 - Temi: sui siti con l'importazione disattivata, come la demo, il pulsante Temi torna nel builder e apre i temi da sfogliare, con categorie, ricerca e anteprime, senza «Importa tema». Il sottotitolo spiega perché.
 
