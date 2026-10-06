@@ -320,7 +320,10 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
                 $chip_margin = ( $text_align === 'center' ) ? '18px auto 0' : '18px 0 0';
                 $chip_just   = ( $text_align === 'center' ) ? 'center' : ( ( $text_align === 'right' ) ? 'flex-end' : 'flex-start' );
             ?>
-            .<?php echo $uid; ?> .olo-hero-searchbox{display:flex;gap:8px;align-items:center;max-width:560px;margin:<?php echo $sb_margin; ?>;background:rgba(255,255,255,.07);border:1px solid <?php echo $mix( $accent_css, 0.4 ); ?>;border-radius:14px;padding:8px;}
+            <?php // Campo e pillole tinti dal colore del testo della hero, non dal bianco fisso: su una scena
+                  // chiara (testo scuro) il riquadro e i bordi delle pillole sparivano. Col testo bianco la
+                  // resa è quella di prima (bianco al 7% e al 16%). ?>
+            .<?php echo $uid; ?> .olo-hero-searchbox{display:flex;gap:8px;align-items:center;max-width:560px;margin:<?php echo $sb_margin; ?>;background:<?php echo $mix( $fg, 0.07 ); ?>;border:1px solid <?php echo $mix( $accent_css, 0.4 ); ?>;border-radius:14px;padding:8px;}
             .<?php echo $uid; ?> .olo-hero-searchbox input{flex:1;background:transparent;border:0;padding:12px 14px;font-size:15px;color:<?php echo $fg; ?>;min-width:0;font-family:inherit;}
             .<?php echo $uid; ?> .olo-hero-searchbox input::placeholder{color:<?php echo $fg; ?>;opacity:.55;}
             .<?php echo $uid; ?> .olo-hero-searchbox input:focus{outline:none;}
@@ -328,7 +331,7 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-hero-searchbtn{cursor:pointer;white-space:nowrap;font-family:inherit;}
             .<?php echo $uid; ?> .olo-hero-searchbtn:focus-visible{outline:2px solid <?php echo $accent_css; ?>;outline-offset:2px;}
             .<?php echo $uid; ?> .olo-hero-chips{display:flex;gap:8px;flex-wrap:wrap;max-width:560px;margin:<?php echo $chip_margin; ?>;justify-content:<?php echo $chip_just; ?>;}
-            .<?php echo $uid; ?> .olo-hero-chip{font-size:13px;font-weight:600;opacity:.85;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:7px 15px;text-decoration:none;color:inherit;transition:border-color .15s,opacity .15s;}
+            .<?php echo $uid; ?> .olo-hero-chip{font-size:13px;font-weight:600;opacity:.85;border:1px solid <?php echo $mix( $fg, 0.16 ); ?>;border-radius:999px;padding:7px 15px;text-decoration:none;color:inherit;transition:border-color .15s,opacity .15s;}
             .<?php echo $uid; ?> .olo-hero-chip:hover{border-color:<?php echo $accent_css; ?>;opacity:1;}
             .<?php echo $uid; ?> .olo-hero-chip:focus-visible{outline:2px solid <?php echo $accent_css; ?>;outline-offset:2px;}
             <?php endif; ?>
@@ -492,8 +495,12 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
                     <?php
                     // Title inline style
                     $title_css = '';
-                    if ( ! empty( $s['title_font_family'] ) ) {
-                        $title_css .= 'font-family:' . esc_attr( $s['title_font_family'] ) . ';';
+                    // Famiglia dal resolver condiviso: i ruoli dei preset ('serif', 'sans'…) diventano il font
+                    // del tema con la sua riserva. Scritto com'era, «serif» dava il serif generico del browser
+                    // (Times) invece del font dei titoli.
+                    $title_ff = $this->resolve_font_family( $s['title_font_family'] );
+                    if ( $title_ff !== '' ) {
+                        $title_css .= 'font-family:' . esc_attr( $title_ff ) . ';';
                     }
                     if ( ! empty( $s['title_font_size'] ) ) {
                         $title_css .= 'font-size:' . intval( $s['title_font_size'] ) . 'px;';
