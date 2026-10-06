@@ -109,6 +109,7 @@ export default {
     { key: 'v_show_icons', label: t('Mostra icone'), type: 'toggle',
       show: s => s.style === 'vertical' },
     { key: 'v_expand_subs', label: t('Sottovoci espandibili'), type: 'toggle',
+      description: t('Acceso: accanto a una voce con sottovoci c\'è una freccia che le apre e le chiude. Spento: le sottovoci restano sempre in vista.'),
       show: s => s.style === 'vertical' },
     { key: 'v_separator', label: t('Separatore tra voci'), type: 'toggle',
       show: s => s.style === 'vertical' },
@@ -255,6 +256,7 @@ export default {
     { key: 'dropdown_bg', label: t('Sfondo dropdown'), type: 'color' },
 
     { type: 'separator', label: t('Header') },
+    { type: 'description', description: t('Modalità e sticky agiscono sull\'header del sito: valgono quando il menu sta nel template Header. Messo nel corpo di una pagina, il menu resta dov\'è e l\'header del sito non cambia.') },
     { key: 'header_mode', label: t('Modalità header'), type: 'select', options: [
       { value: 'overlay', label: t('Sovrapposto (sopra il contenuto)') },
       { value: 'classic', label: t('Classico (spinge il contenuto)') },

@@ -221,7 +221,7 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
         }
 
         // Header mode + sticky script
-        $this->render_header_script( $s );
+        $this->render_header_script( $s, $nav_id );
 
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
@@ -334,7 +334,10 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
             $rules[] = "{$sel} .olo-nav-toggle { {$pos_css} }";
         }
 
-        // Sticky header styles (global, not scoped to nav_id)
+        // Sfondo dell'header agganciato: solo l'header che contiene QUESTO menu (prima la regola
+        // valeva per ogni .olo-header-sticky, anche con il menu nel corpo della pagina). L'header
+        // lo segna lo script (olo-hdr-<id>): un :has() sulla nav si perderebbe quando il renderer
+        // sposta nel body una tile a «Posizione fissa».
         if ( ! empty( $s['sticky'] ) ) {
             $sticky_bg = $this->safe_color_css( $s['sticky_bg'] );
             $sticky_decls = [];
@@ -342,7 +345,7 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
                 $sticky_decls[] = "background-color: {$sticky_bg}";
             }
             if ( ! empty( $sticky_decls ) ) {
-                $rules[] = ".olo-header-sticky { " . implode( '; ', $sticky_decls ) . "; }";
+                $rules[] = '.olo-header-sticky.olo-hdr-' . esc_attr( $nav_id ) . ' { ' . implode( '; ', $sticky_decls ) . '; }';
             }
         }
 
@@ -493,6 +496,34 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
             $rules[] = "{$sel} .olo-vnav-sub--deep { padding-left:" . ( $v_padding + 8 ) . "px; }";
         }
 
+        // Nel corpo della pagina la tendina aperta finiva sotto le sezioni dopo: il suo z-index
+        // vale solo dentro il contesto che la contiene (un'Ombra sul riquadro della tile è un
+        // filter, una sezione con sfondo ha il contenitore a z-index 1) e la sezione successiva le
+        // disegnava sopra; una sezione con immagine di sfondo (overflow: clip) la tagliava. Solo da
+        // aperta: da chiusa la sezione resta com'è, sfondi compresi. I pannelli fissi (schermo
+        // intero, off-canvas) non sono tagliati dalla sezione: a loro basta lo z-index, così il
+        // ritaglio degli sfondi resta. Limite: mentre la tendina è aperta la sezione non ritaglia
+        // gli strati di sfondo più grandi di lei (parallax, video in scala) né i suoi angoli
+        // arrotondati; si risolve spostando il ritaglio sugli strati, nel renderer della sezione.
+        $rules[] = "section:has({$sel} .uk-drop.uk-open), section:has({$sel} .olo-nav-search-item:focus-within) { z-index:100000; overflow:visible !important; }";
+        // Pannelli fissi in vista: aperti, in entrata o in uscita (UIkit toglie uk-open all'inizio
+        // della chiusura e tiene uk-togglable-leave fino alla fine; lo schermo intero tiene
+        // olo-nav-uscita per la dissolvenza).
+        $fissi = [
+            "{$sel} .olo-nav-fullscreen.uk-open",
+            "{$sel} .olo-nav-fullscreen.olo-nav-uscita",
+            "{$sel} .uk-offcanvas.uk-open",
+            "{$sel} .uk-offcanvas.uk-togglable-enter",
+            "{$sel} .uk-offcanvas.uk-togglable-leave",
+        ];
+        $rules[] = 'section:has(' . implode( '), section:has(', $fissi ) . ') { z-index:100000; }';
+        // L'Ombra del riquadro della tile, su un wrapper trasparente, è un filter, e il filtro
+        // sfondo degli Effetti un backdrop-filter: entrambi fanno da blocco contenitore ai
+        // position:fixed, e l'off-canvas o lo schermo intero restavano grandi quanto la barra (su
+        // telefono 390x24). Si sospendono solo mentre un pannello fisso è in vista: copre la pagina,
+        // l'effetto mancante non si vede; da chiuso torna com'era.
+        $rules[] = '.olo-frontend-tile:has(' . implode( '), .olo-frontend-tile:has(', $fissi ) . ') { filter:none !important; -webkit-backdrop-filter:none !important; backdrop-filter:none !important; }';
+
         return ! empty( $rules ) ? implode( ' ', $rules ) : '';
     }
 
@@ -618,10 +649,31 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
                             var x = panel.querySelector('[data-olo-nav-close]');
                             setTimeout(function () { (x || panel).focus(); }, 60);
                         }
+                        /* Durante la dissolvenza di chiusura resta olo-nav-uscita, che tiene sospesa
+                           l'Ombra del riquadro (CSS della tile): se tornasse subito, il pannello in
+                           chiusura ricadrebbe dentro la barra. Durata = transizione del pannello. */
+                        var uscitaTimer = null;
+                        function durataUscita() {
+                            var cs = getComputedStyle(panel);
+                            var dd = String(cs.transitionDuration || '0s').split(',');
+                            var rr = String(cs.transitionDelay || '0s').split(',');
+                            var max = 0;
+                            for (var i = 0; i < dd.length; i++) {
+                                var t = (parseFloat(dd[i]) || 0) + (parseFloat(rr[i % rr.length]) || 0);
+                                if (t > max) { max = t; }
+                            }
+                            return Math.ceil(max * 1000) + 50;
+                        }
                         function chiudi(ridai) {
                             if (!aperto) { return; }
                             aperto = false;
+                            if (uscitaTimer) { clearTimeout(uscitaTimer); }
+                            panel.classList.add('olo-nav-uscita');
                             panel.classList.remove('uk-open');
+                            uscitaTimer = setTimeout(function () {
+                                uscitaTimer = null;
+                                panel.classList.remove('olo-nav-uscita');
+                            }, durataUscita());
                             btn.setAttribute('aria-expanded', 'false');
                             btn.style.visibility = '';
                             html.style.overflow = '';
@@ -997,7 +1049,7 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
     /**
      * Output inline script for header mode (overlay/classic) and sticky behavior.
      */
-    private function render_header_script( $s ) {
+    private function render_header_script( $s, $nav_id ) {
         $mode       = esc_js( $s['header_mode'] ?? 'overlay' );
         $sticky     = ! empty( $s['sticky'] ) ? 'true' : 'false';
         $show_on_up = ! empty( $s['sticky_show_on_up'] ) ? 'true' : 'false';
@@ -1007,14 +1059,33 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
             var mode = "<?php echo $mode; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_js() at assignment above ?>";
             var stickyEnabled = <?php echo $sticky; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'true'/'false' literal from ternary above ?>;
             var showOnUp = <?php echo $show_on_up; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'true'/'false' literal from ternary above ?>;
+            /* Solo l'header del sito che CONTIENE il menu. Con querySelector un menu messo nel
+               corpo della pagina aggiungeva olo-header-overlay all'header del sito (fisso, e nei
+               temi a blocchi spariva il primo blocco della pagina) e lo rendeva sticky.
+               Si cerca SUBITO, non a DOMContentLoaded: lo script segue il markup della nav e gira
+               prima che il renderer sposti nel body le tile a «Posizione fissa»; dopo, la nav non
+               sta più nell'header e lo sticky non partiva. La modalità è del primo menu
+               dell'header, come la sceglie il server (detect_header_mode): un secondo menu
+               aggiungeva la sua accanto all'altra. */
+            var nav = null, header = null, primo = false;
+            function trova() {
+                nav = document.querySelector(".olo-navmenu--<?php echo esc_js( $nav_id ); ?>");
+                header = nav ? nav.closest("header.olo-site-header") : null;
+                primo = header ? header.querySelector(".olo-navmenu, .olo-megamenu") === nav : false;
+            }
+            trova();
             function init() {
-                var header = document.querySelector("header.olo-site-header");
+                if (!header) { trova(); }
                 if (!header) return;
-                // Apply header mode class
-                header.classList.add("olo-header-" + mode);
+                if (primo) {
+                    header.classList.add("olo-header-" + mode);
+                }
                 // Sticky scroll listener
                 if (stickyEnabled) {
                     header.classList.add("olo-sticky-on");
+                    /* Segna l'header di QUESTO menu per lo «Sfondo sticky»: un :has() sulla nav
+                       non lo troverebbe con la tile spostata nel body. */
+                    header.classList.add("olo-hdr-<?php echo esc_js( $nav_id ); ?>");
                     var lastY = 0;
                     var hidden = false;
                     window.addEventListener("scroll", function() {
@@ -1071,16 +1142,16 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
                                 <span class="olo-vnav-icon"><?php echo $this->get_vnav_icon( $icon_style, $icon_size ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup generated by get_vnav_icon() with an intval()'d size ?></span>
                             <?php endif; ?>
                             <span class="olo-vnav-label"><?php echo esc_html( $item->title ); ?></span>
-                            <?php if ( ! empty( $subs ) ) : ?>
-                                <?php if ( $expand_subs ) : ?>
-                                <button type="button" class="olo-vnav-chev" aria-expanded="false" aria-label="<?php echo esc_attr__( 'Toggle submenu', 'olobuild' ); ?>"><svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg></button>
-                                <?php else : ?>
-                                <svg class="olo-vnav-chev" width="12" height="12" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg>
-                                <?php endif; ?>
+                            <?php if ( ! empty( $subs ) && $expand_subs ) : ?>
+                                <button type="button" class="olo-vnav-chev" aria-expanded="true" aria-label="<?php echo esc_attr( olobuild_t( 'Apri o chiudi le sottovoci' ) ); ?>"><svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg></button>
                             <?php endif; ?>
                         </a>
-                        <?php if ( ! empty( $subs ) ) : ?>
-                            <ul class="olo-vnav-sub"<?php echo $expand_subs ? '' : ' style="display:none"'; ?>>
+                        <?php
+                        // Con «Sottovoci espandibili» spento le sottovoci erano nascoste (display:none) e
+                        // nessun comando le apriva: irraggiungibili, con una freccia che non faceva niente.
+                        // Spento = sempre in vista, senza freccia; acceso = freccia che apre e chiude.
+                        if ( ! empty( $subs ) ) : ?>
+                            <ul class="olo-vnav-sub">
                                 <?php foreach ( $subs as $sub ) :
                                     $gc = $grandchildren[ $sub->ID ] ?? [];
                                     $sub_current = trailingslashit( $sub->url ) === $current_url;
