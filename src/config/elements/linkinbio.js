@@ -2,6 +2,7 @@ import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, bo
 import { shadowField } from './_shared.js';
 import { t } from '@/i18n';
 import { demo } from '../demoMedia.js';
+import { PIATTAFORME_SOCIAL } from './social.js';
 
 /**
  * Tile Link in Bio — split CONTENUTO/STILE (regola universale Olobuild).
@@ -45,6 +46,7 @@ export default {
     background_color: '',
     background_gradient: '',
     show_social_icons: false,
+    social_links: [],
     shadow: 'none',
     ...textEffectsDefaults,
     text_effect_target: 'title',
@@ -91,6 +93,16 @@ export default {
     { key: 'profile_bio', label: t('Bio'), type: 'text' },
     { type: 'separator', label: t('Social') },
     { key: 'show_social_icons', label: t('Mostra icone social'), type: 'toggle' },
+    // La riga di icone sotto la bio: prima il toggle non agiva (non c'era dove scrivere i
+    // profili). Stesse piattaforme, icone e nomi della tile Link social.
+    { key: 'social_links', label: t('Profili social'), type: 'content-items',
+      condition: { field: 'show_social_icons', operator: '==', value: true },
+      itemLabel: t('Profilo'), newItemDefaults: { platform: 'instagram', url: '' },
+      itemFields: [
+        { key: 'platform', label: t('Piattaforma'), type: 'select', options: PIATTAFORME_SOCIAL },
+        { key: 'url', label: t('URL'), type: 'link', placeholder: t('https://...') },
+      ],
+    },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────

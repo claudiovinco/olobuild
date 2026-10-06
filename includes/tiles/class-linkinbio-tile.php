@@ -31,6 +31,7 @@ class Olobuild_LinkInBio_Tile extends Olobuild_Tile_Base {
         'background_color'   => '',
         'background_gradient' => '',
         'show_social_icons'  => false,
+        'social_links'       => [],
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -60,7 +61,37 @@ class Olobuild_LinkInBio_Tile extends Olobuild_Tile_Base {
             [ 'key' => 'background_color',   'type' => 'color',   'label' => olobuild_t( 'Colore sfondo' ) ],
             [ 'key' => 'background_gradient','type' => 'text',    'label' => olobuild_t( 'Gradiente CSS' ) ],
             [ 'key' => 'show_social_icons',  'type' => 'toggle',  'label' => olobuild_t( 'Mostra icone social' ) ],
+            [ 'key' => 'social_links',       'type' => 'content-items', 'label' => olobuild_t( 'Profili social' ) ],
         ];
+    }
+
+    /**
+     * I profili della riga di icone sotto la bio: [ [ url, nome, svg ] ].
+     * «Mostra icone social» non faceva niente (nessun renderer lo leggeva, e non c'era
+     * dove scrivere i profili). Icone e nomi sono quelli della tile Link social, così
+     * le due tile disegnano lo stesso marchio allo stesso modo. Senza URL non si mostra.
+     */
+    private function profili_social( $s ) {
+        if ( empty( $s['show_social_icons'] ) || ! is_array( $s['social_links'] ?? null ) || ! class_exists( 'Olobuild_Social_Tile' ) ) {
+            return [];
+        }
+        $out = [];
+        foreach ( $s['social_links'] as $voce ) {
+            if ( ! is_array( $voce ) ) {
+                continue;
+            }
+            $platform = sanitize_key( $voce['platform'] ?? '' );
+            $url      = trim( (string) ( $voce['url'] ?? '' ) );
+            if ( '' === $platform || '' === $url ) {
+                continue;
+            }
+            $out[] = [
+                'url'  => $url,
+                'nome' => Olobuild_Social_Tile::nome_piattaforma( $platform ),
+                'svg'  => Olobuild_Social_Tile::get_icon_svg( $platform ),
+            ];
+        }
+        return $out;
     }
 
     public function render( $settings ) {
@@ -100,11 +131,18 @@ class Olobuild_LinkInBio_Tile extends Olobuild_Tile_Base {
 
         $uid = 'olo-lib-' . wp_unique_id();
 
+        $social      = $this->profili_social( $s );
+        $social_just = [ 'left' => 'flex-start', 'center' => 'center', 'right' => 'flex-end' ][ $text_align ];
+
+        // Nella regola della radice, border-radius: inherit → il Raggio del contenitore ritaglia
+        // anche lo sfondo che disegna la tile. Prima lo sfondo restava ad angoli vivi dentro un
+        // contenitore arrotondato (bisognava aggiungere a mano overflow:hidden al contenitore).
+
         ob_start();
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colours via the safe_color_css() whitelist, gradient via a strict preg_replace() character whitelist, absint()/min()/max() clamps for sizes, in_array() whitelist for alignment, Olobuild_Tile_Utils border_radius()/radius_force_css()/spacing_css()/focal_pos() helpers plus esc_attr() on the focal position; $uid is internally generated. ?>
         <style>
-            #<?php echo $uid; ?> { background: <?php echo $bg_style; ?>; padding: 32px 16px; display: flex; justify-content: center; }
+            #<?php echo $uid; ?> { background: <?php echo $bg_style; ?>; padding: 32px 16px; display: flex; justify-content: center; border-radius: inherit; }
             #<?php echo $uid; ?> .olo-lib-inner { width: 100%; max-width: <?php echo $max_width; ?>px; text-align: <?php echo $text_align; ?>; }
             #<?php echo $uid; ?> .olo-lib-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; object-position: <?php echo esc_attr( $avatar_pos ); ?>; <?php echo $text_align === 'center' ? 'margin: 0 auto 12px;' : 'margin: 0 0 12px;'; ?> display: block; }
             #<?php echo $uid; ?> .olo-lib-avatar-placeholder { width: 80px; height: 80px; border-radius: 50%; background: var(--olo-color-surface-alt, #F3F4F6); color: var(--olo-color-text-faint, #9CA3AF); <?php echo $text_align === 'center' ? 'margin: 0 auto 12px;' : 'margin: 0 0 12px;'; ?> display: flex; align-items: center; justify-content: center; }
@@ -123,6 +161,16 @@ class Olobuild_LinkInBio_Tile extends Olobuild_Tile_Base {
             #<?php echo $uid; ?> .olo-lib-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
             #<?php echo $uid; ?> .olo-lib-icon { margin-right: 8px; opacity: 0.7; display: inline-flex; width: 1em; height: 1em; vertical-align: -0.1em; }
             #<?php echo $uid; ?> .olo-lib-icon svg { width: 100%; height: 100%; fill: currentColor; stroke: currentColor; }
+            <?php if ( $social ) : ?>
+            #<?php echo $uid; ?> .olo-lib-social { display: flex; flex-wrap: wrap; justify-content: <?php echo $social_just; ?>; gap: 0.875em; margin: 0.5em 0 1.25em; }
+            <?php // Il margine negativo avvicina le icone alla bio (20px sotto); senza bio salirebbero sopra il nome. ?>
+            #<?php echo $uid; ?> .olo-lib-bio + .olo-lib-social { margin-top: -0.5em; }
+            #<?php echo $uid; ?> .olo-lib-social-link { display: inline-flex; color: <?php echo $link_color; ?>; font-size: 22px; line-height: 1; border-radius: 50%; transition: transform 0.2s ease, opacity 0.2s ease; }
+            #<?php echo $uid; ?> .olo-lib-social-link svg { width: 1em; height: 1em; }
+            #<?php echo $uid; ?> .olo-lib-social-link:hover { transform: translateY(-2px); opacity: 0.8; }
+            #<?php echo $uid; ?> .olo-lib-social-link:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
+            @media (prefers-reduced-motion: reduce) { #<?php echo $uid; ?> .olo-lib-social-link { transition: none; } #<?php echo $uid; ?> .olo-lib-social-link:hover { transform: none; } }
+            <?php endif; ?>
             <?php if ( $radius_hover_css !== '' ) : ?>#<?php echo $uid; ?> .olo-lib-btn{transition:border-radius 400ms cubic-bezier(.4,0,.2,1),background-color 0.2s,color 0.2s,transform 0.2s}#<?php echo $uid; ?> .olo-lib-btn:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
@@ -142,6 +190,14 @@ class Olobuild_LinkInBio_Tile extends Olobuild_Tile_Base {
 
                     <?php if ( ! empty( $s['profile_bio'] ) ) : ?>
                         <div class="olo-lib-bio"><?php echo esc_html( $s['profile_bio'] ); ?></div>
+                    <?php endif; ?>
+
+                    <?php if ( $social ) : ?>
+                        <div class="olo-lib-social">
+                            <?php foreach ( $social as $profilo ) : ?>
+                                <a class="olo-lib-social-link" href="<?php echo esc_url( $profilo['url'] ); ?>" target="_blank" rel="noopener noreferrer" title="<?php echo esc_attr( $profilo['nome'] ); ?>" aria-label="<?php echo esc_attr( $profilo['nome'] ); ?>"><?php echo $profilo['svg']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico dalla mappa fissa Olobuild_Social_Tile::icon_paths() ?></a>
+                            <?php endforeach; ?>
+                        </div>
                     <?php endif; ?>
                 </div>
 
