@@ -108,9 +108,13 @@ class Olobuild_Pagelight_Tile extends Olobuild_Tile_Base {
             css.textContent='#<?php echo esc_js( $uid ); ?>::after{background-color:var(--pl,<?php echo esc_js( $light ); ?>) !important;}';
             document.head.appendChild(css);
             function apply(c){ if(c){ el.style.setProperty('--pl', c); } }
-            /* Sezioni verticali con data-olo-light */
-            var lit=Array.prototype.slice.call(document.querySelectorAll('section[data-olo-light]'));
-            if(lit.length){
+            /* Sezioni verticali con data-olo-light. Si cercano a pagina caricata: lo
+               script gira mentre il browser legge la sezione della tile, e prima
+               trovava solo quella (le sezioni dopo non erano ancora nel DOM) — la
+               luce non cambiava mai. */
+            function osserva(){
+                var lit=Array.prototype.slice.call(document.querySelectorAll('section[data-olo-light]'));
+                if(!lit.length){ return; }
                 var io=new IntersectionObserver(function(entries){
                     entries.forEach(function(e){
                         /* Le sezioni nei gruppi Cover orizzontale le governa
@@ -123,6 +127,7 @@ class Olobuild_Pagelight_Tile extends Olobuild_Tile_Base {
                 },{rootMargin:'-40% 0px -40% 0px'});
                 lit.forEach(function(sec){ io.observe(sec); });
             }
+            if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', osserva); } else { osserva(); }
             /* Gruppi Cover orizzontale: il motore annuncia la fermata attiva */
             window.addEventListener('olo:hgroup',function(ev){
                 var d=ev.detail||{};

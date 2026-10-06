@@ -389,7 +389,9 @@ trait Olobuild_Renderer_Structure_Trait {
     }
 
     /**
-     * Colore CSS "sicuro" per data-olo-light: hex, rgb(a), hsl(a) o var(--…).
+     * Colore CSS "sicuro" per data-olo-light: hex, rgb(a), hsl(a), var(--…) o color-mix(…).
+     * Il color-mix è quello delle tinte della palette nel selettore colore: prima veniva
+     * scartato in silenzio e la sezione non chiedeva nessun colore.
      */
     private function sanitize_light_color( $value ) {
         $v = trim( (string) $value );
@@ -397,6 +399,7 @@ trait Olobuild_Renderer_Structure_Trait {
         if ( preg_match( '/^#[0-9a-fA-F]{3,8}$/', $v ) ) return $v;
         if ( preg_match( '/^(rgb|rgba|hsl|hsla)\([\d\s.,%\/]+\)$/', $v ) ) return $v;
         if ( preg_match( '/^var\(\s*--[\w-]+(?:\s*,\s*[^;{}<>]+)?\)$/', $v ) ) return $v;
+        if ( preg_match( '/^color-mix\([^;{}<>"]*\)$/', $v ) ) return $v;
         return '';
     }
 
