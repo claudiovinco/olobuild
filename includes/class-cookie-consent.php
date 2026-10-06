@@ -1272,6 +1272,13 @@ class Olobuild_Cookie_Consent {
         $btnPTx  = sanitize_hex_color( $opts['btn_primary_text'] ) ?: '#ffffff';
         $btnSBg  = sanitize_hex_color( $opts['btn_secondary_bg'] ) ?: '#e5e7eb';
         $btnSTx  = sanitize_hex_color( $opts['btn_secondary_text'] ) ?: '#374151';
+        // Il pulsante «Accetta e carica» dei contenuti incorporati bloccati (Instagram, YouTube,
+        // Mappe…) sta nella pagina, al posto dell'iframe, ed era blu #2563eb fisso, fuori dal
+        // tema del sito. Ora prende i colori del pulsante del banner se l'amministratore li ha
+        // scelti, altrimenti il primario del tema col suo colore di contrasto.
+        $embBtnDefault = ( '#2563eb' === strtolower( $btnPBg ) );
+        $embBtnBg = $embBtnDefault ? 'var(--olo-color-primary, #2563eb)' : $btnPBg;
+        $embBtnTx = $embBtnDefault ? 'var(--olo-color-primary-contrast, ' . $btnPTx . ')' : $btnPTx;
         $radius  = intval( $opts['border_radius'] );
         $layout  = $opts['layout'];
         $pos     = $opts['position'] === 'top' ? 'top' : 'bottom';
@@ -1579,7 +1586,7 @@ class Olobuild_Cookie_Consent {
                             wrap.style.cssText = 'background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;padding:32px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px;' + (iframes[i].width ? 'width:'+iframes[i].width+'px;' : 'width:100%;') + (iframes[i].height ? 'height:'+iframes[i].height+'px;' : '');
                             wrap.innerHTML = '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'
                                 + '<p style="margin:12px 0 8px;color:#6b7280;font-size:14px"><?php echo esc_js( __( 'Questo contenuto richiede il consenso ai cookie', 'olobuild' ) ); ?></p>'
-                                + '<button class="olo-cc-iframe-load" style="background:#2563eb;color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600"><?php echo esc_js( __( 'Accetta e carica', 'olobuild' ) ); ?></button>';
+                                + '<button class="olo-cc-iframe-load" style="background:<?php echo esc_js( $embBtnBg ); ?>;color:<?php echo esc_js( $embBtnTx ); ?>;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600"><?php echo esc_js( __( 'Accetta e carica', 'olobuild' ) ); ?></button>';
                             iframes[i].parentNode.replaceChild(wrap, iframes[i]);
                         }
                     }
