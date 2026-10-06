@@ -37,6 +37,8 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
         'size'              => 6,
         'wind'              => 0.5,
         'gravity'           => 1,
+        'confetti_start'    => 'load',
+        'confetti_duration' => 3,
         'connect_lines'     => false,
         'connect_distance'  => 90,
         'interact_on_hover' => false,
@@ -104,6 +106,9 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
         $size     = max( 1,   min( 40,    floatval( $s['size'] ) ) );
         $wind     = max( 0,   min( 6,     floatval( $s['wind'] ) ) );
         $gravity  = max( 0,   min( 6,     floatval( $s['gravity'] ) ) );
+        // Coriandoli: «Quando parte» (su tutta la pagina) e «Durata» dello scoppio (prima fissa, circa 3 s)
+        $c_start  = ( 'view' === ( $s['confetti_start'] ?? 'load' ) ) ? 'view' : 'load';
+        $c_life   = round( 1 / ( max( 1.5, min( 12, floatval( $s['confetti_duration'] ?? 3 ) ) ) * 60 ), 5 );
         $connect  = ! empty( $s['connect_lines'] );
         $conn_d   = max( 20,  min( 300,   intval( $s['connect_distance'] ) ) );
         $hover    = ! empty( $s['interact_on_hover'] );
@@ -137,6 +142,8 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
             'size'     => $size,
             'wind'     => $wind,
             'gravity'  => $gravity,
+            'start'    => $c_start,
+            'lifeStep' => $c_life,
             'connect'  => $connect,
             'connDist' => $conn_d,
             'hover'    => $hover,
@@ -184,7 +191,9 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
             // Posizionamento. "page" = overlay fisso su tutta la finestra, SOPRA il contenuto
             // (effetti stagionali: neve, coriandoli). "section" = sfondo del contenitore.
             var host;
+            var punto = null;   // il posto della tile nella pagina (per «Quando la tile entra nello schermo»)
             if ( CFG.scope === 'page' ) {
+                punto = canvas.parentNode;
                 var layer = document.createElement('div');
                 layer.className = 'olo-particles-page';
                 layer.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:99990;overflow:hidden';
@@ -308,7 +317,7 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
             function makeSnow()   { return { x: rnd(0,W), y: rnd(-H,0),  r: Math.max(1,CFG.size*rnd(.25,.7)), s: rnd(.4,1.4)*CFG.speed, a: rnd(0,TAU), sw: rnd(.3,1)*CFG.wind, col: pick(CFG.colors) }; }
             function makeBubble() { return { x: rnd(0,W), y: H+rnd(0,H), r: Math.max(1,CFG.size*rnd(.4,1.1)), s: rnd(.5,1.6)*CFG.speed, a: rnd(0,TAU), sw: rnd(.3,1)*CFG.wind, col: pick(CFG.colors) }; }
             function makeStar()   { return { x: rnd(0,W), y: rnd(0,H),   r: Math.max(.4,CFG.size*rnd(.06,.28)), tw: rnd(0,TAU), sp: rnd(.3,.8), vx: rnd(-.15,.15)*CFG.wind, vy: rnd(.02,.18)*CFG.gravity*CFG.speed, col: pick(CFG.colors) }; }
-            function makeConfetti(){ var ang=rnd(0,TAU), spd=rnd(3,9)*CFG.speed; return { x: rnd(W*.35,W*.65), y: rnd(-20, H*.25), r: CFG.size*rnd(.5,1.1), vx: Math.cos(ang)*spd*.5, vy: Math.sin(ang)*spd - rnd(2,6), a: rnd(0,TAU), va: rnd(-.2,.2), col: pick(CFG.colors), life: 1 }; }
+            function makeConfetti(){ var ang=rnd(0,TAU), spd=rnd(3,9)*CFG.speed; return { x: rnd(W*.35,W*.65), y: ( pageMode ? SCROLL : 0 ) + rnd(-20, H*.25), r: CFG.size*rnd(.5,1.1), vx: Math.cos(ang)*spd*.5, vy: Math.sin(ang)*spd - rnd(2,6), a: rnd(0,TAU), va: rnd(-.2,.2), col: pick(CFG.colors), life: 1 }; }
             function makeSoccer(){ return { x: rnd(0,W), y: rnd(-H,0), r: Math.max(3, CFG.size*rnd(.9,1.6)), s: rnd(.5,1.4)*CFG.speed, a: rnd(0,TAU), ph: rnd(0,TAU), sw: rnd(.4,1.2)*CFG.wind, spin: rnd(-.05,.05), col: CFG.colors[0] }; }
 
             function makeOne() {
@@ -447,8 +456,11 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
                         if ( p.y > sh ) { p.y -= sh; } if ( p.y < 0 ) { p.y += sh; }
                         if ( p.x > W ) { p.x = 0; } if ( p.x < 0 ) { p.x = W; }
                     } else if ( CFG.preset === 'confetti' ) {
-                        p.vy += .12 * CFG.gravity; p.x += p.vx; p.y += p.vy; p.a += p.va;
-                        p.vx *= .992; p.life -= .006;
+                        p.vy += .12 * CFG.gravity;
+                        // velocità limite: i coriandoli planano invece di precipitare fuori scena
+                        if ( p.vy > 2 + 3 * CFG.gravity ) { p.vy = 2 + 3 * CFG.gravity; }
+                        p.x += p.vx; p.y += p.vy; p.a += p.va;
+                        p.vx *= .992; p.life -= ( CFG.lifeStep || .006 );
                         // one-shot: NON ricicla; quando esce/sfuma resta fuori scena
                     } else { // petals / snow / soccer
                         p.y += p.s * CFG.gravity; p.a += ( p.spin != null ? p.spin : .02 );
@@ -485,8 +497,10 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
 
             function confettiDone() {
                 // tutte fuori dallo schermo o sfumate
+                // in «tutta la pagina» le y sono del documento: il fondo è quello della parte in vista
+                var fondo = ( pageMode ? SCROLL : 0 ) + H + 40;
                 for ( var i = 0; i < parts.length; i++ ) {
-                    if ( parts[i].life > 0 && parts[i].y < H + 40 ) { return false; }
+                    if ( parts[i].life > 0 && parts[i].y < fondo ) { return false; }
                 }
                 return true;
             }
@@ -577,7 +591,9 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
                         }
                     }
                 }, { threshold: 0.01 } );
-                io.observe( canvas );
+                // Coriandoli su tutta la pagina con «Quando la tile entra nello schermo»: il canvas è
+                // fisso (sempre «in vista»), si osserva invece il posto della tile nella pagina.
+                io.observe( ( pageMode && CFG.preset === 'confetti' && CFG.start === 'view' && punto ) ? punto : canvas );
             } else {
                 start();
             }

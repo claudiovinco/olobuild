@@ -40,6 +40,8 @@ export default {
     size: 6,
     wind: 0.5,
     gravity: 1,
+    confetti_start: 'load',
+    confetti_duration: 3,
     connect_lines: false,
     connect_distance: 90,
     interact_on_hover: false,
@@ -111,6 +113,13 @@ export default {
     { key: 'wind', label: t('Vento (deriva orizzontale)'), type: 'range', min: 0, max: 3, step: 0.1 },
     { key: 'gravity', label: t('Gravità / spinta verticale'), type: 'range', min: 0, max: 3, step: 0.1,
       description: t('Petali/neve/coriandoli cadono; le bolle salgono; le stelle restano sospese.') },
+    { key: 'confetti_start', label: t('Quando parte'), type: 'select', options: [
+      { value: 'load', label: t("All'apertura della pagina") },
+      { value: 'view', label: t('Quando la tile entra nello schermo') },
+    ], condition: [ { field: 'preset', value: 'confetti' }, { field: 'scope', value: 'page' } ],
+      description: t('Su tutta la pagina lo scoppio parte di serie appena la pagina si apre: se la tile sta più in basso, scegli «Quando la tile entra nello schermo» perché parta quando il visitatore ci arriva.') },
+    { key: 'confetti_duration', label: t('Durata'), type: 'range', min: 1.5, max: 12, step: 0.5, unit: 's',
+      condition: { field: 'preset', value: 'confetti' } },
 
     { type: 'separator', label: t('Costellazioni') },
     { key: 'connect_lines', label: t('Collega con linee'), type: 'toggle',
