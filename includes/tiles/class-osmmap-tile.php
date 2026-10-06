@@ -49,7 +49,8 @@ class Olobuild_Osmmap_Tile extends Olobuild_Tile_Base {
         $dragging        = filter_var( $s['dragging'], FILTER_VALIDATE_BOOLEAN );
         $popup_text      = esc_js( wp_strip_all_tags( $s['marker_popup'] ) );
         $tile_layer      = in_array( $s['tile_layer'], [ 'standard', 'hot', 'positron', 'voyager', 'dark', 'satellite', 'topo', 'esri_street', 'gray', 'opentopomap' ], true ) ? $s['tile_layer'] : 'standard';
-        $marker_color    = $this->safe_color_css( $s['marker_color'] ) ?: '#e74c3c';
+        // Colore vuoto = il primario del sito (prima il rosso #e74c3c fisso, fuori dalla Palette).
+        $marker_color    = $this->safe_color_css( $s['marker_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $marker_type     = sanitize_key( $s['marker_type'] ?? 'pin' );
         $marker_image    = esc_url( $s['marker_image'] ?? '' );
         $marker_size     = absint( $s['marker_size'] ?? 36 ) ?: 36;
