@@ -95,7 +95,8 @@ export default {
     { key: 'zone_accent', label: t('Colore'), type: 'color',
       description: t('Barra di avanzamento, occhiello, titolo dell\'esito e pulsante. Vuoto: il primario del tema.') },
     { key: 'zone_on', label: t('Testo sul colore'), type: 'color' },
-    { key: 'card_bg', label: t('Sfondo scheda'), type: 'color' },
+    { key: 'card_bg', label: t('Sfondo scheda'), type: 'color',
+      description: t('Su uno sfondo scuro (della scheda o del contenitore) i testi passano al chiaro da soli.') },
     { key: 'card_border', label: t('Bordo scheda'), type: 'border', legacyWidth: 1 },
 
     { type: 'separator', label: t('Disposizione') },

@@ -61,6 +61,54 @@ class Olobuild_ScoreQuiz_Tile extends Olobuild_Tile_Base {
         return $out;
     }
 
+    /**
+     * Luminanza relativa (WCAG) di un fondo, coi token della Palette risolti; null se il
+     * fondo non è pieno (vuoto, trasparente, velato sotto il 50%) o non si risolve.
+     * Stesso calcolo di finder e leaderboard.
+     */
+    private function luminanza_fondo( $c ) {
+        $c = trim( (string) $c );
+        if ( '' === $c || 'transparent' === strtolower( $c ) ) {
+            return null;
+        }
+        $alfa = 1.0;
+        if ( preg_match( '/^#[0-9a-f]{6}([0-9a-f]{2})$/i', $c, $m ) ) {
+            $alfa = hexdec( $m[1] ) / 255;
+        } elseif ( preg_match( '/^rgba?\(\s*[\d.]+%?\s*[,\s]\s*[\d.]+%?\s*[,\s]\s*[\d.]+%?\s*[,\/]\s*([\d.]+)(%?)\s*\)$/i', $c, $m ) ) {
+            $alfa = (float) $m[1] / ( '%' === $m[2] ? 100 : 1 );
+        } elseif ( preg_match( '/^color-mix\(.+\s([\d.]+)%\s*,\s*transparent\s*\)$/is', $c, $m ) ) {
+            $alfa = (float) $m[1] / 100;
+        }
+        $hex = Olobuild_Tile_Utils::colore_hex( $c );
+        if ( $alfa < 0.5 || '' === $hex ) {
+            return null;
+        }
+        $l = 0.0;
+        foreach ( [ 1 => 0.2126, 3 => 0.7152, 5 => 0.0722 ] as $i => $k ) {
+            $v  = hexdec( substr( $hex, $i, 2 ) ) / 255;
+            $l += $k * ( $v <= 0.03928 ? $v / 12.92 : pow( ( $v + 0.055 ) / 1.055, 2.4 ) );
+        }
+        return $l;
+    }
+
+    /**
+     * Il colore di un testo su un fondo disegnato dalla tile: $colore se si legge (contrasto
+     * almeno 3:1), altrimenti il chiaro o lo scuro della Palette secondo il fondo. Prima titolo,
+     * domanda e risposte avevano --olo-color-text fisso: con una scheda o un contenitore scuri
+     * erano scuro su scuro, e una versione scura del quiz non si poteva fare.
+     */
+    private function testo_su( $fondo, $colore ) {
+        $lf = $this->luminanza_fondo( $fondo );
+        $lc = $this->luminanza_fondo( $colore );
+        if ( null === $lf || null === $lc ) {
+            return $colore;
+        }
+        if ( ( max( $lf, $lc ) + 0.05 ) / ( min( $lf, $lc ) + 0.05 ) >= 3 ) {
+            return $colore;
+        }
+        return $lf < 0.18 ? 'var(--olo-color-light, #fdfcfa)' : 'var(--olo-color-dark, #14161c)';
+    }
+
     public function render( $settings, $style = [] ) {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'osq-' . $this->chiave_stabile( $settings );
@@ -85,22 +133,57 @@ class Olobuild_ScoreQuiz_Tile extends Olobuild_Tile_Base {
         $line   = Olobuild_Tile_Utils::border_color( $s['card_border'] ?? null, 'var(--olo-color-border, #e5e7eb)' );
         $center = ( ( $s['align'] ?? 'left' ) === 'center' );
         $n      = count( $domande );
+        // Testi che seguono il fondo su cui stanno: titolo e introduzione sul fondo pieno del
+        // contenitore della tile (se c'è; sennò la pagina, com'era), domanda, risposte e
+        // esito sullo sfondo della scheda. Dove si leggevano già escono identici.
+        $testo_def  = 'var(--olo-color-text,#111827)';
+        $fondo_zona = '';
+        if ( is_array( $style ) && class_exists( 'Olobuild_CSS_Builder' ) ) {
+            $eff = ( new Olobuild_CSS_Builder() )->get_effective_bg( $style );
+            if ( 'solid' === ( $eff['type'] ?? '' ) && intval( $eff['color_opacity'] ?? 100 ) >= 50 ) {
+                $fondo_zona = $this->safe_color_css( $eff['color'] ?? '' );
+            }
+        }
+        $testo_zona = $this->testo_su( $fondo_zona, $testo_def );
+        // Scheda trasparente (o velata): i suoi testi stanno sulla zona.
+        $card_piena = null !== $this->luminanza_fondo( $cardbg );
+        $testo_card = $card_piena ? $this->testo_su( $cardbg, $testo_def ) : $testo_zona;
+        $col_testo  = is_array( $style ) && ! empty( $style['text_color'] );
+        // Il colore del testo del contenitore resta sulla scheda finché ci si legge (passo,
+        // «Indietro» ed esito lo seguivano già); un colore che non si risolve resta ereditato.
+        $testo_cont = $col_testo ? $this->safe_color_css( (string) $style['text_color'] ) : '';
+        $cont_ok    = '' !== $testo_cont && $this->testo_su( $cardbg, $testo_cont ) === $testo_cont;
+        // Sulla radice solo se il contenitore non ha un colore del testo suo (il renderer lo
+        // mette sul wrapper e l'introduzione lo eredita). Una scheda piena ha il suo appena la
+        // zona cambia colore, o quando quello del contenitore sarebbe chiaro su chiaro: sennò
+        // passo, esito e «Ricomincia» ereditavano il chiaro anche sulla scheda chiara.
+        $colore_radice = ( $testo_zona !== $testo_def && ! $col_testo ) ? $testo_zona : '';
+        $colore_card   = ( $card_piena && ! $cont_ok && ( $testo_card !== $testo_def || $testo_zona !== $testo_def || $col_testo ) ) ? $testo_card : '';
+        // La classe nasce dalle sole impostazioni: due quiz uguali su contenitori di colore
+        // diverso l'avrebbero condivisa, e i colori della zona del secondo valevano anche nel primo.
+        if ( $testo_zona !== $testo_def || $col_testo ) {
+            $uid .= '-' . substr( md5( $testo_zona . '|' . $colore_card . '|' . $colore_radice ), 0, 6 );
+        }
+        // Su una scheda scura il filo di serie (grigio chiaro) diventa una velatura del testo.
+        if ( $testo_card !== $testo_def && 'var(--olo-color-border, #e5e7eb)' === $line ) {
+            $line = 'color-mix(in srgb, ' . $testo_card . ' 22%, transparent)';
+        }
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist (with fixed var() fallbacks), Olobuild_Tile_Utils::border_css()/border_color(), fixed literals; $uid is an internal md5-based id. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist (with fixed var() fallbacks), text colours chosen by testo_su() among those or fixed var() literals, Olobuild_Tile_Utils::border_css()/border_color(), fixed literals; $uid is an internal md5-based id. ?>
         <style>
-            .<?php echo $uid; ?>{--sq-accent:<?php echo $accent; ?>;--sq-on:<?php echo $on; ?>;--sq-line:<?php echo $line; ?>;<?php if ( $center ) echo 'text-align:center;'; ?>}
+            .<?php echo $uid; ?>{--sq-accent:<?php echo $accent; ?>;--sq-on:<?php echo $on; ?>;--sq-line:<?php echo $line; ?>;--sq-text:<?php echo $testo_card; ?>;<?php if ( $center ) echo 'text-align:center;'; ?><?php if ( '' !== $colore_radice ) echo 'color:' . $colore_radice . ';'; ?>}
             .<?php echo $uid; ?> .osq-eyebrow{display:block;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--sq-accent);margin-bottom:0.625rem;}
-            .<?php echo $uid; ?> .osq-h{font-family:var(--olo-font-family-heading,inherit);font-size:clamp(26px,3.6vw,40px);line-height:1.12;margin:0;color:var(--olo-color-text,#111827);}
+            .<?php echo $uid; ?> .osq-h{font-family:var(--olo-font-family-heading,inherit);font-size:clamp(26px,3.6vw,40px);line-height:1.12;margin:0;color:<?php echo $testo_zona; ?>;}
             .<?php echo $uid; ?> .osq-intro{font-size:15.5px;line-height:1.6;opacity:.8;margin:0.75rem 0 0;}
-            .<?php echo $uid; ?> .osq-card{margin-top:1.5rem;background:<?php echo $cardbg; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $line ] ) ); ?>border-radius:1rem;padding:clamp(1.25rem,3vw,2rem);text-align:left;<?php echo $center ? 'max-width:640px;margin-left:auto;margin-right:auto;' : ''; ?>}
+            .<?php echo $uid; ?> .osq-card{margin-top:1.5rem;background:<?php echo $cardbg; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $line ] ) ); ?>border-radius:1rem;padding:clamp(1.25rem,3vw,2rem);text-align:left;<?php echo $center ? 'max-width:640px;margin-left:auto;margin-right:auto;' : ''; ?><?php if ( '' !== $colore_card ) echo 'color:' . $colore_card . ';'; ?>}
             .<?php echo $uid; ?> .osq-bar{height:4px;border-radius:6.1875rem;background:var(--sq-line);overflow:hidden;margin-bottom:1.125rem;}
             .<?php echo $uid; ?> .osq-bar i{display:block;height:100%;width:0;background:var(--sq-accent);transition:width .3s ease;}
             .<?php echo $uid; ?> .osq-step{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.6;}
-            .<?php echo $uid; ?> .osq-q{font-size:20px;font-weight:600;line-height:1.35;margin:0.5rem 0 1rem;color:var(--olo-color-text,#111827);outline:0;}
+            .<?php echo $uid; ?> .osq-q{font-size:20px;font-weight:600;line-height:1.35;margin:0.5rem 0 1rem;color:var(--sq-text);outline:0;}
             .<?php echo $uid; ?> .osq-opts{display:grid;gap:0.625rem;}
-            .<?php echo $uid; ?> .osq-opt{font:inherit;font-size:15.5px;text-align:left;padding:0.875rem 1.125rem;border-radius:0.75rem;border:1.5px solid var(--sq-line);background:transparent;color:var(--olo-color-text,#111827);cursor:pointer;transition:border-color .15s,background .15s;}
+            .<?php echo $uid; ?> .osq-opt{font:inherit;font-size:15.5px;text-align:left;padding:0.875rem 1.125rem;border-radius:0.75rem;border:1.5px solid var(--sq-line);background:transparent;color:var(--sq-text);cursor:pointer;transition:border-color .15s,background .15s;}
             .<?php echo $uid; ?> .osq-opt:hover{border-color:var(--sq-accent);background:color-mix(in srgb,var(--sq-accent) 8%,transparent);}
             .<?php echo $uid; ?> .osq-opt:focus-visible,.<?php echo $uid; ?> .osq-link:focus-visible,.<?php echo $uid; ?> .osq-ghost:focus-visible{outline:2px solid var(--sq-accent);outline-offset:2px;}
             .<?php echo $uid; ?> .osq-nav{display:flex;justify-content:space-between;gap:0.75rem;margin-top:1.125rem;}
