@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.561 - 2026-10-06 (fix)
+- Avanzate: lo «Scroll fisso» funziona su tutte le tile della pagina. Prima funzionava solo sulle prime: le altre, caricate quando arrivano sullo schermo, scorrevano via con il resto.
+
 ## v1.4.560 - 2026-10-06 (fix)
 - Avanzate: la «Maschera forma» ritaglia davvero tile, righe e colonne in cerchio, ellisse, triangolo, esagono, stella, diamante, blob o in una forma personalizzata. Prima agiva solo sulle sezioni: sulle tile non cambiava niente.
 - Builder: lavorando a lungo senza pause non compare più l'errore «troppe richieste». Il limite di 300 richieste al minuto si azzera davvero ogni minuto; prima il conteggio ripartiva a ogni richiesta e dopo 300 il builder si bloccava finché non si stava fermi un minuto.
