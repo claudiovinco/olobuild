@@ -141,9 +141,10 @@ class Olobuild_Viewer360_Tile extends Olobuild_Tile_Base {
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php endif; ?>
+        <?php /* Fondo dal colore scuro della Palette (prima #111 fisso, uguale su ogni tema). */ ?>
         <div class="olo-v360 <?php echo $is_object ? 'olo-v3-obj ' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed class-name literal from the ternary ?>olo-v3-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" id="<?php echo esc_attr( $uid ); ?>"
              <?php if ( $is_object ) : ?>tabindex="0" role="img" aria-label="<?php echo esc_attr( ( $s['caption'] ?? '' ) ?: olobuild_t( 'Oggetto girevole 360°' ) ); ?>"<?php endif; ?>
-             style="height:<?php echo (int) $height; ?>px;<?php if ( $radius_css ) echo 'border-radius:' . $radius_css . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- integer px list from Olobuild_Tile_Base::build_border_radius_css() (intval-built) ?>overflow:hidden;position:relative;background:#111"
+             style="height:<?php echo (int) $height; ?>px;<?php if ( $radius_css ) echo 'border-radius:' . $radius_css . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- integer px list from Olobuild_Tile_Base::build_border_radius_css() (intval-built) ?>overflow:hidden;position:relative;background:var(--olo-color-dark, #111111)"
              data-olo-v360='<?php echo esc_attr( wp_json_encode( $config ) ); ?>'>
             <?php if ( $is_object ) : ?>
             <div class="olo-v360-stage">
@@ -155,7 +156,7 @@ class Olobuild_Viewer360_Tile extends Olobuild_Tile_Base {
             <div class="olo-v360-angle" aria-hidden="true">0&deg;</div>
             <?php endif; ?>
             <?php else : ?>
-            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--olo-color-light, #ffffff);font-size:14px">
                 <span><?php echo esc_html( olobuild_t( 'Caricamento 360°...' ) ); ?></span>
             </div>
             <?php endif; ?>

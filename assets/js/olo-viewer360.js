@@ -16,6 +16,12 @@
   var loaded = false;
   var queue = [];
 
+  // L'Oggetto girevole non usa Pannellum e il suo contenuto (foto, frecce, angolo) arriva dal PHP:
+  // gli avvisi d'errore della libreria e il riavvio del builder non devono svuotarlo.
+  function isObject(el) {
+    try { return (JSON.parse(el.getAttribute('data-olo-v360')) || {}).mode === 'object'; } catch(e) { return false; }
+  }
+
   function loadPannellum(callback) {
     if (loaded) { callback(); return; }
     if (window.pannellum) { loaded = true; callback(); return; }
@@ -44,6 +50,7 @@
       console.error('[olo-v360] Failed to load Pannellum from CDN');
       // Show error in all waiting containers
       document.querySelectorAll('[data-olo-v360]').forEach(function(el) {
+        if (isObject(el)) return;
         el.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#EF4444;font-size:14px;flex-direction:column;gap:8px"><p>Errore caricamento libreria 360°</p><p style="font-size:11px;color:#999">CDN non raggiungibile</p></div>';
       });
     };
@@ -55,6 +62,7 @@
         console.warn('[olo-v360] Pannellum load timeout');
         document.querySelectorAll('[data-olo-v360]').forEach(function(el) {
           if (el.querySelector('.pnlm-container')) return; // already initialized
+          if (isObject(el)) return;
           el.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#EF4444;font-size:14px"><p>Timeout caricamento 360° — ricarica la pagina</p></div>';
         });
       }
@@ -183,6 +191,7 @@
   function initObjectViewer(container, config) {
     var img = container.querySelector('.olo-v360-frame');
     if (!img) return;
+    container.__oloV360Img = img;
     var angleEl = container.querySelector('.olo-v360-angle');
     var prevBtn = container.querySelector('.olo-v360-prev');
     var nextBtn = container.querySelector('.olo-v360-next');
@@ -213,7 +222,10 @@
         var src = frames[frameIndex(angle)];
         if (img.getAttribute('src') !== src) img.setAttribute('src', src);
       } else {
-        img.style.transform = 'rotateY(' + angle + 'deg)';
+        // Con una sola foto il retro è la foto stessa: oltre i 90° rotateY la mostrava a specchio
+        // (a 180° scritte e loghi rovesciati). Di spalle si ribalta: il cambio cade di taglio, non si vede.
+        var back = Math.cos(a * Math.PI / 180) < 0;
+        img.style.transform = 'rotateY(' + angle + 'deg)' + (back ? ' scaleX(-1)' : '');
       }
       if (angleEl) angleEl.textContent = Math.round(a) + '°';
     }
@@ -282,6 +294,13 @@
   // Expose for builder iframe reinit
   window.__oloV360Init = function() {
     document.querySelectorAll('[data-olo-v360]').forEach(function(el) {
+      // Oggetto girevole: svuotarlo (come si fa col panorama) toglieva la foto resa dal PHP e il
+      // riquadro restava nero dopo ogni render del builder. Si avvia solo se è nuovo o se la sua
+      // foto è stata sostituita.
+      if (isObject(el)) {
+        if (!el.__oloV360Img || !el.contains(el.__oloV360Img)) { el.__oloV360 = false; initViewer(el); }
+        return;
+      }
       el.__oloV360 = false;
       el.innerHTML = '';
       initViewer(el);
