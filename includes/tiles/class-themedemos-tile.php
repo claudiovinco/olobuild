@@ -20,13 +20,18 @@ class Olobuild_ThemeDemos_Tile extends Olobuild_Tile_Base {
         'items' => [
             [ 'name' => 'Forge', 'category' => 'Software & Tech', 'zone_label' => 'Contrast', 'bg' => 'var(--olo-color-dark, #121212)', 'ink' => '#f4f4f4', 'accent' => '#ff6a2b', 'font_label' => 'Big Shoulders Display', 'light' => false, 'link' => '' ],
             [ 'name' => 'Prisma', 'category' => 'Creative', 'zone_label' => 'Palette', 'bg' => 'var(--olo-color-dark, #160a24)', 'ink' => '#f1e9f7', 'accent' => '#c14bff', 'font_label' => 'Big Shoulders Display', 'light' => false, 'link' => '' ],
-            [ 'name' => 'Saffron', 'category' => 'Food & Drink', 'zone_label' => 'Floor plan', 'bg' => 'var(--olo-color-dark, #f6efe2)', 'ink' => '#241a16', 'accent' => '#c75d3a', 'font_label' => 'Big Shoulders Display', 'light' => true, 'link' => '' ],
+            // Saffron è l'anteprima CHIARA (light, titolo #241a16): la conversione ai token della
+            // 1.4.438 le aveva dato il fondo Scuro, e il titolo spariva scuro su scuro.
+            [ 'name' => 'Saffron', 'category' => 'Food & Drink', 'zone_label' => 'Floor plan', 'bg' => 'var(--olo-color-light, #f6efe2)', 'ink' => '#241a16', 'accent' => '#c75d3a', 'font_label' => 'Big Shoulders Display', 'light' => true, 'link' => '' ],
             [ 'name' => 'Soundwave', 'category' => 'Artist', 'zone_label' => 'Sequencer', 'bg' => 'var(--olo-color-dark, #0c0c10)', 'ink' => '#ffffff', 'accent' => '#27e0a3', 'font_label' => 'Big Shoulders Display', 'light' => false, 'link' => '' ],
         ],
         'accent'                  => '',
         'card_bg'                 => '',
         'card_border_color'       => '',
         'card_border_hover_color' => '',
+        // Nome e categoria del piede: vuoto = il testo del tema, o chiaro/scuro se su
+        // «Sfondo card» non si legge (vedi testo_su()).
+        'footer_text_color'       => '',
         'preview_height'          => 168,
         'gap'                     => 16,
 
@@ -78,6 +83,25 @@ class Olobuild_ThemeDemos_Tile extends Olobuild_Tile_Base {
         $sans = "var(--olo-font-family, 'Hanken Grotesk', sans-serif)";
         $mono = "var(--olo-font-family-mono, 'Space Mono', ui-monospace, monospace)";
 
+        // Nome e categoria del piede: prima --olo-color-text fisso, illeggibile appena
+        // «Sfondo card» era scuro su un tema chiaro (o chiaro su un tema scuro). Ora il colore
+        // di «Testo piede», se no il testo del tema finché si legge sullo sfondo card, se no
+        // il chiaro o lo scuro della Palette. Col testo del tema la categoria resta text-soft.
+        $ft_base = 'var(--olo-color-text, #ECEAE3)';
+        $ft_name = $this->safe_color_css( $s['footer_text_color'] ?? '' ) ?: $this->testo_su( $cbg, $ft_base );
+        $ft_cat  = $ft_name === $ft_base
+            ? 'var(--olo-color-text-soft, #a0a298)'
+            : 'color-mix(in srgb, ' . $ft_name . ' 68%, transparent)';
+
+        // Il font scritto in ogni card («Font del tema»): prima il titolo dell'anteprima
+        // nominava la famiglia senza caricarla, e fuori dai font di sistema si vedeva il sans
+        // del browser. Le famiglie Google si servono in locale (font_face_css()).
+        $font_names = [];
+        foreach ( $items as $it_font ) {
+            $font_names[] = $this->nome_font( $it_font['font_label'] ?? '' );
+        }
+        $font_css = $this->font_face_css( $font_names );
+
         // ── KIT standard OLObuild: sfondo completo + ombra + bordo sul contenitore ──
         $bg_obj  = $s['bg'] ?? null;
         $bg_decl = '';
@@ -99,6 +123,7 @@ class Olobuild_ThemeDemos_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist (or fixed var()/color-mix literals), sizes via intval() with min()/max() clamps, fixed font-stack literals, background/shadow/border via the Olobuild_CSS_Builder/Olobuild_Tile_Base shared helpers (sanitized internally); $uid is internally generated. ?>
         <style>
+            <?php echo $font_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- @font-face generato da Olobuild_Font_Host con URL locali in /uploads; i nomi famiglia passano dal filtro [a-zA-Z0-9 -] di nome_font() ?>
             <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{font-family:<?php echo $sans; ?>;<?php echo $box_decl; ?>}
             .<?php echo $uid; ?> .otd-row{display:flex;gap:<?php echo $gap; ?>px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:14px;-webkit-overflow-scrolling:touch;scrollbar-width:thin;}
@@ -114,8 +139,8 @@ class Olobuild_ThemeDemos_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .otd-z{position:absolute;right:13px;bottom:12px;font-family:<?php echo $mono; ?>;font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#fff;background:rgba(8,9,12,.5);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:4px 9px;}
             .<?php echo $uid; ?> .otd-pv.light .otd-z{background:rgba(255,255,255,.6);border-color:rgba(0,0,0,.12);color:#1a1a1a;}
             .<?php echo $uid; ?> .otd-ft{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:13px 16px;}
-            .<?php echo $uid; ?> .otd-name{font-family:<?php echo $disp; ?>;font-weight:700;font-size:19px;text-transform:uppercase;color:var(--olo-color-text, #ECEAE3);}
-            .<?php echo $uid; ?> .otd-cat{font-size:11.5px;color:var(--olo-color-text-soft, #a0a298);}
+            .<?php echo $uid; ?> .otd-name{font-family:<?php echo $disp; ?>;font-weight:700;font-size:19px;text-transform:uppercase;color:<?php echo $ft_name; ?>;}
+            .<?php echo $uid; ?> .otd-cat{font-size:11.5px;color:<?php echo $ft_cat; ?>;}
             <?php echo $border_hover_css; ?><?php echo $border_effect_css; ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
@@ -128,9 +153,8 @@ class Olobuild_ThemeDemos_Tile extends Olobuild_Tile_Base {
                     $ibg   = $this->safe_color_css( $it['bg'] ?? '' ) ?: '#121212';
                     $iink  = $this->safe_color_css( $it['ink'] ?? '' ) ?: '#f4f4f4';
                     $iacc  = $this->safe_color_css( $it['accent'] ?? '' ) ?: $acc;
-                    // Whitelist del nome font item (contenuto: rappresenta il TEMA, non i ruoli del sito).
-                    $font  = trim( preg_replace( '/[^a-zA-Z0-9 \-]/', '', (string) ( $it['font_label'] ?? '' ) ) );
-                    if ( $font === '' ) { $font = 'Big Shoulders Display'; }
+                    // Nome font item (contenuto: rappresenta il TEMA, non i ruoli del sito).
+                    $font    = $this->nome_font( $it['font_label'] ?? '' );
                     $fontcss = "'" . $font . "',sans-serif";
                     $light = ! empty( $it['light'] );
                     $href  = isset( $it['link'] ) ? trim( (string) $it['link'] ) : '';
@@ -161,6 +185,91 @@ class Olobuild_ThemeDemos_Tile extends Olobuild_Tile_Base {
         </div>
         <?php
         return ob_get_clean();
+    }
+
+    /**
+     * Font di sistema che famiglie_google() non conosce: Google risponde anche a questi nomi
+     * (con un altro carattere, «Georgia» compreso), e la card deve mostrare quello del sistema.
+     */
+    const FONT_DI_SISTEMA = [
+        'palatino linotype', 'palatino', 'book antiqua', 'impact', 'arial black', 'comic sans ms',
+        'lucida sans unicode', 'lucida grande', 'gill sans', 'optima', 'garamond', 'baskerville',
+        'didot', 'futura', 'avenir', 'century gothic', 'franklin gothic medium', 'calibri',
+        'cambria', 'candara', 'constantia', 'corbel', 'rockwell', 'copperplate', 'brush script mt',
+        'hoefler text', 'american typewriter',
+    ];
+
+    /** Il nome del «Font del tema» ripulito ([a-zA-Z0-9 -]), Big Shoulders Display se vuoto. */
+    private function nome_font( $valore ) {
+        $font = trim( preg_replace( '/[^a-zA-Z0-9 \-]/', '', (string) $valore ) );
+        return $font === '' ? 'Big Shoulders Display' : $font;
+    }
+
+    /**
+     * @font-face self-hosted (Olobuild_Font_Host: nessuna richiesta del visitatore a Google) delle
+     * famiglie Google scritte nelle card; i font di sistema e quelli caricati dall'utente restano
+     * fuori. Google rifiuta un peso che la famiglia non ha (Anton ha solo il 400, Lora non ha
+     * l'800): si prova l'800 del titolo, poi 400+700, poi il 400, e il peso che funziona si
+     * ricorda un mese (un nome sbagliato un'ora), così la prova non si ripete a ogni pagina.
+     */
+    private function font_face_css( $nomi ) {
+        if ( ! class_exists( 'Olobuild_Font_Host' ) || ! class_exists( 'Olobuild_Style_System' ) ) {
+            return '';
+        }
+        $css = '';
+        foreach ( Olobuild_Style_System::famiglie_google( $nomi ) as $famiglia ) {
+            if ( in_array( strtolower( $famiglia ), self::FONT_DI_SISTEMA, true ) ) {
+                continue;
+            }
+            $chiave = 'olo_otd_pesi_' . md5( strtolower( $famiglia ) );
+            $pesi   = get_transient( $chiave );
+            if ( ! is_string( $pesi ) || $pesi === '' ) {
+                $pesi = 'no';
+                foreach ( [ '800', '400;700', '400' ] as $prova ) {
+                    if ( '' !== Olobuild_Font_Host::get_font_face_css( [ $famiglia ], $prova ) ) {
+                        $pesi = $prova;
+                        break;
+                    }
+                }
+                set_transient( $chiave, $pesi, 'no' === $pesi ? HOUR_IN_SECONDS : MONTH_IN_SECONDS );
+            }
+            if ( 'no' !== $pesi ) {
+                $css .= Olobuild_Font_Host::get_font_face_css( [ $famiglia ], $pesi );
+            }
+        }
+        return $css;
+    }
+
+    /** Luminanza relativa di un colore pieno (token risolti sul server), null se non si sa. */
+    private function luminanza( $c ) {
+        $c = trim( (string) $c );
+        // Un fondo semitrasparente lascia vedere ciò che sta sotto: non si giudica.
+        if ( $c === '' || preg_match( '/transparent|rgba\(|hsla\(|^#[0-9a-f]{8}$/i', $c ) ) {
+            return null;
+        }
+        $hex = Olobuild_Tile_Utils::colore_hex( $c );
+        if ( '' === $hex ) {
+            return null;
+        }
+        $l = 0.0;
+        foreach ( [ 1 => 0.2126, 3 => 0.7152, 5 => 0.0722 ] as $i => $k ) {
+            $v  = hexdec( substr( $hex, $i, 2 ) ) / 255;
+            $l += $k * ( $v <= 0.03928 ? $v / 12.92 : pow( ( $v + 0.055 ) / 1.055, 2.4 ) );
+        }
+        return $l;
+    }
+
+    /**
+     * $colore se su $fondo si legge (contrasto almeno 3:1: il nome è testo grande), altrimenti
+     * il chiaro o lo scuro della Palette secondo il fondo. Fondo o colore ignoti: $colore.
+     */
+    private function testo_su( $fondo, $colore ) {
+        $lf = $this->luminanza( $fondo );
+        $lc = $this->luminanza( $colore );
+        if ( null === $lf || null === $lc || ( max( $lf, $lc ) + 0.05 ) / ( min( $lf, $lc ) + 0.05 ) >= 3 ) {
+            return $colore;
+        }
+        return $lf < 0.18 ? 'var(--olo-color-light, #fdfcfa)' : 'var(--olo-color-dark, #14161c)';
     }
 
     /**

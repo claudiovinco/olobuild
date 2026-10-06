@@ -27,6 +27,7 @@ export default {
     card_bg: '',
     card_border_color: '',
     card_border_hover_color: '',
+    footer_text_color: '',
     preview_height: 168,
     gap: 16,
 
@@ -55,13 +56,14 @@ export default {
     { type: 'separator', label: t('Temi') },
     { key: 'items', label: t('Card demo'), type: 'content-items',
       itemLabel: t('Tema'),
-      newItemDefaults: { name: 'Nuovo tema', category: 'Categoria', zone_label: 'Zona', bg: '#121212', ink: '#f4f4f4', accent: '#C6F24E', font_label: 'Big Shoulders Display', light: false, link: '' },
+      // Una card aggiunta nasce coi colori della Palette (prima #121212 / #f4f4f4 e un lime #C6F24E fuori tema).
+      newItemDefaults: { name: t('Nuovo tema'), category: t('Categoria'), zone_label: t('Zona'), bg: 'var(--olo-color-dark, #16263d)', ink: 'var(--olo-color-light, #f8f9fa)', accent: 'var(--olo-color-primary, #e1474f)', font_label: 'Big Shoulders Display', light: false, link: '' },
       itemFields: [
         { key: 'name', label: t('Nome tema'), type: 'text' },
         { key: 'category', label: t('Categoria'), type: 'text' },
         { key: 'zone_label', label: t('Badge zona (in anteprima)'), type: 'text' },
         { key: 'font_label', label: t('Font del tema (nome esatto)'), type: 'text',
-          description: t('Font dell\'anteprima: rappresenta il tema mostrato, non segue i ruoli del sito.') },
+          description: t('Font del titolo dell\'anteprima: rappresenta il tema mostrato, non segue i ruoli del sito. Un font di sistema (Georgia, Impact…) o una famiglia di Google Fonts, che il sito carica da sé.') },
         { key: 'light', label: t('Anteprima chiara (badge scuro)'), type: 'toggle' },
         { key: 'link', label: t('Link'), type: 'link' },
       ],
@@ -80,6 +82,8 @@ export default {
       description: t('Vuoto = superficie attenuata del tema.') },
     withHover({ key: 'card_border_color', label: t('Bordo card'), type: 'border', legacyWidth: 1,
       description: t('Vuoto = bordo del tema.') }, { hoverKey: 'card_border_hover_color', defaultDuration: 180 }),
+    { key: 'footer_text_color', label: t('Testo piede'), type: 'color',
+      description: t('Nome e categoria sotto l\'anteprima. Vuoto = il testo del tema, o chiaro/scuro se sullo sfondo card non si legge.') },
 
     { type: 'separator', label: t('Sfondo') },
     { key: 'bg', label: t('Sfondo completo'), type: 'background', showParallax: false },
