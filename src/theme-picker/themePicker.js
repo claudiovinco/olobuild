@@ -69,7 +69,10 @@ function injectStyle() {
 export function createThemePicker(opts = {}) {
   const mode = opts.mode === 'embed' ? 'embed' : 'modal';
   const i18n = Object.assign({}, DEFAULT_I18N, opts.i18n || {});
-  const action = (opts.card && opts.card.action) === 'select' ? 'select' : 'import';
+  // 'browse' = solo da sfogliare (importazione disattivata sul sito, come nella demo):
+  // card senza «Importa tema», non selezionabili.
+  const cardAction = opts.card && opts.card.action;
+  const action = cardAction === 'select' || cardAction === 'browse' ? cardAction : 'import';
   const blank = opts.blank || null;
 
   let themes = Array.isArray(opts.themes) ? opts.themes.slice() : [];
@@ -181,7 +184,7 @@ export function createThemePicker(opts = {}) {
     const link = t.url
       ? `<a class="otmp-cb-link" href="${esc(t.url)}" target="_blank" rel="noopener" data-stop>${esc(i18n.detailsLabel)}${ICON.ext}</a>`
       : '';
-    const foot = selectMode
+    const foot = selectMode || action === 'browse'
       ? `<div class="otmp-cb-foot"><span class="otmp-cb-ver">v${esc(t.version || '1.0')}</span>${link ? `<span class="otmp-cb-spacer"></span>${link}` : ''}</div>`
       : `<div class="otmp-cb-foot">
            <span class="otmp-cb-ver">v${esc(t.version || '1.0')}</span>${link}

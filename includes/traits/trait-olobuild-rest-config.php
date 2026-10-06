@@ -521,7 +521,8 @@ trait Olobuild_Rest_Config_Trait {
 
     public function get_themes() {
         require_once OLOBUILD_PATH . 'includes/class-theme-importer.php';
-        return rest_ensure_response( Olobuild_Theme_Importer::get_themes() );
+        // Senza `dir`, il percorso della cartella sul server: serve solo all'import (come nel wizard).
+        return rest_ensure_response( array_map( function ( $t ) { unset( $t['dir'] ); return $t; }, Olobuild_Theme_Importer::get_themes() ) );
     }
 
     public function import_theme( $request ) {

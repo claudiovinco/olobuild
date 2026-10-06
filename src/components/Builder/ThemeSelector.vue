@@ -66,9 +66,16 @@ async function importTheme(theme) {
 
 function open() {
   if (picker) { picker.close(); picker = null; return; }
+  // Importazione disattivata (OLOBUILD_DISABLE_IMPORTS, come nella demo): i temi si sfogliano
+  // soltanto. Il sottotitolo lo dice; un plugin esterno può darne uno suo
+  // (oloExternalData.themesNotice, filtro olobuild_builder_localize_data).
+  const soloSfoglia = !!oloData.value.importsDisabled;
+  const avviso = (window.oloExternalData && typeof window.oloExternalData.themesNotice === 'string' && window.oloExternalData.themesNotice)
+    || t('Su questo sito l\'importazione dei temi è disattivata: puoi sfogliarli e confrontarli.');
   picker = createThemePicker({
     mode: 'modal',
-    card: { action: 'import' },
+    card: { action: soloSfoglia ? 'browse' : 'import' },
+    i18n: soloSfoglia ? { subtitle: avviso } : {},
     loadThemes: async () => {
       const res = await fetch(`${oloData.value.restUrl}themes`, {
         headers: { 'X-WP-Nonce': oloData.value.nonce },
