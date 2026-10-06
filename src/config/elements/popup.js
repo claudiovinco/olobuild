@@ -1,5 +1,5 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared';
-import { demo } from '../demoMedia.js';
+import { demo, demoAlt } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
@@ -32,6 +32,7 @@ export default {
     // Testo neutro, senza promettere moduli che il popup non ha (stesso default del PHP).
     content: '<p>Per i nuovi clienti, il primo ordine ha uno sconto del 10%. Contattaci per sapere come richiederlo.</p>',
     image: '',
+    image_alt: '',
     image_position: 'top',
     preset: 'modal-classic',
     modal_bg: 'var(--olo-color-surface, #ffffff)',
@@ -108,6 +109,7 @@ export default {
     button_icon: 'gift',
     modal_title: t('Offerta di benvenuto'),
     image: demo('vaso'),
+    image_alt: demoAlt('vaso'),
     image_position: 'left',
     modal_bg: 'var(--olo-color-background, #ffffff)',
     popup_overlay_blur: 4,
@@ -129,6 +131,9 @@ export default {
     { key: 'modal_title', label: t('Titolo modale'), type: 'text' },
     { key: 'content', label: t('Contenuto'), type: 'textarea', supportsDynamic: true },
     { key: 'image', label: t('Immagine'), type: 'image', supportsDynamic: true },
+    { key: 'image_alt', label: t('Testo alternativo'), type: 'text',
+      description: t('Descrive l’immagine a chi non la vede. Vuoto = il testo alternativo dell’immagine nella libreria media.'),
+      condition: { field: 'image', op: 'notEmpty' } },
     { key: 'template_id', label: t('Template'), type: 'select', optionsSource: 'templates' },
 
     { type: 'separator', label: t('Modale — Comportamento') },

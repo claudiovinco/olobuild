@@ -28,6 +28,7 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
         // Stesso testo neutro del default del config (popup.js).
         'content'               => '<p>Per i nuovi clienti, il primo ordine ha uno sconto del 10%. Contattaci per sapere come richiederlo.</p>',
         'image'                 => '',
+        'image_alt'             => '',
         'image_position'        => 'top',
 
         // Preset & granular controls (V3.26.1)
@@ -894,7 +895,17 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
         // Image HTML
         $img_html = '';
         if ( $has_image ) {
-            $img_html = '<div class="olo-popup-image"><img src="' . esc_url( $image ) . '" alt="' . esc_attr( wp_strip_all_tags( $s['title'] ?? '' ) ) . '" loading="lazy" style="width:100%;height:auto;" /></div>';
+            // Testo alternativo: quello scritto nella tile, altrimenti quello della libreria
+            // media, altrimenti vuoto (immagine decorativa). Prima leggeva `title`, una chiave
+            // che il popup non ha: l'alt usciva sempre vuoto.
+            $alt = trim( wp_strip_all_tags( (string) ( $s['image_alt'] ?? '' ) ) );
+            if ( $alt === '' ) {
+                $att_id = absint( attachment_url_to_postid( $image ) );
+                if ( $att_id ) {
+                    $alt = trim( (string) get_post_meta( $att_id, '_wp_attachment_image_alt', true ) );
+                }
+            }
+            $img_html = '<div class="olo-popup-image"><img src="' . esc_url( $image ) . '" alt="' . esc_attr( $alt ) . '" loading="lazy" style="width:100%;height:auto;" /></div>';
         }
 
         // Content HTML — il campo e' un editor rich text: si preserva l'HTML
