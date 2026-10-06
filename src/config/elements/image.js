@@ -24,6 +24,8 @@ export default {
     hover_video: '',
     alt_text: '',
     caption: '',
+    caption_size: '',
+    caption_color: '',
     link_url: '',
     link_target: '_self',
     image_width: '100%',
@@ -130,7 +132,6 @@ export default {
       { value: 'tilt-3d',         label: t('3D Tilt') },
       { value: 'custom',          label: t('Personalizzato') },
     ]},
-    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     { type: 'separator', label: t('Dimensioni') },
     { key: 'image_width', label: t('Larghezza'), type: 'text', responsive: true,
@@ -183,6 +184,12 @@ export default {
       { key: 'border_radius', label: t('Raggio'), type: 'border-radius' },
       { hoverKey: 'hover_border_radius', hoverDurationKey: 'hover_radius_duration' }
     ),
+
+    // Misura e colore della didascalia (vuoti: 0,875 em e testo attenuato del tema). Prima fissi.
+    { type: 'separator', label: t('Didascalia'), condition: { field: 'caption', op: 'notEmpty' } },
+    // Lo «Stile tipografico» tocca solo la didascalia (l'unico testo dell'immagine): sta con lei.
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { type: 'typography', label: t('Testo'), responsiveKeys: [], keys: { size: 'caption_size', color: 'caption_color' }, sizeMin: 10, sizeMax: 32 },
 
     ...textEffectsFields([ { value: 'caption', label: t('Solo Didascalia') } ]),
 
