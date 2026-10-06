@@ -90,11 +90,25 @@ class Olobuild_DescList_Tile extends Olobuild_Tile_Base {
         $term_fw     = absint( $s['term_font_weight'] );
         $def_fs      = absint( $s['definition_font_size'] );
         $striped     = ! empty( $s['striped'] );
-        $striped_clr = $s['striped_color'] ?? 'rgba(255,255,255,0.03)';
+        // Senza un colore scelto (il config parte da '') la riga alternata usa una velatura del
+        // colore del testo: chiara su fondo scuro, scura su fondo chiaro. Prima usciva
+        // `background: ;`, dichiarazione scartata, e il toggle non disegnava niente.
+        $striped_clr = $this->safe_color_css( $s['striped_color'] ?? '' ) ?: 'color-mix(in srgb, var(--olo-color-text, #1f2937) 6%, transparent)';
+        // Una colonna per l'icona solo se almeno una voce ne ha una (l'allineamento in colonna
+        // di «In linea» e «Griglia» la riserva a tutte le righe).
+        $any_icon = false;
+        if ( $show_icon ) {
+            foreach ( $items as $it ) {
+                if ( ! empty( $it['icon'] ) ) {
+                    $any_icon = true;
+                    break;
+                }
+            }
+        }
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist (with var() token fallbacks), striped color esc_attr()'d inline, integers via absint(); $uid is internally generated. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist (with var() token fallbacks), striped color via the safe_color_css() whitelist or a fixed color-mix() token fallback, integers via absint(); $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?> {
                 margin: 0;
@@ -102,6 +116,7 @@ class Olobuild_DescList_Tile extends Olobuild_Tile_Base {
                 list-style: none;
             }
             .<?php echo $uid; ?> .mdl-item {
+                display: block;
                 padding: <?php echo (int) $spacing; ?>px 16px;
                 <?php if ( $show_sep ) : ?>
                 border-bottom: 1px solid <?php echo $brd_clr; ?>;
@@ -112,7 +127,7 @@ class Olobuild_DescList_Tile extends Olobuild_Tile_Base {
             }
             <?php if ( $striped ) : ?>
             .<?php echo $uid; ?> .mdl-item:nth-child(even) {
-                background: <?php echo esc_attr( $striped_clr ); ?>;
+                background: <?php echo $striped_clr; ?>;
             }
             <?php endif; ?>
             <?php if ( $layout === 'stacked' ) : ?>
@@ -154,6 +169,30 @@ class Olobuild_DescList_Tile extends Olobuild_Tile_Base {
                 grid-template-columns: auto auto 1fr;
             }
             <?php endif; ?>
+            <?php if ( $layout === 'inline' || $layout === 'grid' ) : ?>
+            /* Termini e definizioni in colonna su TUTTE le righe: ogni riga era una griglia
+               (o un flex) a sé, la colonna del termine larga quanto il SUO termine, e le
+               definizioni partivano ognuna a un'altezza diversa. La lista diventa la griglia
+               e voci e righe ne ereditano le colonne (subgrid); senza subgrid resta la resa di prima. */
+            @supports (grid-template-columns: subgrid) {
+                .<?php echo $uid; ?> {
+                    display: grid;
+                    grid-template-columns: <?php echo $any_icon ? 'auto auto 1fr' : 'auto 1fr'; ?>;
+                    column-gap: <?php echo $layout === 'grid' ? '24px' : '12px'; ?>;
+                }
+                /* .olo-desclist in più: deve vincere su «.uid.mdl-has-icon .mdl-row» qui sopra. */
+                .<?php echo $uid; ?>.olo-desclist > .mdl-item,
+                .<?php echo $uid; ?>.olo-desclist .mdl-row {
+                    display: grid;
+                    grid-column: 1 / -1;
+                    grid-template-columns: subgrid;
+                    align-items: baseline;
+                }
+                .<?php echo $uid; ?>.olo-desclist .mdl-icon-wrap { grid-column: 1; grid-row: 1; }
+                .<?php echo $uid; ?>.olo-desclist .mdl-term { grid-column: -3; }
+                .<?php echo $uid; ?>.olo-desclist .mdl-def { grid-column: -2; }
+            }
+            <?php endif; ?>
             .<?php echo $uid; ?> .mdl-icon-wrap {
                 flex-shrink: 0;
                 display: inline-flex;
@@ -186,7 +225,7 @@ class Olobuild_DescList_Tile extends Olobuild_Tile_Base {
                 $icon = $item['icon'] ?? '';
                 $has_icon = $show_icon && ! empty( $icon );
                 $has_link = ! empty( $item['link'] );
-                $item_tag  = $has_link ? '<a href="' . esc_url( $item['link'] ) . '" class="mdl-item" role="group" style="text-decoration:none;color:inherit;display:block;">' : '<div class="mdl-item" role="group">';
+                $item_tag  = $has_link ? '<a href="' . esc_url( $item['link'] ) . '" class="mdl-item" role="group" style="text-decoration:none;color:inherit;">' : '<div class="mdl-item" role="group">';
                 $item_close = $has_link ? '</a>' : '</div>';
             ?>
             <?php
@@ -234,7 +273,9 @@ class Olobuild_DescList_Tile extends Olobuild_Tile_Base {
         </dl>
         <?php
         // Text effects: CSS scoped + runtime script (una sola volta per request)
-        $tfx_css = $this->tfx_css( $s, '.olo-desclist' );
+        // Legati a QUESTA lista (uid): con '.olo-desclist' colori e ritardo dell'ultima lista
+        // della pagina valevano per tutte le altre con lo stesso effetto.
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
         if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
         $this->tfx_print_script();
                 // Border system
