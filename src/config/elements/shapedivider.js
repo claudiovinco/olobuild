@@ -2,10 +2,17 @@
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 import { t } from '@/i18n';
 
+// Un bordo (normale o in hover) con almeno un lato > 0, oppure un effetto bordo: ciò che il
+// renderer disegna ancora e che dall'inspector si deve poter togliere.
+const latiPieni = (b) => !!b && typeof b === 'object'
+  && ['top', 'right', 'bottom', 'left'].some((k) => (parseInt(b[k], 10) || 0) > 0);
+const bordoSalvato = (s) => [s.border, s.border_hover].some(latiPieni)
+  || (!!s.border_effect && s.border_effect !== 'none');
+
 /**
  * Tile ShapeDivider — split CONTENUTO/STILE (regola universale Olobuild).
  *   fields[]      → forma, posizione (top/bottom), flip orizzontale/verticale
- *   styleFields[] → colore, altezza, larghezza, z-index, altezze responsive, bordo
+ *   styleFields[] → colore, altezza, larghezza, z-index, altezze responsive (bordo solo se già salvato)
  *   AVANZATE      → meta tecnico (id/class/condizioni)
  */
 export default {
@@ -46,7 +53,12 @@ export default {
     { type: 'separator', label: t('Responsive') },
     { key: 'responsive_height_tablet', label: t('Altezza tablet'), type: 'number', min: 10, max: 500 },
     { key: 'responsive_height_mobile', label: t('Altezza mobile'), type: 'number', min: 10, max: 500 },
-    ...borderFields(),
+    // Il «Bordo» disegnerebbe un rettangolo attorno alla fascia della forma (posizionata fuori
+    // dalla sezione): non è un divisore. Non si offre più, ma chi l'ha già impostato lo ritrova
+    // per toglierlo: la sezione compare solo se il PHP disegna qualcosa, cioè con lati > 0 nel
+    // bordo normale O in quello in hover (con la base a 0 l'hover ricade sui suoi lati), oppure
+    // con un effetto salvato. La `show` del separatore vale per tutta la sezione.
+    ...borderFields().map((f, i) => (i === 0 ? { ...f, show: bordoSalvato } : f)),
     { type: 'separator', label: t('Forma') },
     { key: 'shape', label: t('Forma'), type: 'select', options: [
       { value: 'wave', label: t('Onda') },
