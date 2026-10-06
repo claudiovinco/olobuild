@@ -43,8 +43,23 @@ class Olobuild_Woo_Notices_Tile extends Olobuild_Tile_Base {
 
         // Styles
         $radius    = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
-        $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $font_size = max( 10, min( 24, absint( $s['font_size'] ) ) );
+        // Raggio in hover su TUTTE le notifiche (prima solo sulle «info»), con la sua Durata.
+        $avvisi_sel  = ".{$uid} .woocommerce-message,.{$uid} .woocommerce-error,.{$uid} .woocommerce-info";
+        $avvisi_hov  = ".{$uid} .woocommerce-message:hover,.{$uid} .woocommerce-error:hover,.{$uid} .woocommerce-info:hover";
+        $radius_hover_rules = Olobuild_Tile_Utils::radius_hover_rules( $avvisi_sel, $s, 'border_radius_hover', '', $avvisi_hov );
+
+        // Le notifiche in attesa vanno contate PRIMA di stamparle: wc_print_notices() le svuota, e
+        // il controllo fatto dopo trovava sempre «nessuna» (il riquadro vuoto compariva accanto alle
+        // notifiche vere).
+        $all_notices = WC()->session ? WC()->session->get( 'wc_notices', [] ) : [];
+        $has_notices = false;
+        foreach ( (array) $all_notices as $notices ) {
+            if ( ! empty( $notices ) ) {
+                $has_notices = true;
+                break;
+            }
+        }
 
         ob_start();
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: the internally generated $uid, Olobuild_Tile_Utils radius helpers (absint-based) and the absint()/min()/max() clamped $font_size.
@@ -59,7 +74,7 @@ class Olobuild_Woo_Notices_Tile extends Olobuild_Tile_Base {
                 margin: 0 0 12px 0;
                 list-style: none;
             }
-            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .woocommerce-info{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .woocommerce-info:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
+            <?php echo $radius_hover_rules; ?>
             <?php if ( empty( $s['show_success'] ) ) : ?>
             .<?php echo $uid; ?> .woocommerce-message { display: none; }
             <?php endif; ?>
@@ -78,18 +93,9 @@ class Olobuild_Woo_Notices_Tile extends Olobuild_Tile_Base {
                 wc_print_notices();
             }
 
-            // If no notices, check for stored notices
-            $all_notices = WC()->session ? WC()->session->get( 'wc_notices', [] ) : [];
-            $has_notices = false;
-            foreach ( $all_notices as $type => $notices ) {
-                if ( ! empty( $notices ) ) {
-                    $has_notices = true;
-                    break;
-                }
-            }
-
-            // If truly no notices, output hidden placeholder so tile is visible in editor
-            if ( ! $has_notices ) :
+            // Senza notifiche, il riquadro tratteggiato che spiega la tile serve solo nel builder
+            // (così la tile si vede e si seleziona): prima lo vedevano anche i visitatori del sito.
+            if ( ! $has_notices && ! empty( $s['_builder_mode'] ) ) :
             ?>
             <div class="olo-woo-notices-empty" style="padding:20px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:<?php echo (int) $font_size; ?>px;border:1px dashed var(--olo-color-border, #E5E7EB);border-radius:<?php echo esc_attr( $radius ); ?>;">
                 <?php echo esc_html( olobuild_t( 'Le notifiche WooCommerce appariranno qui quando presenti' ) ); ?>
