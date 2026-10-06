@@ -21,6 +21,8 @@ class Olobuild_Alert_Tile extends Olobuild_Tile_Base {
         'custom_bg_color'     => '',
         'custom_border_color' => '',
         'custom_text_color'   => '',
+        // Raggio dell'avviso: '' = angoli vivi, come prima che il controllo esistesse.
+        'border_radius'       => '',
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -68,9 +70,20 @@ class Olobuild_Alert_Tile extends Olobuild_Tile_Base {
         $icon = $icons[ $s['alert_type'] ] ?? $icons['info'];
 
         // Build inline styles for custom colors
-        $inline_styles = [];
+        // margin:0 — UIkit mette 20 px sotto ogni .uk-alert (e sopra, se ha un fratello
+        // prima): uno spazio FUORI dal contenitore della tile che nessun controllo toglieva.
+        // Le distanze le danno Margine e Padding del contenitore.
+        $inline_styles = [ 'margin:0' ];
         if ( ! empty( $s['custom_bg_color'] ) ) {
-            $inline_styles[] = 'background-color:' . esc_attr( $s['custom_bg_color'] );
+            // Un gradiente (il preset «Gradient Soft») scritto in background-color è CSS non
+            // valido e veniva scartato: restava il colore del tipo. Va nella proprietà breve.
+            $bg_prop = ( false !== stripos( (string) $s['custom_bg_color'], 'gradient(' ) ) ? 'background:' : 'background-color:';
+            $inline_styles[] = $bg_prop . esc_attr( $s['custom_bg_color'] );
+            if ( 'background:' === $bg_prop ) {
+                // Il gradiente parte dal bordo: col bordo sinistro trasparente del preset, da
+                // padding-box si ripeteva sotto i 4 px e a sinistra spuntava la fine (il blu).
+                $inline_styles[] = 'background-origin:border-box';
+            }
         }
         if ( ! empty( $s['custom_border_color'] ) ) {
             $inline_styles[] = 'border-left:4px solid ' . esc_attr( $s['custom_border_color'] );
@@ -82,7 +95,27 @@ class Olobuild_Alert_Tile extends Olobuild_Tile_Base {
         if ( in_array( $alert_ta, [ 'left', 'center', 'right', 'justify' ], true ) ) {
             $inline_styles[] = 'text-align:' . $alert_ta;
         }
-        $style_attr = ! empty( $inline_styles ) ? ' style="' . implode( ';', $inline_styles ) . '"' : '';
+        // Raggio (Stile › Forma): prima l'avviso restava ad angoli vivi anche dentro un
+        // contenitore arrotondato. border_radius() dà già l'unità (interi da absint).
+        $alert_radius = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? '' );
+        if ( '' !== $alert_radius ) {
+            $inline_styles[] = 'border-radius:' . $alert_radius;
+        }
+        $style_attr = ' style="' . implode( ';', $inline_styles ) . '"';
+
+        // L'icona segue l'allineamento del testo: centrato → sopra il testo, al centro;
+        // a destra → a destra del testo. Prima restava sempre a sinistra e, col testo
+        // centrato, la composizione pendeva da un lato.
+        $riga_dir  = '';
+        $testo_css = 'flex:1;min-width:0';
+        if ( 'center' === $alert_ta ) {
+            $riga_dir  = 'flex-direction:column;align-items:center;';
+            $testo_css = 'width:100%';
+        } elseif ( 'right' === $alert_ta ) {
+            // La X di chiusura di UIkit sta nel padding destro (29 px): l'icona, ora in fondo
+            // a destra, le finiva attaccata. Con la X si lascia lo spazio.
+            $riga_dir = 'flex-direction:row-reverse;' . ( ! empty( $s['dismissible'] ) ? 'padding-right:20px;' : '' );
+        }
 
         $alert_uid = 'olo-alert-' . wp_unique_id();
         $title_plain = wp_strip_all_tags( $s['title'] ?? '' );
@@ -92,17 +125,17 @@ class Olobuild_Alert_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-alert uk-alert uk-alert-<?php echo esc_attr( $uk_type ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $alert_uid is the internally generated 'olo-alert-' . wp_unique_id(); $style_attr is assembled above from fixed literals, esc_attr()'d colours and an in_array() whitelisted alignment ?> <?php echo $alert_uid; ?> olo-alert-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>"<?php echo $style_attr; ?> uk-alert>
+        <div class="olo-alert uk-alert uk-alert-<?php echo esc_attr( $uk_type ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $alert_uid is the internally generated 'olo-alert-' . wp_unique_id(); $style_attr is assembled above from fixed literals, esc_attr()'d colours, an in_array() whitelisted alignment and the absint()-built radius ?> <?php echo $alert_uid; ?> olo-alert-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>"<?php echo $style_attr; ?> uk-alert>
             <?php if ( ! empty( $s['dismissible'] ) ) : ?>
                 <a class="uk-alert-close" uk-close></a>
             <?php endif; ?>
-            <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="display: flex; align-items: flex-start; gap: 12px; <?php echo $riga_dir; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed CSS literal chosen above from the whitelisted alignment ?>">
                 <?php if ( ! empty( $s['custom_icon'] ) ) : ?>
                     <?php echo $this->render_icon_html( $s['custom_icon'], 1.2, 'style="flex-shrink: 0;"' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html(): nome e attributi passati da esc_attr, SVG dalla libreria delle icone ?>
                 <?php elseif ( $s['show_icon'] ) : ?>
                     <?php echo $this->render_icon_html( $icon, 1.2, 'style="flex-shrink: 0;"' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html(): nome e attributi passati da esc_attr, SVG dalla libreria delle icone ?>
                 <?php endif; ?>
-                <div style="flex: 1;">
+                <div style="<?php echo $testo_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed CSS literal chosen above from the whitelisted alignment ?>">
                     <?php if ( ! empty( $s['title'] ) ) : ?>
                         <div class="olo-alert-title<?php echo $t_tfx_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); title is esc_html()'d ?>" style="font-weight: 600; margin-bottom: 4px;"<?php echo $t_tfx_data; ?>><?php echo esc_html( $title_plain ); ?></div>
                     <?php endif; ?>

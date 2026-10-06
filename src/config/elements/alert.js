@@ -5,7 +5,7 @@ import { t } from '@/i18n';
 /**
  * Tile Alert — split CONTENUTO/STILE.
  *   fields[]      → tipo, title, message, show_icon, custom_icon, dismissible
- *   styleFields[] → preset, bg, typo, text-effects, allineamento, colori custom, shadow, border
+ *   styleFields[] → preset, bg, typo, text-effects, allineamento, colori custom, shadow, raggio, border
  */
 export default {
   type: 'alert',
@@ -24,6 +24,7 @@ export default {
     dismissible: false,
     custom_bg_color: '',
     custom_text_color: '',
+    border_radius: '',
     text_align: 'left',
     shadow: 'none',
     ...textEffectsDefaults,
@@ -35,12 +36,13 @@ export default {
   },
 
   // Appena nato: un avviso vero di un'attività — orari estivi, con l'icona del calendario, un
-  // titolo, il messaggio e la crocetta per chiuderlo.
+  // titolo, il messaggio e la crocetta per chiuderlo; angoli col raggio medio della scala (10).
   partenza: {
     title: t('Orari estivi'),
     message: t('Dal 5 al 25 agosto siamo aperti dal lunedì al venerdì, dalle 9:00 alle 13:00. Le richieste arrivate in quei giorni ricevono risposta entro il 27 agosto.'),
     custom_icon: 'calendar',
     dismissible: true,
+    border_radius: { tl: 10, tr: 10, br: 10, bl: 10 },
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────
@@ -110,6 +112,10 @@ export default {
     { key: 'custom_bg_color', label: t('Colore sfondo (sovrascrive tipo)'), type: 'color' },
 
     ...shadowField,
+
+    { type: 'separator', label: t('Forma') },
+    { key: 'border_radius', label: t('Raggio'), type: 'border-radius' },
+
     ...borderFields(),
   ],
 };
