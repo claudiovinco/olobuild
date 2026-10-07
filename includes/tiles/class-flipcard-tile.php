@@ -145,10 +145,13 @@ class Olobuild_FlipCard_Tile extends Olobuild_Tile_Base {
         $cta_radius = Olobuild_Tile_Utils::border_radius( $s['back_cta_radius'] ?? 0 );
         $cta_radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['back_cta_radius_hover'] ?? null );
 
-        // Cube: front needs translateZ, back rotated on side
+        // Cube: front needs translateZ, back rotated on side. Il cubo gira attorno all'asse verticale:
+        // la profondità è METÀ LARGHEZZA della card (prima metà altezza: con card più alte che larghe il
+        // retro stava fuori asse e durante il giro scivolava di lato). La larghezza la misura lo script
+        // qui sotto (--olo-fc-mezzo); fino ad allora resta la misura di prima.
         $front_extra = '';
         if ( $dir === 'cube' ) {
-            $front_extra = "transform: translateZ({$halfH}px);";
+            $front_extra = 'transform: translateZ(' . self::mezzo( $halfH ) . ');';
         }
 
         // Slide-flip: use larger perspective for smoother slide
@@ -185,7 +188,7 @@ class Olobuild_FlipCard_Tile extends Olobuild_Tile_Base {
                 transform-style: preserve-3d;
                 transition: transform <?php echo $duration; ?>ms <?php echo $easing; ?>;
                 <?php if ( $dir === 'cube' ) : ?>
-                transform-origin: center center -<?php echo $halfH; ?>px;
+                transform-origin: center center calc(-1 * <?php echo self::mezzo( $halfH ); ?>);
                 <?php endif; ?>
             }
             <?php if ( $trigger === 'hover' ) : ?>
@@ -338,6 +341,12 @@ class Olobuild_FlipCard_Tile extends Olobuild_Tile_Base {
         (function(){
             document.querySelectorAll('.<?php echo esc_js( $uid ); ?>').forEach(function(fc){
                 var t = fc.dataset.trigger;
+                <?php if ( $dir === 'cube' ) : ?>
+                /* Profondità del cubo = metà larghezza, anche quando la card cambia misura. */
+                var mezzo = function(){ var w = fc.offsetWidth; if (w) { fc.style.setProperty('--olo-fc-mezzo', (w / 2) + 'px'); } };
+                mezzo();
+                if (window.ResizeObserver) { new ResizeObserver(mezzo).observe(fc); }
+                <?php endif; ?>
                 if (t === 'click' || ('ontouchstart' in window)) {
                     fc.addEventListener('click', function(e) {
                         if (e.target.closest('a')) return;
@@ -535,11 +544,16 @@ class Olobuild_FlipCard_Tile extends Olobuild_Tile_Base {
             // rotateX(180deg) rotateY(180deg), che equivale a rotateZ(180deg): il retro restava
             // rivolto verso chi guarda, capovolto e sopra il fronte già a riposo.
             case 'diagonal':   return 'rotate3d(1, 1, 0, 180deg)';
-            case 'cube':       return "rotateY(-90deg) translateZ({$halfH}px)";
+            case 'cube':       return 'rotateY(-90deg) translateZ(' . self::mezzo( $halfH ) . ')';
             case 'slide-flip': return 'rotateY(180deg)';
             case 'zoom-flip':  return 'rotateY(180deg)';
             default:           return 'rotateY(180deg)'; // horizontal
         }
+    }
+
+    /** Profondità del cubo: metà larghezza misurata dallo script, metà altezza come riserva. */
+    private static function mezzo( $halfH ) {
+        return 'var(--olo-fc-mezzo, ' . (int) $halfH . 'px)';
     }
 
     /**
