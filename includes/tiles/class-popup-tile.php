@@ -66,6 +66,7 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
 
         'template_id'           => 0,
         'popup_trigger'         => 'click',
+        'popup_anchor'          => '',
         'popup_delay'           => 5,
         'popup_scroll_percent'  => 50,
         'popup_frequency'       => 'always',
@@ -174,6 +175,12 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
 
         // Advanced trigger settings
         $trigger         = $s['popup_trigger'] ?: 'click';
+        // «Solo da un link» (dalla 1.4.574): niente pulsante sul sito, si apre dai link a #ancora.
+        // Senza un'ancora nessun link lo aprirebbe: resta il pulsante, come «Click».
+        $ancora = sanitize_title( ltrim( (string) ( $s['popup_anchor'] ?? '' ), '#' ) );
+        if ( 'link' === $trigger && '' === $ancora ) {
+            $trigger = 'click';
+        }
         $is_auto_trigger = ( $trigger !== 'click' ) && ! $in_builder;
         // Sequenza di tasti (dalla 1.4.508, era di Popup Nascosto): le frecce si scrivono ↑ ↓ ← →.
         $sequenza = [];
@@ -840,6 +847,35 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
                 window.addEventListener('scroll', oloResetInact, {passive: true});
                 window.addEventListener('touchstart', oloResetInact, {passive: true});
                 oloResetInact();
+            }
+            <?php endif; ?>
+
+            <?php if ( 'link' === $trigger ) : ?>
+            /* Solo da un link: ogni link a #<?php echo esc_js( $ancora ); ?> di questa pagina apre il popup, a ogni
+               clic (la Frequenza vale per le aperture automatiche); anche l'indirizzo con l'ancora, al caricamento. */
+            var oloAncora = '#<?php echo esc_js( $ancora ); ?>';
+            function oloApriDaLink() {
+                if (!oloRegoleOk()) { return; }
+                if (typeof UIkit === 'undefined') { return; }
+                UIkit.modal(el).show();
+            }
+            document.addEventListener('click', function (e) {
+                var a = e.target.closest ? e.target.closest('a[href]') : null;
+                if (!a) { return; }
+                if (a.hash !== oloAncora) { return; }
+                if (a.host !== location.host) { return; }
+                if (a.pathname !== location.pathname) { return; }
+                e.preventDefault();
+                oloApriDaLink();
+            });
+            function oloDaIndirizzo() {
+                if (location.hash === oloAncora) { oloApriDaLink(); }
+            }
+            window.addEventListener('hashchange', oloDaIndirizzo);
+            if (document.readyState === 'complete') {
+                setTimeout(oloDaIndirizzo, 300);
+            } else {
+                window.addEventListener('load', function () { setTimeout(oloDaIndirizzo, 300); });
             }
             <?php endif; ?>
             <?php endif; ?>
