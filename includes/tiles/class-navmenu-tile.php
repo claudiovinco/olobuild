@@ -800,12 +800,13 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
             if (!nav || !window.UIkit) return;
             /* Hamburger di Tendina e Pannello laterale: aria-expanded segue il menu (lo Schermo
-               intero lo tiene già il suo script). */
+               intero lo tiene già il suo script). Sugli eventi conclusivi: all'evento hide la
+               tendina di UIkit toglie l'attributo, e il pannello lo riscriveva a false. */
             var hb = nav.querySelector('.olo-nav-toggle:not([aria-haspopup="dialog"])');
             var mob = hb ? document.getElementById(hb.getAttribute('href').slice(1)) : null;
             if (mob) {
-                UIkit.util.on(mob, 'show', function(e){ if (e.target === mob) { hb.setAttribute('aria-expanded', 'true'); } });
-                UIkit.util.on(mob, 'hide', function(e){ if (e.target === mob) { hb.setAttribute('aria-expanded', 'false'); } });
+                UIkit.util.on(mob, 'shown', function(e){ if (e.target === mob) { hb.setAttribute('aria-expanded', 'true'); } });
+                UIkit.util.on(mob, 'hidden', function(e){ if (e.target === mob) { hb.setAttribute('aria-expanded', 'false'); } });
             }
             nav.querySelectorAll('[aria-haspopup="true"][aria-controls]').forEach(function(trigger){
                 var drop = document.getElementById(trigger.getAttribute('aria-controls'));

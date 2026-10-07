@@ -43,13 +43,15 @@ class Olobuild_Accessibility {
     public function output_skip_nav() {
         echo '<a class="olo-skip-nav" href="#olo-main-content">' . esc_html__( 'Vai al contenuto principale', 'olobuild' ) . '</a>' . "\n";
         // Sulle pagine senza contenuto Olobuild #olo-main-content non c'è e il link non portava da
-        // nessuna parte: punta al <main> del tema (o a [role=main]); senza nemmeno quello, si toglie.
+        // nessuna parte: punta al <main> del tema (o a [role=main]). Si toglie se non c'è nemmeno
+        // quello, o se il tema ha già il suo link verso lo stesso posto (due link uguali di fila).
         echo '<script>document.addEventListener("DOMContentLoaded",function(){'
             . 'var a=document.querySelector(".olo-skip-nav");'
             . 'if(!a){return;}'
             . 'if(document.getElementById("olo-main-content")){return;}'
             . 'var m=document.querySelector("main,[role=main]");'
-            . 'if(!m){a.parentNode.removeChild(a);return;}'
+            . 'var doppio=(m?m.id:"")?[].some.call(document.querySelectorAll("a[href]"),function(x){return x!==a?x.getAttribute("href")==="#"+m.id:false;}):false;'
+            . 'if(!m||doppio){a.parentNode.removeChild(a);return;}'
             . 'if(!m.id){m.id="olo-main-content";}'
             . 'a.setAttribute("href","#"+m.id);'
             . '});</script>' . "\n";
