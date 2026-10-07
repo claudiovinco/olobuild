@@ -123,6 +123,8 @@ class Olobuild_FlipCard_Tile extends Olobuild_Tile_Base {
         // Transforms
         $back_initial  = $this->get_back_transform( $dir, $halfH );
         $flip_transform = $this->get_flip_transform( $dir, $halfH );
+        // A riposo: il Cubo arretrato di mezza larghezza (le facce sul piano della card), le altre nessuna.
+        $rest_transform = $dir === 'cube' ? 'translateZ(calc(-1 * ' . self::mezzo( $halfH ) . '))' : 'none';
 
         // Front face — token-first (allineato a flipcard.js + FlipCardTile.vue)
         $front_fg      = $this->safe_color_css( $s['front_text_color'] ) ?: 'var(--olo-color-text, #374151)';
@@ -166,11 +168,10 @@ class Olobuild_FlipCard_Tile extends Olobuild_Tile_Base {
                 width: 100%;
                 box-sizing: border-box;
                 height: <?php echo $height; ?>px;
-                <?php // Il ritaglio sulla radice tagliava l'ombra delle facce (sta FUORI dalla card) e,
-                      // durante il giro, il bordo che si avvicina in prospettiva. Le facce si ritagliano
-                      // già da sé. Resta solo per il Cubo, che porta il fronte in avanti di mezza altezza
-                      // (translateZ) e senza ritaglio lo mostrerebbe ingrandito oltre il riquadro. ?>
-                <?php if ( $dir === 'cube' ) : ?>overflow: hidden;<?php endif; ?>
+                <?php // Niente ritaglio sulla radice: tagliava l'ombra delle facce (sta FUORI dalla card) e,
+                      // durante il giro, il bordo che si avvicina in prospettiva. Le facce si ritagliano già
+                      // da sé. Il Cubo non ne ha più bisogno: è arretrato di mezza larghezza (vedi sotto) e le
+                      // facce a riposo stanno sul piano della card, alla loro misura. ?>
                 <?php if ( $radius && $radius !== '0px' ) : ?>border-radius: <?php echo $radius; ?>;<?php endif; ?>
                 cursor: pointer;
             }
@@ -188,7 +189,11 @@ class Olobuild_FlipCard_Tile extends Olobuild_Tile_Base {
                 transform-style: preserve-3d;
                 transition: transform <?php echo $duration; ?>ms <?php echo $easing; ?>;
                 <?php if ( $dir === 'cube' ) : ?>
-                transform-origin: center center calc(-1 * <?php echo self::mezzo( $halfH ); ?>);
+                <?php // Il cubo gira attorno al SUO centro (l'origine predefinita, al centro della card) ed è
+                      // arretrato di mezza larghezza: fronte e retro a riposo stanno sul piano della card.
+                      // Prima l'origine era mezza profondità DIETRO al centro: il cubo orbitava e il retro
+                      // finiva spostato di mezza card. ?>
+                transform: <?php echo $rest_transform; ?>;
                 <?php endif; ?>
             }
             <?php if ( $trigger === 'hover' ) : ?>
@@ -319,7 +324,7 @@ class Olobuild_FlipCard_Tile extends Olobuild_Tile_Base {
                     height: <?php echo max( 180, round( $height * 0.6 ) ); ?>px;
                 }
                 .<?php echo $uid; ?>:hover .olo-fc-inner {
-                    transform: none !important;
+                    transform: <?php echo $rest_transform; ?> !important;
                 }
                 .<?php echo $uid; ?>.olo-fc-flipped .olo-fc-inner {
                     transform: <?php echo $flip_transform; ?> !important;
@@ -564,7 +569,7 @@ class Olobuild_FlipCard_Tile extends Olobuild_Tile_Base {
             case 'vertical':   return 'rotateX(180deg)';
             // Stesso asse del retro: i due mezzi giri fanno un giro intero e il retro torna dritto.
             case 'diagonal':   return 'rotate3d(1, 1, 0, 180deg)';
-            case 'cube':       return 'rotateY(90deg)';
+            case 'cube':       return 'translateZ(calc(-1 * ' . self::mezzo( $halfH ) . ')) rotateY(90deg)';
             case 'slide-flip': return 'translateX(-10%) rotateY(-180deg)';
             case 'zoom-flip':  return 'scale(1.05) rotateY(180deg)';
             default:           return 'rotateY(180deg)'; // horizontal
