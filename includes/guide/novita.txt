@@ -3,8 +3,11 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.576 - 2026-10-07 (fix)
+- Flip Card: il «Cubo» gira attorno al suo centro e fronte e retro restano della misura della card. Prima girava attorno a un punto dietro di sé: il retro arrivava spostato di mezza card e restava tagliato.
+
 ## v1.4.575 - 2026-10-07 (fix)
-- Flip Card: col movimento «Cubo» la card gira su sé stessa. Prima, con card più alte che larghe, durante il giro il retro scivolava di lato e restava tagliato.
+- Flip Card: col movimento «Cubo» la profondità del cubo segue la larghezza della card, anche quando cambia. Prima seguiva l'altezza, e con card più alte che larghe il retro scivolava di lato.
 
 ## v1.4.574 - 2026-10-07
 - Popup: nuova attivazione «Solo da un link (#ancora)». Scrivi un'ancora, per esempio offerta, e ogni link a #offerta nella pagina apre il popup: un pulsante, una voce di menu, il pulsante di una card dei prezzi. Anche un indirizzo che finisce con #offerta lo apre appena la pagina si carica, così puoi mandarlo per email o metterlo in un post. Il popup non mostra il suo pulsante.
