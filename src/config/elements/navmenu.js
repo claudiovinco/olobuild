@@ -157,7 +157,7 @@ export default {
     { key: 'menu_badge_support', label: t('Supporto badge voci'), type: 'toggle' },
 
     // Solo col menu mobile «Schermo intero» (Stile → Mobile — Aspetto)
-    { type: 'separator', label: t('Menu a schermo intero'), condition: { field: 'mobile_type', value: 'fullscreen' } },
+    { type: 'separator', label: t('Menu a schermo intero'), show: s => s.mobile_type === 'fullscreen' || s.mobile_style === 'fullscreen' },
     { key: 'fs_logo', label: t('Logo'), type: 'image' },
     { key: 'fs_numbers', label: t('Mostra i numeri'), type: 'toggle' },
     { key: 'fs_descriptions', label: t('Mostra le descrizioni'), type: 'toggle',
@@ -320,17 +320,19 @@ export default {
       ]},
 
     { type: 'separator', label: t('Mobile — Aspetto') },
-    { key: 'mobile_style', label: t('Stile mobile'), type: 'select', options: [
-      { value: 'offcanvas', label: t('Pannello offcanvas') },
-      { value: 'dropdown', label: t('Dropdown') },
-    ]},
-    { key: 'mobile_type', label: t('Menu mobile tipo'), type: 'select', options: [
-      { value: 'dropdown', label: t('Dropdown') },
-      { value: 'offcanvas', label: t('Offcanvas') },
-      { value: 'fullscreen', label: t('Fullscreen') },
-    ]},
+    // Un solo select per il menu mobile. Erano due che si sovrapponevano: «Stile mobile» sceglieva
+    // pannello o tendina, «Menu mobile tipo» contava solo per «Fullscreen». Chiavi invariate: la
+    // scelta si salva in mobile_style e si ricopia in mobile_type (lo legge chi aspetta ancora
+    // «fullscreen» lì: il PHP e le sezioni «Schermo intero»).
+    { key: 'mobile_style', label: t('Menu mobile'), type: 'select', options: [
+      { value: 'offcanvas', label: t('Pannello laterale') },
+      { value: 'dropdown', label: t('Tendina') },
+      { value: 'fullscreen', label: t('Schermo intero') },
+    ],
+      valoreDa: (v, s) => (s.mobile_type === 'fullscreen' ? 'fullscreen' : v),
+      scriviAnche: v => ({ mobile_type: v }) },
 
-    { type: 'separator', label: t('Schermo intero — Aspetto'), condition: { field: 'mobile_type', value: 'fullscreen' } },
+    { type: 'separator', label: t('Schermo intero — Aspetto'), show: s => s.mobile_type === 'fullscreen' || s.mobile_style === 'fullscreen' },
     { key: 'fs_bg', label: t('Sfondo'), type: 'color' },
     { key: 'fs_align', label: t('Allineamento'), type: 'select', options: [
       { value: 'center', label: t('Centro') },

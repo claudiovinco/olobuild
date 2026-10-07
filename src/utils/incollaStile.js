@@ -43,6 +43,8 @@ function chiaviDi(fields, perStile, acc = { chiavi: new Set(), voci: new Map() }
       continue;
     }
     const base = [f.key, f.linkedPresetKey, ...Object.values(f.keys || {}), ...Object.values(f.legacyKeys || {})];
+    // Le chiavi sorelle che il campo tiene allineate (`scriviAnche`) passano con lui.
+    if (typeof f.scriviAnche === 'function') base.push(...Object.keys(f.scriviAnche('') || {}));
     for (const k of base) {
       if (typeof k !== 'string' || !k) continue;
       acc.chiavi.add(k);

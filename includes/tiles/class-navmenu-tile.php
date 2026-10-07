@@ -164,8 +164,9 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
             ]],
             [ 'key' => 'mobile_toggle', 'type' => 'toggle', 'label' => 'Mobile Hamburger' ],
             [ 'key' => 'mobile_style', 'type' => 'select', 'label' => 'Mobile Style', 'options' => [
-                'offcanvas' => 'Offcanvas Panel',
-                'dropdown'  => 'Dropdown',
+                'offcanvas'  => 'Offcanvas Panel',
+                'dropdown'   => 'Dropdown',
+                'fullscreen' => 'Fullscreen',
             ]],
         ];
     }
@@ -419,8 +420,7 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
         }
 
         // Fullscreen mobile overlay
-        $mobile_type = $s['mobile_type'] ?? 'dropdown';
-        if ( $mobile_type === 'fullscreen' ) {
+        if ( self::mobile_fullscreen( $s ) ) {
             $fs     = '.olo-nav-fullscreen';
             $fs_bg  = $this->safe_color_css( $s['fs_bg'] ?? '' ) ?: 'rgba(0,0,0,0.95)';
             $fs_col = $this->safe_color_css( $s['fs_color'] ?? '' ) ?: 'var(--olo-color-primary-contrast, #FFFFFF)';
@@ -609,7 +609,7 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
                     $h_sz = max( 16, intval( $s['hamburger_size'] ) );
                     // «Schermo intero» lo apre il suo script: con uk-toggle lo stesso clic metteva anche
                     // `hidden` sul pannello (uk-open + hidden = invisibile) e il menu non si apriva mai.
-                    $fullscreen = ( $s['mobile_type'] ?? 'dropdown' ) === 'fullscreen';
+                    $fullscreen = self::mobile_fullscreen( $s );
                 ?>
                     <a id="<?php echo esc_attr( $nav_id ); ?>-btn" class="uk-hidden@m olo-nav-toggle" href="#<?php echo esc_attr( $nav_id ); ?>"<?php echo $fullscreen ? ' aria-controls="' . esc_attr( $nav_id ) . '" aria-haspopup="dialog"' : ' uk-toggle'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributi fissi, $nav_id passato da esc_attr() ?> aria-label="<?php echo esc_attr__( 'Open menu', 'olobuild' ); ?>" aria-expanded="false">
                         <svg width="<?php echo (int) $h_sz; ?>" height="<?php echo (int) $h_sz; ?>" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
@@ -674,9 +674,8 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
 
             <?php if ( $mobile ) : ?>
                 <?php
-                $mobile_type = $s['mobile_type'] ?? 'dropdown';
                 // Fullscreen mobile menu
-                if ( $mobile_type === 'fullscreen' ) : ?>
+                if ( self::mobile_fullscreen( $s ) ) : ?>
                     <div id="<?php echo esc_attr( $nav_id ); ?>" class="olo-nav-fullscreen" role="dialog" aria-modal="true" tabindex="-1" aria-label="<?php echo esc_attr__( 'Mobile menu', 'olobuild' ); ?>">
                         <button class="uk-close uk-close-large" type="button" uk-close data-olo-nav-close aria-label="<?php echo esc_attr__( 'Close menu', 'olobuild' ); ?>"></button>
                         <?php if ( ! empty( $s['fs_logo'] ) ) : ?>
@@ -779,7 +778,8 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
                         </div>
                     </div>
                 <?php else : ?>
-                    <div id="<?php echo esc_attr( $nav_id ); ?>" class="uk-hidden" uk-drop="mode: click; toggle: #<?php echo esc_attr( $nav_id ); ?>-btn; pos: bottom-left; offset: 0">
+                    <?php // Niente `uk-hidden` qui: è display:none !important, e con uk-open il menu restava 0×0. Il drop chiuso lo nasconde già UIkit (.uk-drop). ?>
+                    <div id="<?php echo esc_attr( $nav_id ); ?>" uk-drop="mode: click; toggle: #<?php echo esc_attr( $nav_id ); ?>-btn; pos: bottom-left; offset: 0">
                         <div class="uk-card uk-card-body uk-card-default uk-card-small">
                             <ul class="uk-nav uk-nav-default uk-nav-parent-icon" uk-nav>
                                 <?php $this->render_mobile_items( $tree, $children, $grandchildren ); ?>
@@ -799,6 +799,14 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
             (<?php echo self::js_sgancia_template(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- costante JS interna ?>)(nav);
             <?php endif; ?>
             if (!nav || !window.UIkit) return;
+            /* Hamburger di Tendina e Pannello laterale: aria-expanded segue il menu (lo Schermo
+               intero lo tiene già il suo script). */
+            var hb = nav.querySelector('.olo-nav-toggle:not([aria-haspopup="dialog"])');
+            var mob = hb ? document.getElementById(hb.getAttribute('href').slice(1)) : null;
+            if (mob) {
+                UIkit.util.on(mob, 'show', function(e){ if (e.target === mob) { hb.setAttribute('aria-expanded', 'true'); } });
+                UIkit.util.on(mob, 'hide', function(e){ if (e.target === mob) { hb.setAttribute('aria-expanded', 'false'); } });
+            }
             nav.querySelectorAll('[aria-haspopup="true"][aria-controls]').forEach(function(trigger){
                 var drop = document.getElementById(trigger.getAttribute('aria-controls'));
                 if (!drop) return;
@@ -808,6 +816,16 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
         })();
         </script>
         <?php
+    }
+
+    /**
+     * Menu mobile «Schermo intero». Prima stava in `mobile_type` (un secondo select che contava
+     * solo per questo valore); dal 1.4.570 l'inspector ha un solo select, `mobile_style`, che
+     * ricopia la scelta anche su `mobile_type`. Vale l'uno o l'altro: i template salvati prima
+     * restano a schermo intero.
+     */
+    private static function mobile_fullscreen( $s ) {
+        return ( $s['mobile_type'] ?? '' ) === 'fullscreen' || ( $s['mobile_style'] ?? '' ) === 'fullscreen';
     }
 
     /**

@@ -767,6 +767,13 @@ function onFieldUpdate(value) {
   for (const m of legacyMirror(props.field, value)) {
     emit('update:settingKey', m);
   }
+  // Chiavi sorelle tenute allineate (`scriviAnche: v => ({ chiave: valore })`), per i renderer
+  // e le condizioni che leggono ancora la chiave storica.
+  if (typeof props.field.scriviAnche === 'function') {
+    for (const [key, val] of Object.entries(props.field.scriviAnche(value) || {})) {
+      emit('update:settingKey', { key, value: val });
+    }
+  }
 }
 
 // ── Hover state (inline per-field) ──
@@ -1037,6 +1044,11 @@ function normalValue() {
   const storici = props.field.valoriStorici;
   if (storici && v != null && typeof v !== 'object' && Object.prototype.hasOwnProperty.call(storici, String(v))) {
     return storici[String(v)];
+  }
+  // Una scelta che storicamente stava in un'ALTRA chiave (`valoreDa: (v, settings) => mostrato`):
+  // due select fusi in uno mostrano quella che il renderer usa davvero. Va con `scriviAnche`.
+  if (typeof props.field.valoreDa === 'function') {
+    return props.field.valoreDa(v, props.tileSettings || {});
   }
   return v;
 }
