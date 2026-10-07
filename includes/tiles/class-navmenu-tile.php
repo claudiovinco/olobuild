@@ -803,9 +803,9 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
                `if (!window.UIkit) return;` saltava tutto quello che segue. Si aspetta il DOM. */
             function lega() {
                 if (!window.UIkit) { return; }
-                /* Hamburger di Tendina e Pannello laterale: aria-expanded segue il menu (lo Schermo
-                   intero lo tiene già il suo script). Sugli eventi conclusivi: all'evento hide la
-                   tendina di UIkit toglie l'attributo. */
+                /* aria-expanded segue l'hamburger di Tendina e Pannello laterale (lo Schermo intero lo
+                   tiene già il suo script) e le voci con sottomenu. Sugli eventi conclusivi: all'evento
+                   hide la tendina di UIkit toglie l'attributo, dopo i gestori di qui. */
                 var hb = nav.querySelector('.olo-nav-toggle:not([aria-haspopup="dialog"])');
                 var mob = hb ? document.getElementById(hb.getAttribute('href').slice(1)) : null;
                 if (mob) {
@@ -815,8 +815,8 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
                 nav.querySelectorAll('[aria-haspopup="true"][aria-controls]').forEach(function(trigger){
                     var drop = document.getElementById(trigger.getAttribute('aria-controls'));
                     if (!drop) return;
-                    UIkit.util.on(drop, 'show', function(){ trigger.setAttribute('aria-expanded', 'true'); });
-                    UIkit.util.on(drop, 'hide', function(){ trigger.setAttribute('aria-expanded', 'false'); });
+                    UIkit.util.on(drop, 'shown', function(e){ if (e.target === drop) { trigger.setAttribute('aria-expanded', 'true'); } });
+                    UIkit.util.on(drop, 'hidden', function(e){ if (e.target === drop) { trigger.setAttribute('aria-expanded', 'false'); } });
                 });
             }
             if (window.UIkit) { lega(); } else { document.addEventListener('DOMContentLoaded', lega); }
