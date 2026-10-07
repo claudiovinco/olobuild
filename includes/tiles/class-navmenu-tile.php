@@ -798,22 +798,28 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
                offcanvas (alti quanto la pagina, dal suo inizio). Sul sito il template si sgancia. */
             (<?php echo self::js_sgancia_template(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- costante JS interna ?>)(nav);
             <?php endif; ?>
-            if (!nav || !window.UIkit) return;
-            /* Hamburger di Tendina e Pannello laterale: aria-expanded segue il menu (lo Schermo
-               intero lo tiene già il suo script). Sugli eventi conclusivi: all'evento hide la
-               tendina di UIkit toglie l'attributo, e il pannello lo riscriveva a false. */
-            var hb = nav.querySelector('.olo-nav-toggle:not([aria-haspopup="dialog"])');
-            var mob = hb ? document.getElementById(hb.getAttribute('href').slice(1)) : null;
-            if (mob) {
-                UIkit.util.on(mob, 'shown', function(e){ if (e.target === mob) { hb.setAttribute('aria-expanded', 'true'); } });
-                UIkit.util.on(mob, 'hidden', function(e){ if (e.target === mob) { hb.setAttribute('aria-expanded', 'false'); } });
+            if (!nav) return;
+            /* UIkit arriva in fondo alla pagina (defer): qui non c'è ancora, e il vecchio
+               `if (!window.UIkit) return;` saltava tutto quello che segue. Si aspetta il DOM. */
+            function lega() {
+                if (!window.UIkit) { return; }
+                /* Hamburger di Tendina e Pannello laterale: aria-expanded segue il menu (lo Schermo
+                   intero lo tiene già il suo script). Sugli eventi conclusivi: all'evento hide la
+                   tendina di UIkit toglie l'attributo. */
+                var hb = nav.querySelector('.olo-nav-toggle:not([aria-haspopup="dialog"])');
+                var mob = hb ? document.getElementById(hb.getAttribute('href').slice(1)) : null;
+                if (mob) {
+                    UIkit.util.on(mob, 'shown', function(e){ if (e.target === mob) { hb.setAttribute('aria-expanded', 'true'); } });
+                    UIkit.util.on(mob, 'hidden', function(e){ if (e.target === mob) { hb.setAttribute('aria-expanded', 'false'); } });
+                }
+                nav.querySelectorAll('[aria-haspopup="true"][aria-controls]').forEach(function(trigger){
+                    var drop = document.getElementById(trigger.getAttribute('aria-controls'));
+                    if (!drop) return;
+                    UIkit.util.on(drop, 'show', function(){ trigger.setAttribute('aria-expanded', 'true'); });
+                    UIkit.util.on(drop, 'hide', function(){ trigger.setAttribute('aria-expanded', 'false'); });
+                });
             }
-            nav.querySelectorAll('[aria-haspopup="true"][aria-controls]').forEach(function(trigger){
-                var drop = document.getElementById(trigger.getAttribute('aria-controls'));
-                if (!drop) return;
-                UIkit.util.on(drop, 'show', function(){ trigger.setAttribute('aria-expanded', 'true'); });
-                UIkit.util.on(drop, 'hide', function(){ trigger.setAttribute('aria-expanded', 'false'); });
-            });
+            if (window.UIkit) { lega(); } else { document.addEventListener('DOMContentLoaded', lega); }
         })();
         </script>
         <?php
