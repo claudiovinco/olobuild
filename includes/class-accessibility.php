@@ -42,6 +42,17 @@ class Olobuild_Accessibility {
 
     public function output_skip_nav() {
         echo '<a class="olo-skip-nav" href="#olo-main-content">' . esc_html__( 'Vai al contenuto principale', 'olobuild' ) . '</a>' . "\n";
+        // Sulle pagine senza contenuto Olobuild #olo-main-content non c'è e il link non portava da
+        // nessuna parte: punta al <main> del tema (o a [role=main]); senza nemmeno quello, si toglie.
+        echo '<script>document.addEventListener("DOMContentLoaded",function(){'
+            . 'var a=document.querySelector(".olo-skip-nav");'
+            . 'if(!a){return;}'
+            . 'if(document.getElementById("olo-main-content")){return;}'
+            . 'var m=document.querySelector("main,[role=main]");'
+            . 'if(!m){a.parentNode.removeChild(a);return;}'
+            . 'if(!m.id){m.id="olo-main-content";}'
+            . 'a.setAttribute("href","#"+m.id);'
+            . '});</script>' . "\n";
     }
 
     /* ─────────────────────────────────────────────
