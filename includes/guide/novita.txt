@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.574 - 2026-10-07
+- Popup: nuova attivazione «Solo da un link (#ancora)». Scrivi un'ancora, per esempio offerta, e ogni link a #offerta nella pagina apre il popup: un pulsante, una voce di menu, il pulsante di una card dei prezzi. Anche un indirizzo che finisce con #offerta lo apre appena la pagina si carica, così puoi mandarlo per email o metterlo in un post. Il popup non mostra il suo pulsante.
+
 ## v1.4.573 - 2026-10-07 (fix)
 - Menu Nav: anche le voci con un sottomenu dicono ai lettori di schermo se la loro tendina è aperta o chiusa. Prima, dopo averla chiusa, non lo dicevano più.
 
