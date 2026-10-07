@@ -3,8 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.572 - 2026-10-07 (fix)
+- Menu Nav: chi usa un lettore di schermo sente se il menu è aperto o chiuso, sia l'hamburger della Tendina e del Pannello laterale sia le voci con un sottomenu. Prima diceva «chiuso» anche a menu aperto.
+
 ## v1.4.571 - 2026-10-07 (fix)
-- Menu Nav: con la Tendina e il Pannello laterale, chi usa un lettore di schermo sente se il menu mobile è aperto o chiuso. Prima l'hamburger diceva «chiuso» anche a menu aperto.
 - Accessibilità: sulle pagine fatte senza Olobuild, se il tema ha già il suo link per saltare al contenuto, «Vai al contenuto principale» non si aggiunge. Prima c'erano due link uguali uno dopo l'altro.
 
 ## v1.4.570 - 2026-10-07 (fix)
