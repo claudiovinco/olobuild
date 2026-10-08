@@ -24028,3 +24028,47 @@ msgstr "Vídeo del servicio"
 #: assets/js/iframe-bridge.js
 msgid "Testo Mask"
 msgstr "Máscara de texto"
+
+#: src/composables/useDynamicContent.js
+msgid "Articolo corrente"
+msgstr "Entrada actual"
+
+#: src/composables/useDynamicContent.js
+msgid "Campo personalizzato"
+msgstr "Campo personalizado"
+
+#: src/composables/useDynamicContent.js
+msgid "Immagine in evidenza"
+msgstr "Imagen destacada"
+
+#: src/composables/useDynamicContent.js
+msgid "Permalink"
+msgstr "Enlace permanente"
+
+#: src/composables/useDynamicContent.js
+msgid "Titolo del sito"
+msgstr "Título del sitio"
+
+#: src/composables/useDynamicContent.js
+msgid "Motto"
+msgstr "Descripción corta"
+
+#: src/composables/useDynamicContent.js
+msgid "Nome visualizzato"
+msgstr "Nombre visible"
+
+#: src/composables/useDynamicContent.js
+msgid "URL avatar"
+msgstr "URL del avatar"
+
+#: src/composables/useDynamicContent.js
+msgid "Archivio autore"
+msgstr "Archivo del autor"
+
+#: src/composables/useDynamicContent.js
+msgid "Primo termine tassonomia"
+msgstr "Primer término de taxonomía"
+
+#: src/composables/useDynamicContent.js
+msgid "Seleziona campo..."
+msgstr "Selecciona campo…"

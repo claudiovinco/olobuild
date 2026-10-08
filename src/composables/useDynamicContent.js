@@ -1,4 +1,5 @@
 import { ref, readonly, watch } from 'vue';
+import { t } from '@/i18n';
 
 const oloData = window.oloData || {};
 
@@ -72,7 +73,8 @@ export function useDynamicContent() {
    */
   function getSourceLabel(sourceKey) {
     if (!sourcesData.value) return sourceKey;
-    return sourcesData.value[sourceKey]?.label || sourceKey;
+    const label = sourcesData.value[sourceKey]?.label;
+    return label ? t(label) : sourceKey;
   }
 
   /**
@@ -86,7 +88,7 @@ export function useDynamicContent() {
     if (Array.isArray(fields)) {
       // Check flat fields
       const f = fields.find(f => f.key === binding.field);
-      if (f) return `${sourceLabel} → ${f.label}`;
+      if (f) return `${sourceLabel} → ${t(f.label)}`;
       // Check ACF grouped fields
       for (const group of fields) {
         if (group.fields) {

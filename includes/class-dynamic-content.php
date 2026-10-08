@@ -574,177 +574,234 @@ class Olobuild_Dynamic_Content {
         if ( ! is_string( $text ) || ! str_contains( $text, '{' ) ) {
             return $text;
         }
+        // Le tile portano quasi sempre graffe (CSS, JS): si lavora solo se c'è un segnaposto vero.
+        if ( ! preg_match( '/\{(?:' . implode( '|', self::TOKENS ) . ')(?::[^}]+)?\}/', $text ) ) {
+            return $text;
+        }
 
-        return preg_replace_callback( '/\{([a-z_]+)(?::([^}]+))?\}/', function( $m ) {
-            $token = $m[1];
-            $arg   = isset( $m[2] ) ? $m[2] : '';
-            $value = null;
-
-            switch ( $token ) {
-                case 'post_title':
-                    $value = get_the_title();
-                    break;
-
-                case 'post_date':
-                    if ( $arg !== '' ) {
-                        $value = get_the_date( $arg );
-                    } else {
-                        $value = get_the_date();
-                    }
-                    break;
-
-                case 'post_excerpt':
-                    $value = get_the_excerpt();
-                    break;
-
-                case 'post_author':
-                    $value = get_the_author();
-                    break;
-
-                case 'post_category':
-                    $cats = get_the_category();
-                    if ( ! empty( $cats ) ) {
-                        $value = $cats[0]->name;
-                    } else {
-                        $value = '';
-                    }
-                    break;
-
-                case 'site_name':
-                    $value = get_bloginfo( 'name' );
-                    break;
-
-                case 'site_url':
-                    $value = home_url();
-                    break;
-
-                case 'current_year':
-                    $value = date_i18n( 'Y' );
-                    break;
-
-                case 'current_date':
-                    $value = date_i18n( get_option( 'date_format' ) );
-                    break;
-
-                case 'featured_image':
-                    $url = get_the_post_thumbnail_url( null, 'large' );
-                    $value = $url ? $url : '';
-                    break;
-
-                case 'custom_field':
-                    if ( $arg !== '' ) {
-                        $value = get_post_meta( get_the_ID(), sanitize_text_field( $arg ), true );
-                    } else {
-                        $value = '';
-                    }
-                    break;
-
-                case 'user_name':
-                    if ( is_user_logged_in() ) {
-                        $user  = wp_get_current_user();
-                        $value = $user->display_name;
-                    } else {
-                        $value = '';
-                    }
-                    break;
-
-                case 'post_id':
-                    $value = (string) get_the_ID();
-                    break;
-
-                case 'post_url':
-                    $value = get_permalink();
-                    break;
-
-                case 'post_count':
-                    $counts = wp_count_posts();
-                    $value  = (string) $counts->publish;
-                    break;
-
-                case 'acf':
-                    // {acf:field_name} — ACF field from current post
-                    if ( $arg !== '' && function_exists( 'get_field' ) ) {
-                        $acf_val = get_field( sanitize_text_field( $arg ) );
-                        $value = is_array( $acf_val ) ? wp_json_encode( $acf_val ) : (string) $acf_val;
-                    } else {
-                        $value = '';
-                    }
-                    break;
-
-                case 'acf_option':
-                    // {acf_option:field_name} — ACF field from options page
-                    if ( $arg !== '' && function_exists( 'get_field' ) ) {
-                        $acf_val = get_field( sanitize_text_field( $arg ), 'option' );
-                        $value = is_array( $acf_val ) ? wp_json_encode( $acf_val ) : (string) $acf_val;
-                    } else {
-                        $value = '';
-                    }
-                    break;
-
-                case 'acf_image':
-                    // {acf_image:field_name} — ACF image field (returns URL)
-                    if ( $arg !== '' && function_exists( 'get_field' ) ) {
-                        $img = get_field( sanitize_text_field( $arg ) );
-                        if ( is_array( $img ) ) {
-                            $value = $img['url'] ?? '';
-                        } elseif ( is_numeric( $img ) ) {
-                            $value = wp_get_attachment_url( $img );
-                        } else {
-                            $value = (string) $img;
-                        }
-                    } else {
-                        $value = '';
-                    }
-                    break;
-
-                case 'product_price':
-                case 'product_title':
-                case 'product_sku':
-                case 'product_stock':
-                case 'product_rating':
-                case 'product_categories':
-                case 'product_short_desc':
-                    if ( class_exists( 'WooCommerce' ) ) {
-                        $inst = new self();
-                        $value = $inst->resolve_woocommerce( $token, get_the_ID() );
-                    } else {
-                        $value = '';
-                    }
-                    break;
-
-                case 'cart_total':
-                case 'cart_count':
-                case 'cart_subtotal':
-                    if ( class_exists( 'WooCommerce' ) ) {
-                        $inst = new self();
-                        $value = $inst->resolve_woocommerce( $token, 0 );
-                    } else {
-                        $value = '';
-                    }
-                    break;
-
-                case 'acf_link':
-                    // {acf_link:field_name} — ACF link field (returns URL)
-                    if ( $arg !== '' && function_exists( 'get_field' ) ) {
-                        $link = get_field( sanitize_text_field( $arg ) );
-                        if ( is_array( $link ) ) {
-                            $value = $link['url'] ?? '';
-                        } else {
-                            $value = (string) $link;
-                        }
-                    } else {
-                        $value = '';
-                    }
-                    break;
-
-                default:
-                    // Token non riconosciuto: lascia invariato
-                    return $m[0];
+        // Lo <span class="olo-dynamic-value"> va solo nel testo visibile. Dentro un tag (alt, title,
+        // aria-label, data-fx-phrases…) spezzava l'attributo; dentro uno script rompeva il JS
+        // (console.log("<span class="…">")). Lì il valore si scrive escapato per quel contesto;
+        // gli <style> restano com'erano.
+        $parti = preg_split( '/(<script\b.*?<\/script>|<style\b.*?<\/style>|<[^>]*>)/is', $text, -1, PREG_SPLIT_DELIM_CAPTURE );
+        if ( ! is_array( $parti ) ) {
+            $parti = [ $text ];
+        }
+        $out = '';
+        foreach ( $parti as $parte ) {
+            if ( '' === $parte || ! str_contains( $parte, '{' ) ) {
+                $out .= $parte;
+                continue;
             }
+            if ( '<' !== $parte[0] ) {
+                $contesto = 'testo';
+            } elseif ( preg_match( '/^<script\b/i', $parte ) ) {
+                $contesto = 'script';
+            } elseif ( preg_match( '/^<style\b/i', $parte ) ) {
+                $out .= $parte;
+                continue;
+            } else {
+                $contesto = 'attributo';
+            }
+            $out .= preg_replace_callback( '/\{([a-z_]+)(?::([^}]+))?\}/', function( $m ) use ( $contesto ) {
+                $value = self::token_value( $m[1], isset( $m[2] ) ? $m[2] : '' );
+                if ( null === $value ) {
+                    return $m[0]; // Token non riconosciuto: lascia invariato
+                }
+                if ( 'attributo' === $contesto ) {
+                    return esc_attr( $value );
+                }
+                if ( 'script' === $contesto ) {
+                    // Sicuro dentro una stringa JS/JSON con apici singoli o doppi; il titolo di WP arriva
+                    // con le entità (&#8220;), che in JS resterebbero lettere.
+                    $value = html_entity_decode( $value, ENT_QUOTES, 'UTF-8' );
+                    return substr( (string) wp_json_encode( $value, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE ), 1, -1 );
+                }
+                // Wrappa il valore sostituito per styling opzionale
+                return '<span class="olo-dynamic-value">' . esc_html( $value ) . '</span>';
+            }, $parte );
+        }
+        return $out;
+    }
 
-            // Wrappa il valore sostituito per styling opzionale
-            return '<span class="olo-dynamic-value">' . esc_html( (string) $value ) . '</span>';
-        }, $text );
+    /** Segnaposto riconosciuti da resolve_tokens() (gli stessi casi di token_value()). */
+    const TOKENS = [ 'post_title', 'post_date', 'post_excerpt', 'post_author', 'post_category', 'site_name', 'site_url',
+        'current_year', 'current_date', 'featured_image', 'custom_field', 'user_name', 'post_id', 'post_url', 'post_count',
+        'acf', 'acf_option', 'acf_image', 'acf_link', 'product_price', 'product_title', 'product_sku', 'product_stock',
+        'product_rating', 'product_categories', 'product_short_desc', 'cart_total', 'cart_count', 'cart_subtotal' ];
+
+    /**
+     * Valore di un segnaposto, o null se il nome non è riconosciuto.
+     *
+     * @param string $token Nome del segnaposto.
+     * @param string $arg   Argomento dopo i due punti ('' se assente).
+     * @return string|null
+     */
+    private static function token_value( $token, $arg ) {
+        $value = null;
+
+        switch ( $token ) {
+            case 'post_title':
+                $value = get_the_title();
+                break;
+
+            case 'post_date':
+                if ( $arg !== '' ) {
+                    $value = get_the_date( $arg );
+                } else {
+                    $value = get_the_date();
+                }
+                break;
+
+            case 'post_excerpt':
+                $value = get_the_excerpt();
+                break;
+
+            case 'post_author':
+                $value = get_the_author();
+                break;
+
+            case 'post_category':
+                $cats = get_the_category();
+                if ( ! empty( $cats ) ) {
+                    $value = $cats[0]->name;
+                } else {
+                    $value = '';
+                }
+                break;
+
+            case 'site_name':
+                $value = get_bloginfo( 'name' );
+                break;
+
+            case 'site_url':
+                $value = home_url();
+                break;
+
+            case 'current_year':
+                $value = date_i18n( 'Y' );
+                break;
+
+            case 'current_date':
+                $value = date_i18n( get_option( 'date_format' ) );
+                break;
+
+            case 'featured_image':
+                $url = get_the_post_thumbnail_url( null, 'large' );
+                $value = $url ? $url : '';
+                break;
+
+            case 'custom_field':
+                if ( $arg !== '' ) {
+                    $value = get_post_meta( get_the_ID(), sanitize_text_field( $arg ), true );
+                } else {
+                    $value = '';
+                }
+                break;
+
+            case 'user_name':
+                if ( is_user_logged_in() ) {
+                    $user  = wp_get_current_user();
+                    $value = $user->display_name;
+                } else {
+                    $value = '';
+                }
+                break;
+
+            case 'post_id':
+                $value = (string) get_the_ID();
+                break;
+
+            case 'post_url':
+                $value = get_permalink();
+                break;
+
+            case 'post_count':
+                $counts = wp_count_posts();
+                $value  = (string) $counts->publish;
+                break;
+
+            case 'acf':
+                // {acf:field_name} — ACF field from current post
+                if ( $arg !== '' && function_exists( 'get_field' ) ) {
+                    $acf_val = get_field( sanitize_text_field( $arg ) );
+                    $value = is_array( $acf_val ) ? wp_json_encode( $acf_val ) : (string) $acf_val;
+                } else {
+                    $value = '';
+                }
+                break;
+
+            case 'acf_option':
+                // {acf_option:field_name} — ACF field from options page
+                if ( $arg !== '' && function_exists( 'get_field' ) ) {
+                    $acf_val = get_field( sanitize_text_field( $arg ), 'option' );
+                    $value = is_array( $acf_val ) ? wp_json_encode( $acf_val ) : (string) $acf_val;
+                } else {
+                    $value = '';
+                }
+                break;
+
+            case 'acf_image':
+                // {acf_image:field_name} — ACF image field (returns URL)
+                if ( $arg !== '' && function_exists( 'get_field' ) ) {
+                    $img = get_field( sanitize_text_field( $arg ) );
+                    if ( is_array( $img ) ) {
+                        $value = $img['url'] ?? '';
+                    } elseif ( is_numeric( $img ) ) {
+                        $value = wp_get_attachment_url( $img );
+                    } else {
+                        $value = (string) $img;
+                    }
+                } else {
+                    $value = '';
+                }
+                break;
+
+            case 'product_price':
+            case 'product_title':
+            case 'product_sku':
+            case 'product_stock':
+            case 'product_rating':
+            case 'product_categories':
+            case 'product_short_desc':
+                if ( class_exists( 'WooCommerce' ) ) {
+                    $inst = new self();
+                    $value = $inst->resolve_woocommerce( $token, get_the_ID() );
+                } else {
+                    $value = '';
+                }
+                break;
+
+            case 'cart_total':
+            case 'cart_count':
+            case 'cart_subtotal':
+                if ( class_exists( 'WooCommerce' ) ) {
+                    $inst = new self();
+                    $value = $inst->resolve_woocommerce( $token, 0 );
+                } else {
+                    $value = '';
+                }
+                break;
+
+            case 'acf_link':
+                // {acf_link:field_name} — ACF link field (returns URL)
+                if ( $arg !== '' && function_exists( 'get_field' ) ) {
+                    $link = get_field( sanitize_text_field( $arg ) );
+                    if ( is_array( $link ) ) {
+                        $value = $link['url'] ?? '';
+                    } else {
+                        $value = (string) $link;
+                    }
+                } else {
+                    $value = '';
+                }
+                break;
+
+            default:
+                return null;
+        }
+
+        return (string) $value;
     }
 
     /**
@@ -915,70 +972,70 @@ class Olobuild_Dynamic_Content {
     public function get_available_sources() {
         $sources = [
             'current_post' => [
-                'label'  => 'Current Post',
+                'label'  => 'Articolo corrente',
                 'fields' => [
-                    [ 'key' => 'post_title',      'label' => 'Title',          'type' => 'text' ],
-                    [ 'key' => 'post_excerpt',     'label' => 'Excerpt',        'type' => 'text' ],
-                    [ 'key' => 'post_content',     'label' => 'Content',        'type' => 'html' ],
-                    [ 'key' => 'featured_image',   'label' => 'Featured Image', 'type' => 'image' ],
-                    [ 'key' => 'post_date',        'label' => 'Date',           'type' => 'text' ],
-                    [ 'key' => 'author_name',      'label' => 'Author',         'type' => 'text' ],
+                    [ 'key' => 'post_title',      'label' => 'Titolo',          'type' => 'text' ],
+                    [ 'key' => 'post_excerpt',     'label' => 'Estratto',        'type' => 'text' ],
+                    [ 'key' => 'post_content',     'label' => 'Contenuto',        'type' => 'html' ],
+                    [ 'key' => 'featured_image',   'label' => 'Immagine in evidenza', 'type' => 'image' ],
+                    [ 'key' => 'post_date',        'label' => 'Data',           'type' => 'text' ],
+                    [ 'key' => 'author_name',      'label' => 'Autore',         'type' => 'text' ],
                     [ 'key' => 'permalink',        'label' => 'Permalink',      'type' => 'url' ],
                 ],
             ],
             'site' => [
-                'label'  => 'Site',
+                'label'  => 'Sito',
                 'fields' => [
-                    [ 'key' => 'name',        'label' => 'Site Title', 'type' => 'text' ],
-                    [ 'key' => 'description', 'label' => 'Tagline',   'type' => 'text' ],
+                    [ 'key' => 'name',        'label' => 'Titolo del sito', 'type' => 'text' ],
+                    [ 'key' => 'description', 'label' => 'Motto',   'type' => 'text' ],
                     [ 'key' => 'url',         'label' => 'URL',        'type' => 'url' ],
                 ],
             ],
             'custom_field' => [
-                'label'  => 'Custom Field',
+                'label'  => 'Campo personalizzato',
                 'fields' => 'manual',
             ],
             'author' => [
-                'label'  => 'Author',
+                'label'  => 'Autore',
                 'fields' => [
-                    [ 'key' => 'author_display_name', 'label' => 'Display Name',     'type' => 'text' ],
-                    [ 'key' => 'author_bio',          'label' => 'Bio',              'type' => 'text' ],
+                    [ 'key' => 'author_display_name', 'label' => 'Nome visualizzato',     'type' => 'text' ],
+                    [ 'key' => 'author_bio',          'label' => 'Biografia',              'type' => 'text' ],
                     [ 'key' => 'author_email',        'label' => 'Email',            'type' => 'text' ],
-                    [ 'key' => 'author_avatar',       'label' => 'Avatar URL',       'type' => 'image' ],
-                    [ 'key' => 'author_url',          'label' => 'Website',          'type' => 'url' ],
-                    [ 'key' => 'author_posts_url',    'label' => 'Author Archive',   'type' => 'url' ],
+                    [ 'key' => 'author_avatar',       'label' => 'URL avatar',       'type' => 'image' ],
+                    [ 'key' => 'author_url',          'label' => 'Sito web',          'type' => 'url' ],
+                    [ 'key' => 'author_posts_url',    'label' => 'Archivio autore',   'type' => 'url' ],
                 ],
             ],
             'user' => [
-                'label'  => 'Current User',
+                'label'  => 'Utente connesso',
                 'fields' => [
-                    [ 'key' => 'user_display_name', 'label' => 'Display Name', 'type' => 'text' ],
+                    [ 'key' => 'user_display_name', 'label' => 'Nome visualizzato', 'type' => 'text' ],
                     [ 'key' => 'user_email',        'label' => 'Email',        'type' => 'text' ],
-                    [ 'key' => 'user_role',         'label' => 'Role',         'type' => 'text' ],
-                    [ 'key' => 'user_avatar',       'label' => 'Avatar URL',   'type' => 'image' ],
+                    [ 'key' => 'user_role',         'label' => 'Ruolo',         'type' => 'text' ],
+                    [ 'key' => 'user_avatar',       'label' => 'URL avatar',   'type' => 'image' ],
                 ],
             ],
             'datetime' => [
-                'label'  => 'Date/Time',
+                'label'  => 'Data e ora',
                 'fields' => [
-                    [ 'key' => 'current_date',     'label' => 'Current Date',     'type' => 'text' ],
-                    [ 'key' => 'current_time',     'label' => 'Current Time',     'type' => 'text' ],
-                    [ 'key' => 'current_year',     'label' => 'Current Year',     'type' => 'text' ],
-                    [ 'key' => 'current_day_name', 'label' => 'Day Name',         'type' => 'text' ],
+                    [ 'key' => 'current_date',     'label' => 'Data di oggi',     'type' => 'text' ],
+                    [ 'key' => 'current_time',     'label' => 'Ora attuale',     'type' => 'text' ],
+                    [ 'key' => 'current_year',     'label' => 'Anno in corso',     'type' => 'text' ],
+                    [ 'key' => 'current_day_name', 'label' => 'Giorno della settimana',         'type' => 'text' ],
                 ],
             ],
             'request' => [
-                'label'  => 'Request',
+                'label'  => 'Richiesta',
                 'fields' => [
-                    [ 'key' => 'request_url', 'label' => 'Current URL',    'type' => 'url' ],
-                    [ 'key' => 'referrer',    'label' => 'HTTP Referrer',  'type' => 'url' ],
+                    [ 'key' => 'request_url', 'label' => 'URL corrente',    'type' => 'url' ],
+                    [ 'key' => 'referrer',    'label' => 'Pagina di provenienza',  'type' => 'url' ],
                 ],
             ],
             'archive' => [
-                'label'  => 'Archive',
+                'label'  => 'Archivio',
                 'fields' => [
-                    [ 'key' => 'archive_title',       'label' => 'Archive Title',       'type' => 'text' ],
-                    [ 'key' => 'archive_description', 'label' => 'Archive Description', 'type' => 'text' ],
+                    [ 'key' => 'archive_title',       'label' => 'Titolo archivio',       'type' => 'text' ],
+                    [ 'key' => 'archive_description', 'label' => 'Descrizione archivio', 'type' => 'text' ],
                 ],
             ],
         ];
@@ -1103,7 +1160,7 @@ class Olobuild_Dynamic_Content {
             ],
         ];
         $sources['global_widget'] = [
-            'label'  => 'Global Widget (embed template)',
+            'label'  => 'Widget globale (template incorporato)',
             'fields' => [
                 [ 'key' => 'template_id', 'label' => 'ID template Olobuild', 'type' => 'text' ],
             ],

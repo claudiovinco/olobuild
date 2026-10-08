@@ -24028,3 +24028,47 @@ msgstr "Leistungsvideo"
 #: assets/js/iframe-bridge.js
 msgid "Testo Mask"
 msgstr "Textmaske"
+
+#: src/composables/useDynamicContent.js
+msgid "Articolo corrente"
+msgstr "Aktueller Beitrag"
+
+#: src/composables/useDynamicContent.js
+msgid "Campo personalizzato"
+msgstr "Benutzerdefiniertes Feld"
+
+#: src/composables/useDynamicContent.js
+msgid "Immagine in evidenza"
+msgstr "Beitragsbild"
+
+#: src/composables/useDynamicContent.js
+msgid "Permalink"
+msgstr "Permalink"
+
+#: src/composables/useDynamicContent.js
+msgid "Titolo del sito"
+msgstr "Website-Titel"
+
+#: src/composables/useDynamicContent.js
+msgid "Motto"
+msgstr "Untertitel"
+
+#: src/composables/useDynamicContent.js
+msgid "Nome visualizzato"
+msgstr "Angezeigter Name"
+
+#: src/composables/useDynamicContent.js
+msgid "URL avatar"
+msgstr "Avatar-URL"
+
+#: src/composables/useDynamicContent.js
+msgid "Archivio autore"
+msgstr "Autorenarchiv"
+
+#: src/composables/useDynamicContent.js
+msgid "Primo termine tassonomia"
+msgstr "Erster Taxonomie-Begriff"
+
+#: src/composables/useDynamicContent.js
+msgid "Seleziona campo..."
+msgstr "Feld auswählen…"

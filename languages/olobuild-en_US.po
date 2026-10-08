@@ -24031,3 +24031,47 @@ msgstr "Service Video"
 #: assets/js/iframe-bridge.js
 msgid "Testo Mask"
 msgstr "Text Mask"
+
+#: src/composables/useDynamicContent.js
+msgid "Articolo corrente"
+msgstr "Current post"
+
+#: src/composables/useDynamicContent.js
+msgid "Campo personalizzato"
+msgstr "Custom field"
+
+#: src/composables/useDynamicContent.js
+msgid "Immagine in evidenza"
+msgstr "Featured image"
+
+#: src/composables/useDynamicContent.js
+msgid "Permalink"
+msgstr "Permalink"
+
+#: src/composables/useDynamicContent.js
+msgid "Titolo del sito"
+msgstr "Site title"
+
+#: src/composables/useDynamicContent.js
+msgid "Motto"
+msgstr "Tagline"
+
+#: src/composables/useDynamicContent.js
+msgid "Nome visualizzato"
+msgstr "Display name"
+
+#: src/composables/useDynamicContent.js
+msgid "URL avatar"
+msgstr "Avatar URL"
+
+#: src/composables/useDynamicContent.js
+msgid "Archivio autore"
+msgstr "Author archive"
+
+#: src/composables/useDynamicContent.js
+msgid "Primo termine tassonomia"
+msgstr "First taxonomy term"
+
+#: src/composables/useDynamicContent.js
+msgid "Seleziona campo..."
+msgstr "Select field…"
