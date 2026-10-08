@@ -21,11 +21,22 @@ async function apiFetch(endpoint, options = {}) {
   return res.json();
 }
 
+/**
+ * I contenuti dinamici si possono usare qui? Nella sandbox di try (oloExternalData.sandbox,
+ * dal plugin olo-sandbox) le API delle fonti sono chiuse: il fulmine e la «Sorgente
+ * dinamica» aprono un avviso (DynamicUnavailableNotice) e le fonti non si chiedono.
+ */
+export function dinamiciNonDisponibili() {
+  const ext = window.oloExternalData;
+  return !!(ext && ext.sandbox && ext.sandbox.enabled);
+}
+
 export function useDynamicContent() {
   /**
    * Fetch available dynamic sources (cached).
    */
   async function fetchSources() {
+    if (dinamiciNonDisponibili()) return null;
     if (sourcesCache) {
       sourcesData.value = sourcesCache;
       return sourcesCache;

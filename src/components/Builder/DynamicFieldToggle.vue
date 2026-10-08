@@ -21,9 +21,10 @@
     <!-- Static field (hidden when dynamic binding active) -->
     <slot v-else />
 
-    <!-- Binding panel -->
+    <!-- Binding panel (nella sandbox, dove le fonti non arrivano, un avviso) -->
+    <DynamicUnavailableNotice v-if="panelOpen && nonDisponibili" @close="panelOpen = false" />
     <DynamicBindingPanel
-      v-if="panelOpen"
+      v-else-if="panelOpen"
       :binding="currentBinding"
       :fieldType="field.type"
       @select="onBindingSelect"
@@ -35,8 +36,9 @@
 <script setup>
 import { t } from '@/i18n';
 import { ref, computed, onMounted } from 'vue';
-import { useDynamicContent } from '@/composables/useDynamicContent';
+import { useDynamicContent, dinamiciNonDisponibili } from '@/composables/useDynamicContent';
 import DynamicBindingPanel from './DynamicBindingPanel.vue';
+import DynamicUnavailableNotice from './DynamicUnavailableNotice.vue';
 
 const props = defineProps({
   field: { type: Object, required: true },
@@ -48,6 +50,7 @@ const emit = defineEmits(['update:dynamic']);
 
 const { fetchSources, getBindingLabel } = useDynamicContent();
 const panelOpen = ref(false);
+const nonDisponibili = dinamiciNonDisponibili();
 
 onMounted(() => {
   fetchSources();

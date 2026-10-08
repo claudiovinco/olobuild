@@ -24079,3 +24079,11 @@ msgstr "Select field…"
 #: src/components/Builder/DynamicQueryPanel.vue
 msgid "Numero progressivo"
 msgstr "Sequential number"
+
+#: src/components/Builder/DynamicUnavailableNotice.vue
+msgid "Non disponibile nella sandbox"
+msgstr "Not available in the sandbox"
+
+#: src/components/Builder/DynamicUnavailableNotice.vue
+msgid "Sul tuo sito collega testi, immagini ed elenchi ai contenuti di WordPress: articoli, pagine, autore, campi personalizzati."
+msgstr "On your site, link texts, images and lists to your WordPress content: posts, pages, author, custom fields."

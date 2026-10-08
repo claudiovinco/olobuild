@@ -24076,3 +24076,11 @@ msgstr "Selecciona campo…"
 #: src/components/Builder/DynamicQueryPanel.vue
 msgid "Numero progressivo"
 msgstr "Número progresivo"
+
+#: src/components/Builder/DynamicUnavailableNotice.vue
+msgid "Non disponibile nella sandbox"
+msgstr "No disponible en la sandbox"
+
+#: src/components/Builder/DynamicUnavailableNotice.vue
+msgid "Sul tuo sito collega testi, immagini ed elenchi ai contenuti di WordPress: articoli, pagine, autore, campi personalizzati."
+msgstr "En tu sitio, vincula textos, imágenes y listas a los contenidos de WordPress: entradas, páginas, autor, campos personalizados."

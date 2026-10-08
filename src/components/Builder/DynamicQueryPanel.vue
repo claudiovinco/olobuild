@@ -14,8 +14,11 @@
       </label>
     </div>
 
+    <!-- Nella sandbox le fonti non arrivano: un avviso al posto delle opzioni vuote -->
+    <DynamicUnavailableNotice v-if="avvisoAperto" @close="avvisoAperto = false" />
+
     <!-- Query config -->
-    <div v-if="isEnabled" class="dqp-config">
+    <div v-if="isEnabled && !nonDisponibili" class="dqp-config">
       <!-- Tipo di contenuto -->
       <div class="dqp-field">
         <label class="dqp-label">{{ t('Tipo di contenuto') }}</label>
@@ -98,7 +101,8 @@
 <script setup>
 import { t } from '@/i18n';
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
-import { useDynamicContent } from '@/composables/useDynamicContent';
+import { useDynamicContent, dinamiciNonDisponibili } from '@/composables/useDynamicContent';
+import DynamicUnavailableNotice from './DynamicUnavailableNotice.vue';
 import FieldSelect from './fields/FieldSelect.vue';
 import FieldToggle from './fields/FieldToggle.vue';
 import NumberScrubber from './fields/NumberScrubber.vue';
@@ -127,6 +131,9 @@ const localQuery = ref({ ...defaultQuery, ...props.query });
 const localItemMap = ref({ ...props.itemMap });
 
 const isEnabled = computed(() => !!localQuery.value.enabled);
+const nonDisponibili = dinamiciNonDisponibili();
+// Acceso già nel modello (la sorgente si può spegnere, non configurare): l'avviso si vede subito
+const avvisoAperto = ref(nonDisponibili && isEnabled.value);
 
 const postTypes = computed(() => sources.value?.post_types || []);
 const taxonomies = computed(() => sources.value?.taxonomies || []);
@@ -246,6 +253,7 @@ function collegaPerNome() {
 }
 
 function toggleEnabled() {
+  if (nonDisponibili && !localQuery.value.enabled) { avvisoAperto.value = true; return; }
   localQuery.value.enabled = !localQuery.value.enabled;
   emitQuery();
   if (localQuery.value.enabled && mappaVuota.value) collegaPerNome();
@@ -260,7 +268,7 @@ let attesaPrimo = null;
 let richiestaPrimo = 0;
 function aggiornaPrimo() {
   clearTimeout(attesaPrimo);
-  if (!isEnabled.value) { primo.value = { stato: '', titolo: '' }; return; }
+  if (!isEnabled.value || nonDisponibili) { primo.value = { stato: '', titolo: '' }; return; }
   primo.value = { stato: 'carico', titolo: '' };
   attesaPrimo = setTimeout(async () => {
     const mia = ++richiestaPrimo;
