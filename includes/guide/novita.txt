@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.579 - 2026-10-08 (fix)
+- Builder: il nome della tile sulla barretta che compare nella tela passando col mouse è nella lingua dell'editor. Prima era sempre in italiano, per esempio «TITOLO».
+
 ## v1.4.578 - 2026-10-08 (fix)
 - Builder: tradotte anche la scheda «Avanzate» dell'Inspector, i nomi Sezione, Riga e Colonna nel percorso in cima all'Inspector, le famiglie Essenziale, Interattivo, Dinamico e Altro della barra delle tile e alcune descrizioni dei pulsanti. Prima restavano in italiano con l'editor in un'altra lingua.
 
