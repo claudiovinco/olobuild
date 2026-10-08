@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.585 - 2026-10-08
+- Contenuti dinamici: Galleria, Pro Gallery e Marquee (con le immagini) prendono le foto dalle immagini in evidenza di articoli, pagine o di un altro tipo di contenuto. Sopra le immagini accendi «Sorgente dinamica»: la didascalia prende il titolo dell'articolo e la categoria va alla barra filtro della Galleria.
+- Avviso: titolo e messaggio stanno nel Contenuto, come i testi delle altre tile, e si possono collegare ai contenuti dinamici col fulmine. Prima stavano nello Stile, in un riquadro «Testi».
+
 ## v1.4.584 - 2026-10-08 (fix)
 - Builder: nella sandbox di prova (try.olotheme.com) il fulmine dei contenuti dinamici e «Sorgente dinamica» aprono l'avviso «Non disponibile nella sandbox». Prima si apriva un pannello vuoto.
 

@@ -90,7 +90,15 @@ export default {
     // `categoria`: chiede al campo galleria la riga «Categoria» per ogni foto (chiave
     // `category`, quella che la barra filtro legge nel renderer). Finché il campo non la
     // disegna il filtro ricade sul testo alternativo di ogni foto.
-    { key: 'images', label: t('Immagini'), type: 'gallery', categoria: true },
+    // `supportsDynamic`: «Sorgente dinamica» riempie la galleria con le immagini in evidenza degli
+    // articoli; `dynamicItemFields` = le parti di ogni foto che si possono mappare.
+    { key: 'images', label: t('Immagini'), type: 'gallery', categoria: true, supportsDynamic: true,
+      dynamicItemFields: [
+        { key: 'url', label: t('Immagine'), type: 'image' },
+        { key: 'caption', label: t('Didascalia'), type: 'text' },
+        { key: 'alt', label: t('Testo alternativo'), type: 'text' },
+        { key: 'category', label: t('Categoria'), type: 'text' },
+      ] },
     { key: 'filter_bar', label: t('Barra filtro'), type: 'toggle',
       description: t('Un bottone per ogni categoria delle foto, più «Tutti». Una foto senza categoria usa il suo testo alternativo (Libreria media): foto con lo stesso testo finiscono sotto lo stesso bottone.') },
     { key: 'random_order', label: t('Ordine casuale'), type: 'toggle' },

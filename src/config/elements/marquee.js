@@ -82,7 +82,11 @@ export default {
       condition: { field: 'content_type', value: 'text' } },
     { key: 'separator', label: t('Separatore'), type: 'text',
       condition: { field: 'content_type', value: 'text' } },
-    { key: 'images', label: t('Immagini'), type: 'gallery',
+    { key: 'images', label: t('Immagini'), type: 'gallery', supportsDynamic: true,
+      dynamicItemFields: [
+        { key: 'url', label: t('Immagine'), type: 'image' },
+        { key: 'alt', label: t('Testo alternativo'), type: 'text' },
+      ],
       condition: { field: 'content_type', value: 'images' } },
 
     { type: 'separator', label: t('Movimento') },

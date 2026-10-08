@@ -4,7 +4,7 @@ import { t } from '@/i18n';
 
 /**
  * Tile Alert — split CONTENUTO/STILE.
- *   fields[]      → tipo, title, message, show_icon, custom_icon, dismissible
+ *   fields[]      → title, message, tipo, show_icon, custom_icon, dismissible
  *   styleFields[] → preset, bg, typo, text-effects, allineamento, colori custom, shadow, raggio, border
  */
 export default {
@@ -46,10 +46,12 @@ export default {
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────
-  // Solo opzioni strutturali del messaggio (tipo, icona, chiudibilità).
-  // I testi (titolo + messaggio) si modificano nella zona STILE via popup
-  // dedicato, per evitare doppi controlli e dare immediato accesso visivo.
+  // I testi e le opzioni del messaggio (tipo, icona, chiudibilità). Titolo e messaggio stavano
+  // nello Stile, in un popup «Testi»: un testo è Contenuto, e qui prende anche il collegamento
+  // dinamico (1.4.585). Chiavi invariate.
   fields: [
+    { key: 'title',   label: t('Titolo'),    type: 'text' },
+    { key: 'message', label: t('Messaggio'), type: 'textarea' },
     { key: 'alert_type', label: t('Tipo'), type: 'select', options: [
       { value: 'info', label: t('Info') },
       { value: 'success', label: t('Successo') },
@@ -63,13 +65,6 @@ export default {
 
   // ─── STILE ─────────────────────────────────────────────────
   styleFields: [
-    // PRIMARIO: editing testi via popup (titolo + messaggio separati).
-    // «Incolla stile» non li porta da un avviso all'altro (incollaStile: false).
-    { type: 'content-popup', label: t('Testi'), incollaStile: false, fields: [
-      { key: 'title',   label: t('Titolo'),    type: 'text' },
-      { key: 'message', label: t('Messaggio'), type: 'textarea' },
-    ]},
-
     { type: 'separator', label: t('Preset stilistico') },
     { key: 'preset', label: t('Stile'), type: 'select', options: [
       { value: 'modern-pill',     label: t('Modern Pill') },

@@ -194,7 +194,7 @@
           </div>
         </div>
       </template>
-      <label v-else-if="field.type !== 'typography' && field.type !== 'content-popup' && !field.reveal" class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">
+      <label v-else-if="field.type !== 'typography' && !field.reveal" class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">
         {{ etichetta.testo }}
         <InfoTip v-if="field.description" class="olo-field-info" :testo="t(field.description)" :titolo="etichetta.testo" />
       </label>
@@ -360,6 +360,31 @@
         @update:modelValue="onFieldUpdate($event)"
       />
 
+      <!-- Galleria dagli articoli (1.4.585): stessa «Sorgente dinamica» dei ripetitori; le voci da
+           mappare le dichiara la tile (dynamicItemFields), la query salva quale campo riempie. -->
+      <template v-else-if="field.type === 'gallery' && field.supportsDynamic && tileId">
+        <DynamicQueryPanel
+          :query="dynamic?._query || {}"
+          :itemFields="field.dynamicItemFields || []"
+          :itemMap="dynamic?._itemMap || {}"
+          @update:query="emit('update:dynamic', { _query: { ...$event, items_key: field.key } })"
+          @update:itemMap="emit('update:dynamic', { _itemMap: $event })"
+        />
+        <div v-if="dynamic?._query?.enabled" class="if-dynamic-info">
+          {{ t('&#9889; Sorgente dinamica attiva — elementi generati dalla query') }}
+        </div>
+        <FieldGallery
+          v-else
+          :modelValue="effectiveValue"
+          :righe-extra="!!field.righeExtra"
+          :categoria="!!field.categoria"
+          :punto-focale="field.puntoFocale !== false"
+          :fit-galleria="contestoGalleria.fit"
+          :posizione-galleria="contestoGalleria.pos"
+          @update:modelValue="onFieldUpdate($event)"
+        />
+      </template>
+
       <FieldGallery
         v-else-if="field.type === 'gallery'"
         :modelValue="effectiveValue"
@@ -450,14 +475,6 @@
         v-else-if="field.type === 'text-shadow'"
         :modelValue="effectiveValue"
         @update:modelValue="onFieldUpdate($event)"
-      />
-
-      <FieldContentPopup
-        v-else-if="field.type === 'content-popup'"
-        :field="field"
-        :settings="tileSettings || {}"
-        :tileId="tileId"
-        @update:settingKey="$emit('update:settingKey', $event)"
       />
 
       <BackgroundControls
@@ -631,6 +648,7 @@ import FieldMedia from './fields/FieldMedia.vue';
 import FieldLink from './fields/FieldLink.vue';
 import FieldLottiePicker from './fields/FieldLottiePicker.vue';
 import FieldGallery from './fields/FieldGallery.vue';
+import DynamicQueryPanel from './DynamicQueryPanel.vue';
 import FieldIcon from './fields/FieldIcon.vue';
 import FieldMegaPanelMap from './fields/FieldMegaPanelMap.vue';
 import FieldMultiPills from './fields/FieldMultiPills.vue';
@@ -654,7 +672,6 @@ import { t } from '@/i18n';
 
 import FieldEditor from './fields/FieldEditor.vue';
 import FieldTextShadow from './fields/FieldTextShadow.vue';
-import FieldContentPopup from './fields/FieldContentPopup.vue';
 import BackgroundControls from './BackgroundControls.vue';
 import { useGlobalPanels } from '@/composables/useGlobalPanels';
 
@@ -1396,4 +1413,15 @@ function onDynamicUpdate(dynamicUpdate, isRemove) {
   color: #64748b;
 }
 .olo-desc-row :deep(.olo-info-btn) { color: #64748b; }
+/* Galleria dagli articoli: lo stesso avviso delle voci dei ripetitori (ContentItemsEditor) */
+.if-dynamic-info {
+  margin-top: 8px;
+  padding: 10px 12px;
+  background: rgb(var(--olo-primary-rgb, 232 98 42) / 0.08);
+  border: 1px solid rgb(var(--olo-primary-rgb, 232 98 42) / 0.2);
+  border-radius: 6px;
+  font-size: 12px;
+  color: #e8622a;
+  text-align: center;
+}
 </style>

@@ -132,7 +132,7 @@ padding/margine → `type:'spacing'` (4 lati) · raggio → `type:'border-radius
   varianti (dispositivi, hover, legacy, tipografia); delle voci dei ripetitori ciò che lo specchio
   mostra. Il Contenuto non si tocca (prima passava tutto tranne un elenco fisso: occhiello e titolo
   del Section Header venivano sovrascritti). Un campo rimasto nello Stile che porta le parole della
-  tile (testi dell'avviso, frasi degli effetti testo) si marca `incollaStile: false`.
+  tile (frasi degli effetti testo) si marca `incollaStile: false`.
 - **Condizione di sezione**: la `condition`/`show` di un separatore vale per TUTTA la sezione, nel
   Contenuto, nello Stile e nelle voci dei ripetitori (`isSectionVisible()` in `fieldCondition.js`,
   dal 1.4.479: prima nessun tab la leggeva). ⚠️ Un campo che vale anche in altri casi NON va sotto un

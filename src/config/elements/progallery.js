@@ -166,7 +166,14 @@ export default {
     // quale valore partire: senza, il pad mostrerebbe un ritaglio che non e'
     // quello vero e la scelta si farebbe su un'immagine sbagliata.
     { key: 'images', label: t('Media'), type: 'gallery', righeExtra: true, puntoFocale: true,
-      contextKeys: { fit: 'object_fit', pos: 'object_position' } },
+      contextKeys: { fit: 'object_fit', pos: 'object_position' }, supportsDynamic: true,
+      dynamicItemFields: [
+        { key: 'url', label: t('Immagine'), type: 'image' },
+        { key: 'caption', label: t('Titolo'), type: 'text' },
+        { key: 'subtitle', label: t('Sottotitolo'), type: 'text' },
+        { key: 'text', label: t('Testo'), type: 'text' },
+        { key: 'alt', label: t('Testo alternativo'), type: 'text' },
+      ] },
     { type: 'separator', label: t('Video'), show: s => s.images?.some(i => i.type === 'video') },
     { key: 'video_preview', label: t('Preview video'), type: 'select', options: [
       { value: 'poster', label: t('Poster statico') },

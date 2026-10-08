@@ -231,9 +231,11 @@ function mappaPerNome() {
     }
   }
   // Senza un campo «titolo» lo riceve il primo testo libero (Elenco, Elenco con icone, didascalia del
-  // Carosello), anche se era andato all'estratto; mai un testo alternativo.
+  // Carosello), anche se era andato all'estratto. Il testo alternativo solo se è l'unico testo della voce
+  // (Marquee di immagini): lì il titolo dell'articolo descrive la foto.
   if (!usati.has('post_title')) {
-    const f = (props.itemFields || []).find((x) => x.type === 'text' && !/alt/i.test(x.key) && (!mappa[x.key] || mappa[x.key] === 'post_excerpt'));
+    const testi = (props.itemFields || []).filter((x) => x.type === 'text' && (!mappa[x.key] || mappa[x.key] === 'post_excerpt'));
+    const f = testi.find((x) => !/alt/i.test(x.key)) || (testi.length === 1 ? testi[0] : null);
     if (f) mappa[f.key] = 'post_title';
   }
   return mappa;
