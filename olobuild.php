@@ -435,6 +435,34 @@ function olobuild_get_translations_map() {
 }
 
 /**
+ * Dizionario delle scritte dell'editor (Vue: `t()` legge `oloData.translations`).
+ *
+ * Prima era solo la mappa del DB di OLOlang: senza quelle righe (un sito in inglese, o con OLOlang ma senza le
+ * stringhe del plugin importate) il builder restava in italiano anche se i cataloghi del plugin traducono le sue
+ * scritte, e le parti rese dal PHP uscivano tradotte: interfaccia mista. Ora parte dal catalogo caricato per la
+ * lingua corrente (`languages/olobuild-*.mo`) e OLOlang lo completa o lo corregge (vince il DB).
+ *
+ * @return array<string,string>
+ */
+function olobuild_builder_translations() {
+    $map    = [];
+    $locale = function_exists( 'determine_locale' ) ? determine_locale() : get_locale();
+    if ( ! str_starts_with( (string) $locale, 'it' ) ) {
+        $catalogo = get_translations_for_domain( 'olobuild' );
+        foreach ( (array) ( is_object( $catalogo ) ? $catalogo->entries : [] ) as $voce ) {
+            if ( ! is_object( $voce ) || ! empty( $voce->context ) || empty( $voce->singular ) ) {
+                continue;
+            }
+            $tradotta = $voce->translations[0] ?? '';
+            if ( '' !== $tradotta && $tradotta !== $voce->singular ) {
+                $map[ $voce->singular ] = $tradotta;
+            }
+        }
+    }
+    return array_merge( $map, olobuild_get_translations_map() );
+}
+
+/**
  * Ritorna il locale corrente (olo-lang > WP locale) in formato xx_XX.
  */
 function olobuild_current_locale() {

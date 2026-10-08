@@ -1049,7 +1049,7 @@ class Olobuild_Builder {
                 'pluginUrl'         => OLOBUILD_URL,
                 'version'           => OLOBUILD_VERSION,
                 'locale'            => olobuild_current_locale(),
-                'translations'      => olobuild_get_translations_map(),
+                'translations'      => olobuild_builder_translations(),
                 'styles'            => $style_system->get_styles(),
                 'presets'           => $style_system->get_presets(),
                 'globalColors'      => $style_system->get_global_colors(),
@@ -1296,7 +1296,7 @@ class Olobuild_Builder {
             'isContentOnly'    => Olobuild_Role_Manager::instance()->is_content_only(),
             'isDesignOnly'     => Olobuild_Role_Manager::instance()->is_design_only(),
             'locale'         => olobuild_current_locale(),
-            'translations'   => olobuild_get_translations_map(),
+            'translations'   => olobuild_builder_translations(),
             'siteInfo'       => [
                 'name'     => get_bloginfo( 'name' ),
                 'tagline'  => get_bloginfo( 'description' ),
