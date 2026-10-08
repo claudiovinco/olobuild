@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.581 - 2026-10-08 (fix)
+- Builder: il pannello «Collegamento dinamico» e quello degli elenchi dagli articoli hanno i colori chiari del resto dell'Inspector, e il campo collegato si legge («Articolo corrente → Titolo»). Prima i pannelli restavano scuri e la scritta del collegamento quasi spariva sul fondo chiaro.
+
 ## v1.4.580 - 2026-10-08 (fix)
 - Contenuti dinamici: un segnaposto come {post_title} scritto nel testo alternativo di un'immagine, nelle frasi di un effetto testo o in un altro valore che finisce dentro un attributo ora mostra il valore. Prima ci finiva un pezzo di HTML che rompeva l'elemento, e nel JS personalizzato della tile fermava lo script.
 - Contenuti dinamici: le fonti e i campi del collegamento (Articolo corrente, Titolo del sito, Campo personalizzato…) sono nella lingua dell'editor. Prima metà erano in inglese.
