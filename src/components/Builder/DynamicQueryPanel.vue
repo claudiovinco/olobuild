@@ -23,7 +23,7 @@
       </div>
 
       <!-- Posts per page -->
-      <div class="dqp-field" style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+      <div class="dqp-field" style="display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:10px;">
         <label class="dqp-label" style="margin:0;">{{ t('Numero di elementi') }}</label>
         <NumberScrubber
           :modelValue="localQuery.posts_per_page"
