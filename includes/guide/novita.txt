@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.578 - 2026-10-08 (fix)
+- Builder: tradotte anche la scheda «Avanzate» dell'Inspector, i nomi Sezione, Riga e Colonna nel percorso in cima all'Inspector, le famiglie Essenziale, Interattivo, Dinamico e Altro della barra delle tile e alcune descrizioni dei pulsanti. Prima restavano in italiano con l'editor in un'altra lingua.
+
 ## v1.4.577 - 2026-10-08
 - Builder: con WordPress in inglese, francese, tedesco o spagnolo l'editor è nella tua lingua anche senza OLOlang: barra, Inspector, pannelli e impostazioni delle tile prendono le traduzioni dal plugin. Prima metà dell'interfaccia restava in italiano.
 - Traduzioni: 1.807 scritte nuove del builder in inglese, francese, tedesco e spagnolo, fra comandi dell'editor e impostazioni di 50 tile.
