@@ -109,7 +109,7 @@ export default {
   // ═══ CONTENUTO ════════════════════════════════════════════════
   fields: [
     { type: 'separator', label: t('Righe') },
-    { key: 'items', label: t('Voci'), type: 'content-items',
+    { key: 'items', label: t('Voci'), type: 'content-items', supportsDynamic: true,
       itemLabel: t('Voce'),
       newItemDefaults: { color: '#e79aa6', name: 'Nuova voce', sub: 'Etichetta', desc: '', number: '', image: '', link_url: '', row_bg: { type: 'none' } },
       itemFields: [

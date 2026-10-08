@@ -89,7 +89,7 @@ export default {
   // ═══ CONTENUTO ═══════════════════════════════════════════════
   fields: [
     { type: 'separator', label: t('Product cards') },
-    { key: 'items', label: t('Cards'), type: 'content-items',
+    { key: 'items', label: t('Cards'), type: 'content-items', supportsDynamic: true,
       itemLabel: t('Card'),
       // Card aggiunta: colori dal tema (primario, tinta tenue), testi neutri in italiano.
       defaults: { letter: 'A', letter_color: 'var(--olo-color-primary, #e1474f)', logo_image: '', top_bg: { type: 'solid', color: 'var(--olo-color-muted, #f6f7f9)' }, screenshot_label: '', brand_label: t('Categoria'), brand_color: 'var(--olo-color-primary, #e1474f)', show_badge: false, badge_text: '', badge_bg: 'var(--olo-color-primary, #e1474f)', badge_color: 'var(--olo-color-primary-contrast, #ffffff)', title: t('Nuovo '), title_accent: t('prodotto'), title_accent_italic: true, description: t('Una riga che racconta il prodotto.'), price: '', cta_text: t('Scopri'), cta_url: '#' },

@@ -97,7 +97,7 @@ export default {
       condition: { field: 'show_intro', op: 'eq', value: true } },
 
     { type: 'separator', label: t('Fotogrammi') },
-    { key: 'items', label: t('Progetti'), type: 'content-items',
+    { key: 'items', label: t('Progetti'), type: 'content-items', supportsDynamic: true,
       itemLabel: t('Fotogramma'),
       newItemDefaults: { image: '', media_bg: { type: 'none' }, media_label: 'Progetto', name: 'Progetto', tag: '', size: 'normal', link: '' },
       itemFields: [

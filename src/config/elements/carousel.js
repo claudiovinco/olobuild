@@ -79,7 +79,7 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'slides', label: t('Slide'), type: 'content-items', segnapostoVoci: true,
+    { key: 'slides', label: t('Slide'), type: 'content-items', supportsDynamic: true, segnapostoVoci: true,
       itemFields: [
         widgetTemplateField,
         { key: 'image_url', label: t('Immagine'), type: 'image' },

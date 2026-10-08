@@ -84,7 +84,7 @@ export default {
   },
 
   fields: [
-    { key: 'cards', label: t('Card'), type: 'content-items',
+    { key: 'cards', label: t('Card'), type: 'content-items', supportsDynamic: true,
       itemLabel: t('Card'),
       defaults: { eyebrow: '', title: 'Nuova card', accent: '', text: 'Testo della card…', media: '', media_label: 'Immagine', color: '', text_color: '' },
       itemFields: [

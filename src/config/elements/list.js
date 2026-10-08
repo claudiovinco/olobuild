@@ -49,7 +49,7 @@ export default {
   },
 
   fields: [
-    { key: 'items', label: t('Elementi'), type: 'content-items',
+    { key: 'items', label: t('Elementi'), type: 'content-items', supportsDynamic: true,
       itemFields: [
         { key: 'text', label: t('Testo'), type: 'text' },
         { key: 'link', label: t('Link'), type: 'link', placeholder: t('https://...') },

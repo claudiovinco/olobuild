@@ -83,7 +83,7 @@ export default {
   fields: [
     { key: 'heading', label: t('Titolo sezione'), type: 'text' },
     {
-      key: 'items', label: t('Quote'), type: 'content-items', addLabel: t('Aggiungi quote'),
+      key: 'items', label: t('Quote'), type: 'content-items', supportsDynamic: true, addLabel: t('Aggiungi quote'),
       titleKey: 'author_name',
       newItemDefaults: { quote: 'Nuova citazione…', author_name: 'Nome', author_role: 'Ruolo', logo_text: '' },
       itemFields: [

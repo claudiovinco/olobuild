@@ -93,7 +93,7 @@ export default {
   // ═══ CONTENUTO ════════════════════════════════════════════════
   fields: [
     { type: 'separator', label: t('Card items') },
-    { key: 'items', label: t('Cards'), type: 'content-items',
+    { key: 'items', label: t('Cards'), type: 'content-items', supportsDynamic: true,
       itemLabel: t('Card'),
       // newItemDefaults (non `defaults`, che ContentItemsEditor non legge: la card aggiunta
       // nasceva vuota, { id }). Testi d'esempio e pallino dal token come le card di partenza.

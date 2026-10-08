@@ -82,7 +82,7 @@ export default {
 
   fields: [
     { type: 'separator', label: t('Card') },
-    { key: 'items', label: t('Voci'), type: 'content-items',
+    { key: 'items', label: t('Voci'), type: 'content-items', supportsDynamic: true,
       itemLabel: t('Card'),
       // La chiave che ContentItemsEditor legge è `newItemDefaults`: con `defaults` (com'era) una
       // card aggiunta nasceva vuota, senza occhiello né titolo.

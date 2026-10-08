@@ -79,7 +79,7 @@ export default {
 
   fields: [
     { type: 'separator', label: t('Tessere') },
-    { key: 'items', label: t('Categorie'), type: 'content-items',
+    { key: 'items', label: t('Categorie'), type: 'content-items', supportsDynamic: true,
       itemLabel: t('Tessera'),
       defaults: { image: '', title: 'Categoria', subtitle: '', link: '#' },
       itemFields: [

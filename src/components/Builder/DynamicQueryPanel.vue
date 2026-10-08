@@ -174,6 +174,9 @@ const WP_FIELD_OPTS = [
   { value: 'author_name', label: 'Autore' },
   { value: 'permalink', label: 'Permalink' },
   { value: 'first_term', label: 'Primo termine tassonomia' },
+  { value: 'post_year', label: 'Anno' },
+  // 01, 02… nell'ordine dell'elenco: per i numeri delle liste e delle card
+  { value: '_index', label: 'Numero progressivo' },
 ];
 
 onMounted(() => {
@@ -197,9 +200,11 @@ function campoPerNome(f) {
   const key = String(f.key || '').toLowerCase();
   if (f.type === 'link') return 'permalink';
   if (f.type === 'image') return 'featured_image';
-  if (f.type === 'textarea' || /^(text|testo|description|descrizione|excerpt|estratto|content|definition|body)$/.test(key)) return 'post_excerpt';
+  if (f.type === 'textarea' || f.type === 'editor' || /^(text|testo|description|descrizione|desc|excerpt|estratto|content|definition|body|quote|citazione)$/.test(key)) return 'post_excerpt';
   if (f.type !== 'text') return '';
-  if (/^(title|titolo|heading|name|nome|term)$/.test(key)) return 'post_title';
+  if (/^(title|titolo|heading|name|nome|term|author_name)$/.test(key)) return 'post_title';
+  if (/^(number|numero|counter|step)$/.test(key)) return '_index';
+  if (/^(year|anno)$/.test(key)) return 'post_year';
   if (/^(tag|category|categoria)$/.test(key)) return 'first_term';
   if (/^(date|data)$/.test(key)) return 'post_date';
   if (/^(author|autore)$/.test(key)) return 'author_name';
@@ -209,12 +214,20 @@ function campoPerNome(f) {
 function mappaPerNome() {
   const mappa = {};
   const usati = new Set();
-  for (const f of props.itemFields || []) {
+  // Un logo riceve l'immagine in evidenza solo se la voce non ha altre immagini (Testimonianze: l'avatar)
+  const ordinati = [...(props.itemFields || [])].sort((x, y) => (x.type === 'image' && /logo/i.test(x.key)) - (y.type === 'image' && /logo/i.test(y.key)));
+  for (const f of ordinati) {
     const wp = campoPerNome(f);
     if (wp && !usati.has(wp)) {
       mappa[f.key] = wp;
       usati.add(wp);
     }
+  }
+  // Senza un campo «titolo» lo riceve il primo testo libero (Elenco, Elenco con icone, didascalia del
+  // Carosello), anche se era andato all'estratto; mai un testo alternativo.
+  if (!usati.has('post_title')) {
+    const f = (props.itemFields || []).find((x) => x.type === 'text' && !/alt/i.test(x.key) && (!mappa[x.key] || mappa[x.key] === 'post_excerpt'));
+    if (f) mappa[f.key] = 'post_title';
   }
   return mappa;
 }

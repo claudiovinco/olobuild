@@ -939,7 +939,12 @@ class Olobuild_Frontend_Renderer {
 
             // Multi-item query
             if ( ! empty( $dynamic['_query']['enabled'] ) ) {
-                $items_key = $this->get_items_key( $type );
+                // Il ripetitore da riempire lo salva il pannello (items_key, dalla 1.4.583): vale per qualsiasi
+                // tile; le query salvate prima usano l'elenco storico di get_items_key().
+                $items_key = sanitize_key( (string) ( $dynamic['_query']['items_key'] ?? '' ) );
+                if ( '' === $items_key ) {
+                    $items_key = $this->get_items_key( $type );
+                }
                 $posts = $dc->resolve_query( $dynamic['_query'] );
                 $item_map = $dynamic['_itemMap'] ?? [];
                 if ( ! empty( $posts ) && ! empty( $item_map ) ) {

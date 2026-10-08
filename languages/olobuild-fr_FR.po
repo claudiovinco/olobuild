@@ -24072,3 +24072,7 @@ msgstr "Premier terme de taxonomie"
 #: src/composables/useDynamicContent.js
 msgid "Seleziona campo..."
 msgstr "Sélectionner le champ…"
+
+#: src/components/Builder/DynamicQueryPanel.vue
+msgid "Numero progressivo"
+msgstr "Numéro progressif"

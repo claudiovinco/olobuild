@@ -95,7 +95,7 @@ export default {
   },
 
   fields: [
-    { key: 'items', label: t('Notizie'), type: 'content-items',
+    { key: 'items', label: t('Notizie'), type: 'content-items', supportsDynamic: true,
       itemFields: [
         { key: 'title', label: t('Titolo'), type: 'text' },
         { key: 'url', label: t('URL (opzionale)'), type: 'link', placeholder: t('https://...') },

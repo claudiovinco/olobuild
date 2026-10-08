@@ -150,7 +150,7 @@ export default {
     { key: 'posts_per_page', label: t('Numero articoli'), type: 'range', min: 1, max: 50, step: 1,
       condition: { field: 'source', op: 'in', value: ['posts', 'custom_taxonomy'] } },
 
-    { key: 'items', label: t('Progetti'), type: 'content-items',
+    { key: 'items', label: t('Progetti'), type: 'content-items', supportsDynamic: true,
       condition: { field: 'source', op: 'eq', value: 'manual' },
       itemFields: [
         { key: 'title', label: t('Titolo'), type: 'text' },

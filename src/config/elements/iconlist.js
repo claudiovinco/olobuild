@@ -57,7 +57,7 @@ export default {
   },
 
   fields: [
-    { key: 'items', label: t('Voci lista'), type: 'content-items',
+    { key: 'items', label: t('Voci lista'), type: 'content-items', supportsDynamic: true,
       itemFields: [
         { key: 'icon', label: t('Icona'), type: 'icon' },
         { key: 'text', label: t('Testo'), type: 'text' },

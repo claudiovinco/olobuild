@@ -79,7 +79,7 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'items', label: t('Link'), type: 'content-items',
+    { key: 'items', label: t('Link'), type: 'content-items', supportsDynamic: true,
       itemFields: [
         { key: 'title', label: t('Titolo'), type: 'text' },
         { key: 'url', label: t('URL'), type: 'link' },

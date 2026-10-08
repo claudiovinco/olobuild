@@ -186,20 +186,21 @@ class Olobuild_Dynamic_Content {
                 return get_permalink( $post_id );
 
             case 'first_term':
-                // Returns the name of the first term from any taxonomy attached to the post.
-                // Single query instead of N+1 (one per taxonomy).
+                // Il nome del primo termine, dalle tassonomie pubbliche del tipo di contenuto: prima le
+                // gerarchiche (categorie), poi le altre (tag). Niente post_format: col suo filtro di WP,
+                // wp_get_object_terms( …, fields => names ) restituiva nomi VUOTI per tutte le tassonomie.
+                // get_the_terms legge la cache dei termini che la query degli elenchi ha già caricato.
                 $post_obj = get_post( $post_id );
                 if ( ! $post_obj ) return '';
-                $taxonomies = get_object_taxonomies( $post_obj->post_type, 'names' );
-                if ( empty( $taxonomies ) ) return '';
-                $terms = wp_get_object_terms( $post_id, $taxonomies, [
-                    'number'  => 1,
-                    'orderby' => 'term_id',
-                    'order'   => 'ASC',
-                    'fields'  => 'names',
-                ] );
-                if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
-                    return $terms[0];
+                $taxonomies = array_filter( get_object_taxonomies( $post_obj->post_type, 'objects' ), function ( $tx ) {
+                    return $tx->public && 'post_format' !== $tx->name;
+                } );
+                uasort( $taxonomies, function ( $a, $b ) { return (int) $b->hierarchical - (int) $a->hierarchical; } );
+                foreach ( $taxonomies as $tx ) {
+                    $terms = get_the_terms( $post_obj, $tx->name );
+                    if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
+                        return $terms[0]->name;
+                    }
                 }
                 return '';
 
@@ -854,12 +855,19 @@ class Olobuild_Dynamic_Content {
      */
     public function build_items_from_query( $posts, $item_map ) {
         $items = [];
-        foreach ( $posts as $post ) {
+        foreach ( array_values( $posts ) as $i => $post ) {
             $item = [
                 'id' => 'dyn-' . $post->ID,
             ];
             foreach ( $item_map as $item_key => $wp_field ) {
-                $item[ $item_key ] = $this->resolve_field( 'current_post', $wp_field, $post->ID );
+                if ( '_index' === $wp_field ) {
+                    // Numero progressivo della voce: 01, 02… (numeri delle liste e delle card)
+                    $item[ $item_key ] = sprintf( '%02d', $i + 1 );
+                } elseif ( 'post_year' === $wp_field ) {
+                    $item[ $item_key ] = get_the_date( 'Y', $post );
+                } else {
+                    $item[ $item_key ] = $this->resolve_field( 'current_post', $wp_field, $post->ID );
+                }
             }
             $items[] = $item;
         }

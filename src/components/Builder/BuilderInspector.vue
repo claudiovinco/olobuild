@@ -242,7 +242,7 @@
                         :supportsDynamic="field.supportsDynamic || false"
                         :dynamic="selectedTile.dynamic || {}"
                         @update:modelValue="updateSetting(field.key, $event)"
-                        @update:dynamic-query="updateDynamicQuery"
+                        @update:dynamic-query="updateDynamicQuery($event, field.key)"
                         @update:dynamic-item-map="updateDynamicItemMap"
                       />
                     </div>
@@ -299,7 +299,7 @@
                         :supportsDynamic="field.supportsDynamic || false"
                         :dynamic="selectedTile.dynamic || {}"
                         @update:modelValue="updateSetting(field.key, $event)"
-                        @update:dynamic-query="updateDynamicQuery"
+                        @update:dynamic-query="updateDynamicQuery($event, field.key)"
                         @update:dynamic-item-map="updateDynamicItemMap"
                       />
                     </div>
@@ -3121,9 +3121,10 @@ function onDynamicFieldUpdate(dynamicUpdate, isRemove) {
   builderStore.markDirtyForTile(builderStore.selectedTileId);
 }
 
-function updateDynamicQuery(queryConfig) {
+// La query sa quale ripetitore riempie (items_key): il PHP lo legge per qualsiasi tile, senza un elenco a mano.
+function updateDynamicQuery(queryConfig, itemsKey = '') {
   if (!builderStore.selectedTileId) return;
-  tilesStore.updateTileDynamic(builderStore.selectedTileId, { _query: queryConfig });
+  tilesStore.updateTileDynamic(builderStore.selectedTileId, { _query: itemsKey ? { ...queryConfig, items_key: itemsKey } : queryConfig });
   builderStore.markDirtyForTile(builderStore.selectedTileId);
 }
 

@@ -110,7 +110,7 @@ export default {
       condition: { field: 'layout', value: 'carousel' } },
     { key: 'show_arrows', label: t('Mostra frecce'), type: 'toggle',
       condition: { field: 'layout', value: 'carousel' } },
-    { key: 'items', label: t('Testimonianze multiple'), type: 'content-items',
+    { key: 'items', label: t('Testimonianze multiple'), type: 'content-items', supportsDynamic: true,
       condition: { field: 'layout', operator: '!=', value: 'single' },
       itemFields: [
         { key: 'quote', label: t('Citazione'), type: 'textarea' },

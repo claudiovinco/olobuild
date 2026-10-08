@@ -71,7 +71,7 @@ export default {
   // ═══ CONTENUTO ════════════════════════════════════════════════
   fields: [
     { type: 'separator', label: t('Lavori') },
-    { key: 'items', label: t('Card'), type: 'content-items',
+    { key: 'items', label: t('Card'), type: 'content-items', supportsDynamic: true,
       itemLabel: t('Lavoro'),
       defaults: { image: '', media_label: 'Nuovo lavoro', title: 'Titolo', meta: "'26 — Categoria", description: 'Breve descrizione del progetto.', link_url: '', tall: false },
       itemFields: [

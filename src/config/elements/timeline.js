@@ -87,7 +87,7 @@ export default {
   fields: [
     // ── Eventi ──
     { type: 'separator', label: t('Eventi') },
-    { key: 'items', label: t('Eventi'), type: 'content-items',
+    { key: 'items', label: t('Eventi'), type: 'content-items', supportsDynamic: true,
       itemFields: [
         { key: 'title', label: t('Titolo'), type: 'text' },
         { key: 'tag', label: t('Etichetta / fase'), type: 'text' },
