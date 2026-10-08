@@ -19,7 +19,7 @@
       <!-- Tipo di contenuto -->
       <div class="dqp-field">
         <label class="dqp-label">{{ t('Tipo di contenuto') }}</label>
-        <FieldSelect ui="dropdown" theme="dark" :model-value="localQuery.post_type" :options="postTypes" @update:model-value="updateQuery('post_type', $event)" />
+        <FieldSelect ui="dropdown" :model-value="localQuery.post_type" :options="postTypes" @update:model-value="updateQuery('post_type', $event)" />
       </div>
 
       <!-- Posts per page -->
@@ -38,19 +38,19 @@
       <div class="dqp-row">
         <div class="dqp-field dqp-field--half">
           <label class="dqp-label">{{ t('Ordina per') }}</label>
-          <FieldSelect ui="dropdown" theme="dark" :model-value="localQuery.orderby" :options="ORDERBY_OPTS" @update:model-value="updateQuery('orderby', $event)" />
+          <FieldSelect ui="dropdown" :model-value="localQuery.orderby" :options="ORDERBY_OPTS" @update:model-value="updateQuery('orderby', $event)" />
         </div>
         <!-- In ordine casuale la direzione non conta: il controllo si nasconde -->
         <div v-if="localQuery.orderby !== 'rand'" class="dqp-field dqp-field--half">
           <label class="dqp-label">{{ t('Ordine') }}</label>
-          <FieldSelect ui="dropdown" theme="dark" :model-value="localQuery.order" :options="orderOpts" @update:model-value="updateQuery('order', $event)" />
+          <FieldSelect ui="dropdown" :model-value="localQuery.order" :options="orderOpts" @update:model-value="updateQuery('order', $event)" />
         </div>
       </div>
 
       <!-- Taxonomy filter -->
       <div class="dqp-field">
         <label class="dqp-label">{{ t('Filtra per tassonomia') }}</label>
-        <FieldSelect ui="dropdown" theme="dark" :model-value="localQuery.taxonomy" :options="taxonomyOpts" @update:model-value="onTaxonomyChange($event)" />
+        <FieldSelect ui="dropdown" :model-value="localQuery.taxonomy" :options="taxonomyOpts" @update:model-value="onTaxonomyChange($event)" />
       </div>
 
       <!-- Terms multi-select -->
@@ -84,7 +84,6 @@
           <span class="dqp-map-key">{{ field.label }}</span>
           <FieldSelect
             ui="dropdown"
-            theme="dark"
             size="compact"
             :model-value="localItemMap[field.key] || ''"
             :options="WP_FIELD_OPTS"
@@ -304,11 +303,13 @@ function emitQuery() {
 </script>
 
 <style scoped>
+/* Tema chiaro del chrome, come l'Inspector che lo contiene */
 .dqp-wrap {
+  --olo-ui-accent: #e8622a;
   margin-bottom: 8px;
   padding: 8px;
-  background: #1e293b;
-  border: 1px solid #334155;
+  background: #fff;
+  border: 1px solid rgba(17, 24, 39, 0.12);
   border-radius: 6px;
 }
 
@@ -323,7 +324,7 @@ function emitQuery() {
   gap: 8px;
   font-size: 12px;
   font-weight: 600;
-  color: #d1d5db;
+  color: #1f2937;
   cursor: pointer;
 }
 
@@ -352,30 +353,30 @@ function emitQuery() {
 .dqp-label {
   font-size: 10px;
   font-weight: 600;
-  color: #9ca3af;
+  color: #6b7280;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .dqp-label--section {
   font-size: 11px;
-  color: #c7d2fe;
+  color: #1f2937;
   margin-bottom: 4px;
 }
 
 .dqp-input {
   width: 100%;
-  background: #111827;
-  border: 1px solid #374151;
+  background: #fff;
+  border: 1px solid #d1d5db;
   border-radius: 4px;
   padding: 5px 8px;
   font-size: 12px;
-  color: #e5e7eb;
+  color: #111827;
 }
 
 .dqp-input:focus {
   outline: none;
-  border-color: var(--olo-ui-accent, #e8622a);
+  border-color: var(--olo-ui-accent);
 }
 
 .dqp-terms {
@@ -385,8 +386,8 @@ function emitQuery() {
   max-height: 120px;
   overflow-y: auto;
   padding: 4px;
-  background: #111827;
-  border: 1px solid #374151;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
   border-radius: 4px;
 }
 
@@ -395,13 +396,13 @@ function emitQuery() {
   align-items: center;
   gap: 6px;
   font-size: 11px;
-  color: #d1d5db;
+  color: #374151;
   cursor: pointer;
 }
 
 .dqp-primo {
   font-size: 11px;
-  color: #9ca3af;
+  color: #6b7280;
   min-height: 15px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -409,7 +410,7 @@ function emitQuery() {
 }
 
 .dqp-primo strong {
-  color: #e5e7eb;
+  color: #111827;
   font-weight: 600;
 }
 
@@ -418,19 +419,19 @@ function emitQuery() {
   padding: 4px 8px;
   font-size: 11px;
   font-weight: 600;
-  color: #e5e7eb;
-  background: #111827;
-  border: 1px solid #374151;
+  color: #1f2937;
+  background: #fff;
+  border: 1px solid #d1d5db;
   border-radius: 4px;
   cursor: pointer;
 }
 
 .dqp-automappa:hover {
-  border-color: var(--olo-ui-accent, #e8622a);
+  border-color: var(--olo-ui-accent);
 }
 
 .dqp-automappa:focus-visible {
-  outline: 2px solid var(--olo-ui-accent, #e8622a);
+  outline: 2px solid var(--olo-ui-accent);
   outline-offset: 2px;
 }
 
@@ -438,7 +439,7 @@ function emitQuery() {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  border-top: 1px solid #374151;
+  border-top: 1px solid #e5e7eb;
   padding-top: 8px;
 }
 
@@ -451,7 +452,7 @@ function emitQuery() {
 .dqp-map-key {
   flex: 0 0 70px;
   font-size: 11px;
-  color: #9ca3af;
+  color: #4b5563;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;

@@ -123,7 +123,7 @@ function removeDynamic() {
   border: 1px solid rgb(var(--olo-primary-rgb, 232 98 42) / 0.3);
   border-radius: 6px;
   font-size: 11px;
-  color: #c7d2fe;
+  color: #9a3412; /* arancio scuro: leggibile sul fondo chiaro del chrome */
 }
 
 .dft-badge-icon {
@@ -148,7 +148,7 @@ function removeDynamic() {
   border: none;
   border-radius: 3px;
   background: transparent;
-  color: #9ca3af;
+  color: #6b7280;
   font-size: 14px;
   cursor: pointer;
   flex-shrink: 0;

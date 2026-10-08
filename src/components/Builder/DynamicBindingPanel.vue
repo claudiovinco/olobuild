@@ -8,7 +8,7 @@
     <!-- Step 1: Select source -->
     <div class="dbp-section">
       <label class="dbp-label">{{ t('Sorgente') }}</label>
-      <FieldSelect ui="dropdown" theme="dark" :model-value="selectedSource" :options="sourceOpts" @update:model-value="onSourceChange" />
+      <FieldSelect ui="dropdown" :model-value="selectedSource" :options="sourceOpts" @update:model-value="onSourceChange" />
     </div>
 
     <!-- Step 2: Select field -->
@@ -27,12 +27,12 @@
 
       <!-- ACF grouped fields -->
       <template v-else-if="selectedSource === 'acf' && isGroupedFields">
-        <FieldSelect ui="dropdown" theme="dark" :model-value="selectedField" :options="groupedFieldOpts" @update:model-value="selectedField = $event" />
+        <FieldSelect ui="dropdown" :model-value="selectedField" :options="groupedFieldOpts" @update:model-value="selectedField = $event" />
       </template>
 
       <!-- Standard flat fields -->
       <template v-else-if="Array.isArray(fieldsForSource)">
-        <FieldSelect ui="dropdown" theme="dark" :model-value="selectedField" :options="flatFieldOpts" @update:model-value="selectedField = $event" />
+        <FieldSelect ui="dropdown" :model-value="selectedField" :options="flatFieldOpts" @update:model-value="selectedField = $event" />
       </template>
     </div>
 
@@ -197,12 +197,15 @@ function applyBinding() {
 </script>
 
 <style scoped>
+/* Tema chiaro del chrome (dalla 1.4.563 l'Inspector è chiaro: il pannello scuro ne usciva a metà) */
 .dbp-panel {
+  --olo-ui-accent: #e8622a;
   margin-top: 6px;
   padding: 10px;
-  background: #1e293b;
-  border: 1px solid #475569;
+  background: #fff;
+  border: 1px solid rgba(17, 24, 39, 0.12);
   border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(17, 24, 39, 0.08);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -217,7 +220,7 @@ function applyBinding() {
 .dbp-title {
   font-size: 11px;
   font-weight: 600;
-  color: #c7d2fe;
+  color: #1f2937;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -231,14 +234,20 @@ function applyBinding() {
   border: none;
   border-radius: 3px;
   background: transparent;
-  color: #9ca3af;
+  color: #6b7280;
   font-size: 14px;
   cursor: pointer;
 }
 
 .dbp-close:hover {
-  background: #374151;
-  color: #fff;
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.dbp-close:focus-visible,
+.dbp-btn:focus-visible {
+  outline: 2px solid var(--olo-ui-accent);
+  outline-offset: 2px;
 }
 
 .dbp-section {
@@ -250,24 +259,24 @@ function applyBinding() {
 .dbp-label {
   font-size: 10px;
   font-weight: 600;
-  color: #9ca3af;
+  color: #6b7280;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .dbp-input {
   width: 100%;
-  background: #111827;
-  border: 1px solid #374151;
+  background: #fff;
+  border: 1px solid #d1d5db;
   border-radius: 4px;
   padding: 5px 8px;
   font-size: 12px;
-  color: #e5e7eb;
+  color: #111827;
 }
 
 .dbp-input:focus {
   outline: none;
-  border-color: var(--olo-ui-accent, #e8622a);
+  border-color: var(--olo-ui-accent);
 }
 
 .dbp-preview {
@@ -278,17 +287,18 @@ function applyBinding() {
 
 .dbp-preview-value {
   padding: 6px 8px;
-  background: #111827;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
   border-radius: 4px;
-  font-size: 11px;
-  color: #d1d5db;
-  word-break: break-all;
+  font-size: 12px;
+  color: #374151;
+  word-break: break-word;
   max-height: 80px;
   overflow: auto;
 }
 
 .dbp-preview-loading {
-  color: #9ca3af;
+  color: #6b7280;
   font-style: italic;
 }
 
@@ -307,12 +317,12 @@ function applyBinding() {
 .dbp-btn {
   flex: 1;
   padding: 6px 0;
-  border: none;
+  border: 1px solid transparent;
   border-radius: 4px;
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.15s, border-color 0.15s;
 }
 
 .dbp-btn:disabled {
@@ -321,7 +331,7 @@ function applyBinding() {
 }
 
 .dbp-btn--apply {
-  background: var(--olo-ui-accent, #e8622a);
+  background: var(--olo-ui-accent);
   color: #fff;
 }
 
@@ -329,12 +339,15 @@ function applyBinding() {
   filter: brightness(0.88);
 }
 
+/* Togliere è l'azione secondaria: contorno, non un secondo pulsante pieno accanto ad Applica */
 .dbp-btn--remove {
-  background: #dc2626;
-  color: #fff;
+  background: #fff;
+  border-color: #e5e7eb;
+  color: #b91c1c;
 }
 
 .dbp-btn--remove:hover {
-  background: #b91c1c;
+  background: #fef2f2;
+  border-color: #fecaca;
 }
 </style>
