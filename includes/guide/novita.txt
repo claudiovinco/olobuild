@@ -4,11 +4,11 @@ Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia pe
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
 ## v1.4.583 - 2026-10-08
-- Contenuti dinamici: 20 tile in più prendono le voci dagli articoli, dalle pagine o da un altro tipo di contenuto: Stack Scroll, Hover List, Info Cards, Scroll Scrub, Work Grid, Work List, Elenco, Elenco con icone, Carosello, Category Rail, Film Reel, Product Grid, Showcase Grid, Link in bio, Testimonianze, Quote Slider, News Ticker, Portfolio, Timeline e Product Cards. Nelle voci della tile accendi «Sorgente dinamica».
+- Contenuti dinamici: 20 tile in più prendono le voci dagli articoli, dalle pagine o da un altro tipo di contenuto: Card impilate, Hover List, Info Cards, Scorrimento orizzontale, Work Grid, Work List, Lista, Lista icone, Carosello immagini, Category Rail, Film Reel, Griglia Prodotti, Showcase Grid, Link in Bio, Testimonianza, Quote Slider, News Ticker, Portfolio, Timeline e Product Cards. Nelle voci della tile accendi «Sorgente dinamica».
 - Contenuti dinamici: nella mappatura dei campi ci sono anche «Numero progressivo» (01, 02…) e «Anno». «Collega i campi per nome» riconosce più campi: numeri, anni, citazioni, nomi, testi lunghi.
 - Contenuti dinamici: «Primo termine tassonomia» mostra la categoria dell'articolo. Prima restava sempre vuoto.
 - Slideshow: l'«URL link» di una slide porta davvero alla pagina, con un clic su tutta la slide. Prima il campo non aveva effetto.
-- Link in bio: l'«Immagine icona» di un link compare accanto al testo. Prima il campo non aveva effetto.
+- Link in Bio: l'«Immagine icona» di un link compare accanto al testo. Prima il campo non aveva effetto.
 
 ## v1.4.582 - 2026-10-08 (fix)
 - Builder: nel pannello degli elenchi dagli articoli «Numero di elementi» ha l'etichetta a sinistra e il numero a destra, come le altre righe. Prima finivano centrati uno sotto l'altro.
