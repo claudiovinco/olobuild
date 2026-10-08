@@ -24007,3 +24007,27 @@ msgstr "Other"
 #: src/components/Builder
 msgid "Column"
 msgstr "Column"
+
+#: assets/js/iframe-bridge.js
+msgid "Prezzi"
+msgstr "Pricing"
+
+#: assets/js/iframe-bridge.js
+msgid "Galleria Servizi"
+msgstr "Service Gallery"
+
+#: assets/js/iframe-bridge.js
+msgid "Ricerca Servizi"
+msgstr "Service Search"
+
+#: assets/js/iframe-bridge.js
+msgid "Correlati"
+msgstr "Related"
+
+#: assets/js/iframe-bridge.js
+msgid "Video Servizio"
+msgstr "Service Video"
+
+#: assets/js/iframe-bridge.js
+msgid "Testo Mask"
+msgstr "Text Mask"

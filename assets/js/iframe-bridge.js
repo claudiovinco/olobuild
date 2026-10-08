@@ -1281,6 +1281,12 @@
       code: 'Codice', html: 'HTML', lottie: 'Lottie', pdfviewer: 'PDF Viewer'
     };
     var label = el.tagName === 'SECTION' ? 'Sezione' : (tileNames[tileType] || tileType || 'Elemento');
+    // Nella lingua dell'editor (1.4.579): il dizionario del builder sta nella pagina che ospita la tela, stessa
+    // origine. Prima l'etichetta restava in italiano («TITOLO») anche con l'editor in un'altra lingua.
+    try {
+      var diz = window.parent && window.parent !== window && window.parent.oloData && window.parent.oloData.translations;
+      if (diz && diz[label]) { label = diz[label]; }
+    } catch (errDiz) { /* tela su un'altra origine: resta il nome italiano */ }
     tb.querySelector('.olo-iframe-toolbar-label').textContent = label;
     tb.setAttribute('data-for-tile', tileId);
     // Position toolbar inside the element (top-left corner with padding)
