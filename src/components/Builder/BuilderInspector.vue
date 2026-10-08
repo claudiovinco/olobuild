@@ -128,7 +128,7 @@
             @click="activeTab = b.target"
             class="insp-badge"
             :class="`insp-badge--${b.color}`"
-            :title="t('Vai a ') + b.target"
+            :title="t('Vai a ') + t(b.target)"
           >{{ t(b.label) }}</button>
         </div>
 
@@ -2386,7 +2386,7 @@ function crumbLabel(node) {
   // Per i tipi strutturali (section/row/column/grid/...) preferiamo typeLabels:
   // sono nomi brevi adatti al breadcrumb. Il name del config (es. "Riga / Colonne")
   // è pensato per la sidebar di drag-and-drop, non per il path gerarchico.
-  if (typeLabels[node.type]) return typeLabels[node.type];
+  if (typeLabels[node.type]) return t(typeLabels[node.type]);
   const def = getElementDef(node.type);
   if (def?.name) return def.name;
   if (node.type === 'column') {

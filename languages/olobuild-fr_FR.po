@@ -23964,3 +23964,43 @@ msgstr "aussi utilisé par une règle d'affichage"
 #: src/utils/zoneOrigin.js
 msgid "in bozza: il sito non lo mostra"
 msgstr "en brouillon : le site ne l'affiche pas"
+
+#: src/components/Builder
+msgid "Avanzate"
+msgstr "Avancé"
+
+#: src/components/Builder
+msgid "Vista"
+msgstr "Vue"
+
+#: src/components/Builder
+msgid "Categorie elementi"
+msgstr "Catégories d'éléments"
+
+#: src/components/Builder
+msgid "Collega a contenuto dinamico"
+msgstr "Lier à un contenu dynamique"
+
+#: src/components/Builder
+msgid "Collegamento dinamico attivo — clicca per modificare"
+msgstr "Lien dynamique actif — cliquez pour modifier"
+
+#: src/components/Builder
+msgid "Essenziale"
+msgstr "Essentiels"
+
+#: src/components/Builder
+msgid "Interattivo"
+msgstr "Interactif"
+
+#: src/components/Builder
+msgid "Dinamico"
+msgstr "Dynamique"
+
+#: src/components/Builder
+msgid "Altro"
+msgstr "Autre"
+
+#: src/components/Builder
+msgid "Column"
+msgstr "Colonne"

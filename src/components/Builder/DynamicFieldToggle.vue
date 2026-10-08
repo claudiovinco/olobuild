@@ -6,7 +6,7 @@
         type="button"
         class="dft-btn"
         :class="{ 'dft-btn--active': hasDynamic }"
-        :title="hasDynamic ? 'Collegamento dinamico attivo — clicca per modificare' : 'Collega a contenuto dinamico'"
+        :title="hasDynamic ? t('Collegamento dinamico attivo — clicca per modificare') : t('Collega a contenuto dinamico')"
         @click="togglePanel"
       >&#9889;</button>
     </label>

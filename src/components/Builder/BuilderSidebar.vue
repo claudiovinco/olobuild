@@ -36,7 +36,7 @@
     <!-- Tiles tab — V2 layout: 56px rail + 1fr panel -->
     <div v-if="activeTab === 'tiles'" class="olo-sb-body">
       <!-- Rail: vertical category buttons -->
-      <div class="olo-sb-rail olo-sb-rail--cats" role="tablist" aria-label="Categorie elementi">
+      <div class="olo-sb-rail olo-sb-rail--cats" role="tablist" :aria-label="t('Categorie elementi')">
         <button
           v-for="cat in railCategories"
           :key="cat.id"
@@ -453,7 +453,7 @@ const selectedBreadcrumb = computed(() => {
   if (!path) return [];
   const out = [{ label: zone, icon: '' }];
   for (const node of path) {
-    const lbl = node.settings?._label || _typeLabels[node.type] || node.type;
+    const lbl = node.settings?._label || (_typeLabels[node.type] ? t(_typeLabels[node.type]) : node.type);
     const ic = (node === path[path.length - 1]) ? (tileIcons[node.type] || '') : '';
     out.push({ label: lbl, icon: ic });
   }

@@ -23967,3 +23967,43 @@ msgstr "also used by a display rule"
 #: src/utils/zoneOrigin.js
 msgid "in bozza: il sito non lo mostra"
 msgstr "draft: the site does not show it"
+
+#: src/components/Builder
+msgid "Avanzate"
+msgstr "Advanced"
+
+#: src/components/Builder
+msgid "Vista"
+msgstr "View"
+
+#: src/components/Builder
+msgid "Categorie elementi"
+msgstr "Element categories"
+
+#: src/components/Builder
+msgid "Collega a contenuto dinamico"
+msgstr "Link to dynamic content"
+
+#: src/components/Builder
+msgid "Collegamento dinamico attivo — clicca per modificare"
+msgstr "Dynamic link active — click to edit"
+
+#: src/components/Builder
+msgid "Essenziale"
+msgstr "Essentials"
+
+#: src/components/Builder
+msgid "Interattivo"
+msgstr "Interactive"
+
+#: src/components/Builder
+msgid "Dinamico"
+msgstr "Dynamic"
+
+#: src/components/Builder
+msgid "Altro"
+msgstr "Other"
+
+#: src/components/Builder
+msgid "Column"
+msgstr "Column"

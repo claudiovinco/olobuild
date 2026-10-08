@@ -80,7 +80,7 @@
             : 'mb-text-gray-400 hover:mb-text-gray-200'
         ]"
         :title="vp.title"
-        :aria-label="'Vista ' + vp.label"
+        :aria-label="t('Vista') + ' ' + vp.label"
         v-html="vp.svg"
       ></button>
     </div>

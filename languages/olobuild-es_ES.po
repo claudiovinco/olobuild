@@ -23964,3 +23964,43 @@ msgstr "usado también por una regla de visualización"
 #: src/utils/zoneOrigin.js
 msgid "in bozza: il sito non lo mostra"
 msgstr "en borrador: el sitio no lo muestra"
+
+#: src/components/Builder
+msgid "Avanzate"
+msgstr "Avanzado"
+
+#: src/components/Builder
+msgid "Vista"
+msgstr "Vista"
+
+#: src/components/Builder
+msgid "Categorie elementi"
+msgstr "Categorías de elementos"
+
+#: src/components/Builder
+msgid "Collega a contenuto dinamico"
+msgstr "Vincular a contenido dinámico"
+
+#: src/components/Builder
+msgid "Collegamento dinamico attivo — clicca per modificare"
+msgstr "Vínculo dinámico activo — haz clic para editar"
+
+#: src/components/Builder
+msgid "Essenziale"
+msgstr "Esenciales"
+
+#: src/components/Builder
+msgid "Interattivo"
+msgstr "Interactivo"
+
+#: src/components/Builder
+msgid "Dinamico"
+msgstr "Dinámico"
+
+#: src/components/Builder
+msgid "Altro"
+msgstr "Otro"
+
+#: src/components/Builder
+msgid "Column"
+msgstr "Columna"
