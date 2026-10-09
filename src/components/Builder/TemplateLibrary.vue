@@ -25,6 +25,7 @@
                 <rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/>
               </svg>
               <h3>{{ t('Blocchi & Pagine') }}</h3>
+              <InfoTip :titolo="t('Blocchi & Pagine')" :testo="[t('Le anteprime usano colori e caratteri d’esempio: inserito nella pagina, il blocco prende quelli del tuo sito (Stile → Palette e Tipografia).'), t('Foto e video del blocco si copiano nella tua Libreria media, così la pagina non dipende da internet. Testi, foto e link si cambiano come in ogni altra tile.')]" />
             </div>
             <!-- Search -->
             <div class="olo-tpl-tools">
@@ -88,8 +89,10 @@
               >
                 <!-- Miniatura: del plugin (indirizzo relativo) o della libreria remota (assoluto) -->
                 <div v-if="tpl.thumbnail" class="olo-tpl-media">
-                  <img :src="thumbSrc(tpl)" :alt="tpl.name" class="olo-tpl-img" :class="{ 'olo-tpl-img--naturale': tpl.thumbnail_ratio }" :style="tpl.thumbnail_ratio ? { aspectRatio: tpl.thumbnail_ratio } : null" loading="lazy" @error="$event.target.style.display='none'" />
-                  <div v-if="tpl.preview_description" class="olo-tpl-hover">
+                  <!-- Le pagine intere: miniatura alta cinque volte la larghezza, in una cornice 4:5 che
+                       al passaggio scorre fino al footer (alle sue proporzioni la card sarebbe altissima) -->
+                  <img :src="thumbSrc(tpl)" :alt="tpl.name" class="olo-tpl-img" :class="{ 'olo-tpl-img--naturale': tpl.thumbnail_ratio && !isPagina(tpl), 'olo-tpl-img--pagina': isPagina(tpl) }" :style="tpl.thumbnail_ratio && !isPagina(tpl) ? { aspectRatio: tpl.thumbnail_ratio } : null" loading="lazy" @error="$event.target.style.display='none'" />
+                  <div v-if="tpl.preview_description" class="olo-tpl-hover" :class="{ 'olo-tpl-hover--pagina': isPagina(tpl) }">
                     <span>{{ tpl.preview_description }}</span>
                   </div>
                   <!-- In inserimento: le foto del blocco si copiano nella Libreria media (qualche secondo) -->
@@ -292,6 +295,7 @@ import { useToast } from '@/composables/useToast.js';
 import { useHistory } from '@/composables/useHistory';
 import { requestScrollToTile } from '@/utils/scrollToTileChannel';
 import FieldSelect from './fields/FieldSelect.vue';
+import InfoTip from './InfoTip.vue';
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
@@ -331,34 +335,37 @@ const deleteDialogVisible = ref(false);
 const deleteTarget = ref(null);
 const deleting = ref(false);
 
+// Etichette tradotte (prima restavano in italiano in tutte le lingue del builder).
 const categoryDefs = [
-  { key: 'all',           label: 'Tutti',          color: '#9CA3AF' },
-  { key: 'hero',          label: 'Hero',           color: '#e1474f' },
-  { key: 'features',      label: 'Features',       color: '#10B981' },
-  { key: 'services',      label: 'Servizi',        color: '#14B8A6' },
-  { key: 'pricing',       label: 'Prezzi',         color: '#F59E0B' },
-  { key: 'testimonials',  label: 'Testimonianze',  color: '#8B5CF6' },
-  { key: 'cta',           label: 'CTA',            color: '#EF4444' },
-  { key: 'about',         label: 'Chi siamo',      color: '#3B82F6' },
-  { key: 'team',          label: 'Team',           color: '#06B6D4' },
-  { key: 'contact',       label: 'Contatti',       color: '#F97316' },
-  { key: 'faq',           label: 'FAQ',            color: '#84CC16' },
-  { key: 'stats',         label: 'Statistiche',    color: '#A855F7' },
-  { key: 'footer',        label: 'Footer',         color: '#64748B' },
-  { key: 'blog',          label: 'Blog',           color: '#EC4899' },
-  { key: 'gallery',       label: 'Galleria',       color: '#F43F5E' },
-  { key: 'portfolio',     label: 'Portfolio',      color: '#0EA5E9' },
-  { key: 'video',         label: 'Video',          color: '#DC2626' },
-  { key: 'timeline',      label: 'Timeline',       color: '#7C3AED' },
-  { key: 'text',          label: 'Testo e titoli', color: '#0369A1' },
-  { key: 'newsletter',    label: 'Newsletter',     color: '#059669' },
-  { key: 'logos',         label: 'Loghi',          color: '#78716C' },
-  { key: 'coming-soon',   label: 'Coming Soon',    color: '#D946EF' },
-  { key: '404',           label: '404',            color: '#EF4444' },
-  { key: 'ecommerce',     label: 'E-Commerce',     color: '#F97316' },
-  { key: 'page',           label: 'Pagine complete', color: '#2563EB' },
-  { key: 'misc',          label: 'Varie',          color: '#6B7280' },
-  { key: 'custom',        label: 'Personali',      color: '#F59E0B' },
+  { key: 'all',           label: t('Tutti'),           color: '#9CA3AF' },
+  { key: 'hero',          label: t('Hero'),            color: '#e1474f' },
+  { key: 'features',      label: t('Caratteristiche'), color: '#10B981' },
+  { key: 'services',      label: t('Servizi'),         color: '#14B8A6' },
+  { key: 'pricing',       label: t('Prezzi'),          color: '#F59E0B' },
+  { key: 'testimonials',  label: t('Testimonianze'),   color: '#8B5CF6' },
+  { key: 'cta',           label: t('Inviti all’azione'), color: '#EF4444' },
+  { key: 'about',         label: t('Chi siamo'),       color: '#3B82F6' },
+  { key: 'team',          label: t('Team'),            color: '#06B6D4' },
+  { key: 'contact',       label: t('Contatti'),        color: '#F97316' },
+  { key: 'faq',           label: t('FAQ'),             color: '#84CC16' },
+  { key: 'stats',         label: t('Statistiche'),     color: '#A855F7' },
+  { key: 'effects',       label: t('Effetti'),         color: '#C026D3' },
+  { key: 'interactive',   label: t('Interattivi'),     color: '#0D9488' },
+  { key: 'footer',        label: t('Footer'),          color: '#64748B' },
+  { key: 'blog',          label: t('Blog'),            color: '#EC4899' },
+  { key: 'gallery',       label: t('Galleria'),        color: '#F43F5E' },
+  { key: 'portfolio',     label: t('Portfolio'),       color: '#0EA5E9' },
+  { key: 'video',         label: t('Video'),           color: '#DC2626' },
+  { key: 'timeline',      label: t('Timeline'),        color: '#7C3AED' },
+  { key: 'text',          label: t('Testo e titoli'),  color: '#0369A1' },
+  { key: 'newsletter',    label: t('Newsletter'),      color: '#059669' },
+  { key: 'logos',         label: t('Loghi'),           color: '#78716C' },
+  { key: 'coming-soon',   label: t('Prossimamente'),   color: '#D946EF' },
+  { key: '404',           label: t('Errore 404'),      color: '#EF4444' },
+  { key: 'ecommerce',     label: t('Negozio'),         color: '#F97316' },
+  { key: 'page',          label: t('Pagine complete'), color: '#2563EB' },
+  { key: 'misc',          label: t('Varie'),           color: '#6B7280' },
+  { key: 'custom',        label: t('Personali'),       color: '#F59E0B' },
 ];
 
 // Category options for save dialog (exclude 'all')
@@ -1347,6 +1354,19 @@ defineExpose({ open, close, visible, openSaveDialog });
 .olo-tpl-img--naturale {
   object-position: center;
 }
+/* Pagina intera: si parte dall'hero e al passaggio si scorre fino al footer */
+.olo-tpl-img--pagina {
+  aspect-ratio: 4 / 5;
+  object-position: top center;
+  transition: object-position 7s linear;
+}
+.olo-tpl-card:hover .olo-tpl-img--pagina,
+.olo-tpl-card:focus-visible .olo-tpl-img--pagina {
+  object-position: bottom center;
+}
+@media (prefers-reduced-motion: reduce) {
+  .olo-tpl-img--pagina { transition: none; }
+}
 
 /* Elenco: blocchi a muratura (colonne CSS, ogni card intera), pagine su due colonne */
 .olo-tpl-elenco--muro {
@@ -1413,6 +1433,12 @@ defineExpose({ open, close, visible, openSaveDialog });
 }
 .olo-tpl-hover--sm {
   padding: 10px;
+}
+.olo-tpl-hover--pagina {
+  inset: auto 0 0 0;
+  align-items: flex-end;
+  padding: 48px 14px 12px;
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0), rgba(20, 20, 20, 0.86) 45%);
 }
 .olo-tpl-hover--sm span {
   font-size: 10.5px;

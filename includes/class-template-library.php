@@ -22,50 +22,33 @@ class Olobuild_Template_Library {
      * Get all available templates grouped by category.
      */
     public function get_templates() {
-        $file = OLOBUILD_PATH . 'assets/data/template-library.json';
-        if ( ! file_exists( $file ) ) {
-            return [];
+        // «Blocchi & Pagine» (ottobre 2026): i blocchi e le pagine intere stanno in due file nati dagli
+        // esempi del catalogo delle tile. Foto, video e miniature stanno nella libreria remota (come gli
+        // screenshot dei temi: il pacchetto resta leggero e le licenze delle foto non entrano nel
+        // plugin): nei file i segnaposto, risolti qui. Foto e video si copiano nella Libreria media
+        // del sito quando il blocco si inserisce (import_media()). Una lettura per richiesta: la
+        // libreria pesa un megabyte e get_template() la chiede a ogni inserimento.
+        static $cache = null;
+        if ( null !== $cache ) {
+            return $cache;
         }
-        $json = file_get_contents( $file );
-        $data = json_decode( $json, true );
-        if ( ! is_array( $data ) ) {
-            return [];
-        }
-        // Support both flat array and {version, templates} wrapper
-        $templates = $data;
-        if ( isset( $data['templates'] ) && is_array( $data['templates'] ) ) {
-            $templates = $data['templates'];
-        }
-
-        // Blocchi nati dagli esempi del catalogo delle tile. Foto e miniature stanno nella libreria
-        // remota (come gli screenshot dei temi: il pacchetto resta leggero e le licenze delle foto non
-        // entrano nel plugin): nel file i segnaposto, risolti qui. Le foto si copiano nella Libreria
-        // media del sito quando il blocco si inserisce (import_media()).
-        $catalogo = OLOBUILD_PATH . 'assets/data/template-library-catalogo.json';
-        if ( file_exists( $catalogo ) ) {
+        $templates = [];
+        foreach ( [ 'template-library.json', 'template-library-pagine.json' ] as $nome ) {
+            $file = OLOBUILD_PATH . 'assets/data/' . $nome;
+            if ( ! file_exists( $file ) ) {
+                continue;
+            }
             $raw  = str_replace(
                 [ '{{OLOBUILD_URL}}', '{{OLOBUILD_LIBRARY}}' ],
                 [ OLOBUILD_URL, self::library_url() ],
-                (string) file_get_contents( $catalogo )
+                (string) file_get_contents( $file )
             );
-            $extra = json_decode( $raw, true );
-            if ( is_array( $extra ) && isset( $extra['templates'] ) && is_array( $extra['templates'] ) ) {
-                $templates = array_merge( $templates, $extra['templates'] );
+            $data = json_decode( $raw, true );
+            if ( is_array( $data ) && isset( $data['templates'] ) && is_array( $data['templates'] ) ) {
+                $templates = array_merge( $templates, $data['templates'] );
             }
         }
-
-        // Load additional page templates from separate files
-        $pages_dir = OLOBUILD_PATH . 'assets/data/page-templates/';
-        if ( is_dir( $pages_dir ) ) {
-            foreach ( glob( $pages_dir . '*.json' ) as $page_file ) {
-                $page_json = file_get_contents( $page_file );
-                $page_data = json_decode( $page_json, true );
-                if ( is_array( $page_data ) && ! empty( $page_data['id'] ) ) {
-                    $templates[] = $page_data;
-                }
-            }
-        }
-
+        $cache = $templates;
         return $templates;
     }
 
@@ -80,8 +63,9 @@ class Olobuild_Template_Library {
     /**
      * Copia nella Libreria media del sito le foto della libreria remota usate da un blocco e
      * riscrive gli indirizzi: il sito non dipende più da olotheme.com. Una foto già copiata (meta
-     * _olobuild_library_media) si riusa. Scarica solo da {library}/media/ e solo immagini; una foto
-     * che non si copia resta all'indirizzo remoto (il blocco si vede comunque).
+     * _olobuild_library_media) si riusa. Scarica solo da {library}/media/ e solo immagini e video MP4
+     * (gli sfondi video dei blocchi, clip brevi con la copertina a parte); un file che non si copia
+     * resta all'indirizzo remoto (il blocco si vede comunque).
      *
      * @return array [ 'content' => array, 'copiate' => int, 'riusate' => int, 'fallite' => int ]
      */
@@ -125,11 +109,11 @@ class Olobuild_Template_Library {
                 continue;
             }
             $tipo = wp_check_filetype( $file );
-            if ( ! in_array( $tipo['type'] ?? '', [ 'image/jpeg', 'image/png', 'image/webp', 'image/gif' ], true ) ) {
+            if ( ! in_array( $tipo['type'] ?? '', [ 'image/jpeg', 'image/png', 'image/webp', 'image/gif', 'video/mp4' ], true ) ) {
                 $esito['fallite']++;
                 continue;
             }
-            $tmp = download_url( $url, 30 );
+            $tmp = download_url( $url, 'video/mp4' === $tipo['type'] ? 60 : 30 );
             if ( is_wp_error( $tmp ) ) {
                 $esito['fallite']++;
                 continue;
