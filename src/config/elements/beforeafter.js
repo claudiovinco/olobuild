@@ -4,10 +4,12 @@ import { demo } from '../demoMedia.js';
 import { t } from '@/i18n';
 
 /**
- * Before / After — griglia di card "prova" (risultati): coppia di media affiancati
- * con etichette Prima/Dopo + didascalia (titolo + testo). Estratta dai blueprint
- * OLOthemes (BeforeAfter: cadence "The proof"). Per il confronto a slider singolo
- * usare invece la tile `imgcompare`. Render Vue == PHP (BeforeAfterTile.vue).
+ * Before / After — griglia di card "prova" (risultati): per ogni card il prima e il dopo
+ * con le etichette + didascalia (titolo + testo). Estratta dai blueprint OLOthemes
+ * (BeforeAfter: cadence "The proof"). Modalità `mode`: 'slider' (predefinita dal 9 ott
+ * 2026) = le due foto una sopra l'altra con la maniglia da trascinare, lo stesso confronto
+ * della tile `imgcompare`; 'split' = le due foto affiancate, la resa di prima.
+ * Il render è il PHP (class-beforeafter-tile.php).
  */
 export default {
   type: 'beforeafter',
@@ -36,6 +38,19 @@ export default {
     text_color: '',
     card_bg: '',
     radius: 12,
+
+    // Confronto a slider (come «Confronto immagini»): le due foto una sopra l'altra, la maniglia
+    // le separa. Stessi nomi e stessi intervalli della tile imgcompare.
+    mode: 'slider',
+    start_position: 50,
+    orientation: 'horizontal',
+    handle_color: '',
+    handle_size: 40,
+    handle_border: 3,
+    line_width: 3,
+    autoplay: false,
+    autoplay_delay: 3,
+    autoplay_speed: 2,
 
     // Spaziatura / Forma — additivi e no-op coi default (parità PHP)
     cap_padding: { top: 16, right: 4, bottom: 4, left: 4 },
@@ -78,6 +93,22 @@ export default {
         { key: 'text', label: t('Testo risultato'), type: 'textarea' },
       ],
     },
+
+    // Comportamento: le tile salvate prima di questo campo non hanno `mode` e nascono slider
+    // come le nuove; «Foto affiancate» riporta la resa di prima.
+    { type: 'separator', label: t('Comportamento') },
+    { key: 'mode', label: t('Modalità'), type: 'select', options: [
+      { value: 'slider', label: t('Slider da trascinare') },
+      { value: 'split', label: t('Foto affiancate') },
+    ] },
+    { key: 'start_position', label: t('Posizione iniziale'), type: 'range', min: 0, max: 100,
+      condition: { field: 'mode', op: 'neq', value: 'split' } },
+    { key: 'autoplay', label: t('Passaggio automatico'), type: 'toggle',
+      condition: { field: 'mode', op: 'neq', value: 'split' } },
+    { key: 'autoplay_delay', label: t('Attesa inattività (sec)'), type: 'range', min: 1, max: 10,
+      condition: [{ field: 'mode', op: 'neq', value: 'split' }, { field: 'autoplay', value: true }] },
+    { key: 'autoplay_speed', label: t('Durata ciclo (sec)'), type: 'range', min: 1, max: 8,
+      condition: [{ field: 'mode', op: 'neq', value: 'split' }, { field: 'autoplay', value: true }] },
   ],
 
   styleFields: [
@@ -90,6 +121,13 @@ export default {
     { key: 'card_bg', label: t('Sfondo card'), type: 'color' },
     { key: 'title_color', label: t('Colore titolo'), type: 'color' },
     { key: 'text_color', label: t('Colore testo'), type: 'color' },
+
+    // La maniglia del confronto: c'è solo in modalità slider.
+    { type: 'separator', label: t('Maniglia'), condition: { field: 'mode', op: 'neq', value: 'split' } },
+    { key: 'handle_color', label: t('Colore maniglia'), type: 'color' },
+    { key: 'handle_size', label: t('Dimensione maniglia'), type: 'range', min: 24, max: 72 },
+    { key: 'handle_border', label: t('Spessore bordo'), type: 'range', min: 0, max: 8 },
+    { key: 'line_width', label: t('Spessore linea'), type: 'range', min: 1, max: 8 },
 
     { type: 'separator', label: t('Forma') },
     // Elenco canonico: alle cinque voci di prima si aggiungono 16:9, 21:9, 9:16 e 2:3.
@@ -142,5 +180,9 @@ export default {
     ...borderFields(),
     { type: 'separator', label: t('Disposizione') },
     { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 4, step: 1, responsive: true },
+    { key: 'orientation', label: t('Orientamento'), type: 'select', options: [
+      { value: 'horizontal', label: t('Orizzontale') },
+      { value: 'vertical', label: t('Verticale') },
+    ], condition: { field: 'mode', op: 'neq', value: 'split' } },
   ],
 };
