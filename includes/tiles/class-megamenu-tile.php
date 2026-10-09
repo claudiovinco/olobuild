@@ -23,6 +23,11 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         'logo_dot_position'  => 'before',
         'logo_text_color'    => '',
         'logo_text_size'     => '19',
+        // Carattere, peso, maiuscolo e spaziatura del nome: vuoti = titoli del tema, 700, -0.02em.
+        'logo_text_font'      => '',
+        'logo_text_weight'    => '',
+        'logo_text_transform' => '',
+        'logo_text_spacing'   => '',
         'logo_crest'         => '',
         'logo_crest_bg'      => '',
         'logo_crest_color'   => '',
@@ -2478,7 +2483,18 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             }
         }
 
-        $html .= '<span class="olo-mm-logo-text" style="font-size:' . (int) $logo_txt_sz . 'px' . $color_style . '">' . $text_html . '</span>';
+        // Carattere, peso, maiuscolo e spaziatura scelti nel controllo «Testo logo» (vuoti = la regola
+        // .olo-mm-logo-text: titoli del tema, 700, -0.02em).
+        $ff = $this->resolve_font_family( (string) ( $s['logo_text_font'] ?? '' ) );
+        $fw = $this->font_weight_css( $s['logo_text_weight'] ?? '' );
+        $tt = (string) ( $s['logo_text_transform'] ?? '' );
+        $ls = (string) ( $s['logo_text_spacing'] ?? '' );
+        $extra = ( $ff && 'inherit' !== $ff ? ';font-family:' . $ff : '' )
+            . ( '' !== $fw ? ';font-weight:' . $fw : '' )
+            . ( in_array( $tt, [ 'none', 'uppercase', 'lowercase', 'capitalize' ], true ) ? ';text-transform:' . $tt : '' )
+            . ( '' !== trim( $ls ) && is_numeric( $ls ) ? ';letter-spacing:' . (float) $ls . 'px' : '' );
+
+        $html .= '<span class="olo-mm-logo-text" style="font-size:' . (int) $logo_txt_sz . 'px' . $color_style . esc_attr( $extra ) . '">' . $text_html . '</span>';
         return $html;
     }
 
