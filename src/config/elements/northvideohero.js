@@ -28,6 +28,8 @@ export default {
     media_bg: { type: 'none' },
     eyebrow_text: 'NORTH',
     crest_on: true,
+    crest_icon: '',
+    crest_image: '',
     headline_text: 'AI for business that turns complexity into clarity',
     accent_text: '',
     subhead: '',
@@ -71,7 +73,12 @@ export default {
 
   fields: [
     { key: 'eyebrow_text', label: t('Eyebrow (mono)'), type: 'text' },
-    { key: 'crest_on', label: t('Mostra crest (orb)'), type: 'toggle' },
+    { key: 'crest_on', label: t('Mostra il simbolo'), type: 'toggle' },
+    // Il simbolo si sostituisce (ogni oggetto di una tile si deve poter cambiare): icona del set o
+    // immagine; vuoti = l'orb disegnato di sempre.
+    { key: 'crest_icon', label: t('Simbolo'), type: 'icon', condition: { crest_on: [true] },
+      description: t('Vuoto: l’orb disegnato della tile. Un’immagine caricata sotto prende il posto dell’icona.') },
+    { key: 'crest_image', label: t('Simbolo da immagine'), type: 'image', condition: { crest_on: [true] } },
     { key: 'headline_text', label: t('Titolo'), type: 'textarea' },
     { key: 'accent_text', label: t('Parola accento (opzionale)'), type: 'text' },
     { key: 'subhead', label: t('Sottotitolo (opzionale)'), type: 'textarea' },
@@ -119,7 +126,7 @@ export default {
     { key: 'eyebrow_color', label: t('Colore eyebrow'), type: 'color' },
     { key: 'sub_color', label: t('Colore sottotitolo'), type: 'color' },
     { key: 'accent', label: t('Accento'), type: 'color', description: t('Vuoto = primario del tema.') },
-    { key: 'crest_color', label: t('Colore crest'), type: 'color' },
+    { key: 'crest_color', label: t('Colore simbolo'), type: 'color', condition: [{ crest_on: [true] }, { field: 'crest_image', op: 'empty' }] },
 
     { type: 'separator', label: t('Layout') },
     { key: 'headline_max', label: t('Larghezza max titolo'), type: 'range', min: 480, max: 1600, step: 20 },

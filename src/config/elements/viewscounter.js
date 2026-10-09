@@ -16,6 +16,7 @@ export default {
     typography_preset: '',
     preset: 'custom',
     show_icon: true,
+    icon: '',
     icon_position: 'before',
     label: t('visualizzazioni'),
     show_label: true,
@@ -45,6 +46,8 @@ export default {
 
   fields: [
     { key: 'show_icon', label: t('Mostra icona'), type: 'toggle' },
+    { key: 'icon', label: t('Icona'), type: 'icon', condition: { field: 'show_icon', value: true },
+      description: t('Vuota: l’occhio.') },
     { key: 'label', label: t('Etichetta'), type: 'text' },
     { key: 'show_label', label: t('Mostra etichetta'), type: 'toggle' },
     { key: 'number_format', label: t('Formato con separatore migliaia'), type: 'toggle' },

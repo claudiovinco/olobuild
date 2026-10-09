@@ -24,6 +24,9 @@ class Olobuild_NorthQuoteSlider_Tile extends Olobuild_Tile_Base {
         // Etichetta in basso sulla grafica: era la scritta fissa «North · enterprise AI» del
         // blueprint Cohere. Il default la ripete, così i template salvati non cambiano.
         'graphic_label'  => 'North · enterprise AI',
+        // La grafica si sostituisce (ogni oggetto di una tile si deve poter cambiare): con una foto o
+        // un'illustrazione caricata qui le linee topografiche lasciano il posto all'immagine.
+        'graphic_image'  => '',
 
         'bg_color'           => 'var(--olo-color-light, #ffffff)',
         'heading_color'      => 'var(--olo-color-text, #212121)',
@@ -109,7 +112,8 @@ class Olobuild_NorthQuoteSlider_Tile extends Olobuild_Tile_Base {
         $shadow_css     = $this->build_shadow_decl( $s );
         $kit_shadow_css = $shadow_css ? "box-shadow:{$shadow_css};" : '';
 
-        $topo   = $this->topo_paths();
+        $gimg   = trim( (string) ( $s['graphic_image'] ?? '' ) );
+        $topo   = $gimg === '' ? $this->topo_paths() : '';
         $glabel = trim( (string) ( $s['graphic_label'] ?? '' ) );
         // Bordo delle frecce e puntini spenti sono il colore delle frecce velato (prima nero
         // al 16-18% fisso: su una sezione scura frecce e puntini sparivano). La colonna di
@@ -146,6 +150,10 @@ class Olobuild_NorthQuoteSlider_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .nqs-graphic.is-slant{clip-path:polygon(20% 0,100% 0,80% 100%,0 100%);}
             <?php endif; ?>
             .<?php echo $uid; ?> .nqs-graphic svg{position:absolute;inset:0;width:100%;height:100%;}
+            .<?php echo $uid; ?> .nqs-graphic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .85s cubic-bezier(.66,0,.34,1);}
+            <?php if ( $slant ) : ?>
+            .<?php echo $uid; ?> .nqs-graphic.is-slant img{transform:scale(1.06);}
+            <?php endif; ?>
             .<?php echo $uid; ?> .nqs-lines{transition:transform .85s cubic-bezier(.66,0,.34,1);}
             <?php if ( $slant ) : ?>
             .<?php echo $uid; ?> .nqs-graphic.is-slant .nqs-lines{transform:skewX(-10deg) translateX(5%);}
@@ -188,7 +196,7 @@ class Olobuild_NorthQuoteSlider_Tile extends Olobuild_Tile_Base {
                     </div>
                     <div class="nqs-right">
                         <div class="nqs-graphic" aria-hidden="true">
-                            <svg viewBox="0 0 400 640" preserveAspectRatio="xMidYMid slice"><g class="nqs-lines"><?php echo $topo; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $topo is SVG <path> markup generated internally by topo_paths() (numeric coordinates only) ?></g></svg>
+                            <?php if ( $gimg !== '' ) : ?><img src="<?php echo esc_url( $gimg ); ?>" alt="" loading="lazy" decoding="async"><?php else : ?><svg viewBox="0 0 400 640" preserveAspectRatio="xMidYMid slice"><g class="nqs-lines"><?php echo $topo; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $topo is SVG <path> markup generated internally by topo_paths() (numeric coordinates only) ?></g></svg><?php endif; ?>
                             <?php if ( '' !== $glabel ) : ?><span class="nqs-glabel"><?php echo esc_html( $glabel ); ?></span><?php endif; ?>
                         </div>
                     </div>

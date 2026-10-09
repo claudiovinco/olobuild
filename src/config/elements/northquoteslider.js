@@ -38,6 +38,7 @@ export default {
     // Etichetta in basso sulla grafica (era una scritta fissa nel renderer): il default
     // ripete quella di prima, i template salvati non cambiano.
     graphic_label: 'North · enterprise AI',
+    graphic_image: '',
 
     bg_color: 'var(--olo-color-light, #f8f9fa)',
     heading_color: 'var(--olo-color-text, #1f2937)',
@@ -96,6 +97,8 @@ export default {
 
     { type: 'separator', label: t('Grafica') },
     { key: 'graphic_label', label: t('Etichetta sulla grafica'), type: 'text', placeholder: t('Vuoto = nessuna etichetta') },
+    { key: 'graphic_image', label: t('Immagine al posto della grafica'), type: 'image',
+      description: t('Vuota: le linee topografiche disegnate dalla tile, nei colori di «Sfondo grafica» e «Linee punteggiate».') },
 
     { type: 'separator', label: t('Animazione') },
     { key: 'slant', label: t('Morph rettangolo → parallelogramma'), type: 'toggle' },
@@ -121,7 +124,7 @@ export default {
 
     { type: 'separator', label: t('Grafica (card destra)') },
     { key: 'graphic_color', label: t('Sfondo grafica'), type: 'color' },
-    { key: 'graphic_line_color', label: t('Linee punteggiate'), type: 'color' },
+    { key: 'graphic_line_color', label: t('Linee punteggiate'), type: 'color', condition: { field: 'graphic_image', op: 'empty' } },
 
     { type: 'separator', label: t('Sfondo sezione') },
     { key: 'bg_color', label: t('Sfondo sezione'), type: 'color' },

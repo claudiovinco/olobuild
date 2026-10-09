@@ -52,6 +52,7 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
         'new_badge_days'         => 7,
         'new_badge_text'         => 'Nuovo',
         'trending_badge'         => false,
+        'trending_badge_text'    => 'Trending',
         'show_comment_count'     => false,
         'enable_search'          => false,
         'search_placeholder'     => 'Cerca…',
@@ -528,7 +529,7 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
         ?>
         <article class="<?php echo esc_attr( implode( ' ', $card_classes ) ); ?>"<?php if ( ! empty( $card_styles ) ) echo ' style="' . esc_attr( implode( ';', $card_styles ) ) . '"'; ?><?php echo $hover_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- data-olo-ql-hover attribute string built above with esc_attr() around the value ?>>
             <?php if ( $is_new ) : ?><span class="olo-ql-new-badge"><?php echo $new_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() at assignment above ?></span><?php endif; ?>
-            <?php if ( $is_trending ) : ?><span class="olo-ql-trend-badge">Trending</span><?php endif; ?>
+            <?php if ( $is_trending ) : ?><span class="olo-ql-trend-badge"><?php echo esc_html( (string) ( $s['trending_badge_text'] ?? 'Trending' ) ); ?></span><?php endif; ?>
             <?php if ( ! empty( $s['show_image'] ) ) :
                 $thumb_url = get_the_post_thumbnail_url( $post_obj, 'large' );
                 $ratio_padding = $this->get_ratio_padding( $s['image_ratio'] );

@@ -23,6 +23,10 @@ class Olobuild_NorthVideoHero_Tile extends Olobuild_Tile_Base {
         // contenuto
         'eyebrow_text'   => 'NORTH',
         'crest_on'       => true,
+        // Il simbolo si cambia (regola: ogni oggetto di una tile si deve poter sostituire): un'immagine
+        // vince su un'icona del set; senza nessuno dei due resta l'orb disegnato di sempre.
+        'crest_icon'     => '',
+        'crest_image'    => '',
         'headline_text'  => 'AI for business that turns complexity into clarity',
         'accent_text'    => '',
         'subhead'        => '',
@@ -102,6 +106,8 @@ class Olobuild_NorthVideoHero_Tile extends Olobuild_Tile_Base {
 
         $mode    = in_array( ( $s['mock_mode'] ?? 'video' ), [ 'video', 'media', 'none' ], true ) ? ( $s['mock_mode'] ?? 'video' ) : 'video';
         $crestOn = ! empty( $s['crest_on'] );
+        $crest_img = trim( (string) ( $s['crest_image'] ?? '' ) );
+        $crest_ico = trim( (string) ( $s['crest_icon'] ?? '' ) );
         $reveal  = ! empty( $s['mock_reveal'] );
         $hmax    = max( 480, min( 1600, intval( $s['headline_max'] ) ) );
 
@@ -153,6 +159,9 @@ class Olobuild_NorthVideoHero_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .nvh-head{display:flex;align-items:flex-start;gap:clamp(20px,4vw,72px);}
             .<?php echo $uid; ?> .nvh-crest{flex:0 0 auto;width:clamp(56px,7vw,92px);height:clamp(56px,7vw,92px);margin-top:6px;}
             .<?php echo $uid; ?> .nvh-crest svg{display:block;width:100%;height:100%;}
+            .<?php echo $uid; ?> .nvh-crest{color:<?php echo $crestC; ?>;}
+            .<?php echo $uid; ?> .nvh-crest > span{display:flex;width:100%;height:100%;}
+            .<?php echo $uid; ?> .nvh-crest img{display:block;width:100%;height:100%;object-fit:contain;}
             .<?php echo $uid; ?> .nvh-text{flex:1 1 auto;min-width:0;}
             .<?php echo $uid; ?> .nvh-eyebrow{display:block;font-family:<?php echo $mono; ?>;font-size:14px;line-height:1.4;letter-spacing:.02em;text-transform:uppercase;color:<?php echo $eyeCol; ?>;margin:0 0 26px;}
             .<?php echo $uid; ?> .nvh-h{font-family:<?php echo $disp; ?>;font-weight:500;font-size:clamp(40px,6.6vw,72px);line-height:1.0;letter-spacing:-.02em;color:<?php echo $txt; ?>;margin:0;max-width:<?php echo (int) $hmax; ?>px;}
@@ -189,12 +198,18 @@ class Olobuild_NorthVideoHero_Tile extends Olobuild_Tile_Base {
                 <div class="nvh-head">
                     <?php if ( $crestOn ) : ?>
                     <span class="nvh-crest" aria-hidden="true">
+                        <?php if ( $crest_img !== '' ) : ?>
+                        <img src="<?php echo esc_url( $crest_img ); ?>" alt="" loading="lazy" decoding="async">
+                        <?php elseif ( $crest_ico !== '' ) : ?>
+                        <?php echo $this->render_icon_html( $crest_ico, 4.6 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup from Olobuild_Tile_Base::render_icon_html(): esc_attr()'d icon name, sanitized custom SVG or the bundled Lucide SVG ?>
+                        <?php else : ?>
                         <svg viewBox="0 0 100 100" fill="none" stroke="<?php echo esc_attr( $crestC ); ?>" stroke-width="1">
                             <circle cx="50" cy="50" r="46"/>
                             <ellipse cx="50" cy="50" rx="46" ry="16" transform="rotate(35 50 50)"/>
                             <ellipse cx="50" cy="50" rx="16" ry="46" transform="rotate(35 50 50)"/>
                             <line x1="50" y1="4" x2="50" y2="96"/>
                         </svg>
+                        <?php endif; ?>
                     </span>
                     <?php endif; ?>
                     <div class="nvh-text">

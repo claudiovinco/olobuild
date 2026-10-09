@@ -37,6 +37,7 @@ class Olobuild_FilmReel_Tile extends Olobuild_Tile_Base {
             [ 'image' => '', 'media_label' => 'Event', 'name' => 'Event', 'tag' => 'Evento · Video', 'size' => 'tall', 'link' => '' ],
         ],
         'rec_overlay'    => true,
+        'rec_text'       => 'REC',
         'velocity_skew'  => true,
         'skew_max'       => '7',
         'progress_bar'   => true,
@@ -260,7 +261,7 @@ class Olobuild_FilmReel_Tile extends Olobuild_Tile_Base {
                         <?php if ( $rec ) : ?>
                         <span class="ofr-rec" aria-hidden="true">
                             <span class="ofr-vf"><span class="tl"></span><span class="tr"></span><span class="bl"></span><span class="br"></span></span>
-                            <span class="ofr-recbadge"><i></i>REC</span>
+                            <span class="ofr-recbadge"><i></i><?php echo esc_html( (string) ( $s['rec_text'] ?? 'REC' ) ); ?></span>
                             <span class="ofr-tc" data-ofr-tc>00:00:00</span>
                         </span>
                         <?php endif; ?>

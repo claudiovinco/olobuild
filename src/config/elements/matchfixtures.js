@@ -89,6 +89,7 @@ export default {
         { key: 'day', label: t('Data (es. Dom 12.10)'), type: 'text' },
         { key: 'time_place', label: t('Ora · luogo'), type: 'text' },
         { key: 'league', label: t('Lega'), type: 'text' },
+        { key: 'league_icon', label: t('Icona della lega'), type: 'icon', description: t('Vuota: lo scudo.') },
         { key: 'matchday', label: t('Giornata'), type: 'text' },
         { key: 'home_crest', label: t('Casa — sigla crest'), type: 'text' },
         { key: 'home_name', label: t('Casa — nome'), type: 'text' },

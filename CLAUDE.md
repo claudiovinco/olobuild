@@ -155,6 +155,14 @@ padding/margine → `type:'spacing'` (4 lati) · raggio → `type:'border-radius
   `css_per_dispositivo()` di Olobuild_Tile_Base), «Bordo» ed «Effetti testo» condivisi mai resi. Per
   ognuno si sceglie: farlo funzionare (nel renderer PHP) o toglierlo. Un campo che dipende da un
   altro si nasconde quando non agisce (`condition`: «Posizione icona» senza icona).
+- ⚠️⚠️ **Ogni oggetto si cambia** (utente, 9 ott 2026: «se inserisci un oggetto, deve esserci la possibilità
+  di cambiarlo/modificarlo»): simbolo, emblema, SVG dedicato, scritta decorativa o grafica che la tile disegna
+  si sostituisce dall'inspector (`type:'icon'`, immagine, testo). Un «Mostra …» col solo colore non basta. Il
+  disegno storico resta il predefinito (campo vuoto = com'era, nessuna migrazione). Fissi solo i comandi
+  dell'interfaccia (frecce, chiudi, play) e i marchi delle piattaforme. Verifica del 9 ott (scansione di 284
+  SVG e delle scritte nei renderer): North Video (simbolo), Match Fixtures (icona della lega), Film Reel
+  (scritta REC), Query Loop (badge di tendenza), North Quote Slider (grafica), Newsletter (icona del
+  pulsante), Contatore visite (icona).
 - **Il nome dice cosa fa**: «Colore sfondo» sul badge era il colore da cui la variante ricava la
   pillola (Soft = 12% di sfondo, 22% di bordo), non lo sfondo — e ha tratto in inganno chi l'ha usato.
 - ⚠️⚠️ **Spiegazioni MAI in linea** (utente, 1 ott 2026: «non vanno scritte lì… crea delle (i) a

@@ -13,6 +13,7 @@ class Olobuild_Viewscounter_Tile extends Olobuild_Tile_Base {
     protected $defaults = [
         'preset' => 'custom',
         'show_icon'     => true,
+        'icon'          => '',
         'icon_position' => 'before',
         'label'         => 'visualizzazioni',
         'show_label'    => true,
@@ -121,6 +122,11 @@ class Olobuild_Viewscounter_Tile extends Olobuild_Tile_Base {
 
         // Eye SVG
         $eye_svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' . $icon_size . '" height="' . $icon_size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+        // L'icona si sceglie (ogni oggetto di una tile si deve poter cambiare): vuota = l'occhio.
+        $scelta = trim( (string) ( $s['icon'] ?? '' ) );
+        if ( $scelta !== '' ) {
+            $eye_svg = $this->render_icon_html( $scelta, max( 0.5, $icon_size / 20 ) );
+        }
 
         $direction = $layout === 'block' ? 'column' : 'row';
 
@@ -129,7 +135,7 @@ class Olobuild_Viewscounter_Tile extends Olobuild_Tile_Base {
         <div class="olo-viewscounter <?php echo esc_attr( $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $direction is a fixed 'row'/'column' literal, sizes are absint()'d, $text_color passed the safe_color_css() whitelist ?> olo-vc-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="display:flex; flex-direction:<?php echo $direction; ?>; align-items:center; gap:6px; font-size:<?php echo (int) $font_size; ?>px; font-weight:<?php echo (int) $font_weight; ?>; color:<?php echo $text_color; ?>;">
             <?php if ( $show_icon ) : ?>
                 <?php if ( $icon_pos === 'before' ) : ?>
-                    <span class="olo-vc-icon" style="display:inline-flex; align-items:center; color:<?php echo $icon_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour from the safe_color_css() whitelist; $eye_svg is a static SVG literal with absint()'d size ?>;"><?php echo $eye_svg; ?></span>
+                    <span class="olo-vc-icon" style="display:inline-flex; align-items:center; color:<?php echo $icon_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour from the safe_color_css() whitelist; $eye_svg is a static SVG literal with absint()'d size or render_icon_html() markup (esc_attr()'d name, sanitized SVG) ?>;"><?php echo $eye_svg; ?></span>
                 <?php endif; ?>
             <?php endif; ?>
 
@@ -143,7 +149,7 @@ class Olobuild_Viewscounter_Tile extends Olobuild_Tile_Base {
 
             <?php if ( $show_icon ) : ?>
                 <?php if ( $icon_pos === 'after' ) : ?>
-                    <span class="olo-vc-icon" style="display:inline-flex; align-items:center; color:<?php echo $icon_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour from the safe_color_css() whitelist; $eye_svg is a static SVG literal with absint()'d size ?>;"><?php echo $eye_svg; ?></span>
+                    <span class="olo-vc-icon" style="display:inline-flex; align-items:center; color:<?php echo $icon_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour from the safe_color_css() whitelist; $eye_svg is a static SVG literal with absint()'d size or render_icon_html() markup (esc_attr()'d name, sanitized SVG) ?>;"><?php echo $eye_svg; ?></span>
                 <?php endif; ?>
             <?php endif; ?>
         </div>

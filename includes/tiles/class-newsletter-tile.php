@@ -27,6 +27,7 @@ class Olobuild_Newsletter_Tile extends Olobuild_Tile_Base {
         'email_placeholder' => 'La tua email',
         'button_text'       => 'Iscriviti',
         'button_icon'       => true,
+        'button_icon_name'  => '',
         'privacy_text'      => '',
         'privacy_required'  => false,
         'success_message'   => 'Iscrizione completata! Controlla la tua email.',
@@ -218,7 +219,10 @@ class Olobuild_Newsletter_Tile extends Olobuild_Tile_Base {
               <button type="submit" class="olo-nl-btn">
                 <?php echo esc_html( $s['button_text'] ); ?>
                 <?php if ( ! empty( $s['button_icon'] ) ) : ?>
+                  <?php if ( '' !== trim( (string) ( $s['button_icon_name'] ?? '' ) ) ) : echo $this->render_icon_html( $s['button_icon_name'], 0.8 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup from Olobuild_Tile_Base::render_icon_html(): esc_attr()'d icon name, sanitized custom SVG or the bundled Lucide SVG
+                  else : ?>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                  <?php endif; ?>
                 <?php endif; ?>
               </button>
             </form>

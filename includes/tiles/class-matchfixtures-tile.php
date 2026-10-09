@@ -126,6 +126,7 @@ class Olobuild_MatchFixtures_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .omf-league{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:<?php echo $accent; ?>;text-align:right;}
             .<?php echo $uid; ?> .omf-badge{width:26px;height:26px;border-radius:7px;background:<?php echo $badgebg; ?>;display:grid;place-items:center;flex:none;}
             .<?php echo $uid; ?> .omf-badge svg{width:14px;height:14px;color:<?php echo $accent; ?>;}
+            .<?php echo $uid; ?> .omf-badge > span{display:flex;color:<?php echo $accent; ?>;}
             .<?php echo $uid; ?> .omf-teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;padding:10px 0;border-top:1px solid <?php echo $cbd; ?>;border-bottom:1px solid <?php echo $cbd; ?>;}
             .<?php echo $uid; ?> .omf-side{display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center;}
             .<?php echo $uid; ?> .omf-crest{display:inline-grid;place-items:center;width:46px;height:50px;font-family:<?php echo $disp; ?>;font-weight:900;font-size:15px;letter-spacing:.02em;color:<?php echo $crestc; ?>;border-radius:14px 14px 16px 16px/14px 14px 22px 22px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.2);}
@@ -150,7 +151,7 @@ class Olobuild_MatchFixtures_Tile extends Olobuild_Tile_Base {
                 <article class="omf-fix">
                     <div class="omf-top">
                         <div class="omf-when"><b><?php echo esc_html( $it['day'] ?? '' ); ?></b><span><?php echo esc_html( $it['time_place'] ?? '' ); ?></span></div>
-                        <div class="omf-league"><span class="omf-badge"><?php echo $shield; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static hardcoded SVG markup defined above ?></span><span><?php echo esc_html( $it['league'] ?? '' ); ?><?php if ( ! empty( $it['matchday'] ) ) : ?><br><?php echo esc_html( $it['matchday'] ); ?><?php endif; ?></span></div>
+                        <div class="omf-league"><span class="omf-badge"><?php echo ( '' !== trim( (string) ( $it['league_icon'] ?? '' ) ) ) ? $this->render_icon_html( $it['league_icon'], 0.7 ) : $shield; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html() (esc_attr()'d name, sanitized custom SVG or bundled Lucide SVG) or the static SVG defined above ?></span><span><?php echo esc_html( $it['league'] ?? '' ); ?><?php if ( ! empty( $it['matchday'] ) ) : ?><br><?php echo esc_html( $it['matchday'] ); ?><?php endif; ?></span></div>
                     </div>
                     <div class="omf-teams">
                         <div class="omf-side"><span class="omf-crest" style="background:<?php echo $hbg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- validated via the safe_color_css() whitelist above ?>"><?php echo esc_html( $it['home_crest'] ?? '' ); ?></span><span class="omf-nm"><?php echo esc_html( $it['home_name'] ?? '' ); ?></span></div>
