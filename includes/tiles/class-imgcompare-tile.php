@@ -280,7 +280,7 @@ class Olobuild_ImgCompare_Tile extends Olobuild_Tile_Base {
             }
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-        <div class="olo-ic <?php echo esc_attr( $uid ); ?> olo-ic-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" data-orientation="<?php echo esc_attr( $orientation ); ?>">
+        <div class="olo-ic <?php echo esc_attr( $uid ); ?> olo-ic-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" data-orientation="<?php echo esc_attr( $orientation ); ?>" data-olo-own-drag>
             <div class="olo-ic-after">
                 <?php if ( $after_url ) : ?>
                     <img src="<?php echo $after_url; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_url() at assignment above ?>" alt="<?php echo esc_attr( $after_lbl ); ?>" draggable="false" loading="lazy" />

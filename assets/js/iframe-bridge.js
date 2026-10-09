@@ -407,6 +407,9 @@
     if (isBuilderChrome(e.target)) return;
     // Skip editable text regions
     if (e.target.closest('[data-olo-editable], [contenteditable="true"]')) return;
+    // Zone che trascinano da sé (la maniglia di Prima/Dopo e Confronto immagini): lì il gesto è
+    // della tile; per spostarla si usa la barra. Il clic seleziona comunque la tile.
+    if (e.target.closest('[data-olo-own-drag]')) return;
     var tileId = findTileId(e.target);
     if (!tileId) return;
     var el = findTileEl(tileId);

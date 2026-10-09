@@ -239,7 +239,7 @@ class Olobuild_BeforeAfter_Tile extends Olobuild_Tile_Base {
                     <?php if ( $slider ) :
                         $cmp_aria = $it_title !== '' ? olobuild_t( 'Confronto immagini' ) . ' – ' . $it_title : olobuild_t( 'Confronto immagini' );
                     ?>
-                    <div class="oba-cmp" data-orientation="<?php echo esc_attr( $orient ); ?>" style="--oba-pos:<?php echo (int) $start; ?>%">
+                    <div class="oba-cmp" data-orientation="<?php echo esc_attr( $orient ); ?>" data-olo-own-drag style="--oba-pos:<?php echo (int) $start; ?>%">
                         <div class="oba-media oba-media--a" role="img" aria-label="<?php echo esc_attr( $a_aria ); ?>"<?php echo $asty; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style attribute assembled above from fixed literals + esc_url()'d image ?>></div>
                         <div class="oba-media oba-media--b" role="img" aria-label="<?php echo esc_attr( $b_aria ); ?>"<?php echo $bsty; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style attribute assembled above from fixed literals + esc_url()'d image ?>></div>
                         <div class="oba-line" aria-hidden="true"></div>
@@ -289,9 +289,12 @@ class Olobuild_BeforeAfter_Tile extends Olobuild_Tile_Base {
                 }
                 // Passaggio automatico: va e viene fra il 5% e il 95%, la durata in proporzione al tratto.
                 function giro() {
+                    // Nel canvas la tile si rifà a ogni modifica: la copia staccata dalla pagina si ferma.
+                    if (!cmp.isConnected) return;
                     var da = pos, a = verso > 0 ? 95 : 5, t0 = null;
                     var dur = Math.max(300, Math.abs(a - da) / 90 * DURATA);
                     function passo(ts) {
+                        if (!cmp.isConnected) { anim = null; return; }
                         if (t0 === null) t0 = ts;
                         var k = Math.min(1, (ts - t0) / dur);
                         var e = k < 0.5 ? 2 * k * k : 1 - Math.pow(2 - 2 * k, 2) / 2;
