@@ -1346,21 +1346,30 @@ trait Olobuild_Renderer_Page_Trait {
                 if(n.length > 3){ if(+n[3] < 0.15) return -1; }
                 return (0.2126 * n[0] + 0.7152 * n[1] + 0.0722 * n[2]) / 255;
               }
-              function fondoScuro(el){
-                for(var giro = 0; el; giro++){
-                  if(el.nodeType === 1){
-                    var cs = getComputedStyle(el);
-                    if(String(cs.backgroundImage).indexOf('url(') > -1) return true;
-                    var l = luce(cs.backgroundColor);
-                    if(l < 0){
-                      var g = String(cs.backgroundImage).match(/(rgba?|color)\([^)]*\)/g);
-                      if(g){ var somma = 0, quanti = 0; for(var i = 0; i < g.length; i++){ var x = luce(g[i]); if(x >= 0){ somma += x; quanti++; } } if(quanti){ return somma / quanti < 0.5; } }
-                    } else {
-                      return l < 0.5;
-                    }
-                  }
-                  el = el.parentElement;
+              // Il fondo di un elemento: -1 se trasparente, altrimenti 1 (scuro) o 0 (chiaro).
+              function scuroDi(el){
+                var cs = getComputedStyle(el);
+                if(String(cs.backgroundImage).indexOf('url(') > -1) return 1;
+                var l = luce(cs.backgroundColor);
+                if(l >= 0) return l < 0.5 ? 1 : 0;
+                var g = String(cs.backgroundImage).match(/(rgba?|color)\([^)]*\)/g);
+                if(g){ var somma = 0, quanti = 0; for(var i = 0; i < g.length; i++){ var x = luce(g[i]); if(x >= 0){ somma += x; quanti++; } } if(quanti){ return somma / quanti < 0.5 ? 1 : 0; } }
+                return -1;
+              }
+              function fondoScuro(host){
+                // prima l'elemento e ciò che lo riempie (la sezione trasparente con dentro la tile scura)…
+                var area = host.offsetWidth * host.offsetHeight, el = host;
+                for(var giu = 0; el; giu++){
+                  var s = scuroDi(el);
+                  if(s >= 0) return s === 1;
+                  if(giu > 5) break;
+                  var dentro = null, figli = el.children;
+                  for(var i = 0; i < figli.length; i++){ if(figli[i].offsetWidth * figli[i].offsetHeight >= area * 0.6){ dentro = figli[i]; break; } }
+                  el = dentro;
                 }
+                // …poi ciò che gli sta dietro
+                el = host.parentElement;
+                while(el){ var t = scuroDi(el); if(t >= 0) return t === 1; el = el.parentElement; }
                 return false;
               }
               function setup(host){
