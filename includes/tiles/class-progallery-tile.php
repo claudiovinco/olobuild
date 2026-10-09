@@ -409,14 +409,25 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
             echo ".{$uid} .olo-pg-item:nth-child(7n+4){grid-column:span 2}";
             echo ".{$uid} .olo-pg-item:nth-child(7n+6){grid-row:span 2}";
         } elseif ( $is_coverflow ) {
-            // Wrapper
+            // COVERFLOW: la foto al centro di fronte, le altre ai lati tutte con lo stesso angolo
+            // («Rotazione 3D laterali»), rivolte verso di lei, impilate a passo regolare e via via
+            // più lontane, sotto UNA prospettiva comune, quella del nastro. Prima ogni foto aveva una
+            // prospettiva sua, restava al suo posto nella fila piatta e l'angolo cresceva a ogni
+            // passo: la vicina finiva dietro la centrale, le altre restavano lontane, un ventaglio
+            // irregolare (9 ott 2026). Il nastro scorre davvero (tocco, trackpad, aggancio al
+            // centro), ma il posto di ogni foto lo decide lo script: misura larghezza, passo,
+            // testa e coda (variabili --cf-*) e a ogni scorrimento sposta, ruota e allontana le foto.
             echo ".{$uid}-wrap{position:relative}";
-            // Container: flex + scroll-snap + scrollbar invisible
-            echo ".{$uid}{display:flex;gap:{$gap}px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;padding:{$film_pad}px 0;scrollbar-width:none;-ms-overflow-style:none}";
+            $cf_persp = (int) round( max( 700, $film_width * 3.6 ) );
+            echo ".{$uid}{display:flex;gap:{$gap}px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;padding:{$film_pad}px 0;scrollbar-width:none;-ms-overflow-style:none;position:relative;perspective:{$cf_persp}px;perspective-origin:50% 50%}";
+            // Testa e coda: anche la prima e l'ultima foto arrivano al centro.
+            echo ".{$uid}::before,.{$uid}::after{content:'';flex:0 0 var(--cf-pad,0px)}";
             echo ".{$uid}::-webkit-scrollbar{height:0;background:transparent}";
             echo ".{$uid}::-webkit-scrollbar-thumb{background:transparent}";
             echo ".{$uid}::-webkit-scrollbar-track{background:transparent}";
-            echo ".{$uid} .olo-pg-item{flex:0 0 auto;width:{$film_width}px;height:{$img_height};position:relative;overflow:hidden;border-radius:{$radius};scroll-snap-align:center;will-change:transform}";
+            echo ".{$uid} .olo-pg-item{flex:0 0 auto;width:var(--cf-w,{$film_width}px);margin-right:var(--cf-mr,0px);height:{$img_height};position:relative;overflow:hidden;border-radius:{$radius};scroll-snap-align:center;will-change:transform,opacity}";
+            echo ".{$uid} .olo-pg-item:last-child{margin-right:0}";
+            echo "@media(prefers-reduced-motion:reduce){.{$uid}{scroll-behavior:auto}}";
             echo ".{$uid} .olo-pg-item img{width:100%;height:100%;object-fit:{$object_fit};display:block;-webkit-user-drag:none;user-select:none}";
             echo ".{$uid} .olo-pg-item{-webkit-user-drag:none;user-select:none}";
             // Frecce (z-index 200 — sopra item coverflow che hanno z-index fino a 100)
@@ -459,8 +470,8 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
             } elseif ( $film_dots === 'fraction' ) {
                 echo ".{$uid}-dots{text-align:center;padding:10px 0;font-size:14px;font-weight:600;color:" . ( $dot_clr ?: 'rgba(0,0,0,.55)' ) . ";font-variant-numeric:tabular-nums;z-index:11;position:relative;letter-spacing:0.05em}";
             }
-            // Mobile: frecce nascoste
-            echo "@media(max-width:640px){.{$uid} .olo-pg-item{width:" . max( 180, $film_width - 60 ) . "px}.{$uid}-prev,.{$uid}-next{display:none}}";
+            // Mobile: frecce nascoste (la larghezza delle foto la adatta lo script al nastro)
+            echo "@media(max-width:640px){.{$uid}-prev,.{$uid}-next{display:none}}";
             echo "@media(hover:none){.{$uid}-prev,.{$uid}-next{display:none}}";
         } elseif ( $layout === 'honeycomb' ) {
             echo ".{$uid}{display:flex;flex-wrap:wrap;gap:{$gap}px;justify-content:center}";
@@ -594,10 +605,21 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
             if ( ! $is_strip ) {
                 echo ".{$uid}{overflow:visible}";
             }
-            echo ".{$uid} .olo-pg-item{transition:transform .4s ease,box-shadow .4s ease;z-index:0}";
-            echo ".{$uid} .olo-pg-item:hover{transform:translateY(-8px);box-shadow:0 14px 32px rgba(0,0,0,.25);z-index:2}";
+            if ( $is_coverflow ) {
+                // Nel coverflow il transform della cornice è il suo posto nel giro, riscritto a ogni passo
+                // dello scorrimento: il sollevamento usa la proprietà `translate`, che si somma (una
+                // transizione sul transform farebbe arrivare ogni passo in ritardo di 0,4 s).
+                echo ".{$uid} .olo-pg-item{transition:translate .4s ease,box-shadow .4s ease}";
+                echo ".{$uid} .olo-pg-item:hover{translate:0 -8px;box-shadow:0 14px 32px rgba(0,0,0,.25)}";
+            } else {
+                echo ".{$uid} .olo-pg-item{transition:transform .4s ease,box-shadow .4s ease;z-index:0}";
+                echo ".{$uid} .olo-pg-item:hover{transform:translateY(-8px);box-shadow:0 14px 32px rgba(0,0,0,.25);z-index:2}";
+            }
         } elseif ( $hover === 'tilt3d' ) {
-            echo ".{$uid} .olo-pg-item{perspective:600px;transform-style:preserve-3d;transition:transform .4s ease}";
+            // Nel coverflow si inclina la foto dentro la cornice (lo script), non la cornice
+            if ( ! $is_coverflow ) {
+                echo ".{$uid} .olo-pg-item{perspective:600px;transform-style:preserve-3d;transition:transform .4s ease}";
+            }
             echo ".{$uid} .olo-pg-item img,.{$uid} .olo-pg-item video{transition:transform .4s ease}";
             // JS tilt handled by shared script
         } elseif ( $hover === 'glow' ) {
@@ -616,7 +638,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
                 echo ".{$uid}:hover .olo-pg-item:hover img{filter:none}";
             }
         } elseif ( $hover === 'magnetic' ) {
-            echo ".{$uid} .olo-pg-item{transition:transform .15s ease-out}";
+            echo $is_coverflow ? ".{$uid} .olo-pg-item img,.{$uid} .olo-pg-item video{transition:transform .15s ease-out}" : ".{$uid} .olo-pg-item{transition:transform .15s ease-out}";
             // JS magnetic handled by shared script
         }
 
@@ -1847,11 +1869,12 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         // Coverflow: frecce + indicatore + chiusura wrapper
         if ( $is_coverflow ) {
             // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- $uid_attr is esc_attr()'d above; button labels are escaped inline.
-            echo '<button type="button" class="' . $uid_attr . '-prev" aria-label="' . esc_attr( olobuild_t( 'Precedente' ) ) . '">&#8249;</button>';
-            echo '<button type="button" class="' . $uid_attr . '-next" aria-label="' . esc_attr( olobuild_t( 'Successivo' ) ) . '">&#8250;</button>';
+            // data-olo-interactive: nell'anteprima del builder frecce e indicatore sfogliano davvero
+            echo '<button type="button" class="' . $uid_attr . '-prev" data-olo-interactive aria-label="' . esc_attr( olobuild_t( 'Precedente' ) ) . '">&#8249;</button>';
+            echo '<button type="button" class="' . $uid_attr . '-next" data-olo-interactive aria-label="' . esc_attr( olobuild_t( 'Successivo' ) ) . '">&#8250;</button>';
             if ( $film_dots !== 'none' ) {
                 if ( $film_dots === 'progress' ) {
-                    echo '<div class="' . $uid_attr . '-dots"><div class="pg-prog-track" tabindex="0" role="slider" aria-label="' . esc_attr( olobuild_t( 'Avanzamento galleria' ) ) . '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="pg-prog-fill"></div></div></div>';
+                    echo '<div class="' . $uid_attr . '-dots"><div class="pg-prog-track" data-olo-interactive tabindex="0" role="slider" aria-label="' . esc_attr( olobuild_t( 'Avanzamento galleria' ) ) . '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="pg-prog-fill"></div></div></div>';
                 } else {
                     echo '<div class="' . $uid_attr . '-dots"></div>';
                 }
@@ -2078,14 +2101,17 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         echo 'if(rm)return;';
         echo '(r||document).querySelectorAll("[data-pg-tilt]").forEach(function(container){';
         echo 'var angle=parseInt(container.dataset.pgTilt)||10;';
+        // Nel coverflow il transform della cornice è il suo posto nel giro: si inclina la foto dentro
+        echo 'var cf=container.hasAttribute("data-pg-filmstrip");';
         echo 'container.querySelectorAll(".olo-pg-item").forEach(function(item){';
+        echo 'var t=cf?(item.querySelector("img,video")||item):item;';
         echo 'item.addEventListener("mousemove",function(e){';
         echo 'var r=item.getBoundingClientRect();';
         echo 'var x=(e.clientX-r.left)/r.width-.5;';
         echo 'var y=(e.clientY-r.top)/r.height-.5;';
-        echo 'item.style.transform="perspective(600px) rotateY("+(x*angle)+"deg) rotateX("+(-y*angle)+"deg) scale(1.02)";';
+        echo 't.style.transform="perspective(600px) rotateY("+(x*angle)+"deg) rotateX("+(-y*angle)+"deg) scale("+(cf?1.14:1.02)+")";';
         echo '});';
-        echo 'item.addEventListener("mouseleave",function(){item.style.transform=""});';
+        echo 'item.addEventListener("mouseleave",function(){t.style.transform=""});';
         echo '});});';
         echo '}';
 
@@ -2094,180 +2120,164 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         echo 'if(rm)return;';
         echo '(r||document).querySelectorAll("[data-pg-magnetic]").forEach(function(container){';
         echo 'var str=parseInt(container.dataset.pgMagnetic)||24;';
+        // Nel coverflow si sposta la foto dentro la cornice, ingrandita quanto basta a non scoprirne i bordi
+        echo 'var cf=container.hasAttribute("data-pg-filmstrip");';
         echo 'container.querySelectorAll(".olo-pg-item").forEach(function(item){';
+        echo 'var t=cf?(item.querySelector("img,video")||item):item;';
         echo 'item.addEventListener("mousemove",function(e){';
         echo 'var r=item.getBoundingClientRect();';
         echo 'var x=(e.clientX-r.left)/r.width-.5;';
         echo 'var y=(e.clientY-r.top)/r.height-.5;';
-        echo 'var sc=1+str/600;';
-        echo 'item.style.transform="translate("+(x*str)+"px,"+(y*str)+"px) scale("+sc+")";';
+        echo 'var sc=cf?1+str/150:1+str/600;';
+        echo 't.style.transform="translate("+(x*str)+"px,"+(y*str)+"px) scale("+sc+")";';
         echo '});';
-        echo 'item.addEventListener("mouseleave",function(){item.style.transform=""});';
+        echo 'item.addEventListener("mouseleave",function(){t.style.transform=""});';
         echo '});});';
         echo '}';
 
-        // ── Filmstrip Coverflow ──
+        // ── Coverflow ──
+        // Il nastro scorre davvero (scroll nativo con aggancio al centro): lo script misura la fila e
+        // a ogni scorrimento mette ogni foto al suo posto. n = distanza dal centro, in passi:
+        //   |n| ≤ 1 → la foto gira da 0° all'angolo, si allontana, passa dallo zoom del centro a 1
+        //   |n| > 1 → stesso angolo, impilata a passo regolare, un filo più lontana a ogni passo
+        // Le laterali guardano verso il centro (lato interno indietro). La correzione orizzontale dx
+        // porta la fila piatta (passo S) al giro (prima vicina a D1 dal centro): oltre la prima è
+        // costante, quindi scorrendo non scatta. La prospettiva è UNA, quella del nastro.
         echo 'function initFilmstrip(r){';
         echo '(r||document).querySelectorAll("[data-pg-filmstrip]").forEach(function(el){';
+        echo 'if(el.dataset.pgFilmPronto)return;';
+        echo 'var wrap=el.parentElement;if(!wrap)return;';
+        echo 'var items=el.querySelectorAll(".olo-pg-item");if(!items.length)return;';
+        echo 'el.dataset.pgFilmPronto="1";';
         echo 'var zoom=parseFloat(el.dataset.pgFilmZoom)||1.15;';
-        echo 'var tilt=parseFloat(el.dataset.pgFilmTilt)||8;';
-        echo 'var iw=parseFloat(el.dataset.pgFilmWidth)||280;';
+        echo 'var ang=parseFloat(el.dataset.pgFilmTilt);if(isNaN(ang))ang=35;';
+        echo 'var wSet=parseFloat(el.dataset.pgFilmWidth)||280;';
         echo 'var autoSec=parseFloat(el.dataset.pgFilmAuto)||0;';
-        echo 'var wrap=el.parentElement;';
-        echo 'if(!wrap)return;';
-        echo 'var items=el.querySelectorAll(".olo-pg-item");';
-        echo 'if(!items.length)return;';
         echo 'var cid=el.className.split(" ")[0];';
         echo 'var dotStyle=el.dataset.pgFilmDots||"dots";';
-        // Scroll to center item on init
-        echo 'var mid=Math.floor(items.length/2);';
-        echo 'var midIt=items[mid];';
-        echo 'el.scrollLeft=midIt.offsetLeft-el.clientWidth/2+midIt.offsetWidth/2;';
-        // Update transforms on scroll
-        echo 'var raf=0;';
-        // GEOMETRIA CILINDRO REALE:
-        // Ogni foto è sulla superficie di un cilindro di raggio R.
-        // tilt = angolo tra foto adiacenti → R = step / (2 * tan(tilt/2))
-        // Per ogni foto ad angolo θ dal centro:
-        //   translateZ = R*(cos(θ)-1)    → profondità sulla superficie circolare
-        //   translateX = R*sin(θ) - d    → correzione dalla posizione flex lineare
-        //   rotateY = θ                  → tangente alla superficie
-        echo 'function updateCoverflow(){';
+        // Il «Gap» della tile si legge una volta: poi il passo lo danno i margini delle foto
+        echo 'var gapSet=parseFloat(getComputedStyle(el).columnGap)||0;';
+        echo 'var cosA=Math.cos(ang*Math.PI/180);';
+        echo 'var W=wSet,S=100,D1=200,dep1=150,depN=15,centri=[],pronto=false;';
+        // Larghezza (al massimo due terzi del nastro: sul telefono le laterali restano in vista),
+        // passo, prima vicina, profondità e prospettiva
+        echo 'function misura(){';
+        echo 'var cw=el.clientWidth;if(cw<80)return false;';
+        echo 'W=Math.round(Math.min(wSet,cw*0.66));';
+        echo 'var P=Math.max(700,W*3.6);';
+        echo 'dep1=W*0.55;depN=W*0.06;';
+        echo 'S=Math.max(28,W*cosA*0.5+gapSet*0.5);';
+        echo 'D1=(W*zoom/2+W*cosA*0.22+gapSet)*(P+dep1)/P;';
+        echo 'el.style.gap="0px";el.style.perspective=Math.round(P)+"px";';
+        echo 'el.style.setProperty("--cf-w",W+"px");';
+        echo 'el.style.setProperty("--cf-mr",(S-W).toFixed(2)+"px");';
+        echo 'el.style.setProperty("--cf-pad",Math.max(0,(cw-W)/2).toFixed(2)+"px");';
+        echo 'items[items.length-1].style.marginRight="0px";';
+        echo 'centri=[];for(var i=0;i<items.length;i++){centri.push(items[i].offsetLeft+items[i].offsetWidth/2)}';
+        echo 'return true}';
+        echo 'function vicino(){var ctr=el.scrollLeft+el.clientWidth/2,c=0,m=Infinity;for(var i=0;i<centri.length;i++){var d=Math.abs(centri[i]-ctr);if(d<m){m=d;c=i}}return c}';
+        echo 'function salta(i){var sb=el.style.scrollBehavior;el.style.scrollBehavior="auto";el.scrollLeft=centri[i]-el.clientWidth/2;el.style.scrollBehavior=sb}';
+        echo 'function vai(i){if(!pronto)return;if(i<0)i=0;if(i>items.length-1)i=items.length-1;el.scrollTo({left:centri[i]-el.clientWidth/2,behavior:rm?"auto":"smooth"})}';
+        echo 'function aggiorna(){';
+        echo 'if(!pronto)return;';
         echo 'var ctr=el.scrollLeft+el.clientWidth/2;';
-        echo 'var gp=parseInt(getComputedStyle(el).gap)||0;';
-        echo 'var step=iw+gp;';
-        // Angolo tilt in radianti
-        echo 'var dRad=tilt*Math.PI/180;';
-        echo 'var maxT=75*Math.PI/180;';
-        echo 'items.forEach(function(it,idx){';
-        echo 'var itCtr=it.offsetLeft+it.offsetWidth/2;';
-        echo 'var d=itCtr-ctr;';
-        echo 'var n=d/step;';
-        echo 'var aN=Math.abs(n);';
-        // Angolo sul cilindro: n * tilt_rad, clampato ±75°
-        echo 'var theta=n*dRad;';
-        echo 'if(theta>maxT)theta=maxT;';
-        echo 'if(theta<-maxT)theta=-maxT;';
-        // Profondità cilindrica: R=300, tz = R*(cos(θ)-1)
-        // Centro tz=0, lati arretrano dolcemente sulla curva del cilindro
-        echo 'var tz=300*(Math.cos(theta)-1);';
-        // Rotazione tangente alla superficie
-        echo 'var ry=theta*180/Math.PI;';
-        // Zoom solo al centro (decade a 0 in ~1 item)
-        echo 'var sc=1+(zoom-1)*Math.max(0,1-aN);';
-        // Z-index: centro davanti
-        echo 'var zi=100-Math.round(Math.min(aN,5)*15);';
-        echo 'if(rm){it.style.transform="";it.style.zIndex="";return}';
-        // Ordine: perspective → rotateY → translateZ → scale
-        // rotateY prima di translateZ = l'item ruota, poi arretra in profondità mondo
-        echo 'it.style.transform="perspective(800px) rotateY("+ry.toFixed(1)+"deg) translateZ("+tz.toFixed(1)+"px) scale("+sc.toFixed(3)+")";';
-        echo 'it.style.zIndex=zi;';
-        echo '});';
-        // Update indicator
+        echo 'for(var i=0;i<items.length;i++){';
+        echo 'var n=(centri[i]-ctr)/S,aN=Math.abs(n),a=aN<1?aN:1,s=n<0?-1:1;';
+        echo 'var dx=s*a*(D1-S);';
+        echo 'var tz=-(dep1*a+depN*(aN>1?aN-1:0));';
+        echo 'var sc=1+(zoom-1)*(1-a);';
+        echo 'items[i].style.transform="translate3d("+dx.toFixed(1)+"px,0,"+tz.toFixed(1)+"px) rotateY("+(-s*ang*a).toFixed(2)+"deg) scale("+sc.toFixed(3)+")";';
+        echo 'items[i].style.zIndex=String(1000-Math.round(aN*20));';
+        echo '}';
+        // Indicatore
         echo 'var dotEl=wrap.querySelector("."+cid+"-dots");';
         echo 'if(dotEl){';
-        echo 'var closest=-1,minD=Infinity;';
-        echo 'items.forEach(function(it,idx){var d=Math.abs(it.offsetLeft+it.offsetWidth/2-ctr);if(d<minD){minD=d;closest=idx}});';
-        // dots / lines: toggle active class
+        echo 'var closest=vicino();';
         echo 'if(dotStyle==="dots"||dotStyle==="lines"){';
         echo 'dotEl.querySelectorAll("button,span").forEach(function(sp,idx){var on=idx===closest;sp.classList.toggle("active",on);if(on){sp.setAttribute("aria-current","true")}else{sp.removeAttribute("aria-current")}});';
         echo '}';
-        // progress: update fill width
         echo 'if(dotStyle==="progress"){';
         echo 'var fill=dotEl.querySelector(".pg-prog-fill");';
         echo 'if(fill){var pct=items.length>1?(closest/(items.length-1))*100:100;fill.style.width=pct+"%";var trk=dotEl.querySelector(".pg-prog-track");if(trk){trk.setAttribute("aria-valuenow",Math.round(pct))}}';
         echo '}';
-        // fraction: update text
         echo 'if(dotStyle==="fraction"){';
         echo 'dotEl.textContent=(closest+1)+" / "+items.length;';
         echo '}';
         echo '}';
         echo '}';
-        // Scroll listener with rAF
-        echo 'el.addEventListener("scroll",function(){if(!raf){raf=requestAnimationFrame(function(){updateCoverflow();raf=0})}},{passive:true});';
-        // Mouse drag-to-scroll (desktop) — NO "&&" perché WP converte in &#038;
-        // Logica: pointerdown registra posizione, pointermove avvia drag solo se >5px,
-        // pointerup resetta. Click semplice = lightbox. Drag = scroll, no lightbox.
+        echo 'var raf=0;';
+        echo 'el.addEventListener("scroll",function(){if(!raf){raf=requestAnimationFrame(function(){aggiorna();raf=0})}},{passive:true});';
+        // Trascinamento col mouse — NIENTE "&&": WordPress lo converte in &#038;
+        // pointerdown registra la posizione, pointermove trascina oltre 5px, pointerup sgancia.
         echo 'var mDown=false,mDrag=false,wasDrag=false,dStartX=0,dScrollL=0;';
         echo 'el.style.cursor="grab";';
         echo 'el.addEventListener("pointerdown",function(e){if(e.pointerType==="mouse"){if(e.button===0){mDown=true;mDrag=false;wasDrag=false;dStartX=e.clientX;dScrollL=el.scrollLeft}}});';
-        echo 'el.addEventListener("pointermove",function(e){if(!mDown)return;var dx=e.clientX-dStartX;if(!mDrag){if(Math.abs(dx)>5){mDrag=true;el.setPointerCapture(e.pointerId);el.style.scrollSnapType="none";el.style.cursor="grabbing"}else{return}}e.preventDefault();el.scrollLeft=dScrollL-dx});';
-        echo 'el.addEventListener("pointerup",function(e){if(mDrag){el.releasePointerCapture(e.pointerId);wasDrag=true}mDown=false;mDrag=false;el.style.scrollSnapType="";el.style.cursor="grab"});';
-        echo 'el.addEventListener("pointercancel",function(){mDown=false;mDrag=false;el.style.scrollSnapType="";el.style.cursor="grab"});';
-        // Blocca click su link dopo drag (wasDrag=true), altrimenti lightbox funziona
-        echo 'el.addEventListener("click",function(e){if(wasDrag){wasDrag=false;e.preventDefault();e.stopPropagation()}},true);';
-        // Generate indicator elements
+        echo 'el.addEventListener("pointermove",function(e){if(!mDown)return;var dx=e.clientX-dStartX;if(!mDrag){if(Math.abs(dx)>5){mDrag=true;el.setPointerCapture(e.pointerId);el.style.scrollSnapType="none";el.style.scrollBehavior="auto";el.style.cursor="grabbing"}else{return}}e.preventDefault();el.scrollLeft=dScrollL-dx});';
+        echo 'el.addEventListener("pointerup",function(e){var eraDrag=mDrag;if(mDrag){el.releasePointerCapture(e.pointerId);wasDrag=true}mDown=false;mDrag=false;el.style.scrollSnapType="";el.style.scrollBehavior="";el.style.cursor="grab";if(eraDrag){vai(vicino())}});';
+        echo 'el.addEventListener("pointercancel",function(){mDown=false;mDrag=false;el.style.scrollSnapType="";el.style.scrollBehavior="";el.style.cursor="grab"});';
+        // Dopo un trascinamento il clic non apre la lightbox; il clic su una foto laterale la porta
+        // al centro, quello sulla foto al centro apre la lightbox
+        echo 'el.addEventListener("click",function(e){';
+        echo 'if(wasDrag){wasDrag=false;e.preventDefault();e.stopPropagation();return}';
+        echo 'var it=e.target.closest?e.target.closest(".olo-pg-item"):null;if(!it)return;';
+        echo 'var ii=Array.prototype.indexOf.call(items,it);if(ii<0)return;';
+        echo 'if(ii!==vicino()){e.preventDefault();e.stopPropagation();vai(ii)}';
+        echo '},true);';
+        // Indicatore: pallini e lineette come pulsanti
         echo 'var dotC=wrap.querySelector("."+cid+"-dots");';
         echo 'if(dotC){';
-        // dots / lines: create span per item
         echo 'if(dotStyle==="dots"||dotStyle==="lines"){';
         echo 'var dotLbl=' . wp_json_encode( olobuild_t( 'Vai alla foto' ) ) . ';';
         echo 'for(var di=0;di<items.length;di++){';
         echo 'var sp=document.createElement("button");';
         echo 'sp.type="button";';
         echo 'sp.setAttribute("aria-label",dotLbl+" "+(di+1));';
-        echo 'if(di===0){sp.setAttribute("aria-current","true")}';
-        // Pallini più piccoli se tante foto
+        echo 'sp.setAttribute("data-olo-interactive","");';
         echo 'if(dotStyle==="dots"){if(items.length>20){sp.style.width="9px";sp.style.height="9px"}}';
-        // Lines più strette se tante foto
         echo 'if(dotStyle==="lines"){if(items.length>20){sp.style.width="12px"}}';
-        echo '(function(idx){sp.addEventListener("click",function(){el.scrollTo({left:items[idx].offsetLeft-el.clientWidth/2+items[idx].offsetWidth/2,behavior:"smooth"})})})(di);';
+        echo '(function(idx){sp.addEventListener("click",function(){vai(idx)})})(di);';
         echo 'dotC.appendChild(sp);';
         echo '}';
         echo '}';
-        // progress: wire click-to-seek on track
         echo 'if(dotStyle==="progress"){';
         echo 'var track=dotC.querySelector(".pg-prog-track");';
         echo 'if(track){track.addEventListener("click",function(e){';
-        echo 'var r=track.getBoundingClientRect();var pct=(e.clientX-r.left)/r.width;var idx=Math.round(pct*(items.length-1));';
-        echo 'if(idx>=0){if(idx<items.length){el.scrollTo({left:items[idx].offsetLeft-el.clientWidth/2+items[idx].offsetWidth/2,behavior:"smooth"})}}';
+        echo 'var rr=track.getBoundingClientRect();vai(Math.round((e.clientX-rr.left)/rr.width*(items.length-1)));';
         echo '});';
         echo 'track.addEventListener("keydown",function(e){';
-        echo 'var cur=parseInt(track.getAttribute("aria-valuenow"))||0;var ci=Math.round(cur/100*(items.length-1));var ni=ci;';
-        echo 'if(e.key==="ArrowLeft"||e.key==="ArrowDown"){e.preventDefault();ni=Math.max(0,ci-1)}';
-        echo 'else if(e.key==="ArrowRight"||e.key==="ArrowUp"){e.preventDefault();ni=Math.min(items.length-1,ci+1)}';
-        echo 'else if(e.key==="Home"){e.preventDefault();ni=0}';
-        echo 'else if(e.key==="End"){e.preventDefault();ni=items.length-1}';
+        echo 'var ci=vicino(),ni=ci;';
+        echo 'if(e.key==="ArrowLeft"||e.key==="ArrowDown"){ni=ci-1}';
+        echo 'else if(e.key==="ArrowRight"||e.key==="ArrowUp"){ni=ci+1}';
+        echo 'else if(e.key==="Home"){ni=0}';
+        echo 'else if(e.key==="End"){ni=items.length-1}';
         echo 'else{return}';
-        echo 'el.scrollTo({left:items[ni].offsetLeft-el.clientWidth/2+items[ni].offsetWidth/2,behavior:"smooth"});';
+        echo 'e.preventDefault();e.stopPropagation();vai(ni);';
         echo '})}';
         echo '}';
-        // fraction: init text
-        echo 'if(dotStyle==="fraction"){';
-        echo 'dotC.textContent="1 / "+items.length;';
         echo '}';
-        echo '}';
-        // Arrow buttons
+        // Frecce e tastiera: una foto alla volta
         echo 'var prevBtn=wrap.querySelector("."+cid+"-prev");';
         echo 'var nextBtn=wrap.querySelector("."+cid+"-next");';
-        echo 'var gap=parseInt(getComputedStyle(el).gap)||0;';
-        echo 'if(prevBtn)prevBtn.addEventListener("click",function(e){e.stopPropagation();e.preventDefault();el.scrollBy({left:-(iw+gap),behavior:"smooth"})});';
-        echo 'if(nextBtn)nextBtn.addEventListener("click",function(e){e.stopPropagation();e.preventDefault();el.scrollBy({left:iw+gap,behavior:"smooth"})});';
-        // Keyboard navigation on wrapper
+        echo 'if(prevBtn)prevBtn.addEventListener("click",function(e){e.stopPropagation();e.preventDefault();vai(vicino()-1)});';
+        echo 'if(nextBtn)nextBtn.addEventListener("click",function(e){e.stopPropagation();e.preventDefault();vai(vicino()+1)});';
         echo 'wrap.addEventListener("keydown",function(e){';
-        echo 'if(e.key==="ArrowLeft"){e.preventDefault();el.scrollBy({left:-(iw+gap),behavior:"smooth"})}';
-        echo 'if(e.key==="ArrowRight"){e.preventDefault();el.scrollBy({left:iw+gap,behavior:"smooth"})}';
+        echo 'if(e.key==="ArrowLeft"){e.preventDefault();vai(vicino()-1)}';
+        echo 'if(e.key==="ArrowRight"){e.preventDefault();vai(vicino()+1)}';
         echo '});';
-        // Auto-advance
+        // Avanzamento automatico: in fondo torna alla prima
         echo 'if(autoSec>0){';
-        echo 'var autoId=setInterval(function(){';
-        echo 'if(el.scrollLeft>=el.scrollWidth-el.clientWidth-10){el.scrollTo({left:0,behavior:"smooth"})}';
-        echo 'else{el.scrollBy({left:iw+gap,behavior:"smooth"})}';
-        echo '},autoSec*1000);';
+        echo 'var avanti=function(){var c=vicino();if(c>=items.length-1){vai(0)}else{vai(c+1)}};';
+        echo 'var autoId=setInterval(avanti,autoSec*1000);';
         echo 'wrap.addEventListener("mouseenter",function(){clearInterval(autoId)});';
-        echo 'wrap.addEventListener("mouseleave",function(){autoId=setInterval(function(){';
-        echo 'if(el.scrollLeft>=el.scrollWidth-el.clientWidth-10){el.scrollTo({left:0,behavior:"smooth"})}';
-        echo 'else{el.scrollBy({left:iw+gap,behavior:"smooth"})}';
-        echo '},autoSec*1000)});';
-        echo 'var touchActive=false;';
-        echo 'el.addEventListener("touchstart",function(){clearInterval(autoId);touchActive=true},{passive:true});';
-        echo 'el.addEventListener("touchend",function(){touchActive=false;autoId=setInterval(function(){';
-        echo 'if(el.scrollLeft>=el.scrollWidth-el.clientWidth-10){el.scrollTo({left:0,behavior:"smooth"})}';
-        echo 'else{el.scrollBy({left:iw+gap,behavior:"smooth"})}';
-        echo '},autoSec*1000)},{passive:true});';
+        echo 'wrap.addEventListener("mouseleave",function(){clearInterval(autoId);autoId=setInterval(avanti,autoSec*1000)});';
+        echo 'el.addEventListener("touchstart",function(){clearInterval(autoId)},{passive:true});';
+        echo 'el.addEventListener("touchend",function(){clearInterval(autoId);autoId=setInterval(avanti,autoSec*1000)},{passive:true});';
         echo '}';
-        // Initial coverflow update
-        echo 'updateCoverflow();';
+        // Si parte dalla foto di mezzo; se il nastro è nascosto (scheda, fisarmonica) si misura
+        // quando compare. Cambiando larghezza resta al centro la stessa foto.
+        echo 'if(misura()){pronto=true;salta(Math.floor(items.length/2))}';
+        echo 'aggiorna();';
+        echo 'if(window.ResizeObserver){var lw=el.clientWidth;new ResizeObserver(function(){var w=el.clientWidth;if(Math.abs(w-lw)<1)return;lw=w;var c=pronto?vicino():Math.floor(items.length/2);if(misura()){pronto=true;salta(c);aggiorna()}}).observe(el)}';
         echo '});';
         echo '}';
 
