@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.614 - 2026-10-10 (fix)
+- Importare di nuovo un tema ritrova le sue pagine anche quando il loro indirizzo era occupato da una pagina del sito: prima ne nasceva un'altra a ogni import (/prenota-3/, /prenota-4/…).
+
 ## v1.4.613 - 2026-10-10 (fix)
 - Importare un tema non si prende più le pagine del sito. Se all'indirizzo di una pagina del tema (per esempio /prenota/) c'è già una pagina con un contenuto suo, il tema crea la propria e menu e collegamenti del tema la seguono. Prima la pagina del sito prendeva il template del tema e il suo contenuto restava sotto: la Prenota di OLObooking mostrava il calendario senza stile. Lo stesso per la home: se ha un contenuto suo, il tema crea la sua home e la mette come pagina iniziale.
 

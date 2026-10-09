@@ -389,6 +389,17 @@ class Olobuild_Theme_Importer {
                     }
                 }
 
+                // La pagina che QUESTO tema ha creato per questa voce in un import di prima
+                // (segno «tema:voce»): si aggiorna quella, anche quando all'indirizzo
+                // dichiarato abita una pagina del sito e la sua è finita a «…-2».
+                $segno = sanitize_key( $theme_id ) . ':' . sanitize_key( $page_key );
+                if ( ! $page_id ) {
+                    $sue = get_posts( [ 'post_type' => 'page', 'post_status' => 'any', 'numberposts' => 1, 'fields' => 'ids', 'meta_key' => '_olo_pagina_tema', 'meta_value' => $segno ] ); // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key, WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- una ricerca per pagina del tema, solo durante l'import
+                    if ( $sue && self::senza_contenuto( (int) $sue[0] ) ) {
+                        $page_id = (int) $sue[0];
+                    }
+                }
+
                 // Chi dichiara uno slug sta dicendo «questa pagina vive a QUESTO
                 // indirizzo»: se ci abita gia' una pagina nata da un tema, si aggiorna
                 // quella (il secondo import non produce "…-2"). Una pagina del sito no:
@@ -431,9 +442,11 @@ class Olobuild_Theme_Importer {
                         $nuova['post_name'] = $slug;
                     }
                     $page_id = wp_insert_post( $nuova );
-                    // Nata dal tema: un import successivo la può riusare al suo indirizzo.
+                    // Nata dal tema: un import successivo la ritrova (segno) o la riusa al suo
+                    // indirizzo. Le pagine riusate non si segnano: dopo «Ripristina» tornano
+                    // del sito e un altro tema non deve poterle prendere.
                     if ( $page_id && ! is_wp_error( $page_id ) ) {
-                        update_post_meta( $page_id, '_olo_pagina_tema', sanitize_key( $theme_id ) );
+                        update_post_meta( $page_id, '_olo_pagina_tema', $segno );
                     }
                 }
 
