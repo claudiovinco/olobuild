@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.588 - 2026-10-09 (fix)
+- Blocchi & Pagine: sul tablet le colonne dei blocchi restano affiancate finché ci stanno, e le voci brevi (le persone di un team, le fasi di un lavoro, i loghi) stanno su due colonne anche sul telefono. Prima sotto i 960 pixel si mettevano tutte in colonna.
+- Blocchi & Pagine: nomi, indirizzi ed email degli esempi sono inventati (dominio esempio.it), e ogni pagina usa le stesse date, la stessa via e lo stesso anno dall’hero al footer.
+
 ## v1.4.587 - 2026-10-09
 - Blocchi & Pagine rinnovata: 221 blocchi e 20 pagine intere, tutti nuovi e diversi fra loro, con elementi che si muovono e si toccano (quiz, gratta e scopri, coriandoli, pennellate, l'ora nel mondo, le dosi che scalano, il conto alla rovescia). Nuove categorie Effetti e Interattivi. Ogni pagina racconta un negozio d'esempio dall'hero al footer e nell'anteprima scorre al passaggio del mouse. Foto e video si copiano nella tua Libreria media quando inserisci il blocco.
 - Logo del sito: nuovo controllo «Nome del sito» (carattere, misura, peso e colore) per quando il logo è il nome del sito. Prima sui fondi scuri il nome non si poteva schiarire e spariva.
