@@ -677,26 +677,27 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         <?php elseif ( $he === 'background' ) : ?>
         <?php // Il pulsante della barra (a.olo-mm-btn) ha sfondo e raggio suoi: queste regole (0,3,2)
               // battevano .olo-mm-btn (0,2,0) e sulla sua pagina, o in hover, diventava una pillola
-              // chiara col testo bianco del pulsante. ?>
-        .<?php echo $uid; ?> .olo-mm-nav > li > a:not(.olo-mm-btn) {
+              // chiara col testo bianco del pulsante. :where() lo esclude SENZA alzare la forza della
+              // regola: un :not() la portava a (0,4,2) e il «Colore attivo» non vinceva più sul bianco. ?>
+        .<?php echo $uid; ?> .olo-mm-nav > li > a:where(:not(.olo-mm-btn)) {
             padding: 8px 14px; border-radius: 6px;
             transition: color .2s, background .2s;
         }
         .<?php echo $uid; ?> .olo-mm-nav > li > a::after { display: none; }
-        .<?php echo $uid; ?> .olo-mm-nav > li.olo-mm-active > a:not(.olo-mm-btn),
-        .<?php echo $uid; ?> .olo-mm-nav > li > a:not(.olo-mm-btn):hover {
+        .<?php echo $uid; ?> .olo-mm-nav > li.olo-mm-active > a:where(:not(.olo-mm-btn)),
+        .<?php echo $uid; ?> .olo-mm-nav > li > a:where(:not(.olo-mm-btn)):hover {
             background: <?php echo $he_color; ?>; color: #fff;
         }
         <?php elseif ( $he === 'framed' ) : ?>
-        .<?php echo $uid; ?> .olo-mm-nav > li > a:not(.olo-mm-btn) {
+        .<?php echo $uid; ?> .olo-mm-nav > li > a:where(:not(.olo-mm-btn)) {
             padding: 6px 14px;
             border: <?php echo $he_h; ?>px solid transparent;
             border-radius: 4px;
             transition: color .2s, border-color .3s;
         }
         .<?php echo $uid; ?> .olo-mm-nav > li > a::after { display: none; }
-        .<?php echo $uid; ?> .olo-mm-nav > li.olo-mm-active > a:not(.olo-mm-btn),
-        .<?php echo $uid; ?> .olo-mm-nav > li > a:not(.olo-mm-btn):hover {
+        .<?php echo $uid; ?> .olo-mm-nav > li.olo-mm-active > a:where(:not(.olo-mm-btn)),
+        .<?php echo $uid; ?> .olo-mm-nav > li > a:where(:not(.olo-mm-btn)):hover {
             border-color: <?php echo $he_color; ?>;
         }
         <?php elseif ( $he === 'dot' ) : ?>

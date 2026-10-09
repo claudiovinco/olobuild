@@ -137,12 +137,12 @@ class Olobuild_WorkGrid_Tile extends Olobuild_Tile_Base {
                             </div>
                         <?php endif; ?>
                     </div>
-                    <div class="olo-workgrid__b" style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;">
+                    <div class="olo-workgrid__b" style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;">
                         <?php if ( $title !== '' ) : ?>
                             <h3 style="font-family:<?php echo esc_attr( $tfam ); ?>;font-weight:<?php echo esc_attr( $title_wt ); ?>;font-size:<?php echo (int) $title_size; ?>px;letter-spacing:-0.02em;color:<?php echo esc_attr( $title_c ); ?>;margin:0;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.title'; ?>"><?php echo esc_html( $title ); ?></h3>
                         <?php endif; ?>
                         <?php if ( $meta !== '' ) : ?>
-                            <span style="flex:none;font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $meta_size; ?>px;letter-spacing:.02em;text-transform:uppercase;color:<?php echo esc_attr( $meta_c ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.meta'; ?>"><?php echo esc_html( $meta ); ?></span>
+                            <span style="flex:0 1 auto;max-width:100%;font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $meta_size; ?>px;letter-spacing:.02em;text-transform:uppercase;color:<?php echo esc_attr( $meta_c ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.meta'; ?>"><?php echo esc_html( $meta ); ?></span>
                         <?php endif; ?>
                     </div>
                     <?php if ( $show_desc && $desc ) : ?>
