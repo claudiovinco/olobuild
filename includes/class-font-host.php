@@ -26,22 +26,27 @@ class Olobuild_Font_Host {
      *
      * @param array  $families Nomi famiglia (es. ['Inter','Poppins']).
      * @param string $weights  Pesi in formato css2 (default '300;400;500;600;700').
+     * @param array  $italic   Famiglie di cui servono anche i corsivi veri (es. il carattere dei
+     *                         titoli di un tema con le parole d'accento in corsivo): senza, il
+     *                         browser inclina il tondo e un serif diventa sgraziato. Google non
+     *                         protesta per i corsivi o i pesi che una famiglia non ha.
      * @return string
      */
-    public static function get_font_face_css( $families, $weights = '300;400;500;600;700' ) {
+    public static function get_font_face_css( $families, $weights = '300;400;500;600;700', $italic = [] ) {
         $families = array_values( array_unique( array_filter( array_map( 'trim', (array) $families ) ) ) );
         if ( empty( $families ) ) {
             return '';
         }
+        $italic = array_values( array_intersect( array_map( 'strtolower', array_map( 'trim', (array) $italic ) ), array_map( 'strtolower', $families ) ) );
 
-        $key    = 'olo_fonthost_' . md5( implode( '|', $families ) . '|' . $weights );
+        $key    = 'olo_fonthost_' . md5( implode( '|', $families ) . '|' . $weights . ( $italic ? '|i:' . implode( ',', $italic ) : '' ) );
         $cached = get_transient( $key );
         if ( is_string( $cached ) ) {
             return $cached;
         }
 
         $rifiutata = false;
-        $css    = self::build( $families, $weights, $rifiutata );
+        $css    = self::build( $families, $weights, $rifiutata, $italic );
         // L'esito vuoto (Google irraggiungibile) viene cachato solo per poco,
         // così i retry riprendono presto; l'esito valido dura un mese.
         $durata = '' === $css ? 5 * MINUTE_IN_SECONDS : MONTH_IN_SECONDS;
@@ -55,7 +60,7 @@ class Olobuild_Font_Host {
             $dubbio = false;
             foreach ( $families as $f ) {
                 $no    = false;
-                $parte = self::build( [ $f ], $weights, $no );
+                $parte = self::build( [ $f ], $weights, $no, $italic );
                 if ( '' !== $parte ) {
                     $parti[] = $parte;
                 } elseif ( ! $no ) {
@@ -78,10 +83,21 @@ class Olobuild_Font_Host {
      * @param bool   $rifiutata Diventa true se Google ha risposto 400 (famiglia inesistente).
      * @return string CSS con URL locali, o '' in caso di errore.
      */
-    private static function build( $families, $weights, &$rifiutata = false ) {
+    private static function build( $families, $weights, &$rifiutata = false, $italic = [] ) {
         $req = [];
         foreach ( $families as $f ) {
-            $req[] = 'family=' . rawurlencode( $f ) . ':wght@' . $weights;
+            if ( in_array( strtolower( $f ), (array) $italic, true ) ) {
+                // ital,wght@0,300;0,400;…;1,300;1,400;… (css2 vuole le coppie in ordine)
+                $tondo   = [];
+                $corsivo = [];
+                foreach ( explode( ';', $weights ) as $w ) {
+                    $tondo[]   = '0,' . $w;
+                    $corsivo[] = '1,' . $w;
+                }
+                $req[] = 'family=' . rawurlencode( $f ) . ':ital,wght@' . implode( ';', array_merge( $tondo, $corsivo ) );
+            } else {
+                $req[] = 'family=' . rawurlencode( $f ) . ':wght@' . $weights;
+            }
         }
         $url = 'https://fonts.googleapis.com/css2?' . implode( '&', $req ) . '&display=swap';
 

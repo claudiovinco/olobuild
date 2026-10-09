@@ -2034,7 +2034,11 @@ class Olobuild_Style_System {
                 && preg_match( '/^[0-9;]+$/', (string) $styles['google_fonts_weights'] ) ) {
                 $weights = (string) $styles['google_fonts_weights'];
             }
-            return Olobuild_Font_Host::get_font_face_css( $fonts, $weights );
+            // Le famiglie di cui servono i corsivi veri (i temi li chiedono per i titoli con le
+            // parole d'accento in corsivo): olo_styles.google_fonts_italic, elenco di nomi.
+            $italic = ( is_array( $styles ) && ! empty( $styles['google_fonts_italic'] ) && is_array( $styles['google_fonts_italic'] ) )
+                ? array_map( 'sanitize_text_field', $styles['google_fonts_italic'] ) : [];
+            return Olobuild_Font_Host::get_font_face_css( $fonts, $weights, $italic );
         }
         return '';
     }
