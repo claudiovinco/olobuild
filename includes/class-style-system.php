@@ -394,7 +394,8 @@ class Olobuild_Style_System {
     }
 
     /**
-     * Com'è adesso una pagina che un import sta per riusare: template, titolo, stato.
+     * Com'è adesso una pagina che un import sta per riusare: template, titolo, stato
+     * e header/footer assegnati a lei (meta `_olo_header_id` / `_olo_footer_id`).
      *
      * @return array|null null se la pagina non esiste.
      */
@@ -404,11 +405,18 @@ class Olobuild_Style_System {
         if ( ! $post ) {
             return null;
         }
-        $tpl = get_post_meta( $page_id, '_olo_template_id', true );
+        $vuoto = function ( $v ) {
+            return '' === $v || false === $v || null === $v;
+        };
+        $tpl    = get_post_meta( $page_id, '_olo_template_id', true );
+        $header = get_post_meta( $page_id, '_olo_header_id', true );
+        $footer = get_post_meta( $page_id, '_olo_footer_id', true );
         return [
-            'tpl'    => ( '' === $tpl || false === $tpl || null === $tpl ) ? null : (string) $tpl,
+            'tpl'    => $vuoto( $tpl ) ? null : (string) $tpl,
             'title'  => (string) $post->post_title,
             'status' => (string) $post->post_status,
+            'header' => $vuoto( $header ) ? null : (string) $header,
+            'footer' => $vuoto( $footer ) ? null : (string) $footer,
         ];
     }
 
@@ -424,6 +432,13 @@ class Olobuild_Style_System {
                 'title'  => (string) ( $stato['title'] ?? '' ),
                 'status' => (string) ( $stato['status'] ?? '' ),
             ];
+            // Header e footer della pagina: le istantanee di prima non li hanno, e allora
+            // il ripristino non li tocca (chiave assente ≠ «nessuno»).
+            foreach ( [ 'header', 'footer' ] as $zona ) {
+                if ( array_key_exists( $zona, $stato ) ) {
+                    $out[ $pid ][ $zona ] = ( isset( $stato[ $zona ] ) && is_scalar( $stato[ $zona ] ) ) ? (string) $stato[ $zona ] : null;
+                }
+            }
         }
         return $out;
     }
@@ -642,7 +657,8 @@ class Olobuild_Style_System {
      * iniziale o degli articoli, anche nel cestino) o il template di una
      * pagina eliminati nel frattempo non si rimettono (il sito resterebbe
      * senza): restano quelli attuali e la risposta li elenca in 'saltati' (le
-     * pagine come 'pagina:<id>' e 'template_pagina:<id>', col titolo in
+     * pagine come 'pagina:<id>', 'template_pagina:<id>', 'header_pagina:<id>' e
+     * 'footer_pagina:<id>' (header e footer assegnati alla pagina), col titolo in
      * 'titoli'); senza la pagina iniziale non si riscrive nemmeno
      * show_on_front. Un font caricato i cui file sono stati cancellati non
      * torna: 'font:<id>', col nome in 'font'.
@@ -765,6 +781,23 @@ class Olobuild_Style_System {
                 $titoli[ $pid ] = (string) ( $stato['title'] ?? '' );
             } else {
                 update_post_meta( $pid, '_olo_template_id', $stato['tpl'] );
+            }
+            // Header e footer assegnati alla pagina (l'import li toglie perché valgano
+            // quelli del tema). Un template eliminato nel frattempo non si rimette: la
+            // pagina resterebbe senza header (render_header() non trova niente).
+            foreach ( [ 'header', 'footer' ] as $zona ) {
+                if ( ! array_key_exists( $zona, $stato ) ) {
+                    continue;
+                }
+                $meta = '_olo_' . $zona . '_id';
+                if ( null === $stato[ $zona ] || (int) $stato[ $zona ] <= 0 ) {
+                    delete_post_meta( $pid, $meta );
+                } elseif ( ! $db || ! $db->get_template( (int) $stato[ $zona ] ) ) {
+                    $saltati[]      = $zona . '_pagina:' . $pid;
+                    $titoli[ $pid ] = (string) ( $stato['title'] ?? '' );
+                } else {
+                    update_post_meta( $pid, $meta, $stato[ $zona ] );
+                }
             }
             $modifica = [];
             if ( '' !== (string) ( $stato['title'] ?? '' ) && $post->post_title !== $stato['title'] ) {

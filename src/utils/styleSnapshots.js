@@ -38,10 +38,11 @@ const NOMI_SALTATI = {
   page_on_front: 'pagina iniziale',
   page_for_posts: 'pagina degli articoli',
 };
-// Le pagine arrivano come 'pagina:<id>' (eliminata) e 'template_pagina:<id>' (il suo
-// template di allora è stato eliminato), col titolo di allora in esito.titoli[id];
+// Le pagine arrivano come 'pagina:<id>' (eliminata), 'template_pagina:<id>' (il suo
+// template di allora è stato eliminato) e 'header_pagina:<id>' / 'footer_pagina:<id>' (l'header o il
+// footer assegnati alla pagina, eliminati), col titolo di allora in esito.titoli[id];
 // i font caricati i cui file sono stati cancellati come 'font:<id>', col nome in esito.font[id].
-const NOMI_PAGINA = { pagina: 'pagina', template_pagina: 'template della pagina' };
+const NOMI_PAGINA = { pagina: 'pagina', template_pagina: 'template della pagina', header_pagina: 'header della pagina', footer_pagina: 'footer della pagina' };
 export function descriviSaltati(esito) {
   const s = (esito && Array.isArray(esito.saltati)) ? esito.saltati : [];
   const titoli = (esito && esito.titoli && typeof esito.titoli === 'object') ? esito.titoli : {};
@@ -49,7 +50,7 @@ export function descriviSaltati(esito) {
   return s.map((k) => {
     const f = /^font:(.+)$/.exec(String(k));
     if (f) return t('font') + ' «' + (Object.prototype.hasOwnProperty.call(font, f[1]) && font[f[1]] ? String(font[f[1]]) : f[1]) + '»';
-    const m = /^(pagina|template_pagina):(\d+)$/.exec(String(k));
+    const m = /^(pagina|template_pagina|header_pagina|footer_pagina):(\d+)$/.exec(String(k));
     if (!m) return t(NOMI_SALTATI[k] || k);
     const titolo = titoli[m[2]] ? String(titoli[m[2]]) : '#' + m[2];
     return t(NOMI_PAGINA[m[1]]) + ' «' + titolo + '»';

@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.611 - 2026-10-09 (fix)
+- Importare un tema: quando la home (o un'altra pagina già esistente) aveva un header o un footer scelti solo per lei, restava quello di prima sopra il tema nuovo. Ora vale quello del tema; «Ripristina» rimette anche le scelte della pagina.
+
 ## v1.4.610 - 2026-10-09 (novità)
 - 52 temi nuovi al posto dei 50 di prima, in 12 categorie: Ristorazione, Ospitalità e viaggi, Moda e bellezza, Negozi online, Studi e professioni, Tecnologia, Creativi e portfolio, Eventi e musica, Sport e benessere, Casa e design, Cultura e formazione, Associazioni e cause. Ognuno ha marchio e testi in italiano, colori e caratteri propri, la home, due o tre pagine interne, testata, piè di pagina e pagina 404.
 - Ogni tema mette in evidenza un effetto, scritto sotto il nome nel selettore: la luce che segue il mouse, il prima e dopo da trascinare, i testi che si scrivono da soli, le onde fra le sezioni, il carosello 3D, la lettura al buio, il gratta e scopri e molti altri.

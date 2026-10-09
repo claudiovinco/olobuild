@@ -410,6 +410,11 @@ class Olobuild_Theme_Importer {
                     // Lo slug di una pagina che esisteva gia' non si tocca: e' un indirizzo
                     // pubblicato, e cambiarlo romperebbe i collegamenti di chi ce l'ha.
                     wp_update_post( [ 'ID' => $page_id, 'post_title' => $title, 'post_status' => 'publish' ] );
+                    // Header e footer assegnati a questa pagina vincono su quelli attivi:
+                    // la home riusata teneva la testata di prima sopra il tema nuovo.
+                    // L'istantanea li ha registrati, «Ripristina» li rimette.
+                    delete_post_meta( $page_id, '_olo_header_id' );
+                    delete_post_meta( $page_id, '_olo_footer_id' );
                 } else {
                     $nuova = [
                         'post_title'   => $title,
