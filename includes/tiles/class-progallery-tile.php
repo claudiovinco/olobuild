@@ -2418,7 +2418,9 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
 
         // ── Init ──
         echo 'function init(r){initReveal(r);initTilt(r);initMagnetic(r);initFilmstrip(r);initExpand(r);initStrip(r);initStripArrows(r);initParallax(r);initDrift(r);initCascade(r)}';
-        echo 'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init)}else{init()}';
+        // init(r) vuole un contenitore: passato direttamente, DOMContentLoaded le dava l'evento e
+        // (r||document).querySelectorAll andava in errore → le gallerie sopra la piega senza effetti.
+        echo 'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",function(){init()})}else{init()}';
         // Lo script si scrive una volta sola per pagina: le gallerie che nascono DOPO dal
         // caricamento pigro (il <template> di una tile sotto la piega) non le avvia nessuno.
         // All'idratazione si avviano quelle del blocco appena nato; se il blocco contiene
