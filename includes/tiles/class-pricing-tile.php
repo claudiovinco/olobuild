@@ -314,8 +314,10 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
 
             /* Additional info */
+            <?php // Dal colore del testo della card: il grigio tenue del tema spariva sulle card scure o colorate
+                  // (la «più scelta» in tinta piena). A 10 px non si leggeva comunque. ?>
             .<?php echo $uid; ?> .olo-price-addinfo {
-                margin-top: 8px; font-size: 10px; color: var(--olo-color-text-muted, #9CA3AF); text-align: center;
+                margin-top: 8px; font-size: 12px; color: color-mix(in srgb, <?php echo $fg; ?> 72%, transparent); text-align: center;
             }
 
             /* CTA */

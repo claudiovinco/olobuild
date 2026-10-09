@@ -675,25 +675,28 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-mm-nav > li > a:hover::before,
         .<?php echo $uid; ?> .olo-mm-nav > li > a:hover::after { transform: scaleX(1); }
         <?php elseif ( $he === 'background' ) : ?>
-        .<?php echo $uid; ?> .olo-mm-nav > li > a {
+        <?php // Il pulsante della barra (a.olo-mm-btn) ha sfondo e raggio suoi: queste regole (0,3,2)
+              // battevano .olo-mm-btn (0,2,0) e sulla sua pagina, o in hover, diventava una pillola
+              // chiara col testo bianco del pulsante. ?>
+        .<?php echo $uid; ?> .olo-mm-nav > li > a:not(.olo-mm-btn) {
             padding: 8px 14px; border-radius: 6px;
             transition: color .2s, background .2s;
         }
         .<?php echo $uid; ?> .olo-mm-nav > li > a::after { display: none; }
-        .<?php echo $uid; ?> .olo-mm-nav > li.olo-mm-active > a,
-        .<?php echo $uid; ?> .olo-mm-nav > li > a:hover {
+        .<?php echo $uid; ?> .olo-mm-nav > li.olo-mm-active > a:not(.olo-mm-btn),
+        .<?php echo $uid; ?> .olo-mm-nav > li > a:not(.olo-mm-btn):hover {
             background: <?php echo $he_color; ?>; color: #fff;
         }
         <?php elseif ( $he === 'framed' ) : ?>
-        .<?php echo $uid; ?> .olo-mm-nav > li > a {
+        .<?php echo $uid; ?> .olo-mm-nav > li > a:not(.olo-mm-btn) {
             padding: 6px 14px;
             border: <?php echo $he_h; ?>px solid transparent;
             border-radius: 4px;
             transition: color .2s, border-color .3s;
         }
         .<?php echo $uid; ?> .olo-mm-nav > li > a::after { display: none; }
-        .<?php echo $uid; ?> .olo-mm-nav > li.olo-mm-active > a,
-        .<?php echo $uid; ?> .olo-mm-nav > li > a:hover {
+        .<?php echo $uid; ?> .olo-mm-nav > li.olo-mm-active > a:not(.olo-mm-btn),
+        .<?php echo $uid; ?> .olo-mm-nav > li > a:not(.olo-mm-btn):hover {
             border-color: <?php echo $he_color; ?>;
         }
         <?php elseif ( $he === 'dot' ) : ?>
@@ -1204,7 +1207,8 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             <?php if ( $btn_hfx === 'glow' ) : ?>box-shadow: 0 6px 20px rgba(15,23,42,.28);<?php endif; ?>
             <?php if ( $btn_rad_h ) : ?>border-radius: <?php echo $btn_rad_h['css']; ?> !important;<?php endif; ?>
         }
-        .<?php echo $uid; ?> .olo-mm-btn::after { display: none; }
+        .<?php echo $uid; ?> .olo-mm-btn::after,
+        .<?php echo $uid; ?> .olo-mm-btn::before { display: none; }
 <?php
         // Barra desktop: i pulsanti stanno in .olo-mm-nav > li > a, la cui «transition: color .2s»
         // (0,2,2) batte quella di .olo-mm-btn (0,2,0) e lo sfondo in hover scattava senza la Durata

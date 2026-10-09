@@ -48,6 +48,8 @@ export default {
     accent_color: '',                      // colore readout/slider/valori
     bg_color: '',
     font_size: '220',                      // px (desktop)
+    font_size_tablet: '',                  // vuoto = come il computer
+    font_size_mobile: '',
     font_weight_fallback: '700',           // peso statico se assi non supportati
     text_align: 'left',
     padding_y: '48',
@@ -122,7 +124,7 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Lettera campione'),
-      responsiveKeys: [],
+      responsiveKeys: ['size'],
       keys: {
         size:  'font_size',
         color: 'text_color',

@@ -41,6 +41,8 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
         'accent_color'         => '',
         'bg_color'             => '',
         'font_size'            => '220',
+        'font_size_tablet'     => '',
+        'font_size_mobile'     => '',
         'font_weight_fallback' => '700',
         'text_align'           => 'left',
         'padding_y'            => '48',
@@ -274,6 +276,14 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
                 box-shadow: 0 0 0 3px color-mix(in srgb, <?php echo $accent; ?> 45%, transparent);
             }
             <?php endif; ?>
+            <?php
+            // Misura per tablet e telefono (selettore del dispositivo del campo Tipografia):
+            // senza, la parola restava di 220 px anche sul telefono e si spezzava a metà.
+            // Vuota = la misura del computer, com'era.
+            echo $this->css_per_dispositivo( $s, 'font_size', '.' . $uid . ' .olo-vf-stage', function ( $v ) {
+                return 'font-size:' . max( 24, min( 800, intval( $v ) ) ) . 'px';
+            } );
+            ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
