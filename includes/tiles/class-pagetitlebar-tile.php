@@ -20,6 +20,8 @@ class Olobuild_Pagetitlebar_Tile extends Olobuild_Tile_Base {
         'title_tag'         => 'h1',
         'title_color'       => '',
         'title_size'        => '36',
+        'title_size_tablet' => '',
+        'title_size_mobile' => '',
         'title_weight'      => '700',
         'title_align'       => 'center',
         'subtitle'          => '',
@@ -110,7 +112,15 @@ class Olobuild_Pagetitlebar_Tile extends Olobuild_Tile_Base {
         }
 
         ob_start();
+        // Misura del titolo: sul telefono si riduce da sola, mai oltre quella scelta (a 104px
+        // «Laboratorio» era largo 422px in uno schermo da 390 e la barra lo tagliava). Tablet e
+        // telefono possono averne una propria, che vince: le regole per dispositivo vengono dopo.
         ?>
+        <style>#<?php echo esc_attr( $uid ); ?> .olo-ptb-title{font-size:<?php echo (int) $title_size; ?>px}@media (max-width:640px){#<?php echo esc_attr( $uid ); ?> .olo-ptb-title{font-size:clamp(<?php echo (int) min( 28, $title_size ); ?>px,9vw,<?php echo (int) $title_size; ?>px)}}<?php
+        echo $this->css_per_dispositivo( $s, 'title_size', '#' . $uid . ' .olo-ptb-title', function ( $v ) { // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- selector from the internal $uid, declaration built from absint()
+            return 'font-size:' . max( 14, min( 240, absint( $v ) ) ) . 'px';
+        } );
+        ?></style>
         <?php
         // Parallax: solo per sfondo IMMAGINE (media_bg image o legacy bg_image); non per il video.
         $parallax_ok = ! empty( $s['bg_parallax'] ) && ( ( $has_mb && $mb_type === 'image' ) || ( ! $has_mb && $bg_img ) );
@@ -126,7 +136,7 @@ class Olobuild_Pagetitlebar_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
 
             <div style="position:relative;z-index:1;width:100%;max-width:<?php echo (int) $max_w; ?>px;margin:0 auto;padding:<?php echo (int) $pad_y; ?>px <?php echo (int) ( is_array( $_tp ) ? intval( $_tp['right'] ?? 20 ) : 20 ); ?>px <?php echo (int) ( is_array( $_tp ) ? intval( $_tp['bottom'] ?? $pad_y ) : $pad_y ); ?>px <?php echo (int) ( is_array( $_tp ) ? intval( $_tp['left'] ?? 20 ) : 20 ); ?>px">
-                <<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tag whitelisted via in_array() above; colour via safe_color_css() or fixed var() fallback; size intval()-clamped; weight sanitize_text_field()'d or fixed '700' ?> style="color:<?php echo $title_c; ?>;font-size:<?php echo (int) $title_size; ?>px;font-weight:<?php echo $title_w; ?>;margin:0;line-height:1.2">
+                <<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tag whitelisted via in_array() above; colour via safe_color_css() or fixed var() fallback; size intval()-clamped; weight sanitize_text_field()'d or fixed '700' ?> class="olo-ptb-title" style="color:<?php echo $title_c; ?>;font-weight:<?php echo $title_w; ?>;margin:0;line-height:1.2">
                     <?php echo esc_html( $title ); ?>
                 </<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tag whitelisted via in_array() above ?>>
 

@@ -16,6 +16,8 @@ class Olobuild_Animatedheading_Tile extends Olobuild_Tile_Base {
         'text_color'      => '',
         'animated_color'  => '',
         'font_size'       => '36',
+        'font_size_tablet' => '',
+        'font_size_mobile' => '',
         'font_weight'     => '700',
         'typing_speed'    => '100',
         'pause_time'      => '2000',
@@ -57,6 +59,13 @@ class Olobuild_Animatedheading_Tile extends Olobuild_Tile_Base {
         <style>
         .<?php echo $uid; ?> { text-align: <?php echo $align; ?>; padding: 24px 16px; }
         .<?php echo $uid; ?> .olo-ah-heading { color: <?php echo $clr; ?>; font-size: <?php echo $fs; ?>px; font-weight: <?php echo $fw; ?>; margin: 0; line-height: 1.2; }
+        <?php // Sul telefono la misura scelta si riduce da sola (mai oltre quella scelta): 76px
+        // portavano «astronauti» fuori dallo schermo. Tablet e telefono possono averne una propria,
+        // che vince (le regole per dispositivo vengono dopo). ?>
+        @media (max-width:640px) { .<?php echo $uid; ?> .olo-ah-heading { font-size: clamp(<?php echo min( 28, $fs ); ?>px, 9vw, <?php echo $fs; ?>px); } }
+        <?php echo $this->css_per_dispositivo( $s, 'font_size', '.' . $uid . ' .olo-ah-heading', function ( $v ) {
+            return 'font-size:' . max( 12, min( 200, absint( $v ) ) ) . 'px';
+        } ); ?>
         .<?php echo $uid; ?> .olo-ah-word { color: <?php echo $aclr; ?>; }
         <?php if ($anim === 'typing') : ?>
         .<?php echo $uid; ?> .olo-ah-cursor { animation: olo-blink 0.7s infinite; }

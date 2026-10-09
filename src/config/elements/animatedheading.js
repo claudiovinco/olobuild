@@ -23,6 +23,8 @@ export default {
     text_color: '',
     animated_color: '',
     font_size: '36',
+    font_size_tablet: '',
+    font_size_mobile: '',
     font_weight: '700',
     typing_speed: '100',
     pause_time: '2000',
@@ -92,7 +94,7 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Testo'),
-      responsiveKeys: [],
+      responsiveKeys: ['size'],
       keys: {
         tag:    'tag',
         size:   'font_size',
