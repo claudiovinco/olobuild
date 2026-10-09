@@ -289,7 +289,7 @@ trait Olobuild_Renderer_Structure_Trait {
         if ( $light_color ) {
             $html .= ' data-olo-light="' . esc_attr( $light_color ) . '"';
         }
-        $html .= $scrollspy_attr . $el_parallax_attr . $snap_data_attr . $mouse_attrs . $this->anim->build_spotlight_attr( $advanced ) . '>';
+        $html .= $scrollspy_attr . $el_parallax_attr . $snap_data_attr . $mouse_attrs . $this->anim->build_spotlight_attr( $advanced ) . $this->anim->build_smear_attr( $advanced ) . '>';
 
         $bg_layers_html = '';
         if ( $has_bg_image ) {
@@ -650,7 +650,7 @@ trait Olobuild_Renderer_Structure_Trait {
         $row_scrollspy_attr = $this->anim->build_scrollspy_attr( $advanced );
         $row_el_parallax_attr = $this->anim->build_element_parallax_attr( $advanced );
         $row_mouse_attrs = $this->anim->build_mouse_attrs( $advanced );
-        $row_spotlight_attr = $this->anim->build_spotlight_attr( $advanced );
+        $row_spotlight_attr = $this->anim->build_spotlight_attr( $advanced ) . $this->anim->build_smear_attr( $advanced );
         // Tutti gli attributi-effetto della row in un'unica stringa: vanno sul
         // wrapper quando esiste, altrimenti direttamente sul nodo griglia
         // (prima i mouse attrs venivano calcolati ma mai stampati, e le row
@@ -1913,7 +1913,7 @@ trait Olobuild_Renderer_Structure_Trait {
         if ( ! empty( $inline_styles ) ) {
             $html .= ' style="' . esc_attr( implode( '; ', $inline_styles ) ) . '"';
         }
-        $html .= $col_scrollspy_attr . $col_el_parallax_attr . $col_mouse_attrs . $this->anim->build_spotlight_attr( $advanced ) . '>';
+        $html .= $col_scrollspy_attr . $col_el_parallax_attr . $col_mouse_attrs . $this->anim->build_spotlight_attr( $advanced ) . $this->anim->build_smear_attr( $advanced ) . '>';
 
         // Background image cover for column
         if ( $has_col_bg_image ) {
@@ -2043,7 +2043,8 @@ trait Olobuild_Renderer_Structure_Trait {
         $fx_attrs = $this->anim->build_scrollspy_attr( $advanced )
             . $this->anim->build_element_parallax_attr( $advanced )
             . $this->anim->build_mouse_attrs( $advanced )
-            . $this->anim->build_spotlight_attr( $advanced );
+            . $this->anim->build_spotlight_attr( $advanced )
+            . $this->anim->build_smear_attr( $advanced );
 
         // Impilare: le sotto-colonne a tutta larghezza una sotto l'altra. Sul telefono
         // («Impila su mobile», come prima) e fino al tablet orizzontale («Impila su

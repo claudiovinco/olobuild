@@ -999,9 +999,8 @@
                   <input type="range" min="5" max="30" step="1" :value="tileAdvanced.mouse_tilt_intensity || 15" @input="updateAdvanced('mouse_tilt_intensity', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
                 </div>
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Applica a') }}</label>
+                  <label class="mb-flex mb-items-center mb-gap-1 mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Applica a') }}<InfoTip :titolo="t('Applica a')" :testo="t('&quot;Foto interne&quot;: ogni immagine o video dentro la tile (gallerie, griglie) si inclina singolarmente.')" /></label>
                   <FieldSelect ui="segmented" :model-value="tileAdvanced.mouse_tilt_target || 'block'" :options="TILT_TARGET_OPTIONS" @update:model-value="updateAdvanced('mouse_tilt_target', $event)" />
-                  <p class="mb-text-[10px] mb-text-gray-500 mb-leading-snug mb-mt-1">{{ t('"Foto interne": ogni immagine o video dentro la tile (gallerie, griglie) si inclina singolarmente.') }}</p>
                 </div>
               </template>
               <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
@@ -1016,11 +1015,13 @@
               </template>
 
               <div class="mb-border-t mb-border-gray-700 mb-pt-3 mb-mt-1"></div>
-              <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
-                <input type="checkbox" :checked="tileAdvanced.cursor_spotlight === true" @change="updateAdvanced('cursor_spotlight', $event.target.checked)" class="mb-accent-primary-500" />
-                <span class="mb-text-xs mb-text-gray-300">{{ t('Spotlight cursore (torcia)') }}</span>
-              </label>
-              <p class="mb-text-[10px] mb-text-gray-500 mb-leading-snug">{{ t('Un disco-torcia segue il cursore e inverte i colori, confinato a questo elemento. Si disattiva su touch e con riduzione del movimento.') }}</p>
+              <div class="mb-flex mb-items-center mb-gap-1">
+                <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                  <input type="checkbox" :checked="tileAdvanced.cursor_spotlight === true" @change="updateAdvanced('cursor_spotlight', $event.target.checked)" class="mb-accent-primary-500" />
+                  <span class="mb-text-xs mb-text-gray-300">{{ t('Spotlight cursore (torcia)') }}</span>
+                </label>
+                <InfoTip :titolo="t('Spotlight cursore (torcia)')" :testo="t('Un disco-torcia segue il cursore e inverte i colori, confinato a questo elemento. Si disattiva su touch e con riduzione del movimento.')" />
+              </div>
               <template v-if="tileAdvanced.cursor_spotlight">
                 <div>
                   <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Inversione (blend)') }}</label>
@@ -1044,6 +1045,39 @@
                 </div>
               </template>
 
+              <!-- Pennellata al cursore (dalla tile Hero — Smear, ora per ogni elemento):
+                   Olobuild_Animation_Builder::build_smear_attr() + runtime nella pagina. -->
+              <div class="mb-border-t mb-border-gray-700 mb-pt-3 mb-mt-1"></div>
+              <div class="mb-flex mb-items-center mb-gap-1">
+                <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                  <input type="checkbox" :checked="tileAdvanced.cursor_smear === true" @change="updateAdvanced('cursor_smear', $event.target.checked)" class="mb-accent-primary-500" />
+                  <span class="mb-text-xs mb-text-gray-300">{{ t('Pennellata al cursore') }}</span>
+                </label>
+                <InfoTip :titolo="t('Pennellata al cursore')" :testo="[t('Il puntatore lascia pennellate di colore che si allargano e svaniscono, solo dentro questo elemento. Al tocco segue il dito, anche mentre la pagina scorre.'), t('I segni passano sopra al contenuto ma non prendono i clic. Con la fusione automatica schiariscono i fondi scuri e tingono quelli chiari: il testo resta leggibile.'), t('Si spegne solo per chi ha chiesto meno movimento nelle impostazioni del sistema.')]" />
+              </div>
+              <template v-if="tileAdvanced.cursor_smear">
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Colori') }}</label>
+                  <FieldSelect ui="dropdown" :model-value="tileAdvanced.cursor_smear_colors || 'tema'" :options="SMEAR_COLOR_OPTIONS" @update:model-value="updateAdvanced('cursor_smear_colors', $event)" />
+                </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Fusione') }}</label>
+                  <FieldSelect ui="dropdown" :model-value="tileAdvanced.cursor_smear_blend || 'auto'" :options="SMEAR_BLEND_OPTIONS" @update:model-value="updateAdvanced('cursor_smear_blend', $event)" />
+                </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Pennello:') }} {{ tileAdvanced.cursor_smear_size || 44 }}px</label>
+                  <input type="range" min="10" max="160" step="2" :value="tileAdvanced.cursor_smear_size || 44" @input="updateAdvanced('cursor_smear_size', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
+                </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Durata della traccia:') }} {{ ((tileAdvanced.cursor_smear_life || 900) / 1000).toFixed(1) }} s</label>
+                  <input type="range" min="300" max="4000" step="100" :value="tileAdvanced.cursor_smear_life || 900" @input="updateAdvanced('cursor_smear_life', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
+                </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Sfocatura:') }} {{ tileAdvanced.cursor_smear_blur ?? 2 }}px</label>
+                  <input type="range" min="0" max="30" step="1" :value="tileAdvanced.cursor_smear_blur ?? 2" @input="updateAdvanced('cursor_smear_blur', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
+                </div>
+              </template>
+
               <!-- Cursore magnetico — impostazione GLOBALE del sito (option
                    olo_magnetic_cursor), non della tile: esposta qui perché è
                    qui che si cercano le impostazioni del puntatore. -->
@@ -1052,10 +1086,10 @@
                 <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
                   <input type="checkbox" :checked="magCursor?.enabled === true" :disabled="!magLoaded" @change="updateMag('enabled', $event.target.checked)" class="mb-accent-primary-500" />
                   <span class="mb-text-xs mb-text-gray-300">{{ t('Cursore magnetico') }}</span>
+                  <InfoTip :titolo="t('Cursore magnetico')" :testo="[t('Anello + dot che sostituiscono il puntatore su tutto il sito, con attrazione magnetica sugli elementi interattivi. Vale per tutte le pagine; nel canvas resta il cursore di sistema.'), t('Si salva da solo a ogni modifica — non serve il tasto Salva del template.')]" />
                 </label>
                 <span class="mb-text-[9px] mb-uppercase mb-tracking-wide mb-text-gray-500 mb-bg-gray-800 mb-rounded mb-px-1.5 mb-py-0.5">{{ t('Globale sito') }}</span>
               </div>
-              <p class="mb-text-[10px] mb-text-gray-500 mb-leading-snug">{{ t('Anello + dot che sostituiscono il puntatore su tutto il sito, con attrazione magnetica sugli elementi interattivi. Vale per tutte le pagine; nel canvas resta il cursore di sistema.') }}</p>
               <template v-if="magLoaded && magCursor?.enabled">
                 <div class="mb-grid mb-grid-cols-2 mb-gap-2">
                   <div>
@@ -1099,11 +1133,10 @@
                   <span class="mb-text-xs mb-text-gray-300">{{ t('Nascondi il cursore di sistema') }}</span>
                 </label>
               </template>
-              <p v-if="magLoaded" class="mb-text-[10px]" :class="magStatus === 'error' ? 'mb-text-red-400' : magStatus === 'saved' ? 'mb-text-green-500' : 'mb-text-gray-500'">
+              <p v-if="magLoaded && ['saving', 'error', 'saved'].includes(magStatus)" class="mb-text-[10px]" :class="magStatus === 'error' ? 'mb-text-red-400' : magStatus === 'saved' ? 'mb-text-green-500' : 'mb-text-gray-500'">
                 {{ magStatus === 'saving' ? t('Salvataggio…')
                   : magStatus === 'error' ? t('Errore di salvataggio — riprova')
-                  : magStatus === 'saved' ? t('✓ Salvato sul sito')
-                  : t('Si salva da solo a ogni modifica — non serve il tasto Salva del template.') }}
+                  : t('✓ Salvato sul sito') }}
               </p>
 
               <!-- HUD mirino — impostazione GLOBALE del sito (option olo_cursor_hud,
@@ -1114,10 +1147,10 @@
                 <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
                   <input type="checkbox" :checked="hudCursor?.enabled === true" :disabled="!hudLoaded" @change="updateHud('enabled', $event.target.checked)" class="mb-accent-primary-500" />
                   <span class="mb-text-xs mb-text-gray-300">{{ t('HUD mirino (linee + coordinate)') }}</span>
+                  <InfoTip :titolo="t('HUD mirino (linee + coordinate)')" :testo="[t('Due linee a tutto schermo seguono il puntatore, con coordinate in pixel e nome della sezione corrente. Vale per tutte le pagine; si disattiva su touch e con riduzione del movimento.'), t('Si salva da solo a ogni modifica — non serve il tasto Salva del template.')]" />
                 </label>
                 <span class="mb-text-[9px] mb-uppercase mb-tracking-wide mb-text-gray-500 mb-bg-gray-800 mb-rounded mb-px-1.5 mb-py-0.5">{{ t('Globale sito') }}</span>
               </div>
-              <p class="mb-text-[10px] mb-text-gray-500 mb-leading-snug">{{ t('Due linee a tutto schermo seguono il puntatore, con coordinate in pixel e nome della sezione corrente. Vale per tutte le pagine; si disattiva su touch e con riduzione del movimento.') }}</p>
               <template v-if="hudLoaded && hudCursor?.enabled">
                 <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
                   <input type="checkbox" :checked="hudCursor.show_coords === true" @change="updateHud('show_coords', $event.target.checked)" class="mb-accent-primary-500" />
@@ -1148,11 +1181,10 @@
                   <input type="range" min="0" max="80" step="2" :value="hudCursor.tag_offset" @input="updateHud('tag_offset', parseInt($event.target.value))" class="mb-w-full mb-accent-primary-500" />
                 </div>
               </template>
-              <p v-if="hudLoaded" class="mb-text-[10px]" :class="hudStatus === 'error' ? 'mb-text-red-400' : hudStatus === 'saved' ? 'mb-text-green-500' : 'mb-text-gray-500'">
+              <p v-if="hudLoaded && ['saving', 'error', 'saved'].includes(hudStatus)" class="mb-text-[10px]" :class="hudStatus === 'error' ? 'mb-text-red-400' : hudStatus === 'saved' ? 'mb-text-green-500' : 'mb-text-gray-500'">
                 {{ hudStatus === 'saving' ? t('Salvataggio…')
                   : hudStatus === 'error' ? t('Errore di salvataggio — riprova')
-                  : hudStatus === 'saved' ? t('✓ Salvato sul sito')
-                  : t('Si salva da solo a ogni modifica — non serve il tasto Salva del template.') }}
+                  : t('✓ Salvato sul sito') }}
               </p>
             </div>
           </CollapseSection>
@@ -1420,6 +1452,7 @@ import { normalizeSearchQuery, fieldMatchesSearch, sectionLabelMatchesSearch, co
 import FieldSelect from './fields/FieldSelect.vue';
 import FieldColor from './fields/FieldColor.vue';
 import CollapseSection from './CollapseSection.vue';
+import InfoTip from './InfoTip.vue';
 import ParallaxEditor from './ParallaxEditor.vue';
 import BezierPathEditor from './BezierPathEditor.vue';
 import ProSliderEditor from '../ProSlider/ProSliderEditor.vue';
@@ -1565,6 +1598,22 @@ const SPOTLIGHT_BLEND_OPTIONS = [
   { value: 'screen', label: 'Schermo' },
   { value: 'overlay', label: 'Sovrapposizione' },
   { value: 'hard-light', label: 'Hard Light' },
+];
+
+// Pennellata al cursore: tavolozze di token (mai esadecimali) e fusione; «auto» guarda il fondo.
+const SMEAR_COLOR_OPTIONS = [
+  { value: 'tema', label: 'Colori del tema' },
+  { value: 'caldi', label: 'Primario e accento' },
+  { value: 'primario', label: 'Solo primario' },
+  { value: 'accento', label: 'Solo accento' },
+  { value: 'chiaro', label: 'Chiaro' },
+  { value: 'scuro', label: 'Scuro' },
+];
+const SMEAR_BLEND_OPTIONS = [
+  { value: 'auto', label: 'Automatica (dal fondo)' },
+  { value: 'screen', label: 'Luce (per fondi scuri)' },
+  { value: 'multiply', label: 'Inchiostro (per fondi chiari)' },
+  { value: 'difference', label: 'Differenza' },
 ];
 
 const TILT_TARGET_OPTIONS = [
@@ -1891,6 +1940,7 @@ const ADV_SEARCH_LABELS = [
   'Fetch Priority', 'Schema.org', 'Data Attributes',
   'Animazione di ingresso', 'Animazione allo scroll', 'Parallax allo scroll',
   'Percorso Bezier allo scroll', 'Scroll fisso (sticky)', 'Effetti mouse',
+  'Tilt 3D al hover', 'Segui cursore', 'Spotlight cursore (torcia)', 'Pennellata al cursore',
   'Animazione continua', 'Maschera forma', 'Tipo maschera', 'Clip-path CSS',
   'Ritardo stagger (ms)', 'Durata (ms)', 'Ritardo iniziale (ms)', 'Intensità (×)',
   'Curva di animazione', 'Ritardo (ms)', 'Stagger figli (ms)',

@@ -1332,6 +1332,89 @@ trait Olobuild_Renderer_Page_Trait {
             })();
             </script>
             <script>
+            /* Pennellata al cursore — il puntatore (o il dito, anche mentre la pagina scorre) lascia segni
+               di colore che si allargano e svaniscono, confinati all'elemento. I segni stanno in uno strato
+               sopra al contenuto che non prende i clic; la fusione «automatica» guarda il fondo: Schermo
+               (schiarisce) sui fondi scuri, Moltiplica (tinge) su quelli chiari, così il testo resta leggibile.
+               Spenta solo con la riduzione del movimento. Niente && (WordPress lo rovina negli script in linea). */
+            (function(){
+              function luce(c){
+                var s = String(c || '');
+                var n = s.match(/-?[\d.]+/g);
+                if(!n) return -1;
+                if(s.indexOf('color(') === 0){ n = [n[0] * 255, n[1] * 255, n[2] * 255, n.length > 3 ? n[3] : 1]; }
+                if(n.length > 3){ if(+n[3] < 0.15) return -1; }
+                return (0.2126 * n[0] + 0.7152 * n[1] + 0.0722 * n[2]) / 255;
+              }
+              function fondoScuro(el){
+                for(var giro = 0; el; giro++){
+                  if(el.nodeType === 1){
+                    var cs = getComputedStyle(el);
+                    if(String(cs.backgroundImage).indexOf('url(') > -1) return true;
+                    var l = luce(cs.backgroundColor);
+                    if(l < 0){
+                      var g = String(cs.backgroundImage).match(/(rgba?|color)\([^)]*\)/g);
+                      if(g){ var somma = 0, quanti = 0; for(var i = 0; i < g.length; i++){ var x = luce(g[i]); if(x >= 0){ somma += x; quanti++; } } if(quanti){ return somma / quanti < 0.5; } }
+                    } else {
+                      return l < 0.5;
+                    }
+                  }
+                  el = el.parentElement;
+                }
+                return false;
+              }
+              function setup(host){
+                if(host.dataset.oloSmearReady) return;
+                var cfg; try { cfg = JSON.parse(host.dataset.oloSmear); } catch(e){ return; }
+                host.dataset.oloSmearReady = '1';
+                if(window.matchMedia){ if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; }
+                var cols = cfg.colors;
+                if(!cols){ cols = ['var(--olo-color-primary)']; }
+                if(!cols.length){ cols = ['var(--olo-color-primary)']; }
+                var size = +cfg.size || 44, life = +cfg.life || 900, blur = (cfg.blur != null ? +cfg.blur : 2);
+                var blend = cfg.blend || 'auto', strato = null, ultimo = 0, vivi = 0;
+                function crea(){
+                  if(strato) return;
+                  if(getComputedStyle(host).position === 'static') host.style.position = 'relative';
+                  host.style.isolation = 'isolate';
+                  if(blend === 'auto'){ blend = fondoScuro(host) ? 'screen' : 'multiply'; }
+                  strato = document.createElement('div');
+                  strato.className = 'olo-smear-layer';
+                  strato.setAttribute('aria-hidden', 'true');
+                  strato.style.cssText = 'position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:99998;mix-blend-mode:' + blend + ';';
+                  host.appendChild(strato);
+                }
+                function segno(x, y){
+                  var ora = Date.now();
+                  if(ora - ultimo < 34) return;
+                  if(vivi > 70) return;
+                  ultimo = ora;
+                  crea();
+                  var r = host.getBoundingClientRect();
+                  var b = document.createElement('span');
+                  var lato = Math.round(size * (0.6 + Math.random() * 0.9));
+                  b.style.cssText = 'position:absolute;left:' + (x - r.left) + 'px;top:' + (y - r.top) + 'px;width:' + lato + 'px;height:' + lato + 'px;border-radius:50%;background:' + cols[Math.floor(Math.random() * cols.length)] + ';opacity:.9;transform:translate(-50%,-50%) scale(1);filter:blur(' + blur + 'px);transition:opacity ' + life + 'ms ease,transform ' + life + 'ms ease;will-change:transform,opacity;';
+                  strato.appendChild(b);
+                  vivi++;
+                  requestAnimationFrame(function(){ requestAnimationFrame(function(){ b.style.opacity = '0'; b.style.transform = 'translate(-50%,-50%) scale(2.2)'; }); });
+                  setTimeout(function(){ if(b.parentNode){ b.parentNode.removeChild(b); } vivi--; }, life + 80);
+                }
+                host.addEventListener('pointermove', function(e){ if(e.pointerType === 'touch') return; segno(e.clientX, e.clientY); });
+                // al tocco i pointermove si fermano appena la pagina scorre: i touchmove (passivi) no
+                host.addEventListener('touchstart', function(e){ var t = e.touches[0]; if(t){ segno(t.clientX, t.clientY); } }, { passive: true });
+                host.addEventListener('touchmove', function(e){ var t = e.touches[0]; if(t){ segno(t.clientX, t.clientY); } }, { passive: true });
+              }
+              function initSmears(){
+                var hosts = document.querySelectorAll('[data-olo-smear]');
+                for(var i = 0; i < hosts.length; i++){ setup(hosts[i]); }
+              }
+              if(document.readyState !== 'loading'){ initSmears(); }
+              document.addEventListener('DOMContentLoaded', initSmears);
+              document.addEventListener('olo:lazy-hydrated', initSmears);
+              window.addEventListener('load', initSmears);
+            })();
+            </script>
+            <script>
             (function(){
               var els = document.querySelectorAll('[data-olo-scroll-fx]');
               if(!els.length) return;

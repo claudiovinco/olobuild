@@ -284,6 +284,49 @@ class Olobuild_Animation_Builder {
     }
 
     /**
+     * Pennellata al cursore: muovendo il puntatore (o il dito) sull'elemento si depositano segni di
+     * colore che si allargano e svaniscono. Riusabile su section/row/column/element come la torcia;
+     * nata nella tile Hero — Smear (che resta com'è), ora vale per qualsiasi elemento.
+     * Colori solo dai token del tema: il runtime li usa come sfondo dei segni (var() funziona).
+     *
+     * @param array $advanced Advanced settings.
+     * @return string Attribute string (leading space) or empty.
+     */
+    public function build_smear_attr( $advanced ) {
+        if ( empty( $advanced['cursor_smear'] ) ) {
+            return '';
+        }
+        $tavolozze = [
+            'tema'     => [ 'primary', 'accent', 'secondary', 'light' ],
+            'caldi'    => [ 'primary', 'accent' ],
+            'primario' => [ 'primary' ],
+            'accento'  => [ 'accent' ],
+            'chiaro'   => [ 'light' ],
+            'scuro'    => [ 'dark' ],
+        ];
+        $scelta = (string) ( $advanced['cursor_smear_colors'] ?? 'tema' );
+        if ( ! isset( $tavolozze[ $scelta ] ) ) {
+            $scelta = 'tema';
+        }
+        $colori = [];
+        foreach ( $tavolozze[ $scelta ] as $ruolo ) {
+            $colori[] = 'var(--olo-color-' . $ruolo . ')';
+        }
+        $fusione = (string) ( $advanced['cursor_smear_blend'] ?? 'auto' );
+        if ( ! in_array( $fusione, [ 'auto', 'screen', 'multiply', 'difference' ], true ) ) {
+            $fusione = 'auto';
+        }
+        $cfg = [
+            'colors' => $colori,
+            'size'   => max( 10, min( 160, intval( $advanced['cursor_smear_size'] ?? 44 ) ) ),
+            'life'   => max( 300, min( 4000, intval( $advanced['cursor_smear_life'] ?? 900 ) ) ),
+            'blur'   => max( 0, min( 30, intval( $advanced['cursor_smear_blur'] ?? 2 ) ) ),
+            'blend'  => $fusione,
+        ];
+        return " data-olo-smear='" . esc_attr( wp_json_encode( $cfg ) ) . "'";
+    }
+
+    /**
      * Build inline CSS for infinite (looping) animation (legacy element-level).
      *
      * @param array $advanced Advanced settings.

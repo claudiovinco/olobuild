@@ -744,11 +744,11 @@ class Olobuild_Frontend_Renderer {
         }
 
         // Effetti con uno script di pagina che raccoglie le tile UNA volta, al caricamento: inclinazione
-        // 3D, inseguimento del cursore, torcia, effetti allo scorrimento, assemblaggio, test A/B,
+        // 3D, inseguimento del cursore, torcia, pennellata, effetti allo scorrimento, assemblaggio, test A/B,
         // galleria di sfondo. Una tile nata dopo da un <template> restava senza effetto (6 ott 2026:
         // inclinazione e torcia ferme sulla pagina Opzioni avanzate). Anche quando l'effetto sta su
         // una tile figlia: l'HTML qui contiene tutto il sottoalbero.
-        if ( preg_match( '/\sdata-olo-(?:tilt|tilt-items|track|spotlight|scroll-fx|assembly|ab-test|bg-gallery)[\s=>]/', $html ) ) {
+        if ( preg_match( '/\sdata-olo-(?:tilt|tilt-items|track|spotlight|smear|scroll-fx|assembly|ab-test|bg-gallery)[\s=>]/', $html ) ) {
             return $html;
         }
 
@@ -1212,8 +1212,8 @@ class Olobuild_Frontend_Renderer {
             $elem_mouse_attrs .= ' data-olo-track="' . $track_speed . '"';
         }
 
-        // Spotlight cursore — riusabile su section/column/row/element (vedi Olobuild_Animation_Builder::build_spotlight_attr)
-        $elem_spotlight_attr = $this->anim->build_spotlight_attr( $advanced );
+        // Spotlight cursore e pennellata — riusabili su section/column/row/element (vedi Olobuild_Animation_Builder::build_spotlight_attr / build_smear_attr)
+        $elem_spotlight_attr = $this->anim->build_spotlight_attr( $advanced ) . $this->anim->build_smear_attr( $advanced );
 
         // Bezier path scroll animation
         $elem_bezier_attr = '';
