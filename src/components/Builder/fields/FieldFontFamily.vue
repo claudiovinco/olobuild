@@ -529,6 +529,13 @@ onBeforeUnmount(() => {
 .ff-search:focus {
   border-color: var(--olo-ui-accent, #e8622a);
 }
+/* La tendina vive nel body (Teleport): forms.css di WordPress (input[type=text]:focus, 0,2,1)
+   aggiungeva l'anello blu attorno al bordo arancio. Un solo bordo, quello del campo. */
+.ff-search-wrap .ff-search[type="text"]:focus {
+  border-color: var(--olo-ui-accent, #e8622a);
+  box-shadow: none;
+  outline: none;
+}
 .ff-search::placeholder {
   color: #9CA3AF;
 }

@@ -750,6 +750,25 @@ defineExpose({ open, close });
 .ip-search-input::placeholder {
   color: #9CA3AF;
 }
+/* Il pannello vive nel body (Teleport), fuori da #olobuilder-app: forms.css di WordPress dava
+   al campo bordo, padding e altezza minima e, al focus, il rettangolo blu (input[type=text]:focus,
+   0,2,1) dentro la casella che ha già il suo focus arancio (:focus-within qui sopra). Il campo
+   resta solo testo, come nel Cerca del builder (BuilderFinder). */
+.ip-search .ip-search-input[type="text"],
+.ip-search .ip-search-input[type="text"]:focus,
+.ip-search .ip-search-input[type="text"]:focus-visible {
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  outline: none;
+  font-size: 13px;
+  line-height: 1.5;
+}
 
 /* Body */
 .ip-body {
