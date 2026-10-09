@@ -395,6 +395,8 @@ class Olobuild_Setup_Wizard {
                 }
                 window.OloThemePicker.create({
                     mode: 'embed',
+                    // la procedura è una pagina scura: il selettore (chiaro nel builder) usa la serie scura
+                    tema: 'scuro',
                     target: host,
                     themes: oloWizardThemes,
                     card: { action: 'select' },

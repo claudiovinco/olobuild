@@ -948,8 +948,8 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
             echo "@media(max-width:640px){.{$uid}{height:auto;perspective:none}.{$uid} .olo-pg-item{position:relative;width:85%;left:auto;top:auto;margin:12px auto;transform:none!important}}";
         }
 
-        // ─── Strip mobile ───
-        if ( $is_strip ) {
+        // ─── Strip mobile ─── (non il coverflow: la larghezza delle sue foto la decide lo script)
+        if ( $is_strip && ! $is_coverflow ) {
             $mob_strip_w = max( 150, $strip_item_w - 80 );
             echo "@media(max-width:640px){.{$uid} .olo-pg-item{width:{$mob_strip_w}px}}";
         }
