@@ -22,7 +22,7 @@ class Olobuild_Theme_Importer {
             $screenshot = '';
             $lib = rtrim( (string) apply_filters( 'olobuild_library_url', 'https://olotheme.com/olobuild-library' ), '/' );
             if ( $lib !== '' ) {
-                $screenshot = $lib . '/themes/' . $theme_id . '/screenshot.jpg';
+                $screenshot = $lib . '/themes/' . $theme_id . '/screenshot.jpg?v=' . rawurlencode( (string) ( $data['preview_v'] ?? ( $data['version'] ?? '1' ) ) );
             } else {
                 foreach ( [ 'screenshot.jpg', 'screenshot.png', 'screenshot.webp' ] as $ext ) {
                     if ( file_exists( $dir . '/' . $ext ) ) {
@@ -80,8 +80,9 @@ class Olobuild_Theme_Importer {
             : ( $catalog ? rtrim( $catalog, '/' ) . '/' . $theme_id . '/' : '' );
 
         return [
-            'category'     => ( isset( $data['category'] ) && $data['category'] !== '' ) ? $data['category'] : self::theme_category( $theme_id, $data ),
-            'zone'         => $data['zone'] ?? self::theme_zone( $theme_id ),
+            'category'     => olobuild_t( self::theme_category( $data ) ),
+            'zone'         => isset( $data['zone'] ) ? olobuild_t( (string) $data['zone'] ) : '',
+            'pages'        => isset( $data['pages'] ) && is_array( $data['pages'] ) ? count( $data['pages'] ) : 0,
             'accent'       => $accent,
             'bg'           => $bg,
             'ink'          => $ink,
@@ -124,48 +125,14 @@ class Olobuild_Theme_Importer {
         return ( $ltx !== null && $ltx >= 0.62 ) ? $text : '#f3f5fb';
     }
 
-    /** Categoria canonica dei 50 OLOtheme (override via theme.json `category`, fallback al primo tag). */
-    private static function theme_category( $theme_id, $data ) {
-        static $map = [
-            'atelier' => 'Beauty & Fashion', 'aurora' => 'Events', 'bloom' => 'Beauty & Fashion',
-            'brewline' => 'Food & Drink', 'cadence' => 'Health & Fitness', 'canvas' => 'Artist',
-            'capital-row' => 'Consulting & Finance', 'carrello' => 'E-commerce', 'circuit' => 'Software & Tech',
-            'contour' => 'Health & Fitness', 'datafold' => 'Software & Tech', 'dispatch' => 'Media & News',
-            'fieldco' => 'E-commerce', 'fiori' => 'Wedding', 'fjordline' => 'Travel', 'forge' => 'Software & Tech',
-            'frame' => 'Media & News', 'gazette' => 'Media & News', 'hearth' => 'Home & Living',
-            'honeycomb' => 'Food & Drink', 'kiln' => 'Artist', 'ledger' => 'Consulting & Finance',
-            'linea' => 'Beauty & Fashion', 'loft' => 'Home & Living', 'lumen' => 'Beauty & Fashion',
-            'maison' => 'Home & Living', 'mercato' => 'E-commerce', 'meridian' => 'Consulting & Finance',
-            'mono' => 'Creative', 'nimbus' => 'Software & Tech', 'pasaje' => 'Travel', 'prisma' => 'Creative',
-            'pulse' => 'Health & Fitness', 'relayos' => 'Software & Tech', 'saffron' => 'Food & Drink',
-            'signal' => 'Media & News', 'soundwave' => 'Artist', 'sterling' => 'Consulting & Finance',
-            'synapse' => 'Software & Tech', 'tavola' => 'Food & Drink', 'terra' => 'Home & Living',
-            'vela' => 'Creative', 'velour' => 'Beauty & Fashion', 'verdano' => 'Health & Fitness',
-            'verde' => 'Food & Drink', 'vinea' => 'Food & Drink', 'vitalis' => 'Health & Fitness',
-            'vows' => 'Wedding', 'voyage' => 'Travel', 'wander' => 'Travel',
-        ];
-        if ( isset( $map[ $theme_id ] ) ) return $map[ $theme_id ];
+    /** Categoria del tema (theme.json `category`), altrimenti il primo tag. */
+    private static function theme_category( $data ) {
+        if ( isset( $data['category'] ) && '' !== (string) $data['category'] ) {
+            return (string) $data['category'];
+        }
         $tags = $data['tags'] ?? [];
         if ( ! empty( $tags[0] ) ) return ucwords( str_replace( [ '-', '_' ], ' ', $tags[0] ) );
         return 'Tema';
-    }
-
-    /** Badge "zona interattiva" dei temi che ne hanno una (override via theme.json `zone`). */
-    private static function theme_zone( $theme_id ) {
-        static $map = [
-            'atelier' => 'Finder', 'bloom' => 'Routine', 'brewline' => 'Builder', 'cadence' => 'Finder',
-            'canvas' => 'Mixer', 'capital-row' => 'Projector', 'carrello' => 'Builder', 'circuit' => 'Builder',
-            'contour' => 'Finder', 'fieldco' => 'Builder', 'fjordline' => 'Finder', 'forge' => 'Contrast',
-            'hearth' => 'Finder', 'honeycomb' => 'Builder', 'kiln' => 'Mixer', 'ledger' => 'Projector',
-            'linea' => 'Finder', 'loft' => 'Mixer', 'lumen' => 'Finder', 'maison' => 'Finder',
-            'mercato' => 'Builder', 'meridian' => 'Finder', 'mono' => 'Type tester', 'nimbus' => 'Projector',
-            'pasaje' => 'Finder', 'prisma' => 'Mixer', 'pulse' => 'Finder', 'relayos' => 'Finder',
-            'saffron' => 'Finder', 'soundwave' => 'Sequencer', 'sterling' => 'Projector', 'synapse' => 'Projector',
-            'tavola' => 'Builder', 'terra' => 'Finder', 'vela' => 'Finder', 'velour' => 'Mixer',
-            'verdano' => 'Builder', 'verde' => 'Builder', 'vinea' => 'Finder', 'vitalis' => 'Finder',
-            'voyage' => 'Route',
-        ];
-        return $map[ $theme_id ] ?? '';
     }
 
     public static function import_theme( $theme_id ) {
@@ -177,7 +144,13 @@ class Olobuild_Theme_Importer {
         $dir = $theme['dir'];
         $theme_json = json_decode( file_get_contents( $dir . '/theme.json' ), true );
         $db = new Olobuild_Database();
-        $results = [ 'templates' => [], 'styles' => false, 'activated' => [] ];
+        $results = [ 'templates' => [], 'styles' => false, 'activated' => [], 'media' => [ 'copiate' => 0, 'riusate' => 0, 'fallite' => 0 ] ];
+
+        // Le foto e i video del tema si copiano nella Libreria media (vedi Step 3): con
+        // decine di file i 30 secondi di default possono non bastare.
+        if ( function_exists( 'set_time_limit' ) ) {
+            @set_time_limit( 300 ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- alcuni hosting lo vietano: si continua col limite del server
+        }
 
         // ── Step 0: istantanea dello stile del sito, PRIMA di cambiarlo ──
         // Header, footer e 404 attivi, stili, colori globali, cursori e pagina
@@ -226,14 +199,8 @@ class Olobuild_Theme_Importer {
                         wp_delete_post( (int) $mi->ID, true );
                     }
                 }
-                foreach ( $theme_json['menu']['items'] ?? [] as $item ) {
-                    wp_update_nav_menu_item( $menu_id, 0, [
-                        'menu-item-title'  => $item['title'] ?? '',
-                        'menu-item-url'    => $item['url'] ?? '#',
-                        'menu-item-status' => 'publish',
-                        'menu-item-type'   => 'custom',
-                    ] );
-                }
+                // Le voci si aggiungono dopo lo Step 6: «{{PAGINA:chiave}}» punta a una pagina
+                // che il tema crea più avanti.
                 $results['menu'] = [ 'id' => $menu_id, 'name' => $menu_name ];
             }
         }
@@ -241,6 +208,8 @@ class Olobuild_Theme_Importer {
         // ── Step 3: Import templates with placeholders already replaced ──
         $template_files = $theme_json['templates'] ?? [];
         $id_map = [];
+        $con_pagine = [];
+        $pagine_tema = [];
 
         foreach ( $template_files as $key => $tpl_meta ) {
             $tpl_file = $dir . '/' . ( $tpl_meta['file'] ?? $key . '.json' );
@@ -259,6 +228,13 @@ class Olobuild_Theme_Importer {
                 if ( $url_tema ) {
                     $json_str = str_replace( '"/wp-content/uploads/' . $vecchio . '"', wp_json_encode( $url_tema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), $json_str );
                 }
+            }
+
+            // Foto e video dalla libreria remota di Olobuild, come nei Blocchi & Pagine:
+            // {{OLOBUILD_URL}} = il plugin, {{OLOBUILD_LIBRARY}} = la libreria (copiati sotto).
+            if ( false !== strpos( $json_str, '{{OLOBUILD_' ) ) {
+                $lib_url  = class_exists( 'Olobuild_Template_Library' ) ? Olobuild_Template_Library::library_url() : '';
+                $json_str = str_replace( [ '{{OLOBUILD_URL}}', '{{OLOBUILD_LIBRARY}}' ], [ OLOBUILD_URL, $lib_url ], $json_str );
             }
 
             // Replace menu_id "auto" with actual menu ID.
@@ -284,6 +260,16 @@ class Olobuild_Theme_Importer {
             // Regenerate all IDs
             self::regenerate_ids( $content );
 
+            // Le foto della libreria si copiano nella Libreria media del sito (una volta sola:
+            // un file già copiato, anche da un altro tema o blocco, si riusa).
+            if ( class_exists( 'Olobuild_Template_Library' ) ) {
+                $media   = Olobuild_Template_Library::instance()->import_media( $content );
+                $content = $media['content'];
+                foreach ( [ 'copiate', 'riusate', 'fallite' ] as $k ) {
+                    $results['media'][ $k ] += (int) ( $media[ $k ] ?? 0 );
+                }
+            }
+
             $type  = $tpl_meta['type'] ?? 'page';
             $title = $tpl_meta['title'] ?? ucfirst( $key );
 
@@ -298,6 +284,10 @@ class Olobuild_Theme_Importer {
             if ( $new_id ) {
                 $id_map[ $key ] = $new_id;
                 $results['templates'][] = [ 'key' => $key, 'id' => $new_id, 'title' => $title, 'type' => $type ];
+                // Collegamenti alle pagine del tema: si risolvono dopo lo Step 6.
+                if ( false !== strpos( (string) wp_json_encode( $content ), '{{PAGINA:' ) ) {
+                    $con_pagine[ $new_id ] = $content;
+                }
             }
         }
 
@@ -434,6 +424,7 @@ class Olobuild_Theme_Importer {
                 }
 
                 if ( $page_id && ! is_wp_error( $page_id ) ) {
+                    $pagine_tema[ $page_key ] = (int) $page_id;
                     update_post_meta( $page_id, '_olo_template_id', $id_map[ $tpl_key ] );
                     if ( $is_home ) {
                         update_option( 'page_on_front', $page_id );
@@ -448,6 +439,45 @@ class Olobuild_Theme_Importer {
 
         if ( $snap_id && $pagine_prima ) {
             Olobuild_Style_System::instance()->amend_snapshot_pages( $snap_id, $pagine_prima );
+        }
+
+        // ── Step 7: menu e collegamenti alle pagine del tema ──
+        // «{{PAGINA:chiave}}» (chiave di theme.json → pages) diventa l'indirizzo della pagina
+        // creata, come percorso relativo (/chi-siamo/): resta giusto se il sito cambia dominio.
+        // Una voce di menu che è solo il segnaposto diventa una voce «Pagina» di WordPress:
+        // segue la pagina anche se poi se ne cambia l'indirizzo.
+        $indirizzi = [];
+        foreach ( $pagine_tema as $k => $pid ) {
+            $indirizzi[ $k ] = wp_make_link_relative( get_permalink( $pid ) );
+        }
+        $risolvi = function ( $testo ) use ( $indirizzi ) {
+            return preg_replace_callback( '/\{\{PAGINA:([a-z0-9_-]+)\}\}/i', function ( $m ) use ( $indirizzi ) {
+                return $indirizzi[ $m[1] ] ?? wp_make_link_relative( home_url( '/' ) );
+            }, (string) $testo );
+        };
+        if ( $menu_id ) {
+            foreach ( $theme_json['menu']['items'] ?? [] as $item ) {
+                $url  = (string) ( $item['url'] ?? '#' );
+                $voce = [
+                    'menu-item-title'  => $item['title'] ?? '',
+                    'menu-item-status' => 'publish',
+                ];
+                if ( preg_match( '/^\{\{PAGINA:([a-z0-9_-]+)\}\}$/i', $url, $m ) && isset( $pagine_tema[ $m[1] ] ) ) {
+                    $voce['menu-item-type']      = 'post_type';
+                    $voce['menu-item-object']    = 'page';
+                    $voce['menu-item-object-id'] = $pagine_tema[ $m[1] ];
+                } else {
+                    $voce['menu-item-type'] = 'custom';
+                    $voce['menu-item-url']  = $risolvi( $url );
+                }
+                wp_update_nav_menu_item( $menu_id, 0, $voce );
+            }
+        }
+        foreach ( $con_pagine as $tpl_id => $tpl_content ) {
+            $nuovo = json_decode( $risolvi( wp_json_encode( $tpl_content ) ), true );
+            if ( is_array( $nuovo ) ) {
+                $db->update_template( $tpl_id, [ 'content' => $nuovo ] );
+            }
         }
 
         // Mark setup complete
