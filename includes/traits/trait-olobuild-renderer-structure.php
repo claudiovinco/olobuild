@@ -636,15 +636,27 @@ trait Olobuild_Renderer_Structure_Trait {
             }
         }
 
+        // Entrance animation — stesso blocco della sezione: prima la riga si fermava
+        // alla classe e ignorava durata, ritardo, curva e intensita'. Va sul contenitore
+        // quando la riga ce l'ha, altrimenti sulla griglia: senza contenitore (riga senza
+        // sfondo, spazi, bordo…) classi e ritardo finivano su un div mai stampato e
+        // l'ingresso scelto nell'inspector non partiva (9 ott 2026).
+        $ent_classes = [];
+        $ent_styles  = [];
+        $this->apply_entrance_animation( $s, $ent_classes, $ent_styles );
+        if ( $needs_wrapper ) {
+            $wrapper_classes = array_merge( $wrapper_classes, $ent_classes );
+            $wrapper_styles  = array_merge( $wrapper_styles, $ent_styles );
+            $ent_classes     = [];
+            $ent_styles      = [];
+        }
+
         // Build class attribute for grid div (after custom class is known)
         if ( $custom_class ) {
             $pre_class_attr_classes[] = $custom_class;
         }
+        $pre_class_attr_classes = array_merge( $pre_class_attr_classes, $ent_classes );
         $class_attr = ! empty( $pre_class_attr_classes ) ? ' class="' . esc_attr( implode( ' ', $pre_class_attr_classes ) ) . '"' : '';
-
-        // Entrance animation — stesso blocco della sezione: prima la riga si fermava
-        // alla classe e ignorava durata, ritardo, curva e intensita'.
-        $this->apply_entrance_animation( $s, $wrapper_classes, $wrapper_styles );
 
         // Scrollspy & element parallax attributes for row
         $row_scrollspy_attr = $this->anim->build_scrollspy_attr( $advanced );
@@ -717,7 +729,7 @@ trait Olobuild_Renderer_Structure_Trait {
 
         // Grid — if no wrapper, put scrollspy/parallax on the grid div itself
         $grid_extra_attrs = $needs_wrapper ? '' : $row_fx_attrs;
-        $grid_style_parts = array_merge( $gap_vars, $row_flex_styles );
+        $grid_style_parts = array_merge( $gap_vars, $row_flex_styles, $ent_styles );
         if ( $needs_wrapper && ( $has_bg_image || $has_bg_video || $has_bg_gallery || $has_overlay ) ) {
             $grid_style_parts[] = 'position: relative';
             $grid_style_parts[] = 'z-index: 1';
@@ -776,7 +788,8 @@ trait Olobuild_Renderer_Structure_Trait {
                 $grid_css_parts[] = 'z-index: 1';
             }
             $grid_extra_attrs = $needs_wrapper ? '' : $row_fx_attrs;
-            $grid_class_list = [];
+            $grid_css_parts  = array_merge( $grid_css_parts, $ent_styles );
+            $grid_class_list = $ent_classes;
             if ( $stack ) $grid_class_list[] = 'olo-grid-stack';
             // «Larghezza responsive» delle colonne (grid_width_*): con almeno una
             // larghezza la classe olo-g-* va sul div PRIMA di stamparlo (il
