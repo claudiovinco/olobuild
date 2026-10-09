@@ -534,6 +534,12 @@ class Olobuild_Image_Tile extends Olobuild_Tile_Base {
         }
         ?>
         <?php
+        // Con le proporzioni la foto riempie la cornice con height:100%: anche i contenitori che le stanno
+        // attorno (immagine al passaggio, link, lightbox) la devono riempire, se no la foto torna alla sua
+        // altezza naturale e sotto resta un vuoto (con l'immagine al passaggio e una foto orizzontale).
+        if ( $aspect_css !== '' ) {
+            echo '<style>.' . esc_attr( $uid ) . ' .olo-hover-wrap,.' . esc_attr( $uid ) . ' > a{height:100%}</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $uid è generato internamente, il resto è fisso.
+        }
         // Con la didascalia la cornice (proporzione, raggio con overflow:hidden, ombra, bordo) va su un
         // riquadro INTERNO e la didascalia le sta sotto: dentro la stessa cornice, con una proporzione,
         // finiva fuori dall'area visibile e non si vedeva mai. La figure esterna porta la classe uid

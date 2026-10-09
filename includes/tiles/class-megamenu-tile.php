@@ -2715,6 +2715,9 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         if ( $url === '' || $url[0] === '#' ) return false;
         $v = wp_parse_url( $url );
         if ( ! is_array( $v ) ) return false;
+        // «/pagina/#sezione» porta a una sezione, come «#sezione»: la voce non si accende sulla pagina
+        // (nella home le voci delle ancore risultavano tutte attive appena aperta).
+        if ( isset( $v['fragment'] ) && $v['fragment'] !== '' ) return false;
         if ( ! empty( $v['scheme'] ) && ! in_array( strtolower( $v['scheme'] ), [ 'http', 'https' ], true ) ) return false;
         if ( ! empty( $v['host'] ) ) {
             $casa = (string) wp_parse_url( home_url( '/' ), PHP_URL_HOST );
