@@ -372,10 +372,14 @@ class Olobuild_Theme_Importer {
                 $slug = isset( $page_meta['slug'] ) ? sanitize_title( $page_meta['slug'] ) : '';
 
                 // Riuso della pagina già assegnata a quel ruolo (home/blog), se esiste ancora.
+                // La home solo se non ha un contenuto suo: il template va DAVANTI al
+                // contenuto della pagina (Page_Integration lo accoda), e ne usciva mezza
+                // pagina del tema e mezza del sito. Altrimenti il tema crea la sua home e
+                // la mette come pagina iniziale («Ripristina» rimette quella di prima).
                 $page_id = 0;
                 if ( $is_home ) {
                     $existing = (int) get_option( 'page_on_front' );
-                    if ( $existing && get_post( $existing ) && get_post_type( $existing ) === 'page' ) {
+                    if ( $existing && get_post( $existing ) && get_post_type( $existing ) === 'page' && self::senza_contenuto( $existing ) ) {
                         $page_id = $existing;
                     }
                 } elseif ( $is_blog ) {
@@ -386,13 +390,14 @@ class Olobuild_Theme_Importer {
                 }
 
                 // Chi dichiara uno slug sta dicendo «questa pagina vive a QUESTO
-                // indirizzo»: se ci abita gia' una pagina, si aggiorna quella. Senza
-                // questo, il secondo import produrrebbe "…-2" e lo slug dichiarato non
-                // servirebbe a niente proprio dalla seconda volta in poi. Vale solo per
-                // chi lo dichiara: i temi che non hanno la chiave si comportano come prima.
+                // indirizzo»: se ci abita gia' una pagina nata da un tema, si aggiorna
+                // quella (il secondo import non produce "…-2"). Una pagina del sito no:
+                // la «Prenota» di OLObooking ([olo_booking]) diventava la Prenota del tema,
+                // col calendario sotto. Allora il tema crea la sua, WordPress le dà un
+                // indirizzo libero e menu e collegamenti del tema la seguono (Step 7).
                 if ( ! $page_id && $slug !== '' ) {
                     $gia = get_page_by_path( $slug );
-                    if ( $gia && 'page' === $gia->post_type ) {
+                    if ( $gia && 'page' === $gia->post_type && get_post_meta( $gia->ID, '_olo_pagina_tema', true ) && self::senza_contenuto( $gia->ID ) ) {
                         $page_id = (int) $gia->ID;
                     }
                 }
@@ -426,6 +431,10 @@ class Olobuild_Theme_Importer {
                         $nuova['post_name'] = $slug;
                     }
                     $page_id = wp_insert_post( $nuova );
+                    // Nata dal tema: un import successivo la può riusare al suo indirizzo.
+                    if ( $page_id && ! is_wp_error( $page_id ) ) {
+                        update_post_meta( $page_id, '_olo_pagina_tema', sanitize_key( $theme_id ) );
+                    }
                 }
 
                 if ( $page_id && ! is_wp_error( $page_id ) ) {
@@ -498,6 +507,27 @@ class Olobuild_Theme_Importer {
         }
 
         return $results;
+    }
+
+    /**
+     * La pagina non ha un contenuto suo? (testo, shortcode, media, una pagina di Elementor).
+     * Commenti dei blocchi e paragrafi vuoti non contano. Nel dubbio dice di no: una pagina
+     * vera del sito non va mai sotto il template di un tema.
+     */
+    private static function senza_contenuto( $post_id ) {
+        if ( 'builder' === get_post_meta( $post_id, '_elementor_edit_mode', true ) ) {
+            return false;
+        }
+        $html = (string) get_post_field( 'post_content', $post_id );
+        if ( preg_match( '#<(img|iframe|video|audio|svg|object|embed|canvas|form|input)\b#i', $html ) ) {
+            return false;
+        }
+        $html = preg_replace( '/<!--.*?-->/s', '', $html );
+        if ( null === $html ) {
+            return false;
+        }
+        $testo = str_replace( [ '&nbsp;', "\xc2\xa0" ], ' ', wp_strip_all_tags( $html ) );
+        return '' === trim( $testo );
     }
 
     private static function regenerate_ids( &$nodes ) {

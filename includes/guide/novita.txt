@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.613 - 2026-10-10 (fix)
+- Importare un tema non si prende più le pagine del sito. Se all'indirizzo di una pagina del tema (per esempio /prenota/) c'è già una pagina con un contenuto suo, il tema crea la propria e menu e collegamenti del tema la seguono. Prima la pagina del sito prendeva il template del tema e il suo contenuto restava sotto: la Prenota di OLObooking mostrava il calendario senza stile. Lo stesso per la home: se ha un contenuto suo, il tema crea la sua home e la mette come pagina iniziale.
+
 ## v1.4.612 - 2026-10-09 (fix)
 - Testo in fusione, modalità «Torcia»: il disco usa il colore scelto anche quando è un colore del tema (prima poteva prenderne un altro o non vedersi) e compare al primo movimento del mouse, già sotto il puntatore. Prima restava fermo nell'angolo in alto a sinistra, sopra il logo.
 
