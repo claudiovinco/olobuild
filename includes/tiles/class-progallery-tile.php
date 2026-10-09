@@ -427,6 +427,12 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
             echo ".{$uid}::-webkit-scrollbar-track{background:transparent}";
             echo ".{$uid} .olo-pg-item{flex:0 0 auto;width:var(--cf-w,{$film_width}px);margin-right:var(--cf-mr,0px);height:{$img_height};position:relative;overflow:hidden;border-radius:{$radius};scroll-snap-align:center;will-change:transform,opacity}";
             echo ".{$uid} .olo-pg-item:last-child{margin-right:0}";
+            // Con lo script attivo ci si aggancia a segnaposto fermi, uno per foto (lo scroll-snap misura il
+            // riquadro trasformato, e le foto si spostano a ogni passo: il nastro si fermava a metà).
+            echo ".{$uid}.olo-cf-on .olo-pg-item{scroll-snap-align:none}";
+            echo ".{$uid} .olo-cf-snap{position:absolute;top:0;width:2px;height:1px;scroll-snap-align:center;pointer-events:none}";
+            // Le foto in fondo alla pila sfumano sul bordo del nastro invece di essere tagliate di netto
+            echo ".{$uid}{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%)}";
             echo "@media(prefers-reduced-motion:reduce){.{$uid}{scroll-behavior:auto}}";
             echo ".{$uid} .olo-pg-item img{width:100%;height:100%;object-fit:{$object_fit};display:block;-webkit-user-drag:none;user-select:none}";
             echo ".{$uid} .olo-pg-item{-webkit-user-drag:none;user-select:none}";
@@ -2158,7 +2164,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         // Il «Gap» della tile si legge una volta: poi il passo lo danno i margini delle foto
         echo 'var gapSet=parseFloat(getComputedStyle(el).columnGap)||0;';
         echo 'var cosA=Math.cos(ang*Math.PI/180);';
-        echo 'var W=wSet,S=100,D1=200,dep1=150,depN=15,centri=[],pronto=false;';
+        echo 'var W=wSet,S=100,D1=200,dep1=150,depN=15,centri=[],ancore=[],pronto=false;';
         // Larghezza (al massimo due terzi del nastro: sul telefono le laterali restano in vista),
         // passo, prima vicina, profondità e prospettiva
         echo 'function misura(){';
@@ -2174,6 +2180,11 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         echo 'el.style.setProperty("--cf-pad",Math.max(0,(cw-W)/2).toFixed(2)+"px");';
         echo 'items[items.length-1].style.marginRight="0px";';
         echo 'centri=[];for(var i=0;i<items.length;i++){centri.push(items[i].offsetLeft+items[i].offsetWidth/2)}';
+        // Punti d'aggancio fermi, uno per foto, nel suo punto della fila piatta: lo scroll-snap misura il
+        // riquadro TRASFORMATO dell'elemento, e qui le foto si spostano e ruotano a ogni passo (il nastro si
+        // fermava a metà fra due foto). Le foto smettono di essere punti d'aggancio (classe olo-cf-on).
+        echo 'if(!ancore.length){for(var j=0;j<items.length;j++){var an=document.createElement("span");an.className="olo-cf-snap";an.setAttribute("aria-hidden","true");el.appendChild(an);ancore.push(an)}el.classList.add("olo-cf-on")}';
+        echo 'for(var k=0;k<ancore.length;k++){ancore[k].style.left=(centri[k]-1).toFixed(2)+"px"}';
         echo 'return true}';
         echo 'function vicino(){var ctr=el.scrollLeft+el.clientWidth/2,c=0,m=Infinity;for(var i=0;i<centri.length;i++){var d=Math.abs(centri[i]-ctr);if(d<m){m=d;c=i}}return c}';
         echo 'function salta(i){var sb=el.style.scrollBehavior;el.style.scrollBehavior="auto";el.scrollLeft=centri[i]-el.clientWidth/2;el.style.scrollBehavior=sb}';
