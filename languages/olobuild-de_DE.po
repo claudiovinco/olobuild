@@ -24084,3 +24084,123 @@ msgstr "In der Sandbox nicht verfügbar"
 #: src/components/Builder/DynamicUnavailableNotice.vue
 msgid "Sul tuo sito collega testi, immagini ed elenchi ai contenuti di WordPress: articoli, pagine, autore, campi personalizzati."
 msgstr "Auf deiner Website verknüpfst du Texte, Bilder und Listen mit den Inhalten von WordPress: Beiträge, Seiten, Autor, benutzerdefinierte Felder."
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Pennellata al cursore"
+msgstr "Pinselstriche am Mauszeiger"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Il puntatore lascia pennellate di colore che si allargano e svaniscono, solo dentro questo elemento. Al tocco segue il dito, anche mentre la pagina scorre."
+msgstr "Der Mauszeiger hinterlässt Farbstriche, die sich ausbreiten und verblassen – nur innerhalb dieses Elements. Auf Touchscreens folgt er dem Finger, auch während die Seite scrollt."
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "I segni passano sopra al contenuto ma non prendono i clic. Con la fusione automatica schiariscono i fondi scuri e tingono quelli chiari: il testo resta leggibile."
+msgstr "Die Striche liegen über dem Inhalt, fangen aber keine Klicks ab. Mit automatischer Mischung hellen sie dunkle Hintergründe auf und tönen helle: Der Text bleibt lesbar."
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Si spegne solo per chi ha chiesto meno movimento nelle impostazioni del sistema."
+msgstr "Es schaltet sich nur für Besucher ab, die in den Systemeinstellungen weniger Bewegung gewählt haben."
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Pennello:"
+msgstr "Pinsel:"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Durata della traccia:"
+msgstr "Dauer der Spur:"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Sfocatura:"
+msgstr "Unschärfe:"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Colori del tema"
+msgstr "Theme-Farben"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Primario e accento"
+msgstr "Primär und Akzent"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Solo primario"
+msgstr "Nur Primär"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Solo accento"
+msgstr "Nur Akzent"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Automatica (dal fondo)"
+msgstr "Automatisch (nach Hintergrund)"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Luce (per fondi scuri)"
+msgstr "Licht (für dunkle Hintergründe)"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Inchiostro (per fondi chiari)"
+msgstr "Tinte (für helle Hintergründe)"
+
+#: src/config/elements/northvideohero.js
+msgid "Mostra il simbolo"
+msgstr "Symbol anzeigen"
+
+#: src/config/elements/northvideohero.js
+msgid "Simbolo"
+msgstr "Symbol"
+
+#: src/config/elements/northvideohero.js
+msgid "Vuoto: l’orb disegnato della tile. Un’immagine caricata sotto prende il posto dell’icona."
+msgstr "Leer: die von der Kachel gezeichnete Kugel. Ein unten hochgeladenes Bild ersetzt das Symbol."
+
+#: src/config/elements/northvideohero.js
+msgid "Simbolo da immagine"
+msgstr "Symbol aus einem Bild"
+
+#: src/config/elements/northvideohero.js
+msgid "Colore simbolo"
+msgstr "Symbolfarbe"
+
+#: src/config/elements/matchfixtures.js
+msgid "Icona della lega"
+msgstr "Liga-Symbol"
+
+#: src/config/elements/matchfixtures.js
+msgid "Vuota: lo scudo."
+msgstr "Leer: das Wappen."
+
+#: src/config/elements/filmreel.js
+msgid "Scritta sul fotogramma"
+msgstr "Text auf dem Bild"
+
+#: src/config/elements/filmreel.js
+msgid "Accanto al pallino che lampeggia, in alto a sinistra. Vuota: resta solo il pallino."
+msgstr "Neben dem blinkenden Punkt, oben links. Leer: Nur der Punkt bleibt."
+
+#: src/config/elements/queryloop.js
+msgid "Testo badge di tendenza"
+msgstr "Text des Trend-Abzeichens"
+
+#: src/config/elements/queryloop.js
+msgid "In tendenza"
+msgstr "Im Trend"
+
+#: src/config/elements/northquoteslider.js
+msgid "Immagine al posto della grafica"
+msgstr "Bild statt der Grafik"
+
+#: src/config/elements/northquoteslider.js
+msgid "Vuota: le linee topografiche disegnate dalla tile, nei colori di «Sfondo grafica» e «Linee punteggiate»."
+msgstr "Leer: die von der Kachel gezeichneten Höhenlinien in den Farben für Grafikhintergrund und gepunktete Linien."
+
+#: src/config/elements/newsletter.js
+msgid "Icona nel pulsante"
+msgstr "Symbol im Button"
+
+#: src/config/elements/newsletter.js
+msgid "Vuota: la freccia."
+msgstr "Leer: der Pfeil."
+
+#: src/config/elements/viewscounter.js
+msgid "Vuota: l’occhio."
+msgstr "Leer: das Auge."

@@ -3,6 +3,12 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.586 - 2026-10-09
+- Effetti mouse: nuova «Pennellata al cursore» per sezioni, righe, colonne e tile (Avanzate › Effetti mouse). Il puntatore lascia pennellate di colore che si allargano e svaniscono dentro l'elemento; al tocco segue il dito, anche mentre la pagina scorre. Scegli i colori del tema, la fusione, il pennello e quanto dura la traccia. Prima l'effetto c'era solo nella tile Hero — Smear.
+- Gli oggetti che le tile disegnano si possono cambiare: in Hero — North Video il simbolo (icona del set o immagine al posto dell'orb), in Match Fixtures l'icona della lega, in Film Reel la scritta REC, in Query Loop il testo del badge di tendenza, in North Quote Slider un'immagine al posto delle linee topografiche, in Newsletter l'icona del pulsante, nel Contatore visite l'icona. Lasciati vuoti, restano come prima.
+- Builder: nel pannello «Inserisci modulo o riga» e nella ricerca dei font il campo di ricerca mostra un solo riquadro evidenziato. Prima dentro compariva anche il rettangolo blu di WordPress.
+- Builder: in Avanzate › Effetti mouse le spiegazioni della torcia, del cursore magnetico e del mirino si aprono dalla (i) accanto al nome.
+
 ## v1.4.585 - 2026-10-08
 - Contenuti dinamici: Galleria, Pro Gallery e Marquee (con le immagini) prendono le foto dalle immagini in evidenza di articoli, pagine o di un altro tipo di contenuto. Sopra le immagini accendi «Sorgente dinamica»: la didascalia prende il titolo dell'articolo e la categoria va alla barra filtro della Galleria.
 - Avviso: titolo e messaggio stanno nel Contenuto, come i testi delle altre tile, e si possono collegare ai contenuti dinamici col fulmine. Prima stavano nello Stile, in un riquadro «Testi».
