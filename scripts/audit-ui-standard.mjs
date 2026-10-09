@@ -998,6 +998,31 @@ regolaC('chrome-nelle-tile', 'Le tile (PHP, Vue, config, frontend.css) non leggo
   regolaC('fantasma-durata', 'La «Durata» dell\'hover è letta dal renderer PHP della tile', trovate);
 }
 
+// Una virgola doppia in un elenco di campi (`...borderFields(),,`) lascia un BUCO nell'array:
+// l'inspector lo scorre, su `undefined` va in errore e l'intero tab resta bianco (Stile del
+// Nastro Scorrevole e della Griglia prodotti, dal 23 set al 9 ott 2026). Si cercano due virgole
+// separate solo da spazi o commenti, fuori dalle stringhe, in tutti i config (anche `_shared.js`).
+{
+  const trovate = [];
+  for (const f of fs.readdirSync(ELEMENTS).filter((x) => x.endsWith('.js'))) {
+    const src = fs.readFileSync(path.join(ELEMENTS, f), 'utf8');
+    let str = null, prima = -1;
+    for (let j = 0; j < src.length; j++) {
+      const c = src[j];
+      if (str) { if (c === BS) { j++; continue; } if (c === str) str = null; continue; }
+      if (c === "'" || c === '"' || c === '`') { str = c; prima = -1; continue; }
+      if (c === '/' && src[j + 1] === '/') { while (j < src.length && src[j] !== '\n') j++; continue; }
+      if (c === '/' && src[j + 1] === '*') { j += 2; while (j < src.length && !(src[j] === '*' && src[j + 1] === '/')) j++; j++; continue; }
+      if (/\s/.test(c)) continue;
+      if (c === ',' && prima >= 0) {
+        trovate.push({ file: f.replace(/\.js$/, ''), type: ':' + src.slice(0, j).split('\n').length, key: src.slice(Math.max(0, prima - 30), j + 1).replace(/\s+/g, ' ').trim(), label: '' });
+      }
+      prima = c === ',' ? j : -1;
+    }
+  }
+  regolaC('campi-virgola-doppia', 'Nessuna virgola doppia negli elenchi dei config (buco nell\'array = tab dell\'inspector bianco)', trovate);
+}
+
 // PIANO 2 — CSS di resa
 regolaC('css-layer-tile', 'Nessun @layer nel CSS delle tile e di resa (la cascata la decide B1, non un livello)',
   occorrenzeC(TVR, /@layer\b/g));

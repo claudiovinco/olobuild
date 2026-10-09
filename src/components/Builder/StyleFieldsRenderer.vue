@@ -252,6 +252,9 @@ function groupBySeparator(fields) {
   const sections = [];
   let current = { label: null, sep: null, fields: [] };
   for (const f of fields) {
+    // Una voce vuota nel config (una virgola doppia lascia un buco nell'array) non deve
+    // spegnere l'intero tab: prima `f.type` andava in errore e lo Stile restava bianco.
+    if (!f) continue;
     if (f.type === 'separator') {
       if (current.fields.length > 0) sections.push(current);
       // `sep`: la condizione del separatore vale per tutta la sezione (isSectionVisible)

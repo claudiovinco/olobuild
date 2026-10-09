@@ -192,7 +192,7 @@ export default {
     { key: 'border_color', label: t('Colore bordo'), type: 'color' },
 
     ...shadowField,
-    ...borderFields(),,
+    ...borderFields(),
     { type: 'separator', label: t('Disposizione') },
     { key: 'gap', label: t('Gap elementi'), type: 'range', min: 20, max: 120, step: 10 },
   ],
