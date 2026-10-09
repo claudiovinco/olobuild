@@ -1999,7 +1999,18 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         /* === Mobile bar extras (logo + search) === */
         .<?php echo $uid; ?> .olo-mm-mobile-logo {
             display: none; align-items: center; order: -1; margin-right: auto;
+            /* il nome può stringersi: il pulsante del menu no (vedi sotto) */
+            min-width: 0;
         }
+        /* Sul telefono il nome del marchio scala con la larghezza invece di spingere fuori il
+           pulsante del menu (con un nome lungo e il pulsante d'azione l'hamburger finiva a 0 px). */
+        .<?php echo $uid; ?> .olo-mm-mobile-logo .olo-mm-logo-text {
+            font-size: clamp(16px, 6.4vw, <?php echo max( 12, min( 40, absint( $s['logo_text_size'] ?? 19 ) ) ); ?>px) !important;
+            overflow: hidden; text-overflow: ellipsis;
+        }
+        .<?php echo $uid; ?> .olo-mm-hamburger,
+        .<?php echo $uid; ?> .olo-mm-mobile-search,
+        .<?php echo $uid; ?> .olo-mm-mobile-cta { flex-shrink: 0; }
         .<?php echo $uid; ?> .olo-mm-mobile-logo img {
             /* height esplicita, non solo max-height: gli SVG senza width/height
                intrinseci (solo viewBox) collasserebbero a 0 con il solo max-height. */

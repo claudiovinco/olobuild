@@ -37,6 +37,7 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
         'card_radius_hover'          => [ 'tl' => 24, 'tr' => 24, 'br' => 24, 'bl' => 24, 'linked' => true ],
         'card_radius_hover_duration' => 400,
         'card_shadow'                => 'sm',
+        'card_border'                => [],
         'card_padding'               => 28,
 
         'top_aspect_ratio'      => '3/4',
@@ -110,7 +111,11 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
             'lg'   => '0 8px 24px -6px rgba(16,24,40,.18), 0 18px 40px -12px rgba(22,38,61,.30)',
             'xl'   => '0 12px 32px -8px rgba(16,24,40,.20), 0 28px 56px -14px rgba(22,38,61,.34)',
         ];
-        $card_shadow = $shadow_map[ $s['card_shadow'] ?? 'sm' ] ?? '';
+        // «Personalizzata»: X, Y, sfocatura, estensione e colore liberi (chiavi card_shadow_h/v/…, come flipcard).
+        $card_shadow_custom = ( $s['card_shadow'] ?? 'sm' ) === 'custom';
+        $card_shadow = $card_shadow_custom ? Olobuild_Tile_Utils::shadow_value( $s, 'card_shadow' ) : ( $shadow_map[ $s['card_shadow'] ?? 'sm' ] ?? '' );
+        if ( $card_shadow === 'none' ) $card_shadow = '';
+        $card_border = Olobuild_Tile_Utils::border_css( $s['card_border'] ?? [] );
 
         // Riserve dal tema (superficie, testo, tinta tenue, scuro) invece di bianco e blu notte fissi.
         $card_bg_css = $this->_bg_inline_css( $s['card_bg'] ?? [ 'type' => 'solid', 'color' => 'var(--olo-color-surface, #ffffff)' ] );
@@ -177,7 +182,7 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
                 $cta_url     = $it['cta_url'] ?? '#';
                 $price       = trim( (string) ( $it['price'] ?? '' ) );
             ?>
-                <div class="olo-pcards__card" style="<?php echo esc_attr( $card_bg_css ); ?>;color:<?php echo esc_attr( $card_color ); ?>;<?php if ( $card_radius ) echo 'border-radius:' . esc_attr( $card_radius ) . ';'; ?><?php if ( $card_shadow ) echo 'box-shadow:' . esc_attr( $card_shadow ) . ';'; ?>overflow:hidden;display:flex;flex-direction:column;transition:transform .3s ease,box-shadow .3s ease<?php if ( $card_radius_h ) echo ',border-radius ' . (int) $card_rdur . 'ms ease'; ?>">
+                <div class="olo-pcards__card" style="<?php echo esc_attr( $card_bg_css ); ?>;color:<?php echo esc_attr( $card_color ); ?>;<?php if ( $card_radius ) echo 'border-radius:' . esc_attr( $card_radius ) . ';'; ?><?php if ( $card_shadow ) echo 'box-shadow:' . esc_attr( $card_shadow ) . ';'; ?><?php echo esc_attr( $card_border ); ?>overflow:hidden;display:flex;flex-direction:column;transition:transform .3s ease,box-shadow .3s ease<?php if ( $card_radius_h ) echo ',border-radius ' . (int) $card_rdur . 'ms ease'; ?>">
 
                     <!-- TOP HALF: gradient + letter + screenshot label -->
                     <div class="olo-pcards__top" style="<?php echo esc_attr( $top_bg_css ); ?>;aspect-ratio:<?php echo esc_attr( $top_aspect ); ?>;padding:<?php echo esc_attr( $top_pad_css ); ?>;position:relative;display:flex;align-items:center;justify-content:<?php echo $letter_align === 'left' ? 'flex-start' : ( $letter_align === 'right' ? 'flex-end' : 'center' ); ?>">
@@ -248,7 +253,7 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
         <style>
             <?php switch ( $hover_effect ) :
                 case 'lift' : ?>
-                    .<?php echo $uid; ?> .olo-pcards__card:hover { transform: translateY(-6px); box-shadow: 0 14px 36px rgba(0,0,0,0.15); }
+                    .<?php echo $uid; ?> .olo-pcards__card:hover { transform: translateY(-6px);<?php if ( ! $card_shadow_custom ) : ?> box-shadow: 0 14px 36px rgba(0,0,0,0.15);<?php endif; ?> }
                     <?php break;
                 case 'scale' : ?>
                     .<?php echo $uid; ?> .olo-pcards__card:hover { transform: scale(1.03); z-index: 2; }

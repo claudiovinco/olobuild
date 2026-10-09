@@ -131,7 +131,12 @@ export default {
       { value: 'md',   label: t('Media') },
       { value: 'lg',   label: t('Forte') },
       { value: 'xl',   label: t('Molto forte') },
+      { value: 'custom', label: t('Personalizzata') },
     ]},
+    { key: 'card_shadow_custom', label: t('Ombra personalizzata'), type: 'box-shadow',
+      legacyKeys: { h: 'card_shadow_h', v: 'card_shadow_v', blur: 'card_shadow_blur', spread: 'card_shadow_spread', color: 'card_shadow_color', inset: 'card_shadow_inset' },
+      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
+    { key: 'card_border', label: t('Bordo card'), type: 'border' },
 
     { key: 'items', type: 'content-items', label: t('Cards'), itemLabel: t('Card'), etichettaDa: 'title', miniaturaDa: 'logo_image', itemFields: [
         { key: 'letter_color',        label: t('Colore lettera'),     type: 'color' },
