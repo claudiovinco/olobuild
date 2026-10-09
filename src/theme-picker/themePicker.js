@@ -34,6 +34,8 @@ const DEFAULT_I18N = {
   closeLabel: 'Chiudi',
   themeWord: 'tema',
   themesWord: 'temi',
+  pageWord: 'pagina',
+  pagesWord: 'pagine',
 };
 
 function esc(s) {
@@ -184,10 +186,14 @@ export function createThemePicker(opts = {}) {
     const link = t.url
       ? `<a class="otmp-cb-link" href="${esc(t.url)}" target="_blank" rel="noopener" data-stop>${esc(i18n.detailsLabel)}${ICON.ext}</a>`
       : '';
+    const n = parseInt(t.pages, 10) || 0;
+    const ver = n
+      ? `<span class="otmp-cb-ver">${n} ${esc(n === 1 ? i18n.pageWord : i18n.pagesWord)}</span>`
+      : `<span class="otmp-cb-ver">v${esc(t.version || '1.0')}</span>`;
     const foot = selectMode || action === 'browse'
-      ? `<div class="otmp-cb-foot"><span class="otmp-cb-ver">v${esc(t.version || '1.0')}</span>${link ? `<span class="otmp-cb-spacer"></span>${link}` : ''}</div>`
+      ? `<div class="otmp-cb-foot">${ver}${link ? `<span class="otmp-cb-spacer"></span>${link}` : ''}</div>`
       : `<div class="otmp-cb-foot">
-           <span class="otmp-cb-ver">v${esc(t.version || '1.0')}</span>${link}
+           ${ver}${link}
            <button class="otmp-cb-btn" data-import="${esc(t.id)}">${ICON.import}${esc(i18n.importLabel)}</button>
          </div>`;
     return `<article class="otmp-card${selectMode ? ' is-select' : ''}${selectMode && selectedId === t.id ? ' is-selected' : ''}" style="${style}"${selectMode ? ` role="button" tabindex="0" data-pick="${esc(t.id)}"` : ''}>
@@ -458,7 +464,8 @@ const CSS = `
 .otmp-card.is-selected .otmp-blankpv,.otmp-card:hover .otmp-blankpv{color:var(--accent);}
 .otmp-blankpv svg{width:34px;height:34px;}
 .otmp-pv-shot{padding:0;background:var(--modal-2);}
-.otmp-shot{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;}
+.otmp-shot{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transition:object-position .6s ease;}
+.otmp-card:hover .otmp-shot,.otmp-card:focus-within .otmp-shot{object-position:bottom center;transition:object-position 9s linear;}
 
 .otmp-cb{padding:16px 17px 17px;display:flex;flex-direction:column;flex:1;}
 .otmp-cb-cat{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--c-acc);margin-bottom:6px;}
@@ -500,6 +507,7 @@ const CSS = `
   .otmp-grid,.otmp--embed .otmp-grid{max-height:none;}
 }
 @media(prefers-reduced-motion:reduce){
-  .otmp-card,.otmp-cb-btn{transition:none;}
+  .otmp-card,.otmp-cb-btn,.otmp-shot{transition:none;}
+  .otmp-card:hover .otmp-shot,.otmp-card:focus-within .otmp-shot{object-position:top center;}
   .otmp-spin{animation-duration:1.6s;}
 }`;
