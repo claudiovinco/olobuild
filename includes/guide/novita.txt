@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.589 - 2026-10-09 (fix)
+- Blocchi & Pagine: i conti alla rovescia (festival, prossima apertura) stanno due per riga sul telefono e su una riga sola dal tablet in su. Prima le cifre andavano a capo una alla volta.
+
 ## v1.4.588 - 2026-10-09 (fix)
 - Blocchi & Pagine: sul tablet le colonne dei blocchi restano affiancate finché ci stanno, e le voci brevi (le persone di un team, le fasi di un lavoro, i loghi) stanno su due colonne anche sul telefono. Prima sotto i 960 pixel si mettevano tutte in colonna.
 - Blocchi & Pagine: nomi, indirizzi ed email degli esempi sono inventati (dominio esempio.it), e ogni pagina usa le stesse date, la stessa via e lo stesso anno dall’hero al footer.
