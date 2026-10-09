@@ -24,6 +24,11 @@ class Olobuild_SiteLogo_Tile extends Olobuild_Tile_Base {
         'show_tagline'        => false,
         'tagline_color'       => '',
         'tagline_size'        => '14',
+        // Il nome del sito, quando non c'è un'immagine: vuoti = come il titolo del tema.
+        'name_font_family'    => '',
+        'name_size'           => '',
+        'name_weight'         => '',
+        'name_color'          => '',
         'alignment'           => 'left',
         'retina_image'        => '',
         'hover_opacity'       => '',
@@ -148,8 +153,17 @@ class Olobuild_SiteLogo_Tile extends Olobuild_Tile_Base {
         } elseif ( $is_svg && $main_logo_url ) {
             $main_html = '<img src="' . esc_url( $main_logo_url ) . '" alt="' . $alt . '" class="olo-logo-main" />';
         } else {
-            // Text fallback
-            $main_html = '<span class="olo-sitelogo-text uk-h3 uk-margin-remove olo-logo-main">' . esc_html( get_bloginfo( 'name' ) ) . '</span>';
+            // Text fallback: il nome del sito. Prima non si poteva cambiarne il colore e su un
+            // piè di pagina scuro spariva (prendeva il colore dei titoli del tema).
+            $name_ff  = $this->resolve_font_family( (string) $s['name_font_family'] );
+            $name_fw  = $this->font_weight_css( $s['name_weight'] );
+            $name_fs  = absint( $s['name_size'] );
+            $name_clr = $this->safe_color_css( (string) $s['name_color'] );
+            $name_css = ( $name_ff && $name_ff !== 'inherit' ? 'font-family:' . $name_ff . ';' : '' )
+                . ( $name_fw !== '' ? 'font-weight:' . $name_fw . ';' : '' )
+                . ( $name_fs > 0 ? 'font-size:' . $name_fs . 'px;' : '' )
+                . ( $name_clr ? 'color:' . $name_clr . ';' : '' );
+            $main_html = '<span class="olo-sitelogo-text uk-h3 uk-margin-remove olo-logo-main"' . ( $name_css ? ' style="' . esc_attr( $name_css ) . '"' : '' ) . '>' . esc_html( get_bloginfo( 'name' ) ) . '</span>';
         }
 
         // Dark variant

@@ -30,6 +30,10 @@ export default {
     show_tagline: false,
     tagline_color: '',
     tagline_size: '14',
+    name_font_family: '',
+    name_size: '',
+    name_weight: '',
+    name_color: '',
     alignment: 'left',
     retina_image: '',
     hover_opacity: '',
@@ -113,6 +117,10 @@ export default {
       { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
     ]},
+
+    { type: 'separator', label: t('Nome del sito') },
+    { type: 'typography', label: t('Nome del sito'), responsiveKeys: [], keys: { family: 'name_font_family', size: 'name_size', weight: 'name_weight', color: 'name_color' }, sizeMin: 12, sizeMax: 72,
+      description: t('Vale quando il logo è il nome del sito, cioè quando non c’è un’immagine: vuoto = come i titoli del tema.') },
 
     { type: 'separator', label: t('Tagline') },
     { type: 'typography', label: t('Tagline'), responsiveKeys: [], keys: { size: 'tagline_size', color: 'tagline_color' }, sizeMin: 10, sizeMax: 24, condition: { field: 'show_tagline', value: true } },
