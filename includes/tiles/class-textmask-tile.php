@@ -74,7 +74,11 @@ class Olobuild_Textmask_Tile extends Olobuild_Tile_Base {
         $fs_tablet  = intval( $s['font_size_tablet'] ) ?: 80;
         $fs_mobile  = intval( $s['font_size_mobile'] ) ?: 50;
         $fw         = esc_attr( $s['font_weight'] ) ?: '900';
-        $ff         = $s['font_family'] ? esc_attr( $s['font_family'] ) : 'inherit';
+        // Ruoli del controllo tipografia (heading, body, serif…) o CSS pronto, come blendtext: prima il
+        // valore finiva nel CSS così com'era e «Carattere dei titoli» non agiva.
+        // Va in un <style>: niente esc_attr (gli apici diventerebbero entità); resolve_font_family() ammette
+        // solo caratteri leciti in un font-family, senza ; { } < >.
+        $ff         = $this->resolve_font_family( (string) $s['font_family'] ) ?: 'inherit';
         $tt         = esc_attr( $s['text_transform'] ) ?: 'uppercase';
         $ls         = intval( $s['letter_spacing'] );
         $lh         = floatval( $s['line_height'] ) ?: 1;

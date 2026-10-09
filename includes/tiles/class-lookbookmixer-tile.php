@@ -120,7 +120,7 @@ class Olobuild_LookbookMixer_Tile extends Olobuild_Tile_Base {
         ob_start();
         ?>
         <div class="olo-lbmix <?php echo esc_attr( $uid ); ?>" data-currency="<?php echo esc_attr( $cur ); ?>" data-decimals="<?php echo (int) $dec; ?>"
-             style="display:grid;grid-template-columns:1.12fr .88fr;gap:clamp(28px,4vw,56px);align-items:center;border:1px solid <?php echo esc_attr( $line ); ?>;border-radius:24px;background:<?php echo esc_attr( $panel ); ?>;padding:clamp(24px,4vw,42px);">
+             style="display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:clamp(28px,4vw,56px);align-items:center;border:1px solid <?php echo esc_attr( $line ); ?>;border-radius:24px;background:<?php echo esc_attr( $panel ); ?>;padding:clamp(24px,4vw,42px);">
             <div class="olo-lbmix__slots" style="display:flex;flex-direction:column;gap:12px;">
                 <?php foreach ( $order as $st ) :
                     $opts  = $groups[ $st ];
@@ -156,7 +156,7 @@ class Olobuild_LookbookMixer_Tile extends Olobuild_Tile_Base {
         </div>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css colors); $uid is an internal generated class name. ?>
         <style>
-            @media (max-width: 860px) { .<?php echo $uid; ?> { grid-template-columns: 1fr !important; gap: 28px !important; } }
+            @media (max-width: 860px) { .<?php echo $uid; ?> { grid-template-columns: minmax(0, 1fr) !important; gap: 28px !important; } }
             .<?php echo $uid; ?> .olo-lbmix__nav button:hover { background: <?php echo $acc; ?>; color: <?php echo $accink; ?>; }
             .<?php echo $uid; ?> .olo-lbmix__nav button:focus-visible,
             .<?php echo $uid; ?> .olo-lbmix__card a:focus-visible { outline: 2px solid <?php echo $acc; ?>; outline-offset: 2px; }

@@ -4253,10 +4253,12 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                         }
                     }
                 }
+                /* In sovrapposizione l'header è già fisso (frontend.css): «sticky» lo rimetteva nel flusso
+                   della pagina, e sopra l'hero restava una banda vuota. */
+                var mmNelFlusso = (headerMode === "classic");
                 if (stickyEnabled) {
                     if (isDesktop()) {
-                        header.style.position = "sticky";
-                        header.style.top = "0";
+                        if (mmNelFlusso) { header.style.position = "sticky"; header.style.top = "0"; }
                         header.style.zIndex = "1000";
                         accendiSeScorsa();
                     }
@@ -4280,8 +4282,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                             onUpFixed = false;
                         } else {
                             if (stickyEnabled) {
-                                header.style.position = "sticky";
-                                header.style.top = "0";
+                                if (mmNelFlusso) { header.style.position = "sticky"; header.style.top = "0"; }
                                 header.style.zIndex = "1000";
                                 accendiSeScorsa();
                             }
@@ -4289,7 +4290,12 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                     });
                     window.addEventListener("scroll", function() {
                         if (ticking) return;
-                        if (!isDesktop()) return;
+                        if (!isDesktop()) {
+                            /* Sul telefono l'header in sovrapposizione resta fisso: scorrendo prende lo sfondo
+                               dello stato sticky, se no il testo chiaro dell'hero finisce sulle sezioni chiare. */
+                            if (!mmNelFlusso) { if (stickyEnabled) { header.classList.toggle("olo-header-sticky", (window.pageYOffset || document.documentElement.scrollTop) > 10); } }
+                            return;
+                        }
                         ticking = true;
                         requestAnimationFrame(function() {
                             ticking = false;
