@@ -996,6 +996,13 @@ trait Olobuild_Renderer_Page_Trait {
                   obs.observe(el);
                 });
               }
+              // Finito l'ingresso si toglie l'animazione (frontend.css, olo-ingresso-finito): la posa
+              // finale restava un transform e trasformava la riga nel riferimento dei figli assoluti.
+              document.addEventListener('animationend', function(e){
+                var el = e.target;
+                if(!el || !el.classList || String(e.animationName || '').indexOf('olo-fx-') !== 0) return;
+                if(el.classList.contains('olo-visible')) el.classList.add('olo-ingresso-finito');
+              }, true);
               // Tile montate a richiesta (il loro HTML arriva da un template quando ci si avvicina)
               document.addEventListener('olo:lazy-hydrated', function(ev){
                 if(ev.detail){ prepara(ev.detail.target); }

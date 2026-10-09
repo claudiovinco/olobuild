@@ -2815,6 +2815,11 @@ html:has(.olo-frontend-grid) {
 /* In attesa (script della pagina, trait-olobuild-renderer-page.php): la tile era sotto lo schermo
    all'apertura e parte quando ci entra. Senza script la classe non c'è e la tile resta visibile. */
 .olo-in-attesa { opacity: 0 !important; }
+/* Finito l'ingresso (script della pagina) l'animazione si toglie: col fill-mode both restava la posa
+   finale, translateY(0), cioè un transform, e un elemento con un transform diventa il riferimento dei
+   figli in posizione assoluta o fissa. L'onda del Divisore si attaccava alla riga invece che alla
+   sezione (9 ott 2026). Tolta l'animazione resta lo stile normale: stessa resa, nessun transform. */
+[class*="olo-entrance-"].olo-ingresso-finito { animation: none; }
 
 @media (prefers-reduced-motion: reduce) {
   [class*="olo-entrance-"] { opacity: 1 !important; animation: none !important; transform: none !important; filter: none !important; }
