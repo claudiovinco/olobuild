@@ -24204,3 +24204,67 @@ msgstr "Vide : la flèche."
 #: src/config/elements/viewscounter.js
 msgid "Vuota: l’occhio."
 msgstr "Vide : l’œil."
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Inviti all’azione"
+msgstr "Appels à l’action"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Team"
+msgstr "Équipe"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Interattivi"
+msgstr "Interactifs"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Blog"
+msgstr "Blog"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Testo e titoli"
+msgstr "Texte et titres"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Loghi"
+msgstr "Logos"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Prossimamente"
+msgstr "Bientôt"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Errore 404"
+msgstr "Erreur 404"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Negozio"
+msgstr "Boutique"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Pagine complete"
+msgstr "Pages complètes"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Varie"
+msgstr "Divers"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Personali"
+msgstr "Personnels"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Le anteprime usano colori e caratteri d’esempio: inserito nella pagina, il blocco prende quelli del tuo sito (Stile → Palette e Tipografia)."
+msgstr "Les aperçus utilisent des couleurs et des polices d’exemple : une fois inséré dans la page, le bloc prend celles de votre site (Style → Palette et Typographie)."
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Foto e video del blocco si copiano nella tua Libreria media: la pagina non dipende da un sito esterno. Testi, foto e link si cambiano come in ogni altra tile."
+msgstr "Les photos et vidéos du bloc sont copiées dans votre médiathèque : la page ne dépend d’aucun site externe. Textes, photos et liens se modifient comme dans toute autre tuile."
+
+#: src/config/elements/sitelogo.js
+msgid "Nome del sito"
+msgstr "Nom du site"
+
+#: src/config/elements/sitelogo.js
+msgid "Vale quando il logo è il nome del sito, cioè quando non c’è un’immagine: vuoto = come i titoli del tema."
+msgstr "S’applique quand le logo est le nom du site, c’est-à-dire sans image : vide = comme les titres du thème."

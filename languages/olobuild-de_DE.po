@@ -24204,3 +24204,67 @@ msgstr "Leer: der Pfeil."
 #: src/config/elements/viewscounter.js
 msgid "Vuota: l’occhio."
 msgstr "Leer: das Auge."
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Inviti all’azione"
+msgstr "Handlungsaufrufe"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Team"
+msgstr "Team"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Interattivi"
+msgstr "Interaktiv"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Blog"
+msgstr "Blog"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Testo e titoli"
+msgstr "Text und Überschriften"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Loghi"
+msgstr "Logos"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Prossimamente"
+msgstr "Demnächst"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Errore 404"
+msgstr "Fehler 404"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Negozio"
+msgstr "Shop"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Pagine complete"
+msgstr "Ganze Seiten"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Varie"
+msgstr "Verschiedenes"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Personali"
+msgstr "Eigene"
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Le anteprime usano colori e caratteri d’esempio: inserito nella pagina, il blocco prende quelli del tuo sito (Stile → Palette e Tipografia)."
+msgstr "Die Vorschauen verwenden Beispielfarben und -schriften: Auf der Seite eingefügt, übernimmt der Block die deiner Website (Stil → Palette und Typografie)."
+
+#: src/components/Builder/TemplateLibrary.vue
+msgid "Foto e video del blocco si copiano nella tua Libreria media: la pagina non dipende da un sito esterno. Testi, foto e link si cambiano come in ogni altra tile."
+msgstr "Fotos und Videos des Blocks werden in deine Mediathek kopiert: Die Seite hängt von keiner externen Website ab. Texte, Fotos und Links änderst du wie in jeder anderen Kachel."
+
+#: src/config/elements/sitelogo.js
+msgid "Nome del sito"
+msgstr "Name der Website"
+
+#: src/config/elements/sitelogo.js
+msgid "Vale quando il logo è il nome del sito, cioè quando non c’è un’immagine: vuoto = come i titoli del tema."
+msgstr "Gilt, wenn das Logo der Name der Website ist, also ohne Bild: leer = wie die Überschriften des Themes."

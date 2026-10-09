@@ -3,6 +3,13 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.587 - 2026-10-09
+- Blocchi & Pagine rinnovata: 221 blocchi e 20 pagine intere, tutti nuovi e diversi fra loro, con elementi che si muovono e si toccano (quiz, gratta e scopri, coriandoli, pennellate, l'ora nel mondo, le dosi che scalano, il conto alla rovescia). Nuove categorie Effetti e Interattivi. Ogni pagina racconta un negozio d'esempio dall'hero al footer e nell'anteprima scorre al passaggio del mouse. Foto e video si copiano nella tua Libreria media quando inserisci il blocco.
+- Logo del sito: nuovo controllo «Nome del sito» (carattere, misura, peso e colore) per quando il logo è il nome del sito. Prima sui fondi scuri il nome non si poteva schiarire e spariva.
+- Pro Gallery: le gallerie in cima alla pagina partono con i loro effetti (coverflow, tilt, entrata, nastri). Prima uno script andava in errore e restavano ferme.
+- Pennellata al cursore: con la fusione automatica riconosce il fondo anche quando il colore sta in una riga o in una colonna dentro la sezione.
+- Libreria: i nomi delle categorie seguono la lingua del builder.
+
 ## v1.4.586 - 2026-10-09
 - Effetti mouse: nuova «Pennellata al cursore» per sezioni, righe, colonne e tile (Avanzate › Effetti mouse). Il puntatore lascia pennellate di colore che si allargano e svaniscono dentro l'elemento; al tocco segue il dito, anche mentre la pagina scorre. Scegli i colori del tema, la fusione, il pennello e quanto dura la traccia. Prima l'effetto c'era solo nella tile Hero — Smear.
 - Gli oggetti che le tile disegnano si possono cambiare: in Hero — North Video il simbolo (icona del set o immagine al posto dell'orb), in Match Fixtures l'icona della lega, in Film Reel la scritta REC, in Query Loop il testo del badge di tendenza, in North Quote Slider un'immagine al posto delle linee topografiche, in Newsletter l'icona del pulsante, nel Contatore visite l'icona. Lasciati vuoti, restano come prima.
