@@ -24268,3 +24268,347 @@ msgstr "Nom du site"
 #: src/config/elements/sitelogo.js
 msgid "Vale quando il logo è il nome del sito, cioè quando non c’è un’immagine: vuoto = come i titoli del tema."
 msgstr "S’applique quand le logo est le nom du site, c’est-à-dire sans image : vide = comme les titres du thème."
+
+#: includes/class-theme-importer.php
+msgid "Ristorazione"
+msgstr "Restauration"
+
+#: includes/class-theme-importer.php
+msgid "Ospitalità e viaggi"
+msgstr "Hôtellerie et voyages"
+
+#: includes/class-theme-importer.php
+msgid "Moda e bellezza"
+msgstr "Mode et beauté"
+
+#: includes/class-theme-importer.php
+msgid "Negozi online"
+msgstr "Boutiques en ligne"
+
+#: includes/class-theme-importer.php
+msgid "Studi e professioni"
+msgstr "Cabinets et professions libérales"
+
+#: includes/class-theme-importer.php
+msgid "Tecnologia"
+msgstr "Technologie"
+
+#: includes/class-theme-importer.php
+msgid "Creativi e portfolio"
+msgstr "Créatifs et portfolios"
+
+#: includes/class-theme-importer.php
+msgid "Eventi e musica"
+msgstr "Événements et musique"
+
+#: includes/class-theme-importer.php
+msgid "Sport e benessere"
+msgstr "Sport et bien-être"
+
+#: includes/class-theme-importer.php
+msgid "Casa e design"
+msgstr "Maison et design"
+
+#: includes/class-theme-importer.php
+msgid "Cultura e formazione"
+msgstr "Culture et formation"
+
+#: includes/class-theme-importer.php
+msgid "Associazioni e cause"
+msgstr "Associations et causes"
+
+#: includes/class-theme-importer.php
+msgid "Il respiro guidato"
+msgstr "La respiration guidée"
+
+#: includes/class-theme-importer.php
+msgid "Cerchi e spirale"
+msgstr "Cercles et spirale"
+
+#: includes/class-theme-importer.php
+msgid "Il prima e dopo"
+msgstr "L’avant-après"
+
+#: includes/class-theme-importer.php
+msgid "Vigne in video"
+msgstr "Vignes en vidéo"
+
+#: includes/class-theme-importer.php
+msgid "Vetro e onde"
+msgstr "Verre et vagues"
+
+#: includes/class-theme-importer.php
+msgid "I palloncini che salgono"
+msgstr "Les ballons qui montent"
+
+#: includes/class-theme-importer.php
+msgid "Il drone da toccare"
+msgstr "Le drone à toucher"
+
+#: includes/class-theme-importer.php
+msgid "Calcolo e ciambelle"
+msgstr "Calcul et graphiques en anneau"
+
+#: includes/class-theme-importer.php
+msgid "La luce che cambia"
+msgstr "La lumière qui change"
+
+#: includes/class-theme-importer.php
+msgid "Vetrina in frantumi"
+msgstr "Vitrine en éclats"
+
+#: includes/class-theme-importer.php
+msgid "I risultati che scorrono"
+msgstr "Les résultats qui défilent"
+
+#: includes/class-theme-importer.php
+msgid "Manifesto che si accende"
+msgstr "Un manifeste qui s’allume"
+
+#: includes/class-theme-importer.php
+msgid "Il nome che brucia"
+msgstr "Le nom qui brûle"
+
+#: includes/class-theme-importer.php
+msgid "I petali che cadono"
+msgstr "Les pétales qui tombent"
+
+#: includes/class-theme-importer.php
+msgid "Prima e dopo"
+msgstr "Avant et après"
+
+#: includes/class-theme-importer.php
+msgid "La parola che respira"
+msgstr "Le mot qui respire"
+
+#: includes/class-theme-importer.php
+msgid "I libri che girano"
+msgstr "Les livres qui tournent"
+
+#: includes/class-theme-importer.php
+msgid "La luce della lampada"
+msgstr "La lumière de la lampe"
+
+#: includes/class-theme-importer.php
+msgid "Il fiore che si ridisegna"
+msgstr "La fleur qui se redessine"
+
+#: includes/class-theme-importer.php
+msgid "Cruscotto dal vivo"
+msgstr "Tableau de bord en direct"
+
+#: includes/class-theme-importer.php
+msgid "Carosello 3D"
+msgstr "Carrousel 3D"
+
+#: includes/class-theme-importer.php
+msgid "Le bolle e l’onda"
+msgstr "Les bulles et la vague"
+
+#: includes/class-theme-importer.php
+msgid "Si legge anche al buio"
+msgstr "À lire même dans le noir"
+
+#: includes/class-theme-importer.php
+msgid "Il profilo che si disegna"
+msgstr "Le profil qui se dessine"
+
+#: includes/class-theme-importer.php
+msgid "Neon e faro"
+msgstr "Néon et projecteur"
+
+#: includes/class-theme-importer.php
+msgid "Gratta il bonus"
+msgstr "Grattez le bonus"
+
+#: includes/class-theme-importer.php
+msgid "Chi c’è adesso"
+msgstr "Qui est là maintenant"
+
+#: includes/class-theme-importer.php
+msgid "Il piatto da toccare"
+msgstr "L’assiette à toucher"
+
+#: includes/class-theme-importer.php
+msgid "L’equalizzatore che balla"
+msgstr "L’égaliseur qui danse"
+
+#: includes/class-theme-importer.php
+msgid "Bagliore dorato"
+msgstr "Lueur dorée"
+
+#: includes/class-theme-importer.php
+msgid "Gocce morbide"
+msgstr "Gouttes douces"
+
+#: includes/class-theme-importer.php
+msgid "Fumo al cursore"
+msgstr "Fumée au curseur"
+
+#: includes/class-theme-importer.php
+msgid "Nome nel video"
+msgstr "Le nom dans la vidéo"
+
+#: includes/class-theme-importer.php
+msgid "L’orologio delle lezioni"
+msgstr "L’horloge des cours"
+
+#: includes/class-theme-importer.php
+msgid "Onda e binari"
+msgstr "Vague et rails"
+
+#: includes/class-theme-importer.php
+msgid "Il codice segreto"
+msgstr "Le code secret"
+
+#: includes/class-theme-importer.php
+msgid "Polaroid e pellicola"
+msgstr "Polaroid et pellicule"
+
+#: includes/class-theme-importer.php
+msgid "Neve e sentiero"
+msgstr "Neige et sentier"
+
+#: includes/class-theme-importer.php
+msgid "Terminale ambra"
+msgstr "Terminal ambre"
+
+#: includes/class-theme-importer.php
+msgid "La band in schegge"
+msgstr "Le groupe en éclats"
+
+#: includes/class-theme-importer.php
+msgid "Dal bianco e nero al colore"
+msgstr "Du noir et blanc à la couleur"
+
+#: includes/class-theme-importer.php
+msgid "Cartamodello"
+msgstr "Patron de couture"
+
+#: includes/class-theme-importer.php
+msgid "Torcia nel buio"
+msgstr "Lampe torche dans le noir"
+
+#: includes/class-theme-importer.php
+msgid "Il campo in tempo reale"
+msgstr "Le champ en temps réel"
+
+#: includes/class-theme-importer.php
+msgid "Prenota in chat"
+msgstr "Réservez par chat"
+
+#: includes/class-theme-importer.php
+msgid "I progetti che scorrono"
+msgstr "Les projets qui défilent"
+
+#: includes/class-theme-importer.php
+msgid "Aurora che respira"
+msgstr "Aurore qui respire"
+
+#: includes/class-theme-importer.php
+msgid "L’occhio di bue"
+msgstr "La poursuite"
+
+#: includes/class-theme-importer.php
+msgid "Gratta e scopri"
+msgstr "Grattez et découvrez"
+
+#: includes/class-theme-importer.php
+msgid "Anelli che girano"
+msgstr "Anneaux qui tournent"
+
+#: includes/class-theme-importer.php
+msgid "Aurora e calcolo"
+msgstr "Aurore et calcul"
+
+#: includes/class-theme-importer.php
+msgid "Sala di regia"
+msgstr "Régie"
+
+#: includes/class-theme-importer.php
+msgid "Ceramiche Riva · 3 settimane"
+msgstr "Ceramiche Riva · 3 semaines"
+
+#: includes/class-theme-importer.php
+msgid "Dal pezzo bianco alla linea decorata a mano: foto nuove e un catalogo che vende anche online."
+msgstr "De la pièce blanche à la ligne décorée à la main : de nouvelles photos et un catalogue qui vend aussi en ligne."
+
+#: includes/class-theme-importer.php
+msgid "Studio Ferri · 6 settimane"
+msgstr "Studio Ferri · 6 semaines"
+
+#: includes/class-theme-importer.php
+msgid "Dalla scrivania di casa a un ufficio luminoso in centro, arredato su misura."
+msgstr "Du bureau à la maison à un bureau lumineux en centre-ville, meublé sur mesure."
+
+#: includes/class-theme-importer.php
+msgid "Osteria del Ponte · 2 mesi"
+msgstr "Osteria del Ponte · 2 mois"
+
+#: includes/class-theme-importer.php
+msgid "Nuova mise en place e un menù da condividere: coperti raddoppiati il sabato sera."
+msgstr "Une nouvelle mise en place et un menu à partager : deux fois plus de couverts le samedi soir."
+
+#: includes/class-theme-importer.php
+msgid "Card prima/dopo"
+msgstr "Carte avant/après"
+
+#: includes/class-theme-importer.php
+msgid "Immagine \"Prima\""
+msgstr "Image « Avant »"
+
+#: includes/class-theme-importer.php
+msgid "Immagine \"Dopo\""
+msgstr "Image « Après »"
+
+#: includes/class-theme-importer.php
+msgid "Testo risultato"
+msgstr "Texte du résultat"
+
+#: includes/class-theme-importer.php
+msgid "Slider da trascinare"
+msgstr "Curseur à faire glisser"
+
+#: includes/class-theme-importer.php
+msgid "Foto affiancate"
+msgstr "Photos côte à côte"
+
+#: includes/class-theme-importer.php
+msgid "Accento (etichetta \"Dopo\")"
+msgstr "Accent (étiquette « Après »)"
+
+#: includes/class-theme-importer.php
+msgid "Sfondo dell’etichetta Dopo; vuoto = primario del tema."
+msgstr "Arrière-plan de l’étiquette Après ; vide = couleur primaire du thème."
+
+#: includes/class-theme-importer.php
+msgid "Testo etichetta Prima"
+msgstr "Texte de l’étiquette Avant"
+
+#: includes/class-theme-importer.php
+msgid "Testo etichetta Dopo"
+msgstr "Texte de l’étiquette Après"
+
+#: includes/class-theme-importer.php
+msgid "Maniglia"
+msgstr "Poignée"
+
+#: includes/class-theme-importer.php
+msgid "Punto focale globale di tutte le immagini (prima + dopo)."
+msgstr "Point focal global de toutes les images (avant + après)."
+
+#: includes/class-theme-importer.php
+msgid "Padding del blocco titolo + testo sotto le immagini."
+msgstr "Padding du bloc titre + texte sous les images."
+
+#: includes/class-theme-importer.php
+msgid "Arrotondamento dei 4 angoli della card. Default = raggio base."
+msgstr "Arrondi des 4 coins de la carte. Par défaut = rayon de base."
+
+#: includes/class-theme-importer.php
+msgid "Raggio etichette"
+msgstr "Rayon des étiquettes"
+
+#: includes/class-theme-importer.php
+msgid "Arrotondamento delle pillole \"Prima\"/\"Dopo\"."
+msgstr "Arrondi des pastilles « Avant »/« Après »."

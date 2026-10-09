@@ -24271,3 +24271,347 @@ msgstr "Site name"
 #: src/config/elements/sitelogo.js
 msgid "Vale quando il logo è il nome del sito, cioè quando non c’è un’immagine: vuoto = come i titoli del tema."
 msgstr "Applies when the logo is the site name, that is when there’s no image: empty = like the theme’s headings."
+
+#: includes/class-theme-importer.php
+msgid "Ristorazione"
+msgstr "Food & drink"
+
+#: includes/class-theme-importer.php
+msgid "Ospitalità e viaggi"
+msgstr "Hospitality & travel"
+
+#: includes/class-theme-importer.php
+msgid "Moda e bellezza"
+msgstr "Fashion & beauty"
+
+#: includes/class-theme-importer.php
+msgid "Negozi online"
+msgstr "Online shops"
+
+#: includes/class-theme-importer.php
+msgid "Studi e professioni"
+msgstr "Firms & professionals"
+
+#: includes/class-theme-importer.php
+msgid "Tecnologia"
+msgstr "Technology"
+
+#: includes/class-theme-importer.php
+msgid "Creativi e portfolio"
+msgstr "Creatives & portfolios"
+
+#: includes/class-theme-importer.php
+msgid "Eventi e musica"
+msgstr "Events & music"
+
+#: includes/class-theme-importer.php
+msgid "Sport e benessere"
+msgstr "Sport & wellness"
+
+#: includes/class-theme-importer.php
+msgid "Casa e design"
+msgstr "Home & design"
+
+#: includes/class-theme-importer.php
+msgid "Cultura e formazione"
+msgstr "Culture & education"
+
+#: includes/class-theme-importer.php
+msgid "Associazioni e cause"
+msgstr "Non-profits & causes"
+
+#: includes/class-theme-importer.php
+msgid "Il respiro guidato"
+msgstr "Guided breathing"
+
+#: includes/class-theme-importer.php
+msgid "Cerchi e spirale"
+msgstr "Circles and spiral"
+
+#: includes/class-theme-importer.php
+msgid "Il prima e dopo"
+msgstr "The before-and-after"
+
+#: includes/class-theme-importer.php
+msgid "Vigne in video"
+msgstr "Vineyards on video"
+
+#: includes/class-theme-importer.php
+msgid "Vetro e onde"
+msgstr "Glass and waves"
+
+#: includes/class-theme-importer.php
+msgid "I palloncini che salgono"
+msgstr "Rising balloons"
+
+#: includes/class-theme-importer.php
+msgid "Il drone da toccare"
+msgstr "A drone to touch"
+
+#: includes/class-theme-importer.php
+msgid "Calcolo e ciambelle"
+msgstr "Calculator and donut charts"
+
+#: includes/class-theme-importer.php
+msgid "La luce che cambia"
+msgstr "Shifting light"
+
+#: includes/class-theme-importer.php
+msgid "Vetrina in frantumi"
+msgstr "Shattered shop window"
+
+#: includes/class-theme-importer.php
+msgid "I risultati che scorrono"
+msgstr "Scrolling results"
+
+#: includes/class-theme-importer.php
+msgid "Manifesto che si accende"
+msgstr "A manifesto that lights up"
+
+#: includes/class-theme-importer.php
+msgid "Il nome che brucia"
+msgstr "The burning name"
+
+#: includes/class-theme-importer.php
+msgid "I petali che cadono"
+msgstr "Falling petals"
+
+#: includes/class-theme-importer.php
+msgid "Prima e dopo"
+msgstr "Before and after"
+
+#: includes/class-theme-importer.php
+msgid "La parola che respira"
+msgstr "The breathing word"
+
+#: includes/class-theme-importer.php
+msgid "I libri che girano"
+msgstr "Spinning books"
+
+#: includes/class-theme-importer.php
+msgid "La luce della lampada"
+msgstr "Lamplight"
+
+#: includes/class-theme-importer.php
+msgid "Il fiore che si ridisegna"
+msgstr "The flower that redraws itself"
+
+#: includes/class-theme-importer.php
+msgid "Cruscotto dal vivo"
+msgstr "Live dashboard"
+
+#: includes/class-theme-importer.php
+msgid "Carosello 3D"
+msgstr "3D carousel"
+
+#: includes/class-theme-importer.php
+msgid "Le bolle e l’onda"
+msgstr "Bubbles and the wave"
+
+#: includes/class-theme-importer.php
+msgid "Si legge anche al buio"
+msgstr "Readable in the dark"
+
+#: includes/class-theme-importer.php
+msgid "Il profilo che si disegna"
+msgstr "The profile that draws itself"
+
+#: includes/class-theme-importer.php
+msgid "Neon e faro"
+msgstr "Neon and spotlight"
+
+#: includes/class-theme-importer.php
+msgid "Gratta il bonus"
+msgstr "Scratch the bonus"
+
+#: includes/class-theme-importer.php
+msgid "Chi c’è adesso"
+msgstr "Who’s in right now"
+
+#: includes/class-theme-importer.php
+msgid "Il piatto da toccare"
+msgstr "A plate to touch"
+
+#: includes/class-theme-importer.php
+msgid "L’equalizzatore che balla"
+msgstr "The dancing equalizer"
+
+#: includes/class-theme-importer.php
+msgid "Bagliore dorato"
+msgstr "Golden glow"
+
+#: includes/class-theme-importer.php
+msgid "Gocce morbide"
+msgstr "Soft drops"
+
+#: includes/class-theme-importer.php
+msgid "Fumo al cursore"
+msgstr "Smoke on the cursor"
+
+#: includes/class-theme-importer.php
+msgid "Nome nel video"
+msgstr "Name in the video"
+
+#: includes/class-theme-importer.php
+msgid "L’orologio delle lezioni"
+msgstr "The lesson clock"
+
+#: includes/class-theme-importer.php
+msgid "Onda e binari"
+msgstr "Wave and tracks"
+
+#: includes/class-theme-importer.php
+msgid "Il codice segreto"
+msgstr "The secret code"
+
+#: includes/class-theme-importer.php
+msgid "Polaroid e pellicola"
+msgstr "Polaroids and film"
+
+#: includes/class-theme-importer.php
+msgid "Neve e sentiero"
+msgstr "Snow and trail"
+
+#: includes/class-theme-importer.php
+msgid "Terminale ambra"
+msgstr "Amber terminal"
+
+#: includes/class-theme-importer.php
+msgid "La band in schegge"
+msgstr "The band in shards"
+
+#: includes/class-theme-importer.php
+msgid "Dal bianco e nero al colore"
+msgstr "From black and white to color"
+
+#: includes/class-theme-importer.php
+msgid "Cartamodello"
+msgstr "Sewing pattern"
+
+#: includes/class-theme-importer.php
+msgid "Torcia nel buio"
+msgstr "Flashlight in the dark"
+
+#: includes/class-theme-importer.php
+msgid "Il campo in tempo reale"
+msgstr "The field in real time"
+
+#: includes/class-theme-importer.php
+msgid "Prenota in chat"
+msgstr "Book in chat"
+
+#: includes/class-theme-importer.php
+msgid "I progetti che scorrono"
+msgstr "Scrolling projects"
+
+#: includes/class-theme-importer.php
+msgid "Aurora che respira"
+msgstr "Breathing aurora"
+
+#: includes/class-theme-importer.php
+msgid "L’occhio di bue"
+msgstr "The spotlight"
+
+#: includes/class-theme-importer.php
+msgid "Gratta e scopri"
+msgstr "Scratch and reveal"
+
+#: includes/class-theme-importer.php
+msgid "Anelli che girano"
+msgstr "Spinning rings"
+
+#: includes/class-theme-importer.php
+msgid "Aurora e calcolo"
+msgstr "Aurora and calculator"
+
+#: includes/class-theme-importer.php
+msgid "Sala di regia"
+msgstr "Control room"
+
+#: includes/class-theme-importer.php
+msgid "Ceramiche Riva · 3 settimane"
+msgstr "Ceramiche Riva · 3 weeks"
+
+#: includes/class-theme-importer.php
+msgid "Dal pezzo bianco alla linea decorata a mano: foto nuove e un catalogo che vende anche online."
+msgstr "From plain white pieces to a hand-decorated line: new photos and a catalog that also sells online."
+
+#: includes/class-theme-importer.php
+msgid "Studio Ferri · 6 settimane"
+msgstr "Studio Ferri · 6 weeks"
+
+#: includes/class-theme-importer.php
+msgid "Dalla scrivania di casa a un ufficio luminoso in centro, arredato su misura."
+msgstr "From a desk at home to a bright, custom-furnished office downtown."
+
+#: includes/class-theme-importer.php
+msgid "Osteria del Ponte · 2 mesi"
+msgstr "Osteria del Ponte · 2 months"
+
+#: includes/class-theme-importer.php
+msgid "Nuova mise en place e un menù da condividere: coperti raddoppiati il sabato sera."
+msgstr "A new table setting and a menu for sharing: covers doubled on Saturday nights."
+
+#: includes/class-theme-importer.php
+msgid "Card prima/dopo"
+msgstr "Before/after card"
+
+#: includes/class-theme-importer.php
+msgid "Immagine \"Prima\""
+msgstr "\"Before\" image"
+
+#: includes/class-theme-importer.php
+msgid "Immagine \"Dopo\""
+msgstr "\"After\" image"
+
+#: includes/class-theme-importer.php
+msgid "Testo risultato"
+msgstr "Result text"
+
+#: includes/class-theme-importer.php
+msgid "Slider da trascinare"
+msgstr "Drag slider"
+
+#: includes/class-theme-importer.php
+msgid "Foto affiancate"
+msgstr "Side-by-side photos"
+
+#: includes/class-theme-importer.php
+msgid "Accento (etichetta \"Dopo\")"
+msgstr "Accent (\"After\" label)"
+
+#: includes/class-theme-importer.php
+msgid "Sfondo dell’etichetta Dopo; vuoto = primario del tema."
+msgstr "Background of the After label; empty = theme primary."
+
+#: includes/class-theme-importer.php
+msgid "Testo etichetta Prima"
+msgstr "Before label text"
+
+#: includes/class-theme-importer.php
+msgid "Testo etichetta Dopo"
+msgstr "After label text"
+
+#: includes/class-theme-importer.php
+msgid "Maniglia"
+msgstr "Handle"
+
+#: includes/class-theme-importer.php
+msgid "Punto focale globale di tutte le immagini (prima + dopo)."
+msgstr "Global focal point for all images (before + after)."
+
+#: includes/class-theme-importer.php
+msgid "Padding del blocco titolo + testo sotto le immagini."
+msgstr "Padding of the title + text block below the images."
+
+#: includes/class-theme-importer.php
+msgid "Arrotondamento dei 4 angoli della card. Default = raggio base."
+msgstr "Rounding of the card’s 4 corners. Default = base radius."
+
+#: includes/class-theme-importer.php
+msgid "Raggio etichette"
+msgstr "Label radius"
+
+#: includes/class-theme-importer.php
+msgid "Arrotondamento delle pillole \"Prima\"/\"Dopo\"."
+msgstr "Rounding of the \"Before\"/\"After\" pills."

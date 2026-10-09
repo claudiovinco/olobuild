@@ -3,6 +3,83 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.610 - 2026-10-09 (novità)
+- 52 temi nuovi al posto dei 50 di prima, in 12 categorie: Ristorazione, Ospitalità e viaggi, Moda e bellezza, Negozi online, Studi e professioni, Tecnologia, Creativi e portfolio, Eventi e musica, Sport e benessere, Casa e design, Cultura e formazione, Associazioni e cause. Ognuno ha marchio e testi in italiano, colori e caratteri propri, la home, due o tre pagine interne, testata, piè di pagina e pagina 404.
+- Ogni tema mette in evidenza un effetto, scritto sotto il nome nel selettore: la luce che segue il mouse, il prima e dopo da trascinare, i testi che si scrivono da soli, le onde fra le sezioni, il carosello 3D, la lettura al buio, il gratta e scopri e molti altri.
+- Nel selettore l'anteprima mostra la home intera e scorre al passaggio del mouse. Categorie ed effetti sono tradotti in inglese, francese, tedesco e spagnolo.
+- Restano «OLOtutor · Vetrina» e «Clod — Evoluzione», ora nelle nuove categorie. I temi già importati nel sito non cambiano.
+
+## v1.4.609 - 2026-10-09 (fix)
+- Animazioni d'ingresso: finita l'animazione la riga torna normale. Prima restava «trasformata» e gli elementi che si posizionano sulla sezione, come l'onda del Divisore, si attaccavano alla riga: l'onda era larga quanto il contenuto e fuori posto.
+
+## v1.4.608 - 2026-10-09 (fix)
+- Titolo animato e Barra del titolo della pagina: sul telefono il titolo si riduce da solo, senza mai superare la misura scelta, e tablet e telefono possono averne una propria. Prima una parola lunga a misura grande usciva dallo schermo o veniva tagliata.
+
+## v1.4.607 - 2026-10-09 (fix)
+- Testata: con gli effetti «Sfondo» e «Cornice» la voce della pagina in cui ti trovi riprende il suo colore. Nella 1.4.606 sui fondi chiari diventava bianca.
+- Timeline: il testo delle card prende il contrasto dal loro sfondo, anche quando è scuro.
+- Work Grid: sul telefono la didascalia va a capo invece di uscire dalla card.
+
+## v1.4.606 - 2026-10-09 (fix)
+- Variable Specimen: la misura del testo può averne una per tablet e una per telefono.
+- Testata: il pulsante resta pieno anche quando sei sulla sua pagina.
+- Listino prezzi: la nota sotto il prezzo prende il colore del testo della card. Timeline: filo e bordi delle card seguono il colore della card.
+
+## v1.4.605 - 2026-10-09 (fix)
+- Righe: l'animazione d'ingresso scelta nell'inspector parte anche quando la riga non ha sfondo, spazi o bordo. Prima in quel caso non arrivava nella pagina.
+
+## v1.4.604 - 2026-10-09 (fix)
+- Builder: la maniglia di Prima/Dopo e di Confronto immagini si trascina anche nel canvas, per provarla. Prima il trascinamento spostava la tile.
+
+## v1.4.603 - 2026-10-09
+- Prima/Dopo: è un confronto a slider vero, come «Confronto immagini». Le due foto stanno nella stessa cornice e la maniglia le separa: si trascina col mouse o col dito, si muove con le frecce della tastiera e può andare da sola. «Foto affiancate» riporta la resa di prima.
+
+## v1.4.602 - 2026-10-09 (fix)
+- Pulsante: l'allineamento per tablet e telefono agisce. Prima valeva sempre quello del desktop.
+
+## v1.4.601 - 2026-10-09
+- Selettore Temi chiaro come Blocchi & Pagine: card bianche, categorie su grigio chiarissimo, la categoria della card in grigio col pallino del colore del tema.
+- Pro Gallery: il Coverflow è giusto anche sul telefono.
+
+## v1.4.600 - 2026-10-09 (fix)
+- Pro Gallery: il Coverflow si ferma sempre su una foto e sfuma ai bordi.
+
+## v1.4.599 - 2026-10-09
+- Pro Gallery: il Coverflow 3D è un coverflow vero. La foto al centro sta di fronte, le altre ruotano verso di lei, impilate a passo regolare; anche la prima e l'ultima arrivano al centro. Un clic su una foto laterale la porta al centro, su quella centrale apre la lightbox; frecce, tastiera, pallini e avanzamento automatico vanno di una foto alla volta.
+
+## v1.4.598 - 2026-10-09 (fix)
+- Inspector: il tab Stile di Nastro scorrevole e Griglia prodotti si apre di nuovo. Prima restava bianco.
+
+## v1.4.597 - 2026-10-09 (fix)
+- Builder: il pacchetto del builder corrisponde alla versione installata, senza l'avviso «versione vecchia».
+
+## v1.4.596 - 2026-10-09 (fix)
+- Work List: sul telefono la riga non esce dallo schermo: la colonna del titolo si restringe e il titolo rimpicciolisce.
+
+## v1.4.595 - 2026-10-09 (fix)
+- Immagine: con l'effetto acqua e le proporzioni fisse la foto riempie la cornice.
+
+## v1.4.594 - 2026-10-09 (fix)
+- Menu: le voci che portano a un'ancora della pagina non risultano più tutte attive.
+- Immagine: con l'immagine al passaggio e le proporzioni fisse la foto riempie la cornice.
+
+## v1.4.593 - 2026-10-09 (fix)
+- Testata in sovrapposizione: sta davvero sopra l'hero anche quando è fissa, anche col fondo fisso sul telefono.
+- Lookbook Mixer: sul telefono non esce dallo schermo. Text Mask: usa i caratteri del tema.
+
+## v1.4.592 - 2026-10-09 (fix)
+- Modulo: la tendina con un'icona lascia lo spazio all'icona.
+
+## v1.4.591 - 2026-10-09
+- Product Cards: bordo della card e ombra personalizzata.
+- Testata: sul telefono il nome del marchio non schiaccia l'hamburger.
+
+## v1.4.590 - 2026-10-09
+- Selettore Temi: al passaggio del mouse l'anteprima scorre la pagina intera, e la card dice quante pagine porta il tema.
+- Testata: per il nome del marchio si scelgono carattere, peso, maiuscolo e spaziatura. Prima solo misura e colore.
+- Caratteri: un tema può chiedere i corsivi veri delle sue famiglie. Prima il browser inclinava il tondo.
+- Temi: l'importazione copia foto e video nella Libreria media e collega le voci del menu alle pagine create.
+
 ## v1.4.589 - 2026-10-09 (fix)
 - Blocchi & Pagine: i conti alla rovescia (festival, prossima apertura) stanno due per riga sul telefono e su una riga sola dal tablet in su. Prima le cifre andavano a capo una alla volta.
 
