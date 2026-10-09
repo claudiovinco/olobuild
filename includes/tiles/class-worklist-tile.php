@@ -85,12 +85,14 @@ class Olobuild_WorkList_Tile extends Olobuild_Tile_Base {
         $show_arrow = ! empty( $s['show_arrow'] );
 
         // grid columns: numero + titolo + [categoria] + [anno] + [freccia]
-        $cols = '48px 1fr';
+        // minmax(0,…): con «1fr» la colonna del titolo non scendeva sotto la parola più lunga e la riga
+        // usciva dallo schermo del telefono.
+        $cols = '48px minmax(0,1fr)';
         if ( $show_cat )   $cols .= ' auto';
         if ( $show_year )  $cols .= ' auto';
         if ( $show_arrow ) $cols .= ' auto';
         // Telefono: la categoria si nasconde, restano numero, titolo e le colonne accese.
-        $cols_m = '32px 1fr';
+        $cols_m = '32px minmax(0,1fr)';
         if ( $show_year )  $cols_m .= ' auto';
         if ( $show_arrow ) $cols_m .= ' auto';
 
@@ -143,6 +145,8 @@ class Olobuild_WorkList_Tile extends Olobuild_Tile_Base {
             @media (max-width: 640px) {
                 .<?php echo $uid; ?> .olo-worklist__row { grid-template-columns: <?php echo $cols_m; ?>; gap: 14px; }
                 .<?php echo $uid; ?> .olo-worklist__cat { display: none; }
+                .<?php echo $uid; ?> .olo-worklist__t { font-size: min(<?php echo (int) $title_size; ?>px, 9vw) !important; overflow-wrap: anywhere; }
+                .<?php echo $uid; ?> .olo-worklist__yr { text-align: right; }
             }
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
