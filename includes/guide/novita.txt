@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.615 - 2026-10-10 (fix)
+- Selettore lingua a tendina: negli articoli (e nelle altre pagine fatte dal tema a blocchi) il menu non si apriva e la console segnalava un errore. WordPress rovinava lo script del selettore; ora lo script non contiene più ciò che WordPress riscriveva.
+
 ## v1.4.614 - 2026-10-10 (fix)
 - Importare di nuovo un tema ritrova le sue pagine anche quando il loro indirizzo era occupato da una pagina del sito: prima ne nasceva un'altra a ogni import (/prenota-3/, /prenota-4/…).
 

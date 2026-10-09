@@ -354,7 +354,8 @@ class Olobuild_LangSwitcher_Tile extends Olobuild_Tile_Base {
             . 'function setLang(c){if(!c)return;var s=location.protocol==="https:"?"; Secure":"";'
             . 'document.cookie="olo_lang="+encodeURIComponent(c)+"; path=/; max-age=31536000; SameSite=Lax"+s;}'
             . 'document.addEventListener("click",function(e){'
-            . 'var t=e.target&&e.target.closest?e.target.closest(".olsb-item[hreflang],.olsb-option[hreflang],.olsb-tab[hreflang]"):null;'
+            // Niente && negli script in linea: negli articoli WordPress lo scrive &#038;&#038; e lo script si rompe.
+            . 'var t=null;if(e.target){if(e.target.closest){t=e.target.closest(".olsb-item[hreflang],.olsb-option[hreflang],.olsb-tab[hreflang]");}}'
             . 'if(t){setLang(t.getAttribute("hreflang"));}'
             . '},true);'
             . '})();</script>';
@@ -579,8 +580,9 @@ class Olobuild_LangSwitcher_Tile extends Olobuild_Tile_Base {
                     e.stopPropagation();
                     el.classList.contains("olsb-open") ? close() : open();
                 });
-                document.addEventListener("click", function(e){ if(!menu.contains(e.target) && !trigger.contains(e.target)) close(); });
-                document.addEventListener("keydown", function(e){ if((e.key === "Escape" || e.key === "Esc") && el.classList.contains("olsb-open")){ close(); trigger.focus(); } });
+                /* Niente doppia «e commerciale» qui: negli articoli WordPress la riscrive come entità e lo script si rompe. */
+                document.addEventListener("click", function(e){ if(menu.contains(e.target)) return; if(trigger.contains(e.target)) return; close(); });
+                document.addEventListener("keydown", function(e){ if(e.key !== "Escape"){ if(e.key !== "Esc") return; } if(!el.classList.contains("olsb-open")) return; close(); trigger.focus(); });
                 window.addEventListener("scroll", function(){ if(el.classList.contains("olsb-open")) place(menu, trigger); }, true);
                 window.addEventListener("resize", function(){ if(el.classList.contains("olsb-open")) place(menu, trigger); });
             });
