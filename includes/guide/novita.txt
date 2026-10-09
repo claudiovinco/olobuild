@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.612 - 2026-10-09 (fix)
+- Testo in fusione, modalità «Torcia»: il disco usa il colore scelto anche quando è un colore del tema (prima poteva prenderne un altro o non vedersi) e compare al primo movimento del mouse, già sotto il puntatore. Prima restava fermo nell'angolo in alto a sinistra, sopra il logo.
+
 ## v1.4.611 - 2026-10-09 (fix)
 - Importare un tema: quando la home (o un'altra pagina già esistente) aveva un header o un footer scelti solo per lei, restava quello di prima sopra il tema nuovo. Ora vale quello del tema; «Ripristina» rimette anche le scelte della pagina.
 

@@ -135,8 +135,9 @@ class Olobuild_Blendtext_Tile extends Olobuild_Tile_Base {
                 flash.dataset.oloFlash = '1';
                 if(window.matchMedia && window.matchMedia('(hover:none)').matches) return;
                 if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-                document.body.appendChild(flash);
-                flash.style.display = 'block';
+                // Nel body col suo colore: fuori dal template il token del tema non vale (il disco
+                // prendeva il primario di :root, su mosaic il blu di un altro plugin, o niente).
+                ( <?php echo self::js_nel_body(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- costante JS interna ?> )( flash );
                 var EASE = <?php echo (float) $sp_ease; ?>;
                 var x = window.innerWidth / 2, y = window.innerHeight / 2, cx = x, cy = y;
                 var running = false;
@@ -151,7 +152,17 @@ class Olobuild_Blendtext_Tile extends Olobuild_Tile_Base {
                     requestAnimationFrame( loop );
                 }
                 function start(){ if ( ! running ) { running = true; requestAnimationFrame( loop ); } }
-                window.addEventListener('pointermove', function( e ){ x = e.clientX; y = e.clientY; start(); }, { passive: true });
+                // Il disco compare al primo movimento, già sotto il puntatore: prima stava
+                // nell'angolo in alto a sinistra, sopra il logo, finché il mouse non si muoveva.
+                window.addEventListener('pointermove', function( e ){
+                    x = e.clientX; y = e.clientY;
+                    if ( flash.style.display !== 'block' ) {
+                        cx = x; cy = y;
+                        flash.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+                        flash.style.display = 'block';
+                    }
+                    start();
+                }, { passive: true });
             })();
             </script>
             <?php
