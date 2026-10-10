@@ -507,6 +507,86 @@ class Olobuild_Demo_Temi {
         return OLOBUILD_PATH . 'templates/demo-tema-template.php';
     }
 
+    /**
+     * Disegna il contenuto come su una pagina vera: mentre si disegna, WordPress vede la pagina del tema
+     * (titolo e slug come all'import), così la barra del titolo mostra il suo titolo e le briciole
+     * «Home › titolo» invece del nome del sito. Vale solo per il contenuto: poi tutto torna com'era.
+     */
+    public static function come_una_pagina( $disegna ) {
+        global $wp_query;
+        if ( '404' === self::$pagina || ! ( $wp_query instanceof WP_Query ) ) {
+            return (string) call_user_func( $disegna );
+        }
+        $p       = self::$tema['json']['pages'][ self::$pagina ] ?? [];
+        $ora     = current_time( 'mysql' );
+        $ora_gmt = current_time( 'mysql', true );
+        $pagina  = new WP_Post( (object) [
+            'ID'                    => 0,
+            'post_author'           => 0,
+            'post_date'             => $ora,
+            'post_date_gmt'         => $ora_gmt,
+            'post_content'          => '',
+            'post_title'            => (string) ( $p['title'] ?? self::$pagina ),
+            'post_excerpt'          => '',
+            'post_status'           => 'publish',
+            'comment_status'        => 'closed',
+            'ping_status'           => 'closed',
+            'post_password'         => '',
+            'post_name'             => self::slug( self::$pagina, $p ),
+            'to_ping'               => '',
+            'pinged'                => '',
+            'post_modified'         => $ora,
+            'post_modified_gmt'     => $ora_gmt,
+            'post_content_filtered' => '',
+            'post_parent'           => 0,
+            'guid'                  => '',
+            'menu_order'            => 0,
+            'post_type'             => 'page',
+            'post_mime_type'        => '',
+            'comment_count'         => '0',
+            'filter'                => 'raw',
+        ] );
+        $prima = [];
+        foreach ( [ 'is_page', 'is_singular', 'queried_object', 'queried_object_id', 'post', 'posts', 'post_count', 'found_posts' ] as $campo ) {
+            $prima[ $campo ] = $wp_query->$campo;
+        }
+        $post_prima                  = $GLOBALS['post'] ?? null;
+        $wp_query->is_page           = true;
+        $wp_query->is_singular       = true;
+        $wp_query->queried_object    = $pagina;
+        $wp_query->queried_object_id = 0;
+        $wp_query->post              = $pagina;
+        $wp_query->posts             = [ $pagina ];
+        $wp_query->post_count        = 1;
+        $wp_query->found_posts       = 1;
+        $GLOBALS['post']             = $pagina; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- solo durante il disegno, rimesso subito dopo
+        try {
+            return (string) call_user_func( $disegna );
+        } finally {
+            foreach ( $prima as $campo => $valore ) {
+                $wp_query->$campo = $valore;
+            }
+            if ( null === $post_prima ) {
+                unset( $GLOBALS['post'] );
+            } else {
+                $GLOBALS['post'] = $post_prima; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- il valore di prima
+            }
+        }
+    }
+
+    /**
+     * I collegamenti alla home del sito (il logo in testata e nel piè di pagina, «Home» nelle briciole)
+     * portano alla home della demo: sul sito importato la home è quella del tema.
+     */
+    public static function casa_della_demo( $html ) {
+        $parti = wp_parse_url( home_url( '/' ) );
+        $host  = preg_quote( ( $parti['host'] ?? '' ) . ( isset( $parti['port'] ) ? ':' . $parti['port'] : '' ), '#' );
+        $via   = preg_quote( rtrim( (string) ( $parti['path'] ?? '' ), '/' ), '#' );
+        $casa  = '(?:https?://' . $host . $via . '/?|' . ( '' === $via ? '/' : $via . '/?' ) . ')';
+        $demo  = esc_url( self::indirizzo_tema( self::$tema['id'] ) );
+        return (string) preg_replace( '#(\shref=)(["\'])' . $casa . '\2#i', '$1$2' . $demo . '$2', (string) $html );
+    }
+
     public static function robots() {
         return [ 'noindex' => true, 'nofollow' => true ];
     }
@@ -568,7 +648,7 @@ class Olobuild_Demo_Temi {
     if (!box) { return; }
     document.addEventListener('submit', function (e) {
         var f = e.target;
-        if (f && f.matches && f.matches('form[data-olo-form]')) { return; }
+        if (f ? (f.matches ? f.matches('form[data-olo-form]') : false) : false) { return; }
         e.preventDefault();
         e.stopImmediatePropagation();
         box.textContent = <?php echo wp_json_encode( $testo ); ?>;

@@ -21,11 +21,14 @@ if ( $olobuild_demo_testata ) {
 }
 $olobuild_demo_html .= '<main class="wp-block-group is-layout-flow wp-block-group-is-layout-flow">'
     . '<div class="entry-content wp-block-post-content is-layout-flow wp-block-post-content-is-layout-flow">'
-    . ( new Olobuild_Frontend_Renderer() )->render_shortcode( [ 'id' => Olobuild_Demo_Temi::id_pagina() ] )
+    . Olobuild_Demo_Temi::come_una_pagina( function () {
+        return ( new Olobuild_Frontend_Renderer() )->render_shortcode( [ 'id' => Olobuild_Demo_Temi::id_pagina() ] );
+    } )
     . '</div></main>';
 if ( $olobuild_demo_piede ) {
     $olobuild_demo_html .= ( new Olobuild_Footer_Integration() )->render_footer( $olobuild_demo_piede );
 }
+$olobuild_demo_html = Olobuild_Demo_Temi::casa_della_demo( $olobuild_demo_html );
 
 ?><!DOCTYPE html>
 <html lang="<?php echo esc_attr( Olobuild_Demo_Temi::lingua() ); ?>">

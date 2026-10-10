@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.637 - 2026-10-10 (fix)
+- Demo dei temi: nelle pagine interne la barra del titolo mostra il titolo della pagina, con le briciole «Home · pagina». Prima mostrava il nome del sito. Il logo e «Home» portano alla home della demo, non più a quella del sito.
+
 ## v1.4.636 - 2026-10-10 (fix)
 - Vetrina temi: chiudendo la demo si ferma davvero, prima restava a girare nascosta. I link dentro la demo cambiano pagina senza allungare la cronologia, così «Indietro» chiude la demo. I link verso altri siti si aprono in una nuova scheda.
 
