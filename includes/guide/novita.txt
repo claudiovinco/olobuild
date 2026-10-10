@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.640 - 2026-10-10 (fix)
+- Siti col tema di Olobuild (hello-olobuild): il fondo della pagina e il colore del testo di base seguono la palette, anche in modalità scura. Prima restavano bianco e grigio scuro: con un tema scuro il bianco si vedeva dietro le testate velate e sotto le pagine corte. Il canvas del builder usa lo stesso fondo.
+
 ## v1.4.639 - 2026-10-10 (fix)
 - Vetrina temi: c'è «Colore filtri» (Stile → Aspetto) per i filtri non attivi. Prima prendevano solo il colore del testo intorno e sui fondi scuri non si leggevano.
 

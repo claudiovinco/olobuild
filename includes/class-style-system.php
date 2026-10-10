@@ -1503,6 +1503,29 @@ class Olobuild_Style_System {
     /**
      * Generate CSS with custom properties and UIkit overrides.
      */
+    /**
+     * Colori di base della pagina col tema di Olobuild (hello-olobuild): fondo e testo della palette su body e
+     * html, anche in modalità scura. Fuori dai template si vedono dietro una testata velata, sotto una pagina più
+     * corta della finestra e nel rimbalzo dello scorrimento, dove restavano il bianco del tema e quello di UIkit
+     * su html; il testo segue il fondo per le pagine senza template. Legati alla classe del tema: con un altro
+     * tema la pagina resta sua (e la pagina di manutenzione tiene il suo fondo). Due regole per stato: un
+     * browser senza :has() scarterebbe tutta la lista.
+     */
+    private function css_colori_pagina( $c, $dc ) {
+        $css  = '';
+        $tema = 'body.wp-theme-hello-olobuild:not(.olo-maintenance-page)';
+        foreach ( [ '' => $c, 'html.olo-dark-mode' => (array) $dc ] as $scuro => $colori ) {
+            $fondo = sanitize_hex_color( (string) ( $colori['background'] ?? '' ) );
+            if ( ! $fondo ) {
+                continue;
+            }
+            $testo = sanitize_hex_color( (string) ( $colori['text'] ?? '' ) );
+            $css  .= ( '' !== $scuro ? $scuro . ' > ' : '' ) . $tema . ' { background-color: ' . $fondo . ';' . ( $testo ? ' color: ' . $testo . ';' : '' ) . " }\n";
+            $css  .= ( '' !== $scuro ? $scuro : 'html' ) . ':has(> ' . $tema . ') { background-color: ' . $fondo . "; }\n";
+        }
+        return '' !== $css ? "\n/* Pagina: colori di base col tema di Olobuild */\n" . $css : '';
+    }
+
     public function generate_css() {
         // Memoizzazione per-request: nello stesso page-load il CSS globale viene richiesto
         // piu' volte (renderer + footer + search-results integration). Il ricalcolo e'
@@ -1981,6 +2004,8 @@ class Olobuild_Style_System {
             }
             $css .= "}\n";
         }
+
+        $css .= $this->css_colori_pagina( $c, $dc );
 
         // Grain / noise overlay (site-wide). SVG fractalNoise inline come data-URI,
         // sopra tutto il contenuto con mix-blend-mode:overlay. Solo se abilitato.

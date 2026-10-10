@@ -76,7 +76,8 @@ header.olo-site-header[style*="sticky"] {
 }
 </style>
 </head>
-<body>
+<?php // La classe del tema come sul sito: i colori di base della pagina (Olobuild_Style_System::css_colori_pagina()) valgono anche qui. ?>
+<body class="<?php echo esc_attr( 'wp-theme-' . get_template() ); ?>">
 <div id="olo-iframe-root">
     <?php echo Olobuild_Builder::get_iframe_empty_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static markup built internally with esc_html__() labels ?>
 </div>
