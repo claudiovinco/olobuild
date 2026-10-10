@@ -3,6 +3,13 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.616 - 2026-10-10 (novità)
+- Blocchi & Pagine: 257 blocchi nuovi presi dai 52 temi. Ci sono l'apertura e la pagina 404 di ogni tema, poi inviti, effetti, sezioni interattive (gratta e scopri, quiz, compositori col prezzo che si aggiorna), prezzi, statistiche, timeline, gallerie, contatti, squadra, negozio, newsletter e piè di pagina. La descrizione di ognuno dice da quale tema viene; la libreria passa da 221 a 478 blocchi.
+- I blocchi dei temi scuri restano scuri in qualsiasi sito, e ogni testo dei blocchi nuovi è stato controllato con dieci palette diverse: dove un colore non si sarebbe letto (per esempio un secondario chiaro su fondo chiaro) prende quello di contrasto del suo fondo, e il primario su fondo scuro si schiarisce un poco.
+- Preventivo, disposizione a pannello: titolo, voci e totale seguono il fondo su cui stanno. Prima avevano il testo della Palette fisso e su un pannello scuro non si leggevano.
+- CTA Banner: sul telefono il titolo si riduce con lo schermo, mai sotto i 30 px. Prima restava della misura scelta e una parola lunga usciva dal bordo.
+- Tema «Onde Corte», pagina Programma: titolo e orari dei palchi si leggono. La scheda era chiara e i testi chiari del tema non si vedevano.
+
 ## v1.4.615 - 2026-10-10 (fix)
 - Selettore lingua a tendina: negli articoli (e nelle altre pagine fatte dal tema a blocchi) il menu non si apriva e la console segnalava un errore. WordPress rovinava lo script del selettore; ora lo script non contiene più ciò che WordPress riscriveva.
 

@@ -154,7 +154,8 @@ class Olobuild_CtaBanner_Tile extends Olobuild_Tile_Base {
 
             <!-- Headline -->
             <?php if ( ! empty( $s['headline'] ) || ! empty( $s['headline_accent'] ) ) : ?>
-                <h2 style="font-family:<?php echo esc_attr( $h_family ); ?>;font-size:<?php echo (int) $h_size; ?>px;font-weight:<?php echo esc_attr( $h_weight ); ?>;line-height:1.15;letter-spacing:-0.01em;color:<?php echo esc_attr( $text_c ); ?>;margin:0">
+                <?php /* Sul telefono il titolo scende fino al 9% della finestra (mai sotto 30 px): a misura fissa una parola lunga in un carattere largo usciva dal bordo e veniva tagliata. */ ?>
+                <h2 style="font-family:<?php echo esc_attr( $h_family ); ?>;font-size:clamp(<?php echo (int) min( 30, $h_size ); ?>px, 9vw, <?php echo (int) $h_size; ?>px);font-weight:<?php echo esc_attr( $h_weight ); ?>;line-height:1.15;letter-spacing:-0.01em;color:<?php echo esc_attr( $text_c ); ?>;margin:0">
                     <?php if ( ! empty( $s['headline'] ) ) : ?><span data-olo-editable="headline"><?php echo esc_html( $s['headline'] ); ?></span><?php endif; ?><?php if ( ! empty( $s['headline_accent'] ) ) : ?> <span style="color:<?php echo esc_attr( $accent_c ); ?>;<?php if ( $h_accent_italic ) echo 'font-style:italic;'; ?>" data-olo-editable="headline_accent"><?php echo esc_html( $s['headline_accent'] ); ?></span><?php endif; ?>
                 </h2>
             <?php endif; ?>

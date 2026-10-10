@@ -53,6 +53,52 @@ class Olobuild_Builder_Tile extends Olobuild_Tile_Base {
 
     public function get_controls() { return []; }
 
+    /**
+     * Luminanza relativa (WCAG) di un fondo, coi token della Palette risolti; null se il
+     * fondo non è pieno (vuoto, trasparente, velato sotto il 50%) o non si risolve.
+     * Stesso calcolo di quiz, finder e leaderboard.
+     */
+    private function luminanza_fondo( $c ) {
+        $c = trim( (string) $c );
+        if ( '' === $c || 'transparent' === strtolower( $c ) ) {
+            return null;
+        }
+        $alfa = 1.0;
+        if ( preg_match( '/^#[0-9a-f]{6}([0-9a-f]{2})$/i', $c, $m ) ) {
+            $alfa = hexdec( $m[1] ) / 255;
+        } elseif ( preg_match( '/^rgba?\(\s*[\d.]+%?\s*[,\s]\s*[\d.]+%?\s*[,\s]\s*[\d.]+%?\s*[,\/]\s*([\d.]+)(%?)\s*\)$/i', $c, $m ) ) {
+            $alfa = (float) $m[1] / ( '%' === $m[2] ? 100 : 1 );
+        } elseif ( preg_match( '/^color-mix\(.+\s([\d.]+)%\s*,\s*transparent\s*\)$/is', $c, $m ) ) {
+            $alfa = (float) $m[1] / 100;
+        }
+        $hex = Olobuild_Tile_Utils::colore_hex( $c );
+        if ( $alfa < 0.5 || '' === $hex ) {
+            return null;
+        }
+        $l = 0.0;
+        foreach ( [ 1 => 0.2126, 3 => 0.7152, 5 => 0.0722 ] as $i => $k ) {
+            $v  = hexdec( substr( $hex, $i, 2 ) ) / 255;
+            $l += $k * ( $v <= 0.03928 ? $v / 12.92 : pow( ( $v + 0.055 ) / 1.055, 2.4 ) );
+        }
+        return $l;
+    }
+
+    /**
+     * Il colore di un testo su un fondo disegnato dalla tile: $colore se si legge (contrasto
+     * almeno 3:1), altrimenti il chiaro o lo scuro della Palette secondo il fondo.
+     */
+    private function testo_su( $fondo, $colore ) {
+        $lf = $this->luminanza_fondo( $fondo );
+        $lc = $this->luminanza_fondo( $colore );
+        if ( null === $lf || null === $lc ) {
+            return $colore;
+        }
+        if ( ( max( $lf, $lc ) + 0.05 ) / ( min( $lf, $lc ) + 0.05 ) >= 3 ) {
+            return $colore;
+        }
+        return $lf < 0.18 ? 'var(--olo-color-light, #fdfcfa)' : 'var(--olo-color-dark, #14161c)';
+    }
+
     public function render( $settings, $style = [] ) {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'obd-' . wp_rand( 10000, 99999 );
@@ -68,6 +114,22 @@ class Olobuild_Builder_Tile extends Olobuild_Tile_Base {
         $cap    = intval( $s['cap'] ?? 0 );
         $layout = ( ( $s['layout'] ?? 'panel' ) === 'split' ) ? 'split' : 'panel';
         $disp   = "var(--olo-font-family-heading, 'Archivo',-apple-system,sans-serif)";
+        // Disposizione a pannello: testi che seguono il fondo su cui stanno (come nel quiz e nei fusi
+        // orari). Titolo e introduzione sul fondo pieno del contenitore della tile (se c'è; sennò la
+        // pagina, com'era), voci, passi e totale sul pannello. Prima avevano il testo della Palette
+        // fisso: con un pannello o un contenitore scuri erano scuro su scuro. Dove si leggevano già
+        // escono identici.
+        $testo_def  = 'var(--olo-color-text,#111827)';
+        $fondo_zona = '';
+        if ( is_array( $style ) && class_exists( 'Olobuild_CSS_Builder' ) ) {
+            $eff = ( new Olobuild_CSS_Builder() )->get_effective_bg( $style );
+            if ( 'solid' === ( $eff['type'] ?? '' ) && intval( $eff['color_opacity'] ?? 100 ) >= 50 ) {
+                $fondo_zona = $this->safe_color_css( $eff['color'] ?? '' );
+            }
+        }
+        $testo_zona     = $this->testo_su( $fondo_zona, $testo_def );
+        $pannello_pieno = null !== $this->luminanza_fondo( $cardbg );
+        $testo_pannello = $pannello_pieno ? $this->testo_su( $cardbg, $testo_def ) : $testo_zona;
         $hcol   = $this->safe_color_css( $s['heading_color'] ?? '' ) ?: 'var(--olo-color-text,#111827)';
         $tally  = $this->safe_color_css( $s['tally_bg'] ?? '' ) ?: 'var(--olo-color-text,#111827)';
         $inm    = $this->safe_color_css( $s['item_name_color'] ?? '' ) ?: 'var(--olo-color-text,#111827)';
@@ -212,24 +274,24 @@ class Olobuild_Builder_Tile extends Olobuild_Tile_Base {
         <style>
             .<?php echo $uid; ?>{ --bd-accent:<?php echo $accent; ?>; --bd-on:<?php echo $on; ?>; font-family:<?php echo $sans; ?>; <?php if ( $center ) echo 'text-align:center;'; ?> }
             .<?php echo $uid; ?> .obd-eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--bd-accent);display:block;margin-bottom:10px;}
-            .<?php echo $uid; ?> .obd-h{font-family:<?php echo $serif; ?>;font-size:clamp(26px,3.6vw,42px);line-height:1.12;margin:0;color:var(--olo-color-text,#111827);}
-            .<?php echo $uid; ?> .obd-intro{font-size:15.5px;line-height:1.6;opacity:.8;margin:14px 0 0;max-width:560px;<?php echo $center ? 'margin-left:auto;margin-right:auto;' : ''; ?>}
-            .<?php echo $uid; ?> .obd-panel{margin-top:26px;background:<?php echo $cardbg; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $cardbd ] ) ); ?>border-radius:16px;padding:clamp(20px,3vw,32px);text-align:left;<?php echo $center ? 'max-width:640px;margin-left:auto;margin-right:auto;' : ''; ?>}
+            .<?php echo $uid; ?> .obd-h{font-family:<?php echo $serif; ?>;font-size:clamp(26px,3.6vw,42px);line-height:1.12;margin:0;color:<?php echo $testo_zona; ?>;}
+            .<?php echo $uid; ?> .obd-intro{font-size:15.5px;line-height:1.6;opacity:.8;margin:14px 0 0;max-width:560px;<?php echo $center ? 'margin-left:auto;margin-right:auto;' : ''; ?><?php if ( $testo_zona !== $testo_def ) echo 'color:' . $testo_zona . ';'; ?>}
+            .<?php echo $uid; ?> .obd-panel{margin-top:26px;background:<?php echo $cardbg; ?>;<?php if ( $testo_pannello !== $testo_def ) echo 'color:' . $testo_pannello . ';'; ?><?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $cardbd ] ) ); ?>border-radius:16px;padding:clamp(20px,3vw,32px);text-align:left;<?php echo $center ? 'max-width:640px;margin-left:auto;margin-right:auto;' : ''; ?>}
             .<?php echo $uid; ?> .obd-row{display:flex;align-items:center;gap:16px;padding:16px 0;border-top:1px solid <?php echo $cardbd; ?>;}
             .<?php echo $uid; ?> .obd-row:first-child{border-top:0;}
             .<?php echo $uid; ?> .obd-row.on{}
             .<?php echo $uid; ?> .obd-row__main{flex:1;min-width:0;}
-            .<?php echo $uid; ?> .obd-row__name{font-weight:600;font-size:15.5px;color:var(--olo-color-text,#111827);}
+            .<?php echo $uid; ?> .obd-row__name{font-weight:600;font-size:15.5px;color:<?php echo $testo_pannello; ?>;}
             .<?php echo $uid; ?> .obd-row__note{font-size:13px;opacity:.6;margin-top:2px;}
             .<?php echo $uid; ?> .obd-row__price{font-weight:600;font-size:14.5px;color:var(--bd-accent);white-space:nowrap;}
             .<?php echo $uid; ?> .obd-step{display:inline-flex;align-items:center;gap:12px;}
-            .<?php echo $uid; ?> .obd-step button{width:32px;height:32px;border-radius:50%;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $cardbd ] ) ); ?>background:transparent;color:var(--olo-color-text,#111827);font-size:18px;line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .15s;}
+            .<?php echo $uid; ?> .obd-step button{width:32px;height:32px;border-radius:50%;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $cardbd ] ) ); ?>background:transparent;color:<?php echo $testo_pannello; ?>;font-size:18px;line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .15s;}
             .<?php echo $uid; ?> .obd-step button:hover{border-color:var(--bd-accent);color:var(--bd-accent);}
             .<?php echo $uid; ?> .obd-step button:focus-visible{outline:2px solid var(--bd-accent);outline-offset:2px;}
             .<?php echo $uid; ?> .obd-step [data-bd-c]{min-width:20px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums;}
             .<?php echo $uid; ?> .obd-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:22px;padding-top:20px;border-top:2px solid <?php echo $cardbd; ?>;}
             .<?php echo $uid; ?> .obd-tot{font-family:<?php echo $serif; ?>;}
-            .<?php echo $uid; ?> .obd-tot b{font-size:clamp(26px,3.4vw,38px);color:var(--olo-color-text,#111827);font-variant-numeric:tabular-nums;}
+            .<?php echo $uid; ?> .obd-tot b{font-size:clamp(26px,3.4vw,38px);color:<?php echo $testo_pannello; ?>;font-variant-numeric:tabular-nums;}
             <?php /* Solo la riga dell'etichetta va a capo: con «.obd-tot span» anche il numero e la parola dentro erano blocchi, e «Totale · 3 voci» stava su tre righe. */ ?>
             .<?php echo $uid; ?> .obd-tot > span{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.6;display:block;}
             .<?php echo $uid; ?> .obd-cta{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14.5px;color:var(--bd-on);background:var(--bd-accent);padding:13px 26px;border-radius:999px;text-decoration:none;transition:transform .18s;}
