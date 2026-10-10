@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.631 - 2026-10-10 (fix)
+- Struttura, «Cerca un blocco»: trova le tile anche per quello che la riga mostra, cioè il titolo o il testo della tile, e per il nome dell'elemento (per esempio «Blend Text»). Prima cercava solo il nome interno: scrivendo il testo letto nell'elenco non usciva niente.
+
 ## v1.4.630 - 2026-10-10 (fix)
 - Mega Menu, ricerca «Overlay a tutta pagina» e «Command palette (⌘K)», e ricerca del menu mobile a schermo intero: scrivendo si evidenzia tutta la casella, col suo raggio. Prima compariva un rettangolo attorno al solo campo, dentro la casella.
 

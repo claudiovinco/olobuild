@@ -450,8 +450,14 @@ const showFooter = computed(() => props.filter === 'all' || props.filter === 'fo
 
 // Compute visible node IDs based on searchQuery and onlySelected.
 // Returns null when no filter is active (= show everything).
+// Si cerca ciò che la riga mostra (etichetta, titolo o testo della tile), il nome dell'elemento e il tipo:
+// prima solo l'etichetta o il tipo interno, così «Blend Text» o il testo letto nella riga non trovavano niente.
+// Gli apostrofi tipografici valgono come quello della tastiera (un’idea = un'idea).
+function _cercabile(testo) {
+  return (testo + '').toLowerCase().replace(/[‘’ʼ`´]/g, "'");
+}
 function _nodeLabelText(node) {
-  return ((node.settings?._label || node.type || '') + '').toLowerCase();
+  return _cercabile([tileLabelFull(node), tileNameMap.value[node.type] || '', node.type || ''].join(' '));
 }
 function _collectMatching(nodes, q, parentChain, out) {
   for (const node of (nodes || [])) {
@@ -482,7 +488,7 @@ function _findPath(nodes, targetId, chain = []) {
   return null;
 }
 const visibleNodeIds = computed(() => {
-  const q = (props.searchQuery || '').trim().toLowerCase();
+  const q = _cercabile((props.searchQuery || '').trim());
   const isolate = !!props.onlySelected;
   if (!q && !isolate) return null;
   const out = new Set();
