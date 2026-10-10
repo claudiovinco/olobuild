@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.634 - 2026-10-10 (novità)
+- Demo dal vivo dei temi, in prova: all'indirizzo /demo/<tema>/ un tema si visita come un sito vero, con le sue pagine, il menu e gli effetti. È disegnato al volo dai file del plugin: non si importa niente e lo stile del sito non cambia. Nelle demo i moduli non inviano nulla e restano fuori popup, banner dei cookie, statistiche e motori di ricerca. È spenta di serie: per ora si accende solo sui siti vetrina.
+
 ## v1.4.633 - 2026-10-10 (novità)
 - Avanzate → Effetti mouse → «Spotlight cursore (torcia)»: c'è l'«Ambito». Il disco può restare dentro l'elemento (come prima), muoversi in tutta la sua sezione o seguire il cursore su tutta la pagina. Il colore della luce si sceglie anche fra i colori del tema.
 - La torcia della tile Blend Text sta qui. Quando apri nel builder una Blend Text che la usava, la torcia passa negli Effetti mouse con ambito «Tutta la pagina» e gli stessi valori, e la pagina resta identica. Prima si regolava solo dentro la tile e nel builder non si vedeva.

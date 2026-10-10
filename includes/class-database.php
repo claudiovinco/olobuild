@@ -211,6 +211,13 @@ class Olobuild_Database {
     }
 
     public function get_template( $id ) {
+        // Template che non stanno nella tabella: quelli delle demo dei temi, letti dai file del tema
+        // (Olobuild_Demo_Temi). Il filtro esiste solo nelle richieste di una demo.
+        $virtuale = apply_filters( 'olobuild_template_virtuale', null, (int) $id );
+        if ( is_array( $virtuale ) ) {
+            return $virtuale;
+        }
+
         $cache_key = 'olo_template_' . (int) $id;
         $cached    = wp_cache_get( $cache_key, $this->cache_group );
         if ( false !== $cached ) {

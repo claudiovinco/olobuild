@@ -24711,3 +24711,6 @@ msgstr "Bereich: nur in diesem Element, im ganzen Abschnitt oder auf der ganzen 
 
 msgid "Si disattiva su touch e con riduzione del movimento."
 msgstr "Auf Touchscreens und bei reduzierter Bewegung ist sie aus."
+
+msgid "Questa è una demo: i moduli non inviano nulla."
+msgstr "Das ist eine Demo: Formulare senden nichts."

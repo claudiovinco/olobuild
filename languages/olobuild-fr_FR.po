@@ -24711,3 +24711,6 @@ msgstr "Portée : uniquement dans cet élément, dans toute sa section ou sur to
 
 msgid "Si disattiva su touch e con riduzione del movimento."
 msgstr "Il se désactive sur les écrans tactiles et avec le mouvement réduit."
+
+msgid "Questa è una demo: i moduli non inviano nulla."
+msgstr "Ceci est une démo : les formulaires n’envoient rien."

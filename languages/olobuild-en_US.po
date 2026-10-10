@@ -24714,3 +24714,6 @@ msgstr "Scope: only inside this element, across its whole section or across the 
 
 msgid "Si disattiva su touch e con riduzione del movimento."
 msgstr "It turns off on touch screens and with reduced motion."
+
+msgid "Questa è una demo: i moduli non inviano nulla."
+msgstr "This is a demo: forms don’t send anything."

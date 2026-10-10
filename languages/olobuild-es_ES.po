@@ -24711,3 +24711,6 @@ msgstr "Ámbito: solo dentro de este elemento, en toda su sección o en toda la 
 
 msgid "Si disattiva su touch e con riduzione del movimento."
 msgstr "Se desactiva en pantallas táctiles y con movimiento reducido."
+
+msgid "Questa è una demo: i moduli non inviano nulla."
+msgstr "Esto es una demo: los formularios no envían nada."

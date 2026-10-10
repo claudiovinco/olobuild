@@ -428,6 +428,12 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
             $form_config_data['date_pairs'] = $coppie_date;
         }
 
+        // Nelle demo dei temi il modulo non invia. Il segno sta nella configurazione firmata: toglierlo
+        // invaliderebbe il token (Olobuild_Form_Handler::handle_submit).
+        if ( class_exists( 'Olobuild_Demo_Temi' ) && Olobuild_Demo_Temi::in_corso() ) {
+            $form_config_data['demo'] = true;
+        }
+
         $form_config = wp_json_encode( $form_config_data );
 
         // Container style

@@ -231,6 +231,15 @@ class Olobuild_Form_Handler {
             ], 403 );
         }
 
+        // 2b. Modulo di una demo dei temi (Olobuild_Demo_Temi): nessuna email, nessun salvataggio,
+        //     nessun servizio collegato. Risponde come un invio riuscito, col testo che lo dice.
+        if ( ! empty( $config['demo'] ) ) {
+            return new WP_REST_Response( [
+                'success' => true,
+                'data'    => [ 'message' => olobuild_t( 'Questa è una demo: i moduli non inviano nulla.' ) ],
+            ], 200 );
+        }
+
         // 3. Honeypot checks
         if ( ! empty( $config['honeypot'] ) ) {
             $honeypot_value = $request->get_param( 'olo_website_url' );
