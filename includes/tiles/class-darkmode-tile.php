@@ -69,6 +69,12 @@ class Olobuild_Darkmode_Tile extends Olobuild_Tile_Base {
         if ( ! empty( $_GET['olo_builder_iframe'] ) ) {
             return;
         }
+        // Nelle demo dei temi vale il tema, non il sito che le ospita: la preferenza salvata sul sito
+        // (stessa origine, stesso localStorage) vestiva di scuro anche i temi senza interruttore, con
+        // la palette scura di serie (indaco su ardesia, testi chiari su schede chiare).
+        if ( class_exists( 'Olobuild_Demo_Temi' ) && Olobuild_Demo_Temi::in_corso() && ! Olobuild_Demo_Temi::ha_tile( 'darkmode' ) ) {
+            return;
+        }
         $segnale = get_option( self::OPZIONE );
         if ( ! is_array( $segnale ) || empty( $segnale['visto'] ) ) {
             return;

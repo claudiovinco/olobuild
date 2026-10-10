@@ -105,6 +105,31 @@ class Olobuild_Demo_Temi {
     }
 
     /**
+     * Il tema della demo usa una tile di questo tipo, in uno qualunque dei suoi file? Per le parti del
+     * sito che ospita le demo che altrimenti varrebbero anche lì (la modalità scura scelta dal
+     * visitatore: un tema senza interruttore non ha una veste scura disegnata).
+     */
+    public static function ha_tile( $tipo ) {
+        static $visti = [];
+        if ( empty( self::$tema ) ) {
+            return false;
+        }
+        $chiave = self::$tema['id'] . '|' . $tipo;
+        if ( ! isset( $visti[ $chiave ] ) ) {
+            $visti[ $chiave ] = false;
+            foreach ( (array) ( self::$tema['json']['templates'] ?? [] ) as $meta ) {
+                $file = self::$tema['dir'] . '/' . basename( (string) ( $meta['file'] ?? '' ) );
+                // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- file del plugin, sul disco
+                if ( is_readable( $file ) && preg_match( '/"type"\s*:\s*"' . preg_quote( (string) $tipo, '/' ) . '"/', (string) file_get_contents( $file ) ) ) {
+                    $visti[ $chiave ] = true;
+                    break;
+                }
+            }
+        }
+        return $visti[ $chiave ];
+    }
+
+    /**
      * [ tema, chiave della pagina ] se l'indirizzo è /demo/<tema>/… di un tema acceso, altrimenti null.
      * Una pagina che il tema non ha mostra la sua 404; senza 404 del tema decide WordPress.
      */
@@ -201,7 +226,22 @@ class Olobuild_Demo_Temi {
 
     public static function stili( $valore ) {
         $s = self::$tema['json']['styles'] ?? null;
-        return is_array( $s ) ? $s : $valore;
+        if ( ! is_array( $s ) ) {
+            return $valore;
+        }
+        // Come all'import (Olobuild_Style_System::sync_dark_palette): in modalità scura i ruoli del
+        // marchio restano quelli del tema, non l'indaco di serie (vale per i temi con l'interruttore).
+        $c  = (array) ( $s['colors'] ?? [] );
+        $dc = (array) ( $s['dark_colors'] ?? [] );
+        foreach ( [ 'primary', 'primary_contrast', 'secondary', 'secondary_contrast', 'link' ] as $k ) {
+            if ( ! isset( $dc[ $k ] ) && isset( $c[ $k ] ) ) {
+                $dc[ $k ] = $c[ $k ];
+            }
+        }
+        if ( $dc ) {
+            $s['dark_colors'] = $dc;
+        }
+        return $s;
     }
 
     public static function vuoto() {
