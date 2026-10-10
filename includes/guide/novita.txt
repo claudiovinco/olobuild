@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.632 - 2026-10-10 (fix)
+- Struttura, «Cerca un blocco»: trova anche le parole che nel testo della tile vanno a capo. Per esempio «idea che» trova «Hai un'idea / che non sta ferma?».
+
 ## v1.4.631 - 2026-10-10 (fix)
 - Struttura, «Cerca un blocco»: trova le tile anche per quello che la riga mostra, cioè il titolo o il testo della tile, e per il nome dell'elemento (per esempio «Blend Text»). Prima cercava solo il nome interno: scrivendo il testo letto nell'elenco non usciva niente.
 

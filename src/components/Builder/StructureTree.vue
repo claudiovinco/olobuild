@@ -452,9 +452,10 @@ const showFooter = computed(() => props.filter === 'all' || props.filter === 'fo
 // Returns null when no filter is active (= show everything).
 // Si cerca ciò che la riga mostra (etichetta, titolo o testo della tile), il nome dell'elemento e il tipo:
 // prima solo l'etichetta o il tipo interno, così «Blend Text» o il testo letto nella riga non trovavano niente.
-// Gli apostrofi tipografici valgono come quello della tastiera (un’idea = un'idea).
+// Gli apostrofi tipografici valgono come quello della tastiera (un’idea = un'idea) e un a capo nel testo come
+// lo spazio che la riga mostra al suo posto.
 function _cercabile(testo) {
-  return (testo + '').toLowerCase().replace(/[‘’ʼ`´]/g, "'");
+  return (testo + '').toLowerCase().replace(/[‘’ʼ`´]/g, "'").replace(/\s+/g, ' ');
 }
 function _nodeLabelText(node) {
   return _cercabile([tileLabelFull(node), tileNameMap.value[node.type] || '', node.type || ''].join(' '));
