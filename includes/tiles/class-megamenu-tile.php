@@ -947,9 +947,12 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         }
         .<?php echo $uid; ?> .olo-mm-search-result:hover { background: rgba(0,0,0,.04); color: <?php echo $ac ?: 'var(--olo-color-primary, #e1474f)'; ?>; }
         .<?php echo $uid; ?> .olo-mm-search-empty { padding: 16px 18px; color: var(--olo-color-text-faint, #9ca3af); font-size: 14px; }
-        /* Gli stili form globali (.olo-template input:focus) aggiungono il ring
-           --olo-form-focus-shadow: l'input dell'overlay è "nudo" per design. */
-        .<?php echo $uid; ?> .olo-mm-search-input:focus { border: none; box-shadow: none; outline: none; }
+        /* Il focus si vede su tutta la casella bianca (olo-casella + :focus-within, col suo raggio), non sul
+           campo: l'anello delle ricerche (.olo-template input[type=search]:focus, 0,3,1) batteva la regola
+           qui sotto (0,3,0) e disegnava un rettangolo attorno al campo, dentro la casella. Lo sfondo
+           attorno è scuro e sfocato: l'anello è più pieno di quello delle caselle su fondo chiaro. */
+        .<?php echo $uid; ?> .olo-mm-search-box:focus-within { box-shadow: 0 0 0 3px color-mix(in srgb, <?php echo $ac ?: 'var(--olo-color-primary, #e1474f)'; ?> 65%, transparent), 0 24px 70px rgba(0,0,0,.35); }
+        .<?php echo $uid; ?> .olo-mm-search-box .olo-mm-search-input:is(:focus, :focus-visible) { border: none; box-shadow: none; outline: none; }
         @media (max-width: 640px) {
             .<?php echo $uid; ?> .olo-mm-search-overlay { padding: 9vh 24px 16px; }
             .<?php echo $uid; ?> .olo-mm-search-form { padding: 13px 16px; }
@@ -1854,6 +1857,9 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             flex: 1; padding: 12px 16px; background: transparent; border: none; color: <?php echo $mob_tc; ?>; font-size: 16px; outline: none;
         }
         .<?php echo $uid; ?> .olo-mm-fs-search input::placeholder { color: rgba(255,255,255,.4); }
+        /* La pillola (campo + lente) mostra il focus tutta intera; il campo dentro resta nudo */
+        .<?php echo $uid; ?> .olo-mm-fs-search form:focus-within { box-shadow: 0 0 0 3px color-mix(in srgb, <?php echo $mob_acc; ?> 65%, transparent); }
+        .<?php echo $uid; ?> .olo-mm-fs-search form input:is(:focus, :focus-visible) { border: none; box-shadow: none; outline: none; }
         .<?php echo $uid; ?> .olo-mm-fs-search button {
             background: none; border: none; padding: 12px 16px; cursor: pointer;
         }
@@ -3225,7 +3231,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                 <?php // Selettore lingua: la barra lo nasconde sotto il breakpoint, qui resta raggiungibile.
                 $this->render_mobile_lang( $s, 'top', 'fullscreen' ); if ( $mob_search ) : ?>
                 <div class="olo-mm-fs-search">
-                    <form action="<?php echo esc_url( home_url('/') ); ?>" method="get" role="search">
+                    <form class="olo-casella" action="<?php echo esc_url( home_url('/') ); ?>" method="get" role="search">
                         <input type="search" name="s" placeholder="<?php echo esc_attr( olobuild_t( 'Cerca...' ) ); ?>" autocomplete="off">
                         <button type="submit" aria-label="<?php echo esc_attr( olobuild_t( 'Cerca' ) ); ?>"><?php echo $search_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from get_search_svg() (hardcoded strings) ?></button>
                     </form>
@@ -3328,7 +3334,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             ?>
             <div class="olo-mm-search-overlay<?php echo $is_cmd ? ' olo-mm-search-overlay--cmd' : ''; ?>" role="dialog" aria-modal="true" aria-label="<?php echo esc_attr( olobuild_t( 'Cerca' ) ); ?>" hidden>
                 <div class="olo-mm-search-overlay-backdrop" data-olo-search-close></div>
-                <div class="olo-mm-search-box">
+                <div class="olo-mm-search-box olo-casella">
                     <form class="olo-mm-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>" method="get" role="search">
                         <span class="olo-mm-search-box-icon"><?php echo $search_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from get_search_svg() (hardcoded strings) ?></span>
                         <input type="search" name="s" class="olo-mm-search-input" placeholder="<?php echo esc_attr( $is_cmd ? olobuild_t( 'Cerca o digita…' ) : olobuild_t( 'Cerca nel sito…' ) ); ?>" autocomplete="off" />

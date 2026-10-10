@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.630 - 2026-10-10 (fix)
+- Mega Menu, ricerca «Overlay a tutta pagina» e «Command palette (⌘K)», e ricerca del menu mobile a schermo intero: scrivendo si evidenzia tutta la casella, col suo raggio. Prima compariva un rettangolo attorno al solo campo, dentro la casella.
+
 ## v1.4.629 - 2026-10-10 (novità)
 - Blocchi & Pagine: i 257 blocchi presi dai temi hanno le stesse aperture a strati dei temi e le foto nuove. Anche le miniature sono rifatte.
 
