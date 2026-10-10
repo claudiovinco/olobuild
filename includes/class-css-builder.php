@@ -1446,25 +1446,50 @@ class Olobuild_CSS_Builder {
             'wave'     => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M0,30 Q25,0 50,30 T100,30 L100,100 L0,100 Z" fill="black"/></svg>',
         ];
 
-        if ( ! isset( $svg_map[ $mask_type ] ) ) {
+        // «Immagine personalizzata» (pannello Effetti → Maschera): la forma è un'immagine scelta
+        // dall'utente (PNG/WebP/SVG con le parti trasparenti, o una JPG letta per chiari e scuri).
+        if ( 'custom' === $mask_type ) {
+            $url = esc_url_raw( trim( (string) ( $style['mask_image'] ?? '' ) ) );
+            if ( '' === $url ) {
+                return [];
+            }
+            $image = 'url("' . str_replace( [ '"', '\\', "\n", "\r" ], [ '%22', '%5C', '', '' ], $url ) . '")';
+        } elseif ( isset( $svg_map[ $mask_type ] ) ) {
+            $image = 'url("data:image/svg+xml,' . rawurlencode( $svg_map[ $mask_type ] ) . '")';
+        } else {
             return [];
         }
 
-        $svg_encoded = 'data:image/svg+xml,' . rawurlencode( $svg_map[ $mask_type ] );
-        $size     = esc_attr( $style['mask_size'] ?? 'contain' );
-        $position = esc_attr( $style['mask_position'] ?? 'center' );
-        $repeat   = esc_attr( $style['mask_repeat'] ?? 'no-repeat' );
+        // Valori ammessi: arrivano dallo stile salvato, finiscono in un attributo style.
+        $size = trim( (string) ( $style['mask_size'] ?? '' ) );
+        if ( ! preg_match( '/^(contain|cover|auto|100% 100%|\d{1,3}%)$/', $size ) ) {
+            $size = 'contain';
+        }
+        $position = trim( (string) ( $style['mask_position'] ?? '' ) );
+        if ( ! preg_match( '/^(center|top|bottom|left|right)( (center|top|bottom|left|right))?$/', $position ) ) {
+            $position = 'center';
+        }
+        $repeat = (string) ( $style['mask_repeat'] ?? '' );
+        if ( ! in_array( $repeat, [ 'no-repeat', 'repeat', 'repeat-x', 'repeat-y', 'space', 'round' ], true ) ) {
+            $repeat = 'no-repeat';
+        }
 
-        return [
-            '-webkit-mask-image: url("' . $svg_encoded . '")',
+        $css = [
+            '-webkit-mask-image: ' . $image,
             '-webkit-mask-size: ' . $size,
             '-webkit-mask-position: ' . $position,
             '-webkit-mask-repeat: ' . $repeat,
-            'mask-image: url("' . $svg_encoded . '")',
+            'mask-image: ' . $image,
             'mask-size: ' . $size,
             'mask-position: ' . $position,
             'mask-repeat: ' . $repeat,
         ];
+        // Una JPG non ha trasparenza: la si legge per chiari e scuri (il bianco mostra, il nero nasconde).
+        if ( 'custom' === $mask_type && 'luminance' === ( $style['mask_mode'] ?? '' ) ) {
+            $css[] = '-webkit-mask-source-type: luminance';
+            $css[] = 'mask-mode: luminance';
+        }
+        return $css;
     }
 
     /**

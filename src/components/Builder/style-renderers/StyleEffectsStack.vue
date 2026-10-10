@@ -153,9 +153,12 @@
       </div>
     </div>
 
-    <!-- MASCHERA (non hoverable: solo stato normale) -->
+    <!-- MASCHERA (non hoverable: solo stato normale). «Immagine personalizzata» = la propria
+         forma da una PNG/WebP/SVG con le parti trasparenti (o una JPG in bianco e nero letta per
+         chiari e scuri). Dimensione, posizione e ripetizione valgono per ogni forma: il renderer
+         PHP (build_mask_css) le leggeva già, ma qui non c'erano. -->
     <div v-if="!isHover" class="olo-es-group">
-      <span class="olo-es-gtitle">{{ t('Maschera') }}</span>
+      <span class="olo-es-gtitle olo-es-gtitle--info">{{ t('Maschera') }}<InfoTip :titolo="t('Maschera')" :testo="[t('La maschera ritaglia la tile secondo una forma: si vede solo dove la forma è piena.'), t('Con «Immagine personalizzata» la forma la scegli tu: una PNG o una WebP con le parti trasparenti (anche una SVG, se il sito la accetta). Dove l’immagine è piena la tile si vede, dove è trasparente sparisce. Una JPG in bianco e nero funziona leggendo i chiari e gli scuri: il bianco mostra, il nero nasconde.'), t('Adatta mette tutta la forma dentro la tile, Riempi la allarga finché copre la tile, Stira la deforma fino ai bordi.')]" /></span>
       <div class="olo-es-row">
         <span class="olo-es-lab">{{ t('Forma') }}</span>
         <FieldSelect
@@ -166,6 +169,40 @@
           @update:model-value="onMask($event)"
         />
       </div>
+      <template v-if="mask === 'custom'">
+        <div class="olo-es-field">
+          <span class="olo-es-lab">{{ t('Immagine della forma') }}</span>
+          <FieldImage :model-value="maskImage" @update:model-value="setMask('mask_image', $event)" />
+        </div>
+        <div class="olo-es-row">
+          <span class="olo-es-lab" :title="t('Leggi la forma da')">{{ t('Leggi la forma da') }}</span>
+          <FieldSelect ui="dropdown" class="olo-es-selwrap" :model-value="maskMode" :options="MASK_MODE_OPTIONS"
+            @update:model-value="setMask('mask_mode', $event === 'alpha' ? '' : $event)" />
+        </div>
+      </template>
+      <template v-if="mask !== 'none'">
+        <div class="olo-es-row">
+          <span class="olo-es-lab">{{ t('Dimensione') }}</span>
+          <FieldSelect ui="dropdown" class="olo-es-selwrap" :model-value="maskSizeChoice" :options="MASK_SIZE_OPTIONS"
+            @update:model-value="onMaskSize($event)" />
+        </div>
+        <div v-if="maskSizeChoice === 'pct'" class="olo-es-sliderrow">
+          <span class="olo-es-lab">{{ t('Scala') }}</span>
+          <NumberScrubber class="olo-es-ns" :modelValue="maskSizePct" :min="10" :max="300" :step="5"
+            :defaultValue="100" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Scala della maschera')"
+            @update:modelValue="setMask('mask_size', Math.max(10, Math.min(300, Math.round(Number($event) || 100))) + '%')" />
+        </div>
+        <div class="olo-es-row">
+          <span class="olo-es-lab">{{ t('Posizione') }}</span>
+          <FieldSelect ui="dropdown" class="olo-es-selwrap" :model-value="tileStyle.mask_position || 'center'" :options="ORIGIN_OPTIONS"
+            @update:model-value="setMask('mask_position', $event === 'center' ? '' : $event)" />
+        </div>
+        <div class="olo-es-row">
+          <span class="olo-es-lab">{{ t('Ripetizione') }}</span>
+          <FieldSelect ui="dropdown" class="olo-es-selwrap" :model-value="tileStyle.mask_repeat || 'no-repeat'" :options="MASK_REPEAT_OPTIONS"
+            @update:model-value="setMask('mask_repeat', $event === 'no-repeat' ? '' : $event)" />
+        </div>
+      </template>
     </div>
 
     <!-- Anteprima effetti -->
@@ -197,13 +234,35 @@ const ORIGIN_OPTIONS = [
 const MASK_OPTIONS = [
   { value: 'none', label: 'Nessuna' },
   { value: 'circle', label: 'Cerchio' },
+  { value: 'ellipse', label: 'Ellisse' },
   { value: 'triangle', label: 'Triangolo' },
   { value: 'diamond', label: 'Diamante' },
   { value: 'hexagon', label: 'Esagono' },
   { value: 'star', label: 'Stella' },
   { value: 'blob', label: 'Blob' },
   { value: 'wave', label: 'Onda' },
+  { value: 'custom', label: 'Immagine personalizzata' },
 ];
+const MASK_MODE_OPTIONS = [
+  { value: 'alpha', label: 'Trasparenza (PNG, WebP, SVG)' },
+  { value: 'luminance', label: 'Chiari e scuri (JPG)' },
+];
+// 'pct' = scala in percentuale (salvata come «80%» nella stessa chiave mask_size).
+const MASK_SIZE_OPTIONS = [
+  { value: 'contain', label: 'Adatta' },
+  { value: 'cover', label: 'Riempi' },
+  { value: '100% 100%', label: 'Stira' },
+  { value: 'pct', label: 'Scala in %' },
+];
+const MASK_REPEAT_OPTIONS = [
+  { value: 'no-repeat', label: 'Nessuna' },
+  { value: 'repeat', label: 'Ripeti' },
+  { value: 'repeat-x', label: 'Solo in orizzontale' },
+  { value: 'repeat-y', label: 'Solo in verticale' },
+  { value: 'space', label: 'Ripeti con spazio' },
+];
+import FieldImage from '../fields/FieldImage.vue';
+import InfoTip from '../InfoTip.vue';
 import { useBuilderStore } from '@/stores/builder';
 import { t } from '@/i18n';
 
@@ -330,6 +389,24 @@ function tsGet(prop) {
 
 // ── Maschera (non hoverable) ──
 const mask = computed(() => props.tileStyle.mask || 'none');
+const maskImage = computed(() => String(props.tileStyle.mask_image || ''));
+const maskMode = computed(() => (props.tileStyle.mask_mode === 'luminance' ? 'luminance' : 'alpha'));
+const maskSizeChoice = computed(() => {
+  const s = String(props.tileStyle.mask_size || 'contain');
+  return /^\d{1,3}%$/.test(s) ? 'pct' : (['contain', 'cover', '100% 100%'].includes(s) ? s : 'contain');
+});
+const maskSizePct = computed(() => {
+  const m = String(props.tileStyle.mask_size || '').match(/^(\d{1,3})%$/);
+  return m ? Number(m[1]) : 100;
+});
+// Valori di default salvati come '' (= chiave assente per il PHP): niente dati inutili nel template.
+function setMask(key, value) {
+  emit('update', { type: 'main', key, value });
+}
+function onMaskSize(v) {
+  if (v === 'pct') setMask('mask_size', maskSizePct.value + '%');
+  else setMask('mask_size', v === 'contain' ? '' : v);
+}
 
 // ── Indicatore "ha valori hover" ──
 const hasAnyHover = computed(() => {

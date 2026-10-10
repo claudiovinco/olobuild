@@ -24612,3 +24612,63 @@ msgstr "Rayon des étiquettes"
 #: includes/class-theme-importer.php
 msgid "Arrotondamento delle pillole \"Prima\"/\"Dopo\"."
 msgstr "Arrondi des pastilles « Avant »/« Après »."
+
+#: src/components/Builder/style-renderers/StyleEffectsStack.vue
+msgid "Immagine della forma"
+msgstr "Image de la forme"
+
+#: src/components/Builder/style-renderers/StyleEffectsStack.vue
+msgid "Leggi la forma da"
+msgstr "Lire la forme depuis"
+
+#: src/components/Builder/style-renderers/StyleEffectsStack.vue
+msgid "Trasparenza (PNG, WebP, SVG)"
+msgstr "Transparence (PNG, WebP, SVG)"
+
+#: src/components/Builder/style-renderers/StyleEffectsStack.vue
+msgid "Chiari e scuri (JPG)"
+msgstr "Clairs et sombres (JPG)"
+
+#: src/components/Builder/style-renderers/StyleEffectsStack.vue
+msgid "Adatta"
+msgstr "Ajuster"
+
+#: src/components/Builder/style-renderers/StyleEffectsStack.vue
+msgid "Stira"
+msgstr "Étirer"
+
+#: src/components/Builder/style-renderers/StyleEffectsStack.vue
+msgid "Scala in %"
+msgstr "Échelle en %"
+
+#: src/components/Builder/style-renderers/StyleEffectsStack.vue
+msgid "Scala della maschera"
+msgstr "Échelle du masque"
+
+#: src/components/Builder/style-renderers/StyleEffectsStack.vue
+msgid "Solo in orizzontale"
+msgstr "Horizontalement seulement"
+
+#: src/components/Builder/style-renderers/StyleEffectsStack.vue
+msgid "Solo in verticale"
+msgstr "Verticalement seulement"
+
+#: src/components/Builder/style-renderers/StyleEffectsStack.vue
+msgid "Ripeti con spazio"
+msgstr "Répéter avec espacement"
+
+#: src/components/Builder/style-renderers/StyleEffectsStack.vue
+msgid "Ripetizione"
+msgstr "Répétition"
+
+#: src/components/Builder/style-renderers/StyleEffectsStack.vue
+msgid "La maschera ritaglia la tile secondo una forma: si vede solo dove la forma è piena."
+msgstr "Le masque découpe la tile selon une forme : elle n’apparaît que là où la forme est pleine."
+
+#: src/components/Builder/style-renderers/StyleEffectsStack.vue
+msgid "Con «Immagine personalizzata» la forma la scegli tu: una PNG o una WebP con le parti trasparenti (anche una SVG, se il sito la accetta). Dove l’immagine è piena la tile si vede, dove è trasparente sparisce. Una JPG in bianco e nero funziona leggendo i chiari e gli scuri: il bianco mostra, il nero nasconde."
+msgstr "Avec « Image personnalisée », c’est vous qui choisissez la forme : un PNG ou un WebP avec des zones transparentes (un SVG aussi, si le site l’accepte). Là où l’image est pleine, la tile apparaît ; là où elle est transparente, elle disparaît. Un JPG en noir et blanc fonctionne en lisant les clairs et les sombres : le blanc montre, le noir cache."
+
+#: src/components/Builder/style-renderers/StyleEffectsStack.vue
+msgid "Adatta mette tutta la forma dentro la tile, Riempi la allarga finché copre la tile, Stira la deforma fino ai bordi."
+msgstr "Ajuster place toute la forme dans la tile, Remplir l’agrandit jusqu’à couvrir la tile, Étirer la déforme jusqu’aux bords."
