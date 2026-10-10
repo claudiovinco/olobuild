@@ -2821,8 +2821,23 @@ html:has(.olo-frontend-grid) {
    sezione (9 ott 2026). Tolta l'animazione resta lo stile normale: stessa resa, nessun transform. */
 [class*="olo-entrance-"].olo-ingresso-finito { animation: none; }
 
+/* Stagger figli (Avanzate → Animazione di ingresso): il contenitore resta fermo e ogni figlio entra con la
+   stessa animazione, uno dopo l'altro. Lo script della pagina mette olo-stagger-attivo sul contenitore,
+   olo-stagger-figlio e --olo-sf-anim (nome, durata, curva, ritardo crescente) sui figli, olo-sf-via quando
+   il contenitore entra nello schermo. Senza script niente di questo c'è e il contenitore entra intero. */
+[class*="olo-entrance-"].olo-stagger-attivo { animation: none !important; }
+.olo-stagger-attivo.olo-in-attesa { opacity: 1 !important; }
+.olo-stagger-figlio { opacity: 0; }
+.olo-stagger-figlio.olo-sf-via { opacity: 1; animation: var(--olo-sf-anim) both; }
+.olo-stagger-figlio.olo-sf-via.olo-ingresso-finito { animation: none; }
+.olo-entrance-swing.olo-stagger-attivo .olo-stagger-figlio { transform-origin: top center; }
+.olo-entrance-hinge.olo-stagger-attivo .olo-stagger-figlio { transform-origin: top left; }
+.olo-entrance-jack-in-box.olo-stagger-attivo .olo-stagger-figlio { transform-origin: center bottom; }
+.olo-entrance-curtain-reveal.olo-stagger-attivo .olo-stagger-figlio { transform-origin: top; }
+
 @media (prefers-reduced-motion: reduce) {
   [class*="olo-entrance-"] { opacity: 1 !important; animation: none !important; transform: none !important; filter: none !important; }
+  .olo-stagger-figlio { opacity: 1 !important; animation: none !important; transform: none !important; filter: none !important; }
 }
 
 /* ── Olobuild switcher: fallback display per pre-UIkit-init ────────── */

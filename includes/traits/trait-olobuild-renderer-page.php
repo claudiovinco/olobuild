@@ -942,18 +942,50 @@ trait Olobuild_Renderer_Page_Trait {
               var ridotto = false;
               try { ridotto = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(_){}
               var obs = null;
-              function entra(el){
-                if(el.classList.contains('olo-stagger-parent')){
-                  var delay = parseInt(getComputedStyle(el).getPropertyValue('--olo-stagger-delay')) || 100;
-                  var children = el.querySelectorAll('.olo-frontend-tile');
-                  if(!children.length){
-                    children = el.querySelectorAll('[uk-grid] > *, .uk-slider-items > *, .uk-accordion > li, .uk-list > li, .olo-tl-item, .olo-postgrid-item, .olo-gal-item, .olo-car-slide, .olo-pl-item, .olo-test-card');
-                  }
-                  children.forEach(function(child, i){
-                    child.style.transitionDelay = (i * delay) + 'ms';
-                    child.style.animationDelay = (i * delay) + 'ms';
+              /* Stagger figli: il contenitore resta fermo e ogni figlio entra con la STESSA animazione, uno dopo
+                 l'altro (frontend.css: olo-stagger-attivo, olo-stagger-figlio, olo-sf-via). Prima il ritardo finiva
+                 sui figli, che non avevano nessuna animazione, e si muoveva il contenitore intero: tutto insieme.
+                 Figli = per una tile le sue voci (foto, schede, righe dell'elenco); per sezione, riga e colonna i
+                 figli veri, saltando i contenitori con un solo figlio e i livelli di sfondo in posizione assoluta. */
+              var VOCI = '[uk-grid] > *, .uk-slider-items > *, .uk-accordion > li, .uk-list > li, .olo-tl-item, .olo-postgrid-item, .olo-gal-item, .olo-car-slide, .olo-pl-item, .olo-test-card';
+              function figliDi(el){
+                if(el.classList.contains('olo-frontend-tile')) return Array.prototype.slice.call(el.querySelectorAll(VOCI));
+                var nodo = el;
+                for(var giro = 0; giro < 5; giro++){
+                  var f = Array.prototype.filter.call(nodo.children, function(c){
+                    if(/^(STYLE|SCRIPT|TEMPLATE|NOSCRIPT|LINK)$/.test(c.tagName)) return false;
+                    var cs = getComputedStyle(c);
+                    if(cs.display === 'none') return false;
+                    return cs.position !== 'absolute' ? cs.position !== 'fixed' : false;
                   });
+                  if(f.length !== 1) return f;
+                  if(f[0].classList.contains('olo-frontend-tile')) return f;
+                  nodo = f[0];
                 }
+                return [];
+              }
+              function ms(v){ v = String(v || '0'); var n = parseFloat(v) || 0; return v.indexOf('ms') > -1 ? n : n * 1000; }
+              function preparaStagger(el){
+                if(el._oloFigli) return;
+                var cs = getComputedStyle(el);
+                var nome = String(cs.animationName || '').split(',')[0].trim();
+                if(nome.indexOf('olo-fx-') !== 0) return;
+                // un figlio con un ingresso suo continua a usare quello
+                var figli = figliDi(el).filter(function(c){ return !/(^|\s)olo-entrance-/.test(c.className); });
+                if(figli.length < 2) return;
+                var passo = parseInt(cs.getPropertyValue('--olo-stagger-delay')) || 100;
+                var dur = String(cs.animationDuration).split(',')[0].trim();
+                var curva = String(cs.animationTimingFunction).split(/,(?![^(]*\))/)[0].trim();
+                var base = ms(String(cs.animationDelay).split(',')[0]);
+                figli.forEach(function(c, i){
+                  c.classList.add('olo-stagger-figlio');
+                  c.style.setProperty('--olo-sf-anim', nome + ' ' + dur + ' ' + curva + ' ' + Math.round(base + i * passo) + 'ms');
+                });
+                el._oloFigli = figli;
+                el.classList.add('olo-stagger-attivo');
+              }
+              function entra(el){
+                if(el._oloFigli){ el._oloFigli.forEach(function(c){ c.classList.add('olo-sf-via'); }); }
                 // Insieme, nello stesso istante: con fill-mode both la posa di partenza vale subito,
                 // anche durante il ritardo (nessun lampo della tile ferma prima dell'animazione)
                 el.classList.add('olo-visible');
@@ -985,6 +1017,8 @@ trait Olobuild_Renderer_Page_Trait {
                 els.forEach(function(el){
                   if(el.dataset.oloIngresso) return;
                   el.dataset.oloIngresso = '1';
+                  // prima di metterlo in attesa: l'animazione del contenitore si legge mentre ce l'ha ancora
+                  if(el.classList.contains('olo-stagger-parent')) preparaStagger(el);
                   // sotto la zona visibile: in attesa (una tile nascosta, alta 0, non si tocca)
                   var r = el.getBoundingClientRect();
                   if(r.height > 0){
@@ -993,6 +1027,8 @@ trait Olobuild_Renderer_Page_Trait {
                       el.classList.add('olo-in-attesa');
                     }
                   }
+                  // già sullo schermo: i figli partono subito, uno dopo l'altro
+                  if(el._oloFigli){ if(!el.classList.contains('olo-in-attesa')) entra(el); }
                   obs.observe(el);
                 });
               }
@@ -1002,11 +1038,15 @@ trait Olobuild_Renderer_Page_Trait {
                 var el = e.target;
                 if(!el || !el.classList || String(e.animationName || '').indexOf('olo-fx-') !== 0) return;
                 if(el.classList.contains('olo-visible')) el.classList.add('olo-ingresso-finito');
+                else if(el.classList.contains('olo-sf-via')) el.classList.add('olo-ingresso-finito');
               }, true);
               // Tile montate a richiesta (il loro HTML arriva da un template quando ci si avvicina)
               document.addEventListener('olo:lazy-hydrated', function(ev){
                 if(ev.detail){ prepara(ev.detail.target); }
               });
+              // Anteprima del builder: a ogni modifica l'iframe-bridge rimette l'HTML resa dal PHP e lo annuncia.
+              // I nodi nuovi si preparano come al caricamento (lo stagger si vede mentre lo si imposta).
+              document.addEventListener('olo:iframe-render', function(){ prepara(document); });
               if(document.readyState === 'loading'){
                 document.addEventListener('DOMContentLoaded', function(){ prepara(document); });
               } else {

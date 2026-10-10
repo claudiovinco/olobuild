@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.621 - 2026-10-10 (fix)
+- Animazione di ingresso con «Stagger figli» (su colonne, righe, sezioni e sulle tile con più voci): i figli entravano tutti insieme, perché si animava il contenitore intero. Ora il contenitore resta fermo e ogni figlio entra con la stessa animazione, uno dopo l’altro, col ritardo scelto. Si vede anche nell’anteprima del builder mentre lo imposti.
+
 ## v1.4.619 - 2026-10-10 (novità)
 - Stile → Effetti → Maschera: c’è la forma «Immagine personalizzata». Scegli una PNG o una WebP con le parti trasparenti (o una JPG in bianco e nero, letta per chiari e scuri) e la tile prende quella sagoma. Per ogni forma ci sono anche Dimensione (Adatta, Riempi, Stira o una scala in percentuale), Posizione e Ripetizione; fra le forme pronte si aggiunge l’Ellisse.
 
