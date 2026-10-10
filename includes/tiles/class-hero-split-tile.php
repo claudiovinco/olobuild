@@ -378,6 +378,19 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
                     $sc_badge_bg  = $this->safe_color_css( $s['showcase_badge_bg'] ) ?: '#ffffff';
                     $sc_badge_col = $this->safe_color_css( $s['showcase_badge_color'] ?? '' ) ?: '#0f172a';
                     $items        = is_array( $s['showcase_items'] ) ? array_slice( $s['showcase_items'], 0, 4 ) : [];
+                    // Didascalie sotto le card: il grigio tenue del tema (--olo-color-text-faint) è per i fondi
+                    // chiari, ma il pannello di serie è scuro e lì stava a 2,6:1. Decide il fondo del pannello;
+                    // se è velato (sotto il 50%) decide il titolo, che segue il fondo dell'apertura.
+                    $sc_lum = ( is_array( $sc_bg_obj ) && in_array( $sc_bg_obj['type'] ?? '', [ 'solid', 'color' ], true ) )
+                        ? Olobuild_Tile_Utils::luminanza( $sc_bg_obj['color'] ?? '' ) : null;
+                    if ( null === $sc_lum ) {
+                        $hl0    = ( is_array( $s['headline_lines'] ) && isset( $s['headline_lines'][0]['color'] ) ) ? $s['headline_lines'][0]['color'] : '';
+                        $lum_hl = Olobuild_Tile_Utils::luminanza( $this->safe_color_css( $hl0 ) );
+                        $sc_lum = null === $lum_hl ? null : ( $lum_hl > 0.4 ? 0.0 : 1.0 );
+                    }
+                    $sc_caption_clr = ( null !== $sc_lum && $sc_lum < 0.18 )
+                        ? 'color-mix(in srgb, var(--olo-color-light, #ffffff) 62%, transparent)'
+                        : 'var(--olo-color-text-faint, #9ca3af)';
                 ?>
                     <div class="olo-hsplit__right"<?php echo $plx_right; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- uk-parallax attribute built above from fixed numbers, esc_attr()'d ?> style="<?php echo esc_attr( $showcase_bg_css ); ?>;<?php if ( $sc_radius ) echo 'border-radius:' . esc_attr( $sc_radius ) . ';'; ?>padding:<?php echo esc_attr( $sc_padding_css ); ?>;position:relative;min-height:480px;display:flex;flex-direction:column<?php if ( $sc_radius_h ) echo ';transition:border-radius ' . (int) $sc_rdur . 'ms ease'; ?>">
                         <?php if ( ! empty( $s['showcase_badge_text'] ) ) : ?>
@@ -423,7 +436,8 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
                                     <div class="olo-hsplit__card olo-hsplit__card--<?php echo (int) $idx; ?>" style="<?php echo esc_attr( $card_bg_css ); ?>;position:relative;overflow:hidden;<?php if ( $card_radius ) echo 'border-radius:' . esc_attr( $card_radius ) . ';'; ?>padding:24px;display:flex;flex-direction:column;justify-content:space-between;min-height:180px;<?php echo esc_attr( $shadow_css ); ?>transition:border-radius <?php echo (int) $card_rdur; ?>ms cubic-bezier(.4,0,.2,1),transform .3s ease,box-shadow .3s ease"><?php
                                         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup <video>/gallery generato sopra con esc_url/esc_attr
                                         echo $card_media; ?>
-                                        <div style="position:relative;z-index:1;font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:11px;color:var(--olo-color-text-faint, #9ca3af);letter-spacing:0.05em" data-olo-editable="<?php echo 'showcase_items.' . intval( $idx ) . '.number'; ?>"><?php echo esc_html( $num ); ?></div>
+                                        <?php // numero della card nel colore della sua parola (prima il grigio tenue del tema, sulla foto 1,4:1) ?>
+                                        <div style="position:relative;z-index:1;font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:11px;color:color-mix(in srgb, <?php echo esc_attr( $txt_clr ); ?> 80%, transparent);letter-spacing:0.05em" data-olo-editable="<?php echo 'showcase_items.' . intval( $idx ) . '.number'; ?>"><?php echo esc_html( $num ); ?></div>
                                         <div class="olo-hsplit__card-word" style="position:relative;z-index:1;font-family:<?php echo esc_attr( $headline_family ); ?>;font-size:36px;font-weight:500;color:<?php echo esc_attr( $txt_clr ); ?>;text-align:center;<?php echo esc_attr( $italic ); ?>" data-olo-editable="<?php echo 'showcase_items.' . intval( $idx ) . '.text'; ?>"><?php echo esc_html( $txt ); ?></div>
                                     </div>
                                 <?php endforeach; ?>
@@ -431,7 +445,7 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
                         <?php endif; ?>
 
                         <?php if ( ! empty( $s['showcase_caption_left'] ) || ! empty( $s['showcase_caption_right'] ) ) : ?>
-                            <div class="olo-hsplit__captions" style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--olo-color-text-faint, #9ca3af)">
+                            <div class="olo-hsplit__captions" style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $sc_caption_clr ); ?>">
                                 <span data-olo-editable="showcase_caption_left"><?php echo esc_html( $s['showcase_caption_left'] ); ?></span>
                                 <span data-olo-editable="showcase_caption_right"><?php echo esc_html( $s['showcase_caption_right'] ); ?></span>
                             </div>

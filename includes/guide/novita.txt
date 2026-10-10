@@ -3,6 +3,11 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.642 - 2026-10-11 (fix)
+- Temi: tutti i 52 temi ricontrollati pagina per pagina, misurando il contrasto di ogni testo sul fondo vero. Corretti i testi poco leggibili: sezioni contatti, pulsanti e il loro passaggio del mouse, parole colorate dei titoli, briciole delle testate, numeri, prezzi, segnaposto dei moduli. In sei temi c'è un video di sottofondo (Fenice Calcio, Passo Lento, Vinile Club, Tostatura Nove, Orto Vivo, Riga di Comando).
+- Pulsanti, Prezzi, Modulo e Newsletter: se si sceglie lo sfondo al passaggio del mouse ma non il colore del testo, il testo prende da solo il chiaro o lo scuro della palette quando quello di sempre non si leggerebbe. Prima poteva sparire, per esempio chiaro su un giallo.
+- Testi piccoli più leggibili in diverse tile: numeri di riga ed etichetta del Codice, date e anni della Timeline (anche i nodi seguono il colore delle card), periodo e note dei Prezzi, passo e punteggio del Quiz, fusi orari, note del Proiettore e del Configuratore, stato delle Presenze, numero dei passaggi in attesa nel Progress tracker, numeri e didascalie dell'Hero split, fumetto della chat dell'Hero su colori chiari. Nella barra del titolo le briciole sono a colore pieno e sottolineate. Nelle mappe i link dell'attribuzione restano scuri invece di prendere il colore dei link del sito.
+
 ## v1.4.641 - 2026-10-10 (fix)
 - Demo dei temi: la modalità scura scelta sul sito che le ospita non vale più nelle demo. Prima un tema senza interruttore si apriva in scuro con la palette scura di serie (indaco su ardesia, testi chiari su schede chiare, bianco sul giallo). I temi che hanno l'interruttore (Margini) tengono in scuro i colori del loro marchio, come dopo l'import.
 

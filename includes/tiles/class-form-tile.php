@@ -226,6 +226,9 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
         $btn_bg      = $this->safe_color_css( $s['submit_bg'] );
         $btn_color   = $this->safe_color_css( $s['submit_color'] );
         $btn_hover   = $this->safe_color_css( $s['submit_hover_bg'] );
+        // Il form non ha un colore del testo in hover: sul fondo in hover scelto il testo di sempre
+        // poteva sparire (giallo su ocra 1,5:1). Se non si legge, il chiaro o lo scuro della Palette.
+        $btn_hover_fg = $btn_hover ? Olobuild_Tile_Utils::testo_su_fondo( $btn_hover, $btn_color ?: '#FFFFFF' ) : '';
         $btn_bg_dur  = Olobuild_Tile_Utils::durata_hover( $s, 'submit_bg_hover_duration', '0.2s' );
         $btn_radius  = $this->build_border_radius_css( $s["submit_radius"] );
         $btn_radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['submit_radius_hover'] ?? null );
@@ -495,7 +498,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
             <?php // UIkit fa posto all'icona solo nei campi di testo (.uk-input): nella tendina l'icona copriva il testo. ?>
             .<?php echo $uid; ?> .uk-form-icon:not(.uk-form-icon-flip) ~ .uk-select{padding-left:2.5em !important}
             .<?php echo $uid; ?> .olo-f-btn{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #e1474f)'; ?>;color:<?php echo $btn_color; ?>;<?php if ( $submit_ff ) : ?>font-family:<?php echo $submit_ff; ?>;<?php endif; ?>border:none<?php if ( $btn_border_css !== '' ) : ?>;<?php echo rtrim( $btn_border_css, ';' ); ?><?php endif; ?>;border-radius:<?php echo $btn_radius; ?>;padding:<?php echo Olobuild_Tile_Utils::sides_css( $btn_pad ); ?>;font-size:<?php echo $btn_fs; ?>px;font-weight:<?php echo $btn_fw; ?>;cursor:pointer;transition:background <?php echo $btn_bg_dur; ?> ease,<?php echo $btn_hover_border['transition'] ?: 'border-color 0.2s ease'; ?>,transform 0.15s ease;display:inline-flex;align-items:center;gap:8px<?php if ( $btn_ls > 0 ) : ?>;letter-spacing:<?php echo $btn_ls; ?>px<?php endif; ?><?php if ( $btn_tt !== 'none' ) : ?>;text-transform:<?php echo $btn_tt; ?><?php endif; ?><?php if ( $btn_full ) : ?>;width:100%;justify-content:center<?php endif; ?>}
-            .<?php echo $uid; ?> .olo-f-btn:hover{background:<?php echo $btn_hover ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 85%, #000)'; ?><?php if ( $btn_hover_border['decls'] !== '' ) : ?>;<?php echo rtrim( $btn_hover_border['decls'], ';' ); ?><?php endif; ?><?php if ( $btn_radius_hover_css !== '' ) : ?>;border-radius:<?php echo $btn_radius_hover_css; ?> !important<?php endif; ?>}
+            .<?php echo $uid; ?> .olo-f-btn:hover{background:<?php echo $btn_hover ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 85%, #000)'; ?><?php if ( $btn_hover_fg !== '' ) : ?>;color:<?php echo $btn_hover_fg; ?><?php endif; ?><?php if ( $btn_hover_border['decls'] !== '' ) : ?>;<?php echo rtrim( $btn_hover_border['decls'], ';' ); ?><?php endif; ?><?php if ( $btn_radius_hover_css !== '' ) : ?>;border-radius:<?php echo $btn_radius_hover_css; ?> !important<?php endif; ?>}
             .<?php echo $uid; ?> .olo-f-btn:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent)}
             .<?php echo $uid; ?> .olo-f-btn:active{transform:translateY(1px)}
             .<?php echo $uid; ?> .olo-f-btn:disabled{opacity:0.6;cursor:not-allowed}

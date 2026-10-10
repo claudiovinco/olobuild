@@ -197,6 +197,9 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
         // Tutti i valori sono no-op coi default: $has_scene false → CSS/markup identici a prima.
         $accent_set  = $this->safe_color_css( $s['accent'] ?? '' );
         $accent_css  = $accent_set ?: 'var(--olo-color-primary, #e1474f)';
+        // Testo sul colore d'accento (fumetto «tu» della chat): era bianco fisso, e su un accento
+        // chiaro (lavanda, giallo) stava a 2,2:1. Accento chiaro → scuro della Palette.
+        $accent_on   = Olobuild_Tile_Utils::testo_su_fondo( $accent_css, '#ffffff' ) ?: '#fff';
         $mb          = $this->bg_media_parts( $s['media_bg'] ?? null, $uid );
         $o_top       = max( 0, min( 1, floatval( $s['overlay_top'] ?? 0 ) ) );
         $o_bot       = max( 0, min( 1, floatval( $s['overlay_bottom'] ?? 0 ) ) );
@@ -398,7 +401,7 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-hero-chatwin{max-width:760px;margin:0 auto;border:1px solid <?php echo $mixc( 10 ); ?>;border-radius:16px 16px 0 0;background:<?php echo $mixc( 5 ); ?>;overflow:hidden;text-align:left;box-shadow:0 -10px 90px -24px <?php echo $mix( $accent_css, 0.4 ); ?>;}
             .<?php echo $uid; ?> .olo-hero-chatbody{padding:22px;display:flex;flex-direction:column;gap:16px;}
             .<?php echo $uid; ?> .olo-hero-msg{max-width:80%;padding:13px 16px;border-radius:14px;font-size:14.5px;line-height:1.5;}
-            .<?php echo $uid; ?> .olo-hero-msg.you{align-self:flex-end;background:<?php echo $accent_css; ?>;color:#fff;border-bottom-right-radius:4px;}
+            .<?php echo $uid; ?> .olo-hero-msg.you{align-self:flex-end;background:<?php echo $accent_css; ?>;color:<?php echo $accent_on; ?>;border-bottom-right-radius:4px;}
             .<?php echo $uid; ?> .olo-hero-msg.ai{align-self:flex-start;background:<?php echo $mixc( 8 ); ?>;border:1px solid <?php echo $mixc( 10 ); ?>;border-bottom-left-radius:4px;opacity:.92;}
             @media(max-width:680px){.<?php echo $uid; ?> .olo-hero-msg{max-width:92%;}}
             <?php endif; ?>

@@ -213,21 +213,25 @@ class Olobuild_Pagetitlebar_Tile extends Olobuild_Tile_Base {
     }
 
     private function render_breadcrumbs( $separator, $color ) {
+        // Link delle briciole: colore pieno e sottolineatura tenue (11 ott 2026). Prima opacità .7 e
+        // niente sottolineatura: su una fascia colorata «Home» scendeva a 2,3-3,2:1, e si distingueva
+        // dalla pagina corrente solo per essere più sbiadito.
+        $link  = 'color:' . $color . ';text-decoration:underline;text-decoration-color:color-mix(in srgb,currentColor 45%,transparent);text-underline-offset:3px';
         $items = [];
-        $items[] = '<a href="' . esc_url( home_url( '/' ) ) . '" style="color:' . $color . ';text-decoration:none;opacity:.7">Home</a>';
+        $items[] = '<a href="' . esc_url( home_url( '/' ) ) . '" style="' . $link . '">Home</a>';
 
         if ( is_singular() ) {
             global $post;
             if ( is_singular( 'post' ) ) {
                 $cats = get_the_category();
                 if ( ! empty( $cats ) ) {
-                    $items[] = '<a href="' . esc_url( get_category_link( $cats[0]->term_id ) ) . '" style="color:' . $color . ';text-decoration:none;opacity:.7">' . esc_html( $cats[0]->name ) . '</a>';
+                    $items[] = '<a href="' . esc_url( get_category_link( $cats[0]->term_id ) ) . '" style="' . $link . '">' . esc_html( $cats[0]->name ) . '</a>';
                 }
             }
             if ( $post ) {
                 $ancestors = array_reverse( get_post_ancestors( $post ) );
                 foreach ( $ancestors as $anc ) {
-                    $items[] = '<a href="' . esc_url( get_permalink( $anc ) ) . '" style="color:' . $color . ';text-decoration:none;opacity:.7">' . esc_html( get_the_title( $anc ) ) . '</a>';
+                    $items[] = '<a href="' . esc_url( get_permalink( $anc ) ) . '" style="' . $link . '">' . esc_html( get_the_title( $anc ) ) . '</a>';
                 }
                 $items[] = '<span>' . esc_html( get_the_title() ) . '</span>';
             }

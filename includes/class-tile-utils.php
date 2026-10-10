@@ -417,6 +417,55 @@ class Olobuild_Tile_Utils {
         return '';
     }
 
+    /**
+     * Luminanza relativa (WCAG) di un colore coi token della Palette risolti; null se è vuoto,
+     * velato sotto il 50% o non si risolve.
+     */
+    public static function luminanza( $color ) {
+        $c = trim( (string) $color );
+        if ( '' === $c || 'transparent' === strtolower( $c ) ) {
+            return null;
+        }
+        if ( preg_match( '/^color-mix\(.+\s([\d.]+)%\s*,\s*transparent\s*\)$/is', $c, $m ) && (float) $m[1] < 50 ) {
+            return null;
+        }
+        $hex = self::colore_hex( $c );
+        if ( '' === $hex ) {
+            return null;
+        }
+        $l = 0.0;
+        foreach ( [ 1 => 0.2126, 3 => 0.7152, 5 => 0.0722 ] as $i => $k ) {
+            $v  = hexdec( substr( $hex, $i, 2 ) ) / 255;
+            $l += $k * ( $v <= 0.03928 ? $v / 12.92 : pow( ( $v + 0.055 ) / 1.055, 2.4 ) );
+        }
+        return $l;
+    }
+
+    /**
+     * Il testo di un pulsante sul suo sfondo in hover, quando lo sfondo è scelto e il colore del
+     * testo in hover no: '' se il testo di sempre si legge (4,5:1), altrimenti il chiaro o lo scuro
+     * della Palette, quello che si legge meglio. Prima restava il testo di sempre: chiaro su un
+     * hover giallo, bianco su un hover quasi bianco (1,05:1).
+     */
+    public static function testo_su_fondo( $fondo, $testo ) {
+        $lf = self::luminanza( $fondo );
+        if ( null === $lf ) {
+            return '';
+        }
+        $rapporto = static function ( $a, $b ) {
+            return ( max( $a, $b ) + 0.05 ) / ( min( $a, $b ) + 0.05 );
+        };
+        $lt = self::luminanza( $testo );
+        if ( null !== $lt && $rapporto( $lf, $lt ) >= 4.5 ) {
+            return '';
+        }
+        $chiaro = self::luminanza( 'var(--olo-color-light, #ffffff)' );
+        $scuro  = self::luminanza( 'var(--olo-color-dark, #14161c)' );
+        $chiaro = null === $chiaro ? 1.0 : $chiaro;
+        $scuro  = null === $scuro ? 0.0085 : $scuro;
+        return $rapporto( $lf, $chiaro ) >= $rapporto( $lf, $scuro ) ? 'var(--olo-color-light, #ffffff)' : 'var(--olo-color-dark, #14161c)';
+    }
+
     /** I token --olo-color-* come li scrive Olobuild_Style_System::generate_css(), per richiesta. */
     private static function token_colori() {
         static $mappa = null;

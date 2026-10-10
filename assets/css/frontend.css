@@ -1012,6 +1012,13 @@ html:has(.olo-frontend-grid) {
 .olo-map-canvas .leaflet-control-container {
   z-index: 800;
 }
+/* Attribuzione delle mappe (Leaflet, tutte le tile mappa): i link prendevano il colore dei
+   link del tema (.olo-template a) e sul riquadro grigio chiaro dell'attribuzione verde fluo,
+   giallo e ciano sparivano (1,0–1,7:1). Ora il testo scuro dell'attribuzione, sottolineato. */
+.leaflet-container .leaflet-control-attribution a {
+  color: inherit;
+  text-decoration: underline;
+}
 
 /* Gallery lightbox overlay */
 .olo-map-lightbox {

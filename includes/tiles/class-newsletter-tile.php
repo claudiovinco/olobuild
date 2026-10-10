@@ -127,6 +127,10 @@ class Olobuild_Newsletter_Tile extends Olobuild_Tile_Base {
         $align_css   = $align_map[ $s['alignment'] ] ?? 'center';
         $btn_bg      = $s['btn_bg'] ?: $primary;
         $btn_hover   = $s['btn_hover_bg'] ?: $btn_bg;
+        // Sfondo in hover scelto senza il suo testo: se il testo di sempre non si legge sul nuovo
+        // fondo (giallo su arancio 2,3:1), il chiaro o lo scuro della Palette.
+        $btn_fg_h    = ! empty( $s['btn_color_hover'] ) ? $s['btn_color_hover']
+            : ( ! empty( $s['btn_hover_bg'] ) ? Olobuild_Tile_Utils::testo_su_fondo( $s['btn_hover_bg'], (string) ( $s['btn_color'] ?? '' ) ) : '' );
         $btn_bg_dur  = Olobuild_Tile_Utils::durata_hover( $s, 'btn_bg_hover_duration', '0.2s' );
         $focus_b     = $s['input_focus_border'] ?: $primary;
         $ih          = absint( $s['input_height'] ) ?: 44;
@@ -159,7 +163,7 @@ class Olobuild_Newsletter_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-nl-form input:focus{border-color:<?php echo esc_attr($focus_b); ?>;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent)}
         <?php if ( ! empty( $s['input_placeholder_color'] ) ) : ?>.<?php echo $uid; ?> .olo-nl-form input::placeholder{color:<?php echo esc_attr($s['input_placeholder_color']); ?>;opacity:1}<?php endif; ?>
         .<?php echo $uid; ?> .olo-nl-btn{height:<?php echo $ih; ?>px;padding:0 <?php echo $is_minimal ? '16' : '24'; ?>px;background:<?php echo esc_attr($btn_bg); ?>;color:<?php echo esc_attr($s['btn_color']); ?>;border:none;border-radius:<?php echo $br; ?>px;font-size:<?php echo absint($s['btn_font_size']); ?>px;font-weight:<?php echo esc_attr($s['btn_font_weight']); ?>;cursor:pointer;transition:background <?php echo esc_attr( $btn_bg_dur ); ?>,transform 0.15s<?php if ( $br_h ) echo ', ' . $br_h['transition']; ?>;display:inline-flex;align-items:center;gap:6px;justify-content:center;white-space:nowrap;<?php echo $is_h ? '' : 'width:100%'; ?>}
-        .<?php echo $uid; ?> .olo-nl-btn:hover{background:<?php echo esc_attr($btn_hover); ?>;<?php if ( ! empty( $s['btn_color_hover'] ) ) echo 'color:' . esc_attr( $s['btn_color_hover'] ) . ';'; ?>transform:translateY(-1px)<?php if ( $br_h ) echo ';border-radius:' . $br_h['css'] . ' !important'; ?>}
+        .<?php echo $uid; ?> .olo-nl-btn:hover{background:<?php echo esc_attr($btn_hover); ?>;<?php if ( '' !== $btn_fg_h ) echo 'color:' . esc_attr( $btn_fg_h ) . ';'; ?>transform:translateY(-1px)<?php if ( $br_h ) echo ';border-radius:' . $br_h['css'] . ' !important'; ?>}
         .<?php echo $uid; ?> .olo-nl-btn:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent)}
         .<?php echo $uid; ?> .olo-nl-privacy{font-size:11px;color:<?php echo ! empty( $s['privacy_color'] ) ? esc_attr( $s['privacy_color'] ) : 'var(--olo-color-text-muted,#9CA3AF)'; ?>;margin-top:10px;display:flex;align-items:flex-start;gap:6px;justify-content:center;text-align:left}
         .<?php echo $uid; ?> .olo-nl-privacy a{color:inherit;text-decoration:underline}

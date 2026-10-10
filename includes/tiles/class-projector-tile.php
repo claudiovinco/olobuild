@@ -160,6 +160,7 @@ class Olobuild_Projector_Tile extends Olobuild_Tile_Base {
         ob_start();
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: $accent and $fondo via the safe_color_css() whitelist (or fixed var() fallback), $testo/$filo fixed var()/color-mix() literals chosen by testo_su(), $pad from intval()'d sides, radius/shadow via build_border_radius_css()/Olobuild_Tile_Utils::shadow_value(), border via build_border_css(); $uid is internally generated. ?>
+        <?php // Testi piccoli secondari (nota, etichette) a opacità .8: a .6-.7 scendevano sotto 4,5:1 (11 ott 2026). ?>
         <style>
             .<?php echo $uid; ?>{
                 --pj-accent: <?php echo $accent; ?>;
@@ -179,7 +180,7 @@ class Olobuild_Projector_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .opj-h{font-size:clamp(28px,4vw,46px);line-height:1.1;margin:14px 0 0;color:var(--pj-text);}
             .<?php echo $uid; ?> .opj-h em{font-style:italic;color:var(--pj-accent);}
             .<?php echo $uid; ?> .opj-intro{font-size:15.5px;line-height:1.6;opacity:.85;margin:14px 0 26px;max-width:460px;}
-            .<?php echo $uid; ?> .opj-inlabel{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.7;margin-bottom:12px;}
+            .<?php echo $uid; ?> .opj-inlabel{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.8;margin-bottom:12px;}
             .<?php echo $uid; ?> .opj-range{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:99px;cursor:pointer;background:linear-gradient(to right,var(--pj-accent) var(--pct,50%),var(--pj-line) var(--pct,50%));}
             .<?php echo $uid; ?> .opj-range::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--pj-surface);border:2px solid var(--pj-accent);box-shadow:0 1px 4px rgba(16,24,40,.3);cursor:pointer;}
             .<?php echo $uid; ?> .opj-range::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--pj-surface);border:2px solid var(--pj-accent);cursor:pointer;}
@@ -188,9 +189,9 @@ class Olobuild_Projector_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .opj-r{text-align:center;border-left:1px solid var(--pj-line);padding-left:clamp(18px,4vw,48px);}
             <?php if ( $center ) : ?>.<?php echo $uid; ?> .opj-r{border-left:0;}<?php endif; ?>
             @media(max-width:820px){.<?php echo $uid; ?> .opj-r{border-left:0;border-top:1px solid var(--pj-line);padding-left:0;padding-top:28px;}}
-            .<?php echo $uid; ?> .opj-caption{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.7;}
+            .<?php echo $uid; ?> .opj-caption{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.8;}
             .<?php echo $uid; ?> .opj-out{font-size:clamp(36px,5vw,60px);font-weight:700;line-height:1.05;color:var(--pj-accent);margin:10px 0 14px;font-variant-numeric:tabular-nums;letter-spacing:-.01em;}
-            .<?php echo $uid; ?> .opj-note{font-size:11.5px;line-height:1.5;opacity:.6;max-width:300px;margin:0 auto;}
+            .<?php echo $uid; ?> .opj-note{font-size:11.5px;line-height:1.5;opacity:.8;max-width:300px;margin:0 auto;}
             .<?php echo $uid; ?> .opj-list{list-style:none;margin:0.875rem 0;padding:0;text-align:left;}
             .<?php echo $uid; ?> .opj-list li{display:flex;justify-content:space-between;gap:1rem;padding:0.5625rem 0;border-bottom:1px solid var(--pj-line);font-size:15px;}
             .<?php echo $uid; ?> .opj-list b{color:var(--pj-accent);font-variant-numeric:tabular-nums;white-space:nowrap;}

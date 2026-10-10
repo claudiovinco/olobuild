@@ -91,9 +91,12 @@ class Olobuild_Progresstracker_Tile extends Olobuild_Tile_Base {
                 box-shadow: 0 0 0 4px <?php echo 'color-mix(in srgb, ' . $act_clr . ' 25%, transparent)'; ?>;
                 animation: olo-pt-pulse-<?php echo $uid; ?> 2s ease-in-out infinite;
             }
+            <?php // Il numero del passaggio in attesa: metà colore «in attesa», metà testo. Col solo colore
+                  // dell'anello (spesso al 30-40% di trasparenza, o l'ardesia #94a3b8) il numero stava a
+                  // 1,7:1; l'anello resta tenue. ?>
             .<?php echo $uid; ?> .olo-pt-circle--pending {
                 background: transparent;
-                color: <?php echo $pend_clr; ?>;
+                color: color-mix(in srgb, <?php echo $pend_clr; ?> 50%, <?php echo $text_clr; ?>);
                 border: 3px solid <?php echo $pend_clr; ?>;
             }
 

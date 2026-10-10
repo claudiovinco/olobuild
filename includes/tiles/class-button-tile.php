@@ -141,6 +141,15 @@ class Olobuild_Button_Tile extends Olobuild_Tile_Base {
             $rad_css = ( absint( $rad_raw ) + $bw_compensate ) . 'px';
         }
 
+        // Sfondo in hover scelto senza il testo in hover: se il testo di sempre non si legge sul
+        // nuovo fondo, il chiaro o lo scuro della Palette (vale per questo render, non si salva).
+        if ( is_string( $s['hover_bg_color'] ?? null ) && '' !== $s['hover_bg_color'] && empty( $s['hover_text_color'] ) && ! empty( $s['text_color'] ) && is_string( $s['text_color'] ) ) {
+            $testo_hover = Olobuild_Tile_Utils::testo_su_fondo( $this->safe_color_css( $s['hover_bg_color'] ), $this->safe_color_css( $s['text_color'] ) );
+            if ( '' !== $testo_hover ) {
+                $s['hover_text_color'] = $testo_hover;
+            }
+        }
+
         // Hover CSS dichiarativo — duale dell'helper JS withHover() in _shared.js.
         // Vedi class-tile-base.php::build_hover_css() per il design.
         $hover = $this->build_hover_css( $s, [

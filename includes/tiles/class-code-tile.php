@@ -47,14 +47,16 @@ class Olobuild_Code_Tile extends Olobuild_Tile_Base {
     public function render( $settings ) {
         $s = wp_parse_args( $settings, $this->defaults );
 
-        // Theme colors
+        // Theme colors. «line» colora i numeri di riga e l'etichetta del linguaggio nella testata:
+        // i grigi originali dei temi stavano fra 1,8 e 3,4:1 (illeggibili). Ora la stessa tinta
+        // spinta verso il testo fino a 4,6:1 sia sul fondo sia sulla testata (11 ott 2026).
         $themes = [
-            'github-dark'    => [ 'bg' => '#0d1117', 'text' => '#c9d1d9', 'line' => '#484f58', 'header' => '#161b22' ],
-            'monokai'        => [ 'bg' => '#272822', 'text' => '#f8f8f2', 'line' => '#75715e', 'header' => '#1e1f1c' ],
-            'dracula'        => [ 'bg' => '#282a36', 'text' => '#f8f8f2', 'line' => '#6272a4', 'header' => '#21222c' ],
-            'one-dark'       => [ 'bg' => '#282c34', 'text' => '#abb2bf', 'line' => '#636d83', 'header' => '#21252b' ],
-            'solarized-dark' => [ 'bg' => '#002b36', 'text' => '#839496', 'line' => '#586e75', 'header' => '#073642' ],
-            'light'          => [ 'bg' => '#ffffff', 'text' => '#24292e', 'line' => '#babbbd', 'header' => '#f6f8fa' ],
+            'github-dark'    => [ 'bg' => '#0d1117', 'text' => '#c9d1d9', 'line' => '#7e868e', 'header' => '#161b22' ],
+            'monokai'        => [ 'bg' => '#272822', 'text' => '#f8f8f2', 'line' => '#939080', 'header' => '#1e1f1c' ],
+            'dracula'        => [ 'bg' => '#282a36', 'text' => '#f8f8f2', 'line' => '#8692b7', 'header' => '#21222c' ],
+            'one-dark'       => [ 'bg' => '#282c34', 'text' => '#abb2bf', 'line' => '#8d95a6', 'header' => '#21252b' ],
+            'solarized-dark' => [ 'bg' => '#002b36', 'text' => '#839496', 'line' => '#8e9d9d', 'header' => '#073642' ],
+            'light'          => [ 'bg' => '#ffffff', 'text' => '#24292e', 'line' => '#6e7174', 'header' => '#f6f8fa' ],
         ];
 
         $theme_key = isset( $themes[ $s['theme'] ] ) ? $s['theme'] : 'github-dark';

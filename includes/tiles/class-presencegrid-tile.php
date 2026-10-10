@@ -238,6 +238,7 @@ class Olobuild_Presencegrid_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> {
                 --pg-on:  <?php echo $on_clr; ?>;
                 --pg-off: <?php echo $off_clr; ?>;
+                --pg-text: <?php echo $card_clr; ?>;
             }
             <?php if ( $show_ticker && $ticker_text !== '' ) : ?>
             @keyframes <?php echo $uid; ?>-tick {
@@ -343,14 +344,18 @@ class Olobuild_Presencegrid_Tile extends Olobuild_Tile_Base {
                 font-size: <?php echo max( 9, $role_size - 1 ); ?>px;
                 letter-spacing: .04em;
                 margin-top: 6px;
-                color: var(--pg-off);
+                color: color-mix(in srgb, var(--pg-off) 40%, var(--pg-text));
             }
-            .<?php echo $uid; ?> .olo-pg-card[data-online="1"] .olo-pg-status { color: var(--pg-on); }
+            .<?php echo $uid; ?> .olo-pg-card[data-online="1"] .olo-pg-status { color: color-mix(in srgb, var(--pg-on) 40%, var(--pg-text)); }
+            /* Il colore pieno dello stato sta nel pallino; la parola lo tiene solo come sfumatura del
+               testo della card: un giallo o un verde chiari come testo sparivano sulla card bianca
+               (1,7:1). */
             .<?php echo $uid; ?> .olo-pg-status::before {
                 content: "";
                 width: 6px; height: 6px; border-radius: 50%;
-                background: currentColor;
+                background: var(--pg-off);
             }
+            .<?php echo $uid; ?> .olo-pg-card[data-online="1"] .olo-pg-status::before { background: var(--pg-on); }
 
             .<?php echo $uid; ?> .olo-pg-card:focus-visible {
                 outline: 2px solid var(--olo-color-primary, #e1474f);

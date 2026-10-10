@@ -157,6 +157,7 @@ class Olobuild_Timezone_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
+        <?php // Fuso («UTC+2») ed etichetta dell'ora base a opacità .8: a .55 il testo della card scendeva a 3,5:1 (11 ott 2026). ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour (text colours chosen by testo_su() among those or fixed var()/color-mix() literals), min()/max()/count() integer column count, fixed font-stack and alignment literals; $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?>{ --tz-accent:<?php echo $accent; ?>; font-family:<?php echo $sans; ?>; <?php if ( $center ) echo 'text-align:center;'; ?><?php if ( '' !== $colore_radice ) echo 'color:' . $colore_radice . ';'; ?> }
@@ -164,7 +165,7 @@ class Olobuild_Timezone_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .otz-h{font-family:<?php echo $serif; ?>;font-size:clamp(26px,3.6vw,42px);line-height:1.12;margin:0;color:<?php echo $testo_zona; ?>;}
             .<?php echo $uid; ?> .otz-intro{font-size:15.5px;line-height:1.6;opacity:.8;margin:14px 0 22px;max-width:560px;<?php echo $center ? 'margin-left:auto;margin-right:auto;' : ''; ?>}
             .<?php echo $uid; ?> .otz-base{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;}
-            .<?php echo $uid; ?> .otz-base__l{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.7;}
+            .<?php echo $uid; ?> .otz-base__l{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.8;}
             .<?php echo $uid; ?> .otz-base__v{font-family:<?php echo $serif; ?>;font-size:26px;color:var(--tz-accent);}
             .<?php echo $uid; ?> .otz-range{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:99px;cursor:pointer;background:linear-gradient(to right,var(--tz-accent) var(--pct,60%),<?php echo $line; ?> var(--pct,60%));margin:10px 0 24px;}
             .<?php echo $uid; ?> .otz-range::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--olo-color-surface, #ffffff);border:2px solid var(--tz-accent);box-shadow:0 1px 4px rgba(16,24,40,.3);cursor:pointer;}
@@ -174,7 +175,7 @@ class Olobuild_Timezone_Tile extends Olobuild_Tile_Base {
             @media(max-width:680px){.<?php echo $uid; ?> .otz-grid{grid-template-columns:1fr 1fr;}}
             .<?php echo $uid; ?> .otz-city{background:<?php echo $cardbg; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $line_card ] ) ); ?>border-radius:12px;padding:16px;text-align:left;<?php if ( '' !== $colore_card ) echo 'color:' . $colore_card . ';'; ?>}
             .<?php echo $uid; ?> .otz-city__c{font-weight:600;font-size:14px;color:<?php echo $testo_card; ?>;}
-            .<?php echo $uid; ?> .otz-city__o{font-size:11px;opacity:.55;letter-spacing:.04em;}
+            .<?php echo $uid; ?> .otz-city__o{font-size:11px;opacity:.8;letter-spacing:.04em;}
             .<?php echo $uid; ?> .otz-city__t{font-family:<?php echo $serif; ?>;font-size:24px;margin-top:8px;color:<?php echo $testo_card; ?>;font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:8px;}
             .<?php echo $uid; ?> .otz-dot{width:9px;height:9px;border-radius:50%;background:<?php echo $sleep; ?>;flex:none;}
             .<?php echo $uid; ?> .otz-city[data-state="w"] .otz-dot{background:<?php echo $work; ?>;}

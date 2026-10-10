@@ -204,6 +204,7 @@ class Olobuild_Builder_Tile extends Olobuild_Tile_Base {
         ob_start();
         if ( $layout === 'split' ) : ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css() for every colour, fixed font-stack literals, internal wp_rand() uid). ?>
+        <?php // Note delle voci, totale e contatori a opacità .8: a .6-.75 scendevano sotto 4,5:1 (11 ott 2026). ?>
         <style>
             .<?php echo $uid; ?>{font-family:<?php echo $sans; ?>;}
             .<?php echo $uid; ?> .obds-eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:<?php echo $accent; ?>;display:block;margin-bottom:10px;}
@@ -213,7 +214,7 @@ class Olobuild_Builder_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .obds-intro{color:var(--olo-color-text-muted,#6b7280);font-size:15.5px;line-height:1.6;margin:10px 0 0;max-width:440px;}
             .<?php echo $uid; ?> .obds-tally{display:flex;align-items:center;gap:22px;background:<?php echo $tally; ?>;color:<?php echo $accent; ?>;border-radius:10px;padding:14px 24px;white-space:nowrap;}
             .<?php echo $uid; ?> .obds-tally .cnt b{font-family:<?php echo $disp; ?>;font-weight:800;font-size:28px;line-height:1;color:var(--olo-color-surface,#fff);}
-            .<?php echo $uid; ?> .obds-tally .cnt span{font-weight:600;font-size:13px;opacity:.75;}
+            .<?php echo $uid; ?> .obds-tally .cnt span{font-weight:600;font-size:13px;opacity:.8;}
             .<?php echo $uid; ?> .obds-tally .tot{font-family:<?php echo $disp; ?>;font-weight:800;font-size:28px;line-height:1;border-left:1px solid color-mix(in srgb, <?php echo $accent; ?> 30%, transparent);padding-left:22px;}
             .<?php echo $uid; ?> .obds-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
             .<?php echo $uid; ?> .obds-item{display:flex;align-items:center;justify-content:space-between;gap:16px;background:<?php echo $cardbg; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $cardbd ] ) ); ?>border-radius:10px;padding:16px 20px;transition:border-color .25s,box-shadow .25s;}
@@ -282,7 +283,7 @@ class Olobuild_Builder_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .obd-row.on{}
             .<?php echo $uid; ?> .obd-row__main{flex:1;min-width:0;}
             .<?php echo $uid; ?> .obd-row__name{font-weight:600;font-size:15.5px;color:<?php echo $testo_pannello; ?>;}
-            .<?php echo $uid; ?> .obd-row__note{font-size:13px;opacity:.6;margin-top:2px;}
+            .<?php echo $uid; ?> .obd-row__note{font-size:13px;opacity:.8;margin-top:2px;}
             .<?php echo $uid; ?> .obd-row__price{font-weight:600;font-size:14.5px;color:var(--bd-accent);white-space:nowrap;}
             .<?php echo $uid; ?> .obd-step{display:inline-flex;align-items:center;gap:12px;}
             .<?php echo $uid; ?> .obd-step button{width:32px;height:32px;border-radius:50%;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $cardbd ] ) ); ?>background:transparent;color:<?php echo $testo_pannello; ?>;font-size:18px;line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .15s;}
@@ -293,7 +294,7 @@ class Olobuild_Builder_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .obd-tot{font-family:<?php echo $serif; ?>;}
             .<?php echo $uid; ?> .obd-tot b{font-size:clamp(26px,3.4vw,38px);color:<?php echo $testo_pannello; ?>;font-variant-numeric:tabular-nums;}
             <?php /* Solo la riga dell'etichetta va a capo: con «.obd-tot span» anche il numero e la parola dentro erano blocchi, e «Totale · 3 voci» stava su tre righe. */ ?>
-            .<?php echo $uid; ?> .obd-tot > span{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.6;display:block;}
+            .<?php echo $uid; ?> .obd-tot > span{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.8;display:block;}
             .<?php echo $uid; ?> .obd-cta{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14.5px;color:var(--bd-on);background:var(--bd-accent);padding:13px 26px;border-radius:999px;text-decoration:none;transition:transform .18s;}
             .<?php echo $uid; ?> .obd-cta:hover{transform:translateY(-1px);}
             .<?php echo $uid; ?> .obd-cta:focus-visible{outline:2px solid var(--bd-accent);outline-offset:3px;}
