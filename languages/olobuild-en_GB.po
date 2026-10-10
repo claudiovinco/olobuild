@@ -16594,3 +16594,195 @@ msgstr "Card radius"
 
 msgid "Nome del tema"
 msgstr "Theme name"
+
+msgid "Anelli che girano"
+msgstr "Spinning rings"
+
+msgid "Associazioni e cause"
+msgstr "Non-profits & causes"
+
+msgid "Aurora che respira"
+msgstr "Breathing aurora"
+
+msgid "Aurora e calcolo"
+msgstr "Aurora and calculator"
+
+msgid "Bagliore dorato"
+msgstr "Golden glow"
+
+msgid "Calcolo e ciambelle"
+msgstr "Calculator and doughnut charts"
+
+msgid "Carosello 3D"
+msgstr "3D carousel"
+
+msgid "Cartamodello"
+msgstr "Sewing pattern"
+
+msgid "Casa e design"
+msgstr "Home & design"
+
+msgid "Cerchi e spirale"
+msgstr "Circles and spiral"
+
+msgid "Chi c’è adesso"
+msgstr "Who’s in right now"
+
+msgid "Costellazioni"
+msgstr "Constellations"
+
+msgid "Creativi e portfolio"
+msgstr "Creatives & portfolios"
+
+msgid "Cruscotto dal vivo"
+msgstr "Live dashboard"
+
+msgid "Cultura e formazione"
+msgstr "Culture & education"
+
+msgid "Dal bianco e nero al colore"
+msgstr "From black and white to colour"
+
+msgid "Eventi e musica"
+msgstr "Events & music"
+
+msgid "Fumo al cursore"
+msgstr "Smoke on the cursor"
+
+msgid "Gocce morbide"
+msgstr "Soft drops"
+
+msgid "Gratta e scopri"
+msgstr "Scratch and reveal"
+
+msgid "Gratta il bonus"
+msgstr "Scratch the bonus"
+
+msgid "I libri che girano"
+msgstr "Spinning books"
+
+msgid "I palloncini che salgono"
+msgstr "Rising balloons"
+
+msgid "I petali che cadono"
+msgstr "Falling petals"
+
+msgid "I progetti che scorrono"
+msgstr "Scrolling projects"
+
+msgid "I risultati che scorrono"
+msgstr "Scrolling results"
+
+msgid "Il campo in tempo reale"
+msgstr "The field in real time"
+
+msgid "Il codice segreto"
+msgstr "The secret code"
+
+msgid "Il drone da toccare"
+msgstr "A drone to touch"
+
+msgid "Il fiore che si ridisegna"
+msgstr "The flower that redraws itself"
+
+msgid "Il nome che brucia"
+msgstr "The burning name"
+
+msgid "Il piatto da toccare"
+msgstr "A plate to touch"
+
+msgid "Il prima e dopo"
+msgstr "The before-and-after"
+
+msgid "Il profilo che si disegna"
+msgstr "The profile that draws itself"
+
+msgid "Il respiro guidato"
+msgstr "Guided breathing"
+
+msgid "La band in schegge"
+msgstr "The band in shards"
+
+msgid "La luce che cambia"
+msgstr "Shifting light"
+
+msgid "La luce della lampada"
+msgstr "Lamplight"
+
+msgid "La parola che respira"
+msgstr "The breathing word"
+
+msgid "Le bolle e l’onda"
+msgstr "Bubbles and the wave"
+
+msgid "L’equalizzatore che balla"
+msgstr "The dancing equaliser"
+
+msgid "L’occhio di bue"
+msgstr "The spotlight"
+
+msgid "L’orologio delle lezioni"
+msgstr "The lesson clock"
+
+msgid "Manifesto che si accende"
+msgstr "A manifesto that lights up"
+
+msgid "Moda e bellezza"
+msgstr "Fashion & beauty"
+
+msgid "Negozi online"
+msgstr "Online shops"
+
+msgid "Neon e faro"
+msgstr "Neon and spotlight"
+
+msgid "Neve e sentiero"
+msgstr "Snow and trail"
+
+msgid "Nome nel video"
+msgstr "Name in the video"
+
+msgid "Onda e binari"
+msgstr "Wave and tracks"
+
+msgid "Ospitalità e viaggi"
+msgstr "Hospitality & travel"
+
+msgid "Polaroid e pellicola"
+msgstr "Polaroids and film"
+
+msgid "Prenota in chat"
+msgstr "Book in chat"
+
+msgid "Prima e dopo"
+msgstr "Before and after"
+
+msgid "Ristorazione"
+msgstr "Food & drink"
+
+msgid "Si legge anche al buio"
+msgstr "Readable in the dark"
+
+msgid "Sport e benessere"
+msgstr "Sport & wellness"
+
+msgid "Studi e professioni"
+msgstr "Firms & professionals"
+
+msgid "Tecnologia"
+msgstr "Technology"
+
+msgid "Terminale ambra"
+msgstr "Amber terminal"
+
+msgid "Torcia nel buio"
+msgstr "Flashlight in the dark"
+
+msgid "Vetrina in frantumi"
+msgstr "Shattered shop window"
+
+msgid "Vetro e onde"
+msgstr "Glass and waves"
+
+msgid "Vigne in video"
+msgstr "Vineyards on video"

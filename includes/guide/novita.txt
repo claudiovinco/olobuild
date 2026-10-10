@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.638 - 2026-10-10 (fix)
+- Vetrina temi: sui siti in più lingue le categorie e gli effetti dei temi escono nella lingua di chi guarda, con le categorie in ordine alfabetico in quella lingua. Prima restavano in italiano.
+
 ## v1.4.637 - 2026-10-10 (fix)
 - Demo dei temi: nelle pagine interne la barra del titolo mostra il titolo della pagina, con le briciole «Home · pagina». Prima mostrava il nome del sito. Il logo e «Home» portano alla home della demo, non più a quella del sito.
 

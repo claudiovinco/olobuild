@@ -70,7 +70,11 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
 
     public function get_controls() { return []; }
 
-    /** I temi con la demo accesa, ordinati per categoria e nome. */
+    /**
+     * I temi con la demo accesa, ordinati per categoria e nome nella lingua di chi guarda. Categoria ed
+     * effetto si traducono dal catalogo del plugin (gli stessi testi del selettore dei temi); il filtro
+     * resta legato alla categoria originale.
+     */
     private function temi() {
         if ( ! class_exists( 'Olobuild_Theme_Importer' ) ) {
             require_once OLOBUILD_PATH . 'includes/class-theme-importer.php';
@@ -81,18 +85,21 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             if ( '' === $id || ! Olobuild_Demo_Temi::acceso( $id ) ) {
                 continue;
             }
-            $temi[] = [
+            $categoria = (string) ( $t['category'] ?? '' );
+            $effetto   = (string) ( $t['zone'] ?? '' );
+            $temi[]    = [
                 'id'        => $id,
                 'nome'      => (string) ( $t['name'] ?? $id ),
-                'categoria' => (string) ( $t['category'] ?? '' ),
-                'effetto'   => (string) ( $t['zone'] ?? '' ),
+                'categoria' => $categoria,
+                'etichetta' => '' !== $categoria ? olobuild_t( $categoria ) : '',
+                'effetto'   => '' !== $effetto ? olobuild_t( $effetto ) : '',
                 'anteprima' => (string) ( $t['screenshot'] ?? '' ),
                 'demo'      => Olobuild_Demo_Temi::indirizzo_tema( $id ),
                 'colore'    => (string) sanitize_hex_color( (string) ( $t['accent'] ?? '' ) ),
             ];
         }
         usort( $temi, function ( $a, $b ) {
-            $c = strnatcasecmp( $a['categoria'], $b['categoria'] );
+            $c = strnatcasecmp( $a['etichetta'], $b['etichetta'] );
             return 0 !== $c ? $c : strnatcasecmp( $a['nome'], $b['nome'] );
         } );
         return $temi;
@@ -145,10 +152,11 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
         }
         $uid = 'ovt-' . $this->chiave_stabile( $settings );
 
+        // categoria originale => [ etichetta tradotta, quanti temi ]
         $categorie = [];
         foreach ( $temi as $t ) {
             if ( '' !== $t['categoria'] ) {
-                $categorie[ $t['categoria'] ] = ( $categorie[ $t['categoria'] ] ?? 0 ) + 1;
+                $categorie[ $t['categoria'] ] = [ $t['etichetta'], ( $categorie[ $t['categoria'] ][1] ?? 0 ) + 1 ];
             }
         }
 
@@ -235,21 +243,21 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             <?php if ( ! empty( $s['filter_bar'] ) && count( $categorie ) > 1 ) : ?>
             <div class="ovt-filtri" role="group" aria-label="<?php echo esc_attr( olobuild_t( 'Categorie' ) ); ?>" data-olo-interactive>
                 <button type="button" class="ovt-filtro is-on" aria-pressed="true" data-cat=""><?php echo esc_html( (string) $s['filter_all_label'] ); ?><span class="ovt-n"><?php echo (int) count( $temi ); ?></span></button>
-                <?php foreach ( $categorie as $nome_cat => $quanti ) : ?>
-                <button type="button" class="ovt-filtro" aria-pressed="false" data-cat="<?php echo esc_attr( $nome_cat ); ?>"><?php echo esc_html( $nome_cat ); ?><span class="ovt-n"><?php echo (int) $quanti; ?></span></button>
+                <?php foreach ( $categorie as $nome_cat => $cat ) : ?>
+                <button type="button" class="ovt-filtro" aria-pressed="false" data-cat="<?php echo esc_attr( $nome_cat ); ?>"><?php echo esc_html( $cat[0] ); ?><span class="ovt-n"><?php echo (int) $cat[1]; ?></span></button>
                 <?php endforeach; ?>
             </div>
             <?php endif; ?>
             <ul class="ovt-griglia" role="list">
                 <?php foreach ( $temi as $t ) : ?>
                 <li class="ovt-voce" data-cat="<?php echo esc_attr( $t['categoria'] ); ?>">
-                    <a class="ovt-card" href="<?php echo esc_url( $t['demo'] ); ?>" data-tema="<?php echo esc_attr( $t['id'] ); ?>" data-nome="<?php echo esc_attr( $t['nome'] ); ?>" data-categoria="<?php echo esc_attr( $t['categoria'] ); ?>"<?php echo '' !== $t['colore'] ? ' style="--ovt-tema:' . esc_attr( $t['colore'] ) . '"' : ''; ?>>
+                    <a class="ovt-card" href="<?php echo esc_url( $t['demo'] ); ?>" data-tema="<?php echo esc_attr( $t['id'] ); ?>" data-nome="<?php echo esc_attr( $t['nome'] ); ?>" data-categoria="<?php echo esc_attr( $t['etichetta'] ); ?>"<?php echo '' !== $t['colore'] ? ' style="--ovt-tema:' . esc_attr( $t['colore'] ) . '"' : ''; ?>>
                         <span class="ovt-anteprima">
                             <?php if ( '' !== $t['anteprima'] ) : ?><img src="<?php echo esc_url( $t['anteprima'] ); ?>" alt="" loading="lazy" decoding="async" /><?php endif; ?>
                             <?php if ( ! empty( $s['show_zone'] ) && '' !== $t['effetto'] ) : ?><span class="ovt-effetto"><i></i><?php echo esc_html( $t['effetto'] ); ?></span><?php endif; ?>
                         </span>
                         <span class="ovt-corpo">
-                            <?php if ( ! empty( $s['show_category'] ) && '' !== $t['categoria'] ) : ?><span class="ovt-cat"><?php echo esc_html( $t['categoria'] ); ?></span><?php endif; ?>
+                            <?php if ( ! empty( $s['show_category'] ) && '' !== $t['categoria'] ) : ?><span class="ovt-cat"><?php echo esc_html( $t['etichetta'] ); ?></span><?php endif; ?>
                             <span class="ovt-nome"><?php echo esc_html( $t['nome'] ); ?></span>
                             <?php if ( '' !== trim( (string) $s['card_label'] ) ) : ?><span class="ovt-azione"><?php echo esc_html( (string) $s['card_label'] ); ?><?php echo $ico['freccia']; ?></span><?php endif; ?>
                         </span>
