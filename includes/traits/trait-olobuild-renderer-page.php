@@ -1310,42 +1310,81 @@ trait Olobuild_Renderer_Page_Trait {
             })();
             </script>
             <script>
-            /* Spotlight cursore — disco-torcia confinato all'elemento (effetto puntatore riusabile) */
+            /* Torcia (Effetti mouse → Spotlight cursore): un disco segue il puntatore e inverte i colori sotto di
+               sé. Ambito (cfg.scope): element = dentro l'elemento · section = in tutta la sezione che lo contiene ·
+               page = su tutta la pagina (disco fisso nel body). Il colore, anche un token del tema, si risolve
+               dove sta l'elemento: nel body i token del template non valgono. */
             (function(){
+              function rgbDi(host, colore){
+                var p = document.createElement('span');
+                p.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden;';
+                p.style.color = colore;
+                host.appendChild(p);
+                var c = getComputedStyle(p).color || '';
+                host.removeChild(p);
+                var m = c.match(/rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)/);
+                if(m) return Math.round(+m[1]) + ',' + Math.round(+m[2]) + ',' + Math.round(+m[3]);
+                // Chrome dà i color-mix() calcolati come color(srgb r g b) con valori da 0 a 1
+                m = c.match(/color\(srgb\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)/);
+                if(m) return Math.round(m[1] * 255) + ',' + Math.round(m[2] * 255) + ',' + Math.round(m[3] * 255);
+                return '255,255,255';
+              }
               function setup(host){
                 if(host.dataset.oloSpotReady) return;
                 var cfg; try { cfg = JSON.parse(host.dataset.oloSpotlight); } catch(e){ return; }
                 host.dataset.oloSpotReady = '1';
+                var scope = cfg.scope || 'element';
                 var size = +cfg.size || 300, soft = (cfg.soft != null ? +cfg.soft : 40);
-                var blend = cfg.blend || 'difference', color = cfg.color || '#ffffff', ease = +cfg.ease || 0.22;
+                var blend = cfg.blend || 'difference', ease = +cfg.ease || 0.22;
                 var inner = Math.max(0, 100 - soft), half = size / 2;
                 /* Falloff a curva: una rampa lineare verso transparent lascia un bordo
                    percepibile (Mach band) anche a morbidezza 100. Gli stop modulano
                    l'alpha del colore con coda dolce che arriva a 0 a derivata ~0. */
-                var hx = String(color).replace('#',''); if(hx.length === 3) hx = hx[0]+hx[0]+hx[1]+hx[1]+hx[2]+hx[2];
-                var nn = parseInt(hx, 16); if(isNaN(nn)) nn = 16777215;
-                var rgb = (nn>>16&255) + ',' + (nn>>8&255) + ',' + (nn&255);
-                var C = function(a){ return 'rgba(' + rgb + ',' + a + ')'; };
-                var core = inner / 100;
-                var exp = 2.0 + (soft / 100) * 1.8;
-                var stops = C(1) + ' 0%';
-                for(var i = 1; i <= 10; i++){
-                  var p = i / 10;
-                  var a = p <= core ? 1 : Math.pow(1 - (p - core) / (1 - core), exp);
-                  if(a < 0.004) a = 0;
-                  stops += ', ' + C(+a.toFixed(3)) + ' ' + (p * 100).toFixed(1) + '%';
+                function grad(rgb){
+                  var C = function(a){ return 'rgba(' + rgb + ',' + a + ')'; };
+                  var core = inner / 100;
+                  var exp = 2.0 + (soft / 100) * 1.8;
+                  var stops = C(1) + ' 0%';
+                  for(var i = 1; i <= 10; i++){
+                    var p = i / 10;
+                    var a = p <= core ? 1 : Math.pow(1 - (p - core) / (1 - core), exp);
+                    if(a < 0.004) a = 0;
+                    stops += ', ' + C(+a.toFixed(3)) + ' ' + (p * 100).toFixed(1) + '%';
+                  }
+                  return 'radial-gradient(circle, ' + stops + ')';
                 }
-                var grad = 'radial-gradient(circle, ' + stops + ')';
+                // dove vive il disco e dove si ascolta il puntatore
+                var zona = scope === 'section' ? (host.closest('section') || host) : host;
                 var disc = null, tx = 0, ty = 0, cx = 0, cy = 0, running = false, inside = false;
-                function build(){          // creazione lazy: solo al primo hover con mouse/pen
+                function build(){          // creazione lazy: solo al primo passaggio con mouse/pen
                   if(disc) return;
-                  if(getComputedStyle(host).position === 'static') host.style.position = 'relative';
-                  host.style.overflow = 'hidden';
-                  host.style.isolation = 'isolate';     // confina il mix-blend al contenuto del box
                   disc = document.createElement('div');
                   disc.setAttribute('aria-hidden', 'true');
-                  disc.style.cssText = 'position:absolute;top:0;left:0;z-index:99999;width:' + size + 'px;height:' + size + 'px;border-radius:50%;pointer-events:none;will-change:transform,opacity;opacity:0;transition:opacity .2s ease;background:' + grad + ';mix-blend-mode:' + blend + ';';
-                  host.appendChild(disc);
+                  var base = 'top:0;left:0;width:' + size + 'px;height:' + size + 'px;border-radius:50%;pointer-events:none;will-change:transform,opacity;opacity:0;transition:opacity .2s ease;background:' + grad(rgbDi(host, cfg.color || '#ffffff')) + ';mix-blend-mode:' + blend + ';';
+                  if(scope === 'page'){
+                    disc.style.cssText = 'position:fixed;z-index:99990;' + base;
+                    document.body.appendChild(disc);
+                    return;
+                  }
+                  if(getComputedStyle(zona).position === 'static') zona.style.position = 'relative';
+                  zona.style.isolation = 'isolate';     // confina il mix-blend al contenuto della zona
+                  if(zona === host){
+                    host.style.overflow = 'hidden';
+                    disc.style.cssText = 'position:absolute;z-index:99999;' + base;
+                    host.appendChild(disc);
+                    return;
+                  }
+                  // la sezione non si ritaglia (menu e decorazioni possono uscirne): ritaglia uno strato suo
+                  var strato = document.createElement('div');
+                  strato.setAttribute('aria-hidden', 'true');
+                  strato.style.cssText = 'position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:99999;';
+                  disc.style.cssText = 'position:absolute;' + base;
+                  strato.appendChild(disc);
+                  zona.appendChild(strato);
+                }
+                function punto(e){
+                  if(scope === 'page'){ tx = e.clientX; ty = e.clientY; return; }
+                  var r = zona.getBoundingClientRect(); tx = e.clientX - r.left; ty = e.clientY - r.top;
                 }
                 function frame(){
                   cx += (tx - cx) * ease; cy += (ty - cy) * ease;
@@ -1353,18 +1392,30 @@ trait Olobuild_Renderer_Page_Trait {
                   if(inside || Math.abs(tx - cx) > 0.5 || Math.abs(ty - cy) > 0.5){ requestAnimationFrame(frame); } else { running = false; }
                 }
                 function start(){ if(!running){ running = true; requestAnimationFrame(frame); } }
-                host.addEventListener('pointerenter', function(e){
+                function entra(e){
                   if(e.pointerType === 'touch') return;   // niente torcia su touch (rilevato per-evento, non via media-query)
-                  if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+                  if(window.matchMedia){ if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; }
                   build();
-                  var r = host.getBoundingClientRect(); tx = cx = e.clientX - r.left; ty = cy = e.clientY - r.top;
+                  punto(e); cx = tx; cy = ty;              // compare già sotto il puntatore
                   inside = true; disc.style.opacity = '1'; start();
+                }
+                if(scope === 'page'){
+                  window.addEventListener('pointermove', function(e){
+                    if(e.pointerType === 'touch') return;
+                    if(!inside){ entra(e); return; }
+                    punto(e); start();
+                  }, { passive: true });
+                  // il puntatore esce dalla finestra: il disco si spegne
+                  document.addEventListener('mouseout', function(e){ if(!e.relatedTarget){ inside = false; if(disc) disc.style.opacity = '0'; } });
+                  return;
+                }
+                zona.addEventListener('pointerenter', entra);
+                zona.addEventListener('pointermove', function(e){
+                  if(e.pointerType === 'touch') return;
+                  if(!disc) return;
+                  punto(e); start();
                 });
-                host.addEventListener('pointermove', function(e){
-                  if(e.pointerType === 'touch' || !disc) return;
-                  var r = host.getBoundingClientRect(); tx = e.clientX - r.left; ty = e.clientY - r.top; start();
-                });
-                host.addEventListener('pointerleave', function(){ inside = false; if(disc) disc.style.opacity = '0'; });
+                zona.addEventListener('pointerleave', function(){ inside = false; if(disc) disc.style.opacity = '0'; });
               }
               function initSpotlights(){
                 var hosts = document.querySelectorAll('[data-olo-spotlight]');

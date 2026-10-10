@@ -24693,3 +24693,21 @@ msgstr "Beim Scrollen steigt der Text schneller auf und das rechte Panel sinkt l
 
 msgid "La data finale non può essere prima di quella iniziale"
 msgstr "Das Enddatum darf nicht vor dem Startdatum liegen"
+
+msgid "Questo elemento"
+msgstr "Dieses Element"
+
+msgid "La sua sezione"
+msgstr "Sein Abschnitt"
+
+msgid "Tutta la pagina"
+msgstr "Ganze Seite"
+
+msgid "Un disco segue il cursore e inverte i colori sotto di sé."
+msgstr "Eine Scheibe folgt dem Mauszeiger und kehrt die Farben darunter um."
+
+msgid "Ambito: solo dentro questo elemento, in tutta la sua sezione o su tutta la pagina."
+msgstr "Bereich: nur in diesem Element, im ganzen Abschnitt oder auf der ganzen Seite."
+
+msgid "Si disattiva su touch e con riduzione del movimento."
+msgstr "Auf Touchscreens und bei reduzierter Bewegung ist sie aus."

@@ -104,80 +104,30 @@ class Olobuild_Blendtext_Tile extends Olobuild_Tile_Base {
             return in_array( $a, $allineam, true ) ? 'text-align:' . $a : '';
         } );
 
-        // ── BlendText · Spotlight: disco-torcia che segue il cursore (rif. 63-tema-risograph.html) ──
-        // Anatomia: <div#uid-flash> position:fixed, border-radius:50%, mix-blend-mode, pointer-events:none.
-        // SSR: il testo resta leggibile senza JS. Runtime: portale su body + rAF easing. Scoped per UID.
-        // a11y/touch: nascosto su (hover:none); reduced-motion → off. In builder: solo testo (no disco).
-        $flash_css = $flash_html = $flash_js = '';
-        $in_builder = ! empty( $s['_builder_mode'] );
-        if ( $mode === 'spotlight' && ! $in_builder ) {
-            $sp_size  = max( 40, min( 1000, intval( $s['spotlight_size'] ?? 300 ) ) );
-            $sp_half  = intval( round( $sp_size / 2 ) );
-            $sp_soft  = max( 0, min( 100, intval( $s['spotlight_softness'] ?? 40 ) ) );
-            $sp_inner = max( 0, min( 100, 100 - $sp_soft ) );  // softness alto → inner basso → bordo più sfumato
-            $sp_blend = in_array( $s['spotlight_blend'] ?? 'difference', [ 'difference', 'exclusion', 'screen' ], true ) ? ( $s['spotlight_blend'] ?? 'difference' ) : 'difference';
-            $sp_color = $this->safe_color_css( $s['spotlight_color'] ?? '' ) ?: 'var(--olo-color-light, #ffffff)';
-            $sp_ease  = max( 5, min( 90, intval( $s['spotlight_easing'] ?? 22 ) ) ) / 100;
-            $flash_id = $uid . '-flash';
-
-            $flash_css  = "#{$flash_id}{position:fixed;top:0;left:0;width:{$sp_size}px;height:{$sp_size}px;margin:-{$sp_half}px 0 0 -{$sp_half}px;border-radius:50%;pointer-events:none;z-index:99990;display:none;will-change:transform;background:radial-gradient(circle, {$sp_color} 0%, {$sp_color} {$sp_inner}%, transparent 100%);mix-blend-mode:{$sp_blend};}";
-            $flash_css .= "@media(hover:none){#{$flash_id}{display:none !important;}}";
-
-            $flash_html = '<div id="' . esc_attr( $flash_id ) . '" class="olo-bt-flash" aria-hidden="true"></div>';
-
-            ob_start();
-            ?>
-            <script>
-            (function(){
-                var flash = document.getElementById('<?php echo esc_js( $flash_id ); ?>');
-                if(!flash) return;
-                if(flash.dataset.oloFlash) return;
-                flash.dataset.oloFlash = '1';
-                if(window.matchMedia && window.matchMedia('(hover:none)').matches) return;
-                if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-                // Nel body col suo colore: fuori dal template il token del tema non vale (il disco
-                // prendeva il primario di :root, su mosaic il blu di un altro plugin, o niente).
-                ( <?php echo self::js_nel_body(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- costante JS interna ?> )( flash );
-                var EASE = <?php echo (float) $sp_ease; ?>;
-                var x = window.innerWidth / 2, y = window.innerHeight / 2, cx = x, cy = y;
-                var running = false;
-                function loop(){
-                    cx += (x - cx) * EASE;
-                    cy += (y - cy) * EASE;
-                    if ( Math.abs(x - cx) < 0.5 && Math.abs(y - cy) < 0.5 ) {
-                        flash.style.transform = 'translate(' + x + 'px,' + y + 'px)';
-                        running = false; return;
-                    }
-                    flash.style.transform = 'translate(' + cx + 'px,' + cy + 'px)';
-                    requestAnimationFrame( loop );
-                }
-                function start(){ if ( ! running ) { running = true; requestAnimationFrame( loop ); } }
-                // Il disco compare al primo movimento, già sotto il puntatore: prima stava
-                // nell'angolo in alto a sinistra, sopra il logo, finché il mouse non si muoveva.
-                window.addEventListener('pointermove', function( e ){
-                    x = e.clientX; y = e.clientY;
-                    if ( flash.style.display !== 'block' ) {
-                        cx = x; cy = y;
-                        flash.style.transform = 'translate(' + x + 'px,' + y + 'px)';
-                        flash.style.display = 'block';
-                    }
-                    start();
-                }, { passive: true });
-            })();
-            </script>
-            <?php
-            $flash_js = ob_get_clean();
+        // Modalità «Torcia» (dati di prima della 1.4.633). La torcia ora è un effetto del mouse: Avanzate → Effetti
+        // mouse → Spotlight cursore, con l'Ambito; il builder converte la tile quando la apre. Finché non la si salva
+        // convertita la disegna il motore comune della pagina, con ambito «Tutta la pagina» come prima: un disco nel
+        // body che segue il puntatore ovunque. Prima la tile aveva un disco suo e nel builder non si vedeva.
+        $spot_attr = '';
+        if ( $mode === 'spotlight' ) {
+            $spot_attr = Olobuild_Animation_Builder::spotlight_attr( [
+                'scope'  => 'page',
+                'size'   => $s['spotlight_size'] ?? 300,
+                'soft'   => $s['spotlight_softness'] ?? 40,
+                'blend'  => $s['spotlight_blend'] ?? 'difference',
+                'color'  => $this->safe_color_css( $s['spotlight_color'] ?? '' ) ?: 'var(--olo-color-light, #ffffff)',
+                'easing' => $s['spotlight_easing'] ?? 22,
+            ] );
         }
 
         list( $bt_cls, $bt_data ) = $this->tfx_attrs( $s, 'text', wp_strip_all_tags( $s['text'] ) );
 
         ob_start();
-        echo '<style>' . $css . $flash_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS assembled above from intval()/floatval() clamped numerics, typography from resolve_font_family()/font_weight_css() and in_array() whitelists (transform, align, blend mode), safe_color_css() whitelisted colors, css_per_dispositivo() media queries from the same align whitelist and the internally generated uid
+        echo '<style>' . $css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS assembled above from intval()/floatval() clamped numerics, typography from resolve_font_family()/font_weight_css() and in_array() whitelists (transform, align, blend mode), safe_color_css() whitelisted colors, css_per_dispositivo() media queries from the same align whitelist and the internally generated uid
         ?>
-        <div id="<?php echo esc_attr( $uid ); ?>">
+        <div id="<?php echo esc_attr( $uid ); ?>"<?php echo $spot_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- data-olo-spotlight built by Olobuild_Animation_Builder::spotlight_attr() (esc_attr of a wp_json_encode of clamped/whitelisted values) ?>>
             <<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tag is in_array() whitelisted; tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); $text is esc_html()'d above (nl2br only adds <br /> tags) ?> class="olo-bt-text<?php echo $bt_cls; ?>"<?php echo $bt_data; ?>><?php echo nl2br( $text ); ?></<?php echo $tag; ?>>
         </div>
-        <?php echo $flash_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed markup built above with esc_attr()'d id ?>
         <?php if ( $mode === 'text' ) : // l'auto-fix stacking-context serve solo al blend statico ?>
         <script>
         (function(){
@@ -218,7 +168,6 @@ class Olobuild_Blendtext_Tile extends Olobuild_Tile_Base {
         })();
         </script>
         <?php endif; ?>
-        <?php echo $flash_js; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline <script> assembled above with esc_js()'d id and float-cast easing only ?>
         <?php
         $tfx_css = $this->tfx_css( $s, '#' . $uid );
         if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings

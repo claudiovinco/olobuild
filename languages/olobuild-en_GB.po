@@ -16480,3 +16480,24 @@ msgstr "As you scroll, the text rises faster and the right panel slowly drifts d
 
 msgid "La data finale non può essere prima di quella iniziale"
 msgstr "The end date cannot be earlier than the start date"
+
+msgid "Ambito"
+msgstr "Scope"
+
+msgid "Questo elemento"
+msgstr "This element"
+
+msgid "La sua sezione"
+msgstr "Its section"
+
+msgid "Tutta la pagina"
+msgstr "Whole page"
+
+msgid "Un disco segue il cursore e inverte i colori sotto di sé."
+msgstr "A disc follows the cursor and inverts the colours underneath it."
+
+msgid "Ambito: solo dentro questo elemento, in tutta la sua sezione o su tutta la pagina."
+msgstr "Scope: only inside this element, across its whole section or across the whole page."
+
+msgid "Si disattiva su touch e con riduzione del movimento."
+msgstr "It turns off on touch screens and with reduced motion."

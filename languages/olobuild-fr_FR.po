@@ -24693,3 +24693,21 @@ msgstr "Au défilement, le texte monte plus vite et le panneau de droite descend
 
 msgid "La data finale non può essere prima di quella iniziale"
 msgstr "La date de fin ne peut pas précéder la date de début"
+
+msgid "Questo elemento"
+msgstr "Cet élément"
+
+msgid "La sua sezione"
+msgstr "Sa section"
+
+msgid "Tutta la pagina"
+msgstr "Toute la page"
+
+msgid "Un disco segue il cursore e inverte i colori sotto di sé."
+msgstr "Un disque suit le curseur et inverse les couleurs en dessous."
+
+msgid "Ambito: solo dentro questo elemento, in tutta la sua sezione o su tutta la pagina."
+msgstr "Portée : uniquement dans cet élément, dans toute sa section ou sur toute la page."
+
+msgid "Si disattiva su touch e con riduzione del movimento."
+msgstr "Il se désactive sur les écrans tactiles et avec le mouvement réduit."

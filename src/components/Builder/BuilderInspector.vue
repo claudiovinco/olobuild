@@ -1020,16 +1020,20 @@
                   <input type="checkbox" :checked="tileAdvanced.cursor_spotlight === true" @change="updateAdvanced('cursor_spotlight', $event.target.checked)" class="mb-accent-primary-500" />
                   <span class="mb-text-xs mb-text-gray-300">{{ t('Spotlight cursore (torcia)') }}</span>
                 </label>
-                <InfoTip :titolo="t('Spotlight cursore (torcia)')" :testo="t('Un disco-torcia segue il cursore e inverte i colori, confinato a questo elemento. Si disattiva su touch e con riduzione del movimento.')" />
+                <InfoTip :titolo="t('Spotlight cursore (torcia)')" :testo="[t('Un disco segue il cursore e inverte i colori sotto di sé.'), t('Ambito: solo dentro questo elemento, in tutta la sua sezione o su tutta la pagina.'), t('Si disattiva su touch e con riduzione del movimento.')]" />
               </div>
               <template v-if="tileAdvanced.cursor_spotlight">
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Ambito') }}</label>
+                  <FieldSelect ui="dropdown" :model-value="tileAdvanced.cursor_spotlight_scope || 'element'" :options="SPOTLIGHT_SCOPE_OPTIONS" @update:model-value="updateAdvanced('cursor_spotlight_scope', $event)" />
+                </div>
                 <div>
                   <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Inversione (blend)') }}</label>
                   <FieldSelect ui="dropdown" :model-value="tileAdvanced.cursor_spotlight_blend || 'difference'" :options="SPOTLIGHT_BLEND_OPTIONS" @update:model-value="updateAdvanced('cursor_spotlight_blend', $event)" />
                 </div>
                 <div>
                   <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Colore luce') }}</label>
-                  <input type="color" :value="tileAdvanced.cursor_spotlight_color || '#ffffff'" @input="updateAdvanced('cursor_spotlight_color', $event.target.value)" class="mb-w-full mb-h-8 mb-rounded mb-cursor-pointer" />
+                  <FieldColor :modelValue="tileAdvanced.cursor_spotlight_color || '#ffffff'" @update:modelValue="updateAdvanced('cursor_spotlight_color', $event)" />
                 </div>
                 <div>
                   <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Dimensione disco:') }} {{ tileAdvanced.cursor_spotlight_size || 300 }}px</label>
@@ -1590,6 +1594,13 @@ const ENTRANCE_EASING_OPTIONS = [
 const STICKY_POSITION_OPTIONS = [
   { value: 'top', label: 'In alto' },
   { value: 'bottom', label: 'In basso' },
+];
+
+// Dove agisce la torcia: dentro l'elemento, in tutta la sua sezione o su tutta la pagina (disco fisso).
+const SPOTLIGHT_SCOPE_OPTIONS = [
+  { value: 'element', label: 'Questo elemento' },
+  { value: 'section', label: 'La sua sezione' },
+  { value: 'page', label: 'Tutta la pagina' },
 ];
 
 const SPOTLIGHT_BLEND_OPTIONS = [

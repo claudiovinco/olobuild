@@ -265,20 +265,42 @@ class Olobuild_Animation_Builder {
         if ( empty( $advanced['cursor_spotlight'] ) ) {
             return '';
         }
-        $blend = $advanced['cursor_spotlight_blend'] ?? 'difference';
+        return self::spotlight_attr( [
+            'scope'  => $advanced['cursor_spotlight_scope'] ?? 'element',
+            'size'   => $advanced['cursor_spotlight_size'] ?? 300,
+            'soft'   => $advanced['cursor_spotlight_softness'] ?? 40,
+            'blend'  => $advanced['cursor_spotlight_blend'] ?? 'difference',
+            'color'  => $advanced['cursor_spotlight_color'] ?? '',
+            'easing' => $advanced['cursor_spotlight_easing'] ?? 22,
+        ] );
+    }
+
+    /**
+     * Attributo data-olo-spotlight dai valori della torcia (anche la vecchia modalità «Torcia» della tile
+     * Blend Text passa da qui: un solo motore, nello script della pagina).
+     * Ambito: element = dentro l'elemento · section = in tutta la sezione che lo contiene · page = su tutta la
+     * pagina. Il colore può essere un token (var(--olo-color-…)): la pagina lo risolve dove sta l'elemento.
+     *
+     * @param array $v scope, size, soft, blend, color, easing.
+     * @return string Attributo (con lo spazio davanti).
+     */
+    public static function spotlight_attr( $v ) {
+        $blend = (string) ( $v['blend'] ?? 'difference' );
         if ( ! in_array( $blend, [ 'difference', 'exclusion', 'screen', 'overlay', 'hard-light', 'color-dodge' ], true ) ) {
             $blend = 'difference';
         }
-        $color = $advanced['cursor_spotlight_color'] ?? '#ffffff';
-        if ( ! preg_match( '/^#[0-9a-fA-F]{3,8}$/', (string) $color ) ) {
-            $color = '#ffffff';
+        $scope = (string) ( $v['scope'] ?? 'element' );
+        if ( ! in_array( $scope, [ 'element', 'section', 'page' ], true ) ) {
+            $scope = 'element';
         }
+        $color = Olobuild_Tile_Utils::safe_color( $v['color'] ?? '' );
         $cfg = [
-            'size'  => max( 40, min( 800, intval( $advanced['cursor_spotlight_size'] ?? 300 ) ) ),
-            'soft'  => max( 0, min( 100, intval( $advanced['cursor_spotlight_softness'] ?? 40 ) ) ),
+            'scope' => $scope,
+            'size'  => max( 40, min( 1000, intval( $v['size'] ?? 300 ) ) ),
+            'soft'  => max( 0, min( 100, intval( $v['soft'] ?? 40 ) ) ),
             'blend' => $blend,
-            'color' => $color,
-            'ease'  => max( 0.02, min( 1, intval( $advanced['cursor_spotlight_easing'] ?? 22 ) / 100 ) ),
+            'color' => '' !== $color ? html_entity_decode( $color, ENT_QUOTES ) : '#ffffff',
+            'ease'  => max( 0.02, min( 1, intval( $v['easing'] ?? 22 ) / 100 ) ),
         ];
         return " data-olo-spotlight='" . esc_attr( wp_json_encode( $cfg ) ) . "'";
     }

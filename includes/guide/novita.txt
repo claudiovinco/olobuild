@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.633 - 2026-10-10 (novità)
+- Avanzate → Effetti mouse → «Spotlight cursore (torcia)»: c'è l'«Ambito». Il disco può restare dentro l'elemento (come prima), muoversi in tutta la sua sezione o seguire il cursore su tutta la pagina. Il colore della luce si sceglie anche fra i colori del tema.
+- La torcia della tile Blend Text sta qui. Quando apri nel builder una Blend Text che la usava, la torcia passa negli Effetti mouse con ambito «Tutta la pagina» e gli stessi valori, e la pagina resta identica. Prima si regolava solo dentro la tile e nel builder non si vedeva.
+
 ## v1.4.632 - 2026-10-10 (fix)
 - Struttura, «Cerca un blocco»: trova anche le parole che nel testo della tile vanno a capo. Per esempio «idea che» trova «Hai un'idea / che non sta ferma?».
 

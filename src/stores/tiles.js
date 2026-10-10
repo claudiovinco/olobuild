@@ -7,6 +7,7 @@ import {
   normalizeNodes, countNodes, posizioneIncolla, liberaPostoGriglia,
 } from './treeUtils.js';
 import { migrateTreeBackgrounds } from '@/utils/bgMigrate';
+import { migraTorciaBlendText } from '@/utils/torciaMigra';
 import { getElementDef } from '@/config/elementRegistry';
 import { incollaImpostazioni } from '@/utils/incollaStile';
 import { PALETTE_CATEGORIES, STRUCTURE_CATEGORY, paletteCategoryOf } from '@/config/paletteCategories';
@@ -44,11 +45,13 @@ const LARGHEZZE_MISURE = ['default', 'small', 'medium', 'large'];
 // Preparazione del caricamento di una pagina, UNICA per chi porta nodi da fuori
 // (template aperto, header, footer, blocchi della libreria): il contenuto legacy si
 // avvolge in sezioni, i {} che json_decode del PHP rende [] tornano oggetti coi
-// default del config (normalizeNodes) e i campi sfondo legacy si uniscono in media_bg.
+// default del config (normalizeNodes), i campi sfondo legacy si uniscono in media_bg e la
+// torcia della Blend Text passa negli Effetti mouse (torciaMigra).
 function preparaContenuto(content) {
   const nodi = isLegacyFormat(content) ? migrateLegacyContent(content) : (content || []);
   normalizeNodes(nodi);
   migrateTreeBackgrounds(nodi);
+  migraTorciaBlendText(nodi);
   return nodi;
 }
 
