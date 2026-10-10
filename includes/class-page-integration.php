@@ -26,14 +26,14 @@ class Olobuild_Page_Integration {
         // Auto-render Olobuild template on frontend if linked
         add_filter( 'the_content', [ $this, 'auto_render_template' ], 20 );
 
-        // Sulle pagine con template Olobuild: niente wptexturize + ripara <script> (vedi metodo).
+        // Pagine con template Olobuild: niente wptexturize; lì e in tutto un tema a blocchi: ripara <script> (vedi metodo).
         // Priorità bassa: l'ob_start dev'essere il più esterno per catturare l'output finale.
         add_action( 'template_redirect', [ $this, 'maybe_disable_texturize' ], 0 );
     }
 
     /**
      * Protegge gli <script> runtime dei tile dalla texturizzazione di WordPress, sulle
-     * pagine renderizzate da un template Olobuild.
+     * pagine renderizzate da un template Olobuild e, in un tema a blocchi, su ogni pagina pubblica.
      *
      * Il contenuto Olobuild è markup strutturato (HTML + <script>), non prosa. Gli <script>
      * dei tile "wow" sono grandi e densi di operatori JS (`<`, `>`, `&&`): su input grande
@@ -45,14 +45,23 @@ class Olobuild_Page_Integration {
      * `&#038;` rimaste SOLO dentro i blocchi <script> dell'output finale.
      */
     public function maybe_disable_texturize() {
-        $id = get_queried_object_id();
-        if ( ! $id || ! get_post_meta( $id, '_olo_template_id', true ) ) {
+        if ( is_feed() || is_robots() || is_trackback() ) {
             return;
         }
-        // 1) Niente wptexturize sul markup del template.
-        remove_filter( 'the_content', 'wptexturize' );
+        $id           = get_queried_object_id();
+        $con_template = $id && get_post_meta( $id, '_olo_template_id', true );
+        if ( $con_template ) {
+            // 1) Niente wptexturize sul markup del template.
+            remove_filter( 'the_content', 'wptexturize' );
+        }
         // 2) Rete di sicurezza: ripara `&#038;` (→ `&`) solo dentro gli <script> finali.
-        ob_start( [ $this, 'repair_script_entities' ] );
+        // Anche sulle pagine SENZA template: in un tema a blocchi WordPress passa da wptexturize l'HTML
+        // intero del template del tema (get_the_block_template_html), quindi anche testata e piè di
+        // pagina Olobuild di articoli, archivi e ricerca. Lì gli script delle tile si rompevano
+        // (Selettore lingua 1.4.615; «&» negli script di altre 35 tile, effetti testo compresi).
+        if ( $con_template || ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) ) {
+            ob_start( [ $this, 'repair_script_entities' ] );
+        }
     }
 
     /**
