@@ -16459,3 +16459,21 @@ msgstr "Score"
 #: includes/tiles
 msgid "Scrivi dove inviare la scelta (indirizzo, numero o pagina): finché manca, il pulsante non compare sul sito."
 msgstr "Enter where to send the selection (address, number or page): until then, the button won't appear on the site."
+
+msgid "Scena — profondità allo scorrimento"
+msgstr "Scene — depth on scroll"
+
+msgid "Profondità allo scorrimento"
+msgstr "Depth on scroll"
+
+msgid "Parallasse a strati"
+msgstr "Layered parallax"
+
+msgid "Il testo sfuma uscendo"
+msgstr "Text fades as it leaves"
+
+msgid "Scorrendo, la foto o il video di sfondo scende e si allarga piano, il testo sale più in fretta e il modulo sotto il testo (finestra, chat, striscia, ricerca) sale per primo: la hero si apre su più livelli. Vale anche sul telefono; si ferma per chi ha chiesto di ridurre il movimento."
+msgstr "As you scroll, the background photo or video slowly drifts down and widens, the text rises faster and the module below the text (window, chat, strip, search) rises first: the hero opens up on several layers. It also works on phones; it stops for anyone who asked to reduce motion."
+
+msgid "Scorrendo, il testo sale più in fretta e il pannello di destra scende piano: la hero si apre su due livelli. Vale anche sul telefono; si ferma per chi ha chiesto di ridurre il movimento."
+msgstr "As you scroll, the text rises faster and the right panel slowly drifts down: the hero opens up on two layers. It also works on phones; it stops for anyone who asked to reduce motion."

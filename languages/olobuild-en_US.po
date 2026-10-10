@@ -24675,3 +24675,21 @@ msgstr "With “Custom image” you choose the shape: a PNG or a WebP with trans
 #: src/components/Builder/style-renderers/StyleEffectsStack.vue
 msgid "Adatta mette tutta la forma dentro la tile, Riempi la allarga finché copre la tile, Stira la deforma fino ai bordi."
 msgstr "Fit puts the whole shape inside the tile, Fill enlarges it until it covers the tile, Stretch distorts it to the edges."
+
+msgid "Scena — profondità allo scorrimento"
+msgstr "Scene — depth on scroll"
+
+msgid "Profondità allo scorrimento"
+msgstr "Depth on scroll"
+
+msgid "Parallasse a strati"
+msgstr "Layered parallax"
+
+msgid "Il testo sfuma uscendo"
+msgstr "Text fades as it leaves"
+
+msgid "Scorrendo, la foto o il video di sfondo scende e si allarga piano, il testo sale più in fretta e il modulo sotto il testo (finestra, chat, striscia, ricerca) sale per primo: la hero si apre su più livelli. Vale anche sul telefono; si ferma per chi ha chiesto di ridurre il movimento."
+msgstr "As you scroll, the background photo or video slowly drifts down and widens, the text rises faster and the module below the text (window, chat, strip, search) rises first: the hero opens up on several layers. It also works on phones; it stops for anyone who asked to reduce motion."
+
+msgid "Scorrendo, il testo sale più in fretta e il pannello di destra scende piano: la hero si apre su due livelli. Vale anche sul telefono; si ferma per chi ha chiesto di ridurre il movimento."
+msgstr "As you scroll, the text rises faster and the right panel slowly drifts down: the hero opens up on two layers. It also works on phones; it stops for anyone who asked to reduce motion."

@@ -52,6 +52,10 @@ export default {
     meta_text: '',
     scroll_hint: '',
 
+    // ── Profondità allo scorrimento (parallasse a strati) — 'none' = ferma, com'era ──
+    scene_depth: 'none',
+    scene_depth_fade: true,
+
     // ── Modulo sotto il contenuto (unificazione hero, Fase 1) — default '' = no-op ──
     module: '',
     strip_items: [
@@ -384,6 +388,16 @@ export default {
       condition: { field: 'frame_on', op: 'eq', value: true } },
     { key: 'watermark_color', label: t('Colore watermark (vuoto = bianco 6%)'), type: 'color',
       condition: { field: 'watermark_text', op: 'neq', value: '' } },
+    // ── Scena: profondità allo scorrimento (parallasse a strati) ──
+    { type: 'separator', label: t('Scena — profondità allo scorrimento') },
+    { key: 'scene_depth', label: t('Parallasse a strati'), type: 'select', options: [
+      { value: 'none',   label: t('Nessuna') },
+      { value: 'soft',   label: t('Leggera') },
+      { value: 'medium', label: t('Normale') },
+      { value: 'strong', label: t('Forte') },
+    ], description: t('Scorrendo, la foto o il video di sfondo scende e si allarga piano, il testo sale più in fretta e il modulo sotto il testo (finestra, chat, striscia, ricerca) sale per primo: la hero si apre su più livelli. Vale anche sul telefono; si ferma per chi ha chiesto di ridurre il movimento.') },
+    { key: 'scene_depth_fade', label: t('Il testo sfuma uscendo'), type: 'toggle',
+      condition: { field: 'scene_depth', op: 'neq', value: 'none' } },
     // ── Tipografia (unica sezione: titolo, sottotitolo, default + effetti) ──
     { type: 'separator', label: t('Tipografia') },
     { key: 'text_color', label: t('Colore testo (default)'), type: 'color',

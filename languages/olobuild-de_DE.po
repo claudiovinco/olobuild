@@ -24672,3 +24672,21 @@ msgstr "Mit „Eigenes Bild“ wählst du die Form selbst: ein PNG oder ein WebP
 #: src/components/Builder/style-renderers/StyleEffectsStack.vue
 msgid "Adatta mette tutta la forma dentro la tile, Riempi la allarga finché copre la tile, Stira la deforma fino ai bordi."
 msgstr "Einpassen setzt die ganze Form in die Tile, Füllen vergrößert sie, bis sie die Tile bedeckt, Strecken verzerrt sie bis an die Ränder."
+
+msgid "Scena — profondità allo scorrimento"
+msgstr "Szene — Tiefe beim Scrollen"
+
+msgid "Profondità allo scorrimento"
+msgstr "Tiefe beim Scrollen"
+
+msgid "Parallasse a strati"
+msgstr "Mehrschichtige Parallaxe"
+
+msgid "Il testo sfuma uscendo"
+msgstr "Text blendet beim Verlassen aus"
+
+msgid "Scorrendo, la foto o il video di sfondo scende e si allarga piano, il testo sale più in fretta e il modulo sotto il testo (finestra, chat, striscia, ricerca) sale per primo: la hero si apre su più livelli. Vale anche sul telefono; si ferma per chi ha chiesto di ridurre il movimento."
+msgstr "Beim Scrollen sinkt das Hintergrundfoto oder -video langsam ab und wird größer, der Text steigt schneller auf und das Modul unter dem Text (Fenster, Chat, Streifen, Suche) steigt als Erstes: Der Hero öffnet sich auf mehreren Ebenen. Funktioniert auch auf dem Smartphone; stoppt für alle, die reduzierte Bewegung eingestellt haben."
+
+msgid "Scorrendo, il testo sale più in fretta e il pannello di destra scende piano: la hero si apre su due livelli. Vale anche sul telefono; si ferma per chi ha chiesto di ridurre il movimento."
+msgstr "Beim Scrollen steigt der Text schneller auf und das rechte Panel sinkt langsam ab: Der Hero öffnet sich auf zwei Ebenen. Funktioniert auch auf dem Smartphone; stoppt für alle, die reduzierte Bewegung eingestellt haben."

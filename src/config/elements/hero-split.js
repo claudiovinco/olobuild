@@ -148,6 +148,10 @@ export default {
     gap:         60,
     min_height:  600,
 
+    // Profondità allo scorrimento (parallasse a strati) — 'none' = ferma, com'era
+    scene_depth:      'none',
+    scene_depth_fade: true,
+
     // Fallback interno (lo style.padding del wrapper esterno ha priorità).
     tile_padding: { top: 80, right: 80, bottom: 60, left: 80 },
     tile_margin:  { top: 0, right: 0, bottom: 0, left: 0 },
@@ -394,5 +398,15 @@ export default {
     ]},
     { key: 'gap',        label: t('Gap colonne'),    type: 'range', min: 0, max: 160, step: 4 },
     { key: 'min_height', label: t('Altezza minima'), type: 'range', min: 0, max: 1200, step: 20 },
+
+    { type: 'separator', label: t('Profondità allo scorrimento') },
+    { key: 'scene_depth', label: t('Parallasse a strati'), type: 'select', options: [
+      { value: 'none',   label: t('Nessuna') },
+      { value: 'soft',   label: t('Leggera') },
+      { value: 'medium', label: t('Normale') },
+      { value: 'strong', label: t('Forte') },
+    ], description: t('Scorrendo, il testo sale più in fretta e il pannello di destra scende piano: la hero si apre su due livelli. Vale anche sul telefono; si ferma per chi ha chiesto di ridurre il movimento.') },
+    { key: 'scene_depth_fade', label: t('Il testo sfuma uscendo'), type: 'toggle',
+      condition: { field: 'scene_depth', op: 'neq', value: 'none' } },
   ],
 };

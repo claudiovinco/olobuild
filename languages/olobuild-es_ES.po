@@ -24672,3 +24672,21 @@ msgstr "Con «Imagen personalizada» la forma la eliges tú: un PNG o un WebP co
 #: src/components/Builder/style-renderers/StyleEffectsStack.vue
 msgid "Adatta mette tutta la forma dentro la tile, Riempi la allarga finché copre la tile, Stira la deforma fino ai bordi."
 msgstr "Ajustar mete toda la forma dentro del tile, Rellenar la amplía hasta cubrir el tile, Estirar la deforma hasta los bordes."
+
+msgid "Scena — profondità allo scorrimento"
+msgstr "Escena — profundidad al desplazarse"
+
+msgid "Profondità allo scorrimento"
+msgstr "Profundidad al desplazarse"
+
+msgid "Parallasse a strati"
+msgstr "Parallax por capas"
+
+msgid "Il testo sfuma uscendo"
+msgstr "El texto se desvanece al salir"
+
+msgid "Scorrendo, la foto o il video di sfondo scende e si allarga piano, il testo sale più in fretta e il modulo sotto il testo (finestra, chat, striscia, ricerca) sale per primo: la hero si apre su più livelli. Vale anche sul telefono; si ferma per chi ha chiesto di ridurre il movimento."
+msgstr "Al desplazarte, la foto o el vídeo de fondo baja y se amplía despacio, el texto sube más rápido y el módulo bajo el texto (ventana, chat, tira, búsqueda) sube primero: el hero se abre en varios niveles. Funciona también en el móvil; se detiene para quien ha pedido reducir el movimiento."
+
+msgid "Scorrendo, il testo sale più in fretta e il pannello di destra scende piano: la hero si apre su due livelli. Vale anche sul telefono; si ferma per chi ha chiesto di ridurre il movimento."
+msgstr "Al desplazarte, el texto sube más rápido y el panel derecho baja despacio: el hero se abre en dos niveles. Funciona también en el móvil; se detiene para quien ha pedido reducir el movimiento."
