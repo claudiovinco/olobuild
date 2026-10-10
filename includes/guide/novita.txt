@@ -3,6 +3,11 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.627 - 2026-10-10 (novità)
+- Temi: ogni tema si apre con un effetto di profondità. Scorrendo, la foto d’apertura, i testi e le decorazioni si muovono a velocità diverse e si separano in strati. Vale anche sul telefono.
+- Foto vere anche nei temi che non ne avevano (studi legali, consulenti, tecnologia, scuole…), messe a strati attorno al testo: ritagli ad arco, tondi, schede con la foto.
+- Le anteprime scorrevoli del selettore dei temi mostrano le home nuove.
+
 ## v1.4.626 - 2026-10-10 (fix)
 - Avanzate → Posizione (relativa, assoluta, fissa): i valori per tablet e telefono ora agiscono. Il valore per il computer stava scritto sull’elemento e vinceva sempre, così Top, Left, Bottom, Right, Larghezza e z-index impostati per un altro dispositivo non cambiavano niente.
 

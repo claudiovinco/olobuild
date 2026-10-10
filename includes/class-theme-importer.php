@@ -22,7 +22,12 @@ class Olobuild_Theme_Importer {
             $screenshot = '';
             $lib = rtrim( (string) apply_filters( 'olobuild_library_url', 'https://olotheme.com/olobuild-library' ), '/' );
             if ( $lib !== '' ) {
-                $screenshot = $lib . '/themes/' . $theme_id . '/screenshot.jpg?v=' . rawurlencode( (string) ( $data['preview_v'] ?? ( $data['version'] ?? '1' ) ) );
+                // Dalla versione 2 l'anteprima ha un file suo (screenshot-<preview_v>.jpg): rifarla sulla
+                // libreria remota non cambia quella dei siti col plugin di prima, che leggono ancora
+                // screenshot.jpg e importano i temi che quell'immagine mostra.
+                $pv   = isset( $data['preview_v'] ) ? (string) $data['preview_v'] : '';
+                $file = ( '' === $pv || '1' === $pv ) ? 'screenshot.jpg' : 'screenshot-' . sanitize_file_name( $pv ) . '.jpg';
+                $screenshot = $lib . '/themes/' . $theme_id . '/' . $file . '?v=' . rawurlencode( (string) ( $data['preview_v'] ?? ( $data['version'] ?? '1' ) ) );
             } else {
                 foreach ( [ 'screenshot.jpg', 'screenshot.png', 'screenshot.webp' ] as $ext ) {
                     if ( file_exists( $dir . '/' . $ext ) ) {
