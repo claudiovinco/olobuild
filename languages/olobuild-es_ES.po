@@ -24714,3 +24714,81 @@ msgstr "Se desactiva en pantallas táctiles y con movimiento reducido."
 
 msgid "Questa è una demo: i moduli non inviano nulla."
 msgstr "Esto es una demo: los formularios no envían nada."
+
+msgid "Nessun tema con la demo accesa su questo sito."
+msgstr "Ningún tema tiene la demo activada en este sitio."
+
+msgid "Computer"
+msgstr "Ordenador"
+
+msgid "Tablet"
+msgstr "Tableta"
+
+msgid "Tema precedente"
+msgstr "Tema anterior"
+
+msgid "Tema successivo"
+msgstr "Tema siguiente"
+
+msgid "Apri in una nuova scheda"
+msgstr "Abrir en una pestaña nueva"
+
+msgid "Demo del tema %s"
+msgstr "Demo del tema %s"
+
+msgid "Caricamento della demo…"
+msgstr "Cargando la demo…"
+
+msgid "Vetrina temi"
+msgstr "Escaparate de temas"
+
+msgid "Guarda la demo"
+msgstr "Ver la demo"
+
+msgid "Usa questo tema"
+msgstr "Usar este tema"
+
+msgid "Filtri per categoria"
+msgstr "Filtros por categoría"
+
+msgid "Etichetta di «tutti»"
+msgstr "Etiqueta de «todos»"
+
+msgid "Mostra la categoria"
+msgstr "Mostrar la categoría"
+
+msgid "Mostra l'effetto in evidenza"
+msgstr "Mostrar el efecto destacado"
+
+msgid "L'effetto che caratterizza il tema, scritto sull'anteprima."
+msgstr "El efecto que caracteriza al tema, escrito sobre la vista previa."
+
+msgid "Invito sulla scheda"
+msgstr "Invitación en la tarjeta"
+
+msgid "Visore"
+msgstr "Visor"
+
+msgid "Una scheda apre la demo del tema a tutto schermo: si sfoglia come un sito vero, in vista computer, tablet o telefono, e si passa ai temi vicini."
+msgstr "Una tarjeta abre la demo del tema a pantalla completa: se navega como un sitio de verdad, en vista ordenador, tableta o teléfono, y se pasa a los temas vecinos."
+
+msgid "Vuoto: il pulsante non compare."
+msgstr "Vacío: el botón no aparece."
+
+msgid "Testo sul colore"
+msgstr "Texto sobre el color"
+
+msgid "Filtro attivo, invito, comandi e pulsante del visore. Vuoto: il primario del tema."
+msgstr "Filtro activo, invitación, controles y botón del visor. Vacío: el color principal del tema."
+
+msgid "Scheda"
+msgstr "Tarjeta"
+
+msgid "Sfondo scheda"
+msgstr "Fondo de la tarjeta"
+
+msgid "Raggio scheda"
+msgstr "Radio de la tarjeta"
+
+msgid "Nome del tema"
+msgstr "Nombre del tema"

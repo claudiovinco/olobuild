@@ -1096,7 +1096,7 @@ regolaC('densita-ds-senza-ripiego', 'Ogni var(--olo-ds|dr|density) ha il ripiego
 // I tipi presenti al 24 set 2026 non leggono i token effettivi --olo-space-*/--olo-radius-*
 // (li converte E3, famiglia per famiglia, con la moltiplicazione per la densità). Una
 // tile NATA DOPO che li legge va messa qui sotto per nome di file.
-const TILE_NATE_DOPO_0_1 = new Set([]);
+const TILE_NATE_DOPO_0_1 = new Set(['class-themeshowcase-tile.php']);
 regolaC('densita-token-in-tile-esistenti', 'Le tile esistenti non leggono --olo-space-*/--olo-radius-*',
   occorrenzeC([...GC.T, ...GC.V, ...GC.F].filter((f) => !TILE_NATE_DOPO_0_1.has(path.basename(f))), /var\(\s*--olo-(?:space|radius)-/g));
 // I px scritti a mano per spazi e raggi nei renderer PHP: un intero ≥ 3 in una

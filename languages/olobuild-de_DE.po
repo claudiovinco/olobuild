@@ -24714,3 +24714,81 @@ msgstr "Auf Touchscreens und bei reduzierter Bewegung ist sie aus."
 
 msgid "Questa è una demo: i moduli non inviano nulla."
 msgstr "Das ist eine Demo: Formulare senden nichts."
+
+msgid "Nessun tema con la demo accesa su questo sito."
+msgstr "Auf dieser Website hat kein Theme eine eingeschaltete Demo."
+
+msgid "Computer"
+msgstr "Computer"
+
+msgid "Tablet"
+msgstr "Tablet"
+
+msgid "Tema precedente"
+msgstr "Vorheriges Theme"
+
+msgid "Tema successivo"
+msgstr "Nächstes Theme"
+
+msgid "Apri in una nuova scheda"
+msgstr "In neuem Tab öffnen"
+
+msgid "Demo del tema %s"
+msgstr "Demo des Themes %s"
+
+msgid "Caricamento della demo…"
+msgstr "Demo wird geladen…"
+
+msgid "Vetrina temi"
+msgstr "Theme-Schaufenster"
+
+msgid "Guarda la demo"
+msgstr "Demo ansehen"
+
+msgid "Usa questo tema"
+msgstr "Dieses Theme verwenden"
+
+msgid "Filtri per categoria"
+msgstr "Kategoriefilter"
+
+msgid "Etichetta di «tutti»"
+msgstr "Beschriftung für „alle“"
+
+msgid "Mostra la categoria"
+msgstr "Kategorie anzeigen"
+
+msgid "Mostra l'effetto in evidenza"
+msgstr "Hervorgehobenen Effekt anzeigen"
+
+msgid "L'effetto che caratterizza il tema, scritto sull'anteprima."
+msgstr "Der Effekt, der das Theme prägt, auf der Vorschau."
+
+msgid "Invito sulla scheda"
+msgstr "Aufforderung auf der Karte"
+
+msgid "Visore"
+msgstr "Betrachter"
+
+msgid "Una scheda apre la demo del tema a tutto schermo: si sfoglia come un sito vero, in vista computer, tablet o telefono, e si passa ai temi vicini."
+msgstr "Eine Karte öffnet die Demo des Themes im Vollbild: Du blätterst darin wie in einer echten Website, in der Ansicht Computer, Tablet oder Smartphone, und wechselst zu den benachbarten Themes."
+
+msgid "Vuoto: il pulsante non compare."
+msgstr "Leer: Die Schaltfläche erscheint nicht."
+
+msgid "Testo sul colore"
+msgstr "Text auf der Farbe"
+
+msgid "Filtro attivo, invito, comandi e pulsante del visore. Vuoto: il primario del tema."
+msgstr "Aktiver Filter, Aufforderung, Steuerung und Schaltfläche des Betrachters. Leer: die Primärfarbe des Themes."
+
+msgid "Scheda"
+msgstr "Karte"
+
+msgid "Sfondo scheda"
+msgstr "Kartenhintergrund"
+
+msgid "Raggio scheda"
+msgstr "Kartenradius"
+
+msgid "Nome del tema"
+msgstr "Theme-Name"

@@ -81,6 +81,13 @@ class Olobuild_Demo_Temi {
         // UIkit e frontend.css interi: il sottoinsieme appreso e il CSS per tile restano quelli del sito.
         add_filter( 'option_olobuild_performance', [ __CLASS__, 'prestazioni' ] );
 
+        // OLOlang: la demo resta nella lingua principale (i testi del tema non si «traducono» a pezzi
+        // con le stringhe globali del sito) e il cookie della lingua del visitatore non si tocca:
+        // tornando al sito, chi naviga in inglese resta in inglese.
+        add_filter( 'olo_lang_current', [ __CLASS__, 'lingua_principale' ], 1000 );
+        add_filter( 'olo_lang_browser_redirect_enabled', '__return_false' );
+        add_action( 'init', [ __CLASS__, 'lascia_il_cookie_della_lingua' ], 1 );
+
         // La pagina: niente query di WordPress, il modello della demo, fuori dai motori.
         add_filter( 'do_parse_request', [ __CLASS__, 'niente_query' ], 1000 );
         add_filter( 'template_include', [ __CLASS__, 'modello' ], 1000 );
@@ -146,6 +153,17 @@ class Olobuild_Demo_Temi {
             return true;
         }
         return is_array( $accesi ) && in_array( $id, $accesi, true );
+    }
+
+    /** Il sito mostra almeno una demo? (la tile Vetrina temi si registra solo così) */
+    public static function accese() {
+        $accesi = get_option( self::OPZIONE, '' );
+        return 'tutti' === $accesi || ( is_array( $accesi ) && ! empty( $accesi ) );
+    }
+
+    /** Indirizzo (relativo) della home della demo di un tema, da qualunque richiesta. */
+    public static function indirizzo_tema( $id ) {
+        return wp_make_link_relative( home_url( '/' . self::BASE . '/' . sanitize_title( (string) $id ) . '/' ) );
     }
 
     /** Chiave della pagina per il pezzo d'indirizzo dopo il tema ('' = la home), '' se non c'è. */
@@ -430,6 +448,54 @@ class Olobuild_Demo_Temi {
         remove_action( 'wp_footer', [ 'Olobuild_Custom_Code', 'output_footer_code' ], 99 );
     }
 
+    /* ── OLOlang ── */
+
+    /** olo_lang_current: la lingua principale del sito, quella in cui OLOlang non cambia niente. */
+    public static function lingua_principale( $lingua ) {
+        return class_exists( 'Olo_Lang_Language' ) ? Olo_Lang_Language::get_default_lang() : $lingua;
+    }
+
+    /** OLOlang riscrive il cookie con la lingua della richiesta: nella demo sarebbe quella principale. */
+    public static function lascia_il_cookie_della_lingua() {
+        remove_action( 'init', [ 'Olo_Lang_Cache_Integration', 'ensure_cookie' ], 5 );
+    }
+
+    /**
+     * Le poche scritte della demo che non sono del tema (l'avviso dei moduli, il titolo della 404)
+     * nella lingua del visitatore: quella del parametro o del cookie di OLOlang, letta dal catalogo
+     * del plugin. Senza OLOlang, o per la lingua principale, la traduzione del sito.
+     */
+    private static function testo_ospite( $testo ) {
+        if ( ! class_exists( 'Olo_Lang_Language' ) ) {
+            return olobuild_t( $testo );
+        }
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended -- sola lettura della lingua scelta dal visitatore
+        $codice = isset( $_GET['lang'] ) ? sanitize_key( wp_unslash( $_GET['lang'] ) ) : '';
+        if ( '' === $codice ) {
+            $codice = isset( $_COOKIE['olo_lang'] ) ? sanitize_key( wp_unslash( $_COOKIE['olo_lang'] ) ) : '';
+        }
+        // phpcs:enable WordPress.Security.NonceVerification.Recommended
+        $locale = '';
+        foreach ( (array) Olo_Lang_Language::get_active_languages() as $l ) {
+            if ( is_array( $l ) && ( $l['code'] ?? '' ) === $codice ) {
+                $locale = (string) ( $l['locale'] ?? '' );
+            }
+        }
+        $file = OLOBUILD_PATH . 'languages/olobuild-' . sanitize_file_name( $locale ) . '.mo';
+        if ( '' === $locale || 0 === strpos( $locale, 'it' ) || ! is_readable( $file ) ) {
+            return olobuild_t( $testo );
+        }
+        static $cataloghi = [];
+        if ( ! isset( $cataloghi[ $locale ] ) ) {
+            if ( ! class_exists( 'MO' ) ) {
+                require_once ABSPATH . WPINC . '/pomo/mo.php';
+            }
+            $cataloghi[ $locale ] = new MO();
+            $cataloghi[ $locale ]->import_from_file( $file );
+        }
+        return $cataloghi[ $locale ]->translate( $testo );
+    }
+
     /* ── La pagina ── */
 
     /** do_parse_request: l'indirizzo non è di WordPress, nessuna query (e quindi nessun 404). */
@@ -458,7 +524,7 @@ class Olobuild_Demo_Temi {
     public static function titolo() {
         $nome = (string) ( self::$tema['json']['name'] ?? self::$tema['id'] );
         if ( '404' === self::$pagina ) {
-            return esc_html( olobuild_t( 'Pagina non trovata' ) . ' — ' . $nome );
+            return esc_html( self::testo_ospite( 'Pagina non trovata' ) . ' — ' . $nome );
         }
         $p = self::$tema['json']['pages'][ self::$pagina ] ?? [];
         return esc_html( empty( $p['set_as_homepage'] ) && ! empty( $p['title'] ) ? $p['title'] . ' — ' . $nome : $nome );
@@ -493,7 +559,7 @@ class Olobuild_Demo_Temi {
      * con lo stesso avviso, così si vede anche come il tema mostra un invio riuscito.
      */
     public static function moduli_fermi() {
-        $testo = olobuild_t( 'Questa è una demo: i moduli non inviano nulla.' );
+        $testo = self::testo_ospite( 'Questa è una demo: i moduli non inviano nulla.' );
         ?>
 <div class="olo-template olo-demo-avviso" role="status" aria-live="polite" hidden></div>
 <script>

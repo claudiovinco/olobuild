@@ -24714,3 +24714,81 @@ msgstr "Il se désactive sur les écrans tactiles et avec le mouvement réduit."
 
 msgid "Questa è una demo: i moduli non inviano nulla."
 msgstr "Ceci est une démo : les formulaires n’envoient rien."
+
+msgid "Nessun tema con la demo accesa su questo sito."
+msgstr "Aucun thème avec une démo activée sur ce site."
+
+msgid "Computer"
+msgstr "Ordinateur"
+
+msgid "Tablet"
+msgstr "Tablette"
+
+msgid "Tema precedente"
+msgstr "Thème précédent"
+
+msgid "Tema successivo"
+msgstr "Thème suivant"
+
+msgid "Apri in una nuova scheda"
+msgstr "Ouvrir dans un nouvel onglet"
+
+msgid "Demo del tema %s"
+msgstr "Démo du thème %s"
+
+msgid "Caricamento della demo…"
+msgstr "Chargement de la démo…"
+
+msgid "Vetrina temi"
+msgstr "Vitrine des thèmes"
+
+msgid "Guarda la demo"
+msgstr "Voir la démo"
+
+msgid "Usa questo tema"
+msgstr "Utiliser ce thème"
+
+msgid "Filtri per categoria"
+msgstr "Filtres par catégorie"
+
+msgid "Etichetta di «tutti»"
+msgstr "Libellé de « tous »"
+
+msgid "Mostra la categoria"
+msgstr "Afficher la catégorie"
+
+msgid "Mostra l'effetto in evidenza"
+msgstr "Afficher l'effet phare"
+
+msgid "L'effetto che caratterizza il tema, scritto sull'anteprima."
+msgstr "L'effet qui caractérise le thème, écrit sur l'aperçu."
+
+msgid "Invito sulla scheda"
+msgstr "Invitation sur la carte"
+
+msgid "Visore"
+msgstr "Visionneuse"
+
+msgid "Una scheda apre la demo del tema a tutto schermo: si sfoglia come un sito vero, in vista computer, tablet o telefono, e si passa ai temi vicini."
+msgstr "Une carte ouvre la démo du thème en plein écran : on la parcourt comme un vrai site, en vue ordinateur, tablette ou téléphone, et on passe aux thèmes voisins."
+
+msgid "Vuoto: il pulsante non compare."
+msgstr "Vide : le bouton n'apparaît pas."
+
+msgid "Testo sul colore"
+msgstr "Texte sur la couleur"
+
+msgid "Filtro attivo, invito, comandi e pulsante del visore. Vuoto: il primario del tema."
+msgstr "Filtre actif, invitation, commandes et bouton de la visionneuse. Vide : la couleur principale du thème."
+
+msgid "Scheda"
+msgstr "Carte"
+
+msgid "Sfondo scheda"
+msgstr "Fond de la carte"
+
+msgid "Raggio scheda"
+msgstr "Rayon de la carte"
+
+msgid "Nome del tema"
+msgstr "Nom du thème"

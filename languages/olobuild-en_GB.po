@@ -16504,3 +16504,93 @@ msgstr "It turns off on touch screens and with reduced motion."
 
 msgid "Questa è una demo: i moduli non inviano nulla."
 msgstr "This is a demo: forms don’t send anything."
+
+msgid "Nessun tema con la demo accesa su questo sito."
+msgstr "No themes with a live demo on this site."
+
+msgid "Vista"
+msgstr "View"
+
+msgid "Computer"
+msgstr "Desktop"
+
+msgid "Tablet"
+msgstr "Tablet"
+
+msgid "Tema precedente"
+msgstr "Previous theme"
+
+msgid "Tema successivo"
+msgstr "Next theme"
+
+msgid "Apri in una nuova scheda"
+msgstr "Open in a new tab"
+
+msgid "Demo del tema %s"
+msgstr "%s theme demo"
+
+msgid "Caricamento della demo…"
+msgstr "Loading the demo…"
+
+msgid "Vetrina temi"
+msgstr "Theme showcase"
+
+msgid "Guarda la demo"
+msgstr "View the demo"
+
+msgid "Usa questo tema"
+msgstr "Use this theme"
+
+msgid "Filtri per categoria"
+msgstr "Category filters"
+
+msgid "Etichetta di «tutti»"
+msgstr "Label for “all”"
+
+msgid "Mostra la categoria"
+msgstr "Show the category"
+
+msgid "Mostra l'effetto in evidenza"
+msgstr "Show the featured effect"
+
+msgid "L'effetto che caratterizza il tema, scritto sull'anteprima."
+msgstr "The effect that defines the theme, written on the preview."
+
+msgid "Invito sulla scheda"
+msgstr "Card call to action"
+
+msgid "Visore"
+msgstr "Viewer"
+
+msgid "Una scheda apre la demo del tema a tutto schermo: si sfoglia come un sito vero, in vista computer, tablet o telefono, e si passa ai temi vicini."
+msgstr "A card opens the theme demo full screen: you browse it like a real website, in desktop, tablet or phone view, and move on to the nearby themes."
+
+msgid "Testo del pulsante"
+msgstr "Button text"
+
+msgid "Collegamento del pulsante"
+msgstr "Button link"
+
+msgid "Vuoto: il pulsante non compare."
+msgstr "Empty: the button does not appear."
+
+msgid "Testo sul colore"
+msgstr "Text on colour"
+
+msgid "Filtro attivo, invito, comandi e pulsante del visore. Vuoto: il primario del tema."
+msgstr "Active filter, call to action, viewer controls and button. Empty: the theme primary colour."
+
+msgid "Scheda"
+msgstr "Card"
+
+msgid "Sfondo scheda"
+msgstr "Card background"
+
+msgid "Bordo scheda"
+msgstr "Card border"
+
+msgid "Raggio scheda"
+msgstr "Card radius"
+
+msgid "Nome del tema"
+msgstr "Theme name"
