@@ -14,6 +14,13 @@ const MEGAMENU_TEMPLATE_OPTIONS = [
 ];
 
 
+// Padding barra salvato prima della 1.4.622: il renderer usa il «sopra» per i lati, sopra e sotto 0.
+const paddingBarraStorico = (v) => {
+  const n = parseInt(v && typeof v === 'object' ? v.top : v, 10);
+  const lato = Number.isNaN(n) ? 16 : Math.max(0, n);
+  return { top: 0, right: lato, bottom: 0, left: lato };
+};
+
 // Visibilità sezione "CTA — Aspetto": i controlli btn_* stilano .olo-mm-btn,
 // usata sia dalle voci CTA (button_mode) sia dai link extra in modalità
 // bottone (extra_link_N_button). Mostrali se almeno uno dei due è attivo.
@@ -607,7 +614,12 @@ export default {
       { value: 'wide', label: t('Wide (1400px)') },
       { value: 'classic', label: t('Classica (1200px)') },
     ]},
-    { key: 'bar_padding', label: t('Padding barra'), type: 'spacing', max: 60 },
+    // Fino alla 1.4.621 il renderer leggeva il solo «sopra» e lo metteva ai lati: finché il campo non si
+    // tocca mostra ciò che la testata rende davvero (temi e testate salvate restano identici); toccato,
+    // valgono i quattro lati (`bar_padding_4lati`, letto da class-megamenu-tile.php).
+    { key: 'bar_padding', label: t('Padding barra'), type: 'spacing', max: 60,
+      valoreDa: (v, s) => (s.bar_padding_4lati ? v : paddingBarraStorico(v)),
+      scriviAnche: () => ({ bar_padding_4lati: true }) },
     { key: 'bar_gap', label: t('Gap elementi barra'), type: 'range', min: 0, max: 60, step: 2 },
     { key: 'logo_margin_right', label: t('Margine destro logo'), type: 'spacing', max: 80 },
 

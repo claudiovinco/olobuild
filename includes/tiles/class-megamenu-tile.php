@@ -463,8 +463,14 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         $tgl_color   = $this->safe_color( $s['mob_toggle_color'] ?? '' );
         $sep_style   = $s['mob_separator_style'] ?? 'line';
 
-        // Bar spacing
-        $bar_pad     = $this->pad_int( $s['bar_padding'] ?? null, 16 );
+        // Bar spacing. Fino alla 1.4.621 del Padding barra si leggeva il solo «sopra», messo ai lati (sopra e
+        // sotto 0): le testate salvate così, temi compresi, restano identiche. I quattro lati valgono quando
+        // il campo è stato toccato dalla 1.4.622 (l'inspector scrive `bar_padding_4lati` insieme al valore).
+        $bar_po = $this->pad_obj( $s['bar_padding'] ?? null, 16 );
+        if ( empty( $s['bar_padding_4lati'] ) ) {
+            $bar_po = [ 'top' => 0, 'right' => $bar_po['top'], 'bottom' => 0, 'left' => $bar_po['top'] ];
+        }
+        $bar_po      = array_map( function ( $n ) { return max( 0, $n ); }, $bar_po );
         $bar_gap_val = intval( $s['bar_gap'] ?? 20 );
         $logo_mr     = $this->pad_int( $s['logo_margin_right'] ?? null, 0 );
 
@@ -577,12 +583,11 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             <?php if ( $nav_h > 0 ) : ?>min-height: <?php echo $nav_h; ?>px;<?php endif; ?>
             <?php
             $bar_w = $s['bar_width'] ?? 'full';
-            if ( $bar_w === 'wide' ) : ?>
-            padding: 0 max(<?php echo $bar_pad; ?>px, calc(50% - 700px));
-            <?php elseif ( $bar_w === 'classic' ) : ?>
-            padding: 0 max(<?php echo $bar_pad; ?>px, calc(50% - 600px));
+            $bar_half = $bar_w === 'wide' ? 700 : ( $bar_w === 'classic' ? 600 : 0 );
+            if ( $bar_half ) : ?>
+            padding: <?php echo $bar_po['top']; ?>px max(<?php echo $bar_po['right']; ?>px, calc(50% - <?php echo $bar_half; ?>px)) <?php echo $bar_po['bottom']; ?>px max(<?php echo $bar_po['left']; ?>px, calc(50% - <?php echo $bar_half; ?>px));
             <?php else : ?>
-            padding: 0 <?php echo $bar_pad; ?>px;
+            padding: <?php echo $bar_po['top']; ?>px <?php echo $bar_po['right']; ?>px <?php echo $bar_po['bottom']; ?>px <?php echo $bar_po['left']; ?>px;
             <?php endif; ?>
             gap: <?php echo $bar_gap_val; ?>px;
             width: 100%;
@@ -2038,7 +2043,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             padding: <?php echo max( 4, $btn_pad['top'] - 2 ); ?>px <?php echo max( 8, $btn_pad['right'] - 4 ); ?>px <?php echo max( 4, $btn_pad['bottom'] - 2 ); ?>px <?php echo max( 8, $btn_pad['left'] - 4 ); ?>px !important;
         }
         .<?php echo $uid; ?> .olo-mm-mob-search-panel {
-            display: none; padding: 10px <?php echo $this->pad_int($s['bar_padding'] ?? null, 12); ?>px;
+            display: none; padding: 10px <?php echo $bar_po['right']; ?>px 10px <?php echo $bar_po['left']; ?>px;
             background: <?php echo $mob_drop_bg; ?>;
         }
         .<?php echo $uid; ?>.olo-mm-search-active .olo-mm-mob-search-panel { display: flex; }
@@ -2368,7 +2373,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         <?php if ( ! empty( $s['topbar_enabled'] ) ) : ?>
         .<?php echo $uid; ?> .olo-mm-topbar {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0 <?php echo absint($this->pad_int($s['bar_padding'] ?? null, 16)); ?>px;
+            padding: 0 <?php echo $bar_po['right']; ?>px 0 <?php echo $bar_po['left']; ?>px;
             height: <?php echo absint($s['topbar_height']); ?>px;
             background: <?php echo esc_attr($s['topbar_bg']); ?>;
             color: <?php echo esc_attr($s['topbar_text_color']); ?>;
@@ -2376,8 +2381,8 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             line-height: 1; position: relative; z-index: 100000;
             width: 100vw;
             margin-left: calc(-50vw + 50%);
-            padding-left: max(<?php echo absint($this->pad_int($s['bar_padding'] ?? null, 16)); ?>px, calc(50vw - 600px));
-            padding-right: max(<?php echo absint($this->pad_int($s['bar_padding'] ?? null, 16)); ?>px, calc(50vw - 600px));
+            padding-left: max(<?php echo $bar_po['left']; ?>px, calc(50vw - 600px));
+            padding-right: max(<?php echo $bar_po['right']; ?>px, calc(50vw - 600px));
             box-sizing: border-box;
         }
         <?php if ( ! empty( $s['topbar_border_bottom'] ) ) : ?>
