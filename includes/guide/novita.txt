@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.625 - 2026-10-10 (fix)
+- Slider pro → Parallax: i livelli ora si muovono davvero. Dopo l’animazione d’ingresso la sua posa finale bloccava lo spostamento col mouse, e scorrendo la pagina il livello si spostava solo la prima volta; con «Entrambi» mouse e scorrimento si sommano. Scendendo nella pagina, i livelli con la profondità più alta salgono più in fretta e sembrano più vicini.
+- Hero e Hero Split, «Parallasse a strati»: gli strati si separano dal primo pixel di scorrimento (prima partivano piano).
+
 ## v1.4.624 - 2026-10-10 (fix)
 - Form: un campo data subito dopo un altro campo data (Arrivo e Partenza, Dal e Al) ora fa da intervallo. Nel calendario della data finale i giorni prima di quella iniziale sono spenti, se sposti l’inizio oltre la fine già scelta la fine si svuota, e un invio con la fine prima dell’inizio viene rifiutato anche dal server. Vale per tutti i form, anche quelli già fatti.
 

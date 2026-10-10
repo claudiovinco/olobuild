@@ -246,6 +246,8 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
             if ( ! $depth ) {
                 return '';
             }
+            // andamento lineare: gli strati si separano dal primo pixel di scorrimento (l'easing 1 di UIkit partiva piano)
+            $parti[] = 'easing: 0';
             $parti[] = 'media: (prefers-reduced-motion: no-preference)';
             return ' uk-parallax="' . esc_attr( implode( '; ', $parti ) ) . '"';
         };

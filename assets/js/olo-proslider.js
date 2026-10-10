@@ -317,6 +317,14 @@ function initSlider(container) {
 
       // Loop animation — starts after entrance completes
       var loopKey = el.getAttribute('data-anim-loop');
+      if (!(loopKey && loopKey !== 'none' && LOOP_ANIM[loopKey])) {
+        // Finito l'ingresso, l'animazione si toglie (il livello resta visibile per mps-anim-visible): la sua posa
+        // finale, tenuta da «both», copriva il transform in linea della parallasse del livello (mouse e scorrimento).
+        var entrataFine = (parseInt(delay, 10) || 0) + (parseInt(dur, 10) || 800) + 60;
+        setTimeout(function () {
+          if (el.style.animation.indexOf(name + ' ') === 0) { el.style.animation = 'none'; }
+        }, entrataFine);
+      }
       if (loopKey && loopKey !== 'none' && LOOP_ANIM[loopKey]) {
         var loopName  = LOOP_ANIM[loopKey];
         var loopDur   = (parseInt(el.getAttribute('data-anim-loop-dur'), 10) || 3000) + 'ms';
@@ -647,46 +655,57 @@ function initSlider(container) {
     if (parallaxLayers.length > 0) {
       var pType = cfg.parallaxType || 'mouse';
       var pIntensity = cfg.parallaxIntensity || 5;
+      // Mouse e scorrimento scrivono lo stesso transform: ogni livello tiene le due parti e le somma.
+      // Prima lo scorrimento scriveva solo la prima volta (poi trovava già un translateY e si fermava)
+      // e con «Entrambi» il mouse e lo scorrimento si cancellavano a vicenda.
+      var pStato = parallaxLayers.map(function () { return { mx: 0, my: 0, sy: 0 }; });
+      function scriviLivello(i) {
+        var st = pStato[i];
+        var x = st.mx, y = st.my + st.sy;
+        parallaxLayers[i].style.transform = (x || y) ? 'translate(' + x.toFixed(1) + 'px, ' + y.toFixed(1) + 'px)' : '';
+      }
 
       if (pType === 'mouse' || pType === 'both') {
         container.addEventListener('mousemove', function (e) {
           var rect = container.getBoundingClientRect();
           var mx = (e.clientX - rect.left) / rect.width - 0.5;
           var my = (e.clientY - rect.top) / rect.height - 0.5;
-          parallaxLayers.forEach(function (pl) {
+          parallaxLayers.forEach(function (pl, i) {
             var depth = parseInt(pl.getAttribute('data-parallax-depth'), 10) || 0;
             if (depth <= 0) return;
-            var offsetX = mx * depth * pIntensity;
-            var offsetY = my * depth * pIntensity;
-            pl.style.transform = 'translate(' + offsetX + 'px, ' + offsetY + 'px)';
+            pStato[i].mx = mx * depth * pIntensity;
+            pStato[i].my = my * depth * pIntensity;
+            scriviLivello(i);
           });
         });
         container.addEventListener('mouseleave', function () {
-          parallaxLayers.forEach(function (pl) {
-            pl.style.transform = '';
+          parallaxLayers.forEach(function (pl, i) {
+            pStato[i].mx = 0;
+            pStato[i].my = 0;
             pl.style.transition = 'transform 0.5s ease-out';
+            scriviLivello(i);
             setTimeout(function () { pl.style.transition = ''; }, 500);
           });
         });
       }
 
       if (pType === 'scroll' || pType === 'both') {
-        window.addEventListener('scroll', function () {
+        var aggiornaScorrimento = function () {
           var rect = container.getBoundingClientRect();
           var viewH = window.innerHeight;
           if (rect.bottom < 0 || rect.top > viewH) return;
           var progress = (viewH - rect.top) / (viewH + rect.height);
           var scrollOffset = (progress - 0.5) * 2;
-          parallaxLayers.forEach(function (pl) {
+          parallaxLayers.forEach(function (pl, i) {
             var depth = parseInt(pl.getAttribute('data-parallax-depth'), 10) || 0;
             if (depth <= 0) return;
-            var offsetY = scrollOffset * depth * pIntensity;
-            var current = pl.style.transform || '';
-            if (current.indexOf('translateY') === -1) {
-              pl.style.transform = 'translateY(' + offsetY + 'px)';
-            }
+            // scendendo nella pagina, più alta è la profondità del livello più in fretta sale: sembra più vicino, davanti allo sfondo
+            pStato[i].sy = -scrollOffset * depth * pIntensity;
+            scriviLivello(i);
           });
-        }, { passive: true });
+        };
+        window.addEventListener('scroll', aggiornaScorrimento, { passive: true });
+        aggiornaScorrimento();
       }
     }
   }
