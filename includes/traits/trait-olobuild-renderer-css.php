@@ -848,23 +848,25 @@ trait Olobuild_Renderer_Css_Trait {
                 $decls[] = 'text-align: ' . esc_attr( $style[ $ta_key ] );
             }
 
-            // Positioning overrides (from advanced)
+            // Positioning overrides (from advanced). La posizione desktop è inline sull'elemento
+            // (apply_common_box_styles): senza !important il selettore #id della media query non la
+            // sovrascriveva e i valori per tablet e telefono del pannello Posizione non agivano mai.
             if ( ! empty( $advanced ) ) {
                 foreach ( [ 'top', 'left', 'bottom', 'right' ] as $dir ) {
                     $pk = "position_{$dir}_{$bp}";
                     if ( isset( $advanced[ $pk ] ) && $advanced[ $pk ] !== '' && $advanced[ $pk ] !== null ) {
                         $pv = $advanced[ $pk ];
-                        $decls[] = $dir . ': ' . ( is_numeric( $pv ) ? $pv . 'px' : esc_attr( $pv ) );
+                        $decls[] = $dir . ': ' . ( is_numeric( $pv ) ? $pv . 'px' : esc_attr( $pv ) ) . ' !important';
                     }
                 }
                 $pw_key = "position_width_{$bp}";
                 if ( isset( $advanced[ $pw_key ] ) && $advanced[ $pw_key ] !== '' && $advanced[ $pw_key ] !== null ) {
                     $pw_val = $advanced[ $pw_key ];
-                    $decls[] = 'width: ' . ( is_numeric( $pw_val ) ? $pw_val . 'px' : esc_attr( $pw_val ) );
+                    $decls[] = 'width: ' . ( is_numeric( $pw_val ) ? $pw_val . 'px' : esc_attr( $pw_val ) ) . ' !important';
                 }
                 $pz_key = "position_zindex_{$bp}";
                 if ( isset( $advanced[ $pz_key ] ) && $advanced[ $pz_key ] !== '' && $advanced[ $pz_key ] !== null ) {
-                    $decls[] = 'z-index: ' . intval( $advanced[ $pz_key ] );
+                    $decls[] = 'z-index: ' . intval( $advanced[ $pz_key ] ) . ' !important';
                 }
             }
 

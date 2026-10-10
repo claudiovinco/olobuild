@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.626 - 2026-10-10 (fix)
+- Avanzate → Posizione (relativa, assoluta, fissa): i valori per tablet e telefono ora agiscono. Il valore per il computer stava scritto sull’elemento e vinceva sempre, così Top, Left, Bottom, Right, Larghezza e z-index impostati per un altro dispositivo non cambiavano niente.
+
 ## v1.4.625 - 2026-10-10 (fix)
 - Slider pro → Parallax: i livelli ora si muovono davvero. Dopo l’animazione d’ingresso la sua posa finale bloccava lo spostamento col mouse, e scorrendo la pagina il livello si spostava solo la prima volta; con «Entrambi» mouse e scorrimento si sommano. Scendendo nella pagina, i livelli con la profondità più alta salgono più in fretta e sembrano più vicini.
 - Hero e Hero Split, «Parallasse a strati»: gli strati si separano dal primo pixel di scorrimento (prima partivano piano).
