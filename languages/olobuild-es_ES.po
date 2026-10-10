@@ -24792,3 +24792,6 @@ msgstr "Radio de la tarjeta"
 
 msgid "Nome del tema"
 msgstr "Nombre del tema"
+
+msgid "Testo e bordo dei filtri non attivi. Vuoto: il colore del testo intorno."
+msgstr "Texto y borde de los filtros inactivos. Vacío: el color del texto de alrededor."

@@ -27,6 +27,7 @@ export default {
     cta_url: '',
     accent: '',
     accent_on: '',
+    filter_color: '',
     card_bg: '',
     card_border: '',
     card_radius: { tl: 16, tr: 16, br: 16, bl: 16 },
@@ -72,6 +73,8 @@ export default {
     { key: 'accent', label: t('Colore'), type: 'color',
       description: t('Filtro attivo, invito, comandi e pulsante del visore. Vuoto: il primario del tema.') },
     { key: 'accent_on', label: t('Testo sul colore'), type: 'color' },
+    { key: 'filter_color', label: t('Colore filtri'), type: 'color',
+      description: t('Testo e bordo dei filtri non attivi. Vuoto: il colore del testo intorno.') },
 
     { type: 'separator', label: t('Scheda') },
     { key: 'card_bg', label: t('Sfondo scheda'), type: 'color' },

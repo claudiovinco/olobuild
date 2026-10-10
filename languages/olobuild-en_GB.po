@@ -16786,3 +16786,6 @@ msgstr "Glass and waves"
 
 msgid "Vigne in video"
 msgstr "Vineyards on video"
+
+msgid "Testo e bordo dei filtri non attivi. Vuoto: il colore del testo intorno."
+msgstr "Text and border of inactive filters. Empty: the surrounding text colour."

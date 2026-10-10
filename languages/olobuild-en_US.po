@@ -24795,3 +24795,6 @@ msgstr "Card radius"
 
 msgid "Nome del tema"
 msgstr "Theme name"
+
+msgid "Testo e bordo dei filtri non attivi. Vuoto: il colore del testo intorno."
+msgstr "Text and border of inactive filters. Empty: the surrounding text color."

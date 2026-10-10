@@ -35,6 +35,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
         // Stile
         'accent'              => '',
         'accent_on'           => '',
+        'filter_color'        => '',
         'card_bg'             => '',
         'card_border'         => '',
         'card_radius'         => [ 'tl' => 16, 'tr' => 16, 'br' => 16, 'bl' => 16 ],
@@ -169,6 +170,8 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
         $cols   = max( 1, min( 4, intval( $s['columns'] ) ) );
         $gap    = max( 0, min( 64, intval( $s['gap'] ) ) );
         $giust  = [ 'left' => 'flex-start', 'center' => 'center', 'right' => 'flex-end' ][ (string) $s['filter_align'] ] ?? 'center';
+        // Filtri non attivi: testo e bordo (il bordo è il testo al 20%); vuoto = il colore del testo intorno.
+        $filtri = $this->safe_color_css( $s['filter_color'] ?? '' );
         $cta    = trim( (string) $s['cta_url'] );
         $ico    = self::ICONE;
         $meta   = ( '' === $this->safe_color_css( $s['meta_color'] ) ? 'opacity:.65;' : '' ) . $this->tipografia( $s, 'meta' );
@@ -179,7 +182,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
         ?>
         <style>
             .<?php echo $uid; ?>{--ovt-acc:<?php echo $acc; ?>;--ovt-on:<?php echo $on; ?>;--ovt-card:<?php echo $card; ?>;--ovt-r:<?php echo $raggio; ?>;}
-            .<?php echo $uid; ?> .ovt-filtri{display:flex;flex-wrap:wrap;gap:var(--olo-space-sm);justify-content:<?php echo $giust; ?>;margin:0 0 var(--olo-space-lg);}
+            .<?php echo $uid; ?> .ovt-filtri{display:flex;flex-wrap:wrap;gap:var(--olo-space-sm);justify-content:<?php echo $giust; ?>;margin:0 0 var(--olo-space-lg);<?php echo '' !== $filtri ? 'color:' . $filtri . ';' : ''; ?>}
             .<?php echo $uid; ?> .ovt-filtro{font:inherit;font-size:14px;font-weight:600;line-height:1.2;display:inline-flex;align-items:center;gap:var(--olo-space-xs);padding:var(--olo-space-sm) var(--olo-space-md);border-radius:var(--olo-btn-border-radius);border:1px solid color-mix(in srgb,currentColor 20%,transparent);background:transparent;color:inherit;cursor:pointer;transition:background-color .2s ease,border-color .2s ease,color .2s ease;}
             .<?php echo $uid; ?> .ovt-filtro:hover{border-color:var(--ovt-acc);}
             .<?php echo $uid; ?> .ovt-filtro .ovt-n{font-size:12px;font-weight:500;opacity:.6;}

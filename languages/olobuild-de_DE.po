@@ -24792,3 +24792,6 @@ msgstr "Kartenradius"
 
 msgid "Nome del tema"
 msgstr "Theme-Name"
+
+msgid "Testo e bordo dei filtri non attivi. Vuoto: il colore del testo intorno."
+msgstr "Text und Rahmen der inaktiven Filter. Leer: die Textfarbe der Umgebung."
