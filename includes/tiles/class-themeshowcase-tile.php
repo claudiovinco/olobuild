@@ -275,8 +275,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                     </div>
                 </div>
                 <div class="ovt-palco">
-                    <div class="ovt-schermo" data-vista="computer">
-                        <iframe title="" src="about:blank" data-titolo="<?php echo esc_attr( olobuild_t( 'Demo del tema %s' ) ); ?>"></iframe>
+                    <div class="ovt-schermo" data-vista="computer" data-titolo="<?php echo esc_attr( olobuild_t( 'Demo del tema %s' ) ); ?>">
                         <div class="ovt-attesa" aria-hidden="true"><span class="ovt-ruota"></span><span><?php echo esc_html( olobuild_t( 'Caricamento della demo…' ) ); ?></span></div>
                     </div>
                 </div>
@@ -317,24 +316,48 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             var visore = root.querySelector('.ovt-visore');
             if (!visore) { return; }
             if (typeof visore.showModal !== 'function') { return; }
-            var schermo = visore.querySelector('.ovt-schermo'), frame = visore.querySelector('iframe');
+            var schermo = visore.querySelector('.ovt-schermo'), frame = null;
             var nuova = visore.querySelector('[data-nuova]'), chiudiBtn = visore.querySelector('[data-chiudi]');
-            var attuale = null, ritorno = null, spinto = false, atteso = '', dentro = false;
-            // Cambiare la pagina del riquadro con src aggiungerebbe una voce alla cronologia della
-            // finestra: «Indietro» tornerebbe al tema di prima invece di chiudere il visore.
-            function vai(url) { try { frame.contentWindow.location.replace(url); } catch (err) { frame.src = url; } }
+            var attuale = null, ritorno = null, spinto = false;
+            // Un riquadro nuovo per ogni tema, tolto alla chiusura: un iframe che cambia pagina lascia la
+            // sua voce nella cronologia della finestra, e «Indietro» lo riportava (nascosto) alla demo di prima.
+            function riquadro(url, titolo) {
+                var f = document.createElement('iframe');
+                f.title = titolo;
+                f.src = url;
+                f.addEventListener('load', caricato);
+                if (frame) { schermo.replaceChild(f, frame); } else { schermo.insertBefore(f, schermo.firstChild); }
+                frame = f;
+            }
+            function togli() { if (frame) { schermo.removeChild(frame); frame = null; } }
+            function caricato() {
+                if (this !== frame) { return; }
+                schermo.classList.remove('is-attesa');
+                var w = null;
+                // «Apri in una nuova scheda» porta alla pagina della demo che si sta guardando.
+                try { w = frame.contentWindow; nuova.href = w.location.href; } catch (err) { w = null; }
+                if (w) { w.addEventListener('click', trattieni); }
+            }
+            // Dentro la demo i link cambiano pagina senza aggiungere voci alla cronologia («Indietro»
+            // chiude il visore); quelli verso altri siti si aprono in una nuova scheda.
+            function trattieni(e) {
+                if (e.defaultPrevented || e.button || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) { return; }
+                var a = e.target.closest ? e.target.closest('a[href]') : null, w = frame ? frame.contentWindow : null, u = null;
+                if (!a || !w || a.hasAttribute('download')) { return; }
+                if ((a.getAttribute('target') || '_self').toLowerCase() !== '_self') { return; }
+                try { u = new URL(a.getAttribute('href'), w.location.href); } catch (err) { return; }
+                if (u.protocol !== 'http:' ? u.protocol !== 'https:' : false) { return; }
+                e.preventDefault();
+                if (u.origin !== w.location.origin) { window.open(u.href, '_blank', 'noopener'); return; }
+                w.location.replace(u.href);
+            }
             function lista() { return voci.filter(function (v) { return !v.hidden; }).map(function (v) { return v.querySelector('.ovt-card'); }); }
             function card(id) { var c = null; voci.forEach(function (v) { var a = v.querySelector('.ovt-card'); if (a.getAttribute('data-tema') === id) { c = a; } }); return c; }
             function mostra(a, storia) {
                 attuale = a;
                 visore.querySelector('[data-nome]').textContent = a.getAttribute('data-nome');
                 visore.querySelector('[data-categoria]').textContent = a.getAttribute('data-categoria');
-                frame.title = frame.getAttribute('data-titolo').replace('%s', a.getAttribute('data-nome'));
-                schermo.classList.add('is-attesa');
-                atteso = a.href;
-                dentro = false;
-                vai(atteso);
-                nuova.href = atteso;
+                nuova.href = a.href;
                 if (!visore.open) {
                     ritorno = document.activeElement;
                     visore.showModal();
@@ -344,20 +367,23 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 var segno = '#demo-' + a.getAttribute('data-tema');
                 if (storia === 'nuova') { history.pushState({ ovt: 1 }, '', segno); spinto = true; }
                 else if (storia === 'sostituisci') { history.replaceState(history.state, '', segno); }
+                // Il riquadro nasce dopo la voce della cronologia: quella di prima non lo conosce.
+                schermo.classList.add('is-attesa');
+                riquadro(a.href, schermo.getAttribute('data-titolo').replace('%s', a.getAttribute('data-nome')));
             }
             function chiudi(daStoria) {
                 if (!visore.open) { return; }
                 visore.close();
-                atteso = '';
-                vai('about:blank');
+                togli();
+                schermo.classList.remove('is-attesa');
                 document.documentElement.classList.remove('ovt-aperto');
                 attuale = null;
                 if (ritorno) { ritorno.focus(); }
                 if (!daStoria) {
-                    // Indietro toglie la voce aggiunta all'apertura; se dentro la demo si è navigato,
-                    // le voci sono di più: si toglie solo il tema dall'indirizzo, senza muoversi.
-                    if (spinto ? !dentro : false) { spinto = false; history.back(); }
-                    else { spinto = false; history.replaceState(history.state, '', location.pathname + location.search); }
+                    // Indietro toglie la voce aggiunta all'apertura; aperto da un indirizzo col tema,
+                    // si toglie solo il tema dall'indirizzo.
+                    if (spinto) { spinto = false; history.back(); }
+                    else { history.replaceState(history.state, '', location.pathname + location.search); }
                 }
             }
             function passo(n) {
@@ -365,17 +391,6 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 if (!l.length) { return; }
                 mostra(l[(i + n + l.length) % l.length], 'sostituisci');
             }
-            frame.addEventListener('load', function () {
-                var dove = '';
-                try { dove = frame.contentWindow.location.href; } catch (err) { dove = ''; }
-                if (!atteso) { return; }
-                schermo.classList.remove('is-attesa');
-                // Una pagina della demo aperta dal suo menu: «Apri in una nuova scheda» porta lì.
-                if (dove) {
-                    if (dove.split('#')[0] !== atteso.split('#')[0]) { dentro = true; }
-                    nuova.href = dove;
-                }
-            });
             voci.forEach(function (v) {
                 var a = v.querySelector('.ovt-card');
                 a.addEventListener('click', function (e) {

@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.636 - 2026-10-10 (fix)
+- Vetrina temi: chiudendo la demo si ferma davvero, prima restava a girare nascosta. I link dentro la demo cambiano pagina senza allungare la cronologia, così «Indietro» chiude la demo. I link verso altri siti si aprono in una nuova scheda.
+
 ## v1.4.635 - 2026-10-10 (novità)
 - Vetrina temi: una tile nuova per i siti che mostrano le demo dei temi. Mostra una scheda per tema, con l'anteprima che scorre, e i filtri per categoria. Cliccando una scheda la demo si apre a tutto schermo, in vista computer, tablet o telefono, e si passa al tema precedente o al successivo. L'elenco segue da solo i temi del plugin.
 - Demo dal vivo dei temi: valgono per tutti i 52 temi. Sui siti in più lingue la demo resta nella lingua del tema, e chi naviga in un'altra lingua la ritrova tornando al sito.
