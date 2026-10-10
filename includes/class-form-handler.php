@@ -345,6 +345,23 @@ class Olobuild_Form_Handler {
             }
         }
 
+        // 6a. Date in coppia (dal config firmato): la fine di un intervallo non può cadere prima dell'inizio.
+        //     I campi data arrivano in formato ISO (AAAA-MM-GG, con l'ora per data e ora): il confronto fra
+        //     stringhe segue il calendario. Il browser lo impedisce già; qui vale anche per chi lo aggira.
+        foreach ( (array) ( $config['date_pairs'] ?? [] ) as $coppia ) {
+            if ( ! is_array( $coppia ) || count( $coppia ) !== 2 ) {
+                continue;
+            }
+            $inizio = $sanitized[ sanitize_key( (string) $coppia[0] ) ] ?? '';
+            $fine   = $sanitized[ sanitize_key( (string) $coppia[1] ) ] ?? '';
+            if ( is_string( $inizio ) && is_string( $fine ) && '' !== trim( $inizio ) && '' !== trim( $fine ) && strcmp( trim( $fine ), trim( $inizio ) ) < 0 ) {
+                return new WP_REST_Response( [
+                    'success' => false,
+                    'data'    => [ 'message' => olobuild_t( 'La data finale non può essere prima di quella iniziale' ) . '.' ],
+                ], 400 );
+            }
+        }
+
         // 6b. Handle file uploads
         // phpcs:ignore WordPress.Security.NonceVerification.Missing -- callback REST pubblica (form contatto): il modello anti-abuso è HMAC token v2 validato sopra (validate_token) + honeypot + rate-limit, non un nonce (form spesso serviti da pagine cache); upload validati con is_uploaded_file/wp_check_filetype/finfo + allowlist estensioni.
         if ( ! empty( $_FILES ) ) {

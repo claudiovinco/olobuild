@@ -388,6 +388,46 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
             $form_config_data['brevo_email_field'] = sanitize_key( $s['brevo_email_field'] ?? 'email' );
         }
 
+        // Date in coppia (regola generale, 10 ott 2026): un campo data subito dopo un altro campo data dello
+        // stesso tipo è la fine di un intervallo (arrivo → partenza, dal → al) e non può cadere prima
+        // dell'inizio. Il calendario del browser spegne i giorni prima (min); la coppia entra anche nel config
+        // firmato perché l'handler la ricontrolli. Solo se c'è: un modulo senza coppie stampa lo stesso config
+        // (e lo stesso token) di prima. I nomi seguono la regola del render dei campi (field_<passo>_<posizione>).
+        $coppie_date = [];
+        $data_prec   = null;
+        $passo_n     = 0;
+        $pos_n       = 0;
+        foreach ( $fields as $f ) {
+            $ft = $f['field_type'] ?? 'text';
+            if ( 'step' === $ft ) {
+                if ( $is_multistep ) {
+                    $passo_n++;
+                    $pos_n = 0;
+                }
+                continue;
+            }
+            $nome_f = sanitize_key( $f['name'] ?? 'field_' . $passo_n . '_' . $pos_n );
+            $pos_n++;
+            if ( 'hidden' === $ft ) {
+                continue;
+            }
+            if ( in_array( $ft, [ 'date', 'datetime' ], true ) ) {
+                if ( $data_prec && $data_prec[1] === $ft ) {
+                    $coppie_date[] = [ $data_prec[0], $nome_f ];
+                }
+                $data_prec = [ $nome_f, $ft ];
+            } else {
+                $data_prec = null;
+            }
+        }
+        $data_dopo = [];
+        foreach ( $coppie_date as $coppia ) {
+            $data_dopo[ $coppia[1] ] = $coppia[0];
+        }
+        if ( $coppie_date ) {
+            $form_config_data['date_pairs'] = $coppie_date;
+        }
+
         $form_config = wp_json_encode( $form_config_data );
 
         // Container style
@@ -620,6 +660,10 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                                 }
                                 if ( $ftype === 'url' ) {
                                     $extra_attrs .= ' title="' . esc_attr( olobuild_t( 'Inserisci un URL valido (es. https://esempio.com)' ) ) . '"';
+                                }
+                                // fine di un intervallo di date: lo script le dà come minimo la data d'inizio
+                                if ( isset( $data_dopo[ $fname ] ) ) {
+                                    $extra_attrs .= ' data-olo-dopo="' . esc_attr( $data_dopo[ $fname ] ) . '"';
                                 }
                             ?>
                                 <?php if ( $is_floating ) : ?>
@@ -927,6 +971,31 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
             var hasRecaptcha = <?php echo $has_recaptcha ? 'true' : 'false'; ?>;
             var recaptchaSiteKey = '<?php echo $has_recaptcha ? esc_js( $recaptcha_site_key ) : ''; ?>';
             var totalSteps = <?php echo (int) $step_count; ?>;
+            var msgDataPrima = '<?php echo esc_js( olobuild_t( 'La data finale non può essere prima di quella iniziale' ) ); ?>';
+
+            // ─── Date in coppia: la fine di un intervallo (arrivo → partenza, dal → al) non può cadere prima
+            // dell'inizio. Il minimo della fine segue l'inizio, così il calendario spegne i giorni prima; se
+            // l'inizio si sposta oltre la fine già scelta, la fine si svuota e si sceglie di nuovo.
+            var finiData = form.querySelectorAll('[data-olo-dopo]');
+            for (var fd = 0; fd < finiData.length; fd++) {
+                (function(fine){
+                    var inizio = form.querySelector('[name="fields[' + fine.getAttribute('data-olo-dopo') + ']"]');
+                    if (!inizio) { return; }
+                    function allinea(svuota) {
+                        if (inizio.value) { fine.min = inizio.value; } else { fine.removeAttribute('min'); }
+                        if (svuota) {
+                            if (fine.value) {
+                                if (inizio.value) {
+                                    if (fine.value < inizio.value) { fine.value = ''; }
+                                }
+                            }
+                        }
+                    }
+                    inizio.addEventListener('input', function(){ allinea(false); });
+                    inizio.addEventListener('change', function(){ allinea(true); });
+                    allinea(false);
+                })(finiData[fd]);
+            }
 
             // ─── Multi-step state ───
             var currentStep = 0;
@@ -1035,6 +1104,8 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                         } else if (el.validity.patternMismatch) {
                             if (el.type === 'tel') { errMsg = 'Inserisci un numero di telefono valido'; }
                             else { errMsg = el.title || 'Formato non valido'; }
+                        } else if (el.validity.rangeUnderflow) {
+                            if (el.hasAttribute('data-olo-dopo')) { errMsg = msgDataPrima; }
                         }
                         if (errMsg) {
                             var span = document.createElement('span');

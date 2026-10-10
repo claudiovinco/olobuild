@@ -24690,3 +24690,6 @@ msgstr "Beim Scrollen sinkt das Hintergrundfoto oder -video langsam ab und wird 
 
 msgid "Scorrendo, il testo sale più in fretta e il pannello di destra scende piano: la hero si apre su due livelli. Vale anche sul telefono; si ferma per chi ha chiesto di ridurre il movimento."
 msgstr "Beim Scrollen steigt der Text schneller auf und das rechte Panel sinkt langsam ab: Der Hero öffnet sich auf zwei Ebenen. Funktioniert auch auf dem Smartphone; stoppt für alle, die reduzierte Bewegung eingestellt haben."
+
+msgid "La data finale non può essere prima di quella iniziale"
+msgstr "Das Enddatum darf nicht vor dem Startdatum liegen"

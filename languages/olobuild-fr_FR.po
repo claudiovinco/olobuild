@@ -24690,3 +24690,6 @@ msgstr "Au défilement, la photo ou la vidéo d’arrière-plan descend et s’�
 
 msgid "Scorrendo, il testo sale più in fretta e il pannello di destra scende piano: la hero si apre su due livelli. Vale anche sul telefono; si ferma per chi ha chiesto di ridurre il movimento."
 msgstr "Au défilement, le texte monte plus vite et le panneau de droite descend lentement : le hero s’ouvre sur deux niveaux. Fonctionne aussi sur mobile ; s’arrête pour qui a demandé de réduire les animations."
+
+msgid "La data finale non può essere prima di quella iniziale"
+msgstr "La date de fin ne peut pas précéder la date de début"

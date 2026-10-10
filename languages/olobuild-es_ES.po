@@ -24690,3 +24690,6 @@ msgstr "Al desplazarte, la foto o el vídeo de fondo baja y se amplía despacio,
 
 msgid "Scorrendo, il testo sale più in fretta e il pannello di destra scende piano: la hero si apre su due livelli. Vale anche sul telefono; si ferma per chi ha chiesto di ridurre il movimento."
 msgstr "Al desplazarte, el texto sube más rápido y el panel derecho baja despacio: el hero se abre en dos niveles. Funciona también en el móvil; se detiene para quien ha pedido reducir el movimiento."
+
+msgid "La data finale non può essere prima di quella iniziale"
+msgstr "La fecha final no puede ser anterior a la inicial"

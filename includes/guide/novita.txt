@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.624 - 2026-10-10 (fix)
+- Form: un campo data subito dopo un altro campo data (Arrivo e Partenza, Dal e Al) ora fa da intervallo. Nel calendario della data finale i giorni prima di quella iniziale sono spenti, se sposti l’inizio oltre la fine già scelta la fine si svuota, e un invio con la fine prima dell’inizio viene rifiutato anche dal server. Vale per tutti i form, anche quelli già fatti.
+
 ## v1.4.623 - 2026-10-10 (novità)
 - Hero e Hero Split → Stile → «Profondità allo scorrimento»: la nuova «Parallasse a strati» (leggera, normale, forte) fa scorrere gli strati della hero a velocità diverse. Nella Hero la foto o il video di sfondo scende e si allarga piano, il testo sale più in fretta e il modulo sotto il testo (finestra, chat, striscia, ricerca) sale per primo; nella Hero Split il testo sale e il pannello di destra scende. Con «Il testo sfuma uscendo» il testo svanisce mentre lascia lo schermo. Vale anche sul telefono e si ferma per chi ha chiesto di ridurre il movimento.
 
