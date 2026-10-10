@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.617 - 2026-10-10 (fix)
+- Blocchi presi dai temi scuri con una scheda di vetro (il programma dei palchi di Onde Corte, i passi e i fusi orari di Synthetica): in un sito chiaro alcuni testi della scheda restavano scuri sul fondo scuro. Ora sono chiari.
+- Tema «Onde Corte», pagina Programma: le celle della tabella sono scure e piene, coi fili gialli fra l'una e l'altra. Velate lasciavano vedere il giallo dei fili e la tabella diventava tutta color sabbia.
+
 ## v1.4.616 - 2026-10-10 (novità)
 - Blocchi & Pagine: 257 blocchi nuovi presi dai 52 temi. Ci sono l'apertura e la pagina 404 di ogni tema, poi inviti, effetti, sezioni interattive (gratta e scopri, quiz, compositori col prezzo che si aggiorna), prezzi, statistiche, timeline, gallerie, contatti, squadra, negozio, newsletter e piè di pagina. La descrizione di ognuno dice da quale tema viene; la libreria passa da 221 a 478 blocchi.
 - I blocchi dei temi scuri restano scuri in qualsiasi sito, e ogni testo dei blocchi nuovi è stato controllato con dieci palette diverse: dove un colore non si sarebbe letto (per esempio un secondario chiaro su fondo chiaro) prende quello di contrasto del suo fondo, e il primario su fondo scuro si schiarisce un poco.
