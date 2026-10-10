@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.629 - 2026-10-10 (novità)
+- Blocchi & Pagine: i 257 blocchi presi dai temi hanno le stesse aperture a strati dei temi e le foto nuove. Anche le miniature sono rifatte.
+
 ## v1.4.628 - 2026-10-10 (fix)
 - Selettore dei temi: tolti «Clod — Evoluzione» e «OLOtutor — Vetrina», siti privati finiti per errore fra i temi da scegliere.
 
