@@ -319,7 +319,10 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             if (typeof visore.showModal !== 'function') { return; }
             var schermo = visore.querySelector('.ovt-schermo'), frame = visore.querySelector('iframe');
             var nuova = visore.querySelector('[data-nuova]'), chiudiBtn = visore.querySelector('[data-chiudi]');
-            var attuale = null, ritorno = null, spinto = false;
+            var attuale = null, ritorno = null, spinto = false, atteso = '', dentro = false;
+            // Cambiare la pagina del riquadro con src aggiungerebbe una voce alla cronologia della
+            // finestra: «Indietro» tornerebbe al tema di prima invece di chiudere il visore.
+            function vai(url) { try { frame.contentWindow.location.replace(url); } catch (err) { frame.src = url; } }
             function lista() { return voci.filter(function (v) { return !v.hidden; }).map(function (v) { return v.querySelector('.ovt-card'); }); }
             function card(id) { var c = null; voci.forEach(function (v) { var a = v.querySelector('.ovt-card'); if (a.getAttribute('data-tema') === id) { c = a; } }); return c; }
             function mostra(a, storia) {
@@ -328,8 +331,10 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 visore.querySelector('[data-categoria]').textContent = a.getAttribute('data-categoria');
                 frame.title = frame.getAttribute('data-titolo').replace('%s', a.getAttribute('data-nome'));
                 schermo.classList.add('is-attesa');
-                frame.src = a.getAttribute('href');
-                nuova.href = a.href;
+                atteso = a.href;
+                dentro = false;
+                vai(atteso);
+                nuova.href = atteso;
                 if (!visore.open) {
                     ritorno = document.activeElement;
                     visore.showModal();
@@ -343,13 +348,16 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             function chiudi(daStoria) {
                 if (!visore.open) { return; }
                 visore.close();
-                frame.src = 'about:blank';
+                atteso = '';
+                vai('about:blank');
                 document.documentElement.classList.remove('ovt-aperto');
                 attuale = null;
                 if (ritorno) { ritorno.focus(); }
                 if (!daStoria) {
-                    if (spinto) { spinto = false; history.back(); }
-                    else { history.replaceState(history.state, '', location.pathname + location.search); }
+                    // Indietro toglie la voce aggiunta all'apertura; se dentro la demo si è navigato,
+                    // le voci sono di più: si toglie solo il tema dall'indirizzo, senza muoversi.
+                    if (spinto ? !dentro : false) { spinto = false; history.back(); }
+                    else { spinto = false; history.replaceState(history.state, '', location.pathname + location.search); }
                 }
             }
             function passo(n) {
@@ -357,7 +365,17 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 if (!l.length) { return; }
                 mostra(l[(i + n + l.length) % l.length], 'sostituisci');
             }
-            frame.addEventListener('load', function () { if (frame.getAttribute('src') !== 'about:blank') { schermo.classList.remove('is-attesa'); } });
+            frame.addEventListener('load', function () {
+                var dove = '';
+                try { dove = frame.contentWindow.location.href; } catch (err) { dove = ''; }
+                if (!atteso) { return; }
+                schermo.classList.remove('is-attesa');
+                // Una pagina della demo aperta dal suo menu: «Apri in una nuova scheda» porta lì.
+                if (dove) {
+                    if (dove.split('#')[0] !== atteso.split('#')[0]) { dentro = true; }
+                    nuova.href = dove;
+                }
+            });
             voci.forEach(function (v) {
                 var a = v.querySelector('.ovt-card');
                 a.addEventListener('click', function (e) {
