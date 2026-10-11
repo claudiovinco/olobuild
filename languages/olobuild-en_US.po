@@ -25050,3 +25050,27 @@ msgstr "This is an automatic message from %s."
 
 msgid "Non rispondere a questa email."
 msgstr "Please do not reply to this email."
+
+msgid "Scegli file"
+msgstr "Choose file"
+
+msgid "Nessun file selezionato"
+msgstr "No file selected"
+
+msgid "Numero massimo di file: %d."
+msgstr "Maximum number of files: %d."
+
+msgid "%s: tipo di file non consentito"
+msgstr "%s: file type not allowed"
+
+msgid "%1$s: supera il limite di %2$s MB"
+msgstr "%1$s: exceeds the %2$s MB limit"
+
+msgid "File selezionati: %d"
+msgstr "Files selected: %d"
+
+msgid "Avanti"
+msgstr "Next"
+
+msgid "Inserisci un URL valido (es. https://esempio.com)"
+msgstr "Enter a valid URL (e.g. https://example.com)"

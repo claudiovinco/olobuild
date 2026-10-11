@@ -843,7 +843,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                                     $f_allowed  = esc_attr( $f_allowed );
                                     $f_max_size = absint( $field['file_max_size'] ?? $s['file_max_size'] ?? 5 );
                                     $f_max_files= absint( $field['file_max_files'] ?? 1 );
-                                    $f_btn_text = esc_html( $field['file_button_text'] ?? 'Scegli file' );
+                                    $f_btn_text = esc_html( $field['file_button_text'] ?? olobuild_t( 'Scegli file' ) );
                                     $f_multiple = ( $f_max_files > 1 ) ? ' multiple' : '';
                                     $f_input_id = 'olo-file-' . esc_attr( $fname ) . '-' . wp_rand( 1000, 9999 );
                                     $f_input_name = ( $f_max_files > 1 ) ? esc_attr( $fname ) . '[]' : esc_attr( $fname );
@@ -1573,7 +1573,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
 
                         // Validate count
                         if (files.length > maxFiles) {
-                            errEl.textContent = 'Massimo ' + maxFiles + ' file consentiti.';
+                            errEl.textContent = <?php /* translators: %d: numero massimo di file */ echo wp_json_encode( olobuild_t( 'Numero massimo di file: %d.' ) ); ?>.replace('%d', maxFiles);
                             errEl.style.display = 'block';
                             input.value = '';
                             info.textContent = <?php echo wp_json_encode( olobuild_t( 'Nessun file selezionato' ) ); ?>;
@@ -1594,7 +1594,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                                         if (ext === allowed[a]) { typeOk = true; break; }
                                     }
                                     if (!typeOk) {
-                                        errors.push(file.name + ': tipo non consentito');
+                                        errors.push(<?php /* translators: %s: nome del file */ echo wp_json_encode( olobuild_t( '%s: tipo di file non consentito' ) ); ?>.replace('%s', function(){ return file.name; }));
                                         continue;
                                     }
                                 }
@@ -1602,7 +1602,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
 
                             // Validate size
                             if (file.size > maxSize * 1024 * 1024) {
-                                errors.push(file.name + ': supera ' + maxSize + ' MB');
+                                errors.push(<?php /* translators: 1: nome del file, 2: dimensione massima in MB */ echo wp_json_encode( olobuild_t( '%1$s: supera il limite di %2$s MB' ) ); ?>.replace('%2$s', maxSize).replace('%1$s', function(){ return file.name; }));
                                 continue;
                             }
 
@@ -1627,7 +1627,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                         if (names.length === 1) {
                             info.textContent = names[0];
                         } else {
-                            info.textContent = names.length + ' file selezionati';
+                            info.textContent = <?php /* translators: %d: numero di file scelti */ echo wp_json_encode( olobuild_t( 'File selezionati: %d' ) ); ?>.replace('%d', names.length);
                         }
                     });
                 })(fileWraps[fw]);
