@@ -3595,7 +3595,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                Accanto al simbolo e ai pulsanti un nome lungo finiva coi puntini: si restringe finché
                ci sta, carattere e spaziatura insieme (la spaziatura è in px e da sola non scala). Se
                dovesse scendere sotto i 15 px il simbolo lascia il posto al nome (conta di più), e il
-               nome non va sotto i 13 px. I valori in linea del nome si ripristinano a ogni misura. */
+               nome non va sotto gli 11 px. I valori in linea del nome si ripristinano a ogni misura. */
             var mmNome = root.querySelector(".olo-mm-mobile-logo .olo-mm-logo-text");
             if (mmNome) {
                 var mmSimbolo = root.querySelector(".olo-mm-mobile-logo .olo-mm-mark");
@@ -3625,7 +3625,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                             if (!k) { return; }
                         }
                     }
-                    var minimo = 13 / fs0, f = 1;
+                    var minimo = 11 / fs0, f = 1;
                     for (var i = 0; i < 4; i++) {
                         f = Math.max(minimo, f * k * 0.995);
                         mmNome.style.setProperty("font-size", (fs0 * f).toFixed(2) + "px", "important");
