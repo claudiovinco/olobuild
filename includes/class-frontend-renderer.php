@@ -1712,7 +1712,7 @@ class Olobuild_Frontend_Renderer {
 
         if ( ! empty( $hover_css_rules ) || ! empty( $this->responsive_css_rules ) ) {
             $all_css = implode( ' ', $hover_css_rules );
-            foreach ( $this->responsive_css_rules as $max_w => $rules ) {
+            foreach ( $this->responsive_css_ordinato() as $max_w => $rules ) {
                 $all_css .= ' @media(max-width:' . $max_w . '){' . implode( ' ', $rules ) . '}';
             }
             echo '<style class="olo-hover-styles">' . $all_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS collected via collect_hover_css()/collect_responsive_css() (esc_attr/intval-sanitized declarations) and safe_block_css() for custom CSS

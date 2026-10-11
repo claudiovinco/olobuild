@@ -1017,23 +1017,22 @@ trait Olobuild_Renderer_Structure_Trait {
 
     /**
      * Le soglie dei margini per dispositivo, bp => X px, nell'ordine in cui la
-     * pagina ne stampa i blocchi @media(max-width:X) (collect_responsive_css()):
-     * quello delle chiavi di responsive_css_rules, cioe' della prima comparsa di
-     * ogni soglia (di solito dalla piu' larga), gia' deciso per le colonne di una
-     * riga quando la riga scrive il suo CSS (le rende prima); a pari X, l'ordine
-     * di collect_responsive_css(). Dove valgono piu' soglie vince l'ultima.
+     * pagina ne stampa i blocchi @media(max-width:X): dalla piu' larga alla piu'
+     * stretta (responsive_css_ordinato()); a pari X, l'ordine di
+     * collect_responsive_css(). Dove valgono piu' soglie vince l'ultima, cioe' la
+     * piu' stretta. Prima seguiva la prima comparsa di ogni soglia nella pagina,
+     * com'era stampata allora.
      *
      * @return int[]
      */
     private function griglia_soglie_margini() {
-        $pos    = array_flip( array_keys( $this->responsive_css_rules ) );
         $soglie = [];
         $ordine = [];
         $i      = 0;
         foreach ( [ 'tablet_landscape' => 1200, 'tablet' => 960, 'mobile_landscape' => 640, 'mobile' => 480 ] as $bp => $def ) {
             $x             = intval( $this->breakpoints[ $bp ] ?? $def );
             $soglie[ $bp ] = $x;
-            $ordine[ $bp ] = [ $pos[ $x . 'px' ] ?? PHP_INT_MAX, $i++ ];
+            $ordine[ $bp ] = [ -$x, $i++ ];
         }
         uksort(
             $soglie,

@@ -687,6 +687,27 @@ trait Olobuild_Renderer_Css_Trait {
      * - gap
      * - border_radius (simple numeric or {tl,tr,br,bl} array)
      */
+    /**
+     * I blocchi @media(max-width) raccolti, dal più largo al più stretto: dove valgono due soglie vince la
+     * più stretta, come ci si aspetta da un valore per il dispositivo più piccolo. Prima uscivano nell'ordine
+     * in cui ogni soglia compariva la prima volta nella pagina: se una tile precedente usava solo il telefono,
+     * il blocco «fino a 640» veniva stampato prima di quello «fino a 1200», e un valore per il tablet
+     * orizzontale vinceva anche sul telefono (Pixel Club, la foto di fondo dell'apertura a 481-640 px).
+     * Usato da chi stampa il CSS (pagina, anteprima, render di una tile via REST) e da griglia_soglie_margini().
+     *
+     * @return array Soglia ('1200px') => regole.
+     */
+    public function responsive_css_ordinato() {
+        $r = $this->responsive_css_rules;
+        uksort(
+            $r,
+            static function ( $a, $b ) {
+                return intval( $b ) <=> intval( $a );
+            }
+        );
+        return $r;
+    }
+
     private function collect_responsive_css( $style, $css_id, $advanced = [] ) {
         // Widescreen breakpoint uses min-width, others use max-width
         $widescreen_decls = [];

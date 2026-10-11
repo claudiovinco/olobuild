@@ -2044,7 +2044,7 @@ class Olobuild_Rest_Api {
         $hover_css_str = is_array( $hover_css ) ? implode( "\n", $hover_css ) : '';
         $responsive_css_str = '';
         if ( ! empty( $renderer->responsive_css_rules ) ) {
-            foreach ( $renderer->responsive_css_rules as $max_w => $rules ) {
+            foreach ( $renderer->responsive_css_ordinato() as $max_w => $rules ) {
                 $responsive_css_str .= '@media(max-width:' . esc_attr( $max_w ) . '){' . implode( ' ', $rules ) . '}';
             }
         }

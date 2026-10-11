@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.650 - 2026-10-11 (fix)
+- Valori per dispositivo (posizione, margini, visibilità e gli altri dello stile): dove una tile ne ha uno per il tablet orizzontale e uno per il telefono, sul telefono vale sempre quello del telefono. Prima dipendeva dall'ordine in cui le soglie comparivano nella pagina, e a volte vinceva quello del tablet.
+
 ## v1.4.649 - 2026-10-11 (fix)
 - Lookbook Mixer: la pastiglia del colore accanto al nome si può spegnere («Mostra pastiglia colore», nel Contenuto), così la riga lascia il suo posto al nome. Spenta in Orto Vivo, dove le pastiglie erano tutte dello stesso colore, e in Osteria Fumo.
 - Lookbook Mixer: ogni opzione può avere un'immagine, che fa da sfondo alla sua riga quando l'opzione è scelta e cambia con le frecce. Sopra c'è un velo del colore dello slot che tiene leggibili nome e prezzo, regolabile nello Stile («Velo sulle immagini»).
