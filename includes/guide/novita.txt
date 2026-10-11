@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.651 - 2026-10-11 (fix)
+- Pixel Club: il titolo «INSERT COIN» dell'apertura non tocca più la foto della sala né il riquadro del terminale. Sul tablet è più piccolo (56 px invece di 80): nelle colonne strette sbordava e passava sotto le immagini. Fra 961 e 1200 px il riquadro scende di poco, così la riga «INSERT» non gli finisce sotto l'angolo.
+
 ## v1.4.650 - 2026-10-11 (fix)
 - Valori per dispositivo (posizione, margini, visibilità e gli altri dello stile): dove una tile ne ha uno per il tablet orizzontale e uno per il telefono, sul telefono vale sempre quello del telefono. Prima dipendeva dall'ordine in cui le soglie comparivano nella pagina, e a volte vinceva quello del tablet.
 
