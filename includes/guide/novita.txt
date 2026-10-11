@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.662 - 2026-10-11 (fix)
+- Temi: in Tostatura Nove il testo del bollino giallo è più grande e corre su tutto il giro del cerchio.
+
 ## v1.4.661 - 2026-10-11 (fix)
 - Temi: le anteprime del selettore dei temi mostrano le home di oggi, con i loghi, le fasce in parallasse e le sezioni meno diluite.
 
