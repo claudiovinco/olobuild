@@ -24834,3 +24834,30 @@ msgstr "Graphit"
 
 msgid "Melograno"
 msgstr "Granatapfel"
+
+msgid "Un simbolo prima del logo testuale, scelto fra le icone. Prende i colori del tema, quindi segue le palette e la modalità scura. Colore, dimensione e sfondo nello Stile."
+msgstr "Ein Symbol vor dem Textlogo, aus den Icons gewählt. Es übernimmt die Farben des Themes und folgt so den Paletten und dem Dunkelmodus. Farbe, Größe und Hintergrund unter Stil."
+
+msgid "Simbolo — colore"
+msgstr "Symbol — Farbe"
+
+msgid "Simbolo — dimensione"
+msgstr "Symbol — Größe"
+
+msgid "Simbolo — spessore linea"
+msgstr "Symbol — Linienstärke"
+
+msgid "Per le icone disegnate a linea: sottile accanto a un logo leggero, spessa accanto a uno pieno."
+msgstr "Für Linien-Icons: dünn neben einem leichten Logo, kräftig neben einem fetten."
+
+msgid "Simbolo — sfondo"
+msgstr "Symbol — Hintergrund"
+
+msgid "Vuoto = il simbolo da solo. Con un colore il simbolo sta in un cerchio o in un riquadro."
+msgstr "Leer = nur das Symbol. Mit einer Farbe steht das Symbol in einem Kreis oder Quadrat."
+
+msgid "Simbolo — forma dello sfondo"
+msgstr "Symbol — Form des Hintergrunds"
+
+msgid "Riquadro arrotondato"
+msgstr "Abgerundetes Quadrat"

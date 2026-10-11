@@ -24834,3 +24834,30 @@ msgstr "Graphite"
 
 msgid "Melograno"
 msgstr "Grenade"
+
+msgid "Un simbolo prima del logo testuale, scelto fra le icone. Prende i colori del tema, quindi segue le palette e la modalità scura. Colore, dimensione e sfondo nello Stile."
+msgstr "Un symbole avant le logo texte, choisi parmi les icônes. Il prend les couleurs du thème et suit donc les palettes et le mode sombre. Couleur, taille et fond dans Style."
+
+msgid "Simbolo — colore"
+msgstr "Symbole — couleur"
+
+msgid "Simbolo — dimensione"
+msgstr "Symbole — taille"
+
+msgid "Simbolo — spessore linea"
+msgstr "Symbole — épaisseur du trait"
+
+msgid "Per le icone disegnate a linea: sottile accanto a un logo leggero, spessa accanto a uno pieno."
+msgstr "Pour les icônes au trait : fin à côté d’un logo léger, épais à côté d’un logo gras."
+
+msgid "Simbolo — sfondo"
+msgstr "Symbole — fond"
+
+msgid "Vuoto = il simbolo da solo. Con un colore il simbolo sta in un cerchio o in un riquadro."
+msgstr "Vide = le symbole seul. Avec une couleur, le symbole est dans un cercle ou un carré."
+
+msgid "Simbolo — forma dello sfondo"
+msgstr "Symbole — forme du fond"
+
+msgid "Riquadro arrotondato"
+msgstr "Carré arrondi"

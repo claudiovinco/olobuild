@@ -3,6 +3,12 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.657 - 2026-10-11 (novità)
+- Mega Menu: il logo testuale può avere un simbolo, scelto fra le icone, con colore, dimensione, spessore della linea e, se vuoi, un cerchio o un riquadro di sfondo («Simbolo» nel Contenuto, il resto nello Stile). Prende i colori del tema, quindi segue le palette e la modalità scura.
+- Temi: 44 temi hanno un logo col simbolo del loro mestiere (gli altri 8 avevano già la sigla).
+- Temi: pagine meno diluite. Le sezioni con padding «Extra grande» (210 px sopra e sotto sul computer, 140 sul telefono) passano a «Grande» (140 e 70) in tutti i 52 temi.
+- Temi: ogni tema ha una fascia con una sua foto in parallasse e una frase, a metà della home: 47 nuove, 5 temi l'avevano già.
+
 ## v1.4.656 - 2026-10-11 (fix)
 - Vetrina temi: con le palette i grigi restano grigi. Con Grafite alcuni prendevano una punta di verde o d'azzurro (la fascia secondaria di Acqua Viva, per esempio).
 

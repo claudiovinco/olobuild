@@ -24834,3 +24834,30 @@ msgstr "Grafito"
 
 msgid "Melograno"
 msgstr "Granada"
+
+msgid "Un simbolo prima del logo testuale, scelto fra le icone. Prende i colori del tema, quindi segue le palette e la modalità scura. Colore, dimensione e sfondo nello Stile."
+msgstr "Un símbolo antes del logo de texto, elegido entre los iconos. Toma los colores del tema, así que sigue las paletas y el modo oscuro. Color, tamaño y fondo en Estilo."
+
+msgid "Simbolo — colore"
+msgstr "Símbolo — color"
+
+msgid "Simbolo — dimensione"
+msgstr "Símbolo — tamaño"
+
+msgid "Simbolo — spessore linea"
+msgstr "Símbolo — grosor de línea"
+
+msgid "Per le icone disegnate a linea: sottile accanto a un logo leggero, spessa accanto a uno pieno."
+msgstr "Para los iconos de línea: fino junto a un logo ligero, grueso junto a uno en negrita."
+
+msgid "Simbolo — sfondo"
+msgstr "Símbolo — fondo"
+
+msgid "Vuoto = il simbolo da solo. Con un colore il simbolo sta in un cerchio o in un riquadro."
+msgstr "Vacío = solo el símbolo. Con un color, el símbolo va dentro de un círculo o un cuadrado."
+
+msgid "Simbolo — forma dello sfondo"
+msgstr "Símbolo — forma del fondo"
+
+msgid "Riquadro arrotondato"
+msgstr "Cuadrado redondeado"

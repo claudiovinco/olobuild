@@ -24837,3 +24837,30 @@ msgstr "Graphite"
 
 msgid "Melograno"
 msgstr "Pomegranate"
+
+msgid "Un simbolo prima del logo testuale, scelto fra le icone. Prende i colori del tema, quindi segue le palette e la modalità scura. Colore, dimensione e sfondo nello Stile."
+msgstr "A symbol before the text logo, chosen from the icons. It takes the theme colors, so it follows the palettes and dark mode. Color, size and background in Style."
+
+msgid "Simbolo — colore"
+msgstr "Symbol — color"
+
+msgid "Simbolo — dimensione"
+msgstr "Symbol — size"
+
+msgid "Simbolo — spessore linea"
+msgstr "Symbol — line weight"
+
+msgid "Per le icone disegnate a linea: sottile accanto a un logo leggero, spessa accanto a uno pieno."
+msgstr "For line icons: thin next to a light logo, thick next to a bold one."
+
+msgid "Simbolo — sfondo"
+msgstr "Symbol — background"
+
+msgid "Vuoto = il simbolo da solo. Con un colore il simbolo sta in un cerchio o in un riquadro."
+msgstr "Empty = the symbol on its own. With a color the symbol sits in a circle or a square."
+
+msgid "Simbolo — forma dello sfondo"
+msgstr "Symbol — background shape"
+
+msgid "Riquadro arrotondato"
+msgstr "Rounded square"

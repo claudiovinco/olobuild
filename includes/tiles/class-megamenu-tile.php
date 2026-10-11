@@ -31,6 +31,12 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         'logo_crest'         => '',
         'logo_crest_bg'      => '',
         'logo_crest_color'   => '',
+        'logo_mark'          => '',
+        'logo_mark_color'    => '',
+        'logo_mark_size'     => 24,
+        'logo_mark_stroke'   => 2,
+        'logo_mark_bg'       => '',
+        'logo_mark_shape'    => 'circle',
         'nav_phone'          => '',
         'nav_phone_url'      => '',
         'nav_phone_color'    => '',
@@ -764,6 +770,10 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-mm-logo-text { font-family: var(--olo-font-family-heading, 'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif); font-weight: 700; letter-spacing: -0.02em; line-height: 1; color: inherit; white-space: nowrap; }
         .<?php echo $uid; ?> .olo-mm-logo-dot { width: 9px; height: 9px; border-radius: 50%; background: currentColor; flex: none; }
         .<?php echo $uid; ?> .olo-mm-crest { display: inline-grid; place-items: center; width: 34px; height: 38px; font-family: var(--olo-font-family-heading, 'Archivo',sans-serif); font-weight: 900; font-size: 13px; letter-spacing: .02em; flex: none; border-radius: 14px 14px 16px 16px/14px 14px 22px 22px; box-shadow: inset 0 0 0 2px rgba(255,255,255,.2); }
+        .<?php echo $uid; ?> .olo-mm-mark { display: inline-flex; align-items: center; justify-content: center; flex: none; line-height: 0; box-sizing: content-box; }
+        .<?php echo $uid; ?> .olo-mm-mark > span { display: inline-flex; }
+        .<?php echo $uid; ?> .olo-mm-mark svg { width: var(--olo-mm-mark-s, 24px); height: var(--olo-mm-mark-s, 24px); }
+        .<?php echo $uid; ?> .olo-mm-mark svg, .<?php echo $uid; ?> .olo-mm-mark svg * { stroke-width: var(--olo-mm-mark-w, 2); }
         .<?php echo $uid; ?> .olo-mm-tel-li { display: flex; align-items: center; }
         .<?php echo $uid; ?> .olo-mm-tel { font-weight: 700; font-size: 14px; letter-spacing: .02em; white-space: nowrap; }
         .<?php echo $uid; ?> .olo-mm-tel-li::after { display: none !important; }
@@ -2514,13 +2524,45 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             return '<a class="' . $classe . '" href="' . $logo_link . '"><img src="' . $img . '" alt="' . esc_attr( olobuild_t( 'Logo' ) ) . '" loading="lazy" /></a>';
         }
         if ( $logo_text !== '' ) {
-            return '<a class="' . $classe . ' olo-mm-logo--text" href="' . $logo_link . '">' . $this->logo_wordmark_html( $s, $logo_text, $logo_txt_sz ) . '</a>';
+            return '<a class="' . $classe . ' olo-mm-logo--text" href="' . $logo_link . '">' . $this->logo_mark_html( $s ) . $this->logo_wordmark_html( $s, $logo_text, $logo_txt_sz ) . '</a>';
         }
         $nome = trim( wp_strip_all_tags( (string) get_bloginfo( 'name' ) ) );
         if ( $nome !== '' ) {
             return '<a class="' . $classe . ' olo-mm-logo--text" href="' . $logo_link . '"><span class="olo-mm-logo-text">' . esc_html( $nome ) . '</span></a>';
         }
         return '<div></div>';
+    }
+
+    /* ─── Simbolo del logo (icona accanto al logo testuale) ─── */
+
+    /**
+     * Il simbolo scelto col selettore delle icone, prima del logo testuale: colore del tema (di serie il
+     * primario), dimensione, spessore della linea e, se c'è uno sfondo, un cerchio o un riquadro attorno.
+     * Coi colori dei ruoli segue le palette e la modalità scura; '' = nessun simbolo (come prima).
+     *
+     * @param array $s Settings.
+     * @return string HTML sicuro.
+     */
+    private function logo_mark_html( $s ) {
+        $nome = trim( (string) ( $s['logo_mark'] ?? '' ) );
+        if ( '' === $nome || '' === trim( (string) ( $s['logo_text'] ?? '' ) ) ) {
+            return '';
+        }
+        $misura = max( 12, min( 64, (int) ( $s['logo_mark_size'] ?? 24 ) ) );
+        $icona  = $this->render_icon_html( $nome, $misura / 20 );
+        if ( '' === $icona ) {
+            return '';
+        }
+        $colore  = $this->safe_color_css( $s['logo_mark_color'] ?? '' ) ?: 'var(--olo-color-primary, currentColor)';
+        $spessore = is_numeric( $s['logo_mark_stroke'] ?? '' ) ? max( 0.5, min( 4, (float) $s['logo_mark_stroke'] ) ) : 2;
+        $fondo   = $this->safe_color_css( $s['logo_mark_bg'] ?? '' );
+        $stile   = 'color:' . $colore . ';--olo-mm-mark-s:' . $misura . 'px;--olo-mm-mark-w:' . $spessore;
+        if ( $fondo ) {
+            $forma  = (string) ( $s['logo_mark_shape'] ?? 'circle' );
+            $raggio = [ 'square' => '0', 'rounded' => round( $misura * 0.32 ) . 'px' ][ $forma ] ?? '50%';
+            $stile .= ';background:' . $fondo . ';padding:' . round( $misura * 0.3 ) . 'px;border-radius:' . $raggio;
+        }
+        return '<span class="olo-mm-mark" style="' . esc_attr( $stile ) . '" aria-hidden="true">' . $icona . '</span>';
     }
 
     /* ─── Logo wordmark (dot before | dot inline sul ".") ─── */
@@ -3040,7 +3082,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                 </a>
                 <?php elseif ( $logo_text !== '' ) : ?>
                 <a class="olo-mm-logo olo-mm-logo--text" href="<?php echo $logo_link; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url()-escaped at assignment above; color esc_attr()-escaped inline ?>"<?php echo $logo_txt_c ? ' style="color:' . esc_attr( $logo_txt_c ) . '"' : ''; ?>>
-                    <?php if ( $logo_crest !== '' ) : ?><span class="olo-mm-crest" style="background:<?php echo $crest_bg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- crest colors validated by safe_color_css() whitelist above; size absint-clamped; texts esc_html()-escaped inline ?>;color:<?php echo $crest_col; ?>"><?php echo esc_html( $logo_crest ); ?></span><?php endif; ?><?php echo $this->logo_wordmark_html( $s, $logo_text, $logo_txt_sz ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by logo_wordmark_html() with esc_html/esc_attr/safe_color_css ?>
+                    <?php echo $this->logo_mark_html( $s ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by logo_mark_html(): colors from safe_color_css(), sizes clamped numbers, icon from render_icon_html() ?><?php if ( $logo_crest !== '' ) : ?><span class="olo-mm-crest" style="background:<?php echo $crest_bg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- crest colors validated by safe_color_css() whitelist above; size absint-clamped; texts esc_html()-escaped inline ?>;color:<?php echo $crest_col; ?>"><?php echo esc_html( $logo_crest ); ?></span><?php endif; ?><?php echo $this->logo_wordmark_html( $s, $logo_text, $logo_txt_sz ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by logo_wordmark_html() with esc_html/esc_attr/safe_color_css ?>
                 </a>
                 <?php endif; ?>
 
