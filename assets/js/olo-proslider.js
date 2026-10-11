@@ -282,9 +282,85 @@ function initSlider(container) {
   });
 
   /* ── Layer animations ────────────────────────────────── */
+  var menoMoto = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Maschera d'ingresso (data-mask): il clip-path va dal riquadro impostato (--mps-m) a tutto il livello, insieme
+  // all'ingresso e con la sua durata, ritardo e curva.
+  function mascheraIngresso(el, dur, easing, delay) {
+    return el.getAttribute('data-mask') === '1' ? 'mpsMaskReveal ' + dur + ' ' + easing + ' ' + delay + ' both' : '';
+  }
+
+  // Percorso di movimento (data-mp sul contenitore .mps-mp): il tracciato SVG si campiona in 64 punti che
+  // diventano keyframe di translate dal primo punto (il livello parte da dove è posato), con la rotazione lungo
+  // il percorso se chiesta. Web Animations sul contenitore interno: l'ingresso resta sul livello.
+  function puntiPercorso(d, ruota) {
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    svg.setAttribute('width', '0');
+    svg.setAttribute('height', '0');
+    svg.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden';
+    path.setAttribute('d', d);
+    svg.appendChild(path);
+    document.body.appendChild(svg);
+    var frames = [];
+    try {
+      var len = path.getTotalLength();
+      if (len > 0) {
+        var p0 = path.getPointAtLength(0);
+        var N = 64;
+        for (var i = 0; i <= N; i++) {
+          var l = len * i / N;
+          var p = path.getPointAtLength(l);
+          var t = 'translate(' + (p.x - p0.x).toFixed(2) + 'px,' + (p.y - p0.y).toFixed(2) + 'px)';
+          if (ruota) {
+            var a = path.getPointAtLength(Math.max(0, l - 0.5));
+            var b = path.getPointAtLength(Math.min(len, l + 0.5));
+            t += ' rotate(' + (Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI).toFixed(1) + 'deg)';
+          }
+          frames.push({ transform: t, offset: i / N });
+        }
+      }
+    } catch (_) { frames = []; }
+    svg.remove();
+    return frames;
+  }
+  function avviaPercorso(el, delay) {
+    if (menoMoto) return;
+    qsa(el, '.mps-mp').forEach(function (mp) {
+      if (mp._mpsAnim) { try { mp._mpsAnim.cancel(); } catch (_) {} mp._mpsAnim = null; }
+      if (!mp.animate) return;
+      var c;
+      try { c = JSON.parse(mp.getAttribute('data-mp') || '{}'); } catch (_) { return; }
+      if (!mp._mpsFrames) mp._mpsFrames = puntiPercorso(c.p || '', !!c.r);
+      if (mp._mpsFrames.length < 2) return;
+      mp._mpsAnim = mp.animate(mp._mpsFrames, {
+        duration: c.d || 3000,
+        iterations: c.l ? Infinity : 1,
+        easing: c.e || 'linear',
+        delay: parseInt(delay, 10) || 0,
+        fill: 'both',
+      });
+    });
+  }
+  function fermaPercorso(slide) {
+    qsa(slide, '.mps-mp').forEach(function (mp) {
+      if (mp._mpsAnim) { try { mp._mpsAnim.pause(); } catch (_) {} }
+    });
+  }
+
+  // Ken Burns del livello immagine: riparte a ogni ingresso della slide
+  function riavviaKenBurnsLivello(el) {
+    qsa(el, '.mps-lkb').forEach(function (img) {
+      img.style.animation = 'none';
+      void img.offsetWidth;
+      img.style.animation = '';
+    });
+  }
+
   function animateLayersIn(slide) {
     var layers = qsa(slide, '.olo-proslider-layer');
     layers.forEach(function (el) {
+      riavviaKenBurnsLivello(el);
       // Timeline keyframe layer
       var tlName = el.getAttribute('data-timeline-name');
       if (tlName) {
@@ -298,6 +374,15 @@ function initSlider(container) {
 
         el.style.animation = tlName + ' ' + tlDur + ' ease ' + tlDelay + ' ' + tlLoop + ' both';
         el.classList.add('mps-anim-visible');
+        // «Fine con la slide» spento: finita la timeline il livello esce, senza aspettare la fine della slide
+        if (el._mpsFine) { clearTimeout(el._mpsFine); el._mpsFine = null; }
+        if (el.getAttribute('data-timeline-end') === '0' && tlLoop !== 'infinite') {
+          el._mpsFine = setTimeout(function () {
+            el.style.animation = 'mpsFadeOut 400ms ease both';
+            el.classList.remove('mps-anim-visible');
+          }, (parseInt(tlDur, 10) || 3000) + (parseInt(tlDelay, 10) || 0));
+        }
+        avviaPercorso(el, 0);
         return;
       }
 
@@ -310,9 +395,10 @@ function initSlider(container) {
       void el.offsetWidth;
 
       if (animKey === 'none') {
-        // No animation — show immediately
-        el.style.animation = '';
+        // No animation — show immediately (la maschera d'ingresso, se c'è, agisce lo stesso)
+        el.style.animation = mascheraIngresso(el, (parseInt(el.getAttribute('data-anim-in-duration'), 10) || 800) + 'ms', el.getAttribute('data-anim-easing') || 'ease', (parseInt(el.getAttribute('data-anim-in-delay'), 10) || 0) + 'ms');
         el.classList.add('mps-anim-visible');
+        avviaPercorso(el, 0);
         return;
       }
 
@@ -325,21 +411,30 @@ function initSlider(container) {
       if (el.getAttribute('data-char-anim') === '1') {
         var chars = qsa(el, '.mps-char');
         if (chars.length > 0) {
-          el.style.animation = '';
+          el.style.animation = mascheraIngresso(el, dur, easing, delay);
           el.classList.add('mps-anim-visible');
+          // Partenza personalizzata (mpsCharCustom, misure dal livello) o l'ingresso del livello; yoyo: andata e
+          // ritorno senza fine. Il ritardo di ogni lettera (scritto dal PHP) si legge UNA volta e si somma a
+          // quello del livello: lo shorthand animation lo azzerava e le lettere entravano tutte insieme.
+          var nomeLettere = el.getAttribute('data-char-custom') === '1' ? 'mpsCharCustom' : name;
+          var giro = el.getAttribute('data-char-yoyo') === '1' ? ' infinite alternate' : '';
+          var base = parseInt(delay, 10) || 0;
           chars.forEach(function (ch) {
+            if (ch._mpsD === undefined) ch._mpsD = parseInt(ch.style.animationDelay, 10) || 0;
             ch.style.opacity = '0';
             ch.style.animation = 'none';
             void ch.offsetWidth;
-            // animation-delay is set inline by PHP
-            ch.style.animation = name + ' ' + dur + ' ' + easing + ' both';
+            ch.style.animation = nomeLettere + ' ' + dur + ' ' + easing + ' ' + (base + ch._mpsD) + 'ms' + giro + ' both';
           });
+          avviaPercorso(el, delay);
           return;
         }
       }
 
-      el.style.animation = name + ' ' + dur + ' ' + easing + ' ' + delay + ' both';
+      var maschera = mascheraIngresso(el, dur, easing, delay);
+      el.style.animation = name + ' ' + dur + ' ' + easing + ' ' + delay + ' both' + (maschera ? ', ' + maschera : '');
       el.classList.add('mps-anim-visible');
+      avviaPercorso(el, delay);
 
       // Loop animation — starts after entrance completes
       var loopKey = el.getAttribute('data-anim-loop');
@@ -366,6 +461,9 @@ function initSlider(container) {
 
   function animateLayersOut(slide, callback) {
     var layers = qsa(slide, '.olo-proslider-layer');
+    // il percorso si ferma dov'è mentre il livello esce (riparte da capo al prossimo ingresso)
+    fermaPercorso(slide);
+    layers.forEach(function (el) { if (el._mpsFine) { clearTimeout(el._mpsFine); el._mpsFine = null; } });
     if (!layers.length) { callback && callback(); return; }
 
     var maxEnd = 0;
@@ -698,64 +796,74 @@ function initSlider(container) {
     }, { passive: false });
   }
 
-  /* ── Parallax (mouse move) ───────────────────────────── */
-  if (cfg.parallax) {
-    var parallaxLayers = qsa(container, '[data-parallax-depth]');
-    if (parallaxLayers.length > 0) {
-      var pType = cfg.parallaxType || 'mouse';
-      var pIntensity = cfg.parallaxIntensity || 5;
-      // Mouse e scorrimento scrivono lo stesso transform: ogni livello tiene le due parti e le somma.
-      // Prima lo scorrimento scriveva solo la prima volta (poi trovava già un translateY e si fermava)
-      // e con «Entrambi» il mouse e lo scorrimento si cancellavano a vicenda.
-      var pStato = parallaxLayers.map(function () { return { mx: 0, my: 0, sy: 0 }; });
-      function scriviLivello(i) {
-        var st = pStato[i];
-        var x = st.mx, y = st.my + st.sy;
-        parallaxLayers[i].style.transform = (x || y) ? 'translate(' + x.toFixed(1) + 'px, ' + y.toFixed(1) + 'px)' : '';
-      }
+  /* ── Parallax (mouse move / scroll) ──────────────────── */
+  // Due sorgenti: la profondità numerica del livello (agisce con la parallasse dello slider accesa, col tipo e
+  // l'intensità dello slider) e la parallasse del livello (oggetto dell'editor: tipo, profondità 1-20,
+  // inclinazione 3D, velocità di scorrimento), che agisce da sola. Prima l'oggetto si salvava e nessuno lo
+  // leggeva. Mouse e scorrimento scrivono lo stesso transform: ogni livello tiene le parti e le somma.
+  var pLivelli = [];
+  qsa(container, '.olo-proslider-layer').forEach(function (pl) {
+    var og = null;
+    var grezzo = pl.getAttribute('data-lpx');
+    if (grezzo) { try { og = JSON.parse(grezzo); } catch (_) { og = null; } }
+    if (og) {
+      pLivelli.push({ el: pl, tipo: og.t || 'mouse', prof: og.d || 5, k: 4, tilt: !!og.r, vel: og.s || 0.5, mx: 0, my: 0, sy: 0, rx: 0, ry: 0 });
+    } else if (cfg.parallax) {
+      var prof = parseInt(pl.getAttribute('data-parallax-depth'), 10) || 0;
+      if (prof > 0) pLivelli.push({ el: pl, tipo: cfg.parallaxType || 'mouse', prof: prof, k: cfg.parallaxIntensity || 5, tilt: false, vel: 1, mx: 0, my: 0, sy: 0, rx: 0, ry: 0 });
+    }
+  });
+  if (pLivelli.length) {
+    var scriviLivello = function (st) {
+      var x = st.mx, y = st.my + st.sy;
+      var t = (x || y) ? 'translate(' + x.toFixed(1) + 'px, ' + y.toFixed(1) + 'px)' : '';
+      if (st.tilt && (st.rx || st.ry)) t += ' perspective(900px) rotateX(' + st.rx.toFixed(2) + 'deg) rotateY(' + st.ry.toFixed(2) + 'deg)';
+      st.el.style.transform = t;
+    };
+    var colMouse = pLivelli.filter(function (st) { return st.tipo === 'mouse' || st.tipo === 'both'; });
+    var colScorrimento = pLivelli.filter(function (st) { return st.tipo === 'scroll' || st.tipo === 'both'; });
 
-      if (pType === 'mouse' || pType === 'both') {
-        container.addEventListener('mousemove', function (e) {
-          var rect = container.getBoundingClientRect();
-          var mx = (e.clientX - rect.left) / rect.width - 0.5;
-          var my = (e.clientY - rect.top) / rect.height - 0.5;
-          parallaxLayers.forEach(function (pl, i) {
-            var depth = parseInt(pl.getAttribute('data-parallax-depth'), 10) || 0;
-            if (depth <= 0) return;
-            pStato[i].mx = mx * depth * pIntensity;
-            pStato[i].my = my * depth * pIntensity;
-            scriviLivello(i);
-          });
+    if (colMouse.length) {
+      container.addEventListener('mousemove', function (e) {
+        var rect = container.getBoundingClientRect();
+        var mx = (e.clientX - rect.left) / rect.width - 0.5;
+        var my = (e.clientY - rect.top) / rect.height - 0.5;
+        colMouse.forEach(function (st) {
+          st.mx = mx * st.prof * st.k;
+          st.my = my * st.prof * st.k;
+          if (st.tilt) {
+            // il livello si inclina verso il puntatore, di più quanto più è profondo
+            st.ry = mx * st.prof * 2.4;
+            st.rx = -my * st.prof * 2.4;
+          }
+          scriviLivello(st);
         });
-        container.addEventListener('mouseleave', function () {
-          parallaxLayers.forEach(function (pl, i) {
-            pStato[i].mx = 0;
-            pStato[i].my = 0;
-            pl.style.transition = 'transform 0.5s ease-out';
-            scriviLivello(i);
-            setTimeout(function () { pl.style.transition = ''; }, 500);
-          });
+      });
+      container.addEventListener('mouseleave', function () {
+        colMouse.forEach(function (st) {
+          st.mx = 0; st.my = 0; st.rx = 0; st.ry = 0;
+          st.el.style.transition = 'transform 0.5s ease-out';
+          scriviLivello(st);
+          setTimeout(function () { st.el.style.transition = ''; }, 500);
         });
-      }
+      });
+    }
 
-      if (pType === 'scroll' || pType === 'both') {
-        var aggiornaScorrimento = function () {
-          var rect = container.getBoundingClientRect();
-          var viewH = window.innerHeight;
-          if (rect.bottom < 0 || rect.top > viewH) return;
-          var progress = (viewH - rect.top) / (viewH + rect.height);
-          var scrollOffset = (progress - 0.5) * 2;
-          parallaxLayers.forEach(function (pl, i) {
-            var depth = parseInt(pl.getAttribute('data-parallax-depth'), 10) || 0;
-            if (depth <= 0) return;
-            // scendendo nella pagina, più alta è la profondità del livello più in fretta sale: sembra più vicino, davanti allo sfondo
-            pStato[i].sy = -scrollOffset * depth * pIntensity;
-            scriviLivello(i);
-          });
-        };
-        window.addEventListener('scroll', aggiornaScorrimento, { passive: true });
-        aggiornaScorrimento();
-      }
+    if (colScorrimento.length) {
+      var aggiornaScorrimento = function () {
+        var rect = container.getBoundingClientRect();
+        var viewH = window.innerHeight;
+        if (rect.bottom < 0 || rect.top > viewH) return;
+        var progress = (viewH - rect.top) / (viewH + rect.height);
+        var scrollOffset = (progress - 0.5) * 2;
+        colScorrimento.forEach(function (st) {
+          // scendendo nella pagina, più alta è la profondità del livello più in fretta sale: sembra più vicino, davanti allo sfondo
+          st.sy = -scrollOffset * st.prof * st.k * st.vel;
+          scriviLivello(st);
+        });
+      };
+      window.addEventListener('scroll', aggiornaScorrimento, { passive: true });
+      aggiornaScorrimento();
     }
   }
 

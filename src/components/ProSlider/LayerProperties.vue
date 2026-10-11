@@ -707,7 +707,7 @@
             </div>
             <div>
               <label class="mps-label">{{ t('Curva di easing') }}</label>
-              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.animEasing" :options="OPTS_EASING" @update:model-value="up('animEasing', $event)" />
+              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.animEasing" :options="EASING_GROUPS" @update:model-value="up('animEasing', $event)" />
             </div>
 
             <!-- Character Animation (solo per text) -->
@@ -776,7 +776,7 @@
               </div>
               <div>
                 <label class="mps-label">Easing loop</label>
-                <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.animLoopEasing || 'ease-in-out'" :options="OPTS_EASING" @update:model-value="up('animLoopEasing', $event)" />
+                <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.animLoopEasing || 'ease-in-out'" :options="EASING_GROUPS" @update:model-value="up('animLoopEasing', $event)" />
               </div>
             </template>
 
@@ -969,7 +969,7 @@
               </label>
               <div>
                 <label class="mps-label">Easing</label>
-                <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.motionPath.easing || 'linear'" :options="OPTS_EASING_LINEAR_FIRST" @update:model-value="upMotionPath('easing', $event)" />
+                <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.motionPath.easing || 'linear'" :options="EASING_GROUPS" @update:model-value="upMotionPath('easing', $event)" />
               </div>
             </template>
 
@@ -1036,7 +1036,9 @@ import FieldColor from '@/components/Builder/fields/FieldColor.vue';
 import FieldSelect from '../Builder/fields/FieldSelect.vue';
 import NumberScrubber from '../Builder/fields/NumberScrubber.vue';
 import KeyframeProperties from './KeyframeProperties.vue';
-import { defaultTimeline } from './timelineUtils.js';
+// Curve di ingresso, uscita, loop e percorso: le stesse della timeline (il PHP le traduce in cubic-bezier,
+// easing_to_css). La curva dell'hover resta fra le 5 di base, che il PHP accetta per l'hover.
+import { defaultTimeline, EASING_GROUPS } from './timelineUtils.js';
 import { t } from '@/i18n';
 
 const props = defineProps({
@@ -1450,7 +1452,6 @@ const OPTS_CURSOR = [
   { value: 'none', label: 'Nascosto' },
 ];
 const OPTS_EASING = ['ease','ease-in','ease-out','ease-in-out','linear'].map(v => ({ value: v, label: v }));
-const OPTS_EASING_LINEAR_FIRST = ['linear','ease','ease-in','ease-out','ease-in-out'].map(v => ({ value: v, label: v }));
 const OPTS_CHAR_SPLIT = [
   { value: 'chars', label: 'Caratteri' },
   { value: 'words', label: 'Parole' },

@@ -562,6 +562,10 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             $anim_attrs .= ' data-timeline-dur="' . absint( $tl['duration'] ?? 3000 ) . 'ms"';
             $anim_attrs .= ' data-timeline-delay="' . absint( $tl['delay'] ?? 0 ) . 'ms"';
             $anim_attrs .= ' data-timeline-loop="' . ( ! empty( $tl['loop'] ) ? '1' : '0' ) . '"';
+            // «Fine con la slide» spento: finita la timeline il livello esce subito (JS), senza aspettare la slide
+            if ( isset( $tl['endWithSlide'] ) && false === $tl['endWithSlide'] ) {
+                $anim_attrs .= ' data-timeline-end="0"';
+            }
         } else {
             $anim_attrs .= ' data-anim-in="' . esc_attr( $layer['animIn'] ?? 'fadeInUp' ) . '"';
             $anim_attrs .= ' data-anim-in-duration="' . absint( $layer['animInDuration'] ?? 800 ) . '"';
@@ -569,12 +573,23 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             $anim_attrs .= ' data-anim-out="' . esc_attr( $layer['animOut'] ?? 'fadeOutDown' ) . '"';
             $anim_attrs .= ' data-anim-out-duration="' . absint( $layer['animOutDuration'] ?? 600 ) . '"';
             $anim_attrs .= ' data-anim-out-delay="' . absint( $layer['animOutDelay'] ?? 0 ) . '"';
-            $anim_attrs .= ' data-anim-easing="' . esc_attr( $layer['animEasing'] ?? 'ease' ) . '"';
+            // la curva arriva al JS già in CSS: l'editor offre anche le curve della timeline (expo, power, back…)
+            $anim_attrs .= ' data-anim-easing="' . esc_attr( $this->easing_to_css( $layer['animEasing'] ?? 'ease' ) ) . '"';
 
             // Character animation
             if ( ! empty( $layer['charAnim'] ) && is_array( $layer['charAnim'] ) ) {
                 $anim_attrs .= ' data-char-anim="1"';
                 $anim_attrs .= ' data-char-stagger="' . absint( $layer['charAnim']['stagger'] ?? 30 ) . '"';
+                // Partenza delle lettere (spostamento, rotazione, scala, opacità, sfocatura): le misure vanno al
+                // livello come variabili e le lettere entrano con mpsCharCustom. Senza, entrano con l'ingresso del
+                // livello, come prima. Yoyo: finito l'ingresso le lettere tornano indietro e avanti, sempre.
+                $char_vars = $this->char_anim_vars( $layer['charAnim'] );
+                if ( $char_vars ) {
+                    $anim_attrs .= ' data-char-custom="1"';
+                }
+                if ( ! empty( $layer['charAnim']['yoyo'] ) ) {
+                    $anim_attrs .= ' data-char-yoyo="1"';
+                }
             }
 
             // Loop animation
@@ -582,7 +597,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             if ( $loop_key !== 'none' ) {
                 $anim_attrs .= ' data-anim-loop="' . esc_attr( $loop_key ) . '"';
                 $anim_attrs .= ' data-anim-loop-dur="' . absint( $layer['animLoopDuration'] ?? 3000 ) . '"';
-                $anim_attrs .= ' data-anim-loop-easing="' . esc_attr( $layer['animLoopEasing'] ?? 'ease-in-out' ) . '"';
+                $anim_attrs .= ' data-anim-loop-easing="' . esc_attr( $this->easing_to_css( $layer['animLoopEasing'] ?? 'ease-in-out' ) ) . '"';
             }
         }
 
@@ -800,6 +815,64 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             $style .= 'display:none;';
         }
 
+        if ( ! $has_timeline && ! empty( $layer['charAnim'] ) && is_array( $layer['charAnim'] ) ) {
+            $style .= $this->char_anim_vars( $layer['charAnim'] );
+        }
+
+        // Maschera d'ingresso (clip-path): il livello si svela dal riquadro impostato a tutto il livello, con
+        // durata, ritardo e curva dell'ingresso (mpsMaskReveal, letto dal JS). Le timeline hanno la loro maschera
+        // nei keyframe. Prima la maschera si salvava e nessuno la leggeva.
+        $mask_attr = '';
+        if ( ! $has_timeline && ! empty( $layer['mask'] ) && is_array( $layer['mask'] ) ) {
+            $mk = $layer['mask'];
+            $mt = max( 0, min( 100, floatval( $mk['top'] ?? 0 ) ) );
+            $mr = max( 0, min( 100, floatval( $mk['right'] ?? 0 ) ) );
+            $mb = max( 0, min( 100, floatval( $mk['bottom'] ?? 0 ) ) );
+            $ml = max( 0, min( 100, floatval( $mk['left'] ?? 0 ) ) );
+            if ( $mt + $mr + $mb + $ml > 0 ) {
+                $style    .= '--mps-m:inset(' . $mt . '% ' . $mr . '% ' . $mb . '% ' . $ml . '%);';
+                $mask_attr = ' data-mask="1"';
+            }
+        }
+
+        // Parallasse del livello (oggetto dell'editor: mouse, scorrimento o entrambi, profondità, inclinazione 3D,
+        // velocità): agisce anche senza la parallasse dello slider, che legge solo la profondità numerica.
+        $lpx_attr = '';
+        if ( ! empty( $layer['parallax'] ) && is_array( $layer['parallax'] ) ) {
+            $lp       = $layer['parallax'];
+            $lpx      = [
+                't' => in_array( $lp['type'] ?? 'mouse', [ 'mouse', 'scroll', 'both' ], true ) ? $lp['type'] : 'mouse',
+                'd' => max( 1, min( 20, absint( $lp['depth'] ?? 5 ) ) ),
+                'r' => ! empty( $lp['tilt3d'] ) ? 1 : 0,
+                's' => max( 0.1, min( 2, floatval( $lp['scrollSpeed'] ?? 0.5 ) ) ),
+            ];
+            $lpx_attr = ' data-lpx="' . esc_attr( wp_json_encode( $lpx ) ) . '"';
+        }
+
+        // Ken Burns del livello immagine: l'immagine si muove dentro la cornice del livello
+        if ( $type === 'image' && ! empty( $layer['kenBurns'] ) && is_array( $layer['kenBurns'] ) && false === strpos( $style, 'overflow:hidden' ) ) {
+            $style .= 'overflow:hidden;';
+        }
+
+        // Percorso di movimento: il contenuto corre lungo un tracciato SVG (in px della tela, dal punto in cui il
+        // livello è posato), con durata, ripetizione, curva e rotazione lungo il percorso (JS, Web Animations).
+        $mp_open  = '';
+        $mp_close = '';
+        if ( ! empty( $layer['motionPath'] ) && is_array( $layer['motionPath'] ) ) {
+            $mpd = trim( preg_replace( '/[^MmLlHhVvCcSsQqTtAaZz0-9,.\s\-eE]/', '', (string) ( $layer['motionPath']['path'] ?? '' ) ) );
+            if ( '' !== $mpd ) {
+                $mpc      = [
+                    'p' => $mpd,
+                    'd' => max( 500, min( 20000, absint( $layer['motionPath']['duration'] ?? 3000 ) ) ),
+                    'r' => ! empty( $layer['motionPath']['autoRotate'] ) ? 1 : 0,
+                    'l' => ( isset( $layer['motionPath']['loop'] ) && false === $layer['motionPath']['loop'] ) ? 0 : 1,
+                    'e' => $this->easing_to_css( $layer['motionPath']['easing'] ?? 'linear' ),
+                ];
+                $mp_open  = '<div class="mps-mp" data-mp="' . esc_attr( wp_json_encode( $mpc ) ) . '">';
+                $mp_close = '</div>';
+            }
+        }
+
         // SFX block reveal
         $sfx_class = '';
         $sfx_style = '';
@@ -824,8 +897,8 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         $custom_css_inline = sanitize_text_field( $layer['customCSS'] ?? '' );
         if ( $custom_css_inline ) { $style .= $custom_css_inline; }
         ?>
-        <div class="olo-proslider-layer<?php echo esc_attr( $layer_class . $sfx_class . ( $custom_class ? ' ' . $custom_class : '' ) . ( $outside_wrap ? ' mps-blend-layer' : '' ) ); ?>"<?php echo $custom_id ? ' id="' . esc_attr( $custom_id ) . '"' : ''; ?> style="<?php echo esc_attr( $style ); ?>"<?php echo $anim_attrs . $action_attr . $parallax_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute strings built above with esc_attr()/absint() around every dynamic value ?><?php echo $sfx_class ? ' data-sfx-effect="' . esc_attr( $layer['sfx']['effect'] ?? 'blockRight' ) . '"' : ''; ?>>
-            <?php echo $this->render_layer_content( $layer, $type, $outside_wrap ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- content HTML built by render_layer_content() with esc_attr()/esc_url()/esc_html()/safe_richtext_content() internally ?>
+        <div class="olo-proslider-layer<?php echo esc_attr( $layer_class . $sfx_class . ( $custom_class ? ' ' . $custom_class : '' ) . ( $outside_wrap ? ' mps-blend-layer' : '' ) ); ?>"<?php echo $custom_id ? ' id="' . esc_attr( $custom_id ) . '"' : ''; ?> style="<?php echo esc_attr( $style ); ?>"<?php echo $anim_attrs . $action_attr . $parallax_attr . $mask_attr . $lpx_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute strings built above with esc_attr()/absint() around every dynamic value ?><?php echo $sfx_class ? ' data-sfx-effect="' . esc_attr( $layer['sfx']['effect'] ?? 'blockRight' ) . '"' : ''; ?>>
+            <?php echo $mp_open . $this->render_layer_content( $layer, $type, $outside_wrap ) . $mp_close; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- content HTML built by render_layer_content() with esc_attr()/esc_url()/esc_html()/safe_richtext_content() internally ?>
         </div>
         <?php
         return ob_get_clean();
@@ -904,7 +977,9 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                 }
 
                 $lh = $line_height != 1.2 ? $line_height : 1.2;
-                $text_extra = '';
+                // A capo e spazi come nell'editor (SliderCanvas: pre-wrap + break-word): prima il sito li
+                // schiacciava e un titolo su due righe nell'editor usciva su una.
+                $text_extra = 'white-space:pre-wrap;word-break:break-word;overflow-wrap:break-word;';
                 if ( ! empty( $layer['selectableText'] ) ) {
                     $text_extra .= 'user-select:text;-webkit-user-select:text;';
                 }
@@ -915,7 +990,15 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                 if ( ! $src ) return '';
                 $obj_fit = esc_attr( $layer['objectFit'] ?? 'cover' );
                 $obj_pos = esc_attr( $layer['objectPosition'] ?? 'center' );
-                return '<img src="' . $src . '" alt="Slide image" style="width:100%;height:100%;object-fit:' . $obj_fit . ';object-position:' . $obj_pos . ';" draggable="false" loading="lazy" />';
+                $kb_cls  = '';
+                $kb_st   = '';
+                if ( ! empty( $layer['kenBurns'] ) && is_array( $layer['kenBurns'] ) ) {
+                    $kt     = $layer['kenBurns']['type'] ?? 'zoomIn';
+                    $kt     = in_array( $kt, [ 'zoomIn', 'zoomOut', 'panLeft', 'panRight', 'panUp', 'panDown' ], true ) ? $kt : 'zoomIn';
+                    $kb_cls = ' class="mps-lkb mps-lkb-' . $kt . '"';
+                    $kb_st  = '--mps-lkb-i:' . ( max( 5, min( 50, absint( $layer['kenBurns']['intensity'] ?? 20 ) ) ) / 100 ) . ';--mps-lkb-d:' . max( 1000, min( 20000, absint( $layer['kenBurns']['duration'] ?? 5000 ) ) ) . 'ms;';
+                }
+                return '<img src="' . $src . '" alt="Slide image"' . $kb_cls . ' style="width:100%;height:100%;object-fit:' . $obj_fit . ';object-position:' . $obj_pos . ';' . $kb_st . '" draggable="false" loading="lazy" />';
 
             case 'button':
                 $url    = esc_url( $layer['buttonUrl'] ?? '#' );
@@ -1061,6 +1144,12 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             $b   = floatval( $p['blur'] ?? 0 );
             $ox  = floatval( $p['originX'] ?? 50 );
             $oy  = floatval( $p['originY'] ?? 50 );
+            $mkt = max( 0, min( 100, floatval( $p['maskTop'] ?? 0 ) ) );
+            $mkr = max( 0, min( 100, floatval( $p['maskRight'] ?? 0 ) ) );
+            $mkb = max( 0, min( 100, floatval( $p['maskBottom'] ?? 0 ) ) );
+            $mkl = max( 0, min( 100, floatval( $p['maskLeft'] ?? 0 ) ) );
+            $bri = floatval( $p['brightness'] ?? 100 );
+            $gra = max( 0, min( 100, floatval( $p['grayscale'] ?? 0 ) ) );
 
             // Build transform (no translate — x/y use left/top for container-relative %)
             $transform = '';
@@ -1077,7 +1166,12 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             $css .= "    transform: {$transform};\n";
             $css .= "    transform-origin: {$ox}% {$oy}%;\n";
             $css .= "    opacity: {$o};\n";
-            $css .= $b > 0 ? "    filter: blur({$b}px);\n" : "    filter: none;\n";
+            $filtri = [];
+            if ( $b > 0 ) { $filtri[] = "blur({$b}px)"; }
+            if ( $bri != 100 ) { $filtri[] = "brightness({$bri}%)"; }
+            if ( $gra > 0 ) { $filtri[] = "grayscale({$gra}%)"; }
+            $css .= $filtri ? '    filter: ' . implode( ' ', $filtri ) . ";\n" : "    filter: none;\n";
+            $css .= ( $mkt + $mkr + $mkb + $mkl > 0 ) ? "    clip-path: inset({$mkt}% {$mkr}% {$mkb}% {$mkl}%);\n" : "    clip-path: inset(0 0 0 0);\n";
 
             // Per-segment easing
             $easing = $kf['easing'] ?? 'ease';
@@ -1090,6 +1184,23 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
 
         $css .= "}\n";
         return $css;
+    }
+
+    /**
+     * Partenza personalizzata delle lettere come variabili CSS (lette da mpsCharCustom), '' se è quella di
+     * sempre (nessuno spostamento, rotazione o sfocatura, scala 1, opacità 0).
+     */
+    private function char_anim_vars( $ca ) {
+        $cx = intval( $ca['offsetX'] ?? 0 );
+        $cy = intval( $ca['offsetY'] ?? 0 );
+        $cr = intval( $ca['rotation'] ?? 0 );
+        $cs = isset( $ca['scale'] ) && '' !== $ca['scale'] ? max( 0, min( 3, floatval( $ca['scale'] ) ) ) : 1;
+        $co = isset( $ca['opacity'] ) && '' !== $ca['opacity'] ? max( 0, min( 100, floatval( $ca['opacity'] ) ) ) / 100 : 0;
+        $cb = max( 0, min( 20, floatval( $ca['blur'] ?? 0 ) ) );
+        if ( ! $cx && ! $cy && ! $cr && 1 == $cs && 0 == $co && 0 == $cb ) {
+            return '';
+        }
+        return '--mps-ca-x:' . $cx . 'px;--mps-ca-y:' . $cy . 'px;--mps-ca-r:' . $cr . 'deg;--mps-ca-s:' . $cs . ';--mps-ca-o:' . $co . ';--mps-ca-b:' . $cb . 'px;';
     }
 
     /**
@@ -1134,6 +1245,15 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                 }
                 $indices = $ordered;
                 break;
+            case 'edgetomiddle':
+                // dai due bordi verso il centro (l'editor la offriva, il sito partiva sempre dall'inizio)
+                $ordered = [];
+                for ( $sx = 0, $dx = $total - 1; $sx <= $dx; $sx++, $dx-- ) {
+                    $ordered[] = $sx;
+                    if ( $dx !== $sx ) { $ordered[] = $dx; }
+                }
+                $indices = $ordered;
+                break;
         }
 
         // Map original index → delay order
@@ -1156,7 +1276,8 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                 continue;
             }
             $delay_ms = $delay_map[ $idx ] * $stagger;
-            $span     = '<span class="mps-char" style="display:inline-block;animation-delay:' . $delay_ms . 'ms">' . esc_html( $unit ) . '</span>';
+            // per righe ogni riga va a capo (inline-block le metteva in fila sulla stessa riga)
+            $span     = '<span class="mps-char" style="display:' . ( $split_mode === 'lines' ? 'block' : 'inline-block' ) . ';animation-delay:' . $delay_ms . 'ms">' . esc_html( $unit ) . '</span>';
             if ( $split_mode === 'chars' ) {
                 $parola .= $span;
             } else {
@@ -1299,7 +1420,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                         $rules .= '#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '{' . $props . '}';
                     }
                     if ( $fs_ov > 0 ) {
-                        $rules .= '#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '>:is(h1,h2,h3,h4,h5,h6,p,span,div,a){font-size:calc(' . $fs_ov . 'px * var(--mps-k, 1))!important}';
+                        $rules .= '#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '>:is(h1,h2,h3,h4,h5,h6,p,span,div,a),#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '>.mps-mp>:is(h1,h2,h3,h4,h5,h6,p,span,div,a){font-size:calc(' . $fs_ov . 'px * var(--mps-k, 1))!important}';
                     }
                 }
             }

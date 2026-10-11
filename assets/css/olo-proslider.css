@@ -275,6 +275,51 @@
   display: inline-block;
   opacity: 0;
 }
+/* Maschera d'ingresso del livello (data-mask): dal riquadro impostato (--mps-m) a tutto il livello,
+   insieme all'ingresso (il JS la aggiunge alla stessa animation) */
+@keyframes mpsMaskReveal {
+  from { clip-path: var(--mps-m, inset(0 0 0 0)); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+/* Lettere con partenza personalizzata (data-char-custom): spostamento, rotazione, scala, opacità e
+   sfocatura scritti dal PHP sul livello */
+@keyframes mpsCharCustom {
+  from {
+    opacity: var(--mps-ca-o, 0);
+    transform: translate(var(--mps-ca-x, 0px), var(--mps-ca-y, 0px)) rotate(var(--mps-ca-r, 0deg)) scale(var(--mps-ca-s, 1));
+    filter: blur(var(--mps-ca-b, 0px));
+  }
+  to { opacity: 1; transform: none; filter: none; }
+}
+/* Ken Burns del livello immagine: l'immagine si muove dentro la cornice del livello (overflow
+   nascosto dal PHP), avanti e indietro senza fine; --mps-lkb-i = intensità (0,05-0,5) */
+.mps-lkb {
+  animation-duration: var(--mps-lkb-d, 5000ms);
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-fill-mode: both;
+  will-change: transform;
+}
+.mps-lkb-zoomIn   { animation-name: mpsLkbZoomIn; }
+.mps-lkb-zoomOut  { animation-name: mpsLkbZoomOut; }
+.mps-lkb-panLeft  { animation-name: mpsLkbPanLeft; }
+.mps-lkb-panRight { animation-name: mpsLkbPanRight; }
+.mps-lkb-panUp    { animation-name: mpsLkbPanUp; }
+.mps-lkb-panDown  { animation-name: mpsLkbPanDown; }
+@keyframes mpsLkbZoomIn  { from { transform: scale(1); } to { transform: scale(calc(1 + var(--mps-lkb-i, 0.2))); } }
+@keyframes mpsLkbZoomOut { from { transform: scale(calc(1 + var(--mps-lkb-i, 0.2))); } to { transform: scale(1); } }
+/* pan: l'immagine ingrandita di (1 + i) scorre di ±0,3·i, dentro il margine che l'ingrandimento lascia */
+@keyframes mpsLkbPanLeft  { from { transform: scale(calc(1 + var(--mps-lkb-i, 0.2))) translateX(calc(var(--mps-lkb-i, 0.2) * 30%)); } to { transform: scale(calc(1 + var(--mps-lkb-i, 0.2))) translateX(calc(var(--mps-lkb-i, 0.2) * -30%)); } }
+@keyframes mpsLkbPanRight { from { transform: scale(calc(1 + var(--mps-lkb-i, 0.2))) translateX(calc(var(--mps-lkb-i, 0.2) * -30%)); } to { transform: scale(calc(1 + var(--mps-lkb-i, 0.2))) translateX(calc(var(--mps-lkb-i, 0.2) * 30%)); } }
+@keyframes mpsLkbPanUp    { from { transform: scale(calc(1 + var(--mps-lkb-i, 0.2))) translateY(calc(var(--mps-lkb-i, 0.2) * 30%)); } to { transform: scale(calc(1 + var(--mps-lkb-i, 0.2))) translateY(calc(var(--mps-lkb-i, 0.2) * -30%)); } }
+@keyframes mpsLkbPanDown  { from { transform: scale(calc(1 + var(--mps-lkb-i, 0.2))) translateY(calc(var(--mps-lkb-i, 0.2) * -30%)); } to { transform: scale(calc(1 + var(--mps-lkb-i, 0.2))) translateY(calc(var(--mps-lkb-i, 0.2) * 30%)); } }
+/* Percorso di movimento: il contenitore interno corre lungo il tracciato (Web Animations, dal JS) */
+.mps-mp { will-change: transform; }
+@media (prefers-reduced-motion: reduce) {
+  .mps-lkb { animation: none; }
+}
+
 /* Timeline keyframe layers: position managed by left/top in @keyframes */
 .olo-proslider-layer[data-timeline-name] {
   transform-origin: center center;
