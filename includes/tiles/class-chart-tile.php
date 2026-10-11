@@ -167,7 +167,8 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
         $legend_ps       = ! empty( $s['legend_point_style'] );
         // Pallino della legenda: Chart.js lo disegna con raggio = boxHeight × √2 / 2 e, con
         // pointStyleWidth, largo pointStyleWidth → un ellisse (12 px di larghezza, alto quanto il
-        // testo). Senza pointStyleWidth e con boxWidth = boxHeight è un cerchio di circa ¾ del testo.
+        // testo). Senza pointStyleWidth e con boxWidth = boxHeight è un cerchio di circa ¾ del testo
+        // (la forma resta quella dei punti del grafico: la stella di un radar resta una stella).
         $legend_dot      = max( 6, (int) round( $legend_fs * 0.55 ) );
 
         // Title
@@ -399,7 +400,6 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
                                         padding: <?php echo $legend_pad; ?>
                                         <?php if ( $legend_ps ) : ?>
                                         ,usePointStyle: true,
-                                        pointStyle: 'circle',
                                         boxHeight: <?php echo $legend_dot; ?>
                                         <?php endif; ?>
                                     }
