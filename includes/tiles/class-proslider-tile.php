@@ -138,8 +138,10 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                 $px = intval( 1440 / $w * $hh );
                 return [ 'css' => 'aspect-ratio:' . $w . '/' . $hh . ';height:auto;', 'px' => $px ];
             default:
+                // px = altezza sulla tela del computer (1440), che si scala con la larghezza (JS): come rapporto il
+                // browser la applica già prima del JS, senza il salto da 640 px fissi all'altezza vera
                 $v = absint( $h_obj['value'] ?: 600 );
-                return [ 'css' => 'height:' . $v . 'px;', 'px' => $v ];
+                return [ 'css' => 'aspect-ratio:1440/' . $v . ';height:auto;', 'px' => $v ];
         }
     }
 
@@ -1352,24 +1354,33 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         foreach ( $breakpoints as $bp_name => $max_width ) {
             $rules = '';
 
-            // Height override per breakpoint
+            // Altezza del formato: la sua o quella del computer (come l'editor e il JS, senza ereditare dal formato
+            // più largo). In px è l'altezza sulla tela del formato (notebook 1240, tablet 1024, telefono 640) e si
+            // scala con la larghezza: qui diventa un rapporto, lo stesso valore che calcola il JS. Prima era
+            // un'altezza fissa con !important che batteva il JS: 1060 per il telefono restava 1060 px su uno
+            // schermo di 390. A schermo pieno l'altezza è la finestra: niente regole.
             $height_key = 'height' . ucfirst( $bp_name );
-            if ( ! empty( $settings[ $height_key ] ) ) {
-                $rh = $this->normalize_height( $settings[ $height_key ] );
-                if ( $rh ) {
-                    $rh_info = $this->height_css( $rh );
-                    $h_css = '';
-                    switch ( $rh['mode'] ) {
-                        case 'vh':
-                            $h_css = 'height:' . absint( $rh['value'] ) . 'vh!important;';
-                            break;
-                        case 'ratio':
-                            $rp = explode( ':', $rh['value'] );
-                            $h_css = 'aspect-ratio:' . floatval( $rp[0] ) . '/' . floatval( $rp[1] ) . '!important;height:auto!important;';
-                            break;
-                        default:
-                            $h_css = 'height:' . $rh_info['px'] . 'px!important;';
-                    }
+            $rh         = ! empty( $settings[ $height_key ] ) ? $this->normalize_height( $settings[ $height_key ] ) : null;
+            $propria    = (bool) $rh;
+            if ( ! $rh ) {
+                $rh = $this->normalize_height( $settings['height'] ?? null ) ?: [ 'mode' => 'px', 'value' => 600 ];
+            }
+            if ( ( $settings['sizingMode'] ?? 'auto' ) !== 'fullscreen' ) {
+                $rh_info = $this->height_css( $rh );
+                $h_css   = '';
+                switch ( $rh['mode'] ) {
+                    case 'vh':
+                        // ereditata dal computer è già nello stile in linea
+                        $h_css = $propria ? 'height:' . absint( $rh['value'] ) . 'vh!important;aspect-ratio:auto!important;' : '';
+                        break;
+                    case 'ratio':
+                        $rp    = explode( ':', $rh['value'] );
+                        $h_css = $propria ? 'aspect-ratio:' . floatval( $rp[0] ) . '/' . floatval( $rp[1] ?? 9 ) . '!important;height:auto!important;' : '';
+                        break;
+                    default:
+                        $h_css = 'aspect-ratio:' . $max_width . '/' . max( 1, absint( $rh['value'] ) ) . '!important;height:auto!important;';
+                }
+                if ( $h_css ) {
                     $rules .= '#' . $uid . '{' . $h_css . '--mps-ch:' . $rh_info['px'] . 'px;}';
                 }
             }

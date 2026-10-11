@@ -1022,6 +1022,9 @@ function initSlider(container) {
     if (avviato) return;
     avviato = true;
     animateLayersIn(slides[current]);
+    // I livelli globali (fermi su tutte le slide) entrano una volta sola, con la prima slide: prima nessuno li
+    // faceva entrare e restavano invisibili (opacità 0 di ogni livello).
+    qsa(container, '.olo-proslider-global-layers').forEach(function (g) { animateLayersIn(g); });
     playVideoBg(slides[current]);
     handleAudioLayers(slides[current], true);
   }

@@ -3,6 +3,11 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.680 - 2026-10-11 (fix)
+- Pro Slider: l’altezza impostata per notebook, tablet e telefono si scala con lo schermo, come nell’editor. Prima restava fissa in pixel: un’altezza di 1060 per il telefono dava uno slider alto 1060 px su uno schermo di 390, con i testi tutti in alto e un vuoto sotto. Lo slider ha la sua altezza giusta già prima che la pagina finisca di caricarsi.
+- Pro Slider: i livelli globali (fermi su tutte le slide, come un nome o un pulsante) si vedono. Prima non entravano mai e restavano invisibili.
+- Temi: in Acqua Viva sul telefono il titolo di ogni slide sta su due righe e non copre il sottotitolo.
+
 ## v1.4.679 - 2026-10-11 (fix)
 - Pro Slider: lo slider parte quando arriva nella finestra. Prima partiva al caricamento della pagina e chi scorreva fino a uno slider più in basso si perdeva l’ingresso dei testi e lo trovava già avanti di qualche slide. Fuori dalla finestra la riproduzione automatica e il video di sfondo si fermano.
 - Pro Slider: nell’animazione per parole lo sfalsamento fra una parola e l’altra è quello impostato (prima contavano anche gli spazi e raddoppiava).
