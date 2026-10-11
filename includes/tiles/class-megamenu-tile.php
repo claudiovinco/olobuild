@@ -3593,32 +3593,46 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
 
             /* ── Nome del logo nella barra del telefono ──
                Accanto al simbolo e ai pulsanti un nome lungo finiva coi puntini: si restringe finché
-               ci sta. Se dovesse scendere sotto i 15 px il simbolo lascia il posto al nome (conta di
-               più), e il nome non va sotto i 13 px. */
+               ci sta, carattere e spaziatura insieme (la spaziatura è in px e da sola non scala). Se
+               dovesse scendere sotto i 15 px il simbolo lascia il posto al nome (conta di più), e il
+               nome non va sotto i 13 px. I valori in linea del nome si ripristinano a ogni misura. */
             var mmNome = root.querySelector(".olo-mm-mobile-logo .olo-mm-logo-text");
             if (mmNome) {
                 var mmSimbolo = root.querySelector(".olo-mm-mobile-logo .olo-mm-mark");
+                var mmOrig = {
+                    fs: mmNome.style.getPropertyValue("font-size"), fsP: mmNome.style.getPropertyPriority("font-size"),
+                    ls: mmNome.style.getPropertyValue("letter-spacing"), lsP: mmNome.style.getPropertyPriority("letter-spacing")
+                };
+                /* quanto stringere per starci (larghezza disponibile / larghezza del nome), 0 = ci sta */
                 var misuraNome = function () {
                     if (!Math.max(0, mmNome.scrollWidth - mmNome.clientWidth - 1)) { return 0; }
-                    return parseFloat(getComputedStyle(mmNome).fontSize) * mmNome.clientWidth / mmNome.scrollWidth;
+                    return mmNome.clientWidth / mmNome.scrollWidth;
                 };
                 var adattaNome = function () {
-                    mmNome.style.removeProperty("font-size");
+                    mmNome.style.setProperty("font-size", mmOrig.fs, mmOrig.fsP);
+                    mmNome.style.setProperty("letter-spacing", mmOrig.ls, mmOrig.lsP);
                     if (mmSimbolo) { mmSimbolo.style.removeProperty("display"); }
                     if (!mmNome.offsetWidth) { return; }
-                    var fs = misuraNome();
-                    if (!fs) { return; }
+                    var cs = getComputedStyle(mmNome);
+                    var fs0 = parseFloat(cs.fontSize);
+                    var ls0 = parseFloat(cs.letterSpacing) || 0;
+                    var k = misuraNome();
+                    if (!k) { return; }
                     if (mmSimbolo) {
-                        if (fs === Math.min(fs, 15)) {
+                        if (fs0 * k === Math.min(fs0 * k, 15)) {
                             mmSimbolo.style.setProperty("display", "none");
-                            fs = misuraNome();
-                            if (!fs) { return; }
+                            k = misuraNome();
+                            if (!k) { return; }
                         }
                     }
-                    for (var i = 0; i < 3; i++) {
-                        mmNome.style.setProperty("font-size", Math.max(13, Math.floor(fs * 10) / 10) + "px", "important");
-                        fs = misuraNome();
-                        if (!fs) { return; }
+                    var minimo = 13 / fs0, f = 1;
+                    for (var i = 0; i < 4; i++) {
+                        f = Math.max(minimo, f * k * 0.995);
+                        mmNome.style.setProperty("font-size", (fs0 * f).toFixed(2) + "px", "important");
+                        mmNome.style.setProperty("letter-spacing", (ls0 * f).toFixed(2) + "px", "important");
+                        k = misuraNome();
+                        if (!k) { return; }
+                        if (f === minimo) { return; }
                     }
                 };
                 adattaNome();
