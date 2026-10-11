@@ -165,6 +165,10 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
         $legend_bw       = max( 10, intval( $s['legend_box_width'] ) );
         $legend_pad      = max( 0, intval( $s['legend_padding'] ) );
         $legend_ps       = ! empty( $s['legend_point_style'] );
+        // Pallino della legenda: Chart.js lo disegna con raggio = boxHeight × √2 / 2 e, con
+        // pointStyleWidth, largo pointStyleWidth → un ellisse (12 px di larghezza, alto quanto il
+        // testo). Senza pointStyleWidth e con boxWidth = boxHeight è un cerchio di circa ¾ del testo.
+        $legend_dot      = max( 6, (int) round( $legend_fs * 0.55 ) );
 
         // Title
         $show_title   = ! empty( $s['show_title'] );
@@ -391,11 +395,12 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
                                     labels: {
                                         color: '<?php echo esc_js( $legend_color ); ?>',
                                         font: { size: <?php echo $legend_fs; ?>, weight: '<?php echo $legend_fw; ?>' },
-                                        boxWidth: <?php echo $legend_bw; ?>,
+                                        boxWidth: <?php echo $legend_ps ? $legend_dot : $legend_bw; ?>,
                                         padding: <?php echo $legend_pad; ?>
                                         <?php if ( $legend_ps ) : ?>
                                         ,usePointStyle: true,
-                                        pointStyleWidth: 12
+                                        pointStyle: 'circle',
+                                        boxHeight: <?php echo $legend_dot; ?>
                                         <?php endif; ?>
                                     }
                                 },

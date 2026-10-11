@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.663 - 2026-10-11 (fix)
+- Grafici: i pallini della legenda sono tondi. Con lo stile a pallino erano ellissi, larghi 12 px e alti quanto il testo; ora la loro misura segue la dimensione del testo della legenda.
+- Temi: in Tostatura Nove il gratta e vinci e il quiz hanno respiro sopra e sotto (il pulsante e l'occhiello toccavano il bordo).
+
 ## v1.4.662 - 2026-10-11 (fix)
 - Temi: in Tostatura Nove il testo del bollino giallo è più grande e corre su tutto il giro del cerchio.
 
