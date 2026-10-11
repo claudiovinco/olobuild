@@ -216,7 +216,7 @@ class Olobuild_Page_Check {
         if ( $stato['tile'] < $min_tile || $stato['sezioni'] < $min_sezioni ) {
             $esito['problemi'][] = sprintf(
                 /* translators: 1: tile della pagina, 2: sezioni della pagina, 3: tile minime, 4: sezioni minime */
-                olobuild_t( 'La pagina è troppo corta: ha %1$d tile in %2$d sezioni, ne servono almeno %3$d in %4$d.' ),
+                olobuild_t( 'La pagina è troppo corta (tile: %1$d, minimo %3$d · sezioni: %2$d, minimo %4$d).' ),
                 $stato['tile'], $stato['sezioni'], $min_tile, $min_sezioni
             );
         }
@@ -256,7 +256,7 @@ class Olobuild_Page_Check {
         } elseif ( $esito['personale'] < $min_personale ) {
             $esito['problemi'][] = sprintf(
                 /* translators: 1: percentuale dei testi propri, 2: percentuale minima, 3: esempi di testi da riscrivere */
-                olobuild_t( 'La pagina è ancora troppo vicina ai contenuti di partenza: solo il %1$d%% dei testi è tuo, ne serve almeno il %2$d%%. Riscrivi con parole tue i testi rimasti come arrivano, per esempio %3$s.' ),
+                olobuild_t( 'La pagina è ancora troppo vicina ai contenuti di partenza (testi tuoi: %1$d%%, minimo %2$d%%). Riscrivi con parole tue i testi rimasti come arrivano, per esempio %3$s.' ),
                 $esito['personale'], $min_personale, implode( ', ', $esempi )
             );
         }
@@ -264,7 +264,7 @@ class Olobuild_Page_Check {
         $esito['ok']        = empty( $esito['problemi'] );
         $esito['riepilogo'] = sprintf(
             /* translators: 1: tile, 2: sezioni, 3: percentuale dei testi propri */
-            olobuild_t( '%1$d tile in %2$d sezioni, %3$d%% di testi propri' ),
+            olobuild_t( 'tile: %1$d · sezioni: %2$d · testi propri: %3$d%%' ),
             $esito['tile'], $esito['sezioni'], $esito['personale']
         );
         return $esito;

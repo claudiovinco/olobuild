@@ -16943,17 +16943,17 @@ msgstr "The attached file is not a page exported from OLObuild: download it from
 msgid "La pagina contiene tile che nella sandbox non ci sono (%s): la pagina va fatta nella sandbox."
 msgstr "The page contains tiles that the sandbox does not have (%s): the page has to be made in the sandbox."
 
-msgid "La pagina è troppo corta: ha %1$d tile in %2$d sezioni, ne servono almeno %3$d in %4$d."
-msgstr "The page is too short: it has %1$d tiles in %2$d sections, at least %3$d in %4$d are needed."
+msgid "La pagina è troppo corta (tile: %1$d, minimo %3$d · sezioni: %2$d, minimo %4$d)."
+msgstr "The page is too short (tiles: %1$d, minimum %3$d · sections: %2$d, minimum %4$d)."
 
 msgid "La pagina ha troppo poco testo: servono titoli e paragrafi scritti da te."
 msgstr "The page has too little text: it needs headings and paragraphs written by you."
 
-msgid "La pagina è ancora troppo vicina ai contenuti di partenza: solo il %1$d%% dei testi è tuo, ne serve almeno il %2$d%%. Riscrivi con parole tue i testi rimasti come arrivano, per esempio %3$s."
-msgstr "The page is still too close to the starting content: only %1$d%% of the text is yours, at least %2$d%% is needed. Rewrite in your own words the texts left as they came, for example %3$s."
+msgid "La pagina è ancora troppo vicina ai contenuti di partenza (testi tuoi: %1$d%%, minimo %2$d%%). Riscrivi con parole tue i testi rimasti come arrivano, per esempio %3$s."
+msgstr "The page is still too close to the starting content (your own text: %1$d%%, minimum %2$d%%). Rewrite in your own words the texts left as they came, for example %3$s."
 
-msgid "%1$d tile in %2$d sezioni, %3$d%% di testi propri"
-msgstr "%1$d tiles in %2$d sections, %3$d%% own text"
+msgid "tile: %1$d · sezioni: %2$d · testi propri: %3$d%%"
+msgstr "tiles: %1$d · sections: %2$d · own text: %3$d%%"
 
 msgid "Allega il file della pagina (.json) che hai scaricato dal builder."
 msgstr "Attach the page file (.json) you downloaded from the builder."

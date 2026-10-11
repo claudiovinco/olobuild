@@ -24943,17 +24943,17 @@ msgstr "El archivo adjunto no es una página exportada de OLObuild: descárgala 
 msgid "La pagina contiene tile che nella sandbox non ci sono (%s): la pagina va fatta nella sandbox."
 msgstr "La página contiene tiles que no están en la sandbox (%s): la página tiene que hacerse en la sandbox."
 
-msgid "La pagina è troppo corta: ha %1$d tile in %2$d sezioni, ne servono almeno %3$d in %4$d."
-msgstr "La página es demasiado corta: tiene %1$d tiles en %2$d secciones, hacen falta al menos %3$d en %4$d."
+msgid "La pagina è troppo corta (tile: %1$d, minimo %3$d · sezioni: %2$d, minimo %4$d)."
+msgstr "La página es demasiado corta (tiles: %1$d, mínimo %3$d · secciones: %2$d, mínimo %4$d)."
 
 msgid "La pagina ha troppo poco testo: servono titoli e paragrafi scritti da te."
 msgstr "La página tiene muy poco texto: hacen falta títulos y párrafos escritos por ti."
 
-msgid "La pagina è ancora troppo vicina ai contenuti di partenza: solo il %1$d%% dei testi è tuo, ne serve almeno il %2$d%%. Riscrivi con parole tue i testi rimasti come arrivano, per esempio %3$s."
-msgstr "La página sigue demasiado cerca del contenido de partida: solo el %1$d%% de los textos es tuyo, hace falta al menos el %2$d%%. Reescribe con tus palabras los textos que siguen como llegaron, por ejemplo %3$s."
+msgid "La pagina è ancora troppo vicina ai contenuti di partenza (testi tuoi: %1$d%%, minimo %2$d%%). Riscrivi con parole tue i testi rimasti come arrivano, per esempio %3$s."
+msgstr "La página sigue demasiado cerca del contenido de partida (textos tuyos: %1$d%%, mínimo %2$d%%). Reescribe con tus palabras los textos que siguen como llegaron, por ejemplo %3$s."
 
-msgid "%1$d tile in %2$d sezioni, %3$d%% di testi propri"
-msgstr "%1$d tiles en %2$d secciones, %3$d%% de textos propios"
+msgid "tile: %1$d · sezioni: %2$d · testi propri: %3$d%%"
+msgstr "tiles: %1$d · secciones: %2$d · textos propios: %3$d%%"
 
 msgid "Allega il file della pagina (.json) che hai scaricato dal builder."
 msgstr "Adjunta el archivo de la página (.json) que has descargado del builder."

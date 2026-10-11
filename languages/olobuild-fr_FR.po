@@ -24943,17 +24943,17 @@ msgstr "Le fichier joint n’est pas une page exportée d’OLObuild : télécha
 msgid "La pagina contiene tile che nella sandbox non ci sono (%s): la pagina va fatta nella sandbox."
 msgstr "La page contient des tiles qui n’existent pas dans la sandbox (%s) : la page doit être faite dans la sandbox."
 
-msgid "La pagina è troppo corta: ha %1$d tile in %2$d sezioni, ne servono almeno %3$d in %4$d."
-msgstr "La page est trop courte : elle a %1$d tiles dans %2$d sections, il en faut au moins %3$d dans %4$d."
+msgid "La pagina è troppo corta (tile: %1$d, minimo %3$d · sezioni: %2$d, minimo %4$d)."
+msgstr "La page est trop courte (tiles : %1$d, minimum %3$d · sections : %2$d, minimum %4$d)."
 
 msgid "La pagina ha troppo poco testo: servono titoli e paragrafi scritti da te."
 msgstr "La page a trop peu de texte : il faut des titres et des paragraphes écrits par vous."
 
-msgid "La pagina è ancora troppo vicina ai contenuti di partenza: solo il %1$d%% dei testi è tuo, ne serve almeno il %2$d%%. Riscrivi con parole tue i testi rimasti come arrivano, per esempio %3$s."
-msgstr "La page est encore trop proche du contenu de départ : seulement %1$d%% des textes sont de vous, il en faut au moins %2$d%%. Réécrivez avec vos mots les textes restés tels quels, par exemple %3$s."
+msgid "La pagina è ancora troppo vicina ai contenuti di partenza (testi tuoi: %1$d%%, minimo %2$d%%). Riscrivi con parole tue i testi rimasti come arrivano, per esempio %3$s."
+msgstr "La page est encore trop proche du contenu de départ (textes à vous : %1$d%%, minimum %2$d%%). Réécrivez avec vos mots les textes restés tels quels, par exemple %3$s."
 
-msgid "%1$d tile in %2$d sezioni, %3$d%% di testi propri"
-msgstr "%1$d tiles dans %2$d sections, %3$d%% de textes propres"
+msgid "tile: %1$d · sezioni: %2$d · testi propri: %3$d%%"
+msgstr "tiles : %1$d · sections : %2$d · textes propres : %3$d%%"
 
 msgid "Allega il file della pagina (.json) che hai scaricato dal builder."
 msgstr "Joignez le fichier de la page (.json) téléchargé depuis le builder."

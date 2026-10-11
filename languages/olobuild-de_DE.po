@@ -24943,17 +24943,17 @@ msgstr "Die angehängte Datei ist keine aus OLObuild exportierte Seite: Lade sie
 msgid "La pagina contiene tile che nella sandbox non ci sono (%s): la pagina va fatta nella sandbox."
 msgstr "Die Seite enthält Tiles, die es in der Sandbox nicht gibt (%s): Die Seite muss in der Sandbox gebaut werden."
 
-msgid "La pagina è troppo corta: ha %1$d tile in %2$d sezioni, ne servono almeno %3$d in %4$d."
-msgstr "Die Seite ist zu kurz: Sie hat %1$d Tiles in %2$d Abschnitten, nötig sind mindestens %3$d in %4$d."
+msgid "La pagina è troppo corta (tile: %1$d, minimo %3$d · sezioni: %2$d, minimo %4$d)."
+msgstr "Die Seite ist zu kurz (Tiles: %1$d, mindestens %3$d · Abschnitte: %2$d, mindestens %4$d)."
 
 msgid "La pagina ha troppo poco testo: servono titoli e paragrafi scritti da te."
 msgstr "Die Seite hat zu wenig Text: Sie braucht Überschriften und Absätze, die du selbst geschrieben hast."
 
-msgid "La pagina è ancora troppo vicina ai contenuti di partenza: solo il %1$d%% dei testi è tuo, ne serve almeno il %2$d%%. Riscrivi con parole tue i testi rimasti come arrivano, per esempio %3$s."
-msgstr "Die Seite ist noch zu nah am Ausgangsinhalt: Nur %1$d%% der Texte sind von dir, nötig sind mindestens %2$d%%. Schreib die Texte, die so geblieben sind, wie sie kamen, mit eigenen Worten neu, zum Beispiel %3$s."
+msgid "La pagina è ancora troppo vicina ai contenuti di partenza (testi tuoi: %1$d%%, minimo %2$d%%). Riscrivi con parole tue i testi rimasti come arrivano, per esempio %3$s."
+msgstr "Die Seite ist noch zu nah am Ausgangsinhalt (eigene Texte: %1$d%%, mindestens %2$d%%). Schreib die Texte, die so geblieben sind, wie sie kamen, mit eigenen Worten neu, zum Beispiel %3$s."
 
-msgid "%1$d tile in %2$d sezioni, %3$d%% di testi propri"
-msgstr "%1$d Tiles in %2$d Abschnitten, %3$d%% eigene Texte"
+msgid "tile: %1$d · sezioni: %2$d · testi propri: %3$d%%"
+msgstr "Tiles: %1$d · Abschnitte: %2$d · eigene Texte: %3$d%%"
 
 msgid "Allega il file della pagina (.json) che hai scaricato dal builder."
 msgstr "Häng die Datei der Seite (.json) an, die du aus dem Builder heruntergeladen hast."
