@@ -39,6 +39,13 @@ class Olobuild_FullPage_Cache {
         // referenzierebbe a vuoto (incidente clod.eu 2026-09-04).
         if ( get_option( self::VERSION_OPT ) !== OLOBUILD_VERSION ) {
             self::purge_all();
+            // La copia del drop-in in wp-content non si aggiorna col plugin: si ricopiava solo
+            // cambiando le impostazioni, e un sito poteva tenere per mesi quella di una versione
+            // vecchia. Al cambio di versione si riallinea al sorgente; install_dropin() non tocca
+            // il drop-in di un altro plugin di cache e non riscrive una copia già uguale.
+            if ( file_exists( self::dropin_path() ) ) {
+                self::install_dropin();
+            }
             update_option( self::VERSION_OPT, OLOBUILD_VERSION, true );
         }
 
@@ -158,8 +165,22 @@ class Olobuild_FullPage_Cache {
         if ( ! is_readable( $src ) ) {
             return [ 'ok' => false, 'reason' => 'source_missing' ];
         }
+        if ( file_exists( $dest ) && md5_file( $dest ) === md5_file( $src ) ) {
+            return [ 'ok' => true ];
+        }
 
-        return [ 'ok' => (bool) @copy( $src, $dest ) ];
+        // Copia atomica: il drop-in lo include ogni richiesta, e un file letto a metà della
+        // scrittura sarebbe un errore di sintassi per quella richiesta.
+        $tmp = $dest . '.' . getmypid() . '.tmp';
+        if ( ! @copy( $src, $tmp ) ) {
+            return [ 'ok' => false, 'reason' => 'copy_failed' ];
+        }
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.rename_rename -- sostituzione atomica del drop-in (stesso filesystem): WP_Filesystem non garantisce l'atomicità
+        if ( ! @rename( $tmp, $dest ) ) {
+            wp_delete_file( $tmp );
+            return [ 'ok' => false, 'reason' => 'copy_failed' ];
+        }
+        return [ 'ok' => true ];
     }
 
     /** Rimuove il drop-in SOLO se è il nostro. */

@@ -8,8 +8,17 @@
  * uscire, azzerando il costo di rigenerazione della pagina (TTFB).
  *
  * NON usa API di WordPress (non è ancora caricato): solo $_SERVER, $_COOKIE e PHP core.
+ * ⚠️ Nemmeno le funzioni di sanificazione: wp-settings.php include questo file PRIMA di
+ * wp-includes/formatting.php, quindi sanitize_text_field(), wp_unslash() e sanitize_key()
+ * non esistono ancora. Dalla 1.4.300 alla 1.4.689 le chiamava: con la cache accesa ogni
+ * richiesta, bacheca compresa, finiva in errore fatale. I valori si ripuliscono qui sotto
+ * con PHP puro e servono solo a decidere (confronti) e a comporre la chiave (md5): non
+ * finiscono mai in una pagina. Le magic quotes di WordPress non sono ancora applicate.
+ *
  * La configurazione (enabled, ttl, esclusioni) è letta da cache/olobuild/fpc-config.php,
  * scritto da Olobuild_FullPage_Cache. Se manca o enabled=false, il drop-in è inerte.
+ * La copia in wp-content si riallinea a questo file a ogni nuova versione del plugin
+ * (Olobuild_FullPage_Cache::init()).
  *
  * Sicurezza-prima: in caso di dubbio NON si serve e NON si salva (passthrough a WP).
  */
@@ -49,13 +58,26 @@ if ( ! defined( 'WP_CONTENT_DIR' ) ) {
         return;
     }
 
+    // Un valore di $_SERVER come stringa senza caratteri di controllo (a capo, tab, NUL).
+    $srv = static function ( $k ) {
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- drop-in pre-bootstrap (WP_CACHE): sanitize_text_field()/wp_unslash() non esistono ancora (formatting.php si carica dopo questo file); valore ripulito qui con PHP puro e usato solo per confronti e per la chiave md5, mai stampato.
+        $v = ( isset( $_SERVER[ $k ] ) && is_scalar( $_SERVER[ $k ] ) ) ? (string) $_SERVER[ $k ] : '';
+        return (string) preg_replace( '/[\x00-\x1F\x7F]/', '', $v );
+    };
+
     // --- Solo GET/HEAD: niente POST/PUT/DELETE (form, checkout, REST mutanti). ---
-    $method = isset( $_SERVER['REQUEST_METHOD'] ) ? strtoupper( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) ) : 'GET';
+    $method = strtoupper( $srv( 'REQUEST_METHOD' ) );
+    if ( $method === '' ) {
+        $method = 'GET';
+    }
     if ( $method !== 'GET' && $method !== 'HEAD' ) {
         return;
     }
 
-    $uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '/';
+    $uri = $srv( 'REQUEST_URI' );
+    if ( $uri === '' ) {
+        $uri = '/';
+    }
 
     // --- Path mai cachabili (admin, login, cron, API, feed, e pagine WooCommerce note). ---
     $blocked = [
@@ -78,7 +100,7 @@ if ( ! defined( 'WP_CONTENT_DIR' ) ) {
 
     // --- Query string: si cacha solo l'URL "pulito". I parametri di tracking
     //     vengono ignorati (stessa pagina); qualsiasi altro parametro => no cache. ---
-    $qs = isset( $_SERVER['QUERY_STRING'] ) ? sanitize_text_field( wp_unslash( $_SERVER['QUERY_STRING'] ) ) : '';
+    $qs = $srv( 'QUERY_STRING' );
     if ( $qs !== '' ) {
         parse_str( $qs, $params );
         $tracking = [ 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid', 'fbclid', 'gad_source', 'mc_cid', 'mc_eid', '_ga' ];
@@ -91,12 +113,9 @@ if ( ! defined( 'WP_CONTENT_DIR' ) ) {
     }
 
     // --- Cookie che indicano una sessione personale: mai servire/salvare. ---
-    // drop-in pre-bootstrap (WP_CACHE): si leggono solo i NOMI dei cookie per
-    // decidere il passthrough; nessuna API nonce disponibile e nessuna elaborazione
-    // di form. I nomi vengono sanificati prima del confronto.
-    // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- drop-in pre-bootstrap (WP_CACHE): nessuna API nonce disponibile, non è elaborazione di form; si iterano solo i NOMI dei cookie per il passthrough e ogni nome è sanificato sotto.
+    // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- drop-in pre-bootstrap (WP_CACHE): nessuna API nonce disponibile, non è elaborazione di form; si confrontano solo i prefissi dei NOMI dei cookie per il passthrough.
     foreach ( array_keys( $_COOKIE ) as $ck ) {
-        $ck = sanitize_text_field( wp_unslash( $ck ) );
+        $ck = (string) $ck;
         if (
             strpos( $ck, 'wordpress_logged_in' ) === 0 ||
             strpos( $ck, 'comment_author' ) === 0 ||
@@ -109,25 +128,34 @@ if ( ! defined( 'WP_CONTENT_DIR' ) ) {
         }
     }
 
-    // --- Chiave di cache: salt + schema + host + path + variante device. ---
-    $https_val = isset( $_SERVER['HTTPS'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTPS'] ) ) : '';
-    $xfp_val   = isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) ) : '';
+    // --- Chiave di cache: salt + schema + host + path + variante device + lingua. ---
+    $https_val = strtolower( $srv( 'HTTPS' ) );
+    $xfp_val   = strtolower( $srv( 'HTTP_X_FORWARDED_PROTO' ) );
     $https     = ( $https_val !== '' && $https_val !== 'off' ) || ( $xfp_val === 'https' );
     $scheme    = $https ? 'https' : 'http';
-    $host      = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
+    // nella chiave solo i caratteri di un nome host (con la porta o un indirizzo IPv6)
+    $host      = strtolower( (string) preg_replace( '/[^A-Za-z0-9.\-:\[\]]/', '', $srv( 'HTTP_HOST' ) ) );
 
     $device = '';
     if ( ! empty( $cfg['vary_device'] ) ) {
-        $ua     = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '';
-        $device = preg_match( '/Mobile|Android|iPhone|iPod|Windows Phone|BlackBerry|Opera Mini|IEMobile/i', $ua ) ? 'm' : 'd';
+        $device = preg_match( '/Mobile|Android|iPhone|iPod|Windows Phone|BlackBerry|Opera Mini|IEMobile/i', $srv( 'HTTP_USER_AGENT' ) ) ? 'm' : 'd';
     }
 
     // Variante per lingua: OLObuild può servire contenuti diversi in base al
     // cookie olo_lang. Includerlo nella chiave evita di servire la lingua sbagliata
-    // (su sito monolingua resta un'unica variante).
-    // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- drop-in pre-bootstrap (WP_CACHE): nessuna API nonce disponibile, non è elaborazione di form; lettura read-only del cookie lingua solo per la variante di chiave cache; valore sanificato e validato (whitelist [a-z]{2}).
-    $olo_lang = isset( $_COOKIE['olo_lang'] ) ? sanitize_key( wp_unslash( $_COOKIE['olo_lang'] ) ) : '';
-    $lang     = preg_match( '/^[a-z]{2}$/', $olo_lang ) ? $olo_lang : '';
+    // (su sito monolingua resta un'unica variante). Con più cookie olo_lang (la copia
+    // del solo host accanto a quella condivisa fra più siti dello stesso dominio,
+    // OLOlang 3.27.11) vale l'ULTIMO, come per OLOlang: $_COOKIE terrebbe il primo,
+    // cioè il più vecchio. Valore accettato solo se sono due lettere.
+    $valori = [];
+    $grezzo = $srv( 'HTTP_COOKIE' );
+    if ( $grezzo !== '' && preg_match_all( '/(?:^|;)\s*olo_lang=([^;]*)/', $grezzo, $m_lang ) ) {
+        $valori = $m_lang[1];
+    } elseif ( isset( $_COOKIE['olo_lang'] ) && is_string( $_COOKIE['olo_lang'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- drop-in pre-bootstrap (WP_CACHE): niente intestazione Cookie grezza; valore validato sotto con una whitelist di due lettere.
+        $valori = [ $_COOKIE['olo_lang'] ]; // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- come sopra: validato sotto.
+    }
+    $ultimo = $valori ? strtolower( trim( rawurldecode( (string) end( $valori ) ) ) ) : '';
+    $lang   = preg_match( '/^[a-z]{2}$/', $ultimo ) ? $ultimo : '';
 
     $key  = md5( $cfg['salt'] . '|' . $scheme . '://' . $host . $path_only . '|' . $device . '|' . $lang );
     $file = $dir . $key . '.html';
