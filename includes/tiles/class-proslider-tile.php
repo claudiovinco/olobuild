@@ -1224,7 +1224,15 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             $units = preg_split( '//u', $plain, -1, PREG_SPLIT_NO_EMPTY );
         }
 
-        $total = count( $units );
+        if ( count( $units ) === 0 ) return $text;
+
+        // L'ordine conta solo i pezzi veri: gli spazi non prendono un turno (nella divisione per parole lo
+        // sfalsamento fra due parole raddoppiava). $indices lavora sulle posizioni dentro $veri.
+        $veri = [];
+        foreach ( $units as $ui => $uu ) {
+            if ( ! preg_match( '/^\s+$/u', $uu ) ) { $veri[] = $ui; }
+        }
+        $total = count( $veri );
         if ( $total === 0 ) return $text;
 
         // Build index order based on direction
@@ -1257,9 +1265,9 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         }
 
         // Map original index → delay order
-        $delay_map = array_fill( 0, $total, 0 );
-        foreach ( $indices as $order => $original_idx ) {
-            $delay_map[ $original_idx ] = $order;
+        $delay_map = array_fill( 0, count( $units ), 0 );
+        foreach ( $indices as $order => $pos ) {
+            $delay_map[ $veri[ $pos ] ] = $order;
         }
 
         // Per lettere: le lettere di una parola stanno in un gruppo che non si spezza. Ogni lettera è un

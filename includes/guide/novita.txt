@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.679 - 2026-10-11 (fix)
+- Pro Slider: lo slider parte quando arriva nella finestra. Prima partiva al caricamento della pagina e chi scorreva fino a uno slider più in basso si perdeva l’ingresso dei testi e lo trovava già avanti di qualche slide. Fuori dalla finestra la riproduzione automatica e il video di sfondo si fermano.
+- Pro Slider: nell’animazione per parole lo sfalsamento fra una parola e l’altra è quello impostato (prima contavano anche gli spazi e raddoppiava).
+
 ## v1.4.678 - 2026-10-11 (novità, fix)
 - Pro Slider: agiscono le funzioni dell’editor dei livelli che finora si salvavano senza effetto. Maschera d’ingresso (sipario, svelamento da un lato), Ken Burns dentro un livello immagine, percorso di movimento (cerchio, otto, onda, zigzag, arco o un tracciato SVG, anche con la rotazione lungo il percorso), parallasse del singolo livello con l’inclinazione 3D verso il puntatore, partenza personalizzata delle lettere (spostamento, rotazione, scala, opacità, sfocatura) con l’andata e ritorno, direzione «Bordi → Centro» e divisione per righe.
 - Pro Slider, timeline: agiscono maschera, luminosità e scala di grigi dei keyframe; con «Fine con la slide» spento il livello esce appena finisce la sua timeline.

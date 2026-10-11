@@ -725,12 +725,17 @@ function initSlider(container) {
     resetProgressBar();
   }
 
-  if (cfg.autoplay) {
-    startAutoplay();
-    if (cfg.pauseOnHover) {
-      container.addEventListener('mouseenter', stopAutoplay);
-      container.addEventListener('mouseleave', startAutoplay);
-    }
+  // La riproduzione automatica corre solo con lo slider nella finestra (e non col puntatore sopra, se chiesto):
+  // prima partiva al caricamento e chi scorreva fino a uno slider più in basso lo trovava già avanti di qualche
+  // slide. L'avvio vero è in fondo (primoIngresso, all'ingresso nella finestra).
+  var inVista = false;
+  var sopra = false;
+  function riprendiAutoplay() {
+    if (cfg.autoplay && inVista && !(cfg.pauseOnHover && sopra)) startAutoplay();
+  }
+  if (cfg.autoplay && cfg.pauseOnHover) {
+    container.addEventListener('mouseenter', function () { sopra = true; stopAutoplay(); });
+    container.addEventListener('mouseleave', function () { sopra = false; riprendiAutoplay(); });
   }
 
   /* ── Video background ────────────────────────────────── */
@@ -1009,9 +1014,37 @@ function initSlider(container) {
   }
 
   /* ── Initial state ───────────────────────────────────── */
-  animateLayersIn(slides[0]);
-  playVideoBg(slides[0]);
-  handleAudioLayers(slides[0], true);
+  // I livelli della prima slide entrano quando lo slider arriva nella finestra (almeno un quinto, o mezza
+  // finestra se è più alto): prima entravano al caricamento e, per uno slider sotto la piega, l'ingresso
+  // finiva prima che lo si vedesse. Fuori dalla finestra si fermano riproduzione automatica e video.
+  var avviato = false;
+  function primoIngresso() {
+    if (avviato) return;
+    avviato = true;
+    animateLayersIn(slides[current]);
+    playVideoBg(slides[current]);
+    handleAudioLayers(slides[current], true);
+  }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (voci) {
+      voci.forEach(function (v) {
+        var ora = v.isIntersecting && (v.intersectionRatio >= 0.2 || v.intersectionRect.height >= window.innerHeight * 0.5);
+        if (ora === inVista) return;
+        inVista = ora;
+        if (inVista) {
+          if (avviato) { playVideoBg(slides[current]); } else { primoIngresso(); }
+          riprendiAutoplay();
+        } else if (avviato) {
+          stopAutoplay();
+          pauseVideoBg(slides[current]);
+        }
+      });
+    }, { threshold: [0, 0.2, 0.5] }).observe(container);
+  } else {
+    inVista = true;
+    primoIngresso();
+    riprendiAutoplay();
+  }
 }
 
 /* ── Bootstrap ─────────────────────────────────────────── */
