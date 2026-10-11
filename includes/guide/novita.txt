@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.689 - 2026-10-12 (fix)
+- Selettore lingua: con OLOlang 3.27.11 la lingua scelta può valere su più siti dello stesso dominio (il sito principale, un sito in sottocartella, un sottodominio). Il selettore scrive il cookie nello stesso dominio di OLOlang, così la scelta resta finché il visitatore non la cambia, su qualunque di quei siti la cambi.
+
 ## v1.4.688 - 2026-10-12 (fix)
 - Modulo, campo File: «Nessun file selezionato» accanto al pulsante, il pulsante «Scegli file» quando non ha un testo suo e i messaggi del controllo del file nel browser (tipo di file non consentito, file oltre il limite di MB, troppi file, numero dei file scelti) seguono la lingua della pagina, come «Avanti» nei moduli a passi e il suggerimento sui campi URL. Restavano in italiano anche nei siti tradotti con OLOlang; ora ci sono in inglese, tedesco, francese e spagnolo.
 

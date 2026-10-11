@@ -345,14 +345,20 @@ class Olobuild_LangSwitcher_Tile extends Olobuild_Tile_Base {
      * senza, il cookie della lingua precedente resta e il redirect lato server rimanda
      * indietro. Delega su document in fase di cattura → funziona anche per il menu del
      * dropdown che viene spostato nel <body>. Emesso UNA volta per pagina.
+     * Stesso dominio del cookie di OLOlang (dalla 3.27.11 può essere condiviso fra più siti, es. il
+     * sito principale, una sottocartella e un sottodominio): in quel caso si toglie prima la copia
+     * del solo host, che passerebbe per prima e metterebbe in ombra quella condivisa.
      */
     private function switch_cookie_script() {
         static $done = false;
         if ( $done ) { return; }
         $done = true;
+        $dominio = is_callable( [ 'Olo_Lang_Cache_Integration', 'cookie_domain' ] ) ? (string) Olo_Lang_Cache_Integration::cookie_domain() : '';
         echo '<script>(function(){'
+            . 'var d=' . wp_json_encode( $dominio ) . ';'
             . 'function setLang(c){if(!c)return;var s=location.protocol==="https:"?"; Secure":"";'
-            . 'document.cookie="olo_lang="+encodeURIComponent(c)+"; path=/; max-age=31536000; SameSite=Lax"+s;}'
+            . 'if(d){document.cookie="olo_lang=; path=/; max-age=0; SameSite=Lax"+s;}'
+            . 'document.cookie="olo_lang="+encodeURIComponent(c)+"; path=/; max-age=31536000"+(d?"; domain="+d:"")+"; SameSite=Lax"+s;}'
             . 'document.addEventListener("click",function(e){'
             // Niente && negli script in linea: negli articoli WordPress lo scrive &#038;&#038; e lo script si rompe.
             . 'var t=null;if(e.target){if(e.target.closest){t=e.target.closest(".olsb-item[hreflang],.olsb-option[hreflang],.olsb-tab[hreflang]");}}'
