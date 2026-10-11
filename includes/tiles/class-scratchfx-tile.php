@@ -319,7 +319,8 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
             }
             .<?php echo $uid; ?> .olo-scratch-reveal:hover {
                 border-color: <?php echo $accent_color; ?>;
-                color: <?php echo $accent_color; ?>;
+                <?php /* l'accento puro come testo, sui fondi chiari, stava a 2,9:1 (un rosa): la stessa tinta verso il testo (11 ott 2026) */ ?>
+                color: color-mix(in srgb, <?php echo $accent_color; ?> 65%, <?php echo $text_color; ?>);
             }
             .<?php echo $uid; ?> .olo-scratch-reveal:focus-visible {
                 outline: 2px solid <?php echo $accent_color; ?>;

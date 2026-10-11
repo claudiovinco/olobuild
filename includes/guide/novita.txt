@@ -3,6 +3,11 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.645 - 2026-10-11 (fix)
+- Menu a mega-pannello: il pulsante della testata senza un colore di hover scelto non schiarisce più sempre. Col testo chiaro ora si scurisce un poco, col testo scuro si schiarisce: prima, su arancio, rosso o verde petrolio, il testo bianco al passaggio del mouse scendeva sotto la soglia di leggibilità.
+- Carta da grattare: al passaggio del mouse il pulsante «Scopri» prende la tinta d'accento scurita verso il testo, non più l'accento puro, che sui fondi chiari non si leggeva.
+- Temi, controllo al passaggio del mouse coi colori calcolati: righe delle liste in hover (Giardino di Elsa, Maison Blanche, Nido), pulsante del modulo di Inchiostro Riso, etichette e badge di Orto Vivo, parole evidenziate nelle recensioni di Passo Lento, occhiello dell'apertura di Cantina Vallerose; nelle carte di Moneta un colore non valido spegneva la sfumatura del fronte.
+
 ## v1.4.644 - 2026-10-11 (fix)
 - Aperture a strati: i testi e i pulsanti che sbiadiscono scorrendo restano pieni fino a metà corsa e solo dopo sfumano. Prima sbiadivano appena la pagina si muoveva, e le righe sotto la prima schermata (conto alla rovescia, pulsanti) non si vedevano mai a piena intensità.
 - Citazioni: testo e firma a colore pieno. Una regola generale le rendeva trasparenti all'85% e sui fondi chiari la firma scendeva sotto la soglia di leggibilità.

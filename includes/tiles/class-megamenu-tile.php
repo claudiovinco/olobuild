@@ -411,6 +411,10 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         $btn_radius  = Olobuild_Tile_Utils::border_radius( $s['btn_radius'] ) ?: '0px';
         $btn_rad_h   = Olobuild_Tile_Utils::radius_hover( $s, 'btn_radius_hover' );
         $btn_hbg     = $this->safe_color( $s['btn_hover_bg'] );
+        // Hover senza «Sfondo pulsante» in hover: schiariva sempre del 10%, e col testo chiaro su un fondo medio
+        // (arancio, verde petrolio) scendeva sotto 4,5:1. Testo chiaro → il fondo scurisce; testo scuro → schiarisce.
+        $btn_txt_l   = Olobuild_Tile_Utils::luminanza( $btn_color );
+        $btn_hfilter = ( null !== $btn_txt_l && $btn_txt_l > 0.4 ) ? 'brightness(.9)' : 'brightness(1.1)';
         // «Durata» dello stato Hover di «Sfondo pulsante» (withHover, btn_bg_hover_duration).
         // Non salvata = la transizione di sempre, «.2s».
         $btn_bg_dur  = ( ( $s['btn_bg_hover_duration'] ?? '' ) === '' ) ? '.2s' : max( 0, intval( $s['btn_bg_hover_duration'] ) ) . 'ms';
@@ -1209,7 +1213,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             <?php if ( $btn_bw > 0 ) : ?>border: <?php echo $btn_bw; ?>px solid <?php echo $btn_bc ?: $btn_color; ?>;<?php endif; ?>
         }
         .<?php echo $uid; ?> .olo-mm-btn:hover {
-            <?php if ( $btn_hbg ) : ?>background: <?php echo $btn_hbg; ?>;<?php elseif ( $btn_hfx !== 'none' ) : ?>filter: brightness(1.1);<?php endif; ?>
+            <?php if ( $btn_hbg ) : ?>background: <?php echo $btn_hbg; ?>;<?php elseif ( $btn_hfx !== 'none' ) : ?>filter: <?php echo $btn_hfilter; ?>;<?php endif; ?>
             <?php if ( $btn_hc ) : ?>color: <?php echo $btn_hc; ?> !important;<?php endif; ?>
             <?php if ( $btn_hfx === 'lift' ) : ?>transform: translateY(-1px);<?php endif; ?>
             <?php if ( $btn_hfx === 'scale' ) : ?>transform: scale(1.04);<?php endif; ?>
