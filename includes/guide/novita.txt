@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.683 - 2026-10-11 (fix)
+- Blocchi & Pagine, «Pro Slider — Coverflow»: sul tablet il nome di una card che andava su due righe copriva la data. Titolo e data hanno ora misure da tablet giuste per la card.
+- Pro Slider, editor: nella barra dei livelli i tipi (testo, immagine, video, pulsante, icona, forma, audio) hanno le icone del builder al posto dei simboli, e i loro nomi si leggono nella lingua del builder.
+
 ## v1.4.682 - 2026-10-11 (novità)
 - Blocchi & Pagine: nuova categoria «Speciale Pro Slider» con dieci hero pronti da usare e da studiare. Ce n’è uno per ogni cosa che il Pro Slider sa fare: foto che si muovono piano, lettere che arrivano una alla volta, foto in cornice che si aprono come un sipario, oggetti che girano su un percorso, una foto che prende colore con la timeline, card in 3D, un pannello di vetro sopra un video. Ci sono anche i tre hero dei temi fatti col Pro Slider.
 - Pro Slider, carosello: con «Ripeti» acceso gira in tondo. Ai lati della card al centro ci sono sempre altre card (alla prima, prima mancavano a sinistra) e dall’ultima si passa alla prima con un solo passo, senza tornare indietro attraverso tutte le card.

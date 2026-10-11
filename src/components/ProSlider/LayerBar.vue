@@ -9,7 +9,7 @@
         @click="$emit('add-layer', lt.type)"
         class="mb-px-2 mb-py-1 mb-text-[11px] mb-bg-gray-700 mb-text-gray-300 mb-rounded hover:mb-bg-gray-600 mb-transition-colors"
       >
-        {{ lt.icon }} {{ lt.label }}
+        <span class="mps-lb-ico" aria-hidden="true" v-html="svg(lt.ico)"></span>{{ lt.label }}
       </button>
     </div>
 
@@ -27,7 +27,7 @@
             : 'mb-border-gray-700 mb-bg-gray-800 mb-text-gray-400 hover:mb-border-gray-500'
         ]"
       >
-        <span class="mb-opacity-60">{{ typeIcon(layer.type) }}</span>
+        <span class="mps-lb-ico mb-opacity-60" aria-hidden="true" v-html="svg(typeIcon(layer.type))"></span>
         <span class="mb-max-w-24 mb-truncate">{{ layerLabel(layer) }}</span>
         <span v-if="hasResponsiveOverride(layer)" class="mb-w-1.5 mb-h-1.5 mb-rounded-full mb-bg-yellow-400 mb-shrink-0" :title="t('Override responsive')"></span>
 
@@ -71,6 +71,7 @@
 <script setup>
 import { computed } from 'vue';
 import { t } from '@/i18n';
+import lucideIcons from './lucideIconsSvg.js';
 
 const props = defineProps({
   layers: { type: Array, default: () => [] },
@@ -87,32 +88,46 @@ function hasResponsiveOverride(layer) {
   return ov && Object.keys(ov).length > 0;
 }
 
+// Icone del set SVG (Lucide, già nel builder con la libreria delle icone): prima erano emoji e simboli di testo
 const layerTypes = [
-  { type: 'text', label: 'Testo', icon: 'T' },
-  { type: 'image', label: 'Immagine', icon: '🖼' },
-  { type: 'video', label: 'Video', icon: '▶' },
-  { type: 'button', label: 'Pulsante', icon: '▢' },
-  { type: 'icon', label: 'Icona', icon: '★' },
-  { type: 'shape', label: 'Forma', icon: '◆' },
-  { type: 'audio', label: 'Audio', icon: '♫' },
+  { type: 'text', label: t('Testo'), ico: 'type' },
+  { type: 'image', label: t('Immagine'), ico: 'image' },
+  { type: 'video', label: t('Video'), ico: 'video' },
+  { type: 'button', label: t('Pulsante'), ico: 'rectangle-horizontal' },
+  { type: 'icon', label: t('Icona'), ico: 'star' },
+  { type: 'shape', label: t('Forma'), ico: 'shapes' },
+  { type: 'audio', label: t('Audio'), ico: 'music' },
 ];
 
 const reversedLayers = computed(() => [...props.layers].reverse());
 
-function typeIcon(t) {
-  return layerTypes.find(lt => lt.type === t)?.icon || '?';
+function typeIcon(tipo) {
+  return layerTypes.find(lt => lt.type === tipo)?.ico || 'square';
+}
+
+function svg(chiave) {
+  return lucideIcons[chiave] || '';
 }
 
 function layerLabel(l) {
   if (l.type === 'text' || l.type === 'button') return l.content || l.type;
-  if (l.type === 'icon') return l.iconName || 'icona';
-  if (l.type === 'image') return 'Immagine';
-  if (l.type === 'video') return 'Video';
-  return l.type;
+  if (l.type === 'icon') return l.iconName || t('Icona');
+  return layerTypes.find(lt => lt.type === l.type)?.label || l.type;
 }
 </script>
 
 <style scoped>
+.mps-lb-ico {
+  display: inline-flex;
+  width: 13px;
+  height: 13px;
+  margin-right: 4px;
+  vertical-align: -2px;
+}
+.mps-lb-ico :deep(svg) {
+  width: 13px;
+  height: 13px;
+}
 .mps-bar-btn {
   margin-left: 2px;
   font-size: 10px;
