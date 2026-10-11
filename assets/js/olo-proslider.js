@@ -788,6 +788,8 @@ function initSlider(container) {
       var centraCard = function (idx, subito) {
         var s = slides[idx];
         if (!s) return;
+        // prospettiva del 3D proporzionale alla card: lo stesso scorcio sul computer e sul telefono
+        container.style.setProperty('--mps-prosp', Math.round(s.offsetWidth * 1.6) + 'px');
         var centro = s.offsetLeft + s.offsetWidth / 2;
         if (s.offsetParent !== track) centro -= track.offsetLeft;
         if (subito) track.style.transition = 'none';
@@ -797,6 +799,9 @@ function initSlider(container) {
           sl.classList.toggle('mps-carousel-active', i === idx);
           sl.classList.toggle('mps-carousel-prima', i < idx);
           sl.classList.toggle('mps-carousel-dopo', i > idx);
+          // distanza dalla card al centro: le card di lato, più piccole, si avvicinano di quanto si sono
+          // ristrette (CSS), così fra una card e l'altra resta il Gap impostato
+          sl.style.setProperty('--mps-d', String(Math.abs(i - idx)));
         });
       };
       allaPartenza.push(function (idx) { cardScelta = idx; centraCard(idx); });

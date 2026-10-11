@@ -788,7 +788,15 @@
   transform: translateX(calc((100% - var(--mps-carousel-w)) / 2 - var(--mps-carousel-gap, 10px)));
   transition: transform var(--mps-trans-dur, 800ms) cubic-bezier(.4,0,.2,1);
 }
+/* Una card di lato si stringe (scala, nel 3D anche la rotazione) attorno al suo centro: senza
+   correzione fra lei e la card al centro restava un vuoto di 100 px e più invece del Gap. Ogni card
+   si sposta verso il centro di quanto si sono stretti il suo lato interno (--mps-a, in frazioni
+   della card) e le card in mezzo (--mps-b ciascuna): d = distanza dalla card al centro (--mps-d,
+   dal JS), verso da --mps-dir. */
 .olo-proslider.mps-carousel .olo-proslider-slide {
+  --mps-dir: -1;
+  --mps-a: calc((1 - var(--mps-carousel-side-scale, 0.85)) / 2);
+  --mps-b: calc(1 - var(--mps-carousel-side-scale, 0.85));
   position: relative;
   inset: auto;
   opacity: 1;
@@ -796,36 +804,52 @@
   overflow: hidden;
   flex: 0 0 var(--mps-carousel-w);
   margin: 0 var(--mps-carousel-gap, 10px);
-  transform: scale(var(--mps-carousel-side-scale, 0.85));
-  filter: brightness(0.7);
+  transform: translateX(calc(var(--mps-dir) * (var(--mps-a) + (var(--mps-d, 1) - 1) * var(--mps-b)) * 100%)) scale(var(--mps-carousel-side-scale, 0.85));
   cursor: pointer;
-  transition: transform var(--mps-trans-dur, 800ms) cubic-bezier(.4,0,.2,1), filter var(--mps-trans-dur, 800ms) ease;
+  transition: transform var(--mps-trans-dur, 800ms) cubic-bezier(.4,0,.2,1);
 }
+.olo-proslider.mps-carousel .olo-proslider-slide.mps-carousel-prima { --mps-dir: 1; }
 .olo-proslider.mps-carousel .olo-proslider-slide.mps-carousel-active {
-  transform: scale(1);
+  transform: translateX(0) scale(1);
   z-index: 2;
-  filter: none;
   cursor: auto;
 }
+/* Velo delle card di lato. Non filter: brightness(), e senza z-index né opacity: in Chrome un
+   figlio composito (filtro, opacità animata, livello sopra la tela dei livelli) di una card con
+   perspective() si dipinge più stretto della geometria della card, e restava una striscia chiara
+   sul lato interno (col filtro sulla card, fra le card il doppio del Gap). Così sta sopra la
+   foto e sotto velatura e livelli, che sulle card di lato sono spenti. */
+.olo-proslider.mps-carousel .olo-proslider-slide::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / var(--mps-velo, 0.3));
+  pointer-events: none;
+  transition: background-color var(--mps-trans-dur, 800ms) ease;
+}
+.olo-proslider.mps-carousel .olo-proslider-slide.mps-carousel-active::after { background-color: rgb(0 0 0 / 0); }
 /* livelli delle card di lato: spenti e non cliccabili, il clic sceglie la card */
 .olo-proslider.mps-carousel .olo-proslider-slide:not(.mps-carousel-active) .olo-proslider-layer { pointer-events: none; }
 /* Carousel 3D: ogni card ha la sua prospettiva e guarda il centro, quelle prima da sinistra e
    quelle dopo da destra. Prima la prospettiva stava sul binario, che scorre: la rotazione
    cambiava a seconda della card al centro, e tutte giravano dallo stesso lato. */
 .olo-proslider.mps-carousel-3d .olo-proslider-slide {
-  transform: perspective(1200px) rotateY(var(--mps-carousel-rotate, 25deg)) scale(var(--mps-carousel-side-scale, 0.85));
-  filter: brightness(0.6);
-}
-.olo-proslider.mps-carousel-3d .olo-proslider-slide.mps-carousel-dopo {
-  transform: perspective(1200px) rotateY(calc(-1 * var(--mps-carousel-rotate, 25deg))) scale(var(--mps-carousel-side-scale, 0.85));
+  /* La rotazione stringe ancora, e la prospettiva più il lato interno (che si allontana) di quello
+     esterno. La prospettiva è 1,6 volte la card (--mps-prosp, dal JS): lo stesso scorcio su ogni
+     schermo, e le frazioni qui sotto (calcolate a 25°) valgono per ogni misura. Lo spostamento sta
+     FUORI dalla prospettiva, se no veniva proiettato anche lui. */
+  --mps-a: calc((1 - 0.825 * var(--mps-carousel-side-scale, 0.85)) / 2);
+  --mps-b: calc(1 - 0.917 * var(--mps-carousel-side-scale, 0.85));
+  transform: translateX(calc(var(--mps-dir) * (var(--mps-a) + (var(--mps-d, 1) - 1) * var(--mps-b)) * 100%)) perspective(var(--mps-prosp, 1200px)) rotateY(calc(var(--mps-dir) * var(--mps-carousel-rotate, 25deg))) scale(var(--mps-carousel-side-scale, 0.85));
+  --mps-velo: 0.4;
 }
 .olo-proslider.mps-carousel-3d .olo-proslider-slide.mps-carousel-active {
-  transform: perspective(1200px) rotateY(0deg) scale(1);
-  filter: none;
+  transform: translateX(0) perspective(var(--mps-prosp, 1200px)) rotateY(0deg) scale(1);
 }
 @media (prefers-reduced-motion: reduce) {
   .olo-proslider.mps-carousel .olo-proslider-track,
-  .olo-proslider.mps-carousel .olo-proslider-slide { transition-duration: 1ms; }
+  .olo-proslider.mps-carousel .olo-proslider-slide,
+  .olo-proslider.mps-carousel .olo-proslider-slide::after { transition-duration: 1ms; }
 }
 
 /* ═══════════════════════════════════════════════════════════
