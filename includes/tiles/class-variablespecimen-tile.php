@@ -209,7 +209,7 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
                 font-size: 13px;
                 font-feature-settings: "tnum" 1;
                 color: <?php echo $text_color; ?>;
-                opacity: .8;
+                opacity: .9;
                 justify-content: <?php echo $text_align === 'center' ? 'center' : ( $text_align === 'right' ? 'flex-end' : 'flex-start' ); ?>;
             }
             .<?php echo $uid; ?> .olo-vf-readout b {
@@ -223,7 +223,7 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
                 font-size: 11px;
                 letter-spacing: .14em;
                 text-transform: uppercase;
-                opacity: .55;
+                opacity: .8; /* era .55: a 11px stava a 4:1 sui fondi chiari */
                 color: <?php echo $text_color; ?>;
             }
             <?php endif; ?>

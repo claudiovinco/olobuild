@@ -345,7 +345,9 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-hero-strip{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;max-width:1180px;margin:0 auto;}
             .<?php echo $uid; ?> .olo-hero-stripmedia{position:relative;overflow:hidden;width:clamp(150px,22vw,240px);<?php echo $strip_ar; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- dichiarazione aspect-ratio prodotta da Olobuild_Tile_Utils::image_frame(), che filtra il valore con una whitelist "W/H" ?>border-radius:<?php echo (int) $strip_rad; ?>px <?php echo (int) $strip_rad; ?>px 8px 8px;background-color:rgba(255,255,255,.06);background-image:repeating-linear-gradient(135deg, rgba(243,233,239,.05) 0 16px, transparent 16px 32px);background-size:cover;background-position:<?php echo esc_attr( $strip_pos ); ?>;}
             <?php if ( $strip_off > 0 ) : ?>.<?php echo $uid; ?> .olo-hero-stripmedia:nth-child(2){margin-top:-<?php echo (int) $strip_off; ?>px;}<?php endif; ?>
-            .<?php echo $uid; ?> .olo-hero-stripcap{position:absolute;left:14px;bottom:12px;right:14px;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(243,233,239,.4);}
+            .<?php echo $uid; ?> .olo-hero-stripcap{position:absolute;z-index:1;left:14px;bottom:12px;right:14px;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:color-mix(in srgb, var(--olo-color-light, #ffffff) 90%, transparent);}
+            <?php /* didascalia: era un rosato fisso al 40% (sulle foto 1,8-3,3:1); ora il chiaro della Palette su una sfumatura scura in fondo alla foto, solo dove c'è una didascalia (11 ott 2026) */ ?>
+            .<?php echo $uid; ?> .olo-hero-stripmedia--cap::after{content:'';position:absolute;left:0;right:0;bottom:0;height:48%;background:linear-gradient(to top, color-mix(in srgb, var(--olo-color-dark, #14161c) 72%, transparent), transparent);pointer-events:none;}
             @media(max-width:600px){.<?php echo $uid; ?> .olo-hero-strip .olo-hero-stripmedia:nth-child(3){display:none;}}
             <?php endif; ?>
             <?php if ( 'search' === $module ) :
@@ -618,7 +620,7 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
                         $cap  = isset( $it['caption'] ) ? (string) $it['caption'] : '';
                         $isty = $img !== '' ? ' style="background-image:url(' . esc_url( $img ) . ')"' : '';
                         ?>
-                        <div class="olo-hero-stripmedia"<?php echo $isty; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style attribute built above with esc_url()'d image URL, or empty string ?>><?php if ( $cap !== '' ) : ?><span class="olo-hero-stripcap"><?php echo esc_html( $cap ); ?></span><?php endif; ?></div>
+                        <div class="olo-hero-stripmedia<?php echo $cap !== '' ? ' olo-hero-stripmedia--cap' : ''; ?>"<?php echo $isty; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style attribute built above with esc_url()'d image URL, or empty string ?>><?php if ( $cap !== '' ) : ?><span class="olo-hero-stripcap"><?php echo esc_html( $cap ); ?></span><?php endif; ?></div>
                     <?php endforeach; ?>
                 </div>
                 <?php elseif ( 'search' === $module ) : ?>

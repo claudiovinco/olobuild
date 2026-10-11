@@ -157,7 +157,8 @@ class Olobuild_CategoryRail_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ocr-card{flex:0 0 <?php echo $w; ?>;width:<?php echo $w; ?>;aspect-ratio:<?php echo $asp; ?>;scroll-snap-align:start;position:relative;border-radius:<?php echo $rad; ?>;<?php if ( $card_radius_css ) { echo 'border-radius:' . $card_radius_css . ';'; } ?>overflow:hidden;text-decoration:none;display:block;background:<?php echo $mbg; ?>;}
             .<?php echo $uid; ?> .ocr-media{position:absolute;inset:0;background-size:cover;background-position:<?php echo esc_attr( Olobuild_Tile_Utils::css_pos( $s, 'object_position' ) ); ?>;transition:transform .5s ease;}
             .<?php echo $uid; ?> .ocr-card:hover .ocr-media{transform:scale(1.05);}
-            .<?php echo $uid; ?> .ocr-ov{position:absolute;inset:0;background:linear-gradient(to top, <?php echo $ov; ?>, transparent 62%);}
+            <?php /* velo pieno sotto titolo e sottotitolo, poi sfuma: prima sfumava da subito e su foto chiare (acqua, cielo) il titolo bianco stava a 2,6:1 (11 ott 2026) */ ?>
+            .<?php echo $uid; ?> .ocr-ov{position:absolute;inset:0;background:linear-gradient(to top, <?php echo $ov; ?>, <?php echo $ov; ?> 22%, transparent 70%);}
             .<?php echo $uid; ?> .ocr-cap{position:absolute;left:0;right:0;bottom:0;padding:16px 18px;<?php if ( $cap_pad_css ) { echo 'padding:' . $cap_pad_css . ';'; } ?>}
             .<?php echo $uid; ?> .ocr-t{font-family:<?php echo $serif; ?>;font-size:19px;line-height:1.2;margin:0;color:<?php echo $tc; ?>;}
             .<?php echo $uid; ?> .ocr-s{font-size:12.5px;margin:4px 0 0;color:<?php echo $sc; ?>;}

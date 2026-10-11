@@ -185,11 +185,12 @@ class Olobuild_FilmReel_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ofr-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:<?php echo esc_attr( $obj_pos ); ?>;background-position:<?php echo esc_attr( $obj_pos ); ?>;display:block;}
             .<?php echo $uid; ?> .ofr-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(236,234,227,.05);}
             .<?php echo $uid; ?> .ofr-ph span{font-family:<?php echo $mono; ?>;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:<?php echo $muted; ?>;text-align:center;padding:0 18px;}
-            .<?php echo $uid; ?> .ofr-meta{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:flex-end;justify-content:space-between;gap:10px;padding:14px 15px;background:linear-gradient(transparent,<?php echo $frame_fade; ?>);pointer-events:none;z-index:5;}
+            .<?php echo $uid; ?> .ofr-meta{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:flex-end;justify-content:space-between;gap:10px;padding:14px 15px;background:linear-gradient(transparent,<?php echo $frame_fade; ?> 55%);pointer-events:none;z-index:5;}
             .<?php echo $uid; ?> .ofr-name{font-family:<?php echo $disp; ?>;font-weight:700;font-size:22px;text-transform:uppercase;line-height:1;color:<?php echo $on_frame; ?>;}
-            <?php // etichetta sulla foto: metà accento e metà colore del nome. Col solo accento, scelto per l'occhiello sul
-                  // fondo della pagina, sulla sfumatura scura della foto non si leggeva (2,6:1) — e viceversa. ?>
-            .<?php echo $uid; ?> .ofr-tag{font-family:<?php echo $mono; ?>;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:color-mix(in srgb, <?php echo $accent; ?> 50%, <?php echo $on_frame; ?>);white-space:nowrap;}
+            <?php // etichetta sulla foto: un terzo d'accento e il resto del colore del nome. Col solo accento, scelto per
+                  // l'occhiello sul fondo della pagina, sulla sfumatura scura della foto non si leggeva (2,6:1); a metà, con un
+                  // accento scuro (Sali d'Argento) diventava grigio medio. La sfumatura è piena da metà altezza (11 ott 2026). ?>
+            .<?php echo $uid; ?> .ofr-tag{font-family:<?php echo $mono; ?>;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:color-mix(in srgb, <?php echo $accent; ?> 35%, <?php echo $on_frame; ?>);white-space:nowrap;}
             <?php if ( $show_prog ) : ?>
             .<?php echo $uid; ?> .ofr-prog{margin:6px <?php echo $pad; ?> 0;height:2px;background:<?php echo $line; ?>;position:relative;}
             .<?php echo $uid; ?> .ofr-prog i{position:absolute;left:0;top:0;height:100%;width:0;background:<?php echo $prog; ?>;transition:width .08s linear;}

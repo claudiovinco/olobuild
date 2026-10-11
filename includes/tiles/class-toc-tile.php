@@ -44,6 +44,10 @@ class Olobuild_Toc_Tile extends Olobuild_Tile_Base {
         // nel colore dei link). Vuoto = come prima.
         $text_set   = $this->safe_color_css($s['text_color']);
         $mark_clr   = $text_set ?: $link_clr;
+        // Numeri delle voci: erano il colore dei link al 60% di opacità, e su fondo chiaro scendevano
+        // sotto 3:1. Ora la stessa tinta mescolata al colore del testo intorno (currentColor), senza
+        // trasparenza; un colore scelto apposta in «Indice» resta pieno (11 ott 2026).
+        $num_clr    = $text_set ?: 'color-mix(in srgb, ' . $link_clr . ' 75%, currentColor)';
         $font_size  = absint($s['font_size']) ?: 15;
         $indent     = absint($s['indent']) ?: 20;
         $sticky     = !empty($s['sticky']);
@@ -85,6 +89,7 @@ class Olobuild_Toc_Tile extends Olobuild_Tile_Base {
             var smooth = <?php echo $smooth ? 'true' : 'false'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'true'/'false' literal from the ternary ?>;
             var doHighlight = <?php echo $highlight ? 'true' : 'false'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'true'/'false' literal from the ternary ?>;
             var markClr = '<?php echo esc_js( $mark_clr ); ?>';
+            var numClr = '<?php echo esc_js( $num_clr ); ?>';
             var isSticky = <?php echo $sticky ? 'true' : 'false'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'true'/'false' literal from the ternary ?>;
 
             // Offset per header fissi del sito: lo sticky e i salti alle sezioni
@@ -169,7 +174,7 @@ class Olobuild_Toc_Tile extends Olobuild_Tile_Base {
                         for(var k = 0; k <= level; k++){
                             if(counter[k] > 0) parts.push(counter[k]);
                         }
-                        num = '<span style="color:' + markClr + ';opacity:0.6;margin-right:6px;">' + parts.join('.') + '.</span>';
+                        num = '<span style="color:' + numClr + ';margin-right:6px;">' + parts.join('.') + '.</span>';
                     } else if(listStyle === 'bullets') {
                         num = '<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:' + markClr + ';margin-right:8px;vertical-align:middle;"></span>';
                     }

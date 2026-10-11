@@ -187,7 +187,6 @@ class Olobuild_Stackscroll_Tile extends Olobuild_Tile_Base {
                 letter-spacing: 0.14em;
                 text-transform: uppercase;
                 font-weight: 600;
-                opacity: 0.92;
                 margin-bottom: 14px;
                 color: <?php echo $num_def; ?>;
             }

@@ -572,7 +572,7 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                 font-size: 11px;
                 letter-spacing: 0.12em;
                 text-transform: uppercase;
-                opacity: 0.5;
+                opacity: 0.8; /* era .5: a 11px stava a 3,2:1 (11 ott 2026) */
                 display: none;
             }
             .<?php echo $uid; ?> .olo-scrub__outer.is-pinned .olo-scrub__hint {

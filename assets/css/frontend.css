@@ -358,7 +358,7 @@ body:has(.olo-template) .wp-site-blocks {
 .olo-frontend-tile blockquote {
   border-left: 3px solid currentColor;
   padding-left: 0.75em;
-  opacity: 0.85;
+  /* niente opacità: all'85% citazione e firma scendevano sotto 4,5:1 (11 ott 2026) */
 }
 
 /* ========================================

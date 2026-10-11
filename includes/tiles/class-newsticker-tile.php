@@ -461,7 +461,7 @@ class Olobuild_Newsticker_Tile extends Olobuild_Tile_Base {
             <?php // Timestamp ?>
             .<?php echo $uid; ?> .olo-nt-time {
                 font-size: 11px;
-                opacity: 0.65;
+                opacity: 0.8; /* era .65 */
                 font-weight: 400;
                 flex-shrink: 0;
                 margin-left: auto;
@@ -504,7 +504,7 @@ class Olobuild_Newsticker_Tile extends Olobuild_Tile_Base {
             }
             .<?php echo $uid; ?> .olo-nt-counter {
                 font-size: 11px;
-                opacity: 0.7;
+                opacity: 0.85; /* era .7: 4,4:1 sulle fasce colorate (11 ott 2026) */
                 padding: 0 8px;
                 flex-shrink: 0;
                 font-variant-numeric: tabular-nums;

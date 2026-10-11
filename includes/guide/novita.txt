@@ -3,6 +3,15 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.644 - 2026-10-11 (fix)
+- Aperture a strati: i testi e i pulsanti che sbiadiscono scorrendo restano pieni fino a metà corsa e solo dopo sfumano. Prima sbiadivano appena la pagina si muoveva, e le righe sotto la prima schermata (conto alla rovescia, pulsanti) non si vedevano mai a piena intensità.
+- Citazioni: testo e firma a colore pieno. Una regola generale le rendeva trasparenti all'85% e sui fondi chiari la firma scendeva sotto la soglia di leggibilità.
+- Didascalie sulle foto più leggibili: nell'apertura con la striscia di foto erano di un rosato fisso al 40%, ora sono chiare su una sfumatura scura in fondo alla foto. Nella galleria a categorie il velo resta pieno sotto titolo e prezzo e sfuma più in alto. Nella Pellicola la sfumatura è piena da metà altezza.
+- Indice dei contenuti: i numeri delle voci sono la tinta dei link scurita verso il testo, non più trasparenti al 60%.
+- Newsletter: senza un colore scelto, il segnaposto dei campi è il colore del testo al 70%, come nei Moduli, e non più il grigio del browser.
+- Testi piccoli a colore pieno o quasi: etichette del conto alla rovescia, numeri delle card impilate, valori e suggerimento del campione di font, contatore e orario delle notizie, «⇄ scorri» dello scorrimento orizzontale, numero delle card nell'apertura divisa, «Fatto» della timeline a programma.
+- Temi, terza verifica completa (257 pagine): voci attive dei menu, occhielli, titoli aperti delle domande frequenti, firme e orari portati sopra la soglia in 28 temi; velo scuro in alto nell'apertura di Cromo (l'aurora animata passava sotto l'occhiello) e di Casa Scogliera (menu sul cielo); velo più coprente sulle foto delle vigne di Cantina Vallerose; stemmi degli avversari visibili nelle partite di Fenice Calcio; il pulsante di Argilla torna col testo chiaro; il pulsante di Il Pozzo pulsa invece di sbiadire.
+
 ## v1.4.643 - 2026-10-11 (fix)
 - Moduli: nelle tendine a una riga il testo («Scegli») non esce più tagliato in basso. La spaziatura verticale dello stile dei Moduli lasciava troppo poco spazio a un campo di altezza fissa.
 - Barra del titolo: il sottotitolo è a colore pieno. Prezzi: anche il periodo («a settimana»). Prima, schiariti, sulle fasce e sulle card colorate scendevano sotto la soglia di leggibilità.
