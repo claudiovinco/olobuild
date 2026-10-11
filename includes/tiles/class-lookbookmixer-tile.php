@@ -133,8 +133,9 @@ class Olobuild_LookbookMixer_Tile extends Olobuild_Tile_Base {
                         <span class="olo-lbmix__sw" data-sw style="width:46px;height:46px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1.5px rgba(246,233,236,.3);transition:background .3s;background:<?php echo esc_attr( $col0 ); ?>;"></span>
                         <div class="olo-lbmix__meta" style="flex:1;min-width:0;">
                             <span class="olo-lbmix__step" style="font-family:<?php echo esc_attr( $mono ); ?>;font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:<?php echo esc_attr( $acc ); ?>;"><?php echo esc_html( $st ); ?></span>
-                            <div class="olo-lbmix__nm" style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-top:2px;">
-                                <span class="olo-lbmix__name" data-name style="font-family:<?php echo esc_attr( $nfam ); ?>;font-size:21px;color:<?php echo esc_attr( $namec ); ?>;line-height:1.08;"><?php echo esc_html( $primo['name'] ?? '' ); ?></span>
+                            <?php // Nome e prezzo: se il nome è lungo il prezzo va sotto (flex-wrap) invece di uscire dalla colonna e finire sotto la freccia. ?>
+                            <div class="olo-lbmix__nm" style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:2px 12px;margin-top:2px;">
+                                <span class="olo-lbmix__name" data-name style="font-family:<?php echo esc_attr( $nfam ); ?>;font-size:21px;color:<?php echo esc_attr( $namec ); ?>;line-height:1.08;min-width:0;overflow-wrap:break-word;hyphens:auto;"><?php echo esc_html( $primo['name'] ?? '' ); ?></span>
                                 <span class="olo-lbmix__price" data-price style="font-family:<?php echo esc_attr( $mono ); ?>;font-weight:700;font-size:14px;color:<?php echo esc_attr( $pricec ); ?>;white-space:nowrap;"><?php echo esc_html( $this->importo( $primo['_prezzo'], $cur, $dec ) ); ?></span>
                             </div>
                         </div>

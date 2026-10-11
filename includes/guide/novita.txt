@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.648 - 2026-10-11 (fix)
+- Lookbook Mixer: con un nome lungo il prezzo va sulla riga sotto, invece di uscire dalla colonna e finire sotto la freccia di destra («Hummus di barbabietola»).
+
 ## v1.4.647 - 2026-10-11 (fix)
 - Lookbook Mixer («componi la tua scelta»): le frecce di ogni riga stanno ai due lati, una a sinistra e una a destra, e sono più piccole. Prima erano in coppia a destra, larghe 40 px, e col nome su due righe coprivano il prezzo. L'area da toccare resta comoda per il dito.
 - Temi, torce più leggere ora che la trasparenza del colore conta: Teatro Darsena al 30%, Il Pozzo al 35%. Le scritte-torcia di Cromo e Scudo hanno il colore al 30% e il bordo morbido: il disco pieno invertiva il testo in colori poco leggibili (verde su magenta, rosso su azzurro).
