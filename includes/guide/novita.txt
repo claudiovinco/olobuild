@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.652 - 2026-10-11 (fix)
+- Pixel Club: sul tablet il riquadro del terminale è un po' più largo e il titolo può andare a capo dopo «PIXEL.»: nelle colonne strette «PIXEL.EXE» usciva dal bordo destro del riquadro.
+
 ## v1.4.651 - 2026-10-11 (fix)
 - Pixel Club: il titolo «INSERT COIN» dell'apertura non tocca più la foto della sala né il riquadro del terminale. Sul tablet è più piccolo (56 px invece di 80): nelle colonne strette sbordava e passava sotto le immagini. Fra 961 e 1200 px il riquadro scende di poco, così la riga «INSERT» non gli finisce sotto l'angolo.
 
