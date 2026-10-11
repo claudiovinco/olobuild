@@ -24870,3 +24870,9 @@ msgstr "Vide = blanc, pour les photos sombres. Sur les slides claires, choisisse
 
 msgid "Speciale Pro Slider"
 msgstr "Spécial Pro Slider"
+
+msgid "Sfondo del riquadro"
+msgstr "Fond du cadre"
+
+msgid "Vuoto = il colore scuro della palette. Per le foto prodotto su fondo bianco scegli il bianco, o il colore del fondo delle foto: il prodotto si fonde col riquadro."
+msgstr "Vide = la couleur sombre de la palette. Pour des photos produit sur fond blanc, choisissez le blanc, ou la couleur du fond des photos : le produit se fond dans le cadre."

@@ -38,6 +38,7 @@ class Olobuild_Viewer360_Tile extends Olobuild_Tile_Base {
         'max_zoom'          => '80',
         'height'            => '400',
         'border_radius'     => 0,
+        'stage_bg'          => '',
         'caption'           => '',
             'border'                  => [],
         'border_hover'            => [],
@@ -82,6 +83,9 @@ class Olobuild_Viewer360_Tile extends Olobuild_Tile_Base {
         }
 
         $height = absint( $s['height'] ) ?: 400;
+        // Sfondo del riquadro: le foto prodotto su fondo bianco restavano un quadrato chiaro dentro il riquadro scuro;
+        // col colore del fondo delle foto il prodotto si fonde. Vuoto = il colore scuro della Palette, come prima.
+        $stage_bg = $this->safe_color_css( $s['stage_bg'] ?? '' ) ?: 'var(--olo-color-dark, #111111)';
         $radius_css = $this->build_border_radius_css( $s['border_radius'] ?? 0 );
         $radius_css_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
@@ -141,10 +145,10 @@ class Olobuild_Viewer360_Tile extends Olobuild_Tile_Base {
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php endif; ?>
-        <?php /* Fondo dal colore scuro della Palette (prima #111 fisso, uguale su ogni tema). */ ?>
+        <?php /* Fondo: «Sfondo del riquadro» ($stage_bg), vuoto = il colore scuro della Palette (prima #111 fisso). */ ?>
         <div class="olo-v360 <?php echo $is_object ? 'olo-v3-obj ' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed class-name literal from the ternary ?>olo-v3-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" id="<?php echo esc_attr( $uid ); ?>"
              <?php if ( $is_object ) : ?>tabindex="0" role="img" aria-label="<?php echo esc_attr( ( $s['caption'] ?? '' ) ?: olobuild_t( 'Oggetto girevole 360°' ) ); ?>"<?php endif; ?>
-             style="height:<?php echo (int) $height; ?>px;<?php if ( $radius_css ) echo 'border-radius:' . $radius_css . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- integer px list from Olobuild_Tile_Base::build_border_radius_css() (intval-built) ?>overflow:hidden;position:relative;background:var(--olo-color-dark, #111111)"
+             style="height:<?php echo (int) $height; ?>px;<?php if ( $radius_css ) echo 'border-radius:' . $radius_css . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- integer px list from Olobuild_Tile_Base::build_border_radius_css() (intval-built) ?>overflow:hidden;position:relative;background:<?php echo esc_attr( $stage_bg ); ?>"
              data-olo-v360='<?php echo esc_attr( wp_json_encode( $config ) ); ?>'>
             <?php if ( $is_object ) : ?>
             <div class="olo-v360-stage">

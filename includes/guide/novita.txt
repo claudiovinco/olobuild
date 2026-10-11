@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.684 - 2026-10-11 (novità)
+- Viewer 360°: nuovo «Sfondo del riquadro» (Stile) per l’oggetto girevole. Le foto prodotto su fondo bianco restavano un quadrato chiaro dentro il riquadro scuro: col bianco, o col colore del fondo delle foto, il prodotto si fonde col riquadro, come negli e-commerce. Vuoto resta lo scuro di sempre.
+
 ## v1.4.683 - 2026-10-11 (fix)
 - Blocchi & Pagine, «Pro Slider — Coverflow»: sul tablet il nome di una card che andava su due righe copriva la data. Titolo e data hanno ora misure da tablet giuste per la card.
 - Pro Slider, editor: nella barra dei livelli i tipi (testo, immagine, video, pulsante, icona, forma, audio) hanno le icone del builder al posto dei simboli, e i loro nomi si leggono nella lingua del builder.

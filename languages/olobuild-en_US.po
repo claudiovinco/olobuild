@@ -24873,3 +24873,9 @@ msgstr "Empty = white, for dark photos. On light slides pick a dark color: arrow
 
 msgid "Speciale Pro Slider"
 msgstr "Pro Slider showcase"
+
+msgid "Sfondo del riquadro"
+msgstr "Box background"
+
+msgid "Vuoto = il colore scuro della palette. Per le foto prodotto su fondo bianco scegli il bianco, o il colore del fondo delle foto: il prodotto si fonde col riquadro."
+msgstr "Empty = the dark palette color. For product photos on a white background pick white, or the background color of the photos: the product blends into the box."

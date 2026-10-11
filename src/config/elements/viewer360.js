@@ -51,6 +51,8 @@ export default {
     // Layout
     height: '400',
     border_radius: 0,
+    // Fondo dietro l'oggetto girevole: vuoto = il colore scuro della palette (com'era)
+    stage_bg: '',
     // Overlay
     caption: '',
     caption_position: 'bottom',
@@ -157,6 +159,9 @@ export default {
       { value: 'tilt-3d',         label: t('3D Tilt') },
       { value: 'custom',          label: t('Personalizzato') },
     ]},
+    { key: 'stage_bg', label: t('Sfondo del riquadro'), type: 'color',
+      description: t('Vuoto = il colore scuro della palette. Per le foto prodotto su fondo bianco scegli il bianco, o il colore del fondo delle foto: il prodotto si fonde col riquadro.'),
+      condition: { field: 'mode', op: 'in', value: ['object-rotate', 'object-frames'] } },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     ...textEffectsFields([ { value: 'caption', label: t('Solo Didascalia') } ]),

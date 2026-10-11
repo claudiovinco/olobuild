@@ -24870,3 +24870,9 @@ msgstr "Leer = Weiß, für dunkle Fotos. Auf hellen Slides eine dunkle Farbe wä
 
 msgid "Speciale Pro Slider"
 msgstr "Pro Slider Spezial"
+
+msgid "Sfondo del riquadro"
+msgstr "Hintergrund des Felds"
+
+msgid "Vuoto = il colore scuro della palette. Per le foto prodotto su fondo bianco scegli il bianco, o il colore del fondo delle foto: il prodotto si fonde col riquadro."
+msgstr "Leer = die dunkle Farbe der Palette. Für Produktfotos auf weißem Grund Weiß wählen oder die Hintergrundfarbe der Fotos: Das Produkt verschmilzt mit dem Feld."

@@ -24870,3 +24870,9 @@ msgstr "Vacío = blanco, para fotos oscuras. En las diapositivas claras elige un
 
 msgid "Speciale Pro Slider"
 msgstr "Especial Pro Slider"
+
+msgid "Sfondo del riquadro"
+msgstr "Fondo del recuadro"
+
+msgid "Vuoto = il colore scuro della palette. Per le foto prodotto su fondo bianco scegli il bianco, o il colore del fondo delle foto: il prodotto si fonde col riquadro."
+msgstr "Vacío = el color oscuro de la paleta. Para fotos de producto sobre fondo blanco elige el blanco, o el color del fondo de las fotos: el producto se funde con el recuadro."
