@@ -335,7 +335,9 @@ class Olobuild_Demo_Temi {
      * Il colore di tinta $h (gradi) e saturazione $s (0-1) con luminanza $y: in HSL la luminanza cresce con
      * la luce, che si cerca per bisezione. Fra gli arrotondamenti a 8 bit vicini vince quello con la
      * luminanza più vicina DAL LATO che non toglie contrasto: più chiaro per i colori chiari (sopra 0,1791,
-     * dove il contrasto col bianco e col nero si equivale), più scuro per gli altri.
+     * dove il contrasto col bianco e col nero si equivale), più scuro per gli altri. Senza aggiungere
+     * tinta: la distanza fra il canale più alto e il più basso resta quella del colore ideale (due unità di
+     * scarto), se no un grigio scuro diventerebbe verdognolo.
      */
     private static function con_luminanza( $h, $s, $y ) {
         $lo = 0.0;
@@ -350,14 +352,18 @@ class Olobuild_Demo_Temi {
         }
         $rgb    = self::hsl_rgb( $h / 360, ( $lo + $hi ) / 2, $s );
         $base   = [ (int) round( $rgb[0] * 255 ), (int) round( $rgb[1] * 255 ), (int) round( $rgb[2] * 255 ) ];
-        $lin    = self::lineari();
-        $chiaro = $y >= 0.1791;
-        $meglio = null;
-        $scelto = $base;
+        $lin      = self::lineari();
+        $chiaro   = $y >= 0.1791;
+        $ampiezza = ( max( $rgb ) - min( $rgb ) ) * 255;
+        $meglio   = null;
+        $scelto   = $base;
         for ( $a = -4; $a <= 4; $a++ ) {
             for ( $b = -4; $b <= 4; $b++ ) {
                 for ( $c = -4; $c <= 4; $c++ ) {
-                    $q  = [ min( 255, max( 0, $base[0] + $a ) ), min( 255, max( 0, $base[1] + $b ) ), min( 255, max( 0, $base[2] + $c ) ) ];
+                    $q = [ min( 255, max( 0, $base[0] + $a ) ), min( 255, max( 0, $base[1] + $b ) ), min( 255, max( 0, $base[2] + $c ) ) ];
+                    if ( abs( ( max( $q ) - min( $q ) ) - $ampiezza ) > 2 ) {
+                        continue;
+                    }
                     $lq = 0.2126 * $lin[ $q[0] ] + 0.7152 * $lin[ $q[1] ] + 0.0722 * $lin[ $q[2] ];
                     if ( $chiaro ? $lq < $y : $lq > $y ) {
                         continue;

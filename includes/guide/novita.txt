@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.656 - 2026-10-11 (fix)
+- Vetrina temi: con le palette i grigi restano grigi. Con Grafite alcuni prendevano una punta di verde o d'azzurro (la fascia secondaria di Acqua Viva, per esempio).
+
 ## v1.4.655 - 2026-10-11 (fix)
 - Vetrina temi: le palette dei bollini non sostituiscono più i colori del tema con colori fissi. Ogni ruolo prende la tinta della palette e tiene la sua luminosità, così testi, pulsanti e fasce restano leggibili come nel tema originale, qualunque combinazione di colori il tema usi (prima, per esempio, il testo accento sulla fascia secondaria di Acqua Viva diventava illeggibile). Seguono la palette anche i campi dei moduli, il cursore e l'HUD dei temi che li hanno.
 
