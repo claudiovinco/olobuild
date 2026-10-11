@@ -339,6 +339,7 @@ const deleting = ref(false);
 const categoryDefs = [
   { key: 'all',           label: t('Tutti'),           color: '#9CA3AF' },
   { key: 'hero',          label: t('Hero'),            color: '#e1474f' },
+  { key: 'proslider',     label: t('Speciale Pro Slider'), color: '#BE123C' },
   { key: 'features',      label: t('Caratteristiche'), color: '#10B981' },
   { key: 'services',      label: t('Servizi'),         color: '#14B8A6' },
   { key: 'pricing',       label: t('Prezzi'),          color: '#F59E0B' },

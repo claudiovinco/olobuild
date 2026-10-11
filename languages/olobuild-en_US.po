@@ -24870,3 +24870,6 @@ msgstr "Arrow and dot color"
 
 msgid "Vuoto = bianco, per le foto scure. Sulle slide chiare scegli un colore scuro: frecce, contorni e punti lo prendono, e il fondo delle frecce Minimal e Box diventa chiaro da sé."
 msgstr "Empty = white, for dark photos. On light slides pick a dark color: arrows, outlines and dots take it, and the background of Minimal and Box arrows turns light on its own."
+
+msgid "Speciale Pro Slider"
+msgstr "Pro Slider showcase"

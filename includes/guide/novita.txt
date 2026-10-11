@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.682 - 2026-10-11 (novità)
+- Blocchi & Pagine: nuova categoria «Speciale Pro Slider» con dieci hero pronti da usare e da studiare. Ce n’è uno per ogni cosa che il Pro Slider sa fare: foto che si muovono piano, lettere che arrivano una alla volta, foto in cornice che si aprono come un sipario, oggetti che girano su un percorso, una foto che prende colore con la timeline, card in 3D, un pannello di vetro sopra un video. Ci sono anche i tre hero dei temi fatti col Pro Slider.
+- Pro Slider, carosello: con «Ripeti» acceso gira in tondo. Ai lati della card al centro ci sono sempre altre card (alla prima, prima mancavano a sinistra) e dall’ultima si passa alla prima con un solo passo, senza tornare indietro attraverso tutte le card.
+
 ## v1.4.681 - 2026-10-11 (novità, fix)
 - Pro Slider: nuovo «Colore frecce e punti» (Stile, Navigazione). Sulle slide chiare frecce e punti bianchi sparivano: con un colore scuro si leggono, e il fondo delle frecce Minimal e Box diventa chiaro da sé. Vuoto resta il bianco di sempre.
 - Pro Slider: frecce, punti, miniature e schede mostrano il contorno quando ci si arriva con la tastiera.

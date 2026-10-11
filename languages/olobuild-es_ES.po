@@ -24867,3 +24867,6 @@ msgstr "Color de flechas y puntos"
 
 msgid "Vuoto = bianco, per le foto scure. Sulle slide chiare scegli un colore scuro: frecce, contorni e punti lo prendono, e il fondo delle frecce Minimal e Box diventa chiaro da sé."
 msgstr "Vacío = blanco, para fotos oscuras. En las diapositivas claras elige un color oscuro: flechas, contornos y puntos lo toman, y el fondo de las flechas Minimal y Box se vuelve claro solo."
+
+msgid "Speciale Pro Slider"
+msgstr "Especial Pro Slider"
