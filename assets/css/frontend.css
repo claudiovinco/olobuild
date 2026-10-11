@@ -195,8 +195,13 @@ body:has(.olo-template) {
 body:has(.olo-template) .wp-site-blocks {
   overflow-x: clip;
 }
+/* 100vw conta anche la barra di scorrimento classica (15 px su Windows): centrato sulla parte visibile, il
+   template ne usciva di 7,5 px per lato e i contenuti a filo di sezione stavano a 8 px dal bordo invece dei
+   loro 16 (nelle anteprime per tablet e telefono si vedeva accanto al logo). --olo-scrollbar, la larghezza
+   vera della barra (script_barra(), con la testata e col template principale), lo riporta alla parte
+   visibile; senza lo script vale 0 e la regola resta quella di prima. Come .olo-site-header. */
 .olo-template {
-  width: 100vw;
+  width: calc(100vw - var(--olo-scrollbar, 0px));
   position: relative;
   left: 50%;
   transform: translateX(-50%);

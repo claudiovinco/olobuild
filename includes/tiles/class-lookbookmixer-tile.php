@@ -6,7 +6,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Lookbook Mixer — "componi la tua routine": slot con prev/next che scorrono le opzioni
- * (nome · prezzo · colore) e una card che somma il totale live. Voci piatte raggruppate per "step".
+ * (nome · prezzo · colore · immagine) e una card che somma il totale live. Voci piatte raggruppate per "step".
+ * La pastiglia del colore si può spegnere (show_swatch); l'immagine di un'opzione fa da sfondo alla
+ * sua riga, sotto un velo del colore dello slot (image_veil) che tiene leggibili nome e prezzo.
  * Runtime inline scoped, senza operatori vietati da wptexturize.
  */
 class Olobuild_LookbookMixer_Tile extends Olobuild_Tile_Base {
@@ -30,6 +32,7 @@ class Olobuild_LookbookMixer_Tile extends Olobuild_Tile_Base {
         'panel_bg' => 'var(--olo-color-dark, #4d2f40)', 'slot_bg' => 'var(--olo-color-dark, #432838)', 'accent' => 'var(--olo-color-primary, #e7a0b4)', 'accent_ink' => 'var(--olo-color-dark, #23131d)',
         'name_color' => 'var(--olo-color-light, #f6e9ec)', 'price_color' => 'var(--olo-color-text-soft, #9c7e8c)', 'line_color' => 'rgba(246,233,236,.13)',
         'name_font_family' => 'heading', 'mono_font_family' => '',
+        'show_swatch' => true, 'image_veil' => 80,
     ];
 
     public function get_controls() { return []; }
@@ -90,6 +93,13 @@ class Olobuild_LookbookMixer_Tile extends Olobuild_Tile_Base {
         $pricec = $this->safe_color_css( $s['price_color'] ) ?: '#9c7e8c';
         $line   = $this->safe_color_css( $s['line_color'] ) ?: 'rgba(246,233,236,.13)';
         $cur    = sanitize_text_field( $s['currency'] ?? '€' );
+        // Pastiglia del colore: spenta, la riga dà il suo posto al nome (in Orto Vivo erano tutte uguali).
+        $show_sw = ! empty( $s['show_swatch'] );
+        // Velo sopra l'immagine di sfondo: il colore dello slot al N%, come strato sopra la foto.
+        $velo_pc = max( 0, min( 95, (int) ( $s['image_veil'] ?? 80 ) ) );
+        $velo_c  = 'color-mix(in srgb, ' . $slotbg . ' ' . $velo_pc . '%, transparent)';
+        $velo    = 'linear-gradient(' . $velo_c . ',' . $velo_c . ')';
+        $con_img = false;
 
         // Raggruppa le voci per "step" preservando l'ordine
         $groups = [];
@@ -98,6 +108,8 @@ class Olobuild_LookbookMixer_Tile extends Olobuild_Tile_Base {
             $st = (string) ( $it['step'] ?? '' );
             if ( ! isset( $groups[ $st ] ) ) { $groups[ $st ] = []; $order[] = $st; }
             $it['_prezzo'] = $this->prezzo( $it['price'] ?? '0' );
+            $it['_img']    = esc_url( (string) ( $it['image'] ?? '' ) );
+            if ( $it['_img'] !== '' ) { $con_img = true; }
             $groups[ $st ][] = $it;
         }
         $n_steps = count( $order );
@@ -119,18 +131,28 @@ class Olobuild_LookbookMixer_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-lbmix <?php echo esc_attr( $uid ); ?>" data-currency="<?php echo esc_attr( $cur ); ?>" data-decimals="<?php echo (int) $dec; ?>"
+        <div class="olo-lbmix <?php echo esc_attr( $uid ); ?>" data-currency="<?php echo esc_attr( $cur ); ?>" data-decimals="<?php echo (int) $dec; ?>"<?php if ( $con_img ) : ?> data-veil="<?php echo esc_attr( $velo ); ?>"<?php endif; ?>
              style="display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:clamp(28px,4vw,56px);align-items:center;border:1px solid <?php echo esc_attr( $line ); ?>;border-radius:24px;background:<?php echo esc_attr( $panel ); ?>;padding:clamp(24px,4vw,42px);">
             <div class="olo-lbmix__slots" style="display:flex;flex-direction:column;gap:12px;">
                 <?php foreach ( $order as $st ) :
                     $opts  = $groups[ $st ];
                     $primo = $opts[0];
                     $col0  = $this->safe_color_css( $primo['color'] ?? '' ) ?: $col_fb;
+                    // Lo strato dell'immagine c'è solo se almeno un'opzione della riga ne ha una.
+                    $slot_img = false;
+                    foreach ( $opts as $o ) {
+                        if ( $o['_img'] !== '' ) { $slot_img = true; }
+                    }
                 ?>
-                    <div class="olo-lbmix__slot" data-slot data-idx="0" style="display:flex;align-items:center;gap:12px;background:<?php echo esc_attr( $slotbg ); ?>;border:1px solid <?php echo esc_attr( $line ); ?>;border-radius:14px;padding:12px 10px;">
+                    <div class="olo-lbmix__slot" data-slot data-idx="0" style="display:flex;align-items:center;gap:12px;background:<?php echo esc_attr( $slotbg ); ?>;border:1px solid <?php echo esc_attr( $line ); ?>;border-radius:14px;padding:12px 10px;<?php echo $slot_img ? 'position:relative;isolation:isolate;' : ''; ?>">
+                        <?php if ( $slot_img ) : // Immagine dell'opzione scelta come sfondo della riga, sotto il velo; z-index -1 dentro lo slot isolato: sopra il suo fondo, sotto testo e frecce. ?>
+                            <span class="olo-lbmix__bg" data-bg aria-hidden="true" style="position:absolute;inset:0;z-index:-1;border-radius:inherit;background-size:cover;background-position:center;background-repeat:no-repeat;<?php echo $primo['_img'] !== '' ? esc_attr( 'background-image:' . $velo . ',url("' . $primo['_img'] . '");' ) : ''; ?>"></span>
+                        <?php endif; ?>
                         <?php // Frecce piccole ai due lati della riga (chevron SVG del set Lucide): prima stavano in coppia a destra, larghe 40 px, e col nome a capo coprivano il prezzo. L'area cliccabile resta 44 px (::before). ?>
                         <button type="button" class="olo-lbmix__arrow" data-prev aria-label="<?php echo esc_attr( olobuild_t( 'Precedente' ) ); ?>" style="width:30px;height:30px;border-radius:50%;border:1px solid <?php echo esc_attr( $acc ); ?>;background:transparent;color:<?php echo esc_attr( $namec ); ?>;cursor:pointer;display:grid;place-items:center;padding:0;flex:none;position:relative;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6"/></svg></button>
-                        <span class="olo-lbmix__sw" data-sw style="width:46px;height:46px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1.5px rgba(246,233,236,.3);transition:background .3s;background:<?php echo esc_attr( $col0 ); ?>;"></span>
+                        <?php if ( $show_sw ) : ?>
+                            <span class="olo-lbmix__sw" data-sw style="width:46px;height:46px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1.5px rgba(246,233,236,.3);transition:background .3s;background:<?php echo esc_attr( $col0 ); ?>;"></span>
+                        <?php endif; ?>
                         <div class="olo-lbmix__meta" style="flex:1;min-width:0;">
                             <span class="olo-lbmix__step" style="font-family:<?php echo esc_attr( $mono ); ?>;font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:<?php echo esc_attr( $acc ); ?>;"><?php echo esc_html( $st ); ?></span>
                             <?php // Nome e prezzo: se il nome è lungo il prezzo va sotto (flex-wrap) invece di uscire dalla colonna e finire sotto la freccia. ?>
@@ -141,7 +163,7 @@ class Olobuild_LookbookMixer_Tile extends Olobuild_Tile_Base {
                         </div>
                         <button type="button" class="olo-lbmix__arrow" data-next aria-label="<?php echo esc_attr( olobuild_t( 'Successivo' ) ); ?>" style="width:30px;height:30px;border-radius:50%;border:1px solid <?php echo esc_attr( $acc ); ?>;background:transparent;color:<?php echo esc_attr( $namec ); ?>;cursor:pointer;display:grid;place-items:center;padding:0;flex:none;position:relative;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"/></svg></button>
                         <?php foreach ( $opts as $o ) : ?>
-                            <span data-opt data-name="<?php echo esc_attr( $o['name'] ?? '' ); ?>" data-price="<?php echo esc_attr( (string) $o['_prezzo'] ); ?>" data-color="<?php echo esc_attr( $this->safe_color_css( $o['color'] ?? '' ) ?: $col_fb ); ?>" style="display:none;"></span>
+                            <span data-opt data-name="<?php echo esc_attr( $o['name'] ?? '' ); ?>" data-price="<?php echo esc_attr( (string) $o['_prezzo'] ); ?>" data-color="<?php echo esc_attr( $this->safe_color_css( $o['color'] ?? '' ) ?: $col_fb ); ?>"<?php if ( $o['_img'] !== '' ) : ?> data-img="<?php echo $o['_img']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url() al raggruppamento ?>"<?php endif; ?> style="display:none;"></span>
                         <?php endforeach; ?>
                     </div>
                 <?php endforeach; ?>
@@ -168,6 +190,7 @@ class Olobuild_LookbookMixer_Tile extends Olobuild_Tile_Base {
             var cur = root.getAttribute('data-currency') || '';
             var dec = parseInt(root.getAttribute('data-decimals') || '0', 10);
             var lang = document.documentElement.lang || 'it-IT';
+            var veil = root.getAttribute('data-veil') || '';
             var totalEl = root.querySelector('[data-total]');
             var slots = root.querySelectorAll('[data-slot]');
             // Importi in CENTESIMI interi: sommati in virgola mobile 24.9 + 5.2 davano 30.099999999999998.
@@ -197,15 +220,32 @@ class Olobuild_LookbookMixer_Tile extends Olobuild_Tile_Base {
                 var opts = slot.querySelectorAll('[data-opt]');
                 var n = opts.length;
                 var sw = slot.querySelector('[data-sw]');
+                var bg = slot.querySelector('[data-bg]');
                 var nm = slot.querySelector('[data-name]');
                 var pr = slot.querySelector('[data-price]');
+                // Le immagini delle altre opzioni si scaricano al primo avvicinarsi alla riga: alla freccia sono già pronte.
+                var pronte = false;
+                function precarica(){
+                    if (pronte) { return; }
+                    pronte = true;
+                    opts.forEach(function (o) { var u = o.getAttribute('data-img'); if (u) { (new Image()).src = u; } });
+                }
+                if (bg) {
+                    slot.addEventListener('pointerenter', precarica);
+                    slot.addEventListener('focusin', precarica);
+                    slot.addEventListener('touchstart', precarica, { passive: true });
+                }
                 function show(){
                     if (n === 0) { return; }
                     var i = parseInt(slot.getAttribute('data-idx') || '0', 10);
                     i = ((i % n) + n) % n;
                     slot.setAttribute('data-idx', i);
                     var o = opts[i];
-                    sw.style.background = o.getAttribute('data-color') || '#000';
+                    if (sw) { sw.style.background = o.getAttribute('data-color') || '#000'; }
+                    if (bg) {
+                        var u = o.getAttribute('data-img') || '';
+                        bg.style.backgroundImage = u ? (veil ? veil + ',' : '') + 'url("' + u.replace(/"/g, '%22') + '")' : 'none';
+                    }
                     nm.textContent = o.getAttribute('data-name') || '';
                     pr.textContent = fmt(cents(o.getAttribute('data-price')));
                     total();

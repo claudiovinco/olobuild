@@ -24795,3 +24795,21 @@ msgstr "Nom du thème"
 
 msgid "Testo e bordo dei filtri non attivi. Vuoto: il colore del testo intorno."
 msgstr "Texte et bordure des filtres inactifs. Vide : la couleur du texte autour."
+
+msgid "Mostra pastiglia colore"
+msgstr "Afficher la pastille de couleur"
+
+msgid "Il cerchio col colore dell'opzione, accanto al nome. Spento, la riga lascia più spazio al nome."
+msgstr "Le cercle à la couleur de l'option, à côté du nom. Désactivé, la ligne laisse plus de place au nom."
+
+msgid "Quando l'opzione è scelta fa da sfondo alla sua riga, sotto un velo del colore dello slot che tiene leggibili nome e prezzo."
+msgstr "Quand l'option est choisie, elle sert de fond à sa ligne, sous un voile de la couleur du slot qui garde le nom et le prix lisibles."
+
+msgid "Velo sulle immagini"
+msgstr "Voile sur les images"
+
+msgid "Il colore dello slot steso sopra l'immagine di sfondo: più alto, più leggibile il testo."
+msgstr "La couleur du slot posée sur l'image de fond : plus elle est haute, plus le texte est lisible."
+
+msgid "Colore pastiglia"
+msgstr "Couleur de la pastille"

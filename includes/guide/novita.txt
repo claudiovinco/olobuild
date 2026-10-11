@@ -3,6 +3,12 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.649 - 2026-10-11 (fix)
+- Lookbook Mixer: la pastiglia del colore accanto al nome si può spegnere («Mostra pastiglia colore», nel Contenuto), così la riga lascia il suo posto al nome. Spenta in Orto Vivo, dove le pastiglie erano tutte dello stesso colore, e in Osteria Fumo.
+- Lookbook Mixer: ogni opzione può avere un'immagine, che fa da sfondo alla sua riga quando l'opzione è scelta e cambia con le frecce. Sopra c'è un velo del colore dello slot che tiene leggibili nome e prezzo, regolabile nello Stile («Velo sulle immagini»).
+- Pagine: il contenuto non passa più sotto la barra di scorrimento. Come la testata nella versione precedente, era largo quanto tutta la finestra e sui computer con la barra classica perdeva 7,5 px per lato: nelle anteprime per tablet e telefono il testo stava a 8 px dal bordo mentre il logo a 16.
+- Pixel Club: nell'apertura il riquadro del terminale è più a destra e la foto tonda in primo piano non copre più il testo; la foto della sala sullo sfondo si sposta a sinistra a riempire lo spazio, sul computer e sul telefono.
+
 ## v1.4.648 - 2026-10-11 (fix)
 - Lookbook Mixer: con un nome lungo il prezzo va sulla riga sotto, invece di uscire dalla colonna e finire sotto la freccia di destra («Hummus di barbabietola»).
 

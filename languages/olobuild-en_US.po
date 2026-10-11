@@ -24798,3 +24798,21 @@ msgstr "Theme name"
 
 msgid "Testo e bordo dei filtri non attivi. Vuoto: il colore del testo intorno."
 msgstr "Text and border of inactive filters. Empty: the surrounding text color."
+
+msgid "Mostra pastiglia colore"
+msgstr "Show color swatch"
+
+msgid "Il cerchio col colore dell'opzione, accanto al nome. Spento, la riga lascia più spazio al nome."
+msgstr "The circle with the option's color, next to the name. Off, the row leaves more room for the name."
+
+msgid "Quando l'opzione è scelta fa da sfondo alla sua riga, sotto un velo del colore dello slot che tiene leggibili nome e prezzo."
+msgstr "When the option is selected it becomes the background of its row, under a veil in the slot color that keeps name and price readable."
+
+msgid "Velo sulle immagini"
+msgstr "Veil over images"
+
+msgid "Il colore dello slot steso sopra l'immagine di sfondo: più alto, più leggibile il testo."
+msgstr "The slot color laid over the background image: the higher, the more readable the text."
+
+msgid "Colore pastiglia"
+msgstr "Swatch color"

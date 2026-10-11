@@ -42,6 +42,8 @@ export default {
     line_color: 'rgba(246,233,236,.13)',
     name_font_family: 'heading',
     mono_font_family: '',
+    show_swatch: true,
+    image_veil: 80,
   },
 
   // Appena nata: «componi il tuo menu» di un locale — quattro portate con due o tre scelte
@@ -74,6 +76,8 @@ export default {
   // ═══ CONTENUTO ════════════════════════════════════════════════
   fields: [
     { type: 'separator', label: t('Opzioni (campo "step" = gruppo/slot)') },
+    { key: 'show_swatch', label: t('Mostra pastiglia colore'), type: 'toggle',
+      description: t('Il cerchio col colore dell\'opzione, accanto al nome. Spento, la riga lascia più spazio al nome.') },
     { key: 'items', label: t('Voci'), type: 'content-items',
       itemLabel: t('Opzione'),
       defaults: { step: 'Step', name: 'Opzione', price: '0', color: '#e7a0b4' },
@@ -81,6 +85,8 @@ export default {
         { key: 'step',  label: t('Step (gruppo)'), type: 'text' },
         { key: 'name',  label: t('Nome'),          type: 'text' },
         { key: 'price', label: t('Prezzo (numero)'), type: 'number', min: 0, step: 0.01 },
+        { key: 'image', label: t('Immagine'), type: 'image',
+          description: t('Quando l\'opzione è scelta fa da sfondo alla sua riga, sotto un velo del colore dello slot che tiene leggibili nome e prezzo.') },
       ],
     },
 
@@ -102,6 +108,10 @@ export default {
     { key: 'accent_ink',  label: t('Testo su accento'), type: 'color' },
     { key: 'price_color', label: t('Colore prezzo/sub'), type: 'color' },
     { key: 'line_color',  label: t('Colore bordi'),    type: 'color' },
+    // Agisce solo se almeno un'opzione ha l'immagine: senza, il controllo non compare.
+    { key: 'image_veil',  label: t('Velo sulle immagini'), type: 'range', min: 0, max: 95, step: 5, unit: '%',
+      description: t('Il colore dello slot steso sopra l\'immagine di sfondo: più alto, più leggibile il testo.'),
+      show: (s) => (Array.isArray(s.items) ? s.items : []).some((it) => it && it.image) },
 
     // Famiglia + colore del nome nello stesso controllo. Il prezzo ha SOLO il
     // colore, e un colore da solo non è tipografia: resta fra i colori.
@@ -113,7 +123,10 @@ export default {
       keys: { family: 'mono_font_family' },
       description: t('Vuoto = il monospace del tema.') },
     { type: 'separator', label: t('Voci') },
-    { key: 'items', type: 'content-items', label: t('Voci'), itemLabel: t('Opzione'), etichettaDa: 'name', itemFields: [
+    // Con la pastiglia spenta il suo colore non agisce: lo specchio (e la sezione) spariscono.
+    { key: 'items', type: 'content-items', label: t('Voci'), itemLabel: t('Opzione'), etichettaDa: 'name',
+      condition: { field: 'show_swatch', op: 'neq', value: false },
+      itemFields: [
         { key: 'color', label: t('Colore pastiglia'), type: 'color' },
     ] },
   ],

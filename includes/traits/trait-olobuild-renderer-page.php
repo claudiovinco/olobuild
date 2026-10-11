@@ -597,6 +597,11 @@ trait Olobuild_Renderer_Page_Trait {
         $wrapper_role_attr = $principale ? ' role="main"' : '';
 
         ob_start();
+        // Il template principale è largo 100vw meno la barra di scorrimento (frontend.css): lo script che la
+        // misura viaggia anche qui, per le pagine senza la testata di Olobuild (con la testata gira una volta sola).
+        if ( $principale && class_exists( 'Olobuild_Header_Integration' ) ) {
+            echo Olobuild_Header_Integration::script_barra(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- script fisso, nessun dato
+        }
         ?>
         <div<?php echo $wrapper_id_attr; ?><?php echo $wrapper_role_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal id/role attribute strings set above ?> class="olo-template olo-template-<?php echo esc_attr( $id ); ?>"<?php
             if ( ( $page_bg['type'] === 'image' && ! empty( $page_bg['image_url'] ) ) || ( $page_bg['type'] === 'video' && ! empty( $page_bg['video_url'] ) ) ) {
