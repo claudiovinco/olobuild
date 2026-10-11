@@ -115,6 +115,18 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
         'form_name'         => '',
         'submissions_limit' => 0,
         'limit_message'     => 'Il modulo è chiuso: sono arrivati tutti gli invii previsti.',
+        // Posti a numero chiuso (1.4.685): gli ammessi si segnano nella pagina Invii; arrivati al totale il
+        // modulo si chiude, sopra i campi c'è il testo dei posti. 0 = spento (il modulo resta com'era).
+        'seats_total'           => 0,
+        'seats_month'           => 0,
+        'seats_text'            => '',
+        'seats_month_full_text' => '',
+        // Controllo della pagina allegata (prova d'ingresso, 1.4.685): spento = com'era.
+        'page_check'        => false,
+        'page_check_scope'  => 'sandbox',
+        'page_min_tiles'    => 8,
+        'page_min_sections' => 3,
+        'page_min_personal' => 50,
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -127,6 +139,12 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
 
     public function get_controls() {
         return [];
+    }
+
+    /** Il messaggio a modulo chiuso (invii arrivati al massimo, o posti tutti assegnati). */
+    private function modulo_chiuso( array $s ) {
+        return '<div class="olo-form-chiuso" role="status" style="padding:1.2em 1.35em;border-radius:.65em;border:1px solid color-mix(in srgb, currentColor 18%, transparent);font-size:15px;line-height:1.6">'
+            . esc_html( (string) ( $s['limit_message'] ?? '' ) ?: $this->defaults['limit_message'] ) . '</div>';
     }
 
     public function render( $settings ) {
@@ -143,8 +161,29 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
         $limite      = absint( $s['submissions_limit'] ?? 0 );
         if ( '' !== $nome_modulo && $limite > 0 && class_exists( 'Olobuild_Form_Submissions' )
             && Olobuild_Form_Submissions::count_for( $nome_modulo ) >= $limite ) {
-            return '<div class="olo-form-chiuso" role="status" style="padding:1.2em 1.35em;border-radius:.65em;border:1px solid color-mix(in srgb, currentColor 18%, transparent);font-size:15px;line-height:1.6">'
-                . esc_html( (string) ( $s['limit_message'] ?? '' ) ?: $this->defaults['limit_message'] ) . '</div>';
+            return $this->modulo_chiuso( $s );
+        }
+
+        // Posti a numero chiuso: il modulo si ricorda fra quelli a posti (pagina Invii, shortcode [olo_posti]),
+        // si chiude quando gli ammessi arrivano al totale e sopra i campi dice quanti posti restano.
+        $posti_totale = absint( $s['seats_total'] ?? 0 );
+        $posti_mese   = absint( $s['seats_month'] ?? 0 );
+        $posti_html   = '';
+        if ( '' !== $nome_modulo && class_exists( 'Olobuild_Form_Submissions' ) ) {
+            Olobuild_Form_Submissions::registra_posti( $nome_modulo, $posti_totale, $posti_mese );
+            if ( $posti_totale > 0 ) {
+                $posti = Olobuild_Form_Submissions::posti( $nome_modulo, $posti_totale, $posti_mese );
+                if ( $posti['restano'] <= 0 ) {
+                    return $this->modulo_chiuso( $s );
+                }
+                $posti_html = '<p class="olo-form-posti" role="status">' . esc_html( Olobuild_Form_Submissions::testo_posti(
+                    $posti,
+                    (string) ( $s['seats_text'] ?? '' ),
+                    (string) ( $s['seats_month_full_text'] ?? '' )
+                ) ) . '</p>';
+            }
+        } else {
+            $posti_totale = 0;
         }
 
         // ── Settings ──
@@ -360,6 +399,20 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                 $form_config_data['submissions_limit'] = $limite;
                 $form_config_data['limit_message']     = sanitize_text_field( (string) ( $s['limit_message'] ?? '' ) );
             }
+            // Posti a numero chiuso: col totale firmato nessuno riapre dal browser un modulo già pieno.
+            if ( $posti_totale > 0 ) {
+                $form_config_data['seats_total']   = $posti_totale;
+                $form_config_data['limit_message'] = sanitize_text_field( (string) ( $s['limit_message'] ?? '' ) );
+            }
+        }
+        // Controllo della pagina allegata: nel config firmato solo se acceso (un modulo senza stampa lo stesso
+        // token di prima); firmato, nessuno lo spegne o lo allenta dal browser.
+        if ( ! empty( $s['page_check'] ) ) {
+            $form_config_data['page_check']        = true;
+            $form_config_data['page_check_scope']  = 'all' === ( $s['page_check_scope'] ?? 'sandbox' ) ? 'all' : 'sandbox';
+            $form_config_data['page_min_tiles']    = max( 1, absint( $s['page_min_tiles'] ?? 8 ) );
+            $form_config_data['page_min_sections'] = max( 1, absint( $s['page_min_sections'] ?? 3 ) );
+            $form_config_data['page_min_personal'] = min( 100, absint( $s['page_min_personal'] ?? 50 ) );
         }
 
         // HubSpot, ActiveCampaign, ConvertKit e Brevo: l'inspector li offre e l'handler li
@@ -502,7 +555,9 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-f-btn:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent)}
             .<?php echo $uid; ?> .olo-f-btn:active{transform:translateY(1px)}
             .<?php echo $uid; ?> .olo-f-btn:disabled{opacity:0.6;cursor:not-allowed}
-            .<?php echo $uid; ?> .olo-f-msg{margin-top:12px;padding:12px 16px;border-radius:<?php echo $radius; ?>;font-size:14px;display:none}
+            .<?php echo $uid; ?> .olo-f-msg{margin-top:12px;padding:12px 16px;border-radius:<?php echo $radius; ?>;font-size:14px;display:none;white-space:pre-line}
+            .<?php echo $uid; ?> .olo-form-posti{display:flex;align-items:center;gap:.6em;margin:0 0 1.1em;font-size:.95em;font-weight:600;line-height:1.45;color:<?php echo $label_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colore da safe_color_css() o token ?>}
+            .<?php echo $uid; ?> .olo-form-posti::before{content:'';flex:none;width:.6em;height:.6em;border-radius:50%;background:var(--olo-color-primary, currentColor)}
             .<?php echo $uid; ?> .olo-f-msg--success{background:color-mix(in srgb, var(--olo-color-success, #10B981) 15%, transparent);color:var(--olo-color-success, #10B981);border:1px solid color-mix(in srgb, var(--olo-color-success, #10B981) 30%, transparent)}
             .<?php echo $uid; ?> .olo-f-msg--error{background:color-mix(in srgb, var(--olo-color-danger, #EF4444) 15%, transparent);color:var(--olo-color-danger, #EF4444);border:1px solid color-mix(in srgb, var(--olo-color-danger, #EF4444) 30%, transparent)}
             .<?php echo $uid; ?> .olo-f-sending .olo-f-btn-text{display:none}
@@ -570,6 +625,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                 <input type="hidden" name="_olo_form_config" value="<?php echo esc_attr( $config_b64 ); ?>" />
                 <input type="hidden" name="_olo_form_token" value="<?php echo esc_attr( $form_token ); ?>" />
                 <input type="hidden" name="_olo_form_id" value="<?php echo esc_attr( $uid ); ?>" />
+                <?php echo $posti_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- testo dei posti già passato da esc_html() ?>
 
                 <?php if ( ! empty( $s['honeypot'] ) ) : ?>
                 <div style="position:absolute;left:-9999px;opacity:0" aria-hidden="true">
@@ -779,7 +835,12 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                                     <label class="olo-f-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
                                 <?php endif; ?>
                                 <?php
-                                    $f_allowed  = esc_attr( $field['file_allowed_types'] ?? $s['file_types'] ?? '.pdf,.doc,.docx,.jpg,.png' );
+                                    $f_allowed  = (string) ( $field['file_allowed_types'] ?? $s['file_types'] ?? '.pdf,.doc,.docx,.jpg,.png' );
+                                    // Col controllo della pagina il file .json si può sempre scegliere (l'handler lo ammette).
+                                    if ( ! empty( $s['page_check'] ) && false === stripos( $f_allowed, '.json' ) ) {
+                                        $f_allowed .= ',.json';
+                                    }
+                                    $f_allowed  = esc_attr( $f_allowed );
                                     $f_max_size = absint( $field['file_max_size'] ?? $s['file_max_size'] ?? 5 );
                                     $f_max_files= absint( $field['file_max_files'] ?? 1 );
                                     $f_btn_text = esc_html( $field['file_button_text'] ?? 'Scegli file' );

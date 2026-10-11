@@ -12,7 +12,7 @@
 
     /* ─── State ───────────────────────────────────────────────────── */
     const state = {
-        status: 'all',     // 'all' | 'unread' | 'read'
+        status: 'all',     // 'all' | 'unread' | 'read' | 'admitted'
         formName: '',      // filtro per form_name
         q: '',
         page: 1,
@@ -78,6 +78,7 @@
                   '<div class="olo-sub-card-head">' +
                     '<span class="olo-sub-name">' + escapeHtml(display) + '</span>' +
                     '<span class="olo-sub-form">' + escapeHtml(s.form_name) + '</span>' +
+                    (s.admitted_at ? '<span class="olo-sub-ammesso">' + escapeHtml(T('admitted', 'Ammesso')) + '</span>' : '') +
                     '<span class="olo-sub-time">' + escapeHtml(s.time_diff) + '</span>' +
                   '</div>' +
                   (s.email && s.email !== display ? '<div class="olo-sub-email">' + escapeHtml(s.email) + '</div>' : '') +
@@ -126,14 +127,26 @@
                 if (id === 'all')    num.textContent = stats.total  || 0;
                 if (id === 'unread') num.textContent = stats.unread || 0;
                 if (id === 'read')   num.textContent = stats.read   || 0;
+                if (id === 'admitted') num.textContent = stats.admitted || 0;
                 if (id && id.indexOf('form:') === 0) {
                     const name = id.substring(5);
                     const f = (stats.forms || []).find(x => x.name === name);
                     if (f) num.textContent = f.count;
                 }
             });
+            aggiornaPosti(stats.posti || []);
             return stats;
         }).catch(()=>{});
+    }
+
+    /* ─── Posti a numero chiuso: la riga sotto il titolo ──────────── */
+    function aggiornaPosti(posti) {
+        const el = document.querySelector('[data-olo-posti]');
+        if (!el) return;
+        el.textContent = posti.map(p => p.al_mese > 0
+            ? T('postiMese', '%1$s: questo mese %2$s su %3$s · in tutto %4$s su %5$s').replace('%1$s', p.name).replace('%2$s', p.ammessi_mese).replace('%3$s', p.al_mese).replace('%4$s', p.ammessi).replace('%5$s', p.totale)
+            : T('postiTot', '%1$s: ammessi %2$s su %3$s').replace('%1$s', p.name).replace('%2$s', p.ammessi).replace('%3$s', p.totale)
+        ).join(' · ');
     }
 
     /* ─── Chips state sync ────────────────────────────────────────── */
@@ -168,7 +181,8 @@
                 drawerMeta.innerHTML =
                     '<span>' + escapeHtml(d.form_name || '') + '</span>' +
                     ' · <span>' + escapeHtml(d.submitted_at) + '</span>' +
-                    (d.ip_address ? ' · <span>IP ' + escapeHtml(d.ip_address) + '</span>' : '');
+                    (d.ip_address ? ' · <span>IP ' + escapeHtml(d.ip_address) + '</span>' : '') +
+                    (d.admitted_at ? ' · <span class="olo-sub-ammesso">' + escapeHtml(T('admittedAt', 'Ammesso il')) + ' ' + escapeHtml(d.admitted_at) + '</span>' : '');
                 drawerBody.innerHTML =
                     '<h3 class="olo-sub-section-title">' + escapeHtml(T('fields', 'Campi')) + '</h3>' +
                     fieldsToHtml(d.fields) +
@@ -182,6 +196,7 @@
                 // Update il toggle-read button label
                 const tg = document.querySelector('[data-olo-drawer-toggle-read]');
                 if (tg) tg.textContent = d.read_status ? T('markUnread') : T('markRead');
+                aggiornaPulsanteAmmetti(d);
 
                 // Aggiorna lo stato della card nella lista (se l'auto-mark-read l'ha cambiata)
                 const card = document.querySelector('.olo-sub-card[data-sub-id="' + d.id + '"]');
@@ -252,6 +267,9 @@
         drawer.addEventListener('click', e => {
             if (e.target === drawer) closeDrawer();
             if (e.target.closest('[data-olo-drawer-close]')) closeDrawer();
+            if (e.target.closest('[data-olo-drawer-admit]')) {
+                if (state.currentDetail) ammetti(state.currentDetail.id);
+            }
             if (e.target.closest('[data-olo-drawer-toggle-read]')) {
                 if (state.currentDetail) toggleRead(state.currentDetail.id, /*fromDrawer*/ true);
             }
@@ -285,6 +303,31 @@
         }).catch(err => console.error('[olo-sub] toggle-read:', err));
     }
 
+    /* Ammettere un invio di un modulo a posti (o togliere l'ammissione): il pulsante c'è solo per quei moduli. */
+    function aggiornaPulsanteAmmetti(d) {
+        const b = document.querySelector('[data-olo-drawer-admit]');
+        if (!b) return;
+        b.hidden = !d.seats;
+        b.textContent = d.admitted_at ? T('unadmit', "Togli l'ammissione") : T('admit', 'Ammetti');
+    }
+    function ammetti(id) {
+        const d = state.currentDetail;
+        const b = document.querySelector('[data-olo-drawer-admit]');
+        if (b) b.disabled = true;
+        api('submissions/' + id + '/admit', {
+            method: 'POST',
+            body: JSON.stringify({ admitted: !(d && d.admitted_at) }),
+        }).then(res => {
+            const item = state.items.find(x => x.id === id);
+            if (item) { item.admitted_at = res.admitted_at; if (res.admitted_at) item.read_status = 1; }
+            if (d && d.id === id) d.admitted_at = res.admitted_at;
+            renderList();
+            fetchStats();
+            if (d && d.id === id) openDrawer(id);
+        }).catch(err => alert(T('admitFailed', 'Ammissione non riuscita') + ': ' + err.message))
+          .finally(() => { if (b) b.disabled = false; });
+    }
+
     function deleteOne(id) {
         api('submissions/' + id, { method: 'DELETE' })
             .then(() => {
@@ -303,6 +346,7 @@
         bindList();
         bindDrawer();
         fetchList();
+        fetchStats();
     }
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', boot);

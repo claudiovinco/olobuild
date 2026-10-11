@@ -303,6 +303,16 @@ class Olobuild_Form_Handler {
             ], 409 );
         }
 
+        // 4a-bis. Posti a numero chiuso: con gli ammessi arrivati al totale (firmato nel config) il modulo è chiuso.
+        $posti_totale = absint( $config['seats_total'] ?? 0 );
+        if ( '' !== $nome_modulo && $posti_totale > 0 && class_exists( 'Olobuild_Form_Submissions' )
+            && Olobuild_Form_Submissions::admitted_for( $nome_modulo ) >= $posti_totale ) {
+            return new WP_REST_Response( [
+                'success' => false,
+                'data'    => [ 'message' => sanitize_text_field( $config['limit_message'] ?? '' ) ?: 'Il modulo è chiuso: sono arrivati tutti gli invii previsti.' ],
+            ], 409 );
+        }
+
         // 4b. reCAPTCHA v3 verification
         if ( ! empty( $config['recaptcha_enabled'] ) ) {
             $recaptcha_secret = get_option( 'olobuild_recaptcha_secret_key', '' );
@@ -372,6 +382,9 @@ class Olobuild_Form_Handler {
         }
 
         // 6b. Handle file uploads
+        // File salvati (per toglierli se il controllo della pagina rifiuta la richiesta) e pagine .json.
+        $olo_file_salvati = [];
+        $olo_json         = [];
         // phpcs:ignore WordPress.Security.NonceVerification.Missing -- callback REST pubblica (form contatto): il modello anti-abuso è HMAC token v2 validato sopra (validate_token) + honeypot + rate-limit, non un nonce (form spesso serviti da pagine cache); upload validati con is_uploaded_file/wp_check_filetype/finfo + allowlist estensioni.
         if ( ! empty( $_FILES ) ) {
             require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -407,6 +420,10 @@ class Olobuild_Form_Handler {
             // Global fallback settings
             $global_max_size = absint( $config['file_max_size'] ?? 5 ) * 1024 * 1024;
             $global_allowed  = array_map( 'trim', explode( ',', $config['file_types'] ?? '.pdf,.jpg,.png' ) );
+            // Col controllo della pagina (firmato) il file della pagina è sempre ammesso.
+            if ( ! empty( $config['page_check'] ) && ! in_array( '.json', $global_allowed, true ) ) {
+                $global_allowed[] = '.json';
+            }
 
             // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- callback REST pubblica protetta da HMAC token v2 + honeypot + rate-limit; i campi $_FILES vengono validati a valle (is_uploaded_file su tmp_name, sanitize_file_name + wp_check_filetype + finfo sul nome, allowlist/blocklist estensioni).
             foreach ( $_FILES as $file_key => $file_data ) {
@@ -481,6 +498,10 @@ class Olobuild_Form_Handler {
                     if ( is_uploaded_file( $single_file['tmp_name'] ) && copy( $single_file['tmp_name'], $dest_path ) ) {
                         $file_url = $upload_dir['baseurl'] . '/olobuild-uploads/' . $safe_name;
                         $uploaded_urls[] = esc_url_raw( $file_url );
+                        $olo_file_salvati[] = $dest_path;
+                        if ( '.json' === $ext ) {
+                            $olo_json[] = $dest_path;
+                        }
                     }
                 }
 
@@ -492,6 +513,34 @@ class Olobuild_Form_Handler {
                     $sanitized[ $clean_key ] = $uploaded_urls;
                 }
             }
+        }
+
+        // 6c. Controllo della pagina allegata (prova d'ingresso): il file .json deve essere una pagina vera, fatta con
+        //     le tile ammesse e scritta da chi la manda. Se non lo è la richiesta non parte (i file appena salvati si
+        //     tolgono) e il messaggio dice che cosa cambiare; se passa, chi valuta legge il riepilogo fra i campi.
+        if ( ! empty( $config['page_check'] ) && class_exists( 'Olobuild_Page_Check' ) ) {
+            $esito = null;
+            if ( empty( $olo_json ) ) {
+                $problemi = [ olobuild_t( 'Allega il file della pagina (.json) che hai scaricato dal builder.' ) ];
+            } else {
+                $esito    = Olobuild_Page_Check::controlla( $olo_json[0], [
+                    'ambito'        => $config['page_check_scope'] ?? 'sandbox',
+                    'min_tile'      => $config['page_min_tiles'] ?? 8,
+                    'min_sezioni'   => $config['page_min_sections'] ?? 3,
+                    'min_personale' => $config['page_min_personal'] ?? 50,
+                ] );
+                $problemi = $esito['problemi'];
+            }
+            if ( $problemi ) {
+                foreach ( $olo_file_salvati as $f ) {
+                    wp_delete_file( $f );
+                }
+                return new WP_REST_Response( [
+                    'success' => false,
+                    'data'    => [ 'message' => implode( "\n", $problemi ) ],
+                ], 422 );
+            }
+            $sanitized['controllo_pagina'] = $esito['riepilogo'];
         }
 
         // 7. Basic validation: at least one non-empty field

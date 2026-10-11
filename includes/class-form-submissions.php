@@ -28,6 +28,12 @@ class Olobuild_Form_Submissions {
         add_filter( 'set-screen-option', [ __CLASS__, 'set_screen_option' ], 10, 3 );
         // Also newer hook name (WP 5.4.2+)
         add_filter( 'set_screen_option_olo_submissions_per_page', [ __CLASS__, 'set_screen_option' ], 10, 3 );
+
+        // Posti a numero chiuso (1.4.685): colonna dell'ammissione sui siti già installati, cache svuotata
+        // quando cambia il mese (i posti del mese ripartono), shortcode per mostrarli fuori dal modulo.
+        add_action( 'init', [ __CLASS__, 'maybe_upgrade' ], 5 );
+        add_action( 'init', [ __CLASS__, 'nuovo_mese' ], 20 );
+        add_shortcode( 'olo_posti', [ __CLASS__, 'shortcode_posti' ] );
     }
 
     // =========================================================================
@@ -51,14 +57,198 @@ class Olobuild_Form_Submissions {
             ip_address varchar(45) DEFAULT '',
             user_agent text,
             read_status tinyint(1) NOT NULL DEFAULT 0,
+            admitted_at datetime NULL DEFAULT NULL,
             PRIMARY KEY (id),
             KEY form_name (form_name),
             KEY submitted_at (submitted_at),
-            KEY read_status (read_status)
+            KEY read_status (read_status),
+            KEY admitted_at (admitted_at)
         ) $charset_collate;";
 
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         dbDelta( $sql );
+        update_option( 'olobuild_form_submissions_schema', self::SCHEMA, true );
+    }
+
+    /** Versione dello schema della tabella: 2 = colonna admitted_at (posti a numero chiuso, 1.4.685). */
+    const SCHEMA = '2';
+
+    /**
+     * Porta la tabella allo schema corrente sui siti già installati: la tabella nasce all'attivazione, ma gli
+     * aggiornamenti per scambio di cartella non riattivano il plugin. Una sola lettura di opzione quando è già fatto.
+     * La colonna si aggiunge con un ALTER guardato da SHOW COLUMNS (dbDelta su una tabella esistente proverebbe a
+     * ridefinire la chiave primaria scritta con uno spazio solo).
+     */
+    public static function maybe_upgrade() {
+        if ( get_option( 'olobuild_form_submissions_schema' ) === self::SCHEMA ) {
+            return;
+        }
+        global $wpdb;
+        $table = $wpdb->prefix . 'olobuild_form_submissions';
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- migrazione della tabella custom del plugin, una volta sola (guardia di versione); solo il nome tabella da $wpdb->prefix è interpolato.
+        if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) ) !== $table ) {
+            self::create_table();
+            return;
+        }
+        if ( ! $wpdb->get_var( $wpdb->prepare( "SHOW COLUMNS FROM $table LIKE %s", 'admitted_at' ) ) ) {
+            $wpdb->query( "ALTER TABLE $table ADD COLUMN admitted_at datetime NULL DEFAULT NULL, ADD KEY admitted_at (admitted_at)" );
+        }
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+        update_option( 'olobuild_form_submissions_schema', self::SCHEMA, true );
+    }
+
+    // =========================================================================
+    // Posti a numero chiuso
+    // =========================================================================
+
+    /**
+     * Quanti invii di un modulo sono stati ammessi, in tutto o nel mese corrente (ora del sito).
+     *
+     * @param string $form_name Nome del modulo.
+     * @param bool   $solo_mese Solo quelli ammessi questo mese.
+     * @return int
+     */
+    public static function admitted_for( $form_name, $solo_mese = false ) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'olobuild_form_submissions';
+        $nome  = sanitize_text_field( $form_name );
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin; $table da $wpdb->prefix; i valori passano da prepare; conteggio che deve essere sempre fresco.
+        if ( $solo_mese ) {
+            $tz     = wp_timezone();
+            $inizio = ( new DateTime( 'first day of this month midnight', $tz ) )->format( 'Y-m-d H:i:s' );
+            $fine   = ( new DateTime( 'first day of next month midnight', $tz ) )->format( 'Y-m-d H:i:s' );
+            $n      = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $table WHERE form_name = %s AND admitted_at >= %s AND admitted_at < %s", $nome, $inizio, $fine ) );
+        } else {
+            $n = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $table WHERE form_name = %s AND admitted_at IS NOT NULL", $nome ) );
+        }
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+        return (int) $n;
+    }
+
+    /**
+     * Ammette un invio (o toglie l'ammissione). La cache delle pagine si svuota: il contatore dei posti è nella
+     * pagina resa.
+     *
+     * @param int  $id      Invio.
+     * @param bool $ammesso true = ammesso adesso, false = non più ammesso.
+     * @return bool
+     */
+    public static function set_admitted( $id, $ammesso ) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'olobuild_form_submissions';
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin; $table da $wpdb->prefix; i valori passano da prepare; scrittura non cacheabile.
+        $ok = $ammesso
+            ? $wpdb->query( $wpdb->prepare( "UPDATE $table SET admitted_at = %s, read_status = 1 WHERE id = %d", current_time( 'mysql' ), absint( $id ) ) )
+            : $wpdb->query( $wpdb->prepare( "UPDATE $table SET admitted_at = NULL WHERE id = %d", absint( $id ) ) );
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+        if ( class_exists( 'Olobuild_FullPage_Cache' ) ) {
+            Olobuild_FullPage_Cache::purge_all();
+        }
+        return false !== $ok;
+    }
+
+    /**
+     * I posti di un modulo a numero chiuso.
+     *
+     * @return array{totale:int,al_mese:int,ammessi:int,ammessi_mese:int,restano:int,restano_mese:int}
+     */
+    public static function posti( $form_name, $totale, $al_mese = 0 ) {
+        $totale       = absint( $totale );
+        $al_mese      = absint( $al_mese );
+        $ammessi      = self::admitted_for( $form_name );
+        $ammessi_mese = $al_mese > 0 ? self::admitted_for( $form_name, true ) : 0;
+        $restano      = max( 0, $totale - $ammessi );
+        return [
+            'totale'       => $totale,
+            'al_mese'      => $al_mese,
+            'ammessi'      => $ammessi,
+            'ammessi_mese' => $ammessi_mese,
+            'restano'      => $restano,
+            'restano_mese' => $al_mese > 0 ? max( 0, min( $al_mese - $ammessi_mese, $restano ) ) : $restano,
+        ];
+    }
+
+    /**
+     * Il testo dei posti. Vuoto = il testo automatico (con o senza i posti del mese). Segnaposto: {mese} liberi
+     * questo mese, {al_mese} posti al mese, {restano} liberi in tutto, {totale} posti in tutto. A posti del mese
+     * esauriti (e posti ancora liberi in tutto) vale il testo del mese esaurito.
+     */
+    public static function testo_posti( array $p, $testo = '', $testo_mese_esaurito = '' ) {
+        if ( $p['al_mese'] > 0 && $p['restano_mese'] <= 0 && $p['restano'] > 0 ) {
+            $t = trim( (string) $testo_mese_esaurito );
+            return '' !== $t ? $t : olobuild_t( 'I posti di questo mese sono assegnati: le richieste che arrivano ora valgono per il mese prossimo.' );
+        }
+        $t = trim( (string) $testo );
+        if ( '' === $t ) {
+            $t = $p['al_mese'] > 0
+                ? olobuild_t( 'Posti liberi questo mese: {mese} su {al_mese} · in tutto: {restano} su {totale}' )
+                : olobuild_t( 'Posti liberi: {restano} su {totale}' );
+        }
+        return strtr( $t, [
+            '{mese}'    => number_format_i18n( $p['restano_mese'] ),
+            '{al_mese}' => number_format_i18n( $p['al_mese'] ),
+            '{restano}' => number_format_i18n( $p['restano'] ),
+            '{totale}'  => number_format_i18n( $p['totale'] ),
+        ] );
+    }
+
+    /**
+     * Ricorda quali moduli hanno i posti (per la pagina Invii e lo shortcode). La tile Modulo la chiama quando si
+     * rende: scrive solo se qualcosa è cambiato; un modulo che spegne i posti esce dall'elenco.
+     */
+    public static function registra_posti( $form_name, $totale, $al_mese ) {
+        $nome = sanitize_text_field( $form_name );
+        if ( '' === $nome ) {
+            return;
+        }
+        $posti = get_option( 'olobuild_form_posti', [] );
+        $posti = is_array( $posti ) ? $posti : [];
+        $voce  = absint( $totale ) > 0 ? [ 'totale' => absint( $totale ), 'al_mese' => absint( $al_mese ) ] : null;
+        if ( ( $posti[ $nome ] ?? null ) === $voce ) {
+            return;
+        }
+        if ( $voce ) {
+            $posti[ $nome ] = $voce;
+        } else {
+            unset( $posti[ $nome ] );
+        }
+        update_option( 'olobuild_form_posti', $posti, true );
+    }
+
+    /** I moduli con i posti: [ nome => [ totale, al_mese ] ]. */
+    public static function moduli_a_posti() {
+        $posti = get_option( 'olobuild_form_posti', [] );
+        return is_array( $posti ) ? $posti : [];
+    }
+
+    /** Cambiato il mese, i posti del mese ripartono: la cache delle pagine col contatore si svuota una volta. */
+    public static function nuovo_mese() {
+        if ( ! self::moduli_a_posti() ) {
+            return;
+        }
+        $mese = wp_date( 'Y-m' );
+        if ( get_option( 'olobuild_form_posti_mese' ) === $mese ) {
+            return;
+        }
+        update_option( 'olobuild_form_posti_mese', $mese, true );
+        if ( class_exists( 'Olobuild_FullPage_Cache' ) ) {
+            Olobuild_FullPage_Cache::purge_all();
+        }
+    }
+
+    /**
+     * [olo_posti modulo="OLOfounder"] — il testo dei posti di un modulo, per mostrarlo anche fuori dal modulo
+     * (un'apertura, una fascia in home). testo="…" con gli stessi segnaposto del campo «Testo dei posti».
+     */
+    public static function shortcode_posti( $atts ) {
+        $a     = shortcode_atts( [ 'modulo' => '', 'testo' => '' ], $atts, 'olo_posti' );
+        $nome  = sanitize_text_field( $a['modulo'] );
+        $posti = self::moduli_a_posti();
+        if ( '' === $nome || empty( $posti[ $nome ] ) ) {
+            return '';
+        }
+        $p = self::posti( $nome, $posti[ $nome ]['totale'], $posti[ $nome ]['al_mese'] );
+        return '<span class="olo-posti">' . esc_html( self::testo_posti( $p, $a['testo'] ) ) . '</span>';
     }
 
     /**
@@ -179,6 +369,7 @@ class Olobuild_Form_Submissions {
                 'ip_address'  => $row['ip_address'],
                 'submitted_at' => $row['submitted_at'],
                 'read_status' => $row['read_status'],
+                'admitted_at' => $row['admitted_at'] ?? '',
             ];
             foreach ( array_keys( $fields ) as $k ) {
                 if ( ! in_array( $k, $all_keys, true ) ) {
@@ -200,7 +391,7 @@ class Olobuild_Form_Submissions {
         fwrite( $out, "\xEF\xBB\xBF" );
 
         // Header row
-        $header = array_merge( [ 'ID', 'Form' ], array_map( 'ucfirst', $all_keys ), [ 'IP', 'Data', 'Stato' ] );
+        $header = array_merge( [ 'ID', 'Form' ], array_map( 'ucfirst', $all_keys ), [ 'IP', 'Data', 'Stato', 'Ammesso il' ] );
         fputcsv( $out, array_map( 'olobuild_csv_safe', $header ), ';' );
 
         // Data rows
@@ -216,6 +407,7 @@ class Olobuild_Form_Submissions {
             $row_data[] = $dr['ip_address'];
             $row_data[] = $dr['submitted_at'];
             $row_data[] = $dr['read_status'] ? 'Letto' : 'Non letto';
+            $row_data[] = (string) $dr['admitted_at'];
             // Anti CSV-injection: prefissa i valori che iniziano con =,+,-,@ (formula Excel/Sheets).
             fputcsv( $out, array_map( 'olobuild_csv_safe', $row_data ), ';' );
         }
@@ -280,6 +472,10 @@ class Olobuild_Form_Submissions {
             [ 'id' => 'unread', 'label' => __( 'Non letti', 'olobuild' ), 'count' => $stats['unread'] ?? 0, 'dot_color' => '#ef4444' ],
             [ 'id' => 'read',   'label' => __( 'Letti', 'olobuild' ),    'count' => $stats['read']   ?? 0, 'dot_color' => '#22c55e' ],
         ];
+        // Moduli a posti: il filtro degli ammessi
+        if ( ! empty( $stats['posti'] ) ) {
+            $chips[] = [ 'id' => 'admitted', 'label' => __( 'Ammessi', 'olobuild' ), 'count' => $stats['admitted'] ?? 0, 'dot_color' => '#15803d' ];
+        }
         // Aggiungi chip per i form più frequenti
         foreach ( ( $stats['forms'] ?? [] ) as $f ) {
             $chips[] = [
@@ -297,6 +493,18 @@ class Olobuild_Form_Submissions {
             '<b>' . number_format_i18n( $stats['unread']  ?? 0 ) . '</b>',
             '<b>' . number_format_i18n( $stats['last_7d'] ?? 0 ) . '</b>'
         );
+        // Posti a numero chiuso: ammessi del mese e in tutto, aggiornati dallo script dopo ogni ammissione.
+        if ( ! empty( $stats['posti'] ) ) {
+            $righe = [];
+            foreach ( $stats['posti'] as $p ) {
+                $righe[] = $p['al_mese'] > 0
+                    /* translators: 1: nome del modulo, 2: ammessi questo mese, 3: posti al mese, 4: ammessi in tutto, 5: posti in tutto */
+                    ? sprintf( __( '%1$s: questo mese %2$s su %3$s · in tutto %4$s su %5$s', 'olobuild' ), $p['name'], $p['ammessi_mese'], $p['al_mese'], $p['ammessi'], $p['totale'] )
+                    /* translators: 1: nome del modulo, 2: ammessi, 3: posti in tutto */
+                    : sprintf( __( '%1$s: ammessi %2$s su %3$s', 'olobuild' ), $p['name'], $p['ammessi'], $p['totale'] );
+            }
+            $sub .= '<br><span data-olo-posti>' . esc_html( implode( ' · ', $righe ) ) . '</span>';
+        }
 
         // Actions: bottone Esporta CSV
         $actions = Olobuild_Builder::cockpit_button( [
@@ -350,6 +558,9 @@ class Olobuild_Form_Submissions {
                     <!-- popolato via JS -->
                 </div>
                 <footer class="olo-sub-drawer-foot">
+                    <button type="button" class="olo-btn olo-btn-pri" data-olo-drawer-admit hidden>
+                        <?php esc_html_e( 'Ammetti', 'olobuild' ); ?>
+                    </button>
                     <button type="button" class="olo-btn olo-btn-sec" data-olo-drawer-toggle-read>
                         <?php esc_html_e( 'Segna come non letto', 'olobuild' ); ?>
                     </button>

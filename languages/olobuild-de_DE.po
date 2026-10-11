@@ -24876,3 +24876,108 @@ msgstr "Hintergrund des Felds"
 
 msgid "Vuoto = il colore scuro della palette. Per le foto prodotto su fondo bianco scegli il bianco, o il colore del fondo delle foto: il prodotto si fonde col riquadro."
 msgstr "Leer = die dunkle Farbe der Palette. Für Produktfotos auf weißem Grund Weiß wählen oder die Hintergrundfarbe der Fotos: Das Produkt verschmilzt mit dem Feld."
+
+msgid "Posti a numero chiuso"
+msgstr "Begrenzte Plätze"
+
+msgid "Posti in tutto"
+msgstr "Plätze insgesamt"
+
+msgid "Per i programmi a numero chiuso: chi è ammesso si segna con «Ammetti» nella pagina Invii. Quando gli ammessi arrivano a questo numero, al posto del modulo compare il messaggio a modulo chiuso. 0 = spento."
+msgstr "Für Programme mit begrenzten Plätzen: Wer aufgenommen wird, wird auf der Seite Formular-Einsendungen mit «Aufnehmen» markiert. Erreichen die Aufgenommenen diese Zahl, erscheint statt des Formulars die Meldung für das geschlossene Formular. 0 = aus."
+
+msgid "Posti al mese"
+msgstr "Plätze pro Monat"
+
+msgid "Quanti ammessi al massimo in un mese. Esauriti quelli del mese, il modulo resta aperto e avvisa che le richieste valgono per il mese dopo. 0 = nessun limite mensile."
+msgstr "Wie viele höchstens in einem Monat aufgenommen werden. Sind die Plätze des Monats vergeben, bleibt das Formular offen und weist darauf hin, dass neue Anfragen für den nächsten Monat gelten. 0 = keine monatliche Grenze."
+
+msgid "Testo dei posti"
+msgstr "Text zu den Plätzen"
+
+msgid "Posti liberi questo mese: {mese} su {al_mese} · in tutto: {restano} su {totale}"
+msgstr "Freie Plätze diesen Monat: {mese} von {al_mese} · insgesamt: {restano} von {totale}"
+
+msgid "Compare sopra il modulo. Vuoto = il testo automatico. Segnaposto: {mese} posti liberi questo mese, {al_mese} posti al mese, {restano} posti liberi in tutto, {totale} posti in tutto. Lo stesso testo si mostra altrove con lo shortcode [olo_posti modulo=\"nome del modulo\"]."
+msgstr "Erscheint über dem Formular. Leer = der automatische Text. Platzhalter: {mese} freie Plätze diesen Monat, {al_mese} Plätze pro Monat, {restano} freie Plätze insgesamt, {totale} Plätze insgesamt. Denselben Text zeigt der Shortcode [olo_posti modulo=\"Formularname\"] auch anderswo."
+
+msgid "Testo a mese esaurito"
+msgstr "Text bei ausgebuchtem Monat"
+
+msgid "I posti di questo mese sono assegnati: le richieste che arrivano ora valgono per il mese prossimo."
+msgstr "Die Plätze dieses Monats sind vergeben: Anfragen, die jetzt eingehen, gelten für den nächsten Monat."
+
+msgid "Pagina allegata"
+msgstr "Angehängte Seite"
+
+msgid "Controlla la pagina allegata"
+msgstr "Angehängte Seite prüfen"
+
+msgid "Per le candidature con una pagina esportata dal builder (file .json, in un campo File upload). All’invio controlla che sia una pagina vera, fatta con le tile ammesse e scritta da chi la manda: se non lo è, la richiesta non parte e il messaggio dice che cosa cambiare. Se passa, chi valuta trova il riepilogo fra i campi dell’invio."
+msgstr "Für Bewerbungen mit einer aus dem Builder exportierten Seite (.json-Datei, in einem Feld Dateiupload). Beim Absenden wird geprüft, ob es eine echte Seite ist, mit den erlaubten Tiles gebaut und vom Absender geschrieben: Wenn nicht, wird die Anfrage nicht gesendet und die Meldung sagt, was zu ändern ist. Besteht sie, findet die prüfende Person die Zusammenfassung bei den Feldern der Einsendung."
+
+msgid "Tile ammesse"
+msgstr "Erlaubte Tiles"
+
+msgid "Solo quelle della sandbox"
+msgstr "Nur die der Sandbox"
+
+msgid "Tile minime"
+msgstr "Tiles mindestens"
+
+msgid "Sezioni minime"
+msgstr "Abschnitte mindestens"
+
+msgid "Testi propri minimi"
+msgstr "Eigene Texte mindestens"
+
+msgid "La parte dei testi della pagina che non è rimasta com’era all’inizio: tile appena trascinate, blocchi della libreria, temi, pagina iniziale della sandbox. Un testo con una parola cambiata conta ancora come di partenza."
+msgstr "Der Anteil der Texte der Seite, der nicht mehr so ist wie am Anfang: frisch eingefügte Tiles, Blöcke der Bibliothek, Themes, die Startseite der Sandbox. Ein Text mit einem geänderten Wort zählt noch als Ausgangstext."
+
+msgid "Posti liberi: {restano} su {totale}"
+msgstr "Freie Plätze: {restano} von {totale}"
+
+msgid "Il file allegato non è una pagina esportata da OLObuild: scaricala dal builder con «Esporta template JSON»."
+msgstr "Die angehängte Datei ist keine aus OLObuild exportierte Seite: Lade sie im Builder mit «Template als JSON exportieren» herunter."
+
+msgid "La pagina contiene tile che nella sandbox non ci sono (%s): la pagina va fatta nella sandbox."
+msgstr "Die Seite enthält Tiles, die es in der Sandbox nicht gibt (%s): Die Seite muss in der Sandbox gebaut werden."
+
+msgid "La pagina è troppo corta: ha %1$d tile in %2$d sezioni, ne servono almeno %3$d in %4$d."
+msgstr "Die Seite ist zu kurz: Sie hat %1$d Tiles in %2$d Abschnitten, nötig sind mindestens %3$d in %4$d."
+
+msgid "La pagina ha troppo poco testo: servono titoli e paragrafi scritti da te."
+msgstr "Die Seite hat zu wenig Text: Sie braucht Überschriften und Absätze, die du selbst geschrieben hast."
+
+msgid "La pagina è ancora troppo vicina ai contenuti di partenza: solo il %1$d%% dei testi è tuo, ne serve almeno il %2$d%%. Riscrivi con parole tue i testi rimasti come arrivano, per esempio %3$s."
+msgstr "Die Seite ist noch zu nah am Ausgangsinhalt: Nur %1$d%% der Texte sind von dir, nötig sind mindestens %2$d%%. Schreib die Texte, die so geblieben sind, wie sie kamen, mit eigenen Worten neu, zum Beispiel %3$s."
+
+msgid "%1$d tile in %2$d sezioni, %3$d%% di testi propri"
+msgstr "%1$d Tiles in %2$d Abschnitten, %3$d%% eigene Texte"
+
+msgid "Allega il file della pagina (.json) che hai scaricato dal builder."
+msgstr "Häng die Datei der Seite (.json) an, die du aus dem Builder heruntergeladen hast."
+
+msgid "Ammetti"
+msgstr "Aufnehmen"
+
+msgid "Togli l'ammissione"
+msgstr "Aufnahme zurücknehmen"
+
+msgid "Ammesso"
+msgstr "Aufgenommen"
+
+msgid "Ammesso il"
+msgstr "Aufgenommen am"
+
+msgid "Ammissione non riuscita"
+msgstr "Aufnahme fehlgeschlagen"
+
+msgid "Ammessi"
+msgstr "Aufgenommen"
+
+msgid "%1$s: questo mese %2$s su %3$s · in tutto %4$s su %5$s"
+msgstr "%1$s: diesen Monat %2$s von %3$s · insgesamt %4$s von %5$s"
+
+msgid "%1$s: ammessi %2$s su %3$s"
+msgstr "%1$s: %2$s von %3$s aufgenommen"

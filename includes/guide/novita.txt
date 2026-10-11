@@ -3,6 +3,11 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.685 - 2026-10-11 (novità)
+- Modulo, posti a numero chiuso: «Posti in tutto» e «Posti al mese». Chi è ammesso si segna con «Ammetti» nella pagina Invii; sopra il modulo compare quanti posti restano (questo mese e in tutto), e quando gli ammessi arrivano al totale il modulo si chiude da solo. Lo stesso testo si mostra altrove con lo shortcode [olo_posti modulo="…"].
+- Modulo, «Controlla la pagina allegata»: per le candidature con una pagina esportata dal builder (file .json). All’invio controlla che sia una pagina vera, fatta con le tile ammesse e scritta da chi la manda; se è rimasta com’era all’inizio (tile appena trascinate, blocchi della libreria, temi) la richiesta non parte e il messaggio dice che cosa cambiare.
+- Pagina Invii: il filtro «Ammessi», il bollino sugli invii ammessi e la riga dei posti sotto il titolo.
+
 ## v1.4.684 - 2026-10-11 (novità)
 - Viewer 360°: nuovo «Sfondo del riquadro» (Stile) per l’oggetto girevole. Le foto prodotto su fondo bianco restavano un quadrato chiaro dentro il riquadro scuro: col bianco, o col colore del fondo delle foto, il prodotto si fonde col riquadro, come negli e-commerce. Vuoto resta lo scuro di sempre.
 

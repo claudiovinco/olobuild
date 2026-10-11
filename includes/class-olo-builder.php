@@ -902,6 +902,16 @@ class Olobuild_Builder {
                     'ip'           => 'IP',
                     'userAgent'    => 'User Agent',
                     'submittedAt'  => __( 'Inviato il', 'olobuild' ),
+                    // Posti a numero chiuso (1.4.685)
+                    'admit'        => __( 'Ammetti', 'olobuild' ),
+                    'unadmit'      => __( "Togli l'ammissione", 'olobuild' ),
+                    'admitted'     => __( 'Ammesso', 'olobuild' ),
+                    'admittedAt'   => __( 'Ammesso il', 'olobuild' ),
+                    'admitFailed'  => __( 'Ammissione non riuscita', 'olobuild' ),
+                    /* translators: 1: nome del modulo, 2: ammessi questo mese, 3: posti al mese, 4: ammessi in tutto, 5: posti in tutto */
+                    'postiMese'    => __( '%1$s: questo mese %2$s su %3$s · in tutto %4$s su %5$s', 'olobuild' ),
+                    /* translators: 1: nome del modulo, 2: ammessi, 3: posti in tutto */
+                    'postiTot'     => __( '%1$s: ammessi %2$s su %3$s', 'olobuild' ),
                 ],
             ] );
         }

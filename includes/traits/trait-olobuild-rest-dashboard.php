@@ -526,6 +526,7 @@ trait Olobuild_Rest_Dashboard_Trait {
         $params = [];
         if ( $status === 'unread' ) $where[] = 'read_status = 0';
         elseif ( $status === 'read' ) $where[] = 'read_status = 1';
+        elseif ( $status === 'admitted' ) $where[] = 'admitted_at IS NOT NULL';
         if ( $form_name ) {
             $where[] = 'form_name = %s';
             $params[] = $form_name;
@@ -543,7 +544,7 @@ trait Olobuild_Rest_Dashboard_Trait {
         // Risultato filtrato/paginato live → non cacheabile.
         // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $count_sql = "SELECT COUNT(*) FROM $tab WHERE $where_sql";
-        $list_sql  = "SELECT id, form_name, fields_data, submitted_at, ip_address, read_status
+        $list_sql  = "SELECT id, form_name, fields_data, submitted_at, ip_address, read_status, admitted_at
                       FROM $tab WHERE $where_sql
                       ORDER BY submitted_at DESC LIMIT %d OFFSET %d";
 
@@ -605,13 +606,25 @@ trait Olobuild_Rest_Dashboard_Trait {
             ];
         }, $forms ?: [] );
 
+        // Moduli a posti: ammessi in tutto e nel mese, per la riga dei posti e il pulsante «Ammetti».
+        $posti    = [];
+        $ammessi  = 0;
+        foreach ( Olobuild_Form_Submissions::moduli_a_posti() as $nome => $cfg ) {
+            $p          = Olobuild_Form_Submissions::posti( $nome, $cfg['totale'] ?? 0, $cfg['al_mese'] ?? 0 );
+            $p['name']  = $nome;
+            $posti[]    = $p;
+            $ammessi   += $p['ammessi'];
+        }
+
         return rest_ensure_response( [
-            'total'   => $total,
-            'unread'  => $unread,
-            'read'    => $total - $unread,
-            'last_7d' => $last_7d,
-            'prev_7d' => $prev_7d,
-            'forms'   => $forms,
+            'total'    => $total,
+            'unread'   => $unread,
+            'read'     => $total - $unread,
+            'last_7d'  => $last_7d,
+            'prev_7d'  => $prev_7d,
+            'forms'    => $forms,
+            'posti'    => $posti,
+            'admitted' => $ammessi,
         ] );
     }
 
@@ -648,6 +661,8 @@ trait Olobuild_Rest_Dashboard_Trait {
             'ip_address'   => $row['ip_address'],
             'user_agent'   => $row['user_agent'],
             'read_status'  => (int) $row['read_status'],
+            'admitted_at'  => $row['admitted_at'] ?? null,
+            'seats'        => isset( Olobuild_Form_Submissions::moduli_a_posti()[ $row['form_name'] ] ),
         ] );
     }
 
@@ -710,6 +725,10 @@ trait Olobuild_Rest_Dashboard_Trait {
         } elseif ( $action === 'mark_unread' ) {
             $wpdb->query( $wpdb->prepare( "UPDATE $tab SET read_status = 0 WHERE id IN ($placeholders)", $ids ) );
         // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, PluginCheck.Security.DirectDB.UnescapedDBParameter
+        } elseif ( $action === 'admit' || $action === 'unadmit' ) {
+            foreach ( $ids as $id ) {
+                Olobuild_Form_Submissions::set_admitted( $id, 'admit' === $action );
+            }
         } else {
             return new WP_Error( 'bad_action', __( 'Azione non valida', 'olobuild' ), [ 'status' => 400 ] );
         }
@@ -756,7 +775,28 @@ trait Olobuild_Rest_Dashboard_Trait {
             'time_diff'    => self::human_time_ago( $row['submitted_at'] ),
             'ip_address'   => $row['ip_address'],
             'read_status'  => (int) $row['read_status'],
+            'admitted_at'  => $row['admitted_at'] ?? null,
         ];
+    }
+
+    /**
+     * Ammette un invio di un modulo a posti, o toglie l'ammissione (POST con body {admitted: true|false}).
+     */
+    public function submissions_admit( $request ) {
+        global $wpdb;
+        $tab  = $this->submissions_table();
+        $id   = (int) $request['id'];
+        $body = $request->get_json_params();
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin; $id via prepare(%d), solo il nome tabella interpolato; lettura live.
+        $row = $wpdb->get_row( $wpdb->prepare( "SELECT id, admitted_at FROM $tab WHERE id = %d", $id ), ARRAY_A );
+        if ( ! $row ) {
+            return new WP_Error( 'not_found', __( 'Invio non trovato', 'olobuild' ), [ 'status' => 404 ] );
+        }
+        $ammesso = isset( $body['admitted'] ) ? (bool) $body['admitted'] : empty( $row['admitted_at'] );
+        Olobuild_Form_Submissions::set_admitted( $id, $ammesso );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- come sopra.
+        $dopo = $wpdb->get_var( $wpdb->prepare( "SELECT admitted_at FROM $tab WHERE id = %d", $id ) );
+        return rest_ensure_response( [ 'id' => $id, 'admitted_at' => $dopo ?: null ] );
     }
 
     /**

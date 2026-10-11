@@ -24879,3 +24879,108 @@ msgstr "Box background"
 
 msgid "Vuoto = il colore scuro della palette. Per le foto prodotto su fondo bianco scegli il bianco, o il colore del fondo delle foto: il prodotto si fonde col riquadro."
 msgstr "Empty = the dark palette color. For product photos on a white background pick white, or the background color of the photos: the product blends into the box."
+
+msgid "Posti a numero chiuso"
+msgstr "Limited places"
+
+msgid "Posti in tutto"
+msgstr "Total places"
+
+msgid "Per i programmi a numero chiuso: chi è ammesso si segna con «Ammetti» nella pagina Invii. Quando gli ammessi arrivano a questo numero, al posto del modulo compare il messaggio a modulo chiuso. 0 = spento."
+msgstr "For limited-entry programs: each accepted applicant is marked with «Admit» on the Form submissions page. When the admitted reach this number, the form is replaced by the closed-form message. 0 = off."
+
+msgid "Posti al mese"
+msgstr "Places per month"
+
+msgid "Quanti ammessi al massimo in un mese. Esauriti quelli del mese, il modulo resta aperto e avvisa che le richieste valgono per il mese dopo. 0 = nessun limite mensile."
+msgstr "The maximum number admitted in a month. Once the month’s places are taken, the form stays open and says that new requests count for the following month. 0 = no monthly limit."
+
+msgid "Testo dei posti"
+msgstr "Places text"
+
+msgid "Posti liberi questo mese: {mese} su {al_mese} · in tutto: {restano} su {totale}"
+msgstr "Places left this month: {mese} of {al_mese} · in total: {restano} of {totale}"
+
+msgid "Compare sopra il modulo. Vuoto = il testo automatico. Segnaposto: {mese} posti liberi questo mese, {al_mese} posti al mese, {restano} posti liberi in tutto, {totale} posti in tutto. Lo stesso testo si mostra altrove con lo shortcode [olo_posti modulo=\"nome del modulo\"]."
+msgstr "Shown above the form. Empty = the automatic text. Placeholders: {mese} places left this month, {al_mese} places per month, {restano} places left in total, {totale} total places. The same text can be shown elsewhere with the shortcode [olo_posti modulo=\"form name\"]."
+
+msgid "Testo a mese esaurito"
+msgstr "Text when the month is full"
+
+msgid "I posti di questo mese sono assegnati: le richieste che arrivano ora valgono per il mese prossimo."
+msgstr "This month’s places are taken: requests arriving now count for next month."
+
+msgid "Pagina allegata"
+msgstr "Attached page"
+
+msgid "Controlla la pagina allegata"
+msgstr "Check the attached page"
+
+msgid "Per le candidature con una pagina esportata dal builder (file .json, in un campo File upload). All’invio controlla che sia una pagina vera, fatta con le tile ammesse e scritta da chi la manda: se non lo è, la richiesta non parte e il messaggio dice che cosa cambiare. Se passa, chi valuta trova il riepilogo fra i campi dell’invio."
+msgstr "For applications with a page exported from the builder (.json file, in a File upload field). On sending, it checks that it is a real page, made with the allowed tiles and written by the sender: if not, the request is not sent and the message says what to change. If it passes, the reviewer finds the summary among the submission fields."
+
+msgid "Tile ammesse"
+msgstr "Allowed tiles"
+
+msgid "Solo quelle della sandbox"
+msgstr "Only the sandbox ones"
+
+msgid "Tile minime"
+msgstr "Minimum tiles"
+
+msgid "Sezioni minime"
+msgstr "Minimum sections"
+
+msgid "Testi propri minimi"
+msgstr "Minimum own text"
+
+msgid "La parte dei testi della pagina che non è rimasta com’era all’inizio: tile appena trascinate, blocchi della libreria, temi, pagina iniziale della sandbox. Un testo con una parola cambiata conta ancora come di partenza."
+msgstr "The share of the page’s text that is no longer as it started: freshly dropped tiles, library blocks, themes, the sandbox’s starting page. A text with one word changed still counts as starting text."
+
+msgid "Posti liberi: {restano} su {totale}"
+msgstr "Places left: {restano} of {totale}"
+
+msgid "Il file allegato non è una pagina esportata da OLObuild: scaricala dal builder con «Esporta template JSON»."
+msgstr "The attached file is not a page exported from OLObuild: download it from the builder with «Export template JSON»."
+
+msgid "La pagina contiene tile che nella sandbox non ci sono (%s): la pagina va fatta nella sandbox."
+msgstr "The page contains tiles that the sandbox does not have (%s): the page has to be made in the sandbox."
+
+msgid "La pagina è troppo corta: ha %1$d tile in %2$d sezioni, ne servono almeno %3$d in %4$d."
+msgstr "The page is too short: it has %1$d tiles in %2$d sections, at least %3$d in %4$d are needed."
+
+msgid "La pagina ha troppo poco testo: servono titoli e paragrafi scritti da te."
+msgstr "The page has too little text: it needs headings and paragraphs written by you."
+
+msgid "La pagina è ancora troppo vicina ai contenuti di partenza: solo il %1$d%% dei testi è tuo, ne serve almeno il %2$d%%. Riscrivi con parole tue i testi rimasti come arrivano, per esempio %3$s."
+msgstr "The page is still too close to the starting content: only %1$d%% of the text is yours, at least %2$d%% is needed. Rewrite in your own words the texts left as they came, for example %3$s."
+
+msgid "%1$d tile in %2$d sezioni, %3$d%% di testi propri"
+msgstr "%1$d tiles in %2$d sections, %3$d%% own text"
+
+msgid "Allega il file della pagina (.json) che hai scaricato dal builder."
+msgstr "Attach the page file (.json) you downloaded from the builder."
+
+msgid "Ammetti"
+msgstr "Admit"
+
+msgid "Togli l'ammissione"
+msgstr "Withdraw admission"
+
+msgid "Ammesso"
+msgstr "Admitted"
+
+msgid "Ammesso il"
+msgstr "Admitted on"
+
+msgid "Ammissione non riuscita"
+msgstr "Admission failed"
+
+msgid "Ammessi"
+msgstr "Admitted"
+
+msgid "%1$s: questo mese %2$s su %3$s · in tutto %4$s su %5$s"
+msgstr "%1$s: this month %2$s of %3$s · in total %4$s of %5$s"
+
+msgid "%1$s: ammessi %2$s su %3$s"
+msgstr "%1$s: %2$s of %3$s admitted"

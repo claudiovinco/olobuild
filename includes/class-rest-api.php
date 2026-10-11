@@ -754,6 +754,12 @@ class Olobuild_Rest_Api {
             'callback'            => [ $this, 'submissions_toggle_read' ],
             'permission_callback' => [ $this, 'check_submissions_permission' ],
         ] );
+        // Posti a numero chiuso: ammettere un invio (o togliere l'ammissione).
+        register_rest_route( $this->namespace, '/submissions/(?P<id>\d+)/admit', [
+            'methods'             => 'POST',
+            'callback'            => [ $this, 'submissions_admit' ],
+            'permission_callback' => [ $this, 'check_submissions_permission' ],
+        ] );
         register_rest_route( $this->namespace, '/submissions/bulk', [
             'methods'             => 'POST',
             'callback'            => [ $this, 'submissions_bulk' ],

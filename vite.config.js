@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import fs from 'fs';
+import { generaImpronte } from './scripts/impronte-testi.mjs';
 
 // Versione con cui il bundle viene compilato, letta dalla stessa riga che fa fede
 // a runtime (OLOBUILD_VERSION in olobuild.php). Serve a staleBundleGuard: se il
@@ -17,7 +18,12 @@ const pluginVersion = (() => {
 })();
 
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    // Impronte dei testi di partenza per il controllo della pagina allegata ai moduli (class-page-check.php):
+    // rigenerate a ogni build, così seguono libreria, temi e tile.
+    { name: 'olobuild-impronte-testi', apply: 'build', buildStart() { generaImpronte(__dirname); } },
+  ],
   // base relativa: i chunk ESM e gli import dinamici si risolvono rispetto all'URL
   // dell'entry (builder.js) via import.meta.url → portabile su qualsiasi path di install WP.
   base: './',

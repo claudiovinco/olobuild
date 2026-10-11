@@ -24876,3 +24876,108 @@ msgstr "Fondo del recuadro"
 
 msgid "Vuoto = il colore scuro della palette. Per le foto prodotto su fondo bianco scegli il bianco, o il colore del fondo delle foto: il prodotto si fonde col riquadro."
 msgstr "Vacío = el color oscuro de la paleta. Para fotos de producto sobre fondo blanco elige el blanco, o el color del fondo de las fotos: el producto se funde con el recuadro."
+
+msgid "Posti a numero chiuso"
+msgstr "Plazas limitadas"
+
+msgid "Posti in tutto"
+msgstr "Plazas en total"
+
+msgid "Per i programmi a numero chiuso: chi è ammesso si segna con «Ammetti» nella pagina Invii. Quando gli ammessi arrivano a questo numero, al posto del modulo compare il messaggio a modulo chiuso. 0 = spento."
+msgstr "Para programas con plazas limitadas: quien es admitido se marca con «Admitir» en la página Envíos de formularios. Cuando los admitidos llegan a este número, el formulario se sustituye por el mensaje de formulario cerrado. 0 = desactivado."
+
+msgid "Posti al mese"
+msgstr "Plazas al mes"
+
+msgid "Quanti ammessi al massimo in un mese. Esauriti quelli del mese, il modulo resta aperto e avvisa che le richieste valgono per il mese dopo. 0 = nessun limite mensile."
+msgstr "Cuántos admitidos como máximo en un mes. Agotadas las plazas del mes, el formulario sigue abierto y avisa de que las solicitudes valen para el mes siguiente. 0 = sin límite mensual."
+
+msgid "Testo dei posti"
+msgstr "Texto de las plazas"
+
+msgid "Posti liberi questo mese: {mese} su {al_mese} · in tutto: {restano} su {totale}"
+msgstr "Plazas libres este mes: {mese} de {al_mese} · en total: {restano} de {totale}"
+
+msgid "Compare sopra il modulo. Vuoto = il testo automatico. Segnaposto: {mese} posti liberi questo mese, {al_mese} posti al mese, {restano} posti liberi in tutto, {totale} posti in tutto. Lo stesso testo si mostra altrove con lo shortcode [olo_posti modulo=\"nome del modulo\"]."
+msgstr "Aparece encima del formulario. Vacío = el texto automático. Marcadores: {mese} plazas libres este mes, {al_mese} plazas al mes, {restano} plazas libres en total, {totale} plazas en total. El mismo texto se muestra en otro sitio con el shortcode [olo_posti modulo=\"nombre del formulario\"]."
+
+msgid "Testo a mese esaurito"
+msgstr "Texto con el mes completo"
+
+msgid "I posti di questo mese sono assegnati: le richieste che arrivano ora valgono per il mese prossimo."
+msgstr "Las plazas de este mes están asignadas: las solicitudes que llegan ahora valen para el mes que viene."
+
+msgid "Pagina allegata"
+msgstr "Página adjunta"
+
+msgid "Controlla la pagina allegata"
+msgstr "Comprobar la página adjunta"
+
+msgid "Per le candidature con una pagina esportata dal builder (file .json, in un campo File upload). All’invio controlla che sia una pagina vera, fatta con le tile ammesse e scritta da chi la manda: se non lo è, la richiesta non parte e il messaggio dice che cosa cambiare. Se passa, chi valuta trova il riepilogo fra i campi dell’invio."
+msgstr "Para candidaturas con una página exportada del builder (archivo .json, en un campo Subir archivo). Al enviar, comprueba que sea una página real, hecha con los tiles admitidos y escrita por quien la envía: si no lo es, la solicitud no sale y el mensaje dice qué cambiar. Si pasa, quien evalúa encuentra el resumen entre los campos del envío."
+
+msgid "Tile ammesse"
+msgstr "Tiles admitidos"
+
+msgid "Solo quelle della sandbox"
+msgstr "Solo los de la sandbox"
+
+msgid "Tile minime"
+msgstr "Tiles mínimos"
+
+msgid "Sezioni minime"
+msgstr "Secciones mínimas"
+
+msgid "Testi propri minimi"
+msgstr "Textos propios mínimos"
+
+msgid "La parte dei testi della pagina che non è rimasta com’era all’inizio: tile appena trascinate, blocchi della libreria, temi, pagina iniziale della sandbox. Un testo con una parola cambiata conta ancora come di partenza."
+msgstr "La parte de los textos de la página que ya no está como al principio: tiles recién arrastrados, bloques de la biblioteca, temas, página inicial de la sandbox. Un texto con una palabra cambiada sigue contando como texto de partida."
+
+msgid "Posti liberi: {restano} su {totale}"
+msgstr "Plazas libres: {restano} de {totale}"
+
+msgid "Il file allegato non è una pagina esportata da OLObuild: scaricala dal builder con «Esporta template JSON»."
+msgstr "El archivo adjunto no es una página exportada de OLObuild: descárgala desde el builder con «Exportar plantilla JSON»."
+
+msgid "La pagina contiene tile che nella sandbox non ci sono (%s): la pagina va fatta nella sandbox."
+msgstr "La página contiene tiles que no están en la sandbox (%s): la página tiene que hacerse en la sandbox."
+
+msgid "La pagina è troppo corta: ha %1$d tile in %2$d sezioni, ne servono almeno %3$d in %4$d."
+msgstr "La página es demasiado corta: tiene %1$d tiles en %2$d secciones, hacen falta al menos %3$d en %4$d."
+
+msgid "La pagina ha troppo poco testo: servono titoli e paragrafi scritti da te."
+msgstr "La página tiene muy poco texto: hacen falta títulos y párrafos escritos por ti."
+
+msgid "La pagina è ancora troppo vicina ai contenuti di partenza: solo il %1$d%% dei testi è tuo, ne serve almeno il %2$d%%. Riscrivi con parole tue i testi rimasti come arrivano, per esempio %3$s."
+msgstr "La página sigue demasiado cerca del contenido de partida: solo el %1$d%% de los textos es tuyo, hace falta al menos el %2$d%%. Reescribe con tus palabras los textos que siguen como llegaron, por ejemplo %3$s."
+
+msgid "%1$d tile in %2$d sezioni, %3$d%% di testi propri"
+msgstr "%1$d tiles en %2$d secciones, %3$d%% de textos propios"
+
+msgid "Allega il file della pagina (.json) che hai scaricato dal builder."
+msgstr "Adjunta el archivo de la página (.json) que has descargado del builder."
+
+msgid "Ammetti"
+msgstr "Admitir"
+
+msgid "Togli l'ammissione"
+msgstr "Quitar la admisión"
+
+msgid "Ammesso"
+msgstr "Admitido"
+
+msgid "Ammesso il"
+msgstr "Admitido el"
+
+msgid "Ammissione non riuscita"
+msgstr "No se pudo admitir"
+
+msgid "Ammessi"
+msgstr "Admitidos"
+
+msgid "%1$s: questo mese %2$s su %3$s · in tutto %4$s su %5$s"
+msgstr "%1$s: este mes %2$s de %3$s · en total %4$s de %5$s"
+
+msgid "%1$s: ammessi %2$s su %3$s"
+msgstr "%1$s: %2$s admitidos de %3$s"
