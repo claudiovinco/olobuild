@@ -134,8 +134,8 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                 $hh    = floatval( $parts[1] ?? 9 );
                 if ( $w <= 0 ) { $w = 16; }
                 if ( $hh <= 0 ) { $hh = 9; }
-                // px approssimativo basato su 1200px design width
-                $px = intval( 1200 / $w * $hh );
+                // px approssimativo sulla tela del computer (1440, come l'editor)
+                $px = intval( 1440 / $w * $hh );
                 return [ 'css' => 'aspect-ratio:' . $w . '/' . $hh . ';height:auto;', 'px' => $px ];
             default:
                 $v = absint( $h_obj['value'] ?: 600 );
@@ -254,7 +254,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             id="<?php echo esc_attr( $uid ); ?>"
             data-transition="<?php echo esc_attr( $transition ); ?>"
             data-proslider="<?php echo esc_attr( wp_json_encode( $config ) ); ?>"
-            data-design-width="1200"
+            data-design-width="1440"
             data-design-height="<?php echo (int) $height; ?>"
             data-height-mode="<?php echo esc_attr( $h_obj['mode'] ); ?>"
             data-height-value="<?php echo esc_attr( $h_obj['value'] ); ?>"
@@ -1130,14 +1130,29 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             $delay_map[ $original_idx ] = $order;
         }
 
-        $html = '';
+        // Per lettere: le lettere di una parola stanno in un gruppo che non si spezza. Ogni lettera è un
+        // inline-block e fra due inline-block il browser può andare a capo: «cadono» usciva «cado / no».
+        $html   = '';
+        $parola = '';
         foreach ( $units as $idx => $unit ) {
-            if ( $unit === ' ' || ( $split_mode === 'words' && preg_match( '/^\s+$/', $unit ) ) ) {
+            if ( preg_match( '/^\s+$/u', $unit ) ) {
+                if ( $parola !== '' ) {
+                    $html  .= '<span class="mps-word" style="display:inline-block;white-space:nowrap">' . $parola . '</span>';
+                    $parola = '';
+                }
                 $html .= $unit;
                 continue;
             }
             $delay_ms = $delay_map[ $idx ] * $stagger;
-            $html .= '<span class="mps-char" style="display:inline-block;animation-delay:' . $delay_ms . 'ms">' . esc_html( $unit ) . '</span>';
+            $span     = '<span class="mps-char" style="display:inline-block;animation-delay:' . $delay_ms . 'ms">' . esc_html( $unit ) . '</span>';
+            if ( $split_mode === 'chars' ) {
+                $parola .= $span;
+            } else {
+                $html .= $span;
+            }
+        }
+        if ( $parola !== '' ) {
+            $html .= '<span class="mps-word" style="display:inline-block;white-space:nowrap">' . $parola . '</span>';
         }
 
         return $html;
@@ -1218,10 +1233,20 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                 }
             }
 
-            // Layer responsive overrides
+            // Layer responsive overrides. Posizione e misura del livello sono IN LINEA (render_layer): senza
+            // !important nessuna regola per formato le batteva. La dimensione del carattere sta sull'elemento
+            // del testo (render_layer_content, in linea anche lei): la regola va lì, non sul contenitore.
+            // Valgono anche per i livelli globali, che prima restavano fuori.
+            $tutti_livelli = [];
             foreach ( $slides as $slide ) {
                 if ( empty( $slide['layers'] ) || ! is_array( $slide['layers'] ) ) continue;
-                foreach ( $slide['layers'] as $layer ) {
+                foreach ( $slide['layers'] as $layer ) { $tutti_livelli[] = $layer; }
+            }
+            foreach ( ( is_array( $settings['globalLayers'] ?? null ) ? $settings['globalLayers'] : [] ) as $layer ) {
+                $tutti_livelli[] = $layer;
+            }
+            {
+                foreach ( $tutti_livelli as $layer ) {
                     $resp = $layer['responsive'] ?? [];
                     $ov   = $resp[ $bp_name ] ?? null;
                     if ( ! $ov || ! is_array( $ov ) ) continue;
@@ -1236,32 +1261,33 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                         $props .= 'display:none!important;';
                     } else {
                         if ( isset( $ov['x'] ) ) {
-                            $props .= 'left:' . floatval( $ov['x'] ) . '%;';
+                            $props .= 'left:' . floatval( $ov['x'] ) . '%!important;';
                         }
                         if ( isset( $ov['y'] ) ) {
-                            $props .= 'top:' . floatval( $ov['y'] ) . '%;';
+                            $props .= 'top:' . floatval( $ov['y'] ) . '%!important;';
                         }
                         if ( isset( $ov['width'] ) ) {
                             if ( $ov['width'] === 'auto' ) {
-                                $props .= 'width:auto;';
+                                $props .= 'width:auto!important;';
                             } else {
-                                $props .= 'width:' . floatval( $ov['width'] ) . '%;';
+                                $props .= 'width:' . floatval( $ov['width'] ) . '%!important;';
                             }
                         }
                         if ( isset( $ov['height'] ) ) {
                             if ( $ov['height'] === 'auto' ) {
-                                $props .= 'height:auto;';
+                                $props .= 'height:auto!important;';
                             } else {
-                                $props .= 'height:' . floatval( $ov['height'] ) . '%;';
+                                $props .= 'height:' . floatval( $ov['height'] ) . '%!important;';
                             }
                         }
-                        if ( isset( $ov['fontSize'] ) ) {
-                            $props .= 'font-size:' . absint( $ov['fontSize'] ) . 'px!important;';
-                        }
                     }
+                    $fs_ov = ( isset( $ov['fontSize'] ) && ! ( isset( $ov['visible'] ) && $ov['visible'] === false ) ) ? absint( $ov['fontSize'] ) : 0;
 
                     if ( $props ) {
                         $rules .= '#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '{' . $props . '}';
+                    }
+                    if ( $fs_ov > 0 ) {
+                        $rules .= '#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '>:is(h1,h2,h3,h4,h5,h6,p,span,div,a){font-size:' . $fs_ov . 'px!important}';
                     }
                 }
             }

@@ -164,8 +164,25 @@ function initSlider(container) {
   if (total === 0) return;
 
   /* ── Proportional responsive scaling ─────────────────── */
-  var designW = parseInt(container.getAttribute('data-design-width')) || 1200;
+  // La tela di progetto è quella dell'editor per ogni formato (ProSliderEditor: computer 1440, notebook 1240,
+  // tablet 1024, telefono 640): i livelli si posano lì e la tela si scala sulla larghezza vera dello slider.
+  // Prima era 1200 per tutti: il computer non somigliava all'editor e sul telefono lo slider diventava una
+  // striscia bassa col testo di un terzo. Le soglie sono quelle delle regole per formato del PHP
+  // (generate_responsive_css, viewport).
+  var designW = parseInt(container.getAttribute('data-design-width')) || 1440;
   var designH = parseInt(container.getAttribute('data-design-height')) || 600;
+  var FORMATI = [
+    { key: 'mobile', max: 640, w: 640 },
+    { key: 'tablet', max: 1024, w: 1024 },
+    { key: 'notebook', max: 1240, w: 1240 },
+  ];
+  function formatoCorrente() {
+    var vw = window.innerWidth;
+    for (var i = 0; i < FORMATI.length; i++) {
+      if (vw <= FORMATI[i].max) return FORMATI[i];
+    }
+    return { key: 'desktop', max: Infinity, w: designW };
+  }
   var layerWraps = qsa(container, '.mps-layers-wrap');
 
   // Desktop height mode (vh, ratio, px)
@@ -192,7 +209,7 @@ function initSlider(container) {
     respHeights.sort(function (a, b) { return a.maxW - b.maxW; });
   }
 
-  function resolveHeightPx(mode, value, containerWidth) {
+  function resolveHeightPx(mode, value, containerWidth, formatW) {
     switch (mode) {
       case 'vh':
         return Math.round((parseInt(value) / 100) * window.innerHeight);
@@ -202,39 +219,30 @@ function initSlider(container) {
         var rh = parseFloat(rp[1]) || 9;
         return Math.round(containerWidth / rw * rh);
       default:
-        return parseInt(value) || 600;
+        // px = altezza sulla tela del formato, che si scala con la larghezza come nell'editor. Prima
+        // l'altezza di un formato era fissa e quella del computer scalava: le due regole non tornavano.
+        return Math.round((parseInt(value) || 600) * containerWidth / (formatW || designW));
     }
   }
 
-  function getResponsiveHeight(containerWidth) {
-    var vw = window.innerWidth;
+  // L'altezza di un formato è la sua, se impostata, se no quella del computer: come nell'editor
+  // (data[heightX] || data.height), senza ereditare dal formato più largo.
+  function altezzaFormato(f) {
     for (var i = 0; i < respHeights.length; i++) {
-      if (vw <= respHeights[i].maxW) {
-        return resolveHeightPx(respHeights[i].mode, respHeights[i].value, containerWidth);
-      }
+      if (respHeights[i].maxW === f.max) return respHeights[i];
     }
-    return 0; // no override
+    return { mode: desktopHeightMode, value: desktopHeightMode === 'px' ? designH : desktopHeightValue };
   }
 
   function updateLayerScale() {
     var cw = container.offsetWidth;
-    var scaleX = cw / designW;
-    var respH = getResponsiveHeight(cw);
-    var finalH;
-    if (respH > 0) {
-      // Responsive breakpoint: use resolved px directly
-      finalH = respH;
-    } else if (desktopHeightMode === 'vh') {
-      finalH = resolveHeightPx('vh', desktopHeightValue, cw);
-    } else if (desktopHeightMode === 'ratio') {
-      finalH = resolveHeightPx('ratio', desktopHeightValue, cw);
-    } else {
-      // Desktop px: proportional scaling
-      finalH = Math.round(designH * scaleX);
-    }
+    var f = formatoCorrente();
+    var scaleX = cw / f.w;
+    var h = altezzaFormato(f);
+    var finalH = resolveHeightPx(h.mode, h.value, cw, f.w);
     var layerDesignH = Math.round(finalH / scaleX);
     layerWraps.forEach(function (w) {
-      w.style.width = designW + 'px';
+      w.style.width = f.w + 'px';
       w.style.height = layerDesignH + 'px';
       w.style.transform = 'scale(' + scaleX + ')';
     });
@@ -513,7 +521,28 @@ function initSlider(container) {
 
   /* ── Keyboard ────────────────────────────────────────── */
   if (cfg.keyboard) {
+    // Le frecce muovono lo slider solo se è lui ad avere il fuoco o se è quello più visibile nella
+    // finestra, e mai mentre si scrive in un campo. Prima ascoltava tutto il documento: con più slider
+    // nella pagina una freccia li faceva scorrere tutti, e scorreva anche scrivendo in un modulo.
+    var visibile = function (el) {
+      var r = el.getBoundingClientRect();
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      return Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0)) / Math.max(1, Math.min(r.height, vh));
+    };
     document.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+      var t = e.target;
+      if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+      var dentro = container.contains(document.activeElement) && document.activeElement !== document.body;
+      if (!dentro) {
+        var mia = visibile(container);
+        if (mia < 0.5) return;
+        var tutti = qsa(document, '.olo-proslider');
+        for (var i = 0; i < tutti.length; i++) {
+          if (tutti[i] !== container && visibile(tutti[i]) > mia) return;
+        }
+      }
       if (e.key === 'ArrowLeft')  prev();
       if (e.key === 'ArrowRight') next();
     });

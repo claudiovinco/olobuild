@@ -3,6 +3,13 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.675 - 2026-10-11 (fix)
+- Pro Slider: sul sito i livelli si posano sulla stessa tela dell’editor per ogni formato (computer 1440, notebook 1240, tablet 1024, telefono 640). Prima il sito usava 1200 per tutti: il computer non somigliava all’editor e sul telefono lo slider diventava una striscia bassa col testo di un terzo.
+- Pro Slider: le regolazioni dei livelli per notebook, tablet e telefono (posizione, larghezza, altezza, dimensione del testo) agiscono davvero, anche sui livelli globali. L’altezza in px di un formato si scala con la larghezza, come nell’editor.
+- Pro Slider: l’animazione a lettere non va più a capo dentro una parola, e le frecce della tastiera muovono solo lo slider che si sta guardando (non tutti quelli della pagina, e non mentre si scrive in un campo).
+- Pro Slider, editor: le icone dei formati sono disegni, non più emoji.
+- Temi: Acqua Viva, Fenice Calcio e Maison Blanche tengono sul computer lo stesso aspetto e sul telefono hanno slider leggibili.
+
 ## v1.4.674 - 2026-10-11 (temi, fix)
 - Temi: Pagine Sparse ha una home più ricca. Un timbro che gira sull’angolo del video, due nastri incrociati con i generi e i servizi, copertine vere per i libri del mese, la citazione di Leopardi che si accende allo scorrimento, le stanze con la foto che compare al passaggio, i librai, la storia in cinque date con i numeri e le voci dei lettori sulla fascia in parallasse.
 - Testimonial: nel carosello si vede solo la slide corrente. Prima le slide vicine sbordavano ai lati della colonna.
