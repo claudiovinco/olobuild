@@ -1279,11 +1279,14 @@ async function deleteGlobal(globalId, name) {
   border: 1px solid #f1f5f9;
   border-radius: 8px;
   flex-shrink: 0;
-  transition: border-color 0.15s, background 0.15s;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
 }
+/* Il focus lo mostra TUTTA la casella, come la ricerca delle impostazioni nell'inspector:
+   bordo d'accento e alone morbido di 3 px. */
 .olo-sb-search:focus-within {
   border-color: var(--olo-ui-accent);
   background: #fff;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-ui-accent) 12%, transparent);
 }
 .olo-sb-search > svg {
   color: #94a3b8;
@@ -1299,6 +1302,14 @@ async function deleteGlobal(globalId, name) {
   color: #1e293b;
   padding: 2px 0;
   min-width: 0;
+}
+/* Il campo è annegato nella casella: niente anello suo. Senza questa regola vinceva quello di
+   forms.css di WordPress (input[type="text"]:focus, box-shadow 1,5 px blu) e dentro la casella
+   compariva un rettangolo blu. */
+.olo-sb-search input:focus {
+  border: 0;
+  outline: 0;
+  box-shadow: none;
 }
 .olo-sb-search input::placeholder { color: #94a3b8; }
 .olo-sb-search .ic-x {

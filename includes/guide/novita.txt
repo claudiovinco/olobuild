@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.666 - 2026-10-11 (fix)
+- Builder: la ricerca di Elementi e di Struttura al focus evidenzia tutta la casella, con il bordo d’accento e un alone morbido come la ricerca delle impostazioni. Prima dentro la casella compariva un rettangolo blu attorno al campo.
+
 ## v1.4.665 - 2026-10-11 (fix)
 - Temi: anche in Vinile Club il testo del bollino è più grande e corre su tutto il giro del cerchio.
 
