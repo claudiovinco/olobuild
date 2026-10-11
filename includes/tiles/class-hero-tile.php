@@ -375,7 +375,7 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             if ( 'mockup' === $module || 'chat' === $module ) : ?>
             .<?php echo $uid; ?> .olo-hero-winbar{display:flex;align-items:center;gap:7px;padding:13px 16px;border-bottom:1px solid <?php echo $mixc( 10 ); ?>;background:<?php echo $mixc( 7 ); ?>;}
             .<?php echo $uid; ?> .olo-hero-windot{width:11px;height:11px;border-radius:50%;background:<?php echo $mixc( 18 ); ?>;flex:none;}
-            .<?php echo $uid; ?> .olo-hero-winlabel{margin-left:13px;font-family:<?php echo $mono_ff; ?>;font-size:11px;opacity:.6;}
+            .<?php echo $uid; ?> .olo-hero-winlabel{margin-left:13px;font-family:<?php echo $mono_ff; ?>;font-size:11px;opacity:.85;}
             <?php endif; ?>
             <?php if ( 'mockup' === $module ) : ?>
             .<?php echo $uid; ?> .olo-hero-mockframe{max-width:1020px;margin:0 auto;border:1px solid <?php echo $mixc( 10 ); ?>;border-radius:16px 16px 0 0;background:<?php echo $mixc( 5 ); ?>;overflow:hidden;text-align:left;box-shadow:0 -10px 80px -20px <?php echo $mix( $accent_css, 0.4 ); ?>;}

@@ -73,7 +73,8 @@
    ogni layout. Prima lo si calcolava dallo scorrimento («Fatto / In corso / In arrivo»). */
 .olo-tlsuper .tl-st{display:inline-block;font:700 9px/1.4 var(--mono);letter-spacing:.07em;text-transform:uppercase;padding:3px 8px;border-radius:99px;width:max-content;white-space:nowrap;border:1px solid transparent;}
 .olo-tlsuper .tl-st[hidden]{display:none;}
-.olo-tlsuper .tl-st--done{color:var(--teal);background:color-mix(in srgb,var(--teal) 12%,transparent);border-color:color-mix(in srgb,var(--teal) 32%,transparent);}
+/* «Fatto»: il verde della palette su velo verde stava a 1,9:1 → stesso verde spinto verso il testo */
+.olo-tlsuper .tl-st--done{color:color-mix(in srgb,var(--teal) 60%,var(--olo-color-text,#1f2937));background:color-mix(in srgb,var(--teal) 12%,transparent);border-color:color-mix(in srgb,var(--teal) 32%,transparent);}
 .olo-tlsuper .tl-st--current{color:var(--cat,var(--red));background:color-mix(in srgb,var(--cat,var(--red)) 14%,transparent);border-color:var(--cat,var(--red));}
 .olo-tlsuper .tl-st--next{color:var(--mute);background:transparent;border-color:var(--border);border-style:dashed;}
 .olo-tlsuper .it.is-current .it-node{box-shadow:0 0 0 4px color-mix(in srgb,var(--cat) 22%,transparent);}
@@ -88,7 +89,7 @@
 .olo-tlsuper .it-media .bar{position:absolute;left:0;top:0;height:4px;width:100%;background:var(--cat);opacity:.9;z-index:1;}
 .olo-tlsuper .super.no-media .it-media{display:none;}
 .olo-tlsuper .it-body{padding:var(--tl-card-pad,13px 13px 14px);text-align:var(--tl-text-align,left);}
-.olo-tlsuper .it-tag{display:inline-block;font:700 9.5px var(--sans,inherit);letter-spacing:.06em;text-transform:uppercase;color:var(--tl-tag-color,var(--cat));background:color-mix(in srgb,var(--tl-tag-color,var(--cat)) 12%,#fff);border:1px solid color-mix(in srgb,var(--tl-tag-color,var(--cat)) 26%,#fff);border-radius:99px;padding:3px 9px;margin-bottom:9px;}
+.olo-tlsuper .it-tag{display:inline-block;font:700 9.5px var(--sans,inherit);letter-spacing:.06em;text-transform:uppercase;color:var(--tl-tag-color,var(--cat));background:color-mix(in srgb,var(--tl-tag-color,var(--cat)) 13%,transparent);border:1px solid color-mix(in srgb,var(--tl-tag-color,var(--cat)) 28%,transparent);border-radius:99px;padding:3px 9px;margin-bottom:9px;}
 .olo-tlsuper .it-card h4{font-family:var(--tl-title-family,inherit);font-size:var(--tl-title-size,18.5px);font-weight:var(--tl-title-weight,600);color:var(--tl-title-color,var(--navy));margin:0 0 6px;letter-spacing:-.01em;}
 .olo-tlsuper .it-card p{margin:0;font-family:var(--tl-text-family,inherit);font-size:var(--tl-text-size,14px);line-height:var(--tl-text-lh,1.5);color:var(--tl-text-color,var(--mute));}
 .olo-tlsuper .it-more{display:inline-flex;align-items:center;gap:5px;margin-top:12px;font:600 12.5px var(--sans,inherit);color:var(--cat);text-decoration:none;}
@@ -154,13 +155,18 @@
 @media(max-width:820px){.olo-tlsuper .it-card{transform-origin:left center!important;}}
 
 /* ════ NODE variants ════ */
-.olo-tlsuper .it-node .lab{display:none;font:700 11px var(--mono);}
+/* numero/anno nel nodo: il colore della categoria spinto verso il testo (un ambra o un giallo puri sul disco
+   chiaro stavano a 2:1); l'icona e l'anello restano nel colore pieno */
+.olo-tlsuper .it-node .lab{display:none;font:700 11px var(--mono);color:color-mix(in srgb,var(--cat) 60%,var(--olo-color-text,#1f2937));}
 .olo-tlsuper .super.node-dot .it-node>svg,.olo-tlsuper .super.node-dot .it-node>[uk-icon]{display:none;}
 .olo-tlsuper .super.node-dot .it-node .pip{display:block;}
 .olo-tlsuper .super.node-dot .it-node{width:18px;height:18px;}
 .olo-tlsuper .super.node-num .it-node>svg,.olo-tlsuper .super.node-num .it-node>[uk-icon],
 .olo-tlsuper .super.node-year .it-node>svg,.olo-tlsuper .super.node-year .it-node>[uk-icon]{display:none;}
 .olo-tlsuper .super.node-num .it-node .lab,.olo-tlsuper .super.node-year .it-node .lab{display:block;}
+/* nodo pieno (raggiunto) o timeline scure: il numero torna al colore del nodo */
+.olo-tlsuper .super.line-scroll .it.reached .it-node .lab{color:inherit;}
+.olo-tlsuper.t-night .it-node .lab,.olo-tlsuper.t-neon .it-node .lab,.olo-tlsuper.t-blue .it-node .lab{color:var(--cat);}
 .olo-tlsuper .super.node-year .it-node{width:48px;height:48px;font-size:13px;}
 
 /* ════ DENSITY ════ */
@@ -249,7 +255,7 @@
 .olo-tlsuper .nv-step.done .d{border-color:var(--tl-fill-from,var(--red));}
 .olo-tlsuper .nv-step.sel .d{background:var(--tl-fill-from,var(--red));border-color:var(--tl-fill-from,var(--red));transform:scale(1.5);box-shadow:0 0 0 5px color-mix(in srgb,var(--tl-fill-from,var(--red)) 16%,transparent);}
 .olo-tlsuper .nv-step.sel .l{color:var(--tl-yr-color,var(--red));}
-.olo-tlsuper .nv-step:hover .l{color:var(--navy);}
+.olo-tlsuper .nv-step:hover .l{color:var(--tl-title-color,var(--navy));}
 .olo-tlsuper .nv-stage{margin-top:28px;min-height:280px;}
 .olo-tlsuper .nv-post{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(26px,3.5vw,44px);align-items:center;transition:opacity .28s ease,transform .28s ease;}
 .olo-tlsuper .nv-post.out{opacity:0;transform:translateY(10px);}
@@ -268,15 +274,17 @@
 .olo-tlsuper .nv-post.nv-post--solo{grid-template-columns:1fr;}
 .olo-tlsuper .nv-media .nyr{position:absolute;right:14px;top:12px;font-family:var(--disp);font-size:30px;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.4);}
 .olo-tlsuper .nv-body .m{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-.olo-tlsuper .nv-body .tg{font:700 10px var(--sans,inherit);letter-spacing:.06em;text-transform:uppercase;color:var(--tl-tag-color,var(--red));background:color-mix(in srgb,var(--tl-tag-color,var(--red)) 12%,#fff);border:1px solid color-mix(in srgb,var(--tl-tag-color,var(--red)) 26%,#fff);border-radius:99px;padding:4px 11px;}
+.olo-tlsuper .nv-body .tg{font:700 10px var(--sans,inherit);letter-spacing:.06em;text-transform:uppercase;color:var(--tl-tag-color,var(--red));background:color-mix(in srgb,var(--tl-tag-color,var(--red)) 13%,transparent);border:1px solid color-mix(in srgb,var(--tl-tag-color,var(--red)) 28%,transparent);border-radius:99px;padding:4px 11px;}
 .olo-tlsuper .nv-body .dt{font:500 12.5px var(--mono);color:var(--tl-yr-color,var(--faint-text));}
 .olo-tlsuper .nv-body h2{font-family:var(--tl-title-family,var(--disp));font-weight:var(--tl-title-weight,400);font-size:var(--tl-title-size,clamp(28px,3.4vw,38px));line-height:1.04;letter-spacing:-.01em;color:var(--tl-title-color,var(--navy));margin:0 0 14px;}
 .olo-tlsuper .nv-body p{font-family:var(--tl-text-family,inherit);font-size:var(--tl-text-size,15px);line-height:var(--tl-text-lh,1.6);color:var(--tl-text-color,var(--mute));margin:0 0 18px;}
 .olo-tlsuper .nv-more{display:inline-flex;align-items:center;gap:7px;font:600 14px var(--sans,inherit);color:var(--red);text-decoration:none;}
 .olo-tlsuper .nv-more svg{width:16px;height:16px;transition:transform .18s;}
 .olo-tlsuper .nv-more:hover svg{transform:translateX(3px);}
+/* numero corrente, anno in hover e pillola dell'etichetta seguono il colore dei titoli e il fondo: il
+   navy fisso e la pillola su bianco sparivano sulle timeline scure (11 ott 2026) */
 .olo-tlsuper .nv-counter{margin-top:8px;text-align:center;font:500 12px var(--mono);color:var(--faint-text);}
-.olo-tlsuper .nv-counter b{color:var(--navy);}
+.olo-tlsuper .nv-counter b{color:var(--tl-title-color,var(--navy));}
 .olo-tlsuper.t-night .nv-arrow,.olo-tlsuper.t-neon .nv-arrow,.olo-tlsuper.t-blue .nv-arrow{background:#16203a;border-color:#26334d;color:#eaf0f8;}
 .olo-tlsuper.t-night .nv-viewport::before,.olo-tlsuper.t-neon .nv-viewport::before{background:linear-gradient(90deg,#0f1726,transparent);}
 .olo-tlsuper.t-night .nv-viewport::after,.olo-tlsuper.t-neon .nv-viewport::after{background:linear-gradient(270deg,#0f1726,transparent);}

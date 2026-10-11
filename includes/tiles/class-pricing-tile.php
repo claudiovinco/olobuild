@@ -321,10 +321,10 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
 
             /* Additional info */
             <?php // Dal colore del testo della card: il grigio tenue del tema spariva sulle card scure o colorate
-                  // (la «più scelta» in tinta piena). A 10 px non si leggeva comunque. 88% (era 72%): sulle card
+                  // (la «più scelta» in tinta piena). A 10 px non si leggeva comunque. 94% (era 72%): sulle card
                   // in tinta piena (blu, verde, petrolio) restava sotto 4,5:1, come il periodo a opacità .7. ?>
             .<?php echo $uid; ?> .olo-price-addinfo {
-                margin-top: 8px; font-size: 12px; color: color-mix(in srgb, <?php echo $fg; ?> 88%, transparent); text-align: center;
+                margin-top: 8px; font-size: 12px; color: color-mix(in srgb, <?php echo $fg; ?> 94%, transparent); text-align: center;
             }
 
             /* CTA */
@@ -389,7 +389,7 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
                 gap: 12px; margin-bottom: 20px; position: relative; z-index: 3;
             }
             .<?php echo $uid; ?> .olo-price-toggle-label {
-                font-size: 0.875em; font-weight: 500; opacity: 0.6; transition: opacity .3s ease; cursor: pointer;
+                font-size: 0.875em; font-weight: 500; opacity: 0.8; transition: opacity .3s ease; cursor: pointer;
             }
             .<?php echo $uid; ?> .olo-price-toggle-label.olo-active { opacity: 1; font-weight: 600; }
             .<?php echo $uid; ?> .olo-price-toggle {
@@ -456,8 +456,8 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
                     if ( $enable_toggle ) {
                         $toggle_attrs = ' data-monthly="' . esc_attr( $price_monthly ) . '" data-yearly="' . esc_attr( $price_yearly ) . '"';
                     }
-                    // Periodo («a settimana», «fino a 15 bambini») a opacità .9: a .7 sulle card in tinta
-                    // piena il bianco scendeva fra 3,4 e 4,1:1.
+                    // Periodo («a settimana», «fino a 15 bambini») a colore pieno: a opacità .7 sulle card
+                    // in tinta piena scendeva fra 3,4 e 4,1:1, e anche a .9 sulle tinte medie (terracotta).
                     ?>
                     <?php if ( $shape !== 'none' ) : ?>
                         <div class="olo-price-shape">
@@ -470,7 +470,7 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
                                 <span style="font-size:<?php echo (int) $cur_size; ?>px;opacity:.8;margin-left:2px"><?php echo $currency; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></span>
                             <?php endif; ?>
                         </div>
-                        <div class="olo-pricing-period" style="font-size:.875em;opacity:.9;margin-top:8px"<?php echo $period_attrs; ?>><?php echo $period; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attrs built with esc_attr(), period escaped with esc_html() at assignment above ?></div>
+                        <div class="olo-pricing-period" style="font-size:.875em;margin-top:8px"<?php echo $period_attrs; ?>><?php echo $period; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attrs built with esc_attr(), period escaped with esc_html() at assignment above ?></div>
                     <?php else : ?>
                         <?php echo $original_price_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above exclusively from esc_html() values ?>
                         <?php if ( $cur_pos === 'before' ) : ?>
@@ -480,7 +480,7 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
                         <?php if ( $cur_pos === 'after' ) : ?>
                             <span style="font-size:<?php echo (int) $cur_size; ?>px;opacity:.8;margin-left:2px"><?php echo $currency; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></span>
                         <?php endif; ?>
-                        <span class="olo-pricing-period" style="font-size:.875em;opacity:.9"<?php echo $period_attrs; ?>><?php echo $period; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attrs built with esc_attr(), period escaped with esc_html() at assignment above ?></span>
+                        <span class="olo-pricing-period" style="font-size:.875em"<?php echo $period_attrs; ?>><?php echo $period; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attrs built with esc_attr(), period escaped with esc_html() at assignment above ?></span>
                     <?php endif; ?>
                 </div>
 

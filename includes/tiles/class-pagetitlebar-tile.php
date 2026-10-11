@@ -142,7 +142,8 @@ class Olobuild_Pagetitlebar_Tile extends Olobuild_Tile_Base {
 
                 <?php if ( ! empty( $s['subtitle'] ) ) : ?>
                 <?php list( $pts_cls, $pts_data ) = $this->tfx_attrs( $s, 'subtitle', $s['subtitle'] ); ?>
-                <p class="olo-ptb-sub<?php echo $pts_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); colour via safe_color_css() or fixed var() fallback; size intval()-clamped ?>" style="color:<?php echo $sub_c; ?>;font-size:<?php echo (int) $sub_size; ?>px;margin:10px 0 0;opacity:.85"<?php echo $pts_data; ?>>
+                <?php // sottotitolo a colore pieno (era a opacità .85: sulle fasce colorate scendeva sotto 4,5:1) ?>
+                <p class="olo-ptb-sub<?php echo $pts_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); colour via safe_color_css() or fixed var() fallback; size intval()-clamped ?>" style="color:<?php echo $sub_c; ?>;font-size:<?php echo (int) $sub_size; ?>px;margin:10px 0 0"<?php echo $pts_data; ?>>
                     <?php echo esc_html( $s['subtitle'] ); ?>
                 </p>
                 <?php endif; ?>

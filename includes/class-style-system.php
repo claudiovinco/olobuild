@@ -1895,6 +1895,9 @@ class Olobuild_Style_System {
         $css .= "  padding: var(--olo-form-field-padding);\n";
         $css .= "  font-size: var(--olo-form-field-font-size);\n";
         $css .= "}\n";
+        // Tendina di UIkit a una riga: l'altezza è fissa (40 px) e la spaziatura verticale dei Moduli
+        // le lasciava 16 px per una riga di 25: «Scegli» usciva tagliato in basso (11 ott 2026).
+        $css .= ".olo-template :where(select.uk-select:not([multiple]):not([size])) { padding-top: 0; padding-bottom: 0; }\n";
         $css .= ".olo-template input:focus, .olo-template textarea:focus, .olo-template select:focus {\n";
         $css .= "  border-color: var(--olo-form-focus-border);\n";
         $css .= "  box-shadow: var(--olo-form-focus-shadow);\n";

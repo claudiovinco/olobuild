@@ -3,6 +3,13 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.643 - 2026-10-11 (fix)
+- Moduli: nelle tendine a una riga il testo («Scegli») non esce più tagliato in basso. La spaziatura verticale dello stile dei Moduli lasciava troppo poco spazio a un campo di altezza fissa.
+- Barra del titolo: il sottotitolo è a colore pieno. Prezzi: anche il periodo («a settimana»). Prima, schiariti, sulle fasce e sulle card colorate scendevano sotto la soglia di leggibilità.
+- Timeline a navigatore: il numero della voce, l'anno al passaggio del mouse e la pillola dell'etichetta seguono il colore dei titoli e il fondo, anche sulle timeline scure. Nella timeline a programma lo stato «Fatto» è di un verde più scuro, leggibile sul suo velo.
+- Altri testi piccoli più leggibili: etichette del conto alla rovescia («giorni», «ore»), pulsante «Copia» del Codice, scelta mensile/annuale dei Prezzi, titolo della finestra nelle aperture con chat o anteprima, etichette sulle foto della Pellicola (metà accento e metà chiaro, così l'accento resta libero per l'occhiello sul fondo della pagina).
+- Temi, seconda verifica completa (257 pagine, a riposo e al passaggio del mouse): segnaposto dei moduli più leggibili in tutti i temi; link di menu e piè di pagina leggibili anche al passaggio del mouse; rosso di Margini e grigio tenue di Acqua Viva e Passo Lento appena più scuri; sistemati alcuni colori che il primo giro aveva peggiorato (occhiello di Cromo, pulsante principale di Moneta, conto alla rovescia di Onde Corte, occhielli delle pellicole di Rewind e Sali d'Argento, «+N» delle gallerie, titoli delle categorie di Passo Lento). Un video di sottofondo anche in Parla Mondo (il cielo dal finestrino, sotto un velo chiaro).
+
 ## v1.4.642 - 2026-10-11 (fix)
 - Temi: tutti i 52 temi ricontrollati pagina per pagina, misurando il contrasto di ogni testo sul fondo vero. Corretti i testi poco leggibili: sezioni contatti, pulsanti e il loro passaggio del mouse, parole colorate dei titoli, briciole delle testate, numeri, prezzi, segnaposto dei moduli. In sei temi c'è un video di sottofondo (Fenice Calcio, Passo Lento, Vinile Club, Tostatura Nove, Orto Vivo, Riga di Comando).
 - Pulsanti, Prezzi, Modulo e Newsletter: se si sceglie lo sfondo al passaggio del mouse ma non il colore del testo, il testo prende da solo il chiaro o lo scuro della palette quando quello di sempre non si leggerebbe. Prima poteva sparire, per esempio chiaro su un giallo.

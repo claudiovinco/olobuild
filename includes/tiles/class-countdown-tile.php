@@ -162,7 +162,7 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .mcd-label {
                 font-size: <?php echo $lbl_fs; ?>px;
                 font-weight: <?php echo $lbl_fw; ?>;
-                opacity: 0.7;
+                opacity: 0.85;
                 <?php if ( ! $is_inline ) : ?>
                 margin-top: 4px;
                 text-transform: uppercase;
@@ -363,7 +363,7 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-cd-label {
                 font-size: <?php echo $lbl_fs; ?>px;
                 font-weight: <?php echo $lbl_fw; ?>;
-                opacity: 0.7;
+                opacity: 0.85;
                 margin-top: 4px;
                 text-transform: uppercase;
                 letter-spacing: 0.08em;
