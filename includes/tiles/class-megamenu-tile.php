@@ -2052,7 +2052,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             font-size: clamp(16px, 6.4vw, <?php echo max( 12, min( 40, absint( $s['logo_text_size'] ?? 19 ) ) ); ?>px) !important;
             overflow: hidden; text-overflow: ellipsis;
         }
-        .<?php echo $uid; ?> .olo-mm-mobile-logo .olo-mm-mark { margin-right: 10px; }
+        .<?php echo $uid; ?> .olo-mm-mobile-logo .olo-mm-mark { margin-right: calc(var(--olo-mm-mark-s) * .42); }
         .<?php echo $uid; ?> .olo-mm-hamburger,
         .<?php echo $uid; ?> .olo-mm-mobile-search,
         .<?php echo $uid; ?> .olo-mm-mobile-cta { flex-shrink: 0; }

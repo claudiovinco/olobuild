@@ -24861,3 +24861,9 @@ msgstr "Symbol — Form des Hintergrunds"
 
 msgid "Riquadro arrotondato"
 msgstr "Abgerundetes Quadrat"
+
+msgid "Colore frecce e punti"
+msgstr "Farbe von Pfeilen und Punkten"
+
+msgid "Vuoto = bianco, per le foto scure. Sulle slide chiare scegli un colore scuro: frecce, contorni e punti lo prendono, e il fondo delle frecce Minimal e Box diventa chiaro da sé."
+msgstr "Leer = Weiß, für dunkle Fotos. Auf hellen Slides eine dunkle Farbe wählen: Pfeile, Umrisse und Punkte übernehmen sie, und der Hintergrund der Pfeile Minimal und Box wird von selbst hell."

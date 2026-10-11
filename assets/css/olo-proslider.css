@@ -408,6 +408,45 @@
 .mps-dots-dash .olo-proslider-dot:hover { background: rgba(255,255,255,0.6); }
 .mps-dots-dash .olo-proslider-dot.mps-dot-active { background: #fff; }
 
+/* --- Colore frecce e punti (navColor → --mps-nav, classe mps-nav-colore) ---------------
+   Il bianco di frecce e punti sparisce sulle slide chiare. Col colore scelto glifo, contorni e punti lo prendono
+   (con le trasparenze di sempre) e il fondo pieno delle frecce Minimal e Box diventa bianco o nero, quello che
+   stacca dal colore (luminosità oklch del colore relativo; i browser che non lo conoscono tengono il fondo scuro).
+   Senza colore scelto nessuna di queste regole entra. */
+.mps-nav-colore > .olo-proslider-arrow { color: var(--mps-nav, #fff); }
+.mps-nav-colore > .mps-arrow-rounded { background: color-mix(in srgb, var(--mps-nav, #fff) 20%, transparent); }
+.mps-nav-colore > .mps-arrow-rounded:hover { background: color-mix(in srgb, var(--mps-nav, #fff) 35%, transparent); }
+.mps-nav-colore > .mps-arrow-outline { border-color: color-mix(in srgb, var(--mps-nav, #fff) 70%, transparent); }
+.mps-nav-colore > .mps-arrow-outline:hover { border-color: var(--mps-nav, #fff); background: color-mix(in srgb, var(--mps-nav, #fff) 10%, transparent); }
+@supports (color: oklch(from red clamp(0, (0.62 - l) * 1000, 1) 0 0 / 0.5)) {
+  .mps-nav-colore > .mps-arrow-minimal { background: oklch(from var(--mps-nav, #fff) clamp(0, (0.62 - l) * 1000, 1) 0 0 / 0.45); }
+  .mps-nav-colore > .mps-arrow-minimal:hover { background: oklch(from var(--mps-nav, #fff) clamp(0, (0.62 - l) * 1000, 1) 0 0 / 0.7); }
+  .mps-nav-colore > .mps-arrow-boxed { background: oklch(from var(--mps-nav, #fff) clamp(0, (0.62 - l) * 1000, 1) 0 0 / 0.6); }
+  .mps-nav-colore > .mps-arrow-boxed:hover { background: oklch(from var(--mps-nav, #fff) clamp(0, (0.62 - l) * 1000, 1) 0 0 / 0.85); }
+}
+.mps-nav-colore .mps-dots-circles .olo-proslider-dot { border-color: color-mix(in srgb, var(--mps-nav, #fff) 70%, transparent); }
+.mps-nav-colore .mps-dots-circles .olo-proslider-dot:hover { border-color: var(--mps-nav, #fff); }
+.mps-nav-colore .mps-dots-circles .olo-proslider-dot.mps-dot-active { background: var(--mps-nav, #fff); border-color: var(--mps-nav, #fff); }
+.mps-nav-colore .mps-dots-bars .olo-proslider-dot { background: color-mix(in srgb, var(--mps-nav, #fff) 40%, transparent); }
+.mps-nav-colore .mps-dots-bars .olo-proslider-dot:hover { background: color-mix(in srgb, var(--mps-nav, #fff) 70%, transparent); }
+.mps-nav-colore .mps-dots-bars .olo-proslider-dot.mps-dot-active { background: var(--mps-nav, #fff); }
+.mps-nav-colore .mps-dots-numbers .olo-proslider-dot { color: color-mix(in srgb, var(--mps-nav, #fff) 50%, transparent); }
+.mps-nav-colore .mps-dots-numbers .olo-proslider-dot:hover { color: color-mix(in srgb, var(--mps-nav, #fff) 80%, transparent); }
+.mps-nav-colore .mps-dots-numbers .olo-proslider-dot.mps-dot-active { color: var(--mps-nav, #fff); border-bottom-color: var(--mps-nav, #fff); }
+.mps-nav-colore .mps-dots-dash .olo-proslider-dot { background: color-mix(in srgb, var(--mps-nav, #fff) 30%, transparent); }
+.mps-nav-colore .mps-dots-dash .olo-proslider-dot:hover { background: color-mix(in srgb, var(--mps-nav, #fff) 60%, transparent); }
+.mps-nav-colore .mps-dots-dash .olo-proslider-dot.mps-dot-active { background: var(--mps-nav, #fff); }
+
+/* Focus da tastiera su frecce, punti, miniature e schede: anello nel colore della navigazione */
+.olo-proslider-arrow:focus-visible,
+.olo-proslider-dot:focus-visible,
+.olo-proslider-thumb:focus-visible {
+  outline: 2px solid var(--mps-nav, #fff);
+  outline-offset: 3px;
+  opacity: 1;
+}
+.olo-proslider-tab:focus-visible { outline: 2px solid var(--mps-nav, #fff); outline-offset: -4px; }
+
 /* --- Progress Bar ----------------------------------------- */
 .olo-proslider-progressbar {
   position: absolute;
@@ -973,12 +1012,12 @@
 .olo-proslider-tab:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.05); }
 .olo-proslider-tab.mps-tab-active {
   color: #fff;
-  border-bottom-color: var(--olo-color-primary, #6366f1);
+  border-bottom-color: var(--olo-color-primary, #e1474f);
 }
 /* Tabs position: top */
 .mps-tabs-top { top:0; bottom:auto; border-bottom: 1px solid rgba(255,255,255,0.15); }
 .mps-tabs-top .olo-proslider-tab { border-bottom:none; border-top: 3px solid transparent; }
-.mps-tabs-top .olo-proslider-tab.mps-tab-active { border-top-color: var(--olo-color-primary, #6366f1); }
+.mps-tabs-top .olo-proslider-tab.mps-tab-active { border-top-color: var(--olo-color-primary, #e1474f); }
 
 /* ═══════════════════════════════════════════════════════════
    Scroll-Fixed Timeline (pin slider during scroll)
@@ -998,6 +1037,10 @@
   .olo-proslider-arrow { width: 36px; height: 36px; font-size: 18px; }
   .olo-proslider-prev { left: 8px; }
   .olo-proslider-next { right: 8px; }
+  /* Sul telefono le frecce scendono negli angoli in basso, all'altezza dei punti: a metà altezza
+     coprivano l'inizio dei testi, che stanno a sinistra proprio dove sta la freccia. Con le miniature
+     sotto (che occupano il fondo) restano a metà. */
+  .olo-proslider:not(:has(+ .olo-proslider-thumbs)) > .olo-proslider-arrow { top: auto; bottom: 6px; transform: none; }
   .olo-proslider-dots { bottom: 10px; gap: 6px; }
   .olo-proslider-dot { width: 10px; height: 10px; }
   .olo-proslider-layer { font-size: 0.6em !important; }

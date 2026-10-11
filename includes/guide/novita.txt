@@ -3,6 +3,11 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.681 - 2026-10-11 (novità, fix)
+- Pro Slider: nuovo «Colore frecce e punti» (Stile, Navigazione). Sulle slide chiare frecce e punti bianchi sparivano: con un colore scuro si leggono, e il fondo delle frecce Minimal e Box diventa chiaro da sé. Vuoto resta il bianco di sempre.
+- Pro Slider: frecce, punti, miniature e schede mostrano il contorno quando ci si arriva con la tastiera.
+- Pro Slider: sul telefono le frecce scendono negli angoli in basso, ai lati dei punti, e non coprono più i testi a metà slide.
+
 ## v1.4.680 - 2026-10-11 (fix)
 - Pro Slider: l’altezza impostata per notebook, tablet e telefono si scala con lo schermo, come nell’editor. Prima restava fissa in pixel: un’altezza di 1060 per il telefono dava uno slider alto 1060 px su uno schermo di 390, con i testi tutti in alto e un vuoto sotto. Lo slider ha la sua altezza giusta già prima che la pagina finisca di caricarsi.
 - Pro Slider: i livelli globali (fermi su tutte le slide, come un nome o un pulsante) si vedono. Prima non entravano mai e restavano invisibili.

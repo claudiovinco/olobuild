@@ -240,6 +240,12 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             $css  = floatval( $s['carouselSideScale'] ?? 0.85 );
             $container_style .= '--mps-carousel-width:' . $cw . '%;--mps-carousel-gap:' . $cgap . 'px;--mps-carousel-side-scale:' . $css . ';';
         }
+        // Colore frecce e punti: il bianco di sempre sparisce sulle slide chiare (regole .mps-nav-colore nel CSS)
+        $nav_color = $this->safe_color_css( $s['navColor'] ?? '' );
+        if ( $nav_color ) {
+            $container_classes .= ' mps-nav-colore';
+            $container_style   .= '--mps-nav:' . $nav_color . ';';
+        }
         if ( $sizing === 'fullscreen' ) {
             $container_style .= 'height:100vh;';
         } else {
