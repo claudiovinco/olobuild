@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.661 - 2026-10-11 (fix)
+- Temi: le anteprime del selettore dei temi mostrano le home di oggi, con i loghi, le fasce in parallasse e le sezioni meno diluite.
+
 ## v1.4.660 - 2026-10-11 (fix)
 - Mega Menu: sul telefono il nome del logo si restringe insieme alla spaziatura fra le lettere, così anche i nomi spaziati stanno interi sugli schermi stretti.
 - Temi: in Tostatura Nove il bollino giallo «Ogni giovedì · Tostato a Trieste» torna sopra la foto (se ne vedeva solo metà).
