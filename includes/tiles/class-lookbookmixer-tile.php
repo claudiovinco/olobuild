@@ -127,7 +127,9 @@ class Olobuild_LookbookMixer_Tile extends Olobuild_Tile_Base {
                     $primo = $opts[0];
                     $col0  = $this->safe_color_css( $primo['color'] ?? '' ) ?: $col_fb;
                 ?>
-                    <div class="olo-lbmix__slot" data-slot data-idx="0" style="display:flex;align-items:center;gap:16px;background:<?php echo esc_attr( $slotbg ); ?>;border:1px solid <?php echo esc_attr( $line ); ?>;border-radius:14px;padding:13px 16px;">
+                    <div class="olo-lbmix__slot" data-slot data-idx="0" style="display:flex;align-items:center;gap:12px;background:<?php echo esc_attr( $slotbg ); ?>;border:1px solid <?php echo esc_attr( $line ); ?>;border-radius:14px;padding:12px 10px;">
+                        <?php // Frecce piccole ai due lati della riga (chevron SVG del set Lucide): prima stavano in coppia a destra, larghe 40 px, e col nome a capo coprivano il prezzo. L'area cliccabile resta 44 px (::before). ?>
+                        <button type="button" class="olo-lbmix__arrow" data-prev aria-label="<?php echo esc_attr( olobuild_t( 'Precedente' ) ); ?>" style="width:30px;height:30px;border-radius:50%;border:1px solid <?php echo esc_attr( $acc ); ?>;background:transparent;color:<?php echo esc_attr( $namec ); ?>;cursor:pointer;display:grid;place-items:center;padding:0;flex:none;position:relative;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6"/></svg></button>
                         <span class="olo-lbmix__sw" data-sw style="width:46px;height:46px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1.5px rgba(246,233,236,.3);transition:background .3s;background:<?php echo esc_attr( $col0 ); ?>;"></span>
                         <div class="olo-lbmix__meta" style="flex:1;min-width:0;">
                             <span class="olo-lbmix__step" style="font-family:<?php echo esc_attr( $mono ); ?>;font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:<?php echo esc_attr( $acc ); ?>;"><?php echo esc_html( $st ); ?></span>
@@ -136,11 +138,7 @@ class Olobuild_LookbookMixer_Tile extends Olobuild_Tile_Base {
                                 <span class="olo-lbmix__price" data-price style="font-family:<?php echo esc_attr( $mono ); ?>;font-weight:700;font-size:14px;color:<?php echo esc_attr( $pricec ); ?>;white-space:nowrap;"><?php echo esc_html( $this->importo( $primo['_prezzo'], $cur, $dec ) ); ?></span>
                             </div>
                         </div>
-                        <?php // Frecce SVG (chevron del set Lucide) al posto dei caratteri ‹ ›, che cambiavano peso e allineamento col font del tema. ?>
-                        <div class="olo-lbmix__nav" style="display:flex;gap:6px;flex:none;">
-                            <button type="button" data-prev aria-label="<?php echo esc_attr( olobuild_t( 'Precedente' ) ); ?>" style="width:40px;height:40px;border-radius:50%;border:1px solid <?php echo esc_attr( $acc ); ?>;background:transparent;color:<?php echo esc_attr( $namec ); ?>;cursor:pointer;display:grid;place-items:center;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6"/></svg></button>
-                            <button type="button" data-next aria-label="<?php echo esc_attr( olobuild_t( 'Successivo' ) ); ?>" style="width:40px;height:40px;border-radius:50%;border:1px solid <?php echo esc_attr( $acc ); ?>;background:transparent;color:<?php echo esc_attr( $namec ); ?>;cursor:pointer;display:grid;place-items:center;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"/></svg></button>
-                        </div>
+                        <button type="button" class="olo-lbmix__arrow" data-next aria-label="<?php echo esc_attr( olobuild_t( 'Successivo' ) ); ?>" style="width:30px;height:30px;border-radius:50%;border:1px solid <?php echo esc_attr( $acc ); ?>;background:transparent;color:<?php echo esc_attr( $namec ); ?>;cursor:pointer;display:grid;place-items:center;padding:0;flex:none;position:relative;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"/></svg></button>
                         <?php foreach ( $opts as $o ) : ?>
                             <span data-opt data-name="<?php echo esc_attr( $o['name'] ?? '' ); ?>" data-price="<?php echo esc_attr( (string) $o['_prezzo'] ); ?>" data-color="<?php echo esc_attr( $this->safe_color_css( $o['color'] ?? '' ) ?: $col_fb ); ?>" style="display:none;"></span>
                         <?php endforeach; ?>
@@ -157,8 +155,9 @@ class Olobuild_LookbookMixer_Tile extends Olobuild_Tile_Base {
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css colors); $uid is an internal generated class name. ?>
         <style>
             @media (max-width: 860px) { .<?php echo $uid; ?> { grid-template-columns: minmax(0, 1fr) !important; gap: 28px !important; } }
-            .<?php echo $uid; ?> .olo-lbmix__nav button:hover { background: <?php echo $acc; ?>; color: <?php echo $accink; ?>; }
-            .<?php echo $uid; ?> .olo-lbmix__nav button:focus-visible,
+            .<?php echo $uid; ?> .olo-lbmix__arrow:hover { background: <?php echo $acc; ?>; color: <?php echo $accink; ?>; }
+            .<?php echo $uid; ?> .olo-lbmix__arrow::before { content: ''; position: absolute; inset: -7px; border-radius: 50%; }
+            .<?php echo $uid; ?> .olo-lbmix__arrow:focus-visible,
             .<?php echo $uid; ?> .olo-lbmix__card a:focus-visible { outline: 2px solid <?php echo $acc; ?>; outline-offset: 2px; }
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
