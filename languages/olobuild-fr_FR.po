@@ -24981,3 +24981,69 @@ msgstr "%1$s : ce mois-ci %2$s sur %3$s · au total %4$s sur %5$s"
 
 msgid "%1$s: ammessi %2$s su %3$s"
 msgstr "%1$s : %2$s admis sur %3$s"
+
+msgid "Invio in corso…"
+msgstr "Envoi en cours…"
+
+msgid "Questo campo è obbligatorio"
+msgstr "Ce champ est obligatoire"
+
+msgid "Inserisci un indirizzo email valido"
+msgstr "Saisissez une adresse e-mail valide"
+
+msgid "Inserisci un URL valido"
+msgstr "Saisissez une URL valide"
+
+msgid "Inserisci un numero di telefono valido"
+msgstr "Saisissez un numéro de téléphone valide"
+
+msgid "Formato non valido"
+msgstr "Format non valide"
+
+msgid "Correggi i campi evidenziati."
+msgstr "Corrigez les champs mis en évidence."
+
+msgid "Devi accettare la Privacy Policy per procedere."
+msgstr "Vous devez accepter la politique de confidentialité pour continuer."
+
+msgid "Inviato!"
+msgstr "Envoyé !"
+
+msgid "Errore."
+msgstr "Erreur."
+
+msgid "Configurazione form non valida."
+msgstr "Configuration du formulaire non valide."
+
+msgid "Token non valido o scaduto. Ricarica la pagina e riprova."
+msgstr "Jeton non valide ou expiré. Rechargez la page et réessayez."
+
+msgid "Troppe richieste. Riprova tra qualche minuto."
+msgstr "Trop de demandes. Réessayez dans quelques minutes."
+
+msgid "Il modulo è chiuso: sono arrivati tutti gli invii previsti."
+msgstr "Le formulaire est fermé : tous les envois prévus sont arrivés."
+
+msgid "Verifica reCAPTCHA mancante. Ricarica la pagina."
+msgstr "Vérification reCAPTCHA manquante. Rechargez la page."
+
+msgid "Verifica anti-spam non superata. Riprova."
+msgstr "Vérification anti-spam échouée. Réessayez."
+
+msgid "Nessun dato ricevuto."
+msgstr "Aucune donnée reçue."
+
+msgid "Compila almeno un campo."
+msgstr "Remplissez au moins un champ."
+
+msgid "Messaggio inviato con successo!"
+msgstr "Message envoyé avec succès !"
+
+msgid "Errore durante l'invio. Riprova."
+msgstr "Erreur lors de l'envoi. Réessayez."
+
+msgid "Questo è un messaggio automatico da %s."
+msgstr "Ceci est un message automatique de %s."
+
+msgid "Non rispondere a questa email."
+msgstr "Ne répondez pas à cet e-mail."

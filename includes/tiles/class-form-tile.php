@@ -1011,7 +1011,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                             <?php echo esc_html( $s['submit_text'] ?: 'Invia' ); ?>
                             <?php if ( $btn_icon && $btn_icon_pos === 'right' ) : ?><?php echo $this->render_icon_html( $btn_icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html(): nome e attributi passati da esc_attr, SVG dalla libreria delle icone ?><?php endif; ?>
                         </span>
-                        <span class="olo-f-btn-loading"><span uk-spinner="ratio: 0.6"></span> Invio in corso…</span>
+                        <span class="olo-f-btn-loading"><span uk-spinner="ratio: 0.6"></span> <?php echo esc_html( olobuild_t( 'Invio in corso…' ) ); ?></span>
                     </button>
                 </div>
 
@@ -1042,6 +1042,16 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
             var recaptchaSiteKey = '<?php echo $has_recaptcha ? esc_js( $recaptcha_site_key ) : ''; ?>';
             var totalSteps = <?php echo (int) $step_count; ?>;
             var msgDataPrima = '<?php echo esc_js( olobuild_t( 'La data finale non può essere prima di quella iniziale' ) ); ?>';
+            // Messaggi di chi compila: nella lingua della pagina (OLOlang), non più fissi in italiano
+            var msgObbligatorio = '<?php echo esc_js( olobuild_t( 'Questo campo è obbligatorio' ) ); ?>';
+            var msgEmail = '<?php echo esc_js( olobuild_t( 'Inserisci un indirizzo email valido' ) ); ?>';
+            var msgUrl = '<?php echo esc_js( olobuild_t( 'Inserisci un URL valido' ) ); ?>';
+            var msgTelefono = '<?php echo esc_js( olobuild_t( 'Inserisci un numero di telefono valido' ) ); ?>';
+            var msgFormato = '<?php echo esc_js( olobuild_t( 'Formato non valido' ) ); ?>';
+            var msgCorreggi = '<?php echo esc_js( olobuild_t( 'Correggi i campi evidenziati.' ) ); ?>';
+            var msgPrivacy = '<?php echo esc_js( olobuild_t( 'Devi accettare la Privacy Policy per procedere.' ) ); ?>';
+            var msgInviato = '<?php echo esc_js( olobuild_t( 'Inviato!' ) ); ?>';
+            var msgErrore = '<?php echo esc_js( olobuild_t( 'Errore.' ) ); ?>';
 
             // ─── Date in coppia: la fine di un intervallo (arrivo → partenza, dal → al) non può cadere prima
             // dell'inizio. Il minimo della fine segue l'inizio, così il calendario spegne i giorni prima; se
@@ -1166,14 +1176,14 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                         el.classList.add('uk-form-danger');
                         var errMsg = '';
                         if (el.validity.valueMissing) {
-                            errMsg = 'Questo campo \u00e8 obbligatorio';
+                            errMsg = msgObbligatorio;
                         } else if (el.validity.typeMismatch) {
-                            if (el.type === 'email') { errMsg = 'Inserisci un indirizzo email valido'; }
-                            else if (el.type === 'url') { errMsg = 'Inserisci un URL valido'; }
-                            else { errMsg = 'Formato non valido'; }
+                            if (el.type === 'email') { errMsg = msgEmail; }
+                            else if (el.type === 'url') { errMsg = msgUrl; }
+                            else { errMsg = msgFormato; }
                         } else if (el.validity.patternMismatch) {
-                            if (el.type === 'tel') { errMsg = 'Inserisci un numero di telefono valido'; }
-                            else { errMsg = el.title || 'Formato non valido'; }
+                            if (el.type === 'tel') { errMsg = msgTelefono; }
+                            else { errMsg = el.title || msgFormato; }
                         } else if (el.validity.rangeUnderflow) {
                             if (el.hasAttribute('data-olo-dopo')) { errMsg = msgDataPrima; }
                         }
@@ -1386,12 +1396,12 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                 if (isMultistep) {
                     // Validate the last step (current step) which should be the final one
                     if (!validateContainer(pages[currentStep])) {
-                        showMsg(msgErr, 'Correggi i campi evidenziati.');
+                        showMsg(msgErr, msgCorreggi);
                         return;
                     }
                 } else {
                     if (!validateContainer(form)) {
-                        showMsg(msgErr, 'Correggi i campi evidenziati.');
+                        showMsg(msgErr, msgCorreggi);
                         return;
                     }
                 }
@@ -1400,7 +1410,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                 var privacyCheck = form.querySelector('[name="_olo_privacy_consent"]');
                 if (privacyCheck) {
                     if (!privacyCheck.checked) {
-                        showMsg(msgErr, 'Devi accettare la Privacy Policy per procedere.');
+                        showMsg(msgErr, msgPrivacy);
                         privacyCheck.focus();
                         return;
                     }
@@ -1461,7 +1471,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                     btn.disabled = false;
                     form.classList.remove('olo-f-sending');
                     if (data.success) {
-                        showMsg(msgOk, data.data.message || 'Inviato!');
+                        showMsg(msgOk, data.data.message || msgInviato);
                         form.reset();
                         form.querySelectorAll('.uk-form-danger').forEach(function(el) { el.classList.remove('uk-form-danger'); });
                         form.querySelectorAll('.olo-f-field-error').forEach(function(el) { el.remove(); });
@@ -1478,7 +1488,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                             setTimeout(function() { window.location.href = redirect; }, 1500);
                         }
                     } else {
-                        showMsg(msgErr, data.data.message || 'Errore.');
+                        showMsg(msgErr, data.data.message || msgErrore);
                     }
                 })
                 .catch(function() {

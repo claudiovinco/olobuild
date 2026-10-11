@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.687 - 2026-10-12 (fix)
+- Modulo: i messaggi per chi compila seguono la lingua della pagina (campo obbligatorio, email o telefono non validi, «Correggi i campi evidenziati», privacy da accettare, «Invio in corso…» sul pulsante), e così le risposte del server (troppe richieste, pagina da ricaricare, modulo chiuso, controllo anti-spam) e le due righe in fondo alla conferma automatica. Erano fissi in italiano anche nei siti tradotti con OLOlang; ora ci sono in inglese, tedesco, francese e spagnolo.
+
 ## v1.4.686 - 2026-10-11 (fix)
 - Modulo, «Controlla la pagina allegata»: i messaggi danno i numeri senza frasi sgrammaticate («tile: 2, minimo 8 · sezioni: 1, minimo 3» al posto di «2 tile in 1 sezioni», «testi tuoi: 0%» al posto di «solo il 0%»), anche nel riepilogo salvato con l’invio.
 

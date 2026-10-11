@@ -24981,3 +24981,69 @@ msgstr "%1$s: este mes %2$s de %3$s · en total %4$s de %5$s"
 
 msgid "%1$s: ammessi %2$s su %3$s"
 msgstr "%1$s: %2$s admitidos de %3$s"
+
+msgid "Invio in corso…"
+msgstr "Enviando…"
+
+msgid "Questo campo è obbligatorio"
+msgstr "Este campo es obligatorio"
+
+msgid "Inserisci un indirizzo email valido"
+msgstr "Introduce una dirección de email válida"
+
+msgid "Inserisci un URL valido"
+msgstr "Introduce una URL válida"
+
+msgid "Inserisci un numero di telefono valido"
+msgstr "Introduce un número de teléfono válido"
+
+msgid "Formato non valido"
+msgstr "Formato no válido"
+
+msgid "Correggi i campi evidenziati."
+msgstr "Corrige los campos resaltados."
+
+msgid "Devi accettare la Privacy Policy per procedere."
+msgstr "Debes aceptar la política de privacidad para continuar."
+
+msgid "Inviato!"
+msgstr "¡Enviado!"
+
+msgid "Errore."
+msgstr "Error."
+
+msgid "Configurazione form non valida."
+msgstr "Configuración del formulario no válida."
+
+msgid "Token non valido o scaduto. Ricarica la pagina e riprova."
+msgstr "Token no válido o caducado. Recarga la página y vuelve a intentarlo."
+
+msgid "Troppe richieste. Riprova tra qualche minuto."
+msgstr "Demasiadas solicitudes. Vuelve a intentarlo dentro de unos minutos."
+
+msgid "Il modulo è chiuso: sono arrivati tutti gli invii previsti."
+msgstr "El formulario está cerrado: han llegado todos los envíos previstos."
+
+msgid "Verifica reCAPTCHA mancante. Ricarica la pagina."
+msgstr "Falta la verificación reCAPTCHA. Recarga la página."
+
+msgid "Verifica anti-spam non superata. Riprova."
+msgstr "No se ha superado la verificación antispam. Vuelve a intentarlo."
+
+msgid "Nessun dato ricevuto."
+msgstr "No se ha recibido ningún dato."
+
+msgid "Compila almeno un campo."
+msgstr "Rellena al menos un campo."
+
+msgid "Messaggio inviato con successo!"
+msgstr "¡Mensaje enviado con éxito!"
+
+msgid "Errore durante l'invio. Riprova."
+msgstr "Error durante el envío. Vuelve a intentarlo."
+
+msgid "Questo è un messaggio automatico da %s."
+msgstr "Este es un mensaje automático de %s."
+
+msgid "Non rispondere a questa email."
+msgstr "No respondas a este email."

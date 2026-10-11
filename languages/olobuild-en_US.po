@@ -24984,3 +24984,69 @@ msgstr "%1$s: this month %2$s of %3$s · in total %4$s of %5$s"
 
 msgid "%1$s: ammessi %2$s su %3$s"
 msgstr "%1$s: %2$s of %3$s admitted"
+
+msgid "Invio in corso…"
+msgstr "Sending…"
+
+msgid "Questo campo è obbligatorio"
+msgstr "This field is required"
+
+msgid "Inserisci un indirizzo email valido"
+msgstr "Enter a valid email address"
+
+msgid "Inserisci un URL valido"
+msgstr "Enter a valid URL"
+
+msgid "Inserisci un numero di telefono valido"
+msgstr "Enter a valid phone number"
+
+msgid "Formato non valido"
+msgstr "Invalid format"
+
+msgid "Correggi i campi evidenziati."
+msgstr "Please correct the highlighted fields."
+
+msgid "Devi accettare la Privacy Policy per procedere."
+msgstr "You need to accept the Privacy Policy to continue."
+
+msgid "Inviato!"
+msgstr "Sent!"
+
+msgid "Errore."
+msgstr "Error."
+
+msgid "Configurazione form non valida."
+msgstr "Invalid form configuration."
+
+msgid "Token non valido o scaduto. Ricarica la pagina e riprova."
+msgstr "Invalid or expired token. Reload the page and try again."
+
+msgid "Troppe richieste. Riprova tra qualche minuto."
+msgstr "Too many requests. Try again in a few minutes."
+
+msgid "Il modulo è chiuso: sono arrivati tutti gli invii previsti."
+msgstr "The form is closed: all the expected submissions have arrived."
+
+msgid "Verifica reCAPTCHA mancante. Ricarica la pagina."
+msgstr "reCAPTCHA check missing. Reload the page."
+
+msgid "Verifica anti-spam non superata. Riprova."
+msgstr "Anti-spam check failed. Try again."
+
+msgid "Nessun dato ricevuto."
+msgstr "No data received."
+
+msgid "Compila almeno un campo."
+msgstr "Fill in at least one field."
+
+msgid "Messaggio inviato con successo!"
+msgstr "Message sent successfully!"
+
+msgid "Errore durante l'invio. Riprova."
+msgstr "Error while sending. Try again."
+
+msgid "Questo è un messaggio automatico da %s."
+msgstr "This is an automatic message from %s."
+
+msgid "Non rispondere a questa email."
+msgstr "Please do not reply to this email."

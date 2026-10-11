@@ -209,14 +209,14 @@ class Olobuild_Form_Handler {
         if ( $config_decoded === false ) {
             return new WP_REST_Response( [
                 'success' => false,
-                'data'    => [ 'message' => 'Configurazione form non valida.' ],
+                'data'    => [ 'message' => olobuild_t( 'Configurazione form non valida.' ) ],
             ], 400 );
         }
         $config = json_decode( $config_decoded, true );
         if ( ! is_array( $config ) ) {
             return new WP_REST_Response( [
                 'success' => false,
-                'data'    => [ 'message' => 'Configurazione form non valida.' ],
+                'data'    => [ 'message' => olobuild_t( 'Configurazione form non valida.' ) ],
             ], 400 );
         }
 
@@ -227,7 +227,7 @@ class Olobuild_Form_Handler {
         if ( ! $this->validate_token( $token, $config_raw ) ) {
             return new WP_REST_Response( [
                 'success' => false,
-                'data'    => [ 'message' => 'Token non valido o scaduto. Ricarica la pagina e riprova.' ],
+                'data'    => [ 'message' => olobuild_t( 'Token non valido o scaduto. Ricarica la pagina e riprova.' ) ],
             ], 403 );
         }
 
@@ -247,7 +247,7 @@ class Olobuild_Form_Handler {
                 // Silently pretend success to not tip off bots
                 return new WP_REST_Response( [
                     'success' => true,
-                    'data'    => [ 'message' => $config['success_message'] ?? 'Inviato!' ],
+                    'data'    => [ 'message' => $config['success_message'] ?? olobuild_t( 'Inviato!' ) ],
                 ], 200 );
             }
         }
@@ -258,7 +258,7 @@ class Olobuild_Form_Handler {
             // Bot filled in the hidden field — silently reject
             return new WP_REST_Response( [
                 'success' => true,
-                'data'    => [ 'message' => $config['success_message'] ?? 'Inviato!' ],
+                'data'    => [ 'message' => $config['success_message'] ?? olobuild_t( 'Inviato!' ) ],
             ], 200 );
         }
 
@@ -282,7 +282,7 @@ class Olobuild_Form_Handler {
                 if ( (int) get_transient( $key ) >= $limit ) {
                     return new WP_REST_Response( [
                         'success' => false,
-                        'data'    => [ 'message' => 'Troppe richieste. Riprova tra qualche minuto.' ],
+                        'data'    => [ 'message' => olobuild_t( 'Troppe richieste. Riprova tra qualche minuto.' ) ],
                     ], 429 );
                 }
             }
@@ -299,7 +299,7 @@ class Olobuild_Form_Handler {
             && Olobuild_Form_Submissions::count_for( $nome_modulo ) >= $limite ) {
             return new WP_REST_Response( [
                 'success' => false,
-                'data'    => [ 'message' => sanitize_text_field( $config['limit_message'] ?? '' ) ?: 'Il modulo è chiuso: sono arrivati tutti gli invii previsti.' ],
+                'data'    => [ 'message' => sanitize_text_field( $config['limit_message'] ?? '' ) ?: olobuild_t( 'Il modulo è chiuso: sono arrivati tutti gli invii previsti.' ) ],
             ], 409 );
         }
 
@@ -309,7 +309,7 @@ class Olobuild_Form_Handler {
             && Olobuild_Form_Submissions::admitted_for( $nome_modulo ) >= $posti_totale ) {
             return new WP_REST_Response( [
                 'success' => false,
-                'data'    => [ 'message' => sanitize_text_field( $config['limit_message'] ?? '' ) ?: 'Il modulo è chiuso: sono arrivati tutti gli invii previsti.' ],
+                'data'    => [ 'message' => sanitize_text_field( $config['limit_message'] ?? '' ) ?: olobuild_t( 'Il modulo è chiuso: sono arrivati tutti gli invii previsti.' ) ],
             ], 409 );
         }
 
@@ -321,7 +321,7 @@ class Olobuild_Form_Handler {
                 if ( empty( $recaptcha_token ) ) {
                     return new WP_REST_Response( [
                         'success' => false,
-                        'data'    => [ 'message' => 'Verifica reCAPTCHA mancante. Ricarica la pagina.' ],
+                        'data'    => [ 'message' => olobuild_t( 'Verifica reCAPTCHA mancante. Ricarica la pagina.' ) ],
                     ], 403 );
                 }
                 $verify = wp_remote_post( 'https://www.google.com/recaptcha/api/siteverify', [
@@ -336,7 +336,7 @@ class Olobuild_Form_Handler {
                     if ( empty( $body['success'] ) || ( isset( $body['score'] ) && $body['score'] < 0.5 ) ) {
                         return new WP_REST_Response( [
                             'success' => false,
-                            'data'    => [ 'message' => 'Verifica anti-spam non superata. Riprova.' ],
+                            'data'    => [ 'message' => olobuild_t( 'Verifica anti-spam non superata. Riprova.' ) ],
                         ], 403 );
                     }
                 }
@@ -348,7 +348,7 @@ class Olobuild_Form_Handler {
         if ( ! is_array( $fields ) || empty( $fields ) ) {
             return new WP_REST_Response( [
                 'success' => false,
-                'data'    => [ 'message' => 'Nessun dato ricevuto.' ],
+                'data'    => [ 'message' => olobuild_t( 'Nessun dato ricevuto.' ) ],
             ], 400 );
         }
 
@@ -555,7 +555,7 @@ class Olobuild_Form_Handler {
         if ( ! $has_content ) {
             return new WP_REST_Response( [
                 'success' => false,
-                'data'    => [ 'message' => 'Compila almeno un campo.' ],
+                'data'    => [ 'message' => olobuild_t( 'Compila almeno un campo.' ) ],
             ], 400 );
         }
 
@@ -639,8 +639,9 @@ class Olobuild_Form_Handler {
             if ( $ar_message ) {
                 $ar_body  = $ar_message . "\n\n";
                 $ar_body .= str_repeat( '─', 40 ) . "\n";
-                $ar_body .= "Questo è un messaggio automatico da {$site_name}.\n";
-                $ar_body .= "Non rispondere a questa email.\n";
+                /* translators: %s: nome del sito */
+                $ar_body .= sprintf( olobuild_t( 'Questo è un messaggio automatico da %s.' ), $site_name ) . "\n";
+                $ar_body .= olobuild_t( 'Non rispondere a questa email.' ) . "\n";
 
                 $ar_headers = [
                     'Content-Type: text/plain; charset=UTF-8',
@@ -703,7 +704,7 @@ class Olobuild_Form_Handler {
             return new WP_REST_Response( [
                 'success' => true,
                 'data'    => [
-                    'message'  => $config['success_message'] ?? 'Messaggio inviato con successo!',
+                    'message'  => $config['success_message'] ?? olobuild_t( 'Messaggio inviato con successo!' ),
                     'redirect' => ! empty( $config['redirect_url'] ) ? esc_url( $config['redirect_url'] ) : '',
                 ],
             ], 200 );
@@ -711,7 +712,7 @@ class Olobuild_Form_Handler {
 
         return new WP_REST_Response( [
             'success' => false,
-            'data'    => [ 'message' => $config['error_message'] ?? 'Errore durante l\'invio. Riprova.' ],
+            'data'    => [ 'message' => $config['error_message'] ?? olobuild_t( 'Errore durante l\'invio. Riprova.' ) ],
         ], 500 );
     }
 
