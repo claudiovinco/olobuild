@@ -1847,6 +1847,20 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-mm-fs-logo img {
             max-height: 40px; width: auto;
         }
+        /* Nome o logo del sito nei pannelli aperti, col colore del testo del pannello (quello del nome
+           nella barra è pensato per il fondo della barra: sul pannello spariva, scuro su scuro). Il nome
+           scala come nella barra e non spinge fuori il pulsante di chiusura. */
+        .<?php echo $uid; ?> .olo-mm-oc-header,
+        .<?php echo $uid; ?> .olo-mm-fs-header { gap: 16px; }
+        .<?php echo $uid; ?> .olo-mm-oc-logo,
+        .<?php echo $uid; ?> .olo-mm-fs-logo { display: flex; align-items: center; min-width: 0; color: <?php echo $mob_tc; ?>; text-decoration: none; }
+        .<?php echo $uid; ?> .olo-mm-oc-logo .olo-mm-logo-text,
+        .<?php echo $uid; ?> .olo-mm-fs-logo .olo-mm-logo-text {
+            font-size: clamp(16px, 6.4vw, <?php echo max( 12, min( 40, absint( $s['logo_text_size'] ?? 19 ) ) ); ?>px) !important;
+            overflow: hidden; text-overflow: ellipsis;
+        }
+        .<?php echo $uid; ?> .olo-mm-oc-actions,
+        .<?php echo $uid; ?> .olo-mm-fs-close { flex-shrink: 0; }
         .<?php echo $uid; ?> .olo-mm-fs-close {
             background: none; border: none; color: <?php echo $mob_tc; ?>; cursor: pointer; padding: 4px;
         }
@@ -2389,8 +2403,9 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             color: <?php echo esc_attr($s['topbar_text_color']); ?>;
             font-size: <?php echo absint($s['topbar_font_size']); ?>px;
             line-height: 1; position: relative; z-index: 100000;
-            width: 100vw;
-            margin-left: calc(-50vw + 50%);
+            /* parte visibile, senza la barra di scorrimento (--olo-scrollbar: vedi la testata in frontend.css) */
+            width: calc(100vw - var(--olo-scrollbar, 0px));
+            margin-left: calc(50% - 50vw + var(--olo-scrollbar, 0px) / 2);
             padding-left: max(<?php echo $bar_po['left']; ?>px, calc(50vw - 600px));
             padding-right: max(<?php echo $bar_po['right']; ?>px, calc(50vw - 600px));
             box-sizing: border-box;
@@ -2476,6 +2491,36 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             default:
                 return '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
         }
+    }
+
+    /**
+     * Nome o logo del sito in cima ai pannelli del menu aperto (laterale e a schermo intero): il logo per
+     * il telefono o il logo, se no il nome scritto, se no il nome del sito. Il colore lo dà il CSS del
+     * pannello: quello del nome nella barra è pensato per il fondo della barra, e sul pannello spariva.
+     *
+     * @param array  $s           Settings.
+     * @param string $classe      olo-mm-oc-logo | olo-mm-fs-logo.
+     * @param string $logo_link   URL già passato da esc_url().
+     * @param string $logo_img    URL già passato da esc_url() o ''.
+     * @param string $mob_logo    URL già passato da esc_url() o ''.
+     * @param string $logo_text   Testo del logo (raw).
+     * @param int    $logo_txt_sz Dimensione font già limitata.
+     * @return string HTML sicuro.
+     */
+    private function logo_pannello_html( $s, $classe, $logo_link, $logo_img, $mob_logo, $logo_text, $logo_txt_sz ) {
+        $classe = esc_attr( $classe );
+        $img    = $mob_logo ?: $logo_img;
+        if ( $img ) {
+            return '<a class="' . $classe . '" href="' . $logo_link . '"><img src="' . $img . '" alt="' . esc_attr( olobuild_t( 'Logo' ) ) . '" loading="lazy" /></a>';
+        }
+        if ( $logo_text !== '' ) {
+            return '<a class="' . $classe . ' olo-mm-logo--text" href="' . $logo_link . '">' . $this->logo_wordmark_html( $s, $logo_text, $logo_txt_sz ) . '</a>';
+        }
+        $nome = trim( wp_strip_all_tags( (string) get_bloginfo( 'name' ) ) );
+        if ( $nome !== '' ) {
+            return '<a class="' . $classe . ' olo-mm-logo--text" href="' . $logo_link . '"><span class="olo-mm-logo-text">' . esc_html( $nome ) . '</span></a>';
+        }
+        return '<div></div>';
     }
 
     /* ─── Logo wordmark (dot before | dot inline sul ".") ─── */
@@ -3127,11 +3172,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             <div class="olo-mm-overlay<?php echo $preview_open ? ' olo-mm-vis' : ''; ?>"></div>
             <div class="olo-mm-offcanvas<?php echo $preview_open ? ' olo-mm-vis' : ''; ?>" id="<?php echo esc_attr( $uid ); ?>-mpanel"<?php echo $swipe ? ' data-swipe="' . esc_attr( $swipe ) . '"' : ''; ?> role="dialog" aria-modal="true" aria-label="<?php echo esc_attr( olobuild_t( 'Menu' ) ); ?>" tabindex="-1">
                 <div class="olo-mm-oc-header">
-                    <?php if ( ! empty( $s['mobile_logo'] ) ) : ?>
-                        <div class="olo-mm-oc-logo"><img src="<?php echo esc_url( $s['mobile_logo'] ); ?>" alt="<?php echo esc_attr( olobuild_t( 'Logo' ) ); ?>" loading="lazy" /></div>
-                    <?php else : ?>
-                        <div></div>
-                    <?php endif; ?>
+                    <?php echo $this->logo_pannello_html( $s, 'olo-mm-oc-logo', $logo_link, $logo_img, $mob_logo, $logo_text, $logo_txt_sz ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by logo_pannello_html(): URLs esc_url()-escaped at assignment, texts esc_html/esc_attr ?>
                     <div class="olo-mm-oc-actions">
                         <?php $this->render_mobile_lang( $s, 'top', 'offcanvas' ); ?>
                         <?php if ( $mob_search ) : ?>
@@ -3223,11 +3264,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             <div class="olo-mm-<?php echo $mob_style_val === 'fullscreen' ? 'fullscreen' : 'dropdown-panel'; ?><?php echo ( $mob_style_val === 'fullscreen' && $mob_numbers ) ? ' olo-mm-numbered' : ''; ?>" id="<?php echo esc_attr( $uid ); ?>-mpanel" tabindex="-1"<?php echo 'fullscreen' === $mob_style_val ? ' role="dialog" aria-modal="true" aria-label="' . esc_attr( olobuild_t( 'Menu' ) ) . '"' : ''; ?>>
                 <?php if ( $mob_style_val === 'fullscreen' ) : ?>
                 <div class="olo-mm-fs-header">
-                    <?php if ( $logo_img ) : ?>
-                    <a class="olo-mm-fs-logo" href="<?php echo $logo_link; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- both URLs esc_url()-escaped at assignment above ?>"><img src="<?php echo $logo_img; ?>" alt="<?php echo esc_attr( olobuild_t( 'Logo' ) ); ?>" loading="lazy" /></a>
-                    <?php elseif ( $logo_text !== '' ) : ?>
-                    <a class="olo-mm-fs-logo olo-mm-logo--text" href="<?php echo $logo_link; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- URL esc_url()-escaped at assignment above; size absint-clamped; color esc_attr()-escaped inline ?>"<?php echo $logo_txt_c ? ' style="color:' . esc_attr( $logo_txt_c ) . '"' : ''; ?>><?php echo $this->logo_wordmark_html( $s, $logo_text, $logo_txt_sz ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by logo_wordmark_html() with esc_html/esc_attr/safe_color_css ?></a>
-                    <?php else : ?><div></div><?php endif; ?>
+                    <?php echo $this->logo_pannello_html( $s, 'olo-mm-fs-logo', $logo_link, $logo_img, $mob_logo, $logo_text, $logo_txt_sz ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by logo_pannello_html(): URLs esc_url()-escaped at assignment, texts esc_html/esc_attr ?>
                     <button class="olo-mm-fs-close" type="button" aria-label="<?php echo esc_attr( olobuild_t( 'Chiudi il menu' ) ); ?>">
                         <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>

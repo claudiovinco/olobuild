@@ -138,8 +138,12 @@ class Olobuild_Header_Integration {
         $inline_css .= '.olo-has-header main > .entry-content:first-child, .olo-has-header main > .wp-block-post-content:first-child, .olo-has-header main > .wp-block-group:first-child + .entry-content, .olo-has-header main > .wp-block-group:first-child + .wp-block-post-content { margin-top: 0 !important; margin-block-start: 0 !important; padding-top: 0 !important; padding-block-start: 0 !important; }';
         $inline_css .= '</style>';
 
+        // Larghezza vera della barra di scorrimento in --olo-scrollbar: la testata (frontend.css) è larga
+        // 100vw meno la barra invece di finirci sotto. Si aggiorna quando la barra compare o sparisce.
+        $barra_js = '<script>(function(){var d=document.documentElement;function m(){var s=window.innerWidth-d.clientWidth;d.style.setProperty("--olo-scrollbar",(s>0?s:0)+"px");}m();window.addEventListener("resize",m);if(window.ResizeObserver){new ResizeObserver(m).observe(d);}})();</script>';
+
         $mode_class = ( $header_mode === 'classic' ) ? 'olo-header-classic' : 'olo-header-overlay';
-        return '<header class="olo-site-header alignfull ' . $mode_class . '" role="banner">' . $inline_css . $inner_html . '</header>';
+        return '<header class="olo-site-header alignfull ' . $mode_class . '" role="banner">' . $barra_js . $inline_css . $inner_html . '</header>';
     }
 
     /**

@@ -228,8 +228,8 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ovt-cta{display:inline-flex;align-items:center;height:40px;padding:0 var(--olo-space-md);border-radius:var(--olo-btn-border-radius);background:var(--ovt-acc);color:var(--ovt-on);font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap;}
             .<?php echo $uid; ?> .ovt-palco{flex:1;min-height:0;display:flex;justify-content:center;align-items:stretch;overflow:hidden;}
             .<?php echo $uid; ?> .ovt-schermo{position:relative;width:100%;height:100%;transition:width .35s ease,margin .35s ease,border-radius .35s ease;}
-            .<?php echo $uid; ?> .ovt-schermo[data-vista="tablet"],.<?php echo $uid; ?> .ovt-schermo[data-vista="telefono"]{width:834px;max-width:calc(100% - 2 * var(--olo-space-md));height:calc(100% - 2 * var(--olo-space-md));margin:var(--olo-space-md) 0;border-radius:var(--olo-space-lg);overflow:hidden;box-shadow:0 0 0 10px color-mix(in srgb,currentColor 10%,transparent),var(--olo-shadow-large);}
-            .<?php echo $uid; ?> .ovt-schermo[data-vista="telefono"]{width:390px;border-radius:var(--olo-space-xl);}
+            .<?php echo $uid; ?> .ovt-schermo[data-vista="tablet"],.<?php echo $uid; ?> .ovt-schermo[data-vista="telefono"]{width:834px;max-width:calc(100% - 2 * var(--olo-space-md));height:calc(100% - 2 * var(--olo-space-md));margin:var(--olo-space-md) 0;border-radius:var(--olo-space-md);overflow:hidden;box-shadow:0 0 0 10px color-mix(in srgb,currentColor 10%,transparent),var(--olo-shadow-large);}
+            .<?php echo $uid; ?> .ovt-schermo[data-vista="telefono"]{width:390px;border-radius:var(--olo-space-lg);}
             .<?php echo $uid; ?> .ovt-schermo iframe{display:block;width:100%;height:100%;border:0;background:var(--olo-color-light);}
             .<?php echo $uid; ?> .ovt-attesa{position:absolute;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;gap:var(--olo-space-sm);font-size:14px;background:var(--olo-color-dark);}
             .<?php echo $uid; ?> .ovt-schermo.is-attesa .ovt-attesa{display:flex;}

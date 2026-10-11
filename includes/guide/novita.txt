@@ -3,6 +3,14 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.646 - 2026-10-11 (fix)
+- Testata: non passa più sotto la barra di scorrimento. Sui computer con la barra classica (Windows) era larga quanto tutta la finestra e la sua parte destra finiva sotto la barra: nelle anteprime per tablet e telefono l'hamburger restava a un pixel dal bordo, mentre a sinistra il logo aveva il suo margine. Ora è larga quanto la parte visibile e i due margini sono uguali.
+- Menu mobile aperto: in cima al pannello c'è sempre il nome o il logo del sito. Nel pannello laterale compariva solo un'immagine dedicata al telefono; nel pannello a schermo intero il nome c'era, ma col colore pensato per la barra, e sul fondo del pannello spesso non si vedeva. Ora prende il colore del testo del pannello.
+- Torcia degli effetti del mouse: rispetta la trasparenza del colore scelto. Un colore come «secondario al 28%» veniva disegnato pieno e la luce copriva il testo (Il Pozzo, Mezzanotte, Teatro Darsena).
+- CSS ottimizzato del sito: le formule con il «+» (calc) restano valide. L'ottimizzazione toglieva gli spazi attorno al segno e il browser scartava la regola: oltre alla testata, si perdevano alcune animazioni degli effetti con l'intensità regolabile.
+- Vetrina temi: la cornice delle anteprime per tablet e telefono è meno arrotondata.
+- Più leggibili il suggerimento del quiz della pagina OLOX, l'occhiello della Pellicola (accento appena scurito verso il testo), i numeri nei nodi della timeline con le categorie chiare e gli occhielli di Studio Quiete.
+
 ## v1.4.645 - 2026-10-11 (fix)
 - Menu a mega-pannello: il pulsante della testata senza un colore di hover scelto non schiarisce più sempre. Col testo chiaro ora si scurisce un poco, col testo scuro si schiarisce: prima, su arancio, rosso o verde petrolio, il testo bianco al passaggio del mouse scendeva sotto la soglia di leggibilità.
 - Carta da grattare: al passaggio del mouse il pulsante «Scopri» prende la tinta d'accento scurita verso il testo, non più l'accento puro, che sui fondi chiari non si leggeva.

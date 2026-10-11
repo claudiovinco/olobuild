@@ -634,7 +634,7 @@
 .oloxp .ans button.right{background:rgba(56,193,114,.18); border-color:var(--tutor); color:var(--tutor); font-weight:600;}
 .oloxp .ans button.wrong{background:rgba(232,69,61,.12); border-color:rgba(232,69,61,.6); color:#F0857F;}
 .oloxp .quiz .verdict{margin-top:18px; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.16em;
-  text-transform:uppercase; color:var(--faint); min-height:1.4em;}
+  text-transform:uppercase; color:var(--dim); min-height:1.4em;} /* --faint (34%) a 11 px non si leggeva: 2,99:1 */
 .oloxp .quiz .verdict b{color:var(--c);}
 .olox-confetti{position:fixed; width:8px; height:8px; z-index:99; pointer-events:none; border-radius:2px;}
 

@@ -25,10 +25,33 @@ class Olobuild_Asset_Optimizer {
         if ( empty( $css ) ) return '';
         // Remove comments
         $css = preg_replace( '!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css );
-        // Remove spaces around selectors/braces
-        $css = preg_replace( '/\s*([{}:;,>+~])\s*/', '$1', $css );
+        // Le funzioni matematiche restano come sono: dentro vogliono gli spazi attorno a + e -.
+        // «calc(-50vw+50%)» non è valido e il browser scartava la dichiarazione intera (la testata
+        // finiva sotto la barra di scorrimento, le scale degli effetti con l'intensità sparivano).
+        $mat = [];
+        $css = preg_replace_callback(
+            '/(?<![\w-])(?:calc|clamp|min|max)(\((?:[^()]++|(?1))*\))/i',
+            static function ( $m ) use ( &$mat ) {
+                $mat[] = preg_replace( '/\s+/', ' ', $m[0] );
+                return '__OLOMAT' . ( count( $mat ) - 1 ) . '__';
+            },
+            $css
+        );
+        // Spazi attorno a graffe, separatori e combinatori; attorno ai due punti solo DOPO:
+        // « :where(…)» è un discendente, e «.a :where(x)» diventava «.a:where(x)», un'altra regola.
+        $css = preg_replace( '/\s*([{};,>+~])\s*/', '$1', $css );
+        $css = preg_replace( '/:\s+/', ':', $css );
         // Remove remaining whitespace
         $css = preg_replace( '/\s+/', ' ', $css );
+        if ( $mat ) {
+            $css = preg_replace_callback(
+                '/__OLOMAT(\d+)__/',
+                static function ( $m ) use ( $mat ) {
+                    return $mat[ (int) $m[1] ];
+                },
+                $css
+            );
+        }
         // Trim
         return trim( $css );
     }

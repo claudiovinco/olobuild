@@ -157,7 +157,8 @@
 /* ════ NODE variants ════ */
 /* numero/anno nel nodo: il colore della categoria spinto verso il testo (un ambra o un giallo puri sul disco
    chiaro stavano a 2:1); l'icona e l'anello restano nel colore pieno */
-.olo-tlsuper .it-node .lab{display:none;font:700 11px var(--mono);color:color-mix(in srgb,var(--cat) 60%,var(--olo-color-text,#1f2937));}
+/* numero nel nodo: 11 px, con una categoria chiara (oro, giallo) al 60% restava sotto 4,5:1 sul bianco del nodo */
+.olo-tlsuper .it-node .lab{display:none;font:700 11px var(--mono);color:color-mix(in srgb,var(--cat) 50%,var(--olo-color-text,#1f2937));}
 .olo-tlsuper .super.node-dot .it-node>svg,.olo-tlsuper .super.node-dot .it-node>[uk-icon]{display:none;}
 .olo-tlsuper .super.node-dot .it-node .pip{display:block;}
 .olo-tlsuper .super.node-dot .it-node{width:18px;height:18px;}

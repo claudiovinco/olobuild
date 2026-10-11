@@ -176,7 +176,8 @@ class Olobuild_FilmReel_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ofr-scroller:focus-visible{outline:none;box-shadow:inset 0 0 0 3px color-mix(in srgb, <?php echo $accent; ?> 30%, transparent);}
             .<?php echo $uid; ?> .ofr-track{display:flex;gap:clamp(14px,1.8vw,26px);padding:26px <?php echo $pad; ?>;width:max-content;}
             .<?php echo $uid; ?> .ofr-pcap{flex:0 0 clamp(220px,22vw,300px);display:flex;flex-direction:column;justify-content:center;padding-right:20px;align-self:center;}
-            .<?php echo $uid; ?> .ofr-eyebrow{display:block;margin-bottom:16px;font-family:<?php echo $mono; ?>;font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;color:<?php echo $accent; ?>;}
+            <?php // occhiello a 12,5 px: l'accento puro su un fondo chiaro restava sotto 4,5:1 (rosso di Rewind 4,27), scurito appena verso il testo ?>
+            .<?php echo $uid; ?> .ofr-eyebrow{display:block;margin-bottom:16px;font-family:<?php echo $mono; ?>;font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;color:color-mix(in srgb, <?php echo $accent; ?> 85%, <?php echo $text; ?>);}
             .<?php echo $uid; ?> .ofr-pcap p{color:<?php echo $muted; ?>;font-size:15px;line-height:1.6;margin:14px 0 0;max-width:30ch;}
             .<?php echo $uid; ?> .ofr-item{position:relative;flex:0 0 clamp(260px,30vw,420px);height:clamp(320px,56vh,560px);overflow:hidden;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['border_color'] ?? null, [ 'width' => 1, 'color' => $line ] ) ); ?>background:<?php echo $itembg; ?>;scroll-snap-align:center;display:block;color:<?php echo $on_frame; ?>;text-decoration:none;}
             .<?php echo $uid; ?> .ofr-item.tall{height:clamp(360px,62vh,610px);align-self:flex-start;}

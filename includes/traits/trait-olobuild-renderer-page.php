@@ -1315,6 +1315,9 @@ trait Olobuild_Renderer_Page_Trait {
                page = su tutta la pagina (disco fisso nel body). Il colore, anche un token del tema, si risolve
                dove sta l'elemento: nel body i token del template non valgono. */
             (function(){
+              /* Colore del disco con la sua trasparenza: un tema che chiede color-mix(… 28%, transparent)
+                 vuole una luce al 28%. Prima l'alfa si perdeva e il disco era pieno: sul testo chiaro, in
+                 modalità schermo, copriva tutto (Il Pozzo, Mezzanotte, Teatro Darsena). */
               function rgbDi(host, colore){
                 var p = document.createElement('span');
                 p.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden;';
@@ -1322,12 +1325,12 @@ trait Olobuild_Renderer_Page_Trait {
                 host.appendChild(p);
                 var c = getComputedStyle(p).color || '';
                 host.removeChild(p);
-                var m = c.match(/rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)/);
-                if(m) return Math.round(+m[1]) + ',' + Math.round(+m[2]) + ',' + Math.round(+m[3]);
-                // Chrome dà i color-mix() calcolati come color(srgb r g b) con valori da 0 a 1
-                m = c.match(/color\(srgb\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)/);
-                if(m) return Math.round(m[1] * 255) + ',' + Math.round(m[2] * 255) + ',' + Math.round(m[3] * 255);
-                return '255,255,255';
+                var m = c.match(/rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:[,\s\/]+([\d.]+))?/);
+                if(m) return { rgb: Math.round(+m[1]) + ',' + Math.round(+m[2]) + ',' + Math.round(+m[3]), a: m[4] != null ? +m[4] : 1 };
+                // Chrome dà i color-mix() calcolati come color(srgb r g b / a) con valori da 0 a 1
+                m = c.match(/color\(srgb\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)(?:\s*\/\s*([\d.]+))?/);
+                if(m) return { rgb: Math.round(m[1] * 255) + ',' + Math.round(m[2] * 255) + ',' + Math.round(m[3] * 255), a: m[4] != null ? +m[4] : 1 };
+                return { rgb: '255,255,255', a: 1 };
               }
               function setup(host){
                 if(host.dataset.oloSpotReady) return;
@@ -1340,8 +1343,8 @@ trait Olobuild_Renderer_Page_Trait {
                 /* Falloff a curva: una rampa lineare verso transparent lascia un bordo
                    percepibile (Mach band) anche a morbidezza 100. Gli stop modulano
                    l'alpha del colore con coda dolce che arriva a 0 a derivata ~0. */
-                function grad(rgb){
-                  var C = function(a){ return 'rgba(' + rgb + ',' + a + ')'; };
+                function grad(col){
+                  var C = function(a){ return 'rgba(' + col.rgb + ',' + (Math.round(a * col.a * 1000) / 1000) + ')'; };
                   var core = inner / 100;
                   var exp = 2.0 + (soft / 100) * 1.8;
                   var stops = C(1) + ' 0%';

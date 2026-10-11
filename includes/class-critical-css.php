@@ -447,8 +447,9 @@ class Olobuild_Critical_CSS {
         $css = preg_replace( '/\/\*.*?\*\//s', '', $css );
         // Remove extra whitespace
         $css = preg_replace( '/\s+/', ' ', $css );
-        // Remove spaces around : ; { }
-        $css = preg_replace( '/\s*([:{;}])\s*/', '$1', $css );
+        // Remove spaces around ; { } e dopo i due punti (non prima: « :hover» è un discendente)
+        $css = preg_replace( '/\s*([{;}])\s*/', '$1', $css );
+        $css = preg_replace( '/:\s+/', ':', $css );
         // Remove trailing semicolons before }
         $css = str_replace( ';}', '}', $css );
 
