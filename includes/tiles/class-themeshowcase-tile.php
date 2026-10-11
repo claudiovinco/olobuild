@@ -88,6 +88,9 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             }
             $categoria = (string) ( $t['category'] ?? '' );
             $effetto   = (string) ( $t['zone'] ?? '' );
+            // Il bollino «Colori del tema» del visore: primario, fondo e secondario del tema.
+            $pal       = is_array( $t['pal'] ?? null ) ? array_values( $t['pal'] ) : [];
+            $propri    = array_map( 'sanitize_hex_color', [ (string) ( $t['accent'] ?? '' ), (string) ( $t['bg'] ?? '' ), (string) ( $pal[1] ?? '' ) ] );
             $temi[]    = [
                 'id'        => $id,
                 'nome'      => (string) ( $t['name'] ?? $id ),
@@ -97,6 +100,8 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 'anteprima' => (string) ( $t['screenshot'] ?? '' ),
                 'demo'      => Olobuild_Demo_Temi::indirizzo_tema( $id ),
                 'colore'    => (string) sanitize_hex_color( (string) ( $t['accent'] ?? '' ) ),
+                'scuro'     => empty( $t['light'] ),
+                'propri'    => 3 === count( array_filter( $propri ) ) ? implode( ',', $propri ) : '',
             ];
         }
         usort( $temi, function ( $a, $b ) {
@@ -176,6 +181,23 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
         $ico    = self::ICONE;
         $meta   = ( '' === $this->safe_color_css( $s['meta_color'] ) ? 'opacity:.65;' : '' ) . $this->tipografia( $s, 'meta' );
         $nome   = $this->tipografia( $s, 'name' );
+        // Bollini del visore: i colori del tema e le palette da provare (versione chiara e scura del bollino:
+        // il visore mostra quella che il tema aperto riceverà).
+        $palette = [];
+        if ( ! $builder ) {
+            foreach ( Olobuild_Demo_Temi::palette() as $pid => $p ) {
+                $v = [];
+                foreach ( [ 'chiaro' => 'c', 'scuro' => 's' ] as $versione => $sigla ) {
+                    foreach ( [ 'primary' => 1, 'background' => 2, 'accent' => 3 ] as $ruolo => $n ) {
+                        $hex = sanitize_hex_color( (string) ( $p[ $versione ][ $ruolo ] ?? '' ) );
+                        if ( $hex ) {
+                            $v[] = '--' . $sigla . $n . ':' . $hex;
+                        }
+                    }
+                }
+                $palette[ $pid ] = [ 'nome' => (string) $p['nome'], 'stile' => implode( ';', $v ) ];
+            }
+        }
 
         ob_start();
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS costruito solo da valori ripuliti qui sopra: colori dalla whitelist safe_color_css() con ripieghi var() fissi, bordo da Olobuild_Tile_Utils::border_css(), raggio da build_border_radius_css() (interi) o token, proporzione da proporzione() (interi), allineamento da mappa fissa, colonne e gap interi limitati, tipografia da tipografia() (whitelist e interi); $uid interno. Icone: SVG fissi della classe.
@@ -225,6 +247,17 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ovt-btn:hover{background:color-mix(in srgb,currentColor 12%,transparent);}
             .<?php echo $uid; ?> .ovt-btn[aria-pressed="true"]{background:var(--ovt-acc);color:var(--ovt-on);}
             .<?php echo $uid; ?> .ovt-btn:focus-visible,.<?php echo $uid; ?> .ovt-cta:focus-visible{outline:2px solid var(--ovt-acc);outline-offset:2px;}
+            .<?php echo $uid; ?> .ovt-barra.con-palette .ovt-titolo{flex:0 1 auto;}
+            .<?php echo $uid; ?> .ovt-palette{flex:1 1 auto;justify-content:center;gap:2px;min-width:0;}
+            .<?php echo $uid; ?> .ovt-pal{display:inline-grid;place-items:center;width:34px;height:34px;padding:0;border:0;border-radius:50%;background:transparent;color:inherit;cursor:pointer;--p1:var(--c1,var(--ovt-tema,currentColor));--p2:var(--c2,transparent);--p3:var(--c3,currentColor);}
+            .<?php echo $uid; ?> .ovt-palette.is-scuro .ovt-pal{--p1:var(--s1,var(--c1,currentColor));--p2:var(--s2,var(--c2,transparent));--p3:var(--s3,var(--c3,currentColor));}
+            .<?php echo $uid; ?> .ovt-pal i{display:block;width:22px;height:22px;border-radius:50%;background:conic-gradient(from -45deg,var(--p1) 0 50%,var(--p3) 0 75%,var(--p2) 0);box-shadow:0 0 0 1px color-mix(in srgb,currentColor 30%,transparent);transition:transform .15s ease,box-shadow .15s ease;}
+            .<?php echo $uid; ?> .ovt-pal:hover i{transform:scale(1.12);}
+            .<?php echo $uid; ?> .ovt-pal[aria-pressed="true"] i{box-shadow:0 0 0 2px var(--olo-color-dark),0 0 0 4px var(--ovt-acc);}
+            .<?php echo $uid; ?> .ovt-pal:focus-visible{outline:2px solid var(--ovt-acc);outline-offset:1px;}
+            @media (max-width:1199px){.<?php echo $uid; ?> .ovt-barra.con-palette{flex-wrap:wrap;row-gap:var(--olo-space-xs);}
+                .<?php echo $uid; ?> .ovt-barra.con-palette .ovt-titolo{flex:1 1 0;}
+                .<?php echo $uid; ?> .ovt-palette{order:9;flex:0 0 100%;}}
             .<?php echo $uid; ?> .ovt-cta{display:inline-flex;align-items:center;height:40px;padding:0 var(--olo-space-md);border-radius:var(--olo-btn-border-radius);background:var(--ovt-acc);color:var(--ovt-on);font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap;}
             .<?php echo $uid; ?> .ovt-palco{flex:1;min-height:0;display:flex;justify-content:center;align-items:stretch;overflow:hidden;}
             .<?php echo $uid; ?> .ovt-schermo{position:relative;width:100%;height:100%;transition:width .35s ease,margin .35s ease,border-radius .35s ease;}
@@ -239,7 +272,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 .<?php echo $uid; ?> .ovt-schermo[data-vista]{width:100%;max-width:none;height:100%;margin:0;border-radius:0;box-shadow:none;}
                 .<?php echo $uid; ?> .ovt-barra{gap:var(--olo-space-xs);padding:var(--olo-space-xs) var(--olo-space-sm);}}
             html.ovt-aperto,html.ovt-aperto body{overflow:hidden;}
-            @media (prefers-reduced-motion:reduce){.<?php echo $uid; ?> .ovt-card,.<?php echo $uid; ?> .ovt-anteprima img,.<?php echo $uid; ?> .ovt-schermo{transition:none;}
+            @media (prefers-reduced-motion:reduce){.<?php echo $uid; ?> .ovt-card,.<?php echo $uid; ?> .ovt-anteprima img,.<?php echo $uid; ?> .ovt-schermo,.<?php echo $uid; ?> .ovt-pal i{transition:none;}
                 .<?php echo $uid; ?> .ovt-card:hover .ovt-anteprima img{object-position:top center;}}
         </style>
         <div class="olo-themeshowcase <?php echo esc_attr( $uid ); ?>" data-ovt="<?php echo esc_attr( $uid ); ?>">
@@ -254,7 +287,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             <ul class="ovt-griglia" role="list">
                 <?php foreach ( $temi as $t ) : ?>
                 <li class="ovt-voce" data-cat="<?php echo esc_attr( $t['categoria'] ); ?>">
-                    <a class="ovt-card" href="<?php echo esc_url( $t['demo'] ); ?>" data-tema="<?php echo esc_attr( $t['id'] ); ?>" data-nome="<?php echo esc_attr( $t['nome'] ); ?>" data-categoria="<?php echo esc_attr( $t['etichetta'] ); ?>"<?php echo '' !== $t['colore'] ? ' style="--ovt-tema:' . esc_attr( $t['colore'] ) . '"' : ''; ?>>
+                    <a class="ovt-card" href="<?php echo esc_url( $t['demo'] ); ?>" data-tema="<?php echo esc_attr( $t['id'] ); ?>" data-nome="<?php echo esc_attr( $t['nome'] ); ?>" data-categoria="<?php echo esc_attr( $t['etichetta'] ); ?>"<?php echo $t['scuro'] ? ' data-scuro="1"' : ''; ?><?php echo '' !== $t['propri'] ? ' data-colori="' . esc_attr( $t['propri'] ) . '"' : ''; ?><?php echo '' !== $t['colore'] ? ' style="--ovt-tema:' . esc_attr( $t['colore'] ) . '"' : ''; ?>>
                         <span class="ovt-anteprima">
                             <?php if ( '' !== $t['anteprima'] ) : ?><img src="<?php echo esc_url( $t['anteprima'] ); ?>" alt="" loading="lazy" decoding="async" /><?php endif; ?>
                             <?php if ( ! empty( $s['show_zone'] ) && '' !== $t['effetto'] ) : ?><span class="ovt-effetto"><i></i><?php echo esc_html( $t['effetto'] ); ?></span><?php endif; ?>
@@ -270,8 +303,16 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             </ul>
             <?php if ( ! $builder ) : ?>
             <dialog class="ovt-visore" aria-labelledby="<?php echo esc_attr( $uid ); ?>-nome">
-                <div class="ovt-barra">
+                <div class="ovt-barra<?php echo $palette ? ' con-palette' : ''; ?>">
                     <div class="ovt-titolo"><strong id="<?php echo esc_attr( $uid ); ?>-nome" data-nome></strong><span data-categoria></span></div>
+                    <?php if ( $palette ) : ?>
+                    <div class="ovt-gruppo ovt-palette" role="group" aria-label="<?php echo esc_attr( olobuild_t( 'Colori da provare' ) ); ?>">
+                        <button type="button" class="ovt-pal" data-palette="" aria-pressed="true" aria-label="<?php echo esc_attr( olobuild_t( 'Colori del tema' ) ); ?>" title="<?php echo esc_attr( olobuild_t( 'Colori del tema' ) ); ?>"><i></i></button>
+                        <?php foreach ( $palette as $pid => $p ) : ?>
+                        <button type="button" class="ovt-pal" data-palette="<?php echo esc_attr( $pid ); ?>" aria-pressed="false" aria-label="<?php echo esc_attr( $p['nome'] ); ?>" title="<?php echo esc_attr( $p['nome'] ); ?>" style="<?php echo esc_attr( $p['stile'] ); ?>"><i></i></button>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php endif; ?>
                     <div class="ovt-gruppo ovt-dispositivi" role="group" aria-label="<?php echo esc_attr( olobuild_t( 'Vista' ) ); ?>">
                         <button type="button" class="ovt-btn" data-vista="computer" aria-pressed="true" aria-label="<?php echo esc_attr( olobuild_t( 'Computer' ) ); ?>" title="<?php echo esc_attr( olobuild_t( 'Computer' ) ); ?>"><?php echo $ico['computer']; ?></button>
                         <button type="button" class="ovt-btn" data-vista="tablet" aria-pressed="false" aria-label="<?php echo esc_attr( olobuild_t( 'Tablet' ) ); ?>" title="<?php echo esc_attr( olobuild_t( 'Tablet' ) ); ?>"><?php echo $ico['tablet']; ?></button>
@@ -330,6 +371,28 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             var schermo = visore.querySelector('.ovt-schermo'), frame = null;
             var nuova = visore.querySelector('[data-nuova]'), chiudiBtn = visore.querySelector('[data-chiudi]');
             var attuale = null, ritorno = null, spinto = false;
+            // Bollini dei colori: la palette scelta va all'indirizzo della demo (?palette=) e resta passando
+            // da un tema all'altro; alla chiusura si torna ai colori di ogni tema.
+            var gruppoPal = visore.querySelector('.ovt-palette'), scelta = '';
+            var bollini = gruppoPal ? [].slice.call(gruppoPal.querySelectorAll('[data-palette]')) : [];
+            function conPalette(url) {
+                var u = null;
+                try { u = new URL(url, location.href); } catch (err) { return url; }
+                if (scelta) { u.searchParams.set('palette', scelta); } else { u.searchParams.delete('palette'); }
+                return u.href;
+            }
+            function segnaPalette() {
+                bollini.forEach(function (b) { b.setAttribute('aria-pressed', (b.getAttribute('data-palette') || '') === scelta ? 'true' : 'false'); });
+            }
+            // Il primo bollino ha i colori del tema aperto; sui temi scuri gli altri mostrano la versione scura.
+            function bolliniDelTema(a) {
+                if (!gruppoPal) { return; }
+                gruppoPal.classList.toggle('is-scuro', a.getAttribute('data-scuro') === '1');
+                var c = (a.getAttribute('data-colori') || '').split(','), t = bollini[0];
+                if (t) {
+                    if (c.length === 3) { t.style.setProperty('--c1', c[0]); t.style.setProperty('--c2', c[1]); t.style.setProperty('--c3', c[2]); }
+                }
+            }
             // Un riquadro nuovo per ogni tema, tolto alla chiusura: un iframe che cambia pagina lascia la
             // sua voce nella cronologia della finestra, e «Indietro» lo riportava (nascosto) alla demo di prima.
             function riquadro(url, titolo) {
@@ -368,7 +431,8 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 attuale = a;
                 visore.querySelector('[data-nome]').textContent = a.getAttribute('data-nome');
                 visore.querySelector('[data-categoria]').textContent = a.getAttribute('data-categoria');
-                nuova.href = a.href;
+                bolliniDelTema(a);
+                nuova.href = conPalette(a.href);
                 if (!visore.open) {
                     ritorno = document.activeElement;
                     visore.showModal();
@@ -380,7 +444,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 else if (storia === 'sostituisci') { history.replaceState(history.state, '', segno); }
                 // Il riquadro nasce dopo la voce della cronologia: quella di prima non lo conosce.
                 schermo.classList.add('is-attesa');
-                riquadro(a.href, schermo.getAttribute('data-titolo').replace('%s', a.getAttribute('data-nome')));
+                riquadro(conPalette(a.href), schermo.getAttribute('data-titolo').replace('%s', a.getAttribute('data-nome')));
             }
             function chiudi(daStoria) {
                 if (!visore.open) { return; }
@@ -389,6 +453,8 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 schermo.classList.remove('is-attesa');
                 document.documentElement.classList.remove('ovt-aperto');
                 attuale = null;
+                scelta = '';
+                segnaPalette();
                 if (ritorno) { ritorno.focus(); }
                 if (!daStoria) {
                     // Indietro toglie la voce aggiunta all'apertura; aperto da un indirizzo col tema,
@@ -414,6 +480,19 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 b.addEventListener('click', function () {
                     schermo.setAttribute('data-vista', b.getAttribute('data-vista'));
                     [].slice.call(visore.querySelectorAll('button[data-vista]')).forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+                });
+            });
+            // Un bollino ricarica la pagina della demo che si sta guardando, coi colori scelti.
+            bollini.forEach(function (b) {
+                b.addEventListener('click', function () {
+                    scelta = b.getAttribute('data-palette') || '';
+                    segnaPalette();
+                    if (!attuale) { return; }
+                    var qui = attuale.href;
+                    try { if (frame) { qui = frame.contentWindow.location.href; } } catch (err) { qui = attuale.href; }
+                    if (qui.indexOf('http') !== 0) { qui = attuale.href; }
+                    schermo.classList.add('is-attesa');
+                    riquadro(conPalette(qui), frame ? frame.title : attuale.getAttribute('data-nome'));
                 });
             });
             [].slice.call(visore.querySelectorAll('[data-passo]')).forEach(function (b) {

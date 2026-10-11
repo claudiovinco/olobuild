@@ -16807,3 +16807,27 @@ msgstr "The slot colour laid over the background image: the higher, the more rea
 
 msgid "Colore pastiglia"
 msgstr "Swatch colour"
+
+msgid "Colori da provare"
+msgstr "Colours to try"
+
+msgid "Colori del tema"
+msgstr "Theme colours"
+
+msgid "Bosco"
+msgstr "Forest"
+
+msgid "Laguna"
+msgstr "Lagoon"
+
+msgid "Terracotta"
+msgstr "Terracotta"
+
+msgid "Lavanda"
+msgstr "Lavender"
+
+msgid "Grafite"
+msgstr "Graphite"
+
+msgid "Melograno"
+msgstr "Pomegranate"

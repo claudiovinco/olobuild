@@ -46,6 +46,12 @@ class Olobuild_Demo_Temi {
     /** @var bool Guardia: sanitize() di cursore e HUD rilegge l'opzione che stiamo filtrando. */
     private static $dentro = false;
 
+    /** Le palette da provare sui temi (bollini del visore della Vetrina temi): versione chiara e scura. */
+    const FILE_PALETTE = 'assets/data/palette-temi.json';
+
+    /** @var string La palette scelta nel visore (?palette=), '' = i colori del tema. */
+    private static $palette = '';
+
     /**
      * Chiamata all'avvio del plugin, prima che le classi leggano le opzioni: se la richiesta è una
      * demo, i filtri sono già al loro posto quando lo stile del sito verrebbe letto.
@@ -56,6 +62,7 @@ class Olobuild_Demo_Temi {
             return;
         }
         list( self::$tema, self::$pagina ) = $richiesta;
+        self::$palette = self::palette_richiesta();
 
         // Stile del tema al posto di quello del sito.
         add_filter( 'pre_option_olobuild_styles', [ __CLASS__, 'stili' ] );
@@ -219,7 +226,85 @@ class Olobuild_Demo_Temi {
         if ( isset( $pagine[ $chiave ] ) && empty( $pagine[ $chiave ]['set_as_homepage'] ) ) {
             $pezzo = self::slug( $chiave, $pagine[ $chiave ] ) . '/';
         }
-        return wp_make_link_relative( home_url( '/' . self::BASE . '/' . self::$tema['id'] . '/' . $pezzo ) );
+        return self::con_palette( wp_make_link_relative( home_url( '/' . self::BASE . '/' . self::$tema['id'] . '/' . $pezzo ) ) );
+    }
+
+    /* ── Palette da provare (bollini del visore) ── */
+
+    /**
+     * Le palette del file dati, id => [ nome, chiaro, scuro ]: ogni versione ha i 14 ruoli dei temi, coi
+     * contrasti che i temi danno per scontati (testo sul fondo e sul fondo tenue, testo sul colore dei
+     * pulsanti, primario e link leggibili sul fondo). Nomi non tradotti: si legge anche all'avvio, prima
+     * che le traduzioni si possano caricare.
+     */
+    private static function dati_palette() {
+        static $pal = null;
+        if ( null === $pal ) {
+            $pal  = [];
+            $file = OLOBUILD_PATH . self::FILE_PALETTE;
+            $json = is_readable( $file ) ? json_decode( (string) file_get_contents( $file ), true ) : null; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- file del plugin
+            foreach ( is_array( $json ) ? $json : [] as $id => $p ) {
+                if ( is_array( $p ) && isset( $p['chiaro'], $p['scuro'] ) && is_array( $p['chiaro'] ) && is_array( $p['scuro'] ) ) {
+                    $pal[ sanitize_key( (string) $id ) ] = $p;
+                }
+            }
+        }
+        return $pal;
+    }
+
+    /** Le palette per i bollini del visore, col nome nella lingua di chi guarda. */
+    public static function palette() {
+        $out = [];
+        foreach ( self::dati_palette() as $id => $p ) {
+            $p['nome']  = olobuild_t( (string) ( $p['nome'] ?? $id ) );
+            $out[ $id ] = $p;
+        }
+        return $out;
+    }
+
+    /** La palette chiesta con ?palette= (sola lettura, scelta fra quelle del file), '' se nessuna. */
+    private static function palette_richiesta() {
+        $id = isset( $_GET['palette'] ) ? sanitize_key( wp_unslash( $_GET['palette'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- sola lettura: sceglie una delle palette del file dati
+        return ( '' !== $id && isset( self::dati_palette()[ $id ] ) ) ? $id : '';
+    }
+
+    /** L'indirizzo con la palette scelta: navigando nella demo i colori provati restano. */
+    private static function con_palette( $url ) {
+        return '' === self::$palette ? $url : add_query_arg( 'palette', self::$palette, $url );
+    }
+
+    /**
+     * Fondo scuro? Come l'anteprima del selettore dei temi: chiaro sopra 0,55 di luminanza (i fondi dei temi
+     * sono esadecimali). Calcolata qui: l'opzione degli stili si può leggere prima delle utility delle tile.
+     */
+    private static function scuro( $colori ) {
+        $hex = ltrim( (string) sanitize_hex_color( (string) ( $colori['background'] ?? '' ) ), '#' );
+        if ( 3 === strlen( $hex ) ) {
+            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+        }
+        if ( 6 !== strlen( $hex ) ) {
+            return false;
+        }
+        $l = 0.0;
+        foreach ( [ 0 => 0.2126, 2 => 0.7152, 4 => 0.0722 ] as $i => $peso ) {
+            $v  = hexdec( substr( $hex, $i, 2 ) ) / 255;
+            $l += $peso * ( $v <= 0.03928 ? $v / 12.92 : pow( ( $v + 0.055 ) / 1.055, 2.4 ) );
+        }
+        return $l <= 0.55;
+    }
+
+    /**
+     * I colori del tema, con la palette scelta al posto dei 14 ruoli: la versione scura sui temi col fondo
+     * scuro, quella chiara sugli altri. Tutto il resto del tema (miscele, veli, sfumature) parte dai ruoli e
+     * li segue.
+     */
+    private static function colori() {
+        $c = (array) ( self::$tema['json']['styles']['colors'] ?? [] );
+        if ( '' !== self::$palette ) {
+            $p = self::dati_palette()[ self::$palette ];
+            $c = array_merge( $c, $p[ self::scuro( $c ) ? 'scuro' : 'chiaro' ] );
+        }
+        return $c;
     }
 
     /* ── Stile del tema ── */
@@ -229,10 +314,16 @@ class Olobuild_Demo_Temi {
         if ( ! is_array( $s ) ) {
             return $valore;
         }
+        // Palette provata nel visore: i ruoli del tema cambiano tutti insieme; nei temi con l'interruttore
+        // della modalità scura quella scura prende la versione scura della stessa palette.
+        $c  = self::colori();
+        $dc = (array) ( $s['dark_colors'] ?? [] );
+        if ( '' !== self::$palette ) {
+            $s['colors'] = $c;
+            $dc          = self::dati_palette()[ self::$palette ]['scuro'];
+        }
         // Come all'import (Olobuild_Style_System::sync_dark_palette): in modalità scura i ruoli del
         // marchio restano quelli del tema, non l'indaco di serie (vale per i temi con l'interruttore).
-        $c  = (array) ( $s['colors'] ?? [] );
-        $dc = (array) ( $s['dark_colors'] ?? [] );
         foreach ( [ 'primary', 'primary_contrast', 'secondary', 'secondary_contrast', 'link' ] as $k ) {
             if ( ! isset( $dc[ $k ] ) && isset( $c[ $k ] ) ) {
                 $dc[ $k ] = $c[ $k ];
@@ -623,7 +714,7 @@ class Olobuild_Demo_Temi {
         $host  = preg_quote( ( $parti['host'] ?? '' ) . ( isset( $parti['port'] ) ? ':' . $parti['port'] : '' ), '#' );
         $via   = preg_quote( rtrim( (string) ( $parti['path'] ?? '' ), '/' ), '#' );
         $casa  = '(?:https?://' . $host . $via . '/?|' . ( '' === $via ? '/' : $via . '/?' ) . ')';
-        $demo  = esc_url( self::indirizzo_tema( self::$tema['id'] ) );
+        $demo  = esc_url( self::con_palette( self::indirizzo_tema( self::$tema['id'] ) ) );
         return (string) preg_replace( '#(\shref=)(["\'])' . $casa . '\2#i', '$1$2' . $demo . '$2', (string) $html );
     }
 
@@ -666,7 +757,7 @@ class Olobuild_Demo_Temi {
      * pagina è più corta della finestra) e lo stile dell'avviso dei moduli.
      */
     public static function stile_pagina() {
-        $fondo = sanitize_hex_color( (string) ( self::$tema['json']['styles']['colors']['background'] ?? '' ) );
+        $fondo = sanitize_hex_color( (string) ( self::colori()['background'] ?? '' ) );
         $css   = $fondo ? 'body.olo-demo-tema{background-color:' . $fondo . '}' : '';
         $css  .= '.olo-template.olo-demo-avviso{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:2147483000;max-width:calc(100% - 32px);padding:12px 18px;border-radius:var(--olo-border-radius);background:var(--olo-color-dark);color:var(--olo-color-light);font:500 15px/1.45 var(--olo-font-family);box-shadow:var(--olo-shadow-large);text-align:center}';
         $css  .= '.olo-template.olo-demo-avviso[hidden]{display:none}';

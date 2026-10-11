@@ -24813,3 +24813,24 @@ msgstr "El color del slot extendido sobre la imagen de fondo: cuanto más alto, 
 
 msgid "Colore pastiglia"
 msgstr "Color de la muestra"
+
+msgid "Colori da provare"
+msgstr "Colores para probar"
+
+msgid "Bosco"
+msgstr "Bosque"
+
+msgid "Laguna"
+msgstr "Laguna"
+
+msgid "Terracotta"
+msgstr "Terracota"
+
+msgid "Lavanda"
+msgstr "Lavanda"
+
+msgid "Grafite"
+msgstr "Grafito"
+
+msgid "Melograno"
+msgstr "Granada"

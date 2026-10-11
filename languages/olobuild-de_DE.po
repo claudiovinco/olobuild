@@ -24813,3 +24813,24 @@ msgstr "Die Slot-Farbe über dem Hintergrundbild: je höher, desto lesbarer der 
 
 msgid "Colore pastiglia"
 msgstr "Farbe des Farbfelds"
+
+msgid "Colori da provare"
+msgstr "Farben zum Ausprobieren"
+
+msgid "Bosco"
+msgstr "Wald"
+
+msgid "Laguna"
+msgstr "Lagune"
+
+msgid "Terracotta"
+msgstr "Terrakotta"
+
+msgid "Lavanda"
+msgstr "Lavendel"
+
+msgid "Grafite"
+msgstr "Graphit"
+
+msgid "Melograno"
+msgstr "Granatapfel"
