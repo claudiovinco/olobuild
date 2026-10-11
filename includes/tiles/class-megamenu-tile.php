@@ -2052,6 +2052,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             font-size: clamp(16px, 6.4vw, <?php echo max( 12, min( 40, absint( $s['logo_text_size'] ?? 19 ) ) ); ?>px) !important;
             overflow: hidden; text-overflow: ellipsis;
         }
+        .<?php echo $uid; ?> .olo-mm-mobile-logo .olo-mm-mark { margin-right: 10px; }
         .<?php echo $uid; ?> .olo-mm-hamburger,
         .<?php echo $uid; ?> .olo-mm-mobile-search,
         .<?php echo $uid; ?> .olo-mm-mobile-cta { flex-shrink: 0; }
@@ -2524,7 +2525,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             return '<a class="' . $classe . '" href="' . $logo_link . '"><img src="' . $img . '" alt="' . esc_attr( olobuild_t( 'Logo' ) ) . '" loading="lazy" /></a>';
         }
         if ( $logo_text !== '' ) {
-            return '<a class="' . $classe . ' olo-mm-logo--text" href="' . $logo_link . '">' . $this->logo_mark_html( $s ) . $this->logo_wordmark_html( $s, $logo_text, $logo_txt_sz ) . '</a>';
+            return '<a class="' . $classe . ' olo-mm-logo--text" href="' . $logo_link . '">' . $this->logo_mark_html( $s, true ) . $this->logo_wordmark_html( $s, $logo_text, $logo_txt_sz ) . '</a>';
         }
         $nome = trim( wp_strip_all_tags( (string) get_bloginfo( 'name' ) ) );
         if ( $nome !== '' ) {
@@ -2539,11 +2540,14 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
      * Il simbolo scelto col selettore delle icone, prima del logo testuale: colore del tema (di serie il
      * primario), dimensione, spessore della linea e, se c'è uno sfondo, un cerchio o un riquadro attorno.
      * Coi colori dei ruoli segue le palette e la modalità scura; '' = nessun simbolo (come prima).
+     * Nei pannelli aperti il simbolo senza sfondo prende il colore del testo del pannello, come il nome:
+     * il suo colore è pensato per la barra e sul fondo del pannello poteva sparire (blu su blu).
      *
-     * @param array $s Settings.
+     * @param array $s        Settings.
+     * @param bool  $pannello Logo di un pannello aperto (menu laterale o a tutto schermo).
      * @return string HTML sicuro.
      */
-    private function logo_mark_html( $s ) {
+    private function logo_mark_html( $s, $pannello = false ) {
         $nome = trim( (string) ( $s['logo_mark'] ?? '' ) );
         if ( '' === $nome || '' === trim( (string) ( $s['logo_text'] ?? '' ) ) ) {
             return '';
@@ -2556,6 +2560,9 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         $colore  = $this->safe_color_css( $s['logo_mark_color'] ?? '' ) ?: 'var(--olo-color-primary, currentColor)';
         $spessore = is_numeric( $s['logo_mark_stroke'] ?? '' ) ? max( 0.5, min( 4, (float) $s['logo_mark_stroke'] ) ) : 2;
         $fondo   = $this->safe_color_css( $s['logo_mark_bg'] ?? '' );
+        if ( $pannello && ! $fondo ) {
+            $colore = 'currentColor';
+        }
         $stile   = 'color:' . $colore . ';--olo-mm-mark-s:' . $misura . 'px;--olo-mm-mark-w:' . $spessore;
         if ( $fondo ) {
             $forma  = (string) ( $s['logo_mark_shape'] ?? 'circle' );
@@ -3047,7 +3054,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                 <?php // Mobile logo (shown only on mobile via CSS) ?>
                 <?php if ( $mob_bar_logo ) : ?>
                 <a class="olo-mm-mobile-logo" href="<?php echo $logo_link; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url()-escaped at assignment above ?>">
-                    <?php if ( $mob_logo ?: $logo_img ) : ?><img src="<?php echo $mob_logo ?: $logo_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- both URLs esc_url()-escaped at assignment above; size absint-clamped, color esc_attr()-escaped inline ?>" alt="<?php echo esc_attr( olobuild_t( 'Logo' ) ); ?>"><?php elseif ( $logo_text !== '' ) : ?><?php echo $this->logo_wordmark_html( $s, $logo_text, $logo_txt_sz, $logo_txt_c ? ';color:' . esc_attr( $logo_txt_c ) : '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by logo_wordmark_html() with esc_html/esc_attr/safe_color_css ?><?php endif; ?>
+                    <?php if ( $mob_logo ?: $logo_img ) : ?><img src="<?php echo $mob_logo ?: $logo_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- both URLs esc_url()-escaped at assignment above; size absint-clamped, color esc_attr()-escaped inline ?>" alt="<?php echo esc_attr( olobuild_t( 'Logo' ) ); ?>"><?php elseif ( $logo_text !== '' ) : ?><?php echo $this->logo_mark_html( $s ) . $this->logo_wordmark_html( $s, $logo_text, $logo_txt_sz, $logo_txt_c ? ';color:' . esc_attr( $logo_txt_c ) : '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by logo_mark_html() and logo_wordmark_html() with esc_html/esc_attr/safe_color_css ?><?php endif; ?>
                 </a>
                 <?php endif; ?>
 
@@ -3583,6 +3590,41 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                ricerca a tutto schermo e pannelli «sotto la sezione». Sul sito il template si sgancia. */
             (<?php echo self::js_sgancia_template(); ?>)(root);
             <?php endif; ?>
+
+            /* ── Nome del logo nella barra del telefono ──
+               Accanto al simbolo e ai pulsanti un nome lungo finiva coi puntini: si restringe finché
+               ci sta. Se dovesse scendere sotto i 15 px il simbolo lascia il posto al nome (conta di
+               più), e il nome non va sotto i 13 px. */
+            var mmNome = root.querySelector(".olo-mm-mobile-logo .olo-mm-logo-text");
+            if (mmNome) {
+                var mmSimbolo = root.querySelector(".olo-mm-mobile-logo .olo-mm-mark");
+                var misuraNome = function () {
+                    if (!Math.max(0, mmNome.scrollWidth - mmNome.clientWidth - 1)) { return 0; }
+                    return parseFloat(getComputedStyle(mmNome).fontSize) * mmNome.clientWidth / mmNome.scrollWidth;
+                };
+                var adattaNome = function () {
+                    mmNome.style.removeProperty("font-size");
+                    if (mmSimbolo) { mmSimbolo.style.removeProperty("display"); }
+                    if (!mmNome.offsetWidth) { return; }
+                    var fs = misuraNome();
+                    if (!fs) { return; }
+                    if (mmSimbolo) {
+                        if (fs === Math.min(fs, 15)) {
+                            mmSimbolo.style.setProperty("display", "none");
+                            fs = misuraNome();
+                            if (!fs) { return; }
+                        }
+                    }
+                    for (var i = 0; i < 3; i++) {
+                        mmNome.style.setProperty("font-size", Math.max(13, Math.floor(fs * 10) / 10) + "px", "important");
+                        fs = misuraNome();
+                        if (!fs) { return; }
+                    }
+                };
+                adattaNome();
+                window.addEventListener("resize", adattaNome);
+                if (document.fonts) { document.fonts.ready.then(adattaNome); }
+            }
 
             /* ── Hover Intent Desktop ── */
             var timers = {};

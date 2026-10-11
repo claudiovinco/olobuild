@@ -154,6 +154,26 @@ class Olobuild_Animation_Builder {
     }
 
     /**
+     * Classe e dichiarazioni di dimensione e posizione del livello immagine di uno sfondo.
+     * Con la parallasse UIkit legge dimensione e posizione dello sfondo dal foglio di stile,
+     * togliendo per un attimo lo stile in linea: scritte in linea, per lui erano «auto» e «0%»,
+     * così con bgx/bgy non allargava la foto per coprire lo spostamento e sopra (o sotto)
+     * restava una striscia vuota. Con la parallasse arrivano quindi da .olo-bg-par
+     * (frontend.css), che le legge da due variabili scritte in linea.
+     *
+     * @param array  $bg   Background config.
+     * @param string $size Dimensione già passata da esc_attr().
+     * @param string $pos  Posizione già passata da esc_attr().
+     * @return array [ classe in più (con lo spazio davanti) o '', dichiarazioni CSS ]
+     */
+    public function bg_image_layer_props( $bg, $size, $pos ) {
+        if ( '' === $this->build_uk_parallax_attr( $bg ) ) {
+            return [ '', 'background-size: ' . $size . '; background-position: ' . $pos ];
+        }
+        return [ ' olo-bg-par', '--olo-bg-size: ' . $size . '; --olo-bg-pos: ' . $pos ];
+    }
+
+    /**
      * Build uk-scrollspy attribute from advanced config.
      *
      * @param array $advanced Advanced settings.

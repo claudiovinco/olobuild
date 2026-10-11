@@ -1337,9 +1337,10 @@ class Olobuild_Frontend_Renderer {
                 $bg_size = esc_attr( $tile_bg['image_size'] ?? 'cover' );
                 $bg_pos  = esc_attr( $tile_bg['image_position'] ?? 'center center' );
                 $parallax_attr = $this->anim->build_uk_parallax_attr( $tile_bg );
+                list( $bg_cls, $bg_css ) = $this->anim->bg_image_layer_props( $tile_bg, $bg_size, $bg_pos );
             ?>
-                <div class="uk-position-cover"
-                    style="background-image: url(<?php echo esc_url( $tile_bg['image_url'] ); ?>); background-size: <?php echo $bg_size; ?>; background-position: <?php echo $bg_pos; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $bg_size/$bg_pos esc_attr()'d at assignment above ?>; background-repeat: no-repeat"
+                <div class="uk-position-cover<?php echo $bg_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed class literal from bg_image_layer_props() ?>"
+                    style="background-image: url(<?php echo esc_url( $tile_bg['image_url'] ); ?>); <?php echo $bg_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built by bg_image_layer_props() from $bg_size/$bg_pos, esc_attr()'d at assignment above ?>; background-repeat: no-repeat"
                     <?php echo $parallax_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- uk-parallax attribute built by Olobuild_Animation_Builder::build_uk_parallax_attr() from intval()/floatval() values ?>
                 ></div>
             <?php endif; ?>

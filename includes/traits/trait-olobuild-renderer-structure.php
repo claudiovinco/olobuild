@@ -295,7 +295,8 @@ trait Olobuild_Renderer_Structure_Trait {
         if ( $has_bg_image ) {
             $bg_size = esc_attr( $tile_bg['image_size'] ?? 'cover' );
             $bg_pos  = esc_attr( $tile_bg['image_position'] ?? 'center center' );
-            $bg_layers_html .= '<div class="uk-position-cover" style="background-image: url(' . esc_url( $tile_bg['image_url'] ) . '); background-size: ' . $bg_size . '; background-position: ' . $bg_pos . '; background-repeat: no-repeat"';
+            list( $bg_cls, $bg_css ) = $this->anim->bg_image_layer_props( $tile_bg, $bg_size, $bg_pos );
+            $bg_layers_html .= '<div class="uk-position-cover' . $bg_cls . '" style="background-image: url(' . esc_url( $tile_bg['image_url'] ) . '); ' . $bg_css . '; background-repeat: no-repeat"';
             $bg_layers_html .= $this->anim->build_uk_parallax_attr( $tile_bg );
             $bg_layers_html .= '></div>';
         }
@@ -682,7 +683,8 @@ trait Olobuild_Renderer_Structure_Trait {
                 $bg_size = esc_attr( $tile_bg['image_size'] ?? 'cover' );
                 $bg_pos  = esc_attr( $tile_bg['image_position'] ?? 'center center' );
 
-                $html .= '<div class="uk-position-cover" style="background-image: url(' . esc_url( $tile_bg['image_url'] ) . '); background-size: ' . $bg_size . '; background-position: ' . $bg_pos . '; background-repeat: no-repeat"';
+                list( $bg_cls, $bg_css ) = $this->anim->bg_image_layer_props( $tile_bg, $bg_size, $bg_pos );
+                $html .= '<div class="uk-position-cover' . $bg_cls . '" style="background-image: url(' . esc_url( $tile_bg['image_url'] ) . '); ' . $bg_css . '; background-repeat: no-repeat"';
                 $html .= $this->anim->build_uk_parallax_attr( $tile_bg );
                 $html .= '></div>';
             }
@@ -1931,7 +1933,8 @@ trait Olobuild_Renderer_Structure_Trait {
         if ( $has_col_bg_image ) {
             $bg_size = esc_attr( $col_bg['image_size'] ?? 'cover' );
             $bg_pos  = esc_attr( $col_bg['image_position'] ?? 'center center' );
-            $html .= '<div class="uk-position-cover" style="background-image: url(' . esc_url( $col_bg['image_url'] ) . '); background-size: ' . $bg_size . '; background-position: ' . $bg_pos . '; background-repeat: no-repeat"';
+            list( $bg_cls, $bg_css ) = $this->anim->bg_image_layer_props( $col_bg, $bg_size, $bg_pos );
+            $html .= '<div class="uk-position-cover' . $bg_cls . '" style="background-image: url(' . esc_url( $col_bg['image_url'] ) . '); ' . $bg_css . '; background-repeat: no-repeat"';
             $html .= $this->anim->build_uk_parallax_attr( $col_bg );
             $html .= '></div>';
         }
@@ -2120,7 +2123,8 @@ trait Olobuild_Renderer_Structure_Trait {
         if ( $has_image ) {
             $bg_size = esc_attr( $bg['image_size'] ?? 'cover' );
             $bg_pos  = esc_attr( $bg['image_position'] ?? 'center center' );
-            $out    .= '<div class="uk-position-cover" style="background-image: url(' . esc_url( $bg['image_url'] ) . '); background-size: ' . $bg_size . '; background-position: ' . $bg_pos . '; background-repeat: no-repeat"'
+            list( $bg_cls, $bg_css ) = $this->anim->bg_image_layer_props( $bg, $bg_size, $bg_pos );
+            $out    .= '<div class="uk-position-cover' . $bg_cls . '" style="background-image: url(' . esc_url( $bg['image_url'] ) . '); ' . $bg_css . '; background-repeat: no-repeat"'
                 . $this->anim->build_uk_parallax_attr( $bg ) . '></div>';
         }
         if ( $has_video ) {

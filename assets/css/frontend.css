@@ -3337,3 +3337,6 @@ html:has(.olo-frontend-grid) {
 .olo-ct-text-body li > p { margin: 0; }
 .olo-ct-text-body li > p + p { margin-top: 0.4em; }
 
+/* Sfondo con parallasse: dimensione e posizione arrivano dal foglio di stile, dove UIkit le legge
+   per allargare la foto quanto lo spostamento (Olobuild_Animation_Builder::bg_image_layer_props()). */
+.olo-bg-par { background-size: var(--olo-bg-size, cover); background-position: var(--olo-bg-pos, center center); }

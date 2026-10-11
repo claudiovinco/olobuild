@@ -3,6 +3,11 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.658 - 2026-10-11 (fix)
+- Sfondi con parallasse: la foto copre sempre tutta la sezione. Spostandosi lasciava una striscia vuota in alto o in basso, perché dimensione e posizione dello sfondo erano scritte dove l'effetto non le leggeva.
+- Mega Menu: il simbolo del logo compare anche nella barra del telefono. Sul telefono il nome si restringe per stare accanto al simbolo e ai pulsanti, invece di finire coi puntini; se non ci sta nemmeno così, il simbolo lascia il posto al nome. Nel menu aperto il simbolo senza sfondo prende il colore del testo del menu, come il nome.
+- Temi: simboli ritoccati dove si leggevano poco (Denim District, Inchiostro Riso, Nido, Tostatura Nove); la home di Studio Quiete presenta le due terapeute e risponde a tre domande in più.
+
 ## v1.4.657 - 2026-10-11 (novità)
 - Mega Menu: il logo testuale può avere un simbolo, scelto fra le icone, con colore, dimensione, spessore della linea e, se vuoi, un cerchio o un riquadro di sfondo («Simbolo» nel Contenuto, il resto nello Stile). Prende i colori del tema, quindi segue le palette e la modalità scura.
 - Temi: 44 temi hanno un logo col simbolo del loro mestiere (gli altri 8 avevano già la sigla).
