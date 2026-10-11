@@ -232,10 +232,12 @@ class Olobuild_Demo_Temi {
     /* ── Palette da provare (bollini del visore) ── */
 
     /**
-     * Le palette del file dati, id => [ nome, chiaro, scuro ]: ogni versione ha i 14 ruoli dei temi, coi
-     * contrasti che i temi danno per scontati (testo sul fondo e sul fondo tenue, testo sul colore dei
-     * pulsanti, primario e link leggibili sul fondo). Nomi non tradotti: si legge anche all'avvio, prima
-     * che le traduzioni si possano caricare.
+     * Le palette del file dati. Una palette non porta colori fissi ma famiglie: per primario, secondario e
+     * accento la tinta (gradi) e la saturazione (%) dei toni scuri e di quelli chiari; per i neutri chiari
+     * e scuri la tinta e la saturazione minima e massima. Ogni ruolo del tema prende la tinta della sua
+     * famiglia e tiene la SUA luminanza (mappa_colori()): i contrasti restano quelli del tema, qualunque
+     * combinazione di ruoli il tema usi. Nomi non tradotti: si legge anche all'avvio, prima che le
+     * traduzioni si possano caricare.
      */
     private static function dati_palette() {
         static $pal = null;
@@ -244,7 +246,11 @@ class Olobuild_Demo_Temi {
             $file = OLOBUILD_PATH . self::FILE_PALETTE;
             $json = is_readable( $file ) ? json_decode( (string) file_get_contents( $file ), true ) : null; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- file del plugin
             foreach ( is_array( $json ) ? $json : [] as $id => $p ) {
-                if ( is_array( $p ) && isset( $p['chiaro'], $p['scuro'] ) && is_array( $p['chiaro'] ) && is_array( $p['scuro'] ) ) {
+                $ok = is_array( $p );
+                foreach ( [ 'primary', 'secondary', 'accent', 'neutri_chiari', 'neutri_scuri' ] as $k ) {
+                    $ok = $ok && isset( $p[ $k ] ) && is_array( $p[ $k ] ) && 3 === count( array_filter( $p[ $k ], 'is_numeric' ) );
+                }
+                if ( $ok ) {
                     $pal[ sanitize_key( (string) $id ) ] = $p;
                 }
             }
@@ -252,14 +258,206 @@ class Olobuild_Demo_Temi {
         return $pal;
     }
 
-    /** Le palette per i bollini del visore, col nome nella lingua di chi guarda. */
+    /**
+     * Le palette per i bollini del visore, col nome nella lingua di chi guarda e i due colori del bollino
+     * (primario e accento) per i temi chiari e per quelli scuri.
+     */
     public static function palette() {
         $out = [];
         foreach ( self::dati_palette() as $id => $p ) {
-            $p['nome']  = olobuild_t( (string) ( $p['nome'] ?? $id ) );
-            $out[ $id ] = $p;
+            $out[ $id ] = [
+                'nome'   => olobuild_t( (string) ( $p['nome'] ?? $id ) ),
+                'chiaro' => [ 'primary' => self::tono( $p, 'primary', 0.16 ), 'accent' => self::tono( $p, 'accent', 0.2 ) ],
+                'scuro'  => [ 'primary' => self::tono( $p, 'primary', 0.45 ), 'accent' => self::tono( $p, 'accent', 0.4 ) ],
+            ];
         }
         return $out;
+    }
+
+    /** Il colore pieno di una famiglia della palette alla luminanza data (bollini). */
+    private static function tono( $p, $fam, $y ) {
+        return self::con_luminanza( (float) $p[ $fam ][0], self::saturazione( $p, $fam, $y ), $y );
+    }
+
+    /** Saturazione della famiglia: quella dei toni scuri fino a 0,08 di luminanza, quella dei chiari da 0,45. */
+    private static function saturazione( $p, $fam, $y ) {
+        $t = min( 1.0, max( 0.0, ( $y - 0.08 ) / 0.37 ) );
+        return ( (float) $p[ $fam ][1] + ( (float) $p[ $fam ][2] - (float) $p[ $fam ][1] ) * $t ) / 100;
+    }
+
+    /** Luminanza relativa (WCAG) di un colore [ r, g, b ] coi canali fra 0 e 1. */
+    private static function luminanza( $rgb ) {
+        $l = 0.0;
+        foreach ( [ 0.2126, 0.7152, 0.0722 ] as $i => $peso ) {
+            $v  = (float) $rgb[ $i ];
+            $l += $peso * ( $v <= 0.03928 ? $v / 12.92 : pow( ( $v + 0.055 ) / 1.055, 2.4 ) );
+        }
+        return $l;
+    }
+
+    /** I canali lineari dei 256 valori di un canale a 8 bit (per provare in fretta gli arrotondamenti). */
+    private static function lineari() {
+        static $t = null;
+        if ( null === $t ) {
+            $t = [];
+            for ( $i = 0; $i < 256; $i++ ) {
+                $v       = $i / 255;
+                $t[ $i ] = $v <= 0.03928 ? $v / 12.92 : pow( ( $v + 0.055 ) / 1.055, 2.4 );
+            }
+        }
+        return $t;
+    }
+
+    /** Da tinta, luce e saturazione (fra 0 e 1, nell'ordine di colorsys) a [ r, g, b ] fra 0 e 1. */
+    private static function hsl_rgb( $h, $l, $s ) {
+        if ( 0.0 === (float) $s ) {
+            return [ $l, $l, $l ];
+        }
+        $m2 = $l <= 0.5 ? $l * ( 1.0 + $s ) : $l + $s - ( $l * $s );
+        $m1 = 2.0 * $l - $m2;
+        $v  = static function ( $t ) use ( $m1, $m2 ) {
+            $t -= floor( $t );
+            if ( $t < 1.0 / 6.0 ) {
+                return $m1 + ( $m2 - $m1 ) * $t * 6.0;
+            }
+            if ( $t < 0.5 ) {
+                return $m2;
+            }
+            if ( $t < 2.0 / 3.0 ) {
+                return $m1 + ( $m2 - $m1 ) * ( 2.0 / 3.0 - $t ) * 6.0;
+            }
+            return $m1;
+        };
+        return [ $v( $h + 1.0 / 3.0 ), $v( $h ), $v( $h - 1.0 / 3.0 ) ];
+    }
+
+    /**
+     * Il colore di tinta $h (gradi) e saturazione $s (0-1) con luminanza $y: in HSL la luminanza cresce con
+     * la luce, che si cerca per bisezione. Fra gli arrotondamenti a 8 bit vicini vince quello con la
+     * luminanza più vicina DAL LATO che non toglie contrasto: più chiaro per i colori chiari (sopra 0,1791,
+     * dove il contrasto col bianco e col nero si equivale), più scuro per gli altri.
+     */
+    private static function con_luminanza( $h, $s, $y ) {
+        $lo = 0.0;
+        $hi = 1.0;
+        for ( $i = 0; $i < 40; $i++ ) {
+            $m = ( $lo + $hi ) / 2;
+            if ( self::luminanza( self::hsl_rgb( $h / 360, $m, $s ) ) < $y ) {
+                $lo = $m;
+            } else {
+                $hi = $m;
+            }
+        }
+        $rgb    = self::hsl_rgb( $h / 360, ( $lo + $hi ) / 2, $s );
+        $base   = [ (int) round( $rgb[0] * 255 ), (int) round( $rgb[1] * 255 ), (int) round( $rgb[2] * 255 ) ];
+        $lin    = self::lineari();
+        $chiaro = $y >= 0.1791;
+        $meglio = null;
+        $scelto = $base;
+        for ( $a = -4; $a <= 4; $a++ ) {
+            for ( $b = -4; $b <= 4; $b++ ) {
+                for ( $c = -4; $c <= 4; $c++ ) {
+                    $q  = [ min( 255, max( 0, $base[0] + $a ) ), min( 255, max( 0, $base[1] + $b ) ), min( 255, max( 0, $base[2] + $c ) ) ];
+                    $lq = 0.2126 * $lin[ $q[0] ] + 0.7152 * $lin[ $q[1] ] + 0.0722 * $lin[ $q[2] ];
+                    if ( $chiaro ? $lq < $y : $lq > $y ) {
+                        continue;
+                    }
+                    $e1 = abs( $lq - $y );
+                    $e2 = abs( $a ) + abs( $b ) + abs( $c );
+                    if ( null === $meglio || $e1 < $meglio[0] || ( $e1 === $meglio[0] && $e2 < $meglio[1] ) ) {
+                        $meglio = [ $e1, $e2 ];
+                        $scelto = $q;
+                    }
+                }
+            }
+        }
+        return sprintf( '#%02X%02X%02X', $scelto[0], $scelto[1], $scelto[2] );
+    }
+
+    /** [ r, g, b ] fra 0 e 1 di un esadecimale (#abc o #aabbcc), null se non lo è. */
+    private static function rgb( $hex ) {
+        $hex = ltrim( (string) sanitize_hex_color( (string) $hex ), '#' );
+        if ( 3 === strlen( $hex ) ) {
+            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+        }
+        if ( 6 !== strlen( $hex ) ) {
+            return null;
+        }
+        return [ hexdec( substr( $hex, 0, 2 ) ) / 255, hexdec( substr( $hex, 2, 2 ) ) / 255, hexdec( substr( $hex, 4, 2 ) ) / 255 ];
+    }
+
+    /**
+     * Un colore del tema nella famiglia della palette, con la sua luminanza. Primario, secondario e accento
+     * prendono la saturazione della famiglia, ridotta se nel tema il ruolo è quasi grigio (un secondario
+     * nero resta quasi nero) ma mai sotto quella dei neutri; i neutri tengono la loro saturazione dentro i
+     * limiti della palette.
+     */
+    private static function mappa_colore( $hex, $fam, $p ) {
+        $rgb = self::rgb( $hex );
+        if ( null === $rgb ) {
+            return $hex;
+        }
+        $y     = self::luminanza( $rgb );
+        $max   = max( $rgb );
+        $min   = min( $rgb );
+        $banda = $p[ $y > 0.5 ? 'neutri_chiari' : 'neutri_scuri' ];
+        if ( in_array( $fam, [ 'primary', 'secondary', 'accent' ], true ) ) {
+            $k = min( 1.0, ( $max - $min ) / 0.2 );
+            return self::con_luminanza( (float) $p[ $fam ][0], max( self::saturazione( $p, $fam, $y ) * $k, (float) $banda[1] / 100 ), $y );
+        }
+        $somma = $max + $min;
+        $s     = $max === $min ? 0.0 : ( $somma / 2 <= 0.5 ? ( $max - $min ) / $somma : ( $max - $min ) / ( 2.0 - $somma ) );
+        return self::con_luminanza( (float) $banda[0], min( (float) $banda[2] / 100, max( (float) $banda[1] / 100, $s ) ), $y );
+    }
+
+    /** I ruoli del tema (anche un elenco parziale, come i colori della modalità scura) nella palette. */
+    private static function mappa_colori( $colori, $p ) {
+        $out = [];
+        foreach ( $colori as $ruolo => $hex ) {
+            if ( 'link' !== $ruolo ) {
+                $out[ $ruolo ] = self::mappa_colore( (string) $hex, in_array( $ruolo, [ 'primary', 'secondary', 'accent' ], true ) ? $ruolo : 'neutro', $p );
+            }
+        }
+        // Il link segue il ruolo di cui ha il colore (di solito il primario), se no la famiglia del primario.
+        if ( isset( $colori['link'] ) ) {
+            $out['link'] = self::come_un_ruolo( (string) $colori['link'], $colori, $out ) ?? self::mappa_colore( (string) $colori['link'], 'primary', $p );
+        }
+        return $out;
+    }
+
+    /** Il colore già nella palette del ruolo che nel tema ha lo stesso colore, null se nessuno. */
+    private static function come_un_ruolo( $hex, $colori, $mappati, $ruoli = [ 'primary', 'accent', 'secondary', 'text', 'dark' ] ) {
+        foreach ( $ruoli as $r ) {
+            if ( isset( $colori[ $r ], $mappati[ $r ] ) && 0 === strcasecmp( (string) $colori[ $r ], (string) $hex ) ) {
+                return $mappati[ $r ];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Un colore del tema fuori dai ruoli (campi dei moduli, cursore, HUD), esadecimale o dentro un valore
+     * con rgba(): segue il ruolo di cui ha il colore, se no la famiglia $fam con la sua luminanza.
+     */
+    private static function in_palette( $valore, $fam ) {
+        $orig  = (array) ( self::$tema['json']['styles']['colors'] ?? [] );
+        $ruoli = array_unique( array_merge( [ 'primary', 'accent', 'secondary', 'link', 'text', 'background', 'light', 'muted', 'border', 'dark', 'text_muted' ], array_keys( $orig ) ) );
+        $p     = self::dati_palette()[ self::$palette ];
+        $uno   = static function ( $hex ) use ( $orig, $ruoli, $p, $fam ) {
+            return self::come_un_ruolo( $hex, $orig, self::colori(), $ruoli ) ?? self::mappa_colore( $hex, $fam, $p );
+        };
+        $valore = trim( (string) $valore );
+        if ( sanitize_hex_color( $valore ) ) {
+            return $uno( $valore );
+        }
+        return (string) preg_replace_callback(
+            '/rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(,\s*[\d.]+\s*)?\)/',
+            static function ( $m ) use ( $uno ) {
+                $hex = sprintf( '#%02X%02X%02X', min( 255, (int) $m[1] ), min( 255, (int) $m[2] ), min( 255, (int) $m[3] ) );
+                return 'rgba(' . implode( ',', sscanf( $uno( $hex ), '#%02x%02x%02x' ) ) . ( isset( $m[4] ) ? $m[4] : ',1' ) . ')';
+            },
+            $valore
+        );
     }
 
     /** La palette chiesta con ?palette= (sola lettura, scelta fra quelle del file), '' se nessuna. */
@@ -274,36 +472,20 @@ class Olobuild_Demo_Temi {
     }
 
     /**
-     * Fondo scuro? Come l'anteprima del selettore dei temi: chiaro sopra 0,55 di luminanza (i fondi dei temi
-     * sono esadecimali). Calcolata qui: l'opzione degli stili si può leggere prima delle utility delle tile.
-     */
-    private static function scuro( $colori ) {
-        $hex = ltrim( (string) sanitize_hex_color( (string) ( $colori['background'] ?? '' ) ), '#' );
-        if ( 3 === strlen( $hex ) ) {
-            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
-        }
-        if ( 6 !== strlen( $hex ) ) {
-            return false;
-        }
-        $l = 0.0;
-        foreach ( [ 0 => 0.2126, 2 => 0.7152, 4 => 0.0722 ] as $i => $peso ) {
-            $v  = hexdec( substr( $hex, $i, 2 ) ) / 255;
-            $l += $peso * ( $v <= 0.03928 ? $v / 12.92 : pow( ( $v + 0.055 ) / 1.055, 2.4 ) );
-        }
-        return $l <= 0.55;
-    }
-
-    /**
-     * I colori del tema, con la palette scelta al posto dei 14 ruoli: la versione scura sui temi col fondo
-     * scuro, quella chiara sugli altri. Tutto il resto del tema (miscele, veli, sfumature) parte dai ruoli e
-     * li segue.
+     * I colori del tema, nella palette scelta se c'è: ogni ruolo con la tinta della sua famiglia e la sua
+     * luminanza. Tutto il resto del tema (miscele, veli, sfumature) parte dai ruoli e li segue; i colori
+     * scritti nelle tile restano, e con le luminanze invariate restano leggibili sui ruoli come prima.
      */
     private static function colori() {
-        $c = (array) ( self::$tema['json']['styles']['colors'] ?? [] );
-        if ( '' !== self::$palette ) {
-            $p = self::dati_palette()[ self::$palette ];
-            $c = array_merge( $c, $p[ self::scuro( $c ) ? 'scuro' : 'chiaro' ] );
+        static $c = null;
+        if ( null !== $c ) {
+            return $c;
         }
+        $colori = (array) ( self::$tema['json']['styles']['colors'] ?? [] );
+        if ( '' === self::$palette ) {
+            return $colori;
+        }
+        $c = self::mappa_colori( $colori, self::dati_palette()[ self::$palette ] );
         return $c;
     }
 
@@ -314,13 +496,18 @@ class Olobuild_Demo_Temi {
         if ( ! is_array( $s ) ) {
             return $valore;
         }
-        // Palette provata nel visore: i ruoli del tema cambiano tutti insieme; nei temi con l'interruttore
-        // della modalità scura quella scura prende la versione scura della stessa palette.
+        // Palette provata nel visore: i ruoli del tema cambiano tutti insieme, e con la stessa regola i
+        // colori della modalità scura del tema e quelli dei campi dei moduli.
         $c  = self::colori();
         $dc = (array) ( $s['dark_colors'] ?? [] );
         if ( '' !== self::$palette ) {
+            foreach ( [ 'field_bg' => 'neutro', 'field_border_color' => 'neutro', 'focus_border_color' => 'primary', 'focus_shadow' => 'primary' ] as $k => $fam ) {
+                if ( isset( $s['forms'][ $k ] ) && is_string( $s['forms'][ $k ] ) ) {
+                    $s['forms'][ $k ] = self::in_palette( $s['forms'][ $k ], $fam );
+                }
+            }
             $s['colors'] = $c;
-            $dc          = self::dati_palette()[ self::$palette ]['scuro'];
+            $dc          = $dc ? self::mappa_colori( $dc, self::dati_palette()[ self::$palette ] ) : [];
         }
         // Come all'import (Olobuild_Style_System::sync_dark_palette): in modalità scura i ruoli del
         // marchio restano quelli del tema, non l'indaco di serie (vale per i temi con l'interruttore).
@@ -355,6 +542,14 @@ class Olobuild_Demo_Temi {
         $c = self::$tema['json'][ $chiave ] ?? null;
         if ( ! is_array( $c ) ) {
             return [ 'enabled' => false ];
+        }
+        // Con una palette i colori del cursore e dell'HUD (quelli di un ruolo del tema) la seguono.
+        if ( '' !== self::$palette ) {
+            foreach ( $c as $k => $v ) {
+                if ( is_string( $v ) && preg_match( '/^\s*(#[0-9a-f]{3}\b|#[0-9a-f]{6}\b|rgba?\()/i', $v ) ) {
+                    $c[ $k ] = self::in_palette( $v, 'accent' );
+                }
+            }
         }
         if ( ! class_exists( $classe ) ) {
             return $c;
