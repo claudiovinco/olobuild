@@ -88,9 +88,9 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             }
             $categoria = (string) ( $t['category'] ?? '' );
             $effetto   = (string) ( $t['zone'] ?? '' );
-            // Il bollino «Colori del tema» del visore: primario, fondo e secondario del tema.
+            // Il bollino «Colori del tema» del visore: primario e secondario del tema.
             $pal       = is_array( $t['pal'] ?? null ) ? array_values( $t['pal'] ) : [];
-            $propri    = array_map( 'sanitize_hex_color', [ (string) ( $t['accent'] ?? '' ), (string) ( $t['bg'] ?? '' ), (string) ( $pal[1] ?? '' ) ] );
+            $propri    = array_map( 'sanitize_hex_color', [ (string) ( $t['accent'] ?? '' ), (string) ( $pal[1] ?? '' ) ] );
             $temi[]    = [
                 'id'        => $id,
                 'nome'      => (string) ( $t['name'] ?? $id ),
@@ -101,7 +101,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 'demo'      => Olobuild_Demo_Temi::indirizzo_tema( $id ),
                 'colore'    => (string) sanitize_hex_color( (string) ( $t['accent'] ?? '' ) ),
                 'scuro'     => empty( $t['light'] ),
-                'propri'    => 3 === count( array_filter( $propri ) ) ? implode( ',', $propri ) : '',
+                'propri'    => 2 === count( array_filter( $propri ) ) ? implode( ',', $propri ) : '',
             ];
         }
         usort( $temi, function ( $a, $b ) {
@@ -188,7 +188,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             foreach ( Olobuild_Demo_Temi::palette() as $pid => $p ) {
                 $v = [];
                 foreach ( [ 'chiaro' => 'c', 'scuro' => 's' ] as $versione => $sigla ) {
-                    foreach ( [ 'primary' => 1, 'background' => 2, 'accent' => 3 ] as $ruolo => $n ) {
+                    foreach ( [ 'primary' => 1, 'accent' => 2 ] as $ruolo => $n ) {
                         $hex = sanitize_hex_color( (string) ( $p[ $versione ][ $ruolo ] ?? '' ) );
                         if ( $hex ) {
                             $v[] = '--' . $sigla . $n . ':' . $hex;
@@ -249,9 +249,9 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ovt-btn:focus-visible,.<?php echo $uid; ?> .ovt-cta:focus-visible{outline:2px solid var(--ovt-acc);outline-offset:2px;}
             .<?php echo $uid; ?> .ovt-barra.con-palette .ovt-titolo{flex:0 1 auto;}
             .<?php echo $uid; ?> .ovt-palette{flex:1 1 auto;justify-content:center;gap:2px;min-width:0;}
-            .<?php echo $uid; ?> .ovt-pal{display:inline-grid;place-items:center;width:34px;height:34px;padding:0;border:0;border-radius:50%;background:transparent;color:inherit;cursor:pointer;--p1:var(--c1,var(--ovt-tema,currentColor));--p2:var(--c2,transparent);--p3:var(--c3,currentColor);}
-            .<?php echo $uid; ?> .ovt-palette.is-scuro .ovt-pal{--p1:var(--s1,var(--c1,currentColor));--p2:var(--s2,var(--c2,transparent));--p3:var(--s3,var(--c3,currentColor));}
-            .<?php echo $uid; ?> .ovt-pal i{display:block;width:22px;height:22px;border-radius:50%;background:conic-gradient(from -45deg,var(--p1) 0 50%,var(--p3) 0 75%,var(--p2) 0);box-shadow:0 0 0 1px color-mix(in srgb,currentColor 30%,transparent);transition:transform .15s ease,box-shadow .15s ease;}
+            .<?php echo $uid; ?> .ovt-pal{display:inline-grid;place-items:center;width:34px;height:34px;padding:0;border:0;border-radius:50%;background:transparent;color:inherit;cursor:pointer;--p1:var(--c1,var(--ovt-tema,currentColor));--p2:var(--c2,currentColor);}
+            .<?php echo $uid; ?> .ovt-palette.is-scuro .ovt-pal{--p1:var(--s1,var(--c1,currentColor));--p2:var(--s2,var(--c2,currentColor));}
+            .<?php echo $uid; ?> .ovt-pal i{display:block;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--p1) calc(50% - .5px),var(--p2) calc(50% + .5px));box-shadow:0 0 0 1px color-mix(in srgb,currentColor 30%,transparent);transition:transform .15s ease,box-shadow .15s ease;}
             .<?php echo $uid; ?> .ovt-pal:hover i{transform:scale(1.12);}
             .<?php echo $uid; ?> .ovt-pal[aria-pressed="true"] i{box-shadow:0 0 0 2px var(--olo-color-dark),0 0 0 4px var(--ovt-acc);}
             .<?php echo $uid; ?> .ovt-pal:focus-visible{outline:2px solid var(--ovt-acc);outline-offset:1px;}
@@ -390,7 +390,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 gruppoPal.classList.toggle('is-scuro', a.getAttribute('data-scuro') === '1');
                 var c = (a.getAttribute('data-colori') || '').split(','), t = bollini[0];
                 if (t) {
-                    if (c.length === 3) { t.style.setProperty('--c1', c[0]); t.style.setProperty('--c2', c[1]); t.style.setProperty('--c3', c[2]); }
+                    if (c.length === 2) { t.style.setProperty('--c1', c[0]); t.style.setProperty('--c2', c[1]); }
                 }
             }
             // Un riquadro nuovo per ogni tema, tolto alla chiusura: un iframe che cambia pagina lascia la

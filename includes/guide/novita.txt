@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.654 - 2026-10-11 (fix)
+- Vetrina temi: i bollini dei colori sono a due tinte (primario e accento della palette, primario e secondario per i colori del tema) e un po' più grandi. Grafite ha un accento grigio ardesia invece che ambra: prima somigliava a Melograno e Terracotta.
+
 ## v1.4.653 - 2026-10-11 (novità)
 - Vetrina temi: nella barra del visore ci sono i bollini dei colori. Il primo ha i colori del tema, gli altri sei provano il tema con una palette diversa (Bosco, Laguna, Terracotta, Lavanda, Grafite, Melograno). La demo si ricarica coi colori scelti e li tiene anche navigando fra le pagine e passando da un tema all'altro. Ogni palette ha una versione chiara e una scura: i temi col fondo scuro ricevono quella scura. Sugli schermi stretti i bollini vanno su una seconda riga.
 
