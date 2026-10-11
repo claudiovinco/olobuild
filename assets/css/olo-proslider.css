@@ -234,6 +234,9 @@
   transform-origin: top left;
   pointer-events: none;
   will-change: transform;
+  /* dentro la tela scalata le misure restano quelle di progetto; fuori (livelli con fusione)
+     --mps-k è la scala dello slider, scritta dal JS sul contenitore */
+  --mps-k: 1;
 }
 .mps-layers-wrap .olo-proslider-layer {
   pointer-events: auto;
@@ -764,10 +767,25 @@
 
 /* ═══════════════════════════════════════════════════════════
    Carousel Mode
-   ═══════════════════════════════════════════════════════════ */
-.olo-proslider.mps-carousel { overflow: visible; }
+   ═══════════════════════════════════════════════════════════
+   Le card stanno in fila sul binario e il JS lo fa scorrere per centrare quella scelta
+   (mps-carousel-active, decisa alla PARTENZA del cambio, insieme allo scorrimento: con
+   mps-active la card cresceva solo a fine uscita dei livelli). Il cambio È lo scorrimento:
+   la transizione del pannello non agisce (data-transition="carousel"). Le card di lato si
+   tagliano al bordo dello slider: con overflow visibile uscivano nella pagina e la facevano
+   scorrere di lato. Sul telefono la card è larga almeno l'80%: al 55% restava una striscia
+   di 200 px. */
+.olo-proslider.mps-carousel {
+  --mps-carousel-w: var(--mps-carousel-width, 80%);
+}
+@media (max-width: 640px) {
+  .olo-proslider.mps-carousel { --mps-carousel-w: max(var(--mps-carousel-width, 80%), 80%); }
+}
 .olo-proslider.mps-carousel .olo-proslider-track {
   display: flex;
+  align-items: stretch;
+  /* partenza: prima card al centro anche prima che il JS misuri */
+  transform: translateX(calc((100% - var(--mps-carousel-w)) / 2 - var(--mps-carousel-gap, 10px)));
   transition: transform var(--mps-trans-dur, 800ms) cubic-bezier(.4,0,.2,1);
 }
 .olo-proslider.mps-carousel .olo-proslider-slide {
@@ -775,26 +793,39 @@
   inset: auto;
   opacity: 1;
   visibility: visible;
-  flex: 0 0 var(--mps-carousel-width, 80%);
+  overflow: hidden;
+  flex: 0 0 var(--mps-carousel-w);
   margin: 0 var(--mps-carousel-gap, 10px);
   transform: scale(var(--mps-carousel-side-scale, 0.85));
-  transition: transform var(--mps-trans-dur, 800ms) ease, opacity var(--mps-trans-dur, 800ms) ease, filter var(--mps-trans-dur, 800ms) ease;
   filter: brightness(0.7);
+  cursor: pointer;
+  transition: transform var(--mps-trans-dur, 800ms) cubic-bezier(.4,0,.2,1), filter var(--mps-trans-dur, 800ms) ease;
 }
-.olo-proslider.mps-carousel .olo-proslider-slide.mps-active {
+.olo-proslider.mps-carousel .olo-proslider-slide.mps-carousel-active {
   transform: scale(1);
   z-index: 2;
-  filter: brightness(1);
+  filter: none;
+  cursor: auto;
 }
-/* Carousel 3D */
-.olo-proslider.mps-carousel-3d .olo-proslider-track { perspective: 1200px; }
+/* livelli delle card di lato: spenti e non cliccabili, il clic sceglie la card */
+.olo-proslider.mps-carousel .olo-proslider-slide:not(.mps-carousel-active) .olo-proslider-layer { pointer-events: none; }
+/* Carousel 3D: ogni card ha la sua prospettiva e guarda il centro, quelle prima da sinistra e
+   quelle dopo da destra. Prima la prospettiva stava sul binario, che scorre: la rotazione
+   cambiava a seconda della card al centro, e tutte giravano dallo stesso lato. */
 .olo-proslider.mps-carousel-3d .olo-proslider-slide {
-  transform: scale(0.85) rotateY(var(--mps-carousel-rotate, -25deg));
+  transform: perspective(1200px) rotateY(var(--mps-carousel-rotate, 25deg)) scale(var(--mps-carousel-side-scale, 0.85));
   filter: brightness(0.6);
 }
-.olo-proslider.mps-carousel-3d .olo-proslider-slide.mps-active {
-  transform: scale(1) rotateY(0);
-  filter: brightness(1);
+.olo-proslider.mps-carousel-3d .olo-proslider-slide.mps-carousel-dopo {
+  transform: perspective(1200px) rotateY(calc(-1 * var(--mps-carousel-rotate, 25deg))) scale(var(--mps-carousel-side-scale, 0.85));
+}
+.olo-proslider.mps-carousel-3d .olo-proslider-slide.mps-carousel-active {
+  transform: perspective(1200px) rotateY(0deg) scale(1);
+  filter: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .olo-proslider.mps-carousel .olo-proslider-track,
+  .olo-proslider.mps-carousel .olo-proslider-slide { transition-duration: 1ms; }
 }
 
 /* ═══════════════════════════════════════════════════════════

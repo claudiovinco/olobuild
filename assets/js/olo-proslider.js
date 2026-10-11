@@ -159,7 +159,16 @@ function initSlider(container) {
   var current    = 0;
   var animating  = false;
   var autoTimer  = null;
-  var transition = cfg.transition || 'fade';
+  // Nel carosello il cambio È lo scorrimento delle card: la transizione scelta non agisce (niente
+  // transform in linea sulle slide, che toglievano scala e rotazione alle card).
+  var transition = cfg.carousel ? 'carousel' : (cfg.transition || 'fade');
+  // Chi segue il cambio di slide (carosello, miniature, schede, timeline di scorrimento) si iscrive qui:
+  // alla PARTENZA riceve la slide scelta, all'ARRIVO sa che il cambio è chiuso. Prima ognuno avvolgeva
+  // goToSlide e leggeva `current` 50 ms dopo, quando era ancora la slide vecchia (si aggiorna a fine
+  // transizione): il carosello restava indietro di una card e le miniature si accendevano anche sui
+  // cambi rifiutati.
+  var allaPartenza = [];
+  var allArrivo = [];
 
   if (total === 0) return;
 
@@ -239,19 +248,28 @@ function initSlider(container) {
     var f = formatoCorrente();
     var scaleX = cw / f.w;
     var h = altezzaFormato(f);
-    var finalH = resolveHeightPx(h.mode, h.value, cw, f.w);
+    var schermoPieno = container.classList.contains('mps-fullscreen');
+    // A schermo pieno l'altezza è quella della finestra (100vh), non quella impostata: la tela dei livelli
+    // la segue, se no un livello al 90% finiva sotto il bordo o a metà schermo.
+    var finalH = schermoPieno ? (container.offsetHeight || resolveHeightPx(h.mode, h.value, cw, f.w)) : resolveHeightPx(h.mode, h.value, cw, f.w);
     var layerDesignH = Math.round(finalH / scaleX);
+    // Nel carosello la tela di una slide è larga quanto la card (la stessa frazione della tela del formato):
+    // i livelli restano alla scala dello slider (un carattere di 48 resta 48 sulla tela) e si posano sulla
+    // card, come nell'editor, che col carosello mostra la tela stretta. Prima la tela era larga quanto
+    // tutto lo slider: un livello al centro finiva sul bordo destro della card, o fuori.
+    var cardW = cfg.carousel && slides[0] ? slides[0].offsetWidth : 0;
+    var slideDesignW = cardW && cw ? Math.round(f.w * cardW / cw) : f.w;
     layerWraps.forEach(function (w) {
-      w.style.width = f.w + 'px';
+      var globale = w.classList.contains('olo-proslider-global-layers');
+      w.style.width = (globale ? f.w : slideDesignW) + 'px';
       w.style.height = layerDesignH + 'px';
       w.style.transform = 'scale(' + scaleX + ')';
     });
-    // Blend-mode layers fuori dal wrapper: scala font-size con CSS var
-    var blendLayers = qsa(container, '.mps-blend-layer');
-    blendLayers.forEach(function (bl) {
-      bl.style.fontSize = 'calc(' + scaleX + ' * var(--mps-blend-fs, 24px))';
-    });
-    if (!container.classList.contains('mps-fullscreen')) {
+    // I livelli con fusione stanno fuori dalla tela scalata (il transform isolerebbe la fusione): carattere,
+    // spaziatura e padding si moltiplicano per --mps-k, che dentro la tela vale 1 (CSS). Prima il carattere
+    // restava quello di progetto e sul telefono un titolo di 120 usciva dallo slider.
+    container.style.setProperty('--mps-k', String(scaleX));
+    if (!schermoPieno) {
       container.style.height = finalH + 'px';
     }
   }
@@ -393,6 +411,7 @@ function initSlider(container) {
     animating = true;
     // Cancel pending autoplay timer (will be re-scheduled after transition)
     if (autoTimer) { clearTimeout(autoTimer); autoTimer = -1; }
+    allaPartenza.forEach(function (fn) { fn(idx); });
 
     var oldSlide = slides[current];
     var newSlide = slides[idx];
@@ -485,6 +504,7 @@ function initSlider(container) {
         animating = false;
         // Re-schedule autoplay based on new current slide's duration
         if (cfg.autoplay && autoTimer !== null) scheduleAutoplay();
+        allArrivo.forEach(function (fn) { fn(idx); });
       }, transition === 'fade' || transition === 'zoom' ? transDur * 0.3 : transDur * 0.5);
     }
 
@@ -757,29 +777,43 @@ function initSlider(container) {
   }
 
   /* ── Carousel Mode ──────────────────────────────────── */
+  // Le card stanno in fila sul binario (flex) e il binario scorre per portare al centro quella scelta. La
+  // posizione si misura sulla card vera (offsetLeft, margini compresi): il conto di prima ignorava metà del
+  // gap e la card scivolava fuori centro di un gap in più a ogni posizione. Card al centro, card prima e
+  // card dopo (che nel 3D guardano il centro da lati opposti) si decidono alla PARTENZA del cambio.
   if (cfg.carousel) {
     var track = qs(container, '.olo-proslider-track');
     if (track) {
-      function updateCarouselTrack() {
-        var cw = parseFloat(getComputedStyle(container).getPropertyValue('--mps-carousel-width')) || 80;
-        var gap = parseFloat(getComputedStyle(container).getPropertyValue('--mps-carousel-gap')) || 10;
-        var containerW = container.offsetWidth;
-        var slideW = containerW * (cw / 100);
-        var offset = (containerW - slideW) / 2 - current * (slideW + gap);
-        track.style.transform = 'translateX(' + offset + 'px)';
-        track.style.transition = 'transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94)';
-        slides.forEach(function (s, i) {
-          s.classList.toggle('mps-carousel-active', i === current);
+      var cardScelta = 0;
+      var centraCard = function (idx, subito) {
+        var s = slides[idx];
+        if (!s) return;
+        var centro = s.offsetLeft + s.offsetWidth / 2;
+        if (s.offsetParent !== track) centro -= track.offsetLeft;
+        if (subito) track.style.transition = 'none';
+        track.style.transform = 'translateX(' + (container.clientWidth / 2 - centro).toFixed(1) + 'px)';
+        if (subito) { void track.offsetWidth; track.style.transition = ''; }
+        slides.forEach(function (sl, i) {
+          sl.classList.toggle('mps-carousel-active', i === idx);
+          sl.classList.toggle('mps-carousel-prima', i < idx);
+          sl.classList.toggle('mps-carousel-dopo', i > idx);
         });
-      }
-      // Patch goToSlide to also update carousel track
-      var _origGoToSlide = goToSlide;
-      goToSlide = function (idx) {
-        _origGoToSlide(idx);
-        setTimeout(updateCarouselTrack, 50);
       };
-      updateCarouselTrack();
-      window.addEventListener('resize', updateCarouselTrack);
+      allaPartenza.push(function (idx) { cardScelta = idx; centraCard(idx); });
+      centraCard(0, true);
+      var _mpsCaroselloTimer;
+      window.addEventListener('resize', function () {
+        clearTimeout(_mpsCaroselloTimer);
+        _mpsCaroselloTimer = setTimeout(function () { centraCard(cardScelta, true); }, 40);
+      });
+      // Una card di lato si sceglie col clic: i suoi livelli sono spenti e non ricevono il clic (CSS).
+      slides.forEach(function (sl, i) {
+        sl.addEventListener('click', function (e) {
+          if (i === cardScelta) return;
+          e.preventDefault();
+          goToSlide(i);
+        });
+      });
     }
   }
 
@@ -793,14 +827,9 @@ function initSlider(container) {
         if (!isNaN(si)) goToSlide(si);
       });
     });
-    // Update active thumb on slide change
-    var _origGoToSlideTh = goToSlide;
-    goToSlide = function (idx) {
-      _origGoToSlideTh(idx);
-      setTimeout(function () {
-        thumbs.forEach(function (t, i) { t.classList.toggle('mps-thumb-active', i === idx); });
-      }, 50);
-    };
+    allaPartenza.push(function (idx) {
+      thumbs.forEach(function (t, i) { t.classList.toggle('mps-thumb-active', i === idx); });
+    });
   }
 
   /* ── Tab Navigation ─────────────────────────────────── */
@@ -813,31 +842,34 @@ function initSlider(container) {
         if (!isNaN(si)) goToSlide(si);
       });
     });
-    var _origGoToSlideTab = goToSlide;
-    goToSlide = function (idx) {
-      _origGoToSlideTab(idx);
-      setTimeout(function () {
-        tabs.forEach(function (t, i) { t.classList.toggle('mps-tab-active', i === idx); });
-      }, 50);
-    };
+    allaPartenza.push(function (idx) {
+      tabs.forEach(function (t, i) { t.classList.toggle('mps-tab-active', i === idx); });
+    });
   }
 
   /* ── Scroll-Fixed Timeline ──────────────────────────── */
+  // Un cambio chiesto dallo scorrimento mentre un altro era in corso veniva rifiutato ma segnato come fatto:
+  // lo slider restava sulla slide sbagliata finché non si scorreva fino alla successiva. Ora resta in
+  // sospeso e si rifà all'arrivo del cambio in corso.
   if (cfg.scrollTimeline) {
     var wrapper = container.closest('.mps-scroll-fixed-wrapper');
     if (wrapper) {
       var scrollDist = cfg.scrollTimelineDistance || 2000;
-      var scrollLast = -1;
-      window.addEventListener('scroll', function () {
+      var bersaglioScorrimento = 0;
+      var inSospeso = false;
+      var seguiScorrimento = function () {
         var wr = wrapper.getBoundingClientRect();
         if (wr.bottom < 0 || wr.top > window.innerHeight) return;
         var progress = Math.max(0, Math.min(1, -wr.top / scrollDist));
         var targetIdx = Math.min(total - 1, Math.floor(progress * total));
-        if (targetIdx !== scrollLast) {
-          scrollLast = targetIdx;
-          goToSlide(targetIdx);
-        }
-      }, { passive: true });
+        if (targetIdx === bersaglioScorrimento && !inSospeso) return;
+        bersaglioScorrimento = targetIdx;
+        if (animating) { inSospeso = true; return; }
+        inSospeso = false;
+        if (targetIdx !== current) goToSlide(targetIdx);
+      };
+      window.addEventListener('scroll', seguiScorrimento, { passive: true });
+      allArrivo.push(function () { if (inSospeso) seguiScorrimento(); });
     }
   }
 

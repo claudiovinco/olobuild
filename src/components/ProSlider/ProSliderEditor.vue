@@ -190,7 +190,7 @@
               :timelinePlayhead="selectedLayerHasTimeline ? timelinePlayhead : null"
               :selectedKeyframeId="selectedKeyframeId"
               :activeBreakpoint="activeBreakpoint"
-              :canvasMaxWidth="activeCanvasWidth"
+              :canvasMaxWidth="canvasDesignWidth"
               :zoom="canvasZoom"
               :hiddenIds="hiddenLayerIds"
               @deselect="selectedLayerId = null"
@@ -339,6 +339,16 @@ const breakpoints = [
 const activeCanvasWidth = computed(() => {
   const bp = breakpoints.find(b => b.key === activeBreakpoint.value);
   return bp ? bp.width : null;
+});
+
+// Carosello: la tela di una slide è larga quanto la card (Larghezza slide %, sul telefono almeno 80%, come
+// sul sito: olo-proslider.css/.js). I livelli globali coprono tutto lo slider e restano sulla tela intera.
+const canvasDesignWidth = computed(() => {
+  const w = activeCanvasWidth.value || 1440;
+  if (!data.carousel || editingGlobal.value) return w;
+  let frazione = Math.min(95, Math.max(40, Number(data.carouselWidth) || 80));
+  if (activeBreakpoint.value === 'mobile') frazione = Math.max(frazione, 80);
+  return Math.round(w * frazione / 100);
 });
 
 const activeSliderHeight = computed(() => {

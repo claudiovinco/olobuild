@@ -367,7 +367,8 @@ export default {
     { key: 'loop', label: t('Ripeti'), type: 'toggle' },
 
     { type: 'separator', label: t('Transizione') },
-    { key: 'transition', label: t('Tipo transizione'), type: 'select', options: [
+    // Nel carosello il cambio è lo scorrimento delle card: il tipo di transizione non agisce e si nasconde.
+    { key: 'transition', label: t('Tipo transizione'), type: 'select', condition: { field: 'carousel', op: 'empty' }, options: [
       { value: 'fade', label: t('Dissolvenza') },
       { value: 'slide', label: t('Scorrimento') },
       { value: 'zoom', label: t('Zoom') },

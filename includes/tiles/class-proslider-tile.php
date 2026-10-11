@@ -252,7 +252,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         <div
             class="<?php echo esc_attr( $container_classes ); ?>"
             id="<?php echo esc_attr( $uid ); ?>"
-            data-transition="<?php echo esc_attr( $transition ); ?>"
+            data-transition="<?php echo esc_attr( $is_carousel ? 'carousel' : $transition ); // nel carosello il cambio è lo scorrimento delle card: le regole delle transizioni non devono toccarle ?>"
             data-proslider="<?php echo esc_attr( wp_json_encode( $config ) ); ?>"
             data-design-width="1440"
             data-design-height="<?php echo (int) $height; ?>"
@@ -290,6 +290,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
 
             <div class="olo-proslider-track">
+                <?php $this->carosello = $is_carousel; ?>
                 <?php foreach ( $slides as $si => $slide ) : ?>
                     <?php echo $this->render_slide( $slide, $si ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- slide HTML built by render_slide()/render_layer() with esc_attr()/esc_url()/safe_color_css()/absint()/floatval() internally ?>
                 <?php endforeach; ?>
@@ -396,11 +397,14 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
 
     /* ─── Slide ───────────────────────────────────────────── */
 
+    /** Carosello in corso di render: la prima card nasce al centro, le altre dopo (render_slide). */
+    private $carosello = false;
+
     private function render_slide( $slide, $index ) {
         $bg = isset( $slide['background'] ) && is_array( $slide['background'] ) ? $slide['background'] : [];
         $layers = isset( $slide['layers'] ) && is_array( $slide['layers'] ) ? $slide['layers'] : [];
 
-        $active_class = $index === 0 ? ' mps-active' : '';
+        $active_class = $index === 0 ? ( $this->carosello ? ' mps-active mps-carousel-active' : ' mps-active' ) : ( $this->carosello ? ' mps-carousel-dopo' : '' );
         $persist_for  = 0;
         if ( ! empty( $slide['persistFor'] ) ) {
             $persist_for = absint( $slide['persistFor'] );
@@ -413,7 +417,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-proslider-slide<?php echo $active_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed ' mps-active'/'' literal from the ternary above ?>"
+        <div class="olo-proslider-slide<?php echo $active_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed class literals from the ternary above ?>"
              data-slide-index="<?php echo (int) $index; ?>"
              <?php echo $persist_for > 0 ? 'data-persist-for="' . (int) $persist_for . '"' : ''; ?>
              <?php echo $slide_duration > 0 ? 'data-duration="' . (int) $slide_duration . '"' : ''; ?>
@@ -680,12 +684,12 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             $rbr = absint( $layer['borderRadiusBR'] ?? 0 );
             $rbl = absint( $layer['borderRadiusBL'] ?? 0 );
             if ( $rtl > 0 || $rtr > 0 || $rbr > 0 || $rbl > 0 ) {
-                $style .= 'border-radius:' . $rtl . 'px ' . $rtr . 'px ' . $rbr . 'px ' . $rbl . 'px;overflow:hidden;';
+                $style .= 'border-radius:' . $this->px_livello( $rtl, $outside_wrap ) . ' ' . $this->px_livello( $rtr, $outside_wrap ) . ' ' . $this->px_livello( $rbr, $outside_wrap ) . ' ' . $this->px_livello( $rbl, $outside_wrap ) . ';overflow:hidden;';
             }
         } else {
             $br = absint( $layer['borderRadius'] ?? 0 );
             if ( $br > 0 ) {
-                $style .= 'border-radius:' . $br . 'px;overflow:hidden;';
+                $style .= 'border-radius:' . $this->px_livello( $br, $outside_wrap ) . ';overflow:hidden;';
             }
         }
 
@@ -718,15 +722,15 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                 $pb = absint( $layer['paddingBottom'] ?? 0 );
                 $pl = absint( $layer['paddingLeft'] ?? 0 );
                 if ( $pt > 0 || $pr > 0 || $pb > 0 || $pl > 0 ) {
-                    $style .= 'padding:' . $pt . 'px ' . $pr . 'px ' . $pb . 'px ' . $pl . 'px;';
+                    $style .= 'padding:' . $this->px_livello( $pt, $outside_wrap ) . ' ' . $this->px_livello( $pr, $outside_wrap ) . ' ' . $this->px_livello( $pb, $outside_wrap ) . ' ' . $this->px_livello( $pl, $outside_wrap ) . ';';
                 }
             } else {
                 $layer_pad = absint( $layer['padding'] ?? 0 );
                 if ( $layer_pad > 0 ) {
                     if ( $type === 'button' ) {
-                        $style .= 'padding:' . $layer_pad . 'px ' . ( $layer_pad * 2 ) . 'px;';
+                        $style .= 'padding:' . $this->px_livello( $layer_pad, $outside_wrap ) . ' ' . $this->px_livello( $layer_pad * 2, $outside_wrap ) . ';';
                     } else {
-                        $style .= 'padding:' . $layer_pad . 'px;';
+                        $style .= 'padding:' . $this->px_livello( $layer_pad, $outside_wrap ) . ';';
                     }
                 }
             }
@@ -821,14 +825,22 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         if ( $custom_css_inline ) { $style .= $custom_css_inline; }
         ?>
         <div class="olo-proslider-layer<?php echo esc_attr( $layer_class . $sfx_class . ( $custom_class ? ' ' . $custom_class : '' ) . ( $outside_wrap ? ' mps-blend-layer' : '' ) ); ?>"<?php echo $custom_id ? ' id="' . esc_attr( $custom_id ) . '"' : ''; ?> style="<?php echo esc_attr( $style ); ?>"<?php echo $anim_attrs . $action_attr . $parallax_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute strings built above with esc_attr()/absint() around every dynamic value ?><?php echo $sfx_class ? ' data-sfx-effect="' . esc_attr( $layer['sfx']['effect'] ?? 'blockRight' ) . '"' : ''; ?>>
-            <?php echo $this->render_layer_content( $layer, $type ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- content HTML built by render_layer_content() with esc_attr()/esc_url()/esc_html()/safe_richtext_content() internally ?>
+            <?php echo $this->render_layer_content( $layer, $type, $outside_wrap ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- content HTML built by render_layer_content() with esc_attr()/esc_url()/esc_html()/safe_richtext_content() internally ?>
         </div>
         <?php
         return ob_get_clean();
     }
 
-    private function render_layer_content( $layer, $type ) {
-        $font_size   = absint( $layer['fontSize'] ?? 24 ) . 'px';
+    /**
+     * Misura in px di un livello. I livelli con fusione stanno fuori dalla tela scalata (il transform isolerebbe
+     * la fusione): le loro misure si moltiplicano per --mps-k, la scala dello slider (1 dentro la tela).
+     */
+    private function px_livello( $n, $fuori ) {
+        return $fuori ? 'calc(' . $n . 'px * var(--mps-k, 1))' : $n . 'px';
+    }
+
+    private function render_layer_content( $layer, $type, $fuori = false ) {
+        $font_size   = $this->px_livello( absint( $layer['fontSize'] ?? 24 ), $fuori );
         $font_weight = esc_attr( $layer['fontWeight'] ?? '700' );
         $font_style  = esc_attr( $layer['fontStyle'] ?? 'normal' );
         $color       = $this->safe_color_css( $layer['color'] ?? '#ffffff' );
@@ -866,7 +878,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             $base_style .= 'line-height:' . $line_height . ';';
         }
         if ( $letter_spacing != 0 ) {
-            $base_style .= 'letter-spacing:' . $letter_spacing . 'px;';
+            $base_style .= 'letter-spacing:' . $this->px_livello( $letter_spacing, $fuori ) . ';';
         }
         if ( $text_transform !== 'none' ) {
             $base_style .= 'text-transform:' . $text_transform . ';';
@@ -1287,7 +1299,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                         $rules .= '#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '{' . $props . '}';
                     }
                     if ( $fs_ov > 0 ) {
-                        $rules .= '#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '>:is(h1,h2,h3,h4,h5,h6,p,span,div,a){font-size:' . $fs_ov . 'px!important}';
+                        $rules .= '#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '>:is(h1,h2,h3,h4,h5,h6,p,span,div,a){font-size:calc(' . $fs_ov . 'px * var(--mps-k, 1))!important}';
                     }
                 }
             }

@@ -3,6 +3,12 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.676 - 2026-10-11 (fix)
+- Pro Slider, carosello: la card al centro è sempre quella attiva. Prima il binario restava indietro di una card (si vedeva al centro la slide di prima, con i testi di quella dopo) e la card scivolava fuori centro di qualche pixel in più a ogni posizione.
+- Pro Slider, carosello: i livelli si posano sulla card, come nell’editor, che col carosello mostra la tela larga quanto la card. Prima la tela era larga quanto tutto lo slider e un testo al centro finiva sul bordo della card. Una card di lato si sceglie col clic, sul telefono la card è larga almeno l’80% e nel 3D le card ai lati guardano il centro da lati opposti.
+- Pro Slider: a schermo pieno i livelli si posano sull’altezza vera della finestra; i livelli con fusione (moltiplica, scolora…) si scalano con lo slider come gli altri; con la timeline di scorrimento lo slider non resta più indietro scorrendo in fretta. Le miniature e le schede si accendono solo sui cambi avvenuti.
+- Temi: in Fenice Calcio il punteggio sul telefono sta su una riga. Maison Blanche e i blocchi della libreria con il Pro Slider tengono lo stesso aspetto.
+
 ## v1.4.675 - 2026-10-11 (fix)
 - Pro Slider: sul sito i livelli si posano sulla stessa tela dell’editor per ogni formato (computer 1440, notebook 1240, tablet 1024, telefono 640). Prima il sito usava 1200 per tutti: il computer non somigliava all’editor e sul telefono lo slider diventava una striscia bassa col testo di un terzo.
 - Pro Slider: le regolazioni dei livelli per notebook, tablet e telefono (posizione, larghezza, altezza, dimensione del testo) agiscono davvero, anche sui livelli globali. L’altezza in px di un formato si scala con la larghezza, come nell’editor.
