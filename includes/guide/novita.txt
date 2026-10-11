@@ -3,8 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
-## v1.4.668 - 2026-10-11 (temi)
+## v1.4.669 - 2026-10-11 (temi, fix)
 - Temi: Pagine Sparse ha una home più ricca. Un timbro che gira sull’angolo del video, due nastri incrociati con i generi e i servizi, copertine vere per i libri del mese, la citazione di Leopardi che si accende allo scorrimento, le stanze con la foto che compare al passaggio, i librai, la storia in cinque date con i numeri e le voci dei lettori sulla fascia in parallasse.
+- Testimonial: nel carosello si vede solo la slide corrente. Prima le slide vicine sbordavano ai lati della colonna.
 
 ## v1.4.666 - 2026-10-11 (fix)
 - Builder: la ricerca di Elementi e di Struttura al focus evidenzia tutta la casella, con il bordo d’accento e un alone morbido come la ricerca delle impostazioni. Prima dentro la casella compariva un rettangolo blu attorno al campo.

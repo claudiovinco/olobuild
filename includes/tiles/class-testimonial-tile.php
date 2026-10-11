@@ -344,6 +344,9 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-testimonial <?php echo esc_attr( $uid ); ?> olo-test-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>"
              uk-slider="autoplay: <?php echo $autoplay_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'true'/'false' literal from boolean ternary above ?>; autoplay-interval: <?php echo (int) $interval; ?>">
+            <?php // uk-slider-container taglia le slide fuori dalla vista: senza, quelle vicine sbordavano ai lati
+            // della colonna (lo slider di UIkit è infinito: la precedente sta a sinistra, la seguente a destra). ?>
+            <div class="uk-slider-container">
             <ul class="uk-slider-items uk-child-width-1-<?php echo (int) $slides; ?>@m uk-child-width-1-1">
                 <?php foreach ( $items as $item ) : ?>
                 <li>
@@ -360,6 +363,7 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
                 </li>
                 <?php endforeach; ?>
             </ul>
+            </div>
 
             <?php if ( $show_arrows || $show_dots ) : ?>
             <div class="olo-test-slider-nav">
