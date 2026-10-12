@@ -1321,20 +1321,45 @@ trait Olobuild_Renderer_Page_Trait {
                sinistra, elemento inclinato a destra) e un'inclinazione forte lo muove molto: l'ampiezza piena arriva a
                25° di inclinazione. Il «giù» viene dalla gravità nel sistema dello schermo, continua anche col telefono
                dritto o in orizzontale (dove beta e gamma saltano di 180°); avanti/indietro si misura rispetto a come lo
-               si tiene, con un riferimento che si adegua piano (~4 s). Su iPhone Safari chiede il permesso al primo
-               tocco sull'elemento. Fermo con la riduzione del movimento. */
+               si tiene, con un riferimento che si adegua piano (~4 s). Fermo con la riduzione del movimento.
+               L'ascolto parte SUBITO: dove gli eventi arrivano senza permesso (Android) si muove da sé. Anche Chrome
+               ha DeviceOrientationEvent.requestPermission, ma consegna gli eventi lo stesso: aspettare il permesso
+               lasciava la tessera ferma su Android. Il permesso si chiede al primo tocco sull'elemento (iPhone:
+               Safari manda gli eventi solo dopo il sì). Lo script è stampato con ogni template della pagina: gira
+               una volta sola, riprende gli elementi a DOMContentLoaded e quelli delle sezioni pigre appena idratate. */
             (function(){
+              if(window.oloGiroscopio) return;
               if(!window.DeviceOrientationEvent) return;
               if(!window.matchMedia('(hover: none) and (pointer: coarse)').matches) return;
               if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-              document.querySelectorAll('[data-olo-tilt-items][data-olo-tilt-gyro]').forEach(function(host){
-                var v = host.getAttribute('data-olo-tilt-gyro');
-                host.querySelectorAll('img, video').forEach(function(it){ it.setAttribute('data-olo-tilt-gyro', v); });
-              });
-              var els = [].slice.call(document.querySelectorAll('[data-olo-tilt-gyro]')).filter(function(el){ return !el.hasAttribute('data-olo-tilt-items'); });
-              if(!els.length) return;
-              var R = Math.PI / 180, lr = 0, fb = 0, base = null, letto = false, attivo = false;
-              var stati = els.map(function(el){ return { el: el, max: parseInt(el.getAttribute('data-olo-tilt-gyro'), 10) || 45, rx: 0, ry: 0, visto: true }; });
+              window.oloGiroscopio = 1;
+              var R = Math.PI / 180, lr = 0, fb = 0, base = null, letto = false, girando = false, stati = [];
+              var chiede = typeof DeviceOrientationEvent.requestPermission === 'function';
+              var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function(voci){
+                voci.forEach(function(v){ if(v.target.__oloGyroS) v.target.__oloGyroS.visto = v.isIntersecting; });
+              }) : null;
+              function permesso(){
+                if(letto) return;
+                try { DeviceOrientationEvent.requestPermission().catch(function(){}); } catch(_){}
+              }
+              function prendi(radice){
+                if(!radice || !radice.querySelectorAll) return;
+                radice.querySelectorAll('[data-olo-tilt-items][data-olo-tilt-gyro]').forEach(function(host){
+                  var v = host.getAttribute('data-olo-tilt-gyro');
+                  host.querySelectorAll('img, video').forEach(function(it){ it.setAttribute('data-olo-tilt-gyro', v); });
+                });
+                radice.querySelectorAll('[data-olo-tilt-gyro]').forEach(function(el){
+                  if(el.__oloGyroS || el.hasAttribute('data-olo-tilt-items')) return;
+                  var s = { el: el, max: parseInt(el.getAttribute('data-olo-tilt-gyro'), 10) || 45, rx: 0, ry: 0, visto: true };
+                  el.__oloGyroS = s;
+                  el.__oloGyro = true;
+                  el.style.willChange = 'transform';
+                  el.style.transition = 'none';
+                  stati.push(s);
+                  if(io) io.observe(el);
+                  if(chiede) el.addEventListener('click', permesso);
+                });
+              }
               function angolo(){ var a = (screen.orientation ? screen.orientation.angle : window.orientation) || 0; return ((a % 360) + 360) % 360; }
               function leggi(e){
                 if(e.beta == null || e.gamma == null) return;
@@ -1351,45 +1376,24 @@ trait Olobuild_Renderer_Page_Trait {
                 base += d * 0.004;
                 fb = d;
                 letto = true;
+                if(!girando){ girando = true; requestAnimationFrame(giro); }
               }
               function giro(){
-                if(letto){
-                  stati.forEach(function(s){
-                    if(!s.visto) return;
-                    var k = s.max / 25;
-                    var ty = Math.max(-s.max, Math.min(s.max, -lr * k));
-                    var tx = Math.max(-s.max, Math.min(s.max, fb * k));
-                    s.ry += (ty - s.ry) * 0.18;
-                    s.rx += (tx - s.rx) * 0.18;
-                    s.el.style.transform = 'perspective(1000px) rotateX(' + s.rx.toFixed(2) + 'deg) rotateY(' + s.ry.toFixed(2) + 'deg)';
-                  });
-                }
-                requestAnimationFrame(giro);
-              }
-              function avvia(){
-                if(attivo) return;
-                attivo = true;
-                stati.forEach(function(s){ s.el.__oloGyro = true; s.el.style.willChange = 'transform'; s.el.style.transition = 'none'; });
-                window.addEventListener('deviceorientation', leggi);
-                if('IntersectionObserver' in window){
-                  var io = new IntersectionObserver(function(voci){
-                    voci.forEach(function(v){ stati.forEach(function(s){ if(s.el === v.target) s.visto = v.isIntersecting; }); });
-                  });
-                  stati.forEach(function(s){ io.observe(s.el); });
-                }
-                requestAnimationFrame(giro);
-              }
-              if(typeof DeviceOrientationEvent.requestPermission === 'function'){
-                /* iPhone e iPad: il permesso si chiede solo dentro un gesto, il tocco sull'elemento */
-                els.forEach(function(el){
-                  el.addEventListener('click', function(){
-                    if(attivo) return;
-                    DeviceOrientationEvent.requestPermission().then(function(r){ if(r === 'granted') avvia(); }).catch(function(){});
-                  });
+                stati.forEach(function(s){
+                  if(!s.visto) return;
+                  var k = s.max / 25;
+                  var ty = Math.max(-s.max, Math.min(s.max, -lr * k));
+                  var tx = Math.max(-s.max, Math.min(s.max, fb * k));
+                  s.ry += (ty - s.ry) * 0.18;
+                  s.rx += (tx - s.rx) * 0.18;
+                  s.el.style.transform = 'perspective(1000px) rotateX(' + s.rx.toFixed(2) + 'deg) rotateY(' + s.ry.toFixed(2) + 'deg)';
                 });
-              } else {
-                avvia();
+                requestAnimationFrame(giro);
               }
+              window.addEventListener('deviceorientation', leggi);
+              prendi(document);
+              document.addEventListener('DOMContentLoaded', function(){ prendi(document); });
+              document.addEventListener('olo:lazy-hydrated', function(e){ prendi(e.detail ? e.detail.target : document); });
             })();
             </script>
             <script>
