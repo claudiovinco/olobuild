@@ -25131,3 +25131,7 @@ msgstr "Die Seite enthält Tiles, die es in der Sandbox nicht gibt (%s): Aus Sic
 
 msgid "Invio #%d"
 msgstr "Einsendung #%d"
+
+#: includes/class-theme-importer.php
+msgid "Gli oggetti escono dal buio"
+msgstr "Die Objekte tauchen aus dem Dunkel auf"

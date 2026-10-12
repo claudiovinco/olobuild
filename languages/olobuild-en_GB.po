@@ -17137,3 +17137,7 @@ msgstr "Theme imported"
 
 msgid "Importato"
 msgstr "Imported"
+
+#: includes/class-theme-importer.php
+msgid "Gli oggetti escono dal buio"
+msgstr "Objects emerge from the dark"

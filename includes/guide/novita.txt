@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.704 - 2026-10-13 (nuovo)
+- Temi: il tema 53, Kemet, un museo di egittologia in quattro pagine (home, collezioni, mostra, visita). Calcare, basalto e blu egizio; in apertura un Pro Slider dove gli oggetti si accendono come in una teca, poi il nome riempito dal Nilo, i percorsi con la foto al passaggio, gli oggetti col loro cartellino, la cronologia che si srotola, una statua da leggere toccando i numeri, la torcia sui geroglifici e la pagina della visita con orari, biglietti, mappa e prenotazione. È nella categoria Cultura e formazione.
+
 ## v1.4.703 - 2026-10-12 (fix)
 - Temi: l'anteprima del telefono di Teatro Darsena, nella Vetrina temi e nel selettore dei temi, mostra l'apertura come è dalla 1.4.702, col titolo che va a capo prima della foto.
 

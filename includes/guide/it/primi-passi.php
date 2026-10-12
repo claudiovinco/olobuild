@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p>Alla prima attivazione Olobuild apre la configurazione guidata, in 3 passi. Se l'hai rimandata, il pannello di benvenuto nella Bacheca di WordPress la riapre con <span class="ui">Avvia la configurazione</span>.</p>
 <ol class="passi">
 	<li><strong>Tema WordPress.</strong> <span class="ui">Installa e attiva</span> mette Hello Olobuild, il tema leggero incluso nel plugin. Con <span class="ui">Usa tema attuale</span> tieni il tema che hai già.</li>
-	<li><strong>Scegli un design.</strong> Scegli uno dei 52 temi pronti, oppure <span class="ui">Vuoto</span>, e premi <span class="ui">Importa tema selezionato</span>. Il tema crea pagine e menu, attiva header e footer, applica i suoi colori e i suoi caratteri e imposta la home. Prima dell'import Olobuild salva un'istantanea del sito, che puoi rimettere con <span class="ui">Ripristina</span>.</li>
+	<li><strong>Scegli un design.</strong> Scegli uno dei 53 temi pronti, oppure <span class="ui">Vuoto</span>, e premi <span class="ui">Importa tema selezionato</span>. Il tema crea pagine e menu, attiva header e footer, applica i suoi colori e i suoi caratteri e imposta la home. Prima dell'import Olobuild salva un'istantanea del sito, che puoi rimettere con <span class="ui">Ripristina</span>.</li>
 	<li><strong>Tutto pronto.</strong> <span class="ui">Apri Olobuild</span> porta alla bacheca, <span class="ui">Vedi il sito</span> apre il sito.</li>
 </ol>
 <div class="nota"><p>Con <strong>Vuoto</strong> ottieni il minimo per partire: una pagina Home impostata come home, il menu «Menu Principale», un «Header base» e un «Footer base» già attivi.</p></div>
