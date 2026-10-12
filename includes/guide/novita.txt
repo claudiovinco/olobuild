@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.693 - 2026-10-12 (fix)
+- Cache a pagina intera (Prestazioni): accendendola o spegnendola, Olobuild non lascia più accanto a wp-config.php una sua copia (wp-config.php.olo-bak) con la password del database e le chiavi del sito, che su alcuni server si poteva scaricare dal browser. La riga che la cache aggiunge a wp-config.php ora si scrive e si ricontrolla senza fare copie. Le copie lasciate dalle versioni precedenti si tolgono da sole con l'aggiornamento, se sono uguali a wp-config.php a parte quella riga; una copia diversa, per esempio fatta a mano, resta dov'è.
+
 ## v1.4.692 - 2026-10-12 (fix)
 - Temi: le anteprime di Acqua Viva, Fenice Calcio, Maison Blanche e Sali d'Argento, nel selettore dei temi e nella vetrina, mostrano l'apertura con la prima slide, quella che vede chi arriva sulla pagina. Le foto di prima erano state scattate mentre lo slider andava avanti da solo e mostravano la seconda.
 

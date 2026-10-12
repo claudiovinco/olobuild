@@ -46,6 +46,9 @@ class Olobuild_FullPage_Cache {
             if ( file_exists( self::dropin_path() ) ) {
                 self::install_dropin();
             }
+            // La copia di wp-config.php che le versioni fino alla 1.4.692 lasciavano accanto
+            // all'originale a ogni accensione o spegnimento della cache (vedi ensure_wp_cache()).
+            self::remove_wp_config_backup();
             update_option( self::VERSION_OPT, OLOBUILD_VERSION, true );
         }
 
@@ -198,7 +201,13 @@ class Olobuild_FullPage_Cache {
 
     /**
      * Inserisce o rimuove la NOSTRA riga `define('WP_CACHE', true)` in wp-config.php.
-     * Non duplica né rimuove un WP_CACHE definito da altri. Fa un backup .olo-bak.
+     * Non duplica né rimuove un WP_CACHE definito da altri.
+     *
+     * Nessuna copia su disco: fino alla 1.4.692 prima di ogni modifica restava accanto
+     * a wp-config.php un wp-config.php.olo-bak, cioè le credenziali del database e le
+     * chiavi in un file che il server web non esegue come PHP e che, senza regole che
+     * lo vietino, consegna come testo. Il contenuto di prima resta in memoria: dopo la
+     * scrittura il file si rilegge e, se non è quello atteso, si rimette com'era.
      */
     public static function ensure_wp_cache( $on ) {
         $path = self::wp_config_path();
@@ -207,28 +216,67 @@ class Olobuild_FullPage_Cache {
         }
         $src     = (string) file_get_contents( $path );
         $defined = (bool) preg_match( '/define\(\s*[\'"]WP_CACHE[\'"]\s*,/', $src );
-        $marker  = preg_quote( self::WPCONFIG_MARKER, '/' );
+        $ok      = true;
 
         if ( $on ) {
-            if ( $defined ) {
-                return true; // già presente (nostro o dell'host): non si tocca.
+            // Già presente (nostro o dell'host): non si tocca.
+            if ( ! $defined ) {
+                $line = "/* " . self::WPCONFIG_MARKER . " */ define( 'WP_CACHE', true ); /* /" . self::WPCONFIG_MARKER . " */\n";
+                $new  = preg_replace( '/^(<\?php\s*\n)/', '$1' . $line, $src, 1 );
+                $ok   = ( $new !== null && $new !== $src ) ? self::write_wp_config( $path, $src, $new ) : false;
             }
-            $line = "/* " . self::WPCONFIG_MARKER . " */ define( 'WP_CACHE', true ); /* /" . self::WPCONFIG_MARKER . " */\n";
-            $new  = preg_replace( '/^(<\?php\s*\n)/', '$1' . $line, $src, 1 );
-            if ( $new === null || $new === $src ) {
-                return false;
+        } else {
+            // off: rimuovi SOLO la riga marcata da noi.
+            $new = self::without_marker_line( $src );
+            if ( $new !== $src ) {
+                $ok = self::write_wp_config( $path, $src, $new );
             }
-            @copy( $path, $path . '.olo-bak' );
-            return (bool) @file_put_contents( $path, $new, LOCK_EX );
         }
 
-        // off: rimuovi SOLO la riga marcata da noi.
-        $new = preg_replace( '/\/\* ' . $marker . ' \*\/.*?\/\* \/' . $marker . ' \*\/\n?/s', '', $src );
-        if ( $new !== null && $new !== $src ) {
-            @copy( $path, $path . '.olo-bak' );
-            return (bool) @file_put_contents( $path, $new, LOCK_EX );
+        self::remove_wp_config_backup();
+        return $ok;
+    }
+
+    /**
+     * Scrive wp-config.php e controlla il risultato rileggendolo; se non torna rimette
+     * il contenuto di prima, tenuto in memoria dal chiamante.
+     */
+    private static function write_wp_config( $path, $old, $new ) {
+        $scritti = @file_put_contents( $path, $new, LOCK_EX );
+        clearstatcache( true, $path );
+        if ( strlen( $new ) === $scritti && @file_get_contents( $path ) === $new ) {
+            return true;
         }
-        return true;
+        @file_put_contents( $path, $old, LOCK_EX );
+        return false;
+    }
+
+    /** Il contenuto di wp-config.php senza la riga marcata OLOBUILD_FPC. */
+    private static function without_marker_line( $src ) {
+        $marker = preg_quote( self::WPCONFIG_MARKER, '/' );
+        $new    = preg_replace( '/\/\* ' . $marker . ' \*\/.*?\/\* \/' . $marker . ' \*\/\n?/s', '', (string) $src );
+        return null === $new ? (string) $src : $new;
+    }
+
+    /**
+     * Toglie il wp-config.php.olo-bak lasciato dalle versioni fino alla 1.4.692, ma solo
+     * se è wp-config.php di adesso a meno della riga marcata: la copia fatta prima di
+     * aggiungerla o di toglierla. Una copia diversa (wp-config cambiato dopo, o un
+     * file salvato a mano con quel nome) resta dov'è.
+     */
+    private static function remove_wp_config_backup() {
+        $path = self::wp_config_path();
+        if ( $path === '' || ! file_exists( $path . '.olo-bak' ) ) {
+            return;
+        }
+        $bak = @file_get_contents( $path . '.olo-bak' );
+        $cur = @file_get_contents( $path );
+        if ( false === $bak || false === $cur ) {
+            return;
+        }
+        if ( self::without_marker_line( $bak ) === self::without_marker_line( $cur ) ) {
+            wp_delete_file( $path . '.olo-bak' );
+        }
     }
 
     /** Trova wp-config.php (in ABSPATH o un livello sopra, come fa WordPress). */
