@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.702 - 2026-10-12 (fix)
+- Titolo animato: una misura per il tablet non annulla più la riduzione automatica sul telefono. Prima il telefono prendeva intera la misura del tablet (72 px su uno schermo largo 360); ora si riduce da sola fino a quella misura, e una misura scelta per il telefono vince sempre.
+- Temi: in Teatro Darsena, su telefoni e tablet, il titolo dell'apertura non finisce più sotto la foto ad arco: va a capo prima della foto, sul tablet è più piccolo, e l'arco resta intero in cima. Cambia nella demo e nei siti che importano il tema da adesso; le pagine già importate restano come sono.
+
 ## v1.4.701 - 2026-10-12 (novità)
 - Importa template: il template importato si apre subito nel builder. Prima diventava una bozza nell'elenco dei template e sembrava che non fosse successo niente. Le foto e i video del file arrivano con lui: quelli caricati su un altro sito e quelli della libreria di OLObuild si copiano nella Libreria media, e le immagini che fanno parte di Olobuild si prendono dal tuo sito. Prima restavano sul sito di provenienza, e nei file con i segnaposto non si vedevano proprio. Lo stesso vale importando un tema. Le foto di Unsplash e Pexels restano collegate al servizio, che è fatto per essere usato così.
 - Invii: accanto alla pagina allegata a un invio (il file .json, per esempio la candidatura OLOfounder) c'è «Apri nel builder». La pagina diventa una bozza col nome di chi l'ha mandata e si apre in un'altra scheda; la seconda volta si riapre la stessa bozza. Il file può mandarlo chiunque, quindi per sicurezza si aprono solo pagine fatte con le tile della sandbox, l'HTML scritto a mano si filtra e le foto di altri siti restano dove sono.

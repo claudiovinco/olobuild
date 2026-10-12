@@ -66,13 +66,17 @@ class Olobuild_Animatedheading_Tile extends Olobuild_Tile_Base {
         <style>
         .<?php echo $uid; ?> { text-align: <?php echo $align; ?>; padding: 24px 16px; }
         .<?php echo $uid; ?> .olo-ah-heading { color: <?php echo $clr; ?>; font-size: <?php echo $fs; ?>px; font-weight: <?php echo $fw; ?>; margin: 0; line-height: 1.2; }
-        <?php // Sul telefono la misura scelta si riduce da sola (mai oltre quella scelta): 76px
-        // portavano «astronauti» fuori dallo schermo. Tablet e telefono possono averne una propria,
-        // che vince (le regole per dispositivo vengono dopo). ?>
-        @media (max-width:640px) { .<?php echo $uid; ?> .olo-ah-heading { font-size: clamp(<?php echo min( 28, $fs ); ?>px, 9vw, <?php echo $fs; ?>px); } }
-        <?php echo $this->css_per_dispositivo( $s, 'font_size', '.' . $uid . ' .olo-ah-heading', function ( $v ) {
+        <?php // Sul telefono la misura si riduce da sola, mai oltre quella che avrebbe (quella del tablet se
+        // c'è, se no quella scelta): 76px portavano «astronauti» fuori dallo schermo. Le misure del tablet
+        // vengono PRIMA della riduzione, quelle del telefono DOPO e vincono. Prima la regola del tablet (fino
+        // a 960 px) veniva dopo e il telefono la prendeva intera: 72px su 360px (Teatro Darsena).
+        $decl_fs = function ( $v ) {
             return 'font-size:' . max( 12, min( 200, absint( $v ) ) ) . 'px';
-        } ); ?>
+        };
+        $fs_tel = max( 12, min( 200, absint( $s['font_size_tablet'] ?? '' ) ?: ( absint( $s['font_size_tablet_landscape'] ?? '' ) ?: $fs ) ) );
+        echo $this->css_per_dispositivo( array_intersect_key( $s, array_flip( [ 'font_size_tablet_landscape', 'font_size_tablet' ] ) ), 'font_size', '.' . $uid . ' .olo-ah-heading', $decl_fs ); ?>
+        @media (max-width:640px) { .<?php echo $uid; ?> .olo-ah-heading { font-size: clamp(<?php echo min( 28, $fs_tel ); ?>px, 9vw, <?php echo $fs_tel; ?>px); } }
+        <?php echo $this->css_per_dispositivo( array_intersect_key( $s, array_flip( [ 'font_size_mobile_landscape', 'font_size_mobile' ] ) ), 'font_size', '.' . $uid . ' .olo-ah-heading', $decl_fs ); ?>
         .<?php echo $uid; ?> .olo-ah-word { color: <?php echo $aclr; ?>; display: inline-grid; }
         .<?php echo $uid; ?> .olo-ah-word > span, .<?php echo $uid; ?> .olo-ah-spazio > span { grid-area: 1 / 1; }
         .<?php echo $uid; ?> .olo-ah-spazio { display: inline-grid; visibility: hidden; }
