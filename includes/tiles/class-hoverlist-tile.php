@@ -51,6 +51,7 @@ class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
         'name_color_hover_duration'   => 200,
         'name_size'                   => 22,
         'name_uppercase'              => false,
+        'name_weight'                 => '',
         'sub_color'                   => 'var(--olo-color-text-soft, #6b7280)',
         'sub_hover_color'             => '',
         'sub_color_hover_duration'    => 200,
@@ -99,6 +100,8 @@ class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
         $sw_rad  = ( ( $s['swatch_shape'] ?? 'circle' ) === 'square' ) ? '7px' : '50%';
         $name_sz = max( 14, min( 56, absint( $s['name_size'] ) ) );
         $name_up = ! empty( $s['name_uppercase'] );
+        // Peso del nome dal controllo tipografia (vuoto = com'era: 700 nella lista coi numeri, ereditato nelle altre)
+        $name_wt = preg_match( '/^[1-9]00$/', (string) ( $s['name_weight'] ?? '' ) ) ? (string) $s['name_weight'] : '';
         $sub_sz  = max( 10, min( 18, absint( $s['sub_size'] ) ) );
         // Il lato SINISTRO resta guidato dal controllo Indentazione (hover_indent):
         // qui valgono alto/destro/basso del padding riga.
@@ -239,7 +242,7 @@ class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
                 <<?php echo $tag . $attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tag is a fixed 'a'/'div' literal from the ternary above; $attrs is empty or built with esc_url() ?> class="olo-hoverlist__row<?php echo esc_attr( $rowbg_cls ); ?>" data-color="<?php echo esc_attr( $color ); ?>" data-name="<?php echo esc_attr( $name ); ?>" data-number="<?php echo esc_attr( $num ); ?>" data-image="<?php echo esc_url( $pimg ); ?>" style="color:inherit;text-decoration:none;">
                     <?php if ( $lead === 'number' ) : ?>
                         <span class="olo-hoverlist__num" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:13px;"><?php echo esc_html( $num ); ?></span>
-                        <span class="olo-hoverlist__nm" style="font-family:<?php echo esc_attr( $nfam ); ?>;font-weight:700;font-size:clamp(26px,3.4vw,<?php echo (int) $name_sz; ?>px);line-height:1.1;<?php echo $name_up ? 'text-transform:uppercase;' : ''; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.name'; ?>"><?php echo esc_html( $name ); ?></span>
+                        <span class="olo-hoverlist__nm" style="font-family:<?php echo esc_attr( $nfam ); ?>;font-weight:<?php echo esc_attr( $name_wt ?: '700' ); ?>;font-size:clamp(26px,3.4vw,<?php echo (int) $name_sz; ?>px);line-height:1.1;<?php echo $name_up ? 'text-transform:uppercase;' : ''; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.name'; ?>"><?php echo esc_html( $name ); ?></span>
                         <?php if ( $desc !== '' ) : ?>
                             <span class="olo-hoverlist__desc" style="justify-self:end;font-size:<?php echo (int) $desc_sz; ?>px;max-width:30ch;text-align:right;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.desc'; ?>"><?php echo esc_html( $desc ); ?></span>
                         <?php elseif ( $sub !== '' ) : ?>
@@ -247,7 +250,7 @@ class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
                         <?php endif; ?>
                     <?php else : ?>
                         <span class="olo-hoverlist__sw" style="border-radius:<?php echo esc_attr( $sw_rad ); ?>;flex:none;background:<?php echo esc_attr( $color ); ?>;box-shadow:inset 0 0 0 1.5px <?php echo esc_attr( $sw_ring ); ?>;"></span>
-                        <span class="olo-hoverlist__nm" style="font-family:<?php echo esc_attr( $nfam ); ?>;font-size:<?php echo (int) $name_sz; ?>px;line-height:1.1;<?php echo $name_up ? 'text-transform:uppercase;' : ''; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.name'; ?>"><?php echo esc_html( $name ); ?></span>
+                        <span class="olo-hoverlist__nm" style="font-family:<?php echo esc_attr( $nfam ); ?>;<?php echo $name_wt ? 'font-weight:' . esc_attr( $name_wt ) . ';' : ''; ?>font-size:<?php echo (int) $name_sz; ?>px;line-height:1.1;<?php echo $name_up ? 'text-transform:uppercase;' : ''; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.name'; ?>"><?php echo esc_html( $name ); ?></span>
                         <?php if ( $sub !== '' ) : ?>
                             <span class="olo-hoverlist__sub" style="margin-left:auto;font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $sub_sz; ?>px;letter-spacing:0.06em;<?php echo $upper ? 'text-transform:uppercase;' : ''; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.sub'; ?>"><?php echo esc_html( $sub ); ?></span>
                         <?php endif; ?>

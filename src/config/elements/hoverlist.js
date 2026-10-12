@@ -53,6 +53,7 @@ export default {
     name_color_hover_duration: 200,
     name_size: 22,
     name_uppercase: false,
+    name_weight: '',
 
     sub_color: 'var(--olo-color-text-soft, #6b7280)',
     sub_hover_color: '',
@@ -160,7 +161,7 @@ export default {
     withHover({ key: 'name_color', label: t('Colore'), type: 'color' },
       { hoverKey: 'name_hover_color', hoverDurationKey: 'name_color_hover_duration', defaultDuration: 200 }),
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
-    { type: 'typography', label: t('Nome'), responsiveKeys: [], keys: { size: 'name_size', uppercase: 'name_uppercase', family: 'name_font_family' }, sizeMin: 14, sizeMax: 56 },
+    { type: 'typography', label: t('Nome'), responsiveKeys: [], keys: { size: 'name_size', weight: 'name_weight', uppercase: 'name_uppercase', family: 'name_font_family' }, sizeMin: 14, sizeMax: 56 },
 
     { type: 'separator', label: t('Sotto-etichetta') },
     { key: 'mono_font_family', label: t('Font (vuoto = mono del tema)'), type: 'font-family' },
