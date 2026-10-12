@@ -25071,3 +25071,9 @@ msgstr "Siguiente"
 
 msgid "Inserisci un URL valido (es. https://esempio.com)"
 msgstr "Introduce una URL válida (p. ej. https://ejemplo.com)"
+
+msgid "Mostra il telefono"
+msgstr "Mostrar el teléfono"
+
+msgid "La home del tema su un telefono, nell'angolo dell'anteprima: scorre insieme a quella del computer. Compare per i temi che hanno l'anteprima mobile."
+msgstr "La portada del tema en un teléfono, en la esquina de la vista previa: se desplaza junto con la del ordenador. Aparece en los temas que tienen vista previa móvil."

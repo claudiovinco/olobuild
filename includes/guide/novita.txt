@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.696 - 2026-10-12 (novità)
+- Vetrina temi: ogni scheda mostra nell'angolo dell'anteprima la stessa home su un telefono, che scorre insieme a quella del computer al passaggio del mouse. Si spegne con «Mostra il telefono» nel Contenuto della tile; compare per i temi che hanno l'anteprima mobile, cioè tutti i 52 temi inclusi.
+
 ## v1.4.695 - 2026-10-12 (fix)
 - Temi: le anteprime del selettore dei temi e della vetrina sono rifatte per i 19 temi la cui home ha cambiato gli spazi nella 1.4.694, così mostrano le fasce più sottili come sono adesso.
 

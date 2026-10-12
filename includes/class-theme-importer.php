@@ -36,10 +36,19 @@ class Olobuild_Theme_Importer {
                     }
                 }
             }
+            // Anteprima del telefono (la home a 390 px): file suo sulla libreria remota,
+            // screenshot-mobile-<preview_mobile_v>.jpg. Senza il campo nel tema, o senza libreria,
+            // resta vuota e la Vetrina temi mostra solo quella del computer.
+            $screenshot_mobile = '';
+            $pm = isset( $data['preview_mobile_v'] ) ? sanitize_file_name( (string) $data['preview_mobile_v'] ) : '';
+            if ( $lib !== '' && $pm !== '' ) {
+                $screenshot_mobile = $lib . '/themes/' . $theme_id . '/screenshot-mobile-' . $pm . '.jpg?v=' . rawurlencode( $pm );
+            }
             $themes[] = array_merge( [
                 'id' => $data['id'], 'name' => $data['name'] ?? $theme_id,
                 'description' => $data['description'] ?? '', 'author' => $data['author'] ?? '',
                 'version' => $data['version'] ?? '1.0', 'screenshot' => $screenshot,
+                'screenshot_mobile' => $screenshot_mobile,
                 'tags' => $data['tags'] ?? [], 'dir' => $dir,
             ], self::build_preview( $data, $theme_id ) );
         }

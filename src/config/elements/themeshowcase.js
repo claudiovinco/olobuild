@@ -22,6 +22,7 @@ export default {
     filter_all_label: t('Tutti'),
     show_category: true,
     show_zone: true,
+    show_phone: true,
     card_label: t('Guarda la demo'),
     cta_text: t('Usa questo tema'),
     cta_url: '',
@@ -59,6 +60,8 @@ export default {
     { key: 'show_category', label: t('Mostra la categoria'), type: 'toggle' },
     { key: 'show_zone', label: t("Mostra l'effetto in evidenza"), type: 'toggle',
       description: t("L'effetto che caratterizza il tema, scritto sull'anteprima.") },
+    { key: 'show_phone', label: t('Mostra il telefono'), type: 'toggle',
+      description: t("La home del tema su un telefono, nell'angolo dell'anteprima: scorre insieme a quella del computer. Compare per i temi che hanno l'anteprima mobile.") },
     { key: 'card_label', label: t('Invito sulla scheda'), type: 'text' },
 
     { type: 'separator', label: t('Visore') },

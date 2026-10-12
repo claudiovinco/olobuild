@@ -3,7 +3,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 /**
  * Tile Vetrina temi — i temi inclusi nel plugin come siti da visitare: una scheda per tema con
- * l'anteprima che scorre al passaggio del mouse (come nel selettore dei temi), i filtri per
+ * l'anteprima che scorre al passaggio del mouse (come nel selettore dei temi), nell'angolo la
+ * stessa home su un telefono che scorre insieme (se il tema ha l'anteprima mobile), i filtri per
  * categoria e un visore a tutto schermo con la demo dal vivo (Olobuild_Demo_Temi) in vista
  * computer, tablet o telefono, col tema precedente e il successivo.
  *
@@ -29,6 +30,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
         'filter_all_label'    => 'Tutti',
         'show_category'       => true,
         'show_zone'           => true,
+        'show_phone'          => true,
         'card_label'          => 'Guarda la demo',
         'cta_text'            => 'Usa questo tema',
         'cta_url'             => '',
@@ -98,6 +100,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 'etichetta' => '' !== $categoria ? olobuild_t( $categoria ) : '',
                 'effetto'   => '' !== $effetto ? olobuild_t( $effetto ) : '',
                 'anteprima' => (string) ( $t['screenshot'] ?? '' ),
+                'telefono'  => (string) ( $t['screenshot_mobile'] ?? '' ),
                 'demo'      => Olobuild_Demo_Temi::indirizzo_tema( $id ),
                 'colore'    => (string) sanitize_hex_color( (string) ( $t['accent'] ?? '' ) ),
                 'scuro'     => empty( $t['light'] ),
@@ -221,6 +224,8 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ovt-card:hover .ovt-anteprima img,.<?php echo $uid; ?> .ovt-card:focus-visible .ovt-anteprima img{object-position:bottom center;transition:object-position 9s linear;}
             .<?php echo $uid; ?> .ovt-effetto{position:absolute;left:var(--olo-space-sm);bottom:var(--olo-space-sm);max-width:calc(100% - 2 * var(--olo-space-sm));display:inline-flex;align-items:center;gap:var(--olo-space-xs);padding:var(--olo-space-xs) var(--olo-space-sm);border-radius:var(--olo-btn-border-radius);font-size:12px;font-weight:600;line-height:1.3;background:color-mix(in srgb,var(--olo-color-dark) 74%,transparent);color:var(--olo-color-light);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
             .<?php echo $uid; ?> .ovt-effetto i{flex:none;width:7px;height:7px;border-radius:50%;background:var(--ovt-tema, var(--ovt-acc));}
+            .<?php echo $uid; ?> .ovt-tel{position:absolute;right:var(--olo-space-sm);bottom:var(--olo-space-sm);width:24%;aspect-ratio:390/844;overflow:hidden;border:3px solid var(--olo-color-dark);border-radius:13%/6%;background:var(--olo-color-light);box-shadow:0 0 0 1px color-mix(in srgb,var(--olo-color-light) 35%,transparent),0 10px 26px color-mix(in srgb,var(--olo-color-dark) 38%,transparent);}
+            .<?php echo $uid; ?> .ovt-anteprima.con-tel .ovt-effetto{max-width:calc(76% - 3 * var(--olo-space-sm));}
             .<?php echo $uid; ?> .ovt-corpo{flex:1;display:flex;flex-direction:column;gap:var(--olo-space-xs);padding:var(--olo-space-md);}
             .<?php echo $uid; ?> .ovt-cat{<?php echo $meta; ?>}
             .<?php echo $uid; ?> .ovt-nome{line-height:1.2;font-family:var(--olo-font-family-heading, inherit);<?php echo $nome; ?>}
@@ -288,9 +293,11 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 <?php foreach ( $temi as $t ) : ?>
                 <li class="ovt-voce" data-cat="<?php echo esc_attr( $t['categoria'] ); ?>">
                     <a class="ovt-card" href="<?php echo esc_url( $t['demo'] ); ?>" data-tema="<?php echo esc_attr( $t['id'] ); ?>" data-nome="<?php echo esc_attr( $t['nome'] ); ?>" data-categoria="<?php echo esc_attr( $t['etichetta'] ); ?>"<?php echo $t['scuro'] ? ' data-scuro="1"' : ''; ?><?php echo '' !== $t['propri'] ? ' data-colori="' . esc_attr( $t['propri'] ) . '"' : ''; ?><?php echo '' !== $t['colore'] ? ' style="--ovt-tema:' . esc_attr( $t['colore'] ) . '"' : ''; ?>>
-                        <span class="ovt-anteprima">
+                        <?php $tel = ! empty( $s['show_phone'] ) && '' !== $t['telefono'] && '' !== $t['anteprima']; ?>
+                        <span class="ovt-anteprima<?php echo $tel ? ' con-tel' : ''; ?>">
                             <?php if ( '' !== $t['anteprima'] ) : ?><img src="<?php echo esc_url( $t['anteprima'] ); ?>" alt="" loading="lazy" decoding="async" /><?php endif; ?>
                             <?php if ( ! empty( $s['show_zone'] ) && '' !== $t['effetto'] ) : ?><span class="ovt-effetto"><i></i><?php echo esc_html( $t['effetto'] ); ?></span><?php endif; ?>
+                            <?php if ( $tel ) : // la stessa home sul telefono: scorre col mouse insieme a quella del computer (stesse regole di .ovt-anteprima img) ?><span class="ovt-tel"><img src="<?php echo esc_url( $t['telefono'] ); ?>" alt="" loading="lazy" decoding="async" /></span><?php endif; ?>
                         </span>
                         <span class="ovt-corpo">
                             <?php if ( ! empty( $s['show_category'] ) && '' !== $t['categoria'] ) : ?><span class="ovt-cat"><?php echo esc_html( $t['etichetta'] ); ?></span><?php endif; ?>
