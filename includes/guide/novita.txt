@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.692 - 2026-10-12 (fix)
+- Temi: le anteprime di Acqua Viva, Fenice Calcio, Maison Blanche e Sali d'Argento, nel selettore dei temi e nella vetrina, mostrano l'apertura con la prima slide, quella che vede chi arriva sulla pagina. Le foto di prima erano state scattate mentre lo slider andava avanti da solo e mostravano la seconda.
+
 ## v1.4.691 - 2026-10-12 (fix)
 - Titolo animato: la parola che cambia tiene sempre lo spazio della più lunga. Prima, quando arrivava una parola corta la frase saliva nella riga di sopra e con quella lunga tornava a capo, e a ogni cambio tutta la pagina sotto saliva e scendeva (nell'apertura di Teatro Darsena di 115 px). Vale per tutte le animazioni: rotazione, macchina da scrivere, dissolvenza, scorrimento, rivelazione ed evidenziazione; la parola visibile resta allineata come il titolo.
 
