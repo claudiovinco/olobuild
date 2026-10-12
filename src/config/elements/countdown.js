@@ -25,6 +25,7 @@ export default {
     expire_redirect_url: '',
     expire_message: 'Tempo scaduto!',
     display_mode: 'block',
+    alignment: 'center',
     target_date: '2026-12-31T23:59',
     show_days: true,
     show_hours: true,
@@ -148,7 +149,7 @@ export default {
     // `text_color` (ereditato dal wrapper .olo-countdown). Il mapping precedente era
     // invertito: il color picker sotto "Numeri" cambiava le etichette.
     { type: 'typography', label: t('Numeri'),
-      responsiveKeys: [],
+      responsiveKeys: ['size'],
       keys: {
         size:   'number_font_size',
         weight: 'number_font_weight',
@@ -173,7 +174,7 @@ export default {
       },
       sizeMin: 12, sizeMax: 80, sizeStep: 2,
     },
-    { key: 'item_min_width', label: t('Larghezza min elemento'), type: 'range', min: 40, max: 160, step: 5 },
+    { key: 'item_min_width', label: t('Larghezza min elemento'), type: 'range', min: 40, max: 160, step: 5, responsive: true },
     { key: 'tile_padding', label: t('Padding interno tile'), type: 'spacing', max: 64 },
 
     { type: 'separator', label: t('Card unità (giorni/ore/min/sec)') },
@@ -183,5 +184,12 @@ export default {
 
     ...shadowField,
     ...borderFields(),
+
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
+    ]},
   ],
 };

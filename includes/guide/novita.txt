@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.706 - 2026-10-13 (miglioria)
+- Conto alla rovescia: nello Stile c'è «Allineamento» (sinistra, centro, destra; di serie al centro come prima) e la misura dei numeri e la larghezza dei riquadri si possono scegliere per tablet e telefono, così i riquadri restano in fila anche sugli schermi stretti.
+- Temi: in Kemet i numeri del conto alla rovescia stanno in fila, nella fascia blu della home allineati al testo e nella pagina della mostra anche sul telefono.
+
 ## v1.4.705 - 2026-10-13 (miglioria)
 - Hover List: nel controllo tipografia del nome c'è anche il peso. Prima il nome era sempre in grassetto (700) nella lista coi numeri; lasciato vuoto resta com'era.
 - Temi: Kemet rifinito dopo la prova nella demo: la testa dell'apertura sparisce nel buio senza il rettangolo della foto, occhielli e pulsanti col carattere e il maiuscolo del tema, immagini senza cornice, «KEMET» su una riga anche sul telefono, i numeri a due colonne sul telefono.

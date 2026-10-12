@@ -21,6 +21,7 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
         'expire_redirect_url' => '',
         'expire_message'      => 'Tempo scaduto!',
         'display_mode'        => 'block',
+        'alignment'           => 'center',
         'target_date'         => '2026-12-31T23:59',
         'show_days'           => true,
         'show_hours'          => true,
@@ -37,11 +38,15 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
         'accent_color'        => '',
         'separator_color'     => '',
         'number_font_size'    => '48',
+        'number_font_size_tablet' => '',
+        'number_font_size_mobile' => '',
         'number_font_weight'  => '700',
         'label_font_size'     => '12',
         'label_font_weight'   => '500',
         'separator_font_size' => '32',
         'item_min_width'      => '70',
+        'item_min_width_tablet' => '',
+        'item_min_width_mobile' => '',
         'item_bg_color'       => '',
         'item_radius'         => '0',
         'item_padding'        => '0',
@@ -116,6 +121,9 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
         $fg      = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
         $accent  = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $is_inline = ( $s['display_mode'] === 'inline' );
+        // «Allineamento» (Stile → Disposizione): di serie al centro, com'era quando era fisso.
+        $allinea   = in_array( $s['alignment'] ?? '', [ 'left', 'right' ], true ) ? $s['alignment'] : 'center';
+        $justify   = [ 'left' => 'flex-start', 'center' => 'center', 'right' => 'flex-end' ][ $allinea ];
         // Card per singola unità (giorni/ore/min/sec) — opzionali, default 0 = no card.
         $item_bg     = $this->safe_color_css( $s['item_bg_color'] ?? '' );
         // Dual-format: numero legacy ('8') O oggetto {tl,tr,br,bl} dal type 'border-radius'. '' se zero/vuoto.
@@ -130,7 +138,7 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
         <style>
             .<?php echo $uid; ?> {
                 display: flex;
-                justify-content: center;
+                justify-content: <?php echo $justify; ?>;
                 align-items: <?php echo $is_inline ? 'baseline' : 'center'; ?>;
                 flex-wrap: <?php echo $is_inline ? 'nowrap' : 'wrap'; ?>;
                 gap: <?php echo $is_inline ? '4px' : '8px'; ?>;
@@ -183,10 +191,27 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
                 <?php endif; ?>
             }
             .<?php echo $uid; ?> .mcd-expire-msg {
-                text-align: center;
+                text-align: <?php echo $allinea; ?>;
                 font-size: 1.5em;
                 padding: 20px;
             }
+            <?php
+            // Misura dei numeri e larghezza dei riquadri per dispositivo (vuote = quelle di sopra): sul
+            // telefono tre riquadri da 170 px andavano a capo uno sotto l'altro. Vengono dopo, e vincono.
+            $decl_num = function ( $v ) use ( $is_inline ) {
+                $px = max( 12, min( 200, absint( $v ) ) );
+                return 'font-size:' . ( $is_inline ? max( 16, (int) round( $px * 0.55 ) ) : $px ) . 'px';
+            };
+            echo $this->css_per_dispositivo( $s, 'number_font_size', '.' . $uid . ' .mcd-num', $decl_num );
+            if ( ! $is_inline ) {
+                echo $this->css_per_dispositivo( $s, 'number_font_size', '.' . $uid . ' .mcd-sep', function ( $v ) {
+                    return 'padding-top:' . (int) round( max( 12, min( 200, absint( $v ) ) ) * 0.15 ) . 'px';
+                } );
+                echo $this->css_per_dispositivo( $s, 'item_min_width', '.' . $uid . ' .mcd-item', function ( $v ) {
+                    return 'min-width:' . min( 400, absint( $v ) ) . 'px';
+                } );
+            }
+            ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div id="<?php echo esc_attr( $uid ); ?>"
