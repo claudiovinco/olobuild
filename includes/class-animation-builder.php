@@ -254,7 +254,8 @@ class Olobuild_Animation_Builder {
 
     /**
      * Tilt 3D col giroscopio (Effetti mouse → Tilt 3D → «Anche col giroscopio»): su telefoni e tablet
-     * l'elemento si inclina al contrario del dispositivo, fino all'ampiezza in gradi (10-60, di serie 45).
+     * l'elemento si inclina al contrario del dispositivo, fino all'ampiezza in gradi (4-60, di serie 12:
+     * vicino all'inclinazione reale del telefono; l'ampiezza piena arriva a 25° di inclinazione).
      * Il runtime sta in renderer-page; con «Foto interne» l'attributo passa alle foto come quello del tilt.
      *
      * @param array $src Advanced (o settings) con mouse_tilt_gyro / mouse_tilt_gyro_max.
@@ -264,8 +265,8 @@ class Olobuild_Animation_Builder {
         if ( empty( $src['mouse_tilt_gyro'] ) ) {
             return '';
         }
-        $max = intval( $src['mouse_tilt_gyro_max'] ?? 45 );
-        $max = $max > 0 ? max( 10, min( 60, $max ) ) : 45;
+        $max = intval( $src['mouse_tilt_gyro_max'] ?? 12 );
+        $max = $max > 0 ? max( 4, min( 60, $max ) ) : 12;
         return ' data-olo-tilt-gyro="' . $max . '"';
     }
 

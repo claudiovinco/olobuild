@@ -1350,7 +1350,7 @@ trait Olobuild_Renderer_Page_Trait {
                 });
                 radice.querySelectorAll('[data-olo-tilt-gyro]').forEach(function(el){
                   if(el.__oloGyroS || el.hasAttribute('data-olo-tilt-items')) return;
-                  var s = { el: el, max: parseInt(el.getAttribute('data-olo-tilt-gyro'), 10) || 45, rx: 0, ry: 0, visto: true };
+                  var s = { el: el, max: parseInt(el.getAttribute('data-olo-tilt-gyro'), 10) || 12, rx: 0, ry: 0, visto: true };
                   el.__oloGyroS = s;
                   el.__oloGyro = true;
                   el.style.willChange = 'transform';
