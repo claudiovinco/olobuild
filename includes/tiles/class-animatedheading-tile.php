@@ -52,6 +52,13 @@ class Olobuild_Animatedheading_Tile extends Olobuild_Tile_Base {
         $anim  = $s['animation'];
         $speed = absint($s['typing_speed']) ?: 100;
         $pause = absint($s['pause_time']) ?: 2000;
+        // La parola animata tiene sempre lo spazio della più LUNGA (.olo-ah-spazio: tutte le parole
+        // sovrapposte in una griglia, invisibili, scritte dai ::before così non entrano nel testo del
+        // titolo), e quella visibile (.olo-ah-testo) si muove lì dentro, allineata come il titolo. Prima
+        // lo spazio seguiva la parola mostrata: una corta saliva nella riga di sopra, una lunga tornava a
+        // capo, e a ogni cambio tutta la pagina sotto saliva e scendeva (Teatro Darsena: 115 px).
+        $dentro = [ 'left' => 'start', 'center' => 'center', 'right' => 'end' ][ $align ];
+        $cursore = 'typing' === $anim;
 
         ob_start();
         ?>
@@ -66,33 +73,42 @@ class Olobuild_Animatedheading_Tile extends Olobuild_Tile_Base {
         <?php echo $this->css_per_dispositivo( $s, 'font_size', '.' . $uid . ' .olo-ah-heading', function ( $v ) {
             return 'font-size:' . max( 12, min( 200, absint( $v ) ) ) . 'px';
         } ); ?>
-        .<?php echo $uid; ?> .olo-ah-word { color: <?php echo $aclr; ?>; }
+        .<?php echo $uid; ?> .olo-ah-word { color: <?php echo $aclr; ?>; display: inline-grid; }
+        .<?php echo $uid; ?> .olo-ah-word > span, .<?php echo $uid; ?> .olo-ah-spazio > span { grid-area: 1 / 1; }
+        .<?php echo $uid; ?> .olo-ah-spazio { display: inline-grid; visibility: hidden; }
+        .<?php echo $uid; ?> .olo-ah-spazio > span::before { content: attr(data-w)<?php echo $cursore ? ' "|"' : ''; ?>; }
+        .<?php echo $uid; ?> .olo-ah-testo { justify-self: <?php echo $dentro; ?>; }
         <?php if ($anim === 'typing') : ?>
         .<?php echo $uid; ?> .olo-ah-cursor { animation: olo-blink 0.7s infinite; }
         @keyframes olo-blink { 0%,50%{opacity:1}51%,100%{opacity:0} }
-        <?php elseif ($anim === 'rotating') : ?>
-        .<?php echo $uid; ?> .olo-ah-word { display: inline-block; overflow: hidden; vertical-align: bottom; }
+        <?php elseif ($anim === 'rotating' || $anim === 'slide') : ?>
+        <?php // la parola entra ed esce scorrendo: la finestra è larga quanto lo spazio riservato ?>
+        .<?php echo $uid; ?> .olo-ah-testo { justify-self: stretch; overflow: hidden; text-align: <?php echo $align; ?>; }
+        <?php elseif ($anim === 'clip') : ?>
+        .<?php echo $uid; ?> .olo-ah-testo { overflow: hidden; white-space: nowrap; border-right: 2px solid currentColor; }
         <?php elseif ($anim === 'fade') : ?>
-        .<?php echo $uid; ?> .olo-ah-word { transition: opacity 0.5s ease; }
+        .<?php echo $uid; ?> .olo-ah-testo { transition: opacity 0.5s ease; }
         <?php elseif ($anim === 'highlight') : ?>
         <?php
+            // Il segno sta sulla parola visibile; lo spazio riservato tiene anche il suo margine.
             $hclr = $this->safe_color_css($s['highlight_color']) ?: 'var(--olo-color-primary, #e1474f)';
             $hstyle = $s['highlight_style'];
             if ($hstyle === 'underline') {
-                echo ".{$uid} .olo-ah-word { border-bottom: 3px solid {$hclr}; }";
+                echo ".{$uid} .olo-ah-testo { border-bottom: 3px solid {$hclr}; }";
             } elseif ($hstyle === 'background') {
-                echo ".{$uid} .olo-ah-word { background: " . Olobuild_Tile_Utils::con_alfa( $hclr, '30' ) . "; padding: 0 8px; border-radius: 4px; }";
+                echo ".{$uid} .olo-ah-testo { background: " . Olobuild_Tile_Utils::con_alfa( $hclr, '30' ) . "; padding: 0 8px; border-radius: 4px; }";
+                echo ".{$uid} .olo-ah-spazio > span { padding: 0 8px; }";
             } elseif ($hstyle === 'strikethrough') {
-                echo ".{$uid} .olo-ah-word { text-decoration: line-through {$hclr}; }";
+                echo ".{$uid} .olo-ah-testo { text-decoration: line-through {$hclr}; }";
             } elseif ($hstyle === 'circle') {
                 // «Cerchio» era nel menu senza una riga di CSS: la parola restava nuda.
-                // Un ovale tracciato attorno, leggermente inclinato come fatto a mano;
-                // inline-block senza overflow tiene la linea di base del testo.
-                echo ".{$uid} .olo-ah-word { position: relative; display: inline-block; padding: 0 .2em; margin: 0 .15em; }";
+                // Un ovale tracciato attorno, leggermente inclinato come fatto a mano.
+                echo ".{$uid} .olo-ah-testo { position: relative; padding: 0 .2em; margin: 0 .15em; }";
+                echo ".{$uid} .olo-ah-spazio > span { padding: 0 .2em; margin: 0 .15em; }";
                 // Ai lati in % della parola (un ovale inscritto nel suo riquadro taglierebbe le
                 // lettere agli estremi delle parole lunghe), sopra e sotto in em: se la frase va
                 // a capo l'ovale non invade la riga di sopra.
-                echo ".{$uid} .olo-ah-word::after { content: ''; position: absolute; left: -5%; right: -5%; top: -.22em; bottom: -.22em; border: 3px solid {$hclr}; border-radius: 50%; transform: rotate(-2deg); pointer-events: none; }";
+                echo ".{$uid} .olo-ah-testo::after { content: ''; position: absolute; left: -5%; right: -5%; top: -.22em; bottom: -.22em; border: 3px solid {$hclr}; border-radius: 50%; transform: rotate(-2deg); pointer-events: none; }";
             }
         ?>
         <?php endif; ?>
@@ -101,8 +117,8 @@ class Olobuild_Animatedheading_Tile extends Olobuild_Tile_Base {
         <div class="olo-animatedheading <?php echo esc_attr( $uid ); ?>">
             <<?php echo tag_escape( $tag ); ?> class="olo-ah-heading">
                 <?php if (!empty($s['before_text'])) echo esc_html($s['before_text']) . ' '; ?>
-                <span class="olo-ah-word" data-words="<?php echo esc_attr(wp_json_encode($words)); ?>"><?php echo esc_html($words[0]); ?></span>
-                <?php if ($anim === 'typing') echo '<span class="olo-ah-cursor">|</span>'; ?>
+                <?php // su una riga sola: uno spazio fra i tag spingerebbe la parola dentro lo spazio riservato ?>
+                <span class="olo-ah-word" data-words="<?php echo esc_attr(wp_json_encode($words)); ?>"><span class="olo-ah-spazio" aria-hidden="true"><?php foreach ( $words as $w ) { echo '<span data-w="' . esc_attr( $w ) . '"></span>'; } ?></span><span class="olo-ah-testo"><?php if ( $cursore ) : ?><span class="olo-ah-lettere"><?php echo esc_html($words[0]); ?></span><span class="olo-ah-cursor">|</span><?php else : echo esc_html($words[0]); endif; ?></span></span>
                 <?php if (!empty($s['after_text'])) echo ' ' . esc_html($s['after_text']); ?>
             </<?php echo tag_escape( $tag ); ?>>
         </div>
@@ -112,13 +128,16 @@ class Olobuild_Animatedheading_Tile extends Olobuild_Tile_Base {
             if(!el) return;
             var words = JSON.parse(el.getAttribute('data-words'));
             if(!words.length) return;
+            // Si anima solo la parola visibile: lo spazio lo tiene .olo-ah-spazio, sempre quello
+            // della parola più lunga, e il titolo non cambia più forma a ogni parola.
+            var tx = el.querySelector('.olo-ah-testo') || el;
+            var lettere = el.querySelector('.olo-ah-lettere') || tx;
             // WCAG 2.2.2 / 2.3.3: rispetta prefers-reduced-motion.
-            // Se l'utente preferisce ridurre il movimento, mostra staticamente
-            // la prima parola senza avviare alcuna animazione/intervallo.
+            // Se l'utente preferisce ridurre il movimento, resta la prima parola
+            // (già scritta) senza avviare alcuna animazione/intervallo.
             // If annidati, niente «&&»: WordPress lo trasforma in &#038; e rompe lo script.
             if(window.matchMedia){
                 if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-                    el.textContent = words[0];
                     return;
                 }
             }
@@ -134,7 +153,7 @@ class Olobuild_Animatedheading_Tile extends Olobuild_Tile_Base {
                 function typeStep(){
                     if(isDeleting){
                         charIdx--;
-                        el.textContent = currentText.substring(0, charIdx);
+                        lettere.textContent = currentText.substring(0, charIdx);
                         if(charIdx === 0){
                             isDeleting = false;
                             idx = (idx + 1) % words.length;
@@ -145,7 +164,7 @@ class Olobuild_Animatedheading_Tile extends Olobuild_Tile_Base {
                         setTimeout(typeStep, speed / 2);
                     } else {
                         charIdx++;
-                        el.textContent = currentText.substring(0, charIdx);
+                        lettere.textContent = currentText.substring(0, charIdx);
                         if(charIdx === currentText.length){
                             isDeleting = true;
                             setTimeout(typeStep, pauseTime);
@@ -156,29 +175,23 @@ class Olobuild_Animatedheading_Tile extends Olobuild_Tile_Base {
                 }
                 setTimeout(function(){ isDeleting = true; typeStep(); }, pauseTime);
             } else if(anim === 'fade'){
-                el.style.transition = 'opacity 0.5s ease';
+                tx.style.transition = 'opacity 0.5s ease';
                 setInterval(function(){
-                    el.style.opacity = '0';
+                    tx.style.opacity = '0';
                     setTimeout(function(){
                         idx = (idx + 1) % words.length;
-                        el.textContent = words[idx];
-                        el.style.opacity = '1';
+                        tx.textContent = words[idx];
+                        tx.style.opacity = '1';
                     }, 500);
                 }, pauseTime);
             } else if(anim === 'rotating'){
-                var h = el.offsetHeight || parseInt(getComputedStyle(el).fontSize);
-                el.style.display = 'inline-block';
-                el.style.overflow = 'hidden';
-                el.style.verticalAlign = 'bottom';
-                el.style.height = h + 'px';
-                el.style.lineHeight = h + 'px';
-                el.style.transition = 'none';
+                // la finestra (.olo-ah-testo, overflow nascosto) è alta e larga quanto lo spazio riservato
                 var inner = document.createElement('span');
                 inner.style.display = 'block';
                 inner.style.transition = 'transform 0.5s cubic-bezier(.4,0,.2,1)';
                 inner.textContent = words[0];
-                el.textContent = '';
-                el.appendChild(inner);
+                tx.textContent = '';
+                tx.appendChild(inner);
                 setInterval(function(){
                     inner.style.transform = 'translateY(-100%)';
                     inner.style.opacity = '0';
@@ -195,16 +208,12 @@ class Olobuild_Animatedheading_Tile extends Olobuild_Tile_Base {
                     }, 500);
                 }, pauseTime);
             } else if(anim === 'slide'){
-                el.style.display = 'inline-block';
-                el.style.overflow = 'hidden';
-                el.style.verticalAlign = 'bottom';
-                el.style.transition = 'none';
                 var inner2 = document.createElement('span');
                 inner2.style.display = 'inline-block';
                 inner2.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
                 inner2.textContent = words[0];
-                el.textContent = '';
-                el.appendChild(inner2);
+                tx.textContent = '';
+                tx.appendChild(inner2);
                 setInterval(function(){
                     inner2.style.transform = 'translateX(-110%)';
                     inner2.style.opacity = '0';
@@ -221,39 +230,33 @@ class Olobuild_Animatedheading_Tile extends Olobuild_Tile_Base {
                     }, 500);
                 }, pauseTime);
             } else if(anim === 'clip'){
-                el.style.display = 'inline-block';
-                el.style.overflow = 'hidden';
-                // Un inline-block con overflow nascosto prende come linea di base il bordo
-                // inferiore: senza questo la parola si alzava sopra il resto del titolo.
-                el.style.verticalAlign = 'bottom';
-                el.style.borderRight = '2px solid currentColor';
-                el.style.whiteSpace = 'nowrap';
-                el.style.transition = 'width 0.8s cubic-bezier(.4,0,.2,1)';
-                el.style.width = 'auto';
-                var fullW = el.offsetWidth;
-                el.style.width = fullW + 'px';
+                // overflow, a capo e cursore stanno nel CSS della tile; qui solo la larghezza
+                tx.style.transition = 'width 0.8s cubic-bezier(.4,0,.2,1)';
+                tx.style.width = 'auto';
+                var fullW = tx.offsetWidth;
+                tx.style.width = fullW + 'px';
                 setInterval(function(){
-                    el.style.width = '0px';
+                    tx.style.width = '0px';
                     setTimeout(function(){
                         idx = (idx + 1) % words.length;
-                        el.textContent = words[idx];
-                        el.style.transition = 'none';
-                        el.style.width = '0px';
-                        var nw = el.scrollWidth;
+                        tx.textContent = words[idx];
+                        tx.style.transition = 'none';
+                        tx.style.width = '0px';
+                        var nw = tx.scrollWidth;
                         setTimeout(function(){
-                            el.style.transition = 'width 0.8s cubic-bezier(.4,0,.2,1)';
-                            el.style.width = nw + 'px';
+                            tx.style.transition = 'width 0.8s cubic-bezier(.4,0,.2,1)';
+                            tx.style.width = nw + 'px';
                         }, 30);
                     }, 800);
                 }, pauseTime);
             } else if(anim === 'highlight'){
-                el.style.transition = 'opacity 0.4s ease';
+                tx.style.transition = 'opacity 0.4s ease';
                 setInterval(function(){
-                    el.style.opacity = '0';
+                    tx.style.opacity = '0';
                     setTimeout(function(){
                         idx = (idx + 1) % words.length;
-                        el.textContent = words[idx];
-                        el.style.opacity = '1';
+                        tx.textContent = words[idx];
+                        tx.style.opacity = '1';
                     }, 400);
                 }, pauseTime);
             }

@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.691 - 2026-10-12 (fix)
+- Titolo animato: la parola che cambia tiene sempre lo spazio della più lunga. Prima, quando arrivava una parola corta la frase saliva nella riga di sopra e con quella lunga tornava a capo, e a ogni cambio tutta la pagina sotto saliva e scendeva (nell'apertura di Teatro Darsena di 115 px). Vale per tutte le animazioni: rotazione, macchina da scrivere, dissolvenza, scorrimento, rivelazione ed evidenziazione; la parola visibile resta allineata come il titolo.
+
 ## v1.4.690 - 2026-10-12 (fix)
 - Cache a pagina intera (Prestazioni): accesa, mandava in errore tutto il sito, bacheca compresa, perché il file che WordPress carica per primo usava funzioni che a quel punto non esistono ancora. Ora funziona; la copia di quel file nel sito si aggiorna da sola a ogni nuova versione (prima restava quella del giorno in cui la cache era stata accesa) e, se il browser ha più cookie della lingua, la pagina servita è quella dell'ultima lingua scelta.
 
