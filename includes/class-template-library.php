@@ -141,6 +141,205 @@ class Olobuild_Template_Library {
         return $esito;
     }
 
+    /** File che import_file_media() copia al massimo dagli altri siti in una richiesta (anche su più template). */
+    const MEDIA_ESTERNI_MAX = 40;
+
+    /** Secondi che import_file_media() dedica al massimo alle copie dagli altri siti in una richiesta. */
+    const MEDIA_ESTERNI_SECONDI = 120;
+
+    /** @var float Fin quando si copiano file dagli altri siti in questa richiesta (0 = non ancora cominciato). */
+    private static $media_scadenza = 0.0;
+
+    /** @var int File degli altri siti già tentati in questa richiesta. */
+    private static $media_tentati = 0;
+
+    /**
+     * Foto e video di un template che arriva da un file (Importa del builder e dell'elenco, pacchetti, pagina
+     * allegata a un invio). Fino alla 1.4.700 l'import salvava il file com'era: i segnaposto {{OLOBUILD_URL}} e
+     * {{OLOBUILD_LIBRARY}} restavano tali (immagini rotte) e le foto restavano sul sito da cui la pagina veniva.
+     *
+     * - segnaposto → gli indirizzi di questo sito, come nei temi e nei Blocchi & Pagine;
+     * - immagini del plugin prese da un altro sito (…/wp-content/plugins/olobuild/assets/…) → lo stesso file qui;
+     * - foto e video della libreria remota → copiati come nei Blocchi & Pagine (import_media());
+     * - con $esterni, foto e video caricati su un altro sito WordPress (…/wp-content/uploads/…) → copiati nella
+     *   Libreria media. Un file già copiato si riusa (meta _olobuild_source_url).
+     *
+     * Dagli altri siti solo JPEG, PNG, WebP, GIF, AVIF, MP4 e WebM, al massimo MEDIA_ESTERNI_MAX file e
+     * MEDIA_ESTERNI_SECONDI secondi per richiesta, ognuno non più grande di quanto il sito lascia caricare (e di
+     * 200 MB). Un file che non si copia resta all'indirizzo di prima: la pagina si vede comunque. Le foto dei
+     * servizi come Unsplash e Pexels (indirizzi senza wp-content/uploads) restano collegate: sono fatte per essere
+     * usate così. Senza il permesso di caricare file si sistemano solo gli indirizzi.
+     *
+     * @param array $dati    Quello che si salva, es. [ 'content' => …, 'settings' => … ].
+     * @param bool  $esterni Copiare anche i file degli altri siti (no per i file mandati da chiunque, gli Invii).
+     * @return array [ 'dati' => array, 'copiate' => int, 'riusate' => int, 'fallite' => int ]
+     */
+    public function import_file_media( $dati, $esterni = true ) {
+        $esito = [ 'dati' => $dati, 'copiate' => 0, 'riusate' => 0, 'fallite' => 0 ];
+        if ( ! is_array( $dati ) ) {
+            return $esito;
+        }
+
+        $lib     = self::library_url();
+        $risolvi = function ( $v ) use ( &$risolvi, $lib ) {
+            if ( is_array( $v ) ) {
+                foreach ( $v as $k => $x ) {
+                    $v[ $k ] = $risolvi( $x );
+                }
+                return $v;
+            }
+            if ( ! is_string( $v ) ) {
+                return $v;
+            }
+            if ( false !== strpos( $v, '{{OLOBUILD_' ) ) {
+                $v = str_replace( [ '{{OLOBUILD_URL}}', '{{OLOBUILD_LIBRARY}}' ], [ OLOBUILD_URL, $lib ], $v );
+            }
+            if ( false !== strpos( $v, '/wp-content/plugins/olobuild/assets/' ) ) {
+                $v = (string) preg_replace_callback( '#https?://[^\s"\'<>()]+?/wp-content/plugins/olobuild/(assets/[^\s"\'<>()?\#]+)#', function ( $m ) {
+                    return ( false === strpos( $m[1], '..' ) && file_exists( OLOBUILD_PATH . $m[1] ) ) ? OLOBUILD_URL . $m[1] : $m[0];
+                }, $v );
+            }
+            return $v;
+        };
+        $esito['dati'] = $risolvi( $dati );
+
+        if ( ! current_user_can( 'upload_files' ) ) {
+            return $esito;
+        }
+
+        $libreria      = $this->import_media( $esito['dati'] );
+        $esito['dati'] = $libreria['content'];
+        foreach ( [ 'copiate', 'riusate', 'fallite' ] as $k ) {
+            $esito[ $k ] += (int) $libreria[ $k ];
+        }
+
+        if ( $esterni ) {
+            $altri         = $this->import_media_esterni( $esito['dati'] );
+            $esito['dati'] = $altri['dati'];
+            foreach ( [ 'copiate', 'riusate', 'fallite' ] as $k ) {
+                $esito[ $k ] += (int) $altri[ $k ];
+            }
+        }
+        return $esito;
+    }
+
+    /**
+     * La parte «altri siti» di import_file_media(): copia nella Libreria media le foto e i video caricati su un
+     * altro sito WordPress e riscrive gli indirizzi.
+     *
+     * @return array [ 'dati' => array, 'copiate' => int, 'riusate' => int, 'fallite' => int ]
+     */
+    private function import_media_esterni( $dati ) {
+        $esito = [ 'dati' => $dati, 'copiate' => 0, 'riusate' => 0, 'fallite' => 0 ];
+        $qui   = array_filter( array_unique( [
+            strtolower( (string) wp_parse_url( home_url(), PHP_URL_HOST ) ),
+            strtolower( (string) wp_parse_url( site_url(), PHP_URL_HOST ) ),
+            strtolower( (string) wp_parse_url( (string) ( wp_get_upload_dir()['baseurl'] ?? '' ), PHP_URL_HOST ) ),
+        ] ) );
+        $urls     = [];
+        $raccogli = function ( $v ) use ( &$raccogli, &$urls, $qui ) {
+            if ( is_array( $v ) ) {
+                foreach ( $v as $x ) {
+                    $raccogli( $x );
+                }
+                return;
+            }
+            if ( ! is_string( $v ) || false === strpos( $v, '/wp-content/uploads/' ) ) {
+                return;
+            }
+            if ( preg_match_all( '#https?://[^\s"\'<>()]+?/wp-content/uploads/[^\s"\'<>()?\#]+?\.(?:jpe?g|png|webp|gif|avif|mp4|webm)(?=[\s"\'<>()?\#&,;]|$)#i', $v, $m ) ) {
+                foreach ( $m[0] as $u ) {
+                    $host = strtolower( (string) wp_parse_url( $u, PHP_URL_HOST ) );
+                    if ( '' !== $host && ! in_array( $host, $qui, true ) ) {
+                        $urls[ $u ] = true;
+                    }
+                }
+            }
+        };
+        $raccogli( $dati );
+        if ( ! $urls ) {
+            return $esito;
+        }
+
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+        if ( ! self::$media_scadenza ) {
+            self::$media_scadenza = microtime( true ) + self::MEDIA_ESTERNI_SECONDI;
+            if ( function_exists( 'set_time_limit' ) ) {
+                @set_time_limit( self::MEDIA_ESTERNI_SECONDI + 180 ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- alcuni hosting lo vietano: si continua col limite del server
+            }
+        }
+        $ammessi = [ 'image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif', 'video/mp4', 'video/webm' ];
+        $massimo = (int) min( wp_max_upload_size(), 200 * MB_IN_BYTES );
+        $mappa   = [];
+        foreach ( array_keys( $urls ) as $url ) {
+            $gia = get_posts( [
+                'post_type'      => 'attachment',
+                'post_status'    => 'inherit',
+                'posts_per_page' => 1,
+                'fields'         => 'ids',
+                'meta_key'       => '_olobuild_source_url', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_query_meta_key -- una ricerca per file copiato, solo durante un import
+                'meta_value'     => $url, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_query_meta_value -- come sopra
+            ] );
+            if ( $gia && wp_get_attachment_url( (int) $gia[0] ) ) {
+                $mappa[ $url ] = wp_get_attachment_url( (int) $gia[0] );
+                $esito['riusate']++;
+                continue;
+            }
+            $file = sanitize_file_name( wp_basename( (string) wp_parse_url( $url, PHP_URL_PATH ) ) );
+            $tipo = wp_check_filetype( $file );
+            if ( ! in_array( $tipo['type'] ?? '', $ammessi, true )
+                || self::$media_tentati >= self::MEDIA_ESTERNI_MAX
+                || microtime( true ) > self::$media_scadenza ) {
+                $esito['fallite']++;
+                continue;
+            }
+            self::$media_tentati++;
+            $tmp = wp_tempnam( $file );
+            if ( ! $tmp ) {
+                $esito['fallite']++;
+                continue;
+            }
+            $video = 0 === strpos( $tipo['type'], 'video/' );
+            $r     = wp_safe_remote_get( $url, [
+                'timeout'             => max( 5, min( $video ? 90 : 30, (int) ceil( self::$media_scadenza - microtime( true ) ) ) ),
+                'stream'              => true,
+                'filename'            => $tmp,
+                'limit_response_size' => $massimo + 1,
+            ] );
+            clearstatcache( true, $tmp );
+            $peso = file_exists( $tmp ) ? (int) filesize( $tmp ) : 0;
+            if ( is_wp_error( $r ) || 200 !== (int) wp_remote_retrieve_response_code( $r ) || $peso < 1 || $peso > $massimo ) {
+                wp_delete_file( $tmp );
+                $esito['fallite']++;
+                continue;
+            }
+            $aid = media_handle_sideload( [ 'name' => $file, 'tmp_name' => $tmp ], 0, preg_replace( '/\.[a-z0-9]+$/i', '', $file ) );
+            if ( is_wp_error( $aid ) ) {
+                wp_delete_file( $tmp );
+                $esito['fallite']++;
+                continue;
+            }
+            update_post_meta( (int) $aid, '_olobuild_source_url', $url );
+            $mappa[ $url ] = wp_get_attachment_url( (int) $aid );
+            $esito['copiate']++;
+        }
+        if ( $mappa ) {
+            $sostituisci = function ( $v ) use ( &$sostituisci, $mappa ) {
+                if ( is_array( $v ) ) {
+                    foreach ( $v as $k => $x ) {
+                        $v[ $k ] = $sostituisci( $x );
+                    }
+                    return $v;
+                }
+                return is_string( $v ) ? strtr( $v, $mappa ) : $v;
+            };
+            $esito['dati'] = $sostituisci( $dati );
+        }
+        return $esito;
+    }
+
     /**
      * Get templates filtered by category.
      */

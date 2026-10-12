@@ -703,6 +703,13 @@ async function handleImportFile(e) {
       throw new Error(err.message || 'Import failed');
     }
     const result = await res.json().catch(() => ({}));
+    // Un template si apre subito nel builder (1.4.701); un tema (più template) resta nell'elenco.
+    const newId = isBundle ? 0 : parseInt(result.id || result.template_id, 10);
+    if (newId) {
+      showToast(t('Importato'));
+      window.location.href = `admin.php?page=olobuilder-templates&template_id=${newId}`;
+      return;
+    }
     await fetchTemplates();
     showToast(isBundle ? (t('Tema importato') + ': ' + (result.imported || 0) + ' template') : t('Importato'));
   } catch (err) {

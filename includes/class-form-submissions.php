@@ -74,6 +74,12 @@ class Olobuild_Form_Submissions {
     const SCHEMA = '2';
 
     /**
+     * Opzione con le pagine allegate già aperte nel builder da Invii (1.4.701): «<id invio>:<nome del file>» → id
+     * della bozza di template. Così «Apri nel builder» riapre la stessa bozza invece di crearne un'altra.
+     */
+    const PAGINE_APERTE = 'olobuild_form_pagine_aperte';
+
+    /**
      * Porta la tabella allo schema corrente sui siti già installati: la tabella nasce all'attivazione, ma gli
      * aggiornamenti per scambio di cartella non riattivano il plugin. Una sola lettura di opzione quando è già fatto.
      * La colonna si aggiunge con un ALTER guardato da SHOW COLUMNS (dbDelta su una tabella esistente proverebbe a
@@ -335,6 +341,20 @@ class Olobuild_Form_Submissions {
         $righe = $wpdb->get_col( $wpdb->prepare( "SELECT fields_data FROM $table WHERE id IN ($placeholders)", ...$ids ) );
         $tolti = (int) $wpdb->query( $wpdb->prepare( "DELETE FROM $table WHERE id IN ($placeholders)", ...$ids ) );
         // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, PluginCheck.Security.DirectDB.UnescapedDBParameter
+        // Le pagine aperte nel builder restano (sono bozze di template, magari già toccate): si dimentica solo da
+        // quale invio venivano.
+        $aperte = get_option( self::PAGINE_APERTE, [] );
+        if ( is_array( $aperte ) && $aperte ) {
+            $prima = count( $aperte );
+            foreach ( array_keys( $aperte ) as $chiave ) {
+                if ( in_array( (int) strtok( (string) $chiave, ':' ), $ids, true ) ) {
+                    unset( $aperte[ $chiave ] );
+                }
+            }
+            if ( count( $aperte ) !== $prima ) {
+                update_option( self::PAGINE_APERTE, $aperte, false );
+            }
+        }
         if ( ! class_exists( 'Olobuild_Form_Handler' ) ) {
             return $tolti;
         }

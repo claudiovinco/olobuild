@@ -231,11 +231,21 @@ class Olobuild_Site_Import_Export {
             $data = $this->remap_urls( $data, $url_map );
         }
 
+        // Segnaposto, immagini del plugin, foto della libreria e foto rimaste su altri siti: come nell'import
+        // dal builder (1.4.701).
+        $styles  = $json['styles'] ?? [];
+        $copiate = 0;
+        if ( class_exists( 'Olobuild_Template_Library' ) && is_array( $data ) ) {
+            $esito   = Olobuild_Template_Library::instance()->import_file_media( [ 'content' => $data, 'settings' => is_array( $styles ) ? $styles : [] ] );
+            $data    = $esito['dati']['content'];
+            $styles  = $esito['dati']['settings'];
+            $copiate = (int) $esito['copiate'];
+        }
+
         // Save template
         $db = new Olobuild_Database();
         $name = sanitize_text_field( $json['name'] ?? 'Template importato' );
         $type = sanitize_text_field( $json['type'] ?? 'page' );
-        $styles = $json['styles'] ?? [];
 
         $new_id = $db->create_template( [
             'title'    => $name,
@@ -253,7 +263,7 @@ class Olobuild_Site_Import_Export {
             'success'     => true,
             'template_id' => $new_id,
             'name'        => $name,
-            'media_imported' => count( $url_map ),
+            'media_imported' => count( $url_map ) + $copiate,
         ] );
     }
 

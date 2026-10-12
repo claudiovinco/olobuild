@@ -50,17 +50,23 @@
         let t; return function() { clearTimeout(t); t = setTimeout(fn.bind(this, ...arguments), ms); };
     }
     // Un valore del campo: i link si aprono; i file allegati (admin-post.php?action=olobuild_form_file) mostrano
-    // «Scarica <nome>» col nome che il file aveva, senza il prefisso casuale (1.4.700).
+    // «Scarica <nome>» col nome che il file aveva, senza il prefisso casuale (1.4.700). Accanto a una pagina del
+    // builder (.json) c'è «Apri nel builder» (1.4.701).
     function valueToHtml(v) {
         const s = v == null ? '' : String(v);
         if (/^https?:\/\/\S+$/.test(s)) {
             let label = s;
+            let apri = '';
             try {
                 const u = new URL(s);
                 const f = u.searchParams.get('action') === 'olobuild_form_file' ? u.searchParams.get('f') : null;
                 if (f) label = T('downloadFile', 'Scarica %s').replace('%s', f.replace(/^[a-z0-9]{16}-/, ''));
+                if (f && /\.json$/i.test(f)) {
+                    apri = ' <button type="button" class="olo-btn olo-btn-sec olo-sub-apri" data-olo-open-page="' + escapeHtml(f) + '">' +
+                        escapeHtml(T('openPage', 'Apri nel builder')) + '</button>';
+                }
             } catch (e) { /* resta l'indirizzo */ }
-            return '<a href="' + escapeHtml(s) + '" target="_blank" rel="noopener">' + escapeHtml(label) + '</a>';
+            return '<a href="' + escapeHtml(s) + '" target="_blank" rel="noopener">' + escapeHtml(label) + '</a>' + apri;
         }
         return escapeHtml(s).replace(/\n/g, '<br/>');
     }
@@ -285,6 +291,10 @@
             if (e.target.closest('[data-olo-drawer-admit]')) {
                 if (state.currentDetail) ammetti(state.currentDetail.id);
             }
+            const apri = e.target.closest('[data-olo-open-page]');
+            if (apri && state.currentDetail) {
+                apriPagina(state.currentDetail.id, apri.getAttribute('data-olo-open-page'), apri);
+            }
             if (e.target.closest('[data-olo-drawer-toggle-read]')) {
                 if (state.currentDetail) toggleRead(state.currentDetail.id, /*fromDrawer*/ true);
             }
@@ -341,6 +351,35 @@
             if (d && d.id === id) openDrawer(id);
         }).catch(err => alert(T('admitFailed', 'Ammissione non riuscita') + ': ' + err.message))
           .finally(() => { if (b) b.disabled = false; });
+    }
+
+    /* La pagina allegata diventa una bozza di template e si apre nel builder in un'altra scheda, così l'elenco
+       degli invii resta dov'è. La scheda si apre subito (al clic: dopo l'attesa il browser la bloccherebbe) e
+       riceve l'indirizzo quando la bozza è pronta; se il browser non apre schede, si va nel builder da qui. */
+    function apriPagina(id, file, b) {
+        const scheda = window.open('', '_blank');
+        if (scheda) {
+            try {
+                scheda.document.title = T('openingPage', 'Apro la pagina…');
+                scheda.document.body.style.font = '15px/1.5 system-ui, sans-serif';
+                scheda.document.body.style.padding = '32px';
+                scheda.document.body.textContent = T('openingPage', 'Apro la pagina…');
+            } catch (err) { /* scheda vuota */ }
+        }
+        b.disabled = true;
+        fetch(cfg.restUrl + 'submissions/' + id + '/open-page', {
+            method: 'POST',
+            headers: { 'X-WP-Nonce': cfg.nonce, 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
+            body: JSON.stringify({ file: file }),
+        }).then(r => r.json().catch(() => ({})).then(d => {
+            if (!r.ok || !d.url) throw new Error(d.message || ('HTTP ' + r.status));
+            if (scheda && !scheda.closed) scheda.location.href = d.url;
+            else window.location.href = d.url;
+        })).catch(err => {
+            if (scheda && !scheda.closed) scheda.close();
+            alert(T('openPageFailed', 'La pagina non si apre') + ': ' + err.message);
+        }).finally(() => { b.disabled = false; });
     }
 
     function deleteOne(id) {

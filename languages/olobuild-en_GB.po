@@ -17104,3 +17104,36 @@ msgstr "File not found: the submission may have been deleted."
 
 msgid "Scarica %s"
 msgstr "Download %s"
+
+msgid "Apri nel builder"
+msgstr "Open in the builder"
+
+msgid "Apro la pagina…"
+msgstr "Opening the page…"
+
+msgid "La pagina non si apre"
+msgstr "The page could not be opened"
+
+msgid "Questo invio non ha una pagina allegata (file .json)."
+msgstr "This submission has no attached page (.json file)."
+
+msgid "Il file della pagina non c'è più sul sito."
+msgstr "The page file is no longer on the site."
+
+msgid "Il file della pagina è troppo grande per aprirlo da qui."
+msgstr "The page file is too large to open from here."
+
+msgid "Il file allegato non è una pagina esportata da OLObuild."
+msgstr "The attached file is not a page exported from OLObuild."
+
+msgid "La pagina contiene tile che la sandbox non ha (%s): per sicurezza da qui si aprono solo pagine fatte nella sandbox. Se ti fidi di chi l'ha mandata, scarica il file e importalo dal builder."
+msgstr "The page contains tiles that the sandbox does not have (%s): for safety, only pages made in the sandbox open from here. If you trust whoever sent it, download the file and import it from the builder."
+
+msgid "Invio #%d"
+msgstr "Submission #%d"
+
+msgid "Tema importato"
+msgstr "Theme imported"
+
+msgid "Importato"
+msgstr "Imported"

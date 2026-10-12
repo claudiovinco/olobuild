@@ -910,6 +910,10 @@ class Olobuild_Builder {
                     // File allegati scaricabili solo dalla bacheca (1.4.700)
                     /* translators: %s: nome del file allegato */
                     'downloadFile' => __( 'Scarica %s', 'olobuild' ),
+                    // La pagina allegata si apre nel builder (1.4.701)
+                    'openPage'       => __( 'Apri nel builder', 'olobuild' ),
+                    'openingPage'    => __( 'Apro la pagina…', 'olobuild' ),
+                    'openPageFailed' => __( 'La pagina non si apre', 'olobuild' ),
                     'admitFailed'  => __( 'Ammissione non riuscita', 'olobuild' ),
                     /* translators: 1: nome del modulo, 2: ammessi questo mese, 3: posti al mese, 4: ammessi in tutto, 5: posti in tutto */
                     'postiMese'    => __( '%1$s: questo mese %2$s su %3$s · in tutto %4$s su %5$s', 'olobuild' ),

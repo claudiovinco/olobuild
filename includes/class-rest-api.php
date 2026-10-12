@@ -754,6 +754,16 @@ class Olobuild_Rest_Api {
             'callback'            => [ $this, 'submissions_toggle_read' ],
             'permission_callback' => [ $this, 'check_submissions_permission' ],
         ] );
+        // La pagina allegata a un invio (.json del builder) diventa una bozza di template da aprire nel builder:
+        // servono i permessi degli Invii E quelli del builder.
+        register_rest_route( $this->namespace, '/submissions/(?P<id>\d+)/open-page', [
+            'methods'             => 'POST',
+            'callback'            => [ $this, 'submissions_open_page' ],
+            'permission_callback' => function ( $request ) {
+                $invii = $this->check_submissions_permission( $request );
+                return true === $invii ? $this->check_permission( $request ) : $invii;
+            },
+        ] );
         // Posti a numero chiuso: ammettere un invio (o togliere l'ammissione).
         register_rest_route( $this->namespace, '/submissions/(?P<id>\d+)/admit', [
             'methods'             => 'POST',
@@ -1250,10 +1260,12 @@ class Olobuild_Rest_Api {
      * passano per wp_kses_post (niente <script> persistente → no stored XSS,
      * importante su multisite dove gli Editor non hanno unfiltered_html).
      * Cammina l'albero ricorsivamente toccando SOLO quei due campi: la struttura
-     * del template resta invariata.
+     * del template resta invariata. Con $sempre filtra anche per chi ha
+     * unfiltered_html: per i file mandati da chiunque (la pagina allegata a un
+     * invio), dove l'HTML non l'ha scritto chi apre.
      */
-    private function sanitize_unfiltered_tile_fields( $data ) {
-        if ( current_user_can( 'unfiltered_html' ) ) {
+    private function sanitize_unfiltered_tile_fields( $data, $sempre = false ) {
+        if ( ! $sempre && current_user_can( 'unfiltered_html' ) ) {
             return $data;
         }
         if ( is_array( $data ) ) {
@@ -1261,7 +1273,7 @@ class Olobuild_Rest_Api {
                 if ( ( 'html_content' === $k || 'shortcode_text' === $k ) && is_string( $v ) ) {
                     $data[ $k ] = wp_kses_post( $v );
                 } else {
-                    $data[ $k ] = $this->sanitize_unfiltered_tile_fields( $v );
+                    $data[ $k ] = $this->sanitize_unfiltered_tile_fields( $v, $sempre );
                 }
             }
         }

@@ -25104,3 +25104,30 @@ msgstr "Datei nicht gefunden: Vielleicht wurde die Einsendung gelöscht."
 
 msgid "Scarica %s"
 msgstr "%s herunterladen"
+
+msgid "Apri nel builder"
+msgstr "Im Builder öffnen"
+
+msgid "Apro la pagina…"
+msgstr "Seite wird geöffnet…"
+
+msgid "La pagina non si apre"
+msgstr "Die Seite lässt sich nicht öffnen"
+
+msgid "Questo invio non ha una pagina allegata (file .json)."
+msgstr "Diese Einsendung hat keine angehängte Seite (.json-Datei)."
+
+msgid "Il file della pagina non c'è più sul sito."
+msgstr "Die Datei der Seite ist nicht mehr auf der Website."
+
+msgid "Il file della pagina è troppo grande per aprirlo da qui."
+msgstr "Die Datei der Seite ist zu groß, um sie von hier aus zu öffnen."
+
+msgid "Il file allegato non è una pagina esportata da OLObuild."
+msgstr "Die angehängte Datei ist keine aus OLObuild exportierte Seite."
+
+msgid "La pagina contiene tile che la sandbox non ha (%s): per sicurezza da qui si aprono solo pagine fatte nella sandbox. Se ti fidi di chi l'ha mandata, scarica il file e importalo dal builder."
+msgstr "Die Seite enthält Tiles, die es in der Sandbox nicht gibt (%s): Aus Sicherheitsgründen öffnen sich von hier nur Seiten aus der Sandbox. Wenn du der Person vertraust, die sie geschickt hat, lade die Datei herunter und importiere sie im Builder."
+
+msgid "Invio #%d"
+msgstr "Einsendung #%d"

@@ -25104,3 +25104,30 @@ msgstr "Archivo no encontrado: quizá el envío se ha eliminado."
 
 msgid "Scarica %s"
 msgstr "Descargar %s"
+
+msgid "Apri nel builder"
+msgstr "Abrir en el builder"
+
+msgid "Apro la pagina…"
+msgstr "Abriendo la página…"
+
+msgid "La pagina non si apre"
+msgstr "La página no se abre"
+
+msgid "Questo invio non ha una pagina allegata (file .json)."
+msgstr "Este envío no tiene ninguna página adjunta (archivo .json)."
+
+msgid "Il file della pagina non c'è più sul sito."
+msgstr "El archivo de la página ya no está en el sitio."
+
+msgid "Il file della pagina è troppo grande per aprirlo da qui."
+msgstr "El archivo de la página es demasiado grande para abrirlo desde aquí."
+
+msgid "Il file allegato non è una pagina esportata da OLObuild."
+msgstr "El archivo adjunto no es una página exportada de OLObuild."
+
+msgid "La pagina contiene tile che la sandbox non ha (%s): per sicurezza da qui si aprono solo pagine fatte nella sandbox. Se ti fidi di chi l'ha mandata, scarica il file e importalo dal builder."
+msgstr "La página contiene tiles que no están en la sandbox (%s): por seguridad, desde aquí solo se abren páginas hechas en la sandbox. Si confías en quien la envió, descarga el archivo e impórtalo desde el builder."
+
+msgid "Invio #%d"
+msgstr "Envío #%d"

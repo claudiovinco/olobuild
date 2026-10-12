@@ -801,6 +801,144 @@ trait Olobuild_Rest_Dashboard_Trait {
     }
 
     /**
+     * «Apri nel builder» di un invio con una pagina allegata (il .json esportato dal builder, la prova d'ingresso
+     * OLOfounder, 1.4.701): la pagina diventa una bozza di template col nome di chi l'ha mandata, da aprire nel
+     * builder. La seconda volta si riapre la stessa bozza, finché c'è (Olobuild_Form_Submissions::PAGINE_APERTE).
+     * Body facoltativo { file: <nome del file> } se l'invio ha più pagine.
+     *
+     * Il file l'ha mandato chiunque: i campi HTML si filtrano anche per chi può scrivere HTML libero, si aprono solo
+     * pagine fatte con le tile della sandbox (quelle che il controllo del modulo ammette, Olobuild_Page_Check) e
+     * dagli altri siti non si scarica niente (le foto della libreria di OLObuild sì, come nei Blocchi & Pagine).
+     */
+    public function submissions_open_page( $request ) {
+        global $wpdb;
+        $tab = $this->submissions_table();
+        $id  = (int) $request['id'];
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin; $id via prepare(%d), solo il nome tabella interpolato; lettura live.
+        $row = $wpdb->get_row( $wpdb->prepare( "SELECT id, form_name, fields_data FROM $tab WHERE id = %d", $id ), ARRAY_A );
+        if ( ! $row ) {
+            return new WP_Error( 'not_found', __( 'Invio non trovato', 'olobuild' ), [ 'status' => 404 ] );
+        }
+        $campi = json_decode( (string) $row['fields_data'], true );
+        $campi = is_array( $campi ) ? $campi : [];
+
+        // Il file .json dell'invio (quello chiesto, se l'invio ne ha più d'uno): solo fra quelli dell'invio
+        $pagine  = $this->pagine_allegate( $campi );
+        $chiesto = (string) $request->get_param( 'file' );
+        $nome    = '' === $chiesto ? ( $pagine[0] ?? '' ) : ( in_array( $chiesto, $pagine, true ) ? $chiesto : '' );
+        if ( '' === $nome ) {
+            return new WP_Error( 'no_page', __( 'Questo invio non ha una pagina allegata (file .json).', 'olobuild' ), [ 'status' => 404 ] );
+        }
+
+        $db     = new Olobuild_Database();
+        $chiave = $id . ':' . $nome;
+        $aperte = get_option( Olobuild_Form_Submissions::PAGINE_APERTE, [] );
+        $aperte = is_array( $aperte ) ? $aperte : [];
+        if ( ! empty( $aperte[ $chiave ] ) && $db->get_template( (int) $aperte[ $chiave ] ) ) {
+            $tid = (int) $aperte[ $chiave ];
+            return rest_ensure_response( [
+                'id'       => $tid,
+                'url'      => admin_url( 'admin.php?page=olobuilder-templates&template_id=' . $tid ),
+                'riaperta' => true,
+            ] );
+        }
+
+        $path = Olobuild_Form_Handler::percorso_scaricabile( $nome );
+        if ( '' === $path ) {
+            return new WP_Error( 'no_file', __( 'Il file della pagina non c\'è più sul sito.', 'olobuild' ), [ 'status' => 404 ] );
+        }
+        if ( filesize( $path ) > 5 * MB_IN_BYTES ) {
+            return new WP_Error( 'too_big', __( 'Il file della pagina è troppo grande per aprirlo da qui.', 'olobuild' ), [ 'status' => 413 ] );
+        }
+        $pagina = json_decode( (string) file_get_contents( $path ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- file locale nella cartella chiusa dei moduli
+        $nodi   = ( is_array( $pagina ) && 'template' === ( $pagina['olo_export'] ?? '' ) ) ? ( $pagina['content'] ?? null ) : null;
+        if ( ! is_array( $nodi ) || ! $nodi ) {
+            return new WP_Error( 'invalid_file', __( 'Il file allegato non è una pagina esportata da OLObuild.', 'olobuild' ), [ 'status' => 400 ] );
+        }
+
+        // Solo le tile della sandbox: le stesse che il controllo del modulo ammette
+        if ( class_exists( 'Olobuild_Page_Check' ) ) {
+            $ammesse = array_merge( Olobuild_Page_Check::TILE_SANDBOX, Olobuild_Page_Check::CONTENITORI );
+            $fuori   = [];
+            $guarda  = function ( array $lista ) use ( &$guarda, &$fuori, $ammesse ) {
+                foreach ( $lista as $nodo ) {
+                    if ( ! is_array( $nodo ) ) {
+                        continue;
+                    }
+                    $tipo = (string) ( $nodo['type'] ?? '' );
+                    if ( '' !== $tipo && ! in_array( $tipo, $ammesse, true ) ) {
+                        $fuori[ $tipo ] = true;
+                    }
+                    if ( ! empty( $nodo['children'] ) && is_array( $nodo['children'] ) ) {
+                        $guarda( $nodo['children'] );
+                    }
+                }
+            };
+            $guarda( $nodi );
+            if ( $fuori ) {
+                return new WP_Error( 'tile_fuori', sprintf(
+                    /* translators: %s: elenco dei tipi di tile */
+                    __( 'La pagina contiene tile che la sandbox non ha (%s): per sicurezza da qui si aprono solo pagine fatte nella sandbox. Se ti fidi di chi l\'ha mandata, scarica il file e importalo dal builder.', 'olobuild' ),
+                    implode( ', ', array_slice( array_keys( $fuori ), 0, 5 ) )
+                ), [ 'status' => 400 ] );
+            }
+        }
+
+        // Il titolo: chi l'ha mandata e il modulo («Mario Rossi — OLOfounder»)
+        $parte = function ( array $chiavi ) use ( $campi ) {
+            foreach ( $campi as $k => $v ) {
+                if ( in_array( strtolower( (string) $k ), $chiavi, true ) && is_scalar( $v ) && '' !== trim( (string) $v ) ) {
+                    return trim( (string) $v );
+                }
+            }
+            return '';
+        };
+        $chi = trim( $parte( [ 'nome', 'name', 'first_name', 'firstname', 'fullname', 'full_name' ] ) . ' ' . $parte( [ 'cognome', 'surname', 'last_name', 'lastname' ] ) );
+        if ( '' === $chi ) {
+            /* translators: %d: numero dell'invio */
+            $chi = sprintf( __( 'Invio #%d', 'olobuild' ), $id );
+        }
+        $titolo = '' !== (string) $row['form_name'] ? $chi . ' — ' . $row['form_name'] : $chi;
+
+        $impostazioni = $pagina['settings'] ?? [];
+        $nuovo        = $this->crea_bozza_importata( $nodi, is_array( $impostazioni ) ? $impostazioni : [], [
+            'titolo'               => mb_substr( $titolo, 0, 150 ),
+            'tipo'                 => 'page',
+            'html_sempre_filtrato' => true,
+            'media_esterni'        => false,
+        ] );
+        if ( is_wp_error( $nuovo ) ) {
+            return $nuovo;
+        }
+        $aperte[ $chiave ] = $nuovo['id'];
+        update_option( Olobuild_Form_Submissions::PAGINE_APERTE, $aperte, false );
+
+        return rest_ensure_response( [
+            'id'       => $nuovo['id'],
+            'url'      => admin_url( 'admin.php?page=olobuilder-templates&template_id=' . $nuovo['id'] ),
+            'riaperta' => false,
+            'media'    => $nuovo['media'],
+        ] );
+    }
+
+    /**
+     * Le pagine allegate a un invio che «Apri nel builder» sa aprire: i file .json (nome nella cartella dei moduli).
+     *
+     * @param array $campi Campi dell'invio.
+     * @return string[]
+     */
+    private function pagine_allegate( array $campi ) {
+        $nomi = [];
+        array_walk_recursive( $campi, function ( $v ) use ( &$nomi ) {
+            $n = Olobuild_Form_Handler::nome_file_caricato( $v );
+            if ( '' !== $n && preg_match( '/\.json$/i', $n ) ) {
+                $nomi[] = $n;
+            }
+        } );
+        return array_values( array_unique( $nomi ) );
+    }
+
+    /**
      * Cerca contenuti linkabili del sito (pagine, post, CPT pubblici, tassonomie)
      * per popolare l'autocomplete del FieldLink nel builder.
      *

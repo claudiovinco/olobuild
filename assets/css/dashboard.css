@@ -1590,6 +1590,13 @@ body.olobuild-cockpit .olo-cockpit-legacy .error {
     border-top: 0;
     padding-top: 0;
 }
+/* «Apri nel builder» accanto alla pagina allegata (1.4.701) */
+.olo-sub-fields .olo-sub-apri {
+    margin: 4px 0 0 8px;
+    padding: 5px 10px;
+    font-size: 12px;
+    vertical-align: middle;
+}
 
 /* Body lock quando drawer aperto */
 body.olo-drawer-open { overflow: hidden; }

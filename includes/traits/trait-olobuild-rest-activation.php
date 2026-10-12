@@ -287,9 +287,6 @@ trait Olobuild_Rest_Activation_Trait {
         if ( ! is_array( $import_content ) ) {
             return new WP_Error( 'invalid_content', 'Il campo content deve essere un array.', [ 'status' => 400 ] );
         }
-        // Stesso gate kses di create/update_template: senza, l'import permetteva
-        // a chi NON ha unfiltered_html di far entrare html_content/shortcode raw.
-        $import_content = $this->sanitize_unfiltered_tile_fields( $import_content );
         $import_settings = $body['settings'] ?? [];
         if ( ! is_array( $import_settings ) && ! is_object( $import_settings ) ) {
             return new WP_Error( 'invalid_settings', 'Il campo settings deve essere un oggetto.', [ 'status' => 400 ] );
@@ -298,21 +295,59 @@ trait Olobuild_Rest_Activation_Trait {
             $import_settings = (array) $import_settings;
         }
 
+        $nuovo = $this->crea_bozza_importata( $import_content, $import_settings, [
+            'titolo' => $body['title'] ?? 'Importato',
+            'tipo'   => $body['type'] ?? 'page',
+        ] );
+        if ( is_wp_error( $nuovo ) ) {
+            return $nuovo;
+        }
+
+        $db       = new Olobuild_Database();
+        $risposta = $this->prepare_template( $db->get_template( $nuovo['id'] ) );
+        // Quanti file sono finiti nella Libreria media (il builder apre subito il template importato)
+        $risposta['media'] = $nuovo['media'];
+        return rest_ensure_response( $risposta );
+    }
+
+    /**
+     * Crea la bozza di un template arrivato da un file (Importa, pacchetti, pagina allegata a un invio).
+     * Stesso gate kses di create/update_template (senza, l'import permetteva a chi NON ha unfiltered_html di far
+     * entrare html_content/shortcode raw; con html_sempre_filtrato vale per tutti) e foto e video sistemati da
+     * Olobuild_Template_Library::import_file_media(): segnaposto risolti, file copiati nella Libreria media.
+     *
+     * @param array $content  Nodi della pagina.
+     * @param array $settings Impostazioni del template.
+     * @param array $opz      titolo, tipo, html_sempre_filtrato (bool), media_esterni (bool, di serie sì).
+     * @return array|WP_Error [ 'id' => int, 'media' => [ 'copiate' => int, 'riusate' => int, 'fallite' => int ] ]
+     */
+    private function crea_bozza_importata( array $content, array $settings, array $opz ) {
+        $content = $this->sanitize_unfiltered_tile_fields( $content, ! empty( $opz['html_sempre_filtrato'] ) );
+        $media   = [ 'copiate' => 0, 'riusate' => 0, 'fallite' => 0 ];
+        if ( class_exists( 'Olobuild_Template_Library' ) ) {
+            $esito    = Olobuild_Template_Library::instance()->import_file_media(
+                [ 'content' => $content, 'settings' => $settings ],
+                ! isset( $opz['media_esterni'] ) || $opz['media_esterni']
+            );
+            $content  = is_array( $esito['dati']['content'] ?? null ) ? $esito['dati']['content'] : $content;
+            $settings = is_array( $esito['dati']['settings'] ?? null ) ? $esito['dati']['settings'] : $settings;
+            foreach ( array_keys( $media ) as $k ) {
+                $media[ $k ] = (int) ( $esito[ $k ] ?? 0 );
+            }
+        }
+
         $db = new Olobuild_Database();
         $id = $db->create_template( [
-            'title'    => sanitize_text_field( $body['title'] ?? 'Importato' ),
-            'type'     => sanitize_text_field( $body['type'] ?? 'page' ),
-            'content'  => $import_content,
-            'settings' => $import_settings,
+            'title'    => sanitize_text_field( (string) ( $opz['titolo'] ?? 'Importato' ) ),
+            'type'     => sanitize_text_field( (string) ( $opz['tipo'] ?? 'page' ) ),
+            'content'  => $content,
+            'settings' => $settings,
             'status'   => 'draft',
         ] );
-
         if ( ! $id ) {
             return new WP_Error( 'import_failed', 'Impossibile importare il template.', [ 'status' => 500 ] );
         }
-
-        $template = $db->get_template( $id );
-        return rest_ensure_response( $this->prepare_template( $template ) );
+        return [ 'id' => (int) $id, 'media' => $media ];
     }
 
     /**
@@ -384,23 +419,24 @@ trait Olobuild_Rest_Activation_Trait {
             return new WP_Error( 'empty', 'Il tema non contiene template.', [ 'status' => 400 ] );
         }
 
-        $db      = new Olobuild_Database();
         $id_map  = [];
         $created = [];
+        $media   = [ 'copiate' => 0, 'riusate' => 0, 'fallite' => 0 ];
         foreach ( $templates as $tpl ) {
             if ( ! is_array( $tpl ) ) continue;
             $content  = ( isset( $tpl['content'] ) && is_array( $tpl['content'] ) ) ? $tpl['content'] : [];
-            $content  = $this->sanitize_unfiltered_tile_fields( $content ); // gate kses anche sui bundle
             $settings = $tpl['settings'] ?? [];
             if ( is_object( $settings ) ) $settings = (array) $settings;
-            $new_id = $db->create_template( [
-                'title'    => sanitize_text_field( $tpl['title'] ?? 'Importato' ),
-                'type'     => sanitize_text_field( $tpl['type'] ?? 'page' ),
-                'content'  => $content,
-                'settings' => is_array( $settings ) ? $settings : [],
-                'status'   => 'draft',
+            // Gate kses e foto/video come nell'import di un template
+            $nuovo  = $this->crea_bozza_importata( $content, is_array( $settings ) ? $settings : [], [
+                'titolo' => $tpl['title'] ?? 'Importato',
+                'tipo'   => $tpl['type'] ?? 'page',
             ] );
+            $new_id = is_wp_error( $nuovo ) ? 0 : $nuovo['id'];
             if ( $new_id ) {
+                foreach ( array_keys( $media ) as $k ) {
+                    $media[ $k ] += $nuovo['media'][ $k ];
+                }
                 if ( ! empty( $tpl['key'] ) ) $id_map[ $tpl['key'] ] = $new_id;
                 $created[] = [ 'id' => $new_id, 'title' => $tpl['title'] ?? '', 'type' => $tpl['type'] ?? 'page' ];
             }
@@ -417,6 +453,7 @@ trait Olobuild_Rest_Activation_Trait {
             'imported'  => count( $created ),
             'templates' => $created,
             'activated' => $activated,
+            'media'     => $media,
         ] );
     }
 }

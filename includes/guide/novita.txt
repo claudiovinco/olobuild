@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.701 - 2026-10-12 (novità)
+- Importa template: il template importato si apre subito nel builder. Prima diventava una bozza nell'elenco dei template e sembrava che non fosse successo niente. Le foto e i video del file arrivano con lui: quelli caricati su un altro sito e quelli della libreria di OLObuild si copiano nella Libreria media, e le immagini che fanno parte di Olobuild si prendono dal tuo sito. Prima restavano sul sito di provenienza, e nei file con i segnaposto non si vedevano proprio. Lo stesso vale importando un tema. Le foto di Unsplash e Pexels restano collegate al servizio, che è fatto per essere usato così.
+- Invii: accanto alla pagina allegata a un invio (il file .json, per esempio la candidatura OLOfounder) c'è «Apri nel builder». La pagina diventa una bozza col nome di chi l'ha mandata e si apre in un'altra scheda; la seconda volta si riapre la stessa bozza. Il file può mandarlo chiunque, quindi per sicurezza si aprono solo pagine fatte con le tile della sandbox, l'HTML scritto a mano si filtra e le foto di altri siti restano dove sono.
+
 ## v1.4.700 - 2026-10-12 (fix)
 - Moduli: i file allegati (per esempio la pagina .json della candidatura OLOfounder) non si aprono più con l'indirizzo diretto, che chiunque poteva indovinare: hanno un nome casuale e si scaricano solo con l'accesso da amministratore, dalla pagina Invii o dal link dell'email, col nome che avevano. Restano finché c'è l'invio e se ne vanno quando lo elimini: prima una pulizia giornaliera li toglieva dopo 30 giorni, anche se l'invio era ancora lì.
 - Moduli: le email partono da un indirizzo del dominio del sito (il destinatario, se è del dominio) e non più dall'email dell'amministratore, che con un indirizzo Gmail o di un altro dominio le faceva finire nello spam. Se l'email non parte ma l'invio è salvato, chi compila vede la conferma, non un errore che lo faceva rimandare due volte; nella pagina Invii l'invio dice che la notifica non è arrivata.

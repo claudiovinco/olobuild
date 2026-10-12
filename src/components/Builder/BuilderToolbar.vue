@@ -984,7 +984,11 @@ function importTemplate() {
       const text = await file.text();
       const data = JSON.parse(text);
       const oloData = window.oloData || {};
-      const res = await fetch(`${oloData.restUrl}templates/import`, {
+      // Gli stessi tre formati dell'elenco dei template (TemplateList.vue)
+      const isBundle = data.olo_export === 'theme-bundle';
+      const endpoint = isBundle ? 'templates/import-bundle'
+        : (data.format === 'olobuild-template' ? 'import-template' : 'templates/import');
+      const res = await fetch(`${oloData.restUrl}${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -992,12 +996,20 @@ function importTemplate() {
         },
         body: JSON.stringify(data),
       });
-      if (!res.ok) throw new Error('Import failed');
-      const result = await res.json();
+      const result = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(result.message || 'Import failed');
+      if (isBundle) {
+        toast.success(t('Tema importato') + ': ' + (result.imported || 0) + ' template');
+        return;
+      }
+      // Il template importato si apre subito (1.4.701): prima restava una bozza nell'elenco e sembrava che
+      // l'import non avesse fatto niente. Con modifiche non salvate chiede conferma il beforeunload di App.vue.
+      const newId = parseInt(result.id || result.template_id, 10);
       toast.success(t('Template importato con successo'));
+      if (newId) window.location.href = `admin.php?page=olobuilder-templates&template_id=${newId}`;
     } catch (err) {
       console.error('Import error:', err);
-      toast.error(t('Errore durante l\'importazione'));
+      toast.error(t('Errore durante l\'importazione') + (err?.message && err.message !== 'Import failed' ? ': ' + err.message : ''));
     }
   };
   input.click();
