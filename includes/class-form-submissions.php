@@ -313,10 +313,122 @@ class Olobuild_Form_Submissions {
      * Delete a submission.
      */
     public static function delete_submission( $id ) {
+        return self::delete_submissions( [ $id ] );
+    }
+
+    /**
+     * Elimina degli invii e i loro file allegati, se nessun altro invio li usa. I file restano finché c'è l'invio
+     * (la pulizia giornaliera li salta, Olobuild_Form_Handler::cleanup_old_uploads()) e se ne vanno con lui.
+     *
+     * @param int[] $ids Id degli invii.
+     * @return int Invii eliminati.
+     */
+    public static function delete_submissions( array $ids ) {
+        global $wpdb;
+        $ids = array_values( array_filter( array_map( 'absint', $ids ) ) );
+        if ( ! $ids ) {
+            return 0;
+        }
+        $table        = $wpdb->prefix . 'olobuild_form_submissions';
+        $placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin; $placeholders è una sequenza di soli '%d' e gli id (interi) passano da prepare; lettura e scrittura live.
+        $righe = $wpdb->get_col( $wpdb->prepare( "SELECT fields_data FROM $table WHERE id IN ($placeholders)", ...$ids ) );
+        $tolti = (int) $wpdb->query( $wpdb->prepare( "DELETE FROM $table WHERE id IN ($placeholders)", ...$ids ) );
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, PluginCheck.Security.DirectDB.UnescapedDBParameter
+        if ( ! class_exists( 'Olobuild_Form_Handler' ) ) {
+            return $tolti;
+        }
+        $file = [];
+        foreach ( (array) $righe as $r ) {
+            foreach ( self::file_di( $r ) as $nome ) {
+                $file[ $nome ] = true;
+            }
+        }
+        if ( $file ) {
+            $in_uso = self::file_in_uso();
+            foreach ( array_keys( $file ) as $nome ) {
+                $path = isset( $in_uso[ $nome ] ) ? '' : Olobuild_Form_Handler::percorso_scaricabile( $nome );
+                if ( '' !== $path ) {
+                    wp_delete_file( $path );
+                }
+            }
+        }
+        return $tolti;
+    }
+
+    /**
+     * I file allegati a cui rimandano gli invii salvati (nome del file → true).
+     *
+     * @return array<string,bool>
+     */
+    public static function file_in_uso() {
         global $wpdb;
         $table = $wpdb->prefix . 'olobuild_form_submissions';
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_form_submissions); nessun equivalente WP_Query; scrittura non cacheabile.
-        return $wpdb->delete( $table, [ 'id' => absint( $id ) ], [ '%d' ] );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin, solo il nome tabella interpolato; LIKE su un testo fisso; serve fresco.
+        $righe = $wpdb->get_col( "SELECT fields_data FROM $table WHERE fields_data LIKE '%olobuild-uploads%'" );
+        $nomi  = [];
+        foreach ( (array) $righe as $r ) {
+            foreach ( self::file_di( $r ) as $nome ) {
+                $nomi[ $nome ] = true;
+            }
+        }
+        return $nomi;
+    }
+
+    /**
+     * I nomi dei file allegati che compaiono nei dati di un invio (il JSON salvato).
+     *
+     * @param string $json fields_data.
+     * @return string[]
+     */
+    private static function file_di( $json ) {
+        $campi = json_decode( (string) $json, true );
+        $nomi  = [];
+        if ( ! is_array( $campi ) || ! class_exists( 'Olobuild_Form_Handler' ) ) {
+            return $nomi;
+        }
+        array_walk_recursive( $campi, function ( $v ) use ( &$nomi ) {
+            $nome = Olobuild_Form_Handler::nome_file_caricato( $v );
+            if ( '' !== $nome ) {
+                $nomi[] = $nome;
+            }
+        } );
+        return $nomi;
+    }
+
+    /**
+     * I campi di un invio con i file allegati al posto giusto: il link che li scarica dalla bacheca (la cartella è
+     * chiusa all'accesso diretto dalla 1.4.700).
+     *
+     * @param array $campi Campi dell'invio.
+     * @return array
+     */
+    public static function campi_con_link( array $campi ) {
+        return class_exists( 'Olobuild_Form_Handler' ) ? array_map( [ 'Olobuild_Form_Handler', 'link_file' ], $campi ) : $campi;
+    }
+
+    /**
+     * Un valore dell'invio in HTML per la pagina di dettaglio: i link (file allegati compresi) si aprono.
+     *
+     * @param mixed $valore Valore (già passato da campi_con_link()).
+     * @return string
+     */
+    private static function valore_html( $valore ) {
+        if ( is_array( $valore ) ) {
+            return implode( ', ', array_map( [ __CLASS__, 'valore_html' ], $valore ) );
+        }
+        $valore = (string) $valore;
+        if ( preg_match( '#^https?://\S+$#', $valore ) ) {
+            $etichetta = $valore;
+            $q         = [];
+            parse_str( (string) wp_parse_url( $valore, PHP_URL_QUERY ), $q );
+            if ( 'olobuild_form_file' === ( $q['action'] ?? '' ) && ! empty( $q['f'] ) && class_exists( 'Olobuild_Form_Handler' ) ) {
+                /* translators: %s: nome del file allegato */
+                $etichetta = sprintf( __( 'Scarica %s', 'olobuild' ), Olobuild_Form_Handler::nome_originale( $q['f'] ) );
+            }
+            return '<a href="' . esc_url( $valore ) . '" target="_blank" rel="noopener">' . esc_html( $etichetta ) . '</a>';
+        }
+        return nl2br( esc_html( $valore ) );
     }
 
     // =========================================================================
@@ -362,6 +474,8 @@ class Olobuild_Form_Submissions {
             if ( ! is_array( $fields ) ) {
                 $fields = [];
             }
+            // I file allegati col link che li scarica dalla bacheca (l'indirizzo diretto non si apre più)
+            $fields = self::campi_con_link( $fields );
             $decoded_rows[] = [
                 'id'          => $row['id'],
                 'form_name'   => $row['form_name'],
@@ -601,6 +715,7 @@ class Olobuild_Form_Submissions {
         if ( ! is_array( $fields ) ) {
             $fields = [];
         }
+        $fields = self::campi_con_link( $fields );
 
         $back_url = admin_url( 'admin.php?page=olo-form-submissions' );
 
@@ -687,11 +802,8 @@ class Olobuild_Form_Submissions {
                                 <tr>
                                     <td><strong><?php echo esc_html( ucfirst( str_replace( [ '_', '-' ], ' ', $key ) ) ); ?></strong></td>
                                     <td><?php
-                                        if ( is_array( $value ) ) {
-                                            echo esc_html( implode( ', ', $value ) );
-                                        } else {
-                                            echo nl2br( esc_html( $value ) );
-                                        }
+                                        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- valore_html() esegue esc_html/esc_url su ogni parte.
+                                        echo self::valore_html( $value );
                                     ?></td>
                                 </tr>
                             <?php endforeach; ?>
@@ -745,8 +857,8 @@ class Olobuild_Form_Submissions {
                 // %d (uno per ogni id), gli id (interi, già passati da absint) sono forniti come argomenti a $wpdb->prepare.
                 // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, PluginCheck.Security.DirectDB.UnescapedDBParameter
                 if ( $action === 'bulk_delete' ) {
-                    $placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
-                    $wpdb->query( $wpdb->prepare( "DELETE FROM $table WHERE id IN ($placeholders)", ...$ids ) );
+                    // Con gli invii se ne vanno i loro file allegati
+                    self::delete_submissions( $ids );
                     echo '<div class="notice notice-success is-dismissible"><p>' . count( $ids ) . ' invii eliminati.</p></div>';
                 } elseif ( $action === 'mark_read' ) {
                     $placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );

@@ -49,11 +49,26 @@
     function debounce(fn, ms) {
         let t; return function() { clearTimeout(t); t = setTimeout(fn.bind(this, ...arguments), ms); };
     }
+    // Un valore del campo: i link si aprono; i file allegati (admin-post.php?action=olobuild_form_file) mostrano
+    // «Scarica <nome>» col nome che il file aveva, senza il prefisso casuale (1.4.700).
+    function valueToHtml(v) {
+        const s = v == null ? '' : String(v);
+        if (/^https?:\/\/\S+$/.test(s)) {
+            let label = s;
+            try {
+                const u = new URL(s);
+                const f = u.searchParams.get('action') === 'olobuild_form_file' ? u.searchParams.get('f') : null;
+                if (f) label = T('downloadFile', 'Scarica %s').replace('%s', f.replace(/^[a-z0-9]{16}-/, ''));
+            } catch (e) { /* resta l'indirizzo */ }
+            return '<a href="' + escapeHtml(s) + '" target="_blank" rel="noopener">' + escapeHtml(label) + '</a>';
+        }
+        return escapeHtml(s).replace(/\n/g, '<br/>');
+    }
     function fieldsToHtml(fields) {
         const rows = Object.entries(fields || {}).map(([k, v]) => {
             const label = k.replace(/[_-]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-            const val = Array.isArray(v) ? v.join(', ') : (v == null ? '' : String(v));
-            return '<dt>' + escapeHtml(label) + '</dt><dd>' + escapeHtml(val).replace(/\n/g, '<br/>') + '</dd>';
+            const val = Array.isArray(v) ? v.map(valueToHtml).join(', ') : valueToHtml(v);
+            return '<dt>' + escapeHtml(label) + '</dt><dd>' + val + '</dd>';
         }).join('');
         return rows ? '<dl class="olo-sub-fields">' + rows + '</dl>' : '<p style="color:var(--olo-text-muted);font-size:13px">' + escapeHtml(T('noResults', '—')) + '</p>';
     }

@@ -653,6 +653,8 @@ trait Olobuild_Rest_Dashboard_Trait {
         }
         $fields = json_decode( $row['fields_data'], true );
         if ( ! is_array( $fields ) ) $fields = [];
+        // I file allegati col link che li scarica con l'accesso da amministratore (la cartella è chiusa)
+        $fields = Olobuild_Form_Submissions::campi_con_link( $fields );
         return rest_ensure_response( [
             'id'           => (int) $row['id'],
             'form_name'    => $row['form_name'],
@@ -691,11 +693,9 @@ trait Olobuild_Rest_Dashboard_Trait {
     }
 
     public function submissions_delete( $request ) {
-        global $wpdb;
-        $tab = $this->submissions_table();
         $id = (int) $request['id'];
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom {prefix}olo_form_submissions; delete via API $wpdb con format array.
-        $wpdb->delete( $tab, [ 'id' => $id ], [ '%d' ] );
+        // Con l'invio se ne vanno i suoi file allegati
+        Olobuild_Form_Submissions::delete_submissions( [ $id ] );
         return rest_ensure_response( [ 'id' => $id, 'deleted' => true ] );
     }
 
@@ -719,7 +719,8 @@ trait Olobuild_Rest_Dashboard_Trait {
         $placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
         // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, PluginCheck.Security.DirectDB.UnescapedDBParameter
         if ( $action === 'delete' ) {
-            $wpdb->query( $wpdb->prepare( "DELETE FROM $tab WHERE id IN ($placeholders)", $ids ) );
+            // Con gli invii se ne vanno i loro file allegati
+            Olobuild_Form_Submissions::delete_submissions( $ids );
         } elseif ( $action === 'mark_read' ) {
             $wpdb->query( $wpdb->prepare( "UPDATE $tab SET read_status = 1 WHERE id IN ($placeholders)", $ids ) );
         } elseif ( $action === 'mark_unread' ) {

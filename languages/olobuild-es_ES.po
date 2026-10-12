@@ -25092,3 +25092,15 @@ msgstr "Se queda quieto para quien ha pedido reducir el movimiento."
 
 msgid "Ampiezza sul telefono:"
 msgstr "Amplitud en el teléfono:"
+
+msgid "La notifica via email non è partita: questo invio è salvato solo qui."
+msgstr "La notificación por correo no se ha enviado: este envío solo está guardado aquí."
+
+msgid "Non hai i permessi per scaricare questo file."
+msgstr "No tienes permiso para descargar este archivo."
+
+msgid "File non trovato: forse l’invio è stato eliminato."
+msgstr "Archivo no encontrado: quizá el envío se ha eliminado."
+
+msgid "Scarica %s"
+msgstr "Descargar %s"

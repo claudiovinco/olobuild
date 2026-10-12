@@ -17092,3 +17092,15 @@ msgstr "It stays still for people who asked to reduce motion."
 
 msgid "Ampiezza sul telefono:"
 msgstr "Range on the phone:"
+
+msgid "La notifica via email non è partita: questo invio è salvato solo qui."
+msgstr "The email notification was not sent: this submission is saved only here."
+
+msgid "Non hai i permessi per scaricare questo file."
+msgstr "You do not have permission to download this file."
+
+msgid "File non trovato: forse l’invio è stato eliminato."
+msgstr "File not found: the submission may have been deleted."
+
+msgid "Scarica %s"
+msgstr "Download %s"

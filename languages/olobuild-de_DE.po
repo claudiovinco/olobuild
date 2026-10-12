@@ -25092,3 +25092,15 @@ msgstr "Es bleibt ruhig für alle, die reduzierte Bewegung eingestellt haben."
 
 msgid "Ampiezza sul telefono:"
 msgstr "Ausschlag auf dem Smartphone:"
+
+msgid "La notifica via email non è partita: questo invio è salvato solo qui."
+msgstr "Die E-Mail-Benachrichtigung wurde nicht gesendet: Diese Einsendung ist nur hier gespeichert."
+
+msgid "Non hai i permessi per scaricare questo file."
+msgstr "Du hast keine Berechtigung, diese Datei herunterzuladen."
+
+msgid "File non trovato: forse l’invio è stato eliminato."
+msgstr "Datei nicht gefunden: Vielleicht wurde die Einsendung gelöscht."
+
+msgid "Scarica %s"
+msgstr "%s herunterladen"

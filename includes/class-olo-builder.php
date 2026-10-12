@@ -907,6 +907,9 @@ class Olobuild_Builder {
                     'unadmit'      => __( "Togli l'ammissione", 'olobuild' ),
                     'admitted'     => __( 'Ammesso', 'olobuild' ),
                     'admittedAt'   => __( 'Ammesso il', 'olobuild' ),
+                    // File allegati scaricabili solo dalla bacheca (1.4.700)
+                    /* translators: %s: nome del file allegato */
+                    'downloadFile' => __( 'Scarica %s', 'olobuild' ),
                     'admitFailed'  => __( 'Ammissione non riuscita', 'olobuild' ),
                     /* translators: 1: nome del modulo, 2: ammessi questo mese, 3: posti al mese, 4: ammessi in tutto, 5: posti in tutto */
                     'postiMese'    => __( '%1$s: questo mese %2$s su %3$s · in tutto %4$s su %5$s', 'olobuild' ),

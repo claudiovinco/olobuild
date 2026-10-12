@@ -173,6 +173,11 @@ class Olobuild_Form_Handler {
         if ( ! wp_next_scheduled( 'olo_cleanup_form_uploads' ) ) {
             wp_schedule_event( time(), 'daily', 'olo_cleanup_form_uploads' );
         }
+
+        // File allegati ai moduli: la cartella è chiusa, si scaricano solo da qui con l'accesso da amministratore
+        // (dalla pagina Invii o dal link dell'email; senza accesso porta al login).
+        add_action( 'admin_post_olobuild_form_file', [ __CLASS__, 'scarica_file' ] );
+        add_action( 'admin_post_nopriv_olobuild_form_file', [ __CLASS__, 'scarica_file' ] );
     }
 
     public function register_routes() {
@@ -396,26 +401,8 @@ class Olobuild_Form_Handler {
             $olo_upload_path = $upload_dir['basedir'] . '/olobuild-uploads';
             wp_mkdir_p( $olo_upload_path );
 
-            // Protect upload directory from direct execution
-            // .htaccess for Apache
-            $htaccess_path = $olo_upload_path . '/.htaccess';
-            if ( ! file_exists( $htaccess_path ) ) {
-                file_put_contents( $htaccess_path, "Options -ExecCGI\nAddHandler cgi-script .php .php3 .php4 .php5 .phtml .pl .py .jsp .asp .htm .shtml .sh .cgi\n<Files *.php>\ndeny from all\n</Files>" );
-            }
-
-            // index.php for directory listing protection (works on both Apache and Nginx)
-            $index_path = $olo_upload_path . '/index.php';
-            if ( ! file_exists( $index_path ) ) {
-                file_put_contents( $index_path, '<?php // Silence is golden.' );
-            }
-
-            // Nginx: write a note file reminding server admins to block PHP execution
-            // Nginx ignores .htaccess — admins must add this to their server block:
-            // location ~* /wp-content/uploads/olobuild-uploads/.*\.php$ { deny all; }
-            $nginx_note = $olo_upload_path . '/NGINX-SECURITY.txt';
-            if ( ! file_exists( $nginx_note ) ) {
-                file_put_contents( $nginx_note, "# Nginx does not use .htaccess — add this rule to your server block:\n# location ~* /wp-content/uploads/olobuild-uploads/.*\\.php$ { deny all; }\n" );
-            }
+            // Cartella chiusa: niente accesso diretto ai file, si scaricano solo da scarica_file()
+            self::proteggi_cartella( $olo_upload_path );
 
             // Global fallback settings
             $global_max_size = absint( $config['file_max_size'] ?? 5 ) * 1024 * 1024;
@@ -489,8 +476,10 @@ class Olobuild_Form_Handler {
                         continue;
                     }
 
-                    // Sanitize filename
-                    $safe_name = wp_unique_filename( $olo_upload_path, sanitize_file_name( $single_file['name'] ) );
+                    // Nome casuale davanti a quello originale: dove il server ignora il .htaccess (Nginx) l'indirizzo
+                    // di un file non si indovina (prima: olobuild-La-tua-pagina.json, poi -1, -2…). Si scarica col nome
+                    // originale (nome_originale()).
+                    $safe_name = wp_unique_filename( $olo_upload_path, strtolower( wp_generate_password( 16, false ) ) . '-' . sanitize_file_name( $single_file['name'] ) );
                     $dest_path = $olo_upload_path . '/' . $safe_name;
 
                     // Move uploaded file — is_uploaded_file() valida l'upload HTTP,
@@ -582,6 +571,8 @@ class Olobuild_Form_Handler {
 
         foreach ( $sanitized as $key => $value ) {
             $label = ucfirst( str_replace( [ '_', '-' ], ' ', $key ) );
+            // I file allegati: il link che li scarica con l'accesso da amministratore (la cartella è chiusa)
+            $value = self::link_file( $value );
             if ( is_array( $value ) ) {
                 $body_lines[] = "{$label}: " . implode( ', ', $value );
             } else {
@@ -597,11 +588,17 @@ class Olobuild_Form_Handler {
 
         $body = implode( "\n", $body_lines );
 
-        // Headers
-        $headers = [
+        // Headers. Il mittente è un indirizzo del dominio del sito (mittente()): le email partono dal server del sito,
+        // e con la gmail dell'amministratore come mittente SPF e DMARC non tornavano (spam o rifiuto).
+        $from_email = self::mittente( $to, $admin_email );
+        $headers    = [
             'Content-Type: text/plain; charset=UTF-8',
-            'From: ' . $from_name . ' <' . get_option( 'admin_email' ) . '>',
+            'From: ' . $from_name . ' <' . $from_email . '>',
         ];
+        // Busta (Return-Path) con lo stesso indirizzo: SPF allineato al mittente. Solo per le email di questo invio.
+        $busta = function ( $phpmailer ) use ( $from_email ) {
+            $phpmailer->Sender = $from_email;
+        };
 
         // Reply-To: use email field if present
         $reply_email = '';
@@ -629,6 +626,7 @@ class Olobuild_Form_Handler {
         }
 
         // 9. Send email
+        add_action( 'phpmailer_init', $busta );
         $sent = wp_mail( $to, "[{$site_name}] {$subject}", $body, $headers );
 
         // 10. Auto-reply
@@ -645,12 +643,13 @@ class Olobuild_Form_Handler {
 
                 $ar_headers = [
                     'Content-Type: text/plain; charset=UTF-8',
-                    'From: ' . $from_name . ' <' . get_option( 'admin_email' ) . '>',
+                    'From: ' . $from_name . ' <' . $from_email . '>',
                 ];
 
                 wp_mail( $reply_email, "[{$site_name}] {$ar_subject}", $ar_body, $ar_headers );
             }
         }
+        remove_action( 'phpmailer_init', $busta );
 
         // 11. Mailchimp integration
         if ( ! empty( $config['mailchimp_enabled'] ) ) {
@@ -684,14 +683,21 @@ class Olobuild_Form_Handler {
 
         // 13. Store submission in database if enabled
         $form_id = sanitize_text_field( $request->get_param( '_olo_form_id' ) ?? '' );
-        $this->store_submission( $form_id, $sanitized, $config );
+        $da_salvare = $sanitized;
+        if ( ! $sent ) {
+            // La notifica non è partita: l'invio si salva lo stesso e chi l'ha mandato vede la conferma (sotto), ma
+            // nella pagina Invii si legge che l'email non è arrivata a nessuno.
+            $da_salvare['avviso_email'] = __( 'La notifica via email non è partita: questo invio è salvato solo qui.', 'olobuild' );
+        }
+        $this->store_submission( $form_id, $da_salvare, $config );
 
         // 14. Store in form submissions dashboard table
+        $salvato = false;
         if ( class_exists( 'Olobuild_Form_Submissions' ) ) {
             // Col «Nome del modulo» gli invii stanno insieme; senza, il nome è l'id della resa, che cambia
             // a ogni caricamento della pagina.
             $form_name = '' !== $nome_modulo ? $nome_modulo : ( $form_id ?: sanitize_text_field( $config['email_subject'] ?? 'Form' ) );
-            Olobuild_Form_Submissions::save_submission( $form_name, $sanitized, $this->get_client_ip() );
+            $salvato   = (bool) Olobuild_Form_Submissions::save_submission( $form_name, $da_salvare, $this->get_client_ip() );
             // L'invio che chiude il modulo svuota la cache delle pagine: chi arriva dopo vede il messaggio
             // a modulo chiuso, non il modulo.
             if ( '' !== $nome_modulo && $limite > 0 && Olobuild_Form_Submissions::count_for( $nome_modulo ) >= $limite
@@ -700,7 +706,10 @@ class Olobuild_Form_Handler {
             }
         }
 
-        if ( $sent ) {
+        // Riuscito se l'email è partita O se l'invio è salvato in Invii. Prima un'email non partita dava «Errore
+        // durante l'invio. Riprova.» con l'invio già salvato: chi riprovava faceva un doppione, che nei moduli a
+        // posti contava fra gli invii del mese.
+        if ( $sent || $salvato ) {
             return new WP_REST_Response( [
                 'success' => true,
                 'data'    => [
@@ -1219,6 +1228,10 @@ class Olobuild_Form_Handler {
     /**
      * Clean up uploaded files older than 30 days.
      * Runs via WP-Cron daily.
+     *
+     * I file di un invio che c'è ancora nella pagina Invii restano finché l'invio non si elimina (e allora se ne vanno
+     * con lui, Olobuild_Form_Submissions::delete_submissions()): prima sparivano dopo 30 giorni anche con l'invio lì,
+     * e il link restava rotto (la pagina della prova d'ingresso OLOfounder si valuta a fine mese).
      */
     public static function cleanup_old_uploads() {
         $upload_dir = wp_upload_dir();
@@ -1227,6 +1240,8 @@ class Olobuild_Form_Handler {
         if ( ! is_dir( $olo_dir ) ) {
             return;
         }
+        // Chiude anche le cartelle create dalle versioni di prima, che bloccavano solo i .php
+        self::proteggi_cartella( $olo_dir );
 
         $max_age = 30 * DAY_IN_SECONDS;
         $now     = time();
@@ -1235,19 +1250,177 @@ class Olobuild_Form_Handler {
         if ( ! is_array( $files ) ) {
             return;
         }
+        $in_uso = class_exists( 'Olobuild_Form_Submissions' ) ? Olobuild_Form_Submissions::file_in_uso() : [];
 
         foreach ( $files as $file ) {
             if ( is_file( $file ) ) {
                 $basename = basename( $file );
-                // Skip .htaccess and index.php
-                if ( $basename === '.htaccess' ) { continue; }
-                if ( $basename === 'index.php' ) { continue; }
+                if ( in_array( $basename, self::FILE_DELLA_CARTELLA, true ) || isset( $in_uso[ $basename ] ) ) {
+                    continue;
+                }
 
                 if ( ( $now - filemtime( $file ) ) > $max_age ) {
                     wp_delete_file( $file );
                 }
             }
         }
+    }
+
+    /** I file di servizio della cartella dei file allegati: non si scaricano e non si cancellano. */
+    const FILE_DELLA_CARTELLA = [ '.htaccess', 'index.php', 'NGINX-SECURITY.txt' ];
+
+    /**
+     * Chiude la cartella dei file allegati ai moduli: nessun accesso diretto, si scaricano solo da scarica_file() con
+     * l'accesso da amministratore. Riscrive il .htaccess delle versioni prima della 1.4.700, che bloccava solo i .php:
+     * gli altri file restavano pubblici, col loro nome originale.
+     *
+     * @param string $dir Cartella (uploads/olobuild-uploads).
+     */
+    public static function proteggi_cartella( $dir ) {
+        $firma    = '# Olobuild 1.4.700';
+        $htaccess = $dir . '/.htaccess';
+        $attuale  = file_exists( $htaccess ) ? (string) file_get_contents( $htaccess ) : '';
+        if ( false === strpos( $attuale, $firma ) ) {
+            file_put_contents( $htaccess, $firma . " - file allegati ai moduli: si scaricano solo dalla bacheca (pagina Invii), mai con l'indirizzo diretto.\n<IfModule mod_authz_core.c>\n\tRequire all denied\n</IfModule>\n<IfModule !mod_authz_core.c>\n\tOrder allow,deny\n\tDeny from all\n</IfModule>\n" );
+        }
+        if ( ! file_exists( $dir . '/index.php' ) ) {
+            file_put_contents( $dir . '/index.php', '<?php // Silence is golden.' );
+        }
+        // Nginx ignora il .htaccess: la regola va messa nella configurazione del server (i nomi casuali restano)
+        $nota  = $dir . '/NGINX-SECURITY.txt';
+        $testo = "# Nginx does not use .htaccess. Form attachments are downloaded only from the dashboard: add this rule to your server block.\n# location ^~ /wp-content/uploads/olobuild-uploads/ { deny all; }\n";
+        if ( ! file_exists( $nota ) || (string) file_get_contents( $nota ) !== $testo ) {
+            file_put_contents( $nota, $testo );
+        }
+    }
+
+    /**
+     * Il nome del file se il valore è l'indirizzo di un file allegato (uploads/olobuild-uploads/…), se no ''.
+     *
+     * @param mixed $valore Valore di un campo dell'invio.
+     * @return string
+     */
+    public static function nome_file_caricato( $valore ) {
+        if ( ! is_string( $valore ) || '' === $valore ) {
+            return '';
+        }
+        $senza = function ( $u ) {
+            return (string) preg_replace( '#^https?:#i', '', $u );
+        };
+        $base  = $senza( wp_upload_dir()['baseurl'] . '/olobuild-uploads/' );
+        $url   = $senza( $valore );
+        if ( 0 !== strpos( $url, $base ) ) {
+            return '';
+        }
+        $nome = rawurldecode( substr( $url, strlen( $base ) ) );
+        return ( '' !== $nome && false === strpos( $nome, '/' ) ) ? $nome : '';
+    }
+
+    /**
+     * Il link che scarica un file allegato con l'accesso da amministratore (admin-post.php) al posto dell'indirizzo
+     * diretto, che la cartella chiusa non serve più. Accetta un valore o un elenco; il resto torna com'è.
+     *
+     * @param mixed $valore Valore di un campo dell'invio.
+     * @return mixed
+     */
+    public static function link_file( $valore ) {
+        if ( is_array( $valore ) ) {
+            return array_map( [ __CLASS__, 'link_file' ], $valore );
+        }
+        $nome = self::nome_file_caricato( $valore );
+        if ( '' === $nome ) {
+            return $valore;
+        }
+        return add_query_arg( [ 'action' => 'olobuild_form_file', 'f' => rawurlencode( $nome ) ], admin_url( 'admin-post.php' ) );
+    }
+
+    /**
+     * Il nome con cui il file si scarica: quello che aveva sul computer di chi l'ha mandato, senza il prefisso casuale.
+     *
+     * @param string $nome Nome del file nella cartella.
+     * @return string
+     */
+    public static function nome_originale( $nome ) {
+        return (string) preg_replace( '/^[a-z0-9]{16}-/', '', (string) $nome );
+    }
+
+    /**
+     * Il percorso di un file allegato da scaricare, se esiste ed è proprio nella cartella dei moduli; se no ''.
+     *
+     * @param string $nome Nome del file.
+     * @return string
+     */
+    public static function percorso_scaricabile( $nome ) {
+        $nome = sanitize_file_name( (string) $nome );
+        if ( '' === $nome || in_array( $nome, self::FILE_DELLA_CARTELLA, true ) ) {
+            return '';
+        }
+        $dir  = wp_upload_dir()['basedir'] . '/olobuild-uploads';
+        $path = $dir . '/' . $nome;
+        if ( ! is_file( $path ) || realpath( dirname( $path ) ) !== realpath( $dir ) ) {
+            return '';
+        }
+        return $path;
+    }
+
+    /**
+     * admin-post.php?action=olobuild_form_file&f=<nome>: scarica un file allegato a un modulo. Senza accesso porta al
+     * login e poi torna qui; senza i permessi della pagina Invii si ferma. Niente nonce: è una lettura, e lo stesso
+     * link sta nelle email, dove un nonce scadrebbe.
+     */
+    public static function scarica_file() {
+        if ( ! is_user_logged_in() ) {
+            auth_redirect();
+        }
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( esc_html__( 'Non hai i permessi per scaricare questo file.', 'olobuild' ), '', [ 'response' => 403 ] );
+        }
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- download in sola lettura, protetto da login + manage_options (vedi sopra).
+        $nome = isset( $_GET['f'] ) ? sanitize_file_name( wp_unslash( $_GET['f'] ) ) : '';
+        $path = self::percorso_scaricabile( $nome );
+        if ( '' === $path ) {
+            wp_die( esc_html__( 'File non trovato: forse l’invio è stato eliminato.', 'olobuild' ), '', [ 'response' => 404 ] );
+        }
+        $tipo = wp_check_filetype( $path );
+        nocache_headers();
+        header( 'Content-Type: ' . ( $tipo['type'] ? $tipo['type'] : 'application/octet-stream' ) );
+        header( 'Content-Disposition: attachment; filename="' . str_replace( [ '"', "\r", "\n" ], '', self::nome_originale( $nome ) ) . '"' );
+        header( 'Content-Length: ' . filesize( $path ) );
+        header( 'X-Content-Type-Options: nosniff' );
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile -- il file allegato va all'amministratore così com'è.
+        readfile( $path );
+        exit;
+    }
+
+    /**
+     * L'indirizzo del mittente delle email del modulo: uno del dominio del sito, perché le email partono dal server
+     * del sito. Prima il destinatario, se è del dominio (una casella che esiste: c'è chi scarta i mittenti che non
+     * esistono), poi l'email dell'amministratore, se è del dominio, se no wordpress@dominio, come fa WordPress.
+     *
+     * @param string $to          Destinatario.
+     * @param string $admin_email Email dell'amministratore.
+     * @return string
+     */
+    private static function mittente( $to, $admin_email ) {
+        $host = strtolower( (string) preg_replace( '/^www\./i', '', (string) wp_parse_url( home_url(), PHP_URL_HOST ) ) );
+        $del_dominio = function ( $email ) use ( $host ) {
+            $at = strrchr( (string) $email, '@' );
+            $d  = $at ? strtolower( substr( $at, 1 ) ) : '';
+            if ( '' === $d || '' === $host ) {
+                return false;
+            }
+            $finisce = function ( $s, $fine ) {
+                return strlen( $s ) > strlen( $fine ) && substr( $s, -strlen( $fine ) ) === $fine;
+            };
+            return $d === $host || $finisce( $host, '.' . $d ) || $finisce( $d, '.' . $host );
+        };
+        if ( is_email( $to ) && $del_dominio( $to ) ) {
+            return $to;
+        }
+        if ( is_email( $admin_email ) && $del_dominio( $admin_email ) ) {
+            return $admin_email;
+        }
+        return 'wordpress@' . ( '' !== $host ? $host : 'localhost' );
     }
 
     /**
