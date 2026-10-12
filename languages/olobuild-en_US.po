@@ -25080,3 +25080,18 @@ msgstr "Show the phone"
 
 msgid "La home del tema su un telefono, nell'angolo dell'anteprima: scorre insieme a quella del computer. Compare per i temi che hanno l'anteprima mobile."
 msgstr "The theme's home page on a phone, in the corner of the preview: it scrolls together with the desktop one. It appears for themes that have a mobile preview."
+
+msgid "Anche col giroscopio (telefono)"
+msgstr "Also with the gyroscope (phone)"
+
+msgid "Su telefoni e tablet l'elemento si inclina al contrario del dispositivo: se inclini il telefono a sinistra, si inclina a destra. Più lo inclini, più si muove."
+msgstr "On phones and tablets the element tilts the opposite way to the device: tilt the phone to the left and it tilts to the right. The more you tilt it, the more it moves."
+
+msgid "Su iPhone parte al primo tocco sull'elemento, quando Safari chiede il permesso di usare il movimento."
+msgstr "On iPhone it starts at the first tap on the element, when Safari asks for permission to use motion."
+
+msgid "Resta fermo per chi ha chiesto di ridurre il movimento."
+msgstr "It stays still for people who asked to reduce motion."
+
+msgid "Ampiezza sul telefono:"
+msgstr "Range on the phone:"

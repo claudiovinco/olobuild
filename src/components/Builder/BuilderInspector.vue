@@ -1002,6 +1002,17 @@
                   <label class="mb-flex mb-items-center mb-gap-1 mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Applica a') }}<InfoTip :titolo="t('Applica a')" :testo="t('&quot;Foto interne&quot;: ogni immagine o video dentro la tile (gallerie, griglie) si inclina singolarmente.')" /></label>
                   <FieldSelect ui="segmented" :model-value="tileAdvanced.mouse_tilt_target || 'block'" :options="TILT_TARGET_OPTIONS" @update:model-value="updateAdvanced('mouse_tilt_target', $event)" />
                 </div>
+                <div class="mb-flex mb-items-center mb-gap-1">
+                  <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                    <input type="checkbox" :checked="tileAdvanced.mouse_tilt_gyro === true" @change="updateAdvanced('mouse_tilt_gyro', $event.target.checked)" class="mb-accent-primary-500" />
+                    <span class="mb-text-xs mb-text-gray-300">{{ t('Anche col giroscopio (telefono)') }}</span>
+                  </label>
+                  <InfoTip :titolo="t('Anche col giroscopio (telefono)')" :testo="[t('Su telefoni e tablet l\'elemento si inclina al contrario del dispositivo: se inclini il telefono a sinistra, si inclina a destra. Più lo inclini, più si muove.'), t('Su iPhone parte al primo tocco sull\'elemento, quando Safari chiede il permesso di usare il movimento.'), t('Resta fermo per chi ha chiesto di ridurre il movimento.')]" />
+                </div>
+                <div v-if="tileAdvanced.mouse_tilt_gyro">
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Ampiezza sul telefono:') }} {{ tileAdvanced.mouse_tilt_gyro_max || 45 }}°</label>
+                  <input type="range" min="10" max="60" step="1" :value="tileAdvanced.mouse_tilt_gyro_max || 45" @input="updateAdvanced('mouse_tilt_gyro_max', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
+                </div>
               </template>
               <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
                 <input type="checkbox" :checked="tileAdvanced.mouse_track === true" @change="updateAdvanced('mouse_track', $event.target.checked)" class="mb-accent-primary-500" />

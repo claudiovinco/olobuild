@@ -1206,6 +1206,7 @@ class Olobuild_Frontend_Renderer {
             $tilt_target = $settings['mouse_tilt_target'] ?? $advanced['mouse_tilt_target'] ?? 'block';
             $tilt_attr   = ( 'items' === $tilt_target ) ? 'data-olo-tilt-items' : 'data-olo-tilt';
             $elem_mouse_attrs .= ' ' . $tilt_attr . '="' . $tilt_intensity . '"';
+            $elem_mouse_attrs .= Olobuild_Animation_Builder::gyro_attr( ! empty( $settings['mouse_tilt_gyro'] ) ? $settings : $advanced );
         }
         if ( ! empty( $settings['mouse_track'] ) || ! empty( $advanced['mouse_track'] ) ) {
             $track_speed = intval( $settings['mouse_track_speed'] ?? $advanced['mouse_track_speed'] ?? 3 );

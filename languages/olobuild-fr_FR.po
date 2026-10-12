@@ -25077,3 +25077,18 @@ msgstr "Afficher le téléphone"
 
 msgid "La home del tema su un telefono, nell'angolo dell'anteprima: scorre insieme a quella del computer. Compare per i temi che hanno l'anteprima mobile."
 msgstr "La page d'accueil du thème sur un téléphone, dans le coin de l'aperçu : elle défile avec celle de l'ordinateur. Elle apparaît pour les thèmes qui ont un aperçu mobile."
+
+msgid "Anche col giroscopio (telefono)"
+msgstr "Aussi avec le gyroscope (téléphone)"
+
+msgid "Su telefoni e tablet l'elemento si inclina al contrario del dispositivo: se inclini il telefono a sinistra, si inclina a destra. Più lo inclini, più si muove."
+msgstr "Sur téléphones et tablettes, l'élément s'incline à l'inverse de l'appareil : si tu inclines le téléphone vers la gauche, il s'incline vers la droite. Plus tu l'inclines, plus il bouge."
+
+msgid "Su iPhone parte al primo tocco sull'elemento, quando Safari chiede il permesso di usare il movimento."
+msgstr "Sur iPhone, il démarre au premier toucher sur l'élément, quand Safari demande l'autorisation d'utiliser le mouvement."
+
+msgid "Resta fermo per chi ha chiesto di ridurre il movimento."
+msgstr "Il reste immobile pour qui a demandé de réduire les animations."
+
+msgid "Ampiezza sul telefono:"
+msgstr "Amplitude sur le téléphone :"

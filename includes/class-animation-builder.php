@@ -253,6 +253,23 @@ class Olobuild_Animation_Builder {
     }
 
     /**
+     * Tilt 3D col giroscopio (Effetti mouse → Tilt 3D → «Anche col giroscopio»): su telefoni e tablet
+     * l'elemento si inclina al contrario del dispositivo, fino all'ampiezza in gradi (10-60, di serie 45).
+     * Il runtime sta in renderer-page; con «Foto interne» l'attributo passa alle foto come quello del tilt.
+     *
+     * @param array $src Advanced (o settings) con mouse_tilt_gyro / mouse_tilt_gyro_max.
+     * @return string Attributo, o '' se spento.
+     */
+    public static function gyro_attr( $src ) {
+        if ( empty( $src['mouse_tilt_gyro'] ) ) {
+            return '';
+        }
+        $max = intval( $src['mouse_tilt_gyro_max'] ?? 45 );
+        $max = $max > 0 ? max( 10, min( 60, $max ) ) : 45;
+        return ' data-olo-tilt-gyro="' . $max . '"';
+    }
+
+    /**
      * Build data attributes for mouse tracking effects (3D tilt + cursor follow).
      *
      * @param array $advanced Advanced settings.
@@ -266,6 +283,7 @@ class Olobuild_Animation_Builder {
             // (il runtime espande l'attr sugli img/video figli).
             $tilt_attr = ( 'items' === ( $advanced['mouse_tilt_target'] ?? 'block' ) ) ? 'data-olo-tilt-items' : 'data-olo-tilt';
             $attrs    .= ' ' . $tilt_attr . '="' . $intensity . '"';
+            $attrs    .= self::gyro_attr( $advanced );
         }
         if ( ! empty( $advanced['mouse_track'] ) ) {
             $speed = intval( $advanced['mouse_track_speed'] ?? 3 );

@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.697 - 2026-10-12 (novità)
+- Effetti mouse: il Tilt 3D può seguire anche il giroscopio del telefono («Anche col giroscopio», con l'ampiezza sul telefono, di serie 45°). Su telefoni e tablet l'elemento si inclina al contrario del dispositivo: telefono inclinato a sinistra, elemento inclinato a destra, e più lo inclini più si muove. Su iPhone parte al primo tocco sull'elemento, quando Safari chiede il permesso; resta fermo per chi ha chiesto di ridurre il movimento.
+
 ## v1.4.696 - 2026-10-12 (novità)
 - Vetrina temi: ogni scheda mostra nell'angolo dell'anteprima la stessa home su un telefono, che scorre insieme a quella del computer al passaggio del mouse. Si spegne con «Mostra il telefono» nel Contenuto della tile; compare per i temi che hanno l'anteprima mobile, cioè tutti i 52 temi inclusi.
 
