@@ -3,6 +3,11 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.707 - 2026-10-13 (miglioria)
+- Portfolio: le «Colonne» si possono scegliere per tablet e telefono. Prima la griglia passava da sola a 2 colonne sotto i 1024 px e a una sul telefono; lasciate vuote resta così.
+- Work List: la colonna del numero si allarga quanto la parola più lunga delle etichette, uguale in tutte le righe. Un'etichetta lunga come «Primavera 2027» usciva dalla colonna e sul telefono toccava il titolo.
+- Temi: in Kemet, sul telefono, gli oggetti della pagina Collezioni stanno a due colonne (tre sul tablet), il testo del nome è allineato al titolo e la prenotazione della visita ha la casella del consenso privacy al posto di due opzioni di prova.
+
 ## v1.4.706 - 2026-10-13 (miglioria)
 - Conto alla rovescia: nello Stile c'è «Allineamento» (sinistra, centro, destra; di serie al centro come prima) e la misura dei numeri e la larghezza dei riquadri si possono scegliere per tablet e telefono, così i riquadri restano in fila anche sugli schermi stretti.
 - Temi: in Kemet i numeri del conto alla rovescia stanno in fila, nella fascia blu della home allineati al testo e nella pagina della mostra anche sul telefono.

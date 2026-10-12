@@ -261,7 +261,7 @@ export default {
       { value: 'polaroid',       label: t('Polaroid Wall') },
       { value: 'postcard-stack', label: t('Postcard Stack 3D') },
     ]},
-    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1,
+    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1, responsive: true,
       condition: { field: 'layout', op: 'in', value: ['grid', 'masonry', 'masonry-pin', 'bento', 'mosaic', 'polaroid'] } },
     { key: 'caption_position', label: t('Posizione testo'), type: 'select', options: [
       { value: 'below',   label: t('Sotto immagine') },

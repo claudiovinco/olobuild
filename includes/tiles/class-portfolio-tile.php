@@ -637,6 +637,17 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
                 .<?php echo $uid; ?>-grid { grid-template-columns: repeat(2, 1fr); }
                 <?php endif; ?>
             }
+            <?php
+            // «Colonne» per dispositivo (vuote = i ripieghi qui sopra: 2 colonne fino a 1024 px, 1 sul
+            // telefono). Vengono dopo, e vincono. Nei masonry si contano le colonne del testo.
+            if ( $layout === 'masonry' || $layout === 'masonry-pin' ) {
+                echo $this->css_per_dispositivo( $s, 'columns', '.' . $uid . '-grid', function ( $v ) {
+                    return 'column-count:' . max( 1, min( 6, absint( $v ) ) );
+                } );
+            } elseif ( in_array( $layout, [ 'grid', 'bento', 'mosaic', 'polaroid' ], true ) ) {
+                echo $this->css_per_dispositivo( $s, 'columns', '.' . $uid . '-grid', $this->decl_colonne( 6 ) );
+            }
+            ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 

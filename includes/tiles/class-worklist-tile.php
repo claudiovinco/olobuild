@@ -84,15 +84,28 @@ class Olobuild_WorkList_Tile extends Olobuild_Tile_Base {
         $show_year  = ! empty( $s['show_year'] );
         $show_arrow = ! empty( $s['show_arrow'] );
 
+        $items = is_array( $s['items'] ) ? $s['items'] : [];
+
+        // Colonna del numero: 48 px (32 sul telefono), ma mai più stretta della parola più lunga delle
+        // etichette, uguale in tutte le righe perché i titoli restino allineati. Un'etichetta come
+        // «Primavera 2027» usciva dalla colonna e sul telefono toccava il titolo.
+        $parola = 0;
+        foreach ( $items as $it ) {
+            foreach ( preg_split( '/\s+/u', (string) ( $it['number'] ?? '' ) ) as $w ) {
+                $parola = max( $parola, mb_strlen( $w ) );
+            }
+        }
+        $num_w = (int) ceil( $parola * $number_size * 0.62 );
+
         // grid columns: numero + titolo + [categoria] + [anno] + [freccia]
         // minmax(0,…): con «1fr» la colonna del titolo non scendeva sotto la parola più lunga e la riga
         // usciva dallo schermo del telefono.
-        $cols = '48px minmax(0,1fr)';
+        $cols = max( 48, $num_w ) . 'px minmax(0,1fr)';
         if ( $show_cat )   $cols .= ' auto';
         if ( $show_year )  $cols .= ' auto';
         if ( $show_arrow ) $cols .= ' auto';
         // Telefono: la categoria si nasconde, restano numero, titolo e le colonne accese.
-        $cols_m = '32px minmax(0,1fr)';
+        $cols_m = max( 32, $num_w ) . 'px minmax(0,1fr)';
         if ( $show_year )  $cols_m .= ' auto';
         if ( $show_arrow ) $cols_m .= ' auto';
 
@@ -103,7 +116,6 @@ class Olobuild_WorkList_Tile extends Olobuild_Tile_Base {
         $hover_pad_l = (int) $row_pad['left'] + $indent;
         $hover_pad_r = (int) $row_pad['right'] + $indent;
 
-        $items    = is_array( $s['items'] ) ? $s['items'] : [];
         $row_base = 'border-bottom:1px solid ' . $line . ';';
 
         ob_start();
@@ -133,7 +145,7 @@ class Olobuild_WorkList_Tile extends Olobuild_Tile_Base {
                 </<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'a'/'div' literal from the ternary above ?>>
             <?php endforeach; ?>
         </div>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colours via the safe_color_css() whitelist, indent and paddings via absint()/intval() with min()/max() clamps, grid columns from fixed literals, cursor a fixed-literal ternary; $uid is internally generated. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colours via the safe_color_css() whitelist, indent and paddings via absint()/intval() with min()/max() clamps, grid columns from fixed literals plus an integer width computed from the labels, cursor a fixed-literal ternary; $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?> .olo-worklist__row { display: grid; grid-template-columns: <?php echo $cols; ?>; gap: 24px; align-items: center; padding: <?php echo $row_pad_css; ?>; cursor: <?php echo $items && ! empty( $items[0]['link_url'] ) ? 'pointer' : 'default'; ?>; transition: padding .25s ease, background .25s ease; color: inherit; text-decoration: none; }
             .<?php echo $uid; ?> .olo-worklist__row:hover { padding-left: <?php echo $hover_pad_l; ?>px; padding-right: <?php echo $hover_pad_r; ?>px; background: <?php echo $hover_bg; ?>; }
