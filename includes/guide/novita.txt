@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.703 - 2026-10-12 (fix)
+- Temi: l'anteprima del telefono di Teatro Darsena, nella Vetrina temi e nel selettore dei temi, mostra l'apertura come è dalla 1.4.702, col titolo che va a capo prima della foto.
+
 ## v1.4.702 - 2026-10-12 (fix)
 - Titolo animato: una misura per il tablet non annulla più la riduzione automatica sul telefono. Prima il telefono prendeva intera la misura del tablet (72 px su uno schermo largo 360); ora si riduce da sola fino a quella misura, e una misura scelta per il telefono vince sempre.
 - Temi: in Teatro Darsena, su telefoni e tablet, il titolo dell'apertura non finisce più sotto la foto ad arco: va a capo prima della foto, sul tablet è più piccolo, e l'arco resta intero in cima. Cambia nella demo e nei siti che importano il tema da adesso; le pagine già importate restano come sono.
