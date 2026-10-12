@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.695 - 2026-10-12 (fix)
+- Temi: le anteprime del selettore dei temi e della vetrina sono rifatte per i 19 temi la cui home ha cambiato gli spazi nella 1.4.694, così mostrano le fasce più sottili come sono adesso.
+
 ## v1.4.694 - 2026-10-12 (fix)
 - Temi: spazi verticali più equilibrati in 26 pagine di 23 temi. Le fasce sottili (una riga di cifre, contatori, orari, icone, iscrizione alla newsletter) avevano sopra e sotto lo stesso spazio delle sezioni grandi, 140 px, e il vuoto superava il contenuto: ora hanno lo spazio «Predefinito», quelle con le cifre in un riquadro lo spazio «Piccolo». Dove due sezioni di fila hanno lo stesso sfondo, fra un contenuto e l'altro restavano 280 px vuoti dello stesso colore: la seconda ha ora lo spazio «Predefinito». Cambia nelle demo e nei siti che importano il tema da adesso; le pagine già importate restano come sono.
 
