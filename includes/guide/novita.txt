@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.708 - 2026-10-13 (fix)
+- Temi: in Kemet la grande scritta «KEMET» della home non è più tagliata sul computer. Le lettere erano più alte del loro riquadro e le barre della E e della T restavano fuori; sugli schermi fra 961 e 1040 px la parola usciva anche ai lati. Ora è un po' più piccola, ha più spazio sopra e sotto e lo zoom allo scorrimento è più leggero.
+
 ## v1.4.707 - 2026-10-13 (miglioria)
 - Portfolio: le «Colonne» si possono scegliere per tablet e telefono. Prima la griglia passava da sola a 2 colonne sotto i 1024 px e a una sul telefono; lasciate vuote resta così.
 - Work List: la colonna del numero si allarga quanto la parola più lunga delle etichette, uguale in tutte le righe. Un'etichetta lunga come «Primavera 2027» usciva dalla colonna e sul telefono toccava il titolo.
