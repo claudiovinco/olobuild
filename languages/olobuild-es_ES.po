@@ -25225,3 +25225,27 @@ msgstr "sin color"
 
 msgid "I dati della mappa del mondo non sono stati trovati."
 msgstr "No se encontraron los datos del mapa del mundo."
+
+msgid "Social nel menu mobile"
+msgstr "Redes sociales en el menú móvil"
+
+msgid "Mostra i social"
+msgstr "Mostrar las redes sociales"
+
+msgid "Le icone compaiono in fondo al menu mobile, sotto le voci: nel pannello laterale, nella tendina e a schermo intero."
+msgstr "Los iconos aparecen al final del menú móvil, debajo de los elementos: en el panel lateral, en el desplegable y a pantalla completa."
+
+msgid "Profili social"
+msgstr "Perfiles sociales"
+
+msgid "Vuoto: il colore delle voci del menu mobile."
+msgstr "Vacío: el color de los elementos del menú móvil."
+
+msgid "Vuoto: nella barra il colore del menu, nel menu mobile quello delle voci del pannello (e al passaggio il suo accento)."
+msgstr "Vacío: en la barra el color del menú, en el menú móvil el de los elementos del panel (y al pasar el ratón su color de acento)."
+
+msgid "Colori dei marchi"
+msgstr "Colores de las marcas"
+
+msgid "Pillola con il nome"
+msgstr "Píldora con el nombre"

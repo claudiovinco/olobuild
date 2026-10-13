@@ -30,6 +30,18 @@ export const PIATTAFORME_SOCIAL = [
   { value: 'website',   label: t('Sito web') },
 ];
 
+// Stili delle icone social nei menu (Mega Menu, social del menu mobile del Menu di navigazione): un solo
+// elenco, resi da Olobuild_Social_Tile::css_menu(). I primi tre sono quelli storici del Mega Menu.
+export const STILI_SOCIAL_MENU = [
+  { value: 'plain',   label: t('Solo icona') },
+  { value: 'circle',  label: t('Cerchio') },
+  { value: 'rounded', label: t('Rettangolo arrotondato') },
+  { value: 'outline', label: t('Contorno') },
+  { value: 'square',  label: t('Quadrato') },
+  { value: 'brand',   label: t('Colori dei marchi') },
+  { value: 'pill',    label: t('Pillola con il nome') },
+];
+
 export default {
   type: 'social',
   name: t('Link social'),

@@ -3,6 +3,7 @@ import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, 
 import { t } from '@/i18n';
 import { MEGAMENU_TEMPLATES } from '../megamenuTemplates.js';
 import { logoDelSito, nomeDelSito, primoMenu } from '../demoMedia.js';
+import { STILI_SOCIAL_MENU } from './social.js';
 
 // Opzioni del selettore "Template pronti": placeholder + 40 template raggruppati
 // per famiglia. La selezione NON è una chiave salvata: il valore arriva alla
@@ -788,12 +789,9 @@ export default {
       ]},
     { type: 'separator', label: t('Social — Aspetto') },
     { key: 'social_size', label: t('Dimensione icone'), type: 'range', min: 14, max: 36, step: 1 },
-    withHover({ key: 'social_color', label: t('Colore icone'), type: 'color' }, { hoverKey: 'social_hover_color' }),
-    { key: 'social_style', label: t('Stile icone'), type: 'select', options: [
-      { value: 'plain', label: t('Solo icona') },
-      { value: 'circle', label: t('Cerchio') },
-      { value: 'rounded', label: t('Rettangolo arrotondato') },
-    ]},
+    withHover({ key: 'social_color', label: t('Colore icone'), type: 'color',
+      description: t('Vuoto: nella barra il colore del menu, nel menu mobile quello delle voci del pannello (e al passaggio il suo accento).') }, { hoverKey: 'social_hover_color', defaultDuration: 200 }),
+    { key: 'social_style', label: t('Stile icone'), type: 'select', options: STILI_SOCIAL_MENU },
 
     // ─── Menu mobile ─────────────────────────────────────────────
     // Una sola zona, in testa lo stile e il breakpoint, poi le zone standard. Un campo che

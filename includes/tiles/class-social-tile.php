@@ -158,19 +158,12 @@ class Olobuild_Social_Tile extends Olobuild_Tile_Base {
         return 1.0;
     }
 
-    public static function get_icon_svg( $platform ) {
-        $paths = self::icon_paths();
-        $d = $paths[ $platform ] ?? '';
-        if ( ! $d ) {
-            return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true" focusable="false"><path d="M10.59 13.41c.41.39.41 1.03 0 1.42-.39.39-1.03.39-1.42 0a5.003 5.003 0 0 1 0-7.07l3.54-3.54a5.003 5.003 0 0 1 7.07 0 5.003 5.003 0 0 1 0 7.07l-1.49 1.49c.01-.82-.12-1.64-.4-2.42l.47-.48a2.982 2.982 0 0 0 0-4.24 2.982 2.982 0 0 0-4.24 0l-3.53 3.53a2.982 2.982 0 0 0 0 4.24zm2.82-4.24c.39-.39 1.03-.39 1.42 0a5.003 5.003 0 0 1 0 7.07l-3.54 3.54a5.003 5.003 0 0 1-7.07 0 5.003 5.003 0 0 1 0-7.07l1.49-1.49c-.01.82.12 1.64.4 2.42l-.47.48a2.982 2.982 0 0 0 0 4.24 2.982 2.982 0 0 0 4.24 0l3.53-3.53a2.982 2.982 0 0 0 0-4.24z"/></svg>';
-        }
-        return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true" focusable="false"><path d="' . $d . '"/></svg>';
-    }
-
-    public function render( $settings ) {
-        $s = wp_parse_args( $settings, $this->defaults );
-
-        $brand_colors = [
+    /**
+     * I colori dei marchi: stile «Pieno» con «Colori brand» di questa tile e stile «Colori dei marchi»
+     * delle icone social dei menu. Pubblico: un solo elenco.
+     */
+    public static function colori_marchi() {
+        return [
             'facebook'  => '#1877F2',
             // X: il nero del marchio attuale (#1DA1F2 era il blu del vecchio Twitter,
             // accanto al logo X).
@@ -190,6 +183,88 @@ class Olobuild_Social_Tile extends Olobuild_Tile_Base {
             'twitch'    => '#9146FF',
             'spotify'   => '#1DB954',
         ];
+    }
+
+    /**
+     * Un'icona della riga social di un menu (Mega Menu, Menu di navigazione): il link col glifo, il nome
+     * (lo mostra solo lo stile «Pillola con il nome»; per gli altri c'è aria-label) e il colore del
+     * marchio in una variabile (lo usa lo stile «Colori dei marchi»). $svg = l'icona, che il Mega Menu
+     * disegna con la sua serie. Si apre in un'altra scheda solo un indirizzo vero: un «#» segnaposto o
+     * un'ancora resta nella pagina.
+     */
+    public static function link_menu( $platform, $url, $svg ) {
+        $nome  = self::nome_piattaforma( $platform );
+        $marca = self::colori_marchi()[ $platform ] ?? 'var(--olo-color-primary, #e1474f)';
+        $su    = 'snapchat' === $platform ? 'var(--olo-color-dark, #14161c)' : '#fff';
+        $fuori = preg_match( '#^https?://#i', (string) $url ) ? ' target="_blank" rel="noopener noreferrer"' : '';
+        return '<a href="' . esc_url( $url ) . '"' . $fuori . ' aria-label="' . esc_attr( $nome ) . '" style="--olo-soc-marchio:' . esc_attr( $marca ) . ';--olo-soc-su:' . esc_attr( $su ) . '">'
+            . $svg . '<span class="olo-soc-nome">' . esc_html( $nome ) . '</span></a>';
+    }
+
+    /**
+     * CSS della riga social di un menu nello stile scelto: un solo elenco di stili per il Mega Menu
+     * (`social_style`) e il Menu di navigazione (social del menu mobile). $sel = la riga; i link sono
+     * `{$sel} a`. Colori già passati da safe_color; $durata = durata del passaggio ('.2s', '200ms').
+     * Solo icona, Cerchio e Rettangolo arrotondato sono quelli storici del Mega Menu, invariati.
+     */
+    public static function css_menu( $sel, $stile, $misura, $colore, $hover, $durata = '.2s' ) {
+        $m   = max( 12, min( 48, (int) $misura ) );
+        $box = $m + 18;
+        $css = "{$sel} { display: flex; align-items: center; gap: 8px; }"
+            . "{$sel} a { display: flex; align-items: center; justify-content: center; color: {$colore}; text-decoration: none; transition: color {$durata}, background-color {$durata}, border-color {$durata}, transform {$durata}, filter {$durata}; }"
+            . "{$sel} a:hover { color: {$hover}; transform: translateY(-2px); }"
+            . "{$sel} a:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }"
+            . "{$sel} svg { width: {$m}px; height: {$m}px; fill: currentColor; flex: none; }"
+            . "{$sel} .olo-soc-nome { display: none; }";
+        switch ( $stile ) {
+            case 'circle':
+                $css .= "{$sel} a { width: " . ( $m + 14 ) . 'px; height: ' . ( $m + 14 ) . "px; border-radius: 50%; background: rgba(128,128,128,.12); }"
+                    . "{$sel} a:hover { background: rgba(128,128,128,.22); }";
+                break;
+            case 'rounded':
+                $css .= "{$sel} a { padding: 6px; border-radius: 6px; background: rgba(128,128,128,.12); }"
+                    . "{$sel} a:hover { background: rgba(128,128,128,.22); }";
+                break;
+            // Un filo tondo che al passaggio prende il colore pieno.
+            case 'outline':
+                $css .= "{$sel} a { box-sizing: border-box; width: {$box}px; height: {$box}px; border-radius: 50%; border: 1px solid color-mix(in srgb, currentColor 38%, transparent); }"
+                    . "{$sel} a:hover { border-color: currentColor; }";
+                break;
+            // Riquadro col filo, angoli quasi vivi: al passaggio si riempie appena invece di salire.
+            case 'square':
+                $css .= "{$sel} a { box-sizing: border-box; width: {$box}px; height: {$box}px; border-radius: 2px; border: 1px solid color-mix(in srgb, currentColor 38%, transparent); }"
+                    . "{$sel} a:hover { transform: none; border-color: currentColor; background-color: color-mix(in srgb, currentColor 12%, transparent); }";
+                break;
+            // Cerchi pieni nei colori dei marchi (link_menu() li passa in --olo-soc-marchio), glifo bianco.
+            case 'brand':
+                $css .= "{$sel} a { width: " . ( $m + 16 ) . 'px; height: ' . ( $m + 16 ) . "px; border-radius: 50%; background-color: var(--olo-soc-marchio); color: var(--olo-soc-su, #fff); }"
+                    . "{$sel} a:hover { color: var(--olo-soc-su, #fff); filter: brightness(1.12); }";
+                break;
+            // Pillola col filo, icona e nome della piattaforma.
+            case 'pill':
+                $css .= "{$sel} { flex-wrap: wrap; gap: .5rem .625rem; }"
+                    . "{$sel} a { gap: .5em; padding: .55em 1em .55em .8em; border-radius: 2em; border: 1px solid color-mix(in srgb, currentColor 32%, transparent); font-size: " . max( 12, (int) round( $m * .72 ) ) . 'px; font-weight: 600; letter-spacing: .02em; line-height: 1; white-space: nowrap; }'
+                    . "{$sel} a:hover { transform: none; border-color: currentColor; background-color: color-mix(in srgb, currentColor 8%, transparent); }"
+                    . "{$sel} svg { width: " . (int) round( $m * .85 ) . 'px; height: ' . (int) round( $m * .85 ) . 'px; }'
+                    . "{$sel} .olo-soc-nome { display: inline; }";
+                break;
+        }
+        return $css;
+    }
+
+    public static function get_icon_svg( $platform ) {
+        $paths = self::icon_paths();
+        $d = $paths[ $platform ] ?? '';
+        if ( ! $d ) {
+            return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true" focusable="false"><path d="M10.59 13.41c.41.39.41 1.03 0 1.42-.39.39-1.03.39-1.42 0a5.003 5.003 0 0 1 0-7.07l3.54-3.54a5.003 5.003 0 0 1 7.07 0 5.003 5.003 0 0 1 0 7.07l-1.49 1.49c.01-.82-.12-1.64-.4-2.42l.47-.48a2.982 2.982 0 0 0 0-4.24 2.982 2.982 0 0 0-4.24 0l-3.53 3.53a2.982 2.982 0 0 0 0 4.24zm2.82-4.24c.39-.39 1.03-.39 1.42 0a5.003 5.003 0 0 1 0 7.07l-3.54 3.54a5.003 5.003 0 0 1-7.07 0 5.003 5.003 0 0 1 0-7.07l1.49-1.49c-.01.82.12 1.64.4 2.42l-.47.48a2.982 2.982 0 0 0 0 4.24 2.982 2.982 0 0 0 4.24 0l3.53-3.53a2.982 2.982 0 0 0 0-4.24z"/></svg>';
+        }
+        return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true" focusable="false"><path d="' . $d . '"/></svg>';
+    }
+
+    public function render( $settings ) {
+        $s = wp_parse_args( $settings, $this->defaults );
+
+        $brand_colors = self::colori_marchi();
 
         $links        = self::parse_links( $s['links'] );
         $size         = absint( $s['size'] );

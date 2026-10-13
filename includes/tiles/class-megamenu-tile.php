@@ -2357,35 +2357,28 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         <?php endif; ?>
 
         <?php
-        // ── SOCIAL ICONS ──
+        // ── SOCIAL ICONS ── stili condivisi col Menu di navigazione (Olobuild_Social_Tile::css_menu())
+        echo Olobuild_Social_Tile::css_menu( ".{$uid} .olo-mm-social", $soc_style, $soc_size, $soc_color, $soc_hcolor, Olobuild_Tile_Utils::durata_hover( $s, 'social_color_hover_duration', '.2s' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS da valori interi, colori passati da safe_color() e stili di un elenco fisso
         ?>
-        .<?php echo $uid; ?> .olo-mm-social { display: flex; align-items: center; gap: 8px; }
-        .<?php echo $uid; ?> .olo-mm-social a {
-            display: flex; align-items: center; justify-content: center;
-            color: <?php echo $soc_color; ?>; text-decoration: none;
-            transition: color .2s, background .2s, transform .2s;
-        }
-        .<?php echo $uid; ?> .olo-mm-social a:hover {
-            color: <?php echo $soc_hcolor; ?>; transform: translateY(-2px);
-        }
-        .<?php echo $uid; ?> .olo-mm-social svg { width: <?php echo $soc_size; ?>px; height: <?php echo $soc_size; ?>px; fill: currentColor; }
-        <?php if ( $soc_style === 'circle' ) : ?>
-        .<?php echo $uid; ?> .olo-mm-social a {
-            width: <?php echo $soc_size + 14; ?>px; height: <?php echo $soc_size + 14; ?>px;
-            border-radius: 50%; background: rgba(128,128,128,.12);
-        }
-        .<?php echo $uid; ?> .olo-mm-social a:hover { background: rgba(128,128,128,.22); }
-        <?php elseif ( $soc_style === 'rounded' ) : ?>
-        .<?php echo $uid; ?> .olo-mm-social a {
-            padding: 6px; border-radius: 6px; background: rgba(128,128,128,.12);
-        }
-        .<?php echo $uid; ?> .olo-mm-social a:hover { background: rgba(128,128,128,.22); }
-        <?php endif; ?>
         .<?php echo $uid; ?> .olo-mm-social-bar { order: 89; }
         .<?php echo $uid; ?> .olo-mm-social-footer {
-            padding: 20px 24px; justify-content: center;
+            padding: 20px 24px; justify-content: center; flex-wrap: wrap;
             border-top: 1px solid rgba(255,255,255,.08);
         }
+        <?php
+        // Nel menu mobile, senza «Colore icone», le icone prendono il colore delle voci del pannello e al
+        // passaggio il suo accento: prima ereditavano il colore della testata, scuro su scuro nei pannelli
+        // scuri. I Colori dei marchi tengono il loro glifo.
+        if ( 'brand' !== $soc_style ) :
+            $soc_libero = '' === $this->safe_color( $s['social_color'] );
+            if ( $soc_libero ) : ?>
+        .<?php echo $uid; ?> .olo-mm-offcanvas .olo-mm-social-footer a, .<?php echo $uid; ?> .olo-mm-fullscreen .olo-mm-social-footer a { color: <?php echo $mob_tc; ?>; }
+        .<?php echo $uid; ?> .olo-mm-dropdown-panel .olo-mm-social-footer a { color: <?php echo $mob_drop_tc; ?>; }
+            <?php endif; ?>
+            <?php if ( $soc_libero || '' === $this->safe_color( $s['social_hover_color'] ) ) : ?>
+        .<?php echo $uid; ?> .olo-mm-social.olo-mm-social-footer a:hover { color: <?php echo $this->safe_color( $s['social_hover_color'] ) ?: $mob_acc; ?>; }
+            <?php endif; ?>
+        <?php endif; ?>
         <?php /* ── Social visibility: toggle-based ── */ ?>
         <?php if ( $soc_navbar_side === 'left' ) : ?>
         .<?php echo $uid; ?> .olo-mm-social-bar { order: -1; }
@@ -2793,13 +2786,13 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         }
         if ( ! $has_any ) return;
 
+        // Link, nome e colore del marchio come nel Menu di navigazione (Olobuild_Social_Tile::link_menu());
+        // le icone restano quelle di sempre del Mega Menu. «x» è la «twitter» della tile Link social.
         echo '<div class="olo-mm-social olo-mm-social-' . esc_attr( $context ) . '">';
         foreach ( $socials as $key => $path ) {
             $url = $s["social_{$key}"] ?? '';
             if ( empty( $url ) ) continue;
-            echo '<a href="' . esc_url( $url ) . '" target="_blank" rel="noopener noreferrer" aria-label="' . esc_attr( ucfirst( $key ) ) . '">';
-            echo '<svg viewBox="0 0 24 24"><path d="' . $path . '"/></svg>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $path is static SVG path data hardcoded in this method
-            echo '</a>';
+            echo Olobuild_Social_Tile::link_menu( 'x' === $key ? 'twitter' : $key, $url, '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="' . $path . '"/></svg>' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- link_menu() esegue l'escape di URL, nome e colori; $path è un tracciato SVG fisso di questo metodo
         }
         echo '</div>';
     }

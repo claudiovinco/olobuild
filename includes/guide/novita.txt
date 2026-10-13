@@ -3,6 +3,12 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.723 - 2026-10-13 (nuovo)
+- Menu di navigazione: nuova sezione «Social nel menu mobile» nel Contenuto. Con «Mostra i social» acceso, le icone dei profili (stesse piattaforme della tile Link social) compaiono in fondo al menu mobile, sotto le voci: nel pannello laterale, nella tendina e a schermo intero. Nello Stile, «Social — Aspetto»: stile, dimensione e colore delle icone (vuoto = il colore delle voci).
+- Icone social dei menu: ai tre stili del Mega Menu (Solo icona, Cerchio, Rettangolo arrotondato) se ne aggiungono quattro, gli stessi nei due menu: Contorno, Quadrato, Colori dei marchi e Pillola con il nome.
+- Mega Menu: senza «Colore icone», nel menu mobile le icone prendono il colore delle voci del pannello e al passaggio il suo accento. Prima prendevano il colore della barra, e sui pannelli scuri potevano sparire. Un «#» segnaposto non apre più un'altra scheda.
+- I 53 temi hanno Facebook, Instagram e LinkedIn in fondo al menu mobile (link da completare), con uno stile diverso secondo il carattere del tema.
+
 ## v1.4.722 - 2026-10-13 (fix)
 - Mappa del mondo: al passaggio del mouse uno stato senza colore prende un velo del colore dei confini. Prima seguiva il colore del testo, e su una pagina scura col testo scuro ereditato non si vedeva.
 

@@ -25228,3 +25228,27 @@ msgstr "no color"
 
 msgid "I dati della mappa del mondo non sono stati trovati."
 msgstr "The world map data was not found."
+
+msgid "Social nel menu mobile"
+msgstr "Social in the mobile menu"
+
+msgid "Mostra i social"
+msgstr "Show social links"
+
+msgid "Le icone compaiono in fondo al menu mobile, sotto le voci: nel pannello laterale, nella tendina e a schermo intero."
+msgstr "The icons appear at the bottom of the mobile menu, below the items: in the side panel, in the dropdown and in full screen."
+
+msgid "Profili social"
+msgstr "Social profiles"
+
+msgid "Vuoto: il colore delle voci del menu mobile."
+msgstr "Empty: the color of the mobile menu items."
+
+msgid "Vuoto: nella barra il colore del menu, nel menu mobile quello delle voci del pannello (e al passaggio il suo accento)."
+msgstr "Empty: in the bar the color of the menu, in the mobile menu that of the panel items (and its accent on hover)."
+
+msgid "Colori dei marchi"
+msgstr "Brand colors"
+
+msgid "Pillola con il nome"
+msgstr "Pill with name"

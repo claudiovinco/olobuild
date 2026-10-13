@@ -35,6 +35,15 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
         'fs_dividers'             => false,
         'fs_divider_color'        => '',
         'fs_close_color'          => '',
+        // Social in fondo al menu mobile (pannello laterale, tendina, schermo intero): piattaforme e icone della
+        // tile Link social, stili condivisi col Mega Menu (Olobuild_Social_Tile::css_menu()).
+        'social_mobile'               => false,
+        'social_links'                => [],
+        'social_style'                => 'plain',
+        'social_size'                 => 20,
+        'social_color'                => '',
+        'social_hover_color'          => '',
+        'social_color_hover_duration' => 200,
         'text_color'     => '',
         'hover_color'    => '',
         'active_color'   => '',
@@ -505,6 +514,30 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
             $rules[] = "{$sel} {$fs} .uk-nav > li.olo-nav-fs-btn > a { display: inline-flex; align-items: center; justify-content: center; padding: 1.1em 2.15em; border-radius: 0.45em; background: var(--olo-color-primary, #e1474f); color: var(--olo-color-on-primary, #ffffff); font-family: {$mono}; font-size: 13px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; }";
         }
 
+        // Social in fondo al menu mobile. Senza «Colore icone» prendono il colore delle voci: nello schermo intero
+        // «Colore voci» e al passaggio il suo colore hover (il pannello non dà un colore al testo), negli altri
+        // pannelli il colore del pannello.
+        if ( '' !== $this->social_mobile_html( $s ) ) {
+            $soc_col = $this->safe_color_css( $s['social_color'] ?? '' );
+            $soc_hov = $this->safe_color_css( $s['social_hover_color'] ?? '' );
+            if ( self::mobile_fullscreen( $s ) ) {
+                $soc_col = $soc_col ?: ( $this->safe_color_css( $s['fs_color'] ?? '' ) ?: 'var(--olo-color-primary-contrast, #FFFFFF)' );
+                $soc_hov = $soc_hov ?: $this->safe_color_css( $s['fs_color_hover'] ?? '' );
+            }
+            $rules[] = Olobuild_Social_Tile::css_menu(
+                "{$sel} .olo-nav-social",
+                (string) ( $s['social_style'] ?? 'plain' ),
+                intval( $s['social_size'] ?? 20 ),
+                $soc_col ?: 'inherit',
+                $soc_hov ?: 'var(--olo-color-primary, #e1474f)',
+                Olobuild_Tile_Utils::durata_hover( $s, 'social_color_hover_duration', '200ms' )
+            );
+            $rules[] = "{$sel} .olo-nav-social { flex-wrap: wrap; }";
+            $rules[] = "{$sel} .olo-nav-fullscreen .olo-nav-social { margin-top: 2.25rem; justify-content: " . ( ( $s['fs_align'] ?? 'center' ) === 'left' ? 'flex-start' : 'center' ) . '; }';
+            $rules[] = "{$sel} .uk-offcanvas-bar .olo-nav-social { margin-top: 1.5rem; }";
+            $rules[] = "{$sel} .uk-drop .olo-nav-social { margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid color-mix(in srgb, currentColor 14%, transparent); }";
+        }
+
         // --- Vertical mode styles ---
         if ( ( $s['style'] ?? '' ) === 'vertical' ) {
             $v_spacing    = max( 0, intval( $s['v_item_spacing'] ) );
@@ -723,6 +756,7 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
                                 <?php $this->render_mobile_items( $tree, $children, $grandchildren, [ 'fs' => true, 's' => $s ] ); ?>
                                 <?php if ( $has_search_ref ) { $this->render_referenced_search( $s['search_tile_id'], $s, true ); } elseif ( $has_search_legacy ) { $this->render_mobile_search( $s ); } ?>
                             </ul>
+                            <?php echo $this->social_mobile_html( $s ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- link_menu() esegue l'escape; icone SVG fisse della tile Link social ?>
                         </div>
                     </div>
                     <script>
@@ -812,6 +846,7 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
                                 <?php $this->render_mobile_items( $tree, $children, $grandchildren ); ?>
                                 <?php if ( $has_search_ref ) { $this->render_referenced_search( $s['search_tile_id'], $s, true ); } elseif ( $has_search_legacy ) { $this->render_mobile_search( $s ); } ?>
                             </ul>
+                            <?php echo $this->social_mobile_html( $s ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- link_menu() esegue l'escape; icone SVG fisse della tile Link social ?>
                         </div>
                     </div>
                 <?php else : ?>
@@ -822,6 +857,7 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
                                 <?php $this->render_mobile_items( $tree, $children, $grandchildren ); ?>
                                 <?php if ( $has_search_ref ) { $this->render_referenced_search( $s['search_tile_id'], $s, true ); } elseif ( $has_search_legacy ) { $this->render_mobile_search( $s ); } ?>
                             </ul>
+                            <?php echo $this->social_mobile_html( $s ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- link_menu() esegue l'escape; icone SVG fisse della tile Link social ?>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -870,6 +906,26 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
      */
     private static function mobile_fullscreen( $s ) {
         return ( $s['mobile_type'] ?? '' ) === 'fullscreen' || ( $s['mobile_style'] ?? '' ) === 'fullscreen';
+    }
+
+    /**
+     * La riga di icone social in fondo al menu mobile (Contenuto → «Social nel menu mobile»): piattaforme, icone e
+     * nomi della tile Link social. '' se spenta o senza profili; un profilo senza indirizzo non si mostra.
+     */
+    private function social_mobile_html( $s ) {
+        if ( empty( $s['social_mobile'] ) || ! is_array( $s['social_links'] ?? null ) ) {
+            return '';
+        }
+        $html = '';
+        foreach ( $s['social_links'] as $voce ) {
+            $piattaforma = is_array( $voce ) ? sanitize_key( (string) ( $voce['platform'] ?? '' ) ) : '';
+            $url         = is_array( $voce ) ? trim( (string) ( $voce['url'] ?? '' ) ) : '';
+            if ( '' === $piattaforma || '' === $url ) {
+                continue;
+            }
+            $html .= Olobuild_Social_Tile::link_menu( $piattaforma, $url, Olobuild_Social_Tile::get_icon_svg( $piattaforma ) );
+        }
+        return '' === $html ? '' : '<div class="olo-nav-social">' . $html . '</div>';
     }
 
     /**

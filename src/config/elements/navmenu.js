@@ -2,6 +2,7 @@
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
 import { t } from '@/i18n';
 import { primoMenu } from '../demoMedia.js';
+import { PIATTAFORME_SOCIAL, STILI_SOCIAL_MENU } from './social.js';
 
 /**
  * Tile NavMenu — split CONTENUTO/STILE (regola universale Olobuild).
@@ -96,6 +97,14 @@ export default {
     fs_dividers: false,
     fs_divider_color: '',
     fs_close_color: '',
+    // Social in fondo al menu mobile: piattaforme e icone della tile Link social, stili del Mega Menu
+    social_mobile: false,
+    social_links: [],
+    social_style: 'plain',
+    social_size: 20,
+    social_color: '',
+    social_hover_color: '',
+    social_color_hover_duration: 200,
     hamburger_style: 'default',
     hamburger_position: 'inline',
     hamburger_offset_x: 16,
@@ -159,6 +168,20 @@ export default {
     { key: 'mobile_toggle', label: t('Hamburger mobile'), type: 'toggle' },
     { key: 'mobile_breakpoint', label: t('Breakpoint mobile'), type: 'range', min: 640, max: 1200, step: 10 },
     { key: 'menu_badge_support', label: t('Supporto badge voci'), type: 'toggle' },
+
+    // In fondo al menu mobile (pannello laterale, tendina o schermo intero), sotto le voci. Stesse piattaforme,
+    // icone e nomi della tile Link social; lo stile in Stile → «Social — Aspetto».
+    { type: 'separator', label: t('Social nel menu mobile') },
+    { key: 'social_mobile', label: t('Mostra i social'), type: 'toggle',
+      description: t('Le icone compaiono in fondo al menu mobile, sotto le voci: nel pannello laterale, nella tendina e a schermo intero.') },
+    { key: 'social_links', label: t('Profili social'), type: 'content-items',
+      condition: { field: 'social_mobile', operator: '==', value: true },
+      itemLabel: t('Profilo'), newItemDefaults: { platform: 'instagram', url: '' },
+      itemFields: [
+        { key: 'platform', label: t('Piattaforma'), type: 'select', options: PIATTAFORME_SOCIAL },
+        { key: 'url', label: t('URL'), type: 'link', placeholder: t('https://...') },
+      ],
+    },
 
     // Solo col menu mobile «Schermo intero» (Stile → Mobile — Aspetto)
     { type: 'separator', label: t('Menu a schermo intero'), show: s => s.mobile_type === 'fullscreen' || s.mobile_style === 'fullscreen' },
@@ -350,6 +373,12 @@ export default {
     { key: 'fs_dividers', label: t('Linee fra le voci'), type: 'toggle' },
     { key: 'fs_divider_color', label: t('Colore linee'), type: 'color', condition: { field: 'fs_dividers', value: true } },
     { key: 'fs_close_color', label: t('Colore X'), type: 'color' },
+
+    { type: 'separator', label: t('Social — Aspetto'), show: s => !!s.social_mobile },
+    { key: 'social_style', label: t('Stile icone'), type: 'select', options: STILI_SOCIAL_MENU },
+    { key: 'social_size', label: t('Dimensione icone'), type: 'range', min: 14, max: 36, step: 1, unit: 'px' },
+    withHover({ key: 'social_color', label: t('Colore icone'), type: 'color',
+      description: t('Vuoto: il colore delle voci del menu mobile.') }, { hoverKey: 'social_hover_color', defaultDuration: 200 }),
 
     { type: 'separator', label: t('Hamburger') },
     { key: 'hamburger_style', label: t('Stile hamburger'), type: 'select', options: [
