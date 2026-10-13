@@ -3,6 +3,12 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.731 - 2026-10-13 (nuovo)
+- Hero: nuovo «Sipario». Un sipario di velluto copre la hero e si apre all'italiana (i teli si raccolgono in alto ai lati), alla greca (scorrono di lato) o alla tedesca (sale in alto); parte all'apertura della pagina, quando la hero entra nello schermo, scorrendo o con un clic. Prima di aprirsi mostra occhiello, titolo, invito e uno stemma (con le iniziali, un'icona o un'immagine); dopo restano le quinte, la mantovana o niente. Nello Stile colore e lucentezza del velluto, numero e profondità delle pieghe, oro e frange, mantovana a festoni, luci della ribalta e lama di luce fra i teli. Per chi chiede al sistema di ridurre il movimento il sipario è già aperto.
+- Nuova tile «Cartellone» (gruppo Interattivo): gli spettacoli e gli appuntamenti con data, ora, genere, luogo, durata, prezzo, stato (ultimi posti, esaurito, ingresso libero…), etichette, incontro col pubblico, foto e link ai biglietti. Tre viste: elenco raggruppato per mese, schede con la data sulla foto, prossimo spettacolo col conto alla rovescia. Filtri per genere e per mese, ricerca, «Aggiungi al calendario» e gli appuntamenti passati che si nascondono da soli.
+- Nuova tile «Pianta della sala» (gruppo Interattivo): la sala di un teatro disegnata da pochi numeri, a ferro di cavallo, a ventaglio o a scatola, con platea, buca dell'orchestra, ordini di palchi e loggione. I settori raccolgono zone della sala: passando o toccando un settore gli altri si attenuano e la scheda mostra prezzo intero e ridotto, descrizione, la foto della vista dal posto e un link.
+- Nuovo tema Teatro della Seta (Eventi e musica, 54 temi): un teatro all'italiana del Settecento con il sipario che si apre nella home e sale scorrendo nella stagione, il cartellone col prossimo spettacolo e il conto alla rovescia, la pianta della sala coi prezzi, la seta in video dentro le lettere di «SETA», l'occhio di bue dietro le quinte, i petali sugli applausi, gli incontri su carte da girare, le visite guidate, le scuole e gli spazi in affitto.
+
 ## v1.4.730 - 2026-10-13 (fix)
 - Tema Osteria Fumo: miniature nuove nel selettore dei temi, con l'apertura in video, la lavagna del fuori menù e il fuoco.
 

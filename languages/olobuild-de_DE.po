@@ -25753,3 +25753,615 @@ msgstr "Größe der Zeichnungen"
 
 msgid "Ingrandisce o rimpicciolisce tutti i disegni insieme. Sul telefono, dove la lavagna è stretta, più piccoli lasciano spazio alle scritte."
 msgstr "Vergrößert oder verkleinert alle Zeichnungen gemeinsam. Auf dem Smartphone, wo die Tafel schmal ist, lassen kleinere Zeichnungen der Schrift Platz."
+
+msgid "Ultimi posti"
+msgstr "Letzte Plätze"
+
+msgid "Esaurito"
+msgstr "Ausverkauft"
+
+msgid "Annullato"
+msgstr "Abgesagt"
+
+msgid "Rinviato"
+msgstr "Verschoben"
+
+msgid "Ingresso libero"
+msgstr "Eintritt frei"
+
+msgid "Su prenotazione"
+msgstr "Nach Anmeldung"
+
+msgid "Apri il sipario"
+msgstr "Vorhang auf"
+
+msgid "%d appuntamento"
+msgstr "%d Termin"
+
+msgid "%d appuntamenti"
+msgstr "%d Termine"
+
+msgid "minuti"
+msgstr "Minuten"
+
+msgid "In scena adesso"
+msgstr "Jetzt auf der Bühne"
+
+msgid "dal %1$s al %2$s"
+msgstr "vom %1$s bis %2$s"
+
+msgid "ore %s"
+msgstr "um %s"
+
+msgid "Genere"
+msgstr "Genre"
+
+msgid "Cerca uno spettacolo"
+msgstr "Suche eine Vorstellung"
+
+msgid "Cerca…"
+msgstr "Suchen…"
+
+msgid "Cartellone"
+msgstr "Spielplan"
+
+msgid "Biglietti"
+msgstr "Tickets"
+
+msgid "Aggiungi al calendario"
+msgstr "Zum Kalender hinzufügen"
+
+msgid "Si apre il sipario tra"
+msgstr "Der Vorhang hebt sich in"
+
+msgid "Prossimo spettacolo"
+msgstr "Nächste Vorstellung"
+
+msgid "Nessun appuntamento in programma: il nuovo cartellone arriva presto."
+msgstr "Derzeit sind keine Termine geplant: Der neue Spielplan kommt bald."
+
+msgid "Nessun appuntamento per questa scelta."
+msgstr "Keine Termine für diese Auswahl."
+
+msgid "Prosa"
+msgstr "Schauspiel"
+
+msgid "Musica"
+msgstr "Musik"
+
+msgid "Incontri"
+msgstr "Begegnungen"
+
+msgid "Sala grande"
+msgstr "Großer Saal"
+
+msgid "Prima del sipario"
+msgstr "Vor dem Vorhang"
+
+msgid "Conversazione con il regista"
+msgstr "Gespräch mit dem Regisseur"
+
+msgid "Ridotto"
+msgstr "Ermäßigt"
+
+msgid "Foyer"
+msgstr "Foyer"
+
+msgid "Appuntamenti"
+msgstr "Termine"
+
+msgid "Appuntamento"
+msgstr "Termin"
+
+msgid "Uno per data. Se lo stesso spettacolo dura più giorni, metti la data di fine e scrivi gli orari («ven e sab 20:30 · dom 16:00»). I passati si nascondono da soli; nel builder restano, attenuati."
+msgstr "Einer pro Datum. Läuft dieselbe Vorstellung an mehreren Tagen, gib das Enddatum an und schreib die Zeiten dazu („Fr und Sa 20:30 · So 16:00“). Vergangene Termine verschwinden von selbst; im Builder bleiben sie abgeschwächt sichtbar."
+
+msgid "Autore, compagnia, interpreti"
+msgstr "Autor, Ensemble, Besetzung"
+
+msgid "Scrivi il genere com'è nell'elenco dei generi (Prosa, Lirica…): diventa il filtro e prende il suo colore."
+msgstr "Schreib das Genre so, wie es in der Genre-Liste steht (Schauspiel, Oper…): Es wird zum Filter und bekommt seine Farbe."
+
+msgid "Fino al"
+msgstr "Bis"
+
+msgid "Luogo"
+msgstr "Ort"
+
+msgid "Come la leggerà il pubblico («2 h 10 min con intervallo»): serve anche al calendario per l'ora di fine."
+msgstr "So, wie das Publikum sie liest („2 Std. 10 Min. mit Pause“): Der Kalender braucht sie auch für die Endzeit."
+
+msgid "Separate da una virgola: «Prima nazionale, Sopratitoli, In LIS»."
+msgstr "Durch Kommas getrennt: „Deutschlandpremiere, Übertitel, Mit Gebärdensprache“."
+
+msgid "Incontro col pubblico"
+msgstr "Publikumsgespräch"
+
+msgid "L'appuntamento che accompagna lo spettacolo: «Alle 19:30 incontro con la compagnia nel Ridotto»."
+msgstr "Der Termin, der die Vorstellung begleitet: „Um 19:30 Gespräch mit dem Ensemble im Foyer“."
+
+msgid "Link dei biglietti"
+msgstr "Ticket-Link"
+
+msgid "Link della scheda"
+msgstr "Link zur Detailseite"
+
+msgid "Generi"
+msgstr "Genres"
+
+msgid "L'ordine dei filtri. I colori stanno nello Stile; un genere scritto negli appuntamenti e non qui si aggiunge in fondo."
+msgstr "Die Reihenfolge der Filter. Die Farben stehen im Stil-Tab; ein Genre, das bei den Terminen steht, aber nicht hier, wird am Ende ergänzt."
+
+msgid "Elenco"
+msgstr "Liste"
+
+msgid "Solo il prossimo, col conto alla rovescia"
+msgstr "Nur der nächste, mit Countdown"
+
+msgid "Divisi per mese"
+msgstr "Nach Monat gruppiert"
+
+msgid "In ordine di data"
+msgstr "Nach Datum sortiert"
+
+msgid "Quanti mostrarne"
+msgstr "Wie viele anzeigen"
+
+msgid "0 = tutti. Con un numero si vedono solo i prossimi (in home, per esempio, i prossimi quattro)."
+msgstr "0 = alle. Mit einer Zahl siehst du nur die nächsten (auf der Startseite zum Beispiel die nächsten vier)."
+
+msgid "Appuntamenti passati"
+msgstr "Vergangene Termine"
+
+msgid "Nascosti"
+msgstr "Ausgeblendet"
+
+msgid "Attenuati"
+msgstr "Abgeschwächt"
+
+msgid "Visibili"
+msgstr "Sichtbar"
+
+msgid "Filtro per genere"
+msgstr "Filter nach Genre"
+
+msgid "Filtro per mese"
+msgstr "Filter nach Monat"
+
+msgid "Testo «Tutti»"
+msgstr "Text „Alle“"
+
+msgid "Solo un genere"
+msgstr "Nur ein Genre"
+
+msgid "Scrivi un genere (es. «Incontri») per mostrare solo quello: utile per una pagina dedicata."
+msgstr "Schreib ein Genre (z. B. „Begegnungen“), um nur dieses anzuzeigen: praktisch für eine eigene Seite."
+
+msgid "Pulsanti e calendario"
+msgstr "Buttons und Kalender"
+
+msgid "Testo dei biglietti"
+msgstr "Ticket-Text"
+
+msgid "Testo della scheda"
+msgstr "Text der Detailseite"
+
+msgid "Un pulsante scarica il file .ics dell'appuntamento, che il telefono o il computer aggiungono al calendario."
+msgstr "Ein Button lädt die .ics-Datei des Termins herunter, die Telefon oder Computer in den Kalender übernehmen."
+
+msgid "Testo del calendario"
+msgstr "Kalender-Text"
+
+msgid "Indirizzo per il calendario"
+msgstr "Adresse für den Kalender"
+
+msgid "Prossimo appuntamento"
+msgstr "Nächster Termin"
+
+msgid "Testo del conto"
+msgstr "Countdown-Text"
+
+msgid "Senza appuntamenti"
+msgstr "Ohne Termine"
+
+msgid "Nessun risultato dei filtri"
+msgstr "Keine Filterergebnisse"
+
+msgid "Pulsante dei biglietti, mesi, incontri. Vuoto: il primario del tema."
+msgstr "Ticket-Button, Monate, Begegnungen. Leer: die Primärfarbe des Themes."
+
+msgid "Sfondo voce"
+msgstr "Eintragshintergrund"
+
+msgid "Bordo voce"
+msgstr "Eintragsrahmen"
+
+msgid "Colore delle linee"
+msgstr "Linienfarbe"
+
+msgid "Colori dei generi"
+msgstr "Genre-Farben"
+
+msgid "Sottolineati"
+msgstr "Unterstrichen"
+
+msgid "Mese, giorno e ora"
+msgstr "Monat, Tag und Uhrzeit"
+
+msgid "Autore e compagnia"
+msgstr "Autor und Ensemble"
+
+msgid "Durata, luogo e prezzo"
+msgstr "Dauer, Ort und Preis"
+
+msgid "Raggio pulsanti"
+msgstr "Radius Buttons"
+
+msgid "Padding voce"
+msgstr "Eintrags-Padding"
+
+msgid "Larghezza della data"
+msgstr "Breite des Datums"
+
+msgid "Pianta della sala"
+msgstr "Saalplan"
+
+msgid "Platea, file davanti"
+msgstr "Parkett, vordere Reihen"
+
+msgid "Platea, file dietro"
+msgstr "Parkett, hintere Reihen"
+
+msgid "%s ordine, palchi centrali"
+msgstr "%s. Rang, mittlere Logen"
+
+msgid "%s ordine, palchi laterali"
+msgstr "%s. Rang, seitliche Logen"
+
+msgid "I ordine, palchi centrali"
+msgstr "1. Rang, mittlere Logen"
+
+msgid "I ordine, palchi laterali"
+msgstr "1. Rang, seitliche Logen"
+
+msgid "II ordine, palchi centrali"
+msgstr "2. Rang, mittlere Logen"
+
+msgid "II ordine, palchi laterali"
+msgstr "2. Rang, seitliche Logen"
+
+msgid "III ordine, palchi centrali"
+msgstr "3. Rang, mittlere Logen"
+
+msgid "III ordine, palchi laterali"
+msgstr "3. Rang, seitliche Logen"
+
+msgid "IV ordine, palchi centrali"
+msgstr "4. Rang, mittlere Logen"
+
+msgid "IV ordine, palchi laterali"
+msgstr "4. Rang, seitliche Logen"
+
+msgid "V ordine, palchi centrali"
+msgstr "5. Rang, mittlere Logen"
+
+msgid "V ordine, palchi laterali"
+msgstr "5. Rang, seitliche Logen"
+
+msgid "Barcacce (palchi accanto al palcoscenico)"
+msgstr "Proszeniumslogen (neben der Bühne)"
+
+msgid "Loggione"
+msgstr "Galerie"
+
+msgid "Palcoscenico"
+msgstr "Bühne"
+
+msgid "Buca"
+msgstr "Graben"
+
+msgid "Passa o tocca un settore: prezzi e vista dal posto."
+msgstr "Fahr über einen Bereich oder tippe darauf: Preise und Blick vom Platz."
+
+msgid "Intero"
+msgstr "Normalpreis"
+
+msgid "La vista da qui"
+msgstr "Der Blick von hier"
+
+msgid "Scegli il posto"
+msgstr "Platz wählen"
+
+msgid "Platea e palchi centrali"
+msgstr "Parkett und mittlere Logen"
+
+msgid "Palchi laterali"
+msgstr "Seitliche Logen"
+
+msgid "Sala"
+msgstr "Saal"
+
+msgid "Forma della sala"
+msgstr "Form des Saals"
+
+msgid "A ferro di cavallo (all'italiana)"
+msgstr "Hufeisenform (italienisch)"
+
+msgid "A ventaglio"
+msgstr "Fächerförmig"
+
+msgid "A scatola"
+msgstr "Schuhschachtel"
+
+msgid "Scritta del palcoscenico"
+msgstr "Beschriftung der Bühne"
+
+msgid "Buca dell'orchestra"
+msgstr "Orchestergraben"
+
+msgid "Scritta della buca"
+msgstr "Beschriftung des Grabens"
+
+msgid "File della platea"
+msgstr "Reihen im Parkett"
+
+msgid "Posti nella fila più larga"
+msgstr "Plätze in der breitesten Reihe"
+
+msgid "Ordini di palchi"
+msgstr "Logenränge"
+
+msgid "Palchi per ordine"
+msgstr "Logen pro Rang"
+
+msgid "L'ultimo ordine è il loggione"
+msgstr "Der oberste Rang ist die Galerie"
+
+msgid "Palco centrale più grande"
+msgstr "Größere Mittelloge"
+
+msgid "Il palco di mezzo del primo ordine prende il posto di tre: il palco d'onore."
+msgstr "Die mittlere Loge des ersten Rangs nimmt den Platz von dreien ein: die Ehrenloge."
+
+msgid "Numeri degli ordini"
+msgstr "Rangnummern"
+
+msgid "Settori"
+msgstr "Bereiche"
+
+msgid "Settore"
+msgstr "Bereich"
+
+msgid "Ogni zona della sala va al primo settore che la sceglie. Le zone senza settore restano neutre."
+msgstr "Jeder Teil des Saals gehört zum ersten Bereich, der ihn auswählt. Teile ohne Bereich bleiben neutral."
+
+msgid "Zone della sala"
+msgstr "Teile des Saals"
+
+msgid "Prezzo intero"
+msgstr "Normalpreis"
+
+msgid "Prezzo ridotto"
+msgstr "Ermäßigter Preis"
+
+msgid "Nota sui prezzi"
+msgstr "Hinweis zu den Preisen"
+
+msgid "Vista dal posto"
+msgstr "Blick vom Platz"
+
+msgid "All'inizio la scheda mostra"
+msgstr "Zu Beginn zeigt die Karte"
+
+msgid "Il primo settore"
+msgstr "Den ersten Bereich"
+
+msgid "L'invito a scegliere"
+msgstr "Die Aufforderung zu wählen"
+
+msgid "Invito"
+msgstr "Aufforderung"
+
+msgid "Etichetta del prezzo intero"
+msgstr "Beschriftung Normalpreis"
+
+msgid "Etichetta del prezzo ridotto"
+msgstr "Beschriftung ermäßigter Preis"
+
+msgid "Etichetta della vista"
+msgstr "Beschriftung des Blicks"
+
+msgid "Colore della sala"
+msgstr "Farbe des Saals"
+
+msgid "I palchi e le zone senza settore. Vuoto: il colore del testo, tenue."
+msgstr "Logen und Teile ohne Bereich. Leer: die Textfarbe, abgeschwächt."
+
+msgid "Colore del palcoscenico"
+msgstr "Farbe der Bühne"
+
+msgid "Colore dei posti senza settore"
+msgstr "Farbe der Plätze ohne Bereich"
+
+msgid "Colori dei settori"
+msgstr "Farben der Bereiche"
+
+msgid "Nome del settore"
+msgstr "Name des Bereichs"
+
+msgid "Padding scheda"
+msgstr "Karten-Padding"
+
+msgid "Accanto alla pianta"
+msgstr "Neben dem Plan"
+
+msgid "Sotto la pianta"
+msgstr "Unter dem Plan"
+
+msgid "Larghezza della pianta"
+msgstr "Breite des Plans"
+
+msgid "Sipario"
+msgstr "Vorhang"
+
+msgid "Sipario sopra la scena"
+msgstr "Vorhang über der Szene"
+
+msgid "Un sipario di velluto copre la hero e si apre: all'apertura della pagina, quando entra nello schermo, scorrendo o al clic. Dopo l'apertura possono restare le quinte e la mantovana a incorniciare la scena. Si apre subito, senza movimento, per chi ha chiesto di ridurlo."
+msgstr "Ein Samtvorhang bedeckt die Hero und öffnet sich: beim Öffnen der Seite, sobald sie ins Bild kommt, beim Scrollen oder per Klick. Danach können die Seitenvorhänge und der Schabracken-Bogen die Szene einrahmen. Bei reduzierter Bewegung öffnet er sich sofort, ohne Animation."
+
+msgid "Sipario — comportamento"
+msgstr "Vorhang — Verhalten"
+
+msgid "Apertura"
+msgstr "Öffnung"
+
+msgid "All'italiana (si raccoglie in alto ai lati)"
+msgstr "Italienisch (rafft sich oben zu den Seiten)"
+
+msgid "Alla greca (scorre ai lati)"
+msgstr "Griechisch (gleitet zur Seite)"
+
+msgid "Alla tedesca (sale)"
+msgstr "Deutsch (hebt sich)"
+
+msgid "Quando si apre"
+msgstr "Wann er sich öffnet"
+
+msgid "Quando entra nello schermo"
+msgstr "Wenn sie ins Bild kommt"
+
+msgid "Al clic sul sipario"
+msgstr "Per Klick auf den Vorhang"
+
+msgid "Ritardo"
+msgstr "Verzögerung"
+
+msgid "Corsa dello scorrimento"
+msgstr "Scrollstrecke"
+
+msgid "Quanto si scorre, in percentuale dell'altezza della hero, perché il sipario sia tutto aperto."
+msgstr "Wie weit gescrollt wird, in Prozent der Hero-Höhe, bis der Vorhang ganz offen ist."
+
+msgid "Si richiude uscendo dallo schermo"
+msgstr "Schließt sich wieder beim Verlassen des Bildschirms"
+
+msgid "Dopo l'apertura restano"
+msgstr "Nach dem Öffnen bleiben"
+
+msgid "Le quinte e la mantovana"
+msgstr "Seitenvorhänge und Schabracke"
+
+msgid "Solo la mantovana"
+msgstr "Nur die Schabracke"
+
+msgid "Nel builder mostra"
+msgstr "Im Builder anzeigen"
+
+msgid "Il sipario aperto"
+msgstr "Den offenen Vorhang"
+
+msgid "Il sipario chiuso"
+msgstr "Den geschlossenen Vorhang"
+
+msgid "Nel builder il sipario resta fermo: aperto per lavorare sulla scena, chiuso per vedere le scritte sul velluto."
+msgstr "Im Builder bleibt der Vorhang still: offen, um an der Szene zu arbeiten, geschlossen, um die Schrift auf dem Samt zu sehen."
+
+msgid "Sipario — scritte"
+msgstr "Vorhang — Schrift"
+
+msgid "Con «Al clic sul sipario» è la scritta del pulsante (vuota: «Apri il sipario»); scorrendo, l'invito a scorrere."
+msgstr "Bei „Per Klick auf den Vorhang“ ist es der Button-Text (leer: „Vorhang auf“); beim Scrollen die Aufforderung zu scrollen."
+
+msgid "Emblema"
+msgstr "Emblem"
+
+msgid "Stemma d'alloro con le iniziali"
+msgstr "Lorbeerwappen mit Initialen"
+
+msgid "Iniziali"
+msgstr "Initialen"
+
+msgid "Sipario — velluto"
+msgstr "Vorhang — Samt"
+
+msgid "Colore del velluto"
+msgstr "Samtfarbe"
+
+msgid "Vuoto: il primario del tema, scurito."
+msgstr "Leer: die Primärfarbe des Themes, abgedunkelt."
+
+msgid "Lucentezza"
+msgstr "Glanz"
+
+msgid "Pieghe per telo"
+msgstr "Falten pro Bahn"
+
+msgid "Profondità delle pieghe"
+msgstr "Faltentiefe"
+
+msgid "Larghezza delle quinte"
+msgstr "Breite der Seitenvorhänge"
+
+msgid "La parte di sipario che resta ai lati dopo l'apertura, in percentuale della larghezza della hero."
+msgstr "Der Teil des Vorhangs, der nach dem Öffnen an den Seiten bleibt, in Prozent der Hero-Breite."
+
+msgid "Nappe"
+msgstr "Raffhalter"
+
+msgid "Sipario — oro e mantovana"
+msgstr "Vorhang — Gold und Schabracke"
+
+msgid "Colore dell'oro"
+msgstr "Goldfarbe"
+
+msgid "Frangia, gallone, nappe e stemma. Vuoto: l'accento del tema."
+msgstr "Fransen, Borte, Raffhalter und Wappen. Leer: die Akzentfarbe des Themes."
+
+msgid "Frangia"
+msgstr "Fransen"
+
+msgid "Lunghezza della frangia"
+msgstr "Fransenlänge"
+
+msgid "Mantovana a festoni"
+msgstr "Schabracke mit Festons"
+
+msgid "Festoni"
+msgstr "Festons"
+
+msgid "Altezza della mantovana"
+msgstr "Höhe der Schabracke"
+
+msgid "Sipario — luci"
+msgstr "Vorhang — Licht"
+
+msgid "Ribalta (luce dal basso)"
+msgstr "Rampenlicht (Licht von unten)"
+
+msgid "Luce nello spacco"
+msgstr "Licht im Spalt"
+
+msgid "Colore della luce"
+msgstr "Lichtfarbe"
+
+msgid "Colore delle scritte"
+msgstr "Schriftfarbe"
+
+msgid "Vuoto: il colore dell'oro."
+msgstr "Leer: die Goldfarbe."
+
+msgid "Misura dell'emblema"
+msgstr "Emblemgröße"
+
+msgid "Occhiello del sipario"
+msgstr "Vorhang-Dachzeile"
+
+msgid "Titolo del sipario"
+msgstr "Vorhang-Titel"
+
+msgid "Invito del sipario"
+msgstr "Vorhang-Aufforderung"
+
+msgid "Si alza il sipario"
+msgstr "Der Vorhang hebt sich"

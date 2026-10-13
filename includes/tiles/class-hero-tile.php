@@ -138,8 +138,10 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
     }
 
     public function render( $settings, $style = [] ) {
-        $s   = wp_parse_args( $settings, $this->defaults );
+        // Il sipario (Olobuild_Sipario) porta le sue chiavi curtain_*, tutte senza effetto da spente.
+        $s   = wp_parse_args( $settings, array_merge( Olobuild_Sipario::DEFAULTS, $this->defaults ) );
         $uid = 'olo-hero-' . wp_rand( 10000, 99999 );
+        $sipario = Olobuild_Sipario::attivo( $s );
 
         $fg = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-on-primary, #FFFFFF)';
 
@@ -335,7 +337,7 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
                 min-height: <?php echo $min_height; ?>;
                 display: flex;
                 color: <?php echo $fg; ?>;
-                <?php if ( $has_scene ) : ?>overflow: hidden;<?php endif; ?>
+                <?php if ( $has_scene || $sipario ) : ?>overflow: hidden;<?php endif; ?>
                 <?php if ( $has_module ) : ?>flex-direction: column;<?php endif; ?>
             }
             <?php if ( $has_module ) : ?>
@@ -517,6 +519,18 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
                 text-decoration: none !important;
             }
             <?php endif; ?>
+            <?php
+            if ( $sipario ) {
+                // Valori per dispositivo del sipario (larghezza delle quinte, misura del titolo): li legge la
+                // tile e li disegna Olobuild_Sipario con le soglie standard.
+                $sip_opz = [ 'font_titolo' => $this->resolve_font_family( $s['curtain_title_font_family'] ), 'quinte' => [], 'titolo' => [] ];
+                foreach ( Olobuild_Sipario::SOGLIE as $sip_d => $sip_px ) {
+                    $sip_opz['quinte'][ $sip_d ] = $s[ 'curtain_quinte_' . $sip_d ] ?? '';
+                    $sip_opz['titolo'][ $sip_d ] = $s[ 'curtain_title_font_size_' . $sip_d ] ?? '';
+                }
+                echo Olobuild_Sipario::css( $s, '.' . $uid, $sip_opz );
+            }
+            ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-hero <?php echo esc_attr( $uid ); ?> olo-hero-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">
@@ -584,6 +598,13 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
                     }
                     if ( ! empty( $s['subtitle_max_width'] ) ) {
                         $sub_css .= 'max-width:' . intval( $s['subtitle_max_width'] ) . 'px;';
+                        // col testo centrato (o a destra) anche il riquadro del sottotitolo si allinea: con la sola
+                        // larghezza massima restava attaccato a sinistra e il testo usciva spostato dal centro
+                        if ( 'center' === $text_align ) {
+                            $sub_css .= 'margin-left:auto;margin-right:auto;';
+                        } elseif ( 'right' === $text_align ) {
+                            $sub_css .= 'margin-left:auto;';
+                        }
                     }
                     ?>
                     <div class="olo-hero-sub<?php echo $s_tfx_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- subtitle wp_kses()'d with a fixed inline-tag set; style attr built from esc_attr()/intval()/floatval()/safe_color_css() parts; fx class/data from Olobuild_Text_Effects helpers ?>" style="<?php echo $sub_css; ?>"<?php echo $s_tfx_data; ?>><?php echo $subtitle; ?></div>
@@ -685,6 +706,18 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             <?php if ( ! empty( $s['scroll_hint'] ) ) : ?>
                 <span class="olo-hero-scrollhint"><?php echo esc_html( $s['scroll_hint'] ); ?></span>
             <?php endif; ?>
+            <?php
+            if ( $sipario ) {
+                // l'emblema scelto (icona o immagine) lo prepara la tile; lo stemma di serie lo disegna il sipario
+                $emblema = '';
+                if ( 'icona' === $s['curtain_emblem'] && '' !== trim( (string) $s['curtain_icon'] ) ) {
+                    $emblema = $this->render_icon_html( (string) $s['curtain_icon'], 3 );
+                } elseif ( 'immagine' === $s['curtain_emblem'] && '' !== trim( (string) $s['curtain_image'] ) ) {
+                    $emblema = '<img src="' . esc_url( $s['curtain_image'] ) . '" alt="" decoding="async">';
+                }
+                echo Olobuild_Sipario::markup( $s, $emblema, ! empty( $s['_builder_mode'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup costruito in Olobuild_Sipario con esc_attr()/esc_html()/wp_kses(), numeri forzati e svg costanti; icona da render_icon_html(), immagine con esc_url()
+            }
+            ?>
         </div>
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $uid );

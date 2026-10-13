@@ -25753,3 +25753,615 @@ msgstr "Taille des dessins"
 
 msgid "Ingrandisce o rimpicciolisce tutti i disegni insieme. Sul telefono, dove la lavagna è stretta, più piccoli lasciano spazio alle scritte."
 msgstr "Agrandit ou réduit tous les dessins ensemble. Sur le téléphone, où l’ardoise est étroite, plus petits ils laissent de la place à l’écriture."
+
+msgid "Ultimi posti"
+msgstr "Dernières places"
+
+msgid "Esaurito"
+msgstr "Complet"
+
+msgid "Annullato"
+msgstr "Annulé"
+
+msgid "Rinviato"
+msgstr "Reporté"
+
+msgid "Ingresso libero"
+msgstr "Entrée libre"
+
+msgid "Su prenotazione"
+msgstr "Sur réservation"
+
+msgid "Apri il sipario"
+msgstr "Ouvrir le rideau"
+
+msgid "%d appuntamento"
+msgstr "%d rendez-vous"
+
+msgid "%d appuntamenti"
+msgstr "%d rendez-vous"
+
+msgid "minuti"
+msgstr "minutes"
+
+msgid "In scena adesso"
+msgstr "En scène maintenant"
+
+msgid "dal %1$s al %2$s"
+msgstr "du %1$s au %2$s"
+
+msgid "ore %s"
+msgstr "à %s"
+
+msgid "Genere"
+msgstr "Genre"
+
+msgid "Cerca uno spettacolo"
+msgstr "Rechercher un spectacle"
+
+msgid "Cerca…"
+msgstr "Rechercher…"
+
+msgid "Cartellone"
+msgstr "Programme"
+
+msgid "Biglietti"
+msgstr "Billets"
+
+msgid "Aggiungi al calendario"
+msgstr "Ajouter au calendrier"
+
+msgid "Si apre il sipario tra"
+msgstr "Lever de rideau dans"
+
+msgid "Prossimo spettacolo"
+msgstr "Prochain spectacle"
+
+msgid "Nessun appuntamento in programma: il nuovo cartellone arriva presto."
+msgstr "Aucun rendez-vous prévu : le nouveau programme arrive bientôt."
+
+msgid "Nessun appuntamento per questa scelta."
+msgstr "Aucun rendez-vous pour ce choix."
+
+msgid "Prosa"
+msgstr "Théâtre"
+
+msgid "Musica"
+msgstr "Musique"
+
+msgid "Incontri"
+msgstr "Rencontres"
+
+msgid "Sala grande"
+msgstr "Grande salle"
+
+msgid "Prima del sipario"
+msgstr "Avant le rideau"
+
+msgid "Conversazione con il regista"
+msgstr "Conversation avec le metteur en scène"
+
+msgid "Ridotto"
+msgstr "Réduit"
+
+msgid "Foyer"
+msgstr "Foyer"
+
+msgid "Appuntamenti"
+msgstr "Rendez-vous"
+
+msgid "Appuntamento"
+msgstr "Rendez-vous"
+
+msgid "Uno per data. Se lo stesso spettacolo dura più giorni, metti la data di fine e scrivi gli orari («ven e sab 20:30 · dom 16:00»). I passati si nascondono da soli; nel builder restano, attenuati."
+msgstr "Un par date. Si le même spectacle dure plusieurs jours, indiquez la date de fin et écrivez les horaires (« ven. et sam. 20 h 30 · dim. 16 h »). Les rendez-vous passés se masquent tout seuls ; dans le builder ils restent, atténués."
+
+msgid "Autore, compagnia, interpreti"
+msgstr "Auteur, compagnie, interprètes"
+
+msgid "Scrivi il genere com'è nell'elenco dei generi (Prosa, Lirica…): diventa il filtro e prende il suo colore."
+msgstr "Écrivez le genre tel qu’il figure dans la liste des genres (Théâtre, Opéra…) : il devient le filtre et prend sa couleur."
+
+msgid "Fino al"
+msgstr "Jusqu’au"
+
+msgid "Luogo"
+msgstr "Lieu"
+
+msgid "Come la leggerà il pubblico («2 h 10 min con intervallo»): serve anche al calendario per l'ora di fine."
+msgstr "Telle que le public la lira (« 2 h 10 avec entracte ») : le calendrier s’en sert aussi pour l’heure de fin."
+
+msgid "Separate da una virgola: «Prima nazionale, Sopratitoli, In LIS»."
+msgstr "Séparées par une virgule : « Création nationale, Surtitres, En langue des signes »."
+
+msgid "Incontro col pubblico"
+msgstr "Rencontre avec le public"
+
+msgid "L'appuntamento che accompagna lo spettacolo: «Alle 19:30 incontro con la compagnia nel Ridotto»."
+msgstr "Le rendez-vous qui accompagne le spectacle : « À 19 h 30, rencontre avec la compagnie au Foyer »."
+
+msgid "Link dei biglietti"
+msgstr "Lien des billets"
+
+msgid "Link della scheda"
+msgstr "Lien de la fiche"
+
+msgid "Generi"
+msgstr "Genres"
+
+msgid "L'ordine dei filtri. I colori stanno nello Stile; un genere scritto negli appuntamenti e non qui si aggiunge in fondo."
+msgstr "L’ordre des filtres. Les couleurs sont dans l’onglet Style ; un genre écrit dans les rendez-vous mais pas ici s’ajoute à la fin."
+
+msgid "Elenco"
+msgstr "Liste"
+
+msgid "Solo il prossimo, col conto alla rovescia"
+msgstr "Seulement le prochain, avec compte à rebours"
+
+msgid "Divisi per mese"
+msgstr "Regroupés par mois"
+
+msgid "In ordine di data"
+msgstr "Par ordre de date"
+
+msgid "Quanti mostrarne"
+msgstr "Combien en afficher"
+
+msgid "0 = tutti. Con un numero si vedono solo i prossimi (in home, per esempio, i prossimi quattro)."
+msgstr "0 = tous. Avec un nombre, seuls les prochains s’affichent (sur l’accueil, par exemple, les quatre prochains)."
+
+msgid "Appuntamenti passati"
+msgstr "Rendez-vous passés"
+
+msgid "Nascosti"
+msgstr "Masqués"
+
+msgid "Attenuati"
+msgstr "Atténués"
+
+msgid "Visibili"
+msgstr "Visibles"
+
+msgid "Filtro per genere"
+msgstr "Filtre par genre"
+
+msgid "Filtro per mese"
+msgstr "Filtre par mois"
+
+msgid "Testo «Tutti»"
+msgstr "Texte « Tous »"
+
+msgid "Solo un genere"
+msgstr "Un seul genre"
+
+msgid "Scrivi un genere (es. «Incontri») per mostrare solo quello: utile per una pagina dedicata."
+msgstr "Écrivez un genre (par ex. « Rencontres ») pour n’afficher que celui-ci : utile pour une page dédiée."
+
+msgid "Pulsanti e calendario"
+msgstr "Boutons et calendrier"
+
+msgid "Testo dei biglietti"
+msgstr "Texte des billets"
+
+msgid "Testo della scheda"
+msgstr "Texte de la fiche"
+
+msgid "Un pulsante scarica il file .ics dell'appuntamento, che il telefono o il computer aggiungono al calendario."
+msgstr "Un bouton télécharge le fichier .ics du rendez-vous, que le téléphone ou l’ordinateur ajoute au calendrier."
+
+msgid "Testo del calendario"
+msgstr "Texte du calendrier"
+
+msgid "Indirizzo per il calendario"
+msgstr "Adresse pour le calendrier"
+
+msgid "Prossimo appuntamento"
+msgstr "Prochain rendez-vous"
+
+msgid "Testo del conto"
+msgstr "Texte du compte à rebours"
+
+msgid "Senza appuntamenti"
+msgstr "Sans rendez-vous"
+
+msgid "Nessun risultato dei filtri"
+msgstr "Aucun résultat des filtres"
+
+msgid "Pulsante dei biglietti, mesi, incontri. Vuoto: il primario del tema."
+msgstr "Bouton des billets, mois, rencontres. Vide : la couleur principale du thème."
+
+msgid "Sfondo voce"
+msgstr "Fond de l’élément"
+
+msgid "Bordo voce"
+msgstr "Bordure de l’élément"
+
+msgid "Colore delle linee"
+msgstr "Couleur des lignes"
+
+msgid "Colori dei generi"
+msgstr "Couleurs des genres"
+
+msgid "Sottolineati"
+msgstr "Soulignés"
+
+msgid "Mese, giorno e ora"
+msgstr "Mois, jour et heure"
+
+msgid "Autore e compagnia"
+msgstr "Auteur et compagnie"
+
+msgid "Durata, luogo e prezzo"
+msgstr "Durée, lieu et prix"
+
+msgid "Raggio pulsanti"
+msgstr "Rayon des boutons"
+
+msgid "Padding voce"
+msgstr "Padding de l’élément"
+
+msgid "Larghezza della data"
+msgstr "Largeur de la date"
+
+msgid "Pianta della sala"
+msgstr "Plan de salle"
+
+msgid "Platea, file davanti"
+msgstr "Parterre, premiers rangs"
+
+msgid "Platea, file dietro"
+msgstr "Parterre, derniers rangs"
+
+msgid "%s ordine, palchi centrali"
+msgstr "%s rang, loges centrales"
+
+msgid "%s ordine, palchi laterali"
+msgstr "%s rang, loges latérales"
+
+msgid "I ordine, palchi centrali"
+msgstr "1er rang, loges centrales"
+
+msgid "I ordine, palchi laterali"
+msgstr "1er rang, loges latérales"
+
+msgid "II ordine, palchi centrali"
+msgstr "2e rang, loges centrales"
+
+msgid "II ordine, palchi laterali"
+msgstr "2e rang, loges latérales"
+
+msgid "III ordine, palchi centrali"
+msgstr "3e rang, loges centrales"
+
+msgid "III ordine, palchi laterali"
+msgstr "3e rang, loges latérales"
+
+msgid "IV ordine, palchi centrali"
+msgstr "4e rang, loges centrales"
+
+msgid "IV ordine, palchi laterali"
+msgstr "4e rang, loges latérales"
+
+msgid "V ordine, palchi centrali"
+msgstr "5e rang, loges centrales"
+
+msgid "V ordine, palchi laterali"
+msgstr "5e rang, loges latérales"
+
+msgid "Barcacce (palchi accanto al palcoscenico)"
+msgstr "Loges d’avant-scène (à côté de la scène)"
+
+msgid "Loggione"
+msgstr "Paradis"
+
+msgid "Palcoscenico"
+msgstr "Scène"
+
+msgid "Buca"
+msgstr "Fosse"
+
+msgid "Passa o tocca un settore: prezzi e vista dal posto."
+msgstr "Survolez ou touchez une zone : prix et vue depuis la place."
+
+msgid "Intero"
+msgstr "Plein tarif"
+
+msgid "La vista da qui"
+msgstr "La vue d’ici"
+
+msgid "Scegli il posto"
+msgstr "Choisir sa place"
+
+msgid "Platea e palchi centrali"
+msgstr "Parterre et loges centrales"
+
+msgid "Palchi laterali"
+msgstr "Loges latérales"
+
+msgid "Sala"
+msgstr "Salle"
+
+msgid "Forma della sala"
+msgstr "Forme de la salle"
+
+msgid "A ferro di cavallo (all'italiana)"
+msgstr "En fer à cheval (à l’italienne)"
+
+msgid "A ventaglio"
+msgstr "En éventail"
+
+msgid "A scatola"
+msgstr "Boîte à chaussures"
+
+msgid "Scritta del palcoscenico"
+msgstr "Libellé de la scène"
+
+msgid "Buca dell'orchestra"
+msgstr "Fosse d’orchestre"
+
+msgid "Scritta della buca"
+msgstr "Libellé de la fosse"
+
+msgid "File della platea"
+msgstr "Rangs du parterre"
+
+msgid "Posti nella fila più larga"
+msgstr "Places dans le rang le plus large"
+
+msgid "Ordini di palchi"
+msgstr "Rangs de loges"
+
+msgid "Palchi per ordine"
+msgstr "Loges par rang"
+
+msgid "L'ultimo ordine è il loggione"
+msgstr "Le dernier rang est le paradis"
+
+msgid "Palco centrale più grande"
+msgstr "Loge centrale plus grande"
+
+msgid "Il palco di mezzo del primo ordine prende il posto di tre: il palco d'onore."
+msgstr "La loge du milieu du premier rang prend la place de trois : la loge d’honneur."
+
+msgid "Numeri degli ordini"
+msgstr "Numéros des rangs"
+
+msgid "Settori"
+msgstr "Zones"
+
+msgid "Settore"
+msgstr "Zone"
+
+msgid "Ogni zona della sala va al primo settore che la sceglie. Le zone senza settore restano neutre."
+msgstr "Chaque partie de la salle va à la première zone qui la choisit. Les parties sans zone restent neutres."
+
+msgid "Zone della sala"
+msgstr "Parties de la salle"
+
+msgid "Prezzo intero"
+msgstr "Plein tarif"
+
+msgid "Prezzo ridotto"
+msgstr "Tarif réduit"
+
+msgid "Nota sui prezzi"
+msgstr "Note sur les prix"
+
+msgid "Vista dal posto"
+msgstr "Vue depuis la place"
+
+msgid "All'inizio la scheda mostra"
+msgstr "Au départ, la fiche affiche"
+
+msgid "Il primo settore"
+msgstr "La première zone"
+
+msgid "L'invito a scegliere"
+msgstr "L’invitation à choisir"
+
+msgid "Invito"
+msgstr "Invitation"
+
+msgid "Etichetta del prezzo intero"
+msgstr "Libellé du plein tarif"
+
+msgid "Etichetta del prezzo ridotto"
+msgstr "Libellé du tarif réduit"
+
+msgid "Etichetta della vista"
+msgstr "Libellé de la vue"
+
+msgid "Colore della sala"
+msgstr "Couleur de la salle"
+
+msgid "I palchi e le zone senza settore. Vuoto: il colore del testo, tenue."
+msgstr "Les loges et les parties sans zone. Vide : la couleur du texte, atténuée."
+
+msgid "Colore del palcoscenico"
+msgstr "Couleur de la scène"
+
+msgid "Colore dei posti senza settore"
+msgstr "Couleur des places sans zone"
+
+msgid "Colori dei settori"
+msgstr "Couleurs des zones"
+
+msgid "Nome del settore"
+msgstr "Nom de la zone"
+
+msgid "Padding scheda"
+msgstr "Padding de la fiche"
+
+msgid "Accanto alla pianta"
+msgstr "À côté du plan"
+
+msgid "Sotto la pianta"
+msgstr "Sous le plan"
+
+msgid "Larghezza della pianta"
+msgstr "Largeur du plan"
+
+msgid "Sipario"
+msgstr "Rideau"
+
+msgid "Sipario sopra la scena"
+msgstr "Rideau sur la scène"
+
+msgid "Un sipario di velluto copre la hero e si apre: all'apertura della pagina, quando entra nello schermo, scorrendo o al clic. Dopo l'apertura possono restare le quinte e la mantovana a incorniciare la scena. Si apre subito, senza movimento, per chi ha chiesto di ridurlo."
+msgstr "Un rideau de velours couvre la hero et s’ouvre : à l’ouverture de la page, quand elle entre à l’écran, au défilement ou au clic. Ensuite, les pendrillons et le lambrequin peuvent rester pour encadrer la scène. Il s’ouvre tout de suite, sans mouvement, pour ceux qui ont demandé de le réduire."
+
+msgid "Sipario — comportamento"
+msgstr "Rideau — comportement"
+
+msgid "Apertura"
+msgstr "Ouverture"
+
+msgid "All'italiana (si raccoglie in alto ai lati)"
+msgstr "À l’italienne (se relève vers les côtés)"
+
+msgid "Alla greca (scorre ai lati)"
+msgstr "À la grecque (coulisse sur les côtés)"
+
+msgid "Alla tedesca (sale)"
+msgstr "À l’allemande (monte)"
+
+msgid "Quando si apre"
+msgstr "Quand il s’ouvre"
+
+msgid "Quando entra nello schermo"
+msgstr "Quand elle entre à l’écran"
+
+msgid "Al clic sul sipario"
+msgstr "Au clic sur le rideau"
+
+msgid "Ritardo"
+msgstr "Délai"
+
+msgid "Corsa dello scorrimento"
+msgstr "Course du défilement"
+
+msgid "Quanto si scorre, in percentuale dell'altezza della hero, perché il sipario sia tutto aperto."
+msgstr "La distance de défilement, en pourcentage de la hauteur de la hero, pour que le rideau soit entièrement ouvert."
+
+msgid "Si richiude uscendo dallo schermo"
+msgstr "Se referme en quittant l’écran"
+
+msgid "Dopo l'apertura restano"
+msgstr "Après l’ouverture, restent"
+
+msgid "Le quinte e la mantovana"
+msgstr "Les pendrillons et le lambrequin"
+
+msgid "Solo la mantovana"
+msgstr "Seulement le lambrequin"
+
+msgid "Nel builder mostra"
+msgstr "Dans le builder, afficher"
+
+msgid "Il sipario aperto"
+msgstr "Le rideau ouvert"
+
+msgid "Il sipario chiuso"
+msgstr "Le rideau fermé"
+
+msgid "Nel builder il sipario resta fermo: aperto per lavorare sulla scena, chiuso per vedere le scritte sul velluto."
+msgstr "Dans le builder le rideau reste immobile : ouvert pour travailler la scène, fermé pour voir les inscriptions sur le velours."
+
+msgid "Sipario — scritte"
+msgstr "Rideau — inscriptions"
+
+msgid "Con «Al clic sul sipario» è la scritta del pulsante (vuota: «Apri il sipario»); scorrendo, l'invito a scorrere."
+msgstr "Avec « Au clic sur le rideau », c’est le texte du bouton (vide : « Ouvrir le rideau ») ; au défilement, l’invitation à défiler."
+
+msgid "Emblema"
+msgstr "Emblème"
+
+msgid "Stemma d'alloro con le iniziali"
+msgstr "Blason de laurier avec les initiales"
+
+msgid "Iniziali"
+msgstr "Initiales"
+
+msgid "Sipario — velluto"
+msgstr "Rideau — velours"
+
+msgid "Colore del velluto"
+msgstr "Couleur du velours"
+
+msgid "Vuoto: il primario del tema, scurito."
+msgstr "Vide : la couleur principale du thème, assombrie."
+
+msgid "Lucentezza"
+msgstr "Brillance"
+
+msgid "Pieghe per telo"
+msgstr "Plis par pan"
+
+msgid "Profondità delle pieghe"
+msgstr "Profondeur des plis"
+
+msgid "Larghezza delle quinte"
+msgstr "Largeur des pendrillons"
+
+msgid "La parte di sipario che resta ai lati dopo l'apertura, in percentuale della larghezza della hero."
+msgstr "La partie du rideau qui reste sur les côtés après l’ouverture, en pourcentage de la largeur de la hero."
+
+msgid "Nappe"
+msgstr "Embrasses"
+
+msgid "Sipario — oro e mantovana"
+msgstr "Rideau — or et lambrequin"
+
+msgid "Colore dell'oro"
+msgstr "Couleur de l’or"
+
+msgid "Frangia, gallone, nappe e stemma. Vuoto: l'accento del tema."
+msgstr "Frange, galon, embrasses et blason. Vide : l’accent du thème."
+
+msgid "Frangia"
+msgstr "Frange"
+
+msgid "Lunghezza della frangia"
+msgstr "Longueur de la frange"
+
+msgid "Mantovana a festoni"
+msgstr "Lambrequin à festons"
+
+msgid "Festoni"
+msgstr "Festons"
+
+msgid "Altezza della mantovana"
+msgstr "Hauteur du lambrequin"
+
+msgid "Sipario — luci"
+msgstr "Rideau — lumières"
+
+msgid "Ribalta (luce dal basso)"
+msgstr "Rampe (lumière d’en bas)"
+
+msgid "Luce nello spacco"
+msgstr "Lumière dans la fente"
+
+msgid "Colore della luce"
+msgstr "Couleur de la lumière"
+
+msgid "Colore delle scritte"
+msgstr "Couleur des inscriptions"
+
+msgid "Vuoto: il colore dell'oro."
+msgstr "Vide : la couleur de l’or."
+
+msgid "Misura dell'emblema"
+msgstr "Taille de l’emblème"
+
+msgid "Occhiello del sipario"
+msgstr "Surtitre du rideau"
+
+msgid "Titolo del sipario"
+msgstr "Titre du rideau"
+
+msgid "Invito del sipario"
+msgstr "Invitation du rideau"
+
+msgid "Si alza il sipario"
+msgstr "Le rideau se lève"

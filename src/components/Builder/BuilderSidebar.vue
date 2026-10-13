@@ -779,6 +779,8 @@ const tileIcons = {
   'tripfinder':          '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="8" w="20" h="8" rx="2"/><path d="M8 8v8M14 8v8"/><path d="M16 12h4"/></svg>',
   'scorequiz':           '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7"/><path d="M12 17h.01"/></svg>',
   'layerscape':          '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="16.5" cy="6.5" r="2.5"/><path d="M2 15l5-6 4 4 3-3 8 7"/><path d="M2 20c3-3 6-4 10-2.5S19 18 22 16.5"/></svg>',
+  'piantasala':          '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M6 4h12v4H6z"/><path d="M4 11a8 8 0 0 0 16 0"/><path d="M8 11a4 4 0 0 0 8 0"/><circle cx="12" cy="11" r=".6"/></svg>',
+  'cartellone':          '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M3 7a2 2 0 0 1 0 4v6h18v-6a2 2 0 0 1 0-4V4H3z"/><path d="M15 4v13" stroke-dasharray="2 2"/><path d="M6 9h6M6 13h4"/></svg>',
   'chalkboard':          '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="18" h="13" rx="1.5"/><path d="M7 8c1.5-1 3-1 4.5 0s3 1 4.5 0"/><path d="M7 12h6"/><path d="M8 16l-2 5M16 16l2 5"/></svg>',
   'worldmap':            '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 3.6 9 14 14 0 0 1-3.6 9 14 14 0 0 1-3.6-9A14 14 0 0 1 12 3z"/></svg>',
   'themeshowcase':       '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="4" w="18" h="16" rx="2"/><path d="M3 8h18"/><rect x="6" y="11" w="5" h="6" rx="1"/><rect x="13" y="11" w="5" h="6" rx="1"/></svg>',

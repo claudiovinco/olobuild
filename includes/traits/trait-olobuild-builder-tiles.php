@@ -15,6 +15,7 @@ trait Olobuild_Builder_Tiles_Trait {
     private function register_core_tiles() {
         require_once OLOBUILD_PATH . 'includes/class-tile-utils.php';
         require_once OLOBUILD_PATH . 'includes/class-text-effects.php';
+        require_once OLOBUILD_PATH . 'includes/class-sipario.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-tile-base.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-section-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-column-tile.php';
@@ -108,6 +109,8 @@ trait Olobuild_Builder_Tiles_Trait {
         require_once OLOBUILD_PATH . 'includes/tiles/class-worldmap-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-layerscape-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-chalkboard-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-cartellone-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-piantasala-tile.php';
 
         require_once OLOBUILD_PATH . 'includes/tiles/class-social-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-map-tile.php';
@@ -380,6 +383,8 @@ trait Olobuild_Builder_Tiles_Trait {
         $manager->register_tile( new Olobuild_WorldMap_Tile() );
         $manager->register_tile( new Olobuild_Layerscape_Tile() );
         $manager->register_tile( new Olobuild_Chalkboard_Tile() );
+        $manager->register_tile( new Olobuild_Cartellone_Tile() );
+        $manager->register_tile( new Olobuild_Piantasala_Tile() );
         // Vetrina temi: solo dove le demo dei temi sono accese (Olobuild_Demo_Temi), altrove non
         // avrebbe niente da mostrare e non entra nella palette.
         if ( class_exists( 'Olobuild_Demo_Temi' ) && Olobuild_Demo_Temi::accese() ) {

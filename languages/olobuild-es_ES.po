@@ -25753,3 +25753,615 @@ msgstr "Tamaño de los dibujos"
 
 msgid "Ingrandisce o rimpicciolisce tutti i disegni insieme. Sul telefono, dove la lavagna è stretta, più piccoli lasciano spazio alle scritte."
 msgstr "Agranda o reduce todos los dibujos a la vez. En el teléfono, donde la pizarra es estrecha, más pequeños dejan sitio a lo escrito."
+
+msgid "Ultimi posti"
+msgstr "Últimas localidades"
+
+msgid "Esaurito"
+msgstr "Agotado"
+
+msgid "Annullato"
+msgstr "Cancelado"
+
+msgid "Rinviato"
+msgstr "Aplazado"
+
+msgid "Ingresso libero"
+msgstr "Entrada libre"
+
+msgid "Su prenotazione"
+msgstr "Con reserva"
+
+msgid "Apri il sipario"
+msgstr "Abre el telón"
+
+msgid "%d appuntamento"
+msgstr "%d cita"
+
+msgid "%d appuntamenti"
+msgstr "%d citas"
+
+msgid "minuti"
+msgstr "minutos"
+
+msgid "In scena adesso"
+msgstr "En escena ahora"
+
+msgid "dal %1$s al %2$s"
+msgstr "del %1$s al %2$s"
+
+msgid "ore %s"
+msgstr "a las %s"
+
+msgid "Genere"
+msgstr "Género"
+
+msgid "Cerca uno spettacolo"
+msgstr "Busca un espectáculo"
+
+msgid "Cerca…"
+msgstr "Buscar…"
+
+msgid "Cartellone"
+msgstr "Cartelera"
+
+msgid "Biglietti"
+msgstr "Entradas"
+
+msgid "Aggiungi al calendario"
+msgstr "Añadir al calendario"
+
+msgid "Si apre il sipario tra"
+msgstr "Se abre el telón en"
+
+msgid "Prossimo spettacolo"
+msgstr "Próximo espectáculo"
+
+msgid "Nessun appuntamento in programma: il nuovo cartellone arriva presto."
+msgstr "No hay citas programadas: la nueva cartelera llegará pronto."
+
+msgid "Nessun appuntamento per questa scelta."
+msgstr "No hay citas para esta selección."
+
+msgid "Prosa"
+msgstr "Teatro"
+
+msgid "Musica"
+msgstr "Música"
+
+msgid "Incontri"
+msgstr "Encuentros"
+
+msgid "Sala grande"
+msgstr "Sala principal"
+
+msgid "Prima del sipario"
+msgstr "Antes del telón"
+
+msgid "Conversazione con il regista"
+msgstr "Conversación con el director"
+
+msgid "Ridotto"
+msgstr "Reducido"
+
+msgid "Foyer"
+msgstr "Foyer"
+
+msgid "Appuntamenti"
+msgstr "Citas"
+
+msgid "Appuntamento"
+msgstr "Cita"
+
+msgid "Uno per data. Se lo stesso spettacolo dura più giorni, metti la data di fine e scrivi gli orari («ven e sab 20:30 · dom 16:00»). I passati si nascondono da soli; nel builder restano, attenuati."
+msgstr "Una por fecha. Si el mismo espectáculo dura varios días, pon la fecha de fin y escribe los horarios («vie y sáb 20:30 · dom 16:00»). Las pasadas se ocultan solas; en el builder se quedan, atenuadas."
+
+msgid "Autore, compagnia, interpreti"
+msgstr "Autor, compañía, intérpretes"
+
+msgid "Scrivi il genere com'è nell'elenco dei generi (Prosa, Lirica…): diventa il filtro e prende il suo colore."
+msgstr "Escribe el género tal como está en la lista de géneros (Teatro, Ópera…): se convierte en el filtro y toma su color."
+
+msgid "Fino al"
+msgstr "Hasta el"
+
+msgid "Luogo"
+msgstr "Lugar"
+
+msgid "Come la leggerà il pubblico («2 h 10 min con intervallo»): serve anche al calendario per l'ora di fine."
+msgstr "Como la leerá el público («2 h 10 min con intermedio»): el calendario también la usa para la hora de fin."
+
+msgid "Separate da una virgola: «Prima nazionale, Sopratitoli, In LIS»."
+msgstr "Separadas por comas: «Estreno nacional, Sobretítulos, En lengua de signos»."
+
+msgid "Incontro col pubblico"
+msgstr "Encuentro con el público"
+
+msgid "L'appuntamento che accompagna lo spettacolo: «Alle 19:30 incontro con la compagnia nel Ridotto»."
+msgstr "La cita que acompaña al espectáculo: «A las 19:30 encuentro con la compañía en el Foyer»."
+
+msgid "Link dei biglietti"
+msgstr "Enlace de las entradas"
+
+msgid "Link della scheda"
+msgstr "Enlace de la ficha"
+
+msgid "Generi"
+msgstr "Géneros"
+
+msgid "L'ordine dei filtri. I colori stanno nello Stile; un genere scritto negli appuntamenti e non qui si aggiunge in fondo."
+msgstr "El orden de los filtros. Los colores están en Estilo; un género escrito en las citas y no aquí se añade al final."
+
+msgid "Elenco"
+msgstr "Lista"
+
+msgid "Solo il prossimo, col conto alla rovescia"
+msgstr "Solo el próximo, con cuenta atrás"
+
+msgid "Divisi per mese"
+msgstr "Agrupadas por mes"
+
+msgid "In ordine di data"
+msgstr "Por orden de fecha"
+
+msgid "Quanti mostrarne"
+msgstr "Cuántas mostrar"
+
+msgid "0 = tutti. Con un numero si vedono solo i prossimi (in home, per esempio, i prossimi quattro)."
+msgstr "0 = todas. Con un número solo se ven las próximas (en la portada, por ejemplo, las cuatro próximas)."
+
+msgid "Appuntamenti passati"
+msgstr "Citas pasadas"
+
+msgid "Nascosti"
+msgstr "Ocultas"
+
+msgid "Attenuati"
+msgstr "Atenuadas"
+
+msgid "Visibili"
+msgstr "Visibles"
+
+msgid "Filtro per genere"
+msgstr "Filtro por género"
+
+msgid "Filtro per mese"
+msgstr "Filtro por mes"
+
+msgid "Testo «Tutti»"
+msgstr "Texto «Todos»"
+
+msgid "Solo un genere"
+msgstr "Solo un género"
+
+msgid "Scrivi un genere (es. «Incontri») per mostrare solo quello: utile per una pagina dedicata."
+msgstr "Escribe un género (p. ej. «Encuentros») para mostrar solo ese: útil para una página dedicada."
+
+msgid "Pulsanti e calendario"
+msgstr "Botones y calendario"
+
+msgid "Testo dei biglietti"
+msgstr "Texto de las entradas"
+
+msgid "Testo della scheda"
+msgstr "Texto de la ficha"
+
+msgid "Un pulsante scarica il file .ics dell'appuntamento, che il telefono o il computer aggiungono al calendario."
+msgstr "Un botón descarga el archivo .ics de la cita, que el teléfono o el ordenador añaden al calendario."
+
+msgid "Testo del calendario"
+msgstr "Texto del calendario"
+
+msgid "Indirizzo per il calendario"
+msgstr "Dirección para el calendario"
+
+msgid "Prossimo appuntamento"
+msgstr "Próxima cita"
+
+msgid "Testo del conto"
+msgstr "Texto de la cuenta atrás"
+
+msgid "Senza appuntamenti"
+msgstr "Sin citas"
+
+msgid "Nessun risultato dei filtri"
+msgstr "Sin resultados de los filtros"
+
+msgid "Pulsante dei biglietti, mesi, incontri. Vuoto: il primario del tema."
+msgstr "Botón de las entradas, meses, encuentros. Vacío: el primario del tema."
+
+msgid "Sfondo voce"
+msgstr "Fondo del elemento"
+
+msgid "Bordo voce"
+msgstr "Borde del elemento"
+
+msgid "Colore delle linee"
+msgstr "Color de las líneas"
+
+msgid "Colori dei generi"
+msgstr "Colores de los géneros"
+
+msgid "Sottolineati"
+msgstr "Subrayados"
+
+msgid "Mese, giorno e ora"
+msgstr "Mes, día y hora"
+
+msgid "Autore e compagnia"
+msgstr "Autor y compañía"
+
+msgid "Durata, luogo e prezzo"
+msgstr "Duración, lugar y precio"
+
+msgid "Raggio pulsanti"
+msgstr "Radio de los botones"
+
+msgid "Padding voce"
+msgstr "Padding del elemento"
+
+msgid "Larghezza della data"
+msgstr "Ancho de la fecha"
+
+msgid "Pianta della sala"
+msgstr "Plano de la sala"
+
+msgid "Platea, file davanti"
+msgstr "Platea, filas delanteras"
+
+msgid "Platea, file dietro"
+msgstr "Platea, filas traseras"
+
+msgid "%s ordine, palchi centrali"
+msgstr "%s piso, palcos centrales"
+
+msgid "%s ordine, palchi laterali"
+msgstr "%s piso, palcos laterales"
+
+msgid "I ordine, palchi centrali"
+msgstr "Primer piso, palcos centrales"
+
+msgid "I ordine, palchi laterali"
+msgstr "Primer piso, palcos laterales"
+
+msgid "II ordine, palchi centrali"
+msgstr "Segundo piso, palcos centrales"
+
+msgid "II ordine, palchi laterali"
+msgstr "Segundo piso, palcos laterales"
+
+msgid "III ordine, palchi centrali"
+msgstr "Tercer piso, palcos centrales"
+
+msgid "III ordine, palchi laterali"
+msgstr "Tercer piso, palcos laterales"
+
+msgid "IV ordine, palchi centrali"
+msgstr "Cuarto piso, palcos centrales"
+
+msgid "IV ordine, palchi laterali"
+msgstr "Cuarto piso, palcos laterales"
+
+msgid "V ordine, palchi centrali"
+msgstr "Quinto piso, palcos centrales"
+
+msgid "V ordine, palchi laterali"
+msgstr "Quinto piso, palcos laterales"
+
+msgid "Barcacce (palchi accanto al palcoscenico)"
+msgstr "Palcos de proscenio (junto al escenario)"
+
+msgid "Loggione"
+msgstr "Gallinero"
+
+msgid "Palcoscenico"
+msgstr "Escenario"
+
+msgid "Buca"
+msgstr "Foso"
+
+msgid "Passa o tocca un settore: prezzi e vista dal posto."
+msgstr "Pasa por encima o toca un sector: precios y vista desde la butaca."
+
+msgid "Intero"
+msgstr "Entrada general"
+
+msgid "La vista da qui"
+msgstr "La vista desde aquí"
+
+msgid "Scegli il posto"
+msgstr "Elige tu butaca"
+
+msgid "Platea e palchi centrali"
+msgstr "Platea y palcos centrales"
+
+msgid "Palchi laterali"
+msgstr "Palcos laterales"
+
+msgid "Sala"
+msgstr "Sala"
+
+msgid "Forma della sala"
+msgstr "Forma de la sala"
+
+msgid "A ferro di cavallo (all'italiana)"
+msgstr "En herradura (a la italiana)"
+
+msgid "A ventaglio"
+msgstr "En abanico"
+
+msgid "A scatola"
+msgstr "Rectangular"
+
+msgid "Scritta del palcoscenico"
+msgstr "Rótulo del escenario"
+
+msgid "Buca dell'orchestra"
+msgstr "Foso de la orquesta"
+
+msgid "Scritta della buca"
+msgstr "Rótulo del foso"
+
+msgid "File della platea"
+msgstr "Filas de la platea"
+
+msgid "Posti nella fila più larga"
+msgstr "Butacas en la fila más ancha"
+
+msgid "Ordini di palchi"
+msgstr "Pisos de palcos"
+
+msgid "Palchi per ordine"
+msgstr "Palcos por piso"
+
+msgid "L'ultimo ordine è il loggione"
+msgstr "El último piso es el gallinero"
+
+msgid "Palco centrale più grande"
+msgstr "Palco central más grande"
+
+msgid "Il palco di mezzo del primo ordine prende il posto di tre: il palco d'onore."
+msgstr "El palco central del primer piso ocupa el lugar de tres: el palco de honor."
+
+msgid "Numeri degli ordini"
+msgstr "Números de los pisos"
+
+msgid "Settori"
+msgstr "Sectores"
+
+msgid "Settore"
+msgstr "Sector"
+
+msgid "Ogni zona della sala va al primo settore che la sceglie. Le zone senza settore restano neutre."
+msgstr "Cada zona de la sala va al primer sector que la elige. Las zonas sin sector quedan neutras."
+
+msgid "Zone della sala"
+msgstr "Zonas de la sala"
+
+msgid "Prezzo intero"
+msgstr "Precio general"
+
+msgid "Prezzo ridotto"
+msgstr "Precio reducido"
+
+msgid "Nota sui prezzi"
+msgstr "Nota sobre los precios"
+
+msgid "Vista dal posto"
+msgstr "Vista desde la butaca"
+
+msgid "All'inizio la scheda mostra"
+msgstr "Al principio la ficha muestra"
+
+msgid "Il primo settore"
+msgstr "El primer sector"
+
+msgid "L'invito a scegliere"
+msgstr "La invitación a elegir"
+
+msgid "Invito"
+msgstr "Invitación"
+
+msgid "Etichetta del prezzo intero"
+msgstr "Etiqueta del precio general"
+
+msgid "Etichetta del prezzo ridotto"
+msgstr "Etiqueta del precio reducido"
+
+msgid "Etichetta della vista"
+msgstr "Etiqueta de la vista"
+
+msgid "Colore della sala"
+msgstr "Color de la sala"
+
+msgid "I palchi e le zone senza settore. Vuoto: il colore del testo, tenue."
+msgstr "Los palcos y las zonas sin sector. Vacío: el color del texto, tenue."
+
+msgid "Colore del palcoscenico"
+msgstr "Color del escenario"
+
+msgid "Colore dei posti senza settore"
+msgstr "Color de las butacas sin sector"
+
+msgid "Colori dei settori"
+msgstr "Colores de los sectores"
+
+msgid "Nome del settore"
+msgstr "Nombre del sector"
+
+msgid "Padding scheda"
+msgstr "Padding de la ficha"
+
+msgid "Accanto alla pianta"
+msgstr "Junto al plano"
+
+msgid "Sotto la pianta"
+msgstr "Debajo del plano"
+
+msgid "Larghezza della pianta"
+msgstr "Ancho del plano"
+
+msgid "Sipario"
+msgstr "Telón"
+
+msgid "Sipario sopra la scena"
+msgstr "Telón sobre la escena"
+
+msgid "Un sipario di velluto copre la hero e si apre: all'apertura della pagina, quando entra nello schermo, scorrendo o al clic. Dopo l'apertura possono restare le quinte e la mantovana a incorniciare la scena. Si apre subito, senza movimento, per chi ha chiesto di ridurlo."
+msgstr "Un telón de terciopelo cubre la hero y se abre: al abrir la página, cuando entra en pantalla, al desplazarte o al hacer clic. Después pueden quedar las bambalinas laterales y la bambalina superior enmarcando la escena. Se abre enseguida, sin movimiento, para quien pidió reducirlo."
+
+msgid "Sipario — comportamento"
+msgstr "Telón — comportamiento"
+
+msgid "Apertura"
+msgstr "Apertura"
+
+msgid "All'italiana (si raccoglie in alto ai lati)"
+msgstr "A la italiana (se recoge arriba a los lados)"
+
+msgid "Alla greca (scorre ai lati)"
+msgstr "A la griega (se desliza a los lados)"
+
+msgid "Alla tedesca (sale)"
+msgstr "A la alemana (sube)"
+
+msgid "Quando si apre"
+msgstr "Cuándo se abre"
+
+msgid "Quando entra nello schermo"
+msgstr "Cuando entra en pantalla"
+
+msgid "Al clic sul sipario"
+msgstr "Al hacer clic en el telón"
+
+msgid "Ritardo"
+msgstr "Retraso"
+
+msgid "Corsa dello scorrimento"
+msgstr "Recorrido del desplazamiento"
+
+msgid "Quanto si scorre, in percentuale dell'altezza della hero, perché il sipario sia tutto aperto."
+msgstr "Cuánto se desplaza, en porcentaje de la altura de la hero, para que el telón quede abierto del todo."
+
+msgid "Si richiude uscendo dallo schermo"
+msgstr "Se vuelve a cerrar al salir de la pantalla"
+
+msgid "Dopo l'apertura restano"
+msgstr "Después de abrirse quedan"
+
+msgid "Le quinte e la mantovana"
+msgstr "Las bambalinas laterales y la superior"
+
+msgid "Solo la mantovana"
+msgstr "Solo la bambalina superior"
+
+msgid "Nel builder mostra"
+msgstr "En el builder muestra"
+
+msgid "Il sipario aperto"
+msgstr "El telón abierto"
+
+msgid "Il sipario chiuso"
+msgstr "El telón cerrado"
+
+msgid "Nel builder il sipario resta fermo: aperto per lavorare sulla scena, chiuso per vedere le scritte sul velluto."
+msgstr "En el builder el telón no se mueve: abierto para trabajar en la escena, cerrado para ver los textos sobre el terciopelo."
+
+msgid "Sipario — scritte"
+msgstr "Telón — textos"
+
+msgid "Con «Al clic sul sipario» è la scritta del pulsante (vuota: «Apri il sipario»); scorrendo, l'invito a scorrere."
+msgstr "Con «Al hacer clic en el telón» es el texto del botón (vacío: «Abre el telón»); al desplazarte, la invitación a desplazarte."
+
+msgid "Emblema"
+msgstr "Emblema"
+
+msgid "Stemma d'alloro con le iniziali"
+msgstr "Escudo de laurel con las iniciales"
+
+msgid "Iniziali"
+msgstr "Iniciales"
+
+msgid "Sipario — velluto"
+msgstr "Telón — terciopelo"
+
+msgid "Colore del velluto"
+msgstr "Color del terciopelo"
+
+msgid "Vuoto: il primario del tema, scurito."
+msgstr "Vacío: el primario del tema, oscurecido."
+
+msgid "Lucentezza"
+msgstr "Brillo"
+
+msgid "Pieghe per telo"
+msgstr "Pliegues por paño"
+
+msgid "Profondità delle pieghe"
+msgstr "Profundidad de los pliegues"
+
+msgid "Larghezza delle quinte"
+msgstr "Ancho de las bambalinas laterales"
+
+msgid "La parte di sipario che resta ai lati dopo l'apertura, in percentuale della larghezza della hero."
+msgstr "La parte del telón que queda a los lados tras abrirse, en porcentaje del ancho de la hero."
+
+msgid "Nappe"
+msgstr "Alzapaños"
+
+msgid "Sipario — oro e mantovana"
+msgstr "Telón — oro y bambalina"
+
+msgid "Colore dell'oro"
+msgstr "Color del oro"
+
+msgid "Frangia, gallone, nappe e stemma. Vuoto: l'accento del tema."
+msgstr "Fleco, galón, alzapaños y escudo. Vacío: el acento del tema."
+
+msgid "Frangia"
+msgstr "Fleco"
+
+msgid "Lunghezza della frangia"
+msgstr "Largo del fleco"
+
+msgid "Mantovana a festoni"
+msgstr "Bambalina con festones"
+
+msgid "Festoni"
+msgstr "Festones"
+
+msgid "Altezza della mantovana"
+msgstr "Altura de la bambalina"
+
+msgid "Sipario — luci"
+msgstr "Telón — luces"
+
+msgid "Ribalta (luce dal basso)"
+msgstr "Candilejas (luz desde abajo)"
+
+msgid "Luce nello spacco"
+msgstr "Luz en la abertura"
+
+msgid "Colore della luce"
+msgstr "Color de la luz"
+
+msgid "Colore delle scritte"
+msgstr "Color de los textos"
+
+msgid "Vuoto: il colore dell'oro."
+msgstr "Vacío: el color del oro."
+
+msgid "Misura dell'emblema"
+msgstr "Tamaño del emblema"
+
+msgid "Occhiello del sipario"
+msgstr "Antetítulo del telón"
+
+msgid "Titolo del sipario"
+msgstr "Título del telón"
+
+msgid "Invito del sipario"
+msgstr "Invitación del telón"
+
+msgid "Si alza il sipario"
+msgstr "Se levanta el telón"

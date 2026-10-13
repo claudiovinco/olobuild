@@ -17777,3 +17777,615 @@ msgstr "Drawing size"
 
 msgid "Ingrandisce o rimpicciolisce tutti i disegni insieme. Sul telefono, dove la lavagna è stretta, più piccoli lasciano spazio alle scritte."
 msgstr "Enlarges or shrinks all drawings together. On phones, where the board is narrow, smaller drawings leave room for the writing."
+
+msgid "Ultimi posti"
+msgstr "Last seats"
+
+msgid "Esaurito"
+msgstr "Sold out"
+
+msgid "Annullato"
+msgstr "Cancelled"
+
+msgid "Rinviato"
+msgstr "Postponed"
+
+msgid "Ingresso libero"
+msgstr "Free entry"
+
+msgid "Su prenotazione"
+msgstr "By reservation"
+
+msgid "Apri il sipario"
+msgstr "Open the curtain"
+
+msgid "%d appuntamento"
+msgstr "%d event"
+
+msgid "%d appuntamenti"
+msgstr "%d events"
+
+msgid "minuti"
+msgstr "minutes"
+
+msgid "In scena adesso"
+msgstr "On stage now"
+
+msgid "dal %1$s al %2$s"
+msgstr "from %1$s to %2$s"
+
+msgid "ore %s"
+msgstr "at %s"
+
+msgid "Genere"
+msgstr "Genre"
+
+msgid "Cerca uno spettacolo"
+msgstr "Search for a show"
+
+msgid "Cerca…"
+msgstr "Search…"
+
+msgid "Cartellone"
+msgstr "Season programme"
+
+msgid "Biglietti"
+msgstr "Tickets"
+
+msgid "Aggiungi al calendario"
+msgstr "Add to calendar"
+
+msgid "Si apre il sipario tra"
+msgstr "Curtain up in"
+
+msgid "Prossimo spettacolo"
+msgstr "Next show"
+
+msgid "Nessun appuntamento in programma: il nuovo cartellone arriva presto."
+msgstr "Nothing scheduled right now: the new programme is coming soon."
+
+msgid "Nessun appuntamento per questa scelta."
+msgstr "No events match this choice."
+
+msgid "Prosa"
+msgstr "Drama"
+
+msgid "Musica"
+msgstr "Music"
+
+msgid "Incontri"
+msgstr "Talks"
+
+msgid "Sala grande"
+msgstr "Main hall"
+
+msgid "Prima del sipario"
+msgstr "Before the curtain"
+
+msgid "Conversazione con il regista"
+msgstr "A conversation with the director"
+
+msgid "Ridotto"
+msgstr "Reduced"
+
+msgid "Foyer"
+msgstr "Foyer"
+
+msgid "Appuntamenti"
+msgstr "Events"
+
+msgid "Appuntamento"
+msgstr "Event"
+
+msgid "Uno per data. Se lo stesso spettacolo dura più giorni, metti la data di fine e scrivi gli orari («ven e sab 20:30 · dom 16:00»). I passati si nascondono da soli; nel builder restano, attenuati."
+msgstr "One per date. If the same show runs for several days, set the end date and write the times (\"Fri and Sat 8.30 pm · Sun 4 pm\"). Past events hide themselves; in the builder they stay, faded."
+
+msgid "Autore, compagnia, interpreti"
+msgstr "Author, company, cast"
+
+msgid "Scrivi il genere com'è nell'elenco dei generi (Prosa, Lirica…): diventa il filtro e prende il suo colore."
+msgstr "Write the genre as it appears in the genre list (Drama, Opera…): it becomes the filter and takes its colour."
+
+msgid "Fino al"
+msgstr "Until"
+
+msgid "Luogo"
+msgstr "Venue"
+
+msgid "Come la leggerà il pubblico («2 h 10 min con intervallo»): serve anche al calendario per l'ora di fine."
+msgstr "As the audience will read it (\"2 h 10 min with interval\"): the calendar also uses it for the end time."
+
+msgid "Separate da una virgola: «Prima nazionale, Sopratitoli, In LIS»."
+msgstr "Separated by commas: \"National premiere, Surtitles, Sign language\"."
+
+msgid "Incontro col pubblico"
+msgstr "Audience talk"
+
+msgid "L'appuntamento che accompagna lo spettacolo: «Alle 19:30 incontro con la compagnia nel Ridotto»."
+msgstr "The event that goes with the show: \"At 7.30 pm, meet the company in the Foyer\"."
+
+msgid "Link dei biglietti"
+msgstr "Tickets link"
+
+msgid "Link della scheda"
+msgstr "Details page link"
+
+msgid "Generi"
+msgstr "Genres"
+
+msgid "L'ordine dei filtri. I colori stanno nello Stile; un genere scritto negli appuntamenti e non qui si aggiunge in fondo."
+msgstr "The order of the filters. Colours are in the Style tab; a genre written in the events but not here is added at the end."
+
+msgid "Elenco"
+msgstr "List"
+
+msgid "Solo il prossimo, col conto alla rovescia"
+msgstr "Only the next one, with a countdown"
+
+msgid "Divisi per mese"
+msgstr "Grouped by month"
+
+msgid "In ordine di data"
+msgstr "Sorted by date"
+
+msgid "Quanti mostrarne"
+msgstr "How many to show"
+
+msgid "0 = tutti. Con un numero si vedono solo i prossimi (in home, per esempio, i prossimi quattro)."
+msgstr "0 = all. With a number only the next ones are shown (on the home page, for example, the next four)."
+
+msgid "Appuntamenti passati"
+msgstr "Past events"
+
+msgid "Nascosti"
+msgstr "Hidden"
+
+msgid "Attenuati"
+msgstr "Faded"
+
+msgid "Visibili"
+msgstr "Visible"
+
+msgid "Filtro per genere"
+msgstr "Filter by genre"
+
+msgid "Filtro per mese"
+msgstr "Filter by month"
+
+msgid "Testo «Tutti»"
+msgstr "\"All\" text"
+
+msgid "Solo un genere"
+msgstr "Only one genre"
+
+msgid "Scrivi un genere (es. «Incontri») per mostrare solo quello: utile per una pagina dedicata."
+msgstr "Write a genre (e.g. \"Talks\") to show only that one: useful for a dedicated page."
+
+msgid "Pulsanti e calendario"
+msgstr "Buttons and calendar"
+
+msgid "Testo dei biglietti"
+msgstr "Tickets text"
+
+msgid "Testo della scheda"
+msgstr "Details text"
+
+msgid "Un pulsante scarica il file .ics dell'appuntamento, che il telefono o il computer aggiungono al calendario."
+msgstr "A button downloads the event’s .ics file, which the phone or computer adds to the calendar."
+
+msgid "Testo del calendario"
+msgstr "Calendar text"
+
+msgid "Indirizzo per il calendario"
+msgstr "Address for the calendar"
+
+msgid "Prossimo appuntamento"
+msgstr "Next event"
+
+msgid "Testo del conto"
+msgstr "Countdown text"
+
+msgid "Senza appuntamenti"
+msgstr "With no events"
+
+msgid "Nessun risultato dei filtri"
+msgstr "No filter results"
+
+msgid "Pulsante dei biglietti, mesi, incontri. Vuoto: il primario del tema."
+msgstr "Tickets button, months, talks. Empty: the theme’s primary colour."
+
+msgid "Sfondo voce"
+msgstr "Item background"
+
+msgid "Bordo voce"
+msgstr "Item border"
+
+msgid "Colore delle linee"
+msgstr "Line colour"
+
+msgid "Colori dei generi"
+msgstr "Genre colours"
+
+msgid "Sottolineati"
+msgstr "Underlined"
+
+msgid "Mese, giorno e ora"
+msgstr "Month, day and time"
+
+msgid "Autore e compagnia"
+msgstr "Author and company"
+
+msgid "Durata, luogo e prezzo"
+msgstr "Duration, venue and price"
+
+msgid "Raggio pulsanti"
+msgstr "Button radius"
+
+msgid "Padding voce"
+msgstr "Item padding"
+
+msgid "Larghezza della data"
+msgstr "Date width"
+
+msgid "Pianta della sala"
+msgstr "Seating plan"
+
+msgid "Platea, file davanti"
+msgstr "Stalls, front rows"
+
+msgid "Platea, file dietro"
+msgstr "Stalls, back rows"
+
+msgid "%s ordine, palchi centrali"
+msgstr "Tier %s, central boxes"
+
+msgid "%s ordine, palchi laterali"
+msgstr "Tier %s, side boxes"
+
+msgid "I ordine, palchi centrali"
+msgstr "Tier I, central boxes"
+
+msgid "I ordine, palchi laterali"
+msgstr "Tier I, side boxes"
+
+msgid "II ordine, palchi centrali"
+msgstr "Tier II, central boxes"
+
+msgid "II ordine, palchi laterali"
+msgstr "Tier II, side boxes"
+
+msgid "III ordine, palchi centrali"
+msgstr "Tier III, central boxes"
+
+msgid "III ordine, palchi laterali"
+msgstr "Tier III, side boxes"
+
+msgid "IV ordine, palchi centrali"
+msgstr "Tier IV, central boxes"
+
+msgid "IV ordine, palchi laterali"
+msgstr "Tier IV, side boxes"
+
+msgid "V ordine, palchi centrali"
+msgstr "Tier V, central boxes"
+
+msgid "V ordine, palchi laterali"
+msgstr "Tier V, side boxes"
+
+msgid "Barcacce (palchi accanto al palcoscenico)"
+msgstr "Proscenium boxes (next to the stage)"
+
+msgid "Loggione"
+msgstr "Gallery"
+
+msgid "Palcoscenico"
+msgstr "Stage"
+
+msgid "Buca"
+msgstr "Pit"
+
+msgid "Passa o tocca un settore: prezzi e vista dal posto."
+msgstr "Hover over or tap a section: prices and the view from the seat."
+
+msgid "Intero"
+msgstr "Full price"
+
+msgid "La vista da qui"
+msgstr "The view from here"
+
+msgid "Scegli il posto"
+msgstr "Choose your seat"
+
+msgid "Platea e palchi centrali"
+msgstr "Stalls and central boxes"
+
+msgid "Palchi laterali"
+msgstr "Side boxes"
+
+msgid "Sala"
+msgstr "Hall"
+
+msgid "Forma della sala"
+msgstr "Shape of the hall"
+
+msgid "A ferro di cavallo (all'italiana)"
+msgstr "Horseshoe (Italian style)"
+
+msgid "A ventaglio"
+msgstr "Fan-shaped"
+
+msgid "A scatola"
+msgstr "Shoebox"
+
+msgid "Scritta del palcoscenico"
+msgstr "Stage label"
+
+msgid "Buca dell'orchestra"
+msgstr "Orchestra pit"
+
+msgid "Scritta della buca"
+msgstr "Pit label"
+
+msgid "File della platea"
+msgstr "Rows in the stalls"
+
+msgid "Posti nella fila più larga"
+msgstr "Seats in the widest row"
+
+msgid "Ordini di palchi"
+msgstr "Tiers of boxes"
+
+msgid "Palchi per ordine"
+msgstr "Boxes per tier"
+
+msgid "L'ultimo ordine è il loggione"
+msgstr "The top tier is the gallery"
+
+msgid "Palco centrale più grande"
+msgstr "Larger central box"
+
+msgid "Il palco di mezzo del primo ordine prende il posto di tre: il palco d'onore."
+msgstr "The middle box of the first tier takes the place of three: the royal box."
+
+msgid "Numeri degli ordini"
+msgstr "Tier numbers"
+
+msgid "Settori"
+msgstr "Sections"
+
+msgid "Settore"
+msgstr "Section"
+
+msgid "Ogni zona della sala va al primo settore che la sceglie. Le zone senza settore restano neutre."
+msgstr "Each area of the hall goes to the first section that picks it. Areas without a section stay neutral."
+
+msgid "Zone della sala"
+msgstr "Areas of the hall"
+
+msgid "Prezzo intero"
+msgstr "Full price"
+
+msgid "Prezzo ridotto"
+msgstr "Reduced price"
+
+msgid "Nota sui prezzi"
+msgstr "Price note"
+
+msgid "Vista dal posto"
+msgstr "View from the seat"
+
+msgid "All'inizio la scheda mostra"
+msgstr "At first the card shows"
+
+msgid "Il primo settore"
+msgstr "The first section"
+
+msgid "L'invito a scegliere"
+msgstr "The invitation to choose"
+
+msgid "Invito"
+msgstr "Invitation"
+
+msgid "Etichetta del prezzo intero"
+msgstr "Full price label"
+
+msgid "Etichetta del prezzo ridotto"
+msgstr "Reduced price label"
+
+msgid "Etichetta della vista"
+msgstr "View label"
+
+msgid "Colore della sala"
+msgstr "Hall colour"
+
+msgid "I palchi e le zone senza settore. Vuoto: il colore del testo, tenue."
+msgstr "Boxes and areas without a section. Empty: the text colour, faint."
+
+msgid "Colore del palcoscenico"
+msgstr "Stage colour"
+
+msgid "Colore dei posti senza settore"
+msgstr "Colour of seats without a section"
+
+msgid "Colori dei settori"
+msgstr "Section colours"
+
+msgid "Nome del settore"
+msgstr "Section name"
+
+msgid "Padding scheda"
+msgstr "Card padding"
+
+msgid "Accanto alla pianta"
+msgstr "Next to the plan"
+
+msgid "Sotto la pianta"
+msgstr "Below the plan"
+
+msgid "Larghezza della pianta"
+msgstr "Plan width"
+
+msgid "Sipario"
+msgstr "Curtain"
+
+msgid "Sipario sopra la scena"
+msgstr "Curtain over the scene"
+
+msgid "Un sipario di velluto copre la hero e si apre: all'apertura della pagina, quando entra nello schermo, scorrendo o al clic. Dopo l'apertura possono restare le quinte e la mantovana a incorniciare la scena. Si apre subito, senza movimento, per chi ha chiesto di ridurlo."
+msgstr "A velvet curtain covers the hero and opens: when the page opens, when it comes into view, as you scroll or on click. After it opens, the side drapes and the valance can stay to frame the scene. It opens at once, without motion, for people who asked for reduced motion."
+
+msgid "Sipario — comportamento"
+msgstr "Curtain — behaviour"
+
+msgid "Apertura"
+msgstr "Opening"
+
+msgid "All'italiana (si raccoglie in alto ai lati)"
+msgstr "Italian style (gathers up at the sides)"
+
+msgid "Alla greca (scorre ai lati)"
+msgstr "Greek style (slides to the sides)"
+
+msgid "Alla tedesca (sale)"
+msgstr "German style (rises)"
+
+msgid "Quando si apre"
+msgstr "When it opens"
+
+msgid "Quando entra nello schermo"
+msgstr "When it comes into view"
+
+msgid "Al clic sul sipario"
+msgstr "On click on the curtain"
+
+msgid "Ritardo"
+msgstr "Delay"
+
+msgid "Corsa dello scorrimento"
+msgstr "Scroll distance"
+
+msgid "Quanto si scorre, in percentuale dell'altezza della hero, perché il sipario sia tutto aperto."
+msgstr "How far you scroll, as a percentage of the hero’s height, for the curtain to be fully open."
+
+msgid "Si richiude uscendo dallo schermo"
+msgstr "Closes again when it leaves the screen"
+
+msgid "Dopo l'apertura restano"
+msgstr "After opening, keep"
+
+msgid "Le quinte e la mantovana"
+msgstr "The side drapes and the valance"
+
+msgid "Solo la mantovana"
+msgstr "Only the valance"
+
+msgid "Nel builder mostra"
+msgstr "In the builder, show"
+
+msgid "Il sipario aperto"
+msgstr "The open curtain"
+
+msgid "Il sipario chiuso"
+msgstr "The closed curtain"
+
+msgid "Nel builder il sipario resta fermo: aperto per lavorare sulla scena, chiuso per vedere le scritte sul velluto."
+msgstr "In the builder the curtain stays still: open to work on the scene, closed to see the lettering on the velvet."
+
+msgid "Sipario — scritte"
+msgstr "Curtain — lettering"
+
+msgid "Con «Al clic sul sipario» è la scritta del pulsante (vuota: «Apri il sipario»); scorrendo, l'invito a scorrere."
+msgstr "With \"On click on the curtain\" it is the button text (empty: \"Open the curtain\"); when scrolling, the invitation to scroll."
+
+msgid "Emblema"
+msgstr "Emblem"
+
+msgid "Stemma d'alloro con le iniziali"
+msgstr "Laurel crest with initials"
+
+msgid "Iniziali"
+msgstr "Initials"
+
+msgid "Sipario — velluto"
+msgstr "Curtain — velvet"
+
+msgid "Colore del velluto"
+msgstr "Velvet colour"
+
+msgid "Vuoto: il primario del tema, scurito."
+msgstr "Empty: the theme’s primary colour, darkened."
+
+msgid "Lucentezza"
+msgstr "Sheen"
+
+msgid "Pieghe per telo"
+msgstr "Folds per panel"
+
+msgid "Profondità delle pieghe"
+msgstr "Fold depth"
+
+msgid "Larghezza delle quinte"
+msgstr "Side drape width"
+
+msgid "La parte di sipario che resta ai lati dopo l'apertura, in percentuale della larghezza della hero."
+msgstr "The part of the curtain left at the sides after opening, as a percentage of the hero’s width."
+
+msgid "Nappe"
+msgstr "Tiebacks"
+
+msgid "Sipario — oro e mantovana"
+msgstr "Curtain — gold and valance"
+
+msgid "Colore dell'oro"
+msgstr "Gold colour"
+
+msgid "Frangia, gallone, nappe e stemma. Vuoto: l'accento del tema."
+msgstr "Fringe, braid, tiebacks and crest. Empty: the theme’s accent."
+
+msgid "Frangia"
+msgstr "Fringe"
+
+msgid "Lunghezza della frangia"
+msgstr "Fringe length"
+
+msgid "Mantovana a festoni"
+msgstr "Swagged valance"
+
+msgid "Festoni"
+msgstr "Swags"
+
+msgid "Altezza della mantovana"
+msgstr "Valance height"
+
+msgid "Sipario — luci"
+msgstr "Curtain — lights"
+
+msgid "Ribalta (luce dal basso)"
+msgstr "Footlights (light from below)"
+
+msgid "Luce nello spacco"
+msgstr "Light through the gap"
+
+msgid "Colore della luce"
+msgstr "Light colour"
+
+msgid "Colore delle scritte"
+msgstr "Lettering colour"
+
+msgid "Vuoto: il colore dell'oro."
+msgstr "Empty: the gold colour."
+
+msgid "Misura dell'emblema"
+msgstr "Emblem size"
+
+msgid "Occhiello del sipario"
+msgstr "Curtain eyebrow"
+
+msgid "Titolo del sipario"
+msgstr "Curtain title"
+
+msgid "Invito del sipario"
+msgstr "Curtain invitation"
+
+msgid "Si alza il sipario"
+msgstr "The curtain rises"
