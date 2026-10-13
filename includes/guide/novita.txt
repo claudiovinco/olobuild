@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.729 - 2026-10-13 (fix)
+- Lavagna a gesso: «Dimensione dei disegni» per dispositivo, per rimpicciolire i disegni sul telefono dove la lavagna è stretta.
+- Tema Osteria Fumo: i disegni della lavagna stanno negli spazi liberi e non coprono più titolo, nota e firma; il banner del giovedì è una velatura scura sopra il video; la sfoglia di Ada ha più spazio per le dosi (sul tablet il calcolatore va sotto il testo); più braci nell'apertura.
+
 ## v1.4.728 - 2026-10-13 (nuovo)
 - Nuova tile «Lavagna a gesso» (gruppo Marketing): una lavagna scritta a gesso con occhiello, titolo, la data di oggi che si aggiorna da sola, le voci con prezzo, etichetta e i giorni della settimana in cui valgono, una nota, una firma e disegnini a gesso (spiga, pesce, fiamma, calice e altri, oppure un'icona o un'immagine). Le righe si scrivono una dopo l'altra quando la lavagna entra nello schermo, i disegni si tracciano e galleggiano scorrendo, col mouse la lavagna si piega verso il cursore. Cornice in legno, metallo o tinta unita, superficie a gesso, carta o liscia, appesa a un chiodo.
 - Particelle: preset «Braci», scintille che salgono tremolando e si spengono, e la posizione «Sezione, sopra il contenuto», per far passare le particelle davanti a un'apertura che disegna da sé il proprio sfondo.

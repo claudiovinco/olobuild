@@ -25747,3 +25747,9 @@ msgstr "Pendant toute la durée, le message ci-dessous remplace les chiffres ; u
 
 msgid "Messaggio durante l'evento"
 msgstr "Message pendant l’événement"
+
+msgid "Dimensione dei disegni"
+msgstr "Taille des dessins"
+
+msgid "Ingrandisce o rimpicciolisce tutti i disegni insieme. Sul telefono, dove la lavagna è stretta, più piccoli lasciano spazio alle scritte."
+msgstr "Agrandit ou réduit tous les dessins ensemble. Sur le téléphone, où l’ardoise est étroite, plus petits ils laissent de la place à l’écriture."

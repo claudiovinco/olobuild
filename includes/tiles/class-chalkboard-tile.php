@@ -108,6 +108,7 @@ class Olobuild_Chalkboard_Tile extends Olobuild_Tile_Base {
         'nota_color'               => '',
         // Forma
         'larghezza'          => 820,
+        'disegni_scala'      => 100,
         'padding'            => [ 'top' => 56, 'right' => 56, 'bottom' => 56, 'left' => 56 ],
         'padding_tablet'     => [ 'top' => 44, 'right' => 40, 'bottom' => 44, 'left' => 40 ],
         'padding_mobile'     => [ 'top' => 32, 'right' => 22, 'bottom' => 32, 'left' => 22 ],
@@ -336,6 +337,9 @@ class Olobuild_Chalkboard_Tile extends Olobuild_Tile_Base {
         echo $this->css_testo( $s, 'voce', "{$sel} .olc-vuoto", false );
         // Disegni
         echo "{$sel} .olc-disegni{position:absolute;inset:0;z-index:0;pointer-events:none}";
+        // Dimensione dei disegni per dispositivo (scala delle misure scritte): sul telefono la lavagna è stretta.
+        echo "{$sel}{--olc-ds:" . round( max( 20, min( 200, (float) $s['disegni_scala'] ) ) / 100, 3 ) . '}';
+        echo $this->css_per_dispositivo( $s, 'disegni_scala', $sel, function ( $v ) { return '--olc-ds:' . round( max( 20, min( 200, (float) $v ) ) / 100, 3 ); } );
         echo "{$sel} .olc-disegno{position:absolute;display:block;color:var(--olc-disegni)}";
         echo "{$sel} .olc-disegno svg{display:block;width:100%;height:100%;overflow:visible}";
         echo "{$sel} .olc-disegno path{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}";
@@ -405,7 +409,7 @@ class Olobuild_Chalkboard_Tile extends Olobuild_Tile_Base {
                 $prof  = max( 0, min( 100, (float) ( $dg['profondita'] ?? 50 ) ) ) / 100;
                 $op    = max( 0, min( 100, (float) ( $dg['opacita'] ?? 85 ) ) ) / 100;
                 $c     = $this->safe_color_css( $dg['colore'] ?? '' );
-                $stile = 'left:' . $x . '%;top:' . $y . '%;width:' . $mm . 'px;height:' . $mm . 'px;margin:-' . round( $mm / 2 ) . 'px 0 0 -' . round( $mm / 2 ) . 'px;transform:rotate(' . $rot . 'deg);opacity:' . $op . ';' . ( $c ? 'color:' . $c . ';' : '' );
+                $stile = 'left:' . $x . '%;top:' . $y . '%;width:calc(' . $mm . 'px * var(--olc-ds, 1));height:calc(' . $mm . 'px * var(--olc-ds, 1));translate:-50% -50%;transform:rotate(' . $rot . 'deg);opacity:' . $op . ';' . ( $c ? 'color:' . $c . ';' : '' );
                 if ( 'icona' === $forma ) {
                     $dentro = $this->render_icon_html( (string) ( $dg['icona'] ?? '' ), max( 0.5, round( $mm / 20, 2 ) ) );
                 } elseif ( 'immagine' === $forma ) {

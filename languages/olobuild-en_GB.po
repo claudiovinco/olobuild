@@ -17771,3 +17771,9 @@ msgstr "For the whole duration, the message below replaces the numbers; once the
 
 msgid "Messaggio durante l'evento"
 msgstr "Message during the event"
+
+msgid "Dimensione dei disegni"
+msgstr "Drawing size"
+
+msgid "Ingrandisce o rimpicciolisce tutti i disegni insieme. Sul telefono, dove la lavagna è stretta, più piccoli lasciano spazio alle scritte."
+msgstr "Enlarges or shrinks all drawings together. On phones, where the board is narrow, smaller drawings leave room for the writing."

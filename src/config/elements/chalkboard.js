@@ -134,6 +134,7 @@ export default {
     nota_font_weight: '400',
     nota_color: '',
     larghezza: 820,
+    disegni_scala: 100,
     padding: { top: 56, right: 56, bottom: 56, left: 56 },
     padding_tablet: { top: 44, right: 40, bottom: 44, left: 40 },
     padding_mobile: { top: 32, right: 22, bottom: 32, left: 22 },
@@ -262,6 +263,8 @@ export default {
         { key: 'colore', label: t('Colore'), type: 'color' },
         { key: 'opacita', label: t('Opacità'), type: 'range', min: 0, max: 100, step: 5, unit: '%' },
     ] },
+    { key: 'disegni_scala', label: t('Dimensione dei disegni'), type: 'range', min: 20, max: 200, step: 5, unit: '%', responsive: true,
+      description: t('Ingrandisce o rimpicciolisce tutti i disegni insieme. Sul telefono, dove la lavagna è stretta, più piccoli lasciano spazio alle scritte.') },
 
     { type: 'separator', label: t('Testo') },
     { type: 'typography', label: t('Occhiello'), responsiveKeys: [], show: pieno('occhiello'),
