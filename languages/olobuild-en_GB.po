@@ -17141,3 +17141,96 @@ msgstr "Imported"
 #: includes/class-theme-importer.php
 msgid "Gli oggetti escono dal buio"
 msgstr "Objects emerge from the dark"
+
+msgid "Mappa del mondo"
+msgstr "World map"
+
+msgid "Coperto"
+msgstr "Covered"
+
+msgid "Stati"
+msgstr "Countries"
+
+msgid "Clicca uno stato: un clic gli dà il primo colore, due il secondo, tre lo riportano trasparente. «Apri in grande» mostra la cartina più grande, con la ricerca per nome e gli elenchi: serve per gli stati piccoli, che sulla cartina sono puntini."
+msgstr "Click a country: one click gives it the first colour, two the second, three make it transparent again. “Open large” shows a bigger map, with search by name and the lists: useful for small countries, which are dots on the map."
+
+msgid "Mostra la legenda"
+msgstr "Show the legend"
+
+msgid "Primo colore (un clic)"
+msgstr "First colour (one click)"
+
+msgid "Secondo colore (due clic)"
+msgstr "Second colour (two clicks)"
+
+msgid "Mostra quanti sono"
+msgstr "Show how many"
+
+msgid "Primo colore"
+msgstr "First colour"
+
+msgid "Secondo colore"
+msgstr "Second colour"
+
+msgid "Stati senza colore"
+msgstr "Countries without colour"
+
+msgid "Vuoto: trasparenti, si vede lo sfondo."
+msgstr "Empty: transparent, the background shows through."
+
+msgid "Confini"
+msgstr "Borders"
+
+msgid "Vuoto: il colore del testo, velato. Chiari su uno sfondo scuro, scuri su uno chiaro."
+msgstr "Empty: the text colour, softened. Light on a dark background, dark on a light one."
+
+msgid "Spessore dei confini"
+msgstr "Border width"
+
+msgid "Posizione della legenda"
+msgstr "Legend position"
+
+msgid "Sotto la cartina"
+msgstr "Below the map"
+
+msgid "Sopra la cartina"
+msgstr "Above the map"
+
+msgid "Allineamento della legenda"
+msgstr "Legend alignment"
+
+msgid "Mappa non disponibile."
+msgstr "Map not available."
+
+msgid "Caricamento della mappa…"
+msgstr "Loading the map…"
+
+msgid "Apri in grande"
+msgstr "Open large"
+
+msgid "Un clic su uno stato gli dà il primo colore, un secondo clic il secondo, un terzo lo riporta trasparente."
+msgstr "One click on a country gives it the first colour, a second click the second, a third makes it transparent again."
+
+msgid "Gli stati troppo piccoli per la cartina sono puntini: puoi anche cercarli per nome qui sotto."
+msgstr "Countries too small for the map are dots: you can also search for them by name below."
+
+msgid "Cerca uno stato"
+msgstr "Search for a country"
+
+msgid "Nessuno stato con questo nome."
+msgstr "No country with this name."
+
+msgid "Nessuno."
+msgstr "None."
+
+msgid "Sicuro? Azzera tutto"
+msgstr "Sure? Clear everything"
+
+msgid "Azzera"
+msgstr "Reset"
+
+msgid "senza colore"
+msgstr "no colour"
+
+msgid "I dati della mappa del mondo non sono stati trovati."
+msgstr "The world map data was not found."

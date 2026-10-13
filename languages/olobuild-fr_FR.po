@@ -25135,3 +25135,93 @@ msgstr "Envoi #%d"
 #: includes/class-theme-importer.php
 msgid "Gli oggetti escono dal buio"
 msgstr "Les objets sortent de l’ombre"
+
+msgid "Mappa del mondo"
+msgstr "Carte du monde"
+
+msgid "Coperto"
+msgstr "Couvert"
+
+msgid "Stati"
+msgstr "Pays"
+
+msgid "Clicca uno stato: un clic gli dà il primo colore, due il secondo, tre lo riportano trasparente. «Apri in grande» mostra la cartina più grande, con la ricerca per nome e gli elenchi: serve per gli stati piccoli, che sulla cartina sono puntini."
+msgstr "Cliquez sur un pays : un clic lui donne la première couleur, deux la deuxième, trois le rendent de nouveau transparent. « Ouvrir en grand » affiche une carte plus grande, avec la recherche par nom et les listes : utile pour les petits pays, qui sont des points sur la carte."
+
+msgid "Mostra la legenda"
+msgstr "Afficher la légende"
+
+msgid "Primo colore (un clic)"
+msgstr "Première couleur (un clic)"
+
+msgid "Secondo colore (due clic)"
+msgstr "Deuxième couleur (deux clics)"
+
+msgid "Mostra quanti sono"
+msgstr "Afficher le nombre"
+
+msgid "Primo colore"
+msgstr "Première couleur"
+
+msgid "Secondo colore"
+msgstr "Deuxième couleur"
+
+msgid "Stati senza colore"
+msgstr "Pays sans couleur"
+
+msgid "Vuoto: trasparenti, si vede lo sfondo."
+msgstr "Vide : transparents, le fond reste visible."
+
+msgid "Confini"
+msgstr "Frontières"
+
+msgid "Vuoto: il colore del testo, velato. Chiari su uno sfondo scuro, scuri su uno chiaro."
+msgstr "Vide : la couleur du texte, atténuée. Claires sur un fond sombre, sombres sur un fond clair."
+
+msgid "Spessore dei confini"
+msgstr "Épaisseur des frontières"
+
+msgid "Posizione della legenda"
+msgstr "Position de la légende"
+
+msgid "Sotto la cartina"
+msgstr "Sous la carte"
+
+msgid "Sopra la cartina"
+msgstr "Au-dessus de la carte"
+
+msgid "Allineamento della legenda"
+msgstr "Alignement de la légende"
+
+msgid "Mappa non disponibile."
+msgstr "Carte indisponible."
+
+msgid "Caricamento della mappa…"
+msgstr "Chargement de la carte…"
+
+msgid "Apri in grande"
+msgstr "Ouvrir en grand"
+
+msgid "Un clic su uno stato gli dà il primo colore, un secondo clic il secondo, un terzo lo riporta trasparente."
+msgstr "Un clic sur un pays lui donne la première couleur, un deuxième clic la deuxième, un troisième le rend de nouveau transparent."
+
+msgid "Gli stati troppo piccoli per la cartina sono puntini: puoi anche cercarli per nome qui sotto."
+msgstr "Les pays trop petits pour la carte sont des points : vous pouvez aussi les chercher par leur nom ci-dessous."
+
+msgid "Cerca uno stato"
+msgstr "Chercher un pays"
+
+msgid "Nessuno stato con questo nome."
+msgstr "Aucun pays portant ce nom."
+
+msgid "Nessuno."
+msgstr "Aucun."
+
+msgid "Sicuro? Azzera tutto"
+msgstr "Sûr ? Tout effacer"
+
+msgid "senza colore"
+msgstr "sans couleur"
+
+msgid "I dati della mappa del mondo non sono stati trovati."
+msgstr "Les données de la carte du monde sont introuvables."

@@ -415,6 +415,13 @@
         @update:modelValue="onFieldUpdate($event)"
       />
 
+      <FieldMappaStati
+        v-else-if="field.type === 'mappa-stati'"
+        :modelValue="effectiveValue"
+        :tileSettings="tileSettings"
+        @update:modelValue="onFieldUpdate($event)"
+      />
+
       <FieldIconSelect
         v-else-if="field.type === 'icon-select'"
         :modelValue="effectiveValue"
@@ -652,6 +659,7 @@ import FieldGallery from './fields/FieldGallery.vue';
 import DynamicQueryPanel from './DynamicQueryPanel.vue';
 import FieldIcon from './fields/FieldIcon.vue';
 import FieldMegaPanelMap from './fields/FieldMegaPanelMap.vue';
+import FieldMappaStati from './fields/FieldMappaStati.vue';
 import FieldMultiPills from './fields/FieldMultiPills.vue';
 import FieldBoxShadow from './fields/FieldBoxShadow.vue';
 import FieldGradient from './fields/FieldGradient.vue';
@@ -1007,6 +1015,7 @@ const fieldComponent = computed(() => {
     case 'icon': return FieldIcon;
     case 'textarea': return FieldTextarea;
     case 'megapanel-map': return FieldMegaPanelMap;
+    case 'mappa-stati': return FieldMappaStati;
     case 'icon-select': return FieldIconSelect;
     case 'multi_pills': return FieldMultiPills;
     case 'box-shadow': return FieldBoxShadow;
@@ -1203,6 +1212,7 @@ const fieldProps = computed(() => {
     case 'icon-select': return { ...base, options: props.field.options || [] };
     case 'multi_pills': return { ...base, options: props.field.options || [] };
     case 'megapanel-map': return { ...base, vuoto: props.field.vuoto || '' };
+    case 'mappa-stati': return { ...base, tileSettings: props.tileSettings };
     case 'code': return { ...base, class: 'olo-field-code' };
     default: return base;
   }

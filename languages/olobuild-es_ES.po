@@ -25135,3 +25135,93 @@ msgstr "Envío #%d"
 #: includes/class-theme-importer.php
 msgid "Gli oggetti escono dal buio"
 msgstr "Los objetos salen de la oscuridad"
+
+msgid "Mappa del mondo"
+msgstr "Mapa del mundo"
+
+msgid "Coperto"
+msgstr "Cubierto"
+
+msgid "Stati"
+msgstr "Países"
+
+msgid "Clicca uno stato: un clic gli dà il primo colore, due il secondo, tre lo riportano trasparente. «Apri in grande» mostra la cartina più grande, con la ricerca per nome e gli elenchi: serve per gli stati piccoli, che sulla cartina sono puntini."
+msgstr "Haz clic en un país: un clic le da el primer color, dos el segundo, tres lo vuelven transparente. «Abrir en grande» muestra un mapa más grande, con búsqueda por nombre y las listas: sirve para los países pequeños, que en el mapa son puntos."
+
+msgid "Mostra la legenda"
+msgstr "Mostrar la leyenda"
+
+msgid "Primo colore (un clic)"
+msgstr "Primer color (un clic)"
+
+msgid "Secondo colore (due clic)"
+msgstr "Segundo color (dos clics)"
+
+msgid "Mostra quanti sono"
+msgstr "Mostrar cuántos son"
+
+msgid "Primo colore"
+msgstr "Primer color"
+
+msgid "Secondo colore"
+msgstr "Segundo color"
+
+msgid "Stati senza colore"
+msgstr "Países sin color"
+
+msgid "Vuoto: trasparenti, si vede lo sfondo."
+msgstr "Vacío: transparentes, se ve el fondo."
+
+msgid "Confini"
+msgstr "Fronteras"
+
+msgid "Vuoto: il colore del testo, velato. Chiari su uno sfondo scuro, scuri su uno chiaro."
+msgstr "Vacío: el color del texto, atenuado. Claras sobre un fondo oscuro, oscuras sobre uno claro."
+
+msgid "Spessore dei confini"
+msgstr "Grosor de las fronteras"
+
+msgid "Posizione della legenda"
+msgstr "Posición de la leyenda"
+
+msgid "Sotto la cartina"
+msgstr "Debajo del mapa"
+
+msgid "Sopra la cartina"
+msgstr "Encima del mapa"
+
+msgid "Allineamento della legenda"
+msgstr "Alineación de la leyenda"
+
+msgid "Mappa non disponibile."
+msgstr "Mapa no disponible."
+
+msgid "Caricamento della mappa…"
+msgstr "Cargando el mapa…"
+
+msgid "Apri in grande"
+msgstr "Abrir en grande"
+
+msgid "Un clic su uno stato gli dà il primo colore, un secondo clic il secondo, un terzo lo riporta trasparente."
+msgstr "Un clic en un país le da el primer color, un segundo clic el segundo y un tercero lo vuelve transparente."
+
+msgid "Gli stati troppo piccoli per la cartina sono puntini: puoi anche cercarli per nome qui sotto."
+msgstr "Los países demasiado pequeños para el mapa son puntos: también puedes buscarlos por nombre aquí abajo."
+
+msgid "Cerca uno stato"
+msgstr "Buscar un país"
+
+msgid "Nessuno stato con questo nome."
+msgstr "Ningún país con este nombre."
+
+msgid "Nessuno."
+msgstr "Ninguno."
+
+msgid "Sicuro? Azzera tutto"
+msgstr "¿Seguro? Borrar todo"
+
+msgid "senza colore"
+msgstr "sin color"
+
+msgid "I dati della mappa del mondo non sono stati trovati."
+msgstr "No se encontraron los datos del mapa del mundo."
