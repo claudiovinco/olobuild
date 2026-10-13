@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.730 - 2026-10-13 (fix)
+- Tema Osteria Fumo: miniature nuove nel selettore dei temi, con l'apertura in video, la lavagna del fuori menù e il fuoco.
+
 ## v1.4.729 - 2026-10-13 (fix)
 - Lavagna a gesso: «Dimensione dei disegni» per dispositivo, per rimpicciolire i disegni sul telefono dove la lavagna è stretta.
 - Tema Osteria Fumo: i disegni della lavagna stanno negli spazi liberi e non coprono più titolo, nota e firma; il banner del giovedì è una velatura scura sopra il video; la sfoglia di Ada ha più spazio per le dosi (sul tablet il calcolatore va sotto il testo); più braci nell'apertura.
