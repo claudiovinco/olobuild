@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.712 - 2026-10-13 (fix)
+- Temi: in Kemet la sala dei visori ha un video nuovo, un primo piano col visore sul fondo caldo della sala, al posto dei due visitatori che si sbracciavano vicino alla ringhiera.
+
 ## v1.4.711 - 2026-10-13 (fix)
 - Temi: l'anteprima di Kemet, nella Vetrina temi e nel selettore dei temi, mostra la home come è dalla 1.4.709, col Nilo nelle lettere di «KEMET» e la visita virtuale; anche quella del telefono.
 
