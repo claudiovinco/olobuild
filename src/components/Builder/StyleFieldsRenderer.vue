@@ -40,6 +40,7 @@
                   :tileSettings="tileSettings"
                   :strutturaFissa="true"
                   :etichettaDa="field.etichettaDa || ''"
+                  :etichettaOpzioni="field.etichettaOpzioni || null"
                   :miniaturaDa="field.miniaturaDa || ''"
                   @update:modelValue="emitSetting(field.key, $event)"
                 />
@@ -74,6 +75,7 @@
                   :tileSettings="tileSettings"
                   :strutturaFissa="true"
                   :etichettaDa="field.etichettaDa || ''"
+                  :etichettaOpzioni="field.etichettaOpzioni || null"
                   :miniaturaDa="field.miniaturaDa || ''"
                   @update:modelValue="emitSetting(field.key, $event)"
                 />

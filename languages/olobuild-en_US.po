@@ -25252,3 +25252,189 @@ msgstr "Brand colors"
 
 msgid "Pillola con il nome"
 msgstr "Pill with name"
+
+msgid "Cime (guglie)"
+msgstr "Peaks (spires)"
+
+msgid "Colline"
+msgstr "Hills"
+
+msgid "Bosco di conifere"
+msgstr "Conifer forest"
+
+msgid "Mare di nuvole"
+msgstr "Sea of clouds"
+
+msgid "Onde"
+msgstr "Waves"
+
+msgid "Dune"
+msgstr "Dunes"
+
+msgid "Città"
+msgstr "City"
+
+msgid "Paesaggio a strati"
+msgstr "Layered landscape"
+
+msgid "Dove finisce il sentiero"
+msgstr "Where the trail ends"
+
+msgid "Strati"
+msgstr "Layers"
+
+msgid "Strati del paesaggio"
+msgstr "Landscape layers"
+
+msgid "Strato"
+msgstr "Layer"
+
+msgid "Dal più lontano (in alto nell'elenco) al più vicino. Ogni strato scorre alla sua velocità: i lontani piano, i vicini insieme alla pagina. Colore, altezza, opacità e sfocatura stanno nello Stile."
+msgstr "From the farthest (at the top of the list) to the nearest. Each layer scrolls at its own speed: far ones slowly, near ones along with the page. Color, height, opacity and blur are in the Style tab."
+
+msgid "Meglio un PNG o un WebP con lo sfondo trasparente: la parte bassa dell'immagine poggia sul fondo della scena."
+msgstr "Ideally a PNG or WebP with a transparent background: the bottom of the image rests on the bottom of the scene."
+
+msgid "Ogni numero disegna un'altra sagoma della stessa forma."
+msgstr "Each number draws another silhouette of the same shape."
+
+msgid "Dettaglio"
+msgstr "Detail"
+
+msgid "Quante punte, alberi, onde o palazzi: più alto, più fitto e frastagliato."
+msgstr "How many peaks, trees, waves or buildings: higher means denser and more jagged."
+
+msgid "Profondità"
+msgstr "Depth"
+
+msgid "0: si muove con la pagina, come una cosa vicina. 100: quasi fermo, come l'orizzonte."
+msgstr "0: moves with the page, like something close. 100: almost still, like the horizon."
+
+msgid "Stelle"
+msgstr "Stars"
+
+msgid "Mostra le stelle"
+msgstr "Show stars"
+
+msgid "Quante stelle"
+msgstr "Number of stars"
+
+msgid "Comparsa"
+msgstr "Appearance"
+
+msgid "Si accendono scorrendo"
+msgstr "Light up on scroll"
+
+msgid "Sempre accese"
+msgstr "Always on"
+
+msgid "Scintillio"
+msgstr "Twinkle"
+
+msgid "Sole o luna"
+msgstr "Sun or moon"
+
+msgid "In cielo"
+msgstr "In the sky"
+
+msgid "Niente"
+msgstr "Nothing"
+
+msgid "Sole"
+msgstr "Sun"
+
+msgid "Luna"
+msgstr "Moon"
+
+msgid "Scorrendo"
+msgstr "On scroll"
+
+msgid "Tramonta dietro gli strati"
+msgstr "Sets behind the layers"
+
+msgid "Sorge da dietro gli strati"
+msgstr "Rises from behind the layers"
+
+msgid "Resta lontano"
+msgstr "Stays far away"
+
+msgid "Nebbia"
+msgstr "Fog"
+
+msgid "Mostra la nebbia"
+msgstr "Show fog"
+
+msgid "Banchi di nebbia nelle valli, fra uno strato e quello davanti."
+msgstr "Fog banks in the valleys, between one layer and the one in front."
+
+msgid "La nebbia scorre"
+msgstr "Fog drifts"
+
+msgid "Tag del titolo"
+msgstr "Title tag"
+
+msgid "Link del pulsante"
+msgstr "Button link"
+
+msgid "Parallasse scorrendo"
+msgstr "Parallax on scroll"
+
+msgid "Gli strati scorrono a velocità diverse. Si ferma per chi ha chiesto al sistema di ridurre il movimento."
+msgstr "The layers scroll at different speeds. It stops for visitors who asked their system to reduce motion."
+
+msgid "Profondità del testo"
+msgstr "Text depth"
+
+msgid "Come per gli strati: 0 scorre con la pagina, 100 resta quasi fermo. A metà, gli strati vicini salendo lo coprono."
+msgstr "As for the layers: 0 scrolls with the page, 100 stays almost still. Halfway, the near layers cover it as they rise."
+
+msgid "Segue il mouse"
+msgstr "Follows the mouse"
+
+msgid "Col mouse gli strati vicini si spostano di lato più dei lontani. Sui telefoni e sui tablet non c'è il mouse: resta la parallasse."
+msgstr "With the mouse, near layers shift sideways more than far ones. Phones and tablets have no mouse: the parallax remains."
+
+msgid "Cielo"
+msgstr "Sky"
+
+msgid "Sfumato"
+msgstr "Gradient"
+
+msgid "Tinta unita"
+msgstr "Solid color"
+
+msgid "Colore cielo in alto"
+msgstr "Sky color at the top"
+
+msgid "Colore cielo all'orizzonte"
+msgstr "Sky color at the horizon"
+
+msgid "Quanta parte della scena occupa, dal basso."
+msgstr "How much of the scene it fills, from the bottom."
+
+msgid "Alone"
+msgstr "Glow"
+
+msgid "Posizione orizzontale"
+msgstr "Horizontal position"
+
+msgid "Posizione del testo"
+msgstr "Text position"
+
+msgid "Larghezza del testo"
+msgstr "Text width"
+
+msgid "Padding testo"
+msgstr "Text padding"
+
+msgid "Strati davanti al testo"
+msgstr "Layers in front of the text"
+
+msgid "Quanti strati, contando dal più vicino, passano davanti al testo. 0: il testo sta sopra tutto."
+msgstr "How many layers, counting from the nearest, pass in front of the text. 0: the text sits above everything."
+
+msgid "Altezza degli strati"
+msgstr "Layer height"
+
+msgid "Alza o abbassa tutti gli strati insieme. Sul telefono, più stretto e alto, abbassarli lascia più cielo al sole e al testo."
+msgstr "Raises or lowers all layers together. On phones, narrower and taller, lowering them leaves more sky for the sun and the text."

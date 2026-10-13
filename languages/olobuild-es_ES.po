@@ -25249,3 +25249,189 @@ msgstr "Colores de las marcas"
 
 msgid "Pillola con il nome"
 msgstr "Píldora con el nombre"
+
+msgid "Cime (guglie)"
+msgstr "Cumbres (agujas)"
+
+msgid "Colline"
+msgstr "Colinas"
+
+msgid "Bosco di conifere"
+msgstr "Bosque de coníferas"
+
+msgid "Mare di nuvole"
+msgstr "Mar de nubes"
+
+msgid "Onde"
+msgstr "Olas"
+
+msgid "Dune"
+msgstr "Dunas"
+
+msgid "Città"
+msgstr "Ciudad"
+
+msgid "Paesaggio a strati"
+msgstr "Paisaje por capas"
+
+msgid "Dove finisce il sentiero"
+msgstr "Donde termina el sendero"
+
+msgid "Strati"
+msgstr "Capas"
+
+msgid "Strati del paesaggio"
+msgstr "Capas del paisaje"
+
+msgid "Strato"
+msgstr "Capa"
+
+msgid "Dal più lontano (in alto nell'elenco) al più vicino. Ogni strato scorre alla sua velocità: i lontani piano, i vicini insieme alla pagina. Colore, altezza, opacità e sfocatura stanno nello Stile."
+msgstr "De la más lejana (arriba en la lista) a la más cercana. Cada capa se desplaza a su propia velocidad: las lejanas despacio, las cercanas junto con la página. Color, altura, opacidad y desenfoque están en Estilo."
+
+msgid "Meglio un PNG o un WebP con lo sfondo trasparente: la parte bassa dell'immagine poggia sul fondo della scena."
+msgstr "Mejor un PNG o un WebP con fondo transparente: la parte inferior de la imagen se apoya en el fondo de la escena."
+
+msgid "Ogni numero disegna un'altra sagoma della stessa forma."
+msgstr "Cada número dibuja otra silueta de la misma forma."
+
+msgid "Dettaglio"
+msgstr "Detalle"
+
+msgid "Quante punte, alberi, onde o palazzi: più alto, più fitto e frastagliato."
+msgstr "Cuántas cumbres, árboles, olas o edificios: cuanto más alto, más denso y recortado."
+
+msgid "Profondità"
+msgstr "Profundidad"
+
+msgid "0: si muove con la pagina, come una cosa vicina. 100: quasi fermo, come l'orizzonte."
+msgstr "0: se mueve con la página, como algo cercano. 100: casi quieto, como el horizonte."
+
+msgid "Stelle"
+msgstr "Estrellas"
+
+msgid "Mostra le stelle"
+msgstr "Mostrar las estrellas"
+
+msgid "Quante stelle"
+msgstr "Cuántas estrellas"
+
+msgid "Comparsa"
+msgstr "Aparición"
+
+msgid "Si accendono scorrendo"
+msgstr "Se encienden al desplazarse"
+
+msgid "Sempre accese"
+msgstr "Siempre encendidas"
+
+msgid "Scintillio"
+msgstr "Centelleo"
+
+msgid "Sole o luna"
+msgstr "Sol o luna"
+
+msgid "In cielo"
+msgstr "En el cielo"
+
+msgid "Niente"
+msgstr "Nada"
+
+msgid "Sole"
+msgstr "Sol"
+
+msgid "Luna"
+msgstr "Luna"
+
+msgid "Scorrendo"
+msgstr "Al desplazarse"
+
+msgid "Tramonta dietro gli strati"
+msgstr "Se pone detrás de las capas"
+
+msgid "Sorge da dietro gli strati"
+msgstr "Sale de detrás de las capas"
+
+msgid "Resta lontano"
+msgstr "Se queda lejos"
+
+msgid "Nebbia"
+msgstr "Niebla"
+
+msgid "Mostra la nebbia"
+msgstr "Mostrar la niebla"
+
+msgid "Banchi di nebbia nelle valli, fra uno strato e quello davanti."
+msgstr "Bancos de niebla en los valles, entre una capa y la de delante."
+
+msgid "La nebbia scorre"
+msgstr "La niebla se mueve"
+
+msgid "Tag del titolo"
+msgstr "Etiqueta del título"
+
+msgid "Link del pulsante"
+msgstr "Enlace del botón"
+
+msgid "Parallasse scorrendo"
+msgstr "Paralaje al desplazarse"
+
+msgid "Gli strati scorrono a velocità diverse. Si ferma per chi ha chiesto al sistema di ridurre il movimento."
+msgstr "Las capas se desplazan a velocidades distintas. Se detiene para quien pidió al sistema reducir el movimiento."
+
+msgid "Profondità del testo"
+msgstr "Profundidad del texto"
+
+msgid "Come per gli strati: 0 scorre con la pagina, 100 resta quasi fermo. A metà, gli strati vicini salendo lo coprono."
+msgstr "Como en las capas: 0 se desplaza con la página, 100 se queda casi quieto. A medias, las capas cercanas lo cubren al subir."
+
+msgid "Segue il mouse"
+msgstr "Sigue el ratón"
+
+msgid "Col mouse gli strati vicini si spostano di lato più dei lontani. Sui telefoni e sui tablet non c'è il mouse: resta la parallasse."
+msgstr "Con el ratón, las capas cercanas se desplazan de lado más que las lejanas. En teléfonos y tabletas no hay ratón: queda el paralaje."
+
+msgid "Cielo"
+msgstr "Cielo"
+
+msgid "Sfumato"
+msgstr "Degradado"
+
+msgid "Tinta unita"
+msgstr "Color sólido"
+
+msgid "Colore cielo in alto"
+msgstr "Color del cielo arriba"
+
+msgid "Colore cielo all'orizzonte"
+msgstr "Color del cielo en el horizonte"
+
+msgid "Quanta parte della scena occupa, dal basso."
+msgstr "Cuánta parte de la escena ocupa, desde abajo."
+
+msgid "Alone"
+msgstr "Halo"
+
+msgid "Posizione orizzontale"
+msgstr "Posición horizontal"
+
+msgid "Posizione del testo"
+msgstr "Posición del texto"
+
+msgid "Larghezza del testo"
+msgstr "Ancho del texto"
+
+msgid "Padding testo"
+msgstr "Padding del texto"
+
+msgid "Strati davanti al testo"
+msgstr "Capas delante del texto"
+
+msgid "Quanti strati, contando dal più vicino, passano davanti al testo. 0: il testo sta sopra tutto."
+msgstr "Cuántas capas, contando desde la más cercana, pasan delante del texto. 0: el texto queda encima de todo."
+
+msgid "Altezza degli strati"
+msgstr "Altura de las capas"
+
+msgid "Alza o abbassa tutti gli strati insieme. Sul telefono, più stretto e alto, abbassarli lascia più cielo al sole e al testo."
+msgstr "Sube o baja todas las capas a la vez. En el teléfono, más estrecho y alto, bajarlas deja más cielo al sol y al texto."

@@ -106,6 +106,7 @@ trait Olobuild_Builder_Tiles_Trait {
         require_once OLOBUILD_PATH . 'includes/tiles/class-availability-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-scorequiz-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-worldmap-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-layerscape-tile.php';
 
         require_once OLOBUILD_PATH . 'includes/tiles/class-social-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-map-tile.php';
@@ -376,6 +377,7 @@ trait Olobuild_Builder_Tiles_Trait {
         $manager->register_tile( new Olobuild_Availability_Tile() );
         $manager->register_tile( new Olobuild_ScoreQuiz_Tile() );
         $manager->register_tile( new Olobuild_WorldMap_Tile() );
+        $manager->register_tile( new Olobuild_Layerscape_Tile() );
         // Vetrina temi: solo dove le demo dei temi sono accese (Olobuild_Demo_Temi), altrove non
         // avrebbe niente da mostrare e non entra nella palette.
         if ( class_exists( 'Olobuild_Demo_Temi' ) && Olobuild_Demo_Temi::accese() ) {

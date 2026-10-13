@@ -3,6 +3,12 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.725 - 2026-10-13 (nuovo)
+- Nuova tile Paesaggio a strati (gruppo Atmosfera): un paesaggio disegnato a strati, dal più lontano al più vicino, che scorrono a velocità diverse mentre si scorre la pagina. Per ogni strato si sceglie la forma (cime, montagne, colline, bosco di conifere, mare di nuvole, onde, dune, città o un'immagine propria), la variante, il dettaglio e la profondità; nello Stile colore, altezza, opacità e sfocatura.
+- Nella scena ci sono anche il cielo sfumato, le stelle che si accendono scorrendo, il sole o la luna che tramonta (o sorge) dietro gli strati, la nebbia nelle valli e un testo con occhiello, titolo, frase e pulsante. Il testo può stare dietro gli strati più vicini: scorrendo, le montagne lo coprono. Col mouse gli strati vicini si spostano anche di lato; per chi chiede al sistema di ridurre il movimento la scena resta ferma.
+- Tema Rifugio Larice: video di sfondo nell'apertura (le nuvole che scavalcano la cresta), nella testata dei Sentieri (il volo sopra i larici) e nella stagione (il fuoco della stufa); la salita a tappe che scorre di lato tenendo ferma la pagina; la giornata al rifugio in schede che si impilano; il panorama della terrazza coi punti da toccare; il tramonto col Paesaggio a strati; la Via Lattea dentro le lettere di «Sotto le stelle»; il conto alla rovescia all'apertura; il profilo altimetrico del sentiero 642; nella pagina Prenota, «Gratta la nebbia» con un regalo per chi prenota.
+- Nello Stile, nelle voci di un ripetitore riprese dal Contenuto, l'etichetta di una voce mostra il nome dell'opzione scelta e non il valore salvato.
+
 ## v1.4.724 - 2026-10-13 (fix)
 - Mega Menu: la riga di icone in fondo al menu mobile non ha più il filo sopra. Con le voci divise da un filo se ne vedevano due vicini.
 - Temi Circo Pappagallo e Mezza delle Mura: icone a cerchio e a rettangolo arrotondato. Con i colori dei marchi, su un pannello blu Facebook e LinkedIn sparivano.

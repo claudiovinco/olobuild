@@ -396,6 +396,9 @@ const props = defineProps({
   // dai campi del Contenuto (etichettaDa / miniaturaDa), che qui non ci sono.
   strutturaFissa: { type: Boolean, default: false },
   etichettaDa: { type: String, default: '' },
+  // Opzioni del select del Contenuto da cui viene l'etichetta (lo specchio non ha quel campo):
+  // senza, la voce mostrerebbe il valore salvato («cime») invece del nome («Cime (guglie)»).
+  etichettaOpzioni: { type: Array, default: null },
   miniaturaDa: { type: String, default: '' },
 });
 
@@ -505,8 +508,9 @@ function getItemLabel(element) {
   if (!val) return t('Senza titolo');
   // Per campi select: mostra la label dell'opzione, non il value
   const fieldDef = props.itemFields.find(f => f.key === labelField.value);
-  if (fieldDef && fieldDef.type === 'select' && fieldDef.options) {
-    const opt = fieldDef.options.find(o => o.value === val);
+  const opzioni = fieldDef ? (fieldDef.type === 'select' ? fieldDef.options : null) : props.etichettaOpzioni;
+  if (Array.isArray(opzioni)) {
+    const opt = opzioni.find(o => o.value === val);
     if (opt) return opt.label;
   }
   return stripHtml(String(val)) || t('Senza titolo');
