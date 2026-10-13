@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.733 - 2026-10-13 (fix)
+- Tema Teatro della Seta: la parola «SETA» con la seta in video non è più tagliata in cima (la curva della S e la punta della A); il riquadro segue la misura del testo su computer, tablet e telefono.
+
 ## v1.4.732 - 2026-10-13 (fix)
 - Tema Teatro della Seta: nella pagina Stagione titolo, frase e pulsanti stanno al centro fra le quinte del sipario (a sinistra la quinta copriva l'inizio del titolo); la foto della sezione per le famiglie non ripete quella della prima scheda; nella pagina del teatro il titolo della storia sta nella sua colonna e la galleria non ripete la foto degli spazi in affitto.
 
