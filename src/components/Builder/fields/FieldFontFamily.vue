@@ -276,6 +276,8 @@ const popularGoogleFonts = [
   'Libre Baskerville', 'Crimson Text', 'Josefin Sans', 'Quicksand', 'Cabin',
   'Archivo', 'Manrope', 'Space Grotesk', 'Outfit', 'Plus Jakarta Sans',
   'Bitter', 'Lora', 'EB Garamond', 'Cormorant Garamond', 'Spectral',
+  // Scritte a mano e a gesso (la tile Lavagna a gesso nasce con Caveat e Fredericka the Great)
+  'Caveat', 'Fredericka the Great', 'Kalam', 'Patrick Hand', 'Cabin Sketch', 'Gochi Hand', 'Permanent Marker', 'Amatic SC',
 ];
 
 // Project fonts from store

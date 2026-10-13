@@ -80,7 +80,22 @@ export default {
     { key: 'countdown_type', label: t('Tipo countdown'), type: 'select', options: [
       { value: 'date', label: t('Data fissa') },
       { value: 'evergreen', label: t('Evergreen (per visitatore)') },
+      { value: 'weekly', label: t('Ogni settimana') },
     ]},
+    { key: 'weekly_day', label: t('Giorno'), type: 'select',
+      condition: { field: 'countdown_type', operator: '==', value: 'weekly' }, options: [
+        { value: '1', label: t('Lunedì') }, { value: '2', label: t('Martedì') }, { value: '3', label: t('Mercoledì') },
+        { value: '4', label: t('Giovedì') }, { value: '5', label: t('Venerdì') }, { value: '6', label: t('Sabato') },
+        { value: '7', label: t('Domenica') },
+      ]},
+    { key: 'weekly_time', label: t('Ora'), type: 'time',
+      condition: { field: 'countdown_type', operator: '==', value: 'weekly' },
+      description: t('Nel fuso orario del sito (Impostazioni → Generali di WordPress), per chiunque lo guardi.') },
+    { key: 'weekly_duration', label: t('Durata dell\'evento'), type: 'range', min: 0, max: 24, step: 0.5, unit: 'h',
+      condition: { field: 'countdown_type', operator: '==', value: 'weekly' },
+      description: t('Per tutta la durata, al posto dei numeri compare il messaggio qui sotto; finito l\'evento, il conto riparte verso la settimana dopo.') },
+    { key: 'weekly_live_message', label: t('Messaggio durante l\'evento'), type: 'text',
+      condition: { field: 'countdown_type', operator: '==', value: 'weekly' } },
     { key: 'target_date', label: t('Data obiettivo'), type: 'datetime',
       condition: { field: 'countdown_type', operator: '==', value: 'date' } },
     { key: 'evergreen_hours', label: t('Ore evergreen'), type: 'range', min: 0, max: 72, step: 1,
@@ -90,7 +105,7 @@ export default {
     { key: 'evergreen_loop', label: t('Ricomincia automaticamente'), type: 'toggle',
       condition: { field: 'countdown_type', operator: '==', value: 'evergreen' } },
 
-    { type: 'separator', label: t('Azione alla scadenza') },
+    { type: 'separator', label: t('Azione alla scadenza'), condition: { field: 'countdown_type', operator: '!=', value: 'weekly' } },
     { key: 'expire_action', label: t('Azione'), type: 'select', options: [
       { value: 'none', label: t('Nessuna (mostra zero)') },
       { value: 'hide', label: t('Nascondi countdown') },
@@ -111,7 +126,8 @@ export default {
     { key: 'show_hours', label: t('Mostra ore'), type: 'toggle' },
     { key: 'show_minutes', label: t('Mostra minuti'), type: 'toggle' },
     { key: 'show_seconds', label: t('Mostra secondi'), type: 'toggle' },
-    { key: 'expired_message', label: t('Messaggio scaduto'), type: 'text' },
+    { key: 'expired_message', label: t('Messaggio scaduto'), type: 'text',
+      condition: { field: 'countdown_type', operator: '!=', value: 'weekly' } },
 
     { type: 'separator', label: t('Etichette') },
     { key: 'label_days', label: t('Etichetta giorni'), type: 'text' },

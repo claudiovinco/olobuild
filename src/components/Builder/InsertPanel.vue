@@ -470,6 +470,7 @@ function moduleIcon(type) {
     tripfinder: '<svg width="24" height="24"'+V+S+'><rect x="2" y="8" width="20" height="8" rx="2"/><path d="M8 8v8M14 8v8"/><path d="M16 12h4"/></svg>',
     scorequiz: '<svg width="24" height="24"'+V+S+'><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7"/><path d="M12 17h.01"/></svg>',
     layerscape: '<svg width="24" height="24"'+V+S+'><circle cx="16.5" cy="6.5" r="2.5"/><path d="M2 15l5-6 4 4 3-3 8 7"/><path d="M2 20c3-3 6-4 10-2.5S19 18 22 16.5"/></svg>',
+    chalkboard: '<svg width="24" height="24"'+V+S+'><rect x="3" y="3" width="18" height="13" rx="1.5"/><path d="M7 8c1.5-1 3-1 4.5 0s3 1 4.5 0"/><path d="M7 12h6"/><path d="M8 16l-2 5M16 16l2 5"/></svg>',
     worldmap: '<svg width="24" height="24"'+V+S+'><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 3.6 9 14 14 0 0 1-3.6 9 14 14 0 0 1-3.6-9A14 14 0 0 1 12 3z"/></svg>',
     themeshowcase: '<svg width="24" height="24"'+V+S+'><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 8h18"/><rect x="6" y="11" width="5" height="6" rx="1"/><rect x="13" y="11" width="5" height="6" rx="1"/></svg>',
     presencegrid: '<svg width="24" height="24"'+V+S+'><rect x="3" y="4" width="7" height="7" rx="1.5"/><rect x="14" y="4" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="6" rx="1.5"/><rect x="14" y="14" width="7" height="6" rx="1.5"/><circle cx="9.5" cy="5.5" r="1.3" fill="currentColor" stroke-width="0"/></svg>',

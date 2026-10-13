@@ -11,6 +11,7 @@ import { t } from '@/i18n';
  *   - bubbles   → 50-tema-acquario.html   (bolle che salgono)
  *   - stars     → 49-tema-planetario.html (costellazioni con linee, interattivo al cursore)
  *   - confetti  → preset ONE-SHOT (burst con gravità e decadimento) — rif. Konami tema 60
+ *   - embers    → braci: scintille che salgono tremolando e si spengono (Osteria Fumo, 13 ott 2026)
  *
  * fields[]      → preset, conteggio, velocità, dimensione, vento, gravità,
  *                 connectLines (costellazioni), interactOnHover, contenuto slot
@@ -96,7 +97,8 @@ export default {
     { key: 'scope', label: t('Riempi'), type: 'select', options: [
       { value: 'section', label: t('Sezione (sfondo della sezione ospite)') },
       { value: 'page',    label: t('Tutta la pagina (overlay fisso del sito)') },
-    ], description: t('Tutta la pagina: le particelle vivono su tutto il documento e scorrono con esso, dietro al contenuto, senza mai bloccare i click.') },
+      { value: 'over',    label: t('Sezione, sopra il contenuto') },
+    ], description: t('Tutta la pagina: le particelle vivono su tutto il documento e scorrono con esso, dietro al contenuto, senza mai bloccare i click. Sopra il contenuto: le particelle passano davanti a ciò che la sezione mostra (anche a uno sfondo disegnato da una tile, come quello di un\'apertura), senza bloccare i click.') },
 
     { type: 'separator', label: t('Sistema particelle') },
     { key: 'preset', label: t('Preset'), type: 'select', options: [
@@ -106,13 +108,14 @@ export default {
       { value: 'stars',    label: t('Stelle / Costellazioni') },
       { value: 'confetti', label: t('Coriandoli (scoppio una tantum)') },
       { value: 'soccer',   label: t('Palloni da calcio') },
+      { value: 'embers',   label: t('Braci (scintille che salgono)') },
     ]},
     { key: 'count', label: t('Numero particelle'), type: 'range', min: 5, max: 300, step: 5,
       description: t('Su mobile il numero viene ridotto automaticamente per le prestazioni.') },
     { key: 'speed', label: t('Velocità'), type: 'range', min: 0.1, max: 4, step: 0.1 },
     { key: 'wind', label: t('Vento (deriva orizzontale)'), type: 'range', min: 0, max: 3, step: 0.1 },
     { key: 'gravity', label: t('Gravità / spinta verticale'), type: 'range', min: 0, max: 3, step: 0.1,
-      description: t('Petali/neve/coriandoli cadono; le bolle salgono; le stelle restano sospese.') },
+      description: t('Petali/neve/coriandoli cadono; le bolle e le braci salgono; le stelle restano sospese.') },
     { key: 'confetti_start', label: t('Quando parte'), type: 'select', options: [
       { value: 'load', label: t("All'apertura della pagina") },
       { value: 'view', label: t('Quando la tile entra nello schermo') },

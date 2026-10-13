@@ -17,6 +17,13 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
         'evergreen_hours'     => '0',
         'evergreen_minutes'   => '30',
         'evergreen_loop'      => false,
+        // Ogni settimana: giorno (1 lunedì … 7 domenica), ora, durata dell'evento in ore e il messaggio
+        // che prende il posto dei numeri mentre l'evento è in corso; poi il conto riparte verso la
+        // settimana dopo. Tutto nel fuso del sito, ricalcolato nel browser (vale anche in cache).
+        'weekly_day'          => '4',
+        'weekly_time'         => '19:30',
+        'weekly_duration'     => 4,
+        'weekly_live_message' => 'È in corso: ti aspettiamo!',
         'expire_action'       => 'none',
         'expire_redirect_url' => '',
         'expire_message'      => 'Tempo scaduto!',
@@ -87,8 +94,11 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
 
     public function render( $settings ) {
         $s = wp_parse_args( $settings, $this->defaults );
+        // Il conto di UIkit vuole una data fissa: quello settimanale si disegna sempre col motore della tile.
         if ( ( $s['countdown_style'] ?? 'custom' ) === 'uikit' ) {
-            return $this->render_uikit( $s );
+            if ( 'weekly' !== ( $s['countdown_type'] ?? '' ) ) {
+                return $this->render_uikit( $s );
+            }
         }
         return $this->render_custom( $s );
     }
@@ -190,6 +200,14 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
                 padding-top: <?php echo max( 0, round( $num_fs * 0.15 ) ); ?>px;
                 <?php endif; ?>
             }
+            .<?php echo $uid; ?>.mcd-live > .mcd-item, .<?php echo $uid; ?>.mcd-live > .mcd-sep { display: none; }
+            .<?php echo $uid; ?> .mcd-live-msg {
+                text-align: <?php echo $allinea; ?>;
+                font-size: 1.5em;
+                font-weight: 600;
+                color: <?php echo $accent; ?>;
+                padding: .5em .8em;
+            }
             .<?php echo $uid; ?> .mcd-expire-msg {
                 text-align: <?php echo $allinea; ?>;
                 font-size: 1.5em;
@@ -224,7 +242,20 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
             data-olo-evergreen-loop="<?php echo $s['evergreen_loop'] ? '1' : '0'; ?>"
             data-olo-expire-action="<?php echo esc_attr( $s['expire_action'] ); ?>"
             data-olo-expire-redirect="<?php echo esc_url( $s['expire_redirect_url'] ); ?>"
-            data-olo-expire-message="<?php echo esc_attr( $s['expire_message'] ); ?>">
+            data-olo-expire-message="<?php echo esc_attr( $s['expire_message'] ); ?>"
+            <?php if ( 'weekly' === $s['countdown_type'] ) :
+                $w_tz  = function_exists( 'wp_timezone_string' ) ? (string) wp_timezone_string() : '';
+                $w_tz  = ( false !== strpos( $w_tz, '/' ) || 'UTC' === $w_tz ) ? $w_tz : '';
+                $w_off = (int) round( wp_timezone()->getOffset( new DateTime( 'now', wp_timezone() ) ) / 60 );
+                $w_ora = preg_match( '/^([01]?\d|2[0-3]):([0-5]\d)/', (string) $s['weekly_time'], $w_m ) ? $w_m[1] . ':' . $w_m[2] : '00:00';
+            ?>
+            data-olo-weekly-day="<?php echo (int) max( 1, min( 7, absint( $s['weekly_day'] ) ) ); ?>"
+            data-olo-weekly-time="<?php echo esc_attr( $w_ora ); ?>"
+            data-olo-weekly-duration="<?php echo esc_attr( (string) max( 0, min( 168, (float) $s['weekly_duration'] ) ) ); ?>"
+            data-olo-weekly-tz="<?php echo esc_attr( $w_tz ); ?>"
+            data-olo-weekly-off="<?php echo (int) $w_off; ?>"
+            data-olo-weekly-live="<?php echo esc_attr( (string) $s['weekly_live_message'] ); ?>"
+            <?php endif; ?>>
             <?php
             $units = [];
             if ( $s['show_days'] )    $units[] = [ 'key' => 'days',    'label' => $s['label_days'],    'short' => 'd' ];
@@ -276,6 +307,35 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
                     target=Date.now()+egDuration;
                     salva(target);
                 }
+            }else if(ctype==='weekly'){
+                var wD=parseInt(el.getAttribute('data-olo-weekly-day'),10)||1;
+                var wT=(el.getAttribute('data-olo-weekly-time')||'00:00').split(':');
+                var wDur=(parseFloat(el.getAttribute('data-olo-weekly-duration'))||0)*3600000;
+                var wTz=el.getAttribute('data-olo-weekly-tz')||'';
+                var wOff=parseInt(el.getAttribute('data-olo-weekly-off'),10)||0;
+                var wLive=el.getAttribute('data-olo-weekly-live')||'';
+                <?php // Lo scarto del fuso del sito in un istante (minuti): da Intl se il sito ha un fuso con nome, se no fisso. ?>
+                var scarto=function(ms){
+                    if(wTz){
+                        try{
+                            var o={};
+                            new Intl.DateTimeFormat('en-US',{timeZone:wTz,hourCycle:'h23',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric'}).formatToParts(new Date(ms)).forEach(function(p){o[p.type]=p.value;});
+                            return Math.round((Date.UTC(+o.year,+o.month-1,+o.day,(+o.hour)%24,+o.minute)-Math.floor(ms/60000)*60000)/60000);
+                        }catch(e){}
+                    }
+                    return wOff;
+                };
+                <?php // Il prossimo inizio: il giorno e l'ora scelti nel fuso del sito; se quello di questa settimana è già finito, la settimana dopo. ?>
+                var prossimo=function(ora){
+                    var l=new Date(ora+scarto(ora)*60000);
+                    var oggi=l.getUTCDay()||7;
+                    var tra=(wD-oggi+7)%7;
+                    var alle=function(gg){var c=Date.UTC(l.getUTCFullYear(),l.getUTCMonth(),l.getUTCDate()+gg,(+wT[0])||0,(+wT[1])||0);return c-scarto(c)*60000;};
+                    var c=alle(tra);
+                    if(c+wDur<=ora){c=alle(tra+7);}
+                    return c;
+                };
+                target=prossimo(Date.now());
             }else{
                 target=new Date(el.dataset.target).getTime();
             }
@@ -300,8 +360,32 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
                 el.innerHTML='<div class="mcd-expire-msg">'+el.dataset.expired+'</div>';
             }
 
+            <?php // Durante l'evento settimanale il messaggio prende il posto dei numeri; finito, si riparte. ?>
+            var inCorso=function(si){
+                if(!wLive){return;}
+                var m=el.querySelector('.mcd-live-msg');
+                if(si){
+                    if(!m){m=document.createElement('div');m.className='mcd-live-msg';m.textContent=wLive;el.appendChild(m);}
+                    el.classList.add('mcd-live');
+                }else{
+                    el.classList.remove('mcd-live');
+                    if(m){m.parentNode.removeChild(m);}
+                }
+            };
             function tick(){
                 var now=Date.now(),diff=target-now;
+                if(ctype==='weekly'){
+                    if(diff<=0){
+                        if(now<target+wDur){
+                            inCorso(true);
+                            vals.forEach(function(v){v.textContent='00';});
+                            return;
+                        }
+                        target=prossimo(now);
+                        diff=target-now;
+                    }
+                    inCorso(false);
+                }
                 if(diff<=0){
                     if(ctype==='evergreen'){
                         if(egLoop){

@@ -25435,3 +25435,315 @@ msgstr "Höhe der Ebenen"
 
 msgid "Alza o abbassa tutti gli strati insieme. Sul telefono, più stretto e alto, abbassarli lascia più cielo al sole e al testo."
 msgstr "Hebt oder senkt alle Ebenen gemeinsam. Auf dem Smartphone, schmaler und höher, lässt du mit niedrigeren Ebenen mehr Himmel für Sonne und Text."
+
+msgid "Lavagna a gesso"
+msgstr "Kreidetafel"
+
+msgid "Spiga"
+msgstr "Ähre"
+
+msgid "Pesce"
+msgstr "Fisch"
+
+msgid "Fiamma"
+msgstr "Flamme"
+
+msgid "Foglia"
+msgstr "Blatt"
+
+msgid "Grappolo d'uva"
+msgstr "Weintraube"
+
+msgid "Peperoncino"
+msgstr "Chilischote"
+
+msgid "Calice"
+msgstr "Weinglas"
+
+msgid "Bottiglia"
+msgstr "Flasche"
+
+msgid "Tazza"
+msgstr "Tasse"
+
+msgid "Pane"
+msgstr "Brot"
+
+msgid "Posate"
+msgstr "Besteck"
+
+msgid "Scarabocchio"
+msgstr "Gekritzel"
+
+msgid "Lun"
+msgstr "Mo"
+
+msgid "Mer"
+msgstr "Mi"
+
+msgid "Gio"
+msgstr "Do"
+
+msgid "Ven"
+msgstr "Fr"
+
+msgid "Sab"
+msgstr "Sa"
+
+msgid "Dom"
+msgstr "So"
+
+msgid "lun"
+msgstr "Mo"
+
+msgid "mar"
+msgstr "Di"
+
+msgid "mer"
+msgstr "Mi"
+
+msgid "gio"
+msgstr "Do"
+
+msgid "ven"
+msgstr "Fr"
+
+msgid "sab"
+msgstr "Sa"
+
+msgid "dom"
+msgstr "So"
+
+msgid "Oggi in lavagna"
+msgstr "Heute auf der Tafel"
+
+msgid "Fuori menù"
+msgstr "Außer der Karte"
+
+msgid "Zuppa di ceci e rosmarino"
+msgstr "Kichererbsensuppe mit Rosmarin"
+
+msgid "con l’olio nuovo"
+msgstr "mit frischem Olivenöl"
+
+msgid "Tagliatelle al ragù"
+msgstr "Tagliatelle mit Ragù"
+
+msgid "tirate al mattarello stamattina"
+msgstr "heute Morgen von Hand ausgerollt"
+
+msgid "Grigliata di pesce"
+msgstr "Gegrillter Fisch"
+
+msgid "solo il giovedì, finché c’è"
+msgstr "nur donnerstags, solange der Vorrat reicht"
+
+msgid "Torta di riso"
+msgstr "Reiskuchen"
+
+msgid "come la faceva la nonna"
+msgstr "wie bei Oma"
+
+msgid "novità!"
+msgstr "neu!"
+
+msgid "Oggi la lavagna è vuota: chiedi in sala."
+msgstr "Heute ist die Tafel leer: frag im Gastraum nach."
+
+msgid "Mostra la data di oggi"
+msgstr "Heutiges Datum anzeigen"
+
+msgid "Si aggiorna da sola ogni giorno, nel fuso orario del sito e nella lingua della pagina."
+msgstr "Es aktualisiert sich jeden Tag von selbst, in der Zeitzone der Website und in der Sprache der Seite."
+
+msgid "Formato della data"
+msgstr "Datumsformat"
+
+msgid "Giorno e data (martedì 13 ottobre)"
+msgstr "Tag und Datum (Dienstag, 13. Oktober)"
+
+msgid "Solo il giorno (martedì)"
+msgstr "Nur der Tag (Dienstag)"
+
+msgid "Solo la data (13 ottobre)"
+msgstr "Nur das Datum (13. Oktober)"
+
+msgid "Breve (13/10)"
+msgstr "Kurz (13.10.)"
+
+msgid "Voci della lavagna"
+msgstr "Einträge der Tafel"
+
+msgid "Voce"
+msgstr "Eintrag"
+
+msgid "Ogni voce compare solo nei giorni scelti; senza giorni vale sempre. Nel builder si vedono tutte, coi giorni accanto. Cerchio, sottolineatura e stellina stanno nello Stile."
+msgstr "Jeder Eintrag erscheint nur an den gewählten Tagen; ohne Tage immer. Im Builder siehst du alle, mit den Tagen daneben. Kreis, Unterstreichung und Sternchen findest du unter Stil."
+
+msgid "Una parola scritta di sbieco accanto al nome, come «novità!» o «finito»."
+msgstr "Ein schräg geschriebenes Wort neben dem Namen, etwa „neu!“ oder „aus“."
+
+msgid "Giorni"
+msgstr "Tage"
+
+msgid "Se oggi non c'è niente"
+msgstr "Wenn es heute nichts gibt"
+
+msgid "Si scrive al posto delle voci nei giorni in cui nessuna voce vale."
+msgstr "Steht anstelle der Einträge an Tagen, an denen kein Eintrag gilt."
+
+msgid "Note"
+msgstr "Notizen"
+
+msgid "Nota"
+msgstr "Notiz"
+
+msgid "Firma"
+msgstr "Unterschrift"
+
+msgid "Disegni"
+msgstr "Zeichnungen"
+
+msgid "Disegni a gesso"
+msgstr "Kreidezeichnungen"
+
+msgid "Disegno"
+msgstr "Zeichnung"
+
+msgid "Disegnini sparsi sulla lavagna, dietro le scritte. Posizione, dimensione, rotazione e colore stanno nello Stile."
+msgstr "Kleine Zeichnungen auf der Tafel verteilt, hinter der Schrift. Position, Größe, Drehung und Farbe findest du unter Stil."
+
+msgid "Quanto si sposta scorrendo e col mouse: 0 resta fermo, 100 galleggia di più."
+msgstr "Wie stark es sich beim Scrollen und mit der Maus bewegt: 0 bleibt stehen, 100 schwebt am meisten."
+
+msgid "Scrittura"
+msgstr "Schrift"
+
+msgid "Si scrive da sola"
+msgstr "Schreibt sich von selbst"
+
+msgid "Compare riga per riga"
+msgstr "Erscheint Zeile für Zeile"
+
+msgid "Già scritta"
+msgstr "Schon geschrieben"
+
+msgid "Quando la lavagna entra nello schermo. Si ferma per chi ha chiesto al sistema di ridurre il movimento."
+msgstr "Wenn die Tafel ins Bild kommt. Sie bleibt still für alle, die im System weniger Bewegung eingestellt haben."
+
+msgid "Lenta"
+msgstr "Langsam"
+
+msgid "Veloce"
+msgstr "Schnell"
+
+msgid "I disegni si tracciano"
+msgstr "Zeichnungen zeichnen sich selbst"
+
+msgid "Scorrendo la lavagna oscilla appena e i disegni galleggiano a profondità diverse."
+msgstr "Beim Scrollen schwankt die Tafel leicht und die Zeichnungen schweben in unterschiedlicher Tiefe."
+
+msgid "Col mouse la lavagna si piega verso il cursore. Sui telefoni e sui tablet resta la parallasse."
+msgstr "Mit der Maus neigt sich die Tafel zum Mauszeiger. Auf Smartphones und Tablets bleibt die Parallaxe."
+
+msgid "Colore lavagna"
+msgstr "Tafelfarbe"
+
+msgid "Superficie"
+msgstr "Oberfläche"
+
+msgid "Gesso"
+msgstr "Kreide"
+
+msgid "Carta"
+msgstr "Papier"
+
+msgid "Liscia"
+msgstr "Glatt"
+
+msgid "Grana"
+msgstr "Körnung"
+
+msgid "Aloni di gesso"
+msgstr "Kreideschlieren"
+
+msgid "Le nuvole chiare del gesso cancellato."
+msgstr "Die hellen Wolken weggewischter Kreide."
+
+msgid "Legno"
+msgstr "Holz"
+
+msgid "Metallo"
+msgstr "Metall"
+
+msgid "Appesa a un chiodo"
+msgstr "An einem Nagel aufgehängt"
+
+msgid "Inclinazione"
+msgstr "Neigung"
+
+msgid "Colore del gesso"
+msgstr "Kreidefarbe"
+
+msgid "Occhiello, prezzi, etichette, cerchi e sottolineature."
+msgstr "Dachzeile, Preise, Etiketten, Kreise und Unterstreichungen."
+
+msgid "Colore disegni"
+msgstr "Farbe der Zeichnungen"
+
+msgid "Vuoto: il colore del gesso."
+msgstr "Leer: die Kreidefarbe."
+
+msgid "Evidenza"
+msgstr "Hervorhebung"
+
+msgid "Cerchiata"
+msgstr "Eingekreist"
+
+msgid "Sottolineata"
+msgstr "Unterstrichen"
+
+msgid "Con la stellina"
+msgstr "Mit Sternchen"
+
+msgid "Nota e firma"
+msgstr "Notiz und Unterschrift"
+
+msgid "Colonne delle voci"
+msgstr "Spalten der Einträge"
+
+msgid "Puntini fra nome e prezzo"
+msgstr "Punkte zwischen Name und Preis"
+
+msgid "Con le voci allineate a sinistra: nome a sinistra, prezzo a destra e i puntini in mezzo."
+msgstr "Bei linksbündigen Einträgen: Name links, Preis rechts und die Punkte dazwischen."
+
+msgid "Ghirigoro"
+msgstr "Schnörkel"
+
+msgid "Sezione, sopra il contenuto"
+msgstr "Abschnitt, über dem Inhalt"
+
+msgid "Tutta la pagina: le particelle vivono su tutto il documento e scorrono con esso, dietro al contenuto, senza mai bloccare i click. Sopra il contenuto: le particelle passano davanti a ciò che la sezione mostra (anche a uno sfondo disegnato da una tile, come quello di un'apertura), senza bloccare i click."
+msgstr "Ganze Seite: Die Partikel leben im gesamten Dokument und scrollen mit, hinter dem Inhalt, ohne je Klicks zu blockieren. Über dem Inhalt: Die Partikel ziehen vor dem vorbei, was der Abschnitt zeigt (auch vor einem Hintergrund, den eine Tile zeichnet, etwa bei einem Hero), ohne Klicks zu blockieren."
+
+msgid "Braci (scintille che salgono)"
+msgstr "Glut (aufsteigende Funken)"
+
+msgid "Petali/neve/coriandoli cadono; le bolle e le braci salgono; le stelle restano sospese."
+msgstr "Blütenblätter/Schnee/Konfetti fallen; Blasen und Glut steigen auf; Sterne schweben."
+
+msgid "Ogni settimana"
+msgstr "Jede Woche"
+
+msgid "Nel fuso orario del sito (Impostazioni → Generali di WordPress), per chiunque lo guardi."
+msgstr "In der Zeitzone der Website (WordPress-Einstellungen → Allgemein), für alle, die sie ansehen."
+
+msgid "Durata dell'evento"
+msgstr "Dauer des Events"
+
+msgid "Per tutta la durata, al posto dei numeri compare il messaggio qui sotto; finito l'evento, il conto riparte verso la settimana dopo."
+msgstr "Während der ganzen Dauer steht statt der Zahlen die Nachricht unten; nach dem Event läuft der Countdown auf die nächste Woche zu."
+
+msgid "Messaggio durante l'evento"
+msgstr "Nachricht während des Events"

@@ -3,6 +3,12 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.728 - 2026-10-13 (nuovo)
+- Nuova tile «Lavagna a gesso» (gruppo Marketing): una lavagna scritta a gesso con occhiello, titolo, la data di oggi che si aggiorna da sola, le voci con prezzo, etichetta e i giorni della settimana in cui valgono, una nota, una firma e disegnini a gesso (spiga, pesce, fiamma, calice e altri, oppure un'icona o un'immagine). Le righe si scrivono una dopo l'altra quando la lavagna entra nello schermo, i disegni si tracciano e galleggiano scorrendo, col mouse la lavagna si piega verso il cursore. Cornice in legno, metallo o tinta unita, superficie a gesso, carta o liscia, appesa a un chiodo.
+- Particelle: preset «Braci», scintille che salgono tremolando e si spengono, e la posizione «Sezione, sopra il contenuto», per far passare le particelle davanti a un'apertura che disegna da sé il proprio sfondo.
+- Conto alla rovescia: tipo «Ogni settimana» (giorno, ora e durata dell'evento): durante l'evento mostra un messaggio, poi riparte verso la settimana dopo. Vale nel fuso orario del sito, anche con le pagine in cache.
+- Tema Osteria Fumo: video della brace nell'apertura con le braci che salgono, la lavagna del fuori menù che cambia col giorno, la brace viva sotto «Il fuoco fa il resto» col titolo che si avvicina scorrendo, il conto alla rovescia al giovedì del pesce, gli abbinamenti dei vini su carte da girare, la sfoglia di Ada con le dosi che scalano, la sala con i punti da toccare e le testate di Menù, Storia e Prenota in video.
+
 ## v1.4.727 - 2026-10-13 (fix)
 - Tema Rifugio Larice: miniature nuove nel selettore dei temi e nella Vetrina (computer e telefono), con l'apertura col video delle nuvole e le sezioni aggiunte nella 1.4.725.
 

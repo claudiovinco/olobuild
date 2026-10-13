@@ -9,7 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * sezione, dietro al contenuto. Bucket C / famiglia C (canvas / generativo).
  *
  * Preset: petals (36), snow (42), bubbles (50), stars/costellazioni (49),
- * confetti (one-shot, rif. Konami tema 60). Gli snippet runtime dei temi sono
+ * confetti (one-shot, rif. Konami tema 60), embers (braci che salgono e si spengono,
+ * Osteria Fumo, 13 ott 2026). Gli snippet runtime dei temi sono
  * portati nell'IIFE inline del render() — multi-istanza, idempotente, con
  * IntersectionObserver, dpr cap e ramo prefers-reduced-motion.
  *
@@ -85,6 +86,7 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
             'stars'    => [ '#EDEFFB', '#F5C24B', '#9B6BFF', '#5BD6E0' ],
             'confetti' => [ '#e1474f', '#F5C24B', '#5BD6E0', '#9B6BFF', '#7BD88F' ],
             'soccer'   => [ '#FFFFFF', '#15241D' ],
+            'embers'   => [ '#FFB347', '#FF8A1F', '#FF5A1A', '#FFD27A' ],
         ];
         return $map[ $preset ] ?? $map['petals'];
     }
@@ -94,12 +96,14 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
         $uid = 'olo-particlefx-' . wp_rand( 10000, 99999 );
 
         // ── Parametri sistema (clampati) ──────────────────────────────────
-        $presets = [ 'petals', 'snow', 'bubbles', 'stars', 'confetti', 'soccer' ];
+        $presets = [ 'petals', 'snow', 'bubbles', 'stars', 'confetti', 'soccer', 'embers' ];
         $preset  = in_array( $s['preset'], $presets, true ) ? $s['preset'] : 'petals';
         // 'section' (default) = sfondo della sezione ospite; 'page' = overlay fisso
         // su tutto il documento (il runtime ha già il ramo dedicato: canvas fixed,
-        // campo alto quanto la pagina, pointer-events none).
-        $scope   = ( ( $s['scope'] ?? 'section' ) === 'page' ) ? 'page' : 'section';
+        // campo alto quanto la pagina, pointer-events none); 'over' = la sezione ospite,
+        // ma SOPRA il suo contenuto (le braci davanti a un'apertura che disegna da sé il
+        // proprio sfondo), mai sopra i click.
+        $scope   = in_array( ( $s['scope'] ?? 'section' ), [ 'page', 'over' ], true ) ? $s['scope'] : 'section';
 
         $count    = max( 1,   min( 400,  intval( $s['count'] ) ) );
         $speed    = max( 0.1, min( 6,     floatval( $s['speed'] ) ) );
@@ -165,7 +169,7 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
                 height: 100%;
                 z-index: -1;          /* dietro al contenuto del contenitore, sopra il suo sfondo */
                 display: block;
-                pointer-events: <?php echo $hover ? 'auto' : 'none'; ?>;
+                pointer-events: <?php echo ( $hover && 'over' !== $scope ) ? 'auto' : 'none'; ?>;
             }
             /* Su touch / senza hover il puntatore non interagisce comunque */
             @media (hover: none), (pointer: coarse) {
@@ -205,6 +209,27 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
                 layer.appendChild( canvas );
                 canvas.style.pointerEvents = 'none';   // su tutta la pagina non blocca mai i click
                 host = layer;
+            } else if ( CFG.scope === 'over' ) {
+                // Sopra il contenuto della sezione: in fondo alla sezione, sopra il contenitore del
+                // contenuto, trasparente ai click (pointer-events none: si clicca ciò che c'è sotto).
+                host = canvas.closest('section') || canvas.closest('.olo-section');
+                if ( host ) {
+                    var ocs = getComputedStyle( host );
+                    if ( ocs.position === 'static' )  { host.style.position = 'relative'; }
+                    if ( ocs.overflow === 'visible' ) { host.style.overflow = 'hidden'; }
+                    host.style.isolation = 'isolate';
+                    var sopra = 2;
+                    var figli = host.children;
+                    for ( var fi = 0; fi < figli.length; fi++ ) {
+                        var fz = parseInt( getComputedStyle( figli[ fi ] ).zIndex, 10 );
+                        if ( fz >= sopra ) { sopra = fz + 1; }
+                    }
+                    canvas.style.zIndex = String( sopra );
+                    canvas.style.pointerEvents = 'none';
+                    host.appendChild( canvas );
+                } else {
+                    host = canvas.parentElement;
+                }
             } else {
                 // Tile a ZERO dimensioni: sposta il canvas come SFONDO del contenitore (section)
                 // in cui è droppato — dietro il contenuto, senza occupare spazio nel flusso.
@@ -319,6 +344,9 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
             function makeStar()   { return { x: rnd(0,W), y: rnd(0,H),   r: Math.max(.4,CFG.size*rnd(.06,.28)), tw: rnd(0,TAU), sp: rnd(.3,.8), vx: rnd(-.15,.15)*CFG.wind, vy: rnd(.02,.18)*CFG.gravity*CFG.speed, col: pick(CFG.colors) }; }
             function makeConfetti(){ var ang=rnd(0,TAU), spd=rnd(3,9)*CFG.speed; return { x: rnd(W*.35,W*.65), y: ( pageMode ? SCROLL : 0 ) + rnd(-20, H*.25), r: CFG.size*rnd(.5,1.1), vx: Math.cos(ang)*spd*.5, vy: Math.sin(ang)*spd - rnd(2,6), a: rnd(0,TAU), va: rnd(-.2,.2), col: pick(CFG.colors), life: 1 }; }
             function makeSoccer(){ return { x: rnd(0,W), y: rnd(-H,0), r: Math.max(3, CFG.size*rnd(.9,1.6)), s: rnd(.5,1.4)*CFG.speed, a: rnd(0,TAU), ph: rnd(0,TAU), sw: rnd(.4,1.2)*CFG.wind, spin: rnd(-.05,.05), col: CFG.colors[0] }; }
+            // Braci: nascono in basso, salgono ondeggiando e tremolando, si spengono a metà strada;
+            // una su quattro è una scintilla veloce, disegnata come un trattino.
+            function makeEmber(){ var sc = Math.random() < .25; return { x: rnd(0,W), y: ( pageMode ? SCROLL : 0 ) + H + rnd(0, 24), r: Math.max(.6, CFG.size*rnd(.12,.34)), s: rnd(.5,1.5)*CFG.speed*( sc ? 1.9 : 1 ), ph: rnd(0,TAU), sw: rnd(.25,1)*CFG.wind, tw: rnd(0,TAU), life: rnd(.55,1), dl: rnd(.0022,.0055)*CFG.speed, sc: sc, col: pick(CFG.colors) }; }
 
             function makeOne() {
                 switch ( CFG.preset ) {
@@ -327,6 +355,7 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
                     case 'stars':    return makeStar();
                     case 'confetti': return makeConfetti();
                     case 'soccer':   return makeSoccer();
+                    case 'embers':   return makeEmber();
                     default:         return makePetal();
                 }
             }
@@ -337,6 +366,7 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
             function placeY( p ) {
                 if ( ! pageMode || CFG.preset === 'confetti' ) { return; }
                 if ( CFG.preset === 'bubbles' )    { p.y = rnd( FH, 2 * FH ); }
+                else if ( CFG.preset === 'embers' ) { p.y = rnd( 0, FH ); }
                 else if ( CFG.preset === 'stars' ) { p.y = rnd( 0, FH ); }
                 else                               { p.y = rnd( -FH, 0 ); }
             }
@@ -344,7 +374,12 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
             function build() {
                 parts = [];
                 var n = targetCount();
-                for ( var i = 0; i < n; i++ ) { var p = makeOne(); placeY( p ); parts.push( p ); }
+                for ( var i = 0; i < n; i++ ) {
+                    var p = makeOne(); placeY( p );
+                    // braci: la scena parte già accesa, a ogni altezza e a ogni punto della loro vita
+                    if ( CFG.preset === 'embers' ) { if ( ! pageMode ) { p.y = rnd( 0, H ); } p.life = rnd( .1, 1 ); }
+                    parts.push( p );
+                }
             }
 
             // ── Disegno singola particella ────────────────────────────────
@@ -367,6 +402,22 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
                 var a = ( .5 + Math.sin( p.tw ) * .4 ) * CFG.opacity;
                 ctx.globalAlpha = a; ctx.fillStyle = p.col;
                 ctx.beginPath(); ctx.arc( p.x, p.y, p.r, 0, TAU ); ctx.fill();
+            }
+            function drawEmber( p ) {
+                var fl = .62 + Math.sin( p.tw ) * .38;
+                var a = Math.max( 0, Math.min( 1, p.life * 1.5 ) ) * fl * CFG.opacity;
+                if ( a <= 0 ) { return; }
+                ctx.globalCompositeOperation = 'lighter';
+                ctx.fillStyle = p.col; ctx.strokeStyle = p.col;
+                if ( p.sc ) {
+                    ctx.globalAlpha = a; ctx.lineWidth = Math.max( .8, p.r * .9 ); ctx.lineCap = 'round';
+                    ctx.beginPath(); ctx.moveTo( p.x, p.y ); ctx.lineTo( p.x - Math.sin( p.ph ) * p.sw * 3, p.y + p.s * 5 ); ctx.stroke();
+                } else {
+                    ctx.globalAlpha = a * .18; ctx.beginPath(); ctx.arc( p.x, p.y, p.r * 3.4, 0, TAU ); ctx.fill();
+                    ctx.globalAlpha = a * .42; ctx.beginPath(); ctx.arc( p.x, p.y, p.r * 1.9, 0, TAU ); ctx.fill();
+                    ctx.globalAlpha = a;       ctx.beginPath(); ctx.arc( p.x, p.y, p.r, 0, TAU ); ctx.fill();
+                }
+                ctx.globalCompositeOperation = 'source-over';
             }
             function drawConfetti( p ) {
                 ctx.save(); ctx.translate( p.x, p.y ); ctx.rotate( p.a );
@@ -455,6 +506,12 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
                         var sh = pageMode ? FH : H;
                         if ( p.y > sh ) { p.y -= sh; } if ( p.y < 0 ) { p.y += sh; }
                         if ( p.x > W ) { p.x = 0; } if ( p.x < 0 ) { p.x = W; }
+                    } else if ( CFG.preset === 'embers' ) {
+                        p.y -= p.s * Math.max( .2, CFG.gravity ); p.ph += .035; p.tw += .22; p.life -= p.dl;
+                        p.x += Math.sin( p.ph ) * p.sw * .7 + CFG.wind * .12;
+                        if ( canHover ) { if ( mouse.on ) { repel( p ); } }
+                        var cima = pageMode ? SCROLL - 20 : -20;
+                        if ( p.life <= 0 || p.y < cima ) { parts[i] = makeEmber(); }
                     } else if ( CFG.preset === 'confetti' ) {
                         p.vy += .12 * CFG.gravity;
                         // velocità limite: i coriandoli planano invece di precipitare fuori scena
@@ -488,6 +545,7 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
                         case 'stars':    drawStar( p ); break;
                         case 'confetti': drawConfetti( p ); break;
                         case 'soccer':   drawSoccer( p ); break;
+                        case 'embers':   drawEmber( p ); break;
                         default:         drawPetal( p );
                     }
                 }
@@ -551,11 +609,13 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
 
             // Pointer Events (solo se hover abilitato e device non coarse)
             if ( canHover ) {
-                canvas.addEventListener( 'pointermove', function( e ) {
+                // sopra il contenuto il canvas non riceve eventi (si clicca sotto): ascolta la sezione
+                var ascolta = ( CFG.scope === 'over' ) ? ( host || canvas ) : canvas;
+                ascolta.addEventListener( 'pointermove', function( e ) {
                     var r = canvas.getBoundingClientRect();
                     mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; mouse.on = true;
                 }, { passive: true } );
-                canvas.addEventListener( 'pointerleave', function() { mouse.on = false; mouse.x = mouse.y = -9999; } );
+                ascolta.addEventListener( 'pointerleave', function() { mouse.on = false; mouse.x = mouse.y = -9999; } );
             }
 
             var rT = null;

@@ -25435,3 +25435,315 @@ msgstr "Hauteur des couches"
 
 msgid "Alza o abbassa tutti gli strati insieme. Sul telefono, più stretto e alto, abbassarli lascia più cielo al sole e al testo."
 msgstr "Monte ou baisse toutes les couches ensemble. Sur le téléphone, plus étroit et plus haut, les baisser laisse plus de ciel au soleil et au texte."
+
+msgid "Lavagna a gesso"
+msgstr "Ardoise à la craie"
+
+msgid "Spiga"
+msgstr "Épi"
+
+msgid "Pesce"
+msgstr "Poisson"
+
+msgid "Fiamma"
+msgstr "Flamme"
+
+msgid "Foglia"
+msgstr "Feuille"
+
+msgid "Grappolo d'uva"
+msgstr "Grappe de raisin"
+
+msgid "Peperoncino"
+msgstr "Piment"
+
+msgid "Calice"
+msgstr "Verre à vin"
+
+msgid "Bottiglia"
+msgstr "Bouteille"
+
+msgid "Tazza"
+msgstr "Tasse"
+
+msgid "Pane"
+msgstr "Pain"
+
+msgid "Posate"
+msgstr "Couverts"
+
+msgid "Scarabocchio"
+msgstr "Gribouillis"
+
+msgid "Lun"
+msgstr "Lun"
+
+msgid "Mer"
+msgstr "Mer"
+
+msgid "Gio"
+msgstr "Jeu"
+
+msgid "Ven"
+msgstr "Ven"
+
+msgid "Sab"
+msgstr "Sam"
+
+msgid "Dom"
+msgstr "Dim"
+
+msgid "lun"
+msgstr "lun"
+
+msgid "mar"
+msgstr "mar"
+
+msgid "mer"
+msgstr "mer"
+
+msgid "gio"
+msgstr "jeu"
+
+msgid "ven"
+msgstr "ven"
+
+msgid "sab"
+msgstr "sam"
+
+msgid "dom"
+msgstr "dim"
+
+msgid "Oggi in lavagna"
+msgstr "Aujourd’hui à l’ardoise"
+
+msgid "Fuori menù"
+msgstr "Hors carte"
+
+msgid "Zuppa di ceci e rosmarino"
+msgstr "Soupe de pois chiches au romarin"
+
+msgid "con l’olio nuovo"
+msgstr "avec l’huile nouvelle"
+
+msgid "Tagliatelle al ragù"
+msgstr "Tagliatelle au ragù"
+
+msgid "tirate al mattarello stamattina"
+msgstr "abaissées au rouleau ce matin"
+
+msgid "Grigliata di pesce"
+msgstr "Grillade de poisson"
+
+msgid "solo il giovedì, finché c’è"
+msgstr "le jeudi seulement, jusqu’à épuisement"
+
+msgid "Torta di riso"
+msgstr "Gâteau de riz"
+
+msgid "come la faceva la nonna"
+msgstr "comme le faisait grand-mère"
+
+msgid "novità!"
+msgstr "nouveau !"
+
+msgid "Oggi la lavagna è vuota: chiedi in sala."
+msgstr "L’ardoise est vide aujourd’hui : demandez en salle."
+
+msgid "Mostra la data di oggi"
+msgstr "Afficher la date du jour"
+
+msgid "Si aggiorna da sola ogni giorno, nel fuso orario del sito e nella lingua della pagina."
+msgstr "Elle se met à jour toute seule chaque jour, dans le fuseau horaire du site et dans la langue de la page."
+
+msgid "Formato della data"
+msgstr "Format de la date"
+
+msgid "Giorno e data (martedì 13 ottobre)"
+msgstr "Jour et date (mardi 13 octobre)"
+
+msgid "Solo il giorno (martedì)"
+msgstr "Jour seulement (mardi)"
+
+msgid "Solo la data (13 ottobre)"
+msgstr "Date seulement (13 octobre)"
+
+msgid "Breve (13/10)"
+msgstr "Courte (13/10)"
+
+msgid "Voci della lavagna"
+msgstr "Éléments de l’ardoise"
+
+msgid "Voce"
+msgstr "Élément"
+
+msgid "Ogni voce compare solo nei giorni scelti; senza giorni vale sempre. Nel builder si vedono tutte, coi giorni accanto. Cerchio, sottolineatura e stellina stanno nello Stile."
+msgstr "Chaque élément n’apparaît que les jours choisis ; sans jours, il apparaît toujours. Dans le builder, vous les voyez tous, avec leurs jours à côté. Cercle, soulignement et étoile se trouvent dans Style."
+
+msgid "Una parola scritta di sbieco accanto al nome, come «novità!» o «finito»."
+msgstr "Un mot écrit de biais à côté du nom, comme « nouveau ! » ou « épuisé »."
+
+msgid "Giorni"
+msgstr "Jours"
+
+msgid "Se oggi non c'è niente"
+msgstr "S’il n’y a rien aujourd’hui"
+
+msgid "Si scrive al posto delle voci nei giorni in cui nessuna voce vale."
+msgstr "S’écrit à la place des éléments les jours où aucun ne s’applique."
+
+msgid "Note"
+msgstr "Notes"
+
+msgid "Nota"
+msgstr "Note"
+
+msgid "Firma"
+msgstr "Signature"
+
+msgid "Disegni"
+msgstr "Dessins"
+
+msgid "Disegni a gesso"
+msgstr "Dessins à la craie"
+
+msgid "Disegno"
+msgstr "Dessin"
+
+msgid "Disegnini sparsi sulla lavagna, dietro le scritte. Posizione, dimensione, rotazione e colore stanno nello Stile."
+msgstr "Petits dessins répartis sur l’ardoise, derrière l’écriture. Position, taille, rotation et couleur se trouvent dans Style."
+
+msgid "Quanto si sposta scorrendo e col mouse: 0 resta fermo, 100 galleggia di più."
+msgstr "Combien il bouge au défilement et avec la souris : 0 reste immobile, 100 flotte le plus."
+
+msgid "Scrittura"
+msgstr "Écriture"
+
+msgid "Si scrive da sola"
+msgstr "S’écrit toute seule"
+
+msgid "Compare riga per riga"
+msgstr "Apparaît ligne par ligne"
+
+msgid "Già scritta"
+msgstr "Déjà écrite"
+
+msgid "Quando la lavagna entra nello schermo. Si ferma per chi ha chiesto al sistema di ridurre il movimento."
+msgstr "Quand l’ardoise apparaît à l’écran. Elle s’arrête pour ceux qui ont demandé à leur système de réduire les animations."
+
+msgid "Lenta"
+msgstr "Lente"
+
+msgid "Veloce"
+msgstr "Rapide"
+
+msgid "I disegni si tracciano"
+msgstr "Les dessins se tracent"
+
+msgid "Scorrendo la lavagna oscilla appena e i disegni galleggiano a profondità diverse."
+msgstr "Au défilement, l’ardoise oscille légèrement et les dessins flottent à différentes profondeurs."
+
+msgid "Col mouse la lavagna si piega verso il cursore. Sui telefoni e sui tablet resta la parallasse."
+msgstr "Avec la souris, l’ardoise s’incline vers le curseur. Sur téléphones et tablettes, la parallaxe reste."
+
+msgid "Colore lavagna"
+msgstr "Couleur de l’ardoise"
+
+msgid "Superficie"
+msgstr "Surface"
+
+msgid "Gesso"
+msgstr "Craie"
+
+msgid "Carta"
+msgstr "Papier"
+
+msgid "Liscia"
+msgstr "Lisse"
+
+msgid "Grana"
+msgstr "Grain"
+
+msgid "Aloni di gesso"
+msgstr "Traces de craie"
+
+msgid "Le nuvole chiare del gesso cancellato."
+msgstr "Les nuages clairs de la craie effacée."
+
+msgid "Legno"
+msgstr "Bois"
+
+msgid "Metallo"
+msgstr "Métal"
+
+msgid "Appesa a un chiodo"
+msgstr "Suspendue à un clou"
+
+msgid "Inclinazione"
+msgstr "Inclinaison"
+
+msgid "Colore del gesso"
+msgstr "Couleur de la craie"
+
+msgid "Occhiello, prezzi, etichette, cerchi e sottolineature."
+msgstr "Surtitre, prix, étiquettes, cercles et soulignements."
+
+msgid "Colore disegni"
+msgstr "Couleur des dessins"
+
+msgid "Vuoto: il colore del gesso."
+msgstr "Vide : la couleur de la craie."
+
+msgid "Evidenza"
+msgstr "Mise en avant"
+
+msgid "Cerchiata"
+msgstr "Entouré"
+
+msgid "Sottolineata"
+msgstr "Souligné"
+
+msgid "Con la stellina"
+msgstr "Avec une étoile"
+
+msgid "Nota e firma"
+msgstr "Note et signature"
+
+msgid "Colonne delle voci"
+msgstr "Colonnes des éléments"
+
+msgid "Puntini fra nome e prezzo"
+msgstr "Points entre nom et prix"
+
+msgid "Con le voci allineate a sinistra: nome a sinistra, prezzo a destra e i puntini in mezzo."
+msgstr "Avec les éléments alignés à gauche : nom à gauche, prix à droite et les points entre les deux."
+
+msgid "Ghirigoro"
+msgstr "Arabesque"
+
+msgid "Sezione, sopra il contenuto"
+msgstr "Section, au-dessus du contenu"
+
+msgid "Tutta la pagina: le particelle vivono su tutto il documento e scorrono con esso, dietro al contenuto, senza mai bloccare i click. Sopra il contenuto: le particelle passano davanti a ciò che la sezione mostra (anche a uno sfondo disegnato da una tile, come quello di un'apertura), senza bloccare i click."
+msgstr "Toute la page : les particules vivent sur tout le document et défilent avec lui, derrière le contenu, sans jamais bloquer les clics. Au-dessus du contenu : les particules passent devant ce que montre la section (même un fond dessiné par une tile, comme celui d’un hero), sans bloquer les clics."
+
+msgid "Braci (scintille che salgono)"
+msgstr "Braises (étincelles qui montent)"
+
+msgid "Petali/neve/coriandoli cadono; le bolle e le braci salgono; le stelle restano sospese."
+msgstr "Pétales/neige/confettis tombent ; les bulles et les braises montent ; les étoiles restent suspendues."
+
+msgid "Ogni settimana"
+msgstr "Chaque semaine"
+
+msgid "Nel fuso orario del sito (Impostazioni → Generali di WordPress), per chiunque lo guardi."
+msgstr "Dans le fuseau horaire du site (Réglages → Général de WordPress), pour tous ceux qui le consultent."
+
+msgid "Durata dell'evento"
+msgstr "Durée de l’événement"
+
+msgid "Per tutta la durata, al posto dei numeri compare il messaggio qui sotto; finito l'evento, il conto riparte verso la settimana dopo."
+msgstr "Pendant toute la durée, le message ci-dessous remplace les chiffres ; une fois l’événement terminé, le compte à rebours repart vers la semaine suivante."
+
+msgid "Messaggio durante l'evento"
+msgstr "Message pendant l’événement"

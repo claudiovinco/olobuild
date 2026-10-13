@@ -25438,3 +25438,315 @@ msgstr "Layer height"
 
 msgid "Alza o abbassa tutti gli strati insieme. Sul telefono, più stretto e alto, abbassarli lascia più cielo al sole e al testo."
 msgstr "Raises or lowers all layers together. On phones, narrower and taller, lowering them leaves more sky for the sun and the text."
+
+msgid "Lavagna a gesso"
+msgstr "Chalkboard"
+
+msgid "Spiga"
+msgstr "Wheat ear"
+
+msgid "Pesce"
+msgstr "Fish"
+
+msgid "Fiamma"
+msgstr "Flame"
+
+msgid "Foglia"
+msgstr "Leaf"
+
+msgid "Grappolo d'uva"
+msgstr "Bunch of grapes"
+
+msgid "Peperoncino"
+msgstr "Chili pepper"
+
+msgid "Calice"
+msgstr "Wine glass"
+
+msgid "Bottiglia"
+msgstr "Bottle"
+
+msgid "Tazza"
+msgstr "Cup"
+
+msgid "Pane"
+msgstr "Bread"
+
+msgid "Posate"
+msgstr "Cutlery"
+
+msgid "Scarabocchio"
+msgstr "Scribble"
+
+msgid "Lun"
+msgstr "Mon"
+
+msgid "Mer"
+msgstr "Wed"
+
+msgid "Gio"
+msgstr "Thu"
+
+msgid "Ven"
+msgstr "Fri"
+
+msgid "Sab"
+msgstr "Sat"
+
+msgid "Dom"
+msgstr "Sun"
+
+msgid "lun"
+msgstr "Mon"
+
+msgid "mar"
+msgstr "Tue"
+
+msgid "mer"
+msgstr "Wed"
+
+msgid "gio"
+msgstr "Thu"
+
+msgid "ven"
+msgstr "Fri"
+
+msgid "sab"
+msgstr "Sat"
+
+msgid "dom"
+msgstr "Sun"
+
+msgid "Oggi in lavagna"
+msgstr "On the board today"
+
+msgid "Fuori menù"
+msgstr "Off the menu"
+
+msgid "Zuppa di ceci e rosmarino"
+msgstr "Chickpea and rosemary soup"
+
+msgid "con l’olio nuovo"
+msgstr "with the new season’s olive oil"
+
+msgid "Tagliatelle al ragù"
+msgstr "Tagliatelle with ragù"
+
+msgid "tirate al mattarello stamattina"
+msgstr "rolled by hand this morning"
+
+msgid "Grigliata di pesce"
+msgstr "Mixed grilled fish"
+
+msgid "solo il giovedì, finché c’è"
+msgstr "Thursdays only, while it lasts"
+
+msgid "Torta di riso"
+msgstr "Rice cake"
+
+msgid "come la faceva la nonna"
+msgstr "just like grandma made it"
+
+msgid "novità!"
+msgstr "new!"
+
+msgid "Oggi la lavagna è vuota: chiedi in sala."
+msgstr "The board is empty today: ask your server."
+
+msgid "Mostra la data di oggi"
+msgstr "Show today’s date"
+
+msgid "Si aggiorna da sola ogni giorno, nel fuso orario del sito e nella lingua della pagina."
+msgstr "It updates itself every day, in the site’s time zone and in the language of the page."
+
+msgid "Formato della data"
+msgstr "Date format"
+
+msgid "Giorno e data (martedì 13 ottobre)"
+msgstr "Day and date (Tuesday 13 October)"
+
+msgid "Solo il giorno (martedì)"
+msgstr "Day only (Tuesday)"
+
+msgid "Solo la data (13 ottobre)"
+msgstr "Date only (13 October)"
+
+msgid "Breve (13/10)"
+msgstr "Short (13/10)"
+
+msgid "Voci della lavagna"
+msgstr "Board items"
+
+msgid "Voce"
+msgstr "Item"
+
+msgid "Ogni voce compare solo nei giorni scelti; senza giorni vale sempre. Nel builder si vedono tutte, coi giorni accanto. Cerchio, sottolineatura e stellina stanno nello Stile."
+msgstr "Each item appears only on the chosen days; with no days, it always appears. In the builder you see them all, with their days next to them. Circle, underline and star are in the Style tab."
+
+msgid "Una parola scritta di sbieco accanto al nome, come «novità!» o «finito»."
+msgstr "A word written at a slant next to the name, like “new!” or “sold out”."
+
+msgid "Giorni"
+msgstr "Days"
+
+msgid "Se oggi non c'è niente"
+msgstr "If there is nothing today"
+
+msgid "Si scrive al posto delle voci nei giorni in cui nessuna voce vale."
+msgstr "Written in place of the items on days when no item applies."
+
+msgid "Note"
+msgstr "Notes"
+
+msgid "Nota"
+msgstr "Note"
+
+msgid "Firma"
+msgstr "Signature"
+
+msgid "Disegni"
+msgstr "Drawings"
+
+msgid "Disegni a gesso"
+msgstr "Chalk drawings"
+
+msgid "Disegno"
+msgstr "Drawing"
+
+msgid "Disegnini sparsi sulla lavagna, dietro le scritte. Posizione, dimensione, rotazione e colore stanno nello Stile."
+msgstr "Little drawings scattered across the board, behind the writing. Position, size, rotation and color are in the Style tab."
+
+msgid "Quanto si sposta scorrendo e col mouse: 0 resta fermo, 100 galleggia di più."
+msgstr "How much it moves when scrolling and with the mouse: 0 stays still, 100 floats the most."
+
+msgid "Scrittura"
+msgstr "Writing"
+
+msgid "Si scrive da sola"
+msgstr "Writes itself"
+
+msgid "Compare riga per riga"
+msgstr "Appears line by line"
+
+msgid "Già scritta"
+msgstr "Already written"
+
+msgid "Quando la lavagna entra nello schermo. Si ferma per chi ha chiesto al sistema di ridurre il movimento."
+msgstr "When the board comes into view. It stops for visitors who have asked their system to reduce motion."
+
+msgid "Lenta"
+msgstr "Slow"
+
+msgid "Veloce"
+msgstr "Fast"
+
+msgid "I disegni si tracciano"
+msgstr "Drawings draw themselves"
+
+msgid "Scorrendo la lavagna oscilla appena e i disegni galleggiano a profondità diverse."
+msgstr "When scrolling, the board sways slightly and the drawings float at different depths."
+
+msgid "Col mouse la lavagna si piega verso il cursore. Sui telefoni e sui tablet resta la parallasse."
+msgstr "With a mouse, the board tilts toward the cursor. On phones and tablets the parallax remains."
+
+msgid "Colore lavagna"
+msgstr "Board color"
+
+msgid "Superficie"
+msgstr "Surface"
+
+msgid "Gesso"
+msgstr "Chalk"
+
+msgid "Carta"
+msgstr "Paper"
+
+msgid "Liscia"
+msgstr "Smooth"
+
+msgid "Grana"
+msgstr "Grain"
+
+msgid "Aloni di gesso"
+msgstr "Chalk smudges"
+
+msgid "Le nuvole chiare del gesso cancellato."
+msgstr "The pale clouds of erased chalk."
+
+msgid "Legno"
+msgstr "Wood"
+
+msgid "Metallo"
+msgstr "Metal"
+
+msgid "Appesa a un chiodo"
+msgstr "Hanging from a nail"
+
+msgid "Inclinazione"
+msgstr "Tilt"
+
+msgid "Colore del gesso"
+msgstr "Chalk color"
+
+msgid "Occhiello, prezzi, etichette, cerchi e sottolineature."
+msgstr "Eyebrow, prices, labels, circles and underlines."
+
+msgid "Colore disegni"
+msgstr "Drawing color"
+
+msgid "Vuoto: il colore del gesso."
+msgstr "Empty: the chalk color."
+
+msgid "Evidenza"
+msgstr "Highlight"
+
+msgid "Cerchiata"
+msgstr "Circled"
+
+msgid "Sottolineata"
+msgstr "Underlined"
+
+msgid "Con la stellina"
+msgstr "With a star"
+
+msgid "Nota e firma"
+msgstr "Note and signature"
+
+msgid "Colonne delle voci"
+msgstr "Item columns"
+
+msgid "Puntini fra nome e prezzo"
+msgstr "Dots between name and price"
+
+msgid "Con le voci allineate a sinistra: nome a sinistra, prezzo a destra e i puntini in mezzo."
+msgstr "With items aligned left: name on the left, price on the right and the dots in between."
+
+msgid "Ghirigoro"
+msgstr "Squiggle"
+
+msgid "Sezione, sopra il contenuto"
+msgstr "Section, above the content"
+
+msgid "Tutta la pagina: le particelle vivono su tutto il documento e scorrono con esso, dietro al contenuto, senza mai bloccare i click. Sopra il contenuto: le particelle passano davanti a ciò che la sezione mostra (anche a uno sfondo disegnato da una tile, come quello di un'apertura), senza bloccare i click."
+msgstr "Whole page: particles live across the entire document and scroll with it, behind the content, never blocking clicks. Above the content: particles pass in front of what the section shows (even a background drawn by a tile, like a hero’s), without blocking clicks."
+
+msgid "Braci (scintille che salgono)"
+msgstr "Embers (rising sparks)"
+
+msgid "Petali/neve/coriandoli cadono; le bolle e le braci salgono; le stelle restano sospese."
+msgstr "Petals/snow/confetti fall; bubbles and embers rise; stars stay suspended."
+
+msgid "Ogni settimana"
+msgstr "Every week"
+
+msgid "Nel fuso orario del sito (Impostazioni → Generali di WordPress), per chiunque lo guardi."
+msgstr "In the site’s time zone (WordPress Settings → General), for everyone who views it."
+
+msgid "Durata dell'evento"
+msgstr "Event duration"
+
+msgid "Per tutta la durata, al posto dei numeri compare il messaggio qui sotto; finito l'evento, il conto riparte verso la settimana dopo."
+msgstr "For the whole duration, the message below replaces the numbers; once the event is over, the countdown restarts toward the following week."
+
+msgid "Messaggio durante l'evento"
+msgstr "Message during the event"
