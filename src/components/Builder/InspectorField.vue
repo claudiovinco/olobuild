@@ -411,6 +411,7 @@
       <FieldMegaPanelMap
         v-else-if="field.type === 'megapanel-map'"
         :modelValue="effectiveValue"
+        :vuoto="field.vuoto || ''"
         @update:modelValue="onFieldUpdate($event)"
       />
 
@@ -1201,6 +1202,7 @@ const fieldProps = computed(() => {
     case 'editor': return { ...base, mode: props.field.mode || 'inline' };
     case 'icon-select': return { ...base, options: props.field.options || [] };
     case 'multi_pills': return { ...base, options: props.field.options || [] };
+    case 'megapanel-map': return { ...base, vuoto: props.field.vuoto || '' };
     case 'code': return { ...base, class: 'olo-field-code' };
     default: return base;
   }

@@ -34,6 +34,8 @@ import FieldSelect from './FieldSelect.vue';
 
 const props = defineProps({
   modelValue: { default: () => ({}) },
+  // Cosa vuol dire «nessun template» per la tile che usa il controllo (Mega Menu: colonne automatiche)
+  vuoto: { type: String, default: '' },
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -43,7 +45,8 @@ const tilesStore = useTilesStore();
 const oloData = window.oloData || {};
 
 const menuItems = ref([]);
-const templateOptions = ref([{ value: 0, label: 'Auto (colonne)' }]);
+const etichettaVuoto = () => props.vuoto || t('Auto (colonne)');
+const templateOptions = ref([{ value: 0, label: etichettaVuoto() }]);
 const loading = ref(false);
 
 // Get current menu_id from the selected tile's settings
@@ -102,7 +105,7 @@ async function fetchMegapanelTemplates() {
       const data = await res.json();
       const items = data.items || [];
       templateOptions.value = [
-        { value: 0, label: 'Auto (colonne)' },
+        { value: 0, label: etichettaVuoto() },
         ...items.map(t => ({ value: t.id, label: t.title })),
       ];
     }

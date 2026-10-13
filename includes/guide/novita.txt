@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.717 - 2026-10-13 (nuovo)
+- Menu di navigazione: nel tab Contenuto, gruppo «Mega Menu — Sorgente», ci sono i «Template pannelli», come nel Mega Menu. A una voce si collega un template «Mega Panel» (Olobuild → Costruisci → Nuovo Mega Panel): al passaggio, al tocco o col Tab la voce apre quel template sotto la testata, largo quanto lei, al posto delle sottovoci. Sul telefono, nel menu a schermo intero, la voce mostra le sue sottovoci.
+- Menu di navigazione, menu a schermo intero: una voce senza pagina (link «#»), come quelle che raccolgono altre voci, è un titolo e non un link che riporta in cima.
+
 ## v1.4.716 - 2026-10-13 (fix)
 - Menu di navigazione: le voci della tendina hanno la misura, il peso, il maiuscolo e la spaziatura delle voci della barra, e al passaggio non diventano più scure (sul fondo scuro sparivano); nel tab Stile, alla voce «Dropdown» della tipografia, c'è anche il colore al passaggio.
 - Menu di navigazione, menu a schermo intero sul telefono: una voce con sottovoci resta un link alla sua pagina e le sottovoci stanno sempre in vista sotto di lei, in una riga di link piccoli (prima il tocco apriva le sottovoci e quella pagina non si raggiungeva più).

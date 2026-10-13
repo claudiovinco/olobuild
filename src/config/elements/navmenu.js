@@ -43,6 +43,7 @@ export default {
     sticky_bg: '',
     sticky_shadow: true,
     mega_menu: 'none',
+    panel_templates: {},
     mega_columns: 3,
     button_items: 'none',
     button_style: 'primary',
@@ -140,6 +141,8 @@ export default {
       { value: 'auto', label: t('Auto (tutti i parent)') },
       { value: 'class', label: t('Classe CSS (mega-menu)') },
     ]},
+    { key: 'panel_templates', label: t('Template pannelli'), type: 'megapanel-map', vuoto: t('Nessuno (sottovoci)'),
+      description: t('Una voce con un template «Mega Panel» collegato apre quel template, largo quanto la testata, al posto delle sue sottovoci. Si crea in Olobuild → Costruisci → «Nuovo Mega Panel».') },
 
     { type: 'separator', label: t('Voci pulsante') },
     { key: 'button_items', label: t('Voci da rendere pulsante'), type: 'select', options: [

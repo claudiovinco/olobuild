@@ -59,6 +59,8 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
         'sticky_shadow'     => true,
         // Mega Menu
         'mega_menu'    => 'none',
+        // Template pannelli, come nel Mega Menu: { "id voce di menu": id del template «megapanel» }
+        'panel_templates' => [],
         'mega_columns' => 3,
         // Button Items
         'button_items' => 'none',
@@ -327,6 +329,12 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
             $rules[] = "{$sel} .olo-nav-dropdown .uk-nav > li > a:hover, {$sel} .olo-nav-dropdown .uk-nav > li > a:focus-visible, {$sel} .olo-mega-panel .uk-nav > li > a:hover, {$sel} .olo-mega-panel .uk-nav > li > a:focus-visible { color: {$tendina_hover}; }";
         }
         $rules[] = "{$sel} .olo-nav-dropdown .uk-nav > li > a:focus-visible, {$sel} .olo-mega-panel .uk-nav > li > a:focus-visible { outline:none; box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); border-radius:0.25em; }";
+
+        // Pannello-template: niente cornice né padding della tendina, il template va da bordo a bordo
+        $rules[] = "{$sel} .olo-nav-tpl-drop { --uk-position-viewport-offset: 0px; padding: 0; background: none; box-shadow: none; overflow-x: hidden !important; }";
+        // Il pannello sta dentro la voce della barra: niente maiuscolo, spaziatura o a capo ereditati dal menu
+        $rules[] = "{$sel} .olo-nav-tpl-panel { text-transform: none; letter-spacing: normal; text-align: left; white-space: normal; }";
+        $rules[] = "{$sel} .olo-nav-tpl-panel > .olo-template { margin: 0; width: 100%; max-width: none; }";
 
         // Toggle icon color inherits text_color
         if ( $text_color ) {
@@ -656,6 +664,7 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
                         $is_current = trailingslashit( $item->url ) === $current_url;
                         $is_button  = $this->is_button_item( $item, $idx, $total, $s );
                         $is_mega    = ! $is_button && $this->is_mega_item( $item, $subs, $s );
+                        $panel_tpl  = $is_button ? 0 : $this->get_panel_template_id( $item->ID, $s );
 
                         $li_classes = [];
                         if ( $is_current ) $li_classes[] = 'uk-active current-menu-item';
@@ -666,11 +675,13 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
                             <?php if ( $is_button ) : ?>
                                 <?php $this->render_button_link( $item, $s ); ?>
                             <?php else : ?>
-                                <?php $has_dropdown = ! empty( $subs ); $drop_id = $nav_id . '-drop-' . $idx; ?>
+                                <?php $has_dropdown = ! empty( $subs ) || $panel_tpl > 0; $drop_id = $nav_id . '-drop-' . $idx; ?>
                                 <a href="<?php echo esc_url( $item->url ); ?>"<?php echo $item->target ? ' target="' . esc_attr( $item->target ) . '"' : ''; ?><?php echo $is_current ? ' aria-current="page"' : ''; ?><?php echo $has_dropdown ? ' aria-haspopup="true" aria-expanded="false" aria-controls="' . esc_attr( $drop_id ) . '"' : ''; ?>>
                                     <?php echo esc_html( $item->title ); ?>
                                 </a>
-                                <?php if ( $is_mega && ! empty( $subs ) ) : ?>
+                                <?php if ( $panel_tpl > 0 ) : ?>
+                                    <?php $this->render_template_panel( $panel_tpl, $drop_id ); ?>
+                                <?php elseif ( $is_mega && ! empty( $subs ) ) : ?>
                                     <?php $this->render_mega_dropdown( $subs, $grandchildren, $s, $drop_id ); ?>
                                 <?php elseif ( ! empty( $subs ) ) : ?>
                                     <div id="<?php echo esc_attr( $drop_id ); ?>" uk-drop="mode: hover; delay-show: 0; delay-hide: 200; pos: bottom-left; offset: 0; animation: uk-animation-slide-top-small; duration: 150">
@@ -862,6 +873,35 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
     }
 
     /**
+     * Template pannelli, come nel Mega Menu: l'id del template «megapanel» collegato alla voce (0 = nessuno).
+     */
+    private function get_panel_template_id( $item_id, $s ) {
+        $map = $s['panel_templates'] ?? [];
+        if ( ! is_array( $map ) || empty( $map ) ) {
+            return 0;
+        }
+        return absint( $map[ (string) $item_id ] ?? 0 );
+    }
+
+    /**
+     * Il template collegato alla voce, in un pannello che si apre al passaggio, al tocco o col Tab come le altre tendine:
+     * sotto il template che contiene il menu (la testata) e largo quanto lui. UIkit 3.21 non ha più «pos: bottom-justify»:
+     * la larghezza la dà «stretch: x» sul riquadro della testata, senza il margine di 15 px dai bordi della finestra
+     * (--uk-position-viewport-offset: 0 nel CSS); niente «flip», che col pannello più alto dello spazio sotto lo
+     * porterebbe sopra la testata, fuori dalla finestra. Resta nel DOM accanto alla voce: col Tab si entra nel pannello.
+     * Il template decide sfondo, larghezza del contenuto e contenuto.
+     */
+    private function render_template_panel( $tpl_id, $drop_id ) {
+        ?>
+        <div id="<?php echo esc_attr( $drop_id ); ?>" class="olo-nav-tpl-drop" uk-drop="mode: hover; delay-show: 0; delay-hide: 250; pos: bottom-left; target: !.olo-template; boundary: !.olo-template; stretch: x; flip: false; shift: false; offset: 0; animation: uk-animation-slide-top-small; duration: 180">
+            <div class="olo-nav-tpl-panel">
+                <?php echo do_shortcode( '[olo_template id="' . absint( $tpl_id ) . '"]' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML del template reso dallo shortcode [olo_template]; i renderer delle tile fanno il loro escape ?>
+            </div>
+        </div>
+        <?php
+    }
+
+    /**
      * Check if a menu item should use mega menu dropdown.
      */
     private function is_mega_item( $item, $subs, $s ) {
@@ -1010,7 +1050,10 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
         $total = count( $tree );
         $qui   = trailingslashit( home_url( add_query_arg( [], false ) ) );
         $link  = function ( $it ) use ( $fs, $desc, $qui ) {
-            $html = '<a href="' . esc_url( $it->url ) . '"';
+            // A schermo intero una voce senza pagina («#», come quelle che raccolgono sottovoci) è un'etichetta: un <a>
+            // senza href non è un link e non si mette a fuoco; le sottovoci sotto restano link.
+            $vuoto = in_array( trim( (string) $it->url ), [ '', '#' ], true );
+            $html  = $fs && $vuoto ? '<a' : '<a href="' . esc_url( $it->url ) . '"';
             if ( $it->target ) {
                 $html .= ' target="' . esc_attr( $it->target ) . '"' . ( '_blank' === $it->target ? ' rel="noopener"' : '' );
             }
