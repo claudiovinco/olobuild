@@ -1768,7 +1768,12 @@ class Olobuild_Style_System {
                 $id = sanitize_key( $gt['id'] ?? '' );
                 if ( ! $id ) continue;
                 $sel = ".olo-typo-{$id}.olo-typo-{$id}";
-                $css .= "{$sel},\n{$sel} :is(h1,h2,h3,h4,h5,h6,p,li,a,span,em,i,blockquote,figcaption,label,dt,dd,td,button,input,textarea,select) {\n";
+                // Un template incluso nella tile (il pannello di un menu, il contenuto di una scheda o di un popup)
+                // è un'altra pagina, con la sua tipografia: il preset del menu lo rendeva tutto monospaziato e
+                // maiuscolo. :not(…) lo esclude; la terza riga ridà il preset a chi lo sceglie DENTRO il template
+                // incluso (anche lo stesso preset). :where() lascia la specificità di prima a tutte e tre.
+                $voci = ':is(h1,h2,h3,h4,h5,h6,p,li,a,span,em,i,blockquote,figcaption,label,dt,dd,td,button,input,textarea,select)';
+                $css .= "{$sel},\n{$sel} {$voci}:where(:not({$sel} .olo-template *)),\n:where({$sel} .olo-template) {$sel} {$voci} {\n";
                 $css .= "  font-family: var(--olo-font-{$id}-family, inherit);\n";
                 $css .= "  font-weight: var(--olo-font-{$id}-weight, inherit);\n";
                 $css .= "  text-transform: var(--olo-font-{$id}-transform, none);\n";
@@ -1784,6 +1789,12 @@ class Olobuild_Style_System {
                 $css .= "{$sel} {\n";
                 $css .= "  --olo-font-family: var(--olo-font-{$id}-family, var(--olo-font-family));\n";
                 $css .= "  --olo-font-family-heading: var(--olo-font-{$id}-family, var(--olo-font-family-heading));\n";
+                $css .= "}\n\n";
+                // …e nel template incluso le variabili di ruolo tornano quelle globali (initial = non definita,
+                // come quando la tipografia globale non sceglie un carattere: vale il ripiego della tile).
+                $css .= "{$sel} .olo-template {\n";
+                $css .= '  --olo-font-family: ' . ( ! empty( $t['font_family'] ) ? $t['font_family'] : 'initial' ) . ";\n";
+                $css .= '  --olo-font-family-heading: ' . ( ! empty( $t['font_family_heading'] ) ? $t['font_family_heading'] : 'initial' ) . ";\n";
                 $css .= "}\n\n";
             }
         }

@@ -331,7 +331,7 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
         $rules[] = "{$sel} .olo-nav-dropdown .uk-nav > li > a:focus-visible, {$sel} .olo-mega-panel .uk-nav > li > a:focus-visible { outline:none; box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); border-radius:0.25em; }";
 
         // Pannello-template: niente cornice né padding della tendina, il template va da bordo a bordo
-        $rules[] = "{$sel} .olo-nav-tpl-drop { --uk-position-viewport-offset: 0px; padding: 0; background: none; box-shadow: none; overflow-x: hidden !important; }";
+        $rules[] = "{$sel} .olo-nav-tpl-drop { --uk-position-viewport-offset: 0px; --uk-position-offset: 0px; padding: 0; background: none; box-shadow: none; overflow-x: hidden !important; }";
         // Il pannello sta dentro la voce della barra: niente maiuscolo, spaziatura o a capo ereditati dal menu
         $rules[] = "{$sel} .olo-nav-tpl-panel { text-transform: none; letter-spacing: normal; text-align: left; white-space: normal; }";
         $rules[] = "{$sel} .olo-nav-tpl-panel > .olo-template { margin: 0; width: 100%; max-width: none; }";
@@ -887,13 +887,14 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
      * Il template collegato alla voce, in un pannello che si apre al passaggio, al tocco o col Tab come le altre tendine:
      * sotto il template che contiene il menu (la testata) e largo quanto lui. UIkit 3.21 non ha più «pos: bottom-justify»:
      * la larghezza la dà «stretch: x» sul riquadro della testata, senza il margine di 15 px dai bordi della finestra
-     * (--uk-position-viewport-offset: 0 nel CSS); niente «flip», che col pannello più alto dello spazio sotto lo
+     * (--uk-position-viewport-offset: 0 nel CSS), attaccato alla testata (--uk-position-offset: 0 nel CSS: «offset: 0»
+     * nell'attributo UIkit lo legge come «falso» e usa i suoi 20 px); niente «flip», che col pannello più alto dello spazio sotto lo
      * porterebbe sopra la testata, fuori dalla finestra. Resta nel DOM accanto alla voce: col Tab si entra nel pannello.
      * Il template decide sfondo, larghezza del contenuto e contenuto.
      */
     private function render_template_panel( $tpl_id, $drop_id ) {
         ?>
-        <div id="<?php echo esc_attr( $drop_id ); ?>" class="olo-nav-tpl-drop" uk-drop="mode: hover; delay-show: 0; delay-hide: 250; pos: bottom-left; target: !.olo-template; boundary: !.olo-template; stretch: x; flip: false; shift: false; offset: 0; animation: uk-animation-slide-top-small; duration: 180">
+        <div id="<?php echo esc_attr( $drop_id ); ?>" class="olo-nav-tpl-drop" uk-drop="mode: hover; delay-show: 0; delay-hide: 250; pos: bottom-left; target: !.olo-template; boundary: !.olo-template; stretch: x; flip: false; shift: false; animation: uk-animation-slide-top-small; duration: 180">
             <div class="olo-nav-tpl-panel">
                 <?php echo do_shortcode( '[olo_template id="' . absint( $tpl_id ) . '"]' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML del template reso dallo shortcode [olo_template]; i renderer delle tile fanno il loro escape ?>
             </div>

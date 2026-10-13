@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.718 - 2026-10-13 (fix)
+- Stili tipografici: un template incluso dentro una tile (il pannello collegato a una voce di menu, il contenuto di una scheda o di un popup) non prende più lo stile tipografico della tile che lo contiene. Col menu in uno stile monospaziato, il pannello usciva tutto monospaziato e maiuscolo; le tile del template che scelgono uno stile loro lo mantengono.
+- Menu di navigazione: il pannello dei «Template pannelli» si apre attaccato alla testata, senza i 20 px di stacco da cui si vedeva la pagina sotto.
+
 ## v1.4.717 - 2026-10-13 (nuovo)
 - Menu di navigazione: nel tab Contenuto, gruppo «Mega Menu — Sorgente», ci sono i «Template pannelli», come nel Mega Menu. A una voce si collega un template «Mega Panel» (Olobuild → Costruisci → Nuovo Mega Panel): al passaggio, al tocco o col Tab la voce apre quel template sotto la testata, largo quanto lei, al posto delle sottovoci. Sul telefono, nel menu a schermo intero, la voce mostra le sue sottovoci.
 - Menu di navigazione, menu a schermo intero: una voce senza pagina (link «#»), come quelle che raccolgono altre voci, è un titolo e non un link che riporta in cima.
