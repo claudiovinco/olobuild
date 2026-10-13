@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.722 - 2026-10-13 (fix)
+- Mappa del mondo: al passaggio del mouse uno stato senza colore prende un velo del colore dei confini. Prima seguiva il colore del testo, e su una pagina scura col testo scuro ereditato non si vedeva.
+
 ## v1.4.721 - 2026-10-13 (nuovo)
 - Nuova tile Mappa del mondo (gruppo Media): una cartina compatta con i soli confini degli stati. Nel Contenuto, «Stati»: un clic su uno stato gli dà il primo colore («In arrivo», giallo), un secondo clic il secondo («Coperto», verde), un terzo lo riporta trasparente. «Apri in grande» mostra la cartina larga, con la ricerca per nome e gli elenchi degli stati colorati. Gli stati troppo piccoli per la cartina (San Marino, Malta, Singapore…) sono puntini.
 - Sotto la cartina c'è la legenda con quanti stati ha ogni colore; nello Stile si cambiano i due colori, gli stati senza colore, i confini e la legenda. Chi visita vede il nome dello stato al passaggio del mouse, nella sua lingua.

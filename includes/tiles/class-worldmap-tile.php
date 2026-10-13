@@ -172,7 +172,8 @@ class Olobuild_WorldMap_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .owm-s{fill:var(--owm-0);stroke:var(--owm-b);stroke-width:<?php echo $spessore; ?>px;vector-effect:non-scaling-stroke;stroke-linejoin:round;transition:fill .2s ease;}
             .<?php echo $uid; ?> .owm-1{fill:var(--owm-1);}
             .<?php echo $uid; ?> .owm-2{fill:var(--owm-2);}
-            .<?php echo $uid; ?> .owm-s:hover{fill:color-mix(in srgb, currentColor 16%, var(--owm-0));}
+            <?php // Al passaggio uno stato vuoto prende un velo del colore dei confini (non del testo): coi confini chiari scelti su una pagina scura, col testo ereditato scuro, il velo restava invisibile ?>
+            .<?php echo $uid; ?> .owm-s:hover{fill:color-mix(in srgb, var(--owm-b) 45%, var(--owm-0));}
             .<?php echo $uid; ?> .owm-1:hover{fill:color-mix(in srgb, var(--owm-1) 80%, currentColor);}
             .<?php echo $uid; ?> .owm-2:hover{fill:color-mix(in srgb, var(--owm-2) 80%, currentColor);}
             .<?php echo $uid; ?> .owm-legenda{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:<?php echo $flex; ?>;gap:0.5rem 1.5rem;line-height:1.4;<?php echo implode( ';', $leg_decl ); ?>}
