@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.720 - 2026-10-13 (fix)
+- Stili tipografici: il pannello collegato a una voce di menu prende il carattere della pagina anche quando la voce del menu ha uno stile tipografico (la 1.4.719 lo faceva solo per il riquadro della tile).
+
 ## v1.4.719 - 2026-10-13 (fix)
 - Stili tipografici: completata la correzione della 1.4.718. Anche i testi senza uno stile loro, nel template incluso, prendono il carattere della pagina e non quello della tile che lo contiene (nel pannello del menu restavano monospaziati).
 

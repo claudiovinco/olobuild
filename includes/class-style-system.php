@@ -1780,10 +1780,11 @@ class Olobuild_Style_System {
                 $css .= "  line-height: var(--olo-font-{$id}-line-height, inherit);\n";
                 $css .= "  letter-spacing: var(--olo-font-{$id}-letter-spacing, normal);\n";
                 $css .= "}\n\n";
-                // …e il wrapper di una tile che contiene un template incluso non glielo passa per eredità: lì torna
-                // la tipografia della pagina (del tema, se la globale non sceglie un carattere), mentre le voci della
-                // tile qui sopra prendono il preset una per una. Chi non conosce :has() salta la regola.
-                $css .= "{$sel}:has(.olo-template) {\n  font-family: inherit;\n  font-weight: inherit;\n  text-transform: inherit;\n  line-height: inherit;\n  letter-spacing: inherit;\n}\n\n";
+                // …e chi contiene un template incluso (il wrapper della tile, la voce <li> del menu che porta il
+                // pannello) non glielo passa per eredità: lì torna la tipografia della pagina (del tema, se la
+                // globale non sceglie un carattere), mentre le altre voci della tile prendono il preset una per una.
+                // Chi non conosce :has() salta la regola.
+                $css .= "{$sel}:has(.olo-template),\n{$sel} {$voci}:has(.olo-template) {\n  font-family: inherit;\n  font-weight: inherit;\n  text-transform: inherit;\n  line-height: inherit;\n  letter-spacing: inherit;\n}\n\n";
                 // Le tile scrivono la tipografia del proprio titolo INLINE, e
                 // l'inline batte qualsiasi regola. Ma la scrivono attraverso le
                 // variabili di ruolo: ridefinendole qui sul wrapper, la
