@@ -20,6 +20,8 @@ class Olobuild_Social_Tile extends Olobuild_Tile_Base {
         'icon_color'       => '',
         'hover_effect'     => 'lift',
         'use_brand_colors' => true,
+        // Padding del riquadro delle icone: era fisso a 16 (nessun controllo), resta 16 per chi non lo imposta.
+        'tile_padding'     => [ 'top' => 16, 'right' => 16, 'bottom' => 16, 'left' => 16 ],
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -197,6 +199,7 @@ class Olobuild_Social_Tile extends Olobuild_Tile_Base {
         $custom_color = $s['icon_color'] ?: 'var(--olo-color-primary, #e1474f)';
         $show_labels  = ! empty( $s['show_labels'] );
         $hover_effect = $s['hover_effect'] ?: 'lift';
+        $padding      = Olobuild_Tile_Utils::sides_css( Olobuild_Tile_Utils::spacing_sides( $s['tile_padding'] ?? null, [], [ 16, 16, 16, 16 ] ) );
 
         $align_map   = [ 'left' => 'uk-flex-left', 'center' => 'uk-flex-center', 'right' => 'uk-flex-right' ];
         $align_class = $align_map[ $s['alignment'] ] ?? 'uk-flex-center';
@@ -218,7 +221,7 @@ class Olobuild_Social_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-social uk-flex uk-flex-wrap <?php echo esc_attr( $align_class ); ?>" style="gap: <?php echo (int) $gap; ?>px; padding: 16px;">
+        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-social uk-flex uk-flex-wrap <?php echo esc_attr( $align_class ); ?>" style="gap: <?php echo (int) $gap; ?>px; padding: <?php echo esc_attr( $padding ); ?>;">
             <?php foreach ( $links as $link ) :
                 $icon  = self::get_icon_svg( $link['platform'] );
                 $color = $use_brand ? ( $brand_colors[ $link['platform'] ] ?? 'var(--olo-color-primary, #e1474f)' ) : $this->safe_color_css( $custom_color );

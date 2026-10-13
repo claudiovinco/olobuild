@@ -54,6 +54,7 @@ export default {
     icon_color: '',
     hover_effect: 'lift',
     use_brand_colors: true,
+    tile_padding: { top: 16, right: 16, bottom: 16, left: 16 },
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
@@ -115,6 +116,7 @@ export default {
       { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
     ]},
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 100 },
 
     { type: 'separator', label: t('Stile') },
     { key: 'style', label: t('Stile'), type: 'select', options: [

@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.715 - 2026-10-13 (nuovo)
+- Link social: nel tab Stile, gruppo Layout, c'è il «Padding» del riquadro delle icone. Prima era fisso a 16 px e le icone non si allineavano al testo vicino; chi non lo cambia resta com'era.
+- Pro Slider: le frecce negli angoli in basso valgono fino a 1200 px, la soglia del tablet orizzontale (nella 1.4.714 fino a 1024).
+
 ## v1.4.714 - 2026-10-13 (fix)
 - Pro Slider: anche sul tablet (da 641 a 1024 px) le frecce stanno negli angoli in basso, all'altezza dei punti, come sul telefono: a metà altezza coprivano l'inizio dei testi posati a sinistra.
 

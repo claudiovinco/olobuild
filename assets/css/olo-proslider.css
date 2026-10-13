@@ -1033,12 +1033,13 @@
 /* ═══════════════════════════════════════════════════════════
    Responsive
    ═══════════════════════════════════════════════════════════ */
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   /* Su tablet e telefono le frecce scendono negli angoli in basso, all'altezza dei punti: a metà altezza
      coprivano l'inizio dei testi, che stanno a sinistra proprio dove sta la freccia. La freccia ha misura
      fissa e la tela si stringe: un testo al 6% della tela del tablet (1024) a 880 px parte a 53 px, sotto
-     la freccia (da 16 a 64). Prima valeva solo sotto i 640. Con le miniature sotto (che occupano il fondo)
-     restano a metà. */
+     la freccia (da 16 a 64). Prima valeva solo sotto i 640. 1200 è la soglia del tablet orizzontale del
+     contratto dei breakpoint (la tela del tablet parte da 1024, che nel contratto non c'è). Con le
+     miniature sotto (che occupano il fondo) restano a metà. */
   .olo-proslider:not(:has(+ .olo-proslider-thumbs)) > .olo-proslider-arrow { top: auto; bottom: 6px; transform: none; }
 }
 @media (max-width: 640px) {
