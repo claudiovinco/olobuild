@@ -36,6 +36,7 @@ export default {
     menu_pointer_color: '',
     dropdown_bg: '',
     dropdown_color: '',
+    dropdown_hover_color: '',
     header_mode: 'overlay',
     sticky: false,
     sticky_show_on_up: false,
@@ -264,6 +265,7 @@ export default {
     { type: 'typography', label: t('Dropdown'),
       keys: {
         color: 'dropdown_color',
+        colorHover: 'dropdown_hover_color',
       },
     },
     { type: 'typography', label: t('Icona verticale'),

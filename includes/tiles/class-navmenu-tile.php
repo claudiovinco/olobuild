@@ -49,6 +49,7 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
         'menu_pointer_color'     => '',
         'dropdown_bg'    => '',
         'dropdown_color' => '',
+        'dropdown_hover_color' => '',
         // Header
         'header_mode'       => 'overlay',
         // Sticky Header
@@ -270,6 +271,7 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
         $active_color   = $this->safe_color_css( $s['active_color'] );
         $dropdown_bg    = $this->safe_color_css( $s['dropdown_bg'] );
         $dropdown_color = $this->safe_color_css( $s['dropdown_color'] );
+        $dropdown_hover = $this->safe_color_css( $s['dropdown_hover_color'] ?? '' );
         $gap            = $s['gap'];
 
         // Base link styles
@@ -312,6 +314,19 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
             $rules[] = "{$sel} .olo-mega-panel .uk-nav > li > a { color: {$dropdown_color}; }";
             $rules[] = "{$sel} .olo-mega-panel .uk-nav-header { color: {$dropdown_color}; opacity: 0.7; }";
         }
+        // Voci della tendina e del mega pannello: misura, peso, maiuscolo e spaziatura delle voci della barra (il carattere
+        // arriva già dallo stile tipografico). Prima restavano quelli di UIkit (14 px, minuscolo) e la tendina non sembrava
+        // parte del menu. Senza impostazioni nella barra non cambia niente.
+        $voce_tendina = array_values( array_filter( $link_decls, function ( $d ) { return 0 !== strpos( $d, 'color' ); } ) );
+        if ( $voce_tendina ) {
+            $rules[] = "{$sel} .olo-nav-dropdown .uk-nav > li > a, {$sel} .olo-mega-panel .uk-nav > li > a { " . implode( '; ', $voce_tendina ) . '; }';
+        }
+        // Al passaggio: il colore scelto o, senza, quello della tendina. UIkit la scuriva (#666): su un fondo scuro spariva.
+        $tendina_hover = $dropdown_hover ?: $dropdown_color;
+        if ( $tendina_hover ) {
+            $rules[] = "{$sel} .olo-nav-dropdown .uk-nav > li > a:hover, {$sel} .olo-nav-dropdown .uk-nav > li > a:focus-visible, {$sel} .olo-mega-panel .uk-nav > li > a:hover, {$sel} .olo-mega-panel .uk-nav > li > a:focus-visible { color: {$tendina_hover}; }";
+        }
+        $rules[] = "{$sel} .olo-nav-dropdown .uk-nav > li > a:focus-visible, {$sel} .olo-mega-panel .uk-nav > li > a:focus-visible { outline:none; box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); border-radius:0.25em; }";
 
         // Toggle icon color inherits text_color
         if ( $text_color ) {
@@ -466,6 +481,17 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
                 $rules[] = "{$sel} {$fs} .uk-nav > li:not(.olo-nav-fs-btn) { border-bottom: 1px solid {$linea}; }";
                 $rules[] = "{$sel} {$fs} .uk-nav > li:not(.olo-nav-fs-btn) > a { padding: 0.45em 0; }";
             }
+            // Sottovoci: sempre in vista sotto la voce, in una riga di link piccoli come le descrizioni. La voce resta un link
+            // alla sua pagina: col menu a fisarmonica di UIkit il clic apriva le sottovoci e quella pagina non si raggiungeva.
+            // Coi numeri partono dove parte il nome (numero di 2 cifre + spazio fra le colonne, 0,75 della misura della voce).
+            $sub_col = $this->safe_color_css( $s['fs_desc_color'] ?? '' ) ?: "color-mix(in srgb, {$fs_col} 72%, transparent)";
+            $sub_rientro = ( ! empty( $s['fs_numbers'] ) && $fs_sx ) ? 'calc(17px + ' . round( 0.75 * ( $fs_sz > 0 ? $fs_sz : 24 ), 2 ) . 'px)' : '0';
+            $rules[] = "{$sel} {$fs} .olo-nav-fs-sub { list-style: none; margin: -0.1em 0 0.75em; padding: 0 0 0 {$sub_rientro}; display: flex; flex-wrap: wrap; gap: 0.25em 1.5em; justify-content: " . ( $fs_sx ? 'flex-start' : 'center' ) . '; }';
+            $rules[] = "{$sel} {$fs} .olo-nav-fs-sub > li > a { display: inline-block; padding: 0.35em 0; font-family: {$mono}; font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: {$sub_col}; text-decoration: none;" . ( $fs_hov ? " transition: color {$fs_dur}ms ease;" : '' ) . ' }';
+            if ( $fs_hov ) {
+                $rules[] = "{$sel} {$fs} .olo-nav-fs-sub > li > a:hover, {$sel} {$fs} .olo-nav-fs-sub > li > a:focus-visible, {$sel} {$fs} .olo-nav-fs-sub > li > a[aria-current] { color: {$fs_hov}; }";
+            }
+            $rules[] = "{$sel} {$fs} .olo-nav-fs-sub > li > a:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); border-radius: 0.25em; }";
             // Voce pulsante (Voci pulsante): un pulsante vero anche qui, coi colori del tema
             $rules[] = "{$sel} {$fs} .uk-nav > li.olo-nav-fs-btn { margin-top: 1.75rem; text-align: " . ( $fs_sx ? 'left' : 'center' ) . '; }';
             $rules[] = "{$sel} {$fs} .uk-nav > li.olo-nav-fs-btn > a { display: inline-flex; align-items: center; justify-content: center; padding: 1.1em 2.15em; border-radius: 0.45em; background: var(--olo-color-primary, #e1474f); color: var(--olo-color-on-primary, #ffffff); font-family: {$mono}; font-size: 13px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; }";
@@ -1000,14 +1026,30 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
             }
             return $html . '</a>';
         };
+        // Sottovoce a schermo intero: solo il nome (la descrizione romperebbe la riga di link)
+        $link_sub = function ( $it ) use ( $qui ) {
+            return '<a href="' . esc_url( $it->url ) . '"'
+                . ( $it->target ? ' target="' . esc_attr( $it->target ) . '"' . ( '_blank' === $it->target ? ' rel="noopener"' : '' ) : '' )
+                . ( trailingslashit( $it->url ) === $qui ? ' aria-current="page"' : '' ) . '>' . esc_html( $it->title ) . '</a>';
+        };
         foreach ( array_values( $tree ) as $idx => $item ) {
             $subs = $children[ $item->ID ] ?? [];
             $cls  = [];
-            if ( ! empty( $subs ) ) { $cls[] = 'uk-parent'; }
+            // A schermo intero la voce con sottovoci non è una fisarmonica: resta un link e le sottovoci stanno sotto
+            if ( ! empty( $subs ) && ! $fs ) { $cls[] = 'uk-parent'; }
             if ( trailingslashit( $item->url ) === $qui ) { $cls[] = 'uk-active'; }
             if ( $fs && $s && $this->is_button_item( $item, $idx, $total, $s ) ) { $cls[] = 'olo-nav-fs-btn'; }
             echo '<li' . ( $cls ? ' class="' . esc_attr( implode( ' ', $cls ) ) . '"' : '' ) . '>' . $link( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $link() escapes url, target and text.
-            if ( ! empty( $subs ) ) {
+            if ( ! empty( $subs ) && $fs ) {
+                echo '<ul class="olo-nav-fs-sub">';
+                foreach ( $subs as $sub ) {
+                    echo '<li>' . $link_sub( $sub ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $link_sub() escapes.
+                    foreach ( $grandchildren[ $sub->ID ] ?? [] as $gci ) {
+                        echo '<li>' . $link_sub( $gci ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $link_sub() escapes.
+                    }
+                }
+                echo '</ul>';
+            } elseif ( ! empty( $subs ) ) {
                 echo '<ul class="uk-nav-sub">';
                 foreach ( $subs as $sub ) {
                     $gc = $grandchildren[ $sub->ID ] ?? [];

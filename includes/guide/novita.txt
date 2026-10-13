@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.716 - 2026-10-13 (fix)
+- Menu di navigazione: le voci della tendina hanno la misura, il peso, il maiuscolo e la spaziatura delle voci della barra, e al passaggio non diventano più scure (sul fondo scuro sparivano); nel tab Stile, alla voce «Dropdown» della tipografia, c'è anche il colore al passaggio.
+- Menu di navigazione, menu a schermo intero sul telefono: una voce con sottovoci resta un link alla sua pagina e le sottovoci stanno sempre in vista sotto di lei, in una riga di link piccoli (prima il tocco apriva le sottovoci e quella pagina non si raggiungeva più).
+
 ## v1.4.715 - 2026-10-13 (nuovo)
 - Link social: nel tab Stile, gruppo Layout, c'è il «Padding» del riquadro delle icone. Prima era fisso a 16 px e le icone non si allineavano al testo vicino; chi non lo cambia resta com'era.
 - Pro Slider: le frecce negli angoli in basso valgono fino a 1200 px, la soglia del tablet orizzontale (nella 1.4.714 fino a 1024).
