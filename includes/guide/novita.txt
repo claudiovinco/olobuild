@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.726 - 2026-10-13 (fix)
+- Tema Rifugio Larice: il pulsante «Scopri» sotto «Gratta la nebbia» si legge sul fondo verde (prendeva il colore scuro del testo della pagina); il cielo del tramonto parte dallo stesso colore della sezione sopra, senza stacco; i sottotitoli delle sezioni nuove sono dritti come gli altri del tema.
+
 ## v1.4.725 - 2026-10-13 (nuovo)
 - Nuova tile Paesaggio a strati (gruppo Atmosfera): un paesaggio disegnato a strati, dal più lontano al più vicino, che scorrono a velocità diverse mentre si scorre la pagina. Per ogni strato si sceglie la forma (cime, montagne, colline, bosco di conifere, mare di nuvole, onde, dune, città o un'immagine propria), la variante, il dettaglio e la profondità; nello Stile colore, altezza, opacità e sfocatura.
 - Nella scena ci sono anche il cielo sfumato, le stelle che si accendono scorrendo, il sole o la luna che tramonta (o sorge) dietro gli strati, la nebbia nelle valli e un testo con occhiello, titolo, frase e pulsante. Il testo può stare dietro gli strati più vicini: scorrendo, le montagne lo coprono. Col mouse gli strati vicini si spostano anche di lato; per chi chiede al sistema di ridurre il movimento la scena resta ferma.
