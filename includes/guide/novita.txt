@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.732 - 2026-10-13 (fix)
+- Tema Teatro della Seta: nella pagina Stagione titolo, frase e pulsanti stanno al centro fra le quinte del sipario (a sinistra la quinta copriva l'inizio del titolo); la foto della sezione per le famiglie non ripete quella della prima scheda; nella pagina del teatro il titolo della storia sta nella sua colonna e la galleria non ripete la foto degli spazi in affitto.
+
 ## v1.4.731 - 2026-10-13 (nuovo)
 - Hero: nuovo «Sipario». Un sipario di velluto copre la hero e si apre all'italiana (i teli si raccolgono in alto ai lati), alla greca (scorrono di lato) o alla tedesca (sale in alto); parte all'apertura della pagina, quando la hero entra nello schermo, scorrendo o con un clic. Prima di aprirsi mostra occhiello, titolo, invito e uno stemma (con le iniziali, un'icona o un'immagine); dopo restano le quinte, la mantovana o niente. Nello Stile colore e lucentezza del velluto, numero e profondità delle pieghe, oro e frange, mantovana a festoni, luci della ribalta e lama di luce fra i teli. Per chi chiede al sistema di ridurre il movimento il sipario è già aperto.
 - Nuova tile «Cartellone» (gruppo Interattivo): gli spettacoli e gli appuntamenti con data, ora, genere, luogo, durata, prezzo, stato (ultimi posti, esaurito, ingresso libero…), etichette, incontro col pubblico, foto e link ai biglietti. Tre viste: elenco raggruppato per mese, schede con la data sulla foto, prossimo spettacolo col conto alla rovescia. Filtri per genere e per mese, ricerca, «Aggiungi al calendario» e gli appuntamenti passati che si nascondono da soli.
