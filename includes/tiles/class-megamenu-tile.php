@@ -2361,9 +2361,9 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         echo Olobuild_Social_Tile::css_menu( ".{$uid} .olo-mm-social", $soc_style, $soc_size, $soc_color, $soc_hcolor, Olobuild_Tile_Utils::durata_hover( $s, 'social_color_hover_duration', '.2s' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS da valori interi, colori passati da safe_color() e stili di un elenco fisso
         ?>
         .<?php echo $uid; ?> .olo-mm-social-bar { order: 89; }
+        <?php // In fondo senza filo sopra: le voci hanno già il loro divisore (a schermo intero sempre), e i due fili vicini sembravano un errore. ?>
         .<?php echo $uid; ?> .olo-mm-social-footer {
             padding: 20px 24px; justify-content: center; flex-wrap: wrap;
-            border-top: 1px solid rgba(255,255,255,.08);
         }
         <?php
         // Nel menu mobile, senza «Colore icone», le icone prendono il colore delle voci del pannello e al
