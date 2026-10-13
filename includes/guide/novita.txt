@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.709 - 2026-10-13 (miglioria)
+- Quiz a punteggio: nello Stile c'è «Raggio», uno per tutta la tile (scheda, barra, risposte e pulsante). Lasciato vuoto restano gli angoli arrotondati di prima.
+- Temi: Kemet è più interattivo. Nella home il Nilo scorre dentro le lettere di «KEMET» e una sezione presenta la visita virtuale in 3D (le sale a 360°, la tomba da percorrere, il visore, la visita guidata dal vivo), con l'anteprima in video; nella pagina Visita c'è la sala dei visori, col suo video, una domanda e la voce nel modulo di prenotazione; in Collezioni un quiz di cinque domande per le famiglie.
+
 ## v1.4.708 - 2026-10-13 (fix)
 - Temi: in Kemet la grande scritta «KEMET» della home non è più tagliata sul computer. Le lettere erano più alte del loro riquadro e le barre della E e della T restavano fuori; sugli schermi fra 961 e 1040 px la parola usciva anche ai lati. Ora è un po' più piccola, ha più spazio sopra e sotto e lo zoom allo scorrimento è più leggero.
 

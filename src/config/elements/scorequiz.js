@@ -6,7 +6,7 @@ import { t } from '@/i18n';
  * Renderer: includes/tiles/class-scorequiz-tile.php. Nato nell'ondata I4 (1.4.508)
  * al posto di Availability, il cui verdetto non portava da nessuna parte.
  *   fields[]      → testi, domande (risposte «Testo|punti»), esiti (da N punti, link)
- *   styleFields[] → colore, testo sul colore, sfondo e bordo della scheda, allineamento
+ *   styleFields[] → colore, testo sul colore, sfondo e bordo della scheda, raggio, allineamento
  */
 export default {
   type: 'scorequiz',
@@ -36,6 +36,7 @@ export default {
     zone_on: 'var(--olo-color-primary-contrast, #ffffff)',
     card_bg: '',
     card_border: '',
+    radius: '',
     align: 'left',
   },
 
@@ -98,6 +99,9 @@ export default {
     { key: 'card_bg', label: t('Sfondo scheda'), type: 'color',
       description: t('Su uno sfondo scuro (della scheda o del contenitore) i testi passano al chiaro da soli.') },
     { key: 'card_border', label: t('Bordo scheda'), type: 'border', legacyWidth: 1 },
+
+    { type: 'separator', label: t('Forma') },
+    { key: 'radius', label: t('Raggio'), type: 'border-radius' },
 
     { type: 'separator', label: t('Disposizione') },
     { key: 'align', label: t('Allineamento'), type: 'select', options: [

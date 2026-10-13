@@ -39,6 +39,7 @@ class Olobuild_ScoreQuiz_Tile extends Olobuild_Tile_Base {
         'zone_on'       => 'var(--olo-color-primary-contrast, #ffffff)',
         'card_bg'       => '',
         'card_border'   => '',
+        'radius'        => '',
         'align'         => 'left',
     ];
 
@@ -131,6 +132,9 @@ class Olobuild_ScoreQuiz_Tile extends Olobuild_Tile_Base {
         $on     = $this->safe_color_css( $s['zone_on'] ?? '' ) ?: 'var(--olo-color-primary-contrast, #ffffff)';
         $cardbg = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-surface, #ffffff)';
         $line   = Olobuild_Tile_Utils::border_color( $s['card_border'] ?? null, 'var(--olo-color-border, #e5e7eb)' );
+        // «Raggio» (Stile → Forma): uno per tutta la tile, scheda, barra, risposte e pulsante. Vuoto = gli angoli di
+        // prima (scheda 16 px, risposte 12, pulsante e barra a pillola); quattro angoli a 0 = angoli vivi.
+        $raggio = Olobuild_Tile_Utils::radius_force_css( $s['radius'] ?? '' );
         $center = ( ( $s['align'] ?? 'left' ) === 'center' );
         $n      = count( $domande );
         // Testi che seguono il fondo su cui stanno: titolo e introduzione sul fondo pieno del
@@ -171,7 +175,7 @@ class Olobuild_ScoreQuiz_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist (with fixed var() fallbacks), text colours chosen by testo_su() among those or fixed var() literals, Olobuild_Tile_Utils::border_css()/border_color(), fixed literals; $uid is an internal md5-based id. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist (with fixed var() fallbacks), text colours chosen by testo_su() among those or fixed var() literals, Olobuild_Tile_Utils::border_css()/border_color(), radius_force_css() (absint corners in px), fixed literals; $uid is an internal md5-based id. ?>
         <?php // Testi secondari piccoli (passo «Domanda 1 di 3», punteggio, «Ricomincia») a opacità .8: a .6-.7
               // il testo del tema scendeva sotto 4,5:1 anche sulla card bianca (11 ott 2026). ?>
         <style>
@@ -179,13 +183,13 @@ class Olobuild_ScoreQuiz_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .osq-eyebrow{display:block;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--sq-accent);margin-bottom:0.625rem;}
             .<?php echo $uid; ?> .osq-h{font-family:var(--olo-font-family-heading,inherit);font-size:clamp(26px,3.6vw,40px);line-height:1.12;margin:0;color:<?php echo $testo_zona; ?>;}
             .<?php echo $uid; ?> .osq-intro{font-size:15.5px;line-height:1.6;opacity:.8;margin:0.75rem 0 0;}
-            .<?php echo $uid; ?> .osq-card{margin-top:1.5rem;background:<?php echo $cardbg; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $line ] ) ); ?>border-radius:1rem;padding:clamp(1.25rem,3vw,2rem);text-align:left;<?php echo $center ? 'max-width:640px;margin-left:auto;margin-right:auto;' : ''; ?><?php if ( '' !== $colore_card ) echo 'color:' . $colore_card . ';'; ?>}
-            .<?php echo $uid; ?> .osq-bar{height:4px;border-radius:6.1875rem;background:var(--sq-line);overflow:hidden;margin-bottom:1.125rem;}
+            .<?php echo $uid; ?> .osq-card{margin-top:1.5rem;background:<?php echo $cardbg; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $line ] ) ); ?>border-radius:<?php echo $raggio ?: '1rem'; ?>;padding:clamp(1.25rem,3vw,2rem);text-align:left;<?php echo $center ? 'max-width:640px;margin-left:auto;margin-right:auto;' : ''; ?><?php if ( '' !== $colore_card ) echo 'color:' . $colore_card . ';'; ?>}
+            .<?php echo $uid; ?> .osq-bar{height:4px;border-radius:<?php echo $raggio ?: '6.1875rem'; ?>;background:var(--sq-line);overflow:hidden;margin-bottom:1.125rem;}
             .<?php echo $uid; ?> .osq-bar i{display:block;height:100%;width:0;background:var(--sq-accent);transition:width .3s ease;}
             .<?php echo $uid; ?> .osq-step{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.8;}
             .<?php echo $uid; ?> .osq-q{font-size:20px;font-weight:600;line-height:1.35;margin:0.5rem 0 1rem;color:var(--sq-text);outline:0;}
             .<?php echo $uid; ?> .osq-opts{display:grid;gap:0.625rem;}
-            .<?php echo $uid; ?> .osq-opt{font:inherit;font-size:15.5px;text-align:left;padding:0.875rem 1.125rem;border-radius:0.75rem;border:1.5px solid var(--sq-line);background:transparent;color:var(--sq-text);cursor:pointer;transition:border-color .15s,background .15s;}
+            .<?php echo $uid; ?> .osq-opt{font:inherit;font-size:15.5px;text-align:left;padding:0.875rem 1.125rem;border-radius:<?php echo $raggio ?: '0.75rem'; ?>;border:1.5px solid var(--sq-line);background:transparent;color:var(--sq-text);cursor:pointer;transition:border-color .15s,background .15s;}
             .<?php echo $uid; ?> .osq-opt:hover{border-color:var(--sq-accent);background:color-mix(in srgb,var(--sq-accent) 8%,transparent);}
             .<?php echo $uid; ?> .osq-opt:focus-visible,.<?php echo $uid; ?> .osq-link:focus-visible,.<?php echo $uid; ?> .osq-ghost:focus-visible{outline:2px solid var(--sq-accent);outline-offset:2px;}
             .<?php echo $uid; ?> .osq-nav{display:flex;justify-content:space-between;gap:0.75rem;margin-top:1.125rem;}
@@ -193,7 +197,7 @@ class Olobuild_ScoreQuiz_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .osq-res-t{font-size:clamp(24px,3vw,32px);font-weight:700;color:var(--sq-accent);margin:0.375rem 0 0.5rem;outline:0;}
             .<?php echo $uid; ?> .osq-res-p{font-size:15.5px;line-height:1.6;margin:0 0 1.125rem;}
             .<?php echo $uid; ?> .osq-score{font-size:13px;opacity:.8;margin:0 0 0.875rem;}
-            .<?php echo $uid; ?> .osq-link{display:inline-flex;align-items:center;gap:0.5rem;font-weight:600;font-size:15px;color:var(--sq-on);background:var(--sq-accent);padding:0.75rem 1.5rem;border-radius:62.4375rem;text-decoration:none;}
+            .<?php echo $uid; ?> .osq-link{display:inline-flex;align-items:center;gap:0.5rem;font-weight:600;font-size:15px;color:var(--sq-on);background:var(--sq-accent);padding:0.75rem 1.5rem;border-radius:<?php echo $raggio ?: '62.4375rem'; ?>;text-decoration:none;}
             .<?php echo $uid; ?> [hidden]{display:none !important;}
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
