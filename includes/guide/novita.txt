@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.727 - 2026-10-13 (fix)
+- Tema Rifugio Larice: miniature nuove nel selettore dei temi e nella Vetrina (computer e telefono), con l'apertura col video delle nuvole e le sezioni aggiunte nella 1.4.725.
+
 ## v1.4.726 - 2026-10-13 (fix)
 - Tema Rifugio Larice: il pulsante «Scopri» sotto «Gratta la nebbia» si legge sul fondo verde (prendeva il colore scuro del testo della pagina); il cielo del tramonto parte dallo stesso colore della sezione sopra, senza stacco; i sottotitoli delle sezioni nuove sono dritti come gli altri del tema.
 
