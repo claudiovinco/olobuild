@@ -1033,14 +1033,18 @@
 /* ═══════════════════════════════════════════════════════════
    Responsive
    ═══════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  /* Su tablet e telefono le frecce scendono negli angoli in basso, all'altezza dei punti: a metà altezza
+     coprivano l'inizio dei testi, che stanno a sinistra proprio dove sta la freccia. La freccia ha misura
+     fissa e la tela si stringe: un testo al 6% della tela del tablet (1024) a 880 px parte a 53 px, sotto
+     la freccia (da 16 a 64). Prima valeva solo sotto i 640. Con le miniature sotto (che occupano il fondo)
+     restano a metà. */
+  .olo-proslider:not(:has(+ .olo-proslider-thumbs)) > .olo-proslider-arrow { top: auto; bottom: 6px; transform: none; }
+}
 @media (max-width: 640px) {
   .olo-proslider-arrow { width: 36px; height: 36px; font-size: 18px; }
   .olo-proslider-prev { left: 8px; }
   .olo-proslider-next { right: 8px; }
-  /* Sul telefono le frecce scendono negli angoli in basso, all'altezza dei punti: a metà altezza
-     coprivano l'inizio dei testi, che stanno a sinistra proprio dove sta la freccia. Con le miniature
-     sotto (che occupano il fondo) restano a metà. */
-  .olo-proslider:not(:has(+ .olo-proslider-thumbs)) > .olo-proslider-arrow { top: auto; bottom: 6px; transform: none; }
   .olo-proslider-dots { bottom: 10px; gap: 6px; }
   .olo-proslider-dot { width: 10px; height: 10px; }
   .olo-proslider-layer { font-size: 0.6em !important; }

@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.714 - 2026-10-13 (fix)
+- Pro Slider: anche sul tablet (da 641 a 1024 px) le frecce stanno negli angoli in basso, all'altezza dei punti, come sul telefono: a metà altezza coprivano l'inizio dei testi posati a sinistra.
+
 ## v1.4.713 - 2026-10-13 (fix)
 - Temi: in Kemet, con la finestra un po' più stretta (da 641 a 1240 px), il titolo della prima slide dell'apertura resta su due righe e non copre più la frase sotto, e i due pulsanti non si toccano più.
 
