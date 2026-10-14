@@ -26889,3 +26889,7 @@ msgstr "Industrie et fabrication"
 #: includes/class-theme-importer.php
 msgid "Il disegno si quota da solo"
 msgstr "Le dessin se cote tout seul"
+
+#: includes/class-theme-importer.php
+msgid "La linea in cinque stazioni"
+msgstr "La ligne en cinq stations"

@@ -26889,3 +26889,7 @@ msgstr "Industria y manufactura"
 #: includes/class-theme-importer.php
 msgid "Il disegno si quota da solo"
 msgstr "El plano se acota solo"
+
+#: includes/class-theme-importer.php
+msgid "La linea in cinque stazioni"
+msgstr "La línea en cinco estaciones"

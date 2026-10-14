@@ -26889,3 +26889,7 @@ msgstr "Industrie & Fertigung"
 #: includes/class-theme-importer.php
 msgid "Il disegno si quota da solo"
 msgstr "Die Zeichnung bemaßt sich selbst"
+
+#: includes/class-theme-importer.php
+msgid "La linea in cinque stazioni"
+msgstr "Die Linie in fünf Stationen"

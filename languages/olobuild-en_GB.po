@@ -18913,3 +18913,7 @@ msgstr "Industry & manufacturing"
 #: includes/class-theme-importer.php
 msgid "Il disegno si quota da solo"
 msgstr "The drawing dimensions itself"
+
+#: includes/class-theme-importer.php
+msgid "La linea in cinque stazioni"
+msgstr "The line in five stations"
