@@ -10,7 +10,8 @@
  * Filtri per genere e per mese e ricerca, nel browser. Gli appuntamenti passati si nascondono (o si
  * attenuano) nel browser, nel fuso del sito: la pagina resta giusta anche servita dalla cache.
  * «Aggiungi al calendario» scarica il file .ics dell'appuntamento. Nel builder si vedono tutti, i
- * passati attenuati.
+ * passati attenuati. Con «Appuntamenti da: Spettacoli del sito» le voci sono gli spettacoli del menu
+ * Spettacoli (Olobuild_Spettacoli), gli stessi in ogni copia della tile; nelle demo dei temi restano le voci.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -26,6 +27,7 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
 
     protected $defaults = [
         // contenuto
+        'fonte'             => 'voci',
         'vista'             => 'lista',
         'raggruppa'         => true,
         'ordina'            => true,
@@ -35,6 +37,7 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
         'filtri_mesi'       => false,
         'ricerca'           => false,
         'solo_genere'       => '',
+        'escludi_generi'    => '',
         'immagini'          => true,
         'testo_tutti'       => 'Tutti',
         'testo_biglietti'   => 'Biglietti',
@@ -254,9 +257,15 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
             $generi[ $slug ] = [ 'nome' => $nome, 'colore' => $this->safe_color_css( $g['colore'] ?? '' ) ];
         }
 
+        // ── Voci: quelle della tile o gli spettacoli del sito (nelle demo dei temi le voci del tema) ──
+        if ( 'spettacoli' === (string) $s['fonte'] && class_exists( 'Olobuild_Spettacoli' ) ) {
+            $s['voci'] = Olobuild_Spettacoli::voci_per_cartellone( (array) $s['voci'] );
+        }
+
         // ── Voci: valide, ordinate per data, con quanto serve al browser ──
-        $solo  = sanitize_title( (string) $s['solo_genere'] );
-        $voci  = [];
+        $solo    = sanitize_title( (string) $s['solo_genere'] );
+        $escludi = array_filter( array_map( 'sanitize_title', explode( ',', (string) $s['escludi_generi'] ) ) );
+        $voci    = [];
         foreach ( (array) $s['voci'] as $i => $v ) {
             $tit = trim( (string) ( $v['titolo'] ?? '' ) );
             $ts  = self::istante( $v['data'] ?? '', $v['ora'] ?? '' );
@@ -266,6 +275,9 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
             $gen  = trim( (string) ( $v['genere'] ?? '' ) );
             $gslg = '' !== $gen ? sanitize_title( $gen ) : '';
             if ( '' !== $solo && $gslg !== $solo ) {
+                continue;
+            }
+            if ( '' !== $gslg && in_array( $gslg, $escludi, true ) ) {
                 continue;
             }
             if ( '' !== $gslg && ! isset( $generi[ $gslg ] ) ) {

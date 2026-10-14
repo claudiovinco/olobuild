@@ -25,6 +25,9 @@ class Olobuild_Demo_Temi {
     /** Primo segmento dell'indirizzo: /demo/<tema>/<pagina>/. */
     const BASE = 'demo';
 
+    /** Pagina di uno spettacolo nella demo: /demo/<tema>/spettacoli/<titolo>/ (la demo è nella lingua del tema). */
+    const BASE_SPETTACOLI = 'spettacoli';
+
     /**
      * Template, menu e voci virtuali hanno id da qui in su: oltre ogni id vero (tabelle e termini
      * partono da 1) e sotto 2^31, così passano da absint() e da %d. Template: un id per tema e
@@ -37,8 +40,11 @@ class Olobuild_Demo_Temi {
     /** @var array|null Il tema della richiesta: id, cartella, theme.json. */
     private static $tema = null;
 
-    /** @var string Chiave della pagina mostrata (theme.json → pages), oppure '404'. */
+    /** @var string Chiave della pagina mostrata (theme.json → pages), oppure '404', o 'spettacolo'. */
     private static $pagina = '';
+
+    /** @var array|null La voce del Cartellone del tema di cui si mostra la pagina (segnaposto ancora da risolvere). */
+    private static $spettacolo = null;
 
     /** @var array<int,array> Template virtuali già preparati in questa richiesta. */
     private static $template = [];
@@ -152,7 +158,7 @@ class Olobuild_Demo_Temi {
         $percorso = (string) wp_parse_url( $uri, PHP_URL_PATH );
         // L'indirizzo del sito senza filtri di lingua: home_url() può già portare il prefisso di OLOlang.
         $casa = trailingslashit( (string) wp_parse_url( (string) get_option( 'home' ), PHP_URL_PATH ) );
-        if ( ! preg_match( '#^' . preg_quote( $casa . self::BASE . '/', '#' ) . '([a-z0-9-]+)(?:/([a-z0-9-]+))?/?$#', $percorso, $m ) ) {
+        if ( ! preg_match( '#^' . preg_quote( $casa . self::BASE . '/', '#' ) . '([a-z0-9-]+)(?:/([a-z0-9-]+))?(?:/([a-z0-9-]+))?/?$#', $percorso, $m ) ) {
             return null;
         }
         $id = $m[1];
@@ -167,6 +173,17 @@ class Olobuild_Demo_Temi {
         $json = json_decode( (string) file_get_contents( $file ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- file del plugin
         if ( ! is_array( $json ) || empty( $json['templates'] ) || empty( $json['pages'] ) || ! is_array( $json['pages'] ) ) {
             return null;
+        }
+        // La pagina di uno spettacolo: il template singolo del tema (theme.json → singles) con la voce del Cartellone
+        // che ha quel titolo. Uno spettacolo che il tema non ha mostra la 404 del tema.
+        if ( isset( $m[3] ) && '' !== $m[3] ) {
+            $voce = ( self::BASE_SPETTACOLI === ( $m[2] ?? '' ) && ! empty( $json['singles']['olo_spettacolo'] ) )
+                ? self::voce_del_tema( $dir, $json, $m[3] ) : null;
+            if ( $voce ) {
+                self::$spettacolo = $voce;
+                return [ [ 'id' => $id, 'dir' => $dir, 'json' => $json ], 'spettacolo' ];
+            }
+            return empty( $json['activate']['404'] ) ? null : [ [ 'id' => $id, 'dir' => $dir, 'json' => $json ], '404' ];
         }
         $chiave = self::pagina_da_indirizzo( $json['pages'], $m[2] ?? '' );
         if ( '' === $chiave ) {
@@ -212,6 +229,72 @@ class Olobuild_Demo_Temi {
             return null === $prima ? '' : (string) $prima;
         }
         return '';
+    }
+
+    /** Le voci dei Cartelloni del tema, una volta ciascuna (per id), lette dai suoi file. */
+    private static function voci_del_tema( $dir, $json ) {
+        $voci = [];
+        $giro = static function ( $nodi ) use ( &$giro, &$voci ) {
+            foreach ( (array) $nodi as $n ) {
+                if ( ! is_array( $n ) ) {
+                    continue;
+                }
+                if ( 'cartellone' === ( $n['type'] ?? '' ) ) {
+                    foreach ( (array) ( $n['settings']['voci'] ?? [] ) as $v ) {
+                        $k = is_array( $v ) ? (string) ( $v['id'] ?? '' ) : '';
+                        if ( '' !== $k && ! isset( $voci[ $k ] ) ) {
+                            $voci[ $k ] = $v;
+                        }
+                    }
+                }
+                if ( ! empty( $n['children'] ) ) {
+                    $giro( $n['children'] );
+                }
+            }
+        };
+        foreach ( (array) ( $json['templates'] ?? [] ) as $meta ) {
+            $file = $dir . '/' . basename( (string) ( $meta['file'] ?? '' ) );
+            if ( ! is_readable( $file ) ) {
+                continue;
+            }
+            $testo = (string) file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- file del plugin
+            if ( false === strpos( $testo, '"cartellone"' ) ) {
+                continue;
+            }
+            $dati = json_decode( $testo, true );
+            if ( is_array( $dati ) ) {
+                $giro( isset( $dati['content'] ) && ! isset( $dati[0] ) ? $dati['content'] : $dati );
+            }
+        }
+        return $voci;
+    }
+
+    /** La voce del tema col titolo di quello slug, o null. */
+    private static function voce_del_tema( $dir, $json, $slug ) {
+        foreach ( self::voci_del_tema( $dir, $json ) as $v ) {
+            if ( sanitize_title( (string) ( $v['titolo'] ?? '' ) ) === $slug ) {
+                return $v;
+            }
+        }
+        return null;
+    }
+
+    /** La voce dello spettacolo mostrato, coi segnaposto risolti come nelle pagine (foto della libreria, link della demo). */
+    private static function spettacolo() {
+        if ( ! is_array( self::$spettacolo ) ) {
+            return null;
+        }
+        $v = self::prepara( [ self::$spettacolo ] );
+        return isset( $v[0] ) && is_array( $v[0] ) ? $v[0] : null;
+    }
+
+    /** Indirizzo (relativo) della pagina di uno spettacolo nella demo, '' se il tema non ha la scheda dello spettacolo. */
+    public static function indirizzo_spettacolo( $titolo ) {
+        $slug = sanitize_title( (string) $titolo );
+        if ( empty( self::$tema['json']['singles']['olo_spettacolo'] ) || '' === $slug ) {
+            return '';
+        }
+        return self::con_palette( wp_make_link_relative( home_url( '/' . self::BASE . '/' . self::$tema['id'] . '/' . self::BASE_SPETTACOLI . '/' . $slug . '/' ) ) );
     }
 
     /** Lo slug di una pagina del tema: quello dichiarato o, come fa WordPress all'import, dal nome. */
@@ -599,6 +682,9 @@ class Olobuild_Demo_Temi {
         if ( '404' === self::$pagina ) {
             return self::id_zona( '404' );
         }
+        if ( 'spettacolo' === self::$pagina ) {
+            return self::id_template( (string) ( self::$tema['json']['singles']['olo_spettacolo'] ?? '' ) );
+        }
         $p = self::$tema['json']['pages'][ self::$pagina ] ?? [];
         return self::id_template( (string) ( $p['template'] ?? self::$pagina ) );
     }
@@ -850,6 +936,14 @@ class Olobuild_Demo_Temi {
             return (string) call_user_func( $disegna );
         }
         $p       = self::$tema['json']['pages'][ self::$pagina ] ?? [];
+        $voce    = 'spettacolo' === self::$pagina ? self::spettacolo() : null;
+        if ( $voce ) {
+            // La pagina di uno spettacolo: i campi dinamici della scheda leggono la voce del tema.
+            $p = [ 'title' => (string) ( $voce['titolo'] ?? '' ), 'slug' => sanitize_title( (string) ( $voce['titolo'] ?? '' ) ) ];
+            if ( class_exists( 'Olobuild_Spettacoli' ) ) {
+                Olobuild_Spettacoli::imposta_demo( $voce );
+            }
+        }
         $ora     = current_time( 'mysql' );
         $ora_gmt = current_time( 'mysql', true );
         $pagina  = new WP_Post( (object) [
@@ -859,7 +953,7 @@ class Olobuild_Demo_Temi {
             'post_date_gmt'         => $ora_gmt,
             'post_content'          => '',
             'post_title'            => (string) ( $p['title'] ?? self::$pagina ),
-            'post_excerpt'          => '',
+            'post_excerpt'          => $voce ? (string) ( $voce['descrizione'] ?? '' ) : '',
             'post_status'           => 'publish',
             'comment_status'        => 'closed',
             'ping_status'           => 'closed',
@@ -873,7 +967,7 @@ class Olobuild_Demo_Temi {
             'post_parent'           => 0,
             'guid'                  => '',
             'menu_order'            => 0,
-            'post_type'             => 'page',
+            'post_type'             => $voce ? 'olo_spettacolo' : 'page',
             'post_mime_type'        => '',
             'comment_count'         => '0',
             'filter'                => 'raw',
@@ -883,7 +977,7 @@ class Olobuild_Demo_Temi {
             $prima[ $campo ] = $wp_query->$campo;
         }
         $post_prima                  = $GLOBALS['post'] ?? null;
-        $wp_query->is_page           = true;
+        $wp_query->is_page           = ! $voce;
         $wp_query->is_singular       = true;
         $wp_query->queried_object    = $pagina;
         $wp_query->queried_object_id = 0;
@@ -895,6 +989,9 @@ class Olobuild_Demo_Temi {
         try {
             return (string) call_user_func( $disegna );
         } finally {
+            if ( $voce && class_exists( 'Olobuild_Spettacoli' ) ) {
+                Olobuild_Spettacoli::imposta_demo( null );
+            }
             foreach ( $prima as $campo => $valore ) {
                 $wp_query->$campo = $valore;
             }
@@ -937,6 +1034,9 @@ class Olobuild_Demo_Temi {
         $nome = (string) ( self::$tema['json']['name'] ?? self::$tema['id'] );
         if ( '404' === self::$pagina ) {
             return esc_html( self::testo_ospite( 'Pagina non trovata' ) . ' — ' . $nome );
+        }
+        if ( 'spettacolo' === self::$pagina && is_array( self::$spettacolo ) ) {
+            return esc_html( (string) ( self::$spettacolo['titolo'] ?? '' ) . ' — ' . $nome );
         }
         $p = self::$tema['json']['pages'][ self::$pagina ] ?? [];
         return esc_html( empty( $p['set_as_homepage'] ) && ! empty( $p['title'] ) ? $p['title'] . ' — ' . $nome : $nome );

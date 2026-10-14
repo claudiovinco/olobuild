@@ -26386,3 +26386,180 @@ msgstr "Swagged"
 
 msgid "Dritta, a pieghe"
 msgstr "Straight, pleated"
+
+msgid "Spettacoli"
+msgstr "Shows"
+
+msgid "Spettacolo"
+msgstr "Show"
+
+msgid "Tutti gli spettacoli"
+msgstr "All shows"
+
+msgid "Aggiungi spettacolo"
+msgstr "Add show"
+
+msgid "Aggiungi uno spettacolo"
+msgstr "Add a show"
+
+msgid "Modifica lo spettacolo"
+msgstr "Edit show"
+
+msgid "Nuovo spettacolo"
+msgstr "New show"
+
+msgid "Vedi lo spettacolo"
+msgstr "View show"
+
+msgid "Vedi gli spettacoli"
+msgstr "View shows"
+
+msgid "Cerca negli spettacoli"
+msgstr "Search shows"
+
+msgid "Nessuno spettacolo."
+msgstr "No shows."
+
+msgid "Nessuno spettacolo nel cestino."
+msgstr "No shows in the bin."
+
+msgid "Foto dello spettacolo"
+msgstr "Show photo"
+
+msgid "Scegli la foto"
+msgstr "Choose the photo"
+
+msgid "Togli la foto"
+msgstr "Remove the photo"
+
+msgid "Usa come foto dello spettacolo"
+msgstr "Use as show photo"
+
+msgid "Spettacolo pubblicato."
+msgstr "Show published."
+
+msgid "Spettacolo aggiornato."
+msgstr "Show updated."
+
+msgid "Titolo dello spettacolo"
+msgstr "Show title"
+
+msgid "Lo spettacolo"
+msgstr "The show"
+
+msgid "di Carlo Goldoni · Compagnia dell'Arco"
+msgstr "by Carlo Goldoni · Compagnia dell’Arco"
+
+msgid "Lirica"
+msgstr "Opera"
+
+msgid "Danza"
+msgstr "Dance"
+
+msgid "Ragazzi"
+msgstr "Young audiences"
+
+msgid "ven e sab 20:30 · dom 16:00"
+msgstr "Fri and Sat 8:30 pm · Sun 4 pm"
+
+msgid "2 h 10 min con intervallo"
+msgstr "2 h 10 min with interval"
+
+msgid "da 14 €"
+msgstr "from €14"
+
+msgid "Prima nazionale, Sopratitoli, In LIS"
+msgstr "National premiere, Surtitles, Sign language"
+
+msgid "Alle 19:30 incontro con la compagnia nel Ridotto"
+msgstr "At 7:30 pm, meet the company in the Foyer"
+
+msgid "Due righe per il cartellone. Il testo lungo va nell'editor qui sopra."
+msgstr "Two lines for the programme. The long text goes in the editor above."
+
+msgid "Vuoto: la pagina dello spettacolo"
+msgstr "Empty: the show’s own page"
+
+msgid "La data di fine veniva prima dell'inizio: l'abbiamo tolta. Controlla le date dello spettacolo."
+msgstr "The end date came before the start date, so we removed it. Please check the show dates."
+
+msgid "fino al %s"
+msgstr "until %s"
+
+msgid "Nessuna voce da trasformare."
+msgstr "No entries to convert."
+
+msgid "Appuntamenti da"
+msgstr "Events from"
+
+msgid "Voci della tile"
+msgstr "The tile’s entries"
+
+msgid "Spettacoli del sito"
+msgstr "The site’s shows"
+
+msgid "Con «Spettacoli del sito» gli appuntamenti si scrivono una volta nel menu Spettacoli di WordPress e ogni copia del Cartellone li mostra con la sua vista e i suoi filtri; ogni spettacolo ha anche la sua pagina."
+msgstr "With “The site’s shows”, events are written once in the WordPress Shows menu and every copy of the Season programme shows them with its own view and filters; each show also gets its own page."
+
+msgid "Escludi i generi"
+msgstr "Exclude genres"
+
+msgid "Separati da una virgola («Incontri, Ragazzi»): quegli appuntamenti non si vedono. Per un «prossimo spettacolo» che non sia un incontro, per esempio."
+msgstr "Comma-separated (“Talks, Young audiences”): those events are hidden. For a “next show” that isn’t a talk, for example."
+
+msgid "spettacolo pubblicato nel sito"
+msgstr "show published on the site"
+
+msgid "spettacoli pubblicati nel sito"
+msgstr "shows published on the site"
+
+msgid "altri %s in bozza"
+msgstr "%s more in draft"
+
+msgid "Non riesco a leggere gli spettacoli del sito."
+msgstr "Can’t read the site’s shows."
+
+msgid "Gestisci gli spettacoli"
+msgstr "Manage shows"
+
+msgid "Creo gli spettacoli…"
+msgstr "Creating the shows…"
+
+msgid "Crea gli spettacoli dalle voci della tile (%s)"
+msgstr "Create shows from the tile’s entries (%s)"
+
+msgid "Creato 1 spettacolo."
+msgstr "1 show created."
+
+msgid "Creati %s spettacoli."
+msgstr "%s shows created."
+
+msgid "%s c'erano già."
+msgstr "%s were already there."
+
+msgid "Non è stato possibile creare gli spettacoli."
+msgstr "The shows could not be created."
+
+msgid "Genere e date"
+msgstr "Genre and dates"
+
+msgid "Date"
+msgstr "Dates"
+
+msgid "Date e orari"
+msgstr "Dates and times"
+
+msgid "Data a parole"
+msgstr "Date in words"
+
+msgid "Data breve"
+msgstr "Short date"
+
+msgid "Prezzo e disponibilità"
+msgstr "Price and availability"
+
+msgid "Testo lungo"
+msgstr "Long text"
+
+msgid "Testo del pulsante dei biglietti"
+msgstr "Ticket button text"

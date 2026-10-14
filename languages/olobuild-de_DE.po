@@ -26383,3 +26383,180 @@ msgstr "Mit Festons"
 
 msgid "Dritta, a pieghe"
 msgstr "Gerade, in Falten"
+
+msgid "Spettacoli"
+msgstr "Vorstellungen"
+
+msgid "Spettacolo"
+msgstr "Vorstellung"
+
+msgid "Tutti gli spettacoli"
+msgstr "Alle Vorstellungen"
+
+msgid "Aggiungi spettacolo"
+msgstr "Vorstellung hinzufügen"
+
+msgid "Aggiungi uno spettacolo"
+msgstr "Eine Vorstellung hinzufügen"
+
+msgid "Modifica lo spettacolo"
+msgstr "Vorstellung bearbeiten"
+
+msgid "Nuovo spettacolo"
+msgstr "Neue Vorstellung"
+
+msgid "Vedi lo spettacolo"
+msgstr "Vorstellung ansehen"
+
+msgid "Vedi gli spettacoli"
+msgstr "Vorstellungen ansehen"
+
+msgid "Cerca negli spettacoli"
+msgstr "Vorstellungen durchsuchen"
+
+msgid "Nessuno spettacolo."
+msgstr "Keine Vorstellungen."
+
+msgid "Nessuno spettacolo nel cestino."
+msgstr "Keine Vorstellungen im Papierkorb."
+
+msgid "Foto dello spettacolo"
+msgstr "Foto der Vorstellung"
+
+msgid "Scegli la foto"
+msgstr "Foto wählen"
+
+msgid "Togli la foto"
+msgstr "Foto entfernen"
+
+msgid "Usa come foto dello spettacolo"
+msgstr "Als Foto der Vorstellung verwenden"
+
+msgid "Spettacolo pubblicato."
+msgstr "Vorstellung veröffentlicht."
+
+msgid "Spettacolo aggiornato."
+msgstr "Vorstellung aktualisiert."
+
+msgid "Titolo dello spettacolo"
+msgstr "Titel der Vorstellung"
+
+msgid "Lo spettacolo"
+msgstr "Die Vorstellung"
+
+msgid "di Carlo Goldoni · Compagnia dell'Arco"
+msgstr "von Carlo Goldoni · Compagnia dell’Arco"
+
+msgid "Lirica"
+msgstr "Oper"
+
+msgid "Danza"
+msgstr "Tanz"
+
+msgid "Ragazzi"
+msgstr "Kinder und Jugendliche"
+
+msgid "ven e sab 20:30 · dom 16:00"
+msgstr "Fr. und Sa. 20:30 · So. 16:00"
+
+msgid "2 h 10 min con intervallo"
+msgstr "2 Std. 10 Min. mit Pause"
+
+msgid "da 14 €"
+msgstr "ab 14 €"
+
+msgid "Prima nazionale, Sopratitoli, In LIS"
+msgstr "Deutsche Erstaufführung, Übertitel, Gebärdensprache"
+
+msgid "Alle 19:30 incontro con la compagnia nel Ridotto"
+msgstr "Um 19:30 Gespräch mit dem Ensemble im Foyer"
+
+msgid "Due righe per il cartellone. Il testo lungo va nell'editor qui sopra."
+msgstr "Zwei Zeilen für den Spielplan. Der lange Text gehört in den Editor oben."
+
+msgid "Vuoto: la pagina dello spettacolo"
+msgstr "Leer: die Seite der Vorstellung"
+
+msgid "La data di fine veniva prima dell'inizio: l'abbiamo tolta. Controlla le date dello spettacolo."
+msgstr "Das Enddatum lag vor dem Beginn und wurde entfernt. Bitte prüfe die Daten der Vorstellung."
+
+msgid "fino al %s"
+msgstr "bis %s"
+
+msgid "Nessuna voce da trasformare."
+msgstr "Keine Einträge zum Umwandeln."
+
+msgid "Appuntamenti da"
+msgstr "Termine aus"
+
+msgid "Voci della tile"
+msgstr "Einträge der Kachel"
+
+msgid "Spettacoli del sito"
+msgstr "Vorstellungen der Website"
+
+msgid "Con «Spettacoli del sito» gli appuntamenti si scrivono una volta nel menu Spettacoli di WordPress e ogni copia del Cartellone li mostra con la sua vista e i suoi filtri; ogni spettacolo ha anche la sua pagina."
+msgstr "Mit „Vorstellungen der Website“ werden die Termine einmal im WordPress-Menü Vorstellungen erfasst, und jede Kopie des Spielplans zeigt sie mit eigener Ansicht und eigenen Filtern; jede Vorstellung hat auch ihre eigene Seite."
+
+msgid "Escludi i generi"
+msgstr "Genres ausschließen"
+
+msgid "Separati da una virgola («Incontri, Ragazzi»): quegli appuntamenti non si vedono. Per un «prossimo spettacolo» che non sia un incontro, per esempio."
+msgstr "Durch Komma getrennt („Begegnungen, Kinder und Jugendliche“): diese Termine werden ausgeblendet. Zum Beispiel für eine „nächste Vorstellung“, die keine Begegnung ist."
+
+msgid "spettacolo pubblicato nel sito"
+msgstr "auf der Website veröffentlichte Vorstellung"
+
+msgid "spettacoli pubblicati nel sito"
+msgstr "auf der Website veröffentlichte Vorstellungen"
+
+msgid "altri %s in bozza"
+msgstr "%s weitere als Entwurf"
+
+msgid "Non riesco a leggere gli spettacoli del sito."
+msgstr "Die Vorstellungen der Website können nicht gelesen werden."
+
+msgid "Gestisci gli spettacoli"
+msgstr "Vorstellungen verwalten"
+
+msgid "Creo gli spettacoli…"
+msgstr "Vorstellungen werden erstellt…"
+
+msgid "Crea gli spettacoli dalle voci della tile (%s)"
+msgstr "Vorstellungen aus den Einträgen der Kachel erstellen (%s)"
+
+msgid "Creato 1 spettacolo."
+msgstr "1 Vorstellung erstellt."
+
+msgid "Creati %s spettacoli."
+msgstr "%s Vorstellungen erstellt."
+
+msgid "%s c'erano già."
+msgstr "%s waren schon vorhanden."
+
+msgid "Non è stato possibile creare gli spettacoli."
+msgstr "Die Vorstellungen konnten nicht erstellt werden."
+
+msgid "Genere e date"
+msgstr "Genre und Daten"
+
+msgid "Date"
+msgstr "Daten"
+
+msgid "Date e orari"
+msgstr "Daten und Uhrzeiten"
+
+msgid "Data a parole"
+msgstr "Datum ausgeschrieben"
+
+msgid "Data breve"
+msgstr "Kurzes Datum"
+
+msgid "Prezzo e disponibilità"
+msgstr "Preis und Verfügbarkeit"
+
+msgid "Testo lungo"
+msgstr "Langer Text"
+
+msgid "Testo del pulsante dei biglietti"
+msgstr "Text der Ticket-Schaltfläche"

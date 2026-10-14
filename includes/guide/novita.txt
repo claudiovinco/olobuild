@@ -3,6 +3,12 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.740 - 2026-10-14 (nuovo)
+- Spettacoli: nuovo menu «Spettacoli» di WordPress per teatri e rassegne. Ogni spettacolo si scrive una volta (titolo, autore e compagnia, genere, data e ora, data di fine, orari, luogo, durata, prezzo, disponibilità, etichette, incontro col pubblico, descrizione breve, testo lungo, foto e link) e ha la sua pagina. Il menu compare dal primo spettacolo.
+- Cartellone: «Appuntamenti da» Voci della tile o Spettacoli del sito. Con gli spettacoli del sito ogni copia del Cartellone mostra lo stesso elenco con la sua vista e i suoi filtri; un pannello dice quanti sono, apre il menu Spettacoli e trasforma le voci della tile in spettacoli con un clic. Nuovo «Escludi i generi»; «Solo un genere» ora vale anche per il prossimo appuntamento.
+- Contenuti dinamici: nuova sorgente «Spettacolo» (fulmine e segnaposto {spettacolo:…}) per la pagina di uno spettacolo: titolo, date e orari, luogo, durata, prezzo e disponibilità, foto, link e testo del pulsante dei biglietti.
+- Tema Teatro della Seta: i cartelloni leggono gli spettacoli del sito e c'è la «Scheda spettacolo», la pagina di ogni spettacolo col sipario che sale, la foto, quando e dove, la descrizione e gli altri appuntamenti. Importando il tema i 24 appuntamenti diventano spettacoli; nella demo la scheda si apre da «Scopri».
+
 ## v1.4.739 - 2026-10-14 (nuovo)
 - Sipario della Hero più sobrio ed elegante: alla greca i teli scorrono di lato e si raccolgono in poche pieghe morbide, stretti e col bordo dritto; nuova «Forma della mantovana» Dritta, a pieghe, una fascia sottile col gallone d'oro al posto dei festoni; le pieghe del velluto sono più morbide e meno lucide.
 - Tema Teatro della Seta: il sipario della home si apre alla greca con quinte strette, e la mantovana è una fascia sottile che non copre il video.

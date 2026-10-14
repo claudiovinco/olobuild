@@ -24,6 +24,12 @@ class Olobuild_Dynamic_Content {
             $post_id = get_the_ID();
         }
 
+        // Spettacolo: i campi della pagina dello spettacolo (Olobuild_Spettacoli), fuori dalla cache: nella demo di
+        // un tema la voce mostrata cambia a parità di post, e la classe tiene già gli spettacoli della richiesta.
+        if ( 'spettacolo' === $source ) {
+            return class_exists( 'Olobuild_Spettacoli' ) ? Olobuild_Spettacoli::campo( $field, $post_id ) : null;
+        }
+
         // Object cache: avoid repeated queries when multiple tiles resolve the same field.
         $cache_key = "olo_dyn_{$source}_{$field}_{$post_id}";
         $cached    = wp_cache_get( $cache_key, 'olo_dynamic' );
@@ -629,7 +635,7 @@ class Olobuild_Dynamic_Content {
     const TOKENS = [ 'post_title', 'post_date', 'post_excerpt', 'post_author', 'post_category', 'site_name', 'site_url',
         'current_year', 'current_date', 'featured_image', 'custom_field', 'user_name', 'post_id', 'post_url', 'post_count',
         'acf', 'acf_option', 'acf_image', 'acf_link', 'product_price', 'product_title', 'product_sku', 'product_stock',
-        'product_rating', 'product_categories', 'product_short_desc', 'cart_total', 'cart_count', 'cart_subtotal' ];
+        'product_rating', 'product_categories', 'product_short_desc', 'cart_total', 'cart_count', 'cart_subtotal', 'spettacolo' ];
 
     /**
      * Valore di un segnaposto, o null se il nome non è riconosciuto.
@@ -690,6 +696,11 @@ class Olobuild_Dynamic_Content {
             case 'featured_image':
                 $url = get_the_post_thumbnail_url( null, 'large' );
                 $value = $url ? $url : '';
+                break;
+
+            case 'spettacolo':
+                // {spettacolo:titolo}, {spettacolo:quando}…: i campi della pagina dello spettacolo
+                $value = ( '' !== $arg && class_exists( 'Olobuild_Spettacoli' ) ) ? Olobuild_Spettacoli::campo( sanitize_key( $arg ) ) : '';
                 break;
 
             case 'custom_field':
@@ -1047,6 +1058,14 @@ class Olobuild_Dynamic_Content {
                 ],
             ],
         ];
+
+        // Spettacoli del sito: i campi della pagina di uno spettacolo (template singolo di olo_spettacolo)
+        if ( class_exists( 'Olobuild_Spettacoli' ) ) {
+            $sources['spettacolo'] = [
+                'label'  => 'Spettacolo',
+                'fields' => Olobuild_Spettacoli::campi_dinamici(),
+            ];
+        }
 
         // WooCommerce support
         $woo_available = class_exists( 'WooCommerce' );

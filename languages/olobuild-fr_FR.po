@@ -26383,3 +26383,180 @@ msgstr "À festons"
 
 msgid "Dritta, a pieghe"
 msgstr "Droit, plissé"
+
+msgid "Spettacoli"
+msgstr "Spectacles"
+
+msgid "Spettacolo"
+msgstr "Spectacle"
+
+msgid "Tutti gli spettacoli"
+msgstr "Tous les spectacles"
+
+msgid "Aggiungi spettacolo"
+msgstr "Ajouter un spectacle"
+
+msgid "Aggiungi uno spettacolo"
+msgstr "Ajouter un spectacle"
+
+msgid "Modifica lo spettacolo"
+msgstr "Modifier le spectacle"
+
+msgid "Nuovo spettacolo"
+msgstr "Nouveau spectacle"
+
+msgid "Vedi lo spettacolo"
+msgstr "Voir le spectacle"
+
+msgid "Vedi gli spettacoli"
+msgstr "Voir les spectacles"
+
+msgid "Cerca negli spettacoli"
+msgstr "Rechercher des spectacles"
+
+msgid "Nessuno spettacolo."
+msgstr "Aucun spectacle."
+
+msgid "Nessuno spettacolo nel cestino."
+msgstr "Aucun spectacle dans la corbeille."
+
+msgid "Foto dello spettacolo"
+msgstr "Photo du spectacle"
+
+msgid "Scegli la foto"
+msgstr "Choisir la photo"
+
+msgid "Togli la foto"
+msgstr "Retirer la photo"
+
+msgid "Usa come foto dello spettacolo"
+msgstr "Utiliser comme photo du spectacle"
+
+msgid "Spettacolo pubblicato."
+msgstr "Spectacle publié."
+
+msgid "Spettacolo aggiornato."
+msgstr "Spectacle mis à jour."
+
+msgid "Titolo dello spettacolo"
+msgstr "Titre du spectacle"
+
+msgid "Lo spettacolo"
+msgstr "Le spectacle"
+
+msgid "di Carlo Goldoni · Compagnia dell'Arco"
+msgstr "de Carlo Goldoni · Compagnia dell’Arco"
+
+msgid "Lirica"
+msgstr "Opéra"
+
+msgid "Danza"
+msgstr "Danse"
+
+msgid "Ragazzi"
+msgstr "Jeune public"
+
+msgid "ven e sab 20:30 · dom 16:00"
+msgstr "ven. et sam. 20h30 · dim. 16h"
+
+msgid "2 h 10 min con intervallo"
+msgstr "2 h 10 avec entracte"
+
+msgid "da 14 €"
+msgstr "à partir de 14 €"
+
+msgid "Prima nazionale, Sopratitoli, In LIS"
+msgstr "Première nationale, Surtitres, Langue des signes"
+
+msgid "Alle 19:30 incontro con la compagnia nel Ridotto"
+msgstr "À 19h30, rencontre avec la compagnie au Foyer"
+
+msgid "Due righe per il cartellone. Il testo lungo va nell'editor qui sopra."
+msgstr "Deux lignes pour l’affiche. Le texte long va dans l’éditeur ci-dessus."
+
+msgid "Vuoto: la pagina dello spettacolo"
+msgstr "Vide : la page du spectacle"
+
+msgid "La data di fine veniva prima dell'inizio: l'abbiamo tolta. Controlla le date dello spettacolo."
+msgstr "La date de fin précédait le début : nous l’avons retirée. Vérifie les dates du spectacle."
+
+msgid "fino al %s"
+msgstr "jusqu’au %s"
+
+msgid "Nessuna voce da trasformare."
+msgstr "Aucune entrée à convertir."
+
+msgid "Appuntamenti da"
+msgstr "Rendez-vous depuis"
+
+msgid "Voci della tile"
+msgstr "Entrées du bloc"
+
+msgid "Spettacoli del sito"
+msgstr "Spectacles du site"
+
+msgid "Con «Spettacoli del sito» gli appuntamenti si scrivono una volta nel menu Spettacoli di WordPress e ogni copia del Cartellone li mostra con la sua vista e i suoi filtri; ogni spettacolo ha anche la sua pagina."
+msgstr "Avec « Spectacles du site », les rendez-vous s’écrivent une fois dans le menu Spectacles de WordPress et chaque copie du Programme les montre avec sa vue et ses filtres ; chaque spectacle a aussi sa page."
+
+msgid "Escludi i generi"
+msgstr "Exclure des genres"
+
+msgid "Separati da una virgola («Incontri, Ragazzi»): quegli appuntamenti non si vedono. Per un «prossimo spettacolo» che non sia un incontro, per esempio."
+msgstr "Séparés par une virgule (« Rencontres, Jeune public ») : ces rendez-vous sont masqués. Par exemple pour un « prochain spectacle » qui ne soit pas une rencontre."
+
+msgid "spettacolo pubblicato nel sito"
+msgstr "spectacle publié sur le site"
+
+msgid "spettacoli pubblicati nel sito"
+msgstr "spectacles publiés sur le site"
+
+msgid "altri %s in bozza"
+msgstr "%s autres en brouillon"
+
+msgid "Non riesco a leggere gli spettacoli del sito."
+msgstr "Impossible de lire les spectacles du site."
+
+msgid "Gestisci gli spettacoli"
+msgstr "Gérer les spectacles"
+
+msgid "Creo gli spettacoli…"
+msgstr "Création des spectacles…"
+
+msgid "Crea gli spettacoli dalle voci della tile (%s)"
+msgstr "Créer les spectacles depuis les entrées du bloc (%s)"
+
+msgid "Creato 1 spettacolo."
+msgstr "1 spectacle créé."
+
+msgid "Creati %s spettacoli."
+msgstr "%s spectacles créés."
+
+msgid "%s c'erano già."
+msgstr "%s existaient déjà."
+
+msgid "Non è stato possibile creare gli spettacoli."
+msgstr "Les spectacles n’ont pas pu être créés."
+
+msgid "Genere e date"
+msgstr "Genre et dates"
+
+msgid "Date"
+msgstr "Dates"
+
+msgid "Date e orari"
+msgstr "Dates et horaires"
+
+msgid "Data a parole"
+msgstr "Date en toutes lettres"
+
+msgid "Data breve"
+msgstr "Date courte"
+
+msgid "Prezzo e disponibilità"
+msgstr "Prix et disponibilité"
+
+msgid "Testo lungo"
+msgstr "Texte long"
+
+msgid "Testo del pulsante dei biglietti"
+msgstr "Texte du bouton des billets"

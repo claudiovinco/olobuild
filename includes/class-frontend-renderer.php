@@ -960,7 +960,25 @@ class Olobuild_Frontend_Renderer {
                 $field  = $binding['field'] ?? '';
                 if ( $source && $field ) {
                     $resolved = $dc->resolve_field( $source, $field, $post_id );
-                    if ( $resolved !== null ) {
+                    if ( $resolved !== null && false !== strpos( (string) $field_key, '.' ) ) {
+                        // Campo dentro un oggetto («media_bg.image_url», la foto dello sfondo di una hero): si scrive al
+                        // suo posto se l'oggetto c'è, e solo con un valore, così senza foto resta quella del template.
+                        $pezzi  = explode( '.', (string) $field_key );
+                        $ultimo = array_pop( $pezzi );
+                        $ref    = &$settings;
+                        $c_e    = true;
+                        foreach ( $pezzi as $pezzo ) {
+                            if ( ! isset( $ref[ $pezzo ] ) || ! is_array( $ref[ $pezzo ] ) ) {
+                                $c_e = false;
+                                break;
+                            }
+                            $ref = &$ref[ $pezzo ];
+                        }
+                        if ( $c_e && '' !== $ultimo && '' !== trim( (string) ( is_scalar( $resolved ) ? $resolved : '' ) ) ) {
+                            $ref[ $ultimo ] = $resolved;
+                        }
+                        unset( $ref );
+                    } elseif ( $resolved !== null ) {
                         $settings[ $field_key ] = $resolved;
                     }
                 }

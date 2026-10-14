@@ -31,6 +31,7 @@ export default {
   category: 'interactive',
 
   defaults: {
+    fonte: 'voci',
     vista: 'lista',
     raggruppa: true,
     ordina: true,
@@ -40,6 +41,7 @@ export default {
     filtri_mesi: false,
     ricerca: false,
     solo_genere: '',
+    escludi_generi: '',
     immagini: true,
     testo_tutti: t('Tutti'),
     testo_biglietti: t('Biglietti'),
@@ -120,7 +122,13 @@ export default {
 
   fields: [
     { type: 'separator', label: t('Appuntamenti') },
+    { key: 'fonte', label: t('Appuntamenti da'), type: 'select', options: [
+      { value: 'voci', label: t('Voci della tile') },
+      { value: 'spettacoli', label: t('Spettacoli del sito') },
+    ], description: t('Con «Spettacoli del sito» gli appuntamenti si scrivono una volta nel menu Spettacoli di WordPress e ogni copia del Cartellone li mostra con la sua vista e i suoi filtri; ogni spettacolo ha anche la sua pagina.') },
+    { key: '_spettacoli', label: t('Spettacoli del sito'), type: 'spettacoli', condition: { field: 'fonte', op: 'eq', value: 'spettacoli' } },
     { key: 'voci', label: t('Appuntamenti'), type: 'content-items', itemLabel: t('Appuntamento'), etichettaDa: 'titolo', miniaturaDa: 'immagine',
+      condition: { field: 'fonte', op: 'neq', value: 'spettacoli' },
       description: t('Uno per data. Se lo stesso spettacolo dura più giorni, metti la data di fine e scrivi gli orari («ven e sab 20:30 · dom 16:00»). I passati si nascondono da soli; nel builder restano, attenuati.'),
       newItemDefaults: { titolo: '', sottotitolo: '', genere: '', data: '', ora: '20:30', data_fine: '', orari: '', luogo: '', durata: '', prezzo: '', stato: '', etichette: '', descrizione: '', incontro: '', immagine: '', link_biglietti: '', link_info: '' },
       itemFields: [
@@ -146,6 +154,10 @@ export default {
         { key: 'link_biglietti', label: t('Link dei biglietti'), type: 'link' },
         { key: 'link_info', label: t('Link della scheda'), type: 'link' },
       ] },
+    { key: 'solo_genere', label: t('Solo un genere'), type: 'text',
+      description: t('Scrivi un genere (es. «Incontri») per mostrare solo quello: utile per una pagina dedicata.') },
+    { key: 'escludi_generi', label: t('Escludi i generi'), type: 'text',
+      description: t('Separati da una virgola («Incontri, Ragazzi»): quegli appuntamenti non si vedono. Per un «prossimo spettacolo» che non sia un incontro, per esempio.') },
 
     { type: 'separator', label: t('Generi') },
     { key: 'generi', label: t('Generi'), type: 'content-items', itemLabel: t('Genere'), etichettaDa: 'nome',
@@ -178,8 +190,6 @@ export default {
     { key: 'ricerca', label: t('Ricerca'), type: 'toggle' },
     { key: 'testo_tutti', label: t('Testo «Tutti»'), type: 'text',
       show: (s) => s.filtri_generi !== false || !!s.filtri_mesi },
-    { key: 'solo_genere', label: t('Solo un genere'), type: 'text',
-      description: t('Scrivi un genere (es. «Incontri») per mostrare solo quello: utile per una pagina dedicata.') },
 
     { type: 'separator', label: t('Pulsanti e calendario') },
     { key: 'testo_biglietti', label: t('Testo dei biglietti'), type: 'text' },

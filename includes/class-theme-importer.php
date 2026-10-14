@@ -224,6 +224,7 @@ class Olobuild_Theme_Importer {
         $id_map = [];
         $con_pagine = [];
         $pagine_tema = [];
+        $voci_spettacoli = [];
 
         foreach ( $template_files as $key => $tpl_meta ) {
             $tpl_file = $dir . '/' . ( $tpl_meta['file'] ?? $key . '.json' );
@@ -282,6 +283,11 @@ class Olobuild_Theme_Importer {
                 foreach ( [ 'copiate', 'riusate', 'fallite' ] as $k ) {
                     $results['media'][ $k ] += (int) ( $media[ $k ] ?? 0 );
                 }
+            }
+
+            // Cartelloni con «Spettacoli del sito»: le loro voci diventeranno spettacoli (Step 8) e la tile le legge da lì.
+            if ( class_exists( 'Olobuild_Spettacoli' ) ) {
+                $voci_spettacoli = array_merge( $voci_spettacoli, Olobuild_Spettacoli::raccogli( $content ) );
             }
 
             $type  = $tpl_meta['type'] ?? 'page';
@@ -518,6 +524,20 @@ class Olobuild_Theme_Importer {
             $nuovo = json_decode( $risolvi( wp_json_encode( $tpl_content ) ), true );
             if ( is_array( $nuovo ) ) {
                 $db->update_template( $tpl_id, [ 'content' => $nuovo ] );
+            }
+        }
+
+        // ── Step 8: spettacoli e pagine dei singoli ──
+        // Le voci dei Cartelloni diventano spettacoli, se il sito non ne ha ancora (i link alle pagine del tema
+        // già risolti); il template «singolo» del tema disegna la pagina di ogni contenuto di quel tipo.
+        if ( $voci_spettacoli && class_exists( 'Olobuild_Spettacoli' ) ) {
+            $results['spettacoli'] = Olobuild_Spettacoli::semina( $voci_spettacoli, $risolvi );
+        }
+        foreach ( (array) ( $theme_json['singles'] ?? [] ) as $tipo => $chiave ) {
+            $tipo = sanitize_key( (string) $tipo );
+            if ( '' !== $tipo && isset( $id_map[ (string) $chiave ] ) ) {
+                update_option( "olobuild_active_single_{$tipo}", (int) $id_map[ (string) $chiave ] );
+                $results['activated'][] = 'single_' . $tipo;
             }
         }
 
