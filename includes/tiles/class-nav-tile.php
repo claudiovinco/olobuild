@@ -226,8 +226,11 @@ class Olobuild_Nav_Tile extends Olobuild_Tile_Base {
                 $icon  = $show_icons && ! empty( $item['icon'] ) ? $item['icon'] : '';
 
                 // Determine active state
+                // «/pagina/#sezione» porta a una sezione, non alla pagina: come nel Mega Menu la voce non si
+                // accende (nel piè di pagina di Lavori si sottolineavano insieme Lavori, Chi siamo, Lavora con noi).
                 $item_path = rtrim( wp_parse_url( $url, PHP_URL_PATH ) ?: '', '/' );
-                $is_active = ( $current_path !== '' && $item_path !== '' && $current_path === $item_path );
+                $item_frag = (string) wp_parse_url( $url, PHP_URL_FRAGMENT );
+                $is_active = ( $current_path !== '' && $item_path !== '' && $current_path === $item_path && '' === $item_frag );
                 $active_class = $is_active ? ' uk-active' : '';
                 $aria_current = $is_active ? ' aria-current="page"' : '';
 

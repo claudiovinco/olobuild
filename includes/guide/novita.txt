@@ -3,6 +3,11 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.773 - 2026-10-14 (fix)
+- Banner CTA: i pulsanti seguono lo stile pulsanti del tema (maiuscolo e spaziatura delle lettere). Con un tema dai pulsanti in maiuscolo, quelli del banner restavano gli unici in minuscolo.
+- Menu (tile): una voce che porta a una sezione della pagina («Chi siamo» → lavori#chi-siamo) non si accende più come pagina corrente, come già nel Mega Menu. Nei piè di pagina si sottolineavano insieme tutte le voci della stessa pagina.
+- Tabella in modalità «Impila» sul telefono: la prima colonna in grassetto fa da titolo della scheda e prende tutta la larghezza; il filo sotto il titolo era più corto della scheda.
+
 ## v1.4.770 - 2026-10-14 (fix)
 - Form Contatti: il link dell’informativa sulla privacy prende il colore dei link del tema invece del colore principale, che con un principale chiaro (arancio, giallo) sul fondo chiaro del modulo non si leggeva.
 - Portfolio: i filtri sopra la griglia usano il carattere del sito; prima uscivano nel carattere di sistema del browser.

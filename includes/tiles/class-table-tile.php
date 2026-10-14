@@ -98,6 +98,9 @@ class Olobuild_Table_Tile extends Olobuild_Tile_Base {
             $css .= ".{$uid} tbody tr{display:block;margin-bottom:12px;border:1px solid {$border_color};border-radius:6px;overflow:hidden}";
             $css .= ".{$uid} tbody td{display:flex;justify-content:space-between;align-items:center;text-align:right}";
             $css .= ".{$uid} tbody td::before{content:attr(data-label);font-weight:600;text-align:left;margin-right:12px}";
+            // La prima colonna in grassetto è un <th scope="row">: nella scheda fa da titolo e prende tutta la
+            // larghezza (restava una cella larga quanto il testo, col filo sotto più corto della scheda).
+            $css .= ".{$uid} tbody th{display:block;text-align:left}";
             $css .= '}';
         }
         $css .= '</style>';
