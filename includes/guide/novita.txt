@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.737 - 2026-10-14 (fix)
+- Tema Teatro della Seta: miniature nuove nel selettore dei temi, senza viola, con la foto della platea e il sipario aperto di lato.
+
 ## v1.4.736 - 2026-10-14 (fix)
 - Tema Teatro della Seta: velo più scuro sulla foto della platea, così i testi del prossimo spettacolo si leggono meglio sopra le poltrone.
 
