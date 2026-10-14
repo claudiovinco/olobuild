@@ -431,7 +431,8 @@ class Olobuild_Piantasala_Tile extends Olobuild_Tile_Base {
             echo "{$sel} .opia-svg [data-s=\"{$i}\"]{fill:var(--opia-s{$i})}";
             echo "{$sel} .opia-leg[data-s=\"{$i}\"]{--c:var(--opia-s{$i})}";
             echo "{$sel}[data-attivo=\"{$i}\"] .opia-svg [data-s]:not([data-s=\"{$i}\"]){opacity:.2}";
-            echo "{$sel}[data-scheda=\"{$i}\"] .opia-scheda[data-s=\"{$i}\"]{display:block}";
+            echo "{$sel}[data-scheda=\"{$i}\"] .opia-scheda[data-s=\"{$i}\"]{visibility:visible;opacity:1;transform:none;transition:opacity .5s cubic-bezier(.2,.7,.2,1) .1s,transform .5s cubic-bezier(.2,.7,.2,1) .1s,visibility 0s}";
+            echo "{$sel}[data-scheda=\"{$i}\"] .opia-scheda[data-s=\"{$i}\"] .opia-vista img{transform:none;transition:transform 1.4s cubic-bezier(.2,.7,.2,1) .1s}";
             echo "{$sel}[data-scheda=\"{$i}\"] .opia-leg[data-s=\"{$i}\"]{background:color-mix(in srgb, var(--c) 14%, transparent);border-color:var(--c)}";
         }
         echo "{$sel} .opia-griglia{display:grid;grid-template-columns:" . ( $lato ? "minmax(0,{$larg}fr) minmax(0," . ( 100 - $larg ) . 'fr)' : 'minmax(0,1fr)' ) . ";gap:{$gap}px;align-items:start}";
@@ -455,10 +456,14 @@ class Olobuild_Piantasala_Tile extends Olobuild_Tile_Base {
         echo "{$sel} .opia-leg{display:inline-flex;align-items:center;gap:.55rem;font:inherit;cursor:pointer;color:inherit;background:transparent;border:1px solid color-mix(in srgb, currentColor 22%, transparent);border-radius:5em;padding:.5em 1em;transition:background-color .25s,border-color .25s}";
         echo "{$sel} .opia-leg::before{content:'';width:.8em;height:.8em;border-radius:50%;background:var(--c)}";
         echo "{$sel} .opia-leg:focus-visible,{$sel} .opia-link:focus-visible{outline:2px solid currentColor;outline-offset:3px}";
-        echo "{$sel} .opia-schede{position:relative;border-radius:{$raggio};padding:{$pad};" . ( $sfondo ? "background:{$sfondo};" : 'background:color-mix(in srgb, currentColor 4%, transparent);' ) . ( $bordo_s ? "border:{$bordo_s};" : '' ) . ( 'none' !== $ombra ? "box-shadow:{$ombra};" : '' ) . '}';
-        echo "{$sel} .opia-scheda{display:none;animation:opia-entra .5s cubic-bezier(.2,.7,.2,1)}";
-        echo "{$sel}:not([data-scheda]) .opia-invito,{$sel}[data-scheda=\"-1\"] .opia-invito{display:block}";
-        echo "{$sel} .opia-invito{display:none;margin:0;font-size:1.05rem;opacity:.8}";
+        // Le schede dei settori stanno tutte nella stessa cella della griglia, quelle non scelte invisibili ma presenti:
+        // la scheda è alta quanto la più lunga e non cambia altezza da un settore all'altro (prima, con display:none, la
+        // legenda sotto saliva e scendeva a ogni passaggio e la foto della vista cambiava posto). Foto e link stanno in fondo.
+        echo "{$sel} .opia-schede{position:relative;display:grid;border-radius:{$raggio};padding:{$pad};" . ( $sfondo ? "background:{$sfondo};" : 'background:color-mix(in srgb, currentColor 4%, transparent);' ) . ( $bordo_s ? "border:{$bordo_s};" : '' ) . ( 'none' !== $ombra ? "box-shadow:{$ombra};" : '' ) . '}';
+        echo "{$sel} .opia-schede>*{grid-area:1/1;min-width:0}";
+        echo "{$sel} .opia-scheda{display:flex;flex-direction:column;visibility:hidden;opacity:0;transform:translateY(.6rem);transition:opacity .2s,transform .2s,visibility 0s linear .2s}";
+        echo "{$sel}:not([data-scheda]) .opia-invito,{$sel}[data-scheda=\"-1\"] .opia-invito{visibility:visible;opacity:.8;transition:opacity .5s .1s,visibility 0s}";
+        echo "{$sel} .opia-invito{align-self:center;margin:0;font-size:1.05rem;visibility:hidden;opacity:0;transition:opacity .2s,visibility 0s linear .2s}";
         echo "{$sel} .opia-nome{margin:0 0 .8rem;display:flex;align-items:center;gap:.6rem}";
         echo "{$sel} .opia-nome::before{content:'';flex:none;width:.55em;height:.55em;border-radius:50%;background:var(--c)}";
         echo "{$sel} .opia-prezzi{display:flex;flex-wrap:wrap;gap:.6rem 2rem;margin:0 0 .6rem}";
@@ -467,13 +472,13 @@ class Olobuild_Piantasala_Tile extends Olobuild_Tile_Base {
         echo "{$sel} .opia-prezzi b{font-weight:400;line-height:1.1}";
         echo "{$sel} .opia-nota{margin:0 0 .8rem;font-size:.9rem;opacity:.8}";
         echo "{$sel} .opia-desc{margin:0 0 1rem}";
-        echo "{$sel} .opia-vista{margin:1rem 0 0}";
+        echo "{$sel} .opia-vista{margin:auto 0 0}";
         echo "{$sel} .opia-vista figcaption{font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;opacity:.7;margin:0 0 .5rem}";
         echo "{$sel} .opia-vista div{overflow:hidden;border-radius:.6rem;aspect-ratio:16/10}";
-        echo "{$sel} .opia-vista img{display:block;width:100%;height:100%;object-fit:cover;animation:opia-vista 1.4s cubic-bezier(.2,.7,.2,1)}";
-        echo "{$sel} .opia-link{display:inline-flex;margin-top:1.2rem;text-decoration:none!important;background:var(--c);color:var(--olo-color-light, #fff)!important;border-radius:5em;padding:.8em 1.5em;font-size:.85rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase}";
-        echo '@keyframes opia-entra{from{opacity:0;transform:translateY(.6rem)}to{opacity:1;transform:none}}@keyframes opia-vista{from{transform:scale(1.18)}to{transform:scale(1)}}';
-        echo '@media (prefers-reduced-motion:reduce){' . "{$sel} .opia-scheda,{$sel} .opia-vista img{animation:none}" . '}';
+        echo "{$sel} .opia-vista img{display:block;width:100%;height:100%;object-fit:cover;transform:scale(1.18);transition:transform 0s linear .2s}";
+        echo "{$sel} .opia-link{display:inline-flex;align-self:flex-start;margin-top:1.2rem;text-decoration:none!important;background:var(--c);color:var(--olo-color-light, #fff)!important;border-radius:5em;padding:.8em 1.5em;font-size:.85rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase}";
+        echo "{$sel} .opia-scheda>:not(.opia-vista)+.opia-link{margin-top:auto}";
+        echo '@media (prefers-reduced-motion:reduce){' . "{$sel} .opia-scheda,{$sel} .opia-invito,{$sel} .opia-vista img{transition:none!important;transform:none!important}" . '}';
         echo $this->css_testo( $s, 'nome', "{$sel} .opia-nome" );
         echo $this->css_testo( $s, 'prezzo', "{$sel} .opia-prezzi b" );
         echo $this->css_testo( $s, 'descrizione', "{$sel} .opia-desc" );

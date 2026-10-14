@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.734 - 2026-10-14 (fix)
+- Pianta della sala: la scheda del settore non cambia più altezza passando da un settore all'altro. È alta quanto la scheda più lunga, la foto della vista e il pulsante restano sempre allo stesso posto e la legenda sotto non sale e non scende più; il cambio di settore è una dissolvenza sul posto.
+
 ## v1.4.733 - 2026-10-13 (fix)
 - Tema Teatro della Seta: la parola «SETA» con la seta in video non è più tagliata in cima (la curva della S e la punta della A); il riquadro segue la misura del testo su computer, tablet e telefono.
 
