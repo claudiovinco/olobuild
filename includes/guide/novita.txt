@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.753 - 2026-10-14 (temi)
+- Tema Sartoria Ferro: anteprime della Vetrina aggiornate con la giacca nuova del cartamodello.
+
 ## v1.4.752 - 2026-10-14 (temi)
 - Tema Sartoria Ferro, «Il cartamodello»: il disegno che si traccia da solo ora è una giacca vera, con revers, taschino, tasche con pattina e le quote del cartamodello; disegno e testo stanno in due colonne pari, su uno sfondo di carta millimetrata leggerissima. Lo stesso nell'articolo «L'arte di prendere misure».
 
