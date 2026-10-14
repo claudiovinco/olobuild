@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.744 - 2026-10-14 (fix)
+- Temi: le anteprime di Teatro della Seta, nella Vetrina temi e nel selettore dei temi, computer e telefono, mostrano la home di adesso: il rosso da sipario, il sipario sobrio col video nuovo e il prossimo spettacolo su tinta unita.
+
 ## v1.4.743 - 2026-10-14 (fix)
 - Cartellone e pagina dello spettacolo: in italiano le date con 1, 8 e 11 si elidono come si deve, «dal 6 all’8 novembre», «dall’11 dicembre» (prima «al 8», «dal 11»).
 
