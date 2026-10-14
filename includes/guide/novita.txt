@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.784 - 2026-10-14 (temi)
+- Tre temi nuovi in «Industria e manifattura»: Varco Nove (logistica conto terzi: magazzini, cross-docking, e-commerce e trasporti, col campo per tracciare la spedizione e la pianta del polo da toccare), Tessiture Navetta (tessuti tecnici, con la lente sul tessuto, le prove di laboratorio e il campionario) e Marmi Lizza (cava e segheria di marmo, con le finiture della stessa lastra sotto la lente e il catalogo delle lastre). Ognuno ha la home e tre pagine interne, testata, piè di pagina, pagina d’errore e il pulsante per tornare in cima su ogni pagina.
+
 ## v1.4.781 - 2026-10-14 (fix)
 - Overlay Grid: nuovo «Colonne (tablet)», fra 640 e 960 px di larghezza. Prima sul tablet le card seguivano il numero del telefono (spesso una per riga, molto alte); di serie resta così («Come il mobile»), quindi le pagine già fatte non cambiano.
 
