@@ -3,6 +3,12 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.764 - 2026-10-14 (temi)
+- Tre temi nuovi nella nuova categoria «Industria e manifattura»: Officine Quota (meccanica di precisione conto terzi), Linea Reno (macchine per il confezionamento) e Fonderia del Mella (pressofusione di alluminio). Ognuno ha la home e tre pagine interne, testata, piè di pagina, pagina d’errore e il pulsante per tornare in cima su ogni pagina.
+
+## v1.4.762 - 2026-10-14 (nuovo)
+- Tile Torna su: nella Disposizione c’è la «Posizione» Fisso nell’angolo dello schermo. Il pulsante resta nell’angolo scelto con l’Allineamento, compare dopo lo scorrimento che decidi in «Compare dopo» (0 = sempre visibile) e si può alzare sopra una barra fissa con «Distanza dal basso». Messo nel piè di pagina, compare su ogni pagina del sito.
+
 ## v1.4.757 - 2026-10-14 (nuovo)
 - Hero: nel controllo «Pulsante» ci sono anche peso, maiuscolo e spaziatura delle lettere, per i due pulsanti. Lasciati vuoti, i pulsanti restano come prima.
 
