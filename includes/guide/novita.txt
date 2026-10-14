@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.774 - 2026-10-14 (fix)
+- Certificazioni: «Valido fino al …» va a capo come una frase sola, col pallino accanto alla prima riga. In una scheda stretta testo e data si stringevano in due colonne affiancate («Valido fino / al» accanto a «15 Settembre / 2027»).
+
 ## v1.4.773 - 2026-10-14 (fix)
 - Banner CTA: i pulsanti seguono lo stile pulsanti del tema (maiuscolo e spaziatura delle lettere). Con un tema dai pulsanti in maiuscolo, quelli del banner restavano gli unici in minuscolo.
 - Menu (tile): una voce che porta a una sezione della pagina («Chi siamo» → lavori#chi-siamo) non si accende più come pagina corrente, come già nel Mega Menu. Nei piè di pagina si sottolineavano insieme tutte le voci della stessa pagina.

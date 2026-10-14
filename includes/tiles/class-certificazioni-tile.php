@@ -228,7 +228,10 @@ class Olobuild_Certificazioni_Tile extends Olobuild_Tile_Base {
         echo "{$sel} .ocert-ambito{margin:.75rem 0 0;opacity:.85;max-width:62ch;text-wrap:pretty}";
         echo "{$sel} .ocert-meta{margin:.85rem 0 0;display:flex;flex-wrap:wrap;gap:.2rem 1rem;opacity:.75}";
         echo "{$sel} .ocert-date{margin:.85rem 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:.35rem 1.1rem}";
-        echo "{$sel} .ocert-scade,{$sel} .ocert-rinnovo{display:inline-flex;align-items:center;gap:.55em}";
+        // Testo e data in UN elemento, così vanno a capo come una frase; il pallino (senza linea di base) si
+        // allinea col fondo alla linea di base della prima riga, cioè a metà delle minuscole.
+        echo "{$sel} .ocert-scade{display:inline-flex;align-items:baseline;gap:.55em}";
+        echo "{$sel} .ocert-rinnovo{display:inline-flex;align-items:center;gap:.55em}";
         echo "{$sel} .ocert-scade::before{content:'';flex:none;width:.55em;height:.55em;border-radius:50%;background:var(--ocert-ok);box-shadow:0 0 0 3px color-mix(in srgb, var(--ocert-ok) 22%, transparent)}";
         echo "{$sel} .ocert-rinnovo{display:none;font-weight:600}";
         echo "{$sel} .ocert-rinnovo::before{content:'';flex:none;width:.55em;height:.55em;border-radius:50%;background:currentColor;opacity:.45}";
@@ -340,7 +343,7 @@ class Olobuild_Certificazioni_Tile extends Olobuild_Tile_Base {
                 $date .= '<span class="ocert-rilascio">' . esc_html( trim( (string) $s['testo_rilascio'] ) ) . ' <time datetime="' . esc_attr( $v['rilascio'] ) . '">' . esc_html( self::data_leggibile( $v['rilascio'], $formato ) ) . '</time></span>';
             }
             if ( $mostra['validita'] && '' !== $v['scadenza'] ) {
-                $date .= '<span class="ocert-scade">' . esc_html( trim( (string) $s['testo_valido'] ) ) . ' <time datetime="' . esc_attr( $v['scadenza'] ) . '">' . esc_html( self::data_leggibile( $v['scadenza'], $formato ) ) . '</time></span>';
+                $date .= '<span class="ocert-scade"><span>' . esc_html( trim( (string) $s['testo_valido'] ) ) . ' <time datetime="' . esc_attr( $v['scadenza'] ) . '">' . esc_html( self::data_leggibile( $v['scadenza'], $formato ) ) . '</time></span></span>';
             }
             if ( 'rinnovo' === $modo && '' !== $v['scadenza'] ) {
                 $date .= '<span class="ocert-rinnovo">' . esc_html( trim( (string) $s['testo_rinnovo'] ) ) . '</span>';
