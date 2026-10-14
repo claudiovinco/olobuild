@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.768 - 2026-10-14 (fix)
+- Contatore: sul telefono un numero grande non esce più dallo schermo. La misura scelta resta quella dei computer; sugli schermi stretti il numero si rimpicciolisce quanto serve per starci, contando anche le cifre che il conteggio dal vivo raggiungerà a fine giornata.
+
 ## v1.4.765 - 2026-10-14 (nuovo)
 - Contatore: nuova opzione «Dal vivo» nel Contenuto. Il numero cresce da solo al ritmo scelto (al minuto, all’ora, al giorno), da mezzanotte, dal 1° gennaio o da una data, anche solo in certe ore: i kWh prodotti oggi, i pallet usciti quest’anno. Si conta nel fuso orario del sito e il valore resta giusto anche nelle pagine servite dalla cache.
 - Particelle: nuovo preset «Scintille». Schizzano dal punto scelto nella direzione del getto, ricadono per gravità e rimbalzano sul fondo, a ondate come sotto una mola; punto di partenza, direzione e ampiezza del getto si regolano nell’inspector.

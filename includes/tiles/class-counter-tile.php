@@ -111,6 +111,20 @@ class Olobuild_Counter_Tile extends Olobuild_Tile_Base {
         ];
     }
 
+    /**
+     * Il testo più lungo che il conteggio dal vivo mostrerà nel periodo: a fine giornata o a fine anno (per «Da una
+     * data» una cifra in più di adesso). Serve a non far uscire il numero dallo schermo del telefono.
+     */
+    private function vivo_testo_max( $c ) {
+        $ora    = $this->vivo_testo( $c );
+        $giorno = $c['r'] * ( $c['h1'] - $c['h0'] ) * 3600;
+        if ( 'data' === $c['da'] ) {
+            return $ora . '0';
+        }
+        $fine = number_format( floor( $c['b'] + $giorno * ( 'anno' === $c['da'] ? 366 : 1 ) ), $c['dec'], $c['sep'], $c['mil'] );
+        return mb_strlen( $fine ) >= mb_strlen( $ora ) ? $fine : $ora;
+    }
+
     /** Il valore del conteggio dal vivo adesso, nel fuso del sito, già scritto (stesso calcolo dello script). */
     private function vivo_testo( $c ) {
         $ora = new DateTime( 'now', wp_timezone() );
@@ -164,6 +178,11 @@ class Olobuild_Counter_Tile extends Olobuild_Tile_Base {
 
         $label    = esc_html( wp_strip_all_tags( $s['label'] ) );
         $vivo     = $this->vivo_conf( $s );
+        // Sul telefono un numero grande usciva dallo schermo (14 ott 2026, «314.73…» tagliato a 390 px): la misura
+        // scelta resta il massimo, ma non supera la larghezza della finestra divisa per i caratteri da mostrare
+        // (prefisso, numero e suffisso; col conteggio dal vivo, quelli che avrà a fine periodo).
+        $caratteri  = mb_strlen( (string) $s['prefix'] . ( $vivo ? $this->vivo_testo_max( $vivo ) : (string) $s['number'] ) . (string) $s['suffix'] );
+        $num_fs_css = $caratteri > 0 ? 'min(' . (int) $num_fs . 'px, calc((100vw - 48px) / ' . round( $caratteri * 0.64, 2 ) . '))' : (int) $num_fs . 'px';
 
         ob_start();
         ?>
@@ -209,6 +228,7 @@ class Olobuild_Counter_Tile extends Olobuild_Tile_Base {
             }
             .<?php echo $uid; ?> .olo-cnt-number {
                 font-size: <?php echo (int) $num_fs; ?>px;
+                font-size: <?php echo $num_fs_css; ?>;
                 font-weight: <?php echo (int) $num_fw; ?>;
                 line-height: 1.1;
                 letter-spacing: -0.02em;
