@@ -570,6 +570,7 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
                 align-items: center;
             }
             .<?php echo $uid; ?>-filter button {
+                font-family: inherit; /* un <button> non eredita il carattere: i filtri uscivano in Arial (14 ott 2026) */
                 font-size: 13px; font-weight: 500; cursor: pointer;
                 transition: all 0.25s ease; border: none; outline: none;
                 color: <?php echo $flt_c; ?>; background: transparent;

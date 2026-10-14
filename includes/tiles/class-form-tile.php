@@ -601,7 +601,8 @@ JS;
             .<?php echo $uid; ?> .uk-radio:focus{border-color:<?php echo $chk_accent ?: 'var(--olo-color-primary, #e1474f)'; ?>}
             .<?php echo $uid; ?> .olo-f-option{display:flex;align-items:center;gap:<?php echo $chk_gap; ?>px;color:<?php echo $label_color; ?>;font-size:<?php echo $label_size; ?>px;cursor:pointer}
             .<?php echo $uid; ?> .olo-f-privacy{margin-top:<?php echo $gap; ?>px}
-            .<?php echo $uid; ?> .olo-f-privacy a{color:var(--olo-color-primary, #e1474f);text-decoration:underline}
+            <?php // Il colore dei link del tema, non il primario: un primario chiaro (arancio, giallo) sul fondo chiaro del modulo non si leggeva (14 ott 2026). ?>
+            .<?php echo $uid; ?> .olo-f-privacy a{color:var(--olo-color-link, var(--olo-color-primary, #e1474f));text-decoration:underline}
             <?php if ( $is_floating ) : ?>
             .<?php echo $uid; ?> .olo-f-float{position:relative}
             .<?php echo $uid; ?> .olo-f-float-label{position:absolute;top:50%;left:14px;transform:translateY(-50%);color:<?php echo $label_color; ?>;font-size:<?php echo $label_size; ?>px;pointer-events:none;transition:all 0.2s ease;opacity:0.6<?php if ( $label_tt && $label_tt !== 'none' ) : ?>;text-transform:<?php echo $label_tt; ?><?php endif; ?><?php if ( $label_ls != 0 ) : ?>;letter-spacing:<?php echo $label_ls; ?>px<?php endif; ?><?php if ( $label_ff ) : ?>;font-family:<?php echo $label_ff; ?><?php endif; ?>}

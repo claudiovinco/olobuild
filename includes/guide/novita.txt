@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.770 - 2026-10-14 (fix)
+- Form Contatti: il link dell’informativa sulla privacy prende il colore dei link del tema invece del colore principale, che con un principale chiaro (arancio, giallo) sul fondo chiaro del modulo non si leggeva.
+- Portfolio: i filtri sopra la griglia usano il carattere del sito; prima uscivano nel carattere di sistema del browser.
+
 ## v1.4.768 - 2026-10-14 (fix)
 - Contatore: sul telefono un numero grande non esce più dallo schermo. La misura scelta resta quella dei computer; sugli schermi stretti il numero si rimpicciolisce quanto serve per starci, contando anche le cifre che il conteggio dal vivo raggiungerà a fine giornata.
 
