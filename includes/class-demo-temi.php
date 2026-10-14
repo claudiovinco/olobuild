@@ -1068,7 +1068,8 @@ class Olobuild_Demo_Temi {
     /**
      * Nella demo nessun modulo invia: ricerca, newsletter e gli altri si fermano qui con un avviso.
      * Il modulo di contatto va avanti da sé: il server riconosce la sua configurazione «demo» e risponde
-     * con lo stesso avviso, così si vede anche come il tema mostra un invio riuscito.
+     * con lo stesso avviso, così si vede anche come il tema mostra un invio riuscito. Passano anche i moduli
+     * marcati data-olo-demo-libero, che non inviano dati ma aprono solo un indirizzo (Tracciamento spedizione).
      */
     public static function moduli_fermi() {
         $testo = self::testo_ospite( 'Questa è una demo: i moduli non inviano nulla.' );
@@ -1080,7 +1081,7 @@ class Olobuild_Demo_Temi {
     if (!box) { return; }
     document.addEventListener('submit', function (e) {
         var f = e.target;
-        if (f ? (f.matches ? f.matches('form[data-olo-form]') : false) : false) { return; }
+        if (f ? (f.matches ? f.matches('form[data-olo-form], form[data-olo-demo-libero]') : false) : false) { return; }
         e.preventDefault();
         e.stopImmediatePropagation();
         box.textContent = <?php echo wp_json_encode( $testo ); ?>;

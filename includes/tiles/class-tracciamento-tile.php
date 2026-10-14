@@ -331,7 +331,9 @@ class Olobuild_Tracciamento_Tile extends Olobuild_Tile_Base {
         $descr = ( '' !== $nota ? $uid . '-n ' : '' ) . $uid . '-e';
 
         echo '<div id="' . esc_attr( $uid ) . '" class="' . esc_attr( $classi ) . '" data-otr="' . esc_attr( wp_json_encode( $conf ) ) . '">';
-        echo '<form class="otr-form" role="search" novalidate aria-labelledby="' . esc_attr( $uid ) . '-et">';
+        // data-olo-demo-libero: il modulo non invia dati, apre solo un indirizzo; la demo dei temi (che ferma ogni altro
+        // modulo con un avviso) lo lascia passare, così si vede il percorso fino alla pagina d'arrivo.
+        echo '<form class="otr-form" role="search" novalidate data-olo-demo-libero aria-labelledby="' . esc_attr( $uid ) . '-et">';
         echo '<label class="otr-etichetta' . ( $mostra_et ? '' : ' otr-sr' ) . '" id="' . esc_attr( $uid ) . '-et" for="' . esc_attr( $uid ) . '-c"' . ( $builder && $mostra_et ? ' data-olo-editable="etichetta"' : '' ) . '>' . esc_html( $etichetta ) . '</label>';
         echo '<div class="otr-riga">';
         if ( $scelta ) {
