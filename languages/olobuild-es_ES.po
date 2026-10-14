@@ -26897,3 +26897,27 @@ msgstr "La línea en cinco estaciones"
 #: includes/class-theme-importer.php
 msgid "La parola piena di metallo"
 msgstr "La palabra llena de metal"
+
+#: src/config/elements/totop.js
+msgid "Nel punto della pagina"
+msgstr "En su sitio en la página"
+
+#: src/config/elements/totop.js
+msgid "Fisso nell’angolo dello schermo"
+msgstr "Fijo en la esquina de la pantalla"
+
+#: src/config/elements/totop.js
+msgid "Distanza dal bordo"
+msgstr "Distancia del borde"
+
+#: src/config/elements/totop.js
+msgid "Distanza dal basso"
+msgstr "Distancia desde abajo"
+
+#: src/config/elements/totop.js
+msgid "Compare dopo"
+msgstr "Aparece tras"
+
+#: src/config/elements/totop.js
+msgid "Quanto si scorre la pagina prima che il pulsante compaia. 0 = sempre visibile."
+msgstr "Cuánto se desplaza la página antes de que aparezca el botón. 0 = siempre visible."

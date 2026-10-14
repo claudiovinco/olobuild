@@ -14,6 +14,10 @@ class Olobuild_Totop_Tile extends Olobuild_Tile_Base {
         'alignment' => 'right',
         'style'     => 'default',
         'smooth'    => true,
+        'posizione'      => 'in_linea',
+        'compare_dopo'   => 600,
+        'distanza_bordo' => 24,
+        'distanza_basso' => 24,
         'button_size' => 44,
         'icon_color'  => '',
             'border'                  => [],
@@ -47,6 +51,16 @@ class Olobuild_Totop_Tile extends Olobuild_Tile_Base {
 
         $align_class = 'uk-text-' . esc_attr( $s['alignment'] );
         $scroll_attr = ! empty( $s['smooth'] ) ? ' uk-scroll' : '';
+
+        // «Fisso nell'angolo dello schermo» (14 ott 2026): il pulsante sta nell'angolo e compare dopo
+        // «Compare dopo» px di scorrimento (0 = sempre). Nel builder resta nel punto della pagina, dove
+        // si seleziona e si modifica. Funziona nel piè di pagina (il template del corpo ha un transform
+        // che intrappola i position:fixed, vedi js_nel_body()).
+        $fisso  = ( $s['posizione'] ?? 'in_linea' ) === 'fisso' && empty( $settings['_builder_mode'] );
+        $lato   = in_array( $s['alignment'] ?? 'right', [ 'left', 'center', 'right' ], true ) ? $s['alignment'] : 'right';
+        $bordo_x = max( 8, min( 80, intval( $s['distanza_bordo'] ?? 24 ) ) );
+        $bordo_y = max( 8, min( 160, intval( $s['distanza_basso'] ?? 24 ) ) );
+        $soglia  = max( 0, min( 2000, intval( $s['compare_dopo'] ?? 600 ) ) );
 
         // Il pulsante. Prima era l'icona `uk-totop` di UIkit: una freccina di 18×10 px grigia
         // (#999), senza misura né colore, e «Stile» non veniva letto. Ora un pulsante tondo con
@@ -86,15 +100,30 @@ class Olobuild_Totop_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-totop-btn:hover::before { opacity: .14; }
             <?php endif; ?>
             .<?php echo $uid; ?> .olo-totop-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
+            <?php if ( $fisso ) :
+                // Sopra un contenuto qualsiasi il Predefinito (trasparente) sparirebbe: prende il fondo del sito e un'ombra leggera.
+                $x_su  = $lato === 'center' ? 'translateX(-50%) ' : '';
+                $x_pos = $lato === 'left' ? 'left:' . $bordo_x . 'px;' : ( $lato === 'center' ? 'left:50%;' : 'right:' . $bordo_x . 'px;' );
+            ?>
+            .<?php echo $uid; ?>.olo-totop--fisso { position: fixed; z-index: 95; margin: 0; line-height: 0; bottom: calc(<?php echo $bordo_y; ?>px + env(safe-area-inset-bottom, 0px)); <?php echo $x_pos; ?> opacity: 0; visibility: hidden; pointer-events: none; transform: <?php echo $x_su; ?>translateY(12px); transition: opacity .25s ease, transform .25s ease, visibility 0s linear .25s; }
+            .<?php echo $uid; ?>.olo-totop--fisso.is-visibile { opacity: 1; visibility: visible; pointer-events: auto; transform: <?php echo $x_su ?: 'none'; ?>; transition: opacity .25s ease, transform .25s ease, visibility 0s; }
+            <?php if ( $style === 'default' ) : ?>
+            .<?php echo $uid; ?>.olo-totop--fisso .olo-totop-btn { background-color: var(--olo-color-background, #ffffff); box-shadow: 0 4px 16px color-mix(in srgb, var(--olo-color-dark, #000000) 18%, transparent); }
+            <?php endif; ?>
+            <?php endif; ?>
             @media (prefers-reduced-motion: reduce) {
                 .<?php echo $uid; ?> .olo-totop-btn, .<?php echo $uid; ?> .olo-totop-btn::before { transition: none; }
                 .<?php echo $uid; ?> .olo-totop-btn:hover { transform: none; }
+                <?php if ( $fisso ) : ?>.<?php echo $uid; ?>.olo-totop--fisso, .<?php echo $uid; ?>.olo-totop--fisso.is-visibile { transform: <?php echo $lato === 'center' ? 'translateX(-50%)' : 'none'; ?>; transition: opacity .01s linear, visibility 0s; }<?php endif; ?>
             }
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-        <div class="olo-totop <?php echo esc_attr( $uid ); ?> <?php echo esc_attr( $align_class ); ?>">
+        <div class="olo-totop <?php echo esc_attr( $uid ); ?> <?php echo esc_attr( $align_class ); ?><?php echo $fisso ? ' olo-totop--fisso' . ( 0 === $soglia ? ' is-visibile' : '' ) : ''; ?>">
             <a href="#" class="olo-totop-btn olo-totop--<?php echo esc_attr( $style ); ?>"<?php echo $scroll_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed internal string (' uk-scroll' or '') set by a boolean toggle above ?> aria-label="<?php echo esc_attr( olobuild_t( 'Torna su' ) ); ?>"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m18 15-6-6-6 6"/></svg></a>
         </div>
+        <?php if ( $fisso && $soglia > 0 ) : // compare dopo la soglia; niente && nello script (wptexturize) ?>
+        <script>(function(){var b=document.querySelector('.<?php echo esc_js( $uid ); ?>');if(!b){return;}var soglia=<?php echo (int) $soglia; ?>,su=false,t=0;function aggiorna(){t=0;var v=(window.pageYOffset||document.documentElement.scrollTop)>soglia;if(v!==su){su=v;b.classList.toggle('is-visibile',v);}}window.addEventListener('scroll',function(){if(!t){t=requestAnimationFrame(aggiorna);}},{passive:true});aggiorna();})();</script>
+        <?php endif; ?>
         <?php
         // Effetti del bordo (neon, gradiente) sul pulsante, dove sta il bordo.
         $border_effect_css = $this->build_border_effect_css( ".{$uid} .olo-totop-btn", $s['border'] ?? [], $s );

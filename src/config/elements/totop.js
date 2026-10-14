@@ -3,7 +3,7 @@ import { t } from '@/i18n';
 
 /**
  * Tile ToTop — split CONTENUTO/STILE (regola universale Olobuild).
- *   fields[]      → allineamento (posizione), comportamento scroll fluido
+ *   fields[]      → comportamento: scroll fluido, «Compare dopo» (solo fisso)
  *   styleFields[] → stile pulsante (default/primary), ombra, bordo
  *   AVANZATE      → meta tecnico (id/class/condizioni)
  */
@@ -16,6 +16,12 @@ export default {
     alignment: 'right',
     style: 'default',
     smooth: true,
+    // «Fisso nell'angolo» (14 ott 2026): il pulsante resta nell'angolo dello schermo e compare dopo
+    // «Compare dopo» px di scorrimento. Va nel piè di pagina del tema (lì i position:fixed funzionano).
+    posizione: 'in_linea',
+    compare_dopo: 600,
+    distanza_bordo: 24,
+    distanza_basso: 24,
     button_size: 44,
     icon_color: '',
     shadow: 'none',
@@ -28,6 +34,9 @@ export default {
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'smooth', label: t('Scorrimento fluido'), type: 'toggle' },
+    { key: 'compare_dopo', label: t('Compare dopo'), type: 'range', min: 0, max: 2000, step: 50, unit: 'px',
+      description: t('Quanto si scorre la pagina prima che il pulsante compaia. 0 = sempre visibile.'),
+      condition: { field: 'posizione', op: 'eq', value: 'fisso' } },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -49,10 +58,18 @@ export default {
 
     ...borderFields(),
     { type: 'separator', label: t('Disposizione') },
+    { key: 'posizione', label: t('Posizione'), type: 'select', options: [
+      { value: 'in_linea', label: t('Nel punto della pagina') },
+      { value: 'fisso', label: t('Fisso nell’angolo dello schermo') },
+    ]},
     { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
     ]},
+    { key: 'distanza_bordo', label: t('Distanza dal bordo'), type: 'range', min: 8, max: 80, step: 2, unit: 'px',
+      condition: { field: 'posizione', op: 'eq', value: 'fisso' } },
+    { key: 'distanza_basso', label: t('Distanza dal basso'), type: 'range', min: 8, max: 160, step: 2, unit: 'px',
+      condition: { field: 'posizione', op: 'eq', value: 'fisso' } },
   ],
 };
