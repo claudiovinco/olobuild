@@ -27017,3 +27017,7 @@ msgstr "0° nach oben, 90° nach rechts, -90° nach links, 180° nach unten. Die
 #: src/config/elements/particlefx.js
 msgid "Ampiezza del getto"
 msgstr "Strahlbreite"
+
+#: includes/class-theme-importer.php
+msgid "I pezzi di oggi, dal vivo"
+msgstr "Die Teile von heute, live"

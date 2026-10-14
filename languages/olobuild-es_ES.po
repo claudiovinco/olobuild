@@ -27017,3 +27017,7 @@ msgstr "0° hacia arriba, 90° hacia la derecha, -90° hacia la izquierda, 180°
 #: src/config/elements/particlefx.js
 msgid "Ampiezza del getto"
 msgstr "Amplitud del chorro"
+
+#: includes/class-theme-importer.php
+msgid "I pezzi di oggi, dal vivo"
+msgstr "Las piezas de hoy, en directo"

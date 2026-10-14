@@ -19041,3 +19041,7 @@ msgstr "0° up, 90° right, -90° left, 180° down. Gravity then makes them fall
 #: src/config/elements/particlefx.js
 msgid "Ampiezza del getto"
 msgstr "Jet width"
+
+#: includes/class-theme-importer.php
+msgid "I pezzi di oggi, dal vivo"
+msgstr "Today’s parts, live"
