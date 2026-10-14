@@ -953,13 +953,24 @@ class Olobuild_Frontend_Renderer {
             }
 
             // Single field bindings
+            $vuoti = [];
             foreach ( $dynamic as $field_key => $binding ) {
                 if ( ! is_array( $binding ) ) continue;
                 if ( str_starts_with( $field_key, '_' ) ) continue; // skip _query, _itemMap
                 $source = $binding['source'] ?? '';
                 $field  = $binding['field'] ?? '';
                 if ( $source && $field ) {
+                    // HTML intero (il testo lungo di uno spettacolo, con foto, video e gallerie): la tile ne riceve il
+                    // segnaposto e il valore si scrive a tile disegnata (resolve_tokens, in fondo), senza il suo filtro.
+                    $segnaposto = Olobuild_Dynamic_Content::segnaposto_html( $source, $field );
+                    if ( '' !== $segnaposto && false === strpos( (string) $field_key, '.' ) ) {
+                        $settings[ $field_key ] = $segnaposto;
+                        continue;
+                    }
                     $resolved = $dc->resolve_field( $source, $field, $post_id );
+                    if ( is_scalar( $resolved ) && '' === trim( (string) $resolved ) ) {
+                        $vuoti[ $field_key ] = true;
+                    }
                     if ( $resolved !== null && false !== strpos( (string) $field_key, '.' ) ) {
                         // Campo dentro un oggetto («media_bg.image_url», la foto dello sfondo di una hero): si scrive al
                         // suo posto se l'oggetto c'è, e solo con un valore, così senza foto resta quella del template.
@@ -982,6 +993,11 @@ class Olobuild_Frontend_Renderer {
                         $settings[ $field_key ] = $resolved;
                     }
                 }
+            }
+            // Un pulsante col testo dinamico vuoto e senza icona non si disegna (i Biglietti di uno spettacolo senza
+            // link, esaurito o annullato), come fa la hero col suo: prima restava una pillola vuota. Nel builder resta.
+            if ( 'button' === $type && ! empty( $vuoti['text'] ) && empty( $settings['icon'] ) && ! $this->builder_mode ) {
+                return '';
             }
         }
 

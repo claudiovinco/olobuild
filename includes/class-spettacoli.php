@@ -383,6 +383,79 @@ class Olobuild_Spettacoli {
     }
 
     /**
+     * Il testo lungo come WordPress scrive il contenuto di un articolo: link di YouTube o Vimeo su una riga e [embed]
+     * incorporati, gallerie, [video] e gli altri shortcode, foto adattive. Senza il filtro the_content, che disegna già
+     * la scheda (Olobuild_Single_Integration). Si scrive a tile disegnata (Olobuild_Dynamic_Content::CAMPI_HTML).
+     */
+    private static function corpo( $c ) {
+        static $dentro = false;
+        $c = trim( (string) $c );
+        if ( '' === $c || $dentro ) {
+            return ''; // anche uno shortcode che ridisegnerebbe la scheda dentro il suo stesso testo
+        }
+        $dentro = true;
+        // I video incorporati prendono tutta la colonna, nelle proporzioni che dichiara il servizio.
+        $media = static function ( $html ) {
+            if ( ! preg_match( '/<iframe\b[^>]*>/i', (string) $html, $m ) ) {
+                return $html;
+            }
+            $w = preg_match( '/\swidth=["\']?(\d+)/i', $m[0], $a ) ? max( 1, (int) $a[1] ) : 16;
+            $h = preg_match( '/\sheight=["\']?(\d+)/i', $m[0], $b ) ? max( 1, (int) $b[1] ) : 9;
+            return '<div class="olo-articolo-media" style="aspect-ratio:' . $w . '/' . $h . '">' . $html . '</div>';
+        };
+        add_filter( 'embed_oembed_html', $media, 99 );
+        add_filter( 'use_default_gallery_style', '__return_false', 99 );
+        try {
+            global $wp_embed;
+            if ( $wp_embed instanceof WP_Embed ) {
+                $c = $wp_embed->run_shortcode( $c );
+                $c = $wp_embed->autoembed( $c );
+            }
+            if ( function_exists( 'has_blocks' ) && has_blocks( $c ) ) {
+                $c = do_blocks( $c );
+            }
+            $c = do_shortcode( shortcode_unautop( wpautop( wptexturize( $c ) ) ) );
+            if ( function_exists( 'wp_filter_content_tags' ) ) {
+                $c = wp_filter_content_tags( $c, 'the_content' );
+            }
+            $c = convert_smilies( $c );
+        } finally {
+            remove_filter( 'embed_oembed_html', $media, 99 );
+            remove_filter( 'use_default_gallery_style', '__return_false', 99 );
+            $dentro = false;
+        }
+        // Il segnaposto del testo lungo scritto nel testo stesso resta parola (non lo ripete dentro di sé).
+        $c = str_replace( '{spettacolo:contenuto}', '&#123;spettacolo:contenuto&#125;', $c );
+        return self::stile_corpo() . '<div class="olo-articolo">' . $c . '</div>';
+    }
+
+    /** Foto, video e gallerie nella colonna del testo, gli allineamenti e le didascalie di WordPress: una volta per pagina. */
+    private static function stile_corpo() {
+        static $fatto = false;
+        if ( $fatto ) {
+            return '';
+        }
+        $fatto   = true;
+        $colonne = '';
+        for ( $n = 1; $n <= 9; $n++ ) {
+            $colonne .= '.olo-articolo .gallery-columns-' . $n . ' .gallery-item{width:' . round( 100 / $n, 4 ) . '%}';
+        }
+        return '<style>.olo-articolo::after,.olo-articolo .gallery::after{content:"";display:table;clear:both}'
+            . '.olo-articolo>:first-child{margin-top:0}.olo-articolo>:last-child{margin-bottom:0}'
+            . '.olo-articolo img,.olo-articolo video{max-width:100%;height:auto}'
+            . '.olo-articolo figure{margin:1.6em 0}.olo-articolo .wp-caption,.olo-articolo .wp-video{max-width:100%}'
+            . '.olo-articolo .aligncenter{display:block;margin-left:auto;margin-right:auto}'
+            . '.olo-articolo .alignleft{float:left;margin:.4em 1.6em 1em 0}.olo-articolo .alignright{float:right;margin:.4em 0 1em 1.6em}'
+            . '.olo-articolo .wp-caption-text{font-size:.85em;opacity:.75;margin:.5em 0 0}'
+            . '.olo-articolo-media{position:relative;margin:1.6em 0}'
+            . '.olo-articolo-media iframe{position:absolute;inset:0;width:100%;height:100%;border:0}'
+            . '.olo-articolo .gallery{margin:1.6em -6px}.olo-articolo .gallery-item{float:left;margin:0;padding:6px;box-sizing:border-box;text-align:center}'
+            . '.olo-articolo .gallery-item img{display:block;margin:0 auto}' . $colonne
+            . '@media (max-width:640px){.olo-articolo .alignleft,.olo-articolo .alignright{float:none;margin:1em 0}'
+            . '.olo-articolo .gallery:not(.gallery-columns-1) .gallery-item{width:50%}}</style>';
+    }
+
+    /**
      * Valore di un campo dello spettacolo: quello della pagina in corso (o di $post_id), o della voce della demo.
      * '' se la pagina non è uno spettacolo o il campo non c'è.
      */
@@ -422,8 +495,7 @@ class Olobuild_Spettacoli {
                 return ( '' !== trim( (string) ( $v['link_biglietti'] ?? '' ) ) && ! in_array( $stato, [ 'esaurito', 'annullato' ], true ) )
                     ? __( 'Biglietti', 'olobuilder' ) : '';
             case 'contenuto':
-                $c = trim( (string) ( $v['contenuto'] ?? '' ) );
-                return '' !== $c ? wpautop( $c ) : '';
+                return self::corpo( (string) ( $v['contenuto'] ?? '' ) );
             case 'titolo':
             case 'sottotitolo':
             case 'genere':

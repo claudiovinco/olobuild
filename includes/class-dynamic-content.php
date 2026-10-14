@@ -615,6 +615,13 @@ class Olobuild_Dynamic_Content {
                 if ( null === $value ) {
                     return $m[0]; // Token non riconosciuto: lascia invariato
                 }
+                if ( self::campo_html( $m[1], isset( $m[2] ) ? $m[2] : '' ) ) {
+                    // HTML intero già pronto (il testo lungo di uno spettacolo): nel testo così com'è, altrove il solo testo
+                    if ( 'testo' === $contesto ) {
+                        return $value;
+                    }
+                    $value = trim( (string) preg_replace( '/\s+/', ' ', wp_strip_all_tags( $value ) ) );
+                }
                 if ( 'attributo' === $contesto ) {
                     return esc_attr( $value );
                 }
@@ -636,6 +643,23 @@ class Olobuild_Dynamic_Content {
         'current_year', 'current_date', 'featured_image', 'custom_field', 'user_name', 'post_id', 'post_url', 'post_count',
         'acf', 'acf_option', 'acf_image', 'acf_link', 'product_price', 'product_title', 'product_sku', 'product_stock',
         'product_rating', 'product_categories', 'product_short_desc', 'cart_total', 'cart_count', 'cart_subtotal', 'spettacolo' ];
+
+    /**
+     * Campi che portano HTML intero, già pronto: il testo lungo di uno spettacolo (foto, video incorporati, gallerie,
+     * shortcode). Una tile legata a uno di questi ne riceve il segnaposto (segnaposto_html()) e il valore si scrive
+     * dopo, a tile disegnata, come WordPress fa col contenuto degli articoli: il filtro dell'HTML delle tile
+     * (wp_kses_post) toglieva iframe, <source> e lo stile delle gallerie.
+     */
+    const CAMPI_HTML = [ 'spettacolo' => [ 'contenuto' ] ];
+
+    /** Il segnaposto di un campo con HTML intero ({spettacolo:contenuto}), '' per gli altri campi. */
+    public static function segnaposto_html( $source, $field ) {
+        return self::campo_html( $source, $field ) ? '{' . $source . ':' . $field . '}' : '';
+    }
+
+    private static function campo_html( $source, $field ) {
+        return in_array( (string) $field, self::CAMPI_HTML[ (string) $source ] ?? [], true );
+    }
 
     /**
      * Valore di un segnaposto, o null se il nome non è riconosciuto.

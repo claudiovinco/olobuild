@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.745 - 2026-10-14 (nuovo)
+- Spettacoli: nella pagina di uno spettacolo il testo lungo mostra tutto quello che si scrive nell'editor: foto (anche allineate e con didascalia), gallerie, video della Libreria e video di YouTube o Vimeo incollando il link su una riga, a tutta colonna nelle loro proporzioni. Prima passavano solo testo e foto.
+- Pagina dello spettacolo: senza link ai biglietti (ingresso libero), a sala esaurita o con lo spettacolo annullato il pulsante Biglietti non resta più come pillola vuota.
+
 ## v1.4.744 - 2026-10-14 (fix)
 - Temi: le anteprime di Teatro della Seta, nella Vetrina temi e nel selettore dei temi, computer e telefono, mostrano la home di adesso: il rosso da sipario, il sipario sobrio col video nuovo e il prossimo spettacolo su tinta unita.
 
