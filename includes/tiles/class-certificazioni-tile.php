@@ -231,6 +231,8 @@ class Olobuild_Certificazioni_Tile extends Olobuild_Tile_Base {
         // Testo e data in UN elemento, così vanno a capo come una frase; il pallino (senza linea di base) si
         // allinea col fondo alla linea di base della prima riga, cioè a metà delle minuscole.
         echo "{$sel} .ocert-scade{display:inline-flex;align-items:baseline;gap:.55em}";
+        // La data non si spezza: «15 Settembre» da una parte e «2027» da sola sotto.
+        echo "{$sel} .ocert-date time{white-space:nowrap}";
         echo "{$sel} .ocert-rinnovo{display:inline-flex;align-items:center;gap:.55em}";
         echo "{$sel} .ocert-scade::before{content:'';flex:none;width:.55em;height:.55em;border-radius:50%;background:var(--ocert-ok);box-shadow:0 0 0 3px color-mix(in srgb, var(--ocert-ok) 22%, transparent)}";
         echo "{$sel} .ocert-rinnovo{display:none;font-weight:600}";

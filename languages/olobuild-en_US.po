@@ -27032,3 +27032,7 @@ msgstr "Today’s sun, in kWh"
 #: includes/class-theme-importer.php
 msgid "Le scintille del taglio"
 msgstr "The sparks of the cut"
+
+#: includes/class-theme-importer.php
+msgid "Che sugo fai?"
+msgstr "What sauce are you making?"

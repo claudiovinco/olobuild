@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.775 - 2026-10-14 (fix)
+- Certificazioni: la data di scadenza non si spezza più a fine riga (prima poteva restare «15 Settembre» da una parte e «2027» da solo sotto).
+
 ## v1.4.774 - 2026-10-14 (fix)
 - Certificazioni: «Valido fino al …» va a capo come una frase sola, col pallino accanto alla prima riga. In una scheda stretta testo e data si stringevano in due colonne affiancate («Valido fino / al» accanto a «15 Settembre / 2027»).
 
