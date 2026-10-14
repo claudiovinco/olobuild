@@ -32,6 +32,7 @@ export default {
       { id: 'og-3', image: '', title: t('Chi siamo'), subtitle: t('Persone, metodo, valori'), link: '' },
     ],
     columns: '3',
+    columns_tablet: '',
     columns_mobile: '1',
     gap: 'medium',
     height: '320',
@@ -228,6 +229,14 @@ export default {
       { value: '3', label: '3' },
       { value: '4', label: '4' },
       { value: '5', label: '5' },
+    ]},
+    // Fra 640 e 959 px; vuoto = come il mobile (com'era prima che ci fosse)
+    { key: 'columns_tablet', label: t('Colonne (tablet)'), type: 'select', options: [
+      { value: '', label: t('Come il mobile') },
+      { value: '1', label: '1' },
+      { value: '2', label: '2' },
+      { value: '3', label: '3' },
+      { value: '4', label: '4' },
     ]},
     { key: 'columns_mobile', label: t('Colonne (mobile)'), type: 'select', options: [
       { value: '1', label: '1' },

@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.781 - 2026-10-14 (fix)
+- Overlay Grid: nuovo «Colonne (tablet)», fra 640 e 960 px di larghezza. Prima sul tablet le card seguivano il numero del telefono (spesso una per riga, molto alte); di serie resta così («Come il mobile»), quindi le pagine già fatte non cambiano.
+
 ## v1.4.780 - 2026-10-14 (temi)
 - Il pulsante «torna in cima» arriva in tutti i temi: i 54 che non l’avevano lo mostrano in basso a destra dopo un po’ di scorrimento, su ogni pagina, coi colori del tema. Vale per i temi importati da adesso in poi; le pagine dei siti già creati non cambiano.
 

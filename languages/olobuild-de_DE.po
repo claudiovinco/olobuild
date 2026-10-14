@@ -27347,3 +27347,11 @@ msgstr "Der Stoff aus der Nähe"
 #: includes/class-theme-importer.php
 msgid "La lastra sotto la lente"
 msgstr "Die Platte unter der Lupe"
+
+#: src/config/elements/overlaygrid.js
+msgid "Colonne (tablet)"
+msgstr "Spalten (Tablet)"
+
+#: src/config/elements/overlaygrid.js
+msgid "Come il mobile"
+msgstr "Wie Mobil"

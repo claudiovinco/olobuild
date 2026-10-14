@@ -27350,3 +27350,11 @@ msgstr "The fabric up close"
 #: includes/class-theme-importer.php
 msgid "La lastra sotto la lente"
 msgstr "The slab under the lens"
+
+#: src/config/elements/overlaygrid.js
+msgid "Colonne (tablet)"
+msgstr "Columns (tablet)"
+
+#: src/config/elements/overlaygrid.js
+msgid "Come il mobile"
+msgstr "Same as mobile"
