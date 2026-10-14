@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.736 - 2026-10-14 (fix)
+- Tema Teatro della Seta: velo più scuro sulla foto della platea, così i testi del prossimo spettacolo si leggono meglio sopra le poltrone.
+
 ## v1.4.735 - 2026-10-14 (nuovo)
 - Sipario della Hero: nuovo «Arco del drappeggio» nello Stile, per l'apertura all'italiana. Al 100% il telo sale in diagonale verso l'angolo alto e disegna l'arco, come prima; abbassandolo il telo si apre di lato, il bordo scende quasi dritto fino alla nappa e il movimento diventa quasi orizzontale.
 - Tema Teatro della Seta: niente più viola, che a teatro porta male. Il colore scuro del tema è un nero caldo di velluto, il prossimo spettacolo nella home sta sulla foto della platea, gli abbonamenti sui palchi rossi e il sipario della home si apre di lato.
