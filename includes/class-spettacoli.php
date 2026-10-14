@@ -443,15 +443,15 @@ class Olobuild_Spettacoli {
         return '<style>.olo-articolo::after,.olo-articolo .gallery::after{content:"";display:table;clear:both}'
             . '.olo-articolo>:first-child{margin-top:0}.olo-articolo>:last-child{margin-bottom:0}'
             . '.olo-articolo img,.olo-articolo video{max-width:100%;height:auto}'
-            . '.olo-articolo figure{margin:1.6em 0}.olo-articolo .wp-caption{max-width:100%}.olo-articolo .wp-video{width:100%!important;max-width:100%}'
+            . '.olo-articolo figure{margin:1.6em 0}.olo-articolo .wp-caption{max-width:100%}.olo-articolo .wp-video{width:100%!important;max-width:100%;clear:both}'
             . '.olo-articolo .aligncenter{display:block;margin-left:auto;margin-right:auto}'
             . '.olo-articolo .alignleft{float:left;margin:.4em 1.6em 1em 0}.olo-articolo .alignright{float:right;margin:.4em 0 1em 1.6em}'
             . '.olo-articolo .wp-caption-text{font-size:.85em;opacity:.75;margin:.5em 0 0}'
-            . '.olo-articolo-media{position:relative;margin:1.6em 0}'
+            . '.olo-articolo-media{position:relative;margin:1.6em 0;clear:both}'
             // il riquadro del consenso ai cookie e l'iframe che rimette dopo arrivano con larghezza e altezza scritte sull'elemento
             . '.olo-articolo-media>*{position:absolute!important;inset:0;width:100%!important;height:100%!important;margin:0!important;box-sizing:border-box}'
             . '.olo-articolo-media iframe{border:0}'
-            . '.olo-articolo .gallery{margin:1.6em -6px}.olo-articolo .gallery-item{float:left;margin:0;padding:6px;box-sizing:border-box;text-align:center}'
+            . '.olo-articolo .gallery{margin:1.6em -6px;clear:both}.olo-articolo .gallery-item{float:left;margin:0;padding:6px;box-sizing:border-box;text-align:center}'
             . '.olo-articolo .gallery-item img{display:block;margin:0 auto}' . $colonne
             . '@media (max-width:640px){.olo-articolo .alignleft,.olo-articolo .alignright{float:none;margin:1em 0}'
             . '.olo-articolo .gallery:not(.gallery-columns-1) .gallery-item{width:50%}}</style>';

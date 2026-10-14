@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.747 - 2026-10-14 (fix)
+- Spettacoli: nel testo lungo video, gallerie e video della Libreria cominciano sotto una foto allineata a destra o a sinistra, senza coprirne la didascalia.
+
 ## v1.4.746 - 2026-10-14 (fix)
 - Spettacoli: nel testo lungo il video di YouTube o Vimeo occupa tutta la colonna anche prima del consenso ai cookie (il riquadro «Accetta e carica») e dopo; il video della Libreria prende tutta la colonna.
 
