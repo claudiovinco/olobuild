@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.777 - 2026-10-14 (temi)
+- Quattro temi nuovi in «Industria e manifattura»: Settimo Asse (automazione e celle robotizzate), Meriggio Energia (impianti fotovoltaici e comunità energetiche), Lamiere Astico (carpenteria metallica e lavorazione della lamiera) e Pastificio Sorgiva (pasta trafilata al bronzo, col marchio proprio e la private label). Ognuno ha la home e tre pagine interne, testata, piè di pagina, pagina d’errore e il pulsante per tornare in cima su ogni pagina.
+
 ## v1.4.776 - 2026-10-14 (fix)
 - Finder: il pulsante del risultato segue lo stile pulsanti del tema (raggio, maiuscolo, spaziatura). Prima era sempre una pillola, anche quando i pulsanti del sito avevano gli angoli quasi vivi.
 - Fascia numeri, Griglia lavori, Elenco lavori, Orari, Hover list e Lookbook: con il carattere mono lasciato vuoto usano il mono del tema, come dice l’inspector. Prima ricadevano sul monospazio di sistema del computer (su Windows il Consolas).
