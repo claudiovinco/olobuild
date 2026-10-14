@@ -26893,3 +26893,7 @@ msgstr "Die Zeichnung bemaßt sich selbst"
 #: includes/class-theme-importer.php
 msgid "La linea in cinque stazioni"
 msgstr "Die Linie in fünf Stationen"
+
+#: includes/class-theme-importer.php
+msgid "La parola piena di metallo"
+msgstr "Das Wort voller Metall"

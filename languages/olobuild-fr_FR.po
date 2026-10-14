@@ -26893,3 +26893,7 @@ msgstr "Le dessin se cote tout seul"
 #: includes/class-theme-importer.php
 msgid "La linea in cinque stazioni"
 msgstr "La ligne en cinq stations"
+
+#: includes/class-theme-importer.php
+msgid "La parola piena di metallo"
+msgstr "Le mot rempli de métal"

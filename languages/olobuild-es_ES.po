@@ -26893,3 +26893,7 @@ msgstr "El plano se acota solo"
 #: includes/class-theme-importer.php
 msgid "La linea in cinque stazioni"
 msgstr "La línea en cinco estaciones"
+
+#: includes/class-theme-importer.php
+msgid "La parola piena di metallo"
+msgstr "La palabra llena de metal"

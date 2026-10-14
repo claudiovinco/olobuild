@@ -18917,3 +18917,7 @@ msgstr "The drawing dimensions itself"
 #: includes/class-theme-importer.php
 msgid "La linea in cinque stazioni"
 msgstr "The line in five stations"
+
+#: includes/class-theme-importer.php
+msgid "La parola piena di metallo"
+msgstr "The word filled with metal"
