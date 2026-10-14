@@ -9,7 +9,8 @@
  *
  * Tre aperture, coi nomi del teatro:
  *  - all'italiana: i teli si raccolgono in diagonale verso gli angoli alti (un arco), legati da
- *    una nappa; sotto la nappa resta una quinta che scende fino a terra;
+ *    una nappa; sotto la nappa resta una quinta che scende fino a terra. Con «Arco del drappeggio»
+ *    più basso il telo si apre di lato e il bordo scende quasi dritto fino alla nappa;
  *  - alla greca: i teli scorrono ai lati, le pieghe si stringono;
  *  - alla tedesca: il telo sale dritto dietro la mantovana.
  * Dopo l'apertura possono restare le quinte (e la mantovana), solo la mantovana, o niente.
@@ -55,6 +56,7 @@ class Olobuild_Sipario {
         'curtain_swags'       => 5,
         'curtain_valance_h'   => 120,
         'curtain_quinte'      => 11,
+        'curtain_arc'         => 100,
         'curtain_tiebacks'    => true,
         'curtain_footlights'  => true,
         'curtain_gap_light'   => true,
@@ -118,37 +120,50 @@ class Olobuild_Sipario {
      * Geometria dell'apertura all'italiana sulla tela SINISTRA (x, y in % della tela).
      * Chiusa è un rettangolo; aperta il bordo interno (lo spigolo in basso al centro) sale in
      * diagonale fino alla nappa e disegna l'arco; sotto la nappa la quinta scende fino a terra.
-     * Stesso numero di punti nei due stati: ogni punto si muove in linea retta con --osip-p.
+     * Con l'arco più basso il telo si apre invece di lato: il bordo interno scende quasi dritto
+     * dall'alto fino alla nappa e i punti si muovono quasi in orizzontale (un tendone tirato ai
+     * lati); in mezzo, la media fra i due. Stesso numero di punti nei due stati: ogni punto si
+     * muove in linea retta con --osip-p.
      *
-     * @param float $q   Larghezza della quinta a terra, frazione della tela (0 = sparisce).
+     * @param float $q     Larghezza della quinta a terra, frazione della tela (0 = sparisce).
+     * @param float $arco  1 = l'arco dell'italiana classica, 0 = il bordo dritto dell'apertura di lato.
      * @return array [ 'punti' => [ [chiuso, aperto], … ], 'nappa' => [x, y] ]
      */
-    private static function italiana( $q ) {
-        $q = max( 0.0, min( 0.6, (float) $q ) ) * 100;
+    private static function italiana( $q, $arco = 1.0 ) {
+        $q    = max( 0.0, min( 0.6, (float) $q ) ) * 100;
+        $arco = max( 0.0, min( 1.0, (float) $arco ) );
         if ( $q < 0.5 ) {
-            // nessuna quinta: il telo si ritira tutto nell'angolo alto, sotto la mantovana
-            $t = [ 0, 9 ];
-            $k = [ 34, 0 ];
-            $d = [ 0, 55 ];
-            $q = 0;
+            // nessuna quinta: il telo si ritira tutto nell'angolo alto, sotto la mantovana (di lato: nel bordo)
+            $t  = [ 0, 9 ];
+            $k  = [ 34, 0 ];
+            $d  = [ 0, 55 ];
+            $q  = 0;
+            $tl = [ 0, 63 ];
         } else {
-            $t = [ max( 3.5, $q * 0.6 ), 63 ];
-            $k = [ 40, 1 ];
-            $d = [ $t[0] * 0.72, 84 ];
+            $t  = [ max( 3.5, $q * 0.6 ), 63 ];
+            $k  = [ 40, 1 ];
+            $d  = [ $t[0] * 0.72, 84 ];
+            $tl = $t;
         }
+        $dl  = [ $tl[0] * 0.72, 84 ];
+        $mix = static function ( $a, $b ) use ( $arco ) {
+            return [ $b[0] + ( $a[0] - $b[0] ) * $arco, $b[1] + ( $a[1] - $b[1] ) * $arco ];
+        };
         $p   = [];
         $p[] = [ [ 0, 0 ], [ 0, 0 ] ];
         $p[] = [ [ 100, 0 ], [ 100, 0 ] ];
         for ( $i = 1; $i <= 10; $i++ ) {
-            $f   = $i / 10;
-            $p[] = [ [ 100, 100 * $f ], self::bez( [ 100, 0 ], $k, $t, $f ) ];
+            $f = $i / 10;
+            // di lato: il primo punto corre in cima (sotto la mantovana), gli altri scendono dritti e si stringono alla nappa
+            $lato = 1 === $i ? [ $q, 1 ] : self::bez( [ $q, 1 ], [ $q, 40 ], $tl, ( $i - 1 ) / 9 );
+            $p[]  = [ [ 100, 100 * $f ], $mix( self::bez( [ 100, 0 ], $k, $t, $f ), $lato ) ];
         }
         for ( $j = 1; $j <= 6; $j++ ) {
             $f   = $j / 6;
-            $p[] = [ [ 100 - ( 100 - $q ) * $f, 100 ], self::bez( $t, $d, [ $q, 100 ], $f ) ];
+            $p[] = [ [ 100 - ( 100 - $q ) * $f, 100 ], $mix( self::bez( $t, $d, [ $q, 100 ], $f ), self::bez( $tl, $dl, [ $q, 100 ], $f ) ) ];
         }
         $p[] = [ [ 0, 100 ], [ 0, 100 ] ];
-        return [ 'punti' => $p, 'nappa' => $t ];
+        return [ 'punti' => $p, 'nappa' => $mix( $t, $tl ) ];
     }
 
     /** polygon() con ogni coordinata = chiuso + --osip-p × (aperto − chiuso). */
@@ -247,9 +262,11 @@ class Olobuild_Sipario {
         // Le pieghe sono strisce ripetute su tutta la tela (niente tessere: con l'angolo che cambia
         // le tessere mostrerebbero le cuciture). All'italiana il telo tirato verso l'angolo alto le
         // inclina e le stringe: l'angolo e il passo seguono --osip-p.
+        // Aperto di lato (arco basso) le pieghe restano dritte e si stringono di più.
+        $arco = self::num( $s['curtain_arc'], 0, 100, 100 ) / 100;
         if ( 'italiana' === $apert ) {
-            $ang = 'calc(90deg - var(--osip-p) * 9deg)';
-            $n   = '(var(--osip-n) * (1 + var(--osip-p) * .35))';
+            $ang = 'calc(90deg - var(--osip-p) * ' . round( 9 * $arco, 2 ) . 'deg)';
+            $n   = '(var(--osip-n) * (1 + var(--osip-p) * ' . round( 1 - 0.65 * $arco, 3 ) . '))';
         } else {
             $ang = '90deg';
             $n   = 'var(--osip-n)';
@@ -267,10 +284,10 @@ class Olobuild_Sipario {
         }
 
         // il movimento di ogni apertura, con la quinta del dispositivo
-        $regola = static function ( $q ) use ( $o, $apert, $resta ) {
+        $regola = static function ( $q ) use ( $o, $apert, $resta, $arco ) {
             $frazione = $resta ? ( $q / 50.6 ) : 0;
             if ( 'italiana' === $apert ) {
-                $g = self::italiana( $frazione );
+                $g = self::italiana( $frazione, $arco );
                 $r = $o . ' .osip-stoffa{clip-path:' . self::poligono( $g['punti'] ) . '}';
                 $r .= $o . ' .osip-nappa{left:calc(' . round( $g['nappa'][0] * 0.506, 2 ) . '% - 1.4rem);top:calc(' . round( $g['nappa'][1], 2 ) . '% - 1.5rem)}';
                 $r .= $o . ' .osip-nappa.osip-n-dx{left:auto;right:calc(' . round( $g['nappa'][0] * 0.506, 2 ) . '% - 1.4rem)}';

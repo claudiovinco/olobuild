@@ -18389,3 +18389,9 @@ msgstr "Curtain invitation"
 
 msgid "Si alza il sipario"
 msgstr "The curtain rises"
+
+msgid "Arco del drappeggio"
+msgstr "Drape arc"
+
+msgid "Come si raccoglie il telo aperto. Al 100% sale in diagonale verso l'angolo alto e disegna l'arco, come nel sipario all'italiana classico; abbassandolo il telo si apre di lato e il bordo scende quasi dritto fino alla nappa."
+msgstr "How the open cloth gathers. At 100% it rises diagonally towards the top corner and draws the arc, as in the classic Italian curtain; lower it and the cloth opens sideways, its edge falling almost straight down to the tieback."
