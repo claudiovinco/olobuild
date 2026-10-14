@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.748 - 2026-10-14 (nuovo)
+- Tema Sartoria Ferro: l'apertura è una hero a tutto schermo col titolo sopra l'immagine, anche sul telefono; i numeri della bottega (1946, 32 misure, 3 prove, 40 ore) in una fascia subito sotto.
+- Tema Sartoria Ferro: nuova pagina «L'arte di prendere misure», l'articolo del sarto con le foto, gli attrezzi, le otto misure che contano, il cartamodello che si disegna e cosa portare in bottega. L'invito a leggerlo è in home e nella pagina del metodo.
+
 ## v1.4.747 - 2026-10-14 (fix)
 - Spettacoli: nel testo lungo video, gallerie e video della Libreria cominciano sotto una foto allineata a destra o a sinistra, senza coprirne la didascalia.
 
