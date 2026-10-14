@@ -26881,3 +26881,11 @@ msgstr "Wert aus der Adresse"
 
 msgid "Il nome di un parametro dell'indirizzo della pagina. Con «prodotto», chi arriva da …?prodotto=LR-240 trova il campo già scritto (un campo nascosto prende sempre quel valore). Il pulsante del preventivo della Scheda tecnica lo usa per portare il codice del prodotto."
 msgstr "Der Name eines Parameters in der Seitenadresse. Mit „prodotto“ findet, wer über …?prodotto=LR-240 kommt, das Feld schon ausgefüllt (ein verstecktes Feld übernimmt den Wert immer). Die Angebotsschaltfläche des Technischen Datenblatts nutzt das, um den Produktcode mitzugeben."
+
+#: includes/class-theme-importer.php
+msgid "Industria e manifattura"
+msgstr "Industrie & Fertigung"
+
+#: includes/class-theme-importer.php
+msgid "Il disegno si quota da solo"
+msgstr "Die Zeichnung bemaßt sich selbst"

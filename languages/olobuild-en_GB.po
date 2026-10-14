@@ -18905,3 +18905,11 @@ msgstr "Value from the address"
 
 msgid "Il nome di un parametro dell'indirizzo della pagina. Con «prodotto», chi arriva da …?prodotto=LR-240 trova il campo già scritto (un campo nascosto prende sempre quel valore). Il pulsante del preventivo della Scheda tecnica lo usa per portare il codice del prodotto."
 msgstr "The name of a parameter in the page address. With “prodotto”, anyone arriving from …?prodotto=LR-240 finds the field already filled in (a hidden field always takes that value). The quote button of the Technical data sheet uses it to pass the product code."
+
+#: includes/class-theme-importer.php
+msgid "Industria e manifattura"
+msgstr "Industry & manufacturing"
+
+#: includes/class-theme-importer.php
+msgid "Il disegno si quota da solo"
+msgstr "The drawing dimensions itself"

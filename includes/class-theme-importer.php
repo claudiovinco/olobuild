@@ -11,6 +11,9 @@ class Olobuild_Theme_Importer {
         foreach ( glob( $themes_dir . '*/theme.json' ) as $file ) {
             $data = json_decode( file_get_contents( $file ), true );
             if ( ! $data || empty( $data['id'] ) ) continue;
+            // Tema non ancora finito (theme.json → in_lavorazione): la sua demo si apre dall'indirizzo
+            // (Olobuild_Demo_Temi legge la cartella), ma il selettore, la Vetrina e l'importazione non lo vedono.
+            if ( ! empty( $data['in_lavorazione'] ) ) continue;
             $dir = dirname( $file );
             $theme_id = basename( $dir );
             // Anteprima (screenshot): servita dalla LIBRERIA REMOTA su olotheme.com, così lo

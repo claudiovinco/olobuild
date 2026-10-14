@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.756 - 2026-10-14 (nuovo)
+- Form Contatti: il campo file accetta anche i disegni CAD (STEP, IGES, DWG, DXF, STL, 3MF) quando li metti fra le estensioni ammesse della tile. Prima il modulo li scartava senza avvisare, perché WordPress non conosce quei formati.
+
 ## v1.4.755 - 2026-10-14 (temi)
 - Tema Sartoria Ferro: la giacca nuova del cartamodello anche nella sezione «A mano» della pagina del metodo e nella pagina d’errore, al posto del disegno di prima.
 

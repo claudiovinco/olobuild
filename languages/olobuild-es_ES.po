@@ -26881,3 +26881,11 @@ msgstr "Valor desde la dirección"
 
 msgid "Il nome di un parametro dell'indirizzo della pagina. Con «prodotto», chi arriva da …?prodotto=LR-240 trova il campo già scritto (un campo nascosto prende sempre quel valore). Il pulsante del preventivo della Scheda tecnica lo usa per portare il codice del prodotto."
 msgstr "El nombre de un parámetro de la dirección de la página. Con «prodotto», quien llega desde …?prodotto=LR-240 encuentra el campo ya escrito (un campo oculto toma siempre ese valor). El botón de presupuesto de la Ficha técnica lo usa para llevar el código del producto."
+
+#: includes/class-theme-importer.php
+msgid "Industria e manifattura"
+msgstr "Industria y manufactura"
+
+#: includes/class-theme-importer.php
+msgid "Il disegno si quota da solo"
+msgstr "El plano se acota solo"

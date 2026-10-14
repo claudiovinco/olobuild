@@ -13,6 +13,12 @@ class Olobuild_Form_Handler {
     const INTEGRATION_ERRORS_OPTION = 'olobuild_form_integrations_last_error';
 
     /**
+     * Disegni CAD che il campo file accetta anche se WordPress non ne conosce il tipo (1.4.756): il preventivo di
+     * un'officina arriva col disegno. Valgono solo se la tile li mette fra le estensioni ammesse.
+     */
+    const ESTENSIONI_CAD = [ '.step', '.stp', '.igs', '.iges', '.dwg', '.dxf', '.stl', '.3mf' ];
+
+    /**
      * Secret key used to sign form tokens (HMAC).
      * Derived from WordPress AUTH_SALT for uniqueness per-site.
      *
@@ -457,9 +463,11 @@ class Olobuild_Form_Handler {
                         continue;
                     }
 
-                    // Validate MIME type matches extension
+                    // Validate MIME type matches extension. I disegni CAD (STEP, IGES, DWG, DXF, STL, 3MF) WordPress non li
+                    // conosce e prima si perdevano in silenzio: passano se la tile li ammette (elenco qui sopra), restano
+                    // nella cartella chiusa e si scaricano solo come allegato (scarica_file: octet-stream, nosniff).
                     $mime_check = wp_check_filetype( $single_file['name'] );
-                    if ( ! $mime_check['type'] ) {
+                    if ( ! $mime_check['type'] && ! in_array( $ext, self::ESTENSIONI_CAD, true ) ) {
                         continue;
                     }
                     // Block dangerous file types regardless of extension
