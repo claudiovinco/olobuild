@@ -27025,3 +27025,7 @@ msgstr "Las piezas de hoy, en directo"
 #: includes/class-theme-importer.php
 msgid "Il sole di oggi, in kWh"
 msgstr "El sol de hoy, en kWh"
+
+#: includes/class-theme-importer.php
+msgid "Le scintille del taglio"
+msgstr "Las chispas del corte"

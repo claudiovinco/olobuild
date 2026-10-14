@@ -19049,3 +19049,7 @@ msgstr "Today’s parts, live"
 #: includes/class-theme-importer.php
 msgid "Il sole di oggi, in kWh"
 msgstr "Today’s sun, in kWh"
+
+#: includes/class-theme-importer.php
+msgid "Le scintille del taglio"
+msgstr "The sparks of the cut"
