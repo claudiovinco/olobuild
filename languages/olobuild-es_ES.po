@@ -27021,3 +27021,7 @@ msgstr "Amplitud del chorro"
 #: includes/class-theme-importer.php
 msgid "I pezzi di oggi, dal vivo"
 msgstr "Las piezas de hoy, en directo"
+
+#: includes/class-theme-importer.php
+msgid "Il sole di oggi, in kWh"
+msgstr "El sol de hoy, en kWh"

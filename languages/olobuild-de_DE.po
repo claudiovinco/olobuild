@@ -27021,3 +27021,7 @@ msgstr "Strahlbreite"
 #: includes/class-theme-importer.php
 msgid "I pezzi di oggi, dal vivo"
 msgstr "Die Teile von heute, live"
+
+#: includes/class-theme-importer.php
+msgid "Il sole di oggi, in kWh"
+msgstr "Die Sonne von heute, in kWh"

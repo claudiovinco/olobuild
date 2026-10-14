@@ -19045,3 +19045,7 @@ msgstr "Jet width"
 #: includes/class-theme-importer.php
 msgid "I pezzi di oggi, dal vivo"
 msgstr "Today’s parts, live"
+
+#: includes/class-theme-importer.php
+msgid "Il sole di oggi, in kWh"
+msgstr "Today’s sun, in kWh"
