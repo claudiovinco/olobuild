@@ -27033,3 +27033,317 @@ msgstr "Die Funken des Schnitts"
 #: includes/class-theme-importer.php
 msgid "Che sugo fai?"
 msgstr "Welche Soße kochst du?"
+
+msgid "Campione"
+msgstr "Muster"
+
+msgid "Prova materiale"
+msgstr "Materialmuster"
+
+msgid "Smalto bianco"
+msgstr "Weiße Glasur"
+
+msgid "Smalto lucido steso a mano: la luce scivola sulle curve senza riflessi duri."
+msgstr "Glänzende, von Hand aufgetragene Glasur: Das Licht gleitet ohne harte Reflexe über die Rundungen."
+
+msgid "Blu cobalto"
+msgstr "Kobaltblau"
+
+msgid "Porcellana blu col decoro dipinto a mano, cotta due volte."
+msgstr "Blaues Porzellan mit handgemaltem Dekor, zweimal gebrannt."
+
+msgid "Rovere naturale"
+msgstr "Eiche natur"
+
+msgid "Rovere spazzolato e oliato: la venatura resta in rilievo sotto le dita."
+msgstr "Gebürstete, geölte Eiche: Die Maserung bleibt unter den Fingern fühlbar."
+
+msgid "Passa sopra la foto per vedere i dettagli"
+msgstr "Fahre über das Foto, um die Details zu sehen"
+
+msgid "Tocca la foto per ingrandirla"
+msgstr "Tippe auf das Foto, um es zu vergrößern"
+
+msgid "Finitura"
+msgstr "Oberfläche"
+
+msgid "Campioni"
+msgstr "Muster"
+
+msgid "Una voce per finitura o colore: la foto grande, che la lente ingrandisce (caricala in alta risoluzione), il nome, il codice e una frase. Il campione da toccare mostra la miniatura, se c'è; altrimenti la tinta scelta nello Stile, o la foto stessa."
+msgstr "Ein Eintrag pro Oberfläche oder Farbe: das große Foto, das die Lupe vergrößert (lade es in hoher Auflösung hoch), der Name, der Code und ein Satz. Das Muster zum Antippen zeigt die Miniatur, falls vorhanden; sonst den unter „Stil“ gewählten Farbton oder das Foto selbst."
+
+msgid "Miniatura del campione"
+msgstr "Miniatur des Musters"
+
+msgid "Il campione da toccare, per esempio il dettaglio del tessuto. Vuota: la tinta scelta nello Stile, o la foto grande."
+msgstr "Das Muster zum Antippen, zum Beispiel ein Detail des Stoffs. Leer: der unter „Stil“ gewählte Farbton oder das große Foto."
+
+msgid "Cosa mostra la foto, per chi non la vede. Vuoto: il nome del campione."
+msgstr "Was das Foto zeigt, für Menschen, die es nicht sehen. Leer: der Name des Musters."
+
+msgid "Campione iniziale"
+msgstr "Anfangsmuster"
+
+msgid "Il primo"
+msgstr "Das erste"
+
+msgid "Quello che si vede quando si apre la pagina."
+msgstr "Das Muster, das beim Öffnen der Seite zu sehen ist."
+
+msgid "Lente"
+msgstr "Lupe"
+
+msgid "Lente d'ingrandimento"
+msgstr "Vergrößerungslupe"
+
+msgid "Al passaggio del puntatore la lente ingrandisce la foto. Sul telefono un tocco la accende, trascinando si sposta e un altro tocco la spegne. Da tastiera: Invio la accende, le frecce la spostano, Esc la chiude."
+msgstr "Wenn der Zeiger darüberfährt, vergrößert die Lupe das Foto. Auf dem Handy schaltet ein Tippen sie ein, Ziehen verschiebt sie und ein weiteres Tippen schaltet sie aus. Mit der Tastatur: Eingabe schaltet sie ein, die Pfeiltasten verschieben sie, Esc schließt sie."
+
+msgid "Mostra il suggerimento"
+msgstr "Hinweis anzeigen"
+
+msgid "Una riga piccola sulla foto che dice come si usa la lente: sparisce appena la si usa."
+msgstr "Eine kleine Zeile auf dem Foto, die erklärt, wie die Lupe funktioniert: Sie verschwindet, sobald man sie benutzt."
+
+msgid "Suggerimento"
+msgstr "Hinweis"
+
+msgid "Suggerimento sul telefono"
+msgstr "Hinweis auf dem Handy"
+
+msgid "Mostra nome, codice e testo"
+msgstr "Name, Code und Text anzeigen"
+
+msgid "Quelli del campione scelto, accanto o sotto ai campioni: cambiano con lui."
+msgstr "Die des gewählten Musters, neben oder unter den Mustern: Sie wechseln mit ihm."
+
+msgid "Etichetta dei campioni"
+msgstr "Beschriftung der Muster"
+
+msgid "Sopra i campioni: «Finitura», «Colore». Vuota: niente."
+msgstr "Über den Mustern: „Oberfläche“, „Farbe“. Leer: nichts."
+
+msgid "L'anello del campione scelto e il bordo della lente. Vuoto: il primario del tema."
+msgstr "Der Ring um das gewählte Muster und der Rand der Lupe. Leer: die Primärfarbe des Themes."
+
+msgid "Colore del testo"
+msgstr "Textfarbe"
+
+msgid "Nome e testo del campione. Vuoto: il colore del testo della sezione."
+msgstr "Name und Text des Musters. Leer: die Textfarbe des Abschnitts."
+
+msgid "Colore tenue"
+msgstr "Gedämpfte Farbe"
+
+msgid "Etichetta e codice. Vuoto: il colore del testo, più chiaro."
+msgstr "Beschriftung und Code. Leer: die Textfarbe, heller."
+
+msgid "Il riquadro con i campioni e i testi. Vuoto: trasparente."
+msgstr "Der Kasten mit den Mustern und den Texten. Leer: transparent."
+
+msgid "Sotto la foto, e sotto il pannello quando ha uno sfondo."
+msgstr "Unter dem Foto und unter dem Bereich, wenn er einen Hintergrund hat."
+
+msgid "Testo del campione"
+msgstr "Text des Musters"
+
+msgid "Forma della lente"
+msgstr "Form der Lupe"
+
+msgid "Misura della lente"
+msgstr "Größe der Lupe"
+
+msgid "Forma dei campioni"
+msgstr "Form der Muster"
+
+msgid "Quadretto"
+msgstr "Kleines Quadrat"
+
+msgid "Pillola col nome"
+msgstr "Pille mit Namen"
+
+msgid "Misura dei campioni"
+msgstr "Größe der Muster"
+
+msgid "Tinte dei campioni"
+msgstr "Farbtöne der Muster"
+
+msgid "Tinta del campione"
+msgstr "Farbton des Musters"
+
+msgid "Un pallino pieno di questo colore al posto della foto, per i colori dei tessuti. Vale quando il campione non ha una miniatura."
+msgstr "Ein voller Punkt in dieser Farbe statt des Fotos, für Stofffarben. Gilt, wenn das Muster keine Miniatur hat."
+
+msgid "Campioni sotto la foto"
+msgstr "Muster unter dem Foto"
+
+msgid "Campioni accanto alla foto"
+msgstr "Muster neben dem Foto"
+
+msgid "Accanto alla foto: sul telefono i campioni tornano sotto."
+msgstr "Neben dem Foto: Auf dem Handy rücken die Muster wieder darunter."
+
+msgid "Lato dei campioni"
+msgstr "Seite der Muster"
+
+msgid "Fra la foto e il pannello dei campioni."
+msgstr "Zwischen dem Foto und dem Musterbereich."
+
+msgid "Tracciamento spedizione"
+msgstr "Sendungsverfolgung"
+
+msgid "Numero di spedizione"
+msgstr "Sendungsnummer"
+
+msgid "Es. 1Z999AA10123456784"
+msgstr "Z. B. 1Z999AA10123456784"
+
+msgid "Traccia"
+msgstr "Verfolgen"
+
+msgid "Scrivi il numero di spedizione completo."
+msgstr "Gib die vollständige Sendungsnummer ein."
+
+msgid "Lo trovi nella mail di conferma della spedizione."
+msgstr "Du findest sie in der Versandbestätigung per E-Mail."
+
+msgid "Indirizzo del tracciamento"
+msgstr "Tracking-Adresse"
+
+msgid "L'indirizzo del portale del corriere, col segnaposto {codice} dove va il numero di spedizione: per esempio https://traccia.esempio.it/?n={codice}. Senza {codice} il numero si aggiunge in fondo. Va bene anche una pagina del sito."
+msgstr "Die Adresse des Portals des Versanddienstes, mit dem Platzhalter {codice} an der Stelle der Sendungsnummer: zum Beispiel https://traccia.esempio.it/?n={codice}. Ohne {codice} wird die Nummer am Ende angehängt. Auch eine Seite der Website ist möglich."
+
+msgid "Operatori"
+msgstr "Versanddienste"
+
+msgid "Facoltativi. Con due o più operatori, prima del campo compare la scelta del corriere e ognuno apre il suo indirizzo (sempre con {codice}). Un operatore senza indirizzo usa quello qui sopra."
+msgstr "Optional. Bei zwei oder mehr Versanddiensten erscheint vor dem Feld die Auswahl des Versanddienstes, und jeder öffnet seine eigene Adresse (immer mit {codice}). Ein Versanddienst ohne Adresse nutzt die obige."
+
+msgid "Indirizzo"
+msgstr "Adresse"
+
+msgid "Per il portale di un corriere. Per una pagina dello stesso sito, spegnilo."
+msgstr "Für das Portal eines Versanddienstes. Für eine Seite derselben Website schalte es aus."
+
+msgid "Il nome di un parametro dell'indirizzo della pagina: con «codice», chi arriva da …?codice=AB123 trova il campo già scritto. Serve alla pagina d'arrivo del tracciamento."
+msgstr "Der Name eines Parameters in der Seitenadresse: Mit „codice“ findet, wer über …?codice=AB123 kommt, das Feld schon ausgefüllt. Gedacht für die Zielseite der Sendungsverfolgung."
+
+msgid "Mostra l'etichetta"
+msgstr "Beschriftung anzeigen"
+
+msgid "Spenta, l'etichetta resta per i lettori di schermo."
+msgstr "Ausgeschaltet bleibt die Beschriftung für Screenreader erhalten."
+
+msgid "Segnaposto"
+msgstr "Platzhalter"
+
+msgid "Icona del campo"
+msgstr "Feldsymbol"
+
+msgid "Una riga sotto il campo: dove si trova il numero, gli orari del servizio clienti. Vuota: niente."
+msgstr "Eine Zeile unter dem Feld: wo die Nummer zu finden ist, die Zeiten des Kundendienstes. Leer: nichts."
+
+msgid "Tutto maiuscolo"
+msgstr "Alles in Großbuchstaben"
+
+msgid "Il numero si scrive e si invia in maiuscolo, come lo stampano i corrieri. Gli spazi si tolgono sempre."
+msgstr "Die Nummer wird in Großbuchstaben geschrieben und gesendet, so wie die Versanddienste sie drucken. Leerzeichen werden immer entfernt."
+
+msgid "Lunghezza minima"
+msgstr "Mindestlänge"
+
+msgid "Sotto questo numero di caratteri il campo mostra il messaggio d'errore invece di aprire il collegamento."
+msgstr "Unter dieser Zeichenzahl zeigt das Feld die Fehlermeldung, statt den Link zu öffnen."
+
+msgid "Messaggio d'errore"
+msgstr "Fehlermeldung"
+
+msgid "Icona del pulsante"
+msgstr "Symbol der Schaltfläche"
+
+msgid "Sotto il campo e il pulsante."
+msgstr "Unter dem Feld und der Schaltfläche."
+
+msgid "Sfondo campo"
+msgstr "Feldhintergrund"
+
+msgid "Vuoto: il colore di fondo del tema."
+msgstr "Leer: die Hintergrundfarbe des Themes."
+
+msgid "Colore testo campo"
+msgstr "Textfarbe des Felds"
+
+msgid "Vuoto: il colore del testo del tema, o quello che si legge sullo sfondo scelto."
+msgstr "Leer: die Textfarbe des Themes oder die, die auf dem gewählten Hintergrund gut lesbar ist."
+
+msgid "Bordo campo"
+msgstr "Feldrahmen"
+
+msgid "Raggio campo"
+msgstr "Feldradius"
+
+msgid "Vuoto: il raggio dei pulsanti del tema, come il pulsante."
+msgstr "Leer: der Radius der Schaltflächen des Themes, wie bei der Schaltfläche."
+
+msgid "Testo del campo"
+msgstr "Feldtext"
+
+msgid "Del campo e del pulsante."
+msgstr "Des Felds und der Schaltfläche."
+
+msgid "Vuoto: il primario del tema. Colora anche l'anello del campo quando si scrive."
+msgstr "Leer: die Primärfarbe des Themes. Färbt beim Schreiben auch den Ring um das Feld."
+
+msgid "Vuoto: il colore che il tema abbina al primario, o quello che si legge sullo sfondo scelto."
+msgstr "Leer: die Farbe, die das Theme der Primärfarbe zuordnet, oder die, die auf dem gewählten Hintergrund gut lesbar ist."
+
+msgid "Vuoto: il raggio dei pulsanti del tema."
+msgstr "Leer: der Radius der Schaltflächen des Themes."
+
+msgid "Colore errore"
+msgstr "Fehlerfarbe"
+
+msgid "Il messaggio quando il numero manca o è troppo corto. Vuoto: il colore «pericolo» del tema."
+msgstr "Die Meldung, wenn die Nummer fehlt oder zu kurz ist. Leer: die Farbe „Gefahr“ des Themes."
+
+msgid "Campo e pulsante in riga"
+msgstr "Feld und Schaltfläche in einer Reihe"
+
+msgid "Pulsante sotto il campo"
+msgstr "Schaltfläche unter dem Feld"
+
+msgid "In riga: sul telefono il pulsante va comunque sotto, largo quanto il campo."
+msgstr "In einer Reihe: Auf dem Handy rückt die Schaltfläche trotzdem darunter, so breit wie das Feld."
+
+msgid "Aggiungi i campioni nel Contenuto: per ognuno la foto, il nome e il codice."
+msgstr "Füge die Muster unter „Inhalt“ hinzu: für jedes das Foto, den Namen und den Code."
+
+msgid "Carica la foto del campione nel Contenuto"
+msgstr "Lade das Foto des Musters unter „Inhalt“ hoch"
+
+msgid "Invio accende la lente d'ingrandimento, le frecce la spostano, Esc la chiude."
+msgstr "Eingabe schaltet die Lupe ein, die Pfeiltasten verschieben sie, Esc schließt sie."
+
+msgid "Campione %d"
+msgstr "Muster %d"
+
+msgid "Nel builder il collegamento non si apre: sul sito porterebbe a %s"
+msgstr "Im Builder öffnet sich der Link nicht: Auf der Website würde er zu %s führen"
+
+msgid "Corriere"
+msgstr "Versanddienst"
+
+msgid "Traccia la spedizione"
+msgstr "Sendung verfolgen"
+
+msgid "Scrivi nel Contenuto l'indirizzo del tracciamento: finché manca, sul sito la tile non si vede."
+msgstr "Gib die Tracking-Adresse unter „Inhalt“ ein: Solange sie fehlt, wird die Tile auf der Website nicht angezeigt."
+
+#: includes/class-theme-importer.php
+msgid "Il tessuto da vicino"
+msgstr "Der Stoff aus der Nähe"
+
+#: includes/class-theme-importer.php
+msgid "La lastra sotto la lente"
+msgstr "Die Platte unter der Lupe"

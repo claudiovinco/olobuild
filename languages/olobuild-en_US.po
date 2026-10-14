@@ -27036,3 +27036,317 @@ msgstr "The sparks of the cut"
 #: includes/class-theme-importer.php
 msgid "Che sugo fai?"
 msgstr "What sauce are you making?"
+
+msgid "Campione"
+msgstr "Swatch"
+
+msgid "Prova materiale"
+msgstr "Material sample"
+
+msgid "Smalto bianco"
+msgstr "White glaze"
+
+msgid "Smalto lucido steso a mano: la luce scivola sulle curve senza riflessi duri."
+msgstr "Glossy glaze applied by hand: light glides over the curves without harsh reflections."
+
+msgid "Blu cobalto"
+msgstr "Cobalt blue"
+
+msgid "Porcellana blu col decoro dipinto a mano, cotta due volte."
+msgstr "Blue porcelain with hand-painted decoration, fired twice."
+
+msgid "Rovere naturale"
+msgstr "Natural oak"
+
+msgid "Rovere spazzolato e oliato: la venatura resta in rilievo sotto le dita."
+msgstr "Brushed, oiled oak: the grain stays raised under your fingers."
+
+msgid "Passa sopra la foto per vedere i dettagli"
+msgstr "Hover over the photo to see the details"
+
+msgid "Tocca la foto per ingrandirla"
+msgstr "Tap the photo to zoom in"
+
+msgid "Finitura"
+msgstr "Finish"
+
+msgid "Campioni"
+msgstr "Swatches"
+
+msgid "Una voce per finitura o colore: la foto grande, che la lente ingrandisce (caricala in alta risoluzione), il nome, il codice e una frase. Il campione da toccare mostra la miniatura, se c'è; altrimenti la tinta scelta nello Stile, o la foto stessa."
+msgstr "One item per finish or color: the large photo, which the magnifier enlarges (upload it in high resolution), the name, the code and a sentence. The swatch to tap shows the thumbnail, if there is one; otherwise the tint chosen in Style, or the photo itself."
+
+msgid "Miniatura del campione"
+msgstr "Swatch thumbnail"
+
+msgid "Il campione da toccare, per esempio il dettaglio del tessuto. Vuota: la tinta scelta nello Stile, o la foto grande."
+msgstr "The swatch to tap, for example a close-up of the fabric. Empty: the tint chosen in Style, or the large photo."
+
+msgid "Cosa mostra la foto, per chi non la vede. Vuoto: il nome del campione."
+msgstr "What the photo shows, for people who cannot see it. Empty: the swatch name."
+
+msgid "Campione iniziale"
+msgstr "Initial swatch"
+
+msgid "Il primo"
+msgstr "The first one"
+
+msgid "Quello che si vede quando si apre la pagina."
+msgstr "The one shown when the page opens."
+
+msgid "Lente"
+msgstr "Magnifier"
+
+msgid "Lente d'ingrandimento"
+msgstr "Magnifying glass"
+
+msgid "Al passaggio del puntatore la lente ingrandisce la foto. Sul telefono un tocco la accende, trascinando si sposta e un altro tocco la spegne. Da tastiera: Invio la accende, le frecce la spostano, Esc la chiude."
+msgstr "When the pointer moves over it, the magnifier enlarges the photo. On phones a tap turns it on, dragging moves it and another tap turns it off. With the keyboard: Enter turns it on, the arrow keys move it, Esc closes it."
+
+msgid "Mostra il suggerimento"
+msgstr "Show the hint"
+
+msgid "Una riga piccola sulla foto che dice come si usa la lente: sparisce appena la si usa."
+msgstr "A small line on the photo that explains how to use the magnifier: it disappears as soon as it is used."
+
+msgid "Suggerimento"
+msgstr "Hint"
+
+msgid "Suggerimento sul telefono"
+msgstr "Hint on phones"
+
+msgid "Mostra nome, codice e testo"
+msgstr "Show name, code and text"
+
+msgid "Quelli del campione scelto, accanto o sotto ai campioni: cambiano con lui."
+msgstr "Those of the selected swatch, next to or below the swatches: they change with it."
+
+msgid "Etichetta dei campioni"
+msgstr "Swatch label"
+
+msgid "Sopra i campioni: «Finitura», «Colore». Vuota: niente."
+msgstr "Above the swatches: “Finish”, “Color”. Empty: nothing."
+
+msgid "L'anello del campione scelto e il bordo della lente. Vuoto: il primario del tema."
+msgstr "The ring of the selected swatch and the magnifier border. Empty: the theme’s primary color."
+
+msgid "Colore del testo"
+msgstr "Text color"
+
+msgid "Nome e testo del campione. Vuoto: il colore del testo della sezione."
+msgstr "Swatch name and text. Empty: the section’s text color."
+
+msgid "Colore tenue"
+msgstr "Muted color"
+
+msgid "Etichetta e codice. Vuoto: il colore del testo, più chiaro."
+msgstr "Label and code. Empty: the text color, lighter."
+
+msgid "Il riquadro con i campioni e i testi. Vuoto: trasparente."
+msgstr "The box with the swatches and the texts. Empty: transparent."
+
+msgid "Sotto la foto, e sotto il pannello quando ha uno sfondo."
+msgstr "Under the photo, and under the panel when it has a background."
+
+msgid "Testo del campione"
+msgstr "Swatch text"
+
+msgid "Forma della lente"
+msgstr "Magnifier shape"
+
+msgid "Misura della lente"
+msgstr "Magnifier size"
+
+msgid "Forma dei campioni"
+msgstr "Swatch shape"
+
+msgid "Quadretto"
+msgstr "Small square"
+
+msgid "Pillola col nome"
+msgstr "Pill with the name"
+
+msgid "Misura dei campioni"
+msgstr "Swatch size"
+
+msgid "Tinte dei campioni"
+msgstr "Swatch tints"
+
+msgid "Tinta del campione"
+msgstr "Swatch tint"
+
+msgid "Un pallino pieno di questo colore al posto della foto, per i colori dei tessuti. Vale quando il campione non ha una miniatura."
+msgstr "A solid dot in this color instead of the photo, for fabric colors. It applies when the swatch has no thumbnail."
+
+msgid "Campioni sotto la foto"
+msgstr "Swatches below the photo"
+
+msgid "Campioni accanto alla foto"
+msgstr "Swatches next to the photo"
+
+msgid "Accanto alla foto: sul telefono i campioni tornano sotto."
+msgstr "Next to the photo: on phones the swatches move back below it."
+
+msgid "Lato dei campioni"
+msgstr "Swatch side"
+
+msgid "Fra la foto e il pannello dei campioni."
+msgstr "Between the photo and the swatch panel."
+
+msgid "Tracciamento spedizione"
+msgstr "Shipment tracking"
+
+msgid "Numero di spedizione"
+msgstr "Tracking number"
+
+msgid "Es. 1Z999AA10123456784"
+msgstr "E.g. 1Z999AA10123456784"
+
+msgid "Traccia"
+msgstr "Track"
+
+msgid "Scrivi il numero di spedizione completo."
+msgstr "Enter the full tracking number."
+
+msgid "Lo trovi nella mail di conferma della spedizione."
+msgstr "You’ll find it in the shipping confirmation email."
+
+msgid "Indirizzo del tracciamento"
+msgstr "Tracking address"
+
+msgid "L'indirizzo del portale del corriere, col segnaposto {codice} dove va il numero di spedizione: per esempio https://traccia.esempio.it/?n={codice}. Senza {codice} il numero si aggiunge in fondo. Va bene anche una pagina del sito."
+msgstr "The address of the carrier’s portal, with the placeholder {codice} where the tracking number goes: for example https://traccia.esempio.it/?n={codice}. Without {codice} the number is added at the end. A page of the site works too."
+
+msgid "Operatori"
+msgstr "Carriers"
+
+msgid "Facoltativi. Con due o più operatori, prima del campo compare la scelta del corriere e ognuno apre il suo indirizzo (sempre con {codice}). Un operatore senza indirizzo usa quello qui sopra."
+msgstr "Optional. With two or more carriers, a carrier menu appears before the field and each one opens its own address (always with {codice}). A carrier without an address uses the one above."
+
+msgid "Indirizzo"
+msgstr "Address"
+
+msgid "Per il portale di un corriere. Per una pagina dello stesso sito, spegnilo."
+msgstr "For a carrier’s portal. For a page of the same site, turn it off."
+
+msgid "Il nome di un parametro dell'indirizzo della pagina: con «codice», chi arriva da …?codice=AB123 trova il campo già scritto. Serve alla pagina d'arrivo del tracciamento."
+msgstr "The name of a parameter in the page address: with “codice”, anyone arriving from …?codice=AB123 finds the field already filled in. It is meant for the tracking landing page."
+
+msgid "Mostra l'etichetta"
+msgstr "Show the label"
+
+msgid "Spenta, l'etichetta resta per i lettori di schermo."
+msgstr "When off, the label stays for screen readers."
+
+msgid "Segnaposto"
+msgstr "Placeholder"
+
+msgid "Icona del campo"
+msgstr "Field icon"
+
+msgid "Una riga sotto il campo: dove si trova il numero, gli orari del servizio clienti. Vuota: niente."
+msgstr "A line under the field: where to find the number, customer service hours. Empty: nothing."
+
+msgid "Tutto maiuscolo"
+msgstr "All caps"
+
+msgid "Il numero si scrive e si invia in maiuscolo, come lo stampano i corrieri. Gli spazi si tolgono sempre."
+msgstr "The number is typed and sent in capitals, as carriers print it. Spaces are always removed."
+
+msgid "Lunghezza minima"
+msgstr "Minimum length"
+
+msgid "Sotto questo numero di caratteri il campo mostra il messaggio d'errore invece di aprire il collegamento."
+msgstr "Below this number of characters the field shows the error message instead of opening the link."
+
+msgid "Messaggio d'errore"
+msgstr "Error message"
+
+msgid "Icona del pulsante"
+msgstr "Button icon"
+
+msgid "Sotto il campo e il pulsante."
+msgstr "Under the field and the button."
+
+msgid "Sfondo campo"
+msgstr "Field background"
+
+msgid "Vuoto: il colore di fondo del tema."
+msgstr "Empty: the theme’s background color."
+
+msgid "Colore testo campo"
+msgstr "Field text color"
+
+msgid "Vuoto: il colore del testo del tema, o quello che si legge sullo sfondo scelto."
+msgstr "Empty: the theme’s text color, or the one that reads well on the chosen background."
+
+msgid "Bordo campo"
+msgstr "Field border"
+
+msgid "Raggio campo"
+msgstr "Field radius"
+
+msgid "Vuoto: il raggio dei pulsanti del tema, come il pulsante."
+msgstr "Empty: the theme’s button radius, like the button."
+
+msgid "Testo del campo"
+msgstr "Field text"
+
+msgid "Del campo e del pulsante."
+msgstr "Of the field and the button."
+
+msgid "Vuoto: il primario del tema. Colora anche l'anello del campo quando si scrive."
+msgstr "Empty: the theme’s primary color. It also colors the field ring while typing."
+
+msgid "Vuoto: il colore che il tema abbina al primario, o quello che si legge sullo sfondo scelto."
+msgstr "Empty: the color the theme pairs with the primary, or the one that reads well on the chosen background."
+
+msgid "Vuoto: il raggio dei pulsanti del tema."
+msgstr "Empty: the theme’s button radius."
+
+msgid "Colore errore"
+msgstr "Error color"
+
+msgid "Il messaggio quando il numero manca o è troppo corto. Vuoto: il colore «pericolo» del tema."
+msgstr "The message when the number is missing or too short. Empty: the theme’s “danger” color."
+
+msgid "Campo e pulsante in riga"
+msgstr "Field and button in a row"
+
+msgid "Pulsante sotto il campo"
+msgstr "Button below the field"
+
+msgid "In riga: sul telefono il pulsante va comunque sotto, largo quanto il campo."
+msgstr "In a row: on phones the button still goes below, as wide as the field."
+
+msgid "Aggiungi i campioni nel Contenuto: per ognuno la foto, il nome e il codice."
+msgstr "Add the swatches in Content: for each one the photo, the name and the code."
+
+msgid "Carica la foto del campione nel Contenuto"
+msgstr "Upload the swatch photo in Content"
+
+msgid "Invio accende la lente d'ingrandimento, le frecce la spostano, Esc la chiude."
+msgstr "Enter turns on the magnifier, the arrow keys move it, Esc closes it."
+
+msgid "Campione %d"
+msgstr "Swatch %d"
+
+msgid "Nel builder il collegamento non si apre: sul sito porterebbe a %s"
+msgstr "In the builder the link does not open: on the site it would lead to %s"
+
+msgid "Corriere"
+msgstr "Carrier"
+
+msgid "Traccia la spedizione"
+msgstr "Track the shipment"
+
+msgid "Scrivi nel Contenuto l'indirizzo del tracciamento: finché manca, sul sito la tile non si vede."
+msgstr "Enter the tracking address in Content: until it is set, the tile is not shown on the site."
+
+#: includes/class-theme-importer.php
+msgid "Il tessuto da vicino"
+msgstr "The fabric up close"
+
+#: includes/class-theme-importer.php
+msgid "La lastra sotto la lente"
+msgstr "The slab under the lens"

@@ -113,6 +113,8 @@ trait Olobuild_Builder_Tiles_Trait {
         require_once OLOBUILD_PATH . 'includes/tiles/class-piantasala-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-certificazioni-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-schedatecnica-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-provamateriale-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-tracciamento-tile.php';
 
         require_once OLOBUILD_PATH . 'includes/tiles/class-social-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-map-tile.php';
@@ -389,6 +391,8 @@ trait Olobuild_Builder_Tiles_Trait {
         $manager->register_tile( new Olobuild_Piantasala_Tile() );
         $manager->register_tile( new Olobuild_Certificazioni_Tile() );
         $manager->register_tile( new Olobuild_Schedatecnica_Tile() );
+        $manager->register_tile( new Olobuild_Provamateriale_Tile() );
+        $manager->register_tile( new Olobuild_Tracciamento_Tile() );
         // Vetrina temi: solo dove le demo dei temi sono accese (Olobuild_Demo_Temi), altrove non
         // avrebbe niente da mostrare e non entra nella palette.
         if ( class_exists( 'Olobuild_Demo_Temi' ) && Olobuild_Demo_Temi::accese() ) {

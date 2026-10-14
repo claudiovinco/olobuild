@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.778 - 2026-10-14 (tile)
+- Nuova tile «Prova materiale»: la foto in alta risoluzione di un materiale (marmo, tessuto, legno, pelle…) con la lente che ingrandisce il punto dove passi col mouse; sul telefono tocchi la foto e trascini la lente, con la tastiera la muovi con le frecce. Sotto o accanto alla foto, i campioni per cambiare finitura o colore, ognuno col suo nome, il codice e una frase.
+- Nuova tile «Tracciamento spedizione»: il campo dove il cliente scrive il numero della spedizione e arriva dritto al portale del corriere. Incolli l’indirizzo del portale con {codice} al posto del numero; con più corrieri compare la scelta. Su una pagina d’arrivo il campo si compila da solo dal numero nell’indirizzo.
+
 ## v1.4.777 - 2026-10-14 (temi)
 - Quattro temi nuovi in «Industria e manifattura»: Settimo Asse (automazione e celle robotizzate), Meriggio Energia (impianti fotovoltaici e comunità energetiche), Lamiere Astico (carpenteria metallica e lavorazione della lamiera) e Pastificio Sorgiva (pasta trafilata al bronzo, col marchio proprio e la private label). Ognuno ha la home e tre pagine interne, testata, piè di pagina, pagina d’errore e il pulsante per tornare in cima su ogni pagina.
 
