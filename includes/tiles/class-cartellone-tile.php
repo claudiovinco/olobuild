@@ -470,6 +470,7 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
             $sotto  = trim( (string) ( $v['sottotitolo'] ?? '' ) );
             $ora    = trim( (string) ( $v['ora'] ?? '' ) );
             $fine_d = self::istante( $v['data_fine'] ?? '', '12:00' );
+            $da     = ( null !== $fine_d && wp_date( 'Y-m', $ts ) === wp_date( 'Y-m', $fine_d ) ) ? 'j' : 'j F'; // stesso mese: «dal 24 al 25 ottobre»
             $orari  = trim( (string) ( $v['orari'] ?? '' ) );
             $meta   = array_filter( array_map( 'trim', [ (string) ( $v['durata'] ?? '' ), (string) ( $v['luogo'] ?? '' ), (string) ( $v['prezzo'] ?? '' ) ] ), 'strlen' );
             $etich  = array_filter( array_map( 'trim', explode( ',', (string) ( $v['etichette'] ?? '' ) ) ), 'strlen' );
@@ -479,7 +480,7 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
             $cerca  = strtolower( remove_accents( $tit . ' ' . $sotto . ' ' . ( $g ? $g['nome'] : '' ) . ' ' . (string) ( $v['luogo'] ?? '' ) ) );
             $quando = ( null !== $fine_d && $fine_d > $ts )
                 /* translators: 1: first date, 2: last date */
-                ? sprintf( __( 'dal %1$s al %2$s', 'olobuilder' ), self::data_a_parole( 'j F', $ts ), self::data_a_parole( 'j F', $fine_d ) )
+                ? sprintf( __( 'dal %1$s al %2$s', 'olobuilder' ), self::data_a_parole( $da, $ts ), self::data_a_parole( 'j F', $fine_d ) )
                 : self::data_a_parole( 'l j F', $ts, 'prossimo' === $vista );
             if ( '' !== $orari ) {
                 $quando .= ' · ' . $orari;

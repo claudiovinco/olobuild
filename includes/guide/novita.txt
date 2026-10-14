@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.742 - 2026-10-14 (fix)
+- Cartellone: uno spettacolo che resta in scena più giorni nello stesso mese si legge «dal 24 al 25 ottobre» (prima «dal 24 ottobre al 25 ottobre»), come nella pagina dello spettacolo.
+
 ## v1.4.741 - 2026-10-14 (fix)
 - Spettacoli: il periodo nella pagina di uno spettacolo si legge meglio. Nello stesso mese «dal 24 al 25 ottobre 2026» (prima «dal 24 ottobre al 25 ottobre 2026»); a cavallo d'anno entrambe le date hanno il loro anno («dal 28 dicembre 2026 al 3 gennaio 2027»).
 
