@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.738 - 2026-10-14 (fix)
+- Tema Teatro della Seta: il colore principale è un rosso pieno da sipario, scelto perché si legga bene anche nei testi piccoli e nei pulsanti; il prossimo spettacolo nella home sta su una tinta unita scura invece che sulla foto; dietro il sipario della home un occhio di bue su un sipario rosso, da cui un'attrice sbuca e passa fra i teli (la ballerina va nella pagina 404).
+
 ## v1.4.737 - 2026-10-14 (fix)
 - Tema Teatro della Seta: miniature nuove nel selettore dei temi, senza viola, con la foto della platea e il sipario aperto di lato.
 
