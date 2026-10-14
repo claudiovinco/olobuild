@@ -26374,3 +26374,15 @@ msgstr "Drape arc"
 
 msgid "Come si raccoglie il telo aperto. Al 100% sale in diagonale verso l'angolo alto e disegna l'arco, come nel sipario all'italiana classico; abbassandolo il telo si apre di lato e il bordo scende quasi dritto fino alla nappa."
 msgstr "How the open cloth gathers. At 100% it rises diagonally towards the top corner and draws the arc, as in the classic Italian curtain; lower it and the cloth opens sideways, its edge falling almost straight down to the tieback."
+
+msgid "Mantovana"
+msgstr "Valance"
+
+msgid "Forma della mantovana"
+msgstr "Valance shape"
+
+msgid "A festoni"
+msgstr "Swagged"
+
+msgid "Dritta, a pieghe"
+msgstr "Straight, pleated"

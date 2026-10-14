@@ -26371,3 +26371,15 @@ msgstr "Arco del drapeado"
 
 msgid "Come si raccoglie il telo aperto. Al 100% sale in diagonale verso l'angolo alto e disegna l'arco, come nel sipario all'italiana classico; abbassandolo il telo si apre di lato e il bordo scende quasi dritto fino alla nappa."
 msgstr "Cómo se recoge la tela abierta. Al 100 % sube en diagonal hacia la esquina superior y dibuja el arco, como en el telón a la italiana clásico; al bajarlo, la tela se abre hacia el lado y el borde cae casi recto hasta el alzapaño."
+
+msgid "Mantovana"
+msgstr "Bambalina"
+
+msgid "Forma della mantovana"
+msgstr "Forma de la bambalina"
+
+msgid "A festoni"
+msgstr "Con festones"
+
+msgid "Dritta, a pieghe"
+msgstr "Recta, plisada"

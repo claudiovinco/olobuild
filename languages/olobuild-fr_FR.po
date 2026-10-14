@@ -26371,3 +26371,15 @@ msgstr "Arc du drapé"
 
 msgid "Come si raccoglie il telo aperto. Al 100% sale in diagonale verso l'angolo alto e disegna l'arco, come nel sipario all'italiana classico; abbassandolo il telo si apre di lato e il bordo scende quasi dritto fino alla nappa."
 msgstr "Comment la toile ouverte se drape. À 100 %, elle monte en diagonale vers le coin supérieur et dessine l’arc, comme le rideau à l’italienne classique. Plus bas, la toile s’ouvre sur le côté et son bord descend presque droit jusqu’à l’embrase."
+
+msgid "Mantovana"
+msgstr "Lambrequin"
+
+msgid "Forma della mantovana"
+msgstr "Forme du lambrequin"
+
+msgid "A festoni"
+msgstr "À festons"
+
+msgid "Dritta, a pieghe"
+msgstr "Droit, plissé"

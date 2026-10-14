@@ -11,7 +11,7 @@
  *  - all'italiana: i teli si raccolgono in diagonale verso gli angoli alti (un arco), legati da
  *    una nappa; sotto la nappa resta una quinta che scende fino a terra. Con «Arco del drappeggio»
  *    più basso il telo si apre di lato e il bordo scende quasi dritto fino alla nappa;
- *  - alla greca: i teli scorrono ai lati, le pieghe si stringono;
+ *  - alla greca: i teli scorrono ai lati e si raccolgono in poche pieghe morbide, col bordo dritto;
  *  - alla tedesca: il telo sale dritto dietro la mantovana.
  * Dopo l'apertura possono restare le quinte (e la mantovana), solo la mantovana, o niente.
  *
@@ -53,6 +53,7 @@ class Olobuild_Sipario {
         'curtain_fringe'      => true,
         'curtain_fringe_h'    => 26,
         'curtain_valance'     => true,
+        'curtain_valance_style' => 'festoni',
         'curtain_swags'       => 5,
         'curtain_valance_h'   => 120,
         'curtain_quinte'      => 11,
@@ -267,6 +268,12 @@ class Olobuild_Sipario {
         if ( 'italiana' === $apert ) {
             $ang = 'calc(90deg - var(--osip-p) * ' . round( 9 * $arco, 2 ) . 'deg)';
             $n   = '(var(--osip-n) * (1 + var(--osip-p) * ' . round( 1 - 0.65 * $arco, 3 ) . '))';
+        } elseif ( 'greca' === $apert ) {
+            // Alla greca tutto il telo si stringe nella quinta: con le pieghe di partenza diventava un codice a barre.
+            // Mentre si apre le pieghe diminuiscono fino a --osip-n1 (una ogni 3% di larghezza della quinta, per
+            // dispositivo): aperto, il telo mostra poche pieghe morbide.
+            $ang = '90deg';
+            $n   = 'max(1.5, var(--osip-n) - var(--osip-p) * (var(--osip-n) - var(--osip-n1, 3)))';
         } else {
             $ang = '90deg';
             $n   = 'var(--osip-n)';
@@ -274,8 +281,8 @@ class Olobuild_Sipario {
         $passo = static function ( $pct, $molt = '1' ) use ( $n ) {
             return 'calc(' . $pct . '% / (' . $n . ' * ' . $molt . '))';
         };
-        $strati[] = 'repeating-linear-gradient(' . $ang . ',rgba(0,0,0,.16) 0,transparent ' . $passo( 46, '.61' ) . ',rgba(255,255,255,.05) ' . $passo( 72, '.61' ) . ',transparent ' . $passo( 100, '.61' ) . ')';
-        $strati[] = 'repeating-linear-gradient(' . $ang . ',var(--osip-vd) 0,var(--osip-v) ' . $passo( 22 ) . ',var(--osip-vl) ' . $passo( 40 ) . ',var(--osip-v) ' . $passo( 58 ) . ',var(--osip-vd) ' . $passo( 84 ) . ',var(--osip-vd) ' . $passo( 100 ) . ')';
+        $strati[] = 'repeating-linear-gradient(' . $ang . ',rgba(0,0,0,.1) 0,transparent ' . $passo( 50, '.61' ) . ',rgba(255,255,255,.035) ' . $passo( 75, '.61' ) . ',rgba(0,0,0,.1) ' . $passo( 100, '.61' ) . ')';
+        $strati[] = 'repeating-linear-gradient(' . $ang . ',var(--osip-vd) 0,var(--osip-v) ' . $passo( 28 ) . ',var(--osip-vl) ' . $passo( 50 ) . ',var(--osip-v) ' . $passo( 72 ) . ',var(--osip-vd) ' . $passo( 100 ) . ')';
         $css .= $o . ' .osip-pieghe{background:' . implode( ',', $strati ) . ',var(--osip-v)}';
         if ( ! empty( $s['curtain_fringe'] ) ) {
             $css .= $o . ' .osip-frangia{position:absolute;left:0;right:0;bottom:0;height:var(--osip-fr);'
@@ -294,7 +301,7 @@ class Olobuild_Sipario {
                 return $r;
             }
             if ( 'greca' === $apert ) {
-                return $o . ' .osip-stoffa{transform:scaleX(calc(1 - var(--osip-p) * ' . round( 1 - $frazione, 4 ) . '))}';
+                return $o . '{--osip-n1:' . round( max( 1.5, $q / 3 ), 2 ) . '}' . $o . ' .osip-stoffa{transform:scaleX(calc(1 - var(--osip-p) * ' . round( 1 - $frazione, 4 ) . '))}';
             }
             return $o . ' .osip-quinta{width:' . round( $q, 2 ) . '%}';
         };
@@ -361,9 +368,10 @@ class Olobuild_Sipario {
         $css .= $o . ' .osip-apri:focus-visible{outline:2px solid ' . $icol . ';outline-offset:4px}';
         $css .= $o . ' .osip-invito i{display:block;width:1px;height:2.2rem;margin:.7rem auto 0;background:currentColor;transform-origin:top;animation:osip-filo 2.4s ease-in-out infinite}@keyframes osip-filo{0%{transform:scaleY(0)}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}';
 
-        // mantovana a festoni: velluto curvo, gallone d'oro e frangia lungo il bordo
+        // mantovana a festoni (velluto curvo) o dritta (una fascia a pieghe), col gallone d'oro e la frangia lungo il bordo
         if ( ! empty( $s['curtain_valance'] ) ) {
-            $maschera = 'linear-gradient(#000 0 0) 0 0/100% 34% no-repeat,radial-gradient(ellipse 50% 100% at 50% 0,#000 98.6%,transparent 100%) 0 0/calc(100% / var(--osip-sw)) 100% repeat-x';
+            $dritta   = 'dritta' === $s['curtain_valance_style'];
+            $maschera = $dritta ? 'linear-gradient(#000 0 0)' : 'linear-gradient(#000 0 0) 0 0/100% 34% no-repeat,radial-gradient(ellipse 50% 100% at 50% 0,#000 98.6%,transparent 100%) 0 0/calc(100% / var(--osip-sw)) 100% repeat-x';
             $css .= $o . ' .osip-mantovana{position:absolute;left:0;right:0;top:0;z-index:4;height:calc(var(--osip-mh) + var(--osip-fr));filter:drop-shadow(0 .7rem .9rem rgba(0,0,0,.5))';
             $css .= ( 'via' === $dopo ) ? ';transform:translateY(calc(max(0, var(--osip-p) - .55) * -245%))}' : '}';
             $css .= $o . ' .osip-mantovana i{position:absolute;left:0;right:0;top:0;display:block;-webkit-mask:' . $maschera . ';mask:' . $maschera . '}';
@@ -372,8 +380,14 @@ class Olobuild_Sipario {
             $css .= $o . ' .osip-m-fa{position:absolute;left:0;right:0;top:0;display:block;height:calc(var(--osip-mh) * .34);'
                 . 'background:linear-gradient(180deg,rgba(0,0,0,.5),rgba(0,0,0,0) 62%,rgba(0,0,0,.28)),repeating-linear-gradient(90deg,var(--osip-vd) 0,var(--osip-v) .8rem,var(--osip-vl) 1.4rem,var(--osip-v) 2rem,var(--osip-vd) 2.8rem),var(--osip-v);'
                 . 'box-shadow:inset 0 -.22rem 0 var(--osip-oro),0 .35rem .6rem rgba(0,0,0,.4)}';
-            $css .= $o . ' .osip-m-ve{height:var(--osip-mh);background:linear-gradient(180deg,rgba(0,0,0,.42),rgba(0,0,0,0) 40%),'
-                . 'url("' . self::pieghe_festone() . '") 0 0/calc(100% / var(--osip-sw)) 100% repeat-x,var(--osip-v)}';
+            if ( $dritta ) {
+                $css .= $o . ' .osip-m-fa{display:none}';
+                $css .= $o . ' .osip-m-ve{height:var(--osip-mh);background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(0,0,0,0) 45%,rgba(0,0,0,.18)),'
+                    . 'repeating-linear-gradient(90deg,var(--osip-vd) 0,var(--osip-v) 1rem,var(--osip-vl) 1.8rem,var(--osip-v) 2.6rem,var(--osip-vd) 3.6rem),var(--osip-v)}';
+            } else {
+                $css .= $o . ' .osip-m-ve{height:var(--osip-mh);background:linear-gradient(180deg,rgba(0,0,0,.42),rgba(0,0,0,0) 40%),'
+                    . 'url("' . self::pieghe_festone() . '") 0 0/calc(100% / var(--osip-sw)) 100% repeat-x,var(--osip-v)}';
+            }
             if ( empty( $s['curtain_fringe'] ) ) {
                 $css .= $o . ' .osip-m-fr{display:none}';
             }

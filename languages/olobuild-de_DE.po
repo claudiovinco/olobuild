@@ -26371,3 +26371,15 @@ msgstr "Bogen der Raffung"
 
 msgid "Come si raccoglie il telo aperto. Al 100% sale in diagonale verso l'angolo alto e disegna l'arco, come nel sipario all'italiana classico; abbassandolo il telo si apre di lato e il bordo scende quasi dritto fino alla nappa."
 msgstr "Wie sich das geöffnete Tuch rafft. Bei 100 % steigt es diagonal zur oberen Ecke und zeichnet den Bogen wie beim klassischen italienischen Vorhang; niedriger öffnet sich das Tuch zur Seite und seine Kante fällt fast gerade bis zum Raffhalter."
+
+msgid "Mantovana"
+msgstr "Schabracke"
+
+msgid "Forma della mantovana"
+msgstr "Form der Schabracke"
+
+msgid "A festoni"
+msgstr "Mit Festons"
+
+msgid "Dritta, a pieghe"
+msgstr "Gerade, in Falten"
