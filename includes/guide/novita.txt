@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.776 - 2026-10-14 (fix)
+- Finder: il pulsante del risultato segue lo stile pulsanti del tema (raggio, maiuscolo, spaziatura). Prima era sempre una pillola, anche quando i pulsanti del sito avevano gli angoli quasi vivi.
+- Fascia numeri, Griglia lavori, Elenco lavori, Orari, Hover list e Lookbook: con il carattere mono lasciato vuoto usano il mono del tema, come dice l’inspector. Prima ricadevano sul monospazio di sistema del computer (su Windows il Consolas).
+
 ## v1.4.775 - 2026-10-14 (fix)
 - Certificazioni: la data di scadenza non si spezza più a fine riga (prima poteva restare «15 Settembre» da una parte e «2027» da solo sotto).
 

@@ -51,7 +51,8 @@ class Olobuild_WorkGrid_Tile extends Olobuild_Tile_Base {
 
         $heading = "var(--olo-font-family-heading, 'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
         $body    = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
-        $mono_fb = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
+        // Vuoto = il mono del tema (--olo-font-family-mono), come dice l'inspector; il monospazio di sistema solo se il tema non ne ha uno.
+        $mono_fb = "var(--olo-font-family-mono, ui-monospace,'SF Mono',Menlo,Consolas,monospace)";
         $mono_fam = $this->resolve_font_family( $s['mono_font_family'] ?? '' );
         // Nome font puro (legacy campo text) → wrap con lo stack mono di fallback storico.
         if ( $mono_fam !== '' && preg_match( '/^[A-Za-z0-9 \-]+$/', $mono_fam ) ) {

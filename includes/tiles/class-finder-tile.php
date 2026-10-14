@@ -267,7 +267,8 @@ class Olobuild_Finder_Tile extends Olobuild_Tile_Base {
             @media(max-width:600px){.<?php echo $uid; ?> .ofn-res--media{flex-direction:column;}.<?php echo $uid; ?> .ofn-media{width:100%;aspect-ratio:auto;height:240px;}}
             .<?php echo $uid; ?> .ofn-res__t{font-family:<?php echo $serif; ?>;font-size:clamp(22px,3vw,30px);line-height:1.15;margin:8px 0 0;color:<?php echo $testo_card; ?>;}
             .<?php echo $uid; ?> .ofn-res__x{font-size:15.5px;line-height:1.6;opacity:.8;margin:12px 0 0;}
-            .<?php echo $uid; ?> .ofn-res__cta{display:inline-flex;align-items:center;gap:8px;margin-top:20px;font-weight:600;font-size:14px;color:var(--fn-on);background:var(--fn-accent);padding:11px 22px;border-radius:999px;text-decoration:none;transition:transform .18s;}
+            <?php // Il pulsante del risultato ha raggio, maiuscolo e spaziatura dello stile pulsanti del tema (--olo-btn-*): era sempre una pillola. ?>
+            .<?php echo $uid; ?> .ofn-res__cta{display:inline-flex;align-items:center;gap:8px;margin-top:20px;font-weight:600;font-size:14px;color:var(--fn-on);background:var(--fn-accent);padding:11px 22px;border-radius:var(--olo-btn-border-radius, 999px);text-transform:var(--olo-btn-text-transform, none);letter-spacing:var(--olo-btn-letter-spacing, normal);text-decoration:none;transition:transform .18s;}
             .<?php echo $uid; ?> .ofn-res__cta:hover{transform:translateY(-1px);}
             .<?php echo $uid; ?> .ofn-res__cta:focus-visible{outline:2px solid var(--fn-accent);outline-offset:3px;}
             @media(max-width:640px){.<?php echo $uid; ?> .ofn-res{padding:22px;}}
