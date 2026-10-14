@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.746 - 2026-10-14 (fix)
+- Spettacoli: nel testo lungo il video di YouTube o Vimeo occupa tutta la colonna anche prima del consenso ai cookie (il riquadro «Accetta e carica») e dopo; il video della Libreria prende tutta la colonna.
+
 ## v1.4.745 - 2026-10-14 (nuovo)
 - Spettacoli: nella pagina di uno spettacolo il testo lungo mostra tutto quello che si scrive nell'editor: foto (anche allineate e con didascalia), gallerie, video della Libreria e video di YouTube o Vimeo incollando il link su una riga, a tutta colonna nelle loro proporzioni. Prima passavano solo testo e foto.
 - Pagina dello spettacolo: senza link ai biglietti (ingresso libero), a sala esaurita o con lo spettacolo annullato il pulsante Biglietti non resta più come pillola vuota.
