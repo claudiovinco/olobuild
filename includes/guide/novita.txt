@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.757 - 2026-10-14 (nuovo)
+- Hero: nel controllo «Pulsante» ci sono anche peso, maiuscolo e spaziatura delle lettere, per i due pulsanti. Lasciati vuoti, i pulsanti restano come prima.
+
 ## v1.4.756 - 2026-10-14 (nuovo)
 - Form Contatti: il campo file accetta anche i disegni CAD (STEP, IGES, DWG, DXF, STL, 3MF) quando li metti fra le estensioni ammesse della tile. Prima il modulo li scartava senza avvisare, perché WordPress non conosce quei formati.
 

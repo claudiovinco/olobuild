@@ -136,6 +136,10 @@ export default {
     cta_text_color: '',
     cta_radius: { tl: 6, tr: 6, br: 6, bl: 6 },
     cta_size: '15',
+    // Peso, maiuscolo e spaziatura dei due pulsanti (1.4.757): vuoti = come sempre (600, testo com'è scritto)
+    cta_font_weight: '600',
+    cta_text_transform: '',
+    cta_letter_spacing: '',
     cta_style: 'filled',
 
     // CTA Secondario
@@ -621,7 +625,8 @@ export default {
       { value: 'outline', label: t('Contorno') },
       { value: 'ghost',   label: t('Trasparente') },
     ]},
-    { type: 'typography', label: t('Pulsante'), responsiveKeys: [], keys: { size: 'cta_size' }, sizeMin: 12, sizeMax: 24 },
+    { type: 'typography', label: t('Pulsante'), responsiveKeys: [],
+      keys: { size: 'cta_size', weight: 'cta_font_weight', transform: 'cta_text_transform', letterSpacing: 'cta_letter_spacing' }, sizeMin: 12, sizeMax: 24 },
     { key: 'cta_bg_color',   label: t('Colore sfondo'), type: 'color' },
     { key: 'cta_text_color', label: t('Colore testo'),  type: 'color' },
     withHover({ key: 'cta_radius', label: t('Raggio'), type: 'border-radius' }),

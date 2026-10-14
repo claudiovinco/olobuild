@@ -122,6 +122,9 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
         'cta_text_color' => '',
         'cta_radius'     => [ 'tl' => 6, 'tr' => 6, 'br' => 6, 'bl' => 6 ],
         'cta_size'       => '15',
+        'cta_font_weight'    => '600',
+        'cta_text_transform' => '',
+        'cta_letter_spacing' => '',
         'cta_style'      => 'filled',
 
         // CTA Secondario
@@ -307,6 +310,15 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
         $cta_pad_y    = round( $cta_fs * 0.8 );
         $cta_pad_x    = round( $cta_fs * 2.1 );
         $cta_size_css = "padding:{$cta_pad_y}px {$cta_pad_x}px;font-size:{$cta_fs}px;";
+        // Peso, maiuscolo e spaziatura (controllo «Pulsante», 1.4.757): vuoti = 600 e il testo com'è scritto, come prima
+        $cta_size_css .= 'font-weight:' . ( $this->font_weight_css( $s['cta_font_weight'] ?? '' ) ?: '600' ) . ';';
+        if ( in_array( $s['cta_text_transform'] ?? '', [ 'uppercase', 'lowercase', 'capitalize', 'none' ], true ) ) {
+            $cta_size_css .= 'text-transform:' . $s['cta_text_transform'] . ';';
+        }
+        $cta_ls = Olobuild_Tile_Utils::css_len( $s['cta_letter_spacing'] ?? '', 'px' );
+        if ( '' !== $cta_ls ) {
+            $cta_size_css .= 'letter-spacing:' . $cta_ls . ';';
+        }
 
         // CTA radius — sistema border-radius unificato (oggetto {tl,tr,br,bl})
         $cta_radius_val       = $this->build_border_radius_css( $s['cta_radius'] ?? null );
