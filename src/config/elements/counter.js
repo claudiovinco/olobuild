@@ -1,9 +1,12 @@
 import { textEffectsFields, textEffectsDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, focalField, focalDefault } from './_shared.js';
 import { t } from '@/i18n';
 
+// Ore intere per «Cresce dalle / Fino alle» del conteggio dal vivo: 00:00 … 24:00.
+const ORE = Array.from({ length: 25 }, (_, h) => ({ value: String(h), label: String(h).padStart(2, '0') + ':00' }));
+
 /**
  * Tile Counter — split CONTENUTO/STILE.
- *   fields[]      → number, label, prefix, suffix, icon, sfondo (image/video)
+ *   fields[]      → number, label, prefix, suffix, icon, conteggio dal vivo, sfondo (image/video)
  *   styleFields[] → preset, bg, typo, text-effects, icon size, tipografia, colori, overlay, padding, radius, shadow, border
  */
 export default {
@@ -27,6 +30,16 @@ export default {
     prefix: '',
     suffix: '+',
     icon_emoji: 'bolt',
+    // «Dal vivo» (14 ott 2026): il numero cresce da solo col tempo (kWh prodotti oggi, pallet usciti
+    // quest'anno). «Numero» è il valore all'inizio del periodo; spento = il contatore di sempre.
+    vivo: false,
+    vivo_ritmo: '',
+    vivo_unita: 'giorno',
+    vivo_da: 'giorno',
+    vivo_data: '',
+    vivo_ora_inizio: '0',
+    vivo_ora_fine: '24',
+    vivo_decimali: 0,
     icon_size: '40',
     text_color: '',
     number_font_size: '48',
@@ -77,6 +90,31 @@ export default {
     { key: 'prefix', label: t('Prefisso'), type: 'text' },
     { key: 'suffix', label: t('Suffisso'), type: 'text' },
     { key: 'icon_emoji', label: t('Icona / Emoji'), type: 'icon' },
+
+    { type: 'separator', label: t('Conteggio') },
+    { key: 'vivo', label: t('Dal vivo'), type: 'toggle',
+      description: t('Il numero cresce da solo al ritmo scelto, anche mentre la pagina è aperta: i kWh prodotti oggi, i pallet usciti quest’anno. «Numero» è il valore all’inizio del periodo.') },
+    { key: 'vivo_ritmo', label: t('Quanto cresce'), type: 'number', min: 0, step: 0.1,
+      condition: { field: 'vivo', value: true } },
+    { key: 'vivo_unita', label: t('Ritmo'), type: 'select', options: [
+      { value: 'minuto', label: t('Al minuto') },
+      { value: 'ora',    label: t('All’ora') },
+      { value: 'giorno', label: t('Al giorno') },
+    ], condition: { field: 'vivo', value: true } },
+    { key: 'vivo_da', label: t('Conta da'), type: 'select', options: [
+      { value: 'giorno', label: t('Mezzanotte (oggi)') },
+      { value: 'anno',   label: t('1° gennaio (quest’anno)') },
+      { value: 'data',   label: t('Una data') },
+    ], condition: { field: 'vivo', value: true } },
+    { key: 'vivo_data', label: t('Data di partenza'), type: 'date',
+      condition: [ { field: 'vivo', value: true }, { field: 'vivo_da', op: 'eq', value: 'data' } ] },
+    { key: 'vivo_ora_inizio', label: t('Cresce dalle'), type: 'select', options: ORE.slice(0, 24),
+      description: t('Fuori da queste ore il numero resta fermo: le ore di sole per il fotovoltaico, i turni per un magazzino. Un ritmo al giorno si distribuisce in queste ore.'),
+      condition: { field: 'vivo', value: true } },
+    { key: 'vivo_ora_fine', label: t('Fino alle'), type: 'select', options: ORE.slice(1),
+      condition: { field: 'vivo', value: true } },
+    { key: 'vivo_decimali', label: t('Decimali'), type: 'range', min: 0, max: 2, step: 1,
+      condition: { field: 'vivo', value: true } },
 
     { type: 'separator', label: t('Sfondo') },
     { key: 'overlay', label: t('Overlay scuro sul media'), type: 'toggle' },

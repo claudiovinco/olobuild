@@ -12,6 +12,7 @@ import { t } from '@/i18n';
  *   - stars     → 49-tema-planetario.html (costellazioni con linee, interattivo al cursore)
  *   - confetti  → preset ONE-SHOT (burst con gravità e decadimento) — rif. Konami tema 60
  *   - embers    → braci: scintille che salgono tremolando e si spengono (Osteria Fumo, 13 ott 2026)
+ *   - sparks    → scintille: schizzano da un punto nella direzione del getto e ricadono (Lamiere Astico, 14 ott 2026)
  *
  * fields[]      → preset, conteggio, velocità, dimensione, vento, gravità,
  *                 connectLines (costellazioni), interactOnHover, contenuto slot
@@ -43,6 +44,11 @@ export default {
     gravity: 1,
     confetti_start: 'load',
     confetti_duration: 3,
+    // Scintille: punto di partenza (in % della sezione), direzione (0° = in alto, 90° = a destra) e ampiezza del getto
+    sparks_x: 50,
+    sparks_y: 70,
+    sparks_dir: 35,
+    sparks_spread: 50,
     connect_lines: false,
     connect_distance: 90,
     interact_on_hover: false,
@@ -109,13 +115,14 @@ export default {
       { value: 'confetti', label: t('Coriandoli (scoppio una tantum)') },
       { value: 'soccer',   label: t('Palloni da calcio') },
       { value: 'embers',   label: t('Braci (scintille che salgono)') },
+      { value: 'sparks',   label: t('Scintille (schizzano e ricadono)') },
     ]},
     { key: 'count', label: t('Numero particelle'), type: 'range', min: 5, max: 300, step: 5,
       description: t('Su mobile il numero viene ridotto automaticamente per le prestazioni.') },
     { key: 'speed', label: t('Velocità'), type: 'range', min: 0.1, max: 4, step: 0.1 },
     { key: 'wind', label: t('Vento (deriva orizzontale)'), type: 'range', min: 0, max: 3, step: 0.1 },
     { key: 'gravity', label: t('Gravità / spinta verticale'), type: 'range', min: 0, max: 3, step: 0.1,
-      description: t('Petali/neve/coriandoli cadono; le bolle e le braci salgono; le stelle restano sospese.') },
+      description: t('Petali, neve, coriandoli e scintille cadono; le bolle e le braci salgono; le stelle restano sospese.') },
     { key: 'confetti_start', label: t('Quando parte'), type: 'select', options: [
       { value: 'load', label: t("All'apertura della pagina") },
       { value: 'view', label: t('Quando la tile entra nello schermo') },
@@ -123,6 +130,14 @@ export default {
       description: t('Su tutta la pagina lo scoppio parte di serie appena la pagina si apre: se la tile sta più in basso, scegli «Quando la tile entra nello schermo» perché parta quando il visitatore ci arriva.') },
     { key: 'confetti_duration', label: t('Durata'), type: 'range', min: 1.5, max: 12, step: 0.5, unit: 's',
       condition: { field: 'preset', value: 'confetti' } },
+
+    { type: 'separator', label: t('Getto delle scintille'), condition: { field: 'preset', value: 'sparks' } },
+    { key: 'sparks_x', label: t('Punto di partenza, in orizzontale'), type: 'range', min: 0, max: 100, step: 1, unit: '%' },
+    { key: 'sparks_y', label: t('Punto di partenza, in verticale'), type: 'range', min: 0, max: 100, step: 1, unit: '%',
+      description: t('Il punto da cui nascono le scintille, come la mola che tocca il metallo: 0% in alto o a sinistra, 100% in basso o a destra.') },
+    { key: 'sparks_dir', label: t('Direzione del getto'), type: 'range', min: -180, max: 180, step: 5, unit: '°',
+      description: t('0° verso l’alto, 90° verso destra, -90° verso sinistra, 180° verso il basso. La gravità poi le fa ricadere.') },
+    { key: 'sparks_spread', label: t('Ampiezza del getto'), type: 'range', min: 10, max: 180, step: 5, unit: '°' },
 
     { type: 'separator', label: t('Costellazioni') },
     { key: 'connect_lines', label: t('Collega con linee'), type: 'toggle',

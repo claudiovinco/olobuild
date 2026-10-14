@@ -26921,3 +26921,99 @@ msgstr "Apparaît après"
 #: src/config/elements/totop.js
 msgid "Quanto si scorre la pagina prima che il pulsante compaia. 0 = sempre visibile."
 msgstr "De combien la page défile avant que le bouton apparaisse. 0 = toujours visible."
+
+#: src/config/elements/counter.js
+msgid "Dal vivo"
+msgstr "En direct"
+
+#: src/config/elements/counter.js
+msgid "Il numero cresce da solo al ritmo scelto, anche mentre la pagina è aperta: i kWh prodotti oggi, i pallet usciti quest’anno. «Numero» è il valore all’inizio del periodo."
+msgstr "Le nombre augmente tout seul au rythme choisi, même pendant que la page est ouverte : les kWh produits aujourd’hui, les palettes expédiées cette année. « Numéro » est la valeur au début de la période."
+
+#: src/config/elements/counter.js
+msgid "Quanto cresce"
+msgstr "De combien il augmente"
+
+#: src/config/elements/counter.js
+msgid "Ritmo"
+msgstr "Rythme"
+
+#: src/config/elements/counter.js
+msgid "Al minuto"
+msgstr "Par minute"
+
+#: src/config/elements/counter.js
+msgid "All’ora"
+msgstr "Par heure"
+
+#: src/config/elements/counter.js
+msgid "Al giorno"
+msgstr "Par jour"
+
+#: src/config/elements/counter.js
+msgid "Conta da"
+msgstr "Compter à partir de"
+
+#: src/config/elements/counter.js
+msgid "Mezzanotte (oggi)"
+msgstr "Minuit (aujourd’hui)"
+
+#: src/config/elements/counter.js
+msgid "1° gennaio (quest’anno)"
+msgstr "1er janvier (cette année)"
+
+#: src/config/elements/counter.js
+msgid "Una data"
+msgstr "Une date"
+
+#: src/config/elements/counter.js
+msgid "Data di partenza"
+msgstr "Date de départ"
+
+#: src/config/elements/counter.js
+msgid "Cresce dalle"
+msgstr "Augmente à partir de"
+
+#: src/config/elements/counter.js
+msgid "Fuori da queste ore il numero resta fermo: le ore di sole per il fotovoltaico, i turni per un magazzino. Un ritmo al giorno si distribuisce in queste ore."
+msgstr "En dehors de ces heures, le nombre ne bouge pas : les heures d’ensoleillement pour le photovoltaïque, les équipes pour un entrepôt. Un rythme par jour se répartit sur ces heures."
+
+#: src/config/elements/counter.js
+msgid "Fino alle"
+msgstr "Jusqu’à"
+
+#: src/config/elements/particlefx.js
+msgid "Scintille (schizzano e ricadono)"
+msgstr "Étincelles (jaillissent et retombent)"
+
+#: src/config/elements/particlefx.js
+msgid "Petali, neve, coriandoli e scintille cadono; le bolle e le braci salgono; le stelle restano sospese."
+msgstr "Les pétales, la neige, les confettis et les étincelles tombent ; les bulles et les braises montent ; les étoiles restent suspendues."
+
+#: src/config/elements/particlefx.js
+msgid "Getto delle scintille"
+msgstr "Jet d’étincelles"
+
+#: src/config/elements/particlefx.js
+msgid "Punto di partenza, in orizzontale"
+msgstr "Point de départ, horizontal"
+
+#: src/config/elements/particlefx.js
+msgid "Punto di partenza, in verticale"
+msgstr "Point de départ, vertical"
+
+#: src/config/elements/particlefx.js
+msgid "Il punto da cui nascono le scintille, come la mola che tocca il metallo: 0% in alto o a sinistra, 100% in basso o a destra."
+msgstr "Le point d’où naissent les étincelles, comme la meule qui touche le métal : 0 % en haut ou à gauche, 100 % en bas ou à droite."
+
+#: src/config/elements/particlefx.js
+msgid "Direzione del getto"
+msgstr "Direction du jet"
+
+#: src/config/elements/particlefx.js
+msgid "0° verso l’alto, 90° verso destra, -90° verso sinistra, 180° verso il basso. La gravità poi le fa ricadere."
+msgstr "0° vers le haut, 90° vers la droite, -90° vers la gauche, 180° vers le bas. La gravité les fait ensuite retomber."
+
+#: src/config/elements/particlefx.js
+msgid "Ampiezza del getto"
+msgstr "Ouverture du jet"

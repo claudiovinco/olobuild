@@ -18945,3 +18945,99 @@ msgstr "Appears after"
 #: src/config/elements/totop.js
 msgid "Quanto si scorre la pagina prima che il pulsante compaia. 0 = sempre visibile."
 msgstr "How far the page scrolls before the button appears. 0 = always visible."
+
+#: src/config/elements/counter.js
+msgid "Dal vivo"
+msgstr "Live"
+
+#: src/config/elements/counter.js
+msgid "Il numero cresce da solo al ritmo scelto, anche mentre la pagina è aperta: i kWh prodotti oggi, i pallet usciti quest’anno. «Numero» è il valore all’inizio del periodo."
+msgstr "The number grows on its own at the chosen rate, even while the page is open: kWh produced today, pallets shipped this year. “Number” is the value at the start of the period."
+
+#: src/config/elements/counter.js
+msgid "Quanto cresce"
+msgstr "How much it grows"
+
+#: src/config/elements/counter.js
+msgid "Ritmo"
+msgstr "Rate"
+
+#: src/config/elements/counter.js
+msgid "Al minuto"
+msgstr "Per minute"
+
+#: src/config/elements/counter.js
+msgid "All’ora"
+msgstr "Per hour"
+
+#: src/config/elements/counter.js
+msgid "Al giorno"
+msgstr "Per day"
+
+#: src/config/elements/counter.js
+msgid "Conta da"
+msgstr "Count from"
+
+#: src/config/elements/counter.js
+msgid "Mezzanotte (oggi)"
+msgstr "Midnight (today)"
+
+#: src/config/elements/counter.js
+msgid "1° gennaio (quest’anno)"
+msgstr "1 January (this year)"
+
+#: src/config/elements/counter.js
+msgid "Una data"
+msgstr "A date"
+
+#: src/config/elements/counter.js
+msgid "Data di partenza"
+msgstr "Start date"
+
+#: src/config/elements/counter.js
+msgid "Cresce dalle"
+msgstr "Grows from"
+
+#: src/config/elements/counter.js
+msgid "Fuori da queste ore il numero resta fermo: le ore di sole per il fotovoltaico, i turni per un magazzino. Un ritmo al giorno si distribuisce in queste ore."
+msgstr "Outside these hours the number stays still: the sunshine hours for solar power, the shifts for a warehouse. A daily rate is spread over these hours."
+
+#: src/config/elements/counter.js
+msgid "Fino alle"
+msgstr "Until"
+
+#: src/config/elements/particlefx.js
+msgid "Scintille (schizzano e ricadono)"
+msgstr "Sparks (shoot out and fall)"
+
+#: src/config/elements/particlefx.js
+msgid "Petali, neve, coriandoli e scintille cadono; le bolle e le braci salgono; le stelle restano sospese."
+msgstr "Petals, snow, confetti and sparks fall; bubbles and embers rise; stars stay suspended."
+
+#: src/config/elements/particlefx.js
+msgid "Getto delle scintille"
+msgstr "Spark jet"
+
+#: src/config/elements/particlefx.js
+msgid "Punto di partenza, in orizzontale"
+msgstr "Starting point, horizontal"
+
+#: src/config/elements/particlefx.js
+msgid "Punto di partenza, in verticale"
+msgstr "Starting point, vertical"
+
+#: src/config/elements/particlefx.js
+msgid "Il punto da cui nascono le scintille, come la mola che tocca il metallo: 0% in alto o a sinistra, 100% in basso o a destra."
+msgstr "The point the sparks come from, like a grinding wheel touching metal: 0% at the top or on the left, 100% at the bottom or on the right."
+
+#: src/config/elements/particlefx.js
+msgid "Direzione del getto"
+msgstr "Jet direction"
+
+#: src/config/elements/particlefx.js
+msgid "0° verso l’alto, 90° verso destra, -90° verso sinistra, 180° verso il basso. La gravità poi le fa ricadere."
+msgstr "0° up, 90° right, -90° left, 180° down. Gravity then makes them fall back."
+
+#: src/config/elements/particlefx.js
+msgid "Ampiezza del getto"
+msgstr "Jet width"

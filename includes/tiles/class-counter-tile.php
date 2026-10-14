@@ -17,6 +17,14 @@ class Olobuild_Counter_Tile extends Olobuild_Tile_Base {
         'prefix'             => '',
         'suffix'             => '+',
         'icon_emoji'         => 'bolt',
+        'vivo'               => false,
+        'vivo_ritmo'         => '',
+        'vivo_unita'         => 'giorno',
+        'vivo_da'            => 'giorno',
+        'vivo_data'          => '',
+        'vivo_ora_inizio'    => '0',
+        'vivo_ora_fine'      => '24',
+        'vivo_decimali'      => 0,
         'icon_size'          => '40',
         'text_color'         => '',
         'number_font_size'   => '48',
@@ -46,6 +54,81 @@ class Olobuild_Counter_Tile extends Olobuild_Tile_Base {
     ];
 
     public function get_controls() { return []; }
+
+    /**
+     * «Dal vivo» (14 ott 2026): il numero cresce col tempo. «Numero» è il valore all'inizio del periodo
+     * (mezzanotte, 1° gennaio o una data), poi sale di «Quanto cresce» ogni minuto, ora o giorno, solo fra
+     * «Cresce dalle» e «Fino alle» (un ritmo al giorno si distribuisce in quelle ore). Si conta nel fuso
+     * del sito: il PHP scrive il valore del momento, lo script lo ricalcola (le pagine possono arrivare
+     * dalla cache) e lo aggiorna ogni secondo. Restituisce null se il conteggio dal vivo è spento.
+     */
+    private function vivo_conf( $s ) {
+        $ritmo = (float) str_replace( ',', '.', (string) ( $s['vivo_ritmo'] ?? '' ) );
+        if ( ! filter_var( $s['vivo'] ?? false, FILTER_VALIDATE_BOOLEAN ) || $ritmo <= 0 ) {
+            return null;
+        }
+        $dec = max( 0, min( 2, intval( $s['vivo_decimali'] ?? 0 ) ) );
+        // Il valore di partenza è il testo di «Numero»: «1.250.000», «0», «4,5» (con i decimali scelti).
+        $t = preg_replace( '/[^0-9.,]/', '', (string) ( $s['number'] ?? '' ) );
+        if ( $dec > 0 && preg_match( '/^(.*)[.,](\d{1,2})$/', $t, $m ) ) {
+            $base = (float) ( preg_replace( '/\D/', '', $m[1] ) . '.' . $m[2] );
+        } else {
+            $base = (float) preg_replace( '/\D/', '', $t );
+        }
+        $h0 = max( 0, min( 23, intval( $s['vivo_ora_inizio'] ?? 0 ) ) );
+        $h1 = max( 1, min( 24, intval( $s['vivo_ora_fine'] ?? 24 ) ) );
+        if ( $h1 <= $h0 ) {
+            $h0 = 0;
+            $h1 = 24;
+        }
+        $unita = (string) ( $s['vivo_unita'] ?? 'giorno' );
+        $al_secondo = 'minuto' === $unita ? $ritmo / 60 : ( 'ora' === $unita ? $ritmo / 3600 : $ritmo / ( ( $h1 - $h0 ) * 3600 ) );
+        $da = in_array( $s['vivo_da'] ?? 'giorno', [ 'giorno', 'anno', 'data' ], true ) ? $s['vivo_da'] : 'giorno';
+        $d  = null;
+        if ( 'data' === $da ) {
+            if ( preg_match( '/^(\d{4})-(\d{2})-(\d{2})/', (string) ( $s['vivo_data'] ?? '' ), $m ) ) {
+                $d = [ (int) $m[1], (int) $m[2], (int) $m[3] ];
+            } else {
+                $da = 'giorno';
+            }
+        }
+        global $wp_locale;
+        $mil = isset( $wp_locale->number_format['thousands_sep'] ) ? $wp_locale->number_format['thousands_sep'] : '.';
+        $sep = isset( $wp_locale->number_format['decimal_point'] ) ? $wp_locale->number_format['decimal_point'] : ',';
+        $tz  = wp_timezone();
+        return [
+            'b'   => $base,
+            'r'   => $al_secondo,
+            'h0'  => $h0,
+            'h1'  => $h1,
+            'da'  => $da,
+            'd'   => $d,
+            'dec' => $dec,
+            'mil' => html_entity_decode( $mil, ENT_QUOTES, 'UTF-8' ),
+            'sep' => html_entity_decode( $sep, ENT_QUOTES, 'UTF-8' ),
+            'tz'  => $tz->getName(),
+            'off' => $tz->getOffset( new DateTime( 'now', $tz ) ),
+        ];
+    }
+
+    /** Il valore del conteggio dal vivo adesso, nel fuso del sito, già scritto (stesso calcolo dello script). */
+    private function vivo_testo( $c ) {
+        $ora = new DateTime( 'now', wp_timezone() );
+        $sec = (int) $ora->format( 'G' ) * 3600 + (int) $ora->format( 'i' ) * 60 + (int) $ora->format( 's' );
+        $a   = $c['h0'] * 3600;
+        $b   = $c['h1'] * 3600;
+        $oggi   = min( max( $sec, $a ), $b ) - $a;
+        $giorni = 0;
+        if ( 'anno' === $c['da'] ) {
+            $giorni = (int) $ora->format( 'z' );
+        } elseif ( 'data' === $c['da'] ) {
+            $t0     = gmmktime( 0, 0, 0, (int) $ora->format( 'n' ), (int) $ora->format( 'j' ), (int) $ora->format( 'Y' ) );
+            $giorni = (int) round( ( $t0 - gmmktime( 0, 0, 0, $c['d'][1], $c['d'][2], $c['d'][0] ) ) / 86400 );
+        }
+        $v = $giorni < 0 ? $c['b'] : $c['b'] + $c['r'] * ( $giorni * ( $b - $a ) + $oggi );
+        $f = pow( 10, $c['dec'] );
+        return number_format( floor( $v * $f ) / $f, $c['dec'], $c['sep'], $c['mil'] );
+    }
 
     public function render( $settings ) {
         $s   = wp_parse_args( $settings, $this->defaults );
@@ -80,6 +163,7 @@ class Olobuild_Counter_Tile extends Olobuild_Tile_Base {
         $has_media = $has_mb ? ( $mb_type !== 'solid' ) : ( $bg_type !== 'color' );
 
         $label    = esc_html( wp_strip_all_tags( $s['label'] ) );
+        $vivo     = $this->vivo_conf( $s );
 
         ob_start();
         ?>
@@ -175,7 +259,7 @@ class Olobuild_Counter_Tile extends Olobuild_Tile_Base {
                     </div>
                 <?php endif; ?>
                 <div class="olo-cnt-number">
-                    <?php echo esc_html( $s['prefix'] ); ?><span class="olo-cnt-value"><?php echo esc_html( $s['number'] ); ?></span><?php if ( $s['suffix'] !== '' ) : ?><span class="olo-cnt-suffix"><?php echo esc_html( $s['suffix'] ); ?></span><?php endif; ?>
+                    <?php echo esc_html( $s['prefix'] ); ?><?php if ( $vivo ) : ?><span class="olo-cnt-value" data-vivo="<?php echo esc_attr( wp_json_encode( $vivo ) ); ?>"><?php echo esc_html( $this->vivo_testo( $vivo ) ); ?></span><?php else : ?><span class="olo-cnt-value"><?php echo esc_html( $s['number'] ); ?></span><?php endif; ?><?php if ( $s['suffix'] !== '' ) : ?><span class="olo-cnt-suffix"><?php echo esc_html( $s['suffix'] ); ?></span><?php endif; ?>
                 </div>
                 <?php if ( ! empty( $s['label'] ) ) : ?>
                     <?php list( $l_tfx_cls, $l_tfx_data ) = $this->tfx_attrs( $s, 'label', wp_strip_all_tags( $s['label'] ) ); ?>
@@ -183,7 +267,85 @@ class Olobuild_Counter_Tile extends Olobuild_Tile_Base {
                 <?php endif; ?>
             </div>
         </div>
-        <?php if ( preg_match( '/\d/', (string) $s['number'] ) ) : ?>
+        <?php if ( $vivo ) : ?>
+        <script>
+        (function(){
+            /* «Dal vivo»: il valore si ricalcola qui, nel fuso del sito (la pagina può arrivare dalla
+               cache), e poi ogni secondo. Entrando nello schermo sale da zero come il contatore fisso;
+               con «riduci movimento» o senza IntersectionObserver parte subito dal valore giusto. */
+            var el = document.querySelector('.<?php echo esc_js( $uid ); ?> .olo-cnt-value');
+            if(!el) return;
+            var c;
+            try { c = JSON.parse(el.getAttribute('data-vivo')); } catch(e){ return; }
+            var fmt = null;
+            try { fmt = new Intl.DateTimeFormat('en-GB', { timeZone: c.tz, hourCycle: 'h23', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }); } catch(e){ fmt = null; }
+            function adesso(){
+                var n = new Date(), q = {};
+                if(fmt){
+                    fmt.formatToParts(n).forEach(function(x){ q[x.type] = parseInt(x.value, 10); });
+                } else {
+                    var t = new Date(n.getTime() + c.off * 1000);
+                    q = { year: t.getUTCFullYear(), month: t.getUTCMonth() + 1, day: t.getUTCDate(), hour: t.getUTCHours(), minute: t.getUTCMinutes(), second: t.getUTCSeconds() };
+                }
+                return q;
+            }
+            function valore(){
+                var q = adesso(), a = c.h0 * 3600, b = c.h1 * 3600;
+                var sec = (q.hour % 24) * 3600 + q.minute * 60 + q.second;
+                var oggi = Math.min(Math.max(sec, a), b) - a, giorni = 0;
+                var t0 = Date.UTC(q.year, q.month - 1, q.day);
+                if(c.da === 'anno') giorni = Math.round((t0 - Date.UTC(q.year, 0, 1)) / 864e5);
+                if(c.da === 'data') giorni = Math.round((t0 - Date.UTC(c.d[0], c.d[1] - 1, c.d[2])) / 864e5);
+                if(giorni < 0) return c.b;
+                return c.b + c.r * (giorni * (b - a) + oggi);
+            }
+            var f = Math.pow(10, c.dec);
+            function forma(v){
+                var p = (Math.floor(v * f) / f).toFixed(c.dec).split('.');
+                return p[0].replace(/\B(?=(\d{3})+(?!\d))/g, c.mil) + (c.dec ? c.sep + p[1] : '');
+            }
+            var timer = null;
+            function batti(){
+                el.textContent = forma(valore());
+                if(timer === null) timer = setInterval(function(){ var v = forma(valore()); if(v !== el.textContent) el.textContent = v; }, 1000);
+            }
+            batti();
+            if(!('IntersectionObserver' in window)) return;
+            if(window.matchMedia){
+                if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            }
+            clearInterval(timer);
+            timer = null;
+            var w = el.getBoundingClientRect().width;
+            el.style.display = 'inline-block';
+            el.style.minWidth = w + 'px';
+            el.style.textAlign = 'right';
+            el.textContent = forma(0);
+            var obs = new IntersectionObserver(function(entries){
+                entries.forEach(function(entry){
+                    if(!entry.isIntersecting) return;
+                    obs.disconnect();
+                    var t0 = null;
+                    var step = function(ts){
+                        if(t0 === null) t0 = ts;
+                        var p = Math.min((ts - t0) / 2000, 1);
+                        if(p < 1){
+                            el.textContent = forma(valore() * (1 - Math.pow(1 - p, 4)));
+                            requestAnimationFrame(step);
+                        } else {
+                            el.style.display = '';
+                            el.style.minWidth = '';
+                            el.style.textAlign = '';
+                            batti();
+                        }
+                    };
+                    requestAnimationFrame(step);
+                });
+            }, {threshold: 0.3});
+            obs.observe(el);
+        })();
+        </script>
+        <?php elseif ( preg_match( '/\d/', (string) $s['number'] ) ) : ?>
         <script>
         (function(){
             /* Il numero del contatore non contava: era scritto fermo. Ora sale da zero

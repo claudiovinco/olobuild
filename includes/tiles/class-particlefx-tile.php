@@ -9,7 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * sezione, dietro al contenuto. Bucket C / famiglia C (canvas / generativo).
  *
  * Preset: petals (36), snow (42), bubbles (50), stars/costellazioni (49),
- * confetti (one-shot, rif. Konami tema 60), embers (braci che salgono e si spengono,
+ * confetti (one-shot, rif. Konami tema 60), sparks (scintille che schizzano da un punto e ricadono,
+ * Lamiere Astico 14 ott 2026), embers (braci che salgono e si spengono,
  * Osteria Fumo, 13 ott 2026). Gli snippet runtime dei temi sono
  * portati nell'IIFE inline del render() — multi-istanza, idempotente, con
  * IntersectionObserver, dpr cap e ramo prefers-reduced-motion.
@@ -40,6 +41,10 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
         'gravity'           => 1,
         'confetti_start'    => 'load',
         'confetti_duration' => 3,
+        'sparks_x'          => 50,
+        'sparks_y'          => 70,
+        'sparks_dir'        => 35,
+        'sparks_spread'     => 50,
         'connect_lines'     => false,
         'connect_distance'  => 90,
         'interact_on_hover' => false,
@@ -87,6 +92,8 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
             'confetti' => [ '#e1474f', '#F5C24B', '#5BD6E0', '#9B6BFF', '#7BD88F' ],
             'soccer'   => [ '#FFFFFF', '#15241D' ],
             'embers'   => [ '#FFB347', '#FF8A1F', '#FF5A1A', '#FFD27A' ],
+            // dal più caldo al più freddo: la scintilla passa dal primo all'ultimo mentre si spegne
+            'sparks'   => [ '#FFF6D5', '#FFD27A', '#FFB347', '#FF7A1A', '#E8400C' ],
         ];
         return $map[ $preset ] ?? $map['petals'];
     }
@@ -96,7 +103,7 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
         $uid = 'olo-particlefx-' . wp_rand( 10000, 99999 );
 
         // ── Parametri sistema (clampati) ──────────────────────────────────
-        $presets = [ 'petals', 'snow', 'bubbles', 'stars', 'confetti', 'soccer', 'embers' ];
+        $presets = [ 'petals', 'snow', 'bubbles', 'stars', 'confetti', 'soccer', 'embers', 'sparks' ];
         $preset  = in_array( $s['preset'], $presets, true ) ? $s['preset'] : 'petals';
         // 'section' (default) = sfondo della sezione ospite; 'page' = overlay fisso
         // su tutto il documento (il runtime ha già il ramo dedicato: canvas fixed,
@@ -113,6 +120,11 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
         // Coriandoli: «Quando parte» (su tutta la pagina) e «Durata» dello scoppio (prima fissa, circa 3 s)
         $c_start  = ( 'view' === ( $s['confetti_start'] ?? 'load' ) ) ? 'view' : 'load';
         $c_life   = round( 1 / ( max( 1.5, min( 12, floatval( $s['confetti_duration'] ?? 3 ) ) ) * 60 ), 5 );
+        // Scintille: punto di partenza in frazione della sezione, direzione e ampiezza del getto in gradi
+        $s_x      = max( 0, min( 100, floatval( $s['sparks_x'] ?? 50 ) ) ) / 100;
+        $s_y      = max( 0, min( 100, floatval( $s['sparks_y'] ?? 70 ) ) ) / 100;
+        $s_dir    = max( -180, min( 180, floatval( $s['sparks_dir'] ?? 35 ) ) );
+        $s_spread = max( 10, min( 180, floatval( $s['sparks_spread'] ?? 50 ) ) );
         $connect  = ! empty( $s['connect_lines'] );
         $conn_d   = max( 20,  min( 300,   intval( $s['connect_distance'] ) ) );
         $hover    = ! empty( $s['interact_on_hover'] );
@@ -148,6 +160,10 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
             'gravity'  => $gravity,
             'start'    => $c_start,
             'lifeStep' => $c_life,
+            'sx'       => $s_x,
+            'sy'       => $s_y,
+            'sdir'     => $s_dir,
+            'sspread'  => $s_spread,
             'connect'  => $connect,
             'connDist' => $conn_d,
             'hover'    => $hover,
@@ -300,6 +316,7 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
             var mouse = { x: -9999, y: -9999, on: false };
             var rafId = null, running = false, started = false;
             var TAU = Math.PI * 2;
+            var T = 0, ONDATA = .3;   // scintille: tempo della scena e forza dell'ondata in corso
             var SOCCER_DARK = '#15241d';
             if ( CFG.colors ) { if ( CFG.colors[1] ) { SOCCER_DARK = CFG.colors[1]; } }
 
@@ -348,8 +365,18 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
             // una su quattro è una scintilla veloce, disegnata come un trattino.
             function makeEmber(){ var sc = Math.random() < .25; return { x: rnd(0,W), y: ( pageMode ? SCROLL : 0 ) + H + rnd(0, 24), r: Math.max(.6, CFG.size*rnd(.12,.34)), s: rnd(.5,1.5)*CFG.speed*( sc ? 1.9 : 1 ), ph: rnd(0,TAU), sw: rnd(.25,1)*CFG.wind, tw: rnd(0,TAU), life: rnd(.55,1), dl: rnd(.0022,.0055)*CFG.speed, sc: sc, col: pick(CFG.colors) }; }
 
+            // Scintille: schizzano dal punto scelto nella direzione del getto, rallentano nell'aria, ricadono
+            // per gravità e rimbalzano una volta sul fondo; si spengono passando dal bianco al rosso.
+            // «attesa» (alla partenza della scena): nascono sfalsate, non tutte nello stesso istante.
+            function makeSpark( attesa ) {
+                var th = ( CFG.sdir + rnd( -.5, .5 ) * CFG.sspread ) * Math.PI / 180, v = rnd( 3.5, 10 ) * CFG.speed;
+                return { x: W * CFG.sx + rnd( -2, 2 ), y: ( pageMode ? SCROLL : 0 ) + H * CFG.sy + rnd( -2, 2 ), vx: Math.sin( th ) * v, vy: -Math.cos( th ) * v,
+                         life: attesa ? rnd( -1.4, 1 ) : 1, dl: rnd( .011, .026 ), r: Math.max( .5, CFG.size * rnd( .09, .2 ) ), bo: 0 };
+            }
+
             function makeOne() {
                 switch ( CFG.preset ) {
+                    case 'sparks':   return makeSpark( true );
                     case 'snow':     return makeSnow();
                     case 'bubbles':  return makeBubble();
                     case 'stars':    return makeStar();
@@ -365,6 +392,7 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
             // [FH,2·FH]; stelle sospese → distribuite. Il riciclo (wrap su FH) tiene poi pieno il campo.
             function placeY( p ) {
                 if ( ! pageMode || CFG.preset === 'confetti' ) { return; }
+                if ( CFG.preset === 'sparks' ) { return; }   // nascono dal loro punto, nella parte in vista
                 if ( CFG.preset === 'bubbles' )    { p.y = rnd( FH, 2 * FH ); }
                 else if ( CFG.preset === 'embers' ) { p.y = rnd( 0, FH ); }
                 else if ( CFG.preset === 'stars' ) { p.y = rnd( 0, FH ); }
@@ -417,6 +445,27 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
                     ctx.globalAlpha = a * .42; ctx.beginPath(); ctx.arc( p.x, p.y, p.r * 1.9, 0, TAU ); ctx.fill();
                     ctx.globalAlpha = a;       ctx.beginPath(); ctx.arc( p.x, p.y, p.r, 0, TAU ); ctx.fill();
                 }
+                ctx.globalCompositeOperation = 'source-over';
+            }
+            function drawSpark( p ) {
+                if ( p.life <= 0 ) { return; }
+                var n = CFG.colors.length, k = Math.min( n - 1, Math.floor( ( 1 - p.life ) * n ) );
+                var len = 1.4 + CFG.size * .12;
+                ctx.globalCompositeOperation = 'lighter';
+                ctx.globalAlpha = Math.min( 1, p.life * 1.6 ) * CFG.opacity;
+                ctx.strokeStyle = CFG.colors[ k < 0 ? 0 : k ];
+                ctx.lineWidth = p.r; ctx.lineCap = 'round';
+                ctx.beginPath(); ctx.moveTo( p.x, p.y ); ctx.lineTo( p.x - p.vx * len, p.y - p.vy * len ); ctx.stroke();
+                ctx.globalCompositeOperation = 'source-over';
+            }
+            // Il punto caldo da cui nascono le scintille: un bagliore piccolo che pulsa con l'ondata.
+            function drawFuoco() {
+                var x = W * CFG.sx, y = ( pageMode ? SCROLL : 0 ) + H * CFG.sy, r = 5 + CFG.size * 1.4;
+                var g = ctx.createRadialGradient( x, y, 0, x, y, r );
+                g.addColorStop( 0, CFG.colors[0] ); g.addColorStop( .35, CFG.colors[ Math.min( 2, CFG.colors.length - 1 ) ] ); g.addColorStop( 1, 'rgba(0,0,0,0)' );
+                ctx.globalCompositeOperation = 'lighter';
+                ctx.globalAlpha = Math.min( 1, .25 + ONDATA * 1.4 ) * CFG.opacity;
+                ctx.fillStyle = g; ctx.beginPath(); ctx.arc( x, y, r, 0, TAU ); ctx.fill();
                 ctx.globalCompositeOperation = 'source-over';
             }
             function drawConfetti( p ) {
@@ -495,9 +544,29 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
 
             // ── Step fisico per preset ────────────────────────────────────
             function step() {
+                if ( CFG.preset === 'sparks' ) {
+                    // a ondate, come sotto una mola: una scintilla spenta rinasce solo a volte
+                    T += .016;
+                    ONDATA = .05 + .25 * Math.max( 0, Math.sin( T * .7 ) + Math.sin( T * 1.9 + 1 ) * .6 );
+                }
                 for ( var i = 0; i < parts.length; i++ ) {
                     var p = parts[i];
-                    if ( CFG.preset === 'bubbles' ) {
+                    if ( CFG.preset === 'sparks' ) {
+                        if ( p.life <= 0 ) {
+                            if ( p.life < -.001 ) { p.life = Math.min( 0, p.life + p.dl ); }   // ancora in attesa
+                            else if ( Math.random() < ONDATA ) { parts[i] = makeSpark( false ); }
+                            continue;
+                        }
+                        p.vy += .22 * CFG.gravity; p.vx += CFG.wind * .015;
+                        p.vx *= .985; p.vy *= .985;
+                        p.x += p.vx; p.y += p.vy; p.life -= p.dl;
+                        var suolo = ( pageMode ? SCROLL : 0 ) + H - 2;
+                        if ( p.y > suolo ) {
+                            if ( p.bo < 1 ) { p.y = suolo; p.vy *= -.32; p.vx *= .55; p.bo = 1; } else { p.life = 0; }
+                        }
+                        if ( p.x < -40 || p.x > W + 40 ) { p.life = 0; }
+                        if ( p.life <= 0 ) { p.life = -.0005; }
+                    } else if ( CFG.preset === 'bubbles' ) {
                         p.y -= p.s * CFG.gravity; p.a += .03; p.x += Math.sin( p.a ) * .4 * CFG.wind;
                         if ( canHover && mouse.on ) { repel( p ); }
                         if ( pageMode ) { if ( p.y < 0 ) { p.y += FH; } } else if ( p.y < -10 ) { p.y = H + 10; p.x = rnd( 0, W ); }
@@ -536,6 +605,7 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
                 // documento) appaiono nella posizione giusta e scorrono con la pagina.
                 if ( pageMode ) { ctx.save(); ctx.translate( 0, -SCROLL ); }
                 if ( CFG.connect ) { drawLines(); }
+                if ( CFG.preset === 'sparks' ) { drawFuoco(); }
                 for ( var i = 0; i < parts.length; i++ ) {
                     var p = parts[i];
                     if ( pageMode ) { var sy = p.y - SCROLL; if ( sy < -60 || sy > H + 60 ) { continue; } }
@@ -546,6 +616,7 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
                         case 'confetti': drawConfetti( p ); break;
                         case 'soccer':   drawSoccer( p ); break;
                         case 'embers':   drawEmber( p ); break;
+                        case 'sparks':   drawSpark( p ); break;
                         default:         drawPetal( p );
                     }
                 }
@@ -578,7 +649,9 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
                 if ( ! started ) { started = true; if ( ! parts.length ) { build(); } }
                 running = true;
                 if ( reduce ) {
-                    // reduced-motion: un solo frame statico, niente loop
+                    // reduced-motion: un solo frame statico, niente loop (le scintille, ferme tutte nel
+                    // loro punto, sarebbero un puntino: prima si fa correre la scena per un secondo e mezzo)
+                    if ( CFG.preset === 'sparks' ) { for ( var w = 0; w < 90; w++ ) { step(); } }
                     drawAll(); running = false; return;
                 }
                 rafId = requestAnimationFrame( frame );
