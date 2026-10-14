@@ -721,6 +721,12 @@ class Olobuild_Frontend_Renderer {
             return $html;
         }
 
+        // Torna su «Fisso nell'angolo dello schermo» (1.4.762): sta nel piè di pagina ma deve comparire dopo
+        // i primi px di scorrimento. Pigro, nasceva solo arrivando al piè di pagina (come la Barra fissa).
+        if ( 'totop' === $type && false !== strpos( $html, 'olo-totop--fisso' ) ) {
+            return $html;
+        }
+
         // Famiglia OLOX (replica olotheme.com): tile scroll-driven, interattive o
         // fixed con runtime inizializzato al DOMContentLoaded (olox.js) — mai lazy.
         if ( strpos( $type, 'olox' ) === 0 ) {
