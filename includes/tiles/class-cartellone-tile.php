@@ -167,6 +167,11 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
         return $t;
     }
 
+    /** In italiano davanti a 1, 8 e 11 (uno, otto, undici) «dal» e «al» si elidono: «dal 6 all’8 novembre». */
+    private static function elidi( $t ) {
+        return 'it' === strtolower( substr( (string) determine_locale(), 0, 2 ) ) ? preg_replace( '/\b(d?al) (1|8|11)(?!\d)/u', '$1l’$2', $t ) : $t;
+    }
+
     /** Minuti di una durata scritta a parole («2 h 10 min», «90 min», «1h30»); 0 se non si capisce. */
     private static function minuti( $testo ) {
         $t = strtolower( (string) $testo );
@@ -480,7 +485,7 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
             $cerca  = strtolower( remove_accents( $tit . ' ' . $sotto . ' ' . ( $g ? $g['nome'] : '' ) . ' ' . (string) ( $v['luogo'] ?? '' ) ) );
             $quando = ( null !== $fine_d && $fine_d > $ts )
                 /* translators: 1: first date, 2: last date */
-                ? sprintf( __( 'dal %1$s al %2$s', 'olobuilder' ), self::data_a_parole( $da, $ts ), self::data_a_parole( 'j F', $fine_d ) )
+                ? self::elidi( sprintf( __( 'dal %1$s al %2$s', 'olobuilder' ), self::data_a_parole( $da, $ts ), self::data_a_parole( 'j F', $fine_d ) ) )
                 : self::data_a_parole( 'l j F', $ts, 'prossimo' === $vista );
             if ( '' !== $orari ) {
                 $quando .= ' · ' . $orari;
