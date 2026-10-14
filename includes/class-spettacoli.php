@@ -365,8 +365,10 @@ class Olobuild_Spettacoli {
         }
         $fine = self::istante( $v['data_fine'] ?? '', '12:00' );
         if ( null !== $fine && $fine > $ts ) {
+            // stesso mese: «dal 24 al 25 ottobre 2026»; stesso anno: «dal 24 ottobre al 3 novembre 2026»
+            $da = wp_date( 'Y-m', $ts ) === wp_date( 'Y-m', $fine ) ? 'j' : ( wp_date( 'Y', $ts ) === wp_date( 'Y', $fine ) ? 'j F' : 'j F Y' );
             /* translators: 1: primo giorno, 2: ultimo giorno (anno compreso) */
-            return sprintf( __( 'dal %1$s al %2$s', 'olobuilder' ), self::a_parole( 'j F', $ts ), self::a_parole( 'j F Y', $fine ) );
+            return sprintf( __( 'dal %1$s al %2$s', 'olobuilder' ), self::a_parole( $da, $ts ), self::a_parole( 'j F Y', $fine ) );
         }
         return self::a_parole( 'l j F Y', $ts );
     }
