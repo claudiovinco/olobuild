@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.750 - 2026-10-14 (temi)
+- Tema Sartoria Ferro: l'apertura della home ha ora il video del cartamodello segnato col gesso e la testata dell'articolo «L'arte di prendere misure» quello del sarto che prende le misure a un cliente.
+
 ## v1.4.749 - 2026-10-14 (fix)
 - Tema Sartoria Ferro, «L'arte di prendere misure»: niente pulsante nella testata dell'articolo, l'occhiello sta su una riga anche sul telefono e la galleria delle mani non tocca più la fascia del cartamodello.
 
