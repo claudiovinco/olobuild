@@ -26563,3 +26563,324 @@ msgstr "Long text"
 
 msgid "Testo del pulsante dei biglietti"
 msgstr "Ticket button text"
+
+msgid "Certificazioni"
+msgstr "Certifications"
+
+msgid "Sistema di gestione per la qualità"
+msgstr "Quality management system"
+
+msgid "Organismo di certificazione accreditato"
+msgstr "Accredited certification body"
+
+msgid "Progettazione e lavorazione meccanica di precisione per conto terzi."
+msgstr "Design and precision machining for third parties."
+
+msgid "Sistema di gestione ambientale"
+msgstr "Environmental management system"
+
+msgid "Scarti di lavorazione, consumi di energia ed emissioni dello stabilimento."
+msgstr "Production waste, energy use and plant emissions."
+
+msgid "Salute e sicurezza sul lavoro"
+msgstr "Occupational health and safety"
+
+msgid "Reparti di produzione, magazzino e uffici tecnici."
+msgstr "Production departments, warehouse and technical offices."
+
+msgid "Valido fino al"
+msgstr "Valid until"
+
+msgid "Rilasciato il"
+msgstr "Issued on"
+
+msgid "In rinnovo"
+msgstr "Renewal in progress"
+
+msgid "Certificato in PDF"
+msgstr "Certificate (PDF)"
+
+msgid "Certificazione"
+msgstr "Certification"
+
+msgid "Una per certificato. Con la data di scadenza la tile la controlla da sola: dal giorno dopo, sul sito sparisce o si mostra «In rinnovo», anche nelle pagine servite dalla cache. Nel builder restano tutte, le scadute attenuate."
+msgstr "One per certificate. With an expiry date the tile checks it by itself: from the next day it disappears from the site or shows “Renewal in progress”, even on pages served from the cache. In the builder they all stay, expired ones faded."
+
+msgid "Norma o marchio"
+msgstr "Standard or mark"
+
+msgid "Il nome con cui il cliente la cerca: «ISO 9001:2015», «IATF 16949», «Marcatura CE»."
+msgstr "The name customers search for: “ISO 9001:2015”, “IATF 16949”, “CE marking”."
+
+msgid "Ente di certificazione"
+msgstr "Certification body"
+
+msgid "Numero del certificato"
+msgstr "Certificate number"
+
+msgid "Campo di applicazione"
+msgstr "Scope"
+
+msgid "Scade il"
+msgstr "Expires on"
+
+msgid "Il marchio della certificazione o dell'ente: se c'è, prende il posto del simbolo."
+msgstr "The mark of the certification or of the body: if set, it replaces the symbol."
+
+msgid "Cosa mostrare"
+msgstr "What to show"
+
+msgid "Mostra l'ente"
+msgstr "Show the body"
+
+msgid "Mostra il numero"
+msgstr "Show the number"
+
+msgid "Mostra il campo di applicazione"
+msgstr "Show the scope"
+
+msgid "Mostra la data di rilascio"
+msgstr "Show the issue date"
+
+msgid "Mostra la scadenza"
+msgstr "Show the expiry date"
+
+msgid "Mostra il PDF"
+msgstr "Show the PDF"
+
+msgid "Nella vista Fascia tutta la voce porta al PDF."
+msgstr "In the Strip view the whole item links to the PDF."
+
+msgid "Certificazioni scadute"
+msgstr "Expired certifications"
+
+msgid "Nascoste"
+msgstr "Hidden"
+
+msgid "Mostrate «In rinnovo»"
+msgstr "Shown as “Renewal in progress”"
+
+msgid "Il giorno dopo la scadenza: nascosta, oppure ancora visibile con «In rinnovo» al posto della data e senza il PDF. Una certificazione senza data di scadenza resta sempre."
+msgstr "The day after it expires: hidden, or still visible with “Renewal in progress” instead of the date and without the PDF. A certification with no expiry date always stays."
+
+msgid "Formato delle date"
+msgstr "Date format"
+
+msgid "11 marzo 2027"
+msgstr "11 March 2027"
+
+msgid "11/03/2027"
+msgstr "11/03/2027"
+
+msgid "Testo della scadenza"
+msgstr "Expiry text"
+
+msgid "Testo del rilascio"
+msgstr "Issue text"
+
+msgid "Testo «In rinnovo»"
+msgstr "“Renewal in progress” text"
+
+msgid "Testo del PDF"
+msgstr "PDF text"
+
+msgid "Simbolo e collegamento al PDF. Vuoto: il primario del tema."
+msgstr "Symbol and PDF link. Empty: the theme’s primary color."
+
+msgid "Colore della validità"
+msgstr "Validity color"
+
+msgid "Il pallino accanto alla scadenza. Vuoto: il colore «successo» del tema."
+msgstr "The dot next to the expiry date. Empty: the theme’s “success” color."
+
+msgid "Vuoto: una velatura leggera del colore del testo, che va bene su fondi chiari e scuri."
+msgstr "Empty: a light tint of the text color, which works on light and dark backgrounds."
+
+msgid "Norma"
+msgstr "Standard"
+
+msgid "Ente, numero e date"
+msgstr "Body, number and dates"
+
+msgid "Collegamento al PDF"
+msgstr "PDF link"
+
+msgid "Dimensione del simbolo"
+msgstr "Symbol size"
+
+msgid "Altezza del logo"
+msgstr "Logo height"
+
+msgid "Fascia"
+msgstr "Strip"
+
+msgid "Schede in griglia"
+msgstr "Card grid"
+
+msgid "Schede in griglia: un riquadro per certificazione. Fascia: una riga compatta di simboli e norme, da mettere sotto un'apertura. Elenco: una riga per certificazione, coi dati in colonna."
+msgstr "Card grid: one box per certification. Strip: a compact row of symbols and standards, to place under an opening section. List: one row per certification, with the data in columns."
+
+msgid "Scheda tecnica"
+msgstr "Technical data sheet"
+
+msgid "Riempitrice rotativa LR 240"
+msgstr "LR 240 rotary filler"
+
+msgid "Per liquidi e creme da 50 a 1000 ml, in linea con tappatura ed etichettatura. Il cambio formato si fa senza attrezzi, in meno di un quarto d'ora."
+msgstr "For liquids and creams from 50 to 1000 ml, in line with capping and labeling. Format changeover needs no tools and takes less than fifteen minutes."
+
+msgid "Nuova serie"
+msgstr "New series"
+
+msgid "Specifiche"
+msgstr "Specifications"
+
+msgid "Prestazioni"
+msgstr "Performance"
+
+msgid "pezzi/min"
+msgstr "pcs/min"
+
+msgid "Formati"
+msgstr "Formats"
+
+msgid "Precisione di dosaggio"
+msgstr "Dosing accuracy"
+
+msgid "Ingombro (L × P × H)"
+msgstr "Footprint (L × W × H)"
+
+msgid "Alimentazione"
+msgstr "Power supply"
+
+msgid "Potenza installata"
+msgstr "Installed power"
+
+msgid "Aria compressa"
+msgstr "Compressed air"
+
+msgid "Documenti"
+msgstr "Documents"
+
+msgid "Disegno di ingombro"
+msgstr "Layout drawing"
+
+msgid "Modello 3D"
+msgstr "3D model"
+
+msgid "Una parola sopra il nome, in evidenza: «Nuova serie», «Disponibile a magazzino». Vuota: niente."
+msgstr "A highlighted word above the name: “New series”, “In stock”. Empty: nothing."
+
+msgid "Titolo delle specifiche"
+msgstr "Specifications title"
+
+msgid "Specifica"
+msgstr "Specification"
+
+msgid "Una riga per dato. Le righe con lo stesso gruppo stanno sotto lo stesso titoletto, nell'ordine in cui il gruppo compare la prima volta. L'unità si scrive a parte: la tabella la allinea e la mostra più leggera."
+msgstr "One row per figure. Rows with the same group sit under the same subheading, in the order the group first appears. Write the unit separately: the table aligns it and shows it lighter."
+
+msgid "Gruppo"
+msgstr "Group"
+
+msgid "Titolo dei documenti"
+msgstr "Documents title"
+
+msgid "Documento"
+msgstr "Document"
+
+msgid "Si scaricano senza moduli da compilare: è quello che un ufficio tecnico si aspetta. Sul sito un documento senza file non si vede."
+msgstr "They download without forms to fill in: that is what an engineering office expects. On the site a document with no file is not shown."
+
+msgid "File"
+msgstr "File"
+
+msgid "Dalla Libreria media: un PDF, oppure uno ZIP coi file CAD (WordPress di serie non accetta STEP, DWG e DXF sciolti)."
+msgstr "From the Media Library: a PDF, or a ZIP with the CAD files (out of the box WordPress does not accept loose STEP, DWG and DXF files)."
+
+msgid "Peso del file"
+msgstr "File size"
+
+msgid "Come lo legge chi scarica: «2,4 MB»."
+msgstr "As the person downloading reads it: “2.4 MB”."
+
+msgid "Certificazioni del prodotto"
+msgstr "Product certifications"
+
+msgid "Separate da una virgola: «CE, ATEX, ISO 9001». Per i certificati completi, con la scadenza e il PDF, c'è la tile Certificazioni."
+msgstr "Comma-separated: “CE, ATEX, ISO 9001”. For full certificates, with expiry date and PDF, there is the Certifications tile."
+
+msgid "Richiesta"
+msgstr "Request"
+
+msgid "Collegamento"
+msgstr "Link"
+
+msgid "Porta il codice nel modulo"
+msgstr "Pass the code to the form"
+
+msgid "Aggiunge al collegamento ?prodotto=CODICE. Nella pagina di arrivo, un campo del Form Contatti con «Valore dall'indirizzo» = prodotto si compila da solo: chi chiede il preventivo non deve riscrivere il codice."
+msgstr "Adds ?prodotto=CODE to the link. On the landing page, a Contact Form field with “Value from the address” = prodotto fills itself in: whoever requests a quote does not have to retype the code."
+
+msgid "Nome del parametro"
+msgstr "Parameter name"
+
+msgid "Motori di ricerca"
+msgstr "Search engines"
+
+msgid "Dati del prodotto per Google"
+msgstr "Product data for Google"
+
+msgid "Aggiunge alla pagina i dati Schema.org del prodotto: nome, codice, foto, descrizione e specifiche. Con più schede nella stessa pagina, ognuna porta i suoi."
+msgstr "Adds the product’s Schema.org data to the page: name, code, photo, description and specifications. With several sheets on the same page, each one carries its own."
+
+msgid "Pulsante, etichetta e icone dei documenti. Vuoto: il primario del tema."
+msgstr "Button, label and document icons. Empty: the theme’s primary color."
+
+msgid "Codice ed etichetta"
+msgstr "Code and label"
+
+msgid "Gruppi e titoli"
+msgstr "Groups and titles"
+
+msgid "Nome della specifica"
+msgstr "Specification name"
+
+msgid "La scheda (se ha sfondo, bordo od ombra) e la foto."
+msgstr "The sheet (if it has a background, border or shadow) and the photo."
+
+msgid "Come la foto"
+msgstr "As the photo"
+
+msgid "Larghezza della foto"
+msgstr "Photo width"
+
+msgid "Colonne delle specifiche"
+msgstr "Specification columns"
+
+msgid "Aggiungi le certificazioni nel Contenuto."
+msgstr "Add the certifications in Content."
+
+msgid "Sono tutte scadute: sul sito la tile non si vede."
+msgstr "They have all expired: the tile is not shown on the site."
+
+msgid "Certificato %s in PDF"
+msgstr "%s certificate (PDF)"
+
+msgid "Scaduta il %s"
+msgstr "Expired on %s"
+
+msgid "La foto del prodotto"
+msgstr "The product photo"
+
+msgid "manca il file"
+msgstr "file missing"
+
+msgid "Scrivi il nome del prodotto e le specifiche nel Contenuto."
+msgstr "Write the product name and specifications in Content."
+
+msgid "Valore dall'indirizzo"
+msgstr "Value from the address"
+
+msgid "Il nome di un parametro dell'indirizzo della pagina. Con «prodotto», chi arriva da …?prodotto=LR-240 trova il campo già scritto (un campo nascosto prende sempre quel valore). Il pulsante del preventivo della Scheda tecnica lo usa per portare il codice del prodotto."
+msgstr "The name of a parameter in the page address. With “prodotto”, anyone arriving from …?prodotto=LR-240 finds the field already filled in (a hidden field always takes that value). The quote button of the Technical data sheet uses it to pass the product code."

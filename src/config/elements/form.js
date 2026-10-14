@@ -203,6 +203,9 @@ export default {
         { key: 'required', label: t('Obbligatorio'), type: 'toggle' },
         { key: 'options', label: t('Opzioni (una per riga)'), type: 'textarea',
           condition: { field: 'field_type', op: 'in', value: ['select', 'radio', 'checkbox'] } },
+        { key: 'param', label: t('Valore dall\'indirizzo'), type: 'text', placeholder: 'prodotto',
+          condition: { field: 'field_type', op: 'in', value: ['text', 'email', 'tel', 'url', 'number', 'textarea', 'select', 'radio', 'hidden'] },
+          description: t('Il nome di un parametro dell\'indirizzo della pagina. Con «prodotto», chi arriva da …?prodotto=LR-240 trova il campo già scritto (un campo nascosto prende sempre quel valore). Il pulsante del preventivo della Scheda tecnica lo usa per portare il codice del prodotto.') },
         { type: 'separator', label: t('Impostazioni tipo campo'),
           condition: { field: 'field_type', op: 'in', value: ['file', 'range', 'star_rating', 'hidden', 'calculation'] } },
         { key: 'file_allowed_types', label: t('Tipi file ammessi'), type: 'text',
@@ -245,7 +248,7 @@ export default {
         { key: 'condition_value', label: t('Condizione: valore'), type: 'text',
           condition: { field: 'condition_field', op: 'notEmpty' } },
       ],
-      newItemDefaults: { field_type: 'text', label: t('Nuovo campo'), placeholder: '', name: '', required: false, width: '1-1', options: '', icon: '', file_allowed_types: '.pdf,.doc,.docx,.jpg,.png', file_max_size: 5, file_max_files: 1, file_button_text: 'Scegli file', range_min: 0, range_max: 100, range_step: 1, range_default: 50, star_count: 5, default_value: '', calc_formula: '', calc_prefix: '', calc_suffix: '', calc_decimals: 2, condition_field: '', condition_operator: 'equals', condition_value: '' },
+      newItemDefaults: { field_type: 'text', label: t('Nuovo campo'), placeholder: '', name: '', required: false, width: '1-1', options: '', icon: '', file_allowed_types: '.pdf,.doc,.docx,.jpg,.png', file_max_size: 5, file_max_files: 1, file_button_text: 'Scegli file', range_min: 0, range_max: 100, range_step: 1, range_default: 50, star_count: 5, default_value: '', calc_formula: '', calc_prefix: '', calc_suffix: '', calc_decimals: 2, param: '', condition_field: '', condition_operator: 'equals', condition_value: '' },
       itemLabel: 'Campo',
     },
 

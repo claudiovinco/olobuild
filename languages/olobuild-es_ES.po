@@ -26560,3 +26560,324 @@ msgstr "Texto largo"
 
 msgid "Testo del pulsante dei biglietti"
 msgstr "Texto del botón de entradas"
+
+msgid "Certificazioni"
+msgstr "Certificaciones"
+
+msgid "Sistema di gestione per la qualità"
+msgstr "Sistema de gestión de la calidad"
+
+msgid "Organismo di certificazione accreditato"
+msgstr "Organismo de certificación acreditado"
+
+msgid "Progettazione e lavorazione meccanica di precisione per conto terzi."
+msgstr "Diseño y mecanizado de precisión para terceros."
+
+msgid "Sistema di gestione ambientale"
+msgstr "Sistema de gestión ambiental"
+
+msgid "Scarti di lavorazione, consumi di energia ed emissioni dello stabilimento."
+msgstr "Residuos de producción, consumo de energía y emisiones de la planta."
+
+msgid "Salute e sicurezza sul lavoro"
+msgstr "Seguridad y salud en el trabajo"
+
+msgid "Reparti di produzione, magazzino e uffici tecnici."
+msgstr "Departamentos de producción, almacén y oficinas técnicas."
+
+msgid "Valido fino al"
+msgstr "Válido hasta el"
+
+msgid "Rilasciato il"
+msgstr "Emitido el"
+
+msgid "In rinnovo"
+msgstr "En renovación"
+
+msgid "Certificato in PDF"
+msgstr "Certificado en PDF"
+
+msgid "Certificazione"
+msgstr "Certificación"
+
+msgid "Una per certificato. Con la data di scadenza la tile la controlla da sola: dal giorno dopo, sul sito sparisce o si mostra «In rinnovo», anche nelle pagine servite dalla cache. Nel builder restano tutte, le scadute attenuate."
+msgstr "Una por certificado. Con la fecha de caducidad, el tile la comprueba solo: desde el día siguiente desaparece del sitio o muestra «En renovación», también en las páginas servidas desde la caché. En el builder se ven todas, las caducadas atenuadas."
+
+msgid "Norma o marchio"
+msgstr "Norma o marca"
+
+msgid "Il nome con cui il cliente la cerca: «ISO 9001:2015», «IATF 16949», «Marcatura CE»."
+msgstr "El nombre con el que el cliente la busca: «ISO 9001:2015», «IATF 16949», «Marcado CE»."
+
+msgid "Ente di certificazione"
+msgstr "Entidad de certificación"
+
+msgid "Numero del certificato"
+msgstr "Número del certificado"
+
+msgid "Campo di applicazione"
+msgstr "Alcance"
+
+msgid "Scade il"
+msgstr "Caduca el"
+
+msgid "Il marchio della certificazione o dell'ente: se c'è, prende il posto del simbolo."
+msgstr "El logotipo de la certificación o de la entidad: si lo hay, sustituye al símbolo."
+
+msgid "Cosa mostrare"
+msgstr "Qué mostrar"
+
+msgid "Mostra l'ente"
+msgstr "Mostrar la entidad"
+
+msgid "Mostra il numero"
+msgstr "Mostrar el número"
+
+msgid "Mostra il campo di applicazione"
+msgstr "Mostrar el alcance"
+
+msgid "Mostra la data di rilascio"
+msgstr "Mostrar la fecha de emisión"
+
+msgid "Mostra la scadenza"
+msgstr "Mostrar la caducidad"
+
+msgid "Mostra il PDF"
+msgstr "Mostrar el PDF"
+
+msgid "Nella vista Fascia tutta la voce porta al PDF."
+msgstr "En la vista Franja todo el elemento lleva al PDF."
+
+msgid "Certificazioni scadute"
+msgstr "Certificaciones caducadas"
+
+msgid "Nascoste"
+msgstr "Ocultas"
+
+msgid "Mostrate «In rinnovo»"
+msgstr "Mostradas «En renovación»"
+
+msgid "Il giorno dopo la scadenza: nascosta, oppure ancora visibile con «In rinnovo» al posto della data e senza il PDF. Una certificazione senza data di scadenza resta sempre."
+msgstr "El día después de la caducidad: oculta, o todavía visible con «En renovación» en lugar de la fecha y sin el PDF. Una certificación sin fecha de caducidad se queda siempre."
+
+msgid "Formato delle date"
+msgstr "Formato de las fechas"
+
+msgid "11 marzo 2027"
+msgstr "11 marzo 2027"
+
+msgid "11/03/2027"
+msgstr "11/03/2027"
+
+msgid "Testo della scadenza"
+msgstr "Texto de la caducidad"
+
+msgid "Testo del rilascio"
+msgstr "Texto de la emisión"
+
+msgid "Testo «In rinnovo»"
+msgstr "Texto «En renovación»"
+
+msgid "Testo del PDF"
+msgstr "Texto del PDF"
+
+msgid "Simbolo e collegamento al PDF. Vuoto: il primario del tema."
+msgstr "Símbolo y enlace al PDF. Vacío: el color principal del tema."
+
+msgid "Colore della validità"
+msgstr "Color de la validez"
+
+msgid "Il pallino accanto alla scadenza. Vuoto: il colore «successo» del tema."
+msgstr "El punto junto a la caducidad. Vacío: el color «éxito» del tema."
+
+msgid "Vuoto: una velatura leggera del colore del testo, che va bene su fondi chiari e scuri."
+msgstr "Vacío: un velo ligero del color del texto, que funciona sobre fondos claros y oscuros."
+
+msgid "Norma"
+msgstr "Norma"
+
+msgid "Ente, numero e date"
+msgstr "Entidad, número y fechas"
+
+msgid "Collegamento al PDF"
+msgstr "Enlace al PDF"
+
+msgid "Dimensione del simbolo"
+msgstr "Tamaño del símbolo"
+
+msgid "Altezza del logo"
+msgstr "Altura del logotipo"
+
+msgid "Fascia"
+msgstr "Franja"
+
+msgid "Schede in griglia"
+msgstr "Cuadrícula de tarjetas"
+
+msgid "Schede in griglia: un riquadro per certificazione. Fascia: una riga compatta di simboli e norme, da mettere sotto un'apertura. Elenco: una riga per certificazione, coi dati in colonna."
+msgstr "Cuadrícula de tarjetas: un recuadro por certificación. Franja: una fila compacta de símbolos y normas, para poner bajo una apertura. Lista: una fila por certificación, con los datos en columnas."
+
+msgid "Scheda tecnica"
+msgstr "Ficha técnica"
+
+msgid "Riempitrice rotativa LR 240"
+msgstr "Llenadora rotativa LR 240"
+
+msgid "Per liquidi e creme da 50 a 1000 ml, in linea con tappatura ed etichettatura. Il cambio formato si fa senza attrezzi, in meno di un quarto d'ora."
+msgstr "Para líquidos y cremas de 50 a 1000 ml, en línea con taponado y etiquetado. El cambio de formato se hace sin herramientas, en menos de un cuarto de hora."
+
+msgid "Nuova serie"
+msgstr "Nueva serie"
+
+msgid "Specifiche"
+msgstr "Especificaciones"
+
+msgid "Prestazioni"
+msgstr "Prestaciones"
+
+msgid "pezzi/min"
+msgstr "piezas/min"
+
+msgid "Formati"
+msgstr "Formatos"
+
+msgid "Precisione di dosaggio"
+msgstr "Precisión de dosificación"
+
+msgid "Ingombro (L × P × H)"
+msgstr "Dimensiones (L × An × Al)"
+
+msgid "Alimentazione"
+msgstr "Alimentación"
+
+msgid "Potenza installata"
+msgstr "Potencia instalada"
+
+msgid "Aria compressa"
+msgstr "Aire comprimido"
+
+msgid "Documenti"
+msgstr "Documentos"
+
+msgid "Disegno di ingombro"
+msgstr "Plano de dimensiones"
+
+msgid "Modello 3D"
+msgstr "Modelo 3D"
+
+msgid "Una parola sopra il nome, in evidenza: «Nuova serie», «Disponibile a magazzino». Vuota: niente."
+msgstr "Una palabra destacada sobre el nombre: «Nueva serie», «Disponible en almacén». Vacía: nada."
+
+msgid "Titolo delle specifiche"
+msgstr "Título de las especificaciones"
+
+msgid "Specifica"
+msgstr "Especificación"
+
+msgid "Una riga per dato. Le righe con lo stesso gruppo stanno sotto lo stesso titoletto, nell'ordine in cui il gruppo compare la prima volta. L'unità si scrive a parte: la tabella la allinea e la mostra più leggera."
+msgstr "Una fila por dato. Las filas con el mismo grupo van bajo el mismo subtítulo, en el orden en que el grupo aparece por primera vez. La unidad se escribe aparte: la tabla la alinea y la muestra más ligera."
+
+msgid "Gruppo"
+msgstr "Grupo"
+
+msgid "Titolo dei documenti"
+msgstr "Título de los documentos"
+
+msgid "Documento"
+msgstr "Documento"
+
+msgid "Si scaricano senza moduli da compilare: è quello che un ufficio tecnico si aspetta. Sul sito un documento senza file non si vede."
+msgstr "Se descargan sin formularios que rellenar: es lo que espera una oficina técnica. En el sitio, un documento sin archivo no se muestra."
+
+msgid "File"
+msgstr "Archivo"
+
+msgid "Dalla Libreria media: un PDF, oppure uno ZIP coi file CAD (WordPress di serie non accetta STEP, DWG e DXF sciolti)."
+msgstr "Desde la Biblioteca de medios: un PDF, o un ZIP con los archivos CAD (de serie WordPress no acepta archivos STEP, DWG y DXF sueltos)."
+
+msgid "Peso del file"
+msgstr "Tamaño del archivo"
+
+msgid "Come lo legge chi scarica: «2,4 MB»."
+msgstr "Como lo lee quien descarga: «2,4 MB»."
+
+msgid "Certificazioni del prodotto"
+msgstr "Certificaciones del producto"
+
+msgid "Separate da una virgola: «CE, ATEX, ISO 9001». Per i certificati completi, con la scadenza e il PDF, c'è la tile Certificazioni."
+msgstr "Separadas por comas: «CE, ATEX, ISO 9001». Para los certificados completos, con caducidad y PDF, está el tile Certificaciones."
+
+msgid "Richiesta"
+msgstr "Solicitud"
+
+msgid "Collegamento"
+msgstr "Enlace"
+
+msgid "Porta il codice nel modulo"
+msgstr "Llevar el código al formulario"
+
+msgid "Aggiunge al collegamento ?prodotto=CODICE. Nella pagina di arrivo, un campo del Form Contatti con «Valore dall'indirizzo» = prodotto si compila da solo: chi chiede il preventivo non deve riscrivere il codice."
+msgstr "Añade ?prodotto=CÓDIGO al enlace. En la página de destino, un campo del Formulario de contacto con «Valor desde la dirección» = prodotto se rellena solo: quien pide el presupuesto no tiene que reescribir el código."
+
+msgid "Nome del parametro"
+msgstr "Nombre del parámetro"
+
+msgid "Motori di ricerca"
+msgstr "Motores de búsqueda"
+
+msgid "Dati del prodotto per Google"
+msgstr "Datos del producto para Google"
+
+msgid "Aggiunge alla pagina i dati Schema.org del prodotto: nome, codice, foto, descrizione e specifiche. Con più schede nella stessa pagina, ognuna porta i suoi."
+msgstr "Añade a la página los datos Schema.org del producto: nombre, código, foto, descripción y especificaciones. Con varias fichas en la misma página, cada una lleva los suyos."
+
+msgid "Pulsante, etichetta e icone dei documenti. Vuoto: il primario del tema."
+msgstr "Botón, etiqueta e iconos de los documentos. Vacío: el color principal del tema."
+
+msgid "Codice ed etichetta"
+msgstr "Código y etiqueta"
+
+msgid "Gruppi e titoli"
+msgstr "Grupos y títulos"
+
+msgid "Nome della specifica"
+msgstr "Nombre de la especificación"
+
+msgid "La scheda (se ha sfondo, bordo od ombra) e la foto."
+msgstr "La ficha (si tiene fondo, borde o sombra) y la foto."
+
+msgid "Come la foto"
+msgstr "Como la foto"
+
+msgid "Larghezza della foto"
+msgstr "Ancho de la foto"
+
+msgid "Colonne delle specifiche"
+msgstr "Columnas de las especificaciones"
+
+msgid "Aggiungi le certificazioni nel Contenuto."
+msgstr "Añade las certificaciones en Contenido."
+
+msgid "Sono tutte scadute: sul sito la tile non si vede."
+msgstr "Están todas caducadas: en el sitio el tile no se muestra."
+
+msgid "Certificato %s in PDF"
+msgstr "Certificado %s en PDF"
+
+msgid "Scaduta il %s"
+msgstr "Caducada el %s"
+
+msgid "La foto del prodotto"
+msgstr "La foto del producto"
+
+msgid "manca il file"
+msgstr "falta el archivo"
+
+msgid "Scrivi il nome del prodotto e le specifiche nel Contenuto."
+msgstr "Escribe el nombre del producto y las especificaciones en Contenido."
+
+msgid "Valore dall'indirizzo"
+msgstr "Valor desde la dirección"
+
+msgid "Il nome di un parametro dell'indirizzo della pagina. Con «prodotto», chi arriva da …?prodotto=LR-240 trova il campo già scritto (un campo nascosto prende sempre quel valore). Il pulsante del preventivo della Scheda tecnica lo usa per portare il codice del prodotto."
+msgstr "El nombre de un parámetro de la dirección de la página. Con «prodotto», quien llega desde …?prodotto=LR-240 encuentra el campo ya escrito (un campo oculto toma siempre ese valor). El botón de presupuesto de la Ficha técnica lo usa para llevar el código del producto."

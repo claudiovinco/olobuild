@@ -26560,3 +26560,324 @@ msgstr "Langer Text"
 
 msgid "Testo del pulsante dei biglietti"
 msgstr "Text der Ticket-Schaltfläche"
+
+msgid "Certificazioni"
+msgstr "Zertifizierungen"
+
+msgid "Sistema di gestione per la qualità"
+msgstr "Qualitätsmanagementsystem"
+
+msgid "Organismo di certificazione accreditato"
+msgstr "Akkreditierte Zertifizierungsstelle"
+
+msgid "Progettazione e lavorazione meccanica di precisione per conto terzi."
+msgstr "Konstruktion und Präzisionsbearbeitung im Lohnauftrag."
+
+msgid "Sistema di gestione ambientale"
+msgstr "Umweltmanagementsystem"
+
+msgid "Scarti di lavorazione, consumi di energia ed emissioni dello stabilimento."
+msgstr "Produktionsabfälle, Energieverbrauch und Emissionen des Werks."
+
+msgid "Salute e sicurezza sul lavoro"
+msgstr "Arbeitsschutz und Gesundheit"
+
+msgid "Reparti di produzione, magazzino e uffici tecnici."
+msgstr "Produktionsabteilungen, Lager und technische Büros."
+
+msgid "Valido fino al"
+msgstr "Gültig bis"
+
+msgid "Rilasciato il"
+msgstr "Ausgestellt am"
+
+msgid "In rinnovo"
+msgstr "In Erneuerung"
+
+msgid "Certificato in PDF"
+msgstr "Zertifikat (PDF)"
+
+msgid "Certificazione"
+msgstr "Zertifizierung"
+
+msgid "Una per certificato. Con la data di scadenza la tile la controlla da sola: dal giorno dopo, sul sito sparisce o si mostra «In rinnovo», anche nelle pagine servite dalla cache. Nel builder restano tutte, le scadute attenuate."
+msgstr "Eine pro Zertifikat. Mit einem Ablaufdatum prüft die Tile es selbst: Ab dem nächsten Tag verschwindet es von der Website oder zeigt „In Erneuerung“ – auch auf Seiten aus dem Cache. Im Builder bleiben alle sichtbar, abgelaufene abgeschwächt."
+
+msgid "Norma o marchio"
+msgstr "Norm oder Zeichen"
+
+msgid "Il nome con cui il cliente la cerca: «ISO 9001:2015», «IATF 16949», «Marcatura CE»."
+msgstr "Der Name, unter dem Kunden danach suchen: „ISO 9001:2015“, „IATF 16949“, „CE-Kennzeichnung“."
+
+msgid "Ente di certificazione"
+msgstr "Zertifizierungsstelle"
+
+msgid "Numero del certificato"
+msgstr "Zertifikatsnummer"
+
+msgid "Campo di applicazione"
+msgstr "Geltungsbereich"
+
+msgid "Scade il"
+msgstr "Läuft ab am"
+
+msgid "Il marchio della certificazione o dell'ente: se c'è, prende il posto del simbolo."
+msgstr "Das Zeichen der Zertifizierung oder der Stelle: Falls vorhanden, ersetzt es das Symbol."
+
+msgid "Cosa mostrare"
+msgstr "Was angezeigt wird"
+
+msgid "Mostra l'ente"
+msgstr "Stelle anzeigen"
+
+msgid "Mostra il numero"
+msgstr "Nummer anzeigen"
+
+msgid "Mostra il campo di applicazione"
+msgstr "Geltungsbereich anzeigen"
+
+msgid "Mostra la data di rilascio"
+msgstr "Ausstellungsdatum anzeigen"
+
+msgid "Mostra la scadenza"
+msgstr "Ablaufdatum anzeigen"
+
+msgid "Mostra il PDF"
+msgstr "PDF anzeigen"
+
+msgid "Nella vista Fascia tutta la voce porta al PDF."
+msgstr "In der Ansicht „Leiste“ führt der ganze Eintrag zum PDF."
+
+msgid "Certificazioni scadute"
+msgstr "Abgelaufene Zertifizierungen"
+
+msgid "Nascoste"
+msgstr "Ausgeblendet"
+
+msgid "Mostrate «In rinnovo»"
+msgstr "Als „In Erneuerung“ angezeigt"
+
+msgid "Il giorno dopo la scadenza: nascosta, oppure ancora visibile con «In rinnovo» al posto della data e senza il PDF. Una certificazione senza data di scadenza resta sempre."
+msgstr "Am Tag nach dem Ablauf: ausgeblendet oder weiter sichtbar mit „In Erneuerung“ statt des Datums und ohne PDF. Eine Zertifizierung ohne Ablaufdatum bleibt immer."
+
+msgid "Formato delle date"
+msgstr "Datumsformat"
+
+msgid "11 marzo 2027"
+msgstr "11 März 2027"
+
+msgid "11/03/2027"
+msgstr "11/03/2027"
+
+msgid "Testo della scadenza"
+msgstr "Ablauf-Text"
+
+msgid "Testo del rilascio"
+msgstr "Ausstellungs-Text"
+
+msgid "Testo «In rinnovo»"
+msgstr "Text „In Erneuerung“"
+
+msgid "Testo del PDF"
+msgstr "PDF-Text"
+
+msgid "Simbolo e collegamento al PDF. Vuoto: il primario del tema."
+msgstr "Symbol und PDF-Link. Leer: die Primärfarbe des Themes."
+
+msgid "Colore della validità"
+msgstr "Farbe der Gültigkeit"
+
+msgid "Il pallino accanto alla scadenza. Vuoto: il colore «successo» del tema."
+msgstr "Der Punkt neben dem Ablaufdatum. Leer: die Farbe „Erfolg“ des Themes."
+
+msgid "Vuoto: una velatura leggera del colore del testo, che va bene su fondi chiari e scuri."
+msgstr "Leer: ein leichter Hauch der Textfarbe, der auf hellen und dunklen Hintergründen funktioniert."
+
+msgid "Norma"
+msgstr "Norm"
+
+msgid "Ente, numero e date"
+msgstr "Stelle, Nummer und Daten"
+
+msgid "Collegamento al PDF"
+msgstr "PDF-Link"
+
+msgid "Dimensione del simbolo"
+msgstr "Symbolgröße"
+
+msgid "Altezza del logo"
+msgstr "Logohöhe"
+
+msgid "Fascia"
+msgstr "Leiste"
+
+msgid "Schede in griglia"
+msgstr "Kartenraster"
+
+msgid "Schede in griglia: un riquadro per certificazione. Fascia: una riga compatta di simboli e norme, da mettere sotto un'apertura. Elenco: una riga per certificazione, coi dati in colonna."
+msgstr "Kartenraster: ein Kasten pro Zertifizierung. Leiste: eine kompakte Reihe aus Symbolen und Normen, ideal unter einem Einstiegsbereich. Liste: eine Zeile pro Zertifizierung, mit den Daten in Spalten."
+
+msgid "Scheda tecnica"
+msgstr "Technisches Datenblatt"
+
+msgid "Riempitrice rotativa LR 240"
+msgstr "Rundläufer-Füllmaschine LR 240"
+
+msgid "Per liquidi e creme da 50 a 1000 ml, in linea con tappatura ed etichettatura. Il cambio formato si fa senza attrezzi, in meno di un quarto d'ora."
+msgstr "Für Flüssigkeiten und Cremes von 50 bis 1000 ml, in Linie mit Verschließen und Etikettieren. Der Formatwechsel geht ohne Werkzeug in weniger als einer Viertelstunde."
+
+msgid "Nuova serie"
+msgstr "Neue Serie"
+
+msgid "Specifiche"
+msgstr "Spezifikationen"
+
+msgid "Prestazioni"
+msgstr "Leistung"
+
+msgid "pezzi/min"
+msgstr "Stück/min"
+
+msgid "Formati"
+msgstr "Formate"
+
+msgid "Precisione di dosaggio"
+msgstr "Dosiergenauigkeit"
+
+msgid "Ingombro (L × P × H)"
+msgstr "Abmessungen (L × B × H)"
+
+msgid "Alimentazione"
+msgstr "Energieversorgung"
+
+msgid "Potenza installata"
+msgstr "Installierte Leistung"
+
+msgid "Aria compressa"
+msgstr "Druckluft"
+
+msgid "Documenti"
+msgstr "Dokumente"
+
+msgid "Disegno di ingombro"
+msgstr "Aufstellplan"
+
+msgid "Modello 3D"
+msgstr "3D-Modell"
+
+msgid "Una parola sopra il nome, in evidenza: «Nuova serie», «Disponibile a magazzino». Vuota: niente."
+msgstr "Ein hervorgehobenes Wort über dem Namen: „Neue Serie“, „Ab Lager lieferbar“. Leer: nichts."
+
+msgid "Titolo delle specifiche"
+msgstr "Titel der Spezifikationen"
+
+msgid "Specifica"
+msgstr "Spezifikation"
+
+msgid "Una riga per dato. Le righe con lo stesso gruppo stanno sotto lo stesso titoletto, nell'ordine in cui il gruppo compare la prima volta. L'unità si scrive a parte: la tabella la allinea e la mostra più leggera."
+msgstr "Eine Zeile pro Angabe. Zeilen mit derselben Gruppe stehen unter derselben Zwischenüberschrift, in der Reihenfolge, in der die Gruppe zuerst vorkommt. Die Einheit kommt in ein eigenes Feld: Die Tabelle richtet sie aus und zeigt sie heller."
+
+msgid "Gruppo"
+msgstr "Gruppe"
+
+msgid "Titolo dei documenti"
+msgstr "Titel der Dokumente"
+
+msgid "Documento"
+msgstr "Dokument"
+
+msgid "Si scaricano senza moduli da compilare: è quello che un ufficio tecnico si aspetta. Sul sito un documento senza file non si vede."
+msgstr "Sie lassen sich ohne Formular herunterladen – genau das erwartet ein technisches Büro. Auf der Website wird ein Dokument ohne Datei nicht angezeigt."
+
+msgid "File"
+msgstr "Datei"
+
+msgid "Dalla Libreria media: un PDF, oppure uno ZIP coi file CAD (WordPress di serie non accetta STEP, DWG e DXF sciolti)."
+msgstr "Aus der Mediathek: ein PDF oder ein ZIP mit den CAD-Dateien (WordPress akzeptiert standardmäßig keine einzelnen STEP-, DWG- und DXF-Dateien)."
+
+msgid "Peso del file"
+msgstr "Dateigröße"
+
+msgid "Come lo legge chi scarica: «2,4 MB»."
+msgstr "So, wie es die Person liest, die herunterlädt: „2,4 MB“."
+
+msgid "Certificazioni del prodotto"
+msgstr "Produktzertifizierungen"
+
+msgid "Separate da una virgola: «CE, ATEX, ISO 9001». Per i certificati completi, con la scadenza e il PDF, c'è la tile Certificazioni."
+msgstr "Durch Kommas getrennt: „CE, ATEX, ISO 9001“. Für vollständige Zertifikate mit Ablaufdatum und PDF gibt es die Tile „Zertifizierungen“."
+
+msgid "Richiesta"
+msgstr "Anfrage"
+
+msgid "Collegamento"
+msgstr "Link"
+
+msgid "Porta il codice nel modulo"
+msgstr "Code ins Formular übernehmen"
+
+msgid "Aggiunge al collegamento ?prodotto=CODICE. Nella pagina di arrivo, un campo del Form Contatti con «Valore dall'indirizzo» = prodotto si compila da solo: chi chiede il preventivo non deve riscrivere il codice."
+msgstr "Hängt ?prodotto=CODE an den Link an. Auf der Zielseite füllt sich ein Feld des Kontaktformulars mit „Wert aus der Adresse“ = prodotto von selbst aus: Wer ein Angebot anfragt, muss den Code nicht abtippen."
+
+msgid "Nome del parametro"
+msgstr "Parametername"
+
+msgid "Motori di ricerca"
+msgstr "Suchmaschinen"
+
+msgid "Dati del prodotto per Google"
+msgstr "Produktdaten für Google"
+
+msgid "Aggiunge alla pagina i dati Schema.org del prodotto: nome, codice, foto, descrizione e specifiche. Con più schede nella stessa pagina, ognuna porta i suoi."
+msgstr "Fügt der Seite die Schema.org-Daten des Produkts hinzu: Name, Code, Foto, Beschreibung und Spezifikationen. Bei mehreren Datenblättern auf derselben Seite bringt jedes seine eigenen mit."
+
+msgid "Pulsante, etichetta e icone dei documenti. Vuoto: il primario del tema."
+msgstr "Schaltfläche, Bezeichnung und Dokumentsymbole. Leer: die Primärfarbe des Themes."
+
+msgid "Codice ed etichetta"
+msgstr "Code und Bezeichnung"
+
+msgid "Gruppi e titoli"
+msgstr "Gruppen und Titel"
+
+msgid "Nome della specifica"
+msgstr "Name der Spezifikation"
+
+msgid "La scheda (se ha sfondo, bordo od ombra) e la foto."
+msgstr "Das Datenblatt (wenn es Hintergrund, Rahmen oder Schatten hat) und das Foto."
+
+msgid "Come la foto"
+msgstr "Wie das Foto"
+
+msgid "Larghezza della foto"
+msgstr "Fotobreite"
+
+msgid "Colonne delle specifiche"
+msgstr "Spalten der Spezifikationen"
+
+msgid "Aggiungi le certificazioni nel Contenuto."
+msgstr "Füge die Zertifizierungen unter „Inhalt“ hinzu."
+
+msgid "Sono tutte scadute: sul sito la tile non si vede."
+msgstr "Alle sind abgelaufen: Auf der Website wird die Tile nicht angezeigt."
+
+msgid "Certificato %s in PDF"
+msgstr "Zertifikat %s (PDF)"
+
+msgid "Scaduta il %s"
+msgstr "Abgelaufen am %s"
+
+msgid "La foto del prodotto"
+msgstr "Das Produktfoto"
+
+msgid "manca il file"
+msgstr "Datei fehlt"
+
+msgid "Scrivi il nome del prodotto e le specifiche nel Contenuto."
+msgstr "Schreibe den Produktnamen und die Spezifikationen unter „Inhalt“."
+
+msgid "Valore dall'indirizzo"
+msgstr "Wert aus der Adresse"
+
+msgid "Il nome di un parametro dell'indirizzo della pagina. Con «prodotto», chi arriva da …?prodotto=LR-240 trova il campo già scritto (un campo nascosto prende sempre quel valore). Il pulsante del preventivo della Scheda tecnica lo usa per portare il codice del prodotto."
+msgstr "Der Name eines Parameters in der Seitenadresse. Mit „prodotto“ findet, wer über …?prodotto=LR-240 kommt, das Feld schon ausgefüllt (ein verstecktes Feld übernimmt den Wert immer). Die Angebotsschaltfläche des Technischen Datenblatts nutzt das, um den Produktcode mitzugeben."

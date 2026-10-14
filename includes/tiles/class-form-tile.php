@@ -141,6 +141,36 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
         return [];
     }
 
+    /** Il nome di un parametro dell'indirizzo per «Valore dall'indirizzo»: lettere, cifre, - e _, o ''. */
+    private static function nome_param( $v ) {
+        return substr( (string) preg_replace( '/[^A-Za-z0-9_-]/', '', (string) $v ), 0, 40 );
+    }
+
+    /**
+     * Lo script che scrive nei campi con «Valore dall'indirizzo» il valore del parametro (…?prodotto=LR-240):
+     * un campo nascosto lo prende sempre, gli altri solo se sono vuoti; una scelta (select/radio) si sceglie se
+     * il valore c'è fra le opzioni. Una volta per pagina; niente && (wptexturize).
+     */
+    private static function script_param() {
+        static $fatto = false;
+        if ( $fatto ) {
+            return '';
+        }
+        $fatto = true;
+        return <<<'JS'
+(function(){var q;try{q=new URLSearchParams(location.search);}catch(e){return;}
+[].forEach.call(document.querySelectorAll("[data-olo-param]"),function(el){
+var v=q.get(el.getAttribute("data-olo-param"));if(v===null){return;}v=String(v).slice(0,200);
+var campi=/^(INPUT|SELECT|TEXTAREA)$/.test(el.tagName)?[el]:[].slice.call(el.querySelectorAll("input,select,textarea"));
+campi.forEach(function(c){var tipo=(c.type||"").toLowerCase();var cambiato=false;
+if(tipo==="radio"){if(c.value===v){c.checked=true;cambiato=true;}}
+else if(c.tagName==="SELECT"){[].forEach.call(c.options,function(o){if(o.value===v){c.value=o.value;cambiato=true;}else if(o.text===v){c.value=o.value;cambiato=true;}});}
+else if(tipo==="hidden"){c.value=v;cambiato=true;}
+else if(tipo!=="file"){if(tipo!=="checkbox"){if(!c.value){c.value=v;cambiato=true;}}}
+if(cambiato){c.dispatchEvent(new Event("input",{bubbles:true}));c.dispatchEvent(new Event("change",{bubbles:true}));}});});})();
+JS;
+    }
+
     /** Il messaggio a modulo chiuso (invii arrivati al massimo, o posti tutti assegnati). */
     private function modulo_chiuso( array $s ) {
         return '<div class="olo-form-chiuso" role="status" style="padding:1.2em 1.35em;border-radius:.65em;border:1px solid color-mix(in srgb, currentColor 18%, transparent);font-size:15px;line-height:1.6">'
@@ -704,8 +734,12 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                                 }
                             }
 
-                            if ( $ftype === 'hidden' ) : ?>
-                                <input type="hidden" name="fields[<?php echo esc_attr( $fname ); ?>]" value="<?php echo esc_attr( $fplaceholder ); ?>" />
+                            $fparam = self::nome_param( $field['param'] ?? '' );
+                            if ( $ftype === 'hidden' ) :
+                                // «Valore default» (fino alla 1.4.753 il campo nascosto scriveva il segnaposto e il default restava inerte): prima il default, poi il segnaposto come prima.
+                                $fvalore = (string) ( $field['default_value'] ?? '' );
+                                ?>
+                                <input type="hidden" name="fields[<?php echo esc_attr( $fname ); ?>]" value="<?php echo esc_attr( '' !== $fvalore ? $fvalore : $fplaceholder ); ?>"<?php echo '' !== $fparam ? ' data-olo-param="' . esc_attr( $fparam ) . '"' : ''; ?> />
                             <?php continue; endif;
 
                             // Width class
@@ -716,7 +750,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
 
                             $cond_class = $cond_hidden ? ' olo-f-cond-hidden' : '';
                         ?>
-                        <div class="<?php echo esc_attr( $width_class . $cond_class ); ?>"<?php echo $cond_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- data-cond-* attribute string built above with esc_attr() around each value ?> data-field-name="<?php echo esc_attr( $fname ); ?>">
+                        <div class="<?php echo esc_attr( $width_class . $cond_class ); ?>"<?php echo $cond_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- data-cond-* attribute string built above with esc_attr() around each value ?> data-field-name="<?php echo esc_attr( $fname ); ?>"<?php echo '' !== $fparam ? ' data-olo-param="' . esc_attr( $fparam ) . '"' : ''; ?>>
                             <?php if ( in_array( $ftype, [ 'text', 'email', 'tel', 'url', 'number', 'date', 'time', 'datetime' ], true ) ) :
                                 $html_type = ( $ftype === 'datetime' ) ? 'datetime-local' : $ftype;
                                 $extra_attrs = '';
@@ -1021,6 +1055,13 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
         </div>
 
         <?php
+        // Valori dall'indirizzo (…?prodotto=LR-240): li scrive il browser, così valgono anche nelle pagine in cache.
+        foreach ( $fields as $f_param ) {
+            if ( '' !== self::nome_param( $f_param['param'] ?? '' ) ) {
+                echo '<script>' . self::script_param() . '</script>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JS costante della classe
+                break;
+            }
+        }
         if ( $has_recaptcha ) {
             // reCAPTCHA v3 caricato via enqueue (stampato nel footer della pagina).
             // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- SDK/embed di terze parti da URL remoto: versione controllata dal provider, non si versiona un asset remoto

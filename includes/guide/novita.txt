@@ -3,6 +3,11 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.754 - 2026-10-14 (nuovo)
+- Nuova tile Certificazioni: le certificazioni dell'azienda con norma, ente, numero, campo di applicazione, date, simbolo o logo e il PDF del certificato, in schede, in una fascia sotto l'apertura o in elenco. Dal giorno dopo la scadenza, sul sito una certificazione sparisce oppure si mostra «In rinnovo», anche nelle pagine servite dalla cache.
+- Nuova tile Scheda tecnica: un prodotto con foto, codice, specifiche raggruppate con le unità allineate, documenti da scaricare senza moduli (PDF, disegni, modelli 3D), certificazioni e il pulsante per il preventivo che porta il codice nel modulo. Può aggiungere alla pagina i dati del prodotto per Google.
+- Form Contatti: nuovo «Valore dall'indirizzo» nei campi. Un campo si compila da solo con un parametro dell'indirizzo della pagina, per esempio il codice del prodotto arrivando dal pulsante della Scheda tecnica; un campo nascosto ora invia il suo valore predefinito.
+
 ## v1.4.753 - 2026-10-14 (temi)
 - Tema Sartoria Ferro: anteprime della Vetrina aggiornate con la giacca nuova del cartamodello.
 
