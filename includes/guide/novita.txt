@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.792 - 2026-10-15 (temi)
+- Sei temi nuovi: Carico Libero (una palestra, in «Sport e benessere»), Leva Consulenza (consulenza per le piccole e medie imprese, in «Studi e professioni»), Baita Stua (una baita affittata intera, in «Ospitalità e viaggi»), Scheda Madre (un negozio di informatica, in «Negozi online»), Giroscopio (tour virtuali a 360°, in «Creativi e portfolio») e Doppia Mandata (escape room online, in «Eventi e musica»). Usano le tile nuove: l’orario dei corsi, il calendario dei soggiorni, il configuratore, il tour a 360° e il lucchetto. Ognuno ha la home e tre pagine interne, testata, piè di pagina, pagina d’errore e il pulsante per tornare in cima su ogni pagina.
+
 ## v1.4.785 - 2026-10-15 (tile)
 - Nuova tile «Orario corsi»: l’orario settimanale dei corsi, in griglia con le ore o in elenco, con i filtri per disciplina e livello, il giorno di oggi in evidenza e la lezione in corso. Tocchi una lezione e si aprono i dettagli col pulsante per prenotarla.
 - Nuova tile «Calendario soggiorni»: la disponibilità di una casa o di una camera con i prezzi per stagione e il minimo di notti. L’ospite sceglie arrivo, partenza e persone e vede subito notti, pulizie, imposta di soggiorno e totale; con un clic le date passano al modulo di richiesta.

@@ -29267,3 +29267,27 @@ msgstr "Das Miniaturbild in der Szenenliste. Leer: das Miniaturbild, das die Med
 #: includes/tiles
 msgid "Passo %1$d di %2$d"
 msgstr "Schritt %1$d von %2$d"
+
+#: includes/class-theme-importer.php
+msgid "L’orario dei corsi"
+msgstr "Der Kursplan"
+
+#: includes/class-theme-importer.php
+msgid "Diagnosi in 5 domande"
+msgstr "Diagnose in 5 Fragen"
+
+#: includes/class-theme-importer.php
+msgid "Monta il tuo PC"
+msgstr "Stell deinen PC zusammen"
+
+#: includes/class-theme-importer.php
+msgid "Prova un tour"
+msgstr "Probier eine Tour aus"
+
+#: includes/class-theme-importer.php
+msgid "Prova il lucchetto"
+msgstr "Probier das Vorhängeschloss aus"
+
+#: includes/class-theme-importer.php
+msgid "Le vostre date"
+msgstr "Eure Reisedaten"

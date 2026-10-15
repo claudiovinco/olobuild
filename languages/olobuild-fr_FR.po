@@ -29267,3 +29267,27 @@ msgstr "La miniature de la liste des scènes. Vide : la miniature que la Médiat
 #: includes/tiles
 msgid "Passo %1$d di %2$d"
 msgstr "Étape %1$d sur %2$d"
+
+#: includes/class-theme-importer.php
+msgid "L’orario dei corsi"
+msgstr "Le planning des cours"
+
+#: includes/class-theme-importer.php
+msgid "Diagnosi in 5 domande"
+msgstr "Diagnostic en 5 questions"
+
+#: includes/class-theme-importer.php
+msgid "Monta il tuo PC"
+msgstr "Montez votre PC"
+
+#: includes/class-theme-importer.php
+msgid "Prova un tour"
+msgstr "Essayez une visite"
+
+#: includes/class-theme-importer.php
+msgid "Prova il lucchetto"
+msgstr "Essayez le cadenas"
+
+#: includes/class-theme-importer.php
+msgid "Le vostre date"
+msgstr "Vos dates"

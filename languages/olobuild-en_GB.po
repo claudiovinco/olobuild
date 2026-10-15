@@ -21332,3 +21332,27 @@ msgstr "The thumbnail in the scene list. Empty: the thumbnail the Media Library 
 #: includes/tiles
 msgid "Passo %1$d di %2$d"
 msgstr "Step %1$d of %2$d"
+
+#: includes/class-theme-importer.php
+msgid "L’orario dei corsi"
+msgstr "The class timetable"
+
+#: includes/class-theme-importer.php
+msgid "Diagnosi in 5 domande"
+msgstr "Diagnosis in 5 questions"
+
+#: includes/class-theme-importer.php
+msgid "Monta il tuo PC"
+msgstr "Build your PC"
+
+#: includes/class-theme-importer.php
+msgid "Prova un tour"
+msgstr "Try a tour"
+
+#: includes/class-theme-importer.php
+msgid "Prova il lucchetto"
+msgstr "Try the padlock"
+
+#: includes/class-theme-importer.php
+msgid "Le vostre date"
+msgstr "Your dates"
