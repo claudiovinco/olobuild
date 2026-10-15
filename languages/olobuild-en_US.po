@@ -29338,3 +29338,15 @@ msgstr "By default the window has square bottom corners, as if it rose from the 
 #: includes/tiles
 msgid "Orario"
 msgstr "Timetable"
+
+#: includes/tiles
+msgid "Pannello dal vivo"
+msgstr "Live dashboard"
+
+#: includes/tiles
+msgid "Quando il pannello entra nello schermo le barre crescono, i numeri dei KPI contano fino al valore e la barra di «adesso» (l’ultima senza colore alternativo) pulsa. Con il movimento ridotto resta fermo."
+msgstr "When the dashboard comes into view the bars grow, the KPI figures count up to their value and the “now” bar (the last one without the alternative color) pulses. With reduced motion it stays still."
+
+#: includes/tiles
+msgid "Etichetta accanto al punto «in diretta»"
+msgstr "Label next to the “live” dot"

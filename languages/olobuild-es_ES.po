@@ -29335,3 +29335,15 @@ msgstr "Por defecto la ventana tiene las esquinas inferiores rectas, como si sal
 #: includes/tiles
 msgid "Orario"
 msgstr "Horario"
+
+#: includes/tiles
+msgid "Pannello dal vivo"
+msgstr "Panel en directo"
+
+#: includes/tiles
+msgid "Quando il pannello entra nello schermo le barre crescono, i numeri dei KPI contano fino al valore e la barra di «adesso» (l’ultima senza colore alternativo) pulsa. Con il movimento ridotto resta fermo."
+msgstr "Cuando el panel entra en pantalla las barras crecen, las cifras de los KPI cuentan hasta su valor y la barra de «ahora» (la última sin color alternativo) late. Con el movimiento reducido se queda quieto."
+
+#: includes/tiles
+msgid "Etichetta accanto al punto «in diretta»"
+msgstr "Etiqueta junto al punto «en directo»"

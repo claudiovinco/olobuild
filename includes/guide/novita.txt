@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.798 - 2026-10-15 (temi)
+- Nido Coworking più tecnologico: in apertura il pannello di oggi con le postazioni e le sale libere e l’occupazione ora per ora, poi il nastro delle dotazioni, chi c’è adesso coi dati dei sensori, la postazione coi punti da toccare, la fibra che si accende scorrendo e la prova raccontata come in un terminale. Pagina nuova «La tecnologia» (rete, sale con lo stato, prenotazioni via API, officina, domande tecniche), i piani nella pagina Spazi e il piano da comporre nella pagina Prezzi.
+- Hero: il pannello del modulo «Mockup» in versione dashboard può prendere vita quando entra nello schermo («Pannello dal vivo»): le barre crescono, i numeri contano fino al valore, la barra di «adesso» pulsa e accanto all’indirizzo compare il punto «in diretta».
+
 ## v1.4.795 - 2026-10-15 (fix)
 - Mega Menu: con la barra «Wide» o «Classica» il pannello «Larghezza della barra» è largo quanto il contenuto della barra (dal logo ai pulsanti), non quanto la finestra.
 - Schedule: su uno schermo stretto la tabella non taglia più le parole delle celle: ogni giorno tiene una larghezza minima e, se non ci sta, la tabella scorre di lato nel suo riquadro.

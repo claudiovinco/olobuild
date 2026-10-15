@@ -29335,3 +29335,15 @@ msgstr "Par défaut, la fenêtre a les coins du bas droits, comme si elle sortai
 #: includes/tiles
 msgid "Orario"
 msgstr "Horaires"
+
+#: includes/tiles
+msgid "Pannello dal vivo"
+msgstr "Tableau de bord en direct"
+
+#: includes/tiles
+msgid "Quando il pannello entra nello schermo le barre crescono, i numeri dei KPI contano fino al valore e la barra di «adesso» (l’ultima senza colore alternativo) pulsa. Con il movimento ridotto resta fermo."
+msgstr "Quand le tableau de bord entre à l’écran, les barres grandissent, les chiffres des KPI comptent jusqu’à leur valeur et la barre « maintenant » (la dernière sans couleur alternative) pulse. Avec le mouvement réduit, il reste immobile."
+
+#: includes/tiles
+msgid "Etichetta accanto al punto «in diretta»"
+msgstr "Libellé à côté du point « en direct »"

@@ -29335,3 +29335,15 @@ msgstr "Standardmäßig hat das Fenster unten eckige Ecken, als käme es aus dem
 #: includes/tiles
 msgid "Orario"
 msgstr "Stundenplan"
+
+#: includes/tiles
+msgid "Pannello dal vivo"
+msgstr "Live-Dashboard"
+
+#: includes/tiles
+msgid "Quando il pannello entra nello schermo le barre crescono, i numeri dei KPI contano fino al valore e la barra di «adesso» (l’ultima senza colore alternativo) pulsa. Con il movimento ridotto resta fermo."
+msgstr "Sobald das Dashboard ins Bild kommt, wachsen die Balken, die KPI-Zahlen zählen bis zu ihrem Wert hoch und der Balken für „jetzt“ (der letzte ohne Alternativfarbe) pulsiert. Bei reduzierter Bewegung bleibt es still."
+
+#: includes/tiles
+msgid "Etichetta accanto al punto «in diretta»"
+msgstr "Beschriftung neben dem „Live“-Punkt"
