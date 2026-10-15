@@ -3,6 +3,12 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.799 - 2026-10-15 (fix)
+- Titolo: la misura del titolo si può scegliere anche per tablet e telefono (selettore del dispositivo nel controllo «Titolo», fino a 320 px). Una scritta gigante, come «nido.» nel piè di pagina di Nido Coworking, sul telefono non esce più dallo schermo.
+- Elenco lavori: anche qui la misura del titolo per tablet e telefono; con titoli lunghi, come un programma di eventi, sul telefono non va più a capo ogni due parole.
+- Hero, pannello «Mockup»: sul telefono l’ultimo indicatore, se resta da solo, prende tutta la riga e il suo valore non va più a capo.
+- Nido Coworking: «nido.» col punto giallo nel logo, la prova su un fondo diverso da quello del piè di pagina, gli eventi con l’ora anche sul telefono, le schede delle sale nel giallo del marchio, le foto giuste per la cucina e per la terrazza nella pagina Spazi, «La tecnologia» e «Eventi» fra i link del piè di pagina.
+
 ## v1.4.798 - 2026-10-15 (temi)
 - Nido Coworking più tecnologico: in apertura il pannello di oggi con le postazioni e le sale libere e l’occupazione ora per ora, poi il nastro delle dotazioni, chi c’è adesso coi dati dei sensori, la postazione coi punti da toccare, la fibra che si accende scorrendo e la prova raccontata come in un terminale. Pagina nuova «La tecnologia» (rete, sale con lo stato, prenotazioni via API, officina, domande tecniche), i piani nella pagina Spazi e il piano da comporre nella pagina Prezzi.
 - Hero: il pannello del modulo «Mockup» in versione dashboard può prendere vita quando entra nello schermo («Pannello dal vivo»): le barre crescono, i numeri contano fino al valore, la barra di «adesso» pulsa e accanto all’indirizzo compare il punto «in diretta».

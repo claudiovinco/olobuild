@@ -69,6 +69,13 @@ class Olobuild_WorkList_Tile extends Olobuild_Tile_Base {
         $indent      = max( 0, min( 48, absint( $s['hover_indent'] ) ) );
         $number_size = max( 10, min( 20, absint( $s['number_size'] ) ) );
         $title_size  = max( 20, min( 72, absint( $s['title_size'] ) ) );
+        // Misure del titolo per tablet e telefono (selettore del dispositivo nel controllo «Titolo»). Vuote =
+        // come prima: sul tablet quella del computer, sul telefono al massimo il 9% della larghezza. Con titoli
+        // lunghi (un programma di eventi) il 9% andava a capo ogni due parole.
+        $title_t     = absint( $s['title_size_tablet'] ?? 0 );
+        $title_m     = absint( $s['title_size_mobile'] ?? 0 );
+        $title_t     = $title_t ? max( 20, min( 72, $title_t ) ) : 0;
+        $title_m     = $title_m ? max( 20, min( 72, $title_m ) ) : 0;
         $title_wt    = preg_match( '/^\d+$/', (string) $s['title_weight'] ) ? $s['title_weight'] : '500';
         $cat_size    = max( 10, min( 18, absint( $s['category_size'] ) ) );
         $year_size   = max( 10, min( 20, absint( $s['year_size'] ) ) );
@@ -155,10 +162,15 @@ class Olobuild_WorkList_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-worklist__arrow { width: 20px; height: 20px; opacity: 0; transform: translateX(-6px); transition: opacity .25s ease, transform .25s ease; justify-self: end; }
             .<?php echo $uid; ?> .olo-worklist__row:hover .olo-worklist__arrow { opacity: 1; transform: none; }
             .<?php echo $uid; ?> a.olo-worklist__row:focus-visible { outline: 2px solid <?php echo $arrow_c; ?>; outline-offset: -2px; }
+            <?php if ( $title_t ) : ?>
+            @media (max-width: 960px) {
+                .<?php echo $uid; ?> .olo-worklist__t { font-size: <?php echo (int) $title_t; ?>px !important; }
+            }
+            <?php endif; ?>
             @media (max-width: 640px) {
                 .<?php echo $uid; ?> .olo-worklist__row { grid-template-columns: <?php echo $cols_m; ?>; gap: 14px; }
                 .<?php echo $uid; ?> .olo-worklist__cat { display: none; }
-                .<?php echo $uid; ?> .olo-worklist__t { font-size: min(<?php echo (int) $title_size; ?>px, 9vw) !important; overflow-wrap: anywhere; }
+                .<?php echo $uid; ?> .olo-worklist__t { font-size: <?php echo $title_m ? (int) $title_m . 'px' : 'min(' . (int) ( $title_t ? $title_t : $title_size ) . 'px, 9vw)'; ?> !important; overflow-wrap: anywhere; }
                 .<?php echo $uid; ?> .olo-worklist__yr { text-align: right; }
             }
         </style>

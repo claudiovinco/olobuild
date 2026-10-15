@@ -28,6 +28,8 @@ export default {
     typography_preset: '',
     heading_size: 'lg',
     heading_font_size: '0',
+    heading_font_size_tablet: '',
+    heading_font_size_mobile: '',
     subtitle_font_size: '0',
     subtitle_font_family: '',
     subtitle_font_weight: '',
@@ -101,7 +103,7 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'),
-      responsiveKeys: [],
+      responsiveKeys: ['size'],
       keys: {
         tag:       'tag',
         size:      'heading_font_size',
@@ -111,7 +113,8 @@ export default {
         uppercase: 'heading_uppercase',
         italic:    'heading_italic',
       },
-      sizeMin: 0, sizeMax: 120, sizeStep: 1,
+      // fino a 320: le scritte giganti dei piè di pagina dei temi arrivano a 240 px
+      sizeMin: 0, sizeMax: 320, sizeStep: 1,
     },
     { type: 'typography', label: t('Sottotitolo'),
       responsiveKeys: [],

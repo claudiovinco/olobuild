@@ -430,7 +430,8 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-hero-chcol i{display:block;width:100%;border-radius:3px 3px 0 0;background:linear-gradient(180deg,<?php echo $accent_css; ?>,<?php echo $mix( $accent_css, 0.25 ); ?>);min-height:4px;}
             .<?php echo $uid; ?> .olo-hero-chcol i.alt{background:linear-gradient(180deg,<?php echo $mixc( 50 ); ?>,<?php echo $mixc( 15 ); ?>);}
             .<?php echo $uid; ?> .olo-hero-chcol span{font-family:<?php echo $mono_ff; ?>;font-size:9.5px;text-align:center;opacity:.55;}
-            @media(max-width:680px){.<?php echo $uid; ?> .olo-hero-mockbody{grid-template-columns:1fr 1fr;}}
+            <?php // Due colonne sul telefono: l'ultimo indicatore, se dispari, prende tutta la riga (restava solo a metà, col valore a capo). ?>
+            @media(max-width:680px){.<?php echo $uid; ?> .olo-hero-mockbody{grid-template-columns:1fr 1fr;}.<?php echo $uid; ?> .olo-hero-kpi:nth-child(odd):nth-last-child(2){grid-column:1/-1;}}
             <?php if ( ! empty( $s['mock_live'] ) ) : ?>
             .<?php echo $uid; ?> .olo-hero-live{margin-left:auto;display:inline-flex;align-items:center;gap:.6em;font-family:<?php echo $mono_ff; ?>;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:.35em .95em .35em .85em;border-radius:2em;background:<?php echo $mixc( 8 ); ?>;}
             .<?php echo $uid; ?> .olo-hero-live i{width:7px;height:7px;border-radius:50%;background:<?php echo $accent_css; ?>;animation:olo-hero-live-dot 1.6s ease-out infinite;}

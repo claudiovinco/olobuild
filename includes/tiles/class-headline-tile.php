@@ -147,9 +147,16 @@ class Olobuild_Headline_Tile extends Olobuild_Tile_Base {
         }
         // Font size custom: override del preset uk-heading-* quando > 0
         $hd_fs = absint( $s['heading_font_size'] ?? 0 );
+        // Misure per tablet e telefono (selettore del dispositivo nel controllo «Titolo»), vuote = quella
+        // del computer. Con una di esse in linea va una variabile, che le regole per dispositivo cambiano
+        // sul contenitore: un font-size in linea con !important non lo batterebbe nessuna media query.
+        // Una scritta gigante (240 px nei piè di pagina dei temi) sul telefono usciva dallo schermo.
+        $hd_fs_t  = absint( $s['heading_font_size_tablet'] ?? 0 );
+        $hd_fs_m  = absint( $s['heading_font_size_mobile'] ?? 0 );
+        $hd_resp  = $hd_fs_t || $hd_fs_m;
         if ( $hd_fs > 0 ) {
             // !important per battere uk-heading-* che ha font-size molto specifica
-            $heading_style .= 'font-size:' . $hd_fs . 'px !important;line-height:1.2;';
+            $heading_style .= 'font-size:' . ( $hd_resp ? 'var(--olo-hl-fs,' . $hd_fs . 'px)' : $hd_fs . 'px' ) . ' !important;line-height:1.2;';
         }
         // Gradient wins over heading_color
         if ( ! $has_gradient && $hd_clr ) {
@@ -159,6 +166,17 @@ class Olobuild_Headline_Tile extends Olobuild_Tile_Base {
 
         // Unique ID for scoped styles
         $uid = 'olo-hl-' . wp_rand( 10000, 99999 );
+
+        // Regole per dispositivo della misura del titolo (vedi sopra). Senza misura del computer (preset
+        // uk-heading-*) la regola dà anche la proprietà, non solo la variabile; il telefono viene dopo e vince.
+        $fs_css = '';
+        foreach ( [ 960 => $hd_fs_t, 640 => $hd_fs_m ] as $bp => $px ) {
+            if ( ! $px ) {
+                continue;
+            }
+            $fs_css .= '@media (max-width:' . $bp . 'px){.' . $uid . '{--olo-hl-fs:' . $px . 'px}'
+                . ( $hd_fs > 0 ? '' : '.' . $uid . ' [data-olo-wave]{font-size:var(--olo-hl-fs) !important;line-height:1.2}' ) . '}';
+        }
 
         // Heading text — support multiline via \n or <br>
         $raw = $s['heading'];
@@ -205,11 +223,12 @@ class Olobuild_Headline_Tile extends Olobuild_Tile_Base {
         ob_start();
 
         $is_line     = $s['decoration'] === 'line';
-        $needs_style = $has_gradient || $dec_clr || $is_line;
+        $needs_style = $has_gradient || $dec_clr || $is_line || '' !== $fs_css;
         if ( $needs_style ) :
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for gradient/decoration colors, absint() for the angle and the internally generated $uid. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for gradient/decoration colors, absint() for the angle and the per-device sizes, and the internally generated $uid. ?>
         <style>
+        <?php echo $fs_css; ?>
         <?php if ( $has_gradient ) :
             $gf = $this->safe_color_css( $s['gradient_from'] ) ?: 'var(--olo-color-primary, #e1474f)';
             $gt = $this->safe_color_css( $s['gradient_to'] ) ?: 'var(--olo-color-accent, #f4a23b)';
