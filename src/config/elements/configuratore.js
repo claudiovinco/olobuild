@@ -1,0 +1,289 @@
+import { ratioOptions } from './_imageFrame.js';
+import { t } from '@/i18n';
+
+/**
+ * Configuratore — gruppi di opzioni con il totale che si aggiorna, il riepilogo e la richiesta: un computer da
+ * comporre, un abbonamento coi servizi in più, un pacchetto di consulenza. Ogni gruppo è un fieldset con controlli
+ * veri (radio per «una scelta», checkbox per «più scelte», − / + per «quantità»), disegnati come schede o righe; le
+ * opzioni stanno in un elenco solo e indicano il loro gruppo con l'id (o col titolo). Totale = prezzo base + le
+ * differenze delle scelte, nella lingua della pagina; indicatori a barre dai punti delle opzioni; il pulsante segnala
+ * i gruppi obbligatori vuoti, apre il collegamento ({configurazione}, {totale}) e/o scrive il riepilogo nel campo di
+ * un Form Contatti della pagina. Nata per i temi della serie palestra/consulenza/informatica (15 ott 2026).
+ * Renderer: includes/tiles/class-configuratore-tile.php.
+ *   fields[]      → gruppi · opzioni · prezzo · indicatori · riepilogo · richiesta
+ *   styleFields[] → Aspetto · Testo · Opzioni · Badge · Riepilogo · Indicatori · Disposizione
+ * Etichette scelte per non cadere su msgid già tradotti con un altro senso: «Schede» = Tabs, «Punti» = Dots,
+ * «Predefinita» = default (minuscolo) nei cataloghi.
+ */
+const conSchede = { field: 'vista_opzioni', op: 'eq', value: 'schede' };
+const conRiepilogo = { field: 'riepilogo', op: 'eq', value: true };
+const conPulsante = { field: 'testo_pulsante', op: 'notEmpty' };
+const conPrezzi = { field: 'mostra_differenze', op: 'eq', value: true };
+const voci = (s, k) => (Array.isArray(s?.[k]) ? s[k] : []);
+const conBadge = (s) => voci(s, 'opzioni').some((o) => String(o?.badge || '').trim() !== '');
+const conImmagini = (s) => voci(s, 'opzioni').some((o) => !!(o?.immagine && (o.immagine.url || typeof o.immagine === 'string')));
+const conIndicatori = (s) => voci(s, 'indicatori').some((d) => String(d?.nome || '').trim() !== '');
+
+const OMBRE = [
+  { value: 'none', label: t('Nessuna') },
+  { value: 'sm', label: t('Leggera') },
+  { value: 'md', label: t('Media') },
+  { value: 'lg', label: t('Forte') },
+  { value: 'xl', label: t('Molto forte') },
+  { value: 'custom', label: t('Personalizzata') },
+];
+
+export default {
+  type: 'configuratore',
+  name: t('Configuratore'),
+  icon: 'dashicons-calculator',
+  category: 'interactive',
+
+  defaults: {
+    gruppi: [
+      { id: 'cpu', titolo: t('Processore'), tipo: 'uno', obbligatorio: true, aiuto: t('Più core aiutano nel montaggio video e nel rendering; una frequenza alta fa girare meglio i giochi.') },
+      { id: 'ram', titolo: t('Memoria'), tipo: 'uno', obbligatorio: true, aiuto: '' },
+      { id: 'servizi', titolo: t('Servizi'), tipo: 'piu', obbligatorio: false, aiuto: '' },
+      { id: 'monitor', titolo: t('Monitor'), tipo: 'quantita', obbligatorio: false, aiuto: t('Fino a tre monitor sulla stessa scheda video.') },
+    ],
+    opzioni: [
+      { id: 'cpu-6', gruppo: 'cpu', nome: t('6 core · 4,6 GHz'), descrizione: t('Ufficio, studio e giochi in Full HD.'), prezzo: 0, immagine: '', badge: '', predefinita: true, punti: 'giochi:35,lavoro:30', min: 0, max: 10 },
+      { id: 'cpu-8', gruppo: 'cpu', nome: t('8 core · 5,0 GHz'), descrizione: t('Giochi in QHD e montaggi leggeri.'), prezzo: 120, immagine: '', badge: t('Consigliato'), predefinita: false, punti: 'giochi:50,lavoro:45', min: 0, max: 10 },
+      { id: 'cpu-16', gruppo: 'cpu', nome: t('16 core · 5,4 GHz'), descrizione: t('Rendering 3D e video in 4K.'), prezzo: 380, immagine: '', badge: '', predefinita: false, punti: 'giochi:55,lavoro:65', min: 0, max: 10 },
+      { id: 'ram-16', gruppo: 'ram', nome: '16 GB', descrizione: t('Dieci schede aperte senza rallentare.'), prezzo: 0, immagine: '', badge: '', predefinita: true, punti: 'giochi:15,lavoro:10', min: 0, max: 10 },
+      { id: 'ram-32', gruppo: 'ram', nome: '32 GB', descrizione: t('Giochi recenti e fotoritocco.'), prezzo: 90, immagine: '', badge: '', predefinita: false, punti: 'giochi:25,lavoro:20', min: 0, max: 10 },
+      { id: 'ram-64', gruppo: 'ram', nome: '64 GB', descrizione: t('Macchine virtuali e progetti pesanti.'), prezzo: 240, immagine: '', badge: '', predefinita: false, punti: 'giochi:25,lavoro:30', min: 0, max: 10 },
+      { id: 'srv-montaggio', gruppo: 'servizi', nome: t('Montaggio e collaudo'), descrizione: t('Lo assembliamo e lo proviamo per 24 ore.'), prezzo: 0, immagine: '', badge: '', predefinita: true, punti: '', min: 0, max: 10 },
+      { id: 'srv-sistema', gruppo: 'servizi', nome: t('Sistema installato'), descrizione: t('Sistema operativo, driver e aggiornamenti.'), prezzo: 49, immagine: '', badge: '', predefinita: false, punti: '', min: 0, max: 10 },
+      { id: 'srv-garanzia', gruppo: 'servizi', nome: t('Garanzia 3 anni'), descrizione: t('Ritiro e riconsegna a domicilio.'), prezzo: 79, immagine: '', badge: '', predefinita: false, punti: '', min: 0, max: 10 },
+      { id: 'mon-27', gruppo: 'monitor', nome: t('Monitor 27″ QHD'), descrizione: t('165 Hz, pannello IPS.'), prezzo: 289, immagine: '', badge: '', predefinita: false, punti: 'giochi:10', min: 0, max: 3 },
+    ],
+    prezzo_base: 899,
+    valuta: '€',
+    testo_totale: t('Totale'),
+    nota_prezzo: t('IVA inclusa'),
+    periodo: '',
+    mostra_differenze: true,
+    indicatori: [
+      { id: 'giochi', nome: t('Giochi'), massimo: 100 },
+      { id: 'lavoro', nome: t('Lavoro'), massimo: 100 },
+    ],
+    riepilogo: true,
+    titolo_riepilogo: t('La tua configurazione'),
+    testo_pulsante: t('Richiedi il preventivo'),
+    link_azione: '',
+    campo_modulo: 'messaggio',
+    testo_azzera: t('Ricomincia'),
+
+    vista_opzioni: 'schede',
+    disposizione: 'lato',
+    sfondo_scheda: '',
+    bordo_scheda: {},
+    colore_scelta: '',
+    sfondo_scelta: '',
+    colore_testo: '',
+    colore_tenue: '',
+    colore_prezzo: '',
+    sfondo_riepilogo: '',
+    sfondo_badge: '',
+    colore_badge: '',
+    colore_indicatori: '',
+    raggio_scheda: { tl: 12, tr: 12, br: 12, bl: 12 },
+    ombra: 'none',
+    ombra_h: '0',
+    ombra_v: '4',
+    ombra_blur: '10',
+    ombra_spread: '0',
+    ombra_color: 'rgba(0,0,0,0.15)',
+    ombra_inset: false,
+    gruppo_font_family: 'heading',
+    gruppo_font_size: 20,
+    gruppo_font_size_tablet: '',
+    gruppo_font_size_mobile: '',
+    gruppo_font_weight: '600',
+    gruppo_color: '',
+    opzione_font_family: '',
+    opzione_font_size: 16,
+    opzione_font_size_tablet: '',
+    opzione_font_size_mobile: '',
+    opzione_font_weight: '600',
+    opzione_color: '',
+    descrizione_font_family: '',
+    descrizione_font_size: 14,
+    descrizione_font_size_tablet: '',
+    descrizione_font_size_mobile: '',
+    descrizione_font_weight: '400',
+    descrizione_color: '',
+    prezzo_font_family: '',
+    prezzo_font_size: 14,
+    prezzo_font_size_tablet: '',
+    prezzo_font_size_mobile: '',
+    prezzo_font_weight: '600',
+    totale_font_family: 'heading',
+    totale_font_size: 34,
+    totale_font_size_tablet: '',
+    totale_font_size_mobile: '',
+    totale_font_weight: '700',
+    totale_color: '',
+    proporzione_immagine: '3/2',
+    colonne: 3,
+    gap: 16,
+  },
+
+  fields: [
+    { type: 'separator', label: t('Gruppi') },
+    { key: 'gruppi', label: t('Gruppi'), type: 'content-items', itemLabel: t('Gruppo'), etichettaDa: 'titolo',
+      description: t('Un gruppo per ogni scelta da fare: il processore, la memoria, i servizi. Le opzioni entrano in un gruppo scrivendo il suo ID (o il suo titolo) nel loro campo Gruppo.'),
+      newItemDefaults: { titolo: '', tipo: 'uno', obbligatorio: true, aiuto: '' },
+      itemFields: [
+        { key: 'titolo', label: t('Titolo'), type: 'text' },
+        { key: 'id', label: t('ID'), type: 'text', placeholder: 'cpu',
+          description: t('Una parola senza spazi, per esempio cpu, da scrivere nel campo Gruppo delle sue opzioni. Vuoto o automatico (ci-…): vale il titolo.') },
+        { key: 'tipo', label: t('Tipo di scelta'), type: 'select', options: [
+          { value: 'uno', label: t('Una scelta') },
+          { value: 'piu', label: t('Più scelte') },
+          { value: 'quantita', label: t('Quantità') },
+        ], description: t('Una scelta: si prende un\'opzione sola. Più scelte: quante se ne vuole. Quantità: per ogni opzione un numero, con − e +, fra il minimo e il massimo dell\'opzione.') },
+        { key: 'obbligatorio', label: t('Obbligatorio'), type: 'toggle',
+          description: t('Prima di inviare la richiesta il gruppo deve avere una scelta. In un gruppo «Una scelta» obbligatorio parte scelta la prima opzione, se nessuna ha «Scelta all\'inizio»; in uno facoltativo un secondo clic toglie la scelta.') },
+        { key: 'aiuto', label: t('Aiuto'), type: 'textarea',
+          description: t('Una frase che aiuta a scegliere: sul sito si apre dalla (i) accanto al titolo del gruppo. Vuota: niente (i).') },
+      ] },
+
+    { type: 'separator', label: t('Opzioni') },
+    { key: 'opzioni', label: t('Opzioni'), type: 'content-items', itemLabel: t('Opzione'), etichettaDa: 'nome', miniaturaDa: 'immagine',
+      description: t('Tutte le opzioni, nell\'ordine in cui compaiono, ognuna col suo gruppo. Il prezzo è la differenza sul prezzo base: 0 = inclusa, un numero negativo = uno sconto.'),
+      newItemDefaults: { gruppo: '', nome: '', descrizione: '', prezzo: 0, immagine: '', badge: '', predefinita: false, punti: '', min: 0, max: 10 },
+      itemFields: [
+        { key: 'gruppo', label: t('Gruppo'), type: 'text', placeholder: 'cpu',
+          description: t('L\'ID del gruppo in cui compare l\'opzione (va bene anche il titolo del gruppo).') },
+        { key: 'nome', label: t('Nome'), type: 'text' },
+        { key: 'descrizione', label: t('Descrizione'), type: 'textarea' },
+        { key: 'prezzo', label: t('Prezzo'), type: 'number', step: 0.01,
+          description: t('La differenza sul prezzo base: 120 = più 120, 0 = inclusa, −30 = uno sconto. Nei gruppi «Quantità» vale per ogni pezzo.') },
+        { key: 'immagine', label: t('Immagine'), type: 'image' },
+        { key: 'badge', label: t('Badge'), type: 'text',
+          description: t('Una parola in evidenza sull\'opzione: «Consigliato», «Novità». Vuoto: niente.') },
+        { key: 'predefinita', label: t('Scelta all\'inizio'), type: 'toggle',
+          description: t('Parte già scelta, e «Ricomincia» la rimette così. In un gruppo «Una scelta» vale la prima che ce l\'ha; nei gruppi «Quantità» parte da 1.') },
+        { key: 'punti', label: t('Punti per gli indicatori'), type: 'text', placeholder: 'giochi:40,lavoro:25',
+          description: t('L\'ID di ogni indicatore, due punti e il valore, separati da una virgola. Vuoto: l\'opzione non conta negli indicatori.') },
+        { key: 'min', label: t('Quantità minima'), type: 'number', min: 0, step: 1,
+          description: t('Solo nei gruppi «Quantità»: il numero più basso che si può scegliere.') },
+        { key: 'max', label: t('Quantità massima'), type: 'number', min: 1, step: 1,
+          description: t('Solo nei gruppi «Quantità»: il numero più alto che si può scegliere.') },
+      ] },
+
+    { type: 'separator', label: t('Prezzo') },
+    { key: 'prezzo_base', label: t('Prezzo base'), type: 'number', step: 0.01,
+      description: t('Il prezzo di partenza: il totale è il prezzo base più le differenze delle opzioni scelte.') },
+    { key: 'valuta', label: t('Valuta'), type: 'text', placeholder: '€',
+      description: t('Il simbolo accanto ai prezzi: prima o dopo il numero, come si usa nella lingua della pagina. Vuota: solo il numero.') },
+    { key: 'periodo', label: t('Periodo'), type: 'text',
+      description: t('Dopo il totale: «/mese», «/anno». Vuoto: un prezzo una tantum.') },
+    { key: 'testo_totale', label: t('Testo del totale'), type: 'text' },
+    { key: 'nota_prezzo', label: t('Nota sul prezzo'), type: 'text',
+      description: t('Sotto il totale: «IVA inclusa», «Spedizione gratuita». Vuota: niente.') },
+    { key: 'mostra_differenze', label: t('Mostra i prezzi delle opzioni'), type: 'toggle',
+      description: t('Su ogni opzione e nel riepilogo la sua differenza («+120 €», «Incluso»). Spento: si vede solo il totale.') },
+
+    { type: 'separator', label: t('Indicatori') },
+    { key: 'indicatori', label: t('Indicatori'), type: 'content-items', itemLabel: t('Indicatore'), etichettaDa: 'nome',
+      description: t('Facoltativi: barre nel riepilogo che sommano i punti delle opzioni scelte, fino al massimo; per esempio quanto la configurazione va bene per giocare o per lavorare.'),
+      newItemDefaults: { nome: '', massimo: 100 },
+      itemFields: [
+        { key: 'nome', label: t('Nome'), type: 'text' },
+        { key: 'id', label: t('ID'), type: 'text', placeholder: 'giochi',
+          description: t('La parola da scrivere nel campo «Punti per gli indicatori» delle opzioni. Vuoto o automatico (ci-…): vale il nome.') },
+        { key: 'massimo', label: t('Massimo'), type: 'number', min: 1, step: 1,
+          description: t('Il valore della barra piena.') },
+      ] },
+
+    { type: 'separator', label: t('Riepilogo') },
+    { key: 'riepilogo', label: t('Mostra il riepilogo'), type: 'toggle',
+      description: t('L\'elenco delle scelte gruppo per gruppo, sopra il totale. Spento: restano il totale, gli indicatori e i pulsanti.') },
+    { key: 'titolo_riepilogo', label: t('Titolo del riepilogo'), type: 'text', condition: conRiepilogo },
+    { key: 'testo_azzera', label: t('Testo «Ricomincia»'), type: 'text',
+      description: t('Il pulsante che riporta tutte le scelte a come erano all\'inizio. Vuoto: niente pulsante.') },
+
+    { type: 'separator', label: t('Richiesta') },
+    { key: 'testo_pulsante', label: t('Testo del pulsante'), type: 'text',
+      description: t('Vuoto: niente pulsante.') },
+    { key: 'link_azione', label: t('Collegamento'), type: 'text', placeholder: '/contatti/?messaggio={configurazione}', condition: conPulsante,
+      description: t('Dove porta il pulsante, coi segnaposto {configurazione} (il riepilogo in testo) e {totale}: una pagina del sito, un indirizzo mailto: o un portale. Vuoto: il pulsante porta al Form Contatti della pagina che ha il campo qui sotto, e sul sito compare solo se quel Form c\'è.') },
+    { key: 'campo_modulo', label: t('Campo del modulo'), type: 'text', placeholder: 'messaggio',
+      description: t('Il nome di un campo di un Form Contatti nella stessa pagina, per esempio messaggio: dopo ogni scelta ci scrive il riepilogo (se il campo è vuoto o ha ancora il riepilogo di prima), e il pulsante lo riscrive e ci porta. Vuoto: nessun modulo.') },
+  ],
+
+  styleFields: [
+    { type: 'separator', label: t('Aspetto') },
+    { key: 'colore_testo', label: t('Colore del testo'), type: 'color',
+      description: t('Nomi e testi delle opzioni. Vuoto: il colore del testo della sezione.') },
+    { key: 'colore_tenue', label: t('Colore tenue'), type: 'color',
+      description: t('Descrizioni, «Incluso» e la (i) dell\'aiuto. Vuoto: il colore del testo, più chiaro.') },
+    { key: 'ombra', label: t('Ombra'), type: 'select', options: OMBRE,
+      description: t('Sotto le schede e sotto il riepilogo.') },
+    { key: 'ombra_custom', label: t('Ombra personalizzata'), type: 'box-shadow',
+      legacyKeys: { h: 'ombra_h', v: 'ombra_v', blur: 'ombra_blur', spread: 'ombra_spread', color: 'ombra_color', inset: 'ombra_inset' },
+      condition: { field: 'ombra', op: 'eq', value: 'custom' } },
+
+    { type: 'separator', label: t('Testo') },
+    { type: 'typography', label: t('Titolo del gruppo'), responsiveKeys: ['size'],
+      keys: { family: 'gruppo_font_family', size: 'gruppo_font_size', weight: 'gruppo_font_weight', color: 'gruppo_color' },
+      sizeMin: 14, sizeMax: 40, sizeStep: 1 },
+    { type: 'typography', label: t('Nome dell\'opzione'), responsiveKeys: ['size'],
+      keys: { family: 'opzione_font_family', size: 'opzione_font_size', weight: 'opzione_font_weight', color: 'opzione_color' },
+      sizeMin: 12, sizeMax: 28 },
+    { type: 'typography', label: t('Descrizione'), responsiveKeys: ['size'],
+      keys: { family: 'descrizione_font_family', size: 'descrizione_font_size', weight: 'descrizione_font_weight', color: 'descrizione_color' },
+      sizeMin: 12, sizeMax: 22 },
+    { type: 'typography', label: t('Prezzo'), responsiveKeys: ['size'], condition: conPrezzi,
+      keys: { family: 'prezzo_font_family', size: 'prezzo_font_size', weight: 'prezzo_font_weight', color: 'colore_prezzo' },
+      sizeMin: 12, sizeMax: 24 },
+    { type: 'typography', label: t('Totale'), responsiveKeys: ['size'],
+      keys: { family: 'totale_font_family', size: 'totale_font_size', weight: 'totale_font_weight', color: 'totale_color' },
+      sizeMin: 18, sizeMax: 64, sizeStep: 1 },
+
+    { type: 'separator', label: t('Opzioni') },
+    { key: 'sfondo_scheda', label: t('Sfondo scheda'), type: 'color',
+      description: t('Vuoto: trasparente, sul fondo della sezione. Con uno sfondo scelto il testo diventa quello che lì si legge.') },
+    { key: 'bordo_scheda', label: t('Bordo scheda'), type: 'border',
+      description: t('Vuoto: un filo leggero del colore del testo.') },
+    { key: 'raggio_scheda', label: t('Raggio scheda'), type: 'border-radius',
+      description: t('Delle schede, del riepilogo e della sua barra.') },
+    { key: 'colore_scelta', label: t('Colore della scelta'), type: 'color',
+      description: t('Bordo, anello e spunta dell\'opzione scelta; è anche il colore del badge e degli indicatori, se non ne scegli uno. Vuoto: il primario del tema.') },
+    { key: 'sfondo_scelta', label: t('Sfondo della scelta'), type: 'color',
+      description: t('Il fondo dell\'opzione scelta. Vuoto: il colore della scelta, appena velato.') },
+    { key: 'proporzione_immagine', label: t('Proporzioni immagini'), type: 'select', options: ratioOptions({ auto: false }),
+      show: conImmagini },
+
+    { type: 'separator', label: t('Badge'), show: conBadge },
+    { key: 'sfondo_badge', label: t('Sfondo badge'), type: 'color',
+      description: t('Vuoto: il colore della scelta.') },
+    { key: 'colore_badge', label: t('Colore testo badge'), type: 'color',
+      description: t('Vuoto: il colore che si legge sullo sfondo del badge.') },
+
+    { type: 'separator', label: t('Riepilogo') },
+    { key: 'sfondo_riepilogo', label: t('Sfondo riepilogo'), type: 'color',
+      description: t('Il pannello col totale e la sua barra in fondo allo schermo. Vuoto: il fondo del tema, appena velato. Il testo prende da solo il colore che lì si legge.') },
+
+    { type: 'separator', label: t('Indicatori'), show: conIndicatori },
+    { key: 'colore_indicatori', label: t('Colore indicatori'), type: 'color',
+      description: t('Le barre. Vuoto: il colore della scelta.') },
+
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'vista_opzioni', label: t('Vista delle opzioni'), type: 'select', options: [
+      { value: 'schede', label: t('Schede in griglia') },
+      { value: 'righe', label: t('Righe compatte') },
+    ], description: t('Schede: in griglia, con l\'immagine in alto. Righe: una sotto l\'altra, col prezzo a destra; occupano meno spazio, anche sul telefono.') },
+    { key: 'disposizione', label: t('Posizione del riepilogo'), type: 'select', options: [
+      { value: 'lato', label: t('Accanto alle opzioni') },
+      { value: 'sotto', label: t('Sotto le opzioni') },
+    ], description: t('Accanto: resta in vista mentre si scorrono le opzioni. Sotto i 960 px, o in una colonna stretta, va sotto, e la sua barra col totale resta in fondo allo schermo finché si sceglie.') },
+    { key: 'colonne', label: t('Colonne'), type: 'range', min: 1, max: 4, step: 1, responsive: true, condition: conSchede,
+      description: t('Delle schede. Se lo spazio non basta la griglia ne mette meno da sola; sul tablet al massimo due e sul telefono una, se non ne scegli altre per quei dispositivi.') },
+    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 2, unit: 'px',
+      description: t('Fra le opzioni.') },
+  ],
+};

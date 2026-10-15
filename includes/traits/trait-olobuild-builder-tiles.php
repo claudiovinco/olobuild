@@ -115,6 +115,11 @@ trait Olobuild_Builder_Tiles_Trait {
         require_once OLOBUILD_PATH . 'includes/tiles/class-schedatecnica-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-provamateriale-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-tracciamento-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-orariocorsi-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-soggiorni-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-configuratore-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-tour360-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-lucchetto-tile.php';
 
         require_once OLOBUILD_PATH . 'includes/tiles/class-social-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-map-tile.php';
@@ -393,6 +398,11 @@ trait Olobuild_Builder_Tiles_Trait {
         $manager->register_tile( new Olobuild_Schedatecnica_Tile() );
         $manager->register_tile( new Olobuild_Provamateriale_Tile() );
         $manager->register_tile( new Olobuild_Tracciamento_Tile() );
+        $manager->register_tile( new Olobuild_Orariocorsi_Tile() );
+        $manager->register_tile( new Olobuild_Soggiorni_Tile() );
+        $manager->register_tile( new Olobuild_Configuratore_Tile() );
+        $manager->register_tile( new Olobuild_Tour360_Tile() );
+        $manager->register_tile( new Olobuild_Lucchetto_Tile() );
         // Vetrina temi: solo dove le demo dei temi sono accese (Olobuild_Demo_Temi), altrove non
         // avrebbe niente da mostrare e non entra nella palette.
         if ( class_exists( 'Olobuild_Demo_Temi' ) && Olobuild_Demo_Temi::accese() ) {

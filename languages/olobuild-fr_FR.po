@@ -27355,3 +27355,1835 @@ msgstr "Colonnes (tablette)"
 #: src/config/elements/overlaygrid.js
 msgid "Come il mobile"
 msgstr "Comme sur mobile"
+
+#: src/config/elements/orariocorsi.js
+msgid "Non indicato"
+msgstr "Non précisé"
+
+#: src/config/elements/orariocorsi.js includes/tiles/class-orariocorsi-tile.php
+msgid "Principianti"
+msgstr "Débutant"
+
+#: src/config/elements/orariocorsi.js includes/tiles/class-orariocorsi-tile.php
+msgid "Intermedi"
+msgstr "Intermédiaire"
+
+#: src/config/elements/orariocorsi.js includes/tiles/class-orariocorsi-tile.php
+msgid "Avanzati"
+msgstr "Avancé"
+
+#: src/config/elements/orariocorsi.js includes/tiles/class-orariocorsi-tile.php
+msgid "Tutti i livelli"
+msgstr "Tous niveaux"
+
+#: src/config/elements/orariocorsi.js
+msgid "Orario corsi"
+msgstr "Planning des cours"
+
+#: src/config/elements/orariocorsi.js
+msgid "Indoor cycling"
+msgstr "Vélo indoor"
+
+#: src/config/elements/orariocorsi.js
+msgid "Pedalata a ritmo di musica, fra salite e sprint guidati: si suda e ci si diverte."
+msgstr "Vous pédalez au rythme de la musique, entre montées et sprints guidés : vous transpirez et vous vous amusez."
+
+#: src/config/elements/orariocorsi.js
+msgid "Pilates"
+msgstr "Pilates"
+
+#: src/config/elements/orariocorsi.js
+msgid "Core, postura e respiro sul tappetino, con movimenti lenti e precisi."
+msgstr "Gainage, posture et respiration sur le tapis, avec des mouvements lents et précis."
+
+#: src/config/elements/orariocorsi.js
+msgid "Yoga flow"
+msgstr "Yoga flow"
+
+#: src/config/elements/orariocorsi.js
+msgid "Sequenze fluide che uniscono forza, equilibrio e respiro."
+msgstr "Des enchaînements fluides qui allient force, équilibre et respiration."
+
+#: src/config/elements/orariocorsi.js
+msgid "Functional training"
+msgstr "Entraînement fonctionnel"
+
+#: src/config/elements/orariocorsi.js
+msgid "Circuiti a corpo libero e con piccoli attrezzi, per forza e resistenza."
+msgstr "Des circuits au poids du corps et avec du petit matériel, pour la force et l'endurance."
+
+#: src/config/elements/orariocorsi.js
+msgid "Boxe fit"
+msgstr "Boxe fitness"
+
+#: src/config/elements/orariocorsi.js
+msgid "I colpi della boxe al sacco e tanto allenamento, senza contatto."
+msgstr "Les coups de la boxe au sac et beaucoup d'entraînement, sans contact."
+
+#: src/config/elements/orariocorsi.js
+msgid "Sala Spin"
+msgstr "Salle de spinning"
+
+#: src/config/elements/orariocorsi.js
+msgid "Porta un asciugamano e una borraccia."
+msgstr "Apportez une serviette et une gourde."
+
+#: src/config/elements/orariocorsi.js
+msgid "Studio"
+msgstr "Studio"
+
+#: src/config/elements/orariocorsi.js
+msgid "Sala 1"
+msgstr "Salle 1"
+
+#: src/config/elements/orariocorsi.js
+msgid "Sala 2"
+msgstr "Salle 2"
+
+#: src/config/elements/orariocorsi.js
+msgid "Mezz'ora intensa, per la pausa pranzo."
+msgstr "Une demi-heure intense, pour votre pause déjeuner."
+
+#: src/config/elements/orariocorsi.js
+msgid "I guantoni te li prestiamo noi, alla reception."
+msgstr "Nous vous prêtons les gants à l'accueil."
+
+#: src/config/elements/orariocorsi.js
+msgid "Con la bella stagione si fa in giardino."
+msgstr "Aux beaux jours, elle a lieu dans le jardin."
+
+#: src/config/elements/orariocorsi.js includes/tiles/class-orariocorsi-tile.php
+msgid "Lunedì,Martedì,Mercoledì,Giovedì,Venerdì,Sabato,Domenica"
+msgstr "Lundi,Mardi,Mercredi,Jeudi,Vendredi,Samedi,Dimanche"
+
+#: src/config/elements/orariocorsi.js includes/tiles/class-orariocorsi-tile.php
+msgid "Nessuna lezione con questi filtri."
+msgstr "Aucun cours avec ces filtres."
+
+#: src/config/elements/orariocorsi.js includes/tiles/class-orariocorsi-tile.php
+msgid "Corsi"
+msgstr "Cours"
+
+#: src/config/elements/orariocorsi.js
+msgid "Corso"
+msgstr "Cours"
+
+#: src/config/elements/orariocorsi.js
+msgid "Un corso per attività: il nome, una frase che lo racconta (si legge nei dettagli della lezione) e la durata. Le lezioni lo richiamano col suo nome. I colori stanno nello Stile; senza colore ogni corso prende uno dei colori del tema."
+msgstr "Un cours par activité : le nom, une phrase qui le décrit (elle s'affiche dans les détails de la séance) et la durée. Les séances l'appellent par son nom. Les couleurs sont dans Style ; sans couleur, chaque cours prend l'une des couleurs du thème."
+
+#: src/config/elements/orariocorsi.js
+msgid "Durata in minuti"
+msgstr "Durée en minutes"
+
+#: src/config/elements/orariocorsi.js
+msgid "Facoltativa: vale per le lezioni scritte senza l'ora di fine."
+msgstr "Facultative : elle s'applique aux séances saisies sans heure de fin."
+
+#: src/config/elements/orariocorsi.js
+msgid "Lezioni"
+msgstr "Séances"
+
+#: src/config/elements/orariocorsi.js
+msgid "Lezione"
+msgstr "Séance"
+
+#: src/config/elements/orariocorsi.js
+msgid "Una voce per ogni lezione della settimana: il giorno, l'ora d'inizio e di fine, il corso, chi la tiene e dove. Due lezioni alla stessa ora nello stesso giorno si affiancano."
+msgstr "Une entrée par séance de la semaine : le jour, l'heure de début et de fin, le cours, qui l'anime et où. Deux séances à la même heure le même jour se placent côte à côte."
+
+#: src/config/elements/orariocorsi.js
+msgid "Vuota: l'inizio più la durata del corso, o un'ora."
+msgstr "Vide : l'heure de début plus la durée du cours, ou une heure."
+
+#: src/config/elements/orariocorsi.js
+msgid "Il nome del corso, come l'hai scritto in Corsi (va bene anche il suo codice)."
+msgstr "Le nom du cours, tel que vous l'avez écrit dans Cours (son code fonctionne aussi)."
+
+#: src/config/elements/orariocorsi.js includes/tiles/class-orariocorsi-tile.php
+msgid "Istruttore"
+msgstr "Coach"
+
+#: src/config/elements/orariocorsi.js includes/tiles/class-orariocorsi-tile.php
+msgid "Livello"
+msgstr "Niveau"
+
+#: src/config/elements/orariocorsi.js includes/tiles/class-orariocorsi-tile.php
+msgid "Posti"
+msgstr "Places"
+
+#: src/config/elements/orariocorsi.js
+msgid "Facoltativi: quante persone accoglie la lezione. Si leggono nei dettagli; 0 o vuoto: non si mostrano."
+msgstr "Facultatives : combien de personnes la séance accueille. Elles s'affichent dans les détails ; 0 ou vide : elles ne s'affichent pas."
+
+#: src/config/elements/orariocorsi.js
+msgid "Una riga nei dettagli della lezione: «Porta un asciugamano»."
+msgstr "Une ligne dans les détails de la séance : « Apportez une serviette »."
+
+#: src/config/elements/orariocorsi.js
+msgid "Nomi dei giorni"
+msgstr "Noms des jours"
+
+#: src/config/elements/orariocorsi.js
+msgid "Da lunedì a domenica, separati da una virgola. Si vedono solo i giorni che hanno lezioni."
+msgstr "Du lundi au dimanche, séparés par une virgule. Seuls les jours qui ont des séances s'affichent."
+
+#: src/config/elements/orariocorsi.js
+msgid "Griglia oraria"
+msgstr "Grille horaire"
+
+#: src/config/elements/orariocorsi.js
+msgid "Elenco per giorno"
+msgstr "Liste par jour"
+
+#: src/config/elements/orariocorsi.js
+msgid "Griglia oraria: una colonna per giorno con le ore a sinistra, ogni lezione alta quanto dura. Elenco per giorno: le lezioni una sotto l'altra. Sul telefono si vede sempre un giorno alla volta, con le schede dei giorni."
+msgstr "Grille horaire : une colonne par jour avec les heures à gauche, chaque séance aussi haute que sa durée. Liste par jour : les séances les unes sous les autres. Sur téléphone, un seul jour s'affiche à la fois, avec des onglets de jours."
+
+#: src/config/elements/orariocorsi.js
+msgid "Dalle"
+msgstr "De"
+
+#: src/config/elements/orariocorsi.js
+msgid "Alle"
+msgstr "À"
+
+#: src/config/elements/orariocorsi.js
+msgid "Le ore della griglia. Se una lezione cade fuori, la griglia si allarga quanto basta per mostrarla."
+msgstr "Les heures de la grille. Si une séance tombe en dehors, la grille s'élargit juste assez pour l'afficher."
+
+#: src/config/elements/orariocorsi.js
+msgid "Mostra i filtri"
+msgstr "Afficher les filtres"
+
+#: src/config/elements/orariocorsi.js
+msgid "Sopra l'orario un pulsante per corso e «Tutti»: scelto un corso, le altre lezioni spariscono. I pulsanti compaiono con almeno due corsi."
+msgstr "Au-dessus du planning, un bouton par cours et « Tous » : choisissez un cours et les autres séances disparaissent. Les boutons apparaissent à partir de deux cours."
+
+#: src/config/elements/orariocorsi.js
+msgid "Filtro per livello"
+msgstr "Filtre par niveau"
+
+#: src/config/elements/orariocorsi.js
+msgid "Un menu coi livelli delle lezioni (compare con almeno due livelli diversi). Un livello mostra anche le lezioni per tutti i livelli."
+msgstr "Un menu avec les niveaux des séances (il apparaît à partir de deux niveaux différents). Un niveau affiche aussi les séances tous niveaux."
+
+#: src/config/elements/orariocorsi.js
+msgid "Filtro per istruttore"
+msgstr "Filtre par coach"
+
+#: src/config/elements/orariocorsi.js
+msgid "Un menu con gli istruttori delle lezioni (compare con almeno due istruttori)."
+msgstr "Un menu avec les coachs des séances (il apparaît à partir de deux coachs)."
+
+#: src/config/elements/orariocorsi.js
+msgid "Senza risultati"
+msgstr "Aucun résultat"
+
+#: src/config/elements/orariocorsi.js
+msgid "Il messaggio quando i filtri non lasciano nessuna lezione."
+msgstr "Le message affiché quand les filtres ne laissent aucune séance."
+
+#: src/config/elements/orariocorsi.js
+msgid "Evidenzia oggi"
+msgstr "Mettre aujourd'hui en évidence"
+
+#: src/config/elements/orariocorsi.js
+msgid "La colonna e la scheda del giorno di oggi, secondo l'orologio di chi guarda la pagina."
+msgstr "La colonne et l'onglet du jour, selon l'horloge de la personne qui consulte la page."
+
+#: src/config/elements/orariocorsi.js
+msgid "Mostra l'ora attuale"
+msgstr "Afficher l'heure actuelle"
+
+#: src/config/elements/orariocorsi.js
+msgid "Nella griglia una linea all'ora attuale, nella colonna di oggi, aggiornata ogni minuto; sulla lezione che si sta svolgendo, «In corso»."
+msgstr "Dans la grille, une ligne à l'heure actuelle dans la colonne du jour, mise à jour chaque minute ; sur la séance en train de se dérouler, « En cours »."
+
+#: src/config/elements/orariocorsi.js
+msgid "Dettagli al clic"
+msgstr "Détails au clic"
+
+#: src/config/elements/orariocorsi.js
+msgid "Un clic su una lezione (o Invio, da tastiera) apre un riquadro con il corso, la descrizione, l'orario, la durata, l'istruttore, la sala, il livello, i posti e la nota."
+msgstr "Un clic sur une séance (ou Entrée, au clavier) ouvre une fenêtre avec le cours, la description, l'horaire, la durée, le coach, la salle, le niveau, les places et la note."
+
+#: src/config/elements/orariocorsi.js
+msgid "Prenotazione"
+msgstr "Réservation"
+
+#: src/config/elements/orariocorsi.js
+msgid "Indirizzo della prenotazione"
+msgstr "Lien de réservation"
+
+#: src/config/elements/orariocorsi.js
+msgid "Il pulsante nei dettagli della lezione. Puoi usare {corso} (il codice del corso), {giorno} (da 1, lunedì, a 7) e {ora} (l'ora d'inizio, 18:30): https://esempio.it/prenota/?corso={corso}&giorno={giorno}&ora={ora}. Vuoto: niente pulsante."
+msgstr "Le bouton dans les détails de la séance. Vous pouvez utiliser {corso} (le code du cours), {giorno} (de 1, lundi, à 7) et {ora} (l'heure de début, 18:30) : https://example.com/reserver/?cours={corso}&jour={giorno}&heure={ora}. Vide : pas de bouton."
+
+#: src/config/elements/orariocorsi.js
+msgid "Giorni, corsi e filtri. Vuoto: il colore del testo della sezione."
+msgstr "Jours, cours et filtres. Vide : la couleur du texte de la section."
+
+#: src/config/elements/orariocorsi.js
+msgid "Orari, istruttore e sala, ore della griglia, conteggio. Vuoto: il colore del testo, più chiaro."
+msgstr "Horaires, coach et salle, heures de la grille, compteur. Vide : la couleur du texte, plus claire."
+
+#: src/config/elements/orariocorsi.js
+msgid "Sfondo dei giorni"
+msgstr "Fond des jours"
+
+#: src/config/elements/orariocorsi.js
+msgid "Il riquadro di ogni giorno. Vuoto: una velatura leggera del colore del testo, che va bene su fondi chiari e scuri."
+msgstr "Le cadre de chaque jour. Vide : un léger voile de la couleur du texte, qui convient aux fonds clairs et sombres."
+
+#: src/config/elements/orariocorsi.js
+msgid "Le righe delle ore e le linee sotto i nomi dei giorni. Vuoto: il colore del testo, molto leggero."
+msgstr "Les lignes des heures et les lignes sous les noms des jours. Vide : la couleur du texte, très claire."
+
+#: src/config/elements/orariocorsi.js
+msgid "Sfondo lezione"
+msgstr "Fond de la séance"
+
+#: src/config/elements/orariocorsi.js
+msgid "Vuoto: la tinta del corso, leggera."
+msgstr "Vide : une teinte légère de la couleur du cours."
+
+#: src/config/elements/orariocorsi.js src/config/elements/soggiorni.js
+msgid "Colore di oggi"
+msgstr "Couleur d’aujourd’hui"
+
+#: src/config/elements/orariocorsi.js
+msgid "La colonna e la scheda del giorno di oggi. Vuoto: il primario del tema."
+msgstr "La colonne et l'onglet du jour. Vide : la couleur primaire du thème."
+
+#: src/config/elements/orariocorsi.js
+msgid "Colore dell'ora attuale"
+msgstr "Couleur de l'heure actuelle"
+
+#: src/config/elements/orariocorsi.js
+msgid "La linea dell'ora e «In corso». Vuoto: l'accento del tema."
+msgstr "La ligne de l'heure et « En cours ». Vide : la couleur d'accent du thème."
+
+#: src/config/elements/orariocorsi.js
+msgid "Sotto le lezioni."
+msgstr "Sous les séances."
+
+#: src/config/elements/orariocorsi.js
+msgid "Colori dei corsi"
+msgstr "Couleurs des cours"
+
+#: src/config/elements/orariocorsi.js
+msgid "Colore del corso"
+msgstr "Couleur du cours"
+
+#: src/config/elements/orariocorsi.js
+msgid "La fascia della lezione, il pallino del filtro e la tinta leggera di fondo. Vuoto: uno dei colori del tema, a rotazione."
+msgstr "La bande de la séance, la pastille du filtre et la teinte légère du fond. Vide : l'une des couleurs du thème, à tour de rôle."
+
+#: src/config/elements/orariocorsi.js
+msgid "Istruttore e sala"
+msgstr "Coach et salle"
+
+#: src/config/elements/orariocorsi.js
+msgid "Raggio lezione"
+msgstr "Rayon séance"
+
+#: src/config/elements/orariocorsi.js
+msgid "Le lezioni; i riquadri dei giorni e dei dettagli lo seguono, un poco più morbidi."
+msgstr "Les séances ; les cadres des jours et des détails le suivent, un peu plus arrondis."
+
+#: src/config/elements/orariocorsi.js
+msgid "Altezza di un'ora"
+msgstr "Hauteur d'une heure"
+
+#: src/config/elements/orariocorsi.js
+msgid "Nella griglia: più alta, più spazio per i nomi dei corsi."
+msgstr "Dans la grille : plus haute, plus de place pour les noms des cours."
+
+#: src/config/elements/orariocorsi.js
+msgid "Filtri e schede"
+msgstr "Filtres et onglets"
+
+#: src/config/elements/orariocorsi.js
+msgid "Forma dei filtri"
+msgstr "Forme des filtres"
+
+#: src/config/elements/orariocorsi.js
+msgid "Angoli squadrati"
+msgstr "Angles droits"
+
+#: src/config/elements/orariocorsi.js
+msgid "I pulsanti dei corsi, i menu e, sul telefono, le schede dei giorni."
+msgstr "Les boutons des cours, les menus et, sur téléphone, les onglets des jours."
+
+#: src/config/elements/orariocorsi.js
+msgid "Fra le colonne dei giorni."
+msgstr "Entre les colonnes des jours."
+
+#: src/config/elements/orariocorsi.js
+msgid "Allineamento dei filtri"
+msgstr "Alignement des filtres"
+
+#: includes/tiles/class-orariocorsi-tile.php
+msgid "Lun,Mar,Mer,Gio,Ven,Sab,Dom"
+msgstr "Lun,Mar,Mer,Jeu,Ven,Sam,Dim"
+
+#: includes/tiles/class-orariocorsi-tile.php
+msgid "Aggiungi i corsi e le lezioni nel Contenuto: per ogni lezione il giorno, l'ora e il corso."
+msgstr "Ajoutez les cours et les séances dans Contenu : pour chaque séance, le jour, l'heure et le cours."
+
+#: includes/tiles/class-orariocorsi-tile.php
+msgid "%d lezione"
+msgstr "%d cours"
+
+#: includes/tiles/class-orariocorsi-tile.php
+msgid "%d lezioni"
+msgstr "%d cours"
+
+#: includes/tiles/class-orariocorsi-tile.php
+msgid "%d min"
+msgstr "%d min"
+
+#: includes/tiles/class-orariocorsi-tile.php
+msgid "%d h"
+msgstr "%d h"
+
+#: includes/tiles/class-orariocorsi-tile.php
+msgid "%1$d h %2$d min"
+msgstr "%1$d h %2$d min"
+
+#: includes/tiles/class-orariocorsi-tile.php
+msgid "Per tutti i livelli"
+msgstr "Pour tous niveaux"
+
+#: includes/tiles/class-orariocorsi-tile.php
+msgid "Tutti gli istruttori"
+msgstr "Tous les coachs"
+
+#: includes/tiles/class-orariocorsi-tile.php src/config/elements/soggiorni.js
+msgid "Giorni della settimana"
+msgstr "Jours de la semaine"
+
+#: src/config/elements/soggiorni.js
+msgid "Calendario soggiorni"
+msgstr "Calendrier des séjours"
+
+#: src/config/elements/soggiorni.js
+msgid "Alta stagione"
+msgstr "Haute saison"
+
+#: src/config/elements/soggiorni.js
+msgid "Feste di fine anno"
+msgstr "Fêtes de fin d’année"
+
+#: src/config/elements/soggiorni.js includes/tiles/class-soggiorni-tile.php
+msgid "Imposta di soggiorno"
+msgstr "Taxe de séjour"
+
+#: src/config/elements/soggiorni.js includes/tiles/class-soggiorni-tile.php
+msgid "Richiedi questo soggiorno"
+msgstr "Demander ce séjour"
+
+#: src/config/elements/soggiorni.js includes/tiles/class-soggiorni-tile.php
+msgid "Scegli il giorno di arrivo"
+msgstr "Choisissez le jour d’arrivée"
+
+#: src/config/elements/soggiorni.js includes/tiles/class-soggiorni-tile.php
+msgid "Ora scegli il giorno di partenza"
+msgstr "Choisissez maintenant le jour de départ"
+
+#: src/config/elements/soggiorni.js includes/tiles/class-soggiorni-tile.php
+msgid "In questo periodo il soggiorno minimo è di {n} notti"
+msgstr "Sur cette période, le séjour minimum est de {n} nuits"
+
+#: src/config/elements/soggiorni.js includes/tiles/class-soggiorni-tile.php
+msgid "Nelle date scelte la casa è già occupata"
+msgstr "Aux dates choisies, la maison est déjà occupée"
+
+#: src/config/elements/soggiorni.js
+msgid "La richiesta non impegna: ti rispondiamo entro un giorno con la conferma."
+msgstr "La demande ne vous engage pas : nous vous répondons sous un jour avec la confirmation."
+
+#: src/config/elements/soggiorni.js
+msgid "Periodi occupati"
+msgstr "Périodes occupées"
+
+#: src/config/elements/soggiorni.js
+msgid "Le notti già prenotate o chiuse. «Dal» è il giorno in cui arrivano gli ospiti, «Al» quello in cui partono: quella notte resta libera, così un altro ospite può arrivare lo stesso giorno. Le date si scrivono AAAA-MM-GG (2026-08-14) oppure come giorni da oggi (+3): con +N i periodi si spostano col calendario, utile per le demo."
+msgstr "Les nuits déjà réservées ou fermées. « Du » est le jour d’arrivée des invités, « Au » celui de leur départ : cette nuit reste libre, un autre invité peut donc arriver le même jour. Saisissez les dates au format AAAA-MM-JJ (2026-08-14) ou en jours à partir d’aujourd’hui (+3) : avec +N, les périodes se déplacent avec le calendrier, pratique pour les démos."
+
+#: src/config/elements/soggiorni.js
+msgid "Dal"
+msgstr "Du"
+
+#: src/config/elements/soggiorni.js
+msgid "Al"
+msgstr "Au"
+
+#: src/config/elements/soggiorni.js
+msgid "Il giorno di partenza: la sua notte resta libera. Vuoto: una notte sola."
+msgstr "Le jour de départ : sa nuit reste libre. Vide : une seule nuit."
+
+#: src/config/elements/soggiorni.js
+msgid "Solo per te: sul sito non compare. Serve a riconoscere il periodo, per esempio da dove arriva la prenotazione."
+msgstr "Pour vous seulement : elle n’apparaît pas sur le site. Elle sert à reconnaître la période, par exemple la provenance de la réservation."
+
+#: src/config/elements/soggiorni.js
+msgid "Il prezzo di una notte fuori dalle stagioni. Con 0 e nessuna stagione col prezzo, la tile mostra solo le date libere e la richiesta, senza prezzi."
+msgstr "Le prix d’une nuit hors saisons. Avec 0 et aucune saison avec un prix, la tile n’affiche que les dates libres et la demande, sans prix."
+
+#: src/config/elements/soggiorni.js
+msgid "Stagioni"
+msgstr "Saisons"
+
+#: src/config/elements/soggiorni.js
+msgid "Stagione"
+msgstr "Saison"
+
+#: src/config/elements/soggiorni.js
+msgid "Periodi con un prezzo o un soggiorno minimo diversi, che valgono ogni anno. «Dal» e «Al» si scrivono MM-GG (07-01 è il 1° luglio), «Al» compreso; un periodo può scavalcare l'anno (12-20 → 01-06). Conta la stagione della notte: un soggiorno a cavallo paga ogni notte al suo prezzo. Se due stagioni si sovrappongono vale la prima dell'elenco."
+msgstr "Des périodes avec un prix ou un séjour minimum différents, valables chaque année. Saisissez « Du » et « Au » au format MM-JJ (07-01 correspond au 1er juillet), « Au » inclus ; une période peut chevaucher deux années (12-20 → 01-06). C’est la saison de chaque nuit qui compte : un séjour à cheval sur deux saisons paie chaque nuit à son prix. Si deux saisons se chevauchent, la première de la liste l’emporte."
+
+#: src/config/elements/soggiorni.js
+msgid "0: il prezzo a notte di base."
+msgstr "0 : le prix de base par nuit."
+
+#: src/config/elements/soggiorni.js
+msgid "Soggiorno minimo"
+msgstr "Séjour minimum"
+
+#: src/config/elements/soggiorni.js
+msgid "Le notti minime per chi arriva in questa stagione. 0: il soggiorno minimo di base."
+msgstr "Le nombre minimum de nuits pour une arrivée pendant cette saison. 0 : le séjour minimum de base."
+
+#: src/config/elements/soggiorni.js includes/tiles/class-soggiorni-tile.php
+msgid "Pulizie finali"
+msgstr "Ménage de fin de séjour"
+
+#: src/config/elements/soggiorni.js
+msgid "Una volta per soggiorno. 0: niente riga."
+msgstr "Une fois par séjour. 0 : pas de ligne."
+
+#: src/config/elements/soggiorni.js
+msgid "A persona e a notte: nel riepilogo diventa ospiti × notti × imposta. 0: niente riga."
+msgstr "Par personne et par nuit : dans le récapitulatif, cela devient invités × nuits × taxe. 0 : pas de ligne."
+
+#: src/config/elements/soggiorni.js
+msgid "Nome dell'imposta"
+msgstr "Nom de la taxe"
+
+#: src/config/elements/soggiorni.js
+msgid "Mostra i prezzi nel calendario"
+msgstr "Afficher les prix dans le calendrier"
+
+#: src/config/elements/soggiorni.js
+msgid "Il prezzo della notte, piccolo sotto ogni giorno libero, e «da … a notte» in cima al riepilogo. Spento, i prezzi compaiono solo nel riepilogo, dopo la scelta delle date."
+msgstr "Le prix de la nuit, en petit sous chaque jour libre, et « à partir de … par nuit » en haut du récapitulatif. Désactivé, les prix n’apparaissent que dans le récapitulatif, après le choix des dates."
+
+#: src/config/elements/soggiorni.js
+msgid "Regole"
+msgstr "Règles"
+
+#: src/config/elements/soggiorni.js
+msgid "Le notti minime, fuori dalle stagioni che ne chiedono altre. Un giorno da cui non si arriva al minimo prima della notte occupata seguente non si può scegliere come arrivo."
+msgstr "Le nombre minimum de nuits, hors des saisons qui en demandent un autre. Un jour à partir duquel le minimum ne peut pas être atteint avant la prochaine nuit occupée ne peut pas être choisi comme arrivée."
+
+#: src/config/elements/soggiorni.js
+msgid "Ospiti al massimo"
+msgstr "Nombre maximum d’invités"
+
+#: src/config/elements/soggiorni.js
+msgid "Ospiti all'inizio"
+msgstr "Invités au début"
+
+#: src/config/elements/soggiorni.js
+msgid "Calendario"
+msgstr "Calendrier"
+
+#: src/config/elements/soggiorni.js
+msgid "Mesi affiancati"
+msgstr "Mois côte à côte"
+
+#: src/config/elements/soggiorni.js
+msgid "Uno"
+msgstr "Un"
+
+#: src/config/elements/soggiorni.js
+msgid "Due"
+msgstr "Deux"
+
+#: src/config/elements/soggiorni.js
+msgid "Sul telefono se ne vede sempre uno."
+msgstr "Sur téléphone, on en voit toujours un."
+
+#: src/config/elements/soggiorni.js
+msgid "Mesi prenotabili"
+msgstr "Mois réservables"
+
+#: src/config/elements/soggiorni.js
+msgid "Quanti mesi si possono sfogliare, contando quello di oggi. I giorni dopo non si possono scegliere."
+msgstr "Combien de mois on peut parcourir, en comptant le mois en cours. Les jours suivants ne peuvent pas être choisis."
+
+#: src/config/elements/soggiorni.js
+msgid "Date dall'indirizzo"
+msgstr "Dates depuis l’adresse"
+
+#: src/config/elements/soggiorni.js
+msgid "Chi arriva da un indirizzo con ?arrivo=2026-08-14&partenza=2026-08-21&ospiti=4 trova le date già scelte, se sono libere: serve ai pulsanti «Prenota» delle altre pagine."
+msgstr "Qui arrive depuis une adresse avec ?arrivo=2026-08-14&partenza=2026-08-21&ospiti=4 trouve les dates déjà choisies, si elles sont libres : utile pour les boutons « Réserver » des autres pages."
+
+#: src/config/elements/soggiorni.js
+msgid "Collegamento della richiesta"
+msgstr "Lien de la demande"
+
+#: src/config/elements/soggiorni.js
+msgid "Dove porta il pulsante: una pagina del sito, un indirizzo esterno o mailto:, coi segnaposto {arrivo} e {partenza} (AAAA-MM-GG), {notti}, {ospiti} e {totale}. Con un #ancora porta al modulo della stessa pagina. Vuoto: niente pulsante, resta il riepilogo."
+msgstr "Où mène le bouton : une page du site, une adresse externe ou mailto:, avec les variables {arrivo} et {partenza} (AAAA-MM-JJ), {notti}, {ospiti} et {totale}. Avec une #ancre, il mène au formulaire de la même page. Vide : pas de bouton, le récapitulatif reste."
+
+#: src/config/elements/soggiorni.js
+msgid "Campi del modulo"
+msgstr "Champs du formulaire"
+
+#: src/config/elements/soggiorni.js
+msgid "I nomi dei campi di un Form Contatti della stessa pagina, separati da virgole, nell'ordine arrivo, partenza, ospiti: quando si scelgono le date la tile li compila. Un campo Data riceve la data, un campo di testo la data in parole. Vuoto: nessun campo."
+msgstr "Les noms des champs d’un Formulaire de contact de la même page, séparés par des virgules, dans l’ordre arrivée, départ, invités : quand les dates sont choisies, la tile les remplit. Un champ Date reçoit la date, un champ texte la date en toutes lettres. Vide : aucun champ."
+
+#: src/config/elements/soggiorni.js
+msgid "Una riga sotto il pulsante: come si paga, quando arriva la risposta. Vuota: niente."
+msgstr "Une ligne sous le bouton : comment payer, quand arrive la réponse. Vide : rien."
+
+#: src/config/elements/soggiorni.js
+msgid "Invito a scegliere l'arrivo"
+msgstr "Invitation à choisir l’arrivée"
+
+#: src/config/elements/soggiorni.js
+msgid "Invito a scegliere la partenza"
+msgstr "Invitation à choisir le départ"
+
+#: src/config/elements/soggiorni.js
+msgid "Soggiorno troppo breve"
+msgstr "Séjour trop court"
+
+#: src/config/elements/soggiorni.js
+msgid "{n} diventa il numero di notti minime."
+msgstr "{n} devient le nombre minimum de nuits."
+
+#: src/config/elements/soggiorni.js
+msgid "Date già occupate"
+msgstr "Dates déjà occupées"
+
+#: src/config/elements/soggiorni.js
+msgid "Calendario e riepilogo. Vuoto: nel calendario il colore del testo della sezione, nel riepilogo quello che si legge sul suo sfondo."
+msgstr "Calendrier et récapitulatif. Vide : dans le calendrier, la couleur du texte de la section ; dans le récapitulatif, celle qui se lit sur son fond."
+
+#: src/config/elements/soggiorni.js
+msgid "Giorni della settimana, prezzi, etichette. Vuoto: il colore del testo, più chiaro."
+msgstr "Jours de la semaine, prix, étiquettes. Vide : la couleur du texte, plus claire."
+
+#: src/config/elements/soggiorni.js
+msgid "Colore delle date scelte"
+msgstr "Couleur des dates choisies"
+
+#: src/config/elements/soggiorni.js
+msgid "Arrivo e partenza, e l'anello del giorno attivo da tastiera. Vuoto: il primario del tema."
+msgstr "Arrivée et départ, et l’anneau autour du jour actif au clavier. Vide : la couleur principale du thème."
+
+#: src/config/elements/soggiorni.js
+msgid "Sfondo del soggiorno"
+msgstr "Fond du séjour"
+
+#: src/config/elements/soggiorni.js
+msgid "Le notti fra arrivo e partenza. Vuoto: il colore delle date scelte, molto chiaro."
+msgstr "Les nuits entre l’arrivée et le départ. Vide : la couleur des dates choisies, très claire."
+
+#: src/config/elements/soggiorni.js
+msgid "Sfondo giorni liberi"
+msgstr "Fond des jours libres"
+
+#: src/config/elements/soggiorni.js
+msgid "Sfondo giorni occupati"
+msgstr "Fond des jours occupés"
+
+#: src/config/elements/soggiorni.js
+msgid "Sotto le righe diagonali. Vuoto: trasparente."
+msgstr "Sous les rayures diagonales. Vide : transparent."
+
+#: src/config/elements/soggiorni.js
+msgid "L'anello attorno al giorno di oggi. Vuoto: il colore del testo."
+msgstr "L’anneau autour du jour d’aujourd’hui. Vide : la couleur du texte."
+
+#: src/config/elements/soggiorni.js
+msgid "Raggio giorno"
+msgstr "Rayon du jour"
+
+#: src/config/elements/soggiorni.js src/config/elements/configuratore.js includes/tiles/class-configuratore-tile.php
+msgid "Riepilogo"
+msgstr "Récapitulatif"
+
+#: src/config/elements/soggiorni.js
+msgid "Il riquadro del riepilogo. Vuoto: il colore di fondo del tema."
+msgstr "Le cadre du récapitulatif. Vide : la couleur de fond du thème."
+
+#: src/config/elements/soggiorni.js
+msgid "Bordo pannello"
+msgstr "Bordure du panneau"
+
+#: src/config/elements/soggiorni.js
+msgid "Senza colore: il colore dei bordi del tema. Con i lati a zero, niente bordo."
+msgstr "Sans couleur : la couleur des bordures du thème. Avec les côtés à zéro, pas de bordure."
+
+#: src/config/elements/soggiorni.js
+msgid "Raggio pannello"
+msgstr "Rayon du panneau"
+
+#: src/config/elements/soggiorni.js
+msgid "Padding pannello"
+msgstr "Padding du panneau"
+
+#: src/config/elements/soggiorni.js
+msgid "Sotto il riquadro del riepilogo (non con lo sfondo trasparente)."
+msgstr "Sous le cadre du récapitulatif (pas avec un fond transparent)."
+
+#: src/config/elements/soggiorni.js
+msgid "Riepilogo accanto al calendario"
+msgstr "Récapitulatif à côté du calendrier"
+
+#: src/config/elements/soggiorni.js
+msgid "Riepilogo sotto il calendario"
+msgstr "Récapitulatif sous le calendrier"
+
+#: src/config/elements/soggiorni.js
+msgid "Accanto: il riepilogo resta in vista mentre si scorre; quando lo spazio non basta, e sempre sul telefono, va sotto il calendario."
+msgstr "À côté : le récapitulatif reste visible pendant le défilement ; quand la place manque, et toujours sur téléphone, il passe sous le calendrier."
+
+#: src/config/elements/soggiorni.js
+msgid "Fra il calendario e il riepilogo."
+msgstr "Entre le calendrier et le récapitulatif."
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "{n} ospiti"
+msgstr "{n} invités"
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "1 ospite"
+msgstr "1 invité"
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "1 notte"
+msgstr "1 nuit"
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "{n} notti"
+msgstr "{n} nuits"
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "{prezzo} a notte"
+msgstr "{prezzo} par nuit"
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "da {prezzo} a notte"
+msgstr "à partir de {prezzo} par nuit"
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "giorno libero"
+msgstr "jour libre"
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "giorno occupato"
+msgstr "jour occupé"
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "non disponibile"
+msgstr "non disponible"
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "giorno di arrivo"
+msgstr "jour d’arrivée"
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "giorno di partenza"
+msgstr "jour de départ"
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "notte del soggiorno"
+msgstr "nuit du séjour"
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "solo partenza"
+msgstr "départ uniquement"
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "Aggiungi data"
+msgstr "Ajouter une date"
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "Mese precedente"
+msgstr "Mois précédent"
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "Mese successivo"
+msgstr "Mois suivant"
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "Le tue date"
+msgstr "Vos dates"
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "Arrivo"
+msgstr "Arrivée"
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "Partenza"
+msgstr "Départ"
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "Togli un ospite"
+msgstr "Retirer un invité"
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "Aggiungi un ospite"
+msgstr "Ajouter un invité"
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "Scegli le date per vedere il prezzo del soggiorno."
+msgstr "Choisissez les dates pour voir le prix du séjour."
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "Il pulsante della richiesta compare quando scrivi nel Contenuto il collegamento della richiesta."
+msgstr "Le bouton de demande apparaît quand vous saisissez dans Contenu le lien de la demande."
+
+#: includes/tiles/class-soggiorni-tile.php
+msgid "Cancella le date"
+msgstr "Effacer les dates"
+
+#: src/config/elements/configuratore.js
+msgid "Configuratore"
+msgstr "Configurateur"
+
+#: src/config/elements/configuratore.js
+msgid "Processore"
+msgstr "Processeur"
+
+#: src/config/elements/configuratore.js
+msgid "Più core aiutano nel montaggio video e nel rendering; una frequenza alta fa girare meglio i giochi."
+msgstr "Plus de cœurs aident au montage vidéo et au rendu ; une fréquence élevée fait mieux tourner les jeux."
+
+#: src/config/elements/configuratore.js
+msgid "Memoria"
+msgstr "Mémoire"
+
+#: src/config/elements/configuratore.js
+msgid "Monitor"
+msgstr "Écran"
+
+#: src/config/elements/configuratore.js
+msgid "Fino a tre monitor sulla stessa scheda video."
+msgstr "Jusqu’à trois écrans sur la même carte graphique."
+
+#: src/config/elements/configuratore.js
+msgid "6 core · 4,6 GHz"
+msgstr "6 cœurs · 4,6 GHz"
+
+#: src/config/elements/configuratore.js
+msgid "Ufficio, studio e giochi in Full HD."
+msgstr "Bureautique, études et jeux en Full HD."
+
+#: src/config/elements/configuratore.js
+msgid "8 core · 5,0 GHz"
+msgstr "8 cœurs · 5,0 GHz"
+
+#: src/config/elements/configuratore.js
+msgid "Giochi in QHD e montaggi leggeri."
+msgstr "Jeux en QHD et petits montages vidéo."
+
+#: src/config/elements/configuratore.js
+msgid "Consigliato"
+msgstr "Recommandé"
+
+#: src/config/elements/configuratore.js
+msgid "16 core · 5,4 GHz"
+msgstr "16 cœurs · 5,4 GHz"
+
+#: src/config/elements/configuratore.js
+msgid "Rendering 3D e video in 4K."
+msgstr "Rendu 3D et vidéo en 4K."
+
+#: src/config/elements/configuratore.js
+msgid "Dieci schede aperte senza rallentare."
+msgstr "Dix onglets ouverts sans ralentir."
+
+#: src/config/elements/configuratore.js
+msgid "Giochi recenti e fotoritocco."
+msgstr "Jeux récents et retouche photo."
+
+#: src/config/elements/configuratore.js
+msgid "Macchine virtuali e progetti pesanti."
+msgstr "Machines virtuelles et projets lourds."
+
+#: src/config/elements/configuratore.js
+msgid "Montaggio e collaudo"
+msgstr "Montage et test"
+
+#: src/config/elements/configuratore.js
+msgid "Lo assembliamo e lo proviamo per 24 ore."
+msgstr "Nous l’assemblons et le testons pendant 24 heures."
+
+#: src/config/elements/configuratore.js
+msgid "Sistema installato"
+msgstr "Système installé"
+
+#: src/config/elements/configuratore.js
+msgid "Sistema operativo, driver e aggiornamenti."
+msgstr "Système d’exploitation, pilotes et mises à jour."
+
+#: src/config/elements/configuratore.js
+msgid "Garanzia 3 anni"
+msgstr "Garantie 3 ans"
+
+#: src/config/elements/configuratore.js
+msgid "Ritiro e riconsegna a domicilio."
+msgstr "Enlèvement et retour à domicile."
+
+#: src/config/elements/configuratore.js
+msgid "Monitor 27″ QHD"
+msgstr "Écran 27″ QHD"
+
+#: src/config/elements/configuratore.js
+msgid "165 Hz, pannello IPS."
+msgstr "165 Hz, dalle IPS."
+
+#: src/config/elements/configuratore.js
+msgid "Giochi"
+msgstr "Jeux"
+
+#: src/config/elements/configuratore.js
+msgid "Lavoro"
+msgstr "Travail"
+
+#: src/config/elements/configuratore.js
+msgid "La tua configurazione"
+msgstr "Votre configuration"
+
+#: src/config/elements/configuratore.js
+msgid "Richiedi il preventivo"
+msgstr "Demander un devis"
+
+#: src/config/elements/configuratore.js
+msgid "Ricomincia"
+msgstr "Recommencer"
+
+#: src/config/elements/configuratore.js
+msgid "Gruppi"
+msgstr "Groupes"
+
+#: src/config/elements/configuratore.js
+msgid "Un gruppo per ogni scelta da fare: il processore, la memoria, i servizi. Le opzioni entrano in un gruppo scrivendo il suo ID (o il suo titolo) nel loro campo Gruppo."
+msgstr "Un groupe pour chaque choix à faire : le processeur, la mémoire, les services. Les options entrent dans un groupe quand vous écrivez son ID (ou son titre) dans leur champ Groupe."
+
+#: src/config/elements/configuratore.js
+msgid "Una parola senza spazi, per esempio cpu, da scrivere nel campo Gruppo delle sue opzioni. Vuoto o automatico (ci-…): vale il titolo."
+msgstr "Un mot sans espaces, par exemple cpu, à écrire dans le champ Groupe de ses options. Vide ou automatique (ci-…) : le titre est utilisé."
+
+#: src/config/elements/configuratore.js
+msgid "Tipo di scelta"
+msgstr "Type de choix"
+
+#: src/config/elements/configuratore.js
+msgid "Una scelta"
+msgstr "Choix unique"
+
+#: src/config/elements/configuratore.js
+msgid "Più scelte"
+msgstr "Choix multiple"
+
+#: src/config/elements/configuratore.js
+msgid "Una scelta: si prende un'opzione sola. Più scelte: quante se ne vuole. Quantità: per ogni opzione un numero, con − e +, fra il minimo e il massimo dell'opzione."
+msgstr "Choix unique : une seule option. Choix multiple : autant que vous voulez. Quantité : un nombre pour chaque option, avec − et +, entre le minimum et le maximum de l’option."
+
+#: src/config/elements/configuratore.js
+msgid "Prima di inviare la richiesta il gruppo deve avere una scelta. In un gruppo «Una scelta» obbligatorio parte scelta la prima opzione, se nessuna ha «Scelta all'inizio»; in uno facoltativo un secondo clic toglie la scelta."
+msgstr "Avant l’envoi de la demande, le groupe doit avoir un choix. Dans un groupe « Choix unique » obligatoire, la première option part sélectionnée si aucune n’a « Sélectionnée au départ » ; dans un groupe facultatif, un second clic retire le choix."
+
+#: src/config/elements/configuratore.js
+msgid "Aiuto"
+msgstr "Aide"
+
+#: src/config/elements/configuratore.js
+msgid "Una frase che aiuta a scegliere: sul sito si apre dalla (i) accanto al titolo del gruppo. Vuota: niente (i)."
+msgstr "Une phrase qui aide à choisir : sur le site, elle s’ouvre depuis le (i) à côté du titre du groupe. Vide : pas de (i)."
+
+#: src/config/elements/configuratore.js
+msgid "Opzione"
+msgstr "Option"
+
+#: src/config/elements/configuratore.js
+msgid "Tutte le opzioni, nell'ordine in cui compaiono, ognuna col suo gruppo. Il prezzo è la differenza sul prezzo base: 0 = inclusa, un numero negativo = uno sconto."
+msgstr "Toutes les options, dans l’ordre où elles apparaissent, chacune avec son groupe. Le prix est la différence par rapport au prix de base : 0 = incluse, un nombre négatif = une remise."
+
+#: src/config/elements/configuratore.js
+msgid "L'ID del gruppo in cui compare l'opzione (va bene anche il titolo del gruppo)."
+msgstr "L’ID du groupe dans lequel l’option apparaît (le titre du groupe fonctionne aussi)."
+
+#: src/config/elements/configuratore.js
+msgid "La differenza sul prezzo base: 120 = più 120, 0 = inclusa, −30 = uno sconto. Nei gruppi «Quantità» vale per ogni pezzo."
+msgstr "La différence par rapport au prix de base : 120 = 120 de plus, 0 = incluse, −30 = une remise. Dans les groupes « Quantité », elle vaut pour chaque pièce."
+
+#: src/config/elements/configuratore.js
+msgid "Una parola in evidenza sull'opzione: «Consigliato», «Novità». Vuoto: niente."
+msgstr "Un mot mis en avant sur l’option : « Recommandé », « Nouveauté ». Vide : aucun."
+
+#: src/config/elements/configuratore.js
+msgid "Scelta all'inizio"
+msgstr "Sélectionnée au départ"
+
+#: src/config/elements/configuratore.js
+msgid "Parte già scelta, e «Ricomincia» la rimette così. In un gruppo «Una scelta» vale la prima che ce l'ha; nei gruppi «Quantità» parte da 1."
+msgstr "Elle part déjà sélectionnée, et « Recommencer » la remet ainsi. Dans un groupe « Choix unique », c’est la première qui l’a qui compte ; dans les groupes « Quantité », elle part de 1."
+
+#: src/config/elements/configuratore.js
+msgid "Punti per gli indicatori"
+msgstr "Points pour les indicateurs"
+
+#: src/config/elements/configuratore.js
+msgid "L'ID di ogni indicatore, due punti e il valore, separati da una virgola. Vuoto: l'opzione non conta negli indicatori."
+msgstr "L’ID de chaque indicateur, deux-points et la valeur, séparés par des virgules. Vide : l’option ne compte pas dans les indicateurs."
+
+#: src/config/elements/configuratore.js
+msgid "Quantità minima"
+msgstr "Quantité minimale"
+
+#: src/config/elements/configuratore.js
+msgid "Solo nei gruppi «Quantità»: il numero più basso che si può scegliere."
+msgstr "Uniquement dans les groupes « Quantité » : le plus petit nombre qu’on peut choisir."
+
+#: src/config/elements/configuratore.js
+msgid "Quantità massima"
+msgstr "Quantité maximale"
+
+#: src/config/elements/configuratore.js
+msgid "Solo nei gruppi «Quantità»: il numero più alto che si può scegliere."
+msgstr "Uniquement dans les groupes « Quantité » : le plus grand nombre qu’on peut choisir."
+
+#: src/config/elements/configuratore.js includes/tiles/class-configuratore-tile.php
+msgid "Prezzo base"
+msgstr "Prix de base"
+
+#: src/config/elements/configuratore.js
+msgid "Il prezzo di partenza: il totale è il prezzo base più le differenze delle opzioni scelte."
+msgstr "Le prix de départ : le total est le prix de base plus les différences des options choisies."
+
+#: src/config/elements/configuratore.js
+msgid "Il simbolo accanto ai prezzi: prima o dopo il numero, come si usa nella lingua della pagina. Vuota: solo il numero."
+msgstr "Le symbole à côté des prix : avant ou après le nombre, selon l’usage de la langue de la page. Vide : le nombre seul."
+
+#: src/config/elements/configuratore.js
+msgid "Dopo il totale: «/mese», «/anno». Vuoto: un prezzo una tantum."
+msgstr "Après le total : « /mois », « /an ». Vide : un prix unique."
+
+#: src/config/elements/configuratore.js
+msgid "Testo del totale"
+msgstr "Libellé du total"
+
+#: src/config/elements/configuratore.js
+msgid "Nota sul prezzo"
+msgstr "Note sur le prix"
+
+#: src/config/elements/configuratore.js
+msgid "Sotto il totale: «IVA inclusa», «Spedizione gratuita». Vuota: niente."
+msgstr "Sous le total : « TVA incluse », « Livraison gratuite ». Vide : rien."
+
+#: src/config/elements/configuratore.js
+msgid "Mostra i prezzi delle opzioni"
+msgstr "Afficher le prix des options"
+
+#: src/config/elements/configuratore.js
+msgid "Su ogni opzione e nel riepilogo la sua differenza («+120 €», «Incluso»). Spento: si vede solo il totale."
+msgstr "Sur chaque option et dans le récapitulatif, sa différence (« +120 € », « Inclus »). Désactivé : seul le total s’affiche."
+
+#: src/config/elements/configuratore.js
+msgid "Indicatori"
+msgstr "Indicateurs"
+
+#: src/config/elements/configuratore.js
+msgid "Facoltativi: barre nel riepilogo che sommano i punti delle opzioni scelte, fino al massimo; per esempio quanto la configurazione va bene per giocare o per lavorare."
+msgstr "Facultatifs : des barres dans le récapitulatif qui additionnent les points des options choisies, jusqu’au maximum ; par exemple, à quel point la configuration convient pour jouer ou pour travailler."
+
+#: src/config/elements/configuratore.js
+msgid "La parola da scrivere nel campo «Punti per gli indicatori» delle opzioni. Vuoto o automatico (ci-…): vale il nome."
+msgstr "Le mot à écrire dans le champ « Points pour les indicateurs » des options. Vide ou automatique (ci-…) : le nom est utilisé."
+
+#: src/config/elements/configuratore.js
+msgid "Massimo"
+msgstr "Maximum"
+
+#: src/config/elements/configuratore.js
+msgid "Il valore della barra piena."
+msgstr "La valeur de la barre pleine."
+
+#: src/config/elements/configuratore.js
+msgid "Mostra il riepilogo"
+msgstr "Afficher le récapitulatif"
+
+#: src/config/elements/configuratore.js
+msgid "L'elenco delle scelte gruppo per gruppo, sopra il totale. Spento: restano il totale, gli indicatori e i pulsanti."
+msgstr "La liste des choix, groupe par groupe, au-dessus du total. Désactivé : le total, les indicateurs et les boutons restent."
+
+#: src/config/elements/configuratore.js
+msgid "Titolo del riepilogo"
+msgstr "Titre du récapitulatif"
+
+#: src/config/elements/configuratore.js
+msgid "Testo «Ricomincia»"
+msgstr "Texte « Recommencer »"
+
+#: src/config/elements/configuratore.js
+msgid "Il pulsante che riporta tutte le scelte a come erano all'inizio. Vuoto: niente pulsante."
+msgstr "Le bouton qui remet tous les choix comme au départ. Vide : pas de bouton."
+
+#: src/config/elements/configuratore.js
+msgid "Vuoto: niente pulsante."
+msgstr "Vide : pas de bouton."
+
+#: src/config/elements/configuratore.js
+msgid "Dove porta il pulsante, coi segnaposto {configurazione} (il riepilogo in testo) e {totale}: una pagina del sito, un indirizzo mailto: o un portale. Vuoto: il pulsante porta al Form Contatti della pagina che ha il campo qui sotto, e sul sito compare solo se quel Form c'è."
+msgstr "Où mène le bouton, avec les espaces réservés {configurazione} (le récapitulatif en texte) et {totale} : une page du site, une adresse mailto: ou un portail. Vide : le bouton mène au Formulaire de contact de la page qui contient le champ ci-dessous, et sur le site il n’apparaît que si ce formulaire existe."
+
+#: src/config/elements/configuratore.js
+msgid "Campo del modulo"
+msgstr "Champ du formulaire"
+
+#: src/config/elements/configuratore.js
+msgid "Il nome di un campo di un Form Contatti nella stessa pagina, per esempio messaggio: dopo ogni scelta ci scrive il riepilogo (se il campo è vuoto o ha ancora il riepilogo di prima), e il pulsante lo riscrive e ci porta. Vuoto: nessun modulo."
+msgstr "Le nom d’un champ d’un Formulaire de contact sur la même page, par exemple messaggio : après chaque choix, le récapitulatif y est écrit (si le champ est vide ou contient encore le récapitulatif précédent), et le bouton le réécrit et vous y amène. Vide : aucun formulaire."
+
+#: src/config/elements/configuratore.js
+msgid "Nomi e testi delle opzioni. Vuoto: il colore del testo della sezione."
+msgstr "Noms et textes des options. Vide : la couleur du texte de la section."
+
+#: src/config/elements/configuratore.js
+msgid "Descrizioni, «Incluso» e la (i) dell'aiuto. Vuoto: il colore del testo, più chiaro."
+msgstr "Descriptions, « Inclus » et le (i) de l’aide. Vide : la couleur du texte, plus claire."
+
+#: src/config/elements/configuratore.js
+msgid "Sotto le schede e sotto il riepilogo."
+msgstr "Sous les cartes et sous le récapitulatif."
+
+#: src/config/elements/configuratore.js
+msgid "Titolo del gruppo"
+msgstr "Titre du groupe"
+
+#: src/config/elements/configuratore.js
+msgid "Nome dell'opzione"
+msgstr "Nom de l’option"
+
+#: src/config/elements/configuratore.js
+msgid "Vuoto: trasparente, sul fondo della sezione. Con uno sfondo scelto il testo diventa quello che lì si legge."
+msgstr "Vide : transparent, sur le fond de la section. Avec un fond choisi, le texte prend une couleur lisible dessus."
+
+#: src/config/elements/configuratore.js
+msgid "Vuoto: un filo leggero del colore del testo."
+msgstr "Vide : un filet léger de la couleur du texte."
+
+#: src/config/elements/configuratore.js
+msgid "Delle schede, del riepilogo e della sua barra."
+msgstr "Des cartes, du récapitulatif et de sa barre."
+
+#: src/config/elements/configuratore.js
+msgid "Colore della scelta"
+msgstr "Couleur de la sélection"
+
+#: src/config/elements/configuratore.js
+msgid "Bordo, anello e spunta dell'opzione scelta; è anche il colore del badge e degli indicatori, se non ne scegli uno. Vuoto: il primario del tema."
+msgstr "Bordure, anneau et coche de l’option choisie ; c’est aussi la couleur du badge et des indicateurs, si vous n’en choisissez pas. Vide : la couleur principale du thème."
+
+#: src/config/elements/configuratore.js
+msgid "Sfondo della scelta"
+msgstr "Fond de la sélection"
+
+#: src/config/elements/configuratore.js
+msgid "Il fondo dell'opzione scelta. Vuoto: il colore della scelta, appena velato."
+msgstr "Le fond de l’option choisie. Vide : la couleur de la sélection, à peine voilée."
+
+#: src/config/elements/configuratore.js
+msgid "Vuoto: il colore della scelta."
+msgstr "Vide : la couleur de la sélection."
+
+#: src/config/elements/configuratore.js
+msgid "Vuoto: il colore che si legge sullo sfondo del badge."
+msgstr "Vide : la couleur lisible sur le fond du badge."
+
+#: src/config/elements/configuratore.js
+msgid "Sfondo riepilogo"
+msgstr "Fond du récapitulatif"
+
+#: src/config/elements/configuratore.js
+msgid "Il pannello col totale e la sua barra in fondo allo schermo. Vuoto: il fondo del tema, appena velato. Il testo prende da solo il colore che lì si legge."
+msgstr "Le panneau avec le total et sa barre en bas de l’écran. Vide : le fond du thème, à peine voilé. Le texte prend tout seul une couleur lisible à cet endroit."
+
+#: src/config/elements/configuratore.js
+msgid "Colore indicatori"
+msgstr "Couleur des indicateurs"
+
+#: src/config/elements/configuratore.js
+msgid "Le barre. Vuoto: il colore della scelta."
+msgstr "Les barres. Vide : la couleur de la sélection."
+
+#: src/config/elements/configuratore.js
+msgid "Vista delle opzioni"
+msgstr "Affichage des options"
+
+#: src/config/elements/configuratore.js
+msgid "Righe compatte"
+msgstr "Lignes compactes"
+
+#: src/config/elements/configuratore.js
+msgid "Schede: in griglia, con l'immagine in alto. Righe: una sotto l'altra, col prezzo a destra; occupano meno spazio, anche sul telefono."
+msgstr "Cartes : en grille, avec l’image en haut. Lignes : l’une sous l’autre, avec le prix à droite ; elles prennent moins de place, aussi sur mobile."
+
+#: src/config/elements/configuratore.js
+msgid "Posizione del riepilogo"
+msgstr "Position du récapitulatif"
+
+#: src/config/elements/configuratore.js
+msgid "Accanto alle opzioni"
+msgstr "À côté des options"
+
+#: src/config/elements/configuratore.js
+msgid "Sotto le opzioni"
+msgstr "Sous les options"
+
+#: src/config/elements/configuratore.js
+msgid "Accanto: resta in vista mentre si scorrono le opzioni. Sotto i 960 px, o in una colonna stretta, va sotto, e la sua barra col totale resta in fondo allo schermo finché si sceglie."
+msgstr "À côté : il reste visible pendant qu’on fait défiler les options. Sous 960 px, ou dans une colonne étroite, il passe dessous, et sa barre avec le total reste en bas de l’écran pendant le choix."
+
+#: src/config/elements/configuratore.js
+msgid "Delle schede. Se lo spazio non basta la griglia ne mette meno da sola; sul tablet al massimo due e sul telefono una, se non ne scegli altre per quei dispositivi."
+msgstr "Des cartes. Si la place manque, la grille en met moins d’elle-même ; sur tablette deux au maximum et sur mobile une, si vous n’en choisissez pas d’autres pour ces appareils."
+
+#: src/config/elements/configuratore.js
+msgid "Fra le opzioni."
+msgstr "Entre les options."
+
+#: includes/tiles/class-configuratore-tile.php
+msgid "Nessuna opzione in questo gruppo: nel Contenuto aggiungine una con Gruppo «%s»."
+msgstr "Aucune option dans ce groupe : dans Contenu, ajoutez-en une avec Groupe « %s »."
+
+#: includes/tiles/class-configuratore-tile.php
+msgid "Opzioni senza gruppo: %d. Nel campo Gruppo scrivi l'ID di un gruppo, per esempio cpu."
+msgstr "Options sans groupe : %d. Dans le champ Groupe, écrivez l’ID d’un groupe, par exemple cpu."
+
+#: includes/tiles/class-configuratore-tile.php
+msgid "Aggiungi nel Contenuto i gruppi e le loro opzioni: ogni opzione indica nel campo Gruppo l'ID del suo gruppo."
+msgstr "Ajoutez dans Contenu les groupes et leurs options : chaque option indique dans le champ Groupe l’ID de son groupe."
+
+#: includes/tiles/class-configuratore-tile.php
+msgid "Incluso"
+msgstr "Inclus"
+
+#: includes/tiles/class-configuratore-tile.php
+msgid "%s cad."
+msgstr "%s l’unité"
+
+#: includes/tiles/class-configuratore-tile.php
+msgid "Da scegliere"
+msgstr "À choisir"
+
+#: includes/tiles/class-configuratore-tile.php
+msgid "Scegli un'opzione in «%s»."
+msgstr "Choisissez une option dans « %s »."
+
+#: includes/tiles/class-configuratore-tile.php
+msgid "Scegli almeno un'opzione in «%s»."
+msgstr "Choisissez au moins une option dans « %s »."
+
+#: includes/tiles/class-configuratore-tile.php
+msgid "La configurazione è nel modulo: completa i tuoi dati e invia."
+msgstr "La configuration est dans le formulaire : complétez vos coordonnées et envoyez-le."
+
+#: includes/tiles/class-configuratore-tile.php
+msgid "Configurazione riportata all'inizio."
+msgstr "Configuration réinitialisée."
+
+#: includes/tiles/class-configuratore-tile.php
+msgid "Nella pagina non c'è un Form Contatti con il campo «%s»: aggiungilo, oppure scrivi un collegamento nel Contenuto."
+msgstr "La page n’a pas de Formulaire de contact avec le champ « %s » : ajoutez-le, ou saisissez un lien dans Contenu."
+
+#: includes/tiles/class-configuratore-tile.php
+msgid "Aiuto: %s"
+msgstr "Aide : %s"
+
+#: includes/tiles/class-configuratore-tile.php
+msgid "%s: uno in meno"
+msgstr "%s : un de moins"
+
+#: includes/tiles/class-configuratore-tile.php
+msgid "%s: uno in più"
+msgstr "%s : un de plus"
+
+#: src/config/elements/tour360.js
+msgid "La prima"
+msgstr "La première"
+
+#: src/config/elements/tour360.js
+msgid "Scena"
+msgstr "Scène"
+
+#: src/config/elements/tour360.js
+msgid "Tour 360°"
+msgstr "Visite 360°"
+
+#: src/config/elements/tour360.js
+msgid "Ingresso"
+msgstr "Entrée"
+
+#: src/config/elements/tour360.js
+msgid "La porta si apre su un corridoio luminoso col pavimento in rovere."
+msgstr "La porte s’ouvre sur un couloir lumineux au parquet de chêne."
+
+#: src/config/elements/tour360.js
+msgid "Soggiorno"
+msgstr "Séjour"
+
+#: src/config/elements/tour360.js
+msgid "Il divano guarda la vetrata sul giardino; la cucina è a vista, dietro la penisola."
+msgstr "Le canapé fait face à la baie vitrée sur le jardin ; la cuisine est ouverte, derrière la péninsule."
+
+#: src/config/elements/tour360.js
+msgid "Vai al soggiorno"
+msgstr "Aller au séjour"
+
+#: src/config/elements/tour360.js
+msgid "Pavimento in rovere"
+msgstr "Parquet en chêne"
+
+#: src/config/elements/tour360.js
+msgid "Doghe larghe 20 cm, oliate a mano: scaldano la casa anche d'inverno."
+msgstr "Lames de 20 cm de large, huilées à la main : elles réchauffent la maison même en hiver."
+
+#: src/config/elements/tour360.js
+msgid "Torna all'ingresso"
+msgstr "Retour à l’entrée"
+
+#: src/config/elements/tour360.js
+msgid "Vetrata sul giardino"
+msgstr "Baie vitrée sur le jardin"
+
+#: src/config/elements/tour360.js
+msgid "Tre metri di vetro basso emissivo, esposti a sud: luce piena fino al tramonto."
+msgstr "Trois mètres de vitrage à faible émissivité, plein sud : pleine lumière jusqu’au coucher du soleil."
+
+#: src/config/elements/tour360.js
+msgid "Trascina per guardarti intorno"
+msgstr "Faites glisser pour regarder autour de vous"
+
+#: src/config/elements/tour360.js
+msgid "Scorri col dito per guardarti intorno"
+msgstr "Faites glisser votre doigt pour regarder autour de vous"
+
+#: src/config/elements/tour360.js includes/tiles/class-tour360-tile.php
+msgid "Carico la vista…"
+msgstr "Chargement de la vue…"
+
+#: src/config/elements/tour360.js includes/tiles/class-tour360-tile.php
+msgid "Scene"
+msgstr "Scènes"
+
+#: src/config/elements/tour360.js
+msgid "Una voce per ogni foto sferica: equirettangolare, larga il doppio dell'altezza (per esempio 4096 × 2048, in JPG). La foto leggera (2048 × 1024) va ai telefoni e alle schede grafiche più piccole; l'anteprima è la miniatura nell'elenco delle scene. Direzione e inclinazione dicono dove guarda la vista quando la scena si apre."
+msgstr "Un élément par photo sphérique : équirectangulaire, deux fois plus large que haute (par exemple 4096 × 2048, en JPG). La photo légère (2048 × 1024) va aux téléphones et aux cartes graphiques plus modestes ; l’aperçu est la miniature de la liste des scènes. Direction et inclinaison indiquent où regarde la vue à l’ouverture de la scène."
+
+#: src/config/elements/tour360.js
+msgid "Foto sferica"
+msgstr "Photo sphérique"
+
+#: src/config/elements/tour360.js
+msgid "Equirettangolare 2:1, per esempio 4096 × 2048. Le foto piatte si vedrebbero stirate."
+msgstr "Équirectangulaire 2:1, par exemple 4096 × 2048. Les photos classiques apparaîtraient étirées."
+
+#: src/config/elements/tour360.js
+msgid "Foto leggera"
+msgstr "Photo légère"
+
+#: src/config/elements/tour360.js
+msgid "La stessa foto a 2048 × 1024: la usano i telefoni e le schede grafiche che non reggono le foto grandi. Vuota: la foto grande, rimpicciolita nel browser quando serve."
+msgstr "La même photo en 2048 × 1024 : utilisée par les téléphones et les cartes graphiques qui ne supportent pas les grandes photos. Vide : la grande photo, réduite dans le navigateur si nécessaire."
+
+#: src/config/elements/tour360.js
+msgid "La miniatura nell'elenco delle scene. Vuota: la foto leggera."
+msgstr "La miniature de la liste des scènes. Vide : la photo légère."
+
+#: src/config/elements/tour360.js
+msgid "In gradi: 0 è il centro della foto, 90 un quarto di giro a destra, −90 a sinistra."
+msgstr "En degrés : 0 est le centre de la photo, 90 un quart de tour à droite, −90 à gauche."
+
+#: src/config/elements/tour360.js
+msgid "In gradi: positiva guarda in alto, negativa in basso."
+msgstr "En degrés : positive regarde vers le haut, négative vers le bas."
+
+#: src/config/elements/tour360.js
+msgid "Scena iniziale"
+msgstr "Scène de départ"
+
+#: src/config/elements/tour360.js
+msgid "Quella che si vede quando si apre la pagina."
+msgstr "Celle qui s’affiche à l’ouverture de la page."
+
+#: src/config/elements/tour360.js
+msgid "I punti da toccare dentro le foto: «Scena» porta a un'altra scena, «Informazioni» apre un riquadro col testo, «Collegamento» apre un indirizzo. Le scene si indicano col numero nell'elenco (1, 2…) o col titolo. Nel builder la vista mostra direzione e inclinazione del centro, e di un punto della foto quando ci fai clic."
+msgstr "Les points à toucher dans les photos : « Scène » mène à une autre scène, « Informations » ouvre un panneau avec du texte, « Lien » ouvre une adresse. Les scènes s’indiquent par leur numéro dans la liste (1, 2…) ou par leur titre. Dans le builder, la vue affiche la direction et l’inclinaison du centre, et d’un point de la photo quand vous cliquez dessus."
+
+#: src/config/elements/tour360.js
+msgid "L'etichetta del punto e il titolo del riquadro. Per «Scena», vuoto: il titolo della scena di arrivo."
+msgstr "Le libellé du point et le titre du panneau. Pour « Scène », vide : le titre de la scène d’arrivée."
+
+#: src/config/elements/tour360.js
+msgid "Nella scena"
+msgstr "Dans la scène"
+
+#: src/config/elements/tour360.js
+msgid "La scena in cui si trova il punto: il numero nell'elenco o il titolo. Vuota: la prima."
+msgstr "La scène où se trouve le point : le numéro dans la liste ou le titre. Vide : la première."
+
+#: src/config/elements/tour360.js
+msgid "Porta alla scena"
+msgstr "Mène à la scène"
+
+#: src/config/elements/tour360.js
+msgid "Il numero nell'elenco o il titolo della scena che si apre."
+msgstr "Le numéro dans la liste ou le titre de la scène qui s’ouvre."
+
+#: src/config/elements/tour360.js
+msgid "Una pagina del sito si apre nella stessa scheda, un altro sito in una nuova."
+msgstr "Une page du site s’ouvre dans le même onglet, un autre site dans un nouvel onglet."
+
+#: src/config/elements/tour360.js
+msgid "Vuota: la freccia per le scene, il più per le informazioni, la freccia obliqua per i collegamenti."
+msgstr "Vide : la flèche pour les scènes, le plus pour les informations, la flèche oblique pour les liens."
+
+#: src/config/elements/tour360.js
+msgid "Campo visivo"
+msgstr "Champ de vision"
+
+#: src/config/elements/tour360.js
+msgid "Quanto si vede in altezza quando la scena si apre: meno gradi, più vicino. Lo zoom va da 35 a 100."
+msgstr "Ce que l’on voit en hauteur à l’ouverture de la scène : moins de degrés, plus près. Le zoom va de 35 à 100."
+
+#: src/config/elements/tour360.js
+msgid "Due dita sul telefono, Ctrl e rotellina sul computer, + e − da tastiera, i pulsanti sulla vista. La rotellina da sola fa scorrere la pagina."
+msgstr "Deux doigts sur téléphone, Ctrl et molette sur ordinateur, + et − au clavier, les boutons sur la vue. La molette seule fait défiler la page."
+
+#: src/config/elements/tour360.js
+msgid "Mostra il titolo della scena"
+msgstr "Afficher le titre de la scène"
+
+#: src/config/elements/tour360.js
+msgid "Elenco delle scene"
+msgstr "Liste des scènes"
+
+#: src/config/elements/tour360.js
+msgid "Le miniature delle scene in fondo alla vista, per saltare da una all'altra."
+msgstr "Les miniatures des scènes en bas de la vue, pour passer de l’une à l’autre."
+
+#: src/config/elements/tour360.js
+msgid "Compare solo dove il browser lo permette: sull'iPhone no."
+msgstr "N’apparaît que là où le navigateur le permet : pas sur iPhone."
+
+#: src/config/elements/tour360.js
+msgid "La vista gira piano finché nessuno la tocca e si ferma alla prima interazione. Ferma per chi ha chiesto al sistema meno movimento."
+msgstr "La vue tourne lentement tant que personne n’y touche et s’arrête à la première interaction. Désactivée pour qui a demandé moins d’animations au système."
+
+#: src/config/elements/tour360.js
+msgid "Riparte dopo"
+msgstr "Reprend après"
+
+#: src/config/elements/tour360.js
+msgid "Secondi senza interazioni prima che la rotazione riparta. 0: non riparte."
+msgstr "Secondes sans interaction avant que la rotation ne reprenne. 0 : elle ne reprend pas."
+
+#: src/config/elements/tour360.js
+msgid "Una riga al centro della vista che dice come si usa: sparisce al primo trascinamento."
+msgstr "Une ligne au centre de la vue qui explique comment l’utiliser : elle disparaît au premier glissement."
+
+#: src/config/elements/tour360.js
+msgid "Caricamento"
+msgstr "Chargement"
+
+#: src/config/elements/tour360.js
+msgid "Testo del caricamento"
+msgstr "Texte de chargement"
+
+#: src/config/elements/tour360.js
+msgid "Proporzioni sul telefono"
+msgstr "Proportions sur téléphone"
+
+#: src/config/elements/tour360.js
+msgid "Gli angoli della vista; il riquadro, le miniature e i pulsanti lo seguono. A zero, tutto ad angoli vivi."
+msgstr "Les angles de la vue ; le panneau, les miniatures et les boutons le suivent. À zéro, tout est à angles vifs."
+
+#: src/config/elements/tour360.js
+msgid "Stile dei punti"
+msgstr "Style des points"
+
+#: src/config/elements/tour360.js
+msgid "Anello"
+msgstr "Anneau"
+
+#: src/config/elements/tour360.js
+msgid "Anello: il cerchio colorato su un velo scuro, che pulsa piano. Cerchio pieno: il disco colorato. Solo icona: l'icona colorata, senza disco."
+msgstr "Anneau : le cercle coloré sur un voile sombre, qui pulse doucement. Cercle plein : le disque coloré. Icône seule : l’icône colorée, sans disque."
+
+#: src/config/elements/tour360.js
+msgid "Colore dei punti"
+msgstr "Couleur des points"
+
+#: src/config/elements/tour360.js
+msgid "Vuoto: il colore accento del tema."
+msgstr "Vide : la couleur d’accent du thème."
+
+#: src/config/elements/tour360.js
+msgid "Misura dei punti"
+msgstr "Taille des points"
+
+#: src/config/elements/tour360.js
+msgid "Sfondo etichette"
+msgstr "Fond des étiquettes"
+
+#: src/config/elements/tour360.js
+msgid "I nomi dei punti, il titolo della scena, il suggerimento e i nomi delle scene. Vuoto: un velo scuro."
+msgstr "Les noms des points, le titre de la scène, l’indication et les noms des scènes. Vide : un voile sombre."
+
+#: src/config/elements/tour360.js
+msgid "Il riquadro che si apre dai punti «Informazioni». Vuoto: il fondo del tema."
+msgstr "Le panneau qui s’ouvre depuis les points « Informations ». Vide : le fond du thème."
+
+#: src/config/elements/tour360.js
+msgid "Colore testo pannello"
+msgstr "Couleur du texte du panneau"
+
+#: src/config/elements/tour360.js
+msgid "Titolo e testo del riquadro, quando non hanno un colore loro. Vuoto: il testo del tema, o quello che si legge sullo sfondo scelto."
+msgstr "Titre et texte du panneau, quand ils n’ont pas de couleur propre. Vide : le texte du thème, ou celui qui se lit bien sur le fond choisi."
+
+#: src/config/elements/tour360.js
+msgid "I pulsanti sulla vista: schermo intero e zoom. Vuoto: un velo scuro."
+msgstr "Les boutons sur la vue : plein écran et zoom. Vide : un voile sombre."
+
+#: src/config/elements/tour360.js
+msgid "Le icone dei pulsanti. Vuoto: il chiaro del tema, o quello che si legge sullo sfondo scelto."
+msgstr "Les icônes des boutons. Vide : la couleur claire du thème, ou celle qui se lit bien sur le fond choisi."
+
+#: includes/tiles/class-tour360-tile.php
+msgid "Aggiungi le scene nel Contenuto: per ognuna una foto sferica equirettangolare (2:1, per esempio 4096 × 2048)."
+msgstr "Ajoutez les scènes dans Contenu : pour chacune une photo sphérique équirectangulaire (2:1, par exemple 4096 × 2048)."
+
+#: includes/tiles/class-tour360-tile.php
+msgid "Vista a 360°: usa le frecce per guardarti intorno, + e − per ingrandire."
+msgstr "Vue à 360° : utilisez les flèches pour regarder autour de vous, + et − pour zoomer."
+
+#: includes/tiles/class-tour360-tile.php
+msgid "Vista a 360°: usa le frecce per guardarti intorno."
+msgstr "Vue à 360° : utilisez les flèches pour regarder autour de vous."
+
+#: includes/tiles/class-tour360-tile.php
+msgid "Esci dallo schermo intero"
+msgstr "Quitter le plein écran"
+
+#: includes/tiles/class-tour360-tile.php
+msgid "Scena %d"
+msgstr "Scène %d"
+
+#: includes/tiles/class-tour360-tile.php
+msgid "Vai a: %s"
+msgstr "Aller à : %s"
+
+#: includes/tiles/class-tour360-tile.php
+msgid "Apri il collegamento"
+msgstr "Ouvrir le lien"
+
+#: includes/tiles/class-tour360-tile.php
+msgid "(si apre in una nuova scheda)"
+msgstr "(s’ouvre dans un nouvel onglet)"
+
+#: includes/tiles/class-tour360-tile.php
+msgid "Foto d'esempio: carica la foto sferica della scena nel Contenuto."
+msgstr "Photo d’exemple : importez la photo sphérique de la scène dans Contenu."
+
+#: includes/tiles/class-tour360-tile.php
+msgid "Non è stato possibile caricare questa vista."
+msgstr "Impossible de charger cette vue."
+
+#: src/config/elements/lucchetto.js
+msgid "Lucchetto"
+msgstr "Cadenas"
+
+#: src/config/elements/lucchetto.js
+msgid "<p><strong>Quattro cifre</strong> aprono il lucchetto, in quest'ordine:</p><p>i colli su cui sorge Roma, i lati di un triangolo, le lune della Terra, le zampe di un gatto.</p>"
+msgstr "<p><strong>Quatre chiffres</strong> ouvrent le cadenas, dans cet ordre :</p><p>les collines sur lesquelles Rome est bâtie, les côtés d’un triangle, les lunes de la Terre, les pattes d’un chat.</p>"
+
+#: src/config/elements/lucchetto.js
+msgid "Sommate fanno 15, e solo l'ultima è pari."
+msgstr "Additionnés, ils font 15, et seul le dernier est pair."
+
+#: src/config/elements/lucchetto.js includes/tiles/class-lucchetto-tile.php
+msgid "Mostra un indizio"
+msgstr "Afficher un indice"
+
+#: src/config/elements/lucchetto.js includes/tiles/class-lucchetto-tile.php
+msgid "Apri"
+msgstr "Ouvrir"
+
+#: src/config/elements/lucchetto.js includes/tiles/class-lucchetto-tile.php
+msgid "Non si apre. Riprova."
+msgstr "Il ne s’ouvre pas. Réessayez."
+
+#: src/config/elements/lucchetto.js
+msgid "Aperto! Il codice qui sotto vale uno sconto del 10% sulla prossima prenotazione."
+msgstr "Ouvert ! Le code ci-dessous vous donne 10 % de réduction sur votre prochaine réservation."
+
+#: src/config/elements/lucchetto.js
+msgid "Enigma"
+msgstr "Énigme"
+
+#: src/config/elements/lucchetto.js
+msgid "Il testo da risolvere: un indovinello, una domanda, gli indizi sparsi nella pagina. Grassetto, corsivo e a capo si vedono come li scrivi."
+msgstr "Le texte à résoudre : une devinette, une question, les indices dispersés dans la page. Le gras, l’italique et les retours à la ligne s’affichent comme vous les écrivez."
+
+#: src/config/elements/lucchetto.js includes/tiles/class-lucchetto-tile.php
+msgid "Indizio"
+msgstr "Indice"
+
+#: src/config/elements/lucchetto.js
+msgid "Si apre dal pulsante «Mostra un indizio». Vuoto: niente pulsante."
+msgstr "S’ouvre avec le bouton « Afficher un indice ». Vide : pas de bouton."
+
+#: src/config/elements/lucchetto.js
+msgid "Pulsante dell'indizio"
+msgstr "Bouton de l’indice"
+
+#: src/config/elements/lucchetto.js
+msgid "Tentativi prima dell'indizio"
+msgstr "Tentatives avant l’indice"
+
+#: src/config/elements/lucchetto.js
+msgid "Dopo questo numero di tentativi sbagliati l'indizio si apre da solo. 0: mai."
+msgstr "Après ce nombre de tentatives erronées, l’indice s’ouvre tout seul. 0 : jamais."
+
+#: src/config/elements/lucchetto.js includes/tiles/class-lucchetto-tile.php
+msgid "Combinazione"
+msgstr "Combinaison"
+
+#: src/config/elements/lucchetto.js
+msgid "La soluzione, da 3 a 6 simboli: tanti quante le ruote. Cifre e lettere si scrivono di seguito («7314», «LUNA»), i simboli personalizzati separati da una virgola («III,I,IV»). Maiuscole e minuscole valgono uguale. Nella pagina non compare: il sito ne conserva solo un'impronta, e il premio si legge solo con la combinazione giusta."
+msgstr "La solution, de 3 à 6 symboles : un par molette. Les chiffres et les lettres s’écrivent à la suite (« 7314 », « LUNA »), les symboles personnalisés séparés par une virgule (« III,I,IV »). Les majuscules et les minuscules sont équivalentes. Elle n’apparaît pas dans la page : le site n’en garde qu’une empreinte, et la récompense ne se lit qu’avec la bonne combinaison."
+
+#: src/config/elements/lucchetto.js
+msgid "Simboli sulle ruote"
+msgstr "Symboles des molettes"
+
+#: src/config/elements/lucchetto.js
+msgid "Cifre (0–9)"
+msgstr "Chiffres (0–9)"
+
+#: src/config/elements/lucchetto.js
+msgid "Lettere (A–Z)"
+msgstr "Lettres (A–Z)"
+
+#: src/config/elements/lucchetto.js
+msgid "Personalizzati"
+msgstr "Personnalisés"
+
+#: src/config/elements/lucchetto.js
+msgid "Simboli personalizzati"
+msgstr "Symboles personnalisés"
+
+#: src/config/elements/lucchetto.js
+msgid "Separati da una virgola, nell'ordine in cui girano sulle ruote: numeri romani, parole brevi, segni. Almeno due."
+msgstr "Séparés par une virgule, dans l’ordre où ils défilent sur les molettes : chiffres romains, mots courts, signes. Au moins deux."
+
+#: src/config/elements/lucchetto.js
+msgid "Mostra i tentativi"
+msgstr "Afficher les tentatives"
+
+#: src/config/elements/lucchetto.js
+msgid "Sotto i pulsanti, quanti tentativi sbagliati sono stati fatti."
+msgstr "Sous les boutons, le nombre de tentatives erronées."
+
+#: src/config/elements/lucchetto.js
+msgid "Premio"
+msgstr "Récompense"
+
+#: src/config/elements/lucchetto.js
+msgid "Messaggio di apertura"
+msgstr "Message d’ouverture"
+
+#: src/config/elements/lucchetto.js
+msgid "Compare quando il lucchetto si apre. Come il codice e il pulsante, non si legge nella pagina finché non si trova la combinazione."
+msgstr "Apparaît quand le cadenas s’ouvre. Comme le code et le bouton, il ne peut pas être lu dans la page tant que la combinaison n’a pas été trouvée."
+
+#: src/config/elements/lucchetto.js
+msgid "Codice premio"
+msgstr "Code de récompense"
+
+#: src/config/elements/lucchetto.js
+msgid "Un codice da copiare: uno sconto, la parola d'ordine della stanza dopo. Vuoto: niente codice."
+msgstr "Un code à copier : une réduction, le mot de passe de la salle suivante. Vide : pas de code."
+
+#: src/config/elements/lucchetto.js
+msgid "Pulsante «Copia»"
+msgstr "Bouton « Copier »"
+
+#: src/config/elements/lucchetto.js
+msgid "Testo dopo la copia"
+msgstr "Texte après la copie"
+
+#: src/config/elements/lucchetto.js
+msgid "Pulsante del premio"
+msgstr "Bouton de la récompense"
+
+#: src/config/elements/lucchetto.js
+msgid "Un pulsante sotto il premio, per esempio verso la stanza successiva. Senza testo o senza collegamento non compare."
+msgstr "Un bouton sous la récompense, par exemple vers la salle suivante. Sans texte ou sans lien, il n’apparaît pas."
+
+#: src/config/elements/lucchetto.js
+msgid "Ricorda l'apertura"
+msgstr "Mémoriser l’ouverture"
+
+#: src/config/elements/lucchetto.js
+msgid "Il browser ricorda che questo lucchetto è stato aperto: alla visita dopo è già aperto, col premio in vista. Nel builder riparte sempre chiuso."
+msgstr "Le navigateur mémorise que ce cadenas a été ouvert : à la visite suivante, il est déjà ouvert, récompense en vue. Dans le builder, il repart toujours fermé."
+
+#: src/config/elements/lucchetto.js
+msgid "Mostra il lucchetto"
+msgstr "Afficher le cadenas"
+
+#: src/config/elements/lucchetto.js
+msgid "Il lucchetto disegnato attorno alle ruote, col gancio che si alza all'apertura. Spento: restano solo le ruote."
+msgstr "Le cadenas dessiné autour des molettes, avec l’anse qui se soulève à l’ouverture. Désactivé, il ne reste que les molettes."
+
+#: src/config/elements/lucchetto.js
+msgid "Icona al posto del disegno"
+msgstr "Icône à la place du dessin"
+
+#: src/config/elements/lucchetto.js
+msgid "Un'icona sopra le ruote al posto del lucchetto disegnato. Vuota: il disegno."
+msgstr "Une icône au-dessus des molettes à la place du cadenas dessiné. Vide : le dessin."
+
+#: src/config/elements/lucchetto.js
+msgid "Ottone"
+msgstr "Laiton"
+
+#: src/config/elements/lucchetto.js
+msgid "Acciaio"
+msgstr "Acier"
+
+#: src/config/elements/lucchetto.js
+msgid "Ottone e acciaio sono metalli disegnati coi riflessi; Minimal è piatto, coi colori del tema."
+msgstr "Le laiton et l’acier sont des métaux dessinés avec des reflets ; Minimal est plat, aux couleurs du thème."
+
+#: src/config/elements/lucchetto.js
+msgid "Colore del corpo"
+msgstr "Couleur du corps"
+
+#: src/config/elements/lucchetto.js
+msgid "Il corpo del lucchetto, o l'icona. Vuoto: l'ottone, l'acciaio o il primario del tema, secondo lo stile."
+msgstr "Le corps du cadenas, ou l’icône. Vide : le laiton, l’acier ou la couleur principale du thème, selon le style."
+
+#: src/config/elements/lucchetto.js
+msgid "Colore delle ruote"
+msgstr "Couleur des molettes"
+
+#: src/config/elements/lucchetto.js
+msgid "Vuoto: scure su ottone e acciaio, il fondo del tema in Minimal."
+msgstr "Vide : foncées sur laiton et acier, le fond du thème en Minimal."
+
+#: src/config/elements/lucchetto.js
+msgid "Colore dei simboli"
+msgstr "Couleur des symboles"
+
+#: src/config/elements/lucchetto.js
+msgid "Cifre, lettere o simboli sulle ruote. Vuoto: quello che si legge sulle ruote."
+msgstr "Chiffres, lettres ou symboles des molettes. Vide : une couleur qui se lit bien sur les molettes."
+
+#: src/config/elements/lucchetto.js
+msgid "Il pulsante «Apri», il pulsante del premio e l'anello della ruota attiva. Vuoto: il primario del tema."
+msgstr "Le bouton « Ouvrir », le bouton de la récompense et l’anneau de la molette active. Vide : la couleur principale du thème."
+
+#: src/config/elements/lucchetto.js
+msgid "Colore del successo"
+msgstr "Couleur de succès"
+
+#: src/config/elements/lucchetto.js
+msgid "Le ruote e il riquadro del premio quando il lucchetto si apre. Vuoto: il colore «successo» del tema."
+msgstr "Les molettes et le cadre de la récompense quand le cadenas s’ouvre. Vide : la couleur « succès » du thème."
+
+#: src/config/elements/lucchetto.js
+msgid "Il messaggio e le ruote quando la combinazione è sbagliata. Vuoto: il colore «pericolo» del tema."
+msgstr "Le message et les molettes quand la combinaison est erronée. Vide : la couleur « danger » du thème."
+
+#: src/config/elements/lucchetto.js
+msgid "Un riquadro attorno a tutta la tile. Vuoto: trasparente."
+msgstr "Un cadre autour de toute la tile. Vide : transparent."
+
+#: src/config/elements/lucchetto.js
+msgid "Sotto il pannello, se ha uno sfondo; altrimenti sotto il lucchetto, o sotto le ruote quando il disegno è spento."
+msgstr "Sous le panneau, s’il a un fond ; sinon sous le cadenas, ou sous les molettes quand le dessin est désactivé."
+
+#: src/config/elements/lucchetto.js
+msgid "Simboli"
+msgstr "Symboles"
+
+#: src/config/elements/lucchetto.js
+msgid "Gli angoli del pannello, del lucchetto, dell'indizio e del premio; le ruote ne prendono una parte."
+msgstr "Les coins du panneau, du cadenas, de l’indice et de la récompense ; les molettes en prennent une partie."
+
+#: src/config/elements/lucchetto.js
+msgid "Misura delle ruote"
+msgstr "Taille des molettes"
+
+#: src/config/elements/lucchetto.js
+msgid "La larghezza di una ruota: tutto il lucchetto cresce con lei. Dove lo spazio non basta, le ruote si stringono da sole."
+msgstr "La largeur d’une molette : tout le cadenas grandit avec elle. Là où la place manque, les molettes se resserrent d’elles-mêmes."
+
+#: src/config/elements/lucchetto.js
+msgid "Fra l'enigma, il lucchetto, i pulsanti e il premio."
+msgstr "Entre l’énigme, le cadenas, les boutons et la récompense."
+
+#: includes/tiles/class-lucchetto-tile.php
+msgid "Il lucchetto è aperto."
+msgstr "Le cadenas est ouvert."
+
+#: includes/tiles/class-lucchetto-tile.php
+msgid "Tentativi: %d"
+msgstr "Tentatives : %d"
+
+#: includes/tiles/class-lucchetto-tile.php
+msgid "Ecco un indizio."
+msgstr "Voici un indice."
+
+#: includes/tiles/class-lucchetto-tile.php
+msgid "Ruota %1$d di %2$d"
+msgstr "Molette %1$d sur %2$d"
+
+#: includes/tiles/class-lucchetto-tile.php
+msgid "Frecce su e giù per cambiare il simbolo, destra e sinistra per passare a un'altra ruota, Invio per aprire. Puoi anche scrivere il simbolo."
+msgstr "Flèches haut et bas pour changer le symbole, droite et gauche pour passer à une autre molette, Entrée pour ouvrir. Vous pouvez aussi taper le symbole."
+
+#: includes/tiles/class-lucchetto-tile.php
+msgid "Scrivi almeno due simboli personalizzati, separati da una virgola: per ora le ruote mostrano le cifre."
+msgstr "Saisissez au moins deux symboles personnalisés, séparés par une virgule : pour l’instant, les molettes affichent des chiffres."
+
+#: includes/tiles/class-lucchetto-tile.php
+msgid "Scrivi la combinazione nel Contenuto, da 3 a 6 simboli: finché manca, sul sito il lucchetto non si vede."
+msgstr "Saisissez la combinaison dans Contenu, de 3 à 6 symboles : tant qu’elle manque, le cadenas n’apparaît pas sur le site."
+
+#: includes/tiles/class-lucchetto-tile.php
+msgid "Nella combinazione ci sono simboli che le ruote non hanno: %s. Finché restano, sul sito il lucchetto non si vede."
+msgstr "La combinaison contient des symboles que les molettes n’ont pas : %s. Tant qu’ils restent, le cadenas n’apparaît pas sur le site."
+
+#: includes/tiles/class-lucchetto-tile.php
+msgid "La combinazione deve avere da 3 a 6 simboli, una ruota per simbolo: ora ne ha %d. Finché è così, sul sito il lucchetto non si vede."
+msgstr "La combinaison doit compter de 3 à 6 symboles, une molette par symbole : elle en a %d pour l’instant. Tant que c’est le cas, le cadenas n’apparaît pas sur le site."
+
+#: includes/tiles/class-lucchetto-tile.php
+msgid "Nel builder la combinazione è %s: provala qui. Sul sito questa nota non c'è."
+msgstr "Dans le builder, la combinaison est %s : essayez-la ici. Cette note n’apparaît pas sur le site."

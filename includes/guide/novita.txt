@@ -3,6 +3,14 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.785 - 2026-10-15 (tile)
+- Nuova tile «Orario corsi»: l’orario settimanale dei corsi, in griglia con le ore o in elenco, con i filtri per disciplina e livello, il giorno di oggi in evidenza e la lezione in corso. Tocchi una lezione e si aprono i dettagli col pulsante per prenotarla.
+- Nuova tile «Calendario soggiorni»: la disponibilità di una casa o di una camera con i prezzi per stagione e il minimo di notti. L’ospite sceglie arrivo, partenza e persone e vede subito notti, pulizie, imposta di soggiorno e totale; con un clic le date passano al modulo di richiesta.
+- Nuova tile «Configuratore»: gruppi di opzioni (una scelta, più scelte, quantità) col prezzo che si aggiorna, gli indicatori e il riepilogo, che con un pulsante passa al modulo o a un link.
+- Nuova tile «Tour 360»: foto sferiche da girare col mouse o col dito, con più scene collegate, i punti con le informazioni, l’elenco delle scene, la rotazione automatica e lo schermo intero.
+- Nuova tile «Lucchetto»: un lucchetto a combinazione da aprire risolvendo un enigma, con l’indizio dopo qualche tentativo. Chi indovina vede il messaggio, un codice premio da copiare e un pulsante.
+- Importando un tema, le foto a 360° restano alla risoluzione piena (WordPress le riduceva a 2560 px).
+
 ## v1.4.784 - 2026-10-14 (temi)
 - Tre temi nuovi in «Industria e manifattura»: Varco Nove (logistica conto terzi: magazzini, cross-docking, e-commerce e trasporti, col campo per tracciare la spedizione e la pianta del polo da toccare), Tessiture Navetta (tessuti tecnici, con la lente sul tessuto, le prove di laboratorio e il campionario) e Marmi Lizza (cava e segheria di marmo, con le finiture della stessa lastra sotto la lente e il catalogo delle lastre). Ognuno ha la home e tre pagine interne, testata, piè di pagina, pagina d’errore e il pulsante per tornare in cima su ogni pagina.
 

@@ -61,6 +61,24 @@ class Olobuild_Template_Library {
     }
 
     /**
+     * Soglia delle immagini grandi durante la copia dei media: un panorama equirettangolare (2:1, fino a
+     * 8192 px) resta intero. WordPress riduce a 2560 px ogni immagine più larga, e il Tour 360 col
+     * panorama da 4096 px perdeva metà della nitidezza; le altre immagini restano ridotte come prima.
+     *
+     * @param int|false $soglia Soglia di WordPress (2560).
+     * @param array     $misure [ larghezza, altezza ].
+     * @return int|false
+     */
+    public static function soglia_panorami( $soglia, $misure = [] ) {
+        $w = (int) ( $misure[0] ?? 0 );
+        $h = (int) ( $misure[1] ?? 0 );
+        if ( $h > 0 && $w === 2 * $h && $w <= 8192 ) {
+            return false;
+        }
+        return $soglia;
+    }
+
+    /**
      * Copia nella Libreria media del sito le foto della libreria remota usate da un blocco e
      * riscrive gli indirizzi: il sito non dipende più da olotheme.com. Una foto già copiata (meta
      * _olobuild_library_media) si riusa. Scarica solo da {library}/media/ e solo immagini e video MP4
@@ -94,6 +112,7 @@ class Olobuild_Template_Library {
         require_once ABSPATH . 'wp-admin/includes/media.php';
         require_once ABSPATH . 'wp-admin/includes/image.php';
         $mappa = [];
+        add_filter( 'big_image_size_threshold', [ __CLASS__, 'soglia_panorami' ], 10, 2 );
         foreach ( array_slice( $urls, 0, 40, true ) as $url => $file ) {
             $gia = get_posts( [
                 'post_type'      => 'attachment',
@@ -128,6 +147,7 @@ class Olobuild_Template_Library {
             $mappa[ $url ] = wp_get_attachment_url( (int) $aid );
             $esito['copiate']++;
         }
+        remove_filter( 'big_image_size_threshold', [ __CLASS__, 'soglia_panorami' ], 10 );
         if ( $mappa ) {
             $sostituisci = function ( $v ) use ( &$sostituisci, $mappa ) {
                 if ( is_array( $v ) ) {
@@ -273,6 +293,7 @@ class Olobuild_Template_Library {
         $ammessi = [ 'image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif', 'video/mp4', 'video/webm' ];
         $massimo = (int) min( wp_max_upload_size(), 200 * MB_IN_BYTES );
         $mappa   = [];
+        add_filter( 'big_image_size_threshold', [ __CLASS__, 'soglia_panorami' ], 10, 2 );
         foreach ( array_keys( $urls ) as $url ) {
             $gia = get_posts( [
                 'post_type'      => 'attachment',
@@ -325,6 +346,7 @@ class Olobuild_Template_Library {
             $mappa[ $url ] = wp_get_attachment_url( (int) $aid );
             $esito['copiate']++;
         }
+        remove_filter( 'big_image_size_threshold', [ __CLASS__, 'soglia_panorami' ], 10 );
         if ( $mappa ) {
             $sostituisci = function ( $v ) use ( &$sostituisci, $mappa ) {
                 if ( is_array( $v ) ) {
