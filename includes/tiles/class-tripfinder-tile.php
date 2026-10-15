@@ -79,6 +79,11 @@ class Olobuild_TripFinder_Tile extends Olobuild_Tile_Base {
         // FORMA: raggio per-angolo override. '' (tutti 0) → usa $rad uniforme storico.
         $rad_corners = $this->build_border_radius_css( $s['radius_corners'] ?? [] );
         $rad_eff     = ( $rad_corners !== '' ) ? $rad_corners : $rad;
+        // Sul telefono (≤ 680 px) i campi vanno uno sotto l'altro: un raggio a pillola (999) faceva della barra un ovale
+        // che tagliava l'etichetta del primo campo (Passo Lento). Lì ogni angolo si ferma a 28 px; il pulsante resta com'è.
+        $rad_pila = implode( ' ', array_map( static function ( $v ) {
+            return ( '' === $v || '0' === $v ) ? '0px' : 'min(' . $v . ',28px)';
+        }, preg_split( '/\s+/', trim( (string) $rad_eff ) ) ) );
 
         // SPAZIATURA: padding barra/campi. Default = valori storici → render invariato.
         $bar_pad   = $this->tf_pad_css( $s['bar_padding'] ?? [], [ 8, 8, 8, 8 ] );
@@ -130,7 +135,7 @@ class Olobuild_TripFinder_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .otf-btn:hover{transform:translateY(-1px);filter:brightness(1.05);}
             .<?php echo $uid; ?> .otf-btn:focus-visible{outline:2px solid <?php echo $accent; ?>;outline-offset:3px;}
             .<?php echo $uid; ?> .otf-btn svg{width:16px;height:16px;}
-            @media (max-width:680px){.<?php echo $uid; ?> .otf-f{flex:1 1 100%;border-left:0;border-top:1px solid <?php echo $fbd; ?>;}.<?php echo $uid; ?> .otf-f:first-child{border-top:0;}.<?php echo $uid; ?> .otf-btn{flex:1 1 100%;margin:8px 0 0;padding:14px 26px;}}
+            @media (max-width:680px){.<?php echo $uid; ?> .otf-bar{border-radius:<?php echo $rad_pila; ?>;}.<?php echo $uid; ?> .otf-f{flex:1 1 100%;border-left:0;border-top:1px solid <?php echo $fbd; ?>;}.<?php echo $uid; ?> .otf-f:first-child{border-top:0;}.<?php echo $uid; ?> .otf-btn{flex:1 1 100%;margin:8px 0 0;padding:14px 26px;}}
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php
