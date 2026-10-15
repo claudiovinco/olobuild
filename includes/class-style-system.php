@@ -1952,7 +1952,10 @@ class Olobuild_Style_System {
 
         // Container max-width
         $css .= "\n/* Container overrides */\n";
-        $css .= ".olo-template .uk-container:not(.uk-container-expand) { max-width: var(--olo-container-max-width); padding-left: var(--olo-gutter-side); padding-right: var(--olo-gutter-side); }\n";
+        // La larghezza globale vale per la sezione «Standard»: Piccola, Grande ed Extra grande tengono la loro
+        // misura di UIkit (900, 1400, 1600 px). Prima questa regola le batteva tutte e la scelta non agiva.
+        $css .= ".olo-template .uk-container:not(.uk-container-expand) { padding-left: var(--olo-gutter-side); padding-right: var(--olo-gutter-side); }\n";
+        $css .= ".olo-template .uk-container:not(.uk-container-expand):not(.uk-container-small):not(.uk-container-large):not(.uk-container-xlarge) { max-width: var(--olo-container-max-width); }\n";
         $css .= ".olo-template .olo-container-narrow { max-width: var(--olo-container-narrow); margin-left: auto; margin-right: auto; }\n";
         $css .= ".olo-template .olo-container-wide { max-width: var(--olo-container-wide); margin-left: auto; margin-right: auto; }\n";
         $css .= ".olo-template .olo-container-full { max-width: 100%; }\n";
