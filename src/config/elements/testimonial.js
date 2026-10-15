@@ -28,6 +28,8 @@ export default {
     quote_accent_color: '',
     quote_font: 'inherit',
     quote_size: 0,
+    // Corsivo della citazione (Singola, Carosello, Griglia): acceso come quando era fisso nel renderer.
+    quote_italic: true,
     author_uppercase: false,
     quote_uppercase: false,
     layout: 'single',
@@ -156,6 +158,22 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    // Il Corsivo vale dove la citazione è un blockquote (Singola, Carosello, Griglia): era fisso nel
+    // renderer, e con un font senza corsivo caricato usciva un obliquo finto. L'Editoriale ha la sua
+    // resa (tondo, con le parole in <em> in corsivo) e lì il comando non agirebbe: stessa «Citazione»
+    // senza la riga Corsivo. Una sola delle due si vede, secondo il layout.
+    { type: 'typography', label: t('Citazione'),
+      responsiveKeys: [],
+      keys: {
+        size:      'quote_size',
+        color:     'text_color',
+        family:    'quote_font',
+        uppercase: 'quote_uppercase',
+        italic:    'quote_italic',
+      },
+      sizeMin: 0, sizeMax: 56,
+      condition: { field: 'layout', op: 'neq', value: 'editorial' },
+    },
     { type: 'typography', label: t('Citazione'),
       responsiveKeys: [],
       keys: {
@@ -165,6 +183,7 @@ export default {
         uppercase: 'quote_uppercase',
       },
       sizeMin: 0, sizeMax: 56,
+      condition: { field: 'layout', op: 'eq', value: 'editorial' },
     },
 
     { type: 'separator', label: t('Autore') },

@@ -12,6 +12,11 @@ import { t } from '@/i18n';
  */
 const conTassa = { field: 'tassa_soggiorno', op: 'gt', value: 0 };
 const conPrezziCalendario = { field: 'mostra_prezzi', op: 'eq', value: true };
+const conLegenda = { field: 'legenda', op: 'eq', value: true };
+// Come $con_prezzi del renderer: il prezzo di base o quello di una stagione (senza il prezzo di base vale il predefinito).
+const positivo = (v) => (parseFloat(String(v ?? '').replace(',', '.')) || 0) > 0;
+const conPrezzi = (s) => s.prezzo_notte === undefined || positivo(s.prezzo_notte)
+  || (Array.isArray(s.stagioni) && s.stagioni.some((x) => !!x && positivo(x.prezzo_notte)));
 
 const OMBRE = [
   { value: 'none', label: t('Nessuna') },
@@ -59,7 +64,13 @@ export default {
     testo_scegli_partenza: t('Ora scegli il giorno di partenza'),
     testo_minimo: t('In questo periodo il soggiorno minimo è di {n} notti'),
     testo_occupato: t('Nelle date scelte la casa è già occupata'),
+    testo_aggiungi: t('Aggiungi data'),
+    testo_vuoto: t('Scegli le date per vedere il prezzo del soggiorno.'),
+    testo_azzera: t('Cancella le date'),
     legenda: true,
+    testo_legenda_libero: t('Libero'),
+    testo_legenda_occupato: t('Occupato'),
+    testo_legenda_scelte: t('Le tue date'),
 
     colore_testo: '',
     colore_tenue: '',
@@ -188,6 +199,9 @@ export default {
     { key: 'mesi_avanti', label: t('Mesi prenotabili'), type: 'range', min: 1, max: 24, step: 1,
       description: t('Quanti mesi si possono sfogliare, contando quello di oggi. I giorni dopo non si possono scegliere.') },
     { key: 'legenda', label: t('Mostra la legenda'), type: 'toggle' },
+    { key: 'testo_legenda_libero', label: t('Testo «Libero»'), type: 'text', condition: conLegenda },
+    { key: 'testo_legenda_occupato', label: t('Testo «Occupato»'), type: 'text', condition: conLegenda },
+    { key: 'testo_legenda_scelte', label: t('Testo «Le tue date»'), type: 'text', condition: conLegenda },
     { key: 'parametri', label: t('Date dall\'indirizzo'), type: 'toggle',
       description: t('Chi arriva da un indirizzo con ?arrivo=2026-08-14&partenza=2026-08-21&ospiti=4 trova le date già scelte, se sono libere: serve ai pulsanti «Prenota» delle altre pagine.') },
 
@@ -206,6 +220,12 @@ export default {
     { key: 'testo_minimo', label: t('Soggiorno troppo breve'), type: 'text',
       description: t('{n} diventa il numero di notti minime.') },
     { key: 'testo_occupato', label: t('Date già occupate'), type: 'text' },
+    { key: 'testo_aggiungi', label: t('Testo «Aggiungi data»'), type: 'text',
+      description: t('Nel riepilogo, al posto dell\'arrivo e della partenza finché non si scelgono.') },
+    { key: 'testo_vuoto', label: t('Riepilogo senza date'), type: 'text', show: conPrezzi,
+      description: t('La frase del riepilogo prima della scelta delle date, al posto del conto.') },
+    { key: 'testo_azzera', label: t('Testo «Cancella le date»'), type: 'text',
+      description: t('Il pulsante sotto il riepilogo che toglie le date scelte: compare dopo la scelta dell\'arrivo.') },
   ],
 
   styleFields: [

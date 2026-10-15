@@ -105,8 +105,9 @@ class Olobuild_Totop_Tile extends Olobuild_Tile_Base {
                 $x_su  = $lato === 'center' ? 'translateX(-50%) ' : '';
                 $x_pos = $lato === 'left' ? 'left:' . $bordo_x . 'px;' : ( $lato === 'center' ? 'left:50%;' : 'right:' . $bordo_x . 'px;' );
             ?>
-            .<?php echo $uid; ?>.olo-totop--fisso { position: fixed; z-index: 95; margin: 0; line-height: 0; bottom: calc(<?php echo $bordo_y; ?>px + env(safe-area-inset-bottom, 0px)); <?php echo $x_pos; ?> opacity: 0; visibility: hidden; pointer-events: none; transform: <?php echo $x_su; ?>translateY(12px); transition: opacity .25s ease, transform .25s ease, visibility 0s linear .25s; }
-            .<?php echo $uid; ?>.olo-totop--fisso.is-visibile { opacity: 1; visibility: visible; pointer-events: auto; transform: <?php echo $x_su ?: 'none'; ?>; transition: opacity .25s ease, transform .25s ease, visibility 0s; }
+            <?php // --olo-barra-fondo: l'altezza di una barra fissa in fondo allo schermo mentre è in vista (quella del totale del Configuratore la pubblica sul documento); il pulsante le sale sopra invece di coprirla. Senza barra vale 0 e tutto resta com'era. ?>
+            .<?php echo $uid; ?>.olo-totop--fisso { position: fixed; z-index: 95; margin: 0; line-height: 0; bottom: calc(<?php echo $bordo_y; ?>px + env(safe-area-inset-bottom, 0px) + var(--olo-barra-fondo, 0px)); <?php echo $x_pos; ?> opacity: 0; visibility: hidden; pointer-events: none; transform: <?php echo $x_su; ?>translateY(12px); transition: opacity .25s ease, transform .25s ease, bottom .25s ease, visibility 0s linear .25s; }
+            .<?php echo $uid; ?>.olo-totop--fisso.is-visibile { opacity: 1; visibility: visible; pointer-events: auto; transform: <?php echo $x_su ?: 'none'; ?>; transition: opacity .25s ease, transform .25s ease, bottom .25s ease, visibility 0s; }
             <?php if ( $style === 'default' ) : ?>
             .<?php echo $uid; ?>.olo-totop--fisso .olo-totop-btn { background-color: var(--olo-color-background, #ffffff); box-shadow: 0 4px 16px color-mix(in srgb, var(--olo-color-dark, #000000) 18%, transparent); }
             <?php endif; ?>

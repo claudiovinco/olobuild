@@ -32,6 +32,8 @@ export default {
     divider: false,
     divider_color: '',
     layout: 'vertical',
+    // Padding dell'elenco: era 16 px fissi in linea nel PHP; 16 su tutti i lati = com'era.
+    list_padding: { top: 16, right: 16, bottom: 16, left: 16 },
     shadow: 'none',
     ...textEffectsDefaults,
     text_effect_target: 'text',
@@ -126,6 +128,7 @@ export default {
     ]},
     { type: 'separator', label: t('Spaziatura & separatore') },
     { key: 'gap', label: t('Gap voci'), type: 'range', min: 4, max: 32, step: 2 },
+    { key: 'list_padding', label: t('Padding lista'), type: 'spacing', min: 0, max: 80 },
     { key: 'divider_color', label: t('Colore separatore'), type: 'color',
       condition: { field: 'divider', operator: '==', value: true } },
 

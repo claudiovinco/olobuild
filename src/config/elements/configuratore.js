@@ -282,7 +282,7 @@ export default {
       { value: 'sotto', label: t('Sotto le opzioni') },
     ], description: t('Accanto: resta in vista mentre si scorrono le opzioni. Sotto i 960 px, o in una colonna stretta, va sotto, e la sua barra col totale resta in fondo allo schermo finché si sceglie.') },
     { key: 'colonne', label: t('Colonne'), type: 'range', min: 1, max: 4, step: 1, responsive: true, condition: conSchede,
-      description: t('Delle schede. Se lo spazio non basta la griglia ne mette meno da sola; sul tablet al massimo due e sul telefono una, se non ne scegli altre per quei dispositivi.') },
+      description: t('Delle schede. Se lo spazio non basta la griglia ne mette meno da sola; sul tablet al massimo due e sul telefono una, se non ne scegli altre per quei dispositivi. Un gruppo che lascerebbe una scheda da sola nell\'ultima riga cambia colonne da sé: 4 opzioni su 3 colonne vanno 2 + 2.') },
     { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 2, unit: 'px',
       description: t('Fra le opzioni.') },
   ],

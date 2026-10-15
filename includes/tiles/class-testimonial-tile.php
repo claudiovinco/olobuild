@@ -25,6 +25,8 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
         'quote_accent_color' => '',
         'quote_font'        => 'inherit',
         'quote_size'        => 0,
+        // Corsivo della citazione (Singola, Carosello, Griglia): acceso come quando era fisso.
+        'quote_italic'      => true,
         'author_uppercase'  => false,
         'layout'          => 'single',
         'autoplay'        => false,
@@ -168,12 +170,17 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
             // 0 / 'inherit' = la resa di sempre.
             $q_size   = intval( $s['quote_size'] ?? 0 );
             $q_family = $this->resolve_font_family( $s['quote_font'] ?? '', $this->font_storici_citazione() );
+            // Corsivo (stesso controllo «Citazione»): era fisso, e con un font di cui il tema non carica
+            // il corsivo il browser disegnava un obliquo finto (Giroscopio, Outfit). Vuoto = acceso, com'era;
+            // spento = dritto, scritto esplicito perché UIkit dà il corsivo a ogni blockquote.
+            $q_it_v   = $s['quote_italic'] ?? true;
+            $q_italic = ( '' === $q_it_v || null === $q_it_v ) ? true : filter_var( $q_it_v, FILTER_VALIDATE_BOOLEAN );
             ?>
             .<?php echo $uid; ?> blockquote {
                 font-size: <?php echo $q_size > 0 ? $q_size . 'px' : '1.1em'; ?>;
                 <?php if ( $q_family !== '' && $q_family !== 'inherit' ) : ?>font-family: <?php echo $q_family; ?>;<?php endif; ?>
                 <?php if ( ! empty( $s['quote_uppercase'] ) ) : ?>text-transform: uppercase;<?php endif; ?>
-                font-style: italic;
+                font-style: <?php echo $q_italic ? 'italic' : 'normal'; ?>;
                 margin: 0;
                 line-height: 1.6;
                 color: <?php echo $fg; ?>;
@@ -251,10 +258,13 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
                 min-width: 0;
             }
             <?php else : ?>
+            <?php // Lo stacco dalla citazione è padding e non margine: nella Griglia l'autore scende in fondo
+                  // alla scheda con margin-top:auto (render_grid) e i 20 px restano come minimo. Altrove il
+                  // margine non c'è più e lo stacco è lo stesso di prima. ?>
             .<?php echo $uid; ?> .olo-test-author-wrap {
                 display: flex;
                 justify-content: <?php echo $bottom_jc; ?>;
-                margin-top: 20px;
+                padding-top: 20px;
             }
             .<?php echo $uid; ?> .olo-test-author {
                 display: flex;
@@ -398,6 +408,16 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
                 grid-template-columns: repeat(<?php echo (int) $columns; ?>, 1fr);
                 gap: 20px;
             }
+            <?php // Le schede di una fila sono già alte uguali (la griglia le allunga): da colonne flex, l'autore
+                  // scende in fondo e gli autori della fila stanno alla stessa quota anche con citazioni di
+                  // lunghezza diversa. Il logo resta largo quanto è (in una colonna flex si allargherebbe a
+                  // 160 px e, con object-fit:contain, finirebbe al centro). ?>
+            .<?php echo $uid; ?> .olo-test-grid .olo-test-card {
+                display: flex;
+                flex-direction: column;
+            }
+            .<?php echo $uid; ?> .olo-test-grid .olo-test-author-wrap { margin-top: auto; }
+            .<?php echo $uid; ?> .olo-test-grid .olo-test-logo { align-self: flex-start; }
             @media (max-width: 640px) {
                 .<?php echo $uid; ?> .olo-test-grid {
                     grid-template-columns: 1fr;

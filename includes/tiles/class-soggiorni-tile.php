@@ -59,7 +59,13 @@ class Olobuild_Soggiorni_Tile extends Olobuild_Tile_Base {
         'testo_scegli_partenza'       => 'Ora scegli il giorno di partenza',
         'testo_minimo'                => 'In questo periodo il soggiorno minimo è di {n} notti',
         'testo_occupato'              => 'Nelle date scelte la casa è già occupata',
+        'testo_aggiungi'              => 'Aggiungi data',
+        'testo_vuoto'                 => 'Scegli le date per vedere il prezzo del soggiorno.',
+        'testo_azzera'                => 'Cancella le date',
         'legenda'                     => true,
+        'testo_legenda_libero'        => 'Libero',
+        'testo_legenda_occupato'      => 'Occupato',
+        'testo_legenda_scelte'        => 'Le tue date',
         // stile
         'colore_testo'                => '',
         'colore_tenue'                => '',
@@ -345,6 +351,13 @@ class Olobuild_Soggiorni_Tile extends Olobuild_Tile_Base {
             'occupato' => self::testo( $s['testo_occupato'] ) ?: __( 'Nelle date scelte la casa è già occupata', 'olobuilder' ),
         ];
         $testo_p   = self::testo( $s['testo_pulsante'] ) ?: __( 'Richiedi questo soggiorno', 'olobuilder' );
+        // Riepilogo e legenda: anche questi si scrivono (un tema che dà del voi resta coerente); vuoti = quelli di sempre.
+        $t_agg     = self::testo( $s['testo_aggiungi'] ) ?: __( 'Aggiungi data', 'olobuilder' );
+        $t_vuoto   = self::testo( $s['testo_vuoto'] ) ?: __( 'Scegli le date per vedere il prezzo del soggiorno.', 'olobuilder' );
+        $t_azzera  = self::testo( $s['testo_azzera'] ) ?: __( 'Cancella le date', 'olobuilder' );
+        $leg_lib   = self::testo( $s['testo_legenda_libero'] ) ?: __( 'Libero', 'olobuilder' );
+        $leg_occ   = self::testo( $s['testo_legenda_occupato'] ) ?: __( 'Occupato', 'olobuilder' );
+        $leg_sc    = self::testo( $s['testo_legenda_scelte'] ) ?: __( 'Le tue date', 'olobuilder' );
         $et_tassa  = self::testo( $s['etichetta_tassa'] ) ?: __( 'Imposta di soggiorno', 'olobuilder' );
         $nota      = self::testo( $s['nota'] );
         $ospiti_n  = str_replace( '{n}', (string) $osp_ini, __( '{n} ospiti', 'olobuilder' ) );
@@ -611,7 +624,7 @@ class Olobuild_Soggiorni_Tile extends Olobuild_Tile_Base {
                 'dentro'   => __( 'notte del soggiorno', 'olobuilder' ),
                 'uscita'   => __( 'solo partenza', 'olobuilder' ),
                 'pulizie'  => __( 'Pulizie finali', 'olobuilder' ),
-                'aggiungi' => __( 'Aggiungi data', 'olobuilder' ),
+                'aggiungi' => $t_agg,
             ],
         ];
 
@@ -628,9 +641,9 @@ class Olobuild_Soggiorni_Tile extends Olobuild_Tile_Base {
         echo '<p class="osg-stato" role="status"><span class="osg-stato-t">' . esc_html( $testi['arrivo'] ) . '</span><span class="osg-conta" aria-hidden="true"></span></p>';
         if ( ! empty( $s['legenda'] ) ) {
             echo '<ul class="osg-legenda" aria-label="' . esc_attr__( 'Legenda', 'olobuilder' ) . '">';
-            echo '<li><span class="osg-cam" aria-hidden="true"></span>' . esc_html__( 'Libero', 'olobuilder' ) . '</li>';
-            echo '<li><span class="osg-cam osg-cam--occupato" aria-hidden="true"></span>' . esc_html__( 'Occupato', 'olobuilder' ) . '</li>';
-            echo '<li><span class="osg-cam osg-cam--scelto" aria-hidden="true"></span>' . esc_html__( 'Le tue date', 'olobuilder' ) . '</li>';
+            echo '<li><span class="osg-cam" aria-hidden="true"></span>' . esc_html( $leg_lib ) . '</li>';
+            echo '<li><span class="osg-cam osg-cam--occupato" aria-hidden="true"></span>' . esc_html( $leg_occ ) . '</li>';
+            echo '<li><span class="osg-cam osg-cam--scelto" aria-hidden="true"></span>' . esc_html( $leg_sc ) . '</li>';
             echo '</ul>';
         }
         echo '<p class="osg-sr osg-annuncio" aria-live="polite"></p>';
@@ -645,8 +658,8 @@ class Olobuild_Soggiorni_Tile extends Olobuild_Tile_Base {
         }
         echo '<div class="osg-campi">';
         echo '<div class="osg-date">';
-        echo '<div class="osg-data"><span class="osg-etichetta">' . esc_html__( 'Arrivo', 'olobuilder' ) . '</span><span class="osg-valore is-vuoto" data-osg-v="arrivo">' . esc_html__( 'Aggiungi data', 'olobuilder' ) . '</span></div>';
-        echo '<div class="osg-data"><span class="osg-etichetta">' . esc_html__( 'Partenza', 'olobuilder' ) . '</span><span class="osg-valore is-vuoto" data-osg-v="partenza">' . esc_html__( 'Aggiungi data', 'olobuilder' ) . '</span></div>';
+        echo '<div class="osg-data"><span class="osg-etichetta">' . esc_html__( 'Arrivo', 'olobuilder' ) . '</span><span class="osg-valore is-vuoto" data-osg-v="arrivo">' . esc_html( $t_agg ) . '</span></div>';
+        echo '<div class="osg-data"><span class="osg-etichetta">' . esc_html__( 'Partenza', 'olobuilder' ) . '</span><span class="osg-valore is-vuoto" data-osg-v="partenza">' . esc_html( $t_agg ) . '</span></div>';
         echo '</div>';
         echo '<div class="osg-ospiti"><span class="osg-etichetta" id="' . esc_attr( $uid ) . '-o">' . esc_html__( 'Ospiti', 'olobuilder' ) . '</span>';
         echo '<div class="osg-passo" role="group" aria-labelledby="' . esc_attr( $uid ) . '-o" data-olo-interactive>';
@@ -659,7 +672,7 @@ class Olobuild_Soggiorni_Tile extends Olobuild_Tile_Base {
 
         echo '<div class="osg-p-b">';
         if ( $con_prezzi ) {
-            echo '<p class="osg-vuoto">' . esc_html__( 'Scegli le date per vedere il prezzo del soggiorno.', 'olobuilder' ) . '</p>';
+            echo '<p class="osg-vuoto">' . esc_html( $t_vuoto ) . '</p>';
             echo '<div class="osg-conto" hidden><ul class="osg-righe"></ul><p class="osg-totale"><span class="osg-etichetta">' . esc_html__( 'Totale', 'olobuilder' ) . '</span><span class="osg-cifra" aria-live="polite"></span></p></div>';
         }
         if ( '' !== $link ) {
@@ -671,7 +684,7 @@ class Olobuild_Soggiorni_Tile extends Olobuild_Tile_Base {
         if ( '' !== $nota ) {
             echo '<p class="osg-nota"' . ( $builder ? ' data-olo-editable="nota"' : '' ) . '>' . esc_html( $nota ) . '</p>';
         }
-        echo '<button type="button" class="osg-azzera" hidden data-olo-interactive>' . esc_html__( 'Cancella le date', 'olobuilder' ) . '</button>';
+        echo '<button type="button" class="osg-azzera" hidden data-olo-interactive>' . esc_html( $t_azzera ) . '</button>';
         echo '</div>';
         echo '</div></div>';
 
@@ -687,6 +700,8 @@ class Olobuild_Soggiorni_Tile extends Olobuild_Tile_Base {
      * «&» nello script (wptexturize lo riscrive fra un «<» e un «>»): condizioni annidate e la «&» delle query da
      * String.fromCharCode(38). Ogni istanza si avvia una volta (data-osg-pronto), anche quando lo script rigira
      * (anteprima del builder, sezioni caricate dopo). I giorni sono numeri (giorni dal 1970, in UTC): niente ora legale.
+     * L'intervallo scelto («3–8 novembre 2026») viene da formatRangeToParts: in it-IT Chrome dà i giorni a due cifre
+     * («03–08 novembre») anche con day:'numeric', e lo zero davanti si toglie dalle sole parti «day».
      */
     private function script() {
         return <<<'JS'
@@ -873,7 +888,13 @@ if(!contaEl){return;}var t="";
 if(S.a!==null){if(S.p===null){if(S.h!==null){if(S.h>S.a){if(S.h<=maxPart(S.a)){t=notti(S.h-S.a);}}}}}
 contaEl.textContent=t;
 }
-function arco(a,p){if(fArco){if(fArco.formatRange){try{return fArco.formatRange(dt(a),dt(p));}catch(e){}}}return f(fArco,a)+" – "+f(fArco,p);}
+function arco(a,p){
+if(fArco){
+if(fArco.formatRangeToParts){try{return fArco.formatRangeToParts(dt(a),dt(p)).map(function(x){return x.type==="day"?String(x.value).replace(/^0(?=\d)/,""):x.value;}).join("");}catch(e){}}
+if(fArco.formatRange){try{return String(fArco.formatRange(dt(a),dt(p))).replace(/(^|[^\d])0(\d)(?!\d)/g,"$1$2");}catch(e){}}
+}
+return f(fArco,a)+" – "+f(fArco,p);
+}
 function dataBreve(n){return prima(f(dt(n).getUTCFullYear()===dt(oggiN).getUTCFullYear()?fBreve:fBreveA,n));}
 function fatto(){if(S.a===null){return false;}return S.p!==null;}
 function riga(t,d,v){

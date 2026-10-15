@@ -94,6 +94,30 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
         return [];
     }
 
+    /**
+     * Un lavoro che porta a un altro sito (si apre in una nuova scheda, col segno «esterno»)?
+     * Un link senza host — relativo come /prova-un-tour/, #ancora, mailto:, tel: — è del sito:
+     * prima wp_parse_url() senza host valeva «diverso dal sito» e anche le pagine interne si
+     * aprivano in una nuova scheda. Si guarda l'indirizzo come lo scrive esc_url() (senza
+     * protocollo e senza «/» davanti diventa http://…, cioè un altro sito); host senza
+     * distinzione fra maiuscole e minuscole, come i nomi a dominio.
+     *
+     * @param string $link      Link del lavoro.
+     * @param string $site_host Host del sito (home_url()).
+     * @return bool
+     */
+    private static function link_esterno( $link, $site_host ) {
+        $link = trim( (string) $link );
+        if ( '' === $link || ! $site_host ) {
+            return false;
+        }
+        $host = wp_parse_url( esc_url_raw( $link ), PHP_URL_HOST );
+        if ( ! $host ) {
+            return false;
+        }
+        return strcasecmp( (string) $host, (string) $site_host ) !== 0;
+    }
+
     private function font_family_css( $val ) {
         switch ( $val ) {
             case 'sans':  return 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
@@ -680,7 +704,7 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
                             $cat_names = array_map( 'trim', explode( ',', $item['category'] ) );
                             foreach ( $cat_names as $cn ) { if ( $cn !== '' ) $cat_slugs[] = sanitize_title( $cn ); }
                             $cat_data = implode( ',', $cat_slugs );
-                            $is_ext = ! empty( $item['link'] ) && $site_host && ( wp_parse_url( $item['link'], PHP_URL_HOST ) !== $site_host );
+                            $is_ext = self::link_esterno( $item['link'] ?? '', $site_host );
                             $extra_class = $item['featured'] ? ' is-featured' : '';
                             if ( $is_ext && ! empty( $s['external_link_badge'] ) ) $extra_class .= ' is-external';
                         ?>
@@ -835,7 +859,7 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
         foreach ( $cat_names as $cn ) { if ( $cn !== '' ) $cat_slugs[] = sanitize_title( $cn ); }
         $cat_data = implode( ',', $cat_slugs );
         $has_link = ! empty( $item['link'] );
-        $is_ext = $has_link && $site_host && ( wp_parse_url( $item['link'], PHP_URL_HOST ) !== $site_host );
+        $is_ext = $has_link && self::link_esterno( $item['link'], $site_host );
 
         $extra_class = '';
         if ( ! empty( $item['featured'] ) ) $extra_class .= ' is-featured';

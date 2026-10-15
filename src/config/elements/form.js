@@ -15,6 +15,13 @@ function etichettaServizio(nome, servizio) {
 }
 
 /**
+ * Il modulo è davvero a passi (interruttore acceso e almeno un separatore): i pulsanti stanno nelle righe dei
+ * passi, con le etichette al centro e «Indietro» accanto all'invio, e allineamento e larghezza piena del
+ * pulsante non agiscono (il PHP fa lo stesso conto: senza separatori il modulo resta a pagina singola).
+ */
+const aPassi = (s) => !!s.enable_multistep && (Array.isArray(s.fields) ? s.fields : []).some((f) => f && f.field_type === 'step');
+
+/**
  * Tile Form — split CONTENUTO/STILE.
  *   fields[]      → campi del form, impostazioni invio (email_to/cc/from/subject/messaggi/redirect/anim),
  *                   auto-reply, pulsante invio (text+icon+pos+align+fullwidth), multi-step toggle+style+labels,
@@ -532,8 +539,8 @@ export default {
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
-    ]},
-    { key: 'submit_full_width', label: t('Pulsante larghezza piena'), type: 'toggle' },
+    ], show: (s) => !aPassi(s) },
+    { key: 'submit_full_width', label: t('Pulsante larghezza piena'), type: 'toggle', show: (s) => !aPassi(s) },
     { type: 'separator', label: t('Checkbox e Radio') },
     { key: 'check_accent_color', label: t('Colore accento (checked)'), type: 'color' },
     { key: 'check_bg', label: t('Sfondo'), type: 'color' },

@@ -116,7 +116,10 @@ export default {
     ...textEffectsFields([ { value: 'name', label: t('Solo Nome') } ]),
 
     { type: 'separator', label: t('Foto') },
-    { key: 'photo_size', label: t('Dimensione foto'), type: 'range', min: 60, max: 250, step: 5 },
+    // Fino a 400: i temi usano anche 330. La foto non esce mai dalla scheda (il PHP la tiene
+    // entro la larghezza utile, alla stessa proporzione), quindi una misura grande è sicura.
+    { key: 'photo_size', label: t('Dimensione foto'), type: 'range', min: 60, max: 400, step: 5,
+      description: t('La larghezza della foto. Dove la scheda è più stretta, la foto si riduce alla sua larghezza e l\'altezza segue le proporzioni.') },
     // Niente voce automatica: il riquadro della foto non ha altro da cui prendere
     // l'altezza (e' un box di dimensione fissa), quindi senza proporzione collasserebbe.
     { key: 'photo_ratio', label: t('Proporzioni'), type: 'select',

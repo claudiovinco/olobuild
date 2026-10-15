@@ -10,7 +10,11 @@
  * Vista «griglia»: una colonna per giorno con l'asse delle ore (righe a ogni ora e, più leggere, a ogni mezz'ora;
  * «altezza_ora» px per ora), ogni lezione alta quanto dura; due lezioni sovrapposte nello stesso giorno si affiancano
  * (corsie calcolate qui, ricalcolate nel browser dopo ogni filtro sulle sole lezioni rimaste). La griglia si allarga
- * da sola se una lezione cade fuori da «Dalle»–«Alle». Vista «elenco»: le lezioni una sotto l'altra per giorno.
+ * da sola se una lezione cade fuori da «Dalle»–«Alle». Il nome del corso resta intero: ogni colonna è larga almeno
+ * quanto la parola più lunga dei nomi dei suoi corsi, per ogni corsia (un misuratore invisibile, .ooc-misura, dà la
+ * larghezza minima della colonna; se le colonne non ci stanno, l'orario scorre in orizzontale DENTRO la tile), e nelle
+ * lezioni brevi o affiancate il nome viene prima dell'ora, che resta solo se c'è posto (ai lettori di schermo resta
+ * sempre). Vista «elenco»: le lezioni una sotto l'altra per giorno.
  * Sul telefono (sotto i 640 px) sempre un giorno alla volta: le schede dei giorni (role="tablist", frecce, Home ed
  * End; aperta oggi, o il primo giorno con lezioni dopo oggi) e sotto le lezioni del giorno; i filtri restano sopra.
  * Filtri: un pulsante per corso (aria-pressed) e «Tutti», i menu facoltativi del livello (un livello mostra anche le
@@ -20,7 +24,8 @@
  * nella griglia (aggiornata ogni minuto e al ritorno sulla scheda), «In corso» sulla lezione che si sta svolgendo.
  * Il clic (o Invio) su una lezione apre un <dialog> modale (top layer: non lo tocca il transform del template;
  * Esc, clic fuori, focus intrappolato e restituito alla lezione) col pulsante Prenota nello stile pulsanti del tema:
- * modello d'indirizzo con {corso} (codice del corso), {giorno} (1–7) e {ora} ('HH:MM'), valori codificati.
+ * modello d'indirizzo con {corso} (codice del corso), {corso_nome} (il nome del corso), {giorno} (1–7), {giorno_nome}
+ * (il nome del giorno nella lingua della pagina, Intl) e {ora} ('HH:MM'), valori codificati.
  * Nata per i temi della palestra (15 ott 2026). Config: src/config/elements/orariocorsi.js.
  */
 
@@ -473,6 +478,27 @@ class Olobuild_Orariocorsi_Tile extends Olobuild_Tile_Base {
         }
         $giorni = array_keys( $per_giorno );
 
+        // ── Il misuratore di ogni giorno: per ogni numero di corsie, i nomi dei corsi delle lezioni che le dividono.
+        // Una riga invisibile con una copia dei nomi per corsia: la sua larghezza minima (la parola più lunga, per
+        // corsia, più il margine interno della lezione) è la larghezza minima della colonna, misurata dal browser col
+        // carattere vero. Così una lezione affiancata non resta mai di tre lettere: se manca spazio, l'orario scorre. ──
+        $misure = [];
+        foreach ( $lezioni as $l ) {
+            $misure[ $l['g'] ][ $l['cols'] ][ $corsi[ $l['c'] ]['nome'] ] = true;
+        }
+
+        // ── La riga del nome del corso (px, come la tipografia «Corso»): quante righe entrano in una lezione (--rn,
+        // --rnt sul tablet) e il centro delle lezioni minime (--ooc-lc). Le lezioni brevi e affiancate mostrano il nome
+        // intero su quelle righe, e l'ora solo se le resta posto. ──
+        $fs_c  = (float) $s['corso_font_size'];
+        $fs_c  = $fs_c > 0 ? $fs_c : 14;
+        $fs_ct = (float) ( $s['corso_font_size_tablet'] ?? 0 );
+        $fs_ct = $fs_ct > 0 ? $fs_ct : $fs_c;
+        $lh_c  = is_numeric( $s['corso_line_height'] ) && (float) $s['corso_line_height'] > 0 ? (float) $s['corso_line_height'] : 1.25;
+        $lc    = $fs_c * $lh_c;
+        $lct   = $fs_ct * $lh_c;
+        $con_rnt = abs( $lct - $lc ) > 0.001;
+
         // ── Le ore della griglia: «Dalle»–«Alle», allargate se una lezione cade fuori, a ore intere ──
         $r_ini = self::minuti( $s['ora_inizio'] );
         $r_fin = self::minuti( $s['ora_fine'] );
@@ -558,7 +584,10 @@ class Olobuild_Orariocorsi_Tile extends Olobuild_Tile_Base {
         ob_start();
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS da colori passati da safe_color_css() e dagli helper di Olobuild_Tile_Utils, numeri forzati, valori da elenchi chiusi e selettori generati qui
         echo '<style>';
-        echo "{$sel}{--ooc-h:{$h}px;--ooc-ore:{$ore};--ooc-n:{$n_g};--ooc-gap:{$gap}px;--ooc-th:3rem;--ooc-r:{$raggio};--ooc-rmax:{$r_max}px;--ooc-rf:{$rf}px;--ooc-rd:{$rd}px;--ooc-rc:{$rc};--ooc-acc:var(--olo-color-primary);--ooc-su-acc:var(--olo-color-primary-contrast, #ffffff);--ooc-oggi:{$oggi};--ooc-su-oggi:{$su_oggi};--ooc-adesso:{$ades};--ooc-su-adesso:{$su_ades};--ooc-tenue:{$tenue};--ooc-sfondo:{$sfondo};--ooc-linee:{$linee};--ooc-ombra:{$om}" . ( '' !== $testo_c ? ";color:{$testo_c}" : '' ) . '}';
+        echo "{$sel}{--ooc-h:{$h}px;--ooc-ore:{$ore};--ooc-n:{$n_g};--ooc-gap:{$gap}px;--ooc-th:3rem;--ooc-r:{$raggio};--ooc-rmax:{$r_max}px;--ooc-rf:{$rf}px;--ooc-rd:{$rd}px;--ooc-rc:{$rc};--ooc-acc:var(--olo-color-primary);--ooc-su-acc:var(--olo-color-primary-contrast, #ffffff);--ooc-oggi:{$oggi};--ooc-su-oggi:{$su_oggi};--ooc-adesso:{$ades};--ooc-su-adesso:{$su_ades};--ooc-tenue:{$tenue};--ooc-sfondo:{$sfondo};--ooc-linee:{$linee};--ooc-ombra:{$om};--ooc-lc:" . self::num( $lc ) . 'px' . ( '' !== $testo_c ? ";color:{$testo_c}" : '' ) . '}';
+        if ( $griglia && abs( $lct - $lc ) > 0.001 ) {
+            echo '@media (max-width:960px){' . "{$sel}{--ooc-lc:" . self::num( $lct ) . 'px}}';
+        }
         echo "{$sel} [hidden]{display:none!important}";
         echo "{$sel} .ooc-sr{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}";
 
@@ -598,6 +627,7 @@ class Olobuild_Orariocorsi_Tile extends Olobuild_Tile_Base {
         echo "{$sel} .ooc-voce{margin:0;padding:0;list-style:none;transition:opacity .18s ease}";
         echo "{$sel} .ooc-voce::before{content:none}";
         echo "{$sel} .ooc-voce.is-fuori{opacity:0}";
+        echo "{$sel} .ooc-misura{display:none}";
 
         // La lezione: la fascia del corso a sinistra, la sua tinta leggera di fondo, ora, corso, istruttore e sala.
         echo "{$sel} .ooc-lez{box-sizing:border-box;position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:.125rem;width:100%;min-width:0;min-height:0;margin:0;padding:.625rem .75rem .625rem 1rem;border:0;border-radius:var(--ooc-r);background:" . ( '' !== $bl_s ? $bl_s : 'color-mix(in srgb, var(--c) 14%, transparent)' ) . ';color:' . ( '' !== $testo_l ? $testo_l : 'inherit' ) . ";font:inherit;line-height:1.25;letter-spacing:normal;text-align:left;text-transform:none;text-shadow:none;overflow:hidden;-webkit-appearance:none;appearance:none;box-shadow:inset .1875rem 0 0 var(--c),var(--ooc-anello, 0 0 0 0 transparent),var(--ooc-ombra);transition:transform .2s ease,box-shadow .2s ease}";
@@ -618,23 +648,43 @@ class Olobuild_Orariocorsi_Tile extends Olobuild_Tile_Base {
         // Desktop e tablet (da 640 px): le colonne affiancate; in griglia l'asse delle ore e le lezioni a misura.
         $largo = '';
         if ( $griglia ) {
-            $largo .= "{$sel} .ooc-orario{display:grid;grid-template-columns:3.25rem repeat(var(--ooc-n),minmax(6.5rem,1fr));column-gap:var(--ooc-gap);overflow-x:auto;overflow-y:hidden;padding:.25rem 0 .75rem}";
+            // Le colonne dei giorni: uguali finché ci stanno; mai più strette di 6.5rem né del loro misuratore (la parola
+            // più lunga dei nomi, per corsia). Il nome del giorno non allarga la colonna (width:0, poi il 100%).
+            $largo .= "{$sel} .ooc-orario{display:grid;grid-template-columns:3.25rem repeat(var(--ooc-n),minmax(min-content,1fr));column-gap:var(--ooc-gap);overflow-x:auto;overflow-y:hidden;padding:.25rem 0 .75rem}";
+            $largo .= "{$sel} .ooc-giorno{min-width:6.5rem}";
+            $largo .= "{$sel} .ooc-giorno-nome{width:0;min-width:100%}";
+            $largo .= "{$sel} .ooc-misura{display:block;height:0;overflow:hidden;visibility:hidden;pointer-events:none}";
+            $largo .= "{$sel} .ooc-misura>div{display:flex}";
+            // Una corsia del misuratore: larga quanto la parola più lunga dei nomi (e, se affiancata, l'ora d'inizio,
+            // che lì resta sola) più il margine interno: .ooc-voce (.25rem per lato) + .ooc-lez stretta (.5625rem +
+            // .3125rem), larga se la corsia è sola (.75rem + .5rem); 1px di scarto per gli arrotondamenti.
+            $largo .= "{$sel} .ooc-misura-c{flex:none;display:block;width:min-content;padding:0 calc(1.375rem + 1px) 0 0}";
+            $largo .= "{$sel} .ooc-misura .is-sola .ooc-misura-c{padding-right:calc(1.75rem + 1px)}";
+            $largo .= "{$sel} .ooc-misura .ooc-lez-corso{display:block;max-width:none;margin:0;padding:0;overflow:visible;white-space:normal;overflow-wrap:normal;word-break:normal;-webkit-hyphens:manual;hyphens:manual}";
+            $largo .= "{$sel} .ooc-misura .ooc-lez-ora{display:block;overflow:visible}";
             $largo .= "{$sel} .ooc-asse-testa{height:var(--ooc-th)}";
             $largo .= "{$sel} .ooc-asse-corpo{position:relative;height:calc(var(--ooc-ore) * var(--ooc-h))}";
             $largo .= "{$sel} .ooc-asse-ora{position:absolute;right:.5rem;top:calc(var(--t) * var(--ooc-h));transform:translateY(-50%);color:var(--ooc-tenue);font-size:12px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}";
             $largo .= "{$sel} .ooc-giorno-nome{border-bottom:0}";
             $largo .= "{$sel} .ooc-lezioni{position:relative;height:calc(var(--ooc-ore) * var(--ooc-h));background-image:repeating-linear-gradient(to bottom,var(--ooc-linee) 0,var(--ooc-linee) 1px,transparent 1px,transparent var(--ooc-h)),repeating-linear-gradient(to bottom,transparent 0,transparent calc(var(--ooc-h) / 2),color-mix(in srgb, var(--ooc-linee) 45%, transparent) calc(var(--ooc-h) / 2),color-mix(in srgb, var(--ooc-linee) 45%, transparent) calc(var(--ooc-h) / 2 + 1px),transparent calc(var(--ooc-h) / 2 + 1px),transparent var(--ooc-h))}";
             // Ogni lezione è un contenitore con nome (ooc-voce): sotto i 6rem di larghezza (due lezioni affiancate su un
-            // tablet) restano l'ora d'inizio e il corso; il resto passa ai lettori di schermo.
-            $largo .= "{$sel} .ooc-voce{position:absolute;box-sizing:border-box;top:calc(var(--t) * var(--ooc-h));left:calc(var(--col) * 100% / var(--cols));width:calc(100% / var(--cols));height:calc(var(--d) * var(--ooc-h));padding:.125rem .25rem;container:ooc-voce / inline-size;transition:opacity .18s ease,left .2s ease,width .2s ease}";
+            // tablet) restano il corso e, se c'è posto, l'ora d'inizio; il resto passa ai lettori di schermo.
+            $largo .= "{$sel} .ooc-voce{position:absolute;box-sizing:border-box;top:calc(var(--t) * var(--ooc-h));left:calc(var(--col) * 100% / var(--cols));width:calc(100% / var(--cols));height:calc(var(--d) * var(--ooc-h));padding:.125rem .25rem;container:ooc-voce / inline-size;transition:opacity .18s ease,left .2s ease,width .2s ease;--rnx:var(--rn, 1)}";
             $largo .= "{$sel} .ooc-lez{height:100%;padding:.3125rem .5rem .3125rem .75rem}";
             // Il corso su una riga; due righe nelle lezioni lunghe. Nelle brevi istruttore e sala restano ai lettori di schermo.
             $largo .= "{$sel} .ooc-lez-corso{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden}";
             $largo .= "{$sel} .is-lunga .ooc-lez-corso{-webkit-line-clamp:2}";
             $largo .= "{$sel} .is-breve .ooc-lez-meta,{$sel} .is-mini .ooc-lez-meta,{$sel} .is-mini .ooc-lez-fine{{$sr}}";
-            $largo .= "{$sel} .is-mini .ooc-lez{flex-direction:row;align-items:center;gap:.375rem;padding-top:0;padding-bottom:0}";
+            // Brevi: prima il nome, su tutte le righe che entrano (--rn), poi l'ora sopra di lui se le resta posto. Con
+            // column-reverse + wrap l'ora, che viene dopo nell'ordine, passa in una seconda colonna fuori dal riquadro
+            // (overflow:clip, che non si può scorrere) quando nome e ora non stanno insieme; nessuno spazio in fondo.
+            $largo .= "{$sel} .is-breve .ooc-lez{flex-direction:column-reverse;flex-wrap:wrap;justify-content:flex-end;align-content:flex-start;column-gap:2rem;padding-bottom:0;overflow:clip}";
+            $largo .= "{$sel} .is-breve .ooc-lez-corso{order:-1;width:100%;-webkit-line-clamp:var(--rnx, 1)}";
+            // Minime: una riga, ora e nome; se non stanno insieme resta il nome (l'ora va a capo, fuori dal riquadro).
+            // Il centro verticale di prima, dalla riga del nome: (altezza − riga) / 2.
+            $largo .= "{$sel} .is-mini .ooc-lez{flex-direction:row-reverse;flex-wrap:wrap;justify-content:flex-end;align-items:center;align-content:flex-start;gap:2rem .375rem;padding-top:max(0px, calc((var(--d) * var(--ooc-h) - .25rem - var(--ooc-lc, 1.25em)) / 2));padding-bottom:0;overflow:clip}";
             $largo .= "{$sel} .is-mini .ooc-lez-riga{width:auto;flex:none}";
-            $largo .= "{$sel} .is-mini .ooc-lez-corso{flex:1 1 auto;min-width:0}";
+            $largo .= "{$sel} .is-mini .ooc-lez-corso{order:-1;flex:0 1 auto;min-width:0}";
             $largo .= "{$sel} .ooc-adesso{position:absolute;left:0;right:0;top:calc(var(--ooc-th) + var(--t) * var(--ooc-h));z-index:3;height:2px;margin-top:-1px;background:var(--ooc-adesso);pointer-events:none}";
             $largo .= "{$sel} .ooc-adesso::before{content:'';position:absolute;left:-.3125rem;top:50%;width:.625rem;height:.625rem;border-radius:50%;background:inherit;transform:translateY(-50%)}";
         } else {
@@ -647,10 +697,16 @@ class Olobuild_Orariocorsi_Tile extends Olobuild_Tile_Base {
         }
         echo '@media (min-width:640px){' . $largo . '}';
         if ( $griglia ) {
+            if ( $con_rnt ) {
+                // Sul tablet la tipografia «Corso» ha la sua misura: le righe che entrano sono altre.
+                echo '@media (max-width:960px){' . "{$sel} .ooc-voce{--rnx:var(--rnt, var(--rn, 1))}" . '}';
+            }
+            // Affiancate (sotto i 6rem): il nome prima dell'ora anche nelle lezioni non brevi, su tutte le righe che entrano.
             echo '@container ooc-voce (max-width:6rem){'
                 . "{$sel} .ooc-lez{padding-left:.5625rem;padding-right:.3125rem}"
                 . "{$sel} .ooc-lez-fine,{$sel} .ooc-lez-meta{{$sr}}"
-                . "{$sel} .ooc-voce:not(.is-breve):not(.is-mini) .ooc-lez-corso{-webkit-line-clamp:2}"
+                . "{$sel} .ooc-voce:not(.is-mini) .ooc-lez{flex-direction:column-reverse;flex-wrap:wrap;justify-content:flex-end;align-content:flex-start;column-gap:2rem;padding-bottom:0;overflow:clip}"
+                . "{$sel} .ooc-voce:not(.is-mini) .ooc-lez-corso{order:-1;width:100%;-webkit-line-clamp:var(--rnx, 2)}"
                 . "{$sel} .ooc-lez-stato{font-size:0;padding:.25rem}"
                 . '}';
         }
@@ -860,6 +916,18 @@ class Olobuild_Orariocorsi_Tile extends Olobuild_Tile_Base {
                 $px   = $durh * $h;
                 $cls  = 'ooc-voce' . ( $griglia ? ( $px < 40 ? ' is-mini' : ( $px < 68 ? ' is-breve' : ( $px >= 92 ? ' is-lunga' : '' ) ) ) : '' );
                 $vars = '--c:' . $c['colore'] . ';--t:' . self::num( ( $l['i'] - $r_ini ) / 60 ) . ';--d:' . self::num( $durh ) . ';--col:' . (int) $l['col'] . ';--cols:' . (int) $l['cols'];
+                if ( $griglia && $px >= 40 ) {
+                    // Le righe del nome che entrano senza l'ora: l'altezza meno .ooc-voce (2 × .125rem) e il margine alto
+                    // di .ooc-lez (.3125rem); 1px di tolleranza. Massimo 12.
+                    $rn = max( 1, min( 12, (int) floor( ( $px - 8 ) / $lc ) ) );
+                    $vars .= ';--rn:' . $rn;
+                    if ( $con_rnt ) {
+                        $rnt = max( 1, min( 12, (int) floor( ( $px - 8 ) / $lct ) ) );
+                        if ( $rnt !== $rn ) {
+                            $vars .= ';--rnt:' . $rnt;
+                        }
+                    }
+                }
                 $meta = implode( ' · ', array_filter( [ $l['ist'], $l['sala'] ], 'strlen' ) );
                 $ini  = self::hhmm( $l['i'] );
                 $fin  = self::hhmm( $l['f'] );
@@ -875,7 +943,21 @@ class Olobuild_Orariocorsi_Tile extends Olobuild_Tile_Base {
                 }
                 echo '</li>';
             }
-            echo '</ol></div>';
+            echo '</ol>';
+            if ( $griglia && ! empty( $misure[ $g ] ) ) {
+                // Il misuratore (invisibile): una riga per numero di corsie, una copia dei nomi per corsia (con l'ora
+                // d'inizio d'esempio se la corsia è affiancata).
+                echo '<div class="ooc-misura" aria-hidden="true">';
+                ksort( $misure[ $g ] );
+                foreach ( $misure[ $g ] as $quante => $nomi_c ) {
+                    $quante = max( 1, min( 12, (int) $quante ) );
+                    $corsia = '<span class="ooc-misura-c"><span class="ooc-lez-corso">' . esc_html( implode( ' ', array_keys( $nomi_c ) ) ) . '</span>'
+                        . ( $quante > 1 ? '<span class="ooc-lez-ora">00:00</span>' : '' ) . '</span>';
+                    echo '<div' . ( 1 === $quante ? ' class="is-sola"' : '' ) . '>' . str_repeat( $corsia, $quante ) . '</div>';
+                }
+                echo '</div>';
+            }
+            echo '</div>';
         }
         echo '</div>';
         echo '<p class="ooc-vuoto" hidden>' . esc_html( $vuoto ) . '</p>';
@@ -1026,10 +1108,13 @@ var durata=function(m){var h=Math.floor(m/60),r=m%60;if(!h){return String(T.min|
 var scrivi=function(s,val){var n=dlg.querySelector(s);if(!n){return;}n.textContent=val||"";if(val){n.removeAttribute("hidden");}else{n.setAttribute("hidden","");}};
 var riga=function(k,val){var r=dlg.querySelector('[data-campo="'+k+'"]');if(!r){return;}var dd=r.querySelector("dd");if(dd){dd.textContent=val||"";}if(val){r.removeAttribute("hidden");}else{r.setAttribute("hidden","");}};
 var sicuro=function(u){var a=document.createElement("a");a.href=u;var p=String(a.protocol||"").toLowerCase();return p==="http:"||p==="https:";};
+var lingua=String(document.documentElement.lang||"it").replace("_","-");
+var nomeGiorno=function(g){var n="";try{n=new Intl.DateTimeFormat(lingua,{weekday:"long",timeZone:"UTC"}).format(new Date(Date.UTC(2024,0,g)));}catch(x){n="";}if(!n){n=String((C.giorni||{})[g]||"");}return n.charAt(0).toUpperCase()+n.slice(1);};
 var indirizzo=function(l){
 var u=String(C.link||"");if(!u){return "";}
-var val={corso:String(l.c||""),giorno:String(l.g||""),ora:hhmm(l.i||0)};
-u=u.replace(/\{(corso|giorno|ora)\}|%7B(corso|giorno|ora)%7D/gi,function(x,a,b){return encodeURIComponent(val[String(a||b).toLowerCase()]);});
+var co=CO[l.c]||{};
+var val={corso:String(l.c||""),giorno:String(l.g||""),ora:hhmm(l.i||0),corso_nome:String(co.nome||l.c||""),giorno_nome:nomeGiorno(+l.g||1)};
+u=u.replace(/\{(corso_nome|giorno_nome|corso|giorno|ora)\}|%7B(corso_nome|giorno_nome|corso|giorno|ora)%7D/gi,function(x,a,b){return encodeURIComponent(val[String(a||b).toLowerCase()]);});
 var p=u.split("?");if(p.length>2){u=p.shift()+"?"+p.join(E);}
 return sicuro(u)?u:"";
 };

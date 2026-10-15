@@ -78,8 +78,34 @@ class Olobuild_HoursStrip_Tile extends Olobuild_Tile_Base {
 
         $band_style = 'padding:' . $pad_css . ';';
         if ( $band_brd ) $band_style .= 'border-top:1px solid ' . $line . ';border-bottom:1px solid ' . $line . ';';
-        $grid_style = 'display:grid;grid-template-columns:repeat(' . $cols . ',minmax(0,1fr));';
+        // Spazio fra le righe a ogni larghezza (prima solo nel ripiego sotto i 760 px: con le colonne scelte per
+        // un dispositivo, o con più voci che colonne, le righe restavano incollate).
+        $grid_style = 'display:grid;grid-template-columns:repeat(' . $cols . ',minmax(0,1fr));row-gap:26px;';
         $cell_style = 'display:flex;flex-direction:column;gap:7px;padding:4px 24px;';
+
+        // Colonne in vigore a ogni larghezza, nell'ordine in cui il CSS qui sotto le applica: quelle scelte per
+        // dispositivo (css_per_dispositivo, la più stretta vince) e, dove non ce ne sono, i ripieghi fissi
+        // (2 sotto i 760 px, 1 sotto i 420). Servono ai divisori: la prima cella di ogni riga non ne ha.
+        $per_disp = [];
+        foreach ( [ 'tablet_landscape' => 1200, 'tablet' => 960, 'mobile_landscape' => 640, 'mobile' => 480 ] as $disp => $px ) {
+            $v = $s[ 'columns_' . $disp ] ?? '';
+            if ( $v !== '' && $v !== null ) {
+                $per_disp[ $px ] = max( 1, min( 6, absint( $v ) ) );
+            }
+        }
+        $col_fasce = [];
+        $scelto    = null;
+        $prec      = $cols;
+        foreach ( [ 1200, 960, 760, 640, 480, 420 ] as $px ) {
+            if ( isset( $per_disp[ $px ] ) ) {
+                $scelto = $per_disp[ $px ];
+            }
+            $n = ( null !== $scelto ) ? $scelto : ( $px <= 420 ? 1 : ( $px <= 760 ? 2 : $cols ) );
+            if ( $n !== $prec ) {
+                $col_fasce[ $px ] = $n;
+                $prec             = $n;
+            }
+        }
 
         ob_start();
         ?>
@@ -102,22 +128,34 @@ class Olobuild_HoursStrip_Tile extends Olobuild_Tile_Base {
                 <?php endforeach; ?>
             </div>
         </div>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from the internally generated $uid and the safe_color_css() whitelisted divider colour. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from the internally generated $uid, the safe_color_css() whitelisted divider colour and integer column counts/thresholds. ?>
         <style>
             <?php if ( $dividers ) : ?>
-            .<?php echo $uid; ?> .olo-hoursstrip__cell:not(:first-child) { border-left: 1px solid <?php echo $line; ?>; }
+            .<?php echo $uid; ?> .olo-hoursstrip__cell:not(:nth-child(<?php echo (int) $cols; ?>n+1)) { border-left: 1px solid <?php echo $line; ?>; }
             <?php endif; ?>
             <?php // !important: le colonne del desktop sono in linea e battevano queste regole (4 colonne schiacciate
                   // sul telefono). Le colonne scelte per dispositivo, stampate dopo, vincono comunque. ?>
             @media (max-width: 760px) {
-                .<?php echo $uid; ?> .olo-hoursstrip__grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 26px 0; }
-                <?php if ( $dividers ) : ?>.<?php echo $uid; ?> .olo-hoursstrip__cell:nth-child(odd) { border-left: 0; }<?php endif; ?>
+                .<?php echo $uid; ?> .olo-hoursstrip__grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
             }
             @media (max-width: 420px) {
                 .<?php echo $uid; ?> .olo-hoursstrip__grid { grid-template-columns: 1fr !important; }
-                <?php if ( $dividers ) : ?>.<?php echo $uid; ?> .olo-hoursstrip__cell { border-left: 0 !important; }<?php endif; ?>
             }
             <?php echo $this->css_per_dispositivo( $s, 'columns', '.' . $uid . ' .olo-hoursstrip__grid', $this->decl_colonne( 6 ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colonne per dispositivo (interi limitati) ?>
+            <?php
+            // Divisori dove cambiano le colonne in vigore: niente filo sulla prima cella di ogni riga, il filo
+            // sulle altre. Prima valevano solo i ripieghi (dispari senza filo sotto i 760, nessuno sotto i 420),
+            // anche quando le colonne scelte per il dispositivo erano altre: a 880 px con 2 colonne per il tablet
+            // la terza cella, a inizio riga, teneva il filo a sinistra.
+            if ( $dividers ) {
+                foreach ( $col_fasce as $px => $n ) {
+                    $cella = '.' . $uid . ' .olo-hoursstrip__cell';
+                    echo '@media (max-width:' . (int) $px . 'px){'
+                        . $cella . ':not(:nth-child(' . (int) $n . 'n+1)){border-left:1px solid ' . $line . '}'
+                        . $cella . ':nth-child(' . (int) $n . 'n+1){border-left:0}}';
+                }
+            }
+            ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php

@@ -29187,3 +29187,83 @@ msgstr "La combinaison doit compter de 3 à 6 symboles, une molette par symbole 
 #: includes/tiles/class-lucchetto-tile.php
 msgid "Nel builder la combinazione è %s: provala qui. Sul sito questa nota non c'è."
 msgstr "Dans le builder, la combinaison est %s : essayez-la ici. Cette note n’apparaît pas sur le site."
+
+#: includes/tiles
+msgid "Delle schede. Se lo spazio non basta la griglia ne mette meno da sola; sul tablet al massimo due e sul telefono una, se non ne scegli altre per quei dispositivi. Un gruppo che lascerebbe una scheda da sola nell'ultima riga cambia colonne da sé: 4 opzioni su 3 colonne vanno 2 + 2."
+msgstr "Des cartes. Si la place manque, la grille en met moins d’elle-même ; sur tablette deux au maximum et sur mobile une, si vous n’en choisissez pas d’autres pour ces appareils. Un groupe qui laisserait une carte seule sur la dernière ligne change de colonnes de lui-même : 4 options sur 3 colonnes donnent 2 + 2."
+
+#: includes/tiles
+msgid "Padding lista"
+msgstr "Padding de la liste"
+
+#: includes/tiles
+msgid "Il font vale anche per il piè di pagina e per la scritta segnaposto del media. Vuoto: il monospazio di sistema."
+msgstr "La police s’applique aussi au pied de carte et au texte d’attente du média. Vide : la police à chasse fixe du système."
+
+#: includes/tiles
+msgid "Il font vale anche per il numero con l'etichetta e per la scritta segnaposto del media. Vuoto: il monospazio di sistema."
+msgstr "La police s’applique aussi au numéro avec son étiquette et au texte d’attente du média. Vide : la police à chasse fixe du système."
+
+#: includes/tiles
+msgid "Il pulsante nei dettagli della lezione. Puoi usare {corso} (il codice del corso), {corso_nome} (il suo nome), {giorno} (da 1, lunedì, a 7), {giorno_nome} (il nome del giorno, nella lingua della pagina) e {ora} (l'ora d'inizio, 18:30): https://esempio.it/prenota/?corso={corso_nome}&giorno={giorno_nome}&ora={ora}. Vuoto: niente pulsante."
+msgstr "Le bouton dans les détails de la séance. Vous pouvez utiliser {corso} (le code du cours), {corso_nome} (son nom), {giorno} (de 1, lundi, à 7), {giorno_nome} (le nom du jour, dans la langue de la page) et {ora} (l'heure de début, 18:30) : https://example.com/reserver/?cours={corso_nome}&jour={giorno_nome}&heure={ora}. Vide : pas de bouton."
+
+#: includes/tiles
+msgid "Colonne (tablet orizzontale)"
+msgstr "Colonnes (tablette paysage)"
+
+#: includes/tiles
+msgid "Come il desktop"
+msgstr "Comme sur ordinateur"
+
+#: includes/tiles
+msgid "Da 960 a 1199 px di larghezza della finestra."
+msgstr "De 960 à 1199 px de largeur de fenêtre."
+
+#: includes/tiles
+msgid "Testo «Libero»"
+msgstr "Texte « Libre »"
+
+#: includes/tiles
+msgid "Testo «Occupato»"
+msgstr "Texte « Occupé »"
+
+#: includes/tiles
+msgid "Testo «Le tue date»"
+msgstr "Texte « Vos dates »"
+
+#: includes/tiles
+msgid "Testo «Aggiungi data»"
+msgstr "Texte « Ajouter une date »"
+
+#: includes/tiles
+msgid "Nel riepilogo, al posto dell'arrivo e della partenza finché non si scelgono."
+msgstr "Dans le récapitulatif, à la place de l’arrivée et du départ tant qu’ils ne sont pas choisis."
+
+#: includes/tiles
+msgid "Riepilogo senza date"
+msgstr "Récapitulatif sans dates"
+
+#: includes/tiles
+msgid "La frase del riepilogo prima della scelta delle date, al posto del conto."
+msgstr "La phrase du récapitulatif avant le choix des dates, à la place du détail du prix."
+
+#: includes/tiles
+msgid "Testo «Cancella le date»"
+msgstr "Texte « Effacer les dates »"
+
+#: includes/tiles
+msgid "Il pulsante sotto il riepilogo che toglie le date scelte: compare dopo la scelta dell'arrivo."
+msgstr "Le bouton sous le récapitulatif qui efface les dates choisies : il apparaît après le choix de l’arrivée."
+
+#: includes/tiles
+msgid "La larghezza della foto. Dove la scheda è più stretta, la foto si riduce alla sua larghezza e l'altezza segue le proporzioni."
+msgstr "La largeur de la photo. Là où la carte est plus étroite, la photo se réduit à sa largeur et la hauteur suit les proportions."
+
+#: includes/tiles
+msgid "La miniatura nell'elenco delle scene. Vuota: la miniatura che la Libreria media ricava dalla foto leggera o, se manca, dalla foto sferica; per le foto fuori dalla Libreria, la foto leggera intera."
+msgstr "La miniature de la liste des scènes. Vide : la miniature que la Médiathèque tire de la photo légère ou, à défaut, de la photo sphérique ; pour les photos hors de la Médiathèque, la photo légère entière."
+
+#: includes/tiles
+msgid "Passo %1$d di %2$d"
+msgstr "Étape %1$d sur %2$d"

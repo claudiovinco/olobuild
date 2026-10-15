@@ -68,6 +68,9 @@ export default {
     counter_size:      11,
     description_size:  15,
     footer_size:       10,
+    // Font delle etichette (numero con etichetta, piè di pagina, segnaposto del media).
+    // Vuoto = il monospazio di sistema che il PHP usava da sempre.
+    mono_font_family:  '',
 
     card_hover_effect: 'none',
   },
@@ -206,7 +209,10 @@ export default {
       { value: 'plain',  label: t('Testo con etichetta') },
       { value: 'circle', label: t('Cerchio') },
     ], valoriStorici: { '': 'plain' } },
-    { type: 'typography', label: t('Numero'), responsiveKeys: [], keys: { size: 'counter_size', color: 'counter_color' }, sizeMin: 9, sizeMax: 22,
+    // Il font del numero (chiave mono_font_family) è lo stesso del piè di pagina: le due righe
+    // lo mostrano entrambe, così si trova da qualunque testo si parta.
+    { type: 'typography', label: t('Numero'), responsiveKeys: [], keys: { size: 'counter_size', color: 'counter_color', family: 'mono_font_family' }, sizeMin: 9, sizeMax: 22,
+      description: t('Il font vale anche per il piè di pagina e per la scritta segnaposto del media. Vuoto: il monospazio di sistema.'),
       condition: { field: 'counter_shape', op: 'neq', value: 'circle' } },
     { key: 'counter_color', label: t('Colore numero'), type: 'color',
       condition: { field: 'counter_shape', op: 'eq', value: 'circle' } },
@@ -215,7 +221,8 @@ export default {
 
     { type: 'separator', label: t('Dimensioni secondarie') },
     { type: 'typography', label: t('Descrizione'), responsiveKeys: [], keys: { size: 'description_size' }, sizeMin: 11, sizeMax: 22 },
-    { type: 'typography', label: t('Piè di pagina'), responsiveKeys: [], keys: { size: 'footer_size' }, sizeMin: 9, sizeMax: 16 },
+    { type: 'typography', label: t('Piè di pagina'), responsiveKeys: [], keys: { size: 'footer_size', family: 'mono_font_family' }, sizeMin: 9, sizeMax: 16,
+      description: t('Il font vale anche per il numero con l\'etichetta e per la scritta segnaposto del media. Vuoto: il monospazio di sistema.') },
 
     { type: 'separator', label: t('Hover card') },
     { key: 'card_hover_effect', label: t('Effetto hover'), type: 'select', options: [

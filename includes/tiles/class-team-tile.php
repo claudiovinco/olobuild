@@ -120,8 +120,11 @@ class Olobuild_Team_Tile extends Olobuild_Tile_Base {
         if ( $ph_fit === 'fill' || preg_match( '/[;{}()]/', $ph_pos ) ) {
             $ph_pos = '';
         }
+        // La foto è larga «Dimensione foto» (+ il bordo) ma mai più della scheda: in una colonna
+        // stretta si riduce alla larghezza utile e l'altezza segue la proporzione scelta. Prima la
+        // misura era fissa in px (flex-shrink 0): a 330 px in celle da 167 px usciva dalla scheda e
+        // copriva le vicine. Dove ci sta (il caso di sempre) il riquadro è identico, al pixel.
         $outer_sz  = $ph_size + $ph_bw * 2;
-        $outer_h   = $ph_h + $ph_bw * 2;
         $ph_shadow  = Olobuild_Tile_Utils::shadow( $s['photo_shadow'] ?? 'none', 'photo' );
         $ph_filter  = $this->filtri_foto( $s );
 
@@ -208,8 +211,12 @@ class Olobuild_Team_Tile extends Olobuild_Tile_Base {
             }
             <?php if ( $ph_gap < 0 ) : ?>.<?php echo $uid; ?> .olo-team-photo-outer { pointer-events: auto; }<?php endif; ?>
             .<?php echo $uid; ?> .olo-team-photo-outer {
+                box-sizing: border-box;
                 width: <?php echo $outer_sz; ?>px;
-                height: <?php echo $outer_h; ?>px;
+                max-width: 100%;
+                <?php if ( $ph_bw > 0 ) : ?>
+                padding: <?php echo $ph_bw; ?>px;
+                <?php endif; ?>
                 flex-shrink: 0;
                 display: flex; align-items: center; justify-content: center;
                 <?php if ( $ph_shape === 'hexagon' ) : ?>
@@ -228,8 +235,8 @@ class Olobuild_Team_Tile extends Olobuild_Tile_Base {
             <?php if ( $outer_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-team-photo-outer{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-team-photo-outer:hover{border-radius:<?php echo $outer_radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-team-photo-inner {
                 overflow: hidden;
-                width: <?php echo $ph_size; ?>px;
-                height: <?php echo $ph_h; ?>px;
+                width: 100%;
+                aspect-ratio: <?php echo $ph_size; ?> / <?php echo $ph_h; ?>;
                 flex-shrink: 0;
                 <?php if ( $ph_shape === 'hexagon' ) : ?>
                 clip-path: <?php echo $hex_clip; ?>;

@@ -101,7 +101,12 @@ class Olobuild_StepTimeline_Tile extends Olobuild_Tile_Base {
 
         $cols       = max( 1, min( 5, absint( $s['columns'] ) ) );
         $gap        = max( 0, min( 80, absint( $s['gap'] ) ) );
-        $items_alig = $s['items_align'] === 'center' ? 'center' : 'flex-start';
+        // «In alto» (il predefinito): le card della stessa fila si allungano fino alla più alta
+        // e il piè scende in fondo (margin-top:auto su .olo-stl__foot). Con flex-start ogni card
+        // finiva col suo contenuto e i piè si sfalsavano quando titoli e testi andavano a capo in
+        // modo diverso (Doppia Mandata a 1200 px: piè a 2904/2911/2881/2881). Il contenuto resta
+        // in alto: cambia solo dove sta il piè. «Centro» resta com'era.
+        $items_alig = $s['items_align'] === 'center' ? 'center' : 'stretch';
 
         // Riserva mescolata col trasparente, non col bianco: su fondo chiaro e' la stessa linea
         // di prima, su una sezione scura non diventa una riga rosata chiara.
@@ -163,6 +168,13 @@ class Olobuild_StepTimeline_Tile extends Olobuild_Tile_Base {
         $items = is_array( $s['items'] ) ? $s['items'] : [];
         $n_items = count( $items );
 
+        // La timeline orizzontale ha un pallino per ogni passo della fila: sopra una griglia a UNA
+        // colonna con più passi impilati non corrisponde più a niente, e si nasconde. Vale per le
+        // colonne del computer, per il ripiego a una colonna sotto i 900 px e per le colonne scelte
+        // per dispositivo. Con un passo solo resta: è la riga coi due pallini sopra la sua card
+        // (Leva Consulenza mette una tile per colonna così).
+        $tl_pila = ! empty( $s['show_timeline'] ) && $n_items > 1;
+
         ob_start();
         ?>
         <div class="olo-stl <?php echo esc_attr( $uid ); ?>">
@@ -220,9 +232,16 @@ class Olobuild_StepTimeline_Tile extends Olobuild_Tile_Base {
                             <?php if ( $counter !== '' ) : ?>
                                 <span class="olo-stl__counter" style="font-family:<?php echo esc_attr( $counter_family ); ?>;font-size:<?php echo (int) $counter_size; ?>px;line-height:.9;color:<?php echo esc_attr( $counter_clr ); ?>;font-style:<?php echo esc_attr( $counter_italic ); ?>;font-weight:<?php echo esc_attr( $counter_w ); ?>;letter-spacing:-0.02em" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.counter'; ?>"><?php echo esc_html( $counter ); ?></span>
                             <?php endif; ?>
-                            <?php if ( $tag_text !== '' ) : ?>
-                                <div style="display:inline-flex;align-items:center;gap:8px;padding-bottom:14px">
-                                    <span style="width:8px;height:8px;border-radius:50%;background:<?php echo esc_attr( $tag_dot_clr ); ?>"></span>
+                            <?php if ( $tag_text !== '' ) :
+                                // Il tag resta accanto al numero e va a capo DENTRO il suo riquadro (flex-basis 0:
+                                // basta che ci stia la sua parola più lunga); prima scendeva tutto sotto il numero
+                                // appena la frase intera non ci stava, la riga del numero si allungava solo in
+                                // quella card e il suo mockup scendeva (Doppia Mandata a 1024 px: teste di 109 e
+                                // 58 px, mockup a 2770 e 2719). Così la riga è alta come il numero in tutta la fila.
+                                // Il pallino non si schiaccia (flex-shrink:0) quando il testo va a capo.
+                            ?>
+                                <div class="olo-stl__tag" style="display:inline-flex;align-items:center;gap:8px;padding-bottom:14px;flex:1 1 0">
+                                    <span style="width:8px;height:8px;border-radius:50%;flex-shrink:0;background:<?php echo esc_attr( $tag_dot_clr ); ?>"></span>
                                     <span style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $tag_size; ?>px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $tag_color ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.tag_text'; ?>"><?php echo esc_html( $tag_text ); ?></span>
                                 </div>
                             <?php endif; ?>
@@ -284,8 +303,16 @@ class Olobuild_StepTimeline_Tile extends Olobuild_Tile_Base {
                         <?php endif; ?>
 
                         <!-- Footer metric -->
-                        <?php if ( $f_val !== '' || $f_lbl !== '' ) : ?>
-                            <div style="display:inline-flex;align-items:center;gap:10px;margin-top:12px;padding-top:14px;border-top:1px solid rgba(15,23,42,0.08)">
+                        <?php if ( $f_val !== '' || $f_lbl !== '' ) :
+                            // Il piè sta in fondo alla card (margin-top:auto, la card si allunga fino alla più
+                            // alta della fila): i piè di una fila restano sulla stessa riga anche quando titoli
+                            // e testi vanno a capo in modo diverso. I 12 px che lo staccavano dal testo restano
+                            // come minimo (padding dell'involucro: un margine auto scenderebbe a 0). Dentro un
+                            // blocco la riga del piè è flex e non inline-flex: da figlia della card flex era già
+                            // larga quanto la card, e il filo sopra deve restare così.
+                        ?>
+                            <div class="olo-stl__foot" style="margin-top:auto;padding-top:12px">
+                            <div style="display:flex;align-items:center;gap:10px;padding-top:14px;border-top:1px solid rgba(15,23,42,0.08)">
                                 <?php if ( $f_icon ) : ?>
                                     <span style="color:<?php echo esc_attr( $fv_clr ); ?>;display:inline-flex;align-items:center"><?php echo $this->render_icon_html( $f_icon, 0.9 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon HTML built by Olobuild_Tile_Base::render_icon_html() (escapes/sanitizes internally) ?></span>
                                 <?php endif; ?>
@@ -296,22 +323,38 @@ class Olobuild_StepTimeline_Tile extends Olobuild_Tile_Base {
                                     <span style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $fl_size; ?>px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $fl_clr ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.footer_label'; ?>"><?php echo esc_html( $f_lbl ); ?></span>
                                 <?php endif; ?>
                             </div>
+                            </div>
                         <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
             </div>
         </div>
 
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from sanitized values: $media_radius_h via build_border_radius_css() (integer-forced); $uid is internally generated. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from sanitized values: $media_radius_h via build_border_radius_css() (integer-forced); column counts via absint() clamps (css_per_dispositivo/decl_colonne); $uid is internally generated. ?>
         <style>
             <?php if ( $media_radius_h ) : ?>
             .<?php echo $uid; ?> .olo-stl__item:hover .olo-stl__mockup { border-radius: <?php echo $media_radius_h; ?> !important; }
+            <?php endif; ?>
+            <?php if ( $tl_pila && $cols === 1 ) : ?>
+            .<?php echo $uid; ?> .olo-stl__timeline { display: none; }
             <?php endif; ?>
             @media (max-width: 900px) {
                 .<?php echo $uid; ?> .olo-stl__grid { grid-template-columns: 1fr !important; }
                 .<?php echo $uid; ?> .olo-stl__sep { display: none !important; }
                 .<?php echo $uid; ?> .olo-stl__counter { font-size: 64px !important; }
+                <?php if ( $tl_pila ) : ?>.<?php echo $uid; ?> .olo-stl__timeline { display: none; }<?php endif; ?>
             }
+            <?php
+            // «Numero colonne» per dispositivo: dopo il ripiego a una colonna, che senza un valore scelto
+            // resta com'era (da 901 px in su le colonne del computer). La timeline segue le colonne di
+            // ogni dispositivo: nascosta a una colonna, di nuovo visibile se lì le colonne sono due o più.
+            echo $this->css_per_dispositivo( $s, 'columns', '.' . $uid . ' .olo-stl__grid', $this->decl_colonne( 5 ) );
+            if ( $tl_pila ) {
+                echo $this->css_per_dispositivo( $s, 'columns', '.' . $uid . ' .olo-stl__timeline', function ( $v ) {
+                    return max( 1, min( 5, absint( $v ) ) ) === 1 ? 'display:none' : 'display:block';
+                } );
+            }
+            ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php

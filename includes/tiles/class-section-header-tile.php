@@ -74,7 +74,15 @@ class Olobuild_SectionHeader_Tile extends Olobuild_Tile_Base {
         $mono  = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
         // Valori legacy ('serif'/'sans-serif'/'mono') → stack storici della tile;
         // valori nuovi (type 'font-family') → CSS pronto via resolver condiviso.
-        $legacy = [ 'serif' => $serif, 'sans-serif' => $sans, 'mono' => $mono ];
+        // 'mono' è il mono del TEMA (l'inspector lo mostra come «Mono (tema)», come
+        // resolve_font_family() e le altre tile): prima usciva il monospazio di sistema
+        // anche con un mono nella Palette. Il ripiego resta la pila di sempre. L'occhiello
+        // e la didascalia senza famiglia scelta («Predefinito») restano sulla pila di sistema.
+        $legacy = [
+            'serif'      => $serif,
+            'sans-serif' => $sans,
+            'mono'       => 'var(--olo-font-family-mono, ' . $mono . ')',
+        ];
         $hfam   = $this->resolve_font_family( $s['headline_font_family'], $legacy ) ?: $serif;
 
         $layout = in_array( $s['layout'], [ 'split', 'stack', 'center' ], true ) ? $s['layout'] : 'split';

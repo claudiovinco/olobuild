@@ -201,18 +201,30 @@ class Olobuild_Leaderboard_Tile extends Olobuild_Tile_Base {
         // ── Raggio riga ──
         $row_radius = $this->build_border_radius_css( $s['border_radius'] ?? [] ) ?: '14px';
 
+        // ── Colonne (posizione · nome e barra · valore) CONDIVISE da tutte le righe ──
+        // Ogni riga era una griglia a sé: la colonna della barra si accorciava o allungava con la
+        // larghezza del valore e della posizione della SUA riga («7 min» contro «22 min»), e barre
+        // con la stessa percentuale avevano lunghezze diverse. Le colonne stanno sul contenitore e le
+        // righe le prendono con subgrid: posizione e valore larghi quanto il più largo, barre di
+        // uguale lunghezza. Senza subgrid (browser vecchi) la riga tiene le sue colonne, come prima.
+        $lb_cols = ( $show_pos ? 'auto ' : '' ) . '1fr' . ( $show_val ? ' auto' : '' );
+        $col_who = $show_pos ? 2 : 1;
+
         ob_start();
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/intval clamps/whitelists/build_border_radius_css/generated uid). ?>
         <style>
             .<?php echo $uid; ?> {
                 display: grid;
+                grid-template-columns: <?php echo $lb_cols; ?>;
                 gap: <?php echo (int) $row_gap; ?>px;
                 width: 100%;
             }
             .<?php echo $uid; ?> .olo-lb-row {
                 display: grid;
-                grid-template-columns: <?php echo $show_pos ? 'auto ' : ''; ?>1fr<?php echo $show_val ? ' auto' : ''; ?>;
+                grid-column: 1 / -1;
+                grid-template-columns: <?php echo $lb_cols; ?>;
+                grid-template-columns: subgrid;
                 align-items: center;
                 gap: 18px;
                 background: <?php echo $row_bg; ?>;
@@ -223,6 +235,7 @@ class Olobuild_Leaderboard_Tile extends Olobuild_Tile_Base {
             <?php echo Olobuild_Tile_Utils::radius_hover_rules( ".{$uid} .olo-lb-row", $s, 'border_radius_hover' ); ?>
             <?php if ( $show_pos ) : ?>
             .<?php echo $uid; ?> .olo-lb-pos {
+                grid-column: 1;
                 font-size: <?php echo (int) $pos_size; ?>px;
                 font-weight: 700;
                 line-height: 1;
@@ -235,7 +248,10 @@ class Olobuild_Leaderboard_Tile extends Olobuild_Tile_Base {
                 color: <?php echo $hl_color; ?>;
             }
             <?php endif; ?>
+            <?php // Colonna esplicita: la riga segnaposto (classifica vuota) ha solo questa parte, e da sola
+                  // finirebbe nella colonna della posizione. ?>
             .<?php echo $uid; ?> .olo-lb-who {
+                grid-column: <?php echo (int) $col_who; ?>;
                 display: flex;
                 flex-direction: column;
                 gap: 9px;
@@ -284,6 +300,7 @@ class Olobuild_Leaderboard_Tile extends Olobuild_Tile_Base {
             }
             <?php if ( $show_val ) : ?>
             .<?php echo $uid; ?> .olo-lb-pts {
+                grid-column: -2;
                 font-weight: 700;
                 text-align: right;
                 line-height: 1.2;
@@ -368,8 +385,9 @@ class Olobuild_Leaderboard_Tile extends Olobuild_Tile_Base {
             if ( ! bars.length ) { return; }
 
             // prefers-reduced-motion → lascia le barre già piene (SSR), nessuna animazione.
-            var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
-            if ( rm && rm.matches ) { return; }
+            // If annidati, mai la doppia e commerciale negli script in linea (wptexturize la altera).
+            var rm = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+            if ( rm ) { if ( rm.matches ) { return; } }
 
             // Riazzera le barre (erano piene per il fallback no-JS), poi anima all'ingresso.
             var i;

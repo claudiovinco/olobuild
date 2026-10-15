@@ -199,6 +199,16 @@ class Olobuild_CtaBanner_Tile extends Olobuild_Tile_Base {
             @media (max-width: 800px) {
                 .<?php echo $uid; ?> { grid-template-columns: 1fr !important; text-align: center; justify-items: center; gap: 20px !important; }
             }
+            <?php if ( ! empty( $s['cta_text'] ) && ! empty( $s['cta2_text'] ) ) : ?>
+            <?php // Sul telefono, quando i due pulsanti vanno a capo, ognuno prende tutta la riga: restavano larghi
+                  // quanto la loro scritta («Prenota l'assistenza» 198 px, «Chiamaci» 130 px). Il gruppo, centrato
+                  // nella colonna, è largo quanto il suo contenuto (al più la riga) e i pulsanti lo riempiono: se
+                  // stanno in fila restano in fila, se vanno a capo il gruppo è largo quanto la riga. ?>
+            @media (max-width: 479px) {
+                .<?php echo $uid; ?> .olo-ctab__ctas { max-width: 100%; }
+                .<?php echo $uid; ?> .olo-ctab__ctas > a { flex: 1 1 0; min-width: fit-content; box-sizing: border-box; }
+            }
+            <?php endif; ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php

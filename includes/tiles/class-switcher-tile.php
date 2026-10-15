@@ -37,6 +37,9 @@ class Olobuild_Switcher_Tile extends Olobuild_Tile_Base {
         'indicator_color'    => '',
         'content_bg'         => '',
         'content_color'      => 'var(--olo-color-text, #1e293b)',
+        // Misura del testo dei pannelli (controllo tipografia «Contenuto», anche per tablet e
+        // telefono: content_font_size_tablet / _mobile). Era fissa a 14 px: 14 resta il predefinito.
+        'content_font_size'  => '14',
         'content_padding_y'  => '20',
         'content_padding_x'  => '0',
         'shadow'             => 'none',
@@ -111,6 +114,12 @@ class Olobuild_Switcher_Tile extends Olobuild_Tile_Base {
         $indicator_clr   = $this->safe_color_css( $s['indicator_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $content_bg      = $this->safe_color_css( $s['content_bg'] ) ?: '';
         $content_color   = $this->safe_color_css( $s['content_color'] ) ?: '';
+        // Misura del testo dei pannelli: vuota o fuori scala = i 14 px di sempre.
+        $misura_testo    = static function ( $v ) {
+            $n = (float) $v;
+            return $n > 0 ? max( 10, min( 40, $n ) ) : 0;
+        };
+        $content_fs      = $misura_testo( $s['content_font_size'] ?? '' ) ?: 14;
 
         // Padding a 4 lati (controllo standard `spacing`), con ripiego sulle chiavi piatte storiche.
         $tab_pad   = Olobuild_Tile_Utils::spacing_sides(
@@ -280,8 +289,20 @@ class Olobuild_Switcher_Tile extends Olobuild_Tile_Base {
                 <?php if ( $content_bg ) : ?>background: <?php echo $content_bg; ?>;<?php endif; ?>
                 <?php if ( $content_color ) : ?>color: <?php echo $content_color; ?>;<?php endif; ?>
                 line-height: 1.65;
-                font-size: 14px;
+                font-size: <?php echo (float) $content_fs; ?>px;
             }
+            <?php
+            // Tablet (fino a 960 px) e telefono (fino a 480 px), dal controllo tipografia «Contenuto».
+            echo $this->css_per_dispositivo(
+                array_intersect_key( $s, array_flip( [ 'content_font_size_tablet', 'content_font_size_mobile' ] ) ),
+                'content_font_size',
+                '.' . esc_attr( $uid ) . ' .uk-switcher > li,.' . esc_attr( $uid ) . ' .olo-switcher-content > li',
+                static function ( $v ) use ( $misura_testo ) {
+                    $n = $misura_testo( $v );
+                    return $n > 0 ? 'font-size:' . $n . 'px' : '';
+                }
+            );
+            ?>
             <?php if ( $vertical ) : ?>
             .<?php echo esc_attr( $uid ); ?>.olo-switcher--vert {
                 display: grid;

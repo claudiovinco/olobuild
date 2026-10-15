@@ -20,6 +20,8 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
             [ 'id' => 'og-3', 'image' => '', 'title' => 'Chi siamo', 'subtitle' => 'Persone, metodo, valori', 'link' => '' ],
         ],
         'columns'             => '3',
+        // Fra 960 e 1199 px (UIkit @m–@l, tablet orizzontale); vuoto = come il desktop.
+        'columns_laptop'      => '',
         'columns_tablet'      => '',
         'columns_mobile'      => '1',
         'gap'                 => 'medium',
@@ -117,6 +119,9 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
         $cols_mob  = absint( $s['columns_mobile'] ) ?: 1;
         // Fra 640 e 959 px (UIkit @s); vuoto = come il mobile, cioè com'era prima di questa chiave
         $cols_tab  = min( 6, absint( $s['columns_tablet'] ?? 0 ) );
+        // Fra 960 e 1199 px (UIkit @m, con il desktop che passa a @l); vuoto = come il desktop, cioè
+        // com'era prima di questa chiave. Quattro schede da 202–262 px a 960 erano troppo strette.
+        $cols_lap  = min( 6, absint( $s['columns_laptop'] ?? 0 ) );
         $height    = absint( $s['height'] ) ?: 300;
         $obj_pos   = Olobuild_Tile_Utils::css_pos( $s, 'object_position' );
         $masonry   = ( ( $s['layout_mode'] ?? 'uniform' ) === 'masonry' );
@@ -358,13 +363,14 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?>.olo-og--masonry .mos-og-img { height:100% !important; }
             .<?php echo $uid; ?>.olo-og--masonry .olo-og-ph { height:100% !important; }
             .<?php echo $uid; ?>.olo-og--masonry .olo-og-card { height:100% !important; }
+            <?php if ( $cols_lap ) : ?>@media(min-width:960px) and (max-width:1199px){ .<?php echo $uid; ?>.olo-og--masonry > div { grid-template-columns:repeat(<?php echo (int) $cols_lap; ?>,1fr) !important; } }<?php endif; ?>
             <?php if ( $cols_tab ) : ?>@media(min-width:640px) and (max-width:959px){ .<?php echo $uid; ?>.olo-og--masonry > div { grid-template-columns:repeat(<?php echo (int) $cols_tab; ?>,1fr) !important; } }<?php endif; ?>
             @media(max-width:640px){ .<?php echo $uid; ?>.olo-og--masonry > div { grid-template-columns:repeat(<?php echo (int) $cols_mob; ?>,1fr) !important; grid-auto-rows:<?php echo (int) $mrow_m; ?>px; } .<?php echo $uid; ?>.olo-og--masonry > div > div.olo-og-tall, .<?php echo $uid; ?>.olo-og--masonry > div > div.olo-og-wide { grid-row:auto; grid-column:auto; } }
             <?php endif; ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="<?php echo $wrap_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- class list built above from esc_attr()'d preset id, fixed literals and internal wp_rand() uid. ?>">
-            <div class="uk-child-width-1-<?php echo (int) $cols_mob; ?><?php echo $cols_tab ? ' uk-child-width-1-' . (int) $cols_tab . '@s' : ''; ?> uk-child-width-1-<?php echo (int) $columns; ?>@m <?php echo $gap_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $gap_class built above from fixed literals + esc_attr(); $grid_attr is a fixed uk-grid literal. ?>" <?php echo $grid_attr; ?>>
+            <div class="uk-child-width-1-<?php echo (int) $cols_mob; ?><?php echo $cols_tab ? ' uk-child-width-1-' . (int) $cols_tab . '@s' : ''; ?><?php echo $cols_lap ? ' uk-child-width-1-' . (int) $cols_lap . '@m uk-child-width-1-' . (int) $columns . '@l' : ' uk-child-width-1-' . (int) $columns . '@m'; ?> <?php echo $gap_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $gap_class built above from fixed literals + esc_attr(); $grid_attr is a fixed uk-grid literal. ?>" <?php echo $grid_attr; ?>>
                 <?php foreach ( $items as $item ) :
                     $has_link    = ! empty( $item['link'] );
                     $link_url    = $has_link ? esc_url( $item['link'] ) : '';

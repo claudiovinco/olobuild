@@ -171,6 +171,23 @@ if(cambiato){c.dispatchEvent(new Event("input",{bubbles:true}));c.dispatchEvent(
 JS;
     }
 
+    /**
+     * Il link «/privacy-policy» del testo del consenso (il predefinito e quello dei temi) è relativo alla radice: su
+     * un sito in una sottocartella portava fuori dal sito. Diventa la pagina privacy di WordPress se è pubblicata,
+     * altrimenti /privacy-policy/ del sito. Solo quell'href esatto: ogni altro link resta com'è.
+     */
+    private static function link_privacy( $testo ) {
+        $testo = (string) $testo;
+        if ( false === strpos( $testo, 'href="/privacy-policy"' ) ) {
+            return $testo;
+        }
+        $url = function_exists( 'get_privacy_policy_url' ) ? (string) get_privacy_policy_url() : '';
+        if ( '' === $url ) {
+            $url = home_url( '/privacy-policy/' );
+        }
+        return str_replace( 'href="/privacy-policy"', 'href="' . esc_url( $url ) . '"', $testo );
+    }
+
     /** Il messaggio a modulo chiuso (invii arrivati al massimo, o posti tutti assegnati). */
     private function modulo_chiuso( array $s ) {
         return '<div class="olo-form-chiuso" role="status" style="padding:1.2em 1.35em;border-radius:.65em;border:1px solid color-mix(in srgb, currentColor 18%, transparent);font-size:15px;line-height:1.6">'
@@ -225,6 +242,10 @@ JS;
         // e con lo sfondo si vede): prima usciva solo col riquadro. Con «Solo linea sotto» no, lì
         // i campi hanno angoli vivi.
         $label_color =$this->safe_color_css( $s['label_color'] ) ?: 'var(--olo-color-text, #374151)';
+        // Messaggi sotto i campi: il rosso del tema (token danger) portato per il 30% verso il colore delle
+        // etichette, che il tema sceglie leggibile sul fondo del modulo. Il token della Palette è #EF4444 (3,8:1
+        // sul bianco a 12 px); così 6:1 sui temi chiari e quasi 5:1 su quelli scuri. Senza token, #C62828 (5,6:1).
+        $err_color   = 'color-mix(in srgb, var(--olo-color-danger, #C62828) 70%, ' . ( in_array( strtolower( $label_color ), [ 'inherit', 'initial' ], true ) ? 'currentColor' : $label_color ) . ')';
         $label_size  = absint( $s['label_size'] ) ?: 14;
         $label_weight= (string) ( $s['label_weight'] ?: '500' );
         if ( ! preg_match( '/^[a-z0-9]+$/i', $label_weight ) ) {
@@ -336,6 +357,11 @@ JS;
         if ( $btn_border_css === '' && strpos( $btn_hover_border['decls'], 'border:0px ' ) === 0 ) {
             $btn_hover_border = [ 'decls' => '', 'transition' => '' ];
         }
+        // «Indietro» dei passi: secondario, a contorno col colore del pulsante e il testo delle etichette (sempre
+        // leggibile sul fondo del modulo). Il contorno ha lo spessore del bordo dei campi; se il pulsante ha già un
+        // bordo suo, fa da contorno quello.
+        $btn_main     = $btn_bg ?: 'var(--olo-color-primary, #e1474f)';
+        $prev_outline = ( $btn_border_css === '' ) ? 'inset 0 0 0 ' . max( 1, min( 3, $bw ) ) . 'px ' . $btn_main : '';
         $btn_ls      = floatval( $s['submit_letter_spacing'] );
         $btn_tt      = in_array( $s['submit_text_transform'], [ 'none', 'uppercase', 'lowercase', 'capitalize' ], true ) ? $s['submit_text_transform'] : 'none';
         $btn_icon    = sanitize_text_field( $s['submit_icon'] ?? '' );
@@ -603,6 +629,8 @@ JS;
             .<?php echo $uid; ?> .olo-f-privacy{margin-top:<?php echo $gap; ?>px}
             <?php // Il colore dei link del tema, non il primario: un primario chiaro (arancio, giallo) sul fondo chiaro del modulo non si leggeva (14 ott 2026). ?>
             .<?php echo $uid; ?> .olo-f-privacy a{color:var(--olo-color-link, var(--olo-color-primary, #e1474f));text-decoration:underline}
+            <?php // Il messaggio sotto un campo (uno solo per gruppo di scelte): il primo colore vale dove color-mix() non c'è. ?>
+            .<?php echo $uid; ?> .olo-f-field-error{display:block;margin-top:4px;font-size:12px;line-height:1.4;color:var(--olo-color-danger, #C62828);color:<?php echo $err_color; ?>}
             <?php if ( $is_floating ) : ?>
             .<?php echo $uid; ?> .olo-f-float{position:relative}
             .<?php echo $uid; ?> .olo-f-float-label{position:absolute;top:50%;left:14px;transform:translateY(-50%);color:<?php echo $label_color; ?>;font-size:<?php echo $label_size; ?>px;pointer-events:none;transition:all 0.2s ease;opacity:0.6<?php if ( $label_tt && $label_tt !== 'none' ) : ?>;text-transform:<?php echo $label_tt; ?><?php endif; ?><?php if ( $label_ls != 0 ) : ?>;letter-spacing:<?php echo $label_ls; ?>px<?php endif; ?><?php if ( $label_ff ) : ?>;font-family:<?php echo $label_ff; ?><?php endif; ?>}
@@ -620,8 +648,15 @@ JS;
             <?php if ( $is_multistep ) : ?>
             .<?php echo $uid; ?> .olo-f-step-page{display:none}
             .<?php echo $uid; ?> .olo-f-step-page.active{display:block}
-            .<?php echo $uid; ?> .olo-f-step-nav{display:flex;gap:12px;margin-top:20px}
-            .<?php echo $uid; ?> .olo-f-step-nav .olo-f-btn{flex:1}
+            <?php // Pulsanti dei passi: etichetta al centro con o senza «Pulsante larghezza piena». La riga si spezza
+            // solo se i due non ci stanno (telefono, colonna stretta): allora l'invio sale sopra «Indietro». ?>
+            .<?php echo $uid; ?> .olo-f-step-nav{display:flex;flex-wrap:wrap-reverse;gap:12px;margin-top:20px}
+            .<?php echo $uid; ?> .olo-f-step-nav .olo-f-btn{flex:1 1 auto;width:auto;justify-content:center;text-align:center}
+            .<?php echo $uid; ?> .olo-f-step-prev{background:transparent;color:<?php echo $label_color; ?><?php if ( $prev_outline !== '' ) : ?>;box-shadow:<?php echo $prev_outline; ?><?php endif; ?>}
+            .<?php echo $uid; ?> .olo-f-step-prev:hover{background:color-mix(in srgb, <?php echo $btn_main; ?> 12%, transparent);color:<?php echo $label_color; ?>}
+            <?php if ( $prev_outline !== '' ) : ?>.<?php echo $uid; ?> .olo-f-step-prev:focus-visible{box-shadow:<?php echo $prev_outline; ?>,0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent)}<?php endif; ?>
+            .<?php echo $uid; ?> .olo-f-step-caption{margin:0 0 .6em;font-size:13px;line-height:1.4;color:<?php echo $label_color; ?>}
+            .<?php echo $uid; ?> .olo-f-step-count{font-weight:600}
             .<?php echo $uid; ?> .olo-f-progress-bar{height:4px;background:<?php echo $input_bc; ?>;border-radius:2px;margin-bottom:24px;overflow:hidden}
             .<?php echo $uid; ?> .olo-f-progress-fill{height:100%;background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #e1474f)'; ?>;transition:width 0.3s ease;border-radius:2px}
             .<?php echo $uid; ?> .olo-f-steps-indicator{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:24px;flex-wrap:wrap}
@@ -667,7 +702,15 @@ JS;
                 <?php
                 // ── Multi-step progress indicator ──
                 if ( $is_multistep ) :
-                    if ( $step_style === 'progress' ) : ?>
+                    if ( $step_style === 'progress' ) :
+                        // Le etichette dei passi anche con la barra (prima le mostravano solo numeri e pallini): una
+                        // didascalia «Passo 2 di 3 · Il ritiro», aggiornata dallo script. Senza etichette resta la sola barra.
+                        if ( $step_labels_arr ) :
+                            /* translators: 1: numero del passo, 2: numero dei passi */
+                            $tpl_passo = olobuild_t( 'Passo %1$d di %2$d' );
+                            ?>
+                        <p class="olo-f-step-caption" aria-live="polite" data-olo-step-caption data-olo-step-tpl="<?php echo esc_attr( $tpl_passo ); ?>" data-olo-step-labels="<?php echo esc_attr( wp_json_encode( $step_labels_arr ) ); ?>"><span class="olo-f-step-count"><?php echo esc_html( str_replace( [ '%1$d', '%2$d' ], [ '1', (string) $step_count ], $tpl_passo ) ); ?></span><span class="olo-f-step-name"><?php echo esc_html( ' · ' . $step_labels_arr[0] ); ?></span></p>
+                        <?php endif; ?>
                         <div class="olo-f-progress-bar" data-olo-steps="<?php echo (int) $step_count; ?>">
                             <div class="olo-f-progress-fill" style="width:<?php echo (float) round( 100 / $step_count, 2 ); ?>%"></div>
                         </div>
@@ -891,7 +934,7 @@ JS;
                                     </label>
                                     <span class="olo-f-file-info" style="display:inline-block;margin-left:12px;font-size:13px;color:<?php echo $label_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized via safe_color_css() whitelist above ?>;opacity:0.7;"><?php echo esc_html( olobuild_t( 'Nessun file selezionato' ) ); ?></span>
                                     <div class="olo-f-file-list" style="margin-top:8px;font-size:13px;color:<?php echo $label_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized via safe_color_css() whitelist above ?>;"></div>
-                                    <div class="olo-f-file-error" style="color:var(--olo-color-danger, #EF4444);font-size:12px;margin-top:4px;display:none;"></div>
+                                    <div class="olo-f-file-error" style="color:var(--olo-color-danger, #C62828);color:<?php echo esc_attr( $err_color ); ?>;font-size:12px;margin-top:4px;display:none;"></div>
                                     <input type="hidden" name="fields[<?php echo esc_attr( $fname ); ?>]" value="" class="olo-f-file-meta" />
                                 </div>
 
@@ -979,7 +1022,7 @@ JS;
                                         <input type="password" class="uk-input<?php echo $size_class; ?>" placeholder="<?php echo esc_attr( olobuild_t( 'Conferma password' ) ); ?>" autocomplete="new-password" data-pwc-confirm="<?php echo $pc_id; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- id composed of literal prefix, esc_attr()-escaped name and wp_rand(); size-class is a fixed internal string ?>" />
                                         <a class="uk-form-icon uk-form-icon-flip" style="cursor:pointer" onclick="var i=this.previousElementSibling;i.type=i.type==='password'?'text':'password'" uk-icon="icon: eye"></a>
                                     </div>
-                                    <div class="olo-f-pwc-error" data-pwc-error="<?php echo $pc_id; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- id composed of literal prefix, esc_attr()-escaped name and wp_rand() ?>" style="color:var(--olo-color-danger, #EF4444);font-size:12px;display:none">Le password non corrispondono</div>
+                                    <div class="olo-f-pwc-error" data-pwc-error="<?php echo $pc_id; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- id composed of literal prefix, esc_attr()-escaped name and wp_rand() ?>" style="color:var(--olo-color-danger, #C62828);color:<?php echo esc_attr( $err_color ); ?>;font-size:12px;display:none">Le password non corrispondono</div>
                                 </div>
 
                             <?php elseif ( $ftype === 'color' ) : ?>
@@ -1017,29 +1060,37 @@ JS;
                     </div>
 
                     <?php if ( $is_multistep ) : ?>
+                        <?php if ( $step_idx < $step_count - 1 ) : // all'ultimo passo «Indietro» sta nella riga dell'invio ?>
                         <div class="olo-f-step-nav">
                             <?php if ( $step_idx > 0 ) : ?>
                                 <button type="button" class="olo-f-btn olo-f-step-prev"><?php echo esc_html( olobuild_t( 'Indietro' ) ); ?></button>
                             <?php endif; ?>
-                            <?php if ( $step_idx < $step_count - 1 ) : ?>
-                                <button type="button" class="olo-f-btn olo-f-step-next"><?php echo esc_html( olobuild_t( 'Avanti' ) ); ?></button>
-                            <?php endif; ?>
+                            <button type="button" class="olo-f-btn olo-f-step-next"><?php echo esc_html( olobuild_t( 'Avanti' ) ); ?></button>
                         </div>
+                        <?php endif; ?>
                         </div><?php // close .olo-f-step-page ?>
                     <?php endif; ?>
 
                 <?php endforeach; // steps loop ?>
 
-                <?php if ( ! empty( $s['privacy_checkbox'] ) ) : ?>
-                <div class="olo-f-privacy"<?php if ( $is_multistep ) : ?> data-olo-privacy<?php endif; ?>>
+                <?php
+                // Nel modulo a passi consenso e invio compaiono solo all'ultimo passo (lo script li mostra), con
+                // «Indietro» sulla stessa riga dell'invio: prima il consenso si vedeva dal primo passo sotto «Avanti».
+                if ( ! empty( $s['privacy_checkbox'] ) ) : ?>
+                <div class="olo-f-privacy"<?php if ( $is_multistep ) : ?> data-olo-privacy style="display:none"<?php endif; ?>>
                     <label class="olo-f-option">
                         <input type="checkbox" class="uk-checkbox" name="_olo_privacy_consent" required />
-                        <span><?php echo wp_kses_post( $s['privacy_text'] ); ?></span>
+                        <span><?php echo wp_kses_post( self::link_privacy( $s['privacy_text'] ) ); ?></span>
                     </label>
                 </div>
                 <?php endif; ?>
 
-                <div class="uk-margin-top olo-f-submit-row" data-olo-submit style="text-align:<?php echo esc_attr( $s['submit_alignment'] ?: 'left' ); ?><?php if ( $is_multistep ) : ?>;display:none<?php endif; ?>">
+                <?php if ( $is_multistep ) : ?>
+                <div class="olo-f-step-nav olo-f-submit-row" data-olo-submit style="display:none">
+                    <button type="button" class="olo-f-btn olo-f-step-prev"><?php echo esc_html( olobuild_t( 'Indietro' ) ); ?></button>
+                <?php else : ?>
+                <div class="uk-margin-top olo-f-submit-row" data-olo-submit style="text-align:<?php echo esc_attr( $s['submit_alignment'] ?: 'left' ); ?>">
+                <?php endif; ?>
                     <button type="submit" class="olo-f-btn">
                         <span class="olo-f-btn-text">
                             <?php if ( $btn_icon && $btn_icon_pos === 'left' ) : ?><?php echo $this->render_icon_html( $btn_icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html(): nome e attributi passati da esc_attr, SVG dalla libreria delle icone ?><?php endif; ?>
@@ -1128,11 +1179,33 @@ JS;
             var lines = wrapper.querySelectorAll('.olo-f-step-line');
             var stepItems = wrapper.querySelectorAll('.olo-f-step-item');
             var submitRow = wrapper.querySelector('[data-olo-submit]');
+            var privacyRow = wrapper.querySelector('[data-olo-privacy]');
+            // Didascalia della barra («Passo 2 di 3 · Il ritiro»): modello ed etichette stanno negli attributi
+            var stepCaption = wrapper.querySelector('[data-olo-step-caption]');
+            var stepTpl = '';
+            var stepLabels = [];
+            if (stepCaption) {
+                stepTpl = stepCaption.getAttribute('data-olo-step-tpl') || '';
+                try { stepLabels = JSON.parse(stepCaption.getAttribute('data-olo-step-labels') || '[]'); } catch (errLabels) { stepLabels = []; }
+            }
+
+            // Consenso privacy e riga dell'invio (con «Indietro») solo all'ultimo passo
+            function righeUltimoPasso() {
+                var ultimo = (currentStep === totalSteps - 1);
+                if (submitRow) { submitRow.style.display = ultimo ? '' : 'none'; }
+                if (privacyRow) { privacyRow.style.display = ultimo ? '' : 'none'; }
+            }
 
             function updateStepIndicator() {
                 if (!isMultistep) return;
                 var pct = ((currentStep + 1) / totalSteps) * 100;
                 if (progressFill) { progressFill.style.width = pct + '%'; }
+                if (stepCaption) {
+                    var capNum = stepCaption.querySelector('.olo-f-step-count');
+                    var capNome = stepCaption.querySelector('.olo-f-step-name');
+                    if (capNum) { capNum.textContent = stepTpl.split('%1$d').join(String(currentStep + 1)).split('%2$d').join(String(totalSteps)); }
+                    if (capNome) { capNome.textContent = stepLabels[currentStep] ? ' · ' + stepLabels[currentStep] : ''; }
+                }
                 var di;
                 for (di = 0; di < dots.length; di++) {
                     dots[di].classList.remove('active', 'completed');
@@ -1162,18 +1235,22 @@ JS;
                 pages[idx].classList.add('active');
                 currentStep = idx;
                 updateStepIndicator();
-
-                // Show submit only on last step
-                if (submitRow) {
-                    if (currentStep === totalSteps - 1) {
-                        submitRow.style.display = '';
-                    } else {
-                        submitRow.style.display = 'none';
-                    }
-                }
+                righeUltimoPasso();
 
                 // Scroll to top of form
                 wrapper.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+            }
+
+            // Dove va il messaggio di un gruppo di scelte (radio, caselle, consenso): UNO solo, sotto il gruppo, nel
+            // riquadro del campo. Prima ne compariva uno accanto a ogni opzione.
+            function riquadroScelte(el) {
+                return el.closest('[data-field-name]') || el.closest('.olo-f-privacy') || el.parentNode;
+            }
+            function mettiErrore(dove, testo) {
+                var span = document.createElement('span');
+                span.className = 'olo-f-field-error';
+                span.textContent = testo;
+                dove.appendChild(span);
             }
 
             // Validate required fields in a container (step page or entire form)
@@ -1190,8 +1267,10 @@ JS;
 
                 var valid = true;
                 var firstInvalid = null;
+                var gruppiSegnati = {};
 
-                // Validate required checkbox groups
+                // Gruppi di caselle obbligatori: classe d'errore sulle caselle, un messaggio sotto il gruppo e il fuoco
+                // sulla prima casella. Prima il fuoco andava al div del gruppo, che non lo prende, e non si vedeva niente.
                 var checkGroups = container.querySelectorAll('[data-olo-check-required]');
                 for (var g = 0; g < checkGroups.length; g++) {
                     var groupEl = checkGroups[g];
@@ -1201,7 +1280,10 @@ JS;
                     var checked = groupEl.querySelectorAll('input[type="checkbox"]:checked');
                     if (checked.length === 0) {
                         valid = false;
-                        if (!firstInvalid) { firstInvalid = groupEl; }
+                        var caselle = groupEl.querySelectorAll('input[type="checkbox"]');
+                        for (var k = 0; k < caselle.length; k++) { caselle[k].classList.add('uk-form-danger'); }
+                        mettiErrore(riquadroScelte(groupEl), msgObbligatorio);
+                        if (!firstInvalid) { firstInvalid = caselle.length ? caselle[0] : groupEl; }
                     }
                 }
 
@@ -1230,11 +1312,14 @@ JS;
                             if (el.hasAttribute('data-olo-dopo')) { errMsg = msgDataPrima; }
                         }
                         if (errMsg) {
-                            var span = document.createElement('span');
-                            span.className = 'olo-f-field-error';
-                            span.textContent = errMsg;
-                            span.style.cssText = 'color:var(--olo-color-danger, #EF4444);font-size:12px;display:block;margin-top:4px';
-                            el.parentNode.appendChild(span);
+                            if (el.type === 'radio' || el.type === 'checkbox') {
+                                if (!gruppiSegnati[el.name]) {
+                                    gruppiSegnati[el.name] = true;
+                                    mettiErrore(riquadroScelte(el), errMsg);
+                                }
+                            } else {
+                                mettiErrore(el.parentNode, errMsg);
+                            }
                         }
                         if (!firstInvalid) { firstInvalid = el; }
                         valid = false;
@@ -1259,8 +1344,10 @@ JS;
                     }
                 }
 
-                if (firstInvalid) {
-                    if (firstInvalid.focus) { firstInvalid.focus(); }
+                // Il fuoco sul primo campo da correggere nell'ordine della pagina (anche quando è la casella di un gruppo)
+                var primoInvalido = container.querySelector('.uk-form-danger') || firstInvalid;
+                if (primoInvalido) {
+                    if (primoInvalido.focus) { primoInvalido.focus(); }
                 }
 
                 return valid;
@@ -1268,14 +1355,8 @@ JS;
 
             // ─── Multi-step: navigation event delegation ───
             if (isMultistep) {
-                // Initial state: show submit only if on last step (shouldn't be, but safe)
-                if (submitRow) {
-                    if (currentStep === totalSteps - 1) {
-                        submitRow.style.display = '';
-                    } else {
-                        submitRow.style.display = 'none';
-                    }
-                }
+                // Stato iniziale: consenso e invio nascosti fino all'ultimo passo (già nascosti nell'HTML)
+                righeUltimoPasso();
 
                 wrapper.addEventListener('click', function(ev) {
                     var prevBtn = ev.target.closest('.olo-f-step-prev');
@@ -1569,14 +1650,25 @@ JS;
                 }
             });
 
-            // Remove danger state and inline error on input
-            form.addEventListener('input', function(e) {
-                if (e.target.classList) {
-                    e.target.classList.remove('uk-form-danger');
-                    var fieldErr = e.target.parentNode.querySelector('.olo-f-field-error');
-                    if (fieldErr) { fieldErr.remove(); }
+            // Il messaggio va via appena il campo cambia. Un gruppo di scelte alla prima scelta (anche con l'evento
+            // change), su tutto il gruppo: prima restava accanto alle altre opzioni fino all'«Avanti» successivo.
+            function pulisciCampo(t) {
+                if (!t) { return; }
+                if (!t.classList) { return; }
+                if (t.type === 'radio' || t.type === 'checkbox') {
+                    var box = riquadroScelte(t);
+                    var scelte = box.querySelectorAll('input[type="' + t.type + '"]');
+                    for (var q = 0; q < scelte.length; q++) { scelte[q].classList.remove('uk-form-danger'); }
+                    var errGruppo = box.querySelector('.olo-f-field-error');
+                    if (errGruppo) { errGruppo.remove(); }
+                    return;
                 }
-            });
+                t.classList.remove('uk-form-danger');
+                var fieldErr = t.parentNode.querySelector('.olo-f-field-error');
+                if (fieldErr) { fieldErr.remove(); }
+            }
+            form.addEventListener('input', function(e) { pulisciCampo(e.target); });
+            form.addEventListener('change', function(e) { pulisciCampo(e.target); });
 
             function showMsg(el, text) {
                 el.textContent = text;

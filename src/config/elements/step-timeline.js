@@ -196,7 +196,9 @@ export default {
   // ═══ STILE ═══════════════════════════════════════════════════
   styleFields: [
     { type: 'separator', label: t('Griglia') },
-    { key: 'columns',     label: t('Numero colonne'),    type: 'range', min: 1, max: 5, step: 1 },
+    // Per dispositivo (columns_tablet_landscape, _tablet, _mobile_landscape, _mobile → css_per_dispositivo
+    // nel PHP). Senza un valore scelto restano le colonne del computer e, sotto i 900 px, una colonna.
+    { key: 'columns',     label: t('Numero colonne'),    type: 'range', min: 1, max: 5, step: 1, responsive: true },
     { key: 'gap',         label: t('Gap step'), type: 'range', min: 0, max: 80, step: 4 },
     { key: 'items_align', label: t('Allineamento contenuto'), type: 'select', options: [
       { value: 'start',  label: t('Sinistra') },

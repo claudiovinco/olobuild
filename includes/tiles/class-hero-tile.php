@@ -494,6 +494,16 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
                 ?>
                 justify-content: <?php echo $jc; ?>;
             }
+            <?php if ( ! empty( $s['cta_text'] ) && ! empty( $s['cta2_text'] ) ) : ?>
+            <?php // Sul telefono, quando i due pulsanti vanno a capo, ognuno prende tutta la riga: restavano larghi
+                  // quanto la loro scritta (169 e 201 px, «Monta il tuo PC» e «Segui la riparazione»). Il gruppo è
+                  // largo quanto il suo contenuto (al più la riga) e i pulsanti lo riempiono: se stanno in fila
+                  // restano in fila, se vanno a capo il gruppo è largo quanto la riga. ?>
+            @media (max-width: 479px) {
+                .<?php echo $uid; ?> .olo-hero-cta-wrap { width: fit-content; max-width: 100%;<?php echo ( 'center' === $text_align ) ? ' margin-left: auto; margin-right: auto;' : ( ( 'right' === $text_align ) ? ' margin-left: auto;' : '' ); ?> }
+                .<?php echo $uid; ?> .olo-hero-cta-wrap > a { flex: 1 1 0; min-width: fit-content; box-sizing: border-box; text-align: center; }
+            }
+            <?php endif; ?>
 
             /* CTA Primary */
             .<?php echo $uid; ?> .olo-hero-cta1 {

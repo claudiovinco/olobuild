@@ -328,10 +328,15 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
             }
 
             /* CTA */
+            <?php // In fondo alla scheda (margin-top:auto nella colonna flex) e centrato se più stretto: la regola
+                  // «margin-top:auto» più sopra veniva annullata da «margin: 0 auto» e nelle schede di una fila i
+                  // pulsanti restavano attaccati alle voci, sfalsati. Maiuscolo e spaziatura dallo stile pulsanti del
+                  // tema (--olo-btn-*), come gli altri pulsanti: era l'unico che restava in minuscolo. ?>
             .<?php echo $uid; ?> .olo-price-cta {
-                display: block; box-sizing: border-box; width: <?php echo (int) $cta_w; ?>%; margin: 0 auto;
+                display: block; box-sizing: border-box; width: <?php echo (int) $cta_w; ?>%; margin: auto auto 0;
                 padding: 12px 24px; text-decoration: none !important;
                 font-weight: 600; font-size: 1em; text-align: center;
+                text-transform: var(--olo-btn-text-transform, none); letter-spacing: var(--olo-btn-letter-spacing, normal);
                 background: <?php echo $cta_bg; ?>; color: <?php echo $cta_fg; ?> !important;
                 border-radius: <?php echo $cta_r; ?>;
                 <?php if ( $cta_bw > 0 ) : ?>

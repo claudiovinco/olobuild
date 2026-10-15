@@ -73,6 +73,8 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
         'counter_size'      => 11,
         'description_size'  => 15,
         'footer_size'       => 10,
+        // Font delle etichette (numero, piè di pagina, segnaposto del media): vuoto = monospazio di sistema, come prima.
+        'mono_font_family'  => '',
 
         'card_hover_effect' => 'none',
     ];
@@ -95,7 +97,17 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
 
         $serif = "var(--olo-font-family-heading, 'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif)";
         $sans  = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
-        $mono  = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
+        // Font delle etichette (numero con etichetta, piè di pagina, scritta segnaposto del media):
+        // era la pila monospazio di sistema scritta qui, senza un controllo per cambiarla. Ora è
+        // `mono_font_family`, come nelle altre tile dati; vuoto = la pila di sempre, così le card
+        // già pubblicate non cambiano. Anche il valore storico 'mono' del titolo la segue.
+        $mono_sistema = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
+        $mono_scelto  = $this->resolve_font_family( $s['mono_font_family'] ?? '' );
+        // Nome di un font scritto a mano ('IBM Plex Mono') → con la pila di sistema come ripiego.
+        if ( $mono_scelto !== '' && preg_match( '/^[A-Za-z0-9 \-]+$/', $mono_scelto ) ) {
+            $mono_scelto = "'" . $mono_scelto . "'," . $mono_sistema;
+        }
+        $mono  = $mono_scelto !== '' ? $mono_scelto : $mono_sistema;
         $legacy = [ 'serif' => $serif, 'sans-serif' => $sans, 'mono' => $mono ];
         $tfam  = $this->resolve_font_family( $s['title_font_family'] ?? '', $legacy ) ?: $serif;
 

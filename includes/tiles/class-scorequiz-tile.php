@@ -194,7 +194,10 @@ class Olobuild_ScoreQuiz_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .osq-opt:focus-visible,.<?php echo $uid; ?> .osq-link:focus-visible,.<?php echo $uid; ?> .osq-ghost:focus-visible{outline:2px solid var(--sq-accent);outline-offset:2px;}
             .<?php echo $uid; ?> .osq-nav{display:flex;justify-content:space-between;gap:0.75rem;margin-top:1.125rem;}
             .<?php echo $uid; ?> .osq-ghost{font:inherit;font-size:13px;background:transparent;border:0;color:inherit;opacity:.8;cursor:pointer;padding:0.375rem 0;text-decoration:underline;text-underline-offset:3px;}
-            .<?php echo $uid; ?> .osq-res-t{font-size:clamp(24px,3vw,32px);font-weight:700;color:var(--sq-accent);margin:0.375rem 0 0.5rem;outline:0;}
+            <?php // Il titolo dell'esito è un titolo: carattere e peso dei titoli del tema, come l'intestazione del
+                  // quiz (.osq-h). Usciva nel carattere del testo in grassetto, e coi titoli serif stonava (Leva
+                  // Consulenza: DM Sans 700 accanto a DM Serif Display 400). Senza i token, il grassetto di prima. ?>
+            .<?php echo $uid; ?> .osq-res-t{font-family:var(--olo-font-family-heading,inherit);font-size:clamp(24px,3vw,32px);font-weight:var(--olo-font-weight-heading,700);color:var(--sq-accent);margin:0.375rem 0 0.5rem;outline:0;}
             .<?php echo $uid; ?> .osq-res-p{font-size:15.5px;line-height:1.6;margin:0 0 1.125rem;}
             .<?php echo $uid; ?> .osq-score{font-size:13px;opacity:.8;margin:0 0 0.875rem;}
             .<?php echo $uid; ?> .osq-link{display:inline-flex;align-items:center;gap:0.5rem;font-weight:600;font-size:15px;color:var(--sq-on);background:var(--sq-accent);padding:0.75rem 1.5rem;border-radius:<?php echo $raggio ?: '62.4375rem'; ?>;text-decoration:none;}

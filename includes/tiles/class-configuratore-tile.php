@@ -281,12 +281,45 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
         return $segno ? '+' . $s : $s;
     }
 
-    /** Il colore se si legge sul fondo (4,5:1, o fondo non risolvibile), altrimenti ''. */
-    private static function leggibile( $colore, $fondo ) {
+    /**
+     * Il colore se si legge sul fondo (4,5:1, o fondo non risolvibile), altrimenti ''. Con $soglia 3 vale la regola
+     * del testo grande (WCAG: da 24 px, o da 18,66 px in grassetto), quella del totale: l'arancio di un tema sul
+     * riepilogo acciaio sta a 4,33:1 e prima veniva scartato in silenzio anche su un totale da 68 px.
+     */
+    private static function leggibile( $colore, $fondo, $soglia = 4.5 ) {
         if ( '' === $colore ) {
             return '';
         }
-        return '' === Olobuild_Tile_Utils::testo_su_fondo( $fondo, $colore ) ? $colore : '';
+        if ( $soglia >= 4.5 ) {
+            return '' === Olobuild_Tile_Utils::testo_su_fondo( $fondo, $colore ) ? $colore : '';
+        }
+        $lf = Olobuild_Tile_Utils::luminanza( $fondo );
+        if ( null === $lf ) {
+            return $colore;
+        }
+        $lt = Olobuild_Tile_Utils::luminanza( $colore );
+        if ( null === $lt ) {
+            return '';
+        }
+        return ( max( $lf, $lt ) + 0.05 ) / ( min( $lf, $lt ) + 0.05 ) >= $soglia ? $colore : '';
+    }
+
+    /**
+     * Colonne di un gruppo di n schede, quando le c della griglia ne lascerebbero UNA da sola nell'ultima riga: una in
+     * meno se così non resta sola (4 su 3 → 2 + 2, 5 su 4 → 3 + 2), altrimenti una in più fino a 4 (7 su 3 → 4 + 3);
+     * se nessuna delle due basta, le c di prima. Con meno di 3 colonne niente: una scheda sola sotto due è normale.
+     */
+    private static function colonne_equilibrate( $n, $c ) {
+        if ( $c < 3 || $n <= $c || 1 !== $n % $c ) {
+            return $c;
+        }
+        if ( 1 !== $n % ( $c - 1 ) ) {
+            return $c - 1;
+        }
+        if ( $c + 1 <= 4 && 1 !== $n % ( $c + 1 ) ) {
+            return $c + 1;
+        }
+        return $c;
     }
 
     /**
@@ -550,7 +583,22 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
         // Prezzo e totale: il colore scelto (colore_prezzo, o prezzo_color della tipografia) sulle schede; nel
         // riepilogo solo se lì si legge.
         $c_prezzo = $this->safe_color_css( $s['colore_prezzo'] ) ?: $this->safe_color_css( $s['prezzo_color'] ?? '' );
-        $c_tot    = self::leggibile( $this->safe_color_css( $s['totale_color'] ), $pf );
+        // Il totale è testo grande (basta 3:1) se lo è anche nella barra, dove esce a 0,7 della sua misura più piccola
+        // fra computer, tablet e telefono. Il periodo («/mese»: metà misura, peso 500) prende quel colore solo se si
+        // legge anche lui; se no resta nel testo del riepilogo, come quando il colore veniva scartato.
+        $tot_min = (float) $s['totale_font_size'] > 0 ? (float) $s['totale_font_size'] : (float) $this->defaults['totale_font_size'];
+        foreach ( [ 'tablet', 'mobile' ] as $disp ) {
+            $v = (float) ( $s[ 'totale_font_size_' . $disp ] ?? 0 );
+            if ( $v > 0 ) {
+                $tot_min = min( $tot_min, $v );
+            }
+        }
+        $tot_min *= 0.7;
+        $tot_fw   = $this->font_weight_css( $s['totale_font_weight'] );
+        $tot_fw   = is_numeric( $tot_fw ) ? (int) $tot_fw : ( in_array( $tot_fw, [ 'bold', 'bolder' ], true ) ? 700 : 400 );
+        $tot_gr   = $tot_min >= 24 || ( $tot_fw >= 700 && $tot_min >= 18.66 );
+        $c_tot    = self::leggibile( $this->safe_color_css( $s['totale_color'] ), $pf, $tot_gr ? 3.0 : 4.5 );
+        $per_pt   = '' !== $c_tot && $tot_min * 0.5 < 24 && '' === self::leggibile( $c_tot, $pf );
 
         // Bordo delle schede: quello scelto (senza colore, il filo di sempre; a zero = nessun bordo).
         $filo  = 'color-mix(in srgb, currentColor 14%, transparent)';
@@ -604,10 +652,19 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
         // da 960 px in su, se la tile non è in una colonna stretta, con il riepilogo accanto e fermo.
         echo "{$sel} .ocfg-corpo{display:flex;flex-direction:column;gap:2rem}";
         echo "{$sel} .ocfg-opzioni{display:flex;flex-direction:column;gap:2.5rem;min-width:0}";
+        // Il riepilogo fermo più alto della finestra scorre dentro di sé, e il suo fondo (totale, pulsanti, stato) resta
+        // attaccato in basso: la seconda colonna si scioglie (display:contents) perché il fondo abbia come contenitore
+        // tutto il pannello; spazi uguali a prima (il -.25rem riporta a 1,25rem quello dopo gli indicatori). Il fondo
+        // pieno e la sfumatura sopra di lui solo quando il pannello scorre davvero (is-scorre, dallo script).
         if ( $a_lato ) {
             echo '@media (min-width:960px){'
                 . "{$sel}:not(.is-stretta) .ocfg-corpo{display:grid;grid-template-columns:minmax(0,1fr) minmax(16.5rem,22rem);align-items:start;gap:2rem clamp(1.5rem,3vw,3rem)}"
-                . "{$sel}:not(.is-stretta) .ocfg-pannello{position:sticky;top:calc(var(--olo-sticky-top-offset, 0px) + 1.5rem);max-height:calc(100vh - var(--olo-sticky-top-offset, 0px) - 3rem);overflow-y:auto;overscroll-behavior:contain;border-radius:var(--ocfg-r)}"
+                . "{$sel}:not(.is-stretta) .ocfg-pannello{position:sticky;top:calc(var(--olo-sticky-top-offset, 0px) + 1.5rem);max-height:calc(100vh - var(--olo-sticky-top-offset, 0px) - 3rem);overflow-y:auto;overscroll-behavior:contain;padding-bottom:0;border-radius:var(--ocfg-r)}"
+                . "{$sel}:not(.is-stretta) .ocfg-pannello > .ocfg-colonna:last-child{display:contents}"
+                . "{$sel}:not(.is-stretta) .ocfg-fondo{position:sticky;bottom:0;z-index:1;display:flex;flex-direction:column;gap:1.25rem;min-width:0;padding-bottom:1.5rem}"
+                . "{$sel}:not(.is-stretta) .ocfg-indicatori + .ocfg-fondo{margin-top:-.25rem}"
+                . "{$sel}:not(.is-stretta) .is-scorre .ocfg-fondo{background:var(--ocfg-pf)}"
+                . "{$sel}:not(.is-stretta) .is-scorre .ocfg-fondo::before{content:'';position:absolute;left:0;right:0;bottom:100%;height:1.25rem;background:linear-gradient(to top,var(--ocfg-pf),transparent);pointer-events:none}"
                 . "{$sel}:not(.is-stretta) .ocfg-barra{display:none}"
                 . "{$sel}:not(.is-stretta) .ocfg-totale{display:flex}"
                 . "{$sel}.ocfg--solo-totale:not(.is-stretta) .ocfg-pannello{display:flex}"
@@ -640,6 +697,37 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
         echo $this->css_per_dispositivo( $s, 'colonne', "{$sel} .ocfg-griglia", static function ( $v ) {
             return '--ocfg-n:' . max( 1, min( 4, absint( $v ) ) );
         } );
+        // Un gruppo che lascerebbe UNA scheda da sola nell'ultima riga (4 opzioni su 3 colonne) ha colonne sue, da
+        // colonne_equilibrate(): le stesse regole di qui sopra, con le stesse soglie e nello stesso ordine, così a ogni
+        // larghezza vince la stessa e il selettore più specifico la cambia solo per quel gruppo.
+        if ( ! $righe ) {
+            $col_valori = [ $colonne, min( 2, $colonne ), 1 ];
+            foreach ( [ 'tablet_landscape', 'tablet', 'mobile_landscape', 'mobile' ] as $disp ) {
+                $v = $s[ 'colonne_' . $disp ] ?? '';
+                if ( '' !== $v && null !== $v ) {
+                    $col_valori[] = max( 1, min( 4, absint( $v ) ) );
+                }
+            }
+            foreach ( $vivi as $gi => $g ) {
+                $n_opz  = count( $g['opz'] );
+                $cambia = false;
+                foreach ( $col_valori as $c ) {
+                    if ( self::colonne_equilibrate( $n_opz, $c ) !== $c ) {
+                        $cambia = true;
+                    }
+                }
+                if ( ! $cambia ) {
+                    continue;
+                }
+                $sel_g = "{$sel} .ocfg-gruppo[data-g=\"" . (int) $gi . '"] .ocfg-griglia';
+                echo "{$sel_g}{--ocfg-n:" . self::colonne_equilibrate( $n_opz, $colonne ) . '}';
+                echo '@media (max-width:959px){' . "{$sel_g}{--ocfg-n:" . self::colonne_equilibrate( $n_opz, min( 2, $colonne ) ) . '}}';
+                echo '@media (max-width:639px){' . "{$sel_g}{--ocfg-n:1}" . '}';
+                echo $this->css_per_dispositivo( $s, 'colonne', $sel_g, static function ( $v ) use ( $n_opz ) {
+                    return '--ocfg-n:' . self::colonne_equilibrate( $n_opz, max( 1, min( 4, absint( $v ) ) ) );
+                } );
+            }
+        }
         echo "{$sel} .ocfg-vuoto{margin:0;padding:1rem;font-size:14px;line-height:1.5;opacity:.75;border:1px dashed color-mix(in srgb, currentColor 30%, transparent);border-radius:min(var(--ocfg-rtl), .75rem)}";
 
         // La scheda di un'opzione: il controllo vero resta dentro, invisibile ma raggiungibile; la scelta = bordo e
@@ -658,7 +746,9 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
         echo "{$sel} .ocfg-img--vuota{display:flex;align-items:center;justify-content:center;color:color-mix(in srgb, currentColor 35%, transparent)}";
         echo "{$sel} .ocfg-img--vuota svg,{$sel} .ocfg-img--vuota .olo-lucide-icon{width:1.75rem;height:1.75rem}";
         echo "{$sel} .ocfg-testo{display:flex;flex-direction:column;gap:.375rem;flex:1;min-width:0;padding:1rem 1.125rem 1.125rem}";
-        echo "{$sel} .ocfg-testa{display:flex;flex-direction:column;align-items:flex-start;gap:.5rem;min-width:0;padding-right:2rem}";
+        // Il badge DOPO il nome, sulla stessa riga se ci sta (come nelle righe compatte): sopra il nome spingeva in basso
+        // il nome della sua scheda e i nomi della stessa fila non stavano più in riga.
+        echo "{$sel} .ocfg-testa{display:flex;flex-wrap:wrap;align-items:center;gap:.25rem .5rem;min-width:0;padding-right:2rem}";
         echo "{$sel} .ocfg-nome{display:block;line-height:1.3;text-wrap:balance}";
         echo "{$sel} .ocfg-descr{display:block;color:var(--ocfg-tenue);line-height:1.5;text-wrap:pretty}";
         echo "{$sel} .ocfg-piede{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5rem .75rem;margin-top:auto;padding-top:.5rem}";
@@ -698,8 +788,7 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
             echo "{$sel} .ocfg-input{left:1rem;right:auto;top:50%}";
             echo "{$sel} .ocfg-img{flex:none;width:3.5rem;height:3.5rem;aspect-ratio:auto;border-radius:min(var(--ocfg-rtl), .5rem)}";
             echo "{$sel} .ocfg-testo{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:1rem;row-gap:.15rem;padding:0}";
-            echo "{$sel} .ocfg-testa{flex-direction:row;flex-wrap:wrap;align-items:center;gap:.25rem .5rem;padding:0}";
-            echo "{$sel} .ocfg-testa .ocfg-badge{order:2}";
+            echo "{$sel} .ocfg-testa{padding:0}";
             echo "{$sel} .ocfg-descr{grid-column:1}";
             echo "{$sel} .ocfg-piede{grid-column:2;grid-row:1 / span 2;flex-wrap:nowrap;margin:0;padding:0}";
             echo "{$sel} .ocfg-opz--breve .ocfg-piede{grid-row:1}";
@@ -722,7 +811,10 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
         echo "{$sel}.ocfg--solo-totale .ocfg-barra{margin-bottom:0;border-bottom:1px solid var(--ocfg-plinea);border-radius:var(--ocfg-r)}";
         echo "{$sel} .ocfg-pannello{box-sizing:border-box;display:flex;flex-direction:column;gap:1.5rem;min-width:0;padding:1.5rem;border:1px solid var(--ocfg-plinea);border-radius:0 0 var(--ocfg-rbr) var(--ocfg-rbl);background:var(--ocfg-pf);color:var(--ocfg-pt);box-shadow:var(--ocfg-om)}";
         echo "{$sel} .ocfg-colonna{display:flex;flex-direction:column;gap:1.25rem;min-width:0}";
-        echo "{$sel} .ocfg-pannello-titolo{margin:0;color:inherit;font-size:18px;font-weight:600;line-height:1.3}";
+        echo "{$sel} .ocfg-fondo{display:contents}";
+        // Il titolo del riepilogo è un titolo (h3, nel carattere dei titoli del tema): ne prende anche il peso. Un 600
+        // fisso su un carattere che ha solo il 400 (DM Serif Display) usciva in grassetto finto.
+        echo "{$sel} .ocfg-pannello-titolo{margin:0;color:inherit;font-size:18px;font-weight:var(--olo-font-weight-heading, 600);line-height:1.3}";
         echo "{$sel} .ocfg-lista{margin:0;padding:0}";
         echo "{$sel} .ocfg-riga{padding:.75rem 0;border-bottom:1px solid var(--ocfg-plinea)}";
         echo "{$sel} .ocfg-riga:first-child{padding-top:0}";
@@ -741,7 +833,7 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
         echo "{$sel} .ocfg-totale{display:none;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.25rem 1rem;padding-top:.25rem}";
         echo "{$sel} .ocfg-totale-etichetta{font-size:14px;font-weight:600;line-height:1.3}";
         echo "{$sel} .ocfg-totale-valore{font-size:var(--ocfg-tfs);font-variant-numeric:tabular-nums;line-height:1.05;white-space:nowrap" . ( '' !== $c_tot ? ";color:{$c_tot}" : '' ) . '}';
-        echo "{$sel} .ocfg-periodo{font-size:.5em;font-weight:500;opacity:.75}";
+        echo "{$sel} .ocfg-periodo{font-size:.5em;font-weight:500;opacity:.75" . ( $per_pt ? ';color:var(--ocfg-pt)' : '' ) . '}';
         echo "{$sel} .ocfg-nota{flex-basis:100%;margin:0;color:var(--ocfg-ptenue);font-size:13px;line-height:1.4}";
         echo "{$sel} .ocfg-azioni{display:flex;flex-direction:column;align-items:stretch;gap:.5rem}";
         echo "{$sel} .ocfg-pulsante{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:.55em;width:100%;min-height:3rem;margin:0;padding:var(--olo-btn-padding, .75rem 1.5rem);border:0;border-radius:var(--olo-btn-border-radius, .5rem);background:var(--olo-color-primary);color:var(--olo-color-primary-contrast, #ffffff);font:inherit;font-size:var(--olo-btn-font-size, 15px);font-weight:var(--olo-btn-font-weight, 600);line-height:1.15;text-align:center;text-transform:var(--olo-btn-text-transform, none);letter-spacing:var(--olo-btn-letter-spacing, normal);cursor:pointer;-webkit-appearance:none;appearance:none;transition:filter .2s ease,transform .15s ease}";
@@ -846,8 +938,10 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
             /* translators: %s: il nome del campo del Form Contatti */
             $cfg['tt']['modulo'] = __( 'Nella pagina non c\'è un Form Contatti con il campo «%s»: aggiungilo, oppure scrivi un collegamento nel Contenuto.', 'olobuilder' );
         }
-        // La pagina ha un'intestazione fissa? Il riepilogo fermo si mette sotto (lo script del renderer ne misura l'altezza).
-        if ( $a_lato && ! $builder && class_exists( 'Olobuild_Frontend_Renderer' ) && property_exists( 'Olobuild_Frontend_Renderer', 'needs_sticky_offset_script' ) ) {
+        // La pagina ha un'intestazione fissa? Il riepilogo fermo si mette sotto, e lo scorrimento verso il modulo o verso
+        // il riepilogo si ferma sotto di lei, in tutte e due le disposizioni (lo script del renderer ne misura l'altezza
+        // in --olo-sticky-top-offset).
+        if ( ! $builder && class_exists( 'Olobuild_Frontend_Renderer' ) && property_exists( 'Olobuild_Frontend_Renderer', 'needs_sticky_offset_script' ) ) {
             Olobuild_Frontend_Renderer::$needs_sticky_offset_script = true;
         }
 
@@ -917,7 +1011,7 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
                 }
                 echo '<span class="ocfg-testo">';
                 $badge_qui = ( ! $immg || $righe || '' === $o['img'] ) ? $badge : '';
-                echo '<span class="ocfg-testa">' . $badge_qui . '<span class="ocfg-nome" id="' . esc_attr( $oid ) . '-n">' . esc_html( $o['nome'] ) . '</span></span>';
+                echo '<span class="ocfg-testa"><span class="ocfg-nome" id="' . esc_attr( $oid ) . '-n">' . esc_html( $o['nome'] ) . '</span>' . $badge_qui . '</span>';
                 if ( '' !== $o['descr'] ) {
                     echo '<span class="ocfg-descr" id="' . esc_attr( $oid ) . '-d">' . esc_html( $o['descr'] ) . '</span>';
                 }
@@ -1008,6 +1102,7 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
             }
             echo '</div>';
         }
+        echo '<div class="ocfg-fondo">';
         echo '<div class="ocfg-totale">' . $tot_html( 'pannello' ) . '</div>';
         if ( $con_puls || '' !== $testo_az ) {
             echo '<div class="ocfg-azioni">';
@@ -1020,6 +1115,7 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
             echo '</div>';
         }
         echo '<p class="ocfg-stato" role="status"></p>';
+        echo '</div>';
         echo '<p class="ocfg-sr ocfg-vivo" aria-live="polite" aria-atomic="true"></p>';
         echo '</div></div>';
         echo '</div></div>';
@@ -1189,7 +1285,7 @@ if(!v){return;}var k=qta(i),o=O[i]||{};
 if(k>0){v.c.classList.add("is-scelta");}else{v.c.classList.remove("is-scelta");}
 if(v.num){if(v.meno){v.meno.disabled=k<=(+o.min||0);}if(v.piu){v.piu.disabled=k>=(+o.max||0);}}
 });
-aggiornaLista();aggiornaInd();
+aggiornaLista();aggiornaInd();scorre();
 var t=totale();animaTot(t);
 if(!daUtente){return;}
 toccato=true;pulsanteServe();
@@ -1238,7 +1334,11 @@ p.hidden=false;b.setAttribute("aria-expanded","true");aperto={b:b,p:p};
 });
 document.addEventListener("click",function(e){if(!aperto){return;}if(aperto.p.contains(e.target)){return;}if(aperto.b.contains(e.target)){return;}chiudi();});
 document.addEventListener("keydown",function(e){if(!aperto){return;}if(e.key==="Escape"||e.key==="Esc"){var b=aperto.b;chiudi();try{b.focus();}catch(x){}}});
-function scorri(n,dove){try{n.scrollIntoView({behavior:riduci?"auto":"smooth",block:dove});}catch(x){try{n.scrollIntoView();}catch(y){}}}
+function altoFisso(){var v=0;try{v=parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--olo-sticky-top-offset"))||0;}catch(x){}return v;}
+function scorri(n,dove){
+if(dove==="start"){try{if(!n.style.scrollMarginTop){if(!parseFloat(getComputedStyle(n).scrollMarginTop)){n.style.scrollMarginTop="calc(var(--olo-sticky-top-offset, 0px) + 1.5rem)";}}}catch(x){}}
+try{n.scrollIntoView({behavior:riduci?"auto":"smooth",block:dove});}catch(x){try{n.scrollIntoView();}catch(y){}}
+}
 function verifica(){
 for(var gi=0;gi<G.length;gi++){
 if(!completo(gi)){
@@ -1288,16 +1388,30 @@ V.forEach(function(v,i){if(!v){return;}var d=+((O[i]||{}).d)||0;if(v.inp){v.inp.
 G.forEach(function(g,gi){segnala(gi,"");});avvisa("",false);
 aggiorna(true,T.ricominciato||"");
 });}
-var pan=el.querySelector(".ocfg-pannello"),vai=el.querySelector(".ocfg-vai"),barra=el.querySelector(".ocfg-barra");
+var pan=el.querySelector(".ocfg-pannello"),vai=el.querySelector(".ocfg-vai"),barra=el.querySelector(".ocfg-barra"),fermo=false;
 if(vai){if(pan){vai.addEventListener("click",function(){
-var y=pan.getBoundingClientRect().top+(window.pageYOffset||0)-(barra?barra.offsetHeight:0)-16;
+var y=pan.getBoundingClientRect().top+(window.pageYOffset||0)-(barra?barra.offsetHeight:0)-16-altoFisso();
 try{window.scrollTo({top:y,behavior:riduci?"auto":"smooth"});}catch(x){window.scrollTo(0,y);}
 });}}
-if(barra){if(window.IntersectionObserver){try{new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting){return;}if(e.intersectionRatio<0.99){el.classList.remove("is-giunta");}else{el.classList.add("is-giunta");}});},{threshold:[0,0.99,1],rootMargin:"0px 0px -1px 0px"}).observe(barra);}catch(e){}}}
+function pubblica(h){
+var R=window.oloConfiguratore,id=el.id||"",m=0,k;if(!R){return;}if(!R.barre){R.barre={};}
+if(h>0){R.barre[id]=Math.round(h);}else{delete R.barre[id];}
+for(k in R.barre){if(R.barre[k]>m){m=R.barre[k];}}
+try{if(m>0){document.documentElement.style.setProperty("--olo-barra-fondo",m+"px");}else{document.documentElement.style.removeProperty("--olo-barra-fondo");}}catch(x){}
+}
+if(barra){if(window.IntersectionObserver){try{new IntersectionObserver(function(es){es.forEach(function(e){
+var h=0;fermo=false;
+if(e.isIntersecting){
+var rb=e.rootBounds,r=e.boundingClientRect,fondo=rb?rb.bottom:(window.innerHeight||0)-1;
+if(r.bottom>fondo+0.5){el.classList.remove("is-giunta");fermo=true;h=r.height;}else{el.classList.add("is-giunta");}
+}
+pubblica(h);
+});},{threshold:[0,0.99,1],rootMargin:"0px 0px -1px 0px"}).observe(barra);}catch(e){}}}
+function scorre(){if(!pan){return;}if(pan.scrollHeight>pan.clientHeight+1){pan.classList.add("is-scorre");}else{pan.classList.remove("is-scorre");}}
 function misura(){var w=el.getBoundingClientRect().width;if(w){if(w<720){el.classList.add("is-stretta");}else{el.classList.remove("is-stretta");}}}
 misura();pulsanteServe();
-window.addEventListener("load",pulsanteServe);setTimeout(pulsanteServe,1500);
-if(window.ResizeObserver){try{new ResizeObserver(function(){misura();}).observe(el);}catch(e){}}else{window.addEventListener("resize",misura);}
+window.addEventListener("load",function(){pulsanteServe();scorre();});setTimeout(pulsanteServe,1500);
+if(window.ResizeObserver){try{var ro=new ResizeObserver(function(){misura();scorre();if(fermo){if(barra){pubblica(barra.offsetHeight);}}});ro.observe(el);if(pan){ro.observe(pan);}if(barra){ro.observe(barra);}}catch(e){}}else{window.addEventListener("resize",function(){misura();scorre();});}
 aggiorna(false);
 };}
 JS;

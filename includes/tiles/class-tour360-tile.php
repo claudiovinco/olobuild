@@ -15,8 +15,10 @@
  * Gesti: trascinamento con inerzia (mouse e un dito, touch-action:none solo sulla tela), inclinazione fino a ±85°;
  * zoom con due dita, Ctrl + rotellina (la rotellina da sola fa scorrere la pagina), + e −, pulsanti; tastiera
  * sulla vista (tabindex 0, role="application", aria-label col titolo della scena e le istruzioni).
- * Punti: pulsanti sopra la tela proiettati a ogni fotogramma (trasparenti dietro e fuori dal campo, ma raggiungibili
- * col Tab: col fuoco la vista si gira verso di loro), etichetta al passaggio e al fuoco (sempre sui touch).
+ * Punti: pulsanti sopra la tela proiettati a ogni fotogramma (trasparenti dietro, fuori dal campo e sotto i riquadri
+ * che li coprirebbero, cioè titolo della scena, comandi e miniature, ma raggiungibili col Tab: col fuoco la vista si
+ * gira verso di loro), etichetta al passaggio e al fuoco (sempre sui touch), sempre intera dentro la vista: ferma a
+ * .5rem dai lati, sotto il punto vicino al bordo in alto o quando sopra urterebbe un riquadro.
  * «Scena» → dissolvenza di 450 ms con un passo verso il punto (niente con «riduci movimento»), la scena nuova parte
  * dalla sua direzione; «Informazioni» → riquadro (Esc, clic fuori, ×; il fuoco torna al punto); «Collegamento» → <a>.
  * Nel builder: senza foto una vista d'esempio disegnata nel browser, il mirino al centro con direzione e inclinazione
@@ -242,8 +244,8 @@ class Olobuild_Tour360_Tile extends Olobuild_Tile_Base {
 
     /**
      * La miniatura di una foto della Libreria media del sito (misura «medium»: per una foto 2:1, 300 × 150), per
-     * l'elenco delle scene quando mancano anteprima e foto leggera. Fuori dalla Libreria: '' (si vede il nome della
-     * scena su un fondo neutro: scaricare la foto sferica intera per una miniatura costerebbe megabyte).
+     * l'elenco delle scene quando manca l'anteprima. Fuori dalla Libreria, o senza la misura ridotta (WordPress
+     * darebbe la foto intera): '' (scaricare la foto sferica intera per una miniatura costerebbe megabyte).
      */
     private static function miniatura_di( $url ) {
         if ( '' === $url ) {
@@ -256,9 +258,9 @@ class Olobuild_Tour360_Tile extends Olobuild_Tile_Base {
         }
         $id = attachment_url_to_postid( $url );
         if ( $id ) {
-            $mini = wp_get_attachment_image_url( $id, 'medium' );
-            if ( $mini ) {
-                return $mini;
+            $mini = wp_get_attachment_image_src( $id, 'medium' );
+            if ( is_array( $mini ) && ! empty( $mini[0] ) && ! empty( $mini[3] ) ) {
+                return $mini[0];
             }
         }
         return '';
@@ -534,11 +536,15 @@ class Olobuild_Tour360_Tile extends Olobuild_Tile_Base {
             echo "{$sel} .o36-segno>span{width:78%;height:78%}";
             echo "{$sel} .o36-segno .olo-custom-icon{width:78%!important;height:78%!important}";
         }
-        // L'etichetta del punto: al passaggio e al fuoco; sui touch sempre (non c'è passaggio).
-        echo "{$sel} .o36-etichetta{position:absolute;left:50%;bottom:calc(100% + .5rem);z-index:1;box-sizing:border-box;max-width:16rem;padding:.4em .8em;border-radius:var(--o36-rp);background:var(--o36-eb);color:var(--o36-ec);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none;opacity:0;transform:translate(-50%,.25rem);transition:opacity .2s ease,transform .2s ease;box-shadow:0 .25rem .875rem -.375rem color-mix(in srgb, var(--olo-color-dark, #14161c) 70%, transparent)}";
-        echo "{$sel} .o36-punto--sotto .o36-etichetta{bottom:auto;top:calc(100% + .5rem);transform:translate(-50%,-.25rem)}";
-        echo "{$sel} .o36-punto:hover .o36-etichetta,{$sel} .o36-punto:focus-visible .o36-etichetta{opacity:1;transform:translate(-50%,0)}";
-        echo '@media (hover:none){' . "{$sel} .o36-etichetta{opacity:1;transform:translate(-50%,0)}" . '}';
+        // L'etichetta del punto: al passaggio e al fuoco; sui touch sempre (non c'è passaggio). Centrata sul punto ma
+        // sempre intera dentro la vista: lo script dà la x del punto (--o36-x) e la larghezza della vista (--o36-w), e
+        // lo spostamento si ferma a .5rem dai bordi (in translate le percentuali sono la larghezza dell'etichetta). Il
+        // salto dell'apparire sta in «translate», l'unica proprietà animata: la x segue il punto senza ritardo.
+        echo "{$sel} .o36-etichetta{position:absolute;left:50%;bottom:calc(100% + .5rem);z-index:1;box-sizing:border-box;max-width:16rem;max-width:min(16rem,calc(var(--o36-w,100vw) - 1rem));padding:.4em .8em;border-radius:var(--o36-rp);background:var(--o36-eb);color:var(--o36-ec);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none;opacity:0;transform:translateX(-50%);translate:0 .25rem;transition:opacity .2s ease,translate .2s ease;box-shadow:0 .25rem .875rem -.375rem color-mix(in srgb, var(--olo-color-dark, #14161c) 70%, transparent)}";
+        echo '@supports (transform:translateX(clamp(1px,-50%,2px))){' . "{$sel} .o36-etichetta{transform:translateX(clamp(calc(.5rem - var(--o36-x,50vw)),-50%,calc(var(--o36-w,100vw) - .5rem - var(--o36-x,50vw) - 100%)))}" . '}';
+        echo "{$sel} .o36-punto--sotto .o36-etichetta{bottom:auto;top:calc(100% + .5rem);translate:0 -.25rem}";
+        echo "{$sel} .o36-punto:hover .o36-etichetta,{$sel} .o36-punto:focus-visible .o36-etichetta{opacity:1;translate:none}";
+        echo '@media (hover:none){' . "{$sel} .o36-etichetta,{$sel} .o36-punto--sotto .o36-etichetta{opacity:1;translate:none}" . '}';
         // Titolo della scena, comandi, suggerimento.
         echo "{$sel} .o36-testata{position:absolute;left:.75rem;top:.75rem;z-index:5;box-sizing:border-box;max-width:min(26rem,calc(100% - 5.25rem));padding:.55em .9em;border-radius:var(--o36-ri);background:var(--o36-eb);color:var(--o36-ec);pointer-events:none;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}";
         echo "{$sel} .o36-testata-titolo{margin:0;font-size:1.15em;line-height:1.25;text-wrap:balance}";
@@ -770,7 +776,9 @@ class Olobuild_Tour360_Tile extends Olobuild_Tile_Base {
         if ( $elenco ) {
             echo '<nav class="o36-scene" aria-label="' . esc_attr__( 'Scene', 'olobuilder' ) . '">';
             foreach ( $scene as $i => $sc ) {
-                $mini = '' !== $sc['ant'] ? $sc['ant'] : ( '' !== $sc['leg'] ? $sc['leg'] : self::miniatura_di( $sc['img'] ) );
+                // L'anteprima; senza: la miniatura della Libreria media della foto leggera, poi di quella grande; poi la
+                // foto leggera intera (una foto fuori dalla Libreria non ha miniature).
+                $mini = $sc['ant'] ?: ( self::miniatura_di( $sc['leg'] ) ?: ( self::miniatura_di( $sc['img'] ) ?: $sc['leg'] ) );
                 echo '<button type="button" class="o36-scena" data-s="' . (int) $i . '" aria-current="' . ( $i === $ini ? 'true' : 'false' ) . '" data-olo-interactive>'
                     . '<span class="o36-scena-img" aria-hidden="true">' . ( $i + 1 ) . ( '' !== $mini ? '<img alt="" data-src="' . esc_url( $mini ) . '" decoding="async">' : '' ) . '</span>'
                     . '<span class="o36-scena-titolo">' . esc_html( $nomi[ $i ] ) . '</span></button>';
@@ -823,6 +831,7 @@ var testata=el.querySelector(".o36-testata"),tt=el.querySelector(".o36-tt"),cont
 var pan=el.querySelector(".o36-pannello"),pTit=el.querySelector(".o36-pannello-titolo"),pTxt=el.querySelector(".o36-pannello-testo"),pX=el.querySelector(".o36-chiudi");
 var lettura=el.querySelector(".o36-lettura"),segnato=el.querySelector(".o36-segnato"),nota=el.querySelector(".o36-nota");
 var fsB=el.querySelector(".o36-schermo"),zPiu=el.querySelector(".o36-piu"),zMeno=el.querySelector(".o36-meno");
+var comandi=el.querySelector(".o36-comandi"),fascia=el.querySelector(".o36-scene"),Z=null;
 function g180(a){a=(a+180)%360;if(a<0){a+=360;}return a-180;}
 function fra(v,a,b){return Math.max(a,Math.min(b,v));}
 function ora(){return window.performance?window.performance.now():Date.now();}
@@ -945,7 +954,7 @@ if(testata){vedi(testata,!!(s.t||s.d));}
 tela.setAttribute("aria-label",(s.t?s.t+". ":"")+(T.aria||""));
 mini.forEach(function(m){m.setAttribute("aria-current",+m.getAttribute("data-s")===cur?"true":"false");});
 vedi(nota,!!s.demo);
-segno=null;vedi(segnato,false);
+segno=null;vedi(segnato,false);Z=null;
 }
 function applica(i,c,op){
 var vecchia=cur,dissolvi=!!op.dissolvi,nuova=null;
@@ -1019,18 +1028,43 @@ var y1=dy*Math.cos(b)+dz*Math.sin(b),z1=dz*Math.cos(b)-dy*Math.sin(b);
 var x2=dx*Math.cos(a)+z1*Math.sin(a),z2=z1*Math.cos(a)-dx*Math.sin(a);
 return {y:Math.atan2(x2,z2)/D,p:Math.asin(fra(y1,-1,1))/D};
 }
+function zone(){
+if(Z){return Z;}
+Z=[];
+function agg(n){if(!n){return;}var w=n.offsetWidth,h=n.offsetHeight;if(!w){return;}if(!h){return;}Z.push({l:n.offsetLeft,t:n.offsetTop,r:n.offsetLeft+w,b:n.offsetTop+h});}
+agg(testata);agg(comandi);
+if(fascia){var t=1e9;mini.forEach(function(m){if(m.offsetWidth){t=Math.min(t,fascia.offsetTop+m.offsetTop);}});if(t<H){Z.push({l:0,t:t,r:W,b:H});}}
+return Z;
+}
+function sottoZ(x,y){var i,k;for(i=0;i<Z.length;i++){k=Z[i];if(x>k.l){if(x<k.r){if(y>k.t){if(y<k.b){return true;}}}}}return false;}
+function urtaZ(l,t,r,b){var i,k;for(i=0;i<Z.length;i++){k=Z[i];if(l<k.r){if(r>k.l){if(t<k.b){if(b>k.t){return true;}}}}}return false;}
 function posa(){
+zone();
+bott.forEach(function(b){if(b.hasAttribute("hidden")){return;}if(b._o36ew===undefined){var e=b.querySelector(".o36-etichetta");b._o36ew=e?e.offsetWidth:0;b._o36eh=e?e.offsetHeight:0;}});
 bott.forEach(function(b){
 if(b.hasAttribute("hidden")){return;}
 var p=PT[+b.getAttribute("data-p")];if(!p){return;}
-var q=proietta(p.y,p.p),dentro=false,m=MZ+8;
+var q=proietta(p.y,p.p),dentro=false,m=MZ+8,sotto=false,lw=b._o36ew,lh=b._o36eh,L,R,su,giu,cSu,cGiu,okSu=false,okGiu=false;
 b._o36pieno=false;
 if(q){if(q.x>-MZ){if(q.x<W+MZ){if(q.y>-MZ){if(q.y<H+MZ){dentro=true;}}}}}
+if(dentro){
+sotto=q.y<64;
+if(sottoZ(q.x,q.y)){dentro=false;}
+else if(lw){
+L=Math.max(8,Math.min(q.x-lw/2,W-8-lw));R=L+lw;su=q.y-MZ-8-lh;giu=q.y+MZ+8+lh;
+cSu=urtaZ(L+3,su+3,R-3,q.y-MZ-11);cGiu=urtaZ(L+3,q.y+MZ+11,R-3,giu-3);
+if(!sotto){if(su>=0){if(!cSu){okSu=true;}}}
+if(giu<=H){if(!cGiu){okGiu=true;}}
+if(okSu){sotto=false;}else if(okGiu){sotto=true;}
+if(sotto){if(cGiu){dentro=false;}}else if(cSu){dentro=false;}
+}
+}
 if(!dentro){b.classList.add("is-fuori");return;}
 if(q.x>=m){if(q.x<=W-m){if(q.y>=m){if(q.y<=H-m){b._o36pieno=true;}}}}
 b.style.transform="translate3d("+(q.x-MZ).toFixed(1)+"px,"+(q.y-MZ).toFixed(1)+"px,0)";
+b.style.setProperty("--o36-x",q.x.toFixed(1)+"px");
 b.classList.remove("is-fuori");
-if(q.y<64){b.classList.add("o36-punto--sotto");}else{b.classList.remove("o36-punto--sotto");}
+if(sotto){b.classList.add("o36-punto--sotto");}else{b.classList.remove("o36-punto--sotto");}
 });
 var q2=null;
 if(segno){if(segnato){q2=proietta(segno.y,segno.p);if(q2){segnato.style.transform="translate3d("+q2.x.toFixed(1)+"px,"+q2.y.toFixed(1)+"px,0)";vedi(segnato,true);}else{vedi(segnato,false);}}}
@@ -1063,6 +1097,7 @@ posa();
 }
 function misura(){
 W=vista.clientWidth||1;H=vista.clientHeight||1;
+el.style.setProperty("--o36-w",W+"px");Z=null;bott.forEach(function(b){b._o36ew=undefined;});
 if(cv){var d=Math.min(2,window.devicePixelRatio||1),w=Math.max(1,Math.round(W*d)),h=Math.max(1,Math.round(H*d));if(cv.width!==w){cv.width=w;}if(cv.height!==h){cv.height=h;}}
 if(pronta){disegna(ora());}
 }
@@ -1199,7 +1234,8 @@ I.push({el:el,chiudi:chiudi});
 function avvia(){if(avviato){return;}avviato=true;var k=+C.ini||0;if(!SC[k]){k=0;}vai(k,{});}
 modo=iniziaGL()?"gl":"piano";if(modo==="piano"){el.classList.add("is-piano");}
 misura();
-if(window.ResizeObserver){ro=new ResizeObserver(function(){misura();});ro.observe(vista);}else{window.addEventListener("resize",misura);}
+if(window.ResizeObserver){ro=new ResizeObserver(function(){misura();});ro.observe(vista);if(testata){ro.observe(testata);}}else{window.addEventListener("resize",misura);}
+if(fascia){fascia.addEventListener("scroll",function(){Z=null;if(pronta){posa();}},{passive:true});}
 if(window.IntersectionObserver){
 io1=new IntersectionObserver(function(en){var x=en[en.length-1];if(x){if(x.isIntersecting){io1.disconnect();avvia();}}},{rootMargin:"300px 0px"});io1.observe(vista);
 io2=new IntersectionObserver(function(en){var x=en[en.length-1];if(x){visibile=x.isIntersecting;if(visibile){richiedi();}}});io2.observe(vista);

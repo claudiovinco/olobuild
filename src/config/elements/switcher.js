@@ -44,6 +44,8 @@ export default {
     indicator_color: '',
     content_bg: '',
     content_color: 'var(--olo-color-text, #1f2937)',
+    // Misura del testo dei pannelli: era fissa a 14 px nel PHP, 14 resta il predefinito.
+    content_font_size: '14',
     content_padding_y: '20',
     content_padding_x: '0',
     ...shadowDefaults,
@@ -162,10 +164,14 @@ export default {
       },
       sizeMin: 11, sizeMax: 20, sizeStep: 1,
     },
+    // La misura del testo dei pannelli era fissa a 14 px: ora si regola, anche per tablet e telefono.
     { type: 'typography', label: t('Contenuto'),
+      responsiveKeys: ['size'],
       keys: {
+        size:  'content_font_size',
         color: 'content_color',
       },
+      sizeMin: 10, sizeMax: 32, sizeStep: 1,
     },
 
     { type: 'separator', label: t('Tab — Spaziatura') },

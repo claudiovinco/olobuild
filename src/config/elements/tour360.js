@@ -116,7 +116,7 @@ export default {
         { key: 'immagine_leggera', label: t('Foto leggera'), type: 'image',
           description: t('La stessa foto a 2048 × 1024: la usano i telefoni e le schede grafiche che non reggono le foto grandi. Vuota: la foto grande, rimpicciolita nel browser quando serve.') },
         { key: 'anteprima', label: t('Anteprima'), type: 'image',
-          description: t('La miniatura nell\'elenco delle scene. Vuota: la foto leggera.') },
+          description: t('La miniatura nell\'elenco delle scene. Vuota: la miniatura che la Libreria media ricava dalla foto leggera o, se manca, dalla foto sferica; per le foto fuori dalla Libreria, la foto leggera intera.') },
         { key: 'yaw', label: t('Direzione'), type: 'range', min: -180, max: 180, step: 1,
           description: t('In gradi: 0 è il centro della foto, 90 un quarto di giro a destra, −90 a sinistra.') },
         { key: 'pitch', label: t('Inclinazione'), type: 'range', min: -85, max: 85, step: 1,

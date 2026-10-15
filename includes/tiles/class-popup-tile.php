@@ -352,7 +352,16 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
                 outline: none;
                 box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
             }
-            <?php if ( empty( $s['button_fullwidth'] ) ) : ?>
+            <?php if ( $is_auto_trigger ) : ?>
+            <?php // Si apre da solo (tasti, scorrimento, uscita…): sul sito non c'è un pulsante, e la tile
+                  // non deve occupare spazio. In linea (inline-block) restava una riga vuota alta quanto
+                  // l'interlinea (28 px) che spostava i testi accanto. In blocco, vuota, è alta 0. ?>
+            .olo-frontend-tile:has(> .olo-popup-<?php echo esc_attr( $uid ); ?>),
+            .olo-frontend-tile:has(> div > .olo-popup-<?php echo esc_attr( $uid ); ?>),
+            .olo-popup-<?php echo esc_attr( $uid ); ?> {
+                display: block;
+            }
+            <?php elseif ( empty( $s['button_fullwidth'] ) ) : ?>
             .olo-frontend-tile:has(> .olo-popup-<?php echo esc_attr( $uid ); ?>),
             .olo-frontend-tile:has(> div > .olo-popup-<?php echo esc_attr( $uid ); ?>) {
                 display: inline-block;

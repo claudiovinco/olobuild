@@ -210,7 +210,7 @@ export default {
 
     { type: 'separator', label: t('Prenotazione'), condition: conDettagli },
     { key: 'link_prenota', label: t('Indirizzo della prenotazione'), type: 'text', placeholder: 'https://…/prenota/?corso={corso}',
-      description: t('Il pulsante nei dettagli della lezione. Puoi usare {corso} (il codice del corso), {giorno} (da 1, lunedì, a 7) e {ora} (l\'ora d\'inizio, 18:30): https://esempio.it/prenota/?corso={corso}&giorno={giorno}&ora={ora}. Vuoto: niente pulsante.') },
+      description: t('Il pulsante nei dettagli della lezione. Puoi usare {corso} (il codice del corso), {corso_nome} (il suo nome), {giorno} (da 1, lunedì, a 7), {giorno_nome} (il nome del giorno, nella lingua della pagina) e {ora} (l\'ora d\'inizio, 18:30): https://esempio.it/prenota/?corso={corso_nome}&giorno={giorno_nome}&ora={ora}. Vuoto: niente pulsante.') },
     { key: 'testo_prenota', label: t('Testo del pulsante'), type: 'text', condition: { field: 'link_prenota', op: 'notEmpty' } },
   ],
 

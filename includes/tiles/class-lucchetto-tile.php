@@ -559,7 +559,7 @@ class Olobuild_Lucchetto_Tile extends Olobuild_Tile_Base {
         echo "{$sel}.is-aprendo .olk-corpo::after{animation:olk-anello .9s ease-out .2s}";
         echo "{$sel}.is-aprendo .olk-icona{animation:olk-pop .55s cubic-bezier(.3,1.6,.5,1)}";
         echo "{$sel}.is-aperto .olk-icona{color:var(--olk-ok)}";
-        echo "{$sel}.is-fatto .olk-azioni,{$sel}.is-fatto .olk-stato,{$sel}.is-fatto .olk-indizio{display:none}";
+        echo "{$sel}.is-fatto .olk-azioni,{$sel}.is-fatto .olk-stato,{$sel}.is-fatto .olk-tentativi,{$sel}.is-fatto .olk-indizio{display:none}";
         echo '@keyframes olk-scossa{0%,100%{transform:translateX(0)}20%{transform:translateX(-.55rem)}40%{transform:translateX(.45rem)}60%{transform:translateX(-.3rem)}80%{transform:translateX(.15rem)}}';
         echo '@keyframes olk-apri{0%{transform:none}40%{transform:translateY(-13%)}100%{transform:translateY(-13%) rotate(-15deg)}}';
         echo '@keyframes olk-anello{0%{opacity:1;box-shadow:0 0 0 0 color-mix(in srgb, var(--olk-ok) 65%, transparent)}100%{opacity:0;box-shadow:0 0 0 1.25rem color-mix(in srgb, var(--olk-ok) 0%, transparent)}}';

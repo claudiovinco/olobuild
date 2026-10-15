@@ -32,6 +32,7 @@ export default {
       { id: 'og-3', image: '', title: t('Chi siamo'), subtitle: t('Persone, metodo, valori'), link: '' },
     ],
     columns: '3',
+    columns_laptop: '',
     columns_tablet: '',
     columns_mobile: '1',
     gap: 'medium',
@@ -230,6 +231,15 @@ export default {
       { value: '4', label: '4' },
       { value: '5', label: '5' },
     ]},
+    // Fra 960 e 1199 px (tablet orizzontale, portatili piccoli); vuoto = come il desktop (com'era
+    // prima che ci fosse): quattro schede da 200 px a 960 erano troppo strette per le didascalie.
+    { key: 'columns_laptop', label: t('Colonne (tablet orizzontale)'), type: 'select', options: [
+      { value: '', label: t('Come il desktop') },
+      { value: '1', label: '1' },
+      { value: '2', label: '2' },
+      { value: '3', label: '3' },
+      { value: '4', label: '4' },
+    ], description: t('Da 960 a 1199 px di larghezza della finestra.') },
     // Fra 640 e 959 px; vuoto = come il mobile (com'era prima che ci fosse)
     { key: 'columns_tablet', label: t('Colonne (tablet)'), type: 'select', options: [
       { value: '', label: t('Come il mobile') },

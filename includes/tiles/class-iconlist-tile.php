@@ -19,6 +19,9 @@ class Olobuild_Iconlist_Tile extends Olobuild_Tile_Base {
         'divider'        => false,
         'divider_color'  => '',
         'layout'         => 'vertical',
+        // Padding dell'elenco (Stile → Spaziatura): era 16 px fissi in linea. Predefinito 16 su tutti i lati,
+        // quindi i template salvati senza la chiave restano com'erano.
+        'list_padding'   => [ 'top' => 16, 'right' => 16, 'bottom' => 16, 'left' => 16 ],
         // Text effects defaults (l'unica opzione di target è 'text')
         'text_effect'           => 'none',
         'text_effect_target'    => 'text',
@@ -66,6 +69,8 @@ class Olobuild_Iconlist_Tile extends Olobuild_Tile_Base {
         $divider    = !empty($s['divider']);
         $div_clr    = $this->safe_color_css($s['divider_color']) ?: 'var(--olo-color-border, #E5E7EB)';
         $radius     = $shape === 'circle' ? '50%' : ($shape === 'rounded' ? '8px' : '4px');
+        // Vuoto (o salvato prima del controllo) = 16 su tutti i lati, come quando era fisso.
+        $list_pad   = Olobuild_Tile_Utils::sides_css( Olobuild_Tile_Utils::spacing_sides( $s['list_padding'] ?? null, [], [ 16, 16, 16, 16 ] ) );
 
         $list_style = 'display:flex;gap:' . $gap . 'px;';
         if ($is_horiz) {
@@ -79,7 +84,7 @@ class Olobuild_Iconlist_Tile extends Olobuild_Tile_Base {
         <style>
             .<?php echo esc_attr( $uid ); ?> a:focus-visible { outline: none; border-radius: 4px; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
         </style>
-        <div class="olo-iconlist <?php echo esc_attr( $uid ); ?> olo-il-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="padding:16px;<?php echo esc_attr( $list_style ); ?>">
+        <div class="olo-iconlist <?php echo esc_attr( $uid ); ?> olo-il-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="padding:<?php echo esc_attr( $list_pad ); ?>;<?php echo esc_attr( $list_style ); ?>">
             <?php foreach ($items as $item) :
                 $item_icon = $item['icon'] ?? 'check';
                 $item_text = $item['text'] ?? '';

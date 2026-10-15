@@ -29187,3 +29187,83 @@ msgstr "Die Kombination muss 3 bis 6 Symbole haben, ein Rad pro Symbol: Jetzt ha
 #: includes/tiles/class-lucchetto-tile.php
 msgid "Nel builder la combinazione è %s: provala qui. Sul sito questa nota non c'è."
 msgstr "Im Builder lautet die Kombination %s: Probier sie hier aus. Auf der Website gibt es diese Notiz nicht."
+
+#: includes/tiles
+msgid "Delle schede. Se lo spazio non basta la griglia ne mette meno da sola; sul tablet al massimo due e sul telefono una, se non ne scegli altre per quei dispositivi. Un gruppo che lascerebbe una scheda da sola nell'ultima riga cambia colonne da sé: 4 opzioni su 3 colonne vanno 2 + 2."
+msgstr "Der Karten. Wenn der Platz nicht reicht, setzt das Raster von selbst weniger; auf dem Tablet höchstens zwei und auf dem Smartphone eine, wenn du für diese Geräte keine anderen wählst. Eine Gruppe, die eine einzelne Karte allein in der letzten Reihe lassen würde, ändert ihre Spalten von selbst: 4 Optionen in 3 Spalten werden zu 2 + 2."
+
+#: includes/tiles
+msgid "Padding lista"
+msgstr "Listen-Padding"
+
+#: includes/tiles
+msgid "Il font vale anche per il piè di pagina e per la scritta segnaposto del media. Vuoto: il monospazio di sistema."
+msgstr "Die Schrift gilt auch für die Fußzeile und den Platzhaltertext des Mediums. Leer: die Monospace-Schrift des Systems."
+
+#: includes/tiles
+msgid "Il font vale anche per il numero con l'etichetta e per la scritta segnaposto del media. Vuoto: il monospazio di sistema."
+msgstr "Die Schrift gilt auch für die Nummer mit Beschriftung und den Platzhaltertext des Mediums. Leer: die Monospace-Schrift des Systems."
+
+#: includes/tiles
+msgid "Il pulsante nei dettagli della lezione. Puoi usare {corso} (il codice del corso), {corso_nome} (il suo nome), {giorno} (da 1, lunedì, a 7), {giorno_nome} (il nome del giorno, nella lingua della pagina) e {ora} (l'ora d'inizio, 18:30): https://esempio.it/prenota/?corso={corso_nome}&giorno={giorno_nome}&ora={ora}. Vuoto: niente pulsante."
+msgstr "Die Schaltfläche in den Details der Einheit. Du kannst {corso} (den Code des Kurses), {corso_nome} (seinen Namen), {giorno} (von 1, Montag, bis 7), {giorno_nome} (den Namen des Tages, in der Sprache der Seite) und {ora} (die Startzeit, 18:30) verwenden: https://example.com/buchen/?kurs={corso_nome}&tag={giorno_nome}&zeit={ora}. Leer: keine Schaltfläche."
+
+#: includes/tiles
+msgid "Colonne (tablet orizzontale)"
+msgstr "Spalten (Tablet quer)"
+
+#: includes/tiles
+msgid "Come il desktop"
+msgstr "Wie Desktop"
+
+#: includes/tiles
+msgid "Da 960 a 1199 px di larghezza della finestra."
+msgstr "Von 960 bis 1199 px Fensterbreite."
+
+#: includes/tiles
+msgid "Testo «Libero»"
+msgstr "Text „Frei“"
+
+#: includes/tiles
+msgid "Testo «Occupato»"
+msgstr "Text „Belegt“"
+
+#: includes/tiles
+msgid "Testo «Le tue date»"
+msgstr "Text „Deine Daten“"
+
+#: includes/tiles
+msgid "Testo «Aggiungi data»"
+msgstr "Text „Datum hinzufügen“"
+
+#: includes/tiles
+msgid "Nel riepilogo, al posto dell'arrivo e della partenza finché non si scelgono."
+msgstr "In der Übersicht anstelle von Anreise und Abreise, bis sie gewählt sind."
+
+#: includes/tiles
+msgid "Riepilogo senza date"
+msgstr "Übersicht ohne Daten"
+
+#: includes/tiles
+msgid "La frase del riepilogo prima della scelta delle date, al posto del conto."
+msgstr "Der Satz der Übersicht, bevor die Daten gewählt sind, anstelle der Preisaufstellung."
+
+#: includes/tiles
+msgid "Testo «Cancella le date»"
+msgstr "Text „Daten löschen“"
+
+#: includes/tiles
+msgid "Il pulsante sotto il riepilogo che toglie le date scelte: compare dopo la scelta dell'arrivo."
+msgstr "Die Schaltfläche unter der Übersicht, die die gewählten Daten löscht: Sie erscheint nach der Wahl der Anreise."
+
+#: includes/tiles
+msgid "La larghezza della foto. Dove la scheda è più stretta, la foto si riduce alla sua larghezza e l'altezza segue le proporzioni."
+msgstr "Die Breite des Fotos. Wo die Karte schmaler ist, schrumpft das Foto auf ihre Breite und die Höhe folgt den Proportionen."
+
+#: includes/tiles
+msgid "La miniatura nell'elenco delle scene. Vuota: la miniatura che la Libreria media ricava dalla foto leggera o, se manca, dalla foto sferica; per le foto fuori dalla Libreria, la foto leggera intera."
+msgstr "Das Miniaturbild in der Szenenliste. Leer: das Miniaturbild, das die Mediathek aus dem leichten Foto erstellt, oder, falls es fehlt, aus dem sphärischen Foto; bei Fotos außerhalb der Mediathek das ganze leichte Foto."
+
+#: includes/tiles
+msgid "Passo %1$d di %2$d"
+msgstr "Schritt %1$d von %2$d"
