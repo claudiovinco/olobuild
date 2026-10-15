@@ -433,7 +433,9 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             <?php // Due colonne sul telefono: l'ultimo indicatore, se dispari, prende tutta la riga (restava solo a metà, col valore a capo). ?>
             @media(max-width:680px){.<?php echo $uid; ?> .olo-hero-mockbody{grid-template-columns:1fr 1fr;}.<?php echo $uid; ?> .olo-hero-kpi:nth-child(odd):nth-last-child(2){grid-column:1/-1;}}
             <?php if ( ! empty( $s['mock_live'] ) ) : ?>
-            .<?php echo $uid; ?> .olo-hero-live{margin-left:auto;display:inline-flex;align-items:center;gap:.6em;font-family:<?php echo $mono_ff; ?>;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:.35em .95em .35em .85em;border-radius:2em;background:<?php echo $mixc( 8 ); ?>;}
+            .<?php echo $uid; ?> .olo-hero-live{margin-left:auto;display:inline-flex;align-items:center;gap:.6em;font-family:<?php echo $mono_ff; ?>;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:.35em .95em .35em .85em;border-radius:2em;background:<?php echo $mixc( 8 ); ?>;white-space:nowrap;flex:none;}
+            <?php // Sul telefono il punto «in diretta» resta su una riga: è l'indirizzo della barra ad accorciarsi coi puntini. ?>
+            .<?php echo $uid; ?> .olo-hero-mockframe--live .olo-hero-winlabel{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
             .<?php echo $uid; ?> .olo-hero-live i{width:7px;height:7px;border-radius:50%;background:<?php echo $accent_css; ?>;animation:olo-hero-live-dot 1.6s ease-out infinite;}
             @keyframes olo-hero-live-dot{0%{box-shadow:0 0 0 0 <?php echo $mix( $accent_css, 0.55 ); ?>;}70%{box-shadow:0 0 0 7px <?php echo $mix( $accent_css, 0 ); ?>;}100%{box-shadow:0 0 0 0 <?php echo $mix( $accent_css, 0 ); ?>;}}
             .<?php echo $uid; ?> .olo-hero-chcol i.is-now{box-shadow:0 0 18px -2px <?php echo $mix( $accent_css, 0.7 ); ?>;animation:olo-hero-now 2.4s ease-in-out infinite;}
