@@ -21356,3 +21356,43 @@ msgstr "Try the padlock"
 #: includes/class-theme-importer.php
 msgid "Le vostre date"
 msgstr "Your dates"
+
+#: includes/tiles
+msgid "Messaggi uno alla volta"
+msgstr "Messages one at a time"
+
+#: includes/tiles
+msgid "Quando la finestra entra nello schermo i messaggi compaiono uno dopo l’altro, come in una conversazione vera. Con il movimento ridotto restano tutti visibili."
+msgstr "When the window comes into view the messages appear one after another, like a real conversation. With reduced motion they all stay visible."
+
+#: includes/tiles
+msgid "Direzione del velo"
+msgstr "Veil direction"
+
+#: includes/tiles
+msgid "Dall’alto in basso"
+msgstr "Top to bottom"
+
+#: includes/tiles
+msgid "Scuro a sinistra, dal lato del testo"
+msgstr "Dark on the left, on the text side"
+
+#: includes/tiles
+msgid "Scuro a destra, dal lato del testo"
+msgstr "Dark on the right, on the text side"
+
+#: includes/tiles
+msgid "Dal lato del testo il velo prende l’intensità «in basso» e sfuma verso quella «in alto»: la persona o la scena dall’altra parte resta luminosa. Sotto i 960 px, dove il testo occupa tutta la riga, il velo torna uniforme."
+msgstr "On the text side the veil takes the “bottom” intensity and fades towards the “top” one: the person or scene on the other side stays bright. Below 960 px, where the text fills the whole line, the veil becomes even again."
+
+#: includes/tiles
+msgid "Modulo — finestra chat"
+msgstr "Module — chat window"
+
+#: includes/tiles
+msgid "Angoli tutti arrotondati"
+msgstr "All corners rounded"
+
+#: includes/tiles
+msgid "Di serie la finestra ha gli angoli in basso dritti, come se uscisse dal fondo della hero. Accesa, è una scheda con i quattro angoli arrotondati e un’ombra morbida."
+msgstr "By default the window has square bottom corners, as if it rose from the bottom of the hero. When on, it is a card with four rounded corners and a soft shadow."

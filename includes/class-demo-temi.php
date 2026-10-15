@@ -800,36 +800,46 @@ class Olobuild_Demo_Temi {
         if ( ! is_object( $menu ) || self::id_menu() !== (int) ( $menu->term_id ?? 0 ) ) {
             return $voci;
         }
+        // Le voci possono avere «children» (e i figli i loro): diventano voci con menu_item_parent, come in un
+        // menu vero, e il Mega Menu le apre a colonne. «description» è la riga sotto la voce nel pannello.
         $nuove = [];
-        foreach ( array_values( (array) ( self::$tema['json']['menu']['items'] ?? [] ) ) as $n => $v ) {
-            $id     = self::ID_VOCE + $n;
-            $titolo = (string) ( $v['title'] ?? '' );
-            $nuove[] = new WP_Post( (object) [
-                'ID'               => $id,
-                'db_id'            => $id,
-                'menu_item_parent' => '0',
-                'object_id'        => (string) $id,
-                'object'           => 'custom',
-                'type'             => 'custom',
-                'type_label'       => '',
-                'title'            => $titolo,
-                'url'              => self::risolvi( (string) ( $v['url'] ?? '#' ) ),
-                'target'           => '',
-                'attr_title'       => '',
-                'description'      => '',
-                'classes'          => [ '' ],
-                'xfn'              => '',
-                'menu_order'       => $n + 1,
-                'post_type'        => 'nav_menu_item',
-                'post_status'      => 'publish',
-                'post_title'       => $titolo,
-                'post_name'        => 'olo-demo-voce-' . ( $n + 1 ),
-                'post_parent'      => 0,
-                'post_content'     => '',
-                'post_excerpt'     => '',
-                'filter'           => 'raw',
-            ] );
-        }
+        $n     = 0;
+        $aggiungi = static function ( $voci, $genitore ) use ( &$aggiungi, &$nuove, &$n ) {
+            foreach ( array_values( (array) $voci ) as $v ) {
+                $id     = self::ID_VOCE + $n;
+                $n++;
+                $titolo = (string) ( $v['title'] ?? '' );
+                $nuove[] = new WP_Post( (object) [
+                    'ID'               => $id,
+                    'db_id'            => $id,
+                    'menu_item_parent' => (string) $genitore,
+                    'object_id'        => (string) $id,
+                    'object'           => 'custom',
+                    'type'             => 'custom',
+                    'type_label'       => '',
+                    'title'            => $titolo,
+                    'url'              => self::risolvi( (string) ( $v['url'] ?? '#' ) ),
+                    'target'           => '',
+                    'attr_title'       => '',
+                    'description'      => (string) ( $v['description'] ?? '' ),
+                    'classes'          => [ '' ],
+                    'xfn'              => '',
+                    'menu_order'       => $n,
+                    'post_type'        => 'nav_menu_item',
+                    'post_status'      => 'publish',
+                    'post_title'       => $titolo,
+                    'post_name'        => 'olo-demo-voce-' . $n,
+                    'post_parent'      => 0,
+                    'post_content'     => '',
+                    'post_excerpt'     => '',
+                    'filter'           => 'raw',
+                ] );
+                if ( ! empty( $v['children'] ) && is_array( $v['children'] ) ) {
+                    $aggiungi( $v['children'], $id );
+                }
+            }
+        };
+        $aggiungi( self::$tema['json']['menu']['items'] ?? [], 0 );
         return $nuove;
     }
 

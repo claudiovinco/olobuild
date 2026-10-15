@@ -31,6 +31,9 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
         'overlay_top'     => 0,
         'overlay_bottom'  => 0,
         'overlay_sides'   => false,
+        // Velo orientato: '' = dall'alto in basso (com'era); 'left'/'right' = scuro dal lato del testo
+        // («in basso») che sfuma verso il lato opposto («in alto»). Sotto i 960 px torna uniforme.
+        'overlay_direction' => '',
         'glow_on'         => false,
         'glow_color'      => '',
         'glow_w'          => 760,
@@ -87,6 +90,10 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             [ 'side' => 'ai', 'text' => 'Su 9 chiamate: 3 citano il prezzo — due chiedono la fatturazione annuale. Ho preparato una bozza di follow-up per ciascuna.' ],
             [ 'side' => 'you', 'text' => 'Perfetto, aggiungile al CRM.' ],
         ],
+        // La conversazione si scrive: i messaggi entrano uno alla volta quando la finestra si vede.
+        'chat_sequence'      => false,
+        // Finestra con i quattro angoli arrotondati (di serie è «appoggiata» al fondo della hero).
+        'chat_round'         => false,
 
         // Titolo tipografia
         'title_tag'            => 'h1',
@@ -218,12 +225,20 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             return 'color-mix(in srgb, ' . $color . ' ' . round( max( 0, min( 1, $alpha ) ) * 100 ) . '%, transparent)';
         };
 
-        $veil_grad = '';
+        $veil_grad   = '';
+        $veil_stretto = '';
+        $veil_dir    = in_array( ( $s['overlay_direction'] ?? '' ), [ 'left', 'right' ], true ) ? $s['overlay_direction'] : '';
         if ( $has_overlay ) {
             $oc     = $this->safe_color_css( $s['overlay_color'] ?? '' ) ?: 'var(--olo-color-dark, #16263d)';
             $o_mid  = round( $o_top * 0.6, 3 );
             $grad_v = 'linear-gradient(180deg, ' . $mix( $oc, $o_top ) . ' 0%, ' . $mix( $oc, $o_mid ) . ' 38%, ' . $mix( $oc, $o_bot ) . ' 100%)';
-            if ( ! empty( $s['overlay_sides'] ) ) {
+            if ( '' !== $veil_dir ) {
+                // Dal lato del testo l'intensità «in basso», che tiene fino a un terzo e sfuma verso quella «in alto»:
+                // il soggetto dall'altra parte resta luminoso. Sotto i 960 px il testo prende la riga intera e il
+                // velo torna uniforme (dall'80% all'intensità piena), altrimenti la fine delle righe cadrebbe sul chiaro.
+                $veil_grad    = 'linear-gradient(' . ( 'left' === $veil_dir ? '90deg' : '270deg' ) . ', ' . $mix( $oc, $o_bot ) . ' 0%, ' . $mix( $oc, round( $o_bot * 0.82, 3 ) ) . ' 34%, ' . $mix( $oc, $o_top ) . ' 72%, ' . $mix( $oc, $o_top ) . ' 100%)';
+                $veil_stretto = 'linear-gradient(180deg, ' . $mix( $oc, round( $o_bot * 0.8, 3 ) ) . ' 0%, ' . $mix( $oc, $o_bot ) . ' 100%)';
+            } elseif ( ! empty( $s['overlay_sides'] ) ) {
                 $s_top     = round( $o_top * 0.4, 3 );
                 $s_bot     = round( $o_bot * 0.7, 3 );
                 $veil_grad = 'linear-gradient(90deg, ' . $mix( $oc, $o_bot ) . ' 0%, ' . $mix( $oc, $s_top ) . ' 52%, ' . $mix( $oc, $s_bot ) . ' 100%), ' . $grad_v;
@@ -420,6 +435,17 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-hero-msg.you{align-self:flex-end;background:<?php echo $accent_css; ?>;color:<?php echo $accent_on; ?>;border-bottom-right-radius:4px;}
             .<?php echo $uid; ?> .olo-hero-msg.ai{align-self:flex-start;background:<?php echo $mixc( 8 ); ?>;border:1px solid <?php echo $mixc( 10 ); ?>;border-bottom-left-radius:4px;opacity:.92;}
             @media(max-width:680px){.<?php echo $uid; ?> .olo-hero-msg{max-width:92%;}}
+            <?php if ( ! empty( $s['chat_round'] ) ) : ?>
+            .<?php echo $uid; ?> .olo-hero-chatwin{border-radius:16px;box-shadow:0 24px 90px -30px <?php echo $mix( $accent_css, 0.45 ); ?>;}
+            <?php endif; ?>
+            <?php if ( ! empty( $s['chat_sequence'] ) ) : ?>
+            <?php // Stato iniziale nascosto solo quando lo script ha «armato» la finestra: senza script, o con il
+                  // movimento ridotto, i messaggi restano visibili come sempre. ?>
+            .<?php echo $uid; ?> .olo-hero-chatwin.is-armed .olo-hero-msg{opacity:0;transform:translateY(12px) scale(.98);}
+            .<?php echo $uid; ?> .olo-hero-chatwin.is-armed.is-in .olo-hero-msg{animation:olo-hero-msg-in .5s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--olo-msg-i, 0) * 1.15s + .25s);}
+            @keyframes olo-hero-msg-in{to{opacity:1;transform:none;}}
+            @media (prefers-reduced-motion: reduce){.<?php echo $uid; ?> .olo-hero-chatwin.is-armed .olo-hero-msg{opacity:1;transform:none;animation:none;}}
+            <?php endif; ?>
             <?php endif; ?>
             <?php if ( $has_scene ) : ?>
             .<?php echo $uid; ?> .olo-hero-scene{position:absolute;inset:<?php echo $scene_inset; ?>;z-index:0;overflow:hidden;pointer-events:none;<?php if ( $arch_mask ) : ?>-webkit-mask:<?php echo $arch_mask; ?>;mask:<?php echo $arch_mask; ?>;<?php endif; ?>}
@@ -432,6 +458,7 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
             <?php if ( $has_overlay ) : ?>
             .<?php echo $uid; ?> .olo-hero-veil{position:absolute;inset:0;background:<?php echo $veil_grad; ?>;}
+            <?php if ( '' !== $veil_stretto ) : ?>@media (max-width: 959px){.<?php echo $uid; ?> .olo-hero-veil{background:<?php echo $veil_stretto; ?>;}}<?php endif; ?>
             <?php endif; ?>
             <?php if ( $wm_text !== '' ) : ?>
             .<?php echo $uid; ?> .olo-hero-wm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:clamp(120px,26vw,380px);font-weight:800;line-height:1;letter-spacing:-0.02em;color:<?php echo $wm_color; ?>;user-select:none;white-space:nowrap;}
@@ -711,17 +738,39 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
                     <?php endif; ?>
                 </div>
                 <?php elseif ( 'chat' === $module ) : ?>
-                <div class="olo-hero-chatwin">
+                <?php $chat_seq = ! empty( $s['chat_sequence'] ); ?>
+                <div class="olo-hero-chatwin<?php echo $chat_seq ? ' olo-hero-chatwin--seq' : ''; ?>">
                     <div class="olo-hero-winbar"><span class="olo-hero-windot"></span><span class="olo-hero-windot"></span><span class="olo-hero-windot"></span><?php if ( ! empty( $s['chat_label'] ) ) : ?><span class="olo-hero-winlabel"><?php echo esc_html( $s['chat_label'] ); ?></span><?php endif; ?></div>
                     <div class="olo-hero-chatbody">
-                        <?php foreach ( $chat_msgs as $m ) {
+                        <?php
+                        $n_msg = 0;
+                        foreach ( $chat_msgs as $m ) {
                             $mtext = isset( $m['text'] ) ? (string) $m['text'] : '';
                             if ( $mtext === '' ) { continue; }
                             $side = ( isset( $m['side'] ) && $m['side'] === 'you' ) ? 'you' : 'ai';
-                            echo '<div class="olo-hero-msg ' . esc_attr( $side ) . '">' . esc_html( $mtext ) . '</div>';
+                            // con la sequenza ogni messaggio sa il suo turno (ritardo dell'entrata)
+                            $turno = $chat_seq ? ' style="--olo-msg-i:' . (int) $n_msg . '"' : '';
+                            echo '<div class="olo-hero-msg ' . esc_attr( $side ) . '"' . $turno . '>' . esc_html( $mtext ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $turno è un attributo letterale con un intero forzato
+                            $n_msg++;
                         } ?>
                     </div>
                 </div>
+                <?php if ( $chat_seq && empty( $s['_builder_mode'] ) ) : ?>
+                <script>
+                (function () {
+                    var w = document.querySelector('.<?php echo esc_js( $uid ); ?> .olo-hero-chatwin--seq');
+                    if (!w || !('IntersectionObserver' in window)) { return; }
+                    if (window.matchMedia) { if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; } }
+                    w.classList.add('is-armed');
+                    var io = new IntersectionObserver(function (voci) {
+                        voci.forEach(function (v) {
+                            if (v.isIntersecting) { w.classList.add('is-in'); io.disconnect(); }
+                        });
+                    }, { threshold: 0.35 });
+                    io.observe(w);
+                })();
+                </script>
+                <?php endif; ?>
                 <?php endif; ?>
             </div>
             <?php endif; ?>

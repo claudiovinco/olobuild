@@ -29291,3 +29291,43 @@ msgstr "Probier das Vorhängeschloss aus"
 #: includes/class-theme-importer.php
 msgid "Le vostre date"
 msgstr "Eure Reisedaten"
+
+#: includes/tiles
+msgid "Messaggi uno alla volta"
+msgstr "Nachrichten nacheinander"
+
+#: includes/tiles
+msgid "Quando la finestra entra nello schermo i messaggi compaiono uno dopo l’altro, come in una conversazione vera. Con il movimento ridotto restano tutti visibili."
+msgstr "Sobald das Fenster ins Bild kommt, erscheinen die Nachrichten nacheinander, wie in einem echten Gespräch. Bei reduzierter Bewegung bleiben alle sichtbar."
+
+#: includes/tiles
+msgid "Direzione del velo"
+msgstr "Richtung des Schleiers"
+
+#: includes/tiles
+msgid "Dall’alto in basso"
+msgstr "Von oben nach unten"
+
+#: includes/tiles
+msgid "Scuro a sinistra, dal lato del testo"
+msgstr "Dunkel links, auf der Textseite"
+
+#: includes/tiles
+msgid "Scuro a destra, dal lato del testo"
+msgstr "Dunkel rechts, auf der Textseite"
+
+#: includes/tiles
+msgid "Dal lato del testo il velo prende l’intensità «in basso» e sfuma verso quella «in alto»: la persona o la scena dall’altra parte resta luminosa. Sotto i 960 px, dove il testo occupa tutta la riga, il velo torna uniforme."
+msgstr "Auf der Textseite nimmt der Schleier die Intensität „unten“ an und läuft zur Intensität „oben“ aus: Die Person oder Szene auf der anderen Seite bleibt hell. Unter 960 px, wo der Text die ganze Zeile füllt, wird der Schleier wieder gleichmäßig."
+
+#: includes/tiles
+msgid "Modulo — finestra chat"
+msgstr "Modul — Chatfenster"
+
+#: includes/tiles
+msgid "Angoli tutti arrotondati"
+msgstr "Alle Ecken abgerundet"
+
+#: includes/tiles
+msgid "Di serie la finestra ha gli angoli in basso dritti, come se uscisse dal fondo della hero. Accesa, è una scheda con i quattro angoli arrotondati e un’ombra morbida."
+msgstr "Standardmäßig hat das Fenster unten eckige Ecken, als käme es aus dem unteren Rand des Heros. Eingeschaltet ist es eine Karte mit vier abgerundeten Ecken und einem weichen Schatten."

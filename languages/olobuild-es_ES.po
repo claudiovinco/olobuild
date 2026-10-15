@@ -29291,3 +29291,43 @@ msgstr "Prueba el candado"
 #: includes/class-theme-importer.php
 msgid "Le vostre date"
 msgstr "Vuestras fechas"
+
+#: includes/tiles
+msgid "Messaggi uno alla volta"
+msgstr "Mensajes uno a uno"
+
+#: includes/tiles
+msgid "Quando la finestra entra nello schermo i messaggi compaiono uno dopo l’altro, come in una conversazione vera. Con il movimento ridotto restano tutti visibili."
+msgstr "Cuando la ventana entra en pantalla, los mensajes aparecen uno tras otro, como en una conversación real. Con el movimiento reducido quedan todos visibles."
+
+#: includes/tiles
+msgid "Direzione del velo"
+msgstr "Dirección del velo"
+
+#: includes/tiles
+msgid "Dall’alto in basso"
+msgstr "De arriba abajo"
+
+#: includes/tiles
+msgid "Scuro a sinistra, dal lato del testo"
+msgstr "Oscuro a la izquierda, del lado del texto"
+
+#: includes/tiles
+msgid "Scuro a destra, dal lato del testo"
+msgstr "Oscuro a la derecha, del lado del texto"
+
+#: includes/tiles
+msgid "Dal lato del testo il velo prende l’intensità «in basso» e sfuma verso quella «in alto»: la persona o la scena dall’altra parte resta luminosa. Sotto i 960 px, dove il testo occupa tutta la riga, il velo torna uniforme."
+msgstr "Del lado del texto el velo toma la intensidad «abajo» y se desvanece hacia la de «arriba»: la persona o la escena del otro lado sigue luminosa. Por debajo de 960 px, donde el texto ocupa toda la línea, el velo vuelve a ser uniforme."
+
+#: includes/tiles
+msgid "Modulo — finestra chat"
+msgstr "Módulo — ventana de chat"
+
+#: includes/tiles
+msgid "Angoli tutti arrotondati"
+msgstr "Todas las esquinas redondeadas"
+
+#: includes/tiles
+msgid "Di serie la finestra ha gli angoli in basso dritti, come se uscisse dal fondo della hero. Accesa, è una scheda con i quattro angoli arrotondati e un’ombra morbida."
+msgstr "Por defecto la ventana tiene las esquinas inferiores rectas, como si saliera del fondo del hero. Activada, es una tarjeta con las cuatro esquinas redondeadas y una sombra suave."

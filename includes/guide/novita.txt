@@ -3,6 +3,11 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.794 - 2026-10-15 (temi)
+- Sorriso Clinic rifatto: in apertura il video di un sorriso a tutta larghezza, nel menu un pannello con le undici specialità dello studio (dall’igiene agli impianti), i trattamenti in schede che si impilano scorrendo col prezzo di partenza, l’impianto coi punti da toccare, la frase del preventivo che si accende parola per parola e la prenotazione in chat che si scrive da sola. Meno spazio vuoto fra le sezioni; la pagina Trattamenti ha il listino delle tre famiglie di cure, le regole dei prezzi e le domande più frequenti.
+- Hero: il velo sopra la foto o il video può essere scuro dal lato del testo e chiaro dall’altro («Direzione del velo»), così la persona in scena resta luminosa; la finestra della chat può scrivere i messaggi uno alla volta e avere tutti gli angoli arrotondati.
+- I temi possono avere voci di menu con sottovoci, che la tile Mega Menu apre a colonne.
+
 ## v1.4.792 - 2026-10-15 (temi)
 - Sei temi nuovi: Carico Libero (una palestra, in «Sport e benessere»), Leva Consulenza (consulenza per le piccole e medie imprese, in «Studi e professioni»), Baita Stua (una baita affittata intera, in «Ospitalità e viaggi»), Scheda Madre (un negozio di informatica, in «Negozi online»), Giroscopio (tour virtuali a 360°, in «Creativi e portfolio») e Doppia Mandata (escape room online, in «Eventi e musica»). Usano le tile nuove: l’orario dei corsi, il calendario dei soggiorni, il configuratore, il tour a 360° e il lucchetto. Ognuno ha la home e tre pagine interne, testata, piè di pagina, pagina d’errore e il pulsante per tornare in cima su ogni pagina.
 

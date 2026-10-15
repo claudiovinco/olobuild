@@ -506,22 +506,34 @@ class Olobuild_Theme_Importer {
             }, (string) $testo );
         };
         if ( $menu_id ) {
-            foreach ( $theme_json['menu']['items'] ?? [] as $item ) {
-                $url  = (string) ( $item['url'] ?? '#' );
-                $voce = [
-                    'menu-item-title'  => $item['title'] ?? '',
-                    'menu-item-status' => 'publish',
-                ];
-                if ( preg_match( '/^\{\{PAGINA:([a-z0-9_-]+)\}\}$/i', $url, $m ) && isset( $pagine_tema[ $m[1] ] ) ) {
-                    $voce['menu-item-type']      = 'post_type';
-                    $voce['menu-item-object']    = 'page';
-                    $voce['menu-item-object-id'] = $pagine_tema[ $m[1] ];
-                } else {
-                    $voce['menu-item-type'] = 'custom';
-                    $voce['menu-item-url']  = $risolvi( $url );
+            // Una voce può avere «children» (e i figli i loro): sottovoci col genitore giusto, che il Mega Menu
+            // apre a colonne. «description» è la riga sotto la voce nel pannello.
+            $aggiungi = static function ( $voci, $genitore ) use ( &$aggiungi, $menu_id, $pagine_tema, $risolvi ) {
+                foreach ( (array) $voci as $item ) {
+                    $url  = (string) ( $item['url'] ?? '#' );
+                    $voce = [
+                        'menu-item-title'     => $item['title'] ?? '',
+                        'menu-item-status'    => 'publish',
+                        'menu-item-parent-id' => (int) $genitore,
+                    ];
+                    if ( ! empty( $item['description'] ) ) {
+                        $voce['menu-item-description'] = sanitize_text_field( (string) $item['description'] );
+                    }
+                    if ( preg_match( '/^\{\{PAGINA:([a-z0-9_-]+)\}\}$/i', $url, $m ) && isset( $pagine_tema[ $m[1] ] ) ) {
+                        $voce['menu-item-type']      = 'post_type';
+                        $voce['menu-item-object']    = 'page';
+                        $voce['menu-item-object-id'] = $pagine_tema[ $m[1] ];
+                    } else {
+                        $voce['menu-item-type'] = 'custom';
+                        $voce['menu-item-url']  = $risolvi( $url );
+                    }
+                    $nuova = wp_update_nav_menu_item( $menu_id, 0, $voce );
+                    if ( ! is_wp_error( $nuova ) && $nuova && ! empty( $item['children'] ) && is_array( $item['children'] ) ) {
+                        $aggiungi( $item['children'], (int) $nuova );
+                    }
                 }
-                wp_update_nav_menu_item( $menu_id, 0, $voce );
-            }
+            };
+            $aggiungi( $theme_json['menu']['items'] ?? [], 0 );
         }
         foreach ( $con_pagine as $tpl_id => $tpl_content ) {
             $nuovo = json_decode( $risolvi( wp_json_encode( $tpl_content ) ), true );

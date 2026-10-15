@@ -36,6 +36,7 @@ export default {
     overlay_top: 0,
     overlay_bottom: 0,
     overlay_sides: false,
+    overlay_direction: '',
     glow_on: false,
     glow_color: '',
     glow_w: 760,
@@ -98,6 +99,8 @@ export default {
       { side: 'ai', text: 'Su 9 chiamate: 3 citano il prezzo — due chiedono la fatturazione annuale. Ho preparato una bozza di follow-up per ciascuna.' },
       { side: 'you', text: 'Perfetto, aggiungile al CRM.' },
     ],
+    chat_sequence: false,
+    chat_round: false,
 
     // Colori
     text_color: '',
@@ -391,6 +394,9 @@ export default {
         { key: 'text', label: t('Testo'), type: 'textarea' },
       ],
       condition: { field: 'module', op: 'eq', value: 'chat' } },
+    { key: 'chat_sequence', label: t('Messaggi uno alla volta'), type: 'toggle',
+      description: t('Quando la finestra entra nello schermo i messaggi compaiono uno dopo l’altro, come in una conversazione vera. Con il movimento ridotto restano tutti visibili.'),
+      condition: { field: 'module', op: 'eq', value: 'chat' } },
 
     { type: 'separator', label: t('Righe extra (opzionali)') },
     { key: 'meta_text', label: t('Riga meta / data'), type: 'text',
@@ -435,7 +441,13 @@ export default {
       description: t('0 su entrambe le intensità = nessun velo.') },
     { key: 'overlay_bottom', label: t('Intensità velo in basso'), type: 'range', min: 0, max: 1, step: 0.05 },
     { key: 'overlay_color', label: t('Colore velo (vuoto = scuro del tema)'), type: 'color' },
-    { key: 'overlay_sides', label: t('Velo laterale (stile Atelier)'), type: 'toggle' },
+    { key: 'overlay_sides', label: t('Velo laterale (stile Atelier)'), type: 'toggle',
+      condition: { field: 'overlay_direction', op: 'eq', value: '' } },
+    { key: 'overlay_direction', label: t('Direzione del velo'), type: 'select', options: [
+      { value: '', label: t('Dall’alto in basso') },
+      { value: 'left', label: t('Scuro a sinistra, dal lato del testo') },
+      { value: 'right', label: t('Scuro a destra, dal lato del testo') },
+    ], description: t('Dal lato del testo il velo prende l’intensità «in basso» e sfuma verso quella «in alto»: la persona o la scena dall’altra parte resta luminosa. Sotto i 960 px, dove il testo occupa tutta la riga, il velo torna uniforme.') },
 
     // ── Scena: glow radiale (stesse chiavi della famiglia glow) ──
     { type: 'separator', label: t('Scena — glow radiale') },
@@ -485,6 +497,12 @@ export default {
       focalOpts: { src: '' }, // le foto stanno nel ripetitore: pad neutro
       condition: { field: 'module', op: 'eq', value: 'strip' },
     }),
+
+    // ── Modulo: finestra della chat ──
+    { type: 'separator', label: t('Modulo — finestra chat'), condition: { field: 'module', op: 'eq', value: 'chat' } },
+    { key: 'chat_round', label: t('Angoli tutti arrotondati'), type: 'toggle',
+      description: t('Di serie la finestra ha gli angoli in basso dritti, come se uscisse dal fondo della hero. Accesa, è una scheda con i quattro angoli arrotondati e un’ombra morbida.'),
+      condition: { field: 'module', op: 'eq', value: 'chat' } },
 
     // ── Finiture di scena ──
     { type: 'separator', label: t('Finiture') },
