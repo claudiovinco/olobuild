@@ -29331,3 +29331,7 @@ msgstr "Alle Ecken abgerundet"
 #: includes/tiles
 msgid "Di serie la finestra ha gli angoli in basso dritti, come se uscisse dal fondo della hero. Accesa, è una scheda con i quattro angoli arrotondati e un’ombra morbida."
 msgstr "Standardmäßig hat das Fenster unten eckige Ecken, als käme es aus dem unteren Rand des Heros. Eingeschaltet ist es eine Karte mit vier abgerundeten Ecken und einem weichen Schatten."
+
+#: includes/tiles
+msgid "Orario"
+msgstr "Stundenplan"

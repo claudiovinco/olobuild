@@ -85,11 +85,18 @@ class Olobuild_Schedule_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .osc-time{font-weight:700;color:<?php echo $headc; ?>;font-size:12.5px;font-variant-numeric:tabular-nums;}
             .<?php echo $uid; ?> .osc-cell.on{background:<?php echo $accent; ?>;color:<?php echo $on; ?>;font-weight:600;}
             .<?php echo $uid; ?> .osc-cell.empty{opacity:.4;}
+            <?php // Su uno schermo stretto la griglia non si schiaccia più fino a tagliare le parole («Ortodonzia» diventava
+                  // «Orto»): ogni giorno tiene una larghezza minima e, se non ci sta, la tabella scorre di lato nel suo riquadro. ?>
+            .<?php echo $uid; ?> .osc-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+            .<?php echo $uid; ?> .osc-scroll:focus-visible{outline:2px solid <?php echo $accent; ?>;outline-offset:2px;}
+            .<?php echo $uid; ?> .osc-grid{min-width:<?php echo (int) ( 64 + 92 * $nd ); ?>px;}
+            @media (max-width: 640px){.<?php echo $uid; ?> .osc-grid{min-width:<?php echo (int) ( 56 + 82 * $nd ); ?>px;}}
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-schedule <?php echo esc_attr( $uid ); ?>">
             <?php if ( $s['eyebrow'] !== '' ) : ?><span class="osc-eyebrow"><?php echo esc_html( $s['eyebrow'] ); ?></span><?php endif; ?>
             <?php if ( $s['heading'] !== '' ) : ?><h2 class="osc-h"><?php echo esc_html( $s['heading'] ); ?></h2><?php endif; ?>
+            <div class="osc-scroll" tabindex="0" role="region" aria-label="<?php echo esc_attr( $s['heading'] !== '' ? $s['heading'] : olobuild_t( 'Orario' ) ); ?>">
             <div class="osc-grid" role="table">
                 <div class="osc-cell osc-head"><?php echo esc_html( $s['corner_label'] ?? '' ); ?></div>
                 <?php foreach ( $days as $d ) : ?><div class="osc-cell osc-head"><?php echo esc_html( $d ); ?></div><?php endforeach; ?>
@@ -104,6 +111,7 @@ class Olobuild_Schedule_Tile extends Olobuild_Tile_Base {
                         <div class="<?php echo esc_attr( $cls ); ?>"><?php echo $c['text'] === '' ? '·' : esc_html( $c['text'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed middot literal or esc_html()'d cell text from the ternary ?></div>
                     <?php endfor; ?>
                 <?php endforeach; ?>
+            </div>
             </div>
         </div>
         <?php

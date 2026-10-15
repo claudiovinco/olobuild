@@ -29331,3 +29331,7 @@ msgstr "Todas las esquinas redondeadas"
 #: includes/tiles
 msgid "Di serie la finestra ha gli angoli in basso dritti, come se uscisse dal fondo della hero. Accesa, è una scheda con i quattro angoli arrotondati e un’ombra morbida."
 msgstr "Por defecto la ventana tiene las esquinas inferiores rectas, como si saliera del fondo del hero. Activada, es una tarjeta con las cuatro esquinas redondeadas y una sombra suave."
+
+#: includes/tiles
+msgid "Orario"
+msgstr "Horario"

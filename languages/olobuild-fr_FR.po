@@ -29331,3 +29331,7 @@ msgstr "Tous les coins arrondis"
 #: includes/tiles
 msgid "Di serie la finestra ha gli angoli in basso dritti, come se uscisse dal fondo della hero. Accesa, è una scheda con i quattro angoli arrotondati e un’ombra morbida."
 msgstr "Par défaut, la fenêtre a les coins du bas droits, comme si elle sortait du bas du hero. Activée, c’est une carte aux quatre coins arrondis avec une ombre douce."
+
+#: includes/tiles
+msgid "Orario"
+msgstr "Horaires"

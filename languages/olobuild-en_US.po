@@ -29334,3 +29334,7 @@ msgstr "All corners rounded"
 #: includes/tiles
 msgid "Di serie la finestra ha gli angoli in basso dritti, come se uscisse dal fondo della hero. Accesa, è una scheda con i quattro angoli arrotondati e un’ombra morbida."
 msgstr "By default the window has square bottom corners, as if it rose from the bottom of the hero. When on, it is a card with four rounded corners and a soft shadow."
+
+#: includes/tiles
+msgid "Orario"
+msgstr "Timetable"

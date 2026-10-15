@@ -3636,6 +3636,19 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             /* ── Hover Intent Desktop ── */
             var timers = {};
             var isFull = <?php echo $s['panel_width'] === 'full' ? 'true' : 'false'; ?>;
+            /* Barra «Wide»/«Classica»: il contenitore è fatto col padding della barra, quindi «Larghezza della barra»
+               vuol dire la larghezza del contenuto (dal logo ai pulsanti), non quella della finestra. */
+            var barContenuto = <?php echo in_array( ( $s['bar_width'] ?? 'full' ), [ 'wide', 'classic' ], true ) ? 'true' : 'false'; ?>;
+            function rettBarra(bar) {
+                var r = bar.getBoundingClientRect();
+                var x = r.left, w = r.width;
+                if (barContenuto) {
+                    var cs = getComputedStyle(bar);
+                    var pl = parseFloat(cs.paddingLeft) || 0, pr = parseFloat(cs.paddingRight) || 0;
+                    x += pl; w -= pl + pr;
+                }
+                return { left: x, width: w };
+            }
             var navItems = root.querySelectorAll(".olo-mm-nav > li, .olo-mm-nav-left > li, .olo-mm-nav-right > li");
 
             var panelSize = "<?php echo esc_js( $s['panel_size'] ?? 'auto' ); ?>";
@@ -3679,7 +3692,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                     } else if (panelSize === "section") {
                         var bar = root.querySelector(".olo-mm-bar");
                         if (bar) {
-                            var barRect = bar.getBoundingClientRect();
+                            var barRect = rettBarra(bar);
                             panel.style.left = barRect.left + "px";
                             panel.style.width = barRect.width + "px";
                         }
@@ -3759,7 +3772,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                 if (panelSize === "section") {
                     var bar2 = root.querySelector(".olo-mm-bar");
                     if (bar2) {
-                        var barRect2 = bar2.getBoundingClientRect();
+                        var barRect2 = rettBarra(bar2);
                         panel.style.left = (barRect2.left - liRect.left) + "px";
                         panel.style.width = barRect2.width + "px";
                     }
