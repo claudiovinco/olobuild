@@ -9,6 +9,10 @@ La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mo
 - Hero, pannello «Mockup»: sul telefono l’ultimo indicatore, se resta da solo, prende tutta la riga e il suo valore non va più a capo.
 - Nido Coworking: «nido.» col punto giallo nel logo, la prova su un fondo diverso da quello del piè di pagina, gli eventi con l’ora anche sul telefono, le schede delle sale nel giallo del marchio, le foto giuste per la cucina e per la terrazza nella pagina Spazi, «La tecnologia» e «Eventi» fra i link del piè di pagina.
 
+## v1.4.807 - 2026-10-17 (temi)
+- Le scritte giganti nei piè di pagina di dodici temi (Denim District, Fuoco, Inchiostro di riso, Mezza delle mura, Moneta, Onde corte, Orto vivo, Rewind, Rifugio Larice, Ruggine, Tostatura Nove, Vinile Club) hanno una misura per il tablet e una per il telefono: prima uscivano dallo schermo fino a 650 px. Anche «nido.» un po’ più piccolo sui telefoni da 360 px.
+- Margini: il filo sotto la testata non taglia più le lettere di «MARGINI» (l’interlinea stretta faceva scendere le lettere oltre il riquadro del titolo).
+
 ## v1.4.806 - 2026-10-16 (fix)
 - Lavagna a gesso: il testo a destra della voce scende sotto anche quando è di sette lettere o più (prima solo oltre le otto: «Fermento» restava schiacciato accanto alla voce).
 - Nido Coworking dopo la verifica a 880 px: sul tablet lavagna e numeri del contratto di rete sotto il testo, le foto delle realtà che riempiono la scheda, sei foto nella griglia della rete (due righe piene sul computer, tre sul telefono), la cornice della lavagna in grafite.
