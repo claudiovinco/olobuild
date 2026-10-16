@@ -208,10 +208,11 @@ class Olobuild_Stackscroll_Tile extends Olobuild_Tile_Base {
                 margin: 0 0 14px;
                 letter-spacing: -0.01em;
             }
+            <?php // Niente margine a sinistra: lo spazio fra titolo e accento c'è già, e quando l'accento va a capo il
+                  // margine faceva rientrare la riga. ?>
             .<?php echo $uid; ?> .scard__title .acc {
                 opacity: 0.62;
                 font-weight: 500;
-                margin-left: 0.18em;
             }
             .<?php echo $uid; ?> .scard__text {
                 font-size: 16px;

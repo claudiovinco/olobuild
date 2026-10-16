@@ -321,6 +321,9 @@ class Olobuild_Chalkboard_Tile extends Olobuild_Tile_Base {
                 echo '@media (max-width:' . $px . 'px){' . "{$sel} .olc-in{display:inline-block}{$sel} .olc-riga1{display:inline-flex;flex-wrap:wrap;justify-content:center}{$sel} .olc-puntini{display:none}}";
             }
         }
+        // Con la cifra lunga (un nome) la riga può andare a capo: il nome resta intero e la cifra scende a destra,
+        // invece di schiacciare il nome in una colonna di una parola per riga sugli schermi stretti.
+        echo "{$sel} .olc-voce--lunga .olc-riga1{flex-wrap:wrap}{$sel} .olc-voce--lunga .olc-prezzo{margin-left:auto}";
         echo "{$sel} .olc-vuoto{margin-top:1em;opacity:.85}";
         echo "{$sel} .olc-vuoto[hidden]{display:none}";
         echo "{$sel} .olc-nota{margin-top:1.3em}";
@@ -482,7 +485,9 @@ class Olobuild_Chalkboard_Tile extends Olobuild_Tile_Base {
                 $viste += $vale ? 1 : 0;
                 $ev    = (string) ( $v['evidenza'] ?? 'nessuna' );
                 $nascosta = ( ! $vale && ! $builder ) ? ' hidden' : '';
-                echo '<li class="olc-voce' . ( ( ! $vale && $builder ) ? ' olc-altro' : '' ) . '" data-giorni="' . esc_attr( implode( ',', $gg ) ) . '"' . $nascosta . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributo fisso
+                // Una «cifra» lunga (un nome, non «14 €») può scendere sotto il nome quando la riga non basta.
+                $lunga = function_exists( 'mb_strlen' ) ? mb_strlen( $prez ) > 8 : strlen( $prez ) > 8;
+                echo '<li class="olc-voce' . ( ( ! $vale && $builder ) ? ' olc-altro' : '' ) . ( $lunga ? ' olc-voce--lunga' : '' ) . '" data-giorni="' . esc_attr( implode( ',', $gg ) ) . '"' . $nascosta . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributo fisso
                 echo '<span class="olc-in" data-c="' . (int) $righe( $nome . ' ' . $prez . ' ' . $desc ) . '"><span class="olc-riga1">';
                 if ( '' !== $nome ) {
                     echo '<span class="olc-nome">';

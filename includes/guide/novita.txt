@@ -9,6 +9,11 @@ La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mo
 - Hero, pannello «Mockup»: sul telefono l’ultimo indicatore, se resta da solo, prende tutta la riga e il suo valore non va più a capo.
 - Nido Coworking: «nido.» col punto giallo nel logo, la prova su un fondo diverso da quello del piè di pagina, gli eventi con l’ora anche sul telefono, le schede delle sale nel giallo del marchio, le foto giuste per la cucina e per la terrazza nella pagina Spazi, «La tecnologia» e «Eventi» fra i link del piè di pagina.
 
+## v1.4.805 - 2026-10-16 (fix)
+- Lavagna a gesso: quando a destra della voce c’è un testo lungo (un nome invece di un prezzo) e la riga non basta, il testo scende sotto la voce, allineato a destra; prima sul telefono la voce restava schiacciata in una colonna di una parola per riga.
+- Schede impilate: la seconda parte del titolo, quando va a capo, non rientra più di uno spazio.
+- Nido Coworking: apertura più scura e leggibile, la lavagna color ardesia col gesso giallo del marchio, le domande sulla rete in schede chiare accanto alla testata, titoli più corti nel programma della settimana.
+
 ## v1.4.804 - 2026-10-16 (temi)
 - Nido Coworking ripensato come una rete di giovani realtà: in apertura la bacheca della rete, dove una richiesta trova in pochi messaggi chi la può fare; poi le competenze della rete, le foto delle persone al lavoro insieme, quattro modi per non lavorare da soli, la lavagna delle richieste in cucina, i progetti grandi fatti da realtà piccole, chi c’è adesso e le voci di chi ci lavora. Pagina nuova «La rete»: come nasce una squadra, il contratto di rete per gare e bandi, le realtà e le domande.
 - Hero: nel modulo «Chat» ogni messaggio può mostrare il nome e la foto di chi scrive.
