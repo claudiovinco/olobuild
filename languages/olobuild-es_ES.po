@@ -29347,3 +29347,23 @@ msgstr "Cuando el panel entra en pantalla las barras crecen, las cifras de los K
 #: includes/tiles
 msgid "Etichetta accanto al punto «in diretta»"
 msgstr "Etiqueta junto al punto «en directo»"
+
+#: includes/tiles
+msgid "Nome di chi scrive"
+msgstr "Nombre de quien escribe"
+
+#: includes/tiles
+msgid "Compare in piccolo sopra il messaggio. Vuoto = nessun nome."
+msgstr "Aparece en pequeño encima del mensaje. Vacío = sin nombre."
+
+#: includes/tiles
+msgid "Foto di chi scrive"
+msgstr "Foto de quien escribe"
+
+#: includes/tiles
+msgid "Un cerchio accanto al messaggio, dal lato di chi scrive. Vuota = nessuna foto."
+msgstr "Un círculo junto al mensaje, del lado de quien escribe. Vacía = sin foto."
+
+#: includes/tiles
+msgid "La bacheca della rete"
+msgstr "El tablón de la red"

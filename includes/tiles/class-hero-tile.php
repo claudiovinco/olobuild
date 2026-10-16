@@ -454,16 +454,25 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-hero-msg.you{align-self:flex-end;background:<?php echo $accent_css; ?>;color:<?php echo $accent_on; ?>;border-bottom-right-radius:4px;}
             .<?php echo $uid; ?> .olo-hero-msg.ai{align-self:flex-start;background:<?php echo $mixc( 8 ); ?>;border:1px solid <?php echo $mixc( 10 ); ?>;border-bottom-left-radius:4px;opacity:.92;}
             @media(max-width:680px){.<?php echo $uid; ?> .olo-hero-msg{max-width:92%;}}
+            .<?php echo $uid; ?> .olo-hero-msgname{display:block;margin-bottom:.25em;font-size:12px;font-weight:700;letter-spacing:.01em;opacity:.8;}
+            .<?php echo $uid; ?> .olo-hero-msg.ai .olo-hero-msgname{color:<?php echo $accent_css; ?>;opacity:1;}
+            .<?php echo $uid; ?> .olo-hero-msgrow{display:flex;align-items:flex-end;gap:.65em;max-width:86%;}
+            .<?php echo $uid; ?> .olo-hero-msgrow.you{align-self:flex-end;flex-direction:row-reverse;}
+            .<?php echo $uid; ?> .olo-hero-msgrow.ai{align-self:flex-start;}
+            .<?php echo $uid; ?> .olo-hero-msgrow .olo-hero-msg{max-width:none;min-width:0;}
+            .<?php echo $uid; ?> .olo-hero-msgav{width:34px;height:34px;flex:none;border-radius:50%;object-fit:cover;border:2px solid <?php echo $mixc( 14 ); ?>;}
+            @media(max-width:680px){.<?php echo $uid; ?> .olo-hero-msgrow{max-width:96%;gap:.5em;}.<?php echo $uid; ?> .olo-hero-msgav{width:28px;height:28px;}}
             <?php if ( ! empty( $s['chat_round'] ) ) : ?>
             .<?php echo $uid; ?> .olo-hero-chatwin{border-radius:16px;box-shadow:0 24px 90px -30px <?php echo $mix( $accent_css, 0.45 ); ?>;}
             <?php endif; ?>
             <?php if ( ! empty( $s['chat_sequence'] ) ) : ?>
             <?php // Stato iniziale nascosto solo quando lo script ha «armato» la finestra: senza script, o con il
                   // movimento ridotto, i messaggi restano visibili come sempre. ?>
-            .<?php echo $uid; ?> .olo-hero-chatwin.is-armed .olo-hero-msg{opacity:0;transform:translateY(12px) scale(.98);}
-            .<?php echo $uid; ?> .olo-hero-chatwin.is-armed.is-in .olo-hero-msg{animation:olo-hero-msg-in .5s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--olo-msg-i, 0) * 1.15s + .25s);}
+            <?php // Entra il messaggio o, se ha la foto, la riga intera (foto + messaggio): mai i due insieme. ?>
+            .<?php echo $uid; ?> .olo-hero-chatwin.is-armed .olo-hero-chatbody > .olo-hero-msg,.<?php echo $uid; ?> .olo-hero-chatwin.is-armed .olo-hero-chatbody > .olo-hero-msgrow{opacity:0;transform:translateY(12px) scale(.98);}
+            .<?php echo $uid; ?> .olo-hero-chatwin.is-armed.is-in .olo-hero-chatbody > .olo-hero-msg,.<?php echo $uid; ?> .olo-hero-chatwin.is-armed.is-in .olo-hero-chatbody > .olo-hero-msgrow{animation:olo-hero-msg-in .5s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--olo-msg-i, 0) * 1.15s + .25s);}
             @keyframes olo-hero-msg-in{to{opacity:1;transform:none;}}
-            @media (prefers-reduced-motion: reduce){.<?php echo $uid; ?> .olo-hero-chatwin.is-armed .olo-hero-msg{opacity:1;transform:none;animation:none;}}
+            @media (prefers-reduced-motion: reduce){.<?php echo $uid; ?> .olo-hero-chatwin.is-armed .olo-hero-chatbody > .olo-hero-msg,.<?php echo $uid; ?> .olo-hero-chatwin.is-armed .olo-hero-chatbody > .olo-hero-msgrow{opacity:1;transform:none;animation:none;}}
             <?php endif; ?>
             <?php endif; ?>
             <?php if ( $has_scene ) : ?>
@@ -821,7 +830,15 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
                             $side = ( isset( $m['side'] ) && $m['side'] === 'you' ) ? 'you' : 'ai';
                             // con la sequenza ogni messaggio sa il suo turno (ritardo dell'entrata)
                             $turno = $chat_seq ? ' style="--olo-msg-i:' . (int) $n_msg . '"' : '';
-                            echo '<div class="olo-hero-msg ' . esc_attr( $side ) . '"' . $turno . '>' . esc_html( $mtext ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $turno è un attributo letterale con un intero forzato
+                            // chi scrive (facoltativo): il nome in piccolo sopra il testo, la foto in un cerchio accanto
+                            $mname   = trim( (string) ( $m['name'] ?? '' ) );
+                            $mavatar = trim( (string) ( $m['avatar'] ?? '' ) );
+                            $nome_html = '' !== $mname ? '<span class="olo-hero-msgname">' . esc_html( $mname ) . '</span>' : '';
+                            if ( '' !== $mavatar ) {
+                                echo '<div class="olo-hero-msgrow ' . esc_attr( $side ) . '"' . $turno . '><img class="olo-hero-msgav" src="' . esc_url( $mavatar ) . '" alt="' . esc_attr( $mname ) . '" loading="lazy" decoding="async"><div class="olo-hero-msg ' . esc_attr( $side ) . '">' . $nome_html . esc_html( $mtext ) . '</div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $turno è un attributo letterale con un intero forzato, $nome_html è già escapato
+                            } else {
+                                echo '<div class="olo-hero-msg ' . esc_attr( $side ) . '"' . $turno . '>' . $nome_html . esc_html( $mtext ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $turno è un attributo letterale con un intero forzato, $nome_html è già escapato
+                            }
                             $n_msg++;
                         } ?>
                     </div>

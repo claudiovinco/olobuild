@@ -29347,3 +29347,23 @@ msgstr "Quand le tableau de bord entre à l’écran, les barres grandissent, le
 #: includes/tiles
 msgid "Etichetta accanto al punto «in diretta»"
 msgstr "Libellé à côté du point « en direct »"
+
+#: includes/tiles
+msgid "Nome di chi scrive"
+msgstr "Nom de l’expéditeur"
+
+#: includes/tiles
+msgid "Compare in piccolo sopra il messaggio. Vuoto = nessun nome."
+msgstr "S’affiche en petit au-dessus du message. Vide = aucun nom."
+
+#: includes/tiles
+msgid "Foto di chi scrive"
+msgstr "Photo de l’expéditeur"
+
+#: includes/tiles
+msgid "Un cerchio accanto al messaggio, dal lato di chi scrive. Vuota = nessuna foto."
+msgstr "Un cercle à côté du message, du côté de l’expéditeur. Vide = aucune photo."
+
+#: includes/tiles
+msgid "La bacheca della rete"
+msgstr "Le tableau du réseau"

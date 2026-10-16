@@ -392,13 +392,17 @@ export default {
       condition: { field: 'module', op: 'eq', value: 'chat' } },
     { key: 'chat_messages', label: t('Messaggi'), type: 'content-items',
       itemLabel: t('Messaggio'),
-      defaults: { side: 'you', text: '' },
+      defaults: { side: 'you', text: '', name: '', avatar: '' },
       itemFields: [
         { key: 'side', label: t('Mittente'), type: 'select', options: [
           { value: 'you', label: t('Tu (a destra, accento)') },
           { value: 'ai',  label: t('Risposta (a sinistra)') },
         ]},
         { key: 'text', label: t('Testo'), type: 'textarea' },
+        { key: 'name', label: t('Nome di chi scrive'), type: 'text',
+          description: t('Compare in piccolo sopra il messaggio. Vuoto = nessun nome.') },
+        { key: 'avatar', label: t('Foto di chi scrive'), type: 'image',
+          description: t('Un cerchio accanto al messaggio, dal lato di chi scrive. Vuota = nessuna foto.') },
       ],
       condition: { field: 'module', op: 'eq', value: 'chat' } },
     { key: 'chat_sequence', label: t('Messaggi uno alla volta'), type: 'toggle',

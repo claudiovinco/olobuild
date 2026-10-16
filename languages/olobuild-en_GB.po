@@ -21412,3 +21412,23 @@ msgstr "When the dashboard comes into view the bars grow, the KPI figures count 
 #: includes/tiles
 msgid "Etichetta accanto al punto «in diretta»"
 msgstr "Label next to the “live” dot"
+
+#: includes/tiles
+msgid "Nome di chi scrive"
+msgstr "Sender name"
+
+#: includes/tiles
+msgid "Compare in piccolo sopra il messaggio. Vuoto = nessun nome."
+msgstr "Shown in small type above the message. Empty = no name."
+
+#: includes/tiles
+msgid "Foto di chi scrive"
+msgstr "Sender photo"
+
+#: includes/tiles
+msgid "Un cerchio accanto al messaggio, dal lato di chi scrive. Vuota = nessuna foto."
+msgstr "A circle next to the message, on the sender’s side. Empty = no photo."
+
+#: includes/tiles
+msgid "La bacheca della rete"
+msgstr "The network board"

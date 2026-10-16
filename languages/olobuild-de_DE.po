@@ -29347,3 +29347,23 @@ msgstr "Sobald das Dashboard ins Bild kommt, wachsen die Balken, die KPI-Zahlen 
 #: includes/tiles
 msgid "Etichetta accanto al punto «in diretta»"
 msgstr "Beschriftung neben dem „Live“-Punkt"
+
+#: includes/tiles
+msgid "Nome di chi scrive"
+msgstr "Name des Absenders"
+
+#: includes/tiles
+msgid "Compare in piccolo sopra il messaggio. Vuoto = nessun nome."
+msgstr "Erscheint klein über der Nachricht. Leer = kein Name."
+
+#: includes/tiles
+msgid "Foto di chi scrive"
+msgstr "Foto des Absenders"
+
+#: includes/tiles
+msgid "Un cerchio accanto al messaggio, dal lato di chi scrive. Vuota = nessuna foto."
+msgstr "Ein Kreis neben der Nachricht, auf der Seite des Absenders. Leer = kein Foto."
+
+#: includes/tiles
+msgid "La bacheca della rete"
+msgstr "Das Brett des Netzwerks"
