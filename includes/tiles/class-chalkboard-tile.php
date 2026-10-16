@@ -486,7 +486,7 @@ class Olobuild_Chalkboard_Tile extends Olobuild_Tile_Base {
                 $ev    = (string) ( $v['evidenza'] ?? 'nessuna' );
                 $nascosta = ( ! $vale && ! $builder ) ? ' hidden' : '';
                 // Una «cifra» lunga (un nome, non «14 €») può scendere sotto il nome quando la riga non basta.
-                $lunga = function_exists( 'mb_strlen' ) ? mb_strlen( $prez ) > 8 : strlen( $prez ) > 8;
+                $lunga = function_exists( 'mb_strlen' ) ? mb_strlen( $prez ) > 6 : strlen( $prez ) > 6;
                 echo '<li class="olc-voce' . ( ( ! $vale && $builder ) ? ' olc-altro' : '' ) . ( $lunga ? ' olc-voce--lunga' : '' ) . '" data-giorni="' . esc_attr( implode( ',', $gg ) ) . '"' . $nascosta . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributo fisso
                 echo '<span class="olc-in" data-c="' . (int) $righe( $nome . ' ' . $prez . ' ' . $desc ) . '"><span class="olc-riga1">';
                 if ( '' !== $nome ) {
