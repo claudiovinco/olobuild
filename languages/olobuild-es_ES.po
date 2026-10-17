@@ -29367,3 +29367,100 @@ msgstr "Un círculo junto al mensaje, del lado de quien escribe. Vacía = sin fo
 #: includes/tiles
 msgid "La bacheca della rete"
 msgstr "El tablón de la red"
+
+#: src/theme-picker
+msgid "Temi Olobuild"
+msgstr "Temas de OLObuild"
+
+#: src/theme-picker
+msgid "Scegli un tema: configura colori, font e sezioni del sito in un click."
+msgstr "Elige un tema: configura los colores, las fuentes y las secciones del sitio en un clic."
+
+#: src/theme-picker
+msgid "Cerca un tema…"
+msgstr "Buscar un tema…"
+
+#: src/theme-picker
+msgid "Tutti i temi"
+msgstr "Todos los temas"
+
+#: src/theme-picker
+msgid "Importa tema"
+msgstr "Importar tema"
+
+#: src/theme-picker
+msgid "Caricamento temi…"
+msgstr "Cargando temas…"
+
+#: src/theme-picker
+msgid "Nessun tema per questi filtri."
+msgstr "Ningún tema coincide con estos filtros."
+
+#: src/theme-picker
+msgid "Nessun tema disponibile."
+msgstr "No hay temas disponibles."
+
+#: src/theme-picker
+msgid "Non è stato possibile caricare i temi."
+msgstr "No se han podido cargar los temas."
+
+#: src/theme-picker
+msgid "tema"
+msgstr "tema"
+
+#: src/theme-picker
+msgid "temi"
+msgstr "temas"
+
+#: src/theme-picker
+msgid "pagina"
+msgstr "página"
+
+#: src/theme-picker
+msgid "Importazione in corso…"
+msgstr "Importando…"
+
+#: src/theme-picker
+msgid "Requisiti"
+msgstr "Requisitos"
+
+#: src/theme-picker
+#, php-format
+msgid "Con %s"
+msgstr "Con %s"
+
+#: src/theme-picker
+msgid "Solo OLObuild"
+msgstr "Solo OLObuild"
+
+#: src/theme-picker
+msgid "attivo"
+msgstr "activo"
+
+#: src/theme-picker
+msgid "da aggiornare"
+msgstr "por actualizar"
+
+#: src/theme-picker
+msgid "da installare"
+msgstr "sin instalar"
+
+#: src/theme-picker
+#, php-format
+msgid "Richiede %s"
+msgstr "Requiere %s"
+
+#: src/theme-picker
+#, php-format
+msgid "Richiede %1$s %2$s o successiva"
+msgstr "Requiere %1$s %2$s o posterior"
+
+#: src/theme-picker
+#, php-format
+msgid "Scopri %s"
+msgstr "Descubrir %s"
+
+#: src/theme-picker
+#, php-format
+msgid "Aggiorna %s"
+msgstr "Actualizar %s"

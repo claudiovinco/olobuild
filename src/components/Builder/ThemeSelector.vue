@@ -14,6 +14,39 @@ const toast = useToast();
 
 let picker = null;
 
+// Le scritte del selettore nella lingua del builder (catalogo olobuild; senza traduzione restano in italiano).
+function etichette() {
+  return {
+    title: t('Temi Olobuild'),
+    subtitle: t('Scegli un tema: configura colori, font e sezioni del sito in un click.'),
+    searchPlaceholder: t('Cerca un tema…'),
+    categoriesLabel: t('Categorie'),
+    allLabel: t('Tutti i temi'),
+    importLabel: t('Importa tema'),
+    detailsLabel: t('Dettagli'),
+    loading: t('Caricamento temi…'),
+    emptyFiltered: t('Nessun tema per questi filtri.'),
+    emptyNone: t('Nessun tema disponibile.'),
+    loadError: t('Non è stato possibile caricare i temi.'),
+    closeLabel: t('Chiudi'),
+    themeWord: t('tema'),
+    themesWord: t('temi'),
+    pageWord: t('pagina'),
+    pagesWord: t('pagine'),
+    busyLabel: t('Importazione in corso…'),
+    requirementsLabel: t('Requisiti'),
+    withPluginLabel: t('Con %s'),
+    onlyOlobuildLabel: t('Solo OLObuild'),
+    reqOkLabel: t('attivo'),
+    reqOldLabel: t('da aggiornare'),
+    reqMissingLabel: t('da installare'),
+    requiresTitle: t('Richiede %s'),
+    requiresVersionTitle: t('Richiede %1$s %2$s o successiva'),
+    discoverLabel: t('Scopri %s'),
+    updateLabel: t('Aggiorna %s'),
+  };
+}
+
 async function importTheme(theme) {
   if (!theme || !theme.id) return;
   const nome = theme.name || theme.id;
@@ -75,7 +108,7 @@ function open() {
   picker = createThemePicker({
     mode: 'modal',
     card: { action: soloSfoglia ? 'browse' : 'import' },
-    i18n: soloSfoglia ? { subtitle: avviso } : {},
+    i18n: soloSfoglia ? { ...etichette(), subtitle: avviso } : etichette(),
     loadThemes: async () => {
       const res = await fetch(`${oloData.value.restUrl}themes`, {
         headers: { 'X-WP-Nonce': oloData.value.nonce },

@@ -6,6 +6,7 @@
       :query="tileQuery"
       :itemFields="itemFields"
       :itemMap="tileItemMap"
+      :origins="dynamicOrigins"
       @update:query="$emit('update:dynamic-query', $event)"
       @update:itemMap="$emit('update:dynamic-item-map', $event)"
     />
@@ -390,6 +391,8 @@ const props = defineProps({
   tileSettings: { type: Object, default: () => ({}) },
   supportsDynamic: { type: Boolean, default: false },
   dynamic: { type: Object, default: () => ({}) },
+  // Origini della «Sorgente dinamica» ammesse dal campo (dynamicOrigins): null = articoli e foto.
+  dynamicOrigins: { type: Array, default: null },
   // Tab Stile: le stesse voci del ripetitore del Contenuto, ma SOLO con i loro campi
   // di stile (colore, corsivo…). Struttura fissa: niente aggiungi, duplica, elimina o
   // riordina — le voci si gestiscono nel Contenuto. Nome e miniatura della voce vengono

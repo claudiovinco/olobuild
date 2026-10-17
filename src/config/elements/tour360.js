@@ -106,16 +106,20 @@ export default {
 
   fields: [
     { type: 'separator', label: t('Scene') },
+    // «Sorgente dinamica» › Foto di un campo: le scene dalle foto 360° del contenuto (per esempio
+    // «Foto 360° della struttura» di OLObooking), una scena per foto. dynamicImage dice quale
+    // parte della foto va in ogni immagine: l'originale (fino a 8192 px) alla foto sferica.
     { key: 'scene', label: t('Scene'), type: 'content-items', itemLabel: t('Scena'), etichettaDa: 'titolo', miniaturaDa: 'anteprima',
+      supportsDynamic: true, dynamicOrigins: ['images'],
       description: t('Una voce per ogni foto sferica: equirettangolare, larga il doppio dell\'altezza (per esempio 4096 × 2048, in JPG). La foto leggera (2048 × 1024) va ai telefoni e alle schede grafiche più piccole; l\'anteprima è la miniatura nell\'elenco delle scene. Direzione e inclinazione dicono dove guarda la vista quando la scena si apre.'),
       newItemDefaults: { titolo: '', immagine: '', immagine_leggera: '', anteprima: '', yaw: 0, pitch: 0, descrizione: '' },
       itemFields: [
         { key: 'titolo', label: t('Titolo'), type: 'text' },
-        { key: 'immagine', label: t('Foto sferica'), type: 'image',
+        { key: 'immagine', label: t('Foto sferica'), type: 'image', dynamicImage: 'url_original',
           description: t('Equirettangolare 2:1, per esempio 4096 × 2048. Le foto piatte si vedrebbero stirate.') },
-        { key: 'immagine_leggera', label: t('Foto leggera'), type: 'image',
+        { key: 'immagine_leggera', label: t('Foto leggera'), type: 'image', dynamicImage: 'url_2048',
           description: t('La stessa foto a 2048 × 1024: la usano i telefoni e le schede grafiche che non reggono le foto grandi. Vuota: la foto grande, rimpicciolita nel browser quando serve.') },
-        { key: 'anteprima', label: t('Anteprima'), type: 'image',
+        { key: 'anteprima', label: t('Anteprima'), type: 'image', dynamicImage: 'url_medium',
           description: t('La miniatura nell\'elenco delle scene. Vuota: la miniatura che la Libreria media ricava dalla foto leggera o, se manca, dalla foto sferica; per le foto fuori dalla Libreria, la foto leggera intera.') },
         { key: 'yaw', label: t('Direzione'), type: 'range', min: -180, max: 180, step: 1,
           description: t('In gradi: 0 è il centro della foto, 90 un quarto di giro a destra, −90 a sinistra.') },

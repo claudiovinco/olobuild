@@ -909,6 +909,191 @@ class Olobuild_Dynamic_Content {
         return $items;
     }
 
+    /* ── Elenco di foto da un campo («Sorgente dinamica» › Foto di un campo) ──────────────
+     * Un ripetitore (scene del Tour 360, foto della Gallery Pro, slide di un carosello) si
+     * riempie con le foto salvate in un campo del post: una voce per foto, coi campi della voce
+     * mappati sulle parti della foto (_itemMap). Il campo può avere gli ID come array, come
+     * testo separato da virgole (WooCommerce), in JSON o come galleria di ACF.
+     */
+
+    /**
+     * Gli elenchi di foto proposti nel pannello: chiave del meta => etichetta e tipi di contenuto.
+     * WooCommerce e i campi galleria di ACF ci sono da soli; i plugin aggiungono i loro col filtro
+     * `olobuild_dynamic_image_lists` (OLObooking: la galleria e le foto 360° delle strutture).
+     *
+     * @return array<string,array{label:string,post_types:string[]}>
+     */
+    public static function image_lists() {
+        $lists = [];
+        if ( class_exists( 'WooCommerce' ) ) {
+            // Etichette in italiano come quelle delle altre fonti: il builder le traduce con t().
+            $lists['_product_image_gallery'] = [ 'label' => 'Galleria del prodotto (WooCommerce)', 'post_types' => [ 'product' ] ];
+        }
+        if ( function_exists( 'acf_get_field_groups' ) && function_exists( 'acf_get_fields' ) ) {
+            foreach ( (array) acf_get_field_groups() as $group ) {
+                foreach ( (array) acf_get_fields( $group['key'] ?? '' ) as $f ) {
+                    if ( 'gallery' === ( $f['type'] ?? '' ) && ! empty( $f['name'] ) ) {
+                        $lists[ $f['name'] ] = [ 'label' => ( $f['label'] ?? $f['name'] ) . ' (ACF)', 'post_types' => [] ];
+                    }
+                }
+            }
+        }
+        /**
+         * Elenchi di foto dei post per la «Sorgente dinamica» › Foto di un campo.
+         *
+         * @param array $lists chiave del meta => [ 'label' => etichetta, 'post_types' => [ tipi di contenuto ] ]
+         */
+        $lists = apply_filters( 'olobuild_dynamic_image_lists', $lists );
+        $out   = [];
+        foreach ( (array) $lists as $key => $def ) {
+            $key = trim( (string) $key );
+            if ( '' === $key ) {
+                continue;
+            }
+            $out[ $key ] = [
+                'label'      => (string) ( is_array( $def ) ? ( $def['label'] ?? $key ) : $def ),
+                'post_types' => is_array( $def ) ? array_values( array_map( 'strval', (array) ( $def['post_types'] ?? [] ) ) ) : [],
+            ];
+        }
+        return $out;
+    }
+
+    /**
+     * Gli ID delle foto salvate in un campo del post, nell'ordine del campo, senza doppioni e senza
+     * gli allegati che non esistono più o che non sono immagini.
+     *
+     * @param string $key     Chiave del meta.
+     * @param int    $post_id Post.
+     * @return int[]
+     */
+    public function image_list_ids( $key, $post_id ) {
+        $key     = trim( (string) $key );
+        $post_id = (int) $post_id;
+        if ( '' === $key || $post_id <= 0 ) {
+            return [];
+        }
+        $ids = self::ids_from_value( get_post_meta( $post_id, $key, true ) );
+        /**
+         * Gli ID delle foto di un elenco, per chi le salva in un altro modo.
+         *
+         * @param int[]  $ids
+         * @param string $key
+         * @param int    $post_id
+         */
+        $ids = (array) apply_filters( 'olobuild_dynamic_image_list_ids', $ids, $key, $post_id );
+        $ids = array_values( array_unique( array_filter( array_map( 'absint', $ids ) ) ) );
+        if ( $ids ) {
+            _prime_post_caches( $ids, false, true );
+        }
+        return array_values( array_filter( $ids, 'wp_attachment_is_image' ) );
+    }
+
+    /** Gli ID da un valore salvato: array (anche di array o oggetti con ID), testo con virgole, JSON, numero. */
+    private static function ids_from_value( $raw ) {
+        if ( is_string( $raw ) ) {
+            $t = trim( $raw );
+            if ( '' === $t ) {
+                return [];
+            }
+            if ( '[' === $t[0] || '{' === $t[0] ) {
+                $json = json_decode( $t, true );
+                if ( is_array( $json ) ) {
+                    return self::ids_from_value( $json );
+                }
+            }
+            $raw = preg_split( '/[\s,;|]+/', $t );
+        }
+        if ( is_numeric( $raw ) ) {
+            return [ (int) $raw ];
+        }
+        if ( ! is_array( $raw ) ) {
+            return [];
+        }
+        $ids = [];
+        foreach ( $raw as $v ) {
+            if ( is_array( $v ) ) {
+                $v = $v['ID'] ?? ( $v['id'] ?? ( $v['attachment_id'] ?? 0 ) );
+            } elseif ( is_object( $v ) ) {
+                $v = $v->ID ?? 0;
+            }
+            if ( is_numeric( $v ) && (int) $v > 0 ) {
+                $ids[] = (int) $v;
+            }
+        }
+        return $ids;
+    }
+
+    /**
+     * Le voci di un ripetitore dalle foto: `id` è l'ID della foto (la Gallery Pro ne ricava
+     * srcset e ingrandimento), gli altri campi vengono dalla mappatura.
+     *
+     * @param int[] $ids      ID delle foto.
+     * @param array $item_map campo della voce => parte della foto (url, url_original, title…).
+     * @return array
+     */
+    public function build_items_from_images( $ids, $item_map ) {
+        $items = [];
+        foreach ( array_values( (array) $ids ) as $i => $aid ) {
+            $item = [ 'id' => (int) $aid ];
+            foreach ( (array) $item_map as $item_key => $part ) {
+                $item[ $item_key ] = $this->image_part( (int) $aid, (string) $part, $i );
+            }
+            $items[] = $item;
+        }
+        return $items;
+    }
+
+    /** Il lato più lungo che una foto 360° può avere come texture: oltre, molte schede grafiche non la caricano. */
+    const MAX_ORIGINALE = 8192;
+
+    /** Una parte di una foto per la mappatura della «Sorgente dinamica». */
+    private function image_part( $aid, $part, $i ) {
+        switch ( $part ) {
+            case '_index':
+                return sprintf( '%02d', $i + 1 );
+            case 'url':
+                return (string) wp_get_attachment_image_url( $aid, 'full' );
+            case 'url_original':
+                return self::original_url( $aid );
+            case 'url_2048':
+                return (string) ( wp_get_attachment_image_url( $aid, '2048x2048' ) ?: wp_get_attachment_image_url( $aid, 'full' ) );
+            case 'url_large':
+                return (string) wp_get_attachment_image_url( $aid, 'large' );
+            case 'url_medium':
+                return (string) wp_get_attachment_image_url( $aid, 'medium' );
+            case 'url_thumb':
+                return (string) wp_get_attachment_image_url( $aid, 'thumbnail' );
+            case 'title':
+                return wp_strip_all_tags( (string) get_the_title( $aid ) );
+            case 'caption':
+                return wp_strip_all_tags( (string) wp_get_attachment_caption( $aid ) );
+            case 'alt':
+                return wp_strip_all_tags( (string) get_post_meta( $aid, '_wp_attachment_image_alt', true ) );
+            case 'description':
+                $att = get_post( $aid );
+                return $att ? trim( wp_strip_all_tags( (string) $att->post_content ) ) : '';
+            default:
+                return '';
+        }
+    }
+
+    /**
+     * Il file caricato, prima che WordPress lo rimpicciolisse a 2560 px: serve alle foto 360°
+     * (8192 × 4096). Se è più largo di MAX_ORIGINALE, la versione rimpicciolita.
+     */
+    private static function original_url( $aid ) {
+        $full = (string) wp_get_attachment_image_url( $aid, 'full' );
+        $meta = wp_get_attachment_metadata( $aid );
+        if ( is_array( $meta ) && ! empty( $meta['original_image'] ) && function_exists( 'wp_get_original_image_path' ) ) {
+            $path = wp_get_original_image_path( $aid );
+            $dim  = ( $path && is_readable( $path ) ) ? wp_getimagesize( $path ) : false;
+            if ( is_array( $dim ) && (int) $dim[0] > 0 && (int) $dim[0] <= self::MAX_ORIGINALE ) {
+                return (string) ( wp_get_original_image_url( $aid ) ?: $full );
+            }
+        }
+        return $full;
+    }
+
     /**
      * Resolve a comments field.
      */
@@ -1216,6 +1401,12 @@ class Olobuild_Dynamic_Content {
                 [ 'key' => 'template_id', 'label' => 'ID template Olobuild', 'type' => 'text' ],
             ],
         ];
+
+        // Elenchi di foto per i ripetitori («Sorgente dinamica» › Foto di un campo).
+        $sources['image_lists'] = [];
+        foreach ( self::image_lists() as $key => $def ) {
+            $sources['image_lists'][] = [ 'value' => $key, 'label' => $def['label'], 'post_types' => $def['post_types'] ];
+        }
 
         return $sources;
     }

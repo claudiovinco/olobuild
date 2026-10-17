@@ -6,9 +6,30 @@ class Olobuild_Theme_Importer {
     public static function get_themes() {
         $themes_dir = OLOBUILD_PATH . 'assets/data/themes/';
         $themes = [];
-        if ( ! is_dir( $themes_dir ) ) return $themes;
 
-        foreach ( glob( $themes_dir . '*/theme.json' ) as $file ) {
+        // Elenco dei theme.json da scansionare: quelli del plugin + quelli portati da plugin
+        // esterni (es. olo-booking) via filtro `olobuild_external_theme_dirs`. Il filtro
+        // riceve un array vuoto e torna cartelle assolute: ciascuna può contenere direttamente
+        // un theme.json (singolo tema) o cartelle figlio con un theme.json ciascuna (bundle di
+        // più temi dallo stesso plugin). Vedi README-themes.md del plugin esterno.
+        $files = [];
+        if ( is_dir( $themes_dir ) ) {
+            $local = glob( $themes_dir . '*/theme.json' );
+            if ( $local ) $files = $local;
+        }
+        $external_dirs = (array) apply_filters( 'olobuild_external_theme_dirs', [] );
+        foreach ( $external_dirs as $extra ) {
+            $extra = rtrim( (string) $extra, '/\\' );
+            if ( '' === $extra || ! is_dir( $extra ) ) continue;
+            if ( file_exists( $extra . '/theme.json' ) ) {
+                $files[] = $extra . '/theme.json';
+                continue;
+            }
+            $extra_files = glob( $extra . '/*/theme.json' );
+            if ( $extra_files ) $files = array_merge( $files, $extra_files );
+        }
+
+        foreach ( $files as $file ) {
             $data = json_decode( file_get_contents( $file ), true );
             if ( ! $data || empty( $data['id'] ) ) continue;
             // Tema non ancora finito (theme.json → in_lavorazione): la sua demo si apre dall'indirizzo
@@ -53,9 +74,187 @@ class Olobuild_Theme_Importer {
                 'version' => $data['version'] ?? '1.0', 'screenshot' => $screenshot,
                 'screenshot_mobile' => $screenshot_mobile,
                 'tags' => $data['tags'] ?? [], 'dir' => $dir,
+                // Dipendenza da un plugin esterno (schema: vedi check_requires_plugin).
+                // Null = tema autonomo (99/100). Il selettore mostra badge + «Scopri» quando
+                // ne serve uno che il sito non ha; i temi locali del plugin esterno (dir presente)
+                // sono comunque importabili se il plugin è attivo, perché la cartella c'è.
+                'requires_plugin' => isset( $data['requires_plugin'] ) && is_array( $data['requires_plugin'] )
+                    ? $data['requires_plugin'] : null,
+                'is_remote_only' => false,
             ], self::build_preview( $data, $theme_id ) );
         }
+
+        // Merge con il catalog remoto: temi che non vivono dentro questa installazione (perché
+        // il loro plugin non è installato) → card informativa con «Scopri X» invece di
+        // «Importa tema». Dedup per id: un tema locale (anche portato da plugin esterno via
+        // olobuild_external_theme_dirs) vince sulla sua controparte remota.
+        if ( ! class_exists( 'Olobuild_Theme_Remote_Catalog' ) ) {
+            require_once OLOBUILD_PATH . 'includes/class-theme-remote-catalog.php';
+        }
+        $existing = wp_list_pluck( $themes, 'id' );
+        foreach ( Olobuild_Theme_Remote_Catalog::fetch() as $remote ) {
+            if ( empty( $remote['id'] ) || in_array( $remote['id'], $existing, true ) ) continue;
+            $themes[] = self::normalize_remote_theme( $remote );
+        }
+
+        // Valutazione requires_plugin → requires_plugin_ok (boolean). Il selettore mostra
+        // «Scopri {label}» (link al purchase_url) invece di «Importa tema» quando è false.
+        // requires_plugin_status per la riga «Requisiti» della card: ok, old (plugin attivo ma
+        // più vecchio di min_version, o tema che arriva con una sua versione successiva),
+        // missing (plugin non attivo). Un plugin più vecchio di min_version non importa il
+        // tema: le sue tile potrebbero non esserci ancora.
+        foreach ( $themes as &$t ) {
+            if ( empty( $t['requires_plugin'] ) ) {
+                $t['requires_plugin_ok']     = true;
+                $t['requires_plugin_status'] = '';
+                continue;
+            }
+            $req      = $t['requires_plugin'];
+            $attivo   = self::check_requires_plugin( $req );
+            $min      = isset( $req['min_version'] ) ? trim( (string) $req['min_version'] ) : '';
+            $versione = ( $attivo && '' !== $min ) ? self::installed_plugin_version( $req ) : '';
+            $vecchio  = '' !== $versione && version_compare( $versione, $min, '<' );
+            $t['requires_plugin_ok']     = $attivo && ! $vecchio;
+            $t['requires_plugin_status'] = ! $attivo ? 'missing' : ( ( $vecchio || ! empty( $t['is_remote_only'] ) ) ? 'old' : 'ok' );
+            $t['requires_plugin']        = self::plugin_badge( $req );
+        }
+        unset( $t );
+
         return $themes;
+    }
+
+    /**
+     * Un payload del catalog remoto nella stessa forma dei temi locali: niente `dir`
+     * (non importabile: template non ci sono), `is_remote_only=true`, screenshot
+     * dai campi `screenshot/screenshot_mobile` del JSON remoto o costruiti dalla
+     * library remota con la stessa convenzione dei locali (preview_v).
+     */
+    private static function normalize_remote_theme( $r ) {
+        $theme_id = (string) $r['id'];
+        $screenshot        = isset( $r['screenshot'] ) ? (string) $r['screenshot'] : '';
+        $screenshot_mobile = isset( $r['screenshot_mobile'] ) ? (string) $r['screenshot_mobile'] : '';
+        if ( '' === $screenshot ) {
+            $lib = rtrim( (string) apply_filters( 'olobuild_library_url', 'https://olotheme.com/olobuild-library' ), '/' );
+            if ( '' !== $lib ) {
+                $pv   = isset( $r['preview_v'] ) ? (string) $r['preview_v'] : '';
+                $file = ( '' === $pv || '1' === $pv ) ? 'screenshot.jpg' : 'screenshot-' . sanitize_file_name( $pv ) . '.jpg';
+                $screenshot = $lib . '/themes/' . $theme_id . '/' . $file . '?v=' . rawurlencode( (string) ( $r['preview_v'] ?? ( $r['version'] ?? '1' ) ) );
+                $pm = isset( $r['preview_mobile_v'] ) ? sanitize_file_name( (string) $r['preview_mobile_v'] ) : '';
+                if ( '' !== $pm ) {
+                    $screenshot_mobile = $lib . '/themes/' . $theme_id . '/screenshot-mobile-' . $pm . '.jpg?v=' . rawurlencode( $pm );
+                }
+            }
+        }
+        return array_merge( [
+            'id' => $theme_id, 'name' => $r['name'] ?? $theme_id,
+            'description' => $r['description'] ?? '', 'author' => $r['author'] ?? '',
+            'version' => $r['version'] ?? '1.0',
+            'screenshot' => $screenshot, 'screenshot_mobile' => $screenshot_mobile,
+            'tags' => $r['tags'] ?? [], 'dir' => '',
+            'requires_plugin' => isset( $r['requires_plugin'] ) && is_array( $r['requires_plugin'] )
+                ? $r['requires_plugin'] : null,
+            'is_remote_only' => true,
+        ], self::build_preview( $r, $theme_id ) );
+    }
+
+    /**
+     * Valuta se la dipendenza plugin è soddisfatta su questo sito. Il campo `check`
+     * del manifest è una stringa interpretata così:
+     *   - constant:NOME_COSTANTE   → defined()
+     *   - function:nome_funzione   → function_exists()
+     *   - class:Nome_Classe        → class_exists()
+     *   - plugin:cartella/file.php → is_plugin_active()
+     * Senza `check` esplicito, se c'è `slug` fallback su is_plugin_active() con
+     * «{slug}/{slug}.php». Qualsiasi errore di parsing → false (prudenza: meglio
+     * mostrare «Scopri X» di un «Importa» che poi fallisce).
+     */
+    public static function check_requires_plugin( $req ) {
+        if ( ! is_array( $req ) ) return false;
+        $check = isset( $req['check'] ) ? (string) $req['check'] : '';
+        if ( '' !== $check && false !== strpos( $check, ':' ) ) {
+            list( $kind, $target ) = array_pad( explode( ':', $check, 2 ), 2, '' );
+            $kind   = strtolower( trim( $kind ) );
+            $target = trim( $target );
+            if ( '' === $target ) return false;
+            if ( 'constant' === $kind ) return defined( $target );
+            if ( 'function' === $kind ) return function_exists( $target );
+            if ( 'class' === $kind )    return class_exists( $target );
+            if ( 'plugin' === $kind ) {
+                if ( ! function_exists( 'is_plugin_active' ) ) {
+                    require_once ABSPATH . 'wp-admin/includes/plugin.php';
+                }
+                return is_plugin_active( $target );
+            }
+            return false;
+        }
+        $slug = isset( $req['slug'] ) ? sanitize_key( (string) $req['slug'] ) : '';
+        if ( '' === $slug ) return false;
+        if ( ! function_exists( 'is_plugin_active' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+        return is_plugin_active( $slug . '/' . $slug . '.php' );
+    }
+
+    /**
+     * Versione installata del plugin richiesto, '' se non si sa. Prima il valore della
+     * costante del `check`, se è un numero di versione (OLObooking: OLO_BOOK_ACCOMMODATION_THEMES
+     * vale OLO_BOOK_VERSION); poi l'intestazione Version del file del plugin (`check`
+     * plugin:cartella/file.php, oppure {slug}/{slug}.php). Versione ignota = nessun blocco.
+     */
+    private static function installed_plugin_version( $req ) {
+        $check = isset( $req['check'] ) ? trim( (string) $req['check'] ) : '';
+        if ( 0 === stripos( $check, 'constant:' ) ) {
+            $nome = trim( substr( $check, 9 ) );
+            $v    = ( '' !== $nome && defined( $nome ) ) ? constant( $nome ) : '';
+            if ( is_string( $v ) && preg_match( '/^\d+(\.\d+)+/', $v ) ) return $v;
+        }
+        $file = 0 === stripos( $check, 'plugin:' ) ? trim( substr( $check, 7 ) ) : '';
+        if ( '' === $file && ! empty( $req['slug'] ) ) {
+            $slug = sanitize_key( (string) $req['slug'] );
+            $file = '' !== $slug ? $slug . '/' . $slug . '.php' : '';
+        }
+        // validate_file: niente «..» né percorsi assoluti (il manifest può venire dal catalogo remoto).
+        if ( '' === $file || 0 !== validate_file( $file ) || ! defined( 'WP_PLUGIN_DIR' ) ) return '';
+        $path = WP_PLUGIN_DIR . '/' . $file;
+        if ( ! is_readable( $path ) ) return '';
+        if ( ! function_exists( 'get_plugin_data' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+        $dati = get_plugin_data( $path, false, false );
+        return isset( $dati['Version'] ) ? (string) $dati['Version'] : '';
+    }
+
+    /**
+     * Il bollino del plugin richiesto: il logo per le superfici chiare (`logo`) e quello per le
+     * scure (`logo_light`), nella riga «Requisiti» delle card del selettore e della Vetrina.
+     * I plugin della famiglia OLO hanno il loro in assets/img/plugins/; un plugin esterno dà il
+     * suo col filtro `olobuild_requires_plugin_badge` ( [ 'logo' => url, 'logo_light' => url ],
+     * slug, requires_plugin ). Un logo scritto nel manifest del tema vince su tutti e due.
+     */
+    private static function plugin_badge( $req ) {
+        $slug  = isset( $req['slug'] ) ? sanitize_key( (string) $req['slug'] ) : '';
+        $noti  = [
+            'olo-booking' => [ 'logo' => 'olo-booking.png', 'logo_light' => 'olo-booking-w.png' ],
+        ];
+        $badge = [];
+        if ( isset( $noti[ $slug ] ) ) {
+            foreach ( $noti[ $slug ] as $chiave => $png ) {
+                $badge[ $chiave ] = OLOBUILD_URL . 'assets/img/plugins/' . $png;
+            }
+        }
+        $badge = (array) apply_filters( 'olobuild_requires_plugin_badge', $badge, $slug, $req );
+        foreach ( [ 'logo', 'logo_light' ] as $chiave ) {
+            $url = isset( $req[ $chiave ] ) ? esc_url_raw( (string) $req[ $chiave ] ) : '';
+            if ( '' === $url && isset( $badge[ $chiave ] ) ) {
+                $url = esc_url_raw( (string) $badge[ $chiave ] );
+            }
+            if ( '' !== $url ) {
+                $req[ $chiave ] = $url;
+            } else {
+                unset( $req[ $chiave ] );
+            }
+        }
+        return $req;
     }
 
     /**
@@ -157,6 +356,25 @@ class Olobuild_Theme_Importer {
         $theme = null;
         foreach ( $themes as $t ) { if ( $t['id'] === $theme_id ) { $theme = $t; break; } }
         if ( ! $theme ) return new WP_Error( 'not_found', 'Tema non trovato: ' . $theme_id );
+
+        // Tema del catalog remoto senza plugin fornitore installato: niente template
+        // in locale → non importabile. Il selettore mostra già «Scopri {label}»;
+        // chi aggira la UI riceve l'errore qui.
+        if ( ! empty( $theme['is_remote_only'] ) || empty( $theme['dir'] ) ) {
+            $req   = ( is_array( $theme['requires_plugin'] ?? null ) ) ? $theme['requires_plugin'] : [];
+            $label = ! empty( $req['label'] ) ? (string) $req['label'] : ( $req['slug'] ?? 'il plugin richiesto' );
+            return new WP_Error( 'requires_plugin', sprintf( 'Per importare questo tema serve %s.', $label ), [ 'requires_plugin' => $req ] );
+        }
+        // Dipendenza dichiarata ma non ancora soddisfatta (plugin disattivato dopo registrazione):
+        // guard di sicurezza, lo stato è ricalcolato in get_themes().
+        if ( ! empty( $theme['requires_plugin'] ) && empty( $theme['requires_plugin_ok'] ) ) {
+            $req   = $theme['requires_plugin'];
+            $label = ! empty( $req['label'] ) ? (string) $req['label'] : ( $req['slug'] ?? 'il plugin richiesto' );
+            if ( 'old' === ( $theme['requires_plugin_status'] ?? '' ) && ! empty( $req['min_version'] ) ) {
+                return new WP_Error( 'requires_plugin', sprintf( 'Aggiorna %1$s alla %2$s o successiva prima di importare questo tema.', $label, (string) $req['min_version'] ), [ 'requires_plugin' => $req ] );
+            }
+            return new WP_Error( 'requires_plugin', sprintf( 'Attiva %s prima di importare questo tema.', $label ), [ 'requires_plugin' => $req ] );
+        }
 
         $dir = $theme['dir'];
         $theme_json = json_decode( file_get_contents( $dir . '/theme.json' ), true );

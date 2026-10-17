@@ -29367,3 +29367,100 @@ msgstr "Ein Kreis neben der Nachricht, auf der Seite des Absenders. Leer = kein 
 #: includes/tiles
 msgid "La bacheca della rete"
 msgstr "Das Brett des Netzwerks"
+
+#: src/theme-picker
+msgid "Temi Olobuild"
+msgstr "OLObuild-Themes"
+
+#: src/theme-picker
+msgid "Scegli un tema: configura colori, font e sezioni del sito in un click."
+msgstr "Wähle ein Theme: Farben, Schriften und Bereiche der Website mit einem Klick einrichten."
+
+#: src/theme-picker
+msgid "Cerca un tema…"
+msgstr "Theme suchen…"
+
+#: src/theme-picker
+msgid "Tutti i temi"
+msgstr "Alle Themes"
+
+#: src/theme-picker
+msgid "Importa tema"
+msgstr "Theme importieren"
+
+#: src/theme-picker
+msgid "Caricamento temi…"
+msgstr "Themes werden geladen…"
+
+#: src/theme-picker
+msgid "Nessun tema per questi filtri."
+msgstr "Keine Themes für diese Filter."
+
+#: src/theme-picker
+msgid "Nessun tema disponibile."
+msgstr "Keine Themes verfügbar."
+
+#: src/theme-picker
+msgid "Non è stato possibile caricare i temi."
+msgstr "Die Themes konnten nicht geladen werden."
+
+#: src/theme-picker
+msgid "tema"
+msgstr "Theme"
+
+#: src/theme-picker
+msgid "temi"
+msgstr "Themes"
+
+#: src/theme-picker
+msgid "pagina"
+msgstr "Seite"
+
+#: src/theme-picker
+msgid "Importazione in corso…"
+msgstr "Import läuft…"
+
+#: src/theme-picker
+msgid "Requisiti"
+msgstr "Voraussetzungen"
+
+#: src/theme-picker
+#, php-format
+msgid "Con %s"
+msgstr "Mit %s"
+
+#: src/theme-picker
+msgid "Solo OLObuild"
+msgstr "Nur OLObuild"
+
+#: src/theme-picker
+msgid "attivo"
+msgstr "aktiv"
+
+#: src/theme-picker
+msgid "da aggiornare"
+msgstr "Update nötig"
+
+#: src/theme-picker
+msgid "da installare"
+msgstr "nicht installiert"
+
+#: src/theme-picker
+#, php-format
+msgid "Richiede %s"
+msgstr "Erfordert %s"
+
+#: src/theme-picker
+#, php-format
+msgid "Richiede %1$s %2$s o successiva"
+msgstr "Erfordert %1$s %2$s oder neuer"
+
+#: src/theme-picker
+#, php-format
+msgid "Scopri %s"
+msgstr "%s entdecken"
+
+#: src/theme-picker
+#, php-format
+msgid "Aggiorna %s"
+msgstr "%s aktualisieren"

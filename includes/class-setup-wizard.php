@@ -405,10 +405,37 @@ class Olobuild_Setup_Wizard {
                         name: <?php echo wp_json_encode( __( 'Vuoto', 'olobuild' ) ); ?>,
                         desc: <?php echo wp_json_encode( __( 'Parti da zero, tela bianca.', 'olobuild' ) ); ?>
                     },
-                    i18n: {
-                        title: <?php echo wp_json_encode( __( 'Temi Olobuild', 'olobuild' ) ); ?>,
-                        importLabel: <?php echo wp_json_encode( __( 'Importa tema', 'olobuild' ) ); ?>
-                    },
+                    i18n: <?php echo wp_json_encode( [
+                        'title'                => __( 'Temi Olobuild', 'olobuild' ),
+                        'importLabel'          => __( 'Importa tema', 'olobuild' ),
+                        'searchPlaceholder'    => __( 'Cerca un tema…', 'olobuild' ),
+                        'categoriesLabel'      => __( 'Categorie', 'olobuild' ),
+                        'allLabel'             => __( 'Tutti i temi', 'olobuild' ),
+                        'detailsLabel'         => __( 'Dettagli', 'olobuild' ),
+                        'loading'              => __( 'Caricamento temi…', 'olobuild' ),
+                        'emptyFiltered'        => __( 'Nessun tema per questi filtri.', 'olobuild' ),
+                        'emptyNone'            => __( 'Nessun tema disponibile.', 'olobuild' ),
+                        'loadError'            => __( 'Non è stato possibile caricare i temi.', 'olobuild' ),
+                        'themeWord'            => __( 'tema', 'olobuild' ),
+                        'themesWord'           => __( 'temi', 'olobuild' ),
+                        'pageWord'             => __( 'pagina', 'olobuild' ),
+                        'pagesWord'            => __( 'pagine', 'olobuild' ),
+                        'requirementsLabel'    => __( 'Requisiti', 'olobuild' ),
+                        /* translators: %s: nome del plugin richiesto dai temi (es. OLObooking) */
+                        'withPluginLabel'      => __( 'Con %s', 'olobuild' ),
+                        'onlyOlobuildLabel'    => __( 'Solo OLObuild', 'olobuild' ),
+                        'reqOkLabel'           => __( 'attivo', 'olobuild' ),
+                        'reqOldLabel'          => __( 'da aggiornare', 'olobuild' ),
+                        'reqMissingLabel'      => __( 'da installare', 'olobuild' ),
+                        /* translators: %s: nome del plugin */
+                        'requiresTitle'        => __( 'Richiede %s', 'olobuild' ),
+                        /* translators: 1: nome del plugin, 2: versione minima */
+                        'requiresVersionTitle' => __( 'Richiede %1$s %2$s o successiva', 'olobuild' ),
+                        /* translators: %s: nome del plugin */
+                        'discoverLabel'        => __( 'Scopri %s', 'olobuild' ),
+                        /* translators: %s: nome del plugin */
+                        'updateLabel'          => __( 'Aggiorna %s', 'olobuild' ),
+                    ] ); ?>,
                     onSelect: function (id) {
                         selectedThemeId = id;
                         var b = document.getElementById('btn-import');

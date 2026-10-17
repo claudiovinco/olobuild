@@ -1573,6 +1573,38 @@ class Olobuild_Rest_Api {
             return new WP_Error( 'missing_params', 'source and field are required.', [ 'status' => 400 ] );
         }
 
+        // «Sorgente dinamica» › Foto di un campo: quante foto ha il contenuto più recente che ne ha
+        // (fra i tipi di contenuto dell'elenco), per sapere subito se il campo è quello giusto.
+        if ( ! empty( $body['query'] ) && is_array( $body['query'] ) && 'images' === ( $body['query']['source'] ?? '' ) ) {
+            $key   = trim( sanitize_text_field( (string) ( $body['query']['images_key'] ?? '' ) ) );
+            $lists = Olobuild_Dynamic_Content::image_lists();
+            $types = ! empty( $lists[ $key ]['post_types'] ) ? $lists[ $key ]['post_types'] : 'any';
+            if ( '' === $key ) {
+                return rest_ensure_response( [ 'value' => 0, 'post_id' => 0 ] );
+            }
+            $dc      = new Olobuild_Dynamic_Content();
+            $recenti = get_posts( [
+                'post_type'      => $types,
+                'post_status'    => 'publish',
+                'posts_per_page' => 25,
+                'fields'         => 'ids',
+                'meta_key'       => $key, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- anteprima del builder: i contenuti col campo delle foto, 25 al massimo.
+                'meta_compare'   => 'EXISTS',
+                'orderby'        => 'date',
+                'order'          => 'DESC',
+            ] );
+            foreach ( $recenti as $pid ) {
+                if ( ! current_user_can( 'read_post', $pid ) ) {
+                    continue;
+                }
+                $ids = $dc->image_list_ids( $key, (int) $pid );
+                if ( $ids ) {
+                    return rest_ensure_response( [ 'value' => count( $ids ), 'post_id' => (int) $pid, 'title' => wp_strip_all_tags( get_the_title( $pid ) ) ] );
+                }
+            }
+            return rest_ensure_response( [ 'value' => 0, 'post_id' => 0 ] );
+        }
+
         // Il primo risultato della query di un ripetitore («Sorgente dinamica»): chi
         // la imposta vede subito se i filtri trovano qualcosa, e che cosa.
         if ( ! empty( $body['query'] ) && is_array( $body['query'] ) ) {

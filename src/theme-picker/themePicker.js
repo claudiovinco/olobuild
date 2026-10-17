@@ -36,10 +36,32 @@ const DEFAULT_I18N = {
   themesWord: 'temi',
   pageWord: 'pagina',
   pagesWord: 'pagine',
+  busyLabel: 'Importazione in corso…',
+  // Requisiti: filtro per plugin richiesto e riga col bollino nella card
+  requirementsLabel: 'Requisiti',
+  withPluginLabel: 'Con %s',
+  onlyOlobuildLabel: 'Solo OLObuild',
+  reqOkLabel: 'attivo',
+  reqOldLabel: 'da aggiornare',
+  reqMissingLabel: 'da installare',
+  requiresTitle: 'Richiede %s',
+  requiresVersionTitle: 'Richiede %1$s %2$s o successiva',
+  discoverLabel: 'Scopri %s',
+  updateLabel: 'Aggiorna %s',
 };
 
 function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+}
+
+/* «Con %s», «Richiede %1$s %2$s o successiva»: segnaposti come in gettext, così le
+   traduzioni del catalogo possono cambiare l'ordine delle parole. */
+function fmt(s, ...args) {
+  let i = 0;
+  return String(s == null ? '' : s).replace(/%(?:(\d)\$)?s/g, (m, n) => {
+    const v = n ? args[n - 1] : args[i++];
+    return v == null ? '' : String(v);
+  });
 }
 
 /* Carica i Google Font display dei temi (una sola volta per documento). */
@@ -87,6 +109,10 @@ export function createThemePicker(opts = {}) {
   let query = '';
   let CATS = ['Tutti'];
   let catBtns = {};
+  // Filtro «Requisiti»: '' = tutti, lo slug di un plugin richiesto, 'none' = solo OLObuild
+  let activeReq = '';
+  let REQS = [];
+  let reqBtns = {};
   let selectedId = null;
   let rootEl = null;     // .otmp (sidebar+main) — anche figlio dell'overlay in modal
   let overlayEl = null;  // modal only
@@ -102,6 +128,10 @@ export function createThemePicker(opts = {}) {
         <div>
           <div class="otmp-side-lab">${esc(i18n.categoriesLabel)}</div>
           <div class="otmp-cats" data-cats></div>
+        </div>
+        <div data-reqs-wrap hidden>
+          <div class="otmp-side-lab">${esc(i18n.requirementsLabel)}</div>
+          <div class="otmp-cats" data-reqs role="group" aria-label="${esc(i18n.requirementsLabel)}"></div>
         </div>
       </aside>
       <div class="otmp-main">
@@ -126,7 +156,7 @@ export function createThemePicker(opts = {}) {
             <button class="otmp-hd-x" data-close aria-label="${esc(i18n.closeLabel)}">${ICON.close}</button>
           </div>
           <div class="otmp otmp--modal">${bodyHTML()}</div>
-          <div class="otmp-busy" data-busy hidden><div class="otmp-spin"></div><span>${esc(opts.busyLabel || 'Importazione in corso…')}</span></div>
+          <div class="otmp-busy" data-busy hidden><div class="otmp-spin"></div><span>${esc(opts.busyLabel || i18n.busyLabel)}</span></div>
         </div>`;
       rootEl = overlayEl.querySelector('.otmp');
     } else {
@@ -192,22 +222,80 @@ export function createThemePicker(opts = {}) {
     const ver = n
       ? `<span class="otmp-cb-ver">${n} ${esc(n === 1 ? i18n.pageWord : i18n.pagesWord)}</span>`
       : `<span class="otmp-cb-ver">v${esc(t.version || '1.0')}</span>`;
+    // Dipendenza plugin (campo requires_plugin nel manifest): riga «Requisiti» col bollino.
+    // Quando non è soddisfatta — plugin non installato, più vecchio di min_version o tema solo
+    // nel catalog remoto — l'azione «Importa tema» diventa «Scopri/Aggiorna {label}» verso purchase_url.
+    const req = reqOf(t);
+    const reqOk = !req || t.requires_plugin_ok !== false;
+    const reqLabel = req ? (req.label || req.slug || '') : '';
+    const status = req ? reqStatus(t) : '';
+    // Tema che c'è solo nel catalogo remoto: i suoi file arrivano col plugin che lo porta,
+    // quindi qui non si importa anche se il plugin è attivo (una versione che non ha ancora il tema).
+    const blocked = (req && !reqOk) || !!t.is_remote_only;
+    const discoverBtn = (req && blocked && req.purchase_url)
+      ? `<a class="otmp-cb-btn is-discover" href="${esc(req.purchase_url)}" target="_blank" rel="noopener" data-stop>${ICON.ext}${esc(fmt(status === 'old' ? i18n.updateLabel : i18n.discoverLabel, reqLabel))}</a>`
+      : '';
     const foot = selectMode || action === 'browse'
-      ? `<div class="otmp-cb-foot">${ver}${link ? `<span class="otmp-cb-spacer"></span>${link}` : ''}</div>`
-      : `<div class="otmp-cb-foot">
-           ${ver}${link}
-           <button class="otmp-cb-btn" data-import="${esc(t.id)}">${ICON.import}${esc(i18n.importLabel)}</button>
-         </div>`;
-    return `<article class="otmp-card${selectMode ? ' is-select' : ''}${selectMode && selectedId === t.id ? ' is-selected' : ''}" style="${style}"${selectMode ? ` role="button" tabindex="0" data-pick="${esc(t.id)}"` : ''}>
+      ? `<div class="otmp-cb-foot">${ver}${link ? `<span class="otmp-cb-spacer"></span>${link}` : ''}${selectMode && blocked ? discoverBtn : ''}</div>`
+      : blocked
+        ? `<div class="otmp-cb-foot">${ver}${link}${discoverBtn}</div>`
+        : `<div class="otmp-cb-foot">
+             ${ver}${link}
+             <button class="otmp-cb-btn" data-import="${esc(t.id)}">${ICON.import}${esc(i18n.importLabel)}</button>
+           </div>`;
+    const cardCls = `otmp-card${selectMode ? ' is-select' : ''}${selectMode && selectedId === t.id ? ' is-selected' : ''}${req ? ' has-req' : ''}${blocked ? ' req-missing' : ''}`;
+    return `<article class="${cardCls}" style="${style}"${selectMode && !blocked ? ` role="button" tabindex="0" data-pick="${esc(t.id)}"` : ''}>
         ${previewHTML(t)}
         <div class="otmp-cb">
           ${t.category ? `<div class="otmp-cb-cat">${esc(t.category)}</div>` : ''}
           <div class="otmp-cb-name">${esc(t.name || '')}</div>
           <p class="otmp-cb-desc">${esc(t.description || '')}</p>
           ${tags ? `<div class="otmp-cb-tags">${tags}</div>` : ''}
+          ${req ? reqRowHTML(req, status) : ''}
           ${foot}
         </div>
       </article>`;
+  }
+
+  // Il plugin che il tema richiede (requires_plugin del manifest), null per i temi autonomi.
+  function reqOf(t) {
+    return t && t.requires_plugin && typeof t.requires_plugin === 'object' ? t.requires_plugin : null;
+  }
+  // Chiave del filtro «Requisiti»: lo slug del plugin richiesto, 'none' per i temi che chiedono solo OLObuild.
+  function reqKey(t) {
+    const r = reqOf(t);
+    return r ? String(r.slug || r.label || 'plugin') : 'none';
+  }
+  function reqName(r) {
+    return r.key === 'none' ? i18n.onlyOlobuildLabel : fmt(i18n.withPluginLabel, r.label);
+  }
+  // Stato del requisito sul sito: requires_plugin_status dal server; con un server di prima
+  // si ricava da requires_plugin_ok e is_remote_only.
+  function reqStatus(t) {
+    const s = t.requires_plugin_status;
+    if (s === 'ok' || s === 'old' || s === 'missing') return s;
+    if (t.requires_plugin_ok === false) return 'missing';
+    return t.is_remote_only ? 'old' : 'ok';
+  }
+
+  // Riga «Requisiti» della card: il bollino del plugin (il suo logo, per superfici chiare o
+  // scure come il selettore; senza logo, o se non carica, il nome), la versione minima e lo
+  // stato sul sito.
+  function reqRowHTML(req, status) {
+    const label = String(req.label || req.slug || '');
+    const logo = scuro ? (req.logo_light || req.logo) : (req.logo || req.logo_light);
+    const nome = `<span class="otmp-bollino-t"${logo ? ' hidden' : ''}>${esc(label)}</span>`;
+    const mark = logo
+      ? `<img class="otmp-bollino-img" src="${esc(logo)}" alt="${esc(label)}" loading="lazy" decoding="async" onerror="this.nextElementSibling.hidden=false;this.remove();"/>${nome}`
+      : nome;
+    const min = req.min_version ? String(req.min_version) : '';
+    const title = min ? fmt(i18n.requiresVersionTitle, label, min) : fmt(i18n.requiresTitle, label);
+    const st = status === 'ok' ? i18n.reqOkLabel : (status === 'old' ? i18n.reqOldLabel : i18n.reqMissingLabel);
+    return `<div class="otmp-cb-req is-${esc(status)}" title="${esc(title)}">
+          <span class="otmp-cb-req-lab">${esc(i18n.requirementsLabel)}</span>
+          <span class="otmp-bollino">${mark}${min ? `<span class="otmp-bollino-v">${esc(min)}+</span>` : ''}</span>
+          <span class="otmp-cb-req-st"><i></i>${esc(st)}</span>
+        </div>`;
   }
 
   function selectCard(id, theme) {
@@ -220,16 +308,26 @@ export function createThemePicker(opts = {}) {
   function renderGrid() {
     const grid = q('[data-grid]');
     if (!grid) return;
+    // La ricerca guarda anche il nome del plugin richiesto («olobooking» trova i suoi temi).
     const bySearch = themes.filter(t => !query
-      || (`${t.name} ${t.category} ${(t.tags || []).join(' ')} ${t.description}`).toLowerCase().includes(query));
+      || (`${t.name} ${t.category} ${(t.tags || []).join(' ')} ${t.description} ${reqOf(t) ? (reqOf(t).label || reqOf(t).slug || '') : ''}`).toLowerCase().includes(query));
+    const matchCat = t => activeCat === 'Tutti' || t.category === activeCat;
+    const matchReq = t => !activeReq || reqKey(t) === activeReq;
+    // Conteggi a faccette: ogni gruppo conta i temi che passano la ricerca e l'altro gruppo.
+    const byReq = bySearch.filter(matchReq);
     CATS.forEach(c => {
-      const n = c === 'Tutti' ? bySearch.length : bySearch.filter(t => t.category === c).length;
+      const n = c === 'Tutti' ? byReq.length : byReq.filter(t => t.category === c).length;
       const b = catBtns[c];
       if (b) b.querySelector('.n').textContent = n;
     });
-    const list = bySearch.filter(t => activeCat === 'Tutti' || t.category === activeCat);
+    const byCat = bySearch.filter(matchCat);
+    REQS.forEach(r => {
+      const b = reqBtns[r.key];
+      if (b) b.querySelector('.n').textContent = byCat.filter(t => reqKey(t) === r.key).length;
+    });
+    const list = byCat.filter(matchReq);
     // card "Vuoto" (solo senza filtri attivi)
-    const showBlank = blank && action === 'select' && activeCat === 'Tutti' && !query;
+    const showBlank = blank && action === 'select' && activeCat === 'Tutti' && !activeReq && !query;
     const cards = list.map(cardHTML);
     if (showBlank) cards.push(cardHTML(Object.assign({ _blank: true }, blank)));
     const emptyTxt = themes.length ? i18n.emptyFiltered : (loadError || i18n.emptyNone);
@@ -252,7 +350,10 @@ export function createThemePicker(opts = {}) {
     // il link "Dettagli" non deve selezionare/attivare la card
     grid.querySelectorAll('[data-stop]').forEach(a => a.addEventListener('click', e => e.stopPropagation()));
 
-    const titleEl = q('[data-title]'); if (titleEl) titleEl.textContent = activeCat === 'Tutti' ? i18n.allLabel : activeCat;
+    const reqSel = activeReq ? REQS.find(r => r.key === activeReq) : null;
+    const catTitle = activeCat === 'Tutti' ? i18n.allLabel : activeCat;
+    const titleEl = q('[data-title]');
+    if (titleEl) titleEl.textContent = !reqSel ? catTitle : (activeCat === 'Tutti' ? reqName(reqSel) : `${catTitle} · ${reqName(reqSel)}`);
     const countEl = q('[data-count]'); if (countEl) countEl.textContent = `${list.length} ${list.length === 1 ? i18n.themeWord : i18n.themesWord}`;
   }
 
@@ -279,6 +380,42 @@ export function createThemePicker(opts = {}) {
         };
         catsEl.appendChild(b);
         catBtns[c] = b;
+      });
+    }
+
+    // Gruppo «Requisiti»: «Con {plugin}» per ogni plugin richiesto dai temi, più «Solo OLObuild»
+    // se ci sono anche temi autonomi. Nascosto quando nessun tema chiede un plugin. Un filtro si
+    // somma alla categoria; un clic su quello attivo lo toglie.
+    const reqMap = new Map();
+    themes.forEach(t => {
+      const r = reqOf(t);
+      if (r && !reqMap.has(reqKey(t))) reqMap.set(reqKey(t), { key: reqKey(t), label: String(r.label || r.slug || '') });
+    });
+    REQS = [...reqMap.values()].sort((a, b) => a.label.localeCompare(b.label, 'it'));
+    if (REQS.length && themes.some(t => !reqOf(t))) REQS.push({ key: 'none', label: '' });
+    if (activeReq && !REQS.some(r => r.key === activeReq)) activeReq = '';
+    const reqsWrap = q('[data-reqs-wrap]');
+    const reqsEl = q('[data-reqs]');
+    reqBtns = {};
+    if (reqsWrap) reqsWrap.hidden = !REQS.length;
+    if (reqsEl) {
+      reqsEl.innerHTML = '';
+      REQS.forEach(r => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'otmp-catbtn' + (r.key === activeReq ? ' on' : '');
+        b.setAttribute('aria-pressed', r.key === activeReq ? 'true' : 'false');
+        b.innerHTML = `<span>${esc(reqName(r))}</span><span class="n"></span>`;
+        b.onclick = () => {
+          activeReq = activeReq === r.key ? '' : r.key;
+          Object.keys(reqBtns).forEach(k => {
+            reqBtns[k].classList.toggle('on', k === activeReq);
+            reqBtns[k].setAttribute('aria-pressed', k === activeReq ? 'true' : 'false');
+          });
+          renderGrid();
+        };
+        reqsEl.appendChild(b);
+        reqBtns[r.key] = b;
       });
     }
     if (opts.fonts !== false) injectFonts(themes);
@@ -386,7 +523,7 @@ const CSS = `
   --backdrop:rgba(17,17,17,.38);--shadow:0 24px 80px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.04);
   --card-line-h:var(--accent);--card-shadow:0 1px 2px rgba(0,0,0,.04);--card-shadow-h:0 14px 30px -14px rgba(0,0,0,.28);
   --mark:rgba(232,98,42,.1);--mark-line:transparent;--busy:rgba(255,255,255,.82);--scroll:rgba(0,0,0,.16);--img:#f3f4f6;
-  --cat-dot:inline-block;}
+  --cat-dot:inline-block;--ok:#17834c;--ok-soft:rgba(23,131,76,.16);--warn:#a85d00;}
 .otmp-overlay.otmp--scuro, .otmp--embed.otmp--scuro{
   --modal:#0e1626;--side:#0b1320;--area:transparent;--panel:#121d31;--field:#0e1626;
   --fill:#121d31;--line:rgba(255,255,255,.08);--line-2:rgba(255,255,255,.14);
@@ -395,7 +532,7 @@ const CSS = `
   --backdrop:rgba(6,9,15,.66);--shadow:0 40px 120px -30px rgba(0,0,0,.7),0 0 0 1px rgba(0,0,0,.4);
   --card-line-h:var(--line-2);--card-shadow:none;--card-shadow-h:0 22px 48px -28px rgba(0,0,0,.8);
   --mark:linear-gradient(140deg,#1b2942,#101a2e);--mark-line:var(--line-2);--busy:rgba(8,12,20,.74);--scroll:rgba(255,255,255,.14);--img:#0b1320;
-  --cat-dot:none;}
+  --cat-dot:none;--ok:#4ade80;--ok-soft:rgba(74,222,128,.16);--warn:#fbbf24;}
 .otmp, .otmp-overlay{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;}
 .otmp *,.otmp-overlay *{box-sizing:border-box;margin:0;padding:0;}
 
@@ -506,6 +643,27 @@ const CSS = `
 .otmp-cb-link:hover{color:var(--txt);}
 .otmp-cb-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px;}
 .otmp-cb-link svg{width:12px;height:12px;}
+/* Riga «Requisiti»: il bollino del plugin richiesto (logo, oppure il nome), la versione minima
+   e lo stato sul sito: pallino verde «attivo», ambra «da aggiornare», neutro «da installare».
+   Sta in fondo alla card, sopra al piede: nelle card di una stessa fila le righe si allineano. */
+.otmp-cb-req{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:6px 10px;margin:auto 0 14px;padding:9px 11px 10px;
+  border-radius:9px;background:var(--fill);border:1px solid var(--line);}
+.otmp-cb-req + .otmp-cb-foot{margin-top:0;}
+.otmp-cb-req-lab{grid-column:1/-1;font-size:9.5px;font-weight:700;line-height:1;letter-spacing:.11em;text-transform:uppercase;color:var(--faint);}
+.otmp-bollino{display:inline-flex;align-items:center;gap:7px;min-width:0;}
+.otmp-bollino-img{display:block;height:16px;width:auto;max-width:120px;}
+.otmp-bollino-t{font-size:12px;font-weight:700;color:var(--txt);}
+.otmp-bollino-t[hidden]{display:none;}
+.otmp-bollino-v{font-size:11px;font-weight:600;color:var(--mute);font-variant-numeric:tabular-nums;white-space:nowrap;}
+.otmp-cb-req-st{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--mute);white-space:nowrap;}
+.otmp-cb-req-st i{width:7px;height:7px;border-radius:50%;flex:none;background:var(--faint);}
+.otmp-cb-req.is-ok .otmp-cb-req-st{color:var(--ok);}
+.otmp-cb-req.is-ok .otmp-cb-req-st i{background:var(--ok);box-shadow:0 0 0 3px var(--ok-soft);}
+.otmp-cb-req.is-old .otmp-cb-req-st{color:var(--warn);}
+.otmp-cb-req.is-old .otmp-cb-req-st i{background:var(--warn);}
+.otmp-card.req-missing .otmp-cb-btn.is-discover{background:transparent;color:var(--accent);border:1px solid var(--accent);}
+.otmp-card.req-missing .otmp-cb-btn.is-discover:hover{background:var(--accent-soft);transform:translateY(-1px);}
+.otmp-card.req-missing .otmp-cb-btn.is-discover svg{width:12px;height:12px;}
 .otmp-cb-btn{margin-left:auto;display:inline-flex;align-items:center;gap:7px;background:var(--accent);color:var(--on-accent);border:0;border-radius:9px;
   padding:9px 15px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s,transform .12s;}
 .otmp-cb-btn:hover{background:var(--accent-d);transform:translateY(-1px);}

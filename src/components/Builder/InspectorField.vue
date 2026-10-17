@@ -367,6 +367,7 @@
           :query="dynamic?._query || {}"
           :itemFields="field.dynamicItemFields || []"
           :itemMap="dynamic?._itemMap || {}"
+          :origins="field.dynamicOrigins || null"
           @update:query="emit('update:dynamic', { _query: { ...$event, items_key: field.key } })"
           @update:itemMap="emit('update:dynamic', { _itemMap: $event })"
         />

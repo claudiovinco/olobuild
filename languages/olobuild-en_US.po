@@ -29370,3 +29370,100 @@ msgstr "A circle next to the message, on the sender’s side. Empty = no photo."
 #: includes/tiles
 msgid "La bacheca della rete"
 msgstr "The network board"
+
+#: src/theme-picker
+msgid "Temi Olobuild"
+msgstr "OLObuild themes"
+
+#: src/theme-picker
+msgid "Scegli un tema: configura colori, font e sezioni del sito in un click."
+msgstr "Choose a theme: set up the site's colors, fonts and sections in one click."
+
+#: src/theme-picker
+msgid "Cerca un tema…"
+msgstr "Search themes…"
+
+#: src/theme-picker
+msgid "Tutti i temi"
+msgstr "All themes"
+
+#: src/theme-picker
+msgid "Importa tema"
+msgstr "Import theme"
+
+#: src/theme-picker
+msgid "Caricamento temi…"
+msgstr "Loading themes…"
+
+#: src/theme-picker
+msgid "Nessun tema per questi filtri."
+msgstr "No themes match these filters."
+
+#: src/theme-picker
+msgid "Nessun tema disponibile."
+msgstr "No themes available."
+
+#: src/theme-picker
+msgid "Non è stato possibile caricare i temi."
+msgstr "The themes could not be loaded."
+
+#: src/theme-picker
+msgid "tema"
+msgstr "theme"
+
+#: src/theme-picker
+msgid "temi"
+msgstr "themes"
+
+#: src/theme-picker
+msgid "pagina"
+msgstr "page"
+
+#: src/theme-picker
+msgid "Importazione in corso…"
+msgstr "Importing…"
+
+#: src/theme-picker
+msgid "Requisiti"
+msgstr "Requirements"
+
+#: src/theme-picker
+#, php-format
+msgid "Con %s"
+msgstr "With %s"
+
+#: src/theme-picker
+msgid "Solo OLObuild"
+msgstr "OLObuild only"
+
+#: src/theme-picker
+msgid "attivo"
+msgstr "active"
+
+#: src/theme-picker
+msgid "da aggiornare"
+msgstr "needs update"
+
+#: src/theme-picker
+msgid "da installare"
+msgstr "not installed"
+
+#: src/theme-picker
+#, php-format
+msgid "Richiede %s"
+msgstr "Requires %s"
+
+#: src/theme-picker
+#, php-format
+msgid "Richiede %1$s %2$s o successiva"
+msgstr "Requires %1$s %2$s or later"
+
+#: src/theme-picker
+#, php-format
+msgid "Scopri %s"
+msgstr "Discover %s"
+
+#: src/theme-picker
+#, php-format
+msgid "Aggiorna %s"
+msgstr "Update %s"

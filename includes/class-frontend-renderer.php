@@ -721,6 +721,17 @@ class Olobuild_Frontend_Renderer {
             return $html;
         }
 
+        // Tile di altri plugin interattive come quelle qui sopra (OLObooking: ricerca, mappa, modulo di
+        // prenotazione, che ha anche lo sticky): il plugin le dichiara e nascono subito. Pigre, i loro
+        // script all'avvio non le trovavano e lo sticky restava chiuso nel div del segnaposto.
+        static $eager_esterne = null;
+        if ( null === $eager_esterne ) {
+            $eager_esterne = array_values( array_filter( array_map( 'strval', (array) apply_filters( 'olobuild_eager_tiles', [] ) ) ) );
+        }
+        if ( $eager_esterne && in_array( $type, $eager_esterne, true ) ) {
+            return $html;
+        }
+
         // Torna su «Fisso nell'angolo dello schermo» (1.4.762): sta nel piè di pagina ma deve comparire dopo
         // i primi px di scorrimento. Pigro, nasceva solo arrivando al piè di pagina (come la Barra fissa).
         if ( 'totop' === $type && false !== strpos( $html, 'olo-totop--fisso' ) ) {
@@ -951,10 +962,28 @@ class Olobuild_Frontend_Renderer {
                 if ( '' === $items_key ) {
                     $items_key = $this->get_items_key( $type );
                 }
-                $posts = $dc->resolve_query( $dynamic['_query'] );
                 $item_map = $dynamic['_itemMap'] ?? [];
-                if ( ! empty( $posts ) && ! empty( $item_map ) ) {
-                    $settings[ $items_key ] = $dc->build_items_from_query( $posts, $item_map );
+                if ( 'images' === ( $dynamic['_query']['source'] ?? '' ) ) {
+                    // Foto di un campo del post (la galleria, le foto 360°…): una voce per foto. Senza foto
+                    // l'elemento non si disegna, né i suoi margini (una baita senza foto 360° non ha un tour
+                    // vuoto); nel builder resta il contenuto di esempio, per vederlo e modificarlo.
+                    $ids = $dc->image_list_ids( (string) ( $dynamic['_query']['images_key'] ?? '' ), (int) $post_id );
+                    $max = absint( $dynamic['_query']['images_max'] ?? 0 );
+                    if ( $max > 0 ) {
+                        $ids = array_slice( $ids, 0, $max );
+                    }
+                    if ( empty( $ids ) ) {
+                        if ( ! $this->builder_mode ) {
+                            return '';
+                        }
+                    } elseif ( ! empty( $item_map ) ) {
+                        $settings[ $items_key ] = $dc->build_items_from_images( $ids, $item_map );
+                    }
+                } else {
+                    $posts = $dc->resolve_query( $dynamic['_query'] );
+                    if ( ! empty( $posts ) && ! empty( $item_map ) ) {
+                        $settings[ $items_key ] = $dc->build_items_from_query( $posts, $item_map );
+                    }
                 }
             }
 

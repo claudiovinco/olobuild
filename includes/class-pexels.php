@@ -334,10 +334,20 @@ class Olobuild_Pexels {
             $best = $hd_file ?: $any_file;
             if ( ! $best ) continue;
 
+            // Tutte le risoluzioni MP4, dalla più larga: «regular» resta la più leggera da 720 in su,
+            // ma per uno sfondo a tutto schermo serve la 1920 (che sui video recenti ha un file diverso).
+            $files = [];
+            foreach ( $video['video_files'] ?? [] as $vf ) {
+                if ( ( $vf['file_type'] ?? '' ) !== 'video/mp4' || empty( $vf['link'] ) ) continue;
+                $files[] = [ 'width' => (int) ( $vf['width'] ?? 0 ), 'height' => (int) ( $vf['height'] ?? 0 ), 'fps' => (float) ( $vf['fps'] ?? 0 ), 'link' => $vf['link'] ];
+            }
+            usort( $files, function ( $a, $b ) { return $b['width'] - $a['width']; } );
+
             $results[] = [
                 'id'           => $video['id'],
                 'thumb'        => $video['image'] ?? '',
                 'regular'      => $best['link'] ?? '',
+                'files'        => $files,
                 'alt'          => '',
                 'photographer' => $video['user']['name'] ?? '',
                 'duration'     => $video['duration'] ?? 0,

@@ -5,8 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * Tile Vetrina temi — i temi inclusi nel plugin come siti da visitare: una scheda per tema con
  * l'anteprima che scorre al passaggio del mouse (come nel selettore dei temi), nell'angolo la
  * stessa home su un telefono che scorre insieme (se il tema ha l'anteprima mobile), i filtri per
- * categoria e un visore a tutto schermo con la demo dal vivo (Olobuild_Demo_Temi) in vista
- * computer, tablet o telefono, col tema precedente e il successivo.
+ * categoria e per plugin richiesto («Con OLObooking», con la riga «Requisiti» e il bollino del
+ * plugin nella scheda) e un visore a tutto schermo con la demo dal vivo (Olobuild_Demo_Temi) in
+ * vista computer, tablet o telefono, col tema precedente e il successivo.
  *
  * Si registra solo dove le demo sono accese: altrove non avrebbe niente da mostrare. Elenco,
  * nomi, categorie ed effetti vengono dai temi stessi (Olobuild_Theme_Importer::get_themes()),
@@ -85,7 +86,9 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
         $temi = [];
         foreach ( Olobuild_Theme_Importer::get_themes() as $t ) {
             $id = (string) ( $t['id'] ?? '' );
-            if ( '' === $id || ! Olobuild_Demo_Temi::acceso( $id ) ) {
+            // Solo i temi con una demo che si apre qui: un tema del catalogo remoto (es. un tema di OLObooking
+            // su un sito senza OLObooking) avrebbe una scheda con la demo che porta a una pagina inesistente.
+            if ( '' === $id || ! Olobuild_Demo_Temi::acceso( $id ) || '' === Olobuild_Demo_Temi::cartella( $id ) ) {
                 continue;
             }
             $categoria = (string) ( $t['category'] ?? '' );
@@ -93,6 +96,10 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             // Il bollino «Colori del tema» del visore: primario e secondario del tema.
             $pal       = is_array( $t['pal'] ?? null ) ? array_values( $t['pal'] ) : [];
             $propri    = array_map( 'sanitize_hex_color', [ (string) ( $t['accent'] ?? '' ), (string) ( $pal[1] ?? '' ) ] );
+            // Il plugin che il tema richiede (OLObooking per i temi delle strutture): filtro «Con …»
+            // e riga «Requisiti» col suo bollino. Logo per superfici chiare: sta su una pastiglia bianca.
+            $req       = is_array( $t['requires_plugin'] ?? null ) ? $t['requires_plugin'] : null;
+            $req_nome  = $req ? (string) ( $req['label'] ?? ( $req['slug'] ?? '' ) ) : '';
             $temi[]    = [
                 'id'        => $id,
                 'nome'      => (string) ( $t['name'] ?? $id ),
@@ -105,6 +112,13 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 'colore'    => (string) sanitize_hex_color( (string) ( $t['accent'] ?? '' ) ),
                 'scuro'     => empty( $t['light'] ),
                 'propri'    => 2 === count( array_filter( $propri ) ) ? implode( ',', $propri ) : '',
+                'req'       => '' !== $req_nome ? ( sanitize_key( (string) ( $req['slug'] ?? '' ) ) ?: sanitize_title( $req_nome ) ) : '',
+                'req_nome'  => $req_nome,
+                'req_logo'  => $req ? (string) ( $req['logo'] ?? '' ) : '',
+                'req_logo_scuro' => $req ? (string) ( $req['logo_light'] ?? '' ) : '',
+                'req_min'   => $req ? (string) ( $req['min_version'] ?? '' ) : '',
+                // Il pulsante del visore porta alla pagina del plugin richiesto: i prezzi di Olobuild non bastano.
+                'req_url'   => $req ? esc_url_raw( (string) ( $req['purchase_url'] ?? '' ) ) : '',
             ];
         }
         usort( $temi, function ( $a, $b ) {
@@ -163,9 +177,14 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
 
         // categoria originale => [ etichetta tradotta, quanti temi ]
         $categorie = [];
+        // plugin richiesto => [ nome, quanti temi ]: un filtro «Con {plugin}» che si somma alla categoria
+        $requisiti = [];
         foreach ( $temi as $t ) {
             if ( '' !== $t['categoria'] ) {
                 $categorie[ $t['categoria'] ] = [ $t['etichetta'], ( $categorie[ $t['categoria'] ][1] ?? 0 ) + 1 ];
+            }
+            if ( '' !== $t['req'] ) {
+                $requisiti[ $t['req'] ] = [ $t['req_nome'], ( $requisiti[ $t['req'] ][1] ?? 0 ) + 1 ];
             }
         }
 
@@ -213,6 +232,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ovt-filtro .ovt-n{font-size:12px;font-weight:500;opacity:.6;}
             .<?php echo $uid; ?> .ovt-filtro.is-on{background:var(--ovt-acc);border-color:var(--ovt-acc);color:var(--ovt-on);}
             .<?php echo $uid; ?> .ovt-filtro.is-on .ovt-n{opacity:.8;}
+            .<?php echo $uid; ?> .ovt-sep{flex:none;align-self:center;width:1px;height:22px;margin:0 var(--olo-space-xs);background:color-mix(in srgb,currentColor 20%,transparent);}
             .<?php echo $uid; ?> .ovt-griglia{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(<?php echo $cols; ?>,minmax(0,1fr));gap:<?php echo $gap; ?>px;}
             .<?php echo $uid; ?> .ovt-voce{margin:0;padding:0;}
             .<?php echo $uid; ?> .ovt-voce[hidden]{display:none;}
@@ -229,6 +249,12 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ovt-corpo{flex:1;display:flex;flex-direction:column;gap:var(--olo-space-xs);padding:var(--olo-space-md);}
             .<?php echo $uid; ?> .ovt-cat{<?php echo $meta; ?>}
             .<?php echo $uid; ?> .ovt-nome{line-height:1.2;font-family:var(--olo-font-family-heading, inherit);<?php echo $nome; ?>}
+            .<?php echo $uid; ?> .ovt-req{display:flex;flex-wrap:wrap;align-items:center;gap:var(--olo-space-xs) var(--olo-space-sm);margin-top:var(--olo-space-xs);}
+            .<?php echo $uid; ?> .ovt-req-lab{font-size:10px;font-weight:700;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;opacity:.6;}
+            .<?php echo $uid; ?> .ovt-bollino{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:7px;background:#fff;color:#1f2937;box-shadow:0 0 0 1px rgba(17,24,39,.1);font-size:12px;font-weight:700;line-height:1;}
+            .<?php echo $uid; ?> .ovt-bollino.is-scuro{background:#111827;color:#f9fafb;box-shadow:0 0 0 1px rgba(255,255,255,.14);}
+            .<?php echo $uid; ?> .ovt-bollino img{display:block;height:14px;width:auto;max-width:110px;}
+            .<?php echo $uid; ?> .ovt-bollino-v{font-size:11px;font-weight:600;opacity:.65;font-variant-numeric:tabular-nums;}
             .<?php echo $uid; ?> .ovt-azione{margin-top:auto;padding-top:var(--olo-space-sm);display:inline-flex;align-items:center;gap:var(--olo-space-xs);font-size:14px;font-weight:600;color:var(--ovt-acc);}
             .<?php echo $uid; ?> .ovt-azione svg{width:16px;height:16px;transition:transform .2s ease;}
             .<?php echo $uid; ?> .ovt-card:hover .ovt-azione svg{transform:translateX(3px);}
@@ -281,18 +307,24 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 .<?php echo $uid; ?> .ovt-card:hover .ovt-anteprima img{object-position:top center;}}
         </style>
         <div class="olo-themeshowcase <?php echo esc_attr( $uid ); ?>" data-ovt="<?php echo esc_attr( $uid ); ?>">
-            <?php if ( ! empty( $s['filter_bar'] ) && count( $categorie ) > 1 ) : ?>
+            <?php if ( ! empty( $s['filter_bar'] ) && ( count( $categorie ) > 1 || ! empty( $requisiti ) ) ) : ?>
             <div class="ovt-filtri" role="group" aria-label="<?php echo esc_attr( olobuild_t( 'Categorie' ) ); ?>" data-olo-interactive>
                 <button type="button" class="ovt-filtro is-on" aria-pressed="true" data-cat=""><?php echo esc_html( (string) $s['filter_all_label'] ); ?><span class="ovt-n"><?php echo (int) count( $temi ); ?></span></button>
-                <?php foreach ( $categorie as $nome_cat => $cat ) : ?>
+                <?php if ( count( $categorie ) > 1 ) : foreach ( $categorie as $nome_cat => $cat ) : ?>
                 <button type="button" class="ovt-filtro" aria-pressed="false" data-cat="<?php echo esc_attr( $nome_cat ); ?>"><?php echo esc_html( $cat[0] ); ?><span class="ovt-n"><?php echo (int) $cat[1]; ?></span></button>
+                <?php endforeach; endif; ?>
+                <?php if ( $requisiti ) : ?>
+                <span class="ovt-sep" aria-hidden="true"></span>
+                <?php foreach ( $requisiti as $chiave_req => $r ) : ?>
+                <button type="button" class="ovt-filtro" aria-pressed="false" data-req="<?php echo esc_attr( $chiave_req ); ?>"><?php echo esc_html( sprintf( olobuild_t( 'Con %s' ), $r[0] ) ); ?><span class="ovt-n"><?php echo (int) $r[1]; ?></span></button>
                 <?php endforeach; ?>
+                <?php endif; ?>
             </div>
             <?php endif; ?>
             <ul class="ovt-griglia" role="list">
                 <?php foreach ( $temi as $t ) : ?>
-                <li class="ovt-voce" data-cat="<?php echo esc_attr( $t['categoria'] ); ?>">
-                    <a class="ovt-card" href="<?php echo esc_url( $t['demo'] ); ?>" data-tema="<?php echo esc_attr( $t['id'] ); ?>" data-nome="<?php echo esc_attr( $t['nome'] ); ?>" data-categoria="<?php echo esc_attr( $t['etichetta'] ); ?>"<?php echo $t['scuro'] ? ' data-scuro="1"' : ''; ?><?php echo '' !== $t['propri'] ? ' data-colori="' . esc_attr( $t['propri'] ) . '"' : ''; ?><?php echo '' !== $t['colore'] ? ' style="--ovt-tema:' . esc_attr( $t['colore'] ) . '"' : ''; ?>>
+                <li class="ovt-voce" data-cat="<?php echo esc_attr( $t['categoria'] ); ?>" data-req="<?php echo esc_attr( $t['req'] ); ?>">
+                    <a class="ovt-card" href="<?php echo esc_url( $t['demo'] ); ?>" data-tema="<?php echo esc_attr( $t['id'] ); ?>" data-nome="<?php echo esc_attr( $t['nome'] ); ?>" data-categoria="<?php echo esc_attr( $t['etichetta'] ); ?>"<?php echo $t['scuro'] ? ' data-scuro="1"' : ''; ?><?php echo '' !== $t['propri'] ? ' data-colori="' . esc_attr( $t['propri'] ) . '"' : ''; ?><?php echo '' !== $t['colore'] ? ' style="--ovt-tema:' . esc_attr( $t['colore'] ) . '"' : ''; ?><?php echo '' !== $t['req_url'] ? ' data-cta-url="' . esc_url( $t['req_url'] ) . '" data-cta-testo="' . esc_attr( sprintf( olobuild_t( 'Scopri %s' ), $t['req_nome'] ) ) . '"' : ''; ?>>
                         <?php $tel = ! empty( $s['show_phone'] ) && '' !== $t['telefono'] && '' !== $t['anteprima']; ?>
                         <span class="ovt-anteprima<?php echo $tel ? ' con-tel' : ''; ?>">
                             <?php if ( '' !== $t['anteprima'] ) : ?><img src="<?php echo esc_url( $t['anteprima'] ); ?>" alt="" loading="lazy" decoding="async" /><?php endif; ?>
@@ -302,6 +334,17 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                         <span class="ovt-corpo">
                             <?php if ( ! empty( $s['show_category'] ) && '' !== $t['categoria'] ) : ?><span class="ovt-cat"><?php echo esc_html( $t['etichetta'] ); ?></span><?php endif; ?>
                             <span class="ovt-nome"><?php echo esc_html( $t['nome'] ); ?></span>
+                            <?php if ( '' !== $t['req_nome'] ) :
+                                $logo_req  = '' !== $t['req_logo'] ? $t['req_logo'] : $t['req_logo_scuro'];
+                                $titolo_req = '' !== $t['req_min']
+                                    ? sprintf( olobuild_t( 'Richiede %1$s %2$s o successiva' ), $t['req_nome'], $t['req_min'] )
+                                    : sprintf( olobuild_t( 'Richiede %s' ), $t['req_nome'] );
+                                ?>
+                            <span class="ovt-req" title="<?php echo esc_attr( $titolo_req ); ?>">
+                                <span class="ovt-req-lab"><?php echo esc_html( olobuild_t( 'Requisiti' ) ); ?></span>
+                                <span class="ovt-bollino<?php echo ( '' === $t['req_logo'] && '' !== $t['req_logo_scuro'] ) ? ' is-scuro' : ''; ?>"><?php if ( '' !== $logo_req ) : ?><img src="<?php echo esc_url( $logo_req ); ?>" alt="<?php echo esc_attr( $t['req_nome'] ); ?>" loading="lazy" decoding="async" /><?php else : echo esc_html( $t['req_nome'] ); endif; ?><?php if ( '' !== $t['req_min'] ) : ?><span class="ovt-bollino-v"><?php echo esc_html( $t['req_min'] ); ?>+</span><?php endif; ?></span>
+                            </span>
+                            <?php endif; ?>
                             <?php if ( '' !== trim( (string) $s['card_label'] ) ) : ?><span class="ovt-azione"><?php echo esc_html( (string) $s['card_label'] ); ?><?php echo $ico['freccia']; ?></span><?php endif; ?>
                         </span>
                     </a>
@@ -356,15 +399,40 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             if (!root) { return; }
             var voci = [].slice.call(root.querySelectorAll('.ovt-voce'));
             var filtri = [].slice.call(root.querySelectorAll('.ovt-filtro'));
-            function filtra(cat) {
+            // Due gruppi che si sommano: la categoria (uno alla volta, «Tutti» = nessuna) e il plugin
+            // richiesto («Con OLObooking»: un clic lo accende, un altro lo spegne). I numeri contano
+            // i temi che si vedrebbero scegliendo quel filtro, con l'altro gruppo com'è.
+            var stato = { cat: '', req: '' };
+            function passa(v, cat, req) {
+                var ok = cat ? v.getAttribute('data-cat') === cat : true;
+                if (req) { ok = ok ? v.getAttribute('data-req') === req : false; }
+                return ok;
+            }
+            function conta(cat, req) {
+                return voci.filter(function (v) { return passa(v, cat, req); }).length;
+            }
+            function filtra(cat, req) {
+                stato.cat = cat;
+                stato.req = req;
                 filtri.forEach(function (b) {
-                    var on = b.getAttribute('data-cat') === cat;
+                    var perReq = b.hasAttribute('data-req');
+                    var on = perReq ? b.getAttribute('data-req') === stato.req : b.getAttribute('data-cat') === stato.cat;
+                    var n = b.querySelector('.ovt-n');
                     b.classList.toggle('is-on', on);
                     b.setAttribute('aria-pressed', on ? 'true' : 'false');
+                    if (n) { n.textContent = perReq ? conta(stato.cat, b.getAttribute('data-req')) : conta(b.getAttribute('data-cat'), stato.req); }
                 });
-                voci.forEach(function (v) { v.hidden = cat ? v.getAttribute('data-cat') !== cat : false; });
+                voci.forEach(function (v) { v.hidden = !passa(v, stato.cat, stato.req); });
             }
-            filtri.forEach(function (b) { b.addEventListener('click', function () { filtra(b.getAttribute('data-cat')); }); });
+            filtri.forEach(function (b) {
+                b.addEventListener('click', function () {
+                    if (b.hasAttribute('data-req')) {
+                        filtra(stato.cat, stato.req === b.getAttribute('data-req') ? '' : b.getAttribute('data-req'));
+                    } else {
+                        filtra(b.getAttribute('data-cat'), stato.req);
+                    }
+                });
+            });
             <?php if ( $builder ) : ?>
         })();
         </script>
@@ -438,6 +506,14 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 attuale = a;
                 visore.querySelector('[data-nome]').textContent = a.getAttribute('data-nome');
                 visore.querySelector('[data-categoria]').textContent = a.getAttribute('data-categoria');
+                // Un tema che richiede un plugin (OLObooking) porta il pulsante alla pagina del plugin.
+                var cta = visore.querySelector('.ovt-cta');
+                if (cta) {
+                    if (!cta.hasAttribute('data-base-href')) { cta.setAttribute('data-base-href', cta.getAttribute('href') || ''); cta.setAttribute('data-base-testo', cta.textContent); }
+                    var ctaUrl = a.getAttribute('data-cta-url') || '';
+                    cta.setAttribute('href', ctaUrl ? ctaUrl : cta.getAttribute('data-base-href'));
+                    cta.textContent = ctaUrl ? (a.getAttribute('data-cta-testo') || cta.getAttribute('data-base-testo')) : cta.getAttribute('data-base-testo');
+                }
                 bolliniDelTema(a);
                 nuova.href = conPalette(a.href);
                 if (!visore.open) {
@@ -518,7 +594,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 if (h.indexOf('#demo-') !== 0) { chiudi(true); return; }
                 var a = card(h.slice(6));
                 if (!a) { return; }
-                if (a.closest('.ovt-voce').hidden) { filtra(''); }
+                if (a.closest('.ovt-voce').hidden) { filtra('', ''); }
                 mostra(a, '');
             }
             window.addEventListener('popstate', function () { spinto = false; dallIndirizzo(); });

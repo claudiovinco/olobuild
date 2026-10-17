@@ -19,61 +19,101 @@
 
     <!-- Query config -->
     <div v-if="isEnabled && !nonDisponibili" class="dqp-config">
-      <!-- Tipo di contenuto -->
-      <div class="dqp-field">
-        <label class="dqp-label">{{ t('Tipo di contenuto') }}</label>
-        <FieldSelect ui="dropdown" :model-value="localQuery.post_type" :options="postTypes" @update:model-value="updateQuery('post_type', $event)" />
+      <!-- Da dove vengono le voci: gli articoli (una query) o le foto salvate in un campo del contenuto
+           che la pagina mostra (la galleria, le foto 360°…). Le foto solo se la voce ha un'immagine. -->
+      <div v-if="originOpts.length > 1" class="dqp-field">
+        <label class="dqp-label">{{ t('Elenco di') }}</label>
+        <FieldSelect ui="dropdown" :model-value="origin" :options="originOpts" @update:model-value="setOrigin($event)" />
       </div>
 
-      <!-- Posts per page -->
-      <div class="dqp-field" style="display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:10px;">
-        <label class="dqp-label" style="margin:0;">{{ t('Numero di elementi') }}</label>
-        <NumberScrubber
-          :modelValue="localQuery.posts_per_page"
-          :min="1" :max="50" :step="1" :defaultValue="6"
-          emitAs="number"
-          :ariaLabel="t('Numero di elementi')"
-          @update:modelValue="updateQuery('posts_per_page', $event || 6)"
-        />
-      </div>
-
-      <!-- Order by -->
-      <div class="dqp-row">
-        <div class="dqp-field dqp-field--half">
-          <label class="dqp-label">{{ t('Ordina per') }}</label>
-          <FieldSelect ui="dropdown" :model-value="localQuery.orderby" :options="ORDERBY_OPTS" @update:model-value="updateQuery('orderby', $event)" />
+      <template v-if="origin === 'images'">
+        <div class="dqp-field">
+          <label class="dqp-label">{{ t('Campo con le foto') }}</label>
+          <FieldSelect ui="dropdown" :model-value="imagesSelect" :options="imageListOpts" @update:model-value="onImagesSelect($event)" />
         </div>
-        <!-- In ordine casuale la direzione non conta: il controllo si nasconde -->
-        <div v-if="localQuery.orderby !== 'rand'" class="dqp-field dqp-field--half">
-          <label class="dqp-label">{{ t('Ordine') }}</label>
-          <FieldSelect ui="dropdown" :model-value="localQuery.order" :options="orderOpts" @update:model-value="updateQuery('order', $event)" />
+        <div v-if="imagesSelect === CAMPO_LIBERO" class="dqp-field">
+          <label class="dqp-label">{{ t('Chiave del campo personalizzato') }}</label>
+          <input
+            type="text"
+            class="dqp-input"
+            :value="localQuery.images_key || ''"
+            placeholder="_mia_galleria"
+            spellcheck="false"
+            @change="updateQuery('images_key', $event.target.value.trim())"
+          />
         </div>
-      </div>
-
-      <!-- Taxonomy filter -->
-      <div class="dqp-field">
-        <label class="dqp-label">{{ t('Filtra per tassonomia') }}</label>
-        <FieldSelect ui="dropdown" :model-value="localQuery.taxonomy" :options="taxonomyOpts" @update:model-value="onTaxonomyChange($event)" />
-      </div>
-
-      <!-- Terms multi-select -->
-      <div v-if="localQuery.taxonomy && selectedTaxTerms.length" class="dqp-field">
-        <label class="dqp-label">{{ t('Termini') }}</label>
-        <div class="dqp-terms">
-          <label v-for="term in selectedTaxTerms" :key="term.value" class="dqp-term">
-            <input
-              type="checkbox"
-              :checked="(localQuery.terms || []).includes(term.value)"
-              @change="toggleTerm(term.value, $event.target.checked)"
-            />
-            <span>{{ term.label }}</span>
-          </label>
+        <div class="dqp-field" style="display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:10px;">
+          <label class="dqp-label" style="margin:0;">{{ t('Foto al massimo') }}</label>
+          <NumberScrubber
+            :modelValue="localQuery.images_max || 0"
+            :min="0" :max="60" :step="1" :defaultValue="0"
+            emitAs="number"
+            :ariaLabel="t('Foto al massimo')"
+            @update:modelValue="updateQuery('images_max', $event || 0)"
+          />
         </div>
-      </div>
+        <p class="dqp-hint">{{ t('0 = tutte. Sono le foto del contenuto che la pagina mostra (nel builder, quello dell\'anteprima): senza foto l\'elemento non compare sul sito.') }}</p>
+      </template>
 
-      <!-- Primo risultato della query: dice subito se i filtri trovano qualcosa -->
+      <template v-else>
+        <!-- Tipo di contenuto -->
+        <div class="dqp-field">
+          <label class="dqp-label">{{ t('Tipo di contenuto') }}</label>
+          <FieldSelect ui="dropdown" :model-value="localQuery.post_type" :options="postTypes" @update:model-value="updateQuery('post_type', $event)" />
+        </div>
+
+        <!-- Posts per page -->
+        <div class="dqp-field" style="display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:10px;">
+          <label class="dqp-label" style="margin:0;">{{ t('Numero di elementi') }}</label>
+          <NumberScrubber
+            :modelValue="localQuery.posts_per_page"
+            :min="1" :max="50" :step="1" :defaultValue="6"
+            emitAs="number"
+            :ariaLabel="t('Numero di elementi')"
+            @update:modelValue="updateQuery('posts_per_page', $event || 6)"
+          />
+        </div>
+
+        <!-- Order by -->
+        <div class="dqp-row">
+          <div class="dqp-field dqp-field--half">
+            <label class="dqp-label">{{ t('Ordina per') }}</label>
+            <FieldSelect ui="dropdown" :model-value="localQuery.orderby" :options="ORDERBY_OPTS" @update:model-value="updateQuery('orderby', $event)" />
+          </div>
+          <!-- In ordine casuale la direzione non conta: il controllo si nasconde -->
+          <div v-if="localQuery.orderby !== 'rand'" class="dqp-field dqp-field--half">
+            <label class="dqp-label">{{ t('Ordine') }}</label>
+            <FieldSelect ui="dropdown" :model-value="localQuery.order" :options="orderOpts" @update:model-value="updateQuery('order', $event)" />
+          </div>
+        </div>
+
+        <!-- Taxonomy filter -->
+        <div class="dqp-field">
+          <label class="dqp-label">{{ t('Filtra per tassonomia') }}</label>
+          <FieldSelect ui="dropdown" :model-value="localQuery.taxonomy" :options="taxonomyOpts" @update:model-value="onTaxonomyChange($event)" />
+        </div>
+
+        <!-- Terms multi-select -->
+        <div v-if="localQuery.taxonomy && selectedTaxTerms.length" class="dqp-field">
+          <label class="dqp-label">{{ t('Termini') }}</label>
+          <div class="dqp-terms">
+            <label v-for="term in selectedTaxTerms" :key="term.value" class="dqp-term">
+              <input
+                type="checkbox"
+                :checked="(localQuery.terms || []).includes(term.value)"
+                @change="toggleTerm(term.value, $event.target.checked)"
+              />
+              <span>{{ term.label }}</span>
+            </label>
+          </div>
+        </div>
+      </template>
+
+      <!-- Primo risultato della query (o le foto di un esempio): dice subito se la sorgente trova qualcosa -->
       <div class="dqp-primo" aria-live="polite">
         <template v-if="primo.stato === 'carico'">{{ t('Carico…') }}</template>
+        <template v-else-if="origin === 'images' && primo.stato === 'trovato'">{{ t('Esempio:') }} <strong>{{ fotoIn(primo) }}</strong></template>
+        <template v-else-if="origin === 'images' && primo.stato === 'vuoto'">{{ t('Nessun contenuto ha foto in questo campo') }}</template>
         <template v-else-if="primo.stato === 'trovato'">{{ t('Primo risultato:') }} <strong>{{ primo.titolo || t('(senza titolo)') }}</strong></template>
         <template v-else-if="primo.stato === 'vuoto'">{{ t('Nessun contenuto con questi filtri') }}</template>
       </div>
@@ -89,7 +129,7 @@
             ui="dropdown"
             size="compact"
             :model-value="localItemMap[field.key] || ''"
-            :options="WP_FIELD_OPTS"
+            :options="origin === 'images' ? IMAGE_PART_OPTS : WP_FIELD_OPTS"
             @update:model-value="updateItemMap(field.key, $event)"
           />
         </div>
@@ -111,6 +151,9 @@ const props = defineProps({
   query: { type: Object, default: () => ({}) },
   itemFields: { type: Array, default: () => [] },
   itemMap: { type: Object, default: () => ({}) },
+  // Le origini che il ripetitore accetta (dynamicOrigins del campo): ['images'] per le scene del
+  // Tour 360, che con le immagini in evidenza degli articoli non avrebbero senso. null = tutte.
+  origins: { type: Array, default: null },
 });
 
 const emit = defineEmits(['update:query', 'update:itemMap']);
@@ -119,6 +162,10 @@ const { fetchSources, sources, previewQuery } = useDynamicContent();
 
 const defaultQuery = {
   enabled: false,
+  // 'posts' = una query di articoli; 'images' = le foto di un campo del contenuto (images_key)
+  source: 'posts',
+  images_key: '',
+  images_max: 0,
   post_type: 'post',
   posts_per_page: 6,
   orderby: 'date',
@@ -186,6 +233,70 @@ const WP_FIELD_OPTS = [
   { value: '_index', label: 'Numero progressivo' },
 ];
 
+// ── Foto di un campo ──
+// Le parti di una foto che una voce può ricevere (le chiavi le legge
+// Olobuild_Dynamic_Content::image_part). L'originale serve alle foto 360°.
+const IMAGE_PART_OPTS = [
+  { value: '', label: '— Non mappato —' },
+  { value: 'url', label: 'Foto' },
+  { value: 'url_original', label: 'Foto originale (fino a 8192 px, per le foto 360°)' },
+  { value: 'url_2048', label: 'Foto leggera (2048 px)' },
+  { value: 'url_large', label: 'Foto grande' },
+  { value: 'url_medium', label: 'Foto media' },
+  { value: 'url_thumb', label: 'Miniatura' },
+  { value: 'title', label: 'Titolo della foto' },
+  { value: 'caption', label: 'Didascalia' },
+  { value: 'alt', label: 'Testo alternativo' },
+  { value: 'description', label: 'Descrizione' },
+  { value: '_index', label: 'Numero progressivo' },
+];
+const CAMPO_LIBERO = '__campo';
+
+// Le foto si propongono solo se la voce ha un'immagine; il campo può limitare le origini.
+const hasImageField = computed(() => (props.itemFields || []).some((f) => f && f.type === 'image'));
+const originOpts = computed(() => {
+  const tutte = [
+    { value: 'posts', label: 'Articoli' },
+    { value: 'images', label: 'Foto di un campo' },
+  ].filter((o) => o.value !== 'images' || hasImageField.value);
+  const ammesse = Array.isArray(props.origins) && props.origins.length ? props.origins : null;
+  const scelte = ammesse ? tutte.filter((o) => ammesse.includes(o.value)) : tutte;
+  return scelte.length ? scelte : tutte;
+});
+const origin = computed(() => {
+  const s = localQuery.value.source === 'images' ? 'images' : 'posts';
+  return originOpts.value.some((o) => o.value === s) ? s : originOpts.value[0].value;
+});
+
+const imageLists = computed(() => sources.value?.image_lists || []);
+const campoLibero = ref(false);
+const imagesSelect = computed(() => {
+  const k = localQuery.value.images_key || '';
+  if (campoLibero.value) return CAMPO_LIBERO;
+  if (!k) return '';
+  return imageLists.value.some((l) => l.value === k) ? k : CAMPO_LIBERO;
+});
+const imageListOpts = computed(() => [
+  { value: '', label: '— Scegli —' },
+  ...imageLists.value.map((l) => ({ value: l.value, label: l.label })),
+  { value: CAMPO_LIBERO, label: 'Altro campo personalizzato…' },
+]);
+
+function onImagesSelect(v) {
+  if (v === CAMPO_LIBERO) {
+    campoLibero.value = true;
+    // Una chiave degli elenchi registrati non resta: si scrive quella del campo libero.
+    if (imageLists.value.some((l) => l.value === localQuery.value.images_key)) updateQuery('images_key', '');
+    return;
+  }
+  campoLibero.value = false;
+  updateQuery('images_key', v || '');
+}
+
+function fotoIn(p) {
+  return `${p.n} ${t('foto in')} «${p.titolo || t('(senza titolo)')}»`;
+}
+
 onMounted(() => {
   fetchSources();
 });
@@ -218,7 +329,40 @@ function campoPerNome(f) {
   return '';
 }
 
+// La parte della foto che un campo della voce riceve, dal tipo e dal nome. Un campo può
+// dichiararla (dynamicImage: le scene del Tour 360 chiedono l'originale per la foto sferica).
+function partePerNome(f) {
+  const key = String(f.key || '').toLowerCase();
+  if (f.type === 'image') {
+    if (f.dynamicImage) return f.dynamicImage;
+    if (/legger|light|small|mobile/.test(key)) return 'url_2048';
+    if (/anteprima|thumb|miniatur|preview|poster/.test(key)) return 'url_medium';
+    return 'url';
+  }
+  if (f.type === 'number' || f.type === 'range') return /^(number|numero|counter|step)$/.test(key) ? '_index' : '';
+  if (/^alt/.test(key)) return 'alt';
+  if (/^(title|titolo|heading|name|nome|label|etichetta)$/.test(key)) return 'title';
+  if (/^(caption|didascalia|desc|descr|description|descrizione|text|testo|subtitle|sottotitolo)$/.test(key)) return 'caption';
+  if (/^(number|numero|counter|step)$/.test(key)) return '_index';
+  return '';
+}
+
+function mappaFotoPerNome() {
+  const mappa = {};
+  const usati = new Set();
+  for (const f of props.itemFields || []) {
+    if (!f || !f.key || f.type === 'separator') continue;
+    const p = partePerNome(f);
+    if (p && !usati.has(p)) {
+      mappa[f.key] = p;
+      usati.add(p);
+    }
+  }
+  return mappa;
+}
+
 function mappaPerNome() {
+  if (origin.value === 'images') return mappaFotoPerNome();
   const mappa = {};
   const usati = new Set();
   // Un logo riceve l'immagine in evidenza solo se la voce non ha altre immagini (Testimonianze: l'avatar)
@@ -257,32 +401,49 @@ function collegaPerNome() {
 function toggleEnabled() {
   if (nonDisponibili && !localQuery.value.enabled) { avvisoAperto.value = true; return; }
   localQuery.value.enabled = !localQuery.value.enabled;
+  // L'origine salvata è sempre una di quelle ammesse dal campo (le scene del Tour 360: le foto).
+  localQuery.value.source = origin.value;
   emitQuery();
   if (localQuery.value.enabled && mappaVuota.value) collegaPerNome();
+}
+
+// Cambiando origine la mappatura di prima non vale più (campi di articolo ≠ parti di una foto):
+// si ricollega per nome.
+function setOrigin(v) {
+  if (v === origin.value) return;
+  localQuery.value.source = v;
+  emitQuery();
+  const mappa = mappaPerNome();
+  localItemMap.value = mappa;
+  emit('update:itemMap', { ...mappa });
 }
 
 // ── Primo risultato ──
 // Si chiede al server il titolo del primo contenuto che la query trova, a
 // ogni cambio dei filtri (con una piccola attesa, per non chiederlo a ogni
 // passo dello scrubber). Vale l'ultima risposta.
-const primo = ref({ stato: '', titolo: '' });
+const primo = ref({ stato: '', titolo: '', n: 0 });
 let attesaPrimo = null;
 let richiestaPrimo = 0;
 function aggiornaPrimo() {
   clearTimeout(attesaPrimo);
-  if (!isEnabled.value || nonDisponibili) { primo.value = { stato: '', titolo: '' }; return; }
-  primo.value = { stato: 'carico', titolo: '' };
+  if (!isEnabled.value || nonDisponibili) { primo.value = { stato: '', titolo: '', n: 0 }; return; }
+  // Foto di un campo senza campo scelto: niente da chiedere.
+  if (origin.value === 'images' && !localQuery.value.images_key) { primo.value = { stato: '', titolo: '', n: 0 }; return; }
+  primo.value = { stato: 'carico', titolo: '', n: 0 };
   attesaPrimo = setTimeout(async () => {
     const mia = ++richiestaPrimo;
-    const r = await previewQuery({ ...localQuery.value });
+    const r = await previewQuery({ ...localQuery.value, source: origin.value });
     if (mia !== richiestaPrimo) return;
-    if (!r) primo.value = { stato: '', titolo: '' };
-    else if (!r.post_id) primo.value = { stato: 'vuoto', titolo: '' };
-    else primo.value = { stato: 'trovato', titolo: String(r.value ?? '') };
+    if (!r) primo.value = { stato: '', titolo: '', n: 0 };
+    else if (!r.post_id) primo.value = { stato: 'vuoto', titolo: '', n: 0 };
+    // Articoli: value = il titolo del primo; foto: value = quante, title = il contenuto che le ha.
+    else if (origin.value === 'images') primo.value = { stato: 'trovato', titolo: String(r.title ?? ''), n: Number(r.value) || 0 };
+    else primo.value = { stato: 'trovato', titolo: String(r.value ?? ''), n: 0 };
   }, 300);
 }
 watch(
-  () => [isEnabled.value, localQuery.value.post_type, localQuery.value.orderby, localQuery.value.order, localQuery.value.taxonomy, (localQuery.value.terms || []).join(',')],
+  () => [isEnabled.value, origin.value, localQuery.value.images_key, localQuery.value.post_type, localQuery.value.orderby, localQuery.value.order, localQuery.value.taxonomy, (localQuery.value.terms || []).join(',')],
   aggiornaPrimo,
   { immediate: true },
 );
@@ -421,6 +582,13 @@ function emitQuery() {
   font-size: 11px;
   color: #374151;
   cursor: pointer;
+}
+
+.dqp-hint {
+  margin: -2px 0 0;
+  font-size: 11px;
+  line-height: 1.45;
+  color: #6b7280;
 }
 
 .dqp-primo {

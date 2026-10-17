@@ -53,6 +53,7 @@ key. The following list documents what is sent, when, and to whom.
 **Theme library previews (WordPress admin only — Theme Importer / setup wizard):**
 
 * olotheme.com — the preview thumbnails of the starter themes are loaded from `https://olotheme.com/olobuild-library/` so they don't have to be bundled in the plugin (keeps it lightweight). Only an image request for the theme you are viewing is made; no personal data is sent. The base URL is filterable via the `olobuild_library_url` hook. The template content itself ships inside the plugin, so importing a theme works even without this service. Terms & Privacy: https://olotheme.com/
+* olotheme.com — theme catalog: at most once a day the server downloads `https://olotheme.com/olobuild-library/themes.json`, the list of the themes that need another plugin (for example the OLObooking themes), so they can be shown in the theme picker with the plugin they need. The request carries only the Olobuild version in its User-Agent; no site address or personal data is sent. The URL is filterable via the `olobuild_theme_remote_catalog_url` hook (an empty string turns the request off). Terms & Privacy: https://olotheme.com/
 
 **Front-end services (only on pages where you use the related tile/feature):**
 

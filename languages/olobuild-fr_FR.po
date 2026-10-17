@@ -29367,3 +29367,100 @@ msgstr "Un cercle à côté du message, du côté de l’expéditeur. Vide = auc
 #: includes/tiles
 msgid "La bacheca della rete"
 msgstr "Le tableau du réseau"
+
+#: src/theme-picker
+msgid "Temi Olobuild"
+msgstr "Thèmes OLObuild"
+
+#: src/theme-picker
+msgid "Scegli un tema: configura colori, font e sezioni del sito in un click."
+msgstr "Choisissez un thème : configurez les couleurs, les polices et les sections du site en un clic."
+
+#: src/theme-picker
+msgid "Cerca un tema…"
+msgstr "Rechercher un thème…"
+
+#: src/theme-picker
+msgid "Tutti i temi"
+msgstr "Tous les thèmes"
+
+#: src/theme-picker
+msgid "Importa tema"
+msgstr "Importer le thème"
+
+#: src/theme-picker
+msgid "Caricamento temi…"
+msgstr "Chargement des thèmes…"
+
+#: src/theme-picker
+msgid "Nessun tema per questi filtri."
+msgstr "Aucun thème ne correspond à ces filtres."
+
+#: src/theme-picker
+msgid "Nessun tema disponibile."
+msgstr "Aucun thème disponible."
+
+#: src/theme-picker
+msgid "Non è stato possibile caricare i temi."
+msgstr "Impossible de charger les thèmes."
+
+#: src/theme-picker
+msgid "tema"
+msgstr "thème"
+
+#: src/theme-picker
+msgid "temi"
+msgstr "thèmes"
+
+#: src/theme-picker
+msgid "pagina"
+msgstr "page"
+
+#: src/theme-picker
+msgid "Importazione in corso…"
+msgstr "Importation en cours…"
+
+#: src/theme-picker
+msgid "Requisiti"
+msgstr "Prérequis"
+
+#: src/theme-picker
+#, php-format
+msgid "Con %s"
+msgstr "Avec %s"
+
+#: src/theme-picker
+msgid "Solo OLObuild"
+msgstr "OLObuild uniquement"
+
+#: src/theme-picker
+msgid "attivo"
+msgstr "actif"
+
+#: src/theme-picker
+msgid "da aggiornare"
+msgstr "à mettre à jour"
+
+#: src/theme-picker
+msgid "da installare"
+msgstr "non installé"
+
+#: src/theme-picker
+#, php-format
+msgid "Richiede %s"
+msgstr "Nécessite %s"
+
+#: src/theme-picker
+#, php-format
+msgid "Richiede %1$s %2$s o successiva"
+msgstr "Nécessite %1$s %2$s ou une version ultérieure"
+
+#: src/theme-picker
+#, php-format
+msgid "Scopri %s"
+msgstr "Découvrir %s"
+
+#: src/theme-picker
+#, php-format
+msgid "Aggiorna %s"
+msgstr "Mettre à jour %s"

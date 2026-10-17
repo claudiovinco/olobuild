@@ -2423,7 +2423,9 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-mm-topbar-right { display: flex; align-items: center; gap: 16px; position: relative; flex-shrink: 0; }
         .<?php echo $uid; ?> .olo-mm-topbar-ticker { display: flex; align-items: center; gap: 8px; overflow: hidden; flex: 1; min-width: 0; }
         .<?php echo $uid; ?> .olo-mm-topbar-ticker-label { font-weight: 700; white-space: nowrap; color: <?php echo esc_attr($s['topbar_link_color']); ?>; }
-        .<?php echo $uid; ?> .olo-mm-topbar-ticker-wrap { overflow: hidden; flex: 1; }
+        <?php // Le notizie entrano ed escono sfumando: prima sparivano tagliate di netto, e l'ultima arrivava a toccare il testo di destra («Rispondono+39 0437…»). ?>
+        .<?php echo $uid; ?> .olo-mm-topbar-ticker-wrap { overflow: hidden; flex: 1; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 28px, #000 calc(100% - 56px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 28px, #000 calc(100% - 56px), transparent 100%); }
+        .<?php echo $uid; ?> .olo-mm-topbar-left:has(.olo-mm-topbar-ticker) { margin-right: 16px; }
         .<?php echo $uid; ?> .olo-mm-topbar-ticker-items { display: flex; animation: olo-mm-ticker <?php echo absint($s['topbar_ticker_speed'] ?: 5) * 3; ?>s linear infinite; white-space: nowrap; }
         .<?php echo $uid; ?> .olo-mm-topbar-ticker-items span { padding: 0 24px; }
         @keyframes olo-mm-ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }

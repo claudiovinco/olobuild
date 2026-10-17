@@ -46,6 +46,21 @@ class Olobuild_Demo_Temi {
     /** @var array|null La voce del Cartellone del tema di cui si mostra la pagina (segnaposto ancora da risolvere). */
     private static $spettacolo = null;
 
+    /**
+     * @var WP_Post|null Il contenuto vero del sito di cui si mostra la scheda del tema (theme.json → singles), a
+     * /demo/<tema>/<base>/<slug>/: per esempio una struttura di OLObooking nella demo di un suo tema.
+     */
+    private static $singolo = null;
+
+    /** @var string Il template della scheda di $singolo (chiave di theme.json → templates). */
+    private static $singolo_tpl = '';
+
+    /** @var string[] [ base, slug ] della scheda chiesta: si cerca a wp_loaded, quando i tipi di contenuto esistono. */
+    private static $singolo_chiesto = [];
+
+    /** @var bool L'indirizzo è la demo di un tema acceso che qui non si è ancora trovato: si riprova coi temi dei plugin. */
+    private static $riprova = false;
+
     /** @var array<int,array> Template virtuali già preparati in questa richiesta. */
     private static $template = [];
 
@@ -65,10 +80,35 @@ class Olobuild_Demo_Temi {
     public static function avvia() {
         $richiesta = self::leggi_richiesta();
         if ( ! $richiesta ) {
+            // Un tema che vive in un plugin (olobuild_external_theme_dirs) si trova solo quando i plugin sono tutti
+            // inclusi: si riprova a plugins_loaded, prima che partano (e prima che OLOlang scelga la lingua).
+            if ( self::$riprova ) {
+                add_action( 'plugins_loaded', [ __CLASS__, 'avvia_tema_di_plugin' ], 0 );
+            }
             return;
         }
+        self::aggancia( $richiesta );
+    }
+
+    /** La seconda prova di avvia(), coi temi portati dai plugin. */
+    public static function avvia_tema_di_plugin() {
+        $richiesta = self::leggi_richiesta();
+        if ( $richiesta ) {
+            self::aggancia( $richiesta );
+        }
+    }
+
+    /** I filtri della demo, per il tema e la pagina della richiesta. */
+    private static function aggancia( $richiesta ) {
         list( self::$tema, self::$pagina ) = $richiesta;
         self::$palette = self::palette_richiesta();
+
+        // La scheda di un contenuto vero si cerca quando i tipi di contenuto esistono; nella demo i suoi
+        // collegamenti restano nella demo.
+        if ( 'singolo' === self::$pagina ) {
+            add_action( 'wp_loaded', [ __CLASS__, 'risolvi_singolo' ], 1 );
+        }
+        add_filter( 'post_type_link', [ __CLASS__, 'link_singolo' ], 99, 2 );
 
         // Stile del tema al posto di quello del sito.
         add_filter( 'pre_option_olobuild_styles', [ __CLASS__, 'stili' ] );
@@ -165,11 +205,12 @@ class Olobuild_Demo_Temi {
         if ( ! self::acceso( $id ) ) {
             return null;
         }
-        $dir  = OLOBUILD_PATH . 'assets/data/themes/' . $id;
-        $file = $dir . '/theme.json';
-        if ( ! is_readable( $file ) ) {
+        $dir = self::cartella( $id );
+        self::$riprova = '' === $dir;
+        if ( '' === $dir ) {
             return null;
         }
+        $file = $dir . '/theme.json';
         $json = json_decode( (string) file_get_contents( $file ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- file del plugin
         if ( ! is_array( $json ) || empty( $json['templates'] ) || empty( $json['pages'] ) || ! is_array( $json['pages'] ) ) {
             return null;
@@ -177,11 +218,17 @@ class Olobuild_Demo_Temi {
         // La pagina di uno spettacolo: il template singolo del tema (theme.json → singles) con la voce del Cartellone
         // che ha quel titolo. Uno spettacolo che il tema non ha mostra la 404 del tema.
         if ( isset( $m[3] ) && '' !== $m[3] ) {
-            $voce = ( self::BASE_SPETTACOLI === ( $m[2] ?? '' ) && ! empty( $json['singles']['olo_spettacolo'] ) )
-                ? self::voce_del_tema( $dir, $json, $m[3] ) : null;
-            if ( $voce ) {
-                self::$spettacolo = $voce;
-                return [ [ 'id' => $id, 'dir' => $dir, 'json' => $json ], 'spettacolo' ];
+            if ( self::BASE_SPETTACOLI === ( $m[2] ?? '' ) ) {
+                $voce = ! empty( $json['singles']['olo_spettacolo'] ) ? self::voce_del_tema( $dir, $json, $m[3] ) : null;
+                if ( $voce ) {
+                    self::$spettacolo = $voce;
+                    return [ [ 'id' => $id, 'dir' => $dir, 'json' => $json ], 'spettacolo' ];
+                }
+            } elseif ( ! empty( $json['singles'] ) && is_array( $json['singles'] ) ) {
+                // La scheda di un contenuto vero del sito (/demo/<tema>/<base>/<slug>/, come il suo indirizzo
+                // fuori dalla demo): il contenuto si cerca a wp_loaded, e se non c'è si mostra la 404 del tema.
+                self::$singolo_chiesto = [ (string) $m[2], (string) $m[3] ];
+                return [ [ 'id' => $id, 'dir' => $dir, 'json' => $json ], 'singolo' ];
             }
             return empty( $json['activate']['404'] ) ? null : [ [ 'id' => $id, 'dir' => $dir, 'json' => $json ], '404' ];
         }
@@ -202,6 +249,116 @@ class Olobuild_Demo_Temi {
             return true;
         }
         return is_array( $accesi ) && in_array( $id, $accesi, true );
+    }
+
+    /**
+     * La cartella da cui la demo disegna il tema, '' se su questo sito il tema non ha una demo: i temi inclusi
+     * nel plugin sì; un tema del catalogo remoto (che vive in un plugin che il sito non ha) no. La Vetrina temi
+     * mostra solo i temi che hanno una cartella qui.
+     */
+    public static function cartella( $id ) {
+        $id = (string) $id;
+        if ( ! preg_match( '/^[a-z0-9-]+$/', $id ) ) {
+            return '';
+        }
+        $dir = OLOBUILD_PATH . 'assets/data/themes/' . $id;
+        if ( is_readable( $dir . '/theme.json' ) ) {
+            return $dir;
+        }
+        // I temi dei plugin, come nel selettore dei temi (olobuild_external_theme_dirs): una cartella col
+        // theme.json di un tema, oppure una che contiene le cartelle dei temi.
+        foreach ( (array) apply_filters( 'olobuild_external_theme_dirs', [] ) as $extra ) {
+            $extra = rtrim( wp_normalize_path( (string) $extra ), '/' );
+            if ( '' === $extra || ! is_dir( $extra ) ) {
+                continue;
+            }
+            if ( is_readable( $extra . '/theme.json' ) ) {
+                $json = json_decode( (string) file_get_contents( $extra . '/theme.json' ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- file del plugin che porta il tema
+                if ( is_array( $json ) && ( $json['id'] ?? '' ) === $id ) {
+                    return $extra;
+                }
+                continue;
+            }
+            if ( is_readable( $extra . '/' . $id . '/theme.json' ) ) {
+                return $extra . '/' . $id;
+            }
+        }
+        return '';
+    }
+
+    /**
+     * L'indirizzo della scheda di un contenuto vero nella demo di un tema, da qualunque richiesta: '' se qui il
+     * tema non ha la demo accesa o non ha una scheda per quel contenuto. Per i plugin che portano temi: OLObooking
+     * manda qui le sue strutture d'esempio quando il sito mostra la demo del tema ma non ne usa la scheda.
+     */
+    public static function indirizzo_singolo( $tema, $post ) {
+        $tema = (string) $tema;
+        if ( ! ( $post instanceof WP_Post ) || 'publish' !== $post->post_status || ! self::acceso( $tema ) ) {
+            return '';
+        }
+        $dir  = self::cartella( $tema );
+        $json = '' !== $dir ? json_decode( (string) file_get_contents( $dir . '/theme.json' ), true ) : null; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- file del tema
+        if ( ! is_array( $json ) || '' === self::scheda_in( $json, $post ) ) {
+            return '';
+        }
+        return self::indirizzo_contenuto( $tema, $post );
+    }
+
+    /**
+     * Il template della scheda che un tema ha per un contenuto: la chiave di theme.json → singles è il tipo di
+     * contenuto, o quella che dice il plugin del contenuto (filtro olobuild_theme_single_key: OLObooking risponde
+     * «accommodation» per le sue strutture). '' se il tema non ha una scheda per lui.
+     */
+    private static function scheda_in( $json, $post ) {
+        $chiave = (string) apply_filters( 'olobuild_theme_single_key', $post->post_type, $post );
+        $tpl    = (string) ( $json['singles'][ $chiave ] ?? '' );
+        return ( '' !== $tpl && isset( $json['templates'][ $tpl ] ) ) ? $tpl : '';
+    }
+
+    /** /demo/<tema>/<base>/<slug>/, con la base dell'indirizzo del tipo di contenuto (la sua rewrite, o il nome). */
+    private static function indirizzo_contenuto( $tema, $post ) {
+        $tipo = get_post_type_object( $post->post_type );
+        if ( ! $tipo || '' === (string) $post->post_name ) {
+            return '';
+        }
+        $rw   = is_array( $tipo->rewrite ) ? (string) ( $tipo->rewrite['slug'] ?? '' ) : '';
+        $base = '' !== $rw ? $rw : $tipo->name;
+        if ( ! preg_match( '/^[a-z0-9-]+$/', $base ) || ! preg_match( '/^[a-z0-9-]+$/', (string) $post->post_name ) ) {
+            return '';
+        }
+        return home_url( '/' . self::BASE . '/' . sanitize_title( $tema ) . '/' . $base . '/' . $post->post_name . '/' );
+    }
+
+    /**
+     * wp_loaded: la scheda chiesta è un contenuto pubblicato di un tipo che ha <base> come indirizzo, e il tema
+     * ha una scheda per lui. Altrimenti la pagina diventa la 404 del tema.
+     */
+    public static function risolvi_singolo() {
+        $base = (string) ( self::$singolo_chiesto[0] ?? '' );
+        $slug = (string) ( self::$singolo_chiesto[1] ?? '' );
+        foreach ( get_post_types( [ 'public' => true ], 'objects' ) as $tipo ) {
+            $rw = is_array( $tipo->rewrite ) ? (string) ( $tipo->rewrite['slug'] ?? '' ) : '';
+            if ( ( '' !== $rw ? $rw : $tipo->name ) !== $base ) {
+                continue;
+            }
+            $post = get_page_by_path( $slug, OBJECT, $tipo->name );
+            $tpl  = ( $post instanceof WP_Post && 'publish' === $post->post_status ) ? self::scheda_in( self::$tema['json'], $post ) : '';
+            if ( '' !== $tpl ) {
+                self::$singolo     = $post;
+                self::$singolo_tpl = $tpl;
+                return;
+            }
+        }
+        self::$pagina = '404';
+    }
+
+    /** post_type_link nella demo: i contenuti che il tema mostra con la sua scheda restano dentro la demo. */
+    public static function link_singolo( $link, $post ) {
+        if ( ! ( $post instanceof WP_Post ) || 'publish' !== $post->post_status || '' === self::scheda_in( self::$tema['json'], $post ) ) {
+            return $link;
+        }
+        $url = self::indirizzo_contenuto( self::$tema['id'], $post );
+        return '' !== $url ? self::con_palette( $url ) : $link;
     }
 
     /** Il sito mostra almeno una demo? (la tile Vetrina temi si registra solo così) */
@@ -685,6 +842,9 @@ class Olobuild_Demo_Temi {
         if ( 'spettacolo' === self::$pagina ) {
             return self::id_template( (string) ( self::$tema['json']['singles']['olo_spettacolo'] ?? '' ) );
         }
+        if ( 'singolo' === self::$pagina ) {
+            return '' !== self::$singolo_tpl ? self::id_template( self::$singolo_tpl ) : 0;
+        }
         $p = self::$tema['json']['pages'][ self::$pagina ] ?? [];
         return self::id_template( (string) ( $p['template'] ?? self::$pagina ) );
     }
@@ -757,12 +917,28 @@ class Olobuild_Demo_Temi {
         $json = (string) wp_json_encode( $nodi, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
         $lib  = class_exists( 'Olobuild_Template_Library' ) ? Olobuild_Template_Library::library_url() : '';
         $json = str_replace( [ '{{OLOBUILD_URL}}', '{{OLOBUILD_LIBRARY}}' ], [ OLOBUILD_URL, $lib ], $json );
-        $logo = file_exists( self::$tema['dir'] . '/logo.png' ) ? OLOBUILD_URL . 'assets/data/themes/' . self::$tema['id'] . '/logo.png' : '';
+        $casa = file_exists( self::$tema['dir'] . '/logo.png' ) ? self::url_cartella( self::$tema['dir'] ) : '';
+        $logo = '' !== $casa ? $casa . '/logo.png' : '';
         $json = str_replace( 'LOGO_PLACEHOLDER', $logo, $json );
         $json = (string) preg_replace( '/"menu_id"\s*:\s*"auto"/', '"menu_id":' . self::id_menu(), $json );
         $json = self::risolvi( $json );
         $nuovi = json_decode( $json, true );
         return is_array( $nuovi ) ? $nuovi : [];
+    }
+
+    /** L'indirizzo di una cartella dentro wp-content: quella dei temi di Olobuild o di un plugin che porta temi. '' fuori. */
+    private static function url_cartella( $dir ) {
+        $dir = wp_normalize_path( (string) $dir );
+        $basi = [
+            [ wp_normalize_path( OLOBUILD_PATH ), OLOBUILD_URL ],
+            [ trailingslashit( wp_normalize_path( WP_CONTENT_DIR ) ), trailingslashit( content_url() ) ],
+        ];
+        foreach ( $basi as $b ) {
+            if ( 0 === strpos( $dir, $b[0] ) ) {
+                return untrailingslashit( $b[1] . ltrim( substr( $dir, strlen( $b[0] ) ), '/' ) );
+            }
+        }
+        return '';
     }
 
     /** «{{PAGINA:chiave}}» → indirizzo della pagina nella demo. */
@@ -945,6 +1121,9 @@ class Olobuild_Demo_Temi {
         if ( '404' === self::$pagina || ! ( $wp_query instanceof WP_Query ) ) {
             return (string) call_user_func( $disegna );
         }
+        if ( 'singolo' === self::$pagina ) {
+            return self::come_il_contenuto( $disegna );
+        }
         $p       = self::$tema['json']['pages'][ self::$pagina ] ?? [];
         $voce    = 'spettacolo' === self::$pagina ? self::spettacolo() : null;
         if ( $voce ) {
@@ -1014,6 +1193,48 @@ class Olobuild_Demo_Temi {
     }
 
     /**
+     * La scheda di un contenuto vero (una struttura): mentre si disegna, WordPress vede quel contenuto come la
+     * pagina chiesta, così le tile della scheda leggono i suoi dati come sul sito importato. Poi torna tutto com'era.
+     */
+    private static function come_il_contenuto( $disegna ) {
+        global $wp_query;
+        $post = self::$singolo;
+        if ( ! ( $post instanceof WP_Post ) ) {
+            return (string) call_user_func( $disegna );
+        }
+        $prima = [];
+        foreach ( [ 'is_single', 'is_page', 'is_singular', 'is_home', 'queried_object', 'queried_object_id', 'post', 'posts', 'post_count', 'found_posts' ] as $campo ) {
+            $prima[ $campo ] = $wp_query->$campo;
+        }
+        $post_prima                  = $GLOBALS['post'] ?? null;
+        $wp_query->is_single         = true;
+        $wp_query->is_page           = false;
+        $wp_query->is_singular       = true;
+        $wp_query->is_home           = false;
+        $wp_query->queried_object    = $post;
+        $wp_query->queried_object_id = (int) $post->ID;
+        $wp_query->post              = $post;
+        $wp_query->posts             = [ $post ];
+        $wp_query->post_count        = 1;
+        $wp_query->found_posts       = 1;
+        $GLOBALS['post']             = $post; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- solo durante il disegno, rimesso subito dopo
+        setup_postdata( $post );
+        try {
+            return (string) call_user_func( $disegna );
+        } finally {
+            foreach ( $prima as $campo => $valore ) {
+                $wp_query->$campo = $valore;
+            }
+            if ( $post_prima instanceof WP_Post ) {
+                $GLOBALS['post'] = $post_prima; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- il valore di prima
+                setup_postdata( $post_prima );
+            } else {
+                unset( $GLOBALS['post'] );
+            }
+        }
+    }
+
+    /**
      * I collegamenti alla home del sito (il logo in testata e nel piè di pagina, «Home» nelle briciole)
      * portano alla home della demo: sul sito importato la home è quella del tema.
      */
@@ -1047,6 +1268,9 @@ class Olobuild_Demo_Temi {
         }
         if ( 'spettacolo' === self::$pagina && is_array( self::$spettacolo ) ) {
             return esc_html( (string) ( self::$spettacolo['titolo'] ?? '' ) . ' — ' . $nome );
+        }
+        if ( 'singolo' === self::$pagina && self::$singolo instanceof WP_Post ) {
+            return esc_html( get_the_title( self::$singolo ) . ' — ' . $nome );
         }
         $p = self::$tema['json']['pages'][ self::$pagina ] ?? [];
         return esc_html( empty( $p['set_as_homepage'] ) && ! empty( $p['title'] ) ? $p['title'] . ' — ' . $nome : $nome );
