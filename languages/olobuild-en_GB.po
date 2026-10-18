@@ -21533,3 +21533,7 @@ msgstr "Discover %s"
 #, php-format
 msgid "Aggiorna %s"
 msgstr "Update %s"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Dissolvenza dal basso"
+msgstr "Fade from bottom"

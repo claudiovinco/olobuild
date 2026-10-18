@@ -114,6 +114,8 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 'propri'    => 2 === count( array_filter( $propri ) ) ? implode( ',', $propri ) : '',
                 'req'       => '' !== $req_nome ? ( sanitize_key( (string) ( $req['slug'] ?? '' ) ) ?: sanitize_title( $req_nome ) ) : '',
                 'req_nome'  => $req_nome,
+                // L'edizione del plugin (OLObooking: il modulo del tema), scritta sotto il nome nel suo logo.
+                'req_edizione' => $req ? (string) ( $req['edition'] ?? '' ) : '',
                 'req_logo'  => $req ? (string) ( $req['logo'] ?? '' ) : '',
                 'req_logo_scuro' => $req ? (string) ( $req['logo_light'] ?? '' ) : '',
                 'req_min'   => $req ? (string) ( $req['min_version'] ?? '' ) : '',
@@ -203,6 +205,8 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
         $ico    = self::ICONE;
         $meta   = ( '' === $this->safe_color_css( $s['meta_color'] ) ? 'opacity:.65;' : '' ) . $this->tipografia( $s, 'meta' );
         $nome   = $this->tipografia( $s, 'name' );
+        // «Requisiti» prende il colore della categoria (o del nome): sulle card scure il testo intorno è scuro.
+        $col_req = $this->safe_color_css( $s['meta_color'] ?? '' ) ?: $this->safe_color_css( $s['name_color'] ?? '' );
         // Bollini del visore: i colori del tema e le palette da provare (versione chiara e scura del bollino:
         // il visore mostra quella che il tema aperto riceverà).
         $palette = [];
@@ -250,10 +254,12 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ovt-cat{<?php echo $meta; ?>}
             .<?php echo $uid; ?> .ovt-nome{line-height:1.2;font-family:var(--olo-font-family-heading, inherit);<?php echo $nome; ?>}
             .<?php echo $uid; ?> .ovt-req{display:flex;flex-wrap:wrap;align-items:center;gap:var(--olo-space-xs) var(--olo-space-sm);margin-top:var(--olo-space-xs);}
-            .<?php echo $uid; ?> .ovt-req-lab{font-size:10px;font-weight:700;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;opacity:.6;}
+            .<?php echo $uid; ?> .ovt-req-lab{font-size:10px;font-weight:700;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;<?php echo '' !== $col_req ? 'color:' . $col_req . ';opacity:.8;' : 'opacity:.6;'; ?>}
             .<?php echo $uid; ?> .ovt-bollino{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:7px;background:#fff;color:#1f2937;box-shadow:0 0 0 1px rgba(17,24,39,.1);font-size:12px;font-weight:700;line-height:1;}
             .<?php echo $uid; ?> .ovt-bollino.is-scuro{background:#111827;color:#f9fafb;box-shadow:0 0 0 1px rgba(255,255,255,.14);}
             .<?php echo $uid; ?> .ovt-bollino img{display:block;height:14px;width:auto;max-width:110px;}
+            .<?php echo $uid; ?> .ovt-bollino.is-edizione{gap:8px;padding:6px 10px;}
+            .<?php echo $uid; ?> .ovt-bollino.is-edizione img{height:30px;max-width:150px;}
             .<?php echo $uid; ?> .ovt-bollino-v{font-size:11px;font-weight:600;opacity:.65;font-variant-numeric:tabular-nums;}
             .<?php echo $uid; ?> .ovt-azione{margin-top:auto;padding-top:var(--olo-space-sm);display:inline-flex;align-items:center;gap:var(--olo-space-xs);font-size:14px;font-weight:600;color:var(--ovt-acc);}
             .<?php echo $uid; ?> .ovt-azione svg{width:16px;height:16px;transition:transform .2s ease;}
@@ -336,13 +342,17 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                             <span class="ovt-nome"><?php echo esc_html( $t['nome'] ); ?></span>
                             <?php if ( '' !== $t['req_nome'] ) :
                                 $logo_req  = '' !== $t['req_logo'] ? $t['req_logo'] : $t['req_logo_scuro'];
+                                // Col nome dell'edizione («OLObooking appointments»): testo alternativo e titolo.
+                                $nome_req  = '' !== $t['req_edizione'] ? $t['req_nome'] . ' ' . $t['req_edizione'] : $t['req_nome'];
                                 $titolo_req = '' !== $t['req_min']
-                                    ? sprintf( olobuild_t( 'Richiede %1$s %2$s o successiva' ), $t['req_nome'], $t['req_min'] )
-                                    : sprintf( olobuild_t( 'Richiede %s' ), $t['req_nome'] );
+                                    ? sprintf( olobuild_t( 'Richiede %1$s %2$s o successiva' ), $nome_req, $t['req_min'] )
+                                    : sprintf( olobuild_t( 'Richiede %s' ), $nome_req );
+                                $cls_req   = ( ( '' === $t['req_logo'] && '' !== $t['req_logo_scuro'] ) ? ' is-scuro' : '' )
+                                    . ( ( '' !== $logo_req && '' !== $t['req_edizione'] ) ? ' is-edizione' : '' );
                                 ?>
                             <span class="ovt-req" title="<?php echo esc_attr( $titolo_req ); ?>">
                                 <span class="ovt-req-lab"><?php echo esc_html( olobuild_t( 'Requisiti' ) ); ?></span>
-                                <span class="ovt-bollino<?php echo ( '' === $t['req_logo'] && '' !== $t['req_logo_scuro'] ) ? ' is-scuro' : ''; ?>"><?php if ( '' !== $logo_req ) : ?><img src="<?php echo esc_url( $logo_req ); ?>" alt="<?php echo esc_attr( $t['req_nome'] ); ?>" loading="lazy" decoding="async" /><?php else : echo esc_html( $t['req_nome'] ); endif; ?><?php if ( '' !== $t['req_min'] ) : ?><span class="ovt-bollino-v"><?php echo esc_html( $t['req_min'] ); ?>+</span><?php endif; ?></span>
+                                <span class="ovt-bollino<?php echo esc_attr( $cls_req ); ?>"><?php if ( '' !== $logo_req ) : ?><img src="<?php echo esc_url( $logo_req ); ?>" alt="<?php echo esc_attr( $nome_req ); ?>" loading="lazy" decoding="async" /><?php else : echo esc_html( $nome_req ); endif; ?><?php if ( '' !== $t['req_min'] ) : ?><span class="ovt-bollino-v"><?php echo esc_html( $t['req_min'] ); ?>+</span><?php endif; ?></span>
                             </span>
                             <?php endif; ?>
                             <?php if ( '' !== trim( (string) $s['card_label'] ) ) : ?><span class="ovt-azione"><?php echo esc_html( (string) $s['card_label'] ); ?><?php echo $ico['freccia']; ?></span><?php endif; ?>

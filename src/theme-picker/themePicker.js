@@ -280,9 +280,11 @@ export function createThemePicker(opts = {}) {
 
   // Riga «Requisiti» della card: il bollino del plugin (il suo logo, per superfici chiare o
   // scure come il selettore; senza logo, o se non carica, il nome), la versione minima e lo
-  // stato sul sito.
+  // stato sul sito. Con l'edizione (OLObooking: il modulo del tema) il logo ne porta il nome
+  // sotto quello del plugin: due righe, quindi un bollino più alto.
   function reqRowHTML(req, status) {
-    const label = String(req.label || req.slug || '');
+    const edizione = req.edition ? String(req.edition) : '';
+    const label = String(req.label || req.slug || '') + (edizione ? ` ${edizione}` : '');
     const logo = scuro ? (req.logo_light || req.logo) : (req.logo || req.logo_light);
     const nome = `<span class="otmp-bollino-t"${logo ? ' hidden' : ''}>${esc(label)}</span>`;
     const mark = logo
@@ -293,7 +295,7 @@ export function createThemePicker(opts = {}) {
     const st = status === 'ok' ? i18n.reqOkLabel : (status === 'old' ? i18n.reqOldLabel : i18n.reqMissingLabel);
     return `<div class="otmp-cb-req is-${esc(status)}" title="${esc(title)}">
           <span class="otmp-cb-req-lab">${esc(i18n.requirementsLabel)}</span>
-          <span class="otmp-bollino">${mark}${min ? `<span class="otmp-bollino-v">${esc(min)}+</span>` : ''}</span>
+          <span class="otmp-bollino${edizione && logo ? ' is-edizione' : ''}">${mark}${min ? `<span class="otmp-bollino-v">${esc(min)}+</span>` : ''}</span>
           <span class="otmp-cb-req-st"><i></i>${esc(st)}</span>
         </div>`;
   }
@@ -645,13 +647,17 @@ const CSS = `
 .otmp-cb-link svg{width:12px;height:12px;}
 /* Riga «Requisiti»: il bollino del plugin richiesto (logo, oppure il nome), la versione minima
    e lo stato sul sito: pallino verde «attivo», ambra «da aggiornare», neutro «da installare».
-   Sta in fondo alla card, sopra al piede: nelle card di una stessa fila le righe si allineano. */
-.otmp-cb-req{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:6px 10px;margin:auto 0 14px;padding:9px 11px 10px;
+   Sta in fondo alla card, sopra al piede: nelle card di una stessa fila le righe si allineano.
+   Bollino e stato stanno su una riga finché c'è posto, poi lo stato va a capo (il logo di
+   un'edizione è largo il doppio di quello del solo plugin). */
+.otmp-cb-req{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 10px;margin:auto 0 14px;padding:9px 11px 10px;
   border-radius:9px;background:var(--fill);border:1px solid var(--line);}
 .otmp-cb-req + .otmp-cb-foot{margin-top:0;}
-.otmp-cb-req-lab{grid-column:1/-1;font-size:9.5px;font-weight:700;line-height:1;letter-spacing:.11em;text-transform:uppercase;color:var(--faint);}
-.otmp-bollino{display:inline-flex;align-items:center;gap:7px;min-width:0;}
+.otmp-cb-req-lab{flex:0 0 100%;font-size:9.5px;font-weight:700;line-height:1;letter-spacing:.11em;text-transform:uppercase;color:var(--faint);}
+.otmp-bollino{display:inline-flex;align-items:center;gap:7px;min-width:0;max-width:100%;}
 .otmp-bollino-img{display:block;height:16px;width:auto;max-width:120px;}
+.otmp-bollino.is-edizione{gap:9px;}
+.otmp-bollino.is-edizione .otmp-bollino-img{height:30px;max-width:150px;}
 .otmp-bollino-t{font-size:12px;font-weight:700;color:var(--txt);}
 .otmp-bollino-t[hidden]{display:none;}
 .otmp-bollino-v{font-size:11px;font-weight:600;color:var(--mute);font-variant-numeric:tabular-nums;white-space:nowrap;}

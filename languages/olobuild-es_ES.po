@@ -29464,3 +29464,7 @@ msgstr "Descubrir %s"
 #, php-format
 msgid "Aggiorna %s"
 msgstr "Actualizar %s"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Dissolvenza dal basso"
+msgstr "Fundido desde abajo"

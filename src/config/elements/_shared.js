@@ -208,6 +208,7 @@ export const entranceAnimationField = {
   key: 'entrance_animation', label: t('Animazione ingresso'), type: 'select', options: [
     { value: 'none', label: t('Nessuna') },
     { value: 'fade', label: t('Dissolvenza') },
+    { value: 'fade-up', label: t('Dissolvenza dal basso') },
     { value: 'slide-up', label: t('Scorrimento dal basso') },
     { value: 'slide-left', label: t('Scorrimento da sinistra') },
     { value: 'slide-right', label: t('Scorrimento da destra') },

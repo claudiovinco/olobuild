@@ -228,21 +228,52 @@ class Olobuild_Theme_Importer {
      * Il bollino del plugin richiesto: il logo per le superfici chiare (`logo`) e quello per le
      * scure (`logo_light`), nella riga «Requisiti» delle card del selettore e della Vetrina.
      * I plugin della famiglia OLO hanno il loro in assets/img/plugins/; un plugin esterno dà il
-     * suo col filtro `olobuild_requires_plugin_badge` ( [ 'logo' => url, 'logo_light' => url ],
-     * slug, requires_plugin ). Un logo scritto nel manifest del tema vince su tutti e due.
+     * suo col filtro `olobuild_requires_plugin_badge` ( [ 'logo' => url, 'logo_light' => url,
+     * 'edition' => nome ], slug, requires_plugin ). Un logo scritto nel manifest del tema vince su tutti e due.
+     *
+     * Edizioni: un tema di OLObooking dice il modulo che usa (`module`), e il bollino mostra il logo di
+     * quell'edizione, col nome del modulo sotto «booking». `edition` è quel nome: testo alternativo,
+     * titolo e misura del bollino (il logo ha due righe e va disegnato più alto).
      */
     private static function plugin_badge( $req ) {
         $slug  = isset( $req['slug'] ) ? sanitize_key( (string) $req['slug'] ) : '';
         $noti  = [
             'olo-booking' => [ 'logo' => 'olo-booking.png', 'logo_light' => 'olo-booking-w.png' ],
         ];
-        $badge = [];
-        if ( isset( $noti[ $slug ] ) ) {
+        // modulo => nome scritto sul logo dell'edizione (assets/img/plugins/{slug}-{modulo}.png e -w.png)
+        $edizioni = [
+            'olo-booking' => [
+                'accommodation' => 'accommodation',
+                'appointments'  => 'appointments',
+                'events'        => 'events',
+                'real-estate'   => 'real-estate',
+                'rentals'       => 'rentals',
+                'restaurants'   => 'restaurant',
+            ],
+        ];
+        $modulo = isset( $req['module'] ) ? sanitize_key( (string) $req['module'] ) : '';
+        $badge  = [];
+        if ( '' !== $modulo && isset( $edizioni[ $slug ][ $modulo ] ) ) {
+            $badge = [
+                'logo'       => OLOBUILD_URL . 'assets/img/plugins/' . $slug . '-' . $modulo . '.png',
+                'logo_light' => OLOBUILD_URL . 'assets/img/plugins/' . $slug . '-' . $modulo . '-w.png',
+                'edition'    => $edizioni[ $slug ][ $modulo ],
+            ];
+        } elseif ( isset( $noti[ $slug ] ) ) {
             foreach ( $noti[ $slug ] as $chiave => $png ) {
                 $badge[ $chiave ] = OLOBUILD_URL . 'assets/img/plugins/' . $png;
             }
         }
         $badge = (array) apply_filters( 'olobuild_requires_plugin_badge', $badge, $slug, $req );
+        // Un logo del manifest è un altro disegno: l'edizione vale solo se la scrive anche il manifest.
+        $logo_proprio = ! empty( $req['logo'] ) || ! empty( $req['logo_light'] );
+        $edizione     = isset( $req['edition'] ) ? (string) $req['edition'] : ( $logo_proprio ? '' : (string) ( $badge['edition'] ?? '' ) );
+        $edizione     = sanitize_text_field( $edizione );
+        if ( '' !== $edizione ) {
+            $req['edition'] = $edizione;
+        } else {
+            unset( $req['edition'] );
+        }
         foreach ( [ 'logo', 'logo_light' ] as $chiave ) {
             $url = isset( $req[ $chiave ] ) ? esc_url_raw( (string) $req[ $chiave ] ) : '';
             if ( '' === $url && isset( $badge[ $chiave ] ) ) {

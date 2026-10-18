@@ -1556,6 +1556,7 @@ const FETCH_PRIORITY_OPTIONS = [
 const ENTRANCE_ANIMATION_OPTIONS = [
   { value: 'none', label: 'Nessuna' },
   { value: 'fade', label: 'Dissolvenza' },
+  { value: 'fade-up', label: 'Dissolvenza dal basso' },
   { value: 'slide-up', label: 'Scorrimento dal basso' },
   { value: 'slide-left', label: 'Scorrimento da sinistra' },
   { value: 'slide-right', label: 'Scorrimento da destra' },

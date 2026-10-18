@@ -2757,6 +2757,9 @@ html:has(.olo-frontend-grid) {
  * ================================================================ */
 .olo-entrance-fade.olo-visible            { animation: olo-fx-fade var(--olo-e-dur, .6s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) both; }
 .olo-entrance-slide-up.olo-visible        { animation: olo-fx-slide-up var(--olo-e-dur, .6s) var(--olo-e-ease, cubic-bezier(.4,0,.2,1)) var(--olo-e-delay, 0s) both; }
+/* fade-up (1.4.819): 362 righe dei temi lo usavano senza una regola, e lo script le teneva in attesa (opacità 0)
+   finché comparivano di colpo. Ora salgono di 24 px sfumando, con la curva che rallenta all'arrivo. */
+.olo-entrance-fade-up.olo-visible         { animation: olo-fx-fade-up var(--olo-e-dur, .7s) var(--olo-e-ease, cubic-bezier(.22,1,.36,1)) var(--olo-e-delay, 0s) both; }
 .olo-entrance-slide-down.olo-visible      { animation: olo-fx-slide-down var(--olo-e-dur, .6s) var(--olo-e-ease, cubic-bezier(.4,0,.2,1)) var(--olo-e-delay, 0s) both; }
 .olo-entrance-slide-left.olo-visible      { animation: olo-fx-slide-left var(--olo-e-dur, .6s) var(--olo-e-ease, cubic-bezier(.4,0,.2,1)) var(--olo-e-delay, 0s) both; }
 .olo-entrance-slide-right.olo-visible     { animation: olo-fx-slide-right var(--olo-e-dur, .6s) var(--olo-e-ease, cubic-bezier(.4,0,.2,1)) var(--olo-e-delay, 0s) both; }
@@ -2793,6 +2796,7 @@ html:has(.olo-frontend-grid) {
 
 @keyframes olo-fx-fade            { from { opacity: 0; } to { opacity: 1; } }
 @keyframes olo-fx-slide-up        { from { opacity: 0; transform: translateY(calc(40px * var(--olo-e-int, 1))); } to { opacity: 1; transform: none; } }
+@keyframes olo-fx-fade-up         { from { opacity: 0; transform: translateY(calc(24px * var(--olo-e-int, 1))); } to { opacity: 1; transform: none; } }
 @keyframes olo-fx-slide-down      { from { opacity: 0; transform: translateY(calc(-40px * var(--olo-e-int, 1))); } to { opacity: 1; transform: none; } }
 @keyframes olo-fx-slide-left      { from { opacity: 0; transform: translateX(calc(-60px * var(--olo-e-int, 1))); } to { opacity: 1; transform: none; } }
 @keyframes olo-fx-slide-right     { from { opacity: 0; transform: translateX(calc(60px * var(--olo-e-int, 1))); } to { opacity: 1; transform: none; } }
