@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.828 - 2026-10-19 (fix)
+- Il builder in inglese, tedesco, spagnolo e francese è tradotto per intero: più di 3.000 scritte che restavano in italiano hanno la loro traduzione. Sono le etichette, le spiegazioni delle (i), le opzioni dei menu, i nomi delle sezioni e i testi di partenza delle voci di 145 tile, più le pagine di amministrazione e il Pro Slider. Anche l’inglese britannico è completo, con le sue grafie («colour», «centre»).
+
 ## v1.4.827 - 2026-10-19 (fix)
 - Shape Divider, «Specchia verticale»: il divisore si ribalta attorno alla linea fra le due sezioni e resta attaccato al bordo, entrando nella sua sezione invece che in quella vicina. Prima si capovolgeva solo il disegno: la parte piena finiva lontano dal bordo, sopra il contenuto della sezione accanto (per esempio il logo del piè di pagina).
 
