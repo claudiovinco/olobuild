@@ -118,8 +118,16 @@ class Olobuild_Shapedivider_Tile extends Olobuild_Tile_Base {
         // la sezione e quel lato tocca la sezione: giusto cosi'. In «Basso» esce
         // sotto, il lato che tocca la sezione e' quello alto, e senza ribaltarlo
         // la forma restava staccata dalla sua sezione, a testa in giu'. In
-        // «Basso» il ribaltamento e' quindi la posizione normale, e «Specchia
-        // verticale» lo toglie.
+        // «Basso» il ribaltamento e' quindi la posizione normale.
+        //
+        // «Specchia verticale» ribalta il divisore attorno alla linea fra le due
+        // sezioni: invece di sporgere nella sezione vicina entra nella sua, sullo
+        // stesso bordo, e la parte piena resta contro la linea (dentro, in
+        // «Basso» la forma piena torna in basso, in «Alto» va in alto). Prima
+        // ribaltava solo il disegno e lo lasciava fuori: la parte piena finiva
+        // lontano dalla linea, sopra il contenuto della sezione vicina (il logo
+        // del piè di pagina coperto, 19 ott 2026).
+        $dentro     = $flip_v;
         $flip_y     = ( $position === 'bottom' ) ? ! $flip_v : $flip_v;
         $transforms = [];
         if ( $flip_h ) {
@@ -210,16 +218,17 @@ class Olobuild_Shapedivider_Tile extends Olobuild_Tile_Base {
              *
              * Un pixel non si vede (il divisore e' alto ottanta) e la cucitura
              * sparisce, perche' i due elementi si sovrappongono invece di
-             * sfiorarsi.
+             * sfiorarsi. Specchiato, il divisore sta dentro la sua sezione e il
+             * pixel sconfina nella vicina.
              */
             ?>
             <?php if ( $position === 'bottom' ) : ?>
             .<?php echo $uid; ?> {
-                transform: translateY(calc(100% - 1px));
+                transform: translateY(<?php echo $dentro ? '1px' : 'calc(100% - 1px)'; ?>);
             }
             <?php else : ?>
             .<?php echo $uid; ?> {
-                transform: translateY(calc(-100% + 1px));
+                transform: translateY(<?php echo $dentro ? '-1px' : 'calc(-100% + 1px)'; ?>);
             }
             <?php endif; ?>
             <?php foreach ( $per_disp as $disp ) : ?>

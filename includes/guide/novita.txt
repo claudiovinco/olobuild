@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.827 - 2026-10-19 (fix)
+- Shape Divider, «Specchia verticale»: il divisore si ribalta attorno alla linea fra le due sezioni e resta attaccato al bordo, entrando nella sua sezione invece che in quella vicina. Prima si capovolgeva solo il disegno: la parte piena finiva lontano dal bordo, sopra il contenuto della sezione accanto (per esempio il logo del piè di pagina).
+
 ## v1.4.826 - 2026-10-19 (fix)
 - Le voci create con «Aggiungi» nascono nella lingua del builder: in inglese, tedesco, spagnolo e francese i testi di partenza sono tradotti (prima restavano in italiano). Nel builder in italiano Griglia Prodotti, Before / After, Step Timeline e Lookbook Mixer li scrivono in italiano invece che in inglese («Prodotto» e «Aggiunta rapida» invece di «Product» e «Quick add»).
 - Il campo «Occhiello» dell’inspector, la riga sopra il titolo, è tradotto bene: «Eyebrow», «Dachzeile», «Antetítulo», «Surtitre» (prima «Eyelet», «Ojal», «Œillet», l’occhiello dei lacci).
