@@ -93,6 +93,13 @@ class Olobuild_Woo_Template_Integration {
      * Override WooCommerce template file for product single and archive.
      */
     public function maybe_override_template( $template ) {
+        // WooCommerce in «coming soon» (priorità 10) ha già scritto la sua pagina d'attesa e coi
+        // temi a blocchi restituisce '': il template OLO finirebbe sotto, come seconda pagina
+        // intera, e il negozio si vedrebbe comunque.
+        if ( '' === $template ) {
+            return $template;
+        }
+
         // Product single
         if ( function_exists( 'is_product' ) && is_product() ) {
             $tpl = (int) get_option( 'olobuild_woo_tpl_product_single', 0 );
@@ -105,6 +112,12 @@ class Olobuild_Woo_Template_Integration {
         // Product archive / shop
         if ( function_exists( 'is_shop' ) && is_shop() ) {
             $tpl = (int) get_option( 'olobuild_woo_tpl_product_archive', 0 );
+            // Nessun template per l'archivio: vale quello costruito sulla pagina Negozio stessa.
+            // WooCommerce al suo indirizzo mostra l'archivio prodotti e non la pagina, che col
+            // template collegato sembrava vuota (la ricerca prodotti resta l'archivio di Woo).
+            if ( ! $tpl && ! is_search() ) {
+                $tpl = $this->template_pagina_negozio();
+            }
             if ( $tpl > 0 ) {
                 return $this->get_olo_wrapper_template( $tpl );
             }
@@ -147,6 +160,18 @@ class Olobuild_Woo_Template_Integration {
         }
 
         return $template;
+    }
+
+    /**
+     * Template OLO collegato alla pagina Negozio di WooCommerce (0 se manca o non esiste più).
+     */
+    private function template_pagina_negozio() {
+        $shop = function_exists( 'wc_get_page_id' ) ? (int) wc_get_page_id( 'shop' ) : 0;
+        if ( $shop <= 0 ) {
+            return 0;
+        }
+        $tpl = (int) get_post_meta( $shop, '_olo_template_id', true );
+        return ( $tpl > 0 && Olobuild_Database::instance()->get_template( $tpl ) ) ? $tpl : 0;
     }
 
     /**

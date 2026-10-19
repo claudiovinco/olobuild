@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.829 - 2026-10-19 (fix)
+- WooCommerce: la pagina Negozio costruita con Olobuild si vede. Al suo indirizzo WooCommerce mostra l’archivio dei prodotti al posto della pagina, che sembrava vuota anche aprendola con «Reale» dal builder. Ora, se nelle impostazioni WooCommerce di Olobuild non c’è un template per l’Archivio prodotti, vale quello costruito sulla pagina Negozio. La ricerca dei prodotti resta quella di WooCommerce.
+- WooCommerce con il negozio in «presto online» (coming soon): i visitatori vedono solo la pagina d’attesa. Prima, con un template Olobuild assegnato al negozio, sotto la pagina d’attesa compariva per intero anche la pagina del negozio.
+
 ## v1.4.828 - 2026-10-19 (fix)
 - Il builder in inglese, tedesco, spagnolo e francese è tradotto per intero: più di 3.000 scritte che restavano in italiano hanno la loro traduzione. Sono le etichette, le spiegazioni delle (i), le opzioni dei menu, i nomi delle sezioni e i testi di partenza delle voci di 145 tile, più le pagine di amministrazione e il Pro Slider. Anche l’inglese britannico è completo, con le sue grafie («colour», «centre»).
 
