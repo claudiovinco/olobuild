@@ -60,7 +60,7 @@ export default {
     { type: 'separator', label: t('Ingredienti') },
     { key: 'items', label: t('Voci'), type: 'content-items',
       itemLabel: t('Ingrediente'),
-      defaults: { name: 'Nuovo', amount: 100, unit: 'g' },
+      defaults: { name: t('Nuovo'), amount: 100, unit: 'g' },
       itemFields: [
         { key: 'name', label: t('Nome'), type: 'text' },
         { key: 'amount', label: t('Quantità base (o % in modalità percentuale)'), type: 'number' },

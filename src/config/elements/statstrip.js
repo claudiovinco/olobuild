@@ -63,7 +63,7 @@ export default {
     { type: 'separator', label: t('Statistiche') },
     { key: 'items', label: t('Voci'), type: 'content-items',
       itemLabel: t('Statistica'),
-      defaults: { value: '00', label: 'Etichetta' },
+      defaults: { value: '00', label: t('Etichetta') },
       itemFields: [
         { key: 'value', label: t('Valore (es. 500+, 92%)'), type: 'text' },
         { key: 'label', label: t('Etichetta'), type: 'text' },

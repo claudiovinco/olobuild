@@ -46,7 +46,7 @@ export default {
     { key: 'lock_text', label: t('Testo lucchetto'), type: 'text' },
     { key: 'anchor', label: t('Ancora (id)'), type: 'text' },
     { key: 'items', label: t('Lezioni'), type: 'content-items', itemLabel: t('Lezione'),
-      defaults: { xp: '+100 xp', title: 'Lezione', text_html: 'Testo…' },
+      defaults: { xp: '+100 xp', title: t('Lezione'), text_html: t('Testo…') },
       itemFields: [
         { key: 'xp', label: t('Badge XP'), type: 'text' },
         { key: 'title', label: t('Titolo'), type: 'text' },

@@ -41,7 +41,7 @@ export default {
     { type: 'separator', label: t('Campioni') },
     { key: 'items', label: t('Swatch'), type: 'content-items',
       itemLabel: t('Swatch'),
-      defaults: { name: 'Nuovo', color: '#cccccc' },
+      defaults: { name: t('Nuovo'), color: '#cccccc' },
       itemFields: [
         { key: 'name', label: t('Nome'), type: 'text' },
       ],

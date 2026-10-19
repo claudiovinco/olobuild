@@ -96,7 +96,7 @@ export default {
     { type: 'separator', label: t('KPI cards (dashboard)') },
     { key: 'kpis', label: t('KPI'), type: 'content-items',
       itemLabel: t('KPI'),
-      defaults: { label: 'Metric', value: '0', delta: '', down: '' },
+      defaults: { label: t('Metrica'), value: '0', delta: '', down: '' },
       itemFields: [
         { key: 'label', label: t('Etichetta'), type: 'text' },
         { key: 'value', label: t('Valore'), type: 'text' },

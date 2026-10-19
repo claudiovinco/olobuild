@@ -83,7 +83,7 @@ export default {
     { type: 'separator', label: t('Card prima/dopo') },
     { key: 'items', label: t('Voci'), type: 'content-items',
       itemLabel: t('Card'),
-      defaults: { before_image: '', after_image: '', before_label: 'Before', after_label: 'After', title: 'Nome · durata', text: 'Risultato ottenuto.' },
+      defaults: { before_image: '', after_image: '', before_label: t('Prima'), after_label: t('Dopo'), title: t('Nome · durata'), text: t('Risultato ottenuto.') },
       itemFields: [
         { key: 'before_image', label: t('Immagine "Prima"'), type: 'image' },
         { key: 'after_image', label: t('Immagine "Dopo"'), type: 'image' },

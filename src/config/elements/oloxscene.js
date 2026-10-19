@@ -94,7 +94,7 @@ export default {
     { key: 'mad_mid', label: t('Testo prima dei sogni'), type: 'text',
       condition: { field: 'scene', op: 'eq', value: 'madlib' } },
     { key: 'mad_picks', label: t('Sogni cliccabili'), type: 'content-items', itemLabel: t('Sogno'),
-      defaults: { label: 'sogno', value: 'un sogno', color: 'build' },
+      defaults: { label: t('sogno'), value: t('un sogno'), color: 'build' },
       itemFields: [
         { key: 'label', label: t('Etichetta'), type: 'text' },
         { key: 'value', label: t('Testo nella mail'), type: 'text' },

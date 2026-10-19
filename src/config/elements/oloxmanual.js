@@ -52,7 +52,7 @@ export default {
     { key: 'sub_html', label: t('Sottotitolo (HTML)'), type: 'textarea' },
     { type: 'separator', label: t('Capitoli') },
     { key: 'chapters', label: t('Capitoli'), type: 'content-items', itemLabel: t('Capitolo'),
-      defaults: { anchor: 'c1', no: '§1', title_html: 'Titolo <em>capitolo</em>', body_html: '<p>Testo…</p>' },
+      defaults: { anchor: 'c1', no: '§1', title_html: t('Titolo <em>capitolo</em>'), body_html: t('<p>Testo…</p>') },
       itemFields: [
         { key: 'anchor', label: t('Ancora (id)'), type: 'text' },
         { key: 'no', label: t('Numero (§1)'), type: 'text' },
@@ -65,7 +65,7 @@ export default {
     { key: 'spec_name', label: t('Nome prodotto'), type: 'text' },
     { key: 'spec_sub', label: t('Sotto il nome'), type: 'text' },
     { key: 'spec_rows', label: t('Righe tabella'), type: 'content-items', itemLabel: t('Riga'),
-      defaults: { f: 'Voce', text_html: 'Valore' },
+      defaults: { f: t('Voce'), text_html: t('Valore') },
       itemFields: [
         { key: 'f', label: t('Voce (sinistra)'), type: 'text' },
         { key: 'text_html', label: t('Valore (HTML)'), type: 'textarea' },

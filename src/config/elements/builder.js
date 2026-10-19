@@ -72,7 +72,7 @@ export default {
     { type: 'separator', label: t('Articoli') },
     { key: 'items', label: t('Voci'), type: 'content-items',
       itemLabel: t('Voce'),
-      defaults: { name: 'Nuova voce', price: '10', note: '', start: 0 },
+      defaults: { name: t('Nuova voce'), price: '10', note: '', start: 0 },
       itemFields: [
         { key: 'name', label: t('Nome'), type: 'text' },
         { key: 'price', label: t('Prezzo'), type: 'number', min: 0, step: 0.01 },

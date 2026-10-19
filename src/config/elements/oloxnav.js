@@ -50,7 +50,7 @@ export default {
     { key: 'logo_url', label: t('Link logo'), type: 'link' },
     { type: 'separator', label: t('Link prodotti') },
     { key: 'links', label: t('Link'), type: 'content-items', itemLabel: t('Link'),
-      defaults: { label: 'prodotto', url: '#', color: 'olo', active: false },
+      defaults: { label: t('prodotto'), url: '#', color: 'olo', active: false },
       itemFields: [
         { key: 'label', label: t('Etichetta'), type: 'text' },
         { key: 'url', label: t('Link'), type: 'link' },

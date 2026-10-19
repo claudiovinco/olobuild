@@ -43,7 +43,7 @@ export default {
     { type: 'separator', label: t('Marker') },
     { key: 'items', label: t('Punti'), type: 'content-items',
       itemLabel: t('Marker'),
-      defaults: { x: 50, y: 50, title: 'Nuovo punto', text: 'Descrizione.', meta: '' },
+      defaults: { x: 50, y: 50, title: t('Nuovo punto'), text: t('Descrizione.'), meta: '' },
       itemFields: [
         { key: 'x', label: t('Posizione X'), type: 'number' },
         { key: 'y', label: t('Posizione Y'), type: 'number' },

@@ -86,7 +86,7 @@ export default {
 
     { type: 'separator', label: t('Lista scalata (facoltativa)') },
     { key: 'list_items', label: t('Voci'), type: 'content-items', itemLabel: t('Voce'),
-      defaults: { name: 'Nuova voce', amount: 100, unit: 'g' },
+      defaults: { name: t('Nuova voce'), amount: 100, unit: 'g' },
       itemFields: [
         { key: 'name', label: t('Nome'), type: 'text' },
         { key: 'amount', label: t('Quantità'), type: 'number', step: 0.01 },

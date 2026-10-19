@@ -90,7 +90,7 @@ export default {
     { key: 'intro_cta2', label: t('CTA 2 (→ finale)'), type: 'text',
       condition: { field: 'variant', op: 'eq', value: 'intro' } },
     { key: 'marquee_items', label: t('Marquee in basso'), type: 'content-items', itemLabel: t('Voce'),
-      defaults: { text: 'voce' },
+      defaults: { text: t('voce') },
       itemFields: [ { key: 'text', label: t('Testo'), type: 'text' } ],
       condition: { field: 'variant', op: 'eq', value: 'intro' } },
 
@@ -147,7 +147,7 @@ export default {
     { key: 'mad_mid', label: t('Testo prima dei sogni'), type: 'text',
       condition: { field: 'variant', op: 'eq', value: 'outro' } },
     { key: 'mad_picks', label: t('Sogni cliccabili'), type: 'content-items', itemLabel: t('Sogno'),
-      defaults: { label: 'sogno', value: 'un sogno', color: 'build' },
+      defaults: { label: t('sogno'), value: t('un sogno'), color: 'build' },
       itemFields: [
         { key: 'label', label: t('Etichetta'), type: 'text' },
         { key: 'value', label: t('Testo nella mail'), type: 'text' },

@@ -46,7 +46,7 @@ export default {
   fields: [
     { key: 'logo', label: t('Logo (reso bianco)'), type: 'image' },
     { key: 'links', label: t('Link'), type: 'content-items', itemLabel: t('Link'),
-      defaults: { label: 'link', url: '#' },
+      defaults: { label: t('link'), url: '#' },
       itemFields: [
         { key: 'label', label: t('Etichetta'), type: 'text' },
         { key: 'url', label: t('Link'), type: 'link' },
@@ -58,7 +58,7 @@ export default {
     { key: 'home_label', label: t('Etichetta link home'), type: 'text',
       condition: { field: 'links_auto', op: 'eq', value: true } },
     { key: 'products', label: t('Prodotti (per i link auto)'), type: 'content-items', itemLabel: t('Prodotto'),
-      defaults: { label: 'prodotto', slug: 'slug' },
+      defaults: { label: t('prodotto'), slug: 'slug' },
       itemFields: [
         { key: 'label', label: t('Etichetta'), type: 'text' },
         { key: 'slug', label: t('Slug pagina'), type: 'text' },

@@ -82,7 +82,7 @@ export default {
     { type: 'separator', label: t('Titolo (righe)') },
     { key: 'lines', label: t('Righe titolo'), type: 'content-items',
       itemLabel: t('Riga'),
-      defaults: { text: 'Riga titolo', mode: '' },
+      defaults: { text: t('Riga titolo'), mode: '' },
       itemFields: [
         { key: 'text', label: t('Testo'), type: 'text' },
         { key: 'mode', label: t('Stile'), type: 'select', options: [

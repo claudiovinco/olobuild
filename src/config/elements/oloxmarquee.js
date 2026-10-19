@@ -29,7 +29,7 @@ export default {
 
   fields: [
     { key: 'items', label: t('Voci'), type: 'content-items', itemLabel: t('Voce'),
-      defaults: { text: 'voce' },
+      defaults: { text: t('voce') },
       itemFields: [ { key: 'text', label: t('Testo'), type: 'text' } ] },
     { key: 'sep', label: t('Separatore'), type: 'select', options: [
       { value: '●', label: '●' }, { value: '▪', label: '▪' }, { value: '✕', label: '✕' },

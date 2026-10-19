@@ -6725,7 +6725,7 @@ msgid "Obbligatorio"
 msgstr "Erforderlich"
 
 msgid "Occhiello"
-msgstr "Eyelet"
+msgstr "Dachzeile"
 
 msgid "Offset"
 msgstr "Offset"
@@ -29696,3 +29696,187 @@ msgstr "Spaltenabstand"
 #: src/config/elements
 msgid "Aggiungi le voci da far scorrere"
 msgstr "Füge die Einträge hinzu, die laufen sollen"
+
+#: src/config/elements
+msgid "Nome · durata"
+msgstr "Name · Dauer"
+
+#: src/config/elements
+msgid "Risultato ottenuto."
+msgstr "Erzieltes Ergebnis."
+
+#: src/config/elements
+msgid "Nuovo messaggio"
+msgstr "Neue Nachricht"
+
+#: src/config/elements
+msgid "Nuova opzione"
+msgstr "Neue Option"
+
+#: src/config/elements
+msgid "Risultato"
+msgstr "Ergebnis"
+
+#: src/config/elements
+msgid "Riga titolo"
+msgstr "Titelzeile"
+
+#: src/config/elements
+msgid "Nuova riga"
+msgstr "Neue Zeile"
+
+#: src/config/elements
+msgid "azione"
+msgstr "Aktion"
+
+#: src/config/elements
+msgid "Passaggio"
+msgstr "Schritt"
+
+#: src/config/elements
+msgid "Testo…"
+msgstr "Text…"
+
+#: src/config/elements
+msgid "link"
+msgstr "Link"
+
+#: src/config/elements
+msgid "prodotto"
+msgstr "Produkt"
+
+#: src/config/elements
+msgid "Benvenuto"
+msgstr "Willkommen"
+
+#: src/config/elements
+msgid "tag"
+msgstr "Tag"
+
+#: src/config/elements
+msgid "[waf] regola caricata"
+msgstr "[waf] Regel geladen"
+
+#: src/config/elements
+msgid "voce"
+msgstr "Eintrag"
+
+#: src/config/elements
+msgid "Obiettivo"
+msgstr "Ziel"
+
+#: src/config/elements
+msgid "Titolo <em>em</em>"
+msgstr "Titel <em>em</em>"
+
+#: src/config/elements
+msgid "Sottotitolo…"
+msgstr "Untertitel…"
+
+#: src/config/elements
+msgid "tag 1|tag 2"
+msgstr "Tag 1|Tag 2"
+
+#: src/config/elements
+msgid "coordinate · deco"
+msgstr "Koordinaten · Deko"
+
+#: src/config/elements
+msgid "sogno"
+msgstr "Traum"
+
+#: src/config/elements
+msgid "un sogno"
+msgstr "ein Traum"
+
+#: src/config/elements
+msgid "indicizzata"
+msgstr "indexiert"
+
+#: src/config/elements
+msgid "Titolo <em>capitolo</em>"
+msgstr "Kapitel<em>titel</em>"
+
+#: src/config/elements
+msgid "<p>Testo…</p>"
+msgstr "<p>Text…</p>"
+
+#: src/config/elements
+msgid "blocco"
+msgstr "Block"
+
+#: src/config/elements
+msgid "Fase…"
+msgstr "Schritt…"
+
+#: src/config/elements
+msgid "verticale"
+msgstr "Branche"
+
+#: src/config/elements
+msgid "Nuovo passo"
+msgstr "Neuer Schritt"
+
+#: src/config/elements
+msgid "Descrizione del passo."
+msgstr "Beschreibung des Schritts."
+
+#: src/config/elements
+msgid "Aggiunta rapida"
+msgstr "Schnell hinzufügen"
+
+#: src/config/elements
+msgid "Metrica"
+msgstr "Kennzahl"
+
+#: src/config/elements
+msgid "Categoria · luogo"
+msgstr "Kategorie · Ort"
+
+#: src/config/elements
+msgid "Testo dell'elemento…"
+msgstr "Text des Elements…"
+
+#: src/config/elements
+msgid "Testo della card…"
+msgstr "Kartentext…"
+
+#: src/config/elements
+msgid "OCCHIELLO"
+msgstr "DACHZEILE"
+
+#: src/config/elements
+msgid "accento"
+msgstr "Akzent"
+
+#: src/config/elements
+msgid "Descrizione…"
+msgstr "Beschreibung…"
+
+#: src/config/elements
+msgid "ETICHETTA"
+msgstr "BEZEICHNUNG"
+
+#: src/config/elements
+msgid "nuova frase a rotazione"
+msgstr "neuer wechselnder Satz"
+
+#: src/config/elements
+msgid "Nuova città"
+msgstr "Neue Stadt"
+
+#: src/config/elements
+msgid "Nuova garanzia"
+msgstr "Neue Garantie"
+
+#: src/config/elements
+msgid "Nuovo lavoro"
+msgstr "Neue Arbeit"
+
+#: src/config/elements
+msgid "'26 — Categoria"
+msgstr "'26 — Kategorie"
+
+#: src/config/elements
+msgid "Breve descrizione del progetto."
+msgstr "Kurze Projektbeschreibung."

@@ -149,7 +149,7 @@ export default {
     { key: 'items', label: t('Voci'), type: 'content-items', supportsDynamic: true,
       condition: { field: 'source', value: 'custom' },
       itemLabel: t('Prodotto'),
-      defaults: { image: '', media_bg: { type: 'none' }, media_label: 'product', tag: '', category: 'Category', title: 'Product', price: '€0', shades: '', notes: '', roast: 0, filter_tags: '', link: '#', quick_add: 'Quick add' },
+      defaults: { image: '', media_bg: { type: 'none' }, media_label: t('prodotto'), tag: '', category: t('Categoria'), title: t('Prodotto'), price: '€0', shades: '', notes: '', roast: 0, filter_tags: '', link: '#', quick_add: t('Aggiunta rapida') },
       itemFields: [
         { key: 'image', label: t('Immagine'), type: 'image' },
         { key: 'media_bg', label: t('Sfondo / media (ogni tipo)'), type: 'background', showParallax: false },

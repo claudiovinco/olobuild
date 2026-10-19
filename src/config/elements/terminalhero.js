@@ -106,7 +106,7 @@ export default {
     { key: 'heading', label: t('Titolo'), type: 'text' },
     { key: 'type_phrases', label: t('Frasi typewriter'), type: 'content-items',
       itemLabel: t('Frase'),
-      defaults: { text: 'nuova frase a rotazione' },
+      defaults: { text: t('nuova frase a rotazione') },
       itemFields: [
         { key: 'text', label: t('Testo'), type: 'text' },
       ],

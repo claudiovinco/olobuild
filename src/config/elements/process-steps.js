@@ -64,7 +64,7 @@ export default {
     { type: 'separator', label: t('Passi') },
     { key: 'items', label: t('Passi'), type: 'content-items',
       itemLabel: t('Passo'),
-      defaults: { number: '00', title: 'Nuovo passo', description: 'Descrizione del passo.' },
+      defaults: { number: '00', title: t('Nuovo passo'), description: t('Descrizione del passo.') },
       itemFields: [
         { key: 'number', label: t('Numero / etichetta'), type: 'text' },
         { key: 'title', label: t('Titolo'), type: 'text' },

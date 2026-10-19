@@ -67,7 +67,7 @@ export default {
     { type: 'separator', label: t('Campi') },
     { key: 'fields', label: t('Campi della barra'), type: 'content-items',
       itemLabel: t('Campo'),
-      defaults: { label: 'Categoria', filter: 'category', auto_options: true, value: 'Tutte', options: '' },
+      defaults: { label: t('Categoria'), filter: 'category', auto_options: true, value: t('Tutte'), options: '' },
       itemFields: [
         { key: 'label', label: t('Etichetta'), type: 'text' },
         { key: 'filter', label: t('Cosa filtra'), type: 'select',

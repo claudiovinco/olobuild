@@ -86,7 +86,7 @@ export default {
   fields: [
     { key: 'cards', label: t('Card'), type: 'content-items', supportsDynamic: true,
       itemLabel: t('Card'),
-      defaults: { eyebrow: '', title: 'Nuova card', accent: '', text: 'Testo della card…', media: '', media_label: 'Immagine', color: '', text_color: '' },
+      defaults: { eyebrow: '', title: t('Nuova card'), accent: '', text: t('Testo della card…'), media: '', media_label: t('Immagine'), color: '', text_color: '' },
       itemFields: [
         { key: 'eyebrow',     label: t('Sopra-titolo (mono maiuscolo)'), type: 'text',
           description: t('Etichetta breve sopra il titolo, resa in maiuscolo con font mono. Distinta dal numero e dall\'accento.') },

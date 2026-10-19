@@ -73,7 +73,7 @@ export default {
     { type: 'separator', label: t('Lavori') },
     { key: 'items', label: t('Card'), type: 'content-items', supportsDynamic: true,
       itemLabel: t('Lavoro'),
-      defaults: { image: '', media_label: 'Nuovo lavoro', title: 'Titolo', meta: "'26 — Categoria", description: 'Breve descrizione del progetto.', link_url: '', tall: false },
+      defaults: { image: '', media_label: t('Nuovo lavoro'), title: t('Titolo'), meta: t('\'26 — Categoria'), description: t('Breve descrizione del progetto.'), link_url: '', tall: false },
       itemFields: [
         { key: 'image',       label: t('Immagine'),                 type: 'image' },
         { key: 'media_label', label: t('Label placeholder (se vuota)'), type: 'text' },

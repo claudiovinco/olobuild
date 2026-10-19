@@ -134,7 +134,7 @@ export default {
   fields: [
     { key: 'items', label: t('Elementi'), type: 'content-items', supportsDynamic: true,
       itemLabel: t('Elemento'),
-      defaults: { title: 'Nuovo elemento', subtitle: 'Categoria · luogo', text: 'Testo dell\'elemento…', media: '', media_label: 'Immagine', color: '', text_color: '' },
+      defaults: { title: t('Nuovo elemento'), subtitle: t('Categoria · luogo'), text: t('Testo dell\'elemento…'), media: '', media_label: t('Immagine'), color: '', text_color: '' },
       itemFields: [
         { key: 'title',       label: t('Titolo'),                        type: 'text' },
         { key: 'subtitle',    label: t('Sottotitolo'),                   type: 'text' },

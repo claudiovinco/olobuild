@@ -78,7 +78,7 @@ export default {
     { type: 'separator', label: t('Assi variabili') },
     { key: 'axes', label: t('Assi'), type: 'content-items',
       itemLabel: t('Asse'),
-      defaults: { tag: 'wght', label: 'Peso', min: 0, max: 100, default_val: 50 },
+      defaults: { tag: 'wght', label: t('Peso'), min: 0, max: 100, default_val: 50 },
       itemFields: [
         { key: 'tag',         label: t('Tag asse (4 lettere)'), type: 'text', placeholder: 'wght' },
         { key: 'label',       label: t('Etichetta'),            type: 'text', placeholder: t('Peso') },

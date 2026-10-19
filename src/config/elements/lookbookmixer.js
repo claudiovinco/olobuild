@@ -80,7 +80,7 @@ export default {
       description: t('Il cerchio col colore dell\'opzione, accanto al nome. Spento, la riga lascia più spazio al nome.') },
     { key: 'items', label: t('Voci'), type: 'content-items',
       itemLabel: t('Opzione'),
-      defaults: { step: 'Step', name: 'Opzione', price: '0', color: '#e7a0b4' },
+      defaults: { step: t('Passaggio'), name: t('Opzione'), price: '0', color: '#e7a0b4' },
       itemFields: [
         { key: 'step',  label: t('Step (gruppo)'), type: 'text' },
         { key: 'name',  label: t('Nome'),          type: 'text' },

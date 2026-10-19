@@ -43,7 +43,7 @@ export default {
     { key: 'anchor', label: t('Ancora (id sezione)'), type: 'text' },
     { type: 'separator', label: t('Card') },
     { key: 'items', label: t('Card'), type: 'content-items', itemLabel: t('Card'),
-      defaults: { label: '', title: 'Titolo', text_html: 'Testo…', extra: '' },
+      defaults: { label: '', title: t('Titolo'), text_html: t('Testo…'), extra: '' },
       itemFields: [
         { key: 'label', label: t('Etichetta (numero / kicker / scena)'), type: 'text' },
         { key: 'title', label: t('Titolo (HTML ok)'), type: 'text' },

@@ -54,7 +54,7 @@ export default {
     { key: 'title_html', label: t('Titolo (HTML)'), type: 'textarea' },
     { key: 'question_html', label: t('Domanda (HTML)'), type: 'textarea' },
     { key: 'answers', label: t('Risposte'), type: 'content-items', itemLabel: t('Risposta'),
-      defaults: { text: 'Risposta', ok: false },
+      defaults: { text: t('Risposta'), ok: false },
       itemFields: [
         { key: 'text', label: t('Testo'), type: 'text' },
         { key: 'ok', label: t('Risposta giusta'), type: 'toggle' },

@@ -57,7 +57,7 @@ export default {
     { key: 'op_p1', label: t('Paragrafo 1 (HTML)'), type: 'textarea' },
     { key: 'op_p2', label: t('Paragrafo 2 (HTML)'), type: 'textarea' },
     { key: 'battles', label: t('Battaglie'), type: 'content-items', itemLabel: t('Battaglia'),
-      defaults: { q: 'Obiettivo', chips: 'build,lang' },
+      defaults: { q: t('Obiettivo'), chips: 'build,lang' },
       itemFields: [
         { key: 'q', label: t('Obiettivo'), type: 'text' },
         { key: 'chips', label: t('Prodotti (CSV: build,booking,lang,secur,tour,tutor)'), type: 'text' },

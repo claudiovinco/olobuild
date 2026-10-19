@@ -99,7 +99,7 @@ export default {
     { type: 'separator', label: t('Opzioni e risultati') },
     { key: 'items', label: t('Voci'), type: 'content-items',
       itemLabel: t('Opzione'),
-      defaults: { option: 'Nuova opzione', kicker: '', title: 'Risultato', text: 'Descrizione.', meta: '', cta_text: '', cta_url: '', icon: '', image: '', media_bg: { type: 'none' }, media_label: '' },
+      defaults: { option: t('Nuova opzione'), kicker: '', title: t('Risultato'), text: t('Descrizione.'), meta: '', cta_text: '', cta_url: '', icon: '', image: '', media_bg: { type: 'none' }, media_label: '' },
       itemFields: [
         { key: 'option', label: t('Etichetta chip'), type: 'text' },
         { key: 'icon', label: t('Icona (opzionale)'), type: 'icon' },

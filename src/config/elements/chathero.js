@@ -89,7 +89,7 @@ export default {
     { key: 'chat_label', label: t('Etichetta barra finestra'), type: 'text' },
     { key: 'messages', label: t('Messaggi (bolle conversazione)'), type: 'content-items',
       itemLabel: t('Messaggio'),
-      defaults: { side: 'ai', text: 'Nuovo messaggio' },
+      defaults: { side: 'ai', text: t('Nuovo messaggio') },
       itemFields: [
         { key: 'side', label: t('Lato'), type: 'select', options: [
           { value: 'you', label: t('Utente (destra)') },

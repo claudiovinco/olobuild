@@ -73,12 +73,12 @@ export default {
       { value: 'none', label: t('Nessuno') },
     ] },
     { key: 'scramble_words', label: t('Parole scramble'), type: 'content-items', itemLabel: t('Parola'),
-      defaults: { text: 'Benvenuto' },
+      defaults: { text: t('Benvenuto') },
       itemFields: [ { key: 'text', label: t('Parola'), type: 'text' } ],
       condition: { field: 'title_fx', op: 'eq', value: 'scramble' } },
     { key: 'sub_html', label: t('Sottotitolo (HTML)'), type: 'textarea' },
     { key: 'tags', label: t('Tag pill'), type: 'content-items', itemLabel: t('Tag'),
-      defaults: { text: 'tag', hot: false },
+      defaults: { text: t('tag'), hot: false },
       itemFields: [
         { key: 'text', label: t('Testo'), type: 'text' },
         { key: 'hot', label: t('Evidenziato (colore prodotto)'), type: 'toggle' },
@@ -121,7 +121,7 @@ export default {
     { key: 'term_sub', label: t('Sottotitolo terminale'), type: 'text',
       condition: { field: 'scene', op: 'eq', value: 'term' } },
     { key: 'term_lines', label: t('Righe boot'), type: 'content-items', itemLabel: t('Riga'),
-      defaults: { cls: 'ok', text: '[waf] regola caricata' },
+      defaults: { cls: 'ok', text: t('[waf] regola caricata') },
       itemFields: [
         { key: 'cls', label: t('Tipo'), type: 'select', options: [
           { value: 'cy', label: t('Ciano (sistema)') }, { value: 'ok', label: t('Verde (ok)') }, { value: 'bad', label: t('Rosso (bloccato)') },

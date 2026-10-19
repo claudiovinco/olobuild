@@ -49,7 +49,7 @@ export default {
       condition: { field: 'variant', op: 'eq', value: 'flip' } },
     { type: 'separator', label: t('Pill URL') },
     { key: 'url_items', label: t('URL'), type: 'content-items', itemLabel: t('URL'),
-      defaults: { html: 'https://tuosito.it<b>/en/</b>pagina', ok: 'indexed' },
+      defaults: { html: 'https://tuosito.it<b>/en/</b>pagina', ok: t('indicizzata') },
       itemFields: [
         { key: 'html', label: t('URL (HTML, <b> evidenzia)'), type: 'text' },
         { key: 'ok', label: t('Badge verde a destra'), type: 'text' },

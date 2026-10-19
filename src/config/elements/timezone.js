@@ -88,7 +88,7 @@ export default {
     { type: 'separator', label: t('Città (la prima è la base)') },
     { key: 'items', label: t('Città'), type: 'content-items',
       itemLabel: t('Città'),
-      defaults: { city: 'Nuova città', tz: 'Europe/Rome', offset: 0, label: '' },
+      defaults: { city: t('Nuova città'), tz: 'Europe/Rome', offset: 0, label: '' },
       itemFields: [
         { key: 'city', label: t('Città'), type: 'text' },
         { key: 'tz', label: t('Fuso orario'), type: 'select', options: FUSI,

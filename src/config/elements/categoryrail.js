@@ -81,7 +81,7 @@ export default {
     { type: 'separator', label: t('Tessere') },
     { key: 'items', label: t('Categorie'), type: 'content-items', supportsDynamic: true,
       itemLabel: t('Tessera'),
-      defaults: { image: '', title: 'Categoria', subtitle: '', link: '#' },
+      defaults: { image: '', title: t('Categoria'), subtitle: '', link: '#' },
       itemFields: [
         { key: 'image', label: t('Immagine'), type: 'image' },
         { key: 'title', label: t('Titolo'), type: 'text' },

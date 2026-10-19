@@ -59,7 +59,7 @@ export default {
     { type: 'separator', label: t('Items') },
     { key: 'items', label: t('Voci'), type: 'content-items',
       itemLabel: t('Voce'),
-      defaults: { icon: 'check', icon_color: '', text: 'Nuova garanzia' },
+      defaults: { icon: 'check', icon_color: '', text: t('Nuova garanzia') },
       itemFields: [
         { key: 'icon',       label: t('Icona'),        type: 'icon' },
         { key: 'logo',       label: t('Logo (immagine — variante Pill)'), type: 'image' },

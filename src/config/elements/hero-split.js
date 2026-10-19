@@ -214,7 +214,7 @@ export default {
     { type: 'separator', label: t('Headline (righe)') },
     { key: 'headline_lines', label: t('Righe titolo'), type: 'content-items',
       itemLabel: t('Riga'),
-      defaults: { text: 'Nuova riga', color: 'var(--olo-color-dark, #16263d)', italic: false },
+      defaults: { text: t('Nuova riga'), color: 'var(--olo-color-dark, #16263d)', italic: false },
       itemFields: [
         { key: 'text',   label: t('Testo'),     type: 'text' },
       ],
@@ -271,7 +271,7 @@ export default {
       condition: { field: 'panel', op: 'eq', value: 'showcase' } },
     { key: 'showcase_items', label: t('Tile (grid 2x2)'), type: 'content-items',
       itemLabel: t('Tile'),
-      defaults: { number: '00', text: 'azione', italic: true, text_color: 'var(--olo-color-dark, #16263d)', bg: { type: 'solid', color: 'var(--olo-color-light, #f8f9fa)' } },
+      defaults: { number: '00', text: t('azione'), italic: true, text_color: 'var(--olo-color-dark, #16263d)', bg: { type: 'solid', color: 'var(--olo-color-light, #f8f9fa)' } },
       itemFields: [
         { key: 'number',     label: t('Numero'),       type: 'text' },
         { key: 'text',       label: t('Testo'),        type: 'text' },

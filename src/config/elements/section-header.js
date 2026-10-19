@@ -103,7 +103,7 @@ export default {
     { type: 'separator', label: t('Titolo') },
     { key: 'headline_lines', label: t('Righe del titolo'), type: 'content-items',
       itemLabel: t('Riga'),
-      defaults: { text: 'Nuova riga', color: 'var(--olo-color-dark, #16263d)', italic: false },
+      defaults: { text: t('Nuova riga'), color: 'var(--olo-color-dark, #16263d)', italic: false },
       itemFields: [
         { key: 'text',   label: t('Testo'),   type: 'text' },
       ],

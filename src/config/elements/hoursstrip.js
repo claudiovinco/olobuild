@@ -59,7 +59,7 @@ export default {
     { type: 'separator', label: t('Orari') },
     { key: 'items', label: t('Voci'), type: 'content-items',
       itemLabel: t('Fascia'),
-      defaults: { day: 'Giorni', time: '00 — 00', note: '' },
+      defaults: { day: t('Giorni'), time: '00 — 00', note: '' },
       itemFields: [
         { key: 'day',  label: t('Giorni (es. Lun — Ven)'), type: 'text' },
         { key: 'time', label: t('Orario (es. 12 — 23)'),   type: 'text' },

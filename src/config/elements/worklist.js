@@ -72,7 +72,7 @@ export default {
     { type: 'separator', label: t('Voci') },
     { key: 'items', label: t('Righe'), type: 'content-items', supportsDynamic: true,
       itemLabel: t('Voce'),
-      defaults: { number: '00', title: 'Nuovo progetto', category: 'Categoria', year: '2026', link_url: '' },
+      defaults: { number: '00', title: t('Nuovo progetto'), category: t('Categoria'), year: '2026', link_url: '' },
       itemFields: [
         { key: 'number',   label: t('Numero (es. 01)'), type: 'text' },
         { key: 'title',    label: t('Titolo'),          type: 'text' },
