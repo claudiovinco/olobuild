@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://olotheme.com
  * Description: Professional holonic page builder for WordPress with a drag & drop tile grid system.
- * Version:     1.4.829
+ * Version:     1.4.830
  * Author:      Claudio Vinco
  * Author URI:  https://clod.eu
  * Text Domain: olobuild
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLOBUILD_VERSION', '1.4.829' );
+define( 'OLOBUILD_VERSION', '1.4.830' );
 define( 'OLOBUILD_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLOBUILD_URL', plugin_dir_url( __FILE__ ) );
 
@@ -451,12 +451,18 @@ function olobuild_builder_translations() {
     if ( ! str_starts_with( (string) $locale, 'it' ) ) {
         $catalogo = get_translations_for_domain( 'olobuild' );
         foreach ( (array) ( is_object( $catalogo ) ? $catalogo->entries : [] ) as $voce ) {
-            if ( ! is_object( $voce ) || ! empty( $voce->context ) || empty( $voce->singular ) ) {
+            // Voci con contesto (msgctxt): un testo che in italiano ha due sensi («Mar» = martedì e marzo,
+            // «Ora» = adesso e l'ora del giorno); il builder le legge con tContesto()/tPartenza() come
+            // «contesto\x04testo».
+            $contesto = is_object( $voce ) ? (string) ( $voce->context ?? '' ) : '';
+            if ( ! is_object( $voce ) || empty( $voce->singular ) ) {
                 continue;
             }
             $tradotta = $voce->translations[0] ?? '';
-            if ( '' !== $tradotta && $tradotta !== $voce->singular ) {
-                $map[ $voce->singular ] = $tradotta;
+            // Nel contesto vale anche la traduzione uguale all'italiano: scavalca quella dell'interfaccia
+            // («Mar» del grafico resta Mar e non diventa Tue).
+            if ( '' !== $tradotta && ( $tradotta !== $voce->singular || '' !== $contesto ) ) {
+                $map[ ( '' !== $contesto ? $contesto . "\x04" : '' ) . $voce->singular ] = $tradotta;
             }
         }
     }

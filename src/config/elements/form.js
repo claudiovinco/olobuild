@@ -203,7 +203,7 @@ export default {
           { value: 'step', label: t('── Separatore step ──') },
         ]},
         { key: 'label', label: t('Etichetta'), type: 'text' },
-        { key: 'name', label: t('Nome campo (email)'), type: 'text' },
+        { key: 'name', label: t('Nome campo (email)'), type: 'text', partenzaFissa: true },
         { key: 'placeholder', label: t('Placeholder'), type: 'text' },
         { key: 'icon', label: t('Icona campo'), type: 'icon',
           condition: { field: 'field_type', op: 'in', value: ['text', 'email', 'tel', 'url', 'number', 'date', 'time'] } },

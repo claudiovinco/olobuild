@@ -1,4 +1,4 @@
-import { t } from '@/i18n';
+import { t, tPartenza, tContesto } from '@/i18n';
 
 /**
  * Evo Notes — layer di annotazioni "Perché questa evoluzione" (blueprint Clod).
@@ -57,8 +57,8 @@ export default {
         { key: 'number', label: t('Numero'), type: 'text' },
         { key: 'title', label: t('Titolo'), type: 'text' },
         { key: 'text', label: t('Testo'), type: 'textarea' },
-        { key: 'before', label: t('Prima'), type: 'text' },
-        { key: 'after', label: t('Ora'), type: 'text' },
+        { key: 'before', label: tPartenza('Prima'), type: 'text' },
+        { key: 'after', label: tContesto('adesso', 'Ora'), type: 'text' },
         { type: 'separator', label: t('Ancoraggio') },
         { key: 'anchor', label: t('ID sezione (html_id)'), type: 'text',
           description: t('Es. "servizi". Vuoto = usa la sezione n-esima della pagina (in ordine).') },
@@ -69,7 +69,7 @@ export default {
         { key: 'offset', label: t('Distanza dal top'), type: 'text',
           description: t('Distanza del marker dal top della sezione, es. "38%" o "18px".') },
       ],
-      newItemDefaults: { number: '07', title: t('Nuova scelta'), text: t('Perché questa scelta migliora il sito.'), before: t('Prima'), after: t('Ora'), anchor: '', side: 'right', offset: '30%' },
+      newItemDefaults: { number: '07', title: t('Nuova scelta'), text: t('Perché questa scelta migliora il sito.'), before: tPartenza('Prima'), after: tContesto('adesso', 'Ora'), anchor: '', side: 'right', offset: '30%' },
       itemLabel: 'Annotazione',
     },
   ],

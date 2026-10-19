@@ -43008,3 +43008,3259 @@ msgstr "Nummer (z. B. 01)"
 #: src/config/elements
 msgid "Sfondo riga (hover)"
 msgstr "Zeilenhintergrund (Hover)"
+
+#: src/config/elements
+msgid "!Reformer | Breath | !Reformer | Mat | Open"
+msgstr "!Reformer | Atem | !Reformer | Matte | Offen"
+
+#: src/config/elements
+msgid "!Reformer | | Mat | | !Reformer"
+msgstr "!Reformer | | Matte | | !Reformer"
+
+#: src/config/elements
+msgid "'24 — Product"
+msgstr "'24 — Produkt"
+
+#: src/config/elements
+msgid "'25 — Wayfinding"
+msgstr "'25 — Leitsystem"
+
+#: src/config/elements
+msgid "'26 — Brand"
+msgstr "'26 — Marke"
+
+#: src/config/elements
+msgid "*prezzo lancio · poi €59/anno"
+msgstr "*Einführungspreis · danach 59 €/Jahr"
+
+#: src/config/elements
+msgid "+ scheda tecnica"
+msgstr "+ Datenblatt"
+
+#: src/config/elements
+msgid "+12% sul mese"
+msgstr "+12% zum Vormonat"
+
+#: src/config/elements
+msgid ", promesso, niente catene."
+msgstr ", versprochen, ohne Bindung."
+
+#: src/config/elements
+msgid "1 squad"
+msgstr "1 Team"
+
+#: src/config/elements
+msgid "100% locale"
+msgstr "100% lokal"
+
+#: src/config/elements
+msgid "100% locale|mini-WAF|TOTP 2FA|Plugin Check 0/0"
+msgstr "100% lokal|Mini-WAF|TOTP-2FA|Plugin Check 0/0"
+
+#: src/config/elements
+msgid "11 effetti testo"
+msgstr "11 Texteffekte"
+
+#: src/config/elements
+msgid "12 famiglie, posate come <em>mattoni</em>"
+msgstr "12 Familien, verlegt wie <em>Ziegel</em>"
+
+#: src/config/elements
+msgid "18 min read"
+msgstr "18 Min. Lesezeit"
+
+#: src/config/elements
+msgid "187 tile"
+msgstr "187 Tiles"
+
+#: src/config/elements
+msgid "28 frames"
+msgstr "28 Bilder"
+
+#: src/config/elements
+msgid "28 lingue"
+msgstr "28 Sprachen"
+
+#: src/config/elements
+msgid "28 lingue|DeepL + IA|SEO hreflang|a vita con Pro"
+msgstr "28 Sprachen|DeepL + KI|SEO mit hreflang|lebenslang mit Pro"
+
+#: src/config/elements
+msgid "3 squads"
+msgstr "3 Teams"
+
+#: src/config/elements
+msgid "36 animazioni"
+msgstr "36 Animationen"
+
+#: src/config/elements
+msgid "360°|hot-spot|multi-stanza|VR ready"
+msgstr "360°|Hotspots|mehrere Räume|VR-fähig"
+
+#: src/config/elements
+msgid "4 squads · U14–U21"
+msgstr "4 Teams · U14–U21"
+
+#: src/config/elements
+msgid "6 verticali booking"
+msgstr "6 Buchungsbranchen"
+
+#: src/config/elements
+msgid "6 verticali|anti no-show|QR access|0% commissioni"
+msgstr "6 Branchen|No-Show-Schutz|QR-Zugang|0% Provision"
+
+#: src/config/elements
+msgid "<h3>Titolo</h3>"
+msgstr "<h3>Titel</h3>"
+
+#: src/config/elements
+msgid "<p>Contenuto rivelato al passaggio del mouse</p>"
+msgstr "<p>Inhalt, der beim Hover erscheint</p>"
+
+#: src/config/elements
+msgid "<p>Per i nuovi clienti, il primo ordine ha uno sconto del 10%. Contattaci per sapere come richiederlo.</p>"
+msgstr "<p>Neukunden erhalten 10 % Rabatt auf die erste Bestellung. Schreib uns, um zu erfahren, wie du ihn bekommst.</p>"
+
+#: src/config/elements
+msgid "<p>Scrivi qui il tuo testo. Puoi formattare con <strong>grassetto</strong>, <em>corsivo</em>, elenchi, titoli e molto altro.</p>"
+msgstr "<p>Schreib hier deinen Text. Du kannst ihn mit <strong>fett</strong>, <em>kursiv</em>, Listen, Überschriften und vielem mehr formatieren.</p>"
+
+#: src/config/elements
+msgid "<p>Scrivi qui il tuo testo.</p>"
+msgstr "<p>Schreib hier deinen Text.</p>"
+
+#: src/config/elements
+msgid "<strong>11</strong> effetti testo · <strong>36</strong> animazioni"
+msgstr "<strong>11</strong> Texteffekte · <strong>36</strong> Animationen"
+
+#: src/config/elements
+msgid "<strong>187 tile in 12 famiglie</strong>, auto-discovered, con animazioni ed effetti di serie."
+msgstr "<strong>187 Tiles in 12 Familien</strong>, automatisch erkannt, mit Animationen und Effekten serienmäßig."
+
+#: src/config/elements
+msgid "<strong>30 giorni</strong> di rimborso, senza domande"
+msgstr "<strong>30 Tage</strong> Geld zurück, ohne Fragen"
+
+#: src/config/elements
+msgid "<strong>OLOlang a vita</strong> · supporto prioritario"
+msgstr "<strong>OLOlang lebenslang</strong> · Priority-Support"
+
+#: src/config/elements
+msgid "<strong>OLOlang gratis</strong> il primo anno"
+msgstr "<strong>OLOlang gratis</strong> im ersten Jahr"
+
+#: src/config/elements
+msgid "<strong>Oltre 100 tile nativi</strong> + form builder + dark mode"
+msgstr "<strong>Über 100 native Tiles</strong> + Formular-Builder + Dark Mode"
+
+#: src/config/elements
+msgid "<strong>Soddisfatti o rimborsati</strong> su OLObuild Pro. 30 giorni pieni, nessuna domanda, zero ostacoli."
+msgstr "<strong>Zufrieden oder Geld zurück</strong> bei OLObuild Pro. Volle 30 Tage, keine Fragen, keine Hürden."
+
+#: src/config/elements
+msgid "@KiraByte ha sbloccato Diamante I · torneo FIFA Cup domenica 21:00 · @pixelmom ha vinto MVP · nuovo record clan: +18.000 XP"
+msgstr "@KiraByte hat Diamant I freigeschaltet · FIFA-Cup-Turnier Sonntag 21:00 · @pixelmom ist MVP · neuer Clan-Rekord: +18.000 XP"
+
+#: src/config/elements
+msgid "A clear strategy, modelled and stress-tested."
+msgstr "Eine klare Strategie, modelliert und auf Herz und Nieren geprüft."
+
+#: src/config/elements
+msgid "A coastal hotel group, rebuilt around one mark and a lot of restraint."
+msgstr "Eine Hotelgruppe an der Küste, neu aufgebaut um ein Zeichen und viel Zurückhaltung."
+
+#: src/config/elements
+msgid "A regional club with a"
+msgstr "Ein regionaler Verein mit"
+
+#: src/config/elements
+msgid "A signage and type system that quietly tells you where you are."
+msgstr "Ein Leit- und Schriftsystem, das dir leise sagt, wo du bist."
+
+#: src/config/elements
+msgid "AI for business that turns complexity into clarity"
+msgstr "KI für Unternehmen, die Komplexität in Klarheit verwandelt"
+
+#: src/config/elements
+msgid "Abbiamo ricevuto il tuo messaggio e ti risponderemo al più presto."
+msgstr "Wir haben deine Nachricht erhalten und melden uns so bald wie möglich."
+
+#: src/config/elements
+msgid "About Us"
+msgstr "Über uns"
+
+#: src/config/elements
+msgid "About the club"
+msgstr "Über den Verein"
+
+#: src/config/elements
+msgid "Accedi"
+msgstr "Anmelden"
+
+#: src/config/elements
+msgid "Accedi al tuo account"
+msgstr "Melde dich bei deinem Konto an"
+
+#: src/config/elements
+msgid "Accendi il radar"
+msgstr "Radar einschalten"
+
+#: src/config/elements
+msgid "Accetto i Termini e le Condizioni"
+msgstr "Ich akzeptiere die AGB"
+
+#: src/config/elements
+msgid "Accetto il trattamento dei dati personali secondo la <a href=\"/privacy-policy\">Privacy Policy</a>"
+msgstr "Ich stimme der Verarbeitung meiner personenbezogenen Daten gemäß der <a href=\"/privacy-policy\">Datenschutzerklärung</a> zu"
+
+#: src/config/elements
+msgid "Across 9 calls: 3 flagged pricing — two want annual billing, one found the Team tier \"a jump\". Drafted a follow-up for each. Want me to send?"
+msgstr "In 9 Calls: 3 haben den Preis angesprochen — zwei wollen jährliche Abrechnung, einer fand den Team-Tarif „einen Sprung“. Ich habe für jeden ein Follow-up entworfen. Soll ich sie senden?"
+
+#: src/config/elements
+msgid "Active accounts"
+msgstr "Aktive Konten"
+
+#: src/config/elements
+msgid "Active members"
+msgstr "Aktive Mitglieder"
+
+#: src/config/elements
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: src/config/elements
+msgid "Add routine to bag"
+msgstr "Routine in den Warenkorb"
+
+#: src/config/elements
+msgid "Affaccia lo sguardo"
+msgstr "Wirf einen Blick"
+
+#: src/config/elements
+msgid "After"
+msgstr "Nachher"
+
+#: src/config/elements
+msgid "Aggiungi quanti item vuoi: scorrono tutti lungo un unico nastro orizzontale."
+msgstr "Füge so viele Einträge hinzu, wie du willst: Sie laufen alle über ein einziges horizontales Band."
+
+#: src/config/elements
+msgid "Aiuto le aziende a <b>farsi vedere</b>: strategia, produzione media e identità visiva, con contenuti originali che lavorano davvero."
+msgstr "Ich helfe Unternehmen, <b>gesehen zu werden</b>: Strategie, Medienproduktion und visuelle Identität, mit eigenen Inhalten, die wirklich wirken."
+
+#: src/config/elements
+msgid "Al livello dei <strong>builder Pro a pagamento</strong> della concorrenza"
+msgstr "Auf dem Niveau der <strong>kostenpflichtigen Pro-Builder</strong> der Konkurrenz"
+
+#: src/config/elements
+msgid "All"
+msgstr "Alle"
+
+#: src/config/elements
+msgid "An independent publisher's new look, from spine to site."
+msgstr "Der neue Auftritt eines unabhängigen Verlags, vom Buchrücken bis zur Website."
+
+#: src/config/elements
+msgid "Animazioni Lottie, senza codice"
+msgstr "Lottie-Animationen, ohne Code"
+
+#: src/config/elements
+msgid "Animazioni complete + ricerca media <strong>8 provider</strong>"
+msgstr "Alle Animationen + Mediensuche bei <strong>8 Anbietern</strong>"
+
+#: src/config/elements
+msgid "Anni di attività"
+msgstr "Jahre Erfahrung"
+
+#: src/config/elements
+msgid "Anteprima fedele in tempo reale. Mobile, tablet, desktop con un click. Niente shortcode, niente \"preview separato\"."
+msgstr "Originalgetreue Vorschau in Echtzeit. Mobil, Tablet, Desktop mit einem Klick. Keine Shortcodes, keine „separate Vorschau“."
+
+#: src/config/elements
+msgid "Aperitivo dalle 18"
+msgstr "Aperitivo ab 18 Uhr"
+
+#: src/config/elements
+msgid "Appassionata di creare esperienze utente eccellenti."
+msgstr "Mit Leidenschaft dabei, großartige Nutzererlebnisse zu schaffen."
+
+#: src/config/elements
+msgid "Apri il calendario"
+msgstr "Kalender öffnen"
+
+#: src/config/elements
+msgid "Apri la demo"
+msgstr "Demo öffnen"
+
+#: src/config/elements
+msgid "Apri pannello"
+msgstr "Panel öffnen"
+
+#: src/config/elements
+msgid "Apricot"
+msgstr "Aprikose"
+
+#: src/config/elements
+msgid "Aprire un B&B"
+msgstr "Ein B&B eröffnen"
+
+#: src/config/elements
+msgid "Aree relax all'aperto curate nel dettaglio, perfette per giornate in completo comfort."
+msgstr "Bis ins Detail gestaltete Entspannungsbereiche im Freien, perfekt für Tage voller Komfort."
+
+#: src/config/elements
+msgid "Art & prints"
+msgstr "Kunst & Drucke"
+
+#: src/config/elements
+msgid "Artist"
+msgstr "Künstler"
+
+#: src/config/elements
+msgid "Atlas Press — book covers"
+msgstr "Atlas Press — Buchcover"
+
+#: src/config/elements
+msgid "Autumn / Winter '26"
+msgstr "Herbst / Winter '26"
+
+#: src/config/elements
+msgid "BORDER-RADIUS ANIMATO"
+msgstr "ANIMIERTER BORDER-RADIUS"
+
+#: src/config/elements
+msgid "Bar & Cocktail"
+msgstr "Bar & Cocktails"
+
+#: src/config/elements
+msgid "Base"
+msgstr "Basis"
+
+#: src/config/elements
+msgid "Become a member"
+msgstr "Mitglied werden"
+
+#: src/config/elements
+msgid "Become a member of our"
+msgstr "Werde Mitglied in unserem"
+
+#: src/config/elements
+msgid "Before"
+msgstr "Vorher"
+
+#: src/config/elements
+msgid "Bentornato"
+msgstr "Willkommen zurück"
+
+#: src/config/elements
+msgid "Bentornato!"
+msgstr "Willkommen zurück!"
+
+#: src/config/elements
+msgid "Benvenuto al Resort delle Ville"
+msgstr "Willkommen im Resort delle Ville"
+
+#: src/config/elements
+msgid "Brand and interface for a developer tool that hates noise."
+msgstr "Marke und Interface für ein Entwickler-Tool, das Lärm hasst."
+
+#: src/config/elements
+msgid "Brand identity"
+msgstr "Markenidentität"
+
+#: src/config/elements
+msgid "Breaking"
+msgstr "Eilmeldung"
+
+#: src/config/elements
+msgid "Build"
+msgstr "Aufbau"
+
+#: src/config/elements
+msgid "Build Tool"
+msgstr "Build-Tool"
+
+#: src/config/elements
+msgid "Built in four taps. Swap any step until it’s yours."
+msgstr "In vier Tipps gebaut. Tausch jeden Schritt, bis sie zu dir passt."
+
+#: src/config/elements
+msgid "Built real strength postpartum, pain-free and back to running."
+msgstr "Nach der Geburt echte Kraft aufgebaut, schmerzfrei und wieder beim Laufen."
+
+#: src/config/elements
+msgid "Buona costanza: progressione vera."
+msgstr "Gute Regelmäßigkeit: echter Fortschritt."
+
+#: src/config/elements
+msgid "By"
+msgstr "Von"
+
+#: src/config/elements
+msgid "By Elena Marchetti · 12 min read"
+msgstr "Von Elena Marchetti · 12 Min. Lesezeit"
+
+#: src/config/elements
+msgid "Calendario disponibilità, picker, slot orari, reception olo-spaces."
+msgstr "Verfügbarkeitskalender, Picker, Zeitfenster, Rezeption olo-spaces."
+
+#: src/config/elements
+msgid "Calendario disponibilità, picker, slot orari."
+msgstr "Verfügbarkeitskalender, Picker, Zeitfenster."
+
+#: src/config/elements
+msgid "Cambia lingua"
+msgstr "Sprache wechseln"
+
+#: src/config/elements
+msgid "Camere, tavoli, appuntamenti, eventi, noleggi, immobili: <strong>una sola configurazione</strong> e il motore diventa il tuo mestiere. Con caparra anti no-show e zero commissioni."
+msgstr "Zimmer, Tische, Termine, Events, Vermietungen, Immobilien: <strong>eine einzige Konfiguration</strong>, und die Engine wird zu deinem Geschäft. Mit Anzahlung gegen No-Shows und null Provision."
+
+#: src/config/elements
+msgid "Capoclan"
+msgstr "Clan-Chef"
+
+#: src/config/elements
+msgid "Capolinea · si scende"
+msgstr "Endstation · alle aussteigen"
+
+#: src/config/elements
+msgid "Carattere proprio"
+msgstr "Eigener Charakter"
+
+#: src/config/elements
+msgid "Cashmere Roll-Neck"
+msgstr "Rollkragenpullover aus Kaschmir"
+
+#: src/config/elements
+msgid "Category"
+msgstr "Kategorie"
+
+#: src/config/elements
+msgid "Celebrations worth"
+msgstr "Feiern, an die man sich"
+
+#: src/config/elements
+msgid "Ceramics"
+msgstr "Keramik"
+
+#: src/config/elements
+msgid "Ceramics, Prints, Jewellery, Homeware, Vintage, Gifts"
+msgstr "Keramik, Drucke, Schmuck, Wohnaccessoires, Vintage, Geschenke"
+
+#: src/config/elements
+msgid "Ceramide Cream"
+msgstr "Ceramid-Creme"
+
+#: src/config/elements
+msgid "Cerca progetto…"
+msgstr "Projekt suchen…"
+
+#: src/config/elements
+msgid "Cerca temi, prodotti, guide…"
+msgstr "Themes, Produkte, Anleitungen suchen…"
+
+#: src/config/elements
+msgid "Chat, agents and your company's knowledge in one place — grounded in your docs, your data and every conversation you've had before."
+msgstr "Chat, Agenten und das Wissen deines Unternehmens an einem Ort — gestützt auf deine Dokumente, deine Daten und jedes Gespräch, das du je geführt hast."
+
+#: src/config/elements
+msgid "Check-in camera Doppia Nord"
+msgstr "Check-in Doppelzimmer Nord"
+
+#: src/config/elements
+msgid "Ciao, mi chiamo"
+msgstr "Hallo, ich heiße"
+
+#: src/config/elements
+msgid "Circuit 3.0 — now with live workflows"
+msgstr "Circuit 3.0 — jetzt mit Live-Workflows"
+
+#: src/config/elements
+msgid "Circuit connects the tools your team already uses, automates the hand-offs, and gives everyone one honest view of every release."
+msgstr "Circuit verbindet die Tools, die dein Team schon nutzt, automatisiert die Übergaben und gibt allen einen ehrlichen Blick auf jedes Release."
+
+#: src/config/elements
+msgid "Clay Melt Balm"
+msgstr "Clay-Melt-Balsam"
+
+#: src/config/elements
+msgid "Cleanse"
+msgstr "Reinigen"
+
+#: src/config/elements
+msgid "Cobalt — product UI"
+msgstr "Cobalt — Produkt-UI"
+
+#: src/config/elements
+msgid "Cocktail signature creati dai nostri bartender, con ingredienti selezionati e una carta che cambia con le stagioni."
+msgstr "Signature-Cocktails unserer Barkeeper, mit ausgewählten Zutaten und einer Karte, die sich mit den Jahreszeiten ändert."
+
+#: src/config/elements
+msgid "Collection"
+msgstr "Kollektion"
+
+#: src/config/elements
+msgid "Comifo — still"
+msgstr "Comifo — Standbild"
+
+#: src/config/elements
+msgid "Competitive teams"
+msgstr "Wettkampfteams"
+
+#: src/config/elements
+msgid "Complimentary shipping & returns worldwide · "
+msgstr "Kostenloser Versand & Rückversand weltweit · "
+
+#: src/config/elements
+msgid "Confermato"
+msgstr "Bestätigt"
+
+#: src/config/elements
+msgid "Confronta i piani"
+msgstr "Tarife vergleichen"
+
+#: src/config/elements
+msgid "Consulenza fiscale, Studio B."
+msgstr "Steuerberatung, Studio B."
+
+#: src/config/elements
+msgid "Contenuto della prima card..."
+msgstr "Inhalt der ersten Karte..."
+
+#: src/config/elements
+msgid "Contenuto della prima scheda."
+msgstr "Inhalt des ersten Tabs."
+
+#: src/config/elements
+msgid "Contenuto della seconda card..."
+msgstr "Inhalt der zweiten Karte..."
+
+#: src/config/elements
+msgid "Contenuto della seconda scheda."
+msgstr "Inhalt des zweiten Tabs."
+
+#: src/config/elements
+msgid "Contenuto della terza card..."
+msgstr "Inhalt der dritten Karte..."
+
+#: src/config/elements
+msgid "Contenuto retro con dettagli."
+msgstr "Rückseiteninhalt mit Details."
+
+#: src/config/elements
+msgid "Contrast"
+msgstr "Kontrast"
+
+#: src/config/elements
+msgid "Cool · blush"
+msgstr "Kühl · Rouge"
+
+#: src/config/elements
+msgid "Cool · matte"
+msgstr "Kühl · matt"
+
+#: src/config/elements
+msgid "Corsi & lezioni"
+msgstr "Kurse & Lektionen"
+
+#: src/config/elements
+msgid "Corsi, quiz, punti e badge, registro voti e certificati, dentro il tuo WordPress. <strong>Gli allievi restano tuoi</strong>, non di un marketplace che ti mette in fila coi concorrenti."
+msgstr "Kurse, Quiz, Punkte und Abzeichen, Notenbuch und Zertifikate, direkt in deinem WordPress. <strong>Deine Lernenden bleiben deine</strong>, nicht die eines Marktplatzes, der dich neben die Konkurrenz stellt."
+
+#: src/config/elements
+msgid "Cosa cerchi"
+msgstr "Was suchst du"
+
+#: src/config/elements
+msgid "Costruisce come un <em>cantiere</em>"
+msgstr "Baut wie eine <em>Baustelle</em>"
+
+#: src/config/elements
+msgid "Costruisci"
+msgstr "Bauen"
+
+#: src/config/elements
+msgid "Costruisci."
+msgstr "Bauen."
+
+#: src/config/elements
+msgid "Costruisci. Traduci. Prenota."
+msgstr "Bauen. Übersetzen. Buchen."
+
+#: src/config/elements
+msgid "Cos’è <em>OLObuild</em>"
+msgstr "Was ist <em>OLObuild</em>"
+
+#: src/config/elements
+msgid "Cos’è OLObuild, come è costruito e perché regge 187 tile con un motore solo."
+msgstr "Was OLObuild ist, wie es gebaut ist und warum es 187 Tiles mit einer einzigen Engine trägt."
+
+#: src/config/elements
+msgid "Cos’è OLObuild, come è costruito e perché regge 187 tile con un motore solo. Cinque capitoli, poi la scheda tecnica."
+msgstr "Was OLObuild ist, wie es gebaut ist und warum es 187 Tiles mit einer einzigen Engine trägt. Fünf Kapitel, dann das Datenblatt."
+
+#: src/config/elements
+msgid "Crea un account"
+msgstr "Konto erstellen"
+
+#: src/config/elements
+msgid "Creative"
+msgstr "Kreativ"
+
+#: src/config/elements
+msgid "Crema"
+msgstr "Creme"
+
+#: src/config/elements
+msgid "Crêpe Tailored Coat"
+msgstr "Taillierter Mantel aus Crêpe"
+
+#: src/config/elements
+msgid "Cucina fino alle 22"
+msgstr "Küche bis 22 Uhr"
+
+#: src/config/elements
+msgid "DEMO LIVE"
+msgstr "LIVE-DEMO"
+
+#: src/config/elements
+msgid "Dati,Spedizione,Pagamento"
+msgstr "Daten,Versand,Zahlung"
+
+#: src/config/elements
+msgid "Deep · matte"
+msgstr "Tief · matt"
+
+#: src/config/elements
+msgid "DeepL + traduttore IA, glossario e memoria di traduzione. Contenuti, menu e stringhe tradotti <strong>via database</strong>, con hreflang, URL localizzati e sitemap per ogni lingua."
+msgstr "DeepL + KI-Übersetzer, Glossar und Übersetzungsspeicher. Inhalte, Menüs und Strings <strong>über die Datenbank</strong> übersetzt, mit hreflang, lokalisierten URLs und einer Sitemap pro Sprache."
+
+#: src/config/elements
+msgid "Description..."
+msgstr "Beschreibung..."
+
+#: src/config/elements
+msgid "Descrivi il primo passaggio del tuo processo. Scrivi una frase chiara e concreta."
+msgstr "Beschreib den ersten Schritt deines Prozesses. Schreib einen klaren, konkreten Satz."
+
+#: src/config/elements
+msgid "Descrizione del primo elemento."
+msgstr "Beschreibung des ersten Eintrags."
+
+#: src/config/elements
+msgid "Descrizione del punto."
+msgstr "Beschreibung des Punkts."
+
+#: src/config/elements
+msgid "Descrizione del risultato consigliato."
+msgstr "Beschreibung des empfohlenen Ergebnisses."
+
+#: src/config/elements
+msgid "Descrizione del risultato."
+msgstr "Beschreibung des Ergebnisses."
+
+#: src/config/elements
+msgid "Descrizione del secondo elemento."
+msgstr "Beschreibung des zweiten Eintrags."
+
+#: src/config/elements
+msgid "Descrizione del terzo elemento."
+msgstr "Beschreibung des dritten Eintrags."
+
+#: src/config/elements
+msgid "Descrizione della card visibile."
+msgstr "Beschreibung der sichtbaren Karte."
+
+#: src/config/elements
+msgid "Descrizione..."
+msgstr "Beschreibung..."
+
+#: src/config/elements
+msgid "Design with"
+msgstr "Design mit"
+
+#: src/config/elements
+msgid "Dove vivono i tuoi corsi con <em>OLOtutor</em>?"
+msgstr "Wo leben deine Kurse mit <em>OLOtutor</em>?"
+
+#: src/config/elements
+msgid "Down 11kg, first-ever pull-up, and a deadlift PB he never thought he’d hit."
+msgstr "11 kg weniger, der allererste Klimmzug und eine Kreuzheben-Bestleistung, die er nie für möglich hielt."
+
+#: src/config/elements
+msgid "Due edizioni"
+msgstr "Zwei Editionen"
+
+#: src/config/elements
+msgid "E-learning completo. Corsi, lezioni, esercizi, certificazioni, area allievi. WordPress-native."
+msgstr "Komplettes E-Learning. Kurse, Lektionen, Übungen, Zertifikate, Lernbereich. WordPress-nativ."
+
+#: src/config/elements
+msgid "Ecosistema OLO"
+msgstr "OLO-Ökosystem"
+
+#: src/config/elements
+msgid "Editorial · web"
+msgstr "Editorial · Web"
+
+#: src/config/elements
+msgid "Eight teams, one badge. Verdano FC has played, fought and grown in this city for fifty years — and we’re only getting started."
+msgstr "Acht Teams, ein Wappen. Der Verdano FC spielt, kämpft und wächst seit fünfzig Jahren in dieser Stadt — und wir fangen gerade erst an."
+
+#: src/config/elements
+msgid "Eleven tracks recorded between Berlin and a cabin with bad wifi. Late-night electronics for headphones and dancefloors alike."
+msgstr "Elf Tracks, aufgenommen zwischen Berlin und einer Hütte mit schlechtem WLAN. Elektronik für späte Stunden, für Kopfhörer wie für Tanzflächen."
+
+#: src/config/elements
+msgid "Entra nel cantiere"
+msgstr "Betritt die Baustelle"
+
+#: src/config/elements
+msgid "Esplora i prodotti"
+msgstr "Produkte entdecken"
+
+#: src/config/elements
+msgid "Established"
+msgstr "Gegründet"
+
+#: src/config/elements
+msgid "Estetica, slot 45 min"
+msgstr "Kosmetik, 45-Min.-Slot"
+
+#: src/config/elements
+msgid "Eveningwear"
+msgstr "Abendmode"
+
+#: src/config/elements
+msgid "Evento · Video"
+msgstr "Event · Video"
+
+#: src/config/elements
+msgid "Events studio · est. 2011"
+msgstr "Eventstudio · seit 2011"
+
+#: src/config/elements
+msgid "Everything good,"
+msgstr "Alles Gute,"
+
+#: src/config/elements
+msgid "Evoluzione"
+msgstr "Entwicklung"
+
+#: src/config/elements
+msgid "Export <b>HTML/JSON</b> totale"
+msgstr "Vollständiger <b>HTML/JSON</b>-Export"
+
+#: src/config/elements
+msgid "Far visitare un immobile a distanza"
+msgstr "Eine Immobilie aus der Ferne zeigen"
+
+#: src/config/elements
+msgid "Fase 1 · <em>header</em> e menu al loro posto."
+msgstr "Phase 1 · <em>Header</em> und Menü an ihrem Platz."
+
+#: src/config/elements
+msgid "Fase 2, l’<em>hero</em> animato entra in scena."
+msgstr "Phase 2, der animierte <em>Hero</em> betritt die Bühne."
+
+#: src/config/elements
+msgid "Fase 3, la <em>galleria</em> aggancia i media."
+msgstr "Phase 3, die <em>Galerie</em> holt sich die Medien."
+
+#: src/config/elements
+msgid "Fase 4, il <em>form</em> raccoglie contatti."
+msgstr "Phase 4, das <em>Formular</em> sammelt Kontakte."
+
+#: src/config/elements
+msgid "Fase 5 · <em>footer</em>: sito consegnato. ~1h30."
+msgstr "Phase 5 · <em>Footer</em>: Website übergeben. ~1h30."
+
+#: src/config/elements
+msgid "Featured"
+msgstr "Empfohlen"
+
+#: src/config/elements
+msgid "Field Museum — wayfinding"
+msgstr "Field Museum — Leitsystem"
+
+#: src/config/elements
+msgid "Firewall OWASP, 2FA, scanner anti-webshell e bonifica guidata dal pannello <strong>Sentinel</strong>. Tutto elaborato <strong>sul tuo server</strong>: il traffico non finisce in nessun cloud altrui."
+msgstr "OWASP-Firewall, 2FA, Anti-Webshell-Scanner und geführte Bereinigung im <strong>Sentinel</strong>-Panel. Alles wird <strong>auf deinem Server</strong> verarbeitet: Der Traffic landet in keiner fremden Cloud."
+
+#: src/config/elements
+msgid "First Men's Team"
+msgstr "Erste Herrenmannschaft"
+
+#: src/config/elements
+msgid "First Women's Team"
+msgstr "Erste Frauenmannschaft"
+
+#: src/config/elements
+msgid "Floor plan"
+msgstr "Grundriss"
+
+#: src/config/elements
+msgid "Food & Drink"
+msgstr "Essen & Trinken"
+
+#: src/config/elements
+msgid "For a decade they were left for dead. Now, under the same lanterns, a new generation is rebuilding the night market — one stall, one recipe, one argument at a time."
+msgstr "Ein Jahrzehnt lang galt er als tot. Jetzt baut unter denselben Laternen eine neue Generation den Nachtmarkt wieder auf — Stand für Stand, Rezept für Rezept, Streit für Streit."
+
+#: src/config/elements
+msgid "For seventy-two hours the talks looked dead. Then a late-night compromise on housing rewrote the maths — and the coalition with it. We reconstruct the week."
+msgstr "Zweiundsiebzig Stunden lang schienen die Gespräche gescheitert. Dann schrieb ein nächtlicher Kompromiss beim Wohnen die Rechnung neu — und mit ihr die Koalition. Wir rekonstruieren die Woche."
+
+#: src/config/elements
+msgid "Forge,Prisma*,Saffron,Soundwave,+46\\ntemi"
+msgstr "Forge,Prisma*,Saffron,Soundwave,+46\\nThemes"
+
+#: src/config/elements
+msgid "Forged on the"
+msgstr "Geschmiedet auf dem"
+
+#: src/config/elements
+msgid "Formazione · in arrivo"
+msgstr "Weiterbildung · demnächst"
+
+#: src/config/elements
+msgid "Foto tecniche"
+msgstr "Technische Fotos"
+
+#: src/config/elements
+msgid "Friday, 6 March 2026 · Milan"
+msgstr "Freitag, 6. März 2026 · Mailand"
+
+#: src/config/elements
+msgid "From a handful of friends on a muddy field to eight competitive teams across men's, women's and youth football — Verdano FC is built on the people who keep showing up."
+msgstr "Von einer Handvoll Freunden auf einem matschigen Platz zu acht Wettkampfteams im Herren-, Frauen- und Jugendfußball — der Verdano FC lebt von den Menschen, die immer wieder kommen."
+
+#: src/config/elements
+msgid "From couch to first powerlifting meet — and stayed for the community."
+msgstr "Vom Sofa zum ersten Powerlifting-Wettkampf — und wegen der Community geblieben."
+
+#: src/config/elements
+msgid "GPL · Trento · no SaaS"
+msgstr "GPL · Trient · kein SaaS"
+
+#: src/config/elements
+msgid "GPL · niente SaaS · GDPR in casa · 30 giorni di rimborso su OLObuild Pro. Ogni fermata ha la sua pagina di approfondimento."
+msgstr "GPL · kein SaaS · DSGVO im Haus · 30 Tage Geld zurück bei OLObuild Pro. Jede Haltestelle hat ihre eigene Detailseite."
+
+#: src/config/elements
+msgid "GPL · niente SaaS · GDPR in casa."
+msgstr "GPL · kein SaaS · DSGVO im Haus."
+
+#: src/config/elements
+msgid "Gel-Water Lotion"
+msgstr "Gel-Wasser-Lotion"
+
+#: src/config/elements
+msgid "Gerarchia leggibile"
+msgstr "Lesbare Hierarchie"
+
+#: src/config/elements
+msgid "Gestisci & cresci"
+msgstr "Verwalten & wachsen"
+
+#: src/config/elements
+msgid "Go to membership"
+msgstr "Zur Mitgliedschaft"
+
+#: src/config/elements
+msgid "Grazie per averci contattato"
+msgstr "Danke für deine Nachricht"
+
+#: src/config/elements
+msgid "Guarda dentro, <em>prima di entrare</em>"
+msgstr "Schau hinein, <em>bevor du eintrittst</em>"
+
+#: src/config/elements
+msgid "Guarda il cantiere ↓"
+msgstr "Zur Baustelle ↓"
+
+#: src/config/elements
+msgid "Hero*,Galleria,Griglia,CTA"
+msgstr "Hero*,Galerie,Raster,CTA"
+
+#: src/config/elements
+msgid "Homeware"
+msgstr "Wohnaccessoires"
+
+#: src/config/elements
+msgid "Hosting <b>a scelta tua</b>"
+msgstr "Hosting <b>nach deiner Wahl</b>"
+
+#: src/config/elements
+msgid "Hydrate"
+msgstr "Feuchtigkeit"
+
+#: src/config/elements
+msgid "I progetti scorrono in un reel orizzontale cinematografico — trascina, usa la rotella o scorri — al posto di video sparsi senza ordine."
+msgstr "Die Projekte laufen in einer kinoreifen horizontalen Filmrolle — ziehen, Mausrad oder wischen — statt verstreuter Videos ohne Ordnung."
+
+#: src/config/elements
+msgid "I servizi diventano una lista numerata, scansionabile in un colpo d'occhio — non più cinque parole schiacciate su una riga."
+msgstr "Die Leistungen werden zu einer nummerierten Liste, die man auf einen Blick erfasst — keine fünf Wörter mehr, gequetscht in eine Zeile."
+
+#: src/config/elements
+msgid "Idee che si <em>vedono.</em><br/>Progetti che <em>funzionano.</em>"
+msgstr "Ideen, die man <em>sieht.</em><br/>Projekte, die <em>funktionieren.</em>"
+
+#: src/config/elements
+msgid "Identity · product"
+msgstr "Identität · Produkt"
+
+#: src/config/elements
+msgid "Identità tipografica"
+msgstr "Typografische Identität"
+
+#: src/config/elements
+msgid "Il cantiere"
+msgstr "Die Baustelle"
+
+#: src/config/elements
+msgid "Il lavoro al centro"
+msgstr "Die Arbeit im Mittelpunkt"
+
+#: src/config/elements
+msgid "Il percorso"
+msgstr "Der Weg"
+
+#: src/config/elements
+msgid "Il secondo passaggio. Le card si fermano una dopo l'altra mentre scorri la pagina."
+msgstr "Der zweite Schritt. Die Karten bleiben nacheinander stehen, während du die Seite scrollst."
+
+#: src/config/elements
+msgid "Il sito è il prodotto"
+msgstr "Die Website ist das Produkt"
+
+#: src/config/elements
+msgid "Il telaio · page builder"
+msgstr "Das Gerüst · Page Builder"
+
+#: src/config/elements
+msgid "Il telaio · page builder olonico"
+msgstr "Das Gerüst · holonischer Page Builder"
+
+#: src/config/elements
+msgid "Il terzo passaggio. Ogni card sale sopra la precedente creando la pila."
+msgstr "Der dritte Schritt. Jede Karte schiebt sich über die vorherige und bildet den Stapel."
+
+#: src/config/elements
+msgid "Il tuo primo sito OLObuild è online"
+msgstr "Deine erste OLObuild-Website ist online"
+
+#: src/config/elements
+msgid "Il viaggio OLOtheme"
+msgstr "Die OLOtheme-Reise"
+
+#: src/config/elements
+msgid "In arrivo · OLOtour & OLOtutor"
+msgstr "Demnächst · OLOtour & OLOtutor"
+
+#: src/config/elements
+msgid "In un cloud di terzi, a canone mensile"
+msgstr "In der Cloud eines Dritten, gegen Monatsgebühr"
+
+#: src/config/elements
+msgid "Inchiostro"
+msgstr "Tinte"
+
+#: src/config/elements
+msgid "Independent studio | Est. 2015 | Milan / everywhere"
+msgstr "Unabhängiges Studio | Seit 2015 | Mailand / überall"
+
+#: src/config/elements
+msgid "Industria · Foto"
+msgstr "Industrie · Foto"
+
+#: src/config/elements
+msgid "Industriale"
+msgstr "Industrie"
+
+#: src/config/elements
+msgid "Industriale · Video"
+msgstr "Industrie · Video"
+
+#: src/config/elements
+msgid "Industry"
+msgstr "Industrie"
+
+#: src/config/elements
+msgid "Ingrediente A"
+msgstr "Zutat A"
+
+#: src/config/elements
+msgid "Ingrediente B"
+msgstr "Zutat B"
+
+#: src/config/elements
+msgid "Ingrediente C"
+msgstr "Zutat C"
+
+#: src/config/elements
+msgid "Inizia il viaggio →"
+msgstr "Reise beginnen →"
+
+#: src/config/elements
+msgid "Inizia ora →"
+msgstr "Jetzt starten →"
+
+#: src/config/elements
+msgid "Inside the budget deal"
+msgstr "Hinter den Kulissen des Haushaltsdeals"
+
+#: src/config/elements
+msgid "Invest"
+msgstr "Investieren"
+
+#: src/config/elements
+msgid "Invia messaggio"
+msgstr "Nachricht senden"
+
+#: src/config/elements
+msgid "Iscriviti all’idea"
+msgstr "Melde dich für die Idee an"
+
+#: src/config/elements
+msgid "Istituzionale"
+msgstr "Institutionell"
+
+#: src/config/elements
+msgid "Jewellery"
+msgstr "Schmuck"
+
+#: src/config/elements
+msgid "Knitwear"
+msgstr "Strickwaren"
+
+#: src/config/elements
+msgid "L'evento è iniziato!"
+msgstr "Das Event hat begonnen!"
+
+#: src/config/elements
+msgid "L'ultimo passaggio resta in cima. Aggiungi, rimuovi o riordina le card a piacere."
+msgstr "Der letzte Schritt bleibt oben. Füge Karten hinzu, entferne oder sortiere sie, wie du willst."
+
+#: src/config/elements
+msgid "LMS|quiz & badge|certificati|area allievi"
+msgstr "LMS|Quiz & Abzeichen|Zertifikate|Lernbereich"
+
+#: src/config/elements
+msgid "La cellula <em>olonica</em>"
+msgstr "Die <em>holonische</em> Zelle"
+
+#: src/config/elements
+msgid "La gru cala il <em>Pro</em>"
+msgstr "Der Kran senkt das <em>Pro</em> ab"
+
+#: src/config/elements
+msgid "La libreria"
+msgstr "Die Bibliothek"
+
+#: src/config/elements
+msgid "La locandiera"
+msgstr "Die Wirtin"
+
+#: src/config/elements
+msgid "La mia consulenza parte da un'analisi della situazione reale dell'azienda — sfide e opportunità — per identificare le soluzioni più adatte. Poi le rendo visibili: strategia, web e media originali, in un unico filo conduttore."
+msgstr "Meine Beratung beginnt mit einer Analyse der realen Lage des Unternehmens — Herausforderungen und Chancen —, um die passendsten Lösungen zu finden. Dann mache ich sie sichtbar: Strategie, Web und eigene Medien, an einem roten Faden."
+
+#: src/config/elements
+msgid "La nostra sede"
+msgstr "Unser Standort"
+
+#: src/config/elements
+msgid "La scrubbar in basso mostra il progresso dello scorrimento."
+msgstr "Die Scrub-Leiste unten zeigt den Scrollfortschritt."
+
+#: src/config/elements
+msgid "La suite modulare per WordPress: page builder, prenotazioni, traduzioni, tour virtuali e corsi. Un solo fornitore, un solo standard."
+msgstr "Die modulare Suite für WordPress: Page Builder, Buchungen, Übersetzungen, virtuelle Touren und Kurse. Ein Anbieter, ein Standard."
+
+#: src/config/elements
+msgid "La vita è ciò che ti succede mentre sei occupato a fare altri progetti."
+msgstr "Leben ist das, was passiert, während du eifrig dabei bist, andere Pläne zu machen."
+
+#: src/config/elements
+msgid "La vita è quello che ti succede mentre sei impegnato a fare altri progetti."
+msgstr "Leben ist das, was passiert, während du eifrig dabei bist, andere Pläne zu machen."
+
+#: src/config/elements
+msgid "La wishlist è vuota"
+msgstr "Die Wunschliste ist leer"
+
+#: src/config/elements
+msgid "Large-scale abstracts about colour, weather and memory. Move your cursor — leave a mark."
+msgstr "Großformatige Abstraktionen über Farbe, Wetter und Erinnerung. Beweg den Cursor — hinterlass eine Spur."
+
+#: src/config/elements
+msgid "Le funzionalità principali del prodotto o servizio. Usa questo spazio per evidenziare i vantaggi."
+msgstr "Die wichtigsten Funktionen des Produkts oder Service. Nutze diesen Platz, um die Vorteile hervorzuheben."
+
+#: src/config/elements
+msgid "Le lezioni si <em>sbloccano</em> scendendo"
+msgstr "Die Lektionen werden beim Scrollen <em>freigeschaltet</em>"
+
+#: src/config/elements
+msgid "Le quattro stagioni"
+msgstr "Die vier Jahreszeiten"
+
+#: src/config/elements
+msgid "Leggi tutto"
+msgstr "Weiterlesen"
+
+#: src/config/elements
+msgid "Licenza <b>GPL-v3</b>"
+msgstr "<b>GPL-v3</b>-Lizenz"
+
+#: src/config/elements
+msgid "Lime"
+msgstr "Limette"
+
+#: src/config/elements
+msgid "Lista 01–05"
+msgstr "Liste 01–05"
+
+#: src/config/elements
+msgid "Listen"
+msgstr "Zuhören"
+
+#: src/config/elements
+msgid "Lo stesso sito, <em>28 voci</em>"
+msgstr "Dieselbe Website, <em>28 Stimmen</em>"
+
+#: src/config/elements
+msgid "Londra"
+msgstr "London"
+
+#: src/config/elements
+msgid "Lun — Gio"
+msgstr "Mo — Do"
+
+#: src/config/elements
+msgid "Lun, Mar, Mer, Gio, Ven"
+msgstr "Mo, Di, Mi, Do, Fr"
+
+#: src/config/elements
+msgid "L’intera libreria: <strong>187 tile</strong>"
+msgstr "Die gesamte Bibliothek: <strong>187 Tiles</strong>"
+
+#: src/config/elements
+msgid "Maestro"
+msgstr "Meister"
+
+#: src/config/elements
+msgid "Manuale <em>base</em>"
+msgstr "<em>Basis</em>-Handbuch"
+
+#: src/config/elements
+msgid "Mappa del sistema"
+msgstr "Systemkarte"
+
+#: src/config/elements
+msgid "Marcus · 16 weeks"
+msgstr "Marcus · 16 Wochen"
+
+#: src/config/elements
+msgid "Marisol — identity system"
+msgstr "Marisol — Identitätssystem"
+
+#: src/config/elements
+msgid "Marketplace for independent makers"
+msgstr "Marktplatz für unabhängige Macher"
+
+#: src/config/elements
+msgid "Massima disponibilità: spingi."
+msgstr "Maximale Verfügbarkeit: Gib Gas."
+
+#: src/config/elements
+msgid "Mat | Reformer | | Reformer | Mat"
+msgstr "Matte | Reformer | | Reformer | Matte"
+
+#: src/config/elements
+msgid "Matchday 03"
+msgstr "Spieltag 03"
+
+#: src/config/elements
+msgid "Matchday 04"
+msgstr "Spieltag 04"
+
+#: src/config/elements
+msgid "Mattone su <em>mattone.</em>"
+msgstr "Stein auf <em>Stein.</em>"
+
+#: src/config/elements
+msgid "Mattone su mattone: <strong>187 tile in 12 famiglie</strong>, tutti auto-discovered, con animazioni ed effetti di serie. <strong>La Free (100+ tile) vale quanto i builder Pro a pagamento della concorrenza</strong>; Pro sblocca l’intera libreria."
+msgstr "Stein auf Stein: <strong>187 Tiles in 12 Familien</strong>, alle automatisch erkannt, mit Animationen und Effekten serienmäßig. <strong>Die Free (100+ Tiles) ist so viel wert wie die kostenpflichtigen Pro-Builder der Konkurrenz</strong>; Pro schaltet die gesamte Bibliothek frei."
+
+#: src/config/elements
+msgid "Mattone su mattone: <strong>187 tile in 12 famiglie</strong>, tutti auto-discovered."
+msgstr "Stein auf Stein: <strong>187 Tiles in 12 Familien</strong>, alle automatisch erkannt."
+
+#: src/config/elements
+msgid "Mattone su mattone: <strong>187 tile in 12 famiglie</strong>."
+msgstr "Stein auf Stein: <strong>187 Tiles in 12 Familien</strong>."
+
+#: src/config/elements
+msgid "Mattone su mattone…"
+msgstr "Stein auf Stein…"
+
+#: src/config/elements
+msgid "Media sparsi"
+msgstr "Verstreute Medien"
+
+#: src/config/elements
+msgid "Membership"
+msgstr "Mitgliedschaft"
+
+#: src/config/elements
+msgid "Men"
+msgstr "Herren"
+
+#: src/config/elements
+msgid "Men's squad"
+msgstr "Herrenteam"
+
+#: src/config/elements
+msgid "Mentre leggevi questa pagina"
+msgstr "Während du diese Seite gelesen hast"
+
+#: src/config/elements
+msgid "Messaggio chiaro"
+msgstr "Klare Botschaft"
+
+#: src/config/elements
+msgid "Messaggio inviato con successo! Ti risponderemo al più presto."
+msgstr "Nachricht erfolgreich gesendet! Wir melden uns so bald wie möglich."
+
+#: src/config/elements
+msgid "Milano"
+msgstr "Mailand"
+
+#: src/config/elements
+msgid "Milk Cleanser"
+msgstr "Reinigungsmilch"
+
+#: src/config/elements
+msgid "Minuti"
+msgstr "Minuten"
+
+#: src/config/elements
+msgid "Mirino col nome della sezione, timecode di scroll, grana pellicola, fotogrammi che si inclinano col drag: il mestiere — video e media — diventa il linguaggio stesso del sito."
+msgstr "Sucher mit dem Namen des Abschnitts, Scroll-Timecode, Filmkorn, Bilder, die sich beim Ziehen neigen: das Handwerk — Video und Medien — wird zur Sprache der Website selbst."
+
+#: src/config/elements
+msgid "Modalità chiara"
+msgstr "Heller Modus"
+
+#: src/config/elements
+msgid "Mon, Tue, Wed, Thu, Fri, Sat, Sun"
+msgstr "Mo, Di, Mi, Do, Fr, Sa, So"
+
+#: src/config/elements
+msgid "Monitor live"
+msgstr "Live-Monitor"
+
+#: src/config/elements
+msgid "Morning, Midday, Evening"
+msgstr "Morgen, Mittag, Abend"
+
+#: src/config/elements
+msgid "Mostra di meno"
+msgstr "Weniger anzeigen"
+
+#: src/config/elements
+msgid "Mostra di più"
+msgstr "Mehr anzeigen"
+
+#: src/config/elements
+msgid "Motore di prenotazione multi-verticale. Strutture, appuntamenti, eventi, immobili, noleggi, ristoranti."
+msgstr "Buchungs-Engine für viele Branchen. Unterkünfte, Termine, Events, Immobilien, Vermietungen, Restaurants."
+
+#: src/config/elements
+msgid "Multilingua nativo"
+msgstr "Nativ mehrsprachig"
+
+#: src/config/elements
+msgid "Multilingua nativo · 28 lingue"
+msgstr "Nativ mehrsprachig · 28 Sprachen"
+
+#: src/config/elements
+msgid "Multilingua nativo. Traduzioni IA + editing umano. SEO per ogni lingua. 28 idiomi inclusi."
+msgstr "Nativ mehrsprachig. KI-Übersetzungen + menschliches Lektorat. SEO für jede Sprache. 28 Sprachen inklusive."
+
+#: src/config/elements
+msgid "N. 24-EMS-0112"
+msgstr "Nr. 24-EMS-0112"
+
+#: src/config/elements
+msgid "N. 24-QMS-0381"
+msgstr "Nr. 24-QMS-0381"
+
+#: src/config/elements
+msgid "N. 25-OHS-0057"
+msgstr "Nr. 25-OHS-0057"
+
+#: src/config/elements
+msgid "Nascondi motivazioni"
+msgstr "Begründungen ausblenden"
+
+#: src/config/elements
+msgid "Nessun articolo correlato"
+msgstr "Keine ähnlichen Beiträge"
+
+#: src/config/elements
+msgid "Nessun prodotto visualizzato di recente"
+msgstr "Keine kürzlich angesehenen Produkte"
+
+#: src/config/elements
+msgid "Nessun rischio,"
+msgstr "Kein Risiko,"
+
+#: src/config/elements
+msgid "Nessuna <strong>registrazione obbligatoria</strong>. Scarichi, installi, lavori. L'account lo crei solo se vuoi."
+msgstr "Keine <strong>Registrierungspflicht</strong>. Herunterladen, installieren, loslegen. Ein Konto legst du nur an, wenn du willst."
+
+#: src/config/elements
+msgid "Net revenue"
+msgstr "Nettoumsatz"
+
+#: src/config/elements
+msgid "New"
+msgstr "Neu"
+
+#: src/config/elements
+msgid "New album · out now"
+msgstr "Neues Album · jetzt erhältlich"
+
+#: src/config/elements
+msgid "Next home game · Sat 14 Mar · 15:00"
+msgstr "Nächstes Heimspiel · Sa 14. März · 15:00"
+
+#: src/config/elements
+msgid "Niacinamide 10%"
+msgstr "Niacinamid 10%"
+
+#: src/config/elements
+msgid "Niente <strong>carta di credito</strong> per scaricare e provare. Niente trial scaduto, niente sblocchi nascosti."
+msgstr "Keine <strong>Kreditkarte</strong> zum Herunterladen und Testen. Keine abgelaufene Testphase, keine versteckten Freischaltungen."
+
+#: src/config/elements
+msgid "Niente SaaS, niente lock-in, niente cloud altrui: tutto vive <strong>sul tuo hosting</strong>, in GPL, scritto a Trento."
+msgstr "Kein SaaS, kein Lock-in, keine fremde Cloud: Alles lebt <strong>auf deinem Hosting</strong>, unter GPL, geschrieben in Trient."
+
+#: src/config/elements
+msgid "Niente SaaS, niente lock-in, niente cloud altrui: tutto vive <strong>sul tuo hosting</strong>, in GPL, scritto a Trento. Scorri: ogni fermata è un prodotto."
+msgstr "Kein SaaS, kein Lock-in, keine fremde Cloud: Alles lebt <strong>auf deinem Hosting</strong>, unter GPL, geschrieben in Trient. Scroll weiter: Jede Haltestelle ist ein Produkt."
+
+#: src/config/elements
+msgid "Niente monolite: <strong>i prodotti si uniscono a seconda della battaglia</strong> da affrontare, e si sciolgono quando non servono."
+msgstr "Kein Monolith: <strong>Die Produkte schließen sich je nach Herausforderung zusammen</strong> und lösen sich wieder, wenn sie nicht gebraucht werden."
+
+#: src/config/elements
+msgid "Niente monolite: <strong>i prodotti si uniscono a seconda della battaglia</strong> da affrontare."
+msgstr "Kein Monolith: <strong>Die Produkte schließen sich je nach Herausforderung zusammen</strong>."
+
+#: src/config/elements
+msgid "Niente monolite: <strong>i prodotti si uniscono a seconda della battaglia</strong>."
+msgstr "Kein Monolith: <strong>Die Produkte schließen sich je nach Herausforderung zusammen</strong>."
+
+#: src/config/elements
+msgid "No, parto da zero|1\nUn po'|2\nSì, molta|3"
+msgstr "Nein, ich fange bei null an|1\nEin bisschen|2\nJa, viel|3"
+
+#: src/config/elements
+msgid "No-show ◦ Coperto"
+msgstr "No-Show ◦ Abgedeckt"
+
+#: src/config/elements
+msgid "Noi siamo"
+msgstr "Wir sind"
+
+#: src/config/elements
+msgid "Noleggio e-bike, 3 ore"
+msgstr "E-Bike-Verleih, 3 Stunden"
+
+#: src/config/elements
+msgid "Non solo i testi: menu, stringhe di tema e plugin, tutto passa dal database e torna fuori nella lingua giusta."
+msgstr "Nicht nur die Texte: Menüs, Theme- und Plugin-Strings, alles läuft über die Datenbank und kommt in der richtigen Sprache wieder heraus."
+
+#: src/config/elements
+msgid "Non solo i testi: menu, stringhe di tema e plugin."
+msgstr "Nicht nur die Texte: Menüs, Theme- und Plugin-Strings."
+
+#: src/config/elements
+msgid "North lets our teams move from question to verified answer in seconds — grounded in our own data, without the risk."
+msgstr "Mit North kommen unsere Teams in Sekunden von der Frage zur geprüften Antwort — gestützt auf unsere eigenen Daten, ohne das Risiko."
+
+#: src/config/elements
+msgid "North · enterprise AI"
+msgstr "North · KI für Unternehmen"
+
+#: src/config/elements
+msgid "Nove progetti tra industria, retail, ritratto ed eventi. Trascina i tuoi fotogrammi nelle cornici."
+msgstr "Neun Projekte aus Industrie, Einzelhandel, Porträt und Events. Zieh deine Bilder in die Rahmen."
+
+#: src/config/elements
+msgid "Nuovo messaggio dal sito"
+msgstr "Neue Nachricht von der Website"
+
+#: src/config/elements
+msgid "OLOBUILD · EDITOR LIVE"
+msgstr "OLOBUILD · LIVE-EDITOR"
+
+#: src/config/elements
+msgid "OLOBUILD, PER SEMPRE"
+msgstr "OLOBUILD, FÜR IMMER"
+
+#: src/config/elements
+msgid "OLObuild · sistema"
+msgstr "OLObuild · System"
+
+#: src/config/elements
+msgid "OLOlang o OLObooking."
+msgstr "OLOlang oder OLObooking."
+
+#: src/config/elements
+msgid "OLOtheme by <a href=\"https://clod.eu\" target=\"_blank\" rel=\"noopener\">clod.eu</a> | @2026 | sito introduttivo | <a href=\"mailto:info@olotheme.com\">info@olotheme.com</a>"
+msgstr "OLOtheme by <a href=\"https://clod.eu\" target=\"_blank\" rel=\"noopener\">clod.eu</a> | @2026 | Einführungsseite | <a href=\"mailto:info@olotheme.com\">info@olotheme.com</a>"
+
+#: src/config/elements
+msgid "OLOtheme · made in Trento · no SaaS · nessuna catena"
+msgstr "OLOtheme · made in Trento · kein SaaS · keine Bindung"
+
+#: src/config/elements
+msgid "OLOtheme · suite WordPress"
+msgstr "OLOtheme · WordPress-Suite"
+
+#: src/config/elements
+msgid "Ocra"
+msgstr "Ocker"
+
+#: src/config/elements
+msgid "Offerta!"
+msgstr "Angebot!"
+
+#: src/config/elements
+msgid "Ogni famiglia arriva da sinistra e da destra, come in cantiere."
+msgstr "Jede Familie kommt von links und von rechts, wie auf der Baustelle."
+
+#: src/config/elements
+msgid "Ogni famiglia arriva da sinistra e da destra, come in cantiere. 187 tile, un solo motore."
+msgstr "Jede Familie kommt von links und von rechts, wie auf der Baustelle. 187 Tiles, eine einzige Engine."
+
+#: src/config/elements
+msgid "Ogni riga <em>gira</em> come un tabellone"
+msgstr "Jede Zeile <em>dreht</em> sich wie eine Anzeigetafel"
+
+#: src/config/elements
+msgid "One unit · since 1974"
+msgstr "Eine Einheit · seit 1974"
+
+#: src/config/elements
+msgid "Opzione A"
+msgstr "Option A"
+
+#: src/config/elements
+msgid "Opzione B"
+msgstr "Option B"
+
+#: src/config/elements
+msgid "Opzione C"
+msgstr "Option C"
+
+#: src/config/elements
+msgid "Orchestra da camera della città"
+msgstr "Kammerorchester der Stadt"
+
+#: src/config/elements
+msgid "Ore"
+msgstr "Stunden"
+
+#: src/config/elements
+msgid "Outerwear"
+msgstr "Oberbekleidung"
+
+#: src/config/elements
+msgid "PASSA IL MOUSE SUI TILE"
+msgstr "FAHR MIT DER MAUS ÜBER DIE TILES"
+
+#: src/config/elements
+msgid "PHP 7.4+ con WordPress"
+msgstr "PHP 7.4+ mit WordPress"
+
+#: src/config/elements
+msgid "PRENOTA UN TAVOLO"
+msgstr "TISCH RESERVIEREN"
+
+#: src/config/elements
+msgid "PRIMA PAGINA"
+msgstr "ERSTE SEITE"
+
+#: src/config/elements
+msgid "PRODOTTI MODULARI"
+msgstr "MODULARE PRODUKTE"
+
+#: src/config/elements
+msgid "PRONTO AL TRAFFICO"
+msgstr "BEREIT FÜR TRAFFIC"
+
+#: src/config/elements
+msgid "PRONTO IN 30\""
+msgstr "FERTIG IN 30\""
+
+#: src/config/elements
+msgid "PROVALO SUBITO"
+msgstr "JETZT AUSPROBIEREN"
+
+#: src/config/elements
+msgid "PUBBLICHI & SCALI"
+msgstr "VERÖFFENTLICHEN & SKALIEREN"
+
+#: src/config/elements
+msgid "Pacchetto risparmio"
+msgstr "Sparpaket"
+
+#: src/config/elements
+msgid "Paga ora"
+msgstr "Jetzt bezahlen"
+
+#: src/config/elements
+msgid "Page builder WordPress tile-based, render server-side"
+msgstr "Tile-basierter WordPress-Page-Builder, serverseitiges Rendering"
+
+#: src/config/elements
+msgid "Page builder olonico. 187 tile, motion design, border-radius animato all'hover. Alla pari dei top builder commerciali."
+msgstr "Holonischer Page Builder. 187 Tiles, Motion Design, animierter Border-Radius beim Hover. Auf Augenhöhe mit den besten kommerziellen Buildern."
+
+#: src/config/elements
+msgid "Page builder · 187 tile drag & drop"
+msgstr "Page Builder · 187 Drag-&-Drop-Tiles"
+
+#: src/config/elements
+msgid "Pagina statica"
+msgstr "Statische Seite"
+
+#: src/config/elements
+msgid "Painter · oil & pigment"
+msgstr "Maler · Öl & Pigment"
+
+#: src/config/elements
+msgid "Panorami sferici e HDRI (Polyhaven, Street View), <strong>hot-spot cliccabili</strong>, ambienti collegati, fruizione VR. Il sopralluogo diventa parte del sito, e finisce sul bottone “prenota”."
+msgstr "Kugelpanoramen und HDRIs (Polyhaven, Street View), <strong>klickbare Hotspots</strong>, verbundene Räume, VR-Wiedergabe. Die Besichtigung wird Teil der Website und endet beim Button „buchen“."
+
+#: src/config/elements
+msgid "Passa a Pro"
+msgstr "Auf Pro upgraden"
+
+#: src/config/elements
+msgid "Patient, diversified, low-cost where it counts."
+msgstr "Geduldig, diversifiziert, kostengünstig, wo es zählt."
+
+#: src/config/elements
+msgid "Peak"
+msgstr "Höchstform"
+
+#: src/config/elements
+msgid "Peony"
+msgstr "Pfingstrose"
+
+#: src/config/elements
+msgid "Perché questa evoluzione"
+msgstr "Warum diese Entwicklung"
+
+#: src/config/elements
+msgid "Percorsi guidati a 360°. Foto e video sferici con hot-spot interattivi, multi-stanza, supporto VR."
+msgstr "Geführte 360°-Touren. Kugelfotos und -videos mit interaktiven Hotspots, mehrere Räume, VR-Unterstützung."
+
+#: src/config/elements
+msgid "Perfetto, aggiungile al CRM."
+msgstr "Perfekt, füg sie dem CRM hinzu."
+
+#: src/config/elements
+msgid "Photo Essay · Issue 41"
+msgstr "Fotoessay · Ausgabe 41"
+
+#: src/config/elements
+msgid "Photographs · Yuki Mori"
+msgstr "Fotos · Yuki Mori"
+
+#: src/config/elements
+msgid "Piatti raffinati che raccontano il territorio attraverso una cucina di stagione, leggera e creativa."
+msgstr "Raffinierte Gerichte, die mit einer saisonalen, leichten und kreativen Küche von der Region erzählen."
+
+#: src/config/elements
+msgid "Plan"
+msgstr "Planen"
+
+#: src/config/elements
+msgid "Platino"
+msgstr "Platin"
+
+#: src/config/elements
+msgid "Play album"
+msgstr "Album abspielen"
+
+#: src/config/elements
+msgid "Poco tempo: una base sostenibile."
+msgstr "Wenig Zeit: eine nachhaltige Basis."
+
+#: src/config/elements
+msgid "Poco|1\nAbbastanza|2\nTutto quello che serve|3"
+msgstr "Wenig|1\nGenug|2\nAlles, was nötig ist|3"
+
+#: src/config/elements
+msgid "Point 1"
+msgstr "Punkt 1"
+
+#: src/config/elements
+msgid "Point 2"
+msgstr "Punkt 2"
+
+#: src/config/elements
+msgid "Politics · Analysis"
+msgstr "Politik · Analyse"
+
+#: src/config/elements
+msgid "Portare i corsi online"
+msgstr "Kurse online bringen"
+
+#: src/config/elements
+msgid "Portfolio statico"
+msgstr "Statisches Portfolio"
+
+#: src/config/elements
+msgid "Prenota demo →"
+msgstr "Demo buchen →"
+
+#: src/config/elements
+msgid "Prenota."
+msgstr "Buchen."
+
+#: src/config/elements
+msgid "Prenotazioni · 6 verticali"
+msgstr "Buchungen · 6 Branchen"
+
+#: src/config/elements
+msgid "Prima card"
+msgstr "Erste Karte"
+
+#: src/config/elements
+msgid "Prima scheda"
+msgstr "Erster Tab"
+
+#: src/config/elements
+msgid "Primo gesto"
+msgstr "Erster Schritt"
+
+#: src/config/elements
+msgid "Primo progetto"
+msgstr "Erstes Projekt"
+
+#: src/config/elements
+msgid "Priya · 6 months"
+msgstr "Priya · 6 Monate"
+
+#: src/config/elements
+msgid "Prodotti correlati"
+msgstr "Ähnliche Produkte"
+
+#: src/config/elements
+msgid "Prodotto precedente"
+msgstr "Vorheriges Produkt"
+
+#: src/config/elements
+msgid "Prodotto successivo"
+msgstr "Nächstes Produkt"
+
+#: src/config/elements
+msgid "Product"
+msgstr "Produkt"
+
+#: src/config/elements
+msgid "Progettiamo assieme"
+msgstr "Lass uns gemeinsam planen"
+
+#: src/config/elements
+msgid "Prossima fermata"
+msgstr "Nächste Haltestelle"
+
+#: src/config/elements
+msgid "Protect"
+msgstr "Schützen"
+
+#: src/config/elements
+msgid "Prova i prodotti su siti demo reali."
+msgstr "Teste die Produkte auf echten Demo-Websites."
+
+#: src/config/elements
+msgid "Punto 3"
+msgstr "Punkt 3"
+
+#: src/config/elements
+msgid "Quando ti serve,"
+msgstr "Wenn du es brauchst,"
+
+#: src/config/elements
+msgid "Quarto gesto"
+msgstr "Vierter Schritt"
+
+#: src/config/elements
+msgid "Quarto progetto"
+msgstr "Viertes Projekt"
+
+#: src/config/elements
+msgid "Questo stesso sito è costruito come un OLOtheme: visitarlo significa vedere dal vivo cosa sa fare lo studio. Showreel e prova insieme."
+msgstr "Diese Website selbst ist als OLOtheme gebaut: Wer sie besucht, sieht live, was das Studio kann. Showreel und Beweis zugleich."
+
+#: src/config/elements
+msgid "Quick View"
+msgstr "Schnellansicht"
+
+#: src/config/elements
+msgid "Quick add"
+msgstr "Schnell hinzufügen"
+
+#: src/config/elements
+msgid "Quickview, wishlist, comparazione, bundle, filtro AJAX, checkout multi-step."
+msgstr "Schnellansicht, Wunschliste, Vergleich, Bundles, AJAX-Filter, mehrstufiger Checkout."
+
+#: src/config/elements
+msgid "Quickview, wishlist, comparazione, bundle."
+msgstr "Schnellansicht, Wunschliste, Vergleich, Bundles."
+
+#: src/config/elements
+msgid "Quinto progetto"
+msgstr "Fünftes Projekt"
+
+#: src/config/elements
+msgid "Quiz & gamification"
+msgstr "Quiz & Gamification"
+
+#: src/config/elements
+msgid "Quiz, mini-giochi, punti e badge."
+msgstr "Quiz, Minispiele, Punkte und Abzeichen."
+
+#: src/config/elements
+msgid "Quiz, mini-giochi, punti e badge. La motivazione fa parte del metodo, non è un plugin in più."
+msgstr "Quiz, Minispiele, Punkte und Abzeichen. Motivation gehört zur Methode und ist kein zusätzliches Plugin."
+
+#: src/config/elements
+msgid "R&S"
+msgstr "F&E"
+
+#: src/config/elements
+msgid "R&S · divisione idee"
+msgstr "F&E · Ideenabteilung"
+
+#: src/config/elements
+msgid "Recluta"
+msgstr "Rekrut"
+
+#: src/config/elements
+msgid "Reel orizzontale"
+msgstr "Horizontale Filmrolle"
+
+#: src/config/elements
+msgid "Registrati in pochi secondi"
+msgstr "Registriere dich in wenigen Sekunden"
+
+#: src/config/elements
+msgid "Registrazione"
+msgstr "Registrierung"
+
+#: src/config/elements
+msgid "Replay"
+msgstr "Wiederholen"
+
+#: src/config/elements
+msgid "Respingere un attacco"
+msgstr "Einen Angriff abwehren"
+
+#: src/config/elements
+msgid "Retinal Night Oil"
+msgstr "Retinal-Nachtöl"
+
+#: src/config/elements
+msgid "Revenue"
+msgstr "Umsatz"
+
+#: src/config/elements
+msgid "Revenue by week"
+msgstr "Umsatz pro Woche"
+
+#: src/config/elements
+msgid "Review"
+msgstr "Überprüfen"
+
+#: src/config/elements
+msgid "Riassumi le chiamate della settimana e segnala i temi sul prezzo."
+msgstr "Fass die Calls der Woche zusammen und markiere die Preisthemen."
+
+#: src/config/elements
+msgid "Ricevuto ◦ OLOtheme"
+msgstr "Erhalten ◦ OLOtheme"
+
+#: src/config/elements
+msgid "Richiedi una demo"
+msgstr "Demo anfordern"
+
+#: src/config/elements
+msgid "Riga unica"
+msgstr "Eine Zeile"
+
+#: src/config/elements
+msgid "Riordina, rimuovi o personalizza i singoli item dal pannello a destra."
+msgstr "Ordne einzelne Einträge im Panel rechts neu, entferne oder passe sie an."
+
+#: src/config/elements
+msgid "Risposte alle domande più frequenti dei tuoi utenti. Sintetiche, dirette, utili."
+msgstr "Antworten auf die häufigsten Fragen deiner Nutzer. Knapp, direkt, nützlich."
+
+#: src/config/elements
+msgid "Ristorante"
+msgstr "Restaurant"
+
+#: src/config/elements
+msgid "Risultato A"
+msgstr "Ergebnis A"
+
+#: src/config/elements
+msgid "Risultato B"
+msgstr "Ergebnis B"
+
+#: src/config/elements
+msgid "Risultato C"
+msgstr "Ergebnis C"
+
+#: src/config/elements
+msgid "Ritratto"
+msgstr "Porträt"
+
+#: src/config/elements
+msgid "Roast"
+msgstr "Röstung"
+
+#: src/config/elements
+msgid "Rosewater Gel"
+msgstr "Rosenwasser-Gel"
+
+#: src/config/elements
+msgid "Rosewood"
+msgstr "Rosenholz"
+
+#: src/config/elements
+msgid "SAAS · LOCK-IN · COMMISSIONI"
+msgstr "SAAS · LOCK-IN · PROVISIONEN"
+
+#: src/config/elements
+msgid "SCOPRI DI PIÙ"
+msgstr "MEHR ERFAHREN"
+
+#: src/config/elements
+msgid "SCOPRI OLOBOOKING"
+msgstr "OLOBOOKING ENTDECKEN"
+
+#: src/config/elements
+msgid "SCOPRI OLOBUILD"
+msgstr "OLOBUILD ENTDECKEN"
+
+#: src/config/elements
+msgid "SCOPRI OLOLANG"
+msgstr "OLOLANG ENTDECKEN"
+
+#: src/config/elements
+msgid "SCOPRI OLOTOUR"
+msgstr "OLOTOUR ENTDECKEN"
+
+#: src/config/elements
+msgid "SCOPRI OLOTUTOR"
+msgstr "OLOTUTOR ENTDECKEN"
+
+#: src/config/elements
+msgid "SCREENSHOT · AREA CORSI"
+msgstr "SCREENSHOT · KURSBEREICH"
+
+#: src/config/elements
+msgid "SCREENSHOT · CALENDARIO"
+msgstr "SCREENSHOT · KALENDER"
+
+#: src/config/elements
+msgid "SCREENSHOT · EDITOR LIVE"
+msgstr "SCREENSHOT · LIVE-EDITOR"
+
+#: src/config/elements
+msgid "SCREENSHOT · MULTILINGUA"
+msgstr "SCREENSHOT · MEHRSPRACHIG"
+
+#: src/config/elements
+msgid "SCREENSHOT · TOUR 360°"
+msgstr "SCREENSHOT · 360°-TOUR"
+
+#: src/config/elements
+msgid "STACK WORDPRESS · PER AGENZIE E PMI"
+msgstr "WORDPRESS-STACK · FÜR AGENTUREN UND KMU"
+
+#: src/config/elements
+msgid "Sali di livello, <em>lezione dopo lezione</em>"
+msgstr "Steig auf, <em>Lektion für Lektion</em>"
+
+#: src/config/elements
+msgid "Sam · 1 year"
+msgstr "Sam · 1 Jahr"
+
+#: src/config/elements
+msgid "Sat, 14.03"
+msgstr "Sa, 14.03."
+
+#: src/config/elements
+msgid "Scarica Free"
+msgstr "Free herunterladen"
+
+#: src/config/elements
+msgid "Scarichi"
+msgstr "Du lädst"
+
+#: src/config/elements
+msgid "Scheda <em>tecnica</em>"
+msgstr "Technisches <em>Datenblatt</em>"
+
+#: src/config/elements
+msgid "Scopri e Prenota"
+msgstr "Entdecken & Buchen"
+
+#: src/config/elements
+msgid "Scopri la Suite OLO"
+msgstr "Die OLO Suite entdecken"
+
+#: src/config/elements
+msgid "Scopri qualcosa di straordinario"
+msgstr "Entdecke etwas Außergewöhnliches"
+
+#: src/config/elements
+msgid "Scorri"
+msgstr "Scrollen"
+
+#: src/config/elements
+msgid "Scorri in orizzontale"
+msgstr "Horizontal scrollen"
+
+#: src/config/elements
+msgid "Scrivetemi a"
+msgstr "Schreibt mir an"
+
+#: src/config/elements
+msgid "Scrivi una parola"
+msgstr "Gib ein Wort ein"
+
+#: src/config/elements
+msgid "Scroll to see the work"
+msgstr "Scrollen, um die Arbeiten zu sehen"
+
+#: src/config/elements
+msgid "Scrolla in basso"
+msgstr "Nach unten scrollen"
+
+#: src/config/elements
+msgid "Scrolla: il sito si <em>monta da solo</em>."
+msgstr "Scroll: Die Website <em>baut sich selbst zusammen</em>."
+
+#: src/config/elements
+msgid "Search"
+msgstr "Suchen"
+
+#: src/config/elements
+msgid "Search 90,000+ handmade things…"
+msgstr "Durchsuche über 90.000 handgemachte Dinge…"
+
+#: src/config/elements
+msgid "Seconda card"
+msgstr "Zweite Karte"
+
+#: src/config/elements
+msgid "Seconda scheda"
+msgstr "Zweiter Tab"
+
+#: src/config/elements
+msgid "Secondi"
+msgstr "Sekunden"
+
+#: src/config/elements
+msgid "Secondo gesto"
+msgstr "Zweiter Schritt"
+
+#: src/config/elements
+msgid "Secondo progetto"
+msgstr "Zweites Projekt"
+
+#: src/config/elements
+msgid "See how it works"
+msgstr "So funktioniert's"
+
+#: src/config/elements
+msgid "See our work"
+msgstr "Unsere Arbeiten"
+
+#: src/config/elements
+msgid "See tour dates"
+msgstr "Tourdaten ansehen"
+
+#: src/config/elements
+msgid "Selezione progetti"
+msgstr "Projektauswahl"
+
+#: src/config/elements
+msgid "Selezione · photograph & video"
+msgstr "Auswahl · Foto & Video"
+
+#: src/config/elements
+msgid "Sheer SPF 50"
+msgstr "Leichter LSF 50"
+
+#: src/config/elements
+msgid "Ship reliable software,"
+msgstr "Liefere zuverlässige Software,"
+
+#: src/config/elements
+msgid "Shop the collection"
+msgstr "Kollektion shoppen"
+
+#: src/config/elements
+msgid "Showreel vivo"
+msgstr "Lebendiges Showreel"
+
+#: src/config/elements
+msgid "Si è verificato un errore. Riprova più tardi."
+msgstr "Ein Fehler ist aufgetreten. Versuch es später noch einmal."
+
+#: src/config/elements
+msgid "Sicurezza · 100% locale"
+msgstr "Sicherheit · 100% lokal"
+
+#: src/config/elements
+msgid "Sicurezza, firewall e backup"
+msgstr "Sicherheit, Firewall und Backups"
+
+#: src/config/elements
+msgid "Sign in"
+msgstr "Anmelden"
+
+#: src/config/elements
+msgid "Silk Column Dress"
+msgstr "Säulenkleid aus Seide"
+
+#: src/config/elements
+msgid "Software & Tech"
+msgstr "Software & Technik"
+
+#: src/config/elements
+msgid "Solo pranzo"
+msgstr "Nur mittags"
+
+#: src/config/elements
+msgid "Spazi privati immersi nella natura, con vista panoramica e piscina riservata."
+msgstr "Private Rückzugsorte mitten in der Natur, mit Panoramablick und eigenem Pool."
+
+#: src/config/elements
+msgid "Spazi,Bordi,Ombra,Colore*"
+msgstr "Abstände,Rahmen,Schatten,Farbe*"
+
+#: src/config/elements
+msgid "Start free — no card"
+msgstr "Kostenlos starten — ohne Karte"
+
+#: src/config/elements
+msgid "Start planning"
+msgstr "Planung starten"
+
+#: src/config/elements
+msgid "Stationery"
+msgstr "Schreibwaren"
+
+#: src/config/elements
+msgid "Stessa anima olonica per costruire, gestire e far crescere il tuo sito WordPress. Senza SaaS, senza lock-in."
+msgstr "Dieselbe holonische Seele, um deine WordPress-Website zu bauen, zu verwalten und wachsen zu lassen. Ohne SaaS, ohne Lock-in."
+
+#: src/config/elements
+msgid "Stesso stack, stessa interfaccia, niente migration. Pronto al traffico — i pezzi crescono insieme al sito."
+msgstr "Gleicher Stack, gleiche Oberfläche, keine Migration. Bereit für Traffic — die Bausteine wachsen mit der Website."
+
+#: src/config/elements
+msgid "Strutture di corso, lezioni ordinate, area allievi con i progressi di ciascuno. Il programma lo detti tu."
+msgstr "Kursstrukturen, geordnete Lektionen, ein Lernbereich mit dem Fortschritt jedes Einzelnen. Den Lehrplan bestimmst du."
+
+#: src/config/elements
+msgid "Strutture di corso, lezioni ordinate, area allievi."
+msgstr "Kursstrukturen, geordnete Lektionen, Lernbereich."
+
+#: src/config/elements
+msgid "Su 9 chiamate: 3 citano il prezzo — due chiedono la fatturazione annuale. Ho preparato una bozza di follow-up per ciascuna."
+msgstr "Von 9 Calls erwähnen 3 den Preis — zwei wollen jährliche Abrechnung. Ich habe für jeden einen Follow-up-Entwurf vorbereitet."
+
+#: src/config/elements
+msgid "Su mobile e con “meno movimento” attivo la traccia diventa uno scroll orizzontale nativo."
+msgstr "Auf Mobilgeräten und bei aktivem „Bewegung reduzieren“ wird die Spur zu einem nativen horizontalen Scroll."
+
+#: src/config/elements
+msgid "Su un marketplace, in fila coi concorrenti"
+msgstr "Auf einem Marktplatz, in einer Reihe mit der Konkurrenz"
+
+#: src/config/elements
+msgid "Subscribe"
+msgstr "Abonnieren"
+
+#: src/config/elements
+msgid "Successivo »"
+msgstr "Weiter »"
+
+#: src/config/elements
+msgid "Suite OLO"
+msgstr "OLO Suite"
+
+#: src/config/elements
+msgid "Sul mio WordPress, con i miei allievi e i miei dati"
+msgstr "Auf meinem WordPress, mit meinen Lernenden und meinen Daten"
+
+#: src/config/elements
+msgid "Summarise last week's customer calls and flag anything about pricing."
+msgstr "Fass die Kundengespräche der letzten Woche zusammen und markiere alles zum Thema Preis."
+
+#: src/config/elements
+msgid "Sun, 08.03"
+msgstr "So, 08.03."
+
+#: src/config/elements
+msgid "Synapse 3 · now with long-term memory"
+msgstr "Synapse 3 · jetzt mit Langzeitgedächtnis"
+
+#: src/config/elements
+msgid "TEMPO MEDIO"
+msgstr "DURCHSCHNITTLICHE ZEIT"
+
+#: src/config/elements
+msgid "TERMINAL · INSTALL"
+msgstr "TERMINAL · INSTALLATION"
+
+#: src/config/elements
+msgid "TRE GARANZIE · CINQUE PROMESSE"
+msgstr "DREI GARANTIEN · FÜNF VERSPRECHEN"
+
+#: src/config/elements
+msgid "TUOSITO.COM · LIVE"
+msgstr "DEINESEITE.COM · LIVE"
+
+#: src/config/elements
+msgid "Tailoring"
+msgstr "Schneiderei"
+
+#: src/config/elements
+msgid "Tailoring for the hours after dark. Cut in wool crêpe and silk, finished by hand in our Paris atelier."
+msgstr "Maßgeschneidertes für die Stunden nach Einbruch der Dunkelheit. Aus Wollkrepp und Seide geschnitten, von Hand vollendet in unserem Pariser Atelier."
+
+#: src/config/elements
+msgid "Tavolo 12, cena ×6 (caparra)"
+msgstr "Tisch 12, Abendessen ×6 (Anzahlung)"
+
+#: src/config/elements
+msgid "Tavolo 4, pranzo ×2"
+msgstr "Tisch 4, Mittagessen ×2"
+
+#: src/config/elements
+msgid "Tema YOOtheme"
+msgstr "YOOtheme-Theme"
+
+#: src/config/elements
+msgid "Temi popolari"
+msgstr "Beliebte Themes"
+
+#: src/config/elements
+msgid "Temi pronti per ogni settore"
+msgstr "Fertige Themes für jede Branche"
+
+#: src/config/elements
+msgid "Tempo di lettura:"
+msgstr "Lesezeit:"
+
+#: src/config/elements
+msgid "Tempo scaduto!"
+msgstr "Zeit abgelaufen!"
+
+#: src/config/elements
+msgid "Terza card"
+msgstr "Dritte Karte"
+
+#: src/config/elements
+msgid "Terzo gesto"
+msgstr "Dritter Schritt"
+
+#: src/config/elements
+msgid "Terzo progetto"
+msgstr "Drittes Projekt"
+
+#: src/config/elements
+msgid "Testo che segue un tracciato curvo"
+msgstr "Text, der einem gekrümmten Pfad folgt"
+
+#: src/config/elements
+msgid "Testo scorrevole di esempio"
+msgstr "Beispiel für Lauftext"
+
+#: src/config/elements
+msgid "The"
+msgstr "Die"
+
+#: src/config/elements
+msgid "The AI workspace that "
+msgstr "Der KI-Arbeitsplatz, der sich "
+
+#: src/config/elements
+msgid "The City After Rain"
+msgstr "Die Stadt nach dem Regen"
+
+#: src/config/elements
+msgid "The Essay · Cities"
+msgstr "Der Essay · Städte"
+
+#: src/config/elements
+msgid "The Nocturne collection has arrived"
+msgstr "Die Nocturne-Kollektion ist da"
+
+#: src/config/elements
+msgid "The slow return of the city night market"
+msgstr "Die langsame Rückkehr des städtischen Nachtmarkts"
+
+#: src/config/elements
+msgid "Thousands of independent sellers, one cart, one checkout. Find the thing — and support the person who made it."
+msgstr "Tausende unabhängige Verkäufer, ein Warenkorb, ein Checkout. Finde das Richtige — und unterstütze die Person, die es gemacht hat."
+
+#: src/config/elements
+msgid "Ti potrebbe anche interessare"
+msgstr "Das könnte dir auch gefallen"
+
+#: src/config/elements
+msgid "Ti potrebbe interessare"
+msgstr "Das könnte dich interessieren"
+
+#: src/config/elements
+msgid "Timbra e invia ▾"
+msgstr "Abstempeln und senden ▾"
+
+#: src/config/elements
+msgid "Tinted SPF 30"
+msgstr "Getönter LSF 30"
+
+#: src/config/elements
+msgid "Titolo del progetto"
+msgstr "Projekttitel"
+
+#: src/config/elements
+msgid "Titolo fronte"
+msgstr "Titel Vorderseite"
+
+#: src/config/elements
+msgid "Titolo retro"
+msgstr "Titel Rückseite"
+
+#: src/config/elements
+msgid "Tocca i numeri per leggere ogni scelta — Prima → Ora"
+msgstr "Tippe auf die Zahlen, um jede Entscheidung zu lesen — Vorher → Jetzt"
+
+#: src/config/elements
+msgid "Tour esclusivi e charter privati nelle acque cristalline della costa."
+msgstr "Exklusive Touren und private Charter im kristallklaren Wasser der Küste."
+
+#: src/config/elements
+msgid "Tour virtuali 360° e corsi online. Pagina prodotto già online."
+msgstr "Virtuelle 360°-Touren und Onlinekurse. Produktseite schon online."
+
+#: src/config/elements
+msgid "Tour virtuali · in arrivo"
+msgstr "Virtuelle Touren · demnächst"
+
+#: src/config/elements
+msgid "Tradotto davvero"
+msgstr "Wirklich übersetzt"
+
+#: src/config/elements
+msgid "Traduci."
+msgstr "Übersetzen."
+
+#: src/config/elements
+msgid "Trascina · rotella · scorri in orizzontale"
+msgstr "Ziehen · Mausrad · horizontal scrollen"
+
+#: src/config/elements
+msgid "Trascini i tile, scegli i colori,"
+msgstr "Zieh die Tiles, wähl die Farben,"
+
+#: src/config/elements
+msgid "Treat"
+msgstr "Pflegen"
+
+#: src/config/elements
+msgid "Trending"
+msgstr "Im Trend"
+
+#: src/config/elements
+msgid "Trento — Italia"
+msgstr "Trient — Italien"
+
+#: src/config/elements
+msgid "Trento, <b>Italia</b>"
+msgstr "Trient, <b>Italien</b>"
+
+#: src/config/elements
+msgid "Trial gratuita, niente carta. Tre passi, una sigaretta a testa di pausa."
+msgstr "Kostenlose Testphase, keine Karte. Drei Schritte, jeder so kurz wie eine Zigarettenpause."
+
+#: src/config/elements
+msgid "Try before you trust"
+msgstr "Erst testen, dann vertrauen"
+
+#: src/config/elements
+msgid "Try free"
+msgstr "Kostenlos testen"
+
+#: src/config/elements
+msgid "Tutte le categorie"
+msgstr "Alle Kategorien"
+
+#: src/config/elements
+msgid "Tutto\nArticoli|post\nPagine|page"
+msgstr "Alles\nBeiträge|post\nSeiten|page"
+
+#: src/config/elements
+msgid "Tutto questo, <em>sul tuo hosting</em>"
+msgstr "All das, <em>auf deinem Hosting</em>"
+
+#: src/config/elements
+msgid "UN SOLO [ECOSISTEMA] WORDPRESS"
+msgstr "EIN EINZIGES WORDPRESS-[ÖKOSYSTEM]"
+
+#: src/config/elements
+msgid "Un <strong>olone</strong> è qualcosa che è insieme <strong>un tutto e una parte</strong>."
+msgstr "Ein <strong>Holon</strong> ist etwas, das zugleich <strong>ein Ganzes und ein Teil</strong> ist."
+
+#: src/config/elements
+msgid "Un <strong>olone</strong> è qualcosa che è insieme <strong>un tutto e una parte</strong>: completo da solo, più forte dentro un organismo."
+msgstr "Ein <strong>Holon</strong> ist etwas, das zugleich <strong>ein Ganzes und ein Teil</strong> ist: vollständig für sich allein, stärker in einem Organismus."
+
+#: src/config/elements
+msgid "Un <strong>olone</strong> è qualcosa che è insieme <strong>un tutto e una parte</strong>: completo da solo, più forte dentro un organismo. OLOtheme è costruito così, ogni prodotto è una cellula autonoma che funziona da sola, ma condivide telaio, dati e lingua con le altre."
+msgstr "Ein <strong>Holon</strong> ist etwas, das zugleich <strong>ein Ganzes und ein Teil</strong> ist: vollständig für sich allein, stärker in einem Organismus. OLOtheme ist so gebaut: Jedes Produkt ist eine autonome Zelle, die allein funktioniert, aber Gerüst, Daten und Sprache mit den anderen teilt."
+
+#: src/config/elements
+msgid "Un display industriale proprio dà voce allo studio fin dalla prima schermata, invece di affidarsi al look di un tema preconfezionato."
+msgstr "Eine eigene industrielle Display-Schrift gibt dem Studio vom ersten Bildschirm an eine Stimme, statt sich auf den Look eines Fertig-Themes zu verlassen."
+
+#: src/config/elements
+msgid "Un messaggio editoriale netto sostituisce slider e animazioni: chi arriva capisce subito cosa fai e perché conta."
+msgstr "Eine klare redaktionelle Botschaft ersetzt Slider und Animationen: Wer ankommt, versteht sofort, was du machst und warum es zählt."
+
+#: src/config/elements
+msgid "Un motore che riempie <em>l’agenda</em>"
+msgstr "Eine Engine, die <em>den Kalender</em> füllt"
+
+#: src/config/elements
+msgid "Un motore, otto prodotti"
+msgstr "Eine Engine, acht Produkte"
+
+#: src/config/elements
+msgid "Un quiz <em>vero</em>, provalo"
+msgstr "Ein <em>echtes</em> Quiz, probier es aus"
+
+#: src/config/elements
+msgid "Un radar che non <em>dorme mai</em>"
+msgstr "Ein Radar, das <em>nie schläft</em>"
+
+#: src/config/elements
+msgid "Un risultato veloce|1\nUn percorso guidato|2\nApprofondire tutto|3"
+msgstr "Ein schnelles Ergebnis|1\nEin geführter Weg|2\nAlles vertiefen|3"
+
+#: src/config/elements
+msgid "Un telaio, cinque prodotti, nessuna catena. Page builder gratis + prenotazioni + multilingua + virtual tour + e-learning, tutto in WordPress."
+msgstr "Ein Gerüst, fünf Produkte, keine Bindung. Kostenloser Page Builder + Buchungen + Mehrsprachigkeit + virtuelle Touren + E-Learning, alles in WordPress."
+
+#: src/config/elements
+msgid "Un telaio. Sei prodotti. <em>Nessuna catena.</em>"
+msgstr "Ein Gerüst. Sechs Produkte. <em>Keine Bindung.</em>"
+
+#: src/config/elements
+msgid "Un'esperienza unica che unisce eleganza, comfort e attenzione ai dettagli. Scopri ciò che ci rende speciali."
+msgstr "Ein einzigartiges Erlebnis, das Eleganz, Komfort und Liebe zum Detail vereint. Entdecke, was uns besonders macht."
+
+#: src/config/elements
+msgid "Una breve descrizione del progetto."
+msgstr "Eine kurze Beschreibung des Projekts."
+
+#: src/config/elements
+msgid "Una breve descrizione del progetto. La traccia scorre in orizzontale mentre scendi nella pagina."
+msgstr "Eine kurze Beschreibung des Projekts. Die Spur läuft horizontal, während du die Seite hinunterscrollst."
+
+#: src/config/elements
+msgid "Una breve descrizione di questa funzionalità e del suo valore."
+msgstr "Eine kurze Beschreibung dieser Funktion und ihres Nutzens."
+
+#: src/config/elements
+msgid "Una breve descrizione qui"
+msgstr "Eine kurze Beschreibung hier"
+
+#: src/config/elements
+msgid "Una panoramica chiara e sintetica di ciò che offri. Aggiungi qui il tuo testo introduttivo."
+msgstr "Ein klarer, knapper Überblick über dein Angebot. Füge hier deinen Einführungstext ein."
+
+#: src/config/elements
+msgid "Una struttura immersa nel verde, a 10 minuti dal mare."
+msgstr "Eine Unterkunft mitten im Grünen, 10 Minuten vom Meer."
+
+#: src/config/elements
+msgid "Una voce, non effetti"
+msgstr "Eine Stimme, keine Effekte"
+
+#: src/config/elements
+msgid "Under 14 Team · Full time"
+msgstr "U14 · Endstand"
+
+#: src/config/elements
+msgid "Utenti attivi"
+msgstr "Aktive Nutzer"
+
+#: src/config/elements
+msgid "Utenti raggiunti"
+msgstr "Erreichte Nutzer"
+
+#: src/config/elements
+msgid "VEDI LA CARTA"
+msgstr "ZUR KARTE"
+
+#: src/config/elements
+msgid "Vedi"
+msgstr "Ansehen"
+
+#: src/config/elements
+msgid "Vedi l'anteprima"
+msgstr "Vorschau ansehen"
+
+#: src/config/elements
+msgid "Vedi progetto"
+msgstr "Projekt ansehen"
+
+#: src/config/elements
+msgid "Vedi tutti i risultati"
+msgstr "Alle Ergebnisse anzeigen"
+
+#: src/config/elements
+msgid "Ven — Sab"
+msgstr "Fr — Sa"
+
+#: src/config/elements
+msgid "Vendere all’estero"
+msgstr "Ins Ausland verkaufen"
+
+#: src/config/elements
+msgid "Verifica finale"
+msgstr "Abschlusstest"
+
+#: src/config/elements
+msgid "Versione demo o gratuita/completa in arrivo: segui <a href=\"https://www.linkedin.com/company/olotheme/\" target=\"_blank\" rel=\"noopener\">OLOtheme su LinkedIn</a> o <a href=\"https://www.linkedin.com/in/vincoclaudio/\" target=\"_blank\" rel=\"noopener\">Claudio Vinco</a> per rimanere aggiornato."
+msgstr "Demo- oder Gratis-/Vollversion in Kürze: Folge <a href=\"https://www.linkedin.com/company/olotheme/\" target=\"_blank\" rel=\"noopener\">OLOtheme auf LinkedIn</a> oder <a href=\"https://www.linkedin.com/in/vincoclaudio/\" target=\"_blank\" rel=\"noopener\">Claudio Vinco</a>, um auf dem Laufenden zu bleiben."
+
+#: src/config/elements
+msgid "Versione demo o gratuita/completa in arrivo: segui <a href=\"https://www.linkedin.com/company/olotheme/\" target=\"_blank\" rel=\"noopener\">OLOtheme su LinkedIn</a> per rimanere aggiornato."
+msgstr "Demo- oder Gratis-/Vollversion in Kürze: Folge <a href=\"https://www.linkedin.com/company/olotheme/\" target=\"_blank\" rel=\"noopener\">OLOtheme auf LinkedIn</a>, um auf dem Laufenden zu bleiben."
+
+#: src/config/elements
+msgid "Veterano"
+msgstr "Veteran"
+
+#: src/config/elements
+msgid "View fixtures"
+msgstr "Spielplan ansehen"
+
+#: src/config/elements
+msgid "View lookbook"
+msgstr "Lookbook ansehen"
+
+#: src/config/elements
+msgid "Visita immobile, via Verdi 8"
+msgstr "Immobilienbesichtigung, Via Verdi 8"
+
+#: src/config/elements
+msgid "Visual studio — still"
+msgstr "Visual studio — Standbild"
+
+#: src/config/elements
+msgid "Vitamin C Drops"
+msgstr "Vitamin-C-Tropfen"
+
+#: src/config/elements
+msgid "Vue.js 3 con Composition API"
+msgstr "Vue.js 3 mit Composition API"
+
+#: src/config/elements
+msgid "WP Plugin Check: zero errori, <em>zero warning</em>"
+msgstr "WP Plugin Check: null Fehler, <em>null Warnungen</em>"
+
+#: src/config/elements
+msgid "Warm · blush"
+msgstr "Warm · Rouge"
+
+#: src/config/elements
+msgid "Warm · matte"
+msgstr "Warm · matt"
+
+#: src/config/elements
+msgid "Wayfinding"
+msgstr "Leitsystem"
+
+#: src/config/elements
+msgid "We build brands, identities and digital products for people who'd rather stand out than blend in."
+msgstr "Wir entwickeln Marken, Identitäten und digitale Produkte für Menschen, die lieber auffallen als untergehen."
+
+#: src/config/elements
+msgid "We design and produce weddings, galas and private events — the kind your guests talk about for years. From the first spark of an idea to the last dance."
+msgstr "Wir planen und produzieren Hochzeiten, Galas und private Events — von denen deine Gäste noch jahrelang sprechen. Vom ersten Funken einer Idee bis zum letzten Tanz."
+
+#: src/config/elements
+msgid "We jointly announced a customized platform, North for Banking, to enable RBC to accelerate the development of our genAI solutions securely and efficiently and we're pleased with our results to date."
+msgstr "Wir haben gemeinsam eine maßgeschneiderte Plattform angekündigt, North for Banking, mit der RBC die Entwicklung unserer GenAI-Lösungen sicher und effizient beschleunigen kann, und wir sind mit den bisherigen Ergebnissen zufrieden."
+
+#: src/config/elements
+msgid "We meet regularly and adjust as life changes."
+msgstr "Wir treffen uns regelmäßig und passen an, wenn sich das Leben ändert."
+
+#: src/config/elements
+msgid "We start with your life, not your balance sheet."
+msgstr "Wir beginnen mit deinem Leben, nicht mit deiner Bilanz."
+
+#: src/config/elements
+msgid "Wedding"
+msgstr "Hochzeit"
+
+#: src/config/elements
+msgid "Why enterprises and innovators choose Cohere"
+msgstr "Warum Unternehmen und Innovatoren sich für Cohere entscheiden"
+
+#: src/config/elements
+msgid "Women"
+msgstr "Damen"
+
+#: src/config/elements
+msgid "Women's League"
+msgstr "Frauenliga"
+
+#: src/config/elements
+msgid "Women's squad"
+msgstr "Frauenteam"
+
+#: src/config/elements
+msgid "Woo nativo"
+msgstr "Natives Woo"
+
+#: src/config/elements
+msgid "Workshop serale, 24 posti"
+msgstr "Abend-Workshop, 24 Plätze"
+
+#: src/config/elements
+msgid "Years of football"
+msgstr "Jahre Fußball"
+
+#: src/config/elements
+msgid "Yes, and add them to the CRM."
+msgstr "Ja, und füg sie dem CRM hinzu."
+
+#: src/config/elements
+msgid "Your routine"
+msgstr "Deine Routine"
+
+#: src/config/elements
+msgid "Youth"
+msgstr "Jugend"
+
+#: src/config/elements
+msgid "Youth Elite"
+msgstr "Jugend-Elite"
+
+#: src/config/elements
+msgid "Youth squad"
+msgstr "Jugendteam"
+
+#: src/config/elements
+msgid "Zero"
+msgstr "Null"
+
+#: src/config/elements
+msgid "Zero configurazione obbligatoria. Funziona con qualunque tema WP. Anche dal nostro sito al lancio — un click e sei dentro."
+msgstr "Keine Pflichtkonfiguration. Funktioniert mit jedem WP-Theme. Zum Start auch direkt von unserer Website — ein Klick und du bist drin."
+
+#: src/config/elements
+msgid "[2fa]      TOTP attivo · codici recupero ok"
+msgstr "[2fa]      TOTP aktiv · Wiederherstellungscodes ok"
+
+#: src/config/elements
+msgid "[bot]      finto Googlebot (FCrDNS) → RESPINTO"
+msgstr "[bot]      falscher Googlebot (FCrDNS) → ABGEWIESEN"
+
+#: src/config/elements
+msgid "[cve]      feed firme sincronizzato"
+msgstr "[cve]      Signatur-Feed synchronisiert"
+
+#: src/config/elements
+msgid "[geo]      blocco IPv4/IPv6 + rate limit ARMATO"
+msgstr "[geo]      IPv4/IPv6-Sperre + Rate-Limit SCHARF"
+
+#: src/config/elements
+msgid "[scan]     checksum core 100% · 0 webshell"
+msgstr "[scan]     Core-Prüfsummen 100% · 0 Webshells"
+
+#: src/config/elements
+msgid "[sentinel] avvio pannello v1.2.0 …"
+msgstr "[sentinel] starte Panel v1.2.0 …"
+
+#: src/config/elements
+msgid "[sentinel] tutto sotto controllo. resto in ascolto…"
+msgstr "[sentinel] alles unter Kontrolle. höre weiter zu…"
+
+#: src/config/elements
+msgid "[waf]      SQLi da 185.220.•.•  → BLOCCATO"
+msgstr "[waf]      SQLi von 185.220.•.•  → BLOCKIERT"
+
+#: src/config/elements
+msgid "[waf]      regole OWASP caricate (4 famiglie)"
+msgstr "[waf]      OWASP-Regeln geladen (4 Familien)"
+
+#: src/config/elements
+msgid "a point"
+msgstr "einem eigenen"
+
+#: src/config/elements
+msgid "accommodation"
+msgstr "Unterkunft"
+
+#: src/config/elements
+msgid "agenda riempita"
+msgstr "Kalender gefüllt"
+
+#: src/config/elements
+msgid "aggiungi"
+msgstr "ergänze"
+
+#: src/config/elements
+msgid "album cover — Nightglass, neon on black"
+msgstr "Albumcover — Nightglass, Neon auf Schwarz"
+
+#: src/config/elements
+msgid "anima"
+msgstr "animieren"
+
+#: src/config/elements
+msgid "app.tuoprodotto.com"
+msgstr "app.deinprodukt.com"
+
+#: src/config/elements
+msgid "appuntamenti"
+msgstr "Termine"
+
+#: src/config/elements
+msgid "aula"
+msgstr "Klassenzimmer"
+
+#: src/config/elements
+msgid "ballroom, florals"
+msgstr "Ballsaal, Blumen"
+
+#: src/config/elements
+msgid "bloccati da un WordPress medio esposto in rete."
+msgstr "von einem durchschnittlichen, im Netz erreichbaren WordPress blockiert."
+
+#: src/config/elements
+msgid "bloccati da un WordPress medio esposto in rete. Non serve essere famosi per essere un bersaglio: basta essere online."
+msgstr "von einem durchschnittlichen, im Netz erreichbaren WordPress blockiert. Man muss nicht berühmt sein, um ein Ziel zu sein: Online zu sein genügt."
+
+#: src/config/elements
+msgid "boxe"
+msgstr "Boxen"
+
+#: src/config/elements
+msgid "campaign — figure in black tailoring, gold light, full bleed"
+msgstr "Kampagne — Figur in schwarzem Maßanzug, goldenes Licht, randabfallend"
+
+#: src/config/elements
+msgid "cantiere"
+msgstr "Baustelle"
+
+#: src/config/elements
+msgid "cashmere knit"
+msgstr "Kaschmirstrick"
+
+#: src/config/elements
+msgid "club"
+msgstr "Verein"
+
+#: src/config/elements
+msgid "club portrait — squad on the pitch"
+msgstr "Vereinsporträt — Mannschaft auf dem Platz"
+
+#: src/config/elements
+msgid "corso · questa pagina"
+msgstr "Kurs · diese Seite"
+
+#: src/config/elements
+msgid "couple, golden hour"
+msgstr "Paar, goldene Stunde"
+
+#: src/config/elements
+msgid "cover photograph — rain-soaked city street, single figure"
+msgstr "Titelfoto — regennasse Straße, einzelne Figur"
+
+#: src/config/elements
+msgid "cover — empty night market, lanterns, long exposure"
+msgstr "Titelbild — leerer Nachtmarkt, Laternen, Langzeitbelichtung"
+
+#: src/config/elements
+msgid "crea"
+msgstr "erstellen"
+
+#: src/config/elements
+msgid "creativi\ninnovativi\nappassionati"
+msgstr "kreativ\ninnovativ\nleidenschaftlich"
+
+#: src/config/elements
+msgid "da 12 €"
+msgstr "ab 12 €"
+
+#: src/config/elements
+msgid "dettaglio — 01"
+msgstr "Detail — 01"
+
+#: src/config/elements
+msgid "dettaglio — 02"
+msgstr "Detail — 02"
+
+#: src/config/elements
+msgid "dettaglio — 03"
+msgstr "Detail — 03"
+
+#: src/config/elements
+msgid "direttamente da WordPress.org."
+msgstr "direkt von WordPress.org herunter."
+
+#: src/config/elements
+msgid "divisione idee"
+msgstr "Ideenabteilung"
+
+#: src/config/elements
+msgid "doppio click"
+msgstr "Doppelklick"
+
+#: src/config/elements
+msgid "e il mio sito sogna di diventare"
+msgstr "und meine Website träumt von"
+
+#: src/config/elements
+msgid "esatto · <b>+90 xp</b> · badge sbloccato"
+msgstr "richtig · <b>+90 xp</b> · Abzeichen freigeschaltet"
+
+#: src/config/elements
+msgid "eventi"
+msgstr "Events"
+
+#: src/config/elements
+msgid "footer"
+msgstr "Footer"
+
+#: src/config/elements
+msgid "form builder"
+msgstr "Formular-Builder"
+
+#: src/config/elements
+msgid "fortezza"
+msgstr "Festung"
+
+#: src/config/elements
+msgid "from"
+msgstr "aus"
+
+#: src/config/elements
+msgid "functional"
+msgstr "Functional"
+
+#: src/config/elements
+msgid "galleria media"
+msgstr "Mediengalerie"
+
+#: src/config/elements
+msgid "gg"
+msgstr "Tage"
+
+#: src/config/elements
+msgid "header + menu"
+msgstr "Header + Menü"
+
+#: src/config/elements
+msgid "hero animato"
+msgstr "animierter Hero"
+
+#: src/config/elements
+msgid "home hero — match footage · background video"
+msgstr "Home-Hero — Spielaufnahmen · Hintergrundvideo"
+
+#: src/config/elements
+msgid "il timbro apre la tua mail già compilata"
+msgstr "der Stempel öffnet deine fertig ausgefüllte Mail"
+
+#: src/config/elements
+msgid "il viaggio"
+msgstr "die Reise"
+
+#: src/config/elements
+msgid "iltuosito.it/editor"
+msgstr "deineseite.de/editor"
+
+#: src/config/elements
+msgid "in ascolto"
+msgstr "hören zu"
+
+#: src/config/elements
+msgid "last 12 weeks · live"
+msgstr "letzte 12 Wochen · live"
+
+#: src/config/elements
+msgid "linea diretta · Trento"
+msgstr "Direktleitung · Trient"
+
+#: src/config/elements
+msgid "livello"
+msgstr "Level"
+
+#: src/config/elements
+msgid "lo scroll muove le lancette"
+msgstr "Scrollen bewegt die Zeiger"
+
+#: src/config/elements
+msgid "lo scroll ruota la vista"
+msgstr "Scrollen dreht die Ansicht"
+
+#: src/config/elements
+msgid "manuale base"
+msgstr "Basis-Handbuch"
+
+#: src/config/elements
+msgid "manuali base · GPL · Trento"
+msgstr "Basis-Handbücher · GPL · Trient"
+
+#: src/config/elements
+msgid "membership — supporters in the stands · background video"
+msgstr "Mitgliedschaft — Fans auf der Tribüne · Hintergrundvideo"
+
+#: src/config/elements
+msgid "mmh, riprova: la risposta è nel nome della suite…"
+msgstr "hm, versuch's noch mal: Die Antwort steckt im Namen der Suite…"
+
+#: src/config/elements
+msgid "modulo · OLO-CNT-07"
+msgstr "Formular · OLO-CNT-07"
+
+#: src/config/elements
+msgid "no SaaS"
+msgstr "kein SaaS"
+
+#: src/config/elements
+msgid "nome e cognome"
+msgstr "Vor- und Nachname"
+
+#: src/config/elements
+msgid "nome@dominio.it"
+msgstr "name@domain.de"
+
+#: src/config/elements
+msgid "occupancy feed · live"
+msgstr "Belegungs-Feed · live"
+
+#: src/config/elements
+msgid "of view."
+msgstr "Standpunkt."
+
+#: src/config/elements
+msgid "oggi pomeriggio."
+msgstr "— heute Nachmittag."
+
+#: src/config/elements
+msgid "olonica"
+msgstr "holonisch"
+
+#: src/config/elements
+msgid "olos · intero e parte"
+msgstr "holos · Ganzes und Teil"
+
+#: src/config/elements
+msgid "olosecurity:GPL · Trento · no SaaS · 100% locale"
+msgstr "olosecurity:GPL · Trient · kein SaaS · 100% lokal"
+
+#: src/config/elements
+msgid "per chi affitta camere"
+msgstr "für alle, die Zimmer vermieten"
+
+#: src/config/elements
+msgid "per chi costruisce siti"
+msgstr "für alle, die Websites bauen"
+
+#: src/config/elements
+msgid "per chi parla al mondo"
+msgstr "für alle, die mit der Welt sprechen"
+
+#: src/config/elements
+msgid "per editare."
+msgstr "zum Bearbeiten."
+
+#: src/config/elements
+msgid "per sempre · GPL · su WP.org"
+msgstr "für immer · GPL · auf WP.org"
+
+#: src/config/elements
+msgid "perimetro · armato"
+msgstr "Perimeter · scharf"
+
+#: src/config/elements
+msgid "pitch."
+msgstr "Platz."
+
+#: src/config/elements
+msgid "poliglotta"
+msgstr "Mehrsprachigkeit"
+
+#: src/config/elements
+msgid "product"
+msgstr "Produkt"
+
+#: src/config/elements
+msgid "product — North workspace"
+msgstr "Produkt — North-Arbeitsbereich"
+
+#: src/config/elements
+msgid "product — workflow board &amp; live status dashboard"
+msgstr "Produkt — Workflow-Board &amp; Live-Status-Dashboard"
+
+#: src/config/elements
+msgid "pubblica"
+msgstr "veröffentlichen"
+
+#: src/config/elements
+msgid "real estate"
+msgstr "Immobilien"
+
+#: src/config/elements
+msgid "remembering."
+msgstr "erinnert."
+
+#: src/config/elements
+msgid "remembers."
+msgstr "erinnert."
+
+#: src/config/elements
+msgid "rentals"
+msgstr "Vermietungen"
+
+#: src/config/elements
+msgid "rich history"
+msgstr "reicher Geschichte"
+
+#: src/config/elements
+msgid "rispondi per guadagnare +90 xp"
+msgstr "antworte und verdiene +90 xp"
+
+#: src/config/elements
+msgid "ristorante"
+msgstr "Restaurant"
+
+#: src/config/elements
+msgid "scendi per sbloccare"
+msgstr "scroll nach unten zum Freischalten"
+
+#: src/config/elements
+msgid "screenshot prodotto — 16/8.5"
+msgstr "Produkt-Screenshot — 16/8.5"
+
+#: src/config/elements
+msgid "scroll → orizzontale"
+msgstr "Scroll → horizontal"
+
+#: src/config/elements
+msgid "scrolla per far passare le ore"
+msgstr "scroll, um die Stunden vergehen zu lassen"
+
+#: src/config/elements
+msgid "si va a destra"
+msgstr "es geht nach rechts"
+
+#: src/config/elements
+msgid "silk column dress"
+msgstr "Säulenkleid aus Seide"
+
+#: src/config/elements
+msgid "small shops."
+msgstr "kleinen Läden."
+
+#: src/config/elements
+msgid "solo prodotto."
+msgstr "nur Produkt."
+
+#: src/config/elements
+msgid "steps"
+msgstr "Schritte"
+
+#: src/config/elements
+msgid "studente"
+msgstr "Student"
+
+#: src/config/elements
+msgid "syllabus · v1 · 4 lezioni"
+msgstr "Lehrplan · v1 · 4 Lektionen"
+
+#: src/config/elements
+msgid "tablescape, candlelight"
+msgstr "Tischdekoration, Kerzenlicht"
+
+#: src/config/elements
+msgid "tentativi"
+msgstr "Versuche"
+
+#: src/config/elements
+msgid "that almost didn't happen"
+msgstr "der fast nicht zustande kam"
+
+#: src/config/elements
+msgid "tile / 187"
+msgstr "Tiles / 187"
+
+#: src/config/elements
+msgid "tour 360°"
+msgstr "360°-Tour"
+
+#: src/config/elements
+msgid "traduci"
+msgstr "übersetzen"
+
+#: src/config/elements
+msgid "translator"
+msgstr "Übersetzer"
+
+#: src/config/elements
+msgid "tuxedo jacket"
+msgstr "Smokingjacke"
+
+#: src/config/elements
+msgid "ultimi 12 mesi"
+msgstr "letzte 12 Monate"
+
+#: src/config/elements
+msgid "un cantiere"
+msgstr "einer Baustelle"
+
+#: src/config/elements
+msgid "un tour 360°"
+msgstr "einer 360°-Tour"
+
+#: src/config/elements
+msgid "una fermata alla volta"
+msgstr "eine Haltestelle nach der anderen"
+
+#: src/config/elements
+msgid "una fortezza"
+msgstr "einer Festung"
+
+#: src/config/elements
+msgid "un’agenda piena"
+msgstr "einem vollen Kalender"
+
+#: src/config/elements
+msgid "un’aula"
+msgstr "einem Klassenzimmer"
+
+#: src/config/elements
+msgid "without the busywork."
+msgstr "ohne Kleinkram."
+
+#: src/config/elements
+msgid "wool crêpe coat"
+msgstr "Mantel aus Wollkrepp"
+
+#: src/config/elements
+msgid "workspace"
+msgstr "Arbeitsbereich"
+
+#: src/config/elements
+msgid "« Precedente"
+msgstr "« Zurück"
+
+#: src/config/elements
+msgid "· boot sequence"
+msgstr "· Startsequenz"
+
+#: src/config/elements
+msgid "· dashboard · batch in corso"
+msgstr "· Dashboard · Batch läuft"
+
+#: src/config/elements
+msgid "È in corso: ti aspettiamo!"
+msgstr "Es läuft gerade: Wir warten auf dich!"
+
+#: src/config/elements
+msgid "€0 free · 100+ tile"
+msgstr "0 € gratis · 100+ Tiles"
+
+#: src/config/elements
+msgid "€0 free · 100+ tile|36 animazioni"
+msgstr "0 € gratis · 100+ Tiles|36 Animationen"
+
+#: src/config/elements
+msgid "€0 free · 100+ tile|36 animazioni|Woo nativo|dark mode"
+msgstr "0 € gratis · 100+ Tiles|36 Animationen|Natives Woo|Dark Mode"
+
+#: src/config/elements
+msgid "← Torna alla scheda prodotto"
+msgstr "← Zurück zur Produktseite"
+
+#: src/config/elements
+msgid "← drag →"
+msgstr "← ziehen →"
+
+#: src/config/elements
+msgid "← il viaggio"
+msgstr "← die Reise"
+
+#: src/config/elements
+msgid "← scheda prodotto"
+msgstr "← Produktseite"
+
+#: src/config/elements
+msgid "↑ drag the colour around"
+msgstr "↑ zieh die Farbe herum"
+
+#: src/config/elements
+msgid "→ POI"
+msgstr "→ DANN"
+
+#: src/config/elements
+msgid "→ VAI LIVE"
+msgstr "→ LIVE GEHEN"
+
+#: src/config/elements
+msgid "↔ trascina · X = primo asse · Y = secondo asse"
+msgstr "↔ ziehen · X = erste Achse · Y = zweite Achse"
+
+#: src/config/elements
+msgid "▼ continua a scorrere"
+msgstr "▼ weiter scrollen"
+
+#: src/utils/testiDiPartenza.js
+msgctxt "partenza"
+msgid "Mar"
+msgstr "Mär"
+
+#: src/utils/testiDiPartenza.js
+msgctxt "partenza"
+msgid "Set"
+msgstr "Sep"
+
+#: src/utils/testiDiPartenza.js
+msgctxt "partenza"
+msgid "Carta"
+msgstr "Karte"
+
+#: src/utils/testiDiPartenza.js
+msgctxt "partenza"
+msgid "Prima"
+msgstr "Vorher"
+
+#: src/utils/testiDiPartenza.js
+msgctxt "partenza"
+msgid "Dopo"
+msgstr "Nachher"
+
+#: src/utils/testiDiPartenza.js
+msgctxt "partenza"
+msgid "Co"
+msgstr "Bau"
+
+#: src/utils/testiDiPartenza.js
+msgctxt "partenza"
+msgid "struisci"
+msgstr "en"
+
+#: src/utils/testiDiPartenza.js
+msgctxt "partenza"
+msgid "Tra"
+msgstr "Über"
+
+#: src/utils/testiDiPartenza.js
+msgctxt "partenza"
+msgid "duci"
+msgstr "setzen"
+
+#: src/utils/testiDiPartenza.js
+msgctxt "partenza"
+msgid "Pre"
+msgstr "Bu"
+
+#: src/utils/testiDiPartenza.js
+msgctxt "partenza"
+msgid "nota"
+msgstr "chen"
+
+#: src/utils/testiDiPartenza.js
+msgctxt "partenza"
+msgid "Mo"
+msgstr "Zei"
+
+#: src/utils/testiDiPartenza.js
+msgctxt "partenza"
+msgid "stra"
+msgstr "gen"
+
+#: src/utils/testiDiPartenza.js
+msgctxt "partenza"
+msgid "In"
+msgstr "Leh"
+
+#: src/utils/testiDiPartenza.js
+msgctxt "partenza"
+msgid "segna"
+msgstr "ren"
+
+#: src/config/elements/evonotes.js
+msgctxt "adesso"
+msgid "Ora"
+msgstr "Jetzt"
+
+#: src/config/elements
+msgid "Annotazione"
+msgstr "Anmerkung"
+
+#: src/config/elements
+msgid "Dato"
+msgstr "Datenpunkt"
+
+#: src/config/elements
+msgid "Evento"
+msgstr "Event"
+
+#: src/config/elements
+msgid "Marcatore"
+msgstr "Markierung"
+
+#: src/config/elements
+msgid "Notizia"
+msgstr "Meldung"
+
+#: src/config/elements
+msgid "Piatto"
+msgstr "Gericht"
+
+#: src/config/elements
+msgid "Progetto"
+msgstr "Projekt"

@@ -38,7 +38,7 @@ export default {
     { key: 'lead', label: t('Paragrafo'), type: 'textarea' },
     { key: 'anchor', label: t('Ancora (id)'), type: 'text' },
     { type: 'separator', label: t('Righe flipboard') },
-    { key: 'flip_items', label: t('Righe'), type: 'content-items', itemLabel: t('Riga'),
+    { key: 'flip_items', label: t('Righe'), type: 'content-items', itemLabel: t('Riga'), partenzaFissa: true,
       defaults: { src_label: 'contenuto · it', src_html: 'Testo', dst_label: 'content · en', dst_html: 'Text' },
       itemFields: [
         { key: 'src_label', label: t('Label sinistra'), type: 'text' },

@@ -80,7 +80,7 @@ export default {
       itemLabel: t('Asse'),
       defaults: { tag: 'wght', label: t('Peso'), min: 0, max: 100, default_val: 50 },
       itemFields: [
-        { key: 'tag',         label: t('Tag asse (4 lettere)'), type: 'text', placeholder: 'wght' },
+        { key: 'tag',         label: t('Tag asse (4 lettere)'), type: 'text', placeholder: 'wght', partenzaFissa: true },
         { key: 'label',       label: t('Etichetta'),            type: 'text', placeholder: t('Peso') },
         { key: 'min',         label: t('Minimo'),               type: 'number', step: 1 },
         { key: 'max',         label: t('Massimo'),              type: 'number', step: 1 },

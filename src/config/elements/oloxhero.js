@@ -72,7 +72,7 @@ export default {
       { value: 'scramble', label: t('Parola scramble ({scramble} nel titolo)') },
       { value: 'none', label: t('Nessuno') },
     ] },
-    { key: 'scramble_words', label: t('Parole scramble'), type: 'content-items', itemLabel: t('Parola'),
+    { key: 'scramble_words', label: t('Parole scramble'), type: 'content-items', itemLabel: t('Parola'), partenzaFissa: true,
       defaults: { text: t('Benvenuto') },
       itemFields: [ { key: 'text', label: t('Parola'), type: 'text' } ],
       condition: { field: 'title_fx', op: 'eq', value: 'scramble' } },

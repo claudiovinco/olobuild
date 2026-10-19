@@ -3,6 +3,11 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.830 - 2026-10-19 (fix)
+- Le tile nascono nella lingua del builder: in inglese, tedesco, spagnolo e francese una tile appena inserita si presenta con titoli, descrizioni, pulsanti e voci d’esempio tradotti (prima restavano in italiano, in alcune tile in inglese). Restano com’erano nomi propri, marchi, numeri, codici e i campi tecnici, come i nomi dei campi del Form, le scene del Tour 360 e gli identificativi del Configuratore.
+- Grafico: «Mar» resta marzo (in inglese diventava «Tue», martedì) e «Set» è settembre (in spagnolo diventava «Conjunto», in francese «Ensemble»). Before / After in tedesco dice «Vorher / Nachher» invece di «Vor / Nach»; in Evonotes il confronto «Prima → Ora» in inglese è «Before → Now», non «Time».
+- Spagnolo: «Título del proyecto», «Título de la sección» e «Bienvenido a nuestro sitio» erano rimasti in inglese.
+
 ## v1.4.829 - 2026-10-19 (fix)
 - WooCommerce: la pagina Negozio costruita con Olobuild si vede. Al suo indirizzo WooCommerce mostra l’archivio dei prodotti al posto della pagina, che sembrava vuota anche aprendola con «Reale» dal builder. Ora, se nelle impostazioni WooCommerce di Olobuild non c’è un template per l’Archivio prodotti, vale quello costruito sulla pagina Negozio. La ricerca dei prodotti resta quella di WooCommerce.
 - WooCommerce con il negozio in «presto online» (coming soon): i visitatori vedono solo la pagina d’attesa. Prima, con un template Olobuild assegnato al negozio, sotto la pagina d’attesa compariva per intero anche la pagina del negozio.

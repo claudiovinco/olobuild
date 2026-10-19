@@ -1,6 +1,6 @@
 import { textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared';
 import { shadowField } from './_shared.js';
-import { t } from '@/i18n';
+import { t, tPartenza } from '@/i18n';
 
 /**
  * Tile Chart — split CONTENUTO/STILE (regola universale Olobuild).
@@ -27,7 +27,7 @@ export default {
     items: [
       { id: 'c-1', label: t('Gen'), value: '65', color: 'var(--olo-color-primary, #e1474f)' },
       { id: 'c-2', label: 'Feb', value: '45', color: 'var(--olo-color-dark, #16263d)' },
-      { id: 'c-3', label: t('Mar'), value: '80', color: 'var(--olo-color-accent, #f4a23b)' },
+      { id: 'c-3', label: tPartenza('Mar'), value: '80', color: 'var(--olo-color-accent, #f4a23b)' },
       { id: 'c-4', label: t('Apr'), value: '55', color: 'var(--olo-color-success, #15803d)' },
     ],
     chart_height: '400',
@@ -122,13 +122,13 @@ export default {
     items: [
       { id: 'c-1', label: t('Gen'), value: '1240', color: 'color-mix(in srgb, var(--olo-color-primary) 40%, transparent)' },
       { id: 'c-2', label: t('Feb'), value: '1310', color: 'color-mix(in srgb, var(--olo-color-primary) 40%, transparent)' },
-      { id: 'c-3', label: t('Mar'), value: '1680', color: 'color-mix(in srgb, var(--olo-color-primary) 40%, transparent)' },
+      { id: 'c-3', label: tPartenza('Mar'), value: '1680', color: 'color-mix(in srgb, var(--olo-color-primary) 40%, transparent)' },
       { id: 'c-4', label: t('Apr'), value: '1920', color: 'color-mix(in srgb, var(--olo-color-primary) 40%, transparent)' },
       { id: 'c-5', label: t('Mag'), value: '2250', color: 'color-mix(in srgb, var(--olo-color-primary) 40%, transparent)' },
       { id: 'c-6', label: t('Giu'), value: '2610', color: 'color-mix(in srgb, var(--olo-color-primary) 40%, transparent)' },
       { id: 'c-7', label: t('Lug'), value: '2890', color: 'var(--olo-color-primary)' },
       { id: 'c-8', label: t('Ago'), value: '2140', color: 'color-mix(in srgb, var(--olo-color-primary) 40%, transparent)' },
-      { id: 'c-9', label: t('Set'), value: '2470', color: 'color-mix(in srgb, var(--olo-color-primary) 40%, transparent)' },
+      { id: 'c-9', label: tPartenza('Set'), value: '2470', color: 'color-mix(in srgb, var(--olo-color-primary) 40%, transparent)' },
       { id: 'c-10', label: t('Ott'), value: '2330', color: 'color-mix(in srgb, var(--olo-color-primary) 40%, transparent)' },
       { id: 'c-11', label: t('Nov'), value: '1860', color: 'color-mix(in srgb, var(--olo-color-primary) 40%, transparent)' },
       { id: 'c-12', label: t('Dic'), value: '2050', color: 'color-mix(in srgb, var(--olo-color-primary) 40%, transparent)' },

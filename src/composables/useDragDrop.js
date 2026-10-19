@@ -5,6 +5,7 @@ import { useHistory } from '@/composables/useHistory';
 import { extractClosestEdge, isOloData } from '@/composables/useDnD';
 import { getElementDef } from '@/config/elementRegistry';
 import { applyContentPlaceholders } from '@/utils/contentPlaceholders';
+import { traduciTestiDiPartenza } from '@/utils/testiDiPartenza';
 
 // Segnaposto delle tile appena inserite (immagine grigia, Lorem ipsum nei soli testi lunghi da
 // leggere): src/utils/contentPlaceholders.js, fonte unica anche per il catalogo delle tile.
@@ -67,6 +68,7 @@ export function useDragDrop() {
     if (def?.partenza && typeof def.partenza === 'object') {
       Object.assign(defaults, JSON.parse(JSON.stringify(def.partenza)));
     }
+    traduciTestiDiPartenza(defaults, def);
     applyContentPlaceholders(defaults, def?.fields);
 
     const tile = {

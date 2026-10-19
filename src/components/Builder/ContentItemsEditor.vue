@@ -266,7 +266,7 @@
       </template>
     </div>
 
-    <button v-if="!isDynamicQueryActive && !strutturaFissa" type="button" class="cie-add" @click="addItem">{{ t('&#65291; Aggiungi') }} {{ itemLabel }}</button>
+    <button v-if="!isDynamicQueryActive && !strutturaFissa" type="button" class="cie-add" @click="addItem">{{ t('&#65291; Aggiungi') }} {{ t(itemLabel) }}</button>
 
     <!-- Icon picker modal -->
     <IconPicker
@@ -506,7 +506,7 @@ function stripHtml(html) {
 }
 
 function getItemLabel(element) {
-  if (!labelField.value) return props.itemLabel;
+  if (!labelField.value) return t(props.itemLabel);
   // `etichettaDa: 'testo|tipo'`: il primo campo non vuoto (una voce senza testo, come
   // un'immagine o un separatore, si chiama col suo tipo invece di «Senza titolo»).
   const chiave = String(labelField.value).split('|').find(k => element[k]) || '';

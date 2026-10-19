@@ -39,6 +39,24 @@ export function t(key) {
   return dict[key] || key;
 }
 
+/**
+ * Testo che in italiano ha più sensi: la traduzione col contesto `contesto` del catalogo (msgctxt),
+ * se c'è; se no quella dell'interfaccia. Es. tContesto('adesso', 'Ora') = «Now», non «Time».
+ */
+export function tContesto(contesto, key) {
+  if (!key || typeof key !== 'string') return key;
+  return dict[contesto + '\u0004' + key] || dict[key] || key;
+}
+
+/**
+ * Testo di partenza di una tile (il contenuto con cui nasce). Se in italiano ha due sensi
+ * («Mar» = martedì e marzo, «Carta» = carta e carta di credito) la sua traduzione sta nel
+ * contesto «partenza» del catalogo; senza, vale quella dell'interfaccia.
+ */
+export function tPartenza(key) {
+  return tContesto('partenza', key);
+}
+
 export function needsTranslation() {
   return !locale.startsWith('it');
 }
