@@ -181,7 +181,7 @@ class Olobuild_Scorrimentoverticale_Tile extends Olobuild_Tile_Base {
         $css .= "{$sel} .olo-vmq-voce{display:block;flex:none;max-width:100%;text-decoration:none;color:inherit}";
         $css .= "{$sel} a.olo-vmq-voce:focus-visible{outline:2px solid var(--olo-color-primary,#e1474f);outline-offset:4px;border-radius:.25em}";
         // testi
-        $css .= "{$sel} .olo-vmq-testo{line-height:1.15;text-align:" . ( 'flex-start' === $allinea ? 'left' : ( 'flex-end' === $allinea ? 'right' : 'center' ) ) . ';overflow-wrap:anywhere;color:' . $testo . '}';
+        $css .= "{$sel} .olo-vmq-testo{line-height:1.15;text-align:" . ( 'flex-start' === $allinea ? 'left' : ( 'flex-end' === $allinea ? 'right' : 'center' ) ) . ';overflow-wrap:break-word;-webkit-hyphens:auto;hyphens:auto;color:' . $testo . '}';
         if ( $sfuma ) {
             $css .= "{$sel} .olo-vmq-testo{background-image:linear-gradient(90deg,var(--olo-vmq-c," . $testo . "),{$fine});-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}";
         }

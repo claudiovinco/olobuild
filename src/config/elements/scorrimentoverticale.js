@@ -80,6 +80,10 @@ export default {
       { tipo: 'icona', icona: 'code-xml', colonna: '3', colore: bianco, sfondo: 'var(--olo-color-primary, #e1474f)' },
     ],
     direzione_3: 'su',
+    // sul telefono le icone a sinistra e le scritte, che in un terzo di schermo andrebbero a capo a ogni sillaba
+    colonne_mobile: '2',
+    testo_font_size_tablet: 30,
+    testo_font_size_mobile: 24,
     testo_sfumatura: true,
     testo_colore: 'var(--olo-color-warning, #f59e0b)',
     testo_colore_fine: 'var(--olo-color-primary, #e1474f)',
@@ -90,7 +94,7 @@ export default {
   fields: [
     { type: 'separator', label: t('Voci') },
     { key: 'voci', label: t('Voci'), type: 'content-items', itemLabel: t('Voce'), etichettaDa: 'testo|tipo', miniaturaDa: 'immagine',
-      defaults: { tipo: 'testo', testo: t('Nuova voce'), immagine: '', alt: '', icona: 'star', link: '', colonna: 'auto', colore: '', sfondo: '' },
+      newItemDefaults: { tipo: 'testo', testo: t('Nuova voce'), immagine: '', alt: '', icona: 'star', link: '', colonna: 'auto', colore: '', sfondo: '' },
       itemFields: [
         { key: 'tipo', label: t('Tipo'), type: 'select', options: TIPI },
         { key: 'immagine', label: t('Immagine'), type: 'image', condition: tipo('immagine') },
