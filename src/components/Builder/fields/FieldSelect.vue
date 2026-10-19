@@ -30,6 +30,13 @@
       @click="toggle"
       @keydown="onTriggerKeydown"
     >
+      <svg
+        v-if="selected && selected.anteprima"
+        class="fsel-anteprima fsel-anteprima--trigger"
+        :viewBox="selected.anteprima.viewBox || '0 0 100 100'"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      ><path :d="selected.anteprima.d" /></svg>
       <span class="fsel-value">{{ displayLabel }}</span>
       <svg class="fsel-chev" :class="{ 'fsel-chev--open': open }" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
     </button>
@@ -40,13 +47,35 @@
         v-if="open"
         ref="popEl"
         class="fsel-pop"
-        :class="{ 'fsel-pop--dark': theme === 'dark' }"
+        :class="{ 'fsel-pop--dark': theme === 'dark', 'fsel-pop--anteprime': conAnteprime }"
         :style="popStyle"
         role="listbox"
         @keydown="onPopKeydown"
       >
         <template v-for="(row, ri) in renderList" :key="row.kind === 'group' ? 'g-' + ri : 'o-' + String(row.opt.value)">
           <div v-if="row.kind === 'group'" class="fsel-group-label" role="presentation">{{ t(row.label) }}</div>
+          <!-- Con le anteprime ogni voce è una scheda: la miniatura disegnata dal tracciato
+               dell'opzione e il nome sotto (es. le forme dello Shape Divider). -->
+          <button
+            v-else-if="conAnteprime"
+            type="button"
+            class="fsel-item fsel-card"
+            :class="{ 'fsel-item--selected': isActive(row.opt), 'fsel-item--hl': row.idx === highlight }"
+            role="option"
+            :aria-selected="isActive(row.opt)"
+            :title="t(row.opt.label)"
+            @click="pick(row.opt)"
+            @mousemove="highlight = row.idx"
+          >
+            <svg
+              v-if="row.opt.anteprima"
+              class="fsel-anteprima"
+              :viewBox="row.opt.anteprima.viewBox || '0 0 100 100'"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            ><path :d="row.opt.anteprima.d" /></svg>
+            <span class="fsel-card-label">{{ t(row.opt.label) }}</span>
+          </button>
           <button
             v-else
             type="button"
@@ -95,10 +124,14 @@ const SEG_MAX_LABEL = 11; // char: oltre, le label vanno strette e si troncano
 
 const hasGroups = computed(() => (props.options || []).some(o => o && Array.isArray(o.options)));
 
+// `soloSeAttiva`: una voce che resta solo per i valori già salvati (un doppione storico) compare
+// soltanto quando è quella scelta, così il selettore la mostra senza riproporla a chi sceglie.
+const visibile = (o) => !!o && !(o.soloSeAttiva && !isActive(o));
+
 // Opzioni appiattite nell'ordine visivo: è la lista su cui lavorano selezione,
 // highlight e navigazione tastiera (le intestazioni di gruppo non sono focusabili).
 const flatOptions = computed(() =>
-  (props.options || []).flatMap(o => (o && Array.isArray(o.options)) ? o.options : [o])
+  (props.options || []).flatMap(o => (o && Array.isArray(o.options)) ? o.options : [o]).filter(visibile)
 );
 
 // Righe del popup: intestazioni di gruppo intercalate alle opzioni; idx è
@@ -109,16 +142,23 @@ const renderList = computed(() => {
   for (const o of props.options || []) {
     if (o && Array.isArray(o.options)) {
       rows.push({ kind: 'group', label: o.group ?? o.label ?? '' });
-      for (const opt of o.options) rows.push({ kind: 'opt', opt, idx: idx++ });
-    } else {
+      for (const opt of o.options.filter(visibile)) rows.push({ kind: 'opt', opt, idx: idx++ });
+    } else if (visibile(o)) {
       rows.push({ kind: 'opt', opt: o, idx: idx++ });
     }
   }
   return rows;
 });
 
+// Opzioni con `anteprima: { viewBox, d }`: il popup diventa una griglia di miniature
+// (3 per riga) e il pulsante mostra quella scelta accanto al nome.
+const conAnteprime = computed(() => flatOptions.value.some(o => o.anteprima && o.anteprima.d));
+const COLONNE_ANTEPRIME = 3;
+const selected = computed(() => flatOptions.value.find(o => isActive(o)) || null);
+
 const isSegmented = computed(() => {
   if (props.ui === 'dropdown') return false;
+  if (conAnteprime.value) return false; // le miniature stanno nel popup
   if (hasGroups.value) return false; // i gruppi hanno senso solo nel popup
   if (props.ui === 'segmented') return true;
   const opts = flatOptions.value;
@@ -186,19 +226,21 @@ function position() {
   const pop = popEl.value;
   if (!trigger || !pop) return;
   const r = trigger.getBoundingClientRect();
-  const popH = Math.min(pop.scrollHeight + 8, 264);
+  // La griglia delle miniature ha bisogno di più spazio di un elenco di nomi.
+  const maxH = conAnteprime.value ? 380 : 264;
+  const popH = Math.min(pop.scrollHeight + 8, maxH);
   const below = window.innerHeight - r.bottom;
   const openUp = below < popH + 8 && r.top > popH + 8;
   // I trigger compact possono essere molto stretti (es. 44px per "px"):
   // il popup ha comunque una larghezza leggibile, clampata nel viewport.
-  const popW = Math.max(Math.round(r.width), 110);
+  const popW = Math.max(Math.round(r.width), conAnteprime.value ? 300 : 110);
   const left = Math.max(8, Math.min(Math.round(r.left), window.innerWidth - popW - 8));
   popStyle.value = {
     position: 'fixed',
     left: `${left}px`,
     width: `${popW}px`,
     top: openUp ? `${Math.round(r.top - popH - 4)}px` : `${Math.round(r.bottom + 4)}px`,
-    maxHeight: '264px',
+    maxHeight: `${maxH}px`,
     zIndex: 100090,
   };
 }
@@ -225,8 +267,12 @@ function onTriggerKeydown(e) {
 }
 
 function onPopKeydown(e) {
-  if (e.key === 'ArrowDown') { e.preventDefault(); move(1); }
-  else if (e.key === 'ArrowUp') { e.preventDefault(); move(-1); }
+  // Nella griglia delle miniature su e giù saltano una riga, destra e sinistra una scheda.
+  const riga = conAnteprime.value ? COLONNE_ANTEPRIME : 1;
+  if (e.key === 'ArrowDown') { e.preventDefault(); move(riga); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); move(-riga); }
+  else if (conAnteprime.value && e.key === 'ArrowRight') { e.preventDefault(); move(1); }
+  else if (conAnteprime.value && e.key === 'ArrowLeft') { e.preventDefault(); move(-1); }
   else if (e.key === 'Enter' || e.key === ' ') {
     e.preventDefault();
     const opt = flatOptions.value[highlight.value];
@@ -389,4 +435,45 @@ onBeforeUnmount(() => close(false));
   color: var(--olo-ui-accent, #e8622a);
   flex-shrink: 0;
 }
+
+/* Popup con le anteprime: griglia di schede (miniatura + nome), le intestazioni dei gruppi a tutta riga */
+.fsel-pop--anteprime {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  align-content: start;
+}
+.fsel-pop--anteprime .fsel-group-label { grid-column: 1 / -1; }
+.fsel-card {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  padding: 5px;
+  border: 1px solid transparent;
+}
+.fsel-card.fsel-item--selected { border-color: var(--olo-ui-accent, #e8622a); background: #fff7f3; }
+.fsel-card-label {
+  font-size: 10.5px;
+  line-height: 1.2;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fsel-anteprima {
+  display: block;
+  width: 100%;
+  height: 30px;
+  background: #eef1f6;
+  border-radius: 4px;
+  fill: #64748b;
+}
+.fsel-card.fsel-item--selected .fsel-anteprima { fill: var(--olo-ui-accent, #e8622a); }
+.fsel-anteprima--trigger {
+  width: 44px;
+  height: 18px;
+  flex-shrink: 0;
+  border-radius: 3px;
+}
+.fsel-pop--dark .fsel-anteprima { background: #374151; fill: #9ca3af; }
 </style>

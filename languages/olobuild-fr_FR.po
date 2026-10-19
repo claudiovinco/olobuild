@@ -29468,3 +29468,143 @@ msgstr "Mettre à jour %s"
 #: src/components/Builder/BuilderInspector.vue
 msgid "Dissolvenza dal basso"
 msgstr "Fondu depuis le bas"
+
+#: src/config/elements
+msgid "Movimento delle onde"
+msgstr "Mouvement des vagues"
+
+#: src/config/elements
+msgid "Durata del ciclo"
+msgstr "Durée du cycle"
+
+#: src/config/elements
+msgid "Il tempo in cui le onde compiono un giro completo: più è lungo, più si muovono piano. I livelli dietro vanno un po' più lenti, così non si muovono mai insieme."
+msgstr "Le temps que mettent les vagues pour faire un cycle complet : plus il est long, plus elles bougent lentement. Les calques de derrière sont un peu plus lents, pour ne jamais bouger ensemble."
+
+#: src/config/elements
+msgid "Ingresso dei livelli"
+msgstr "Entrée des calques"
+
+#: src/config/elements
+msgid "I livelli dietro la forma entrano uno dopo l'altro quando il divisore arriva nello schermo. La forma piena resta ferma: è il bordo della sezione."
+msgstr "Les calques derrière la forme entrent l'un après l'autre quand le séparateur arrive à l'écran. La forme pleine reste immobile : c'est le bord de la section."
+
+#: src/config/elements
+msgid "Ritardo fra i livelli"
+msgstr "Délai entre les calques"
+
+#: src/config/elements
+msgid "Colore finale"
+msgstr "Couleur finale"
+
+#: src/config/elements
+msgid "La sfumatura va dal colore di ogni livello a questo. Vuoto = il colore svanisce nel trasparente."
+msgstr "Le dégradé va de la couleur de chaque calque à celle-ci. Vide = la couleur s'efface dans la transparence."
+
+#: src/config/elements
+msgid "Colore livello 2"
+msgstr "Couleur du calque 2"
+
+#: src/config/elements
+msgid "Vuoto = il colore della forma con opacità 60%."
+msgstr "Vide = la couleur de la forme à 60 % d'opacité."
+
+#: src/config/elements
+msgid "Colore livello 3"
+msgstr "Couleur du calque 3"
+
+#: src/config/elements
+msgid "Vuoto = il colore della forma con opacità 30%."
+msgstr "Vide = la couleur de la forme à 30 % d'opacité."
+
+#: src/config/elements
+msgid "Onde e curve"
+msgstr "Vagues et courbes"
+
+#: src/config/elements
+msgid "Onde fitte"
+msgstr "Vaguelettes"
+
+#: src/config/elements
+msgid "Valle"
+msgstr "Vallée"
+
+#: src/config/elements
+msgid "Collina"
+msgstr "Colline"
+
+#: src/config/elements
+msgid "Slancio"
+msgstr "Élan"
+
+#: src/config/elements
+msgid "Libro aperto"
+msgstr "Livre ouvert"
+
+#: src/config/elements
+msgid "Denti"
+msgstr "Dents"
+
+#: src/config/elements
+msgid "Tacca"
+msgstr "Encoche"
+
+#: src/config/elements
+msgid "Picco"
+msgstr "Pic"
+
+#: src/config/elements
+msgid "Gradini"
+msgstr "Marches"
+
+#: src/config/elements
+msgid "Lastre"
+msgstr "Dalles"
+
+#: src/config/elements
+msgid "Altopiano"
+msgstr "Plateau"
+
+#: src/config/elements
+msgid "Pendio"
+msgstr "Pente"
+
+#: src/config/elements
+msgid "Angolo tondo"
+msgstr "Coin arrondi"
+
+#: src/config/elements
+msgid "Forme libere"
+msgstr "Formes libres"
+
+#: src/config/elements
+msgid "Bolle"
+msgstr "Bulles"
+
+#: src/config/elements
+msgid "Colature"
+msgstr "Coulures"
+
+#: src/config/elements
+msgid "In movimento"
+msgstr "En mouvement"
+
+#: src/config/elements
+msgid "Dinamica"
+msgstr "Dynamique"
+
+#: src/config/elements
+msgid "«Dinamica» disegna onde che si muovono da sole, senza fine."
+msgstr "« Dynamique » dessine des vagues qui bougent toutes seules, sans fin."
+
+#: src/config/elements
+msgid "Livelli"
+msgstr "Calques"
+
+#: src/config/elements
+msgid "Copie della forma dietro quella piena, sempre più trasparenti: danno profondità al bordo della sezione."
+msgstr "Des copies de la forme derrière la forme pleine, de plus en plus transparentes : elles donnent de la profondeur au bord de la section."
+
+#: src/config/elements
+msgid "Gap livelli"
+msgstr "Écart entre calques"

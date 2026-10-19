@@ -755,10 +755,26 @@ const respKey = computed(() => {
   return props.field.key + '_' + respBp.value;
 });
 
+// Chiave storica di un valore per dispositivo (`legacyDeviceKeys: { tablet: 'responsive_height_tablet' }`):
+// prima del selettore del dispositivo alcune tile salvavano la misura per tablet o telefono in un campo a
+// parte. Finché la chiave nuova è vuota il campo mostra quella (il renderer fa lo stesso), e scrivendo
+// nella chiave nuova la storica si svuota: resta un solo valore, senza migrare i dati.
+const respLegacyKey = computed(() => {
+  if (!props.field.responsive || respBp.value === 'desktop') return '';
+  return (props.field.legacyDeviceKeys || {})[respBp.value] || '';
+});
+
 const respValue = computed(() => {
   if (!props.field.responsive || respBp.value === 'desktop') return props.modelValue;
-  if (props.tileSettings && respKey.value in props.tileSettings) {
-    return props.tileSettings[respKey.value];
+  const s = props.tileSettings || {};
+  if (respLegacyKey.value) {
+    const nuovo = s[respKey.value];
+    if (nuovo !== undefined && nuovo !== null && nuovo !== '') return nuovo;
+    const storico = s[respLegacyKey.value];
+    return storico !== undefined && storico !== null ? storico : '';
+  }
+  if (respKey.value in s) {
+    return s[respKey.value];
   }
   return '';
 });
@@ -793,6 +809,7 @@ function onFieldUpdate(value) {
   }
   if (props.field.responsive && respBp.value !== 'desktop') {
     emit('update:responsiveValue', { key: respKey.value, value });
+    if (respLegacyKey.value) emit('update:settingKey', { key: respLegacyKey.value, value: '' });
   } else {
     emit('update:modelValue', value);
   }

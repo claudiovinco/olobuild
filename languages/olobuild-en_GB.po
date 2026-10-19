@@ -21537,3 +21537,143 @@ msgstr "Update %s"
 #: src/components/Builder/BuilderInspector.vue
 msgid "Dissolvenza dal basso"
 msgstr "Fade from bottom"
+
+#: src/config/elements
+msgid "Movimento delle onde"
+msgstr "Wave motion"
+
+#: src/config/elements
+msgid "Durata del ciclo"
+msgstr "Cycle duration"
+
+#: src/config/elements
+msgid "Il tempo in cui le onde compiono un giro completo: più è lungo, più si muovono piano. I livelli dietro vanno un po' più lenti, così non si muovono mai insieme."
+msgstr "The time the waves take to complete a full cycle: the longer it is, the slower they move. The layers behind are a little slower, so they never move together."
+
+#: src/config/elements
+msgid "Ingresso dei livelli"
+msgstr "Layer entrance"
+
+#: src/config/elements
+msgid "I livelli dietro la forma entrano uno dopo l'altro quando il divisore arriva nello schermo. La forma piena resta ferma: è il bordo della sezione."
+msgstr "The layers behind the shape come in one after another when the divider scrolls into view. The solid shape stays still: it is the edge of the section."
+
+#: src/config/elements
+msgid "Ritardo fra i livelli"
+msgstr "Delay between layers"
+
+#: src/config/elements
+msgid "Colore finale"
+msgstr "End colour"
+
+#: src/config/elements
+msgid "La sfumatura va dal colore di ogni livello a questo. Vuoto = il colore svanisce nel trasparente."
+msgstr "The gradient goes from each layer's colour to this one. Empty = the colour fades to transparent."
+
+#: src/config/elements
+msgid "Colore livello 2"
+msgstr "Layer 2 colour"
+
+#: src/config/elements
+msgid "Vuoto = il colore della forma con opacità 60%."
+msgstr "Empty = the shape's colour at 60% opacity."
+
+#: src/config/elements
+msgid "Colore livello 3"
+msgstr "Layer 3 colour"
+
+#: src/config/elements
+msgid "Vuoto = il colore della forma con opacità 30%."
+msgstr "Empty = the shape's colour at 30% opacity."
+
+#: src/config/elements
+msgid "Onde e curve"
+msgstr "Waves and curves"
+
+#: src/config/elements
+msgid "Onde fitte"
+msgstr "Ripples"
+
+#: src/config/elements
+msgid "Valle"
+msgstr "Valley"
+
+#: src/config/elements
+msgid "Collina"
+msgstr "Hill"
+
+#: src/config/elements
+msgid "Slancio"
+msgstr "Swoosh"
+
+#: src/config/elements
+msgid "Libro aperto"
+msgstr "Open book"
+
+#: src/config/elements
+msgid "Denti"
+msgstr "Teeth"
+
+#: src/config/elements
+msgid "Tacca"
+msgstr "Notch"
+
+#: src/config/elements
+msgid "Picco"
+msgstr "Peak"
+
+#: src/config/elements
+msgid "Gradini"
+msgstr "Steps"
+
+#: src/config/elements
+msgid "Lastre"
+msgstr "Slabs"
+
+#: src/config/elements
+msgid "Altopiano"
+msgstr "Plateau"
+
+#: src/config/elements
+msgid "Pendio"
+msgstr "Slope"
+
+#: src/config/elements
+msgid "Angolo tondo"
+msgstr "Round corner"
+
+#: src/config/elements
+msgid "Forme libere"
+msgstr "Free shapes"
+
+#: src/config/elements
+msgid "Bolle"
+msgstr "Bubbles"
+
+#: src/config/elements
+msgid "Colature"
+msgstr "Drips"
+
+#: src/config/elements
+msgid "In movimento"
+msgstr "In motion"
+
+#: src/config/elements
+msgid "Dinamica"
+msgstr "Dynamic"
+
+#: src/config/elements
+msgid "«Dinamica» disegna onde che si muovono da sole, senza fine."
+msgstr "“Dynamic” draws waves that move by themselves, endlessly."
+
+#: src/config/elements
+msgid "Livelli"
+msgstr "Layers"
+
+#: src/config/elements
+msgid "Copie della forma dietro quella piena, sempre più trasparenti: danno profondità al bordo della sezione."
+msgstr "Copies of the shape behind the solid one, increasingly transparent: they add depth to the edge of the section."
+
+#: src/config/elements
+msgid "Gap livelli"
+msgstr "Layer gap"
