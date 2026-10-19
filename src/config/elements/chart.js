@@ -112,6 +112,7 @@ export default {
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
+    border_radius: 0,
     ...borderEffectDefaults,
   },
 
@@ -396,6 +397,7 @@ export default {
     { key: 'axis_color', label: t('Colore bordo assi'), type: 'color' },
 
     ...shadowField,
-    ...borderFields(), // bordo ed effetti sul riquadro del grafico: dalla 1.4.506 il selettore .{uid} c'è
+    // bordo, raggio ed effetti sul riquadro del grafico: dalla 1.4.506 il selettore .{uid} c'è
+    ...borderFields({ raggio: withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }) }),
   ],
 };

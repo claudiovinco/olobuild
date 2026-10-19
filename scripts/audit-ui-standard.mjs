@@ -650,7 +650,10 @@ function effettiDisegnati(php) {
     const tipo = tipoConfig(src);
     for (let i = src.indexOf('...borderFields('); i >= 0; i = src.indexOf('...borderFields(', i + 1)) {
       const call = src.slice(i, matchParen(src, i + '...borderFields'.length) + 1);
-      const k = (call.match(/key:\s*'([a-z0-9_]+)'/) || [])[1] || 'border';
+      // `raggio:` porta un campo intero, con la sua `key`: non è la chiave del bordo
+      const r = call.indexOf('raggio:');
+      const opzioni = r < 0 ? call : call.slice(0, r) + call.slice(chiudiC(call, r + call.slice(r).search(/[({]/)) + 1);
+      const k = (opzioni.match(/key:\s*'([a-z0-9_]+)'/) || [])[1] || 'border';
       const spenti = /effetti:\s*false/.test(call);
       const d = disegnatiPer[tipo];
       const disegnati = !!d?.vivi.has(k);

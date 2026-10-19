@@ -736,7 +736,7 @@ abstract class Olobuild_Tile_Base {
      * Genera CSS per effetti bordo avanzati (neon, gradiente).
      * Restituisce stringa CSS (senza tag <style>) o ''.
      */
-    protected function build_border_effect_css( $uid, $border, $settings ) {
+    protected function build_border_effect_css( $uid, $border, $settings, $arrotondato = false ) {
         $effect = $settings['border_effect'] ?? 'none';
         if ( $effect === 'none' || $effect === '' ) return '';
 
@@ -774,19 +774,56 @@ abstract class Olobuild_Tile_Base {
 
             case 'gradient':
                 $angle = intval( $settings['border_effect_angle'] ?? 135 );
-                // border-image: no border-radius — nota documentata nel tooltip
+                if ( $arrotondato && $d ) {
+                    return $this->anello_bordo( $uid, $d, $border, $settings, "linear-gradient({$angle}deg,{$color1},{$color2})" );
+                }
+                // border-image ignora il border-radius: con un raggio si passa dall'anello qui sopra
                 return "{$uid}{border-image:linear-gradient({$angle}deg,{$color1},{$color2}) 1;}";
 
             case 'gradient-spin':
                 $speed  = max( 1, intval( $settings['border_effect_speed'] ?? 4 ) );
                 $prop   = '--olo-ba-' . substr( md5( $uid ), 0, 6 );
                 $anim_id = 'olo-bs-' . substr( md5( $uid ), 0, 6 );
-                return "@property {$prop}{syntax:'<angle>';initial-value:0deg;inherits:false;}" .
-                       "@keyframes {$anim_id}{to{{$prop}:360deg;}}" .
+                $regole  = "@property {$prop}{syntax:'<angle>';initial-value:0deg;inherits:false;}" .
+                           "@keyframes {$anim_id}{to{{$prop}:360deg;}}";
+                if ( $arrotondato && $d ) {
+                    // La proprietà animata non si eredita (inherits:false): l'animazione gira sull'anello stesso.
+                    return $regole . $this->anello_bordo( $uid, $d, $border, $settings,
+                        "conic-gradient(from var({$prop}),{$color1},{$color2},{$color1})", "animation:{$anim_id} {$speed}s linear infinite;" );
+                }
+                return $regole .
                        "{$uid}{border-image:conic-gradient(from var({$prop}),{$color1},{$color2},{$color1}) 1;" .
                        "animation:{$anim_id} {$speed}s linear infinite;}";
         }
         return '';
+    }
+
+    /**
+     * Bordo a gradiente che segue il border-radius: border-image lascia sempre gli angoli vivi, quindi
+     * il bordo vero resta (spessori, quindi misure) ma trasparente, e il gradiente sta in un ::after
+     * grande quanto il riquadro col bordo, mascherato al solo anello (fuori il contenuto). Il raggio
+     * lo eredita dall'elemento, anche quando cambia in hover. Con un Bordo in hover configurato
+     * l'anello sparisce al passaggio, come prima il border-image sotto `border:` dell'hover.
+     *
+     * @param string $uid    Selettore dell'elemento.
+     * @param array  $d      Bordo letto da parse_border() (spessori dei quattro lati).
+     * @param mixed  $border Bordo salvato (per confrontarlo con quello in hover).
+     * @param array  $s      Settings del tile (`border_hover` e la sua durata).
+     * @param string $sfondo Gradiente CSS dell'anello.
+     * @param string $extra  Dichiarazioni in più per l'anello (animazione del gradiente rotante).
+     */
+    private function anello_bordo( $uid, $d, $border, $s, $sfondo, $extra = '' ) {
+        ['top' => $t, 'right' => $r, 'bottom' => $b, 'left' => $l] = $d;
+        $css = "{$uid}{position:relative;border-color:transparent;}"
+             . "{$uid}::after{content:'';position:absolute;inset:-{$t}px -{$r}px -{$b}px -{$l}px;padding:{$t}px {$r}px {$b}px {$l}px;"
+             . "border-radius:inherit;background:{$sfondo};pointer-events:none;"
+             . '-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;'
+             . "mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);{$extra}}";
+        $dur = intval( $s['border_hover_duration'] ?? 300 );
+        if ( '' !== $this->build_border_hover_css( $uid, $border, $s['border_hover'] ?? null, $dur ) ) {
+            $css .= "{$uid}::after{transition:opacity " . max( 50, $dur ) . "ms ease;}{$uid}:hover::after{opacity:0;}";
+        }
+        return $css;
     }
 
     /**

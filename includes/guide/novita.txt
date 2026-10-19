@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.831 - 2026-10-19 (miglioria)
+- Grafico: c’è il «Raggio» per arrotondare gli angoli del riquadro, sotto il Bordo, anche in hover (Normale / Hover). Il bordo segue gli angoli con ogni effetto: con «Gradiente statico» e «Gradiente rotante» il gradiente diventa un anello arrotondato, prima gli angoli restavano vivi.
+
 ## v1.4.830 - 2026-10-19 (fix)
 - Le tile nascono nella lingua del builder: in inglese, tedesco, spagnolo e francese una tile appena inserita si presenta con titoli, descrizioni, pulsanti e voci d’esempio tradotti (prima restavano in italiano, in alcune tile in inglese). Restano com’erano nomi propri, marchi, numeri, codici e i campi tecnici, come i nomi dei campi del Form, le scene del Tour 360 e gli identificativi del Configuratore.
 - Grafico: «Mar» resta marzo (in inglese diventava «Tue», martedì) e «Set» è settembre (in spagnolo diventava «Conjunto», in francese «Ensemble»). Before / After in tedesco dice «Vorher / Nachher» invece di «Vor / Nach»; in Evonotes il confronto «Prima → Ora» in inglese è «Before → Now», non «Time».

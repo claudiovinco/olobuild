@@ -1105,6 +1105,9 @@ export function borderEffectFields({ separatore = true, bordo = null } = {}) {
  *   (build_border_effect_css sul bordo della tile, su un selettore che nel markup esiste): lì
  *   sarebbero controlli che non fanno niente. Le chiavi border_effect_* dei default restano: cambia
  *   solo l'inspector. L'audit effetti-bordo-elemento controlla i due versi.
+ * @param {Object}  [opts.raggio] - campo «Raggio» dell'elemento, subito sotto il Bordo (Grafico):
+ *   il renderer passa il raggio a build_border_effect_css, che col gradiente disegna un anello
+ *   che segue gli angoli (border-image li lascerebbe vivi).
  */
 export function borderFields(opts = {}) {
   const key      = opts.key          ?? 'border';
@@ -1117,6 +1120,7 @@ export function borderFields(opts = {}) {
       { key, label: t('Bordo'), type: 'border' },
       { hoverKey, hoverDurationKey: durKey }
     ),
+    ...(opts.raggio ? [opts.raggio] : []),
     ...(opts.effetti === false ? [] : borderEffectFields({ separatore: false, bordo: key })),
   ];
 }

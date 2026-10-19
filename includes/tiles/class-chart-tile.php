@@ -87,6 +87,7 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
+        'border_radius'           => 0,
         'border_effect'           => 'none',
         'border_effect_intensity' => 'medium',
         'border_effect_color2'    => '',
@@ -534,14 +535,19 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php
 
-                // Border system
+        // Bordo e Raggio del riquadro. Il raggio (anche solo quello in hover) va agli effetti: col
+        // gradiente build_border_effect_css() disegna un anello che segue gli angoli.
+        $raggio            = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
         $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
-        $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
-        if ( $border_css || $border_hover_css || $border_effect_css ) {
+        $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s, '' !== $raggio || null !== Olobuild_Tile_Utils::radius_hover( $s, 'border_radius_hover' ) );
+        // Raggio in hover DOPO il bordo in hover, riprendendone la transizione (in CSS ne vince una sola).
+        $raggio_hover_css  = Olobuild_Tile_Utils::radius_hover_rules( ".{$uid}", $s, 'border_radius_hover', Olobuild_Tile_Utils::transizione_di( $border_hover_css ) );
+        $elemento_css      = ( '' !== $raggio ? 'border-radius:' . $raggio . ';' : '' ) . $border_css;
+        if ( $elemento_css || $border_hover_css || $border_effect_css || $raggio_hover_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base::build_border_css() from sanitized border settings
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base border helpers from sanitized border settings
+            if ( $elemento_css ) echo ".{$uid}{{$elemento_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- radius from Olobuild_Tile_Utils::border_radius() (integers) + CSS built by Olobuild_Tile_Base::build_border_css() from sanitized border settings
+            echo $border_hover_css . $border_effect_css . $raggio_hover_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base border helpers and Olobuild_Tile_Utils::radius_hover_rules() from sanitized settings
         }
         return ob_get_clean();
     }
