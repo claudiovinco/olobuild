@@ -25,8 +25,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  *   - SSR: lo STATO BASE è la traccia in scroll orizzontale nativo (overflow-x:auto) — visibile
  *     e usabile senza JS, da tastiera, con reduced-motion e su mobile. Nessuna sezione vuota.
  *   - Runtime INLINE (IIFE idempotente, scoped, multi-istanza): su scroll
- *     p = clamp((-rect.top)/(outer.h - vh), 0..1); track.x = -p*(track.scrollW - vw);
- *     ricalcola max su resize; passive:true; IntersectionObserver spegne i listener fuori viewport.
+ *     p = clamp((-rect.top)/(outer.h - vh), 0..1); track.x = -p*(fine del nastro - finestra);
+ *     ricalcola la corsa su resize e quando la sezione entra in vista; passive:true; IntersectionObserver spegne i listener fuori viewport.
  *   - prefers-reduced-motion (se pause_on_reduced_motion) / no-JS / mobile → resta lo scroll nativo.
  *     Senza JS resta anche la BARRA del browser, e frecce e indicatori non si mostrano: è il
  *     runtime ad aggiungere `olo-scrub--js` alla radice, e solo quella classe nasconde la barra.
@@ -317,7 +317,9 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: intval()/absint() clamped via max()/min() for every size, safe_color_css() whitelist for every colour, in_array() whitelists for align/easing/arrows/arrows_pos/indicators, build_border_radius_css() (integer-forced), preset shadow map or integer-built custom shadow, fixed ternary literals and the internally generated uid. ?>
         <style>
-            .<?php echo $uid; ?> { position: relative; }
+            /* Il margine laterale del nastro, condiviso da testata, nastro, comandi e
+               barra: le card partono tutte dallo stesso filo. */
+            .<?php echo $uid; ?> { position: relative; --olo-scrub-gutter: clamp(20px, 8vw, 96px); }
 
             /* OUTER: in modalità pin è alta scroll_length×100vh. STATO BASE (no-JS/mobile):
                altezza automatica, il pin diventa un blocco normale e la traccia scrolla in
@@ -544,13 +546,18 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-scrub__text p { margin: 0 0 0.6em; }
             .<?php echo $uid; ?> .olo-scrub__text p:last-child { margin-bottom: 0; }
 
-            /* Scrubbar (progress) — visibile solo in modalità pin */
+            /* Scrubbar (progress) — visibile solo in modalità pin, SUBITO SOTTO il
+               nastro e i suoi comandi. Ancorata al fondo dello schermo lasciava, con
+               la fila agganciata in alto, mezzo schermo vuoto fra le card e il loro
+               indicatore (OLOtour, 19 ott 2026). Sul fondo torna solo se il blocco
+               non ci sta (.is-stretto, più sotto). */
             .<?php echo $uid; ?> .olo-scrub__bar {
-                position: absolute;
-                left: clamp(20px, 8vw, 96px);
-                right: clamp(20px, 8vw, 96px);
-                bottom: 34px;
+                /* static, non relative: nel flusso un left/right ereditato dai
+                   temi pensati per la barra ancorata la spingerebbe di lato. */
+                position: static;
+                flex: 0 0 auto;
                 height: 3px;
+                margin: 1.1em var(--olo-scrub-gutter) 0;
                 border-radius: 3px;
                 background: rgba(128,128,128,0.22);
                 display: none;
@@ -566,9 +573,8 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                 background: <?php echo $prog_c; ?>;
             }
             .<?php echo $uid; ?> .olo-scrub__hint {
-                position: absolute;
-                bottom: 18px;
-                left: clamp(20px, 8vw, 96px);
+                flex: 0 0 auto;
+                margin: 0.9em var(--olo-scrub-gutter) 0;
                 font-size: 11px;
                 letter-spacing: 0.12em;
                 text-transform: uppercase;
@@ -577,6 +583,23 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
             }
             .<?php echo $uid; ?> .olo-scrub__outer.is-pinned .olo-scrub__hint {
                 display: block;
+            }
+            /* Schermo basso: se testata, card, comandi e barra non stanno nei 100vh
+               del pin (il runtime lo misura e mette .is-stretto), barra e
+               suggerimento tornano ancorati al fondo, sopra le card, invece di
+               finire tagliati sotto il bordo. */
+            .<?php echo $uid; ?> .olo-scrub__outer.is-pinned.is-stretto .olo-scrub__bar {
+                position: absolute;
+                left: var(--olo-scrub-gutter);
+                right: var(--olo-scrub-gutter);
+                bottom: 34px;
+                margin: 0;
+            }
+            .<?php echo $uid; ?> .olo-scrub__outer.is-pinned.is-stretto .olo-scrub__hint {
+                position: absolute;
+                left: var(--olo-scrub-gutter);
+                bottom: 18px;
+                margin: 0;
             }
 
             /* ── PALCO e FINESTRA ────────────────────────────────────────────
@@ -780,13 +803,16 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                 gap: 16px;
                 padding: 14px clamp(20px, 8vw, 96px) 2px;
             }
-            /* In pin il blocco è alto tutto lo schermo e la fila è centrata: i
-               comandi vanno ancorati in basso. A 56px stanno SOPRA la scrubbar
-               (34px) e il suggerimento (18px), senza accavallarsi a nessuno. */
-            .<?php echo $uid; ?> .olo-scrub__outer.is-pinned .olo-scrub__ctrl {
+            /* In pin i comandi restano dove sono nello stato base, subito sotto il
+               nastro: il blocco è alto tutto lo schermo, e ancorarli al fondo li
+               staccava dalle card di mezzo schermo (con la fila in alto) o di un
+               quarto (con la fila al centro). Solo se il blocco non ci sta
+               (.is-stretto) tornano in basso, a 56px: SOPRA la scrubbar (34px) e
+               il suggerimento (18px), senza accavallarsi a nessuno. */
+            .<?php echo $uid; ?> .olo-scrub__outer.is-pinned.is-stretto .olo-scrub__ctrl {
                 position: absolute;
-                left: clamp(20px, 8vw, 96px);
-                right: clamp(20px, 8vw, 96px);
+                left: var(--olo-scrub-gutter);
+                right: var(--olo-scrub-gutter);
                 bottom: 56px;
                 padding: 0;
             }
@@ -942,10 +968,11 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                 <?php if ( $has_ctrl ) : ?>
                 /* I comandi NON sono decorazione: con «riduci movimento» il pin
                    sparisce ma frecce e indicatori restano, e tornano in fila
-                   sotto il nastro come nello stato base. */
-                .<?php echo $uid; ?> .olo-scrub__outer.is-pinned .olo-scrub__ctrl {
+                   sotto il nastro come nello stato base (anche dallo schermo basso,
+                   dove il pin li aveva ancorati al fondo). */
+                .<?php echo $uid; ?> .olo-scrub__outer.is-pinned.is-stretto .olo-scrub__ctrl {
                     position: static;
-                    padding: 14px clamp(20px, 8vw, 96px) 2px;
+                    padding: 14px var(--olo-scrub-gutter) 2px;
                 }
                 <?php endif; ?>
             }
@@ -1123,8 +1150,9 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
            STATO BASE (SSR): la traccia è già uno scroll orizzontale nativo, usabile senza JS,
            da tastiera, su mobile e con reduced-motion. Questo IIFE *promuove* l'esperienza al
            "pin verticale → translateX" solo dove ha senso:
-             p = clamp((-rect.top)/(outer.h - vh), 0..1);  track.x = -p*(track.scrollW - vw).
-           Ricalcola la corsa massima su resize. scroll listener passive. IntersectionObserver
+             p = clamp((-rect.top)/(outer.h - vh), 0..1);  track.x = -p*(fine del nastro - finestra).
+           Ricalcola la corsa massima su resize, quando la finestra cambia misura e quando la
+           sezione entra in vista. scroll listener passive. IntersectionObserver
            aggancia/sgancia lo scroll per non far girare nulla fuori viewport.
 
            NEL CANVAS DEL BUILDER lo script ORA gira lo stesso, con PIN_ALLOWED a false.
@@ -1145,9 +1173,9 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
             var track = root.querySelector('.olo-scrub__track');
             if ( ! outer || ! pin || ! track ) { return; }
 
-            // La finestra: il riquadro che si vede del nastro. È anche l'elemento
-            // da cui gli item contano il loro offsetLeft (è lui il positioned più
-            // vicino), quindi le due misure parlano già la stessa lingua.
+            // Il riquadro che si vede del nastro (lo involucro sfumato ai bordi): se
+            // cambia misura — colonna più stretta, card più alte quando arrivano i
+            // caratteri — corsa e altezza del blocco vanno rimisurate.
             var vp = root.querySelector('.olo-scrub__viewport') || track;
 
             var bar = root.querySelector('.olo-scrub__bar > i');
@@ -1203,13 +1231,39 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
             var listening = false;  // scroll listener agganciato?
             var ticking = false;    // throttle via rAF
 
+            /* La FINESTRA del nastro è il riquadro in cui le card si vedono, cioè il
+               nastro stesso: in pin il blocco incollato è largo quanto la sua colonna,
+               non quanto lo schermo. Misurata sullo schermo (innerWidth), dentro un
+               contenitore da 1200px su uno schermo da 1440 la corsa finiva con
+               l'ultima card ancora fuori dal riquadro: delle sei card di OLOtour se ne
+               vedevano tre, e la sesta mai (19 ott 2026). */
+            function finestraW(){ return track.clientWidth; }
+
+            /* Dove finisce il nastro, margine finale compreso. Si misura sulle card,
+               non con scrollWidth: in pin il nastro non è un contenitore che scorre
+               (overflow visibile, lo muove translateX) e lì scrollWidth non è una
+               misura su cui contare — perde il margine finale e, a seconda di quando
+               e come lo si legge, torna la larghezza del riquadro: corsa zero, frecce
+               spente, card ferme mentre la barra avanza. offsetLeft delle card,
+               sorelle con lo stesso genitore di riferimento, non risente né di
+               translateX né dello scorrimento nativo. */
+            function margini(){
+                var cs = getComputedStyle( track );
+                return { sx: parseFloat( cs.paddingLeft ) || 0, dx: parseFloat( cs.paddingRight ) || 0 };
+            }
+            function fineNastro(){
+                if ( ! itemEls.length ) { return track.scrollWidth; }
+                var m = margini(), primo = itemEls[0], ultimo = itemEls[ itemEls.length - 1 ];
+                return m.sx + ( ultimo.offsetLeft - primo.offsetLeft ) + ultimo.offsetWidth + m.dx;
+            }
+
             function shouldPin(){
                 if ( ! PIN_ALLOWED ) { return false; }           // canvas del builder
                 if ( BEHAVIOR === 'inline' ) { return false; }   // scelta esplicita: mai pin
                 if ( RESPECT_RM && rm && rm.matches ) { return false; }
                 if ( ! stickyOK() ) { return false; }
-                // Inutile pinnare se la traccia non eccede la viewport
-                return ( track.scrollWidth - window.innerWidth ) > 4;
+                // Inutile pinnare se le card stanno tutte nella finestra
+                return ( fineNastro() - finestraW() ) > 4;
             }
 
             // Altezza dell'header sticky/fixed in cima alla pagina (megamenu, nav
@@ -1227,9 +1281,15 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
             }
 
             function recalc(){
-                maxX = Math.max( 0, track.scrollWidth - window.innerWidth );
+                maxX = Math.max( 0, fineNastro() - finestraW() );
                 pinTop = hdrOffset();
                 if ( pinned ) { pin.style.paddingTop = pinTop + 'px'; }
+                // Schermo basso: se il blocco non sta nei 100vh, comandi e barra
+                // tornano ancorati al fondo (CSS .is-stretto). Si misura senza la
+                // classe, cioè con tutto nel flusso: con la classe il blocco è più
+                // corto e la risposta sarebbe sempre «ci sta».
+                outer.classList.remove( 'is-stretto' );
+                if ( pinned ) { if ( pin.scrollHeight > pin.clientHeight + 1 ) { outer.classList.add( 'is-stretto' ); } }
                 measure();
             }
 
@@ -1258,7 +1318,6 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
 
             var stops = [];   // per ogni elemento: la corsa che lo porta al centro
 
-            function viewW(){ return pinned ? window.innerWidth : track.clientWidth; }
             function runMax(){ return pinned ? maxX : Math.max( 0, track.scrollWidth - track.clientWidth ); }
             function runNow(){ return pinned ? ( progress * maxX ) : track.scrollLeft; }
             function clampRun( x ){ var m = runMax(); return x < 0 ? 0 : ( x > m ? m : x ); }
@@ -1269,18 +1328,21 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                scorre. offsetLeft e offsetWidth non cambiano con lo scorrimento.
 
                Centrare l'elemento i vuol dire portare la corsa a
-               offsetLeft + metà elemento − metà finestra. Cambia solo da dove si
-               conta: nello scroll nativo l'origine è la traccia stessa (scrollLeft
-               parte da lì), in pin è lo SCHERMO — perché maxX si misura in
-               innerWidth — e se la sezione non è a tutta larghezza il bordo
-               sinistro della finestra non sta a zero e va aggiunto. */
+               posizione nel nastro + metà elemento − metà finestra, e vale uguale
+               nelle due modalità: la finestra è il nastro stesso (finestraW), e la
+               posizione si conta dal suo bordo — margine iniziale più la distanza
+               dalla prima card, che non risente né di translateX né di scrollLeft.
+               (Prima in pin si contava dallo SCHERMO, perché la corsa si misurava
+               su innerWidth: con la sezione dentro un contenitore i fermi cadevano
+               fuori dal riquadro.) */
             function measure(){
                 stops = [];
                 if ( ! itemEls.length ) { return; }
-                var orig  = pinned ? vp.getBoundingClientRect().left : 0;
-                var mezzo = viewW() / 2;
+                var sx    = margini().sx;
+                var o0    = itemEls[0].offsetLeft;
+                var mezzo = finestraW() / 2;
                 for ( var i = 0; i < itemEls.length; i++ ) {
-                    stops.push( orig + itemEls[i].offsetLeft + ( itemEls[i].offsetWidth / 2 ) - mezzo );
+                    stops.push( sx + ( itemEls[i].offsetLeft - o0 ) + ( itemEls[i].offsetWidth / 2 ) - mezzo );
                 }
             }
 
@@ -1436,7 +1498,7 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                 }
                 pinned = false;
                 progress = 0;
-                outer.classList.remove( 'is-pinned' );
+                outer.classList.remove( 'is-pinned', 'is-stretto' );
                 pin.style.paddingTop = '';
                 track.style.transform = '';
                 if ( bar ) { bar.style.width = '0'; }
@@ -1591,7 +1653,10 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                 if ( 'IntersectionObserver' in window ) {
                     var io = new IntersectionObserver( function( entries ){
                         for ( var i = 0; i < entries.length; i++ ) {
-                            if ( entries[i].isIntersecting ) { addScroll(); onScroll(); }
+                            // Entrando in vista si rimisura prima di muovere: una corsa
+                            // calcolata in un altro momento (pagina in secondo piano,
+                            // zoom, finestra spostata) non deve sopravvivere fin qui.
+                            if ( entries[i].isIntersecting ) { applyMode(); addScroll(); onScroll(); }
                             else { removeScroll(); }
                         }
                     }, { threshold: 0 } );
@@ -1606,6 +1671,23 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                     if ( rt ) { clearTimeout( rt ); }
                     rt = setTimeout( function(){ applyMode(); }, 120 );
                 }, { passive: true } );
+
+                // …e quando cambia il riquadro senza che cambi la finestra del
+                // browser: colonna ridimensionata, caratteri arrivati dopo (card più
+                // alte → il blocco può non starci più nei 100vh). Uno per fotogramma.
+                if ( 'ResizeObserver' in window ) {
+                    var roF = 0;
+                    new ResizeObserver( function(){
+                        if ( roF ) { return; }
+                        roF = window.requestAnimationFrame( function(){ roF = 0; applyMode(); } );
+                    } ).observe( vp );
+                }
+
+                // Pagina ripresa dalla cache avanti/indietro: lo stato del runtime è
+                // quello di prima, la finestra forse no.
+                window.addEventListener( 'pageshow', function( e ){
+                    if ( e.persisted ) { applyMode(); }
+                } );
 
                 // Reagisci ai cambi di reduced-motion a runtime (DevTools/OS).
                 if ( rm && rm.addEventListener ) {

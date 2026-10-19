@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.833 - 2026-10-19 (fix)
+- Scorrimento orizzontale in modalità Pin: il nastro arriva fino all’ultima card. La corsa si misurava sulla larghezza dello schermo e non su quella del riquadro: con la tile dentro un contenitore l’ultima card restava fuori, e in certe condizioni la corsa risultava zero, con le card ferme, le frecce spente e il contatore fermo su 01 mentre la barra avanzava. La corsa ora si misura sulle card e si ricalcola anche quando la sezione entra in vista o il riquadro cambia misura.
+- Scorrimento orizzontale in modalità Pin: indicatori, barra di avanzamento e «Scorri» stanno subito sotto le card. Prima erano ancorati al fondo dello schermo e, con la fila in alto, fra le card e il loro indicatore restava mezzo schermo vuoto. Solo se il blocco non sta nello schermo tornano in fondo, sopra le card.
+
 ## v1.4.832 - 2026-10-19 (miglioria)
 - Griglia: nuova «Posizione immagine» (Stile → Disposizione) — Sopra, com’era, oppure a Sinistra o a Destra del testo: la card diventa una riga con la foto accanto a titolo e testo, tutta cliccabile. La «Larghezza immagine» (in % della card) sta in Immagine — stile; il badge passa sopra il titolo, e sulla card «Minimale» la foto è una miniatura con tutti gli angoli arrotondati.
 
