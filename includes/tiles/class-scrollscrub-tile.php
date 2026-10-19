@@ -1138,7 +1138,8 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                     <?php if ( $show_prog ) : ?>
                     <div class="olo-scrub__bar" aria-hidden="true"><i></i></div>
                     <?php endif; ?>
-                    <div class="olo-scrub__hint" aria-hidden="true">⇄ scorri</div>
+                    <?php // «Scorri» è già nei cataloghi di tutte le lingue (la usa anche l'ispettore); il CSS la mette in maiuscolo. ?>
+                    <div class="olo-scrub__hint" aria-hidden="true">⇄ <?php echo esc_html( olobuild_t( 'Scorri' ) ); ?></div>
                 </div>
             </div>
         </div>
