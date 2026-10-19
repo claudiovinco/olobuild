@@ -7,12 +7,26 @@ const modules = import.meta.glob('./elements/*.js', { eager: true });
 
 const elements = {};
 
+/**
+ * I valori di una voce NUOVA di un ripetitore si chiamano `newItemDefaults`, ma 73 ripetitori
+ * (49 tile) li scrivono come `defaults`: «Aggiungi» li ignorava e la voce nasceva vuota. Valgono
+ * come `newItemDefaults` quando questo manca (il Contenuto, e lo specchio dello Stile che li
+ * prende dal ripetitore gemello).
+ */
+function voceNuova(def) {
+  for (const f of [...(def.fields || []), ...(def.styleFields || [])]) {
+    const d = f && f.type === 'content-items' && !f.newItemDefaults ? f.defaults : null;
+    if (d && typeof d === 'object' && !Array.isArray(d)) f.newItemDefaults = d;
+  }
+  return def;
+}
+
 for (const path in modules) {
   // Skip helper modules (file che iniziano con "_", es. _shared.js, _oloxShared.js)
   if (/\/_/.test(path)) continue;
   const def = modules[path].default;
   if (def && def.type) {
-    elements[def.type] = def;
+    elements[def.type] = voceNuova(def);
   }
 }
 
@@ -67,7 +81,7 @@ if (window.oloExternalData && window.oloExternalData.elements) {
   const ext = window.oloExternalData.elements;
   for (const key in ext) {
     if (ext[key] && ext[key].type) {
-      elements[ext[key].type] = inherit(ext[key]);
+      elements[ext[key].type] = voceNuova(inherit(ext[key]));
     }
   }
 }

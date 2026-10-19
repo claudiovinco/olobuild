@@ -164,7 +164,7 @@ export default {
     { type: 'separator', label: t('Step') },
     { key: 'items', label: t('Step cards'), type: 'content-items',
       itemLabel: t('Step'),
-      defaults: { counter: '0X', tag_text: 'TAG', tag_dot_color: '#b3261e', media_label: 'MOCKUP', media_type: 'placeholder', media_content: '', media_image: '', media_bg: '#f5efe7', media_color: '#b3261e', pre_title: 'PRE-TITLE', title: 'Titolo', title_accent: 'accent', title_accent_italic: true, title_after: '', title_after_italic: false, description: 'Descrizione…', footer_value: '0"', footer_label: 'LABEL', separator_text: '' },
+      defaults: { counter: '0X', tag_text: 'TAG', tag_dot_color: 'var(--olo-color-primary, #e1474f)', media_label: 'MOCKUP', media_type: 'placeholder', media_content: '', media_image: '', media_bg: 'var(--olo-color-muted, #f6f7f9)', media_color: 'var(--olo-color-primary, #e1474f)', pre_title: 'PRE-TITLE', title: 'Titolo', title_accent: 'accent', title_accent_italic: true, title_after: '', title_after_italic: false, description: 'Descrizione…', footer_value: '0"', footer_label: 'LABEL', separator_text: '' },
       itemFields: [
         { key: 'counter',             label: t('Numero step'),           type: 'text' },
         { key: 'tag_text',            label: t('Tag testo'),             type: 'text' },

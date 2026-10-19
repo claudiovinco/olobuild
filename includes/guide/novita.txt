@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.825 - 2026-10-19 (fix)
+- «Aggiungi» negli elenchi di voci di 49 tile, fra cui Hero, Hero Split, Section Header, Trust Strip, Stat Strip, Process Steps, Product Cards, Step Timeline, Quiz a punteggio, Griglia Prodotti, Work List e Calcolatore a slider, crea la voce coi suoi valori di partenza, come nelle altre tile: prima nasceva vuota e andava compilata da zero.
+
 ## v1.4.822 - 2026-10-19 (nuovo)
 - Nuova tile «Scorrimento verticale»: colonne di immagini, icone e testi che scorrono senza fine, ognuna verso l’alto o verso il basso, coi separatori a puntini e i bordi che sfumano nella sezione. Da una a quattro colonne (anche meno su tablet e telefono), la durata del ciclo, la pausa al passaggio del mouse, i testi sfumati e le icone nei loro riquadri colorati.
 - Shape Divider: selezionato nel builder resta sul bordo della sezione (prima finiva dentro la sezione proprio mentre lo si modificava); le «Bolle» sono più tonde.
