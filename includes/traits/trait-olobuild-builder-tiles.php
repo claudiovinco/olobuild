@@ -115,6 +115,7 @@ trait Olobuild_Builder_Tiles_Trait {
         require_once OLOBUILD_PATH . 'includes/tiles/class-schedatecnica-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-provamateriale-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-tracciamento-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-scorrimentoverticale-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-orariocorsi-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-soggiorni-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-configuratore-tile.php';
@@ -398,6 +399,7 @@ trait Olobuild_Builder_Tiles_Trait {
         $manager->register_tile( new Olobuild_Schedatecnica_Tile() );
         $manager->register_tile( new Olobuild_Provamateriale_Tile() );
         $manager->register_tile( new Olobuild_Tracciamento_Tile() );
+        $manager->register_tile( new Olobuild_Scorrimentoverticale_Tile() );
         $manager->register_tile( new Olobuild_Orariocorsi_Tile() );
         $manager->register_tile( new Olobuild_Soggiorni_Tile() );
         $manager->register_tile( new Olobuild_Configuratore_Tile() );

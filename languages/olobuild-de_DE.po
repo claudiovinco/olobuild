@@ -29608,3 +29608,91 @@ msgstr "Kopien der Form hinter der vollen Form, zunehmend transparent: Sie geben
 #: src/config/elements
 msgid "Gap livelli"
 msgstr "Ebenenabstand"
+
+#: src/config/elements
+msgid "Verso il basso"
+msgstr "Nach unten"
+
+#: src/config/elements
+msgid "Verso l'alto"
+msgstr "Nach oben"
+
+#: src/config/elements
+msgid "Scorrimento verticale"
+msgstr "Vertikaler Lauftext"
+
+#: src/config/elements
+msgid "Automatica = le voci si distribuiscono a turno fra le colonne."
+msgstr "Automatisch = die Einträge werden der Reihe nach auf die Spalten verteilt."
+
+#: src/config/elements
+msgid "Su tablet e telefono puoi mostrarne meno: le colonne in più si nascondono con le loro voci."
+msgstr "Auf Tablet und Smartphone kannst du weniger zeigen: Die zusätzlichen Spalten werden mit ihren Einträgen ausgeblendet."
+
+#: src/config/elements
+msgid "Il tempo in cui una colonna fa scorrere tutte le sue voci: più è lungo, più va piano."
+msgstr "Die Zeit, in der eine Spalte alle ihre Einträge durchlaufen lässt: Je länger, desto langsamer."
+
+#: src/config/elements
+msgid "Colonna 1"
+msgstr "Spalte 1"
+
+#: src/config/elements
+msgid "Colonna 2"
+msgstr "Spalte 2"
+
+#: src/config/elements
+msgid "Colonna 3"
+msgstr "Spalte 3"
+
+#: src/config/elements
+msgid "Colonna 4"
+msgstr "Spalte 4"
+
+#: src/config/elements
+msgid "Pausa al passaggio del mouse"
+msgstr "Pause beim Überfahren mit der Maus"
+
+#: src/config/elements
+msgid "Del testo o dell'icona di questa voce. Vuoto = quello di tutte le voci; con la sfumatura è il colore da cui parte."
+msgstr "Des Textes oder Icons dieses Eintrags. Leer = die Farbe aller Einträge; mit Verlauf ist es die Startfarbe."
+
+#: src/config/elements
+msgid "Il riquadro dietro questa icona. Vuoto = quello di tutte le icone."
+msgstr "Das Feld hinter diesem Icon. Leer = das aller Icons."
+
+#: src/config/elements
+msgid "Il testo sfuma dal suo colore a questo. Vuoto = il primario del tema."
+msgstr "Der Text verläuft von seiner Farbe zu dieser. Leer = die Primärfarbe des Themes."
+
+#: src/config/elements
+msgid "Sfondo icone"
+msgstr "Icon-Hintergrund"
+
+#: src/config/elements
+msgid "Il riquadro dietro le icone. Vuoto = nessun riquadro, solo l'icona."
+msgstr "Das Feld hinter den Icons. Leer = kein Feld, nur das Icon."
+
+#: src/config/elements
+msgid "Raggio riquadro"
+msgstr "Radius des Feldes"
+
+#: src/config/elements
+msgid "Raggio immagini"
+msgstr "Radius der Bilder"
+
+#: src/config/elements
+msgid "Sfumatura ai bordi"
+msgstr "Ausblenden an den Rändern"
+
+#: src/config/elements
+msgid "In alto e in basso le voci svaniscono nel fondo della sezione. 0 = bordi netti."
+msgstr "Oben und unten verblassen die Einträge im Hintergrund des Abschnitts. 0 = scharfe Ränder."
+
+#: src/config/elements
+msgid "Gap colonne"
+msgstr "Spaltenabstand"
+
+#: src/config/elements
+msgid "Aggiungi le voci da far scorrere"
+msgstr "Füge die Einträge hinzu, die laufen sollen"

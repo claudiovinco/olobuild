@@ -3,6 +3,13 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.822 - 2026-10-19 (nuovo)
+- Nuova tile «Scorrimento verticale»: colonne di immagini, icone e testi che scorrono senza fine, ognuna verso l’alto o verso il basso, coi separatori a puntini e i bordi che sfumano nella sezione. Da una a quattro colonne (anche meno su tablet e telefono), la durata del ciclo, la pausa al passaggio del mouse, i testi sfumati e le icone nei loro riquadri colorati.
+- Shape Divider: selezionato nel builder resta sul bordo della sezione (prima finiva dentro la sezione proprio mentre lo si modificava); le «Bolle» sono più tonde.
+
+## v1.4.821 - 2026-10-19 (novità)
+- Shape Divider: 17 forme nuove (28 in tutto) da scegliere dalle miniature, fino a tre livelli di profondità col loro colore, la sfumatura, i livelli che entrano animati quando il divisore arriva nello schermo, la forma «Dinamica» con onde che si muovono da sole e l’altezza per computer, tablet e telefono.
+
 ## v1.4.799 - 2026-10-15 (fix)
 - Titolo: la misura del titolo si può scegliere anche per tablet e telefono (selettore del dispositivo nel controllo «Titolo», fino a 320 px). Una scritta gigante, come «nido.» nel piè di pagina di Nido Coworking, sul telefono non esce più dallo schermo.
 - Elenco lavori: anche qui la misura del titolo per tablet e telefono; con titoli lunghi, come un programma di eventi, sul telefono non va più a capo ogni due parole.

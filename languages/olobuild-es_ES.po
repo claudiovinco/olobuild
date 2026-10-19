@@ -29608,3 +29608,91 @@ msgstr "Copias de la forma detrás de la sólida, cada vez más transparentes: d
 #: src/config/elements
 msgid "Gap livelli"
 msgstr "Espacio entre capas"
+
+#: src/config/elements
+msgid "Verso il basso"
+msgstr "Hacia abajo"
+
+#: src/config/elements
+msgid "Verso l'alto"
+msgstr "Hacia arriba"
+
+#: src/config/elements
+msgid "Scorrimento verticale"
+msgstr "Marquesina vertical"
+
+#: src/config/elements
+msgid "Automatica = le voci si distribuiscono a turno fra le colonne."
+msgstr "Automática = los elementos se reparten por turnos entre las columnas."
+
+#: src/config/elements
+msgid "Su tablet e telefono puoi mostrarne meno: le colonne in più si nascondono con le loro voci."
+msgstr "En tableta y móvil puedes mostrar menos: las columnas sobrantes se ocultan con sus elementos."
+
+#: src/config/elements
+msgid "Il tempo in cui una colonna fa scorrere tutte le sue voci: più è lungo, più va piano."
+msgstr "El tiempo que tarda una columna en pasar todos sus elementos: cuanto más largo, más despacio va."
+
+#: src/config/elements
+msgid "Colonna 1"
+msgstr "Columna 1"
+
+#: src/config/elements
+msgid "Colonna 2"
+msgstr "Columna 2"
+
+#: src/config/elements
+msgid "Colonna 3"
+msgstr "Columna 3"
+
+#: src/config/elements
+msgid "Colonna 4"
+msgstr "Columna 4"
+
+#: src/config/elements
+msgid "Pausa al passaggio del mouse"
+msgstr "Pausa al pasar el ratón"
+
+#: src/config/elements
+msgid "Del testo o dell'icona di questa voce. Vuoto = quello di tutte le voci; con la sfumatura è il colore da cui parte."
+msgstr "Del texto o del icono de este elemento. Vacío = el de todos los elementos; con el degradado es el color de partida."
+
+#: src/config/elements
+msgid "Il riquadro dietro questa icona. Vuoto = quello di tutte le icone."
+msgstr "El recuadro detrás de este icono. Vacío = el de todos los iconos."
+
+#: src/config/elements
+msgid "Il testo sfuma dal suo colore a questo. Vuoto = il primario del tema."
+msgstr "El texto pasa de su color a este. Vacío = el color primario del tema."
+
+#: src/config/elements
+msgid "Sfondo icone"
+msgstr "Fondo de los iconos"
+
+#: src/config/elements
+msgid "Il riquadro dietro le icone. Vuoto = nessun riquadro, solo l'icona."
+msgstr "El recuadro detrás de los iconos. Vacío = sin recuadro, solo el icono."
+
+#: src/config/elements
+msgid "Raggio riquadro"
+msgstr "Radio del recuadro"
+
+#: src/config/elements
+msgid "Raggio immagini"
+msgstr "Radio de las imágenes"
+
+#: src/config/elements
+msgid "Sfumatura ai bordi"
+msgstr "Desvanecido en los bordes"
+
+#: src/config/elements
+msgid "In alto e in basso le voci svaniscono nel fondo della sezione. 0 = bordi netti."
+msgstr "Arriba y abajo los elementos se desvanecen en el fondo de la sección. 0 = bordes nítidos."
+
+#: src/config/elements
+msgid "Gap colonne"
+msgstr "Espacio entre columnas"
+
+#: src/config/elements
+msgid "Aggiungi le voci da far scorrere"
+msgstr "Añade los elementos que se desplazan"

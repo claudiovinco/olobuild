@@ -48,6 +48,18 @@ body.olo-preview-mode,
               inset 0 0 0 9999px rgba(232, 98, 42, 0.06);
 }
 
+/* Shape Divider: la forma è in position:absolute rispetto alla SEZIONE e ne esce sopra o sotto.
+   Il position:relative della tile selezionata la riportava dentro il suo involucro (alto 0): proprio
+   mentre la si modificava spariva nella sezione e livelli, sfumatura e onde non si vedevano.
+   Resta ancorata alla sezione; il contorno della selezione lo prende la forma. */
+[data-olo-tile-type="shapedivider"].olo-builder-selected {
+  position: static;
+}
+[data-olo-tile-type="shapedivider"].olo-builder-selected > .olo-shapedivider {
+  outline: 2px solid var(--olo-ui-accent, #e8622a);
+  outline-offset: -2px;
+}
+
 /* Preview mode: no outlines */
 body.olo-preview-mode [data-olo-tile-id] {
   cursor: default;

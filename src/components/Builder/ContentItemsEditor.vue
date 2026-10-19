@@ -507,10 +507,13 @@ function stripHtml(html) {
 
 function getItemLabel(element) {
   if (!labelField.value) return props.itemLabel;
-  const val = element[labelField.value];
+  // `etichettaDa: 'testo|tipo'`: il primo campo non vuoto (una voce senza testo, come
+  // un'immagine o un separatore, si chiama col suo tipo invece di «Senza titolo»).
+  const chiave = String(labelField.value).split('|').find(k => element[k]) || '';
+  const val = chiave ? element[chiave] : '';
   if (!val) return t('Senza titolo');
   // Per campi select: mostra la label dell'opzione, non il value
-  const fieldDef = props.itemFields.find(f => f.key === labelField.value);
+  const fieldDef = props.itemFields.find(f => f.key === chiave);
   const opzioni = fieldDef ? (fieldDef.type === 'select' ? fieldDef.options : null) : props.etichettaOpzioni;
   if (Array.isArray(opzioni)) {
     const opt = opzioni.find(o => o.value === val);

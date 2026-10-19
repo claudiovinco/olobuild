@@ -29608,3 +29608,91 @@ msgstr "Des copies de la forme derrière la forme pleine, de plus en plus transp
 #: src/config/elements
 msgid "Gap livelli"
 msgstr "Écart entre calques"
+
+#: src/config/elements
+msgid "Verso il basso"
+msgstr "Vers le bas"
+
+#: src/config/elements
+msgid "Verso l'alto"
+msgstr "Vers le haut"
+
+#: src/config/elements
+msgid "Scorrimento verticale"
+msgstr "Défilement vertical"
+
+#: src/config/elements
+msgid "Automatica = le voci si distribuiscono a turno fra le colonne."
+msgstr "Automatique = les éléments se répartissent à tour de rôle entre les colonnes."
+
+#: src/config/elements
+msgid "Su tablet e telefono puoi mostrarne meno: le colonne in più si nascondono con le loro voci."
+msgstr "Sur tablette et téléphone, tu peux en afficher moins : les colonnes en trop sont masquées avec leurs éléments."
+
+#: src/config/elements
+msgid "Il tempo in cui una colonna fa scorrere tutte le sue voci: più è lungo, più va piano."
+msgstr "Le temps qu'une colonne met à faire défiler tous ses éléments : plus il est long, plus elle va lentement."
+
+#: src/config/elements
+msgid "Colonna 1"
+msgstr "Colonne 1"
+
+#: src/config/elements
+msgid "Colonna 2"
+msgstr "Colonne 2"
+
+#: src/config/elements
+msgid "Colonna 3"
+msgstr "Colonne 3"
+
+#: src/config/elements
+msgid "Colonna 4"
+msgstr "Colonne 4"
+
+#: src/config/elements
+msgid "Pausa al passaggio del mouse"
+msgstr "Pause au survol"
+
+#: src/config/elements
+msgid "Del testo o dell'icona di questa voce. Vuoto = quello di tutte le voci; con la sfumatura è il colore da cui parte."
+msgstr "Du texte ou de l'icône de cet élément. Vide = celle de tous les éléments ; avec le dégradé, c'est la couleur de départ."
+
+#: src/config/elements
+msgid "Il riquadro dietro questa icona. Vuoto = quello di tutte le icone."
+msgstr "Le cadre derrière cette icône. Vide = celui de toutes les icônes."
+
+#: src/config/elements
+msgid "Il testo sfuma dal suo colore a questo. Vuoto = il primario del tema."
+msgstr "Le texte passe de sa couleur à celle-ci. Vide = la couleur principale du thème."
+
+#: src/config/elements
+msgid "Sfondo icone"
+msgstr "Fond des icônes"
+
+#: src/config/elements
+msgid "Il riquadro dietro le icone. Vuoto = nessun riquadro, solo l'icona."
+msgstr "Le cadre derrière les icônes. Vide = pas de cadre, seulement l'icône."
+
+#: src/config/elements
+msgid "Raggio riquadro"
+msgstr "Rayon du cadre"
+
+#: src/config/elements
+msgid "Raggio immagini"
+msgstr "Rayon des images"
+
+#: src/config/elements
+msgid "Sfumatura ai bordi"
+msgstr "Fondu sur les bords"
+
+#: src/config/elements
+msgid "In alto e in basso le voci svaniscono nel fondo della sezione. 0 = bordi netti."
+msgstr "En haut et en bas, les éléments s'effacent dans le fond de la section. 0 = bords nets."
+
+#: src/config/elements
+msgid "Gap colonne"
+msgstr "Écart entre colonnes"
+
+#: src/config/elements
+msgid "Aggiungi le voci da far scorrere"
+msgstr "Ajoute les éléments à faire défiler"

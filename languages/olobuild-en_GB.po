@@ -21677,3 +21677,91 @@ msgstr "Copies of the shape behind the solid one, increasingly transparent: they
 #: src/config/elements
 msgid "Gap livelli"
 msgstr "Layer gap"
+
+#: src/config/elements
+msgid "Verso il basso"
+msgstr "Downwards"
+
+#: src/config/elements
+msgid "Verso l'alto"
+msgstr "Upwards"
+
+#: src/config/elements
+msgid "Scorrimento verticale"
+msgstr "Vertical marquee"
+
+#: src/config/elements
+msgid "Automatica = le voci si distribuiscono a turno fra le colonne."
+msgstr "Automatic = the items are shared out among the columns in turn."
+
+#: src/config/elements
+msgid "Su tablet e telefono puoi mostrarne meno: le colonne in più si nascondono con le loro voci."
+msgstr "On tablets and phones you can show fewer: the extra columns are hidden along with their items."
+
+#: src/config/elements
+msgid "Il tempo in cui una colonna fa scorrere tutte le sue voci: più è lungo, più va piano."
+msgstr "The time a column takes to scroll through all its items: the longer it is, the slower it goes."
+
+#: src/config/elements
+msgid "Colonna 1"
+msgstr "Column 1"
+
+#: src/config/elements
+msgid "Colonna 2"
+msgstr "Column 2"
+
+#: src/config/elements
+msgid "Colonna 3"
+msgstr "Column 3"
+
+#: src/config/elements
+msgid "Colonna 4"
+msgstr "Column 4"
+
+#: src/config/elements
+msgid "Pausa al passaggio del mouse"
+msgstr "Pause on hover"
+
+#: src/config/elements
+msgid "Del testo o dell'icona di questa voce. Vuoto = quello di tutte le voci; con la sfumatura è il colore da cui parte."
+msgstr "Of this item's text or icon. Empty = the one for all items; with the gradient, it is the colour it starts from."
+
+#: src/config/elements
+msgid "Il riquadro dietro questa icona. Vuoto = quello di tutte le icone."
+msgstr "The box behind this icon. Empty = the one for all icons."
+
+#: src/config/elements
+msgid "Il testo sfuma dal suo colore a questo. Vuoto = il primario del tema."
+msgstr "The text fades from its colour to this one. Empty = the theme's primary colour."
+
+#: src/config/elements
+msgid "Sfondo icone"
+msgstr "Icon background"
+
+#: src/config/elements
+msgid "Il riquadro dietro le icone. Vuoto = nessun riquadro, solo l'icona."
+msgstr "The box behind the icons. Empty = no box, just the icon."
+
+#: src/config/elements
+msgid "Raggio riquadro"
+msgstr "Box radius"
+
+#: src/config/elements
+msgid "Raggio immagini"
+msgstr "Image radius"
+
+#: src/config/elements
+msgid "Sfumatura ai bordi"
+msgstr "Edge fade"
+
+#: src/config/elements
+msgid "In alto e in basso le voci svaniscono nel fondo della sezione. 0 = bordi netti."
+msgstr "At the top and bottom the items fade into the section background. 0 = sharp edges."
+
+#: src/config/elements
+msgid "Gap colonne"
+msgstr "Column gap"
+
+#: src/config/elements
+msgid "Aggiungi le voci da far scorrere"
+msgstr "Add the items to scroll"
