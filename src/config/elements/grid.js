@@ -55,6 +55,8 @@ export default {
     content_color: '',
     image_animation: 'none',
     image_animation_speed: '3',
+    image_position: 'top',
+    image_width: '40',
     ...textEffectsDefaults,
     text_effect_target: 'title',
   },
@@ -182,6 +184,11 @@ export default {
     { key: 'card_border_color', label: t('Colore bordo card'), type: 'color' },
 
     { type: 'separator', label: t('Immagine — stile') },
+    { key: 'image_width', label: t('Larghezza immagine'), type: 'range', min: 15, max: 70, step: 1, unit: '%',
+      condition: [
+        { field: 'image_position', op: 'in', value: ['left', 'right'] },
+        { field: 'overlay_text', op: 'neq', value: true },
+      ] },
     { key: 'image_height', label: t('Altezza immagine'), type: 'range', min: 0, max: 500, step: 10,
       description: t('0 = automatica') },
     { key: 'image_animation_speed', label: t('Velocità animazione'), type: 'range', min: 2, max: 20, step: 1,
@@ -253,6 +260,13 @@ export default {
       { value: 'large', label: t('Grande') },
     ]},
     { key: 'equal_height', label: t('Altezza uguale'), type: 'toggle' },
+    // Foto sopra il testo (la resa di sempre) o a lato: la card diventa una riga. Con il testo
+    // sulla foto la card è solo foto e la posizione non agisce.
+    { key: 'image_position', label: t('Posizione immagine'), type: 'select', options: [
+      { value: 'top', label: t('Sopra') },
+      { value: 'left', label: t('Sinistra') },
+      { value: 'right', label: t('Destra') },
+    ], condition: { field: 'overlay_text', op: 'neq', value: true } },
     { key: 'overlay_position', label: t('Posizione testo'), type: 'select', options: [
       { value: 'bottom', label: t('In basso') },
       { value: 'center', label: t('Centrato') },

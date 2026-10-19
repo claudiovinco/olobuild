@@ -43,6 +43,8 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
         'content_color'      => '',
         'image_animation'    => 'none',
         'image_animation_speed' => '3',
+        'image_position'     => 'top',
+        'image_width'        => '40',
     ];
 
     public function get_controls() {
@@ -104,6 +106,10 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
         }
         $has_tags = ! empty( $tags );
 
+        // Immagine a lato del testo (Stile → Disposizione → Posizione immagine). Con il testo
+        // sulla foto la card È la foto: la posizione non vale e resta la resa di sempre.
+        $img_lato = ( in_array( $s['image_position'] ?? 'top', [ 'left', 'right' ], true ) && empty( $s['overlay_text'] ) ) ? $s['image_position'] : '';
+
         // Build scoped CSS
         $scoped_css = $this->build_scoped_css( $uid, $s );
 
@@ -161,6 +167,9 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
                     }
                     $tag_class_str = implode( ' ', $tag_classes );
 
+                    // Foto a lato del testo: solo per le card che una foto ce l'hanno.
+                    $lato_cls = ( $img_lato && ! empty( $item['image'] ) ) ? ' olo-grid-card--side olo-grid-card--img-' . $img_lato : '';
+
                     $has_link   = ! empty( $item['link'] );
                     $link_tag   = $has_link ? 'a' : 'div';
                     $link_attrs = '';
@@ -169,7 +178,8 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
                         if ( ! empty( $item['link_target'] ) ) {
                             $link_attrs .= ' target="_blank" rel="noopener noreferrer"';
                         }
-                        $link_attrs .= ' style="text-decoration:none;color:inherit;display:block;"';
+                        // In linea vince su ogni regola: la card con la foto a lato resta una riga.
+                        $link_attrs .= ' style="text-decoration:none;color:inherit;display:' . ( $lato_cls ? 'flex' : 'block' ) . ';"';
                     }
 
                     $card_hover = $s['card_hover'] ?? 'none';
@@ -177,14 +187,20 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
                     // Testo sulla foto: la card È la foto, quindi la foto prende il raggio su tutti
                     // e quattro gli angoli (vedi .olo-grid-card--ov in build_scoped_css()).
                     $ov_cls = ( ! empty( $s['overlay_text'] ) && ! empty( $item['image'] ) ) ? ' olo-grid-card--ov' : '';
+
+                    // Badge: sulla card con la foto a lato sta nel testo, sopra il titolo (in alto
+                    // a destra della card copriva il titolo).
+                    $badge_html = '';
+                    if ( ! empty( $item['badge'] ) ) {
+                        $bc = ! empty( $item['badge_color'] ) ? esc_attr( $item['badge_color'] ) : 'var(--olo-color-primary, #e1474f)';
+                        $badge_html = '<span class="olo-grid-badge" style="background:' . $bc . ';">' . esc_html( $item['badge'] ) . '</span>';
+                    }
                 ?>
                 <div<?php if ( $tag_class_str ) : ?> class="<?php echo esc_attr( $tag_class_str ); ?>"<?php endif; ?>>
-                    <<?php echo $link_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed a/div tag from ternary; $link_attrs is built above from esc_url() and fixed literals ?> class="olo-grid-card olo-grid-card--<?php echo esc_attr( $card_style ); ?><?php echo $card_hover !== 'none' ? ' olo-grid-hover--' . esc_attr( $card_hover ) : ''; ?><?php echo esc_attr( $ov_cls ); ?>"<?php echo $link_attrs; ?>>
+                    <<?php echo $link_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed a/div tag from ternary; $link_attrs is built above from esc_url() and fixed literals ?> class="olo-grid-card olo-grid-card--<?php echo esc_attr( $card_style ); ?><?php echo $card_hover !== 'none' ? ' olo-grid-hover--' . esc_attr( $card_hover ) : ''; ?><?php echo esc_attr( $ov_cls . $lato_cls ); ?>"<?php echo $link_attrs; ?>>
                         <?php
-                        // Badge
-                        if ( ! empty( $item['badge'] ) ) {
-                            $bc = ! empty( $item['badge_color'] ) ? esc_attr( $item['badge_color'] ) : 'var(--olo-color-primary, #e1474f)';
-                            echo '<span class="olo-grid-badge" style="background:' . $bc . ';">' . esc_html( $item['badge'] ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $bc is esc_attr()'d above or the fixed var(--olo-color-primary) literal
+                        if ( ! $lato_cls ) {
+                            echo $badge_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above: $bc is esc_attr()'d or the fixed var(--olo-color-primary) literal, text esc_html()'d
                         }
 
                         // Image
@@ -217,6 +233,9 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
                         // Content area (skip if overlay_text + has image)
                         if ( empty( $s['overlay_text'] ) || empty( $item['image'] ) ) {
                             echo '<div class="olo-grid-body">';
+                            if ( $lato_cls ) {
+                                echo $badge_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above: $bc is esc_attr()'d or the fixed var(--olo-color-primary) literal, text esc_html()'d
+                            }
                             // L'icona è un NOME del selettore (UIkit, Lucide, «custom:»): usato come
                             // classe CSS non disegnava niente. Un valore con più parole è una classe
                             // di un font di icone scritta a mano: quella resta com'era.
@@ -508,6 +527,20 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
         if ( ! empty( $s['equal_height'] ) ) {
             $css .= $sel . ' .olo-grid-card{display:flex;flex-direction:column;height:100%;}';
             $css .= $sel . ' .olo-grid-body{flex:1;}';
+        }
+
+        // Foto a lato del testo: la card diventa una riga (DOPO «Altezza uguale», che la mette
+        // in colonna), la foto prende la larghezza scelta in % della card e almeno l'altezza del
+        // testo; i suoi angoli sono quelli della card dal suo lato. Sulla card «Minimale», senza
+        // fondo, la foto è una miniatura a sé e prende tutti e quattro gli angoli.
+        $img_lato = $s['image_position'] ?? 'top';
+        if ( in_array( $img_lato, [ 'left', 'right' ], true ) && empty( $s['overlay_text'] ) ) {
+            $larghezza = max( 15, min( 70, absint( $s['image_width'] ?? 40 ) ?: 40 ) );
+            $css .= $sel . ' .olo-grid-card--side{display:flex;flex-direction:' . ( 'left' === $img_lato ? 'row' : 'row-reverse' ) . ';align-items:center;}';
+            $css .= $sel . ' .olo-grid-card--side .olo-grid-media{flex:0 0 ' . $larghezza . '%;max-width:' . $larghezza . '%;align-self:stretch;border-radius:0;border-top-' . $img_lato . '-radius:inherit;border-bottom-' . $img_lato . '-radius:inherit;}';
+            $css .= $sel . ' .olo-grid-card--minimal.olo-grid-card--side .olo-grid-media{border-radius:inherit;}';
+            $css .= $sel . ' .olo-grid-card--side .olo-grid-body{flex:1 1 auto;min-width:0;padding:' . $padding . ';}';
+            $css .= $sel . ' .olo-grid-card--side .olo-grid-badge{position:static;display:inline-block;margin:0 0 .5em;}';
         }
 
         return $css;

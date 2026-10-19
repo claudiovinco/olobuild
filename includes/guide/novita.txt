@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.832 - 2026-10-19 (miglioria)
+- Griglia: nuova «Posizione immagine» (Stile → Disposizione) — Sopra, com’era, oppure a Sinistra o a Destra del testo: la card diventa una riga con la foto accanto a titolo e testo, tutta cliccabile. La «Larghezza immagine» (in % della card) sta in Immagine — stile; il badge passa sopra il titolo, e sulla card «Minimale» la foto è una miniatura con tutti gli angoli arrotondati.
+
 ## v1.4.831 - 2026-10-19 (miglioria)
 - Grafico: c’è il «Raggio» per arrotondare gli angoli del riquadro, sotto il Bordo, anche in hover (Normale / Hover). Il bordo segue gli angoli con ogni effetto: con «Gradiente statico» e «Gradiente rotante» il gradiente diventa un anello arrotondato, prima gli angoli restavano vivi.
 
