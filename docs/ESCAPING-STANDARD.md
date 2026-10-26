@@ -1,7 +1,7 @@
 # BRIEF — Campagna hardening EscapeOutput (wordpress.org compliance)
 
 Sei incaricato di sistemare gli errori PHPCS `WordPress.Security.EscapeOutput.OutputNotEscaped`
-nei file PHP assegnati del plugin WordPress Olobuild (page builder, `D:\TECNICA\olobuild`).
+nei file PHP assegnati del plugin WordPress Olobuild (page builder, `T:\TECNICA\olobuild`).
 
 ## OBIETTIVO
 Ogni `echo`/`print` di variabile deve risultare: (a) escapato con una funzione `esc_*`/cast

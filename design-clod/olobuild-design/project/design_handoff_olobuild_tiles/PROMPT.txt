@@ -1,4 +1,4 @@
-Leggi D:\TECNICA\olobuild\regoletiles1\START_HERE.md e segui il protocollo per intero.
+Leggi T:\TECNICA\olobuild\regoletiles1\START_HERE.md e segui il protocollo per intero.
 
 Fai prima il setup delle fondamenta (§1), poi enumera TUTTE le tile in
 src/components/Tiles/*.vue e crea il tracker TILE_PROGRESS.md (§2). Lavora per categoria

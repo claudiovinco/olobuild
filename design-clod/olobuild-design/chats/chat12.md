@@ -1201,7 +1201,7 @@ _[tool: present_fs_item_for_download]_
 
 Ecco lo zip **`OLOthemes_reference`** ☝️ — bundle auto-navigabile offline: `OLOthemes - Gallery.html` (indice con filtri) + i 50 temi (home + pagina interna) + `olothemes/` (un CSS per tema + `fx.js`/`theme.js`) + `themes/` (gallery) + `previews/` + un `README.md`.
 
-**Sul tuo dubbio "basta un 'guarda qui'?"** — no, e qui sta il punto: Claude Code lavora sul repo `claudiovinco/olobuild` e **non vede questo progetto di design**, quindi non posso puntarlo a un percorso che lui non ha. La via giusta è esattamente questa: scompatti lo zip dentro il workspace del repo, es. `D:\TECNICA\olobuild\regoletiles1\OLOthemes_reference\`, e nel prompt gli dai la destinazione fissa:
+**Sul tuo dubbio "basta un 'guarda qui'?"** — no, e qui sta il punto: Claude Code lavora sul repo `claudiovinco/olobuild` e **non vede questo progetto di design**, quindi non posso puntarlo a un percorso che lui non ha. La via giusta è esattamente questa: scompatti lo zip dentro il workspace del repo, es. `T:\TECNICA\olobuild\regoletiles1\OLOthemes_reference\`, e nel prompt gli dai la destinazione fissa:
 
 > Reference visivo dei temi: apri `regoletiles1/OLOthemes_reference/OLOthemes - Gallery.html` e i singoli `OLOtheme - *.html` / `olothemes/<tema>.css` quando ti serve un metro di qualità per template e tile.
 

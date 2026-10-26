@@ -1,6 +1,6 @@
 # ⛳ START HERE — Istruzioni operative per Claude Code
 
-Questo file vive in `D:\TECNICA\olobuild\regoletiles1\` ed è il **punto di ingresso
+Questo file vive in `T:\TECNICA\olobuild\regoletiles1\` ed è il **punto di ingresso
 unico**. Tutti i file citati qui sotto sono nella stessa cartella. Leggilo per intero,
 poi esegui il protocollo. Obiettivo: rendere **tutte** le tile di OLObuild **belle e coerenti** come
 una sola famiglia, applicando le regole a **ognuna delle 240**, senza eccezioni.

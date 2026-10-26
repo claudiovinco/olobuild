@@ -4,14 +4,14 @@ Audit completato. Ecco il report.
 
 # AUDIT TILE vs blueprint "Clod — Evoluzione v2"
 
-Blueprint: `D:\TECNICA\olobuild\design-clod\olobuild-design\project\Clod - Evoluzione (supertemplate) v2.html` + `clod/clod.css` + `clod/evo-fx.css` + `clod/evo-fx.js` + `clod/olomap.js`.
+Blueprint: `T:\TECNICA\olobuild\design-clod\olobuild-design\project\Clod - Evoluzione (supertemplate) v2.html` + `clod/clod.css` + `clod/evo-fx.css` + `clod/evo-fx.js` + `clod/olomap.js`.
 Sezioni: NAV (timecode+hairline) · HERO (meta-row + "Visual/STUDIO" outline-fill + olomap tilt 3D) · STRIP marquee · MANIFESTO (scrub parole) · SERVIZI (lista 01-05 + monitor cursore) · REEL Lavori (drag/rotella/snap/REC/skew) · R&S (4 demo-card temi) · CONTATTO (mail display) · PARTNER · FOOTER.
 
 ---
 
 ## 1. `marquee.js` — strip servizi → **USABILE COSÌ** (riserva micro)
 
-File: `D:\TECNICA\olobuild\src\config\elements\marquee.js` + `includes\tiles\class-marquee-tile.php`.
+File: `T:\TECNICA\olobuild\src\config\elements\marquee.js` + `includes\tiles\class-marquee-tile.php`.
 Settings rilevanti già presenti:
 - `text_items` (stringa) + `separator` con **`separator_color` + `separator_size`** → il puntino lime si ottiene con `separator: '●'`, `separator_color: lime` (PHP riga 111-114, 225-227: `.olo-mq-sep { color: …; font-size: …px }`)
 - `font_family` (type `font-family` → Big Shoulders), `font_size` (max 48), `font_weight`, `text_transform: uppercase`, `height`, `full_width`, `bg_color`, `border_top`/`border_bottom`/`border_color` (il blueprint ha `border-block:1px`)

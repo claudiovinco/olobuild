@@ -9,7 +9,7 @@ import os
 import re
 import sys
 
-LANG_DIR = r"D:\TECNICA\olo-calendar\languages"
+LANG_DIR = r"T:\TECNICA\olo-calendar\languages"
 
 # Lingue target (suffisso file = chiave dict)
 LANGS = [

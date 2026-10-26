@@ -6,7 +6,7 @@ Report completo. Tutti i pattern verificati sul codice reale.
 
 ## 1. TILE-PERFETTA.md — sintesi sezioni chiave
 
-File: `D:\TECNICA\olobuild\docs\TILE-PERFETTA.md`
+File: `T:\TECNICA\olobuild\docs\TILE-PERFETTA.md`
 
 - **Anatomia (§0)**: una tile vive in 5 file — `src/config/elements/<type>.js` (schema inspector), `src/components/Tiles/<Name>Tile.vue` (anteprima WYSIWYG), `includes/tiles/class-<type>-tile.php` (render autoritativo), `BuilderInspector.vue` → `TILE_PRESETS` (preset apply-once), opzionale `assets/css/frontend.css`.
 - **Regola n.1 di stabilità (§2)**: ogni chiave usata nel render PHP DEVE avere default identico in JS e in PHP `$defaults` (`wp_parse_args`). Gotcha noto: `text_effect_target` default `'heading'` va overridato se il dropdown espone altri target.
@@ -18,7 +18,7 @@ File: `D:\TECNICA\olobuild\docs\TILE-PERFETTA.md`
 
 ## 2. Tile di riferimento: chathero (3 file)
 
-### 2a. PHP — `D:\TECNICA\olobuild\includes\tiles\class-chathero-tile.php`
+### 2a. PHP — `T:\TECNICA\olobuild\includes\tiles\class-chathero-tile.php`
 
 `class Olo_ChatHero_Tile extends Olo_Tile_Base`. Il metodo `render($settings, $style)` ritorna una stringa bufferizzata composta da: **`<style>` scoped + markup + `<style>` finale per il kit bordi**. Tutto inline, niente enqueue.
 
@@ -61,7 +61,7 @@ $hover = $this->build_hover_css( $s, [
 // → ['hover_decls' => "...", 'transitions' => [...]] da comporre in ".{$uid}:hover{...}"
 ```
 
-### 2b. Vue — `D:\TECNICA\olobuild\src\components\Tiles\ChatHeroTile.vue`
+### 2b. Vue — `T:\TECNICA\olobuild\src\components\Tiles\ChatHeroTile.vue`
 
 Replica **byte-identica** del render PHP, tutta a computed style inline:
 
@@ -77,7 +77,7 @@ const rootStyle = computed(() => ({ ..., '--cht-accent': accent.value }));  // C
 - Le funzioni helper del PHP (shadowDecl, borderDecl, chatRadius) sono **duplicate in JS con identica logica** incluse le "stringhe byte-identiche" per i default (`'0 28px'`, `'16px 16px 0 0'`) — parità Vue↔PHP garantita anche sui default.
 - Le tile più recenti (es. `StepTimelineTile.vue:68`) usano invece i token centralizzati: `import { resolveColor, resolveFontFamily, TOKENS, SHADOW } from '@/composables/oloTileDefaults'` con `resolveColor(s.value.title_color, TOKENS.text)` e `resolveFontFamily(v, FONT_LEGACY) || SERIF`. Helper in `src/composables/oloTileDefaults.js` (`resolveColor` riga 110 = `userValue || token`; `resolveFontFamily` riga 138, gemello JS di `Olo_Tile_Base::resolve_font_family`). **Per le tile nuove Clod usare questo pattern**, non la duplicazione di stack chathero.
 
-### 2c. Registrazione PHP — le 2 righe esatte in `D:\TECNICA\olobuild\includes\class-olo-builder.php`
+### 2c. Registrazione PHP — le 2 righe esatte in `T:\TECNICA\olobuild\includes\class-olo-builder.php`
 
 ```php
 // riga 3026
@@ -89,7 +89,7 @@ NON è auto-discovery lato PHP (il playbook vault sbaglia su questo) — 2 righe
 
 ## 2-bis. Runtime JS frontend — chathero NON ne ha; il pattern di riferimento è smearhero
 
-Chathero e glowgallery sono dichiaratamente "Nessun JS (pure CSS)". Per le tile Clod che richiedono animazioni JS (infografica SVG animata, REC overlay con blink/timer), il pattern reale è in `D:\TECNICA\olobuild\includes\tiles\class-smearhero-tile.php` (righe 149-181):
+Chathero e glowgallery sono dichiaratamente "Nessun JS (pure CSS)". Per le tile Clod che richiedono animazioni JS (infografica SVG animata, REC overlay con blink/timer), il pattern reale è in `T:\TECNICA\olobuild\includes\tiles\class-smearhero-tile.php` (righe 149-181):
 
 ```php
 <?php if ( $smear ) : ?>
@@ -128,17 +128,17 @@ private function print_shared_css() {
 
 ## 3. glowgallery PHP — generazione SVG/canvas animato
 
-`D:\TECNICA\olobuild\includes\tiles\class-glowgallery-tile.php`: **NON c'è generazione SVG/canvas** — il glow è pure-CSS (`radial-gradient` + `filter:blur` su uno `<span class="evh-glow">`), il placeholder media è `repeating-linear-gradient`. Gli unici SVG nelle tile hero sono micro-icone inline statiche (freccia CTA in chathero riga 201). Per pattern SVG generati in PHP l'unico precedente è `Olo_CSS_Builder::build_pattern_svg` (`includes/class-css-builder.php`). **Conclusione operativa per l'hero Clod con infografica SVG animata**: emettere l'SVG inline nel markup della tile (con `esc_attr` su ogni valore interpolato), animarlo con keyframes CSS scoped a `$uid` (dashoffset, transform) e/o script per-istanza stile smearhero; niente da riusare da glowgallery oltre allo scheletro generale (che è identico a chathero).
+`T:\TECNICA\olobuild\includes\tiles\class-glowgallery-tile.php`: **NON c'è generazione SVG/canvas** — il glow è pure-CSS (`radial-gradient` + `filter:blur` su uno `<span class="evh-glow">`), il placeholder media è `repeating-linear-gradient`. Gli unici SVG nelle tile hero sono micro-icone inline statiche (freccia CTA in chathero riga 201). Per pattern SVG generati in PHP l'unico precedente è `Olo_CSS_Builder::build_pattern_svg` (`includes/class-css-builder.php`). **Conclusione operativa per l'hero Clod con infografica SVG animata**: emettere l'SVG inline nel markup della tile (con `esc_attr` su ogni valore interpolato), animarlo con keyframes CSS scoped a `$uid` (dashoffset, transform) e/o script per-istanza stile smearhero; niente da riusare da glowgallery oltre allo scheletro generale (che è identico a chathero).
 
 ## 4. Auto-discovery: config SÌ, Vue NO, PHP NO
 
-- **Config JS — auto-discovery confermato**: `D:\TECNICA\olobuild\src\config\elementRegistry.js:6`:
+- **Config JS — auto-discovery confermato**: `T:\TECNICA\olobuild\src\config\elementRegistry.js:6`:
 ```js
 const modules = import.meta.glob('./elements/*.js', { eager: true });
 // salta _shared.js, indicizza per def.type
 ```
   Basta creare `src/config/elements/<type>.js` con `export default { type, name, icon, category, defaults, fields, styleFields }`.
-- **Componenti Vue — registrazione MANUALE** in `D:\TECNICA\olobuild\src\components\Tiles\TileBase.vue`: import esplicito + voce nella mappa `tileComponents` (riga 295), chiave = il `type` del config, fallback `ExternalTilePlaceholder` se assente:
+- **Componenti Vue — registrazione MANUALE** in `T:\TECNICA\olobuild\src\components\Tiles\TileBase.vue`: import esplicito + voce nella mappa `tileComponents` (riga 295), chiave = il `type` del config, fallback `ExternalTilePlaceholder` se assente:
 ```js
 import ChatHeroTile from './ChatHeroTile.vue';      // riga 41
 const tileComponents = { ..., chathero: ChatHeroTile, ... };   // riga 328
@@ -172,7 +172,7 @@ node node_modules/vite/bin/vite.js build        # npx NON funziona su questo sis
 ```
 (Il bundle `theme-picker` con `--config vite.picker.config.js` serve SOLO se si tocca `src/theme-picker/` — non è il caso delle tile.)
 
-**Le 10 regole regoletiles1** (`D:\TECNICA\olobuild\regoletiles1\DESIGN_LANGUAGE.md`), sintesi:
+**Le 10 regole regoletiles1** (`T:\TECNICA\olobuild\regoletiles1\DESIGN_LANGUAGE.md`), sintesi:
 1. **Colore solo via token**: ruoli cliente via `resolveColor(userVal, GLOBAL.x)`, neutri/superfici da SYSTEM, `contrastOn()` per il testo su primario — zero hex grezzi nei componenti.
 2. **Spaziatura scala 8pt** (`SPACE`): padding per taglia (12 / 16-24 / 32-48), gap 8/12/16, mai 13px/7px.
 3. **Raggio scala `RADIUS`** (sm 6 / md 10 / lg 14 / pill): UNA tile = UN raggio coerente ovunque.

@@ -4,7 +4,7 @@ Gestisce i tile PHP speciali rimasti senza border system.
 """
 import re, os
 
-TILES_DIR = r'D:\TECNICA\olobuild\includes\tiles'
+TILES_DIR = r'T:\TECNICA\olobuild\includes\tiles'
 
 PHP_BORDER_DEFAULTS = """\
         'border'                  => [],

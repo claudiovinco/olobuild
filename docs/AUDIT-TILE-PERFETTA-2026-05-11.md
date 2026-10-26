@@ -96,7 +96,7 @@ Tile esterni booking (es. `Olo_Ac_Tile_Base::common_defaults()`) usano `hover_bo
 ### 2.4 `border_radius` scalare invece di `{ tl, tr, br, bl }`
 
 - [`audio.js:21`](../src/config/elements/audio.js#L21): `border_radius: '8'` (scalar) ma il field NON è esposto in `fields[]` → setting morto.
-- [`olo-booking class-ac-tile-base.php:62`](D:/TECNICA/olo-booking/includes/modules/accommodation/tiles/class-ac-tile-base.php): `'border_radius' => '12px'` come scalar.
+- [`olo-booking class-ac-tile-base.php:62`](T:/TECNICA/olo-booking/includes/modules/accommodation/tiles/class-ac-tile-base.php): `'border_radius' => '12px'` come scalar.
 
 ### 2.5 Regex HTML inline rotta `/^\s*</`
 
@@ -178,12 +178,12 @@ Solo **20 tile su 152** lo usano. Significa che molti border-radius sono ancora 
 **0 / 84 tile booking** hanno un config JS in olobuild `src/config/elements/`. La configurazione lato Vue per i tile booking è assente.
 
 **Issue specifici accommodation** (modulo più maturo):
-- [`class-ac-tile-base.php`](D:/TECNICA/olo-booking/includes/modules/accommodation/tiles/class-ac-tile-base.php) `common_defaults()` espone `border_radius: '12px'` scalar, `hover_border_radius` / `hover_border_width` / `hover_border_color` / `hover_lift` come field separati (anti-pattern §8)
+- [`class-ac-tile-base.php`](T:/TECNICA/olo-booking/includes/modules/accommodation/tiles/class-ac-tile-base.php) `common_defaults()` espone `border_radius: '12px'` scalar, `hover_border_radius` / `hover_border_width` / `hover_border_color` / `hover_lift` come field separati (anti-pattern §8)
 - Nessun preset stilistico (12+1)
 - Nessun typography_preset
 - Stringhe `name` non internazionalizzate (`'Ac — Hero'` invece di `__('Ac — Hero', 'olo-booking')`)
 
-**Issue specifico appointments** ([`class-appointmentform-tile.php`](D:/TECNICA/olo-booking/includes/modules/appointments/tiles/class-appointmentform-tile.php)):
+**Issue specifico appointments** ([`class-appointmentform-tile.php`](T:/TECNICA/olo-booking/includes/modules/appointments/tiles/class-appointmentform-tile.php)):
 - Solo 1 default (`service_id`)
 - Nessun border, padding, color, font
 - Nessun helper PHP
@@ -278,11 +278,11 @@ Esempio: [`OloRoomBookingTile.vue`](../src/components/Tiles/OloRoomBookingTile.v
 
 ## 8. File scansionati
 
-- `D:/TECNICA/olobuild/includes/tiles/class-*-tile.php` (152 file)
-- `D:/TECNICA/olobuild/src/config/elements/*.js` (163 file + 2 shared)
-- `D:/TECNICA/olobuild/src/components/Tiles/*Tile.vue` (232 file)
-- `D:/TECNICA/olobuild/src/components/Builder/BuilderInspector.vue` (mappa `TILE_PRESETS`)
-- `D:/TECNICA/olo-booking/includes/modules/{accommodation,appointments,events,real-estate,rentals,restaurants}/tiles/class-*-tile.php` (84 file)
+- `T:/TECNICA/olobuild/includes/tiles/class-*-tile.php` (152 file)
+- `T:/TECNICA/olobuild/src/config/elements/*.js` (163 file + 2 shared)
+- `T:/TECNICA/olobuild/src/components/Tiles/*Tile.vue` (232 file)
+- `T:/TECNICA/olobuild/src/components/Builder/BuilderInspector.vue` (mappa `TILE_PRESETS`)
+- `T:/TECNICA/olo-booking/includes/modules/{accommodation,appointments,events,real-estate,rentals,restaurants}/tiles/class-*-tile.php` (84 file)
 
 Metodologia: scansione programmatica via grep/regex + ispezione manuale a campione su tile rappresentativi di ogni categoria (audio, button, content, querylo­op, flipcard, achero, appointmentform, OloRoomBooking).
 

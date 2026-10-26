@@ -55,7 +55,7 @@ Quando tocchi una qualsiasi tile — sia il render **Vue** (`src/components/Tile
 sia il render **PHP frontend** (`includes/tiles/`), sia il config inspector
 (`src/config/elements/*.js`) — applica le regole del pacchetto:
 
-- **Entry point / protocollo completo**: `D:\TECNICA\olobuild\regoletiles1\START_HERE.md`
+- **Entry point / protocollo completo**: `T:\TECNICA\olobuild\regoletiles1\START_HERE.md`
 - **Le 10 regole**: `…\regoletiles1\DESIGN_LANGUAGE.md`
 - **Checklist per tile + categorie**: `…\regoletiles1\TILE_AUDIT_CHECKLIST.md`
 - **Token e colori globali del cliente**: `…\regoletiles1\TOKEN_MAPPING.md`
@@ -85,7 +85,7 @@ Regole sempre attive (sintesi):
 
 Questo plugin fa parte dell'ecosistema **OLOtheme**. Standard tecnici cross-prodotto, decisioni architetturali (ADR), playbook operativi e info sui prodotti fratelli (OLObooking, OLOlang, OLOtour, OLOtutor, OLOcalendar) sono documentati nel vault Obsidian:
 
-- **Path**: `D:\TECNICA\OLOtheme-Vault\`
+- **Path**: `T:\TECNICA\OLOtheme-Vault\`
 - **Entry point**: `00 - Home.md` (MOC dashboard navigabile)
 - **Setup**: 2026-05-02
 

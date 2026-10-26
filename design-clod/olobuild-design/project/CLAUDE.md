@@ -9,7 +9,7 @@ Rendere i controlli dell'inspector e le **240 tile** di OLObuild **belli e coere
 consegnare a Claude Code un pacchetto operativo che applichi le regole a tutto.
 
 ## Pacchetto handoff (cartella `design_handoff_olobuild_tiles/`)
-È la fonte di verità, scaricato dall'utente in `D:\TECNICA\olobuild\regoletiles1\`.
+È la fonte di verità, scaricato dall'utente in `T:\TECNICA\olobuild\regoletiles1\`.
 - `START_HERE.md` — protocollo operativo per Claude Code (enumerare TUTTE le tile, tracker
   `TILE_PROGRESS.md`, checklist per tile, Definition of Done, guardrail). + `PROMPT.txt`.
 - `DESIGN_LANGUAGE.md` — 10 regole "bello & coerente". Include la nota **CHROME vs CONTENUTO**.

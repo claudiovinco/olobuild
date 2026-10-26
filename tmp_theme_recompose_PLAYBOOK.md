@@ -81,7 +81,7 @@ K.emit({ slug, name, tags, description, colors:{...}, css_disp, css_sans, headin
 1. Leggi il CSS del tema (`OLOthemes_reference/olothemes/<css>`): estrai `:root` (palette) + `@import` (font).
 2. Leggi l'HTML home del tema: estrai ordine sezioni, `data-olo-tile`, e **tutta la copy**.
 3. Scrivi `tmp_gen_<slug>.cjs` (copia capital-row, adatta palette/font/sezioni/copy).
-4. Esegui: `node tmp_gen_<slug>.cjs` dalla root `D:/TECNICA/olobuild`. Deve stampare `text-block 0 ✓`.
+4. Esegui: `node tmp_gen_<slug>.cjs` dalla root `T:/TECNICA/olobuild`. Deve stampare `text-block 0 ✓`.
    Se stampa text-block > 0, correggi (hai usato `text-block`: sostituiscilo con un tile vero).
 5. **Gotcha .cjs**: apostrofi dentro stringhe single-quote rompono → usa **backtick** per stringhe
    con apostrofi/virgolette curve. Mai `&&` dentro stringhe di contenuto.

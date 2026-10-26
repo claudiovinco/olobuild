@@ -34,7 +34,7 @@ previews/                       ← anteprime jpg usate dalle card della gallery
 ## Nota per "guarda qui" (uso con Claude Code)
 Claude Code lavora sul repo `claudiovinco/olobuild` e NON vede il progetto di design.
 Per dargli una destinazione stabile da consultare: metti questa cartella accanto al pacchetto
-regole, es. `D:\TECNICA\olobuild\regoletiles1\OLOthemes_reference\`, e nel prompt indica:
+regole, es. `T:\TECNICA\olobuild\regoletiles1\OLOthemes_reference\`, e nel prompt indica:
 "reference visivo dei temi: apri `regoletiles1/OLOthemes_reference/OLOthemes - Gallery.html`".
 NB: è SOLO reference d'ispirazione/qualità — i temi sono HTML/CSS statici, non tile OLObuild;
 le chiavi salvate e le regole restano quelle di `regoletiles1/` (token-first, useBoxModel, ecc.).

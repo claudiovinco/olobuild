@@ -338,7 +338,7 @@ Il mio consiglio resta il **Caso A**: la bozza `FieldBorder.vue` e il `REFERENCE
 
 ## User
 
-dammi i file, io li metto in D:\TECNICA\olobuild\bordo tu prepara tutti i file, compreso il prompt
+dammi i file, io li metto in T:\TECNICA\olobuild\bordo tu prepara tutti i file, compreso il prompt
 
 ## Assistant
 
@@ -350,7 +350,7 @@ _[tool: str_replace_edit]_
 
 _[tool: present_fs_item_for_download]_
 
-Ecco il pacchetto completo da mettere in `D:\TECNICA\olobuild\bordo`:
+Ecco il pacchetto completo da mettere in `T:\TECNICA\olobuild\bordo`:
 
 ```
 design_handoff_olobuild_bordercontrol/

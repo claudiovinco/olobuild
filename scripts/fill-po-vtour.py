@@ -2,19 +2,19 @@
 """
 Fill olo-vtour .po translation files.
 
-Reads each .po template in D:/TECNICA/olo-vtour/languages/, looks up
+Reads each .po template in T:/TECNICA/olo-vtour/languages/, looks up
 each msgid in the `translations` dict below, and writes the matching
 msgstr inline. Also updates the header (Last-Translator, PO-Revision-Date).
 
 Run:
-    python D:/TECNICA/olobuild/scripts/fill-po-vtour.py
+    python T:/TECNICA/olobuild/scripts/fill-po-vtour.py
 """
 
 import os
 import re
 import sys
 
-LANG_DIR = r"D:\TECNICA\olo-vtour\languages"
+LANG_DIR = r"T:\TECNICA\olo-vtour\languages"
 
 LANGS = [
     "cs_CZ", "de_DE", "en_US", "es_ES", "fr_FR",

@@ -2,7 +2,7 @@
 
 ## 1. `theme.json` di Cadence (riferimento completo)
 
-Path: `D:\TECNICA\olobuild\assets\data\themes\cadence\theme.json` (un'unica riga, qui riformattato):
+Path: `T:\TECNICA\olobuild\assets\data\themes\cadence\theme.json` (un'unica riga, qui riformattato):
 
 ```json
 {
@@ -67,7 +67,7 @@ File nella cartella tema di Cadence: `theme.json, header.json, footer.json, home
 
 ## 2. `includes/class-theme-importer.php` (370 righe) — flusso completo
 
-Path: `D:\TECNICA\olobuild\includes\class-theme-importer.php`. Classe `Olo_Theme_Importer`, tutta statica.
+Path: `T:\TECNICA\olobuild\includes\class-theme-importer.php`. Classe `Olo_Theme_Importer`, tutta statica.
 
 **`get_themes()`** (r.6-31): scandisce `OLO_PATH . 'assets/data/themes/*/theme.json'`; per ogni tema cerca lo **screenshot** in quest'ordine: `screenshot.jpg`, `screenshot.png`, `screenshot.webp` (r.17). Aggiunge i campi preview (`build_preview`, r.39-83): `category` (override `theme.json.category`, fallback mappa hardcoded r.118-135, poi primo tag), `zone` (override `theme.json.zone`), `accent/bg/ink/font/light/pal/google_fonts/url` derivati da `styles.colors`/`styles.typography`. `preview.ink` in theme.json può forzare il colore titolo anteprima (r.52).
 
@@ -92,7 +92,7 @@ Path: `D:\TECNICA\olobuild\includes\class-theme-importer.php`. Classe `Olo_Theme
 
 ## 3. Schema dei file template (homepage.json / header.json)
 
-Path: `D:\TECNICA\olobuild\assets\data\themes\cadence\homepage.json` (1161 righe) e `header.json` (63 righe). Il file è **un array JSON di sezioni** (no wrapper). Schema nodo, identico a ogni livello:
+Path: `T:\TECNICA\olobuild\assets\data\themes\cadence\homepage.json` (1161 righe) e `header.json` (63 righe). Il file è **un array JSON di sezioni** (no wrapper). Schema nodo, identico a ogni livello:
 
 ```
 [                                  ← array root = sezioni
@@ -180,7 +180,7 @@ Così le tile ereditano gratis: `--olo-color-surface`=ink, `--olo-color-surface-
 
 ## Schema riassuntivo per l'autore del tema clod-evoluzione
 
-Cartella: `D:\TECNICA\olobuild\assets\data\themes\clod-evoluzione\` con:
+Cartella: `T:\TECNICA\olobuild\assets\data\themes\clod-evoluzione\` con:
 - `theme.json` — `id:"clod-evoluzione"` (= nome cartella), `menu`, `templates{header,footer,homepage,…}`, `activate{header,footer}`, `pages{home:{set_as_homepage:true},…}`, `styles{colors,typography,google_fonts:["Big Shoulders Display","Hanken Grotesk","Space Mono"],spacing:{}}`; opzionali `category`, `zone`, `cursor`, `preview.ink`.
 - `header.json` / `footer.json` / `homepage.json` — array di sezioni `{id,type,settings,style,advanced,children}` (section→row→column→tile); nel megamenu `"menu_id":"auto"`; per il logo usare la stringa `LOGO_PLACEHOLDER` se serve immagine.
 - `logo.png`, `logo-light.png` (copiati in uploads come `olobuild-logo-<id tema>[-light].png`), `screenshot.jpg|png|webp`.

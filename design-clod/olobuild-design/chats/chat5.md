@@ -583,7 +583,7 @@ Ecco il pacchetto scaricabile qui sopra (zip). Contiene la spec, il blueprint (H
 
 **Dove copiarlo**
 Scompatta lo zip dentro la **root del repo** `claudiovinco/olobuild`, es.:
-`D:\TECNICA\olobuild\NOVA-per-claude\`
+`T:\TECNICA\olobuild\NOVA-per-claude\`
 (così Claude Code vede sia la spec sia il codice del plugin da cui dedurre il formato JSON).
 
 **Prompt da scrivere a Claude Code**

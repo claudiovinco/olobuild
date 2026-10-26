@@ -11,9 +11,9 @@
 
 ## Tile = belle & coerenti, sempre
 Quando tocchi una qualsiasi `src/components/Tiles/*Tile.vue` o `src/config/elements/*.js`,
-applica le regole in `D:\TECNICA\olobuild\regoletiles1\DESIGN_LANGUAGE.md` e la checklist
-in `D:\TECNICA\olobuild\regoletiles1\TILE_AUDIT_CHECKLIST.md`. Per un lavoro completo su
-tutte le tile, segui `D:\TECNICA\olobuild\regoletiles1\START_HERE.md`.
+applica le regole in `T:\TECNICA\olobuild\regoletiles1\DESIGN_LANGUAGE.md` e la checklist
+in `T:\TECNICA\olobuild\regoletiles1\TILE_AUDIT_CHECKLIST.md`. Per un lavoro completo su
+tutte le tile, segui `T:\TECNICA\olobuild\regoletiles1\START_HERE.md`.
 
 ## Regole sempre attive
 - **Colori solo via token** (`oloTileDefaults`: GLOBAL ruoli cliente / SYSTEM fissi) +
@@ -25,4 +25,4 @@ tutte le tile, segui `D:\TECNICA\olobuild\regoletiles1\START_HERE.md`.
 - **Chiavi salvate INVARIATE**: cambia la UI/resa, non il formato dei dati.
 - Non inventare nomi `--olo-color-*` che il GlobalColorsPanel non genera (vedi TOKEN_MAPPING).
 
-> Il pacchetto regole vive in `D:\TECNICA\olobuild\regoletiles1\`.
+> Il pacchetto regole vive in `T:\TECNICA\olobuild\regoletiles1\`.

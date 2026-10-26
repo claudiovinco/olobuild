@@ -16,7 +16,7 @@ import os
 import re
 import sys
 
-LANG_DIR = r"D:\TECNICA\oloele-property-map\languages"
+LANG_DIR = r"T:\TECNICA\oloele-property-map\languages"
 
 LANGS = [
     "cs_CZ", "de_DE", "en_US", "es_ES", "fr_FR",

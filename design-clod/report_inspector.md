@@ -1,6 +1,6 @@
 # REPORT — Inspector, "Impostazioni avanzate" e collocazione "Effetti mouse"
 
-## 1. Organizzazione dell'inspector (`D:\TECNICA\olobuild\src\components\Builder\BuilderInspector.vue`)
+## 1. Organizzazione dell'inspector (`T:\TECNICA\olobuild\src\components\Builder\BuilderInspector.vue`)
 
 ### Tab (3, fissi, hard-coded)
 ```js
@@ -148,4 +148,4 @@ Uso nel config tile: `...mouseEffectsFields({ wave: true })` in fondo a `fields`
 
 **Vincoli/convenzioni da rispettare** (standard del repo): condition syntax `{ field, op: 'eq'|'neq'|'in', value }`; select 2-4 opzioni corte = segmented automatico (opt-out `ui:'dropdown'`); chiavi salvate `mouse_*` INVARIATE (il renderer PHP le legge già); niente `tab:`/`advanced:` nei config (non esistono); nuovi effetti = anche runtime inline PHP + anteprima GridCell.vue + build (`node node_modules/vite/bin/vite.js build`) + bump `OLO_VERSION`.
 
-**File chiave**: `D:\TECNICA\olobuild\src\components\Builder\BuilderInspector.vue` (tab:1610, advanced rail:1714, Effetti mouse:952-1071, updateAdvanced:5839, groupedSections:2305) · `D:\TECNICA\olobuild\src\config\elements\_shared.js` (mouseFields:275, withHover:936, borderFields:1004) · `D:\TECNICA\olobuild\src\config\elements\_styleFieldsBase.js` · `D:\TECNICA\olobuild\includes\class-animation-builder.php` (build_mouse_attrs:240, build_spotlight_attr:263) · `D:\TECNICA\olobuild\includes\class-frontend-renderer.php` (attrs:2960-2977, runtime inline:4527-4589+) · `D:\TECNICA\olobuild\includes\class-magnetic-cursor.php` · `D:\TECNICA\olobuild\src\components\Grid\GridCell.vue` (anteprima canvas:156-206).
+**File chiave**: `T:\TECNICA\olobuild\src\components\Builder\BuilderInspector.vue` (tab:1610, advanced rail:1714, Effetti mouse:952-1071, updateAdvanced:5839, groupedSections:2305) · `T:\TECNICA\olobuild\src\config\elements\_shared.js` (mouseFields:275, withHover:936, borderFields:1004) · `T:\TECNICA\olobuild\src\config\elements\_styleFieldsBase.js` · `T:\TECNICA\olobuild\includes\class-animation-builder.php` (build_mouse_attrs:240, build_spotlight_attr:263) · `T:\TECNICA\olobuild\includes\class-frontend-renderer.php` (attrs:2960-2977, runtime inline:4527-4589+) · `T:\TECNICA\olobuild\includes\class-magnetic-cursor.php` · `T:\TECNICA\olobuild\src\components\Grid\GridCell.vue` (anteprima canvas:156-206).

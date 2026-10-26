@@ -5,8 +5,8 @@ Aggiunge il border system a tutti i tile PHP e JS che mancano ancora.
 
 import re, os
 
-TILES_DIR = r'D:\TECNICA\olobuild\includes\tiles'
-JS_DIR    = r'D:\TECNICA\olobuild\src\config\elements'
+TILES_DIR = r'T:\TECNICA\olobuild\includes\tiles'
+JS_DIR    = r'T:\TECNICA\olobuild\src\config\elements'
 
 # ---- Tile da saltare (layout/utility, nessun wrapper visivo) ----
 PHP_SKIP = {

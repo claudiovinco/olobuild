@@ -359,13 +359,13 @@ Il controllo **Bordo** resta nel suo pacchetto esistente, qui solo richiamato. H
 
 ## User
 
-l'ho messo in questa cartella D:\TECNICA\olobuild
+l'ho messo in questa cartella T:\TECNICA\olobuild
 
 ## Assistant
 
 Perfetto. Allora per avviare Claude Code basta puntarlo lì, ad esempio:
 
-> Leggi `D:\TECNICA\olobuild\design_handoff_olobuild_panels\PROMPT.txt` e segui le istruzioni.
+> Leggi `T:\TECNICA\olobuild\design_handoff_olobuild_panels\PROMPT.txt` e segui le istruzioni.
 
 Lavora un pannello alla volta nell'ordine **Layout → Effetti → Inserter**, e ad ogni passo valida il diff sul canvas prima di procedere. Se vuoi, quando hai i primi diff incollami pure uno screenshot e li verifichiamo insieme.
 

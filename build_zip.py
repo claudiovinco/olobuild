@@ -15,8 +15,8 @@ from pathlib import Path
 _positional = [a for a in sys.argv[1:] if not a.startswith("--")]
 _root_args = [a.split("=", 1)[1] for a in sys.argv[1:] if a.startswith("--root=")]
 PLUGIN = _positional[0] if _positional else "olobuild"
-PROJECT_ROOT = Path(_root_args[0]) if _root_args else Path(f"D:/TECNICA/{PLUGIN}")
-OUTPUT_DIR = Path("D:/TECNICA/olobuild/dist")
+PROJECT_ROOT = Path(_root_args[0]) if _root_args else Path(f"T:/TECNICA/{PLUGIN}")
+OUTPUT_DIR = Path("T:/TECNICA/olobuild/dist")
 
 # Read version from main PHP file
 main_php = PROJECT_ROOT / f"{PLUGIN}.php"

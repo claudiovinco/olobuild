@@ -107,10 +107,10 @@ Senza `--require` il render si ferma subito con un messaggio (niente uid casuali
 
 ```powershell
 & $SSH -i $K $M "tar -cf /root/olo-golden/snap.tar -C /root/olo-golden snap"
-& $SCP -i $K "${M}:/root/olo-golden/snap.tar" "D:\TECNICA\olo-golden-snap.tar"
+& $SCP -i $K "${M}:/root/olo-golden/snap.tar" "T:\TECNICA\olo-golden-snap.tar"
 & $SSH -i $K $M "rm /root/olo-golden/snap.tar"
-New-Item -ItemType Directory -Force D:\TECNICA\olo-golden | Out-Null
-tar -xf D:\TECNICA\olo-golden-snap.tar -C D:\TECNICA\olo-golden
+New-Item -ItemType Directory -Force T:\TECNICA\olo-golden | Out-Null
+tar -xf T:\TECNICA\olo-golden-snap.tar -C T:\TECNICA\olo-golden
 ```
 
 La baseline resta su mosaic in `snap/baseline-<versione>` e in locale fuori dal repo: non si
@@ -123,15 +123,15 @@ driver Python) o uno installato in una cartella esterna:
 
 ```powershell
 $env:OLO_PLAYWRIGHT = 'C:\Program Files\Python311\Lib\site-packages\playwright\driver\package'
-# oppure: & 'C:\Program Files\nodejs\npm.cmd' install --prefix D:\TECNICA\pw playwright-core ; $env:OLO_PLAYWRIGHT = 'D:\TECNICA\pw'
+# oppure: & 'C:\Program Files\nodejs\npm.cmd' install --prefix T:\TECNICA\pw playwright-core ; $env:OLO_PLAYWRIGHT = 'T:\TECNICA\pw'
 $env:OLO_GOLDEN_RESOLVE = 'MAP mosaic.clod.eu <ip di mosaic>'   # scavalca il CDN
 # una volta: l'utente accede a mano, lo script salva solo la sessione (fuori dal repo)
-node scripts/golden/golden-shots.mjs --salva-accesso D:\TECNICA\olo-golden\mosaic-state.json --site https://mosaic.clod.eu
-$env:OLO_GOLDEN_STATE = 'D:\TECNICA\olo-golden\mosaic-state.json'
-node scripts/golden/golden-shots.mjs --urls D:\TECNICA\olo-golden\snap\baseline-1.4.480\_urls.tsv `
-  --widths 1440,1199,959,639,390 --theme attivo,olo-tema-prova,hello-olobuild --out D:\TECNICA\olo-golden\shots\A
+node scripts/golden/golden-shots.mjs --salva-accesso T:\TECNICA\olo-golden\mosaic-state.json --site https://mosaic.clod.eu
+$env:OLO_GOLDEN_STATE = 'T:\TECNICA\olo-golden\mosaic-state.json'
+node scripts/golden/golden-shots.mjs --urls T:\TECNICA\olo-golden\snap\baseline-1.4.480\_urls.tsv `
+  --widths 1440,1199,959,639,390 --theme attivo,olo-tema-prova,hello-olobuild --out T:\TECNICA\olo-golden\shots\A
 # … dopo il passo, stesso comando con --out …\shots\B, poi:
-node scripts/golden/golden-shots.mjs --compare D:\TECNICA\olo-golden\shots\A D:\TECNICA\olo-golden\shots\B
+node scripts/golden/golden-shots.mjs --compare T:\TECNICA\olo-golden\shots\A T:\TECNICA\olo-golden\shots\B
 ```
 
 - `--theme <slug>` aggiunge `?wp_theme_preview=<slug>` (core ≥ 6.3, utente con

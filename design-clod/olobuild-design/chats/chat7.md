@@ -337,7 +337,7 @@ cartella copiata, mi scrivi il prompt?
 
 ## Assistant
 
-Eccolo — copia e incolla in Claude Code (dopo aver messo la cartella, es. in `D:\TECNICA\olobuild\regoletiles1\tryhome\` o dove preferisci, e averla aperta nel repo):
+Eccolo — copia e incolla in Claude Code (dopo aver messo la cartella, es. in `T:\TECNICA\olobuild\regoletiles1\tryhome\` o dove preferisci, e averla aperta nel repo):
 
 ```text
 Leggi START_HERE.md e segui il protocollo. Stiamo lavorando sul repo claudiovinco/olobuild (branch main, stack Vue 3 + Pinia + PHP).
@@ -365,14 +365,14 @@ Una sola accortezza: nel prompt i file sono citati per nome (`START_HERE.md`, `E
 
 ## User
 
-messa in D:\TECNICA\olobuild\design_handoff_olobuild_tryhome
+messa in T:\TECNICA\olobuild\design_handoff_olobuild_tryhome
 
 ## Assistant
 
 Perfetto, è dentro la root del repo. Ecco il prompt con il percorso esatto:
 
 ```text
-I file di handoff sono in D:\TECNICA\olobuild\design_handoff_olobuild_tryhome\
+I file di handoff sono in T:\TECNICA\olobuild\design_handoff_olobuild_tryhome\
 Leggi design_handoff_olobuild_tryhome\START_HERE.md e segui il protocollo. Repo: claudiovinco/olobuild (branch main, Vue 3 + Pinia + PHP).
 
 Obiettivo: rendere NATIVI in OLObuild i tre effetti della landing "Try", come capacità riusabili (non CSS incollato in una pagina):
@@ -512,13 +512,13 @@ ma devo riscaricare la cartella o lo saprà già?
 
 _[tool: present_fs_item_for_download]_
 
-No, Claude Code **non lo sa già** — quel file l'ho appena creato *qui*, nel progetto. Claude Code legge solo il tuo disco (`D:\TECNICA\olobuild\…`), quindi devi portarcelo.
+No, Claude Code **non lo sa già** — quel file l'ho appena creato *qui*, nel progetto. Claude Code legge solo il tuo disco (`T:\TECNICA\olobuild\…`), quindi devi portarcelo.
 
 Due modi, scegli il più comodo:
-1. **Scarica solo questo file** e mettilo in `D:\TECNICA\olobuild\NOVA handoff\` (così sta accanto alla build spec) — card qui sotto.
+1. **Scarica solo questo file** e mettilo in `T:\TECNICA\olobuild\NOVA handoff\` (così sta accanto alla build spec) — card qui sotto.
 2. Oppure **incolla direttamente il testo** della punch-list nella chat di Claude Code: è corto, non serve nemmeno il file.
 
-Non serve riscaricare tutta la cartella `design_handoff_olobuild_tryhome` (quella è un altro lavoro, già a posto).Ecco il file da scaricare ⬆️ — mettilo in `D:\TECNICA\olobuild\NOVA handoff\`. Poi lancia Claude Code con il prompt minimo che ti ho dato. Quando ha finito, mandami uno screenshot e rifacciamo il confronto.
+Non serve riscaricare tutta la cartella `design_handoff_olobuild_tryhome` (quella è un altro lavoro, già a posto).Ecco il file da scaricare ⬆️ — mettilo in `T:\TECNICA\olobuild\NOVA handoff\`. Poi lancia Claude Code con il prompt minimo che ti ho dato. Quando ha finito, mandami uno screenshot e rifacciamo il confronto.
 
 ## User
 

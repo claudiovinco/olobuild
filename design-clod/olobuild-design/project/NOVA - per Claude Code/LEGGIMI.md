@@ -9,7 +9,7 @@ Contenuto:
 
 ## Dove copiarlo
 Metti questa cartella **dentro la root del repo `claudiovinco/olobuild`**, ad esempio:
-`D:\TECNICA\olobuild\NOVA-per-claude\`
+`T:\TECNICA\olobuild\NOVA-per-claude\`
 Così Claude Code ha sotto mano sia la spec sia il codice del plugin (da cui deve
 dedurre il formato JSON di import).
 

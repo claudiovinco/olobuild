@@ -52,7 +52,7 @@ database/                   → schema.sql
 
 Questo plugin fa parte dell'ecosistema **OLOtheme**. Standard tecnici cross-prodotto, decisioni architetturali (ADR), playbook operativi e info sui prodotti fratelli (OLObooking, OLOlang, OLOtour, OLOtutor, OLOcalendar) sono documentati nel vault Obsidian:
 
-- **Path**: `D:\TECNICA\OLOtheme-Vault\`
+- **Path**: `T:\TECNICA\OLOtheme-Vault\`
 - **Entry point**: `00 - Home.md` (MOC dashboard navigabile)
 - **Setup**: 2026-05-02
 

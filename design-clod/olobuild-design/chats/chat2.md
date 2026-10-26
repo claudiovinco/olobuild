@@ -1435,7 +1435,7 @@ Il meccanismo chiave anti-scorciatoia è il **`TILE_PROGRESS.md`** + la **Defini
 
 ## User
 
-io metterò i file che mi dai dentro la cartella D:\TECNICA\olobuild\regoletiles1\ non puoi preparami i file giusti in modo da fare un prompt semplice a claude code?
+io metterò i file che mi dai dentro la cartella T:\TECNICA\olobuild\regoletiles1\ non puoi preparami i file giusti in modo da fare un prompt semplice a claude code?
 
 ## Assistant
 
@@ -1455,14 +1455,14 @@ _[tool: snip]_
 
 _[tool: present_fs_item_for_download]_
 
-Pronto ↑ I percorsi sono già impostati su `D:\TECNICA\olobuild\regoletiles1\`.
+Pronto ↑ I percorsi sono già impostati su `T:\TECNICA\olobuild\regoletiles1\`.
 
 ## Cosa fare (3 mosse)
-1. **Scompatta** tutto il contenuto del pacchetto dentro `D:\TECNICA\olobuild\regoletiles1\` (mantenendo la sottocartella `prototype/`).
+1. **Scompatta** tutto il contenuto del pacchetto dentro `T:\TECNICA\olobuild\regoletiles1\` (mantenendo la sottocartella `prototype/`).
 2. Apri il progetto OLObuild in **Claude Code**.
 3. Incolla il prompt — è già pronto in **`PROMPT.txt`**. In sintesi è:
 
-> Leggi `D:\TECNICA\olobuild\regoletiles1\START_HERE.md` e segui il protocollo per intero. Fai il setup (§1), enumera TUTTE le tile e crea `TILE_PROGRESS.md` (§2), lavora per categoria applicando la checklist a ogni tile (§3). Finito solo quando la Definition of Done (§4) è verde. Rispetta i guardrail (§5). Mostrami il diff del primo batch prima di proseguire.
+> Leggi `T:\TECNICA\olobuild\regoletiles1\START_HERE.md` e segui il protocollo per intero. Fai il setup (§1), enumera TUTTE le tile e crea `TILE_PROGRESS.md` (§2), lavora per categoria applicando la checklist a ogni tile (§3). Finito solo quando la Definition of Done (§4) è verde. Rispetta i guardrail (§5). Mostrami il diff del primo batch prima di proseguire.
 
 `START_HERE.md` e `CLAUDE.md` puntano già a quella cartella, quindi non devi correggere percorsi. Se vuoi che le regole valgano in **ogni** sessione, copia anche `CLAUDE.md` nella root del repo OLObuild.
 
@@ -1480,7 +1480,7 @@ Sì, **unisci** — non sovrascrivere. Il `CLAUDE.md` esistente contiene probabi
 Come fare:
 1. Apri il `CLAUDE.md` esistente (quello nella root del repo / cartella).
 2. **Appendi in fondo** il contenuto del mio `CLAUDE.md` — idealmente sotto un titolo chiaro, es. `## Tile — regole di design (regoletiles1)`, così resta distinguibile dal resto.
-3. Dentro al testo che incolli, l'unico riferimento da controllare è il percorso `D:\TECNICA\olobuild\regoletiles1\` — è già giusto, quindi nessuna modifica necessaria.
+3. Dentro al testo che incolli, l'unico riferimento da controllare è il percorso `T:\TECNICA\olobuild\regoletiles1\` — è già giusto, quindi nessuna modifica necessaria.
 
 Due note:
 - Se nel `CLAUDE.md` esistente ci fossero **regole in conflitto** sui colori delle tile (es. un vecchio primario diverso), correggile o rimuovile, altrimenti Claude Code riceve istruzioni contraddittorie.
@@ -1506,7 +1506,7 @@ Fatto — ho integrato le mie regole nel tuo `CLAUDE.md` esistente, rispettando 
 
 1. **Regola colori potenziata** — la riga "mai hardcodare hex blu" ora copre **tutti** gli hex e nomina i 4 primari storici da eliminare (`#6366F1`, `#1e87f0`, `#e8622a`, `#e1474f`), con il rosso brand come unico primario via token.
 
-2. **Nuova sezione "🎨 Tile — design coerente (regoletiles1)"** — collocata dopo `## Regole`, prima del Vault. Include i puntatori a `D:\TECNICA\olobuild\regoletiles1\`, la sintesi delle regole sempre attive, e tre aggiunte fatte sul tuo contesto reale:
+2. **Nuova sezione "🎨 Tile — design coerente (regoletiles1)"** — collocata dopo `## Regole`, prima del Vault. Include i puntatori a `T:\TECNICA\olobuild\regoletiles1\`, la sintesi delle regole sempre attive, e tre aggiunte fatte sul tuo contesto reale:
    - **Render doppio**: la coerenza vale sia per Vue (`src/components/Tiles/`) sia per il **renderer PHP frontend** (`includes/tiles/`) — il tuo stack ha entrambi.
    - **Build/version bump**: ricordato `node node_modules/vite/bin/vite.js build` + `OLO_VERSION`.
    - **Nuove tile**: rimando al playbook *Aggiungere un tile OloBuild* perché nascano già conformi.
@@ -1642,7 +1642,7 @@ Dipende da *cosa* intendi — distinguo due cose:
 
 **I file restano. La conversazione no.**
 - ✅ **Tutto il lavoro è salvato** in questo progetto: il pacchetto `design_handoff_olobuild_tiles/`, le pagine `REFERENCE_*`, i confronti, il `CLAUDE.md` integrato. Una **nuova chat in questo stesso progetto** vede tutti questi file — non riparti da zero.
-- ✅ Il pacchetto che hai scaricato in `D:\TECNICA\olobuild\regoletiles1\` e il `CLAUDE.md` nel repo sono **sul tuo disco**: indipendenti da qualsiasi chat.
+- ✅ Il pacchetto che hai scaricato in `T:\TECNICA\olobuild\regoletiles1\` e il `CLAUDE.md` nel repo sono **sul tuo disco**: indipendenti da qualsiasi chat.
 - ⚠️ Quello che **non** si trasferisce è la *memoria del discorso* (il filo del ragionamento, le decisioni prese a voce qui). Una nuova chat parte senza ricordare questa conversazione.
 
 **Come ripartire senza perdere nulla**
