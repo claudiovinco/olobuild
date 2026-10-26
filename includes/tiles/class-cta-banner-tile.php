@@ -122,13 +122,25 @@ class Olobuild_CtaBanner_Tile extends Olobuild_Tile_Base {
         $banner_radius_h = $this->_radius_hover_diff( $s['banner_radius'] ?? [], $s['banner_radius_hover'] ?? [] );
         $banner_rdur     = max( 50, intval( $s['banner_radius_hover_duration'] ?? 400 ) );
 
-        $bg_css = '';
-        $bg = $s['bg'] ?? [ 'type' => 'solid', 'color' => '#0f172a' ];
-        if ( is_array( $bg ) && ( $bg['type'] ?? 'none' ) !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
+        // Sfondo del banner. «Nessuno» = trasparente: si vede lo sfondo della sezione o della colonna (fino alla 1.4.834
+        // diventava un blu fisso #0f172a, come un riquadro sopra la foto di Marmi Lizza). Tinta, sfumatura, immagine e
+        // generativi sono uno stile in linea; video e galleria hanno i loro livelli, disegnati dentro il banner da
+        // sfondo_elemento() (prima scelti nell'inspector non comparivano). Il blu resta per uno sfondo scelto ma vuoto.
+        $bg_css    = '';
+        $bg_layers = '';
+        $bg        = $s['bg'] ?? [ 'type' => 'solid', 'color' => '#0f172a' ];
+        $bg_type   = is_array( $bg ) ? ( $bg['type'] ?? 'none' ) : 'none';
+        if ( 'none' !== $bg_type && class_exists( 'Olobuild_CSS_Builder' ) ) {
             $cssb = new Olobuild_CSS_Builder();
-            $bg_css = $cssb->get_bg_inline_css( $bg, true ); // true: col velo dello Sfondo (il banner copre quello del contenitore)
+            if ( '' !== (string) $cssb->get_bg_html_markup( $bg, $uid, false ) ) {
+                $el        = $this->sfondo_elemento( [ 'bg' => $bg ], $uid );
+                $bg_css    = $el['css_con_livelli'];
+                $bg_layers = $el['markup'];
+            } else {
+                $bg_css = $cssb->get_bg_inline_css( $bg, true ); // true: col velo dello Sfondo (il banner copre quello del contenitore)
+            }
         }
-        if ( ! $bg_css ) $bg_css = 'background:#0f172a';
+        if ( ! $bg_css && 'none' !== $bg_type ) $bg_css = 'background:#0f172a';
 
         // Padding interno: FieldSpacing 4 lati ({top,right,bottom,left}); un numero
         // legacy (template salvati prima della 1.4.430) resta valido e uniforme.
@@ -151,6 +163,7 @@ class Olobuild_CtaBanner_Tile extends Olobuild_Tile_Base {
         ob_start();
         ?>
         <div class="olo-ctab <?php echo esc_attr( $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- unescaped fragments on this line are fixed-literal ternaries plus the absint()/intval() clamped gap and duration; everything else (padding included, via the integer-forced spacing_css() helper) is esc_attr()'d ?>" style="<?php echo esc_attr( $bg_css ); ?>;<?php if ( $banner_radius ) echo 'border-radius:' . esc_attr( $banner_radius ) . ';'; ?>padding:<?php echo esc_attr( $banner_padding ); ?>;color:<?php echo esc_attr( $text_c ); ?>;display:grid;grid-template-columns:<?php echo esc_attr( $grid_cols ); ?>;gap:<?php echo (int) $gap; ?>px;align-items:<?php echo esc_attr( $valign === 'start' ? 'flex-start' : ( $valign === 'end' ? 'flex-end' : 'center' ) ); ?>;<?php echo ( $layout === 'stack' ) ? 'text-align:center;justify-items:center;' : ''; ?>transition:<?php echo $banner_radius_h ? 'border-radius ' . (int) $banner_rdur . 'ms ease' : 'none'; ?>">
+            <?php echo $bg_layers; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup di sfondo_elemento(): Olobuild_CSS_Builder::get_bg_html_markup() esegue esc_url/esc_attr su ogni attributo ?>
 
             <!-- Headline -->
             <?php if ( ! empty( $s['headline'] ) || ! empty( $s['headline_accent'] ) ) : ?>

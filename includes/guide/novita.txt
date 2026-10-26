@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.835 - 2026-10-26 (fix)
+- Invito (CTA Banner): lo sfondo video e la galleria di foto scelti nello Sfondo della tile si vedono, sotto i testi e col velo. Prima il banner restava di un colore fisso.
+- Invito: con lo Sfondo «Nessuno» il banner è trasparente e lascia vedere lo sfondo della sezione o della colonna. Prima diventava un riquadro blu scuro, anche sopra una foto.
+
 ## v1.4.834 - 2026-10-19 (fix)
 - Scorrimento orizzontale: il suggerimento «⇄ Scorri» sotto il nastro (modalità Pin) parla la lingua della pagina — Scroll, Scrollen, Desliza, Faites défiler. Prima restava in italiano in tutte le lingue.
 
