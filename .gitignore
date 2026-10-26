@@ -33,3 +33,6 @@ build/
 /tmp_gen_*
 /tmp_try_*/
 script-temp/
+
+# Impostazioni personali di Claude Code (permessi e percorsi di una macchina)
+.claude/settings.local.json
