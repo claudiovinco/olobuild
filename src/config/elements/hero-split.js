@@ -114,6 +114,7 @@ export default {
     panel_media: { type: 'none' },
     panel_media_label: 'media — 4/5',
     panel_aspect: '4/5',
+    panel_radius: { tl: 18, tr: 18, br: 18, bl: 18 },
     panel_badge_number: '',
     panel_badge_label: '',
     panel_track_title: 'Glasshouse',
@@ -382,6 +383,8 @@ export default {
     { type: 'separator', label: t('Pannello destro') },
     { key: 'panel_aspect', label: t('Aspect ratio media (es. 4/5)'), type: 'text',
       condition: { field: 'panel', op: 'eq', value: 'media' } },
+    { key: 'panel_radius', label: t('Raggio pannello'), type: 'border-radius',
+      condition: { field: 'panel', op: 'in', value: ['media', 'audio'] } },
     { type: 'separator', label: t('Showcase') },
     { key: 'showcase_items', type: 'content-items', label: t('Tile (grid 2x2)'), itemLabel: t('Tile'), etichettaDa: 'text', condition: [{ field: 'panel', op: 'eq', value: 'showcase' }, { field: 'panel', op: 'eq', value: 'showcase' }], itemFields: [
         { key: 'italic',     label: t('Corsivo'),      type: 'toggle' },

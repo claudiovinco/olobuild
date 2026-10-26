@@ -44731,3 +44731,15 @@ msgstr "Dish"
 #: src/config/elements
 msgid "Progetto"
 msgstr "Project"
+
+#: includes/class-theme-importer.php
+msgid "Componi la torta"
+msgstr "Build your cake"
+
+#: includes/class-theme-importer.php
+msgid "A che punto è la mia bici?"
+msgstr "Is my bike ready yet?"
+
+#: includes/class-theme-importer.php
+msgid "Dove fa più male?"
+msgstr "Where does it hurt most?"

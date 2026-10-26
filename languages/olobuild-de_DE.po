@@ -46264,3 +46264,15 @@ msgstr "Gericht"
 #: src/config/elements
 msgid "Progetto"
 msgstr "Projekt"
+
+#: includes/class-theme-importer.php
+msgid "Componi la torta"
+msgstr "Stell deine Torte zusammen"
+
+#: includes/class-theme-importer.php
+msgid "A che punto è la mia bici?"
+msgstr "Ist mein Rad schon fertig?"
+
+#: includes/class-theme-importer.php
+msgid "Dove fa più male?"
+msgstr "Wo tut es am meisten weh?"

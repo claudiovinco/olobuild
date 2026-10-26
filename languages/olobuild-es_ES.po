@@ -46122,3 +46122,15 @@ msgstr "Plato"
 #: src/config/elements
 msgid "Progetto"
 msgstr "Proyecto"
+
+#: includes/class-theme-importer.php
+msgid "Componi la torta"
+msgstr "Compón tu tarta"
+
+#: includes/class-theme-importer.php
+msgid "A che punto è la mia bici?"
+msgstr "¿Cómo va mi bici?"
+
+#: includes/class-theme-importer.php
+msgid "Dove fa più male?"
+msgstr "¿Dónde duele más?"

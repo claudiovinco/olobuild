@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.837 - 2026-10-26 (temi)
+- Tre temi nuovi. Bagnasciuga, una gelateria sul lungomare dal 1958, in «Ristorazione»: il tendone a righe sopra ogni pagina, la colonna dei gusti che scorre, la lavagna del giorno, i giorni alla riapertura e la torta gelato da comporre col prezzo che si aggiorna. Raggiera, una ciclofficina a Ferrara in stile Bauhaus, in «Sport e benessere»: la ruota che gira dentro un tondo, il cartellino per sapere a che punto è la bici, il quiz «che bici fa per te», la bici da comporre pezzo per pezzo e il profilo del giro della domenica. Ago e Ancora, uno studio di tatuaggi a Livorno, in «Moda e bellezza»: il manifesto che si accende parola per parola, la mappa del dolore sulla schiena, chi c’è in studio oggi, il flash del mese da grattare e la richiesta in due passi con la foto di riferimento. Ognuno ha la home e almeno tre pagine interne, con video e foto, testata, piè di pagina, pagina d’errore e il pulsante per tornare in cima.
+- Hero Split: nel pannello con la foto, il video o il lettore audio c’è il controllo «Raggio pannello». Con tutti gli angoli a 999 e la proporzione 1/1 il riquadro diventa un cerchio. Prima gli angoli erano fissi a 18 px.
+
 ## v1.4.836 - 2026-10-26 (fix)
 - Tema Fuoco Studio: il nome gigante in apertura è pieno di fumo ambrato che si muove piano, in loop senza stacchi. Prima c’era un tunnel optical bianco e nero di un secondo che girava di continuo.
 - Tema Fuoco Studio: il nome parte fermo e cresce solo quando si comincia a scorrere, ed è solo una finestra sul video: il fumo si vede dentro le lettere, intorno resta il nero della pagina. Prima a pagina appena aperta era già ingrandito (sul telefono usciva dallo schermo) e il riquadro sbiadiva lasciando vedere tutto il video.
