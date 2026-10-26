@@ -164,10 +164,15 @@ class Olobuild_Textmask_Tile extends Olobuild_Tile_Base {
             //     diventa il colore pieno, il video dentro le lettere resta intatto.
             // A differenza di «Testo rivela il video» il colore intorno e' pieno,
             // qualunque sia, e il video nelle lettere non e' velato.
+            // Nel livello bianco le lettere hanno un contorno nero di 1px: lungo il
+            // bordo sfumato delle lettere del secondo livello il primo e' gia' tutto
+            // video, e non resta l'alone grigio (bianco sfumato per colore pieno).
+            // Il bordo del riquadro lo allinea ai pixel lo script piu' sotto.
             $css .= "#{$uid} .olo-tm-mask{position:absolute;inset:0;z-index:2;display:flex;align-items:{$va_css};justify-content:center;padding:{$py}px {$px}px;background:#fff;mix-blend-mode:screen}";
             $css .= "#{$uid} .olo-tm-mask--fondo{z-index:3;background:{$bg_color};mix-blend-mode:multiply}";
             $css .= "#{$uid} .olo-tm-text{color:#000;{$text_css};position:relative}";
-            $css .= "#{$uid} .olo-tm-mask--fondo .olo-tm-text{color:#fff}";
+            $css .= "#{$uid} .olo-tm-mask:not(.olo-tm-mask--fondo) .olo-tm-text{-webkit-text-stroke:2px #000}";
+            $css .= "#{$uid} .olo-tm-mask--fondo .olo-tm-text{color:#fff;-webkit-text-stroke:0}";
         } else {
             // Simple blend mode — blend on mask layer so it composites with sibling video
             $css .= "#{$uid} .olo-tm-mask{position:absolute;inset:0;display:flex;align-items:{$va_css};justify-content:center;padding:{$py}px {$px}px;mix-blend-mode:{$blend}}";
@@ -209,6 +214,38 @@ class Olobuild_Textmask_Tile extends Olobuild_Tile_Base {
             </div>
             <?php endif; ?>
         </div>
+        <?php if ( $mode === 'video_behind_text' ) : ?>
+        <script>
+        /* «Video dietro al testo»: i livelli si fondono fra loro, e un bordo a meta' pixel copre solo in
+           parte ciascuno — scorrendo, nella riga sfumata filtrava una riga di video o di bianco. Il
+           riquadro si sposta di meno di un pixel per avere l'angolo in alto a sinistra su un pixel del
+           dispositivo, e il pezzo di pixel in piu' a destra e in basso si taglia (clip-path). */
+        (function(){
+            var el = document.getElementById('<?php echo esc_js( $uid ); ?>');
+            if(!el || !el.getBoundingClientRect) return;
+            var dx = 0, dy = 0, busy = false;
+            function pos(){
+                busy = false;
+                var d = window.devicePixelRatio || 1;
+                var r = el.getBoundingClientRect(), x = r.left - dx, y = r.top - dy;
+                var nx = Math.round(x * d) / d - x, ny = Math.round(y * d) / d - y;
+                var right = x + nx + r.width, bottom = y + ny + r.height;
+                var cr = right - Math.floor(right * d + 0.001) / d, cb = bottom - Math.floor(bottom * d + 0.001) / d;
+                el.style.transform = (Math.abs(nx) > 0.001 || Math.abs(ny) > 0.001) ? 'translate(' + nx + 'px,' + ny + 'px)' : '';
+                el.style.clipPath = (cr > 0.001 || cb > 0.001) ? 'inset(0 ' + cr + 'px ' + cb + 'px 0)' : '';
+                dx = nx; dy = ny;
+            }
+            function later(){ if(!busy){ busy = true; requestAnimationFrame(pos); } }
+            pos();
+            window.addEventListener('scroll', later, {passive:true});
+            window.addEventListener('resize', later);
+            window.addEventListener('load', later);
+            if(window.ResizeObserver){ new ResizeObserver(later).observe(document.documentElement); }
+            if(document.fonts){ if(document.fonts.ready){ document.fonts.ready.then(later); } } /* niente doppia e commerciale: wptexturize la guasta */
+            setTimeout(later, 400); setTimeout(later, 1500); setTimeout(later, 4000);
+        })();
+        </script>
+        <?php endif; ?>
         <?php
 
         // Scroll animation script

@@ -3,6 +3,11 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.836 - 2026-10-26 (fix)
+- Tema Fuoco Studio: il nome gigante in apertura è pieno di fumo ambrato che si muove piano, in loop senza stacchi. Prima c’era un tunnel optical bianco e nero di un secondo che girava di continuo.
+- Tema Fuoco Studio: il nome parte fermo e cresce solo quando si comincia a scorrere, ed è solo una finestra sul video: il fumo si vede dentro le lettere, intorno resta il nero della pagina. Prima a pagina appena aperta era già ingrandito (sul telefono usciva dallo schermo) e il riquadro sbiadiva lasciando vedere tutto il video.
+- Testo maschera, modalità «Video dietro al testo»: niente più alone grigio attorno alle lettere né riga grigia sul bordo del riquadro mentre si scorre.
+
 ## v1.4.835 - 2026-10-26 (fix)
 - Invito (CTA Banner): lo sfondo video e la galleria di foto scelti nello Sfondo della tile si vedono, sotto i testi e col velo. Prima il banner restava di un colore fisso.
 - Invito: con lo Sfondo «Nessuno» il banner è trasparente e lascia vedere lo sfondo della sezione o della colonna. Prima diventava un riquadro blu scuro, anche sopra una foto.
