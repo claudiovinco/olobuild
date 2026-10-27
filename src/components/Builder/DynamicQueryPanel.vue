@@ -55,6 +55,32 @@
         <p class="dqp-hint">{{ t('0 = tutte. Sono le foto del contenuto che la pagina mostra (nel builder, quello dell\'anteprima): senza foto l\'elemento non compare sul sito.') }}</p>
       </template>
 
+      <!-- Righe di un campo: le voci scritte nel contenuto che la pagina mostra, una per riga, parti divise da «|»
+           (le mostre di un'opera, le misure di un prodotto). -->
+      <template v-else-if="origin === 'righe'">
+        <div class="dqp-field">
+          <label class="dqp-label" style="display:flex;align-items:center;gap:4px;">{{ t('Chiave del campo con le righe') }}<InfoTip :titolo="t('Righe di un campo')" :testo="TESTO_RIGHE" /></label>
+          <input
+            type="text"
+            class="dqp-input"
+            :value="localQuery.righe_key || ''"
+            placeholder="pedigree"
+            spellcheck="false"
+            @change="updateQuery('righe_key', $event.target.value.trim())"
+          />
+        </div>
+        <div class="dqp-field" style="display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:10px;">
+          <label class="dqp-label" style="margin:0;">{{ t('Righe al massimo') }}</label>
+          <NumberScrubber
+            :modelValue="localQuery.righe_max || 0"
+            :min="0" :max="60" :step="1" :defaultValue="0"
+            emitAs="number"
+            :ariaLabel="t('Righe al massimo')"
+            @update:modelValue="updateQuery('righe_max', $event || 0)"
+          />
+        </div>
+      </template>
+
       <template v-else>
         <!-- Tipo di contenuto -->
         <div class="dqp-field">
@@ -114,6 +140,8 @@
         <template v-if="primo.stato === 'carico'">{{ t('Carico…') }}</template>
         <template v-else-if="origin === 'images' && primo.stato === 'trovato'">{{ t('Esempio:') }} <strong>{{ fotoIn(primo) }}</strong></template>
         <template v-else-if="origin === 'images' && primo.stato === 'vuoto'">{{ t('Nessun contenuto ha foto in questo campo') }}</template>
+        <template v-else-if="origin === 'righe' && primo.stato === 'trovato'">{{ t('Esempio:') }} <strong>{{ righeIn(primo) }}</strong></template>
+        <template v-else-if="origin === 'righe' && primo.stato === 'vuoto'">{{ t('Nessun contenuto ha righe in questo campo') }}</template>
         <template v-else-if="primo.stato === 'trovato'">{{ t('Primo risultato:') }} <strong>{{ primo.titolo || t('(senza titolo)') }}</strong></template>
         <template v-else-if="primo.stato === 'vuoto'">{{ t('Nessun contenuto con questi filtri') }}</template>
       </div>
@@ -129,7 +157,7 @@
             ui="dropdown"
             size="compact"
             :model-value="localItemMap[field.key] || ''"
-            :options="origin === 'images' ? IMAGE_PART_OPTS : WP_FIELD_OPTS"
+            :options="origin === 'images' ? IMAGE_PART_OPTS : (origin === 'righe' ? RIGA_PART_OPTS : WP_FIELD_OPTS)"
             @update:model-value="updateItemMap(field.key, $event)"
           />
         </div>
@@ -146,6 +174,7 @@ import DynamicUnavailableNotice from './DynamicUnavailableNotice.vue';
 import FieldSelect from './fields/FieldSelect.vue';
 import FieldToggle from './fields/FieldToggle.vue';
 import NumberScrubber from './fields/NumberScrubber.vue';
+import InfoTip from './InfoTip.vue';
 
 const props = defineProps({
   query: { type: Object, default: () => ({}) },
@@ -162,10 +191,13 @@ const { fetchSources, sources, previewQuery } = useDynamicContent();
 
 const defaultQuery = {
   enabled: false,
-  // 'posts' = una query di articoli; 'images' = le foto di un campo del contenuto (images_key)
+  // 'posts' = una query di articoli; 'images' = le foto di un campo del contenuto (images_key);
+  // 'righe' = le righe di un campo del contenuto (righe_key), una voce per riga
   source: 'posts',
   images_key: '',
   images_max: 0,
+  righe_key: '',
+  righe_max: 0,
   post_type: 'post',
   posts_per_page: 6,
   orderby: 'date',
@@ -252,19 +284,39 @@ const IMAGE_PART_OPTS = [
 ];
 const CAMPO_LIBERO = '__campo';
 
+// ── Righe di un campo ──
+// Le parti di una riga (Olobuild_Dynamic_Content::build_items_from_righe): divise da «|», al massimo sei.
+const RIGA_PART_OPTS = [
+  { value: '', label: '— Non mappato —' },
+  { value: 'parte_1', label: 'Parte 1' },
+  { value: 'parte_2', label: 'Parte 2' },
+  { value: 'parte_3', label: 'Parte 3' },
+  { value: 'parte_4', label: 'Parte 4' },
+  { value: 'parte_5', label: 'Parte 5' },
+  { value: 'parte_6', label: 'Parte 6' },
+  { value: 'riga', label: 'Riga intera' },
+  { value: '_index', label: 'Numero progressivo' },
+];
+const TESTO_RIGHE = [
+  t('Le voci vengono da un campo personalizzato del contenuto che la pagina mostra (un prodotto, un articolo): una voce per riga, con le parti separate da «|». Per esempio «2019 | Pietrasanta | Bianco su bianco».'),
+  t('Nella mappatura ogni campo della voce riceve una parte (Parte 1 è il testo prima del primo «|»). Le righe vuote e quelle che iniziano con # non contano.'),
+  t("Senza righe l'elemento non compare sul sito; nel builder resta il contenuto di esempio."),
+];
+
 // Le foto si propongono solo se la voce ha un'immagine; il campo può limitare le origini.
 const hasImageField = computed(() => (props.itemFields || []).some((f) => f && f.type === 'image'));
 const originOpts = computed(() => {
   const tutte = [
     { value: 'posts', label: 'Articoli' },
     { value: 'images', label: 'Foto di un campo' },
+    { value: 'righe', label: 'Righe di un campo' },
   ].filter((o) => o.value !== 'images' || hasImageField.value);
   const ammesse = Array.isArray(props.origins) && props.origins.length ? props.origins : null;
   const scelte = ammesse ? tutte.filter((o) => ammesse.includes(o.value)) : tutte;
   return scelte.length ? scelte : tutte;
 });
 const origin = computed(() => {
-  const s = localQuery.value.source === 'images' ? 'images' : 'posts';
+  const s = ['images', 'righe'].includes(localQuery.value.source) ? localQuery.value.source : 'posts';
   return originOpts.value.some((o) => o.value === s) ? s : originOpts.value[0].value;
 });
 
@@ -291,6 +343,10 @@ function onImagesSelect(v) {
   }
   campoLibero.value = false;
   updateQuery('images_key', v || '');
+}
+
+function righeIn(p) {
+  return `${p.n} ${t('righe in')} «${p.titolo || t('(senza titolo)')}»` + (p.primaRiga ? ` — ${p.primaRiga}` : '');
 }
 
 function fotoIn(p) {
@@ -361,8 +417,20 @@ function mappaFotoPerNome() {
   return mappa;
 }
 
+// Righe: le parti nell'ordine dei campi di testo della voce (il primo riceve la Parte 1…).
+function mappaRighePerNome() {
+  const mappa = {};
+  let n = 0;
+  for (const f of props.itemFields || []) {
+    if (!f || !f.key || !['text', 'textarea'].includes(f.type) || n >= 6) continue;
+    mappa[f.key] = 'parte_' + (++n);
+  }
+  return mappa;
+}
+
 function mappaPerNome() {
   if (origin.value === 'images') return mappaFotoPerNome();
+  if (origin.value === 'righe') return mappaRighePerNome();
   const mappa = {};
   const usati = new Set();
   // Un logo riceve l'immagine in evidenza solo se la voce non ha altre immagini (Testimonianze: l'avatar)
@@ -430,6 +498,7 @@ function aggiornaPrimo() {
   if (!isEnabled.value || nonDisponibili) { primo.value = { stato: '', titolo: '', n: 0 }; return; }
   // Foto di un campo senza campo scelto: niente da chiedere.
   if (origin.value === 'images' && !localQuery.value.images_key) { primo.value = { stato: '', titolo: '', n: 0 }; return; }
+  if (origin.value === 'righe' && !localQuery.value.righe_key) { primo.value = { stato: '', titolo: '', n: 0 }; return; }
   primo.value = { stato: 'carico', titolo: '', n: 0 };
   attesaPrimo = setTimeout(async () => {
     const mia = ++richiestaPrimo;
@@ -439,11 +508,12 @@ function aggiornaPrimo() {
     else if (!r.post_id) primo.value = { stato: 'vuoto', titolo: '', n: 0 };
     // Articoli: value = il titolo del primo; foto: value = quante, title = il contenuto che le ha.
     else if (origin.value === 'images') primo.value = { stato: 'trovato', titolo: String(r.title ?? ''), n: Number(r.value) || 0 };
+    else if (origin.value === 'righe') primo.value = { stato: 'trovato', titolo: String(r.title ?? ''), n: Number(r.value) || 0, primaRiga: String(r.prima ?? '') };
     else primo.value = { stato: 'trovato', titolo: String(r.value ?? ''), n: 0 };
   }, 300);
 }
 watch(
-  () => [isEnabled.value, origin.value, localQuery.value.images_key, localQuery.value.post_type, localQuery.value.orderby, localQuery.value.order, localQuery.value.taxonomy, (localQuery.value.terms || []).join(',')],
+  () => [isEnabled.value, origin.value, localQuery.value.images_key, localQuery.value.righe_key, localQuery.value.post_type, localQuery.value.orderby, localQuery.value.order, localQuery.value.taxonomy, (localQuery.value.terms || []).join(',')],
   aggiornaPrimo,
   { immediate: true },
 );

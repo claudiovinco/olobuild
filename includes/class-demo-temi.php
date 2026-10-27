@@ -93,12 +93,16 @@ class Olobuild_Demo_Temi {
     }
 
     /**
-     * Le chiamate AJAX di WooCommerce (?wc-ajax=…, aggiunta al carrello, frammenti del mini carrello) partono
-     * dall'indirizzo del sito, non da quello della demo: la tendina del mini carrello tornava coi link al carrello
-     * del sito. Se arrivano da una pagina della demo di un negozio, carrello e cassa restano quelli del tema.
+     * Le chiamate AJAX di WooCommerce (?wc-ajax=…, aggiunta al carrello, frammenti del mini carrello) e le rotte REST
+     * delle tile del negozio partono dall'indirizzo del sito, non da quello della demo: la tendina del mini carrello
+     * tornava coi link al carrello del sito. Se arrivano da una pagina della demo di un negozio, carrello, cassa e
+     * scritta dei prodotti senza prezzo restano quelli del tema.
      */
     private static function woo_dalla_demo() {
-        if ( empty( $_GET['wc-ajax'] ) || empty( $_SERVER['HTTP_REFERER'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- si guarda solo se c'è
+        // Anche le rotte REST delle tile del negozio (anteprima veloce, confronto, preferiti).
+        $uri  = isset( $_SERVER['REQUEST_URI'] ) ? (string) wp_unslash( $_SERVER['REQUEST_URI'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- solo confrontato con una stringa fissa
+        $rest = (bool) preg_match( '#(/|%2F)olobuild(/|%2F)v1(/|%2F)(woo-|livesearch)#i', $uri );
+        if ( ( empty( $_GET['wc-ajax'] ) && ! $rest ) || empty( $_SERVER['HTTP_REFERER'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- si guarda solo se c'è
             return;
         }
         $percorso = (string) wp_parse_url( esc_url_raw( wp_unslash( $_SERVER['HTTP_REFERER'] ) ), PHP_URL_PATH );
@@ -114,6 +118,46 @@ class Olobuild_Demo_Temi {
         self::$tema = [ 'id' => $m[1], 'dir' => $dir, 'json' => $json ];
         add_filter( 'woocommerce_get_cart_url', [ __CLASS__, 'carrello_della_demo' ], 99 );
         add_filter( 'woocommerce_get_checkout_url', [ __CLASS__, 'cassa_della_demo' ], 99 );
+        add_filter( 'pre_option_olobuild_woo_senza_prezzo', [ __CLASS__, 'senza_prezzo_della_demo' ] );
+        self::solo_il_negozio_del_tema();
+    }
+
+    /**
+     * Più negozi dimostrativi sullo stesso sito (Fulmine, Tacet…): nella demo di uno, le tile vedono solo i suoi
+     * prodotti e le sue categorie (meta _olo_demo = id del tema, scritto dagli script dei prodotti di prova). Prima
+     * le griglie e la ricerca di Fulmine avrebbero mostrato anche le sculture di Tacet.
+     */
+    private static function solo_il_negozio_del_tema() {
+        add_action( 'pre_get_posts', [ __CLASS__, 'prodotti_del_tema' ] );
+        add_filter( 'get_terms_args', [ __CLASS__, 'categorie_del_tema' ], 10, 2 );
+    }
+
+    /** Le ricerche di prodotti nella demo: solo quelli del tema. */
+    public static function prodotti_del_tema( $q ) {
+        $tipi = (array) $q->get( 'post_type' );
+        if ( ! in_array( 'product', $tipi, true ) || empty( self::$tema['id'] ) ) {
+            return;
+        }
+        $mq   = (array) $q->get( 'meta_query' );
+        $mq[] = [ 'key' => '_olo_demo', 'value' => (string) self::$tema['id'] ];
+        $q->set( 'meta_query', $mq );
+    }
+
+    /** Le categorie dei prodotti nella demo: solo quelle del tema. */
+    public static function categorie_del_tema( $args, $tassonomie ) {
+        if ( ! in_array( 'product_cat', (array) $tassonomie, true ) || empty( self::$tema['id'] ) ) {
+            return $args;
+        }
+        $mq                 = isset( $args['meta_query'] ) && is_array( $args['meta_query'] ) ? $args['meta_query'] : [];
+        $mq[]               = [ 'key' => '_olo_demo', 'value' => (string) self::$tema['id'] ];
+        $args['meta_query'] = $mq;
+        return $args;
+    }
+
+    /** Nella demo di un negozio, la scritta dei prodotti senza prezzo del tema (theme.json → woo → senza_prezzo). */
+    public static function senza_prezzo_della_demo( $valore ) {
+        $testo = self::$tema['json']['woo']['senza_prezzo'] ?? null;
+        return is_string( $testo ) ? $testo : $valore;
     }
 
     /**
@@ -196,6 +240,8 @@ class Olobuild_Demo_Temi {
             add_filter( 'woocommerce_get_cart_url', [ __CLASS__, 'carrello_della_demo' ], 99 );
             add_filter( 'woocommerce_get_checkout_url', [ __CLASS__, 'cassa_della_demo' ], 99 );
             add_filter( 'woocommerce_is_checkout', [ __CLASS__, 'e_la_cassa' ] );
+            add_filter( 'pre_option_olobuild_woo_senza_prezzo', [ __CLASS__, 'senza_prezzo_della_demo' ] );
+            self::solo_il_negozio_del_tema();
         }
 
         // Stile del tema al posto di quello del sito.

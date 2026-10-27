@@ -31,6 +31,9 @@ export default {
     hover_text: '',
     border_radius: '6',
     quantity_style: 'input',
+    testo_senza_prezzo: 'Richiedi informazioni',
+    link_senza_prezzo: '',
+    parametro_senza_prezzo: 'prodotto',
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
@@ -63,6 +66,14 @@ export default {
       { value: 'bag', label: t('Borsa') },
       { value: 'plus', label: t('Piu') },
     ], condition: { field: 'show_icon', value: true } },
+
+    // Un prodotto senza prezzo non si compra: al posto di «Aggiungi» un pulsante di richiesta.
+    { type: 'separator', label: t('Prodotto senza prezzo') },
+    { key: 'testo_senza_prezzo', label: t('Testo del pulsante di richiesta'), type: 'text' },
+    { key: 'link_senza_prezzo', label: t('Collegamento della richiesta'), type: 'link',
+      description: t('La pagina o la sezione col modulo («#richiesta»). Il pulsante compare al posto di «Aggiungi al carrello» quando il prodotto non ha prezzo; senza collegamento non compare niente.') },
+    { key: 'parametro_senza_prezzo', label: t('Porta il nome nel campo'), type: 'text', placeholder: 'prodotto',
+      description: t("Il nome del parametro dell'indirizzo che il campo del modulo legge («Valore dall'indirizzo»): chi arriva trova il nome del prodotto già scritto. Vuoto: il link resta com'è.") },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -102,6 +113,22 @@ export default {
     ]},
     { key: 'full_width', label: t('Larghezza piena'), type: 'toggle' },
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
+    // Il testo del pulsante: misura, peso, maiuscolo e spaziatura come il Pulsante. Vuoti = come prima
+    // (la misura della «Dimensione», peso 600).
+    { type: 'typography', label: t('Testo'),
+      linkedPresetKey: 'typography_preset',
+      linkedPresetGoverns: ['family', 'weight'],
+      responsiveKeys: [],
+      keys: {
+        family:        'font_family',
+        size:          'font_size',
+        weight:        'font_weight',
+        transform:     'text_transform',
+        letterSpacing: 'letter_spacing',
+      },
+      sizeMin: 10, sizeMax: 28,
+      letterSpacingUnit: 'px',
+    },
 
     { type: 'separator', label: t('Colori') },
     withHover({ key: 'bg_color', label: t('Sfondo pulsante'), type: 'color' }, { hoverKey: 'hover_bg', defaultDuration: 200 }),

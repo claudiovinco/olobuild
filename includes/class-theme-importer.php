@@ -832,6 +832,10 @@ class Olobuild_Theme_Importer {
                     $results['activated'][] = 'woo_' . $ruolo;
                 }
             }
+            // La scritta dei prodotti senza prezzo (theme.json → woo → senza_prezzo): «Prezzo riservato».
+            if ( isset( $ruoli['senza_prezzo'] ) && is_string( $ruoli['senza_prezzo'] ) && '' !== trim( $ruoli['senza_prezzo'] ) ) {
+                update_option( 'olobuild_woo_senza_prezzo', mb_substr( sanitize_text_field( $ruoli['senza_prezzo'] ), 0, 80 ) );
+            }
         }
 
         // Mark setup complete

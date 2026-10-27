@@ -264,7 +264,7 @@ def build_header():
         'font_size': '11', 'font_weight': '500', 'text_transform': 'uppercase', 'letter_spacing': '2', 'item_gap': '34',
         'bar_width': 'wide', 'nav_height': '84', 'bar_padding': {'top': 10, 'right': 40, 'bottom': 10, 'left': 40},
         'hover_effect': 'underline', 'hover_effect_color': FUOCO,
-        'button_mode': 'last', 'btn_bg': INK, 'btn_color': FONDO, 'btn_hover_color': INK,
+        'button_mode': 'last', 'btn_bg': INK, 'btn_color': FONDO, 'btn_hover_bg': FUOCO, 'btn_hover_color': INK,
         'btn_radius': SQ, 'btn_padding': {'top': 12, 'right': 20, 'bottom': 12, 'left': 20}, 'btn_hover_effect': 'none',
         'btn_font_weight': '500', 'btn_transform': 'uppercase', 'btn_letter_spacing': '2',
         'social_in_navbar': False, 'social_in_mobile': True, 'social_facebook': '', 'social_instagram': '#',

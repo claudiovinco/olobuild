@@ -29,6 +29,15 @@
           <CfgSelect searchable :model-value="form[pt.optionKey]" :options="optionsFor({ selected: form[pt.optionKey], emptyLabel: t('Default WooCommerce') })" @update:model-value="set(pt.optionKey, parseInt($event) || 0)" />
         </div>
       </div>
+      <!-- I prodotti senza prezzo (opere su richiesta, pezzi su misura): la scritta al posto del prezzo in tutte
+           le tile e nelle pagine di WooCommerce. Vuota: come WooCommerce, niente. -->
+      <div class="cfg-row">
+        <div class="label-col">
+          <label>{{ t('Prodotti senza prezzo') }}</label>
+          <div class="hint">{{ t('Al posto del prezzo, quando un prodotto non ne ha: «Prezzo su richiesta», «Prezzo riservato». Vuoto: non compare niente.') }}</div>
+        </div>
+        <div class="control-col"><div class="cfg-input cfg-w-md"><input type="text" :value="testoSenzaPrezzo" maxlength="80" :placeholder="t('Prezzo su richiesta')" @input="setTesto($event.target.value)" /></div></div>
+      </div>
     </div>
   </div>
 </template>
@@ -64,6 +73,10 @@ const pageTypes = [
 const INIZIALE = Object.fromEntries(pageTypes.map((pt) => [pt.optionKey, 0]));
 const CHIAVI = Object.keys(INIZIALE);
 const form = ref({ ...INIZIALE });
+// Testo dei prodotti senza prezzo (option olobuild_woo_senza_prezzo): una stringa, non un id di template.
+const TESTO = 'olobuild_woo_senza_prezzo';
+const testoSenzaPrezzo = ref('');
+function setTesto(v) { testoSenzaPrezzo.value = v; setDirty(true); }
 
 const wooActive = ref(true);
 
@@ -87,6 +100,7 @@ async function loadSettings(invariato) {
       const nostre = {};
       CHIAVI.forEach((k) => { if (data && data[k] !== undefined) nostre[k] = parseInt(data[k]) || 0; });
       form.value = conIniziali(INIZIALE, nostre);
+      testoSenzaPrezzo.value = typeof data?.[TESTO] === 'string' ? data[TESTO] : '';
       if (typeof data?.woo_active === 'boolean') wooActive.value = data.woo_active;
       loaded.value = true;
     }
@@ -97,10 +111,11 @@ async function saveSettings() {
   assertLoaded(loaded);
   // Rilettura: a video resta ciò che il server ha scritto davvero, tranne le scelte
   // fatte mentre la richiesta era in volo, che restano da salvare (salvaERileggi).
-  await salvaERileggi(() => JSON.stringify(form.value), () => okOrThrow(fetch(`${window.oloData.restUrl}woo-templates`, {
+  const corpo = () => ({ ...form.value, [TESTO]: testoSenzaPrezzo.value });
+  await salvaERileggi(() => JSON.stringify(corpo()), () => okOrThrow(fetch(`${window.oloData.restUrl}woo-templates`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-    body: JSON.stringify(form.value),
+    body: JSON.stringify(corpo()),
   })), loadSettings);
 }
 

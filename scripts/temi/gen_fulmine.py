@@ -126,7 +126,7 @@ def button(t, label_, url, kind='giallo', align='left', pad_top=10, icon=''):
     o.update({'text': label_, 'url': url, 'alignment': align, 'border_radius': 10, 'font_size': 15, 'font_weight': '700',
               'text_transform': 'none', 'letter_spacing': '0'})
     if icon:
-        o.update({'icon': icon, 'icon_position': 'right', 'icon_spacing': 8, 'icon_size': 16})
+        o.update({'icon': icon, 'icon_position': 'after', 'icon_spacing': 8, 'icon_size': 16})
     return t.classic('button', o, style={'padding_top': pad_top})
 
 
@@ -135,7 +135,8 @@ def link(t, label_, url, align='right'):
     return t.classic('button', {'text': label_, 'url': url, 'alignment': align, 'bg_color': 'transparent', 'text_color': BLU,
                                 'hover_bg_color': 'transparent', 'hover_text_color': NOTTE, 'border_radius': 0,
                                 'font_size': 15, 'font_weight': '600', 'text_transform': 'none', 'letter_spacing': '0',
-                                'padding_x': 0, 'padding_y': 4, 'icon': 'arrow-right', 'icon_position': 'right',
+                                'padding_x': 0, 'padding_y': 4, 'tile_padding': {'top': 4, 'right': 0, 'bottom': 4, 'left': 0},
+                                'icon': 'arrow-right', 'icon_position': 'after',
                                 'icon_spacing': 6, 'icon_size': 15},
                      style={'padding_top': 0})
 
@@ -205,7 +206,7 @@ def faq(t, pairs, prefix):
     panels = [{'id': '%s-%d' % (prefix, i + 1), 'title': q, 'content': a, 'image': '', 'video': '', 'icon': ''}
               for i, (q, a) in enumerate(pairs)]
     return t.classic('accordion', {
-        'panels': panels, 'default_open': 'first', 'icon_style': 'chevron', 'icon_position': 'right',
+        'panels': panels, 'default_open': 'first', 'icon_style': 'chevron', 'icon_position': 'after',
         'header_bg': BIANCO, 'header_bg_active': BIANCO, 'content_bg': BIANCO,
         'header_text_color': TESTO, 'header_text_color_active': BLU, 'header_font_size': 17, 'header_font_weight': '700',
         'header_font_family': 'var(--olo-font-family-body)', 'content_font_size': 15, 'text_color': TENUE,
@@ -506,7 +507,8 @@ def link_chiaro(t, label_, url):
     return t.classic('button', {'text': label_, 'url': url, 'alignment': 'left', 'bg_color': 'transparent', 'text_color': GIALLO,
                                 'hover_bg_color': 'transparent', 'hover_text_color': BIANCO, 'border_radius': 0,
                                 'font_size': 15, 'font_weight': '600', 'text_transform': 'none', 'letter_spacing': '0',
-                                'padding_x': 0, 'padding_y': 4, 'icon': 'arrow-right', 'icon_position': 'right',
+                                'padding_x': 0, 'padding_y': 4, 'tile_padding': {'top': 4, 'right': 0, 'bottom': 4, 'left': 0},
+                                'icon': 'arrow-right', 'icon_position': 'after',
                                 'icon_spacing': 6, 'icon_size': 15}, style={'padding_top': 14})
 
 

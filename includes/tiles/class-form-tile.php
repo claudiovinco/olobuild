@@ -150,6 +150,9 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
      * Lo script che scrive nei campi con «Valore dall'indirizzo» il valore del parametro (…?prodotto=LR-240):
      * un campo nascosto lo prende sempre, gli altri solo se sono vuoti; una scelta (select/radio) si sceglie se
      * il valore c'è fra le opzioni. Una volta per pagina; niente && (wptexturize).
+     * Anche al clic su un link alla stessa pagina col parametro e un'ancora (…?opera=Undici#visione, il pulsante
+     * di richiesta di una scheda prodotto): lo scorrimento morbido non ricarica la pagina, e il campo restava vuoto.
+     * Dal clic il valore si scrive anche sopra quello che c'era: è la scelta appena fatta.
      */
     private static function script_param() {
         static $fatto = false;
@@ -158,7 +161,8 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
         }
         $fatto = true;
         return <<<'JS'
-(function(){var q;try{q=new URLSearchParams(location.search);}catch(e){return;}
+(function(){
+function riempi(q,forza){
 [].forEach.call(document.querySelectorAll("[data-olo-param]"),function(el){
 var v=q.get(el.getAttribute("data-olo-param"));if(v===null){return;}v=String(v).slice(0,200);
 var campi=/^(INPUT|SELECT|TEXTAREA)$/.test(el.tagName)?[el]:[].slice.call(el.querySelectorAll("input,select,textarea"));
@@ -166,8 +170,16 @@ campi.forEach(function(c){var tipo=(c.type||"").toLowerCase();var cambiato=false
 if(tipo==="radio"){if(c.value===v){c.checked=true;cambiato=true;}}
 else if(c.tagName==="SELECT"){[].forEach.call(c.options,function(o){if(o.value===v){c.value=o.value;cambiato=true;}else if(o.text===v){c.value=o.value;cambiato=true;}});}
 else if(tipo==="hidden"){c.value=v;cambiato=true;}
-else if(tipo!=="file"){if(tipo!=="checkbox"){if(!c.value){c.value=v;cambiato=true;}}}
-if(cambiato){c.dispatchEvent(new Event("input",{bubbles:true}));c.dispatchEvent(new Event("change",{bubbles:true}));}});});})();
+else if(tipo!=="file"){if(tipo!=="checkbox"){if(forza||!c.value){c.value=v;cambiato=true;}}}
+if(cambiato){c.dispatchEvent(new Event("input",{bubbles:true}));c.dispatchEvent(new Event("change",{bubbles:true}));}});});}
+var q;try{q=new URLSearchParams(location.search);}catch(e){return;}
+riempi(q,false);
+document.addEventListener("click",function(ev){
+var a=ev.target.closest?ev.target.closest("a[href]"):null;if(!a){return;}
+var u;try{u=new URL(a.getAttribute("href"),location.href);}catch(e){return;}
+if(u.origin!==location.origin){return;}if(u.pathname!==location.pathname){return;}if(!u.search){return;}
+riempi(new URLSearchParams(u.search),true);},true);
+})();
 JS;
     }
 

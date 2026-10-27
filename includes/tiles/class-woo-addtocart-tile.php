@@ -24,6 +24,10 @@ class Olobuild_Woo_Addtocart_Tile extends Olobuild_Tile_Base {
         'hover_text'     => '',
         'border_radius'  => 6,
         'quantity_style'  => 'input',
+        // Prodotto senza prezzo (non acquistabile): un pulsante di richiesta al posto di «Aggiungi».
+        'testo_senza_prezzo'     => 'Richiedi informazioni',
+        'link_senza_prezzo'      => '',
+        'parametro_senza_prezzo' => 'prodotto',
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -92,6 +96,13 @@ class Olobuild_Woo_Addtocart_Tile extends Olobuild_Tile_Base {
             'large'  => [ 'py' => 16, 'px' => 32, 'fs' => 17 ],
         ];
         $sz = isset( $size_map[ $s['size'] ] ) ? $size_map[ $s['size'] ] : $size_map['medium'];
+        // Il testo del pulsante (controllo «Testo»): vuoto = la misura della Dimensione e peso 600, come prima.
+        $btn_fs     = absint( $s['font_size'] ?? 0 );
+        $btn_fs     = $btn_fs ? max( 10, min( 28, $btn_fs ) ) : $sz['fs'];
+        $btn_peso   = $this->font_weight_css( $s['font_weight'] ?? '' ) ?: '600';
+        $btn_maiusc = in_array( $s['text_transform'] ?? '', [ 'uppercase', 'lowercase', 'capitalize', 'none' ], true ) ? $s['text_transform'] : '';
+        $btn_spazio = is_numeric( $s['letter_spacing'] ?? '' ) ? max( -2, min( 10, (float) $s['letter_spacing'] ) ) : null;
+        $btn_font   = (string) $this->resolve_font_family( (string) ( $s['font_family'] ?? '' ) );
 
         // Style
         $btn_style = in_array( $s['style'], [ 'filled', 'outline', 'text' ], true ) ? $s['style'] : 'filled';
@@ -124,8 +135,11 @@ class Olobuild_Woo_Addtocart_Tile extends Olobuild_Tile_Base {
                 gap: 8px;
                 justify-content: center;
                 padding: <?php echo $sz['py']; ?>px <?php echo $sz['px']; ?>px;
-                font-size: <?php echo $sz['fs']; ?>px;
-                font-weight: 600;
+                font-size: <?php echo $btn_fs; ?>px;
+                font-weight: <?php echo $btn_peso; ?>;
+                <?php if ( '' !== $btn_maiusc ) : ?>text-transform: <?php echo $btn_maiusc; ?>;<?php endif; ?>
+                <?php if ( null !== $btn_spazio ) : ?>letter-spacing: <?php echo $btn_spazio; ?>px;<?php endif; ?>
+                <?php if ( '' !== $btn_font ) : ?>font-family: <?php echo $btn_font; ?>;<?php endif; ?>
                 border-radius: <?php echo $radius; ?>;
                 cursor: pointer;
                 text-decoration: none;
@@ -193,6 +207,31 @@ class Olobuild_Woo_Addtocart_Tile extends Olobuild_Tile_Base {
             }
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+        <?php
+        // Un prodotto senza prezzo non si compra (opere su richiesta, pezzi su misura): prima il pulsante tentava
+        // l'aggiunta con AJAX, WooCommerce la rifiutava e la pagina si ricaricava. Ora, con un link scelto, un
+        // pulsante di richiesta che porta il nome del prodotto nel modulo (?prodotto=…, «Valore dall'indirizzo»
+        // del campo del Form); senza link, niente pulsante.
+        if ( ! $product->is_purchasable() ) :
+            $link_rich = trim( (string) ( $s['link_senza_prezzo'] ?? '' ) );
+            $param     = substr( (string) preg_replace( '/[^A-Za-z0-9_-]/', '', (string) ( $s['parametro_senza_prezzo'] ?? '' ) ), 0, 40 );
+            if ( '' !== $link_rich && '' !== $param ) {
+                $link_rich = add_query_arg( $param, rawurlencode( $product->get_name() ), $link_rich );
+            }
+            if ( '' === $link_rich ) {
+                ob_end_clean();
+                return '';
+            }
+            ?>
+        <div class="<?php echo esc_attr( $uid ); ?>">
+            <a href="<?php echo esc_url( $link_rich ); ?>" class="olo-atc-btn olo-atc-richiesta">
+                <span><?php echo esc_html( (string) ( $s['testo_senza_prezzo'] ?? '' ) ?: olobuild_t( 'Richiedi informazioni' ) ); ?></span>
+            </a>
+        </div>
+        <?php
+            return ob_get_clean();
+        endif;
+        ?>
         <div class="<?php echo esc_attr( $uid ); ?>">
             <?php if ( ! empty( $s['show_quantity'] ) ) : ?>
             <div class="olo-atc-qty-wrap">

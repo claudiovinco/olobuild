@@ -420,12 +420,26 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
         // tema scuro (rosa, testo quasi bianco, alone viola) e, senza i token, su una
         // pagina chiara titolo e testo sparivano. --olo-color-text-emphasis non esiste
         // nella Palette: il titolo prende il colore del testo.
-        $accent = $this->safe_color_css( $s['tl_yr_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
-        $title  = $this->safe_color_css( $s['tl_title_color'] ?? '' ) ?: 'var(--olo-color-text, #1f2937)';
-        $text   = $this->safe_color_css( $s['tl_text_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #6b7280)';
-        $rail   = $this->safe_color_css( $s['tl_rail_color'] ?? '' ) ?: 'var(--olo-color-border, #e5e7eb)';
-        $halo   = 'var(--olo-color-background, #ffffff)';
+        // Coi temi scuri (Notte, Neon, Blu) le riserve sono chiare, come nelle altre disposizioni: prima la
+        // Scaletta restava nei colori del sito e su fondo scuro data, titolo e testo sparivano. L'alone del
+        // pallino ha il colore del fondo della tile (niente, se trasparente): era sempre quello chiaro della
+        // pagina, un anello bianco che copriva l'ultima cifra dell'anno.
+        $scuro  = in_array( $s['tl_theme'] ?? 'paper', [ 'night', 'neon', 'blue' ], true );
+        $accent = $this->safe_color_css( $s['tl_yr_color'] ?? '' ) ?: ( $scuro ? '#9fb0c6' : 'var(--olo-color-primary, #e1474f)' );
+        $title  = $this->safe_color_css( $s['tl_title_color'] ?? '' ) ?: ( $scuro ? '#eef3fa' : 'var(--olo-color-text, #1f2937)' );
+        $text   = $this->safe_color_css( $s['tl_text_color'] ?? '' ) ?: ( $scuro ? '#9fb0c6' : 'var(--olo-color-text-muted, #6b7280)' );
+        $rail   = $this->safe_color_css( $s['tl_rail_color'] ?? '' ) ?: ( $scuro ? '#33405d' : 'var(--olo-color-border, #e5e7eb)' );
+        $tag    = $this->safe_color_css( $s['tl_tag_color'] ?? '' ) ?: $accent;
+        $pallino = $scuro ? $title : $accent;
+        $fondi  = [ 'night' => '#0f1726', 'neon' => '#0f1726', 'blue' => '#0a1f3c' ];
+        if ( ! empty( $s['tl_transparent'] ) ) {
+            $halo = 'transparent';
+        } else {
+            $halo = $scuro ? $fondi[ $s['tl_theme'] ] : 'var(--olo-color-background, #ffffff)';
+        }
         $disp   = 'var(--olo-font-family-heading, Georgia, "Times New Roman", serif)';
+        // «Mostra etichetta»: l'etichetta della tappa sopra il titolo (prima la Scaletta non la mostrava).
+        $con_tag = ! isset( $s['tl_show_tag'] ) || ! empty( $s['tl_show_tag'] );
 
         echo '<div class="olo-tl-sched">';
         foreach ( $items as $item ) {
@@ -433,6 +447,7 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
             echo '<div class="olo-tl-slot__t">' . esc_html( $item['date'] ) . '</div>';
             echo '<div class="olo-tl-slot__c">';
             echo $this->status_html( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- status_html() escapes label and class internally
+            if ( $con_tag && '' !== (string) ( $item['tag'] ?? '' ) ) { echo '<span class="olo-tl-slot__tag">' . esc_html( $item['tag'] ) . '</span>'; }
             if ( $item['title'] !== '' )       { echo '<h3>' . esc_html( $item['title'] ) . '</h3>'; }
             if ( $item['description'] !== '' ) { echo '<p>' . esc_html( $item['description'] ) . '</p>'; }
             echo '</div></div>';
@@ -440,16 +455,19 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
         echo '</div>';
 
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from safe_color_css()-validated colors with fixed var() fallbacks, fixed font-stack literals and the internally generated $uid.
+        // Famiglia, misura e peso di anno, titolo e testo (controlli Tipografia della tile): le variabili che la
+        // tile scrive sulla radice, con le misure di prima come riserva.
         echo '<style>'
            . ".{$uid} .olo-tl-sched{max-width:760px;margin:0 auto;position:relative;}"
            . ".{$uid} .olo-tl-sched::before{content:\"\";position:absolute;left:90px;top:8px;bottom:8px;width:1px;background:{$rail};}"
            . ".{$uid} .olo-tl-slot{display:grid;grid-template-columns:80px 1fr;gap:30px;padding:0 0 28px;position:relative;}"
            . ".{$uid} .olo-tl-slot:last-child{padding-bottom:0;}"
-           . ".{$uid} .olo-tl-slot__t{font-family:{$disp};font-size:20px;color:{$accent};text-align:right;line-height:1.25;}"
+           . ".{$uid} .olo-tl-slot__t{font-family:var(--tl-yr-family,{$disp});font-size:var(--tl-yr-size,20px);color:{$accent};text-align:right;line-height:1.25;}"
            . ".{$uid} .olo-tl-slot__c{position:relative;padding-left:30px;}"
-           . ".{$uid} .olo-tl-slot__c::before{content:\"\";position:absolute;left:-25px;top:7px;width:11px;height:11px;border-radius:50%;background:{$accent};box-shadow:0 0 0 4px {$halo};}"
-           . ".{$uid} .olo-tl-slot__c h3{font-family:{$disp};font-size:20px;font-weight:400;margin:0 0 5px;color:{$title};line-height:1.2;}"
-           . ".{$uid} .olo-tl-slot__c p{font-size:14px;color:{$text};margin:0;line-height:1.6;}"
+           . ".{$uid} .olo-tl-slot__c::before{content:\"\";position:absolute;left:-25px;top:7px;width:11px;height:11px;border-radius:50%;background:{$pallino};box-shadow:0 0 0 4px {$halo};}"
+           . ".{$uid} .olo-tl-slot__tag{display:block;margin:0 0 .25rem;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:{$tag};}"
+           . ".{$uid} .olo-tl-slot__c h3{font-family:var(--tl-title-family,{$disp});font-size:var(--tl-title-size,20px);font-weight:var(--tl-title-weight,400);margin:0 0 5px;color:{$title};line-height:1.2;}"
+           . ".{$uid} .olo-tl-slot__c p{font-family:var(--tl-text-family,inherit);font-size:var(--tl-text-size,14px);color:{$text};margin:0;line-height:var(--tl-text-lh,1.6);}"
            . "@media(max-width:600px){.{$uid} .olo-tl-sched::before{left:0;}.{$uid} .olo-tl-slot{grid-template-columns:1fr;gap:6px;}.{$uid} .olo-tl-slot__t{text-align:left;}.{$uid} .olo-tl-slot__c{padding-left:24px;}.{$uid} .olo-tl-slot__c::before{left:-24px;}}"
            . '</style>';
         // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

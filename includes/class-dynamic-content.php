@@ -470,7 +470,12 @@ class Olobuild_Dynamic_Content {
             case 'product_review_count': return (string) $product->get_review_count();
             case 'product_url':         return $product->get_permalink();
             case 'product_add_to_cart_url': return $product->add_to_cart_url();
-            default:                    return '';
+            default:
+                // Un attributo del prodotto («attributo:pa_artista»): i valori, separati da virgola.
+                if ( str_starts_with( $field, 'attributo:' ) ) {
+                    return (string) $product->get_attribute( sanitize_title( substr( $field, 10 ) ) );
+                }
+                return '';
         }
     }
 
@@ -1043,6 +1048,80 @@ class Olobuild_Dynamic_Content {
         return $items;
     }
 
+    /** Quante parti al massimo si leggono da una riga (Parte 1…6 nella mappatura). */
+    const PARTI_RIGA = 6;
+
+    /**
+     * «Righe di un campo»: le voci scritte in un campo del contenuto, una per riga, con le parti separate da «|»
+     * («2019 | Pietrasanta | Bianco su bianco»). Le righe vuote e quelle che iniziano con # non contano. Vale anche
+     * un campo salvato come elenco (array di testi o di array). Così una tile a voci (Timeline, Scheda tecnica,
+     * Lista…) mostra i dati di ogni contenuto: le mostre di un'opera, le misure di un prodotto.
+     *
+     * @param string $key     Chiave del campo (meta).
+     * @param int    $post_id Contenuto.
+     * @return array[] Una voce per riga: le sue parti, già ripulite.
+     */
+    public function righe_di_un_campo( $key, $post_id ) {
+        $key     = trim( (string) $key );
+        $post_id = (int) $post_id;
+        if ( '' === $key || $post_id <= 0 ) {
+            return [];
+        }
+        $raw = get_post_meta( $post_id, $key, true );
+        /**
+         * Il valore del campo letto da «Righe di un campo», per chi lo salva in un altro modo.
+         *
+         * @param mixed  $raw
+         * @param string $key
+         * @param int    $post_id
+         */
+        $raw   = apply_filters( 'olobuild_dynamic_righe_raw', $raw, $key, $post_id );
+        $righe = [];
+        if ( is_array( $raw ) ) {
+            foreach ( $raw as $voce ) {
+                $righe[] = is_array( $voce ) ? implode( ' | ', array_map( 'strval', array_values( $voce ) ) ) : (string) $voce;
+            }
+        } else {
+            $righe = preg_split( '/\r\n|\r|\n/', (string) $raw );
+        }
+        $esito = [];
+        foreach ( $righe as $riga ) {
+            $riga = trim( wp_strip_all_tags( (string) $riga ) );
+            if ( '' === $riga || '#' === $riga[0] ) {
+                continue;
+            }
+            $parti   = array_map( 'trim', explode( '|', $riga, self::PARTI_RIGA ) );
+            $esito[] = [ 'riga' => preg_replace( '/\s*\|\s*/', ' · ', $riga ), 'parti' => $parti ];
+        }
+        return $esito;
+    }
+
+    /**
+     * Le voci di un ripetitore dalle righe di un campo.
+     *
+     * @param array[] $righe    Da righe_di_un_campo().
+     * @param array   $item_map campo della voce => parte_1…parte_6, riga, _index.
+     * @return array
+     */
+    public function build_items_from_righe( $righe, $item_map ) {
+        $items = [];
+        foreach ( array_values( (array) $righe ) as $i => $r ) {
+            $item = [ 'id' => 'riga-' . ( $i + 1 ) ];
+            foreach ( (array) $item_map as $item_key => $part ) {
+                $part = (string) $part;
+                if ( '_index' === $part ) {
+                    $item[ $item_key ] = sprintf( '%02d', $i + 1 );
+                } elseif ( 'riga' === $part ) {
+                    $item[ $item_key ] = (string) $r['riga'];
+                } elseif ( preg_match( '/^parte_([1-6])$/', $part, $m ) ) {
+                    $item[ $item_key ] = (string) ( $r['parti'][ (int) $m[1] - 1 ] ?? '' );
+                }
+            }
+            $items[] = $item;
+        }
+        return $items;
+    }
+
     /** Il lato più lungo che una foto 360° può avere come texture: oltre, molte schede grafiche non la caricano. */
     const MAX_ORIGINALE = 8192;
 
@@ -1306,6 +1385,16 @@ class Olobuild_Dynamic_Content {
                     [ 'key' => 'cart_count',          'label' => 'Articoli nel carrello', 'type' => 'text' ],
                 ],
             ];
+            // Gli attributi del negozio (Artista, Marca, Materiale…): uno per voce, letti dal prodotto della pagina.
+            if ( function_exists( 'wc_get_attribute_taxonomies' ) ) {
+                foreach ( (array) wc_get_attribute_taxonomies() as $att ) {
+                    $sources['woocommerce']['fields'][] = [
+                        'key'   => 'attributo:pa_' . $att->attribute_name,
+                        'label' => 'Attributo: ' . $att->attribute_label,
+                        'type'  => 'text',
+                    ];
+                }
+            }
         }
 
         // ACF support

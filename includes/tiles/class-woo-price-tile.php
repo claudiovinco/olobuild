@@ -121,6 +121,10 @@ class Olobuild_Woo_Price_Tile extends Olobuild_Tile_Base {
                 $max         = max( $prezzi_figli );
                 $html_prezzo = $min !== $max ? wc_format_price_range( $min, $max ) : wc_price( $min );
             }
+        } elseif ( '' === (string) $product->get_price() ) {
+            // Senza prezzo (opere su richiesta, pezzi su misura): la scritta di Template WooCommerce, «Prezzo su
+            // richiesta», o niente. Prima wc_price('') scriveva «0,00 €».
+            $html_prezzo = (string) apply_filters( 'woocommerce_empty_price_html', '', $product );
         } else {
             // Semplici, esterni, singole varianti: invariato.
             $regular_raw  = $product->get_regular_price();

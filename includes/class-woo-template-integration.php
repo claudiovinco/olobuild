@@ -56,6 +56,23 @@ class Olobuild_Woo_Template_Integration {
 
         // Admin page under Olobuild menu
         add_action( 'admin_menu', [ $this, 'add_admin_page' ], 30 );
+
+        // Prodotti senza prezzo: la scritta scelta in Template WooCommerce, ovunque WooCommerce dà il prezzo.
+        add_filter( 'woocommerce_empty_price_html', [ $this, 'prezzo_vuoto' ], 10, 2 );
+    }
+
+    /**
+     * La scritta al posto del prezzo di un prodotto che non ne ha (opere su richiesta, pezzi su misura), dalla
+     * option olobuild_woo_senza_prezzo; vuota, come WooCommerce: niente.
+     */
+    public function prezzo_vuoto( $html, $product = null ) {
+        $testo = self::testo_senza_prezzo();
+        return '' !== $testo ? '<span class="olo-prezzo-riservato">' . esc_html( $testo ) . '</span>' : $html;
+    }
+
+    /** Il testo dei prodotti senza prezzo ('' se non c'è). La demo di un tema lo prende dal suo theme.json. */
+    public static function testo_senza_prezzo() {
+        return trim( (string) get_option( 'olobuild_woo_senza_prezzo', '' ) );
     }
 
     /**

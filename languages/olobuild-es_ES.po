@@ -47080,3 +47080,107 @@ msgstr "Mostrar productos recomendados"
 #: src/config/elements/woo_cart.js
 msgid "«Potresti essere interessato a…»: i cross-sell che WooCommerce aggiunge sotto il carrello. Spegnilo se nella pagina c'è la tile Cross-sell."
 msgstr "«Quizás te interese…»: los productos cruzados que WooCommerce añade debajo del carrito. Desactívalo si la página tiene la tile Cross-sell."
+
+#: src/components/Builder/DynamicQueryPanel.vue
+msgid "Righe di un campo"
+msgstr "Líneas de un campo"
+
+#: src/components/Builder/DynamicQueryPanel.vue
+msgid "Chiave del campo con le righe"
+msgstr "Clave del campo con las líneas"
+
+#: src/components/Builder/DynamicQueryPanel.vue
+msgid "Righe al massimo"
+msgstr "Líneas como máximo"
+
+#: src/components/Builder/DynamicQueryPanel.vue
+msgid "Le voci vengono da un campo personalizzato del contenuto che la pagina mostra (un prodotto, un articolo): una voce per riga, con le parti separate da «|». Per esempio «2019 | Pietrasanta | Bianco su bianco»."
+msgstr "Los elementos vienen de un campo personalizado del contenido que muestra la página (un producto, una entrada): un elemento por línea, con las partes separadas por «|». Por ejemplo «2019 | Pietrasanta | Blanco sobre blanco»."
+
+#: src/components/Builder/DynamicQueryPanel.vue
+msgid "Nella mappatura ogni campo della voce riceve una parte (Parte 1 è il testo prima del primo «|»). Le righe vuote e quelle che iniziano con # non contano."
+msgstr "En el mapeo cada campo del elemento recibe una parte (Parte 1 es el texto antes del primer «|»). Las líneas vacías y las que empiezan por # no cuentan."
+
+#: src/components/Builder/DynamicQueryPanel.vue
+msgid "Senza righe l'elemento non compare sul sito; nel builder resta il contenuto di esempio."
+msgstr "Sin líneas el elemento no aparece en el sitio; en el builder queda el contenido de ejemplo."
+
+#: src/components/Builder/DynamicQueryPanel.vue
+msgid "Nessun contenuto ha righe in questo campo"
+msgstr "Ningún contenido tiene líneas en este campo"
+
+#: src/components/Builder/DynamicQueryPanel.vue
+msgid "righe in"
+msgstr "líneas en"
+
+#: src/components/Builder/DynamicQueryPanel.vue
+msgid "Parte 1"
+msgstr "Parte 1"
+
+#: src/components/Builder/DynamicQueryPanel.vue
+msgid "Parte 2"
+msgstr "Parte 2"
+
+#: src/components/Builder/DynamicQueryPanel.vue
+msgid "Parte 3"
+msgstr "Parte 3"
+
+#: src/components/Builder/DynamicQueryPanel.vue
+msgid "Parte 4"
+msgstr "Parte 4"
+
+#: src/components/Builder/DynamicQueryPanel.vue
+msgid "Parte 5"
+msgstr "Parte 5"
+
+#: src/components/Builder/DynamicQueryPanel.vue
+msgid "Parte 6"
+msgstr "Parte 6"
+
+#: src/components/Builder/DynamicQueryPanel.vue
+msgid "Riga intera"
+msgstr "Línea entera"
+
+#: src/config/elements/woo_addtocart.js
+msgid "Prodotto senza prezzo"
+msgstr "Producto sin precio"
+
+#: src/config/elements/woo_addtocart.js
+msgid "Testo del pulsante di richiesta"
+msgstr "Texto del botón de solicitud"
+
+#: src/config/elements/woo_addtocart.js
+msgid "La pagina o la sezione col modulo («#richiesta»). Il pulsante compare al posto di «Aggiungi al carrello» quando il prodotto non ha prezzo; senza collegamento non compare niente."
+msgstr "La página o la sección con el formulario («#solicitud»). El botón sustituye a «Añadir al carrito» cuando el producto no tiene precio; sin enlace no aparece nada."
+
+#: src/config/elements/woo_addtocart.js
+msgid "Porta il nome nel campo"
+msgstr "Llevar el nombre al campo"
+
+#: src/config/elements/woo_addtocart.js
+msgid "Il nome del parametro dell'indirizzo che il campo del modulo legge («Valore dall'indirizzo»): chi arriva trova il nome del prodotto già scritto. Vuoto: il link resta com'è."
+msgstr "El nombre del parámetro de la dirección que lee el campo del formulario («Valor de la dirección»): quien llega encuentra el nombre del producto ya escrito. Vacío: el enlace queda como está."
+
+#: includes/tiles/class-woo-addtocart-tile.php
+msgid "Richiedi informazioni"
+msgstr "Solicitar información"
+
+#: src/components/Admin/WooTemplatesTab.vue
+msgid "Prodotti senza prezzo"
+msgstr "Productos sin precio"
+
+#: src/components/Admin/WooTemplatesTab.vue
+msgid "Al posto del prezzo, quando un prodotto non ne ha: «Prezzo su richiesta», «Prezzo riservato». Vuoto: non compare niente."
+msgstr "En lugar del precio, cuando un producto no lo tiene: «Precio a consultar», «Precio reservado». Vacío: no aparece nada."
+
+#: src/components/Admin/WooTemplatesTab.vue
+msgid "Prezzo su richiesta"
+msgstr "Precio a consultar"
+
+#: includes/class-theme-importer.php
+msgid "Opere su appuntamento"
+msgstr "Obras con cita previa"
+
+#: src/config/elements/text-block.js
+msgid "Colore dei link"
+msgstr "Color de los enlaces"

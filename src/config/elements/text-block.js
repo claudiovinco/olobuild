@@ -18,6 +18,7 @@ export default {
     content: '<p>Scrivi qui il tuo testo. Puoi formattare con <strong>grassetto</strong>, <em>corsivo</em>, elenchi, titoli e molto altro.</p>',
     typography_preset: '',
     text_color: '',
+    link_color: '',
     font_family: '',
     font_size: '',
     font_weight: '',
@@ -87,6 +88,7 @@ export default {
       },
       sizeMin: 12, sizeMax: 60,
     },
+    { key: 'link_color', label: t('Colore dei link'), type: 'color' },
 
     { type: 'separator', label: t('Layout') },
     { key: 'text_align', label: t('Allineamento'), type: 'select', options: [

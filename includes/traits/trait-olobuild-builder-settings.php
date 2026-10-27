@@ -827,6 +827,7 @@ trait Olobuild_Builder_Settings_Trait {
                         'olobuild_woo_tpl_cart'             => (int) get_option( 'olobuild_woo_tpl_cart', 0 ),
                         'olobuild_woo_tpl_checkout'         => (int) get_option( 'olobuild_woo_tpl_checkout', 0 ),
                         'olobuild_woo_tpl_myaccount'        => (int) get_option( 'olobuild_woo_tpl_myaccount', 0 ),
+                        'olobuild_woo_senza_prezzo'         => (string) get_option( 'olobuild_woo_senza_prezzo', '' ),
                         'woo_active'                   => class_exists( 'WooCommerce' ),
                     ] );
                 },
@@ -850,6 +851,15 @@ trait Olobuild_Builder_Settings_Trait {
                     }
                     foreach ( $allowed as $k ) {
                         if ( isset( $p[ $k ] ) ) update_option( $k, (int) $p[ $k ] );
+                    }
+                    // Il testo dei prodotti senza prezzo (Olobuild_Woo_Template_Integration::prezzo_vuoto()).
+                    if ( isset( $p['olobuild_woo_senza_prezzo'] ) && is_string( $p['olobuild_woo_senza_prezzo'] ) ) {
+                        $testo = mb_substr( sanitize_text_field( $p['olobuild_woo_senza_prezzo'] ), 0, 80 );
+                        if ( '' === $testo ) {
+                            delete_option( 'olobuild_woo_senza_prezzo' );
+                        } else {
+                            update_option( 'olobuild_woo_senza_prezzo', $testo );
+                        }
                     }
                     update_option( 'olobuild_settings_last_saved', time() );
                     return rest_ensure_response( [ 'ok' => true ] );

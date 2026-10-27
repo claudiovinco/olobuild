@@ -107,16 +107,16 @@ export default {
 
   fields: [
     { type: 'separator', label: t('Prodotto') },
-    { key: 'codice', label: t('Codice'), type: 'text' },
-    { key: 'nome', label: t('Nome'), type: 'text' },
+    { key: 'codice', label: t('Codice'), type: 'text', supportsDynamic: true },
+    { key: 'nome', label: t('Nome'), type: 'text', supportsDynamic: true },
     { key: 'etichetta', label: t('Etichetta'), type: 'text',
       description: t('Una parola sopra il nome, in evidenza: «Nuova serie», «Disponibile a magazzino». Vuota: niente.') },
-    { key: 'descrizione', label: t('Descrizione breve'), type: 'textarea' },
-    { key: 'immagine', label: t('Foto'), type: 'image' },
+    { key: 'descrizione', label: t('Descrizione breve'), type: 'textarea', supportsDynamic: true },
+    { key: 'immagine', label: t('Foto'), type: 'image', supportsDynamic: true },
 
     { type: 'separator', label: t('Specifiche') },
     { key: 'titolo_specifiche', label: t('Titolo delle specifiche'), type: 'text' },
-    { key: 'specifiche', label: t('Specifiche'), type: 'content-items', itemLabel: t('Specifica'), etichettaDa: 'nome',
+    { key: 'specifiche', label: t('Specifiche'), type: 'content-items', itemLabel: t('Specifica'), etichettaDa: 'nome', supportsDynamic: true,
       description: t('Una riga per dato. Le righe con lo stesso gruppo stanno sotto lo stesso titoletto, nell\'ordine in cui il gruppo compare la prima volta. L\'unità si scrive a parte: la tabella la allinea e la mostra più leggera.'),
       newItemDefaults: { gruppo: '', nome: '', valore: '', unita: '' },
       itemFields: [

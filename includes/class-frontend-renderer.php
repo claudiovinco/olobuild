@@ -983,6 +983,21 @@ class Olobuild_Frontend_Renderer {
                     } elseif ( ! empty( $item_map ) ) {
                         $settings[ $items_key ] = $dc->build_items_from_images( $ids, $item_map );
                     }
+                } elseif ( 'righe' === ( $dynamic['_query']['source'] ?? '' ) ) {
+                    // Righe di un campo del contenuto (le mostre di un'opera, le misure di un prodotto): una voce per
+                    // riga. Senza righe l'elemento non si disegna; nel builder resta il contenuto di esempio.
+                    $righe = $dc->righe_di_un_campo( (string) ( $dynamic['_query']['righe_key'] ?? '' ), (int) $post_id );
+                    $max   = absint( $dynamic['_query']['righe_max'] ?? 0 );
+                    if ( $max > 0 ) {
+                        $righe = array_slice( $righe, 0, $max );
+                    }
+                    if ( empty( $righe ) ) {
+                        if ( ! $this->builder_mode ) {
+                            return '';
+                        }
+                    } elseif ( ! empty( $item_map ) ) {
+                        $settings[ $items_key ] = $dc->build_items_from_righe( $righe, $item_map );
+                    }
                 } else {
                     $posts = $dc->resolve_query( $dynamic['_query'] );
                     if ( ! empty( $posts ) && ! empty( $item_map ) ) {

@@ -383,6 +383,7 @@ class Olobuild_Style_System {
             'olobuild_woo_tpl_cart',
             'olobuild_woo_tpl_checkout',
             'olobuild_woo_tpl_myaccount',
+            'olobuild_woo_senza_prezzo',
             'show_on_front',
             'page_on_front',
             'page_for_posts',

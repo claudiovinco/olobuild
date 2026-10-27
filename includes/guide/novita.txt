@@ -3,6 +3,19 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.851 - 2026-10-27 (contrasti)
+- Timeline › Scaletta: coi temi scuri (Notte, Neon, Blu) date, titoli e testi sono chiari (prima restavano nei colori del sito e su fondo scuro non si leggevano); l'alone del pallino prende il fondo della tile, o niente se è trasparente (era un anello chiaro che copriva l'ultima cifra dell'anno); legge famiglia, misura e peso di anno, titolo e testo dalla Tipografia, e mostra l'etichetta della tappa con «Mostra etichetta».
+- Testo: «Colore dei link», per i link dentro un testo su fondo scuro (prima prendevano sempre il colore dei link del sito).
+- Temi Tacet e Lunga Posa: il pulsante della testata al passaggio del mouse non diventa più nero su nero. Tacet: bronzo e grigio più profondi, che si leggono su tutti i fondi chiari; sul nero un bronzo schiarito.
+
+## v1.4.850 - 2026-10-27 (tema e WooCommerce)
+- Tema nuovo, Tacet: una galleria d’arte su appuntamento a Pietrasanta che vende sculture con WooCommerce. Minimale e un po’ criptico: il bianco del gesso, il nero dell’inchiostro e un solo bronzo. Venti opere in marmo, gesso, bronzo, pietra, ceramica, vetro e legno di sei artisti che dicono poco di sé; alcune col prezzo, altre «Prezzo riservato». La scheda dell’opera è dinamica: artista, anno e materiale, la scheda tecnica per chi la installerà (misure, peso, appoggio, carico sul piano, luce, cassa) e il pedigree delle mostre, letti dai campi dell’opera.
+- Sorgente dinamica › «Righe di un campo»: le voci di una tile a ripetitore (Timeline, Scheda tecnica, Lista…) possono venire da un campo personalizzato del contenuto, una voce per riga con le parti separate da «|». Così ogni prodotto ha la sua cronologia, le sue misure, i suoi dati.
+- Template WooCommerce › «Prodotti senza prezzo»: la scritta al posto del prezzo («Prezzo su richiesta»), in tutte le tile e nelle pagine di WooCommerce. Prezzo WC non scrive più «0,00 €» per un prodotto senza prezzo.
+- Aggiungi al carrello: per un prodotto senza prezzo, invece del pulsante che non poteva funzionare, un pulsante di richiesta che porta il nome del prodotto nel modulo.
+- Contenuti dinamici › WooCommerce: gli attributi dei prodotti («Attributo: Artista», «Attributo: Marca»…) si possono collegare a titoli e testi. Scheda tecnica: codice, nome, descrizione, foto e specifiche possono essere dinamici.
+- Demo dei temi: ogni negozio dimostrativo mostra solo i suoi prodotti e le sue categorie.
+
 ## v1.4.849 - 2026-10-27 (WooCommerce)
 - L'avviso «Aggiunto al carrello» si carica solo sulle pagine con una tile di WooCommerce (anche nelle sezioni che compaiono scorrendo). Nella 1.4.848, sui siti con WooCommerce, arrivava su ogni pagina fatta con Olobuild: circa 9 KB in più anche dove non si compra niente.
 
