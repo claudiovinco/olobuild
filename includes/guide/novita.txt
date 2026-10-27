@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.840 - 2026-10-27 (sicurezza)
+- Ricerca dal vivo: cerca solo nei tipi di contenuto e nelle tassonomie che il sito mostra a tutti, e salta i contenuti protetti da password. Prima, chiedendolo apposta, chiunque poteva cercare anche in tipi interni (voci dei menu, codici sconto di WooCommerce, messaggi salvati come contenuti da altri plugin) e leggere l’estratto delle pagine con password.
+- Confronto prodotti (WooCommerce): mostra solo i prodotti pubblicati, come l’anteprima veloce e la lista dei desideri. Prima, conoscendo il numero di un prodotto, chiunque ne leggeva nome, prezzo, codice e descrizione anche in bozza o privato.
+
 ## v1.4.839 - 2026-10-27 (temi)
 - Due temi nuovi per fotografi, in «Creativi e portfolio». Lunga Posa, una fotografa di architettura e oggetti a Torino che fa anche dodici matrimoni l’anno e le feste della città: carta grigia, grafite e l’arancio del punto di messa a fuoco, il mirino sopra il video d’apertura, tre sezioni che si svelano di lato una sopra l’altra, le serie che arrivano spinte di lato, i listini e il modulo per scrivere. Solleone, uno studio di Lecce con nove servizi e l’occhio sulle mode: latte, cacao e terracotta, la ghiera della fotocamera da girare per scegliere il servizio, le mode del 2026 che si svelano di lato, le pellicole da provare sulla stessa foto, il quiz, il listino e il pacchetto contenuti col prezzo.
 - Hero › Mirino: la scena vista dal mirino di una fotocamera. Il punto di messa a fuoco segue il puntatore e attorno la foto o il video si sfoca (il testo resta netto); un clic scatta: il diaframma si chiude e si riapre, il fotogramma diventa un provino accanto al pulsante e le pose del rullino scendono. Si scelgono i dati di scatto, le pose, il punto di partenza del fuoco, la sfocatura, la griglia dei terzi e l’esposimetro. Sul telefono il fuoco si sposta da solo e si scatta toccando.

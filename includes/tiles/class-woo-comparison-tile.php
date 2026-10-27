@@ -73,7 +73,12 @@ class Olobuild_Woo_Comparison_Tile extends Olobuild_Tile_Base {
         $results = [];
         foreach ( $ids as $pid ) {
             $product = wc_get_product( $pid );
-            if ( ! $product ) {
+            // La rotta è pubblica: senza questo controllo chiunque leggeva nome, prezzo, SKU e descrizione dei prodotti
+            // in bozza, privati, in attesa o protetti da password. Come l'anteprima veloce e la wishlist, solo i
+            // pubblicati (per una variazione vale anche il prodotto da cui viene). 1.4.840.
+            $genitore = $product ? (int) $product->get_parent_id() : 0;
+            if ( ! $product || 'publish' !== $product->get_status() || post_password_required( $pid )
+                || ( $genitore && ( 'publish' !== get_post_status( $genitore ) || post_password_required( $genitore ) ) ) ) {
                 continue;
             }
 

@@ -135,8 +135,11 @@ class Olobuild_LiveSearch_Tile extends Olobuild_Tile_Base {
         if ( empty( $post_types ) ) {
             $post_types = [ 'post', 'page' ];
         }
-        // Validate against actual registered post types
-        $post_types = array_values( array_filter( $post_types, 'post_type_exists' ) );
+        // Solo i tipi che il sito mostra a tutti: la richiesta arriva da chiunque, e prima bastava che il tipo esistesse
+        // (voci dei menu, codici sconto di WooCommerce, messaggi salvati come contenuti da altri plugin). 1.4.840.
+        $post_types = array_values( array_filter( $post_types, function ( $tipo ) {
+            return post_type_exists( $tipo ) && is_post_type_viewable( $tipo );
+        } ) );
         if ( empty( $post_types ) ) {
             return new WP_REST_Response( [ 'results' => [], 'total' => 0 ], 200 );
         }
@@ -152,6 +155,8 @@ class Olobuild_LiveSearch_Tile extends Olobuild_Tile_Base {
         $args = [
             'post_type'      => $post_types,
             'post_status'    => 'publish',
+            // i contenuti protetti da password non si cercano: l'estratto ne mostrava il testo
+            'has_password'   => false,
             'posts_per_page' => $max,
             'orderby'        => 'relevance',
             'order'          => 'DESC',
@@ -165,7 +170,7 @@ class Olobuild_LiveSearch_Tile extends Olobuild_Tile_Base {
         }
 
         // Taxonomy filter
-        if ( ! empty( $taxonomy ) && taxonomy_exists( $taxonomy ) && ! empty( $terms_raw ) ) {
+        if ( ! empty( $taxonomy ) && taxonomy_exists( $taxonomy ) && is_taxonomy_viewable( $taxonomy ) && ! empty( $terms_raw ) ) {
             $term_slugs = array_filter( array_map( 'trim', explode( ',', $terms_raw ) ) );
             if ( ! empty( $term_slugs ) ) {
                 $args['tax_query'] = [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- query per filtro tassonomia della ricerca live; tax query necessaria alla funzione, volume limitato (max 100 risultati)
