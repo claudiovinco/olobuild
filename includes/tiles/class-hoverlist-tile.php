@@ -259,8 +259,9 @@ class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
                 </<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'a'/'div' literal from the ternary above ?>>
             <?php endforeach; ?>
             <?php if ( $peek && $peek_mode === 'monitor' ) : ?>
-            <div class="olo-hoverlist__peek olo-hoverlist__peek--mon" aria-hidden="true" style="position:fixed;z-index:90;pointer-events:none;opacity:0;width:200px;transform:translate(-50%,-112%) scale(.92);transition:opacity .16s ease,transform .16s ease;">
-                <span class="olo-hl-mon-scr" style="position:relative;display:block;height:118px;border:1px solid <?php echo esc_attr( $mon_border ); ?>;background:repeating-linear-gradient(-45deg,<?php echo esc_attr( $mon_stripe ); ?> 0 9px,transparent 9px 18px),<?php echo esc_attr( $mon_scr_bg ); ?>;">
+            <div class="olo-hoverlist__peek olo-hoverlist__peek--mon" aria-hidden="true" style="position:fixed;z-index:90;pointer-events:none;opacity:0;width:<?php echo (int) $peek_w; ?>px;transform:translate(-50%,-112%) scale(.92);transition:opacity .16s ease,transform .16s ease;">
+                <?php // Lo schermo ha le proporzioni del monitor storico (200×118); la foto della voce lo riempie (focale della lista), il tratteggio e «FOTO» restano per le voci senza foto. ?>
+                <span class="olo-hl-mon-scr" style="position:relative;display:block;aspect-ratio:200/118;border:1px solid <?php echo esc_attr( $mon_border ); ?>;background:repeating-linear-gradient(-45deg,<?php echo esc_attr( $mon_stripe ); ?> 0 9px,transparent 9px 18px),<?php echo esc_attr( $mon_scr_bg ); ?>;background-size:cover;background-position:<?php echo esc_attr( Olobuild_Tile_Utils::css_pos( $s, 'object_position' ) ); ?>;">
                     <i style="position:absolute;left:8px;top:8px;width:13px;height:13px;border:2px solid <?php echo esc_attr( $acc ); ?>;border-right:0;border-bottom:0;"></i>
                     <i style="position:absolute;right:8px;top:8px;width:13px;height:13px;border:2px solid <?php echo esc_attr( $acc ); ?>;border-left:0;border-bottom:0;"></i>
                     <i style="position:absolute;left:8px;bottom:8px;width:13px;height:13px;border:2px solid <?php echo esc_attr( $acc ); ?>;border-right:0;border-top:0;"></i>
@@ -323,10 +324,16 @@ class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
             if (isMon) {
                 var labN = peek.querySelector('.olo-hl-mon-n');
                 var labNm = peek.querySelector('.olo-hl-mon-nm');
+                var scr = peek.querySelector('.olo-hl-mon-scr');
+                var rec = peek.querySelector('.olo-hl-mon-rec');
+                var scrBg = scr ? scr.style.backgroundImage : '';
                 rows.forEach(function (r) {
                     r.addEventListener('mouseenter', function () {
                         if (labN) { labN.textContent = r.getAttribute('data-number') || ''; }
                         if (labNm) { labNm.textContent = r.getAttribute('data-name') || ''; }
+                        var foto = r.getAttribute('data-image') || '';
+                        if (scr) { scr.style.backgroundImage = foto ? ('url("' + foto + '")') : scrBg; }
+                        if (rec) { rec.style.display = foto ? 'none' : ''; }
                         peek.style.opacity = '1';
                         peek.style.transform = 'translate(-50%,-112%) scale(1)';
                     });

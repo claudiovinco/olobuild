@@ -46824,3 +46824,355 @@ msgstr "Den Fokus bestimmst du"
 #: includes/class-theme-importer.php
 msgid "Gira la ghiera"
 msgstr "Dreh am Wahlrad"
+
+#: src/config/elements/montaggio.js
+msgid "Montaggio"
+msgstr "Schnitt-Timeline"
+
+#: src/config/elements/montaggio.js
+msgid "Bianco"
+msgstr "Weiß"
+
+#: src/config/elements/montaggio.js
+msgid "Fashion film"
+msgstr "Modefilm"
+
+#: src/config/elements/montaggio.js
+msgid "Guarda il film"
+msgstr "Film ansehen"
+
+#: src/config/elements/montaggio.js
+msgid "Strada bianca"
+msgstr "Weiße Straße"
+
+#: src/config/elements/montaggio.js
+msgid "Spot"
+msgstr "Werbespot"
+
+#: src/config/elements/montaggio.js
+msgid "Guarda lo spot"
+msgstr "Spot ansehen"
+
+#: src/config/elements/montaggio.js
+msgid "Rosso"
+msgstr "Rot"
+
+#: src/config/elements/montaggio.js
+msgid "Videoclip"
+msgstr "Musikvideo"
+
+#: src/config/elements/montaggio.js
+msgid "Guarda il video"
+msgstr "Video ansehen"
+
+#: src/config/elements/montaggio.js
+msgid "Clip"
+msgstr "Clip"
+
+#: src/config/elements/montaggio.js
+msgid "Una per clip, nell'ordine della timeline: si mettono in fila e ognuna è lunga quanto dura. Il video va nel monitor quando la testina ci passa; la foto fa da copertina e da striscia di fotogrammi sulla traccia."
+msgstr "Einer pro Clip, in der Reihenfolge der Timeline: Sie stehen hintereinander und jeder ist so lang, wie er dauert. Das Video läuft im Monitor, wenn der Abspielkopf darüberfährt; das Foto ist das Titelbild und der Filmstreifen auf der Spur."
+
+#: src/config/elements/montaggio.js
+msgid "Guarda il progetto"
+msgstr "Projekt ansehen"
+
+#: src/config/elements/montaggio.js
+msgid "Spot, Videoclip, Documentario…"
+msgstr "Werbespot, Musikvideo, Dokumentarfilm…"
+
+#: src/config/elements/montaggio.js
+msgid "Cliente"
+msgstr "Kunde"
+
+#: src/config/elements/montaggio.js
+msgid "Senza audio e corto: si vede solo il tratto lungo quanto la durata qui sotto."
+msgstr "Ohne Ton und kurz: Zu sehen ist nur der Abschnitt, der so lang ist wie die Dauer unten."
+
+#: src/config/elements/montaggio.js
+msgid "Quanto resta in onda la clip, e quanto è lunga sulla traccia."
+msgstr "Wie lange der Clip läuft und wie lang er auf der Spur ist."
+
+#: src/config/elements/montaggio.js
+msgid "Testo del collegamento"
+msgstr "Linktext"
+
+#: src/config/elements/montaggio.js
+msgid "Nome della sequenza"
+msgstr "Name der Sequenz"
+
+#: src/config/elements/montaggio.js
+msgid "Il nome che compare nella barra, come in un programma di montaggio. Vuoto: niente nome."
+msgstr "Der Name in der Leiste, wie in einem Schnittprogramm. Leer: kein Name."
+
+#: src/config/elements/montaggio.js
+msgid "Fotogrammi al secondo"
+msgstr "Bilder pro Sekunde"
+
+#: src/config/elements/montaggio.js
+msgid "Solo per il timecode (ore:minuti:secondi:fotogrammi) e per il passo delle frecce."
+msgstr "Nur für den Timecode (Stunden:Minuten:Sekunden:Bilder) und den Schritt der Pfeiltasten."
+
+#: src/config/elements/montaggio.js
+msgid "Parte da sola"
+msgstr "Startet von selbst"
+
+#: src/config/elements/montaggio.js
+msgid "Senza audio, quando la timeline entra nello schermo; si ferma quando esce. Mai nel builder, mai con la riduzione del movimento."
+msgstr "Ohne Ton, wenn die Timeline ins Bild kommt; sie hält an, wenn sie es verlässt. Nie im Builder, nie bei reduzierter Bewegung."
+
+#: src/config/elements/montaggio.js
+msgid "Mostra la traccia audio"
+msgstr "Tonspur anzeigen"
+
+#: src/config/elements/montaggio.js
+msgid "Mostra il riquadro della clip"
+msgstr "Clip-Feld anzeigen"
+
+#: src/config/elements/montaggio.js
+msgid "Accanto o sotto il monitor: tipo, titolo, cliente, anno e collegamento della clip in onda."
+msgstr "Neben oder unter dem Monitor: Art, Titel, Kunde, Jahr und Link des laufenden Clips."
+
+#: src/config/elements/montaggio.js
+msgid "Vuoto: lo scuro del tema."
+msgstr "Leer: das Dunkel des Themes."
+
+#: src/config/elements/montaggio.js
+msgid "Vuoto: quello che si legge sullo sfondo."
+msgstr "Leer: was auf dem Hintergrund lesbar ist."
+
+#: src/config/elements/montaggio.js
+msgid "La testina, il timecode, il tipo della clip e la clip in onda. Vuoto: il primario del tema."
+msgstr "Der Abspielkopf, der Timecode, die Clip-Art und der laufende Clip. Leer: die Primärfarbe des Themes."
+
+#: src/config/elements/montaggio.js
+msgid "Colore delle clip"
+msgstr "Farbe der Clips"
+
+#: src/config/elements/montaggio.js
+msgid "Sotto la striscia di fotogrammi. Vuoto: il secondario del tema."
+msgstr "Unter dem Filmstreifen. Leer: die Sekundärfarbe des Themes."
+
+#: src/config/elements/montaggio.js
+msgid "Colore della forma d'onda"
+msgstr "Farbe der Wellenform"
+
+#: src/config/elements/montaggio.js
+msgid "Colore del bordo"
+msgstr "Randfarbe"
+
+#: src/config/elements/montaggio.js
+msgid "Il filo a sinistra della clip sulla traccia. Vuoto: il colore accento."
+msgstr "Die Linie links am Clip auf der Spur. Leer: die Akzentfarbe."
+
+#: src/config/elements/montaggio.js
+msgid "Titolo della clip"
+msgstr "Titel des Clips"
+
+#: src/config/elements/montaggio.js
+msgid "Font del timecode"
+msgstr "Schrift des Timecodes"
+
+#: src/config/elements/montaggio.js
+msgid "Proporzione del monitor"
+msgstr "Seitenverhältnis des Monitors"
+
+#: src/config/elements/montaggio.js
+msgid "Altezza delle tracce"
+msgstr "Höhe der Spuren"
+
+#: src/config/elements/montaggio.js
+msgid "Riquadro della clip"
+msgstr "Clip-Feld"
+
+#: src/config/elements/montaggio.js
+msgid "Accanto al monitor"
+msgstr "Neben dem Monitor"
+
+#: src/config/elements/montaggio.js
+msgid "Sotto il monitor"
+msgstr "Unter dem Monitor"
+
+#: src/config/elements/montaggio.js
+msgid "Quando la colonna è stretta va comunque sotto."
+msgstr "In einer schmalen Spalte kommt es trotzdem darunter."
+
+#: src/config/elements/pellicole.js
+msgid "Personalizzata — i valori nello Stile"
+msgstr "Eigene — die Werte im Stil"
+
+#: src/config/elements/pellicole.js
+msgid "Ricetta personalizzata"
+msgstr "Eigenes Rezept"
+
+#: src/config/elements/pellicole.js
+msgid "Tinta"
+msgstr "Tönung"
+
+#: src/config/elements/pellicole.js
+msgid "Un colore fuso sopra la foto in modo morbido: caldo per l'olio, scuro per un mordente."
+msgstr "Eine weich über das Foto gelegte Farbe: warm für Öl, dunkel für eine Beize."
+
+#: src/config/elements/pellicole.js
+msgid "Forza della tinta"
+msgstr "Stärke der Tönung"
+
+#: src/config/elements/woo_products.js
+msgid "Voto e numero di recensioni"
+msgstr "Bewertung und Anzahl der Rezensionen"
+
+#: src/config/elements/woo_products.js
+msgid "Accanto alle stelle il voto medio («4,6») e quante recensioni ha il prodotto («(3.812)»)."
+msgstr "Neben den Sternen die Durchschnittsbewertung («4,6») und wie viele Rezensionen das Produkt hat («(3.812)»)."
+
+#: src/config/elements/woo_products.js
+msgid "Cuore dei preferiti"
+msgstr "Merkliste-Herz"
+
+#: src/config/elements/woo_products.js
+msgid "Sulla foto, in alto a destra: aggiunge o toglie il prodotto dalla lista della tile Wishlist, che si aggiorna subito."
+msgstr "Auf dem Foto oben rechts: fügt das Produkt der Liste der Wishlist-Kachel hinzu oder entfernt es; sie aktualisiert sich sofort."
+
+#: src/config/elements/woo_products.js
+msgid "Quanto si risparmia"
+msgstr "Ersparnis"
+
+#: src/config/elements/woo_products.js
+msgid "Sotto il prezzo dei prodotti in saldo: «Risparmi 50,00 €»."
+msgstr "Unter dem Preis der reduzierten Produkte: «Du sparst 50,00 €»."
+
+#: src/config/elements/woo_products.js
+msgid "Avviso di scorta bassa"
+msgstr "Hinweis bei niedrigem Bestand"
+
+#: src/config/elements/woo_products.js
+msgid "«Ne restano solo 3» quando i pezzi in magazzino scendono alla soglia di scorta bassa di WooCommerce. Solo per i prodotti con la gestione della scorta."
+msgstr "«Nur noch 3» wenn der Lagerbestand auf die WooCommerce-Schwelle für niedrigen Bestand sinkt. Nur für Produkte mit Bestandsverwaltung."
+
+#: src/config/elements/woo_products.js
+msgid "Testi della card"
+msgstr "Texte der Karte"
+
+#: src/config/elements/woo_products.js
+msgid "Attributo della marca"
+msgstr "Marken-Attribut"
+
+#: src/config/elements/woo_products.js
+msgid "Lo slug di un attributo globale di WooCommerce (Prodotti → Attributi): il suo valore compare sopra il nome, in maiuscoletto. Vuoto: niente marca."
+msgstr "Der Slug eines globalen WooCommerce-Attributs (Produkte → Attribute): Sein Wert erscheint über dem Namen in Kapitälchen. Leer: keine Marke."
+
+#: src/config/elements/woo_products.js
+msgid "Riga della consegna"
+msgstr "Lieferzeile"
+
+#: src/config/elements/woo_products.js
+msgid "Consegna gratuita domani"
+msgstr "Kostenlose Lieferung morgen"
+
+#: src/config/elements/woo_products.js
+msgid "Una riga col furgoncino sotto il prezzo, solo per i prodotti disponibili. Vuota: niente riga."
+msgstr "Eine Zeile mit dem Lieferwagen unter dem Preis, nur für verfügbare Produkte. Leer: keine Zeile."
+
+#: src/config/elements/woo_products.js
+msgid "Bollo dei prodotti in evidenza"
+msgstr "Abzeichen der hervorgehobenen Produkte"
+
+#: src/config/elements/woo_products.js
+msgid "Scelto da noi"
+msgstr "Unsere Wahl"
+
+#: src/config/elements/woo_products.js
+msgid "Un secondo bollo sulla foto dei prodotti «In evidenza» di WooCommerce, sotto quello dello sconto. Vuoto: niente bollo."
+msgstr "Ein zweites Abzeichen auf dem Foto der «Hervorgehobenen» WooCommerce-Produkte, unter dem Rabatt. Leer: kein Abzeichen."
+
+#: src/config/elements/woo_products.js
+msgid "Seconda foto"
+msgstr "Zweites Foto"
+
+#: src/config/elements/woo_products.js
+msgid "«Seconda foto»: al passaggio compare la prima foto della galleria del prodotto."
+msgstr "«Zweites Foto»: beim Überfahren erscheint das erste Foto der Produktgalerie."
+
+#: src/config/elements/woo_products.js
+msgid "Il nome si ferma a queste righe coi puntini, così le card restano allineate. 0: tutto il nome."
+msgstr "Der Name endet nach diesen Zeilen mit Auslassungspunkten, damit die Karten bündig bleiben. 0: der ganze Name."
+
+#: src/config/elements/woo_categories.js
+msgid "Pagina del negozio"
+msgstr "Shop-Seite"
+
+#: src/config/elements/woo_categories.js
+msgid "Le categorie aprono questa pagina col filtro della categoria (?product_cat=…), che la tile Prodotti WC della pagina legge. Vuota: l'archivio della categoria di WooCommerce."
+msgstr "Die Kategorien öffnen diese Seite mit dem Kategoriefilter (?product_cat=…), den die WC-Produkte-Kachel der Seite liest. Leer: das Kategoriearchiv von WooCommerce."
+
+#: src/config/elements/woo_categories.js
+msgid "Sul telefono scorrono di lato"
+msgstr "Auf dem Handy seitlich scrollen"
+
+#: src/config/elements/woo_categories.js
+msgid "Sotto i 640 px una sola fila che si scorre col dito, invece delle colonne."
+msgstr "Unter 640 px eine einzige Reihe, die man mit dem Finger scrollt, statt Spalten."
+
+#: src/config/elements/woo_categories.js
+msgid "Nome della categoria"
+msgstr "Name der Kategorie"
+
+#: src/config/elements/livesearch.js
+msgid "Debounce"
+msgstr "Verzögerung"
+
+#: src/config/elements/livesearch.js
+msgid "Modal Spotlight"
+msgstr "Modal Spotlight"
+
+#: src/config/elements/livesearch.js
+msgid "Expanded Bar"
+msgstr "Breite Leiste"
+
+#: src/config/elements/livesearch.js
+msgid "Icon Trigger"
+msgstr "Symbol-Auslöser"
+
+#: src/config/elements/livesearch.js
+msgid "Glass Floating"
+msgstr "Schwebendes Glas"
+
+#: src/config/elements/hoverlist.js
+msgid "Hover List"
+msgstr "Hover-Liste"
+
+#: includes/tiles/class-woo-products-tile.php
+msgid "Togli dai preferiti"
+msgstr "Von der Merkliste entfernen"
+
+#: includes/tiles/class-woo-products-tile.php
+msgid "Ne resta solo %d"
+msgstr "Nur noch %d"
+
+#: includes/tiles/class-woo-products-tile.php
+msgid "Ne restano solo %d"
+msgstr "Nur noch %d"
+
+#: includes/tiles/class-woo-products-tile.php
+msgid "Risparmi %s"
+msgstr "Du sparst %s"
+
+#: includes/tiles/class-woo-products-tile.php
+msgid "Valutazione %1$s su 5, %2$s recensioni"
+msgstr "Bewertung %1$s von 5, %2$s Rezensionen"
+
+#: includes/class-theme-importer.php
+msgid "La testina la muovi tu"
+msgstr "Den Abspielkopf bewegst du"
+
+#: includes/class-theme-importer.php
+msgid "Il legno ha una memoria"
+msgstr "Holz hat ein Gedächtnis"
+
+#: includes/class-theme-importer.php
+msgid "Ordini oggi, arriva domani"
+msgstr "Heute bestellt, morgen da"
+
+#: includes/class-theme-importer.php
+msgid "Il bancone, dal vivo"
+msgstr "Die Theke, live"

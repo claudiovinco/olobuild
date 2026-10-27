@@ -36,6 +36,14 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
         'button_bg'       => '',
         'badge_bg'        => '',
         'show_compare'    => false,
+        'show_rating_count' => false,
+        'show_wishlist'   => false,
+        'mostra_scorta'   => false,
+        'mostra_risparmio' => false,
+        'marca_attributo' => '',
+        'consegna_testo'  => '',
+        'testo_evidenza'  => '',
+        'titolo_righe'    => 0,
         'pagination'      => false,
         'columns_tablet'  => 2,
         'columns_mobile'  => 1,
@@ -141,6 +149,22 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
 
         // Hover effect
         $hover_effect = $s['hover_effect'];
+
+        // Le parti della card di un negozio grande (27 ott 2026): la seconda foto al passaggio, il voto e
+        // le recensioni contate, la marca (un attributo del prodotto), il risparmio, la consegna, la scorta
+        // che finisce, il bollo dei prodotti in evidenza, il cuore dei preferiti (la stessa lista della tile
+        // Wishlist) e il titolo tenuto su un numero di righe. Spente o vuote nei default: le griglie già
+        // pubblicate restano com'erano.
+        $swap         = ( $hover_effect === 'swap' );
+        $rating_count = ! empty( $s['show_rating_count'] );
+        $marca_tax    = sanitize_title( preg_replace( '/^pa_/', '', (string) ( $s['marca_attributo'] ?? '' ) ) );
+        $marca_tax    = ( $marca_tax !== '' && taxonomy_exists( 'pa_' . $marca_tax ) ) ? 'pa_' . $marca_tax : '';
+        $consegna     = trim( (string) ( $s['consegna_testo'] ?? '' ) );
+        $scorta       = ! empty( $s['mostra_scorta'] );
+        $wish         = ! empty( $s['show_wishlist'] );
+        $evidenza     = trim( (string) ( $s['testo_evidenza'] ?? '' ) );
+        $risparmio    = ! empty( $s['mostra_risparmio'] );
+        $righe        = max( 0, min( 4, absint( $s['titolo_righe'] ?? 0 ) ) );
 
         // WP_Query args
         $query_args = [
@@ -429,6 +453,138 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
                 border-radius: 4px;
                 z-index: 2;
             }
+            .<?php echo $uid; ?> .olo-woo-card-badges {
+                position: absolute;
+                top: .5rem;
+                left: .5rem;
+                z-index: 2;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: .25rem;
+            }
+            .<?php echo $uid; ?> .olo-woo-card-badges .olo-woo-card-badge {
+                position: static;
+            }
+            .<?php echo $uid; ?> .olo-woo-card-badge--evidenza {
+                background: <?php echo $btn_bg; ?>;
+                color: <?php echo $btn_color; ?>;
+            }
+            <?php if ( $swap ) : ?>
+            .<?php echo $uid; ?> .olo-woo-card-img img.olo-woo-card-img2 {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                opacity: 0;
+                transition: opacity .35s ease;
+            }
+            .<?php echo $uid; ?> .olo-woo-card:hover .olo-woo-card-img img.olo-woo-card-img2,
+            .<?php echo $uid; ?> .olo-woo-card:focus-within .olo-woo-card-img img.olo-woo-card-img2 {
+                opacity: 1;
+            }
+            @media (prefers-reduced-motion: reduce) {
+                .<?php echo $uid; ?> .olo-woo-card-img img.olo-woo-card-img2 { transition: none; }
+            }
+            <?php endif; ?>
+            <?php if ( $wish ) : ?>
+            .<?php echo $uid; ?> .olo-woo-card-wish {
+                position: absolute;
+                top: .5rem;
+                right: .5rem;
+                z-index: 3;
+                width: 36px;
+                height: 36px;
+                border: 0;
+                border-radius: 50%;
+                padding: 0;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                background: color-mix(in srgb, var(--olo-color-background, #ffffff) 90%, transparent);
+                color: var(--olo-color-text, #111827);
+                box-shadow: 0 2px 8px rgba(0,0,0,.14);
+                cursor: pointer;
+                transition: transform .2s ease, color .2s ease;
+            }
+            .<?php echo $uid; ?> .olo-woo-card-wish svg {
+                width: 18px;
+                height: 18px;
+                fill: none;
+                stroke: currentColor;
+                stroke-width: 2;
+            }
+            .<?php echo $uid; ?> .olo-woo-card-wish[aria-pressed="true"] {
+                color: <?php echo $sale_color; ?>;
+            }
+            .<?php echo $uid; ?> .olo-woo-card-wish[aria-pressed="true"] svg {
+                fill: currentColor;
+            }
+            .<?php echo $uid; ?> .olo-woo-card-wish:hover {
+                transform: scale(1.08);
+            }
+            .<?php echo $uid; ?> .olo-woo-card-wish:focus-visible {
+                outline: 2px solid <?php echo $btn_bg; ?>;
+                outline-offset: 2px;
+            }
+            <?php endif; ?>
+            .<?php echo $uid; ?> .olo-woo-card-marca {
+                margin: 0 0 .25rem;
+                font-size: 12px;
+                font-weight: 600;
+                letter-spacing: .05em;
+                text-transform: uppercase;
+                color: var(--olo-color-text-muted, #6B7280);
+            }
+            <?php if ( $righe > 0 ) : ?>
+            .<?php echo $uid; ?> .olo-woo-card-title a {
+                display: -webkit-box;
+                -webkit-line-clamp: <?php echo (int) $righe; ?>;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+            <?php endif; ?>
+            .<?php echo $uid; ?> .olo-woo-card-voto {
+                margin-right: .25rem;
+                font-size: 13px;
+                font-weight: 600;
+                color: <?php echo $title_color; ?>;
+            }
+            .<?php echo $uid; ?> .olo-woo-card-conta {
+                margin-left: .25rem;
+                font-size: 12px;
+                color: var(--olo-color-text-muted, #6B7280);
+            }
+            .<?php echo $uid; ?> .olo-woo-card-risparmio {
+                margin: -.375rem 0 .5rem;
+                font-size: 12px;
+                font-weight: 600;
+                color: <?php echo $sale_color; ?>;
+            }
+            .<?php echo $uid; ?> .olo-woo-card-consegna {
+                display: flex;
+                align-items: center;
+                gap: .375rem;
+                margin: 0 0 .375rem;
+                font-size: 12px;
+                line-height: 1.35;
+                color: var(--olo-color-text, #111827);
+            }
+            .<?php echo $uid; ?> .olo-woo-card-consegna svg {
+                flex: none;
+                width: 15px;
+                height: 15px;
+                fill: none;
+                stroke: var(--olo-color-success, #15803d);
+                stroke-width: 2;
+            }
+            .<?php echo $uid; ?> .olo-woo-card-scorta {
+                margin: 0 0 .5rem;
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--olo-color-warning, #b45309);
+            }
             .<?php echo $uid; ?> .olo-woo-card-body {
                 padding: <?php echo $card_pad; ?>;
             }
@@ -540,6 +696,14 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
                     <?php if ( $thumb_id ) : ?>
                     <a href="<?php echo esc_url( $permalink ); ?>">
                         <?php echo wp_get_attachment_image( $thumb_id, 'woocommerce_thumbnail' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image() returns escaped HTML built by WordPress core ?>
+                        <?php
+                        // «Seconda foto»: la prima della galleria, sopra la principale, compare al passaggio.
+                        $seconda = $swap ? (int) ( $product->get_gallery_image_ids()[0] ?? 0 ) : 0;
+                        if ( $seconda ) {
+                            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image() returns escaped HTML built by WordPress core
+                            echo wp_get_attachment_image( $seconda, 'woocommerce_thumbnail', false, [ 'class' => 'olo-woo-card-img2', 'alt' => '', 'aria-hidden' => 'true', 'loading' => 'lazy' ] );
+                        }
+                        ?>
                     </a>
                     <?php else : ?>
                     <a href="<?php echo esc_url( $permalink ); ?>" style="display:block;background:var(--olo-color-muted, #F3F4F6);<?php if ( ! $auto_h ) : ?>position:absolute;inset:0;<?php else : ?>padding:40px 0;<?php endif; ?>display:flex;align-items:center;justify-content:center;">
@@ -547,27 +711,54 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
                     </a>
                     <?php endif; ?>
                     <?php
+                    $bolli = '';
                     if ( ! empty( $s['show_badge'] ) ) {
                         if ( $on_sale ) {
                             $regular = (float) $product->get_regular_price();
                             $sale    = (float) $product->get_sale_price();
                             if ( $regular > 0 ) {
-                                $pct = round( ( ( $regular - $sale ) / $regular ) * 100 );
-                                echo '<div class="olo-woo-card-badge">-' . absint( $pct ) . '%</div>';
+                                $pct    = round( ( ( $regular - $sale ) / $regular ) * 100 );
+                                $bolli .= '<div class="olo-woo-card-badge">-' . absint( $pct ) . '%</div>';
                             }
                         }
+                    }
+                    if ( $evidenza !== '' ) {
+                        if ( $product->is_featured() ) {
+                            $bolli .= '<div class="olo-woo-card-badge olo-woo-card-badge--evidenza">' . esc_html( $evidenza ) . '</div>';
+                        }
+                    }
+                    if ( $bolli !== '' ) {
+                        echo '<div class="olo-woo-card-badges">' . $bolli . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- badge built above from absint() and esc_html()
+                    }
+                    if ( $wish ) {
+                        echo '<button type="button" class="olo-woo-card-wish" data-olo-wish="' . absint( $product->get_id() ) . '" aria-pressed="false" aria-label="' . esc_attr( olobuild_t( 'Aggiungi ai preferiti' ) ) . ': ' . esc_attr( $title ) . '">'
+                            . '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 21s-7.5-4.6-9.6-9.2C1 8.6 3 5 6.6 5c2.1 0 3.6 1.2 4.4 2.5C11.8 6.2 13.3 5 15.4 5 19 5 21 8.6 19.6 11.8 17.5 16.4 12 21 12 21z" stroke-linejoin="round"/></svg>'
+                            . '</button>';
                     }
                     ?>
                 </div>
                 <?php endif; ?>
                 <div class="olo-woo-card-body">
+                    <?php
+                    if ( $marca_tax !== '' ) {
+                        $marche = wc_get_product_terms( $product->get_id(), $marca_tax, [ 'fields' => 'names' ] );
+                        if ( ! empty( $marche ) ) {
+                            echo '<p class="olo-woo-card-marca">' . esc_html( $marche[0] ) . '</p>';
+                        }
+                    }
+                    ?>
                     <?php if ( ! empty( $s['show_title'] ) ) : ?>
                     <div class="olo-woo-card-title">
                         <a href="<?php echo esc_url( $permalink ); ?>"><?php echo esc_html( $title ); ?></a>
                     </div>
                     <?php endif; ?>
                     <?php if ( ! empty( $s['show_rating'] ) ) : ?>
-                    <div class="olo-woo-card-rating">
+                    <?php
+                    $n_rec    = (int) $product->get_review_count();
+                    $voto_txt = number_format_i18n( (float) $avg_rating, 1 );
+                    ?>
+                    <div class="olo-woo-card-rating"<?php if ( $rating_count ) : ?> role="img" aria-label="<?php echo esc_attr( sprintf( olobuild_t( 'Valutazione %1$s su 5, %2$s recensioni' ), $voto_txt, number_format_i18n( $n_rec ) ) ); ?>"<?php endif; ?>>
+                        <?php if ( $rating_count ) : ?><span class="olo-woo-card-voto" aria-hidden="true"><?php echo esc_html( $voto_txt ); ?></span><?php endif; ?>
                         <?php
                         $full  = floor( (float) $avg_rating );
                         $half  = ( ( (float) $avg_rating - $full ) >= 0.5 ) ? 1 : 0;
@@ -581,11 +772,39 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
                         for ( $i = 0; $i < $empty; $i++ ) { echo $star_svg_empty; }
                         // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
                         ?>
+                        <?php if ( $rating_count ) : ?><span class="olo-woo-card-conta" aria-hidden="true">(<?php echo esc_html( number_format_i18n( $n_rec ) ); ?>)</span><?php endif; ?>
                     </div>
                     <?php endif; ?>
                     <?php if ( ! empty( $s['show_price'] ) ) : ?>
                     <div class="olo-woo-card-price"><?php echo $price_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WooCommerce price HTML from WC_Product::get_price_html(), escaped by WooCommerce core ?></div>
+                    <?php
+                    if ( $risparmio ) {
+                        if ( $on_sale ) {
+                            $diff = (float) $product->get_regular_price() - (float) $product->get_sale_price();
+                            if ( $diff > 0 ) {
+                                echo '<p class="olo-woo-card-risparmio">' . wp_kses_post( sprintf( olobuild_t( 'Risparmi %s' ), wc_price( $diff ) ) ) . '</p>';
+                            }
+                        }
+                    }
+                    ?>
                     <?php endif; ?>
+                    <?php
+                    if ( $consegna !== '' ) {
+                        if ( $product->is_in_stock() ) {
+                            echo '<p class="olo-woo-card-consegna"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7" stroke-linejoin="round"/><circle cx="7" cy="17.5" r="1.6"/><circle cx="17.5" cy="17.5" r="1.6"/></svg>'
+                                . esc_html( $consegna ) . '</p>';
+                        }
+                    }
+                    if ( $scorta ) {
+                        $quanti = $product->managing_stock() ? (int) $product->get_stock_quantity() : 0;
+                        $soglia = (int) wc_get_low_stock_amount( $product );
+                        if ( $quanti > 0 ) {
+                            if ( $quanti <= $soglia ) {
+                                echo '<p class="olo-woo-card-scorta">' . esc_html( sprintf( 1 === $quanti ? olobuild_t( 'Ne resta solo %d' ) : olobuild_t( 'Ne restano solo %d' ), $quanti ) ) . '</p>';
+                            }
+                        }
+                    }
+                    ?>
                     <?php if ( ! empty( $s['show_add_to_cart'] ) ) : ?>
                     <?php
                     $add_url = $product->add_to_cart_url();
@@ -605,7 +824,7 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
                     ><?php echo esc_html( $add_text ); ?></a>
                     <?php endif; ?>
                     <?php if ( ! empty( $s['show_compare'] ) ) : ?>
-                    <button type="button" class="olo-woo-btn olo-woo-compare-btn" style="margin-top:6px;background:transparent;border:1px solid <?php echo esc_attr( $btn_bg ); ?>;color:<?php echo esc_attr( $btn_bg ); ?>" onclick="var id=<?php echo absint( $product->get_id() ); ?>;var K='olo_compare_ids';var ids;try{ids=JSON.parse(localStorage.getItem(K)||'[]')}catch(e){ids=[]}if(ids.indexOf(id)===-1){ids.push(id);localStorage.setItem(K,JSON.stringify(ids));this.textContent='<?php echo esc_js( olobuild_t( 'Aggiunto!' ) ); ?>';var b=this;setTimeout(function(){b.textContent='<?php echo esc_js( olobuild_t( 'Confronta' ) ); ?>'},1500)}">
+                    <button type="button" class="olo-woo-btn olo-woo-compare-btn" style="margin-top:6px;background:transparent;border:1px solid var(--olo-color-border, #E5E7EB);color:<?php echo esc_attr( $title_color ); ?>" onclick="var id=<?php echo absint( $product->get_id() ); ?>;var K='olo_compare_ids';var ids;try{ids=JSON.parse(localStorage.getItem(K)||'[]')}catch(e){ids=[]}if(ids.indexOf(id)===-1){ids.push(id);localStorage.setItem(K,JSON.stringify(ids));this.textContent='<?php echo esc_js( olobuild_t( 'Aggiunto!' ) ); ?>';var b=this;setTimeout(function(){b.textContent='<?php echo esc_js( olobuild_t( 'Confronta' ) ); ?>'},1500)}">
                         <?php echo esc_html( olobuild_t( 'Confronta' ) ); ?>
                     </button>
                     <?php endif; ?>
@@ -765,6 +984,45 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
             ] );
             echo '</div>';
         }
+
+        if ( $wish ) :
+            // Il cuore sulla card: la stessa lista della tile Wishlist (cookie olo_woo_wishlist, array di id) e lo
+            // stesso evento olo:wishlist, così il contatore nella testata si aggiorna subito.
+            ?>
+        <script>
+        (function(){
+            var SEL = '.<?php echo esc_js( $uid ); ?> [data-olo-wish]', K = 'olo_woo_wishlist';
+            var AGG = <?php echo wp_json_encode( olobuild_t( 'Aggiungi ai preferiti' ) ); ?>, TOGLI = <?php echo wp_json_encode( olobuild_t( 'Togli dai preferiti' ) ); ?>;
+            function lista(){
+                var m = document.cookie.match(new RegExp('(?:^|;\\s*)' + K + '=([^;]*)'));
+                if(!m){ return []; }
+                try { var a = JSON.parse(decodeURIComponent(m[1])); return Array.isArray(a) ? a : []; } catch(e){ return []; }
+            }
+            function aggiorna(){
+                var l = lista();
+                document.querySelectorAll(SEL).forEach(function(b){
+                    var on = l.indexOf(parseInt(b.getAttribute('data-olo-wish'), 10)) !== -1;
+                    var nome = (b.getAttribute('aria-label') || '').split(': ').slice(1).join(': ');
+                    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+                    b.setAttribute('aria-label', (on ? TOGLI : AGG) + (nome ? ': ' + nome : ''));
+                });
+            }
+            document.addEventListener('click', function(e){
+                var b = e.target.closest ? e.target.closest(SEL) : null;
+                if(!b){ return; }
+                e.preventDefault();
+                var id = parseInt(b.getAttribute('data-olo-wish'), 10), l = lista(), i = l.indexOf(id);
+                if(i === -1){ l.push(id); } else { l.splice(i, 1); }
+                document.cookie = K + '=' + encodeURIComponent(JSON.stringify(l)) + ';path=/;max-age=' + (365 * 86400) + ';SameSite=Lax';
+                aggiorna();
+                try { document.dispatchEvent(new CustomEvent('olo:wishlist', { detail: b })); } catch(err){}
+            });
+            document.addEventListener('olo:wishlist', aggiorna);
+            aggiorna();
+        })();
+        </script>
+            <?php
+        endif;
 
         wp_reset_postdata();
         return ob_get_clean();

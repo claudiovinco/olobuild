@@ -80,6 +80,7 @@ class Olobuild_Demo_Temi {
     public static function avvia() {
         $richiesta = self::leggi_richiesta();
         if ( ! $richiesta ) {
+            add_action( 'template_redirect', [ __CLASS__, 'prodotto_nella_demo' ] );
             // Un tema che vive in un plugin (olobuild_external_theme_dirs) si trova solo quando i plugin sono tutti
             // inclusi: si riprova a plugins_loaded, prima che partano (e prima che OLOlang scelga la lingua).
             if ( self::$riprova ) {
@@ -88,6 +89,63 @@ class Olobuild_Demo_Temi {
             return;
         }
         self::aggancia( $richiesta );
+    }
+
+    /**
+     * Fuori dalle demo: un prodotto di WooCommerce dei dati d'esempio di un tema (meta _olo_demo = id del tema),
+     * aperto dal suo indirizzo di sempre, porta alla sua scheda dentro la demo, se il sito la mostra e il tema ha
+     * la scheda dei prodotti (theme.json → singles → product). Come le strutture d'esempio di OLObooking: i
+     * prodotti di prova vivono nella demo, col negozio del tema attorno.
+     */
+    public static function prodotto_nella_demo() {
+        if ( ! is_singular( 'product' ) ) {
+            return;
+        }
+        $post = get_queried_object();
+        if ( ! ( $post instanceof WP_Post ) ) {
+            return;
+        }
+        $tema = (string) get_post_meta( $post->ID, '_olo_demo', true );
+        $url  = '' !== $tema ? self::indirizzo_singolo( $tema, $post ) : '';
+        if ( '' !== $url ) {
+            wp_safe_redirect( $url, 302 );
+            exit;
+        }
+    }
+
+    /**
+     * Nella demo di un negozio: il carrello e la cassa di WooCommerce sono le pagine del tema che theme.json → woo
+     * indica ({"cart": "carrello", "checkout": "cassa"}, chiavi di pages). Senza, «Vai al carrello» usciva dalla
+     * demo e apriva il carrello del sito che la ospita, con la sua grafica.
+     */
+    public static function carrello_della_demo( $url ) {
+        return self::pagina_woo( 'cart', $url );
+    }
+
+    /** Come carrello_della_demo(), per la cassa. */
+    public static function cassa_della_demo( $url ) {
+        return self::pagina_woo( 'checkout', $url );
+    }
+
+    /**
+     * La pagina della demo indicata come cassa (theme.json → woo → checkout) è la cassa per WooCommerce: le tile
+     * della cassa la riconoscono e WooCommerce carica i suoi script. Inviare l'ordine resta impossibile: nella
+     * demo i moduli non partono (moduli_fermi()).
+     */
+    public static function e_la_cassa( $si ) {
+        $chiave = (string) ( self::$tema['json']['woo']['checkout'] ?? '' );
+        return ( '' !== $chiave && self::$pagina === $chiave ) ? true : $si;
+    }
+
+    /** L'indirizzo intero della pagina del tema che theme.json → woo → $ruolo indica; $url se non ce n'è una. */
+    private static function pagina_woo( $ruolo, $url ) {
+        $chiave = (string) ( self::$tema['json']['woo'][ $ruolo ] ?? '' );
+        $pagina = ( '' !== $chiave ) ? ( self::$tema['json']['pages'][ $chiave ] ?? null ) : null;
+        if ( ! is_array( $pagina ) ) {
+            return $url;
+        }
+        $pezzo = empty( $pagina['set_as_homepage'] ) ? self::slug( $chiave, $pagina ) . '/' : '';
+        return self::con_palette( home_url( '/' . self::BASE . '/' . self::$tema['id'] . '/' . $pezzo ) );
     }
 
     /** La seconda prova di avvia(), coi temi portati dai plugin. */
@@ -109,6 +167,11 @@ class Olobuild_Demo_Temi {
             add_action( 'wp_loaded', [ __CLASS__, 'risolvi_singolo' ], 1 );
         }
         add_filter( 'post_type_link', [ __CLASS__, 'link_singolo' ], 99, 2 );
+        if ( ! empty( self::$tema['json']['woo'] ) ) {
+            add_filter( 'woocommerce_get_cart_url', [ __CLASS__, 'carrello_della_demo' ], 99 );
+            add_filter( 'woocommerce_get_checkout_url', [ __CLASS__, 'cassa_della_demo' ], 99 );
+            add_filter( 'woocommerce_is_checkout', [ __CLASS__, 'e_la_cassa' ] );
+        }
 
         // Stile del tema al posto di quello del sito.
         add_filter( 'pre_option_olobuild_styles', [ __CLASS__, 'stili' ] );

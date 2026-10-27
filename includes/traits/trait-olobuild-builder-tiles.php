@@ -124,6 +124,7 @@ trait Olobuild_Builder_Tiles_Trait {
         require_once OLOBUILD_PATH . 'includes/tiles/class-lucchetto-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-ghiera-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-pellicole-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-montaggio-tile.php';
 
         require_once OLOBUILD_PATH . 'includes/tiles/class-social-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-map-tile.php';
@@ -410,6 +411,7 @@ trait Olobuild_Builder_Tiles_Trait {
         $manager->register_tile( new Olobuild_Lucchetto_Tile() );
         $manager->register_tile( new Olobuild_Ghiera_Tile() );
         $manager->register_tile( new Olobuild_Pellicole_Tile() );
+        $manager->register_tile( new Olobuild_Montaggio_Tile() );
         // Vetrina temi: solo dove le demo dei temi sono accese (Olobuild_Demo_Temi), altrove non
         // avrebbe niente da mostrare e non entra nella palette.
         if ( class_exists( 'Olobuild_Demo_Temi' ) && Olobuild_Demo_Temi::accese() ) {

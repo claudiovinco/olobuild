@@ -234,6 +234,27 @@ class Olobuild_LiveSearch_Tile extends Olobuild_Tile_Base {
             }
             $item['excerpt'] = $excerpt;
 
+            // I prodotti di WooCommerce mostrano il prezzo (e quello pieno, barrato, se sono in saldo):
+            // in un negozio si cerca per sapere quanto costa.
+            if ( 'product' === $p->post_type ) {
+                if ( function_exists( 'wc_get_product' ) ) {
+                    $prodotto = wc_get_product( $p->ID );
+                    if ( $prodotto ) {
+                        if ( '' !== (string) $prodotto->get_price() ) {
+                            $testo_prezzo  = static function ( $v ) {
+                                return trim( html_entity_decode( wp_strip_all_tags( wc_price( (float) $v ) ), ENT_QUOTES, 'UTF-8' ) );
+                            };
+                            $item['price'] = $testo_prezzo( $prodotto->get_price() );
+                            if ( $prodotto->is_on_sale() ) {
+                                if ( '' !== (string) $prodotto->get_regular_price() ) {
+                                    $item['price_regular'] = $testo_prezzo( $prodotto->get_regular_price() );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             // Thumbnail
             if ( $show_thumb ) {
                 $thumb_id = get_post_thumbnail_id( $p->ID );

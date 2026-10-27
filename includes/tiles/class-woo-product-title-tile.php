@@ -92,7 +92,8 @@ class Olobuild_Woo_Product_Title_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colours via the safe_color_css() whitelist (with fixed var() fallbacks), font-size via absint() with min()/max() clamp, align/weight/line-height via in_array() whitelists; $uid is internally generated. ?>
         <style>
-            .<?php echo $uid; ?> {
+            <?php // Col tag nel selettore: la tipografia del tema (.olo-template h1, 0,1,1) batteva la sola classe e il nome usciva alla misura dell'h1 del sito, non a quella scelta. ?>
+            <?php echo $tag; ?>.<?php echo $uid; ?> {
                 margin: 0;
                 padding: 0;
                 text-align: <?php echo $text_align; ?>;

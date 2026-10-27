@@ -509,13 +509,15 @@ class Olobuild_Button_Tile extends Olobuild_Tile_Base {
             if ( $svg === '' ) {
                 return ''; // icona personalizzata eliminata: niente icona e niente spazio
             }
-            $stile = 'display:inline-flex;fill:currentColor;' . ( $colore !== '' ? 'color:' . $colore . ';' : '' );
+            // flex:none: nel testo del pulsante (inline-flex) l'icona si restringeva fino a sparire quando la colonna
+            // era stretta (il logo di un negozio in testata: 8 px sul telefono, 0 a 1100 px).
+            $stile = 'display:inline-flex;flex:none;fill:currentColor;' . ( $colore !== '' ? 'color:' . $colore . ';' : '' );
             return '<span class="olo-button-icon" aria-hidden="true" style="' . esc_attr( $stile ) . '">' . $svg . '</span>';
         }
 
         // Ratio con il punto come separatore in ogni locale: 20 → «1», 24 → «1.2».
         $ratio = rtrim( rtrim( number_format( $px / 20, 3, '.', '' ), '0' ), '.' );
-        $stile = 'vertical-align: middle;' . ( $colore !== '' ? ' color: ' . $colore . ';' : '' );
+        $stile = 'vertical-align: middle; flex: none;' . ( $colore !== '' ? ' color: ' . $colore . ';' : '' );
         return '<span uk-icon="icon: ' . esc_attr( $nome ) . '; ratio: ' . $ratio . '" style="' . esc_attr( $stile ) . '"></span>';
     }
 }

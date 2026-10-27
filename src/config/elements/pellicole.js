@@ -20,7 +20,9 @@ const LOOK = [
   { value: 'burro', label: t('Toni burro — giallo morbido') },
   { value: 'notte', label: t('Notte cinematografica — ottanio e arancio') },
   { value: 'digicam', label: t('Digicam anni 2000 — con la data') },
+  { value: 'personalizzata', label: t('Personalizzata — i valori nello Stile') },
 ];
+const PROPRIA = { field: 'look', op: 'eq', value: 'personalizzata' };
 
 export default {
   type: 'pellicole',
@@ -73,7 +75,7 @@ export default {
     { type: 'separator', label: t('Pellicole') },
     { key: 'pellicole', label: t('Pellicole'), type: 'content-items', itemLabel: t('Pellicola'), etichettaDa: 'nome',
       description: t('Ogni rullino è un look applicato alla foto: scegli la ricetta e dagli il nome che vuoi (una pellicola, un tuo preset, una moda).'),
-      newItemDefaults: { nome: '', nota: '', look: 'portra', colore: '' },
+      newItemDefaults: { nome: '', nota: '', look: 'portra', colore: '', luminosita: 100, contrasto: 100, saturazione: 100, seppia: 0, tonalita: 0, tinta: '', tinta_opacita: 30, vignetta: 0 },
       itemFields: [
         { key: 'nome', label: t('Nome'), type: 'text' },
         { key: 'nota', label: t('Nota'), type: 'text' },
@@ -106,6 +108,16 @@ export default {
       itemFields: [
         { key: 'colore', label: t('Colore del barattolo'), type: 'color',
           description: t('La fascia sul barattolo del rullino. Vuoto: il colore tipico della ricetta.') },
+        { type: 'separator', label: t('Ricetta personalizzata'), condition: PROPRIA },
+        { key: 'luminosita', label: t('Luminosità'), type: 'range', min: 40, max: 160, step: 1, unit: '%', condition: PROPRIA },
+        { key: 'contrasto', label: t('Contrasto'), type: 'range', min: 40, max: 160, step: 1, unit: '%', condition: PROPRIA },
+        { key: 'saturazione', label: t('Saturazione'), type: 'range', min: 0, max: 220, step: 1, unit: '%', condition: PROPRIA },
+        { key: 'seppia', label: t('Seppia'), type: 'range', min: 0, max: 100, step: 1, unit: '%', condition: PROPRIA },
+        { key: 'tonalita', label: t('Tonalità'), type: 'range', min: -180, max: 180, step: 1, unit: '°', condition: PROPRIA },
+        { key: 'tinta', label: t('Tinta'), type: 'color', condition: PROPRIA,
+          description: t('Un colore fuso sopra la foto in modo morbido: caldo per l\'olio, scuro per un mordente.') },
+        { key: 'tinta_opacita', label: t('Forza della tinta'), type: 'range', min: 0, max: 100, step: 1, unit: '%', condition: PROPRIA },
+        { key: 'vignetta', label: t('Vignettatura'), type: 'range', min: 0, max: 100, step: 1, unit: '%', condition: PROPRIA },
       ] },
     { key: 'grana', label: t('Grana'), type: 'range', min: 0, max: 100, step: 5, unit: '%',
       description: t('La grana di pellicola sopra lo sviluppo. 0: niente grana.') },

@@ -45409,3 +45409,359 @@ msgstr "You decide the focus"
 #: includes/class-theme-importer.php
 msgid "Gira la ghiera"
 msgstr "Turn the dial"
+
+#: src/config/elements/montaggio.js
+msgid "Montaggio"
+msgstr "Edit timeline"
+
+#: src/config/elements/montaggio.js
+msgid "Bianco"
+msgstr "White"
+
+#: src/config/elements/montaggio.js
+msgid "Fashion film"
+msgstr "Fashion film"
+
+#: src/config/elements/montaggio.js
+msgid "Guarda il film"
+msgstr "Watch the film"
+
+#: src/config/elements/montaggio.js
+msgid "Strada bianca"
+msgstr "White road"
+
+#: src/config/elements/montaggio.js
+msgid "Spot"
+msgstr "Commercial"
+
+#: src/config/elements/montaggio.js
+msgid "Guarda lo spot"
+msgstr "Watch the commercial"
+
+#: src/config/elements/montaggio.js
+msgid "Rosso"
+msgstr "Red"
+
+#: src/config/elements/montaggio.js
+msgid "Videoclip"
+msgstr "Music video"
+
+#: src/config/elements/montaggio.js
+msgid "Guarda il video"
+msgstr "Watch the video"
+
+#: src/config/elements/montaggio.js
+msgid "Clip"
+msgstr "Clip"
+
+#: src/config/elements/montaggio.js
+msgid "Una per clip, nell'ordine della timeline: si mettono in fila e ognuna è lunga quanto dura. Il video va nel monitor quando la testina ci passa; la foto fa da copertina e da striscia di fotogrammi sulla traccia."
+msgstr "One per clip, in timeline order: they line up and each is as long as it lasts. The video plays in the monitor when the playhead passes over it; the photo is the cover and the filmstrip on the track."
+
+#: src/config/elements/montaggio.js
+msgid "Guarda il progetto"
+msgstr "See the project"
+
+#: src/config/elements/montaggio.js
+msgid "Spot, Videoclip, Documentario…"
+msgstr "Commercial, Music video, Documentary…"
+
+#: src/config/elements/montaggio.js
+msgid "Cliente"
+msgstr "Client"
+
+#: src/config/elements/montaggio.js
+msgid "Senza audio e corto: si vede solo il tratto lungo quanto la durata qui sotto."
+msgstr "Silent and short: only the stretch as long as the duration below is shown."
+
+#: src/config/elements/montaggio.js
+msgid "Quanto resta in onda la clip, e quanto è lunga sulla traccia."
+msgstr "How long the clip stays on air, and how long it is on the track."
+
+#: src/config/elements/montaggio.js
+msgid "Testo del collegamento"
+msgstr "Link text"
+
+#: src/config/elements/montaggio.js
+msgid "Nome della sequenza"
+msgstr "Sequence name"
+
+#: src/config/elements/montaggio.js
+msgid "Il nome che compare nella barra, come in un programma di montaggio. Vuoto: niente nome."
+msgstr "The name shown in the bar, as in an editing program. Empty: no name."
+
+#: src/config/elements/montaggio.js
+msgid "Fotogrammi al secondo"
+msgstr "Frames per second"
+
+#: src/config/elements/montaggio.js
+msgid "Solo per il timecode (ore:minuti:secondi:fotogrammi) e per il passo delle frecce."
+msgstr "Only for the timecode (hours:minutes:seconds:frames) and the arrow-key step."
+
+#: src/config/elements/montaggio.js
+msgid "Parte da sola"
+msgstr "Starts by itself"
+
+#: src/config/elements/montaggio.js
+msgid "Senza audio, quando la timeline entra nello schermo; si ferma quando esce. Mai nel builder, mai con la riduzione del movimento."
+msgstr "Muted, when the timeline comes on screen; it stops when it leaves. Never in the builder, never with reduced motion."
+
+#: src/config/elements/montaggio.js
+msgid "Mostra la traccia audio"
+msgstr "Show the audio track"
+
+#: src/config/elements/montaggio.js
+msgid "Mostra il riquadro della clip"
+msgstr "Show the clip box"
+
+#: src/config/elements/montaggio.js
+msgid "Accanto o sotto il monitor: tipo, titolo, cliente, anno e collegamento della clip in onda."
+msgstr "Next to or below the monitor: type, title, client, year and link of the clip on air."
+
+#: src/config/elements/montaggio.js
+msgid "Vuoto: lo scuro del tema."
+msgstr "Empty: the theme's dark color."
+
+#: src/config/elements/montaggio.js
+msgid "Vuoto: quello che si legge sullo sfondo."
+msgstr "Empty: whatever reads on the background."
+
+#: src/config/elements/montaggio.js
+msgid "La testina, il timecode, il tipo della clip e la clip in onda. Vuoto: il primario del tema."
+msgstr "The playhead, the timecode, the clip type and the clip on air. Empty: the theme's primary color."
+
+#: src/config/elements/montaggio.js
+msgid "Colore delle clip"
+msgstr "Clip color"
+
+#: src/config/elements/montaggio.js
+msgid "Sotto la striscia di fotogrammi. Vuoto: il secondario del tema."
+msgstr "Under the filmstrip. Empty: the theme's secondary color."
+
+#: src/config/elements/montaggio.js
+msgid "Colore della forma d'onda"
+msgstr "Waveform color"
+
+#: src/config/elements/montaggio.js
+msgid "Colore del bordo"
+msgstr "Border color"
+
+#: src/config/elements/montaggio.js
+msgid "Il filo a sinistra della clip sulla traccia. Vuoto: il colore accento."
+msgstr "The line on the left of the clip on the track. Empty: the accent color."
+
+#: src/config/elements/montaggio.js
+msgid "Titolo della clip"
+msgstr "Clip title"
+
+#: src/config/elements/montaggio.js
+msgid "Font del timecode"
+msgstr "Timecode font"
+
+#: src/config/elements/montaggio.js
+msgid "Proporzione del monitor"
+msgstr "Monitor aspect ratio"
+
+#: src/config/elements/montaggio.js
+msgid "Altezza delle tracce"
+msgstr "Track height"
+
+#: src/config/elements/montaggio.js
+msgid "Riquadro della clip"
+msgstr "Clip box"
+
+#: src/config/elements/montaggio.js
+msgid "Accanto al monitor"
+msgstr "Next to the monitor"
+
+#: src/config/elements/montaggio.js
+msgid "Sotto il monitor"
+msgstr "Below the monitor"
+
+#: src/config/elements/montaggio.js
+msgid "Quando la colonna è stretta va comunque sotto."
+msgstr "When the column is narrow it goes below anyway."
+
+#: src/config/elements/pellicole.js
+msgid "Personalizzata — i valori nello Stile"
+msgstr "Custom — the values in Style"
+
+#: src/config/elements/pellicole.js
+msgid "Ricetta personalizzata"
+msgstr "Custom recipe"
+
+#: src/config/elements/pellicole.js
+msgid "Tinta"
+msgstr "Tint"
+
+#: src/config/elements/pellicole.js
+msgid "Un colore fuso sopra la foto in modo morbido: caldo per l'olio, scuro per un mordente."
+msgstr "A color blended softly over the photo: warm for oil, dark for a stain."
+
+#: src/config/elements/pellicole.js
+msgid "Forza della tinta"
+msgstr "Tint strength"
+
+#: src/config/elements/woo_products.js
+msgid "Voto e numero di recensioni"
+msgstr "Rating and number of reviews"
+
+#: src/config/elements/woo_products.js
+msgid "Accanto alle stelle il voto medio («4,6») e quante recensioni ha il prodotto («(3.812)»)."
+msgstr "Next to the stars, the average rating («4.6») and how many reviews the product has («(3,812)»)."
+
+#: src/config/elements/woo_products.js
+msgid "Cuore dei preferiti"
+msgstr "Wishlist heart"
+
+#: src/config/elements/woo_products.js
+msgid "Sulla foto, in alto a destra: aggiunge o toglie il prodotto dalla lista della tile Wishlist, che si aggiorna subito."
+msgstr "On the photo, top right: adds or removes the product from the Wishlist tile's list, which updates at once."
+
+#: src/config/elements/woo_products.js
+msgid "Quanto si risparmia"
+msgstr "How much you save"
+
+#: src/config/elements/woo_products.js
+msgid "Sotto il prezzo dei prodotti in saldo: «Risparmi 50,00 €»."
+msgstr "Under the price of products on sale: «You save €50.00»."
+
+#: src/config/elements/woo_products.js
+msgid "Avviso di scorta bassa"
+msgstr "Low stock warning"
+
+#: src/config/elements/woo_products.js
+msgid "«Ne restano solo 3» quando i pezzi in magazzino scendono alla soglia di scorta bassa di WooCommerce. Solo per i prodotti con la gestione della scorta."
+msgstr "«Only 3 left» when the items in stock fall to WooCommerce's low stock threshold. Only for products with stock management."
+
+#: src/config/elements/woo_products.js
+msgid "Testi della card"
+msgstr "Card texts"
+
+#: src/config/elements/woo_products.js
+msgid "Attributo della marca"
+msgstr "Brand attribute"
+
+#: src/config/elements/woo_products.js
+msgid "Lo slug di un attributo globale di WooCommerce (Prodotti → Attributi): il suo valore compare sopra il nome, in maiuscoletto. Vuoto: niente marca."
+msgstr "The slug of a global WooCommerce attribute (Products → Attributes): its value appears above the name, in small caps. Empty: no brand."
+
+#: src/config/elements/woo_products.js
+msgid "Riga della consegna"
+msgstr "Delivery line"
+
+#: src/config/elements/woo_products.js
+msgid "Consegna gratuita domani"
+msgstr "Free delivery tomorrow"
+
+#: src/config/elements/woo_products.js
+msgid "Una riga col furgoncino sotto il prezzo, solo per i prodotti disponibili. Vuota: niente riga."
+msgstr "A line with the van under the price, only for products in stock. Empty: no line."
+
+#: src/config/elements/woo_products.js
+msgid "Bollo dei prodotti in evidenza"
+msgstr "Featured products badge"
+
+#: src/config/elements/woo_products.js
+msgid "Scelto da noi"
+msgstr "Our pick"
+
+#: src/config/elements/woo_products.js
+msgid "Un secondo bollo sulla foto dei prodotti «In evidenza» di WooCommerce, sotto quello dello sconto. Vuoto: niente bollo."
+msgstr "A second badge on the photo of WooCommerce «Featured» products, below the discount one. Empty: no badge."
+
+#: src/config/elements/woo_products.js
+msgid "Seconda foto"
+msgstr "Second photo"
+
+#: src/config/elements/woo_products.js
+msgid "«Seconda foto»: al passaggio compare la prima foto della galleria del prodotto."
+msgstr "«Second photo»: on hover the first photo of the product gallery appears."
+
+#: src/config/elements/woo_products.js
+msgid "Il nome si ferma a queste righe coi puntini, così le card restano allineate. 0: tutto il nome."
+msgstr "The name stops at these lines with an ellipsis, so the cards stay aligned. 0: the whole name."
+
+#: src/config/elements/woo_categories.js
+msgid "Pagina del negozio"
+msgstr "Shop page"
+
+#: src/config/elements/woo_categories.js
+msgid "Le categorie aprono questa pagina col filtro della categoria (?product_cat=…), che la tile Prodotti WC della pagina legge. Vuota: l'archivio della categoria di WooCommerce."
+msgstr "Categories open this page with the category filter (?product_cat=…), which the page's WC Products tile reads. Empty: the WooCommerce category archive."
+
+#: src/config/elements/woo_categories.js
+msgid "Sul telefono scorrono di lato"
+msgstr "On phones they scroll sideways"
+
+#: src/config/elements/woo_categories.js
+msgid "Sotto i 640 px una sola fila che si scorre col dito, invece delle colonne."
+msgstr "Below 640 px a single row you scroll with your finger, instead of columns."
+
+#: src/config/elements/woo_categories.js
+msgid "Nome della categoria"
+msgstr "Category name"
+
+#: src/config/elements/livesearch.js
+msgid "Debounce"
+msgstr "Debounce"
+
+#: src/config/elements/livesearch.js
+msgid "Modal Spotlight"
+msgstr "Modal Spotlight"
+
+#: src/config/elements/livesearch.js
+msgid "Expanded Bar"
+msgstr "Expanded Bar"
+
+#: src/config/elements/livesearch.js
+msgid "Icon Trigger"
+msgstr "Icon Trigger"
+
+#: src/config/elements/livesearch.js
+msgid "Glass Floating"
+msgstr "Glass Floating"
+
+#: src/config/elements/livesearch.js
+msgid "Input"
+msgstr "Input"
+
+#: src/config/elements/hoverlist.js
+msgid "Hover List"
+msgstr "Hover List"
+
+#: includes/tiles/class-woo-products-tile.php
+msgid "Togli dai preferiti"
+msgstr "Remove from wishlist"
+
+#: includes/tiles/class-woo-products-tile.php
+msgid "Ne resta solo %d"
+msgstr "Only %d left"
+
+#: includes/tiles/class-woo-products-tile.php
+msgid "Ne restano solo %d"
+msgstr "Only %d left"
+
+#: includes/tiles/class-woo-products-tile.php
+msgid "Risparmi %s"
+msgstr "You save %s"
+
+#: includes/tiles/class-woo-products-tile.php
+msgid "Valutazione %1$s su 5, %2$s recensioni"
+msgstr "Rated %1$s out of 5, %2$s reviews"
+
+#: includes/class-theme-importer.php
+msgid "La testina la muovi tu"
+msgstr "You move the playhead"
+
+#: includes/class-theme-importer.php
+msgid "Il legno ha una memoria"
+msgstr "Wood has a memory"
+
+#: includes/class-theme-importer.php
+msgid "Ordini oggi, arriva domani"
+msgstr "Order today, it arrives tomorrow"
+
+#: includes/class-theme-importer.php
+msgid "Il bancone, dal vivo"
+msgstr "The counter, live"

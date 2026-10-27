@@ -124,20 +124,42 @@ class Olobuild_Pellicole_Tile extends Olobuild_Tile_Base {
 
         $img = esc_url_raw( self::url_di( $s['immagine'] ) );
         $rul = [];
+        $propri = []; // le ricette personalizzate: data-look «p<n>» → [ filtro, tinta, fusione, opacità, vignetta ]
         foreach ( ( is_array( $s['pellicole'] ) ? $s['pellicole'] : [] ) as $p ) {
             if ( ! is_array( $p ) ) {
                 continue;
             }
-            $look = isset( self::LOOK[ $p['look'] ?? '' ] ) ? $p['look'] : 'portra';
             $nome = trim( wp_strip_all_tags( (string) ( $p['nome'] ?? '' ) ) );
             if ( '' === $nome ) {
                 continue;
+            }
+            if ( 'personalizzata' === ( $p['look'] ?? '' ) ) {
+                // Una ricetta propria (finiture del legno, preset dello studio): luminosità, contrasto, saturazione,
+                // seppia e tonalità diventano il filtro; la tinta si fonde in «colore morbido»; la vignettatura come le altre.
+                $num  = static function ( $v, $min, $max, $def ) {
+                    return is_numeric( $v ) ? max( $min, min( $max, (float) $v ) ) : $def;
+                };
+                $look = 'p' . count( $propri );
+                $tin  = $this->safe_color_css( $p['tinta'] ?? '' );
+                $propri[ $look ] = [
+                    'brightness(' . round( $num( $p['luminosita'] ?? 100, 40, 160, 100 ) / 100, 3 ) . ') contrast(' . round( $num( $p['contrasto'] ?? 100, 40, 160, 100 ) / 100, 3 )
+                        . ') saturate(' . round( $num( $p['saturazione'] ?? 100, 0, 220, 100 ) / 100, 3 ) . ') sepia(' . round( $num( $p['seppia'] ?? 0, 0, 100, 0 ) / 100, 3 )
+                        . ') hue-rotate(' . (int) $num( $p['tonalita'] ?? 0, -180, 180, 0 ) . 'deg)',
+                    $tin,
+                    'soft-light',
+                    round( $num( $p['tinta_opacita'] ?? 30, 0, 100, 30 ) / 100, 3 ),
+                    round( $num( $p['vignetta'] ?? 0, 0, 100, 0 ) / 100, 3 ),
+                ];
+                $col_def = '' !== $tin ? $tin : '#8a6a4a';
+            } else {
+                $look    = isset( self::LOOK[ $p['look'] ?? '' ] ) ? $p['look'] : 'portra';
+                $col_def = self::LOOK[ $look ][5];
             }
             $rul[] = [
                 'nome'   => $nome,
                 'nota'   => trim( wp_strip_all_tags( (string) ( $p['nota'] ?? '' ) ) ),
                 'look'   => $look,
-                'colore' => $this->safe_color_css( $p['colore'] ?? '' ) ?: self::LOOK[ $look ][5],
+                'colore' => $this->safe_color_css( $p['colore'] ?? '' ) ?: $col_def,
             ];
         }
         if ( '' === $img || ! $rul ) {
@@ -186,7 +208,7 @@ class Olobuild_Pellicole_Tile extends Olobuild_Tile_Base {
         echo '@keyframes opl-lampo{0%{opacity:.55}100%{opacity:0}}';
         echo "{$sel} .opl-data{position:absolute;right:4%;bottom:5%;font-family:'Courier New',ui-monospace,monospace;font-weight:700;font-size:clamp(11px,1.7vw,22px);letter-spacing:.06em;color:#ff8c2b;text-shadow:0 0 6px rgba(255,120,30,.7);display:none}";
         echo "{$sel} .opl-sviluppo[data-look=\"digicam\"] .opl-data{display:block}";
-        foreach ( self::LOOK as $k => $l ) {
+        foreach ( array_merge( self::LOOK, $propri ) as $k => $l ) {
             echo "{$sel} .opl-sviluppo[data-look=\"{$k}\"] .opl-foto{filter:{$l[0]}}";
             if ( '' !== $l[1] ) {
                 echo "{$sel} .opl-sviluppo[data-look=\"{$k}\"] .opl-tinta{background:{$l[1]};mix-blend-mode:{$l[2]};opacity:{$l[3]}}";

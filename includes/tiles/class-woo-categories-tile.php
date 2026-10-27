@@ -28,6 +28,9 @@ class Olobuild_Woo_Categories_Tile extends Olobuild_Tile_Base {
         'hover_effect'     => 'zoom',
         'columns_tablet'   => 2,
         'columns_mobile'   => 1,
+        'posizione_testo'  => 'sopra',
+        'scorri_mobile'    => false,
+        'pagina_negozio'   => '',
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -68,7 +71,7 @@ class Olobuild_Woo_Categories_Tile extends Olobuild_Tile_Base {
                  . '</div>';
         }
 
-        $cols        = max( 1, min( 6, absint( $s['columns'] ) ) );
+        $cols        = max( 1, min( 8, absint( $s['columns'] ) ) );
         $cols_tablet = max( 1, min( 4, absint( $s['columns_tablet'] ) ) );
         $cols_mobile = max( 1, min( 2, absint( $s['columns_mobile'] ) ) );
         $gap         = absint( $s['gap'] );
@@ -104,6 +107,18 @@ class Olobuild_Woo_Categories_Tile extends Olobuild_Tile_Base {
         ];
         $ratio_val = isset( $ratio_map[ $s['image_ratio'] ] ) ? $ratio_map[ $s['image_ratio'] ] : '100%';
 
+        // Nome sotto la foto (27 ott 2026): la foto è una tessera (tonda col raggio al massimo) e nome e numero
+        // stanno sotto, scuri sul fondo della pagina, come nei negozi grandi. «Sopra» resta il disegno di prima.
+        // «Pagina del negozio»: le categorie aprono quella pagina col filtro ?product_cat=<slug>, che la tile
+        // Prodotti WC legge; vuota, l'archivio della categoria di WooCommerce come prima.
+        // «Scorre sul telefono»: sotto i 640 px una sola fila che si scorre di lato, invece delle colonne.
+        $sotto   = ( ( $s['posizione_testo'] ?? 'sopra' ) === 'sotto' );
+        $scorre  = ! empty( $s['scorri_mobile'] );
+        $negozio = trim( (string) ( $s['pagina_negozio'] ?? '' ) );
+        if ( $sotto ) {
+            $txt_color = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #111827)';
+        }
+
         ob_start();
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: absint() clamps for columns/gap, Olobuild_Tile_Utils radius helpers, safe_color_css()/esc_attr()'d colors, fixed ratio map, in_array() whitelisted tag and the internally generated $uid. ?>
@@ -123,21 +138,39 @@ class Olobuild_Woo_Categories_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-wcat-ov .olo-wcat-count{color:<?php echo $txt_color; ?>;opacity:.8;font-size:13px;margin-top:4px}
             .<?php echo $uid; ?> .olo-wcat-ov .olo-wcat-desc{color:<?php echo $txt_color; ?>;opacity:.7;font-size:12px;margin-top:6px}
             .<?php echo $uid; ?> a{text-decoration:none}
+            .<?php echo $uid; ?> .olo-wcat:focus-visible{outline:2px solid var(--olo-color-primary, #e1474f);outline-offset:3px}
+            <?php if ( $sotto ) : ?>
+            .<?php echo $uid; ?> .olo-wcat{overflow:visible;border-radius:0;display:flex;flex-direction:column;gap:.625rem;text-align:center}
+            .<?php echo $uid; ?> .olo-wcat-img{border-radius:<?php echo $radius; ?>;transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}
+            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-wcat:hover{border-radius:0 !important}.<?php echo $uid; ?> .olo-wcat:hover .olo-wcat-img{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
+            .<?php echo $uid; ?> .olo-wcat-cap <?php echo $tag; ?>{margin:0;color:<?php echo $txt_color; ?>;font-size:15px;font-weight:700;line-height:1.25}
+            .<?php echo $uid; ?> .olo-wcat:hover .olo-wcat-cap <?php echo $tag; ?>{text-decoration:underline;text-underline-offset:3px}
+            .<?php echo $uid; ?> .olo-wcat-cap .olo-wcat-count{margin-top:.125rem;color:var(--olo-color-text-muted, #6B7280);font-size:12px}
+            .<?php echo $uid; ?> .olo-wcat-cap .olo-wcat-desc{margin-top:.25rem;color:var(--olo-color-text-muted, #6B7280);font-size:12px}
+            <?php endif; ?>
             @media(max-width:960px){.<?php echo $uid; ?>{grid-template-columns:repeat(<?php echo $cols_tablet; ?>,1fr)}}
             @media(max-width:640px){.<?php echo $uid; ?>{grid-template-columns:repeat(<?php echo $cols_mobile; ?>,1fr)}}
+            <?php if ( $scorre ) : ?>
+            @media(max-width:640px){.<?php echo $uid; ?>{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}.<?php echo $uid; ?>::-webkit-scrollbar{display:none}.<?php echo $uid; ?> > .olo-wcat{flex:0 0 28%;scroll-snap-align:start}}
+            <?php endif; ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="<?php echo esc_attr( $uid ); ?>">
         <?php foreach ( $categories as $cat ) :
             $thumb_id = get_term_meta( $cat->term_id, 'thumbnail_id', true );
-            $link     = get_term_link( $cat );
+            $link     = ( $negozio !== '' ) ? add_query_arg( 'product_cat', $cat->slug, $negozio ) : get_term_link( $cat );
         ?>
             <a href="<?php echo esc_url( $link ); ?>" class="olo-wcat">
                 <div class="olo-wcat-img">
                     <?php if ( $thumb_id && ! empty( $s['show_image'] ) ) : // «Mostra immagine» spento: resta la tessera tinta col nome ?>
                         <?php echo wp_get_attachment_image( $thumb_id, 'medium_large' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- image markup generated by WordPress core wp_get_attachment_image() (escaped internally) ?>
                     <?php endif; ?>
+                    <?php if ( $sotto ) : ?>
+                </div>
+                <div class="olo-wcat-cap">
+                    <?php else : ?>
                     <div class="olo-wcat-ov">
+                    <?php endif; ?>
                         <<?php echo tag_escape( $tag ); ?>><?php echo esc_html( $cat->name ); ?></<?php echo tag_escape( $tag ); ?>>
                         <?php if ( ! empty( $s['show_count'] ) ) : ?>
                         <div class="olo-wcat-count"><?php echo absint( $cat->count ); ?> <?php echo esc_html( olobuild_t( 'prodotti' ) ); ?></div>
@@ -146,7 +179,9 @@ class Olobuild_Woo_Categories_Tile extends Olobuild_Tile_Base {
                         <div class="olo-wcat-desc"><?php echo esc_html( wp_trim_words( $cat->description, 12 ) ); ?></div>
                         <?php endif; ?>
                     </div>
+                <?php if ( ! $sotto ) : ?>
                 </div>
+                <?php endif; ?>
             </a>
         <?php endforeach; ?>
         </div>

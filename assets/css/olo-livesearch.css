@@ -315,6 +315,20 @@
   text-overflow: ellipsis;
 }
 
+/* Il prezzo dei prodotti di WooCommerce: pieno e barrato se sono in saldo. */
+.olo-ls-item-price {
+  font-size: 13px;
+  color: var(--ls-title-color, #111827);
+  white-space: nowrap;
+}
+.olo-ls-item-price del {
+  font-size: 11px;
+  color: var(--ls-excerpt-color, #6b7280);
+}
+.olo-ls-item-price b {
+  font-weight: 700;
+}
+
 /* ─── Highlight match ─── */
 .olo-ls-item-title mark {
   background: rgba(225,71,79,.15);

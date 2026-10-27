@@ -104,7 +104,8 @@ class Olobuild_Woo_Comparison_Tile extends Olobuild_Tile_Base {
                 'review_count'      => intval( $product->get_review_count() ),
                 'in_stock'          => $product->is_in_stock(),
                 'sku'               => $product->get_sku(),
-                'short_description' => wp_strip_all_tags( $product->get_short_description() ),
+                // Le voci di un elenco restano separate: senza tag, «Wi-fi e Bluetooth» e «Multiroom» si attaccavano.
+                'short_description' => trim( preg_replace( '/\s*·\s*$/u', '', preg_replace( '/\s+/u', ' ', wp_strip_all_tags( preg_replace( '#</(li|p)>#i', ' · ', $product->get_short_description() ) ) ) ) ),
                 'attributes'        => $attrs,
                 'add_to_cart_url'   => $product->add_to_cart_url(),
                 'add_to_cart_text'  => $product->add_to_cart_text(),
@@ -146,7 +147,7 @@ class Olobuild_Woo_Comparison_Tile extends Olobuild_Tile_Base {
         #<?php echo $uid; ?> table{width:100%;border-collapse:collapse;min-width:600px}
         #<?php echo $uid; ?> th{background:<?php echo $hdr_bg; ?>;color:<?php echo $hdr_c; ?>;padding:12px 16px;text-align:left;font-weight:600;<?php echo $cell_bdr; ?>white-space:nowrap}
         #<?php echo $uid; ?> td{padding:12px 16px;<?php echo $cell_bdr; ?>vertical-align:middle;text-align:center}
-        #<?php echo $uid; ?> td:first-child{text-align:left;font-weight:500;background:<?php echo $hdr_bg; ?>}
+        #<?php echo $uid; ?> td:first-child{text-align:left;font-weight:500;background:<?php echo $hdr_bg; ?>;color:<?php echo $hdr_c; ?>}
         #<?php echo $uid; ?> .cmp-img{max-width:120px;height:auto;border-radius:6px}
         #<?php echo $uid; ?> .cmp-price{font-size:18px;font-weight:700;color:<?php echo $accent; ?>}
         #<?php echo $uid; ?> .cmp-btn{display:inline-block;padding:8px 20px;background:<?php echo $btn_bg; ?>;color:<?php echo $btn_c; ?>;border:none;border-radius:6px;cursor:pointer;text-decoration:none;font-size:14px;transition:opacity .2s}

@@ -202,8 +202,9 @@ export default {
     // altezza zero e l'anteprima sparirebbe. Il 16:11 non sta nel set canonico ma era
     // una delle quattro voci offerte finora: resta selezionabile via `extra` per chi
     // l'ha già salvato.
+    // Il monitor di regia ha le sue proporzioni (quelle di uno schermo): qui agisce solo sull'immagine.
     { key: 'peek_ratio', label: t('Proporzioni anteprima'), type: 'select',
-      condition: { field: 'peek', value: true },
+      condition: [{ field: 'peek', value: true }, { field: 'peek_mode', op: 'neq', value: 'monitor' }],
       options: ratioOptions({ auto: false, extra: ['16/11'] }) },
   ],
 };

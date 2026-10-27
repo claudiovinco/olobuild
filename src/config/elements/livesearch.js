@@ -111,6 +111,7 @@ export default {
         { value: 'page', label: t('Pagine'), icon: 'album' },
         { value: 'olo_service', label: t('Strutture'), icon: 'home' },
         { value: 'olo_room', label: t('Sale'), icon: 'grid' },
+        { value: 'product', label: t('Prodotti'), icon: 'cart' },
       ],
     },
     { key: 'taxonomy_filter', label: t('Filtra per tassonomia'), type: 'select', optionsSource: 'taxonomies' },

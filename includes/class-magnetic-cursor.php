@@ -318,8 +318,11 @@ html.<?php echo $uid; ?>-on [role="button"]{cursor:none;}
       var el = e.target && e.target.closest ? e.target.closest(CFG.sel) : null;
       if (!el){ clearPull(); return; }
       if (pulled && pulled !== el) clearPull();
-      pulled = el; el.style.willChange = 'transform';
       var r = el.getBoundingClientRect();
+      /* il pull è per pulsanti e link piccoli: una riga d'elenco o una card larga 1100 px, tirata
+         del 30%, si spostava di 170 px (l'anello resta «hot» anche lì) */
+      if (r.width > 420 || r.height > 220) { clearPull(); return; }
+      pulled = el; el.style.willChange = 'transform';
       var dx = (e.clientX - r.left - r.width/2)  * CFG.pull;
       var dy = (e.clientY - r.top  - r.height/2) * CFG.pull;
       el.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';

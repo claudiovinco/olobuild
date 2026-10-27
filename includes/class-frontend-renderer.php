@@ -1055,7 +1055,10 @@ class Olobuild_Frontend_Renderer {
         // completo» si vede solo nel padding del contenitore.
         $SFONDO_PROPRIO = [ 'announcementbar', 'audiohero', 'beforeafter', 'categoryrail', 'chathero', 'cta-banner', 'featuredstory', 'filmreel', 'glowgallery', 'glowhero', 'imagehero', 'introsplit', 'marquee', 'masthead', 'matchfixtures', 'mediacta', 'northquoteslider', 'northvideohero', 'particlefx', 'photocover', 'productgrid', 'producthero', 'scrubtext', 'searchhero', 'showcasegrid', 'smearhero', 'studiohero', 'terminalhero', 'themedemos' ];
         if ( empty( $bg_source['bg'] ) && ! empty( $settings['bg'] ) && ! in_array( $type, $SFONDO_PROPRIO, true ) ) $bg_source['bg'] = $settings['bg'];
-        if ( empty( $bg_source['bg_color'] ) && ! empty( $settings['bg_color'] ) ) $bg_source['bg_color'] = $settings['bg_color'];
+        // Tile in cui bg_color è il colore di un loro elemento, non del contenitore: «Aggiungi al carrello» lo usa per
+        // il pulsante, e il riquadro della tile (quantità compresa) si tingeva tutto di quel colore.
+        $BG_COLOR_DELL_ELEMENTO = [ 'woo_addtocart' ];
+        if ( empty( $bg_source['bg_color'] ) && ! empty( $settings['bg_color'] ) && ! in_array( $type, $BG_COLOR_DELL_ELEMENTO, true ) ) $bg_source['bg_color'] = $settings['bg_color'];
 
         // v1.0.55 — Tile ATOMICHE (button/icon/divider/spacer/togglebtn): wrapper SEMPRE
         // trasparente, ignora qualsiasi bg in style/settings (il bg appartiene all'elemento

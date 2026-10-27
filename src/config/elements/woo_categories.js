@@ -39,6 +39,9 @@ export default {
     hover_effect: 'zoom',
     columns_tablet: '2',
     columns_mobile: '1',
+    posizione_testo: 'sopra',
+    scorri_mobile: false,
+    pagina_negozio: '',
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
@@ -71,6 +74,10 @@ export default {
     { key: 'show_image', label: t('Mostra immagine'), type: 'toggle' },
     { key: 'show_count', label: t('Mostra conteggio prodotti'), type: 'toggle' },
     { key: 'show_description', label: t('Mostra descrizione'), type: 'toggle' },
+
+    { type: 'separator', label: t('Collegamento') },
+    { key: 'pagina_negozio', label: t('Pagina del negozio'), type: 'link',
+      description: t('Le categorie aprono questa pagina col filtro della categoria (?product_cat=…), che la tile Prodotti WC della pagina legge. Vuota: l\'archivio della categoria di WooCommerce.') },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -103,9 +110,16 @@ export default {
     },
 
     { type: 'separator', label: t('Layout') },
-    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1 },
+    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 8, step: 1 },
     { key: 'columns_tablet', label: t('Colonne tablet'), type: 'range', min: 1, max: 4, step: 1 },
-    { key: 'columns_mobile', label: t('Colonne mobile'), type: 'range', min: 1, max: 2, step: 1 },
+    { key: 'columns_mobile', label: t('Colonne mobile'), type: 'range', min: 1, max: 2, step: 1,
+      condition: { field: 'scorri_mobile', op: 'neq', value: true } },
+    { key: 'scorri_mobile', label: t('Sul telefono scorrono di lato'), type: 'toggle',
+      description: t('Sotto i 640 px una sola fila che si scorre col dito, invece delle colonne.') },
+    { key: 'posizione_testo', label: t('Nome della categoria'), type: 'select', options: [
+      { value: 'sopra', label: t('Sopra la foto') },
+      { value: 'sotto', label: t('Sotto la foto') },
+    ] },
     { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 4 },
     // Elenco canonico col separatore TRATTINO, che è quello che le tile WooCommerce
     // salvano da sempre ('16-9', non '16/9'): i valori già nei template restano
@@ -123,9 +137,10 @@ export default {
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
 
     { type: 'separator', label: t('Colori') },
-    { key: 'overlay', label: t('Overlay'), type: 'toggle' },
+    { key: 'overlay', label: t('Overlay'), type: 'toggle',
+      condition: { field: 'posizione_testo', op: 'neq', value: 'sotto' } },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color',
-      condition: { field: 'overlay', value: true } },
+      condition: [{ field: 'overlay', value: true }, { field: 'posizione_testo', op: 'neq', value: 'sotto' }] },
     ...borderFields(),
   ],
 };

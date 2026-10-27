@@ -289,6 +289,14 @@
 
         html += '<span class="olo-ls-item-text">';
         html += '<span class="olo-ls-item-title">' + highlightMatch(item.title, query) + '</span>';
+        // Prodotti di WooCommerce: il prezzo, e quello pieno barrato se sono in saldo.
+        if (item.price) {
+          html += '<span class="olo-ls-item-price">';
+          if (item.price_regular) {
+            html += '<del>' + oloUtils.escHtml(item.price_regular) + '</del> ';
+          }
+          html += '<b>' + oloUtils.escHtml(item.price) + '</b></span>';
+        }
         if (showExcerpt) {
           if (item.excerpt) {
             html += '<span class="olo-ls-item-excerpt">' + oloUtils.escHtml(item.excerpt) + '</span>';
