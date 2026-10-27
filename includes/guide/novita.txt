@@ -3,6 +3,16 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.848 - 2026-10-27 (WooCommerce)
+- «Aggiunto al carrello»: dopo l'aggiunta compare un riquadro con la foto, il nome, la quantità e il subtotale, e i pulsanti «Vai al carrello» e «Continua gli acquisti». Vale per tutte le tile di WooCommerce che aggiungono al carrello; si chiude da solo dopo qualche secondo, con Esc o con la X. Prima cambiava solo il numero sul mini carrello.
+- Mini Carrello: l'icona porta alla pagina del carrello (prima il clic, e il tocco sul telefono, non facevano niente); la tendina si apre al passaggio del mouse o col tasto Tab e non si chiude più scendendo dall'icona.
+- Gallery Prodotto WC: con lo zoom si vede solo la foto scelta, a piena risoluzione (prima la foto accanto entrava nella cornice e se ne vedevano due mezze); sul telefono il tocco apre la lightbox. «Altezza principale» scritta senza unità (560) vale in pixel: prima era ignorata.
+- Carrello: «Mostra prodotti consigliati» spegne il «Potresti essere interessato a…» di WooCommerce sotto il carrello, quando la pagina ha già la tile Cross-sell.
+- Prodotti visti di recente: si registrano anche le schede prodotto delle demo dei temi.
+- Bundle Prodotti WC: lo sconto del set c'è davvero nel carrello, alla riga «Sconto set», finché ci sono tutti i prodotti (prima la tile lo mostrava ma i prodotti entravano a prezzo pieno). Lasciando vuoto il campo degli ID, nella scheda di un prodotto il set è il prodotto stesso e i suoi accessori (cross-sell).
+- Aggiungi al carrello: con la quantità a casella numerica il carrello riceve il numero scritto (prima sempre uno).
+- Importare un tema di negozio: catalogo, carrello, cassa, account e scheda prodotto vanno in Impostazioni → Template WooCommerce, sulle pagine di WooCommerce, invece di diventare pagine a parte («Ripristina» le rimette com'erano). Fulmine ha anche la pagina «Il mio account» e nella scheda prodotto «Spesso comprati insieme», «Potrebbe interessarti anche», il badge dell'offerta e i prodotti precedente e successivo.
+
 ## v1.4.846 - 2026-10-27 (temi e WooCommerce)
 - Quattro temi nuovi. Ventiquattro, una casa di produzione video a Bologna, minimale e scura col rosso del REC: lo showreel montato su una timeline vera, i quattro mestieri che si svelano di lato, i lavori col monitor di regia. Venatura, una falegnameria in Val di Fiemme: dal tronco al mobile in quattro pannelli, sei finiture provate sulla stessa tavola, il tavolo da comporre col prezzo vero che finisce nel preventivo, le essenze con la lente. Fulmine, un negozio di elettronica con WooCommerce: ricerca coi prezzi, preferiti e carrello in testata, offerte lampo col conto alla rovescia, filtro, confronto, scheda prodotto, carrello e cassa a passi. Yuge, ramen e izakaya a Milano col modulo ristoranti di OLObooking.
 - Nuova tile Montaggio: lo showreel su una timeline di montaggio, con il monitor, il timecode, il righello, la traccia video con le clip in fila e la traccia audio. La testina si trascina, un clic su una clip salta al suo inizio, i tasti funzionano come in sala di montaggio (frecce, J K L, Spazio). Parte da sola quando entra nello schermo.

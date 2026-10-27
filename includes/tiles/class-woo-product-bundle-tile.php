@@ -41,6 +41,86 @@ class Olobuild_Woo_Product_Bundle_Tile extends Olobuild_Tile_Base {
         'border_effect_speed'     => 4,
     ];
 
+    /**
+     * Lo sconto del set c'è davvero nel carrello. Prima la tile mostrava «Risparmi 10%» e il prezzo del set, ma i
+     * prodotti entravano a prezzo pieno. Ora entrano insieme col segno del set (id, sconto, quanti sono) e, finché
+     * nel carrello ci sono tutti, c'è la riga «Sconto set». Prodotti e sconto arrivano firmati dal server
+     * (wp_hash): chi aggiunge non può cambiarli. Le tile si istanziano a ogni richiesta: gli agganci valgono
+     * anche per la chiamata AJAX e per il calcolo del carrello.
+     */
+    public function __construct() {
+        static $agganciato = false;
+        if ( $agganciato ) {
+            return;
+        }
+        $agganciato = true;
+        add_action( 'wc_ajax_olo_set', [ __CLASS__, 'aggiungi_set' ] );
+        add_action( 'woocommerce_cart_calculate_fees', [ __CLASS__, 'sconto_set' ] );
+        add_filter( 'woocommerce_get_item_data', [ __CLASS__, 'riga_del_set' ], 10, 2 );
+    }
+
+    /** La firma di prodotti e sconto di un set: senza, chiunque poteva chiedere il 100%. */
+    private static function firma( $ids, $pct ) {
+        return wp_hash( 'olo-set|' . implode( ',', array_map( 'absint', (array) $ids ) ) . '|' . (int) $pct );
+    }
+
+    /** ?wc-ajax=olo_set — mette nel carrello i prodotti del set, segnati come set. */
+    public static function aggiungi_set() {
+        // phpcs:disable WordPress.Security.NonceVerification.Missing -- nessuna azione dell'utente da proteggere: aggiunge al carrello come ?add-to-cart, e prodotti e sconto sono verificati dalla firma del server.
+        $ids   = array_values( array_unique( array_filter( array_map( 'absint', explode( ',', sanitize_text_field( wp_unslash( $_POST['ids'] ?? '' ) ) ) ) ) ) );
+        $pct   = max( 0, min( 100, absint( $_POST['sconto'] ?? 0 ) ) );
+        $firma = sanitize_text_field( wp_unslash( $_POST['firma'] ?? '' ) );
+        // phpcs:enable WordPress.Security.NonceVerification.Missing
+        if ( ! $ids || ! WC()->cart || ! hash_equals( self::firma( $ids, $pct ), $firma ) ) {
+            wp_send_json( [ 'aggiunti' => 0 ], 400 );
+        }
+        $segno    = [ 'id' => substr( md5( implode( ',', $ids ) . '|' . $pct ), 0, 12 ), 'sconto' => $pct, 'n' => count( $ids ) ];
+        $aggiunti = 0;
+        foreach ( $ids as $id ) {
+            $p = wc_get_product( $id );
+            if ( ! $p || 'publish' !== $p->get_status() || ! $p->is_purchasable() || ! $p->is_in_stock() || ! $p->is_type( 'simple' ) ) {
+                continue;
+            }
+            if ( WC()->cart->add_to_cart( $id, 1, 0, [], $pct > 0 ? [ 'olo_set' => $segno ] : [] ) ) {
+                $aggiunti++;
+            }
+        }
+        wp_send_json( [ 'aggiunti' => $aggiunti ] );
+    }
+
+    /** La riga «Sconto set» per ogni set che nel carrello è ancora intero (tolto un prodotto, lo sconto se ne va). */
+    public static function sconto_set( $cart ) {
+        $set = [];
+        foreach ( $cart->get_cart() as $item ) {
+            if ( empty( $item['olo_set']['id'] ) || empty( $item['data'] ) ) {
+                continue;
+            }
+            $sid = (string) $item['olo_set']['id'];
+            $set[ $sid ]['sconto']  = (int) $item['olo_set']['sconto'];
+            $set[ $sid ]['n']       = (int) $item['olo_set']['n'];
+            $set[ $sid ]['prezzi'][] = (float) $item['data']->get_price();
+            $set[ $sid ]['qta'][]    = (int) $item['quantity'];
+        }
+        $n = 0;
+        foreach ( $set as $s ) {
+            if ( $s['sconto'] <= 0 || count( $s['prezzi'] ) < $s['n'] ) {
+                continue;
+            }
+            $importo = array_sum( $s['prezzi'] ) * min( $s['qta'] ) * $s['sconto'] / 100;
+            $n++;
+            $nome = sprintf( olobuild_t( 'Sconto set (-%d%%)' ), $s['sconto'] ) . ( $n > 1 ? ' ' . $n : '' );
+            $cart->add_fee( $nome, -round( $importo, wc_get_price_decimals() ), false );
+        }
+    }
+
+    /** Sotto il prodotto, nel carrello e nella cassa: fa parte del set. */
+    public static function riga_del_set( $dati, $item ) {
+        if ( ! empty( $item['olo_set']['sconto'] ) ) {
+            $dati[] = [ 'key' => olobuild_t( 'Set' ), 'value' => sprintf( olobuild_t( 'acquistato insieme, -%d%%' ), (int) $item['olo_set']['sconto'] ) ];
+        }
+        return $dati;
+    }
+
     public function get_controls() {
         return [];
     }
@@ -54,9 +134,17 @@ class Olobuild_Woo_Product_Bundle_Tile extends Olobuild_Tile_Base {
 
         $s = wp_parse_args( $settings, $this->defaults );
 
-        // Parse product IDs
+        // Parse product IDs. Vuoto, nella scheda di un prodotto: il prodotto della pagina e i suoi accessori
+        // (cross-sell, i primi due), «Spesso comprati insieme». Prima la tile andava riempita a mano con gli id
+        // e nel template della scheda prodotto mostrava lo stesso set per tutti i prodotti.
         $raw_ids = sanitize_text_field( $s['product_ids'] );
         if ( empty( $raw_ids ) ) {
+            $raw_ids = $this->set_della_scheda();
+        }
+        if ( empty( $raw_ids ) ) {
+            if ( empty( $s['_builder_mode'] ) && ! current_user_can( 'edit_posts' ) ) {
+                return '';
+            }
             return '<div style="padding:30px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px">'
                  . esc_html( olobuild_t( 'Nessun prodotto nel bundle. Inserisci gli ID dei prodotti nelle impostazioni.' ) )
                  . '</div>';
@@ -489,34 +577,29 @@ class Olobuild_Woo_Product_Bundle_Tile extends Olobuild_Tile_Base {
             var atcBtn = wrap.querySelector('[data-olo-bundle-atc]');
             if(!atcBtn){return}
 
-            var productIds = '<?php echo esc_js( $js_product_ids ); ?>'.split(',');
             var addUrl = '<?php echo esc_js( wc_get_cart_url() ); ?>';
+            var setUrl = '<?php echo esc_js( WC_AJAX::get_endpoint( 'olo_set' ) ); ?>';
+            var dati = new FormData();
+            dati.append('ids', '<?php echo esc_js( $js_product_ids ); ?>');
+            dati.append('sconto', '<?php echo (int) $discount_pct; ?>');
+            dati.append('firma', '<?php echo esc_js( self::firma( array_column( $products, 'id' ), $discount_pct ) ); ?>');
+            var testo = atcBtn.textContent;
 
+            /* Una sola richiesta per tutto il set (prima una pagina intera del sito per ogni prodotto), coi
+               prodotti segnati come set: nel carrello lo sconto c'è davvero. Poi il carrello, come prima. */
             atcBtn.addEventListener('click', function(){
                 atcBtn.disabled = true;
                 atcBtn.textContent = '<?php echo esc_js( olobuild_t( 'Aggiunta in corso...' ) ); ?>';
-
-                var added = 0;
-                var total = productIds.length;
-
-                function addNext(){
-                    if(added >= total){
-                        window.location.href = addUrl;
-                        return;
-                    }
-                    var pid = productIds[added];
-                    var url = '<?php echo esc_js( home_url( '/' ) ); ?>?add-to-cart=' + pid;
-                    fetch(url, { method: 'GET', credentials: 'same-origin' })
-                    .then(function(){
-                        added++;
-                        addNext();
-                    })
-                    .catch(function(){
-                        added++;
-                        addNext();
-                    });
-                }
-                addNext();
+                fetch(setUrl, { method: 'POST', body: dati, credentials: 'same-origin' })
+                .then(function(r){ return r.json(); })
+                .then(function(j){
+                    if(j){ if(j.aggiunti > 0){ window.location.href = addUrl; return; } }
+                    throw new Error('set');
+                })
+                .catch(function(){
+                    atcBtn.disabled = false;
+                    atcBtn.textContent = testo;
+                });
             });
         })();
         </script>
@@ -531,6 +614,29 @@ class Olobuild_Woo_Product_Bundle_Tile extends Olobuild_Tile_Base {
             echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
         return ob_get_clean();
+    }
+
+    /**
+     * Il set della scheda prodotto: il prodotto della pagina e i primi due suoi cross-sell pubblicati e
+     * acquistabili ('' fuori dalla scheda o senza cross-sell).
+     */
+    private function set_della_scheda() {
+        global $product;
+        $p = is_a( $product, 'WC_Product' ) ? $product : ( is_singular( 'product' ) ? wc_get_product( get_the_ID() ) : null );
+        if ( ! $p ) {
+            return '';
+        }
+        $ids = [];
+        foreach ( $p->get_cross_sell_ids() as $cid ) {
+            $c = wc_get_product( $cid );
+            if ( $c && 'publish' === $c->get_status() && $c->is_purchasable() && $c->is_in_stock() ) {
+                $ids[] = (int) $cid;
+            }
+            if ( count( $ids ) >= 2 ) {
+                break;
+            }
+        }
+        return $ids ? implode( ',', array_merge( [ (int) $p->get_id() ], $ids ) ) : '';
     }
 
     /**

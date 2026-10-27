@@ -45765,3 +45765,49 @@ msgstr "Order today, it arrives tomorrow"
 #: includes/class-theme-importer.php
 msgid "Il bancone, dal vivo"
 msgstr "The counter, live"
+
+#: includes/class-woo-avviso-carrello.php
+msgid "Aggiunto al carrello"
+msgstr "Added to cart"
+
+#: includes/class-woo-avviso-carrello.php
+msgid "articolo"
+msgstr "item"
+
+#: includes/class-woo-avviso-carrello.php
+msgid "articoli"
+msgstr "items"
+
+#: includes/class-woo-avviso-carrello.php
+msgid "altri"
+msgstr "more"
+
+#: includes/class-woo-avviso-carrello.php
+msgid "Vai al carrello"
+msgstr "Go to cart"
+
+#: includes/class-woo-avviso-carrello.php
+msgid "Vai alla cassa"
+msgstr "Go to checkout"
+
+#: includes/class-woo-avviso-carrello.php
+msgid "Continua gli acquisti"
+msgstr "Continue shopping"
+
+#: includes/tiles/class-woo-product-bundle-tile.php
+#, php-format
+msgid "Sconto set (-%d%%)"
+msgstr "Bundle discount (-%d%%)"
+
+#: includes/tiles/class-woo-product-bundle-tile.php
+#, php-format
+msgid "acquistato insieme, -%d%%"
+msgstr "bought together, -%d%%"
+
+#: src/config/elements/woo_cart.js
+msgid "Mostra prodotti consigliati"
+msgstr "Show recommended products"
+
+#: src/config/elements/woo_cart.js
+msgid "«Potresti essere interessato a…»: i cross-sell che WooCommerce aggiunge sotto il carrello. Spegnilo se nella pagina c'è la tile Cross-sell."
+msgstr "“You may be interested in…”: the cross-sells WooCommerce adds below the cart. Turn it off if the page has the Cross-sells tile."

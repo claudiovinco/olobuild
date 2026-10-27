@@ -77,7 +77,11 @@ class Olobuild_Woo_Recently_Viewed_Tile extends Olobuild_Tile_Base {
      * widget c'è. Ordine come WooCommerce: dal più vecchio al più recente, al massimo 15.
      */
     public function registra_prodotto_visto() {
-        if ( ! function_exists( 'wc_setcookie' ) || ! is_singular( 'product' ) ) {
+        // La scheda di un prodotto nella demo di un tema (/demo/<tema>/prodotto/…) non è una pagina prodotto
+        // per WordPress: i prodotti visti lì non si registravano e la tile restava vuota.
+        $demo = class_exists( 'Olobuild_Demo_Temi' ) ? Olobuild_Demo_Temi::singolo() : null;
+        $demo = ( $demo && 'product' === $demo->post_type ) ? (int) $demo->ID : 0;
+        if ( ! function_exists( 'wc_setcookie' ) || ( ! is_singular( 'product' ) && ! $demo ) ) {
             return;
         }
         if ( is_active_widget( false, false, 'woocommerce_recently_viewed_products', true ) ) {
@@ -87,7 +91,7 @@ class Olobuild_Woo_Recently_Viewed_Tile extends Olobuild_Tile_Base {
         if ( $in_uso < time() - self::DURATA_IN_USO ) {
             return;
         }
-        $pid = (int) get_queried_object_id();
+        $pid = $demo ? $demo : (int) get_queried_object_id();
         if ( $pid <= 0 ) {
             return;
         }

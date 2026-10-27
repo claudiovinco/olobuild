@@ -49,6 +49,7 @@ OFFERTE = '{{PAGINA:offerte}}'
 ASSISTENZA = '{{PAGINA:assistenza}}'
 CONFRONTA = '{{PAGINA:confronta}}'
 CARRELLO = '{{PAGINA:carrello}}'
+ACCOUNT = '{{PAGINA:account}}'
 PHONE = '0523 000 247'
 PHONE_TEL = 'tel:+390523000247'
 MAIL = 'aiuto@fulmine.example'
@@ -284,14 +285,18 @@ def build_header():
         }, advanced=dict(adv))
 
     def icone(adv):
+        conto = t.classic('icon', {'icon': 'user', 'link_url': ACCOUNT, 'link_target': '_self', 'link_label': 'Il mio account',
+                                   'size': 26, 'color': BIANCO, 'hover_animation': 'none', 'view': 'default', 'alignment': 'center'},
+                          style={'margin_bottom': 0, 'padding_top': 6}, advanced=dict(adv))
         cuore = t.bare('woo_wishlist', {'icon': 'heart', 'style': 'icon', 'show_count': True, 'show_grid': False, 'icon_size': 24,
                                         'icon_color': BIANCO, 'badge_bg': GIALLO, 'badge_color': ON_GIALLO}, advanced=dict(adv))
         carrello = t.bare('woo_minicart', {'style': 'icon', 'icon': 'cart', 'show_count': True, 'show_total': True, 'dropdown': True,
                                            'icon_size': 26, 'text_color': BIANCO, 'icon_color': BIANCO, 'badge_bg': GIALLO,
                                            'badge_color': ON_GIALLO, 'dropdown_width': 360}, advanced=dict(adv))
-        return t.row([t.col([cuore], wm='1-2', ws='1-2', width_default='1-2'),
-                      t.col([carrello], wm='1-2', ws='1-2', width_default='1-2')],
-                     layout='50-50', valign='center', anim=None, stack=False, gap=8)
+        return t.row([t.col([conto], wm='1-3', ws='1-3', width_default='1-3'),
+                      t.col([cuore], wm='1-3', ws='1-3', width_default='1-3'),
+                      t.col([carrello], wm='1-3', ws='1-3', width_default='1-3')],
+                     layout='33-33-33', valign='center', anim=None, stack=False, gap=8)
 
     alto = t.row([
         t.col([logo(SOLO_GRANDE)], wm='1-5', ws='1-5'),
@@ -563,15 +568,21 @@ def build_prodotto():
                                           'alignment': 'left'})
     galleria = t.bare('woo_product_gallery_slider', {
         'show_thumbnails': True, 'thumbnail_position': 'left', 'enable_zoom': True, 'enable_lightbox': True,
-        'main_height': 560, 'thumbnail_size': 76, 'thumbnail_gap': 10, 'arrows': True, 'main_bg': BIANCO,
+        'main_height': '560px', 'max_width': 0, 'thumbnail_size': 76, 'thumbnail_gap': 10, 'arrows': True, 'main_bg': BIANCO,
         'thumbnail_border': FILO, 'thumbnail_active_border': BLU, 'arrow_color': TESTO, 'arrow_bg': BIANCO,
-        'show_badge': True, 'badge_bg': ROSSO,
+        'show_badge': False, 'badge_bg': ROSSO,
     })
+    navigazione = t.bare('woo_product_navigation', {'show_thumbnail': True, 'show_label': True, 'label_prev': 'Precedente',
+                                                    'label_next': 'Successivo', 'separator_style': 'line', 'text_color': TENUE,
+                                                    'hover_color': BLU})
+    avvisi = t.bare('woo_notices', {'show_success': True, 'show_error': True, 'show_info': True, 'border_radius': 10, 'font_size': 14})
     destra = [
         t.bare('woo_product_title', {'tag': 'h1', 'text_align': 'left', 'color': TESTO, 'font_size': 28, 'font_weight': '800',
                                      'line_height': '1.2', 'link_to_product': False}),
         t.bare('woo_rating', {'show_count': True, 'show_average': True, 'star_color': GIALLO, 'empty_star_color': FILO,
                               'text_color': BLU, 'star_size': 18, 'text_size': 14}),
+        t.bare('woo_sale_badge', {'badge_text': 'auto', 'badge_bg': ROSSO, 'badge_color': BIANCO, 'badge_shape': 'rounded',
+                                  'position': 'top-left', 'font_size': 13, 'font_weight': '800'}, style={'margin_top': 6}),
         t.bare('woo_price', {'show_regular': True, 'show_sale': True, 'show_suffix': False, 'price_color': TESTO,
                              'sale_color': ROSSO, 'regular_color': TENUE, 'font_size': 32, 'font_weight': '800',
                              'text_align': 'left'}),
@@ -599,17 +610,32 @@ def build_prodotto():
                                     'separator': ' · ', 'text_color': TENUE, 'label_color': TENUE, 'link_color': BLU,
                                     'font_size': 13, 'label_weight': '600'}),
     ]
-    out = [t.section([t.one([briciole], anim=None)], padding='remove-vertical', width='large',
+    out = [t.section([t.row([t.col([briciole], wm='2-3', ws='1-1'), t.col([navigazione], wm='1-3', ws='1-1')],
+                            layout='custom', custom='62,38', gap=16, valign='center', anim=None),
+                      t.one([avvisi], anim=None)], padding='remove-vertical', width='large',
                      style={'padding_top': 18, 'padding_bottom': 8})]
     out.append(t.section([
         t.row([t.col([galleria], wm='7-12', ws='1-1'), t.col(destra, wm='5-12', ws='1-1')],
               layout='custom', custom='58,42', gap=40, valign='start', anim=None),
     ], padding='default', width='large', style={'padding_top': 8, 'padding_bottom': 40}))
     out.append(t.section([
+        t.one([t.bare('woo_product_bundle', {
+            'product_ids': '', 'bundle_title': 'Spesso comprati insieme', 'title_tag': 'h2', 'discount_percent': 10,
+            'show_savings': True, 'show_images': True, 'show_prices': True, 'show_descriptions': False,
+            'button_text': 'Aggiungi i tre al carrello', 'layout': 'horizontal', 'gap': 16, 'card_style': 'border',
+            'title_color': TESTO, 'price_color': TESTO, 'savings_color': 'var(--olo-color-success, #15803d)',
+            'bundle_bg': BIANCO, 'button_bg': GIALLO, 'button_color': ON_GIALLO, 'divider_color': FILO,
+            'border_color': FILO, 'border_radius': 14})]),
+    ], padding='default', width='large', style={'padding_top': 0, 'padding_bottom': 40}))
+    out.append(t.section([
         t.one([t.bare('woo_product_tabs', {'show_description': True, 'show_additional': True, 'show_reviews': True,
                                            'tab_style': 'underline', 'active_color': BLU, 'text_color': TESTO})]),
     ], bg=solid(BIANCO), padding='default', width='large', style={'padding_top': 36, 'padding_bottom': 36}))
     out.append(t.section([
+        t.one([t.bare('woo_upsells', {'show_heading': True, 'title_text': 'Potrebbe interessarti anche', 'show_image': True,
+                                      'show_title': True, 'show_price': True, 'gap': 16, 'card_style': 'border', 'columns': 4,
+                                      'columns_tablet': 2, 'columns_mobile': 2, 'title_color': TESTO, 'price_color': TESTO})],
+              style={'margin_bottom': 40}),
         t.one([t.bare('woo_related', {'posts_per_page': 4, 'columns': 4, 'columns_tablet': 2, 'columns_mobile': 2,
                                       'show_image': True, 'show_title': True, 'show_price': True, 'card_style': 'border',
                                       'gap': 16, 'title_color': TESTO, 'price_color': TESTO,
@@ -632,7 +658,7 @@ def build_carrello():
     t = Tpl(ID, 'carrello')
     out = [intestazione(t, 'Il carrello', 'Il tuo carrello', 'Consegna gratuita da 29 €. Ordina entro le 18 e arriva domani.')]
     out.append(t.section([
-        t.one([t.bare('woo_cart', {'show_thumbnail': True, 'show_coupon': True, 'show_totals': True, 'button_color': ON_GIALLO,
+        t.one([t.bare('woo_cart', {'show_thumbnail': True, 'show_coupon': True, 'show_totals': True, 'show_cross_sells': False, 'button_color': ON_GIALLO,
                                    'button_bg': GIALLO, 'text_color': TESTO, 'heading_color': TESTO})]),
         t.one([t.bare('woo_cross_sells', {
             'columns': 4, 'columns_tablet': 2, 'columns_mobile': 2, 'gap': 16, 'card_style': 'border', 'show_image': True,
@@ -640,6 +666,26 @@ def build_carrello():
             'hover_effect': 'zoom', 'image_ratio': '1-1', 'title_color': TESTO, 'price_color': TESTO, 'sale_color': ROSSO,
             'button_bg': GIALLO, 'button_color': ON_GIALLO, 'badge_bg': ROSSO, 'heading': 'Ti potrebbero servire anche',
             'heading_size': 22, 'heading_color': TESTO, 'limit': 4})], style={'margin_top': 40}),
+    ], padding='default', width='large', style={'padding_top': 32, 'padding_bottom': 64}))
+    return out
+
+
+def build_account():
+    t = Tpl(ID, 'account')
+    out = [intestazione(t, 'Il mio account', 'I tuoi ordini, in un posto solo.', 'Ordini, resi, indirizzi e preferenze. '
+                                                                               'Entri con la mail e la password del primo ordine.')]
+    out.append(t.section([
+        t.row([t.col([t.bare('woo_myaccount', {'layout': 'sidebar', 'show_avatar': True, 'show_greeting': True, 'avatar_size': '56',
+                                               'border_radius': '14', 'sidebar_bg': BIANCO, 'sidebar_color': TESTO,
+                                               'sidebar_active_bg': NOTTE, 'sidebar_active_color': BIANCO, 'content_bg': BIANCO,
+                                               'heading_color': TESTO, 'text_color': TESTO, 'link_color': BLU,
+                                               'button_bg': GIALLO, 'button_color': ON_GIALLO, 'border_color': FILO})],
+                     wm='2-3', ws='1-1'),
+               t.col([label(t, 'Senza account'), titolo(t, 'Un ordine in arrivo?', size=26, tag='h2'),
+                      text(t, '<p>Non serve entrare: con il numero dell’ordine e la mail lo segui dalla pagina Assistenza.</p>'),
+                      button(t, 'Traccia l’ordine', ASSISTENZA + '#spedizioni', kind='blu', pad_top=14)],
+                     wm='1-3', ws='1-1')],
+              layout='custom', custom='66,34', gap=40, valign='start'),
     ], padding='default', width='large', style={'padding_top': 32, 'padding_bottom': 64}))
     return out
 
@@ -770,10 +816,14 @@ THEME = {
         'confronta': {'file': 'confronta.json', 'type': 'page', 'title': 'Fulmine — Confronta'},
         'carrello': {'file': 'carrello.json', 'type': 'page', 'title': 'Fulmine — Carrello'},
         'cassa': {'file': 'cassa.json', 'type': 'page', 'title': 'Fulmine — Cassa'},
+        'account': {'file': 'account.json', 'type': 'page', 'title': 'Fulmine — Il mio account'},
         'prodotto': {'file': 'prodotto.json', 'type': 'single', 'title': 'Fulmine — Scheda prodotto', 'post_type': 'product'},
     },
     'singles': {'product': 'prodotto'},
-    'woo': {'cart': 'carrello', 'checkout': 'cassa'},
+    # Le pagine del negozio in Template WooCommerce (all'import: Impostazioni → Template WooCommerce), la scheda dei
+    # prodotti da singles → product. Nella demo, carrello e cassa del tema al posto di quelli del sito.
+    'woo': {'product_archive': 'negozio', 'product_category': 'negozio', 'cart': 'carrello', 'checkout': 'cassa',
+            'myaccount': 'account'},
     'activate': {'404': '404', 'header': 'header', 'footer': 'footer'},
     'pages': {
         'home': {'title': 'Home', 'template': 'home', 'set_as_homepage': True},
@@ -783,6 +833,7 @@ THEME = {
         'confronta': {'title': 'Confronta', 'template': 'confronta', 'slug': 'confronta'},
         'carrello': {'title': 'Carrello', 'template': 'carrello', 'slug': 'carrello'},
         'cassa': {'title': 'Cassa', 'template': 'cassa', 'slug': 'cassa'},
+        'account': {'title': 'Il mio account', 'template': 'account', 'slug': 'il-mio-account'},
     },
     'styles': {
         'colors': dict(HEX),
@@ -815,7 +866,7 @@ THEME = {
 def main():
     builds = {'header.json': build_header(), 'footer.json': build_footer(), 'home.json': build_home(),
               'negozio.json': build_negozio(), 'offerte.json': build_offerte(), 'assistenza.json': build_assistenza(),
-              'confronta.json': build_confronta(), 'carrello.json': build_carrello(), 'cassa.json': build_cassa(),
+              'confronta.json': build_confronta(), 'carrello.json': build_carrello(), 'cassa.json': build_cassa(), 'account.json': build_account(),
               'prodotto.json': build_prodotto(), '404.json': build_404()}
     write_theme(THEME, builds, MEDIA)
 

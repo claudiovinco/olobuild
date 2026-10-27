@@ -627,10 +627,19 @@ class Olobuild_Theme_Importer {
         // _olo_template_id in-place) invece di creare una nuova pagina "Home" ad ogni
         // import — evita la proliferazione di duplicati e l'ambiguità su quale pagina sia
         // davvero la home. Stessa logica per la pagina blog (page_for_posts).
+        $pagine_woo = self::pagine_woo_del_tema( $theme_json );
         if ( ! empty( $theme_json['pages'] ) ) {
             foreach ( $theme_json['pages'] as $page_key => $page_meta ) {
                 $tpl_key = $page_meta['template'] ?? $page_key;
                 if ( ! isset( $id_map[ $tpl_key ] ) ) continue;
+
+                // Negozio, carrello, cassa e account del tema sono le pagine di WooCommerce: il template ci va da
+                // Template WooCommerce (Step 8) e i collegamenti del tema portano lì. Creata a parte, la pagina
+                // «Carrello» del tema non era il carrello per WooCommerce (e prendeva l'indirizzo «carrello-2»).
+                if ( isset( $pagine_woo[ $page_key ] ) ) {
+                    $pagine_tema[ $page_key ] = $pagine_woo[ $page_key ];
+                    continue;
+                }
 
                 $is_home = ! empty( $page_meta['set_as_homepage'] );
                 $is_blog = ! empty( $page_meta['set_as_blog'] );
@@ -797,11 +806,31 @@ class Olobuild_Theme_Importer {
         if ( $voci_spettacoli && class_exists( 'Olobuild_Spettacoli' ) ) {
             $results['spettacoli'] = Olobuild_Spettacoli::semina( $voci_spettacoli, $risolvi );
         }
+        $con_woo = class_exists( 'WooCommerce' );
         foreach ( (array) ( $theme_json['singles'] ?? [] ) as $tipo => $chiave ) {
             $tipo = sanitize_key( (string) $tipo );
+            // La scheda dei prodotti la disegna Template WooCommerce (qui sotto), non l'integrazione dei singoli.
+            if ( 'product' === $tipo && $con_woo ) {
+                continue;
+            }
             if ( '' !== $tipo && isset( $id_map[ (string) $chiave ] ) ) {
                 update_option( "olobuild_active_single_{$tipo}", (int) $id_map[ (string) $chiave ] );
                 $results['activated'][] = 'single_' . $tipo;
+            }
+        }
+        // Template WooCommerce (Impostazioni → Template WooCommerce): la scheda dei prodotti (singles → product) e
+        // le pagine del negozio che il tema indica in theme.json → woo, coi ruoli di quelle impostazioni.
+        if ( $con_woo ) {
+            $ruoli = (array) ( $theme_json['woo'] ?? [] );
+            if ( ! empty( $theme_json['singles']['product'] ) ) {
+                $ruoli['product_single'] = $theme_json['singles']['product'];
+            }
+            foreach ( self::RUOLI_WOO as $ruolo ) {
+                $chiave = (string) ( $ruoli[ $ruolo ] ?? '' );
+                if ( '' !== $chiave && isset( $id_map[ $chiave ] ) ) {
+                    update_option( "olobuild_woo_tpl_{$ruolo}", (int) $id_map[ $chiave ], false );
+                    $results['activated'][] = 'woo_' . $ruolo;
+                }
             }
         }
 
@@ -818,6 +847,35 @@ class Olobuild_Theme_Importer {
         }
 
         return $results;
+    }
+
+    /** I ruoli di Template WooCommerce (option olobuild_woo_tpl_<ruolo>) che un tema può occupare. */
+    const RUOLI_WOO = [ 'product_single', 'product_archive', 'product_category', 'cart', 'checkout', 'myaccount' ];
+
+    /**
+     * Le pagine del tema che sono pagine di WooCommerce (theme.json → woo: product_archive, cart, checkout,
+     * myaccount → chiave del template): chiave della pagina → id della pagina di WooCommerce. Vuoto senza
+     * WooCommerce o se il sito non ha quella pagina (allora il tema crea la sua, come prima).
+     */
+    private static function pagine_woo_del_tema( $theme_json ) {
+        if ( ! class_exists( 'WooCommerce' ) || ! function_exists( 'wc_get_page_id' ) || empty( $theme_json['woo'] ) ) {
+            return [];
+        }
+        $di_woo = [ 'product_archive' => 'shop', 'cart' => 'cart', 'checkout' => 'checkout', 'myaccount' => 'myaccount' ];
+        $esito  = [];
+        foreach ( $di_woo as $ruolo => $pagina_wc ) {
+            $tpl = (string) ( $theme_json['woo'][ $ruolo ] ?? '' );
+            $id  = (int) wc_get_page_id( $pagina_wc );
+            if ( '' === $tpl || $id <= 0 || 'page' !== get_post_type( $id ) ) {
+                continue;
+            }
+            foreach ( (array) ( $theme_json['pages'] ?? [] ) as $page_key => $page_meta ) {
+                if ( ( $page_meta['template'] ?? $page_key ) === $tpl && empty( $page_meta['set_as_homepage'] ) ) {
+                    $esito[ $page_key ] = $id;
+                }
+            }
+        }
+        return $esito;
     }
 
     /**

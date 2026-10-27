@@ -80,6 +80,7 @@ class Olobuild_Demo_Temi {
     public static function avvia() {
         $richiesta = self::leggi_richiesta();
         if ( ! $richiesta ) {
+            self::woo_dalla_demo();
             add_action( 'template_redirect', [ __CLASS__, 'prodotto_nella_demo' ] );
             // Un tema che vive in un plugin (olobuild_external_theme_dirs) si trova solo quando i plugin sono tutti
             // inclusi: si riprova a plugins_loaded, prima che partano (e prima che OLOlang scelga la lingua).
@@ -89,6 +90,30 @@ class Olobuild_Demo_Temi {
             return;
         }
         self::aggancia( $richiesta );
+    }
+
+    /**
+     * Le chiamate AJAX di WooCommerce (?wc-ajax=…, aggiunta al carrello, frammenti del mini carrello) partono
+     * dall'indirizzo del sito, non da quello della demo: la tendina del mini carrello tornava coi link al carrello
+     * del sito. Se arrivano da una pagina della demo di un negozio, carrello e cassa restano quelli del tema.
+     */
+    private static function woo_dalla_demo() {
+        if ( empty( $_GET['wc-ajax'] ) || empty( $_SERVER['HTTP_REFERER'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- si guarda solo se c'è
+            return;
+        }
+        $percorso = (string) wp_parse_url( esc_url_raw( wp_unslash( $_SERVER['HTTP_REFERER'] ) ), PHP_URL_PATH );
+        $casa     = trailingslashit( (string) wp_parse_url( (string) get_option( 'home' ), PHP_URL_PATH ) );
+        if ( ! preg_match( '#^' . preg_quote( $casa . self::BASE . '/', '#' ) . '([a-z0-9-]+)/#', $percorso, $m ) || ! self::acceso( $m[1] ) ) {
+            return;
+        }
+        $dir  = self::cartella( $m[1] );
+        $json = '' !== $dir ? json_decode( (string) file_get_contents( $dir . '/theme.json' ), true ) : null; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- file del tema
+        if ( ! is_array( $json ) || empty( $json['woo'] ) ) {
+            return;
+        }
+        self::$tema = [ 'id' => $m[1], 'dir' => $dir, 'json' => $json ];
+        add_filter( 'woocommerce_get_cart_url', [ __CLASS__, 'carrello_della_demo' ], 99 );
+        add_filter( 'woocommerce_get_checkout_url', [ __CLASS__, 'cassa_della_demo' ], 99 );
     }
 
     /**
@@ -413,6 +438,11 @@ class Olobuild_Demo_Temi {
             }
         }
         self::$pagina = '404';
+    }
+
+    /** Il contenuto vero di cui la richiesta mostra la scheda nella demo (null fuori da una scheda). */
+    public static function singolo() {
+        return self::$singolo instanceof WP_Post ? self::$singolo : null;
     }
 
     /** post_type_link nella demo: i contenuti che il tema mostra con la sua scheda restano dentro la demo. */

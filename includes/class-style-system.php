@@ -376,6 +376,13 @@ class Olobuild_Style_System {
             'olobuild_active_404',
             'olobuild_magnetic_cursor',
             'olobuild_cursor_hud',
+            // Template WooCommerce: un tema di negozio li occupa all'import, «Ripristina» li rimette com'erano.
+            'olobuild_woo_tpl_product_single',
+            'olobuild_woo_tpl_product_archive',
+            'olobuild_woo_tpl_product_category',
+            'olobuild_woo_tpl_cart',
+            'olobuild_woo_tpl_checkout',
+            'olobuild_woo_tpl_myaccount',
             'show_on_front',
             'page_on_front',
             'page_for_posts',

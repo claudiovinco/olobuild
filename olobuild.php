@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://olotheme.com
  * Description: Professional holonic page builder for WordPress with a drag & drop tile grid system.
- * Version:     1.4.846
+ * Version:     1.4.848
  * Author:      Claudio Vinco
  * Author URI:  https://clod.eu
  * Text Domain: olobuild
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLOBUILD_VERSION', '1.4.846' );
+define( 'OLOBUILD_VERSION', '1.4.848' );
 define( 'OLOBUILD_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLOBUILD_URL', plugin_dir_url( __FILE__ ) );
 
@@ -561,6 +561,7 @@ require_once OLOBUILD_PATH . 'includes/class-olo-lang-bridge.php';
 Olobuild_Lang_Bridge::init();
 require_once OLOBUILD_PATH . 'includes/class-debug-bar.php';
 require_once OLOBUILD_PATH . 'includes/class-woo-template-integration.php';
+require_once OLOBUILD_PATH . 'includes/class-woo-avviso-carrello.php';
 require_once OLOBUILD_PATH . 'includes/class-olo-builder.php';
 // Aggiornamenti da olotheme.com (Update URI): con la licenza OLObooking del sito.
 require_once OLOBUILD_PATH . 'includes/class-olobuild-updater.php';
@@ -924,4 +925,7 @@ add_action( 'plugins_loaded', function () {
 
     // WooCommerce Theme Builder integration
     Olobuild_Woo_Template_Integration::instance()->init();
+
+    // «Aggiunto al carrello»: l'avviso delle tile di WooCommerce
+    Olobuild_Woo_Avviso_Carrello::init();
 } );

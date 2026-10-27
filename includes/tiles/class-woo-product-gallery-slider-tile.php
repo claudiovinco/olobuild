@@ -100,7 +100,14 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
 
         // Settings
         // CSS-safe height: strip characters that could break out of the declaration/<style> block.
-        $main_h      = preg_replace( '/[;{}<>]/', '', sanitize_text_field( $s['main_height'] ) );
+        $main_h      = preg_replace( '/[;{}<>]/', '', sanitize_text_field( (string) $s['main_height'] ) );
+        // Un numero senza unità («560», anche scritto così nel campo) dava «height: 560» che il browser
+        // scarta: la foto prendeva l'altezza che capitava. Vale in pixel; vuoto = 500px come prima.
+        if ( is_numeric( $main_h ) ) {
+            $main_h .= 'px';
+        } elseif ( '' === trim( $main_h ) ) {
+            $main_h = '500px';
+        }
         $thumb_size  = max( 40, min( 120, absint( $s['thumbnail_size'] ) ) );
         $thumb_gap   = max( 2, min( 20, absint( $s['thumbnail_gap'] ) ) );
         $radius      = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
@@ -208,6 +215,10 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                /* Ogni slide ritaglia la sua foto: ingrandita dallo zoom, quella accanto invadeva
+                   la cornice e se ne vedevano due mezze. */
+                position: relative;
+                overflow: hidden;
                 <?php if ( $is_fade ) : ?>
                 /* Dissolvenza: le foto una sull'altra nella stessa cella, si vede quella attiva. */
                 grid-area: 1 / 1;
@@ -281,7 +292,7 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?>-slide img {
                 cursor: zoom-in;
             }
-            .<?php echo $uid; ?>-main.is-zooming .<?php echo $uid; ?>-slide img {
+            .<?php echo $uid; ?>-main.is-zooming .<?php echo $uid; ?>-slide.is-active img {
                 transform: scale(2);
                 cursor: zoom-out;
             }
@@ -552,12 +563,12 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
                 if(idx < 0){ idx = total - 1; }
                 if(idx >= total){ idx = 0; }
                 current = idx;
-                if(isFade){
-                    for(var si = 0; si < slideEls.length; si++){
-                        if(si === idx){ slideEls[si].classList.add('is-active'); }
-                        else { slideEls[si].classList.remove('is-active'); }
-                    }
-                } else if(track){ track.style.transform = 'translateX(-' + (idx * 100) + '%)'; }
+                /* La slide attiva anche nello scorrimento: lo zoom ingrandisce solo lei. */
+                for(var si = 0; si < slideEls.length; si++){
+                    if(si === idx){ slideEls[si].classList.add('is-active'); }
+                    else { slideEls[si].classList.remove('is-active'); }
+                }
+                if(!isFade){ if(track){ track.style.transform = 'translateX(-' + (idx * 100) + '%)'; } }
                 dots.forEach(function(d){
                     if(parseInt(d.getAttribute('data-olo-gs-dot'), 10) === idx){ d.setAttribute('aria-current', 'true'); }
                     else { d.removeAttribute('aria-current'); }
@@ -615,37 +626,52 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
                 }
             }
 
-            /* Zoom on hover */
+            /* Zoom al passaggio del mouse: solo con un puntatore vero (sul telefono il tocco apriva lo
+               zoom e la lightbox insieme: lì il tocco apre la lightbox), mai sopra frecce e pallini,
+               e sulla foto a piena risoluzione (la «large» ingrandita due volte si sgranava). */
+            if(enableZoom){
+                if(window.matchMedia){
+                    if(!window.matchMedia('(hover: hover) and (pointer: fine)').matches){ enableZoom = false; }
+                }
+            }
             if(enableZoom){
                 if(mainEl){
-                    var isZooming = false;
-                    var slides = root.querySelectorAll('.<?php echo $uid; ?>-slide img');
+                    var slides  = root.querySelectorAll('.<?php echo $uid; ?>-slide img');
+                    var zoomata = null;
+                    var azzera = function(){
+                        mainEl.classList.remove('is-zooming');
+                        if(zoomata){
+                            zoomata.style.transform = '';
+                            zoomata.style.transformOrigin = 'center center';
+                            zoomata = null;
+                        }
+                    };
+                    var piena = function(img){
+                        var full = img.getAttribute('data-full');
+                        if(!full){return}
+                        if(img.getAttribute('data-olo-gs-piena')){return}
+                        img.setAttribute('data-olo-gs-piena', '1');
+                        var pre = new Image();
+                        pre.onload = function(){ img.src = full; };
+                        pre.src = full;
+                    };
 
                     mainEl.addEventListener('mousemove', function(e){
-                        if(!isZooming){return}
+                        if(e.target.closest('[data-olo-gs-prev], [data-olo-gs-next], [data-olo-gs-dot]')){ azzera(); return; }
+                        var img = slides[current];
+                        if(!img){return}
+                        if(zoomata){ if(zoomata !== img){ azzera(); } }
+                        piena(img);
                         var rect = mainEl.getBoundingClientRect();
                         var x = ((e.clientX - rect.left) / rect.width) * 100;
                         var y = ((e.clientY - rect.top) / rect.height) * 100;
-                        var img = slides[current];
-                        if(img){
-                            img.style.transformOrigin = x + '% ' + y + '%';
-                            img.style.transform = 'scale(2)';
-                        }
-                    });
-
-                    mainEl.addEventListener('mouseenter', function(){
-                        isZooming = true;
                         mainEl.classList.add('is-zooming');
+                        img.style.transformOrigin = x + '% ' + y + '%';
+                        img.style.transform = 'scale(2)';
+                        zoomata = img;
                     });
 
-                    mainEl.addEventListener('mouseleave', function(){
-                        isZooming = false;
-                        mainEl.classList.remove('is-zooming');
-                        slides.forEach(function(img){
-                            img.style.transform = '';
-                            img.style.transformOrigin = 'center center';
-                        });
-                    });
+                    mainEl.addEventListener('mouseleave', azzera);
 
                     /* Click opens lightbox (if enabled) */
                     if(enableLb){

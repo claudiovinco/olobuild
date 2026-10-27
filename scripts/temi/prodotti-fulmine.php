@@ -279,4 +279,35 @@ foreach ( $P as $i => $d ) {
 	$p->save();
 	$fatti++;
 }
+
+// ── Versione superiore e accessori ───────────────────────────────────────────
+// Upsell (la tile «Ti potrebbe interessare» della scheda) e cross-sell (gli accessori: «Spesso comprati insieme»
+// nella scheda e «Ti potrebbero servire anche» nel carrello). sku → [ upsell ], [ cross-sell ]
+$LEGAMI = [
+	'FUL-001' => [ [ 'FUL-003' ], [ 'FUL-005', 'FUL-018' ] ], 'FUL-002' => [ [ 'FUL-001' ], [ 'FUL-005', 'FUL-007' ] ],
+	'FUL-003' => [ [], [ 'FUL-005', 'FUL-012' ] ],            'FUL-004' => [ [ 'FUL-003' ], [ 'FUL-016', 'FUL-014' ] ],
+	'FUL-005' => [ [ 'FUL-006' ], [ 'FUL-001', 'FUL-018' ] ], 'FUL-006' => [ [], [ 'FUL-007', 'FUL-008' ] ],
+	'FUL-007' => [ [ 'FUL-008' ], [ 'FUL-025', 'FUL-006' ] ], 'FUL-008' => [ [], [ 'FUL-007', 'FUL-025' ] ],
+	'FUL-009' => [ [], [ 'FUL-001', 'FUL-018' ] ],            'FUL-010' => [ [ 'FUL-009' ], [ 'FUL-002', 'FUL-019' ] ],
+	'FUL-011' => [ [ 'FUL-012' ], [ 'FUL-016', 'FUL-003' ] ], 'FUL-012' => [ [ 'FUL-013' ], [ 'FUL-014', 'FUL-016' ] ],
+	'FUL-013' => [ [], [ 'FUL-015', 'FUL-016' ] ],            'FUL-014' => [ [ 'FUL-015' ], [ 'FUL-016', 'FUL-012' ] ],
+	'FUL-015' => [ [], [ 'FUL-016', 'FUL-017' ] ],            'FUL-016' => [ [], [ 'FUL-014', 'FUL-017' ] ],
+	'FUL-017' => [ [ 'FUL-016' ], [ 'FUL-023', 'FUL-015' ] ], 'FUL-018' => [ [], [ 'FUL-001', 'FUL-009' ] ],
+	'FUL-019' => [ [ 'FUL-018' ], [ 'FUL-002', 'FUL-010' ] ], 'FUL-020' => [ [ 'FUL-021' ], [ 'FUL-022', 'FUL-012' ] ],
+	'FUL-021' => [ [], [ 'FUL-022', 'FUL-013' ] ],            'FUL-022' => [ [], [ 'FUL-020', 'FUL-011' ] ],
+	'FUL-023' => [ [ 'FUL-027' ], [ 'FUL-024', 'FUL-017' ] ], 'FUL-024' => [ [], [ 'FUL-023', 'FUL-003' ] ],
+	'FUL-025' => [ [], [ 'FUL-007', 'FUL-008' ] ],            'FUL-026' => [ [], [ 'FUL-006', 'FUL-024' ] ],
+	'FUL-027' => [ [], [ 'FUL-024', 'FUL-017' ] ],
+];
+$da_sku = static function ( $skus ) {
+	return array_values( array_filter( array_map( 'wc_get_product_id_by_sku', $skus ) ) );
+};
+foreach ( $LEGAMI as $sku => $l ) {
+	$p = wc_get_product( wc_get_product_id_by_sku( $sku ) );
+	if ( $p ) {
+		$p->set_upsell_ids( $da_sku( $l[0] ) );
+		$p->set_cross_sell_ids( $da_sku( $l[1] ) );
+		$p->save();
+	}
+}
 WP_CLI::success( $fatti . ' prodotti · ' . count( $cat_id ) . ' categorie' );

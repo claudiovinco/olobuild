@@ -14,6 +14,7 @@ class Olobuild_Woo_Cart_Tile extends Olobuild_Tile_Base {
         'show_thumbnail' => true,
         'show_coupon'    => true,
         'show_totals'    => true,
+        'show_cross_sells' => true,
         'button_color'   => '',
         'button_bg'      => '',
         'text_color'     => '',
@@ -175,7 +176,18 @@ class Olobuild_Woo_Cart_Tile extends Olobuild_Tile_Base {
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="<?php echo esc_attr( $uid ); ?>">
-            <?php echo do_shortcode( '[woocommerce_cart]' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WooCommerce core cart shortcode output; WooCommerce templates escape their own output ?>
+            <?php
+            // «Potresti essere interessato a…»: i cross-sell che WooCommerce mette sotto il carrello, col suo
+            // stile. Spenti, quando la pagina ha la tile Cross-sell (che li mostra come le altre card).
+            $prio_cross = empty( $s['show_cross_sells'] ) ? has_action( 'woocommerce_cart_collaterals', 'woocommerce_cross_sell_display' ) : false;
+            if ( false !== $prio_cross ) {
+                remove_action( 'woocommerce_cart_collaterals', 'woocommerce_cross_sell_display', $prio_cross );
+            }
+            echo do_shortcode( '[woocommerce_cart]' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WooCommerce core cart shortcode output; WooCommerce templates escape their own output
+            if ( false !== $prio_cross ) {
+                add_action( 'woocommerce_cart_collaterals', 'woocommerce_cross_sell_display', $prio_cross );
+            }
+            ?>
         </div>
         <?php
                 // Border system

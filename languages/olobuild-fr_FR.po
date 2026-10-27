@@ -47194,3 +47194,49 @@ msgstr "Commandé aujourd'hui, livré demain"
 #: includes/class-theme-importer.php
 msgid "Il bancone, dal vivo"
 msgstr "Le comptoir, en direct"
+
+#: includes/class-woo-avviso-carrello.php
+msgid "Aggiunto al carrello"
+msgstr "Ajouté au panier"
+
+#: includes/class-woo-avviso-carrello.php
+msgid "articolo"
+msgstr "article"
+
+#: includes/class-woo-avviso-carrello.php
+msgid "articoli"
+msgstr "articles"
+
+#: includes/class-woo-avviso-carrello.php
+msgid "altri"
+msgstr "autres"
+
+#: includes/class-woo-avviso-carrello.php
+msgid "Vai al carrello"
+msgstr "Voir le panier"
+
+#: includes/class-woo-avviso-carrello.php
+msgid "Vai alla cassa"
+msgstr "Passer à la caisse"
+
+#: includes/class-woo-avviso-carrello.php
+msgid "Continua gli acquisti"
+msgstr "Continuer mes achats"
+
+#: includes/tiles/class-woo-product-bundle-tile.php
+#, php-format
+msgid "Sconto set (-%d%%)"
+msgstr "Remise lot (-%d%%)"
+
+#: includes/tiles/class-woo-product-bundle-tile.php
+#, php-format
+msgid "acquistato insieme, -%d%%"
+msgstr "acheté ensemble, -%d%%"
+
+#: src/config/elements/woo_cart.js
+msgid "Mostra prodotti consigliati"
+msgstr "Afficher les produits recommandés"
+
+#: src/config/elements/woo_cart.js
+msgid "«Potresti essere interessato a…»: i cross-sell che WooCommerce aggiunge sotto il carrello. Spegnilo se nella pagina c'è la tile Cross-sell."
+msgstr "« Vous aimerez peut-être… » : les ventes croisées que WooCommerce ajoute sous le panier. Désactivez-le si la page contient la tuile Ventes croisées."

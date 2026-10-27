@@ -229,8 +229,9 @@ class Olobuild_Woo_Addtocart_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
         </div>
         <?php
-        // Stepper JS — NO && in inline scripts!
-        if ( $s['quantity_style'] === 'stepper' ) :
+        // Quantità JS — NO && in inline scripts! Anche la casella numerica: il numero scritto
+        // non arrivava al pulsante (data-quantity restava 1) e il carrello ne riceveva sempre uno.
+        if ( ! empty( $s['show_quantity'] ) ) :
         ?>
         <script>
         (function(){
@@ -240,6 +241,14 @@ class Olobuild_Woo_Addtocart_Tile extends Olobuild_Tile_Base {
             var valEl = wrap.querySelector('[data-qty-val]');
             var hidden = wrap.querySelector('.olo-atc-qty-hidden');
             var atcBtn = wrap.querySelector('.olo-atc-btn');
+            var numero = wrap.querySelector('.olo-atc-qty-input');
+            if(numero){
+                numero.addEventListener('input', function(){
+                    var q = parseInt(numero.value, 10);
+                    if(!(q > 0)){ q = 1; }
+                    if(atcBtn){ atcBtn.setAttribute('data-quantity', q); }
+                });
+            }
             btns.forEach(function(btn){
                 btn.addEventListener('click', function(){
                     var dir = btn.getAttribute('data-dir');

@@ -47176,3 +47176,49 @@ msgstr "Heute bestellt, morgen da"
 #: includes/class-theme-importer.php
 msgid "Il bancone, dal vivo"
 msgstr "Die Theke, live"
+
+#: includes/class-woo-avviso-carrello.php
+msgid "Aggiunto al carrello"
+msgstr "In den Warenkorb gelegt"
+
+#: includes/class-woo-avviso-carrello.php
+msgid "articolo"
+msgstr "Artikel"
+
+#: includes/class-woo-avviso-carrello.php
+msgid "articoli"
+msgstr "Artikel"
+
+#: includes/class-woo-avviso-carrello.php
+msgid "altri"
+msgstr "weitere"
+
+#: includes/class-woo-avviso-carrello.php
+msgid "Vai al carrello"
+msgstr "Zum Warenkorb"
+
+#: includes/class-woo-avviso-carrello.php
+msgid "Vai alla cassa"
+msgstr "Zur Kasse"
+
+#: includes/class-woo-avviso-carrello.php
+msgid "Continua gli acquisti"
+msgstr "Weiter einkaufen"
+
+#: includes/tiles/class-woo-product-bundle-tile.php
+#, php-format
+msgid "Sconto set (-%d%%)"
+msgstr "Set-Rabatt (-%d%%)"
+
+#: includes/tiles/class-woo-product-bundle-tile.php
+#, php-format
+msgid "acquistato insieme, -%d%%"
+msgstr "zusammen gekauft, -%d%%"
+
+#: src/config/elements/woo_cart.js
+msgid "Mostra prodotti consigliati"
+msgstr "Empfohlene Produkte anzeigen"
+
+#: src/config/elements/woo_cart.js
+msgid "«Potresti essere interessato a…»: i cross-sell che WooCommerce aggiunge sotto il carrello. Spegnilo se nella pagina c'è la tile Cross-sell."
+msgstr "„Das könnte dich auch interessieren …“: die Cross-Sells, die WooCommerce unter dem Warenkorb einfügt. Schalte es aus, wenn die Seite die Kachel Cross-Sells hat."

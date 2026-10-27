@@ -21,6 +21,7 @@ export default {
     show_thumbnail: true,
     show_coupon: true,
     show_totals: true,
+    show_cross_sells: true,
     button_color: '',
     button_bg: '',
     text_color: '',
@@ -38,6 +39,8 @@ export default {
     { key: 'show_thumbnail', label: t('Mostra miniatura prodotto'), type: 'toggle' },
     { key: 'show_coupon', label: t('Mostra campo coupon'), type: 'toggle' },
     { key: 'show_totals', label: t('Mostra totali carrello'), type: 'toggle' },
+    { key: 'show_cross_sells', label: t('Mostra prodotti consigliati'), type: 'toggle',
+      description: t("«Potresti essere interessato a…»: i cross-sell che WooCommerce aggiunge sotto il carrello. Spegnilo se nella pagina c'è la tile Cross-sell.") },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
