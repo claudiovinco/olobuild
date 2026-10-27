@@ -33,6 +33,8 @@ def _collect():
                 continue
             with open(os.path.join(d, f), encoding='utf-8') as fh:
                 data = json.load(fh)
+            if isinstance(data, dict):  # formato esteso {settings, content}
+                data = data.get('content') or []
 
             def walk(n):
                 if n['type'] not in ('section', 'row', 'column') and n['type'] not in SAMPLES:
@@ -164,13 +166,20 @@ def check(nodes, media, path=''):
         assert m in media, '%s: manca il file %s' % (path, m)
 
 
+def page(content, **settings):
+    """Un template nel formato esteso {settings, content}: le impostazioni di pagina viaggiano col file
+    (effetti di pagina come l'apertura page_intro_*, la grana page_grain_*)."""
+    return {'settings': settings, 'content': content}
+
+
 def write_theme(theme, builds, media):
-    """theme: il dizionario di theme.json; builds: {file.json: nodi}; media: nomi dei file della libreria usati."""
+    """theme: il dizionario di theme.json; builds: {file.json: nodi | page(nodi, …)}; media: nomi dei file della libreria usati."""
     out = os.path.join(THEMES, theme['id'])
     os.makedirs(out, exist_ok=True)
     used = {}
     ids = set()
-    for name, nodes in builds.items():
+    for name, built in builds.items():
+        nodes = built['content'] if isinstance(built, dict) else built
         check(nodes, media, name)
 
         def walk(n):
@@ -181,7 +190,7 @@ def write_theme(theme, builds, media):
         for n in nodes:
             walk(n)
         with open(os.path.join(out, name), 'w', encoding='utf-8', newline='\n') as fh:
-            fh.write(json.dumps(nodes, ensure_ascii=False, separators=(',', ':')))
+            fh.write(json.dumps(built, ensure_ascii=False, separators=(',', ':')))
         used[name] = sorted(tiles_used(nodes, set()))
     with open(os.path.join(out, 'theme.json'), 'w', encoding='utf-8', newline='\n') as fh:
         fh.write(json.dumps(theme, ensure_ascii=False, separators=(',', ':')))

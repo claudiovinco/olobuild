@@ -384,7 +384,9 @@ trait Olobuild_Renderer_Structure_Trait {
         // Horizontal sticky: add data attribute for JS grouping
         if ( $is_sticky_h ) {
             // Mark section with data for JS to build the horizontal scroll group
-            $html = '<div class="olo-h-marker" data-sticky-h="' . esc_attr( $sticky_effect ) . '" data-sticky-top="' . $sticky_top . '" style="display:contents">' . $html . '</div>';
+            // Dove sta il contenuto nel pannello alto una schermata: in alto (com'era), al centro o in basso.
+            $h_align = in_array( $s['sticky_h_align'] ?? '', [ 'center', 'bottom' ], true ) ? $s['sticky_h_align'] : 'top';
+            $html = '<div class="olo-h-marker" data-sticky-h="' . esc_attr( $sticky_effect ) . '" data-sticky-top="' . $sticky_top . '" data-h-align="' . esc_attr( $h_align ) . '" style="display:contents">' . $html . '</div>';
         }
 
         return $html;

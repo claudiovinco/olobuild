@@ -150,6 +150,68 @@
               />
             </div>
           </template>
+
+          <!-- Apertura: renderer Olobuild_Page_Intro (class-page-intro.php), stesse chiavi page_intro_* -->
+          <div class="psp-row">
+            <label for="psp-intro" class="psp-label">{{ t('Apertura della pagina') }}<InfoTip class="psp-info" :testo="t('Un velo col nome che si apre dopo un attimo e scopre la pagina. Si vede sul sito, non nel builder; un clic o un tasto la salta. Niente velo con la riduzione del movimento.')" :titolo="t('Apertura della pagina')" /></label>
+            <FieldToggle
+              id="psp-intro"
+              class="psp-switch"
+              role="switch"
+              :aria-checked="String(pageSettings.page_intro_enabled === true)"
+              :modelValue="pageSettings.page_intro_enabled === true"
+              @update:modelValue="builderStore.updatePageSetting('page_intro_enabled', $event)"
+            />
+          </div>
+          <template v-if="pageSettings.page_intro_enabled">
+            <div class="psp-row psp-row--fill">
+              <span class="psp-label">{{ t('Stile') }}</span>
+              <FieldSelect ui="dropdown" :aria-label="t('Stile')" :modelValue="pageSettings.page_intro_style || 'sipario'" :options="introStyleOptions" @update:modelValue="builderStore.updatePageSetting('page_intro_style', $event)" />
+            </div>
+            <div class="psp-field">
+              <span class="psp-label">{{ t('Scritta') }}</span>
+              <FieldText :aria-label="t('Scritta')" :placeholder="siteName" :modelValue="pageSettings.page_intro_text || ''" @update:modelValue="builderStore.updatePageSetting('page_intro_text', $event)" />
+            </div>
+            <div class="psp-field">
+              <span class="psp-label">{{ t('Riga sotto') }}</span>
+              <FieldText :aria-label="t('Riga sotto')" :modelValue="pageSettings.page_intro_caption || ''" @update:modelValue="builderStore.updatePageSetting('page_intro_caption', $event)" />
+            </div>
+            <div class="psp-row psp-row--fill">
+              <span class="psp-label">{{ t('Colore velo') }}</span>
+              <FieldColor :modelValue="pageSettings.page_intro_bg || ''" @update:modelValue="builderStore.updatePageSetting('page_intro_bg', $event)" />
+            </div>
+            <div class="psp-row psp-row--fill">
+              <span class="psp-label">{{ t('Colore scritta') }}</span>
+              <FieldColor :modelValue="pageSettings.page_intro_color || ''" @update:modelValue="builderStore.updatePageSetting('page_intro_color', $event)" />
+            </div>
+            <div class="psp-row">
+              <span class="psp-label">{{ t(INTRO_RANGE.label) }}</span>
+              <FieldRange
+                compact
+                :unit="INTRO_RANGE.unit"
+                :min="INTRO_RANGE.min"
+                :max="INTRO_RANGE.max"
+                :step="INTRO_RANGE.step"
+                :defaultValue="INTRO_RANGE.def"
+                :aria-label="t(INTRO_RANGE.label)"
+                :modelValue="pageNum(INTRO_RANGE)"
+                @update:modelValue="setPageInt(INTRO_RANGE, $event)"
+                @focusout="risincronizza($event, pageNum(INTRO_RANGE))"
+              />
+            </div>
+            <!-- Chiave assente = una volta per sessione, come il PHP (array_key_exists) -->
+            <div class="psp-row">
+              <label for="psp-intro-once" class="psp-label">{{ t('Una volta per visita') }}<InfoTip class="psp-info" :testo="t('Acceso: il velo si vede solo alla prima pagina aperta; le pagine dopo si aprono subito. Spento: a ogni pagina.')" :titolo="t('Una volta per visita')" /></label>
+              <FieldToggle
+                id="psp-intro-once"
+                class="psp-switch"
+                role="switch"
+                :aria-checked="String((pageSettings.page_intro_once ?? true) === true)"
+                :modelValue="(pageSettings.page_intro_once ?? true) === true"
+                @update:modelValue="builderStore.updatePageSetting('page_intro_once', $event)"
+              />
+            </div>
+          </template>
         </div>
       </CollapseSection>
     </CollapseSection>
@@ -394,6 +456,8 @@ import { interoNelRange, risincronizzaNumero } from '@/utils/numeroIntero';
 import FieldSelect from './fields/FieldSelect.vue';
 import FieldToggle from './fields/FieldToggle.vue';
 import FieldRange from './fields/FieldRange.vue';
+import FieldText from './fields/FieldText.vue';
+import FieldColor from './fields/FieldColor.vue';
 
 const builderStore = useBuilderStore();
 const pageSettings = computed(() => builderStore.pageSettings);
@@ -457,8 +521,18 @@ const GRAIN_RANGES = [
   { key: 'page_grain_opacity', label: 'Intensità grana', unit: '%', min: 1, max: 30, step: 1, def: 7 },
   { key: 'page_grain_size', label: 'Dimensione pattern', unit: 'px', min: 80, max: 480, step: 20, def: 240 },
 ];
+// Apertura: durata in ms come intval( … ) del PHP (1000-4000, 2000 se manca).
+const INTRO_RANGE = { key: 'page_intro_duration', label: 'Durata', unit: 'ms', min: 1000, max: 4000, step: 100, def: 2000 };
+const introStyleOptions = [
+  { value: 'sipario', label: 'Sipario' },
+  { value: 'contatore', label: 'Contatore' },
+  { value: 'linea', label: 'Linea' },
+];
+// La scritta vuota è il nome del sito (get_bloginfo nel PHP): lo si mostra come segnaposto.
+const siteName = (oloData.siteInfo && oloData.siteInfo.name) || '';
 const effettiAttivi = computed(() =>
   pageSettings.value.page_crt_enabled === true || pageSettings.value.page_grain_enabled === true
+    || pageSettings.value.page_intro_enabled === true
 );
 
 // FieldRange emette STRINGHE: si torna all'intero entro gli estremi (i cursori nativi

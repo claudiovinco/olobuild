@@ -2012,6 +2012,29 @@ html:has(.olo-frontend-grid) {
   display: flex;
   will-change: transform;
 }
+/* «Reveal orizzontale»: pannelli impilati, il nuovo si scopre da destra sopra il precedente.
+   Il filo di luce segue il bordo che si apre (posizione e opacità dallo script). */
+.olo-h-reveal .olo-h-track {
+  display: block;
+  will-change: auto;
+}
+.olo-h-reveal .olo-h-track > .uk-section {
+  will-change: clip-path, transform;
+}
+.olo-h-edge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  z-index: 99;
+  width: 1px;
+  margin-left: -.5px;
+  pointer-events: none;
+  opacity: 0;
+  background: var(--olo-h-edge, rgba(255, 255, 255, .85));
+  box-shadow: 0 0 28px 8px color-mix(in srgb, var(--olo-h-edge, #ffffff) 22%, transparent);
+  transition: opacity .25s;
+}
 
 /* ========================================
    PostGrid — Service stats, club & opening

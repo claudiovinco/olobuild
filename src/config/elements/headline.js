@@ -112,6 +112,7 @@ export default {
         family:    'heading_font',
         uppercase: 'heading_uppercase',
         italic:    'heading_italic',
+        letterSpacing: 'heading_letter_spacing',
       },
       // fino a 320: le scritte giganti dei piè di pagina dei temi arrivano a 240 px
       sizeMin: 0, sizeMax: 320, sizeStep: 1,

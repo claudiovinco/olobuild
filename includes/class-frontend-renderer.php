@@ -1454,7 +1454,7 @@ class Olobuild_Frontend_Renderer {
                 // Menu tiles: just move to body, always visible
                 $html .= '<script>(function(){'
                     . 'var el=document.getElementById("' . $js_id . '");'
-                    . 'if(el){document.body.appendChild(el)}'
+                    . 'if(el){el.classList.add("olo-tokens");document.body.appendChild(el)}'
                     . '})()</script>';
             } else {
                 // Other tiles: sentinel-based scroll show
@@ -1471,6 +1471,8 @@ class Olobuild_Frontend_Renderer {
                     . 'var el=document.getElementById("' . $js_id . '");'
                     . 'if(!el)return;'
                     . 'el.style.visibility="hidden";'
+                    // Fuori dal template: «olo-tokens» le ridà colori e font del tema (Olobuild_Style_System).
+                    . 'el.classList.add("olo-tokens");'
                     . 'document.body.appendChild(el);'
                     . 'var sn=document.getElementById("' . $js_sid . '");'
                     . 'if(!sn)return;'

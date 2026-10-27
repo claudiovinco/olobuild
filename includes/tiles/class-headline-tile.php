@@ -133,6 +133,12 @@ class Olobuild_Headline_Tile extends Olobuild_Tile_Base {
         if ( ! empty( $s['heading_uppercase'] ) ) {
             $heading_style .= 'text-transform:uppercase;letter-spacing:0.05em;';
         }
+        // Spaziatura caratteri (controllo «Titolo», in px): vuota = quella di prima, 0,05em col maiuscolo.
+        // Le didascalie in maiuscoletto dei temi la vogliono larga (2-3 px), i titoli giganti stretta.
+        $hd_ls = $s['heading_letter_spacing'] ?? '';
+        if ( $hd_ls !== '' && $hd_ls !== null && is_numeric( $hd_ls ) ) {
+            $heading_style .= 'letter-spacing:' . max( -10, min( 40, (float) $hd_ls ) ) . 'px;';
+        }
         // Famiglia font: override esplicito (default 'inherit' = font titoli del tema → non settare)
         $hf_legacy = [
             'body'    => "var(--olo-font-family, -apple-system,'Segoe UI',Roboto,sans-serif)",

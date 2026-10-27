@@ -16,6 +16,7 @@ trait Olobuild_Builder_Tiles_Trait {
         require_once OLOBUILD_PATH . 'includes/class-tile-utils.php';
         require_once OLOBUILD_PATH . 'includes/class-text-effects.php';
         require_once OLOBUILD_PATH . 'includes/class-sipario.php';
+        require_once OLOBUILD_PATH . 'includes/class-mirino.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-tile-base.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-section-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-column-tile.php';
@@ -121,6 +122,8 @@ trait Olobuild_Builder_Tiles_Trait {
         require_once OLOBUILD_PATH . 'includes/tiles/class-configuratore-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-tour360-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-lucchetto-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-ghiera-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-pellicole-tile.php';
 
         require_once OLOBUILD_PATH . 'includes/tiles/class-social-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-map-tile.php';
@@ -405,6 +408,8 @@ trait Olobuild_Builder_Tiles_Trait {
         $manager->register_tile( new Olobuild_Configuratore_Tile() );
         $manager->register_tile( new Olobuild_Tour360_Tile() );
         $manager->register_tile( new Olobuild_Lucchetto_Tile() );
+        $manager->register_tile( new Olobuild_Ghiera_Tile() );
+        $manager->register_tile( new Olobuild_Pellicole_Tile() );
         // Vetrina temi: solo dove le demo dei temi sono accese (Olobuild_Demo_Temi), altrove non
         // avrebbe niente da mostrare e non entra nella palette.
         if ( class_exists( 'Olobuild_Demo_Temi' ) && Olobuild_Demo_Temi::accese() ) {

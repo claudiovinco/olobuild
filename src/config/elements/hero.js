@@ -159,6 +159,25 @@ export default {
     ...textEffectsDefaults,
     text_effect_target: 'all',
 
+    // ── Mirino (Olobuild_Mirino) — spento = la hero com'era ──
+    vf_on: false,
+    vf_readout: 'M · 1/125 · f/8 · ISO 100',
+    vf_frames: 36,
+    vf_hint: t('Clicca per scattare'),
+    vf_shutter_label: t('Scatta'),
+    vf_focus: true,
+    vf_shutter: true,
+    vf_strip: true,
+    vf_grid: true,
+    vf_meter: true,
+    vf_x: 66,
+    vf_y: 42,
+    vf_color: '',
+    vf_accent: '',
+    vf_blur: 8,
+    vf_focus_size: 26,
+    vf_font_family: '',
+
     // ── Sipario (Olobuild_Sipario) — spento = la hero com'era ──
     curtain_on: false,
     curtain_opening: 'italiana',
@@ -257,6 +276,34 @@ export default {
 
     { type: 'separator', label: t('Scena / media di sfondo') },
     { key: 'media_bg', label: t('Media di scena (immagine, video, gradiente, colore…)'), type: 'background', showParallax: false },
+
+    // ── Mirino: la scena vista dal mirino di una fotocamera, col fuoco che segue il puntatore e lo scatto ──
+    { type: 'separator', label: t('Mirino') },
+    { key: 'vf_on', label: t('Mirino della fotocamera'), type: 'toggle',
+      description: t('La scena vista dal mirino: gli angoli del fotogramma, i dati di scatto, il punto di messa a fuoco che segue il puntatore (attorno la foto o il video si sfoca, il testo resta netto). Un clic sulla scena scatta: il diaframma si chiude e si riapre, il fotogramma diventa un provino accanto al pulsante e le pose scendono. Sul telefono il fuoco si sposta da solo e si scatta toccando. Con la riduzione del movimento lo scatto è un lampo breve.') },
+    { key: 'vf_readout', label: t('Dati di scatto'), type: 'text', placeholder: 'M · 1/125 · f/8 · ISO 100',
+      condition: { field: 'vf_on', op: 'eq', value: true },
+      description: t('Separati da «·». Il primo va nel riquadro del modo; sul telefono restano i primi due.') },
+    { key: 'vf_frames', label: t('Pose del rullino'), type: 'range', min: 0, max: 72, step: 1,
+      condition: { field: 'vf_on', op: 'eq', value: true },
+      description: t('Le pose rimaste, in basso a destra: scendono a ogni scatto e, finito il rullino, lo scatto dopo lo riavvolge. 0: niente contatore.') },
+    { key: 'vf_shutter', label: t('Si può scattare'), type: 'toggle', condition: { field: 'vf_on', op: 'eq', value: true },
+      description: t('Il pulsante tondo e il clic sulla scena. Nel builder scatta solo il pulsante: il clic sulla tile la seleziona.') },
+    { key: 'vf_shutter_label', label: t('Nome del pulsante'), type: 'text', condition: [{ field: 'vf_on', op: 'eq', value: true }, { field: 'vf_shutter', op: 'eq', value: true }],
+      description: t('Lo leggono i lettori di schermo e compare passandoci sopra.') },
+    { key: 'vf_hint', label: t('Invito sotto il fuoco'), type: 'text', condition: [{ field: 'vf_on', op: 'eq', value: true }, { field: 'vf_shutter', op: 'eq', value: true }],
+      description: t('Una riga piccola sotto le staffe del fuoco, che sparisce al primo scatto. Vuota: niente invito.') },
+    { key: 'vf_strip', label: t('Mostra i provini degli scatti'), type: 'toggle', condition: [{ field: 'vf_on', op: 'eq', value: true }, { field: 'vf_shutter', op: 'eq', value: true }],
+      description: t('Ogni scatto diventa un provino che si sviluppa accanto al pulsante: gli ultimi quattro (tre sul telefono).') },
+    { key: 'vf_focus', label: t('Sfoca fuori dal fuoco'), type: 'toggle', condition: { field: 'vf_on', op: 'eq', value: true } },
+    { key: 'vf_x', label: t('Fuoco all\'inizio, da sinistra'), type: 'range', min: 5, max: 95, step: 1, unit: '%',
+      condition: { field: 'vf_on', op: 'eq', value: true },
+      description: t('Dove sta il punto di messa a fuoco quando la pagina si apre, prima che il puntatore lo sposti: mettilo sul soggetto.') },
+    { key: 'vf_y', label: t('Fuoco all\'inizio, dall\'alto'), type: 'range', min: 5, max: 95, step: 1, unit: '%',
+      condition: { field: 'vf_on', op: 'eq', value: true } },
+    { key: 'vf_grid', label: t('Mostra la griglia dei terzi'), type: 'toggle', condition: { field: 'vf_on', op: 'eq', value: true } },
+    { key: 'vf_meter', label: t('Mostra l\'esposimetro'), type: 'toggle', condition: { field: 'vf_on', op: 'eq', value: true },
+      description: t('La scala da − a + con l\'ago, che si sposta mentre il fuoco cerca e torna allo zero quando si aggancia.') },
 
     // ── Sipario: un sipario di velluto sopra la scena, che si apre ──
     { type: 'separator', label: t('Sipario') },
@@ -523,6 +570,20 @@ export default {
       condition: { field: 'frame_on', op: 'eq', value: true } },
     { key: 'watermark_color', label: t('Colore watermark (vuoto = bianco 6%)'), type: 'color',
       condition: { field: 'watermark_text', op: 'neq', value: '' } },
+    // ── Mirino ──
+    { type: 'separator', label: t('Mirino'), condition: { field: 'vf_on', op: 'eq', value: true } },
+    { key: 'vf_color', label: t('Colore delle linee e dei dati'), type: 'color',
+      description: t('Angoli, griglia, staffe del fuoco, dati e pulsante. Vuoto: il colore del testo della hero.') },
+    { key: 'vf_accent', label: t('Colore del fuoco agganciato'), type: 'color',
+      description: t('Le staffe quando il fuoco si aggancia, l\'ago dell\'esposimetro, il contatore a fine rullino. Vuoto: il colore accento.') },
+    { key: 'vf_blur', label: t('Sfocatura'), type: 'range', min: 0, max: 30, step: 1, unit: 'px',
+      condition: { field: 'vf_focus', op: 'eq', value: true } },
+    { key: 'vf_focus_size', label: t('Zona a fuoco'), type: 'range', min: 8, max: 60, step: 1, unit: '%',
+      condition: { field: 'vf_focus', op: 'eq', value: true },
+      description: t('Il raggio della zona nitida, in percentuale del lato corto della finestra.') },
+    { key: 'vf_font_family', label: t('Font dei dati'), type: 'font-family',
+      description: t('Vuoto: il monospaziato del tema.') },
+
     // ── Scena: profondità allo scorrimento (parallasse a strati) ──
     { type: 'separator', label: t('Scena — profondità allo scorrimento') },
     { key: 'scene_depth', label: t('Parallasse a strati'), type: 'select', options: [

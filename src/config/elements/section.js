@@ -22,6 +22,7 @@ export default {
     bg_scope: 'container',
     sticky_effect: 'none',
     sticky_top: '',
+    sticky_h_align: 'top',
     scroll_snap: false,
     snap_dots: false,
     snap_dot_color: '',
@@ -81,6 +82,12 @@ export default {
       { value: 'reveal-h', label: t('Reveal orizzontale') },
     ]},
     { key: 'sticky_top', label: t('Offset dall\'alto'), type: 'number', min: 0, placeholder: '0', condition: { field: 'sticky_effect', operator: '!=', value: 'none' } },
+    { key: 'sticky_h_align', label: t('Contenuto nel pannello'), type: 'select', options: [
+      { value: 'top', label: t('In alto') },
+      { value: 'center', label: t('Al centro') },
+      { value: 'bottom', label: t('In basso') },
+    ], condition: { field: 'sticky_effect', op: 'in', value: ['cover-h', 'reveal-h'] },
+      description: t('Le sezioni orizzontali sono alte una schermata: qui scegli dove sta il loro contenuto. «Reveal orizzontale» scopre la sezione sopra la precedente, da destra; «Cover orizzontale» la fa arrivare spinta di lato. Sul telefono il gruppo resta orizzontale se ogni sezione sta in una schermata.') },
 
     { type: 'separator', label: t('Atmosfera') },
     { key: 'light_color', label: t('Colore luce'), type: 'color',

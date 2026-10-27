@@ -46276,3 +46276,551 @@ msgstr "Ist mein Rad schon fertig?"
 #: includes/class-theme-importer.php
 msgid "Dove fa più male?"
 msgstr "Wo tut es am meisten weh?"
+
+#: includes/class-theme-importer.php
+msgid "Quale casa è ancora libera?"
+msgstr "Welches Haus ist noch frei?"
+
+#: includes/class-theme-importer.php
+msgid "A che ora ti senti?"
+msgstr "Welche Tageszeit bist du?"
+
+#: includes/class-theme-importer.php
+msgid "Quando esci in barca?"
+msgstr "Wann fährst du mit dem Boot raus?"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Apertura della pagina"
+msgstr "Seitenauftakt"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Un velo col nome che si apre dopo un attimo e scopre la pagina. Si vede sul sito, non nel builder; un clic o un tasto la salta. Niente velo con la riduzione del movimento."
+msgstr "Ein Vorhang mit dem Namen, der sich nach einem Augenblick öffnet und die Seite freigibt. Sichtbar auf der Website, nicht im Builder; ein Klick oder eine Taste überspringt ihn. Bei reduzierter Bewegung kein Vorhang."
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Scritta"
+msgstr "Schriftzug"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Riga sotto"
+msgstr "Zeile darunter"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Colore scritta"
+msgstr "Farbe des Schriftzugs"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Una volta per visita"
+msgstr "Einmal pro Besuch"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Acceso: il velo si vede solo alla prima pagina aperta; le pagine dopo si aprono subito. Spento: a ogni pagina."
+msgstr "An: Der Vorhang erscheint nur auf der ersten geöffneten Seite, die folgenden öffnen sich sofort. Aus: auf jeder Seite."
+
+#: src/config/elements/ghiera.js
+msgid "Ghiera"
+msgstr "Moduswahlrad"
+
+#: src/config/elements/ghiera.js
+msgid "Matrimoni"
+msgstr "Hochzeiten"
+
+#: src/config/elements/ghiera.js
+msgid "Tutta la giornata, dai preparativi all’ultimo ballo: racconto, non pose."
+msgstr "Der ganze Tag, von den Vorbereitungen bis zum letzten Tanz: erzählen, nicht posieren."
+
+#: src/config/elements/ghiera.js
+msgid "da 1.900 €"
+msgstr "ab 1.900 €"
+
+#: src/config/elements/ghiera.js
+msgid "Ritratti"
+msgstr "Porträts"
+
+#: src/config/elements/ghiera.js
+msgid "In studio o all’aperto, un’ora e venti foto scelte insieme."
+msgstr "Im Studio oder draußen: eine Stunde und zwanzig gemeinsam ausgewählte Fotos."
+
+#: src/config/elements/ghiera.js
+msgid "da 180 €"
+msgstr "ab 180 €"
+
+#: src/config/elements/ghiera.js
+msgid "Le foto della tua attività per il sito e i social, in una mattina."
+msgstr "Fotos deines Unternehmens für Website und Social Media, an einem Vormittag."
+
+#: src/config/elements/ghiera.js
+msgid "da 450 €"
+msgstr "ab 450 €"
+
+#: src/config/elements/ghiera.js
+msgid "Feste, inaugurazioni, concerti: arrivo presto e me ne vado per ultimo."
+msgstr "Feste, Eröffnungen, Konzerte: Ich komme früh und gehe als Letzte."
+
+#: src/config/elements/ghiera.js
+msgid "da 90 € l’ora"
+msgstr "ab 90 € pro Stunde"
+
+#: src/config/elements/ghiera.js
+msgid "Scegli il servizio"
+msgstr "Wähle die Leistung"
+
+#: src/config/elements/ghiera.js
+msgid "Una per tacca della ghiera, da 2 a 12. La sigla (una o due lettere) sta sul disco; titolo, testo, prezzo e pulsante nel pannello accanto."
+msgstr "Eine pro Raste des Wahlrads, 2 bis 12. Das Kürzel (ein oder zwei Buchstaben) steht auf der Scheibe; Titel, Text, Preis und Button im Feld daneben."
+
+#: src/config/elements/ghiera.js
+msgid "Sigla sul disco"
+msgstr "Kürzel auf der Scheibe"
+
+#: src/config/elements/ghiera.js
+msgid "Una o due lettere, come i modi di una fotocamera. Vuota: l'iniziale del titolo."
+msgstr "Ein oder zwei Buchstaben, wie die Modi einer Kamera. Leer: der Anfangsbuchstabe des Titels."
+
+#: src/config/elements/ghiera.js
+msgid "Video al posto della foto"
+msgstr "Video statt Foto"
+
+#: src/config/elements/ghiera.js
+msgid "Parte solo quando la voce è scelta, senza audio e in loop; la foto fa da copertina."
+msgstr "Läuft nur, wenn der Eintrag gewählt ist, ohne Ton und in Schleife; das Foto dient als Titelbild."
+
+#: src/config/elements/ghiera.js
+msgid "Voce di partenza"
+msgstr "Starteintrag"
+
+#: src/config/elements/ghiera.js
+msgid "La voce sotto l'indice quando la pagina si apre: 1 è la prima."
+msgstr "Der Eintrag unter dem Zeiger beim Öffnen der Seite: 1 ist der erste."
+
+#: src/config/elements/ghiera.js
+msgid "Scritta al centro"
+msgstr "Beschriftung in der Mitte"
+
+#: src/config/elements/ghiera.js
+msgid "Una parola piccola sotto il numero, nel cappello al centro. Vuota: solo il numero."
+msgstr "Ein kleines Wort unter der Zahl, auf der Kappe in der Mitte. Leer: nur die Zahl."
+
+#: src/config/elements/ghiera.js
+msgid "Mostra il numero della voce"
+msgstr "Nummer des Eintrags anzeigen"
+
+#: src/config/elements/ghiera.js
+msgid "Nome per i lettori di schermo"
+msgstr "Name für Screenreader"
+
+#: src/config/elements/ghiera.js
+msgid "Lo leggono i lettori di schermo quando la ghiera prende il fuoco: dice a cosa serve."
+msgstr "Screenreader lesen ihn vor, wenn das Wahlrad den Fokus erhält: Er sagt, wofür es da ist."
+
+#: src/config/elements/ghiera.js
+msgid "Metallo ha i riflessi e l'ombra sotto il disco; Piatto è a tinta unita, coi colori del tema."
+msgstr "Metall hat Glanzlichter und einen Schatten unter der Scheibe; Flach ist einfarbig, in den Farben des Themes."
+
+#: src/config/elements/ghiera.js
+msgid "Colore della ghiera"
+msgstr "Farbe des Wahlrads"
+
+#: src/config/elements/ghiera.js
+msgid "Il disco, la zigrinatura e il cappello al centro. Vuoto: lo scuro del tema."
+msgstr "Die Scheibe, die Rändelung und die Kappe in der Mitte. Leer: die dunkle Farbe des Themes."
+
+#: src/config/elements/ghiera.js
+msgid "Colore delle sigle"
+msgstr "Farbe der Kürzel"
+
+#: src/config/elements/ghiera.js
+msgid "Sigle, tacche e numero al centro. Vuoto: quello che si legge sulla ghiera."
+msgstr "Kürzel, Rasten und die Zahl in der Mitte. Leer: was sich auf dem Wahlrad gut liest."
+
+#: src/config/elements/ghiera.js
+msgid "L'indice in alto, la sigla scelta e il suo riquadro nel pannello. Vuoto: il primario del tema."
+msgstr "Der Zeiger oben, das gewählte Kürzel und sein Rahmen im Feld. Leer: die Primärfarbe des Themes."
+
+#: src/config/elements/ghiera.js
+msgid "Un riquadro dietro foto e testo. Vuoto: trasparente."
+msgstr "Ein Kasten hinter Foto und Text. Leer: transparent."
+
+#: src/config/elements/ghiera.js
+msgid "Colore del pulsante"
+msgstr "Farbe des Buttons"
+
+#: src/config/elements/ghiera.js
+msgid "Colore del testo del pulsante"
+msgstr "Textfarbe des Buttons"
+
+#: src/config/elements/ghiera.js
+msgid "Sotto il disco. Con «Nessuna» lo stile Metallo tiene la sua ombra morbida."
+msgstr "Unter der Scheibe. Mit «Keiner» behält der Stil Metall seinen weichen Schatten."
+
+#: src/config/elements/ghiera.js
+msgid "Sigle e numero"
+msgstr "Kürzel und Zahl"
+
+#: src/config/elements/ghiera.js
+msgid "Misura della ghiera"
+msgstr "Größe des Wahlrads"
+
+#: src/config/elements/ghiera.js
+msgid "Il diametro del disco. Dove lo spazio non basta si stringe da sola."
+msgstr "Der Durchmesser der Scheibe. Wo der Platz nicht reicht, wird sie von selbst kleiner."
+
+#: src/config/elements/ghiera.js
+msgid "Proporzione foto"
+msgstr "Seitenverhältnis des Fotos"
+
+#: src/config/elements/ghiera.js
+msgid "Ghiera accanto al pannello"
+msgstr "Wahlrad neben dem Feld"
+
+#: src/config/elements/ghiera.js
+msgid "Ghiera sopra il pannello"
+msgstr "Wahlrad über dem Feld"
+
+#: src/config/elements/ghiera.js
+msgid "Sul telefono la ghiera va sempre sopra; quando la colonna è stretta foto e testo si mettono uno sotto l'altro."
+msgstr "Auf dem Handy steht das Wahlrad immer oben; ist die Spalte schmal, stehen Foto und Text untereinander."
+
+#: src/config/elements/pellicole.js
+msgid "Portra — pelle morbida, verdi caldi"
+msgstr "Portra — weiche Haut, warme Grüntöne"
+
+#: src/config/elements/pellicole.js
+msgid "Ektar — colori saturi, rossi accesi"
+msgstr "Ektar — satte Farben, leuchtende Rottöne"
+
+#: src/config/elements/pellicole.js
+msgid "Cinestill — luci della sera, alone rosso"
+msgstr "Cinestill — Abendlichter, roter Hof"
+
+#: src/config/elements/pellicole.js
+msgid "Fuji — verdi freschi, luce piatta"
+msgstr "Fuji — frische Grüntöne, flaches Licht"
+
+#: src/config/elements/pellicole.js
+msgid "Bianco e nero di grana"
+msgstr "Körniges Schwarzweiß"
+
+#: src/config/elements/pellicole.js
+msgid "Seppia d'archivio"
+msgstr "Archiv-Sepia"
+
+#: src/config/elements/pellicole.js
+msgid "Flash diretto — lampo e angoli scuri"
+msgstr "Direkter Blitz — hartes Licht, dunkle Ecken"
+
+#: src/config/elements/pellicole.js
+msgid "Toni burro — giallo morbido"
+msgstr "Buttertöne — weiches Gelb"
+
+#: src/config/elements/pellicole.js
+msgid "Notte cinematografica — ottanio e arancio"
+msgstr "Kinonacht — Petrol und Orange"
+
+#: src/config/elements/pellicole.js
+msgid "Digicam anni 2000 — con la data"
+msgstr "Digicam der 2000er — mit Datum"
+
+#: src/config/elements/pellicole.js
+msgid "Pellicole"
+msgstr "Filmlooks"
+
+#: src/config/elements/pellicole.js
+msgid "La pelle morbida, i verdi caldi"
+msgstr "Weiche Haut, warme Grüntöne"
+
+#: src/config/elements/pellicole.js
+msgid "Le luci della sera, l’alone rosso"
+msgstr "Die Abendlichter, der rote Hof"
+
+#: src/config/elements/pellicole.js
+msgid "Flash diretto"
+msgstr "Direkter Blitz"
+
+#: src/config/elements/pellicole.js
+msgid "Il lampo in faccia, gli angoli scuri"
+msgstr "Blitz ins Gesicht, dunkle Ecken"
+
+#: src/config/elements/pellicole.js
+msgid "Toni burro"
+msgstr "Buttertöne"
+
+#: src/config/elements/pellicole.js
+msgid "Giallo morbido, contrasto basso"
+msgstr "Weiches Gelb, wenig Kontrast"
+
+#: src/config/elements/pellicole.js
+msgid "Scatto grezzo"
+msgstr "Rohaufnahme"
+
+#: src/config/elements/pellicole.js
+msgid "Pellicola"
+msgstr "Film"
+
+#: src/config/elements/pellicole.js
+msgid "Ogni rullino è un look applicato alla foto: scegli la ricetta e dagli il nome che vuoi (una pellicola, un tuo preset, una moda)."
+msgstr "Jede Filmrolle ist ein Look für das Foto: Wähle das Rezept und gib ihm einen beliebigen Namen (ein Film, ein eigenes Preset, ein Trend)."
+
+#: src/config/elements/pellicole.js
+msgid "Ricetta"
+msgstr "Rezept"
+
+#: src/config/elements/pellicole.js
+msgid "Pellicola di partenza"
+msgstr "Startfilm"
+
+#: src/config/elements/pellicole.js
+msgid "Confronto"
+msgstr "Vergleich"
+
+#: src/config/elements/pellicole.js
+msgid "Confronto col grezzo"
+msgstr "Mit der Rohaufnahme vergleichen"
+
+#: src/config/elements/pellicole.js
+msgid "Il divisore da trascinare: a sinistra lo scatto com'è uscito, a destra lo sviluppo. La prima volta che la foto si vede, scorre da solo a metà. Spento: lo sviluppo copre tutta la foto."
+msgstr "Der verschiebbare Trenner: links die Aufnahme, wie sie herauskam, rechts die Entwicklung. Beim ersten Erscheinen gleitet er von selbst zur Mitte. Aus: Die Entwicklung bedeckt das ganze Foto."
+
+#: src/config/elements/pellicole.js
+msgid "Posizione del divisore"
+msgstr "Position des Trenners"
+
+#: src/config/elements/pellicole.js
+msgid "Etichetta del grezzo"
+msgstr "Beschriftung der Rohaufnahme"
+
+#: src/config/elements/pellicole.js
+msgid "Mostra le etichette sulla foto"
+msgstr "Beschriftungen auf dem Foto anzeigen"
+
+#: src/config/elements/pellicole.js
+msgid "Mostra la nota dei rullini"
+msgstr "Notizen der Filme anzeigen"
+
+#: src/config/elements/pellicole.js
+msgid "Data stampata dal digicam"
+msgstr "Vom Digicam gedrucktes Datum"
+
+#: src/config/elements/pellicole.js
+msgid "Compare nell'angolo con la ricetta «Digicam». Vuota: la data di oggi."
+msgstr "Erscheint in der Ecke mit dem Rezept «Digicam». Leer: das heutige Datum."
+
+#: src/config/elements/pellicole.js
+msgid "Il bordo del rullino scelto e l'anello del divisore col fuoco. Vuoto: il primario del tema."
+msgstr "Der Rand der gewählten Rolle und der Fokusring des Trenners. Leer: die Primärfarbe des Themes."
+
+#: src/config/elements/pellicole.js
+msgid "Colore del divisore"
+msgstr "Farbe des Trenners"
+
+#: src/config/elements/pellicole.js
+msgid "La linea e la maniglia tonda. Vuoto: bianco."
+msgstr "Die Linie und der runde Griff. Leer: Weiß."
+
+#: src/config/elements/pellicole.js
+msgid "Sfondo dei rullini"
+msgstr "Hintergrund der Filmrollen"
+
+#: src/config/elements/pellicole.js
+msgid "Colore del barattolo"
+msgstr "Farbe der Filmdose"
+
+#: src/config/elements/pellicole.js
+msgid "La fascia sul barattolo del rullino. Vuoto: il colore tipico della ricetta."
+msgstr "Der Streifen auf der Filmdose. Leer: die typische Farbe des Rezepts."
+
+#: src/config/elements/pellicole.js
+msgid "La grana di pellicola sopra lo sviluppo. 0: niente grana."
+msgstr "Filmkorn über der Entwicklung. 0: kein Korn."
+
+#: src/config/elements/pellicole.js
+msgid "Nome dei rullini"
+msgstr "Namen der Filmrollen"
+
+#: src/config/elements/pellicole.js
+msgid "Nota dei rullini"
+msgstr "Notizen der Filmrollen"
+
+#: src/config/elements/pellicole.js
+msgid "Raggio rullini"
+msgstr "Radius der Filmrollen"
+
+#: src/config/elements/pellicole.js
+msgid "Posizione dei rullini"
+msgstr "Position der Filmrollen"
+
+#: src/config/elements/pellicole.js
+msgid "Sotto la foto"
+msgstr "Unter dem Foto"
+
+#: src/config/elements/pellicole.js
+msgid "Sopra la foto"
+msgstr "Über dem Foto"
+
+#: src/config/elements/hero.js
+msgid "Clicca per scattare"
+msgstr "Klicken zum Auslösen"
+
+#: src/config/elements/hero.js
+msgid "Scatta"
+msgstr "Auslösen"
+
+#: src/config/elements/hero.js
+msgid "Mirino della fotocamera"
+msgstr "Kamerasucher"
+
+#: src/config/elements/hero.js
+msgid "La scena vista dal mirino: gli angoli del fotogramma, i dati di scatto, il punto di messa a fuoco che segue il puntatore (attorno la foto o il video si sfoca, il testo resta netto). Un clic sulla scena scatta: il diaframma si chiude e si riapre, il fotogramma diventa un provino accanto al pulsante e le pose scendono. Sul telefono il fuoco si sposta da solo e si scatta toccando. Con la riduzione del movimento lo scatto è un lampo breve."
+msgstr "Die Szene durch den Sucher gesehen: die Ecken des Bildes, die Aufnahmedaten, der Fokuspunkt, der dem Zeiger folgt (rundherum wird Foto oder Video unscharf, der Text bleibt scharf). Ein Klick auf die Szene löst aus: Die Blende schließt und öffnet sich, das Bild wird zu einem Kontaktabzug neben dem Button und der Bildzähler sinkt. Auf dem Handy wandert der Fokus von selbst, ein Tippen löst aus. Bei reduzierter Bewegung ist die Aufnahme ein kurzer Blitz."
+
+#: src/config/elements/hero.js
+msgid "Dati di scatto"
+msgstr "Aufnahmedaten"
+
+#: src/config/elements/hero.js
+msgid "Separati da «·». Il primo va nel riquadro del modo; sul telefono restano i primi due."
+msgstr "Getrennt durch «·». Das erste steht im Moduskasten; auf dem Handy bleiben die ersten zwei."
+
+#: src/config/elements/hero.js
+msgid "Pose del rullino"
+msgstr "Bilder auf dem Film"
+
+#: src/config/elements/hero.js
+msgid "Le pose rimaste, in basso a destra: scendono a ogni scatto e, finito il rullino, lo scatto dopo lo riavvolge. 0: niente contatore."
+msgstr "Die verbleibenden Bilder unten rechts: Sie sinken mit jeder Aufnahme, und ist der Film voll, spult die nächste Aufnahme ihn zurück. 0: kein Zähler."
+
+#: src/config/elements/hero.js
+msgid "Si può scattare"
+msgstr "Auslösen möglich"
+
+#: src/config/elements/hero.js
+msgid "Il pulsante tondo e il clic sulla scena. Nel builder scatta solo il pulsante: il clic sulla tile la seleziona."
+msgstr "Der runde Button und der Klick auf die Szene. Im Builder löst nur der Button aus: Ein Klick auf die Kachel wählt sie aus."
+
+#: src/config/elements/hero.js
+msgid "Nome del pulsante"
+msgstr "Name des Buttons"
+
+#: src/config/elements/hero.js
+msgid "Lo leggono i lettori di schermo e compare passandoci sopra."
+msgstr "Wird von Screenreadern vorgelesen und beim Darüberfahren angezeigt."
+
+#: src/config/elements/hero.js
+msgid "Invito sotto il fuoco"
+msgstr "Hinweis unter dem Fokus"
+
+#: src/config/elements/hero.js
+msgid "Una riga piccola sotto le staffe del fuoco, che sparisce al primo scatto. Vuota: niente invito."
+msgstr "Eine kleine Zeile unter den Fokusklammern, die nach der ersten Aufnahme verschwindet. Leer: kein Hinweis."
+
+#: src/config/elements/hero.js
+msgid "Mostra i provini degli scatti"
+msgstr "Kontaktabzüge der Aufnahmen anzeigen"
+
+#: src/config/elements/hero.js
+msgid "Ogni scatto diventa un provino che si sviluppa accanto al pulsante: gli ultimi quattro (tre sul telefono)."
+msgstr "Jede Aufnahme wird zu einem Kontaktabzug, der sich neben dem Button entwickelt: die letzten vier (drei auf dem Handy)."
+
+#: src/config/elements/hero.js
+msgid "Sfoca fuori dal fuoco"
+msgstr "Außerhalb des Fokus unscharf"
+
+#: src/config/elements/hero.js
+msgid "Fuoco all'inizio, da sinistra"
+msgstr "Fokus am Anfang, von links"
+
+#: src/config/elements/hero.js
+msgid "Dove sta il punto di messa a fuoco quando la pagina si apre, prima che il puntatore lo sposti: mettilo sul soggetto."
+msgstr "Wo der Fokuspunkt beim Öffnen der Seite sitzt, bevor der Zeiger ihn bewegt: Setze ihn auf das Motiv."
+
+#: src/config/elements/hero.js
+msgid "Fuoco all'inizio, dall'alto"
+msgstr "Fokus am Anfang, von oben"
+
+#: src/config/elements/hero.js
+msgid "Mostra la griglia dei terzi"
+msgstr "Drittelraster anzeigen"
+
+#: src/config/elements/hero.js
+msgid "Mostra l'esposimetro"
+msgstr "Belichtungsmesser anzeigen"
+
+#: src/config/elements/hero.js
+msgid "La scala da − a + con l'ago, che si sposta mentre il fuoco cerca e torna allo zero quando si aggancia."
+msgstr "Die Skala von − bis + mit der Nadel, die sich bewegt, während der Fokus sucht, und auf null zurückgeht, wenn er greift."
+
+#: src/config/elements/hero.js
+msgid "Colore delle linee e dei dati"
+msgstr "Farbe der Linien und Daten"
+
+#: src/config/elements/hero.js
+msgid "Angoli, griglia, staffe del fuoco, dati e pulsante. Vuoto: il colore del testo della hero."
+msgstr "Ecken, Raster, Fokusklammern, Daten und Button. Leer: die Textfarbe der Hero."
+
+#: src/config/elements/hero.js
+msgid "Colore del fuoco agganciato"
+msgstr "Farbe des eingerasteten Fokus"
+
+#: src/config/elements/hero.js
+msgid "Le staffe quando il fuoco si aggancia, l'ago dell'esposimetro, il contatore a fine rullino. Vuoto: il colore accento."
+msgstr "Die Klammern beim Einrasten des Fokus, die Nadel des Belichtungsmessers, der Zähler am Filmende. Leer: die Akzentfarbe."
+
+#: src/config/elements/hero.js
+msgid "Zona a fuoco"
+msgstr "Schärfebereich"
+
+#: src/config/elements/hero.js
+msgid "Il raggio della zona nitida, in percentuale del lato corto della finestra."
+msgstr "Der Radius des scharfen Bereichs in Prozent der kurzen Fensterseite."
+
+#: src/config/elements/hero.js
+msgid "Font dei dati"
+msgstr "Schrift der Daten"
+
+#: src/config/elements/hero.js
+msgid "Vuoto: il monospaziato del tema."
+msgstr "Leer: die Monospace-Schrift des Themes."
+
+#: src/config/elements/section.js
+msgid "Contenuto nel pannello"
+msgstr "Inhalt im Feld"
+
+#: src/config/elements/section.js
+msgid "Le sezioni orizzontali sono alte una schermata: qui scegli dove sta il loro contenuto. «Reveal orizzontale» scopre la sezione sopra la precedente, da destra; «Cover orizzontale» la fa arrivare spinta di lato. Sul telefono il gruppo resta orizzontale se ogni sezione sta in una schermata."
+msgstr "Horizontale Abschnitte sind eine Bildschirmhöhe hoch: Hier wählst du, wo ihr Inhalt steht. «Horizontal enthüllen» deckt den Abschnitt über dem vorherigen von rechts auf; «Horizontal überdecken» schiebt ihn seitlich herein. Auf dem Handy bleibt die Gruppe horizontal, wenn jeder Abschnitt auf einen Bildschirm passt."
+
+#: includes/class-mirino.php
+msgid "Scatto %1$d di %2$d"
+msgstr "Aufnahme %1$d von %2$d"
+
+#: includes/class-mirino.php
+msgid "Rullino finito: lo scatto dopo lo riavvolge."
+msgstr "Film voll: Die nächste Aufnahme spult ihn zurück."
+
+#: includes/class-mirino.php
+msgid "Rullino riavvolto."
+msgstr "Film zurückgespult."
+
+#: includes/tiles/class-ghiera-tile.php
+msgid "La ghiera ha bisogno di almeno due voci: aggiungile nel Contenuto."
+msgstr "Das Wahlrad braucht mindestens zwei Einträge: Füge sie im Inhalt hinzu."
+
+#: includes/tiles/class-ghiera-tile.php
+msgid "Frecce per girare la ghiera, Inizio e Fine per la prima e l'ultima voce. Si può anche trascinare."
+msgstr "Pfeiltasten drehen das Wahlrad, Pos1 und Ende springen zum ersten und letzten Eintrag. Man kann es auch ziehen."
+
+#: includes/tiles/class-pellicole-tile.php
+msgid "Scegli una foto e almeno una pellicola nel Contenuto."
+msgstr "Wähle im Inhalt ein Foto und mindestens einen Film."
+
+#: includes/tiles/class-pellicole-tile.php
+msgid "Confronto fra lo scatto grezzo e lo sviluppo"
+msgstr "Vergleich zwischen Rohaufnahme und Entwicklung"
+
+#: includes/class-theme-importer.php
+msgid "Il fuoco lo decidi tu"
+msgstr "Den Fokus bestimmst du"
+
+#: includes/class-theme-importer.php
+msgid "Gira la ghiera"
+msgstr "Dreh am Wahlrad"

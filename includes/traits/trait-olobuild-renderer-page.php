@@ -602,6 +602,11 @@ trait Olobuild_Renderer_Page_Trait {
         if ( $principale && class_exists( 'Olobuild_Header_Integration' ) ) {
             echo Olobuild_Header_Integration::script_barra(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- script fisso, nessun dato
         }
+        // Apertura della pagina (Effetti di pagina): qui solo con un tema classico, dove la testata è
+        // già uscita; con un tema a blocchi esce subito dopo <body> (Olobuild_Page_Intro).
+        if ( $principale && class_exists( 'Olobuild_Page_Intro' ) ) {
+            echo Olobuild_Page_Intro::per_template( $page_settings ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup assembled by Olobuild_Page_Intro::markup() from escaped values
+        }
         ?>
         <div<?php echo $wrapper_id_attr; ?><?php echo $wrapper_role_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal id/role attribute strings set above ?> class="olo-template olo-template-<?php echo esc_attr( $id ); ?>"<?php
             if ( ( $page_bg['type'] === 'image' && ! empty( $page_bg['image_url'] ) ) || ( $page_bg['type'] === 'video' && ! empty( $page_bg['video_url'] ) ) ) {
@@ -747,8 +752,11 @@ trait Olobuild_Renderer_Page_Trait {
                            schermata e lo scroll traslerebbe layer enormi. Fallback
                            mobile: niente raggruppamento, sezioni in flusso verticale
                            (la luce di pagina passa all'IntersectionObserver, i pallini
-                           coverdots si nascondono da soli senza gruppo). */
-                        if(window.matchMedia('(max-width: 959px)').matches)return;
+                           coverdots si nascondono da soli senza gruppo). Dalla 1.4.839 il
+                           controllo è per gruppo: se ogni pannello sta in una schermata
+                           (foto a tutto schermo con due righe) il gruppo resta orizzontale
+                           anche sul telefono; basta un pannello più alto e resta verticale. */
+                        var stretto=window.matchMedia('(max-width: 959px)').matches;
                         /* Collect all h-markers and group consecutive runs */
                         var markers=Array.from(document.querySelectorAll('.olo-h-marker'));
                         if(!markers.length)return;
@@ -793,7 +801,21 @@ trait Olobuild_Renderer_Page_Trait {
                             var n=sections.length;
                             if(n<2)return;
                             var viewH=window.innerHeight-stickyTop;
-                            /* Group height = viewH * n (1 screen per panel for scroll travel) */
+                            if(stretto){
+                                var alto=false;
+                                sections.forEach(function(item){if(item.sec.offsetHeight>viewH+2){alto=true;}});
+                                if(alto)return;
+                            }
+                            /* «Reveal orizzontale»: la sezione non arriva spinta da destra, si
+                               scopre sopra la precedente (clip-path che si apre da destra, il
+                               contenuto che scivola un poco, un filo di luce sul bordo), mentre
+                               la precedente arretra e si scurisce. Pannelli impilati, uno sopra
+                               l'altro; con sole sezioni «Cover» resta il binario di prima. */
+                            var svela=false;
+                            sections.forEach(function(item,i){
+                                item.svela=(item.marker.dataset.stickyH==='reveal-h');
+                                if(i>0){if(item.svela){svela=true;}}
+                            });
                             var group=document.createElement('div');
                             group.className='olo-h-group';
                             group.style.height=(viewH*n)+'px';
@@ -807,11 +829,36 @@ trait Olobuild_Renderer_Page_Trait {
                             var panelCSS='flex:0 0 100%;width:100%;min-height:'+viewH+'px;box-sizing:border-box;position:relative;overflow:hidden';
                             /* Move (not clone) the real nodes: JS listeners, form state and
                                media playback inside the panels survive the grouping. */
-                            sections.forEach(function(item){
+                            sections.forEach(function(item,i){
                                 item.sec.style.cssText+=';'+panelCSS;
+                                var allinea=item.marker.dataset.hAlign;
+                                if(allinea==='center'||allinea==='bottom'){
+                                    item.sec.style.display='flex';
+                                    item.sec.style.flexDirection='column';
+                                    item.sec.style.justifyContent=(allinea==='bottom')?'flex-end':'center';
+                                }
+                                if(svela){
+                                    /* con «important»: le sezioni con lo sfondo hanno uk-position-relative,
+                                       che in UIkit è !important e vincerebbe sullo stile in linea */
+                                    item.sec.style.setProperty('position','absolute','important');
+                                    item.sec.style.left='0';
+                                    item.sec.style.top='0';
+                                    item.sec.style.height=viewH+'px';
+                                    item.sec.style.zIndex=String(i+1);
+                                    item.dentro=item.sec.querySelector(':scope > .uk-container');
+                                }
                                 track.appendChild(item.sec);
                             });
                             viewport.appendChild(track);
+                            var filo=null;
+                            if(svela){
+                                group.classList.add('olo-h-reveal');
+                                track.style.position='relative';
+                                filo=document.createElement('div');
+                                filo.className='olo-h-edge';
+                                filo.setAttribute('aria-hidden','true');
+                                viewport.appendChild(filo);
+                            }
                             group.appendChild(viewport);
                             /* Insert before the first marker and hide all originals */
                             run[0].parentNode.insertBefore(group,run[0]);
@@ -835,9 +882,38 @@ trait Olobuild_Renderer_Page_Trait {
                                     var travel=group.offsetHeight-viewH;
                                     if(travel<=0){ticking=false;return;}
                                     var p=Math.max(0,Math.min(1,scrolled/travel));
-                                    track.style.transform='translateX('+ (-p*maxShift) +'%)';
-                                    group.style.setProperty('--olo-hp',p.toFixed(4));
                                     var pos=p*(n-1);
+                                    if(svela){
+                                        var bordo=-1;
+                                        sections.forEach(function(item,i){
+                                            var q=(i===0)?1:Math.max(0,Math.min(1,pos-(i-1)));
+                                            var nx=sections[i+1],qn=0,tx=0,clip='';
+                                            if(nx){qn=Math.max(0,Math.min(1,pos-i));}
+                                            if(i>0){
+                                                if(item.svela){
+                                                    clip=(q<1)?'inset(0 0 0 '+((1-q)*100).toFixed(3)+'%)':'';
+                                                    if(q>0){if(q<1){bordo=(1-q)*100;}}
+                                                    if(item.dentro){item.dentro.style.transform=(q<1)?'translate3d('+((1-q)*14).toFixed(3)+'%,0,0)':'';}
+                                                }else{tx+=(1-q)*100;}
+                                            }
+                                            if(nx){if(nx.svela){tx-=qn*22;}else{tx-=qn*100;}}
+                                            item.sec.style.transform=tx?'translate3d('+tx.toFixed(3)+'%,0,0)':'';
+                                            item.sec.style.clipPath=clip;
+                                            item.sec.style.webkitClipPath=clip;
+                                            var buio=0;
+                                            if(nx){if(nx.svela){buio=qn;}}
+                                            item.sec.style.filter=buio>0.001?'brightness('+(1-buio*0.45).toFixed(3)+')':'';
+                                            /* il testo di chi esce sfuma in fretta: non si accavalla con quello che entra */
+                                            if(item.dentro){if(nx){if(nx.svela){item.dentro.style.opacity=buio>0.001?Math.max(0,1-buio*1.6).toFixed(3):'';}}}
+                                        });
+                                        if(filo){
+                                            if(bordo>=0){filo.style.left=bordo.toFixed(3)+'%';filo.style.opacity='1';}
+                                            else{filo.style.opacity='0';}
+                                        }
+                                    }else{
+                                        track.style.transform='translateX('+ (-p*maxShift) +'%)';
+                                    }
+                                    group.style.setProperty('--olo-hp',p.toFixed(4));
                                     sections.forEach(function(item,i){
                                         var pp=1-Math.min(1,Math.abs(pos-i));
                                         item.sec.style.setProperty('--olo-pp',pp.toFixed(4));

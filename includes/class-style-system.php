@@ -1576,8 +1576,9 @@ class Olobuild_Style_System {
             }
         }
 
-        // Custom properties
-        $css .= ".olo-template {\n";
+        // Custom properties. «.olo-tokens»: gli stessi valori fuori dal template, per ciò che il renderer
+        // sposta nel <body> (tile in posizione fissa, apertura della pagina): lì var(--olo-color-*) non esisteva.
+        $css .= ".olo-template,\n.olo-tokens {\n";
         // Colors
         foreach ( $c as $key => $value ) {
             $prop = str_replace( '_', '-', $key );
@@ -2018,7 +2019,7 @@ class Olobuild_Style_System {
         }
         if ( $has_dark ) {
             $css .= "\n/* Dark Mode color overrides */\n";
-            $css .= "html.olo-dark-mode .olo-template {\n";
+            $css .= "html.olo-dark-mode .olo-template,\nhtml.olo-dark-mode .olo-tokens {\n";
             foreach ( $dc as $key => $value ) {
                 if ( empty( $value ) ) continue;
                 $prop = str_replace( '_', '-', $key );

@@ -189,8 +189,13 @@ class Olobuild_Finder_Tile extends Olobuild_Tile_Base {
         // chip_radius dual-format: Number legacy ('999') E oggetto {tl,tr,br,bl}.
         // '' / 0 / oggetto tutto-zero → '0px' (= comportamento storico per il vuoto).
         $chip_r = $this->build_border_radius_css( $s['chip_radius'] ?? 999 ) ?: '0px';
-        $cr     = $this->build_border_radius_css( $s['card_radius'] ?? '16' );
-        $card_radius_css = 'border-radius:' . ( $cr ?: '16px' ) . ';';
+        // Vuoto = i 16 px di sempre; zero (numero o quattro angoli a 0) = angoli vivi: prima tornava a 16.
+        $cr_raw = $s['card_radius'] ?? '16';
+        $cr     = $this->build_border_radius_css( $cr_raw );
+        if ( $cr === '' ) {
+            $cr = ( $cr_raw === '' || $cr_raw === null ) ? '16px' : '0px';
+        }
+        $card_radius_css = 'border-radius:' . $cr . ';';
         $cp     = is_array( $s['card_padding'] ?? null ) ? $s['card_padding'] : [];
         $card_pad = intval( $cp['top'] ?? 34 ) . 'px ' . intval( $cp['right'] ?? 38 ) . 'px ' . intval( $cp['bottom'] ?? 34 ) . 'px ' . intval( $cp['left'] ?? 38 ) . 'px';
         $card_mw  = max( 0, intval( $s['card_max_width'] ?? 680 ) ) ?: 680;

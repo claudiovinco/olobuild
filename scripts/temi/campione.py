@@ -24,5 +24,6 @@ for t in sorted(os.listdir(ROOT)):
                 print(json.dumps({'settings': n['settings'], 'style': n.get('style'), 'advanced': n.get('advanced')}, ensure_ascii=False))
             for c in n.get('children') or []:
                 walk(c)
-        for n in json.load(open(os.path.join(ROOT, t, f), encoding='utf-8')):
+        dati = json.load(open(os.path.join(ROOT, t, f), encoding="utf-8"))
+        for n in (dati.get("content") or [] if isinstance(dati, dict) else dati):
             walk(n)
