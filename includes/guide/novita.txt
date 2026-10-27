@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.849 - 2026-10-27 (WooCommerce)
+- L'avviso «Aggiunto al carrello» si carica solo sulle pagine con una tile di WooCommerce (anche nelle sezioni che compaiono scorrendo). Nella 1.4.848, sui siti con WooCommerce, arrivava su ogni pagina fatta con Olobuild: circa 9 KB in più anche dove non si compra niente.
+
 ## v1.4.848 - 2026-10-27 (WooCommerce)
 - «Aggiunto al carrello»: dopo l'aggiunta compare un riquadro con la foto, il nome, la quantità e il subtotale, e i pulsanti «Vai al carrello» e «Continua gli acquisti». Vale per tutte le tile di WooCommerce che aggiungono al carrello; si chiude da solo dopo qualche secondo, con Esc o con la X. Prima cambiava solo il numero sul mini carrello.
 - Mini Carrello: l'icona porta alla pagina del carrello (prima il clic, e il tocco sul telefono, non facevano niente); la tendina si apre al passaggio del mouse o col tasto Tab e non si chiude più scendendo dall'icona.

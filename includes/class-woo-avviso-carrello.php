@@ -13,7 +13,8 @@
  *   sulla pagina che segue, se nessuno ha già stampato in pagina il messaggio di WooCommerce (tile Avvisi,
  *   pagine di WooCommerce): niente doppioni.
  *
- * Lo script si stampa sulle pagine che OLObuild ha disegnato (almeno una tile resa).
+ * Lo script si stampa sulle pagine con una tile del negozio (woo_*, anche nelle sezioni pigre: il renderer le disegna
+ * subito dentro un <template>) e su quelle con un'aggiunta da confermare.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -28,6 +29,9 @@ class Olobuild_Woo_Avviso_Carrello {
     /** @var string[] Le righe aggiunte in questa richiesta. */
     private static $righe = [];
 
+    /** @var bool La pagina ha una tile del negozio (serve()): solo lì lo script dell'avviso. */
+    private static $serve = false;
+
     public static function init() {
         if ( ! class_exists( 'WooCommerce' ) ) {
             return;
@@ -35,6 +39,11 @@ class Olobuild_Woo_Avviso_Carrello {
         add_action( 'woocommerce_add_to_cart', [ __CLASS__, 'ricorda' ], 20 );
         add_filter( 'woocommerce_add_to_cart_fragments', [ __CLASS__, 'frammento' ] );
         add_action( 'wp_footer', [ __CLASS__, 'stampa' ], 40 );
+    }
+
+    /** Il renderer disegna una tile woo_*: la pagina può aggiungere al carrello. */
+    public static function serve() {
+        self::$serve = true;
     }
 
     /** Una riga è stata aggiunta: con AJAX va nei frammenti, senza nella sessione per la pagina dopo. */
@@ -126,7 +135,9 @@ class Olobuild_Woo_Avviso_Carrello {
             return;
         }
         $subito = self::in_attesa();
-        if ( ! $subito && '' === (string) Olobuild_Tile_Base::$nodo_in_resa ) {
+        // Solo dove serve: sulle pagine con una tile del negozio, o con un'aggiunta da confermare. Stampato su
+        // ogni pagina disegnata da OLObuild pesava 9 KB anche dove non si compra niente.
+        if ( ! $subito && ! self::$serve ) {
             return;
         }
         // Gli indirizzi si prendono qui, dalla pagina: la richiesta AJAX non passa dai filtri della demo dei temi.

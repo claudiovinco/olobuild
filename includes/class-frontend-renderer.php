@@ -610,6 +610,10 @@ class Olobuild_Frontend_Renderer {
                 $html = $this->render_floatingpanel_node( $node, $manager, $template_id, $hover_css_rules, $tile_counter );
                 break;
             default:
+                // Una tile del negozio nella pagina: l'avviso «Aggiunto al carrello» va stampato (solo lì).
+                if ( 0 === strpos( (string) $type, 'woo_' ) && class_exists( 'Olobuild_Woo_Avviso_Carrello' ) ) {
+                    Olobuild_Woo_Avviso_Carrello::serve();
+                }
                 $html = $this->render_element_node( $node, $manager, $template_id, $hover_css_rules, $tile_counter );
                 $adv  = $node['advanced'] ?? [];
                 $html = $this->maybe_lazy_wrap( $html, $type, $adv );
