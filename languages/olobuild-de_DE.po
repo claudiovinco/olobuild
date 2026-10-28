@@ -48140,3 +48140,207 @@ msgstr "Du kannst hier keine Einträge hinzufügen."
 #: includes/class-redazione.php
 msgid "Scrivi il nome."
 msgstr "Gib den Namen ein."
+
+#: src/redazione\Anteprima.vue
+msgid "Preparo l'anteprima…"
+msgstr "Vorschau wird vorbereitet…"
+
+#: src/redazione\Anteprima.vue
+msgid "Ricarica"
+msgstr "Neu laden"
+
+#: src/redazione\Anteprima.vue
+msgid "Anteprima della pagina"
+msgstr "Seitenvorschau"
+
+#: src/redazione\Anteprima.vue
+msgid "Caricamento dell'anteprima…"
+msgstr "Vorschau wird geladen…"
+
+#: src/redazione\Scheda.vue
+msgid "C'è una copia salvata automaticamente il %s, più recente di questa versione."
+msgstr "Es gibt eine automatisch gespeicherte Kopie vom %s, neuer als diese Version."
+
+#: src/redazione\Scheda.vue
+msgid "Riprendila"
+msgstr "Wiederherstellen"
+
+#: src/redazione\Scheda.vue
+msgid "Scartala"
+msgstr "Verwerfen"
+
+#: src/redazione\Scheda.vue
+msgid "Versioni"
+msgstr "Versionen"
+
+#: src/redazione\Scheda.vue
+msgid "Nessuna versione salvata"
+msgstr "Keine gespeicherten Versionen"
+
+#: src/redazione\Scheda.vue
+msgid "1 versione salvata"
+msgstr "1 gespeicherte Version"
+
+#: src/redazione\Scheda.vue
+msgid "%s versioni salvate"
+msgstr "%s gespeicherte Versionen"
+
+#: src/redazione\Scheda.vue
+msgid "Guarda le versioni"
+msgstr "Versionen ansehen"
+
+#: src/redazione\Scheda.vue
+msgid "Salvataggio automatico…"
+msgstr "Automatisches Speichern…"
+
+#: src/redazione\Scheda.vue
+msgid "Modifiche non ancora sul sito: copia di sicurezza alle %s"
+msgstr "Änderungen noch nicht auf der Website: Sicherungskopie um %s"
+
+#: src/redazione\Scheda.vue
+msgid "Salvato automaticamente alle %s"
+msgstr "Automatisch gespeichert um %s"
+
+#: src/redazione\Scheda.vue
+msgid "Copia ripresa: controlla e salva."
+msgstr "Kopie wiederhergestellt: prüfe sie und speichere."
+
+#: src/redazione\Scheda.vue
+msgid "Hai ripreso la versione del %s: controlla e salva."
+msgstr "Du hast die Version vom %s wiederhergestellt: prüfe sie und speichere."
+
+#: src/redazione\Scheda.vue
+msgid "Salvataggio automatico non riuscito: riprovo tra poco."
+msgstr "Automatisches Speichern fehlgeschlagen: neuer Versuch in Kürze."
+
+#: src/redazione\Scheda.vue
+msgid "Prima scegli se riprendere la copia salvata automaticamente."
+msgstr "Entscheide zuerst, ob du die automatisch gespeicherte Kopie wiederherstellen willst."
+
+#: src/redazione\Scheda.vue
+msgid "Con le modifiche non ancora salvate"
+msgstr "Mit nicht gespeicherten Änderungen"
+
+#: src/redazione\Versioni.vue
+msgid "Versioni salvate"
+msgstr "Gespeicherte Versionen"
+
+#: src/redazione\Versioni.vue
+msgid "Adesso"
+msgstr "Jetzt"
+
+#: src/redazione\Versioni.vue
+msgid "Scegli una versione per vedere cosa cambia."
+msgstr "Wähle eine Version, um zu sehen, was sich ändert."
+
+#: src/redazione\Versioni.vue
+msgid "Salvata il %1$s da %2$s"
+msgstr "Gespeichert am %1$s von %2$s"
+
+#: src/redazione\Versioni.vue
+msgid "Riprendi questa versione"
+msgstr "Diese Version wiederherstellen"
+
+#: src/redazione\Versioni.vue
+msgid "È uguale al contenuto di adesso."
+msgstr "Sie ist gleich wie der aktuelle Inhalt."
+
+#: src/redazione\Versioni.vue
+msgid "Diverso da adesso"
+msgstr "Anders als jetzt"
+
+#: src/redazione\Versioni.vue
+msgid "Di questa versione restano solo titolo, testo e riassunto."
+msgstr "Von dieser Version sind nur Titel, Text und Zusammenfassung erhalten."
+
+#: src/redazione\Versioni.vue
+msgid "Questa versione"
+msgstr "Diese Version"
+
+#: src/redazione\Versioni.vue
+msgid "Il testo è uguale a quello di adesso."
+msgstr "Der Text ist gleich wie jetzt."
+
+#: src/redazione\Versioni.vue
+msgid "Questo testo si riprende dalle revisioni di WordPress."
+msgstr "Dieser Text wird über die WordPress-Revisionen wiederhergestellt."
+
+#: src/redazione\Versioni.vue
+msgid "Apri le revisioni"
+msgstr "Revisionen öffnen"
+
+#: includes/class-redazione.php
+msgid "Non sono riuscito a salvare la copia di sicurezza."
+msgstr "Die Sicherungskopie konnte nicht gespeichert werden."
+
+#: includes/class-redazione.php
+msgid "Questa versione non c'è più."
+msgstr "Diese Version gibt es nicht mehr."
+
+#: includes/tiles/class-montaggio-tile.php
+msgid "Aggiungi almeno una clip con un video o una foto nel Contenuto."
+msgstr "Füge im Inhalt mindestens einen Clip mit einem Video oder Foto hinzu."
+
+#: includes/tiles/class-montaggio-tile.php
+msgid "Riproduci o ferma"
+msgstr "Abspielen oder anhalten"
+
+#: includes/tiles/class-montaggio-tile.php
+msgid "Timeline del montaggio"
+msgstr "Schnitt-Zeitleiste"
+
+#: includes/tiles/class-montaggio-tile.php
+msgid "Frecce per un fotogramma, con Maiuscolo un secondo; Spazio o K ferma e riparte, L avanti, J indietro di cinque secondi."
+msgstr "Pfeiltasten für ein Einzelbild, mit Umschalt eine Sekunde; Leertaste oder K hält an und startet wieder, L vor, J fünf Sekunden zurück."
+
+#: src/redazione\Scheda.vue
+msgid "I campi in più (allegati, foto per i social, date, link…) si aggiungono per tipo in Impostazioni › Tipi di contenuto e valgono per tutti i suoi contenuti. Dopo averli salvati, ricarica questa pagina."
+msgstr "Zusätzliche Felder (Anhänge, Fotos für soziale Netzwerke, Daten, Links…) fügst du pro Typ unter Einstellungen › Inhaltstypen hinzu; sie gelten für alle Inhalte des Typs. Lade diese Seite nach dem Speichern neu."
+
+#: src/redazione\Scheda.vue
+msgid "%s non hanno campi in più."
+msgstr "%s haben keine zusätzlichen Felder."
+
+#: src/redazione\Scheda.vue
+msgid "Aggiungi campi"
+msgstr "Felder hinzufügen"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Per quali reti"
+msgstr "Für welche Netzwerke"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Testo per i social"
+msgstr "Text für soziale Netzwerke"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Tutte le reti"
+msgstr "Alle Netzwerke"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Facebook, LinkedIn e le altre"
+msgstr "Facebook, LinkedIn und die anderen"
+
+#: src/redazione\Scheda.vue
+msgid "Nessun campo per le categorie scelte."
+msgstr "Keine Felder für die gewählten Kategorien."
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Solo nelle categorie"
+msgstr "Nur in den Kategorien"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Aggiungi una categoria…"
+msgstr "Kategorie hinzufügen…"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "In tutte le categorie"
+msgstr "In allen Kategorien"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Categoria tolta"
+msgstr "Gelöschte Kategorie"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Un campo può valere solo in alcune categorie, sottocategorie comprese."
+msgstr "Ein Feld kann nur für einige Kategorien gelten, Unterkategorien eingeschlossen."

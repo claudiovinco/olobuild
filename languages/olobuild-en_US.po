@@ -46729,3 +46729,207 @@ msgstr "You can't add items here."
 #: includes/class-redazione.php
 msgid "Scrivi il nome."
 msgstr "Enter the name."
+
+#: src/redazione\Anteprima.vue
+msgid "Preparo l'anteprima…"
+msgstr "Preparing preview…"
+
+#: src/redazione\Anteprima.vue
+msgid "Ricarica"
+msgstr "Reload"
+
+#: src/redazione\Anteprima.vue
+msgid "Anteprima della pagina"
+msgstr "Page preview"
+
+#: src/redazione\Anteprima.vue
+msgid "Caricamento dell'anteprima…"
+msgstr "Loading preview…"
+
+#: src/redazione\Scheda.vue
+msgid "C'è una copia salvata automaticamente il %s, più recente di questa versione."
+msgstr "There is an automatically saved copy from %s, newer than this version."
+
+#: src/redazione\Scheda.vue
+msgid "Riprendila"
+msgstr "Restore it"
+
+#: src/redazione\Scheda.vue
+msgid "Scartala"
+msgstr "Discard it"
+
+#: src/redazione\Scheda.vue
+msgid "Versioni"
+msgstr "Versions"
+
+#: src/redazione\Scheda.vue
+msgid "Nessuna versione salvata"
+msgstr "No saved versions"
+
+#: src/redazione\Scheda.vue
+msgid "1 versione salvata"
+msgstr "1 saved version"
+
+#: src/redazione\Scheda.vue
+msgid "%s versioni salvate"
+msgstr "%s saved versions"
+
+#: src/redazione\Scheda.vue
+msgid "Guarda le versioni"
+msgstr "View versions"
+
+#: src/redazione\Scheda.vue
+msgid "Salvataggio automatico…"
+msgstr "Autosaving…"
+
+#: src/redazione\Scheda.vue
+msgid "Modifiche non ancora sul sito: copia di sicurezza alle %s"
+msgstr "Changes not on the site yet: backup copy at %s"
+
+#: src/redazione\Scheda.vue
+msgid "Salvato automaticamente alle %s"
+msgstr "Saved automatically at %s"
+
+#: src/redazione\Scheda.vue
+msgid "Copia ripresa: controlla e salva."
+msgstr "Copy restored: check it and save."
+
+#: src/redazione\Scheda.vue
+msgid "Hai ripreso la versione del %s: controlla e salva."
+msgstr "You restored the version from %s: check it and save."
+
+#: src/redazione\Scheda.vue
+msgid "Salvataggio automatico non riuscito: riprovo tra poco."
+msgstr "Autosave failed: trying again shortly."
+
+#: src/redazione\Scheda.vue
+msgid "Prima scegli se riprendere la copia salvata automaticamente."
+msgstr "First choose whether to restore the automatically saved copy."
+
+#: src/redazione\Scheda.vue
+msgid "Con le modifiche non ancora salvate"
+msgstr "With unsaved changes"
+
+#: src/redazione\Versioni.vue
+msgid "Versioni salvate"
+msgstr "Saved versions"
+
+#: src/redazione\Versioni.vue
+msgid "Adesso"
+msgstr "Now"
+
+#: src/redazione\Versioni.vue
+msgid "Scegli una versione per vedere cosa cambia."
+msgstr "Choose a version to see what changes."
+
+#: src/redazione\Versioni.vue
+msgid "Salvata il %1$s da %2$s"
+msgstr "Saved on %1$s by %2$s"
+
+#: src/redazione\Versioni.vue
+msgid "Riprendi questa versione"
+msgstr "Restore this version"
+
+#: src/redazione\Versioni.vue
+msgid "È uguale al contenuto di adesso."
+msgstr "It is the same as the current content."
+
+#: src/redazione\Versioni.vue
+msgid "Diverso da adesso"
+msgstr "Different from now"
+
+#: src/redazione\Versioni.vue
+msgid "Di questa versione restano solo titolo, testo e riassunto."
+msgstr "Only the title, text and summary of this version were kept."
+
+#: src/redazione\Versioni.vue
+msgid "Questa versione"
+msgstr "This version"
+
+#: src/redazione\Versioni.vue
+msgid "Il testo è uguale a quello di adesso."
+msgstr "The text is the same as now."
+
+#: src/redazione\Versioni.vue
+msgid "Questo testo si riprende dalle revisioni di WordPress."
+msgstr "This text is restored from the WordPress revisions."
+
+#: src/redazione\Versioni.vue
+msgid "Apri le revisioni"
+msgstr "Open revisions"
+
+#: includes/class-redazione.php
+msgid "Non sono riuscito a salvare la copia di sicurezza."
+msgstr "I couldn't save the backup copy."
+
+#: includes/class-redazione.php
+msgid "Questa versione non c'è più."
+msgstr "This version no longer exists."
+
+#: includes/tiles/class-montaggio-tile.php
+msgid "Aggiungi almeno una clip con un video o una foto nel Contenuto."
+msgstr "Add at least one clip with a video or a photo in Content."
+
+#: includes/tiles/class-montaggio-tile.php
+msgid "Riproduci o ferma"
+msgstr "Play or pause"
+
+#: includes/tiles/class-montaggio-tile.php
+msgid "Timeline del montaggio"
+msgstr "Edit timeline"
+
+#: includes/tiles/class-montaggio-tile.php
+msgid "Frecce per un fotogramma, con Maiuscolo un secondo; Spazio o K ferma e riparte, L avanti, J indietro di cinque secondi."
+msgstr "Arrows move one frame, with Shift one second; Space or K pauses and resumes, L forward, J back five seconds."
+
+#: src/redazione\Scheda.vue
+msgid "I campi in più (allegati, foto per i social, date, link…) si aggiungono per tipo in Impostazioni › Tipi di contenuto e valgono per tutti i suoi contenuti. Dopo averli salvati, ricarica questa pagina."
+msgstr "Extra fields (attachments, social photos, dates, links…) are added per type in Settings › Content types and apply to all its content. After saving them, reload this page."
+
+#: src/redazione\Scheda.vue
+msgid "%s non hanno campi in più."
+msgstr "%s have no extra fields."
+
+#: src/redazione\Scheda.vue
+msgid "Aggiungi campi"
+msgstr "Add fields"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Per quali reti"
+msgstr "For which networks"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Testo per i social"
+msgstr "Social media text"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Tutte le reti"
+msgstr "All networks"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Facebook, LinkedIn e le altre"
+msgstr "Facebook, LinkedIn and the others"
+
+#: src/redazione\Scheda.vue
+msgid "Nessun campo per le categorie scelte."
+msgstr "No fields for the chosen categories."
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Solo nelle categorie"
+msgstr "Only in categories"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Aggiungi una categoria…"
+msgstr "Add a category…"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "In tutte le categorie"
+msgstr "In all categories"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Categoria tolta"
+msgstr "Deleted category"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Un campo può valere solo in alcune categorie, sottocategorie comprese."
+msgstr "A field can apply only to some categories, subcategories included."

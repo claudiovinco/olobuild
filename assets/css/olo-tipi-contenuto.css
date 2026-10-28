@@ -1,6 +1,8 @@
 /* Campi dei tipi di contenuto nella scheda di modifica (Olobuild_Tipi_Contenuto) — stile della bacheca di WordPress. */
 .olo-tc { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px 16px; }
 .olo-tc-campo { grid-column: span 6; margin: 8px 0; min-width: 0; }
+/* «Solo nelle categorie»: fuori dalle sue categorie il campo non si vede (olo-tipi-categorie.js). */
+.olo-tc-campo[hidden] { display: none !important; }
 .olo-tc--meta { grid-column: span 3; }
 .olo-tc--terzo { grid-column: span 2; }
 .olo-tc-etichetta { display: block; font-weight: 600; margin: 0 0 4px; }

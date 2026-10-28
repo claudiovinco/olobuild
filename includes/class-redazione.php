@@ -8,6 +8,11 @@
  * WordPress resta il motore: permessi del tipo, revisioni, programmazione, blocco di modifica, cestino. Le schede di
  * WordPress restano la riserva per ciò che l'editor della Redazione non sa tenere (testi a blocchi, HTML con stili).
  * App Vue in src/redazione/ (bundle assets/js/redazione.js, vite.config.redazione.js), rotte olobuild/v1/redazione.
+ *
+ * Copia di sicurezza e anteprima: la copia è il salvataggio automatico di WordPress (la revisione «autosave» di chi
+ * scrive) con accanto, in META, i campi, le categorie e la foto. L'anteprima di WordPress ne legge titolo, testo e
+ * riassunto; prepara_anteprima() le fa leggere anche il resto. Così si vede la pagina vera con le modifiche non salvate
+ * senza toccare ciò che è sul sito. Le versioni (revisioni) tengono in META la stessa fotografia di campi e categorie.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,11 +29,21 @@ class Olobuild_Redazione {
 
     const STATI = [ 'publish', 'future', 'draft', 'pending', 'private' ];
 
+    /** Sulle revisioni e sulla copia di sicurezza: campi, categorie e tag, foto in evidenza (JSON). */
+    const META = '_olo_redazione_modulo';
+
+    /** L'anteprima in corso: [ 'id' => contenuto, 'modulo' => ciò che la copia tiene oltre al testo ]. */
+    private static $anteprima = null;
+
     public static function avvia() {
         add_action( 'rest_api_init', [ __CLASS__, 'rotte' ] );
+        add_action( '_wp_put_post_revision', [ __CLASS__, 'fotografa_revisione' ], 10, 2 );
+        add_filter( 'wp_save_post_revision_post_has_changed', [ __CLASS__, 'revisione_cambiata' ], 10, 3 );
         if ( is_admin() ) {
             add_action( 'admin_menu', [ __CLASS__, 'menu' ] );
             add_action( 'admin_enqueue_scripts', [ __CLASS__, 'script' ] );
+        } else {
+            add_action( 'init', [ __CLASS__, 'prepara_anteprima' ], 20 );
         }
     }
 
@@ -104,17 +119,27 @@ class Olobuild_Redazione {
                 'crea'       => current_user_can( $x->cap->edit_terms ),
             ];
         }
+        // «Solo nelle categorie»: la scheda mostra il campo quando una di queste (figlie comprese) è spuntata.
+        $tax_cat = Olobuild_Tipi_Contenuto::tassonomia_categorie( $k );
+        $campi   = array_map( function ( $c ) use ( $tax_cat ) {
+            $c['tutteCategorie'] = ( '' !== $tax_cat && ! empty( $c['categorie'] ) ) ? Olobuild_Tipi_Contenuto::con_figlie( $tax_cat, $c['categorie'] ) : [];
+            return $c;
+        }, $t['campi'] );
         return [
             'chiave'     => $k,
             'nome'       => $pto->labels->name,
             'singolare'  => $pto->labels->singular_name,
             'icona'      => ( is_string( $pto->menu_icon ) && 0 === strpos( $pto->menu_icon, 'dashicons-' ) ) ? $pto->menu_icon : 'dashicons-admin-post',
-            'campi'      => $t['campi'],
+            'campi'      => $campi,
+            'tassonomiaCategorie' => $tax_cat,
             'estratto'   => post_type_supports( $k, 'excerpt' ),
             'immagine'   => post_type_supports( $k, 'thumbnail' ),
             'tassonomie' => $tax,
             'crea'       => current_user_can( $pto->cap->create_posts ),
             'pubblica'   => current_user_can( $pto->cap->publish_posts ),
+            'versioni'   => post_type_supports( $k, 'revisions' ),
+            // Dove si aggiungono i campi del tipo: solo per chi può cambiare le impostazioni.
+            'configura'  => current_user_can( 'manage_options' ) ? admin_url( 'admin.php?page=olobuilder-settings&tab=tipicontenuto' ) : '',
             'nuovoWp'    => admin_url( 'post-new.php' . ( 'post' === $k ? '' : '?post_type=' . $k ) ),
         ];
     }
@@ -218,32 +243,42 @@ class Olobuild_Redazione {
         ];
     }
 
-    /** La scheda di un contenuto: tutto ciò che l'app mostra e modifica. */
-    private static function scheda( $post ) {
-        $t      = Olobuild_Tipi_Contenuto::del_tipo( $post->post_type );
-        $motivo = self::motivo_sola_lettura( $post->post_content );
-        $campi  = [];
-        $media  = [];
+    /** I valori dei campi come li legge la scheda: i testi formattati coi loro paragrafi. */
+    private static function campi_per_scheda( $tipo, $campi ) {
+        $t   = Olobuild_Tipi_Contenuto::del_tipo( $tipo );
+        $out = [];
         foreach ( $t ? $t['campi'] : [] as $c ) {
-            $v   = get_post_meta( $post->ID, $c['chiave'], true );
-            $v   = is_scalar( $v ) ? (string) $v : '';
-            $ids = [];
-            if ( 'formattato' === $c['tipo'] ) {
-                $v = self::con_paragrafi( $v );
-            } elseif ( in_array( $c['tipo'], [ 'immagine', 'galleria', 'allegati' ], true ) ) {
-                $ids = explode( ',', $v );
+            $v                   = (string) ( $campi[ $c['chiave'] ] ?? '' );
+            $out[ $c['chiave'] ] = 'formattato' === $c['tipo'] ? self::con_paragrafi( $v ) : $v;
+        }
+        return $out;
+    }
+
+    /** I file che i campi (e la foto in evidenza) nominano, id => media(): la scheda ne mostra miniatura e nome. */
+    private static function media_di( $tipo, $campi, $immagine = 0 ) {
+        $t   = Olobuild_Tipi_Contenuto::del_tipo( $tipo );
+        $ids = $immagine ? [ (int) $immagine ] : [];
+        foreach ( $t ? $t['campi'] : [] as $c ) {
+            $v = (string) ( $campi[ $c['chiave'] ] ?? '' );
+            if ( in_array( $c['tipo'], [ 'immagine', 'galleria', 'allegati' ], true ) ) {
+                $ids = array_merge( $ids, explode( ',', $v ) );
             } elseif ( 'foto_social' === $c['tipo'] ) {
                 $d   = json_decode( $v, true );
-                $ids = is_array( $d ) ? array_values( $d ) : [];
-            }
-            $campi[ $c['chiave'] ] = $v;
-            foreach ( array_filter( array_map( 'absint', $ids ) ) as $aid ) {
-                $m = self::media( $aid );
-                if ( $m ) {
-                    $media[ $aid ] = $m;
-                }
+                $ids = array_merge( $ids, is_array( $d ) ? array_values( $d ) : [] );
             }
         }
+        $media = [];
+        foreach ( array_unique( array_filter( array_map( 'absint', $ids ) ) ) as $aid ) {
+            $m = self::media( $aid );
+            if ( $m ) {
+                $media[ $aid ] = $m;
+            }
+        }
+        return $media;
+    }
+
+    /** Le voci di ogni tassonomia del contenuto: id per le categorie, nomi per i tag. */
+    private static function termini_di( $post ) {
         $termini = [];
         foreach ( self::tassonomie( $post->post_type ) as $x ) {
             $v                   = wp_get_post_terms( $post->ID, $x->name, [ 'fields' => $x->hierarchical ? 'ids' : 'names' ] );
@@ -252,7 +287,54 @@ class Olobuild_Redazione {
                 return html_entity_decode( $n, ENT_QUOTES, 'UTF-8' );
             }, $v );
         }
-        $evid   = (int) get_post_thumbnail_id( $post );
+        return $termini;
+    }
+
+    /** Ciò che una versione tiene oltre a titolo, testo e riassunto: i campi del tipo, categorie e tag, la foto. */
+    private static function modulo_di( $post ) {
+        $t     = Olobuild_Tipi_Contenuto::del_tipo( $post->post_type );
+        $campi = [];
+        foreach ( $t ? $t['campi'] : [] as $c ) {
+            $v                     = get_post_meta( $post->ID, $c['chiave'], true );
+            $campi[ $c['chiave'] ] = is_scalar( $v ) ? (string) $v : '';
+        }
+        return [
+            'campi'    => $campi,
+            'termini'  => self::termini_di( $post ),
+            'immagine' => (int) get_post_thumbnail_id( $post ),
+        ];
+    }
+
+    /** Due moduli dicono la stessa cosa? Campi vuoti e ordine delle voci non contano. */
+    private static function stesso_modulo( $a, $b ) {
+        $norma = function ( $m ) {
+            $termini = [];
+            foreach ( (array) ( $m['termini'] ?? [] ) as $k => $v ) {
+                $v = array_map( 'strval', (array) $v );
+                sort( $v );
+                if ( $v ) {
+                    $termini[ $k ] = $v;
+                }
+            }
+            ksort( $termini );
+            $campi = array_filter( array_map( 'strval', (array) ( $m['campi'] ?? [] ) ), 'strlen' );
+            ksort( $campi );
+            return [ $campi, $termini, (int) ( $m['immagine'] ?? 0 ) ];
+        };
+        return $norma( (array) $a ) === $norma( (array) $b );
+    }
+
+    /** Il modulo salvato su una revisione o sulla copia, o null se non c'è (revisioni di prima della 1.4.860). */
+    private static function modulo_salvato( $revisione_id ) {
+        $m = json_decode( (string) get_metadata( 'post', (int) $revisione_id, self::META, true ), true );
+        return is_array( $m ) ? $m : null;
+    }
+
+    /** La scheda di un contenuto: tutto ciò che l'app mostra e modifica. */
+    private static function scheda( $post ) {
+        $motivo = self::motivo_sola_lettura( $post->post_content );
+        $modulo = self::modulo_di( $post );
+        $evid   = $modulo['immagine'];
         $blocco = wp_check_post_lock( $post->ID );
         $ts     = get_post_timestamp( $post );
         $mod    = get_post_timestamp( $post, 'modified' );
@@ -270,9 +352,9 @@ class Olobuild_Redazione {
             'data'                => $ts ? wp_date( 'Y-m-d\TH:i', $ts ) : '',
             'dataLeggibile'       => self::quando( $ts ),
             'immagine'            => $evid ? self::media( $evid ) : null,
-            'termini'             => (object) $termini,
-            'campi'               => (object) $campi,
-            'media'               => (object) $media,
+            'termini'             => (object) $modulo['termini'],
+            'campi'               => (object) self::campi_per_scheda( $post->post_type, $modulo['campi'] ),
+            'media'               => (object) self::media_di( $post->post_type, $modulo['campi'] ),
             'modificato'          => (int) $mod,
             'modificatoLeggibile' => self::quando( $mod ),
             'autore'              => self::nome_utente( $post->post_author ),
@@ -281,6 +363,61 @@ class Olobuild_Redazione {
             'anteprima'           => 'publish' === $post->post_status ? (string) get_permalink( $post ) : (string) get_preview_post_link( $post ),
             'wpModifica'          => (string) get_edit_post_link( $post->ID, 'raw' ),
             'puoCestinare'        => current_user_can( 'delete_post', $post->ID ),
+            'copia'               => self::copia_da_riprendere( $post, $motivo, $modulo ),
+            'versioni'            => self::conta_versioni( $post->ID ),
+        ];
+    }
+
+    /** Quante versioni (revisioni, senza le copie di sicurezza) ha il contenuto. */
+    private static function conta_versioni( $post_id ) {
+        global $wpdb;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- un conteggio: wp_get_post_revisions() leggerebbe tutti i testi
+        return (int) $wpdb->get_var( $wpdb->prepare(
+            "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_parent = %d AND post_type = 'revision' AND post_status = 'inherit' AND post_name NOT LIKE %s",
+            $post_id,
+            '%' . $wpdb->esc_like( '-autosave-v1' )
+        ) );
+    }
+
+    /**
+     * La copia di sicurezza di chi scrive, se è più recente del contenuto e dice qualcosa di diverso: la scheda propone di
+     * riprenderla (per esempio dopo una finestra chiusa senza salvare). Null se non c'è.
+     */
+    private static function copia_da_riprendere( $post, $motivo, $modulo ) {
+        $a = wp_get_post_autosave( $post->ID, get_current_user_id() );
+        if ( ! $a ) {
+            return null;
+        }
+        // Più vecchia del contenuto: qualcuno ha salvato dopo, la copia non vale più. Nello stesso secondo conta ancora (il
+        // confronto qui sotto scarta quella uguale al contenuto).
+        $ts = (int) get_post_timestamp( $a, 'modified' );
+        if ( $ts < (int) get_post_timestamp( $post, 'modified' ) ) {
+            return null;
+        }
+        $m       = self::modulo_salvato( $a->ID );
+        $diversa = normalize_whitespace( $a->post_title ) !== normalize_whitespace( $post->post_title )
+            || normalize_whitespace( $a->post_excerpt ) !== normalize_whitespace( $post->post_excerpt )
+            || ( '' === $motivo && normalize_whitespace( $a->post_content ) !== normalize_whitespace( $post->post_content ) )
+            || ( $m && ! self::stesso_modulo( $m, $modulo ) );
+        if ( ! $diversa ) {
+            return null;
+        }
+        return self::da_riprendere( $post, $a, $m, $motivo ) + [ 'alle' => self::quando( $ts ) ];
+    }
+
+    /** Ciò che serve alla scheda per riprendere una versione o la copia: titolo, testo, riassunto e il modulo. */
+    private static function da_riprendere( $post, $rev, $m, $motivo ) {
+        $ripristinabile = '' === $motivo && '' === self::motivo_sola_lettura( $rev->post_content );
+        if ( $m ) {
+            $m['campi'] = (object) self::campi_per_scheda( $post->post_type, (array) ( $m['campi'] ?? [] ) );
+        }
+        return [
+            'titolo'              => $rev->post_title,
+            'riassunto'           => $rev->post_excerpt,
+            'testo'               => $ripristinabile ? self::con_paragrafi( $rev->post_content ) : '',
+            'testoRipristinabile' => $ripristinabile,
+            'modulo'              => $m,
+            'media'               => (object) ( $m ? self::media_di( $post->post_type, (array) $m['campi'], (int) ( $m['immagine'] ?? 0 ) ) : [] ),
         ];
     }
 
@@ -321,6 +458,28 @@ class Olobuild_Redazione {
         register_rest_route( self::NS, '/redazione/(?P<id>\d+)/blocco', [
             'methods'             => 'POST',
             'callback'            => [ __CLASS__, 'rest_blocco' ],
+            'permission_callback' => [ __CLASS__, 'puo_contenuto' ],
+        ] );
+        register_rest_route( self::NS, '/redazione/(?P<id>\d+)/copia', [
+            [
+                'methods'             => 'POST',
+                'callback'            => [ __CLASS__, 'rest_copia' ],
+                'permission_callback' => [ __CLASS__, 'puo_contenuto' ],
+            ],
+            [
+                'methods'             => 'DELETE',
+                'callback'            => [ __CLASS__, 'rest_togli_copia' ],
+                'permission_callback' => [ __CLASS__, 'puo_contenuto' ],
+            ],
+        ] );
+        register_rest_route( self::NS, '/redazione/(?P<id>\d+)/versioni', [
+            'methods'             => 'GET',
+            'callback'            => [ __CLASS__, 'rest_versioni' ],
+            'permission_callback' => [ __CLASS__, 'puo_contenuto' ],
+        ] );
+        register_rest_route( self::NS, '/redazione/(?P<id>\d+)/versioni/(?P<versione>\d+)', [
+            'methods'             => 'GET',
+            'callback'            => [ __CLASS__, 'rest_versione' ],
             'permission_callback' => [ __CLASS__, 'puo_contenuto' ],
         ] );
         register_rest_route( self::NS, '/redazione/termini', [
@@ -501,16 +660,45 @@ class Olobuild_Redazione {
         }
 
         if ( $post ) {
+            // Prima campi, categorie e foto: la versione che WordPress salva con l'aggiornamento li fotografa già nuovi.
+            self::scrivi_resto( $post->ID, $tipo, $t, $r );
             $dati['ID'] = $post->ID;
             $id         = wp_update_post( wp_slash( $dati ), true );
         } else {
             $dati['post_author'] = get_current_user_id();
             $id                  = wp_insert_post( wp_slash( $dati ), true );
+            if ( ! is_wp_error( $id ) ) {
+                self::scrivi_resto( $id, $tipo, $t, $r );
+            }
         }
         if ( is_wp_error( $id ) ) {
             return $id;
         }
+        update_post_meta( $id, '_edit_last', get_current_user_id() );
+        wp_set_post_lock( $id );
+        // La copia di sicurezza di chi salva non serve più: ciò che teneva ora è il contenuto.
+        $copia = wp_get_post_autosave( $id, get_current_user_id() );
+        if ( $copia ) {
+            wp_delete_post_revision( $copia->ID );
+        }
 
+        // OLOsocial: le scelte del riquadro Social (fatte nella scheda di WordPress) partono anche quando il contenuto esce
+        // dalla Redazione; il riquadro, nelle richieste REST, lascia fare a chi salva.
+        if ( 'publish' === get_post_status( $id ) && 'publish' !== $prima && class_exists( 'Olo_Social_Riquadro' )
+            && method_exists( 'Olo_Social_Riquadro', 'condividi' ) && Olo_Social_Riquadro::attivo_per( $tipo )
+            && is_array( get_post_meta( $id, Olo_Social_Riquadro::META, true ) ) ) {
+            Olo_Social_Riquadro::condividi( $id );
+        }
+
+        $scheda = self::scheda( get_post( $id ) );
+        if ( 'pending' === $scheda['stato'] && in_array( $azione, [ 'pubblica', 'programma' ], true ) ) {
+            $scheda['avviso'] = __( 'Inviato in revisione: lo pubblica chi può farlo.', 'olobuild' );
+        }
+        return rest_ensure_response( $scheda );
+    }
+
+    /** Categorie e tag, foto in evidenza e campi del tipo che arrivano dalla scheda. */
+    private static function scrivi_resto( $id, $tipo, $t, WP_REST_Request $r ) {
         $termini = $r['termini'];
         $termini = is_array( $termini ) ? $termini : [];
         foreach ( self::tassonomie( $tipo ) as $x ) {
@@ -546,22 +734,276 @@ class Olobuild_Redazione {
         if ( $t && is_array( $r['campi'] ) ) {
             Olobuild_Tipi_Contenuto::salva_campi( $id, $t, $r['campi'] );
         }
-        update_post_meta( $id, '_edit_last', get_current_user_id() );
-        wp_set_post_lock( $id );
+    }
 
-        // OLOsocial: le scelte del riquadro Social (fatte nella scheda di WordPress) partono anche quando il contenuto esce
-        // dalla Redazione; il riquadro, nelle richieste REST, lascia fare a chi salva.
-        if ( 'publish' === get_post_status( $id ) && 'publish' !== $prima && class_exists( 'Olo_Social_Riquadro' )
-            && method_exists( 'Olo_Social_Riquadro', 'condividi' ) && Olo_Social_Riquadro::attivo_per( $tipo )
-            && is_array( get_post_meta( $id, Olo_Social_Riquadro::META, true ) ) ) {
-            Olo_Social_Riquadro::condividi( $id );
-        }
+    /* ─────────────────────────────────────────────
+     * Copia di sicurezza e anteprima
+     * ───────────────────────────────────────────── */
 
-        $scheda = self::scheda( get_post( $id ) );
-        if ( 'pending' === $scheda['stato'] && in_array( $azione, [ 'pubblica', 'programma' ], true ) ) {
-            $scheda['avviso'] = __( 'Inviato in revisione: lo pubblica chi può farlo.', 'olobuild' );
+    /** Il modulo che arriva dalla scheda, ripulito come lo sarebbe salvandolo. */
+    private static function modulo_da_richiesta( $post, WP_REST_Request $r ) {
+        $t     = Olobuild_Tipi_Contenuto::del_tipo( $post->post_type );
+        $in    = is_array( $r['campi'] ) ? $r['campi'] : [];
+        $campi = [];
+        foreach ( $t ? $t['campi'] : [] as $c ) {
+            $campi[ $c['chiave'] ] = Olobuild_Tipi_Contenuto::pulisci( $c, $in[ $c['chiave'] ] ?? '' );
         }
-        return rest_ensure_response( $scheda );
+        $tin     = is_array( $r['termini'] ) ? $r['termini'] : [];
+        $termini = [];
+        foreach ( self::tassonomie( $post->post_type ) as $x ) {
+            $v                   = (array) ( $tin[ $x->name ] ?? [] );
+            $termini[ $x->name ] = $x->hierarchical
+                ? array_values( array_filter( array_map( 'absint', $v ) ) )
+                : array_values( array_filter( array_map( function ( $n ) {
+                    return trim( sanitize_text_field( (string) $n ) );
+                }, $v ), 'strlen' ) );
+        }
+        $data = (string) $r['data'];
+        return [
+            'campi'    => $campi,
+            'termini'  => $termini,
+            'immagine' => absint( $r['immagine'] ),
+            'data'     => preg_match( '/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/', $data ) ? $data : '',
+        ];
+    }
+
+    /** L'anteprima di WordPress del contenuto, senza la barra di amministrazione (olo_rz: la mostra la Redazione). */
+    private static function link_anteprima( $post ) {
+        return (string) get_preview_post_link( $post, [
+            'preview_id'    => $post->ID,
+            'preview_nonce' => wp_create_nonce( 'post_preview_' . $post->ID ),
+            'olo_rz'        => 1,
+        ] );
+    }
+
+    /**
+     * Salva la copia di sicurezza di chi scrive: ciò che ha nella scheda, senza toccare il contenuto. È la revisione
+     * «autosave» di WordPress (una per utente) più il modulo in META. Serve all'anteprima e, sui contenuti già usciti, al
+     * salvataggio automatico.
+     */
+    public static function rest_copia( WP_REST_Request $r ) {
+        $post = get_post( (int) $r['id'] );
+        $uid  = get_current_user_id();
+        $base = get_post( $post->ID, ARRAY_A );
+
+        $base['post_title'] = (string) $r['titolo'];
+        if ( '' === self::motivo_sola_lettura( $post->post_content ) && $r->has_param( 'testo' ) ) {
+            $base['post_content'] = (string) $r['testo'];
+        }
+        if ( post_type_supports( $post->post_type, 'excerpt' ) ) {
+            $base['post_excerpt'] = (string) $r['riassunto'];
+        }
+        // Come wp_create_post_autosave(), che però toglie la copia quando titolo e testo sono quelli del contenuto: qui
+        // possono cambiare solo i campi.
+        $vecchia = wp_get_post_autosave( $post->ID, $uid );
+        if ( $vecchia ) {
+            $dati                = _wp_post_revision_data( $base, true );
+            $dati['ID']          = $vecchia->ID;
+            $dati['post_author'] = $uid;
+            $aid                 = wp_update_post( wp_slash( $dati ), true );
+        } else {
+            $aid = _wp_put_post_revision( $base, true );
+        }
+        if ( is_wp_error( $aid ) ) {
+            return $aid;
+        }
+        if ( ! $aid ) {
+            return new WP_Error( 'olo_redazione_copia', __( 'Non sono riuscito a salvare la copia di sicurezza.', 'olobuild' ), [ 'status' => 500 ] );
+        }
+        update_metadata( 'post', $aid, self::META, wp_slash( wp_json_encode( self::modulo_da_richiesta( $post, $r ) ) ) );
+        return rest_ensure_response( [
+            'alle'      => wp_date( get_option( 'time_format' ), (int) get_post_timestamp( $aid, 'modified' ) ),
+            'anteprima' => self::link_anteprima( $post ),
+        ] );
+    }
+
+    /** Toglie la copia di sicurezza di chi scrive; l'anteprima mostra allora il contenuto salvato. */
+    public static function rest_togli_copia( WP_REST_Request $r ) {
+        $post = get_post( (int) $r['id'] );
+        $a    = wp_get_post_autosave( $post->ID, get_current_user_id() );
+        if ( $a ) {
+            wp_delete_post_revision( $a->ID );
+        }
+        return rest_ensure_response( [ 'anteprima' => self::link_anteprima( $post ) ] );
+    }
+
+    /**
+     * Nell'anteprima di un contenuto (link di WordPress con preview_id e preview_nonce validi) i campi, le categorie e la
+     * foto vengono dalla copia di sicurezza di chi guarda, come il testo che WordPress prende da lì (_set_preview()).
+     */
+    public static function prepara_anteprima() {
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended -- il nonce dell'anteprima si verifica qui sotto
+        if ( empty( $_GET['preview_id'] ) || empty( $_GET['preview_nonce'] ) ) {
+            return;
+        }
+        $id    = absint( $_GET['preview_id'] );
+        $nonce = sanitize_text_field( wp_unslash( $_GET['preview_nonce'] ) );
+        $rz    = ! empty( $_GET['olo_rz'] );
+        // phpcs:enable WordPress.Security.NonceVerification.Recommended
+        if ( ! wp_verify_nonce( $nonce, 'post_preview_' . $id ) || ! current_user_can( 'edit_post', $id ) ) {
+            return;
+        }
+        if ( $rz ) {
+            add_filter( 'show_admin_bar', '__return_false' );
+        }
+        $a = wp_get_post_autosave( $id, get_current_user_id() );
+        $m = $a ? self::modulo_salvato( $a->ID ) : null;
+        if ( ! $m ) {
+            return;
+        }
+        self::$anteprima = [ 'id' => $id, 'modulo' => $m ];
+        add_filter( 'get_post_metadata', [ __CLASS__, 'meta_in_anteprima' ], 20, 4 );
+        add_filter( 'get_the_terms', [ __CLASS__, 'termini_in_anteprima' ], 20, 3 );
+    }
+
+    public static function meta_in_anteprima( $valore, $object_id, $chiave, $singolo ) {
+        if ( ! self::$anteprima || (int) $object_id !== self::$anteprima['id'] || '' === (string) $chiave ) {
+            return $valore;
+        }
+        $m = self::$anteprima['modulo'];
+        if ( '_thumbnail_id' === $chiave && isset( $m['immagine'] ) ) {
+            $v = $m['immagine'] ? (string) (int) $m['immagine'] : '';
+        } elseif ( is_array( $m['campi'] ?? null ) && array_key_exists( $chiave, $m['campi'] ) ) {
+            $v = (string) $m['campi'][ $chiave ];
+        } else {
+            return $valore;
+        }
+        // Come get_metadata(): un valore solo in un array; un campo vuoto è «nessun valore».
+        if ( '' === $v ) {
+            return $singolo ? [ '' ] : [];
+        }
+        return [ $v ];
+    }
+
+    public static function termini_in_anteprima( $termini, $post_id, $tassonomia ) {
+        if ( ! self::$anteprima || (int) $post_id !== self::$anteprima['id'] ) {
+            return $termini;
+        }
+        $scelti = self::$anteprima['modulo']['termini'] ?? null;
+        if ( ! is_array( $scelti ) || ! array_key_exists( $tassonomia, $scelti ) ) {
+            return $termini;
+        }
+        $a_cartelle = is_taxonomy_hierarchical( $tassonomia );
+        $out        = [];
+        foreach ( (array) $scelti[ $tassonomia ] as $v ) {
+            // I tag nuovi, che nascono salvando, nell'anteprima non ci sono ancora.
+            $x = $a_cartelle ? get_term( (int) $v, $tassonomia ) : get_term_by( 'name', (string) $v, $tassonomia );
+            if ( $x instanceof WP_Term ) {
+                $out[] = $x;
+            }
+        }
+        return $out ? $out : false;
+    }
+
+    /* ─────────────────────────────────────────────
+     * Versioni
+     * ───────────────────────────────────────────── */
+
+    /** Ogni versione salvata tiene la fotografia di campi, categorie e foto (le copie di sicurezza la scrivono da sé). */
+    public static function fotografa_revisione( $revisione_id, $post_id = 0 ) {
+        if ( wp_is_post_autosave( $revisione_id ) ) {
+            return;
+        }
+        $post = get_post( $post_id ? $post_id : wp_get_post_parent_id( $revisione_id ) );
+        if ( ! $post || ! Olobuild_Tipi_Contenuto::del_tipo( $post->post_type ) ) {
+            return;
+        }
+        update_metadata( 'post', $revisione_id, self::META, wp_slash( wp_json_encode( self::modulo_di( $post ) ) ) );
+    }
+
+    /**
+     * WordPress salva una versione solo se cambiano titolo, testo o riassunto: qui conta anche un campo, una categoria o
+     * la foto. L'ultima versione senza fotografia (di prima della 1.4.860) ne prende una alla prima occasione.
+     */
+    public static function revisione_cambiata( $cambiata, $ultima, $post ) {
+        if ( $cambiata || ! $post || ! Olobuild_Tipi_Contenuto::del_tipo( $post->post_type ) ) {
+            return $cambiata;
+        }
+        $prima = self::modulo_salvato( $ultima->ID );
+        return ! $prima || ! self::stesso_modulo( $prima, self::modulo_di( $post ) );
+    }
+
+    /** Un testo per il confronto: una riga per paragrafo, senza tag; le foto come [Foto]. */
+    private static function testo_piano( $html ) {
+        $html  = preg_replace( '#<!--.*?-->#s', '', (string) $html );
+        $html  = preg_replace( '#<img\b[^>]*>#i', "\n[" . __( 'Foto', 'olobuild' ) . "]\n", $html );
+        $html  = preg_replace( '#</(p|h[1-6]|li|blockquote|div|figure)>|<br\s*/?>#i', "\n", $html );
+        $righe = array_map( 'trim', explode( "\n", html_entity_decode( wp_strip_all_tags( $html ), ENT_QUOTES, 'UTF-8' ) ) );
+        return implode( "\n", array_filter( $righe, 'strlen' ) );
+    }
+
+    public static function rest_versioni( WP_REST_Request $r ) {
+        $post = get_post( (int) $r['id'] );
+        $out  = [];
+        foreach ( wp_get_post_revisions( $post->ID, [ 'posts_per_page' => 60 ] ) as $v ) {
+            if ( wp_is_post_autosave( $v ) ) {
+                continue;
+            }
+            // La prima è di solito il contenuto com'è adesso (WordPress ne salva una a ogni aggiornamento).
+            $adesso = ! $out
+                && normalize_whitespace( $v->post_title ) === normalize_whitespace( $post->post_title )
+                && normalize_whitespace( $v->post_content ) === normalize_whitespace( $post->post_content )
+                && normalize_whitespace( $v->post_excerpt ) === normalize_whitespace( $post->post_excerpt );
+            $out[]  = [
+                'id'     => $v->ID,
+                'quando' => self::quando( get_post_timestamp( $v, 'modified' ) ),
+                'autore' => self::nome_utente( $v->post_author ),
+                'titolo' => html_entity_decode( $v->post_title, ENT_QUOTES, 'UTF-8' ),
+                'adesso' => $adesso,
+            ];
+        }
+        return rest_ensure_response( $out );
+    }
+
+    /** Una versione: cosa cambia rispetto a ora (il testo riga per riga, l'elenco del resto) e ciò che serve a riprenderla. */
+    public static function rest_versione( WP_REST_Request $r ) {
+        $post = get_post( (int) $r['id'] );
+        $rid  = (int) $r['versione']; // wp_get_post_revision() vuole una variabile (per riferimento)
+        $v    = wp_get_post_revision( $rid );
+        if ( ! $v || (int) $v->post_parent !== $post->ID || wp_is_post_autosave( $v ) ) {
+            return new WP_Error( 'olo_redazione_versione', __( 'Questa versione non c\'è più.', 'olobuild' ), [ 'status' => 404 ] );
+        }
+        $motivo = self::motivo_sola_lettura( $post->post_content );
+        $m      = self::modulo_salvato( $v->ID );
+        $ora    = self::modulo_di( $post );
+        $cambia = [];
+        if ( normalize_whitespace( $v->post_title ) !== normalize_whitespace( $post->post_title ) ) {
+            $cambia[] = __( 'Titolo', 'olobuild' );
+        }
+        if ( post_type_supports( $post->post_type, 'excerpt' ) && normalize_whitespace( $v->post_excerpt ) !== normalize_whitespace( $post->post_excerpt ) ) {
+            $cambia[] = __( 'Riassunto', 'olobuild' );
+        }
+        if ( $m ) {
+            $t = Olobuild_Tipi_Contenuto::del_tipo( $post->post_type );
+            foreach ( $t ? $t['campi'] : [] as $c ) {
+                if ( (string) ( $m['campi'][ $c['chiave'] ] ?? '' ) !== (string) ( $ora['campi'][ $c['chiave'] ] ?? '' ) ) {
+                    $cambia[] = $c['etichetta'];
+                }
+            }
+            foreach ( self::tassonomie( $post->post_type ) as $x ) {
+                $a = array_map( 'strval', (array) ( $m['termini'][ $x->name ] ?? [] ) );
+                $b = array_map( 'strval', (array) ( $ora['termini'][ $x->name ] ?? [] ) );
+                sort( $a );
+                sort( $b );
+                if ( $a !== $b ) {
+                    $cambia[] = $x->labels->name;
+                }
+            }
+            if ( post_type_supports( $post->post_type, 'thumbnail' ) && (int) ( $m['immagine'] ?? 0 ) !== $ora['immagine'] ) {
+                $cambia[] = __( 'Immagine in evidenza', 'olobuild' );
+            }
+        }
+        // Il testo: a sinistra la versione, a destra adesso; vuoto = uguale.
+        $differenze = (string) wp_text_diff( self::testo_piano( $v->post_content ), self::testo_piano( $post->post_content ), [ 'show_split_view' => false ] );
+        return rest_ensure_response( self::da_riprendere( $post, $v, $m, $motivo ) + [
+            'id'          => $v->ID,
+            'quando'      => self::quando( get_post_timestamp( $v, 'modified' ) ),
+            'autore'      => self::nome_utente( $v->post_author ),
+            'cambia'      => $cambia,
+            'differenze'  => $differenze,
+            'fotografia'  => (bool) $m,
+            'wpConfronta' => admin_url( 'revision.php?revision=' . $v->ID ),
+        ] );
     }
 
     public static function rest_cestina( WP_REST_Request $r ) {

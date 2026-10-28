@@ -5,7 +5,7 @@
       <InfoTip v-if="campo.aiuto" :testo="campo.aiuto" :titolo="campo.etichetta" />
     </div>
 
-    <textarea v-if="campo.tipo === 'testo_lungo'" :id="id" rows="4" :value="modelValue" :disabled="spento" @input="manda($event.target.value)"></textarea>
+    <textarea v-if="campo.tipo === 'testo_lungo' || campo.tipo === 'testo_social'" :id="id" rows="4" :value="modelValue" :disabled="spento" @input="manda($event.target.value)"></textarea>
 
     <EditorTesto
       v-else-if="campo.tipo === 'formattato'"

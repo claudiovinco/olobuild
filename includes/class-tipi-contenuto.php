@@ -24,7 +24,10 @@ class Olobuild_Tipi_Contenuto {
     /** Impronta di tipi, indirizzi e tassonomie con cui sono state scritte le regole di riscrittura. */
     const OPZIONE_REGOLE = 'olobuild_tipi_regole';
 
-    const TIPI_CAMPO = [ 'testo', 'testo_lungo', 'formattato', 'numero', 'data', 'ora', 'link', 'scelta', 'sino', 'immagine', 'galleria', 'foto_social', 'allegati' ];
+    const TIPI_CAMPO = [ 'testo', 'testo_lungo', 'formattato', 'numero', 'data', 'ora', 'link', 'scelta', 'sino', 'immagine', 'galleria', 'foto_social', 'testo_social', 'allegati' ];
+
+    /** A quali reti va un campo «Testo per i social» (OLOsocial): tutte, Instagram, o Facebook, LinkedIn e le altre. */
+    const RETI_TESTO = [ 'tutte', 'instagram', 'altre' ];
 
     /** I formati delle foto per i social: proporzione e misura del ritaglio (mai ingrandito oltre l'originale). */
     const FORMATI_SOCIAL = [
@@ -57,6 +60,7 @@ class Olobuild_Tipi_Contenuto {
         add_filter( 'post_type_labels_post', [ __CLASS__, 'etichette_articoli' ] );
         // OLOsocial (riquadro Social della scheda): per ogni rete la foto inquadrata nel suo formato.
         add_filter( 'olo_social_foto_rete', [ __CLASS__, 'foto_per_rete' ], 10, 3 );
+        add_filter( 'olo_social_testo_rete', [ __CLASS__, 'testo_per_rete' ], 10, 3 );
         if ( is_admin() ) {
             add_action( 'add_meta_boxes', [ __CLASS__, 'riquadri' ], 10, 2 );
             add_action( 'save_post', [ __CLASS__, 'salva' ], 10, 2 );
@@ -189,6 +193,8 @@ class Olobuild_Tipi_Contenuto {
             }
             $prese[ $chiave ] = true;
             $larghezza        = (string) ( $c['larghezza'] ?? 'piena' );
+            $reti             = (string) ( $c['reti'] ?? 'tutte' );
+            $categorie        = array_slice( array_values( array_unique( array_filter( array_map( 'absint', (array) ( $c['categorie'] ?? [] ) ) ) ) ), 0, 50 );
             $formati          = array_values( array_intersect( array_map( 'strval', (array) ( $c['formati'] ?? array_keys( self::FORMATI_SOCIAL ) ) ), array_keys( self::FORMATI_SOCIAL ) ) );
             $opzioni          = array_slice( array_values( array_filter( array_map( 'trim', explode( "\n", str_replace( "\r", '', (string) ( $c['opzioni'] ?? '' ) ) ) ), 'strlen' ) ), 0, 50 );
             $out[]            = [
@@ -199,6 +205,9 @@ class Olobuild_Tipi_Contenuto {
                 'aiuto'     => self::testo( $c['aiuto'] ?? '', 300 ),
                 'opzioni'   => implode( "\n", array_map( 'sanitize_text_field', $opzioni ) ),
                 'formati'   => $formati ? $formati : array_keys( self::FORMATI_SOCIAL ),
+                'reti'      => in_array( $reti, self::RETI_TESTO, true ) ? $reti : 'tutte',
+                // Vuoto = in tutti i contenuti del tipo; altrimenti solo in quelli di queste categorie (o delle figlie).
+                'categorie' => $categorie,
             ];
         }
         return array_slice( $out, 0, 60 );
@@ -442,23 +451,33 @@ class Olobuild_Tipi_Contenuto {
         wp_nonce_field( 'olobuild_campi', 'olobuild_campi_nonce' );
         echo '<div class="olo-tc">';
         foreach ( $t['campi'] as $c ) {
-            self::campo_html( $c, get_post_meta( $post->ID, $c['chiave'], true ) );
+            self::campo_html( $c, get_post_meta( $post->ID, $c['chiave'], true ), $post );
         }
         echo '</div>';
     }
 
-    private static function campo_html( $c, $v ) {
+    private static function campo_html( $c, $v, $post = null ) {
         $k      = $c['chiave'];
         $id     = 'olo-tc-' . $k;
         $nome   = 'olo_tc[' . $k . ']';
         $classe = 'olo-tc-campo olo-tc--' . $c['larghezza'] . ' olo-tc--' . $c['tipo'];
         $v      = is_scalar( $v ) ? (string) $v : '';
-        echo '<div class="' . esc_attr( $classe ) . '">';
+        // «Solo nelle categorie»: assets/js/olo-tipi-categorie.js lo mostra e lo nasconde mentre si spuntano le categorie.
+        $tax    = ( $post && ! empty( $c['categorie'] ) ) ? self::tassonomia_categorie( $post->post_type ) : '';
+        $dati   = '';
+        if ( '' !== $tax ) {
+            $x     = get_taxonomy( $tax );
+            $dati  = ' data-tassonomia="' . esc_attr( $tax ) . '" data-rest="' . esc_attr( ( $x && $x->rest_base ) ? $x->rest_base : $tax ) . '"'
+                . ' data-categorie="' . esc_attr( implode( ',', self::con_figlie( $tax, $c['categorie'] ) ) ) . '"'
+                . ( self::campo_vale( $c, $post->ID ) ? '' : ' hidden' );
+        }
+        echo '<div class="' . esc_attr( $classe ) . '"' . $dati . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributi già protetti qui sopra
         if ( 'sino' !== $c['tipo'] ) {
             echo '<label class="olo-tc-etichetta" for="' . esc_attr( $id ) . '">' . esc_html( $c['etichetta'] ) . '</label>';
         }
         switch ( $c['tipo'] ) {
             case 'testo_lungo':
+            case 'testo_social':
                 echo '<textarea id="' . esc_attr( $id ) . '" name="' . esc_attr( $nome ) . '" rows="4">' . esc_textarea( $v ) . '</textarea>';
                 break;
             case 'formattato':
@@ -577,6 +596,7 @@ class Olobuild_Tipi_Contenuto {
         $v = is_scalar( $v ) ? (string) $v : '';
         switch ( $c['tipo'] ) {
             case 'testo_lungo':
+            case 'testo_social':
                 return sanitize_textarea_field( $v );
             case 'formattato':
                 return trim( wp_kses_post( $v ) );
@@ -628,6 +648,9 @@ class Olobuild_Tipi_Contenuto {
             return;
         }
         wp_enqueue_style( 'olobuild-tipi-contenuto', OLOBUILD_URL . 'assets/css/olo-tipi-contenuto.css', [], OLOBUILD_VERSION );
+        if ( array_filter( array_column( $t['campi'], 'categorie' ) ) ) {
+            wp_enqueue_script( 'olobuild-tipi-categorie', OLOBUILD_URL . 'assets/js/olo-tipi-categorie.js', [], OLOBUILD_VERSION, true );
+        }
         $media = array_intersect( array_column( $t['campi'], 'tipo' ), [ 'immagine', 'galleria', 'allegati', 'foto_social' ] );
         if ( ! $media ) {
             return;
@@ -690,6 +713,9 @@ class Olobuild_Tipi_Contenuto {
                 $c = $x;
             }
         }
+        if ( $c && ! self::campo_vale( $c, $post_id ) ) {
+            return '';
+        }
         $v = get_post_meta( $post_id, sanitize_key( $chiave ), true );
         if ( ! $c || '' === $v || null === $v ) {
             return is_scalar( $v ) ? (string) $v : '';
@@ -729,7 +755,7 @@ class Olobuild_Tipi_Contenuto {
     public static function foto_per_rete( $foto, $post_id, $rete ) {
         $t = self::del_tipo( get_post_type( (int) $post_id ) );
         foreach ( $t ? $t['campi'] : [] as $c ) {
-            if ( 'foto_social' !== $c['tipo'] ) {
+            if ( 'foto_social' !== $c['tipo'] || ! self::campo_vale( $c, $post_id ) ) {
                 continue;
             }
             $dati = json_decode( (string) get_post_meta( (int) $post_id, $c['chiave'], true ), true );
@@ -744,6 +770,120 @@ class Olobuild_Tipi_Contenuto {
             return (int) $dati['sorgente'];
         }
         return $foto;
+    }
+
+    /* ─────────────────────────────────────────────
+     * Campi «Solo nelle categorie»
+     * ───────────────────────────────────────────── */
+
+    /** La tassonomia delle categorie di un tipo ('category' per gli Articoli), '' se il tipo non ne ha. */
+    public static function tassonomia_categorie( $tipo ) {
+        if ( 'post' === $tipo ) {
+            return 'category';
+        }
+        $t = self::del_tipo( $tipo );
+        if ( ! $t || empty( $t['categorie'] ) ) {
+            return '';
+        }
+        $x = self::tassonomia( $t, 'categorie' );
+        return taxonomy_exists( $x ) ? $x : '';
+    }
+
+    /** Le categorie scelte con tutte le loro figlie: un campo per «Eventi» vale anche in «Eventi › Concerti». */
+    public static function con_figlie( $tassonomia, $ids ) {
+        $out = array_map( 'absint', (array) $ids );
+        foreach ( $out as $id ) {
+            $figlie = get_term_children( $id, $tassonomia );
+            if ( is_array( $figlie ) ) {
+                $out = array_merge( $out, array_map( 'intval', $figlie ) );
+            }
+        }
+        return array_values( array_unique( array_filter( $out ) ) );
+    }
+
+    /**
+     * Un campo con «Solo nelle categorie» vale per un contenuto solo se il contenuto sta in una di loro (o in una
+     * figlia): altrimenti la scheda non lo mostra e il sito, OLOsocial compreso, non lo usa. Il valore resta salvato e
+     * torna se il contenuto torna in quella categoria.
+     */
+    public static function campo_vale( $c, $post_id ) {
+        if ( empty( $c['categorie'] ) ) {
+            return true;
+        }
+        $tax = self::tassonomia_categorie( (string) get_post_type( (int) $post_id ) );
+        return '' === $tax || has_term( self::con_figlie( $tax, $c['categorie'] ), $tax, (int) $post_id );
+    }
+
+    /** Come campo_vale(), dalla chiave: un valore che non è un campo del tipo vale sempre. */
+    public static function chiave_vale( $chiave, $post_id ) {
+        $t = self::del_tipo( (string) get_post_type( (int) $post_id ) );
+        foreach ( $t ? $t['campi'] : [] as $c ) {
+            if ( $c['chiave'] === $chiave ) {
+                return self::campo_vale( $c, $post_id );
+            }
+        }
+        return true;
+    }
+
+    /** Per le Impostazioni: le categorie di ogni tipo, col percorso (Eventi › Concerti), da scegliere sui campi. */
+    private static function categorie_per_tipo() {
+        $out = [];
+        foreach ( array_merge( [ self::impostazioni()['articoli'] ], self::impostazioni()['tipi'] ) as $t ) {
+            $tax = self::tassonomia_categorie( $t['chiave'] );
+            if ( '' === $tax ) {
+                continue;
+            }
+            $termini = get_terms( [ 'taxonomy' => $tax, 'hide_empty' => false, 'number' => 500 ] );
+            if ( ! is_array( $termini ) || ! $termini ) {
+                continue;
+            }
+            $per_id = [];
+            foreach ( $termini as $x ) {
+                $per_id[ $x->term_id ] = $x;
+            }
+            $voci = [];
+            foreach ( $termini as $x ) {
+                $nomi  = [ $x->name ];
+                $padre = (int) $x->parent;
+                $giri  = 0;
+                while ( $padre && isset( $per_id[ $padre ] ) && $giri++ < 10 ) {
+                    array_unshift( $nomi, $per_id[ $padre ]->name );
+                    $padre = (int) $per_id[ $padre ]->parent;
+                }
+                $voci[] = [ 'value' => (int) $x->term_id, 'label' => html_entity_decode( implode( ' › ', $nomi ), ENT_QUOTES, 'UTF-8' ) ];
+            }
+            usort( $voci, function ( $a, $b ) {
+                return strcasecmp( $a['label'], $b['label'] );
+            } );
+            $out[ $t['chiave'] ] = $voci;
+        }
+        return $out;
+    }
+
+    /**
+     * OLOsocial: il testo di partenza di una rete dai campi «Testo per i social» del contenuto: prima quello scritto per
+     * quella rete (Instagram, o Facebook, LinkedIn e le altre), poi quello per tutte; vuoti, resta il modello di OLOsocial.
+     */
+    public static function testo_per_rete( $testo, $post_id, $rete ) {
+        $t      = self::del_tipo( get_post_type( (int) $post_id ) );
+        $gruppo = 'instagram' === $rete ? 'instagram' : 'altre';
+        $tutte  = '';
+        foreach ( $t ? $t['campi'] : [] as $c ) {
+            if ( 'testo_social' !== $c['tipo'] || ! self::campo_vale( $c, $post_id ) ) {
+                continue;
+            }
+            $v = trim( (string) get_post_meta( (int) $post_id, $c['chiave'], true ) );
+            if ( '' === $v ) {
+                continue;
+            }
+            if ( $gruppo === $c['reti'] ) {
+                return $v;
+            }
+            if ( 'tutte' === $c['reti'] && '' === $tutte ) {
+                $tutte = $v;
+            }
+        }
+        return '' !== $tutte ? $tutte : $testo;
     }
 
     /** I campi Allegati di tutti i tipi, per la tile Allegati › «Dal contenuto» (una voce per chiave). */
@@ -770,6 +910,9 @@ class Olobuild_Tipi_Contenuto {
     public static function allegati( $chiave, $post_id = 0 ) {
         $post_id = $post_id ? (int) $post_id : (int) get_the_ID();
         $out     = [];
+        if ( ! self::chiave_vale( sanitize_key( $chiave ), $post_id ) ) {
+            return $out;
+        }
         foreach ( array_filter( array_map( 'absint', explode( ',', (string) get_post_meta( $post_id, sanitize_key( $chiave ), true ) ) ) ) as $aid ) {
             if ( 'attachment' !== get_post_type( $aid ) ) {
                 continue;
@@ -832,6 +975,7 @@ class Olobuild_Tipi_Contenuto {
             'impostazioni' => self::impostazioni(),
             'icone'        => self::ICONE,
             'formati'      => $formati,
+            'categorie'    => (object) self::categorie_per_tipo(),
             'riservati'    => array_values( array_unique( array_merge( self::RISERVATI, $altri ) ) ),
             'conteggi'     => $conteggi,
         ] );

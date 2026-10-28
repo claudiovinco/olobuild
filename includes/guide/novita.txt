@@ -3,6 +3,23 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.863 - 2026-10-28 (campi per categoria)
+- Nei Tipi di contenuto (Articoli compresi) ogni campo può valere «Solo nelle categorie» scelte, sottocategorie comprese: un campo per «Eventi» vale anche in «Eventi › Concerti». Nella Redazione e nella scheda di WordPress (editor classico e a blocchi) il campo compare appena si spunta una di quelle categorie.
+- Fuori dalle sue categorie il campo non si usa nemmeno sul sito, nelle tile Allegati, nelle sorgenti dinamiche e nei testi e nelle foto per OLOsocial; il valore resta salvato e torna se il contenuto torna in quella categoria.
+- Impostazioni › Tipi di contenuto: i riquadri dei campi hanno di nuovo il loro bordo.
+
+## v1.4.862 - 2026-10-28 (Testo per i social)
+- Nuovo tipo di campo «Testo per i social» nei Tipi di contenuto (anche negli Articoli), per tutte le reti, per Instagram o per Facebook, LinkedIn e le altre: con OLOsocial è il testo di partenza del post su quella rete. Prima c'era solo nelle schede dei temi, che ora usano lo stesso campo (testi già scritti invariati).
+
+## v1.4.861 - 2026-10-28 (Redazione: campi da aggiungere)
+- Nella scheda della Redazione, un tipo senza campi in più (allegati, foto per i social, date…) lo dice nella zona «Dettagli», con «Aggiungi campi» che apre Impostazioni › Tipi di contenuto (per chi può cambiare le impostazioni).
+
+## v1.4.860 - 2026-10-28 (Redazione: anteprima, salvataggio automatico, versioni)
+- Anteprima nella Redazione: la pagina vera del sito, col suo template, con le modifiche non ancora salvate (testo, campi, categorie, foto), al telefono, sul tablet o al computer. Il contenuto sul sito non cambia.
+- Salvataggio automatico mezzo minuto dopo una modifica: bozze e contenuti in revisione si salvano da soli; quelli già pubblicati o programmati vanno in una copia di sicurezza, così il sito non cambia a metà lavoro. Se chiudi senza salvare, alla riapertura la scheda propone di riprendere la copia.
+- Versioni: l'elenco dei salvataggi con chi e quando, cosa cambia rispetto ad adesso (il testo riga per riga, poi campi, categorie e foto) e «Riprendi questa versione», che la rimette nella scheda da controllare e salvare. Dalla 1.4.860 ogni versione tiene anche campi, categorie e foto.
+- I testi di tile, Tipi di contenuto e schede dei temi scritti col nome di catalogo storico («olobuilder») ora si traducono anche sui siti in inglese, tedesco, spagnolo e francese: prima restavano in italiano.
+
 ## v1.4.859 - 2026-10-28 (la Redazione)
 - Nuova voce «Redazione» nel menu di WordPress, per chi scrive: una pagina sola con l'elenco dei contenuti (Articoli e Tipi di contenuto: Notizie, Comunicati…) e la scheda per scriverli. La vede chi può scrivere in almeno un tipo, anche col ruolo «Redazione» del tipo.
 - L'elenco: stati col loro numero (pubblicati, programmati, bozze, in revisione), ricerca, categoria, e chi sta scrivendo cosa.

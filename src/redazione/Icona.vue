@@ -50,6 +50,10 @@ const SET = {
   documento: ['M6 3h9l4 4v14H6z', 'M9 12h7', 'M9 16h7'],
   orologio: ['M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18z', 'M12 7v5l3 2'],
   menu: ['M5 12h.01', 'M12 12h.01', 'M19 12h.01'],
+  telefono: ['M8 3h8a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z', 'M11 18h2'],
+  tablet: ['M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z', 'M11 18h2'],
+  computer: ['M3 5h18v11H3z', 'M8 20h8', 'M12 16v4'],
+  aggiorna: ['M20 11a8 8 0 0 0-14.3-4.9L4 8', 'M4 4v4h4', 'M4 13a8 8 0 0 0 14.3 4.9L20 16', 'M20 20v-4h-4'],
 };
 
 const tracce = computed(() => SET[props.nome] || []);

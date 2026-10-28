@@ -46,7 +46,7 @@
  * La Redazione (Olobuild_Redazione): i tipi in alto, poi l'elenco o la scheda. L'indirizzo della pagina dice dove si è
  * (#notizia, #notizia/123, #notizia/nuovo): si ricarica, si torna indietro e si condivide un link restando lì.
  */
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import Icona from './Icona.vue';
 import Elenco from './Elenco.vue';
@@ -100,18 +100,27 @@ function vai(k, quale = '') {
   leggiIndirizzo();
 }
 
+// Dopo i salvataggi automatici l'elenco (nascosto) si ricarica al ritorno, non ogni mezzo minuto.
+let elencoVecchio = false;
+
 function chiudi(opzioni = {}) {
   vai(chiaveTipo.value);
   if (opzioni.ricarica && elenco.value) elenco.value.ricarica();
 }
 
-function salvato({ id, nuovo }) {
+watch(vista, (v) => {
+  if (v === 'elenco' && elencoVecchio && elenco.value) elenco.value.ricarica();
+  if (v === 'elenco') elencoVecchio = false;
+});
+
+function salvato({ id, nuovo, automatico }) {
   if (nuovo) {
     scriviIndirizzo(chiaveTipo.value, id, true);
     idAperto.value = id;
     ultimoHash = window.location.hash;
   }
-  if (elenco.value) elenco.value.ricarica();
+  if (automatico) elencoVecchio = true;
+  else if (elenco.value) elenco.value.ricarica();
 }
 
 function indietro() {

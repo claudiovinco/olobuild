@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://olotheme.com
  * Description: Professional holonic page builder for WordPress with a drag & drop tile grid system.
- * Version:     1.4.859
+ * Version:     1.4.863
  * Author:      Claudio Vinco
  * Author URI:  https://clod.eu
  * Text Domain: olobuild
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLOBUILD_VERSION', '1.4.859' );
+define( 'OLOBUILD_VERSION', '1.4.863' );
 define( 'OLOBUILD_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLOBUILD_URL', plugin_dir_url( __FILE__ ) );
 
@@ -171,6 +171,9 @@ function olobuild_convert_to_webp( $source_path, $quality = 82 ) {
 /**
  * Load plugin text domain for translations.
  * Force-load MO for all non-Italian locales (plugin source strings are in Italian).
+ * Lo stesso catalogo serve anche il dominio storico 'olobuilder' (tile, Tipi di contenuto, schede dei temi): i suoi testi
+ * sono nel catalogo, ma il dominio non veniva caricato e restavano in italiano. Priorità 1: prima che i Tipi di contenuto
+ * (init 9) registrino nomi ed etichette.
  */
 add_action( 'init', function() {
     $locale = determine_locale();
@@ -181,9 +184,10 @@ add_action( 'init', function() {
         }
         if ( file_exists( $mo ) ) {
             load_textdomain( 'olobuild', $mo );
+            load_textdomain( 'olobuilder', $mo );
         }
     }
-} );
+}, 1 );
 
 /**
  * Abilita upload di file JSON/Lottie e SVG nella Media Library.

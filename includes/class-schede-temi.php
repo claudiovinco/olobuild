@@ -34,7 +34,6 @@ class Olobuild_Schede_Temi {
         add_filter( 'post_type_link', [ __CLASS__, 'indirizzo' ], 10, 2 );
         add_filter( 'olo_social_tipi_riquadro', [ __CLASS__, 'nel_riquadro' ] );
         add_filter( 'olo_social_foto_rete', [ __CLASS__, 'foto' ], 20, 3 );
-        add_filter( 'olo_social_testo_rete', [ __CLASS__, 'testo' ], 10, 3 );
         add_action( 'admin_init', [ __CLASS__, 'sincronizza_se_serve' ] );
     }
 
@@ -66,8 +65,8 @@ class Olobuild_Schede_Temi {
                 [ 'chiave' => 'foto_social', 'etichetta' => __( 'Foto per i social', 'olobuilder' ), 'tipo' => 'foto_social' ],
                 [ 'chiave' => 'grafica_fb', 'etichetta' => __( 'Grafica per Facebook, LinkedIn e le altre reti', 'olobuilder' ), 'tipo' => 'immagine', 'larghezza' => 'meta',
                     'aiuto' => __( 'Se diversa da quella di Instagram: per esempio con l\'indirizzo del sito al posto di «link in bio».', 'olobuilder' ) ],
-                [ 'chiave' => 'testo_instagram', 'etichetta' => __( 'Testo per Instagram', 'olobuilder' ), 'tipo' => 'testo_lungo', 'larghezza' => 'meta' ],
-                [ 'chiave' => 'testo_social', 'etichetta' => __( 'Testo per Facebook, LinkedIn e le altre reti', 'olobuilder' ), 'tipo' => 'testo_lungo', 'larghezza' => 'meta',
+                [ 'chiave' => 'testo_instagram', 'etichetta' => __( 'Testo per Instagram', 'olobuilder' ), 'tipo' => 'testo_social', 'reti' => 'instagram', 'larghezza' => 'meta' ],
+                [ 'chiave' => 'testo_social', 'etichetta' => __( 'Testo per Facebook, LinkedIn e le altre reti', 'olobuilder' ), 'tipo' => 'testo_social', 'reti' => 'altre', 'larghezza' => 'meta',
                     'aiuto' => __( 'Il link al tema lo aggiunge OLOsocial.', 'olobuilder' ) ],
                 [ 'chiave' => 'allegati', 'etichetta' => __( 'Allegati', 'olobuilder' ), 'tipo' => 'allegati' ],
             ],
@@ -102,15 +101,6 @@ class Olobuild_Schede_Temi {
         }
         $fb = absint( get_post_meta( (int) $post_id, 'grafica_fb', true ) );
         return $fb ? $fb : $foto;
-    }
-
-    /** Il testo di partenza per rete: quello di Instagram, o quello delle altre reti, se scritti nella scheda. */
-    public static function testo( $testo, $post_id, $rete ) {
-        if ( self::TIPO !== get_post_type( (int) $post_id ) ) {
-            return $testo;
-        }
-        $t = trim( (string) get_post_meta( (int) $post_id, 'instagram' === $rete ? 'testo_instagram' : 'testo_social', true ) );
-        return '' !== $t ? $t : $testo;
     }
 
     /**

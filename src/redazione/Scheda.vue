@@ -11,6 +11,12 @@
       </span>
       <span class="orz-scheda-azioni">
         <button
+          type="button"
+          class="orz-btn orz-btn--quieto"
+          :disabled="caricamento || preparaAnteprima || nuovoVuoto"
+          @click="apriAnteprima"
+        ><Icona nome="occhio" /> {{ preparaAnteprima ? t('Preparo l\'anteprima…') : t('Anteprima') }}</button>
+        <button
           v-if="secondaria"
           type="button"
           class="orz-btn"
@@ -34,6 +40,13 @@
         <span class="orz-avviso-azioni">
           <button type="button" class="orz-btn orz-btn--piccolo" @click="salva(conflitto.azione, true)">{{ t('Salva comunque la mia versione') }}</button>
           <button type="button" class="orz-btn orz-btn--piccolo orz-btn--quieto" @click="ricarica">{{ t('Carica la loro versione') }}</button>
+        </span>
+      </div>
+      <div v-if="copiaDaScegliere" class="orz-avviso orz-avviso--attenzione" role="alert">
+        <span><Icona nome="orologio" :dim="14" /> {{ t('C\'è una copia salvata automaticamente il %s, più recente di questa versione.').replace('%s', s.copia.alle) }}</span>
+        <span class="orz-avviso-azioni">
+          <button type="button" class="orz-btn orz-btn--piccolo" @click="riprendiCopia">{{ t('Riprendila') }}</button>
+          <button type="button" class="orz-btn orz-btn--piccolo orz-btn--quieto" @click="scartaCopia">{{ t('Scartala') }}</button>
         </span>
       </div>
       <div v-if="spento && bloccatoDa" class="orz-avviso orz-avviso--attenzione" role="alert">
@@ -84,9 +97,10 @@
 
         <div v-if="tipo.campi.length" class="orz-blocco">
           <h2 class="orz-sezione">{{ t('Dettagli') }}</h2>
-          <div class="orz-campi">
+          <p v-if="!campiVisibili.length" class="orz-nota">{{ t('Nessun campo per le categorie scelte.') }}</p>
+          <div v-else class="orz-campi">
             <Campo
-              v-for="c in tipo.campi"
+              v-for="c in campiVisibili"
               :key="c.chiave"
               v-model="f.campi[c.chiave]"
               :campo="c"
@@ -95,6 +109,16 @@
               @media="aggiungiMedia"
             />
           </div>
+        </div>
+        <div v-else-if="tipo.configura" class="orz-blocco">
+          <div class="orz-etichetta">
+            <h2 class="orz-sezione">{{ t('Dettagli') }}</h2>
+            <InfoTip :titolo="t('Dettagli')" :testo="t('I campi in più (allegati, foto per i social, date, link…) si aggiungono per tipo in Impostazioni › Tipi di contenuto e valgono per tutti i suoi contenuti. Dopo averli salvati, ricarica questa pagina.')" />
+          </div>
+          <p class="orz-riga-info orz-riga-info--a-capo">
+            {{ t('%s non hanno campi in più.').replace('%s', tipo.nome) }}
+            <a class="orz-link" :href="tipo.configura" target="_blank" rel="noopener"><Icona nome="piu" :dim="14" /> {{ t('Aggiungi campi') }}</a>
+          </p>
         </div>
       </div>
 
@@ -114,8 +138,8 @@
           </fieldset>
           <p v-if="s && s.autore" class="orz-riga-info">{{ t('Autore') }}: {{ s.autore }}</p>
           <p v-if="!tipo.pubblica" class="orz-nota">{{ t('Puoi scrivere e inviare in revisione: lo pubblica chi può farlo.') }}</p>
-          <a v-if="s && s.anteprima" class="orz-link" :href="s.anteprima" target="_blank" rel="noopener" :title="modificata ? t('Mostra l\'ultima versione salvata') : ''">
-            <Icona nome="occhio" :dim="14" /> {{ uscito ? t('Vedi la pagina') : t('Anteprima') }}
+          <a v-if="uscito && s.link" class="orz-link" :href="s.link" target="_blank" rel="noopener">
+            <Icona nome="esterno" :dim="14" /> {{ t('Vedi la pagina') }}
           </a>
         </div>
 
@@ -144,6 +168,15 @@
           </span>
         </div>
 
+        <div v-if="s && tipo.versioni" class="orz-riquadro">
+          <h2 class="orz-sezione">{{ t('Versioni') }}</h2>
+          <p class="orz-riga-info">
+            <Icona nome="orologio" :dim="14" />
+            {{ !s.versioni ? t('Nessuna versione salvata') : (s.versioni === 1 ? t('1 versione salvata') : t('%s versioni salvate').replace('%s', s.versioni)) }}
+          </p>
+          <button v-if="s.versioni" type="button" class="orz-btn orz-btn--piccolo" @click="versioniAperte = true">{{ t('Guarda le versioni') }}</button>
+        </div>
+
         <div v-if="s" class="orz-riquadro orz-riquadro--altro">
           <a class="orz-link" :href="s.wpModifica" target="_blank" rel="noopener"><Icona nome="esterno" :dim="14" /> {{ t('Apri nella scheda di WordPress') }}</a>
           <button v-if="uscito" type="button" class="orz-link" :disabled="spento || occupato" @click="togliDallaPubblicazione">{{ t('Togli dalla pubblicazione') }}</button>
@@ -153,6 +186,16 @@
         </div>
       </aside>
     </div>
+
+    <Anteprima
+      v-if="anteprima"
+      :url="anteprima"
+      :nota="notaAnteprima"
+      :aggiornando="preparaAnteprima"
+      @aggiorna="apriAnteprima"
+      @chiudi="anteprima = ''"
+    />
+    <Versioni v-if="versioniAperte && s" :id="s.id" @chiudi="versioniAperte = false" @riprendi="riprendiVersione" />
   </section>
 </template>
 
@@ -161,6 +204,11 @@
  * La scheda di un contenuto: titolo, riassunto, testo, i campi del tipo; a destra pubblicazione, categorie e tag,
  * immagine in evidenza. Salva con Olobuild_Redazione::scrivi(); tiene il blocco di modifica di WordPress mentre è aperta
  * e non scrive sopra a chi ha salvato dopo (conflitto: si sceglie quale versione tenere).
+ *
+ * Salvataggio automatico, mezzo minuto dopo una modifica: bozze e contenuti in revisione si salvano davvero (restano
+ * bozze); i contenuti già usciti o programmati no, perché il sito cambierebbe a metà lavoro: le modifiche vanno nella
+ * copia di sicurezza (rest_copia), che la scheda propone di riprendere se la si chiude senza salvare. L'anteprima mostra
+ * la pagina vera con la copia; le versioni si riprendono nella scheda e si salvano come ogni modifica.
  */
 import { ref, reactive, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
@@ -169,6 +217,8 @@ import Icona from './Icona.vue';
 import EditorTesto from './EditorTesto.vue';
 import Campo from './Campo.vue';
 import Termini from './Termini.vue';
+import Anteprima from './Anteprima.vue';
+import Versioni from './Versioni.vue';
 import { chiama } from './api.js';
 import { scegli } from './media.js';
 import { nomeStato } from './stati.js';
@@ -193,7 +243,18 @@ const conflitto = ref(null);
 const bloccatoDa = ref('');
 const spento = ref(false);
 const salvatoAlle = ref('');
+const salvatoAuto = ref(false);
+const autoInCorso = ref(false);
+const erroreAuto = ref('');
+const copiaAlle = ref('');
+const copiaScelta = ref(false);
 const cambiaData = ref(false);
+const anteprima = ref('');
+const notaAnteprima = ref('');
+const preparaAnteprima = ref(false);
+const versioniAperte = ref(false);
+// L'ultima istantanea della scheda finita nella copia di sicurezza: la stessa non si ricopia.
+let copiato = '';
 
 function istantanea() {
   return JSON.stringify(f);
@@ -201,10 +262,34 @@ function istantanea() {
 const modificata = computed(() => originale.value !== '' && istantanea() !== originale.value);
 
 const uscito = computed(() => !!s.value && ['publish', 'private'].includes(s.value.stato));
+// Il contenuto appena creato (anche dal salvataggio automatico) prima che l'indirizzo della pagina lo dica.
+const idCorrente = computed(() => (s.value ? s.value.id : props.id));
+// Già sul sito o in uscita: il salvataggio automatico va nella copia di sicurezza, non nel contenuto.
+const daCopiare = computed(() => !!s.value && (uscito.value || s.value.stato === 'future'));
+const copiaDaScegliere = computed(() => !!(s.value && s.value.copia) && !copiaScelta.value);
+
+function testoScritto(html) {
+  const h = String(html || '');
+  return /<img/i.test(h) || h.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim() !== '';
+}
+const nuovoVuoto = computed(() => !s.value && !f.titolo.trim() && !testoScritto(f.testo));
+
+// «Solo nelle categorie» (Olobuild_Tipi_Contenuto::campo_vale): il campo si vede quando una sua categoria, o una figlia,
+// è spuntata. Il valore di un campo nascosto resta e si salva com'era.
+const campiVisibili = computed(() => {
+  const tax = props.tipo.tassonomiaCategorie;
+  const scelte = (tax && f.termini[tax]) || [];
+  return props.tipo.campi.filter((c) => !tax || !(c.tutteCategorie || []).length || scelte.some((id) => c.tutteCategorie.includes(Number(id))));
+});
 
 const notaSalvataggio = computed(() => {
-  if (modificata.value) return t('Modifiche non salvate');
-  if (salvatoAlle.value) return t('Salvato alle %s').replace('%s', salvatoAlle.value);
+  if (autoInCorso.value) return t('Salvataggio automatico…');
+  if (modificata.value) {
+    if (erroreAuto.value) return erroreAuto.value;
+    if (daCopiare.value && copiaAlle.value) return t('Modifiche non ancora sul sito: copia di sicurezza alle %s').replace('%s', copiaAlle.value);
+    return t('Modifiche non salvate');
+  }
+  if (salvatoAlle.value) return (salvatoAuto.value ? t('Salvato automaticamente alle %s') : t('Salvato alle %s')).replace('%s', salvatoAlle.value);
   return s.value && s.value.modificatoLeggibile ? t('Modificato il %s').replace('%s', s.value.modificatoLeggibile) : '';
 });
 
@@ -256,7 +341,70 @@ function applica(r) {
   Object.values(r.media || {}).forEach((m) => aggiungiMedia([m]));
   if (r.immagine) aggiungiMedia([r.immagine]);
   cambiaData.value = false;
+  copiaScelta.value = false;
+  copiaAlle.value = '';
+  copiato = '';
   originale.value = istantanea();
+}
+
+/**
+ * Dopo un salvataggio mentre si scriveva ancora (o automatico): la scheda resta com'è, con quello che si sta scrivendo;
+ * il sito ora ha la versione inviata.
+ */
+function tieni(r, inviato) {
+  s.value = r;
+  Object.values(r.media || {}).forEach((m) => aggiungiMedia([m]));
+  if (r.immagine) aggiungiMedia([r.immagine]);
+  copiaScelta.value = false;
+  copiaAlle.value = '';
+  copiato = '';
+  originale.value = inviato;
+}
+
+/** Rimette nella scheda una versione o la copia di sicurezza (non salva: lo fa chi scrive, quando ha controllato). */
+function riprendi(d) {
+  f.titolo = d.titolo || '';
+  if (d.testoRipristinabile && !(s.value && s.value.solaLettura)) f.testo = d.testo || '';
+  if (props.tipo.estratto) f.riassunto = d.riassunto || '';
+  aggiungiMedia(Object.values(d.media || {}));
+  const m = d.modulo;
+  if (!m) return;
+  const campi = {};
+  props.tipo.campi.forEach((c) => {
+    campi[c.chiave] = (m.campi && m.campi[c.chiave]) || '';
+  });
+  f.campi = campi;
+  const termini = {};
+  props.tipo.tassonomie.forEach((x) => {
+    termini[x.nome] = ((m.termini && m.termini[x.nome]) || []).slice();
+  });
+  f.termini = termini;
+  if (props.tipo.immagine) f.immagine = m.immagine || 0;
+  if (m.data && !uscito.value) {
+    f.quando = 'data';
+    f.data = m.data;
+  }
+}
+
+function riprendiCopia() {
+  riprendi(s.value.copia);
+  copiaScelta.value = true;
+  avvisa(t('Copia ripresa: controlla e salva.'));
+}
+
+async function scartaCopia() {
+  copiaScelta.value = true;
+  try {
+    await chiama('redazione/' + idCorrente.value + '/copia', { metodo: 'DELETE' });
+  } catch (e) {
+    // Resta sul sito finché non si salva: il prossimo salvataggio la toglie comunque.
+  }
+}
+
+function riprendiVersione(d) {
+  riprendi(d);
+  versioniAperte.value = false;
+  avvisa(t('Hai ripreso la versione del %s: controlla e salva.').replace('%s', d.quando));
 }
 
 function vuota() {
@@ -334,34 +482,150 @@ const MESSAGGI = {
 };
 
 let timerAvviso = null;
-async function salva(azione, forza = false) {
+function avvisa(testo) {
+  avviso.value = testo;
+  clearTimeout(timerAvviso);
+  timerAvviso = setTimeout(() => {
+    avviso.value = '';
+  }, 5000);
+}
+
+function oraBreve() {
+  return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+// Il salvataggio in corso, manuale o automatico: un pulsante premuto durante quello automatico aspetta che finisca.
+let inVolo = null;
+
+async function salva(azione, forza = false, automatico = false) {
   if (occupato.value || spento.value) return;
-  if (azione === 'programma' && f.quando === 'data' && !f.data) {
+  if (inVolo) {
+    if (automatico) return;
+    await inVolo;
+  }
+  if (!automatico && azione === 'programma' && f.quando === 'data' && !f.data) {
     errore.value = t('Scegli la data di uscita.');
     return;
   }
-  occupato.value = true;
-  errore.value = '';
-  conflitto.value = null;
+  const inviato = istantanea();
+  const nuovo = !idCorrente.value;
+  if (automatico) {
+    autoInCorso.value = true;
+  } else {
+    occupato.value = true;
+    errore.value = '';
+    conflitto.value = null;
+  }
+  let finito;
+  inVolo = new Promise((ok) => {
+    finito = ok;
+  });
   try {
-    const nuovo = !props.id;
-    const r = await chiama(nuovo ? 'redazione' : 'redazione/' + props.id, { metodo: 'POST', corpo: corpo(azione, forza) });
-    applica(r);
-    salvatoAlle.value = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    avviso.value = r.avviso || (r.stato === 'future' && azione !== 'bozza' ? t('Programmato.') : MESSAGGI[azione]());
-    clearTimeout(timerAvviso);
-    timerAvviso = setTimeout(() => {
-      avviso.value = '';
-    }, 5000);
-    emit('salvato', { id: r.id, nuovo });
+    const r = await chiama(nuovo ? 'redazione' : 'redazione/' + idCorrente.value, { metodo: 'POST', corpo: corpo(azione, forza) });
+    // Chi ha continuato a scrivere durante il salvataggio non perde le parole nuove.
+    if (!automatico && istantanea() === inviato) applica(r);
+    else tieni(r, inviato);
+    salvatoAlle.value = oraBreve();
+    salvatoAuto.value = automatico;
+    erroreAuto.value = '';
+    if (!automatico) avvisa(r.avviso || (r.stato === 'future' && azione !== 'bozza' ? t('Programmato.') : MESSAGGI[azione]()));
+    emit('salvato', { id: r.id, nuovo, automatico });
   } catch (e) {
     if (e.codice === 'olo_redazione_conflitto' || e.codice === 'olo_redazione_bloccato') {
       conflitto.value = { messaggio: e.message, azione };
+    } else if (automatico) {
+      erroreAuto.value = t('Salvataggio automatico non riuscito: riprovo tra poco.');
     } else {
       errore.value = e.message;
     }
   } finally {
     occupato.value = false;
+    autoInCorso.value = false;
+    inVolo = null;
+    finito();
+  }
+}
+
+/** La copia di sicurezza: ciò che c'è nella scheda, salvato a parte senza cambiare il contenuto. */
+async function faiCopia(automatico) {
+  const inviato = istantanea();
+  if (automatico) autoInCorso.value = true;
+  try {
+    const r = await chiama('redazione/' + idCorrente.value + '/copia', { metodo: 'POST', corpo: corpo('salva') });
+    copiato = inviato;
+    copiaAlle.value = r.alle;
+    erroreAuto.value = '';
+    return r;
+  } catch (e) {
+    if (!automatico) throw e;
+    erroreAuto.value = t('Salvataggio automatico non riuscito: riprovo tra poco.');
+    return null;
+  } finally {
+    if (automatico) autoInCorso.value = false;
+  }
+}
+
+// Il salvataggio automatico: mezzo minuto dopo la prima modifica non salvata.
+const ATTESA_AUTOMATICO = 30000;
+let timerAuto = null;
+
+function programmaAutomatico() {
+  if (timerAuto || !modificata.value) return;
+  timerAuto = setTimeout(salvaDaSolo, ATTESA_AUTOMATICO);
+}
+
+async function salvaDaSolo() {
+  timerAuto = null;
+  // Mai mentre un altro ha il controllo, c'è un conflitto da scegliere o una copia da riprendere (la sovrascriverebbe).
+  if (!modificata.value || spento.value || conflitto.value || copiaDaScegliere.value || caricamento.value) return;
+  if (occupato.value || inVolo || preparaAnteprima.value) {
+    programmaAutomatico();
+    return;
+  }
+  if (nuovoVuoto.value || (!idCorrente.value && !props.tipo.crea)) return;
+  const prima = istantanea();
+  if (daCopiare.value) {
+    if (prima !== copiato) await faiCopia(true);
+  } else {
+    await salva('salva', false, true);
+  }
+  // Non riuscito: si riprova al giro dopo anche senza nuove modifiche.
+  if (erroreAuto.value) programmaAutomatico();
+}
+
+watch(f, programmaAutomatico, { deep: true });
+
+/** Prepara la copia (con le modifiche) o la toglie (senza) e apre l'anteprima della pagina vera. */
+async function apriAnteprima() {
+  if (preparaAnteprima.value) return;
+  if (copiaDaScegliere.value) {
+    errore.value = t('Prima scegli se riprendere la copia salvata automaticamente.');
+    return;
+  }
+  errore.value = '';
+  preparaAnteprima.value = true;
+  try {
+    // Un contenuto nuovo diventa prima una bozza: l'anteprima ha bisogno di un indirizzo.
+    if (!idCorrente.value) {
+      await salva('salva');
+      if (!idCorrente.value) return;
+    }
+    if (inVolo) await inVolo;
+    const conModifiche = modificata.value;
+    let r;
+    if (conModifiche) {
+      r = await faiCopia(false);
+    } else {
+      r = await chiama('redazione/' + idCorrente.value + '/copia', { metodo: 'DELETE' });
+      copiato = '';
+      copiaAlle.value = '';
+    }
+    notaAnteprima.value = conModifiche ? t('Con le modifiche non ancora salvate') : '';
+    anteprima.value = r.anteprima + (r.anteprima.includes('?') ? '&' : '?') + 'olo_v=' + Date.now();
+  } catch (e) {
+    errore.value = e.message;
+  } finally {
+    preparaAnteprima.value = false;
   }
 }
 
@@ -450,6 +714,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   clearInterval(timerBlocco);
   clearTimeout(timerAvviso);
+  clearTimeout(timerAuto);
   window.removeEventListener('keydown', tasti);
   window.removeEventListener('beforeunload', primaDiUscire);
 });

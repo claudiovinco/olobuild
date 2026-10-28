@@ -1004,6 +1004,10 @@ class Olobuild_Dynamic_Content {
         if ( '' === $key || $post_id <= 0 ) {
             return [];
         }
+        // Un campo «Solo nelle categorie» fuori dalle sue categorie non si usa (Olobuild_Tipi_Contenuto::campo_vale()).
+        if ( class_exists( 'Olobuild_Tipi_Contenuto' ) && ! Olobuild_Tipi_Contenuto::chiave_vale( $key, $post_id ) ) {
+            return [];
+        }
         $ids = self::ids_from_value( get_post_meta( $post_id, $key, true ) );
         /**
          * Gli ID delle foto di un elenco, per chi le salva in un altro modo.
@@ -1092,6 +1096,9 @@ class Olobuild_Dynamic_Content {
         $key     = trim( (string) $key );
         $post_id = (int) $post_id;
         if ( '' === $key || $post_id <= 0 ) {
+            return [];
+        }
+        if ( class_exists( 'Olobuild_Tipi_Contenuto' ) && ! Olobuild_Tipi_Contenuto::chiave_vale( $key, $post_id ) ) {
             return [];
         }
         $raw = get_post_meta( $post_id, $key, true );

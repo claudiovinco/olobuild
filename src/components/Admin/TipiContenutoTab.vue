@@ -39,8 +39,8 @@
         </div>
       </div>
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Campi') }}</label><div class="hint">{{ t('Compaiono nella scheda di ogni articolo, nel riquadro Dettagli.') }}</div></div>
-        <div class="control-col"><CfgCampi :campi="articoli.campi" :formati="formati" /></div>
+        <div class="label-col"><label>{{ t('Campi') }}</label><div class="hint">{{ t('Compaiono nella scheda di ogni articolo, nel riquadro Dettagli.') }}</div><div v-if="(categorie.post || []).length" class="hint">{{ t('Un campo può valere solo in alcune categorie, sottocategorie comprese.') }}</div></div>
+        <div class="control-col"><CfgCampi :campi="articoli.campi" :formati="formati" :categorie="categorie.post || []" /></div>
       </div>
     </div>
   </div>
@@ -114,8 +114,8 @@
         </div>
       </div>
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Campi') }}</label><div class="hint">{{ t('Compaiono nella scheda di ogni contenuto, nel riquadro Dettagli, e nella Sorgente dinamica come «Campi dei contenuti».') }}</div></div>
-        <div class="control-col"><CfgCampi :campi="tipo.campi" :formati="formati" /></div>
+        <div class="label-col"><label>{{ t('Campi') }}</label><div class="hint">{{ t('Compaiono nella scheda di ogni contenuto, nel riquadro Dettagli, e nella Sorgente dinamica come «Campi dei contenuti».') }}</div><div v-if="(categorie[tipo.chiave] || []).length" class="hint">{{ t('Un campo può valere solo in alcune categorie, sottocategorie comprese.') }}</div></div>
+        <div class="control-col"><CfgCampi :campi="tipo.campi" :formati="formati" :categorie="categorie[tipo.chiave] || []" /></div>
       </div>
     </div>
   </div>
@@ -151,6 +151,8 @@ const articoli = ref({ nome: '', singolare: '', editor: 'blocchi', campi: [] });
 const tipi = ref([]);
 const icone = ref([]);
 const formati = ref([]);
+// Le categorie di ogni tipo (chiave => [{ value, label }]), per «Solo nelle categorie» sui campi.
+const categorie = ref({});
 const riservati = ref([]);
 const conteggi = ref({});
 let pronto = false;
@@ -204,6 +206,7 @@ function applica(data) {
   tipi.value = (imp.tipi || []).map((x) => ({ ...x, campi: conId(x.campi), _id: nuovoId(), _nuovo: false, _chiaveScritta: true, _indirizzoScritto: true }));
   icone.value = data?.icone || [];
   formati.value = data?.formati || [];
+  categorie.value = data?.categorie || {};
   riservati.value = data?.riservati || [];
   conteggi.value = data?.conteggi || {};
   nextTick(() => { pronto = true; });
