@@ -42,6 +42,8 @@ database/                   → schema.sql
 - **Due bundle**: oltre a `builder.js` esiste `assets/js/theme-picker.js` (selettore temi
   condiviso `src/theme-picker/`, usato dal modale del builder E dal setup wizard). Dopo
   modifiche al picker buildare ANCHE: `node node_modules/vite/bin/vite.js build --config vite.picker.config.js`
+- Altri bundle: le Impostazioni (`src/components/Admin/`) → `--config vite.config.admin.js`; la **Redazione**
+  (`src/redazione/`, menu «Redazione» di WordPress, `includes/class-redazione.php`) → `--config vite.config.redazione.js`.
 - Version bump obbligatorio dopo modifiche JS/CSS: `OLOBUILD_VERSION` in olobuild.php
 
 ## 🧭 Uniformità dei controlli (inspector)

@@ -46419,3 +46419,313 @@ msgstr "The site uses this template for the archives"
 #: src/components/Builder/BuilderToolbar.vue
 msgid "Usa questo template per gli archivi"
 msgstr "Use this template for the archives"
+
+#: src/redazione\CampoFotoSocial.vue
+msgid "Cambia la foto"
+msgstr "Change photo"
+
+#: src/redazione\EditorTesto.vue
+msgid "Formattazione del testo"
+msgstr "Text formatting"
+
+#: src/redazione\EditorTesto.vue
+msgid "Stile del paragrafo"
+msgstr "Paragraph style"
+
+#: src/redazione\EditorTesto.vue
+msgid "Elenco puntato"
+msgstr "Bulleted list"
+
+#: src/redazione\EditorTesto.vue
+msgid "Elenco numerato"
+msgstr "Numbered list"
+
+#: src/redazione\EditorTesto.vue
+msgid "Foto nel testo"
+msgstr "Photo in the text"
+
+#: src/redazione\EditorTesto.vue
+msgid "https://… oppure /pagina/"
+msgstr "https://… or /page/"
+
+#: src/redazione\EditorTesto.vue
+msgid "Indirizzo del link"
+msgstr "Link address"
+
+#: src/redazione\EditorTesto.vue
+msgid "Togli il link"
+msgstr "Remove link"
+
+#: src/redazione\EditorTesto.vue
+msgid "Scrivi qui…"
+msgstr "Write here…"
+
+#: src/redazione\Elenco.vue
+msgid "Cerca nei titoli e nei testi"
+msgstr "Search titles and text"
+
+#: src/redazione\Elenco.vue
+msgid "%s sta scrivendo"
+msgstr "%s is writing"
+
+#: src/redazione\Elenco.vue
+msgid "Vedi la pagina"
+msgstr "View page"
+
+#: src/redazione\Elenco.vue
+msgid "Mostra altri"
+msgstr "Show more"
+
+#: src/redazione\Elenco.vue
+msgid "Esce il %s"
+msgstr "Goes live on %s"
+
+#: src/redazione\Elenco.vue
+msgid "Modificato il %s"
+msgstr "Edited on %s"
+
+#: src/redazione\RedazioneApp.vue
+msgid "Redazione"
+msgstr "Newsroom"
+
+#: src/redazione\RedazioneApp.vue
+msgid "Non ci sono contenuti che puoi scrivere."
+msgstr "There's no content you can write."
+
+#: src/redazione\RedazioneApp.vue
+msgid "Le modifiche non salvate andranno perse. Uscire lo stesso?"
+msgstr "Unsaved changes will be lost. Leave anyway?"
+
+#: src/redazione\Scheda.vue
+msgid "Salva comunque la mia versione"
+msgstr "Save my version anyway"
+
+#: src/redazione\Scheda.vue
+msgid "Carica la loro versione"
+msgstr "Load their version"
+
+#: src/redazione\Scheda.vue
+msgid "%s sta modificando questo contenuto. Puoi leggerlo; per cambiarlo prendi il controllo."
+msgstr "%s is editing this content. You can read it; to change it, take over."
+
+#: src/redazione\Scheda.vue
+msgid "Prendi il controllo"
+msgstr "Take over"
+
+#: src/redazione\Scheda.vue
+msgid "Due righe che vanno negli elenchi del sito, nei risultati di ricerca e, se non scrivi un testo apposta, nei social. Vuoto: le prime parole del testo."
+msgstr "Two lines shown in the site's lists, in search results and, unless you write a dedicated text, on social media. Empty: the first words of the text."
+
+#: src/redazione\Scheda.vue
+msgid "Questo testo è scritto con l'editor a blocchi: si cambia lì. Qui puoi cambiare tutto il resto."
+msgstr "This text was written with the block editor: change it there. Here you can change everything else."
+
+#: src/redazione\Scheda.vue
+msgid "Questo testo ha parti che l'editor della Redazione perderebbe: si cambia nella scheda di WordPress. Qui puoi cambiare tutto il resto."
+msgstr "This text has parts the Newsroom editor would lose: change it in the WordPress editor screen. Here you can change everything else."
+
+#: src/redazione\Scheda.vue
+msgid "Apri nell'editor a blocchi"
+msgstr "Open in the block editor"
+
+#: src/redazione\Scheda.vue
+msgid "Apri nella scheda di WordPress"
+msgstr "Open in the WordPress editor"
+
+#: src/redazione\Scheda.vue
+msgid "Scrivi qui il testo…"
+msgstr "Write the text here…"
+
+#: src/redazione\Scheda.vue
+msgid "Pubblicazione"
+msgstr "Publishing"
+
+#: src/redazione\Scheda.vue
+msgid "Pubblicato il %s"
+msgstr "Published on %s"
+
+#: src/redazione\Scheda.vue
+msgid "Cambia la data"
+msgstr "Change date"
+
+#: src/redazione\Scheda.vue
+msgid "Data di pubblicazione"
+msgstr "Publish date"
+
+#: src/redazione\Scheda.vue
+msgid "Quando esce"
+msgstr "When it goes live"
+
+#: src/redazione\Scheda.vue
+msgid "Appena lo pubblichi"
+msgstr "As soon as you publish"
+
+#: src/redazione\Scheda.vue
+msgid "In una data"
+msgstr "On a date"
+
+#: src/redazione\Scheda.vue
+msgid "Data di uscita"
+msgstr "Release date"
+
+#: src/redazione\Scheda.vue
+msgid "Puoi scrivere e inviare in revisione: lo pubblica chi può farlo."
+msgstr "You can write and submit for review: someone who can publish will do it."
+
+#: src/redazione\Scheda.vue
+msgid "Mostra l'ultima versione salvata"
+msgstr "Shows the last saved version"
+
+#: src/redazione\Scheda.vue
+msgid "La foto del contenuto negli elenchi, nelle card e, se non ne scegli una per i social, nei post dei social."
+msgstr "The content's photo in lists, cards and, unless you choose one for social media, in social posts."
+
+#: src/redazione\Scheda.vue
+msgid "Togli dalla pubblicazione"
+msgstr "Unpublish"
+
+#: src/redazione\Scheda.vue
+msgid "Sposta nel cestino"
+msgstr "Move to trash"
+
+#: src/redazione\Scheda.vue
+msgid "Salvato alle %s"
+msgstr "Saved at %s"
+
+#: src/redazione\Scheda.vue
+msgid "Aggiorna"
+msgstr "Update"
+
+#: src/redazione\Scheda.vue
+msgid "Invia in revisione"
+msgstr "Submit for review"
+
+#: src/redazione\Scheda.vue
+msgid "Pubblica adesso"
+msgstr "Publish now"
+
+#: src/redazione\Scheda.vue
+msgid "Programma"
+msgstr "Schedule"
+
+#: src/redazione\Scheda.vue
+msgid "Torna in bozza"
+msgstr "Back to draft"
+
+#: src/redazione\Scheda.vue
+msgid "Salva bozza"
+msgstr "Save draft"
+
+#: src/redazione\Scheda.vue
+msgid "Le tue modifiche non salvate andranno perse. Continuare?"
+msgstr "Your unsaved changes will be lost. Continue?"
+
+#: src/redazione\Scheda.vue
+msgid "Salvato come bozza."
+msgstr "Saved as draft."
+
+#: src/redazione\Scheda.vue
+msgid "Inviato in revisione."
+msgstr "Submitted for review."
+
+#: src/redazione\Scheda.vue
+msgid "Salvato."
+msgstr "Saved."
+
+#: src/redazione\Scheda.vue
+msgid "Scegli la data di uscita."
+msgstr "Choose the release date."
+
+#: src/redazione\Scheda.vue
+msgid "Il contenuto sparisce dal sito e torna una bozza. Continuare?"
+msgstr "The content disappears from the site and becomes a draft again. Continue?"
+
+#: src/redazione\Scheda.vue
+msgid "Spostarlo nel cestino? Si può recuperare dal cestino di WordPress."
+msgstr "Move it to the trash? It can be restored from the WordPress trash."
+
+#: src/redazione\Termini.vue
+msgid "Nessuna corrispondenza"
+msgstr "No matches"
+
+#: src/redazione\Termini.vue
+msgid "Ancora nessuna voce"
+msgstr "No items yet"
+
+#: src/redazione\Termini.vue
+msgid "In cima"
+msgstr "Top level"
+
+#: src/redazione\Termini.vue
+msgid "Scrivi e premi Invio"
+msgstr "Type and press Enter"
+
+#: src/redazione\api.js
+msgid "Il sito non risponde: controlla la connessione e riprova."
+msgstr "The site isn't responding: check your connection and try again."
+
+#: src/redazione\api.js
+msgid "Qualcosa non è andato: riprova."
+msgstr "Something went wrong: try again."
+
+#: src/redazione\stati.js
+msgid "Pubblicati"
+msgstr "Published"
+
+#: src/redazione\stati.js
+msgid "Programmati"
+msgstr "Scheduled"
+
+#: src/redazione\stati.js
+msgid "Bozze"
+msgstr "Drafts"
+
+#: src/redazione\stati.js
+msgid "In revisione"
+msgstr "Pending review"
+
+#: src/redazione\stati.js
+msgid "Privati"
+msgstr "Private"
+
+#: src/redazione\stati.js
+msgid "Programmato"
+msgstr "Scheduled"
+
+#: src/redazione\stati.js
+msgid "Privato"
+msgstr "Private"
+
+#: includes/class-redazione.php
+msgid "Non puoi creare contenuti di questo tipo."
+msgstr "You can't create content of this type."
+
+#: includes/class-redazione.php
+#, php-format
+msgid "%s lo sta modificando adesso."
+msgstr "%s is editing it right now."
+
+#: includes/class-redazione.php
+#, php-format
+msgid "%1$s l'ha salvato il %2$s, dopo che l'hai aperto."
+msgstr "%1$s saved it on %2$s, after you opened it."
+
+#: includes/class-redazione.php
+msgid "Inviato in revisione: lo pubblica chi può farlo."
+msgstr "Submitted for review: someone who can publish will do it."
+
+#: includes/class-redazione.php
+msgid "Non puoi spostarlo nel cestino."
+msgstr "You can't move it to the trash."
+
+#: includes/class-redazione.php
+msgid "Non sono riuscito a spostarlo nel cestino."
+msgstr "It couldn't be moved to the trash."
+
+#: includes/class-redazione.php
+msgid "Non puoi aggiungere voci qui."
+msgstr "You can't add items here."
+
+#: includes/class-redazione.php
+msgid "Scrivi il nome."
+msgstr "Enter the name."

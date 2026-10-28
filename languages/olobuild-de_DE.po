@@ -47830,3 +47830,313 @@ msgstr "Die Website verwendet dieses Template für die Archive"
 #: src/components/Builder/BuilderToolbar.vue
 msgid "Usa questo template per gli archivi"
 msgstr "Dieses Template für die Archive verwenden"
+
+#: src/redazione\CampoFotoSocial.vue
+msgid "Cambia la foto"
+msgstr "Foto ändern"
+
+#: src/redazione\EditorTesto.vue
+msgid "Formattazione del testo"
+msgstr "Textformatierung"
+
+#: src/redazione\EditorTesto.vue
+msgid "Stile del paragrafo"
+msgstr "Absatzstil"
+
+#: src/redazione\EditorTesto.vue
+msgid "Elenco puntato"
+msgstr "Aufzählung"
+
+#: src/redazione\EditorTesto.vue
+msgid "Elenco numerato"
+msgstr "Nummerierte Liste"
+
+#: src/redazione\EditorTesto.vue
+msgid "Foto nel testo"
+msgstr "Foto im Text"
+
+#: src/redazione\EditorTesto.vue
+msgid "https://… oppure /pagina/"
+msgstr "https://… oder /seite/"
+
+#: src/redazione\EditorTesto.vue
+msgid "Indirizzo del link"
+msgstr "Linkadresse"
+
+#: src/redazione\EditorTesto.vue
+msgid "Togli il link"
+msgstr "Link entfernen"
+
+#: src/redazione\EditorTesto.vue
+msgid "Scrivi qui…"
+msgstr "Hier schreiben…"
+
+#: src/redazione\Elenco.vue
+msgid "Cerca nei titoli e nei testi"
+msgstr "In Titeln und Texten suchen"
+
+#: src/redazione\Elenco.vue
+msgid "%s sta scrivendo"
+msgstr "%s schreibt gerade"
+
+#: src/redazione\Elenco.vue
+msgid "Vedi la pagina"
+msgstr "Seite ansehen"
+
+#: src/redazione\Elenco.vue
+msgid "Mostra altri"
+msgstr "Mehr anzeigen"
+
+#: src/redazione\Elenco.vue
+msgid "Esce il %s"
+msgstr "Erscheint am %s"
+
+#: src/redazione\Elenco.vue
+msgid "Modificato il %s"
+msgstr "Bearbeitet am %s"
+
+#: src/redazione\RedazioneApp.vue
+msgid "Redazione"
+msgstr "Redaktion"
+
+#: src/redazione\RedazioneApp.vue
+msgid "Non ci sono contenuti che puoi scrivere."
+msgstr "Es gibt keine Inhalte, die du schreiben kannst."
+
+#: src/redazione\RedazioneApp.vue
+msgid "Le modifiche non salvate andranno perse. Uscire lo stesso?"
+msgstr "Nicht gespeicherte Änderungen gehen verloren. Trotzdem verlassen?"
+
+#: src/redazione\Scheda.vue
+msgid "Salva comunque la mia versione"
+msgstr "Meine Version trotzdem speichern"
+
+#: src/redazione\Scheda.vue
+msgid "Carica la loro versione"
+msgstr "Deren Version laden"
+
+#: src/redazione\Scheda.vue
+msgid "%s sta modificando questo contenuto. Puoi leggerlo; per cambiarlo prendi il controllo."
+msgstr "%s bearbeitet diesen Inhalt. Du kannst ihn lesen; um ihn zu ändern, übernimm die Bearbeitung."
+
+#: src/redazione\Scheda.vue
+msgid "Prendi il controllo"
+msgstr "Übernehmen"
+
+#: src/redazione\Scheda.vue
+msgid "Due righe che vanno negli elenchi del sito, nei risultati di ricerca e, se non scrivi un testo apposta, nei social. Vuoto: le prime parole del testo."
+msgstr "Zwei Zeilen für die Listen der Website, die Suchergebnisse und, wenn du keinen eigenen Text schreibst, die sozialen Netzwerke. Leer: die ersten Wörter des Textes."
+
+#: src/redazione\Scheda.vue
+msgid "Questo testo è scritto con l'editor a blocchi: si cambia lì. Qui puoi cambiare tutto il resto."
+msgstr "Dieser Text wurde mit dem Block-Editor geschrieben: Er wird dort geändert. Hier kannst du alles andere ändern."
+
+#: src/redazione\Scheda.vue
+msgid "Questo testo ha parti che l'editor della Redazione perderebbe: si cambia nella scheda di WordPress. Qui puoi cambiare tutto il resto."
+msgstr "Dieser Text enthält Teile, die der Editor der Redaktion verlieren würde: Er wird in der WordPress-Bearbeitungsseite geändert. Hier kannst du alles andere ändern."
+
+#: src/redazione\Scheda.vue
+msgid "Apri nell'editor a blocchi"
+msgstr "Im Block-Editor öffnen"
+
+#: src/redazione\Scheda.vue
+msgid "Apri nella scheda di WordPress"
+msgstr "In der WordPress-Bearbeitungsseite öffnen"
+
+#: src/redazione\Scheda.vue
+msgid "Scrivi qui il testo…"
+msgstr "Text hier schreiben…"
+
+#: src/redazione\Scheda.vue
+msgid "Pubblicazione"
+msgstr "Veröffentlichung"
+
+#: src/redazione\Scheda.vue
+msgid "Pubblicato il %s"
+msgstr "Veröffentlicht am %s"
+
+#: src/redazione\Scheda.vue
+msgid "Cambia la data"
+msgstr "Datum ändern"
+
+#: src/redazione\Scheda.vue
+msgid "Data di pubblicazione"
+msgstr "Veröffentlichungsdatum"
+
+#: src/redazione\Scheda.vue
+msgid "Quando esce"
+msgstr "Wann es erscheint"
+
+#: src/redazione\Scheda.vue
+msgid "Appena lo pubblichi"
+msgstr "Sobald du veröffentlichst"
+
+#: src/redazione\Scheda.vue
+msgid "In una data"
+msgstr "An einem Datum"
+
+#: src/redazione\Scheda.vue
+msgid "Data di uscita"
+msgstr "Erscheinungsdatum"
+
+#: src/redazione\Scheda.vue
+msgid "Puoi scrivere e inviare in revisione: lo pubblica chi può farlo."
+msgstr "Du kannst schreiben und zur Prüfung einreichen: Veröffentlichen kann es, wer die Berechtigung hat."
+
+#: src/redazione\Scheda.vue
+msgid "Mostra l'ultima versione salvata"
+msgstr "Zeigt die zuletzt gespeicherte Version"
+
+#: src/redazione\Scheda.vue
+msgid "La foto del contenuto negli elenchi, nelle card e, se non ne scegli una per i social, nei post dei social."
+msgstr "Das Foto des Inhalts in Listen, Karten und, wenn du keines für die sozialen Netzwerke wählst, in den Social-Media-Beiträgen."
+
+#: src/redazione\Scheda.vue
+msgid "Togli dalla pubblicazione"
+msgstr "Veröffentlichung zurückziehen"
+
+#: src/redazione\Scheda.vue
+msgid "Sposta nel cestino"
+msgstr "In den Papierkorb"
+
+#: src/redazione\Scheda.vue
+msgid "Salvato alle %s"
+msgstr "Gespeichert um %s"
+
+#: src/redazione\Scheda.vue
+msgid "Aggiorna"
+msgstr "Aktualisieren"
+
+#: src/redazione\Scheda.vue
+msgid "Invia in revisione"
+msgstr "Zur Prüfung einreichen"
+
+#: src/redazione\Scheda.vue
+msgid "Pubblica adesso"
+msgstr "Jetzt veröffentlichen"
+
+#: src/redazione\Scheda.vue
+msgid "Programma"
+msgstr "Planen"
+
+#: src/redazione\Scheda.vue
+msgid "Torna in bozza"
+msgstr "Zurück zum Entwurf"
+
+#: src/redazione\Scheda.vue
+msgid "Salva bozza"
+msgstr "Entwurf speichern"
+
+#: src/redazione\Scheda.vue
+msgid "Le tue modifiche non salvate andranno perse. Continuare?"
+msgstr "Deine nicht gespeicherten Änderungen gehen verloren. Fortfahren?"
+
+#: src/redazione\Scheda.vue
+msgid "Salvato come bozza."
+msgstr "Als Entwurf gespeichert."
+
+#: src/redazione\Scheda.vue
+msgid "Inviato in revisione."
+msgstr "Zur Prüfung eingereicht."
+
+#: src/redazione\Scheda.vue
+msgid "Salvato."
+msgstr "Gespeichert."
+
+#: src/redazione\Scheda.vue
+msgid "Scegli la data di uscita."
+msgstr "Wähle das Erscheinungsdatum."
+
+#: src/redazione\Scheda.vue
+msgid "Il contenuto sparisce dal sito e torna una bozza. Continuare?"
+msgstr "Der Inhalt verschwindet von der Website und wird wieder ein Entwurf. Fortfahren?"
+
+#: src/redazione\Scheda.vue
+msgid "Spostarlo nel cestino? Si può recuperare dal cestino di WordPress."
+msgstr "In den Papierkorb verschieben? Er kann aus dem WordPress-Papierkorb wiederhergestellt werden."
+
+#: src/redazione\Termini.vue
+msgid "Nessuna corrispondenza"
+msgstr "Keine Treffer"
+
+#: src/redazione\Termini.vue
+msgid "Ancora nessuna voce"
+msgstr "Noch keine Einträge"
+
+#: src/redazione\Termini.vue
+msgid "In cima"
+msgstr "Oberste Ebene"
+
+#: src/redazione\Termini.vue
+msgid "Scrivi e premi Invio"
+msgstr "Eingeben und Enter drücken"
+
+#: src/redazione\api.js
+msgid "Il sito non risponde: controlla la connessione e riprova."
+msgstr "Die Website antwortet nicht: Prüfe die Verbindung und versuche es erneut."
+
+#: src/redazione\api.js
+msgid "Qualcosa non è andato: riprova."
+msgstr "Etwas ist schiefgelaufen: Versuche es erneut."
+
+#: src/redazione\stati.js
+msgid "Pubblicati"
+msgstr "Veröffentlicht"
+
+#: src/redazione\stati.js
+msgid "Programmati"
+msgstr "Geplant"
+
+#: src/redazione\stati.js
+msgid "Bozze"
+msgstr "Entwürfe"
+
+#: src/redazione\stati.js
+msgid "In revisione"
+msgstr "Zur Prüfung"
+
+#: src/redazione\stati.js
+msgid "Privati"
+msgstr "Privat"
+
+#: src/redazione\stati.js
+msgid "Programmato"
+msgstr "Geplant"
+
+#: src/redazione\stati.js
+msgid "Privato"
+msgstr "Privat"
+
+#: includes/class-redazione.php
+msgid "Non puoi creare contenuti di questo tipo."
+msgstr "Du kannst keine Inhalte dieses Typs erstellen."
+
+#: includes/class-redazione.php
+#, php-format
+msgid "%s lo sta modificando adesso."
+msgstr "%s bearbeitet ihn gerade."
+
+#: includes/class-redazione.php
+#, php-format
+msgid "%1$s l'ha salvato il %2$s, dopo che l'hai aperto."
+msgstr "%1$s hat ihn am %2$s gespeichert, nachdem du ihn geöffnet hast."
+
+#: includes/class-redazione.php
+msgid "Inviato in revisione: lo pubblica chi può farlo."
+msgstr "Zur Prüfung eingereicht: Veröffentlichen kann es, wer die Berechtigung hat."
+
+#: includes/class-redazione.php
+msgid "Non puoi spostarlo nel cestino."
+msgstr "Du kannst ihn nicht in den Papierkorb verschieben."
+
+#: includes/class-redazione.php
+msgid "Non sono riuscito a spostarlo nel cestino."
+msgstr "Er konnte nicht in den Papierkorb verschoben werden."
+
+#: includes/class-redazione.php
+msgid "Non puoi aggiungere voci qui."
+msgstr "Du kannst hier keine Einträge hinzufügen."
+
+#: includes/class-redazione.php
+msgid "Scrivi il nome."
+msgstr "Gib den Namen ein."

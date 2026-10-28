@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://olotheme.com
  * Description: Professional holonic page builder for WordPress with a drag & drop tile grid system.
- * Version:     1.4.858
+ * Version:     1.4.859
  * Author:      Claudio Vinco
  * Author URI:  https://clod.eu
  * Text Domain: olobuild
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLOBUILD_VERSION', '1.4.858' );
+define( 'OLOBUILD_VERSION', '1.4.859' );
 define( 'OLOBUILD_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLOBUILD_URL', plugin_dir_url( __FILE__ ) );
 
@@ -520,6 +520,9 @@ Olobuild_Tipi_Contenuto::avvia();
 // Le schede dei temi della Vetrina (menu «Temi»), dove le demo dei temi sono accese.
 require_once OLOBUILD_PATH . 'includes/class-schede-temi.php';
 Olobuild_Schede_Temi::avvia();
+// La Redazione (menu «Redazione»): elenco e scheda per scrivere gli Articoli e i Tipi di contenuto.
+require_once OLOBUILD_PATH . 'includes/class-redazione.php';
+Olobuild_Redazione::avvia();
 require_once OLOBUILD_PATH . 'includes/class-archive-integration.php';
 require_once OLOBUILD_PATH . 'includes/class-404-integration.php';
 require_once OLOBUILD_PATH . 'includes/class-search-results-integration.php';

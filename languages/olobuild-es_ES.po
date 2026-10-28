@@ -47688,3 +47688,313 @@ msgstr "El sitio usa esta plantilla para los archivos"
 #: src/components/Builder/BuilderToolbar.vue
 msgid "Usa questo template per gli archivi"
 msgstr "Usar esta plantilla para los archivos"
+
+#: src/redazione\CampoFotoSocial.vue
+msgid "Cambia la foto"
+msgstr "Cambiar la foto"
+
+#: src/redazione\EditorTesto.vue
+msgid "Formattazione del testo"
+msgstr "Formato del texto"
+
+#: src/redazione\EditorTesto.vue
+msgid "Stile del paragrafo"
+msgstr "Estilo de párrafo"
+
+#: src/redazione\EditorTesto.vue
+msgid "Elenco puntato"
+msgstr "Lista con viñetas"
+
+#: src/redazione\EditorTesto.vue
+msgid "Elenco numerato"
+msgstr "Lista numerada"
+
+#: src/redazione\EditorTesto.vue
+msgid "Foto nel testo"
+msgstr "Foto en el texto"
+
+#: src/redazione\EditorTesto.vue
+msgid "https://… oppure /pagina/"
+msgstr "https://… o /pagina/"
+
+#: src/redazione\EditorTesto.vue
+msgid "Indirizzo del link"
+msgstr "Dirección del enlace"
+
+#: src/redazione\EditorTesto.vue
+msgid "Togli il link"
+msgstr "Quitar el enlace"
+
+#: src/redazione\EditorTesto.vue
+msgid "Scrivi qui…"
+msgstr "Escribe aquí…"
+
+#: src/redazione\Elenco.vue
+msgid "Cerca nei titoli e nei testi"
+msgstr "Buscar en títulos y textos"
+
+#: src/redazione\Elenco.vue
+msgid "%s sta scrivendo"
+msgstr "%s está escribiendo"
+
+#: src/redazione\Elenco.vue
+msgid "Vedi la pagina"
+msgstr "Ver la página"
+
+#: src/redazione\Elenco.vue
+msgid "Mostra altri"
+msgstr "Mostrar más"
+
+#: src/redazione\Elenco.vue
+msgid "Esce il %s"
+msgstr "Sale el %s"
+
+#: src/redazione\Elenco.vue
+msgid "Modificato il %s"
+msgstr "Modificado el %s"
+
+#: src/redazione\RedazioneApp.vue
+msgid "Redazione"
+msgstr "Redacción"
+
+#: src/redazione\RedazioneApp.vue
+msgid "Non ci sono contenuti che puoi scrivere."
+msgstr "No hay contenidos que puedas escribir."
+
+#: src/redazione\RedazioneApp.vue
+msgid "Le modifiche non salvate andranno perse. Uscire lo stesso?"
+msgstr "Los cambios no guardados se perderán. ¿Salir de todos modos?"
+
+#: src/redazione\Scheda.vue
+msgid "Salva comunque la mia versione"
+msgstr "Guardar mi versión de todos modos"
+
+#: src/redazione\Scheda.vue
+msgid "Carica la loro versione"
+msgstr "Cargar su versión"
+
+#: src/redazione\Scheda.vue
+msgid "%s sta modificando questo contenuto. Puoi leggerlo; per cambiarlo prendi il controllo."
+msgstr "%s está editando este contenido. Puedes leerlo; para cambiarlo, toma el control."
+
+#: src/redazione\Scheda.vue
+msgid "Prendi il controllo"
+msgstr "Tomar el control"
+
+#: src/redazione\Scheda.vue
+msgid "Due righe che vanno negli elenchi del sito, nei risultati di ricerca e, se non scrivi un testo apposta, nei social. Vuoto: le prime parole del testo."
+msgstr "Dos líneas que aparecen en los listados del sitio, en los resultados de búsqueda y, si no escribes un texto aparte, en las redes sociales. Vacío: las primeras palabras del texto."
+
+#: src/redazione\Scheda.vue
+msgid "Questo testo è scritto con l'editor a blocchi: si cambia lì. Qui puoi cambiare tutto il resto."
+msgstr "Este texto está escrito con el editor de bloques: se cambia allí. Aquí puedes cambiar todo lo demás."
+
+#: src/redazione\Scheda.vue
+msgid "Questo testo ha parti che l'editor della Redazione perderebbe: si cambia nella scheda di WordPress. Qui puoi cambiare tutto il resto."
+msgstr "Este texto tiene partes que el editor de la Redacción perdería: se cambia en la pantalla de edición de WordPress. Aquí puedes cambiar todo lo demás."
+
+#: src/redazione\Scheda.vue
+msgid "Apri nell'editor a blocchi"
+msgstr "Abrir en el editor de bloques"
+
+#: src/redazione\Scheda.vue
+msgid "Apri nella scheda di WordPress"
+msgstr "Abrir en la pantalla de WordPress"
+
+#: src/redazione\Scheda.vue
+msgid "Scrivi qui il testo…"
+msgstr "Escribe aquí el texto…"
+
+#: src/redazione\Scheda.vue
+msgid "Pubblicazione"
+msgstr "Publicación"
+
+#: src/redazione\Scheda.vue
+msgid "Pubblicato il %s"
+msgstr "Publicado el %s"
+
+#: src/redazione\Scheda.vue
+msgid "Cambia la data"
+msgstr "Cambiar la fecha"
+
+#: src/redazione\Scheda.vue
+msgid "Data di pubblicazione"
+msgstr "Fecha de publicación"
+
+#: src/redazione\Scheda.vue
+msgid "Quando esce"
+msgstr "Cuándo sale"
+
+#: src/redazione\Scheda.vue
+msgid "Appena lo pubblichi"
+msgstr "En cuanto lo publiques"
+
+#: src/redazione\Scheda.vue
+msgid "In una data"
+msgstr "En una fecha"
+
+#: src/redazione\Scheda.vue
+msgid "Data di uscita"
+msgstr "Fecha de salida"
+
+#: src/redazione\Scheda.vue
+msgid "Puoi scrivere e inviare in revisione: lo pubblica chi può farlo."
+msgstr "Puedes escribir y enviar a revisión: lo publica quien tiene permiso."
+
+#: src/redazione\Scheda.vue
+msgid "Mostra l'ultima versione salvata"
+msgstr "Muestra la última versión guardada"
+
+#: src/redazione\Scheda.vue
+msgid "La foto del contenuto negli elenchi, nelle card e, se non ne scegli una per i social, nei post dei social."
+msgstr "La foto del contenido en los listados, las tarjetas y, si no eliges una para las redes sociales, en las publicaciones sociales."
+
+#: src/redazione\Scheda.vue
+msgid "Togli dalla pubblicazione"
+msgstr "Retirar de la publicación"
+
+#: src/redazione\Scheda.vue
+msgid "Sposta nel cestino"
+msgstr "Mover a la papelera"
+
+#: src/redazione\Scheda.vue
+msgid "Salvato alle %s"
+msgstr "Guardado a las %s"
+
+#: src/redazione\Scheda.vue
+msgid "Aggiorna"
+msgstr "Actualizar"
+
+#: src/redazione\Scheda.vue
+msgid "Invia in revisione"
+msgstr "Enviar a revisión"
+
+#: src/redazione\Scheda.vue
+msgid "Pubblica adesso"
+msgstr "Publicar ahora"
+
+#: src/redazione\Scheda.vue
+msgid "Programma"
+msgstr "Programar"
+
+#: src/redazione\Scheda.vue
+msgid "Torna in bozza"
+msgstr "Volver a borrador"
+
+#: src/redazione\Scheda.vue
+msgid "Salva bozza"
+msgstr "Guardar borrador"
+
+#: src/redazione\Scheda.vue
+msgid "Le tue modifiche non salvate andranno perse. Continuare?"
+msgstr "Tus cambios no guardados se perderán. ¿Continuar?"
+
+#: src/redazione\Scheda.vue
+msgid "Salvato come bozza."
+msgstr "Guardado como borrador."
+
+#: src/redazione\Scheda.vue
+msgid "Inviato in revisione."
+msgstr "Enviado a revisión."
+
+#: src/redazione\Scheda.vue
+msgid "Salvato."
+msgstr "Guardado."
+
+#: src/redazione\Scheda.vue
+msgid "Scegli la data di uscita."
+msgstr "Elige la fecha de salida."
+
+#: src/redazione\Scheda.vue
+msgid "Il contenuto sparisce dal sito e torna una bozza. Continuare?"
+msgstr "El contenido desaparece del sitio y vuelve a ser un borrador. ¿Continuar?"
+
+#: src/redazione\Scheda.vue
+msgid "Spostarlo nel cestino? Si può recuperare dal cestino di WordPress."
+msgstr "¿Moverlo a la papelera? Se puede recuperar desde la papelera de WordPress."
+
+#: src/redazione\Termini.vue
+msgid "Nessuna corrispondenza"
+msgstr "Sin coincidencias"
+
+#: src/redazione\Termini.vue
+msgid "Ancora nessuna voce"
+msgstr "Aún no hay elementos"
+
+#: src/redazione\Termini.vue
+msgid "In cima"
+msgstr "Nivel superior"
+
+#: src/redazione\Termini.vue
+msgid "Scrivi e premi Invio"
+msgstr "Escribe y pulsa Intro"
+
+#: src/redazione\api.js
+msgid "Il sito non risponde: controlla la connessione e riprova."
+msgstr "El sitio no responde: comprueba la conexión y vuelve a intentarlo."
+
+#: src/redazione\api.js
+msgid "Qualcosa non è andato: riprova."
+msgstr "Algo salió mal: inténtalo de nuevo."
+
+#: src/redazione\stati.js
+msgid "Pubblicati"
+msgstr "Publicados"
+
+#: src/redazione\stati.js
+msgid "Programmati"
+msgstr "Programados"
+
+#: src/redazione\stati.js
+msgid "Bozze"
+msgstr "Borradores"
+
+#: src/redazione\stati.js
+msgid "In revisione"
+msgstr "En revisión"
+
+#: src/redazione\stati.js
+msgid "Privati"
+msgstr "Privados"
+
+#: src/redazione\stati.js
+msgid "Programmato"
+msgstr "Programado"
+
+#: src/redazione\stati.js
+msgid "Privato"
+msgstr "Privado"
+
+#: includes/class-redazione.php
+msgid "Non puoi creare contenuti di questo tipo."
+msgstr "No puedes crear contenidos de este tipo."
+
+#: includes/class-redazione.php
+#, php-format
+msgid "%s lo sta modificando adesso."
+msgstr "%s lo está editando ahora."
+
+#: includes/class-redazione.php
+#, php-format
+msgid "%1$s l'ha salvato il %2$s, dopo che l'hai aperto."
+msgstr "%1$s lo guardó el %2$s, después de que lo abrieras."
+
+#: includes/class-redazione.php
+msgid "Inviato in revisione: lo pubblica chi può farlo."
+msgstr "Enviado a revisión: lo publica quien tiene permiso."
+
+#: includes/class-redazione.php
+msgid "Non puoi spostarlo nel cestino."
+msgstr "No puedes moverlo a la papelera."
+
+#: includes/class-redazione.php
+msgid "Non sono riuscito a spostarlo nel cestino."
+msgstr "No se pudo mover a la papelera."
+
+#: includes/class-redazione.php
+msgid "Non puoi aggiungere voci qui."
+msgstr "No puedes añadir elementos aquí."
+
+#: includes/class-redazione.php
+msgid "Scrivi il nome."
+msgstr "Escribe el nombre."

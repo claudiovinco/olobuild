@@ -3,6 +3,14 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.859 - 2026-10-28 (la Redazione)
+- Nuova voce «Redazione» nel menu di WordPress, per chi scrive: una pagina sola con l'elenco dei contenuti (Articoli e Tipi di contenuto: Notizie, Comunicati…) e la scheda per scriverli. La vede chi può scrivere in almeno un tipo, anche col ruolo «Redazione» del tipo.
+- L'elenco: stati col loro numero (pubblicati, programmati, bozze, in revisione), ricerca, categoria, e chi sta scrivendo cosa.
+- La scheda: titolo, riassunto, testo con un editor semplice (titoli, grassetto, corsivo, link, elenchi, citazione, foto), i campi del tipo (allegati, foto per i social col ritaglio, gli altri), categorie e tag, immagine in evidenza; pubblica, programma, salva bozza o invia in revisione secondo i permessi.
+- Se un altro sta scrivendo lo stesso contenuto lo dice, e non si scrive sopra a chi ha salvato dopo: si sceglie quale versione tenere. Ctrl+S salva.
+- I testi scritti con l'editor a blocchi (o con HTML che l'editor perderebbe) restano intatti: si cambiano nella scheda di WordPress, che resta sempre a disposizione.
+- Impostazioni › Tipi di contenuto si apre e salva di nuovo: chiamava un indirizzo sbagliato.
+
 ## v1.4.858 - 2026-10-28 (template d'archivio)
 - Template › Nuovo Template › «Template archivio»: la pagina che elenca i contenuti di un tipo (il blog con le sue categorie e i tag, Notizie, Comunicati…), oppure «Tutti gli archivi» per i tipi che non ne hanno uno loro. Dentro si mette un Query Loop o una Griglia articoli con «Segui l'archivio aperto».
 - Il pulsante «Attiva» nella barra del builder, come per il Singolo: da lì il sito usa il template per quegli archivi. Le Regole di visualizzazione col contesto Archivi restano più forti (una categoria con la sua grafica). Il tipo si cambia in Impostazioni pagina › Layout › «Archivio di».

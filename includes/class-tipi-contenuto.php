@@ -5,7 +5,7 @@
  * rinominare e arricchire di campi.
  *
  * Le impostazioni stanno nell'opzione olobuild_tipi_contenuto (Impostazioni › Tipi di contenuto, rotta
- * olo/v1/tipi-contenuto). WordPress fa il resto: ruoli e permessi, revisioni, pubblicazione programmata, cestino.
+ * olobuild/v1/tipi-contenuto). WordPress fa il resto: ruoli e permessi, revisioni, pubblicazione programmata, cestino.
  * OLObuild li disegna coi template Singolo e Archivio e legge i campi con la fonte dinamica «Campi dei contenuti».
  *
  * I campi si salvano come metadati con la loro chiave così com'è (sottotitolo, allegati…): li leggono anche «Campo
@@ -555,8 +555,13 @@ class Olobuild_Tipi_Contenuto {
         if ( ! $t ) {
             return;
         }
-        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- ogni valore passa da pulisci() qui sotto
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- ogni valore passa da pulisci() in salva_campi()
         $in = ( isset( $_POST['olo_tc'] ) && is_array( $_POST['olo_tc'] ) ) ? wp_unslash( $_POST['olo_tc'] ) : [];
+        self::salva_campi( $post_id, $t, $in );
+    }
+
+    /** I campi del tipo $t con i valori di $in (chiave => valore), ripuliti; un campo vuoto si toglie. Anche dalla Redazione. */
+    public static function salva_campi( $post_id, $t, $in ) {
         foreach ( $t['campi'] as $c ) {
             $v = self::pulisci( $c, $in[ $c['chiave'] ] ?? '' );
             if ( '' === $v ) {
@@ -786,18 +791,21 @@ class Olobuild_Tipi_Contenuto {
      * ───────────────────────────────────────────── */
 
     public static function rotte() {
-        register_rest_route( 'olo/v1', '/tipi-contenuto', [
-            [
-                'methods'             => 'GET',
-                'callback'            => [ __CLASS__, 'rest_leggi' ],
-                'permission_callback' => [ __CLASS__, 'puo' ],
-            ],
-            [
-                'methods'             => 'POST',
-                'callback'            => [ __CLASS__, 'rest_salva' ],
-                'permission_callback' => [ __CLASS__, 'puo' ],
-            ],
-        ] );
+        // olobuild/v1 è quella che la scheda delle Impostazioni chiama (oloData.restUrl); olo/v1 resta per chi la usava.
+        foreach ( [ 'olobuild/v1', 'olo/v1' ] as $ns ) {
+            register_rest_route( $ns, '/tipi-contenuto', [
+                [
+                    'methods'             => 'GET',
+                    'callback'            => [ __CLASS__, 'rest_leggi' ],
+                    'permission_callback' => [ __CLASS__, 'puo' ],
+                ],
+                [
+                    'methods'             => 'POST',
+                    'callback'            => [ __CLASS__, 'rest_salva' ],
+                    'permission_callback' => [ __CLASS__, 'puo' ],
+                ],
+            ] );
+        }
     }
 
     public static function puo() {
