@@ -21,6 +21,7 @@ const TAB_META = {
 	tipografia:    { label: 'Tipografia',              group: 'Design' },
 	spaziature:    { label: 'Spaziature & layout',     group: 'Design' },
 	responsive:    { label: "Dispositivi dell'editor", group: 'Design' },
+	tipicontenuto: { label: 'Tipi di contenuto',       group: 'Contenuti & Template' },
 	tplconditions: { label: 'Assegnazione template',   group: 'Contenuti & Template' },
 	wootemplates:  { label: 'WooCommerce template',    group: 'Contenuti & Template' },
 	// Le tre schede traslocate nelle aree (restyling Fase 3) dichiarano la
@@ -45,6 +46,7 @@ const TAB_FILES = {
 	tipografia:    'TypographyTab.vue',
 	spaziature:    'SpaziatureTab.vue',
 	responsive:    'BreakpointsTab.vue',
+	tipicontenuto: 'TipiContenutoTab.vue',
 	tplconditions: 'TemplateConditionsTab.vue',
 	wootemplates:  'WooTemplatesTab.vue',
 	popups:        'PopupsTab.vue',

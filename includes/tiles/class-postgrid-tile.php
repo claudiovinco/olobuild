@@ -12,6 +12,7 @@ class Olobuild_PostGrid_Tile extends Olobuild_Tile_Base {
     protected $category = 'dynamic';
     protected $defaults = [
         'preset' => 'custom',
+        'segui_archivio'  => false,
         'post_type'       => 'post',
         'posts_per_page'  => '12',
         'orderby'         => 'date',
@@ -171,6 +172,28 @@ class Olobuild_PostGrid_Tile extends Olobuild_Tile_Base {
                     [ 'key' => sanitize_key( $mf_key ), 'value' => sanitize_text_field( $mf_val ) ],
                 ];
             }
+        }
+
+        // «Segui l'archivio aperto»: i contenuti della pagina d'archivio, col numero e l'ordine della griglia (la query
+        // principale prende lo stesso numero, così la tile Paginazione sfoglia le stesse pagine). Il filtro meta no.
+        if ( ! empty( $s['segui_archivio'] ) && class_exists( 'Olobuild_Archive_Integration' ) ) {
+            $archivio = Olobuild_Archive_Integration::argomenti_dell_archivio();
+            $ordine   = [ 'orderby' => $query_args['orderby'], 'order' => $query_args['order'] ];
+            if ( is_array( $archivio ) && isset( $archivio['s'] ) && 'date' === $ordine['orderby'] ) {
+                $ordine = []; // nella ricerca resta la pertinenza
+            }
+            $query_args = array_merge(
+                is_array( $archivio ) ? $archivio : [ 'post_type' => $post_type ],
+                [
+                    'posts_per_page'         => $query_args['posts_per_page'],
+                    'paged'                  => max( 1, absint( get_query_var( 'paged', 1 ) ) ),
+                    'post_status'            => 'publish',
+                    'no_found_rows'          => true,
+                    'update_post_meta_cache' => true,
+                    'update_post_term_cache' => true,
+                ],
+                $ordine
+            );
         }
 
         $query = new WP_Query( $query_args );

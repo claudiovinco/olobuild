@@ -439,7 +439,7 @@
       <FieldMultiPills
         v-else-if="field.type === 'multi_pills'"
         :modelValue="effectiveValue"
-        :options="field.options || []"
+        :options="field.optionsSource ? resolvedOptions : (field.options || [])"
         @update:modelValue="onFieldUpdate($event)"
       />
 
@@ -911,6 +911,24 @@ const resolvedOptions = computed(() => {
     }
     if (props.field.optionsSource === 'postTypes') {
       return (md.postTypes || []);
+    }
+    if (props.field.optionsSource === 'tipiContenuto') {
+      // Articoli, Pagine e ogni tipo pubblico del sito; «Custom Post Type» (lo slug scritto a mano) solo per chi l'ha già.
+      const tipi = [...(md.postTypes || [])];
+      tipi.splice(tipi.length ? 1 : 0, 0, { value: 'page', label: t('Pagine') });
+      if (props.modelValue === 'custom') tipi.push({ value: 'custom', label: t('Custom Post Type') });
+      return tipi;
+    }
+    if (props.field.optionsSource === 'campiAllegati') {
+      // I campi Allegati dei tipi di contenuto (Impostazioni › Tipi di contenuto); il primo è «Elenco qui sotto».
+      return md.campiAllegati?.length ? md.campiAllegati : [{ value: '', label: t('Elenco qui sotto') }];
+    }
+    if (props.field.optionsSource === 'termini') {
+      // I termini della tassonomia scelta in un altro campo della tile (optionsDependOn), sottocategorie rientrate.
+      const tilesStore = useTilesStore();
+      const tile = props.tileId ? tilesStore.getTileById(props.tileId) : null;
+      const tax = tile?.settings?.[props.field.optionsDependOn || 'taxonomy'] || '';
+      return tax ? ((md.termini || {})[tax] || []) : [];
     }
     if (props.field.optionsSource === 'taxonomies') {
       return (md.taxonomies || []);

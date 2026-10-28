@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://olotheme.com
  * Description: Professional holonic page builder for WordPress with a drag & drop tile grid system.
- * Version:     1.4.851
+ * Version:     1.4.857
  * Author:      Claudio Vinco
  * Author URI:  https://clod.eu
  * Text Domain: olobuild
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLOBUILD_VERSION', '1.4.851' );
+define( 'OLOBUILD_VERSION', '1.4.857' );
 define( 'OLOBUILD_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLOBUILD_URL', plugin_dir_url( __FILE__ ) );
 
@@ -514,6 +514,12 @@ require_once OLOBUILD_PATH . 'includes/class-single-integration.php';
 // Gli spettacoli del sito (menu «Spettacoli»): li leggono il Cartellone e la pagina di ogni spettacolo.
 require_once OLOBUILD_PATH . 'includes/class-spettacoli.php';
 Olobuild_Spettacoli::avvia();
+// I tipi di contenuto delle Impostazioni (Notizie, Comunicati…) e i campi in più degli Articoli.
+require_once OLOBUILD_PATH . 'includes/class-tipi-contenuto.php';
+Olobuild_Tipi_Contenuto::avvia();
+// Le schede dei temi della Vetrina (menu «Temi»), dove le demo dei temi sono accese.
+require_once OLOBUILD_PATH . 'includes/class-schede-temi.php';
+Olobuild_Schede_Temi::avvia();
 require_once OLOBUILD_PATH . 'includes/class-archive-integration.php';
 require_once OLOBUILD_PATH . 'includes/class-404-integration.php';
 require_once OLOBUILD_PATH . 'includes/class-search-results-integration.php';

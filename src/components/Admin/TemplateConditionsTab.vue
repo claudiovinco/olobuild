@@ -2,7 +2,7 @@
   <div class="cfg-page-head">
     <div>
       <h1>{{ t('Assegnazione template') }}</h1>
-      <p>{{ t('Regole che decidono quale Header / Footer mostrare in ogni contesto del sito. Quando più regole matchano, vince quella con priorità più bassa.') }}</p>
+      <p>{{ t('Regole che decidono quale template mostrare in ogni contesto: testata e piè di pagina, pagine singole e archivi (per esempio gli articoli di una categoria e il suo archivio, con le sottocategorie). Quando più regole valgono, vince quella con priorità più bassa.') }}</p>
     </div>
     <div class="head-actions">
       <button class="cfg-btn cfg-btn-primary" @click="addRule">
@@ -91,6 +91,10 @@
             <CfgSelect class="cond-type" :model-value="cond.type" :options="typeOptionsFor(cond.type)" @update:model-value="setCond(idx, ci, 'type', $event)" />
             <div class="cond-value">
               <CondValue :type="cond.type" :model-value="cond.value" @update:model-value="setCond(idx, ci, 'value', $event)" />
+              <label v-if="cond.type === 'category' && valoreMostrato('category', cond.value) !== ''" class="cond-figlie">
+                <input type="checkbox" :checked="!!cond.figlie" @change="setCond(idx, ci, 'figlie', $event.target.checked)" />
+                <span>{{ t('anche le sottocategorie') }}</span>
+              </label>
             </div>
             <button class="cfg-btn-icon cfg-btn-danger cond-del" @click="removeCond(idx, ci)" :title="t('Rimuovi')">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
@@ -193,6 +197,8 @@ function setCond(idx, ci, k, v) {
   if (k === 'type') {
     cond.value = '';
     if (v === 'entire_site') cond.negate = false;
+    if (v === 'category') cond.figlie = true;
+    else delete cond.figlie;
   }
   setDirty(true);
 }
@@ -221,7 +227,8 @@ function descriviCondizione(cond) {
   const s = SCELTE[tipo];
   if (s) {
     if (valoreMostrato(tipo, cond.value) === '') return s.any ? t(s.any) : `${nome} (${t('nessuno')})`;
-    return `${nome} ${etichettaValore(tipo, cond.value)}`;
+    const figlie = tipo === 'category' && cond.figlie ? ` ${t('e sottocategorie')}` : '';
+    return `${nome} ${etichettaValore(tipo, cond.value)}${figlie}`;
   }
   if (TIPI_SENZA_VALORE.has(tipo) || cond.value === '' || cond.value == null) return nome;
   return `${nome} ${cond.value}`;
@@ -287,6 +294,9 @@ onBeforeUnmount(() => {
   align-items: start;
 }
 .cond-value { min-width: 0; }
+.cond-figlie { display: flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 12px; cursor: pointer; }
+.cond-figlie input { margin: 0; }
+.cond-figlie input:focus-visible { outline: 2px solid var(--c-red); outline-offset: 2px; }
 .cond-mode button:focus-visible { outline: 2px solid var(--c-red); outline-offset: 2px; }
 .cond-mode button:disabled { opacity: .45; cursor: not-allowed; }
 @media (max-width: 720px) {

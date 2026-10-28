@@ -3,6 +3,40 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.857 - 2026-10-28 (Hero e contrasti di Lunga Posa)
+- Hero: «Colore eyebrow», il colore delle lettere del sopratitolo (vuoto: l'accento, come prima). Serve quando l'accento sopra una foto o un video non si legge.
+- Tema Lunga Posa: contrasti misurati su ogni testo, anche sopra foto e video e al passaggio del mouse. Il grigio dei testi tenui è più scuro, l'arancio dei testi piccoli (menu, numeri, dati di scatto) è un arancio bruciato, i pulsanti arancioni hanno le scritte nere; le sezioni che si svelano di lato e le fasce sopra i video hanno un velo più pieno; Ritratti e Boudoir si aprono sulla carta come le altre pagine, così la testata si legge.
+
+## v1.4.856 - 2026-10-28 (tema Lunga Posa)
+- Tema Lunga Posa: i servizi di uno studio fotografico completo. Pagine nuove Per le aziende (hotel, studi di architettura e ingegneria, agenzie immobiliari, comunicazione aziendale), Ritratti (il ritratto, di coppia, in attesa, book fotografici, beauty e glamour), Famiglia (ritratti di famiglia, newborn, i primi anni, il primo anno in quattro sedute) e Boudoir (boudoir e ritratti glamour, con la riservatezza scritta). Matrimoni ha i provini e le cerimonie in famiglia (battesimi, comunioni, anniversari); la home l'indice dei servizi; il menu «Servizi» con le sottovoci; il modulo sa già quale servizio chiedete.
+
+## v1.4.855 - 2026-10-28 (schede dei temi)
+- Dove c'è la Vetrina temi (le demo dei temi accese), ogni tema ha la sua scheda nel menu «Temi» della bacheca: una riga da mostrare sotto il nome nella Vetrina, «Non mostrarlo nella Vetrina», le foto e i testi per i social (Instagram e le altre reti), gli allegati. Nome, categoria, anteprime e demo restano quelli del tema.
+- Le schede nascono da sole a ogni versione: i temi nuovi arrivano come bozze. Pubblicare la scheda annuncia il tema; con OLOsocial, il riquadro Social la manda anche sui social, col testo e la grafica di ogni rete, e il link porta alla Vetrina col tema aperto.
+- Tipi di contenuto: i moduli di OLObuild possono aggiungere tipi «di sistema» (come le schede dei temi), con gli stessi campi e la stessa scheda, senza pagina propria.
+
+## v1.4.854 - 2026-10-28 (social)
+- Con OLOsocial: il riquadro Social nella scheda di un contenuto usa, per ogni rete, la foto per i social inquadrata nel suo formato (Instagram 4:5, Facebook, LinkedIn e le altre 1,91:1); senza quel campo, l'immagine in evidenza.
+
+## v1.4.853 - 2026-10-28 (tipi di contenuto)
+- Impostazioni › Tipi di contenuto: Notizie, Comunicati, Rubriche… ognuno con la sua voce nel menu di WordPress (nome, icona, posizione), il suo indirizzo (/notizie/), la pagina con tutti i contenuti, categorie con sottocategorie e tag propri. Chi scrive lo trova nella bacheca; OLObuild lo disegna coi template Singolo e Archivio.
+- Permessi: come gli articoli, oppure propri, col ruolo «Redazione Notizie» che scrive e pubblica solo lì (amministratori e redattori possono tutto).
+- Editor semplice: l'editor visuale classico con titoli, grassetto, corsivo, link, elenchi e citazioni, al posto di quello a blocchi. Vale per i tipi nuovi e, se lo scegli, per gli Articoli.
+- Gli Articoli si possono rinominare (Notizie e Notizia) in tutta la bacheca.
+- Campi nella scheda di ogni contenuto (riquadro Dettagli): testo, testo lungo, testo formattato, numero, data, ora, link, scelta da un elenco, sì/no, foto, galleria, allegati e foto per i social. Le foto per i social si inquadrano una per formato (link di Facebook e LinkedIn 1200×630, post di Instagram 1080×1350, quadrato, storie e reel 1080×1920) col ritaglio di WordPress: l'originale resta com'è.
+- Sorgente dinamica › «Campi dei contenuti»: i campi dei tipi nei titoli, nei testi e nelle foto delle tile (ogni formato delle foto per i social è una voce).
+- Tile nuova, Allegati: i file da scaricare con l'icona del tipo, il formato e il peso. Prende i file dal campo Allegati del contenuto (e senza file non compare) o li elenca a mano.
+- Regole di visualizzazione: la casella «anche le sottocategorie» della 1.4.852 arriva davvero nella scheda (mancava la build delle Impostazioni).
+
+## v1.4.852 - 2026-10-28 (archivi e notizie)
+- Query Loop, Griglia articoli e Sorgente dinamica: «Segui l'archivio aperto». Nel template di un archivio la tile mostra i contenuti della pagina che si sta guardando (la categoria con le sue sottocategorie, il tag, l'autore, il blog, la ricerca) e le pagine si sfogliano con la sua paginazione o con la tile Paginazione. Prima le categorie si scrivevano nella tile, e con un solo template ogni categoria mostrava le stesse notizie.
+- Il numero per pagina della tile vale anche per WordPress: le ultime pagine di un archivio non danno più «pagina non trovata» quando la tile ne mostra meno di Impostazioni › Lettura.
+- Regole di visualizzazione: i contesti «Pagine singole» e «Archivi» funzionano (prima valevano solo testata e piè di pagina). Un template per gli articoli di una categoria, uno per il suo archivio. Con una categoria scelta, «anche le sottocategorie» porta la regola sotto di lei: Sport vale anche per Calcio e Serie A.
+- Sugli archivi le condizioni «Tassonomia» guardano il termine aperto (prima il primo articolo dell'elenco) e «Autore» vale anche sulla pagina dell'autore.
+- Gli archivi delle categorie di un tipo di contenuto personalizzato prendono il template d'archivio di quel tipo (prima quello degli Articoli).
+- Query Loop: «Tipo contenuto» elenca i tipi del sito (articoli, pagine, prodotti, spettacoli…) invece di chiedere lo slug; i termini si scelgono cliccandoli, con le sottocategorie rientrate, invece di scriverli separati da virgola.
+- Query Loop › «Carica altro» e scorrimento infinito leggono solo tipi di contenuto che il sito mostra a tutti: prima, chiedendolo apposta, si leggevano anche titoli di tipi interni (codici sconto di WooCommerce, voci dei menu).
+
 ## v1.4.851 - 2026-10-27 (contrasti)
 - Timeline › Scaletta: coi temi scuri (Notte, Neon, Blu) date, titoli e testi sono chiari (prima restavano nei colori del sito e su fondo scuro non si leggevano); l'alone del pallino prende il fondo della tile, o niente se è trasparente (era un anello chiaro che copriva l'ultima cifra dell'anno); legge famiglia, misura e peso di anno, titolo e testo dalla Tipografia, e mostra l'etichetta della tappa con «Mostra etichetta».
 - Testo: «Colore dei link», per i link dentro un testo su fondo scuro (prima prendevano sempre il colore dei link del sito).

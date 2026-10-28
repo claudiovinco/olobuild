@@ -150,6 +150,8 @@ export function useDynamicContent() {
     if (!sourcesData.value) return [];
     const keys = ['current_post', 'site', 'custom_field', 'author'];
     if (sourcesData.value.acf?.available) keys.push('acf');
+    // I campi dei tipi di contenuto delle Impostazioni (Notizie › Sottotitolo…), quando ce n'è almeno uno.
+    if (sourcesData.value.campi?.fields?.length) keys.push('campi');
     return keys.map(key => ({
       value: key,
       label: sourcesData.value[key]?.label || key,

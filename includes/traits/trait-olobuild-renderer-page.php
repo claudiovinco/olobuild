@@ -29,12 +29,8 @@ trait Olobuild_Renderer_Page_Trait {
         );
 
         // Also check single CPT pages with active single templates
-        if ( ! $has_olo && is_singular() && ! is_page() ) {
-            $pt     = get_post_type();
-            $tpl_id = (int) get_option( "olobuild_active_single_{$pt}", 0 );
-            if ( $tpl_id ) {
-                $has_olo = true;
-            }
+        if ( ! $has_olo && is_singular() && ! is_page() && Olobuild_Single_Integration::template_id() ) {
+            $has_olo = true;
         }
 
         // Also check header/footer templates
@@ -48,21 +44,8 @@ trait Olobuild_Renderer_Page_Trait {
 
         // Also check archive/404/search templates
         if ( ! $has_olo ) {
-            if ( is_archive() || is_home() ) {
-                $pt = get_query_var( 'post_type' );
-                if ( is_array( $pt ) ) {
-                    $pt = reset( $pt );
-                }
-                if ( ! $pt ) {
-                    $pt = 'post';
-                }
-                $tpl_id = (int) get_option( "olobuild_active_archive_{$pt}", 0 );
-                if ( ! $tpl_id ) {
-                    $tpl_id = (int) get_option( 'olobuild_active_archive', 0 );
-                }
-                if ( $tpl_id ) {
-                    $has_olo = true;
-                }
+            if ( ( is_archive() || is_home() ) && Olobuild_Archive_Integration::template_id() ) {
+                $has_olo = true;
             }
             if ( is_404() ) {
                 $tpl_id = (int) get_option( 'olobuild_active_404', 0 );
@@ -95,12 +78,8 @@ trait Olobuild_Renderer_Page_Trait {
         );
 
         // Also enqueue for single CPT pages with active single templates
-        if ( ! $has_olo && is_singular() && ! is_page() ) {
-            $pt     = get_post_type();
-            $tpl_id = (int) get_option( "olobuild_active_single_{$pt}", 0 );
-            if ( $tpl_id ) {
-                $has_olo = true;
-            }
+        if ( ! $has_olo && is_singular() && ! is_page() && Olobuild_Single_Integration::template_id() ) {
+            $has_olo = true;
         }
 
         if ( $has_olo ) {

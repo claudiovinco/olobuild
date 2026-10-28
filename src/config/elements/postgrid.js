@@ -17,6 +17,7 @@ export default {
     bg: { type: 'none' },
     typography_preset: '',
     preset: 'custom',
+    segui_archivio: false,
     ...textEffectsDefaults,
     text_effect_target: 'title',
     post_type: 'post',
@@ -125,7 +126,10 @@ export default {
 
   fields: [
     { type: 'separator', label: t('Query') },
-    { key: 'post_type', label: t('Tipo di contenuto'), type: 'select', optionsSource: 'postTypes', options: [] },
+    { key: 'segui_archivio', label: t("Segui l'archivio aperto"), type: 'toggle',
+      description: t("Nel template di un archivio (una categoria con le sue sottocategorie, un tag, un autore, il blog, la ricerca) la griglia mostra i contenuti di quella pagina; con la tile Paginazione le pagine si sfogliano. Restano il numero, l'ordine e l'aspetto della griglia; tipo e filtro meta qui non servono. Nel builder, fuori da un archivio, si vedono gli ultimi contenuti.") },
+    { key: 'post_type', label: t('Tipo di contenuto'), type: 'select', optionsSource: 'postTypes', options: [],
+      condition: { field: 'segui_archivio', op: 'neq', value: true } },
     { key: 'posts_per_page', label: t('Max articoli'), type: 'range', min: 1, max: 50, step: 1 },
     { key: 'orderby', label: t('Ordina per'), type: 'select', options: [
       { value: 'date', label: t('Data') },
@@ -140,8 +144,9 @@ export default {
     ]},
     { key: 'meta_key', label: t('Meta key (per ordinamento meta)'), type: 'text',
       condition: { field: 'orderby', value: 'meta_value_num' } },
-    { key: 'meta_filter_key', label: t('Filtro meta — chiave'), type: 'select', optionsSource: 'metaKeys', optionsDependOn: 'post_type', options: [] },
-    { key: 'meta_filter_value', label: t('Filtro meta — valore'), type: 'select', optionsSource: 'metaValues', optionsDependOn: ['post_type', 'meta_filter_key'], options: [], condition: { field: 'meta_filter_key', not_in: [''] } },
+    { key: 'meta_filter_key', label: t('Filtro meta — chiave'), type: 'select', optionsSource: 'metaKeys', optionsDependOn: 'post_type', options: [],
+      condition: { field: 'segui_archivio', op: 'neq', value: true } },
+    { key: 'meta_filter_value', label: t('Filtro meta — valore'), type: 'select', optionsSource: 'metaValues', optionsDependOn: ['post_type', 'meta_filter_key'], options: [], condition: [{ field: 'meta_filter_key', not_in: [''] }, { field: 'segui_archivio', op: 'neq', value: true }] },
 
     { type: 'separator', label: t('Filtri tassonomia') },
     { key: 'taxonomy', label: t('Tassonomia'), type: 'select', optionsSource: 'taxonomies' },

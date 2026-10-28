@@ -27,12 +27,15 @@ NAME = 'Lunga Posa'
 HEX = {
     'primary': '#E04A21', 'primary_contrast': '#141414', 'secondary': '#8A8F86', 'secondary_contrast': '#141414',
     'accent': '#E04A21', 'dark': '#121212', 'light': '#F7F6F2', 'muted': '#E3E0D9', 'muted_contrast': '#161616',
-    'text': '#161616', 'text_muted': '#6E6C66', 'background': '#EEECE7', 'border': '#D3D0C8', 'link': '#161616',
+    'text': '#161616', 'text_muted': '#64625C', 'background': '#EEECE7', 'border': '#D3D0C8', 'link': '#161616',
 }
 
 INK = 'var(--olo-color-text)'
 TENUE = 'var(--olo-color-text-muted)'
 FUOCO = 'var(--olo-color-primary)'
+# L'arancio per i testi piccoli (hover, numeri, dati di scatto): il fuoco scurito con la grafite regge 4,5:1 sulla carta
+# e sulle fasce grigie; il fuoco pieno resta per i titoli grandi, le icone e i fondi (lì sopra si scrive in NERO).
+FUOCO_TESTO = 'color-mix(in srgb, var(--olo-color-primary) 70%, var(--olo-color-text))'
 FONDO = 'var(--olo-color-background)'
 CARTA = 'var(--olo-color-muted)'
 NERO = 'var(--olo-color-dark)'
@@ -53,6 +56,10 @@ LAVORI = '{{PAGINA:lavori}}'
 MATRIMONI = '{{PAGINA:matrimoni}}'
 EVENTI = '{{PAGINA:eventi}}'
 STUDIO = '{{PAGINA:studio}}'
+AZIENDE = '{{PAGINA:aziende}}'
+RITRATTI = '{{PAGINA:ritratti}}'
+FAMIGLIA = '{{PAGINA:famiglia}}'
+BOUDOIR = '{{PAGINA:boudoir}}'
 
 V_MURO = 'pexels-video-6963729'      # l'ombra di un ramo e della finestra sul muro grigio, il vaso sulla mensola
 V_BICCHIERE = 'pexels-video-4513055'  # la luce che attraversa un bicchiere d'acqua sul pavimento
@@ -80,6 +87,82 @@ PHOTOS = [
     'pexels-8533745.jpg', 'pexels-38816868.jpg', 'pexels-7119223.jpg', 'pexels-27584189.jpg', 'pexels-9566058.jpg',
     'pexels-8143699.jpg', 'pexels-7383644.jpg', 'pexels-37468396.jpg', 'pexels-14925658.jpg', 'pexels-32031528.jpg',
     'pexels-10141648.jpg', 'pexels-37034969.jpg',
+    # i servizi del 28 ottobre: aziende, ritratti, famiglia, boudoir, cerimonie e provini dei matrimoni
+    'pexels-7061335.jpg',
+    'pexels-8143672.jpg',
+    'pexels-8146158.jpg',
+    'pexels-7303782.jpg',
+    'pexels-7303775.jpg',
+    'pexels-6962847.jpg',
+    'pexels-35747340.jpg',
+    'pexels-36603625.jpg',
+    'pexels-36486477.jpg',
+    'pexels-39836703.jpg',
+    'pexels-33259929.jpg',
+    'pexels-39836722.jpg',
+    'pexels-37098141.jpg',
+    'pexels-12181160.jpg',
+    'pexels-29419658.jpg',
+    'pexels-17384783.jpg',
+    'pexels-19216762.jpg',
+    'pexels-20856131.jpg',
+    'pexels-7652128.jpg',
+    'pexels-3860617.jpg',
+    'pexels-7652130.jpg',
+    'pexels-8297155.jpg',
+    'pexels-36499768.jpg',
+    'pexels-8124401.jpg',
+    'pexels-30362729.jpg',
+    'pexels-6039107.jpg',
+    'pexels-25470069.jpg',
+    'pexels-7244030.jpg',
+    'pexels-15523449.jpg',
+    'pexels-15929707.jpg',
+    'pexels-7910793.jpg',
+    'pexels-7911306.jpg',
+    'pexels-35663243.jpg',
+    'pexels-34069062.jpg',
+    'pexels-23875387.jpg',
+    'pexels-8252016.jpg',
+    'pexels-30010820.jpg',
+    'pexels-30010818.jpg',
+    'pexels-8841432.jpg',
+    'pexels-5638732.jpg',
+    'pexels-5425036.jpg',
+    'pexels-9267508.jpg',
+    'pexels-12594181.jpg',
+    'pexels-40446142.jpg',
+    'pexels-38604997.jpg',
+    'pexels-4609048.jpg',
+    'pexels-8120950.jpg',
+    'pexels-13965216.jpg',
+    'pexels-10283404.jpg',
+    'pexels-34651408.jpg',
+    'pexels-10600032.jpg',
+    'pexels-3455996.jpg',
+    'pexels-12613919.jpg',
+    'pexels-29002731.jpg',
+    'pexels-34384314.jpg',
+    'pexels-28588970.jpg',
+    'pexels-1372177.jpg',
+    'pexels-6860127.jpg',
+    'pexels-15148504.jpg',
+    'pexels-9256869.jpg',
+    'pexels-29977336.jpg',
+    'pexels-37512797.jpg',
+    'pexels-6487425.jpg',
+    'pexels-9242466.jpg',
+    'pexels-27366104.jpg',
+    'pexels-18821003.jpg',
+    'pexels-17166034.jpg',
+    'pexels-40436533.jpg',
+    'pexels-14468108.jpg',
+    'pexels-14175330.jpg',
+    'pexels-4534869.jpg',
+    'pexels-27255537.jpg',
+    'pexels-8284464.jpg',
+    'pexels-31951839.jpg',
+    'pexels-12793812.jpg',
 ]
 VIDEOS = [V_MURO, V_BICCHIERE, V_VELO, V_TENDA, V_FOGLIE, V_LUCI]
 MEDIA = set(PHOTOS) | {v + '.mp4' for v in VIDEOS} | {v + '.jpg' for v in VIDEOS}
@@ -150,7 +233,7 @@ def text(t, html, size=16, color=TENUE, pad=(0, 0, 0, 0), align='left'):
 def button(t, label_, url, kind='filo', align='left', pad_top=14):
     """Pulsanti piatti ad angoli vivi: grafite pieno, col filo, o chiaro sopra le foto."""
     if kind == 'pieno':
-        o = {'bg_color': INK, 'text_color': FONDO, 'hover_bg_color': FUOCO, 'hover_text_color': INK}
+        o = {'bg_color': INK, 'text_color': FONDO, 'hover_bg_color': FUOCO, 'hover_text_color': NERO}
     elif kind == 'chiaro':
         o = {'bg_color': 'transparent', 'text_color': CHIARO, 'hover_bg_color': CHIARO, 'hover_text_color': NERO,
              'shadow': 'custom', 'shadow_h': 0, 'shadow_v': 0, 'shadow_blur': 0, 'shadow_spread': 1,
@@ -214,7 +297,7 @@ def faq(t, pairs, prefix):
     return t.classic('accordion', {
         'panels': panels, 'default_open': 'none', 'icon_style': 'plus', 'icon_position': 'right',
         'header_bg': '', 'header_bg_active': '', 'content_bg': '',
-        'header_text_color': INK, 'header_text_color_active': FUOCO, 'header_font_size': 22, 'header_font_weight': '300',
+        'header_text_color': INK, 'header_text_color_active': FUOCO_TESTO, 'header_font_size': 22, 'header_font_weight': '300',
         'header_font_family': 'var(--olo-font-family-heading)', 'content_font_size': 15, 'text_color': TENUE,
         'icon_color': INK, 'faq_schema': True,
         'border': {'top': 0, 'right': 0, 'bottom': 1, 'left': 0, 'linked': False, 'style': 'solid', 'color': FILO},
@@ -244,7 +327,9 @@ def pannello(t, foto, eyebrow, titolo, testo, link_t, link_u, effetto='reveal-h'
     return t.section([
         t.row([t.col(blocco, wm='1-2', ws='1-1'), t.col([], wm='1-2', ws='1-1')], layout='custom', custom='52,48',
               valign='end', anim=None),
-    ], bg=photo_bg(foto, overlay=overlay, position=pos), padding='large', width='large', sticky_effect=effetto,
+    # Il velo non scende sotto il 60%: con meno, sulle foto chiare (finestre, muri bianchi) le scritte restavano fra 2,8 e
+    # 4,4:1, misurate sui pixel il 28 ottobre 2026.
+    ], bg=photo_bg(foto, overlay=max(overlay, 60), position=pos), padding='large', width='large', sticky_effect=effetto,
         sticky_h_align='bottom', html_id=html_id, style={'padding_top': 140, 'padding_bottom': 80})
 
 
@@ -260,11 +345,11 @@ def build_header():
         'logo_mark': '', 'logo_mark_bg': '', 'logo_dot': True, 'logo_position': 'left',
         'layout': 'right', 'header_mode': 'overlay', 'sticky': True,
         'sticky_bg': mix(FONDO, 90), 'sticky_shadow': False, 'sticky_shrink': True, 'sticky_show_on_up': True,
-        'nav_bg': 'transparent', 'text_color': INK, 'hover_color': FUOCO, 'active_color': FUOCO,
+        'nav_bg': 'transparent', 'text_color': INK, 'hover_color': FUOCO_TESTO, 'active_color': FUOCO_TESTO,
         'font_size': '11', 'font_weight': '500', 'text_transform': 'uppercase', 'letter_spacing': '2', 'item_gap': '34',
         'bar_width': 'wide', 'nav_height': '84', 'bar_padding': {'top': 10, 'right': 40, 'bottom': 10, 'left': 40},
         'hover_effect': 'underline', 'hover_effect_color': FUOCO,
-        'button_mode': 'last', 'btn_bg': INK, 'btn_color': FONDO, 'btn_hover_bg': FUOCO, 'btn_hover_color': INK,
+        'button_mode': 'last', 'btn_bg': INK, 'btn_color': FONDO, 'btn_hover_bg': FUOCO, 'btn_hover_color': NERO,
         'btn_radius': SQ, 'btn_padding': {'top': 12, 'right': 20, 'bottom': 12, 'left': 20}, 'btn_hover_effect': 'none',
         'btn_font_weight': '500', 'btn_transform': 'uppercase', 'btn_letter_spacing': '2',
         'social_in_navbar': False, 'social_in_mobile': True, 'social_facebook': '', 'social_instagram': '#',
@@ -274,6 +359,8 @@ def build_header():
         'mobile_link_font': 'heading', 'mobile_link_weight': '300',
         'border': {'top': 0, 'right': 0, 'bottom': 1, 'left': 0, 'style': 'solid', 'color': mix(INK, 12)},
         'topbar_enabled': False, 'nav_phone': '', 'nav_phone_url': '',
+        # La tendina dei Servizi: carta chiara e angoli vivi, come il resto del tema.
+        'panel_bg': CHIARO, 'panel_radius': SQ, 'panel_shadow': 'sm',
     })
     return [t.section([t.one([mm], anim=None)], width='fullbleed', padding='remove-vertical')]
 
@@ -285,16 +372,18 @@ def build_header():
 def build_footer():
     t = Tpl(ID, 'footer')
     brand = headline(t, 'LUNGA POSA', size=150, color=INK, tag='p', pad_bottom=0, weight='300', spacing=-4)
-    claim = text(t, '<p>Adele Rivoira, fotografa. Architettura, interni e oggetti per chi progetta; dodici matrimoni l’anno; '
-                    'le feste della città quando chiamano.</p>', size=15, color=TENUE, pad=(0, 0, 18, 0))
+    claim = text(t, '<p>Adele Rivoira, fotografa. Architettura, interni e oggetti per chi progetta; hotel e aziende; dodici '
+                    'matrimoni l’anno, ritratti e famiglie; le feste della città quando chiamano.</p>', size=15, color=TENUE,
+                 pad=(0, 0, 18, 0))
 
     def nav(items):
         return t.classic('nav', {'items': [{'title': a, 'content': b, 'tag': ''} for a, b in items], 'style': 'default',
                                  'direction': 'vertical', 'alignment': 'left', 'text_transform': 'none', 'letter_spacing': '0',
-                                 'link_color': INK, 'link_hover_color': FUOCO, 'active_color': FUOCO,
+                                 'link_color': INK, 'link_hover_color': FUOCO_TESTO, 'active_color': FUOCO_TESTO,
                                  'font_size': '15', 'font_weight': '400', 'tile_padding': {'top': 3, 'right': 0, 'bottom': 3, 'left': 0}})
-    pagine = nav([('I lavori', LAVORI), ('Matrimoni', MATRIMONI), ('Eventi in città', EVENTI), ('Lo studio', STUDIO),
-                  ('Privacy', '/privacy-policy/')])
+    servizi = nav([('Per le aziende', AZIENDE), ('Matrimoni e cerimonie', MATRIMONI), ('Ritratti', RITRATTI),
+                   ('Famiglia', FAMIGLIA), ('Boudoir', BOUDOIR), ('Eventi in città', EVENTI)])
+    pagine = nav([('I lavori', LAVORI), ('Lo studio', STUDIO), ('Scrivimi', STUDIO + '#scrivimi'), ('Privacy', '/privacy-policy/')])
     borsa = text(t, '<p>Hasselblad 503 CW · rullino 120<br>Fujifilm GFX 100 · medio formato<br>Linhof 4×5 · per l’architettura</p>'
                     '<p>Studio aperto martedì — sabato, 10 — 18.</p>', size=15, color=INK)
     legal = text(t, '<p>© 2026 Lunga Posa · Adele Rivoira fotografa · P. IVA 00000000000 · Le stampe fine art sono firmate e '
@@ -304,10 +393,11 @@ def build_footer():
                                   'size': '30', 'alignment': 'right', 'icon_color': TENUE, 'hover_effect': 'none'})
     totop = t.classic('totop', {'icon_color': INK, 'posizione': 'fisso', 'style': 'default'})
     top = t.row([
-        t.col([claim, contacts(t)], wm='1-2', ws='1-1'),
-        t.col([label(t, 'Le pagine'), pagine], wm='1-4', ws='1-2'),
-        t.col([label(t, 'In borsa'), borsa], wm='1-4', ws='1-2'),
-    ], layout='custom', custom='50,25,25', gap=48, valign='start', anim=None)
+        t.col([claim, contacts(t)], wm='2-5', ws='1-1'),
+        t.col([label(t, 'I servizi'), servizi], wm='1-5', ws='1-2'),
+        t.col([label(t, 'Le pagine'), pagine], wm='1-5', ws='1-2'),
+        t.col([label(t, 'In borsa'), borsa], wm='1-5', ws='1-1'),
+    ], layout='custom', custom='34,22,18,26', gap=40, valign='start', anim=None)
     bottom = t.row([t.col([legal, totop], wm='2-3', ws='1-1'), t.col([social], wm='1-3', ws='1-1')],
                    layout='custom', custom='66.66,33.33', valign='center', anim=None,
                    style={'border': {'top': 1, 'right': 0, 'bottom': 0, 'left': 0, 'style': 'solid', 'color': FILO},
@@ -335,10 +425,10 @@ def build_home():
     out = []
 
     hero = t.classic('hero', {
-        'preset': 'custom', 'eyebrow_text': 'Adele Rivoira · fotografa · Torino', 'eyebrow_dot': True,
+        'preset': 'custom', 'eyebrow_text': 'Adele Rivoira · fotografa · Torino', 'eyebrow_dot': True, 'eyebrow_color': INK,
         'title': 'Guardo a lungo.<br>Scatto una volta.',
-        'subtitle': 'Architettura, interni e oggetti per chi progetta. E quando serve matrimoni ed eventi in città, con lo stesso '
-                    'sguardo lento. Muovete il mouse: il fuoco lo decidete voi.',
+        'subtitle': 'Architettura, interni e oggetti per chi progetta, hotel e aziende. E con lo stesso sguardo lento matrimoni, '
+                    'ritratti e famiglie. Muovete il mouse: il fuoco lo decidete voi.',
         'media_bg': {'type': 'video', 'video_url': img(V_MURO + '.mp4'), 'video_poster': img(V_MURO + '.jpg'),
                      'video_size': 'cover', 'video_position': 'center center'},
         'overlay_color': FONDO, 'overlay_top': 0.0, 'overlay_bottom': 0.18, 'overlay_sides': False, 'overlay_direction': '',
@@ -390,17 +480,17 @@ def build_home():
                         'Cataloghi, lanci e schede prodotto per aziende di arredo e designer: sul fondale in studio o nella casa '
                         'vera, con la luce di una finestra.',
                         'Gli oggetti', LAVORI + '#frassino', overlay=38, html_id='oggetti'))
-    out.append(pannello(t, 'pexels-30705517.jpg', '03 / 03 — Matrimoni ed eventi',
-                        'Dodici matrimoni l’anno. E le feste della città.',
-                        'Senza pose e senza scalette: guardo, aspetto, scatto. Dalle Langhe ai cortili di Torino, dai concerti in '
-                        'piazza alle inaugurazioni di quartiere.',
-                        'I matrimoni', MATRIMONI, overlay=34, html_id='persone'))
+    out.append(pannello(t, 'pexels-30705517.jpg', '03 / 03 — Le persone',
+                        'Matrimoni, ritratti, famiglie.',
+                        'Senza pose e senza scalette: guardo, aspetto, scatto. Dalle Langhe ai cortili di Torino, dal primo giorno '
+                        'di un figlio all’ultimo ballo di un matrimonio.',
+                        'I ritratti', RITRATTI, overlay=34, html_id='persone'))
 
     scelti = t.classic('hoverlist', {
         'items': [{'name': n, 'sub': c, 'desc': c, 'number': '%02d' % (i + 1), 'image': img(f),
                    'link_url': (LAVORI + a) if a else (MATRIMONI if 'Matrimonio' in c else EVENTI), 'color': ''}
                   for i, (n, c, f, a) in enumerate(LAVORI_SCELTI)],
-        'lead_mode': 'number', 'number_color': TENUE, 'number_hover_color': FUOCO,
+        'lead_mode': 'number', 'number_color': TENUE, 'number_hover_color': FUOCO_TESTO,
         'name_font_family': 'heading', 'name_weight': '300', 'name_color': INK, 'name_hover_color': INK, 'name_size': 48,
         'name_uppercase': False,
         'desc_color': TENUE, 'desc_hover_color': INK, 'desc_size': 13, 'sub_uppercase': False,
@@ -423,7 +513,7 @@ def build_home():
                               pad_bottom=18),
                      text(t, '<p>In studio c’è una finestra a nord e nient’altro. Il flash lo porto, ma resta quasi sempre spento.</p>',
                           size=16, color=mix(INK, 80), align='center')]),
-    ], bg=video_bg(V_BICCHIERE, overlay=14, color=FONDO), padding='xlarge', html_id='luce',
+    ], bg=video_bg(V_BICCHIERE, overlay=32, color=FONDO), padding='xlarge', html_id='luce',
         style={'padding_top': 230, 'padding_bottom': 230}))
 
     metodo = t.classic('process-steps', {
@@ -435,7 +525,7 @@ def build_home():
                                                                        'oscura: si sceglie insieme.'},
                   {'number': '04', 'title': 'Le stampe', 'description': 'Le immagini finite in alta risoluzione e, per chi le vuole, '
                                                                        'le stampe fine art firmate.'}],
-        'columns': 4, 'gap': 0, 'auto_number': False, 'number_style': 'plain', 'number_color': FUOCO, 'number_bg': '',
+        'columns': 4, 'gap': 0, 'auto_number': False, 'number_style': 'plain', 'number_color': FUOCO_TESTO, 'number_bg': '',
         'number_size': 13, 'number_font': MONO, 'number_weight': '400', 'title_color': INK, 'title_size': 24,
         'title_weight': '300', 'title_font': 'heading', 'desc_color': TENUE, 'desc_size': 14, 'align': 'left', 'item_gap': 10,
         'card_bg': 'transparent', 'card_border': {'top': 1, 'right': 0, 'bottom': 0, 'left': 0, 'style': 'solid', 'color': FILO_INK},
@@ -446,6 +536,26 @@ def build_home():
                        tagline='Vale per una casa, per un catalogo e anche per un matrimonio: cambia solo quanto dura la giornata.')]),
         t.one([metodo]),
     ], bg=solid(CARTA), padding='large'))
+
+    servizi = t.classic('worklist', {
+        'items': [{'number': n, 'title': a, 'category': b, 'year': c, 'link_url': u} for n, a, b, c, u in [
+            ('01', 'Per le aziende', 'Hotel, studi tecnici, agenzie immobiliari, comunicazione', 'da 190 €', AZIENDE),
+            ('02', 'Matrimoni e cerimonie', 'Dodici matrimoni l’anno, battesimi, comunioni, anniversari', 'da 380 €', MATRIMONI),
+            ('03', 'Ritratti', 'Da soli, in coppia, in attesa, book, beauty e glamour', 'da 180 €', RITRATTI),
+            ('04', 'Famiglia', 'Newborn, il primo anno, tutti insieme', 'da 220 €', FAMIGLIA),
+            ('05', 'Boudoir', 'Ritratti intimi e glamour, con la massima riservatezza', 'da 380 €', BOUDOIR),
+            ('06', 'Eventi in città', 'Feste, concerti, inaugurazioni', 'da 120 €', EVENTI)]],
+        'divider_color': FILO, 'row_padding_y': 22, 'row_hover_bg': mix(INK, 4), 'hover_indent': 16,
+        'number_color': FUOCO_TESTO, 'number_size': 12, 'title_font_family': 'heading', 'title_color': INK, 'title_size': 36,
+        'title_weight': '300', 'show_category': True, 'category_color': TENUE, 'category_size': 14, 'show_year': True,
+        'year_color': INK, 'year_size': 12, 'show_arrow': True, 'arrow_color': FUOCO, 'mono_font_family': 'mono',
+        'row_padding': {'top': 20, 'right': 6, 'bottom': 20, 'left': 6}, 'title_size_tablet': 28, 'title_size_mobile': 22,
+    }, style={'padding_top': 0, 'padding_right': 0, 'padding_bottom': 0, 'padding_left': 0})
+    out.append(t.section([
+        t.one([sechead(t, '06 — I servizi', ['Sei modi', 'di farvi fotografare.'], size=64,
+                       tagline='Ogni servizio ha la sua pagina, coi prezzi chiusi e le domande che mi fanno tutti.')]),
+        t.one([servizi]),
+    ], padding='large', html_id='servizi'))
 
     voce = t.classic('testimonial', {
         'quote': 'Adele è l’unica che aspetta. Ci ha chiesto di tornare alle sette di sera, con la casa vuota: <em>aveva '
@@ -551,7 +661,7 @@ def build_lavori():
             t.row([t.col([label(t, '%02d — %s' % (i + 1, s['per'])),
                           headline(t, s['nome'], size=56, tag='h2', pad_bottom=14),
                           text(t, '<p>' + s['testo'] + '</p>', size=16),
-                          label(t, s['exif'], color=FUOCO, pad_top=6, pad_bottom=0)], wm='1-3', ws='1-1'),
+                          label(t, s['exif'], color=FUOCO_TESTO, pad_top=6, pad_bottom=0)], wm='1-3', ws='1-1'),
                    t.col([galleria], wm='2-3', ws='1-1')], layout='custom', custom='30,70', gap=56, valign='center'),
         ], bg=solid(CARTA) if i % 2 else None, padding='large', html_id=s['id']))
 
@@ -560,7 +670,7 @@ def build_lavori():
         'divider_color': FILO, 'row_padding_y': 22, 'row_hover_bg': mix(INK, 4), 'hover_indent': 16,
         'number_color': TENUE, 'number_size': 12, 'title_font_family': 'heading', 'title_color': INK, 'title_size': 32,
         'title_weight': '300', 'show_category': True, 'category_color': TENUE, 'category_size': 14, 'show_year': True,
-        'year_color': FUOCO, 'year_size': 12, 'show_arrow': False, 'arrow_color': INK, 'mono_font_family': 'mono',
+        'year_color': FUOCO_TESTO, 'year_size': 12, 'show_arrow': False, 'arrow_color': INK, 'mono_font_family': 'mono',
         'row_padding': {'top': 20, 'right': 6, 'bottom': 20, 'left': 6}, 'title_size_tablet': 26, 'title_size_mobile': 21,
     }, style={'padding_top': 0, 'padding_right': 0, 'padding_bottom': 0, 'padding_left': 0})
     out.append(t.section([
@@ -610,7 +720,7 @@ def build_matrimoni():
                                                                        'Due fotocamere, una è a pellicola.'},
                   {'number': '04', 'title': 'Dopo', 'description': 'Venti foto in tre giorni, tutte le altre in sei settimane, '
                                                                    'l’album quando l’avete scelto.'}],
-        'columns': 4, 'gap': 0, 'auto_number': False, 'number_style': 'plain', 'number_color': FUOCO, 'number_bg': '',
+        'columns': 4, 'gap': 0, 'auto_number': False, 'number_style': 'plain', 'number_color': FUOCO_TESTO, 'number_bg': '',
         'number_size': 13, 'number_font': MONO, 'number_weight': '400', 'title_color': INK, 'title_size': 24,
         'title_weight': '300', 'title_font': 'heading', 'desc_color': TENUE, 'desc_size': 14, 'align': 'left', 'item_gap': 10,
         'card_bg': 'transparent', 'card_border': {'top': 1, 'right': 0, 'bottom': 0, 'left': 0, 'style': 'solid', 'color': FILO_INK},
@@ -630,19 +740,51 @@ def build_matrimoni():
         out.append(pannello(t, f, '%s — %02d / 04' % (ora, i + 1), titolo + '.', frase, '', '', overlay=(54, 46, 40, 30)[i],
                             pos='center 40%'))
 
+    out.append(t.section([
+        t.one([sechead(t, '03 — Dai matrimoni', ['Sei matrimoni,', 'sei luci diverse.'], size=56, layout='stack',
+                       tagline='Quasi tutte in bianco e nero, come le vedo mentre succedono.')]),
+        t.one([galleria(t, [('pexels-3455996.jpg', 'Il padre della sposa che le accarezza il braccio, commosso'),
+                            ('pexels-29002731.jpg', 'La sposa col bouquet in piedi in una stanza, la porta aperta'),
+                            ('pexels-12613919.jpg', 'Un abbraccio felice fra gli invitati, in bianco e nero'),
+                            ('pexels-34384314.jpg', 'Il viso di una sposa che si prepara, gli occhi bassi'),
+                            ('pexels-28588970.jpg', 'Una testimone che legge il discorso, la sposa di spalle'),
+                            ('pexels-1372177.jpg', 'Gli sposi abbracciati in mezzo a una strada piena di gente')], cols=3,
+                        altezza='440px')]),
+    ], padding='large', html_id='provini'))
+
+    out.append(t.section([
+        t.row([t.col([sechead(t, '04 — Cerimonie in famiglia', ['Battesimi, comunioni,', 'anniversari.'], size=56,
+                              layout='stack', size_mobile=36),
+                      text(t, '<p>Le stesse regole dei matrimoni, in poche ore: il rito senza flash, i nonni, il pranzo. Per i '
+                              'cinquant’anni di matrimonio porto anche un fondale e faccio un ritratto a ogni coppia di '
+                              'figli.</p>', size=16),
+                      listino(t, [('Il rito', 'Due ore, cento immagini', '380 €'),
+                                  ('Il rito e il pranzo', 'Cinque ore, trecento immagini', '690 €'),
+                                  ('Un ritratto per famiglia', 'Al pranzo, col fondale', '+ 120 €')]),
+                      button(t, 'Chiedi la data', chiedi('Cerimonia in famiglia'), kind='pieno', pad_top=22)], wm='2-5', ws='1-1'),
+               t.col([galleria(t, [('pexels-35663243.jpg', 'Una mamma sorridente col bambino in braccio al battesimo'),
+                                   ('pexels-34069062.jpg', 'Il sacerdote che versa l’acqua sulla testa del bambino'),
+                                   ('pexels-8252016.jpg', 'Una bambina con la mamma il giorno della prima comunione'),
+                                   ('pexels-30010818.jpg', 'Il cero e i fiori bianchi della comunione'),
+                                   ('pexels-7910793.jpg', 'Due anziani che si baciano con un mazzo di tulipani'),
+                                   ('pexels-8841432.jpg', 'Una famiglia a pranzo all’aperto, la tavola apparecchiata')],
+                                cols=3, altezza='300px', mobile=2)], wm='3-5', ws='1-1')],
+              layout='custom', custom='40,60', gap=64, valign='start'),
+    ], bg=solid(CARTA), padding='large', html_id='cerimonie'))
+
     def piano(nome, prezzo, cosa, extra, popolare=False):
         return t.classic('pricing', {
             'plan_name': nome, 'price': prezzo, 'currency': '€', 'currency_position': 'after', 'period': extra,
             'currency_size': '22', 'features': cosa, 'check_style': 'arrow', 'cta_text': 'Chiedi la data',
-            'cta_url': STUDIO + '?servizio=matrimonio#scrivimi', 'cta_bg_color': INK if popolare else 'transparent',
+            'cta_url': chiedi('Matrimonio'), 'cta_bg_color': INK if popolare else 'transparent',
             'cta_text_color': FONDO if popolare else INK, 'cta_radius': '0', 'cta_hover_bg_color': FUOCO,
-            'cta_hover_text_color': INK, 'is_popular': popolare, 'badge_text': 'La più scelta', 'badge_bg_color': FUOCO,
-            'badge_text_color': INK, 'bg_color': CHIARO if popolare else 'transparent', 'accent_color': FUOCO, 'text_color': INK,
+            'cta_hover_text_color': NERO, 'is_popular': popolare, 'badge_text': 'La più scelta', 'badge_bg_color': FUOCO,
+            'badge_text_color': NERO, 'bg_color': CHIARO if popolare else 'transparent', 'accent_color': FUOCO, 'text_color': INK,
             'border_radius': '0', 'shadow': 'none', 'additional_info': '',
         }, style={'margin_top': 0, 'margin_right': 0, 'margin_bottom': 0, 'margin_left': 0,
                   'border': {'top': 1, 'right': 1, 'bottom': 1, 'left': 1, 'style': 'solid', 'color': FILO}})
     out.append(t.section([
-        t.one([sechead(t, '03 — Quanto costa', ['Tre modi,', 'prezzi chiusi.'], size=64,
+        t.one([sechead(t, '05 — Quanto costa', ['Tre modi,', 'prezzi chiusi.'], size=64,
                        tagline='Tutto compreso entro cento chilometri da Torino: viaggio, assistente, provini stampati.')]),
         t.row([t.col([piano('Il rito', '1.600', 'Cerimonia e ritratti\nQuattro ore\n250 fotografie\nProvini stampati', 'fino a 4 ore')],
                      wm='1-3', ws='1-1'),
@@ -655,7 +797,7 @@ def build_matrimoni():
     ], bg=solid(CARTA), padding='large', html_id='prezzi'))
 
     out.append(t.section([
-        t.row([t.col([sechead(t, '04 — Le domande', ['Quelle che', 'mi fanno tutti.'], size=48, layout='stack', size_mobile=34)],
+        t.row([t.col([sechead(t, '06 — Le domande', ['Quelle che', 'mi fanno tutti.'], size=48, layout='stack', size_mobile=34)],
                      wm='1-3', ws='1-1'),
                t.col([faq(t, [
                    ('Scatti davvero in pellicola?', 'Sì: due rullini di bianco e nero a ogni matrimonio, di solito per la sera. Li '
@@ -676,7 +818,7 @@ def build_matrimoni():
                             'Silvia e Tommaso · Langhe · 1/250 · f/2.8', ratio='4/5'), wm='2-5', ws='1-1'),
                t.col([headline(t, 'Ditemi la data: <em>se è libera, è vostra.</em>', size=64, tag='h2', pad_bottom=18),
                       text(t, '<p>Tengo la data per due settimane, senza acconto, mentre ci pensate.</p>', size=17),
-                      button(t, 'Chiedi la data', STUDIO + '?servizio=matrimonio#scrivimi', kind='pieno', pad_top=10)],
+                      button(t, 'Chiedi la data', chiedi('Matrimonio'), kind='pieno', pad_top=10)],
                      wm='3-5', ws='1-1')],
               layout='custom', custom='42,58', gap=72, valign='center'),
     ], bg=solid(CARTA), padding='large', style={'padding_top': 130, 'padding_bottom': 130}))
@@ -705,16 +847,16 @@ def build_eventi():
 
     out.append(t.section([
         t.row([t.col([label(t, 'Venti foto la sera stessa', color=SOFT_CHIARO),
-                      headline(t, 'La festa finisce, <em>le foto sono già arrivate.</em>', size=72, color=CHIARO, tag='h2', pad_bottom=16),
+                      headline(t, 'La festa finisce, le foto sono già arrivate.', size=72, color=CHIARO, tag='h2', pad_bottom=16),
                       text(t, '<p>Scatto, scelgo e correggo durante la serata: prima di mezzanotte avete una cartella con venti '
                               'immagini pronte da pubblicare. Le altre, tutte, in quarantotto ore.</p>', size=16, color=SOFT_CHIARO)],
                      wm='3-5', ws='1-1'), t.col([], wm='2-5', ws='1-1')], layout='custom', custom='60,40', valign='end'),
-    ], bg=video_bg(V_LUCI, overlay=48), padding='xlarge', style={'padding_top': 240, 'padding_bottom': 90}))
+    ], bg=video_bg(V_LUCI, overlay=62), padding='xlarge', style={'padding_top': 240, 'padding_bottom': 90}))
 
     lista = t.classic('worklist', {
         'items': [{'number': d, 'title': n, 'category': c, 'year': k} for d, n, c, k in FESTE],
         'divider_color': FILO, 'row_padding_y': 22, 'row_hover_bg': mix(INK, 4), 'hover_indent': 16,
-        'number_color': FUOCO, 'number_size': 12, 'title_font_family': 'heading', 'title_color': INK, 'title_size': 32,
+        'number_color': FUOCO_TESTO, 'number_size': 12, 'title_font_family': 'heading', 'title_color': INK, 'title_size': 32,
         'title_weight': '300', 'show_category': True, 'category_color': TENUE, 'category_size': 14, 'show_year': True,
         'year_color': TENUE, 'year_size': 12, 'show_arrow': False, 'arrow_color': INK, 'mono_font_family': 'mono',
         'row_padding': {'top': 20, 'right': 6, 'bottom': 20, 'left': 6}, 'title_size_tablet': 26, 'title_size_mobile': 21,
@@ -767,7 +909,7 @@ def build_eventi():
         t.row([t.col([sechead(t, '03 — Le tariffe', ['A ore,', 'senza sorprese.'], size=48, layout='stack', size_mobile=34),
                       text(t, '<p>In tutta Torino e prima cintura il viaggio è compreso. Associazioni di quartiere e feste di '
                               'beneficenza: metà prezzo.</p>'),
-                      button(t, 'Chiedi la serata', STUDIO + '?servizio=evento#scrivimi', kind='pieno')], wm='1-3', ws='1-1'),
+                      button(t, 'Chiedi la serata', chiedi('Evento'), kind='pieno')], wm='1-3', ws='1-1'),
                t.col([tariffe], wm='2-3', ws='1-1')], layout='custom', custom='33,67', gap=64, valign='start'),
     ], padding='large', html_id='tariffe'))
     return out
@@ -797,18 +939,19 @@ def build_studio():
 
     out.append(t.section([
         centered(t, [label(t, 'Via Mazzini 31 · secondo piano · finestra a nord', color=SOFT_CHIARO, align='center'),
-                     headline(t, 'Una stanza, una finestra, <em>una tenda.</em>', size=76, color=CHIARO, tag='h2', align='center',
+                     headline(t, 'Una stanza, una finestra, una tenda.', size=76, color=CHIARO, tag='h2', align='center',
                               pad_bottom=16),
                      text(t, '<p>Lo studio è aperto dal martedì al sabato. Si può passare a vedere le stampe: c’è sempre il caffè.</p>',
                           size=16, color=SOFT_CHIARO, align='center')]),
-    ], bg=video_bg(V_TENDA, overlay=46), padding='xlarge', style={'padding_top': 220, 'padding_bottom': 220}))
+    ], bg=video_bg(V_TENDA, overlay=64), padding='xlarge', style={'padding_top': 220, 'padding_bottom': 220}))
 
     modulo = t.classic('form', {
         'fields': [
             {'field_type': 'text', 'label': 'Nome', 'name': 'nome', 'placeholder': '', 'required': True, 'width': '1-2', 'options': '', 'icon': ''},
             {'field_type': 'email', 'label': 'Email', 'name': 'email', 'placeholder': '', 'required': True, 'width': '1-2', 'options': '', 'icon': ''},
             {'field_type': 'select', 'label': 'Cosa', 'name': 'servizio', 'param': 'servizio', 'placeholder': '', 'required': True,
-             'width': '1-2', 'options': 'Architettura e interni\nOggetti e design\nRitratto\nMatrimonio\nEvento', 'icon': ''},
+             'width': '1-2', 'options': 'Architettura e interni\nHotel e immobili\nComunicazione aziendale\nOggetti e design\n'
+                                        'Ritratto\nFamiglia\nBoudoir\nMatrimonio\nCerimonia in famiglia\nEvento', 'icon': ''},
             {'field_type': 'date', 'label': 'Quando', 'name': 'data', 'placeholder': '', 'required': False, 'width': '1-2', 'options': '', 'icon': ''},
             {'field_type': 'text', 'label': 'Dove', 'name': 'luogo', 'placeholder': 'Una via, un paese, una chiesa', 'required': False,
              'width': '1-1', 'options': '', 'icon': ''},
@@ -823,7 +966,7 @@ def build_studio():
         'input_focus_border': FUOCO, 'input_focus_shadow': False, 'gap': '20', 'submit_bg': INK, 'submit_color': FONDO,
         'submit_radius': 0, 'submit_padding_x': '30', 'submit_padding_y': '16', 'submit_font_size': '11',
         'submit_font_weight': '500', 'submit_text_transform': 'uppercase', 'submit_letter_spacing': '2',
-        'submit_hover_bg': FUOCO, 'privacy_checkbox': True,
+        'submit_hover_bg': FUOCO_TESTO, 'privacy_checkbox': True,
     }, style={'bg': {'type': 'none'}, 'padding_top': 0, 'padding_right': 0, 'padding_bottom': 0, 'padding_left': 0,
               'border_radius': 0})
     out.append(t.section([
@@ -848,6 +991,365 @@ def build_studio():
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+#  PEZZI DEI SERVIZI (aziende, ritratti, famiglia, boudoir)
+# ══════════════════════════════════════════════════════════════════════════════
+
+def chiedi(servizio):
+    """Il link al modulo con «Cosa» già scelto (il campo legge ?servizio= dall'indirizzo)."""
+    return STUDIO + '?servizio=' + servizio.replace(' ', '%20') + '#scrivimi'
+
+
+def galleria(t, foto, cols=4, altezza='420px', mobile=2):
+    return t.classic('progallery', {
+        'images': [{'url': img(f), 'alt': a, 'caption': '', 'subtitle': '', 'text': ''} for f, a in foto],
+        'layout': 'expand', 'layout_family': 'classic', 'columns': cols, 'gap': 8, 'img_height': altezza,
+        'object_fit': 'cover', 'object_position': 'center center', 'thumb_radius': 0, 'mobile_columns': mobile,
+        'expand_ratio': 2.4, 'expand_shrink': 0.6, 'expand_speed': 600, 'hover_effect': 'none', 'hover_caption': 'none',
+        'lightbox': True, 'show_caption': False, 'entrance': 'none', 'filter': 'none',
+    })
+
+
+def listino(t, voci):
+    return t.classic('pricelist', {
+        'items': [{'title': a, 'description': b, 'price': c, 'image_url': '', 'highlighted': False, 'badge': ''} for a, b, c in voci],
+        'separator_style': 'solid', 'separator_color': FILO, 'title_color': INK, 'price_color': INK,
+        'description_color': TENUE, 'image_size': 64, 'image_border_radius': '0', 'show_image': False,
+        'price_position': 'right', 'tile_padding': {'top': 18, 'right': 0, 'bottom': 18, 'left': 0}, 'card_bg': 'transparent',
+        'card_border_radius': '0',
+    }, style={'bg': {'type': 'none'}, 'padding_top': 0, 'padding_right': 0, 'padding_bottom': 0, 'padding_left': 0,
+              'border_radius': 0})
+
+
+def passi(t, voci):
+    return t.classic('process-steps', {
+        'items': [{'number': '%02d' % (i + 1), 'title': a, 'description': b} for i, (a, b) in enumerate(voci)],
+        'columns': 4, 'gap': 0, 'auto_number': False, 'number_style': 'plain', 'number_color': FUOCO_TESTO, 'number_bg': '',
+        'number_size': 13, 'number_font': MONO, 'number_weight': '400', 'title_color': INK, 'title_size': 24,
+        'title_weight': '300', 'title_font': 'heading', 'desc_color': TENUE, 'desc_size': 14, 'align': 'left', 'item_gap': 10,
+        'card_bg': 'transparent', 'card_border': {'top': 1, 'right': 0, 'bottom': 0, 'left': 0, 'style': 'solid', 'color': FILO_INK},
+        'card_radius': radius(0), 'card_padding': 22, 'columns_tablet': 2, 'columns_mobile': 1,
+    })
+
+
+def servizio(t, eyebrow, titolo, testo, dettagli, foto, alt, exif, giro=False, html_id=None, carta=False, link=None):
+    """Un servizio: il testo coi dettagli (durata, cosa si riceve, da quanto) e la foto col suo cartellino."""
+    parole = [label(t, eyebrow), headline(t, titolo, size=56, tag='h2', pad_bottom=14),
+              text(t, '<p>' + testo + '</p>', size=16), specs(t, dettagli)]
+    if link:
+        parole.append(button(t, link[0], link[1], pad_top=18))
+    a = t.col(parole, wm='1-2', ws='1-1')
+    b = t.col(scatto(t, foto, alt, exif, ratio='4/5'), wm='1-2', ws='1-1')
+    return t.section([t.row([b, a] if giro else [a, b], layout='custom', custom='46,54' if giro else '54,46', gap=72,
+                            valign='center')], bg=solid(CARTA) if carta else None, padding='large', html_id=html_id)
+
+
+def domande(t, eyebrow, righe, coppie, prefisso):
+    return t.section([
+        t.row([t.col([sechead(t, eyebrow, righe, size=48, layout='stack', size_mobile=34)], wm='1-3', ws='1-1'),
+               t.col([faq(t, coppie, prefisso)], wm='2-3', ws='1-1')], layout='custom', custom='33,67', gap=64, valign='start'),
+    ], padding='large')
+
+
+def invito(t, titolo, testo, etichetta, url):
+    return t.section([
+        centered(t, [headline(t, titolo, size=60, tag='h2', align='center', pad_bottom=16),
+                     text(t, '<p>' + testo + '</p>', size=17, align='center'),
+                     button(t, etichetta, url, kind='pieno', align='center')]),
+    ], bg=solid(CARTA), padding='large', style={'padding_top': 130, 'padding_bottom': 130})
+
+
+def fascia_scura(t, foto, eyebrow, titolo, testo, overlay=60, pos='center center'):
+    """Una fascia a tutta larghezza con la foto velata e le scritte chiare al centro. Mai in apertura: la testata
+    trasparente ha le scritte grafite e le pagine si aprono sulla carta."""
+    return t.section([
+        centered(t, [label(t, eyebrow, color=SOFT_CHIARO, align='center'),
+                     headline(t, titolo, size=76, color=CHIARO, tag='h2', align='center', pad_bottom=16),
+                     text(t, '<p>' + testo + '</p>', size=16, color=SOFT_CHIARO, align='center')]),
+    ], bg=photo_bg(foto, overlay=overlay, position=pos), padding='xlarge', style={'padding_top': 220, 'padding_bottom': 220})
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  PER LE AZIENDE
+# ══════════════════════════════════════════════════════════════════════════════
+
+def build_aziende():
+    t = Tpl(ID, 'aziende')
+    out = [intro(t, 'Per le aziende', ['Spazi da vendere,', 'spazi da abitare.'],
+                 '<p>Hotel, studi di architettura e d’ingegneria, agenzie immobiliari, aziende che vogliono farsi vedere come sono. '
+                 'Fotografo i loro spazi come per una rivista: all’ora giusta, con la luce che c’è, e consegno immagini che si '
+                 'usano ovunque, dal sito ai portali alla stampa.</p>')]
+    out.append(pannello(t, 'pexels-39836703.jpg', '01 / 04 — Hotel', 'Le camere come le vedrà chi arriva.',
+                        'Camere, hall, colazione, il giardino: una giornata dal mattino alla sera, per il sito, i portali di '
+                        'prenotazione e le riviste di viaggio.', 'Per gli hotel', '#hotel', overlay=48))
+    out.append(pannello(t, 'pexels-17384783.jpg', '02 / 04 — Studi di architettura e ingegneria',
+                        'I progetti finiti, prima che li abitino.',
+                        'Per i concorsi, le pubblicazioni e il portfolio dello studio: la luce di tutto il giorno, i dettagli '
+                        'costruttivi, le strutture. E i cantieri, una visita al mese.', 'Per gli studi', '#studi', overlay=44))
+    out.append(pannello(t, 'pexels-8143672.jpg', '03 / 04 — Agenzie immobiliari', 'Una casa in vendita, dodici foto giuste.',
+                        'Un’ora di sopralluogo e scatti, le foto pronte in quarantotto ore. Linee dritte, stanze mai deformate, '
+                        'i colori com’erano.', 'Per le agenzie', '#immobili', overlay=50))
+    out.append(pannello(t, 'pexels-3860617.jpg', '04 / 04 — Comunicazione aziendale', 'Le persone e i luoghi di un’azienda.',
+                        'I ritratti del gruppo, il laboratorio, l’ufficio, il lavoro mentre si fa: per il sito, LinkedIn, la '
+                        'stampa e il bilancio di fine anno.', 'Per le aziende', '#comunicazione', overlay=66))
+
+    out.append(servizio(t, '01 — Hotel', 'Una giornata, <em>tutte le luci</em>.',
+                        'Arrivo per la colazione e me ne vado con l’ultima luce sulla facciata. Le camere le fotografo rifatte e '
+                        'col sole che entra, la hall quando è vuota e quando si riempie.',
+                        [('Una giornata', 'dalla colazione alla luce della sera'), ('Consegna', 'quaranta immagini in cinque giorni'),
+                         ('Formati', 'orizzontali per il sito, verticali per i social, quadrate per i portali'), ('Da', '850 € la giornata')],
+                        'pexels-35747340.jpg', 'La hall di un hotel, bianca e vuota, col banco della reception',
+                        'Hotel Barolo Alto · GFX 100 · 1/30 · f/8', html_id='hotel'))
+    out.append(servizio(t, '02 — Studi di architettura e ingegneria', 'Linee dritte, <em>sempre</em>.',
+                        'Lavoro col banco ottico, come si è sempre fatto per l’architettura: le verticali restano verticali. Per '
+                        'gli ingegneri fotografo anche le strutture, i nodi, i cantieri dalle fondazioni al collaudo.',
+                        [('Per', 'concorsi, pubblicazioni, portfolio'), ('Cantieri', 'una visita al mese, finché serve'),
+                         ('Strumento', 'banco ottico 4×5 e medio formato'), ('Da', '520 € la mezza giornata')],
+                        'pexels-12181160.jpg', 'Il pilone bianco di un ponte strallato contro il cielo chiaro',
+                        'Ponte sul Sangone · Linhof 4×5 · 1/60 · f/22', giro=True, html_id='studi', carta=True))
+    out.append(servizio(t, '03 — Agenzie immobiliari', 'Un’ora, <em>dodici fotografie</em>.',
+                        'Le case si vendono dalla prima foto. Arrivo con la luce migliore della giornata, apro le finestre, tolgo '
+                        'quello che distrae: non aggiungo cieli finti e non allargo le stanze.',
+                        [('In un’ora', 'sopralluogo e scatti'), ('Consegna', 'dodici immagini in quarantotto ore'),
+                         ('Compresi', 'la planimetria fotografata e una foto della via'), ('Da', '190 € a immobile')],
+                        'pexels-8146158.jpg', 'Un appartamento vuoto con le pareti bianche e il parquet, la luce dalle finestre',
+                        'Via Nizza · GFX 100 · 1/15 · f/9', html_id='immobili'))
+    out.append(servizio(t, '04 — Comunicazione aziendale', 'Chi lavora, <em>dove lavora</em>.',
+                        'Una giornata in azienda: i ritratti alla finestra, il reparto, le mani sul lavoro. Niente strette di mano '
+                        'finte: chiedo solo cinque minuti a testa e poi aspetto.',
+                        [('Ritratti', 'del gruppo e di ognuno, nello stesso stile'), ('Reportage', 'una giornata di lavoro vera'),
+                         ('Uso', 'sito, LinkedIn, stampa, bilancio'), ('Da', '640 € la giornata')],
+                        'pexels-36499768.jpg', 'Una donna sorridente seduta in poltrona vicino alla finestra dell’ufficio',
+                        'Officina Ruà · Hasselblad 503 · 1/125 · f/4', giro=True, html_id='comunicazione', carta=True))
+
+    out.append(t.section([
+        t.one([sechead(t, '05 — Dai lavori recenti', ['Camere, strutture,', 'persone al lavoro.'], size=56, layout='stack')]),
+        t.one([galleria(t, [('pexels-39836722.jpg', 'Il letto di una camera d’albergo con la parete color terracotta'),
+                            ('pexels-36603625.jpg', 'La scala a spirale bianca nella hall di un hotel'),
+                            ('pexels-29419658.jpg', 'Gli archi d’acciaio di un ponte visti da sotto'),
+                            ('pexels-20856131.jpg', 'L’angolo di un palazzo moderno, in bianco e nero'),
+                            ('pexels-7303782.jpg', 'Una cucina chiara con una sedia di legno'),
+                            ('pexels-37098141.jpg', 'Una camera minimale col letto bianco e le lampade'),
+                            ('pexels-8297155.jpg', 'Una donna in piedi in un ufficio con la città dietro'),
+                            ('pexels-7652130.jpg', 'Tre colleghi a una riunione intorno a un tavolo bianco')])]),
+    ], padding='large'))
+
+    out.append(domande(t, '06 — Le domande', ['Quelle delle', 'aziende.'], [
+        ('Le foto restano nostre?', 'Sì: la licenza d’uso non scade e vale per sito, social, portali e stampa. Io chiedo solo di '
+                                    'poterle mostrare nel portfolio, se siete d’accordo.'),
+        ('Usi il drone?', 'No: lavoro da terra o da un terrazzo, con le ottiche decentrabili. Per le viste dall’alto lavoro con un '
+                          'pilota abilitato, a parte.'),
+        ('Quanto ritocchi?', 'Raddrizzo le linee, pulisco i fili e correggo la luce. Non tolgo muri e non metto cieli che non c’erano.'),
+        ('Venite anche fuori Torino?', 'In tutto il Piemonte e in Valle d’Aosta il viaggio è compreso; altrove lo aggiungo al '
+                                       'preventivo, al costo.'),
+    ], 'az'))
+    out.append(invito(t, 'Avete uno spazio <em>da far vedere?</em>',
+                      'Scrivetemi cos’è, dove si trova e per cosa vi servono le foto: vi mando un preventivo entro sera.',
+                      'Chiedi un preventivo', chiedi('Hotel e immobili')))
+    return out
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  RITRATTI
+# ══════════════════════════════════════════════════════════════════════════════
+
+def build_ritratti():
+    t = Tpl(ID, 'ritratti')
+    out = [intro(t, 'Ritratti · in studio o a casa vostra', ['Fermi,', 'solo un momento.'],
+                 '<p>Un ritratto non è una foto in cui venite bene: è una foto in cui vi riconoscete. In studio ci sono una '
+                 'finestra a nord, una sedia e il tempo che serve. Si parla, si beve un caffè; quando smettete di guardare '
+                 'l’obiettivo, scatto.</p>')]
+    out.append(t.section([
+        t.one([sechead(t, '01 — I ritratti', ['Facce che ho', 'guardato a lungo.'], size=56, layout='stack',
+                       tagline='Passate sopra le foto per allargarle, cliccate per vederle intere.')]),
+        t.one([galleria(t, [('pexels-4534869.jpg', 'Una donna seduta sul davanzale di una grande finestra'),
+                            ('pexels-8284464.jpg', 'Il ritratto in bianco e nero di un uomo anziano'),
+                            ('pexels-27255537.jpg', 'La sagoma di una ragazza dietro un vetro, controluce'),
+                            ('pexels-31951839.jpg', 'Un uomo appoggiato al muro di mattoni, in bianco e nero'),
+                            ('pexels-6860127.jpg', 'Il viso di una donna con gli occhi chiusi, da vicino'),
+                            ('pexels-12793812.jpg', 'Un uomo seduto sul divano, pensieroso, in bianco e nero'),
+                            ('pexels-15148504.jpg', 'Una donna coi capelli sul viso nella luce della finestra'),
+                            ('pexels-37512797.jpg', 'Un uomo contro il muro grigio in studio, in bianco e nero')], altezza='460px')]),
+    ], padding='large', style={'padding_top': 20}))
+
+    out.append(servizio(t, '02 — Il ritratto', 'Una persona, <em>una luce</em>.',
+                        'Per voi, per il profilo di lavoro, per un compleanno che conta. Un’ora in studio con la luce della finestra, '
+                        'poi i provini su carta: le dieci foto le scegliamo insieme.',
+                        [('Durata', 'un’ora, in studio'), ('Ricevete', 'dieci immagini e una stampa fine art'), ('Da', '180 €')],
+                        'pexels-8284464.jpg', 'Il ritratto in bianco e nero di un uomo anziano dallo sguardo profondo',
+                        'Hasselblad 503 · 1/60 · f/4 · Ilford HP5', carta=True, html_id='ritratto'))
+    out.append(servizio(t, '03 — Di coppia', 'Prima del sì, <em>o senza nessun sì</em>.',
+                        'Una passeggiata al tramonto in collina o lungo il Po: per l’invito del matrimonio, per un anniversario, o '
+                        'solo per avere una foto in due che vi somigli.',
+                        [('Durata', 'un’ora e mezza, all’aperto'), ('Ricevete', 'trenta immagini'), ('Da', '260 €')],
+                        'pexels-9242466.jpg', 'Due innamorati abbracciati nella luce dorata del tramonto',
+                        'Superga · GFX 100 · 1/500 · f/2.8', giro=True, html_id='coppia'))
+    out.append(servizio(t, '04 — In attesa', 'Nove mesi, <em>una luce sola</em>.',
+                        'Fra il settimo e l’ottavo mese, in studio o a casa vostra, da sola o con chi aspetta con voi. Un abito '
+                        'semplice, la tenda, nessuna fretta.',
+                        [('Quando', 'fra la 28ª e la 34ª settimana'), ('Ricevete', 'venti immagini'), ('Da', '220 €')],
+                        'pexels-17166034.jpg', 'Una donna incinta in abito nero accanto alla tenda chiara, le mani sul ventre',
+                        'Studio · Hasselblad 503 · 1/30 · f/5.6', carta=True, html_id='attesa',
+                        link=('Poi il primo anno', FAMIGLIA + '#primo-anno')))
+    out.append(servizio(t, '05 — Book fotografici', 'Per chi lavora <em>con la propria faccia</em>.',
+                        'Attori, modelle, musicisti, chi parla in pubblico: fondale grigio e luce di finestra, tre cambi d’abito, '
+                        'un trucco leggero se serve. Le foto escono ritoccate quanto basta, non di più.',
+                        [('Durata', 'mezza giornata'), ('Ricevete', 'venti immagini ritoccate'), ('Da', '390 €')],
+                        'pexels-29977336.jpg', 'Una donna vestita di nero col cappuccio in studio, in bianco e nero',
+                        'Studio · GFX 100 · 1/125 · f/8', giro=True, html_id='book'))
+    out.append(servizio(t, '06 — Beauty e glamour', 'Un abito, un trucco, <em>una sera</em>.',
+                        'Con una truccatrice in studio e l’abito che vi piace di più: per un regalo a voi stesse, o per ricordarvi '
+                        'come eravate a quarant’anni. Per i ritratti più intimi c’è il boudoir.',
+                        [('Durata', 'tre ore, con trucco e capelli'), ('Ricevete', 'venticinque immagini'), ('Da', '340 €')],
+                        'pexels-15523449.jpg', 'Una donna in abito nero di paillettes seduta sul divano, la parete chiara dietro',
+                        'Studio · Hasselblad 503 · 1/60 · f/4', carta=True, html_id='glamour', link=('Il boudoir', BOUDOIR)))
+
+    out.append(domande(t, '07 — Le domande', ['Quelle di chi', 'non si piace.'], [
+        ('Non sono fotogenico.', 'Lo dicono quasi tutti. Dopo venti minuti nessuno se lo ricorda più, e lì comincio a scattare.'),
+        ('Cosa mi metto?', 'Quello che mettete quando state bene. Tinte unite, niente scritte, e portate un secondo cambio.'),
+        ('Posso portare qualcuno?', 'Sì. Ma di solito si viene meglio da soli: chi accompagna guarda, e chi è guardato se ne accorge.'),
+        ('Si può regalare?', 'Sì: il buono regalo vale un anno, e lo stampo su carta cotone dentro una busta chiusa.'),
+    ], 'rit'))
+    out.append(invito(t, 'Venite <em>con un’ora libera</em>.', 'Il resto lo facciamo insieme. Ditemi che ritratto avete in mente.',
+                      'Prenota un ritratto', chiedi('Ritratto')))
+    return out
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  FAMIGLIA
+# ══════════════════════════════════════════════════════════════════════════════
+
+def build_famiglia():
+    t = Tpl(ID, 'famiglia')
+    out = [intro(t, 'Famiglia', ['In casa vostra,', 'con la luce di casa.'],
+                 '<p>Niente sfondi, niente cappellini, niente «guardate qui». Vengo da voi la mattina, quando il sole entra in '
+                 'cucina, e fotografo quello che succede: la colazione, il bagnetto, la lotta sul letto. Dopo due ore nessuno si '
+                 'ricorda più di me.</p>')]
+    out.append(t.section([
+        t.one([galleria(t, [('pexels-4609048.jpg', 'Una famiglia abbracciata davanti a una grande finestra luminosa'),
+                            ('pexels-12594181.jpg', 'Un bambino in piedi accanto a una sedia, in bianco e nero'),
+                            ('pexels-10283404.jpg', 'Un neonato che dorme, in bianco e nero'),
+                            ('pexels-13965216.jpg', 'Una bambina bionda col mento sulle mani, sul divano'),
+                            ('pexels-8120950.jpg', 'Una famiglia seduta sul pavimento di legno vicino alla finestra'),
+                            ('pexels-40446142.jpg', 'Una bambina coi riccioli e gli occhi azzurri, in camicetta bianca'),
+                            ('pexels-34651408.jpg', 'Una neonata che dorme su una coperta bianca'),
+                            ('pexels-38604997.jpg', 'Un bimbo sdraiato sul letto che guarda curioso')], altezza='440px')]),
+    ], padding='large', style={'padding_top': 20}))
+
+    out.append(t.section([
+        t.one([sechead(t, '01 — Il primo anno', ['Quattro mattine', 'in un anno.'], size=64,
+                       tagline='Dall’attesa al primo compleanno, sempre a casa vostra. Insieme costano 720 € invece di 900.')]),
+        t.one([passi(t, [('In attesa', 'Al settimo mese, voi due e la pancia, in studio o in casa.'),
+                         ('I primi giorni', 'Entro le prime due settimane, quando dorme quasi sempre.'),
+                         ('Sei mesi', 'Sta seduto, ride, vi tira i capelli: è il momento migliore.'),
+                         ('Il primo compleanno', 'La torta, gli invitati, i primi passi se ci sono.')])]),
+    ], bg=solid(CARTA), padding='large', html_id='primo-anno'))
+
+    out.append(servizio(t, '02 — Ritratti di famiglia', 'Tutti insieme, <em>almeno una volta l’anno</em>.',
+                        'Genitori, figli, nonni, il cane. A casa vostra o in un parco che conoscete: due ore, qualche foto tutti '
+                        'insieme e molte di quello che fate quando nessuno vi dice di stare fermi.',
+                        [('Durata', 'due ore, a casa o all’aperto'), ('Ricevete', 'quaranta immagini'), ('Da', '280 €')],
+                        'pexels-8120950.jpg', 'Una famiglia seduta sul pavimento di legno vicino a una grande finestra',
+                        'A casa · GFX 100 · 1/125 · f/4', html_id='insieme'))
+    out.append(servizio(t, '03 — Newborn', 'I primi <em>dieci giorni</em>.',
+                        'Entro le prime due settimane, quando dormono quasi sempre. A casa vostra, col riscaldamento acceso e senza '
+                        'fretta: tre ore, con tutte le pause per la poppata. Niente ceste e niente costumi, solo lui e voi.',
+                        [('Quando', 'fra il quinto e il quattordicesimo giorno'), ('Durata', 'tre ore, a casa vostra'), ('Da', '320 €')],
+                        'pexels-10283404.jpg', 'Un neonato che dorme sereno, in bianco e nero',
+                        'A casa · Hasselblad 503 · 1/30 · f/2.8 · Ilford HP5', giro=True, carta=True, html_id='newborn'))
+    out.append(servizio(t, '04 — I primi anni', 'Quando cominciano <em>a guardarvi</em>.',
+                        'Dai sei mesi ai tre anni cambiano ogni settimana. Una mattina a casa, giocando per terra con loro: le foto '
+                        'migliori vengono quando dimenticano la macchina fotografica.',
+                        [('Durata', 'un’ora e mezza'), ('Ricevete', 'trenta immagini'), ('Da', '220 €')],
+                        'pexels-40446142.jpg', 'Una bambina coi riccioli biondi e gli occhi azzurri in camicetta bianca',
+                        'A casa · GFX 100 · 1/250 · f/2.8', html_id='bambini'))
+    out.append(servizio(t, '05 — In attesa', 'Voi due, <em>e chi arriva</em>.',
+                        'Le mani sulla pancia, la luce della finestra, una camicia bianca. Si può fare da sola o in coppia, e si '
+                        'può tenere da parte per la prima pagina dell’album del primo anno.',
+                        [('Quando', 'al settimo mese'), ('Durata', 'un’ora'), ('Da', '220 €')],
+                        'pexels-5425036.jpg', 'Le mani di lui sulla pancia di lei, nella luce chiara di una stanza',
+                        'Studio · GFX 100 · 1/60 · f/4', giro=True, carta=True, html_id='attesa'))
+
+    out.append(domande(t, '06 — Le domande', ['Quelle dei', 'genitori.'], [
+        ('E se piange?', 'Ci fermiamo. Nelle sedute coi bambini le pause sono metà del tempo, e sono già nel prezzo.'),
+        ('Usi il flash?', 'No, mai coi neonati: solo la luce delle finestre. Per questo vengo la mattina.'),
+        ('Dobbiamo preparare la casa?', 'No. Apriamo le tende e spostiamo una sedia, il resto va bene così com’è: è casa vostra.'),
+    ], 'fam'))
+    out.append(invito(t, 'Una mattina <em>a casa vostra</em>.', 'Ditemi chi c’è e quando nasce o è nato: troviamo il giorno giusto.',
+                      'Fissiamo una mattina', chiedi('Famiglia')))
+    return out
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  BOUDOIR
+# ══════════════════════════════════════════════════════════════════════════════
+
+def build_boudoir():
+    t = Tpl(ID, 'boudoir')
+    out = [intro(t, 'Boudoir · solo su appuntamento', ['Per voi,', 'prima che per altri.'],
+                 '<p>Un ritratto intimo, in camicia, in lingerie, in un lenzuolo: per vedervi come non vi siete mai viste. Nessuna '
+                 'foto esce dallo studio senza il vostro sì.</p>')]
+    out.append(fascia_scura(t, 'pexels-30362729.jpg', 'Via Mazzini 31 · la stanza con la tenda',
+                            'Solo noi due, e la tenda chiusa.',
+                            'Lo studio è vostro per tre ore: la porta chiusa, la musica che scegliete, un tè fra una posa e l’altra.',
+                            pos='center 35%'))
+    out.append(servizio(t, '01 — Boudoir', 'La luce di una finestra, <em>e basta</em>.',
+                        'Il bianco e nero, il lino, una luce che accarezza invece di mostrare. Vi dico io come mettervi, un passo '
+                        'alla volta: non serve aver mai posato.',
+                        [('Durata', 'tre ore, in studio'), ('Ricevete', 'venticinque immagini'), ('Da', '420 €')],
+                        'pexels-6039107.jpg', 'Una donna sdraiata sul tessuto bianco, vista dall’alto, in bianco e nero',
+                        'Studio · Hasselblad 503 · 1/30 · f/4 · Ilford HP5', html_id='boudoir'))
+    out.append(servizio(t, '02 — Ritratti glamour', 'Un abito lungo, <em>una sera</em>.',
+                        'L’abito da sera che non mettete mai, il trucco di una truccatrice, la luce calda dell’ultima ora: una '
+                        'serata per voi, da tenere in un album.',
+                        [('Durata', 'tre ore, con trucco e capelli'), ('Ricevete', 'venti immagini'), ('Da', '380 €')],
+                        'pexels-7244030.jpg', 'Una donna in abito lungo grigio seduta nella luce calda di una finestra',
+                        'Studio · GFX 100 · 1/60 · f/2.8', giro=True, carta=True, html_id='glamour'))
+
+    out.append(t.section([
+        t.row([t.col([sechead(t, '03 — La riservatezza', ['Quello che succede', 'in studio, resta lì.'], size=56, layout='stack',
+                              size_mobile=36),
+                      text(t, '<p>Lo scrivo nel contratto, prima di cominciare.</p>', size=16)], wm='2-5', ws='1-1'),
+               t.col([specs(t, [('In studio', 'solo noi due; la truccatrice se la volete'),
+                                ('Le foto', 'in una galleria privata con la password, per trenta giorni'),
+                                ('Pubblicate', 'mai, senza un vostro sì scritto'),
+                                ('L’archivio', 'cancellato dopo la consegna, se lo chiedete'),
+                                ('L’album', 'in una scatola chiusa, consegnato a mano')])], wm='3-5', ws='1-1')],
+              layout='custom', custom='40,60', gap=72, valign='start'),
+    ], padding='large'))
+
+    out.append(t.section([
+        t.one([sechead(t, '04 — Come si svolge', ['Una telefonata,', 'poi tre ore per voi.'], size=56, layout='stack')]),
+        t.one([passi(t, [('Una telefonata', 'Cosa vi piacerebbe, cosa no. Nessun impegno.'),
+                         ('Prepariamo', 'Gli abiti, il trucco, la musica: decidete voi.'),
+                         ('In studio', 'Tre ore, con le pause e un tè. Si comincia vestite.'),
+                         ('La scelta', 'Una settimana dopo, sui provini, solo voi e io.')])]),
+    ], bg=solid(CARTA), padding='large'))
+
+    out.append(t.section([
+        t.row([t.col([galleria(t, [('pexels-25470069.jpg', 'Una donna avvolta in un tessuto scuro, in bianco e nero'),
+                                   ('pexels-15929707.jpg', 'Una donna elegante in abito nero seduta sul divano'),
+                                   ('pexels-30362729.jpg', 'Una donna seduta sul letto vicino alla finestra, in bianco e nero')],
+                                cols=3, altezza='520px', mobile=1)], wm='3-5', ws='1-1'),
+               t.col([sechead(t, '05 — Quanto costa', ['Tre ore,', 'un album.'], size=48, layout='stack', size_mobile=34),
+                      listino(t, [('Boudoir', 'Tre ore in studio, venticinque immagini', '420 €'),
+                                  ('Ritratti glamour', 'Con truccatrice e parrucchiera', '380 €'),
+                                  ('L’album', 'Venti stampe in una scatola di tela', '+ 290 €'),
+                                  ('Il buono regalo', 'Vale un anno, in una busta chiusa', 'a scelta')])], wm='2-5', ws='1-1')],
+              layout='custom', custom='58,42', gap=64, valign='center'),
+    ], padding='large'))
+
+    out.append(domande(t, '06 — Le domande', ['Quelle che non', 'si fanno ad alta voce.'], [
+        ('Non sono una modella.', 'Nessuna lo è. Vi dico io dove mettere le mani e dove guardare, e possiamo fermarci quando volete.'),
+        ('Chi vede le foto?', 'Voi e io. Non le mostro a nessuno e, se lo chiedete, le cancello dal mio archivio dopo la consegna.'),
+        ('Devo spogliarmi?', 'Solo quanto volete voi. Molte delle foto più belle sono in camicia o in maglione.'),
+        ('È adatto come regalo?', 'Sì, per voi o per chi amate: il buono vale un anno e lo consegno in una busta chiusa.'),
+    ], 'bou'))
+    out.append(invito(t, 'Ne parliamo <em>prima, al telefono</em>.', 'Scrivetemi solo nome e recapito: vi chiamo io, quando vi va bene.',
+                      'Scrivimi', chiedi('Boudoir')))
+    return out
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 #  404
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -867,15 +1369,21 @@ def build_404():
 # ══════════════════════════════════════════════════════════════════════════════
 
 THEME = {
-    'id': ID, 'name': NAME, 'author': 'Olobuild', 'version': '1.0.0', 'preview_v': '1', 'preview_mobile_v': '1',
+    'id': ID, 'name': NAME, 'author': 'Olobuild', 'version': '1.1.0', 'preview_v': '2', 'preview_mobile_v': '2',
     'category': 'Creativi e portfolio', 'zone': 'Il fuoco lo decidi tu',
-    'tags': ['fotografia', 'architettura', 'still life', 'matrimoni', 'eventi', 'minimale', 'torino'],
-    'description': 'Lo studio di una fotografa di architettura e oggetti a Torino, che fa anche dodici matrimoni l’anno e le feste '
-                   'della città: carta grigia e grafite con l’arancio del fuoco, il mirino sopra il video d’apertura (il fuoco '
-                   'segue il mouse, il clic scatta e fa un provino), le sezioni che si svelano di lato, le serie che scorrono, i '
-                   'listini e il modulo per scrivere.',
+    'tags': ['fotografia', 'architettura', 'still life', 'hotel', 'immobili', 'matrimoni', 'ritratti', 'famiglia', 'newborn',
+             'boudoir', 'eventi', 'minimale', 'torino'],
+    'description': 'Lo studio di una fotografa di Torino: architettura, interni e oggetti, hotel, studi tecnici, agenzie '
+                   'immobiliari e aziende; dodici matrimoni l’anno e le cerimonie in famiglia; ritratti, famiglie, newborn e '
+                   'boudoir; le feste della città. Carta grigia e grafite con l’arancio del fuoco, il mirino sopra il video '
+                   'd’apertura (il fuoco segue il mouse, il clic scatta e fa un provino), le sezioni che si svelano di lato, i '
+                   'listini a prezzi chiusi e il modulo che sa già cosa chiedete.',
     'menu': {'name': 'Lunga Posa — menu', 'items': [
-        {'title': 'I lavori', 'url': LAVORI}, {'title': 'Matrimoni', 'url': MATRIMONI}, {'title': 'Eventi', 'url': EVENTI},
+        {'title': 'I lavori', 'url': LAVORI},
+        {'title': 'Servizi', 'url': HOME + '#servizi', 'children': [
+            {'title': 'Per le aziende', 'url': AZIENDE}, {'title': 'Matrimoni e cerimonie', 'url': MATRIMONI},
+            {'title': 'Ritratti', 'url': RITRATTI}, {'title': 'Famiglia', 'url': FAMIGLIA}, {'title': 'Boudoir', 'url': BOUDOIR},
+            {'title': 'Eventi in città', 'url': EVENTI}]},
         {'title': 'Lo studio', 'url': STUDIO}, {'title': 'Scrivimi', 'url': STUDIO + '#scrivimi'}]},
     'templates': {
         '404': {'file': '404.json', 'type': '404', 'title': 'Lunga Posa — Pagina 404'},
@@ -886,6 +1394,10 @@ THEME = {
         'matrimoni': {'file': 'matrimoni.json', 'type': 'page', 'title': 'Lunga Posa — Matrimoni'},
         'eventi': {'file': 'eventi.json', 'type': 'page', 'title': 'Lunga Posa — Eventi in città'},
         'studio': {'file': 'studio.json', 'type': 'page', 'title': 'Lunga Posa — Lo studio'},
+        'aziende': {'file': 'aziende.json', 'type': 'page', 'title': 'Lunga Posa — Per le aziende'},
+        'ritratti': {'file': 'ritratti.json', 'type': 'page', 'title': 'Lunga Posa — Ritratti'},
+        'famiglia': {'file': 'famiglia.json', 'type': 'page', 'title': 'Lunga Posa — Famiglia'},
+        'boudoir': {'file': 'boudoir.json', 'type': 'page', 'title': 'Lunga Posa — Boudoir'},
     },
     'activate': {'404': '404', 'header': 'header', 'footer': 'footer'},
     'pages': {
@@ -894,6 +1406,10 @@ THEME = {
         'matrimoni': {'title': 'Matrimoni', 'template': 'matrimoni', 'slug': 'matrimoni'},
         'eventi': {'title': 'Eventi in città', 'template': 'eventi', 'slug': 'eventi'},
         'studio': {'title': 'Lo studio', 'template': 'studio', 'slug': 'studio'},
+        'aziende': {'title': 'Per le aziende', 'template': 'aziende', 'slug': 'aziende'},
+        'ritratti': {'title': 'Ritratti', 'template': 'ritratti', 'slug': 'ritratti'},
+        'famiglia': {'title': 'Famiglia', 'template': 'famiglia', 'slug': 'famiglia'},
+        'boudoir': {'title': 'Boudoir', 'template': 'boudoir', 'slug': 'boudoir'},
     },
     'styles': {
         'colors': dict(HEX),
@@ -927,7 +1443,8 @@ THEME = {
 def main():
     builds = {'header.json': build_header(), 'footer.json': build_footer(), 'home.json': build_home(),
               'lavori.json': build_lavori(), 'matrimoni.json': build_matrimoni(), 'eventi.json': build_eventi(),
-              'studio.json': build_studio(), '404.json': build_404()}
+              'studio.json': build_studio(), 'aziende.json': build_aziende(), 'ritratti.json': build_ritratti(),
+              'famiglia.json': build_famiglia(), 'boudoir.json': build_boudoir(), '404.json': build_404()}
     write_theme(THEME, builds, MEDIA)
 
 

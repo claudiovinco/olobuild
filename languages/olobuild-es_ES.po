@@ -47184,3 +47184,479 @@ msgstr "Obras con cita previa"
 #: src/config/elements/text-block.js
 msgid "Colore dei link"
 msgstr "Color de los enlaces"
+
+#: src/config/elements/queryloop.js
+msgid "Segui l'archivio aperto"
+msgstr "Seguir el archivo abierto"
+
+#: src/config/elements/queryloop.js
+msgid "Nel template di un archivio (una categoria con le sue sottocategorie, un tag, un autore, il blog, la ricerca) la tile mostra i contenuti di quella pagina, e le pagine si sfogliano con la paginazione della tile o con la tile Paginazione. Restano il numero, l'ordine e l'aspetto della tile; tipo, tassonomie e filtri qui non servono. Nel builder, fuori da un archivio, si vedono gli ultimi contenuti."
+msgstr "En la plantilla de un archivo (una categoría con sus subcategorías, una etiqueta, un autor, el blog, la búsqueda) el bloque muestra los contenidos de esa página, y las páginas se pasan con la paginación del bloque o con el bloque Paginación. Quedan el número, el orden y el aspecto del bloque; tipo, taxonomías y filtros aquí no hacen falta. En el builder, fuera de un archivo, se ven los últimos contenidos."
+
+#: src/config/elements/postgrid.js
+msgid "Nel template di un archivio (una categoria con le sue sottocategorie, un tag, un autore, il blog, la ricerca) la griglia mostra i contenuti di quella pagina; con la tile Paginazione le pagine si sfogliano. Restano il numero, l'ordine e l'aspetto della griglia; tipo e filtro meta qui non servono. Nel builder, fuori da un archivio, si vedono gli ultimi contenuti."
+msgstr "En la plantilla de un archivo (una categoría con sus subcategorías, una etiqueta, un autor, el blog, la búsqueda) la cuadrícula muestra los contenidos de esa página; con el bloque Paginación las páginas se pasan. Quedan el número, el orden y el aspecto de la cuadrícula; tipo y filtro meta aquí no hacen falta. En el builder, fuera de un archivo, se ven los últimos contenidos."
+
+#: src/components/Builder/DynamicQueryPanel.vue
+msgid "Nel template di un archivio (una categoria con le sue sottocategorie, un tag, un autore, il blog, la ricerca) le voci sono i contenuti di quella pagina, e la tile Paginazione ne sfoglia le pagine."
+msgstr "En la plantilla de un archivo (una categoría con sus subcategorías, una etiqueta, un autor, el blog, la búsqueda) los elementos son los contenidos de esa página, y el bloque Paginación pasa sus páginas."
+
+#: src/components/Builder/DynamicQueryPanel.vue
+msgid "Restano il numero e l'ordine scelti qui; tipo e tassonomia non servono. Nel builder, fuori da un archivio, si vedono gli ultimi contenuti."
+msgstr "Quedan el número y el orden elegidos aquí; tipo y taxonomía no hacen falta. En el builder, fuera de un archivo, se ven los últimos contenidos."
+
+#: src/components/Admin/TemplateConditionsTab.vue
+msgid "anche le sottocategorie"
+msgstr "también las subcategorías"
+
+#: src/components/Admin/TemplateConditionsTab.vue
+msgid "e sottocategorie"
+msgstr "y subcategorías"
+
+#: includes/class-tipi-contenuto.php
+msgid "Aggiungi una categoria"
+msgstr "Añadir una categoría"
+
+#: includes/class-tipi-contenuto.php
+msgid "Aggiungi un tag"
+msgstr "Añadir una etiqueta"
+
+#: includes/class-tipi-contenuto.php
+msgid "Categoria madre"
+msgstr "Categoría superior"
+
+#: includes/class-tipi-contenuto.php
+msgid "Cerca nelle categorie"
+msgstr "Buscar categorías"
+
+#: includes/class-tipi-contenuto.php
+msgid "Cerca nei tag"
+msgstr "Buscar etiquetas"
+
+#: includes/class-tipi-contenuto.php
+msgid "Nessuna categoria."
+msgstr "Ninguna categoría."
+
+#: includes/class-tipi-contenuto.php
+msgid "Nessun tag."
+msgstr "Ninguna etiqueta."
+
+#: includes/class-tipi-contenuto.php
+#, php-format
+msgid "Aggiungi: %s"
+msgstr "Añadir: %s"
+
+#: includes/class-tipi-contenuto.php
+#, php-format
+msgid "Tutte: %s"
+msgstr "Todos: %s"
+
+#: includes/class-tipi-contenuto.php
+#, php-format
+msgid "Modifica: %s"
+msgstr "Editar: %s"
+
+#: includes/class-tipi-contenuto.php
+#, php-format
+msgid "Nuovo: %s"
+msgstr "Nuevo: %s"
+
+#: includes/class-tipi-contenuto.php
+#, php-format
+msgid "Vedi: %s"
+msgstr "Ver: %s"
+
+#: includes/class-tipi-contenuto.php
+#, php-format
+msgid "Cerca: %s"
+msgstr "Buscar: %s"
+
+#: includes/class-tipi-contenuto.php
+msgid "Ancora niente qui."
+msgstr "Aún no hay nada aquí."
+
+#: includes/class-tipi-contenuto.php
+msgid "Niente nel cestino."
+msgstr "Nada en la papelera."
+
+#: includes/class-tipi-contenuto.php
+#, php-format
+msgid "Archivio: %s"
+msgstr "Archivo: %s"
+
+#: includes/class-tipi-contenuto.php
+msgid "Pubblicato."
+msgstr "Publicado."
+
+#: includes/class-tipi-contenuto.php
+msgid "Aggiornato."
+msgstr "Actualizado."
+
+#: includes/class-tipi-contenuto.php
+msgid "Programmato."
+msgstr "Programado."
+
+#: includes/class-tipi-contenuto.php
+#, php-format
+msgid "Redazione %s"
+msgstr "Redacción %s"
+
+#: includes/class-tipi-contenuto.php
+msgid "Aggiungi allegati"
+msgstr "Añadir adjuntos"
+
+#: includes/class-tipi-contenuto.php
+msgid "Aggiungi foto"
+msgstr "Añadir fotos"
+
+#: includes/class-tipi-contenuto.php
+msgid "Inquadrata"
+msgstr "Encuadrada"
+
+#: includes/class-tipi-contenuto.php
+msgid "Centro della foto"
+msgstr "Centro de la foto"
+
+#: includes/class-tipi-contenuto.php
+msgid "Inquadra"
+msgstr "Encuadrar"
+
+#: includes/class-tipi-contenuto.php
+msgid "Sposta prima"
+msgstr "Subir"
+
+#: includes/class-tipi-contenuto.php
+msgid "Togli"
+msgstr "Quitar"
+
+#: includes/class-tipi-contenuto.php
+msgid "Scegli le foto"
+msgstr "Elegir las fotos"
+
+#: includes/class-tipi-contenuto.php
+msgid "Scegli gli allegati"
+msgstr "Elegir los adjuntos"
+
+#: includes/class-tipi-contenuto.php
+msgid "Usa"
+msgstr "Usar"
+
+#: includes/class-tipi-contenuto.php
+msgid "Ritaglio non riuscito: riprova."
+msgstr "El recorte ha fallado: inténtalo de nuevo."
+
+#: includes/class-tipi-contenuto.php
+msgid "Elenco qui sotto"
+msgstr "Lista de abajo"
+
+#: includes/class-tipi-contenuto.php
+msgid "Link (Facebook, LinkedIn)"
+msgstr "Enlace (Facebook, LinkedIn)"
+
+#: includes/class-tipi-contenuto.php
+msgid "Post Instagram"
+msgstr "Publicación de Instagram"
+
+#: includes/class-tipi-contenuto.php
+msgid "Storie e reel"
+msgstr "Historias y reels"
+
+#: includes/class-dynamic-content.php
+msgid "Campi dei contenuti"
+msgstr "Campos de los contenidos"
+
+#: includes/tiles/class-allegati-tile.php
+msgid "Aggiungi i file nel Contenuto, o scegli il campo Allegati del contenuto."
+msgstr "Añade los archivos en Contenido, o elige el campo Adjuntos del contenido."
+
+#: includes/tiles/class-allegati-tile.php
+msgid "Sul sito: gli allegati del contenuto. Qui: le voci d'esempio."
+msgstr "En el sitio: los adjuntos del contenido. Aquí: los elementos de ejemplo."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Notizie, comunicati, rubriche: ogni tipo ha la sua voce nel menu di WordPress, le sue categorie e i suoi campi. Chi scrive lo trova nella bacheca con i permessi di WordPress; OLObuild lo disegna coi template Singolo e Archivio e ne legge i campi."
+msgstr "Noticias, comunicados, columnas: cada tipo tiene su elemento en el menú de WordPress, sus categorías y sus campos. Quien escribe lo encuentra en el escritorio con los permisos de WordPress; OLObuild lo dibuja con las plantillas Individual y Archivo y lee sus campos."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Nuovo tipo"
+msgstr "Nuevo tipo"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Gli articoli di WordPress, con le loro categorie e sottocategorie."
+msgstr "Las entradas de WordPress, con sus categorías y subcategorías."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Nome nel menu"
+msgstr "Nombre en el menú"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Vuoto: Articoli. Per esempio Notizie e Notizia."
+msgstr "Vacío: Entradas. Por ejemplo Noticias y Noticia."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Nome plurale"
+msgstr "Nombre plural"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Nome singolare"
+msgstr "Nombre singular"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Editor"
+msgstr "Editor"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Semplice: titoli, grassetto, corsivo, link, elenchi e citazioni, come in un programma di scrittura."
+msgstr "Sencillo: títulos, negrita, cursiva, enlaces, listas y citas, como en un procesador de textos."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Compaiono nella scheda di ogni articolo, nel riquadro Dettagli."
+msgstr "Aparecen en la ficha de cada entrada, en el recuadro Detalles."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Tipo senza nome"
+msgstr "Tipo sin nombre"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Scrivi il nome per cominciare"
+msgstr "Escribe el nombre para empezar"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "contenuti"
+msgstr "contenidos"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Elimina il tipo"
+msgstr "Eliminar el tipo"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Plurale e singolare: Notizie e Notizia, Comunicati e Comunicato."
+msgstr "Plural y singular: Noticias y Noticia, Comunicados y Comunicado."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Chiave e indirizzo"
+msgstr "Clave y dirección"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "La chiave non cambia più dopo il salvataggio: i contenuti sono legati a lei. L'indirizzo è la parte dopo il dominio."
+msgstr "La clave ya no cambia después de guardar: los contenidos están ligados a ella. La dirección es la parte después del dominio."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Chiave"
+msgstr "Clave"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Questa chiave è già usata da WordPress o da un altro plugin: scegline un'altra."
+msgstr "Esta clave ya la usa WordPress u otro plugin: elige otra."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Icona e posizione"
+msgstr "Icono y posición"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "La posizione nel menu: 5 sotto la Bacheca, 20 sotto le Pagine, 25 sotto i Commenti."
+msgstr "La posición en el menú: 5 debajo del Escritorio, 20 debajo de Páginas, 25 debajo de Comentarios."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Organizzazione"
+msgstr "Organización"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Nella scheda"
+msgstr "En la ficha"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Come gli articoli"
+msgstr "Como las entradas"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Propri"
+msgstr "Propios"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Compaiono nella scheda di ogni contenuto, nel riquadro Dettagli, e nella Sorgente dinamica come «Campi dei contenuti»."
+msgstr "Aparecen en la ficha de cada contenido, en el recuadro Detalles, y en la Fuente dinámica como «Campos de los contenidos»."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Amministratori e redattori possono tutto; il ruolo «Redazione {nome}» scrive e pubblica solo qui. Assegnalo in Utenti."
+msgstr "Administradores y editores pueden todo; el rol «Redacción {nome}» escribe y publica solo aquí. Asígnalo en Usuarios."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Chi può scrivere articoli può scrivere anche qui."
+msgstr "Quien puede escribir entradas puede escribir también aquí."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Eliminare il tipo? I suoi {n} contenuti restano nel database ma spariscono dalla bacheca finché non ricrei un tipo con la stessa chiave."
+msgstr "¿Eliminar el tipo? Sus {n} contenidos quedan en la base de datos pero desaparecen del escritorio hasta que vuelvas a crear un tipo con la misma clave."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Eliminare il tipo?"
+msgstr "¿Eliminar el tipo?"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Pagina con tutti i contenuti"
+msgstr "Página con todos los contenidos"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Categorie e sottocategorie"
+msgstr "Categorías y subcategorías"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Riassunto"
+msgstr "Resumen"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Nome del campo"
+msgstr "Nombre del campo"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Sposta dopo"
+msgstr "Bajar"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Togli il campo"
+msgstr "Quitar el campo"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Suggerimento per chi scrive (facoltativo)"
+msgstr "Sugerencia para quien escribe (opcional)"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Suggerimento per chi scrive"
+msgstr "Sugerencia para quien escribe"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Una scelta per riga"
+msgstr "Una opción por línea"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Scelte"
+msgstr "Opciones"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Aggiungi un campo"
+msgstr "Añadir un campo"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Testo formattato"
+msgstr "Texto con formato"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Scelta da un elenco"
+msgstr "Opción de una lista"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Sì / no"
+msgstr "Sí / no"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Foto per i social"
+msgstr "Fotos para redes sociales"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Allegati"
+msgstr "Adjuntos"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Togliere questo campo? I valori già scritti restano nei contenuti, ma la scheda non li mostra più."
+msgstr "¿Quitar este campo? Los valores ya escritos quedan en los contenidos, pero la ficha ya no los muestra."
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Intera"
+msgstr "Entera"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Metà"
+msgstr "Mitad"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Un terzo"
+msgstr "Un tercio"
+
+#: src/config/elements/allegati.js
+msgid "Comunicato stampa"
+msgstr "Comunicado de prensa"
+
+#: src/config/elements/allegati.js
+msgid "Foto in alta risoluzione"
+msgstr "Fotos en alta resolución"
+
+#: src/config/elements/allegati.js
+msgid "Dati e tabelle"
+msgstr "Datos y tablas"
+
+#: src/config/elements/allegati.js
+msgid "Dal contenuto"
+msgstr "Del contenido"
+
+#: src/config/elements/allegati.js
+msgid "Nel template di una notizia (o di un altro tipo con un campo Allegati) la tile mostra i file di quel contenuto, e senza file non compare. Con «Elenco qui sotto» si scrivono le voci a mano. Nel builder, fuori da un contenuto, si vedono le voci d'esempio."
+msgstr "En la plantilla de una noticia (o de otro tipo con un campo Adjuntos) el bloque muestra los archivos de ese contenido, y sin archivos no aparece. Con «Lista de abajo» los elementos se escriben a mano. En el builder, fuera de un contenido, se ven los elementos de ejemplo."
+
+#: src/config/elements/allegati.js
+msgid "Foglio di calcolo"
+msgstr "Hoja de cálculo"
+
+#: src/config/elements/allegati.js
+msgid "Presentazione"
+msgstr "Presentación"
+
+#: src/config/elements/allegati.js
+msgid "Mostra formato e peso"
+msgstr "Mostrar formato y tamaño"
+
+#: src/config/elements/allegati.js
+msgid "Le icone e il nome al passaggio del mouse. Vuoto: il primario del tema."
+msgstr "Los iconos y el nombre al pasar el ratón. Vacío: el color primario del tema."
+
+#: src/config/elements/allegati.js
+msgid "Nome del file"
+msgstr "Nombre del archivo"
+
+#: src/config/elements/allegati.js
+msgid "Formato e peso"
+msgstr "Formato y tamaño"
+
+#: src/config/elements/allegati.js
+msgid "Si vede quando la voce ha uno sfondo o un bordo."
+msgstr "Se ve cuando el elemento tiene un fondo o un borde."
+
+#: src/components/Admin/TemplateConditionsTab.vue
+msgid "Regole che decidono quale template mostrare in ogni contesto: testata e piè di pagina, pagine singole e archivi (per esempio gli articoli di una categoria e il suo archivio, con le sottocategorie). Quando più regole valgono, vince quella con priorità più bassa."
+msgstr "Reglas que deciden qué plantilla mostrar en cada contexto: cabecera y pie de página, páginas individuales y archivos (por ejemplo las entradas de una categoría y su archivo, con las subcategorías). Cuando valen varias reglas, gana la de prioridad más baja."
+
+#: includes/class-schede-temi.php
+msgid "Riga nella Vetrina"
+msgstr "Línea en el Escaparate"
+
+#: includes/class-schede-temi.php
+msgid "Sotto il nome del tema, nella sua scheda della Vetrina. Vuota: niente."
+msgstr "Debajo del nombre del tema, en su ficha del Escaparate. Vacía: nada."
+
+#: includes/class-schede-temi.php
+msgid "Non mostrarlo nella Vetrina"
+msgstr "No mostrarlo en el Escaparate"
+
+#: includes/class-schede-temi.php
+msgid "Grafica per Facebook, LinkedIn e le altre reti"
+msgstr "Gráfica para Facebook, LinkedIn y las demás redes"
+
+#: includes/class-schede-temi.php
+msgid "Se diversa da quella di Instagram: per esempio con l'indirizzo del sito al posto di «link in bio»."
+msgstr "Si es distinta de la de Instagram: por ejemplo con la dirección del sitio en lugar de «link in bio»."
+
+#: includes/class-schede-temi.php
+msgid "Testo per Instagram"
+msgstr "Texto para Instagram"
+
+#: includes/class-schede-temi.php
+msgid "Testo per Facebook, LinkedIn e le altre reti"
+msgstr "Texto para Facebook, LinkedIn y las demás redes"
+
+#: includes/class-schede-temi.php
+msgid "Il link al tema lo aggiunge OLOsocial."
+msgstr "El enlace al tema lo añade OLOsocial."
+
+#: src/config/elements/hero.js
+msgid "Le lettere del sopratitolo. Vuoto: il colore accento, come il dot. Un colore più scuro o più chiaro aiuta a leggerlo sopra una foto o un video."
+msgstr "Las letras del antetítulo. Vacío: el color de acento, como el punto. Un color más oscuro o más claro ayuda a leerlo sobre una foto o un vídeo."

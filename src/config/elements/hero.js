@@ -31,6 +31,7 @@ export default {
     //    esistenti restano identici finché l'utente non attiva qualcosa. ──
     eyebrow_text: '',
     eyebrow_dot: false,
+    eyebrow_color: '',
     media_bg: { type: 'none' },
     overlay_color: '',
     overlay_top: 0,
@@ -652,6 +653,8 @@ export default {
       description: t('Default per titolo + sottotitolo, sovrascritto dai colori specifici nei popover qui sotto.') },
     { key: 'accent', label: t('Colore accento'), type: 'color',
       description: t('Colora le parole in corsivo (em) del titolo, il dot eyebrow e il glow di default. Vuoto = nessun accento.') },
+    { key: 'eyebrow_color', label: t('Colore eyebrow'), type: 'color', condition: { field: 'eyebrow_text', op: 'notEmpty' },
+      description: t('Le lettere del sopratitolo. Vuoto: il colore accento, come il dot. Un colore più scuro o più chiaro aiuta a leggerlo sopra una foto o un video.') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'),
       responsiveKeys: [],

@@ -1,0 +1,33 @@
+/* Campi dei tipi di contenuto nella scheda di modifica (Olobuild_Tipi_Contenuto) — stile della bacheca di WordPress. */
+.olo-tc { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px 16px; }
+.olo-tc-campo { grid-column: span 6; margin: 8px 0; min-width: 0; }
+.olo-tc--meta { grid-column: span 3; }
+.olo-tc--terzo { grid-column: span 2; }
+.olo-tc-etichetta { display: block; font-weight: 600; margin: 0 0 4px; }
+.olo-tc input[type=text], .olo-tc input[type=number], .olo-tc input[type=date], .olo-tc input[type=time],
+.olo-tc input[type=url], .olo-tc select, .olo-tc textarea { width: 100%; max-width: none; }
+.olo-tc-sino { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+.olo-tc .description { margin: 4px 0 0; }
+.olo-tc-voci { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; padding: 0; list-style: none; }
+.olo-tc-voci li { position: relative; display: flex; align-items: center; gap: 6px; margin: 0; }
+.olo-tc-voci img { display: block; width: 80px; height: 80px; object-fit: cover; border-radius: 4px; background: #f0f0f1; }
+.olo-tc--allegati .olo-tc-voci { flex-direction: column; align-items: stretch; }
+.olo-tc--allegati .olo-tc-voci li { padding: 6px 8px; border: 1px solid #dcdcde; border-radius: 4px; background: #fff; }
+.olo-tc-file { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.olo-tc-file em { color: #50575e; font-style: normal; margin-left: 4px; }
+.olo-tc-su, .olo-tc-togli { width: 24px; height: 24px; padding: 0; border: 1px solid #c3c4c7; border-radius: 50%; background: #fff; color: #1d2327; line-height: 20px; cursor: pointer; }
+.olo-tc-voci img + .olo-tc-su { position: absolute; top: 4px; left: 4px; }
+.olo-tc-voci img ~ .olo-tc-togli { position: absolute; top: 4px; right: 4px; }
+.olo-tc-su:focus-visible, .olo-tc-togli:focus-visible { outline: 2px solid #2271b1; outline-offset: 1px; }
+.olo-tc-sorgente { display: flex; align-items: center; gap: 12px; margin: 0 0 12px; }
+.olo-tc-sorgente img, .olo-tc-vuoto { display: block; width: 80px; height: 80px; object-fit: cover; border-radius: 4px; background: #f0f0f1; }
+.olo-tc-formati { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+.olo-tc-formati li { display: flex; flex-direction: column; gap: 4px; margin: 0; }
+.olo-tc-anteprima { display: block; width: 100%; max-height: 220px; aspect-ratio: var(--olo-tc-r); overflow: hidden; border-radius: 4px; background: #f0f0f1; }
+.olo-tc-anteprima img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.olo-tc-formato { font-weight: 600; font-size: 12px; }
+.olo-tc-stato { color: #50575e; font-size: 12px; }
+.olo-tc-formati .button { align-self: flex-start; }
+@media (max-width: 782px) {
+    .olo-tc--meta, .olo-tc--terzo { grid-column: span 6; }
+}

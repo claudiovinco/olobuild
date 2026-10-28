@@ -159,7 +159,7 @@ class Olobuild_Template_Conditions {
         // Su una pagina data (il builder): ciò che dipende dalla pagina legge il
         // post; utente e data restano sulla richiesta corrente, come sul sito.
         if ( $post_id > 0 ) {
-            $result = $this->evaluate_for_post( $type, $value, (int) $post_id );
+            $result = $this->evaluate_for_post( $type, $value, (int) $post_id, $cond );
             if ( null !== $result ) {
                 return $negate ? ! $result : $result;
             }
@@ -218,6 +218,9 @@ class Olobuild_Template_Conditions {
                 } else {
                     $result = is_category( self::rif_categoria( $value ) );
                 }
+                if ( ! $result && ! empty( $cond['figlie'] ) ) {
+                    $result = self::sotto_termine( 'category', $value, is_singular() ? (int) get_queried_object_id() : 0 );
+                }
                 break;
 
             case 'tag':
@@ -231,14 +234,20 @@ class Olobuild_Template_Conditions {
             case 'taxonomy':
                 $parts = explode( ':', $value );
                 if ( count( $parts ) >= 2 ) {
-                    $result = has_term( $parts[1], $parts[0] );
+                    // Sull'archivio conta il termine aperto, non il primo contenuto dell'elenco (has_term leggeva quello).
+                    $result = is_singular() ? has_term( $parts[1], $parts[0] ) : self::archivio_del_termine( $parts[0], $parts[1] );
+                    if ( ! $result && ! empty( $cond['figlie'] ) ) {
+                        $result = self::sotto_termine( $parts[0], $parts[1], is_singular() ? (int) get_queried_object_id() : 0 );
+                    }
                 } elseif ( count( $parts ) === 1 ) {
                     $result = is_tax( $parts[0] );
                 }
                 break;
 
             case 'author':
-                $result = is_singular() && (int) get_the_author_meta( 'ID' ) === (int) $value;
+                $result = is_singular()
+                    ? (int) get_the_author_meta( 'ID' ) === (int) $value
+                    : is_author( (int) $value );
                 break;
 
             case 'user_logged_in':
@@ -318,7 +327,7 @@ class Olobuild_Template_Conditions {
      * @param int    $post_id
      * @return bool|null
      */
-    private function evaluate_for_post( $type, $value, $post_id ) {
+    private function evaluate_for_post( $type, $value, $post_id, $cond = [] ) {
         $post_type = get_post_type( $post_id );
 
         switch ( $type ) {
@@ -367,7 +376,8 @@ class Olobuild_Template_Conditions {
                 return false;
 
             case 'category':
-                return (bool) has_category( self::rif_categoria( $value ), $post_id );
+                return (bool) has_category( self::rif_categoria( $value ), $post_id )
+                    || ( ! empty( $cond['figlie'] ) && self::sotto_termine( 'category', $value, $post_id ) );
 
             case 'tag':
                 return (bool) has_tag( sanitize_text_field( $value ), $post_id );
@@ -375,7 +385,8 @@ class Olobuild_Template_Conditions {
             case 'taxonomy':
                 $parts = explode( ':', (string) $value );
                 if ( count( $parts ) >= 2 ) {
-                    return (bool) has_term( $parts[1], $parts[0], $post_id );
+                    return (bool) has_term( $parts[1], $parts[0], $post_id )
+                        || ( ! empty( $cond['figlie'] ) && self::sotto_termine( $parts[0], $parts[1], $post_id ) );
                 }
                 return false;
 
@@ -448,6 +459,67 @@ class Olobuild_Template_Conditions {
             return intval( $value );
         }
         return self::candidati( $value );
+    }
+
+    /**
+     * L'archivio aperto è quello del termine: is_category() / is_tag() per le tassonomie del core, is_tax() per le altre.
+     *
+     * @param string $taxonomy
+     * @param string $termine  slug, nome o ID
+     * @return bool
+     */
+    private static function archivio_del_termine( $taxonomy, $termine ) {
+        $taxonomy = sanitize_key( $taxonomy );
+        $termine  = is_numeric( $termine ) ? (int) $termine : sanitize_text_field( (string) $termine );
+        if ( 'category' === $taxonomy ) {
+            return is_category( $termine );
+        }
+        if ( 'post_tag' === $taxonomy ) {
+            return is_tag( $termine );
+        }
+        return is_tax( $taxonomy, $termine );
+    }
+
+    /**
+     * «Anche le sottocategorie»: il termine aperto (sull'archivio) o uno dei termini del contenuto sta sotto quello della
+     * condizione, a qualunque profondità. Il termine stesso lo controlla già la condizione normale.
+     *
+     * @param string $taxonomy
+     * @param mixed  $value    ID, slug o nome del termine madre
+     * @param int    $post_id  0 = l'archivio aperto
+     * @return bool
+     */
+    private static function sotto_termine( $taxonomy, $value, $post_id = 0 ) {
+        $taxonomy = sanitize_key( $taxonomy );
+        if ( ! is_taxonomy_hierarchical( $taxonomy ) || empty( $value ) || 'all' === $value ) {
+            return false;
+        }
+        $madri = [];
+        foreach ( is_numeric( $value ) ? [ (int) $value ] : self::candidati( $value ) as $rif ) {
+            $t = is_int( $rif ) ? get_term( $rif, $taxonomy ) : get_term_by( 'slug', (string) $rif, $taxonomy );
+            if ( ! ( $t instanceof WP_Term ) && ! is_int( $rif ) ) {
+                $t = get_term_by( 'name', (string) $rif, $taxonomy );
+            }
+            if ( $t instanceof WP_Term ) {
+                $madri[] = (int) $t->term_id;
+            }
+        }
+        if ( ! $madri ) {
+            return false;
+        }
+        if ( $post_id > 0 ) {
+            $termini = wp_get_post_terms( $post_id, $taxonomy, [ 'fields' => 'ids' ] );
+            $termini = is_wp_error( $termini ) ? [] : $termini;
+        } else {
+            $aperto  = get_queried_object();
+            $termini = ( $aperto instanceof WP_Term && $aperto->taxonomy === $taxonomy ) ? [ (int) $aperto->term_id ] : [];
+        }
+        foreach ( $termini as $id ) {
+            if ( array_intersect( $madri, array_map( 'intval', get_ancestors( (int) $id, $taxonomy, 'taxonomy' ) ) ) ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

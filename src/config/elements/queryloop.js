@@ -19,6 +19,7 @@ export default {
     bg: { type: 'none' },
     typography_preset: '',
     preset: 'magazine-trio',
+    segui_archivio: false,
     post_type: 'post',
     custom_post_type: '',
     posts_per_page: '6',
@@ -114,13 +115,13 @@ export default {
 
   fields: [
     { type: 'separator', label: t('Query') },
-    { key: 'post_type', label: t('Tipo contenuto'), type: 'select', options: [
-      { value: 'post', label: t('Articoli') },
-      { value: 'page', label: t('Pagine') },
-      { value: 'custom', label: t('Custom Post Type') },
-    ]},
+    { key: 'segui_archivio', label: t("Segui l'archivio aperto"), type: 'toggle',
+      description: t("Nel template di un archivio (una categoria con le sue sottocategorie, un tag, un autore, il blog, la ricerca) la tile mostra i contenuti di quella pagina, e le pagine si sfogliano con la paginazione della tile o con la tile Paginazione. Restano il numero, l'ordine e l'aspetto della tile; tipo, tassonomie e filtri qui non servono. Nel builder, fuori da un archivio, si vedono gli ultimi contenuti.") },
+    // I tipi del sito (articoli, pagine e ogni tipo pubblico); «Custom Post Type» resta per chi l'aveva già scelto.
+    { key: 'post_type', label: t('Tipo contenuto'), type: 'select', optionsSource: 'tipiContenuto',
+      condition: { field: 'segui_archivio', op: 'neq', value: true } },
     { key: 'custom_post_type', label: t('CPT slug'), type: 'text', placeholder: t('es: product, portfolio'),
-      condition: { field: 'post_type', op: 'eq', value: 'custom' } },
+      condition: [{ field: 'post_type', op: 'eq', value: 'custom' }, { field: 'segui_archivio', op: 'neq', value: true }] },
     { key: 'posts_per_page', label: t('Numero di post'), type: 'number', min: 1, max: 100 },
     { key: 'orderby', label: t('Ordina per'), type: 'select', options: [
       { value: 'date', label: t('Data') },
@@ -136,17 +137,19 @@ export default {
       { value: 'DESC', label: t('Decrescente') },
       { value: 'ASC', label: t('Crescente') },
     ]},
-    { type: 'separator', label: t('Tassonomie') },
+    { type: 'separator', label: t('Tassonomie'), condition: { field: 'segui_archivio', op: 'neq', value: true } },
     { key: 'taxonomy', label: t('Tassonomia'), type: 'select', optionsSource: 'taxonomies' },
-    { key: 'terms', label: t('Termini (separati da virgola)'), type: 'text', placeholder: t('news, tutorial') },
+    { key: 'terms', label: t('Termini'), type: 'multi_pills', optionsSource: 'termini', optionsDependOn: 'taxonomy',
+      condition: { field: 'taxonomy', op: 'notEmpty' } },
     { key: 'tax_relation', label: t('Relazione tassonomia'), type: 'select', options: [
       { value: 'IN', label: t('IN (qualsiasi termine)') },
       { value: 'AND', label: t('AND (tutti i termini)') },
       { value: 'NOT IN', label: t('NOT IN (escludi)') },
     ]},
     { key: 'second_taxonomy', label: t('Seconda tassonomia'), type: 'select', optionsSource: 'taxonomies' },
-    { key: 'second_terms', label: t('Secondo gruppo termini'), type: 'text', placeholder: t('tag1, tag2') },
-    { type: 'separator', label: t('Inclusioni / Esclusioni') },
+    { key: 'second_terms', label: t('Secondo gruppo termini'), type: 'multi_pills', optionsSource: 'termini', optionsDependOn: 'second_taxonomy',
+      condition: { field: 'second_taxonomy', op: 'notEmpty' } },
+    { type: 'separator', label: t('Inclusioni / Esclusioni'), condition: { field: 'segui_archivio', op: 'neq', value: true } },
     { key: 'offset', label: t('Offset'), type: 'number', min: 0, max: 100 },
     { key: 'exclude_current', label: t('Escludi post corrente'), type: 'toggle' },
     { key: 'include_ids', label: t('Includi solo ID (virgola)'), type: 'text', placeholder: t('12, 34, 56') },
@@ -158,11 +161,11 @@ export default {
       { value: 'exclude', label: t('Escludi in evidenza') },
     ]},
 
-    { type: 'separator', label: t('Filtro data') },
+    { type: 'separator', label: t('Filtro data'), condition: { field: 'segui_archivio', op: 'neq', value: true } },
     { key: 'date_after', label: t('Dopo il'), type: 'date' },
     { key: 'date_before', label: t('Prima del'), type: 'date' },
 
-    { type: 'separator', label: t('Filtro meta (ACF / custom field)') },
+    { type: 'separator', label: t('Filtro meta (ACF / custom field)'), condition: { field: 'segui_archivio', op: 'neq', value: true } },
     { key: 'meta_key', label: t('Meta key'), type: 'text', placeholder: t('prezzo, colore, etc.') },
     { key: 'meta_value', label: t('Meta value'), type: 'text', placeholder: t('valore da confrontare') },
     { key: 'meta_compare', label: t('Operatore'), type: 'select', options: [

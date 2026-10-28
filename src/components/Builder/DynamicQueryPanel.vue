@@ -82,8 +82,23 @@
       </template>
 
       <template v-else>
+        <!-- Nel template di un archivio: i contenuti di quella pagina (categoria, tag, autore, blog, ricerca) -->
+        <div class="dqp-toggle-row">
+          <label class="dqp-toggle-label">
+            <FieldToggle
+              type="button"
+              role="switch"
+              :aria-checked="localQuery.segui_archivio ? 'true' : 'false'"
+              :model-value="!!localQuery.segui_archivio"
+              @update:model-value="updateQuery('segui_archivio', !!$event)"
+            />
+            <span>{{ t("Segui l'archivio aperto") }}</span>
+          </label>
+          <InfoTip :titolo="TITOLO_ARCHIVIO" :testo="TESTO_ARCHIVIO" />
+        </div>
+
         <!-- Tipo di contenuto -->
-        <div class="dqp-field">
+        <div v-if="!localQuery.segui_archivio" class="dqp-field">
           <label class="dqp-label">{{ t('Tipo di contenuto') }}</label>
           <FieldSelect ui="dropdown" :model-value="localQuery.post_type" :options="postTypes" @update:model-value="updateQuery('post_type', $event)" />
         </div>
@@ -114,13 +129,13 @@
         </div>
 
         <!-- Taxonomy filter -->
-        <div class="dqp-field">
+        <div v-if="!localQuery.segui_archivio" class="dqp-field">
           <label class="dqp-label">{{ t('Filtra per tassonomia') }}</label>
           <FieldSelect ui="dropdown" :model-value="localQuery.taxonomy" :options="taxonomyOpts" @update:model-value="onTaxonomyChange($event)" />
         </div>
 
         <!-- Terms multi-select -->
-        <div v-if="localQuery.taxonomy && selectedTaxTerms.length" class="dqp-field">
+        <div v-if="!localQuery.segui_archivio && localQuery.taxonomy && selectedTaxTerms.length" class="dqp-field">
           <label class="dqp-label">{{ t('Termini') }}</label>
           <div class="dqp-terms">
             <label v-for="term in selectedTaxTerms" :key="term.value" class="dqp-term">
@@ -204,6 +219,7 @@ const defaultQuery = {
   order: 'DESC',
   taxonomy: '',
   terms: [],
+  segui_archivio: false,
 };
 
 const localQuery = ref({ ...defaultQuery, ...props.query });
@@ -296,6 +312,11 @@ const RIGA_PART_OPTS = [
   { value: 'parte_6', label: 'Parte 6' },
   { value: 'riga', label: 'Riga intera' },
   { value: '_index', label: 'Numero progressivo' },
+];
+const TITOLO_ARCHIVIO = t("Segui l'archivio aperto");
+const TESTO_ARCHIVIO = [
+  t("Nel template di un archivio (una categoria con le sue sottocategorie, un tag, un autore, il blog, la ricerca) le voci sono i contenuti di quella pagina, e la tile Paginazione ne sfoglia le pagine."),
+  t("Restano il numero e l'ordine scelti qui; tipo e tassonomia non servono. Nel builder, fuori da un archivio, si vedono gli ultimi contenuti."),
 ];
 const TESTO_RIGHE = [
   t('Le voci vengono da un campo personalizzato del contenuto che la pagina mostra (un prodotto, un articolo): una voce per riga, con le parti separate da «|». Per esempio «2019 | Pietrasanta | Bianco su bianco».'),

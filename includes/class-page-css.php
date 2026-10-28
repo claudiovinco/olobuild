@@ -131,12 +131,9 @@ class Olobuild_Page_CSS {
                 if ( $t ) {
                     $tpl_ids[] = $t;
                 }
-                $post_type = get_post_type( $pid );
-                if ( $post_type ) {
-                    $t = (int) get_option( "olobuild_active_single_{$post_type}", 0 );
-                    if ( $t ) {
-                        $tpl_ids[] = $t;
-                    }
+                $t = Olobuild_Single_Integration::template_id( (int) $pid );
+                if ( $t ) {
+                    $tpl_ids[] = $t;
                 }
                 $post = get_post( $pid );
                 if ( $post && preg_match_all( '/\[(?:olo|mosaic)_template[^\]]*id=["\']?(\d+)/', (string) $post->post_content, $m ) ) {
@@ -153,9 +150,9 @@ class Olobuild_Page_CSS {
                     $tpl_ids[] = $t;
                 }
             }
-            $qo = get_queried_object();
-            if ( $qo instanceof WP_Post_Type || ( is_object( $qo ) && ! empty( $qo->name ) ) ) {
-                $t = (int) get_option( 'olobuild_active_archive_' . $qo->name, 0 );
+            // Il template che l'archivio usa davvero (regola per categoria, tipo dell'archivio o generico).
+            if ( class_exists( 'Olobuild_Archive_Integration' ) ) {
+                $t = Olobuild_Archive_Integration::template_id();
                 if ( $t ) {
                     $tpl_ids[] = $t;
                 }

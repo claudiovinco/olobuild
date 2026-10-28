@@ -26,6 +26,7 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
         // Scena (unificazione hero, Fase 1) — tutti default no-op, parità col JS.
         'eyebrow_text'    => '',
         'eyebrow_dot'     => false,
+        'eyebrow_color'   => '',
         'media_bg'        => [ 'type' => 'none' ],
         'overlay_color'   => '',
         'overlay_top'     => 0,
@@ -498,7 +499,8 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-hero-title em{color:<?php echo $accent_css; ?>;}
             <?php endif; ?>
             <?php if ( ! empty( $s['eyebrow_text'] ) ) : ?>
-            .<?php echo $uid; ?> .olo-hero-eyebrow{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:11.5px;letter-spacing:.28em;text-transform:uppercase;color:<?php echo $accent_css; ?>;margin:0 0 18px;}
+            <?php $eyebrow_css = $this->safe_color_css( $s['eyebrow_color'] ?? '' ) ?: $accent_css; // vuoto: l'accento, come il dot ?>
+            .<?php echo $uid; ?> .olo-hero-eyebrow{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:11.5px;letter-spacing:.28em;text-transform:uppercase;color:<?php echo $eyebrow_css; ?>;margin:0 0 18px;}
             .<?php echo $uid; ?> .olo-hero-eyedot{width:6px;height:6px;border-radius:50%;background:<?php echo $accent_css; ?>;box-shadow:0 0 8px <?php echo $accent_css; ?>;flex:none;}
             <?php endif; ?>
             <?php if ( ! empty( $s['meta_text'] ) ) : ?>

@@ -255,6 +255,7 @@ import StockmediaTab from './StockmediaTab.vue';
 import IntegrazioniTab from './IntegrazioniTab.vue';
 import WhitelabelTab from './WhitelabelTab.vue';
 import PermessiTab from './PermessiTab.vue';
+import TipiContenutoTab from './TipiContenutoTab.vue';
 
 // ─── Information Architecture ───────────────────────────────────────
 const IA_GROUPS = [
@@ -268,6 +269,7 @@ const IA_GROUPS = [
   },
   {
     id: 'content', title: 'Contenuti & Template', items: [
+      { id: 'tipicontenuto', label: 'Tipi di contenuto',     icon: 'news',    component: TipiContenutoTab },
       { id: 'tplconditions', label: 'Assegnazione template', icon: 'sitemap', component: TemplateConditionsTab },
       { id: 'wootemplates',  label: 'WooCommerce template',  icon: 'cart',    component: WooTemplatesTab },
       // Traslocata nell'area Costruisci (restyling Fase 3): hidden = fuori
@@ -512,6 +514,7 @@ function riprovaScheda() {
 
 // ─── Icon mapping (Lucide-style inline SVG) ─────────────────────────
 const ICONS = {
+  news:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/></svg>',
   layers:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 17 9 5 9-5"/><path d="m3 12 9 5 9-5"/></svg>',
   palette:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.5-.5 1.5-1.5 0-.4-.2-.8-.5-1.2a1.5 1.5 0 0 1 1.2-2.3h2C18.5 17 20.5 15 20.5 12.4 20.5 6.5 16.7 2 12 2z"/></svg>',
   type:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2"/><path d="M9 20h6"/><path d="M12 5v15"/></svg>',

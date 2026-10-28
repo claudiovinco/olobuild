@@ -30,6 +30,11 @@ class Olobuild_Dynamic_Content {
             return class_exists( 'Olobuild_Spettacoli' ) ? Olobuild_Spettacoli::campo( $field, $post_id ) : null;
         }
 
+        // Campi dei contenuti: i campi dei tipi delle Impostazioni (e degli Articoli), nel formato da mostrare.
+        if ( 'campi' === $source ) {
+            return class_exists( 'Olobuild_Tipi_Contenuto' ) ? Olobuild_Tipi_Contenuto::campo( $field, $post_id ) : null;
+        }
+
         // Object cache: avoid repeated queries when multiple tiles resolve the same field.
         $cache_key = "olo_dyn_{$source}_{$field}_{$post_id}";
         $cached    = wp_cache_get( $cache_key, 'olo_dynamic' );
@@ -864,6 +869,28 @@ class Olobuild_Dynamic_Content {
             'post_status'    => 'publish',
         ];
 
+        // «Segui l'archivio aperto»: i contenuti della pagina d'archivio (Olobuild_Archive_Integration), col numero e
+        // l'ordine scelti qui; tipo e tassonomia non contano. Fuori da un archivio (il builder) gli ultimi del tipo.
+        if ( ! empty( $query_config['segui_archivio'] ) && class_exists( 'Olobuild_Archive_Integration' ) ) {
+            $archivio = Olobuild_Archive_Integration::argomenti_dell_archivio();
+            $ordine   = [ 'orderby' => $args['orderby'], 'order' => $args['order'] ];
+            if ( is_array( $archivio ) && isset( $archivio['s'] ) && 'date' === $ordine['orderby'] ) {
+                $ordine = []; // nella ricerca resta la pertinenza
+            }
+            $args = array_merge(
+                is_array( $archivio ) ? $archivio : [ 'post_type' => $args['post_type'] ],
+                [
+                    'posts_per_page' => $args['posts_per_page'],
+                    'paged'          => max( 1, absint( get_query_var( 'paged', 1 ) ) ),
+                    'post_status'    => 'publish',
+                ],
+                $ordine
+            );
+            $query = new WP_Query( $args );
+            update_post_thumbnail_cache( $query );
+            return $query->posts;
+        }
+
         // Taxonomy filter
         $taxonomy = $query_config['taxonomy'] ?? '';
         $terms    = $query_config['terms'] ?? [];
@@ -1346,6 +1373,17 @@ class Olobuild_Dynamic_Content {
                 ],
             ],
         ];
+
+        // I campi dei tipi di contenuto delle Impostazioni (Notizie › Sottotitolo, Articoli › Allegati…)
+        if ( class_exists( 'Olobuild_Tipi_Contenuto' ) ) {
+            $campi = Olobuild_Tipi_Contenuto::campi_dinamici();
+            if ( $campi ) {
+                $sources['campi'] = [
+                    'label'  => 'Campi dei contenuti',
+                    'fields' => $campi,
+                ];
+            }
+        }
 
         // Spettacoli del sito: i campi della pagina di uno spettacolo (template singolo di olo_spettacolo)
         if ( class_exists( 'Olobuild_Spettacoli' ) ) {

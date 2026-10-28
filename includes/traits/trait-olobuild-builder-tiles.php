@@ -114,6 +114,7 @@ trait Olobuild_Builder_Tiles_Trait {
         require_once OLOBUILD_PATH . 'includes/tiles/class-piantasala-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-certificazioni-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-schedatecnica-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-allegati-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-provamateriale-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-tracciamento-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-scorrimentoverticale-tile.php';
@@ -401,6 +402,7 @@ trait Olobuild_Builder_Tiles_Trait {
         $manager->register_tile( new Olobuild_Piantasala_Tile() );
         $manager->register_tile( new Olobuild_Certificazioni_Tile() );
         $manager->register_tile( new Olobuild_Schedatecnica_Tile() );
+        $manager->register_tile( new Olobuild_Allegati_Tile() );
         $manager->register_tile( new Olobuild_Provamateriale_Tile() );
         $manager->register_tile( new Olobuild_Tracciamento_Tile() );
         $manager->register_tile( new Olobuild_Scorrimentoverticale_Tile() );
@@ -596,6 +598,51 @@ trait Olobuild_Builder_Tiles_Trait {
             ];
         }
         return $result;
+    }
+
+    /**
+     * I termini di ogni tassonomia pubblica, per i controlli che li scelgono (Query Loop › Termini): slug e nome, le
+     * sottocategorie rientrate sotto la loro madre. Al massimo 200 per tassonomia.
+     */
+    private function get_terms_map() {
+        $mappa = [];
+        foreach ( get_taxonomies( [ 'public' => true ], 'names' ) as $tax ) {
+            $termini = get_terms( [
+                'taxonomy'               => $tax,
+                'hide_empty'             => false,
+                'number'                 => 200,
+                'orderby'                => 'name',
+                'update_term_meta_cache' => false,
+            ] );
+            if ( is_wp_error( $termini ) || ! $termini ) {
+                continue;
+            }
+            $figli = [];
+            $tutti = [];
+            foreach ( $termini as $t ) {
+                $figli[ (int) $t->parent ][] = $t;
+                $tutti[ (int) $t->term_id ]  = $t;
+            }
+            $voci  = [];
+            $visti = [];
+            $giu   = function ( $madre, $livello ) use ( &$giu, &$voci, &$visti, $figli ) {
+                foreach ( $figli[ $madre ] ?? [] as $t ) {
+                    $visti[ (int) $t->term_id ] = true;
+                    $voci[] = [ 'value' => $t->slug, 'label' => str_repeat( '— ', $livello ) . $t->name ];
+                    $giu( (int) $t->term_id, $livello + 1 );
+                }
+            };
+            $giu( 0, 0 );
+            // Le figlie di una madre rimasta fuori dai 200: in fondo, senza rientro.
+            foreach ( $tutti as $id => $t ) {
+                if ( empty( $visti[ $id ] ) && ! isset( $tutti[ (int) $t->parent ] ) ) {
+                    $voci[] = [ 'value' => $t->slug, 'label' => $t->name ];
+                    $giu( $id, 1 );
+                }
+            }
+            $mappa[ $tax ] = $voci;
+        }
+        return $mappa ? $mappa : new stdClass();
     }
 
     private function get_public_post_types() {

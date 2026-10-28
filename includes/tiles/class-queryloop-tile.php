@@ -12,6 +12,7 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
     protected $category = 'dynamic';
     protected $defaults = [
         'preset'          => 'magazine-trio',
+        'segui_archivio'  => false,
         'post_type'       => 'post',
         'posts_per_page'  => '6',
         'orderby'         => 'date',
@@ -302,9 +303,39 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
     }
 
     /**
+     * «Segui l'archivio aperto»: i contenuti dell'archivio, della ricerca o del blog che la pagina mostra (categoria con le
+     * sottocategorie, tag, autore, data, tipo), col numero per pagina e l'ordine della tile; la query principale prende lo
+     * stesso numero (Olobuild_Archive_Integration::per_pagina_della_query), così le pagine coincidono. Fuori da un
+     * archivio (il builder, una pagina qualunque) gli ultimi contenuti del tipo scelto. Gli altri filtri della tile non
+     * valgono qui: cambierebbero il conto delle pagine.
+     *
+     * @param array      $s
+     * @param int        $paged
+     * @param array|null $archivio Olobuild_Archive_Integration::argomenti_dell_archivio()
+     * @return array
+     */
+    private function argomenti_archivio( $s, $paged, $archivio ) {
+        $args = is_array( $archivio ) ? $archivio : [ 'post_type' => $this->tipo_contenuto( $s ) ];
+        $args['posts_per_page'] = max( 1, min( 100, absint( $s['posts_per_page'] ) ) );
+        $args['paged']          = max( 1, (int) $paged );
+        $args['post_status']    = 'publish';
+        // Nella ricerca resta l'ordine per pertinenza di WordPress, a meno che la tile non ne chieda un altro.
+        $orderby = sanitize_key( $s['orderby'] ?? 'date' );
+        if ( ! isset( $args['s'] ) || 'date' !== $orderby ) {
+            $args['orderby'] = $orderby;
+            $args['order']   = strtoupper( (string) ( $s['order'] ?? 'DESC' ) ) === 'ASC' ? 'ASC' : 'DESC';
+        }
+        return $args;
+    }
+
+    /**
      * Build WP_Query args from settings.
      */
-    private function build_query_args( $s, $paged = 1 ) {
+    private function build_query_args( $s, $paged = 1, $archivio = null ) {
+        if ( ! empty( $s['segui_archivio'] ) ) {
+            return $this->argomenti_archivio( $s, $paged, $archivio );
+        }
+
         // Post type: support custom post types
         $post_type = $this->tipo_contenuto( $s );
 
@@ -649,7 +680,13 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
             $paged = max( 1, absint( get_query_var( 'paged', 1 ) ) );
         }
 
-        $query_args = $this->build_query_args( $s, $paged );
+        // L'archivio aperto viaggia con le impostazioni anche verso «Carica altro», che non ha la pagina sotto.
+        $archivio = ! empty( $s['segui_archivio'] ) && class_exists( 'Olobuild_Archive_Integration' ) ? Olobuild_Archive_Integration::argomenti_dell_archivio() : null;
+        if ( is_array( $archivio ) ) {
+            $s['_archivio'] = $archivio;
+        }
+
+        $query_args = $this->build_query_args( $s, $paged, $archivio );
         $query = new WP_Query( $query_args );
 
         if ( ! $query->have_posts() ) {
@@ -1148,7 +1185,20 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
 
         $s = wp_parse_args( $s, $this->defaults );
 
-        $query_args = $this->build_query_args( $s, $page );
+        // Le impostazioni arrivano dal browser: solo tipi di contenuto che il sito mostra a tutti (prima, chiedendolo
+        // apposta, si leggevano anche i tipi interni: codici sconto di WooCommerce, voci dei menu…).
+        if ( empty( $s['segui_archivio'] ) && ! is_post_type_viewable( $this->tipo_contenuto( $s ) ) ) {
+            wp_send_json_error( [ 'message' => 'Invalid post type' ] );
+        }
+        $archivio = null;
+        if ( ! empty( $s['segui_archivio'] ) && is_array( $s['_archivio'] ?? null ) && class_exists( 'Olobuild_Archive_Integration' ) ) {
+            $archivio = Olobuild_Archive_Integration::variabili_pulite( $s['_archivio'] );
+        }
+        if ( ! empty( $s['segui_archivio'] ) && null === $archivio && ! is_post_type_viewable( $this->tipo_contenuto( $s ) ) ) {
+            wp_send_json_error( [ 'message' => 'Invalid post type' ] );
+        }
+
+        $query_args = $this->build_query_args( $s, $page, $archivio );
         $query = new WP_Query( $query_args );
 
         if ( ! $query->have_posts() ) {

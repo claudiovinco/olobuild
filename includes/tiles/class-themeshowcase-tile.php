@@ -84,8 +84,13 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             require_once OLOBUILD_PATH . 'includes/class-theme-importer.php';
         }
         $temi = [];
+        // Le schede dei temi (menu «Temi», Olobuild_Schede_Temi): una riga sotto il nome e «Non mostrarlo nella Vetrina».
+        $schede = class_exists( 'Olobuild_Schede_Temi' ) ? Olobuild_Schede_Temi::schede() : [];
         foreach ( Olobuild_Theme_Importer::get_themes() as $t ) {
             $id = (string) ( $t['id'] ?? '' );
+            if ( ! empty( $schede[ $id ]['nascosto'] ) ) {
+                continue;
+            }
             // Solo i temi con una demo che si apre qui: un tema del catalogo remoto (es. un tema di OLObooking
             // su un sito senza OLObooking) avrebbe una scheda con la demo che porta a una pagina inesistente.
             if ( '' === $id || ! Olobuild_Demo_Temi::acceso( $id ) || '' === Olobuild_Demo_Temi::cartella( $id ) ) {
@@ -103,6 +108,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             $temi[]    = [
                 'id'        => $id,
                 'nome'      => (string) ( $t['name'] ?? $id ),
+                'sottotitolo' => (string) ( $schede[ $id ]['sottotitolo'] ?? '' ),
                 'categoria' => $categoria,
                 'etichetta' => '' !== $categoria ? olobuild_t( $categoria ) : '',
                 'effetto'   => '' !== $effetto ? olobuild_t( $effetto ) : '',
@@ -253,6 +259,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ovt-corpo{flex:1;display:flex;flex-direction:column;gap:var(--olo-space-xs);padding:var(--olo-space-md);}
             .<?php echo $uid; ?> .ovt-cat{<?php echo $meta; ?>}
             .<?php echo $uid; ?> .ovt-nome{line-height:1.2;font-family:var(--olo-font-family-heading, inherit);<?php echo $nome; ?>}
+            .<?php echo $uid; ?> .ovt-sotto{display:block;margin-top:var(--olo-space-xs);font-size:.875em;line-height:1.4;opacity:.75;}
             .<?php echo $uid; ?> .ovt-req{display:flex;flex-wrap:wrap;align-items:center;gap:var(--olo-space-xs) var(--olo-space-sm);margin-top:var(--olo-space-xs);}
             .<?php echo $uid; ?> .ovt-req-lab{font-size:10px;font-weight:700;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;<?php echo '' !== $col_req ? 'color:' . $col_req . ';opacity:.8;' : 'opacity:.6;'; ?>}
             .<?php echo $uid; ?> .ovt-bollino{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:7px;background:#fff;color:#1f2937;box-shadow:0 0 0 1px rgba(17,24,39,.1);font-size:12px;font-weight:700;line-height:1;}
@@ -340,6 +347,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                         <span class="ovt-corpo">
                             <?php if ( ! empty( $s['show_category'] ) && '' !== $t['categoria'] ) : ?><span class="ovt-cat"><?php echo esc_html( $t['etichetta'] ); ?></span><?php endif; ?>
                             <span class="ovt-nome"><?php echo esc_html( $t['nome'] ); ?></span>
+                            <?php if ( '' !== $t['sottotitolo'] ) : ?><span class="ovt-sotto"><?php echo esc_html( $t['sottotitolo'] ); ?></span><?php endif; ?>
                             <?php if ( '' !== $t['req_nome'] ) :
                                 $logo_req  = '' !== $t['req_logo'] ? $t['req_logo'] : $t['req_logo_scuro'];
                                 // Col nome dell'edizione («OLObooking appointments»): testo alternativo e titolo.

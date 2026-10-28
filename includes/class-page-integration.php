@@ -100,7 +100,7 @@ class Olobuild_Page_Integration {
         // Check for CPT single template (olo_active_single_{post_type})
         $post_type = get_post_type( $post_id );
         if ( $post_type && $post_type !== 'page' && $post_type !== 'post' ) {
-            $single_tpl = (int) get_option( "olobuild_active_single_{$post_type}", 0 );
+            $single_tpl = Olobuild_Single_Integration::template_id( (int) $post_id );
             if ( $single_tpl ) {
                 return admin_url( 'admin.php?page=olobuilder-templates&template_id=' . $single_tpl . '&post_id=' . $post_id );
             }
@@ -159,7 +159,7 @@ class Olobuild_Page_Integration {
                 if ( ! $template_id ) {
                     $pt = get_post_type( $post_id );
                     if ( $pt && $pt !== 'page' && $pt !== 'post' ) {
-                        $template_id = (int) get_option( "olobuild_active_single_{$pt}", 0 );
+                        $template_id = Olobuild_Single_Integration::template_id( (int) $post_id );
                     }
                 }
                 $node = [

@@ -1296,6 +1296,8 @@ class Olobuild_Builder {
             'widgetTemplates'    => $this->get_widget_templates(),
             'postTypes'      => $this->get_public_post_types(),
             'taxonomies'     => $this->get_public_taxonomies(),
+            'termini'        => $this->get_terms_map(),
+            'campiAllegati'  => class_exists( 'Olobuild_Tipi_Contenuto' ) ? Olobuild_Tipi_Contenuto::scelte_allegati() : [],
             'metaPrefixes'   => $this->get_meta_prefixes(),
             'metaKeys'       => $this->get_meta_keys_map(),
             'serviceList'    => $this->get_service_list(),

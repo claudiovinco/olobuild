@@ -366,7 +366,7 @@ class Olobuild_Performance_Hints {
         $db  = new Olobuild_Database();
         $ids = array_filter( [
             (int) get_post_meta( $pid, '_olo_template_id', true ),
-            (int) get_option( 'olobuild_active_single_' . get_post_type( $pid ), 0 ),
+            Olobuild_Single_Integration::template_id( (int) $pid ),
         ] );
         foreach ( $ids as $id ) {
             $t = $db->get_template( $id );

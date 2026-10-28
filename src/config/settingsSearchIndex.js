@@ -129,6 +129,26 @@ export const SETTINGS_FIELD_INDEX = {
 			"hint": "Desktop c'è sempre."
 		}
 	],
+	"tipicontenuto": [
+		{
+			"kind": "field",
+			"label": "Nome nel menu",
+			"hint": "Vuoto: Articoli. Per esempio Notizie e Notizia.",
+			"section": ""
+		},
+		{
+			"kind": "field",
+			"label": "Editor",
+			"hint": "Semplice: titoli, grassetto, corsivo, link, elenchi e citazioni, come in un programma di scrittura.",
+			"section": ""
+		},
+		{
+			"kind": "field",
+			"label": "Campi",
+			"hint": "Compaiono nella scheda di ogni articolo, nel riquadro Dettagli.",
+			"section": ""
+		}
+	],
 	"tplconditions": [
 		{
 			"kind": "field",
@@ -172,6 +192,12 @@ export const SETTINGS_FIELD_INDEX = {
 			"kind": "section",
 			"label": "Mappa template",
 			"hint": "Lascia \"Default WooCommerce\" per usare il rendering nativo di Woo."
+		},
+		{
+			"kind": "field",
+			"label": "Prodotti senza prezzo",
+			"hint": "Al posto del prezzo, quando un prodotto non ne ha: «Prezzo su richiesta», «Prezzo riservato». Vuoto: non compare niente.",
+			"section": "Mappa template"
 		}
 	],
 	"popups": [

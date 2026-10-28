@@ -60,10 +60,7 @@ class Olobuild_Critical_CSS {
         $template_id = (int) get_post_meta( $post_id, '_olo_template_id', true );
         if ( ! $template_id ) {
             // Check if it's a single CPT with active template
-            $post_type = get_post_type( $post_id );
-            if ( $post_type ) {
-                $template_id = (int) get_option( "olobuild_active_single_{$post_type}", 0 );
-            }
+            $template_id = Olobuild_Single_Integration::template_id( (int) $post_id );
         }
 
         if ( ! $template_id ) {

@@ -12,6 +12,32 @@ class Olobuild_Single_Integration {
     }
 
     /**
+     * Il template singolo di un contenuto, scelto in un posto solo (pagina, CSS, CSS critico, «Modifica con Olobuild»):
+     * una Regola di visualizzazione col contesto Single (gli articoli di una categoria e delle sue sottocategorie, un
+     * tipo, un autore…) e, se nessuna vale, quello attivato per il suo tipo. Le pagine hanno il loro template: 0.
+     *
+     * @param int $post_id 0 = il contenuto aperto.
+     * @return int
+     */
+    public static function template_id( $post_id = 0 ) {
+        $post_id = $post_id ? (int) $post_id : (int) get_queried_object_id();
+        $tipo    = $post_id ? get_post_type( $post_id ) : '';
+        if ( ! $tipo || in_array( $tipo, [ 'page', 'attachment' ], true ) ) {
+            return 0;
+        }
+        static $memo = [];
+        if ( isset( $memo[ $post_id ] ) ) {
+            return $memo[ $post_id ];
+        }
+        $id = (int) get_option( "olobuild_active_single_{$tipo}", 0 );
+        if ( class_exists( 'Olobuild_Template_Conditions' ) ) {
+            $id = (int) Olobuild_Template_Conditions::instance()->resolve_by_conditions( $id, 'single', $post_id );
+        }
+        $memo[ $post_id ] = $id;
+        return $id;
+    }
+
+    /**
      * Replace content with Olobuilder single template for matching CPTs.
      */
     public function render_single_template( $content ) {
@@ -25,8 +51,7 @@ class Olobuild_Single_Integration {
             return $content;
         }
 
-        $post_type   = get_post_type();
-        $template_id = (int) get_option( "olobuild_active_single_{$post_type}", 0 );
+        $template_id = self::template_id( (int) get_the_ID() );
 
         if ( ! $template_id ) {
             return $content;
