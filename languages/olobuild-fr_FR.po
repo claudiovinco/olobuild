@@ -47820,3 +47820,31 @@ msgstr "OLOsocial ajoute le lien vers le thème."
 #: src/config/elements/hero.js
 msgid "Le lettere del sopratitolo. Vuoto: il colore accento, come il dot. Un colore più scuro o più chiaro aiuta a leggerlo sopra una foto o un video."
 msgstr "Les lettres du surtitre. Vide : la couleur d’accent, comme le point. Une couleur plus foncée ou plus claire aide à le lire sur une photo ou une vidéo."
+
+#: src/components/TemplateManager/TemplateList.vue
+msgid "Template archivio"
+msgstr "Modèles d'archive"
+
+#: src/components/TemplateManager/TemplateList.vue
+msgid "Tutti gli archivi"
+msgstr "Toutes les archives"
+
+#: src/components/TemplateManager/TemplateList.vue
+msgid "Per gli archivi dei tipi che non hanno un template loro"
+msgstr "Pour les archives des types qui n'ont pas leur propre modèle"
+
+#: src/components/TemplateManager/TemplateList.vue
+msgid "tutti"
+msgstr "tous"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Archivio di"
+msgstr "Archive de"
+
+#: src/components/Builder/BuilderToolbar.vue
+msgid "Il sito usa questo template per gli archivi"
+msgstr "Le site utilise ce modèle pour les archives"
+
+#: src/components/Builder/BuilderToolbar.vue
+msgid "Usa questo template per gli archivi"
+msgstr "Utiliser ce modèle pour les archives"

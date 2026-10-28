@@ -3,7 +3,7 @@
 anche matrimoni (pochi) e le feste della città.
 
 Minimale come i portfolio premiati del 2026 (Almira Kho, Brandon Yasin): carta grigia e grafite, un solo colore di
-segnale, l'arancio del punto di messa a fuoco. Titoli nel Funnel Display sottile, testo in Funnel Sans, i dati di
+segnale, un rosa lampone (dal 28 ottobre 2026; prima l'arancio del fuoco). Titoli nel Funnel Display sottile, testo in Funnel Sans, i dati di
 scatto in Fragment Mono come si leggono nel mirino. Angoli vivi, fili da un pixel, grana leggera.
 
 Dettagli: l'apertura «linea» col nome, il mirino della fotocamera sopra il video d'apertura (il fuoco segue il mouse,
@@ -25,17 +25,20 @@ ID = 'lunga-posa'
 NAME = 'Lunga Posa'
 
 HEX = {
-    'primary': '#E04A21', 'primary_contrast': '#141414', 'secondary': '#8A8F86', 'secondary_contrast': '#141414',
-    'accent': '#E04A21', 'dark': '#121212', 'light': '#F7F6F2', 'muted': '#E3E0D9', 'muted_contrast': '#161616',
+    'primary': '#E3457C', 'primary_contrast': '#141414', 'secondary': '#8A8F86', 'secondary_contrast': '#141414',
+    'accent': '#E3457C', 'dark': '#121212', 'light': '#F7F6F2', 'muted': '#E3E0D9', 'muted_contrast': '#161616',
     'text': '#161616', 'text_muted': '#64625C', 'background': '#EEECE7', 'border': '#D3D0C8', 'link': '#161616',
 }
 
 INK = 'var(--olo-color-text)'
 TENUE = 'var(--olo-color-text-muted)'
 FUOCO = 'var(--olo-color-primary)'
-# L'arancio per i testi piccoli (hover, numeri, dati di scatto): il fuoco scurito con la grafite regge 4,5:1 sulla carta
-# e sulle fasce grigie; il fuoco pieno resta per i titoli grandi, le icone e i fondi (lì sopra si scrive in NERO).
+# Il primario è un rosa lampone (#E3457C, dal 28 ottobre 2026). Per i testi piccoli (hover, numeri, dati di scatto) il rosa
+# scurito con la grafite regge 4,5:1 sulla carta e sulle fasce grigie; per gli accenti dei titoli grandi e le icone un rosa
+# appena più scuro regge 3:1 anche sulle fasce grigie (il pieno lì sta a 2,95). Il pieno resta per fondi, punti e linee,
+# e sopra il rosa si scrive in NERO.
 FUOCO_TESTO = 'color-mix(in srgb, var(--olo-color-primary) 70%, var(--olo-color-text))'
+FUOCO_TITOLI = 'color-mix(in srgb, var(--olo-color-primary) 90%, var(--olo-color-text))'
 FONDO = 'var(--olo-color-background)'
 CARTA = 'var(--olo-color-muted)'
 NERO = 'var(--olo-color-dark)'
@@ -210,7 +213,7 @@ def headline(t, label_, size=40, color=INK, tag='h3', pad_bottom=10, align='left
         o['heading_letter_spacing'] = spacing
     m = re.search(r'<em>(.*?)</em>', label_)
     if m:
-        o.update({'accent_text': m.group(1), 'accent_italic': False, 'accent_color': FUOCO})
+        o.update({'accent_text': m.group(1), 'accent_italic': False, 'accent_color': FUOCO_TITOLI})
     o['heading'] = label_.replace('<em>', '').replace('</em>', '')
     if size >= 40:
         o.update({'heading_font_size_tablet': str(int(size * 0.8)), 'heading_font_size_mobile': str(max(28, int(size * 0.56)))})
@@ -286,7 +289,7 @@ def contacts(t, color=INK):
         'items': [{'icon': 'map-pin', 'text': ADDRESS, 'link': STUDIO + '#dove', 'color': ''},
                   {'icon': 'phone', 'text': PHONE, 'link': PHONE_TEL, 'color': ''},
                   {'icon': 'mail', 'text': MAIL, 'link': 'mailto:' + MAIL, 'color': ''}],
-        'icon_color': FUOCO, 'icon_size': '16', 'text_color': color, 'text_size': '15', 'gap': '12', 'icon_shape': 'none',
+        'icon_color': FUOCO_TITOLI, 'icon_size': '16', 'text_color': color, 'text_size': '15', 'gap': '12', 'icon_shape': 'none',
         'icon_bg_color': '', 'divider': False, 'layout': 'vertical',
     }, style={})
 
@@ -561,7 +564,7 @@ def build_home():
         'quote': 'Adele è l’unica che aspetta. Ci ha chiesto di tornare alle sette di sera, con la casa vuota: <em>aveva '
                  'ragione, e la rivista ha messo quella foto in copertina.</em>',
         'author_name': 'Giulia Ferro', 'author_role': 'Ferro Vallino Architetti, Torino',
-        'rating': '5', 'text_color': INK, 'star_color': FUOCO, 'author_color': TENUE, 'quote_accent_color': FUOCO,
+        'rating': '5', 'text_color': INK, 'star_color': FUOCO, 'author_color': TENUE, 'quote_accent_color': FUOCO_TITOLI,
         'quote_font': 'heading', 'quote_size': 40, 'author_uppercase': True, 'quote_uppercase': False, 'layout': 'editorial',
         'show_line': True, 'line_color': FUOCO,
     })
@@ -1369,13 +1372,13 @@ def build_404():
 # ══════════════════════════════════════════════════════════════════════════════
 
 THEME = {
-    'id': ID, 'name': NAME, 'author': 'Olobuild', 'version': '1.1.0', 'preview_v': '2', 'preview_mobile_v': '2',
+    'id': ID, 'name': NAME, 'author': 'Olobuild', 'version': '1.2.0', 'preview_v': '3', 'preview_mobile_v': '3',
     'category': 'Creativi e portfolio', 'zone': 'Il fuoco lo decidi tu',
     'tags': ['fotografia', 'architettura', 'still life', 'hotel', 'immobili', 'matrimoni', 'ritratti', 'famiglia', 'newborn',
              'boudoir', 'eventi', 'minimale', 'torino'],
     'description': 'Lo studio di una fotografa di Torino: architettura, interni e oggetti, hotel, studi tecnici, agenzie '
                    'immobiliari e aziende; dodici matrimoni l’anno e le cerimonie in famiglia; ritratti, famiglie, newborn e '
-                   'boudoir; le feste della città. Carta grigia e grafite con l’arancio del fuoco, il mirino sopra il video '
+                   'boudoir; le feste della città. Carta grigia e grafite con un rosa lampone, il mirino sopra il video '
                    'd’apertura (il fuoco segue il mouse, il clic scatta e fa un provino), le sezioni che si svelano di lato, i '
                    'listini a prezzi chiusi e il modulo che sa già cosa chiedete.',
     'menu': {'name': 'Lunga Posa — menu', 'items': [

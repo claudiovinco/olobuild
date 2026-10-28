@@ -47660,3 +47660,31 @@ msgstr "El enlace al tema lo añade OLOsocial."
 #: src/config/elements/hero.js
 msgid "Le lettere del sopratitolo. Vuoto: il colore accento, come il dot. Un colore più scuro o più chiaro aiuta a leggerlo sopra una foto o un video."
 msgstr "Las letras del antetítulo. Vacío: el color de acento, como el punto. Un color más oscuro o más claro ayuda a leerlo sobre una foto o un vídeo."
+
+#: src/components/TemplateManager/TemplateList.vue
+msgid "Template archivio"
+msgstr "Plantillas de archivo"
+
+#: src/components/TemplateManager/TemplateList.vue
+msgid "Tutti gli archivi"
+msgstr "Todos los archivos"
+
+#: src/components/TemplateManager/TemplateList.vue
+msgid "Per gli archivi dei tipi che non hanno un template loro"
+msgstr "Para los archivos de los tipos sin una plantilla propia"
+
+#: src/components/TemplateManager/TemplateList.vue
+msgid "tutti"
+msgstr "todos"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Archivio di"
+msgstr "Archivo de"
+
+#: src/components/Builder/BuilderToolbar.vue
+msgid "Il sito usa questo template per gli archivi"
+msgstr "El sitio usa esta plantilla para los archivos"
+
+#: src/components/Builder/BuilderToolbar.vue
+msgid "Usa questo template per gli archivi"
+msgstr "Usar esta plantilla para los archivos"

@@ -586,6 +586,26 @@ trait Olobuild_Builder_Tiles_Trait {
     }
 
     /**
+     * I template d'archivio attivati: { tipo => id } più `_generic` (olobuild_active_archive, gli archivi dei tipi
+     * senza un template loro). Come la rotta GET olo/v1/archive/activate.
+     */
+    private function get_active_archives_map() {
+        $result  = [];
+        $generic = (int) get_option( 'olobuild_active_archive', 0 );
+        if ( $generic ) {
+            $result['_generic'] = $generic;
+        }
+        foreach ( get_post_types( [ 'public' => true ], 'names' ) as $pt ) {
+            if ( in_array( $pt, [ 'page', 'attachment' ], true ) ) continue;
+            $tpl_id = (int) get_option( "olobuild_active_archive_{$pt}", 0 );
+            if ( $tpl_id ) {
+                $result[ $pt ] = $tpl_id;
+            }
+        }
+        return ! empty( $result ) ? $result : new stdClass;
+    }
+
+    /**
      * Get public post types (excluding page and attachment) for the builder UI.
      */
     private function get_public_taxonomies() {

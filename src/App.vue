@@ -347,8 +347,15 @@ async function createAndOpenBuilder(typeOrObj = 'page') {
   if (typeof typeOrObj === 'object' && typeOrObj !== null) {
     type = typeOrObj.type || 'page';
     postType = typeOrObj.postType || '';
-    title = type === 'single' ? `Single: ${postType}` : 'Template senza titolo';
-    settings = type === 'single' ? { single_post_type: postType } : {};
+    if (type === 'archive') {
+      // postType '' = il generico (tutti gli archivi senza un template loro)
+      const etichetta = (oloData.postTypes || []).find(p => p.value === postType)?.label || postType;
+      title = postType ? `${t('Archivio')}: ${etichetta}` : t('Tutti gli archivi');
+      settings = { archive_post_type: postType };
+    } else {
+      title = type === 'single' ? `Single: ${postType}` : 'Template senza titolo';
+      settings = type === 'single' ? { single_post_type: postType } : {};
+    }
   } else {
     type = typeOrObj;
     postType = '';

@@ -3,6 +3,12 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.858 - 2026-10-28 (template d'archivio)
+- Template › Nuovo Template › «Template archivio»: la pagina che elenca i contenuti di un tipo (il blog con le sue categorie e i tag, Notizie, Comunicati…), oppure «Tutti gli archivi» per i tipi che non ne hanno uno loro. Dentro si mette un Query Loop o una Griglia articoli con «Segui l'archivio aperto».
+- Il pulsante «Attiva» nella barra del builder, come per il Singolo: da lì il sito usa il template per quegli archivi. Le Regole di visualizzazione col contesto Archivi restano più forti (una categoria con la sua grafica). Il tipo si cambia in Impostazioni pagina › Layout › «Archivio di».
+- Template: il filtro «Archivio» e il segno «Attivo» sui template d'archivio in uso.
+- Tema Lunga Posa: il colore del tema è il rosa lampone.
+
 ## v1.4.857 - 2026-10-28 (Hero e contrasti di Lunga Posa)
 - Hero: «Colore eyebrow», il colore delle lettere del sopratitolo (vuoto: l'accento, come prima). Serve quando l'accento sopra una foto o un video non si legge.
 - Tema Lunga Posa: contrasti misurati su ogni testo, anche sopra foto e video e al passaggio del mouse. Il grigio dei testi tenui è più scuro, l'arancio dei testi piccoli (menu, numeri, dati di scatto) è un arancio bruciato, i pulsanti arancioni hanno le scritte nere; le sezioni che si svelano di lato e le fasce sopra i video hanno un velo più pieno; Ritratti e Boudoir si aprono sulla carta come le altre pagine, così la testata si legge.

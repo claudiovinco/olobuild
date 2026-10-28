@@ -47802,3 +47802,31 @@ msgstr "Den Link zum Theme fügt OLOsocial hinzu."
 #: src/config/elements/hero.js
 msgid "Le lettere del sopratitolo. Vuoto: il colore accento, come il dot. Un colore più scuro o più chiaro aiuta a leggerlo sopra una foto o un video."
 msgstr "Die Buchstaben der Dachzeile. Leer: die Akzentfarbe, wie der Punkt. Eine dunklere oder hellere Farbe macht sie über einem Foto oder Video besser lesbar."
+
+#: src/components/TemplateManager/TemplateList.vue
+msgid "Template archivio"
+msgstr "Archiv-Templates"
+
+#: src/components/TemplateManager/TemplateList.vue
+msgid "Tutti gli archivi"
+msgstr "Alle Archive"
+
+#: src/components/TemplateManager/TemplateList.vue
+msgid "Per gli archivi dei tipi che non hanno un template loro"
+msgstr "Für die Archive der Typen ohne eigenes Template"
+
+#: src/components/TemplateManager/TemplateList.vue
+msgid "tutti"
+msgstr "alle"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Archivio di"
+msgstr "Archiv von"
+
+#: src/components/Builder/BuilderToolbar.vue
+msgid "Il sito usa questo template per gli archivi"
+msgstr "Die Website verwendet dieses Template für die Archive"
+
+#: src/components/Builder/BuilderToolbar.vue
+msgid "Usa questo template per gli archivi"
+msgstr "Dieses Template für die Archive verwenden"

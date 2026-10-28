@@ -44,6 +44,22 @@
             </span>
             Single: {{ pt.label }}
           </div>
+          <!-- Archivi: la pagina che elenca i contenuti (blog, categoria, tag, autore, archivio di un tipo).
+               «Tutti gli archivi» = il generico, per i tipi che non ne hanno uno loro (olobuild_active_archive). -->
+          <hr />
+          <div class="grp-head">{{ t('Template archivio') }}</div>
+          <div class="item" :title="t('Per gli archivi dei tipi che non hanno un template loro')" @click="createNewArchive('')">
+            <span class="ic-box" :style="{ background: TONE_BG.teal }">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="4" rx="1"/><rect x="3" y="16" width="18" height="4" rx="1"/></svg>
+            </span>
+            {{ t('Tutti gli archivi') }}
+          </div>
+          <div v-for="pt in postTypes" :key="'archivio-' + pt.value" class="item" @click="createNewArchive(pt.value)">
+            <span class="ic-box" :style="{ background: TONE_BG.teal }">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="4" rx="1"/><rect x="3" y="16" width="18" height="4" rx="1"/></svg>
+            </span>
+            {{ t('Archivio') }}: {{ pt.label }}
+          </div>
         </div>
       </div>
     </div>
@@ -144,7 +160,7 @@
           <img v-if="tpl.thumbnail" :src="tpl.thumbnail" :alt="tpl.title || ''" loading="lazy" class="thumb-img" />
           <TplPreviewShape v-else :kind="previewKindFor(tpl)" :type="tpl.type" />
           <div class="badges">
-            <span :class="['badge', 't-' + (tpl.type || 'page')]">{{ typeLabelShort(tpl.type) }}<span v-if="getSinglePostType(tpl)">: {{ getSinglePostType(tpl) }}</span></span>
+            <span :class="['badge', 't-' + (tpl.type || 'page')]">{{ typeLabelShort(tpl.type) }}<span v-if="getSinglePostType(tpl)">: {{ getSinglePostType(tpl) }}</span><span v-else-if="tpl.type === 'archive'">: {{ getArchivePostType(tpl) || t('tutti') }}</span></span>
           </div>
           <div class="badge-r">
             <span v-if="isActive(tpl)" class="badge attivo">{{ t('Attivo') }}</span>
@@ -301,6 +317,8 @@ const activeHeaderId = ref(parseInt(oloData.activeHeaderId) || 0);
 const activeFooterId = ref(parseInt(oloData.activeFooterId) || 0);
 const active404Id = ref(parseInt(oloData.active404Id) || 0);
 const activeSingles = ref({ ...(oloData.activeSingles || {}) });
+// { post_type: id, _generic: id } (get_active_archives_map)
+const activeArchives = ref({ ...(oloData.activeArchives || {}) });
 
 const activeType = ref('all');
 const query = ref('');
@@ -391,6 +409,7 @@ const TONE_BG = {
   amber:   'linear-gradient(135deg,#f59e0b,#d97706)',
   violet:  'linear-gradient(135deg,#8b5cf6,#5b21b6)',
   red:     'linear-gradient(135deg,#ef4444,#b91c1c)',
+  teal:    'linear-gradient(135deg,#14b8a6,#0f766e)',
 };
 
 /* ─── Type filters ─────────────────────────────────────────────────── */
@@ -399,6 +418,7 @@ const TYPE_META = {
   header:    { label: t('Header'),     short: 'HEADER',     dot: '#3b82f6' },
   footer:    { label: t('Footer'),     short: 'FOOTER',     dot: '#64748b' },
   single:    { label: t('Single'),     short: 'SINGLE',     dot: '#a855f7' },
+  archive:   { label: t('Archivio'),   short: 'ARCHIVIO',  dot: '#0d9488' },
   megapanel: { label: t('Mega Panel'), short: 'MEGA',       dot: '#f59e0b' },
   widget:    { label: t('Widget'),     short: 'WIDGET',     dot: '#8b5cf6' },
   '404':     { label: '404',           short: '404',        dot: '#ef4444' },
@@ -408,7 +428,7 @@ const typeFilters = computed(() => {
   const list = [
     { id: 'all', label: t('Tutti'), count: byType.value.all || templates.value.length, dotColor: '' },
   ];
-  for (const k of ['page', 'header', 'footer', 'single', 'megapanel', 'widget', '404']) {
+  for (const k of ['page', 'header', 'footer', 'single', 'archive', 'megapanel', 'widget', '404']) {
     const c = byType.value[k] || 0;
     if (c === 0 && activeType.value !== k) continue;
     list.push({
@@ -547,6 +567,10 @@ function createNewSingle(postType) {
   showNewMenu.value = false;
   emit('create', { type: 'single', postType });
 }
+function createNewArchive(postType) {
+  showNewMenu.value = false;
+  emit('create', { type: 'archive', postType });
+}
 
 function editTemplate(id) { emit('edit', id); }
 
@@ -621,9 +645,13 @@ async function copyShortcode(id) {
   }
 }
 
-/* ─── Active flags (header/footer/single/404) ─────────────────────── */
+/* ─── Active flags (header/footer/single/archive/404) ─────────────── */
 function getSinglePostType(tpl) {
   return tpl.settings?.single_post_type || '';
+}
+/* '' = il generico, per gli archivi dei tipi senza un template loro */
+function getArchivePostType(tpl) {
+  return tpl.settings?.archive_post_type || '';
 }
 function isActive(tpl) {
   if (tpl.type === 'header' && tpl.id === activeHeaderId.value) return true;
@@ -632,6 +660,9 @@ function isActive(tpl) {
   if (tpl.type === 'single') {
     const pt = getSinglePostType(tpl);
     return pt && activeSingles.value[pt] === tpl.id;
+  }
+  if (tpl.type === 'archive') {
+    return activeArchives.value[getArchivePostType(tpl) || '_generic'] === tpl.id;
   }
   return false;
 }
@@ -1055,6 +1086,7 @@ import TplPreviewShape from './TplPreviewShape.vue';
 .tpl-card .badge.t-header  { background: #dbeafe; color: #1e40af; border-color: #bfdbfe; }
 .tpl-card .badge.t-footer  { background: #e2e8f0; color: #1e293b; border-color: #cbd5e1; }
 .tpl-card .badge.t-single  { background: #f3e8ff; color: #6b21a8; border-color: #e9d5ff; }
+.tpl-card .badge.t-archive { background: #ccfbf1; color: #115e59; border-color: #99f6e4; }
 .tpl-card .badge.t-megapanel { background: #fef3c7; color: #92400e; border-color: #fde68a; }
 .tpl-card .badge.t-widget  { background: #ede9fe; color: #5b21b6; border-color: #ddd6fe; }
 .tpl-card .badge.t-404     { background: #fee2e2; color: #991b1b; border-color: #fecaca; }

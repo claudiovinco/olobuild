@@ -47,6 +47,10 @@
         class="mb-ml-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-amber-600/20 mb-text-amber-300 mb-border mb-border-amber-500/30"
       >Single: {{ singlePostType }}</span>
       <span
+        v-if="templateType === 'archive'"
+        class="mb-ml-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-cyan-600/20 mb-text-cyan-300 mb-border mb-border-cyan-500/30"
+      >{{ t('Archivio') }}: {{ archiveLabel }}</span>
+      <span
         v-if="templateType === '404'"
         class="mb-ml-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-gray-600/30 mb-text-gray-300 mb-border mb-border-gray-500/40"
       >404</span>
@@ -632,6 +636,22 @@
       >
         {{ isActiveSingle ? t('Disattiva') : t('Attiva') }}
       </button>
+      <!-- Activate archive: olobuild_active_archive_<tipo>, o il generico olobuild_active_archive
+           (archive_post_type vuoto). Le Regole di visualizzazione col contesto Archivi vincono
+           su entrambi (Olobuild_Archive_Integration::template_id). -->
+      <button
+        v-if="templateType === 'archive' && isPublished"
+        @click="toggleActivateArchive"
+        :title="isActiveArchive ? t('Il sito usa questo template per gli archivi') + ': ' + archiveLabel : t('Usa questo template per gli archivi') + ': ' + archiveLabel"
+        :class="[
+          'mb-px-4 mb-py-1.5 mb-text-xs mb-font-medium mb-rounded-md mb-border mb-transition-colors',
+          isActiveArchive
+            ? 'mb-border-cyan-500 mb-text-cyan-300 mb-bg-cyan-600/20 hover:mb-bg-red-600/20 hover:mb-text-red-300 hover:mb-border-red-500/30'
+            : 'mb-border-cyan-500/50 mb-text-cyan-400 hover:mb-bg-cyan-600/20'
+        ]"
+      >
+        {{ isActiveArchive ? t('Disattiva') : t('Attiva') }}
+      </button>
       <!-- Activate 404: la pagina che il sito mostra per gli indirizzi inesistenti
            (olobuild_active_404, letta da Olobuild_404_Integration). Prima mancava:
            una 404 si attivava solo importando un tema. -->
@@ -1085,6 +1105,20 @@ const isActiveSingle = computed(() => {
   return pt && activeSingles.value[pt] === tplId;
 });
 
+// '' = il generico: gli archivi dei tipi che non hanno un template loro.
+const archivePostType = computed(() => builderStore.currentTemplate?.settings?.archive_post_type || '');
+const archiveLabel = computed(() => {
+  const pt = archivePostType.value;
+  if (!pt) return t('tutti');
+  return (oloData.postTypes || []).find(p => p.value === pt)?.label || pt;
+});
+// { post_type: id, _generic: id } (get_active_archives_map)
+const activeArchives = ref({ ...(oloData.activeArchives || {}) });
+const isActiveArchive = computed(() => {
+  const tplId = builderStore.currentTemplate?.id;
+  return !!tplId && activeArchives.value[archivePostType.value || '_generic'] === tplId;
+});
+
 const active404Id = ref(parseInt(oloData.active404Id) || 0);
 const isActive404 = computed(() => {
   const tplId = builderStore.currentTemplate?.id;
@@ -1196,6 +1230,29 @@ async function toggleActivateSingle() {
     }
   } catch (err) {
     console.error('Toggle single activation error:', err);
+  }
+}
+
+async function toggleActivateArchive() {
+  const tplId = builderStore.currentTemplate?.id;
+  if (!tplId) return;
+  const pt = archivePostType.value;
+  const chiave = pt || '_generic';
+  try {
+    const spegni = isActiveArchive.value;
+    const res = await fetch(`${oloData.restUrl}archive/activate`, {
+      method: spegni ? 'DELETE' : 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': oloData.nonce },
+      body: JSON.stringify(spegni ? { post_type: pt } : { id: tplId, post_type: pt }),
+    });
+    if (res.ok) {
+      const updated = { ...activeArchives.value };
+      if (spegni) delete updated[chiave];
+      else updated[chiave] = tplId;
+      activeArchives.value = updated;
+    }
+  } catch (err) {
+    console.error('Toggle archive activation error:', err);
   }
 }
 

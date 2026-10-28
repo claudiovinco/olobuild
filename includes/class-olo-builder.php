@@ -1285,6 +1285,7 @@ class Olobuild_Builder {
             'resolvedZones'  => $resolved_zones,
             'active404Id'    => (int) get_option( 'olobuild_active_404', 0 ),
             'activeSingles'  => $this->get_active_singles_map(),
+            'activeArchives' => $this->get_active_archives_map(),
             'stockmedia'     => wp_parse_args(
                 get_option( 'olobuild_stockmedia_behavior', [] ) ?: [],
                 [ 'preferred' => 'unsplash', 'download_local' => true, 'optimize_on_download' => false ]

@@ -28,6 +28,16 @@
               @update:modelValue="builderStore.updatePageSetting('single_post_type', $event)"
             />
           </div>
+          <div v-if="isArchiveTemplate" class="psp-field">
+            <span class="psp-label">{{ t('Archivio di') }}</span>
+            <FieldSelect
+              ui="dropdown"
+              :aria-label="t('Archivio di')"
+              :modelValue="pageSettings.archive_post_type || ''"
+              :options="archiveTypeOptions"
+              @update:modelValue="builderStore.updatePageSetting('archive_post_type', $event)"
+            />
+          </div>
           <div class="psp-field">
             <span class="psp-label">{{ t('Larghezza max contenuto') }}</span>
             <FieldSelect
@@ -620,6 +630,9 @@ function removeFavicon() {
 
 const postTypes = oloData.postTypes || [];
 const isSingleTemplate = computed(() => builderStore.currentTemplate?.type === 'single');
+const isArchiveTemplate = computed(() => builderStore.currentTemplate?.type === 'archive');
+// '' = il generico (olobuild_active_archive): gli archivi dei tipi senza un template loro.
+const archiveTypeOptions = [{ value: '', label: t('Tutti gli archivi') }, ...postTypes];
 
 // ── SEO per-pagina ──
 // Disponibile solo quando il template è associato a un post (page/single).

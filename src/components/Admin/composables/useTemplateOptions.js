@@ -29,7 +29,7 @@ let seq = 0;
 function typeLabel(type) {
   const map = {
     page: t('Pagina'), header: t('Header'), footer: t('Footer'), single: t('Single'),
-    megapanel: t('Mega Panel'), widget: t('Widget'), '404': '404',
+    archive: t('Archivio'), megapanel: t('Mega Panel'), widget: t('Widget'), '404': '404',
   };
   return map[type] || String(type || '');
 }
