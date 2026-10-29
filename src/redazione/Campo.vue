@@ -39,6 +39,16 @@
       @media="(l) => emit('media', l)"
     />
 
+    <CampoVideo
+      v-else-if="campo.tipo === 'video'"
+      :id="id"
+      :model-value="modelValue"
+      :media="media"
+      :spento="spento"
+      @update:model-value="manda"
+      @media="(l) => emit('media', l)"
+    />
+
     <CampoFotoSocial
       v-else-if="campo.tipo === 'foto_social'"
       :model-value="modelValue"
@@ -68,6 +78,7 @@ import InfoTip from '@/components/Builder/InfoTip.vue';
 import EditorTesto from './EditorTesto.vue';
 import CampoMedia from './CampoMedia.vue';
 import CampoFotoSocial from './CampoFotoSocial.vue';
+import CampoVideo from './CampoVideo.vue';
 
 const props = defineProps({
   campo: { type: Object, required: true },

@@ -3,8 +3,21 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.875 - 2026-10-29 (i video su YouTube e Vimeo)
+- Con OLOsocial 0.6.0 il video di un contenuto esce anche su YouTube e Vimeo: nella sezione Social della Redazione si spuntano come le altre reti, e caricano il video della libreria scelto nel campo Video (titolo del contenuto come titolo del video, testo e link come descrizione). Se il contenuto non ha un video della libreria, la carta lo dice.
+- «Testo per i social» può valere anche solo per YouTube o per Vimeo, e la sezione Social ha i loro colori.
+- Tipi di contenuto: le due caselle di «Nome nel menu» e di «Chiave e indirizzo» restano dentro il riquadro (prima uscivano a destra e si toccavano); nei campi una casella attiva ha un solo bordo rosso (prima due).
+
+## v1.4.874 - 2026-10-29 (il campo Video)
+- In Olobuild › Sistema › Configurazione › Contenuti & Template › Tipi di contenuto c'è il nuovo tipo di campo Video: un video della libreria (si sceglie, si vede l'anteprima) oppure un link a YouTube, a Vimeo o a un file .mp4. Nella Redazione e nella scheda di WordPress si sceglie dalla libreria o si incolla il link; la Redazione dice se è YouTube, Vimeo o un file, con la miniatura di YouTube.
+- Sul sito: nella tile Video collega «URL video» alla fonte dinamica «Campi dei contenuti» e il campo; il file si riproduce, YouTube e Vimeo vanno in embed anche con la Sorgente «File». Un contenuto senza video nel campo non mostra il riquadro vuoto. La tile riproduce ora anche i file .m4v, .mov e .ogv.
+- L'aiuto (i) dei Dettagli nella Redazione e queste Novità dicono il percorso intero dei Tipi di contenuto: Olobuild › Sistema › Configurazione › Contenuti & Template › Tipi di contenuto.
+
+## v1.4.872 - 2026-10-29 (un testo per ogni social)
+- Un campo «Testo per i social» vale per tutte le reti o solo per quelle che spunti, fra le 20 di OLOsocial: si possono preparare testi dedicati a LinkedIn, a X, a Facebook e Threads insieme, e così via. Per ogni account vince il campo più preciso, cioè quello che copre meno reti; se è vuoto vale il successivo, poi il modello di OLOsocial. Nella Redazione la casella vuota mostra in grigio il testo che uscirebbe. I campi creati prima (Instagram, «Facebook, LinkedIn e le altre») funzionano come prima.
+
 ## v1.4.871 - 2026-10-29 (i campi dei Tipi di contenuto in ordine)
-- In Impostazioni › Tipi di contenuto ogni campo è una riga con la sua icona, il nome e un riassunto (tipo, larghezza, categorie); un clic la apre e ogni scelta ha la sua etichetta sopra. «Dove compare» sceglie fra tutte le categorie e solo alcune, i formati della foto per i social sono pulsanti da accendere, Sposta e Togli hanno le loro icone.
+- In Olobuild › Sistema › Configurazione › Contenuti & Template › Tipi di contenuto ogni campo è una riga con la sua icona, il nome e un riassunto (tipo, larghezza, categorie); un clic la apre e ogni scelta ha la sua etichetta sopra. «Dove compare» sceglie fra tutte le categorie e solo alcune, i formati della foto per i social sono pulsanti da accendere, Sposta e Togli hanno le loro icone.
 
 ## v1.4.868 - 2026-10-29 (le reti nuove di OLOsocial nella Redazione)
 - Nella sezione Social della Redazione le carte delle 14 reti nuove di OLOsocial 0.5.0 (Threads, X, Pinterest, Google Business Profile, Tumblr, Reddit, Viber, Discord, Slack, Microsoft Teams, Google Chat, Pixelfed, Misskey, Lemmy) hanno il loro colore.
@@ -20,13 +33,13 @@ La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mo
 ## v1.4.863 - 2026-10-28 (campi per categoria)
 - Nei Tipi di contenuto (Articoli compresi) ogni campo può valere «Solo nelle categorie» scelte, sottocategorie comprese: un campo per «Eventi» vale anche in «Eventi › Concerti». Nella Redazione e nella scheda di WordPress (editor classico e a blocchi) il campo compare appena si spunta una di quelle categorie.
 - Fuori dalle sue categorie il campo non si usa nemmeno sul sito, nelle tile Allegati, nelle sorgenti dinamiche e nei testi e nelle foto per OLOsocial; il valore resta salvato e torna se il contenuto torna in quella categoria.
-- Impostazioni › Tipi di contenuto: i riquadri dei campi hanno di nuovo il loro bordo.
+- Olobuild › Sistema › Configurazione › Contenuti & Template › Tipi di contenuto: i riquadri dei campi hanno di nuovo il loro bordo.
 
 ## v1.4.862 - 2026-10-28 (Testo per i social)
 - Nuovo tipo di campo «Testo per i social» nei Tipi di contenuto (anche negli Articoli), per tutte le reti, per Instagram o per Facebook, LinkedIn e le altre: con OLOsocial è il testo di partenza del post su quella rete. Prima c'era solo nelle schede dei temi, che ora usano lo stesso campo (testi già scritti invariati).
 
 ## v1.4.861 - 2026-10-28 (Redazione: campi da aggiungere)
-- Nella scheda della Redazione, un tipo senza campi in più (allegati, foto per i social, date…) lo dice nella zona «Dettagli», con «Aggiungi campi» che apre Impostazioni › Tipi di contenuto (per chi può cambiare le impostazioni).
+- Nella scheda della Redazione, un tipo senza campi in più (allegati, foto per i social, date…) lo dice nella zona «Dettagli», con «Aggiungi campi» che apre Olobuild › Sistema › Configurazione › Contenuti & Template › Tipi di contenuto (per chi può cambiare le impostazioni).
 
 ## v1.4.860 - 2026-10-28 (Redazione: anteprima, salvataggio automatico, versioni)
 - Anteprima nella Redazione: la pagina vera del sito, col suo template, con le modifiche non ancora salvate (testo, campi, categorie, foto), al telefono, sul tablet o al computer. Il contenuto sul sito non cambia.
@@ -40,7 +53,7 @@ La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mo
 - La scheda: titolo, riassunto, testo con un editor semplice (titoli, grassetto, corsivo, link, elenchi, citazione, foto), i campi del tipo (allegati, foto per i social col ritaglio, gli altri), categorie e tag, immagine in evidenza; pubblica, programma, salva bozza o invia in revisione secondo i permessi.
 - Se un altro sta scrivendo lo stesso contenuto lo dice, e non si scrive sopra a chi ha salvato dopo: si sceglie quale versione tenere. Ctrl+S salva.
 - I testi scritti con l'editor a blocchi (o con HTML che l'editor perderebbe) restano intatti: si cambiano nella scheda di WordPress, che resta sempre a disposizione.
-- Impostazioni › Tipi di contenuto si apre e salva di nuovo: chiamava un indirizzo sbagliato.
+- Olobuild › Sistema › Configurazione › Contenuti & Template › Tipi di contenuto si apre e salva di nuovo: chiamava un indirizzo sbagliato.
 
 ## v1.4.858 - 2026-10-28 (template d'archivio)
 - Template › Nuovo Template › «Template archivio»: la pagina che elenca i contenuti di un tipo (il blog con le sue categorie e i tag, Notizie, Comunicati…), oppure «Tutti gli archivi» per i tipi che non ne hanno uno loro. Dentro si mette un Query Loop o una Griglia articoli con «Segui l'archivio aperto».
@@ -64,7 +77,7 @@ La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mo
 - Con OLOsocial: il riquadro Social nella scheda di un contenuto usa, per ogni rete, la foto per i social inquadrata nel suo formato (Instagram 4:5, Facebook, LinkedIn e le altre 1,91:1); senza quel campo, l'immagine in evidenza.
 
 ## v1.4.853 - 2026-10-28 (tipi di contenuto)
-- Impostazioni › Tipi di contenuto: Notizie, Comunicati, Rubriche… ognuno con la sua voce nel menu di WordPress (nome, icona, posizione), il suo indirizzo (/notizie/), la pagina con tutti i contenuti, categorie con sottocategorie e tag propri. Chi scrive lo trova nella bacheca; OLObuild lo disegna coi template Singolo e Archivio.
+- Olobuild › Sistema › Configurazione › Contenuti & Template › Tipi di contenuto: Notizie, Comunicati, Rubriche… ognuno con la sua voce nel menu di WordPress (nome, icona, posizione), il suo indirizzo (/notizie/), la pagina con tutti i contenuti, categorie con sottocategorie e tag propri. Chi scrive lo trova nella bacheca; OLObuild lo disegna coi template Singolo e Archivio.
 - Permessi: come gli articoli, oppure propri, col ruolo «Redazione Notizie» che scrive e pubblica solo lì (amministratori e redattori possono tutto).
 - Editor semplice: l'editor visuale classico con titoli, grassetto, corsivo, link, elenchi e citazioni, al posto di quello a blocchi. Vale per i tipi nuovi e, se lo scegli, per gli Articoli.
 - Gli Articoli si possono rinominare (Notizie e Notizia) in tutta la bacheca.

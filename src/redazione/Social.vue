@@ -63,14 +63,17 @@
           <label class="orz-social-testa">
             <input type="checkbox" :checked="scelto(a)" :disabled="spento" @change="alterna(a, $event.target.checked)" />
             <span class="orz-rete" :class="'orz-rete--' + a.rete" aria-hidden="true">{{ iniziale(a.nomeRete) }}</span>
-            <span class="orz-social-nome"><strong>{{ a.nomeRete }}</strong><small>{{ a.nome }}</small></span>
+            <span class="orz-social-nome">
+              <strong>{{ a.nomeRete }}</strong><small>{{ a.nome }}</small>
+              <small v-if="a.video && scelto(a) && !haVideo" class="orz-social-errore">{{ t('Serve un video della libreria nel campo Video.') }}</small>
+            </span>
             <img v-if="a.foto" class="orz-social-foto" :src="a.foto" alt="" />
           </label>
           <div v-if="scelto(a)" class="orz-social-corpo">
             <textarea
               :value="testoDi(a)"
               rows="4"
-              :placeholder="a.modello || t('Il testo del modello di OLOsocial')"
+              :placeholder="riserva(a) || t('Il testo del modello di OLOsocial')"
               :aria-label="t('Testo per %s').replace('%s', a.nomeRete)"
               :disabled="spento"
               @input="scrivi(a, $event.target.value)"
@@ -111,6 +114,8 @@ const props = defineProps({
   // I campi del contenuto (f.campi) e quelli «Testo per i social» del tipo: il testo di una rete sta lì, se c'è.
   campi: { type: Object, default: () => ({}) },
   campiTesto: { type: Array, default: () => [] },
+  // Il contenuto ha un video della libreria (campo Video): senza, YouTube e Vimeo non escono.
+  haVideo: { type: Boolean, default: false },
   // Da OLOsocial: account disponibili, esito se già condiviso, indirizzo degli account.
   info: { type: Object, required: true },
   idContenuto: { type: Number, default: 0 },
@@ -145,14 +150,39 @@ function alterna(a, acceso) {
 }
 
 /**
+ * Quanto un campo «Testo per i social» è preciso per una rete: meno reti copre, prima vale (null = non vale per lei).
+ * Gemello PHP: Olobuild_Tipi_Contenuto::precisione_rete(); 'instagram' e 'altre' sono i valori di prima della 1.4.872.
+ */
+function precisione(reti, rete) {
+  if (Array.isArray(reti)) return reti.includes(rete) ? reti.length : null;
+  if (reti === 'instagram') return rete === 'instagram' ? 1 : null;
+  if (reti === 'altre') return rete !== 'instagram' ? 100 : null;
+  return 1000;
+}
+
+// I campi «Testo per i social» che valgono per la rete dell'account, dal più preciso; a pari merito, nell'ordine del tipo.
+function campiPer(a) {
+  return props.campiTesto
+    .map((c, i) => ({ c, i, p: precisione(c.reti || 'tutte', a.rete) }))
+    .filter((x) => x.p !== null)
+    .sort((x, y) => x.p - y.p || x.i - y.i)
+    .map((x) => x.c);
+}
+
+/**
  * Dove sta il testo di un account, cioè quello che uscirà: il testo scritto apposta per l'account (vince sempre), se no
- * il campo «Testo per i social» del tipo per la sua rete (Instagram, oppure le altre reti, oppure tutte), se no il testo
- * dell'account (vuoto = il modello di OLOsocial).
+ * il campo «Testo per i social» più preciso per la sua rete, se no il testo dell'account (vuoto = il modello di OLOsocial).
  */
 function campoDi(a) {
   if ((props.modelValue.testi[a.id] || '') !== '') return null;
-  const gruppo = a.rete === 'instagram' ? 'instagram' : 'altre';
-  return props.campiTesto.find((c) => c.reti === gruppo) || props.campiTesto.find((c) => c.reti === 'tutte') || null;
+  return campiPer(a)[0] || null;
+}
+
+// Il testo che esce se la casella resta vuota: quello di un campo meno preciso già scritto, se no il modello di OLOsocial.
+function riserva(a) {
+  const c = campoDi(a);
+  const altro = c ? campiPer(a).slice(1).find((x) => (props.campi[x.chiave] || '').trim() !== '') : null;
+  return altro ? props.campi[altro.chiave] : a.modello || '';
 }
 
 function testoDi(a) {
@@ -173,7 +203,7 @@ function notaTesto(a) {
 }
 
 function lunghezza(a) {
-  return [...(testoDi(a) || a.modello || '')].length;
+  return [...(testoDi(a) || riserva(a))].length;
 }
 
 // Lo stato di OLOsocial come colore della Redazione.

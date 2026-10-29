@@ -147,6 +147,11 @@ class Olobuild_Video_Tile extends Olobuild_Tile_Base {
         }
 
         $is_file = $s["source_type"] === 'file' || $this->is_direct_video( $s['video_url'] );
+        // Un collegamento dinamico (il campo Video di un contenuto) può portare YouTube o Vimeo anche con la Sorgente
+        // «File»: senza un file da riprodurre, quel link si mostra come embed.
+        if ( $is_file && '' === $this->get_file_src( $s ) && preg_match( '~(youtube\.com|youtu\.be|vimeo\.com)/~i', (string) $s['video_url'] ) ) {
+            $is_file = false;
+        }
         $is_cover = $s['display_mode'] === 'cover';
 
         // Build hover CSS prefix scoped to this instance only
@@ -601,12 +606,12 @@ class Olobuild_Video_Tile extends Olobuild_Tile_Base {
 
     private function is_direct_video( $url ) {
         if ( empty( $url ) ) return false;
-        return (bool) preg_match( '/\.(mp4|webm|ogg)(\?.*)?$/i', $url );
+        return (bool) preg_match( '/\.(mp4|m4v|mov|webm|ogv|ogg)(\?.*)?$/i', $url );
     }
 
     private function get_video_mime( $url ) {
         $ext = strtolower( pathinfo( wp_parse_url( $url, PHP_URL_PATH ), PATHINFO_EXTENSION ) );
-        $map = [ 'mp4' => 'video/mp4', 'webm' => 'video/webm', 'ogg' => 'video/ogg' ];
+        $map = [ 'mp4' => 'video/mp4', 'm4v' => 'video/mp4', 'mov' => 'video/mp4', 'webm' => 'video/webm', 'ogv' => 'video/ogg', 'ogg' => 'video/ogg' ];
         return $map[ $ext ] ?? 'video/mp4';
     }
 

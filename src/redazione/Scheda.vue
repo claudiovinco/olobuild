@@ -113,7 +113,7 @@
         <div v-else-if="tipo.configura" class="orz-blocco">
           <div class="orz-etichetta">
             <h2 class="orz-sezione">{{ t('Dettagli') }}</h2>
-            <InfoTip :titolo="t('Dettagli')" :testo="t('I campi in più (allegati, foto per i social, date, link…) si aggiungono per tipo in Impostazioni › Tipi di contenuto e valgono per tutti i suoi contenuti. Dopo averli salvati, ricarica questa pagina.')" />
+            <InfoTip :titolo="t('Dettagli')" :testo="t('I campi in più (allegati, foto per i social, date, link…) si aggiungono per tipo in Olobuild › Sistema › Configurazione › Contenuti & Template › Tipi di contenuto e valgono per tutti i suoi contenuti. Dopo averli salvati, ricarica questa pagina.')" />
           </div>
           <p class="orz-riga-info orz-riga-info--a-capo">
             {{ t('%s non hanno campi in più.').replace('%s', tipo.nome) }}
@@ -126,6 +126,7 @@
           :info="socialInfo"
           :campi="f.campi"
           :campi-testo="campiSocialTesto"
+          :ha-video="haVideo"
           :id-contenuto="idCorrente"
           :spento="spento"
           :uscito="uscito"
@@ -321,6 +322,8 @@ const nuovoVuoto = computed(() => !s.value && !f.titolo.trim() && !testoScritto(
 // un posto solo per tutto ciò che riguarda i social.
 const socialConCampi = computed(() => !!(socialInfo.value && socialInfo.value.accountDisponibili && socialInfo.value.accountDisponibili.length && !socialInfo.value.condiviso));
 const campiSocialFoto = computed(() => (socialConCampi.value ? campiVisibili.value.filter((c) => c.tipo === 'foto_social') : []));
+// YouTube e Vimeo caricano il video della libreria di un campo Video (un link non si ricarica).
+const haVideo = computed(() => campiVisibili.value.some((c) => c.tipo === 'video' && /^\d+$/.test(String(f.campi[c.chiave] || ''))));
 const campiSocialTesto = computed(() => (socialConCampi.value ? campiVisibili.value.filter((c) => c.tipo === 'testo_social') : []));
 const campiDettagli = computed(() => campiVisibili.value.filter((c) => !campiSocialFoto.value.includes(c) && !campiSocialTesto.value.includes(c)));
 // Tutti i campi del tipo sono dei social: i Dettagli non servono.

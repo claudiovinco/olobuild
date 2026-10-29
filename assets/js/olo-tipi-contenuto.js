@@ -71,6 +71,32 @@
         }
     });
 
+    // Video: un file della libreria (il suo ID nel campo nascosto) o un link scritto a mano
+    function video(box, valore, nomeFile) {
+        box.find('input[type=hidden]').first().val(valore).trigger('change');
+        box.find('.olo-tc-video-file').text(nomeFile || '').prop('hidden', !nomeFile);
+        box.find('.olo-tc-video-link').prop('hidden', !!nomeFile);
+        box.find('.olo-tc-video-togli').prop('hidden', !valore);
+    }
+    $(document).on('input', '.olo-tc-video .olo-tc-video-link', function () {
+        video($(this).closest('.olo-tc-video'), $.trim($(this).val()), '');
+    });
+    $(document).on('click', '.olo-tc-video .olo-tc-video-scegli', function () {
+        var box = $(this).closest('.olo-tc-video');
+        var frame = wp.media({ title: T.video, button: { text: T.usa }, multiple: false, library: { type: 'video' } });
+        frame.on('select', function () {
+            var att = frame.state().get('selection').first().toJSON();
+            box.find('.olo-tc-video-link').val('');
+            video(box, String(att.id), att.title || att.filename);
+        });
+        frame.open();
+    });
+    $(document).on('click', '.olo-tc-video .olo-tc-video-togli', function () {
+        var box = $(this).closest('.olo-tc-video');
+        box.find('.olo-tc-video-link').val('');
+        video(box, '', '');
+    });
+
     // Foto per i social
     function leggi(box) {
         try {

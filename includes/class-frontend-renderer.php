@@ -1053,6 +1053,12 @@ class Olobuild_Frontend_Renderer {
             if ( 'button' === $type && ! empty( $vuoti['text'] ) && empty( $settings['icon'] ) && ! $this->builder_mode ) {
                 return '';
             }
+            // Un video col link dinamico vuoto (il contenuto non ha video nel suo campo) e senza file non si disegna: sul
+            // sito restava il riquadro scuro «Inserisci un URL video». Nel builder resta.
+            if ( 'video' === $type && ( ! empty( $vuoti['video_url'] ) || ! empty( $vuoti['file_url'] ) ) && ! $this->builder_mode
+                && '' === trim( (string) ( $settings['video_url'] ?? '' ) ) && '' === trim( (string) ( $settings['file_url'] ?? '' ) ) ) {
+                return '';
+            }
         }
 
         // Migrazione legacy hero: prima della v3.55.13 la tile hero aveva il proprio

@@ -30,6 +30,12 @@
 .olo-tc-formato { font-weight: 600; font-size: 12px; }
 .olo-tc-stato { color: #50575e; font-size: 12px; }
 .olo-tc-formati .button { align-self: flex-start; }
+/* Video: il file scelto o il link, coi pulsanti accanto */
+.olo-tc-video { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.olo-tc-video .olo-tc-video-link { flex: 1 1 260px; min-width: 0; }
+.olo-tc-video .olo-tc-video-file { flex: 1 1 260px; padding: 5px 10px; border: 1px solid #dcdcde; border-radius: 4px; background: #fff; }
+.olo-tc-video [hidden] { display: none !important; }
+.olo-tc-video-azioni { display: inline-flex; align-items: center; gap: 10px; }
 @media (max-width: 782px) {
     .olo-tc--meta, .olo-tc--terzo { grid-column: span 6; }
 }

@@ -267,6 +267,8 @@ class Olobuild_Redazione {
             } elseif ( 'foto_social' === $c['tipo'] ) {
                 $d   = json_decode( $v, true );
                 $ids = array_merge( $ids, is_array( $d ) ? array_values( $d ) : [] );
+            } elseif ( 'video' === $c['tipo'] && ctype_digit( $v ) ) {
+                $ids[] = $v;
             }
         }
         $media = [];

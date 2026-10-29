@@ -48484,3 +48484,43 @@ msgstr "nur in {nomi}"
 #: src/components/Admin/controls/CfgCampi.vue
 msgid "in tutte le categorie"
 msgstr "in allen Kategorien"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Solo alcune"
+msgstr "Nur einige"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "tutte tranne Instagram"
+msgstr "alle außer Instagram"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "tutte le reti"
+msgstr "alle Netzwerke"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "{reti} e altre {n}"
+msgstr "{reti} und {n} weitere"
+
+#: src/redazione/CampoVideo.vue
+msgid "Cambia il video"
+msgstr "Video ändern"
+
+#: src/redazione/CampoVideo.vue
+msgid "Scegli dalla libreria"
+msgstr "Aus der Mediathek wählen"
+
+#: src/redazione/CampoVideo.vue
+msgid "Link non riconosciuto"
+msgstr "Link nicht erkannt"
+
+#: src/redazione/media.js
+msgid "Scegli il video"
+msgstr "Video auswählen"
+
+#: src/redazione/Scheda.vue
+msgid "I campi in più (allegati, foto per i social, date, link…) si aggiungono per tipo in Olobuild › Sistema › Configurazione › Contenuti & Template › Tipi di contenuto e valgono per tutti i suoi contenuti. Dopo averli salvati, ricarica questa pagina."
+msgstr "Zusätzliche Felder (Anhänge, Fotos für soziale Netzwerke, Daten, Links…) fügst du pro Typ unter Olobuild › System › Konfiguration › Inhalte & Templates › Inhaltstypen hinzu; sie gelten für alle Inhalte des Typs. Lade diese Seite nach dem Speichern neu."
+
+#: src/redazione/Social.vue
+msgid "Serve un video della libreria nel campo Video."
+msgstr "Im Feld Video wird ein Video aus der Mediathek benötigt."

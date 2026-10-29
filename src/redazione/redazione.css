@@ -198,6 +198,15 @@
 }
 .orz-media--immagine .orz-btn-icona, .orz-media--galleria .orz-btn-icona { width: 26px; height: 26px; }
 
+/* Video: l'anteprima del file della libreria, o il link con la piattaforma riconosciuta */
+.orz-video { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.orz-video > input { width: 100%; }
+.orz-video-anteprima { display: block; width: 100%; max-width: 420px; aspect-ratio: 16 / 9; border-radius: 8px; background: var(--orz-testo); }
+.orz-video .orz-media-file { width: 100%; max-width: 420px; box-sizing: border-box; }
+.orz-video-piattaforma { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--orz-testo-2); }
+.orz-video-piattaforma.is-ignota { color: var(--orz-accento-forte); }
+.orz-video-mini { width: 96px; height: 54px; object-fit: cover; border-radius: 6px; background: var(--orz-fondo); }
+
 /* Foto per i social */
 .orz-social { display: flex; flex-direction: column; gap: 12px; }
 .orz-social-sorgente { display: flex; align-items: center; gap: 12px; }
@@ -377,6 +386,8 @@ html.orz-modale-aperta, html.orz-modale-aperta body { overflow: hidden; }
 .orz-rete--pixelfed { background: #7c3aed; }
 .orz-rete--misskey { background: #5b7d00; }
 .orz-rete--lemmy { background: #14854f; }
+.orz-rete--youtube { background: #ff0033; }
+.orz-rete--vimeo { background: #1ab7ea; }
 .orz-social-nome { display: flex; flex-direction: column; flex: 1; min-width: 0; }
 .orz-social-nome strong { font-size: 13px; }
 .orz-social-nome small { color: var(--orz-testo-3); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

@@ -24,10 +24,39 @@ class Olobuild_Tipi_Contenuto {
     /** Impronta di tipi, indirizzi e tassonomie con cui sono state scritte le regole di riscrittura. */
     const OPZIONE_REGOLE = 'olobuild_tipi_regole';
 
-    const TIPI_CAMPO = [ 'testo', 'testo_lungo', 'formattato', 'numero', 'data', 'ora', 'link', 'scelta', 'sino', 'immagine', 'galleria', 'foto_social', 'testo_social', 'allegati' ];
+    const TIPI_CAMPO = [ 'testo', 'testo_lungo', 'formattato', 'numero', 'data', 'ora', 'link', 'scelta', 'sino', 'immagine', 'galleria', 'foto_social', 'testo_social', 'allegati', 'video' ];
 
-    /** A quali reti va un campo «Testo per i social» (OLOsocial): tutte, Instagram, o Facebook, LinkedIn e le altre. */
+    /**
+     * A quali reti va un campo «Testo per i social» (OLOsocial): 'tutte' o un elenco di reti di RETI_SOCIALI. Valgono
+     * ancora i valori di prima della 1.4.872: 'instagram' e 'altre' (tutte tranne Instagram).
+     */
     const RETI_TESTO = [ 'tutte', 'instagram', 'altre' ];
+
+    /** Le reti di OLOsocial (id del connettore => nome), per i campi «Testo per i social» dedicati. */
+    const RETI_SOCIALI = [
+        'facebook'       => 'Facebook',
+        'instagram'      => 'Instagram',
+        'linkedin'       => 'LinkedIn',
+        'threads'        => 'Threads',
+        'x'              => 'X',
+        'pinterest'      => 'Pinterest',
+        'googlebusiness' => 'Google Business Profile',
+        'tumblr'         => 'Tumblr',
+        'reddit'         => 'Reddit',
+        'telegram'       => 'Telegram',
+        'viber'          => 'Viber',
+        'discord'        => 'Discord',
+        'slack'          => 'Slack',
+        'teams'          => 'Microsoft Teams',
+        'googlechat'     => 'Google Chat',
+        'bluesky'        => 'Bluesky',
+        'mastodon'       => 'Mastodon',
+        'pixelfed'       => 'Pixelfed',
+        'misskey'        => 'Misskey',
+        'lemmy'          => 'Lemmy',
+        'youtube'        => 'YouTube',
+        'vimeo'          => 'Vimeo',
+    ];
 
     /** I formati delle foto per i social: proporzione e misura del ritaglio (mai ingrandito oltre l'originale). */
     const FORMATI_SOCIAL = [
@@ -61,6 +90,7 @@ class Olobuild_Tipi_Contenuto {
         // OLOsocial (riquadro Social della scheda): per ogni rete la foto inquadrata nel suo formato.
         add_filter( 'olo_social_foto_rete', [ __CLASS__, 'foto_per_rete' ], 10, 3 );
         add_filter( 'olo_social_testo_rete', [ __CLASS__, 'testo_per_rete' ], 10, 3 );
+        add_filter( 'olo_social_video', [ __CLASS__, 'video_per_social' ], 10, 2 );
         if ( is_admin() ) {
             add_action( 'add_meta_boxes', [ __CLASS__, 'riquadri' ], 10, 2 );
             add_action( 'save_post', [ __CLASS__, 'salva' ], 10, 2 );
@@ -193,7 +223,6 @@ class Olobuild_Tipi_Contenuto {
             }
             $prese[ $chiave ] = true;
             $larghezza        = (string) ( $c['larghezza'] ?? 'piena' );
-            $reti             = (string) ( $c['reti'] ?? 'tutte' );
             $categorie        = array_slice( array_values( array_unique( array_filter( array_map( 'absint', (array) ( $c['categorie'] ?? [] ) ) ) ) ), 0, 50 );
             $formati          = array_values( array_intersect( array_map( 'strval', (array) ( $c['formati'] ?? array_keys( self::FORMATI_SOCIAL ) ) ), array_keys( self::FORMATI_SOCIAL ) ) );
             $opzioni          = array_slice( array_values( array_filter( array_map( 'trim', explode( "\n", str_replace( "\r", '', (string) ( $c['opzioni'] ?? '' ) ) ) ), 'strlen' ) ), 0, 50 );
@@ -205,7 +234,7 @@ class Olobuild_Tipi_Contenuto {
                 'aiuto'     => self::testo( $c['aiuto'] ?? '', 300 ),
                 'opzioni'   => implode( "\n", array_map( 'sanitize_text_field', $opzioni ) ),
                 'formati'   => $formati ? $formati : array_keys( self::FORMATI_SOCIAL ),
-                'reti'      => in_array( $reti, self::RETI_TESTO, true ) ? $reti : 'tutte',
+                'reti'      => self::reti_campo( $c['reti'] ?? 'tutte' ),
                 // Vuoto = in tutti i contenuti del tipo; altrimenti solo in quelli di queste categorie (o delle figlie).
                 'categorie' => $categorie,
             ];
@@ -215,6 +244,32 @@ class Olobuild_Tipi_Contenuto {
 
     private static function testo( $v, $max ) {
         return mb_substr( sanitize_text_field( is_scalar( $v ) ? (string) $v : '' ), 0, $max );
+    }
+
+    /** Le reti di un campo «Testo per i social»: un elenco di reti conosciute (nel loro ordine), o 'tutte', 'instagram', 'altre'. */
+    private static function reti_campo( $v ) {
+        if ( is_array( $v ) ) {
+            $v = array_values( array_intersect( array_keys( self::RETI_SOCIALI ), array_map( 'sanitize_key', array_filter( $v, 'is_string' ) ) ) );
+            return $v ? $v : 'tutte';
+        }
+        return in_array( $v, self::RETI_TESTO, true ) ? $v : 'tutte';
+    }
+
+    /**
+     * Quanto un campo «Testo per i social» è preciso per una rete: meno reti copre, prima vale (null = non vale per lei).
+     * Gemello JS: precisione() in src/redazione/Social.vue.
+     */
+    public static function precisione_rete( $reti, $rete ) {
+        if ( is_array( $reti ) ) {
+            return in_array( $rete, $reti, true ) ? count( $reti ) : null;
+        }
+        if ( 'instagram' === $reti ) {
+            return 'instagram' === $rete ? 1 : null;
+        }
+        if ( 'altre' === $reti ) {
+            return 'instagram' !== $rete ? 100 : null;
+        }
+        return 1000;
     }
 
     /* ─────────────────────────────────────────────
@@ -513,6 +568,17 @@ class Olobuild_Tipi_Contenuto {
                     . esc_html( 'allegati' === $c['tipo'] ? __( 'Aggiungi allegati', 'olobuilder' ) : ( $multi ? __( 'Aggiungi foto', 'olobuilder' ) : __( 'Scegli la foto', 'olobuilder' ) ) )
                     . '</button></div>';
                 break;
+            case 'video':
+                // Un video della libreria (il suo ID) o un link: YouTube, Vimeo o un file .mp4 su un altro sito.
+                $aid = ctype_digit( $v ) ? (int) $v : 0;
+                echo '<div class="olo-tc-video">';
+                echo '<input type="hidden" name="' . esc_attr( $nome ) . '" value="' . esc_attr( $v ) . '">';
+                echo '<span class="olo-tc-file olo-tc-video-file"' . ( $aid ? '' : ' hidden' ) . '>' . esc_html( $aid ? get_the_title( $aid ) : '' ) . '</span>';
+                echo '<input type="url" id="' . esc_attr( $id ) . '" class="olo-tc-video-link" value="' . esc_attr( $aid ? '' : $v ) . '" placeholder="https://www.youtube.com/watch?v=…"' . ( $aid ? ' hidden' : '' ) . '>';
+                echo '<span class="olo-tc-video-azioni"><button type="button" class="button olo-tc-video-scegli">' . esc_html__( 'Scegli dalla libreria', 'olobuilder' ) . '</button>';
+                echo '<button type="button" class="button-link olo-tc-video-togli"' . ( '' === $v ? ' hidden' : '' ) . '>' . esc_html__( 'Togli', 'olobuilder' ) . '</button></span>';
+                echo '</div>';
+                break;
             case 'foto_social':
                 $dati = json_decode( $v, true );
                 $dati = is_array( $dati ) ? $dati : [];
@@ -633,9 +699,24 @@ class Olobuild_Tipi_Contenuto {
                     }
                 }
                 return empty( $out['sorgente'] ) ? '' : (string) wp_json_encode( $out );
+            case 'video':
+                $v = trim( $v );
+                if ( ctype_digit( $v ) ) {
+                    return wp_attachment_is( 'video', (int) $v ) ? (string) (int) $v : '';
+                }
+                return preg_match( '~^https?://~i', $v ) ? esc_url_raw( $v ) : '';
             default:
                 return sanitize_text_field( $v );
         }
+    }
+
+    /** L'indirizzo del video di un campo Video: il file della libreria o il link così com'è ('' = nessuno). */
+    public static function indirizzo_video( $v ) {
+        $v = trim( (string) $v );
+        if ( ctype_digit( $v ) ) {
+            return (string) wp_get_attachment_url( (int) $v );
+        }
+        return $v;
     }
 
     public static function script( $hook ) {
@@ -651,7 +732,7 @@ class Olobuild_Tipi_Contenuto {
         if ( array_filter( array_column( $t['campi'], 'categorie' ) ) ) {
             wp_enqueue_script( 'olobuild-tipi-categorie', OLOBUILD_URL . 'assets/js/olo-tipi-categorie.js', [], OLOBUILD_VERSION, true );
         }
-        $media = array_intersect( array_column( $t['campi'], 'tipo' ), [ 'immagine', 'galleria', 'allegati', 'foto_social' ] );
+        $media = array_intersect( array_column( $t['campi'], 'tipo' ), [ 'immagine', 'galleria', 'allegati', 'foto_social', 'video' ] );
         if ( ! $media ) {
             return;
         }
@@ -664,6 +745,7 @@ class Olobuild_Tipi_Contenuto {
                 'foto'        => __( 'Scegli la foto', 'olobuilder' ),
                 'fotoMolte'   => __( 'Scegli le foto', 'olobuilder' ),
                 'allegati'    => __( 'Scegli gli allegati', 'olobuilder' ),
+                'video'       => __( 'Scegli il video', 'olobuilder' ),
                 'usa'         => __( 'Usa', 'olobuilder' ),
                 'inquadra'    => __( 'Inquadra', 'olobuilder' ),
                 'inquadrata'  => __( 'Inquadrata', 'olobuilder' ),
@@ -686,7 +768,7 @@ class Olobuild_Tipi_Contenuto {
         foreach ( $gruppi as $t ) {
             $nome = 'post' === $t['chiave'] ? ( '' !== $t['nome'] ? $t['nome'] : __( 'Articoli', 'olobuilder' ) ) : $t['nome'];
             foreach ( $t['campi'] as $c ) {
-                $tipo = in_array( $c['tipo'], [ 'immagine', 'galleria', 'foto_social' ], true ) ? 'image' : ( 'link' === $c['tipo'] ? 'url' : ( 'formattato' === $c['tipo'] ? 'html' : 'text' ) );
+                $tipo = in_array( $c['tipo'], [ 'immagine', 'galleria', 'foto_social' ], true ) ? 'image' : ( in_array( $c['tipo'], [ 'link', 'video' ], true ) ? 'url' : ( 'formattato' === $c['tipo'] ? 'html' : 'text' ) );
                 if ( 'foto_social' === $c['tipo'] ) {
                     foreach ( $c['formati'] as $f ) {
                         $voci[] = [ 'key' => $c['chiave'] . ':' . $f, 'label' => $nome . ' › ' . $c['etichetta'] . ' (' . __( self::FORMATI_SOCIAL[ $f ]['nome'], 'olobuilder' ) . ')', 'type' => 'image' ]; // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText -- i nomi dei formati sono nel catalogo
@@ -742,6 +824,9 @@ class Olobuild_Tipi_Contenuto {
                     $nomi[] = get_the_title( $aid );
                 }
                 return implode( ', ', $nomi );
+            case 'video':
+                // L'indirizzo che la tile Video sa mostrare: il file (.mp4) o il link di YouTube e Vimeo.
+                return self::indirizzo_video( $v );
             default:
                 return (string) $v;
         }
@@ -770,6 +855,24 @@ class Olobuild_Tipi_Contenuto {
             return (int) $dati['sorgente'];
         }
         return $foto;
+    }
+
+    /**
+     * OLOsocial: il video da caricare su YouTube e Vimeo, dal primo campo Video del contenuto che ha un file della libreria
+     * (un link a YouTube o Vimeo non si ricarica). Senza, resta quello che OLOsocial ha già (nessuno).
+     */
+    public static function video_per_social( $video, $post_id ) {
+        $t = self::del_tipo( get_post_type( (int) $post_id ) );
+        foreach ( $t ? $t['campi'] : [] as $c ) {
+            if ( 'video' !== $c['tipo'] || ! self::campo_vale( $c, $post_id ) ) {
+                continue;
+            }
+            $v = trim( (string) get_post_meta( (int) $post_id, $c['chiave'], true ) );
+            if ( ctype_digit( $v ) && wp_attachment_is( 'video', (int) $v ) ) {
+                return (int) $v;
+            }
+        }
+        return $video;
     }
 
     /* ─────────────────────────────────────────────
@@ -861,29 +964,28 @@ class Olobuild_Tipi_Contenuto {
     }
 
     /**
-     * OLOsocial: il testo di partenza di una rete dai campi «Testo per i social» del contenuto: prima quello scritto per
-     * quella rete (Instagram, o Facebook, LinkedIn e le altre), poi quello per tutte; vuoti, resta il modello di OLOsocial.
+     * OLOsocial: il testo di partenza di una rete dai campi «Testo per i social» del contenuto: il campo pieno più preciso
+     * per quella rete (meno reti copre, prima vale; a pari merito il primo), poi quello per tutte; vuoti, resta il modello.
      */
     public static function testo_per_rete( $testo, $post_id, $rete ) {
         $t      = self::del_tipo( get_post_type( (int) $post_id ) );
-        $gruppo = 'instagram' === $rete ? 'instagram' : 'altre';
-        $tutte  = '';
+        $meglio = null;
+        $valore = '';
         foreach ( $t ? $t['campi'] : [] as $c ) {
             if ( 'testo_social' !== $c['tipo'] || ! self::campo_vale( $c, $post_id ) ) {
                 continue;
             }
-            $v = trim( (string) get_post_meta( (int) $post_id, $c['chiave'], true ) );
-            if ( '' === $v ) {
+            $p = self::precisione_rete( $c['reti'] ?? 'tutte', (string) $rete );
+            if ( null === $p || ( null !== $meglio && $p >= $meglio ) ) {
                 continue;
             }
-            if ( $gruppo === $c['reti'] ) {
-                return $v;
-            }
-            if ( 'tutte' === $c['reti'] && '' === $tutte ) {
-                $tutte = $v;
+            $v = trim( (string) get_post_meta( (int) $post_id, $c['chiave'], true ) );
+            if ( '' !== $v ) {
+                $meglio = $p;
+                $valore = $v;
             }
         }
-        return '' !== $tutte ? $tutte : $testo;
+        return '' !== $valore ? $valore : $testo;
     }
 
     /** I campi Allegati di tutti i tipi, per la tile Allegati › «Dal contenuto» (una voce per chiave). */
@@ -971,10 +1073,15 @@ class Olobuild_Tipi_Contenuto {
             $n                          = wp_count_posts( $t['chiave'] );
             $conteggi[ $t['chiave'] ] = $n ? (int) array_sum( (array) $n ) : 0;
         }
+        $reti = [];
+        foreach ( self::RETI_SOCIALI as $k => $nome ) {
+            $reti[] = [ 'value' => $k, 'label' => $nome ];
+        }
         return rest_ensure_response( [
             'impostazioni' => self::impostazioni(),
             'icone'        => self::ICONE,
             'formati'      => $formati,
+            'reti'         => $reti,
             'categorie'    => (object) self::categorie_per_tipo(),
             'riservati'    => array_values( array_unique( array_merge( self::RISERVATI, $altri ) ) ),
             'conteggi'     => $conteggi,

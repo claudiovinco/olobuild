@@ -40,7 +40,7 @@
       </div>
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('Campi') }}</label><div class="hint">{{ t('Compaiono nella scheda di ogni articolo, nel riquadro Dettagli.') }}</div><div v-if="(categorie.post || []).length" class="hint">{{ t('Un campo può valere solo in alcune categorie, sottocategorie comprese.') }}</div></div>
-        <div class="control-col"><CfgCampi :campi="articoli.campi" :formati="formati" :categorie="categorie.post || []" /></div>
+        <div class="control-col"><CfgCampi :campi="articoli.campi" :formati="formati" :reti="reti" :categorie="categorie.post || []" /></div>
       </div>
     </div>
   </div>
@@ -115,7 +115,7 @@
       </div>
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('Campi') }}</label><div class="hint">{{ t('Compaiono nella scheda di ogni contenuto, nel riquadro Dettagli, e nella Sorgente dinamica come «Campi dei contenuti».') }}</div><div v-if="(categorie[tipo.chiave] || []).length" class="hint">{{ t('Un campo può valere solo in alcune categorie, sottocategorie comprese.') }}</div></div>
-        <div class="control-col"><CfgCampi :campi="tipo.campi" :formati="formati" :categorie="categorie[tipo.chiave] || []" /></div>
+        <div class="control-col"><CfgCampi :campi="tipo.campi" :formati="formati" :reti="reti" :categorie="categorie[tipo.chiave] || []" /></div>
       </div>
     </div>
   </div>
@@ -151,6 +151,8 @@ const articoli = ref({ nome: '', singolare: '', editor: 'blocchi', campi: [] });
 const tipi = ref([]);
 const icone = ref([]);
 const formati = ref([]);
+// Le reti di OLOsocial, per i campi «Testo per i social» dedicati ad alcune.
+const reti = ref([]);
 // Le categorie di ogni tipo (chiave => [{ value, label }]), per «Solo nelle categorie» sui campi.
 const categorie = ref({});
 const riservati = ref([]);
@@ -206,6 +208,7 @@ function applica(data) {
   tipi.value = (imp.tipi || []).map((x) => ({ ...x, campi: conId(x.campi), _id: nuovoId(), _nuovo: false, _chiaveScritta: true, _indirizzoScritto: true }));
   icone.value = data?.icone || [];
   formati.value = data?.formati || [];
+  reti.value = data?.reti || [];
   categorie.value = data?.categorie || {};
   riservati.value = data?.riservati || [];
   conteggi.value = data?.conteggi || {};
@@ -251,7 +254,9 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.tc-due { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.tc-due { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+/* Le caselle della pagina hanno larghezza 100% più il bordo interno: in due colonne uscivano dal riquadro e si toccavano. */
+.tc-due > .cfg-input { box-sizing: border-box; min-width: 0; }
 .tc-indirizzo { display: flex; align-items: center; gap: 2px; }
 .tc-indirizzo span { color: var(--c-text-mute); }
 .tc-indirizzo input { flex: 1; min-width: 0; }

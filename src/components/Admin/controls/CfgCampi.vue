@@ -59,7 +59,15 @@
         <div v-if="c.tipo === 'testo_social'" class="cc-voce is-intera">
           <span class="cc-lbl">{{ t('Per quali reti') }}</span>
           <div class="cfg-segment cc-a-capo" role="group" :aria-label="t('Per quali reti')">
-            <button v-for="r in RETI" :key="r.value" type="button" :class="{ 'is-on': (c.reti || 'tutte') === r.value }" :aria-pressed="(c.reti || 'tutte') === r.value ? 'true' : 'false'" @click="set(c, 'reti', r.value)">{{ r.label }}</button>
+            <button type="button" :class="{ 'is-on': !retiScelte(c) }" :aria-pressed="retiScelte(c) ? 'false' : 'true'" @click="tutteLeReti(c)">{{ t('Tutte le reti') }}</button>
+            <button type="button" :class="{ 'is-on': retiScelte(c) }" :aria-pressed="retiScelte(c) ? 'true' : 'false'" @click="sceltaReti.add(c._id)">{{ t('Solo alcune') }}</button>
+          </div>
+          <div v-if="retiScelte(c)" class="cc-formati" role="group" :aria-label="t('Per quali reti')">
+            <label v-for="r in reti" :key="r.value" class="cc-formato" :class="{ 'is-on': retiDi(c).includes(r.value) }">
+              <input type="checkbox" class="cc-nascosto" :checked="retiDi(c).includes(r.value)" @change="setRete(c, r.value, $event.target.checked)" />
+              <svg class="cc-spunta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+              <span>{{ r.label }}</span>
+            </label>
           </div>
         </div>
         <div v-if="c.tipo === 'foto_social'" class="cc-voce is-intera">
@@ -117,6 +125,8 @@ const props = defineProps({
   formati: { type: Array, default: () => [] },
   // Le categorie del tipo ([{ value, label }]): con almeno una, ogni campo può valere solo in alcune.
   categorie: { type: Array, default: () => [] },
+  // Le reti di OLOsocial ([{ value, label }], Olobuild_Tipi_Contenuto::RETI_SOCIALI), per i «Testo per i social».
+  reti: { type: Array, default: () => [] },
 });
 const emit = defineEmits(['cambia']);
 
@@ -135,6 +145,7 @@ const TIPI = [
   { value: 'foto_social', label: t('Foto per i social') },
   { value: 'testo_social', label: t('Testo per i social') },
   { value: 'allegati', label: t('Allegati') },
+  { value: 'video', label: t('Video') },
 ];
 // L'icona di ogni tipo, nella riga del campo.
 const ICONE = {
@@ -152,13 +163,8 @@ const ICONE = {
   foto_social: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
   testo_social: '<circle cx="18" cy="5.5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="18.5" r="2.5"/><path d="m8.2 13.3 7.6 4M15.8 6.7l-7.6 4"/>',
   allegati: '<path d="m20.5 11.5-8.4 8.4a5.5 5.5 0 0 1-7.8-7.8l8.8-8.8a3.7 3.7 0 0 1 5.2 5.2l-8.8 8.8a1.8 1.8 0 0 1-2.6-2.6l8.1-8.1"/>',
+  video: '<rect x="2.5" y="6" width="13" height="12" rx="2"/><path d="m15.5 10.5 6-3.5v10l-6-3.5"/>',
 };
-// «Testo per i social»: OLOsocial lo usa come testo di partenza della rete (Olobuild_Tipi_Contenuto::testo_per_rete).
-const RETI = [
-  { value: 'tutte', label: t('Tutte le reti') },
-  { value: 'instagram', label: 'Instagram' },
-  { value: 'altre', label: t('Facebook, LinkedIn e le altre') },
-];
 const LARGHEZZE = [
   { value: 'piena', label: 'Intera' },
   { value: 'meta', label: 'Metà' },
@@ -169,9 +175,10 @@ let prossimo = 1;
 function nuovoId() { prossimo += 1; return 'c' + Date.now().toString(36) + prossimo; }
 props.campi.forEach((c) => { if (!c._id) c._id = nuovoId(); });
 
-// Aperti e «Solo in alcune» stanno qui, non nei campi: aprire una riga non è una modifica da salvare.
+// Aperti, «Solo in alcune» e «Solo alcune» reti stanno qui, non nei campi: aprire una riga non è una modifica da salvare.
 const aperti = reactive(new Set());
 const alcune = reactive(new Set());
+const sceltaReti = reactive(new Set());
 const nomi = {};
 function aperto(c) { return aperti.has(c._id); }
 function alterna(c) { if (aperti.has(c._id)) aperti.delete(c._id); else aperti.add(c._id); }
@@ -204,11 +211,39 @@ function sommario(c) {
     const n = String(c.opzioni || '').split('\n').filter((x) => x.trim()).length;
     parti.push(n === 1 ? t('1 scelta') : t('{n} scelte').replace('{n}', n));
   }
-  if (c.tipo === 'testo_social') parti.push((RETI.find((x) => x.value === (c.reti || 'tutte')) || RETI[0]).label);
+  if (c.tipo === 'testo_social') parti.push(nomeReti(c));
   if ((c.categorie || []).length) parti.push(t('solo in {nomi}').replace('{nomi}', c.categorie.map(nomeCategoria).join(', ')));
   else if (props.categorie.length) parti.push(t('in tutte le categorie'));
   const s = parti.join(' · ');
   return s ? s.charAt(0).toUpperCase() + s.slice(1) : tipo;
+}
+
+// «Testo per i social»: OLOsocial lo usa come testo di partenza delle sue reti (Olobuild_Tipi_Contenuto::testo_per_rete).
+// Le reti come elenco: i valori di prima ('instagram', 'altre' = tutte tranne Instagram) diventano spunte.
+function retiDi(c) {
+  const v = c.reti || 'tutte';
+  if (Array.isArray(v)) return v;
+  if (v === 'instagram') return ['instagram'];
+  if (v === 'altre') return props.reti.map((r) => r.value).filter((r) => r !== 'instagram');
+  return [];
+}
+function retiScelte(c) { return retiDi(c).length > 0 || sceltaReti.has(c._id); }
+function setRete(c, rete, acceso) {
+  const s = new Set(retiDi(c));
+  if (acceso) s.add(rete); else s.delete(rete);
+  sceltaReti.add(c._id);
+  const lista = props.reti.map((r) => r.value).filter((r) => s.has(r));
+  set(c, 'reti', lista.length ? lista : 'tutte');
+}
+function tutteLeReti(c) {
+  sceltaReti.delete(c._id);
+  if ((c.reti || 'tutte') !== 'tutte') set(c, 'reti', 'tutte');
+}
+function nomeReti(c) {
+  if (c.reti === 'altre') return t('tutte tranne Instagram');
+  const nomi = retiDi(c).map((r) => (props.reti.find((x) => x.value === r) || { label: r }).label);
+  if (!nomi.length) return t('tutte le reti');
+  return nomi.length > 3 ? t('{reti} e altre {n}').replace('{reti}', nomi.slice(0, 3).join(', ')).replace('{n}', nomi.length - 3) : nomi.join(', ');
 }
 
 function nomeCategoria(id) {
@@ -298,7 +333,8 @@ function sposta(i, d) {
 .cc-chip button svg { width: 11px; height: 11px; }
 .cc-chip button:hover { background: var(--c-line); color: var(--c-navy); }
 .cc-aggiungi { align-self: flex-start; }
-.cc button:focus-visible, .cc input:focus-visible, .cc textarea:focus-visible { outline: 2px solid var(--c-red); outline-offset: 2px; }
+/* Le caselle hanno già l'anello del loro riquadro (.cfg-input:focus-within): il contorno va solo sui pulsanti. */
+.cc button:focus-visible { outline: 2px solid var(--c-red); outline-offset: 2px; }
 @media (max-width: 640px) {
   .cc-corpo { grid-template-columns: minmax(0, 1fr); padding: 12px; }
   .cc-icona { display: none; }

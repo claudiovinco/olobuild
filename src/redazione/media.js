@@ -18,16 +18,17 @@ export function daAllegato(att) {
   };
 }
 
-/** Apre la libreria: tipo 'immagine' | 'galleria' | 'allegati'. Chiama fatto() con i file scelti. */
+/** Apre la libreria: tipo 'immagine' | 'galleria' | 'allegati' | 'video'. Chiama fatto() con i file scelti. */
 export function scegli(tipo, fatto) {
   const wp = window.wp;
   if (!wp || !wp.media) return;
-  const multi = tipo !== 'immagine';
+  const multi = tipo === 'galleria' || tipo === 'allegati';
+  const titoli = { allegati: t('Scegli gli allegati'), galleria: t('Scegli le foto'), video: t('Scegli il video') };
   const frame = wp.media({
-    title: tipo === 'allegati' ? t('Scegli gli allegati') : (multi ? t('Scegli le foto') : t('Scegli la foto')),
+    title: titoli[tipo] || t('Scegli la foto'),
     button: { text: t('Usa') },
     multiple: multi ? 'add' : false,
-    library: tipo === 'allegati' ? {} : { type: 'image' },
+    library: tipo === 'allegati' ? {} : { type: tipo === 'video' ? 'video' : 'image' },
   });
   frame.on('select', () => {
     fatto(frame.state().get('selection').map((m) => daAllegato(m.toJSON())));

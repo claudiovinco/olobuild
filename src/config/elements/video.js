@@ -1,9 +1,9 @@
 import { textEffectsFields, textEffectsDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
 import { t } from '@/i18n';
 
-// File = Sorgente «File» oppure un «URL video» diretto (.mp4/.webm/.ogg), come is_direct_video() in
+// File = Sorgente «File» oppure un «URL video» diretto (.mp4/.m4v/.mov/.webm/.ogv/.ogg), come is_direct_video() in
 // class-video-tile.php: guardare solo source_type lasciava facciata e privacy visibili e inerti.
-const isFile = (s) => s.source_type === 'file' || /\.(mp4|webm|ogg)(\?.*)?$/i.test(s.video_url || '');
+const isFile = (s) => s.source_type === 'file' || /\.(mp4|m4v|mov|webm|ogv|ogg)(\?.*)?$/i.test(s.video_url || '');
 // Il pulsante play disegnato: sugli embed è la copertina della «facciata», sui file un pulsante
 // sopra il video che con la riproduzione automatica non c'è (class-video-tile.php, play_su_file()).
 const playDisegnato = (s) => (isFile(s) ? !s.autoplay : s.facade !== false);
