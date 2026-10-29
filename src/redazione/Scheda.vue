@@ -95,12 +95,12 @@
           <EditorTesto v-else v-model="f.testo" :spento="spento" :segnaposto="t('Scrivi qui il testo…')" />
         </div>
 
-        <div v-if="tipo.campi.length" class="orz-blocco">
+        <div v-if="tipo.campi.length && !soloSocial" class="orz-blocco">
           <h2 class="orz-sezione">{{ t('Dettagli') }}</h2>
-          <p v-if="!campiVisibili.length" class="orz-nota">{{ t('Nessun campo per le categorie scelte.') }}</p>
+          <p v-if="!campiDettagli.length" class="orz-nota">{{ t('Nessun campo per le categorie scelte.') }}</p>
           <div v-else class="orz-campi">
             <Campo
-              v-for="c in campiVisibili"
+              v-for="c in campiDettagli"
               :key="c.chiave"
               v-model="f.campi[c.chiave]"
               :campo="c"
@@ -120,6 +120,29 @@
             <a class="orz-link" :href="tipo.configura" target="_blank" rel="noopener"><Icona nome="piu" :dim="14" /> {{ t('Aggiungi campi') }}</a>
           </p>
         </div>
+        <Social
+          v-if="socialInfo && f.social"
+          v-model="f.social"
+          :info="socialInfo"
+          :campi="f.campi"
+          :campi-testo="campiSocialTesto"
+          :id-contenuto="idCorrente"
+          :spento="spento"
+          :uscito="uscito"
+          @aggiornato="socialAggiornato"
+        >
+          <template v-if="campiSocialFoto.length" #foto>
+            <Campo
+              v-for="c in campiSocialFoto"
+              :key="c.chiave"
+              v-model="f.campi[c.chiave]"
+              :campo="c"
+              :media="media"
+              :spento="spento"
+              @media="aggiungiMedia"
+            />
+          </template>
+        </Social>
       </div>
 
       <aside class="orz-pannello">
@@ -218,6 +241,7 @@ import EditorTesto from './EditorTesto.vue';
 import Campo from './Campo.vue';
 import Termini from './Termini.vue';
 import Anteprima from './Anteprima.vue';
+import Social from './Social.vue';
 import Versioni from './Versioni.vue';
 import { chiama } from './api.js';
 import { scegli } from './media.js';
@@ -230,7 +254,7 @@ const props = defineProps({
 const emit = defineEmits(['chiudi', 'salvato']);
 
 const s = ref(null);
-const f = reactive({ titolo: '', testo: '', riassunto: '', quando: 'subito', data: '', termini: {}, immagine: 0, campi: {} });
+const f = reactive({ titolo: '', testo: '', riassunto: '', quando: 'subito', data: '', termini: {}, immagine: 0, campi: {}, social: null });
 const media = reactive({});
 const immagineInfo = computed(() => (f.immagine ? media[f.immagine] : null));
 const originale = ref('');
@@ -268,6 +292,23 @@ const idCorrente = computed(() => (s.value ? s.value.id : props.id));
 const daCopiare = computed(() => !!s.value && (uscito.value || s.value.stato === 'future'));
 const copiaDaScegliere = computed(() => !!(s.value && s.value.copia) && !copiaScelta.value);
 
+// I social (OLOsocial): quelli del contenuto, o per un contenuto nuovo gli account e le scelte di partenza del tipo.
+const socialInfo = computed(() => (s.value ? s.value.social : props.tipo.social) || null);
+
+/** Le scelte social come le tiene la scheda (null = niente social per questo tipo o per chi scrive). */
+function socialDa(d) {
+  if (!d) return null;
+  const testi = {};
+  Object.entries(d.testi || {}).forEach(([k, v]) => {
+    testi[k] = v;
+  });
+  return { modo: d.modo || 'bozza', account: (d.account || []).map(Number), testi, adesso: false };
+}
+
+function socialAggiornato(info) {
+  if (s.value) s.value = { ...s.value, social: info };
+}
+
 function testoScritto(html) {
   const h = String(html || '');
   return /<img/i.test(h) || h.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim() !== '';
@@ -276,6 +317,15 @@ const nuovoVuoto = computed(() => !s.value && !f.titolo.trim() && !testoScritto(
 
 // «Solo nelle categorie» (Olobuild_Tipi_Contenuto::campo_vale): il campo si vede quando una sua categoria, o una figlia,
 // è spuntata. Il valore di un campo nascosto resta e si salva com'era.
+// Con la sezione Social (OLOsocial con almeno un account) la foto e i testi per i social stanno lì, non nei Dettagli:
+// un posto solo per tutto ciò che riguarda i social.
+const socialConCampi = computed(() => !!(socialInfo.value && socialInfo.value.accountDisponibili && socialInfo.value.accountDisponibili.length && !socialInfo.value.condiviso));
+const campiSocialFoto = computed(() => (socialConCampi.value ? campiVisibili.value.filter((c) => c.tipo === 'foto_social') : []));
+const campiSocialTesto = computed(() => (socialConCampi.value ? campiVisibili.value.filter((c) => c.tipo === 'testo_social') : []));
+const campiDettagli = computed(() => campiVisibili.value.filter((c) => !campiSocialFoto.value.includes(c) && !campiSocialTesto.value.includes(c)));
+// Tutti i campi del tipo sono dei social: i Dettagli non servono.
+const soloSocial = computed(() => socialConCampi.value && props.tipo.campi.every((c) => ['foto_social', 'testo_social'].includes(c.tipo)));
+
 const campiVisibili = computed(() => {
   const tax = props.tipo.tassonomiaCategorie;
   const scelte = (tax && f.termini[tax]) || [];
@@ -338,6 +388,7 @@ function applica(r) {
     campi[c.chiave] = (r.campi && r.campi[c.chiave]) || '';
   });
   f.campi = campi;
+  f.social = socialDa(r.social);
   Object.values(r.media || {}).forEach((m) => aggiungiMedia([m]));
   if (r.immagine) aggiungiMedia([r.immagine]);
   cambiaData.value = false;
@@ -420,6 +471,7 @@ function vuota() {
     campi[c.chiave] = '';
   });
   f.campi = campi;
+  f.social = socialDa(props.tipo.social);
   spento.value = false;
   bloccatoDa.value = '';
   originale.value = istantanea();
@@ -465,6 +517,7 @@ function corpo(azione, forza) {
     forza: !!forza,
   };
   if (!s.value || !s.value.solaLettura) c.testo = f.testo;
+  if (f.social) c.social = f.social;
   if (uscito.value) {
     c.data = s.value && f.data !== s.value.data ? f.data : '';
   } else {

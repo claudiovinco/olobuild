@@ -3,6 +3,14 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.867 - 2026-10-29 (un posto solo per i social)
+- Nella Redazione la «Foto per i social» e i campi «Testo per i social» stanno dentro la sezione Social, non più nei Dettagli: ogni carta di un account mostra e cambia il testo che uscirà davvero (quello scritto apposta per l'account, se c'è, se no il campo della sua rete).
+
+## v1.4.864 - 2026-10-29 (i social dalla Redazione)
+- Nella scheda della Redazione c'è la sezione «Social»: scegli su quali account esce il contenuto (Facebook sì, LinkedIn no…), quando (insieme al contenuto, come bozza da controllare, niente social) e, se vuoi, un testo diverso per ogni rete, col contatore dei caratteri e la foto che userà.
+- Dopo l'uscita la sezione mostra com'è andata rete per rete, con «Apri il post», «Riprova» sulle reti non riuscite e «Pubblica adesso sui social» per la bozza. Su un contenuto già pubblicato, «Condividi adesso» lo manda subito.
+- Serve OLOsocial 0.4.0: le scelte sono le stesse del riquadro Social della scheda di WordPress.
+
 ## v1.4.863 - 2026-10-28 (campi per categoria)
 - Nei Tipi di contenuto (Articoli compresi) ogni campo può valere «Solo nelle categorie» scelte, sottocategorie comprese: un campo per «Eventi» vale anche in «Eventi › Concerti». Nella Redazione e nella scheda di WordPress (editor classico e a blocchi) il campo compare appena si spunta una di quelle categorie.
 - Fuori dalle sue categorie il campo non si usa nemmeno sul sito, nelle tile Allegati, nelle sorgenti dinamiche e nei testi e nelle foto per OLOsocial; il valore resta salvato e torna se il contenuto torna in quella categoria.

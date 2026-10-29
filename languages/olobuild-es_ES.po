@@ -48202,3 +48202,95 @@ msgstr "Categoría eliminada"
 #: src/components/Admin/TipiContenutoTab.vue
 msgid "Un campo può valere solo in alcune categorie, sottocategorie comprese."
 msgstr "Un campo puede valer solo en algunas categorías, subcategorías incluidas."
+
+#: src/redazione\Social.vue
+msgid "Account dei social"
+msgstr "Cuentas sociales"
+
+#: src/redazione\Social.vue
+msgid "Apri il post"
+msgstr "Abrir la publicación"
+
+#: src/redazione\Social.vue
+msgid "Pubblica adesso sui social"
+msgstr "Publicar ahora en redes sociales"
+
+#: src/redazione\Social.vue
+msgid "Apri in OLOsocial"
+msgstr "Abrir en OLOsocial"
+
+#: src/redazione\Social.vue
+msgid "Nessun social collegato a OLOsocial."
+msgstr "Ninguna red social conectada a OLOsocial."
+
+#: src/redazione\Social.vue
+msgid "Collega un social"
+msgstr "Conectar una red social"
+
+#: src/redazione\Social.vue
+msgid "Quando esce sui social"
+msgstr "Cuándo sale en redes sociales"
+
+#: src/redazione\Social.vue
+msgid "Il testo del modello di OLOsocial"
+msgstr "El texto de la plantilla de OLOsocial"
+
+#: src/redazione\Social.vue
+msgid "Testo per %s"
+msgstr "Texto para %s"
+
+#: src/redazione\Social.vue
+msgid "Testo scritto per questa rete"
+msgstr "Texto escrito para esta red"
+
+#: src/redazione\Social.vue
+msgid "Testo del modello"
+msgstr "Texto de la plantilla"
+
+#: src/redazione\Social.vue
+msgid "Spunta almeno un social: altrimenti non esce niente."
+msgstr "Marca al menos una red: si no, no sale nada."
+
+#: src/redazione\Social.vue
+msgid "Condividi adesso, salvando: il contenuto è già pubblicato"
+msgstr "Compartir ahora al guardar: el contenido ya está publicado"
+
+#: src/redazione\Social.vue
+msgid "Insieme al contenuto"
+msgstr "Junto con el contenido"
+
+#: src/redazione\Social.vue
+msgid "esce sui social quando lo pubblichi"
+msgstr "sale en redes sociales cuando lo publicas"
+
+#: src/redazione\Social.vue
+msgid "Come bozza da controllare"
+msgstr "Como borrador para revisar"
+
+#: src/redazione\Social.vue
+msgid "OLOsocial la prepara nel suo calendario"
+msgstr "OLOsocial lo prepara en su calendario"
+
+#: src/redazione\Social.vue
+msgid "Niente social"
+msgstr "Sin redes sociales"
+
+#: src/redazione\Social.vue
+msgid "per questo contenuto"
+msgstr "para este contenido"
+
+#: src/redazione\Social.vue
+msgid "Scegli su quali social esce questo contenuto e con quale testo.\n\nInsieme al contenuto: il post parte quando pubblichi, o all'ora programmata.\n\nCome bozza: OLOsocial prepara il post nel suo calendario; lo pubblichi da qui con «Pubblica adesso sui social».\n\nTesto: se lo lasci vuoto, OLOsocial usa il suo modello (o i campi «Testo per i social» del contenuto). Il link al contenuto lo aggiunge OLOsocial.\n\nFoto: l'immagine in evidenza, o la «Foto per i social» del contenuto, inquadrata per ogni rete."
+msgstr "Elige en qué redes sale este contenido y con qué texto.\n\nJunto con el contenido: la publicación sale cuando publicas, o a la hora programada.\n\nComo borrador: OLOsocial prepara la publicación en su calendario; la publicas desde aquí con «Publicar ahora en redes sociales».\n\nTexto: si lo dejas vacío, OLOsocial usa su plantilla (o los campos «Texto para redes sociales» del contenido). El enlace al contenido lo añade OLOsocial.\n\nFoto: la imagen destacada, o la «Foto para redes sociales» del contenido, recortada para cada red."
+
+#: includes/class-redazione.php
+msgid "I social non sono attivi per questo contenuto."
+msgstr "Las redes sociales no están activas para este contenido."
+
+#: includes/class-redazione.php
+msgid "Non è stato possibile: ricarica la scheda e riprova."
+msgstr "No ha sido posible: recarga la ficha e inténtalo de nuevo."
+
+#: src/redazione\Social.vue
+msgid "Testo scritto per questo account"
+msgstr "Texto escrito para esta cuenta"

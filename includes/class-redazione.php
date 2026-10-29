@@ -138,6 +138,8 @@ class Olobuild_Redazione {
             'crea'       => current_user_can( $pto->cap->create_posts ),
             'pubblica'   => current_user_can( $pto->cap->publish_posts ),
             'versioni'   => post_type_supports( $k, 'revisions' ),
+            // OLOsocial: gli account e le scelte di partenza per un contenuto nuovo (null = niente social per questo tipo).
+            'social'     => self::social_attivo() ? Olo_Social_Riquadro::per_la_scheda( 0, $k ) : null,
             // Dove si aggiungono i campi del tipo: solo per chi può cambiare le impostazioni.
             'configura'  => current_user_can( 'manage_options' ) ? admin_url( 'admin.php?page=olobuilder-settings&tab=tipicontenuto' ) : '',
             'nuovoWp'    => admin_url( 'post-new.php' . ( 'post' === $k ? '' : '?post_type=' . $k ) ),
@@ -364,6 +366,7 @@ class Olobuild_Redazione {
             'wpModifica'          => (string) get_edit_post_link( $post->ID, 'raw' ),
             'puoCestinare'        => current_user_can( 'delete_post', $post->ID ),
             'copia'               => self::copia_da_riprendere( $post, $motivo, $modulo ),
+            'social'              => self::social_attivo() ? Olo_Social_Riquadro::per_la_scheda( $post->ID ) : null,
             'versioni'            => self::conta_versioni( $post->ID ),
         ];
     }
@@ -480,6 +483,11 @@ class Olobuild_Redazione {
         register_rest_route( self::NS, '/redazione/(?P<id>\d+)/versioni/(?P<versione>\d+)', [
             'methods'             => 'GET',
             'callback'            => [ __CLASS__, 'rest_versione' ],
+            'permission_callback' => [ __CLASS__, 'puo_contenuto' ],
+        ] );
+        register_rest_route( self::NS, '/redazione/(?P<id>\d+)/social', [
+            'methods'             => 'POST',
+            'callback'            => [ __CLASS__, 'rest_social' ],
             'permission_callback' => [ __CLASS__, 'puo_contenuto' ],
         ] );
         register_rest_route( self::NS, '/redazione/termini', [
@@ -676,15 +684,22 @@ class Olobuild_Redazione {
         }
         update_post_meta( $id, '_edit_last', get_current_user_id() );
         wp_set_post_lock( $id );
+        // Le scelte social della scheda (dove, quando, i testi per account), come le salva il riquadro di OLOsocial.
+        $social = $r['social'];
+        $social = is_array( $social ) ? $social : null;
+        if ( $social && self::social_attivo() && null !== Olo_Social_Riquadro::per_la_scheda( $id ) ) {
+            Olo_Social_Riquadro::salva_scelte( $id, $social );
+        }
         // La copia di sicurezza di chi salva non serve più: ciò che teneva ora è il contenuto.
         $copia = wp_get_post_autosave( $id, get_current_user_id() );
         if ( $copia ) {
             wp_delete_post_revision( $copia->ID );
         }
 
-        // OLOsocial: le scelte del riquadro Social (fatte nella scheda di WordPress) partono anche quando il contenuto esce
-        // dalla Redazione; il riquadro, nelle richieste REST, lascia fare a chi salva.
-        if ( 'publish' === get_post_status( $id ) && 'publish' !== $prima && class_exists( 'Olo_Social_Riquadro' )
+        // OLOsocial: le scelte social partono quando il contenuto esce dalla Redazione (il riquadro, nelle richieste REST,
+        // lascia fare a chi salva), o subito con «Condividi adesso» su un contenuto già pubblicato. Una volta sola.
+        $adesso = $social && ! empty( $social['adesso'] );
+        if ( 'publish' === get_post_status( $id ) && ( 'publish' !== $prima || $adesso ) && class_exists( 'Olo_Social_Riquadro' )
             && method_exists( 'Olo_Social_Riquadro', 'condividi' ) && Olo_Social_Riquadro::attivo_per( $tipo )
             && is_array( get_post_meta( $id, Olo_Social_Riquadro::META, true ) ) ) {
             Olo_Social_Riquadro::condividi( $id );
@@ -1004,6 +1019,35 @@ class Olobuild_Redazione {
             'fotografia'  => (bool) $m,
             'wpConfronta' => admin_url( 'revision.php?revision=' . $v->ID ),
         ] );
+    }
+
+    /* ─────────────────────────────────────────────
+     * Social (OLOsocial)
+     * ───────────────────────────────────────────── */
+
+    /** OLOsocial c'è, nella versione che lascia leggere e salvare le scelte da un'altra scheda (0.4.0 in su)? */
+    private static function social_attivo() {
+        return class_exists( 'Olo_Social_Riquadro' ) && method_exists( 'Olo_Social_Riquadro', 'per_la_scheda' )
+            && method_exists( 'Olo_Social_Riquadro', 'salva_scelte' );
+    }
+
+    /** Dopo l'uscita: «riprova» una rete non riuscita, o «pubblica» la bozza social. Restituisce la sezione aggiornata. */
+    public static function rest_social( WP_REST_Request $r ) {
+        $id = (int) $r['id'];
+        if ( ! self::social_attivo() || null === Olo_Social_Riquadro::per_la_scheda( $id ) ) {
+            return new WP_Error( 'olo_redazione_social', __( 'I social non sono attivi per questo contenuto.', 'olobuild' ), [ 'status' => 400 ] );
+        }
+        $azione = sanitize_key( (string) $r['azione'] );
+        $fatto  = false;
+        if ( 'riprova' === $azione ) {
+            $fatto = Olo_Social_Riquadro::riprova( $id, absint( $r['target'] ) );
+        } elseif ( 'pubblica' === $azione ) {
+            $fatto = Olo_Social_Riquadro::pubblica_bozza( $id );
+        }
+        if ( ! $fatto ) {
+            return new WP_Error( 'olo_redazione_social', __( 'Non è stato possibile: ricarica la scheda e riprova.', 'olobuild' ), [ 'status' => 409 ] );
+        }
+        return rest_ensure_response( Olo_Social_Riquadro::per_la_scheda( $id ) );
     }
 
     public static function rest_cestina( WP_REST_Request $r ) {
