@@ -48294,3 +48294,47 @@ msgstr "No ha sido posible: recarga la ficha e inténtalo de nuevo."
 #: src/redazione\Social.vue
 msgid "Testo scritto per questo account"
 msgstr "Texto escrito para esta cuenta"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Ancora nessun campo."
+msgstr "Todavía no hay campos."
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Campo senza nome"
+msgstr "Campo sin nombre"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Per esempio Allegati"
+msgstr "Por ejemplo Adjuntos"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Larghezza nella scheda"
+msgstr "Ancho en la ficha"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Facoltativo: compare sotto il campo"
+msgstr "Opcional: aparece debajo del campo"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Dove compare"
+msgstr "Dónde aparece"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Solo in alcune"
+msgstr "Solo en algunas"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "1 scelta"
+msgstr "1 opción"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "{n} scelte"
+msgstr "{n} opciones"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "solo in {nomi}"
+msgstr "solo en {nomi}"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "in tutte le categorie"
+msgstr "en todas las categorías"

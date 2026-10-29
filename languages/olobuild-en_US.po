@@ -47029,3 +47029,47 @@ msgstr "That wasn't possible: reload the page and try again."
 #: src/redazione\Social.vue
 msgid "Testo scritto per questo account"
 msgstr "Text written for this account"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Ancora nessun campo."
+msgstr "No fields yet."
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Campo senza nome"
+msgstr "Untitled field"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Per esempio Allegati"
+msgstr "For example Attachments"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Larghezza nella scheda"
+msgstr "Width in the form"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Facoltativo: compare sotto il campo"
+msgstr "Optional: shown below the field"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Dove compare"
+msgstr "Where it appears"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "Solo in alcune"
+msgstr "Only in some"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "1 scelta"
+msgstr "1 option"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "{n} scelte"
+msgstr "{n} options"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "solo in {nomi}"
+msgstr "only in {nomi}"
+
+#: src/components/Admin/controls/CfgCampi.vue
+msgid "in tutte le categorie"
+msgstr "in all categories"

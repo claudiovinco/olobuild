@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.871 - 2026-10-29 (i campi dei Tipi di contenuto in ordine)
+- In Impostazioni › Tipi di contenuto ogni campo è una riga con la sua icona, il nome e un riassunto (tipo, larghezza, categorie); un clic la apre e ogni scelta ha la sua etichetta sopra. «Dove compare» sceglie fra tutte le categorie e solo alcune, i formati della foto per i social sono pulsanti da accendere, Sposta e Togli hanno le loro icone.
+
 ## v1.4.868 - 2026-10-29 (le reti nuove di OLOsocial nella Redazione)
 - Nella sezione Social della Redazione le carte delle 14 reti nuove di OLOsocial 0.5.0 (Threads, X, Pinterest, Google Business Profile, Tumblr, Reddit, Viber, Discord, Slack, Microsoft Teams, Google Chat, Pixelfed, Misskey, Lemmy) hanno il loro colore.
 
