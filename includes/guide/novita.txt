@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.868 - 2026-10-29 (le reti nuove di OLOsocial nella Redazione)
+- Nella sezione Social della Redazione le carte delle 14 reti nuove di OLOsocial 0.5.0 (Threads, X, Pinterest, Google Business Profile, Tumblr, Reddit, Viber, Discord, Slack, Microsoft Teams, Google Chat, Pixelfed, Misskey, Lemmy) hanno il loro colore.
+
 ## v1.4.867 - 2026-10-29 (un posto solo per i social)
 - Nella Redazione la «Foto per i social» e i campi «Testo per i social» stanno dentro la sezione Social, non più nei Dettagli: ogni carta di un account mostra e cambia il testo che uscirà davvero (quello scritto apposta per l'account, se c'è, se no il campo della sua rete).
 

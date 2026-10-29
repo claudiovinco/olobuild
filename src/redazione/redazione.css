@@ -363,6 +363,20 @@ html.orz-modale-aperta, html.orz-modale-aperta body { overflow: hidden; }
 .orz-rete--telegram { background: #1b7fb0; }
 .orz-rete--bluesky { background: #0b6fd6; }
 .orz-rete--mastodon { background: #6364ff; }
+.orz-rete--threads { background: #101010; }
+.orz-rete--x { background: #0f1419; }
+.orz-rete--pinterest { background: #e60023; }
+.orz-rete--googlebusiness { background: #1a73e8; }
+.orz-rete--tumblr { background: #001935; }
+.orz-rete--reddit { background: #d93900; }
+.orz-rete--viber { background: #7360f2; }
+.orz-rete--discord { background: #5865f2; }
+.orz-rete--slack { background: #4a154b; }
+.orz-rete--teams { background: #4b53bc; }
+.orz-rete--googlechat { background: #188038; }
+.orz-rete--pixelfed { background: #7c3aed; }
+.orz-rete--misskey { background: #5b7d00; }
+.orz-rete--lemmy { background: #14854f; }
 .orz-social-nome { display: flex; flex-direction: column; flex: 1; min-width: 0; }
 .orz-social-nome strong { font-size: 13px; }
 .orz-social-nome small { color: var(--orz-testo-3); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
