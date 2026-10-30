@@ -3,6 +3,18 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.878 - 2026-10-30 (i pulsanti della mappa sempre leggibili)
+- Mappa: i pulsanti + e − restano scuri sul loro fondo chiaro anche al passaggio del mouse. Prima prendevano il colore dei link del tema e con un colore chiaro (una luce ambra, un giallo) sparivano.
+
+## v1.4.877 - 2026-10-30 (tre temi per professionisti e il prima e dopo nell'apertura)
+- Tre temi nuovi: Penombra, uno studio di lighting design dove nell'apertura la luce segue il puntatore sulla sala buia; Fuoco Lento, uno chef privato col flambé in video, le braci che seguono il mouse e la cena da comporre col prezzo a persona; Tratteggio, una restauratrice di dipinti con il soffitto affrescato da pulire passandoci sopra.
+- Hero Split ha un pannello nuovo, «Prima e dopo (da trascinare)»: il media del pannello è il dopo, un'immagine il prima, e una maniglia li divide. Col mouse la maniglia segue il puntatore, sul telefono si trascina, da tastiera si sposta con le frecce; al primo sguardo può passare da sola, come una pulitura. Si sceglie in Contenuto › Pannello destro.
+- Vetrina temi: con una palette, i testi quasi bianchi dei temi scuri prendono davvero la tinta della palette (a volte restavano quelli del tema).
+
+## v1.4.876 - 2026-10-30 (colori da provare tutti diversi)
+- Vetrina temi: i bollini dei colori da provare sono tutti diversi fra loro, colore principale compreso (prima Terracotta e Grafite avevano lo stesso arancio e quasi tutte le palette un accento arancio). Bosco è verde e oro, Laguna blu e corallo, Terracotta cotto e salvia, Lavanda viola e rosa, Grafite ardesia e azzurro elettrico, Melograno rosso e verde acqua.
+- Sui temi scuri il visore offre due colorazioni in più, pensate solo per loro: Brace (neri caldi, oro e rosso brace) e Notte (blu notte, orchidea e oro). Passando a un tema chiaro si torna ai suoi colori.
+
 ## v1.4.875 - 2026-10-29 (i video su YouTube e Vimeo)
 - Con OLOsocial 0.6.0 il video di un contenuto esce anche su YouTube e Vimeo: nella sezione Social della Redazione si spuntano come le altre reti, e caricano il video della libreria scelto nel campo Video (titolo del contenuto come titolo del video, testo e link come descrizione). Se il contenuto non ha un video della libreria, la carta lo dice.
 - «Testo per i social» può valere anche solo per YouTube o per Vimeo, e la sezione Social ha i loro colori.

@@ -227,7 +227,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                         }
                     }
                 }
-                $palette[ $pid ] = [ 'nome' => (string) $p['nome'], 'stile' => implode( ';', $v ) ];
+                $palette[ $pid ] = [ 'nome' => (string) $p['nome'], 'stile' => implode( ';', $v ), 'scura' => ! empty( $p['scura'] ) ];
             }
         }
 
@@ -295,6 +295,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ovt-palette{flex:1 1 auto;justify-content:center;gap:2px;min-width:0;}
             .<?php echo $uid; ?> .ovt-pal{display:inline-grid;place-items:center;width:34px;height:34px;padding:0;border:0;border-radius:50%;background:transparent;color:inherit;cursor:pointer;--p1:var(--c1,var(--ovt-tema,currentColor));--p2:var(--c2,currentColor);}
             .<?php echo $uid; ?> .ovt-palette.is-scuro .ovt-pal{--p1:var(--s1,var(--c1,currentColor));--p2:var(--s2,var(--c2,currentColor));}
+            .<?php echo $uid; ?> .ovt-palette:not(.is-scuro) .ovt-pal--scura{display:none;}
             .<?php echo $uid; ?> .ovt-pal i{display:block;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--p1) calc(50% - .5px),var(--p2) calc(50% + .5px));box-shadow:0 0 0 1px color-mix(in srgb,currentColor 30%,transparent);transition:transform .15s ease,box-shadow .15s ease;}
             .<?php echo $uid; ?> .ovt-pal:hover i{transform:scale(1.12);}
             .<?php echo $uid; ?> .ovt-pal[aria-pressed="true"] i{box-shadow:0 0 0 2px var(--olo-color-dark),0 0 0 4px var(--ovt-acc);}
@@ -377,7 +378,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                     <div class="ovt-gruppo ovt-palette" role="group" aria-label="<?php echo esc_attr( olobuild_t( 'Colori da provare' ) ); ?>">
                         <button type="button" class="ovt-pal" data-palette="" aria-pressed="true" aria-label="<?php echo esc_attr( olobuild_t( 'Colori del tema' ) ); ?>" title="<?php echo esc_attr( olobuild_t( 'Colori del tema' ) ); ?>"><i></i></button>
                         <?php foreach ( $palette as $pid => $p ) : ?>
-                        <button type="button" class="ovt-pal" data-palette="<?php echo esc_attr( $pid ); ?>" aria-pressed="false" aria-label="<?php echo esc_attr( $p['nome'] ); ?>" title="<?php echo esc_attr( $p['nome'] ); ?>" style="<?php echo esc_attr( $p['stile'] ); ?>"><i></i></button>
+                        <button type="button" class="ovt-pal<?php echo $p['scura'] ? ' ovt-pal--scura' : ''; ?>" data-palette="<?php echo esc_attr( $pid ); ?>"<?php echo $p['scura'] ? ' data-scura="1"' : ''; ?> aria-pressed="false" aria-label="<?php echo esc_attr( $p['nome'] ); ?>" title="<?php echo esc_attr( $p['nome'] ); ?>" style="<?php echo esc_attr( $p['stile'] ); ?>"><i></i></button>
                         <?php endforeach; ?>
                     </div>
                     <?php endif; ?>
@@ -477,10 +478,17 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             function segnaPalette() {
                 bollini.forEach(function (b) { b.setAttribute('aria-pressed', (b.getAttribute('data-palette') || '') === scelta ? 'true' : 'false'); });
             }
-            // Il primo bollino ha i colori del tema aperto; sui temi scuri gli altri mostrano la versione scura.
+            // Il primo bollino ha i colori del tema aperto; sui temi scuri gli altri mostrano la versione scura
+            // e compaiono le colorazioni pensate solo per loro (passando a un tema chiaro si torna ai suoi colori).
             function bolliniDelTema(a) {
                 if (!gruppoPal) { return; }
-                gruppoPal.classList.toggle('is-scuro', a.getAttribute('data-scuro') === '1');
+                var scuro = a.getAttribute('data-scuro') === '1';
+                gruppoPal.classList.toggle('is-scuro', scuro);
+                var soloScura = bollini.some(function (b) { return b.getAttribute('data-palette') === scelta ? b.getAttribute('data-scura') === '1' : false; });
+                if (soloScura ? !scuro : false) {
+                    scelta = '';
+                    segnaPalette();
+                }
                 var c = (a.getAttribute('data-colori') || '').split(','), t = bollini[0];
                 if (t) {
                     if (c.length === 2) { t.style.setProperty('--c1', c[0]); t.style.setProperty('--c2', c[1]); }

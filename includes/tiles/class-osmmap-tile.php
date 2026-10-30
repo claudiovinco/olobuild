@@ -198,6 +198,8 @@ class Olobuild_Osmmap_Tile extends Olobuild_Tile_Base {
 
         <style>
         .olo-osm-marker { background: none !important; border: none !important; }
+        <?php // I pulsanti + e − della mappa stanno su un fondo chiaro fisso: il colore dei link in hover del tema (una luce ambra, un giallo) ci spariva sopra. ?>
+        .olo-template .leaflet-bar a, .olo-template .leaflet-bar a:hover, .olo-template .leaflet-bar a:focus { color: var(--olo-color-dark, #1f2328); }
         </style>
 
         <?php

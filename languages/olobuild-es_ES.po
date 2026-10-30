@@ -48378,3 +48378,63 @@ msgstr "Los campos adicionales (adjuntos, fotos para redes sociales, fechas, enl
 #: src/redazione/Social.vue
 msgid "Serve un video della libreria nel campo Video."
 msgstr "Se necesita un vídeo de la biblioteca en el campo Vídeo."
+
+#: assets/data/palette-temi.json
+msgid "Brace"
+msgstr "Brasas"
+
+#: src/config/elements/hero-split.js
+msgid "Prima e dopo (da trascinare)"
+msgstr "Antes y después (arrastrar)"
+
+#: src/config/elements/hero-split.js
+msgid "Con «Prima e dopo» è l'immagine del dopo, quella che si scopre spostando la maniglia."
+msgstr "Con «Antes y después» es la imagen del después, la que aparece al mover el tirador."
+
+#: src/config/elements/hero-split.js
+msgid "Immagine del prima"
+msgstr "Imagen del antes"
+
+#: src/config/elements/hero-split.js
+msgid "Etichetta del prima"
+msgstr "Etiqueta del antes"
+
+#: src/config/elements/hero-split.js
+msgid "Etichetta del dopo"
+msgstr "Etiqueta del después"
+
+#: src/config/elements/hero-split.js
+msgid "Maniglia all'inizio %"
+msgstr "Tirador al inicio %"
+
+#: src/config/elements/hero-split.js
+msgid "La maniglia segue il mouse"
+msgstr "El tirador sigue el ratón"
+
+#: src/config/elements/hero-split.js
+msgid "Col mouse la maniglia si sposta passando sopra l'immagine, senza premere; sul telefono si trascina col dito."
+msgstr "Con el ratón el tirador se mueve al pasar sobre la imagen, sin pulsar; en el móvil se arrastra con el dedo."
+
+#: src/config/elements/hero-split.js
+msgid "Passata iniziale"
+msgstr "Pasada inicial"
+
+#: src/config/elements/hero-split.js
+msgid "Quando l'apertura si vede la prima volta, l'immagine parte tutta «prima» e la maniglia scorre da sola fino al punto di partenza. Niente passata per chi ha chiesto meno movimento."
+msgstr "Cuando la apertura se ve por primera vez, la imagen empieza toda «antes» y el tirador se desliza solo hasta el punto de partida. Sin pasada para quien pidió menos movimiento."
+
+#: includes/tiles/class-hero-split-tile.php
+msgid "Confronto immagini"
+msgstr "Comparación de imágenes"
+
+#: includes/class-theme-importer.php
+msgid "La luce la porti tu"
+msgstr "La luz la traes tú"
+
+#: includes/class-theme-importer.php
+msgid "Le braci le lasci tu"
+msgstr "Las brasas las dejas tú"
+
+#: includes/class-theme-importer.php
+msgid "Pulisci il soffitto"
+msgstr "Limpia el techo"

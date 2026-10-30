@@ -646,6 +646,7 @@ class Olobuild_Demo_Temi {
         foreach ( self::dati_palette() as $id => $p ) {
             $out[ $id ] = [
                 'nome'   => olobuild_t( (string) ( $p['nome'] ?? $id ) ),
+                'scura'  => ! empty( $p['scura'] ),
                 'chiaro' => [ 'primary' => self::tono( $p, 'primary', 0.16 ), 'accent' => self::tono( $p, 'accent', 0.2 ) ],
                 'scuro'  => [ 'primary' => self::tono( $p, 'primary', 0.45 ), 'accent' => self::tono( $p, 'accent', 0.4 ) ],
             ];
@@ -712,8 +713,8 @@ class Olobuild_Demo_Temi {
 
     /**
      * Il colore di tinta $h (gradi) e saturazione $s (0-1) con luminanza $y: in HSL la luminanza cresce con
-     * la luce, che si cerca per bisezione. Fra gli arrotondamenti a 8 bit vicini vince quello con la
-     * luminanza più vicina DAL LATO che non toglie contrasto: più chiaro per i colori chiari (sopra 0,1791,
+     * la luce, che si cerca per bisezione. Fra gli arrotondamenti a 8 bit vicini vince il più vicino al
+     * colore ideale DAL LATO che non toglie contrasto: più chiaro per i colori chiari (sopra 0,1791,
      * dove il contrasto col bianco e col nero si equivale), più scuro per gli altri. Senza aggiungere
      * tinta: la distanza fra il canale più alto e il più basso resta quella del colore ideale (due unità di
      * scarto), se no un grigio scuro diventerebbe verdognolo.
@@ -747,9 +748,11 @@ class Olobuild_Demo_Temi {
                     if ( $chiaro ? $lq < $y : $lq > $y ) {
                         continue;
                     }
+                    // Vince il più vicino al colore ideale, poi alla luminanza: cercando prima la luminanza
+                    // esatta si poteva ripescare il colore del tema (stessa luminanza, tinta di prima).
                     $e1 = abs( $lq - $y );
                     $e2 = abs( $a ) + abs( $b ) + abs( $c );
-                    if ( null === $meglio || $e1 < $meglio[0] || ( $e1 === $meglio[0] && $e2 < $meglio[1] ) ) {
+                    if ( null === $meglio || $e2 < $meglio[1] || ( $e2 === $meglio[1] && $e1 < $meglio[0] ) ) {
                         $meglio = [ $e1, $e2 ];
                         $scelto = $q;
                     }
@@ -845,10 +848,22 @@ class Olobuild_Demo_Temi {
         );
     }
 
-    /** La palette chiesta con ?palette= (sola lettura, scelta fra quelle del file), '' se nessuna. */
+    /**
+     * La palette chiesta con ?palette= (sola lettura, scelta fra quelle del file), '' se nessuna. Le
+     * colorazioni «scura» valgono solo sui temi scuri (fondo con luminanza sotto 0,2), come nel visore.
+     */
     private static function palette_richiesta() {
         $id = isset( $_GET['palette'] ) ? sanitize_key( wp_unslash( $_GET['palette'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- sola lettura: sceglie una delle palette del file dati
-        return ( '' !== $id && isset( self::dati_palette()[ $id ] ) ) ? $id : '';
+        if ( '' === $id || ! isset( self::dati_palette()[ $id ] ) ) {
+            return '';
+        }
+        if ( ! empty( self::dati_palette()[ $id ]['scura'] ) ) {
+            $fondo = self::rgb( (string) ( self::$tema['json']['styles']['colors']['background'] ?? '' ) );
+            if ( null === $fondo || self::luminanza( $fondo ) >= 0.2 ) {
+                return '';
+            }
+        }
+        return $id;
     }
 
     /** L'indirizzo con la palette scelta: navigando nella demo i colori provati restano. */

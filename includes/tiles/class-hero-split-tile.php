@@ -95,6 +95,15 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
         'panel_badge_label'  => '',
         'panel_track_title'  => 'Glasshouse',
         'panel_track_meta'   => 'Kova · Nightglass',
+        // Pannello «Prima e dopo»: il media del pannello è il «dopo», questa immagine il «prima», divisi da
+        // una maniglia da trascinare (o che segue il mouse). Contano solo con panel = 'compare'.
+        'panel_before'         => '',
+        'panel_compare_start'  => 50,
+        'panel_compare_follow' => true,
+        'panel_compare_intro'  => true,
+        'panel_label_before'   => '',
+        'panel_label_after'    => '',
+        'panel_compare_color'  => '',
 
         // Showcase
         'showcase_enabled'        => true,
@@ -175,7 +184,7 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
         if ( $min_h ) $wrap_style .= 'min-height:' . $min_h . 'px;';
 
         // ── Pannello destro (unificazione hero, Fase 1c) ──
-        $panel = in_array( ( $s['panel'] ?? 'showcase' ), [ 'showcase', 'media', 'audio' ], true ) ? ( $s['panel'] ?? 'showcase' ) : 'showcase';
+        $panel = in_array( ( $s['panel'] ?? 'showcase' ), [ 'showcase', 'media', 'audio', 'compare' ], true ) ? ( $s['panel'] ?? 'showcase' ) : 'showcase';
         $panel_visible = ( 'showcase' === $panel ) ? ! empty( $s['showcase_enabled'] ) : true;
         // Colore del testo della tile = quello del sottotitolo (il preset scuro lo porta al chiaro).
         // Da qui filo ed etichette delle statistiche, il testo del pannello destro e le sue tinte:
@@ -192,6 +201,17 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
         // Quattro angoli a zero = angoli vivi; il valore azzerato ('') torna ai 18 px storici.
         $panel_rad = is_array( $s['panel_radius'] ) ? ( $this->build_border_radius_css( $s['panel_radius'] ) ?: '0' ) : '18px';
         $wave = [ 30, 60, 90, 50, 75, 40, 85, 55, 95, 35, 70, 45 ];
+
+        // Prima e dopo: il «prima» sta sopra al media, ritagliato fino alla maniglia (--ohs-pos). Senza
+        // immagine del «prima» il pannello resta un pannello media.
+        $cmp_before = 'compare' === $panel ? esc_url( trim( (string) ( $s['panel_before'] ?? '' ) ) ) : '';
+        $cmp        = '' !== $cmp_before;
+        $cmp_start  = max( 0, min( 100, intval( $s['panel_compare_start'] ?? 50 ) ) );
+        $cmp_color  = $this->safe_color_css( $s['panel_compare_color'] ?? '' ) ?: 'var(--olo-color-light, #ffffff)';
+        $cmp_pos    = 'center center';
+        if ( is_array( $s['panel_media'] ?? null ) && preg_match( '/^[a-z0-9 .%-]+$/i', (string) ( $s['panel_media']['image_position'] ?? '' ) ) ) {
+            $cmp_pos = (string) $s['panel_media']['image_position'];
+        }
 
         // Grid style
         $gap = absint( $s['gap'] ?? 60 );
@@ -358,9 +378,20 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
                 <?php if ( $panel_visible && 'showcase' !== $panel ) : ?>
                     <div class="olo-hsplit__right"<?php echo $plx_right; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- uk-parallax attribute built above from fixed numbers, esc_attr()'d ?> style="position:relative;display:flex;flex-direction:column;justify-content:center;color:<?php echo esc_attr( $txt_base ); ?>">
                         <div style="position:relative;aspect-ratio:<?php echo esc_attr( $panel_ar ); ?>">
-                            <div style="position:absolute;inset:0;border-radius:<?php echo esc_attr( $panel_rad ); ?>;overflow:hidden;border:1px solid <?php echo esc_attr( $mixp( 10 ) ); ?>;background-color:<?php echo esc_attr( $mixp( 5 ) ); ?>;background-image:repeating-linear-gradient(135deg, <?php echo esc_attr( $mixp( 4 ) ); ?> 0 16px, transparent 16px 32px);background-size:cover;background-position:center center;<?php echo esc_attr( $panel_media['has'] ? $panel_media['css'] : '' ); ?>">
+                            <div<?php echo $cmp ? ' class="ohs-cmp" data-olo-own-drag data-segue="' . ( ! empty( $s['panel_compare_follow'] ) ? '1' : '0' ) . '" data-intro="' . ( ! empty( $s['panel_compare_intro'] ) ? '1' : '0' ) . '"' : ''; ?> style="position:absolute;inset:0;border-radius:<?php echo esc_attr( $panel_rad ); ?>;overflow:hidden;border:1px solid <?php echo esc_attr( $mixp( 10 ) ); ?>;background-color:<?php echo esc_attr( $mixp( 5 ) ); ?>;background-image:repeating-linear-gradient(135deg, <?php echo esc_attr( $mixp( 4 ) ); ?> 0 16px, transparent 16px 32px);background-size:cover;background-position:center center;<?php echo esc_attr( $panel_media['has'] ? $panel_media['css'] : '' ); ?><?php echo $cmp ? esc_attr( '--ohs-pos:' . $cmp_start . '%;cursor:col-resize;touch-action:pan-y;user-select:none;-webkit-user-select:none;' ) : ''; ?>">
                                 <?php if ( $panel_media['has'] && $panel_media['markup'] !== '' ) { echo $panel_media['markup']; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- media markup generated by Olobuild_CSS_Builder::get_bg_html_markup() which escapes its own attributes ?>
                                 <?php if ( ! $panel_media['has'] && ! empty( $s['panel_media_label'] ) ) : ?><span style="position:absolute;left:14px;bottom:12px;right:14px;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;opacity:.5;z-index:1"><?php echo esc_html( $s['panel_media_label'] ); ?></span><?php endif; ?>
+                                <?php if ( $cmp ) :
+                                    $cmp_lb = trim( (string) ( $s['panel_label_before'] ?? '' ) );
+                                    $cmp_la = trim( (string) ( $s['panel_label_after'] ?? '' ) );
+                                ?>
+                                <div class="ohs-prima" role="img" aria-label="<?php echo esc_attr( '' !== $cmp_lb ? $cmp_lb : olobuild_t( 'Prima' ) ); ?>" style="position:absolute;inset:0;z-index:1;pointer-events:none;background:url(<?php echo $cmp_before; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url() sopra ?>) <?php echo esc_attr( $cmp_pos ); ?> / cover no-repeat;clip-path:inset(0 calc(100% - var(--ohs-pos)) 0 0)"></div>
+                                <div aria-hidden="true" style="position:absolute;z-index:2;top:0;bottom:0;left:var(--ohs-pos);width:2px;transform:translateX(-50%);background:<?php echo esc_attr( $cmp_color ); ?>;box-shadow:0 0 12px rgba(0,0,0,.25);pointer-events:none"></div>
+                                <div class="ohs-maniglia" aria-hidden="true" style="position:absolute;z-index:3;top:50%;left:var(--ohs-pos);width:52px;height:52px;box-sizing:border-box;transform:translate(-50%,-50%);border-radius:50%;border:2px solid <?php echo esc_attr( $cmp_color ); ?>;background:rgba(0,0,0,.28);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;pointer-events:none;transition:transform .2s ease"><svg viewBox="0 0 24 24" style="width:22px;height:22px;fill:none;stroke:<?php echo esc_attr( $cmp_color ); ?>;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><polyline points="9 6 3 12 9 18"/><polyline points="15 6 21 12 15 18"/></svg></div>
+                                <?php if ( '' !== $cmp_lb ) : ?><span aria-hidden="true" style="position:absolute;z-index:2;top:14px;left:14px;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.45em 1.05em;border-radius:99em;background:rgba(0,0,0,.6);color:#fff;pointer-events:none"><?php echo esc_html( $cmp_lb ); ?></span><?php endif; ?>
+                                <?php if ( '' !== $cmp_la ) : ?><span aria-hidden="true" style="position:absolute;z-index:2;top:14px;right:14px;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.45em 1.05em;border-radius:99em;background:var(--olo-color-primary, #e1474f);color:var(--olo-color-on-primary, #ffffff);pointer-events:none"><?php echo esc_html( $cmp_la ); ?></span><?php endif; ?>
+                                <input type="range" class="ohs-range" min="0" max="100" step="1" value="<?php echo (int) $cmp_start; ?>" aria-label="<?php echo esc_attr( olobuild_t( 'Confronto immagini' ) ); ?>" style="position:absolute;inset:0;z-index:4;width:100%;height:100%;margin:0;padding:0;opacity:0;pointer-events:none" />
+                                <?php endif; ?>
                             </div>
                             <?php if ( 'media' === $panel && ( ! empty( $s['panel_badge_number'] ) || ! empty( $s['panel_badge_label'] ) ) ) : ?>
                             <div style="position:absolute;left:-18px;bottom:24px;z-index:2;background:var(--olo-color-primary, #e1474f);color:var(--olo-color-on-primary, #ffffff);border-radius:16px;padding:18px 22px;box-shadow:0 18px 40px -16px rgba(22,38,61,.5)">
@@ -501,7 +532,78 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
                 .<?php echo $uid; ?> .olo-hsplit__stats { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 20px 24px !important; }
                 .<?php echo $uid; ?> .olo-hsplit__card-word { font-size: clamp(18px, 6vw, 36px) !important; overflow-wrap: break-word; }
             }
+            <?php if ( $cmp ) : ?>
+            .<?php echo $uid; ?> .ohs-cmp:focus-within .ohs-maniglia { outline: 3px solid var(--olo-color-primary, #e1474f); outline-offset: 3px; }
+            .<?php echo $uid; ?> .ohs-cmp.is-drag .ohs-maniglia { transform: translate(-50%, -50%) scale(1.08) !important; }
+            <?php endif; ?>
         </style>
+        <?php if ( $cmp ) : ?>
+        <script>
+        (function(){
+            var root = document.querySelector('.<?php echo $uid; ?>');
+            var cmp = root ? root.querySelector('.ohs-cmp') : null;
+            if (!cmp) return;
+            var range = cmp.querySelector('.ohs-range');
+            var ridotto = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false;
+            var pos = parseFloat(range.value), meta = 50, trascina = false, anim = null, toccato = false;
+            if (isNaN(pos)) pos = 50;
+            meta = pos;
+            function metti(p) {
+                p = Math.max(0, Math.min(100, p));
+                pos = p;
+                cmp.style.setProperty('--ohs-pos', p + '%');
+                range.value = Math.round(p);
+            }
+            function ferma() { toccato = true; if (anim) { cancelAnimationFrame(anim); anim = null; } }
+            function daPuntatore(e) {
+                var r = cmp.getBoundingClientRect();
+                if (r.width) metti((e.clientX - r.left) / r.width * 100);
+            }
+            cmp.addEventListener('pointerdown', function(e) {
+                if (e.button > 0) return;
+                ferma(); trascina = true; cmp.classList.add('is-drag');
+                try { cmp.setPointerCapture(e.pointerId); } catch (x) {}
+                daPuntatore(e);
+            });
+            // Col mouse, se scelto, la maniglia segue il puntatore anche senza premere; col dito si trascina.
+            cmp.addEventListener('pointermove', function(e) {
+                if (trascina) { daPuntatore(e); return; }
+                if (cmp.getAttribute('data-segue') === '1' ? e.pointerType === 'mouse' : false) { ferma(); daPuntatore(e); }
+            });
+            function fine() { if (!trascina) return; trascina = false; cmp.classList.remove('is-drag'); }
+            cmp.addEventListener('pointerup', fine);
+            cmp.addEventListener('pointercancel', fine);
+            cmp.addEventListener('lostpointercapture', fine);
+            range.addEventListener('input', function() { ferma(); metti(parseFloat(range.value)); });
+            // La prima passata: si parte tutto «prima» e la maniglia scorre fino al punto di partenza, una volta.
+            if (cmp.getAttribute('data-intro') === '1' ? !ridotto : false) {
+                metti(100);
+                var passata = function() {
+                    if (toccato) return;
+                    var t0 = null, dur = 1700;
+                    function passo(ts) {
+                        if (toccato ? true : !cmp.isConnected) { anim = null; return; }
+                        if (t0 === null) t0 = ts;
+                        var k = Math.min(1, (ts - t0) / dur);
+                        metti(100 + (meta - 100) * (1 - Math.pow(1 - k, 3)));
+                        anim = k < 1 ? requestAnimationFrame(passo) : null;
+                    }
+                    anim = requestAnimationFrame(passo);
+                };
+                if ('IntersectionObserver' in window) {
+                    var io = new IntersectionObserver(function(v) {
+                        if (!v[0].isIntersecting) return;
+                        io.disconnect();
+                        setTimeout(passata, 450);
+                    }, { threshold: 0.35 });
+                    io.observe(cmp);
+                } else {
+                    setTimeout(passata, 450);
+                }
+            }
+        })();
+        </script>
+        <?php endif; ?>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php
 

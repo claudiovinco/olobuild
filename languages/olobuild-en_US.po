@@ -47113,3 +47113,63 @@ msgstr "Extra fields (attachments, social photos, dates, links…) are added per
 #: src/redazione/Social.vue
 msgid "Serve un video della libreria nel campo Video."
 msgstr "A library video is needed in the Video field."
+
+#: assets/data/palette-temi.json
+msgid "Brace"
+msgstr "Embers"
+
+#: src/config/elements/hero-split.js
+msgid "Prima e dopo (da trascinare)"
+msgstr "Before and after (drag)"
+
+#: src/config/elements/hero-split.js
+msgid "Con «Prima e dopo» è l'immagine del dopo, quella che si scopre spostando la maniglia."
+msgstr "With «Before and after» this is the after image, the one revealed by moving the handle."
+
+#: src/config/elements/hero-split.js
+msgid "Immagine del prima"
+msgstr "Before image"
+
+#: src/config/elements/hero-split.js
+msgid "Etichetta del prima"
+msgstr "Before label"
+
+#: src/config/elements/hero-split.js
+msgid "Etichetta del dopo"
+msgstr "After label"
+
+#: src/config/elements/hero-split.js
+msgid "Maniglia all'inizio %"
+msgstr "Handle at start %"
+
+#: src/config/elements/hero-split.js
+msgid "La maniglia segue il mouse"
+msgstr "The handle follows the mouse"
+
+#: src/config/elements/hero-split.js
+msgid "Col mouse la maniglia si sposta passando sopra l'immagine, senza premere; sul telefono si trascina col dito."
+msgstr "With a mouse the handle moves as you pass over the image, without clicking; on a phone you drag it with your finger."
+
+#: src/config/elements/hero-split.js
+msgid "Passata iniziale"
+msgstr "Opening sweep"
+
+#: src/config/elements/hero-split.js
+msgid "Quando l'apertura si vede la prima volta, l'immagine parte tutta «prima» e la maniglia scorre da sola fino al punto di partenza. Niente passata per chi ha chiesto meno movimento."
+msgstr "When the opening first comes into view, the image starts fully «before» and the handle slides by itself to its starting point. No sweep for people who asked for less motion."
+
+#: includes/tiles/class-hero-split-tile.php
+msgid "Confronto immagini"
+msgstr "Image comparison"
+
+#: includes/class-theme-importer.php
+msgid "La luce la porti tu"
+msgstr "You bring the light"
+
+#: includes/class-theme-importer.php
+msgid "Le braci le lasci tu"
+msgstr "You leave the embers"
+
+#: includes/class-theme-importer.php
+msgid "Pulisci il soffitto"
+msgstr "Clean the ceiling"

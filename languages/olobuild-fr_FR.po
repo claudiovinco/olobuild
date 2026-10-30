@@ -48538,3 +48538,63 @@ msgstr "Les champs supplémentaires (pièces jointes, photos pour les réseaux s
 #: src/redazione/Social.vue
 msgid "Serve un video della libreria nel campo Video."
 msgstr "Il faut une vidéo de la médiathèque dans le champ Vidéo."
+
+#: assets/data/palette-temi.json
+msgid "Brace"
+msgstr "Braises"
+
+#: src/config/elements/hero-split.js
+msgid "Prima e dopo (da trascinare)"
+msgstr "Avant et après (à faire glisser)"
+
+#: src/config/elements/hero-split.js
+msgid "Con «Prima e dopo» è l'immagine del dopo, quella che si scopre spostando la maniglia."
+msgstr "Avec «Avant et après», c'est l'image de l'après, celle qu'on découvre en déplaçant la poignée."
+
+#: src/config/elements/hero-split.js
+msgid "Immagine del prima"
+msgstr "Image de l'avant"
+
+#: src/config/elements/hero-split.js
+msgid "Etichetta del prima"
+msgstr "Libellé de l'avant"
+
+#: src/config/elements/hero-split.js
+msgid "Etichetta del dopo"
+msgstr "Libellé de l'après"
+
+#: src/config/elements/hero-split.js
+msgid "Maniglia all'inizio %"
+msgstr "Poignée au départ %"
+
+#: src/config/elements/hero-split.js
+msgid "La maniglia segue il mouse"
+msgstr "La poignée suit la souris"
+
+#: src/config/elements/hero-split.js
+msgid "Col mouse la maniglia si sposta passando sopra l'immagine, senza premere; sul telefono si trascina col dito."
+msgstr "À la souris, la poignée se déplace en survolant l'image, sans cliquer ; sur le téléphone, on la fait glisser du doigt."
+
+#: src/config/elements/hero-split.js
+msgid "Passata iniziale"
+msgstr "Passage initial"
+
+#: src/config/elements/hero-split.js
+msgid "Quando l'apertura si vede la prima volta, l'immagine parte tutta «prima» e la maniglia scorre da sola fino al punto di partenza. Niente passata per chi ha chiesto meno movimento."
+msgstr "Quand l'ouverture apparaît pour la première fois, l'image est entièrement «avant» et la poignée glisse d'elle-même jusqu'au point de départ. Pas de passage pour qui a demandé moins de mouvement."
+
+#: includes/tiles/class-hero-split-tile.php
+msgid "Confronto immagini"
+msgstr "Comparaison d'images"
+
+#: includes/class-theme-importer.php
+msgid "La luce la porti tu"
+msgstr "La lumière, c'est toi qui l'apportes"
+
+#: includes/class-theme-importer.php
+msgid "Le braci le lasci tu"
+msgstr "Les braises, c'est toi qui les laisses"
+
+#: includes/class-theme-importer.php
+msgid "Pulisci il soffitto"
+msgstr "Nettoie le plafond"

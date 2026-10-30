@@ -1,8 +1,10 @@
 {
-  "bosco": { "nome": "Bosco", "primary": [152,45,58], "secondary": [36,76,80], "accent": [16,74,86], "neutri_chiari": [42,16,40], "neutri_scuri": [150,10,28] },
-  "laguna": { "nome": "Laguna", "primary": [195,66,80], "secondary": [176,60,66], "accent": [9,68,100], "neutri_chiari": [192,16,36], "neutri_scuri": [202,14,45] },
-  "terracotta": { "nome": "Terracotta", "primary": [17,68,84], "secondary": [77,28,46], "accent": [348,50,75], "neutri_chiari": [30,22,55], "neutri_scuri": [20,12,40] },
-  "lavanda": { "nome": "Lavanda", "primary": [253,45,100], "secondary": [301,34,60], "accent": [40,90,92], "neutri_chiari": [258,20,42], "neutri_scuri": [253,10,30] },
-  "grafite": { "nome": "Grafite", "primary": [17,88,100], "secondary": [0,0,0], "accent": [210,25,32], "neutri_chiari": [60,0,5], "neutri_scuri": [0,0,0] },
-  "melograno": { "nome": "Melograno", "primary": [349,64,100], "secondary": [300,38,71], "accent": [29,90,100], "neutri_chiari": [0,20,46], "neutri_scuri": [333,12,38] }
+  "bosco": { "nome": "Bosco", "primary": [150,52,48], "secondary": [95,30,40], "accent": [44,78,86], "neutri_chiari": [70,14,30], "neutri_scuri": [155,14,26] },
+  "laguna": { "nome": "Laguna", "primary": [205,76,84], "secondary": [186,50,60], "accent": [10,80,94], "neutri_chiari": [200,18,34], "neutri_scuri": [208,22,40] },
+  "terracotta": { "nome": "Terracotta", "primary": [25,72,82], "secondary": [34,40,55], "accent": [91,30,40], "neutri_chiari": [32,24,50], "neutri_scuri": [22,14,34] },
+  "lavanda": { "nome": "Lavanda", "primary": [256,54,92], "secondary": [282,30,50], "accent": [315,62,84], "neutri_chiari": [260,20,40], "neutri_scuri": [256,14,30] },
+  "grafite": { "nome": "Grafite", "primary": [205,10,14], "secondary": [214,6,10], "accent": [200,90,92], "neutri_chiari": [214,4,10], "neutri_scuri": [214,6,12] },
+  "melograno": { "nome": "Melograno", "primary": [338,72,90], "secondary": [300,30,50], "accent": [178,70,72], "neutri_chiari": [350,16,36], "neutri_scuri": [340,14,32] },
+  "brace": { "nome": "Brace", "scura": true, "primary": [48,92,98], "secondary": [16,60,74], "accent": [4,70,86], "neutri_chiari": [36,22,40], "neutri_scuri": [24,26,36] },
+  "notte": { "nome": "Notte", "scura": true, "primary": [300,56,80], "secondary": [250,40,60], "accent": [52,86,92], "neutri_chiari": [230,18,34], "neutri_scuri": [232,34,46] }
 }
