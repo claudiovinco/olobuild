@@ -73,7 +73,7 @@ class Olobuild_Theme_Importer {
                 'description' => $data['description'] ?? '', 'author' => $data['author'] ?? '',
                 'version' => $data['version'] ?? '1.0', 'screenshot' => $screenshot,
                 'screenshot_mobile' => $screenshot_mobile,
-                'tags' => $data['tags'] ?? [], 'dir' => $dir,
+                'tags' => $data['tags'] ?? [], 'dir' => $dir, 'created' => (string) ( $data['created'] ?? '' ),
                 // Dipendenza da un plugin esterno (schema: vedi check_requires_plugin).
                 // Null = tema autonomo (99/100). Il selettore mostra badge + «Scopri» quando
                 // ne serve uno che il sito non ha; i temi locali del plugin esterno (dir presente)
@@ -120,7 +120,33 @@ class Olobuild_Theme_Importer {
         }
         unset( $t );
 
+        // In ordine di creazione, dal più recente (richiesta dell'utente, 30 ott 2026): la Vetrina e il selettore
+        // mostrano per primi i temi nuovi. La data viene dal theme.json (`created`) o da assets/data/temi-creati.json
+        // (scripts/temi/date-creazione.py, dalla storia di git); un tema senza data è nuovo e va in cima.
+        $date = self::date_creazione();
+        foreach ( $themes as &$t ) {
+            $c            = (string) ( $t['created'] ?? '' );
+            $t['created'] = '' !== $c ? $c : (string) ( $date[ $t['id'] ] ?? '' );
+        }
+        unset( $t );
+        usort( $themes, function ( $a, $b ) {
+            $da = '' !== $a['created'] ? strtotime( $a['created'] ) : PHP_INT_MAX;
+            $db = '' !== $b['created'] ? strtotime( $b['created'] ) : PHP_INT_MAX;
+            return $db <=> $da ?: strnatcasecmp( (string) $a['name'], (string) $b['name'] );
+        } );
+
         return $themes;
+    }
+
+    /** Le date di creazione dei temi (id => data ISO) da assets/data/temi-creati.json. */
+    private static function date_creazione() {
+        static $date = null;
+        if ( null === $date ) {
+            $file = OLOBUILD_PATH . 'assets/data/temi-creati.json';
+            $date = file_exists( $file ) ? json_decode( (string) file_get_contents( $file ), true ) : [];
+            $date = is_array( $date ) ? $date : [];
+        }
+        return $date;
     }
 
     /**

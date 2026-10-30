@@ -47119,3 +47119,31 @@ msgstr "The serene hours"
 #: includes/class-theme-importer.php
 msgid "Il caldo che resta"
 msgstr "The warmth that stays"
+
+#: includes/class-theme-importer.php
+msgid "Leggero come un velo"
+msgstr "Light as a veil"
+
+#: includes/class-theme-importer.php
+msgid "Il respiro viene prima"
+msgstr "The breath comes first"
+
+#: includes/class-theme-importer.php
+msgid "Dal sì all’ultimo ballo"
+msgstr "From “I do” to the last dance"
+
+#: includes/class-theme-importer.php
+msgid "Malto, luppolo, pazienza"
+msgstr "Malt, hops, patience"
+
+#: includes/class-theme-importer.php
+msgid "Un’auto alla volta"
+msgstr "One car at a time"
+
+#: includes/class-theme-importer.php
+msgid "E cinque, sei, sette, otto"
+msgstr "And five, six, seven, eight"
+
+#: includes/class-theme-importer.php
+msgid "Lo sapevi?"
+msgstr "Did you know?"

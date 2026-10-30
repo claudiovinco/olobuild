@@ -75,7 +75,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
     public function get_controls() { return []; }
 
     /**
-     * I temi con la demo accesa, ordinati per categoria e nome nella lingua di chi guarda. Categoria ed
+     * I temi con la demo accesa, dal più recente al più vecchio (l'ordine del catalogo). Categoria ed
      * effetto si traducono dal catalogo del plugin (gli stessi testi del selettore dei temi); il filtro
      * resta legato alla categoria originale.
      */
@@ -128,10 +128,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 'req_url'   => $req ? esc_url_raw( (string) ( $req['purchase_url'] ?? '' ) ) : '',
             ];
         }
-        usort( $temi, function ( $a, $b ) {
-            $c = strnatcasecmp( $a['etichetta'], $b['etichetta'] );
-            return 0 !== $c ? $c : strnatcasecmp( $a['nome'], $b['nome'] );
-        } );
+        // L'ordine è quello del catalogo: per data di creazione, dal più recente (Olobuild_Theme_Importer::get_themes).
         return $temi;
     }
 

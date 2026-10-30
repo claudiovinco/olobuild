@@ -21,8 +21,12 @@ TOK = {
 
 
 class Kit:
-    def __init__(self, theme_id, media, raggio=0, peso_titoli='400', corsivo=True, maiuscole_pulsanti=True):
+    def __init__(self, theme_id, media, raggio=0, peso_titoli='400', corsivo=True, maiuscole_pulsanti=True,
+                 tema_chiaro=False, accento_su_media=None):
         self.id = theme_id
+        # Temi chiari: sopra foto e video (intro, pannelli, frasi) i testi vanno chiari, non nel colore del testo
+        # del tema (che lì è scuro). Nei temi scuri restano quelli di prima.
+        self.tema_chiaro = tema_chiaro
         self.media = media
         self.r = raggio
         self.peso = peso_titoli
@@ -30,6 +34,9 @@ class Kit:
         self.maiuscole = maiuscole_pulsanti
         self.c = dict(TOK)
         self.c['soft'] = mix(TOK['testo'], 82)
+        self.su_media = TOK['chiaro'] if tema_chiaro else TOK['testo']
+        self.soft_media = mix(TOK['chiaro'], 88) if tema_chiaro else self.c['soft']
+        self.acc_media = accento_su_media or TOK['acc']
 
     # ── media ──
     def img(self, name):
@@ -49,9 +56,9 @@ class Kit:
     def sechead(self, t, eyebrow, lines, tagline='', size=72, align='left', layout='split', size_mobile=40, chiaro=False):
         c = self.c
         base = c['chiaro'] if chiaro else c['testo']
-        alt = c['acc']
+        alt = self.acc_media if chiaro else c['acc']
         return t.classic('section-header', {
-            'eyebrow_show': bool(eyebrow), 'eyebrow_text': eyebrow, 'eyebrow_color': c['acc'], 'eyebrow_dot_color': c['acc'],
+            'eyebrow_show': bool(eyebrow), 'eyebrow_text': eyebrow, 'eyebrow_color': alt, 'eyebrow_dot_color': alt,
             'eyebrow_separator': '', 'eyebrow_font_family': 'mono', 'eyebrow_font_size': 11, 'eyebrow_font_weight': '400',
             'headline_lines': [{'text': l, 'color': base if i % 2 == 0 else alt, 'italic': self.corsivo and i % 2 == 1}
                                for i, l in enumerate(lines)],
@@ -59,7 +66,7 @@ class Kit:
             'headline_font_weight': self.peso, 'headline_align': align,
             'headline_font_size_tablet': max(38, int(size * 0.78)), 'headline_font_size_mobile': size_mobile,
             'tagline_show': bool(tagline), 'tagline_text': tagline, 'tagline_text_italic': False,
-            'tagline_text_color': c['soft'] if chiaro else c['tenue'], 'tagline_text_size': 16, 'tagline_font_family': 'body',
+            'tagline_text_color': self.soft_media if chiaro else c['tenue'], 'tagline_text_size': 16, 'tagline_font_family': 'body',
             'tagline_font_weight': '', 'tagline_caption': '',
             'layout': (layout if tagline else 'stack') if align == 'left' else 'center', 'split_ratio': '1.25fr 1fr', 'gap': 24,
             'vertical_align': 'end', 'headline_inline': False,
@@ -171,8 +178,9 @@ class Kit:
     # ── blocchi ──
     def intro(self, t, eyebrow, lines, body, bg=None, size=100, overlay_text=False, pad_top=200, advanced=None):
         sec = t.section([
-            t.row([t.col([self.sechead(t, eyebrow, lines, size=size, size_mobile=46)], wm='3-5', ws='1-1'),
-                   t.col([self.text(t, body, size=17, color=self.c['soft'] if overlay_text else None)], wm='2-5', ws='1-1')],
+            t.row([t.col([self.sechead(t, eyebrow, lines, size=size, size_mobile=46,
+                                       chiaro=self.tema_chiaro and overlay_text)], wm='3-5', ws='1-1'),
+                   t.col([self.text(t, body, size=17, color=self.soft_media if overlay_text else None)], wm='2-5', ws='1-1')],
                   layout='custom', custom='60,40', gap=56, valign='end'),
         ], bg=bg, padding='large', style={'padding_top': pad_top, 'padding_bottom': 72})
         if advanced:
@@ -181,10 +189,11 @@ class Kit:
 
     def pannello(self, t, foto, eyebrow, titolo, testo, link_t='', link_u='', overlay=56, pos='center center', effetto='reveal-h',
                  video=False):
-        blocco = [self.label(t, eyebrow, color=self.c['acc']), self.headline(t, titolo, size=80, tag='h2', pad_bottom=16),
-                  self.text(t, testo, size=16, color=self.c['soft'])]
+        blocco = [self.label(t, eyebrow, color=self.acc_media),
+                  self.headline(t, titolo, size=80, tag='h2', pad_bottom=16, color=self.su_media, accento=self.acc_media),
+                  self.text(t, testo, size=16, color=self.soft_media)]
         if link_t:
-            blocco.append(self.button(t, link_t, link_u, pad_top=10))
+            blocco.append(self.button(t, link_t, link_u, pad_top=10, chiaro=self.tema_chiaro))
         bg = self.video_bg(foto, overlay=overlay, position=pos) if video else self.photo_bg(foto, overlay=overlay, position=pos)
         return t.section([
             t.row([t.col(blocco, wm='1-2', ws='1-1'), t.col([], wm='1-2', ws='1-1')], layout='custom', custom='52,48',
@@ -193,9 +202,10 @@ class Kit:
             style={'padding_top': 140, 'padding_bottom': 80})
 
     def video_frase(self, t, video, eyebrow, titolo, testo, overlay=45, pad=230, extra=None):
-        tiles = [self.label(t, eyebrow, color=self.c['soft'], align='center'),
-                 self.headline(t, titolo, size=96, tag='h2', align='center', pad_bottom=18),
-                 self.text(t, testo, size=16, color=self.c['soft'], align='center')]
+        tiles = [self.label(t, eyebrow, color=self.soft_media, align='center'),
+                 self.headline(t, titolo, size=96, tag='h2', align='center', pad_bottom=18, color=self.su_media,
+                               accento=self.acc_media),
+                 self.text(t, testo, size=16, color=self.soft_media, align='center')]
         if extra:
             tiles += extra
         return t.section([self.centered(t, tiles)], bg=self.video_bg(video, overlay=overlay), padding='xlarge',
@@ -244,7 +254,7 @@ class Kit:
             'menu_id': 'auto', 'logo_text': logo, 'logo_text_size': logo_size, 'logo_text_color': c['testo'],
             'logo_text_font': 'heading', 'logo_text_weight': self.peso, 'logo_text_spacing': 0, 'logo_text_transform': '',
             'logo_mark': '', 'logo_mark_bg': '', 'logo_dot': True, 'logo_position': 'left',
-            'layout': 'right', 'header_mode': 'overlay' if overlay else 'normal', 'sticky': True,
+            'layout': 'right', 'header_mode': 'overlay' if overlay else 'classic', 'sticky': True,
             'sticky_bg': c['fondo'], 'sticky_shadow': False, 'sticky_shrink': True, 'sticky_show_on_up': True,
             'nav_bg': 'transparent', 'text_color': c['testo'], 'hover_color': c['acc'], 'active_color': c['acc'],
             'font_size': '12', 'font_weight': '500', 'text_transform': 'uppercase', 'letter_spacing': '2', 'item_gap': '32',
@@ -263,7 +273,7 @@ class Kit:
         })
         return [t.section([t.one([mm], anim=None)], width='fullbleed', padding='remove-vertical')]
 
-    def piede(self, t, marchio, claim, pagine, titolo_terza, terza_html, voci, legale, social, marchio_size=140):
+    def piede(self, t, marchio, claim, pagine, titolo_terza, terza_html, voci, legale, social, marchio_size=140, fondo=None):
         c = self.c
         brand = self.headline(t, marchio, size=marchio_size, tag='p', pad_bottom=0, spacing=-3,
                               sizes=(int(marchio_size * 0.64), int(marchio_size * 0.38)))
@@ -284,7 +294,7 @@ class Kit:
                        layout='custom', custom='66.66,33.33', valign='center', anim=None,
                        style={'border': {'top': 1, 'right': 0, 'bottom': 0, 'left': 0, 'style': 'solid', 'color': c['filo']},
                               'padding_top': 22, 'margin_top': 24})
-        return [t.section([top, t.one([brand], anim='fade', style={'margin_top': 64}), bottom], bg=solid(c['nero']), padding='large',
+        return [t.section([top, t.one([brand], anim='fade', style={'margin_top': 64}), bottom], bg=solid(fondo or c['nero']), padding='large',
                           style={'border': {'top': 1, 'right': 0, 'bottom': 0, 'left': 0, 'style': 'solid', 'color': c['filo']}})]
 
     # ── Slider Pro ──

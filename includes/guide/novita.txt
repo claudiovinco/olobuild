@@ -3,6 +3,15 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.886 - 2026-10-30 (i temi dal più recente e un tema per le auto storiche)
+- Vetrina temi e selettore dei temi: i temi sono in ordine di creazione, dal più recente. Prima erano raggruppati per categoria e in ordine alfabetico, e i temi nuovi si perdevano in mezzo agli altri. I filtri per categoria restano.
+- Tema nuovo, Halden Classic: il reparto storico di una marca di auto sportive (inventata) che vende auto d'epoca certificate. In apertura le tappe della Casa con l'anno enorme, la targhetta della vettura battuta a macchina e il pulsante «Lo sapevi?» che apre la curiosità; poi i colori storici sotto la lente, le auto in vendita con la ricerca, il quiz dell'archivio, le carte delle curiosità e la ricerca per numero di telaio.
+- Slider Pro: le linguette non attive si leggono meglio (testo più chiaro sul fondo scuro).
+- Controtempo e Bialbero: titoli con un carattere dalle proporzioni normali; l'ingresso animato dei sei temi nuovi è usato solo su un paio di titoli per pagina.
+
+## v1.4.885 - 2026-10-30 (sei temi nuovi, tre chiari e tre scuri)
+- Vetrina temi: 106 temi. Sei nuovi, ognuno con un'apertura Slider Pro diversa: Zucchero a Velo (pasticceria, la vetrina che cambia colore a ogni dolce e i tondi da toccare), Soffio (yoga e pilates, il cerchio che respira in otto secondi), Fiori d'Arancio (wedding planner, l'album di inviti col sigillo di ceralacca), Fermento (birrificio, le spine con le barre di alcol, amaro e colore e le bolle che salgono), Bialbero (restauro di auto d'epoca, le pratiche battute a macchina col timbro e il contagiri) e Controtempo (scuola di danza, i nomi dei corsi che ballano e il conteggio «cinque, sei, sette, otto»).
+
 ## v1.4.884 - 2026-10-30 (cento temi, e il bollino di OLObooking senza versione)
 - Vetrina temi: cento temi. I quindici nuovi sono scuri, con un'apertura Slider Pro diversa per ciascuno e i loro effetti: Cielo Buio, Cordata, Lanterne, Kaamos, Ca' Notturna, Fotogramma, Arrocco, Profondo, Ring, Sillage, Forma, Calce & Pigmento, Ombra & Riserbo, Meridiana e Focolare.
 - Vetrina temi e selettore dei temi: il bollino dei temi che usano OLObooking dice solo «OLObooking», senza il numero di versione. La versione minima si vede solo quando quella installata è troppo vecchia per importare il tema.

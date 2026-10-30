@@ -44,6 +44,17 @@ FIRME = {
     'meridiana': dict(ingresso='fade-up', testo='reveal-word', immagini='zoom', forma='tilt',
                       bordo=('projector', 'tutte', 'gradient-spin', P, A)),
     'focolare': dict(ingresso='zoom-in-up', testo='gradient-anim', testo_colori=(P, A), immagini='zoom', forma='valley'),
+    # i sei del 30 ottobre (tre chiari e tre scuri)
+    'zucchero-a-velo': dict(dosato=2, ingresso='zoom-in', testo='underline-grow', testo_colori=(P, ''),
+                            immagini='tilt', forma='drips'),
+    'soffio': dict(dosato=2, ingresso='fade', testo='reveal-word', immagini='fuoco', forma='clouds'),
+    'fiori-d-arancio': dict(dosato=2, ingresso='fade-down-big', testo='reveal-letter', immagini='zoom', forma='wave2'),
+    'fermento': dict(dosato=2, ingresso='jack-in-box', testo='wave', immagini='zoom', forma='bubbles',
+                     bordo=('pricing', 'popolare', 'gradient-spin', P, A)),
+    'bialbero': dict(dosato=2, ingresso='lightspeed-right', testo='typewriter', immagini='tilt', forma='chevron'),
+    'halden-classic': dict(dosato=2, ingresso='zoom-out', testo='underline-grow', testo_colori=(A, ''), immagini='zoom',
+                           forma='notch'),
+    'controtempo': dict(dosato=1, ingresso='roll-in', testo='gradient-anim', testo_colori=(P, S), immagini='zoom', forma='dinamica'),
 }
 
 
@@ -64,14 +75,28 @@ def _testo(s, f):
               'text_effect_phrases': '', 'text_effect_pause': '1500'})
 
 
-def _nodo(n, f):
+def _ha_titolo(n):
+    return n.get('type') == 'section-header' or any(_ha_titolo(c) for c in n.get('children') or [])
+
+
+def _nodo(n, f, conto=None):
     if isinstance(n, list):
         for x in n:
-            _nodo(x, f)
+            _nodo(x, f, conto)
         return
     tipo, s = n.get('type'), n.get('settings') or {}
     if tipo == 'row' and s.get('entrance_animation') == 'slide-up':
-        s['entrance_animation'] = f['ingresso']
+        # Ingresso dosato (utente, 30 ott 2026, su Controtempo: «lo usa ovunque, non va bene, deve essere dosato in
+        # meno zone o stufa»): quello del tema solo sui titoli di sezione, al massimo `dosato` per pagina; le altre
+        # righe entrano con un fade-up discreto.
+        if f.get('dosato'):
+            if conto is not None and conto[0] < f['dosato'] and _ha_titolo(n):
+                conto[0] += 1
+                s['entrance_animation'] = f['ingresso']
+            else:
+                s['entrance_animation'] = 'fade-up'
+        else:
+            s['entrance_animation'] = f['ingresso']
     elif tipo == 'headline' and s.get('tag') in ('h1', 'h2') and int(s.get('heading_font_size') or 0) >= 56:
         _testo(s, f)
     elif tipo == 'image':
@@ -83,7 +108,7 @@ def _nodo(n, f):
         s.update({'border_effect': b[2], 'border_effect_color2': b[4], 'border_effect_speed': 6,
                   'border_effect_angle': 135, 'border_effect_intensity': 'medium'})
     for c in n.get('children') or []:
-        _nodo(c, f)
+        _nodo(c, f, conto)
 
 
 def _sfondo(sez):
@@ -126,7 +151,7 @@ def applica(tid, builds):
         if nome in ('header.json', 'footer.json'):
             continue
         contenuto = b['content'] if isinstance(b, dict) else b
-        _nodo(contenuto, f)
+        _nodo(contenuto, f, [0])
         if nome == 'home.json':
             _divisore(tid, contenuto, f['forma'])
     return builds

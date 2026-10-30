@@ -48498,3 +48498,31 @@ msgstr "Las horas serenas"
 #: includes/class-theme-importer.php
 msgid "Il caldo che resta"
 msgstr "El calor que queda"
+
+#: includes/class-theme-importer.php
+msgid "Leggero come un velo"
+msgstr "Ligero como un velo"
+
+#: includes/class-theme-importer.php
+msgid "Il respiro viene prima"
+msgstr "La respiración va primero"
+
+#: includes/class-theme-importer.php
+msgid "Dal sì all’ultimo ballo"
+msgstr "Del sí al último baile"
+
+#: includes/class-theme-importer.php
+msgid "Malto, luppolo, pazienza"
+msgstr "Malta, lúpulo, paciencia"
+
+#: includes/class-theme-importer.php
+msgid "Un’auto alla volta"
+msgstr "Un coche cada vez"
+
+#: includes/class-theme-importer.php
+msgid "E cinque, sei, sette, otto"
+msgstr "Y cinco, seis, siete, ocho"
+
+#: includes/class-theme-importer.php
+msgid "Lo sapevi?"
+msgstr "¿Lo sabías?"
