@@ -434,6 +434,13 @@ class Olobuild_Piantasala_Tile extends Olobuild_Tile_Base {
             echo "{$sel}[data-scheda=\"{$i}\"] .opia-scheda[data-s=\"{$i}\"]{visibility:visible;opacity:1;transform:none;transition:opacity .5s cubic-bezier(.2,.7,.2,1) .1s,transform .5s cubic-bezier(.2,.7,.2,1) .1s,visibility 0s}";
             echo "{$sel}[data-scheda=\"{$i}\"] .opia-scheda[data-s=\"{$i}\"] .opia-vista img{transform:none;transition:transform 1.4s cubic-bezier(.2,.7,.2,1) .1s}";
             echo "{$sel}[data-scheda=\"{$i}\"] .opia-leg[data-s=\"{$i}\"]{background:color-mix(in srgb, var(--c) 14%, transparent);border-color:var(--c)}";
+            // Il pulsante della scheda ha il colore del settore come fondo: su un settore chiaro (un giallo, un avorio)
+            // il testo chiaro fisso non si leggeva (1,3:1 sul giallo di Fotogramma, 30 ott 2026). Si sceglie il testo
+            // che si legge su quel fondo.
+            $su_settore = Olobuild_Tile_Utils::testo_su_fondo( $x['col'], 'var(--olo-color-light, #ffffff)' );
+            if ( '' !== $su_settore ) {
+                echo "{$sel} .opia-scheda[data-s=\"{$i}\"] .opia-link{color:{$su_settore}!important}";
+            }
         }
         echo "{$sel} .opia-griglia{display:grid;grid-template-columns:" . ( $lato ? "minmax(0,{$larg}fr) minmax(0," . ( 100 - $larg ) . 'fr)' : 'minmax(0,1fr)' ) . ";gap:{$gap}px;align-items:start}";
         echo '@media (max-width:960px){' . "{$sel} .opia-griglia{grid-template-columns:minmax(0,1fr)}" . '}';

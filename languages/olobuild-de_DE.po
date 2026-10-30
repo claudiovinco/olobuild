@@ -48584,3 +48584,63 @@ msgstr "Die Glut hinterlässt du"
 #: includes/class-theme-importer.php
 msgid "Pulisci il soffitto"
 msgstr "Reinige die Decke"
+
+#: includes/class-theme-importer.php
+msgid "Tocca le stelle"
+msgstr "Berühre die Sterne"
+
+#: includes/class-theme-importer.php
+msgid "Sali con la squadra"
+msgstr "Steig mit dem Team auf"
+
+#: includes/class-theme-importer.php
+msgid "Scorri la notte"
+msgstr "Scrolle durch die Nacht"
+
+#: includes/class-theme-importer.php
+msgid "Dormi sotto l’aurora"
+msgstr "Schlaf unter dem Polarlicht"
+
+#: includes/class-theme-importer.php
+msgid "Sfoglia la notte"
+msgstr "Blättere durch die Nacht"
+
+#: includes/class-theme-importer.php
+msgid "Buio in sala"
+msgstr "Licht aus im Saal"
+
+#: includes/class-theme-importer.php
+msgid "Muovi il cubo"
+msgstr "Dreh den Würfel"
+
+#: includes/class-theme-importer.php
+msgid "Scorri per scendere"
+msgstr "Scroll zum Abtauchen"
+
+#: includes/class-theme-importer.php
+msgid "Tre round"
+msgstr "Drei Runden"
+
+#: includes/class-theme-importer.php
+msgid "Testa, cuore, fondo"
+msgstr "Kopf, Herz, Basis"
+
+#: includes/class-theme-importer.php
+msgid "Dalla misura alla scarpa"
+msgstr "Vom Maß zum Schuh"
+
+#: includes/class-theme-importer.php
+msgid "Terre e calce"
+msgstr "Erden und Kalk"
+
+#: includes/class-theme-importer.php
+msgid "Il fascicolo"
+msgstr "Die Akte"
+
+#: includes/class-theme-importer.php
+msgid "Le ore serene"
+msgstr "Die heiteren Stunden"
+
+#: includes/class-theme-importer.php
+msgid "Il caldo che resta"
+msgstr "Die Wärme, die bleibt"

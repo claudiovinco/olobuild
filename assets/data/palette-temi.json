@@ -5,6 +5,6 @@
   "lavanda": { "nome": "Lavanda", "primary": [256,54,92], "secondary": [282,30,50], "accent": [315,62,84], "neutri_chiari": [260,20,40], "neutri_scuri": [256,14,30] },
   "grafite": { "nome": "Grafite", "primary": [205,10,14], "secondary": [214,6,10], "accent": [200,90,92], "neutri_chiari": [214,4,10], "neutri_scuri": [214,6,12] },
   "melograno": { "nome": "Melograno", "primary": [338,72,90], "secondary": [300,30,50], "accent": [178,70,72], "neutri_chiari": [350,16,36], "neutri_scuri": [340,14,32] },
-  "brace": { "nome": "Brace", "scura": true, "primary": [48,92,98], "secondary": [16,60,74], "accent": [4,70,86], "neutri_chiari": [36,22,40], "neutri_scuri": [24,26,36] },
-  "notte": { "nome": "Notte", "scura": true, "primary": [300,56,80], "secondary": [250,40,60], "accent": [52,86,92], "neutri_chiari": [230,18,34], "neutri_scuri": [232,34,46] }
+  "brace": { "nome": "Brace", "primary": [50,92,98], "secondary": [16,60,74], "accent": [4,70,86], "neutri_chiari": [36,22,40], "neutri_scuri": [24,26,36] },
+  "notte": { "nome": "Notte", "primary": [300,56,80], "secondary": [250,40,60], "accent": [52,86,92], "neutri_chiari": [230,18,34], "neutri_scuri": [232,34,46] }
 }

@@ -47173,3 +47173,63 @@ msgstr "You leave the embers"
 #: includes/class-theme-importer.php
 msgid "Pulisci il soffitto"
 msgstr "Clean the ceiling"
+
+#: includes/class-theme-importer.php
+msgid "Tocca le stelle"
+msgstr "Touch the stars"
+
+#: includes/class-theme-importer.php
+msgid "Sali con la squadra"
+msgstr "Climb with the team"
+
+#: includes/class-theme-importer.php
+msgid "Scorri la notte"
+msgstr "Scroll through the night"
+
+#: includes/class-theme-importer.php
+msgid "Dormi sotto l’aurora"
+msgstr "Sleep under the aurora"
+
+#: includes/class-theme-importer.php
+msgid "Sfoglia la notte"
+msgstr "Leaf through the night"
+
+#: includes/class-theme-importer.php
+msgid "Buio in sala"
+msgstr "Lights down"
+
+#: includes/class-theme-importer.php
+msgid "Muovi il cubo"
+msgstr "Turn the cube"
+
+#: includes/class-theme-importer.php
+msgid "Scorri per scendere"
+msgstr "Scroll to dive"
+
+#: includes/class-theme-importer.php
+msgid "Tre round"
+msgstr "Three rounds"
+
+#: includes/class-theme-importer.php
+msgid "Testa, cuore, fondo"
+msgstr "Top, heart, base"
+
+#: includes/class-theme-importer.php
+msgid "Dalla misura alla scarpa"
+msgstr "From measure to shoe"
+
+#: includes/class-theme-importer.php
+msgid "Terre e calce"
+msgstr "Earths and lime"
+
+#: includes/class-theme-importer.php
+msgid "Il fascicolo"
+msgstr "The case file"
+
+#: includes/class-theme-importer.php
+msgid "Le ore serene"
+msgstr "The serene hours"
+
+#: includes/class-theme-importer.php
+msgid "Il caldo che resta"
+msgstr "The warmth that stays"

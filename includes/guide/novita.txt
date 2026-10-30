@@ -3,6 +3,25 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.884 - 2026-10-30 (cento temi, e il bollino di OLObooking senza versione)
+- Vetrina temi: cento temi. I quindici nuovi sono scuri, con un'apertura Slider Pro diversa per ciascuno e i loro effetti: Cielo Buio, Cordata, Lanterne, Kaamos, Ca' Notturna, Fotogramma, Arrocco, Profondo, Ring, Sillage, Forma, Calce & Pigmento, Ombra & Riserbo, Meridiana e Focolare.
+- Vetrina temi e selettore dei temi: il bollino dei temi che usano OLObooking dice solo «OLObooking», senza il numero di versione. La versione minima si vede solo quando quella installata è troppo vecchia per importare il tema.
+
+## v1.4.883 - 2026-10-30 (il pulsante della pianta della sala sempre leggibile)
+- Pianta sala: il pulsante nella scheda di un settore («Scegli il posto») prende il testo chiaro o scuro a seconda del colore del settore. Prima il testo era sempre chiaro e su un settore giallo o avorio non si leggeva.
+
+## v1.4.882 - 2026-10-30 (il cubo segue anche lo scorrimento della pagina)
+- Slider Pro con «Cambia slide scorrendo la pagina» e la transizione a cubo: se scorri mentre il cubo sta ancora girando, la diapositiva giusta arriva appena la rotazione finisce. Prima quel cambio poteva andare perso e lo slider restava una diapositiva indietro.
+
+## v1.4.881 - 2026-10-30 (le transizioni a cubo dello Slider Pro girano come un cubo vero)
+- Slider Pro, transizioni Cubo orizzontale e Cubo verticale: le diapositive ora girano attorno all'asse del cubo. Quella che esce va sul fianco mentre la nuova arriva dal fianco opposto, unite per lo spigolo, e la faccia che gira di lato si scurisce come una scatola vera. Andando indietro (freccia sinistra, swipe verso destra) il cubo gira nell'altro verso. Prima l'ultima diapositiva compariva per un attimo a sinistra a ogni cambio, e le due facce giravano su cardini diversi.
+
+## v1.4.880 - 2026-10-30 (la palette cambia anche i colori fissi delle demo)
+- Vetrina temi: provando una palette cambiano anche i colori scritti direttamente nelle tile del tema, non solo quelli della Palette. Prima in alcune demo (Moto Perpetuo, Ringhiera, Contropelo, Baite e altri temi di OLObooking) restavano il verde, il blu o l'oro del tema e la palette sembrava non funzionare. Ogni colore va nella famiglia giusta della palette e tiene la sua luminanza, quindi i testi restano leggibili come prima.
+
+## v1.4.879 - 2026-10-30 (gli stessi colori da provare su tutti i temi)
+- Vetrina temi: Brace e Notte si provano su tutti i temi, non più solo su quelli scuri. Ogni tema ha gli stessi otto bollini, e ognuno ha la sua versione per i temi chiari e quella per i temi scuri (il bollino mostra quella che il tema riceverà). Prima, sui temi chiari Brace e Notte non c'erano o non cambiavano niente.
+
 ## v1.4.878 - 2026-10-30 (i pulsanti della mappa sempre leggibili)
 - Mappa: i pulsanti + e − restano scuri sul loro fondo chiaro anche al passaggio del mouse. Prima prendevano il colore dei link del tema e con un colore chiaro (una luce ambra, un giallo) sparivano.
 

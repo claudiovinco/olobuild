@@ -48438,3 +48438,63 @@ msgstr "Las brasas las dejas tú"
 #: includes/class-theme-importer.php
 msgid "Pulisci il soffitto"
 msgstr "Limpia el techo"
+
+#: includes/class-theme-importer.php
+msgid "Tocca le stelle"
+msgstr "Toca las estrellas"
+
+#: includes/class-theme-importer.php
+msgid "Sali con la squadra"
+msgstr "Sube con el equipo"
+
+#: includes/class-theme-importer.php
+msgid "Scorri la notte"
+msgstr "Recorre la noche"
+
+#: includes/class-theme-importer.php
+msgid "Dormi sotto l’aurora"
+msgstr "Duerme bajo la aurora"
+
+#: includes/class-theme-importer.php
+msgid "Sfoglia la notte"
+msgstr "Hojea la noche"
+
+#: includes/class-theme-importer.php
+msgid "Buio in sala"
+msgstr "Se apagan las luces"
+
+#: includes/class-theme-importer.php
+msgid "Muovi il cubo"
+msgstr "Gira el cubo"
+
+#: includes/class-theme-importer.php
+msgid "Scorri per scendere"
+msgstr "Desliza para bajar"
+
+#: includes/class-theme-importer.php
+msgid "Tre round"
+msgstr "Tres asaltos"
+
+#: includes/class-theme-importer.php
+msgid "Testa, cuore, fondo"
+msgstr "Salida, corazón, fondo"
+
+#: includes/class-theme-importer.php
+msgid "Dalla misura alla scarpa"
+msgstr "De la medida al zapato"
+
+#: includes/class-theme-importer.php
+msgid "Terre e calce"
+msgstr "Tierras y cal"
+
+#: includes/class-theme-importer.php
+msgid "Il fascicolo"
+msgstr "El expediente"
+
+#: includes/class-theme-importer.php
+msgid "Le ore serene"
+msgstr "Las horas serenas"
+
+#: includes/class-theme-importer.php
+msgid "Il caldo che resta"
+msgstr "El calor que queda"

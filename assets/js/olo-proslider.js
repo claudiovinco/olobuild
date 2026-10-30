@@ -504,9 +504,22 @@ function initSlider(container) {
   var persistTracker = {};
 
   /* ── Slide transition ────────────────────────────────── */
+  // Il cubo gira per tutta la durata: un altro cambio a metà rotazione partirebbe da una faccia storta.
+  var cuboInGiro = false;
+  var allaFineCubo = [];
+  var verso = 0;
+  var cubo = transition === 'cubeH' || transition === 'cubeV';
+  function profonditaCubo() {
+    var tr = qs(container, '.olo-proslider-track') || container;
+    var lato = transition === 'cubeV' ? tr.offsetHeight : tr.offsetWidth;
+    if (lato > 0) container.style.setProperty('--mps-cube-d', (lato / 2) + 'px');
+  }
+  if (cubo) profonditaCubo();
+
   function goToSlide(idx) {
-    if (animating || idx === current || total <= 1) return;
+    if (animating || cuboInGiro || idx === current || total <= 1) return;
     animating = true;
+    var versoChiesto = verso;
     // Cancel pending autoplay timer (will be re-scheduled after transition)
     if (autoTimer) { clearTimeout(autoTimer); autoTimer = -1; }
     allaPartenza.forEach(function (fn) { fn(idx); });
@@ -544,10 +557,22 @@ function initSlider(container) {
     function proceed() {
       var needs3D = ['slide', 'flipH', 'flipV', 'cubeH', 'cubeV', 'slideOver'].indexOf(transition) !== -1;
 
+      // Il verso viene da chi ha chiesto il cambio (frecce, swipe, autoplay): dall'ultima alla prima col
+      // loop è un passo avanti, dalla prima all'ultima un passo indietro. Schede, miniature e punti: conta
+      // la posizione.
+      var goingForward = versoChiesto !== 0 ? versoChiesto > 0 : idx > current;
       if (needs3D && !newAlreadyVisible) {
-        var goingForward = idx > current || (current === total - 1 && idx === 0);
         // Set initial off-screen position for new slide (CSS handles this via default styles)
         newSlide.classList.remove('mps-persistent-visible');
+        if (cubo) {
+          // La faccia nuova parte dal fianco giusto (destra andando avanti, sinistra tornando indietro) senza
+          // transizione, poi gira in posizione.
+          profonditaCubo();
+          newSlide.classList.remove('mps-exit-left', 'mps-exit-right');
+          newSlide.classList.add('mps-no-trans', goingForward ? 'mps-from-next' : 'mps-from-prev');
+          void newSlide.offsetWidth;
+          newSlide.classList.remove('mps-no-trans', 'mps-from-next', 'mps-from-prev');
+        }
         newSlide.classList.add('mps-active');
         void newSlide.offsetWidth; // reflow
         // For 'slide' transition, set inline transform
@@ -558,7 +583,7 @@ function initSlider(container) {
           oldSlide.style.transform = goingForward ? 'translateX(-100%)' : 'translateX(100%)';
         }
         // Add exit class for CSS-driven 3D transitions
-        oldSlide.classList.add('mps-exit-left');
+        oldSlide.classList.add(cubo && !goingForward ? 'mps-exit-right' : 'mps-exit-left');
       } else {
         newSlide.classList.remove('mps-persistent-visible');
         newSlide.classList.add('mps-active');
@@ -569,6 +594,20 @@ function initSlider(container) {
         oldSlide.classList.remove('mps-active');
         oldSlide.classList.add('mps-persistent-visible');
         persistTracker[current] = oldPersistFor;
+      } else if (cubo && !newAlreadyVisible) {
+        // La faccia uscente resta visibile sul fianco finché il cubo non ha finito di girare, poi torna
+        // nascosta senza transizione (altrimenti rigirerebbe dietro a quella nuova).
+        oldSlide.classList.remove('mps-active');
+        cuboInGiro = true;
+        setTimeout(function () {
+          cuboInGiro = false;
+          allaFineCubo.forEach(function (fn) { fn(); });
+          if (oldSlide.classList.contains('mps-active')) return;
+          oldSlide.classList.add('mps-no-trans');
+          oldSlide.classList.remove('mps-exit-left', 'mps-exit-right');
+          void oldSlide.offsetWidth;
+          oldSlide.classList.remove('mps-no-trans');
+        }, (cfg.transDuration || 800) + 40);
       } else {
         oldSlide.classList.remove('mps-active');
         oldSlide.classList.remove('mps-exit-left');
@@ -617,13 +656,17 @@ function initSlider(container) {
   function next() {
     var idx = current + 1;
     if (idx >= total) idx = cfg.loop ? 0 : current;
+    verso = 1;
     goToSlide(idx);
+    verso = 0;
   }
 
   function prev() {
     var idx = current - 1;
     if (idx < 0) idx = cfg.loop ? total - 1 : 0;
+    verso = -1;
     goToSlide(idx);
+    verso = 0;
   }
 
   /* ── Navigation ──────────────────────────────────────── */
@@ -1007,12 +1050,13 @@ function initSlider(container) {
         var targetIdx = Math.min(total - 1, Math.floor(progress * total));
         if (targetIdx === bersaglioScorrimento && !inSospeso) return;
         bersaglioScorrimento = targetIdx;
-        if (animating) { inSospeso = true; return; }
+        if (animating || cuboInGiro) { inSospeso = true; return; }
         inSospeso = false;
         if (targetIdx !== current) goToSlide(targetIdx);
       };
       window.addEventListener('scroll', seguiScorrimento, { passive: true });
       allArrivo.push(function () { if (inSospeso) seguiScorrimento(); });
+      allaFineCubo.push(function () { if (inSospeso) seguiScorrimento(); });
     }
   }
 

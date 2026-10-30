@@ -646,7 +646,6 @@ class Olobuild_Demo_Temi {
         foreach ( self::dati_palette() as $id => $p ) {
             $out[ $id ] = [
                 'nome'   => olobuild_t( (string) ( $p['nome'] ?? $id ) ),
-                'scura'  => ! empty( $p['scura'] ),
                 'chiaro' => [ 'primary' => self::tono( $p, 'primary', 0.16 ), 'accent' => self::tono( $p, 'accent', 0.2 ) ],
                 'scuro'  => [ 'primary' => self::tono( $p, 'primary', 0.45 ), 'accent' => self::tono( $p, 'accent', 0.4 ) ],
             ];
@@ -848,22 +847,10 @@ class Olobuild_Demo_Temi {
         );
     }
 
-    /**
-     * La palette chiesta con ?palette= (sola lettura, scelta fra quelle del file), '' se nessuna. Le
-     * colorazioni «scura» valgono solo sui temi scuri (fondo con luminanza sotto 0,2), come nel visore.
-     */
+    /** La palette chiesta con ?palette= (sola lettura, scelta fra quelle del file), '' se nessuna. */
     private static function palette_richiesta() {
         $id = isset( $_GET['palette'] ) ? sanitize_key( wp_unslash( $_GET['palette'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- sola lettura: sceglie una delle palette del file dati
-        if ( '' === $id || ! isset( self::dati_palette()[ $id ] ) ) {
-            return '';
-        }
-        if ( ! empty( self::dati_palette()[ $id ]['scura'] ) ) {
-            $fondo = self::rgb( (string) ( self::$tema['json']['styles']['colors']['background'] ?? '' ) );
-            if ( null === $fondo || self::luminanza( $fondo ) >= 0.2 ) {
-                return '';
-            }
-        }
-        return $id;
+        return ( '' !== $id && isset( self::dati_palette()[ $id ] ) ) ? $id : '';
     }
 
     /** L'indirizzo con la palette scelta: navigando nella demo i colori provati restano. */
@@ -1076,8 +1063,87 @@ class Olobuild_Demo_Temi {
         $json = str_replace( 'LOGO_PLACEHOLDER', $logo, $json );
         $json = (string) preg_replace( '/"menu_id"\s*:\s*"auto"/', '"menu_id":' . self::id_menu(), $json );
         $json = self::risolvi( $json );
+        if ( '' !== self::$palette ) {
+            $json = self::colori_fissi( $json );
+        }
         $nuovi = json_decode( $json, true );
         return is_array( $nuovi ) ? $nuovi : [];
+    }
+
+    /**
+     * Con una palette, anche i colori scritti fissi nelle tile la seguono (prima restavano quelli del tema: in
+     * Moto Perpetuo il verde neon e il blu non cambiavano mai). Esadecimali e rgba(): quello di un ruolo del
+     * tema segue il ruolo, un grigio va fra i neutri, gli altri nella famiglia del ruolo di tinta più vicina;
+     * la luminanza resta, e con lei i contrasti.
+     */
+    private static function colori_fissi( $json ) {
+        $json = (string) preg_replace_callback(
+            '/(?<=[\s"(:,])#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{3})(?=[\s"),;])/',
+            static function ( $m ) {
+                return self::colore_fisso( $m[0] );
+            },
+            $json
+        );
+        return (string) preg_replace_callback(
+            '/rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*(?:,\s*[\d.]+\s*)?\)/',
+            static function ( $m ) {
+                return self::colore_fisso( $m[0] );
+            },
+            $json
+        );
+    }
+
+    /** Un colore fisso nella palette scelta (vedi colori_fissi()), una volta per colore. */
+    private static function colore_fisso( $valore ) {
+        static $fatti = [];
+        if ( ! isset( $fatti[ $valore ] ) ) {
+            $hex = $valore;
+            if ( '#' !== $valore[0] && preg_match( '/(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})/', $valore, $c ) ) {
+                $hex = sprintf( '#%02X%02X%02X', min( 255, (int) $c[1] ), min( 255, (int) $c[2] ), min( 255, (int) $c[3] ) );
+            }
+            $fatti[ $valore ] = self::in_palette( $valore, self::famiglia_di( $hex ) );
+        }
+        return $fatti[ $valore ];
+    }
+
+    /** La famiglia di un colore fisso: 'neutro' se quasi grigio, se no il ruolo del tema di tinta più vicina. */
+    private static function famiglia_di( $hex ) {
+        $tinta = static function ( $rgb ) {
+            $max = max( $rgb );
+            $min = min( $rgb );
+            if ( $max - $min < 0.12 ) {
+                return null;
+            }
+            $d = $max - $min;
+            if ( $max === $rgb[0] ) {
+                $h = fmod( ( $rgb[1] - $rgb[2] ) / $d, 6 );
+            } elseif ( $max === $rgb[1] ) {
+                $h = ( $rgb[2] - $rgb[0] ) / $d + 2;
+            } else {
+                $h = ( $rgb[0] - $rgb[1] ) / $d + 4;
+            }
+            return fmod( $h * 60 + 360, 360 );
+        };
+        $rgb = self::rgb( $hex );
+        $h   = null === $rgb ? null : $tinta( $rgb );
+        if ( null === $h ) {
+            return 'neutro';
+        }
+        $orig   = (array) ( self::$tema['json']['styles']['colors'] ?? [] );
+        $meglio = [ 'accent', 999 ];
+        foreach ( [ 'primary', 'accent', 'secondary' ] as $ruolo ) {
+            $r  = self::rgb( (string) ( $orig[ $ruolo ] ?? '' ) );
+            $hr = null === $r ? null : $tinta( $r );
+            if ( null === $hr ) {
+                continue;
+            }
+            $dist = abs( $h - $hr );
+            $dist = min( $dist, 360 - $dist );
+            if ( $dist < $meglio[1] ) {
+                $meglio = [ $ruolo, $dist ];
+            }
+        }
+        return $meglio[0];
     }
 
     /** L'indirizzo di una cartella dentro wp-content: quella dei temi di Olobuild o di un plugin che porta temi. '' fuori. */

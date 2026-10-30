@@ -48598,3 +48598,63 @@ msgstr "Les braises, c'est toi qui les laisses"
 #: includes/class-theme-importer.php
 msgid "Pulisci il soffitto"
 msgstr "Nettoie le plafond"
+
+#: includes/class-theme-importer.php
+msgid "Tocca le stelle"
+msgstr "Touche les étoiles"
+
+#: includes/class-theme-importer.php
+msgid "Sali con la squadra"
+msgstr "Monte avec l’équipe"
+
+#: includes/class-theme-importer.php
+msgid "Scorri la notte"
+msgstr "Fais défiler la nuit"
+
+#: includes/class-theme-importer.php
+msgid "Dormi sotto l’aurora"
+msgstr "Dors sous l’aurore"
+
+#: includes/class-theme-importer.php
+msgid "Sfoglia la notte"
+msgstr "Feuillette la nuit"
+
+#: includes/class-theme-importer.php
+msgid "Buio in sala"
+msgstr "Noir dans la salle"
+
+#: includes/class-theme-importer.php
+msgid "Muovi il cubo"
+msgstr "Tourne le cube"
+
+#: includes/class-theme-importer.php
+msgid "Scorri per scendere"
+msgstr "Fais défiler pour descendre"
+
+#: includes/class-theme-importer.php
+msgid "Tre round"
+msgstr "Trois rounds"
+
+#: includes/class-theme-importer.php
+msgid "Testa, cuore, fondo"
+msgstr "Tête, cœur, fond"
+
+#: includes/class-theme-importer.php
+msgid "Dalla misura alla scarpa"
+msgstr "De la mesure à la chaussure"
+
+#: includes/class-theme-importer.php
+msgid "Terre e calce"
+msgstr "Terres et chaux"
+
+#: includes/class-theme-importer.php
+msgid "Il fascicolo"
+msgstr "Le dossier"
+
+#: includes/class-theme-importer.php
+msgid "Le ore serene"
+msgstr "Les heures sereines"
+
+#: includes/class-theme-importer.php
+msgid "Il caldo che resta"
+msgstr "La chaleur qui reste"

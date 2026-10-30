@@ -291,11 +291,13 @@ export function createThemePicker(opts = {}) {
       ? `<img class="otmp-bollino-img" src="${esc(logo)}" alt="${esc(label)}" loading="lazy" decoding="async" onerror="this.nextElementSibling.hidden=false;this.remove();"/>${nome}`
       : nome;
     const min = req.min_version ? String(req.min_version) : '';
-    const title = min ? fmt(i18n.requiresVersionTitle, label, min) : fmt(i18n.requiresTitle, label);
+    // Nel bollino il plugin senza la versione (30 ott 2026); la versione minima resta nel suggerimento solo quando
+    // quella installata è troppo vecchia, perché lì serve a sapere cosa aggiornare.
+    const title = (min && status === 'old') ? fmt(i18n.requiresVersionTitle, label, min) : fmt(i18n.requiresTitle, label);
     const st = status === 'ok' ? i18n.reqOkLabel : (status === 'old' ? i18n.reqOldLabel : i18n.reqMissingLabel);
     return `<div class="otmp-cb-req is-${esc(status)}" title="${esc(title)}">
           <span class="otmp-cb-req-lab">${esc(i18n.requirementsLabel)}</span>
-          <span class="otmp-bollino${edizione && logo ? ' is-edizione' : ''}">${mark}${min ? `<span class="otmp-bollino-v">${esc(min)}+</span>` : ''}</span>
+          <span class="otmp-bollino${edizione && logo ? ' is-edizione' : ''}">${mark}</span>
           <span class="otmp-cb-req-st"><i></i>${esc(st)}</span>
         </div>`;
   }
@@ -660,7 +662,6 @@ const CSS = `
 .otmp-bollino.is-edizione .otmp-bollino-img{height:30px;max-width:150px;}
 .otmp-bollino-t{font-size:12px;font-weight:700;color:var(--txt);}
 .otmp-bollino-t[hidden]{display:none;}
-.otmp-bollino-v{font-size:11px;font-weight:600;color:var(--mute);font-variant-numeric:tabular-nums;white-space:nowrap;}
 .otmp-cb-req-st{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--mute);white-space:nowrap;}
 .otmp-cb-req-st i{width:7px;height:7px;border-radius:50%;flex:none;background:var(--faint);}
 .otmp-cb-req.is-ok .otmp-cb-req-st{color:var(--ok);}

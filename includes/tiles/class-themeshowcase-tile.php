@@ -124,7 +124,6 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 'req_edizione' => $req ? (string) ( $req['edition'] ?? '' ) : '',
                 'req_logo'  => $req ? (string) ( $req['logo'] ?? '' ) : '',
                 'req_logo_scuro' => $req ? (string) ( $req['logo_light'] ?? '' ) : '',
-                'req_min'   => $req ? (string) ( $req['min_version'] ?? '' ) : '',
                 // Il pulsante del visore porta alla pagina del plugin richiesto: i prezzi di Olobuild non bastano.
                 'req_url'   => $req ? esc_url_raw( (string) ( $req['purchase_url'] ?? '' ) ) : '',
             ];
@@ -227,7 +226,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                         }
                     }
                 }
-                $palette[ $pid ] = [ 'nome' => (string) $p['nome'], 'stile' => implode( ';', $v ), 'scura' => ! empty( $p['scura'] ) ];
+                $palette[ $pid ] = [ 'nome' => (string) $p['nome'], 'stile' => implode( ';', $v ) ];
             }
         }
 
@@ -267,7 +266,6 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ovt-bollino img{display:block;height:14px;width:auto;max-width:110px;}
             .<?php echo $uid; ?> .ovt-bollino.is-edizione{gap:8px;padding:6px 10px;}
             .<?php echo $uid; ?> .ovt-bollino.is-edizione img{height:30px;max-width:150px;}
-            .<?php echo $uid; ?> .ovt-bollino-v{font-size:11px;font-weight:600;opacity:.65;font-variant-numeric:tabular-nums;}
             .<?php echo $uid; ?> .ovt-azione{margin-top:auto;padding-top:var(--olo-space-sm);display:inline-flex;align-items:center;gap:var(--olo-space-xs);font-size:14px;font-weight:600;color:var(--ovt-acc);}
             .<?php echo $uid; ?> .ovt-azione svg{width:16px;height:16px;transition:transform .2s ease;}
             .<?php echo $uid; ?> .ovt-card:hover .ovt-azione svg{transform:translateX(3px);}
@@ -294,9 +292,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ovt-barra.con-palette .ovt-titolo{flex:0 1 auto;}
             .<?php echo $uid; ?> .ovt-palette{flex:1 1 auto;justify-content:center;gap:2px;min-width:0;}
             .<?php echo $uid; ?> .ovt-pal{display:inline-grid;place-items:center;width:34px;height:34px;padding:0;border:0;border-radius:50%;background:transparent;color:inherit;cursor:pointer;--p1:var(--c1,var(--ovt-tema,currentColor));--p2:var(--c2,currentColor);}
-            .<?php echo $uid; ?> .ovt-palette.is-scuro .ovt-pal{--p1:var(--s1,var(--c1,currentColor));--p2:var(--s2,var(--c2,currentColor));}
-            .<?php echo $uid; ?> .ovt-palette:not(.is-scuro) .ovt-pal--scura{display:none;}
-            .<?php echo $uid; ?> .ovt-pal i{display:block;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--p1) calc(50% - .5px),var(--p2) calc(50% + .5px));box-shadow:0 0 0 1px color-mix(in srgb,currentColor 30%,transparent);transition:transform .15s ease,box-shadow .15s ease;}
+            .<?php echo $uid; ?> .ovt-palette.is-scuro .ovt-pal{--p1:var(--s1,var(--c1,currentColor));--p2:var(--s2,var(--c2,currentColor));}            .<?php echo $uid; ?> .ovt-pal i{display:block;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--p1) calc(50% - .5px),var(--p2) calc(50% + .5px));box-shadow:0 0 0 1px color-mix(in srgb,currentColor 30%,transparent);transition:transform .15s ease,box-shadow .15s ease;}
             .<?php echo $uid; ?> .ovt-pal:hover i{transform:scale(1.12);}
             .<?php echo $uid; ?> .ovt-pal[aria-pressed="true"] i{box-shadow:0 0 0 2px var(--olo-color-dark),0 0 0 4px var(--ovt-acc);}
             .<?php echo $uid; ?> .ovt-pal:focus-visible{outline:2px solid var(--ovt-acc);outline-offset:1px;}
@@ -353,15 +349,15 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                                 $logo_req  = '' !== $t['req_logo'] ? $t['req_logo'] : $t['req_logo_scuro'];
                                 // Col nome dell'edizione («OLObooking appointments»): testo alternativo e titolo.
                                 $nome_req  = '' !== $t['req_edizione'] ? $t['req_nome'] . ' ' . $t['req_edizione'] : $t['req_nome'];
-                                $titolo_req = '' !== $t['req_min']
-                                    ? sprintf( olobuild_t( 'Richiede %1$s %2$s o successiva' ), $nome_req, $t['req_min'] )
-                                    : sprintf( olobuild_t( 'Richiede %s' ), $nome_req );
+                                // Il bollino dice solo che serve il plugin, senza la versione (utente, 30 ott 2026): la
+                                // versione minima conta all'importazione, dove il selettore la controlla davvero.
+                                $titolo_req = sprintf( olobuild_t( 'Richiede %s' ), $nome_req );
                                 $cls_req   = ( ( '' === $t['req_logo'] && '' !== $t['req_logo_scuro'] ) ? ' is-scuro' : '' )
                                     . ( ( '' !== $logo_req && '' !== $t['req_edizione'] ) ? ' is-edizione' : '' );
                                 ?>
                             <span class="ovt-req" title="<?php echo esc_attr( $titolo_req ); ?>">
                                 <span class="ovt-req-lab"><?php echo esc_html( olobuild_t( 'Requisiti' ) ); ?></span>
-                                <span class="ovt-bollino<?php echo esc_attr( $cls_req ); ?>"><?php if ( '' !== $logo_req ) : ?><img src="<?php echo esc_url( $logo_req ); ?>" alt="<?php echo esc_attr( $nome_req ); ?>" loading="lazy" decoding="async" /><?php else : echo esc_html( $nome_req ); endif; ?><?php if ( '' !== $t['req_min'] ) : ?><span class="ovt-bollino-v"><?php echo esc_html( $t['req_min'] ); ?>+</span><?php endif; ?></span>
+                                <span class="ovt-bollino<?php echo esc_attr( $cls_req ); ?>"><?php if ( '' !== $logo_req ) : ?><img src="<?php echo esc_url( $logo_req ); ?>" alt="<?php echo esc_attr( $nome_req ); ?>" loading="lazy" decoding="async" /><?php else : echo esc_html( $nome_req ); endif; ?></span>
                             </span>
                             <?php endif; ?>
                             <?php if ( '' !== trim( (string) $s['card_label'] ) ) : ?><span class="ovt-azione"><?php echo esc_html( (string) $s['card_label'] ); ?><?php echo $ico['freccia']; ?></span><?php endif; ?>
@@ -378,7 +374,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                     <div class="ovt-gruppo ovt-palette" role="group" aria-label="<?php echo esc_attr( olobuild_t( 'Colori da provare' ) ); ?>">
                         <button type="button" class="ovt-pal" data-palette="" aria-pressed="true" aria-label="<?php echo esc_attr( olobuild_t( 'Colori del tema' ) ); ?>" title="<?php echo esc_attr( olobuild_t( 'Colori del tema' ) ); ?>"><i></i></button>
                         <?php foreach ( $palette as $pid => $p ) : ?>
-                        <button type="button" class="ovt-pal<?php echo $p['scura'] ? ' ovt-pal--scura' : ''; ?>" data-palette="<?php echo esc_attr( $pid ); ?>"<?php echo $p['scura'] ? ' data-scura="1"' : ''; ?> aria-pressed="false" aria-label="<?php echo esc_attr( $p['nome'] ); ?>" title="<?php echo esc_attr( $p['nome'] ); ?>" style="<?php echo esc_attr( $p['stile'] ); ?>"><i></i></button>
+                        <button type="button" class="ovt-pal" data-palette="<?php echo esc_attr( $pid ); ?>" aria-pressed="false" aria-label="<?php echo esc_attr( $p['nome'] ); ?>" title="<?php echo esc_attr( $p['nome'] ); ?>" style="<?php echo esc_attr( $p['stile'] ); ?>"><i></i></button>
                         <?php endforeach; ?>
                     </div>
                     <?php endif; ?>
@@ -478,17 +474,10 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             function segnaPalette() {
                 bollini.forEach(function (b) { b.setAttribute('aria-pressed', (b.getAttribute('data-palette') || '') === scelta ? 'true' : 'false'); });
             }
-            // Il primo bollino ha i colori del tema aperto; sui temi scuri gli altri mostrano la versione scura
-            // e compaiono le colorazioni pensate solo per loro (passando a un tema chiaro si torna ai suoi colori).
+            // Il primo bollino ha i colori del tema aperto; sui temi scuri gli altri mostrano la versione scura.
             function bolliniDelTema(a) {
                 if (!gruppoPal) { return; }
-                var scuro = a.getAttribute('data-scuro') === '1';
-                gruppoPal.classList.toggle('is-scuro', scuro);
-                var soloScura = bollini.some(function (b) { return b.getAttribute('data-palette') === scelta ? b.getAttribute('data-scura') === '1' : false; });
-                if (soloScura ? !scuro : false) {
-                    scelta = '';
-                    segnaPalette();
-                }
+                gruppoPal.classList.toggle('is-scuro', a.getAttribute('data-scuro') === '1');
                 var c = (a.getAttribute('data-colori') || '').split(','), t = bollini[0];
                 if (t) {
                     if (c.length === 2) { t.style.setProperty('--c1', c[0]); t.style.setProperty('--c2', c[1]); }
