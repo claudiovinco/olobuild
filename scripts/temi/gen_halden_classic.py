@@ -350,9 +350,9 @@ def build_storia():
         ('Che cosa c’è nell’ultima H8 ad aria?', 'Il pieno del 31 marzo 1995, quarantuno chilometri e duecento firme sotto '
          'il cofano. Non è mai stata accesa da allora.', 'pexels-38276873.jpg')]:
         carte.append(t.col([t.classic('flipcard', {
-            'front_media': {'type': 'image', 'image_url': K.img(foto)}, 'back_media': {'type': 'none'},
+            'front_media': {'type': 'image', 'image_url': K.img(foto), 'image_size': 'cover', 'image_position': 'center center', 'overlay_color': C['nero'], 'overlay_opacity': 60}, 'back_media': {'type': 'none'},
             'front_title': domanda, 'front_description': 'Lo sapevi? · girate la carta', 'front_text_color': C['chiaro'],
-            'front_valign': 'bottom', 'front_overlay': mix(C['nero'], 60), 'back_title': 'Lo sapevi?',
+            'front_valign': 'bottom', 'front_overlay': '', 'back_title': 'Lo sapevi?',
             'back_description': risposta, 'back_bg': C['chiaro'], 'back_text_color': C['testo'], 'back_valign': 'center',
             'back_cta_text': '', 'back_cta_url': '', 'flip_direction': 'horizontal', 'flip_trigger': 'hover',
             'card_height': '380', 'card_border_radius': '2', 'card_shadow': 'md', 'title_size': '24', 'title_weight': '400',

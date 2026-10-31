@@ -311,9 +311,9 @@ def build_vetrina():
         ('pexels-33106880.jpg', 'Sfoglia ai frutti di bosco', 'Solo d’estate', 'Sfoglia caramellata, crema leggera e i '
          'frutti di bosco della Val Pellice.')]:
         carte.append(t.col([t.classic('flipcard', {
-            'front_media': {'type': 'image', 'image_url': K.img(foto)}, 'back_media': {'type': 'none'},
+            'front_media': {'type': 'image', 'image_url': K.img(foto), 'image_size': 'cover', 'image_position': 'center center', 'overlay_color': C['nero'], 'overlay_opacity': 58}, 'back_media': {'type': 'none'},
             'front_title': nome, 'front_description': sotto, 'front_text_color': C['chiaro'], 'front_valign': 'bottom',
-            'front_overlay': mix(C['nero'], 52), 'back_title': nome, 'back_description': retro, 'back_bg': C['chiaro'],
+            'front_overlay': '', 'back_title': nome, 'back_description': retro, 'back_bg': C['chiaro'],
             'back_text_color': C['testo'], 'back_valign': 'center', 'back_cta_text': 'Prenota', 'back_cta_url': CONTATTI + '#ordina',
             'back_cta_bg': C['acc'], 'back_cta_color': C['on_acc'], 'back_cta_radius': '999', 'flip_direction': 'horizontal',
             'flip_trigger': 'hover', 'card_height': '440', 'card_border_radius': '32', 'card_shadow': 'md',

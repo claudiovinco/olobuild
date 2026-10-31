@@ -373,7 +373,13 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         if ( ! empty( $s['showTabs'] ) && count( $slides ) > 1 ) {
             $tab_pos   = in_array( $s['tabPosition'] ?? 'bottom', [ 'bottom', 'top' ], true ) ? ( $s['tabPosition'] ?? 'bottom' ) : 'bottom';
             $tab_class = 'olo-proslider-tabs mps-tabs-' . $tab_pos;
-            echo '<div class="' . esc_attr( $tab_class ) . '" data-tabs-for="' . esc_attr( $uid ) . '">';
+            // La barra sta fuori dal contenitore dello slider: il colore di navigazione le arriva qui, con la sua classe.
+            $tab_style = '';
+            if ( ! empty( $nav_color ) ) {
+                $tab_class .= ' mps-tabs-colore';
+                $tab_style  = ' style="' . esc_attr( '--mps-nav:' . $nav_color . ';' ) . '"';
+            }
+            echo '<div class="' . esc_attr( $tab_class ) . '" data-tabs-for="' . esc_attr( $uid ) . '"' . $tab_style . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tab_style built with esc_attr() above
             foreach ( $slides as $ti => $tslide ) {
                 $tlabel = ! empty( $tslide['tabLabel'] ) ? esc_html( $tslide['tabLabel'] ) : 'Slide ' . ( $ti + 1 );
                 $tact   = $ti === 0 ? ' mps-tab-active' : '';
@@ -680,6 +686,9 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             $style .= 'mix-blend-mode:' . $blend . ';';
         }
 
+        // L'aspetto del livello (bordo, raggio, sfondo, padding, ombra) si segna qui: col percorso di movimento passa
+        // dal contenitore fermo a quello che si muove (più sotto), se no il contenuto correva e il tondo restava lì.
+        $aspetto_da = strlen( $style );
         // Border — supporta lati individuali
         $valid_border_styles = [ 'solid', 'dashed', 'dotted', 'double' ];
         $bs = in_array( $layer['borderStyle'] ?? 'solid', $valid_border_styles, true ) ? ( $layer['borderStyle'] ?? 'solid' ) : 'solid';
@@ -776,6 +785,8 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             }
         }
 
+        $aspetto_a = strlen( $style );
+
         // CSS filters (image/video)
         if ( in_array( $type, [ 'image', 'video' ], true ) ) {
             $filter_parts = [];
@@ -871,12 +882,17 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             if ( '' !== $mpd ) {
                 $mpc      = [
                     'p' => $mpd,
-                    'd' => max( 500, min( 20000, absint( $layer['motionPath']['duration'] ?? 3000 ) ) ),
+                    'd' => max( 500, min( 120000, absint( $layer['motionPath']['duration'] ?? 3000 ) ) ),
                     'r' => ! empty( $layer['motionPath']['autoRotate'] ) ? 1 : 0,
                     'l' => ( isset( $layer['motionPath']['loop'] ) && false === $layer['motionPath']['loop'] ) ? 0 : 1,
                     'e' => $this->easing_to_css( $layer['motionPath']['easing'] ?? 'linear' ),
                 ];
-                $mp_open  = '<div class="mps-mp" data-mp="' . esc_attr( wp_json_encode( $mpc ) ) . '">';
+                // Il contenitore che corre prende tutto il livello e il suo aspetto (bordo, raggio, sfondo, ombra): prima
+                // restavano sul contenitore fermo, e un tondo col bordo restava al suo posto mentre la foto ne usciva.
+                $aspetto  = substr( $style, $aspetto_da, $aspetto_a - $aspetto_da );
+                $style    = substr( $style, 0, $aspetto_da ) . substr( $style, $aspetto_a );
+                $mp_open  = '<div class="mps-mp" data-mp="' . esc_attr( wp_json_encode( $mpc ) ) . '" style="'
+                    . esc_attr( 'width:100%;height:100%;box-sizing:border-box;' . $aspetto ) . '">';
                 $mp_close = '</div>';
             }
         }

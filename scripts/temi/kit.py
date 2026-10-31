@@ -348,6 +348,75 @@ class Kit:
     def apertura(self, t, slider):
         return t.section([t.one([slider], anim=None)], width='fullbleed', padding='remove-vertical')
 
+    @staticmethod
+    def tl(x, y, punti, durata, loop=True, ritardo=0, curva='linear', fine_con_slide=True):
+        """La timeline di un livello: punti = [(ms, {proprietà})]. x e y vanno in ogni fotogramma (sono left/top):
+        si mettono quelli del livello dove il punto non li dà. Con rotationX/Y nei fotogrammi la prospettiva c'è
+        solo dove la rotazione 3D non è zero: un valore minimo (0.01) negli altri tiene la prospettiva costante."""
+        kfs = []
+        for punto in punti:  # (ms, proprietà) o (ms, proprietà, curva fino al fotogramma dopo)
+            ms, p = punto[0], punto[1]
+            q = {'x': x, 'y': y}
+            q.update(p)
+            kfs.append({'time': ms, 'props': q, 'easing': punto[2] if len(punto) > 2 else curva})
+        o = {'duration': durata, 'delay': ritardo, 'loop': loop, 'keyframes': kfs}
+        if not fine_con_slide:
+            o['endWithSlide'] = False
+        return o
+
+    def numeri(self, t, voci, colonne=4, size=54, chiaro=False):
+        c = self.c
+        return t.classic('statstrip', {
+            'items': [{'value': v, 'label': l} for v, l in voci], 'columns': colonne, 'columns_tablet': 2,
+            'columns_mobile': 2, 'band_padding_y': 28, 'show_dividers': True,
+            'divider_color': mix(c['chiaro'], 22) if chiaro else c['filo'], 'value_font_family': 'heading',
+            'value_color': c['chiaro'] if chiaro else c['testo'], 'value_size': size, 'value_weight': self.peso,
+            'label_color': self.soft_media if chiaro else c['tenue'], 'label_size': 12, 'label_uppercase': True,
+            'align': 'left', 'mono_font_family': ''}, style={})
+
+    def squadra(self, t, persone, ratio='4/5', size='300', sfondo=None, testo=None):
+        """persone: [(foto, nome, ruolo, bio, punto focale)] → una riga di schede della squadra."""
+        c = self.c
+        cols = []
+        for foto, nome, ruolo, bio, pos in persone:
+            cols.append(t.col([t.classic('team', {
+                'photo': self.img(foto), 'hover_image': '', 'hover_video': '', 'name': nome, 'role': ruolo, 'bio': bio,
+                'link_text': '', 'link_url': '', 'photo_size': size, 'photo_ratio': ratio, 'photo_fit': 'cover',
+                'photo_object_position': pos, 'photo_shape': 'rounded', 'photo_radius': str(self.r),
+                'photo_border_width': '0', 'photo_shadow': 'none', 'info_bg_color': sfondo or c['sala'],
+                'info_text_color': testo or c['testo'], 'info_padding': '24', 'info_radius': str(self.r),
+                'info_align': 'left', 'name_size': '24', 'name_weight': self.peso, 'role_size': '13',
+                'role_color': c['acc'], 'bio_size': '15', 'bg_color': 'transparent'}, style={})],
+                wm='1-%d' % len(persone), ws='1-1'))
+        return t.row(cols, layout='-'.join([str(100 // len(persone))] * len(persone)), gap=24, valign='start')
+
+    def piani(self, t, piani, cta, link, nota='', sfondo=None, valuta='€'):
+        """piani: [(nome, prezzo, periodo, 'voce\\nvoce', popolare, badge)] → una riga di listini."""
+        c = self.c
+        cols = []
+        for nome, prezzo, periodo, voci, pop, badge in piani:
+            cols.append(t.col([t.classic('pricing', {
+                'plan_name': nome, 'price': prezzo, 'currency': valuta, 'currency_position': 'after', 'period': periodo,
+                'features': voci, 'check_style': 'circle-check', 'cta_text': cta, 'cta_url': link,
+                'cta_bg_color': c['acc'] if pop else 'transparent', 'cta_text_color': c['on_acc'] if pop else c['testo'],
+                'cta_border_width': '0' if pop else '1', 'cta_border_color': c['testo'], 'cta_radius': str(self.r),
+                'cta_hover_bg_color': c['testo'], 'additional_info': nota, 'is_popular': pop, 'badge_text': badge,
+                'badge_bg_color': c['acc2'], 'badge_text_color': c['nero'], 'bg_color': sfondo or c['sala'],
+                'accent_color': c['acc'], 'text_color': c['testo'], 'price_color': c['testo'],
+                'border_radius': str(self.r), 'shadow': 'md' if pop else 'none'}, style={})],
+                wm='1-%d' % len(piani), ws='1-1'))
+        return t.row(cols, layout='-'.join([str(100 // len(piani))] * len(piani)), gap=20, valign='start')
+
+    def coverflow(self, t, voci, altezza=440, larghezza=360):
+        """La galleria a coverflow 3D (Galleria pro, nastro): voci = [(foto, alt, titolo, sottotitolo)]."""
+        return t.classic('progallery', {
+            'images': [{'url': self.img(f), 'alt': a, 'caption': ti, 'subtitle': s, 'text': ''} for f, a, ti, s in voci],
+            'layout_family': 'strip', 'layout': 'strip_coverflow', 'columns': 4, 'gap': 12, 'object_fit': 'cover',
+            'thumb_radius': self.r, 'mobile_columns': 1, 'filmstrip_autoplay': True, 'filmstrip_speed': 3.5,
+            'filmstrip_dots': 'lines', 'filmstrip_dots_color': self.c['acc'], 'filmstrip_item_width': larghezza,
+            'filmstrip_center_zoom': 1.12, 'filmstrip_side_tilt': 38, 'img_height': '%dpx' % altezza, 'entrance': 'none',
+            'hover_effect': 'none', 'lightbox': True, 'show_caption': True}, style={})
+
 
 def tema(theme_id, nome, categoria, zona, tags, descrizione, menu, pagine, hexes, font_corpo, font_titoli, font_mono,
          gfonts, corsivo_di=None, peso_titoli='400', raggio=0, grana=5, titoli_line='1.0', titoli_spazio='-0.01em'):

@@ -48686,3 +48686,63 @@ msgstr "Et cinq, six, sept, huit"
 #: includes/class-theme-importer.php
 msgid "Lo sapevi?"
 msgstr "Le saviez-vous ?"
+
+#: includes/class-theme-importer.php
+msgid "Il piatto da inclinare"
+msgstr "L’assiette qui s’incline"
+
+#: includes/class-theme-importer.php
+msgid "Il bilanciere che oscilla"
+msgstr "Le balancier qui oscille"
+
+#: includes/class-theme-importer.php
+msgid "La pizza che gira"
+msgstr "La pizza qui tourne"
+
+#: includes/class-theme-importer.php
+msgid "La tavola che va a fuoco"
+msgstr "Le tableau qui devient net"
+
+#: includes/class-theme-importer.php
+msgid "I satelliti in orbita"
+msgstr "Satellites en orbite"
+
+#: includes/class-theme-importer.php
+msgid "Le botaniche in orbita"
+msgstr "Botaniques en orbite"
+
+#: includes/class-theme-importer.php
+msgid "La pallina in campo"
+msgstr "La balle sur le terrain"
+
+#: includes/class-theme-importer.php
+msgid "La goccia e il vetro liquido"
+msgstr "La goutte et le verre liquide"
+
+#: includes/class-theme-importer.php
+msgid "Le bobine che girano"
+msgstr "Les bobines qui tournent"
+
+#: includes/class-theme-importer.php
+msgid "Le corde che vibrano"
+msgstr "Les cordes qui vibrent"
+
+#: includes/class-theme-importer.php
+msgid "Le praline che girano"
+msgstr "Les pralines qui tournent"
+
+#: includes/class-theme-importer.php
+msgid "Le forbici che tagliano"
+msgstr "Les ciseaux qui coupent"
+
+#: includes/class-theme-importer.php
+msgid "L’arcobaleno che dondola"
+msgstr "L’arc-en-ciel qui se balance"
+
+#: includes/class-theme-importer.php
+msgid "La via del giorno"
+msgstr "La voie du jour"
+
+#: includes/class-theme-importer.php
+msgid "Il vetro che gira"
+msgstr "Le verre qui tourne"

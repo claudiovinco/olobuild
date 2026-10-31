@@ -445,6 +445,17 @@
 .mps-nav-colore .mps-dots-dash .olo-proslider-dot { background: color-mix(in srgb, var(--mps-nav, #fff) 30%, transparent); }
 .mps-nav-colore .mps-dots-dash .olo-proslider-dot:hover { background: color-mix(in srgb, var(--mps-nav, #fff) 60%, transparent); }
 .mps-nav-colore .mps-dots-dash .olo-proslider-dot.mps-dot-active { background: var(--mps-nav, #fff); }
+/* Anche le linguette prendono il colore scelto: il testo nel colore e la barra bianca o nera, quella che stacca, come
+   il fondo delle frecce. La barra sta fuori dal contenitore dello slider: il PHP le dà la classe mps-tabs-colore e la
+   variabile. Prima restava nera anche sulle slide chiare (temi chiari con le linguette, 31 ott 2026). */
+.mps-tabs-colore .olo-proslider-tab { color: color-mix(in srgb, var(--mps-nav, #fff) 74%, transparent); }
+.mps-tabs-colore .olo-proslider-tab:hover { color: var(--mps-nav, #fff); background: color-mix(in srgb, var(--mps-nav, #fff) 6%, transparent); }
+.mps-tabs-colore .olo-proslider-tab.mps-tab-active { color: var(--mps-nav, #fff); }
+.olo-proslider-tabs.mps-tabs-colore.mps-tabs-top { border-bottom-color: color-mix(in srgb, var(--mps-nav, #fff) 15%, transparent); }
+@supports (color: oklch(from red clamp(0, (0.62 - l) * 1000, 1) 0 0 / 0.5)) {
+  .olo-proslider-tabs.mps-tabs-colore { background: oklch(from var(--mps-nav, #fff) clamp(0, (0.62 - l) * 1000, 1) 0 0 / 0.6); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+}
+
 
 /* Focus da tastiera su frecce, punti, miniature e schede: anello nel colore della navigazione */
 .olo-proslider-arrow:focus-visible,

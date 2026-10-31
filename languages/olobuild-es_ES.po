@@ -48526,3 +48526,63 @@ msgstr "Y cinco, seis, siete, ocho"
 #: includes/class-theme-importer.php
 msgid "Lo sapevi?"
 msgstr "¿Lo sabías?"
+
+#: includes/class-theme-importer.php
+msgid "Il piatto da inclinare"
+msgstr "El plato que se inclina"
+
+#: includes/class-theme-importer.php
+msgid "Il bilanciere che oscilla"
+msgstr "El volante que oscila"
+
+#: includes/class-theme-importer.php
+msgid "La pizza che gira"
+msgstr "La pizza que gira"
+
+#: includes/class-theme-importer.php
+msgid "La tavola che va a fuoco"
+msgstr "La tabla que se enfoca"
+
+#: includes/class-theme-importer.php
+msgid "I satelliti in orbita"
+msgstr "Satélites en órbita"
+
+#: includes/class-theme-importer.php
+msgid "Le botaniche in orbita"
+msgstr "Botánicos en órbita"
+
+#: includes/class-theme-importer.php
+msgid "La pallina in campo"
+msgstr "La pelota en la pista"
+
+#: includes/class-theme-importer.php
+msgid "La goccia e il vetro liquido"
+msgstr "La gota y el vidrio líquido"
+
+#: includes/class-theme-importer.php
+msgid "Le bobine che girano"
+msgstr "Las bobinas que giran"
+
+#: includes/class-theme-importer.php
+msgid "Le corde che vibrano"
+msgstr "Las cuerdas que vibran"
+
+#: includes/class-theme-importer.php
+msgid "Le praline che girano"
+msgstr "Los bombones que giran"
+
+#: includes/class-theme-importer.php
+msgid "Le forbici che tagliano"
+msgstr "Las tijeras que cortan"
+
+#: includes/class-theme-importer.php
+msgid "L’arcobaleno che dondola"
+msgstr "El arcoíris que se balancea"
+
+#: includes/class-theme-importer.php
+msgid "La via del giorno"
+msgstr "La vía del día"
+
+#: includes/class-theme-importer.php
+msgid "Il vetro che gira"
+msgstr "El vidrio que gira"

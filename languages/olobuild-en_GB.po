@@ -47147,3 +47147,63 @@ msgstr "And five, six, seven, eight"
 #: includes/class-theme-importer.php
 msgid "Lo sapevi?"
 msgstr "Did you know?"
+
+#: includes/class-theme-importer.php
+msgid "Il piatto da inclinare"
+msgstr "The plate that tilts"
+
+#: includes/class-theme-importer.php
+msgid "Il bilanciere che oscilla"
+msgstr "The swinging balance wheel"
+
+#: includes/class-theme-importer.php
+msgid "La pizza che gira"
+msgstr "The spinning pizza"
+
+#: includes/class-theme-importer.php
+msgid "La tavola che va a fuoco"
+msgstr "The eye chart that comes into focus"
+
+#: includes/class-theme-importer.php
+msgid "I satelliti in orbita"
+msgstr "Satellites in orbit"
+
+#: includes/class-theme-importer.php
+msgid "Le botaniche in orbita"
+msgstr "Botanicals in orbit"
+
+#: includes/class-theme-importer.php
+msgid "La pallina in campo"
+msgstr "The ball on court"
+
+#: includes/class-theme-importer.php
+msgid "La goccia e il vetro liquido"
+msgstr "The drop and liquid glass"
+
+#: includes/class-theme-importer.php
+msgid "Le bobine che girano"
+msgstr "The spinning tape reels"
+
+#: includes/class-theme-importer.php
+msgid "Le corde che vibrano"
+msgstr "The vibrating strings"
+
+#: includes/class-theme-importer.php
+msgid "Le praline che girano"
+msgstr "The spinning pralines"
+
+#: includes/class-theme-importer.php
+msgid "Le forbici che tagliano"
+msgstr "The cutting scissors"
+
+#: includes/class-theme-importer.php
+msgid "L’arcobaleno che dondola"
+msgstr "The rocking rainbow"
+
+#: includes/class-theme-importer.php
+msgid "La via del giorno"
+msgstr "Route of the day"
+
+#: includes/class-theme-importer.php
+msgid "Il vetro che gira"
+msgstr "The spinning glass"

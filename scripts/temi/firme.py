@@ -55,6 +55,22 @@ FIRME = {
     'halden-classic': dict(dosato=2, ingresso='zoom-out', testo='underline-grow', testo_colori=(A, ''), immagini='zoom',
                            forma='notch'),
     'controtempo': dict(dosato=1, ingresso='roll-in', testo='gradient-anim', testo_colori=(P, S), immagini='zoom', forma='dinamica'),
+    # i quindici del 31 ottobre
+    'nove-posti': dict(dosato=2, ingresso='fade-up', testo='reveal-letter', immagini='zoom', forma='ripples'),
+    'diottria': dict(dosato=2, ingresso='blur-in', testo='scramble', testo_colori=(P, TX), immagini='fuoco', forma='curve'),
+    'cornicione': dict(dosato=2, ingresso='zoom-in-up', testo='wave', immagini='zoom', forma='wave'),
+    'orbita-bassa': dict(dosato=2, ingresso='zoom-in', testo='gradient-anim', testo_colori=(P, A), immagini='tilt', forma='tilt'),
+    'bacca-nera': dict(dosato=2, ingresso='blur-zoom', testo='reveal-word', immagini='zoom', forma='mountains'),
+    'bandeja': dict(dosato=2, ingresso='back-in-left', testo='underline-grow', testo_colori=(A, ''), immagini='tilt', forma='zigzag'),
+    'rugiada': dict(dosato=2, ingresso='curtain-reveal', testo='reveal-word', immagini='zoom', forma='ripples'),
+    'presa-diretta': dict(dosato=2, ingresso='flip-x', testo='glitch', immagini='tilt', forma='steps'),
+    'anima': dict(dosato=2, ingresso='fade-up-big', testo='reveal-letter', immagini='tilt', forma='curve'),
+    'fondente': dict(dosato=2, ingresso='zoom-in-up', testo='gradient-anim', testo_colori=(P, A), immagini='zoom', forma='drips'),
+    'mano-libera': dict(dosato=2, ingresso='flip-y', testo='underline-grow', testo_colori=(P, ''), immagini='tilt', forma='steps'),
+    'girotondo': dict(dosato=2, ingresso='zoom-in', testo='wave', immagini='tilt', forma='clouds'),
+    'strapiombo': dict(dosato=2, ingresso='zoom-in-up', testo='underline-grow', testo_colori=(P, ''), immagini='zoom', forma='peak'),
+    'fornace': dict(dosato=2, ingresso='blur-in', testo='gradient-anim', testo_colori=(P, A), immagini='fuoco', forma='wave'),
+    'scappamento': dict(dosato=2, ingresso='zoom-in-down', testo='reveal-word', immagini='tilt', forma='teeth'),
 }
 
 

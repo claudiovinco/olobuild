@@ -48672,3 +48672,63 @@ msgstr "Und fünf, sechs, sieben, acht"
 #: includes/class-theme-importer.php
 msgid "Lo sapevi?"
 msgstr "Schon gewusst?"
+
+#: includes/class-theme-importer.php
+msgid "Il piatto da inclinare"
+msgstr "Der Teller zum Neigen"
+
+#: includes/class-theme-importer.php
+msgid "Il bilanciere che oscilla"
+msgstr "Die schwingende Unruh"
+
+#: includes/class-theme-importer.php
+msgid "La pizza che gira"
+msgstr "Die Pizza, die sich dreht"
+
+#: includes/class-theme-importer.php
+msgid "La tavola che va a fuoco"
+msgstr "Die Sehtafel wird scharf"
+
+#: includes/class-theme-importer.php
+msgid "I satelliti in orbita"
+msgstr "Satelliten im Orbit"
+
+#: includes/class-theme-importer.php
+msgid "Le botaniche in orbita"
+msgstr "Botanicals im Orbit"
+
+#: includes/class-theme-importer.php
+msgid "La pallina in campo"
+msgstr "Der Ball im Spiel"
+
+#: includes/class-theme-importer.php
+msgid "La goccia e il vetro liquido"
+msgstr "Der Tropfen und flüssiges Glas"
+
+#: includes/class-theme-importer.php
+msgid "Le bobine che girano"
+msgstr "Die laufenden Tonbandspulen"
+
+#: includes/class-theme-importer.php
+msgid "Le corde che vibrano"
+msgstr "Die schwingenden Saiten"
+
+#: includes/class-theme-importer.php
+msgid "Le praline che girano"
+msgstr "Die drehenden Pralinen"
+
+#: includes/class-theme-importer.php
+msgid "Le forbici che tagliano"
+msgstr "Die schneidende Schere"
+
+#: includes/class-theme-importer.php
+msgid "L’arcobaleno che dondola"
+msgstr "Der schaukelnde Regenbogen"
+
+#: includes/class-theme-importer.php
+msgid "La via del giorno"
+msgstr "Route des Tages"
+
+#: includes/class-theme-importer.php
+msgid "Il vetro che gira"
+msgstr "Das drehende Glas"
