@@ -75,7 +75,7 @@ SERVIZI_SLIDE = [  # linguetta, occhiello, riga 1, riga 2, testo, foto, prezzo
      '22 €'),
     ('Barba', '02 · la barba', 'La barba', 'si disegna.', 'Si spunta a forbice, si rifinisce col rasoio, si nutre con l’olio '
      'di mandorla. Vi spieghiamo come tenerla a casa fra una volta e l’altra.', 'pexels-3998421.jpg', '18 €'),
-    ('Rasatura', '03 · la rasatura', 'Panno caldo,', 'rasoio a mano libera.', 'Due panni bollenti, il sapone montato col '
+    ('Rasatura', '03 · la rasatura', 'Panno caldo,', 'rasoio a mano.', 'Due panni bollenti, il sapone montato col '
      'pennello, due passate di rasoio, il panno freddo e l’allume. Venti minuti di silenzio.', 'pexels-9315046.jpg', '25 €'),
     ('Rituale', '04 · il rituale', 'Taglio, barba', 'e un caffè.', 'Il servizio completo del sabato mattina: un’ora sulla '
      'poltrona, il caffè della moka e il giornale. Si prenota, perché va via in fretta.', 'pexels-20405689.jpg', '45 €'),
@@ -111,46 +111,47 @@ def forbici(px, py):
 def apertura(t):
     m = K.mob
     sl = []
-    fx, fy, fw, fh = 60.0, 9.0, 27.0, 74.0
     for i, (tab, occ, r1, r2, testo, foto, prezzo) in enumerate(SERVIZI_SLIDE):
         n = i + 1
-        sl.append(K.diapositiva('ct-%d' % n, K.sfondo_foto('pexels-37764947.jpg', overlay=0.88, scala=1.06, durata=12000,
-                                                           verso='in' if n % 2 else 'out', colore=C['fondo']), [
-            K.livello('ct-f%d' % n, tipo='image', imageSrc=K.img(foto), objectFit='cover', x=fx, y=fy, w=fw, h=fh,
-                      borderRadius=4, borderWidth=8, borderColor=mix(OTTONE, 75), entra='fadeInRight', ritardo=150,
-                      durata=1100, esce='fadeOut', parallax={'type': 'mouse', 'depth': 6, 'tilt3d': True, 'scrollSpeed': 0.5},
-                      kenBurns={'type': 'zoomIn', 'intensity': 8, 'duration': 9000},
-                      boxShadow={'x': 0, 'y': 40, 'blur': 90, 'spread': -20, 'color': mix(C['nero'], 90)},
-                      responsive={'mobile': {'x': 14, 'y': 5, 'width': 72, 'height': 30}}),
-            K.livello('ct-o%d' % n, contenuto=occ, x=6, y=18, w=40, size=12, peso='500', colore=OTTONE, letterSpacing=3,
+        sl.append(K.diapositiva('ct-%d' % n, K.sfondo_video([V_TAGLIO, V_SFUMATURA, V_RASOIO, V_NUCA][i], overlay=0.22,
+                                                            colore=C['fondo']), [
+            # lo schermo diviso: il video del barbiere a sinistra, il testo su fondo scuro a destra
+            K.livello('ct-pan%d' % n, tipo='shape', x=50, y=0, w=50, h=100, bgColor=mix(C['fondo'], 93), entra='fadeIn',
+                      ritardo=0, durata=500, esce='fadeOut',
+                      responsive={'mobile': {'x': 0, 'y': 38, 'width': 100, 'height': 62}}),
+            K.livello('ct-o%d' % n, contenuto=occ, x=56, y=18, w=38, size=12, peso='500', colore=OTTONE, letterSpacing=3,
                       textTransform='uppercase', fontFamily=MONO, ritardo=250,
-                      responsive={'mobile': {'fontSize': m(11), 'y': 40.5, 'x': 7, 'width': 86}}),
-            K.livello('ct-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=6, y=22.5, w=48, size=82, peso='400',
-                      colore=C['chiaro'], fontFamily=TITOLI, lineHeight=1.02, entra='maskFromLeft', ritardo=350, durata=1100,
-                      responsive={'mobile': {'fontSize': m(38), 'y': 43, 'x': 7, 'width': 88}}),
-            K.livello('ct-i%d' % n, contenuto=r2, tag='p', x=6, y=34, w=48, size=82, peso='400', fontStyle='italic',
-                      colore=OTTONE, fontFamily=TITOLI, lineHeight=1.02, entra='maskFromLeft', ritardo=600, durata=1100,
-                      responsive={'mobile': {'fontSize': m(38), 'y': 47.3, 'x': 7, 'width': 88}}),
-            K.livello('ct-s%d' % n, contenuto=testo, x=6, y=49, w=32, size=17, peso='400', colore=mix(C['chiaro'], 80),
-                      lineHeight=1.65, ritardo=950, responsive={'mobile': {'fontSize': m(14), 'y': 53.5, 'x': 7, 'width': 86}}),
-            K.livello('ct-b%d' % n, tipo='button', contenuto='Prenota la poltrona', x=6, y=70, w='auto', size=12, peso='600',
+                      responsive={'mobile': {'fontSize': m(11), 'y': 42, 'x': 7, 'width': 86}}),
+            K.livello('ct-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=56, y=22, w=40, size=50, peso='400',
+                      colore=C['chiaro'], fontFamily=TITOLI, lineHeight=1.04, entra='maskFromLeft', ritardo=350, durata=1100,
+                      responsive={'mobile': {'fontSize': m(38), 'y': 44.5, 'x': 7, 'width': 88}}),
+            K.livello('ct-i%d' % n, contenuto=r2, tag='p', x=56, y=29, w=40, size=50, peso='400', fontStyle='italic',
+                      colore=OTTONE, fontFamily=TITOLI, lineHeight=1.04, entra='maskFromLeft', ritardo=600, durata=1100,
+                      responsive={'mobile': {'fontSize': m(38), 'y': 48.8, 'x': 7, 'width': 88}}),
+            K.livello('ct-s%d' % n, contenuto=testo, x=56, y=41, w=34, size=17, peso='400', colore=mix(C['chiaro'], 80),
+                      lineHeight=1.65, ritardo=950,
+                      responsive={'mobile': {'fontSize': m(14), 'y': 55, 'x': 7, 'width': 86}, 'tablet': {'width': 38}}),
+            K.livello('ct-b%d' % n, tipo='button', contenuto='Prenota la poltrona', x=56, y=66, w='auto', size=12, peso='600',
                       colore=C['on_acc'], bgColor=OTTONE, padding=16, letterSpacing=2, textTransform='uppercase',
                       borderRadius=4, ritardo=1250, buttonUrl=PRENOTA, hover={'bgColor': C['chiaro'], 'duration': 250},
-                      responsive={'mobile': {'y': 69, 'x': 7, 'fontSize': m(11)}}),
-            K.livello('ct-p%d' % n, contenuto=prezzo, x=24.6, y=71, w='auto', size=13, peso='500', colore=C['chiaro'],
+                      responsive={'mobile': {'y': 70.5, 'x': 7, 'fontSize': m(11)}}),
+            K.livello('ct-p%d' % n, contenuto=prezzo, x=73.5, y=67, w='auto', size=13, peso='500', colore=C['chiaro'],
                       fontFamily=MONO, padding=12, borderRadius=999, borderWidth=1, borderColor=mix(C['chiaro'], 40),
-                      entra='popUpBack', ritardo=1500, responsive={'mobile': {'y': 69.6, 'x': 60, 'fontSize': m(12)}}),
+                      entra='popUpBack', ritardo=1500,
+                      responsive={'mobile': {'y': 71.1, 'x': 60, 'fontSize': m(12)}, 'tablet': {'x': 78}}),
         ], durata=7500, tab=tab))
-    globali = forbici(56.5, 62.0)
-    globali.append(K.livello('ct-dal', contenuto='dal<br>1962', x=82.5, y=4.5, w=8.33, h=14.8, size=22, peso='400',
+    # le forbici sulla linea che divide lo schermo, e il bollino della bottega sul video
+    globali = forbici(50.0, 62.0)
+    globali.append(K.livello('ct-dal', contenuto='dal<br>1962', x=38.5, y=9, w=8.33, h=14.8, size=22, peso='400',
                              colore=C['nero'], bgColor=OTTONE, borderRadius=999, align='center', fontFamily=TITOLI,
                              fontStyle='italic', lineHeight=1.0, padding=26,
                              boxShadow={'x': 0, 'y': 14, 'blur': 30, 'spread': -8, 'color': mix(C['nero'], 80)},
-                             timeline=K.tl(82.5, 4.5, [(0, {'rotation': -10}), (6000, {'rotation': 10}), (12000, {'rotation': -10})],
+                             timeline=K.tl(38.5, 9, [(0, {'rotation': -10}), (6000, {'rotation': 10}), (12000, {'rotation': -10})],
                                            12000, curva='sine.inOut'),
-                             responsive={'mobile': {'x': 72, 'y': 27, 'width': 20, 'height': 9, 'fontSize': m(15)}}))
-    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='blur',
-                       durata_trans=1000, showArrows=False, showDots=False, showTabs=True, tabPosition='bottom',
+                             responsive={'mobile': {'x': 74, 'y': 32, 'width': 20, 'height': 9, 'fontSize': m(15)}, 'tablet': {'fontSize': 17},
+                                         'notebook': {'fontSize': 20}}))
+    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='cubeH',
+                       durata_trans=1100, showArrows=False, showDots=False, showTabs=True, tabPosition='bottom',
                        parallax=False, autoplaySpeed=7500, progressBarColor=OTTONE, navColor=C['chiaro'])
 
 
@@ -395,15 +396,17 @@ def build_404():
 THEME = tema(
     ID, NAME, 'Moda e bellezza', 'Le forbici che tagliano',
     ['barbiere', 'barberia', 'barba', 'rasatura', 'bari', 'scuro', 'slider pro'],
-    'Una barberia di tre generazioni, verde bottiglia e ottone: in apertura le forbici che aprono e chiudono le lame '
-    'davanti alla foto in cornice che si inclina, il bollino «dal 1962»; il listino, i tagli in coverflow 3D, la '
-    'rasatura in tre tempi, la storia in cinque date e la prenotazione della poltrona.',
+    'Una barberia di tre generazioni, verde bottiglia e ottone: in apertura lo schermo diviso, il video del barbiere '
+    'al lavoro da una parte e il racconto dall’altra, con le forbici che aprono e chiudono le lame sulla linea di '
+    'mezzo e il bollino «dal 1962»; il listino, i tagli in coverflow 3D, la rasatura e la prenotazione della '
+    'poltrona.',
     [('I servizi', SERVIZI), ('La bottega', BOTTEGA), ('Il listino', HOME + '#listino'), ('Prenota', PRENOTA)],
     [('home', 'Home', None), ('servizi', 'I servizi', 'servizi'), ('la-bottega', 'La bottega', 'la-bottega'),
      ('prenota', 'Prenota', 'prenota')],
     HEX, '\'Albert Sans\', system-ui, -apple-system, \'Segoe UI\', sans-serif', '\'DM Serif Text\', \'Georgia\', serif',
     '\'IBM Plex Mono\', ui-monospace, Menlo, monospace', ['DM Serif Text', 'Albert Sans', 'IBM Plex Mono'],
     corsivo_di=['DM Serif Text'], peso_titoli='400', raggio=4, grana=6, titoli_line='1.04', titoli_spazio='-0.01em')
+THEME['preview_v'] = THEME['preview_mobile_v'] = '2'  # apertura rifatta il 31 ottobre 2026
 
 
 def main():

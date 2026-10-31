@@ -103,27 +103,26 @@ def apertura(t):
         else:
             piatto = K.livello('np-p%d' % n, tipo='image', imageSrc=K.img(media[1]), objectFit='cover',
                                kenBurns={'type': 'zoomIn', 'intensity': 6, 'duration': 9000}, **finestra)
-        sfondo = {'type': 'gradient', 'gradientFrom': C['fondo'], 'gradientTo': mix(C['acc2'], 9, C['sala']), 'gradientAngle': 120 + 30 * i,
-                  'image': '', 'video': '', 'color': '', 'overlay': '', 'overlayOpacity': 0, 'kenBurns': False}
+        sfondo = K.sfondo_video([V_TE, V_TONNO, V_RISO, V_TONNO, V_MATCHA][i], overlay=0.8, colore=C['fondo'])
         sl.append(K.diapositiva('np-%d' % n, sfondo, [
             # il nome del momento, enorme e contornato, dietro al piatto
             K.livello('np-n%d' % n, contenuto=tab, x=30, y=66, w=66, size=230, peso='500', fontStyle='italic',
                       colore='transparent', align='right', fontFamily=TITOLI, lineHeight=0.9, textStrokeWidth=1,
                       textStrokeColor=mix(ORO, 55), entra='maskFromLeft', ritardo=300, durata=1800, esce='fadeOut',
-                      responsive={'mobile': {'x': 4, 'y': 34, 'width': 92, 'fontSize': m(76)}}),
+                      responsive={'mobile': {'x': 4, 'y': 34, 'width': 92, 'fontSize': m(76)}, 'tablet': {'visible': False}}),
             piatto,
             K.livello('np-o%d' % n, contenuto=occ, x=6, y=19, w=40, size=12, peso='400', colore=ORO, letterSpacing=3,
                       textTransform='uppercase', fontFamily=MONO, ritardo=250,
                       responsive={'mobile': {'fontSize': m(11), 'y': 43, 'x': 7, 'width': 86}}),
-            K.livello('np-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=6, y=24, w=44, size=92, peso='500',
+            K.livello('np-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=6, y=24, w=46, size=70, peso='500',
                       colore=C['chiaro'], fontFamily=TITOLI, lineHeight=1.0, entra='fadeIn', ritardo=380, durata=1300,
                       charAnim={'stagger': 30, 'offsetY': 28, 'blur': 10, 'opacity': 0},
-                      responsive={'mobile': {'fontSize': m(42), 'y': 45.6, 'x': 7, 'width': 88}}),
-            K.livello('np-i%d' % n, contenuto=r2, tag='p', x=6, y=37, w=44, size=92, peso='500', fontStyle='italic',
+                      responsive={'mobile': {'fontSize': m(33), 'y': 45.6, 'x': 7, 'width': 88}}),
+            K.livello('np-i%d' % n, contenuto=r2, tag='p', x=6, y=34, w=46, size=70, peso='500', fontStyle='italic',
                       colore=C['acc'], fontFamily=TITOLI, lineHeight=1.0, entra='fadeIn', ritardo=700, durata=1300,
                       charAnim={'stagger': 30, 'offsetY': 28, 'blur': 10, 'opacity': 0},
-                      responsive={'mobile': {'fontSize': m(42), 'y': 50.6, 'x': 7, 'width': 88}}),
-            K.livello('np-s%d' % n, contenuto=testo, x=6, y=54, w=32, size=17, peso='400', colore=mix(C['chiaro'], 80),
+                      responsive={'mobile': {'fontSize': m(33), 'y': 50.6, 'x': 7, 'width': 88}}),
+            K.livello('np-s%d' % n, contenuto=testo, x=6, y=48, w=32, size=17, peso='400', colore=mix(C['chiaro'], 80),
                       lineHeight=1.65, ritardo=1100, responsive={'mobile': {'fontSize': m(14), 'y': 57.5, 'x': 7, 'width': 86}}),
             K.livello('np-b%d' % n, tipo='button', contenuto='Prenota un posto', x=6, y=73, w='auto', size=12, peso='600',
                       colore=C['on_acc'], bgColor=C['acc'], padding=16, letterSpacing=2, textTransform='uppercase',
@@ -152,7 +151,7 @@ def apertura(t):
                   colore=mix(C['chiaro'], 62), letterSpacing=2, textTransform='uppercase', fontFamily=MONO, entra='fadeIn',
                   ritardo=1800, responsive={'mobile': {'y': 77, 'x': 7, 'width': 86, 'fontSize': m(10)}}),
     ]
-    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='zoomFade',
+    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='cubeV',
                        durata_trans=1200, showArrows=False, showDots=False, showTabs=True, tabPosition='bottom',
                        parallax=False, autoplaySpeed=8000, progressBarColor=C['acc'], navColor=C['chiaro'])
 
@@ -424,6 +423,7 @@ THEME = tema(
     HEX, '\'Instrument Sans\', system-ui, -apple-system, \'Segoe UI\', sans-serif', '\'Cormorant\', \'Georgia\', serif',
     '\'Xanh Mono\', ui-monospace, Menlo, monospace', ['Cormorant', 'Instrument Sans', 'Xanh Mono'],
     corsivo_di=['Cormorant'], peso_titoli='500', raggio=2, grana=5, titoli_line='1.0', titoli_spazio='-0.005em')
+THEME['preview_v'] = THEME['preview_mobile_v'] = '2'  # apertura rifatta il 31 ottobre 2026
 
 
 def main():

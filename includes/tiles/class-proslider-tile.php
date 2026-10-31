@@ -161,7 +161,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         $h_obj      = $this->normalize_height( $s['height'] ) ?: [ 'mode' => 'px', 'value' => 600 ];
         $h_info     = $this->height_css( $h_obj );
         $height     = $h_info['px'];
-        $valid_transitions = [ 'fade', 'slide', 'zoom', 'crossFade', 'slideOver', 'fadeThroughDark', 'blur', 'flipH', 'flipV', 'cubeH', 'cubeV', 'push', 'pushDown', 'stack', 'paperCut', 'zoomFade', 'rotateSlide', 'curtain3D', 'slideUp', 'slideDown' ];
+        $valid_transitions = [ 'fade', 'slide', 'zoom', 'crossFade', 'slideOver', 'fadeThroughDark', 'blur', 'flipH', 'flipV', 'cubeH', 'cubeV', 'push', 'pushRight', 'pushDown', 'stack', 'paperCut', 'zoomFade', 'rotateSlide', 'curtain3D', 'slideUp', 'slideDown' ];
         $transition = in_array( $s['transition'], $valid_transitions, true ) ? $s['transition'] : 'fade';
         $trans_dur  = absint( $s['transitionDuration'] );
 
@@ -185,6 +185,10 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             'carousel3D'    => ! empty( $s['carousel3D'] ),
             'scrollTimeline' => ! empty( $s['scrollTimeline'] ),
             'scrollTimelineDistance' => absint( $s['scrollTimelineDistance'] ?? 2000 ),
+            // Il cubo gira insieme allo scorrimento (solo con la timeline a scorrimento e il cubo).
+            'scrollScrub'   => ! empty( $s['scrollTimeline'] ) && ! empty( $s['scrollScrub'] ) && in_array( $transition, [ 'cubeH', 'cubeV' ], true ),
+            // Una diapositiva per gesto: di serie (spenta solo se scelta).
+            'scrollStep'    => ! isset( $s['scrollStep'] ) || ! empty( $s['scrollStep'] ),
         ];
 
         // Sizing mode
@@ -733,7 +737,9 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                 $sg_angle = intval( $sg['angle'] ?? 180 );
                 $sg_from = $this->safe_color_css( $sg['from'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
                 $sg_to = $this->safe_color_css( $sg['to'] ?? '' ) ?: 'var(--olo-color-accent, #f4a23b)';
-                $style .= 'background:linear-gradient(' . $sg_angle . 'deg,' . $sg_from . ',' . $sg_to . ');';
+                // Inizio sfumatura: il primo colore resta pieno fino a quel punto (velo dal lato del testo)
+                $sg_stop = max( 0, min( 95, intval( $sg['fromStop'] ?? 0 ) ) );
+                $style .= 'background:linear-gradient(' . $sg_angle . 'deg,' . $sg_from . ( $sg_stop > 0 ? ' ' . $sg_stop . '%' : '' ) . ',' . $sg_to . ');';
             } else {
                 $style .= 'background-color:' . ( $layer_bg ?: 'var(--olo-color-primary, #e1474f)' ) . ';';
             }
@@ -1456,12 +1462,18 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                         }
                     }
                     $fs_ov = ( isset( $ov['fontSize'] ) && ! ( isset( $ov['visible'] ) && $ov['visible'] === false ) ) ? absint( $ov['fontSize'] ) : 0;
+                    // Allineamento del testo per dispositivo: un titolo diviso ai lati di una foto sul computer
+                    // (a destra quello di sinistra) torna a sinistra sul telefono, dove le righe vanno in colonna.
+                    $ta_ov = ( isset( $ov['textAlign'] ) && in_array( $ov['textAlign'], [ 'left', 'center', 'right' ], true ) && ! ( isset( $ov['visible'] ) && $ov['visible'] === false ) ) ? $ov['textAlign'] : '';
 
                     if ( $props ) {
                         $rules .= '#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '{' . $props . '}';
                     }
                     if ( $fs_ov > 0 ) {
                         $rules .= '#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '>:is(h1,h2,h3,h4,h5,h6,p,span,div,a),#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '>.mps-mp>:is(h1,h2,h3,h4,h5,h6,p,span,div,a){font-size:calc(' . $fs_ov . 'px * var(--mps-k, 1))!important}';
+                    }
+                    if ( $ta_ov ) {
+                        $rules .= '#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . ',#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '>:is(h1,h2,h3,h4,h5,h6,p,span,div,a),#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '>.mps-mp>:is(h1,h2,h3,h4,h5,h6,p,span,div,a){text-align:' . $ta_ov . '!important}';
                     }
                 }
             }

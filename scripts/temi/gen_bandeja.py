@@ -57,7 +57,7 @@ VOCI = [('map-pin', 'Viale dei Mille 30 · Riccione', CAMPI + '#arrivare'), ('ph
 
 
 def build_header():
-    return K.testata(Tpl(ID, 'header'), 'Bandeja', logo_size='24', scuro=False)
+    return K.testata(Tpl(ID, 'header'), 'Bandeja', logo_size='24', overlay=False, scuro=False)
 
 
 def build_footer():
@@ -102,10 +102,9 @@ def apertura(t):
     sl = []
     for i, (tab, occ, r1, r2, testo, foto, didascalia, bottone, link) in enumerate(SERVIZI):
         n = i + 1
-        sl.append(K.diapositiva('bj-%d' % n, {'type': 'gradient', 'gradientFrom': C['fondo'],
-                                              'gradientTo': mix(C['acc'], 9, C['sala']), 'gradientAngle': 160,
-                                              'image': '', 'video': '', 'color': '', 'overlay': '', 'overlayOpacity': 0,
-                                              'kenBurns': False}, [
+        sl.append(K.diapositiva('bj-%d' % n, K.sfondo_video([V_PARTITA, V_CAMPI, V_PALLINE, V_PARTITA][i], overlay=0.6,
+                                                            colore=C['fondo']),
+                                K.veli('bj-velo%d' % n, 'sinistra', 50, 66) + [
             K.livello('bj-f%d' % n, tipo='image', imageSrc=K.img(foto), objectFit='cover', x=76, y=11.5, w=15, h=34,
                       borderRadius=22, borderWidth=6, borderColor=C['chiaro'], entra='zoomIn', ritardo=300, durata=900,
                       esce='fadeOut', parallax={'type': 'mouse', 'depth': 7, 'tilt3d': True, 'scrollSpeed': 0.5},
@@ -117,17 +116,17 @@ def apertura(t):
             K.livello('bj-o%d' % n, contenuto=occ, x=6, y=17, w=40, size=12, peso='500', colore=C['acc'], letterSpacing=2,
                       textTransform='uppercase', fontFamily=MONO, ritardo=250,
                       responsive={'mobile': {'fontSize': m(11), 'y': 41, 'x': 7, 'width': 86}}),
-            K.livello('bj-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=6, y=21.5, w=48, size=78, peso='600',
+            K.livello('bj-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=6, y=21.5, w=50, size=62, peso='600',
                       colore=C['testo'], fontFamily=TITOLI, lineHeight=1.02, letterSpacing=-2, entra='fadeIn', ritardo=350,
                       durata=1000, charAnim={'stagger': 22, 'offsetY': 46, 'rotation': -6, 'opacity': 0},
-                      responsive={'mobile': {'fontSize': m(38), 'y': 43.5, 'x': 7, 'width': 88}}),
-            K.livello('bj-i%d' % n, contenuto=r2, tag='p', x=6, y=32.5, w=48, size=78, peso='600', colore=C['acc'],
+                      responsive={'mobile': {'fontSize': m(31), 'y': 43.5, 'x': 7, 'width': 88}}),
+            K.livello('bj-i%d' % n, contenuto=r2, tag='p', x=6, y=30.5, w=50, size=62, peso='600', colore=C['acc'],
                       fontFamily=TITOLI, lineHeight=1.02, letterSpacing=-2, entra='fadeIn', ritardo=650, durata=1000,
                       charAnim={'stagger': 22, 'offsetY': 46, 'rotation': -6, 'opacity': 0},
-                      responsive={'mobile': {'fontSize': m(38), 'y': 47.8, 'x': 7, 'width': 88}}),
-            K.livello('bj-s%d' % n, contenuto=testo, x=6, y=48, w=33, size=17, peso='400', colore=C['tenue'],
+                      responsive={'mobile': {'fontSize': m(31), 'y': 47.8, 'x': 7, 'width': 88}}),
+            K.livello('bj-s%d' % n, contenuto=testo, x=6, y=44, w=33, size=17, peso='400', colore=C['tenue'],
                       lineHeight=1.65, ritardo=1000, responsive={'mobile': {'fontSize': m(14), 'y': 53.5, 'x': 7, 'width': 86}}),
-            K.livello('bj-b%d' % n, tipo='button', contenuto=bottone, x=6, y=70, w='auto', size=15, peso='600',
+            K.livello('bj-b%d' % n, tipo='button', contenuto=bottone, x=6, y=66, w='auto', size=15, peso='600',
                       colore=C['on_acc'], bgColor=C['acc'], padding=17, borderRadius=999, ritardo=1300, buttonUrl=link,
                       hover={'bgColor': C['testo'], 'duration': 250},
                       responsive={'mobile': {'y': 69, 'x': 7, 'fontSize': m(13)}}),
@@ -156,7 +155,7 @@ def apertura(t):
     globali.append(K.livello('bj-punti', contenuto='15 — 30', x=6, y=86, w=20, size=12, peso='500', colore=C['tenue'],
                              fontFamily=MONO, letterSpacing=2, entra='fadeIn', ritardo=1800,
                              responsive={'mobile': {'visible': False}}))
-    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='zoomFade',
+    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='push',
                        durata_trans=1000, showArrows=False, showDots=False, showTabs=True, tabPosition='bottom',
                        parallax=False, autoplaySpeed=7500, progressBarColor=C['acc'], navColor=C['testo'],
                        globalBackground={'type': 'color', 'color': C['fondo']})
@@ -400,6 +399,8 @@ THEME = tema(
     HEX, '\'Funnel Sans\', system-ui, -apple-system, \'Segoe UI\', sans-serif', '\'Funnel Display\', system-ui, sans-serif',
     '\'Kode Mono\', ui-monospace, Menlo, monospace', ['Funnel Display', 'Funnel Sans', 'Kode Mono'], peso_titoli='600',
     raggio=14, grana=0, titoli_line='1.02', titoli_spazio='-0.025em')
+THEME['preview_v'] = THEME['preview_mobile_v'] = '3'  # apertura scura sul video pieno, 31 ottobre 2026
+THEME['cursor']['style'] = 'cometa'  # cursore: la scia della pallina (31 ott 2026)
 
 
 def main():

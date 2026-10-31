@@ -266,12 +266,13 @@
               <FieldColor :modelValue="layer.color || '#ffffff'" @update:modelValue="up('color', $event)" />
             </div>
             <div>
-              <label class="mps-label">{{ t('Allineamento testo') }}</label>
-              <div class="mb-flex mb-gap-1">
+              <label class="mps-label" :class="{ 'mb-text-yellow-400': isOverridden('textAlign') }">{{ t('Allineamento testo') }}</label>
+              <div class="mb-flex mb-items-center mb-gap-1">
                 <button v-for="a in ['left','center','right']" :key="a"
                   @click="up('textAlign', a)"
-                  :class="['mb-flex-1 mb-py-1 mb-rounded mb-text-xs', layer.textAlign === a ? 'mb-bg-primary-600 mb-text-white' : 'mb-bg-gray-700 mb-text-gray-400']"
+                  :class="['mb-flex-1 mb-py-1 mb-rounded mb-text-xs', (rv('textAlign') || 'left') === a ? 'mb-bg-primary-600 mb-text-white' : 'mb-bg-gray-700 mb-text-gray-400']"
                 >{{ a }}</button>
+                <button v-if="isOverridden('textAlign')" @click="clearOverride('textAlign')" class="mb-text-yellow-500 mb-text-[10px]" title="Reset">&times;</button>
               </div>
             </div>
             <div>
@@ -359,6 +360,10 @@
               <div>
                 <label class="mps-label">{{ t('Angolo') }}</label>
                 <NumberScrubber theme="dark" :modelValue="layer.shapeGradient.angle ?? 180" :min="0" :max="360" :step="15" :defaultValue="180" emitAs="number" :sliderOnFocus="false" unit="°" :ariaLabel="t('Angolo')" @update:modelValue="upShapeGrad('angle', $event)" />
+              </div>
+              <div>
+                <label class="mps-label">{{ t('Inizio sfumatura') }}</label>
+                <NumberScrubber theme="dark" :modelValue="layer.shapeGradient.fromStop ?? 0" :min="0" :max="95" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Inizio sfumatura')" @update:modelValue="upShapeGrad('fromStop', $event)" />
               </div>
             </template>
             <template v-else>

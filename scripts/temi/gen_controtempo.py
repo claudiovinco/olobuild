@@ -413,6 +413,7 @@ THEME = tema(
     '\'Martian Mono\', ui-monospace, Menlo, monospace', ['Bricolage Grotesque', 'Plus Jakarta Sans', 'Martian Mono'], corsivo_di=[],
     peso_titoli='700', raggio=14, grana=5, titoli_line='0.98', titoli_spazio='-0.02em')
 THEME['styles']['google_fonts_weights'] = '400;500;600;700;800'
+THEME['cursor']['style'] = 'goccia'  # cursore: la goccia che danza (31 ott 2026)
 
 
 def main():

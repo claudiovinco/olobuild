@@ -89,59 +89,61 @@ PRALINE = ['pexels-66234.jpg', 'pexels-10313341.jpg', 'pexels-18958634.jpg', 'pe
 def apertura(t):
     m = K.mob
     sl = []
-    ax, ay, aw, ah = 57.0, 8.0, 26.0, 62.0
     for i, (tab, occ, r1, r2, testo, arco, sfondo, prezzo) in enumerate(FAMIGLIE):
         n = i + 1
-        sl.append(K.diapositiva('fo-%d' % n, K.sfondo_foto(sfondo, overlay=0.86, scala=1.08, durata=10000,
-                                                           verso='in' if n % 2 else 'out', colore=C['fondo']), [
-            K.livello('fo-a%d' % n, tipo='image', imageSrc=K.img(arco), objectFit='cover', x=ax, y=ay, w=aw, h=ah,
-                      borderRadiusLinked=False, borderRadiusTL=200, borderRadiusTR=200, borderRadiusBR=10, borderRadiusBL=10,
-                      kenBurns={'type': 'zoomIn', 'intensity': 8, 'duration': 9000}, entra='maskFromBottom', ritardo=100,
-                      durata=1300, esce='fadeOut', parallax={'type': 'mouse', 'depth': 6, 'tilt3d': True, 'scrollSpeed': 0.5},
-                      boxShadow={'x': 0, 'y': 40, 'blur': 90, 'spread': -20, 'color': mix(CARAMELLO, 18)},
-                      responsive={'mobile': {'x': 22, 'y': 5, 'width': 56, 'height': 28}}),
-            K.livello('fo-o%d' % n, contenuto=occ, x=6, y=18, w=40, size=12, peso='400', colore=CARAMELLO, letterSpacing=3,
-                      textTransform='uppercase', fontFamily=MONO, ritardo=250,
-                      responsive={'mobile': {'fontSize': m(11), 'y': 42.5, 'x': 7, 'width': 86}}),
-            K.livello('fo-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=6, y=22.5, w=48, size=80, peso='400',
-                      colore=C['chiaro'], fontFamily=TITOLI, lineHeight=1.02, entra='fadeIn', ritardo=350, durata=1200,
+        sl.append(K.diapositiva('fo-%d' % n, K.sfondo_video([V_COLATA, V_TEMPERA, V_STAMPI, V_CABOSSIDE][i], overlay=0.42,
+                                                            colore=C['fondo']), [
+            # il pannello di vetro scuro a destra, col testo dentro: il video del cioccolato resta tutto in vista
+            K.livello('fo-v%d' % n, tipo='shape', x=53, y=11, w=41, h=60, bgColor=mix(C['sala'], 74), borderRadius=24,
+                      borderWidth=1, borderColor=mix(CARAMELLO, 30), backdropBlur=16, entra='fadeInRight', ritardo=150,
+                      durata=1000, esce='fadeOut',
+                      boxShadow={'x': 0, 'y': 30, 'blur': 70, 'spread': -20, 'color': mix(C['nero'], 60)},
+                      responsive={'mobile': {'x': 4, 'y': 8.5, 'width': 92, 'height': 45}, 'tablet': {'y': 13.5}}),
+            K.livello('fo-o%d' % n, contenuto=occ, x=56.5, y=16.5, w=35, size=12, peso='400', colore=CARAMELLO, letterSpacing=3,
+                      textTransform='uppercase', fontFamily=MONO, ritardo=400,
+                      responsive={'mobile': {'fontSize': m(11), 'y': 11.5, 'x': 9, 'width': 82}, 'tablet': {'y': 19}}),
+            K.livello('fo-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=56.5, y=20.5, w=35, size=45, peso='400',
+                      colore=C['chiaro'], fontFamily=TITOLI, lineHeight=1.04, entra='fadeIn', ritardo=500, durata=1200,
                       charAnim={'stagger': 26, 'offsetY': 30, 'blur': 8, 'opacity': 0},
-                      responsive={'mobile': {'fontSize': m(38), 'y': 45, 'x': 7, 'width': 88}}),
-            K.livello('fo-i%d' % n, contenuto=r2, tag='p', x=6, y=34, w=48, size=80, peso='400', colore=CARAMELLO,
-                      fontFamily=TITOLI, lineHeight=1.02, entra='fadeIn', ritardo=650, durata=1200,
+                      responsive={'mobile': {'fontSize': m(28), 'y': 14, 'x': 9, 'width': 82}, 'tablet': {'y': 23}}),
+            K.livello('fo-i%d' % n, contenuto=r2, tag='p', x=56.5, y=27.5, w=35, size=45, peso='400', colore=CARAMELLO,
+                      fontFamily=TITOLI, lineHeight=1.04, entra='fadeIn', ritardo=800, durata=1200,
                       charAnim={'stagger': 26, 'offsetY': 30, 'blur': 8, 'opacity': 0},
-                      responsive={'mobile': {'fontSize': m(38), 'y': 49.3, 'x': 7, 'width': 88}}),
-            K.livello('fo-s%d' % n, contenuto=testo, x=6, y=49, w=32, size=17, peso='400', colore=mix(C['chiaro'], 80),
-                      lineHeight=1.65, ritardo=1000, responsive={'mobile': {'fontSize': m(14), 'y': 55.5, 'x': 7, 'width': 86}}),
-            K.livello('fo-b%d' % n, tipo='button', contenuto='Al negozio', x=6, y=70, w='auto', size=12, peso='600',
+                      responsive={'mobile': {'fontSize': m(28), 'y': 18.3, 'x': 9, 'width': 82}, 'tablet': {'y': 31.3}}),
+            K.livello('fo-s%d' % n, contenuto=testo, x=56.5, y=38, w=33, size=16, peso='400', colore=mix(C['chiaro'], 82),
+                      lineHeight=1.65, ritardo=1100,
+                      responsive={'mobile': {'fontSize': m(14), 'y': 24.5, 'x': 9, 'width': 82}, 'tablet': {'width': 35, 'y': 40.5}}),
+            K.livello('fo-b%d' % n, tipo='button', contenuto='Al negozio', x=56.5, y=59.5, w='auto', size=12, peso='600',
                       colore=C['on_acc'], bgColor=CARAMELLO, padding=16, letterSpacing=2, textTransform='uppercase',
-                      borderRadius=10, ritardo=1300, buttonUrl=TAVOLETTE, hover={'bgColor': C['chiaro'], 'duration': 250},
-                      responsive={'mobile': {'y': 71, 'x': 7, 'fontSize': m(11)}}),
-            K.livello('fo-p%d' % n, contenuto=prezzo, x=17.5, y=71, w='auto', size=12, peso='400', colore=C['chiaro'],
+                      borderRadius=10, ritardo=1400, buttonUrl=TAVOLETTE, hover={'bgColor': C['chiaro'], 'duration': 250},
+                      responsive={'mobile': {'y': 45.5, 'x': 9, 'fontSize': m(11)}, 'tablet': {'y': 62}}),
+            K.livello('fo-p%d' % n, contenuto=prezzo, x=68, y=60.2, w='auto', size=12, peso='400', colore=C['chiaro'],
                       fontFamily=MONO, padding=12, borderRadius=999, borderWidth=1, borderColor=mix(C['chiaro'], 40),
-                      entra='popUpBack', ritardo=1550, responsive={'mobile': {'y': 71.6, 'x': 46, 'fontSize': m(11)}}),
+                      entra='popUpBack', ritardo=1650,
+                      responsive={'mobile': {'y': 46.1, 'x': 48, 'fontSize': m(11)}, 'tablet': {'x': 71, 'y': 62.7}}),
         ], durata=8000, tab=tab))
-    # le praline che girano in 3D una dopo l'altra, come un'onda
-    globali = [K.livello('fo-vassoio', tipo='shape', x=53.5, y=74, w=33, h=15, bgColor=mix(C['sala'], 70), borderRadius=999,
-                         borderWidth=1, borderColor=mix(CARAMELLO, 30), backdropBlur=10, entra='fadeInUp', ritardo=800,
-                         responsive={'mobile': {'x': 6, 'y': 32, 'width': 88, 'height': 7}})]
+    # la vetrina in fondo: cinque praline che girano in 3D una dopo l'altra, come un'onda
+    globali = [K.livello('fo-vassoio', tipo='shape', x=6, y=76, w=88, h=15, bgColor=mix(C['sala'], 62), borderRadius=999,
+                         borderWidth=1, borderColor=mix(CARAMELLO, 30), backdropBlur=10, entra='fadeInUp', ritardo=600,
+                         responsive={'mobile': {'x': 6, 'y': 58.5, 'width': 88, 'height': 7}, 'tablet': {'y': 77}})]
     for k, foto in enumerate(PRALINE):
-        x = 55.2 + k * 6.2
-        globali.append(K.livello('fo-pr%d' % k, tipo='image', imageSrc=K.img(foto), objectFit='cover', x=x, y=75.8, w=5.4,
+        x = 14 + k * 16.5
+        globali.append(K.livello('fo-pr%d' % k, tipo='image', imageSrc=K.img(foto), objectFit='cover', x=x, y=78.7, w=5.4,
                                  h=9.6, borderRadius=999, borderWidth=2, borderColor=mix(CARAMELLO, 60),
                                  boxShadow={'x': 0, 'y': 10, 'blur': 20, 'spread': -6, 'color': mix(C['nero'], 80)},
-                                 timeline=K.tl(x, 75.8, [(0, {'rotationY': 0.01, 'opacity': 0, 'scale': 0.6}, 'back.out'),
-                                                         (500 + 150 * k, {'rotationY': 0.01, 'opacity': 100, 'scale': 1}, 'power2.inOut'),
+                                 timeline=K.tl(x, 78.7, [(0, {'rotationY': 0.01, 'opacity': 0, 'scale': 0.6}, 'back.out'),
+                                                         (700 + 150 * k, {'rotationY': 0.01, 'opacity': 100, 'scale': 1}, 'power2.inOut'),
                                                          (2600 + 300 * k, {'rotationY': 0.01, 'opacity': 100, 'scale': 1}, 'power2.inOut'),
                                                          (3600 + 300 * k, {'rotationY': 360, 'opacity': 100, 'scale': 1.08}, 'power2.inOut'),
                                                          (6400, {'rotationY': 360, 'opacity': 100, 'scale': 1})], 6400),
-                                 responsive={'mobile': {'x': 9.5 + k * 17.5, 'y': 32.6, 'width': 13, 'height': 5.9}}))
-    globali.append(K.livello('fo-vl', contenuto='La vetrina di oggi · cinque praline', x=53.5, y=90.6, w=33, size=10,
-                             peso='400', colore=mix(C['chiaro'], 60), fontFamily=MONO, letterSpacing=2, align='center',
+                                 responsive={'mobile': {'x': 9.5 + k * 17.5, 'y': 59.1, 'width': 13, 'height': 5.9}, 'tablet': {'y': 79.7}}))
+    globali.append(K.livello('fo-vl', contenuto='La vetrina di oggi · cinque praline', x=6, y=69.5, w='auto', size=10,
+                             peso='400', colore=C['chiaro'], fontFamily=MONO, letterSpacing=2,
+                             bgColor=mix(C['sala'], 94), padding=9, borderRadius=999,
                              textTransform='uppercase', entra='fadeIn', ritardo=1500,
                              responsive={'mobile': {'visible': False}}))
-    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='zoomFade',
-                       durata_trans=1200, showArrows=False, showDots=False, showTabs=True, tabPosition='bottom',
+    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='stack',
+                       durata_trans=1100, showArrows=False, showDots=False, showTabs=True, tabPosition='bottom',
                        parallax=False, autoplaySpeed=8000, progressBarColor=CARAMELLO, navColor=C['chiaro'])
 
 
@@ -409,15 +411,18 @@ def build_404():
 THEME = tema(
     ID, NAME, 'Negozi online', 'Le praline che girano',
     ['cioccolato', 'cioccolateria', 'praline', 'modica', 'regali', 'e-commerce', 'scuro', 'slider pro', '3d'],
-    'Una cioccolateria dalla fava alla tavoletta, cacao e caramello: in apertura il prodotto nell’arco che si inclina in 3D '
-    'e cinque praline che girano su sé stesse a onda; le origini che si affacciano, le praline in coverflow 3D, le '
-    'tavolette con la ricerca e la carta d’identità, la scatola regalo da comporre e il club della tavoletta.',
+    'Una cioccolateria dalla fava alla tavoletta, cacao e caramello: in apertura il video del cioccolato che cola a '
+    'tutta larghezza, il pannello di vetro col racconto e in fondo la vetrina di cinque praline che girano su sé '
+    'stesse a onda; le origini che si affacciano, le praline in coverflow 3D, le tavolette con la ricerca e la carta '
+    'd’identità, la scatola regalo da comporre e il club della tavoletta.',
     [('Le tavolette', TAVOLETTE), ('Il laboratorio', LAB), ('Regali', REGALI), ('Il club', REGALI + '#club')],
     [('home', 'Home', None), ('le-tavolette', 'Le tavolette', 'le-tavolette'), ('il-laboratorio', 'Il laboratorio', 'il-laboratorio'),
      ('regali', 'Regali', 'regali')],
     HEX, '\'Readex Pro\', system-ui, -apple-system, \'Segoe UI\', sans-serif', '\'Gloock\', \'Georgia\', serif',
     '\'DM Mono\', ui-monospace, Menlo, monospace', ['Gloock', 'Readex Pro', 'DM Mono'], peso_titoli='400', raggio=10,
     grana=6, titoli_line='1.04', titoli_spazio='-0.01em')
+THEME['preview_v'] = THEME['preview_mobile_v'] = '2'  # apertura rifatta il 31 ottobre 2026
+THEME['cursor']['style'] = 'etichetta'  # cursore: la parola sui link della bottega (31 ott 2026)
 
 
 def main():

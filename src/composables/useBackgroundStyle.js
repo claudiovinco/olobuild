@@ -172,6 +172,20 @@ export function buildBgStyle(bg) {
 }
 
 /**
+ * La Sovrapposizione come valore di `background`: piena, o sfumata da un lato (overlay_fade bottom/top/left/right,
+ * trasparente a overlay_fade_reach %). Gemello di Olobuild_CSS_Builder::velo_fondo() (PHP), stessa stringa.
+ */
+export function overlayBackground(bg, colore) {
+  const versi = { bottom: 'to top', top: 'to bottom', left: 'to right', right: 'to left' };
+  const verso = versi[bg?.overlay_fade || ''];
+  if (!verso) return colore;
+  const fino = Math.max(20, Math.min(100, parseInt(bg.overlay_fade_reach ?? 70, 10) || 70));
+  const pieno = Math.round(fino * 0.42);
+  const meta = Math.round(pieno + (fino - pieno) * 0.5);
+  return `linear-gradient(${verso},${colore} 0%,${colore} ${pieno}%,color-mix(in srgb,${colore} 55%,transparent) ${meta}%,transparent ${fino}%)`;
+}
+
+/**
  * Costruisce lo style dell'overlay (colore + opacità).
  * Ritorna null se overlay non attivo.
  */
@@ -179,7 +193,7 @@ export function buildOverlayStyle(bg) {
   if (!bg || bg.type === 'none') return null;
   if (!bg.overlay_opacity || parseInt(bg.overlay_opacity) <= 0) return null;
   return {
-    backgroundColor: bg.overlay_color || '#000000',
+    background: overlayBackground(bg, bg.overlay_color || '#000000'),
     opacity: parseInt(bg.overlay_opacity) / 100,
   };
 }
@@ -243,7 +257,7 @@ export function useBackgroundStyle(bgGetter) {
       inset: '0',
       zIndex: 1,
       pointerEvents: 'none',
-      backgroundColor: bg.overlay_color || '#000000',
+      background: overlayBackground(bg, bg.overlay_color || '#000000'),
       opacity: (bg.overlay_opacity || 0) / 100,
     };
   });

@@ -90,65 +90,76 @@ LAVORI = [  # linguetta, occhiello, riga 1, riga 2, testo, foto, prezzo/nota
 def apertura(t):
     m = K.mob
     sl = []
-    ax, ay, aw, ah = 59.0, 8.0, 25.0, 82.0                 # l'arco: 360 × 664 px
+    W, H = 1440.0, 810.0
+    bx, by, bw, bh = 56.0, 16.0, 36.11, 64.2               # la buca: 520 px, la foto dello strumento dentro
+    rx, ry, rw, rh = bx - 1.39, by - 2.47, bw + 2.78, bh + 4.94   # la rosetta attorno alla buca
     for i, (tab, occ, r1, r2, testo, foto, nota) in enumerate(LAVORI):
         n = i + 1
-        sl.append(K.diapositiva('an-%d' % n, {'type': 'gradient', 'gradientFrom': C['fondo'],
-                                              'gradientTo': mix(C['acc2'], 18, C['sala']), 'gradientAngle': 120 + 15 * i,
-                                              'image': '', 'video': '', 'color': '', 'overlay': '', 'overlayOpacity': 0,
-                                              'kenBurns': False}, [
-            K.livello('an-a%d' % n, tipo='image', imageSrc=K.img(foto), objectFit='cover', x=ax, y=ay, w=aw, h=ah,
-                      borderRadiusLinked=False, borderRadiusTL=180, borderRadiusTR=180, borderRadiusBR=4, borderRadiusBL=4,
-                      entra='maskFromBottom', ritardo=100, durata=1300, esce='fadeOut',
-                      parallax={'type': 'mouse', 'depth': 6, 'tilt3d': True, 'scrollSpeed': 0.5},
-                      boxShadow={'x': 0, 'y': 40, 'blur': 80, 'spread': -24, 'color': mix(C['nero'], 35)},
-                      responsive={'mobile': {'x': 24, 'y': 4.5, 'width': 52, 'height': 32}}),
+        sl.append(K.diapositiva('an-%d' % n, K.sfondo_video([V_BOTTEGA, V_ARCO, V_SGORBIA, V_MAESTRO][i], overlay=0.6,
+                                                            colore=C['fondo']),
+                                K.veli('an-velo%d' % n, 'sinistra', 48, 60) + [
+            K.livello('an-a%d' % n, tipo='image', imageSrc=K.img(foto), objectFit='cover', x=bx, y=by, w=bw, h=bh,
+                      borderRadius=999, entra='zoomIn', ritardo=100, durata=1200, esce='fadeOut',
+                      boxShadow={'x': 0, 'y': 30, 'blur': 70, 'spread': -18, 'color': mix(C['nero'], 40)},
+                      responsive={'mobile': {'x': 14, 'y': 5, 'width': 72, 'height': 32.91}}),
             K.livello('an-o%d' % n, contenuto=occ, x=6, y=19, w=40, size=12, peso='400', colore=C['acc'], letterSpacing=3,
                       textTransform='uppercase', fontFamily=MONO, ritardo=250,
                       responsive={'mobile': {'fontSize': m(11), 'y': 41, 'x': 7, 'width': 86}}),
-            K.livello('an-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=6, y=23.5, w=46, size=86, peso='500',
+            K.livello('an-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=6, y=23.5, w=44, size=66, peso='500',
                       colore=C['testo'], fontFamily=TITOLI, lineHeight=1.0, entra='fadeIn', ritardo=350, durata=1300,
                       charAnim={'stagger': 30, 'offsetY': 24, 'blur': 6, 'opacity': 0},
-                      responsive={'mobile': {'fontSize': m(42), 'y': 43.5, 'x': 7, 'width': 88}}),
-            K.livello('an-i%d' % n, contenuto=r2, tag='p', x=6, y=35, w=46, size=86, peso='500', fontStyle='italic',
+                      responsive={'mobile': {'fontSize': m(38), 'y': 43.5, 'x': 7, 'width': 88}}),
+            K.livello('an-i%d' % n, contenuto=r2, tag='p', x=6, y=32.5, w=44, size=66, peso='500', fontStyle='italic',
                       colore=C['acc'], fontFamily=TITOLI, lineHeight=1.0, entra='fadeIn', ritardo=700, durata=1300,
                       charAnim={'stagger': 30, 'offsetY': 24, 'blur': 6, 'opacity': 0},
-                      responsive={'mobile': {'fontSize': m(42), 'y': 48.2, 'x': 7, 'width': 88}}),
-            K.livello('an-s%d' % n, contenuto=testo, x=6, y=51, w=32, size=17, peso='400', colore=C['tenue'],
+                      responsive={'mobile': {'fontSize': m(38), 'y': 48.2, 'x': 7, 'width': 88}}),
+            K.livello('an-s%d' % n, contenuto=testo, x=6, y=47, w=32, size=17, peso='400', colore=C['tenue'],
                       lineHeight=1.65, ritardo=1000, responsive={'mobile': {'fontSize': m(14), 'y': 55, 'x': 7, 'width': 86}}),
-            K.livello('an-b%d' % n, tipo='button', contenuto='Prenota una prova', x=6, y=73, w='auto', size=12, peso='600',
+            K.livello('an-b%d' % n, tipo='button', contenuto='Prenota una prova', x=6, y=72, w='auto', size=12, peso='600',
                       colore=C['on_acc'], bgColor=C['acc'], padding=16, letterSpacing=2, textTransform='uppercase',
                       borderRadius=4, ritardo=1300, buttonUrl=VISITA, hover={'bgColor': C['testo'], 'duration': 250},
                       responsive={'mobile': {'y': 70, 'x': 7, 'fontSize': m(11)}}),
-            K.livello('an-n%d' % n, contenuto=nota, x=22, y=74, w='auto', size=12, peso='400', colore=C['testo'],
+            K.livello('an-n%d' % n, contenuto=nota, x=22, y=73, w='auto', size=12, peso='400', colore=C['testo'],
                       fontFamily=MONO, padding=11, borderRadius=999, borderWidth=1, borderColor=mix(C['testo'], 30),
                       entra='popUpBack', ritardo=1550, responsive={'mobile': {'y': 70.6, 'x': 58, 'fontSize': m(10)}}),
         ], durata=8000, tab=tab))
-    # le quattro corde che vibrano (sol, re, la, mi) e le onde del suono che partono dallo strumento
-    globali = []
-    for k, (x, periodo, spessore) in enumerate([(44.2, 150, 0.21), (45.1, 120, 0.17), (46.0, 96, 0.14), (46.9, 78, 0.1)]):
-        globali.append(K.livello('an-corda%d' % k, tipo='shape', x=x, y=0, w=spessore, h=100,
-                                 bgColor=mix(C['acc2'], 70, C['testo']),
-                                 timeline=K.tl(x, 0, [(0, {'x': x - 0.05}), (periodo // 2, {'x': x + 0.05}),
-                                                      (periodo, {'x': x - 0.05})], periodo, curva='sine.inOut'),
-                                 responsive={'mobile': {'visible': False}}))
-    cx, cy = ax + aw / 2, ay + ah * 0.58
+    # la rosetta, il ponticello e le quattro corde (sol, re, la, mi) che passano sopra la buca e vibrano;
+    # le onde del suono che escono dalla buca
+    globali = [K.livello('an-rosetta', tipo='shape', x=rx, y=ry, w=rw, h=rh, bgColor='transparent', borderRadius=999,
+                         borderWidth=3, borderStyle='dotted', borderColor=mix(C['acc'], 70),
+                         timeline=K.tl(rx, ry, [(0, {'rotation': 0, 'opacity': 0}), (1200, {'rotation': 20, 'opacity': 100}),
+                                                (90000, {'rotation': 380, 'opacity': 100})], 90000),
+                         responsive={'mobile': {'x': 12, 'y': 3.86, 'width': 76, 'height': 35.2}}),
+               K.livello('an-ponte', tipo='shape', x=48.6, y=41.5, w=0.7, h=15.5, bgColor=mix(C['testo'], 85), borderRadius=3,
+                         entra='fadeIn', ritardo=500, durata=800,
+                         responsive={'mobile': {'visible': False}})]
+    cy = by + bh / 2
+    for k, (periodo, spessore) in enumerate([(150, 0.4), (120, 0.33), (96, 0.27), (78, 0.2)]):
+        y = round(cy - 4.5 + 3 * k, 2)
+        my = round(5 + 32.91 / 2 - 2.25 + 1.5 * k, 2)
+        globali.append(K.livello('an-corda%d' % k, tipo='shape', x=48.9, y=y, w=51.1, h=spessore,
+                                 bgColor=mix(C['acc2'], 70, C['testo']), entra='maskFromLeft', ritardo=600 + 120 * k,
+                                 durata=900,
+                                 timeline=K.tl(48.9, y, [(0, {'y': y - 0.08}), (periodo // 2, {'y': y + 0.08}),
+                                                         (periodo, {'y': y - 0.08})], periodo, curva='sine.inOut'),
+                                 responsive={'mobile': {'x': 0, 'y': my, 'width': 100, 'height': round(spessore / 2.2, 2)}}))
+    cx = bx + bw / 2
     for k in range(3):
         d = 30.0
-        h = round(d * 1440 / 810, 2)
+        h = round(d * W / H, 2)
         globali.append(K.livello('an-onda%d' % k, tipo='shape', x=round(cx - d / 2, 2), y=round(cy - h / 2, 2), w=d, h=h,
                                  bgColor='transparent', borderRadius=999, borderWidth=1, borderColor=mix(C['acc'], 55),
                                  timeline=K.tl(round(cx - d / 2, 2), round(cy - h / 2, 2),
-                                               [(0, {'scale': 0.3, 'opacity': 0}), (1000 * k, {'scale': 0.3, 'opacity': 0}, 'power2.out'),
-                                                (1000 * k + 200, {'scale': 0.35, 'opacity': 90}, 'power2.out'),
+                                               [(0, {'scale': 0.6, 'opacity': 0}), (1000 * k, {'scale': 0.6, 'opacity': 0}, 'power2.out'),
+                                                (1000 * k + 200, {'scale': 0.65, 'opacity': 90}, 'power2.out'),
                                                 (1000 * k + 2800, {'scale': 1.6, 'opacity': 0}), (3600, {'scale': 1.6, 'opacity': 0})],
                                                3600),
                                  responsive={'mobile': {'visible': False}}))
     globali.append(K.livello('an-note', contenuto='Sol · Re · La · Mi — la 442 Hz', x=6, y=86, w=30, size=11, peso='400',
                              colore=C['tenue'], fontFamily=MONO, letterSpacing=2, entra='fadeIn', ritardo=1800,
                              responsive={'mobile': {'y': 77, 'x': 7, 'width': 86, 'fontSize': m(10)}}))
-    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='crossFade',
-                       durata_trans=1300, showArrows=False, showDots=False, showTabs=True, tabPosition='bottom',
+    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='paperCut',
+                       durata_trans=1200, showArrows=False, showDots=False, showTabs=True, tabPosition='bottom',
                        parallax=False, autoplaySpeed=8000, progressBarColor=C['acc'], navColor=C['testo'],
                        globalBackground={'type': 'color', 'color': C['fondo']})
 
@@ -389,15 +400,16 @@ def build_404():
 THEME = tema(
     ID, NAME, 'Industria e manifattura', 'Le corde che vibrano',
     ['liuteria', 'violino', 'violoncello', 'artigianato', 'cremona', 'chiaro', 'slider pro', '3d'],
-    'Una bottega di liuteria, carta, acero e vernice a olio: in apertura lo strumento nell’arco che si inclina in 3D, le '
-    'onde del suono che partono dalle effe e quattro corde che vibrano; i legni sotto la lente, gli strumenti in '
-    'coverflow 3D e con la ricerca, la scheda delle misure, la scuola e la prova al buio.',
+    'Una bottega di liuteria, carta, acero e vernice a olio: in apertura, sopra il video della bottega, lo strumento '
+    'nella buca rotonda con la rosetta che gira, quattro corde che ci passano sopra e vibrano e le onde del suono; i '
+    'legni sotto la lente, gli strumenti in coverflow 3D, la prova al buio e la scuola.',
     [('Gli strumenti', STRUMENTI), ('La bottega', BOTTEGA), ('I legni', HOME + '#legni'), ('Visita e prova', VISITA)],
     [('home', 'Home', None), ('gli-strumenti', 'Gli strumenti', 'gli-strumenti'), ('la-bottega', 'La bottega', 'la-bottega'),
      ('visita', 'Visita e prova', 'visita')],
     HEX, '\'Gantari\', system-ui, -apple-system, \'Segoe UI\', sans-serif', '\'Crimson Pro\', \'Georgia\', serif',
     '\'Fragment Mono\', ui-monospace, Menlo, monospace', ['Crimson Pro', 'Gantari', 'Fragment Mono'],
     corsivo_di=['Crimson Pro'], peso_titoli='500', raggio=4, grana=5, titoli_line='1.0', titoli_spazio='-0.01em')
+THEME['preview_v'] = THEME['preview_mobile_v'] = '3'  # apertura scura sul video pieno, 31 ottobre 2026
 
 
 def main():

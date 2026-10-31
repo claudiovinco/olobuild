@@ -196,6 +196,11 @@
 }
 .olo-proslider[data-transition="cubeH"] .olo-proslider-slide.mps-active::after,
 .olo-proslider[data-transition="cubeV"] .olo-proslider-slide.mps-active::after { opacity: 0; }
+/* Il cubo che segue lo scorrimento: le due facce in giro sono visibili, l'angolo e l'ombra li scrive il JS. */
+.olo-proslider.mps-cubo-scorre .olo-proslider-slide { transition: none; }
+.olo-proslider.mps-cubo-scorre .olo-proslider-slide.mps-faccia { visibility: visible; }
+.olo-proslider.mps-cubo-scorre .olo-proslider-slide::after { opacity: var(--mps-faccia-ombra, .55); transition: none; }
+.olo-proslider.mps-cubo-scorre .olo-proslider-slide.mps-active::after { opacity: var(--mps-faccia-ombra, 0); }
 .olo-proslider .olo-proslider-slide.mps-no-trans,
 .olo-proslider .olo-proslider-slide.mps-no-trans::after { transition: none !important; }
 @media (prefers-reduced-motion: reduce) {
@@ -761,6 +766,13 @@
 .olo-proslider[data-transition="push"] .olo-proslider-slide.mps-active { transform: translateX(0); }
 .olo-proslider[data-transition="push"] .olo-proslider-slide.mps-exit-left { transform: translateX(-100%); }
 
+/* pushRight: la nuova arriva da sinistra e spinge la vecchia verso destra (lo script dà i versi, 31 ott 2026) */
+.olo-proslider[data-transition="pushRight"] .olo-proslider-slide {
+  transform: translateX(-100%); opacity:1; visibility:visible;
+  transition: transform var(--mps-trans-dur, 800ms) cubic-bezier(.4,0,.2,1);
+}
+.olo-proslider[data-transition="pushRight"] .olo-proslider-slide.mps-active { transform: translateX(0); }
+
 /* pushDown */
 .olo-proslider[data-transition="pushDown"] .olo-proslider-slide {
   transform: translateY(-100%); opacity:1; visibility:visible;
@@ -1049,6 +1061,10 @@
   position: sticky;
   top: 0;
 }
+/* A tutta larghezza con la timeline a scorrimento: lo slider è sticky, quindi left: 50% non lo sposta più e la sola
+   traslazione lo mandava mezzo fuori a sinistra (31 ott 2026). La larghezza piena la prende il contenitore che scorre. */
+.mps-scroll-fixed-wrapper:has(> .olo-proslider.mps-fullwidth) { width: 100vw; margin-left: calc(50% - 50vw); }
+.mps-scroll-fixed-wrapper > .olo-proslider.mps-fullwidth { width: 100%; left: auto; transform: none; }
 
 /* ═══════════════════════════════════════════════════════════
    Responsive

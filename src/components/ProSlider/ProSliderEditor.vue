@@ -492,7 +492,7 @@ function updateLayer(layerId, updates) {
   if (!layer) return;
 
   const bp = activeBreakpoint.value;
-  const responsiveKeys = ['x', 'y', 'width', 'height', 'fontSize', 'visible'];
+  const responsiveKeys = ['x', 'y', 'width', 'height', 'fontSize', 'visible', 'textAlign'];
 
   if (bp !== 'desktop') {
     // Salva in responsive override solo le chiavi responsive
@@ -535,7 +535,7 @@ function updateLayerProp(key, val) {
 
   // Se siamo su un breakpoint diverso da desktop, salva nel responsive override
   const bp = activeBreakpoint.value;
-  const responsiveKeys = ['x', 'y', 'width', 'height', 'fontSize', 'visible'];
+  const responsiveKeys = ['x', 'y', 'width', 'height', 'fontSize', 'visible', 'textAlign'];
   if (bp !== 'desktop' && responsiveKeys.includes(key)) {
     const resp = layer.responsive || { notebook: null, tablet: null, mobile: null };
     const bpOverride = resp[bp] || {};

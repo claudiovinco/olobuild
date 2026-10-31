@@ -56,7 +56,7 @@ VOCI = [('map-pin', 'Via Toledo 210 · Napoli', PRENOTA + '#arrivare'), ('phone'
 
 
 def build_header():
-    return K.testata(Tpl(ID, 'header'), 'Diottria', logo_size='24', scuro=False)
+    return K.testata(Tpl(ID, 'header'), 'Diottria', logo_size='24', overlay=False, scuro=False)
 
 
 def build_footer():
@@ -84,15 +84,22 @@ VETRINA = [  # linguetta, occhiello, riga 1, riga 2, testo, montatura, chi la po
 SNELLEN = ['E', 'F P', 'T O Z', 'L P E D', 'P E C F D', 'E D F C Z P', 'F E L O P Z D']
 
 
+def lastra(lid):
+    """La lastra di vetro chiaro, sfocato, sotto i testi: il video si vede tutto, i testi si leggono."""
+    return K.livello(lid, tipo='shape', x=3.5, y=12, w=44, h=74, bgColor=mix(C['chiaro'], 90), borderRadius=30,
+                     borderWidth=1, borderColor=mix(C['chiaro'], 90), backdropBlur=18, entra='fadeIn', ritardo=0, durata=700,
+                     esce='fadeOut', boxShadow={'x': 0, 'y': 30, 'blur': 60, 'spread': -20, 'color': mix(C['nero'], 35)},
+                     responsive={'mobile': {'x': 3, 'y': 38.5, 'width': 94, 'height': 39}})
+
+
 def apertura(t):
     m = K.mob
     sl = []
     for i, (tab, occ, r1, r2, testo, montatura, persona, didascalia, prezzo, fondo) in enumerate(VETRINA):
         n = i + 1
         cx, cy, cw, ch = 54.0, 20.0, 37.5, 48.0
-        sl.append(K.diapositiva('di-%d' % n, {'type': 'gradient', 'gradientFrom': C['fondo'], 'gradientTo': fondo,
-                                              'gradientAngle': 120, 'image': '', 'video': '', 'color': '', 'overlay': '',
-                                              'overlayOpacity': 0, 'kenBurns': False}, [
+        sl.append(K.diapositiva('di-%d' % n, K.sfondo_video([V_LEI, V_SOLE, V_OCCHIALI][i], overlay=0.3, colore=C['nero']), [
+            lastra('di-c%d' % n),
             # la montatura sul piatto girevole: gira avanti e indietro sull'asse verticale
             K.livello('di-m%d' % n, tipo='image', imageSrc=K.img(montatura), objectFit='cover', x=cx, y=cy, w=cw, h=ch,
                       borderRadius=28, boxShadow={'x': 0, 'y': 40, 'blur': 80, 'spread': -24, 'color': mix(C['nero'], 35)},
@@ -110,24 +117,24 @@ def apertura(t):
             K.livello('di-d%d' % n, contenuto=didascalia, x=61, y=72, w='auto', size=12, peso='500', colore=C['testo'],
                       fontFamily=MONO, letterSpacing=1, bgColor=C['chiaro'], padding=10, borderRadius=999, entra='fadeInLeft',
                       ritardo=1600, responsive={'mobile': {'x': 33, 'y': 33.5, 'width': 'auto', 'fontSize': m(10)}}),
-            K.livello('di-o%d' % n, contenuto=occ, x=6, y=20, w=40, size=12, peso='500', colore=C['acc'], letterSpacing=2,
+            K.livello('di-o%d' % n, contenuto=occ, x=7, y=18, w=40, size=12, peso='500', colore=C['acc'], letterSpacing=2,
                       textTransform='uppercase', fontFamily=MONO, ritardo=250,
                       responsive={'mobile': {'fontSize': m(11), 'y': 42, 'x': 7, 'width': 86}}),
-            K.livello('di-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=6, y=24.5, w=46, size=76, peso='600',
+            K.livello('di-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=7, y=22.5, w=38, size=58, peso='600',
                       colore=C['testo'], fontFamily=TITOLI, lineHeight=1.02, letterSpacing=-2, entra='fadeIn', ritardo=350,
                       durata=1100, charAnim={'stagger': 24, 'offsetY': 0, 'blur': 14, 'opacity': 0},
                       responsive={'mobile': {'fontSize': m(38), 'y': 44.5, 'x': 7, 'width': 88}}),
-            K.livello('di-i%d' % n, contenuto=r2, tag='p', x=6, y=35, w=46, size=76, peso='600', colore=C['acc'],
+            K.livello('di-i%d' % n, contenuto=r2, tag='p', x=7, y=31, w=38, size=58, peso='600', colore=C['acc'],
                       fontFamily=TITOLI, lineHeight=1.02, letterSpacing=-2, entra='fadeIn', ritardo=700, durata=1100,
                       charAnim={'stagger': 24, 'offsetY': 0, 'blur': 14, 'opacity': 0},
                       responsive={'mobile': {'fontSize': m(38), 'y': 49, 'x': 7, 'width': 88}}),
-            K.livello('di-s%d' % n, contenuto=testo, x=6, y=50, w=33, size=17, peso='400', colore=C['tenue'],
+            K.livello('di-s%d' % n, contenuto=testo, x=7, y=46, w=35, size=17, peso='400', colore=C['tenue'],
                       lineHeight=1.65, ritardo=1000, responsive={'mobile': {'fontSize': m(14), 'y': 55, 'x': 7, 'width': 86}}),
-            K.livello('di-b%d' % n, tipo='button', contenuto='Prenota l’esame', x=6, y=71, w='auto', size=14, peso='600',
+            K.livello('di-b%d' % n, tipo='button', contenuto='Prenota l’esame', x=7, y=70, w='auto', size=14, peso='600',
                       colore=C['on_acc'], bgColor=C['acc'], padding=17, borderRadius=999, ritardo=1300,
                       buttonUrl=PRENOTA, hover={'bgColor': C['testo'], 'duration': 250},
                       responsive={'mobile': {'y': 69, 'x': 7, 'fontSize': m(13)}}),
-            K.livello('di-p%d' % n, contenuto=prezzo, x=19.5, y=72.2, w='auto', size=13, peso='500', colore=C['testo'],
+            K.livello('di-p%d' % n, contenuto=prezzo, x=20.5, y=71.2, w='auto', size=13, peso='500', colore=C['testo'],
                       bgColor=C['acc2'], padding=12, borderRadius=999, fontFamily=MONO, entra='popUpBack', ritardo=1550,
                       responsive={'mobile': {'y': 69.6, 'x': 53, 'fontSize': m(12)}}),
         ], durata=9200, tab=tab))
@@ -150,29 +157,28 @@ def apertura(t):
     tav.append(K.livello('di-filo', tipo='shape', x=60, y=70.4, w=24, h=0.25, bgColor=C['acc'], entra='maskFromLeft',
                          ritardo=3000, durata=900, responsive={'mobile': {'x': 14, 'y': 34.4, 'width': 66, 'height': 0.14}}))
     tav += [
-        K.livello('di-o4', contenuto='04 · l’esame della vista', x=6, y=20, w=40, size=12, peso='500', colore=C['acc'],
+        K.livello('di-o4', contenuto='04 · l’esame della vista', x=7, y=18, w=40, size=12, peso='500', colore=C['acc'],
                   letterSpacing=2, textTransform='uppercase', fontFamily=MONO, ritardo=250,
                   responsive={'mobile': {'fontSize': m(11), 'y': 42, 'x': 7, 'width': 86}}),
-        K.livello('di-t4', contenuto='Venti minuti', tag='h2', x=6, y=24.5, w=46, size=76, peso='600', colore=C['testo'],
+        K.livello('di-t4', contenuto='Venti minuti', tag='h2', x=7, y=22.5, w=38, size=58, peso='600', colore=C['testo'],
                   fontFamily=TITOLI, lineHeight=1.02, letterSpacing=-2, entra='fadeIn', ritardo=350, durata=1100,
                   charAnim={'stagger': 24, 'offsetY': 0, 'blur': 14, 'opacity': 0},
                   responsive={'mobile': {'fontSize': m(38), 'y': 44.5, 'x': 7, 'width': 88}}),
-        K.livello('di-i4', contenuto='per vederci chiaro.', tag='p', x=6, y=35, w=46, size=76, peso='600', colore=C['acc'],
+        K.livello('di-i4', contenuto='per vederci chiaro.', tag='p', x=7, y=31, w=38, size=58, peso='600', colore=C['acc'],
                   fontFamily=TITOLI, lineHeight=1.02, letterSpacing=-2, entra='fadeIn', ritardo=700, durata=1100,
                   charAnim={'stagger': 24, 'offsetY': 0, 'blur': 14, 'opacity': 0},
                   responsive={'mobile': {'fontSize': m(38), 'y': 49, 'x': 7, 'width': 88}}),
         K.livello('di-s4', contenuto='L’optometrista misura la vista da lontano e da vicino, la pressione dell’occhio e '
-                  'come lavorano insieme i due occhi. Gratis se poi fate gli occhiali da noi.', x=6, y=50, w=33, size=17,
+                  'come lavorano insieme i due occhi. Gratis se poi fate gli occhiali da noi.', x=7, y=46, w=35, size=17,
                   peso='400', colore=C['tenue'], lineHeight=1.65, ritardo=1000,
                   responsive={'mobile': {'fontSize': m(14), 'y': 55, 'x': 7, 'width': 86}}),
-        K.livello('di-b4', tipo='button', contenuto='Prenota l’esame', x=6, y=71, w='auto', size=14, peso='600',
+        K.livello('di-b4', tipo='button', contenuto='Prenota l’esame', x=7, y=70, w='auto', size=14, peso='600',
                   colore=C['on_acc'], bgColor=C['acc'], padding=17, borderRadius=999, ritardo=1300, buttonUrl=PRENOTA,
                   hover={'bgColor': C['testo'], 'duration': 250}, responsive={'mobile': {'y': 69, 'x': 7, 'fontSize': m(13)}}),
     ]
-    sl.append(K.diapositiva('di-4', {'type': 'gradient', 'gradientFrom': C['fondo'], 'gradientTo': mix(C['acc'], 8, C['sala']),
-                                     'gradientAngle': 120, 'image': '', 'video': '', 'color': '', 'overlay': '',
-                                     'overlayOpacity': 0, 'kenBurns': False}, tav, durata=9200, tab='L’esame'))
-    return K.proslider(t, sl, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='blur', durata_trans=1000,
+    sl.append(K.diapositiva('di-4', K.sfondo_video(V_OCCHIO, overlay=0.3, colore=C['nero']), [lastra('di-c4')] + tav,
+                            durata=9200, tab='L’esame'))
+    return K.proslider(t, sl, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='zoomFade', durata_trans=1100,
                        showArrows=False, showDots=False, showTabs=True, tabPosition='bottom', parallax=False,
                        autoplaySpeed=9200, progressBarColor=C['acc'], navColor=C['testo'],
                        globalBackground={'type': 'color', 'color': C['fondo']})
@@ -437,6 +443,8 @@ THEME = tema(
     HEX, '\'Geist\', system-ui, -apple-system, \'Segoe UI\', sans-serif', '\'Geist\', system-ui, sans-serif',
     '\'Geist Mono\', ui-monospace, Menlo, monospace', ['Geist', 'Geist Mono'], peso_titoli='600', raggio=20, grana=0,
     titoli_line='1.02', titoli_spazio='-0.03em')
+THEME['preview_v'] = THEME['preview_mobile_v'] = '2'  # apertura rifatta il 31 ottobre 2026
+THEME['cursor']['style'] = 'inverti'  # cursore: la lente che rovescia i colori (31 ott 2026)
 
 
 def main():

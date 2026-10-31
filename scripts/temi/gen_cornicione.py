@@ -54,7 +54,7 @@ VOCI = [('map-pin', 'Via del Pratello 48 · Bologna', PRENOTA + '#arrivare'), ('
 
 
 def build_header():
-    return K.testata(Tpl(ID, 'header'), 'Cornicione', logo_size='26', scuro=False)
+    return K.testata(Tpl(ID, 'header'), 'Cornicione', logo_size='26', overlay=False, scuro=False)
 
 
 def build_footer():
@@ -88,24 +88,24 @@ PIZZE = [  # linguetta, occhiello, nome, sottotitolo, testo, prezzo, foto, fondo
 def apertura(t):
     m = K.mob
     sl = []
-    # la pizza: 600 px su una tela di 1440 × 810 (16:9), centro al 72,8% × 49%
-    px, py, pw, ph = 52.0, 12.0, 41.67, 74.07
+    # la pizza: 580 px nel piatto di 640 su una tela di 1440 × 810 (16:9); il piatto parte sotto la testata
+    px, py, pw, ph = 61.08, 16.2, 40.28, 71.6
     cadute = [  # foto, x, y, x e y sul telefono
-        ('pexels-8471577.jpg', 50.5, 8, 6, 4.2), ('pexels-3669501.jpg', 88.5, 30, 79, 21.5),
-        ('pexels-5947611.jpg', 84.5, 74, 72, 31.5)]
+        ('pexels-8471577.jpg', 64.3, 12.2, 4, 22), ('pexels-3669501.jpg', 57.85, 64.3, 79, 21.5),
+        ('pexels-5947611.jpg', 73.2, 83.5, 72, 31.5)]
     for i, (tab, occ, nome, sotto, testo, prezzo, foto, fondo) in enumerate(PIZZE):
         n = i + 1
-        livelli = [
-            K.livello('co-piatto%d' % n, tipo='shape', x=49.9, y=8.26, w=45.83, h=81.48, bgColor=C['chiaro'],
+        livelli = K.veli('co-velo%d' % n, 'sinistra', 46, 62) + [
+            K.livello('co-piatto%d' % n, tipo='shape', x=59, y=12.5, w=44.44, h=79.01, bgColor=C['chiaro'],
                       borderRadius=999, entra='zoomIn', ritardo=0, durata=900, esce='fadeOut',
                       boxShadow={'x': 0, 'y': 34, 'blur': 70, 'spread': -18, 'color': mix(C['nero'], 30)},
-                      responsive={'mobile': {'x': 13.3, 'y': 4, 'width': 73.4, 'height': 33.6}}),
+                      responsive={'mobile': {'x': 13.3, 'y': 7, 'width': 73.4, 'height': 33.6}, 'tablet': {'y': 15.5}}),
             K.livello('co-p%d' % n, tipo='image', imageSrc=K.img(foto), objectFit='cover', x=px, y=py, w=pw, h=ph,
                       borderRadius=999,
                       timeline=K.tl(px, py, [(0, {'rotation': -30, 'scale': 0.86, 'opacity': 0}, 'power3.out'),
                                              (1300, {'rotation': 0, 'scale': 1, 'opacity': 100}),
                                              (61300, {'rotation': 360, 'scale': 1, 'opacity': 100})], 61300),
-                      responsive={'mobile': {'x': 15.6, 'y': 5, 'width': 68.75, 'height': 31.43}}),
+                      responsive={'mobile': {'x': 15.6, 'y': 8, 'width': 68.75, 'height': 31.43}, 'tablet': {'y': py + 3}}),
         ]
         for k, (f, x, y, mx, my) in enumerate(cadute):
             livelli.append(K.livello('co-c%d%d' % (n, k), tipo='image', imageSrc=K.img(f), objectFit='cover', x=x, y=y,
@@ -115,15 +115,16 @@ def apertura(t):
                                                           (500 + 220 * k, {'y': -25, 'rotation': -40, 'opacity': 0}, 'bounce.out'),
                                                           (1500 + 220 * k, {'rotation': 0, 'opacity': 100})],
                                                    1500 + 220 * k, loop=False),
-                                     responsive={'mobile': {'x': mx, 'y': my, 'width': 14.06, 'height': 6.43}}))
+                                     responsive={'mobile': {'x': mx, 'y': my, 'width': 14.06, 'height': 6.43},
+                                                 'tablet': {'y': y + 3 if k < 2 else 85}}))
         livelli += [
-            K.livello('co-o%d' % n, contenuto=occ, x=6, y=20, w=40, size=12, peso='500', colore=C['acc'], letterSpacing=2,
+            K.livello('co-o%d' % n, contenuto=occ, x=6, y=20, w=40, size=12, peso='500', colore=mix(C['acc'], 78, C['testo']), letterSpacing=2,
                       textTransform='uppercase', fontFamily=MONO, ritardo=250,
                       responsive={'mobile': {'fontSize': m(11), 'y': 41, 'x': 7, 'width': 86}}),
             K.livello('co-t%d' % n, contenuto=nome, tag='h1' if n == 1 else 'h2', x=6, y=24.5, w=46, size=104, peso='400',
                       colore=C['testo'], fontFamily=TITOLI, lineHeight=1.0, entra='fadeIn', ritardo=350, durata=1100,
                       charAnim={'stagger': 28, 'offsetY': 50, 'rotation': 8, 'opacity': 0},
-                      responsive={'mobile': {'fontSize': m(46), 'y': 43.5, 'x': 7, 'width': 88}}),
+                      responsive={'mobile': {'fontSize': m(41), 'y': 43.5, 'x': 7, 'width': 88}}),
             K.livello('co-i%d' % n, contenuto=sotto, tag='p', x=6, y=39, w=46, size=44, peso='400', colore=C['acc'],
                       fontFamily=TITOLI, lineHeight=1.1, entra='fadeInUp', ritardo=750, durata=900,
                       responsive={'mobile': {'fontSize': m(24), 'y': 48.6, 'x': 7, 'width': 88}}),
@@ -139,19 +140,19 @@ def apertura(t):
                       hover={'bgColor': C['chiaro'], 'borderColor': C['testo'], 'duration': 250},
                       responsive={'mobile': {'y': 67, 'x': 54, 'fontSize': m(13)}}),
             # il bollino del prezzo sul bordo della pizza
-            K.livello('co-z%d' % n, contenuto=prezzo, x=55, y=66, w=7.64, h=13.58, size=30, peso='400', colore=C['testo'],
+            K.livello('co-z%d' % n, contenuto=prezzo, x=55.56, y=38.3, w=7.64, h=13.58, size=30, peso='400', colore=C['testo'],
                       bgColor=C['acc2'], borderRadius=999, align='center', fontFamily=TITOLI, lineHeight=3.65,
                       entra='popUpBack', ritardo=1700, durata=800,
                       boxShadow={'x': 0, 'y': 10, 'blur': 24, 'spread': -8, 'color': mix(C['nero'], 30)},
-                      responsive={'mobile': {'x': 14, 'y': 30.5, 'width': 17.2, 'height': 7.86, 'fontSize': 30}}),
+                      responsive={'mobile': {'x': 14, 'y': 30.5, 'width': 17.2, 'height': 7.86, 'fontSize': 30},
+                                  'tablet': {'y': 41.3}}),
         ]
-        sfondo = {'type': 'gradient', 'gradientFrom': C['fondo'], 'gradientTo': fondo, 'gradientAngle': 115, 'image': '',
-                  'video': '', 'color': '', 'overlay': '', 'overlayOpacity': 0, 'kenBurns': False}
+        sfondo = K.sfondo_video([V_STESURA, V_CONDIRE, V_FORNO, V_TAGLIO][i], overlay=0.6, colore=C['fondo'])
         sl.append(K.diapositiva('co-%d' % n, sfondo, livelli, durata=7500, tab=tab))
     globali = [K.livello('co-forno', contenuto='Forno a legna · 450 °C · novanta secondi', x=6, y=86, w=40, size=11,
                          peso='500', colore=C['tenue'], letterSpacing=2, textTransform='uppercase', fontFamily=MONO,
                          entra='fadeIn', ritardo=1800, responsive={'mobile': {'y': 74, 'x': 7, 'width': 86, 'fontSize': m(10)}})]
-    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='zoomFade',
+    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='pushRight',
                        durata_trans=1000, showArrows=False, showDots=False, showTabs=True, tabPosition='bottom',
                        parallax=False, autoplaySpeed=7500, progressBarColor=C['acc'], navColor=C['testo'],
                        globalBackground={'type': 'color', 'color': C['fondo']})
@@ -430,6 +431,7 @@ THEME = tema(
     '\'Hedvig Letters Serif\', \'Georgia\', serif', '\'Victor Mono\', ui-monospace, Menlo, monospace',
     ['Hedvig Letters Serif', 'Familjen Grotesk', 'Victor Mono'], peso_titoli='400', raggio=14, grana=4,
     titoli_line='1.02', titoli_spazio='-0.015em')
+THEME['preview_v'] = THEME['preview_mobile_v'] = '3'  # apertura scura sul video pieno, 31 ottobre 2026
 
 
 def main():

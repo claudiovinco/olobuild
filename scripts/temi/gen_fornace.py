@@ -5,9 +5,9 @@ lampadari; la fornace si visita e si può provare a lume a fare una perla.
 Tema scuro: il nero della fornace, l'arancio del vetro fuso, il blu di Murano e l'acquamarina. Titoli in Fraunces (anche
 corsivo), testo in Spline Sans, dati in Spline Sans Mono.
 
-Apertura: Slider Pro «la fornace», alto 16:9. Il vetro fuso in una finestra rotonda (un video a lume); attorno, tre
-dischi di vetro liquido (sfocatura di quello che c'è dietro, riflesso, bordo di luce) che girano su sé stessi in 3D a
-velocità diverse, e due murrine che ruotano piano. Una diapositiva per lavoro della vetreria, a linguette.
+Apertura: Slider Pro «la fornace», alto 16:9. Il vetro fuso in una finestra rotonda (un video a lume); ai lati due
+murrine che ruotano piano. (I tre dischi di vetro liquido che giravano in 3D sono stati tolti il 31 ottobre: la
+sfocatura dietro restava un riquadro e di taglio diventavano una lama.) Una diapositiva per lavoro della vetreria, a linguette.
 """
 import os
 import sys
@@ -89,11 +89,12 @@ LAVORI = [  # linguetta, occhiello, riga 1, riga 2, testo, finestra (foto|video)
 def apertura(t):
     m = K.mob
     sl = []
-    fx, fy, fw, fh = 59.0, 15.0, 33.33, 59.26        # la finestra: 480 px
+    fx, fy, fw, fh = 33.33, 20.37, 33.33, 59.26      # la finestra: 480 px, al centro
+    ombra = {'x': 0, 'y': 4, 'blur': 28, 'color': mix(C['nero'], 85)}
     for i, (tab, occ, r1, r2, testo, media, sfondo) in enumerate(LAVORI):
         n = i + 1
         finestra = dict(x=fx, y=fy, w=fw, h=fh, borderRadius=999, entra='zoomIn', ritardo=100, durata=1300, esce='fadeOut',
-                        boxShadow={'x': 0, 'y': 0, 'blur': 120, 'spread': 6, 'color': mix(FUSO, 30)},
+                        boxShadow={'x': 0, 'y': 0, 'blur': 140, 'spread': 10, 'color': mix(FUSO, 32)},
                         responsive={'mobile': {'x': 17.2, 'y': 6, 'width': 65.6, 'height': 30}})
         if media[0] == 'video':
             vetro = K.livello('fn-v%d' % n, tipo='video', videoSrc=K.img(media[1] + '.mp4'), videoAutoplay=True, videoMuted=True,
@@ -101,43 +102,35 @@ def apertura(t):
         else:
             vetro = K.livello('fn-v%d' % n, tipo='image', imageSrc=K.img(media[1]), objectFit='cover',
                               kenBurns={'type': 'zoomIn', 'intensity': 8, 'duration': 9000}, **finestra)
-        sl.append(K.diapositiva('fn-%d' % n, K.sfondo_foto(sfondo, overlay=0.88, scala=1.08, durata=10000,
-                                                           verso='in' if n % 2 else 'out', colore=C['fondo']), [
+        sl.append(K.diapositiva('fn-%d' % n, K.sfondo_video([V_FORNO, V_CANALE, V_BOCCA, V_TUBO][i], overlay=0.8,
+                                                            colore=C['fondo']), [
             vetro,
-            K.livello('fn-o%d' % n, contenuto=occ, x=6, y=18, w=40, size=12, peso='400', colore=FUSO, letterSpacing=3,
-                      textTransform='uppercase', fontFamily=MONO, ritardo=250,
-                      responsive={'mobile': {'fontSize': m(11), 'y': 42, 'x': 7, 'width': 86}}),
-            K.livello('fn-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=6, y=22.5, w=48, size=84, peso='400',
-                      colore=C['chiaro'], fontFamily=TITOLI, lineHeight=1.02, entra='fadeIn', ritardo=350, durata=1200,
-                      charAnim={'stagger': 28, 'offsetY': 26, 'blur': 10, 'opacity': 0},
-                      responsive={'mobile': {'fontSize': m(40), 'y': 44.5, 'x': 7, 'width': 88}}),
-            K.livello('fn-i%d' % n, contenuto=r2, tag='p', x=6, y=34, w=48, size=84, peso='400', fontStyle='italic',
-                      colore=FUSO, fontFamily=TITOLI, lineHeight=1.02, entra='fadeIn', ritardo=650, durata=1200,
-                      charAnim={'stagger': 28, 'offsetY': 26, 'blur': 10, 'opacity': 0},
-                      responsive={'mobile': {'fontSize': m(40), 'y': 49, 'x': 7, 'width': 88}}),
-            K.livello('fn-s%d' % n, contenuto=testo, x=6, y=49.5, w=32, size=17, peso='400', colore=mix(C['chiaro'], 80),
-                      lineHeight=1.65, ritardo=1000, responsive={'mobile': {'fontSize': m(14), 'y': 55.5, 'x': 7, 'width': 86}}),
-            K.livello('fn-b%d' % n, tipo='button', contenuto='Prenota la visita', x=6, y=71, w='auto', size=12, peso='600',
+            # il velo sulla finestra: il titolo ci passa sopra e resta leggibile
+            K.livello('fn-velo%d' % n, tipo='shape', x=fx, y=fy, w=fw, h=fh, bgColor=mix(C['nero'], 42), borderRadius=999,
+                      entra='fadeIn', ritardo=500, durata=900, esce='fadeOut',
+                      responsive={'mobile': {'visible': False}}),
+            K.livello('fn-o%d' % n, contenuto=occ, x=20, y=13, w=60, size=12, peso='400', colore=FUSO, letterSpacing=3,
+                      textTransform='uppercase', fontFamily=MONO, align='center', ritardo=250,
+                      responsive={'mobile': {'fontSize': m(11), 'y': 42, 'x': 7, 'width': 86, 'textAlign': 'left'}}),
+            K.livello('fn-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=8, y=36, w=84, size=84, peso='400',
+                      colore=C['chiaro'], fontFamily=TITOLI, lineHeight=1.02, align='center', textShadow=ombra,
+                      entra='fadeIn', ritardo=650, durata=1200, charAnim={'stagger': 28, 'offsetY': 26, 'blur': 10, 'opacity': 0},
+                      responsive={'mobile': {'fontSize': m(34), 'y': 44.5, 'x': 7, 'width': 88, 'textAlign': 'left'}}),
+            K.livello('fn-i%d' % n, contenuto=r2, tag='p', x=8, y=47, w=84, size=84, peso='400', fontStyle='italic',
+                      colore=FUSO, fontFamily=TITOLI, lineHeight=1.02, align='center', textShadow=ombra, entra='fadeIn',
+                      ritardo=950, durata=1200, charAnim={'stagger': 28, 'offsetY': 26, 'blur': 10, 'opacity': 0},
+                      responsive={'mobile': {'fontSize': m(34), 'y': 49, 'x': 7, 'width': 88, 'textAlign': 'left'}}),
+            K.livello('fn-s%d' % n, contenuto=testo, x=5, y=64, w=25, size=16, peso='400', colore=mix(C['chiaro'], 82),
+                      lineHeight=1.65, ritardo=1300, responsive={'mobile': {'fontSize': m(14), 'y': 55.5, 'x': 7, 'width': 86}}),
+            K.livello('fn-b%d' % n, tipo='button', contenuto='Prenota la visita', x=80, y=74, w='auto', size=12, peso='600',
                       colore=C['on_acc'], bgColor=FUSO, padding=16, letterSpacing=2, textTransform='uppercase',
-                      borderRadius=12, ritardo=1300, buttonUrl=VISITA, hover={'bgColor': C['chiaro'], 'duration': 250},
-                      responsive={'mobile': {'y': 71, 'x': 7, 'fontSize': m(11)}}),
+                      borderRadius=12, ritardo=1500, buttonUrl=VISITA, hover={'bgColor': C['chiaro'], 'duration': 250},
+                      responsive={'mobile': {'y': 71, 'x': 7, 'fontSize': m(11)}, 'tablet': {'x': 77}}),
         ], durata=8000, tab=tab))
-    # i dischi di vetro liquido che girano in 3D e le murrine che ruotano
+    # le murrine che ruotano piano ai lati della finestra
     globali = []
-    for k, (x, y, d, dur, col) in enumerate([(55.0, 10.0, 9.0, 7000, ACQUA), (86.5, 22.0, 6.5, 9000, BLU),
-                                             (83.0, 66.0, 10.0, 11000, FUSO)]):
-        h = round(d * 1440 / 810, 2)
-        globali.append(K.livello('fn-disco%d' % k, tipo='shape', x=x, y=y, w=d, h=h, borderRadius=999, borderWidth=1,
-                                 borderColor=mix(C['chiaro'], 55), backdropBlur=12, backdropBrightness=125,
-                                 shapeGradient={'angle': 135, 'from': mix(C['chiaro'], 30), 'to': mix(col, 22)},
-                                 boxShadow={'x': 0, 'y': 20, 'blur': 40, 'spread': -10, 'color': mix(col, 35)},
-                                 timeline=K.tl(x, y, [(0, {'rotationY': 0.01, 'y': y}, 'sine.inOut'),
-                                                      (dur // 2, {'rotationY': 180, 'y': y - 2}, 'sine.inOut'),
-                                                      (dur, {'rotationY': 360, 'y': y})], dur),
-                                 responsive={'mobile': {'x': [8, 80, 74][k], 'y': [4, 14, 30][k], 'width': [16, 12, 18][k],
-                                                        'height': [7.3, 5.5, 8.2][k]}}))
-    for k, (x, y, d, foto, dur) in enumerate([(52.5, 62.0, 7.0, 'pexels-5114970.jpg', 40000),
-                                              (90.5, 47.0, 5.0, 'pexels-38774907.jpg', 30000)]):
+    for k, (x, y, d, foto, dur) in enumerate([(26.5, 40.0, 5.5, 'pexels-5114970.jpg', 40000),
+                                              (88.0, 40.0, 5.0, 'pexels-38774907.jpg', 30000)]):
         h = round(d * 1440 / 810, 2)
         globali.append(K.livello('fn-murrina%d' % k, tipo='image', imageSrc=K.img(foto), objectFit='cover', x=x, y=y, w=d, h=h,
                                  borderRadius=999, borderWidth=3, borderColor=mix(C['chiaro'], 40),
@@ -147,9 +140,9 @@ def apertura(t):
     globali.append(K.livello('fn-gradi', contenuto='Fornace a 1.100 °C · vetro sodico-calcico · dal 1921', x=50, y=88, w=44,
                              size=11, peso='400', colore=mix(C['chiaro'], 60), fontFamily=MONO, letterSpacing=2, align='right',
                              textTransform='uppercase', entra='fadeIn', ritardo=1600,
-                             responsive={'mobile': {'y': 78, 'x': 7, 'width': 86, 'fontSize': m(10)}}))
-    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='crossFade',
-                       durata_trans=1300, showArrows=False, showDots=False, showTabs=True, tabPosition='bottom',
+                             responsive={'mobile': {'y': 78, 'x': 7, 'width': 86, 'fontSize': m(10), 'textAlign': 'left'}}))
+    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='zoom',
+                       durata_trans=1200, showArrows=False, showDots=False, showTabs=True, tabPosition='bottom',
                        parallax=False, autoplaySpeed=8000, progressBarColor=FUSO, navColor=C['chiaro'])
 
 
@@ -400,15 +393,16 @@ def build_404():
 THEME = tema(
     ID, NAME, 'Industria e manifattura', 'Il vetro che gira',
     ['vetro', 'murano', 'vetro soffiato', 'artigianato', 'venezia', 'scuro', 'slider pro', '3d'],
-    'Una vetreria di Murano, nero di fornace e arancio di vetro fuso: in apertura il vetro a lume nella finestra rotonda, '
-    'tre dischi di vetro liquido che girano su sé stessi in 3D e le murrine che ruotano; i colori sotto la lente, le '
-    'opere in coverflow 3D e con la ricerca, i tre tempi del soffiato e la visita in fornace.',
+    'Una vetreria di Murano, nero di fornace e arancio di vetro fuso: in apertura la finestra rotonda al centro col '
+    'vetro a lume e il titolo che ci passa sopra, le murrine che ruotano, sul video della fornace; i colori sotto la lente, le opere, i lampadari e la visita.',
     [('Le opere', OPERE), ('La fornace', FORNACE_P), ('I colori', HOME + '#colori'), ('Visita', VISITA)],
     [('home', 'Home', None), ('le-opere', 'Le opere', 'le-opere'), ('la-fornace', 'La fornace', 'la-fornace'),
      ('visita', 'Visita', 'visita')],
     HEX, '\'Spline Sans\', system-ui, -apple-system, \'Segoe UI\', sans-serif', '\'Fraunces\', \'Georgia\', serif',
     '\'Spline Sans Mono\', ui-monospace, Menlo, monospace', ['Fraunces', 'Spline Sans', 'Spline Sans Mono'],
     corsivo_di=['Fraunces'], peso_titoli='400', raggio=12, grana=5, titoli_line='1.02', titoli_spazio='-0.01em')
+THEME['preview_v'] = THEME['preview_mobile_v'] = '3'  # apertura rifatta il 31 ottobre 2026, senza i dischi
+THEME['cursor']['style'] = 'scintille'  # cursore: le scintille della fornace (31 ott 2026)
 
 
 def main():

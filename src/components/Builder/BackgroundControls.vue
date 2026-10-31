@@ -573,6 +573,16 @@
           <span class="rowlab">{{ t('Opacità') }}</span>
           <NumberScrubber class="ns-grow" :modelValue="bg.overlay_opacity || 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Opacità sovrapposizione')" @update:modelValue="commitInt('overlay_opacity', $event, 0)" />
         </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Sfumatura') }}</span>
+          <div class="selwrap">
+            <FieldSelect ui="dropdown" :model-value="bg.overlay_fade || ''" :options="OVERLAY_FADE_OPTS" @update:model-value="updateField('overlay_fade', $event)" />
+          </div>
+        </div>
+        <div v-if="bg.overlay_fade" class="row">
+          <span class="rowlab">{{ t('Estensione') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="bg.overlay_fade_reach ?? 70" :min="20" :max="100" :step="5" :defaultValue="70" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Estensione della sfumatura')" @update:modelValue="commitInt('overlay_fade_reach', $event, 70)" />
+        </div>
       </div>
     </template>
   </div>
@@ -611,6 +621,15 @@ const VIDEO_FIT_OPTS = [
   { value: 'none', label: 'Nessuno (dimensione originale)' },
 ];
 
+// Sovrapposizione sfumata: piena su quel bordo, trasparente verso il centro (il testo si legge, il media resta
+// intero dove non c'è testo). Vuoto = piena su tutto.
+const OVERLAY_FADE_OPTS = [
+  { value: '', label: t('Piena') },
+  { value: 'bottom', label: t('Dal basso') },
+  { value: 'left', label: t('Da sinistra') },
+  { value: 'right', label: t('Da destra') },
+  { value: 'top', label: t('Dall’alto') },
+];
 const GALLERY_TRANSITION_OPTS = [
   { value: 'fade', label: 'Fade' },
   { value: 'crossfade', label: 'Crossfade' },

@@ -57,6 +57,10 @@ trait Olobuild_Renderer_Structure_Trait {
         } else {
             $classes[] = 'uk-position-relative';
         }
+        // Piega (31 ott 2026): la sezione sale dal fondo dello schermo piegata all'indietro e si raddrizza.
+        if ( 'piega' === ( $s['scroll_entrance'] ?? '' ) && ! $is_sticky ) {
+            $classes[] = 'olo-piega';
+        }
         $section_style = $s['style'] ?? 'default';
         $style_map = [
             'muted'     => 'uk-section-muted',
@@ -327,7 +331,7 @@ trait Olobuild_Renderer_Structure_Trait {
         if ( $has_overlay ) {
             $ov_color   = esc_attr( $tile_bg['overlay_color'] ?? '#000000' );
             $ov_opacity = intval( $tile_bg['overlay_opacity'] ) / 100;
-            $bg_layers_html .= '<div class="uk-position-cover" style="background-color: ' . $ov_color . '; opacity: ' . $ov_opacity . '; pointer-events: none" aria-hidden="true"></div>';
+            $bg_layers_html .= '<div class="uk-position-cover" style="background: ' . esc_attr( Olobuild_CSS_Builder::velo_fondo( $tile_bg, $ov_color ) ) . '; opacity: ' . $ov_opacity . '; pointer-events: none" aria-hidden="true"></div>';
         }
 
         // bg_scope=section: emit bg layers as siblings of the container (full edge-to-edge bg)
@@ -572,6 +576,11 @@ trait Olobuild_Renderer_Structure_Trait {
             $classes[] = $valign_map[ $valign ];
         }
 
+        // Le colonne si allargano al passaggio (31 ott 2026): regole in frontend.css.
+        if ( ! empty( $s['espandi_hover'] ) ) {
+            $classes[] = 'olo-riga-espandi';
+        }
+
         // Custom class will be added after we know it
         $pre_class_attr_classes = $classes;
 
@@ -718,7 +727,7 @@ trait Olobuild_Renderer_Structure_Trait {
             if ( $has_overlay ) {
                 $ov_color   = esc_attr( $tile_bg['overlay_color'] ?? '#000000' );
                 $ov_opacity = intval( $tile_bg['overlay_opacity'] ) / 100;
-                $html .= '<div class="uk-position-cover" style="background-color: ' . $ov_color . '; opacity: ' . $ov_opacity . '; pointer-events: none"></div>';
+                $html .= '<div class="uk-position-cover" style="background: ' . esc_attr( Olobuild_CSS_Builder::velo_fondo( $tile_bg, $ov_color ) ) . '; opacity: ' . $ov_opacity . '; pointer-events: none"></div>';
             }
         }
 
@@ -1954,7 +1963,7 @@ trait Olobuild_Renderer_Structure_Trait {
         if ( $has_col_overlay ) {
             $ov_color   = esc_attr( $col_bg['overlay_color'] ?? '#000000' );
             $ov_opacity = intval( $col_bg['overlay_opacity'] ) / 100;
-            $html .= '<div class="uk-position-cover" style="background-color: ' . $ov_color . '; opacity: ' . $ov_opacity . '; pointer-events: none" aria-hidden="true"></div>';
+            $html .= '<div class="uk-position-cover" style="background: ' . esc_attr( Olobuild_CSS_Builder::velo_fondo( $col_bg, $ov_color ) ) . '; opacity: ' . $ov_opacity . '; pointer-events: none" aria-hidden="true"></div>';
         }
 
         // Column children content (z-index above bg if needed)
@@ -2149,7 +2158,7 @@ trait Olobuild_Renderer_Structure_Trait {
         if ( $has_overlay ) {
             $ov_color   = ! empty( $bg['overlay_color'] ) ? esc_attr( $bg['overlay_color'] ) : 'var(--olo-color-dark, #000000)';
             $ov_opacity = intval( $bg['overlay_opacity'] ) / 100;
-            $out       .= '<div class="uk-position-cover" style="background-color: ' . $ov_color . '; opacity: ' . $ov_opacity . '; pointer-events: none"></div>';
+            $out       .= '<div class="uk-position-cover" style="background: ' . esc_attr( Olobuild_CSS_Builder::velo_fondo( $bg, $ov_color ) ) . '; opacity: ' . $ov_opacity . '; pointer-events: none"></div>';
         }
         return '<div class="olo-ic-sfondo" aria-hidden="true" style="position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit; overflow: hidden">' . $out . '</div>';
     }

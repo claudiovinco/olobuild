@@ -97,6 +97,9 @@ class Tpl:
 
     def section(self, children, bg=None, padding='default', width='default', html_id=None, style=None, **extra):
         s = {'width': width, 'padding': padding}
+        # Regola del 31 ott 2026 (mai media velati): un velo scuro piatto su una foto o un video non va oltre il 50%.
+        if isinstance(bg, dict) and bg.get('type') in ('image', 'video') and not bg.get('overlay_fade')                 and bg.get('overlay_color', 'var(--olo-color-dark)') in ('var(--olo-color-dark)', '#000000', '#000')                 and int(bg.get('overlay_opacity') or 0) > 50:
+            bg = dict(bg, overlay_opacity=50)
         if bg is not None:
             s['bg'] = bg
             s['bg_scope'] = 'section'
@@ -172,9 +175,75 @@ def page(content, **settings):
     return {'settings': settings, 'content': content}
 
 
+SCURI = ('var(--olo-color-dark)', '#000000', '#000')
+
+
+def niente_velati(o, chiave=''):
+    """Regola del 31 ott 2026, mai media velati: un velo scuro piatto oltre il 50% su una foto o un video diventa una
+    sfumatura dal basso sulle facce delle carte (il titolo sta in fondo) e scende al 50% altrove."""
+    if isinstance(o, dict):
+        if o.get('type') in ('image', 'video') and (o.get('image_url') or o.get('video_url')) and not o.get('overlay_fade')                 and o.get('overlay_color', SCURI[0]) in SCURI and int(o.get('overlay_opacity') or 0) > 50:
+            if chiave in ('front_media', 'back_media'):
+                o.update(overlay_opacity=88, overlay_fade='bottom', overlay_fade_reach=80)
+            else:
+                o['overlay_opacity'] = 50
+        for k, v in o.items():
+            niente_velati(v, k)
+    elif isinstance(o, list):
+        for v in o:
+            niente_velati(v, chiave)
+
+
+def nodo_timeline(o):
+    """Timeline col nodo «Anno»: la data è già scritta di lato, nel cerchio era un doppione (e una data lunga non ci
+    stava). Il nodo prende l'icona della tappa, o un pallino se le tappe non hanno icona (utente, 31 ott 2026)."""
+    if isinstance(o, dict):
+        if o.get('type') == 'timeline' and (o.get('settings') or {}).get('tl_node') == 'year':
+            voci = o['settings'].get('items') or []
+            o['settings']['tl_node'] = 'icon' if voci and all(v.get('icon') for v in voci) else 'dot'
+        for v in o.values():
+            nodo_timeline(v)
+    elif isinstance(o, list):
+        for v in o:
+            nodo_timeline(v)
+
+
+RINFORZI = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'rinforzi.json')
+
+
+def rinforza(tema, o, r):
+    """Le correzioni misurate (scripts/temi/rinforzi.json, scritte dopo media_contrasti.py): le colonne «schede» diventano
+    un riquadro scuro (testo chiaro sopra un media), le «chiare» un riquadro chiaro (testo scuro), e le sezioni «leggeri»
+    tengono il media quasi pieno (velo al 15%)."""
+    if isinstance(o, dict):
+        nid = o.get('id')
+        if nid in r.get('schede', []) or nid in r.get('chiare', []):
+            st = o.setdefault('style', {})
+            st.update({'padding_top': 40, 'padding_right': 44, 'padding_bottom': 36, 'padding_left': 44,
+                       'border_radius': {'tl': 6, 'tr': 6, 'br': 6, 'bl': 6}})
+            colore = 'var(--olo-color-background)' if nid in r.get('chiare', []) else 'var(--olo-color-dark)'
+            st['bg'] = {'type': 'solid', 'color': 'color-mix(in srgb, %s 86%%, transparent)' % colore}
+        if nid in r.get('leggeri', []) and isinstance((o.get('settings') or {}).get('bg'), dict):
+            bg = o['settings']['bg']
+            bg.pop('overlay_fade', None)
+            bg.pop('overlay_fade_reach', None)
+            bg.update(overlay_color='var(--olo-color-dark)', overlay_opacity=15)
+        for v in o.values():
+            rinforza(tema, v, r)
+    elif isinstance(o, list):
+        for v in o:
+            rinforza(tema, v, r)
+
+
 def write_theme(theme, builds, media):
     """theme: il dizionario di theme.json; builds: {file.json: nodi | page(nodi, …)}; media: nomi dei file della libreria usati."""
     out = os.path.join(THEMES, theme['id'])
+    r = json.load(open(RINFORZI, encoding='utf-8')).get(theme['id'], {}) if os.path.exists(RINFORZI) else {}
+    for built in builds.values():
+        niente_velati(built)
+        nodo_timeline(built)
+        if r:
+            rinforza(theme['id'], built, r)
     os.makedirs(out, exist_ok=True)
     used = {}
     ids = set()

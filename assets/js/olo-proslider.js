@@ -275,6 +275,15 @@ function initSlider(container) {
   }
 
   updateLayerScale();
+  // Anche quando cambia solo la larghezza del contenitore (una colonna che si allarga al passaggio): la tela
+  // segue fotogramma per fotogramma.
+  if ('ResizeObserver' in window) {
+    var _mpsLargo = container.offsetWidth, _mpsRo = null;
+    new ResizeObserver(function () {
+      if (container.offsetWidth === _mpsLargo || _mpsRo) return;
+      _mpsRo = requestAnimationFrame(function () { _mpsRo = null; _mpsLargo = container.offsetWidth; updateLayerScale(); });
+    }).observe(container);
+  }
   var _mpsResizeTimer;
   window.addEventListener('resize', function () {
     clearTimeout(_mpsResizeTimer);
@@ -509,6 +518,17 @@ function initSlider(container) {
   var allaFineCubo = [];
   var verso = 0;
   var cubo = transition === 'cubeH' || transition === 'cubeV';
+  // Il cubo che segue lo scorrimento (scrollScrub, 31 ott 2026): niente transizioni a tempo, l'angolo lo dà la pagina.
+  var cuboAScorrimento = false;
+  // La timeline a scorrimento a passi: un cambio chiesto da punti, linguette o frecce porta la pagina alla diapositiva.
+  var scorriAPosto = null;
+  var daScorrimento = false;
+  var scorriAFaccia = function () {};
+  // Scorrimenti: asse, verso andando avanti (1 = la nuova entra da destra o dal basso), la vecchia esce spinta.
+  var SCORRIMENTI = {
+    slide: ['X', 1, true], push: ['X', 1, true], pushRight: ['X', -1, true], slideOver: ['X', 1, false],
+    pushDown: ['Y', -1, true], slideDown: ['Y', -1, true], slideUp: ['Y', 1, true],
+  };
   function profonditaCubo() {
     var tr = qs(container, '.olo-proslider-track') || container;
     var lato = transition === 'cubeV' ? tr.offsetHeight : tr.offsetWidth;
@@ -517,6 +537,8 @@ function initSlider(container) {
   if (cubo) profonditaCubo();
 
   function goToSlide(idx) {
+    if (cuboAScorrimento) { scorriAFaccia(idx); return; }
+    if (scorriAPosto && !daScorrimento) { scorriAPosto(idx); return; }
     if (animating || cuboInGiro || idx === current || total <= 1) return;
     animating = true;
     var versoChiesto = verso;
@@ -555,13 +577,40 @@ function initSlider(container) {
     }
 
     function proceed() {
-      var needs3D = ['slide', 'flipH', 'flipV', 'cubeH', 'cubeV', 'slideOver'].indexOf(transition) !== -1;
+      var needs3D = ['flipH', 'flipV', 'cubeH', 'cubeV', 'curtain3D'].indexOf(transition) !== -1;
+      var durata = cfg.transDuration || 800;
 
       // Il verso viene da chi ha chiesto il cambio (frecce, swipe, autoplay): dall'ultima alla prima col
       // loop è un passo avanti, dalla prima all'ultima un passo indietro. Schede, miniature e punti: conta
       // la posizione.
       var goingForward = versoChiesto !== 0 ? versoChiesto > 0 : idx > current;
-      if (needs3D && !newAlreadyVisible) {
+      // Scorrimenti (31 ott 2026): la nuova entra dal lato giusto e spinge via la vecchia dal lato opposto,
+      // al contrario tornando indietro; a fine corsa la vecchia torna al suo posto fuori campo senza
+      // transizione. Prima la vecchia perdeva subito la classe d'uscita (spariva o tornava indietro
+      // incrociando la nuova) e con «slide» riattraversava lo schermo a fine corsa.
+      var sc = SCORRIMENTI[transition];
+      if (sc && !newAlreadyVisible && !(oldPersistFor > 0)) {
+        var segno = sc[1] * (goingForward ? 1 : -1);
+        var tr = function (v) { return 'translate' + sc[0] + '(' + v + '%)'; };
+        newSlide.classList.remove('mps-persistent-visible');
+        newSlide.classList.add('mps-no-trans');
+        newSlide.style.transform = tr(100 * segno);
+        newSlide.classList.add('mps-active');
+        void newSlide.offsetWidth;
+        newSlide.classList.remove('mps-no-trans');
+        newSlide.style.transform = tr(0);
+        oldSlide.style.transform = sc[2] ? tr(-100 * segno) : tr(0);
+        oldSlide.classList.remove('mps-active');
+        oldSlide.classList.add('mps-scorre-via');
+        setTimeout(function () {
+          oldSlide.classList.add('mps-no-trans');
+          oldSlide.classList.remove('mps-scorre-via');
+          oldSlide.style.transform = '';
+          newSlide.style.transform = '';
+          void oldSlide.offsetWidth;
+          oldSlide.classList.remove('mps-no-trans');
+        }, durata + 40);
+      } else if (needs3D && !newAlreadyVisible) {
         // Set initial off-screen position for new slide (CSS handles this via default styles)
         newSlide.classList.remove('mps-persistent-visible');
         if (cubo) {
@@ -575,13 +624,6 @@ function initSlider(container) {
         }
         newSlide.classList.add('mps-active');
         void newSlide.offsetWidth; // reflow
-        // For 'slide' transition, set inline transform
-        if (transition === 'slide') {
-          newSlide.style.transform = goingForward ? 'translateX(100%)' : 'translateX(-100%)';
-          void newSlide.offsetWidth;
-          newSlide.style.transform = 'translateX(0)';
-          oldSlide.style.transform = goingForward ? 'translateX(-100%)' : 'translateX(100%)';
-        }
         // Add exit class for CSS-driven 3D transitions
         oldSlide.classList.add(cubo && !goingForward ? 'mps-exit-right' : 'mps-exit-left');
       } else {
@@ -610,7 +652,19 @@ function initSlider(container) {
         }, (cfg.transDuration || 800) + 40);
       } else {
         oldSlide.classList.remove('mps-active');
-        oldSlide.classList.remove('mps-exit-left');
+        if (needs3D && !newAlreadyVisible) {
+          // Flip e sipario: la faccia uscente finisce di girare con la classe d'uscita, poi torna al suo posto
+          // senza transizione. Prima la classe se ne andava nello stesso istante in cui arrivava.
+          setTimeout(function () {
+            if (oldSlide.classList.contains('mps-active')) return;
+            oldSlide.classList.add('mps-no-trans');
+            oldSlide.classList.remove('mps-exit-left');
+            void oldSlide.offsetWidth;
+            oldSlide.classList.remove('mps-no-trans');
+          }, durata + 40);
+        } else {
+          oldSlide.classList.remove('mps-exit-left');
+        }
       }
 
       // Update dots
@@ -632,10 +686,6 @@ function initSlider(container) {
         // If the new slide was already persistent-visible, layers are already shown
         if (!newAlreadyVisible) {
           animateLayersIn(newSlide);
-        }
-        // Clean old slide transform
-        if (transition === 'slide' && !(oldPersistFor > 0)) {
-          oldSlide.style.transform = '';
         }
         current = idx;
         animating = false;
@@ -1039,7 +1089,63 @@ function initSlider(container) {
   // sospeso e si rifà all'arrivo del cambio in corso.
   if (cfg.scrollTimeline) {
     var wrapper = container.closest('.mps-scroll-fixed-wrapper');
-    if (wrapper) {
+    // Il cubo che segue lo scorrimento: la faccia i esce di lato e la i+1 entra dal lato opposto, ruotate della
+    // frazione di pagina scorsa fra le due (come le classi del cubo a tempo: avanti la nuova arriva da destra, o dal
+    // basso); il lato in ombra si scurisce. La faccia più vicina è quella «attiva»: i suoi livelli entrano, il
+    // suo video va, linguette e punti la segnano. Frecce, linguette e punti scorrono la pagina fino a lei.
+    if (wrapper && cfg.scrollScrub && cubo && total > 1 && !menoMoto) {
+      cuboAScorrimento = true;
+      cfg.autoplay = false;
+      container.classList.add('mps-cubo-scorre');
+      // Lo scorrimento che fa girare il cubo è il tratto in cui lo slider resta fermo in cima (altezza del contenitore
+      // meno quella dello slider): con un'altezza in vh la distanza impostata non torna col contenitore.
+      var distCubo = function () { return Math.max(1, wrapper.offsetHeight - container.offsetHeight) || cfg.scrollTimelineDistance || 2000; };
+      var asseV = transition === 'cubeV';
+      var gira = function (s, gradi, ombra) {
+        s.style.transform = asseV ? 'rotateX(' + (-gradi) + 'deg)' : 'rotateY(' + gradi + 'deg)';
+        s.style.setProperty('--mps-faccia-ombra', ombra.toFixed(3));
+      };
+      var arriva = function (idx) {
+        var vecchia = slides[current], nuova = slides[idx];
+        allaPartenza.forEach(function (fn) { fn(idx); });
+        animateLayersOut(vecchia, function () {});
+        vecchia.classList.remove('mps-active');
+        nuova.classList.add('mps-active');
+        handleAudioLayers(vecchia, false);
+        handleAudioLayers(nuova, true);
+        dots.forEach(function (d, i) { d.classList.toggle('mps-dot-active', i === idx); });
+        current = idx;
+        animateLayersIn(nuova);
+        allArrivo.forEach(function (fn) { fn(idx); });
+      };
+      var giro = null;
+      var segui = function () {
+        giro = null;
+        var wr = wrapper.getBoundingClientRect();
+        if (wr.bottom < 0 || wr.top > window.innerHeight) return;
+        var p = Math.max(0, Math.min(1, -wr.top / distCubo())) * (total - 1);
+        var i = Math.min(total - 2, Math.floor(p));
+        var f = p - i;
+        slides.forEach(function (s, k) {
+          var su = k === i || k === i + 1;
+          s.classList.toggle('mps-faccia', su);
+          if (su) { playVideoBg(s); } else { s.style.transform = ''; pauseVideoBg(s); }
+        });
+        gira(slides[i], -90 * f, 0.55 * f);
+        gira(slides[i + 1], 90 * (1 - f), 0.55 * (1 - f));
+        var vicina = Math.round(p);
+        if (vicina !== current) arriva(vicina);
+      };
+      var chiedi = function () { if (!giro) giro = requestAnimationFrame(segui); };
+      scorriAFaccia = function (idx) {
+        idx = Math.max(0, Math.min(total - 1, idx));
+        var y = wrapper.getBoundingClientRect().top + window.pageYOffset + distCubo() * idx / (total - 1);
+        window.scrollTo({ top: Math.round(y), behavior: 'smooth' });
+      };
+      window.addEventListener('scroll', chiedi, { passive: true });
+      window.addEventListener('resize', function () { profonditaCubo(); chiedi(); });
+      chiedi();
+    } else if (wrapper) {
       var scrollDist = cfg.scrollTimelineDistance || 2000;
       var bersaglioScorrimento = 0;
       var inSospeso = false;
@@ -1052,11 +1158,97 @@ function initSlider(container) {
         bersaglioScorrimento = targetIdx;
         if (animating || cuboInGiro) { inSospeso = true; return; }
         inSospeso = false;
-        if (targetIdx !== current) goToSlide(targetIdx);
+        if (targetIdx !== current) { daScorrimento = true; goToSlide(targetIdx); daScorrimento = false; }
       };
       window.addEventListener('scroll', seguiScorrimento, { passive: true });
       allArrivo.push(function () { if (inSospeso) seguiScorrimento(); });
       allaFineCubo.push(function () { if (inSospeso) seguiScorrimento(); });
+
+      // Una diapositiva per gesto (31 ott 2026): con la rotella o il trackpad 600 px passano in un attimo e si saltavano
+      // diapositive. Mentre lo slider è fermo in cima un gesto porta alla diapositiva dopo o prima, l'inerzia dello stesso
+      // gesto non conta (un gesto nuovo comincia dopo una pausa); alla prima e all'ultima la pagina scorre. Fermandosi
+      // (anche col dito) la pagina si posa al centro del tratto della diapositiva.
+      if (cfg.scrollStep !== false && total > 1) {
+        var cima = function () { return wrapper.getBoundingClientRect().top + window.pageYOffset; };
+        var posizione = function (i) { return Math.round(cima() + scrollDist * (i + 0.5) / total); };
+        var fermo = function () { var wr = wrapper.getBoundingClientRect(); return wr.top <= 1 && wr.bottom >= window.innerHeight - 1; };
+        var mio = false;
+        scorriAPosto = function (i) {
+          mio = true;
+          window.scrollTo({ top: posizione(Math.max(0, Math.min(total - 1, i))), behavior: menoMoto ? 'auto' : 'smooth' });
+          setTimeout(function () { mio = false; }, 900);
+        };
+        var ultimaRuota = 0, gestoUsato = false, bloccoFino = 0;
+        window.addEventListener('wheel', function (e) {
+          if (e.ctrlKey || !fermo()) return;
+          var ora = performance.now();
+          if (ora - ultimaRuota > 220) gestoUsato = false;
+          ultimaRuota = ora;
+          if (gestoUsato) { e.preventDefault(); return; }
+          if (Math.abs(e.deltaY) < 2) return;
+          var i = bersaglioScorrimento + (e.deltaY > 0 ? 1 : -1);
+          if (i < 0 || i > total - 1) return;
+          e.preventDefault();
+          if (ora < bloccoFino) return;
+          gestoUsato = true;
+          bloccoFino = ora + (cfg.transDuration || 800) + 200;
+          mio = true;
+          window.scrollTo({ top: posizione(i), behavior: 'auto' });
+          setTimeout(function () { mio = false; }, 200);
+        }, { passive: false });
+        // Col dito: un trascinamento, una diapositiva; lo slancio non c'è perché il trascinamento è nostro.
+        var tocco = null;
+        window.addEventListener('touchstart', function (e) {
+          tocco = fermo() && e.touches.length === 1 ? { y: e.touches[0].clientY, verso: 0, fatto: false } : null;
+        }, { passive: true });
+        window.addEventListener('touchmove', function (e) {
+          if (!tocco) return;
+          var dy = tocco.y - e.touches[0].clientY;
+          if (!tocco.verso) {
+            if (Math.abs(dy) < 8) return;
+            tocco.verso = dy > 0 ? 1 : -1;
+            var j = bersaglioScorrimento + tocco.verso;
+            if (j < 0 || j > total - 1) { tocco = null; return; }
+            tocco.indice = j;
+          }
+          if (e.cancelable) e.preventDefault();
+          if (!tocco.fatto && Math.abs(dy) > 40) {
+            tocco.fatto = true;
+            mio = true;
+            window.scrollTo({ top: posizione(tocco.indice), behavior: 'auto' });
+            setTimeout(function () { mio = false; }, 250);
+          }
+        }, { passive: false });
+        window.addEventListener('touchend', function () { tocco = null; }, { passive: true });
+        window.addEventListener('touchcancel', function () { tocco = null; }, { passive: true });
+        // Entrando nel tratto fermo con lo slancio (non col dito sopra, non per un nostro scorrimento): la pagina si posa
+        // sulla diapositiva del bordo da cui si entra, e lo slancio finisce lì.
+        var eraFermo = fermo();
+        window.addEventListener('scroll', function () {
+          var f = fermo();
+          if (f && !eraFermo && !tocco && !mio) {
+            var j = window.pageYOffset > cima() + scrollDist / 2 ? total - 1 : 0;
+            mio = true;
+            gestoUsato = true;
+            window.scrollTo({ top: posizione(j), behavior: 'auto' });
+            setTimeout(function () { mio = false; }, 250);
+          }
+          eraFermo = f;
+        }, { passive: true });
+        var posa = null;
+        window.addEventListener('scroll', function () {
+          clearTimeout(posa);
+          posa = setTimeout(function () {
+            if (mio || !fermo()) return;
+            var y = posizione(bersaglioScorrimento);
+            if (Math.abs(window.pageYOffset - y) > 4) {
+              mio = true;
+              window.scrollTo({ top: y, behavior: menoMoto ? 'auto' : 'smooth' });
+              setTimeout(function () { mio = false; }, 700);
+            }
+          }, 180);
+        }, { passive: true });
+      }
     }
   }
 

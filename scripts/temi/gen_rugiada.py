@@ -59,7 +59,7 @@ VOCI = [('map-pin', 'Borgo delle Colonne 21 · Parma', CONTATTI + '#arrivare'), 
 
 
 def build_header():
-    return K.testata(Tpl(ID, 'header'), 'Rugiada', logo_size='26', scuro=False)
+    return K.testata(Tpl(ID, 'header'), 'Rugiada', logo_size='26', overlay=False, scuro=False)
 
 
 def build_footer():
@@ -92,41 +92,44 @@ PRODOTTI_SLIDE = [  # linguetta, occhiello, riga 1, riga 2, testo, foto, prezzo,
 def apertura(t):
     m = K.mob
     sl = []
-    ax, ay, aw, ah = 56.0, 12.0, 25.0, 74.0              # l'arco: 360 × 600 px
+    ax, ay, aw, ah = 37.5, 13.0, 25.0, 74.0              # l'arco al centro: 360 × 600 px
     for i, (tab, occ, r1, r2, testo, foto, prezzo, fondo) in enumerate(PRODOTTI_SLIDE):
         n = i + 1
-        sl.append(K.diapositiva('ru-%d' % n, {'type': 'gradient', 'gradientFrom': C['fondo'], 'gradientTo': fondo,
-                                              'gradientAngle': 135, 'image': '', 'video': '', 'color': '', 'overlay': '',
-                                              'overlayOpacity': 0, 'kenBurns': False}, [
+        sl.append(K.diapositiva('ru-%d' % n, K.sfondo_video([V_ACQUA, V_CREMA, V_MANO, V_VISO][i], overlay=0.7,
+                                                            colore=C['fondo']),
+                                # un velo per lato: il titolo diviso sta ai due lati dell'arco
+                                K.veli('ru-velo%d' % n, 'sinistra', 35, 40) + K.veli('ru-vela%d' % n, 'destra', 35, 39)[:1] + [
             K.livello('ru-a%d' % n, tipo='image', imageSrc=K.img(foto), objectFit='cover', x=ax, y=ay, w=aw, h=ah,
                       borderRadiusLinked=False, borderRadiusTL=180, borderRadiusTR=180, borderRadiusBR=18, borderRadiusBL=18,
                       kenBurns={'type': 'zoomIn', 'intensity': 8, 'duration': 9000}, entra='maskFromBottom', ritardo=100,
                       durata=1300, esce='fadeOut',
                       boxShadow={'x': 0, 'y': 40, 'blur': 80, 'spread': -24, 'color': mix(C['nero'], 25)},
                       responsive={'mobile': {'x': 24, 'y': 6, 'width': 52, 'height': 31}}),
-            K.livello('ru-o%d' % n, contenuto=occ, x=6, y=19, w=40, size=12, peso='500', colore=C['acc'], letterSpacing=2,
-                      textTransform='uppercase', fontFamily=MONO, ritardo=250,
-                      responsive={'mobile': {'fontSize': m(11), 'y': 41, 'x': 7, 'width': 86}}),
-            K.livello('ru-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=6, y=23.5, w=50, size=66, peso='500',
-                      colore=C['testo'], fontFamily=TITOLI, lineHeight=1.04, entra='fadeIn', ritardo=350, durata=1300,
-                      charAnim={'stagger': 30, 'offsetY': 0, 'blur': 12, 'opacity': 0},
-                      responsive={'mobile': {'fontSize': m(38), 'y': 43.5, 'x': 7, 'width': 88}}),
-            K.livello('ru-i%d' % n, contenuto=r2, tag='p', x=6, y=33.5, w=50, size=66, peso='500', fontStyle='italic',
+            # il titolo si legge attraverso l'arco: la prima riga a sinistra, la seconda a destra
+            K.livello('ru-o%d' % n, contenuto=occ, x=3, y=22, w=31.5, size=12, peso='500', colore=C['acc'], letterSpacing=2,
+                      textTransform='uppercase', fontFamily=MONO, align='right', ritardo=250,
+                      responsive={'mobile': {'fontSize': m(11), 'y': 41, 'x': 7, 'width': 86, 'textAlign': 'left'}}),
+            K.livello('ru-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=3, y=26, w=31.5, size=58, peso='500',
+                      colore=C['testo'], fontFamily=TITOLI, lineHeight=1.04, align='right', entra='fadeIn', ritardo=350,
+                      durata=1300, charAnim={'stagger': 30, 'offsetY': 0, 'blur': 12, 'opacity': 0},
+                      responsive={'mobile': {'fontSize': m(38), 'y': 43.5, 'x': 7, 'width': 88, 'textAlign': 'left'}}),
+            K.livello('ru-i%d' % n, contenuto=r2, tag='p', x=65.5, y=40, w=31.5, size=58, peso='500', fontStyle='italic',
                       colore=C['acc'], fontFamily=TITOLI, lineHeight=1.04, entra='fadeIn', ritardo=700, durata=1300,
                       charAnim={'stagger': 30, 'offsetY': 0, 'blur': 12, 'opacity': 0},
                       responsive={'mobile': {'fontSize': m(38), 'y': 47.8, 'x': 7, 'width': 88}}),
-            K.livello('ru-s%d' % n, contenuto=testo, x=6, y=50, w=32, size=17, peso='400', colore=C['tenue'],
-                      lineHeight=1.65, ritardo=1000, responsive={'mobile': {'fontSize': m(14), 'y': 54.5, 'x': 7, 'width': 86}}),
-            K.livello('ru-b%d' % n, tipo='button', contenuto='Scopri il prodotto', x=6, y=71, w='auto', size=15, peso='600',
+            K.livello('ru-s%d' % n, contenuto=testo, x=65.5, y=57, w=28, size=17, peso='400', colore=C['tenue'],
+                      lineHeight=1.65, ritardo=1000,
+                      responsive={'mobile': {'fontSize': m(14), 'y': 54.5, 'x': 7, 'width': 86}, 'tablet': {'width': 31}}),
+            K.livello('ru-b%d' % n, tipo='button', contenuto='Scopri il prodotto', x=65.5, y=76, w='auto', size=15, peso='600',
                       colore=C['on_acc'], bgColor=C['acc'], padding=17, borderRadius=999, ritardo=1300, buttonUrl=PRODOTTI,
                       hover={'bgColor': C['testo'], 'duration': 250},
-                      responsive={'mobile': {'y': 69.5, 'x': 7, 'fontSize': m(13)}}),
-            K.livello('ru-p%d' % n, contenuto=prezzo, x=21.5, y=72.2, w='auto', size=13, peso='500', colore=C['testo'],
+                      responsive={'mobile': {'y': 69.5, 'x': 7, 'fontSize': m(13)}, 'tablet': {'y': 77}}),
+            K.livello('ru-p%d' % n, contenuto=prezzo, x=81, y=77.2, w='auto', size=13, peso='500', colore=C['testo'],
                       fontFamily=MONO, bgColor=C['chiaro'], padding=12, borderRadius=999, entra='popUpBack', ritardo=1550,
-                      responsive={'mobile': {'y': 70.1, 'x': 58, 'fontSize': m(12)}}),
+                      responsive={'mobile': {'y': 70.1, 'x': 58, 'fontSize': m(12)}, 'tablet': {'x': 84, 'y': 78}}),
         ], durata=8000, tab=tab))
-    # la goccia che cade sull'arco e l'onda che si allarga; le bolle di vetro liquido che galleggiano
-    gx, gy = 67.8, -6.0
+    # la goccia che cade sulla cima dell'arco e l'onda che si allarga; le bolle di vetro liquido che galleggiano
+    gx, gy = 49.3, -6.0
     globali = [
         K.livello('ru-goccia', tipo='shape', x=gx, y=gy, w=1.39, h=3.1, bgColor=C['chiaro'], borderRadiusLinked=False,
                   borderRadiusTL=0, borderRadiusTR=999, borderRadiusBR=999, borderRadiusBL=999,
@@ -134,22 +137,22 @@ def apertura(t):
                   boxShadow={'x': 0, 'y': 6, 'blur': 14, 'spread': 0, 'color': mix(C['acc'], 30)},
                   timeline=K.tl(gx, gy, [(0, {'y': -6, 'rotation': -45, 'opacity': 0}, 'power2.in'),
                                          (300, {'y': -4, 'rotation': -45, 'opacity': 100}, 'power2.in'),
-                                         (1300, {'y': 8.5, 'rotation': -45, 'opacity': 100}),
-                                         (1450, {'y': 9.5, 'rotation': -45, 'opacity': 0, 'scale': 0.4}),
-                                         (3600, {'y': 9.5, 'rotation': -45, 'opacity': 0, 'scale': 0.4})], 3600),
+                                         (1300, {'y': 10, 'rotation': -45, 'opacity': 100}),
+                                         (1450, {'y': 11, 'rotation': -45, 'opacity': 0, 'scale': 0.4}),
+                                         (3600, {'y': 11, 'rotation': -45, 'opacity': 0, 'scale': 0.4})], 3600),
                   responsive={'mobile': {'visible': False}}),
     ]
     for k, ritardo in enumerate([0, 450]):
-        globali.append(K.livello('ru-onda%d' % k, tipo='shape', x=62.2, y=4.2, w=12.5, h=22.2, bgColor='transparent',
+        globali.append(K.livello('ru-onda%d' % k, tipo='shape', x=43.75, y=1.9, w=12.5, h=22.2, bgColor='transparent',
                                  borderRadius=999, borderWidth=2, borderColor=mix(C['acc'], 60),
-                                 timeline=K.tl(62.2, 4.2, [(0, {'scale': 0.05, 'opacity': 0}),
-                                                           (1400 + ritardo, {'scale': 0.05, 'opacity': 0}, 'power2.out'),
-                                                           (1450 + ritardo, {'scale': 0.1, 'opacity': 100}, 'power2.out'),
-                                                           (2900 + ritardo, {'scale': 1.0, 'opacity': 0}),
-                                                           (3600, {'scale': 1.0, 'opacity': 0})], 3600),
+                                 timeline=K.tl(43.75, 1.9, [(0, {'scale': 0.05, 'opacity': 0}),
+                                                            (1400 + ritardo, {'scale': 0.05, 'opacity': 0}, 'power2.out'),
+                                                            (1450 + ritardo, {'scale': 0.1, 'opacity': 100}, 'power2.out'),
+                                                            (2900 + ritardo, {'scale': 1.0, 'opacity': 0}),
+                                                            (3600, {'scale': 1.0, 'opacity': 0})], 3600),
                                  responsive={'mobile': {'visible': False}}))
-    for k, (x, y, d, dur, dy) in enumerate([(50.5, 16, 8.0, 7000, 2.5), (82.5, 22, 5.5, 8200, 3), (85, 64, 9.5, 9000, 2),
-                                            (51.5, 66, 4.2, 6400, 3.5)]):
+    for k, (x, y, d, dur, dy) in enumerate([(31.5, 58, 7.0, 7000, 2.5), (59, 15, 5.5, 8200, 3), (57, 76, 6.0, 9000, 2),
+                                            (34, 12, 4.2, 6400, 3.5)]):
         h = round(d * 1440 / 810, 2)
         globali.append(K.livello('ru-bolla%d' % k, tipo='shape', x=x, y=y, w=d, h=h, bgColor=mix(C['chiaro'], 22),
                                  borderRadius=999, borderWidth=1, borderColor=mix(C['chiaro'], 75), backdropBlur=10,
@@ -162,8 +165,12 @@ def apertura(t):
                                                       (dur, {'y': y, 'opacity': 100})], dur),
                                  responsive={'mobile': {'x': [18, 76, 70, 14][k], 'y': [5, 9, 30, 32][k],
                                                         'width': [12, 8, 15, 7][k], 'height': [5.5, 3.6, 6.8, 3.2][k]}}))
-    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='blur',
-                       durata_trans=1100, showArrows=False, showDots=False, showTabs=True, tabPosition='bottom',
+    globali.append(K.livello('ru-nota', contenuto='Formule corte · fatte a Parma · senza profumi aggiunti', x=3, y=80,
+                             w=31.5, size=11, peso='500', colore=C['tenue'], letterSpacing=2, textTransform='uppercase',
+                             fontFamily=MONO, align='right', lineHeight=1.6, entra='fadeIn', ritardo=1800,
+                             responsive={'mobile': {'visible': False}}))
+    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='crossFade',
+                       durata_trans=1300, showArrows=False, showDots=False, showTabs=True, tabPosition='bottom',
                        parallax=False, autoplaySpeed=8000, progressBarColor=C['acc'], navColor=C['testo'],
                        globalBackground={'type': 'color', 'color': C['fondo']})
 
@@ -426,15 +433,17 @@ def build_404():
 THEME = tema(
     ID, NAME, 'Negozi online', 'La goccia e il vetro liquido',
     ['cosmesi', 'skincare', 'siero', 'creme', 'parma', 'e-commerce', 'chiaro', 'slider pro'],
-    'Un laboratorio di cosmesi, pesca chiara e rosa legno: in apertura la goccia che cade sul prodotto e si apre in '
-    'un’onda, fra bolle di vetro liquido; le texture sotto la lente, il configuratore della routine col prezzo, gli '
-    'ingredienti che si affacciano, la scheda con l’INCI e la chimica che risponde.',
+    'Un laboratorio di cosmesi, pesca chiara e rosa legno: in apertura il prodotto nell’arco al centro e il titolo '
+    'diviso ai due lati, la goccia che cade sulla cima e si apre in un’onda, fra bolle di vetro liquido, sul video '
+    'dell’acqua e delle creme; le texture sotto la lente, il configuratore della routine col prezzo, gli ingredienti '
+    'e il laboratorio.',
     [('I prodotti', PRODOTTI), ('Il laboratorio', LAB), ('La routine', PRODOTTI + '#routine'), ('Contatti', CONTATTI)],
     [('home', 'Home', None), ('prodotti', 'I prodotti', 'prodotti'), ('il-laboratorio', 'Il laboratorio', 'il-laboratorio'),
      ('contatti', 'Contatti', 'contatti')],
     HEX, '\'Hanken Grotesk\', system-ui, -apple-system, \'Segoe UI\', sans-serif', '\'Ibarra Real Nova\', \'Georgia\', serif',
     '\'Red Hat Mono\', ui-monospace, Menlo, monospace', ['Ibarra Real Nova', 'Hanken Grotesk', 'Red Hat Mono'],
     corsivo_di=['Ibarra Real Nova'], peso_titoli='500', raggio=18, grana=3, titoli_line='1.04', titoli_spazio='-0.01em')
+THEME['preview_v'] = THEME['preview_mobile_v'] = '3'  # apertura scura sul video pieno, 31 ottobre 2026
 
 
 def main():

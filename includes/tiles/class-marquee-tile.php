@@ -154,7 +154,7 @@ class Olobuild_Marquee_Tile extends Olobuild_Tile_Base {
         // (contrasto scuro) il testo spariva scuro su scuro.
         $text_color  = $this->safe_color_css( $s['text_color'] ) ?: $this->testo_leggibile( $fondo_testo );
         $font_size   = max( 10, intval( $s['font_size'] ) );
-        $font_weight = in_array( $s['font_weight'], [ '400', '500', '600', '700', '900' ] ) ? $s['font_weight'] : '500';
+        $font_weight = in_array( $s['font_weight'], [ '100', '200', '300', '400', '500', '600', '700', '800', '900' ] ) ? $s['font_weight'] : '500';
         $ls          = max( 0, intval( $s['letter_spacing'] ) );
         $tt          = in_array( $s['text_transform'], [ 'none', 'uppercase', 'lowercase' ] ) ? $s['text_transform'] : 'uppercase';
 

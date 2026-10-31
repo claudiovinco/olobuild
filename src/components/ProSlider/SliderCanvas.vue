@@ -356,7 +356,8 @@ function layerStyle(l) {
   // Background — ogni tipo ha il suo default/fallback
   if (l.type === 'shape') {
     if (l.shapeGradient) {
-      st.background = `linear-gradient(${l.shapeGradient.angle ?? 180}deg, ${l.shapeGradient.from || '#3b82f6'}, ${l.shapeGradient.to || '#8b5cf6'})`;
+      const stop = Math.max(0, Math.min(95, parseInt(l.shapeGradient.fromStop, 10) || 0));
+      st.background = `linear-gradient(${l.shapeGradient.angle ?? 180}deg, ${l.shapeGradient.from || '#3b82f6'}${stop ? ' ' + stop + '%' : ''}, ${l.shapeGradient.to || '#8b5cf6'})`;
     } else {
       st.backgroundColor = l.bgColor || '#3b82f6';
     }
@@ -427,7 +428,7 @@ function textStyle(l) {
     fontSize: rl.fontSize + 'px',
     fontWeight: l.fontWeight || '700',
     color: l.color || '#fff',
-    textAlign: l.textAlign || 'left',
+    textAlign: rl.textAlign || 'left',
     lineHeight: l.lineHeight ?? 1.2,
     whiteSpace: 'pre-wrap',
     wordBreak: 'break-word',

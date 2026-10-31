@@ -375,6 +375,19 @@ body:has(.olo-template) .wp-site-blocks {
   box-sizing: border-box;
 }
 
+/* ─── Riga: «Le colonne si allargano al passaggio» (espandi_hover, classe olo-riga-espandi) ───
+ * Da 1200 px di pagina le colonne si dividono lo spazio in parti uguali e quella sotto il puntatore ne prende di
+ * più (le aperture divise in due metà quasi indipendenti). Sotto, le colonne si dispongono come sempre (con «Impila
+ * su tablet» una sotto l'altra); con meno movimento non si allarga niente. */
+@container olo-tpl (min-width: 1200px) {
+  .olo-riga-espandi > * { flex: 1 1 0% !important; width: auto !important; max-width: none !important; min-width: 0;
+    transition: flex-grow .9s cubic-bezier(.22,1,.36,1); }
+  .olo-riga-espandi > *:hover, .olo-riga-espandi > *:focus-within { flex-grow: 1.3 !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .olo-riga-espandi > *:hover, .olo-riga-espandi > *:focus-within { flex-grow: 1 !important; }
+}
+
 /* ─── Riga: «Gap» in px (render_row_node, classe olo-row-gap) ───
  * Il Gap della riga Flex è un column-gap/row-gap vero: --olo-row-gap-x/-y stanno in linea
  * sulla riga. Prima diventava la classe UIkit più vicina (16 = colonne attaccate, 48 = 70 px).

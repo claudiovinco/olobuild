@@ -88,11 +88,11 @@ def apertura(t):
     m = K.mob
     sl = []
     # la ruota grande: 480 px su una tela di 1440 × 810 (16:9), centro al 72,67% × 41,6%
-    gx, gy, gw, gh = 56.0, 12.0, 33.33, 59.26
+    gx, gy, gw, gh = 10.67, 12.0, 33.33, 59.26
     for i, (tab, occ, r1, r2, testo, ruota, foto) in enumerate(LAVORI):
         n = i + 1
-        sl.append(K.diapositiva('sc-%d' % n, K.sfondo_foto(foto, overlay=0.86, scala=1.08, durata=10000,
-                                                           verso='in' if n % 2 else 'out', colore=C['fondo']), [
+        sl.append(K.diapositiva('sc-%d' % n, K.sfondo_video([V_LENTE, V_MANI, V_TASCA, V_MOVIMENTO][i], overlay=0.8,
+                                                            colore=C['fondo']), [
             K.livello('sc-r%d' % n, tipo='image', imageSrc=K.img(ruota), objectFit='cover', x=gx, y=gy, w=gw, h=gh,
                       borderRadius=999, borderWidth=6, borderColor=mix(C['acc'], 55),
                       boxShadow={'x': 0, 'y': 30, 'blur': 80, 'spread': -10, 'color': mix(C['nero'], 80)},
@@ -100,30 +100,30 @@ def apertura(t):
                                              (1200, {'rotation': 6, 'opacity': 100, 'scale': 1}),
                                              (60000, {'rotation': 360, 'opacity': 100, 'scale': 1})], 60000),
                       responsive={'mobile': {'x': 17.2, 'y': 5, 'width': 65.6, 'height': 30}}),
-            K.livello('sc-o%d' % n, contenuto=occ, x=6, y=18, w=40, size=12, peso='400', colore=C['acc'], letterSpacing=3,
+            K.livello('sc-o%d' % n, contenuto=occ, x=53, y=18, w=40, size=12, peso='400', colore=C['acc'], letterSpacing=3,
                       textTransform='uppercase', fontFamily=MONO, ritardo=250,
                       responsive={'mobile': {'fontSize': m(11), 'y': 41.5, 'x': 7, 'width': 86}}),
-            K.livello('sc-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=6, y=23, w=46, size=80, peso='500',
+            K.livello('sc-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=53, y=23, w=45, size=64, peso='500',
                       colore=C['chiaro'], fontFamily=TITOLI, lineHeight=1.04, entra='maskFromBottom', ritardo=350, durata=1100,
-                      responsive={'mobile': {'fontSize': m(38), 'y': 44, 'x': 7, 'width': 88}}),
-            K.livello('sc-i%d' % n, contenuto=r2, tag='p', x=6, y=34.5, w=46, size=80, peso='500', fontStyle='italic',
+                      responsive={'mobile': {'fontSize': m(36), 'y': 44, 'x': 7, 'width': 88}}),
+            K.livello('sc-i%d' % n, contenuto=r2, tag='p', x=53, y=32.5, w=45, size=64, peso='500', fontStyle='italic',
                       colore=C['acc'], fontFamily=TITOLI, lineHeight=1.04, entra='maskFromBottom', ritardo=600, durata=1100,
-                      responsive={'mobile': {'fontSize': m(38), 'y': 48.6, 'x': 7, 'width': 88}}),
-            K.livello('sc-s%d' % n, contenuto=testo, x=6, y=51, w=33, size=17, peso='400', colore=mix(C['chiaro'], 80),
+                      responsive={'mobile': {'fontSize': m(36), 'y': 48.6, 'x': 7, 'width': 88}}),
+            K.livello('sc-s%d' % n, contenuto=testo, x=53, y=47, w=34, size=17, peso='400', colore=mix(C['chiaro'], 80),
                       lineHeight=1.65, ritardo=1000, responsive={'mobile': {'fontSize': m(14), 'y': 55, 'x': 7, 'width': 86}}),
-            K.livello('sc-b%d' % n, tipo='button', contenuto='Porta il tuo orologio', x=6, y=71, w='auto', size=12,
+            K.livello('sc-b%d' % n, tipo='button', contenuto='Porta il tuo orologio', x=53, y=67, w='auto', size=12,
                       peso='600', colore=C['on_acc'], bgColor=C['acc'], padding=16, letterSpacing=2, textTransform='uppercase',
                       borderRadius=2, ritardo=1300, buttonUrl=BOTTEGA + '#scrivici',
                       hover={'bgColor': C['chiaro'], 'duration': 250},
                       responsive={'mobile': {'y': 68.5, 'x': 7, 'fontSize': m(11)}}),
         ], durata=8000, tab=tab))
     # la ruota piccola ingranata, il bilanciere e l'anello dei secondi restano fra una diapositiva e l'altra
-    bx, by = 49.97, 55.95
+    bx, by = 31.97, 55.95
     globali = [
-        K.livello('sc-anello', tipo='shape', x=53.92, y=8.27, w=37.5, h=66.67, bgColor='transparent', borderRadius=999,
+        K.livello('sc-anello', tipo='shape', x=8.58, y=8.27, w=37.5, h=66.67, bgColor='transparent', borderRadius=999,
                   borderWidth=2, borderStyle='dashed', borderColor=mix(C['acc'], 45), entra='fadeIn', ritardo=300, durata=1500,
                   responsive={'mobile': {'x': 13.3, 'y': 3.2, 'width': 73.4, 'height': 33.6}}),
-        K.livello('sc-secondi', tipo='shape', x=72.32, y=7.65, w=0.7, h=1.24, bgColor=C['acc'], borderRadius=999,
+        K.livello('sc-secondi', tipo='shape', x=26.98, y=7.65, w=0.7, h=1.24, bgColor=C['acc'], borderRadius=999,
                   entra='fadeIn', ritardo=1500, durata=800,
                   boxShadow={'x': 0, 'y': 0, 'blur': 12, 'spread': 2, 'color': mix(C['acc'], 70)},
                   motionPath={'path': 'M 0 0 A 270 270 0 1 1 0 540 A 270 270 0 1 1 0 0', 'duration': 60000,
@@ -136,21 +136,21 @@ def apertura(t):
                   responsive={'mobile': {'x': 60.95, 'y': 23.6, 'width': 28.1, 'height': 12.86}}),
     ]
     # il bilanciere: un anello e il suo braccio, stesso centro, stessa oscillazione
-    for lid, x, y, w, h, extra in [('sc-bil', 81.05, 62.65, 13.89, 24.69, dict(bgColor='transparent', borderWidth=3,
+    for lid, x, y, w, h, extra in [('sc-bil', 5.06, 62.65, 13.89, 24.69, dict(bgColor='transparent', borderWidth=3,
                                                                                  borderColor=C['acc'], borderRadius=999)),
-                                   ('sc-braccio', 87.86, 62.65, 0.28, 24.69, dict(bgColor=C['acc']))]:
+                                   ('sc-braccio', 11.86, 62.65, 0.28, 24.69, dict(bgColor=C['acc']))]:
         mob = {'x': 11.05, 'y': 26, 'width': 21.9, 'height': 10} if lid == 'sc-bil' else {'x': 21.7, 'y': 26, 'width': 0.6, 'height': 10}
         globali.append(K.livello(lid, tipo='shape', x=x, y=y, w=w, h=h,
                                  timeline=K.tl(x, y, [(0, {'rotation': -110}), (700, {'rotation': 110}), (1400, {'rotation': -110})],
                                                1400, curva='ease-in-out'),
                                  responsive={'mobile': mob}, **extra))
-    globali.append(K.livello('sc-perno', tipo='shape', x=87.3, y=73.77, w=1.39, h=2.47, bgColor=C['acc'], borderRadius=999,
+    globali.append(K.livello('sc-perno', tipo='shape', x=11.31, y=73.77, w=1.39, h=2.47, bgColor=C['acc'], borderRadius=999,
                              responsive={'mobile': {'x': 20.9, 'y': 30.5, 'width': 2.2, 'height': 1.0}}))
-    globali.append(K.livello('sc-bpz', contenuto='Il bilanciere · 2,5 battiti al secondo', x=78, y=89, w=20, size=10,
+    globali.append(K.livello('sc-bpz', contenuto='Il bilanciere · 2,5 battiti al secondo', x=2, y=89, w=20, size=10,
                              peso='400', colore=mix(C['chiaro'], 60), letterSpacing=2, textTransform='uppercase',
                              fontFamily=MONO, align='center', entra='fadeIn', ritardo=1600,
                              responsive={'mobile': {'visible': False}}))
-    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='blur',
+    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='pushDown',
                        durata_trans=1100, showArrows=False, showDots=False, showTabs=True, tabPosition='bottom',
                        parallax=False, autoplaySpeed=8000, progressBarColor=C['acc'], navColor=C['chiaro'])
 
@@ -449,6 +449,8 @@ THEME = tema(
     HEX, '\'Mona Sans\', system-ui, -apple-system, \'Segoe UI\', sans-serif', '\'Playfair\', \'Georgia\', serif',
     '\'Chivo Mono\', ui-monospace, Menlo, monospace', ['Playfair', 'Mona Sans', 'Chivo Mono'],
     corsivo_di=['Playfair'], peso_titoli='500', raggio=2, grana=5, titoli_line='1.04', titoli_spazio='-0.01em')
+THEME['preview_v'] = THEME['preview_mobile_v'] = '2'  # apertura rifatta il 31 ottobre 2026
+THEME['cursor']['style'] = 'bussola'  # cursore: la lancetta che punta dove si va (31 ott 2026)
 
 
 def main():

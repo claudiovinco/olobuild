@@ -105,7 +105,7 @@ class Olobuild_IntroSplit_Tile extends Olobuild_Tile_Base {
         // Flush 50/50 + tipografia titolo + firma + CTA underline (additivi, default no-op).
         $flush  = ! empty( $s['flush'] );
         $acc_it = ! empty( $s['accent_italic'] ) ? 'font-style:italic;' : '';
-        $h_wt   = in_array( (string) ( $s['headline_weight'] ?? '900' ), [ '400', '500', '600', '700', '900' ], true ) ? (string) $s['headline_weight'] : '900';
+        $h_wt   = in_array( (string) ( $s['headline_weight'] ?? '900' ), [ '100', '200', '300', '400', '500', '600', '700', '800', '900' ], true ) ? (string) $s['headline_weight'] : '900';
         $hsz    = intval( $s['headline_size'] ?? 0 );
         $h_fs   = $hsz > 0 ? "clamp(30px,4.2vw,{$hsz}px)" : 'clamp(34px,5.2vw,68px)';
         $content_bg    = $this->safe_color_css( $s['content_bg'] ?? '' );

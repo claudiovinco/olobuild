@@ -48732,3 +48732,115 @@ msgstr "Route des Tages"
 #: includes/class-theme-importer.php
 msgid "Il vetro che gira"
 msgstr "Das drehende Glas"
+
+#: src/config/elements/proslider.js
+msgid "Push verso destra"
+msgstr "Nach rechts schieben"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Inizio sfumatura"
+msgstr "Verlauf beginnt bei"
+
+#: src/config/elements/configuratore.js
+msgid "Identità"
+msgstr "Identität"
+
+#: src/config/elements/configuratore.js
+msgid "Per i preventivi lunghi: i gruppi di fila con lo stesso blocco stanno sotto un titolo numerato col loro subtotale, anche nel riepilogo. Con «Un blocco alla volta» ogni blocco è un passo. Vuoto: nessun blocco."
+msgstr "Für lange Angebote: aufeinanderfolgende Gruppen mit demselben Block stehen unter einer nummerierten Überschrift mit ihrer Zwischensumme, auch in der Übersicht. Mit „Ein Block nach dem anderen“ wird jeder Block zu einem Schritt. Leer: kein Block."
+
+#: src/config/elements/configuratore.js
+msgid "Un blocco alla volta"
+msgstr "Ein Block nach dem anderen"
+
+#: src/config/elements/configuratore.js
+msgid "I blocchi diventano passi: in alto i loro nomi, in fondo a ognuno Indietro e Avanti. Avanti controlla i gruppi obbligatori del blocco; il riepilogo col totale resta sempre in vista."
+msgstr "Die Blöcke werden zu Schritten: oben ihre Namen, am Ende jedes Blocks Zurück und Weiter. Weiter prüft die Pflichtgruppen des Blocks; die Übersicht mit der Summe bleibt immer sichtbar."
+
+#: src/config/elements/configuratore.js
+msgid "Canone annuo"
+msgstr "Jahresgebühr"
+
+#: src/config/elements/configuratore.js
+msgid "Quello che si paga ogni anno oltre al prezzo: dominio, hosting, assistenza. Si somma a parte, sotto il totale. Un'opzione con il solo canone non mostra «Incluso»."
+msgstr "Was jedes Jahr zusätzlich zum Preis bezahlt wird: Domain, Hosting, Support. Es wird separat summiert, unter der Gesamtsumme. Eine Option mit nur einer Jahresgebühr zeigt nicht „Inklusive“."
+
+#: src/config/elements/configuratore.js
+msgid "Testo del canone"
+msgstr "Text der Jahresgebühr"
+
+#: includes/tiles/class-configuratore-tile.php
+msgid "Ogni anno"
+msgstr "Jedes Jahr"
+
+#: src/config/elements/configuratore.js
+msgid "Accanto alla somma dei canoni annui, sotto il totale. Vuoto: «Ogni anno»."
+msgstr "Neben der Summe der Jahresgebühren, unter der Gesamtsumme. Leer: „Jedes Jahr“."
+
+#: includes/tiles/class-configuratore-tile.php
+msgid "%s all'anno"
+msgstr "%s pro Jahr"
+
+#: includes/tiles/class-configuratore-tile.php
+msgid "Passo %d"
+msgstr "Schritt %d"
+
+#: includes/tiles/class-configuratore-tile.php
+msgid "Avanti: %s"
+msgstr "Weiter: %s"
+
+#: includes/class-theme-importer.php
+msgid "L’indirizzo che si scrive"
+msgstr "Die Adresse, die sich selbst schreibt"
+
+#: src/components/Builder/BackgroundControls.vue
+msgid "Dall’alto"
+msgstr "Von oben"
+
+#: src/components/Builder/BackgroundControls.vue
+msgid "Estensione della sfumatura"
+msgstr "Länge des Verlaufs"
+
+#: src/config/elements/proslider.js
+msgid "Il cubo segue lo scorrimento"
+msgstr "Der Würfel folgt dem Scrollen"
+
+#: src/config/elements/proslider.js
+msgid "Con la transizione a cubo: il cubo gira insieme alla pagina, si ferma se smettete di scorrere e torna indietro se risalite. Frecce, linguette e punti portano la pagina alla faccia."
+msgstr "Mit dem Würfel-Übergang: Der Würfel dreht sich mit der Seite, hält an, wenn Sie aufhören zu scrollen, und dreht sich zurück, wenn Sie nach oben scrollen. Pfeile, Reiter und Punkte bringen die Seite zu dieser Fläche."
+
+#: src/config/elements/section.js
+msgid "Arrivo con lo scorrimento"
+msgstr "Auftritt beim Scrollen"
+
+#: src/config/elements/section.js
+msgid "Piega"
+msgstr "Falte"
+
+#: src/config/elements/section.js
+msgid "Piega: la sezione sale dal fondo dello schermo inclinata all’indietro, come un foglio che si piega sotto il bordo del monitor, e si raddrizza mentre sale. Arrivata, resta piatta."
+msgstr "Falte: Der Abschnitt steigt vom unteren Bildschirmrand nach hinten geneigt auf, wie ein Blatt, das sich unter den Rand des Monitors biegt, und richtet sich beim Aufsteigen auf. Angekommen, bleibt er flach."
+
+#: src/config/elements/row.js
+msgid "Le colonne si allargano al passaggio"
+msgstr "Spalten werden beim Überfahren breiter"
+
+#: src/config/elements/row.js
+msgid "Da 1200 px le colonne si dividono lo spazio in parti uguali e quella sotto il puntatore se ne prende di più. Per le aperture divise in due metà, ognuna col suo Slider Pro (con «Impila su tablet» sotto i 1200 px stanno una sotto l’altra)."
+msgstr "Ab 1200 px teilen sich die Spalten den Platz gleichmäßig, und die unter dem Mauszeiger nimmt sich mehr davon. Für zweigeteilte Eröffnungen, jede mit ihrem eigenen Slider Pro (mit „Auf Tablet stapeln“ stehen sie unter 1200 px untereinander)."
+
+#: includes/class-theme-importer.php
+msgid "Dentro e fuori"
+msgstr "Drinnen und draußen"
+
+#: includes/class-theme-importer.php
+msgid "Il cubo dei mestieri"
+msgstr "Der Würfel der Disziplinen"
+
+#: src/config/elements/proslider.js
+msgid "Una diapositiva per gesto"
+msgstr "Eine Folie pro Geste"
+
+#: src/config/elements/proslider.js
+msgid "Mentre lo slider è fermo in cima, ogni gesto della rotella o del trackpad porta alla diapositiva dopo o prima, senza saltarne; alla prima e all’ultima la pagina riprende a scorrere. Fermandosi, la pagina si posa sulla diapositiva più vicina."
+msgstr "Während der Slider oben stehen bleibt, führt jede Geste mit dem Mausrad oder Trackpad zur nächsten oder vorherigen Folie, ohne eine zu überspringen; bei der ersten und letzten scrollt die Seite weiter. Beim Anhalten bleibt die Seite auf der nächstgelegenen Folie stehen."

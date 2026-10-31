@@ -71,6 +71,8 @@ FIRME = {
     'strapiombo': dict(dosato=2, ingresso='zoom-in-up', testo='underline-grow', testo_colori=(P, ''), immagini='zoom', forma='peak'),
     'fornace': dict(dosato=2, ingresso='blur-in', testo='gradient-anim', testo_colori=(P, A), immagini='fuoco', forma='wave'),
     'scappamento': dict(dosato=2, ingresso='zoom-in-down', testo='reveal-word', immagini='tilt', forma='teeth'),
+    # Insegna rifatta il 31 ott 2026: l'effetto forte è il cubo (e la piega nei Lavori), il resto sobrio.
+    'insegna': dict(dosato=1, ingresso='blur-in', testo='none', immagini='', forma=''),
 }
 
 
@@ -113,7 +115,8 @@ def _nodo(n, f, conto=None):
                 s['entrance_animation'] = 'fade-up'
         else:
             s['entrance_animation'] = f['ingresso']
-    elif tipo == 'headline' and s.get('tag') in ('h1', 'h2') and int(s.get('heading_font_size') or 0) >= 56:
+    elif tipo == 'headline' and f.get('testo') not in (None, '', 'none') and s.get('tag') in ('h1', 'h2') \
+            and int(s.get('heading_font_size') or 0) >= 56:
         _testo(s, f)
     elif tipo == 'image':
         n.setdefault('advanced', {})
@@ -168,6 +171,6 @@ def applica(tid, builds):
             continue
         contenuto = b['content'] if isinstance(b, dict) else b
         _nodo(contenuto, f, [0])
-        if nome == 'home.json':
+        if nome == 'home.json' and f.get('forma'):
             _divisore(tid, contenuto, f['forma'])
     return builds

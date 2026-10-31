@@ -1456,7 +1456,7 @@ class Olobuild_Frontend_Renderer {
                 $ov_color   = esc_attr( $tile_bg['overlay_color'] ?? '#000000' );
                 $ov_opacity = intval( $tile_bg['overlay_opacity'] ) / 100;
             ?>
-                <div class="uk-position-cover" style="background-color: <?php echo $ov_color; ?>; opacity: <?php echo $ov_opacity; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $ov_color esc_attr()'d at assignment above; $ov_opacity is intval()/100 ?>; pointer-events: none" aria-hidden="true"></div>
+                <div class="uk-position-cover" style="background: <?php echo esc_attr( Olobuild_CSS_Builder::velo_fondo( $tile_bg, $ov_color ) ); ?>; opacity: <?php echo $ov_opacity; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $ov_color esc_attr()'d at assignment above; $ov_opacity is intval()/100 ?>; pointer-events: none" aria-hidden="true"></div>
             <?php endif; ?>
 
             <?php if ( $this->builder_mode ) $settings['_builder_mode'] = true; Olobuild_Tile_Base::$nodo_in_resa = (string) ( $node['id'] ?? '' ); // sulla stessa riga: una riga in più finirebbe come spazi nell'HTML di ogni tile ?>

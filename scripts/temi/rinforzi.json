@@ -1,0 +1,126 @@
+{
+ "bagnasciuga": {
+  "schede": [
+   "bagnasciuga-home-38"
+  ],
+  "chiare": [],
+  "leggeri": [
+   "bagnasciuga-home-40"
+  ]
+ },
+ "fuoco-lento": {
+  "schede": [
+   "fuoco-lento-chi-sono-23"
+  ],
+  "chiare": [],
+  "leggeri": [
+   "fuoco-lento-chi-sono-26"
+  ]
+ },
+ "lunga-posa": {
+  "schede": [
+   "lunga-posa-eventi-10",
+   "lunga-posa-studio-14"
+  ],
+  "chiare": [
+   "lunga-posa-home-50"
+  ],
+  "leggeri": [
+   "lunga-posa-home-53",
+   "lunga-posa-eventi-13",
+   "lunga-posa-studio-17"
+  ]
+ },
+ "ora-blu": {
+  "schede": [
+   "ora-blu-home-43"
+  ],
+  "chiare": [],
+  "leggeri": [
+   "ora-blu-home-46"
+  ]
+ },
+ "penombra": {
+  "schede": [
+   "penombra-home-61",
+   "penombra-metodo-15",
+   "penombra-progetti-51",
+   "penombra-studio-28"
+  ],
+  "chiare": [],
+  "leggeri": [
+   "penombra-home-64",
+   "penombra-metodo-18",
+   "penombra-progetti-54",
+   "penombra-studio-31"
+  ]
+ },
+ "solleone": {
+  "schede": [
+   "solleone-home-36",
+   "solleone-home-58",
+   "solleone-matrimoni-5",
+   "solleone-prenota-2",
+   "solleone-brand-5",
+   "solleone-prenota-4"
+  ],
+  "chiare": [],
+  "leggeri": [
+   "solleone-home-39",
+   "solleone-home-61",
+   "solleone-matrimoni-8",
+   "solleone-prenota-6",
+   "solleone-brand-8"
+  ]
+ },
+ "tacet": {
+  "schede": [
+   "tacet-opere-18"
+  ],
+  "chiare": [],
+  "leggeri": [
+   "tacet-opere-21"
+  ]
+ },
+ "tratteggio": {
+  "schede": [
+   "tratteggio-home-37",
+   "tratteggio-metodo-22",
+   "tratteggio-studio-19"
+  ],
+  "chiare": [],
+  "leggeri": [
+   "tratteggio-home-40",
+   "tratteggio-metodo-25",
+   "tratteggio-studio-22"
+  ]
+ },
+ "undici-ulivi": {
+  "schede": [
+   "undici-ulivi-il-luogo-4"
+  ],
+  "chiare": [],
+  "leggeri": [
+   "undici-ulivi-il-luogo-6"
+  ]
+ },
+ "venatura": {
+  "schede": [
+   "venatura-legni-14",
+   "venatura-legni-16"
+  ],
+  "chiare": [],
+  "leggeri": [
+   "venatura-legni-18"
+  ]
+ },
+ "ventiquattro": {
+  "schede": [
+   "ventiquattro-studio-28"
+  ],
+  "chiare": [],
+  "leggeri": [
+   "ventiquattro-studio-31"
+  ]
+ }
+}

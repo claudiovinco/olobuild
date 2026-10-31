@@ -112,7 +112,9 @@ class Olobuild_CSS_Builder {
             // che usano lo sfondo dentro di sé non hanno il div del velo del contenitore).
             $velo = $con_velo ? self::velo_sfondo( $bg ) : '';
             if ( '' !== $velo ) {
-                return "background-image:linear-gradient({$velo},{$velo}),url('{$url}');background-position:0 0," . esc_attr( $position )
+                $strato = self::velo_fondo( $bg, $velo );
+                $strato = $strato === $velo ? "linear-gradient({$velo},{$velo})" : $strato;
+                return "background-image:{$strato},url('{$url}');background-position:0 0," . esc_attr( $position )
                     . ';background-size:100% 100%,' . esc_attr( $size )
                     . ';background-repeat:no-repeat,' . esc_attr( $repeat )
                     . ';background-attachment:scroll,' . esc_attr( $attach );
@@ -203,7 +205,33 @@ class Olobuild_CSS_Builder {
     /** Il velo sopra un video o una galleria di sfondo (dopo il media, sotto il contenuto). */
     private static function velo_markup( $bg ) {
         $velo = self::velo_sfondo( $bg );
-        return '' === $velo ? '' : '<div class="olo-bg-velo" aria-hidden="true" style="position:absolute;inset:0;z-index:0;pointer-events:none;background:' . esc_attr( $velo ) . '"></div>';
+        return '' === $velo ? '' : '<div class="olo-bg-velo" aria-hidden="true" style="position:absolute;inset:0;z-index:0;pointer-events:none;background:' . esc_attr( self::velo_fondo( $bg, $velo ) ) . '"></div>';
+    }
+
+    /**
+     * La Sovrapposizione dello Sfondo come valore di `background`: piena (overlay_fade vuoto) o sfumata da un
+     * lato (bottom, top, left, right): piena sul bordo, trasparente a overlay_fade_reach % (70 se manca). Il
+     * testo che sta da quel lato si legge e il resto della foto o del video resta intero, senza velo.
+     * L'opacità resta a parte (opacity del livello, o già dentro il colore). Gemello JS: overlayBackground()
+     * in src/composables/useBackgroundStyle.js.
+     *
+     * @param array  $bg     Lo Sfondo.
+     * @param string $colore Il colore della sovrapposizione, già validato.
+     * @return string
+     */
+    public static function velo_fondo( $bg, $colore ) {
+        $versi = [ 'bottom' => 'to top', 'top' => 'to bottom', 'left' => 'to right', 'right' => 'to left' ];
+        $lato  = (string) ( $bg['overlay_fade'] ?? '' );
+        if ( ! isset( $versi[ $lato ] ) ) {
+            return $colore;
+        }
+        $fino  = max( 20, min( 100, (int) ( $bg['overlay_fade_reach'] ?? 70 ) ) );
+        // Piena per il primo 42% dell'estensione, a metà della strada che resta vale il 55%: il testo che sta da quel
+        // lato resta sullo scuro anche nella parte alta del suo blocco (contrasti misurati, 31 ott 2026).
+        $pieno = (int) round( $fino * 0.42 );
+        $meta  = (int) round( $pieno + ( $fino - $pieno ) * 0.5 );
+        return 'linear-gradient(' . $versi[ $lato ] . ',' . $colore . ' 0%,' . $colore . ' ' . $pieno . '%,color-mix(in srgb,' . $colore
+            . ' 55%,transparent) ' . $meta . '%,transparent ' . $fino . '%)';
     }
 
     /**

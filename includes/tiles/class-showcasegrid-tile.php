@@ -108,7 +108,7 @@ class Olobuild_ShowcaseGrid_Tile extends Olobuild_Tile_Base {
 
         $show_arrow  = ! empty( $s['show_arrow'] );
         $title_size  = max( 10, intval( $s['title_size'] ?? 34 ) );
-        $title_wt    = in_array( (string) ( $s['title_weight'] ?? '900' ), [ '400', '500', '600', '700', '900' ], true ) ? (string) $s['title_weight'] : '900';
+        $title_wt    = in_array( (string) ( $s['title_weight'] ?? '900' ), [ '100', '200', '300', '400', '500', '600', '700', '800', '900' ], true ) ? (string) $s['title_weight'] : '900';
         $title_tt    = ! empty( $s['title_uppercase'] ) ? 'uppercase' : 'none';
         $kicker_size = max( 8, intval( $s['kicker_size'] ?? 12 ) );
 

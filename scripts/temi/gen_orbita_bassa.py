@@ -91,55 +91,57 @@ DATI_SLIDE = [  # linguetta, occhiello, riga 1, riga 2, testo, foto della scheda
 def apertura(t):
     m = K.mob
     W, H = 1440.0, 810.0
-    ex, ey, ew, eh = 54.0, 15.0, 38.9, 69.1           # la Terra: 560 px
+    ex, ey, ew, eh = 27.78, 59.0, 44.44, 79.01         # la Terra: 640 px, sorge dal bordo in basso
     cx, cy = (ex + ew / 2) * W / 100, (ey + eh / 2) * H / 100
     sl = []
     for i, (tab, occ, r1, r2, testo, foto, etichetta, valore, luogo) in enumerate(DATI_SLIDE):
         n = i + 1
-        sl.append(K.diapositiva('ob-%d' % n, K.sfondo_foto('pexels-11858855.jpg', overlay=0.72, scala=1.06, durata=12000,
-                                                           verso='in' if n % 2 else 'out', colore=C['fondo']), [
-            K.livello('ob-o%d' % n, contenuto=occ, x=6, y=14, w=40, size=12, peso='500', colore=C['acc'], letterSpacing=3,
-                      textTransform='uppercase', fontFamily=MONO, ritardo=250,
-                      responsive={'mobile': {'fontSize': m(11), 'y': 41, 'x': 7, 'width': 86}}),
-            K.livello('ob-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=6, y=18.5, w=48, size=72, peso='500',
-                      colore=C['chiaro'], fontFamily=TITOLI, lineHeight=1.04, letterSpacing=-1, entra='fadeIn', ritardo=350,
-                      durata=1100, charAnim={'stagger': 22, 'offsetY': 20, 'blur': 6, 'opacity': 0},
-                      responsive={'mobile': {'fontSize': m(36), 'y': 43.5, 'x': 7, 'width': 88}}),
-            K.livello('ob-i%d' % n, contenuto=r2, tag='p', x=6, y=29, w=48, size=72, peso='500', colore=GHIACCIO,
-                      fontFamily=TITOLI, lineHeight=1.04, letterSpacing=-1, entra='fadeIn', ritardo=650, durata=1100,
-                      charAnim={'stagger': 22, 'offsetY': 20, 'blur': 6, 'opacity': 0},
-                      responsive={'mobile': {'fontSize': m(36), 'y': 47.8, 'x': 7, 'width': 88}}),
-            K.livello('ob-s%d' % n, contenuto=testo, x=6, y=42, w=33, size=17, peso='400', colore=mix(C['chiaro'], 78),
-                      lineHeight=1.65, ritardo=1000, responsive={'mobile': {'fontSize': m(14), 'y': 53, 'x': 7, 'width': 86}}),
-            K.livello('ob-b%d' % n, tipo='button', contenuto='Vedi i dati', x=6, y=60.5, w='auto', size=12, peso='600',
+        sl.append(K.diapositiva('ob-%d' % n, K.sfondo_video([V_ANTENNA, V_LANCIO, V_SATELLITE, V_ANTENNA][i], overlay=0.74,
+                                                            colore=C['fondo']), [
+            K.livello('ob-o%d' % n, contenuto=occ, x=20, y=11.5, w=60, size=12, peso='500', colore=C['acc'], letterSpacing=3,
+                      textTransform='uppercase', fontFamily=MONO, align='center', ritardo=250,
+                      responsive={'mobile': {'fontSize': m(11), 'y': 8.6, 'x': 7, 'width': 86}, 'tablet': {'y': 13}}),
+            K.livello('ob-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=10, y=15.5, w=80, size=70, peso='500',
+                      colore=C['chiaro'], fontFamily=TITOLI, lineHeight=1.04, letterSpacing=-1, align='center', entra='fadeIn',
+                      ritardo=350, durata=1100, charAnim={'stagger': 22, 'offsetY': -30, 'blur': 6, 'opacity': 0},
+                      responsive={'mobile': {'fontSize': m(31), 'y': 11, 'x': 5, 'width': 90}, 'tablet': {'y': 17.5}}),
+            K.livello('ob-i%d' % n, contenuto=r2, tag='p', x=10, y=24.5, w=80, size=70, peso='500', colore=GHIACCIO,
+                      fontFamily=TITOLI, lineHeight=1.04, letterSpacing=-1, align='center', entra='fadeIn', ritardo=650,
+                      durata=1100, charAnim={'stagger': 22, 'offsetY': -30, 'blur': 6, 'opacity': 0},
+                      responsive={'mobile': {'fontSize': m(31), 'y': 15.5, 'x': 5, 'width': 90}, 'tablet': {'y': 26.5}}),
+            K.livello('ob-s%d' % n, contenuto=testo, x=29, y=35.5, w=42, size=17, peso='400', colore=mix(C['chiaro'], 80),
+                      lineHeight=1.6, align='center', ritardo=1000,
+                      responsive={'mobile': {'fontSize': m(14), 'y': 21.3, 'x': 7, 'width': 86},
+                                  'tablet': {'y': 37, 'x': 18, 'width': 64}}),
+            K.livello('ob-b%d' % n, tipo='button', contenuto='Vedi i dati', x=44.3, y=48, w='auto', size=12, peso='600',
                       colore=C['on_acc'], bgColor=C['acc'], padding=16, letterSpacing=2, textTransform='uppercase',
                       borderRadius=10, ritardo=1300, buttonUrl=DATI, hover={'bgColor': C['chiaro'], 'duration': 250},
-                      responsive={'mobile': {'y': 66, 'x': 7, 'fontSize': m(11)}}),
-            # la scheda di vetro col dato della diapositiva
-            K.livello('ob-cs%d' % n, tipo='shape', x=6, y=71, w=27, h=18.5, bgColor=mix(C['sala'], 55), borderRadius=16,
-                      borderWidth=1, borderColor=mix(GHIACCIO, 30), backdropBlur=14, entra='fadeInUp', ritardo=1500,
+                      responsive={'mobile': {'y': 30, 'x': 33, 'fontSize': m(11)}, 'tablet': {'x': 43.3, 'y': 50}}),
+            # la scheda di vetro col dato della diapositiva, in basso a sinistra
+            K.livello('ob-cs%d' % n, tipo='shape', x=4, y=60, w=21, h=27, bgColor=mix(C['sala'], 55), borderRadius=16,
+                      borderWidth=1, borderColor=mix(GHIACCIO, 30), backdropBlur=14, entra='fadeInLeft', ritardo=1500,
                       durata=900, esce='fadeOut',
                       parallax={'type': 'mouse', 'depth': 8, 'tilt3d': True, 'scrollSpeed': 0.5},
-                      responsive={'mobile': {'x': 7, 'y': 72, 'width': 86, 'height': 10}}),
-            K.livello('ob-cf%d' % n, tipo='image', imageSrc=K.img(foto), objectFit='cover', x=6.85, y=72.5, w=8.33, h=14.8,
+                      responsive={'mobile': {'x': 7, 'y': 36.5, 'width': 86, 'height': 10}}),
+            K.livello('ob-cf%d' % n, tipo='image', imageSrc=K.img(foto), objectFit='cover', x=5.2, y=62, w=6.9, h=12.3,
                       borderRadius=10, entra='fadeIn', ritardo=1800, durata=700,
-                      responsive={'mobile': {'x': 9, 'y': 73.1, 'width': 17.2, 'height': 7.86}}),
-            K.livello('ob-ce%d' % n, contenuto=etichetta, x=16.5, y=73.5, w=16, size=11, peso='500', colore=mix(C['chiaro'], 70),
+                      responsive={'mobile': {'x': 9, 'y': 37.6, 'width': 17.2, 'height': 7.86}}),
+            K.livello('ob-ce%d' % n, contenuto=etichetta, x=13, y=62.5, w=11, size=11, peso='500', colore=mix(C['chiaro'], 70),
                       fontFamily=MONO, letterSpacing=1, textTransform='uppercase', lineHeight=1.4, entra='fadeIn',
-                      ritardo=1900, responsive={'mobile': {'x': 30, 'y': 73.5, 'width': 60, 'fontSize': m(10)}}),
-            K.livello('ob-cv%d' % n, contenuto=valore, x=16.5, y=77.5, w=16, size=40, peso='500', colore=C['acc'],
+                      ritardo=1900, responsive={'mobile': {'x': 30, 'y': 38, 'width': 60, 'fontSize': m(10)}}),
+            K.livello('ob-cv%d' % n, contenuto=valore, x=5.2, y=75.5, w=18, size=40, peso='500', colore=C['acc'],
                       fontFamily=TITOLI, lineHeight=1.0, entra='fadeInUp', ritardo=2100, durata=700,
-                      responsive={'mobile': {'x': 30, 'y': 75.6, 'width': 60, 'fontSize': m(24)}}),
-            K.livello('ob-cl%d' % n, contenuto=luogo, x=16.5, y=84, w=16, size=11, peso='400', colore=mix(C['chiaro'], 62),
-                      fontFamily=MONO, entra='fadeIn', ritardo=2300,
-                      responsive={'mobile': {'x': 30, 'y': 79.4, 'width': 60, 'fontSize': m(10)}}),
+                      responsive={'mobile': {'x': 30, 'y': 40.1, 'width': 60, 'fontSize': m(24)}}),
+            K.livello('ob-cl%d' % n, contenuto=luogo, x=13, y=67.5, w=11, size=11, peso='400', colore=mix(C['chiaro'], 62),
+                      fontFamily=MONO, lineHeight=1.4, entra='fadeIn', ritardo=2300,
+                      responsive={'mobile': {'x': 30, 'y': 43.9, 'width': 60, 'fontSize': m(10)}}),
         ], durata=8000, tab=tab))
-    # la Terra che gira, le orbite inclinate e i satelliti che ci corrono sopra
+    # la Terra che sorge dal bordo, le orbite inclinate e i satelliti che ci corrono sopra
     globali = [K.livello('ob-terra', tipo='video', videoSrc=K.img(V_TERRA + '.mp4'), videoAutoplay=True, videoMuted=True,
-                         videoLoop=True, x=ex, y=ey, w=ew, h=eh, borderRadius=999, entra='zoomIn', ritardo=0, durata=1600,
-                         boxShadow={'x': 0, 'y': 0, 'blur': 120, 'spread': 0, 'color': mix(GHIACCIO, 22)},
-                         responsive={'mobile': {'x': 17.2, 'y': 6, 'width': 65.6, 'height': 30}})]
-    for k, (rx, ry, ang, dur, sz) in enumerate([(403, 121, -12, 14000, 12), (330, 200, 25, 22000, 10)]):
+                         videoLoop=True, x=ex, y=ey, w=ew, h=eh, borderRadius=999, entra='fadeInUp', ritardo=0, durata=1800,
+                         boxShadow={'x': 0, 'y': 0, 'blur': 140, 'spread': 10, 'color': mix(GHIACCIO, 30)},
+                         responsive={'mobile': {'x': 10, 'y': 58.5, 'width': 80, 'height': 36.57}})]
+    for k, (rx, ry, ang, dur, sz) in enumerate([(470, 92, -7, 14000, 12), (590, 150, 5, 22000, 10)]):
         ox, oy = (cx - rx) / W * 100, (cy - ry) / H * 100
         globali.append(K.livello('ob-orbita%d' % k, tipo='shape', x=round(ox, 2), y=round(oy, 2), w=round(2 * rx / W * 100, 2),
                                  h=round(2 * ry / H * 100, 2), bgColor='transparent', borderRadius=999, borderWidth=1,
@@ -161,14 +163,13 @@ def apertura(t):
                                  motionPath={'path': percorso, 'duration': dur, 'autoRotate': True, 'loop': True,
                                              'easing': 'linear'},
                                  responsive={'mobile': {'visible': False}}))
-    globali.append(K.livello('ob-quota', contenuto='Quota 550 km · inclinazione 97,6° · 15 giri al giorno', x=50, y=88, w=44,
-                             size=11, peso='400', colore=mix(C['chiaro'], 60), letterSpacing=2, textTransform='uppercase',
-                             fontFamily=MONO, align='right', entra='fadeIn', ritardo=1800,
-                             responsive={'mobile': {'y': 85, 'x': 7, 'width': 86, 'fontSize': m(10)}}))
-    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='fade',
-                       durata_trans=1000, showArrows=False, showDots=False, showTabs=True, tabPosition='bottom',
+    globali.append(K.livello('ob-quota', contenuto='Quota 550 km · inclinazione 97,6° · 15 giri al giorno', x=74, y=80, w=22,
+                             size=11, peso='400', colore=mix(C['chiaro'], 62), letterSpacing=2, textTransform='uppercase',
+                             fontFamily=MONO, align='right', lineHeight=1.6, entra='fadeIn', ritardo=1800,
+                             responsive={'mobile': {'visible': False}}))
+    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='blur',
+                       durata_trans=1100, showArrows=False, showDots=False, showTabs=True, tabPosition='bottom',
                        parallax=False, autoplaySpeed=8000, progressBarColor=C['acc'], navColor=C['chiaro'])
-
 
 USI = [  # titolo, sottotitolo, foto, ancora
     ('Agricoltura', 'Acqua e concime solo dove servono', 'pexels-20286952.jpg', 'agricoltura'),
@@ -431,9 +432,10 @@ def build_404():
 THEME = tema(
     ID, NAME, 'Tecnologia', 'I satelliti in orbita',
     ['spazio', 'satelliti', 'aerospazio', 'dati', 'roma', 'scuro', 'slider pro', '3d'],
-    'Una giovane azienda spaziale, nero dello spazio e arancio di segnalazione: in apertura la Terra che gira, due orbite '
-    'inclinate coi satelliti che ci corrono sopra e a ogni diapositiva la scheda di vetro col dato raccolto; il conto alla '
-    'rovescia del lancio, le foto dall’alto in coverflow 3D, gli indici su carte da girare e gli abbonamenti ai dati.',
+    'Una giovane azienda spaziale, nero dello spazio e arancio di segnalazione: in apertura, sopra il video delle '
+    'antenne e del lancio, la Terra che sorge dal bordo, due orbite inclinate coi satelliti che ci corrono sopra e a '
+    'ogni diapositiva la scheda di vetro col dato raccolto; il conto alla rovescia del lancio, i dati sulla mappa, la'
+    ' costellazione e le missioni.',
     [('La costellazione', COSTELLAZIONE), ('I dati', DATI), ('Il lancio', HOME + '#lancio'), ('Contatti', CONTATTI)],
     [('home', 'Home', None), ('la-costellazione', 'La costellazione', 'la-costellazione'), ('i-dati', 'I dati', 'i-dati'),
      ('contatti', 'Contatti', 'contatti')],
@@ -441,6 +443,8 @@ THEME = tema(
     '\'Radio Canada Big\', system-ui, sans-serif', '\'Ubuntu Sans Mono\', ui-monospace, Menlo, monospace',
     ['Radio Canada Big', 'Atkinson Hyperlegible Next', 'Ubuntu Sans Mono'], peso_titoli='500', raggio=10, grana=4,
     titoli_line='1.04', titoli_spazio='-0.02em')
+THEME['preview_v'] = THEME['preview_mobile_v'] = '2'  # apertura rifatta il 31 ottobre 2026
+THEME['cursor']['style'] = 'mirino'  # cursore: il mirino con le coordinate (31 ott 2026)
 
 
 def main():

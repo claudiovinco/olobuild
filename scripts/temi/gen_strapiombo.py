@@ -5,10 +5,9 @@ strapiombanti, le vie cambiate ogni settimana, corsi per adulti e bambini e le u
 Tema chiaro e grafico: cemento chiaro, nero, il rosso segnale e i colori delle prese. Titoli in Schibsted Grotesk
 nero pieno, dati in JetBrains Mono.
 
-Apertura: Slider Pro «la via del giorno», alto 16:9. La parete in una foto inclinata in 3D come uno strapiombo vero;
-sopra, le prese della via del giorno compaiono una alla volta dal basso verso l'alto, e il punto dello scalatore sale
-di presa in presa lungo un percorso di movimento. Una diapositiva per servizio, a linguette: la parete cambia, la via
-resta.
+Apertura divisa in due metà quasi indipendenti, ognuna col suo Slider Pro: Dentro (il boulder, i corsi, i bambini)
+scorre dall'alto ogni 7 secondi, Fuori (la falesia, il materiale) sfuma ogni 9 e mezzo. I video si vedono pieni, il
+testo sta in basso su una sfumatura scura; la metà sotto il puntatore si allarga. Sotto i 1200 px una sotto l'altra.
 """
 import os
 import sys
@@ -31,8 +30,8 @@ HOME, PALESTRA, CORSI, CONTATTI = '{{PAGINA:home}}', '{{PAGINA:la-palestra}}', '
 MAIL, PHONE, PHONE_TEL = 'parete@strapiombo.example', '+39 0461 000 868', 'tel:+390461000868'
 LAT, LNG = '46.0664', '11.1257'
 
-V_SOTTO, V_PRESE, V_MAGNESITE, V_FALESIA = ('pexels-video-6702517', 'pexels-video-6703359', 'pexels-video-5964195',
-                                            'pexels-video-5963230')
+V_SOTTO, V_PRESE, V_MAGNESITE, V_FALESIA, V_BIMBI = ('pexels-video-6702517', 'pexels-video-6703359', 'pexels-video-5964195',
+                                                     'pexels-video-5963230', 'pexels-video-5916206')
 PHOTOS = [
     'pexels-5383474.jpg', 'pexels-5384162.jpg', 'pexels-5384156.jpg', 'pexels-5384642.jpg', 'pexels-5916161.jpg',
     'pexels-5384172.jpg', 'pexels-5384630.jpg', 'pexels-5383759.jpg', 'pexels-5383781.jpg', 'pexels-5383475.jpg',
@@ -43,7 +42,7 @@ PHOTOS = [
     'pexels-5384283.jpg', 'pexels-8728635.jpg', 'pexels-24964833.jpg', 'pexels-8728592.jpg', 'pexels-37516086.jpg',
     'pexels-5384018.jpg', 'pexels-8729207.jpg', 'pexels-5916221.jpg',
 ]
-VIDEOS = [V_SOTTO, V_PRESE, V_MAGNESITE, V_FALESIA]
+VIDEOS = [V_SOTTO, V_PRESE, V_MAGNESITE, V_FALESIA, V_BIMBI]
 MEDIA = set(PHOTOS) | {v + '.mp4' for v in VIDEOS} | {v + '.jpg' for v in VIDEOS}
 
 K = Kit(ID, MEDIA, raggio=6, peso_titoli='800', corsivo=False, maiuscole_pulsanti=True, tema_chiaro=True,
@@ -71,94 +70,77 @@ def build_footer():
                    fondo=C['sala'])
 
 
-PARETI = [  # linguetta, occhiello, riga 1, riga 2, testo, foto della parete, bottone, link
-    ('Boulder', '01 · il boulder', 'Quattro metri,', 'nessuna corda.', 'Centoventi blocchi dal 3 al 7C, tracciati di nuovo '
-     'ogni lunedì. Si sale con le scarpette e la magnesite, si cade sul materasso alto quaranta centimetri.',
-     'pexels-5384630.jpg', 'Prova un ingresso', PALESTRA + '#prezzi'),
-    ('Corsi', '02 · i corsi', 'Dal primo blocco', 'al primo 6A.', 'Otto lezioni in gruppi di sei: come si cade, come si '
-     'usano i piedi, come si legge un blocco prima di toccarlo.', 'pexels-5383759.jpg', 'Prova gratis', CORSI),
-    ('Bambini', '03 · i bambini', 'Arrampicare', 'è giocare.', 'Dai cinque anni, il sabato mattina e il mercoledì: '
-     'equilibrio, coraggio e una parete tutta per loro, con le prese a forma di animale.', 'pexels-5916169.jpg',
-     'I corsi junior', CORSI + '#orario'),
-    ('Falesia', '04 · fuori', 'Da aprile,', 'sulla roccia vera.', 'Ogni domenica una falesia del Trentino con le guide: '
-     'Arco, la Valle dei Laghi, la Paganella. Il materiale ve lo prestiamo noi.', 'pexels-8728635.jpg',
-     'Le uscite', CORSI + '#uscite'),
+# ── L'apertura: due metà, Dentro e Fuori ──
+# Ogni metà è uno Slider Pro con la sua tela: sul computer la metà è larga circa metà della tela da 1440, quindi le
+# misure sul computer sono il doppio di quelle che si vedono (128 = un titolo da 64). Tablet e telefono le hanno una
+# sotto l'altra, a tutta larghezza, con le loro misure.
+DENTRO = [  # linguetta, occhiello, riga 1, riga 2, testo, video, pulsante, link
+    ('Boulder', 'Il boulder', 'Quattro metri,', 'nessuna corda.', 'Centoventi blocchi dal 3 al 7C, tracciati di nuovo ogni '
+     'lunedì. Si cade sul materasso alto quaranta centimetri.', V_SOTTO, 'Prova un ingresso', PALESTRA + '#prezzi'),
+    ('Corsi', 'I corsi', 'Dal primo blocco', 'al primo 6A.', 'Otto lezioni in gruppi di sei: come si cade, come si usano i '
+     'piedi, come si legge un blocco prima di toccarlo.', V_PRESE, 'Prova gratis', CORSI),
+    ('Bambini', 'I bambini', 'Arrampicare', 'è giocare.', 'Dai cinque anni, il sabato mattina e il mercoledì, con una '
+     'parete tutta per loro e le prese a forma di animale.', V_BIMBI, 'I corsi junior', CORSI + '#orario'),
 ]
-# la via del giorno: le prese dal basso all'alto (x, y in % della tela, colore)
-VIA = [(66.0, 82.0), (71.5, 72.0), (67.0, 61.5), (74.0, 52.0), (69.5, 41.0), (77.0, 32.0), (73.0, 21.0), (80.5, 13.0)]
+FUORI = [
+    ('Falesia', 'La falesia', 'Da aprile,', 'sulla roccia vera.', 'Ogni domenica una falesia del Trentino con le guide '
+     'alpine: Arco, la Valle dei Laghi, la Paganella.', V_FALESIA, 'Le uscite', CORSI + '#uscite'),
+    ('Materiale', 'Il materiale', 'La corda,', 've la diamo noi.', 'Imbrago, corda, rinvii e casco li prestiamo noi; il '
+     'pullmino parte alle otto dalla palestra.', V_MAGNESITE, 'Il calendario', CORSI + '#uscite'),
+]
+
+
+def meta(t, pid, nome, voci, transizione, durata_trans, ritmo):
+    m = K.mob
+    sl = []
+    for i, (tab, occ, r1, r2, testo, video, bottone, link) in enumerate(voci):
+        n = '%s%d' % (pid, i + 1)
+        sl.append(K.diapositiva(n, K.sfondo_video(video, overlay=0.18, colore=C['nero']),
+                                K.veli(n + '-velo', 'basso', 42, 64, colore=C['nero'], forza=88, mobile_da=44) + [
+            K.livello(n + '-o', contenuto=occ, x=6, y=39, w=80, size=26, peso='600', colore=GIALLO, letterSpacing=4,
+                      textTransform='uppercase', fontFamily=MONO, ritardo=200,
+                      responsive={'notebook': {'fontSize': 14, 'y': 39}, 'tablet': {'fontSize': 14, 'y': 41},
+                                  'mobile': {'fontSize': m(11), 'y': 50, 'x': 7, 'width': 86}}),
+            # Le due righe del titolo in un livello solo (la seconda gialla): separate, con l'altezza dello schermo che
+            # cambia e il carattere che segue la larghezza, in una finestra larga e bassa si toccavano (31 ott 2026).
+            K.livello(n + '-t', contenuto=r1 + '<br><span style="color:' + GIALLO + '">' + r2 + '</span>',
+                      tag='h1' if (pid == 'sd' and i == 0) else 'h2', x=6, y=44, w=88, size=128, peso='800',
+                      colore=C['chiaro'], fontFamily=TITOLI, lineHeight=0.98, letterSpacing=-2, entra='maskFromBottom',
+                      ritardo=300, durata=1100,
+                      responsive={'notebook': {'fontSize': 64}, 'tablet': {'fontSize': 60, 'y': 46},
+                                  'mobile': {'fontSize': m(32), 'y': 55, 'x': 7, 'width': 88}}),
+            K.livello(n + '-s', contenuto=testo, x=6, y=72, w=76, size=34, peso='400', colore=mix(C['chiaro'], 88),
+                      lineHeight=1.55, ritardo=850,
+                      responsive={'notebook': {'fontSize': 17, 'width': 56}, 'tablet': {'fontSize': 17, 'y': 71, 'width': 60},
+                                  'mobile': {'fontSize': m(14), 'y': 71, 'x': 7, 'width': 86}}),
+            K.livello(n + '-b', tipo='button', contenuto=bottone, x=6, y=89, w='auto', size=26, peso='700',
+                      colore=C['on_acc'], bgColor=C['acc'], padding=28, letterSpacing=2, textTransform='uppercase',
+                      borderRadius=12, ritardo=1100, buttonUrl=link,
+                      hover={'bgColor': C['chiaro'], 'color': C['nero'], 'duration': 250},
+                      responsive={'notebook': {'fontSize': 13}, 'tablet': {'fontSize': 13, 'y': 85},
+                                  'mobile': {'y': 88, 'x': 7, 'fontSize': m(12)}}),
+        ], durata=ritmo, tab=tab))
+    globali = [K.livello(pid + '-nome', contenuto=nome, x=6, y=6, w='auto', size=24, peso='600', colore=C['chiaro'],
+                         letterSpacing=4, textTransform='uppercase', fontFamily=MONO, bgColor=mix(C['nero'], 72), padding=18,
+                         borderRadius=999, borderWidth=1, borderColor=mix(C['chiaro'], 30), entra='fadeInDown', ritardo=150,
+                         responsive={'notebook': {'fontSize': 12}, 'tablet': {'fontSize': 12},
+                                     'mobile': {'fontSize': m(11), 'x': 7, 'y': 5}})]
+    return K.proslider(t, sl, globali=globali, altezza={'mode': 'vh', 'value': 88}, transizione=transizione,
+                       durata_trans=durata_trans, heightNotebook={'mode': 'vh', 'value': 88},
+                       heightTablet={'mode': 'ratio', 'value': '4:3'}, heightMobile={'mode': 'px', 'value': 1000},
+                       sizingMode='auto', showArrows=False, showDots=True, dotStyle='dash', showTabs=False, parallax=False,
+                       autoplaySpeed=ritmo, progressBarColor=GIALLO, navColor=C['chiaro'],
+                       globalBackground={'type': 'color', 'color': C['nero']})
 
 
 def apertura(t):
-    m = K.mob
-    W, H = 1440.0, 810.0
-    sl = []
-    for i, (tab, occ, r1, r2, testo, foto, bottone, link) in enumerate(PARETI):
-        n = i + 1
-        px, py, pw, ph = 56.0, 6.0, 36.0, 88.0
-        sl.append(K.diapositiva('sp-%d' % n, {'type': 'gradient', 'gradientFrom': C['fondo'],
-                                              'gradientTo': mix(C['acc'], 7, C['sala']), 'gradientAngle': 150,
-                                              'image': '', 'video': '', 'color': '', 'overlay': '', 'overlayOpacity': 0,
-                                              'kenBurns': False}, [
-            K.livello('sp-p%d' % n, tipo='image', imageSrc=K.img(foto), objectFit='cover', x=px, y=py, w=pw, h=ph,
-                      borderRadius=6, boxShadow={'x': -30, 'y': 40, 'blur': 70, 'spread': -20, 'color': mix(C['nero'], 35)},
-                      timeline=K.tl(px, py, [(0, {'rotationY': -32, 'rotationX': 0.01, 'opacity': 0, 'scale': 0.92}, 'power3.out'),
-                                             (1300, {'rotationY': -16, 'rotationX': 6, 'opacity': 100, 'scale': 1})],
-                                    1300, loop=False),
-                      responsive={'mobile': {'x': 8, 'y': 4, 'width': 84, 'height': 33}}),
-            K.livello('sp-o%d' % n, contenuto=occ, x=6, y=17, w=40, size=12, peso='500', colore=C['acc'], letterSpacing=2,
-                      textTransform='uppercase', fontFamily=MONO, ritardo=250,
-                      responsive={'mobile': {'fontSize': m(11), 'y': 41, 'x': 7, 'width': 86}}),
-            K.livello('sp-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=6, y=21.5, w=50, size=82, peso='800',
-                      colore=C['testo'], fontFamily=TITOLI, lineHeight=0.98, letterSpacing=-3, entra='fadeIn', ritardo=350,
-                      durata=900, charAnim={'stagger': 20, 'offsetY': 60, 'rotation': 0, 'opacity': 0},
-                      responsive={'mobile': {'fontSize': m(40), 'y': 43.5, 'x': 7, 'width': 88}}),
-            K.livello('sp-i%d' % n, contenuto=r2, tag='p', x=6, y=32.5, w=50, size=82, peso='800', colore=C['acc'],
-                      fontFamily=TITOLI, lineHeight=0.98, letterSpacing=-3, entra='fadeIn', ritardo=600, durata=900,
-                      charAnim={'stagger': 20, 'offsetY': 60, 'rotation': 0, 'opacity': 0},
-                      responsive={'mobile': {'fontSize': m(40), 'y': 48, 'x': 7, 'width': 88}}),
-            K.livello('sp-s%d' % n, contenuto=testo, x=6, y=48, w=33, size=17, peso='400', colore=C['tenue'],
-                      lineHeight=1.6, ritardo=950, responsive={'mobile': {'fontSize': m(14), 'y': 54.5, 'x': 7, 'width': 86}}),
-            K.livello('sp-b%d' % n, tipo='button', contenuto=bottone, x=6, y=70, w='auto', size=13, peso='700',
-                      colore=C['on_acc'], bgColor=C['acc'], padding=17, letterSpacing=1, textTransform='uppercase',
-                      borderRadius=6, ritardo=1250, buttonUrl=link, hover={'bgColor': C['testo'], 'duration': 250},
-                      responsive={'mobile': {'y': 70, 'x': 7, 'fontSize': m(12)}}),
-        ], durata=7500, tab=tab))
-    # la via del giorno: le prese che compaiono dal basso e lo scalatore che sale di presa in presa
-    colori = [GIALLO, GIALLO, GIALLO, GIALLO, GIALLO, GIALLO, GIALLO, C['acc']]
-    forme = [(60, 40, 70, 30), (40, 70, 30, 60), (70, 30, 60, 40), (30, 60, 40, 70)]
-    globali = []
-    for k, ((x, y), col) in enumerate(zip(VIA, colori)):
-        tl, tr, br, bl = forme[k % 4]
-        sz = 2.6 if k < 7 else 3.2
-        globali.append(K.livello('sp-presa%d' % k, tipo='shape', x=x - sz / 2, y=y - sz * 0.89, w=sz, h=round(sz * 1.78, 2),
-                                 bgColor=col, borderRadiusLinked=False, borderRadiusTL=tl, borderRadiusTR=tr,
-                                 borderRadiusBR=br, borderRadiusBL=bl, borderWidth=2, borderColor=mix(C['nero'], 30),
-                                 boxShadow={'x': 2, 'y': 5, 'blur': 8, 'spread': -2, 'color': mix(C['nero'], 45)},
-                                 timeline=K.tl(x - sz / 2, y - sz * 0.89, [(0, {'scale': 0, 'opacity': 0}, 'back.out'),
-                                                                           (900 + 160 * k, {'scale': 0, 'opacity': 0}, 'back.out'),
-                                                                           (1300 + 160 * k, {'scale': 1, 'opacity': 100})],
-                                               1300 + 160 * k, loop=False),
-                                 responsive={'mobile': {'visible': False}}))
-    x0, y0 = VIA[0]
-    passi = ['M 0 0']
-    for (x, y) in VIA[1:]:
-        passi.append('L %.1f %.1f' % ((x - x0) * W / 100, (y - y0) * H / 100))
-    passi.append('L 0 0')
-    globali.append(K.livello('sp-scalatore', tipo='shape', x=x0 - 1.0, y=y0 - 1.78, w=2.0, h=3.56, bgColor=VIOLA,
-                             borderRadius=999, borderWidth=3, borderColor=C['chiaro'], entra='zoomIn', ritardo=2400, durata=500,
-                             boxShadow={'x': 0, 'y': 0, 'blur': 0, 'spread': 6, 'color': mix(VIOLA, 30)},
-                             motionPath={'path': ' '.join(passi), 'duration': 9000, 'autoRotate': False, 'loop': True,
-                                         'easing': 'ease-in-out'},
-                             responsive={'mobile': {'visible': False}}))
-    globali.append(K.livello('sp-via', contenuto='La via del giorno · gialla · 6A', x=62.5, y=8.5, w='auto', size=12,
-                             peso='600', colore=C['testo'], fontFamily=MONO, bgColor=C['chiaro'], padding=10, borderRadius=6,
-                             entra='fadeInLeft', ritardo=2600,
-                             boxShadow={'x': 0, 'y': 8, 'blur': 18, 'spread': -8, 'color': mix(C['nero'], 30)},
-                             responsive={'mobile': {'x': 8, 'y': 37.5, 'fontSize': m(10)}}))
-    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='zoomFade',
-                       durata_trans=900, showArrows=False, showDots=False, showTabs=True, tabPosition='bottom',
-                       parallax=False, autoplaySpeed=7500, progressBarColor=C['acc'], navColor=C['testo'],
-                       globalBackground={'type': 'color', 'color': C['fondo']})
+    """Due metà quasi indipendenti: Dentro scorre dall'alto ogni 7 secondi, Fuori sfuma ogni 9 e mezzo; la metà sotto
+    il puntatore si allarga (riga «Le colonne si allargano al passaggio»). Sotto i 1200 px una sotto l'altra."""
+    return t.section([t.row([
+        t.col([meta(t, 'sd', 'Dentro · la palestra', DENTRO, 'pushDown', 1000, 7000)], wm='1-2', ws='1-1'),
+        t.col([meta(t, 'sf', 'Fuori · la falesia', FUORI, 'crossFade', 1400, 9500)], wm='1-2', ws='1-1'),
+    ], layout='50-50', gap=0, anim=None, stack=True, stack_tablet=True, espandi_hover=True)],
+        width='fullbleed', padding='remove-vertical')
 
 
 def vie(t):
@@ -178,7 +160,7 @@ def vie(t):
 
 def build_home():
     t = Tpl(ID, 'home')
-    out = [K.apertura(t, apertura(t))]
+    out = [apertura(t)]
     out.append(t.section([
         t.row([t.col([K.sechead(t, 'Strapiombo · Trento', ['Ottocento metri', 'di parete.'], size=64, layout='stack',
                                 size_mobile=38)], wm='1-2', ws='1-1'),
@@ -210,7 +192,7 @@ def build_home():
                              ('Il tallonaggio', 'Il tallone appoggiato sopra la presa, come una terza mano.', 'pexels-5383487.jpg'),
                              ('Il lancio', 'Quando la presa è troppo lontana: si salta e si prende al volo.', 'pexels-5383781.jpg')]:
         colpi.append(t.col([t.classic('flipcard', {
-            'front_media': {'type': 'image', 'image_url': K.img(foto), 'image_size': 'cover', 'image_position': 'center center', 'overlay_color': C['nero'], 'overlay_opacity': 58}, 'back_media': {'type': 'none'},
+            'front_media': {'type': 'image', 'image_url': K.img(foto), 'image_size': 'cover', 'image_position': 'center center', 'overlay_color': C['nero'], 'overlay_opacity': 88, 'overlay_fade': 'bottom', 'overlay_fade_reach': 75}, 'back_media': {'type': 'none'},
             'front_title': nome, 'front_description': 'I movimenti · girate la carta', 'front_text_color': C['chiaro'],
             'front_valign': 'bottom', 'front_overlay': '', 'back_title': nome, 'back_description': cosa,
             'back_bg': C['testo'], 'back_text_color': C['chiaro'], 'back_valign': 'center', 'back_cta_text': 'Impararlo',
@@ -381,17 +363,18 @@ def build_404():
 
 
 THEME = tema(
-    ID, NAME, 'Sport e benessere', 'La via del giorno',
-    ['arrampicata', 'boulder', 'palestra', 'corsi', 'trento', 'chiaro', 'slider pro', '3d'],
-    'Una palestra di boulder, cemento chiaro e rosso segnale: in apertura la parete inclinata in 3D come uno strapiombo, '
-    'le prese della via del giorno che compaiono dal basso e lo scalatore che sale di presa in presa; le vie della '
-    'settimana, i movimenti su carte da girare, i prezzi, la classifica e l’orario dei corsi filtrabile.',
+    ID, NAME, 'Sport e benessere', 'Dentro e fuori',
+    ['arrampicata', 'boulder', 'palestra', 'corsi', 'trento', 'chiaro', 'slider pro', 'diviso'],
+    'Una palestra di boulder, cemento chiaro e rosso segnale: in apertura due metà indipendenti, Dentro e Fuori, '
+    'ognuna coi suoi video e il suo ritmo, e la metà sotto il puntatore che si allarga; le vie della settimana, i movimenti su carte da girare, i prezzi, la classifica e l’orario dei corsi filtrabile.',
     [('La palestra', PALESTRA), ('I corsi', CORSI), ('Le vie', HOME + '#vie'), ('Contatti', CONTATTI)],
     [('home', 'Home', None), ('la-palestra', 'La palestra', 'la-palestra'), ('corsi', 'I corsi', 'corsi'),
      ('contatti', 'Contatti', 'contatti')],
     HEX, '\'Schibsted Grotesk\', system-ui, -apple-system, \'Segoe UI\', sans-serif', '\'Schibsted Grotesk\', system-ui, sans-serif',
     '\'JetBrains Mono\', ui-monospace, Menlo, monospace', ['Schibsted Grotesk', 'JetBrains Mono'], peso_titoli='800',
     raggio=6, grana=0, titoli_line='0.98', titoli_spazio='-0.035em')
+THEME['preview_v'] = THEME['preview_mobile_v'] = '3'  # apertura divisa in due il 31 ottobre 2026
+THEME['cursor']['style'] = 'scia'  # cursore: la scia di magnesite (31 ott 2026)
 
 
 def main():

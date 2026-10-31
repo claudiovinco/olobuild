@@ -23,6 +23,8 @@ const voci = (s, k) => (Array.isArray(s?.[k]) ? s[k] : []);
 const conBadge = (s) => voci(s, 'opzioni').some((o) => String(o?.badge || '').trim() !== '');
 const conImmagini = (s) => voci(s, 'opzioni').some((o) => !!(o?.immagine && (o.immagine.url || typeof o.immagine === 'string')));
 const conIndicatori = (s) => voci(s, 'indicatori').some((d) => String(d?.nome || '').trim() !== '');
+const conBlocchi = (s) => voci(s, 'gruppi').some((g) => String(g?.blocco || '').trim() !== '');
+const conCanone = (s) => voci(s, 'opzioni').some((o) => Number(o?.canone || 0) !== 0);
 
 const OMBRE = [
   { value: 'none', label: t('Nessuna') },
@@ -74,6 +76,8 @@ export default {
     link_azione: '',
     campo_modulo: 'messaggio',
     testo_azzera: t('Ricomincia'),
+    a_passi: false,
+    testo_canone: '',
 
     vista_opzioni: 'schede',
     disposizione: 'lato',
@@ -148,7 +152,11 @@ export default {
           description: t('Prima di inviare la richiesta il gruppo deve avere una scelta. In un gruppo «Una scelta» obbligatorio parte scelta la prima opzione, se nessuna ha «Scelta all\'inizio»; in uno facoltativo un secondo clic toglie la scelta.') },
         { key: 'aiuto', label: t('Aiuto'), type: 'textarea',
           description: t('Una frase che aiuta a scegliere: sul sito si apre dalla (i) accanto al titolo del gruppo. Vuota: niente (i).') },
+        { key: 'blocco', label: t('Blocco'), type: 'text', placeholder: t('Identità'),
+          description: t('Per i preventivi lunghi: i gruppi di fila con lo stesso blocco stanno sotto un titolo numerato col loro subtotale, anche nel riepilogo. Con «Un blocco alla volta» ogni blocco è un passo. Vuoto: nessun blocco.') },
       ] },
+    { key: 'a_passi', label: t('Un blocco alla volta'), type: 'toggle', show: conBlocchi,
+      description: t('I blocchi diventano passi: in alto i loro nomi, in fondo a ognuno Indietro e Avanti. Avanti controlla i gruppi obbligatori del blocco; il riepilogo col totale resta sempre in vista.') },
 
     { type: 'separator', label: t('Opzioni') },
     { key: 'opzioni', label: t('Opzioni'), type: 'content-items', itemLabel: t('Opzione'), etichettaDa: 'nome', miniaturaDa: 'immagine',
@@ -161,6 +169,8 @@ export default {
         { key: 'descrizione', label: t('Descrizione'), type: 'textarea' },
         { key: 'prezzo', label: t('Prezzo'), type: 'number', step: 0.01,
           description: t('La differenza sul prezzo base: 120 = più 120, 0 = inclusa, −30 = uno sconto. Nei gruppi «Quantità» vale per ogni pezzo.') },
+        { key: 'canone', label: t('Canone annuo'), type: 'number', step: 0.01,
+          description: t('Quello che si paga ogni anno oltre al prezzo: dominio, hosting, assistenza. Si somma a parte, sotto il totale. Un\'opzione con il solo canone non mostra «Incluso».') },
         { key: 'immagine', label: t('Immagine'), type: 'image' },
         { key: 'badge', label: t('Badge'), type: 'text',
           description: t('Una parola in evidenza sull\'opzione: «Consigliato», «Novità». Vuoto: niente.') },
@@ -182,6 +192,8 @@ export default {
     { key: 'periodo', label: t('Periodo'), type: 'text',
       description: t('Dopo il totale: «/mese», «/anno». Vuoto: un prezzo una tantum.') },
     { key: 'testo_totale', label: t('Testo del totale'), type: 'text' },
+    { key: 'testo_canone', label: t('Testo del canone'), type: 'text', placeholder: t('Ogni anno'), show: conCanone,
+      description: t('Accanto alla somma dei canoni annui, sotto il totale. Vuoto: «Ogni anno».') },
     { key: 'nota_prezzo', label: t('Nota sul prezzo'), type: 'text',
       description: t('Sotto il totale: «IVA inclusa», «Spedizione gratuita». Vuota: niente.') },
     { key: 'mostra_differenze', label: t('Mostra i prezzi delle opzioni'), type: 'toggle',

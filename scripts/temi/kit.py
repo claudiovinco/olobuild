@@ -43,22 +43,45 @@ class Kit:
         assert name in self.media, name
         return lib(name)
 
-    def video_bg(self, name, overlay=40, color=None, position='center center'):
-        return {'type': 'video', 'video_url': self.img(name + '.mp4'), 'video_poster': self.img(name + '.jpg'),
-                'video_fit': 'cover', 'image_position': position, 'overlay_color': color or self.c['nero'],
-                'overlay_opacity': overlay}
+    def video_bg(self, name, overlay=40, color=None, position='center center', lato=None, fino=70):
+        return self._sfuma({'type': 'video', 'video_url': self.img(name + '.mp4'), 'video_poster': self.img(name + '.jpg'),
+                            'video_fit': 'cover', 'image_position': position, 'overlay_color': color or self.c['nero'],
+                            'overlay_opacity': overlay}, lato, fino)
 
-    def photo_bg(self, name, overlay=45, color=None, position='center center'):
-        return {'type': 'image', 'image_url': self.img(name), 'image_size': 'cover', 'image_position': position,
-                'overlay_color': color or self.c['nero'], 'overlay_opacity': overlay}
+    def photo_bg(self, name, overlay=45, color=None, position='center center', lato=None, fino=70):
+        return self._sfuma({'type': 'image', 'image_url': self.img(name), 'image_size': 'cover', 'image_position': position,
+                            'overlay_color': color or self.c['nero'], 'overlay_opacity': overlay}, lato, fino)
+
+    @staticmethod
+    def _sfuma(bg, lato, fino):
+        """La Sovrapposizione sfumata da un lato (bottom, top, left, right): piena sul bordo, trasparente a `fino` %."""
+        if lato:
+            bg['overlay_fade'], bg['overlay_fade_reach'] = lato, fino
+        return bg
+
+    def sui_media(self, bg, lato='bottom', fino=100, forza=86):
+        """Un testo sopra una foto o un video (regola del 31 ott 2026, mai media velati): il media resta pieno e una
+        sfumatura scura sale solo da dove sta il testo; il testo va chiaro. Gli sfondi senza media restano com'erano."""
+        if not isinstance(bg, dict) or bg.get('type') not in ('image', 'video'):
+            return bg, False
+        return dict(bg, overlay_color=self.c['nero'], overlay_opacity=forza, overlay_fade=lato, overlay_fade_reach=fino), True
+
+    def piatto(self, bg, massimo=50):
+        """Un velo piatto scuro su un media non va oltre `massimo` %: oltre, il media diventa una filigrana."""
+        if isinstance(bg, dict) and bg.get('type') in ('image', 'video') and not bg.get('overlay_fade'):
+            bg = dict(bg, overlay_color=self.c['nero'], overlay_opacity=min(int(bg.get('overlay_opacity') or 0), massimo))
+        return bg
 
     # ── testi ──
-    def sechead(self, t, eyebrow, lines, tagline='', size=72, align='left', layout='split', size_mobile=40, chiaro=False):
+    def sechead(self, t, eyebrow, lines, tagline='', size=72, align='left', layout='split', size_mobile=40, chiaro=False,
+                su_media=False):
         c = self.c
         base = c['chiaro'] if chiaro else c['testo']
         alt = self.acc_media if chiaro else c['acc']
+        # sopra una foto o un video l'occhiello è chiaro: piccolo e nel colore d'accento non si leggeva (31 ott 2026)
+        occhiello = mix(c['chiaro'], 88) if su_media else alt
         return t.classic('section-header', {
-            'eyebrow_show': bool(eyebrow), 'eyebrow_text': eyebrow, 'eyebrow_color': alt, 'eyebrow_dot_color': alt,
+            'eyebrow_show': bool(eyebrow), 'eyebrow_text': eyebrow, 'eyebrow_color': occhiello, 'eyebrow_dot_color': alt,
             'eyebrow_separator': '', 'eyebrow_font_family': 'mono', 'eyebrow_font_size': 11, 'eyebrow_font_weight': '400',
             'headline_lines': [{'text': l, 'color': base if i % 2 == 0 else alt, 'italic': self.corsivo and i % 2 == 1}
                                for i, l in enumerate(lines)],
@@ -177,9 +200,11 @@ class Kit:
 
     # ── blocchi ──
     def intro(self, t, eyebrow, lines, body, bg=None, size=100, overlay_text=False, pad_top=200, advanced=None):
+        bg, su_media = self.sui_media(bg, forza=90)
+        overlay_text = overlay_text or su_media
         sec = t.section([
             t.row([t.col([self.sechead(t, eyebrow, lines, size=size, size_mobile=46,
-                                       chiaro=self.tema_chiaro and overlay_text)], wm='3-5', ws='1-1'),
+                                       chiaro=self.tema_chiaro and overlay_text, su_media=su_media)], wm='3-5', ws='1-1'),
                    t.col([self.text(t, body, size=17, color=self.soft_media if overlay_text else None)], wm='2-5', ws='1-1')],
                   layout='custom', custom='60,40', gap=56, valign='end'),
         ], bg=bg, padding='large', style={'padding_top': pad_top, 'padding_bottom': 72})
@@ -189,27 +214,40 @@ class Kit:
 
     def pannello(self, t, foto, eyebrow, titolo, testo, link_t='', link_u='', overlay=56, pos='center center', effetto='reveal-h',
                  video=False):
-        blocco = [self.label(t, eyebrow, color=self.acc_media),
+        # sopra il media l'occhiello è chiaro: piccolo e nel colore d'accento non si leggeva sulle foto (31 ott 2026)
+        blocco = [self.label(t, eyebrow, color=self.soft_media),
                   self.headline(t, titolo, size=80, tag='h2', pad_bottom=16, color=self.su_media, accento=self.acc_media),
                   self.text(t, testo, size=16, color=self.soft_media)]
         if link_t:
             blocco.append(self.button(t, link_t, link_u, pad_top=10, chiaro=self.tema_chiaro))
         bg = self.video_bg(foto, overlay=overlay, position=pos) if video else self.photo_bg(foto, overlay=overlay, position=pos)
+        # Il media resta pieno (velo leggero) e il testo sta in un riquadro scuro sopra la foto: la sfumatura dal basso
+        # non arrivava fino all'occhiello e al titolo (31 ott 2026, contrasti misurati).
+        bg = dict(bg, overlay_color=self.c['nero'], overlay_opacity=12)
+        bg.pop('overlay_fade', None)
+        bg.pop('overlay_fade_reach', None)
+        scheda = {'bg': solid(mix(self.c['nero'], 88)), 'padding_top': 44, 'padding_right': 48, 'padding_bottom': 40,
+                  'padding_left': 48, 'border_radius': radius(self.r)}
         return t.section([
-            t.row([t.col(blocco, wm='1-2', ws='1-1'), t.col([], wm='1-2', ws='1-1')], layout='custom', custom='52,48',
+            t.row([t.col(blocco, wm='1-2', ws='1-1', style=scheda), t.col([], wm='1-2', ws='1-1')], layout='custom', custom='52,48',
                   valign='end', anim=None),
         ], bg=bg, padding='large', width='large', sticky_effect=effetto, sticky_h_align='bottom',
             style={'padding_top': 140, 'padding_bottom': 80})
 
     def video_frase(self, t, video, eyebrow, titolo, testo, overlay=45, pad=230, extra=None):
-        tiles = [self.label(t, eyebrow, color=self.soft_media, align='center'),
-                 self.headline(t, titolo, size=96, tag='h2', align='center', pad_bottom=18, color=self.su_media,
-                               accento=self.acc_media),
+        tit = self.headline(t, titolo, size=96, tag='h2', align='center', pad_bottom=18, color=self.su_media,
+                            accento=self.acc_media)
+        # un alone scuro morbido attorno alle lettere: si leggono anche dove passano i punti chiari del video
+        tit['settings'].update({'text_shadow': 'custom', 'text_shadow_h': 0, 'text_shadow_v': 2, 'text_shadow_blur': 30,
+                                'text_shadow_color': mix(self.c['nero'], 75)})
+        tiles = [self.label(t, eyebrow, color=self.soft_media, align='center'), tit,
                  self.text(t, testo, size=16, color=self.soft_media, align='center')]
         if extra:
             tiles += extra
-        return t.section([self.centered(t, tiles)], bg=self.video_bg(video, overlay=overlay), padding='xlarge',
-                         style={'padding_top': pad, 'padding_bottom': pad})
+        # Il video si vede pieno in alto; la frase sta in basso, sulla sfumatura scura che sale dal fondo (31 ott 2026:
+        # col velo piatto su tutto il video diventava una filigrana).
+        return t.section([self.centered(t, tiles)], bg=self.sui_media(self.video_bg(video, overlay=overlay), 'bottom', 100, 90)[0],
+                         padding='xlarge', style={'padding_top': pad + 280, 'padding_bottom': 80})
 
     def modulo(self, t, campi, oggetto, invio, grazie):
         c = self.c
@@ -331,7 +369,157 @@ class Kit:
         return {'type': 'video', 'image': self.img(name + '.jpg'), 'video': self.img(name + '.mp4'), 'color': '',
                 'overlay': colore or self.c['nero'], 'overlayOpacity': overlay, 'kenBurns': False}
 
+    def veli(self, lid, lato, pieno, fino, colore=None, forza=94, mobile_da=40, mobile_alto=None):
+        """Il velo dal lato del testo sopra il video di fondo (primi livelli della diapositiva): pieno fino a `pieno` %
+        della tela, poi sfuma e a `fino` % è trasparente, così il video resta vivo dove non c'è testo. lato: sinistra,
+        destra, alto. Sul telefono il testo sta sotto la foto: il secondo velo è pieno da `mobile_da` % in giù."""
+        c = colore or self.c['fondo']
+        geo, ang = {'sinistra': (dict(x=0, y=0, w=fino, h=100), 90), 'destra': (dict(x=100 - fino, y=0, w=fino, h=100), 270),
+                    'alto': (dict(x=0, y=0, w=100, h=fino), 180), 'basso': (dict(x=0, y=100 - fino, w=100, h=fino), 0)}[lato]
+        g = lambda angolo, stop: {'angle': angolo, 'from': mix(c, forza), 'to': mix(c, 0), 'fromStop': stop}
+        hm = 110 - mobile_da
+        desk = self.livello(lid, tipo='shape', shapeGradient=g(ang, round(pieno / fino * 100)), entra='fadeIn', ritardo=0,
+                            durata=600, esce='fadeOut', responsive={'mobile': {'visible': False}}, **geo)
+        if mobile_alto is not None:
+            # testi in alto sul telefono: il velo scende dall'alto fin poco sotto l'ultimo testo
+            ha = min(100, mobile_alto + 12)
+            return [desk, self.livello(lid + 'm', tipo='shape', x=0, y=0, w=0.1, h=0.1,
+                                       shapeGradient=g(180, round(mobile_alto / ha * 100)), entra='fadeIn', ritardo=0,
+                                       durata=600, esce='fadeOut',
+                                       responsive={'mobile': {'x': 0, 'y': 0, 'width': 100, 'height': ha}})]
+        return [desk,
+                self.livello(lid + 'm', tipo='shape', x=0, y=0, w=0.1, h=0.1, shapeGradient=g(0, round((100 - mobile_da) / hm * 100)),
+                             entra='fadeIn', ritardo=0, durata=600, esce='fadeOut',
+                             responsive={'mobile': {'x': 0, 'y': mobile_da - 10, 'width': 100, 'height': hm}})]
+
+    @staticmethod
+    def formati_intermedi(livelli):
+        """Regole per notebook (tela 1240) e tablet (tela 1024), dove la tela è più stretta di quella del computer
+        ma i caratteri restano in pixel: i titoli grandi si riducono in proporzione (se no si sovrapponevano), i testi
+        piccoli restano leggibili e prendono una colonna un po' più larga; le scritte sul fondo, che sul tablet
+        finirebbero sotto le linguette, si nascondono. Le regole scritte a mano nel generatore vincono."""
+        for L in livelli:
+            r = L.setdefault('responsive', {})
+            fs = L.get('fontSize')
+            for chiave, tela in (('notebook', 1240.0), ('tablet', 1024.0)):
+                ov = r.setdefault(chiave, {})
+                if isinstance(fs, (int, float)) and fs and 'fontSize' not in ov:
+                    ov['fontSize'] = int(round(fs * tela / 1440)) if fs >= 30 else int(round(fs * (0.94 if chiave == 'tablet' else 0.97)))
+                w = L.get('width')
+                if chiave == 'tablet' and L.get('type') == 'text' and isinstance(fs, (int, float)) and fs < 30 \
+                        and isinstance(w, (int, float)) and 25 <= w <= 40 and 'width' not in ov:
+                    # la colonna si allarga senza uscire dalla tela: un testo a destra tiene il suo bordo destro, uno
+                    # centrato il suo centro, gli altri si fermano al 98%
+                    nw, x = round(w * 1.2, 2), L.get('x', 0)
+                    if L.get('textAlign') == 'right' and 'x' not in ov:
+                        ov['x'] = round(max(0, x - (nw - w)), 2)
+                    elif L.get('textAlign') == 'center' and 'x' not in ov:
+                        ov['x'] = round(max(0, x - (nw - w) / 2), 2)
+                    elif x + nw > 98:
+                        nw = round(max(w, 98 - x), 2)
+                    ov['width'] = nw
+                if chiave == 'tablet' and L.get('type') == 'text' and isinstance(L.get('y'), (int, float)) \
+                        and L['y'] >= 84 and 'visible' not in ov:
+                    ov['visible'] = False
+                if not ov:
+                    del r[chiave]
+        # Pulsanti e bollini affiancati: sul tablet il primo pulsante è relativamente più largo (padding in pixel),
+        # quello accanto si sposta un po' a destra per non accavallarsi.
+        primi = [L for L in livelli if L.get('type') == 'button' and isinstance(L.get('x'), (int, float)) and L['x'] < 12]
+        for L in livelli:
+            x, y = L.get('x'), L.get('y')
+            if L in primi or not isinstance(x, (int, float)) or not isinstance(y, (int, float)) or not 12 <= x <= 45:
+                continue
+            if any(abs(y - P.get('y', -99)) <= 3 for P in primi) and (L.get('fontSize') or 99) < 30:
+                tab = L.setdefault('responsive', {}).setdefault('tablet', {})
+                tab.setdefault('x', round(x + 4.5, 2))
+
+    def veli_dal_testo(self, s, forza=92):
+        """Una diapositiva con un velo piatto scuro oltre 0,45 sul suo media (il video diventava una filigrana): il velo
+        scende a 0,3 e sotto i livelli arriva un velo scuro sfumato solo dal lato dove stanno i testi (sinistra,
+        destra, o dal basso se sono al centro), più quello del telefono sotto i testi. Le diapositive che hanno già i
+        loro veli restano come sono."""
+        b = s.get('background') or {}
+        if b.get('type') not in ('image', 'video') or float(b.get('overlayOpacity') or 0) <= 0.45:
+            return
+        L = s.get('layers') or []
+        if any(x.get('shapeGradient') for x in L):
+            return
+        if self.tema_chiaro and b.get('overlay') in (self.c['fondo'], self.c['sala'], self.c['chiaro']):
+            return
+        testi = [x for x in L if x.get('type') in ('text', 'button') and x.get('content')
+                 and (x.get('responsive') or {}).get('desktop', {}).get('visible', True) is not False]
+        if not testi:
+            return
+        larg = lambda x: x['width'] if isinstance(x.get('width'), (int, float)) else 22
+        x0 = min(x.get('x', 0) for x in testi)
+        x1 = max(x.get('x', 0) + larg(x) for x in testi)
+        y0 = min(x.get('y', 0) for x in testi)
+        y1 = max(x.get('y', 0) + (8 if (x.get('fontSize') or 0) >= 40 else 4) for x in testi)
+        ym = [((x.get('responsive') or {}).get('mobile') or {}).get('y') for x in testi]
+        ym = [y for y in ym if isinstance(y, (int, float))]
+        # sul telefono il velo va dal lato dove stanno i testi: dall'alto se stanno nella metà alta, se no dal basso
+        mob = {}
+        if ym and sum(ym) / len(ym) < 45:
+            mob['mobile_alto'] = max(ym) + 8
+        else:
+            mob['mobile_da'] = max(8, min(ym) - 6) if ym else 40
+        sid = 'velo-' + str(s.get('id', 'x'))
+        if x1 <= 62:
+            veli = self.veli(sid, 'sinistra', min(74, x1 + 6), min(100, x1 + 30), colore=self.c['nero'], forza=forza, **mob)
+        elif x0 >= 38:
+            veli = self.veli(sid, 'destra', min(74, 100 - x0 + 6), min(100, 100 - x0 + 30), colore=self.c['nero'], forza=forza, **mob)
+        elif y1 <= 60:
+            veli = self.veli(sid, 'alto', min(80, y1 + 2), min(100, y1 + 22), colore=self.c['nero'], forza=forza, **mob)
+        else:
+            alto = 100 - max(0, y0 - 6)
+            veli = self.veli(sid, 'basso', min(80, alto), min(100, alto + 22), colore=self.c['nero'], forza=forza, **mob)
+        s['background'] = dict(b, overlayOpacity=0.42)
+        s['layers'] = veli + L
+
+    def chiaro_su_scuro(self, slides, globali, opz):
+        """Temi chiari, regola del 31 ott 2026 (mai media velati): le aperture col velo chiaro sul video diventano scure.
+        Il video si vede (velo scuro a 0,25), i veli sfumati sotto i testi passano dal colore della carta al nero, i
+        testi liberi (senza un fondo loro) vanno chiari e l'accento prende il colore per i media; i livelli con un fondo
+        loro (bollini, schede) restano come sono."""
+        c = self.c
+        chiari = (c['fondo'], c['sala'], c['chiaro'])
+        if not self.tema_chiaro or not any((s.get('background') or {}).get('overlay') in chiari for s in slides):
+            return
+        tok = lambda v: (v.replace(c['testo'], c['chiaro']).replace(c['tenue'], mix(c['chiaro'], 82))
+                         .replace(c['acc'], self.acc_media) if isinstance(v, str) else v)
+        for s in slides:
+            b = s.get('background') or {}
+            if b.get('overlay') in chiari:
+                s['background'] = dict(b, overlay=c['nero'], overlayOpacity=0.25)
+        for L in [x for s in slides for x in s.get('layers') or []] + list(globali or []):
+            g = L.get('shapeGradient')
+            if isinstance(g, dict) and any(k in str(g.get('from')) for k in chiari):
+                L['shapeGradient'] = dict(g, **{'from': mix(c['nero'], 84), 'to': mix(c['nero'], 0)})
+                continue
+            if L.get('type') not in ('text', 'button'):
+                continue
+            fondo = str(L.get('bgColor') or '')
+            if fondo and fondo != 'transparent':
+                continue
+            for k in ('color', 'borderColor', 'textStrokeColor'):
+                if k in L:
+                    L[k] = tok(L[k])
+            h = L.get('hover')
+            if isinstance(h, dict):
+                L['hover'] = {k: (c['chiaro'] if v == c['testo'] else tok(v)) for k, v in h.items()}
+        if opz.get('navColor') == c['testo']:
+            opz['navColor'] = c['chiaro']
+        gb = opz.get('globalBackground')
+        if isinstance(gb, dict) and gb.get('color') in chiari:
+            opz['globalBackground'] = dict(gb, color=c['nero'])
+
     def proslider(self, t, slides, globali=None, altezza=None, transizione='fade', durata_trans=900, **opz):
+        self.chiaro_su_scuro(slides, globali, opz)
+        for s in slides:
+            self.veli_dal_testo(s)
+            self.formati_intermedi(s.get('layers') or [])
+        self.formati_intermedi(globali or [])
         o = {'preset': 'custom', 'globalBackground': {'type': 'color', 'color': self.c['nero']},
              'height': altezza or {'mode': 'vh', 'value': 100}, 'heightNotebook': None, 'heightTablet': None,
              'heightMobile': {'mode': 'px', 'value': 1400}, 'autoplay': True, 'autoplaySpeed': 6500, 'pauseOnHover': True,
@@ -437,7 +625,10 @@ def tema(theme_id, nome, categoria, zona, tags, descrizione, menu, pagine, hexes
         'cursor': {'enabled': True, 'hide_system': False, 'ring_size': 30, 'ring_color': hexes['light'], 'ring_width': 1,
                    'dot_size': 5, 'dot_color': hexes['primary'], 'hot_scale': 2.0, 'hot_color': hexes['primary'],
                    'hot_fill': 'rgba(%d,%d,%d,0.12)' % tuple(int(hexes['primary'][i:i + 2], 16) for i in (1, 3, 5)),
-                   'blend_mode': 'normal', 'magnetic_selector': 'a, button', 'pull_strength': 0.3, 'follow_easing': 0.2},
+                   'blend_mode': 'normal', 'magnetic_selector': 'a, button', 'pull_strength': 0.3, 'follow_easing': 0.2,
+                   # stile del cursore (OLObuild 1.4.892): anello, scia, mirino, goccia, inverti, etichetta, cometa,
+                   # aggancio, bussola, scintille, alone; il generatore lo cambia con THEME['cursor']['style']
+                   'style': 'anello', 'label_text': 'Apri', 'label_color': hexes['primary_contrast']},
         'styles': {
             'colors': dict(hexes),
             'typography': {

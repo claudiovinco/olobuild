@@ -321,6 +321,8 @@ export default {
     // Scroll-fixed timeline (pin slider, animate on scroll)
     scrollTimeline: false,
     scrollTimelineDistance: 2000, // px of scroll for full timeline,
+    scrollScrub: false,
+    scrollStep: true,
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
@@ -382,6 +384,7 @@ export default {
       { value: 'cubeH', label: t('Cubo Orizzontale') },
       { value: 'cubeV', label: t('Cubo Verticale') },
       { value: 'push', label: t('Push') },
+      { value: 'pushRight', label: t('Push verso destra') },
       { value: 'pushDown', label: t('Push Giu') },
       { value: 'stack', label: t('Stack') },
       { value: 'paperCut', label: t('Paper Cut') },
@@ -420,6 +423,15 @@ export default {
     { key: 'scrollTimeline', label: t('Scroll-fixed timeline'), type: 'toggle' },
     { key: 'scrollTimelineDistance', label: t('Distanza scroll'), type: 'number', min: 500, max: 10000, step: 100,
       condition: { field: 'scrollTimeline', value: true } },
+    { key: 'scrollStep', label: t('Una diapositiva per gesto'), type: 'toggle',
+      description: t('Mentre lo slider è fermo in cima, ogni gesto della rotella o del trackpad porta alla diapositiva dopo '
+        + 'o prima, senza saltarne; alla prima e all’ultima la pagina riprende a scorrere. Fermandosi, la pagina si posa '
+        + 'sulla diapositiva più vicina.'),
+      condition: [{ field: 'scrollTimeline', value: true }, { field: 'scrollScrub', op: 'neq', value: true }] },
+    { key: 'scrollScrub', label: t('Il cubo segue lo scorrimento'), type: 'toggle',
+      description: t('Con la transizione a cubo: il cubo gira insieme alla pagina, si ferma se smettete di scorrere e torna '
+        + 'indietro se risalite. Frecce, linguette e punti portano la pagina alla faccia.'),
+      condition: [{ field: 'scrollTimeline', value: true }, { field: 'transition', op: 'in', value: ['cubeH', 'cubeV'] }] },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────

@@ -448,12 +448,13 @@ def build_home():
     ], bg=solid(SABBIA), padding='large', width='large', html_id='look', style={'padding_top': 150, 'padding_bottom': 150}))
 
     out.append(t.section([
-        t.row([t.col([label(t, 'Lecce · luglio · ore 15:20', color=CACAO),
-                      headline(t, 'Scattiamo nella controra, <em>quando gli altri dormono.</em>', size=96, color=CACAO,
-                               tag='h2', pad_bottom=18, accent=LATTE),
+        # sul video arancio il testo sta in un riquadro scuro (rinforzi.json): testo chiaro, accento del sole (31 ott 2026)
+        t.row([t.col([label(t, 'Lecce · luglio · ore 15:20', color=SOLE),
+                      headline(t, 'Scattiamo nella controra, <em>quando gli altri dormono.</em>', size=96, color=LATTE,
+                               tag='h2', pad_bottom=18, accent=SOLE),
                       text(t, '<p>Dalle una alle cinque Lecce si ferma e la luce entra dalle persiane in strisce arancioni. È '
                               'la nostra ora preferita: i ritratti più belli li abbiamo fatti lì.</p>', size=18,
-                           color=mix(CACAO, 85))], wm='3-5', ws='1-1'), t.col([], wm='2-5', ws='1-1')],
+                           color=SOFT_LATTE)], wm='3-5', ws='1-1'), t.col([], wm='2-5', ws='1-1')],
               layout='custom', custom='60,40', valign='center'),
     ], bg=video_bg(V_CONTRORA, overlay=8, color=SOLE), padding='xlarge', html_id='controra',
         style={'padding_top': 220, 'padding_bottom': 220}))

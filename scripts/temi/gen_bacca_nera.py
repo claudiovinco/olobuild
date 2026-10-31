@@ -88,7 +88,7 @@ BOTANICHE = [('pexels-30688213.jpg', 'Ginepro'), ('pexels-36745315.jpg', 'Anice 
 def apertura(t):
     m = K.mob
     W, H = 1440.0, 810.0
-    ax, ay, aw, ah = 60.0, 14.0, 20.83, 66.67           # l'arco: 300 × 540 px
+    ax, ay, aw, ah = 19.0, 14.0, 20.83, 66.67           # l'arco: 300 × 540 px, a sinistra
     sl = []
     for i, (tab, occ, r1, r2, testo, gradi, media) in enumerate(GINS):
         n = i + 1
@@ -102,32 +102,30 @@ def apertura(t):
         else:
             finestra = K.livello('bn-a%d' % n, tipo='image', imageSrc=K.img(media[1]), objectFit='cover',
                                  kenBurns={'type': 'zoomIn', 'intensity': 8, 'duration': 9000}, **arco)
-        sl.append(K.diapositiva('bn-%d' % n, {'type': 'gradient', 'gradientFrom': C['fondo'],
-                                              'gradientTo': mix(C['acc2'], 8, C['sala']), 'gradientAngle': 140 - 20 * i,
-                                              'image': '', 'video': '', 'color': '', 'overlay': '', 'overlayOpacity': 0,
-                                              'kenBurns': False}, [
+        sl.append(K.diapositiva('bn-%d' % n, K.sfondo_video([V_SALA, V_SCORZA, V_GHIACCIO, V_BOTTE][i], overlay=0.8,
+                                                            colore=C['fondo']), [
             finestra,
-            K.livello('bn-o%d' % n, contenuto=occ, x=6, y=18, w=40, size=12, peso='400', colore=OTTONE, letterSpacing=3,
+            K.livello('bn-o%d' % n, contenuto=occ, x=53.5, y=18, w=40, size=12, peso='400', colore=OTTONE, letterSpacing=3,
                       textTransform='uppercase', fontFamily=MONO, ritardo=250,
                       responsive={'mobile': {'fontSize': m(11), 'y': 41, 'x': 7, 'width': 86}}),
-            K.livello('bn-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=6, y=22.5, w=46, size=80, peso='500',
+            K.livello('bn-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=53.5, y=22.5, w=43, size=62, peso='500',
                       colore=C['chiaro'], fontFamily=TITOLI, lineHeight=1.04, entra='fadeIn', ritardo=350, durata=1200,
                       charAnim={'stagger': 26, 'offsetY': 30, 'blur': 8, 'opacity': 0},
-                      responsive={'mobile': {'fontSize': m(38), 'y': 43.5, 'x': 7, 'width': 88}}),
-            K.livello('bn-i%d' % n, contenuto=r2, tag='p', x=6, y=34, w=46, size=80, peso='500', fontStyle='italic',
+                      responsive={'mobile': {'fontSize': m(35), 'y': 43.5, 'x': 7, 'width': 88}}),
+            K.livello('bn-i%d' % n, contenuto=r2, tag='p', x=53.5, y=32, w=43, size=62, peso='500', fontStyle='italic',
                       colore=SALVIA, fontFamily=TITOLI, lineHeight=1.04, entra='fadeIn', ritardo=650, durata=1200,
                       charAnim={'stagger': 26, 'offsetY': 30, 'blur': 8, 'opacity': 0},
-                      responsive={'mobile': {'fontSize': m(38), 'y': 47.8, 'x': 7, 'width': 88}}),
-            K.livello('bn-s%d' % n, contenuto=testo, x=6, y=49, w=32, size=17, peso='400', colore=mix(C['chiaro'], 80),
+                      responsive={'mobile': {'fontSize': m(35), 'y': 47.8, 'x': 7, 'width': 88}}),
+            K.livello('bn-s%d' % n, contenuto=testo, x=53.5, y=46, w=34, size=17, peso='400', colore=mix(C['chiaro'], 80),
                       lineHeight=1.65, ritardo=1000, responsive={'mobile': {'fontSize': m(14), 'y': 53.5, 'x': 7, 'width': 86}}),
-            K.livello('bn-b%d' % n, tipo='button', contenuto='Prenota una visita', x=6, y=70, w='auto', size=12, peso='600',
+            K.livello('bn-b%d' % n, tipo='button', contenuto='Prenota una visita', x=53.5, y=67, w='auto', size=12, peso='600',
                       colore=C['on_acc'], bgColor=OTTONE, padding=16, letterSpacing=2, textTransform='uppercase',
                       borderRadius=4, ritardo=1300, buttonUrl=VISITE, hover={'bgColor': C['chiaro'], 'duration': 250},
-                      responsive={'mobile': {'y': 68, 'x': 7, 'fontSize': m(11)}}),
-            K.livello('bn-g%d' % n, contenuto=gradi, x=22.5, y=71, w='auto', size=12, peso='400', colore=C['chiaro'],
+                      responsive={'mobile': {'y': 68, 'x': 7, 'fontSize': m(11)}, 'tablet': {'y': 69}}),
+            K.livello('bn-g%d' % n, contenuto=gradi, x=70, y=68, w='auto', size=12, peso='400', colore=C['chiaro'],
                       fontFamily=MONO, letterSpacing=1, padding=12, borderRadius=999, borderWidth=1,
                       borderColor=mix(C['chiaro'], 40), entra='popUpBack', ritardo=1550,
-                      responsive={'mobile': {'y': 68.6, 'x': 60, 'fontSize': m(11)}}),
+                      responsive={'mobile': {'y': 68.6, 'x': 60, 'fontSize': m(11)}, 'tablet': {'x': 74.5, 'y': 70}}),
         ], durata=8000, tab=tab))
     # l'orbita inclinata delle botaniche attorno all'arco
     cx, cy, rx, ry, th, sz = (ax + aw / 2) * W / 100, 52 * H / 100, 330.0, 105.0, -8.0, 84.0
@@ -154,11 +152,11 @@ def apertura(t):
                                              'easing': 'linear'},
                                  responsive={'mobile': {'visible': False}}))
     globali.append(K.livello('bn-quattordici', contenuto='Quattordici botaniche · tre distillazioni · lotti da 600 bottiglie',
-                             x=50, y=89, w=44, size=11, peso='400', colore=mix(C['chiaro'], 60), letterSpacing=2,
-                             textTransform='uppercase', fontFamily=MONO, align='right', entra='fadeIn', ritardo=1800,
+                             x=53.5, y=86, w=44, size=11, peso='400', colore=mix(C['chiaro'], 60), letterSpacing=2,
+                             textTransform='uppercase', fontFamily=MONO, align='left', entra='fadeIn', ritardo=1800,
                              responsive={'mobile': {'y': 76, 'x': 7, 'width': 86, 'fontSize': m(10)}}))
-    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='crossFade',
-                       durata_trans=1300, showArrows=False, showDots=False, showTabs=True, tabPosition='bottom',
+    return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='slideUp',
+                       durata_trans=1100, showArrows=False, showDots=False, showTabs=True, tabPosition='bottom',
                        parallax=False, autoplaySpeed=8000, progressBarColor=OTTONE, navColor=C['chiaro'])
 
 
@@ -428,6 +426,7 @@ THEME = tema(
     HEX, '\'Afacad\', system-ui, -apple-system, \'Segoe UI\', sans-serif', '\'Brygada 1918\', \'Georgia\', serif',
     '\'Sometype Mono\', ui-monospace, Menlo, monospace', ['Brygada 1918', 'Afacad', 'Sometype Mono'],
     corsivo_di=['Brygada 1918'], peso_titoli='500', raggio=4, grana=6, titoli_line='1.04', titoli_spazio='-0.01em')
+THEME['preview_v'] = THEME['preview_mobile_v'] = '2'  # apertura rifatta il 31 ottobre 2026
 
 
 def main():

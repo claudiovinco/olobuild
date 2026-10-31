@@ -93,35 +93,39 @@ def apertura(t):
     sl = []
     for i, (tab, occ, r1, r2, testo, foto, fondo) in enumerate(MOMENTI):
         n = i + 1
-        sl.append(K.diapositiva('gi-%d' % n, {'type': 'gradient', 'gradientFrom': C['fondo'], 'gradientTo': fondo,
-                                              'gradientAngle': 135, 'image': '', 'video': '', 'color': '', 'overlay': '',
-                                              'overlayOpacity': 0, 'kenBurns': False}, [
-            K.livello('gi-f%d' % n, tipo='image', imageSrc=K.img(foto), objectFit='cover', x=56, y=9, w=36, h=72,
+        sl.append(K.diapositiva('gi-%d' % n, K.sfondo_video([V_BLOCCHI, V_PITTURA, V_ORTO, V_PALLONCINI][i], overlay=0.6,
+                                                            colore=C['fondo']),
+                                K.veli('gi-velo%d' % n, 'alto', 58, 72) + [
+            K.livello('gi-f%d' % n, tipo='image', imageSrc=K.img(foto), objectFit='cover', x=5, y=46, w=24, h=42,
                       borderRadiusLinked=False, borderRadiusTL=220, borderRadiusTR=60, borderRadiusBR=220, borderRadiusBL=60,
-                      kenBurns={'type': 'zoomIn', 'intensity': 6, 'duration': 9000}, entra='zoomIn', ritardo=100, durata=1100,
+                      kenBurns={'type': 'zoomIn', 'intensity': 6, 'duration': 9000}, entra='zoomIn', ritardo=500, durata=1100,
                       esce='fadeOut', boxShadow={'x': 0, 'y': 30, 'blur': 60, 'spread': -20, 'color': mix(C['nero'], 25)},
+                      parallax={'type': 'mouse', 'depth': 6, 'tilt3d': True, 'scrollSpeed': 0.5},
                       responsive={'mobile': {'x': 10, 'y': 4, 'width': 80, 'height': 28}}),
-            K.livello('gi-o%d' % n, contenuto=occ, x=6, y=18, w=40, size=13, peso='500', colore=C['acc'], letterSpacing=1,
-                      textTransform='uppercase', fontFamily=MONO, ritardo=250,
-                      responsive={'mobile': {'fontSize': m(11), 'y': 42, 'x': 7, 'width': 86}}),
-            K.livello('gi-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=6, y=22.5, w=50, size=70, peso='600',
-                      colore=C['testo'], fontFamily=TITOLI, lineHeight=1.04, letterSpacing=-1, entra='fadeIn', ritardo=350,
+            # il testo al centro, sopra l'arcobaleno
+            K.livello('gi-o%d' % n, contenuto=occ, x=20, y=12.5, w=60, size=13, peso='500', colore=C['acc'], letterSpacing=1,
+                      textTransform='uppercase', fontFamily=MONO, align='center', ritardo=250,
+                      responsive={'mobile': {'fontSize': m(11), 'y': 42, 'x': 7, 'width': 86, 'textAlign': 'left'}}),
+            K.livello('gi-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=12, y=16.5, w=76, size=64, peso='600',
+                      colore=C['testo'], fontFamily=TITOLI, lineHeight=1.04, letterSpacing=-1, align='center', entra='fadeIn',
+                      ritardo=350, durata=1000, charAnim={'stagger': 24, 'offsetY': 40, 'rotation': 0, 'opacity': 0},
+                      responsive={'mobile': {'fontSize': m(36), 'y': 44.5, 'x': 7, 'width': 88, 'textAlign': 'left'}}),
+            K.livello('gi-i%d' % n, contenuto=r2, tag='p', x=12, y=25.5, w=76, size=64, peso='600', colore=C['acc'],
+                      fontFamily=TITOLI, lineHeight=1.04, letterSpacing=-1, align='center', entra='fadeIn', ritardo=650,
                       durata=1000, charAnim={'stagger': 24, 'offsetY': 40, 'rotation': 0, 'opacity': 0},
-                      responsive={'mobile': {'fontSize': m(38), 'y': 44.5, 'x': 7, 'width': 88}}),
-            K.livello('gi-i%d' % n, contenuto=r2, tag='p', x=6, y=32.5, w=50, size=70, peso='600', colore=C['acc'],
-                      fontFamily=TITOLI, lineHeight=1.04, letterSpacing=-1, entra='fadeIn', ritardo=650, durata=1000,
-                      charAnim={'stagger': 24, 'offsetY': 40, 'rotation': 0, 'opacity': 0},
-                      responsive={'mobile': {'fontSize': m(38), 'y': 48.8, 'x': 7, 'width': 88}}),
-            K.livello('gi-s%d' % n, contenuto=testo, x=6, y=49, w=33, size=18, peso='400', colore=C['tenue'],
-                      lineHeight=1.6, ritardo=950, responsive={'mobile': {'fontSize': m(15), 'y': 55, 'x': 7, 'width': 86}}),
-            K.livello('gi-b%d' % n, tipo='button', contenuto='Vieni all’open day', x=6, y=70, w='auto', size=15, peso='600',
+                      responsive={'mobile': {'fontSize': m(36), 'y': 48.8, 'x': 7, 'width': 88, 'textAlign': 'left'}}),
+            K.livello('gi-s%d' % n, contenuto=testo, x=29, y=37.5, w=42, size=18, peso='400', colore=C['tenue'],
+                      lineHeight=1.6, align='center', ritardo=950,
+                      responsive={'mobile': {'fontSize': m(15), 'y': 55, 'x': 7, 'width': 86, 'textAlign': 'left'},
+                                  'tablet': {'x': 20, 'width': 60}}),
+            K.livello('gi-b%d' % n, tipo='button', contenuto='Vieni all’open day', x=43.1, y=52, w='auto', size=15, peso='600',
                       colore=C['on_acc'], bgColor=C['acc'], padding=17, borderRadius=999, ritardo=1250,
                       buttonUrl=ISCRIZIONI + '#openday', hover={'bgColor': C['testo'], 'duration': 250},
-                      responsive={'mobile': {'y': 70, 'x': 7, 'fontSize': m(13)}}),
+                      responsive={'mobile': {'y': 70, 'x': 7, 'fontSize': m(13)}, 'tablet': {'x': 40.7, 'y': 54}}),
         ], durata=7500, tab=tab))
-    # l'arcobaleno di legno: cinque mezzi dischi, dal più grande al più piccolo, che dondolano sullo stesso punto
+    # l'arcobaleno di legno in basso al centro: cinque mezzi dischi, dal più grande al più piccolo, che dondolano
     W, H, MW, MH = 1440.0, 810.0, 640.0, 1400.0
-    cx, cy, mcx, mcy = 790.0, 712.0, 520.0, 468.0       # il punto d'appoggio, sul computer e sul telefono
+    cx, cy, mcx, mcy = 720.0, 806.0, 520.0, 468.0       # il punto d'appoggio, sul computer e sul telefono
     colori = [C['acc'], SOLE, SALVIA, mix(C['acc'], 45, C['chiaro']), mix(SALVIA, 40, C['chiaro']), C['fondo']]
     globali = []
     for k, col in enumerate(colori):
@@ -136,16 +140,17 @@ def apertura(t):
                                  responsive={'mobile': {'x': round((mcx - md / 2) / MW * 100, 2),
                                                         'y': round((mcy - md / 2) / MH * 100, 2),
                                                         'width': round(md / MW * 100, 2), 'height': round(md / 2 / MH * 100, 2)}}))
-    for k, (x, y_fine, col, giro) in enumerate([(84.2, 12.0, SOLE, 4), (88.0, 12.0, SALVIA, -3), (86.1, 5.6, C['acc'], 8)]):
+    # i cubetti di legno che cadono uno sull'altro, a destra
+    for k, (x, y_fine, col, giro) in enumerate([(80.2, 80.0, SOLE, 4), (84.0, 80.0, SALVIA, -3), (82.1, 73.6, C['acc'], 8)]):
         globali.append(K.livello('gi-cubo%d' % k, tipo='shape', x=x, y=y_fine, w=3.6, h=6.4, bgColor=col, borderRadius=8,
                                  boxShadow={'x': 0, 'y': 8, 'blur': 16, 'spread': -6, 'color': mix(C['nero'], 30)},
-                                 timeline=K.tl(x, y_fine, [(0, {'y': -12, 'rotation': giro * 3, 'opacity': 0}, 'bounce.out'),
-                                                           (300 + 350 * k, {'y': -12, 'rotation': giro * 3, 'opacity': 100}, 'bounce.out'),
+                                 timeline=K.tl(x, y_fine, [(0, {'y': 40, 'rotation': giro * 3, 'opacity': 0}, 'bounce.out'),
+                                                           (300 + 350 * k, {'y': 40, 'rotation': giro * 3, 'opacity': 100}, 'bounce.out'),
                                                            (1300 + 350 * k, {'rotation': giro, 'opacity': 100})],
                                                1300 + 350 * k, loop=False, fine_con_slide=True),
                                  responsive={'mobile': {'visible': False}}))
     return K.proslider(t, sl, globali=globali,
-                       altezza={'mode': 'ratio', 'value': '16:9'}, transizione='zoomFade', durata_trans=1000,
+                       altezza={'mode': 'ratio', 'value': '16:9'}, transizione='slideDown', durata_trans=1100,
                        showArrows=False, showDots=False, showTabs=True, tabPosition='bottom', parallax=False,
                        autoplaySpeed=7500, progressBarColor=C['acc'], navColor=C['testo'],
                        globalBackground={'type': 'color', 'color': C['fondo']})
@@ -387,15 +392,16 @@ def build_404():
 THEME = tema(
     ID, NAME, 'Cultura e formazione', 'L’arcobaleno che dondola',
     ['nido', 'asilo', 'montessori', 'infanzia', 'reggio emilia', 'chiaro', 'slider pro'],
-    'Un nido Montessori, latte, terracotta e salvia: in apertura l’arcobaleno di legno a cinque archi che dondola e i cubi '
-    'che cadono e rimbalzano, accanto alla foto dalle curve morbide; la giornata in sei momenti, i materiali su carte da '
-    'girare, gli spazi, l’atelier in coverflow 3D, le rette e il conto alla rovescia dell’open day.',
+    'Un nido Montessori, latte, terracotta e salvia: in apertura il titolo al centro sopra il video del nido, '
+    'l’arcobaleno di legno a cinque archi che dondola, i cubi che cadono e rimbalzano e la foto dalle curve morbide; '
+    'la giornata in sei momenti, i materiali su carte da girare, gli spazi e le iscrizioni.',
     [('La giornata', GIORNATA), ('Gli spazi', SPAZI), ('Iscrizioni', ISCRIZIONI), ('Open day', ISCRIZIONI + '#openday')],
     [('home', 'Home', None), ('la-giornata', 'La giornata', 'la-giornata'), ('gli-spazi', 'Gli spazi', 'gli-spazi'),
      ('iscrizioni', 'Iscrizioni', 'iscrizioni')],
     HEX, '\'Inclusive Sans\', system-ui, -apple-system, \'Segoe UI\', sans-serif', '\'Parkinsans\', system-ui, sans-serif',
     '\'Overpass Mono\', ui-monospace, Menlo, monospace', ['Parkinsans', 'Inclusive Sans', 'Overpass Mono'], peso_titoli='600',
     raggio=22, grana=0, titoli_line='1.04', titoli_spazio='-0.015em')
+THEME['preview_v'] = THEME['preview_mobile_v'] = '3'  # apertura scura sul video pieno, 31 ottobre 2026
 
 
 def main():

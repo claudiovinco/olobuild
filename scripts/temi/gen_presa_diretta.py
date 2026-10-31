@@ -89,19 +89,19 @@ def apertura(t):
     sl = []
     for i, (tab, occ, r1, r2, testo, foto) in enumerate(SERVIZI):
         n = i + 1
-        sl.append(K.diapositiva('pd-%d' % n, K.sfondo_foto(foto, overlay=0.84, scala=1.08, durata=10000,
-                                                           verso='in' if n % 2 else 'out', colore=C['fondo']), [
+        sl.append(K.diapositiva('pd-%d' % n, K.sfondo_video([V_CONSOLLE, V_VOCE, V_FADER, V_BATTERIA][i], overlay=0.8,
+                                                            colore=C['fondo']), [
             K.livello('pd-o%d' % n, contenuto=occ, x=6, y=18, w=40, size=12, peso='500', colore=AMBRA, letterSpacing=3,
                       textTransform='uppercase', fontFamily=MONO, ritardo=250,
                       responsive={'mobile': {'fontSize': m(11), 'y': 42, 'x': 7, 'width': 86}}),
             K.livello('pd-t%d' % n, contenuto=r1, tag='h1' if n == 1 else 'h2', x=6, y=22.5, w=50, size=76, peso='600',
                       colore=C['chiaro'], fontFamily=TITOLI, lineHeight=1.02, letterSpacing=-2, entra='fadeIn', ritardo=350,
                       durata=900, charAnim={'stagger': 18, 'offsetY': 40, 'opacity': 0},
-                      responsive={'mobile': {'fontSize': m(38), 'y': 44.5, 'x': 7, 'width': 88}}),
+                      responsive={'mobile': {'fontSize': m(33), 'y': 44.5, 'x': 7, 'width': 88}}),
             K.livello('pd-i%d' % n, contenuto=r2, tag='p', x=6, y=33, w=50, size=76, peso='600', colore=AMBRA,
                       fontFamily=TITOLI, lineHeight=1.02, letterSpacing=-2, entra='fadeIn', ritardo=600, durata=900,
                       charAnim={'stagger': 18, 'offsetY': 40, 'opacity': 0},
-                      responsive={'mobile': {'fontSize': m(38), 'y': 48.8, 'x': 7, 'width': 88}}),
+                      responsive={'mobile': {'fontSize': m(33), 'y': 48.8, 'x': 7, 'width': 88}}),
             K.livello('pd-s%d' % n, contenuto=testo, x=6, y=48, w=33, size=17, peso='400', colore=mix(C['chiaro'], 80),
                       lineHeight=1.65, ritardo=950, responsive={'mobile': {'fontSize': m(14), 'y': 55, 'x': 7, 'width': 86}}),
             K.livello('pd-b%d' % n, tipo='button', contenuto='Prenota la sala', x=6, y=70, w='auto', size=12, peso='600',
@@ -378,6 +378,7 @@ THEME = tema(
     HEX, '\'Golos Text\', system-ui, -apple-system, \'Segoe UI\', sans-serif', '\'SUSE\', system-ui, sans-serif',
     '\'Reddit Mono\', ui-monospace, Menlo, monospace', ['SUSE', 'Golos Text', 'Reddit Mono'], peso_titoli='600', raggio=6,
     grana=6, titoli_line='1.02', titoli_spazio='-0.025em')
+THEME['preview_v'] = THEME['preview_mobile_v'] = '2'  # apertura rifatta il 31 ottobre 2026
 
 
 def main():

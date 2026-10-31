@@ -68,6 +68,8 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
         'link_azione'                  => '',
         'campo_modulo'                 => 'messaggio',
         'testo_azzera'                 => 'Ricomincia',
+        'a_passi'                      => false,
+        'testo_canone'                 => '',
         // stile
         'vista_opzioni'                => 'schede',
         'disposizione'                 => 'lato',
@@ -397,6 +399,7 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
                 'tipo'   => $tipo,
                 'obbl'   => ! array_key_exists( 'obbligatorio', $g ) || self::vero( $g['obbligatorio'] ),
                 'aiuto'  => trim( (string) ( $g['aiuto'] ?? '' ) ),
+                'blocco' => trim( (string) ( $g['blocco'] ?? '' ) ),
                 'opz'    => [],
             ];
             $per_id[ $id ] = count( $gruppi ) - 1;
@@ -439,13 +442,16 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
             }
             $max      = min( 999, max( $min, $max ) );
             $prezzo   = self::numero( $o['prezzo'] ?? 0 );
+            $canone   = self::numero( $o['canone'] ?? 0 );
             $prezzi[] = $prezzo;
+            $prezzi[] = $canone;
 
             $gruppi[ $gi ]['opz'][] = [
                 'n'      => $n,
                 'nome'   => $nome,
                 'descr'  => trim( (string) ( $o['descrizione'] ?? '' ) ),
                 'prezzo' => $prezzo,
+                'canone' => $canone,
                 'img'    => esc_url_raw( self::url_di( $o['immagine'] ?? '' ) ),
                 'badge'  => trim( (string) ( $o['badge'] ?? '' ) ),
                 'pred'   => self::vero( $o['predefinita'] ?? false ),
@@ -502,6 +508,41 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
             }
         }
         $totale = round( $totale, $dec );
+
+        // ── Macroblocchi: gruppi di fila con lo stesso «Blocco», sotto un titolo numerato col loro subtotale ──
+        $blocchi   = [];
+        $blocco_di = [];
+        foreach ( $vivi as $gi => $g ) {
+            $ultimo = count( $blocchi ) - 1;
+            if ( $ultimo < 0 || $blocchi[ $ultimo ]['nome'] !== $g['blocco'] ) {
+                $blocchi[] = [ 'nome' => $g['blocco'], 'g' => [], 'sub' => 0.0, 'can' => 0.0 ];
+                $ultimo++;
+            }
+            $blocchi[ $ultimo ]['g'][] = $gi;
+            $blocco_di[ $gi ]          = $ultimo;
+            foreach ( $g['opz'] as $o ) {
+                $blocchi[ $ultimo ]['sub'] += $o['prezzo'] * $o['q'];
+                $blocchi[ $ultimo ]['can'] += $o['canone'] * $o['q'];
+            }
+        }
+        $con_blocchi = count( $blocchi ) > 1 || ( 1 === count( $blocchi ) && '' !== $blocchi[0]['nome'] );
+        $a_passi     = $con_blocchi && count( $blocchi ) > 1 && ! empty( $s['a_passi'] );
+        // Canone: quello che si paga ogni anno (dominio, hosting, assistenza), sommato a parte sotto il totale.
+        $con_canone = false;
+        $canone_tot = 0.0;
+        foreach ( $vivi as $g ) {
+            foreach ( $g['opz'] as $o ) {
+                if ( abs( $o['canone'] ) > 0.00001 ) {
+                    $con_canone = true;
+                }
+                $canone_tot += $o['canone'] * $o['q'];
+            }
+        }
+        $canone_tot   = round( $canone_tot, $dec );
+        $testo_canone = trim( (string) $s['testo_canone'] );
+        $testo_canone = '' !== $testo_canone ? $testo_canone : __( 'Ogni anno', 'olobuilder' );
+        /* translators: %s: un prezzo, per esempio «12 €» */
+        $annuo = __( '%s all\'anno', 'olobuilder' );
 
         // ── Indicatori: un nome o un id, il massimo (100 se manca) ──
         $indicatori = [];
@@ -864,6 +905,49 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
                 echo "{$sel} .ocfg-riga-prezzo{color:{$c_prezzo_p}}";
             }
         }
+        // Macroblocchi: titolo numerato col subtotale; con «Un blocco alla volta» i passi in alto e Indietro / Avanti.
+        echo "{$sel} .ocfg-blocco{display:flex;flex-direction:column;gap:2rem;min-width:0}";
+        echo "{$sel} .ocfg-blocco + .ocfg-blocco{padding-top:2.5rem;border-top:1px solid var(--ocfg-bc)}";
+        echo "{$sel} .ocfg-blocco-testa{display:flex;flex-wrap:wrap;align-items:baseline;gap:.35rem .875rem;min-width:0}";
+        echo "{$sel} .ocfg-blocco-num{flex:none;color:var(--ocfg-acc);font-size:14px;font-weight:700;letter-spacing:.08em;font-variant-numeric:tabular-nums;line-height:1}";
+        echo "{$sel} .ocfg-blocco-titolo{flex:1 1 12rem;min-width:0;margin:0;color:inherit;font-size:clamp(21px,2.2vw,27px);font-weight:var(--olo-font-weight-heading, 600);line-height:1.2;text-wrap:balance}";
+        echo "{$sel} .ocfg-blocco-titolo:focus{outline:none}";
+        echo "{$sel} .ocfg-blocco-sub{flex:none;color:var(--ocfg-tenue);font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}";
+        echo "{$sel} .ocfg-sub-can::before{content:' · '}";
+        echo "{$sel} .ocfg-sub-uno[hidden] + .ocfg-sub-can::before{content:none}";
+        echo "{$sel}.ocfg--passi .ocfg-blocco + .ocfg-blocco{padding-top:0;border-top:0}";
+        echo "{$sel} .ocfg-passi{display:flex;flex-wrap:wrap;gap:.5rem;margin:0;padding:0;list-style:none}";
+        echo "{$sel} .ocfg-passi li{margin:0;padding:0}";
+        echo "{$sel} .ocfg-tappa{display:inline-flex;align-items:center;gap:.5rem;margin:0;padding:.45rem .9rem .45rem .45rem;border:1px solid var(--ocfg-bc);border-radius:5em;background:transparent;color:inherit;font:inherit;font-size:14px;font-weight:600;line-height:1.2;cursor:pointer;-webkit-appearance:none;appearance:none;transition:border-color .2s ease,background-color .2s ease,color .2s ease}";
+        echo "{$sel} .ocfg-tappa:hover{border-color:var(--ocfg-acc);background:transparent;color:inherit}";
+        echo "{$sel} .ocfg-tappa:focus{outline:none}";
+        echo "{$sel} .ocfg-tappa:focus-visible{outline:2px solid var(--ocfg-acc);outline-offset:2px}";
+        echo "{$sel} .ocfg-tappa-n{display:inline-flex;align-items:center;justify-content:center;flex:none;width:1.65rem;height:1.65rem;border-radius:50%;background:color-mix(in srgb, currentColor 9%, transparent);font-size:12px;font-variant-numeric:tabular-nums}";
+        echo "{$sel} .ocfg-tappa.is-fatta .ocfg-tappa-n{background:var(--ocfg-acc);color:var(--ocfg-su-acc)}";
+        echo "{$sel} .ocfg-tappa[aria-current=\"step\"]{border-color:var(--ocfg-acc);background:var(--ocfg-acc);color:var(--ocfg-su-acc)}";
+        echo "{$sel} .ocfg-tappa[aria-current=\"step\"] .ocfg-tappa-n{background:color-mix(in srgb, var(--ocfg-su-acc) 20%, transparent);color:inherit}";
+        echo "{$sel} .ocfg-passi-nav{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.75rem;padding-top:.5rem}";
+        echo "{$sel} .ocfg-indietro,{$sel} .ocfg-avanti{display:inline-flex;align-items:center;gap:.5em;min-height:2.75rem;margin:0;padding:.65rem 1.25rem;border:1px solid var(--ocfg-bc);border-radius:var(--olo-btn-border-radius, .5rem);background:transparent;color:inherit;font:inherit;font-size:15px;font-weight:600;line-height:1.2;cursor:pointer;-webkit-appearance:none;appearance:none;transition:border-color .2s ease,filter .2s ease}";
+        echo "{$sel} .ocfg-avanti{margin-left:auto;border-color:var(--ocfg-acc);background:var(--ocfg-acc);color:var(--ocfg-su-acc)}";
+        echo "{$sel} .ocfg-indietro:hover{border-color:var(--ocfg-acc);background:transparent;color:inherit}";
+        echo "{$sel} .ocfg-avanti:hover{filter:brightness(.94);background:var(--ocfg-acc);color:var(--ocfg-su-acc)}";
+        echo "{$sel} .ocfg-indietro:focus,{$sel} .ocfg-avanti:focus{outline:none}";
+        echo "{$sel} .ocfg-indietro:focus-visible,{$sel} .ocfg-avanti:focus-visible{outline:2px solid var(--ocfg-acc);outline-offset:3px}";
+        echo "{$sel} .ocfg-indietro svg,{$sel} .ocfg-avanti svg,{$sel} .ocfg-indietro .olo-lucide-icon,{$sel} .ocfg-avanti .olo-lucide-icon{width:1.05em;height:1.05em;flex:none}";
+        // Canone annuo: sotto il prezzo della scheda, accanto ai prezzi del riepilogo, sotto il totale.
+        echo "{$sel} .ocfg-canone-opz{color:var(--ocfg-tenue);font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}";
+        echo "{$sel} .ocfg-riga-cifre{display:flex;flex:none;flex-direction:column;align-items:flex-end;gap:.1rem}";
+        echo "{$sel} .ocfg-riga-canone{color:var(--ocfg-ptenue);font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}";
+        echo "{$sel} .ocfg-riga--blocco{display:flex;align-items:baseline;justify-content:space-between;gap:.75rem;padding:1rem 0 .35rem;border-bottom:1px solid var(--ocfg-pt)}";
+        echo "{$sel} .ocfg-riga--blocco:first-child{padding-top:0}";
+        echo "{$sel} .ocfg-riga--blocco dt{margin:0;color:var(--ocfg-pt);letter-spacing:.08em}";
+        echo "{$sel} .ocfg-riga--blocco dd{display:block;margin:0}";
+        echo "{$sel} .ocfg-riga--blocco .ocfg-sub-can::before{content:none}";
+        echo "{$sel} .ocfg-canone{display:flex;flex-basis:100%;align-items:baseline;justify-content:space-between;gap:.75rem;color:var(--ocfg-ptenue);font-size:14px;font-weight:600;line-height:1.35}";
+        echo "{$sel} .ocfg-canone-cifra{color:var(--ocfg-pt);font-size:17px;font-variant-numeric:tabular-nums;white-space:nowrap}";
+        echo "{$sel} .ocfg-barra .ocfg-canone{flex-basis:auto;justify-content:flex-start;font-size:13px}";
+        echo "{$sel} .ocfg-barra .ocfg-canone-cifra{font-size:14px}";
+        echo '@media (prefers-reduced-motion:reduce){' . "{$sel} .ocfg-tappa,{$sel} .ocfg-indietro,{$sel} .ocfg-avanti{transition:none}" . '}';
         echo '</style>';
 
         // Nel builder: cosa manca (gruppi vuoti, opzioni che non trovano il gruppo), detto dove si vede.
@@ -894,9 +978,9 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
         $dati_g = [];
         $dati_o = [];
         foreach ( $vivi as $gi => $g ) {
-            $dati_g[] = [ 't' => $g['titolo'], 'tipo' => $g['tipo'], 'obbl' => $g['obbl'] ];
+            $dati_g[] = [ 't' => $g['titolo'], 'tipo' => $g['tipo'], 'obbl' => $g['obbl'], 'b' => $blocco_di[ $gi ] ];
             foreach ( $g['opz'] as $o ) {
-                $dati_o[] = [ 'g' => $gi, 'n' => $o['nome'], 'p' => $o['prezzo'], 'pt' => (object) $o['punti'], 'min' => $o['min'], 'max' => $o['max'], 'd' => $o['q'] ];
+                $dati_o[] = [ 'g' => $gi, 'n' => $o['nome'], 'p' => $o['prezzo'], 'c' => $o['canone'], 'pt' => (object) $o['punti'], 'min' => $o['min'], 'max' => $o['max'], 'd' => $o['q'] ];
             }
         }
         $dati_i = [];
@@ -915,7 +999,15 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
             'link'    => $con_puls ? $link : '',
             'campo'   => $campo,
             'builder' => $builder,
+            'blocchi' => $con_blocchi,
+            'passi'   => $a_passi,
+            'canone'  => $con_canone,
+            'bn'      => array_map( static function ( $b ) {
+                return $b['nome'];
+            }, $blocchi ),
             'tt'      => [
+                'canone'      => $testo_canone,
+                'annuo'       => $annuo,
                 'titolo'      => $con_lista ? $titolo_r : '',
                 'totale'      => $testo_tot,
                 'nota'        => $nota,
@@ -958,13 +1050,39 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
             return [ $quantita ? sprintf( __( '%s cad.', 'olobuilder' ), $t ) : $t, false ];
         };
 
-        echo '<div id="' . esc_attr( $uid ) . '" class="' . esc_attr( $classi ) . '" data-ocfg="' . esc_attr( wp_json_encode( $cfg ) ) . '">';
+        echo '<div id="' . esc_attr( $uid ) . '" class="' . esc_attr( $classi . ( $a_passi ? ' ocfg--passi' : '' ) ) . '" data-ocfg="' . esc_attr( wp_json_encode( $cfg ) ) . '">';
         echo '<div class="ocfg-corpo">';
 
         // ── Le opzioni, gruppo per gruppo ──
         echo '<div class="ocfg-opzioni">';
+        if ( $a_passi ) {
+            echo '<ol class="ocfg-passi" aria-label="' . esc_attr__( 'Passi', 'olobuilder' ) . '">';
+            foreach ( $blocchi as $bi => $b ) {
+                /* translators: %d: il numero del passo */
+                $nome_b = '' !== $b['nome'] ? $b['nome'] : sprintf( __( 'Passo %d', 'olobuilder' ), $bi + 1 );
+                echo '<li><button type="button" class="ocfg-tappa" data-b="' . (int) $bi . '"' . ( 0 === $bi ? ' aria-current="step"' : '' ) . ' data-olo-interactive>'
+                    . '<span class="ocfg-tappa-n" aria-hidden="true">' . esc_html( sprintf( '%02d', $bi + 1 ) ) . '</span><span class="ocfg-tappa-t">' . esc_html( $nome_b ) . '</span></button></li>';
+            }
+            echo '</ol>';
+        }
         $oi = 0;
         foreach ( $vivi as $gi => $g ) {
+            $bi = $blocco_di[ $gi ];
+            if ( $con_blocchi && $blocchi[ $bi ]['g'][0] === $gi ) {
+                $b      = $blocchi[ $bi ];
+                $bid    = $uid . '-b' . $bi;
+                /* translators: %d: il numero del passo */
+                $nome_b = '' !== $b['nome'] ? $b['nome'] : sprintf( __( 'Passo %d', 'olobuilder' ), $bi + 1 );
+                echo '<section class="ocfg-blocco" data-b="' . (int) $bi . '" aria-labelledby="' . esc_attr( $bid ) . '"' . ( $a_passi && $bi > 0 ? ' hidden' : '' ) . '>';
+                echo '<header class="ocfg-blocco-testa"><span class="ocfg-blocco-num" aria-hidden="true">' . esc_html( sprintf( '%02d', $bi + 1 ) ) . '</span>';
+                echo '<h3 class="ocfg-blocco-titolo" id="' . esc_attr( $bid ) . '" tabindex="-1">' . esc_html( $nome_b ) . '</h3>';
+                if ( $diff ) {
+                    $solo_c = abs( $b['sub'] ) < 0.00001 && $b['can'] > 0;
+                    echo '<span class="ocfg-blocco-sub" data-sub="' . (int) $bi . '"><span class="ocfg-sub-uno"' . ( $solo_c ? ' hidden' : '' ) . '>' . esc_html( self::soldi( round( $b['sub'], $dec ), $dec, $valuta ) ) . '</span>'
+                        . '<span class="ocfg-sub-can"' . ( $b['can'] > 0 ? '' : ' hidden' ) . '>' . esc_html( $b['can'] > 0 ? sprintf( $annuo, self::soldi( round( $b['can'], $dec ), $dec, $valuta ) ) : '' ) . '</span></span>';
+                }
+                echo '</header>';
+            }
             $gid  = $uid . '-g' . $gi;
             $qta  = 'quantita' === $g['tipo'];
             $immg = false;
@@ -1019,7 +1137,11 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
                     echo '<span class="ocfg-piede">';
                     if ( $diff ) {
                         list( $pt_txt, $incluso ) = $prezzo( $o, $qta );
-                        echo '<span class="ocfg-prezzo' . ( $incluso ? ' is-incluso' : '' ) . '" id="' . esc_attr( $oid ) . '-p">' . esc_html( $pt_txt ) . '</span>';
+                        $solo_can = $incluso && abs( $o['canone'] ) > 0.00001;
+                        echo '<span class="ocfg-prezzo' . ( $incluso ? ' is-incluso' : '' ) . '" id="' . esc_attr( $oid ) . '-p"' . ( $solo_can ? ' hidden' : '' ) . '>' . esc_html( $pt_txt ) . '</span>';
+                        if ( abs( $o['canone'] ) > 0.00001 ) {
+                            echo '<span class="ocfg-canone-opz">' . esc_html( sprintf( $annuo, self::soldi( round( $o['canone'], $dec ), $dec, $valuta ) ) ) . '</span>';
+                        }
                     }
                     if ( $qta ) {
                         /* translators: %s: nome dell'opzione */
@@ -1043,6 +1165,22 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
                 $oi++;
             }
             echo '</div></fieldset>';
+            if ( $con_blocchi && $blocchi[ $bi ]['g'][ count( $blocchi[ $bi ]['g'] ) - 1 ] === $gi ) {
+                if ( $a_passi ) {
+                    echo '<div class="ocfg-passi-nav">';
+                    if ( $bi > 0 ) {
+                        echo '<button type="button" class="ocfg-indietro" data-olo-interactive>' . $this->render_icon_html( 'arrow-left', 0.9, 'aria-hidden="true"' ) . '<span>' . esc_html__( 'Indietro', 'olobuilder' ) . '</span></button>';
+                    }
+                    if ( $bi < count( $blocchi ) - 1 ) {
+                        $dopo = $blocchi[ $bi + 1 ]['nome'];
+                        /* translators: %s: il nome del passo dopo */
+                        $t_av = '' !== $dopo ? sprintf( __( 'Avanti: %s', 'olobuilder' ), $dopo ) : __( 'Avanti', 'olobuilder' );
+                        echo '<button type="button" class="ocfg-avanti" data-olo-interactive><span>' . esc_html( $t_av ) . '</span>' . $this->render_icon_html( 'arrow-right', 0.9, 'aria-hidden="true"' ) . '</button>';
+                    }
+                    echo '</div>';
+                }
+                echo '</section>';
+            }
         }
         if ( $builder ) {
             echo $note();
@@ -1050,10 +1188,11 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
         echo '</div>';
 
         // ── La testata del riepilogo col totale (impilato) ──
-        $tot_html = function ( $dove ) use ( $totale, $dec, $valuta, $periodo, $testo_tot, $nota, $ed ) {
+        $tot_html = function ( $dove ) use ( $totale, $dec, $valuta, $periodo, $testo_tot, $nota, $ed, $con_canone, $canone_tot, $testo_canone ) {
             return '<span class="ocfg-totale-etichetta"' . ( 'pannello' === $dove ? $ed( 'testo_totale' ) : '' ) . '>' . esc_html( $testo_tot ) . '</span>'
                 . '<span class="ocfg-totale-valore"><span class="ocfg-cifra">' . esc_html( self::soldi( $totale, $dec, $valuta ) ) . '</span>'
                 . ( '' !== $periodo ? '<span class="ocfg-periodo">' . esc_html( $periodo ) . '</span>' : '' ) . '</span>'
+                . ( $con_canone ? '<span class="ocfg-canone"' . ( $canone_tot > 0 ? '' : ' hidden' ) . '><span class="ocfg-canone-etichetta">' . esc_html( $testo_canone ) . '</span><span class="ocfg-canone-cifra">' . esc_html( self::soldi( $canone_tot, $dec, $valuta ) ) . '</span></span>' : '' )
                 . ( '' !== $nota ? '<p class="ocfg-nota"' . ( 'pannello' === $dove ? $ed( 'nota_prezzo' ) : '' ) . '>' . esc_html( $nota ) . '</p>' : '' );
         };
         echo '<div class="ocfg-barra"><div class="ocfg-barra-totale">' . $tot_html( 'barra' ) . '</div>';
@@ -1072,6 +1211,14 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
                 echo '<div class="ocfg-riga ocfg-riga--base"><dt>' . esc_html__( 'Prezzo base', 'olobuilder' ) . '</dt><dd><span class="ocfg-riga-nome"></span><span class="ocfg-riga-prezzo">' . esc_html( self::soldi( $base, $dec, $valuta ) ) . '</span></dd></div>';
             }
             foreach ( $vivi as $gi => $g ) {
+                $bi = $blocco_di[ $gi ];
+                if ( $con_blocchi && $diff && $blocchi[ $bi ]['g'][0] === $gi ) {
+                    $b = $blocchi[ $bi ];
+                    /* translators: %d: il numero del passo */
+                    echo '<div class="ocfg-riga ocfg-riga--blocco" data-b="' . (int) $bi . '"><dt>' . esc_html( '' !== $b['nome'] ? $b['nome'] : sprintf( __( 'Passo %d', 'olobuilder' ), $bi + 1 ) ) . '</dt>'
+                        . '<dd><span class="ocfg-riga-cifre" data-sub="' . (int) $bi . '"><span class="ocfg-riga-prezzo ocfg-sub-uno"' . ( abs( $b['sub'] ) < 0.00001 && $b['can'] > 0 ? ' hidden' : '' ) . '>' . esc_html( self::soldi( round( $b['sub'], $dec ), $dec, $valuta ) ) . '</span>'
+                        . '<span class="ocfg-riga-canone ocfg-sub-can"' . ( $b['can'] > 0 ? '' : ' hidden' ) . '>' . esc_html( $b['can'] > 0 ? sprintf( $annuo, self::soldi( round( $b['can'], $dec ), $dec, $valuta ) ) : '' ) . '</span></span></dd></div>';
+                }
                 $sc = array_values( array_filter( $g['opz'], static function ( $o ) {
                     return $o['q'] > 0;
                 } ) );
@@ -1081,8 +1228,18 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
                 }
                 foreach ( $sc as $o ) {
                     $tot_o = round( $o['prezzo'] * $o['q'], $dec );
-                    echo '<dd><span class="ocfg-riga-nome">' . esc_html( $o['nome'] . ( 'quantita' === $g['tipo'] ? ' × ' . $o['q'] : '' ) ) . '</span>'
-                        . ( $diff ? '<span class="ocfg-riga-prezzo' . ( abs( $tot_o ) < 0.00001 ? ' is-incluso' : '' ) . '">' . esc_html( abs( $tot_o ) < 0.00001 ? __( 'Incluso', 'olobuilder' ) : self::soldi( $tot_o, $dec, $valuta, true ) ) . '</span>' : '' ) . '</dd>';
+                    $can_o = round( $o['canone'] * $o['q'], $dec );
+                    $cifre = '';
+                    if ( $diff ) {
+                        if ( abs( $tot_o ) > 0.00001 || abs( $can_o ) < 0.00001 ) {
+                            $cifre .= '<span class="ocfg-riga-prezzo' . ( abs( $tot_o ) < 0.00001 ? ' is-incluso' : '' ) . '">' . esc_html( abs( $tot_o ) < 0.00001 ? __( 'Incluso', 'olobuilder' ) : self::soldi( $tot_o, $dec, $valuta, true ) ) . '</span>';
+                        }
+                        if ( abs( $can_o ) > 0.00001 ) {
+                            $cifre .= '<span class="ocfg-riga-canone">' . esc_html( sprintf( $annuo, self::soldi( $can_o, $dec, $valuta ) ) ) . '</span>';
+                        }
+                        $cifre = '<span class="ocfg-riga-cifre">' . $cifre . '</span>';
+                    }
+                    echo '<dd><span class="ocfg-riga-nome">' . esc_html( $o['nome'] . ( 'quantita' === $g['tipo'] ? ' × ' . $o['q'] : '' ) ) . '</span>' . $cifre . '</dd>';
                 }
                 echo '</div>';
             }
@@ -1173,6 +1330,13 @@ if(v.num){var n=parseInt(v.num.value,10);if(isNaN(n)){n=0;}return lim(o,n);}
 return v.inp?(v.inp.checked?1:0):0;
 }
 function totale(){var t=+C.base||0;O.forEach(function(o,i){var k=qta(i);if(k){t+=(+o.p||0)*k;}});return tondo(t);}
+function canone(){var t=0;O.forEach(function(o,i){var k=qta(i);if(k){t+=(+o.c||0)*k;}});return tondo(t);}
+function annuo(n){return String(T.annuo||"%s").replace("%s",function(){return soldi(n,false);});}
+function subB(b){var t=0,c=0;O.forEach(function(o,i){if((G[o.g]||{}).b!==b){return;}var k=qta(i);if(k){t+=(+o.p||0)*k;c+=(+o.c||0)*k;}});return [tondo(t),tondo(c)];}
+function aggiornaBlocchi(){
+[].forEach.call(el.querySelectorAll("[data-sub]"),function(x){var r=subB(+x.getAttribute("data-sub")),u=x.querySelector(".ocfg-sub-uno"),c=x.querySelector(".ocfg-sub-can");if(u){u.textContent=soldi(r[0],false);u.hidden=false;if(!r[0]){if(r[1]){u.hidden=true;}}}if(c){c.textContent=r[1]?annuo(r[1]):"";c.hidden=!r[1];}});
+var ct=canone();[].forEach.call(el.querySelectorAll(".ocfg-canone"),function(x){x.hidden=!ct;var v=x.querySelector(".ocfg-canone-cifra");if(v){v.textContent=soldi(ct,false);}});
+}
 function scelteDi(gi){var r=[];O.forEach(function(o,i){if(o.g!==gi){return;}var k=qta(i);if(k>0){r.push({o:o,k:k});}});return r;}
 function completo(gi){var g=G[gi]||{};if(!g.obbl){return true;}return scelteDi(gi).length>0;}
 function gruppoEl(gi){return el.querySelector('.ocfg-gruppo[data-g="'+gi+'"]');}
@@ -1190,7 +1354,10 @@ return;
 sc.forEach(function(s){
 var d=document.createElement("dd"),n=document.createElement("span");
 n.className="ocfg-riga-nome";n.textContent=s.o.n+(g.tipo==="quantita"?" "+PER+" "+s.k:"");d.appendChild(n);
-if(C.diff){var p=document.createElement("span"),pz=tondo((+s.o.p||0)*s.k);p.className="ocfg-riga-prezzo"+(pz?"":" is-incluso");p.textContent=pz?soldi(pz,true):(T.incluso||"");d.appendChild(p);}
+if(C.diff){var w=document.createElement("span"),pz=tondo((+s.o.p||0)*s.k),cz=tondo((+s.o.c||0)*s.k);w.className="ocfg-riga-cifre";
+if(pz||!cz){var p=document.createElement("span");p.className="ocfg-riga-prezzo"+(pz?"":" is-incluso");p.textContent=pz?soldi(pz,true):(T.incluso||"");w.appendChild(p);}
+if(cz){var q=document.createElement("span");q.className="ocfg-riga-canone";q.textContent=annuo(cz);w.appendChild(q);}
+d.appendChild(w);}
 r.appendChild(d);
 });
 });
@@ -1223,8 +1390,9 @@ if(k<1){requestAnimationFrame(passo);}
 requestAnimationFrame(passo);
 }
 [].forEach.call(el.querySelectorAll(".ocfg-opz[data-o]"),function(c){
-var o=O[+c.getAttribute("data-o")],pe=c.querySelector(".ocfg-prezzo");if(!o){return;}if(!pe){return;}
-var p=tondo(+o.p||0),t=p?soldi(p,true):(T.incluso||"");
+var o=O[+c.getAttribute("data-o")],pe=c.querySelector(".ocfg-prezzo");if(!o){return;}
+var ce=c.querySelector(".ocfg-canone-opz");if(ce){ce.textContent=annuo(tondo(+o.c||0));}if(!pe){return;}
+var p=tondo(+o.p||0),t=p?soldi(p,true):(T.incluso||"");if(!p){if(+o.c){pe.hidden=true;return;}}
 if(p){if((G[o.g]||{}).tipo==="quantita"){t=String(T.cad||"%s").replace("%s",function(){return t;});}}
 pe.textContent=t;
 });
@@ -1241,11 +1409,15 @@ function testoRiepilogo(){
 var r=[],t=totale();
 if(T.titolo){r.push(T.titolo);}
 if(C.diff){if(+C.base){r.push((T.base||"")+": "+soldi(+C.base,false));}}
+var bVisto=-1;
 G.forEach(function(g,gi){
 var sc=scelteDi(gi);if(!sc.length){return;}
-r.push((g.t||"")+": "+sc.map(function(s){var x=s.o.n+(g.tipo==="quantita"?" "+PER+" "+s.k:"");if(C.diff){var pz=tondo((+s.o.p||0)*s.k);if(pz){x+=" ("+soldi(pz,true)+")";}}return x;}).join(", "));
+if(C.blocchi){if(g.b!==bVisto){bVisto=g.b;var sb=subB(g.b),nb=String((C.bn||[])[g.b]||"");if(nb){r.push("");r.push(nb.toUpperCase()+(C.diff?" · "+(sb[0]||!sb[1]?soldi(sb[0],false)+(sb[1]?" + "+annuo(sb[1]):""):annuo(sb[1])):""));}}}
+r.push((g.t||"")+": "+sc.map(function(s){var x=s.o.n+(g.tipo==="quantita"?" "+PER+" "+s.k:"");if(C.diff){var pz=tondo((+s.o.p||0)*s.k),cz=tondo((+s.o.c||0)*s.k),pp=[];if(pz){pp.push(soldi(pz,true));}if(cz){pp.push(annuo(cz));}if(pp.length){x+=" ("+pp.join(", ")+")";}}return x;}).join(", "));
 });
+if(C.blocchi){r.push("");}
 r.push((T.totale||"")+": "+soldi(t,false)+periodo+(T.nota?" ("+T.nota+")":""));
+if(C.canone){var ctot=canone();if(ctot){r.push((T.canone||"")+": "+soldi(ctot,false));}}
 return r.join("\n");
 }
 var toccato=false,ultimo="";
@@ -1285,11 +1457,12 @@ if(!v){return;}var k=qta(i),o=O[i]||{};
 if(k>0){v.c.classList.add("is-scelta");}else{v.c.classList.remove("is-scelta");}
 if(v.num){if(v.meno){v.meno.disabled=k<=(+o.min||0);}if(v.piu){v.piu.disabled=k>=(+o.max||0);}}
 });
-aggiornaLista();aggiornaInd();scorre();
+aggiornaLista();aggiornaInd();aggiornaBlocchi();scorre();
 var t=totale();animaTot(t);
 if(!daUtente){return;}
 toccato=true;pulsanteServe();
-annuncia((pre?pre+" ":"")+(T.totale||"")+": "+soldi(t,false)+periodo);
+var cn=C.canone?canone():0;
+annuncia((pre?pre+" ":"")+(T.totale||"")+": "+soldi(t,false)+periodo+(cn?". "+(T.canone||"")+": "+soldi(cn,false):""));
 G.forEach(function(g,gi){var fs=gruppoEl(gi);if(fs){if(fs.classList.contains("is-manca")){if(completo(gi)){segnala(gi,"");avvisa("",false);}}}});
 sincronizza(false);
 }
@@ -1344,6 +1517,7 @@ for(var gi=0;gi<G.length;gi++){
 if(!completo(gi)){
 var g=G[gi],msg=String(g.tipo==="uno"?(T.manca1||""):(T.mancaN||"")).replace("%s",function(){return g.t||"";});
 segnala(gi,msg);avvisa(msg,false);
+if(C.passi){vaiA(g.b,false);}
 var fs=gruppoEl(gi);
 if(fs){scorri(fs,"center");var primo=fs.querySelector(".ocfg-input, .ocfg-num");if(primo){try{primo.focus({preventScroll:true});}catch(x){}}}
 return false;
@@ -1387,6 +1561,7 @@ chiudi();
 V.forEach(function(v,i){if(!v){return;}var d=+((O[i]||{}).d)||0;if(v.inp){v.inp.checked=d>0;}if(v.num){v.num.value=String(d);}});
 G.forEach(function(g,gi){segnala(gi,"");});avvisa("",false);
 aggiorna(true,T.ricominciato||"");
+vaiA(0,false);
 });}
 var pan=el.querySelector(".ocfg-pannello"),vai=el.querySelector(".ocfg-vai"),barra=el.querySelector(".ocfg-barra"),fermo=false;
 if(vai){if(pan){vai.addEventListener("click",function(){
@@ -1409,6 +1584,28 @@ pubblica(h);
 });},{threshold:[0,0.99,1],rootMargin:"0px 0px -1px 0px"}).observe(barra);}catch(e){}}}
 function scorre(){if(!pan){return;}if(pan.scrollHeight>pan.clientHeight+1){pan.classList.add("is-scorre");}else{pan.classList.remove("is-scorre");}}
 function misura(){var w=el.getBoundingClientRect().width;if(w){if(w<720){el.classList.add("is-stretta");}else{el.classList.remove("is-stretta");}}}
+var tappe=[].slice.call(el.querySelectorAll(".ocfg-tappa")),blocchiEl=[].slice.call(el.querySelectorAll(".ocfg-blocco")),cur=0;
+function vaiA(b,fuoco){
+if(!C.passi){return;}if(!blocchiEl.length){return;}
+cur=Math.max(0,Math.min(blocchiEl.length-1,b));
+blocchiEl.forEach(function(x,i){x.hidden=i!==cur;});
+tappe.forEach(function(x,i){if(i===cur){x.setAttribute("aria-current","step");}else{x.removeAttribute("aria-current");}if(i<cur){x.classList.add("is-fatta");}else{x.classList.remove("is-fatta");}});
+if(fuoco){var bx=blocchiEl[cur];scorri(bx,"start");var h=bx.querySelector(".ocfg-blocco-titolo");if(h){try{h.focus({preventScroll:true});}catch(x){}}}
+scorre();
+}
+function bloccoPieno(b){for(var gi=0;gi<G.length;gi++){if(G[gi].b===b){if(!completo(gi)){return gi;}}}return -1;}
+function bloccoOk(b){
+var gi=bloccoPieno(b);if(gi<0){avvisa("",false);return true;}
+var g=G[gi],msg=String(g.tipo==="uno"?(T.manca1||""):(T.mancaN||"")).replace("%s",function(){return g.t||"";});
+if(cur!==b){vaiA(b,false);}
+segnala(gi,msg);avvisa(msg,false);var fs=gruppoEl(gi);if(fs){scorri(fs,"center");}
+return false;
+}
+if(C.passi){
+[].forEach.call(el.querySelectorAll(".ocfg-avanti"),function(b){b.addEventListener("click",function(){if(bloccoOk(cur)){vaiA(cur+1,true);}});});
+[].forEach.call(el.querySelectorAll(".ocfg-indietro"),function(b){b.addEventListener("click",function(){vaiA(cur-1,true);});});
+tappe.forEach(function(x,i){x.addEventListener("click",function(){if(i<=cur){vaiA(i,true);return;}for(var k=cur;k<i;k++){if(!bloccoOk(k)){return;}}vaiA(i,true);});});
+}
 misura();pulsanteServe();
 window.addEventListener("load",function(){pulsanteServe();scorre();});setTimeout(pulsanteServe,1500);
 if(window.ResizeObserver){try{var ro=new ResizeObserver(function(){misura();scorre();if(fermo){if(barra){pubblica(barra.offsetHeight);}}});ro.observe(el);if(pan){ro.observe(pan);}if(barra){ro.observe(barra);}}catch(e){}}else{window.addEventListener("resize",function(){misura();scorre();});}

@@ -684,6 +684,46 @@ trait Olobuild_Renderer_Page_Trait {
                 }
             endif; ?>
             <?php
+            // Piega: le sezioni salgono dal fondo dello schermo piegate all'indietro (--olo-piega da 1 a 0 mentre la
+            // cima della sezione va dal fondo a un terzo dello schermo). Cerniera sul bordo alto, la prospettiva
+            // della pagina; a 0 nessuna trasformazione. Con meno movimento: niente.
+            $has_any_piega = false;
+            foreach ( $tiles as $sec ) {
+                if ( 'piega' === ( $sec['settings']['scroll_entrance'] ?? '' ) ) {
+                    $has_any_piega = true;
+                    break;
+                }
+            }
+            if ( $has_any_piega ) : ?>
+                <style>
+                .olo-piega{transform-origin:50% 0;transform:perspective(1800px) rotateX(calc(var(--olo-piega,0) * -42deg)) scale(calc(1 - var(--olo-piega,0) * .1));backface-visibility:hidden}
+                .olo-piega.olo-piega-piana{transform:none}
+                @media (prefers-reduced-motion: reduce){.olo-piega{transform:none}}
+                </style>
+                <script>
+                (function(){
+                    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+                    var els=[].slice.call(document.querySelectorAll('.olo-piega'));
+                    if(!els.length)return;
+                    var rq=null;
+                    function giro(){
+                        rq=null;
+                        var vh=window.innerHeight;
+                        els.forEach(function(el){
+                            var r=el.getBoundingClientRect();
+                            var p=Math.max(0,Math.min(1,(r.top-vh*0.3)/(vh*0.7)));
+                            el.style.setProperty('--olo-piega',p.toFixed(3));
+                            el.classList.toggle('olo-piega-piana',p===0);
+                        });
+                    }
+                    function chiedi(){if(!rq)rq=requestAnimationFrame(giro);}
+                    window.addEventListener('scroll',chiedi,{passive:true});
+                    window.addEventListener('resize',chiedi);
+                    giro();
+                })();
+                </script>
+            <?php endif; ?>
+            <?php
             // Detect scroll-snap sections
             $has_any_snap = false;
             foreach ( $tiles as $sec ) {

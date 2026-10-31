@@ -516,7 +516,7 @@ def build_home():
                               pad_bottom=18),
                      text(t, '<p>In studio c’è una finestra a nord e nient’altro. Il flash lo porto, ma resta quasi sempre spento.</p>',
                           size=16, color=mix(INK, 80), align='center')]),
-    ], bg=video_bg(V_BICCHIERE, overlay=32, color=FONDO), padding='xlarge', html_id='luce',
+    ], bg=video_bg(V_BICCHIERE, overlay=0, color=FONDO), padding='xlarge', html_id='luce',
         style={'padding_top': 230, 'padding_bottom': 230}))
 
     metodo = t.classic('process-steps', {
@@ -712,7 +712,7 @@ def build_matrimoni():
                               'dopo dieci minuti si dimenticano di me, ed è lì che si comincia.</p>', size=17, color=mix(INK, 82))],
                      wm='1-2', ws='1-1'),
                t.col([], wm='1-2', ws='1-1')], layout='50-50', valign='end'),
-    ], bg=video_bg(V_VELO, overlay=30, color=FONDO), padding='xlarge', style={'padding_top': 260, 'padding_bottom': 100}))
+    ], bg=video_bg(V_VELO, overlay=0, color=FONDO), padding='xlarge', style={'padding_top': 260, 'padding_bottom': 100}))
 
     come = t.classic('process-steps', {
         'items': [{'number': '01', 'title': 'Ci conosciamo', 'description': 'Un caffè in studio o una telefonata lunga: chi siete, '
@@ -1364,7 +1364,7 @@ def build_404():
                      text(t, '<p>Questa pagina non è venuta. Capita anche alle foto: si ricomincia dalla prima.</p>', size=17,
                           align='center', color=mix(INK, 80)),
                      button(t, 'Torna alla home', HOME, kind='pieno', align='center')]),
-    ], bg=video_bg(V_FOGLIE, overlay=24, color=FONDO), padding='xlarge', style={'padding_top': 240, 'padding_bottom': 220})]
+    ], bg=video_bg(V_FOGLIE, overlay=0, color=FONDO), padding='xlarge', style={'padding_top': 240, 'padding_bottom': 220})]
 
 
 # ══════════════════════════════════════════════════════════════════════════════

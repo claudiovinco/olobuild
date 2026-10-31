@@ -55,7 +55,7 @@ VOCI = [('map-pin', 'Via XX Settembre 40 · Verona', PROVA + '#arrivare'), ('pho
 
 
 def build_header():
-    return K.testata(Tpl(ID, 'header'), 'Soffio', logo_size='28', overlay=True, scuro=False)
+    return K.testata(Tpl(ID, 'header'), 'Soffio', logo_size='28', overlay=False, scuro=False)
 
 
 def build_footer():
@@ -382,11 +382,13 @@ def build_prova():
 def build_404():
     t = Tpl(ID, '404')
     return [t.section([
-        K.centered(t, [K.label(t, 'Errore 404 · pagina assente', color=C['acc'], align='center'),
-                       K.headline(t, 'Respira. <em>Non è qui.</em>', size=96, tag='h1', align='center', pad_bottom=20),
-                       K.text(t, 'Quattro dentro, quattro fuori, e torniamo all’inizio.', size=17, align='center'),
+        K.centered(t, [K.label(t, 'Errore 404 · pagina assente', color=K.acc_media, align='center'),
+                       K.headline(t, 'Respira. <em>Non è qui.</em>', size=96, tag='h1', align='center', pad_bottom=20,
+                                  color=C['chiaro'], accento=K.acc_media),
+                       K.text(t, 'Quattro dentro, quattro fuori, e torniamo all’inizio.', size=17, align='center',
+                              color=K.soft_media),
                        K.button(t, 'Torna all’inizio', HOME, kind='pieno', align='center')]),
-    ], bg=K.video_bg(V_TENDA, overlay=78, color=C['fondo']), padding='xlarge', style={'padding_top': 240, 'padding_bottom': 220})]
+    ], bg=K.video_bg(V_TENDA, overlay=50), padding='xlarge', style={'padding_top': 240, 'padding_bottom': 220})]
 
 
 THEME = tema(

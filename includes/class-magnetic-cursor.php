@@ -40,6 +40,14 @@ class Olobuild_Magnetic_Cursor {
     /** Option key (wp_options). */
     const OPT = 'olobuild_magnetic_cursor';
 
+    /**
+     * Gli stili del cursore (31 ott 2026): «anello» è quello di sempre, disegnato qui; gli altri li disegna
+     * assets/js/olo-cursori.js. scia: catena di punti · mirino: fili e coordinate · goccia: si allunga col movimento ·
+     * inverti: disco che rovescia i colori · etichetta: una parola sui link · cometa: scia di luce · aggancio: abbraccia
+     * i pulsanti · bussola: freccia che punta dove si va · scintille: particelle · alone: luce morbida che insegue.
+     */
+    const STILI = [ 'anello', 'scia', 'mirino', 'goccia', 'inverti', 'etichetta', 'cometa', 'aggancio', 'bussola', 'scintille', 'alone' ];
+
     /** Blend mode ammessi per l'anello (whitelist anti-injection). */
     const BLEND_MODES = [ 'normal', 'screen', 'difference', 'exclusion', 'overlay', 'lighten', 'multiply' ];
 
@@ -78,6 +86,9 @@ class Olobuild_Magnetic_Cursor {
     public static function get_settings() {
         $defaults = [
             'enabled'           => false,        // master switch
+            'style'             => 'anello',     // uno di STILI
+            'label_text'        => 'Apri',       // stile «etichetta»: la parola sui link senza data-cursor
+            'label_color'       => '#FFFFFF',    // stile «etichetta»: colore della parola (il fondo è dot_color)
             'ring_size'         => 38,           // px — diametro anello a riposo
             'ring_color'        => '#22D3EE',    // colore bordo anello
             'ring_width'        => 1.5,          // px — spessore bordo anello
@@ -113,6 +124,9 @@ class Olobuild_Magnetic_Cursor {
         $clean = [];
 
         $clean['enabled']     = ! empty( $input['enabled'] );
+        $stile                = sanitize_key( $input['style'] ?? $d['style'] );
+        $clean['style']       = in_array( $stile, self::STILI, true ) ? $stile : 'anello';
+        $clean['label_text']  = mb_substr( sanitize_text_field( $input['label_text'] ?? $d['label_text'] ), 0, 24 );
         $clean['hide_system'] = ! empty( $input['hide_system'] );
 
         // Interi con clamp
@@ -127,7 +141,7 @@ class Olobuild_Magnetic_Cursor {
         $clean['follow_easing'] = max( 0.02, min( 1, floatval( $input['follow_easing'] ?? $d['follow_easing'] ) ) );
 
         // Colori (color picker → esadecimale o rgba; sanitize_text_field tiene rgba()/var())
-        foreach ( [ 'ring_color', 'dot_color', 'hot_color', 'hot_fill' ] as $ck ) {
+        foreach ( [ 'ring_color', 'dot_color', 'hot_color', 'hot_fill', 'label_color' ] as $ck ) {
             $clean[ $ck ] = sanitize_text_field( $input[ $ck ] ?? $d[ $ck ] );
         }
 
@@ -150,12 +164,51 @@ class Olobuild_Magnetic_Cursor {
      * ═══════════════════════════════════════════════════ */
 
     /**
+     * Gli stili diversi dall'anello: la configurazione in window.OLO_CURSORE e il motore in olo-cursori.js.
+     *
+     * @param array  $o     Impostazioni.
+     * @param string $stile Uno di STILI.
+     */
+    private static function render_stile( $o, $stile ) {
+        $cfg = [
+            'style'      => $stile,
+            'ring'       => (float) $o['ring_size'],
+            'ringW'      => (float) $o['ring_width'],
+            'dot'        => (float) $o['dot_size'],
+            'hotScale'   => (float) $o['hot_scale'],
+            'z'          => (int) $o['z_index'],
+            'ringColor'  => (string) $o['ring_color'],
+            'dotColor'   => (string) $o['dot_color'],
+            'hotColor'   => '' !== $o['hot_color'] ? (string) $o['hot_color'] : (string) $o['ring_color'],
+            'hotFill'    => '' !== $o['hot_fill'] ? (string) $o['hot_fill'] : 'transparent',
+            'labelColor' => (string) ( $o['label_color'] ?? '#FFFFFF' ),
+            'label'      => (string) ( $o['label_text'] ?? 'Apri' ),
+            'blend'      => in_array( $o['blend_mode'], self::BLEND_MODES, true ) ? $o['blend_mode'] : 'normal',
+            'sel'        => (string) $o['magnetic_selector'],
+            'hideSys'    => ! empty( $o['hide_system'] ),
+        ];
+        echo '<script>window.OLO_CURSORE=' . wp_json_encode( $cfg ) . ';</script>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_json_encode() of sanitized settings
+        echo '<script src="' . esc_url( OLOBUILD_URL . 'assets/js/olo-cursori.js?ver=' . OLOBUILD_VERSION ) . '" defer></script>'; // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript -- stampato nel footer dopo l'accodamento
+    }
+
+    /**
      * Emette CSS + runtime inline. SSR-safe: senza JS resta il cursore di sistema
      * (i nodi del cursore custom sono creati dal runtime, non stampati lato server),
      * quindi nessuna regressione su no-JS / stampa / screen reader.
      */
     public static function render_frontend() {
         $o = self::get_settings();
+        $stile = in_array( $o['style'] ?? 'anello', self::STILI, true ) ? $o['style'] : 'anello';
+        // Prova di uno stile senza cambiare niente: ?cursore=scia sull'indirizzo (solo lettura, solo nomi della lista).
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- sola visualizzazione, valore in whitelist
+        $prova = isset( $_GET['cursore'] ) ? sanitize_key( wp_unslash( $_GET['cursore'] ) ) : '';
+        if ( in_array( $prova, self::STILI, true ) ) {
+            $stile = $prova;
+        }
+        if ( 'anello' !== $stile ) {
+            self::render_stile( $o, $stile );
+            return;
+        }
 
         // UID per-istanza: prefissa classi, id e @keyframes. Se per qualunque motivo
         // il footer emettesse due volte, le due copie non si calpestano.

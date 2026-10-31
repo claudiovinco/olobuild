@@ -21,6 +21,7 @@ export default {
     padding_bottom_custom: 70,
     bg_scope: 'container',
     sticky_effect: 'none',
+    scroll_entrance: '',
     sticky_top: '',
     sticky_h_align: 'top',
     scroll_snap: false,
@@ -88,6 +89,14 @@ export default {
       { value: 'bottom', label: t('In basso') },
     ], condition: { field: 'sticky_effect', op: 'in', value: ['cover-h', 'reveal-h'] },
       description: t('Le sezioni orizzontali sono alte una schermata: qui scegli dove sta il loro contenuto. «Reveal orizzontale» scopre la sezione sopra la precedente, da destra; «Cover orizzontale» la fa arrivare spinta di lato. Sul telefono il gruppo resta orizzontale se ogni sezione sta in una schermata.') },
+
+    { type: 'separator', label: t('Arrivo') },
+    { key: 'scroll_entrance', label: t('Arrivo con lo scorrimento'), type: 'select', options: [
+      { value: '', label: t('Nessuno') },
+      { value: 'piega', label: t('Piega') },
+    ], condition: { field: 'sticky_effect', op: 'in', value: ['none', ''] },
+      description: t('Piega: la sezione sale dal fondo dello schermo inclinata all’indietro, come un foglio che si piega sotto il '
+        + 'bordo del monitor, e si raddrizza mentre sale. Arrivata, resta piatta.') },
 
     { type: 'separator', label: t('Atmosfera') },
     { key: 'light_color', label: t('Colore luce'), type: 'color',

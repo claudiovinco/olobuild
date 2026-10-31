@@ -57,7 +57,7 @@ VOCI = [('map-pin', 'Via Vanchiglia 18 · Torino', CONTATTI + '#arrivare'), ('ph
 
 
 def build_header():
-    return K.testata(Tpl(ID, 'header'), 'Zucchero a Velo', logo_size='24', overlay=True, scuro=False)
+    return K.testata(Tpl(ID, 'header'), 'Zucchero a Velo', logo_size='24', overlay=False, scuro=False)
 
 
 def build_footer():
@@ -421,13 +421,13 @@ def build_contatti():
 def build_404():
     t = Tpl(ID, '404')
     return [t.section([
-        K.centered(t, [K.label(t, 'Errore 404 · vetrina vuota', color=C['acc'], align='center'),
+        K.centered(t, [K.label(t, 'Errore 404 · vetrina vuota', color=K.acc_media, align='center'),
                        K.headline(t, 'Finita, come i bignè <em>della domenica.</em>', size=88, tag='h1', align='center',
-                                  pad_bottom=20),
+                                  pad_bottom=20, color=C['chiaro'], accento=K.acc_media),
                        K.text(t, 'Questa pagina non c’è più. In vetrina invece qualcosa è rimasto.', size=17,
-                              align='center'),
+                              align='center', color=K.soft_media),
                        K.button(t, 'Torna alla vetrina', HOME, kind='pieno', align='center')]),
-    ], bg=K.video_bg(V_ZUCCHERO, overlay=78, color=C['fondo']), padding='xlarge', style={'padding_top': 240, 'padding_bottom': 220})]
+    ], bg=K.video_bg(V_ZUCCHERO, overlay=50), padding='xlarge', style={'padding_top': 240, 'padding_bottom': 220})]
 
 
 THEME = tema(

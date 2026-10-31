@@ -324,6 +324,7 @@ THEME = tema(
 
 THEME['preview_v'] = '2'          # la prima anteprima aveva la fascia vuota dello scorrimento
 THEME['preview_mobile_v'] = '2'
+THEME['cursor']['style'] = 'alone'  # cursore: una luce che insegue (31 ott 2026)
 
 
 def main():

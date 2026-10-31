@@ -20,6 +20,7 @@ export default {
     vertical_align: 'stretch',
     stack_mobile: true,
     stack_tablet: false,
+    espandi_hover: false,
     grid_column_gap: '',
     grid_row_gap: '',
     grid_auto_flow: 'row',
@@ -146,6 +147,10 @@ export default {
     { type: 'separator', label: t('Responsive') },
     { key: 'stack_mobile', label: t('Impila su mobile'), type: 'toggle' },
     { key: 'stack_tablet', label: t('Impila su tablet'), type: 'toggle' },
+    { key: 'espandi_hover', label: t('Le colonne si allargano al passaggio'), type: 'toggle',
+      description: t('Da 1200 px le colonne si dividono lo spazio in parti uguali e quella sotto il puntatore se ne prende di '
+        + 'più. Per le aperture divise in due metà, ognuna col suo Slider Pro (con «Impila su tablet» sotto i 1200 px '
+        + 'stanno una sotto l’altra).') },
 
     { key: '_grid_sep', label: t('Controlli CSS Grid'), type: 'separator', condition: { field: 'layout_mode', value: 'grid' } },
     { key: 'grid_column_gap', label: t('Gap Orizzontale'), type: 'range', min: 0, max: 60, step: 2, condition: { field: 'layout_mode', value: 'grid' } },
