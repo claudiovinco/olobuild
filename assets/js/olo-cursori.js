@@ -902,29 +902,74 @@
     };
   };
 
-  // Filo: un filo morbido pende dal puntatore e lo segue ondeggiando, con l'ago in cima; sui link il filo si arrotola.
+  // Filo: un ago vero, inclinato, con la punta sul puntatore e la cruna forata; dalla cruna esce un filo morbido che
+  // pende, ondeggia piano e segue il movimento (con un codino dall'altra parte della cruna e il nodo in fondo). L'ago
+  // si inclina con la velocità; sui link si raddrizza e il filo si accorcia.
   STILI.filo = function () {
-    var T = tela(), ago = nodo('punto'), N = 18, L = 7, pts = [];
-    for (var i = 0; i < N; i++) pts.push({ x: mx, y: my + i * L, px: mx, py: my + i * L });
+    var T = tela(), N = 16, L = 6, pts = [];
     var col = risolvi(CFG.dotColor || '#c0392b');
-    ago.style.cssText += ';width:3px;height:16px;margin:-14px 0 0 -1.5px;border-radius:2px;background:var(--oc-ring)';
-    var fermi = 0;
+    var acciaio = risolvi(CFG.ringColor || '#e6e6e6');
+    for (var i = 0; i < N; i++) pts.push({ x: mx, y: my + i * L, px: mx, py: my + i * L });
+    var ang = 38, sc = 1, prima = null, scossa = 0;
+    function disegnaAgo(g, x, y, a, s) {
+      var len = 30 * s, w = 1.8 * s;
+      g.save();
+      g.translate(x, y);
+      g.rotate(a * Math.PI / 180);
+      var gr = g.createLinearGradient(-w, 0, w, 0);
+      gr.addColorStop(0, 'rgba(0,0,0,0.35)');
+      gr.addColorStop(0.35, acciaio);
+      gr.addColorStop(1, acciaio);
+      g.beginPath();
+      g.moveTo(0, 0);
+      g.quadraticCurveTo(w * 0.9, -len * 0.45, w, -len + w);
+      g.arc(0, -len + w, w, 0, Math.PI, true);
+      g.quadraticCurveTo(-w * 0.9, -len * 0.45, 0, 0);
+      g.closePath();
+      g.fillStyle = acciaio;
+      g.fill();
+      g.fillStyle = gr;
+      g.globalAlpha = 0.6;
+      g.fill();
+      g.globalAlpha = 1;
+      g.lineWidth = 0.6;
+      g.strokeStyle = 'rgba(0,0,0,0.35)';
+      g.stroke();
+      // la cruna: una fessura allungata vicino alla testa, forata (si vede quello che c'è sotto)
+      g.globalCompositeOperation = 'destination-out';
+      g.beginPath();
+      g.ellipse(0, -len + 5.2 * s, 0.75 * s, 2.7 * s, 0, 0, 6.283);
+      g.fill();
+      g.globalCompositeOperation = 'source-over';
+      g.restore();
+    }
     return {
-      frame: function () {
-        pts[0].x = mx; pts[0].y = my;
-        var mosso = false;
+      frame: function (t) {
+        if (hot !== prima) { prima = hot; scossa = t; }
+        var aT = hot ? 12 : 38 + Math.max(-22, Math.min(22, vx * 1.2));
+        ang += (aT - ang) * (meno ? 1 : 0.16);
+        sc += ((hot ? 1.18 : 1) - sc) * 0.2;
+        // la cruna, nel mondo
+        var r = ang * Math.PI / 180, len = 30 * sc;
+        var ex = mx + Math.sin(r) * (len - 5.2 * sc), ey = my - Math.cos(r) * (len - 5.2 * sc);
+        pts[0].x = ex; pts[0].y = ey;
+        var lj = hot ? L * 0.4 : L;
         for (var i = 1; i < N; i++) {
-          var s = pts[i];
-          var vxs = (s.x - s.px) * 0.96, vys = (s.y - s.py) * 0.96;
-          s.px = s.x; s.py = s.y;
-          s.x += vxs; s.y += vys + (hot ? -0.05 : 0.35);
-          if (Math.abs(vxs) + Math.abs(vys) > 0.05) mosso = true;
+          var p = pts[i];
+          var vxs = (p.x - p.px) * 0.94, vys = (p.y - p.py) * 0.94;
+          p.px = p.x; p.py = p.y;
+          var brezza = meno ? 0 : Math.sin(t / 650 + i * 0.45) * 0.05 * (i / N);
+          p.x += vxs + brezza;
+          p.y += vys + 0.32;
         }
-        for (var it = 0; it < 4; it++) {
+        // il filo esce dalla cruna di traverso all'ago, poi pende: si tira piano il primo tratto in quella direzione
+        var ux = Math.cos(r), uy = Math.sin(r);
+        for (var it = 0; it < 5; it++) {
+          pts[1].x += (ex + ux * lj - pts[1].x) * 0.5; pts[1].y += (ey + uy * lj - pts[1].y) * 0.5;
+          pts[2].x += (ex + ux * lj * 1.7 - pts[2].x) * 0.15; pts[2].y += (ey + uy * lj * 1.7 + lj * 0.6 - pts[2].y) * 0.15;
           for (var j = 1; j < N; j++) {
             var a = pts[j - 1], b = pts[j];
             var dx = b.x - a.x, dy = b.y - a.y, d = Math.sqrt(dx * dx + dy * dy) || 1;
-            var lj = hot ? L * 0.45 : L;
             var k = (d - lj) / d;
             if (j > 1) { a.x += dx * k * 0.5; a.y += dy * k * 0.5; b.x -= dx * k * 0.5; b.y -= dy * k * 0.5; } else { b.x -= dx * k; b.y -= dy * k; }
           }
@@ -932,13 +977,28 @@
         var g = T.g;
         g.setTransform(T.dpr, 0, 0, T.dpr, 0, 0);
         g.clearRect(0, 0, innerWidth, innerHeight);
-        g.strokeStyle = col; g.lineWidth = 1.6; g.lineCap = 'round'; g.lineJoin = 'round';
-        g.beginPath(); g.moveTo(pts[0].x, pts[0].y);
-        for (var m = 1; m < N; m++) g.lineTo(pts[m].x, pts[m].y);
+        disegnaAgo(g, mx, my, ang, sc);
+        // il filo: dalla cruna, assottigliandosi verso il fondo, con le curve morbide fra i punti
+        g.strokeStyle = col; g.lineCap = 'round'; g.lineJoin = 'round';
+        for (var m = 1; m < N; m++) {
+          var p0 = pts[m - 1], p1 = pts[m], p2 = pts[Math.min(N - 1, m + 1)];
+          g.lineWidth = 2.1 - 1.1 * m / N;
+          g.beginPath();
+          g.moveTo(m === 1 ? p0.x : (p0.x + p1.x) / 2, m === 1 ? p0.y : (p0.y + p1.y) / 2);
+          g.quadraticCurveTo(p1.x, p1.y, (p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
+          g.stroke();
+        }
+        // il codino dall'altra parte della cruna, e il nodo in fondo
+        g.lineWidth = 1.6;
+        g.beginPath();
+        g.moveTo(ex, ey);
+        g.quadraticCurveTo(ex - ux * 7, ey - uy * 7 + 2, ex - ux * 8, ey - uy * 8 + 9);
         g.stroke();
-        sposta(ago, mx, my, ' rotate(' + Math.max(-40, Math.min(40, vx * 2)).toFixed(1) + 'deg)');
-        fermi = mosso ? 0 : fermi + 1;
-        return fermi < 30 || meno === false && mosso;
+        var fondo = pts[N - 1];
+        g.fillStyle = col;
+        g.beginPath(); g.arc(fondo.x, fondo.y, 2.1, 0, 6.283); g.fill();
+        // continua finché il filo si assesta dopo l'ultimo movimento o l'ultimo link; poi resta fermo com'è
+        return t - Math.max(ultimo, scossa) < 3500;
       }
     };
   };

@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.900 - 2026-11-01 (il cursore ago e filo disegnato come un ago vero)
+- Cursore «Filo con l'ago»: la punta di un ago d'acciaio, inclinato, sta sul puntatore; il filo passa dalla cruna (con un codino dall'altra parte), esce di lato, pende morbido col nodo in fondo e segue il movimento. L'ago si inclina con la velocità; sui link si raddrizza e il filo si accorcia. Prima era un bastoncino bianco staccato con una riga dritta sotto.
+
 ## v1.4.899 - 2026-11-01 (aperture a scorrimento che non si sovrappongono sugli schermi larghi)
 - Temi: Aerostato, Arnia, Bolina e Pista Nera hanno l'apertura in proporzione 16:9 come gli altri: sugli schermi larghi e bassi il titolo non scende più sopra il testo e i tondi restano tondi. Nelle aperture che restano ferme in cima mentre si scorre (anche Tavola Errante, Telaio, Staffa, Concia e Soglia) titoli e pulsanti finali stanno più in alto, dentro la parte che si vede anche sugli schermi 1920 × 900.
 
