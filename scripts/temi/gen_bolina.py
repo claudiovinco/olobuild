@@ -188,18 +188,18 @@ def apertura(t):
                   shapeGradient={'angle': 0, 'from': mix(C['nero'], 90), 'to': mix(C['nero'], 0), 'fromStop': 40},
                   scrollMove={'inizio': 78, 'fine': 92, 'da': {'o': 0}, 'a': {'o': 100}},
                   responsive={'mobile': {'y': 70, 'height': 30}}),
-        K.livello('bo-b', tipo='button', contenuto='Scegli il corso', x=5, y=84, w='auto', size=14, peso='600',
+        K.livello('bo-b', tipo='button', contenuto='Scegli il corso', x=5, y=56, w='auto', size=14, peso='600',
                   colore=C['nero'], bgColor=CERATA, padding=16, borderRadius=999, entra='fadeIn', ritardo=0, buttonUrl=CORSI,
                   hover={'bgColor': C['chiaro'], 'duration': 250}, scrollMove=fine(84, 96),
                   responsive={'mobile': {'y': 87, 'x': 7, 'fontSize': m(12)}}),
-        K.livello('bo-l', tipo='button', contenuto='Noleggio', x=17.5, y=84, w='auto', size=14, peso='600',
+        K.livello('bo-l', tipo='button', contenuto='Noleggio', x=17.5, y=56, w='auto', size=14, peso='600',
                   colore=C['chiaro'], bgColor='transparent', padding=16, borderRadius=999, borderWidth=1,
                   borderColor=mix(C['chiaro'], 60), entra='fadeIn', ritardo=0, buttonUrl=NOLEGGIO,
                   hover={'bgColor': mix(C['chiaro'], 14), 'borderColor': C['chiaro'], 'duration': 250}, scrollMove=fine(86, 98),
                   responsive={'tablet': {'x': 21}, 'mobile': {'y': 87, 'x': 52, 'fontSize': m(12)}}),
     ]
     sl = [K.diapositiva('bo-1', K.sfondo_video(V_DRONE, overlay=0.2, colore=C['nero']), livelli, durata=60000)]
-    return K.proslider(t, sl, altezza={'mode': 'vh', 'value': 100}, transizione='fade', showArrows=False,
+    return K.proslider(t, sl, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='fade', showArrows=False,
                        showDots=False, showTabs=False, showProgressBar=False, autoplay=False, parallax=False,
                        scrollTimeline=True, scrollTimelineDistance=1800, scrollStep=False,
                        heightMobile={'mode': 'px', 'value': 1400})

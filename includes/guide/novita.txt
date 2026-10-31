@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.899 - 2026-11-01 (aperture a scorrimento che non si sovrappongono sugli schermi larghi)
+- Temi: Aerostato, Arnia, Bolina e Pista Nera hanno l'apertura in proporzione 16:9 come gli altri: sugli schermi larghi e bassi il titolo non scende più sopra il testo e i tondi restano tondi. Nelle aperture che restano ferme in cima mentre si scorre (anche Tavola Errante, Telaio, Staffa, Concia e Soglia) titoli e pulsanti finali stanno più in alto, dentro la parte che si vede anche sugli schermi 1920 × 900.
+
 ## v1.4.898 - 2026-11-01 (quindici temi con aperture che si muovono con la pagina, e diciotto cursori nuovi)
 - Slider Pro, «Movimento con lo scorrimento» su ogni livello: il livello si sposta, si ingrandisce, ruota (anche in 3D) e cambia opacità mentre la pagina scorre, dall'inizio alla fine del tratto che scegliete. Con la timeline a scorrimento il tratto è quello in cui lo slider resta fermo in cima; senza, è l'uscita dello slider dalla finestra. Il movimento si somma alle animazioni d'ingresso, e con «meno movimento» i livelli restano fermi.
 - Slider Pro: «Allineamento verticale» per i testi con un'altezza (in alto, al centro, in basso): una parola resta al centro del suo riquadro su ogni schermo.

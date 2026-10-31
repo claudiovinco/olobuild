@@ -115,15 +115,15 @@ def apertura(t):
                                  responsive={'mobile': {'x': b[0], 'y': b[1], 'width': b[2], 'height': b[3]}}))
     fine = lambda i, f: {'inizio': i, 'fine': f, 'da': {'y': 40, 'o': 0}, 'a': {}}
     livelli += [
-        K.livello('st-b', tipo='button', contenuto='Prenota una lezione', x=36.5, y=86.5, w='auto', size=14, peso='600',
+        K.livello('st-b', tipo='button', contenuto='Prenota una lezione', x=4, y=66, w='auto', size=14, peso='600',
                   colore=C['nero'], bgColor=ORO, padding=16, borderRadius=999, entra='fadeIn', ritardo=0, buttonUrl=LEZIONI,
                   hover={'bgColor': C['chiaro'], 'duration': 250}, scrollMove=fine(62, 82),
-                  responsive={'tablet': {'x': 30}, 'mobile': {'y': 88, 'x': 7, 'fontSize': m(12)}}),
-        K.livello('st-l', tipo='button', contenuto='Le passeggiate', x=52, y=86.5, w='auto', size=14, peso='600',
+                  responsive={'tablet': {'x': 30}, 'mobile': {'y': 71, 'x': 7, 'fontSize': m(12)}}),
+        K.livello('st-l', tipo='button', contenuto='Le passeggiate', x=84, y=66, w='auto', size=14, peso='600',
                   colore=C['chiaro'], bgColor='transparent', padding=16, borderRadius=999, borderWidth=1,
                   borderColor=mix(C['chiaro'], 60), entra='fadeIn', ritardo=0, buttonUrl=PASSEGGIATE,
                   hover={'bgColor': mix(C['chiaro'], 14), 'borderColor': C['chiaro'], 'duration': 250},
-                  scrollMove=fine(66, 86), responsive={'tablet': {'x': 52}, 'mobile': {'y': 88, 'x': 53, 'fontSize': m(12)}}),
+                  scrollMove=fine(66, 86), responsive={'tablet': {'x': 52}, 'mobile': {'y': 71, 'x': 53, 'fontSize': m(12)}}),
     ]
     sl = [K.diapositiva('st-1', K.sfondo_video(V_TRAMONTO, overlay=0.25, colore=C['nero']), livelli, durata=60000)]
     return K.proslider(t, sl, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='fade', showArrows=False,

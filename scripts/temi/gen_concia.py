@@ -105,7 +105,7 @@ def apertura(t):
                   responsive={'tablet': {'x': 77, 'y': 28.5}, 'mobile': {'y': 70, 'x': 50, 'fontSize': m(11)}}),
     ]
     # la vetrina: il video della bottega e i pezzi, in fila; tutti scorrono insieme
-    top, alto = 330.0, 396.0                 # computer
+    top, alto = 290.0, 340.0                 # computer
     topm, altom = 500.0, 300.0               # telefono
     a = _pc(80, top, 560, alto, W, H)
     b = _pc(24, topm, 300, altom, WM, HM)
@@ -134,9 +134,9 @@ def apertura(t):
                                  responsive={'mobile': {'x': b[0], 'y': b[1], 'width': b[2], 'fontSize': m(10)}}))
     # il segno di quanto manca: una barra sottile che si riempie
     livelli += [
-        K.livello('co-barra', tipo='shape', x=6, y=96, w=88, h=0.25, bgColor=mix(C['chiaro'], 18), entra='fadeIn', ritardo=800,
+        K.livello('co-barra', tipo='shape', x=6, y=84, w=88, h=0.25, bgColor=mix(C['chiaro'], 18), entra='fadeIn', ritardo=800,
                   responsive={'mobile': {'y': 84, 'height': 0.15}}),
-        K.livello('co-punto', tipo='shape', x=5.5, y=95.6, w=1, h=1.1, borderRadius=999, bgColor=C['acc'], entra='fadeIn',
+        K.livello('co-punto', tipo='shape', x=5.5, y=83.6, w=1, h=1.1, borderRadius=999, bgColor=C['acc'], entra='fadeIn',
                   ritardo=800, scrollMove={'inizio': 0, 'fine': 88, 'da': {}, 'a': {'x': 1267}},
                   responsive={'mobile': {'y': 83.7, 'width': 2.2, 'height': 0.55}}),
     ]

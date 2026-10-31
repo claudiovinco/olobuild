@@ -217,8 +217,8 @@ def apertura(t):
     e compaiono i loro nomi), resta aperto un momento e si rimonta; alla fine entrano il prezzo e i pulsanti."""
     import math
     m = K.mob
-    S, SM = 1.4, 0.92
-    cxa, cya = 720.0, 470.0                  # centro della tavola sul computer
+    S, SM = 1.2, 0.92
+    cxa, cya = 720.0, 400.0                  # centro della tavola sul computer
     cxm, cym = 320.0, 560.0                   # sul telefono
     # il disegno: coordinate in px (y verso l'alto) moltiplicate per la scala, attorno al centro del telaio
     o = (cxa - CENTRO_TELAIO[0] * S, cya + CENTRO_TELAIO[1] * S)
@@ -299,7 +299,7 @@ def apertura(t):
             cxl = o[0] + (p[0] + q[0]) / 2 + dx * 1.9
             cyl = o[1] - (p[1] + q[1]) / 2 + dy * 1.9
             cxlm = om[0] + (pm[0] + qm[0]) / 2 + dx * 1.9 * 0.44
-            cylm = om[1] - (pm[1] + qm[1]) / 2 + dy * 1.9 * 0.44
+            cylm = om[1] - (pm[1] + qm[1]) / 2 + dy * 1.9 * 0.44 - (34 if nome == 'obliquo-post' else 0)
             a_ = _pc(cxl - 80, cyl - 12, 160, 24, W, H)
             b_ = _pc(cxlm - 80, cylm - 12, 160, 24, WM, HM)
             livelli.append(K.livello('tl-n-%s' % nome, contenuto=NOMI[nome], x=a_[0], y=a_[1], w=a_[2], size=12, peso='700',
@@ -318,10 +318,10 @@ def apertura(t):
     # alla fine: il prezzo e i pulsanti
     fine = lambda i, f: {'inizio': i, 'fine': f, 'da': {'y': 40, 'o': 0}, 'a': {}}
     livelli += [
-        K.livello('tl-k', contenuto='Cromo-molibdeno · 1,8 kg · sette settimane · da 2.400 €', x=17, y=84, w=42, size=13,
+        K.livello('tl-k', contenuto='Cromo-molibdeno · 1,8 kg · sette settimane · da 2.400 €', x=58, y=23.5, w=25, size=13,
                   peso='400', colore=mix(C['chiaro'], 84), letterSpacing=1, fontFamily=MONO, entra='fadeIn', ritardo=0,
                   scrollMove=fine(80, 94), responsive={'mobile': {'x': 7, 'y': 79, 'width': 86, 'fontSize': m(10)}}),
-        K.livello('tl-b', tipo='button', contenuto='Prenota la misurazione', x=58, y=82, w='auto', size=12, peso='700',
+        K.livello('tl-b', tipo='button', contenuto='Prenota la misurazione', x=58, y=14, w='auto', size=12, peso='700',
                   colore=C['nero'], bgColor=ARANCIO, padding=16, letterSpacing=2, textTransform='uppercase', borderRadius=2,
                   entra='fadeIn', ritardo=0, buttonUrl=SU_MISURA + '#misurazione',
                   hover={'bgColor': C['chiaro'], 'duration': 250}, scrollMove=fine(84, 98),
