@@ -46,7 +46,17 @@ class Olobuild_Magnetic_Cursor {
      * inverti: disco che rovescia i colori · etichetta: una parola sui link · cometa: scia di luce · aggancio: abbraccia
      * i pulsanti · bussola: freccia che punta dove si va · scintille: particelle · alone: luce morbida che insegue.
      */
-    const STILI = [ 'anello', 'scia', 'mirino', 'goccia', 'inverti', 'etichetta', 'cometa', 'aggancio', 'bussola', 'scintille', 'alone' ];
+    const STILI = [ 'anello', 'scia', 'mirino', 'goccia', 'inverti', 'etichetta', 'cometa', 'aggancio', 'bussola', 'scintille', 'alone',
+                    'orbita', 'onde', 'neve', 'cucitura', 'pennello', 'testo', 'lente', 'coriandoli',
+                    'faro', 'brace', 'inchiostro', 'bolle', 'foglie', 'vapore', 'calamita', 'impronte', 'filo' ];
+
+    /**
+     * Il cursore scelto per la pagina che si sta disegnando (Effetti di pagina → Cursore): uno degli STILI, «nessuno»,
+     * o vuoto = quello del sito. Lo scrive il renderer quando disegna la pagina, lo legge il footer.
+     *
+     * @var string
+     */
+    public static $pagina = '';
 
     /** Blend mode ammessi per l'anello (whitelist anti-injection). */
     const BLEND_MODES = [ 'normal', 'screen', 'difference', 'exclusion', 'overlay', 'lighten', 'multiply' ];
@@ -61,10 +71,8 @@ class Olobuild_Magnetic_Cursor {
         }
         $done = true;
 
-        $opts = self::get_settings();
-        if ( empty( $opts['enabled'] ) ) {
-            return;
-        }
+        // Il footer si aggancia sempre: una pagina può avere un cursore suo anche col cursore del sito spento
+        // (render_frontend decide se disegnare).
 
         // Non emettere dentro l'iframe di editing del builder (cursore di sistema in canvas).
         if ( defined( 'OLOBUILD_BUILDER_PREVIEW' ) && OLOBUILD_BUILDER_PREVIEW ) {
@@ -202,8 +210,15 @@ class Olobuild_Magnetic_Cursor {
         // Prova di uno stile senza cambiare niente: ?cursore=scia sull'indirizzo (solo lettura, solo nomi della lista).
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- sola visualizzazione, valore in whitelist
         $prova = isset( $_GET['cursore'] ) ? sanitize_key( wp_unslash( $_GET['cursore'] ) ) : '';
+        $pagina = sanitize_key( (string) self::$pagina );
         if ( in_array( $prova, self::STILI, true ) ) {
             $stile = $prova;
+        } elseif ( 'nessuno' === $pagina ) {
+            return;
+        } elseif ( in_array( $pagina, self::STILI, true ) ) {
+            $stile = $pagina;
+        } elseif ( empty( $o['enabled'] ) ) {
+            return;
         }
         if ( 'anello' !== $stile ) {
             self::render_stile( $o, $stile );

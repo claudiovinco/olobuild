@@ -275,6 +275,15 @@
                 <button v-if="isOverridden('textAlign')" @click="clearOverride('textAlign')" class="mb-text-yellow-500 mb-text-[10px]" title="Reset">&times;</button>
               </div>
             </div>
+            <div v-if="layer.type === 'text' && layer.height && layer.height !== 'auto'">
+              <label class="mps-label">{{ t('Allineamento verticale') }}</label>
+              <div class="mb-flex mb-items-center mb-gap-1">
+                <button v-for="a in [['top', 'In alto'], ['center', 'Al centro'], ['bottom', 'In basso']]" :key="a[0]"
+                  @click="up('textValign', a[0])"
+                  :class="['mb-flex-1 mb-py-1 mb-rounded mb-text-xs', (layer.textValign || 'top') === a[0] ? 'mb-bg-primary-600 mb-text-white' : 'mb-bg-gray-700 mb-text-gray-400']"
+                >{{ t(a[1]) }}</button>
+              </div>
+            </div>
             <div>
               <label class="mps-label">Line-height</label>
               <NumberScrubber theme="dark" :modelValue="layer.lineHeight ?? 1.2" :min="0.8" :max="3" :step="0.1" :defaultValue="1.2" emitAs="number" :sliderOnFocus="false" ariaLabel="Line-height" @update:modelValue="up('lineHeight', $event)" />
@@ -1007,6 +1016,36 @@
                 </div>
               </template>
             </template>
+
+            <!-- Movimento con lo scorrimento -->
+            <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase mb-flex mb-items-center mb-gap-1">{{ t('Movimento con lo scorrimento') }}<InfoTip :testo="t('Con «Timeline a scorrimento» accesa conta il tratto in cui lo slider resta fermo in cima; se no, l’uscita dello slider dalla finestra. Spostamenti in px della tela del computer.')" :titolo="t('Movimento con lo scorrimento')" /></p>
+            <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+              <input type="checkbox" :checked="!!layer.scrollMove" @change="toggleScrollMove($event.target.checked)" class="mb-rounded" />
+              <span class="mb-text-[11px] mb-text-gray-400">{{ t('Si muove mentre la pagina scorre') }}</span>
+            </label>
+            <template v-if="layer.scrollMove">
+              <div class="mb-grid mb-grid-cols-2 mb-gap-2">
+                <div>
+                  <label class="mps-label">{{ t('Inizio del tratto') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.scrollMove.inizio ?? 0" :min="0" :max="100" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Inizio del tratto')" @update:modelValue="upScrollMove('inizio', $event)" />
+                </div>
+                <div>
+                  <label class="mps-label">{{ t('Fine del tratto') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.scrollMove.fine ?? 100" :min="0" :max="100" :step="1" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Fine del tratto')" @update:modelValue="upScrollMove('fine', $event)" />
+                </div>
+              </div>
+              <p v-if="(layer.scrollMove.tappe || []).length > 2" class="mb-text-[10px] mb-text-gray-500">{{ t('Percorso a tappe: qui si cambiano la prima e l’ultima.') }} ({{ layer.scrollMove.tappe.length }})</p>
+              <template v-for="stato in ['da', 'a']" :key="stato">
+                <p class="mb-text-[10px] mb-text-gray-400 mb-mt-1">{{ stato === 'da' ? t('All’inizio') : t('Alla fine') }}</p>
+                <div class="mb-grid mb-grid-cols-2 mb-gap-2">
+                  <div v-for="c in SCROLL_MOVE_CAMPI" :key="stato + c.k">
+                    <label class="mps-label">{{ t(c.l) }}</label>
+                    <NumberScrubber theme="dark" :modelValue="smVal(stato, c.k, c.d)" :min="c.min" :max="c.max" :step="c.step" :defaultValue="c.d" emitAs="number" :sliderOnFocus="false" :unit="c.u" :ariaLabel="t(c.l)" @update:modelValue="upSmVal(stato, c.k, $event)" />
+                  </div>
+                </div>
+              </template>
+            </template>
           </template>
 
           <!-- Modo TIMELINE -->
@@ -1041,6 +1080,7 @@ import FieldColor from '@/components/Builder/fields/FieldColor.vue';
 import FieldSelect from '../Builder/fields/FieldSelect.vue';
 import NumberScrubber from '../Builder/fields/NumberScrubber.vue';
 import KeyframeProperties from './KeyframeProperties.vue';
+import InfoTip from '../Builder/InfoTip.vue';
 // Curve di ingresso, uscita, loop e percorso: le stesse della timeline (il PHP le traduce in cubic-bezier,
 // easing_to_css). La curva dell'hover resta fra le 5 di base, che il PHP accetta per l'hover.
 import { defaultTimeline, EASING_GROUPS } from './timelineUtils.js';
@@ -1608,6 +1648,42 @@ function applyMotionPreset(preset) {
 function upMotionPath(key, val) {
   if (!props.layer?.motionPath) return;
   up('motionPath', { ...props.layer.motionPath, [key]: val });
+}
+
+// Movimento con lo scorrimento (scrollMove): due stati, o la prima e l'ultima delle tappe se ci sono
+const SCROLL_MOVE_CAMPI = [
+  { k: 'x', l: 'Sposta in orizzontale', d: 0, min: -2000, max: 2000, step: 10, u: 'px' },
+  { k: 'y', l: 'Sposta in verticale', d: 0, min: -2000, max: 2000, step: 10, u: 'px' },
+  { k: 's', l: 'Scala', d: 1, min: 0, max: 6, step: 0.05, u: '' },
+  { k: 'r', l: 'Rotazione', d: 0, min: -720, max: 720, step: 1, u: '°' },
+  { k: 'rx', l: 'Rotazione 3D (X)', d: 0, min: -180, max: 180, step: 1, u: '°' },
+  { k: 'ry', l: 'Rotazione 3D (Y)', d: 0, min: -180, max: 180, step: 1, u: '°' },
+  { k: 'o', l: 'Opacità', d: 100, min: 0, max: 100, step: 1, u: '%' },
+];
+function toggleScrollMove(enabled) {
+  up('scrollMove', enabled ? { inizio: 0, fine: 100, da: {}, a: { y: -120, o: 0 } } : null);
+}
+function upScrollMove(key, val) {
+  if (!props.layer?.scrollMove) return;
+  up('scrollMove', { ...props.layer.scrollMove, [key]: val });
+}
+function smVal(stato, k, d) {
+  const sm = props.layer?.scrollMove || {};
+  const tappe = sm.tappe || [];
+  const v = tappe.length > 1 ? (stato === 'da' ? tappe[0] : tappe[tappe.length - 1]) : (sm[stato] || {});
+  return v[k] ?? d;
+}
+function upSmVal(stato, k, val) {
+  const sm = props.layer?.scrollMove;
+  if (!sm) return;
+  const tappe = sm.tappe || [];
+  if (tappe.length > 1) {
+    const i = stato === 'da' ? 0 : tappe.length - 1;
+    const nuove = tappe.map((t, j) => (j === i ? { ...t, [k]: val } : t));
+    up('scrollMove', { ...sm, tappe: nuove });
+  } else {
+    up('scrollMove', { ...sm, [stato]: { ...(sm[stato] || {}), [k]: val } });
+  }
 }
 
 // Parallax layer helpers

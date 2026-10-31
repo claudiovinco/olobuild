@@ -47319,3 +47319,227 @@ msgstr "One slide per gesture"
 #: src/config/elements/proslider.js
 msgid "Mentre lo slider è fermo in cima, ogni gesto della rotella o del trackpad porta alla diapositiva dopo o prima, senza saltarne; alla prima e all’ultima la pagina riprende a scorrere. Fermandosi, la pagina si posa sulla diapositiva più vicina."
 msgstr "While the slider is held at the top, each gesture of the wheel or trackpad goes to the next or previous slide, without skipping any; at the first and last one the page scrolls on. When you stop, the page settles on the nearest slide."
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Cursore del sito"
+msgstr "Site cursor"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Parola del cursore"
+msgstr "Cursor word"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Come il sito"
+msgstr "Same as the site"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Nessuno (quello di sistema)"
+msgstr "None (the system one)"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Il cursore che segue il mouse in questa pagina. «Come il sito» usa quello scelto in Sito; su telefoni e tablet resta quello di sistema."
+msgstr "The cursor that follows the mouse on this page. “Same as the site” uses the one chosen in Site; on phones and tablets the system cursor stays."
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Il cursore che segue il mouse in tutto il sito. Ogni pagina può sceglierne un altro in Effetti di pagina."
+msgstr "The cursor that follows the mouse across the whole site. Each page can choose another one in Page effects."
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Cursore del sito salvato"
+msgstr "Site cursor saved"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Cursore non salvato: "
+msgstr "Cursor not saved: "
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Anello e punto"
+msgstr "Ring and dot"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Aggancio (abbraccia i pulsanti)"
+msgstr "Snap (wraps the buttons)"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Scia di punti"
+msgstr "Trail of dots"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Mirino con le coordinate"
+msgstr "Crosshair with coordinates"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Disco che inverte i colori"
+msgstr "Colour-inverting disc"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Etichetta sui link"
+msgstr "Label on links"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Cometa"
+msgstr "Comet"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Scintille"
+msgstr "Sparks"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Alone di luce"
+msgstr "Halo of light"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Orbita"
+msgstr "Orbit"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Onde al clic"
+msgstr "Ripples on click"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Cucitura"
+msgstr "Stitching"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Pennello"
+msgstr "Brush"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Testo in cerchio"
+msgstr "Text in a circle"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Coriandoli al clic"
+msgstr "Confetti on click"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Faro (la pagina in penombra)"
+msgstr "Spotlight (the page in half-light)"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Foglie che cadono"
+msgstr "Falling leaves"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Vapore"
+msgstr "Steam"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Calamita (attira i pulsanti)"
+msgstr "Magnet (pulls the buttons)"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Impronte"
+msgstr "Footprints"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Filo con l’ago"
+msgstr "Thread and needle"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Movimento con lo scorrimento"
+msgstr "Movement on scroll"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Si muove mentre la pagina scorre"
+msgstr "Moves while the page scrolls"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Con «Timeline a scorrimento» accesa conta il tratto in cui lo slider resta fermo in cima; se no, l’uscita dello slider dalla finestra. Spostamenti in px della tela del computer."
+msgstr "With “Scroll-fixed” on, what counts is the stretch in which the slider stays pinned at the top; otherwise, the slider leaving the window. Offsets in px of the desktop canvas."
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Inizio del tratto"
+msgstr "Start of the stretch"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Fine del tratto"
+msgstr "End of the stretch"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Percorso a tappe: qui si cambiano la prima e l’ultima."
+msgstr "Path with steps: here you change the first and the last."
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "All’inizio"
+msgstr "At the start"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Alla fine"
+msgstr "At the end"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Sposta in orizzontale"
+msgstr "Move horizontally"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Sposta in verticale"
+msgstr "Move vertically"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Rotazione 3D (X)"
+msgstr "3D rotation (X)"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Rotazione 3D (Y)"
+msgstr "3D rotation (Y)"
+
+#: includes/class-theme-importer.php
+msgid "La tavola che si apparecchia"
+msgstr "The table being laid"
+
+#: includes/class-theme-importer.php
+msgid "Il carosello delle stagioni"
+msgstr "The carousel of the seasons"
+
+#: includes/class-theme-importer.php
+msgid "Il telaio esploso"
+msgstr "The exploded frame"
+
+#: includes/class-theme-importer.php
+msgid "La parola che si apre"
+msgstr "The word that opens up"
+
+#: includes/class-theme-importer.php
+msgid "La carta nautica"
+msgstr "The nautical chart"
+
+#: includes/class-theme-importer.php
+msgid "Il disco sul piatto"
+msgstr "The record on the turntable"
+
+#: includes/class-theme-importer.php
+msgid "La salita"
+msgstr "The ascent"
+
+#: includes/class-theme-importer.php
+msgid "La tazza a metà"
+msgstr "The cup in between"
+
+#: includes/class-theme-importer.php
+msgid "Il semaforo"
+msgstr "The starting lights"
+
+#: includes/class-theme-importer.php
+msgid "Il cubo dei livelli"
+msgstr "The cube of levels"
+
+#: includes/class-theme-importer.php
+msgid "Sotto la cupola"
+msgstr "Under the dome"
+
+#: includes/class-theme-importer.php
+msgid "Il ventaglio"
+msgstr "The fan"
+
+#: includes/class-theme-importer.php
+msgid "La vetrina che scorre"
+msgstr "The sliding shop window"
+
+#: includes/class-theme-importer.php
+msgid "La pianta che cresce"
+msgstr "The growing plant"
+
+#: includes/class-theme-importer.php
+msgid "La porta che si apre"
+msgstr "The door that opens"

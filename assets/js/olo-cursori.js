@@ -1,7 +1,7 @@
 /**
  * OLObuild — cursori che seguono il mouse (31 ott 2026). Gli stili del cursore globale oltre all'anello classico
  * (che resta in Olobuild_Magnetic_Cursor): scia, mirino, goccia, inverti, etichetta, cometa, aggancio, bussola,
- * scintille, alone. La configurazione arriva da window.OLO_CURSORE (stampata da Olobuild_Magnetic_Cursor).
+ * scintille, alone; e dal 1 nov 2026 orbita, onde, neve, cucitura, pennello, testo, lente, coriandoli. La configurazione arriva da window.OLO_CURSORE (stampata da Olobuild_Magnetic_Cursor).
  *
  * Regole comuni: niente su touch o puntatore grossolano; con «meno movimento» niente scie, particelle né rincorse
  * (il cursore sta sul puntatore); il focus da tastiera non si nasconde mai; i colori passano come proprietà CSS
@@ -354,6 +354,591 @@
         a.style.opacity = hot ? '1' : '0.75';
         sposta(a, x, y, ' scale(' + sc.toFixed(3) + ')');
         return Math.abs(mx - x) + Math.abs(my - y) > 0.3 || Math.abs(scT - sc) > 0.005;
+      }
+    };
+  };
+
+  // Orbita: un punto insegue il puntatore e un satellite gli gira attorno; sugli elementi interattivi l'orbita si allarga.
+  STILI.orbita = function () {
+    var c = nodo('punto'), sat = nodo('punto'), giro = nodo('anello');
+    var S = R * 1.1;
+    giro.style.cssText += ';width:' + S + 'px;height:' + S + 'px;margin:' + (-S / 2) + 'px 0 0 ' + (-S / 2) + 'px;opacity:.7;border-style:dashed';
+    sat.style.background = 'var(--oc-ring)';
+    var x = mx, y = my, a = 0, r = S / 2, prima = 0;
+    return {
+      frame: function (t) {
+        var dt = prima ? Math.min(40, t - prima) : 16; prima = t;
+        x += (mx - x) * (meno ? 1 : 0.3); y += (my - y) * (meno ? 1 : 0.3);
+        var rT = (hot ? S * 0.85 : S / 2);
+        r += (rT - r) * 0.15;
+        a += meno ? 0 : dt * 0.0045;
+        sposta(c, mx, my);
+        sposta(giro, x, y, ' scale(' + (r / (S / 2)).toFixed(3) + ')');
+        sposta(sat, x + Math.cos(a) * r, y + Math.sin(a) * r);
+        return !meno && performance.now() - ultimo < 4000; // gira finché il puntatore si muove (poi riparte al primo movimento)
+      }
+    };
+  };
+
+  // Onde: un anello leggero segue il puntatore; ogni clic apre tre onde che si allargano e svaniscono.
+  STILI.onde = function () {
+    var a = nodo('anello'), p = nodo('punto');
+    a.style.margin = (-R / 2) + 'px 0 0 ' + (-R / 2) + 'px';
+    var onde = [];
+    document.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'touch' || meno) return;
+      for (var k = 0; k < 3; k++) {
+        var o = nodo('anello');
+        o.style.margin = (-R / 2) + 'px 0 0 ' + (-R / 2) + 'px';
+        o.style.transition = 'none';
+        onde.push({ el: o, x: mx, y: my, t0: performance.now() + k * 140 });
+      }
+      chiedi();
+    });
+    var x = mx, y = my;
+    return {
+      frame: function (t) {
+        x += (mx - x) * (meno ? 1 : 0.25); y += (my - y) * (meno ? 1 : 0.25);
+        sposta(p, mx, my);
+        a.classList.toggle('is-hot', !!hot);
+        sposta(a, x, y, hot ? ' scale(' + (+CFG.hotScale || 1.6) + ')' : '');
+        for (var i = onde.length - 1; i >= 0; i--) {
+          var o = onde[i], k = (t - o.t0) / 900;
+          if (k < 0) { o.el.style.opacity = '0'; continue; }
+          if (k >= 1) { o.el.remove(); onde.splice(i, 1); continue; }
+          o.el.style.opacity = String(1 - k);
+          sposta(o.el, o.x, o.y, ' scale(' + (1 + k * 3.5).toFixed(3) + ')');
+        }
+        return onde.length > 0 || Math.abs(mx - x) + Math.abs(my - y) > 0.2;
+      }
+    };
+  };
+
+  // Neve: muovendosi il puntatore lascia cadere fiocchi che scendono ondeggiando e si sciolgono.
+  STILI.neve = function () {
+    var T = tela(), p = nodo('punto'), f = [];
+    var col = risolvi(CFG.ringColor || '#fff');
+    var prima = 0;
+    return {
+      punto: function () {
+        if (meno) return;
+        var n = Math.min(2, 1 + Math.floor(Math.sqrt(vx * vx + vy * vy) / 16));
+        for (var i = 0; i < n; i++) {
+          f.push({ x: mx + (Math.random() - 0.5) * 18, y: my + (Math.random() - 0.5) * 10, vy: 0.4 + Math.random() * 0.7,
+                   fase: Math.random() * 6.28, r: 1.2 + Math.random() * 2.4, t: 0, vita: 1400 + Math.random() * 900 });
+        }
+        if (f.length > 260) f.splice(0, f.length - 260);
+      },
+      frame: function (t) {
+        var dt = prima ? Math.min(40, t - prima) : 16; prima = t;
+        sposta(p, mx, my);
+        var g = T.g;
+        g.setTransform(T.dpr, 0, 0, T.dpr, 0, 0);
+        g.clearRect(0, 0, innerWidth, innerHeight);
+        g.fillStyle = col;
+        for (var i = f.length - 1; i >= 0; i--) {
+          var s = f[i];
+          s.t += dt;
+          if (s.t > s.vita) { f.splice(i, 1); continue; }
+          s.y += s.vy * dt / 16;
+          s.x += Math.sin(s.fase + s.t / 380) * 0.45;
+          g.globalAlpha = Math.min(1, (1 - s.t / s.vita) * 1.4) * 0.9;
+          g.beginPath(); g.arc(s.x, s.y, s.r, 0, 6.283); g.fill();
+        }
+        g.globalAlpha = 1;
+        if (!f.length) prima = 0;
+        return f.length > 0;
+      }
+    };
+  };
+
+  // Cucitura: il puntatore cuce: dietro resta una fila di punti di filo tratteggiati che si sfilano in poco tempo.
+  STILI.cucitura = function () {
+    var T = tela(), ago = nodo('punto'), pts = [];
+    var col = risolvi(CFG.dotColor || '#fff');
+    var VITA = 700;
+    return {
+      punto: function (t) { if (!meno) pts.push({ x: mx, y: my, t: t }); },
+      frame: function (t) {
+        sposta(ago, mx, my);
+        var g = T.g;
+        g.setTransform(T.dpr, 0, 0, T.dpr, 0, 0);
+        g.clearRect(0, 0, innerWidth, innerHeight);
+        while (pts.length && t - pts[0].t > VITA) pts.shift();
+        if (pts.length > 1) {
+          g.strokeStyle = col;
+          g.lineWidth = Math.max(1.5, D * 0.35);
+          g.lineCap = 'round';
+          g.setLineDash([7, 6]);
+          g.globalAlpha = 0.9;
+          g.beginPath();
+          g.moveTo(pts[0].x, pts[0].y);
+          for (var i = 1; i < pts.length; i++) g.lineTo(pts[i].x, pts[i].y);
+          g.stroke();
+          g.setLineDash([]);
+          g.globalAlpha = 1;
+        }
+        return pts.length > 1;
+      }
+    };
+  };
+
+  // Pennello: una pennellata morbida che segue il puntatore, più larga se si va piano, e svanisce in meno di un secondo.
+  STILI.pennello = function () {
+    var T = tela(), p = nodo('punto'), pts = [];
+    var col = risolvi(CFG.dotColor || '#fff');
+    var VITA = 800;
+    return {
+      punto: function (t) {
+        if (meno) return;
+        var v = Math.sqrt(vx * vx + vy * vy);
+        pts.push({ x: mx, y: my, t: t, w: Math.max(6, D * 4.2 - v * 0.3) });
+      },
+      frame: function (t) {
+        sposta(p, mx, my);
+        var g = T.g;
+        g.setTransform(T.dpr, 0, 0, T.dpr, 0, 0);
+        g.clearRect(0, 0, innerWidth, innerHeight);
+        while (pts.length && t - pts[0].t > VITA) pts.shift();
+        g.strokeStyle = col;
+        g.lineCap = 'round';
+        g.lineJoin = 'round';
+        for (var i = 1; i < pts.length; i++) {
+          var k = 1 - (t - pts[i].t) / VITA;
+          g.globalAlpha = Math.max(0, k) * 0.8;
+          g.lineWidth = pts[i].w * (0.5 + 0.7 * k);
+          g.beginPath(); g.moveTo(pts[i - 1].x, pts[i - 1].y); g.lineTo(pts[i].x, pts[i].y); g.stroke();
+        }
+        g.globalAlpha = 1;
+        return pts.length > 1;
+      }
+    };
+  };
+
+  // Testo: una scritta in cerchio gira piano attorno al puntatore (la parola della configurazione); sugli elementi
+  // interattivi si allarga e gira più in fretta.
+  STILI.testo = function () {
+    var c = nodo('testo-giro'), p = nodo('punto');
+    var S = Math.max(84, R * 2.6);
+    var parola = (CFG.label || 'Scorri · scopri').toUpperCase();
+    var giro = (parola + ' · ').repeat(Math.max(1, Math.round(26 / (parola.length + 3))));
+    c.style.cssText += ';width:' + S + 'px;height:' + S + 'px;margin:' + (-S / 2) + 'px 0 0 ' + (-S / 2) + 'px';
+    c.innerHTML = '<svg viewBox="0 0 100 100" width="100%" height="100%"><defs><path id="' + P + '-cerchio" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"/></defs>'
+      + '<text font-size="9.5" letter-spacing="2.4" font-family="ui-monospace,Menlo,monospace" fill="var(--oc-ring)"><textPath href="#' + P + '-cerchio">'
+      + giro.replace(/[<>&]/g, '') + '</textPath></text></svg>';
+    var x = mx, y = my, a = 0, sc = 1, prima = 0;
+    return {
+      frame: function (t) {
+        var dt = prima ? Math.min(40, t - prima) : 16; prima = t;
+        x += (mx - x) * (meno ? 1 : 0.18); y += (my - y) * (meno ? 1 : 0.18);
+        a += meno ? 0 : dt * (hot ? 0.09 : 0.03);
+        var scT = hot ? 1.35 : 1;
+        sc += (scT - sc) * 0.15;
+        sposta(p, mx, my);
+        sposta(c, x, y, ' rotate(' + (a % 360).toFixed(1) + 'deg) scale(' + sc.toFixed(3) + ')');
+        return !meno && performance.now() - ultimo < 4000;
+      }
+    };
+  };
+
+  // Lente: un cerchio di vetro che ravviva quello che ha sotto (colori più pieni, più contrasto); sugli elementi
+  // interattivi si allarga.
+  STILI.lente = function () {
+    var l = nodo('lente');
+    var S = R * 2.2;
+    l.style.cssText += ';width:' + S + 'px;height:' + S + 'px;margin:' + (-S / 2) + 'px 0 0 ' + (-S / 2) + 'px;border-radius:50%;'
+      + 'border:var(--oc-w,1.5px) solid color-mix(in srgb,var(--oc-ring) 70%,transparent);'
+      + 'backdrop-filter:saturate(1.8) contrast(1.15) brightness(1.08);-webkit-backdrop-filter:saturate(1.8) contrast(1.15) brightness(1.08);'
+      + 'box-shadow:inset 0 0 0 6px color-mix(in srgb,var(--oc-ring) 10%,transparent),0 10px 30px -12px rgba(0,0,0,.45)';
+    var x = mx, y = my, sc = 1;
+    return {
+      frame: function () {
+        x += (mx - x) * (meno ? 1 : 0.22); y += (my - y) * (meno ? 1 : 0.22);
+        var scT = hot ? 1.5 : 1;
+        sc += (scT - sc) * 0.16;
+        sposta(l, x, y, ' scale(' + sc.toFixed(3) + ')');
+        return Math.abs(mx - x) + Math.abs(my - y) > 0.2 || Math.abs(scT - sc) > 0.005;
+      }
+    };
+  };
+
+  // Coriandoli: un punto sul puntatore; ogni clic fa uno scoppio di coriandoli colorati che girano e cadono.
+  STILI.coriandoli = function () {
+    var T = tela(), p = nodo('punto'), cc = [];
+    var cols = [risolvi(CFG.dotColor || '#f55'), risolvi(CFG.hotColor || '#5af'), risolvi(CFG.ringColor || '#fd5'),
+                risolvi(CFG.labelColor || '#fff')];
+    document.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'touch' || meno) return;
+      for (var i = 0; i < 34; i++) {
+        var a = -Math.PI / 2 + (Math.random() - 0.5) * 2.4, v = 3 + Math.random() * 4.5;
+        cc.push({ x: mx, y: my, vx: Math.cos(a) * v, vy: Math.sin(a) * v, r: Math.random() * 6.28, vr: (Math.random() - 0.5) * 0.35,
+                  w: 4 + Math.random() * 5, h: 2 + Math.random() * 3, c: cols[i % cols.length], t: 0, vita: 1100 + Math.random() * 700 });
+      }
+      chiedi();
+    });
+    var prima = 0;
+    return {
+      frame: function (t) {
+        var dt = prima ? Math.min(40, t - prima) : 16; prima = t;
+        sposta(p, mx, my);
+        var g = T.g;
+        g.setTransform(T.dpr, 0, 0, T.dpr, 0, 0);
+        g.clearRect(0, 0, innerWidth, innerHeight);
+        for (var i = cc.length - 1; i >= 0; i--) {
+          var s = cc[i];
+          s.t += dt;
+          if (s.t > s.vita) { cc.splice(i, 1); continue; }
+          s.vy += 0.16 * dt / 16; s.vx *= 0.985; s.x += s.vx * dt / 16; s.y += s.vy * dt / 16; s.r += s.vr;
+          g.globalAlpha = Math.min(1, (1 - s.t / s.vita) * 2);
+          g.fillStyle = s.c;
+          g.setTransform(T.dpr * Math.cos(s.r), T.dpr * Math.sin(s.r), -T.dpr * Math.sin(s.r), T.dpr * Math.cos(s.r), s.x * T.dpr, s.y * T.dpr);
+          g.fillRect(-s.w / 2, -s.h / 2, s.w, s.h);
+        }
+        g.setTransform(T.dpr, 0, 0, T.dpr, 0, 0);
+        g.globalAlpha = 1;
+        if (!cc.length) prima = 0;
+        return cc.length > 0;
+      }
+    };
+  };
+
+  // Faro: la pagina resta in penombra e il puntatore la illumina come una torcia; sui link la luce si allarga.
+  STILI.faro = function () {
+    var v = nodo('faro');
+    var buio = Math.max(0.2, Math.min(0.7, +CFG.shade || 0.45));
+    v.style.cssText += ';inset:0;width:100vw;height:100vh;transform:none!important;transition:opacity .4s;'
+      + 'background:radial-gradient(circle var(--of-r,170px) at var(--of-x,-400px) var(--of-y,-400px),transparent 0,'
+      + 'transparent 35%,rgba(0,0,0,' + buio + ') 100%)';
+    var p = nodo('punto'), x = mx, y = my, r = 170;
+    return {
+      frame: function () {
+        x += (mx - x) * (meno ? 1 : 0.22);
+        y += (my - y) * (meno ? 1 : 0.22);
+        var rT = hot ? 240 : 170;
+        r += (rT - r) * (meno ? 1 : 0.12);
+        v.style.setProperty('--of-x', x.toFixed(1) + 'px');
+        v.style.setProperty('--of-y', y.toFixed(1) + 'px');
+        v.style.setProperty('--of-r', r.toFixed(1) + 'px');
+        sposta(p, mx, my);
+        return Math.abs(mx - x) + Math.abs(my - y) > 0.3 || Math.abs(rT - r) > 0.5;
+      }
+    };
+  };
+
+  // Brace: dal puntatore salgono scintille calde che tremano, si spengono e cambiano colore mentre salgono.
+  STILI.brace = function () {
+    var T = tela(), p = nodo('punto'), f = [];
+    var c1 = risolvi(CFG.dotColor || '#ffb347'), c2 = risolvi(CFG.hotColor || CFG.ringColor || '#ff5a36');
+    var prima = 0;
+    return {
+      punto: function () {
+        if (meno) return;
+        var n = Math.min(3, 1 + Math.floor(Math.sqrt(vx * vx + vy * vy) / 12));
+        for (var i = 0; i < n; i++) {
+          f.push({ x: mx + (Math.random() - 0.5) * 10, y: my, vx: (Math.random() - 0.5) * 0.8, vy: -0.6 - Math.random() * 1.4,
+                   r: 1 + Math.random() * 2.2, t: 0, vita: 700 + Math.random() * 900, c: Math.random() < 0.5 ? c1 : c2 });
+        }
+        if (f.length > 220) f.splice(0, f.length - 220);
+      },
+      frame: function (t) {
+        var dt = prima ? Math.min(40, t - prima) : 16; prima = t;
+        sposta(p, mx, my, hot ? ' scale(2.2)' : '');
+        var g = T.g;
+        g.setTransform(T.dpr, 0, 0, T.dpr, 0, 0);
+        g.clearRect(0, 0, innerWidth, innerHeight);
+        g.globalCompositeOperation = 'lighter';
+        for (var i = f.length - 1; i >= 0; i--) {
+          var s = f[i];
+          s.t += dt;
+          if (s.t > s.vita) { f.splice(i, 1); continue; }
+          s.vx += (Math.random() - 0.5) * 0.12;
+          s.x += s.vx * dt / 16; s.y += s.vy * dt / 16;
+          var k = 1 - s.t / s.vita;
+          g.globalAlpha = Math.min(1, k * 1.5);
+          g.fillStyle = s.c;
+          g.shadowColor = s.c; g.shadowBlur = 8;
+          g.beginPath(); g.arc(s.x, s.y, s.r * (0.4 + 0.6 * k), 0, 6.283); g.fill();
+        }
+        g.shadowBlur = 0; g.globalAlpha = 1; g.globalCompositeOperation = 'source-over';
+        if (!f.length) prima = 0;
+        return f.length > 0;
+      }
+    };
+  };
+
+  // Inchiostro: dove passa il puntatore cadono gocce che si allargano e sfumano, come inchiostro nell'acqua.
+  STILI.inchiostro = function () {
+    var T = tela(), p = nodo('punto'), f = [], ultimoP = 0;
+    var col = risolvi(CFG.dotColor || '#1a1a1a');
+    var prima = 0;
+    return {
+      punto: function (t) {
+        if (meno || t - ultimoP < 45) return;
+        ultimoP = t;
+        var v = Math.sqrt(vx * vx + vy * vy);
+        f.push({ x: mx, y: my, r0: 3 + Math.min(10, v * 0.5), r1: 22 + Math.random() * 26 + Math.min(30, v * 1.4), t: 0,
+                 vita: 1500 + Math.random() * 700 });
+        if (f.length > 80) f.splice(0, f.length - 80);
+      },
+      frame: function (t) {
+        var dt = prima ? Math.min(40, t - prima) : 16; prima = t;
+        sposta(p, mx, my, hot ? ' scale(2.4)' : '');
+        var g = T.g;
+        g.setTransform(T.dpr, 0, 0, T.dpr, 0, 0);
+        g.clearRect(0, 0, innerWidth, innerHeight);
+        g.fillStyle = col;
+        for (var i = f.length - 1; i >= 0; i--) {
+          var s = f[i];
+          s.t += dt;
+          if (s.t > s.vita) { f.splice(i, 1); continue; }
+          var k = s.t / s.vita, e = 1 - Math.pow(1 - k, 3);
+          g.globalAlpha = 0.16 * (1 - k);
+          g.beginPath(); g.arc(s.x, s.y, s.r0 + (s.r1 - s.r0) * e, 0, 6.283); g.fill();
+          g.globalAlpha = 0.28 * (1 - k);
+          g.beginPath(); g.arc(s.x, s.y, (s.r0 + (s.r1 - s.r0) * e) * 0.45, 0, 6.283); g.fill();
+        }
+        g.globalAlpha = 1;
+        if (!f.length) prima = 0;
+        return f.length > 0;
+      }
+    };
+  };
+
+  // Bolle: dal puntatore partono bolle trasparenti che salgono ondeggiando e scoppiano in un anello.
+  STILI.bolle = function () {
+    var T = tela(), p = nodo('punto'), f = [], ultimoP = 0;
+    var col = risolvi(CFG.ringColor || '#ffffff');
+    var prima = 0;
+    return {
+      punto: function (t) {
+        if (meno || t - ultimoP < 70) return;
+        ultimoP = t;
+        f.push({ x: mx, y: my, r: 3 + Math.random() * 7, vy: -0.5 - Math.random() * 0.8, fase: Math.random() * 6.28, t: 0,
+                 vita: 1300 + Math.random() * 1100 });
+        if (f.length > 90) f.splice(0, f.length - 90);
+      },
+      frame: function (t) {
+        var dt = prima ? Math.min(40, t - prima) : 16; prima = t;
+        sposta(p, mx, my, hot ? ' scale(2.4)' : '');
+        var g = T.g;
+        g.setTransform(T.dpr, 0, 0, T.dpr, 0, 0);
+        g.clearRect(0, 0, innerWidth, innerHeight);
+        g.strokeStyle = col;
+        for (var i = f.length - 1; i >= 0; i--) {
+          var s = f[i];
+          s.t += dt;
+          if (s.t > s.vita + 220) { f.splice(i, 1); continue; }
+          if (s.t <= s.vita) {
+            s.y += s.vy * dt / 16;
+            s.x += Math.sin(s.fase + s.t / 260) * 0.6;
+            g.globalAlpha = 0.75; g.lineWidth = 1.4;
+            g.beginPath(); g.arc(s.x, s.y, s.r, 0, 6.283); g.stroke();
+            g.globalAlpha = 0.6;
+            g.beginPath(); g.arc(s.x - s.r * 0.35, s.y - s.r * 0.35, s.r * 0.22, 0, 6.283); g.stroke();
+          } else {
+            var k = (s.t - s.vita) / 220;
+            g.globalAlpha = 0.7 * (1 - k); g.lineWidth = 1;
+            g.beginPath(); g.arc(s.x, s.y, s.r * (1 + k * 1.6), 0, 6.283); g.stroke();
+          }
+        }
+        g.globalAlpha = 1;
+        if (!f.length) prima = 0;
+        return f.length > 0;
+      }
+    };
+  };
+
+  // Foglie: muovendo il puntatore si staccano foglioline che cadono girando su se stesse e oscillando.
+  STILI.foglie = function () {
+    var T = tela(), p = nodo('punto'), f = [], ultimoP = 0;
+    var cols = [risolvi(CFG.dotColor || '#3f7a3a'), risolvi(CFG.ringColor || '#7fb069'), risolvi(CFG.hotColor || '#c9a227')];
+    var prima = 0;
+    return {
+      punto: function (t) {
+        if (meno || t - ultimoP < 90) return;
+        ultimoP = t;
+        f.push({ x: mx, y: my, vx: vx * 0.08, vy: 0.4 + Math.random() * 0.5, a: Math.random() * 6.28, va: (Math.random() - 0.5) * 0.08,
+                 fase: Math.random() * 6.28, l: 7 + Math.random() * 6, c: cols[Math.floor(Math.random() * cols.length)], t: 0,
+                 vita: 2000 + Math.random() * 1200 });
+        if (f.length > 70) f.splice(0, f.length - 70);
+      },
+      frame: function (t) {
+        var dt = prima ? Math.min(40, t - prima) : 16; prima = t;
+        sposta(p, mx, my, hot ? ' scale(2.4)' : '');
+        var g = T.g;
+        g.setTransform(T.dpr, 0, 0, T.dpr, 0, 0);
+        g.clearRect(0, 0, innerWidth, innerHeight);
+        for (var i = f.length - 1; i >= 0; i--) {
+          var s = f[i];
+          s.t += dt;
+          if (s.t > s.vita) { f.splice(i, 1); continue; }
+          s.vx *= 0.98;
+          s.x += (s.vx + Math.sin(s.fase + s.t / 420) * 0.9) * dt / 16;
+          s.y += s.vy * dt / 16;
+          s.a += s.va * dt / 16;
+          var k = 1 - s.t / s.vita;
+          g.globalAlpha = Math.min(1, k * 1.6) * 0.9;
+          g.fillStyle = s.c;
+          g.setTransform(T.dpr * Math.cos(s.a), T.dpr * Math.sin(s.a), -T.dpr * Math.sin(s.a), T.dpr * Math.cos(s.a), s.x * T.dpr, s.y * T.dpr);
+          g.beginPath();
+          g.moveTo(-s.l, 0);
+          g.quadraticCurveTo(0, -s.l * 0.55, s.l, 0);
+          g.quadraticCurveTo(0, s.l * 0.55, -s.l, 0);
+          g.fill();
+        }
+        g.setTransform(T.dpr, 0, 0, T.dpr, 0, 0);
+        g.globalAlpha = 1;
+        if (!f.length) prima = 0;
+        return f.length > 0;
+      }
+    };
+  };
+
+  // Vapore: dal puntatore salgono sbuffi morbidi che si allargano e svaniscono, come il vapore da una tazza.
+  STILI.vapore = function () {
+    var T = tela(), p = nodo('punto'), f = [], ultimoP = 0;
+    var col = risolvi(CFG.ringColor || '#ffffff');
+    var prima = 0;
+    return {
+      punto: function (t) {
+        if (meno || t - ultimoP < 60) return;
+        ultimoP = t;
+        f.push({ x: mx + (Math.random() - 0.5) * 8, y: my, r: 6 + Math.random() * 6, vy: -0.45 - Math.random() * 0.4,
+                 fase: Math.random() * 6.28, t: 0, vita: 1600 + Math.random() * 900 });
+        if (f.length > 90) f.splice(0, f.length - 90);
+      },
+      frame: function (t) {
+        var dt = prima ? Math.min(40, t - prima) : 16; prima = t;
+        sposta(p, mx, my, hot ? ' scale(2.4)' : '');
+        var g = T.g;
+        g.setTransform(T.dpr, 0, 0, T.dpr, 0, 0);
+        g.clearRect(0, 0, innerWidth, innerHeight);
+        for (var i = f.length - 1; i >= 0; i--) {
+          var s = f[i];
+          s.t += dt;
+          if (s.t > s.vita) { f.splice(i, 1); continue; }
+          var k = s.t / s.vita;
+          s.y += s.vy * dt / 16;
+          s.x += Math.sin(s.fase + s.t / 500) * 0.35;
+          var r = s.r * (1 + k * 2.6);
+          var gr = g.createRadialGradient(s.x, s.y, 0, s.x, s.y, r);
+          gr.addColorStop(0, col);
+          gr.addColorStop(1, 'rgba(255,255,255,0)');
+          g.globalAlpha = 0.22 * Math.sin(Math.PI * Math.min(1, k * 1.2));
+          g.fillStyle = gr;
+          g.beginPath(); g.arc(s.x, s.y, r, 0, 6.283); g.fill();
+        }
+        g.globalAlpha = 1;
+        if (!f.length) prima = 0;
+        return f.length > 0;
+      }
+    };
+  };
+
+  // Calamita: un anello col punto; avvicinandosi a un pulsante o a un link, l'elemento si sposta verso il puntatore
+  // (fino a un terzo della distanza) e torna al suo posto quando lo si lascia.
+  STILI.calamita = function () {
+    var a = nodo('anello'), p = nodo('punto'), ax = mx, ay = my, preso = null;
+    function lascia() {
+      if (preso) { preso.style.translate = ''; preso.style.transition = 'translate .45s cubic-bezier(.2,.8,.2,1)'; preso = null; }
+    }
+    return {
+      frame: function () {
+        var bersaglio = hot && hot.closest ? hot.closest('a, button, [role="button"]') : null;
+        if (bersaglio !== preso) { lascia(); preso = bersaglio; if (preso) preso.style.transition = 'translate .12s linear'; }
+        var tx = mx, ty = my;
+        if (preso && !meno) {
+          var r = preso.getBoundingClientRect();
+          var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+          preso.style.translate = ((mx - cx) * 0.3).toFixed(1) + 'px ' + ((my - cy) * 0.3).toFixed(1) + 'px';
+          tx = cx + (mx - cx) * 0.3; ty = cy + (my - cy) * 0.3;
+        }
+        ax += (tx - ax) * (meno ? 1 : 0.25);
+        ay += (ty - ay) * (meno ? 1 : 0.25);
+        a.classList.toggle('is-hot', !!preso);
+        sposta(a, ax - R / 2, ay - R / 2, preso ? ' scale(1.9)' : '');
+        sposta(p, mx, my);
+        return Math.abs(tx - ax) + Math.abs(ty - ay) > 0.3 || !!preso;
+      }
+    };
+  };
+
+  // Impronte: dietro il puntatore restano ferri di cavallo, uno a sinistra e uno a destra del cammino, che sbiadiscono.
+  STILI.impronte = function () {
+    var T = tela(), p = nodo('punto'), f = [], lato = 1, ux = mx, uy = my;
+    var col = risolvi(CFG.dotColor || '#7a3e1d');
+    var prima = 0;
+    return {
+      punto: function () {
+        if (meno) return;
+        var dx = mx - ux, dy = my - uy, d = Math.sqrt(dx * dx + dy * dy);
+        if (d < 34) return;
+        var a = Math.atan2(dy, dx);
+        lato = -lato;
+        f.push({ x: mx + Math.cos(a + Math.PI / 2) * 9 * lato, y: my + Math.sin(a + Math.PI / 2) * 9 * lato, a: a, t: 0, vita: 1800 });
+        ux = mx; uy = my;
+        if (f.length > 40) f.splice(0, f.length - 40);
+      },
+      frame: function (t) {
+        var dt = prima ? Math.min(40, t - prima) : 16; prima = t;
+        sposta(p, mx, my, hot ? ' scale(2.4)' : '');
+        var g = T.g;
+        g.setTransform(T.dpr, 0, 0, T.dpr, 0, 0);
+        g.clearRect(0, 0, innerWidth, innerHeight);
+        g.strokeStyle = col; g.lineWidth = 2.6; g.lineCap = 'round';
+        for (var i = f.length - 1; i >= 0; i--) {
+          var s = f[i];
+          s.t += dt;
+          if (s.t > s.vita) { f.splice(i, 1); continue; }
+          g.globalAlpha = 0.75 * (1 - s.t / s.vita);
+          g.setTransform(T.dpr * Math.cos(s.a), T.dpr * Math.sin(s.a), -T.dpr * Math.sin(s.a), T.dpr * Math.cos(s.a), s.x * T.dpr, s.y * T.dpr);
+          g.beginPath(); g.arc(0, 0, 6, Math.PI * 0.62, Math.PI * 1.38, true); g.stroke();
+        }
+        g.setTransform(T.dpr, 0, 0, T.dpr, 0, 0);
+        g.globalAlpha = 1;
+        if (!f.length) prima = 0;
+        return f.length > 0;
+      }
+    };
+  };
+
+  // Filo: un filo morbido pende dal puntatore e lo segue ondeggiando, con l'ago in cima; sui link il filo si arrotola.
+  STILI.filo = function () {
+    var T = tela(), ago = nodo('punto'), N = 18, L = 7, pts = [];
+    for (var i = 0; i < N; i++) pts.push({ x: mx, y: my + i * L, px: mx, py: my + i * L });
+    var col = risolvi(CFG.dotColor || '#c0392b');
+    ago.style.cssText += ';width:3px;height:16px;margin:-14px 0 0 -1.5px;border-radius:2px;background:var(--oc-ring)';
+    var fermi = 0;
+    return {
+      frame: function () {
+        pts[0].x = mx; pts[0].y = my;
+        var mosso = false;
+        for (var i = 1; i < N; i++) {
+          var s = pts[i];
+          var vxs = (s.x - s.px) * 0.96, vys = (s.y - s.py) * 0.96;
+          s.px = s.x; s.py = s.y;
+          s.x += vxs; s.y += vys + (hot ? -0.05 : 0.35);
+          if (Math.abs(vxs) + Math.abs(vys) > 0.05) mosso = true;
+        }
+        for (var it = 0; it < 4; it++) {
+          for (var j = 1; j < N; j++) {
+            var a = pts[j - 1], b = pts[j];
+            var dx = b.x - a.x, dy = b.y - a.y, d = Math.sqrt(dx * dx + dy * dy) || 1;
+            var lj = hot ? L * 0.45 : L;
+            var k = (d - lj) / d;
+            if (j > 1) { a.x += dx * k * 0.5; a.y += dy * k * 0.5; b.x -= dx * k * 0.5; b.y -= dy * k * 0.5; } else { b.x -= dx * k; b.y -= dy * k; }
+          }
+        }
+        var g = T.g;
+        g.setTransform(T.dpr, 0, 0, T.dpr, 0, 0);
+        g.clearRect(0, 0, innerWidth, innerHeight);
+        g.strokeStyle = col; g.lineWidth = 1.6; g.lineCap = 'round'; g.lineJoin = 'round';
+        g.beginPath(); g.moveTo(pts[0].x, pts[0].y);
+        for (var m = 1; m < N; m++) g.lineTo(pts[m].x, pts[m].y);
+        g.stroke();
+        sposta(ago, mx, my, ' rotate(' + Math.max(-40, Math.min(40, vx * 2)).toFixed(1) + 'deg)');
+        fermi = mosso ? 0 : fermi + 1;
+        return fermi < 30 || meno === false && mosso;
       }
     };
   };

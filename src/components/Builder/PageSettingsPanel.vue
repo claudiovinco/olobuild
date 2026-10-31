@@ -65,6 +65,10 @@
       <!-- Effetti di pagina: aperto da sé se un effetto è acceso (chiuso lo nasconderebbe) -->
       <CollapseSection :title="t('Effetti di pagina')" :defaultOpen="effettiAttivi">
         <div class="psp-group">
+          <div class="psp-row psp-row--fill">
+            <span class="psp-label">{{ t('Cursore') }}<InfoTip class="psp-info" :testo="t('Il cursore che segue il mouse in questa pagina. «Come il sito» usa quello scelto in Sito; su telefoni e tablet resta quello di sistema.')" :titolo="t('Cursore')" /></span>
+            <FieldSelect ui="dropdown" :aria-label="t('Cursore')" :modelValue="pageSettings.page_cursor || ''" :options="cursorePaginaOptions" @update:modelValue="builderStore.updatePageSetting('page_cursor', $event)" />
+          </div>
           <div class="psp-row">
             <label for="psp-crt" class="psp-label">{{ t('Overlay CRT (scanline + vignetta)') }}<InfoTip class="psp-info" :testo="t('Decoratore a tutta pagina in stile schermo CRT. Statico con riduzione del movimento.')" :titolo="t('Overlay CRT (scanline + vignetta)')" /></label>
             <FieldToggle
@@ -448,6 +452,16 @@
         <p v-if="canManageSite" id="psp-favicon-help" class="psp-help">{{ t('Imposta la favicon del sito (salvata in WordPress).') }}</p>
         <p v-else id="psp-favicon-help" class="psp-help">{{ t("Solo un amministratore può cambiare la favicon del sito.") }}</p>
       </div>
+      <div v-if="canManageSite" class="psp-group">
+        <div class="psp-row psp-row--fill">
+          <span class="psp-label">{{ t('Cursore del sito') }}<InfoTip class="psp-info" :testo="t('Il cursore che segue il mouse in tutto il sito. Ogni pagina può sceglierne un altro in Effetti di pagina.')" :titolo="t('Cursore del sito')" /></span>
+          <FieldSelect ui="dropdown" :aria-label="t('Cursore del sito')" :modelValue="cursoreSito.stile" :options="cursoreSitoOptions" :disabled="cursoreSito.busy" @update:modelValue="salvaCursoreSito({ stile: $event })" />
+        </div>
+        <div v-if="['etichetta', 'testo'].includes(cursoreSito.stile)" class="psp-row psp-row--fill">
+          <span class="psp-label">{{ t('Parola del cursore') }}</span>
+          <FieldText :aria-label="t('Parola del cursore')" :modelValue="cursoreSito.parola" @update:modelValue="salvaCursoreSito({ parola: $event })" />
+        </div>
+      </div>
     </CollapseSection>
   </div>
 </template>
@@ -533,6 +547,22 @@ const GRAIN_RANGES = [
 ];
 // Apertura: durata in ms come intval( … ) del PHP (1000-4000, 2000 se manca).
 const INTRO_RANGE = { key: 'page_intro_duration', label: 'Durata', unit: 'ms', min: 1000, max: 4000, step: 100, def: 2000 };
+// I cursori (Olobuild_Magnetic_Cursor::STILI). La pagina può usare quello del sito o nessuno.
+const CURSORI = [
+  ['anello', 'Anello e punto'], ['aggancio', 'Aggancio (abbraccia i pulsanti)'], ['scia', 'Scia di punti'],
+  ['mirino', 'Mirino con le coordinate'], ['goccia', 'Goccia'], ['inverti', 'Disco che inverte i colori'],
+  ['etichetta', 'Etichetta sui link'], ['cometa', 'Cometa'], ['bussola', 'Bussola'], ['scintille', 'Scintille'],
+  ['alone', 'Alone di luce'], ['orbita', 'Orbita'], ['onde', 'Onde al clic'], ['neve', 'Neve'], ['cucitura', 'Cucitura'],
+  ['pennello', 'Pennello'], ['testo', 'Testo in cerchio'], ['lente', 'Lente'], ['coriandoli', 'Coriandoli al clic'],
+  ['faro', 'Faro (la pagina in penombra)'], ['brace', 'Brace'], ['inchiostro', 'Inchiostro'], ['bolle', 'Bolle'],
+  ['foglie', 'Foglie che cadono'], ['vapore', 'Vapore'], ['calamita', 'Calamita (attira i pulsanti)'],
+  ['impronte', 'Impronte'], ['filo', 'Filo con l’ago'],
+];
+const cursorePaginaOptions = [
+  { value: '', label: t('Come il sito') }, { value: 'nessuno', label: t('Nessuno (quello di sistema)') },
+  ...CURSORI.map(([v, l]) => ({ value: v, label: t(l) })),
+];
+const cursoreSitoOptions = [{ value: '', label: t('Nessuno (quello di sistema)') }, ...CURSORI.map(([v, l]) => ({ value: v, label: t(l) }))];
 const introStyleOptions = [
   { value: 'sipario', label: 'Sipario' },
   { value: 'contatore', label: 'Contatore' },
@@ -567,6 +597,46 @@ const risincronizza = risincronizzaNumero;
 const canManageSite = !!oloData.canManageOptions;
 const faviconUrl = ref((oloData.siteInfo && oloData.siteInfo.icon_url) || '');
 const faviconBusy = ref(false);
+
+// Cursore del sito: si legge all'apertura e si salva subito (come la favicon), solo per chi gestisce il sito.
+const cursoreSito = ref({ stile: '', parola: '', busy: false });
+function cursoreUrl() {
+  const base = String(oloData.restUrl || oloData.apiUrl || '').replace(/\/$/, '');
+  return base ? base + '/magnetic-cursor' : wpRestUrl('olobuild/v1/magnetic-cursor');
+}
+async function leggiCursoreSito() {
+  if (!canManageSite) return;
+  try {
+    const res = await fetch(cursoreUrl(), { credentials: 'same-origin', headers: { 'X-WP-Nonce': oloData.nonce || '' } });
+    if (!res.ok) return;
+    const j = await res.json();
+    cursoreSito.value = { stile: j.enabled ? (j.style || 'anello') : '', parola: j.label_text || '', busy: false };
+  } catch (e) { /* senza risposta il menu resta su Nessuno */ }
+}
+async function salvaCursoreSito({ stile, parola }) {
+  if (!canManageSite) return;
+  const nuovo = { ...cursoreSito.value };
+  if (stile !== undefined) nuovo.stile = stile;
+  if (parola !== undefined) nuovo.parola = parola;
+  cursoreSito.value = { ...nuovo, busy: true };
+  try {
+    const corpo = { enabled: !!nuovo.stile, label_text: nuovo.parola };
+    if (nuovo.stile) corpo.style = nuovo.stile;
+    const res = await fetch(cursoreUrl(), {
+      method: 'PUT', credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': oloData.nonce || '' },
+      body: JSON.stringify(corpo),
+    });
+    const j = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(j.message || ('HTTP ' + res.status));
+    toast?.success?.(t('Cursore del sito salvato'));
+  } catch (e) {
+    toast?.error?.(t('Cursore non salvato: ') + e.message);
+  } finally {
+    cursoreSito.value = { ...cursoreSito.value, busy: false };
+  }
+}
+leggiCursoreSito();
 
 function wpRestUrl(path) {
   const root = String(oloData.wpRestRoot || '');

@@ -1754,6 +1754,10 @@ class Olobuild_Frontend_Renderer {
      * @return string HTML ('' se nessun effetto attivo)
      */
     private function render_page_effects( $page_settings ) {
+        // Il cursore di questa pagina (Effetti di pagina → Cursore): lo disegna il footer.
+        if ( is_array( $page_settings ) && ! empty( $page_settings['page_cursor'] ) && class_exists( 'Olobuild_Magnetic_Cursor' ) ) {
+            Olobuild_Magnetic_Cursor::$pagina = sanitize_key( (string) $page_settings['page_cursor'] );
+        }
         if ( ! is_array( $page_settings ) || ! class_exists( 'Olobuild_Crtoverlay_Tile' ) ) {
             return '';
         }

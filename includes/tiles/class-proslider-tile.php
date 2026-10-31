@@ -682,6 +682,13 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         if ( $pdepth > 0 ) {
             $parallax_attr = ' data-parallax-depth="' . $pdepth . '"';
         }
+        // Movimento con lo scorrimento (scrollMove): lo legge il JS, che muove il livello mentre la pagina scorre.
+        $parallax_attr .= $this->scroll_move_attr( $layer );
+        // Allineamento verticale del testo nel riquadro (solo con un'altezza): al centro o in fondo.
+        $valign = $layer['textValign'] ?? 'top';
+        if ( 'text' === $type && 'auto' !== $h && in_array( $valign, [ 'center', 'bottom' ], true ) ) {
+            $style .= 'display:flex;flex-direction:column;justify-content:' . ( 'center' === $valign ? 'center' : 'flex-end' ) . ';';
+        }
 
         // Blend mode
         $blend = $layer['blendMode'] ?? 'normal';
@@ -1115,6 +1122,52 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
     }
 
     /* ─── Timeline Keyframe CSS Generation ─────────────────── */
+
+    /**
+     * Il movimento del livello con lo scorrimento, come attributo data-scroll-move: il tratto di scorrimento (inizio e
+     * fine, da 0 a 100) e le tappe, ognuna con la posizione nel tratto (p, 0-100) e i valori: x e y in px della tela del
+     * computer, scala, rotazione (r), rotazione 3D (rx, ry) e opacità (o, 0-100). Senza tappe: «da» all'inizio e «a» alla
+     * fine. Solo numeri: tutto il resto si scarta.
+     */
+    private function scroll_move_attr( $layer ) {
+        $sm = $layer['scrollMove'] ?? null;
+        if ( empty( $sm ) || ! is_array( $sm ) ) {
+            return '';
+        }
+        $chiavi = [ 'x', 'y', 's', 'r', 'rx', 'ry', 'o' ];
+        $pulisci = function ( $v ) use ( $chiavi ) {
+            $o = [];
+            foreach ( $chiavi as $k ) {
+                if ( isset( $v[ $k ] ) && '' !== $v[ $k ] && is_numeric( $v[ $k ] ) ) {
+                    $o[ $k ] = round( floatval( $v[ $k ] ), 3 );
+                }
+            }
+            return $o;
+        };
+        $tappe = [];
+        if ( ! empty( $sm['tappe'] ) && is_array( $sm['tappe'] ) ) {
+            foreach ( $sm['tappe'] as $t ) {
+                if ( is_array( $t ) ) {
+                    $tappe[] = [ 'p' => max( 0, min( 100, floatval( $t['p'] ?? 0 ) ) ), 'v' => $pulisci( $t ) ];
+                }
+            }
+        } else {
+            $tappe[] = [ 'p' => 0, 'v' => $pulisci( is_array( $sm['da'] ?? null ) ? $sm['da'] : [] ) ];
+            $tappe[] = [ 'p' => 100, 'v' => $pulisci( is_array( $sm['a'] ?? null ) ? $sm['a'] : [] ) ];
+        }
+        if ( count( $tappe ) < 2 ) {
+            return '';
+        }
+        usort( $tappe, function ( $a, $b ) {
+            return $a['p'] <=> $b['p'];
+        } );
+        $dati = [
+            'i' => max( 0, min( 100, floatval( $sm['inizio'] ?? 0 ) ) ),
+            'f' => max( 0, min( 100, floatval( $sm['fine'] ?? 100 ) ) ),
+            't' => $tappe,
+        ];
+        return ' data-scroll-move="' . esc_attr( wp_json_encode( $dati ) ) . '"';
+    }
 
     private function layer_has_timeline( $layer ) {
         return ! empty( $layer['timeline'] )

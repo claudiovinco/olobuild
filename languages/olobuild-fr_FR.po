@@ -48858,3 +48858,227 @@ msgstr "Une diapositive par geste"
 #: src/config/elements/proslider.js
 msgid "Mentre lo slider è fermo in cima, ogni gesto della rotella o del trackpad porta alla diapositiva dopo o prima, senza saltarne; alla prima e all’ultima la pagina riprende a scorrere. Fermandosi, la pagina si posa sulla diapositiva più vicina."
 msgstr "Tant que le slider reste fixé en haut, chaque geste de la molette ou du trackpad mène à la diapositive suivante ou précédente, sans en sauter ; à la première et à la dernière, la page reprend son défilement. À l’arrêt, la page se pose sur la diapositive la plus proche."
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Cursore del sito"
+msgstr "Curseur du site"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Parola del cursore"
+msgstr "Mot du curseur"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Come il sito"
+msgstr "Comme le site"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Nessuno (quello di sistema)"
+msgstr "Aucun (celui du système)"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Il cursore che segue il mouse in questa pagina. «Come il sito» usa quello scelto in Sito; su telefoni e tablet resta quello di sistema."
+msgstr "Le curseur qui suit la souris sur cette page. « Comme le site » utilise celui choisi dans Site ; sur téléphones et tablettes, celui du système reste."
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Il cursore che segue il mouse in tutto il sito. Ogni pagina può sceglierne un altro in Effetti di pagina."
+msgstr "Le curseur qui suit la souris sur tout le site. Chaque page peut en choisir un autre dans Effets de page."
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Cursore del sito salvato"
+msgstr "Curseur du site enregistré"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Cursore non salvato: "
+msgstr "Curseur non enregistré : "
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Anello e punto"
+msgstr "Anneau et point"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Aggancio (abbraccia i pulsanti)"
+msgstr "Accroche (entoure les boutons)"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Scia di punti"
+msgstr "Traînée de points"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Mirino con le coordinate"
+msgstr "Viseur avec coordonnées"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Disco che inverte i colori"
+msgstr "Disque qui inverse les couleurs"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Etichetta sui link"
+msgstr "Étiquette sur les liens"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Cometa"
+msgstr "Comète"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Scintille"
+msgstr "Étincelles"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Alone di luce"
+msgstr "Halo de lumière"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Orbita"
+msgstr "Orbite"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Onde al clic"
+msgstr "Ondes au clic"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Cucitura"
+msgstr "Couture"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Pennello"
+msgstr "Pinceau"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Testo in cerchio"
+msgstr "Texte en cercle"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Coriandoli al clic"
+msgstr "Confettis au clic"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Faro (la pagina in penombra)"
+msgstr "Projecteur (la page dans la pénombre)"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Foglie che cadono"
+msgstr "Feuilles qui tombent"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Vapore"
+msgstr "Vapeur"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Calamita (attira i pulsanti)"
+msgstr "Aimant (attire les boutons)"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Impronte"
+msgstr "Empreintes"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Filo con l’ago"
+msgstr "Fil et aiguille"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Movimento con lo scorrimento"
+msgstr "Mouvement au défilement"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Si muove mentre la pagina scorre"
+msgstr "Bouge pendant que la page défile"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Con «Timeline a scorrimento» accesa conta il tratto in cui lo slider resta fermo in cima; se no, l’uscita dello slider dalla finestra. Spostamenti in px della tela del computer."
+msgstr "Avec « Fixé au défilement » activé, compte le tronçon où le slider reste fixé en haut ; sinon, la sortie du slider de la fenêtre. Décalages en px du canevas ordinateur."
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Inizio del tratto"
+msgstr "Début du tronçon"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Fine del tratto"
+msgstr "Fin du tronçon"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Percorso a tappe: qui si cambiano la prima e l’ultima."
+msgstr "Parcours par étapes : ici on change la première et la dernière."
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "All’inizio"
+msgstr "Au début"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Alla fine"
+msgstr "À la fin"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Sposta in orizzontale"
+msgstr "Déplacer horizontalement"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Sposta in verticale"
+msgstr "Déplacer verticalement"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Rotazione 3D (X)"
+msgstr "Rotation 3D (X)"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Rotazione 3D (Y)"
+msgstr "Rotation 3D (Y)"
+
+#: includes/class-theme-importer.php
+msgid "La tavola che si apparecchia"
+msgstr "La table qui se dresse"
+
+#: includes/class-theme-importer.php
+msgid "Il carosello delle stagioni"
+msgstr "Le carrousel des saisons"
+
+#: includes/class-theme-importer.php
+msgid "Il telaio esploso"
+msgstr "Le cadre éclaté"
+
+#: includes/class-theme-importer.php
+msgid "La parola che si apre"
+msgstr "Le mot qui s’ouvre"
+
+#: includes/class-theme-importer.php
+msgid "La carta nautica"
+msgstr "La carte marine"
+
+#: includes/class-theme-importer.php
+msgid "Il disco sul piatto"
+msgstr "Le disque sur la platine"
+
+#: includes/class-theme-importer.php
+msgid "La salita"
+msgstr "L’ascension"
+
+#: includes/class-theme-importer.php
+msgid "La tazza a metà"
+msgstr "La tasse entre deux"
+
+#: includes/class-theme-importer.php
+msgid "Il semaforo"
+msgstr "Le feu de départ"
+
+#: includes/class-theme-importer.php
+msgid "Il cubo dei livelli"
+msgstr "Le cube des niveaux"
+
+#: includes/class-theme-importer.php
+msgid "Sotto la cupola"
+msgstr "Sous la coupole"
+
+#: includes/class-theme-importer.php
+msgid "Il ventaglio"
+msgstr "L’éventail"
+
+#: includes/class-theme-importer.php
+msgid "La vetrina che scorre"
+msgstr "La vitrine qui défile"
+
+#: includes/class-theme-importer.php
+msgid "La pianta che cresce"
+msgstr "La plante qui pousse"
+
+#: includes/class-theme-importer.php
+msgid "La porta che si apre"
+msgstr "La porte qui s’ouvre"

@@ -1274,6 +1274,70 @@ function initSlider(container) {
     });
   }
 
+  /* ── Livelli che si muovono con lo scorrimento (scrollMove) ── */
+  // L'avanzamento va da 0 a 1: nello slider fermo in cima (scorrimento fissato) è il tratto in cui resta fermo, se no è
+  // l'uscita dello slider dalla finestra. Ogni livello lo legge nel suo tratto (inizio, fine) e passa da una tappa
+  // all'altra; i valori vanno sulle proprietà singole translate, scale e rotate, che si sommano al transform delle
+  // animazioni d'ingresso senza toccarlo, e l'opacità su un filtro. Gli spostamenti sono in px della tela del computer
+  // (1440): sulle tele più strette si riducono in proporzione. Con «riduci il movimento» i livelli restano alla prima tappa.
+  (function () {
+    var mobili = qsa(container, '.olo-proslider-layer[data-scroll-move]').map(function (el) {
+      try { return { el: el, d: JSON.parse(el.getAttribute('data-scroll-move')) }; } catch (e) { return null; }
+    }).filter(function (m) { return m && m.d && m.d.t && m.d.t.length > 1; });
+    if (!mobili.length) return;
+    // la prospettiva per le rotazioni 3D sta sulla tela del livello
+    mobili.forEach(function (m) {
+      if (m.d.t.some(function (t) { return t.v.rx || t.v.ry; })) {
+        var tela = m.el.parentElement;
+        if (tela) tela.style.perspective = '1600px';
+      }
+    });
+    var avvolto = container.closest('.mps-scroll-fixed-wrapper');
+    function valore(t, k, base) {
+      var u = 0;
+      for (var i = 0; i < t.length - 1; i++) { if (t[i + 1].p >= k) { u = i; break; } u = i; }
+      var a = t[u], b = t[Math.min(u + 1, t.length - 1)];
+      var span = Math.max(0.0001, b.p - a.p);
+      var f = Math.max(0, Math.min(1, (k - a.p) / span));
+      f = f * f * (3 - 2 * f);
+      var va = a.v[base], vb = b.v[base];
+      var def = base === 's' ? 1 : (base === 'o' ? 100 : 0);
+      va = va == null ? def : va; vb = vb == null ? def : vb;
+      return va + (vb - va) * f;
+    }
+    function applica() {
+      giro = null;
+      var r = (avvolto || container).getBoundingClientRect();
+      var vh = window.innerHeight || 800;
+      var p;
+      if (avvolto) {
+        var dist = Math.max(1, avvolto.offsetHeight - container.offsetHeight);
+        p = -r.top / dist;
+      } else {
+        p = -r.top / Math.max(1, r.height);
+      }
+      if (r.bottom < -vh || r.top > vh * 2) return;
+      p = menoMoto ? 0 : Math.max(0, Math.min(1, p)) * 100;
+      mobili.forEach(function (m) {
+        var d = m.d, k = d.f > d.i ? Math.max(0, Math.min(100, (p - d.i) / (d.f - d.i) * 100)) : (p >= d.i ? 100 : 0);
+        var tela = m.el.parentElement;
+        var fattore = tela && tela.offsetWidth ? tela.offsetWidth / 1440 : 1;
+        var x = valore(d.t, k, 'x') * fattore, y = valore(d.t, k, 'y') * fattore;
+        var s = valore(d.t, k, 's'), rz = valore(d.t, k, 'r'), rx = valore(d.t, k, 'rx'), ry = valore(d.t, k, 'ry');
+        var o = valore(d.t, k, 'o');
+        m.el.style.translate = x.toFixed(1) + 'px ' + y.toFixed(1) + 'px';
+        m.el.style.scale = s.toFixed(4);
+        m.el.style.rotate = rx ? 'x ' + rx.toFixed(2) + 'deg' : (ry ? 'y ' + ry.toFixed(2) + 'deg' : rz.toFixed(2) + 'deg');
+        if (d.t.some(function (t) { return t.v.o != null; })) m.el.style.filter = 'opacity(' + (o / 100).toFixed(3) + ')';
+      });
+    }
+    var giro = null;
+    function chiedi() { if (!giro) giro = requestAnimationFrame(applica); }
+    window.addEventListener('scroll', chiedi, { passive: true });
+    window.addEventListener('resize', chiedi);
+    applica();
+  })();
+
   /* ── Initial state ───────────────────────────────────── */
   // I livelli della prima slide entrano quando lo slider arriva nella finestra (almeno un quinto, o mezza
   // finestra se è più alto): prima entravano al caricamento e, per uno slider sotto la piega, l'ingresso
