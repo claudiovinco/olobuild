@@ -73,7 +73,8 @@ class Olobuild_Woo_Categories_Tile extends Olobuild_Tile_Base {
 
         $cols        = max( 1, min( 8, absint( $s['columns'] ) ) );
         $cols_tablet = max( 1, min( 4, absint( $s['columns_tablet'] ) ) );
-        $cols_mobile = max( 1, min( 2, absint( $s['columns_mobile'] ) ) );
+        // fino a 3 sul telefono: i reparti in tondo stanno tre per fila (1.4.910; prima al massimo 2)
+        $cols_mobile = max( 1, min( 3, absint( $s['columns_mobile'] ) ) );
         $gap         = absint( $s['gap'] );
         $radius      = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );

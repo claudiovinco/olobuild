@@ -1,0 +1,999 @@
+{
+ "tema": "suola",
+ "titolo_dentro": "Nella confezione",
+ "attributi": {
+  "numero": {
+   "nome": "Numero",
+   "termini": [
+    "35",
+    "36",
+    "37",
+    "38",
+    "39",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46"
+   ]
+  }
+ },
+ "categorie": [
+  {
+   "slug": "sneakers",
+   "nome": "Sneakers",
+   "descrizione": "In pelle e in tela, bianche e da tutti i giorni.",
+   "foto": "pexels-28645957.jpg"
+  },
+  {
+   "slug": "mocassini",
+   "nome": "Mocassini",
+   "descrizione": "Col tacco o bassi, in pelle e in nappa.",
+   "foto": "pexels-13923676.jpg"
+  },
+  {
+   "slug": "stivaletti",
+   "nome": "Stivaletti",
+   "descrizione": "Per la pioggia e per la sera.",
+   "foto": "pexels-4046699.jpg"
+  },
+  {
+   "slug": "decollete",
+   "nome": "Décolleté e sandali",
+   "descrizione": "Tacchi, slingback, ballerine.",
+   "foto": "pexels-3682290.jpg"
+  },
+  {
+   "slug": "uomo",
+   "nome": "Uomo",
+   "descrizione": "Oxford, derby e brogue cuciti Goodyear.",
+   "foto": "pexels-34968265.jpg"
+  },
+  {
+   "slug": "sport",
+   "nome": "Sport",
+   "descrizione": "Da corsa e da camminata.",
+   "foto": "pexels-26852035.jpg"
+  }
+ ],
+ "prodotti": [
+  {
+   "sku": "SUO-001",
+   "nome": "Sneaker Gesso, pelle bianca",
+   "slug": "sneaker-gesso",
+   "cat": [
+    "sneakers"
+   ],
+   "prezzo": 129,
+   "sconto": 99,
+   "scorta": 30,
+   "voto": 4.8,
+   "recensioni": 612,
+   "evidenza": true,
+   "foto": [
+    "pexels-28645957.jpg",
+    "pexels-7193634.jpg",
+    "pexels-2331069.jpg"
+   ],
+   "punti": [
+    "Pelle bianca pieno fiore",
+    "Suola in gomma cucita",
+    "Plantare estraibile",
+    "Il video della scarpa"
+   ],
+   "testo": "La sneaker bianca che va con tutto: pelle pieno fiore, suola cucita, plantare che si lava.",
+   "upsell": [],
+   "cross": [
+    "SUO-021"
+   ],
+   "varianti": {
+    "attributo": "numero",
+    "valori": [
+     "36",
+     "37",
+     "38",
+     "39",
+     "40",
+     "41",
+     "42",
+     "43",
+     "44",
+     "45"
+    ],
+    "esaurite": [
+     "36"
+    ]
+   },
+   "video": "pexels-video-5665059.mp4",
+   "poster": "pexels-video-5665059.jpg",
+   "dentro": "Le scarpe nella scatola di cartone riciclato, i sacchetti di cotone, il cartellino del cambio."
+  },
+  {
+   "sku": "SUO-002",
+   "nome": "Sneaker Vimini",
+   "slug": "sneaker-vimini",
+   "cat": [
+    "sneakers"
+   ],
+   "prezzo": 119,
+   "sconto": 0,
+   "scorta": 18,
+   "voto": 4.6,
+   "recensioni": 144,
+   "evidenza": false,
+   "foto": [
+    "pexels-7193623.jpg",
+    "pexels-13807630.jpg"
+   ],
+   "punti": [
+    "Pelle e camoscio",
+    "Linguetta imbottita",
+    "Suola leggera",
+    "Lacci di cotone cerato"
+   ],
+   "testo": "La sneaker bassa di pelle e camoscio, leggera come una pantofola.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "numero",
+    "valori": [
+     "36",
+     "37",
+     "38",
+     "39",
+     "40",
+     "41",
+     "42",
+     "43",
+     "44",
+     "45"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Le scarpe nella scatola di cartone riciclato, i sacchetti di cotone, il cartellino del cambio."
+  },
+  {
+   "sku": "SUO-003",
+   "nome": "Sneaker Prato, tela",
+   "slug": "sneaker-prato",
+   "cat": [
+    "sneakers"
+   ],
+   "prezzo": 89,
+   "sconto": 0,
+   "scorta": 26,
+   "voto": 4.5,
+   "recensioni": 203,
+   "evidenza": false,
+   "foto": [
+    "pexels-11962357.jpg",
+    "pexels-537466.jpg",
+    "pexels-1858407.jpg"
+   ],
+   "punti": [
+    "Tela di cotone",
+    "Suola vulcanizzata",
+    "Si lava a 30°",
+    "Bianca o naturale"
+   ],
+   "testo": "La tela bianca dell’estate e del weekend: si lava in lavatrice.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "numero",
+    "valori": [
+     "36",
+     "37",
+     "38",
+     "39",
+     "40",
+     "41",
+     "42",
+     "43",
+     "44",
+     "45"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Le scarpe nella scatola di cartone riciclato, i sacchetti di cotone, il cartellino del cambio."
+  },
+  {
+   "sku": "SUO-004",
+   "nome": "Mocassino Notte, pelle nera",
+   "slug": "mocassino-notte",
+   "cat": [
+    "mocassini"
+   ],
+   "prezzo": 159,
+   "sconto": 0,
+   "scorta": 14,
+   "voto": 4.8,
+   "recensioni": 188,
+   "evidenza": true,
+   "foto": [
+    "pexels-13919725.jpg",
+    "pexels-13922656.jpg"
+   ],
+   "punti": [
+    "Pelle spazzolata nera",
+    "Cucitura a mano sulla tomaia",
+    "Suola in cuoio",
+    "Fatto nelle Marche"
+   ],
+   "testo": "Il mocassino nero classico: cucito a mano sulla tomaia, la suola in cuoio che si risuola.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "numero",
+    "valori": [
+     "36",
+     "37",
+     "38",
+     "39",
+     "40",
+     "41"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Le scarpe nella scatola di cartone riciclato, i sacchetti di cotone, il cartellino del cambio."
+  },
+  {
+   "sku": "SUO-005",
+   "nome": "Mocassino col tacco, pelle nera",
+   "slug": "mocassino-tacco",
+   "cat": [
+    "mocassini"
+   ],
+   "prezzo": 175,
+   "sconto": 139,
+   "scorta": 10,
+   "voto": 4.7,
+   "recensioni": 96,
+   "evidenza": false,
+   "foto": [
+    "pexels-13923676.jpg",
+    "pexels-13923530.jpg"
+   ],
+   "punti": [
+    "Tacco a blocco 5 cm",
+    "Pelle nera lucida",
+    "Plantare in pelle",
+    "Comodo tutto il giorno"
+   ],
+   "testo": "Il mocassino col tacco a blocco: si sta in piedi tutto il giorno.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "numero",
+    "valori": [
+     "36",
+     "37",
+     "38",
+     "39",
+     "40",
+     "41"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Le scarpe nella scatola di cartone riciclato, i sacchetti di cotone, il cartellino del cambio."
+  },
+  {
+   "sku": "SUO-006",
+   "nome": "Mocassino Limone, nappa",
+   "slug": "mocassino-limone",
+   "cat": [
+    "mocassini"
+   ],
+   "prezzo": 145,
+   "sconto": 0,
+   "scorta": 8,
+   "voto": 4.6,
+   "recensioni": 52,
+   "evidenza": false,
+   "foto": [
+    "pexels-13525164.jpg"
+   ],
+   "punti": [
+    "Nappa morbida gialla",
+    "Senza fodera",
+    "Suola in gomma sottile",
+    "Si piega in borsa"
+   ],
+   "testo": "La nappa gialla senza fodera: morbida come un guanto, si piega in borsa.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "numero",
+    "valori": [
+     "36",
+     "37",
+     "38",
+     "39",
+     "40",
+     "41"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Le scarpe nella scatola di cartone riciclato, i sacchetti di cotone, il cartellino del cambio."
+  },
+  {
+   "sku": "SUO-007",
+   "nome": "Mocassino Amarena",
+   "slug": "mocassino-amarena",
+   "cat": [
+    "mocassini"
+   ],
+   "prezzo": 165,
+   "sconto": 0,
+   "scorta": 12,
+   "voto": 4.7,
+   "recensioni": 77,
+   "evidenza": false,
+   "foto": [
+    "pexels-8193568.jpg"
+   ],
+   "punti": [
+    "Pelle bordeaux spazzolata",
+    "Mascherina cucita",
+    "Suola in cuoio",
+    "Uomo e donna"
+   ],
+   "testo": "Il bordeaux spazzolato per l’autunno: col pantalone grigio e coi jeans.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "numero",
+    "valori": [
+     "36",
+     "37",
+     "38",
+     "39",
+     "40",
+     "41",
+     "42",
+     "43",
+     "44",
+     "45"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Le scarpe nella scatola di cartone riciclato, i sacchetti di cotone, il cartellino del cambio."
+  },
+  {
+   "sku": "SUO-008",
+   "nome": "Stivaletto Senape",
+   "slug": "stivaletto-senape",
+   "cat": [
+    "stivaletti"
+   ],
+   "prezzo": 189,
+   "sconto": 149,
+   "scorta": 9,
+   "voto": 4.8,
+   "recensioni": 133,
+   "evidenza": true,
+   "foto": [
+    "pexels-4046699.jpg"
+   ],
+   "punti": [
+    "Camoscio senape",
+    "Tacco 4 cm",
+    "Zip laterale",
+    "Suola in gomma"
+   ],
+   "testo": "Lo stivaletto senape col tacchetto: col vestito a fiori e coi jeans.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "numero",
+    "valori": [
+     "36",
+     "37",
+     "38",
+     "39",
+     "40",
+     "41"
+    ],
+    "esaurite": [
+     "40"
+    ]
+   },
+   "dentro": "Le scarpe nella scatola di cartone riciclato, i sacchetti di cotone, il cartellino del cambio."
+  },
+  {
+   "sku": "SUO-009",
+   "nome": "Stivaletto Bosco, pelle ingrassata",
+   "slug": "stivaletto-bosco",
+   "cat": [
+    "stivaletti"
+   ],
+   "prezzo": 219,
+   "sconto": 0,
+   "scorta": 15,
+   "voto": 4.9,
+   "recensioni": 241,
+   "evidenza": true,
+   "foto": [
+    "pexels-10939830.jpg",
+    "pexels-29090887.jpg"
+   ],
+   "punti": [
+    "Pelle ingrassata",
+    "Suola in gomma cucita",
+    "Impermeabile",
+    "Il video sotto la pioggia"
+   ],
+   "testo": "Lo stivaletto da pioggia: pelle ingrassata, la suola cucita, l’acqua non passa. Guardatelo nel video.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "numero",
+    "valori": [
+     "36",
+     "37",
+     "38",
+     "39",
+     "40",
+     "41",
+     "42",
+     "43",
+     "44",
+     "45"
+    ],
+    "esaurite": []
+   },
+   "video": "pexels-video-5321384.mp4",
+   "poster": "pexels-video-5321384.jpg",
+   "dentro": "Le scarpe nella scatola di cartone riciclato, i sacchetti di cotone, il cartellino del cambio."
+  },
+  {
+   "sku": "SUO-010",
+   "nome": "Anfibio Radio, nero",
+   "slug": "anfibio-radio",
+   "cat": [
+    "stivaletti"
+   ],
+   "prezzo": 199,
+   "sconto": 0,
+   "scorta": 12,
+   "voto": 4.6,
+   "recensioni": 88,
+   "evidenza": false,
+   "foto": [
+    "pexels-30915712.jpg",
+    "pexels-27533556.jpg"
+   ],
+   "punti": [
+    "Pelle nera",
+    "Otto occhielli",
+    "Suola carrarmato",
+    "Unisex"
+   ],
+   "testo": "L’anfibio nero a otto occhielli, uomo e donna.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "numero",
+    "valori": [
+     "36",
+     "37",
+     "38",
+     "39",
+     "40",
+     "41",
+     "42",
+     "43",
+     "44",
+     "45"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Le scarpe nella scatola di cartone riciclato, i sacchetti di cotone, il cartellino del cambio."
+  },
+  {
+   "sku": "SUO-011",
+   "nome": "Décolleté Ciliegia, vernice rossa",
+   "slug": "decollete-ciliegia",
+   "cat": [
+    "decollete"
+   ],
+   "prezzo": 189,
+   "sconto": 149,
+   "scorta": 7,
+   "voto": 4.8,
+   "recensioni": 102,
+   "evidenza": true,
+   "foto": [
+    "pexels-3682290.jpg",
+    "pexels-3682291.jpg",
+    "pexels-18984547.jpg"
+   ],
+   "punti": [
+    "Vernice rossa",
+    "Tacco 9 cm",
+    "Plantare imbottito",
+    "Fatta a mano"
+   ],
+   "testo": "La décolleté rossa di vernice: il tacco a spillo da nove, il plantare imbottito per ballare.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "numero",
+    "valori": [
+     "36",
+     "37",
+     "38",
+     "39",
+     "40",
+     "41"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Le scarpe nella scatola di cartone riciclato, i sacchetti di cotone, il cartellino del cambio."
+  },
+  {
+   "sku": "SUO-013",
+   "nome": "Slingback Cipria",
+   "slug": "slingback-cipria",
+   "cat": [
+    "decollete"
+   ],
+   "prezzo": 169,
+   "sconto": 0,
+   "scorta": 9,
+   "voto": 4.7,
+   "recensioni": 58,
+   "evidenza": false,
+   "foto": [
+    "pexels-30826570.jpg"
+   ],
+   "punti": [
+    "Pelle cipria",
+    "Punta affusolata",
+    "Tacco 5 cm",
+    "Cinturino elastico"
+   ],
+   "testo": "La slingback cipria col tacco basso: dall’ufficio alla cena.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "numero",
+    "valori": [
+     "36",
+     "37",
+     "38",
+     "39",
+     "40",
+     "41"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Le scarpe nella scatola di cartone riciclato, i sacchetti di cotone, il cartellino del cambio."
+  },
+  {
+   "sku": "SUO-014",
+   "nome": "Sandalo Glicine, cinturino alla caviglia",
+   "slug": "sandalo-glicine",
+   "cat": [
+    "decollete"
+   ],
+   "prezzo": 155,
+   "sconto": 0,
+   "scorta": 8,
+   "voto": 4.6,
+   "recensioni": 41,
+   "evidenza": false,
+   "foto": [
+    "pexels-17591638.jpg"
+   ],
+   "punti": [
+    "Camoscio glicine",
+    "Cinturino alla caviglia",
+    "Tacco a blocco 7 cm",
+    "Fibbia dorata"
+   ],
+   "testo": "Il camoscio color glicine col tacco a blocco: per i matrimoni di primavera.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "numero",
+    "valori": [
+     "36",
+     "37",
+     "38",
+     "39",
+     "40",
+     "41"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Le scarpe nella scatola di cartone riciclato, i sacchetti di cotone, il cartellino del cambio."
+  },
+  {
+   "sku": "SUO-015",
+   "nome": "Décolleté Sole, giallo",
+   "slug": "decollete-sole",
+   "cat": [
+    "decollete"
+   ],
+   "prezzo": 145,
+   "sconto": 0,
+   "scorta": 6,
+   "voto": 4.5,
+   "recensioni": 37,
+   "evidenza": false,
+   "foto": [
+    "pexels-2128379.jpg"
+   ],
+   "punti": [
+    "Pelle gialla",
+    "Tacco 8 cm",
+    "Punta arrotondata",
+    "Plantare in pelle"
+   ],
+   "testo": "La décolleté gialla per chi non ha paura dei colori.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "numero",
+    "valori": [
+     "36",
+     "37",
+     "38",
+     "39",
+     "40",
+     "41"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Le scarpe nella scatola di cartone riciclato, i sacchetti di cotone, il cartellino del cambio."
+  },
+  {
+   "sku": "SUO-016",
+   "nome": "Sandalo Cuoio, due fibbie",
+   "slug": "sandalo-cuoio",
+   "cat": [
+    "decollete"
+   ],
+   "prezzo": 119,
+   "sconto": 95,
+   "scorta": 14,
+   "voto": 4.7,
+   "recensioni": 121,
+   "evidenza": false,
+   "foto": [
+    "pexels-12896849.jpg",
+    "pexels-25190055.jpg"
+   ],
+   "punti": [
+    "Cuoio conciato al vegetale",
+    "Due fibbie regolabili",
+    "Plantare anatomico",
+    "Ultimi numeri dell’estate"
+   ],
+   "testo": "Il sandalo in cuoio con le due fibbie: gli ultimi numeri dell’estate, a meno.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "numero",
+    "valori": [
+     "36",
+     "37",
+     "38",
+     "39",
+     "40",
+     "41",
+     "42",
+     "43",
+     "44",
+     "45"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Le scarpe nella scatola di cartone riciclato, i sacchetti di cotone, il cartellino del cambio."
+  },
+  {
+   "sku": "SUO-017",
+   "nome": "Ballerina Sabbia",
+   "slug": "ballerina-sabbia",
+   "cat": [
+    "decollete"
+   ],
+   "prezzo": 99,
+   "sconto": 0,
+   "scorta": 16,
+   "voto": 4.6,
+   "recensioni": 69,
+   "evidenza": false,
+   "foto": [
+    "pexels-1556668.jpg",
+    "pexels-8933241.jpg"
+   ],
+   "punti": [
+    "Nappa color sabbia",
+    "Suola flessibile",
+    "Fiocchetto",
+    "Si piega"
+   ],
+   "testo": "La ballerina color sabbia che si piega in borsa.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "numero",
+    "valori": [
+     "36",
+     "37",
+     "38",
+     "39",
+     "40",
+     "41"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Le scarpe nella scatola di cartone riciclato, i sacchetti di cotone, il cartellino del cambio."
+  },
+  {
+   "sku": "SUO-018",
+   "nome": "Oxford Castagna, cucita Goodyear",
+   "slug": "oxford-castagna",
+   "cat": [
+    "uomo"
+   ],
+   "prezzo": 245,
+   "sconto": 0,
+   "scorta": 12,
+   "voto": 4.9,
+   "recensioni": 287,
+   "evidenza": true,
+   "foto": [
+    "pexels-34968265.jpg",
+    "pexels-8069881.jpg",
+    "pexels-13611901.jpg"
+   ],
+   "punti": [
+    "Vitello castagna",
+    "Cucitura Goodyear",
+    "Suola in cuoio",
+    "Si risuola in bottega"
+   ],
+   "testo": "L’oxford castagna cucita Goodyear: la suola si cambia in bottega, la scarpa dura vent’anni.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "numero",
+    "valori": [
+     "40",
+     "41",
+     "42",
+     "43",
+     "44",
+     "45"
+    ],
+    "esaurite": []
+   },
+   "video": "pexels-video-37655310.mp4",
+   "poster": "pexels-video-37655310.jpg",
+   "dentro": "Le scarpe nella scatola di cartone riciclato, i sacchetti di cotone, il cartellino del cambio."
+  },
+  {
+   "sku": "SUO-019",
+   "nome": "Derby Brogue, coda di rondine",
+   "slug": "derby-brogue",
+   "cat": [
+    "uomo"
+   ],
+   "prezzo": 229,
+   "sconto": 189,
+   "scorta": 10,
+   "voto": 4.8,
+   "recensioni": 156,
+   "evidenza": false,
+   "foto": [
+    "pexels-4637874.jpg",
+    "pexels-6766308.jpg",
+    "pexels-9992898.jpg"
+   ],
+   "punti": [
+    "Vitello marrone",
+    "Traforature brogue",
+    "Suola in gomma e cuoio",
+    "Larga in pianta"
+   ],
+   "testo": "La derby traforata, larga in pianta: per chi sta in piedi tutto il giorno.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "numero",
+    "valori": [
+     "40",
+     "41",
+     "42",
+     "43",
+     "44",
+     "45"
+    ],
+    "esaurite": [
+     "45"
+    ]
+   },
+   "dentro": "Le scarpe nella scatola di cartone riciclato, i sacchetti di cotone, il cartellino del cambio."
+  },
+  {
+   "sku": "SUO-020",
+   "nome": "Oxford Notte, nera",
+   "slug": "oxford-notte",
+   "cat": [
+    "uomo"
+   ],
+   "prezzo": 259,
+   "sconto": 0,
+   "scorta": 9,
+   "voto": 4.8,
+   "recensioni": 98,
+   "evidenza": false,
+   "foto": [
+    "pexels-8625661.jpg",
+    "pexels-29494530.jpg"
+   ],
+   "punti": [
+    "Vitello nero lucido",
+    "Cucitura Goodyear",
+    "Per lo smoking",
+    "Suola in cuoio"
+   ],
+   "testo": "L’oxford nera lucida per la cerimonia e per lo smoking.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "numero",
+    "valori": [
+     "40",
+     "41",
+     "42",
+     "43",
+     "44",
+     "45"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Le scarpe nella scatola di cartone riciclato, i sacchetti di cotone, il cartellino del cambio."
+  },
+  {
+   "sku": "SUO-021",
+   "nome": "Running Nuvola, grigia",
+   "slug": "running-nuvola",
+   "cat": [
+    "sport"
+   ],
+   "prezzo": 149,
+   "sconto": 119,
+   "scorta": 20,
+   "voto": 4.7,
+   "recensioni": 340,
+   "evidenza": true,
+   "foto": [
+    "pexels-26852035.jpg",
+    "pexels-28381500.jpg"
+   ],
+   "punti": [
+    "Intersuola ammortizzata",
+    "Tomaia in rete",
+    "Pesa 240 g",
+    "Per correre fino a 21 km"
+   ],
+   "testo": "La scarpa da corsa morbida per la mezza maratona: 240 grammi, l’intersuola che rimbalza.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "numero",
+    "valori": [
+     "36",
+     "37",
+     "38",
+     "39",
+     "40",
+     "41",
+     "42",
+     "43",
+     "44",
+     "45"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Le scarpe nella scatola di cartone riciclato, i sacchetti di cotone, il cartellino del cambio."
+  },
+  {
+   "sku": "SUO-022",
+   "nome": "Running Ardesia, nera",
+   "slug": "running-ardesia",
+   "cat": [
+    "sport"
+   ],
+   "prezzo": 139,
+   "sconto": 0,
+   "scorta": 16,
+   "voto": 4.6,
+   "recensioni": 167,
+   "evidenza": false,
+   "foto": [
+    "pexels-17931282.jpg"
+   ],
+   "punti": [
+    "Tomaia in maglia",
+    "Suola grippante",
+    "Per camminare e correre",
+    "Nera"
+   ],
+   "testo": "La scarpa nera per camminare in città e correre al parco.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "numero",
+    "valori": [
+     "36",
+     "37",
+     "38",
+     "39",
+     "40",
+     "41",
+     "42",
+     "43",
+     "44",
+     "45"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Le scarpe nella scatola di cartone riciclato, i sacchetti di cotone, il cartellino del cambio."
+  }
+ ],
+ "recensioni": [
+  [
+   5,
+   "Il numero giusto al primo colpo grazie alla guida. Comodissime."
+  ],
+  [
+   5,
+   "Arrivate in due giorni, e il cambio numero è stato gratis."
+  ],
+  [
+   4,
+   "Belle, la pelle all’inizio è un po’ rigida, poi si adatta."
+  ],
+  [
+   5,
+   "Le ho fatte risuolare in bottega dopo due anni: come nuove."
+  ],
+  [
+   5,
+   "Le uso tutti i giorni al lavoro, mai un dolore."
+  ],
+  [
+   4,
+   "Calzano mezzo numero abbondante."
+  ],
+  [
+   5,
+   "Commessi gentilissimi, mi hanno misurato il piede."
+  ],
+  [
+   3,
+   "Belle ma il colore dal vivo è più chiaro."
+  ]
+ ],
+ "nomi": [
+  "Federico M.",
+  "Valentina S.",
+  "Andrea L.",
+  "Giorgia T.",
+  "Luca B.",
+  "Serena P.",
+  "Matteo R.",
+  "Alice D.",
+  "Davide C.",
+  "Martina G.",
+  "Simone F.",
+  "Noemi V."
+ ]
+}

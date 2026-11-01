@@ -1,0 +1,741 @@
+{
+ "tema": "tracolla",
+ "titolo_dentro": "Nella confezione",
+ "attributi": {
+  "colore": {
+   "nome": "Colore",
+   "termini": [
+    "Cognac",
+    "Nero",
+    "Grigio fumo",
+    "Cuoio naturale"
+   ]
+  }
+ },
+ "categorie": [
+  {
+   "slug": "borse-a-mano",
+   "nome": "Borse a mano",
+   "descrizione": "Tote, bauletti e secchielli: per il lavoro e per la sera.",
+   "foto": "pexels-10919291.jpg"
+  },
+  {
+   "slug": "tracolle",
+   "nome": "Tracolle",
+   "descrizione": "A spalla o di traverso, piccole e mini.",
+   "foto": "pexels-12061812.jpg"
+  },
+  {
+   "slug": "zaini",
+   "nome": "Zaini",
+   "descrizione": "In cuoio, in tela, a uncinetto.",
+   "foto": "pexels-36958694.jpg"
+  },
+  {
+   "slug": "pochette",
+   "nome": "Pochette",
+   "descrizione": "Per le feste: catene, strass, trapuntate.",
+   "foto": "pexels-20591024.jpg"
+  },
+  {
+   "slug": "piccola-pelletteria",
+   "nome": "Piccola pelletteria",
+   "descrizione": "Portafogli e portacarte cuciti a mano.",
+   "foto": "pexels-32954513.jpg"
+  },
+  {
+   "slug": "viaggio",
+   "nome": "Viaggio",
+   "descrizione": "Borsoni, valigette e borse per il fine settimana.",
+   "foto": "pexels-1058959.jpg"
+  }
+ ],
+ "prodotti": [
+  {
+   "sku": "TRA-001",
+   "nome": "Borsa a mano Cognac, conciata al vegetale",
+   "slug": "borsa-cognac",
+   "cat": [
+    "borse-a-mano"
+   ],
+   "prezzo": 289,
+   "sconto": 229,
+   "scorta": 14,
+   "voto": 4.9,
+   "recensioni": 412,
+   "evidenza": true,
+   "foto": [
+    "pexels-10919291.jpg",
+    "pexels-13525167.jpg",
+    "pexels-14806252.jpg"
+   ],
+   "punti": [
+    "Pelle conciata al vegetale in Toscana",
+    "Cucita a mano in bottega",
+    "Tasca interna con la zip",
+    "Il video della borsa nella galleria"
+   ],
+   "testo": "La borsa che si porta tutti i giorni: due manici, la tracolla staccabile, la pelle che col tempo si scurisce.",
+   "upsell": [],
+   "cross": [
+    "TRA-016",
+    "TRA-017"
+   ],
+   "varianti": {
+    "attributo": "colore",
+    "valori": [
+     "Cognac",
+     "Nero",
+     "Grigio fumo"
+    ],
+    "esaurite": [
+     "Grigio fumo"
+    ]
+   },
+   "video": "pexels-video-7570173.mp4",
+   "poster": "pexels-video-7570173.jpg",
+   "dentro": "La borsa nella sua sacca di cotone, la scheda della pelle, il biglietto di chi l’ha cucita."
+  },
+  {
+   "sku": "TRA-002",
+   "nome": "Tote Biblioteca, porta il computer da 14″",
+   "slug": "tote-biblioteca",
+   "cat": [
+    "borse-a-mano"
+   ],
+   "prezzo": 239,
+   "sconto": 0,
+   "scorta": 20,
+   "voto": 4.8,
+   "recensioni": 268,
+   "evidenza": true,
+   "foto": [
+    "pexels-29359841.jpg",
+    "pexels-21897124.jpg"
+   ],
+   "punti": [
+    "Ci sta un computer da 14″",
+    "Fondo rigido, sta in piedi",
+    "Due tasche interne",
+    "Chiusura a calamita"
+   ],
+   "testo": "La tote del lavoro: il computer, il quaderno, la borraccia e un maglione, e sta in piedi sotto la scrivania.",
+   "upsell": [],
+   "cross": [
+    "TRA-016"
+   ],
+   "varianti": {
+    "attributo": "colore",
+    "valori": [
+     "Cognac",
+     "Nero"
+    ],
+    "esaurite": []
+   },
+   "dentro": "La borsa nella sua sacca di cotone, la scheda della pelle, il biglietto di chi l’ha cucita."
+  },
+  {
+   "sku": "TRA-003",
+   "nome": "Borsa Polaroid, cuoio tamponato",
+   "slug": "borsa-polaroid",
+   "cat": [
+    "borse-a-mano"
+   ],
+   "prezzo": 195,
+   "sconto": 159,
+   "scorta": 9,
+   "voto": 4.7,
+   "recensioni": 154,
+   "evidenza": false,
+   "foto": [
+    "pexels-4499757.jpg"
+   ],
+   "punti": [
+    "Cuoio tamponato a mano",
+    "Due manici e la tracolla",
+    "Fodera in cotone",
+    "Fatta in 40 pezzi"
+   ],
+   "testo": "Il cuoio tamponato a mano a strati, come una fotografia sbiadita: ognuna ha il suo colore.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La borsa nella sua sacca di cotone, la scheda della pelle, il biglietto di chi l’ha cucita."
+  },
+  {
+   "sku": "TRA-004",
+   "nome": "Secchiello Sabbia",
+   "slug": "secchiello-sabbia",
+   "cat": [
+    "borse-a-mano"
+   ],
+   "prezzo": 179,
+   "sconto": 0,
+   "scorta": 16,
+   "voto": 4.6,
+   "recensioni": 98,
+   "evidenza": false,
+   "foto": [
+    "pexels-12572107.jpg",
+    "pexels-12945022.jpg"
+   ],
+   "punti": [
+    "Il manico ad anello in legno",
+    "Coulisse in cuoio",
+    "Fodera in lino",
+    "Pesa 480 g"
+   ],
+   "testo": "Il secchiello col manico ad anello: si chiude con la coulisse, si porta a mano o al gomito.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La borsa nella sua sacca di cotone, la scheda della pelle, il biglietto di chi l’ha cucita."
+  },
+  {
+   "sku": "TRA-005",
+   "nome": "Bauletto Notte",
+   "slug": "bauletto-notte",
+   "cat": [
+    "borse-a-mano"
+   ],
+   "prezzo": 219,
+   "sconto": 175,
+   "scorta": 6,
+   "voto": 4.8,
+   "recensioni": 131,
+   "evidenza": true,
+   "foto": [
+    "pexels-35270330.jpg",
+    "pexels-21837372.jpg"
+   ],
+   "punti": [
+    "Pelle liscia color tabacco",
+    "Doppia zip in ottone",
+    "Piedini sul fondo",
+    "Tracolla regolabile"
+   ],
+   "testo": "Il bauletto per la sera in città: rigido, con la zip doppia e i piedini, non si siede mai sul tavolino.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La borsa nella sua sacca di cotone, la scheda della pelle, il biglietto di chi l’ha cucita."
+  },
+  {
+   "sku": "TRA-006",
+   "nome": "Tracolla Onda",
+   "slug": "tracolla-onda",
+   "cat": [
+    "tracolle"
+   ],
+   "prezzo": 149,
+   "sconto": 0,
+   "scorta": 22,
+   "voto": 4.7,
+   "recensioni": 187,
+   "evidenza": false,
+   "foto": [
+    "pexels-12061812.jpg",
+    "pexels-20399717.jpg"
+   ],
+   "punti": [
+    "Patta con la fibbia in ottone",
+    "Tracolla regolabile",
+    "Ci sta un telefono grande",
+    "Tre colori"
+   ],
+   "testo": "La tracolla piccola che sta su tutto: la patta, la fibbia d’ottone, la tracolla lunga per portarla di traverso.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "colore",
+    "valori": [
+     "Cuoio naturale",
+     "Cognac",
+     "Nero"
+    ],
+    "esaurite": []
+   },
+   "dentro": "La borsa nella sua sacca di cotone, la scheda della pelle, il biglietto di chi l’ha cucita."
+  },
+  {
+   "sku": "TRA-007",
+   "nome": "Mini Mandarino",
+   "slug": "mini-mandarino",
+   "cat": [
+    "tracolle"
+   ],
+   "prezzo": 129,
+   "sconto": 99,
+   "scorta": 12,
+   "voto": 4.8,
+   "recensioni": 220,
+   "evidenza": true,
+   "foto": [
+    "pexels-8801100.jpg",
+    "pexels-8217756.jpg"
+   ],
+   "punti": [
+    "Pelle liscia color mandarino",
+    "Manico corto e tracolla",
+    "Ci stanno chiavi, rossetto e carte",
+    "Chiusura a calamita"
+   ],
+   "testo": "La borsa mini color mandarino: chiavi, rossetto, carte e il telefono, e basta così.",
+   "upsell": [],
+   "cross": [
+    "TRA-017"
+   ],
+   "dentro": "La borsa nella sua sacca di cotone, la scheda della pelle, il biglietto di chi l’ha cucita."
+  },
+  {
+   "sku": "TRA-008",
+   "nome": "Tracolla Vimini",
+   "slug": "tracolla-vimini",
+   "cat": [
+    "tracolle"
+   ],
+   "prezzo": 165,
+   "sconto": 0,
+   "scorta": 10,
+   "voto": 4.5,
+   "recensioni": 64,
+   "evidenza": false,
+   "foto": [
+    "pexels-20399717.jpg"
+   ],
+   "punti": [
+    "Pelle e intreccio",
+    "Fodera in tela",
+    "Tracolla in cuoio",
+    "Fatta a mano"
+   ],
+   "testo": "Il cuoio liscio davanti, l’intreccio sui fianchi: la tracolla di mezza stagione.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La borsa nella sua sacca di cotone, la scheda della pelle, il biglietto di chi l’ha cucita."
+  },
+  {
+   "sku": "TRA-009",
+   "nome": "Mini Limone, arricciata",
+   "slug": "mini-limone",
+   "cat": [
+    "tracolle"
+   ],
+   "prezzo": 119,
+   "sconto": 0,
+   "scorta": 18,
+   "voto": 4.6,
+   "recensioni": 76,
+   "evidenza": false,
+   "foto": [
+    "pexels-8801061.jpg",
+    "pexels-7735762.jpg"
+   ],
+   "punti": [
+    "Nappa morbida arricciata",
+    "Manico corto imbottito",
+    "Tracolla a catena",
+    "Giallo limone"
+   ],
+   "testo": "La nappa arricciata come una nuvola: si porta a mano o con la catena, per l’estate e per le feste.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La borsa nella sua sacca di cotone, la scheda della pelle, il biglietto di chi l’ha cucita."
+  },
+  {
+   "sku": "TRA-010",
+   "nome": "Zaino Città, cuoio e tela",
+   "slug": "zaino-citta",
+   "cat": [
+    "zaini"
+   ],
+   "prezzo": 210,
+   "sconto": 0,
+   "scorta": 15,
+   "voto": 4.8,
+   "recensioni": 203,
+   "evidenza": true,
+   "foto": [
+    "pexels-36958694.jpg",
+    "pexels-2453823.jpg",
+    "pexels-164697.jpg"
+   ],
+   "punti": [
+    "Tela cerata e cuoio",
+    "Tasca imbottita per il computer",
+    "Spallacci regolabili",
+    "Resiste alla pioggia"
+   ],
+   "testo": "Lo zaino per andare al lavoro in bicicletta: la tela cerata non teme la pioggia, il cuoio invecchia bene.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "colore",
+    "valori": [
+     "Cuoio naturale",
+     "Nero"
+    ],
+    "esaurite": []
+   },
+   "dentro": "La borsa nella sua sacca di cotone, la scheda della pelle, il biglietto di chi l’ha cucita."
+  },
+  {
+   "sku": "TRA-011",
+   "nome": "Zaino Corda, a uncinetto",
+   "slug": "zaino-corda",
+   "cat": [
+    "zaini"
+   ],
+   "prezzo": 89,
+   "sconto": 69,
+   "scorta": 11,
+   "voto": 4.4,
+   "recensioni": 58,
+   "evidenza": false,
+   "foto": [
+    "pexels-10820410.jpg"
+   ],
+   "punti": [
+    "Cotone a uncinetto",
+    "Patta in cuoio",
+    "Fodera interna",
+    "Leggero: 320 g"
+   ],
+   "testo": "Lo zaino a uncinetto con la patta in cuoio: leggero, per il mercato e per la gita.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La borsa nella sua sacca di cotone, la scheda della pelle, il biglietto di chi l’ha cucita."
+  },
+  {
+   "sku": "TRA-012",
+   "nome": "Pochette Serata, catena e strass",
+   "slug": "pochette-serata",
+   "cat": [
+    "pochette"
+   ],
+   "prezzo": 159,
+   "sconto": 0,
+   "scorta": 8,
+   "voto": 4.7,
+   "recensioni": 92,
+   "evidenza": false,
+   "foto": [
+    "pexels-15432831.jpg"
+   ],
+   "punti": [
+    "Raso nero e strass",
+    "Catena staccabile",
+    "Ci sta il telefono",
+    "Nella scatola regalo"
+   ],
+   "testo": "La pochette per Capodanno: il raso nero, gli strass e la catena.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La borsa nella sua sacca di cotone, la scheda della pelle, il biglietto di chi l’ha cucita."
+  },
+  {
+   "sku": "TRA-013",
+   "nome": "Pochette Trapuntata, catena dorata",
+   "slug": "pochette-trapuntata",
+   "cat": [
+    "pochette"
+   ],
+   "prezzo": 175,
+   "sconto": 139,
+   "scorta": 9,
+   "voto": 4.9,
+   "recensioni": 176,
+   "evidenza": true,
+   "foto": [
+    "pexels-20591024.jpg",
+    "pexels-5243552.jpg"
+   ],
+   "punti": [
+    "Nappa trapuntata a rombi",
+    "Catena dorata lunga",
+    "Si porta a mano o a spalla",
+    "Nella scatola regalo"
+   ],
+   "testo": "La trapuntata col catenella dorata: a mano a cena, a spalla quando si balla.",
+   "upsell": [],
+   "cross": [
+    "TRA-016"
+   ],
+   "dentro": "La borsa nella sua sacca di cotone, la scheda della pelle, il biglietto di chi l’ha cucita."
+  },
+  {
+   "sku": "TRA-014",
+   "nome": "Pochette Cuore, argento",
+   "slug": "pochette-cuore",
+   "cat": [
+    "pochette"
+   ],
+   "prezzo": 99,
+   "sconto": 0,
+   "scorta": 7,
+   "voto": 4.5,
+   "recensioni": 41,
+   "evidenza": false,
+   "foto": [
+    "pexels-15432797.jpg"
+   ],
+   "punti": [
+    "A forma di cuore",
+    "Argento lucido",
+    "Manico rigido",
+    "Ci stanno rossetto e chiavi"
+   ],
+   "testo": "Un cuore d’argento da tenere in mano: per gli sposi, le feste, San Valentino.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La borsa nella sua sacca di cotone, la scheda della pelle, il biglietto di chi l’ha cucita."
+  },
+  {
+   "sku": "TRA-015",
+   "nome": "Clutch Perla",
+   "slug": "clutch-perla",
+   "cat": [
+    "pochette"
+   ],
+   "prezzo": 139,
+   "sconto": 0,
+   "scorta": 10,
+   "voto": 4.6,
+   "recensioni": 63,
+   "evidenza": false,
+   "foto": [
+    "pexels-33198066.jpg",
+    "pexels-36674977.jpg"
+   ],
+   "punti": [
+    "Pelle color perla",
+    "Chiusura a scatto",
+    "Tasca per le carte",
+    "Catena nascosta"
+   ],
+   "testo": "La clutch bianca delle cerimonie.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La borsa nella sua sacca di cotone, la scheda della pelle, il biglietto di chi l’ha cucita."
+  },
+  {
+   "sku": "TRA-016",
+   "nome": "Portafoglio Libro, cuoio",
+   "slug": "portafoglio-libro",
+   "cat": [
+    "piccola-pelletteria"
+   ],
+   "prezzo": 79,
+   "sconto": 59,
+   "scorta": 25,
+   "voto": 4.8,
+   "recensioni": 302,
+   "evidenza": false,
+   "foto": [
+    "pexels-32954513.jpg",
+    "pexels-15763948.jpg"
+   ],
+   "punti": [
+    "Otto carte e due tasche",
+    "Cuoio conciato al vegetale",
+    "Cuciture a mano",
+    "Le iniziali impresse a caldo"
+   ],
+   "testo": "Il portafoglio che si apre come un libro: otto carte, le banconote, le iniziali sul retro.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La borsa nella sua sacca di cotone, la scheda della pelle, il biglietto di chi l’ha cucita."
+  },
+  {
+   "sku": "TRA-017",
+   "nome": "Portacarte Cuciture, set di due",
+   "slug": "portacarte-cuciture",
+   "cat": [
+    "piccola-pelletteria"
+   ],
+   "prezzo": 49,
+   "sconto": 0,
+   "scorta": 30,
+   "voto": 4.7,
+   "recensioni": 188,
+   "evidenza": false,
+   "foto": [
+    "pexels-28028262.jpg",
+    "pexels-11676702.jpg",
+    "pexels-6651193.jpg"
+   ],
+   "punti": [
+    "Due portacarte",
+    "Cucitura a mano a punto sellaio",
+    "Quattro carte ciascuno",
+    "Il video del laboratorio"
+   ],
+   "testo": "Due portacarte cuciti a punto sellaio: uno per voi, uno da regalare. Guardate come si cuciono nel video.",
+   "upsell": [],
+   "cross": [],
+   "video": "pexels-video-34740247.mp4",
+   "poster": "pexels-video-34740247.jpg",
+   "dentro": "La borsa nella sua sacca di cotone, la scheda della pelle, il biglietto di chi l’ha cucita."
+  },
+  {
+   "sku": "TRA-018",
+   "nome": "Borsone Weekend, con la tasca per il passaporto",
+   "slug": "borsone-weekend",
+   "cat": [
+    "viaggio"
+   ],
+   "prezzo": 349,
+   "sconto": 279,
+   "scorta": 6,
+   "voto": 4.9,
+   "recensioni": 144,
+   "evidenza": true,
+   "foto": [
+    "pexels-1058959.jpg",
+    "pexels-7821312.jpg",
+    "pexels-7821329.jpg"
+   ],
+   "punti": [
+    "Sta nel bagaglio a mano",
+    "Tasca esterna per il passaporto",
+    "Tracolla imbottita",
+    "Fondo con i piedini"
+   ],
+   "testo": "Il borsone da due notti fuori: sta nel bagaglio a mano, la tasca davanti tiene il passaporto e la carta d’imbarco.",
+   "upsell": [],
+   "cross": [
+    "TRA-016"
+   ],
+   "dentro": "La borsa nella sua sacca di cotone, la scheda della pelle, il biglietto di chi l’ha cucita."
+  },
+  {
+   "sku": "TRA-019",
+   "nome": "Valigetta Ufficio, tre scomparti",
+   "slug": "valigetta-ufficio",
+   "cat": [
+    "viaggio"
+   ],
+   "prezzo": 259,
+   "sconto": 0,
+   "scorta": 8,
+   "voto": 4.6,
+   "recensioni": 72,
+   "evidenza": false,
+   "foto": [
+    "pexels-6650001.jpg"
+   ],
+   "punti": [
+    "Tre scomparti",
+    "Chiusura con la fibbia",
+    "Ci sta un computer da 15″",
+    "Tracolla staccabile"
+   ],
+   "testo": "La valigetta classica col cuoio spesso: tre scomparti, la fibbia, la maniglia cucita due volte.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La borsa nella sua sacca di cotone, la scheda della pelle, il biglietto di chi l’ha cucita."
+  },
+  {
+   "sku": "TRA-020",
+   "nome": "Borsa Paglia Fiori",
+   "slug": "borsa-paglia-fiori",
+   "cat": [
+    "borse-a-mano"
+   ],
+   "prezzo": 69,
+   "sconto": 55,
+   "scorta": 14,
+   "voto": 4.6,
+   "recensioni": 120,
+   "evidenza": false,
+   "foto": [
+    "pexels-17214199.jpg",
+    "pexels-17363018.jpg",
+    "pexels-17363016.jpg"
+   ],
+   "punti": [
+    "Paglia intrecciata a mano",
+    "Tonda, coi manici in cuoio",
+    "Fodera in cotone",
+    "Ultimi pezzi dell’estate"
+   ],
+   "testo": "La borsa di paglia tonda dell’estate: gli ultimi pezzi, a meno.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La borsa nella sua sacca di cotone, la scheda della pelle, il biglietto di chi l’ha cucita."
+  },
+  {
+   "sku": "TRA-021",
+   "nome": "Cesto Bambù",
+   "slug": "cesto-bambu",
+   "cat": [
+    "borse-a-mano"
+   ],
+   "prezzo": 85,
+   "sconto": 0,
+   "scorta": 9,
+   "voto": 4.5,
+   "recensioni": 37,
+   "evidenza": false,
+   "foto": [
+    "pexels-38350333.jpg",
+    "pexels-40038347.jpg"
+   ],
+   "punti": [
+    "Intreccio di fibre naturali",
+    "Manici ad anello in bambù",
+    "Nappine fatte a mano",
+    "Ogni pezzo è diverso"
+   ],
+   "testo": "Il cesto coi manici di bambù e le nappine: fatto a mano, ognuno diverso.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La borsa nella sua sacca di cotone, la scheda della pelle, il biglietto di chi l’ha cucita."
+  }
+ ],
+ "recensioni": [
+  [
+   5,
+   "La pelle è bellissima e si sente il profumo del cuoio. Cucita benissimo."
+  ],
+  [
+   5,
+   "Arrivata in due giorni, impacchettata con la carta della bottega."
+  ],
+  [
+   4,
+   "Un po’ più piccola di come la immaginavo, ma perfetta."
+  ],
+  [
+   5,
+   "Mi hanno impresso le iniziali senza spese: un regalo riuscito."
+  ],
+  [
+   5,
+   "Dopo un anno la pelle è più bella di prima."
+  ],
+  [
+   4,
+   "Ottima, la tracolla potrebbe essere un po’ più lunga."
+  ],
+  [
+   5,
+   "Sono passata in bottega a ritirarla: gentilissimi."
+  ],
+  [
+   3,
+   "Bella, ma il colore dal vivo è più scuro che in foto."
+  ]
+ ],
+ "nomi": [
+  "Giulia F.",
+  "Martina C.",
+  "Elena R.",
+  "Sofia B.",
+  "Chiara D.",
+  "Anna P.",
+  "Laura M.",
+  "Federica V.",
+  "Marco S.",
+  "Silvia T.",
+  "Paola G.",
+  "Ilaria N."
+ ]
+}

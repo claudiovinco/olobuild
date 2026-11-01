@@ -1,0 +1,634 @@
+{
+ "tema": "carambola",
+ "titolo_dentro": "Nella confezione",
+ "attributi": {
+  "fascia": {
+   "nome": "Fascia oraria",
+   "termini": [
+    "Pomeriggio",
+    "Sera",
+    "Notte"
+   ]
+  }
+ },
+ "categorie": [
+  {
+   "slug": "tavoli",
+   "nome": "Prenota un tavolo",
+   "descrizione": "Pool, carambola e snooker, a ore.",
+   "foto": "pexels-8092382.jpg"
+  },
+  {
+   "slug": "serate",
+   "nome": "Serate e feste",
+   "descrizione": "Per quattro, per il compleanno, per l’aperitivo.",
+   "foto": "pexels-5055270.jpg"
+  },
+  {
+   "slug": "corsi",
+   "nome": "Corsi e tornei",
+   "descrizione": "Il corso base, il maestro, il torneo del giovedì.",
+   "foto": "pexels-10627100.jpg"
+  },
+  {
+   "slug": "stecche",
+   "nome": "Stecche e custodie",
+   "descrizione": "Acero, ebano, la custodia in cuoio.",
+   "foto": "pexels-37157955.jpg"
+  },
+  {
+   "slug": "accessori",
+   "nome": "Palle, gesso e guanti",
+   "descrizione": "Tutto per il tavolo di casa.",
+   "foto": "pexels-11367368.jpg"
+  },
+  {
+   "slug": "regali",
+   "nome": "Carte regalo",
+   "descrizione": "Una serata da regalare.",
+   "foto": "pexels-31916152.jpg"
+  }
+ ],
+ "prodotti": [
+  {
+   "sku": "CAR-001",
+   "nome": "Un’ora di pool",
+   "slug": "ora-pool",
+   "cat": [
+    "tavoli"
+   ],
+   "prezzo": 14,
+   "sconto": 0,
+   "scorta": 99,
+   "voto": 4.8,
+   "recensioni": 612,
+   "evidenza": true,
+   "foto": [
+    "pexels-10627132.jpg",
+    "pexels-8092382.jpg"
+   ],
+   "punti": [
+    "Tavolo da 9 piedi",
+    "Stecche e gesso compresi",
+    "Pomeriggio, sera o notte",
+    "Il video del colpo d’apertura"
+   ],
+   "testo": "Un tavolo da pool per un’ora: stecche, gesso e triangolo compresi. Scegliete la fascia, il tavolo lo teniamo noi.",
+   "upsell": [],
+   "cross": [
+    "CAR-013"
+   ],
+   "varianti": {
+    "attributo": "fascia",
+    "valori": [
+     "Pomeriggio",
+     "Sera",
+     "Notte"
+    ],
+    "esaurite": []
+   },
+   "video": "pexels-video-7279167.mp4",
+   "poster": "pexels-video-7279167.jpg",
+   "dentro": "La conferma con il tavolo e l’ora, o la stecca nella sua custodia."
+  },
+  {
+   "sku": "CAR-002",
+   "nome": "Un’ora di carambola, tre sponde",
+   "slug": "ora-carambola",
+   "cat": [
+    "tavoli"
+   ],
+   "prezzo": 16,
+   "sconto": 0,
+   "scorta": 99,
+   "voto": 4.7,
+   "recensioni": 188,
+   "evidenza": false,
+   "foto": [
+    "pexels-13036106.jpg",
+    "pexels-13036112.jpg"
+   ],
+   "punti": [
+    "Tavolo senza buche",
+    "Tre palle",
+    "Il gioco delle sponde",
+    "Il maestro il martedì"
+   ],
+   "testo": "Il tavolo senza buche delle tre sponde: il biliardo dei nonni, che è il più difficile.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "fascia",
+    "valori": [
+     "Pomeriggio",
+     "Sera",
+     "Notte"
+    ],
+    "esaurite": []
+   },
+   "dentro": "La conferma con il tavolo e l’ora, o la stecca nella sua custodia."
+  },
+  {
+   "sku": "CAR-003",
+   "nome": "Un’ora di snooker",
+   "slug": "ora-snooker",
+   "cat": [
+    "tavoli"
+   ],
+   "prezzo": 18,
+   "sconto": 14,
+   "scorta": 99,
+   "voto": 4.8,
+   "recensioni": 141,
+   "evidenza": true,
+   "foto": [
+    "pexels-11354500.jpg",
+    "pexels-36640536.jpg"
+   ],
+   "punti": [
+    "Tavolo da 12 piedi",
+    "Ventidue palle",
+    "Il martedì a meno",
+    "Stecche da snooker comprese"
+   ],
+   "testo": "Il tavolo grande dello snooker, ventidue palle: il martedì costa meno.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "fascia",
+    "valori": [
+     "Pomeriggio",
+     "Sera",
+     "Notte"
+    ],
+    "esaurite": []
+   },
+   "dentro": "La conferma con il tavolo e l’ora, o la stecca nella sua custodia."
+  },
+  {
+   "sku": "CAR-004",
+   "nome": "Serata per quattro: due ore di pool e quattro birre",
+   "slug": "serata-quattro",
+   "cat": [
+    "serate"
+   ],
+   "prezzo": 59,
+   "sconto": 49,
+   "scorta": 40,
+   "voto": 4.9,
+   "recensioni": 344,
+   "evidenza": true,
+   "foto": [
+    "pexels-5055270.jpg",
+    "pexels-12940784.jpg"
+   ],
+   "punti": [
+    "Due ore di tavolo",
+    "Quattro birre artigianali",
+    "Patatine e olive",
+    "Dal giovedì alla domenica"
+   ],
+   "testo": "Il modo migliore di passare il venerdì: due ore di pool, quattro birre della casa, patatine e olive.",
+   "upsell": [],
+   "cross": [
+    "CAR-006"
+   ],
+   "dentro": "La conferma con il tavolo e l’ora, o la stecca nella sua custodia."
+  },
+  {
+   "sku": "CAR-005",
+   "nome": "Festa di compleanno: tre tavoli e buffet",
+   "slug": "festa-compleanno",
+   "cat": [
+    "serate"
+   ],
+   "prezzo": 240,
+   "sconto": 0,
+   "scorta": 10,
+   "voto": 4.8,
+   "recensioni": 66,
+   "evidenza": false,
+   "foto": [
+    "pexels-5055275.jpg",
+    "pexels-1269025.jpg"
+   ],
+   "punti": [
+    "Tre tavoli per tre ore",
+    "Buffet per quindici",
+    "La torta la portate voi",
+    "Il maestro per una sfida"
+   ],
+   "testo": "Il compleanno in sala: tre tavoli, il buffet per quindici, il maestro che sfida il festeggiato.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La conferma con il tavolo e l’ora, o la stecca nella sua custodia."
+  },
+  {
+   "sku": "CAR-006",
+   "nome": "Aperitivo e partita, per due",
+   "slug": "aperitivo-partita",
+   "cat": [
+    "serate"
+   ],
+   "prezzo": 29,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.7,
+   "recensioni": 205,
+   "evidenza": false,
+   "foto": [
+    "pexels-27897615.jpg",
+    "pexels-5055415.jpg"
+   ],
+   "punti": [
+    "Un’ora di tavolo",
+    "Due cocktail",
+    "Il tagliere",
+    "Dalle 18 alle 21"
+   ],
+   "testo": "Un’ora di tavolo, due cocktail e il tagliere: l’aperitivo che finisce a biliardo.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La conferma con il tavolo e l’ora, o la stecca nella sua custodia."
+  },
+  {
+   "sku": "CAR-007",
+   "nome": "Corso base, sei lezioni",
+   "slug": "corso-base",
+   "cat": [
+    "corsi"
+   ],
+   "prezzo": 120,
+   "sconto": 99,
+   "scorta": 12,
+   "voto": 4.9,
+   "recensioni": 98,
+   "evidenza": true,
+   "foto": [
+    "pexels-10627100.jpg",
+    "pexels-38345584.jpg"
+   ],
+   "punti": [
+    "Sei lezioni da un’ora",
+    "Il ponte, la mira, l’effetto",
+    "Gruppi di quattro",
+    "Stecca in prestito"
+   ],
+   "testo": "Sei lezioni per tenere la stecca come si deve, mirare, dare l’effetto: in gruppi di quattro.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La conferma con il tavolo e l’ora, o la stecca nella sua custodia."
+  },
+  {
+   "sku": "CAR-008",
+   "nome": "Lezione privata col maestro",
+   "slug": "lezione-privata",
+   "cat": [
+    "corsi"
+   ],
+   "prezzo": 45,
+   "sconto": 0,
+   "scorta": 20,
+   "voto": 4.9,
+   "recensioni": 61,
+   "evidenza": false,
+   "foto": [
+    "pexels-10627103.jpg",
+    "pexels-6253920.jpg"
+   ],
+   "punti": [
+    "Un’ora col maestro",
+    "Sul vostro gioco",
+    "Anche lo snooker",
+    "Si prenota il giorno"
+   ],
+   "testo": "Un’ora col maestro, sul vostro gioco: il colpo che non viene, la sponda che sbagliate.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La conferma con il tavolo e l’ora, o la stecca nella sua custodia."
+  },
+  {
+   "sku": "CAR-009",
+   "nome": "Torneo del giovedì, iscrizione",
+   "slug": "torneo-giovedi",
+   "cat": [
+    "corsi"
+   ],
+   "prezzo": 15,
+   "sconto": 0,
+   "scorta": 32,
+   "voto": 4.6,
+   "recensioni": 152,
+   "evidenza": false,
+   "foto": [
+    "pexels-5055413.jpg",
+    "pexels-37352317.jpg"
+   ],
+   "punti": [
+    "Pool a eliminazione",
+    "Trentadue giocatori",
+    "Si vince la stecca d’ebano",
+    "Dalle 21"
+   ],
+   "testo": "Il torneo di pool del giovedì sera: trentadue giocatori, si vince la stecca d’ebano.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La conferma con il tavolo e l’ora, o la stecca nella sua custodia."
+  },
+  {
+   "sku": "CAR-010",
+   "nome": "Stecca Acero, due pezzi",
+   "slug": "stecca-acero",
+   "cat": [
+    "stecche"
+   ],
+   "prezzo": 129,
+   "sconto": 99,
+   "scorta": 15,
+   "voto": 4.7,
+   "recensioni": 176,
+   "evidenza": true,
+   "foto": [
+    "pexels-37157955.jpg",
+    "pexels-13089177.jpg"
+   ],
+   "punti": [
+    "Acero canadese",
+    "Due pezzi con la vite",
+    "Puntale da 13 mm",
+    "19 once"
+   ],
+   "testo": "La prima stecca vera: acero canadese, due pezzi, il puntale da tredici millimetri.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La conferma con il tavolo e l’ora, o la stecca nella sua custodia."
+  },
+  {
+   "sku": "CAR-011",
+   "nome": "Stecca Ebano, intarsiata",
+   "slug": "stecca-ebano",
+   "cat": [
+    "stecche"
+   ],
+   "prezzo": 249,
+   "sconto": 0,
+   "scorta": 6,
+   "voto": 4.9,
+   "recensioni": 54,
+   "evidenza": false,
+   "foto": [
+    "pexels-34763004.jpg"
+   ],
+   "punti": [
+    "Ebano e acero",
+    "Intarsi in madreperla",
+    "Due pezzi",
+    "Nella custodia"
+   ],
+   "testo": "La stecca d’ebano con gli intarsi: quella che si vince al torneo, o si regala.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La conferma con il tavolo e l’ora, o la stecca nella sua custodia."
+  },
+  {
+   "sku": "CAR-012",
+   "nome": "Custodia in cuoio per due stecche",
+   "slug": "custodia-cuoio",
+   "cat": [
+    "stecche"
+   ],
+   "prezzo": 89,
+   "sconto": 0,
+   "scorta": 10,
+   "voto": 4.6,
+   "recensioni": 42,
+   "evidenza": false,
+   "foto": [
+    "pexels-10627113.jpg"
+   ],
+   "punti": [
+    "Cuoio e velluto",
+    "Per due stecche in due pezzi",
+    "Tracolla",
+    "Tasca per il gesso"
+   ],
+   "testo": "La custodia di cuoio per portare le stecche al torneo.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La conferma con il tavolo e l’ora, o la stecca nella sua custodia."
+  },
+  {
+   "sku": "CAR-013",
+   "nome": "Gesso blu, dodici pezzi",
+   "slug": "gesso-blu",
+   "cat": [
+    "accessori"
+   ],
+   "prezzo": 9,
+   "sconto": 0,
+   "scorta": 60,
+   "voto": 4.5,
+   "recensioni": 233,
+   "evidenza": false,
+   "foto": [
+    "pexels-13179841.jpg"
+   ],
+   "punti": [
+    "Dodici cubetti",
+    "Blu",
+    "Non sporca il panno",
+    "Per pool e carambola"
+   ],
+   "testo": "Il gesso blu che tiene il puntale: dodici cubetti.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La conferma con il tavolo e l’ora, o la stecca nella sua custodia."
+  },
+  {
+   "sku": "CAR-014",
+   "nome": "Guanto da biliardo, tre dita",
+   "slug": "guanto-biliardo",
+   "cat": [
+    "accessori"
+   ],
+   "prezzo": 12,
+   "sconto": 9,
+   "scorta": 40,
+   "voto": 4.6,
+   "recensioni": 120,
+   "evidenza": false,
+   "foto": [
+    "pexels-13089176.jpg"
+   ],
+   "punti": [
+    "Lycra traspirante",
+    "Tre dita",
+    "Per destri e mancini",
+    "La stecca scorre"
+   ],
+   "testo": "Il guanto a tre dita: la stecca scorre sul ponte senza attrito.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La conferma con il tavolo e l’ora, o la stecca nella sua custodia."
+  },
+  {
+   "sku": "CAR-015",
+   "nome": "Set di palle da pool, sedici pezzi",
+   "slug": "set-palle",
+   "cat": [
+    "accessori"
+   ],
+   "prezzo": 79,
+   "sconto": 0,
+   "scorta": 12,
+   "voto": 4.8,
+   "recensioni": 88,
+   "evidenza": false,
+   "foto": [
+    "pexels-11367368.jpg",
+    "pexels-13036108.jpg",
+    "pexels-39332572.jpg"
+   ],
+   "punti": [
+    "Resina fenolica",
+    "57 mm",
+    "Quindici più la bianca",
+    "Nella valigetta"
+   ],
+   "testo": "Le sedici palle in resina, come quelle della sala: per il tavolo di casa.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La conferma con il tavolo e l’ora, o la stecca nella sua custodia."
+  },
+  {
+   "sku": "CAR-016",
+   "nome": "Triangolo in legno",
+   "slug": "triangolo-legno",
+   "cat": [
+    "accessori"
+   ],
+   "prezzo": 25,
+   "sconto": 0,
+   "scorta": 20,
+   "voto": 4.5,
+   "recensioni": 37,
+   "evidenza": false,
+   "foto": [
+    "pexels-13793180.jpg"
+   ],
+   "punti": [
+    "Faggio",
+    "Per palle da 57 mm",
+    "Angoli rinforzati",
+    "Fatto a mano"
+   ],
+   "testo": "Il triangolo di faggio per stringere le palle come si deve.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La conferma con il tavolo e l’ora, o la stecca nella sua custodia."
+  },
+  {
+   "sku": "CAR-017",
+   "nome": "Carta regalo, 50 €",
+   "slug": "carta-regalo-50",
+   "cat": [
+    "regali"
+   ],
+   "prezzo": 50,
+   "sconto": 0,
+   "scorta": 999,
+   "voto": 4.9,
+   "recensioni": 140,
+   "evidenza": false,
+   "foto": [
+    "pexels-31916152.jpg"
+   ],
+   "punti": [
+    "Vale un anno",
+    "Per tavoli, corsi e bar",
+    "Arriva per email",
+    "Si stampa"
+   ],
+   "testo": "Cinquanta euro da spendere in sala: tavoli, corsi, bar.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La conferma con il tavolo e l’ora, o la stecca nella sua custodia."
+  },
+  {
+   "sku": "CAR-018",
+   "nome": "Carta regalo: una serata per due",
+   "slug": "carta-serata-due",
+   "cat": [
+    "regali"
+   ],
+   "prezzo": 39,
+   "sconto": 32,
+   "scorta": 999,
+   "voto": 4.8,
+   "recensioni": 99,
+   "evidenza": false,
+   "foto": [
+    "pexels-16064240.jpg",
+    "pexels-1269042.jpg"
+   ],
+   "punti": [
+    "Due ore di tavolo",
+    "Due drink",
+    "Vale un anno",
+    "Arriva per email"
+   ],
+   "testo": "Una serata da regalare: due ore di tavolo e due drink.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La conferma con il tavolo e l’ora, o la stecca nella sua custodia."
+  }
+ ],
+ "recensioni": [
+  [
+   5,
+   "Tavoli perfetti, panno nuovo, stecche dritte. Si prenota in un minuto."
+  ],
+  [
+   5,
+   "La serata per quattro è stata la cosa migliore del mese."
+  ],
+  [
+   4,
+   "Bellissimo posto, il venerdì è un po’ affollato: prenotate."
+  ],
+  [
+   5,
+   "Il corso base mi ha cambiato il gioco."
+  ],
+  [
+   5,
+   "Ho regalato la carta a mio fratello: ci torniamo ogni settimana."
+  ],
+  [
+   4,
+   "Ottime birre, il tagliere potrebbe essere più grande."
+  ],
+  [
+   5,
+   "Il maestro è pazientissimo."
+  ],
+  [
+   3,
+   "Bel posto, la musica il sabato è un po’ alta."
+  ]
+ ],
+ "nomi": [
+  "Riccardo P.",
+  "Elisa M.",
+  "Stefano G.",
+  "Michela T.",
+  "Alberto R.",
+  "Chiara N.",
+  "Giacomo V.",
+  "Sara L.",
+  "Fabio C.",
+  "Irene B.",
+  "Nicola D.",
+  "Veronica F."
+ ]
+}

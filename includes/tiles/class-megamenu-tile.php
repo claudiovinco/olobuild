@@ -3101,7 +3101,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                         $is_current = $this->e_pagina_corrente( $item->url ) || $this->ramo_corrente( $subs, $grandchildren );
                         $is_button  = $this->is_button_item( $item, $idx, $total, $s );
                         $is_mega    = ! $is_button && $this->is_mega_item( $item, $subs, $grandchildren, $s );
-                        $has_panel_tpl = ! $is_button && $this->get_panel_template_id( $item->ID, $s ) > 0;
+                        $has_panel_tpl = ! $is_button && $this->get_panel_template_id( $item, $s ) > 0;
                         $has_subs   = ! $is_button && ( ! empty( $subs ) || $has_panel_tpl );
                         $li_classes = [];
                         if ( $is_current ) $li_classes[] = 'olo-mm-active';
@@ -3119,7 +3119,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                         $is_current = $this->e_pagina_corrente( $item->url ) || $this->ramo_corrente( $subs, $grandchildren );
                         $is_button  = $this->is_button_item( $item, $real_idx, $total, $s );
                         $is_mega    = ! $is_button && $this->is_mega_item( $item, $subs, $grandchildren, $s );
-                        $has_panel_tpl = ! $is_button && $this->get_panel_template_id( $item->ID, $s ) > 0;
+                        $has_panel_tpl = ! $is_button && $this->get_panel_template_id( $item, $s ) > 0;
                         $has_subs   = ! $is_button && ( ! empty( $subs ) || $has_panel_tpl );
                         $li_classes = [];
                         if ( $is_current ) $li_classes[] = 'olo-mm-active';
@@ -3139,7 +3139,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                         $is_current = $this->e_pagina_corrente( $item->url ) || $this->ramo_corrente( $subs, $grandchildren );
                         $is_button  = $this->is_button_item( $item, $idx, $total, $s );
                         $is_mega    = ! $is_button && $this->is_mega_item( $item, $subs, $grandchildren, $s );
-                        $has_panel_tpl = ! $is_button && $this->get_panel_template_id( $item->ID, $s ) > 0;
+                        $has_panel_tpl = ! $is_button && $this->get_panel_template_id( $item, $s ) > 0;
                         $has_subs   = ! $is_button && ( ! empty( $subs ) || $has_panel_tpl );
 
                         $li_classes = [];
@@ -3160,7 +3160,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                                     <?php endif; ?>
                                 </a>
                                 <?php
-                                    $panel_tpl_id = $this->get_panel_template_id( $item->ID, $s );
+                                    $panel_tpl_id = $this->get_panel_template_id( $item, $s );
                                     if ( $panel_tpl_id ) :
                                 ?>
                                     <?php $this->render_template_panel( $panel_tpl_id ); ?>
@@ -4601,10 +4601,22 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
 
     /* ─── Helpers ─── */
 
-    private function get_panel_template_id( $item_id, $s ) {
+    /**
+     * Il pannello di una voce: quello scelto nel builder (panel_templates, per id della voce) o, se manca, la classe
+     * CSS `olo-pannello-<id del template>` sulla voce del menu WP. La mettono i temi (import e demo: la voce di
+     * theme.json con «pannello») e si può scrivere a mano in Aspetto › Menu, come `mega-promo` e `badge-*`.
+     */
+    private function get_panel_template_id( $item, $s ) {
         $map = $s['panel_templates'] ?? [];
-        if ( ! is_array( $map ) || empty( $map ) ) return 0;
-        return absint( $map[ (string) $item_id ] ?? 0 );
+        if ( is_array( $map ) && ! empty( $map[ (string) $item->ID ] ) ) {
+            return absint( $map[ (string) $item->ID ] );
+        }
+        foreach ( is_array( $item->classes ?? null ) ? $item->classes : [] as $c ) {
+            if ( preg_match( '/^olo-pannello-(\d+)$/', (string) $c, $m ) ) {
+                return absint( $m[1] );
+            }
+        }
+        return 0;
     }
 
     private function render_template_panel( $tpl_id ) {
@@ -4650,7 +4662,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                 <?php endif; ?>
             </a>
             <?php
-                $panel_tpl_id = $this->get_panel_template_id( $item->ID, $s );
+                $panel_tpl_id = $this->get_panel_template_id( $item, $s );
                 if ( $panel_tpl_id ) :
                     $this->render_template_panel( $panel_tpl_id );
                 elseif ( $is_mega && ! empty( $subs ) ) :

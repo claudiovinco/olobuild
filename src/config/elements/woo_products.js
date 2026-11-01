@@ -49,6 +49,7 @@ export default {
     show_compare: false,
     show_rating_count: false,
     show_wishlist: false,
+    vista_rapida: true,
     mostra_scorta: false,
     mostra_risparmio: false,
     marca_attributo: '',
@@ -121,6 +122,8 @@ export default {
       description: t('Accanto alle stelle il voto medio («4,6») e quante recensioni ha il prodotto («(3.812)»).') },
     { key: 'show_wishlist', label: t('Cuore dei preferiti'), type: 'toggle',
       description: t('Sulla foto, in alto a destra: aggiunge o toglie il prodotto dalla lista della tile Wishlist, che si aggiorna subito.') },
+    { key: 'vista_rapida', label: t('Vista rapida sulle card'), type: 'toggle',
+      description: t('Il pulsante della tile Vista rapida sulla foto di ogni prodotto. Spento, queste card restano senza: utile per le miniature piccole, dove il pulsante coprirebbe la foto.') },
     { key: 'mostra_risparmio', label: t('Quanto si risparmia'), type: 'toggle',
       condition: { field: 'show_price', value: true },
       description: t('Sotto il prezzo dei prodotti in saldo: «Risparmi 50,00 €».') },
@@ -192,7 +195,7 @@ export default {
     { type: 'separator', label: t('Layout') },
     { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1 },
     { key: 'columns_tablet', label: t('Colonne tablet'), type: 'range', min: 1, max: 4, step: 1 },
-    { key: 'columns_mobile', label: t('Colonne mobile'), type: 'range', min: 1, max: 2, step: 1 },
+    { key: 'columns_mobile', label: t('Colonne mobile'), type: 'range', min: 1, max: 4, step: 1 },
     { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 4 },
     // Le tile WooCommerce salvano il rapporto col TRATTINO ('4-3'): `sep: '-'`
     // tiene quel formato storico e porta l'elenco a quello canonico. La voce

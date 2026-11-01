@@ -29,7 +29,12 @@ window.__ctr = (function(){
       n = n.parentElement; }
     return false; }
   function bg(e){ const layers = []; let n = e;
-    while(n){ const c = parse(getComputedStyle(n).backgroundColor); if(c){ if(c[3] > 0){ layers.push(c); if(c[3] >= 1){ break; } } } n = n.parentElement; }
+    while(n){
+      // La tile «Luce di pagina» dipinge il fondo della pagina col suo ::before (fisso, senza clic): vale quello,
+      // non il bianco della griglia che ha sotto.
+      const pl = n.querySelector ? n.querySelector(':scope > .olo-pagelight') : null;
+      if(pl){ const c = parse(getComputedStyle(pl, '::before').backgroundColor); if(c){ if(c[3] > 0){ layers.push(c); if(c[3] >= 1){ break; } } } }
+      const c = parse(getComputedStyle(n).backgroundColor); if(c){ if(c[3] > 0){ layers.push(c); if(c[3] >= 1){ break; } } } n = n.parentElement; }
     let res = [255, 255, 255];
     for(let i = layers.length - 1; i >= 0; i--){ const l = layers[i]; res = res.map((v, k) => l[k] * l[3] + v * (1 - l[3])); }
     return res; }

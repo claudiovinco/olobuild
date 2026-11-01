@@ -28,6 +28,8 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
         'show_badge'             => true,
         'badge_bg'               => '',
         'max_width'              => 600,
+        'show_video'             => true,
+        'video_position'         => 'second',
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -163,9 +165,28 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
                 ];
             }
         }
-
         if ( empty( $images ) ) {
             return '';
+        }
+
+        // Il video del prodotto (campo «Video del prodotto» della scheda WooCommerce): una voce della galleria come le
+        // foto, con la copertina come miniatura. Nella foto grande gira muto (un file) o mostra la copertina (YouTube,
+        // Vimeo); nella finestra che si apre parte con l'audio e i comandi.
+        $video = ( filter_var( $s['show_video'] ?? true, FILTER_VALIDATE_BOOLEAN ) && class_exists( 'Olobuild_Woo_Video_Prodotto' ) )
+            ? Olobuild_Woo_Video_Prodotto::del_prodotto( $prod ) : null;
+        if ( $video ) {
+            $copertina = $video['poster'] ?: $images[0]['large'];
+            $voce      = [
+                'full'  => $copertina,
+                'large' => $copertina,
+                'thumb' => $copertina,
+                'alt'   => $prod->get_name() . ' — ' . olobuild_t( 'video' ),
+                'video' => $video['src'],
+                'embed' => $video['embed'],
+            ];
+            $dove = (string) ( $s['video_position'] ?? 'second' );
+            $at   = 'first' === $dove ? 0 : ( 'last' === $dove ? count( $images ) : 1 );
+            array_splice( $images, $at, 0, [ $voce ] );
         }
 
         $total = count( $images );
@@ -384,11 +405,65 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
                 padding: 40px;
             }
             .<?php echo $uid; ?>-lb.is-open { display: flex; }
-            .<?php echo $uid; ?>-lb img {
+            .<?php echo $uid; ?>-lb img,
+            .<?php echo $uid; ?>-lb video {
                 max-width: 92vw;
                 max-height: 88vh;
                 object-fit: contain;
                 border-radius: 4px;
+            }
+            .<?php echo $uid; ?>-lb iframe {
+                width: min(92vw, 156vh);
+                aspect-ratio: 16 / 9;
+                height: auto;
+                max-height: 88vh;
+                border: 0;
+                border-radius: .25rem;
+                background: #000;
+            }
+            .<?php echo $uid; ?>-lb [hidden] { display: none; }
+            /* Il video fra le foto: la copertina (o l'anteprima muta) e il triangolo al centro. */
+            .<?php echo $uid; ?>-slide--video { cursor: pointer; }
+            .<?php echo $uid; ?>-slide--video video {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .<?php echo $uid; ?>-slide--video:focus-visible {
+                outline: 2px solid var(--olo-color-primary, #e1474f);
+                outline-offset: -4px;
+            }
+            .<?php echo $uid; ?>-play {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                width: 72px;
+                height: 72px;
+                transform: translate(-50%, -50%);
+                border-radius: 50%;
+                background: rgba(0,0,0,0.55);
+                box-shadow: 0 0 0 2px rgba(255,255,255,0.85), 0 8px 24px rgba(0,0,0,0.25);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 2;
+                pointer-events: none;
+                transition: transform 0.2s ease, background 0.2s ease;
+            }
+            .<?php echo $uid; ?>-play svg { width: 30px; height: 30px; fill: #fff; translate: 2px 0; }
+            .<?php echo $uid; ?>-slide--video:hover .<?php echo $uid; ?>-play { transform: translate(-50%, -50%) scale(1.08); background: rgba(0,0,0,0.7); }
+            .<?php echo $uid; ?>-thumb { position: relative; }
+            .<?php echo $uid; ?>-play--mini {
+                width: 26px;
+                height: 26px;
+                transform: translate(-50%, -50%);
+                box-shadow: 0 0 0 1.5px rgba(255,255,255,0.85);
+            }
+            .<?php echo $uid; ?>-play--mini svg { width: 13px; height: 13px; margin-left: 2px; }
+            @media (prefers-reduced-motion: reduce) {
+                .<?php echo $uid; ?>-play { transition: none; }
             }
             .<?php echo $uid; ?>-lb-close {
                 position: absolute;
@@ -460,8 +535,9 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
                 <?php if ( $show_thumbs ) { if ( $is_left ) { if ( $total > 1 ) { ?>
                 <div class="<?php echo esc_attr( $uid ); ?>-thumbs">
                     <?php foreach ( $images as $i => $img ) : ?>
-                    <div class="<?php echo esc_attr( $uid ); ?>-thumb<?php echo $i === 0 ? ' is-active' : ''; ?>" data-olo-gs-thumb="<?php echo (int) $i; ?>">
+                    <div class="<?php echo esc_attr( $uid ); ?>-thumb<?php echo $i === 0 ? ' is-active' : ''; ?><?php echo isset( $img['video'] ) ? ' is-video' : ''; ?>" data-olo-gs-thumb="<?php echo (int) $i; ?>">
                         <img src="<?php echo esc_url( $img['thumb'] ); ?>" alt="<?php echo esc_attr( $img['alt'] ); ?>" loading="lazy" />
+                        <?php if ( isset( $img['video'] ) ) : ?><span class="<?php echo esc_attr( $uid ); ?>-play <?php echo esc_attr( $uid ); ?>-play--mini" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><?php endif; ?>
                     </div>
                     <?php endforeach; ?>
                 </div>
@@ -471,9 +547,17 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
                 <div class="<?php echo esc_attr( $uid ); ?>-main" data-olo-gs-main>
                     <div class="<?php echo esc_attr( $uid ); ?>-track" data-olo-gs-track>
                         <?php foreach ( $images as $si => $img ) : ?>
+                        <?php if ( isset( $img['video'] ) ) : ?>
+                        <div class="<?php echo esc_attr( $uid ); ?>-slide <?php echo esc_attr( $uid ); ?>-slide--video<?php echo $si === 0 ? ' is-active' : ''; ?>" data-olo-gs-video role="button" tabindex="0" aria-label="<?php echo esc_attr( olobuild_t( 'Guarda il video' ) ); ?>">
+                            <img src="<?php echo esc_url( $img['large'] ); ?>" alt="<?php echo esc_attr( $img['alt'] ); ?>" loading="lazy" />
+                            <?php if ( $img['video'] ) : ?><video src="<?php echo esc_url( $img['video'] ); ?>" poster="<?php echo esc_url( $img['large'] ); ?>" muted loop playsinline preload="metadata" data-olo-gs-anteprima aria-hidden="true"></video><?php endif; ?>
+                            <span class="<?php echo esc_attr( $uid ); ?>-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+                        </div>
+                        <?php else : ?>
                         <div class="<?php echo esc_attr( $uid ); ?>-slide<?php echo $si === 0 ? ' is-active' : ''; ?>">
                             <img src="<?php echo esc_url( $img['large'] ); ?>" alt="<?php echo esc_attr( $img['alt'] ); ?>" data-full="<?php echo esc_url( $img['full'] ); ?>" loading="lazy" />
                         </div>
+                        <?php endif; ?>
                         <?php endforeach; ?>
                     </div>
                     <?php
@@ -509,8 +593,9 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
                 <?php if ( $show_thumbs ) { if ( ! $is_left ) { if ( $total > 1 ) { ?>
                 <div class="<?php echo esc_attr( $uid ); ?>-thumbs">
                     <?php foreach ( $images as $i => $img ) : ?>
-                    <div class="<?php echo esc_attr( $uid ); ?>-thumb<?php echo $i === 0 ? ' is-active' : ''; ?>" data-olo-gs-thumb="<?php echo (int) $i; ?>">
+                    <div class="<?php echo esc_attr( $uid ); ?>-thumb<?php echo $i === 0 ? ' is-active' : ''; ?><?php echo isset( $img['video'] ) ? ' is-video' : ''; ?>" data-olo-gs-thumb="<?php echo (int) $i; ?>">
                         <img src="<?php echo esc_url( $img['thumb'] ); ?>" alt="<?php echo esc_attr( $img['alt'] ); ?>" loading="lazy" />
+                        <?php if ( isset( $img['video'] ) ) : ?><span class="<?php echo esc_attr( $uid ); ?>-play <?php echo esc_attr( $uid ); ?>-play--mini" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><?php endif; ?>
                     </div>
                     <?php endforeach; ?>
                 </div>
@@ -533,6 +618,8 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
             </button>
             <?php endif; ?>
             <img src="" alt="" data-olo-gs-lb-img />
+            <video controls playsinline preload="none" data-olo-gs-lb-video hidden></video>
+            <iframe title="<?php echo esc_attr( olobuild_t( 'Video del prodotto' ) ); ?>" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen data-olo-gs-lb-frame hidden></iframe>
             <div class="<?php echo esc_attr( $uid ); ?>-lb-counter" data-olo-gs-lb-counter></div>
         </div>
         <?php endif; ?>
@@ -558,6 +645,17 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
             var autoSpeed  = <?php echo (int) $auto_speed; ?>;
             var slideEls   = track ? track.children : [];
             var dots       = root.querySelectorAll('[data-olo-gs-dot]');
+            /* L'anteprima muta del video gira solo quando è la voce in vista, e mai con «meno movimento». */
+            var anteprime  = root.querySelectorAll('[data-olo-gs-anteprima]');
+            var fermi      = false;
+            if(window.matchMedia){ fermi = window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+            function anteprima(){
+                anteprime.forEach(function(v){
+                    var attiva = v.parentNode === slideEls[current];
+                    if(attiva){ if(!fermi){ var pr = v.play(); if(pr){ pr.catch(function(){}); } } }
+                    else { v.pause(); }
+                });
+            }
 
             function goTo(idx){
                 if(idx < 0){ idx = total - 1; }
@@ -582,7 +680,9 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
                 if(thumbs[idx]){
                     thumbs[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
                 }
+                anteprima();
             }
+            anteprima();
 
             /* Thumbnail clicks */
             thumbs.forEach(function(t){
@@ -658,7 +758,9 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
 
                     mainEl.addEventListener('mousemove', function(e){
                         if(e.target.closest('[data-olo-gs-prev], [data-olo-gs-next], [data-olo-gs-dot]')){ azzera(); return; }
-                        var img = slides[current];
+                        /* Il video non si ingrandisce: si apre. */
+                        if(slideEls[current]){ if(slideEls[current].hasAttribute('data-olo-gs-video')){ azzera(); return; } }
+                        var img = slideEls[current] ? slideEls[current].querySelector('img') : null;
                         if(!img){return}
                         if(zoomata){ if(zoomata !== img){ azzera(); } }
                         piena(img);
@@ -683,6 +785,30 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
                         });
                     }
                 }
+            }
+            if(!enableLb){
+                if(mainEl){
+                    mainEl.addEventListener('click', function(e){
+                        var sl = e.target.closest('[data-olo-gs-video]');
+                        if(!sl){return}
+                        var it = images[current];
+                        if(it.embed){
+                            var fr = document.createElement('iframe');
+                            fr.src = it.embed;
+                            fr.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
+                            fr.setAttribute('allowfullscreen', '');
+                            fr.setAttribute('title', it.alt);
+                            fr.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;z-index:4';
+                            sl.appendChild(fr);
+                            return;
+                        }
+                        var v = sl.querySelector('video');
+                        if(v){ v.muted = false; v.controls = true; v.loop = false; v.removeAttribute('aria-hidden'); var pv = v.play(); if(pv){ pv.catch(function(){}); } }
+                    });
+                }
+            }
+            if(enableZoom){
+                /* zoom e lightbox insieme: il clic è già agganciato sopra */
             } else if(enableLb){
                 /* No zoom but lightbox on click */
                 if(mainEl){
@@ -708,27 +834,50 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
             var lbPrev  = lb ? lb.querySelector('[data-olo-gs-lb-prev]') : null;
             var lbNext  = lb ? lb.querySelector('[data-olo-gs-lb-next]') : null;
             var lbCount = lb ? lb.querySelector('[data-olo-gs-lb-counter]') : null;
+            var lbVideo = lb ? lb.querySelector('[data-olo-gs-lb-video]') : null;
+            var lbFrame = lb ? lb.querySelector('[data-olo-gs-lb-frame]') : null;
             var lbIdx   = 0;
 
+            /* La voce nella finestra: la foto, o il video che parte con l'audio (file) o incorporato (YouTube, Vimeo). */
+            function lbMostra(idx){
+                var it = images[idx];
+                var eVideo = !!(it.video || it.embed);
+                if(lbVideo){ lbVideo.pause(); lbVideo.hidden = true; }
+                if(lbFrame){ lbFrame.hidden = true; lbFrame.removeAttribute('src'); }
+                if(lbImg){ lbImg.hidden = eVideo; if(!eVideo){ lbImg.src = it.full; lbImg.alt = it.alt; } }
+                if(it.embed){ if(lbFrame){ lbFrame.src = it.embed; lbFrame.hidden = false; } }
+                else if(it.video){
+                    if(lbVideo){
+                        lbVideo.poster = it.full;
+                        if(lbVideo.getAttribute('src') !== it.video){ lbVideo.src = it.video; }
+                        lbVideo.hidden = false;
+                        var pv = lbVideo.play(); if(pv){ pv.catch(function(){}); }
+                    }
+                }
+                if(lbCount){ lbCount.textContent = (idx + 1) + ' / ' + total; }
+                /* L'anteprima muta nella foto grande sta ferma mentre la finestra è aperta. */
+                anteprime.forEach(function(v){ v.pause(); });
+            }
             function openLightbox(idx){
                 if(!lb){return}
                 lbIdx = idx;
-                if(lbImg){ lbImg.src = images[idx].full; }
-                if(lbCount){ lbCount.textContent = (idx + 1) + ' / ' + total; }
                 lb.classList.add('is-open');
+                lbMostra(idx);
                 document.body.style.overflow = 'hidden';
             }
             function closeLightbox(){
                 if(!lb){return}
                 lb.classList.remove('is-open');
+                if(lbVideo){ lbVideo.pause(); }
+                if(lbFrame){ lbFrame.removeAttribute('src'); }
                 document.body.style.overflow = '';
+                anteprima();
             }
             function lbGoTo(idx){
                 if(idx < 0){ idx = total - 1; }
                 if(idx >= total){ idx = 0; }
                 lbIdx = idx;
-                if(lbImg){ lbImg.src = images[idx].full; }
-                if(lbCount){ lbCount.textContent = (idx + 1) + ' / ' + total; }
+                lbMostra(idx);
             }
 
             if(lbClose){ lbClose.addEventListener('click', closeLightbox); }
@@ -748,6 +897,14 @@ class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
                 if(e.key === 'ArrowRight'){ lbGoTo(lbIdx + 1); }
             });
             <?php endif; ?>
+
+            root.querySelectorAll('[data-olo-gs-video]').forEach(function(sl){
+                sl.addEventListener('keydown', function(e){
+                    if(e.key !== 'Enter'){ if(e.key !== ' '){ return; } }
+                    e.preventDefault();
+                    sl.click();
+                });
+            });
 
             /* Swipe support for touch devices */
             if(mainEl){

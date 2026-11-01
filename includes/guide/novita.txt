@@ -3,6 +3,68 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.915 - 2026-11-01 (rifiniture)
+- Pulsante del carrello (taglie) e galleria prodotto (video): gli spazi nuovi in unità relative, il pulsante play centrato col translate invece dei margini negativi. Nessun cambiamento visibile.
+
+## v1.4.914 - 2026-11-01 (quindici temi nuovi)
+- Quindici temi nelle categorie che ne avevano meno, ognuno con un’apertura diversa e il suo cursore. Salute e cura: Vertebra (fisioterapia, le vertebre storte tornano in fila scorrendo e seguono il puntatore in 3D), Respiro (psicoterapia, tre anelli che girano in 3D e un cerchio che respira), Nove Lune (ostetriche, la luna che cresce mese per mese). Noleggio: Strada Bianca (camper e van, il navigatore fa il viaggio sulla carta), Ciak (attrezzature per il cinema, il ciak si chiude, lampo e REC). Immobiliare: Pianta Libera (la pianta dell’appartamento si alza in 3D), Chiavistello (l’insegna «Vendesi» che dondola e si gira in «Venduto»), Lungolago (il riflesso nel lago si ribalta e diventa il titolo). Associazioni e cause: Sirena (volontari del soccorso, il lampeggiante), Cuccia (canile, il mazzo delle schede da adottare), Zolla (orti condivisi, i semi che germogliano). Tecnologia: Strato (stampa 3D, il vaso stampato strato per strato), Giunto (robotica, il braccio che prende il pezzo e lo posa). Casa e design: Cementina (le piastrelle che si girano in un’onda 3D), Capitonné (tappezzeria, il sipario di velluto a pannelli).
+- Vetrina temi: 168 temi di OLObuild; zone tradotte nelle cinque lingue.
+
+## v1.4.913 - 2026-11-01 (quindici cursori nuovi)
+- Effetti mouse: quindici cursori nuovi. Elastico (si tende e si ritira), Respiro (un cerchio che respira), Luna (cambia fase con la strada fatta), Volante (sterza), Messa a fuoco (gli angoli stringono sull’elemento), Quota (le misure del disegno), Chiave (gira sui link), Riflesso nell’acqua, Battito (il monitor del cuore), Scodinzolo, Pioggerella, Ugello (il filo della stampa 3D), Passo passo (scatta sulla griglia), Mosaico (tessere che si girano) e Nappa (oscilla come un pendolo).
+
+## v1.4.912 - 2026-11-01 (Vetrina temi, il link delle schede)
+- Vetrina temi: «Guarda la demo» si mescola col colore del nome della scheda (o col testo, se il nome non ha un colore suo): sulle schede scure col nome chiaro il link si schiariva verso il testo scuro della Palette.
+
+## v1.4.911 - 2026-11-01 (contrasti della pagina Temi)
+- Vetrina temi: «Guarda la demo» prende l'accento tirato verso il colore del testo della scheda, leggibile sulle schede chiare e su quelle scure (sul fondo scuro restava a 3,7); il numero dentro il filtro attivo è pieno come la sua etichetta.
+- Tile OLOX: il grigio tenue dei testi piccoli (menu, etichette, link del piè di pagina, nastro) passa dal 34% al 52% del bianco e supera 4,5 sul fondo scuro.
+
+## v1.4.910 - 2026-11-01 (più colonne sul telefono)
+- Prodotti WC: sul telefono fino a quattro colonne (prima al massimo due), per le miniature piccole in fila. Categorie WC: fino a tre. Le tile già fatte non cambiano.
+- Negozi WooCommerce, sul telefono: la scheda dei reparti mostra tre reparti per fila, la terza scheda accanto le quattro foto in fila.
+
+## v1.4.909 - 2026-11-01 (le schede dei negozi sul telefono)
+- Prodotti WC: «Vista rapida sulle card» si può spegnere per una griglia. Sulle miniature piccole il pulsante «Anteprima veloce» copriva la foto: ora le card di quella griglia restano senza, e la tile Vista rapida le salta.
+- Negozi WooCommerce, sul telefono: le schede sotto la vetrina senza il pulsante sulle miniature, il conto alla rovescia dell'offerta a tempo che sta nella sua scheda (ore e minuti), la scheda dei reparti su tutta la riga con tre reparti per fila.
+
+## v1.4.908 - 2026-11-01 (la ricerca nella Vetrina dei temi, le schede dei negozi tutte diverse)
+- Vetrina temi: una casella di ricerca sopra i filtri. Cerca nel nome, nella categoria, nell'effetto, nella riga sotto il nome e nelle parole chiave del tema, senza badare ad accenti e maiuscole; si somma ai filtri (anche nei numeri delle etichette), Esc la svuota, e se non trova niente lo dice con un pulsante per tornare a tutti i temi. Si accende e si spegne nel builder, col suo testo.
+- Negozi WooCommerce: le schede sotto la vetrina delle offerte non sono più uguali in tutti i temi. Otto forme: le quattro schede con le foto, un prodotto grande per scheda col prezzo, il banner su foto largo metà con due schede, due fasce di sei prodotti che scorrono, tre schede con due prodotti, le schede chiare su una fascia scura, la scheda dei reparti, l'offerta a tempo col conto alla rovescia.
+- Corretti nei temi: le aperture di alcune pagine mostravano il tag del corsivo invece del corsivo (Tracolla, Suola, Ristretto, Carambola, Spiedo, Pennino, Falda, Calice); le tabelle delle misure di Orlo, Tracolla, Suola e Ristretto mostravano i dati grezzi invece della tabella.
+
+## v1.4.907 - 2026-11-01 (gli ultimi quattro negozi del centro e quattro cursori)
+- Quattro temi-negozio nuovi con WooCommerce, con la vetrina delle offerte, le quattro schede, i pannelli del mega menu e un pezzo forte a metà pagina che si muove con lo scorrimento: Pennino (cartoleria e stilografiche a Venezia, coi corsi di calligrafia: il pennino scrive la lettera riga per riga, il foglio scende nella busta e ci cade sopra il sigillo di ceralacca), Falda (cappelli e ombrelli a Trieste: l'ago del barometro passa da sole a bora, pioggia e neve, il cielo cambia e arriva il cappello giusto), Trottola (giocattoli a Bari: i cubi cadono uno alla volta e rimbalzano finché si legge TROTTOLA, la trottola gira e la palla arriva rotolando) e Calice (enoteca a Siena, vendita ai maggiorenni: il calice visto dall'alto si riempie quattro volte, dalla Vernaccia al Brunello, ognuno col suo colore, il naso e il piatto).
+- Quattro cursori nuovi: pennino (scrive un tratto da calligrafo dietro al puntatore, al clic una macchia d'inchiostro), ombrello (il vento del movimento lo inclina, dalle punte cadono gocce, sui link si chiude a metà), trottola (gira più svelta quanto più si va e ondeggia quando rallenta) e calice (il vino ondeggia quando ci si muove, sui link si brinda).
+
+## v1.4.906 - 2026-11-01 (altri tre negozi del centro e tre cursori)
+- Tre temi-negozio nuovi con WooCommerce, con la vetrina delle offerte, le quattro schede, i pannelli del mega menu e un pezzo forte a metà pagina che si muove con lo scorrimento: Ristretto (torrefazione di Napoli con le capsule compatibili: tredici capsule si accendono dalla più chiara alla più scura e la tacca dice il gusto), Carambola (sala da biliardo e bar sui Navigli, coi tavoli da prenotare a ore: la stecca tira, la bianca apre il triangolo e le palle si sparpagliano) e Spiedo (kebab e cucina di strada a Roma, da ritirare o farsi portare: sulla piadina arrivano gli ingredienti e lo scontrino si allunga fino al totale).
+- Tre cursori nuovi: chicco di caffè (gira mentre si muove, al clic se ne spargono alcuni), stecca da biliardo (punta al puntatore, sui link prende la mira, al clic tira) e peperoncino (si piega nella direzione in cui si va, al clic sparge i fiocchi).
+- Slider Pro, bollini delle vetrine dei negozi: quelli inclinati ora lo sono davvero (la rotazione fissa dei livelli non c'è: la dà il movimento con lo scorrimento tenuto fermo).
+
+## v1.4.905 - 2026-11-01 (tre negozi del centro e tre cursori)
+- Tre temi-negozio nuovi con WooCommerce, ognuno con la vetrina delle offerte in apertura, le quattro schede coi prodotti, i pannelli del mega menu e un pezzo forte a metà pagina che si muove con lo scorrimento: Tracolla (bottega di borse a Bologna: la lancetta dell'orologio gira e per ogni ora arriva la sua borsa), Velluto (atelier d'alta moda a Firenze: il sipario di velluto si apre sulla passerella e compare il programma della sfilata) e Suola (scarpe a Torino: le impronte camminano sullo schermo e il metro dei numeri scorre).
+- Tre cursori nuovi: fibbia (una fibbia d'ottone col cinturino, girata dove si va; sui link l'ardiglione la chiude), paillettes (cadono dal puntatore girando e luccicando, al clic ne esplode una manciata) e laccio da scarpa (pende dal puntatore col suo puntale; sui link si tende).
+
+## v1.4.904 - 2026-11-01 (negozi come i negozi grandi: la fascia delle offerte e i pannelli del menu)
+- Mega Menu: una voce può aprire un pannello fatto con le tile anche dal menu di WordPress, con la classe CSS «olo-pannello-» seguita dal numero del template (tipo Mega panel). I temi lo fanno da soli: importandoli, le voci Offerte, Novità e Reparti aprono i loro pannelli. Se nel builder scegliete un pannello per la voce, vale quello.
+- Temi-negozio Orlo, Siero, Madia, Davanzale e Crocevia: aprono come i negozi online grandi. Sotto la testata c'è una fascia bassa di offerte che scorre da sola, ognuna col suo bollino dello sconto, e sotto quattro schede coi prodotti veri (le offerte, le novità, i prezzi piccoli, i più amati). L'apertura a tutto schermo non c'è più. Il menu apre i pannelli delle offerte (col conto alla rovescia e i prodotti scontati), delle novità e dei reparti, ognuno con la sua promozione. Gli sconti dichiarati sono quelli dei prodotti: Orlo arriva al −28%, Siero ha il kit del mattino a −19%.
+
+## v1.4.903 - 2026-11-01 (cinque negozi online, le taglie nel pulsante del carrello, cinque cursori)
+- Aggiungi al carrello, prodotti a varianti: le taglie (o i numeri, i colori) sono bottoni sopra il pulsante; scelta la combinazione, il pulsante aggiunge quella variante, anche senza ricaricare la pagina, e sotto le opzioni si leggono prezzo e disponibilità. Le opzioni esaurite sono barrate. Prima il pulsante diceva «Seleziona opzioni» e portava alla scheda stessa: la taglia non si sceglieva da nessuna parte.
+- Barra degli annunci: fra il testo e la parte in evidenza c'è lo spazio («…domenica. Scopri l'Archivio»).
+- Mini carrello: al passaggio del mouse resta del suo colore anche su una testata scura.
+- Demo dei temi-negozio: i prodotti a varianti restano a varianti (prima nella demo diventavano «semplici», senza taglie e col prezzo a zero).
+- Cinque cursori nuovi: metro da sarta (il nastro con le tacche si srotola dietro il puntatore), perla (iridescente, sui link diventa una bolla), farina (cade dal puntatore, uno sbuffo al clic), ombra lunga (un'asticella con l'ombra che si allunga come col sole basso) e cartellino del prezzo (dondola appeso allo spago e dice la parola del cursore).
+- Cinque temi-negozio nuovi con WooCommerce, ognuno con le sue pagine del negozio fatte con le tile (catalogo coi filtri, scheda prodotto col video nella galleria, carrello, cassa a passi, account, preferiti, assistenza) e un'apertura diversa: Orlo (moda: le colonne di look scorrono in controsenso, le taglie nella scheda), Siero (cosmetica: tre flaconi impilati come lastre di vetro si raddrizzano e si mettono in fila), Madia (gastronomia: la box del mese apre il coperchio e i prodotti salgono ad arco), Davanzale (casa e design: la stanza si avvicina e gli oggetti entrano col prezzo) e Crocevia (multisettore: il tabellone delle partenze gira le palette coi reparti e gli sconti).
+
+## v1.4.902 - 2026-11-01 (il video del prodotto nella galleria)
+- WooCommerce, «Video del prodotto»: nella scheda del prodotto (Dati prodotto → Generale) si sceglie un video della libreria o si incolla un link YouTube o Vimeo, con la sua copertina facoltativa. La Gallery Prodotto WC lo mette fra le foto, dopo la prima o dove si sceglie in «Posizione del video»: la miniatura ha il triangolo, nella foto grande il video gira senza audio, e nella finestra della galleria che si apre parte con l'audio e i comandi. Si apre anche da tastiera. Senza la finestra della galleria il video si guarda dov'è. Un prodotto senza video mostra solo le foto, come prima.
+
+## v1.4.901 - 2026-11-01 (il cursore si sceglie negli Effetti mouse, varianti colore come tondi)
+- Cursore: si sceglie in Avanzate → Effetti mouse, dove stanno gli altri effetti del puntatore. «Cursore del sito» (vale per tutto il sito) elenca tutti gli stili, dall'anello al filo con l'ago, al posto della sola casella «Cursore magnetico»; sotto, «Cursore di questa pagina» sceglie quello della pagina, «Come il sito» o nessuno. In Impostazioni pagina non ci sono più. «Forza magnetica» compare solo con l'anello, l'unico che la usa.
+- Sezione, «Variante colore»: le quattro varianti sono tondi del colore che danno alla sezione, con «Aa» nel colore del testo; il nome compare passandoci sopra col mouse. Prima i nomi stavano in quattro bottoni troppo stretti e si leggeva «Pred…», «Atten…».
+
 ## v1.4.900 - 2026-11-01 (il cursore ago e filo disegnato come un ago vero)
 - Cursore «Filo con l'ago»: la punta di un ago d'acciaio, inclinato, sta sul puntatore; il filo passa dalla cruna (con un codino dall'altra parte), esce di lato, pende morbido col nodo in fondo e segue il movimento. L'ago si inclina con la velocità; sui link si raddrizza e il filo si accorcia. Prima era un bastoncino bianco staccato con una riga dritta sotto.
 

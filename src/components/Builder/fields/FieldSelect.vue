@@ -1,8 +1,33 @@
 <template>
+  <!-- Tinte: opzioni che portano un `colore` (un token della palette, es. le varianti della sezione) →
+       un tondo per voce, dipinto col colore che dà, con «Aa» nel colore del suo testo. Il nome compare in
+       sovraimpressione al passaggio del mouse e al focus: scritto nei bottoni si troncava («Pred…»). -->
+  <div v-if="conTinte" class="fsel-tinte" role="radiogroup" :aria-label="ariaLabel || undefined">
+    <button
+      v-for="opt in flatOptions"
+      :key="opt.value"
+      type="button"
+      role="radio"
+      :aria-checked="isActive(opt)"
+      :aria-label="t(opt.label)"
+      class="fsel-tinta"
+      :class="{ 'fsel-tinta--active': isActive(opt) }"
+      :style="{ '--tinta': tinta(opt.colore), '--tinta-testo': tinta(opt.testo) }"
+      @click="$emit('update:modelValue', opt.value)"
+      @mouseenter="mostraNome($event, opt)"
+      @mouseleave="nome = null"
+      @focus="mostraNome($event, opt)"
+      @blur="nome = null"
+    ><span class="fsel-tinta-aa" aria-hidden="true">Aa</span></button>
+    <Teleport to="body">
+      <div v-if="nome" class="fsel-tinta-nome" role="tooltip" :style="{ left: nome.x + 'px', top: nome.y + 'px' }">{{ nome.testo }}</div>
+    </Teleport>
+  </div>
+
   <!-- Segmented (auto): per select brevi i bottoni sono più rapidi del dropdown
        (1 click invece di 2, opzioni sempre visibili). Stesso modello dati del
        select: emette gli stessi value stringa — è SOLO una resa alternativa. -->
-  <div v-if="isSegmented" class="fsel-seg" role="radiogroup">
+  <div v-else-if="isSegmented" class="fsel-seg" role="radiogroup">
     <button
       v-for="opt in flatOptions"
       :key="opt.value"
@@ -98,6 +123,8 @@
 <script setup>
 import { t } from '@/i18n';
 import { ref, computed, nextTick, onBeforeUnmount } from 'vue';
+import { useStylesStore } from '@/stores/styles';
+import { resolveColorToken } from '@/utils/colorToken';
 
 const props = defineProps({
   modelValue: { type: [String, Number], default: '' },
@@ -168,6 +195,24 @@ const isSegmented = computed(() => {
 
 function isActive(opt) {
   return String(opt.value) === String(props.modelValue);
+}
+
+// ── Tinte ────────────────────────────────────────────────────────────
+// Tutte le opzioni con `colore` (e facoltativo `testo`, il colore della scritta su quel fondo). I token
+// `var(--olo-color-*)` esistono solo nel canvas: si risolvono dalla palette dello store, come in FieldColor.
+const conTinte = computed(() =>
+  props.ui !== 'dropdown' && !hasGroups.value && flatOptions.value.length > 0 && flatOptions.value.every(o => o.colore)
+);
+let stylesStore = null;
+function tinta(val) {
+  if (!val) return '';
+  try { stylesStore = stylesStore || useStylesStore(); } catch (e) { return ''; }
+  return resolveColorToken(val, stylesStore);
+}
+const nome = ref(null);
+function mostraNome(e, opt) {
+  const r = e.currentTarget.getBoundingClientRect();
+  nome.value = { testo: t(opt.label), x: r.left + r.width / 2, y: r.top - 6 };
 }
 
 // ── Dropdown custom ──────────────────────────────────────────────────
@@ -287,6 +332,57 @@ onBeforeUnmount(() => close(false));
 </script>
 
 <style scoped>
+.fsel-tinte {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 2px 0;
+}
+.fsel-tinta {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(16, 24, 40, 0.18);
+  background: var(--tinta, #fff);
+  color: var(--tinta-testo, #111827);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.fsel-tinta:hover { transform: scale(1.08); }
+.fsel-tinta:focus-visible {
+  outline: 2px solid var(--olo-ui-accent, #e8622a);
+  outline-offset: 3px;
+}
+.fsel-tinta--active {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--olo-ui-accent, #e8622a);
+}
+.fsel-tinta-aa {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  pointer-events: none;
+}
+.fsel-tinta-nome {
+  position: fixed;
+  z-index: 100000;
+  transform: translate(-50%, -100%);
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #111827;
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(16, 24, 40, 0.18);
+}
+
 .fsel-seg {
   display: flex;
   width: 100%;

@@ -17,6 +17,8 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from base import Tpl, write_theme, page, lib, mix, radius, solid  # noqa: E402
+from kit import Kit  # noqa: E402
+from negozio import Negozio, pannelli  # noqa: E402
 
 ID = 'fulmine'
 NAME = 'Fulmine'
@@ -173,7 +175,7 @@ def anteprima(t):
     return t.bare('woo_quickview', {
         'button_text': 'Anteprima veloce', 'button_style': 'filled', 'show_gallery': True, 'show_add_to_cart': True,
         'show_price': True, 'show_rating': True, 'show_excerpt': True, 'show_meta': False, 'modal_width': 920,
-        'image_width': 50, 'accent_color': BLU, 'text_color': TESTO,
+        'image_width': 50, 'accent_color': GIALLO, 'text_color': TESTO,
     })
 
 
@@ -323,6 +325,9 @@ def build_header():
         'mobile_font_size': '26', 'mobile_link_size': '26', 'mobile_link_font': 'heading', 'mobile_link_weight': '700',
         'border': {'top': 0, 'right': 0, 'bottom': 0, 'left': 0, 'style': 'solid', 'color': ''},
         'topbar_enabled': False, 'nav_phone': '', 'nav_phone_url': '',
+        # i pannelli delle voci (reparti, offerte, novità): template del tema su tutta la larghezza sotto il menu
+        'panel_bg': FONDO, 'panel_border_top': '1', 'panel_border_color': FILO, 'panel_shadow': 'lg',
+        'panel_radius': {'tl': 0, 'tr': 0, 'br': 0, 'bl': 0}, 'panel_open_animation': 'fade', 'panel_origin': 'nav',
     })
     return [t.section([alto, piccolo, sotto], bg=solid(NOTTE), width='large', padding='remove-vertical',
                       style={'padding_top': 14, 'padding_bottom': 14}),
@@ -389,31 +394,68 @@ def categorie(t, columns=8):
     })
 
 
+# ── La vetrina delle offerte, le quattro schede e i pannelli del menu ──
+# Dal 1° nov 2026 il negozio apre come quelli grandi: una fascia bassa di offerte che scorre da sola invece
+# dell'apertura alta, e il mega menu racconta le offerte e le novità nei suoi pannelli. Le parti sono quelle del kit
+# dei negozi (negozio.py); il primario di Fulmine è il giallo, che su un fondo chiaro non si legge: nel kit l'accento
+# è il blu, il giallo resta sui bollini dello sconto.
+P = {'home': HOME, 'negozio': NEGOZIO, 'offerte': OFFERTE, 'assistenza': ASSISTENZA, 'account': ACCOUNT,
+     'carrello': CARRELLO, 'confronta': CONFRONTA}
+K = Kit(ID, MEDIA, raggio=10, peso_titoli='800', corsivo=False, maiuscole_pulsanti=False, tema_chiaro=True)
+N = Negozio(K, NAME, P, raggio=10, ratio='1-1', card='border', hover='swap', peso_titoli='800')
+N.c = dict(K.c, acc=BLU, on_acc=BIANCO)
+LARGO = 0.5  # la larghezza media di una lettera dei titoli (Archivo, per la vetrina)
+
+
+def vetrina(t):
+    f = dict(titoli='Archivo', mono='JetBrains Mono', largo=LARGO, bollino_fondo=GIALLO, bollino_testo=ON_GIALLO)
+    return N.vetrina(t, [
+        N.offerta('fu-o1', K.sfondo_video(V_CUFFIE, overlay=0.12), 'Offerte lampo · finiscono a mezzanotte',
+                  'Le cuffie Arcus Studio a 219 €.', 'Cancellazione del rumore e quaranta ore di musica. Erano 299 €.',
+                  'Le offerte lampo', OFFERTE, bollino='−27%', nota='Ordini entro le 18, arriva domani', primo=True, **f),
+        N.offerta('fu-o2', K.sfondo_foto('pexels-28779689.jpg', overlay=0.12, scala=1.06), 'Computer · la scrivania',
+                  'La tastiera Volta K75 a 99 €.', 'Meccanica, senza fili, tre computer con un tasto. Era 129 €.',
+                  'Il reparto Computer', cat_url('computer'), bollino='−23%', nota='Garanzia italiana di 2 anni', **f),
+        N.offerta('fu-o3', K.sfondo_video(V_STAND, overlay=0.12), 'La settimana dell’audio',
+                  'Audio, fino al −31%.', 'La cassa Kiri Go a 54,90 €, gli auricolari Volta Pods Pro a 129 €.',
+                  'Il reparto Audio', cat_url('audio'), bollino='−31%', bollino_x=66, nota='Reso gratuito in 30 giorni', **f),
+    ], transizione='push')
+
+
+# le schede sotto la vetrina: «striscia» (ogni negozio la sua forma, vedi Negozio.quadri)
+def quadri(t):
+    return N.quadri(t, stile='striscia', voci=[
+        ('Offerte lampo', {'on_sale': True, 'orderby': 'popularity'}, 'Vedi tutte', OFFERTE),
+        ('Appena arrivati', {'orderby': 'date'}, 'Vedi tutti', NEGOZIO),
+        ('Sotto i 100 €', {'orderby': 'price', 'order': 'ASC'}, 'Vedi tutti', NEGOZIO + '?max_price=100'),
+        ('I più votati', {'orderby': 'rating'}, 'Vedi tutti', NEGOZIO),
+    ])
+
+
+def build_pannello_reparti():
+    return N.pannello_reparti(Tpl(ID, 'pannello-reparti'), 'Le categorie', 'Otto reparti, duemila prodotti',
+                              ('Il Monte Air 14,', '1.099 €.', 'Il portatile ultraleggero, era 1.299 €.', 'Computer',
+                               cat_url('computer'), 'pexels-3184451.jpg'), colonne=4)
+
+
+def build_pannello_offerte():
+    return N.pannello_offerte(Tpl(ID, 'pannello-offerte'), 'Offerte lampo', 'Finiscono a mezzanotte.',
+                              'Quelle di oggi finiscono tra:',
+                              ('Il robot Kiri Robo S8,', '349 €.', 'Aspira e lava da solo, era 499 €.', 'Casa smart',
+                               cat_url('casa-smart'), 'pexels-4107249.jpg'))
+
+
+def build_pannello_novita():
+    return N.pannello_novita(Tpl(ID, 'pannello-novita'), 'Novità', 'Appena arrivati in magazzino',
+                             [(n, cat_url(s)) for n, s in CATEGORIE[:6]],
+                             ('Il visore Orbita 2,', '449 €.', 'La realtà virtuale senza cavi, 128 GB.', 'Gaming',
+                              cat_url('gaming'), 'pexels-7561900.jpg'))
+
+
 def build_home():
     t = Tpl(ID, 'home')
     out = []
-    hero = t.classic('hero', {
-        'preset': 'custom', 'eyebrow_text': 'Elettronica scelta e provata · da Piacenza', 'eyebrow_dot': True,
-        'title': 'Ordini entro le 18,<br>arriva <em>domani.</em>',
-        'subtitle': 'Duemila prodotti con la consegna gratuita da 29 €, il reso in 30 giorni e l’assistenza in italiano. '
-                    'Ogni prodotto lo proviamo prima di metterlo in vendita.',
-        'media_bg': {'type': 'video', 'video_url': img(V_STAND + '.mp4'), 'video_poster': img(V_STAND + '.jpg'),
-                     'video_size': 'cover', 'video_position': 'center center'},
-        'overlay_color': NOTTE, 'overlay_top': 0.15, 'overlay_bottom': 0.75, 'overlay_sides': True, 'overlay_direction': 'left',
-        'glow_on': False, 'frame_on': False, 'watermark_text': '',
-        'accent': GIALLO, 'text_color': BIANCO, 'title_color': BIANCO, 'subtitle_color': BIANCO_T,
-        'title_tag': 'h1', 'title_font_family': 'heading', 'title_font_size': 80, 'title_font_weight': '800',
-        'title_line_height': '1', 'title_letter_spacing': '-2', 'title_text_transform': 'none',
-        'subtitle_font_size': 17, 'subtitle_max_width': 520,
-        'min_height': '72vh', 'content_max_width': 1280, 'vertical_align': 'center', 'horizontal_align': 'center',
-        'text_align': 'left', 'tile_padding': {'top': 80, 'right': 32, 'bottom': 80, 'left': 32},
-        'cta_text': 'Le offerte lampo', 'cta_url': OFFERTE, 'cta_bg_color': GIALLO, 'cta_text_color': ON_GIALLO,
-        'cta_radius': R, 'cta_size': '16', 'cta_style': 'filled', 'cta_font_weight': '700', 'cta_text_transform': 'none',
-        'cta_letter_spacing': '0',
-        'cta2_text': 'Tutti i prodotti', 'cta2_url': NEGOZIO, 'cta2_text_color': BIANCO, 'cta2_style': 'ghost',
-        'meta_text': '', 'scroll_hint': '', 'scene_depth': 'none', 'module': '',
-    })
-    out.append(t.section([t.one([hero], anim=None)], width='fullbleed', padding='remove-vertical'))
+    out += [vetrina(t), quadri(t)]
 
     out.append(t.section([
         t.one([titolo(t, 'Le categorie', size=26, sizes=(24, 22), pad_bottom=18)], anim=None),
@@ -796,17 +838,20 @@ def build_404():
 
 
 THEME = {
-    'id': ID, 'name': NAME, 'author': 'Olobuild', 'version': '1.0.0', 'preview_v': '1', 'preview_mobile_v': '1',
-    'category': 'Negozi online', 'zone': 'Ordini oggi, arriva domani',
+    'id': ID, 'name': NAME, 'author': 'Olobuild', 'version': '1.0.0', 'preview_v': '2', 'preview_mobile_v': '2',
+    'category': 'Negozi online', 'zone': 'Le offerte lampo',
     'requires_plugin': {'slug': 'woocommerce', 'label': 'WooCommerce', 'check': 'class:WooCommerce',
                         'purchase_url': 'https://wordpress.org/plugins/woocommerce/'},
     'tags': ['negozio', 'elettronica', 'woocommerce', 'offerte', 'e-commerce', 'tecnologia', 'consegna'],
     'description': 'Un negozio di elettronica con WooCommerce: la ricerca dal vivo fra i prodotti col prezzo, il carrello e i '
-                   'preferiti in testata, le categorie, le card con la seconda foto, il voto, la marca, il risparmio, la '
+                   'preferiti in testata, in apertura la fascia delle offerte lampo che scorre e le quattro schede coi '
+                   'prodotti, il mega menu coi pannelli delle categorie, delle offerte e delle novità, le categorie, le card con la seconda foto, il voto, la marca, il risparmio, la '
                    'consegna e la scorta, l’anteprima veloce, le offerte lampo col conto alla rovescia, il filtro, il confronto, '
                    'la scheda prodotto, il carrello e la cassa a passi.',
-    'menu': {'name': 'Fulmine — categorie', 'items': [{'title': 'Offerte lampo', 'url': OFFERTE}, {'title': 'Tutti i prodotti', 'url': NEGOZIO}]
-             + [{'title': n, 'url': cat_url(s)} for n, s in CATEGORIE] + [{'title': 'Assistenza', 'url': ASSISTENZA}]},
+    'menu': {'name': 'Fulmine — categorie', 'items': [{'title': 'Tutti i prodotti', 'url': NEGOZIO},
+                                                      {'title': 'Offerte lampo', 'url': OFFERTE},
+                                                      {'title': 'Novità', 'url': NEGOZIO}]
+             + [{'title': n, 'url': cat_url(s)} for n, s in CATEGORIE[:6]] + [{'title': 'Assistenza', 'url': ASSISTENZA}]},
     'templates': {
         '404': {'file': '404.json', 'type': '404', 'title': 'Fulmine — Pagina 404'},
         'header': {'file': 'header.json', 'type': 'header', 'title': 'Fulmine — Header'},
@@ -825,7 +870,7 @@ THEME = {
     # Le pagine del negozio in Template WooCommerce (all'import: Impostazioni → Template WooCommerce), la scheda dei
     # prodotti da singles → product. Nella demo, carrello e cassa del tema al posto di quelli del sito.
     'woo': {'product_archive': 'negozio', 'product_category': 'negozio', 'cart': 'carrello', 'checkout': 'cassa',
-            'myaccount': 'account'},
+            'myaccount': 'account', 'recensioni': 'acquirenti'},
     'activate': {'404': '404', 'header': 'header', 'footer': 'footer'},
     'pages': {
         'home': {'title': 'Home', 'template': 'home', 'set_as_homepage': True},
@@ -863,13 +908,17 @@ THEME = {
         'links': {'color': '', 'hover_color': '', 'decoration': 'none', 'hover_decoration': 'underline'},
     },
 }
+pannelli(THEME, NAME, {'Tutti i prodotti': ('pannello-reparti', 'Pannello delle categorie'),
+                       'Offerte lampo': ('pannello-offerte', 'Pannello delle offerte'),
+                       'Novità': ('pannello-novita', 'Pannello delle novità')})
 
 
 def main():
     builds = {'header.json': build_header(), 'footer.json': build_footer(), 'home.json': build_home(),
               'negozio.json': build_negozio(), 'offerte.json': build_offerte(), 'assistenza.json': build_assistenza(),
               'confronta.json': build_confronta(), 'carrello.json': build_carrello(), 'cassa.json': build_cassa(), 'account.json': build_account(),
-              'prodotto.json': build_prodotto(), '404.json': build_404()}
+              'prodotto.json': build_prodotto(), '404.json': build_404(), 'pannello-reparti.json': build_pannello_reparti(),
+              'pannello-offerte.json': build_pannello_offerte(), 'pannello-novita.json': build_pannello_novita()}
     write_theme(THEME, builds, MEDIA)
 
 

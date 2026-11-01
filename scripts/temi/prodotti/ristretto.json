@@ -1,0 +1,631 @@
+{
+ "tema": "ristretto",
+ "titolo_dentro": "Nella confezione",
+ "attributi": {
+  "macinatura": {
+   "nome": "Macinatura",
+   "termini": [
+    "In grani",
+    "Per espresso",
+    "Per moka"
+   ]
+  }
+ },
+ "categorie": [
+  {
+   "slug": "capsule",
+   "nome": "Capsule",
+   "descrizione": "Compostabili, compatibili con le macchine più diffuse.",
+   "foto": "pexels-21033142.jpg"
+  },
+  {
+   "slug": "grani",
+   "nome": "Grani e macinato",
+   "descrizione": "Per la moka, per l’espresso, in grani.",
+   "foto": "pexels-19162213.jpg"
+  },
+  {
+   "slug": "abbonamenti",
+   "nome": "Abbonamenti",
+   "descrizione": "La scatola ogni mese, si sospende quando si vuole.",
+   "foto": "pexels-8015467.jpg"
+  },
+  {
+   "slug": "macchine",
+   "nome": "Macchine e moka",
+   "descrizione": "A leva, a capsule, la napoletana.",
+   "foto": "pexels-6032786.jpg"
+  },
+  {
+   "slug": "tazzine",
+   "nome": "Tazzine e tazze",
+   "descrizione": "Ceramica di Vietri e vetro doppio.",
+   "foto": "pexels-4195607.jpg"
+  },
+  {
+   "slug": "regali",
+   "nome": "Regali",
+   "descrizione": "Scatole con le miscele e le tazzine.",
+   "foto": "pexels-5994300.jpg"
+  }
+ ],
+ "prodotti": [
+  {
+   "sku": "RIS-001",
+   "nome": "Capsule Intenso n. 11, cento pezzi",
+   "slug": "capsule-intenso",
+   "cat": [
+    "capsule"
+   ],
+   "prezzo": 32,
+   "sconto": 26,
+   "scorta": 80,
+   "voto": 4.8,
+   "recensioni": 1204,
+   "evidenza": true,
+   "foto": [
+    "pexels-32297816.jpg",
+    "pexels-9996344.jpg"
+   ],
+   "punti": [
+    "Intensità 11 su 13",
+    "70% arabica, 30% robusta",
+    "Capsule compostabili",
+    "Il video dell’estrazione"
+   ],
+   "testo": "La miscela del bar sotto casa: corpo pieno, crema nocciola, un finale di cacao amaro.",
+   "upsell": [],
+   "cross": [
+    "RIS-015"
+   ],
+   "video": "pexels-video-7019759.mp4",
+   "poster": "pexels-video-7019759.jpg",
+   "dentro": "Il caffè nella busta con la valvola o nella scatola delle capsule, il biglietto della tostatura."
+  },
+  {
+   "sku": "RIS-002",
+   "nome": "Capsule Cremoso n. 8, cento pezzi",
+   "slug": "capsule-cremoso",
+   "cat": [
+    "capsule"
+   ],
+   "prezzo": 30,
+   "sconto": 0,
+   "scorta": 90,
+   "voto": 4.7,
+   "recensioni": 866,
+   "evidenza": true,
+   "foto": [
+    "pexels-21033142.jpg",
+    "pexels-36192953.jpg"
+   ],
+   "punti": [
+    "Intensità 8 su 13",
+    "80% arabica",
+    "Crema densa",
+    "Per il cappuccino"
+   ],
+   "testo": "La crema più alta delle nostre miscele: rotonda, morbida, perfetta col latte.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il caffè nella busta con la valvola o nella scatola delle capsule, il biglietto della tostatura."
+  },
+  {
+   "sku": "RIS-003",
+   "nome": "Capsule Ristretto n. 13, cento pezzi",
+   "slug": "capsule-ristretto",
+   "cat": [
+    "capsule"
+   ],
+   "prezzo": 34,
+   "sconto": 27,
+   "scorta": 60,
+   "voto": 4.9,
+   "recensioni": 932,
+   "evidenza": true,
+   "foto": [
+    "pexels-12265177.jpg",
+    "pexels-18071820.jpg"
+   ],
+   "punti": [
+    "Intensità 13 su 13",
+    "Robusta indiana",
+    "Tostatura scura",
+    "Due sorsi"
+   ],
+   "testo": "Il caffè napoletano vero: corto, scuro, carico.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il caffè nella busta con la valvola o nella scatola delle capsule, il biglietto della tostatura."
+  },
+  {
+   "sku": "RIS-004",
+   "nome": "Capsule Dek, cento pezzi",
+   "slug": "capsule-dek",
+   "cat": [
+    "capsule"
+   ],
+   "prezzo": 31,
+   "sconto": 0,
+   "scorta": 70,
+   "voto": 4.6,
+   "recensioni": 411,
+   "evidenza": false,
+   "foto": [
+    "pexels-4921556.jpg"
+   ],
+   "punti": [
+    "Decaffeinato ad acqua",
+    "Intensità 7 su 13",
+    "Arabica brasiliana",
+    "Gusto pieno, senza caffeina"
+   ],
+   "testo": "Il decaffeinato ad acqua che sa di caffè: per la sera e per chi ne beve tanti.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il caffè nella busta con la valvola o nella scatola delle capsule, il biglietto della tostatura."
+  },
+  {
+   "sku": "RIS-005",
+   "nome": "Capsule Sidamo, arabica d’Etiopia, cinquanta pezzi",
+   "slug": "capsule-sidamo",
+   "cat": [
+    "capsule"
+   ],
+   "prezzo": 19,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.7,
+   "recensioni": 233,
+   "evidenza": false,
+   "foto": [
+    "pexels-9892391.jpg",
+    "pexels-14356266.jpg"
+   ],
+   "punti": [
+    "Monorigine Etiopia",
+    "Intensità 6 su 13",
+    "Note di gelsomino e agrumi",
+    "Tostatura chiara"
+   ],
+   "testo": "Un’arabica d’altura, fiorita e leggera: per chi il caffè lo assaggia.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il caffè nella busta con la valvola o nella scatola delle capsule, il biglietto della tostatura."
+  },
+  {
+   "sku": "RIS-006",
+   "nome": "Capsule Ginseng, cinquanta pezzi",
+   "slug": "capsule-ginseng",
+   "cat": [
+    "capsule"
+   ],
+   "prezzo": 18,
+   "sconto": 0,
+   "scorta": 45,
+   "voto": 4.4,
+   "recensioni": 188,
+   "evidenza": false,
+   "foto": [
+    "pexels-8243689.jpg"
+   ],
+   "punti": [
+    "Caffè e ginseng",
+    "Dolce, cremoso",
+    "Senza zuccheri aggiunti",
+    "Come al bar"
+   ],
+   "testo": "Il ginseng come lo fanno al bar: dolce e cremoso, da bere a metà pomeriggio.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il caffè nella busta con la valvola o nella scatola delle capsule, il biglietto della tostatura."
+  },
+  {
+   "sku": "RIS-007",
+   "nome": "Capsula ricaricabile in acciaio, due pezzi",
+   "slug": "capsula-ricaricabile",
+   "cat": [
+    "capsule"
+   ],
+   "prezzo": 29,
+   "sconto": 24,
+   "scorta": 35,
+   "voto": 4.6,
+   "recensioni": 154,
+   "evidenza": false,
+   "foto": [
+    "pexels-7243711.jpg",
+    "pexels-7243717.jpg"
+   ],
+   "punti": [
+    "Acciaio inox",
+    "Si riempie col nostro macinato",
+    "Dura anni",
+    "Niente rifiuti"
+   ],
+   "testo": "La capsula d’acciaio che si riempie col macinato per espresso: zero rifiuti, il caffè che volete.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il caffè nella busta con la valvola o nella scatola delle capsule, il biglietto della tostatura."
+  },
+  {
+   "sku": "RIS-008",
+   "nome": "Miscela Tribunali, un chilo",
+   "slug": "miscela-tribunali",
+   "cat": [
+    "grani"
+   ],
+   "prezzo": 26,
+   "sconto": 0,
+   "scorta": 50,
+   "voto": 4.9,
+   "recensioni": 640,
+   "evidenza": true,
+   "foto": [
+    "pexels-19162213.jpg",
+    "pexels-8218593.jpg"
+   ],
+   "punti": [
+    "La miscela della bottega",
+    "Tostata a legna",
+    "Macinata il giorno della spedizione",
+    "Il video dei chicchi"
+   ],
+   "testo": "La miscela che serviamo al banco da cinquant’anni: in grani, per espresso o per moka.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "macinatura",
+    "valori": [
+     "In grani",
+     "Per espresso",
+     "Per moka"
+    ],
+    "esaurite": []
+   },
+   "video": "pexels-video-20534643.mp4",
+   "poster": "pexels-video-20534643.jpg",
+   "dentro": "Il caffè nella busta con la valvola o nella scatola delle capsule, il biglietto della tostatura."
+  },
+  {
+   "sku": "RIS-009",
+   "nome": "Moka Napoletana, arabica, 250 g",
+   "slug": "moka-napoletana",
+   "cat": [
+    "grani"
+   ],
+   "prezzo": 9.5,
+   "sconto": 7.5,
+   "scorta": 70,
+   "voto": 4.7,
+   "recensioni": 512,
+   "evidenza": false,
+   "foto": [
+    "pexels-37510306.jpg",
+    "pexels-14792388.jpg"
+   ],
+   "punti": [
+    "Macinata per moka",
+    "Arabica 100%",
+    "Busta con la valvola",
+    "Tostata questa settimana"
+   ],
+   "testo": "La macinatura grossa per la moka: il caffè che sale piano e profuma la cucina.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "macinatura",
+    "valori": [
+     "Per moka",
+     "Per espresso"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il caffè nella busta con la valvola o nella scatola delle capsule, il biglietto della tostatura."
+  },
+  {
+   "sku": "RIS-010",
+   "nome": "Cold brew in bottiglia, sei pezzi",
+   "slug": "cold-brew",
+   "cat": [
+    "grani"
+   ],
+   "prezzo": 21,
+   "sconto": 0,
+   "scorta": 30,
+   "voto": 4.5,
+   "recensioni": 96,
+   "evidenza": false,
+   "foto": [
+    "pexels-18997241.jpg",
+    "pexels-16785688.jpg"
+   ],
+   "punti": [
+    "Infuso a freddo per 18 ore",
+    "Senza zucchero",
+    "Bottiglie da 250 ml",
+    "In frigo, con il ghiaccio"
+   ],
+   "testo": "Il caffè infuso a freddo per diciotto ore: morbido, senza amaro, da bere col ghiaccio.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il caffè nella busta con la valvola o nella scatola delle capsule, il biglietto della tostatura."
+  },
+  {
+   "sku": "RIS-011",
+   "nome": "Abbonamento Capsule, cento al mese",
+   "slug": "abbonamento-capsule",
+   "cat": [
+    "abbonamenti"
+   ],
+   "prezzo": 27,
+   "sconto": 0,
+   "scorta": 999,
+   "voto": 4.8,
+   "recensioni": 344,
+   "evidenza": true,
+   "foto": [
+    "pexels-8015467.jpg",
+    "pexels-9594423.jpg"
+   ],
+   "punti": [
+    "Cento capsule ogni mese",
+    "Si sceglie la miscela",
+    "Si sospende quando si vuole",
+    "Spedizione compresa"
+   ],
+   "testo": "Cento capsule a casa ogni mese, la miscela che volete: si sospende con un clic.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il caffè nella busta con la valvola o nella scatola delle capsule, il biglietto della tostatura."
+  },
+  {
+   "sku": "RIS-012",
+   "nome": "Abbonamento Grani, un chilo al mese",
+   "slug": "abbonamento-grani",
+   "cat": [
+    "abbonamenti"
+   ],
+   "prezzo": 24,
+   "sconto": 0,
+   "scorta": 999,
+   "voto": 4.8,
+   "recensioni": 201,
+   "evidenza": false,
+   "foto": [
+    "pexels-6079719.jpg",
+    "pexels-4820676.jpg"
+   ],
+   "punti": [
+    "Un chilo ogni mese",
+    "Tostato pochi giorni prima",
+    "Una miscela nuova ogni tanto",
+    "Spedizione compresa"
+   ],
+   "testo": "Un chilo di grani tostati pochi giorni prima, ogni mese.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il caffè nella busta con la valvola o nella scatola delle capsule, il biglietto della tostatura."
+  },
+  {
+   "sku": "RIS-013",
+   "nome": "Macchina Lucida, espresso a leva",
+   "slug": "macchina-lucida",
+   "cat": [
+    "macchine"
+   ],
+   "prezzo": 389,
+   "sconto": 329,
+   "scorta": 6,
+   "voto": 4.9,
+   "recensioni": 77,
+   "evidenza": true,
+   "foto": [
+    "pexels-6032786.jpg",
+    "pexels-6032787.jpg",
+    "pexels-29611242.jpg"
+   ],
+   "punti": [
+    "Acciaio lucido",
+    "A leva, a mano",
+    "Caldaia da un litro",
+    "Il video della leva"
+   ],
+   "testo": "La macchina a leva per chi vuole l’espresso del bar a casa: si impara in una settimana.",
+   "upsell": [],
+   "cross": [],
+   "video": "pexels-video-36285235.mp4",
+   "poster": "pexels-video-36285235.jpg",
+   "dentro": "Il caffè nella busta con la valvola o nella scatola delle capsule, il biglietto della tostatura."
+  },
+  {
+   "sku": "RIS-014",
+   "nome": "Macchina Gialla, per capsule",
+   "slug": "macchina-gialla",
+   "cat": [
+    "macchine"
+   ],
+   "prezzo": 149,
+   "sconto": 0,
+   "scorta": 10,
+   "voto": 4.5,
+   "recensioni": 120,
+   "evidenza": false,
+   "foto": [
+    "pexels-13696018.jpg"
+   ],
+   "punti": [
+    "Per le nostre capsule",
+    "Pronta in 25 secondi",
+    "Serbatoio da un litro",
+    "Gialla"
+   ],
+   "testo": "La macchina a capsule piccola e gialla: pronta in venticinque secondi.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il caffè nella busta con la valvola o nella scatola delle capsule, il biglietto della tostatura."
+  },
+  {
+   "sku": "RIS-015",
+   "nome": "Tazzine Vesuvio, set di sei",
+   "slug": "tazzine-vesuvio",
+   "cat": [
+    "tazzine"
+   ],
+   "prezzo": 36,
+   "sconto": 0,
+   "scorta": 25,
+   "voto": 4.8,
+   "recensioni": 290,
+   "evidenza": false,
+   "foto": [
+    "pexels-4195607.jpg",
+    "pexels-4195322.jpg",
+    "pexels-4195608.jpg"
+   ],
+   "punti": [
+    "Ceramica di Vietri",
+    "Parete spessa",
+    "Tengono il caldo",
+    "Sei colori"
+   ],
+   "testo": "Le tazzine spesse di Vietri: tengono il caffè caldo fino all’ultimo sorso.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il caffè nella busta con la valvola o nella scatola delle capsule, il biglietto della tostatura."
+  },
+  {
+   "sku": "RIS-016",
+   "nome": "Tazze da cappuccino, set di due",
+   "slug": "tazze-cappuccino",
+   "cat": [
+    "tazzine"
+   ],
+   "prezzo": 28,
+   "sconto": 0,
+   "scorta": 20,
+   "voto": 4.7,
+   "recensioni": 133,
+   "evidenza": false,
+   "foto": [
+    "pexels-12620633.jpg",
+    "pexels-459489.jpg",
+    "pexels-15447295.jpg"
+   ],
+   "punti": [
+    "Ceramica smaltata",
+    "180 ml",
+    "Per il latte art",
+    "Col piattino"
+   ],
+   "testo": "Le tazze larghe per il cappuccino e per disegnare col latte.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il caffè nella busta con la valvola o nella scatola delle capsule, il biglietto della tostatura."
+  },
+  {
+   "sku": "RIS-017",
+   "nome": "Scatola Napoli, tre miscele e due tazzine",
+   "slug": "scatola-napoli",
+   "cat": [
+    "regali"
+   ],
+   "prezzo": 49,
+   "sconto": 39,
+   "scorta": 15,
+   "voto": 4.9,
+   "recensioni": 258,
+   "evidenza": true,
+   "foto": [
+    "pexels-5994300.jpg",
+    "pexels-19791005.jpg"
+   ],
+   "punti": [
+    "Tre miscele in capsule",
+    "Due tazzine di Vietri",
+    "Il biglietto scritto a mano",
+    "Nella scatola col nastro"
+   ],
+   "testo": "Il regalo per chi beve caffè: tre miscele, due tazzine, il biglietto scritto a mano.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il caffè nella busta con la valvola o nella scatola delle capsule, il biglietto della tostatura."
+  },
+  {
+   "sku": "RIS-018",
+   "nome": "Kit Colazione, capsule e biscotti",
+   "slug": "kit-colazione",
+   "cat": [
+    "regali"
+   ],
+   "prezzo": 35,
+   "sconto": 0,
+   "scorta": 18,
+   "voto": 4.6,
+   "recensioni": 87,
+   "evidenza": false,
+   "foto": [
+    "pexels-27246443.jpg",
+    "pexels-34800842.jpg"
+   ],
+   "punti": [
+    "Cinquanta capsule Cremoso",
+    "Biscotti al burro",
+    "Due tazze",
+    "Nella scatola regalo"
+   ],
+   "testo": "La colazione da regalare: le capsule Cremoso, i biscotti al burro, due tazze.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il caffè nella busta con la valvola o nella scatola delle capsule, il biglietto della tostatura."
+  }
+ ],
+ "recensioni": [
+  [
+   5,
+   "Finalmente un caffè in capsula che sa di caffè. La Intenso è il bar di casa."
+  ],
+  [
+   5,
+   "Arrivato in due giorni, tostato da una settimana: si sente."
+  ],
+  [
+   4,
+   "Buonissimo, le capsule a volte si incastrano un po’ nella mia macchina."
+  ],
+  [
+   5,
+   "L’abbonamento è comodissimo, l’ho sospeso ad agosto senza problemi."
+  ],
+  [
+   5,
+   "La scatola Napoli regalata a mio padre: commosso."
+  ],
+  [
+   4,
+   "Ottimo, la Ristretto è davvero forte: va presa sul serio."
+  ],
+  [
+   5,
+   "Le tazzine di Vietri sono bellissime e tengono il caldo."
+  ],
+  [
+   3,
+   "Il cold brew è buono ma per me un po’ leggero."
+  ]
+ ],
+ "nomi": [
+  "Gennaro E.",
+  "Carmela R.",
+  "Salvatore P.",
+  "Rosaria M.",
+  "Ciro L.",
+  "Assunta D.",
+  "Pasquale F.",
+  "Titti C.",
+  "Mariano B.",
+  "Lucia V.",
+  "Antonio S.",
+  "Teresa G."
+ ]
+}

@@ -38,6 +38,7 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
         'show_compare'    => false,
         'show_rating_count' => false,
         'show_wishlist'   => false,
+        'vista_rapida'    => true,
         'mostra_scorta'   => false,
         'mostra_risparmio' => false,
         'marca_attributo' => '',
@@ -75,7 +76,8 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
 
         $cols         = max( 1, min( 6, absint( $s['columns'] ) ) );
         $cols_tablet  = max( 1, min( 4, absint( $s['columns_tablet'] ) ) );
-        $cols_mobile  = max( 1, min( 2, absint( $s['columns_mobile'] ) ) );
+        // fino a 4 sul telefono: le miniature piccole (solo foto) stanno in fila (1.4.910; prima al massimo 2)
+        $cols_mobile  = max( 1, min( 4, absint( $s['columns_mobile'] ) ) );
         $gap          = absint( $s['gap'] );
         $uid          = 'olo-woo-prod-' . wp_rand( 10000, 99999 );
 
@@ -162,6 +164,8 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
         $consegna     = trim( (string) ( $s['consegna_testo'] ?? '' ) );
         $scorta       = ! empty( $s['mostra_scorta'] );
         $wish         = ! empty( $s['show_wishlist'] );
+        // Le card che non vogliono il pulsante della Vista rapida (le miniature piccole): la tile Vista rapida le salta.
+        $qv_attr      = ( isset( $s['vista_rapida'] ) && ! $s['vista_rapida'] ) ? ' data-olo-qv="no"' : '';
         $evidenza     = trim( (string) ( $s['testo_evidenza'] ?? '' ) );
         $risparmio    = ! empty( $s['mostra_risparmio'] );
         $righe        = max( 0, min( 4, absint( $s['titolo_righe'] ?? 0 ) ) );
@@ -690,7 +694,7 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
             $avg_rating = $product->get_average_rating();
             $thumb_id   = get_post_thumbnail_id();
         ?>
-            <div class="olo-woo-card" data-product-id="<?php echo esc_attr( $product->get_id() ); ?>">
+            <div class="olo-woo-card" data-product-id="<?php echo esc_attr( $product->get_id() ); ?>"<?php echo $qv_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributo fisso ?>>
                 <?php if ( ! empty( $s['show_image'] ) ) : ?>
                 <div class="olo-woo-card-img">
                     <?php if ( $thumb_id ) : ?>

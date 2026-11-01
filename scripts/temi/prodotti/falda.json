@@ -1,0 +1,798 @@
+{
+ "tema": "falda",
+ "titolo_dentro": "Nella confezione",
+ "attributi": {
+  "misura": {
+   "nome": "Misura",
+   "termini": [
+    "55",
+    "56",
+    "57",
+    "58",
+    "59",
+    "60"
+   ]
+  }
+ },
+ "categorie": [
+  {
+   "slug": "feltri",
+   "nome": "Fedora e feltri",
+   "descrizione": "Il nero, il cammello, la tesa larga.",
+   "foto": "pexels-5698920.jpg"
+  },
+  {
+   "slug": "paglia",
+   "nome": "Paglie",
+   "descrizione": "Il panama, la paglietta, la rafia.",
+   "foto": "pexels-39275404.jpg"
+  },
+  {
+   "slug": "coppole",
+   "nome": "Coppole e baschi",
+   "descrizione": "Tweed, lana cotta, il basco rosso.",
+   "foto": "pexels-37578220.jpg"
+  },
+  {
+   "slug": "lana",
+   "nome": "Cuffie e sciarpe",
+   "descrizione": "Merino e lana, per la bora.",
+   "foto": "pexels-3738699.jpg"
+  },
+  {
+   "slug": "ombrelli",
+   "nome": "Ombrelli",
+   "descrizione": "Antivento, da città, trasparenti.",
+   "foto": "pexels-15171377.jpg"
+  }
+ ],
+ "prodotti": [
+  {
+   "sku": "FAL-001",
+   "nome": "Fedora in feltro di lana, nero",
+   "slug": "fedora-nero",
+   "cat": [
+    "feltri"
+   ],
+   "prezzo": 89,
+   "sconto": 75,
+   "scorta": 30,
+   "voto": 4.9,
+   "recensioni": 312,
+   "evidenza": true,
+   "foto": [
+    "pexels-5699021.jpg",
+    "pexels-7578351.jpg"
+   ],
+   "punti": [
+    "Feltro di lana, 100 grammi",
+    "Tesa 6 cm",
+    "Nastro gros-grain",
+    "Si rimette in forma, gratis"
+   ],
+   "testo": "Il fedora nero di tutti i giorni: feltro di lana, tesa da sei centimetri, il nastro gros-grain.",
+   "upsell": [],
+   "cross": [
+    "FAL-015",
+    "FAL-017"
+   ],
+   "varianti": {
+    "attributo": "misura",
+    "valori": [
+     "55",
+     "56",
+     "57",
+     "58",
+     "59",
+     "60"
+    ],
+    "esaurite": []
+   },
+   "video": "pexels-video-5699613.mp4",
+   "poster": "pexels-video-5699613.jpg",
+   "dentro": "Il cappello nella cappelliera di cartone, il nastrino per stringere, il biglietto della bottega."
+  },
+  {
+   "sku": "FAL-002",
+   "nome": "Fedora in feltro, cammello",
+   "slug": "fedora-cammello",
+   "cat": [
+    "feltri"
+   ],
+   "prezzo": 95,
+   "sconto": 0,
+   "scorta": 30,
+   "voto": 4.8,
+   "recensioni": 166,
+   "evidenza": false,
+   "foto": [
+    "pexels-5698920.jpg",
+    "pexels-5698983.jpg"
+   ],
+   "punti": [
+    "Feltro di lana",
+    "Colore cammello",
+    "Nastro tono su tono",
+    "Fodera in raso"
+   ],
+   "testo": "Il cammello che sta bene col cappotto blu e con quello grigio: feltro di lana, nastro tono su tono.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "misura",
+    "valori": [
+     "55",
+     "56",
+     "57",
+     "58",
+     "59",
+     "60"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il cappello nella cappelliera di cartone, il nastrino per stringere, il biglietto della bottega."
+  },
+  {
+   "sku": "FAL-003",
+   "nome": "Cappello a tesa larga, grigio perla",
+   "slug": "tesa-larga-grigio",
+   "cat": [
+    "feltri"
+   ],
+   "prezzo": 110,
+   "sconto": 0,
+   "scorta": 30,
+   "voto": 4.7,
+   "recensioni": 74,
+   "evidenza": false,
+   "foto": [
+    "pexels-6975408.jpg",
+    "pexels-18856744.jpg"
+   ],
+   "punti": [
+    "Feltro di pelo di coniglio",
+    "Tesa 8 cm",
+    "Nastro nero",
+    "Scatola cappelliera"
+   ],
+   "testo": "Il feltro più morbido, di pelo, con la tesa da otto centimetri: arriva nella cappelliera.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "misura",
+    "valori": [
+     "55",
+     "56",
+     "57",
+     "58",
+     "59",
+     "60"
+    ],
+    "esaurite": []
+   },
+   "video": "pexels-video-6975425.mp4",
+   "poster": "pexels-video-6975425.jpg",
+   "dentro": "Il cappello nella cappelliera di cartone, il nastrino per stringere, il biglietto della bottega."
+  },
+  {
+   "sku": "FAL-004",
+   "nome": "Cloche in feltro, nero",
+   "slug": "cloche-nero",
+   "cat": [
+    "feltri"
+   ],
+   "prezzo": 79,
+   "sconto": 0,
+   "scorta": 30,
+   "voto": 4.7,
+   "recensioni": 98,
+   "evidenza": false,
+   "foto": [
+    "pexels-9251126.jpg",
+    "pexels-6069956.jpg"
+   ],
+   "punti": [
+    "Feltro di lana",
+    "Tesa corta e morbida",
+    "Si piega di lato",
+    "Per le teste piccole"
+   ],
+   "testo": "La cloche degli anni Venti, con la tesa corta che si piega di lato.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "misura",
+    "valori": [
+     "55",
+     "56",
+     "57",
+     "58",
+     "59",
+     "60"
+    ],
+    "esaurite": [
+     "60"
+    ]
+   },
+   "dentro": "Il cappello nella cappelliera di cartone, il nastrino per stringere, il biglietto della bottega."
+  },
+  {
+   "sku": "FAL-005",
+   "nome": "Cappello in feltro, bordeaux",
+   "slug": "feltro-bordeaux",
+   "cat": [
+    "feltri"
+   ],
+   "prezzo": 85,
+   "sconto": 0,
+   "scorta": 30,
+   "voto": 4.8,
+   "recensioni": 121,
+   "evidenza": false,
+   "foto": [
+    "pexels-16115837.jpg",
+    "pexels-30404716.jpg"
+   ],
+   "punti": [
+    "Feltro di lana",
+    "Colore bordeaux",
+    "Nastro in tinta",
+    "Tesa 7 cm"
+   ],
+   "testo": "Il bordeaux del feltro, quello del nostro nome: per il cappotto cammello.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "misura",
+    "valori": [
+     "55",
+     "56",
+     "57",
+     "58",
+     "59",
+     "60"
+    ],
+    "esaurite": []
+   },
+   "video": "pexels-video-7820808.mp4",
+   "poster": "pexels-video-7820808.jpg",
+   "dentro": "Il cappello nella cappelliera di cartone, il nastrino per stringere, il biglietto della bottega."
+  },
+  {
+   "sku": "FAL-006",
+   "nome": "Panama con la fascia nera",
+   "slug": "panama-fascia-nera",
+   "cat": [
+    "paglia"
+   ],
+   "prezzo": 120,
+   "sconto": 0,
+   "scorta": 30,
+   "voto": 4.9,
+   "recensioni": 143,
+   "evidenza": true,
+   "foto": [
+    "pexels-39275404.jpg",
+    "pexels-7467786.jpg"
+   ],
+   "punti": [
+    "Paglia toquilla intrecciata a mano",
+    "Fascia nera",
+    "Si arrotola nel tubo",
+    "Dall’Ecuador"
+   ],
+   "testo": "Il panama vero, intrecciato a mano in Ecuador, con la fascia nera: si arrotola nel tubo per il viaggio.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "misura",
+    "valori": [
+     "55",
+     "56",
+     "57",
+     "58",
+     "59",
+     "60"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il cappello nella cappelliera di cartone, il nastrino per stringere, il biglietto della bottega."
+  },
+  {
+   "sku": "FAL-007",
+   "nome": "Paglia a tesa larga",
+   "slug": "paglia-tesa-larga",
+   "cat": [
+    "paglia"
+   ],
+   "prezzo": 59,
+   "sconto": 45,
+   "scorta": 30,
+   "voto": 4.7,
+   "recensioni": 266,
+   "evidenza": true,
+   "foto": [
+    "pexels-4738060.jpg",
+    "pexels-9064213.jpg"
+   ],
+   "punti": [
+    "Paglia naturale",
+    "Tesa 11 cm",
+    "Laccio sotto il mento",
+    "Per il mare e la campagna"
+   ],
+   "testo": "La tesa da undici centimetri che fa ombra davvero, col laccio per la bora d’estate.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "misura",
+    "valori": [
+     "55",
+     "56",
+     "57",
+     "58",
+     "59",
+     "60"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il cappello nella cappelliera di cartone, il nastrino per stringere, il biglietto della bottega."
+  },
+  {
+   "sku": "FAL-008",
+   "nome": "Paglietta col nastro",
+   "slug": "paglietta-nastro",
+   "cat": [
+    "paglia"
+   ],
+   "prezzo": 69,
+   "sconto": 0,
+   "scorta": 30,
+   "voto": 4.6,
+   "recensioni": 88,
+   "evidenza": false,
+   "foto": [
+    "pexels-36551109.jpg",
+    "pexels-29210958.jpg"
+   ],
+   "punti": [
+    "Paglia rigida",
+    "Cupola piatta",
+    "Nastro a righe",
+    "Per le domeniche"
+   ],
+   "testo": "La paglietta rigida dei gondolieri e delle regate, col nastro a righe.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "misura",
+    "valori": [
+     "55",
+     "56",
+     "57",
+     "58",
+     "59",
+     "60"
+    ],
+    "esaurite": [
+     "60"
+    ]
+   },
+   "dentro": "Il cappello nella cappelliera di cartone, il nastrino per stringere, il biglietto della bottega."
+  },
+  {
+   "sku": "FAL-009",
+   "nome": "Cappello da spiaggia in rafia",
+   "slug": "rafia-spiaggia",
+   "cat": [
+    "paglia"
+   ],
+   "prezzo": 39,
+   "sconto": 0,
+   "scorta": 30,
+   "voto": 4.5,
+   "recensioni": 154,
+   "evidenza": false,
+   "foto": [
+    "pexels-8879828.jpg",
+    "pexels-38689798.jpg"
+   ],
+   "punti": [
+    "Rafia intrecciata",
+    "Si piega in borsa",
+    "Tesa 10 cm",
+    "Taglia unica"
+   ],
+   "testo": "La rafia che si piega in borsa e torna come prima: per Barcola.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il cappello nella cappelliera di cartone, il nastrino per stringere, il biglietto della bottega."
+  },
+  {
+   "sku": "FAL-010",
+   "nome": "Coppola di tweed",
+   "slug": "coppola-tweed",
+   "cat": [
+    "coppole"
+   ],
+   "prezzo": 59,
+   "sconto": 0,
+   "scorta": 30,
+   "voto": 4.9,
+   "recensioni": 287,
+   "evidenza": true,
+   "foto": [
+    "pexels-15906278.jpg",
+    "pexels-18055802.jpg"
+   ],
+   "punti": [
+    "Tweed di lana",
+    "Cucita a Trieste",
+    "Fodera trapuntata",
+    "Non vola con la bora"
+   ],
+   "testo": "La coppola di tweed cucita qui: aderisce alla testa, con la bora non vola.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "misura",
+    "valori": [
+     "55",
+     "56",
+     "57",
+     "58",
+     "59",
+     "60"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il cappello nella cappelliera di cartone, il nastrino per stringere, il biglietto della bottega."
+  },
+  {
+   "sku": "FAL-011",
+   "nome": "Coppola in lana cotta, grigia",
+   "slug": "coppola-grigia",
+   "cat": [
+    "coppole"
+   ],
+   "prezzo": 49,
+   "sconto": 0,
+   "scorta": 30,
+   "voto": 4.7,
+   "recensioni": 131,
+   "evidenza": false,
+   "foto": [
+    "pexels-31108773.jpg",
+    "pexels-37578220.jpg"
+   ],
+   "punti": [
+    "Lana cotta",
+    "Grigio melange",
+    "Visiera corta",
+    "Leggera"
+   ],
+   "testo": "La lana cotta grigia, più leggera del tweed, con la visiera corta.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "misura",
+    "valori": [
+     "55",
+     "56",
+     "57",
+     "58",
+     "59",
+     "60"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il cappello nella cappelliera di cartone, il nastrino per stringere, il biglietto della bottega."
+  },
+  {
+   "sku": "FAL-012",
+   "nome": "Basco di lana, rosso",
+   "slug": "basco-rosso",
+   "cat": [
+    "coppole"
+   ],
+   "prezzo": 35,
+   "sconto": 28,
+   "scorta": 30,
+   "voto": 4.8,
+   "recensioni": 203,
+   "evidenza": false,
+   "foto": [
+    "pexels-12077063.jpg",
+    "pexels-32801810.jpg"
+   ],
+   "punti": [
+    "Lana merino follata",
+    "Rosso pieno",
+    "Taglia unica",
+    "Si porta di lato"
+   ],
+   "testo": "Il basco rosso di lana follata: si porta di lato, col cappotto scuro.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il cappello nella cappelliera di cartone, il nastrino per stringere, il biglietto della bottega."
+  },
+  {
+   "sku": "FAL-013",
+   "nome": "Cuffia a coste, ocra",
+   "slug": "cuffia-ocra",
+   "cat": [
+    "lana"
+   ],
+   "prezzo": 29,
+   "sconto": 0,
+   "scorta": 30,
+   "voto": 4.7,
+   "recensioni": 244,
+   "evidenza": false,
+   "foto": [
+    "pexels-3738699.jpg",
+    "pexels-5623700.jpg"
+   ],
+   "punti": [
+    "Lana merino",
+    "Coste larghe",
+    "Risvolto",
+    "Taglia unica"
+   ],
+   "testo": "La cuffia di merino a coste, col risvolto: l’ocra si vede anche nella nebbia.",
+   "upsell": [],
+   "cross": [],
+   "video": "pexels-video-7578133.mp4",
+   "poster": "pexels-video-7578133.jpg",
+   "dentro": "Il cappello nella cappelliera di cartone, il nastrino per stringere, il biglietto della bottega."
+  },
+  {
+   "sku": "FAL-014",
+   "nome": "Cuffia di merino, nera",
+   "slug": "cuffia-nera",
+   "cat": [
+    "lana"
+   ],
+   "prezzo": 32,
+   "sconto": 0,
+   "scorta": 30,
+   "voto": 4.8,
+   "recensioni": 176,
+   "evidenza": false,
+   "foto": [
+    "pexels-34311307.jpg",
+    "pexels-7585611.jpg"
+   ],
+   "punti": [
+    "Merino extrafine",
+    "Non punge",
+    "Senza risvolto",
+    "Taglia unica"
+   ],
+   "testo": "Il merino extrafine che non punge, nero, senza risvolto.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il cappello nella cappelliera di cartone, il nastrino per stringere, il biglietto della bottega."
+  },
+  {
+   "sku": "FAL-015",
+   "nome": "Sciarpa di merino, azzurra",
+   "slug": "sciarpa-azzurra",
+   "cat": [
+    "lana"
+   ],
+   "prezzo": 45,
+   "sconto": 0,
+   "scorta": 30,
+   "voto": 4.8,
+   "recensioni": 152,
+   "evidenza": false,
+   "foto": [
+    "pexels-10453034.jpg",
+    "pexels-6633534.jpg"
+   ],
+   "punti": [
+    "Merino",
+    "180 × 30 cm",
+    "Frange corte",
+    "Azzurro del golfo"
+   ],
+   "testo": "L’azzurro del golfo d’inverno, in merino: un metro e ottanta da girare due volte.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il cappello nella cappelliera di cartone, il nastrino per stringere, il biglietto della bottega."
+  },
+  {
+   "sku": "FAL-016",
+   "nome": "Sciarpa a quadri",
+   "slug": "sciarpa-quadri",
+   "cat": [
+    "lana"
+   ],
+   "prezzo": 55,
+   "sconto": 44,
+   "scorta": 30,
+   "voto": 4.7,
+   "recensioni": 119,
+   "evidenza": false,
+   "foto": [
+    "pexels-3757706.jpg",
+    "pexels-6633369.jpg"
+   ],
+   "punti": [
+    "Lana d’agnello",
+    "Quadri scozzesi",
+    "190 × 35 cm",
+    "Frange lunghe"
+   ],
+   "testo": "I quadri in lana d’agnello, larghi e caldi: per le mattine di bora scura.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il cappello nella cappelliera di cartone, il nastrino per stringere, il biglietto della bottega."
+  },
+  {
+   "sku": "FAL-017",
+   "nome": "Ombrello antivento, petrolio",
+   "slug": "ombrello-antivento",
+   "cat": [
+    "ombrelli"
+   ],
+   "prezzo": 39,
+   "sconto": 29,
+   "scorta": 30,
+   "voto": 4.9,
+   "recensioni": 498,
+   "evidenza": true,
+   "foto": [
+    "pexels-15171377.jpg",
+    "pexels-5358118.jpg"
+   ],
+   "punti": [
+    "Stecche in fibra di vetro",
+    "Si rovescia e torna",
+    "Apertura automatica",
+    "Collaudato con la bora a 100"
+   ],
+   "testo": "L’ombrello che si rovescia con la raffica e torna com’era: collaudato in molo Audace.",
+   "upsell": [],
+   "cross": [],
+   "video": "pexels-video-8323023.mp4",
+   "poster": "pexels-video-8323023.jpg",
+   "dentro": "Il cappello nella cappelliera di cartone, il nastrino per stringere, il biglietto della bottega."
+  },
+  {
+   "sku": "FAL-018",
+   "nome": "Ombrello da città, manico in legno",
+   "slug": "ombrello-citta",
+   "cat": [
+    "ombrelli"
+   ],
+   "prezzo": 69,
+   "sconto": 0,
+   "scorta": 30,
+   "voto": 4.8,
+   "recensioni": 141,
+   "evidenza": false,
+   "foto": [
+    "pexels-13850641.jpg",
+    "pexels-30504807.jpg"
+   ],
+   "punti": [
+    "Manico in castagno curvato",
+    "Otto stecche d’acciaio",
+    "Tela antigoccia",
+    "Puntale in ottone"
+   ],
+   "testo": "Il bastone da città: il manico in castagno curvato a vapore, otto stecche, il puntale d’ottone.",
+   "upsell": [],
+   "cross": [],
+   "video": "pexels-video-31365792.mp4",
+   "poster": "pexels-video-31365792.jpg",
+   "dentro": "Il cappello nella cappelliera di cartone, il nastrino per stringere, il biglietto della bottega."
+  },
+  {
+   "sku": "FAL-019",
+   "nome": "Ombrello trasparente a cupola",
+   "slug": "ombrello-trasparente",
+   "cat": [
+    "ombrelli"
+   ],
+   "prezzo": 25,
+   "sconto": 0,
+   "scorta": 30,
+   "voto": 4.6,
+   "recensioni": 233,
+   "evidenza": false,
+   "foto": [
+    "pexels-32442106.jpg",
+    "pexels-10206432.jpg"
+   ],
+   "punti": [
+    "A cupola, scende sulle spalle",
+    "Si vede attraverso",
+    "Manico a uncino",
+    "Per la città"
+   ],
+   "testo": "La cupola trasparente che scende sulle spalle: si vede dove si va.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il cappello nella cappelliera di cartone, il nastrino per stringere, il biglietto della bottega."
+  },
+  {
+   "sku": "FAL-020",
+   "nome": "Ombrello pieghevole a fiori",
+   "slug": "ombrello-fiori",
+   "cat": [
+    "ombrelli"
+   ],
+   "prezzo": 22,
+   "sconto": 0,
+   "scorta": 30,
+   "voto": 4.5,
+   "recensioni": 167,
+   "evidenza": false,
+   "foto": [
+    "pexels-31215155.jpg",
+    "pexels-12708083.jpg"
+   ],
+   "punti": [
+    "Pieghevole, 24 cm chiuso",
+    "Fodero",
+    "Tela a fiori",
+    "Per la borsa"
+   ],
+   "testo": "Ventiquattro centimetri chiuso, nel suo fodero: in borsa per quando cambia il tempo.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il cappello nella cappelliera di cartone, il nastrino per stringere, il biglietto della bottega."
+  }
+ ],
+ "recensioni": [
+  [
+   5,
+   "Il fedora calza perfetto, la misura era quella giusta."
+  ],
+  [
+   5,
+   "L’ombrello antivento ha retto la bora sul molo. Incredibile."
+  ],
+  [
+   4,
+   "Bellissimo, ma la scatola cappelliera è arrivata un po’ ammaccata."
+  ],
+  [
+   5,
+   "La coppola non vola, finalmente."
+  ],
+  [
+   5,
+   "Mi hanno rimesso in forma il cappello del nonno."
+  ],
+  [
+   4,
+   "Ottima sciarpa, il colore dal vivo è un po’ più scuro."
+  ],
+  [
+   5,
+   "Il panama arrotolato nel tubo è tornato perfetto."
+  ],
+  [
+   3,
+   "Bello, ma la 57 per me era stretta: l’ho cambiata gratis."
+  ]
+ ],
+ "nomi": [
+  "Marco D.",
+  "Giulia S.",
+  "Lorenzo P.",
+  "Francesca R.",
+  "Tommaso B.",
+  "Beatrice C.",
+  "Edoardo F.",
+  "Aurora M.",
+  "Leonardo T.",
+  "Sofia G.",
+  "Mattia V.",
+  "Greta L."
+ ]
+}

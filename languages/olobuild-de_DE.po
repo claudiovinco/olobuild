@@ -49072,3 +49072,375 @@ msgstr "Die wachsende Pflanze"
 #: includes/class-theme-importer.php
 msgid "La porta che si apre"
 msgstr "Die Tür, die sich öffnet"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Cursore di questa pagina"
+msgstr "Cursor dieser Seite"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Il cursore che segue il mouse in tutto il sito, al posto della freccia. Ogni pagina può sceglierne un altro in «Cursore di questa pagina». Su telefoni e tablet, e nel canvas del builder, resta quello di sistema."
+msgstr "Der Cursor, der auf der ganzen Website der Maus folgt, statt des Pfeils. Jede Seite kann unter „Cursor dieser Seite“ einen anderen wählen. Auf Smartphones und Tablets und im Canvas des Builders bleibt der des Systems."
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Il cursore che segue il mouse in questa pagina. «Come il sito» usa il Cursore del sito qui sopra. Si salva col tasto Salva del template."
+msgstr "Der Cursor, der auf dieser Seite der Maus folgt. „Wie die Website“ verwendet den Cursor der Website oben. Er wird mit der Schaltfläche Speichern des Templates gespeichert."
+
+#: includes/class-woo-video-prodotto.php
+msgid "Video del prodotto"
+msgstr "Produktvideo"
+
+#: includes/class-woo-video-prodotto.php
+msgid "Copertina del video"
+msgstr "Videocover"
+
+#: includes/tiles/class-woo-product-gallery-slider-tile.php
+msgid "video"
+msgstr "Video"
+
+#: src/config/elements/woo_product_gallery_slider.js
+msgid "Mostra il video del prodotto"
+msgstr "Produktvideo anzeigen"
+
+#: src/config/elements/woo_product_gallery_slider.js
+msgid "Posizione del video"
+msgstr "Position des Videos"
+
+#: src/config/elements/woo_product_gallery_slider.js
+msgid "Dopo la prima foto"
+msgstr "Nach dem ersten Foto"
+
+#: src/config/elements/woo_product_gallery_slider.js
+msgid "Per primo"
+msgstr "Zuerst"
+
+#: includes/class-woo-video-prodotto.php
+msgid "Un video della libreria (mp4) o un link YouTube o Vimeo. La Gallery Prodotto WC di OLObuild lo mette fra le foto e lo apre con l’audio nella finestra della galleria."
+msgstr "Ein Video aus der Mediathek (mp4) oder ein YouTube- oder Vimeo-Link. Die WC-Produktgalerie von OLObuild zeigt es zwischen den Fotos und öffnet es mit Ton im Galeriefenster."
+
+#: includes/class-woo-video-prodotto.php
+msgid "L’immagine della miniatura del video. Vuoto = la foto principale del prodotto."
+msgstr "Das Bild für die Miniatur des Videos. Leer = das Hauptfoto des Produkts."
+
+#: src/config/elements/woo_product_gallery_slider.js
+msgid "Il video scelto nella scheda del prodotto in WooCommerce (campo «Video del prodotto»): sta fra le foto col triangolo sulla miniatura, nella foto grande gira senza audio e nella finestra della galleria parte con l’audio e i comandi. Un prodotto senza video mostra solo le foto."
+msgstr "Das im WooCommerce-Produkt gewählte Video (Feld „Produktvideo“): Es steht zwischen den Fotos mit dem Dreieck auf der Miniatur, läuft im großen Foto ohne Ton und startet im Galeriefenster mit Ton und Steuerung. Ein Produkt ohne Video zeigt nur die Fotos."
+
+#: includes/tiles/class-woo-addtocart-tile.php
+msgid "Esaurita"
+msgstr "Ausverkauft"
+
+#: src/config/cursori.js
+msgid "Metro da sarta"
+msgstr "Schneidermaßband"
+
+#: src/config/cursori.js
+msgid "Perla"
+msgstr "Perle"
+
+#: src/config/cursori.js
+msgid "Farina (uno sbuffo al clic)"
+msgstr "Mehl (eine Wolke beim Klick)"
+
+#: src/config/cursori.js
+msgid "Ombra lunga"
+msgstr "Langer Schatten"
+
+#: src/config/cursori.js
+msgid "Cartellino del prezzo"
+msgstr "Preisschild"
+
+#: includes/class-theme-importer.php
+msgid "Le colonne in controsenso"
+msgstr "Die gegenläufigen Spalten"
+
+#: includes/class-theme-importer.php
+msgid "La routine in tre lastre"
+msgstr "Die Routine in drei Glasscheiben"
+
+#: includes/class-theme-importer.php
+msgid "La scatola che si apre"
+msgstr "Die Schachtel, die sich öffnet"
+
+#: includes/class-theme-importer.php
+msgid "La stanza che si avvicina"
+msgstr "Der Raum, der näher kommt"
+
+#: includes/class-theme-importer.php
+msgid "Il tabellone delle partenze"
+msgstr "Die Abfahrtstafel"
+
+#: includes/class-theme-importer.php
+msgid "Le offerte della collezione"
+msgstr "Die Angebote der Kollektion"
+
+#: includes/class-theme-importer.php
+msgid "Le offerte della routine"
+msgstr "Die Angebote der Pflegeroutine"
+
+#: includes/class-theme-importer.php
+msgid "Le offerte della bottega"
+msgstr "Die Angebote des Ladens"
+
+#: includes/class-theme-importer.php
+msgid "Le offerte per la casa"
+msgstr "Angebote für das Zuhause"
+
+#: includes/class-theme-importer.php
+msgid "Le offerte del giorno"
+msgstr "Die Angebote des Tages"
+
+#: includes/class-theme-importer.php
+msgid "Le offerte lampo"
+msgstr "Blitzangebote"
+
+#: includes/class-theme-importer.php
+msgid "Le nuove opere"
+msgstr "Die neuen Werke"
+
+#: src/config/cursori.js
+msgid "Fibbia"
+msgstr "Schnalle"
+
+#: src/config/cursori.js
+msgid "Paillettes (al clic una manciata)"
+msgstr "Pailletten (eine Handvoll beim Klick)"
+
+#: src/config/cursori.js
+msgid "Laccio da scarpa"
+msgstr "Schnürsenkel"
+
+#: includes/class-theme-importer.php
+msgid "La giornata in borse"
+msgstr "Ein Tag in Taschen"
+
+#: includes/class-theme-importer.php
+msgid "Il sipario"
+msgstr "Der Vorhang"
+
+#: includes/class-theme-importer.php
+msgid "Il passo"
+msgstr "Der Schritt"
+
+#: src/config/cursori.js
+msgid "Chicco di caffè (al clic se ne spargono)"
+msgstr "Kaffeebohne (beim Klick verstreut)"
+
+#: src/config/cursori.js
+msgid "Stecca da biliardo (al clic tira)"
+msgstr "Billardqueue (stößt beim Klick)"
+
+#: src/config/cursori.js
+msgid "Peperoncino (al clic i fiocchi)"
+msgstr "Chili (Flocken beim Klick)"
+
+#: includes/class-theme-importer.php
+msgid "La scala dell’intensità"
+msgstr "Die Intensitätsskala"
+
+#: includes/class-theme-importer.php
+msgid "Il colpo d’apertura"
+msgstr "Der Eröffnungsstoß"
+
+#: includes/class-theme-importer.php
+msgid "Il dürüm"
+msgstr "Der Dürüm"
+
+#: src/config/cursori.js
+msgid "Pennino (scrive in corsivo)"
+msgstr "Füllerfeder (schreibt Schreibschrift)"
+
+#: src/config/cursori.js
+msgid "Ombrello (si chiude sui link)"
+msgstr "Regenschirm (schließt sich über Links)"
+
+#: src/config/cursori.js
+msgid "Trottola"
+msgstr "Kreisel"
+
+#: src/config/cursori.js
+msgid "Calice (il vino ondeggia)"
+msgstr "Weinglas (der Wein schwappt)"
+
+#: includes/class-theme-importer.php
+msgid "La lettera"
+msgstr "Der Brief"
+
+#: includes/class-theme-importer.php
+msgid "Il barometro"
+msgstr "Das Barometer"
+
+#: includes/class-theme-importer.php
+msgid "Le costruzioni"
+msgstr "Die Bauklötze"
+
+#: includes/class-theme-importer.php
+msgid "Quattro calici"
+msgstr "Vier Gläser"
+
+#: includes/tiles/class-themeshowcase-tile.php
+msgid "Cerca un tema"
+msgstr "Ein Theme suchen"
+
+#: includes/tiles/class-themeshowcase-tile.php
+msgid "Cerca un tema: nome, settore, effetto…"
+msgstr "Theme suchen: Name, Branche, Effekt…"
+
+#: includes/tiles/class-themeshowcase-tile.php
+msgid "Azzera la ricerca"
+msgstr "Suche löschen"
+
+#: includes/tiles/class-themeshowcase-tile.php
+msgid "Nessun tema per «%s»."
+msgstr "Kein Theme für „%s“."
+
+#: includes/tiles/class-themeshowcase-tile.php
+msgid "Nessun tema con questi filtri."
+msgstr "Kein Theme mit diesen Filtern."
+
+#: includes/tiles/class-themeshowcase-tile.php
+msgid "Mostra tutti i temi"
+msgstr "Alle Themes zeigen"
+
+#: src/config/elements/themeshowcase.js
+msgid "Casella di ricerca"
+msgstr "Suchfeld"
+
+#: src/config/elements/themeshowcase.js
+msgid "Sopra i filtri: cerca nel nome, nella categoria, nell'effetto e nelle parole chiave dei temi, senza badare ad accenti e maiuscole. Si somma ai filtri."
+msgstr "Über den Filtern: sucht in Name, Kategorie, Effekt und Schlüsselwörtern der Themes, ohne auf Akzente und Großschreibung zu achten. Wirkt zusammen mit den Filtern."
+
+#: src/config/elements/themeshowcase.js
+msgid "Testo nella casella"
+msgstr "Text im Feld"
+
+#: src/config/elements/themeshowcase.js
+msgid "Allineamento filtri e ricerca"
+msgstr "Ausrichtung von Filtern und Suche"
+
+#: src/config/elements/woo_products.js
+msgid "Vista rapida sulle card"
+msgstr "Schnellansicht auf den Karten"
+
+#: src/config/elements/woo_products.js
+msgid "Il pulsante della tile Vista rapida sulla foto di ogni prodotto. Spento, queste card restano senza: utile per le miniature piccole, dove il pulsante coprirebbe la foto."
+msgstr "Die Schaltfläche der Kachel Schnellansicht auf jedem Produktfoto. Ausgeschaltet bleiben diese Karten ohne: nützlich bei kleinen Vorschaubildern, wo die Schaltfläche das Foto verdecken würde."
+
+#: src/config/cursori.js
+msgid "Elastico (si tende e si ritira)"
+msgstr "Gummiband (dehnt sich und zieht sich zurück)"
+
+#: src/config/cursori.js
+msgid "Respiro (un cerchio che respira)"
+msgstr "Atem (ein atmender Kreis)"
+
+#: src/config/cursori.js
+msgid "Luna (cambia fase con la strada)"
+msgstr "Mond (wechselt die Phase mit dem Weg)"
+
+#: src/config/cursori.js
+msgid "Volante (sterza)"
+msgstr "Lenkrad (lenkt)"
+
+#: src/config/cursori.js
+msgid "Messa a fuoco (gli angoli stringono sui link)"
+msgstr "Fokus (die Ecken ziehen sich um Links zusammen)"
+
+#: src/config/cursori.js
+msgid "Quota (le misure del disegno)"
+msgstr "Bemaßung (die Maße der Zeichnung)"
+
+#: src/config/cursori.js
+msgid "Chiave (gira sui link)"
+msgstr "Schlüssel (dreht sich über Links)"
+
+#: src/config/cursori.js
+msgid "Riflesso nell’acqua"
+msgstr "Spiegelung im Wasser"
+
+#: src/config/cursori.js
+msgid "Battito (il monitor del cuore)"
+msgstr "Herzschlag (der Herzmonitor)"
+
+#: src/config/cursori.js
+msgid "Scodinzolo"
+msgstr "Schwanzwedeln"
+
+#: src/config/cursori.js
+msgid "Pioggerella"
+msgstr "Nieselregen"
+
+#: src/config/cursori.js
+msgid "Ugello (il filo della stampa 3D)"
+msgstr "Düse (der Faden des 3D-Drucks)"
+
+#: src/config/cursori.js
+msgid "Passo passo (scatta sulla griglia)"
+msgstr "Schrittmotor (rastet im Raster ein)"
+
+#: src/config/cursori.js
+msgid "Mosaico (tessere che si girano)"
+msgstr "Mosaik (Steinchen, die sich umdrehen)"
+
+#: src/config/cursori.js
+msgid "Nappa (oscilla come un pendolo)"
+msgstr "Quaste (schwingt wie ein Pendel)"
+
+#: includes/class-theme-importer.php
+msgid "La schiena che si raddrizza"
+msgstr "Der Rücken, der sich aufrichtet"
+
+#: includes/class-theme-importer.php
+msgid "Il cerchio che respira"
+msgstr "Der atmende Kreis"
+
+#: includes/class-theme-importer.php
+msgid "La luna che cresce"
+msgstr "Der zunehmende Mond"
+
+#: includes/class-theme-importer.php
+msgid "Il viaggio sulla carta"
+msgstr "Die Reise auf der Karte"
+
+#: includes/class-theme-importer.php
+msgid "Il ciak che si chiude"
+msgstr "Die Filmklappe schlägt zu"
+
+#: includes/class-theme-importer.php
+msgid "La pianta che si alza"
+msgstr "Der Grundriss, der sich aufrichtet"
+
+#: includes/class-theme-importer.php
+msgid "L’insegna che si gira"
+msgstr "Das Schild, das sich dreht"
+
+#: includes/class-theme-importer.php
+msgid "Il riflesso nel lago"
+msgstr "Die Spiegelung im See"
+
+#: includes/class-theme-importer.php
+msgid "Il lampeggiante"
+msgstr "Das Blinklicht"
+
+#: includes/class-theme-importer.php
+msgid "Il mazzo delle adozioni"
+msgstr "Der Stapel der Adoptionen"
+
+#: includes/class-theme-importer.php
+msgid "La semina"
+msgstr "Die Aussaat"
+
+#: includes/class-theme-importer.php
+msgid "Il vaso stampato strato per strato"
+msgstr "Die Vase, Schicht für Schicht gedruckt"
+
+#: includes/class-theme-importer.php
+msgid "Il braccio robotico"
+msgstr "Der Roboterarm"
+
+#: includes/class-theme-importer.php
+msgid "Il pavimento che si gira"
+msgstr "Der Boden, der sich umdreht"
+
+#: includes/class-theme-importer.php
+msgid "Il sipario di velluto"
+msgstr "Der Samtvorhang"

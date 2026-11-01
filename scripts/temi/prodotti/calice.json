@@ -1,0 +1,746 @@
+{
+ "tema": "calice",
+ "titolo_dentro": "Nella confezione",
+ "attributi": {
+  "astuccio": {
+   "nome": "Astuccio",
+   "termini": [
+    "Senza astuccio",
+    "Astuccio di legno"
+   ]
+  }
+ },
+ "categorie": [
+  {
+   "slug": "rossi",
+   "nome": "Rossi",
+   "descrizione": "Chianti, Brunello, Nobile, il fiasco.",
+   "foto": "pexels-8473140.jpg"
+  },
+  {
+   "slug": "bianchi",
+   "nome": "Bianchi",
+   "descrizione": "Vernaccia, Vermentino, l’anfora.",
+   "foto": "pexels-8472887.jpg"
+  },
+  {
+   "slug": "bollicine",
+   "nome": "Bollicine",
+   "descrizione": "Metodo classico, rosé, extra dry.",
+   "foto": "pexels-9822760.jpg"
+  },
+  {
+   "slug": "rosati",
+   "nome": "Rosati e da dessert",
+   "descrizione": "Il rosato di Toscana, il Vin Santo.",
+   "foto": "pexels-34400995.jpg"
+  },
+  {
+   "slug": "regali",
+   "nome": "Cassette e regali",
+   "descrizione": "Le cassette, le confezioni, la degustazione.",
+   "foto": "pexels-4877844.jpg"
+  },
+  {
+   "slug": "dispensa",
+   "nome": "Calici e dispensa",
+   "descrizione": "I calici, il cavatappi, il tagliere.",
+   "foto": "pexels-9179281.jpg"
+  }
+ ],
+ "prodotti": [
+  {
+   "sku": "CAL-001",
+   "nome": "Chianti Classico 2022",
+   "slug": "chianti-classico-2022",
+   "cat": [
+    "rossi"
+   ],
+   "prezzo": 19.9,
+   "sconto": 14.9,
+   "scorta": 60,
+   "voto": 4.8,
+   "recensioni": 412,
+   "evidenza": true,
+   "foto": [
+    "pexels-8473179.jpg",
+    "pexels-8473175.jpg"
+   ],
+   "punti": [
+    "Sangiovese di Castellina",
+    "Rubino, viola e ciliegia",
+    "Dodici mesi in botte grande",
+    "Con la ribollita"
+   ],
+   "testo": "Il Chianti di Castellina: rubino vivo, viola e ciliegia, la bistecca e la ribollita.",
+   "upsell": [],
+   "cross": [
+    "CAL-020",
+    "CAL-018"
+   ],
+   "varianti": {
+    "attributo": "astuccio",
+    "valori": [
+     "Senza astuccio",
+     "Astuccio di legno"
+    ],
+    "esaurite": []
+   },
+   "video": "pexels-video-10163756.mp4",
+   "poster": "pexels-video-10163756.jpg",
+   "dentro": "La bottiglia nell’imballo di cartone sagomato, l’astuccio se l’avete scelto, il biglietto della cantina."
+  },
+  {
+   "sku": "CAL-002",
+   "nome": "Brunello di Montalcino 2020",
+   "slug": "brunello-2020",
+   "cat": [
+    "rossi"
+   ],
+   "prezzo": 54,
+   "sconto": 0,
+   "scorta": 60,
+   "voto": 4.9,
+   "recensioni": 233,
+   "evidenza": true,
+   "foto": [
+    "pexels-8473140.jpg",
+    "pexels-8472744.jpg"
+   ],
+   "punti": [
+    "Sangiovese grosso",
+    "Granato, prugna e tabacco",
+    "Tre anni in botte",
+    "Da aprire un’ora prima"
+   ],
+   "testo": "Il Brunello dell’annata calda: granato, prugna e tabacco, da aprire un’ora prima.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "astuccio",
+    "valori": [
+     "Senza astuccio",
+     "Astuccio di legno"
+    ],
+    "esaurite": []
+   },
+   "video": "pexels-video-10040032.mp4",
+   "poster": "pexels-video-10040032.jpg",
+   "dentro": "La bottiglia nell’imballo di cartone sagomato, l’astuccio se l’avete scelto, il biglietto della cantina."
+  },
+  {
+   "sku": "CAL-003",
+   "nome": "Rosso di Montalcino 2023",
+   "slug": "rosso-montalcino-2023",
+   "cat": [
+    "rossi"
+   ],
+   "prezzo": 24,
+   "sconto": 0,
+   "scorta": 60,
+   "voto": 4.7,
+   "recensioni": 176,
+   "evidenza": false,
+   "foto": [
+    "pexels-8472740.jpg",
+    "pexels-8473210.jpg"
+   ],
+   "punti": [
+    "Sangiovese grosso",
+    "Ciliegia e fiori",
+    "Un anno in botte",
+    "Il fratello giovane del Brunello"
+   ],
+   "testo": "Il fratello giovane del Brunello: la stessa vigna, un anno in botte, da bere adesso.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "astuccio",
+    "valori": [
+     "Senza astuccio",
+     "Astuccio di legno"
+    ],
+    "esaurite": []
+   },
+   "dentro": "La bottiglia nell’imballo di cartone sagomato, l’astuccio se l’avete scelto, il biglietto della cantina."
+  },
+  {
+   "sku": "CAL-004",
+   "nome": "Nobile di Montepulciano 2021",
+   "slug": "nobile-2021",
+   "cat": [
+    "rossi"
+   ],
+   "prezzo": 26,
+   "sconto": 22,
+   "scorta": 60,
+   "voto": 4.8,
+   "recensioni": 143,
+   "evidenza": false,
+   "foto": [
+    "pexels-8473177.jpg",
+    "pexels-28826629.jpg"
+   ],
+   "punti": [
+    "Prugnolo gentile",
+    "Mora e spezie",
+    "Due anni in legno",
+    "Con l’arrosto"
+   ],
+   "testo": "Il prugnolo gentile di Montepulciano: mora e spezie, per l’arrosto della domenica.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "astuccio",
+    "valori": [
+     "Senza astuccio",
+     "Astuccio di legno"
+    ],
+    "esaurite": []
+   },
+   "dentro": "La bottiglia nell’imballo di cartone sagomato, l’astuccio se l’avete scelto, il biglietto della cantina."
+  },
+  {
+   "sku": "CAL-005",
+   "nome": "Rosso di Toscana in barrique, «Torre»",
+   "slug": "rosso-torre",
+   "cat": [
+    "rossi"
+   ],
+   "prezzo": 39,
+   "sconto": 0,
+   "scorta": 60,
+   "voto": 4.7,
+   "recensioni": 88,
+   "evidenza": false,
+   "foto": [
+    "pexels-18737012.jpg",
+    "pexels-30557566.jpg"
+   ],
+   "punti": [
+    "Sangiovese e merlot",
+    "Diciotto mesi in barrique",
+    "Morbido e scuro",
+    "Seimila bottiglie"
+   ],
+   "testo": "Sangiovese e merlot in barrique: il rosso scuro e morbido delle cene lunghe.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La bottiglia nell’imballo di cartone sagomato, l’astuccio se l’avete scelto, il biglietto della cantina."
+  },
+  {
+   "sku": "CAL-006",
+   "nome": "Il fiasco della casa, rosso, 1,5 l",
+   "slug": "fiasco-casa",
+   "cat": [
+    "rossi"
+   ],
+   "prezzo": 12,
+   "sconto": 0,
+   "scorta": 60,
+   "voto": 4.6,
+   "recensioni": 305,
+   "evidenza": false,
+   "foto": [
+    "pexels-14169599.jpg",
+    "pexels-3937673.jpg"
+   ],
+   "punti": [
+    "Un litro e mezzo",
+    "Nella paglia",
+    "Sangiovese e canaiolo",
+    "Per la tavola di tutti i giorni"
+   ],
+   "testo": "Il fiasco impagliato da un litro e mezzo: il rosso di tutti i giorni, per la tavola lunga.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La bottiglia nell’imballo di cartone sagomato, l’astuccio se l’avete scelto, il biglietto della cantina."
+  },
+  {
+   "sku": "CAL-007",
+   "nome": "Vernaccia di San Gimignano 2024",
+   "slug": "vernaccia-2024",
+   "cat": [
+    "bianchi"
+   ],
+   "prezzo": 15,
+   "sconto": 0,
+   "scorta": 60,
+   "voto": 4.8,
+   "recensioni": 221,
+   "evidenza": true,
+   "foto": [
+    "pexels-8472887.jpg",
+    "pexels-8472730.jpg"
+   ],
+   "punti": [
+    "Vernaccia",
+    "Paglierino coi riflessi verdi",
+    "Mela e mandorla",
+    "Coi crostini"
+   ],
+   "testo": "La Vernaccia dalle torri: paglierina, mela e mandorla amara, coi crostini neri.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "astuccio",
+    "valori": [
+     "Senza astuccio",
+     "Astuccio di legno"
+    ],
+    "esaurite": []
+   },
+   "dentro": "La bottiglia nell’imballo di cartone sagomato, l’astuccio se l’avete scelto, il biglietto della cantina."
+  },
+  {
+   "sku": "CAL-008",
+   "nome": "Vermentino di Toscana 2024",
+   "slug": "vermentino-2024",
+   "cat": [
+    "bianchi"
+   ],
+   "prezzo": 13.5,
+   "sconto": 0,
+   "scorta": 60,
+   "voto": 4.6,
+   "recensioni": 167,
+   "evidenza": false,
+   "foto": [
+    "pexels-8472929.jpg",
+    "pexels-8472735.jpg"
+   ],
+   "punti": [
+    "Vermentino della costa",
+    "Salino",
+    "Agrumi e macchia",
+    "Col pesce"
+   ],
+   "testo": "Il Vermentino della costa: salino, agrumi e macchia mediterranea, per il pesce.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La bottiglia nell’imballo di cartone sagomato, l’astuccio se l’avete scelto, il biglietto della cantina."
+  },
+  {
+   "sku": "CAL-009",
+   "nome": "Bianco macerato in anfora",
+   "slug": "bianco-anfora",
+   "cat": [
+    "bianchi"
+   ],
+   "prezzo": 29,
+   "sconto": 0,
+   "scorta": 60,
+   "voto": 4.5,
+   "recensioni": 64,
+   "evidenza": false,
+   "foto": [
+    "pexels-7022837.jpg",
+    "pexels-3019019.jpg"
+   ],
+   "punti": [
+    "Trebbiano e malvasia",
+    "Sei mesi in anfora",
+    "Ambrato, sulle bucce",
+    "Per chi cerca altro"
+   ],
+   "testo": "Il bianco lasciato sulle bucce in anfora: ambrato, tannico, per chi cerca altro.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La bottiglia nell’imballo di cartone sagomato, l’astuccio se l’avete scelto, il biglietto della cantina."
+  },
+  {
+   "sku": "CAL-010",
+   "nome": "Metodo classico brut, 36 mesi",
+   "slug": "metodo-classico-36",
+   "cat": [
+    "bollicine"
+   ],
+   "prezzo": 32,
+   "sconto": 0,
+   "scorta": 60,
+   "voto": 4.9,
+   "recensioni": 198,
+   "evidenza": true,
+   "foto": [
+    "pexels-3616954.jpg",
+    "pexels-14071962.jpg"
+   ],
+   "punti": [
+    "Chardonnay e pinot nero",
+    "Trentasei mesi sui lieviti",
+    "Perlage fine",
+    "Per brindare"
+   ],
+   "testo": "Trentasei mesi sui lieviti: la bollicina fine, crosta di pane e agrumi, per brindare davvero.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "astuccio",
+    "valori": [
+     "Senza astuccio",
+     "Astuccio di legno"
+    ],
+    "esaurite": []
+   },
+   "video": "pexels-video-8071316.mp4",
+   "poster": "pexels-video-8071316.jpg",
+   "dentro": "La bottiglia nell’imballo di cartone sagomato, l’astuccio se l’avete scelto, il biglietto della cantina."
+  },
+  {
+   "sku": "CAL-011",
+   "nome": "Spumante extra dry",
+   "slug": "spumante-extra-dry",
+   "cat": [
+    "bollicine"
+   ],
+   "prezzo": 15,
+   "sconto": 12,
+   "scorta": 60,
+   "voto": 4.6,
+   "recensioni": 344,
+   "evidenza": false,
+   "foto": [
+    "pexels-9822760.jpg",
+    "pexels-5472971.jpg"
+   ],
+   "punti": [
+    "Glera",
+    "Fresco e fruttato",
+    "Mela verde e glicine",
+    "Per l’aperitivo"
+   ],
+   "testo": "La bollicina dell’aperitivo: fresca, mela verde e glicine, da tenere sempre in frigo.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La bottiglia nell’imballo di cartone sagomato, l’astuccio se l’avete scelto, il biglietto della cantina."
+  },
+  {
+   "sku": "CAL-012",
+   "nome": "Metodo classico rosé",
+   "slug": "metodo-classico-rose",
+   "cat": [
+    "bollicine"
+   ],
+   "prezzo": 22,
+   "sconto": 0,
+   "scorta": 60,
+   "voto": 4.7,
+   "recensioni": 121,
+   "evidenza": false,
+   "foto": [
+    "pexels-8459381.jpg",
+    "pexels-8459368.jpg"
+   ],
+   "punti": [
+    "Pinot nero",
+    "Rosa tenue",
+    "Fragolina e lampone",
+    "Ventiquattro mesi sui lieviti"
+   ],
+   "testo": "Il rosé di pinot nero: rosa tenue, fragolina e lampone, ventiquattro mesi sui lieviti.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La bottiglia nell’imballo di cartone sagomato, l’astuccio se l’avete scelto, il biglietto della cantina."
+  },
+  {
+   "sku": "CAL-013",
+   "nome": "Rosato di Toscana 2024",
+   "slug": "rosato-2024",
+   "cat": [
+    "rosati"
+   ],
+   "prezzo": 14,
+   "sconto": 0,
+   "scorta": 60,
+   "voto": 4.6,
+   "recensioni": 133,
+   "evidenza": false,
+   "foto": [
+    "pexels-34400995.jpg",
+    "pexels-6236629.jpg"
+   ],
+   "punti": [
+    "Sangiovese",
+    "Buccia di cipolla",
+    "Pompelmo e sale",
+    "Con la pappa al pomodoro"
+   ],
+   "testo": "Il rosato di sangiovese, color buccia di cipolla: pompelmo e sale, per l’estate e oltre.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La bottiglia nell’imballo di cartone sagomato, l’astuccio se l’avete scelto, il biglietto della cantina."
+  },
+  {
+   "sku": "CAL-014",
+   "nome": "Vin Santo del Chianti, mezza bottiglia",
+   "slug": "vin-santo",
+   "cat": [
+    "rosati"
+   ],
+   "prezzo": 28,
+   "sconto": 0,
+   "scorta": 60,
+   "voto": 4.9,
+   "recensioni": 156,
+   "evidenza": false,
+   "foto": [
+    "pexels-4994753.jpg",
+    "pexels-15006643.jpg"
+   ],
+   "punti": [
+    "Uve appassite sui graticci",
+    "Cinque anni in caratello",
+    "Ambra, fico e noce",
+    "Coi cantucci"
+   ],
+   "testo": "Le uve appassite sui graticci, cinque anni nei caratelli: ambra, fico, noce. Coi cantucci.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La bottiglia nell’imballo di cartone sagomato, l’astuccio se l’avete scelto, il biglietto della cantina."
+  },
+  {
+   "sku": "CAL-015",
+   "nome": "Cassetta «Toscana in tre»",
+   "slug": "cassetta-toscana-tre",
+   "cat": [
+    "regali"
+   ],
+   "prezzo": 69,
+   "sconto": 59,
+   "scorta": 60,
+   "voto": 4.8,
+   "recensioni": 187,
+   "evidenza": true,
+   "foto": [
+    "pexels-4877844.jpg",
+    "pexels-13975260.jpg"
+   ],
+   "punti": [
+    "Chianti, Nobile, Rosso di Montalcino",
+    "Cassetta di legno",
+    "Il biglietto scritto a mano",
+    "Consegna a temperatura"
+   ],
+   "testo": "Tre rossi in una cassetta di legno: Chianti, Nobile e Rosso di Montalcino, col biglietto.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La bottiglia nell’imballo di cartone sagomato, l’astuccio se l’avete scelto, il biglietto della cantina."
+  },
+  {
+   "sku": "CAL-016",
+   "nome": "Confezione regalo, due bottiglie",
+   "slug": "confezione-due",
+   "cat": [
+    "regali"
+   ],
+   "prezzo": 45,
+   "sconto": 0,
+   "scorta": 60,
+   "voto": 4.7,
+   "recensioni": 98,
+   "evidenza": false,
+   "foto": [
+    "pexels-13975271.jpg",
+    "pexels-8015269.jpg"
+   ],
+   "punti": [
+    "Due bottiglie a scelta",
+    "Scatola rossa col nastro",
+    "Il biglietto",
+    "Scriveteci quali"
+   ],
+   "testo": "Due bottiglie scelte da voi nella scatola rossa col nastro: scriveteci quali nelle note.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La bottiglia nell’imballo di cartone sagomato, l’astuccio se l’avete scelto, il biglietto della cantina."
+  },
+  {
+   "sku": "CAL-017",
+   "nome": "Sei bollicine, la settima è nostra",
+   "slug": "sei-bollicine",
+   "cat": [
+    "regali"
+   ],
+   "prezzo": 90,
+   "sconto": 0,
+   "scorta": 60,
+   "voto": 4.9,
+   "recensioni": 76,
+   "evidenza": true,
+   "foto": [
+    "pexels-5499117.jpg",
+    "pexels-8015267.jpg"
+   ],
+   "punti": [
+    "Sei extra dry",
+    "La settima in regalo",
+    "Cartone da sette",
+    "Per le feste"
+   ],
+   "testo": "Sei bottiglie di extra dry per le feste, e la settima la mettiamo noi.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La bottiglia nell’imballo di cartone sagomato, l’astuccio se l’avete scelto, il biglietto della cantina."
+  },
+  {
+   "sku": "CAL-018",
+   "nome": "Calici da degustazione, sei",
+   "slug": "calici-sei",
+   "cat": [
+    "dispensa"
+   ],
+   "prezzo": 48,
+   "sconto": 0,
+   "scorta": 60,
+   "voto": 4.8,
+   "recensioni": 143,
+   "evidenza": false,
+   "foto": [
+    "pexels-9179281.jpg",
+    "pexels-11289743.jpg"
+   ],
+   "punti": [
+    "Cristallo sonoro",
+    "Soffiati a mano",
+    "Per rossi e bianchi",
+    "Sei calici"
+   ],
+   "testo": "Sei calici di cristallo soffiati a mano: la forma giusta per sentire il naso.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La bottiglia nell’imballo di cartone sagomato, l’astuccio se l’avete scelto, il biglietto della cantina."
+  },
+  {
+   "sku": "CAL-019",
+   "nome": "Cavatappi da sommelier",
+   "slug": "cavatappi-sommelier",
+   "cat": [
+    "dispensa"
+   ],
+   "prezzo": 24,
+   "sconto": 0,
+   "scorta": 60,
+   "voto": 4.7,
+   "recensioni": 112,
+   "evidenza": false,
+   "foto": [
+    "pexels-30557624.jpg",
+    "pexels-39852932.jpg"
+   ],
+   "punti": [
+    "Doppia leva",
+    "Lama per la capsula",
+    "Manico in olivo",
+    "Si chiude in tasca"
+   ],
+   "testo": "Il cavatappi a doppia leva col manico d’olivo: il tappo esce senza rompersi.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La bottiglia nell’imballo di cartone sagomato, l’astuccio se l’avete scelto, il biglietto della cantina."
+  },
+  {
+   "sku": "CAL-020",
+   "nome": "Tagliere di pecorino e salumi, per due",
+   "slug": "tagliere-due",
+   "cat": [
+    "dispensa"
+   ],
+   "prezzo": 24,
+   "sconto": 0,
+   "scorta": 60,
+   "voto": 4.8,
+   "recensioni": 254,
+   "evidenza": false,
+   "foto": [
+    "pexels-34621126.jpg",
+    "pexels-5732751.jpg"
+   ],
+   "punti": [
+    "Pecorino di Pienza",
+    "Finocchiona e salame",
+    "Miele e noci",
+    "Per due"
+   ],
+   "testo": "Il pecorino di Pienza, la finocchiona, il miele e le noci: per due, col rosso.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La bottiglia nell’imballo di cartone sagomato, l’astuccio se l’avete scelto, il biglietto della cantina."
+  },
+  {
+   "sku": "CAL-021",
+   "nome": "Degustazione in enoteca, per due",
+   "slug": "degustazione-due",
+   "cat": [
+    "regali"
+   ],
+   "prezzo": 40,
+   "sconto": 0,
+   "scorta": 60,
+   "voto": 4.9,
+   "recensioni": 167,
+   "evidenza": false,
+   "foto": [
+    "pexels-6762291.jpg",
+    "pexels-7447405.jpg"
+   ],
+   "punti": [
+    "Sei vini",
+    "Il giovedì sera",
+    "Col tagliere",
+    "Per due persone"
+   ],
+   "testo": "Il biglietto per il giovedì sera: sei vini, il tagliere, il sommelier che racconta.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "La bottiglia nell’imballo di cartone sagomato, l’astuccio se l’avete scelto, il biglietto della cantina."
+  }
+ ],
+ "recensioni": [
+  [
+   5,
+   "Il Chianti è arrivato in due giorni, perfetto e ben imballato."
+  ],
+  [
+   5,
+   "Il Brunello vale ogni euro. Aperto un’ora prima, come consigliato."
+  ],
+  [
+   4,
+   "Ottima cassetta, il biglietto scritto a mano è un bel pensiero."
+  ],
+  [
+   5,
+   "La degustazione del giovedì è stata la serata più bella del mese."
+  ],
+  [
+   5,
+   "Il Vin Santo coi cantucci: come a casa della nonna."
+  ],
+  [
+   4,
+   "Buono, ma avrei preferito l’annata più vecchia."
+  ],
+  [
+   5,
+   "Sei bollicine e la settima in regalo: le feste sono salve."
+  ],
+  [
+   3,
+   "Il vino è buono, il corriere però ha chiesto due volte il documento."
+  ]
+ ],
+ "nomi": [
+  "Marco D.",
+  "Giulia S.",
+  "Lorenzo P.",
+  "Francesca R.",
+  "Tommaso B.",
+  "Beatrice C.",
+  "Edoardo F.",
+  "Aurora M.",
+  "Leonardo T.",
+  "Sofia G.",
+  "Mattia V.",
+  "Greta L."
+ ]
+}

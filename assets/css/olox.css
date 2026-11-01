@@ -9,7 +9,8 @@
   --bg:#0C0E13; --bg-2:#12151D; --bg-3:#181C27;
   --line:rgba(250,247,242,.1); --line-2:rgba(250,247,242,.18);
   --panelline:rgba(250,247,242,.1);
-  --paper:#FAF7F2; --dim:rgba(250,247,242,.62); --faint:rgba(250,247,242,.34);
+  /* --faint al 52% (prima 34%: 2,9 sul fondo scuro, sotto il 4,5 dei testi piccoli; 1.4.911) */
+  --paper:#FAF7F2; --dim:rgba(250,247,242,.62); --faint:rgba(250,247,242,.52);
   --olo:#E8453D;
   --build:#E8453D; --booking:#3D8BFF; --lang:#E8409A;
   --tour:#12A19A; --tutor:#38C172; --secur:#26B8E8;

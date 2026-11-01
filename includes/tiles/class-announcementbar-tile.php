@@ -73,7 +73,8 @@ class Olobuild_AnnouncementBar_Tile extends Olobuild_Tile_Base {
         $dismiss = ! empty( $s['dismissible'] );
 
         $inner = esc_html( $text );
-        if ( $accent !== '' ) { $inner .= '<b>' . esc_html( $accent ) . '</b>'; }
+        // Fra il testo e la parte in evidenza uno spazio, se il testo non lo ha già: «…domenica.Scopri» si leggeva attaccato.
+        if ( $accent !== '' ) { $inner .= ( '' !== $text && ! preg_match( '/\s$/u', $text ) ? ' ' : '' ) . '<b>' . esc_html( $accent ) . '</b>'; }
 
         ob_start();
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: background via Olobuild_CSS_Builder::get_bg_inline_css() or the safe_color_css() whitelist, colours via safe_color_css(), $fs/$bb via intval() clamps, $fw/$tt/$align via in_array() whitelists, $ls via preg_replace() character whitelist, padding integer-forced, font stack fixed literal; $uid is internally generated.

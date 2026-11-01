@@ -119,6 +119,41 @@ class Olobuild_Woo_Addtocart_Tile extends Olobuild_Tile_Base {
         $full_w   = ! empty( $s['full_width'] );
         $product_id = $product->get_id();
 
+        // Prodotto a varianti (taglie, colori): prima il pulsante diceva «Seleziona opzioni» e portava alla scheda,
+        // cioè alla pagina stessa, e la taglia non si sceglieva da nessuna parte. Ora le opzioni sono bottoni sopra il
+        // pulsante; scelta la combinazione, il pulsante aggiunge quella variante (WooCommerce accetta l'id della
+        // variante come prodotto anche nell'aggiunta con AJAX). Le opzioni senza una variante disponibile sono barrate.
+        $varianti  = [];
+        $attributi = [];
+        if ( $product->is_type( 'variable' ) ) {
+            foreach ( $product->get_available_variations( 'objects' ) as $var ) {
+                $varianti[] = [
+                    'id'     => $var->get_id(),
+                    'a'      => $var->get_variation_attributes(),
+                    'ok'     => $var->is_in_stock() && $var->is_purchasable(),
+                    'prezzo' => wp_strip_all_tags( wc_price( (float) wc_get_price_to_display( $var ) ) ),
+                    'scorta' => wp_strip_all_tags( (string) ( $var->get_availability()['availability'] ?? '' ) ),
+                    'url'    => add_query_arg( 'add-to-cart', $var->get_id(), $product->get_permalink() ),
+                ];
+            }
+            foreach ( $product->get_variation_attributes() as $nome => $valori ) {
+                $voci = [];
+                if ( taxonomy_exists( $nome ) ) {
+                    // Nell'ordine dei termini (S, M, L…), non in quello alfabetico degli slug.
+                    foreach ( wc_get_product_terms( $product_id, $nome, [ 'fields' => 'all' ] ) as $term ) {
+                        if ( in_array( $term->slug, $valori, true ) ) {
+                            $voci[ $term->slug ] = $term->name;
+                        }
+                    }
+                } else {
+                    foreach ( $valori as $v ) {
+                        $voci[ $v ] = $v;
+                    }
+                }
+                $attributi[ 'attribute_' . sanitize_title( $nome ) ] = [ 'nome' => wc_attribute_label( $nome, $product ), 'voci' => $voci ];
+            }
+        }
+
         ob_start();
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist (with var() fallbacks), sizes from the fixed internal $size_map, radius via Olobuild_Tile_Utils::border_radius()/radius_force_css() (integer-forced), style from an in_array() whitelist; $uid is internally generated.
         ?>
@@ -196,6 +231,40 @@ class Olobuild_Woo_Addtocart_Tile extends Olobuild_Tile_Base {
                 font-size: <?php echo $sz['fs']; ?>px;
                 cursor: pointer;
             }
+            .<?php echo $uid; ?> .olo-atc-var {
+                flex: 1 1 100%;
+                display: flex;
+                flex-direction: column;
+                gap: .875rem;
+                margin-bottom: .25rem;
+            }
+            .<?php echo $uid; ?> .olo-atc-attr-nome {
+                display: block;
+                font-size: 13px;
+                margin-bottom: .5rem;
+                color: var(--olo-color-text-muted, #6b7280);
+            }
+            .<?php echo $uid; ?> .olo-atc-attr-nome strong { color: var(--olo-color-text, #111827); font-weight: 600; }
+            .<?php echo $uid; ?> .olo-atc-opz { display: flex; flex-wrap: wrap; gap: .5rem; }
+            .<?php echo $uid; ?> .olo-atc-o {
+                min-width: 46px;
+                height: 42px;
+                padding: 0 .75rem;
+                border: 1px solid var(--olo-color-border, #E5E7EB);
+                border-radius: <?php echo $radius; ?>;
+                background: transparent;
+                color: var(--olo-color-text, #111827);
+                font: inherit;
+                font-size: 14px;
+                cursor: pointer;
+                transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+            }
+            .<?php echo $uid; ?> .olo-atc-o:hover { border-color: <?php echo $bg_color; ?>; }
+            .<?php echo $uid; ?> .olo-atc-o:focus-visible { outline: 2px solid <?php echo $bg_color; ?>; outline-offset: 2px; }
+            .<?php echo $uid; ?> .olo-atc-o[aria-checked="true"] { background: <?php echo $bg_color; ?>; border-color: <?php echo $bg_color; ?>; color: <?php echo $text_color; ?>; }
+            .<?php echo $uid; ?> .olo-atc-o.is-esaurita { text-decoration: line-through; opacity: 0.45; }
+            .<?php echo $uid; ?> .olo-atc-var-info { margin: 0; font-size: 14px; min-height: 1.4em; color: var(--olo-color-text-muted, #6b7280); }
+            .<?php echo $uid; ?> .olo-atc-btn[aria-disabled="true"] { opacity: 0.55; cursor: not-allowed; }
             .<?php echo $uid; ?> .olo-atc-stepper-val {
                 width: 36px;
                 text-align: center;
@@ -233,6 +302,21 @@ class Olobuild_Woo_Addtocart_Tile extends Olobuild_Tile_Base {
         endif;
         ?>
         <div class="<?php echo esc_attr( $uid ); ?>">
+            <?php if ( $varianti ) : ?>
+            <div class="olo-atc-var" data-olo-varianti="<?php echo esc_attr( wp_json_encode( $varianti ) ); ?>">
+                <?php foreach ( $attributi as $chiave => $attr ) : ?>
+                <div class="olo-atc-attr" data-attr="<?php echo esc_attr( $chiave ); ?>">
+                    <span class="olo-atc-attr-nome"><?php echo esc_html( $attr['nome'] ); ?>: <strong data-scelta></strong></span>
+                    <div class="olo-atc-opz" role="radiogroup" aria-label="<?php echo esc_attr( $attr['nome'] ); ?>">
+                        <?php foreach ( $attr['voci'] as $slug => $etichetta ) : ?>
+                        <button type="button" class="olo-atc-o" role="radio" aria-checked="false" data-val="<?php echo esc_attr( $slug ); ?>"><?php echo esc_html( $etichetta ); ?></button>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+                <p class="olo-atc-var-info" data-info aria-live="polite"></p>
+            </div>
+            <?php endif; ?>
             <?php if ( ! empty( $s['show_quantity'] ) ) : ?>
             <div class="olo-atc-qty-wrap">
                 <?php if ( $s['quantity_style'] === 'stepper' ) : ?>
@@ -246,7 +330,23 @@ class Olobuild_Woo_Addtocart_Tile extends Olobuild_Tile_Base {
             </div>
             <?php endif; ?>
 
-            <?php if ( $product->is_type( 'variable' ) ) : ?>
+            <?php if ( $varianti ) : ?>
+                <a href="<?php echo esc_url( $product->get_permalink() ); ?>"
+                   class="olo-atc-btn ajax_add_to_cart add_to_cart_button"
+                   data-product_id=""
+                   data-product_sku="<?php echo esc_attr( $product->get_sku() ); ?>"
+                   data-quantity="1"
+                   data-testo="<?php echo esc_attr( $btn_text ); ?>"
+                   data-scegli="<?php echo esc_attr( olobuild_t( 'Scegli' ) . ': ' . implode( ', ', wp_list_pluck( $attributi, 'nome' ) ) ); ?>"
+                   data-esaurita="<?php echo esc_attr( olobuild_t( 'Esaurita' ) ); ?>"
+                   aria-disabled="true"
+                >
+                    <?php if ( ! empty( $s['show_icon'] ) ) : ?>
+                    <?php echo $icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from the hardcoded $icon_svgs map above ?>
+                    <?php endif; ?>
+                    <span data-etichetta><?php echo esc_html( olobuild_t( 'Scegli' ) . ': ' . implode( ', ', wp_list_pluck( $attributi, 'nome' ) ) ); ?></span>
+                </a>
+            <?php elseif ( $product->is_type( 'variable' ) ) : ?>
                 <a href="<?php echo esc_url( $product->get_permalink() ); ?>" class="olo-atc-btn">
                     <?php if ( ! empty( $s['show_icon'] ) ) : ?>
                     <?php echo $icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from the hardcoded $icon_svgs map above ?>
@@ -267,6 +367,97 @@ class Olobuild_Woo_Addtocart_Tile extends Olobuild_Tile_Base {
                 </a>
             <?php endif; ?>
         </div>
+        <?php if ( $varianti ) : ?>
+        <script>
+        (function(){
+            /* Le varianti: scelta ogni opzione, il pulsante prende l'id della variante. Niente «e» logici negli script in linea. */
+            var wrap = document.querySelector('.<?php echo $uid; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- internal 'olo-woo-atc-' . wp_rand() identifier ?>');
+            if(!wrap){return}
+            var box = wrap.querySelector('[data-olo-varianti]');
+            var btn = wrap.querySelector('.olo-atc-btn');
+            if(!box){return}
+            if(!btn){return}
+            var varianti = JSON.parse(box.getAttribute('data-olo-varianti') || '[]');
+            var gruppi = box.querySelectorAll('[data-attr]');
+            var info = box.querySelector('[data-info]');
+            var etichetta = btn.querySelector('[data-etichetta]');
+            var scelte = {};
+            function combacia(v, chiave, valore){
+                var a = v.a[chiave];
+                if(a === ''){ return true; }
+                if(a === undefined){ return true; }
+                return a === valore;
+            }
+            function trova(sc){
+                for(var i = 0; i < varianti.length; i++){
+                    var v = varianti[i], tutte = true;
+                    for(var k in sc){ if(!combacia(v, k, sc[k])){ tutte = false; } }
+                    if(tutte){ return v; }
+                }
+                return null;
+            }
+            function disponibile(chiave, valore){
+                var sc = {};
+                for(var k in scelte){ if(k !== chiave){ sc[k] = scelte[k]; } }
+                sc[chiave] = valore;
+                for(var i = 0; i < varianti.length; i++){
+                    var v = varianti[i];
+                    if(!v.ok){ continue; }
+                    var tutte = true;
+                    for(var c in sc){ if(!combacia(v, c, sc[c])){ tutte = false; } }
+                    if(tutte){ return true; }
+                }
+                return false;
+            }
+            function aggiorna(){
+                gruppi.forEach(function(g){
+                    var chiave = g.getAttribute('data-attr');
+                    g.querySelectorAll('.olo-atc-o').forEach(function(o){
+                        var ok = disponibile(chiave, o.getAttribute('data-val'));
+                        o.classList.toggle('is-esaurita', !ok);
+                    });
+                });
+                var tutte = Object.keys(scelte).length === gruppi.length;
+                var v = tutte ? trova(scelte) : null;
+                if(v){ if(v.ok){
+                    btn.setAttribute('data-product_id', v.id);
+                    btn.setAttribute('href', v.url);
+                    btn.removeAttribute('aria-disabled');
+                    if(etichetta){ etichetta.textContent = btn.getAttribute('data-testo'); }
+                    if(info){ info.textContent = v.prezzo + (v.scorta ? ' · ' + v.scorta : ''); }
+                    return;
+                } }
+                btn.setAttribute('data-product_id', '');
+                btn.setAttribute('aria-disabled', 'true');
+                if(etichetta){ etichetta.textContent = v ? btn.getAttribute('data-esaurita') : btn.getAttribute('data-scegli'); }
+                if(info){ info.textContent = v ? (v.scorta || btn.getAttribute('data-esaurita')) : ''; }
+            }
+            gruppi.forEach(function(g){
+                var chiave = g.getAttribute('data-attr');
+                var mostra = g.querySelector('[data-scelta]');
+                g.querySelectorAll('.olo-atc-o').forEach(function(o){
+                    o.addEventListener('click', function(){
+                        g.querySelectorAll('.olo-atc-o').forEach(function(x){ x.setAttribute('aria-checked', 'false'); });
+                        o.setAttribute('aria-checked', 'true');
+                        scelte[chiave] = o.getAttribute('data-val');
+                        if(mostra){ mostra.textContent = o.textContent; }
+                        aggiorna();
+                    });
+                });
+            });
+            /* Senza una variante scelta il clic non parte: niente aggiunta vuota né salto alla pagina. */
+            btn.addEventListener('click', function(e){
+                if(btn.getAttribute('aria-disabled') === 'true'){
+                    e.preventDefault();
+                    e.stopPropagation();
+                    var primo = box.querySelector('.olo-atc-o');
+                    if(primo){ primo.focus(); }
+                }
+            });
+            aggiorna();
+        })();
+        </script>
+        <?php endif; ?>
         <?php
         // Quantità JS — NO && in inline scripts! Anche la casella numerica: il numero scritto
         // non arrivava al pulsante (data-quantity restava 1) e il carrello ne riceveva sempre uno.

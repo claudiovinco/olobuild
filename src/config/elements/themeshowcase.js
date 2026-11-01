@@ -20,6 +20,8 @@ export default {
   defaults: {
     filter_bar: true,
     filter_all_label: t('Tutti'),
+    search_bar: true,
+    search_placeholder: t('Cerca un tema: nome, settore, effetto…'),
     show_category: true,
     show_zone: true,
     show_phone: true,
@@ -55,6 +57,11 @@ export default {
     { key: 'filter_bar', label: t('Filtri per categoria'), type: 'toggle' },
     { key: 'filter_all_label', label: t('Etichetta di «tutti»'), type: 'text',
       condition: { field: 'filter_bar', op: 'eq', value: true } },
+
+    { key: 'search_bar', label: t('Casella di ricerca'), type: 'toggle',
+      description: t('Sopra i filtri: cerca nel nome, nella categoria, nell\'effetto e nelle parole chiave dei temi, senza badare ad accenti e maiuscole. Si somma ai filtri.') },
+    { key: 'search_placeholder', label: t('Testo nella casella'), type: 'text',
+      condition: { field: 'search_bar', op: 'eq', value: true } },
 
     { type: 'separator', label: t('Schede') },
     { key: 'show_category', label: t('Mostra la categoria'), type: 'toggle' },
@@ -114,8 +121,8 @@ export default {
     { type: 'separator', label: t('Disposizione') },
     { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 4, step: 1, responsive: true },
     { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 64, step: 4 },
-    { key: 'filter_align', label: t('Allineamento filtri'), type: 'select',
-      condition: { field: 'filter_bar', op: 'eq', value: true },
+    { key: 'filter_align', label: t('Allineamento filtri e ricerca'), type: 'select',
+      show: (s) => s.filter_bar !== false || s.search_bar !== false,
       options: [
         { value: 'left', label: t('Sinistra') },
         { value: 'center', label: t('Centro') },

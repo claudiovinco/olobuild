@@ -1,0 +1,854 @@
+{
+ "tema": "trottola",
+ "titolo_dentro": "Nella confezione",
+ "attributi": {
+  "incarto": {
+   "nome": "Incarto",
+   "termini": [
+    "Senza incarto",
+    "Carta a pois",
+    "Carta a righe"
+   ]
+  }
+ },
+ "categorie": [
+  {
+   "slug": "primi-anni",
+   "nome": "0–3 anni",
+   "descrizione": "Da impilare, da toccare, da mordere.",
+   "foto": "pexels-7269674.jpg"
+  },
+  {
+   "slug": "legno",
+   "nome": "Giochi di legno",
+   "descrizione": "Trenini, trottole, animali, macchinine.",
+   "foto": "pexels-15250000.jpg"
+  },
+  {
+   "slug": "costruzioni",
+   "nome": "Costruzioni",
+   "descrizione": "Blocchi naturali e cubi dell’alfabeto.",
+   "foto": "pexels-7269694.jpg"
+  },
+  {
+   "slug": "peluche",
+   "nome": "Peluche e bambole",
+   "descrizione": "Orsi, bambole di pezza, folletti.",
+   "foto": "pexels-5786757.jpg"
+  },
+  {
+   "slug": "tavolo",
+   "nome": "Giochi da tavolo e puzzle",
+   "descrizione": "Per le sere di pioggia.",
+   "foto": "pexels-6333907.jpg"
+  },
+  {
+   "slug": "aria-aperta",
+   "nome": "All’aria aperta",
+   "descrizione": "Aquiloni per il lungomare.",
+   "foto": "pexels-32646283.jpg"
+  }
+ ],
+ "prodotti": [
+  {
+   "sku": "TRO-001",
+   "nome": "Trottola di legno tornita",
+   "slug": "trottola-legno",
+   "cat": [
+    "legno"
+   ],
+   "prezzo": 12,
+   "sconto": 0,
+   "scorta": 25,
+   "voto": 4.9,
+   "recensioni": 512,
+   "evidenza": true,
+   "foto": [
+    "pexels-7269975-a.jpg",
+    "pexels-7269978-a.jpg"
+   ],
+   "punti": [
+    "Faggio tornito a mano",
+    "Righe incise",
+    "Gira più di un minuto",
+    "Dai 3 anni"
+   ],
+   "testo": "La trottola che ci ha dato il nome: faggio tornito, le righe incise, gira più di un minuto.",
+   "upsell": [],
+   "cross": [
+    "TRO-002",
+    "TRO-020"
+   ],
+   "varianti": {
+    "attributo": "incarto",
+    "valori": [
+     "Senza incarto",
+     "Carta a pois",
+     "Carta a righe"
+    ],
+    "esaurite": []
+   },
+   "video": "pexels-video-7269975.mp4",
+   "poster": "pexels-video-7269975.jpg",
+   "dentro": "Il gioco nella sua scatola, incartato se l’avete chiesto, col biglietto per il festeggiato."
+  },
+  {
+   "sku": "TRO-002",
+   "nome": "Trenino di legno, quaranta pezzi",
+   "slug": "trenino-quaranta",
+   "cat": [
+    "legno"
+   ],
+   "prezzo": 49,
+   "sconto": 39,
+   "scorta": 25,
+   "voto": 4.9,
+   "recensioni": 388,
+   "evidenza": true,
+   "foto": [
+    "pexels-15250000.jpg",
+    "pexels-8612915.jpg"
+   ],
+   "punti": [
+    "Binari, ponte e stazione",
+    "Tre vagoni magnetici",
+    "Faggio e colori all’acqua",
+    "Dai 2 anni"
+   ],
+   "testo": "Quaranta pezzi: i binari, il ponte, la stazione e la locomotiva coi tre vagoni a calamita.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "incarto",
+    "valori": [
+     "Senza incarto",
+     "Carta a pois",
+     "Carta a righe"
+    ],
+    "esaurite": []
+   },
+   "video": "pexels-video-10325105.mp4",
+   "poster": "pexels-video-10325105.jpg",
+   "dentro": "Il gioco nella sua scatola, incartato se l’avete chiesto, col biglietto per il festeggiato."
+  },
+  {
+   "sku": "TRO-003",
+   "nome": "Locomotiva con tre vagoni",
+   "slug": "locomotiva-vagoni",
+   "cat": [
+    "legno"
+   ],
+   "prezzo": 24,
+   "sconto": 0,
+   "scorta": 25,
+   "voto": 4.7,
+   "recensioni": 176,
+   "evidenza": false,
+   "foto": [
+    "pexels-4887210.jpg",
+    "pexels-3622563.jpg"
+   ],
+   "punti": [
+    "Quattro pezzi",
+    "Ganci a calamita",
+    "Va sui binari del trenino",
+    "Dai 2 anni"
+   ],
+   "testo": "La locomotiva gialla e i tre vagoni, coi ganci a calamita: vanno sui binari del trenino.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "incarto",
+    "valori": [
+     "Senza incarto",
+     "Carta a pois",
+     "Carta a righe"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il gioco nella sua scatola, incartato se l’avete chiesto, col biglietto per il festeggiato."
+  },
+  {
+   "sku": "TRO-004",
+   "nome": "Abaco dei numeri da impilare",
+   "slug": "abaco-numeri",
+   "cat": [
+    "primi-anni"
+   ],
+   "prezzo": 29,
+   "sconto": 0,
+   "scorta": 25,
+   "voto": 4.8,
+   "recensioni": 203,
+   "evidenza": false,
+   "foto": [
+    "pexels-7269674.jpg",
+    "pexels-7269676.jpg"
+   ],
+   "punti": [
+    "Numeri da 1 a 5",
+    "Quindici anelli",
+    "Legno di faggio",
+    "Dai 18 mesi"
+   ],
+   "testo": "Il carretto dei numeri: si infilano gli anelli, uno sull’uno e cinque sul cinque.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "incarto",
+    "valori": [
+     "Senza incarto",
+     "Carta a pois",
+     "Carta a righe"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il gioco nella sua scatola, incartato se l’avete chiesto, col biglietto per il festeggiato."
+  },
+  {
+   "sku": "TRO-005",
+   "nome": "Animali della savana, in legno",
+   "slug": "animali-savana",
+   "cat": [
+    "legno"
+   ],
+   "prezzo": 34,
+   "sconto": 0,
+   "scorta": 25,
+   "voto": 4.7,
+   "recensioni": 121,
+   "evidenza": false,
+   "foto": [
+    "pexels-3661201.jpg",
+    "pexels-3661280.jpg"
+   ],
+   "punti": [
+    "Giraffa, elefante, zebra, leone",
+    "Legno d’acero",
+    "Stanno in piedi",
+    "Dai 2 anni"
+   ],
+   "testo": "Quattro animali d’acero che stanno in piedi da soli: la giraffa arriva al davanzale.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il gioco nella sua scatola, incartato se l’avete chiesto, col biglietto per il festeggiato."
+  },
+  {
+   "sku": "TRO-006",
+   "nome": "Costruzioni naturali, sessanta blocchi",
+   "slug": "costruzioni-sessanta",
+   "cat": [
+    "costruzioni"
+   ],
+   "prezzo": 45,
+   "sconto": 0,
+   "scorta": 25,
+   "voto": 4.9,
+   "recensioni": 344,
+   "evidenza": true,
+   "foto": [
+    "pexels-7269694.jpg",
+    "pexels-7296783.jpg"
+   ],
+   "punti": [
+    "Sessanta blocchi",
+    "Archi, cubi, colonne",
+    "Faggio grezzo, levigato",
+    "Dai 2 anni"
+   ],
+   "testo": "Sessanta blocchi di faggio grezzo: archi, cubi, colonne, per il castello del sabato.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "incarto",
+    "valori": [
+     "Senza incarto",
+     "Carta a pois",
+     "Carta a righe"
+    ],
+    "esaurite": []
+   },
+   "video": "pexels-video-7269976.mp4",
+   "poster": "pexels-video-7269976.jpg",
+   "dentro": "Il gioco nella sua scatola, incartato se l’avete chiesto, col biglietto per il festeggiato."
+  },
+  {
+   "sku": "TRO-007",
+   "nome": "Cubi dell’alfabeto, trenta",
+   "slug": "cubi-alfabeto",
+   "cat": [
+    "costruzioni"
+   ],
+   "prezzo": 32,
+   "sconto": 26,
+   "scorta": 25,
+   "voto": 4.8,
+   "recensioni": 266,
+   "evidenza": true,
+   "foto": [
+    "pexels-12955654.jpg",
+    "pexels-12940817.jpg"
+   ],
+   "punti": [
+    "Trenta cubi",
+    "Lettere, numeri e animali",
+    "Colori all’acqua",
+    "Dai 18 mesi"
+   ],
+   "testo": "I cubi coi bordi in rilievo: lettere, numeri e animali, per scrivere il proprio nome.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "incarto",
+    "valori": [
+     "Senza incarto",
+     "Carta a pois",
+     "Carta a righe"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il gioco nella sua scatola, incartato se l’avete chiesto, col biglietto per il festeggiato."
+  },
+  {
+   "sku": "TRO-008",
+   "nome": "Arcobaleno da impilare",
+   "slug": "arcobaleno-impilare",
+   "cat": [
+    "primi-anni"
+   ],
+   "prezzo": 39,
+   "sconto": 0,
+   "scorta": 25,
+   "voto": 4.9,
+   "recensioni": 198,
+   "evidenza": true,
+   "foto": [
+    "pexels-34817532.jpg",
+    "pexels-34817526.jpg"
+   ],
+   "punti": [
+    "Sette archi",
+    "Colori pastello all’acqua",
+    "Si impila e si dondola",
+    "Dai 12 mesi"
+   ],
+   "testo": "Sette archi di legno tinto: si impila, si dondola, diventa ponte, galleria, culla.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "incarto",
+    "valori": [
+     "Senza incarto",
+     "Carta a pois",
+     "Carta a righe"
+    ],
+    "esaurite": []
+   },
+   "video": "pexels-video-10555500.mp4",
+   "poster": "pexels-video-10555500.jpg",
+   "dentro": "Il gioco nella sua scatola, incartato se l’avete chiesto, col biglietto per il festeggiato."
+  },
+  {
+   "sku": "TRO-009",
+   "nome": "Scatola delle forme",
+   "slug": "scatola-forme",
+   "cat": [
+    "primi-anni"
+   ],
+   "prezzo": 28,
+   "sconto": 0,
+   "scorta": 25,
+   "voto": 4.6,
+   "recensioni": 142,
+   "evidenza": false,
+   "foto": [
+    "pexels-35230776.jpg",
+    "pexels-6693308.jpg"
+   ],
+   "punti": [
+    "Dodici forme",
+    "Il coperchio a buchi",
+    "Le ruote per tirarla",
+    "Dai 12 mesi"
+   ],
+   "testo": "La scatola coi buchi e le ruote: ogni forma ha il suo, e poi si tira per casa.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "incarto",
+    "valori": [
+     "Senza incarto",
+     "Carta a pois",
+     "Carta a righe"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il gioco nella sua scatola, incartato se l’avete chiesto, col biglietto per il festeggiato."
+  },
+  {
+   "sku": "TRO-010",
+   "nome": "Orsetto di peluche, 30 cm",
+   "slug": "orsetto-30",
+   "cat": [
+    "peluche"
+   ],
+   "prezzo": 29,
+   "sconto": 0,
+   "scorta": 25,
+   "voto": 4.8,
+   "recensioni": 455,
+   "evidenza": false,
+   "foto": [
+    "pexels-5786757.jpg",
+    "pexels-207891.jpg"
+   ],
+   "punti": [
+    "Peluche morbido",
+    "Occhi ricamati",
+    "Lavabile a 30°",
+    "Dalla nascita"
+   ],
+   "testo": "L’orsetto con gli occhi ricamati, senza bottoni: va bene dalla culla.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "incarto",
+    "valori": [
+     "Senza incarto",
+     "Carta a pois",
+     "Carta a righe"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il gioco nella sua scatola, incartato se l’avete chiesto, col biglietto per il festeggiato."
+  },
+  {
+   "sku": "TRO-011",
+   "nome": "Orso grande, 80 cm",
+   "slug": "orso-80",
+   "cat": [
+    "peluche"
+   ],
+   "prezzo": 79,
+   "sconto": 65,
+   "scorta": 25,
+   "voto": 4.9,
+   "recensioni": 233,
+   "evidenza": true,
+   "foto": [
+    "pexels-836040.jpg",
+    "pexels-35172085.jpg"
+   ],
+   "punti": [
+    "Ottanta centimetri",
+    "Fiocco a quadri",
+    "Imbottitura anallergica",
+    "Arriva in una scatola enorme"
+   ],
+   "testo": "L’orso che si abbraccia con tutte e due le braccia, col fiocco a quadri.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il gioco nella sua scatola, incartato se l’avete chiesto, col biglietto per il festeggiato."
+  },
+  {
+   "sku": "TRO-012",
+   "nome": "Bambola di pezza col cappello rosso",
+   "slug": "bambola-cappello-rosso",
+   "cat": [
+    "peluche"
+   ],
+   "prezzo": 34,
+   "sconto": 0,
+   "scorta": 25,
+   "voto": 4.7,
+   "recensioni": 188,
+   "evidenza": false,
+   "foto": [
+    "pexels-6158202.jpg",
+    "pexels-15054343.jpg"
+   ],
+   "punti": [
+    "Cotone e lana",
+    "Cucita a mano",
+    "Cappello a maglia",
+    "Dalla nascita"
+   ],
+   "testo": "La bambola di pezza col cappello di lana rosso, cucita a mano in Puglia.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "incarto",
+    "valori": [
+     "Senza incarto",
+     "Carta a pois",
+     "Carta a righe"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il gioco nella sua scatola, incartato se l’avete chiesto, col biglietto per il festeggiato."
+  },
+  {
+   "sku": "TRO-013",
+   "nome": "Bambola di stoffa, la folletta",
+   "slug": "bambola-folletta",
+   "cat": [
+    "peluche"
+   ],
+   "prezzo": 29,
+   "sconto": 0,
+   "scorta": 25,
+   "voto": 4.6,
+   "recensioni": 97,
+   "evidenza": false,
+   "foto": [
+    "pexels-31501520.jpg",
+    "pexels-30389636.jpg"
+   ],
+   "punti": [
+    "Feltro e cotone",
+    "Cappello a punta",
+    "Venti centimetri",
+    "Dai 3 anni"
+   ],
+   "testo": "La folletta di feltro col cappello a punta: sta nella tasca del cappotto.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "incarto",
+    "valori": [
+     "Senza incarto",
+     "Carta a pois",
+     "Carta a righe"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il gioco nella sua scatola, incartato se l’avete chiesto, col biglietto per il festeggiato."
+  },
+  {
+   "sku": "TRO-014",
+   "nome": "Puzzle dello spazio, cento pezzi",
+   "slug": "puzzle-spazio",
+   "cat": [
+    "tavolo"
+   ],
+   "prezzo": 19,
+   "sconto": 0,
+   "scorta": 25,
+   "voto": 4.8,
+   "recensioni": 221,
+   "evidenza": false,
+   "foto": [
+    "pexels-7269457.jpg",
+    "pexels-7269503.jpg"
+   ],
+   "punti": [
+    "Cento pezzi grandi",
+    "Razzi e pianeti",
+    "Cartone riciclato",
+    "Dai 5 anni"
+   ],
+   "testo": "Cento pezzi grandi coi razzi, i pianeti e un astronauta che saluta.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "incarto",
+    "valori": [
+     "Senza incarto",
+     "Carta a pois",
+     "Carta a righe"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il gioco nella sua scatola, incartato se l’avete chiesto, col biglietto per il festeggiato."
+  },
+  {
+   "sku": "TRO-015",
+   "nome": "Puzzle colorato, ventiquattro pezzi",
+   "slug": "puzzle-ventiquattro",
+   "cat": [
+    "tavolo"
+   ],
+   "prezzo": 16,
+   "sconto": 0,
+   "scorta": 25,
+   "voto": 4.6,
+   "recensioni": 133,
+   "evidenza": false,
+   "foto": [
+    "pexels-9227506.jpg",
+    "pexels-9227510.jpg"
+   ],
+   "punti": [
+    "Ventiquattro pezzi",
+    "Legno sottile",
+    "Colori pieni",
+    "Dai 3 anni"
+   ],
+   "testo": "Il primo puzzle: ventiquattro pezzi di legno dai colori pieni.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "incarto",
+    "valori": [
+     "Senza incarto",
+     "Carta a pois",
+     "Carta a righe"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il gioco nella sua scatola, incartato se l’avete chiesto, col biglietto per il festeggiato."
+  },
+  {
+   "sku": "TRO-016",
+   "nome": "Scacchi in legno da viaggio",
+   "slug": "scacchi-viaggio",
+   "cat": [
+    "tavolo"
+   ],
+   "prezzo": 39,
+   "sconto": 0,
+   "scorta": 25,
+   "voto": 4.8,
+   "recensioni": 87,
+   "evidenza": false,
+   "foto": [
+    "pexels-10388909.jpg",
+    "pexels-6333933.jpg"
+   ],
+   "punti": [
+    "Scacchiera pieghevole",
+    "Pezzi in bosso",
+    "Si chiude come una scatola",
+    "Dai 6 anni"
+   ],
+   "testo": "La scacchiera che si chiude come una scatola coi pezzi dentro: per il treno.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "incarto",
+    "valori": [
+     "Senza incarto",
+     "Carta a pois",
+     "Carta a righe"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il gioco nella sua scatola, incartato se l’avete chiesto, col biglietto per il festeggiato."
+  },
+  {
+   "sku": "TRO-017",
+   "nome": "La scatola delle serate",
+   "slug": "scatola-serate",
+   "cat": [
+    "tavolo"
+   ],
+   "prezzo": 29,
+   "sconto": 22,
+   "scorta": 25,
+   "voto": 4.9,
+   "recensioni": 302,
+   "evidenza": true,
+   "foto": [
+    "pexels-6333907.jpg",
+    "pexels-6333894.jpg"
+   ],
+   "punti": [
+    "Cinque giochi in una scatola",
+    "Carte, dadi e pedine",
+    "Da 2 a 6 giocatori",
+    "Dai 6 anni"
+   ],
+   "testo": "Carte, dadi e pedine per cinque giochi di famiglia: per le sere di pioggia.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "incarto",
+    "valori": [
+     "Senza incarto",
+     "Carta a pois",
+     "Carta a righe"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il gioco nella sua scatola, incartato se l’avete chiesto, col biglietto per il festeggiato."
+  },
+  {
+   "sku": "TRO-018",
+   "nome": "Aquilone a delta, arcobaleno",
+   "slug": "aquilone-delta",
+   "cat": [
+    "aria-aperta"
+   ],
+   "prezzo": 25,
+   "sconto": 0,
+   "scorta": 25,
+   "voto": 4.7,
+   "recensioni": 164,
+   "evidenza": false,
+   "foto": [
+    "pexels-32646283.jpg",
+    "pexels-18343866.jpg"
+   ],
+   "punti": [
+    "Nylon antistrappo",
+    "Vola con poco vento",
+    "Trenta metri di filo",
+    "Dai 5 anni"
+   ],
+   "testo": "Il delta arcobaleno che vola anche col vento leggero del lungomare.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il gioco nella sua scatola, incartato se l’avete chiesto, col biglietto per il festeggiato."
+  },
+  {
+   "sku": "TRO-019",
+   "nome": "Aquilone a pesce, tre metri",
+   "slug": "aquilone-pesce",
+   "cat": [
+    "aria-aperta"
+   ],
+   "prezzo": 32,
+   "sconto": 0,
+   "scorta": 25,
+   "voto": 4.6,
+   "recensioni": 76,
+   "evidenza": false,
+   "foto": [
+    "pexels-31358776.jpg",
+    "pexels-36985957.jpg"
+   ],
+   "punti": [
+    "Tre metri di coda",
+    "Nylon colorato",
+    "Cinquanta metri di filo",
+    "Dai 7 anni"
+   ],
+   "testo": "Il pesce con tre metri di coda che si muove come nell’acqua.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il gioco nella sua scatola, incartato se l’avete chiesto, col biglietto per il festeggiato."
+  },
+  {
+   "sku": "TRO-020",
+   "nome": "Macchinine di legno, quattro",
+   "slug": "macchinine-quattro",
+   "cat": [
+    "legno"
+   ],
+   "prezzo": 22,
+   "sconto": 0,
+   "scorta": 25,
+   "voto": 4.7,
+   "recensioni": 245,
+   "evidenza": false,
+   "foto": [
+    "pexels-6865340.jpg",
+    "pexels-5433851.jpg"
+   ],
+   "punti": [
+    "Quattro macchinine",
+    "Ruote che girano davvero",
+    "Colori all’acqua",
+    "Dai 18 mesi"
+   ],
+   "testo": "Quattro macchinine tonde, con le ruote che girano davvero: per la pista sul tappeto.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "incarto",
+    "valori": [
+     "Senza incarto",
+     "Carta a pois",
+     "Carta a righe"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il gioco nella sua scatola, incartato se l’avete chiesto, col biglietto per il festeggiato."
+  },
+  {
+   "sku": "TRO-021",
+   "nome": "Libro degli animali, da toccare",
+   "slug": "libro-animali",
+   "cat": [
+    "primi-anni"
+   ],
+   "prezzo": 18,
+   "sconto": 0,
+   "scorta": 25,
+   "voto": 4.8,
+   "recensioni": 154,
+   "evidenza": false,
+   "foto": [
+    "pexels-6437458.jpg",
+    "pexels-7269539.jpg"
+   ],
+   "punti": [
+    "Pagine spesse",
+    "Da toccare e sfogliare",
+    "Dieci animali",
+    "Dai 12 mesi"
+   ],
+   "testo": "Dieci animali da toccare, sulle pagine spesse che resistono alle mani piccole.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "incarto",
+    "valori": [
+     "Senza incarto",
+     "Carta a pois",
+     "Carta a righe"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il gioco nella sua scatola, incartato se l’avete chiesto, col biglietto per il festeggiato."
+  }
+ ],
+ "recensioni": [
+  [
+   5,
+   "Il trenino è bellissimo e arrivato incartato a pois."
+  ],
+  [
+   5,
+   "La trottola gira davvero più di un minuto: mio figlio la cronometra."
+  ],
+  [
+   4,
+   "Ottimo, ma la scatola dell’orso grande non passava dalla porta."
+  ],
+  [
+   5,
+   "L’arcobaleno è il gioco più usato della casa."
+  ],
+  [
+   5,
+   "I cubi dell’alfabeto: ha scritto il suo nome da solo."
+  ],
+  [
+   4,
+   "Bello, i colori dal vivo sono più tenui."
+  ],
+  [
+   5,
+   "La lista di nascita ci ha salvato da tre orsetti uguali."
+  ],
+  [
+   3,
+   "Carino, ma l’aquilone col vento forte si gira."
+  ]
+ ],
+ "nomi": [
+  "Marco D.",
+  "Giulia S.",
+  "Lorenzo P.",
+  "Francesca R.",
+  "Tommaso B.",
+  "Beatrice C.",
+  "Edoardo F.",
+  "Aurora M.",
+  "Leonardo T.",
+  "Sofia G.",
+  "Mattia V.",
+  "Greta L."
+ ]
+}

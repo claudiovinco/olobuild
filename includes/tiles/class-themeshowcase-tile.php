@@ -7,7 +7,10 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * stessa home su un telefono che scorre insieme (se il tema ha l'anteprima mobile), i filtri per
  * categoria e per plugin richiesto («Con OLObooking», con la riga «Requisiti» e il bollino del
  * plugin nella scheda) e un visore a tutto schermo con la demo dal vivo (Olobuild_Demo_Temi) in
- * vista computer, tablet o telefono, col tema precedente e il successivo.
+ * vista computer, tablet o telefono, col tema precedente e il successivo. Sopra i filtri la casella
+ * di ricerca (dal 1.4.908, coi temi diventati più di 150): cerca nel nome, nella categoria, nell'effetto,
+ * nella riga sotto il nome, nelle parole chiave del tema e nel plugin richiesto, senza badare ad
+ * accenti e maiuscole; si somma ai filtri, anche nei numeri delle etichette.
  *
  * Si registra solo dove le demo sono accese: altrove non avrebbe niente da mostrare. Elenco,
  * nomi, categorie ed effetti vengono dai temi stessi (Olobuild_Theme_Importer::get_themes()),
@@ -29,6 +32,8 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
     protected $defaults = [
         'filter_bar'          => true,
         'filter_all_label'    => 'Tutti',
+        'search_bar'          => true,
+        'search_placeholder'  => 'Cerca un tema: nome, settore, effetto…',
         'show_category'       => true,
         'show_zone'           => true,
         'show_phone'          => true,
@@ -69,6 +74,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
         'succ'     => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>',
         'esterno'  => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg>',
         'chiudi'   => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+        'cerca'    => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>',
         'freccia'  => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
     ];
 
@@ -105,7 +111,13 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             // e riga «Requisiti» col suo bollino. Logo per superfici chiare: sta su una pastiglia bianca.
             $req       = is_array( $t['requires_plugin'] ?? null ) ? $t['requires_plugin'] : null;
             $req_nome  = $req ? (string) ( $req['label'] ?? ( $req['slug'] ?? '' ) ) : '';
+            // Il testo della ricerca: nome, categoria ed effetto (originali e tradotti), riga sotto il nome,
+            // parole chiave del tema, plugin richiesto. In minuscolo e senza accenti, come la ricerca.
+            $parole    = array_merge( [ $id, (string) ( $t['name'] ?? '' ), (string) ( $schede[ $id ]['sottotitolo'] ?? '' ),
+                $categoria, olobuild_t( $categoria ), $effetto, olobuild_t( $effetto ), $req_nome ],
+                array_map( 'strval', is_array( $t['tags'] ?? null ) ? $t['tags'] : [] ) );
             $temi[]    = [
+                'cerca'     => self::per_la_ricerca( implode( ' ', array_unique( array_filter( $parole ) ) ) ),
                 'id'        => $id,
                 'nome'      => (string) ( $t['name'] ?? $id ),
                 'sottotitolo' => (string) ( $schede[ $id ]['sottotitolo'] ?? '' ),
@@ -130,6 +142,13 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
         }
         // L'ordine è quello del catalogo: per data di creazione, dal più recente (Olobuild_Theme_Importer::get_themes).
         return $temi;
+    }
+
+    /** Un testo come lo confronta la ricerca: minuscolo, senza accenti, spazi semplici (il gemello JS è norma()). */
+    private static function per_la_ricerca( $testo ) {
+        $testo = function_exists( 'remove_accents' ) ? remove_accents( $testo ) : $testo;
+        $testo = function_exists( 'mb_strtolower' ) ? mb_strtolower( $testo, 'UTF-8' ) : strtolower( $testo );
+        return trim( preg_replace( '/\s+/u', ' ', str_replace( [ '’', "'" ], ' ', $testo ) ) );
     }
 
     /** «4:3», «4/3» o «4-3» (i formati storici delle proporzioni) → «4/3» per aspect-ratio. */
@@ -209,6 +228,8 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
         $nome   = $this->tipografia( $s, 'name' );
         // «Requisiti» prende il colore della categoria (o del nome): sulle card scure il testo intorno è scuro.
         $col_req = $this->safe_color_css( $s['meta_color'] ?? '' ) ?: $this->safe_color_css( $s['name_color'] ?? '' );
+        // «Guarda la demo» si mescola col colore del nome: è quello che regge sul fondo della scheda (chiara o scura).
+        $col_az  = $this->safe_color_css( $s['name_color'] ?? '' ) ?: 'currentColor';
         // Bollini del visore: i colori del tema e le palette da provare (versione chiara e scura del bollino:
         // il visore mostra quella che il tema aperto riceverà).
         $palette = [];
@@ -237,7 +258,25 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ovt-filtro:hover{border-color:var(--ovt-acc);}
             .<?php echo $uid; ?> .ovt-filtro .ovt-n{font-size:12px;font-weight:500;opacity:.6;}
             .<?php echo $uid; ?> .ovt-filtro.is-on{background:var(--ovt-acc);border-color:var(--ovt-acc);color:var(--ovt-on);}
-            .<?php echo $uid; ?> .ovt-filtro.is-on .ovt-n{opacity:.8;}
+            .<?php echo $uid; ?> .ovt-filtro.is-on .ovt-n{opacity:1;}
+            .<?php echo $uid; ?> .ovt-cerca{display:flex;justify-content:<?php echo $giust; ?>;margin:0 0 var(--olo-space-md);<?php echo '' !== $filtri ? 'color:' . $filtri . ';' : ''; ?>}
+            .<?php echo $uid; ?> .ovt-cerca-box{display:flex;align-items:center;gap:var(--olo-space-sm);width:min(100%,480px);height:50px;padding:0 var(--olo-space-xs) 0 var(--olo-space-md);border-radius:var(--olo-btn-border-radius);border:1px solid color-mix(in srgb,currentColor 24%,transparent);background:color-mix(in srgb,currentColor 5%,transparent);color:inherit;cursor:text;transition:border-color .2s ease,background-color .2s ease;}
+            .<?php echo $uid; ?> .ovt-cerca-box:hover{border-color:color-mix(in srgb,currentColor 45%,transparent);}
+            .<?php echo $uid; ?> .ovt-cerca-box:focus-within{border-color:var(--ovt-acc);background:color-mix(in srgb,currentColor 8%,transparent);outline:2px solid var(--ovt-acc);outline-offset:3px;}
+            .<?php echo $uid; ?> .ovt-cerca-box svg{flex:none;width:20px;height:20px;opacity:.7;}
+            .<?php echo $uid; ?> .ovt-cerca-in{flex:1;min-width:0;height:100%;margin:0;padding:0;border:0;background:transparent;color:inherit;font:inherit;font-size:16px;outline:none;box-shadow:none;-webkit-appearance:none;appearance:none;}
+            .<?php echo $uid; ?> .ovt-cerca-in::placeholder{color:currentColor;opacity:.62;}
+            /* l'anello del focus lo porta tutta la casella (:focus-within): via quello generico dei campi del sito */
+            .<?php echo $uid; ?> .ovt-cerca-box .ovt-cerca-in:focus,.<?php echo $uid; ?> .ovt-cerca-box .ovt-cerca-in:focus-visible{border:0;box-shadow:none;outline:none;}
+            .<?php echo $uid; ?> .ovt-cerca-in::-webkit-search-cancel-button,.<?php echo $uid; ?> .ovt-cerca-in::-webkit-search-decoration{-webkit-appearance:none;}
+            .<?php echo $uid; ?> .ovt-cerca-x{flex:none;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;padding:0;border:0;border-radius:var(--olo-btn-border-radius);background:transparent;color:inherit;cursor:pointer;}
+            .<?php echo $uid; ?> .ovt-cerca-x:hover{background:color-mix(in srgb,currentColor 12%,transparent);}
+            .<?php echo $uid; ?> .ovt-cerca-x:focus-visible{outline:2px solid var(--ovt-acc);outline-offset:1px;}
+            .<?php echo $uid; ?> .ovt-cerca-x[hidden]{display:none;}
+            .<?php echo $uid; ?> .ovt-cerca-x svg{width:18px;height:18px;opacity:1;}
+            .<?php echo $uid; ?> .ovt-vuoto{display:flex;flex-direction:column;align-items:center;gap:var(--olo-space-sm);padding:var(--olo-space-xl) var(--olo-space-md);text-align:center;font-size:16px;<?php echo '' !== $filtri ? 'color:' . $filtri . ';' : ''; ?>}
+            .<?php echo $uid; ?> .ovt-vuoto[hidden]{display:none;}
+            .<?php echo $uid; ?> .ovt-vuoto p{margin:0;}
             .<?php echo $uid; ?> .ovt-sep{flex:none;align-self:center;width:1px;height:22px;margin:0 var(--olo-space-xs);background:color-mix(in srgb,currentColor 20%,transparent);}
             .<?php echo $uid; ?> .ovt-griglia{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(<?php echo $cols; ?>,minmax(0,1fr));gap:<?php echo $gap; ?>px;}
             .<?php echo $uid; ?> .ovt-voce{margin:0;padding:0;}
@@ -263,7 +302,9 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ovt-bollino img{display:block;height:14px;width:auto;max-width:110px;}
             .<?php echo $uid; ?> .ovt-bollino.is-edizione{gap:8px;padding:6px 10px;}
             .<?php echo $uid; ?> .ovt-bollino.is-edizione img{height:30px;max-width:150px;}
-            .<?php echo $uid; ?> .ovt-azione{margin-top:auto;padding-top:var(--olo-space-sm);display:inline-flex;align-items:center;gap:var(--olo-space-xs);font-size:14px;font-weight:600;color:var(--ovt-acc);}
+            /* «Guarda la demo»: l'accento tirato verso il colore del nome (o del testo della scheda), leggibile sulle card
+               chiare e scure (l'accento pieno è fatto per fare da fondo col suo testo sopra: come testo sul fondo scuro restava a 3,7) */
+            .<?php echo $uid; ?> .ovt-azione{margin-top:auto;padding-top:var(--olo-space-sm);display:inline-flex;align-items:center;gap:var(--olo-space-xs);font-size:14px;font-weight:600;color:color-mix(in srgb,var(--ovt-acc) 65%,<?php echo $col_az; ?>);}
             .<?php echo $uid; ?> .ovt-azione svg{width:16px;height:16px;transition:transform .2s ease;}
             .<?php echo $uid; ?> .ovt-card:hover .ovt-azione svg{transform:translateX(3px);}
             @media (max-width:959px){.<?php echo $uid; ?> .ovt-griglia{grid-template-columns:repeat(<?php echo min( 2, $cols ); ?>,minmax(0,1fr));}}
@@ -314,6 +355,21 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 .<?php echo $uid; ?> .ovt-card:hover .ovt-anteprima img{object-position:top center;}}
         </style>
         <div class="olo-themeshowcase <?php echo esc_attr( $uid ); ?>" data-ovt="<?php echo esc_attr( $uid ); ?>">
+            <?php if ( ! empty( $s['search_bar'] ) ) :
+                $segnaposto = trim( (string) $s['search_placeholder'] );
+                // il testo predefinito (non salvato nel template) si traduce come gli altri testi della tile
+                if ( $segnaposto === $this->defaults['search_placeholder'] ) {
+                    $segnaposto = olobuild_t( $segnaposto );
+                }
+                ?>
+            <div class="ovt-cerca" role="search" data-olo-interactive>
+                <label class="ovt-cerca-box">
+                    <?php echo $ico['cerca']; ?>
+                    <input type="search" class="ovt-cerca-in" autocomplete="off" spellcheck="false" enterkeyhint="search" aria-label="<?php echo esc_attr( olobuild_t( 'Cerca un tema' ) ); ?>" placeholder="<?php echo esc_attr( '' !== $segnaposto ? $segnaposto : olobuild_t( 'Cerca un tema' ) ); ?>" />
+                    <button type="button" class="ovt-cerca-x" hidden aria-label="<?php echo esc_attr( olobuild_t( 'Azzera la ricerca' ) ); ?>" title="<?php echo esc_attr( olobuild_t( 'Azzera la ricerca' ) ); ?>"><?php echo $ico['chiudi']; ?></button>
+                </label>
+            </div>
+            <?php endif; ?>
             <?php if ( ! empty( $s['filter_bar'] ) && ( count( $categorie ) > 1 || ! empty( $requisiti ) ) ) : ?>
             <div class="ovt-filtri" role="group" aria-label="<?php echo esc_attr( olobuild_t( 'Categorie' ) ); ?>" data-olo-interactive>
                 <button type="button" class="ovt-filtro is-on" aria-pressed="true" data-cat=""><?php echo esc_html( (string) $s['filter_all_label'] ); ?><span class="ovt-n"><?php echo (int) count( $temi ); ?></span></button>
@@ -330,7 +386,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
             <ul class="ovt-griglia" role="list">
                 <?php foreach ( $temi as $t ) : ?>
-                <li class="ovt-voce" data-cat="<?php echo esc_attr( $t['categoria'] ); ?>" data-req="<?php echo esc_attr( $t['req'] ); ?>">
+                <li class="ovt-voce" data-cat="<?php echo esc_attr( $t['categoria'] ); ?>" data-req="<?php echo esc_attr( $t['req'] ); ?>" data-cerca="<?php echo esc_attr( $t['cerca'] ); ?>">
                     <a class="ovt-card" href="<?php echo esc_url( $t['demo'] ); ?>" data-tema="<?php echo esc_attr( $t['id'] ); ?>" data-nome="<?php echo esc_attr( $t['nome'] ); ?>" data-categoria="<?php echo esc_attr( $t['etichetta'] ); ?>"<?php echo $t['scuro'] ? ' data-scuro="1"' : ''; ?><?php echo '' !== $t['propri'] ? ' data-colori="' . esc_attr( $t['propri'] ) . '"' : ''; ?><?php echo '' !== $t['colore'] ? ' style="--ovt-tema:' . esc_attr( $t['colore'] ) . '"' : ''; ?><?php echo '' !== $t['req_url'] ? ' data-cta-url="' . esc_url( $t['req_url'] ) . '" data-cta-testo="' . esc_attr( sprintf( olobuild_t( 'Scopri %s' ), $t['req_nome'] ) ) . '"' : ''; ?>>
                         <?php $tel = ! empty( $s['show_phone'] ) && '' !== $t['telefono'] && '' !== $t['anteprima']; ?>
                         <span class="ovt-anteprima<?php echo $tel ? ' con-tel' : ''; ?>">
@@ -363,6 +419,10 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 </li>
                 <?php endforeach; ?>
             </ul>
+            <div class="ovt-vuoto" hidden aria-live="polite">
+                <p data-vuoto="<?php echo esc_attr( olobuild_t( 'Nessun tema per «%s».' ) ); ?>" data-vuoto-filtri="<?php echo esc_attr( olobuild_t( 'Nessun tema con questi filtri.' ) ); ?>"></p>
+                <button type="button" class="ovt-filtro" data-tutti><?php echo esc_html( olobuild_t( 'Mostra tutti i temi' ) ); ?></button>
+            </div>
             <?php if ( ! $builder ) : ?>
             <dialog class="ovt-visore" aria-labelledby="<?php echo esc_attr( $uid ); ?>-nome">
                 <div class="ovt-barra<?php echo $palette ? ' con-palette' : ''; ?>">
@@ -410,14 +470,25 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             var root = document.querySelector('[data-ovt="<?php echo esc_js( $uid ); ?>"]');
             if (!root) { return; }
             var voci = [].slice.call(root.querySelectorAll('.ovt-voce'));
-            var filtri = [].slice.call(root.querySelectorAll('.ovt-filtro'));
+            var filtri = [].slice.call(root.querySelectorAll('.ovt-filtri .ovt-filtro'));
             // Due gruppi che si sommano: la categoria (uno alla volta, «Tutti» = nessuna) e il plugin
             // richiesto («Con OLObooking»: un clic lo accende, un altro lo spegne). I numeri contano
             // i temi che si vedrebbero scegliendo quel filtro, con l'altro gruppo com'è.
-            var stato = { cat: '', req: '' };
+            // La ricerca si somma ai due gruppi: ogni parola scritta deve stare nel testo del tema (data-cerca,
+            // già minuscolo e senza accenti dal PHP), in qualsiasi ordine.
+            var stato = { cat: '', req: '', q: [] };
+            var cerca = root.querySelector('.ovt-cerca-in'), azzera = root.querySelector('.ovt-cerca-x');
+            var vuoto = root.querySelector('.ovt-vuoto');
+            function norma(s) {
+                return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[\u2019\u0027]/g, ' ');
+            }
             function passa(v, cat, req) {
                 var ok = cat ? v.getAttribute('data-cat') === cat : true;
                 if (req) { ok = ok ? v.getAttribute('data-req') === req : false; }
+                if (ok) {
+                    var testo = v.getAttribute('data-cerca') || '';
+                    ok = stato.q.every(function (w) { return testo.indexOf(w) !== -1; });
+                }
                 return ok;
             }
             function conta(cat, req) {
@@ -434,7 +505,34 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                     b.setAttribute('aria-pressed', on ? 'true' : 'false');
                     if (n) { n.textContent = perReq ? conta(stato.cat, b.getAttribute('data-req')) : conta(b.getAttribute('data-cat'), stato.req); }
                 });
-                voci.forEach(function (v) { v.hidden = !passa(v, stato.cat, stato.req); });
+                var visti = 0;
+                voci.forEach(function (v) { v.hidden = !passa(v, stato.cat, stato.req); if (!v.hidden) { visti++; } });
+                if (vuoto) {
+                    vuoto.hidden = visti !== 0;
+                    var p = vuoto.querySelector('p');
+                    p.textContent = stato.q.length ? p.getAttribute('data-vuoto').replace('%s', cerca.value.trim()) : p.getAttribute('data-vuoto-filtri');
+                }
+            }
+            function cercaOra() {
+                stato.q = norma(cerca.value).split(/\s+/).filter(function (w) { return w !== ''; });
+                if (azzera) { azzera.hidden = cerca.value === ''; }
+                filtra(stato.cat, stato.req);
+            }
+            if (cerca) {
+                cerca.addEventListener('input', cercaOra);
+                cerca.addEventListener('keydown', function (e) {
+                    // Esc svuota la casella (e non chiude niente intorno); Invio non manda nessun modulo
+                    if (e.key === 'Escape') { if (cerca.value !== '') { e.preventDefault(); e.stopPropagation(); cerca.value = ''; cercaOra(); } }
+                    if (e.key === 'Enter') { e.preventDefault(); }
+                });
+                if (azzera) { azzera.addEventListener('click', function () { cerca.value = ''; cercaOra(); cerca.focus(); }); }
+            }
+            if (vuoto) {
+                vuoto.querySelector('[data-tutti]').addEventListener('click', function () {
+                    if (cerca) { cerca.value = ''; if (azzera) { azzera.hidden = true; } }
+                    stato.q = [];
+                    filtra('', '');
+                });
             }
             filtri.forEach(function (b) {
                 b.addEventListener('click', function () {

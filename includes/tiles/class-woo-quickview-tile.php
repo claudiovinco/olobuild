@@ -583,6 +583,8 @@ class Olobuild_Woo_Quickview_Tile extends Olobuild_Tile_Base {
             function decora(card){
                 var gia = card.getAttribute('data-olo-qv');
                 if(gia === OWNER){return}
+                /* La griglia ha spento la Vista rapida per le sue card (opzione della tile Prodotti). */
+                if(gia === 'no'){return}
                 var imgWrap = card.querySelector('.olo-woo-card-img');
                 if(!imgWrap){return}
                 if(!card.getAttribute('data-product-id')){return}

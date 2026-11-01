@@ -67,11 +67,13 @@ export default {
       condition: { field: 'padding', op: 'eq', value: 'custom' } },
 
     { type: 'separator', label: t('Aspetto preset') },
+    // Ogni voce porta lo sfondo e il testo che la variante dà (le regole uk-section-* di Olobuild_Style_System):
+    // l'inspector la mostra come un tondo di quel colore, col nome in sovraimpressione.
     { key: 'style', label: t('Variante colore'), type: 'select', options: [
-      { value: 'default',   label: t('Predefinito') },
-      { value: 'muted',     label: t('Attenuato') },
-      { value: 'primary',   label: t('Primario') },
-      { value: 'secondary', label: t('Secondario') },
+      { value: 'default',   label: t('Predefinito'), colore: 'var(--olo-color-background)', testo: 'var(--olo-color-text)' },
+      { value: 'muted',     label: t('Attenuato'),   colore: 'var(--olo-color-muted)',      testo: 'var(--olo-color-muted-contrast)' },
+      { value: 'primary',   label: t('Primario'),    colore: 'var(--olo-color-primary)',    testo: 'var(--olo-color-primary-contrast)' },
+      { value: 'secondary', label: t('Secondario'),  colore: 'var(--olo-color-secondary)',  testo: 'var(--olo-color-secondary-contrast)' },
     ], description: t('Variante rapida basata sui colori globali del tema. Per uno sfondo personalizzato usa "Sfondo" nelle sezioni sotto.') },
 
     { type: 'separator', label: t('Sticky') },

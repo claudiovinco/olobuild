@@ -1,0 +1,1080 @@
+{
+ "tema": "crocevia",
+ "titolo_dentro": "Nella confezione",
+ "attributi": {
+  "marca": {
+   "nome": "Marca",
+   "termini": []
+  },
+  "numero": {
+   "nome": "Numero",
+   "termini": [
+    "38",
+    "39",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44"
+   ]
+  }
+ },
+ "categorie": [
+  {
+   "slug": "moda",
+   "nome": "Moda",
+   "descrizione": "Sneakers, zaini, occhiali.",
+   "foto": "pexels-11324518.jpg"
+  },
+  {
+   "slug": "casa",
+   "nome": "Casa",
+   "descrizione": "Tazze, piante, piccole cose belle.",
+   "foto": "pexels-8533397.jpg"
+  },
+  {
+   "slug": "tech",
+   "nome": "Tech",
+   "descrizione": "Cuffie, smartwatch, casse.",
+   "foto": "pexels-8217430.jpg"
+  },
+  {
+   "slug": "bellezza",
+   "nome": "Bellezza",
+   "descrizione": "Profumi, trucchi, pennelli.",
+   "foto": "pexels-15574229.jpg"
+  },
+  {
+   "slug": "sport",
+   "nome": "Sport",
+   "descrizione": "Yoga, pesi, borracce.",
+   "foto": "pexels-4793328.jpg"
+  },
+  {
+   "slug": "bimbi",
+   "nome": "Bimbi",
+   "descrizione": "Giochi di legno e costruzioni.",
+   "foto": "pexels-7269676.jpg"
+  },
+  {
+   "slug": "tempo-libero",
+   "nome": "Tempo libero",
+   "descrizione": "Puzzle, libri, giochi da tavolo.",
+   "foto": "pexels-3852577.jpg"
+  },
+  {
+   "slug": "gourmet",
+   "nome": "Gourmet",
+   "descrizione": "Caffè e cioccolato.",
+   "foto": "pexels-6167340.jpg"
+  }
+ ],
+ "prodotti": [
+  {
+   "sku": "CRO-001",
+   "nome": "Sneakers Passo, bianche",
+   "slug": "sneakers-passo",
+   "cat": [
+    "moda"
+   ],
+   "prezzo": 69,
+   "sconto": 49,
+   "scorta": 60,
+   "voto": 4.6,
+   "recensioni": 1840,
+   "evidenza": true,
+   "foto": [
+    "pexels-11324518.jpg",
+    "pexels-11324548.jpg"
+   ],
+   "punti": [
+    "Pelle e rete traspirante",
+    "Suola in gomma riciclata",
+    "Lacci di ricambio",
+    "Dal 38 al 44"
+   ],
+   "testo": "Le sneakers bianche di tutti i giorni, con la suola che non scivola.",
+   "upsell": [],
+   "cross": [
+    "CRO-003",
+    "CRO-016"
+   ],
+   "varianti": {
+    "attributo": "numero",
+    "valori": [
+     "38",
+     "39",
+     "40",
+     "41",
+     "42",
+     "43",
+     "44"
+    ],
+    "esaurite": [
+     "38",
+     "44"
+    ]
+   },
+   "attributi": {
+    "marca": [
+     "Passo"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-002",
+   "nome": "Zaino da città Valico",
+   "slug": "zaino-valico",
+   "cat": [
+    "moda"
+   ],
+   "prezzo": 79,
+   "sconto": 0,
+   "scorta": 35,
+   "voto": 4.7,
+   "recensioni": 612,
+   "evidenza": false,
+   "foto": [
+    "pexels-34207686.jpg"
+   ],
+   "punti": [
+    "Tela cerata impermeabile",
+    "Tasca imbottita per il portatile",
+    "22 litri",
+    "Spallacci regolabili"
+   ],
+   "testo": "Lo zaino che va in ufficio e in montagna: tela cerata, ci sta il portatile.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "marca": [
+     "Valico"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-003",
+   "nome": "Occhiali da sole Faro",
+   "slug": "occhiali-faro",
+   "cat": [
+    "moda"
+   ],
+   "prezzo": 59,
+   "sconto": 45,
+   "scorta": 40,
+   "voto": 4.5,
+   "recensioni": 388,
+   "evidenza": false,
+   "foto": [
+    "pexels-8104329.jpg",
+    "pexels-15403324.jpg"
+   ],
+   "punti": [
+    "Lenti polarizzate",
+    "Montatura in acetato",
+    "Custodia rigida",
+    "Protezione UV400"
+   ],
+   "testo": "Gli occhiali neri dalla montatura squadrata, con le lenti polarizzate.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "marca": [
+     "Faro"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-004",
+   "nome": "Cuffie wireless Eco",
+   "slug": "cuffie-eco",
+   "cat": [
+    "tech"
+   ],
+   "prezzo": 129,
+   "sconto": 99,
+   "scorta": 30,
+   "voto": 4.6,
+   "recensioni": 2210,
+   "evidenza": true,
+   "foto": [
+    "pexels-7241444.jpg"
+   ],
+   "punti": [
+    "Cancellazione attiva del rumore",
+    "40 ore di musica",
+    "Ricarica USB-C",
+    "Si piegano"
+   ],
+   "testo": "Silenziose in treno, comode per ore: le cuffie con la cancellazione del rumore.",
+   "upsell": [],
+   "cross": [
+    "CRO-007"
+   ],
+   "attributi": {
+    "marca": [
+     "Eco"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-005",
+   "nome": "Smartwatch Polso",
+   "slug": "smartwatch-polso",
+   "cat": [
+    "tech"
+   ],
+   "prezzo": 199,
+   "sconto": 0,
+   "scorta": 25,
+   "voto": 4.7,
+   "recensioni": 1470,
+   "evidenza": true,
+   "foto": [
+    "pexels-8217430.jpg",
+    "pexels-8217295.jpg",
+    "pexels-8217294.jpg"
+   ],
+   "punti": [
+    "GPS e cardiofrequenzimetro",
+    "Sette giorni di batteria",
+    "Impermeabile",
+    "Notifiche dal telefono"
+   ],
+   "testo": "L’orologio che conta i passi e il sonno, e dura una settimana.",
+   "upsell": [],
+   "cross": [
+    "CRO-016"
+   ],
+   "attributi": {
+    "marca": [
+     "Polso"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-006",
+   "nome": "Cassa bluetooth Mimetica",
+   "slug": "cassa-mimetica",
+   "cat": [
+    "tech"
+   ],
+   "prezzo": 59,
+   "sconto": 0,
+   "scorta": 45,
+   "voto": 4.4,
+   "recensioni": 690,
+   "evidenza": false,
+   "foto": [
+    "pexels-33693664.jpg",
+    "pexels-33797083.jpg"
+   ],
+   "punti": [
+    "Impermeabile IP67",
+    "12 ore di musica",
+    "Laccetto in silicone",
+    "Si abbina a una seconda"
+   ],
+   "testo": "La cassa da zaino, mimetica e impermeabile.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "marca": [
+     "Tuono"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-007",
+   "nome": "Cassa bluetooth Rombo",
+   "slug": "cassa-rombo",
+   "cat": [
+    "tech"
+   ],
+   "prezzo": 49,
+   "sconto": 39,
+   "scorta": 50,
+   "voto": 4.5,
+   "recensioni": 512,
+   "evidenza": false,
+   "foto": [
+    "pexels-34241799.jpg"
+   ],
+   "punti": [
+    "Bassi profondi",
+    "10 ore di musica",
+    "Laccetto da polso",
+    "Vivavoce"
+   ],
+   "testo": "Piccola, nera a righe, coi bassi di una cassa grande.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "marca": [
+     "Tuono"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-008",
+   "nome": "Tazza Tondo, bianca",
+   "slug": "tazza-tondo",
+   "cat": [
+    "casa"
+   ],
+   "prezzo": 14,
+   "sconto": 0,
+   "scorta": 120,
+   "voto": 4.8,
+   "recensioni": 330,
+   "evidenza": false,
+   "foto": [
+    "pexels-8533397.jpg"
+   ],
+   "punti": [
+    "Porcellana",
+    "350 ml",
+    "Col piattino",
+    "Lavastoviglie"
+   ],
+   "testo": "La tazza bianca col piattino lungo per il biscotto.",
+   "upsell": [],
+   "cross": [
+    "CRO-023"
+   ],
+   "attributi": {
+    "marca": [
+     "Tondo"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-009",
+   "nome": "Tazza Rossa smaltata",
+   "slug": "tazza-rossa",
+   "cat": [
+    "casa"
+   ],
+   "prezzo": 16,
+   "sconto": 12,
+   "scorta": 90,
+   "voto": 4.6,
+   "recensioni": 210,
+   "evidenza": false,
+   "foto": [
+    "pexels-38448889.jpg",
+    "pexels-36179805.jpg"
+   ],
+   "punti": [
+    "Gres smaltato rosso",
+    "300 ml",
+    "Lavastoviglie e microonde",
+    "Manico grande"
+   ],
+   "testo": "Il rosso che sveglia: la tazza del caffè lungo.",
+   "upsell": [],
+   "cross": [
+    "CRO-023"
+   ],
+   "attributi": {
+    "marca": [
+     "Tondo"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-010",
+   "nome": "Aloe in vaso di cemento",
+   "slug": "aloe-vaso-cemento",
+   "cat": [
+    "casa"
+   ],
+   "prezzo": 24,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.7,
+   "recensioni": 280,
+   "evidenza": false,
+   "foto": [
+    "pexels-15601643.jpg",
+    "pexels-3614119.jpg"
+   ],
+   "punti": [
+    "Aloe vera di serra",
+    "Vaso in cemento grigio",
+    "Si annaffia ogni due settimane",
+    "Spedita protetta"
+   ],
+   "testo": "La pianta che non muore: aloe nel vaso di cemento.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "marca": [
+     "Serra Viva"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-011",
+   "nome": "Pianta nel vaso arancio",
+   "slug": "pianta-vaso-arancio",
+   "cat": [
+    "casa"
+   ],
+   "prezzo": 29,
+   "sconto": 0,
+   "scorta": 25,
+   "voto": 4.5,
+   "recensioni": 96,
+   "evidenza": false,
+   "foto": [
+    "pexels-35062097.jpg"
+   ],
+   "punti": [
+    "Dracena di serra",
+    "Vaso in plastica riciclata",
+    "Luce indiretta",
+    "Alta 50 cm"
+   ],
+   "testo": "La dracena nel vaso arancio, per un angolo che ha bisogno di colore.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "marca": [
+     "Serra Viva"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-012",
+   "nome": "Eau de parfum Vetro, 50 ml",
+   "slug": "eau-de-parfum-vetro",
+   "cat": [
+    "bellezza"
+   ],
+   "prezzo": 79,
+   "sconto": 59,
+   "scorta": 30,
+   "voto": 4.6,
+   "recensioni": 540,
+   "evidenza": true,
+   "foto": [
+    "pexels-15574229.jpg",
+    "pexels-3785784.jpg"
+   ],
+   "punti": [
+    "Fiori bianchi e legno di cedro",
+    "Flacone in vetro spesso",
+    "Dura tutto il giorno",
+    "Fatto a Grasse"
+   ],
+   "testo": "Fiori bianchi e cedro: il profumo che si ricorda.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "marca": [
+     "Vetro"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-013",
+   "nome": "Palette viso Pesca",
+   "slug": "palette-viso-pesca",
+   "cat": [
+    "bellezza"
+   ],
+   "prezzo": 35,
+   "sconto": 0,
+   "scorta": 50,
+   "voto": 4.5,
+   "recensioni": 418,
+   "evidenza": false,
+   "foto": [
+    "pexels-7256120.jpg",
+    "pexels-7256160.jpg"
+   ],
+   "punti": [
+    "Fard, illuminante e terra",
+    "Con lo specchio",
+    "Senza parabeni",
+    "Tre pennelli inclusi"
+   ],
+   "testo": "Tutto il viso in una palette color pesca.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "marca": [
+     "Pesca"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-014",
+   "nome": "Set di pennelli",
+   "slug": "set-pennelli",
+   "cat": [
+    "bellezza"
+   ],
+   "prezzo": 29,
+   "sconto": 0,
+   "scorta": 60,
+   "voto": 4.6,
+   "recensioni": 302,
+   "evidenza": false,
+   "foto": [
+    "pexels-3800060.jpg"
+   ],
+   "punti": [
+    "Otto pennelli",
+    "Setole sintetiche morbide",
+    "Bicchiere portapennelli",
+    "Si lavano"
+   ],
+   "testo": "Otto pennelli nel bicchiere: dal fondotinta alla sfumatura.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "marca": [
+     "Pesca"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-015",
+   "nome": "Tappetino yoga Lilla",
+   "slug": "tappetino-yoga-lilla",
+   "cat": [
+    "sport"
+   ],
+   "prezzo": 39,
+   "sconto": 29,
+   "scorta": 70,
+   "voto": 4.7,
+   "recensioni": 960,
+   "evidenza": true,
+   "foto": [
+    "pexels-4793328.jpg",
+    "pexels-8899524.jpg",
+    "pexels-9004302.jpg"
+   ],
+   "punti": [
+    "Gomma naturale antiscivolo",
+    "6 mm",
+    "Cinghia per portarlo",
+    "Si lava con acqua"
+   ],
+   "testo": "Il tappetino che non scivola anche quando si suda.",
+   "upsell": [],
+   "cross": [
+    "CRO-016",
+    "CRO-017"
+   ],
+   "attributi": {
+    "marca": [
+     "Asana"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-016",
+   "nome": "Borraccia termica in acciaio",
+   "slug": "borraccia-termica",
+   "cat": [
+    "sport"
+   ],
+   "prezzo": 25,
+   "sconto": 0,
+   "scorta": 100,
+   "voto": 4.8,
+   "recensioni": 1320,
+   "evidenza": false,
+   "foto": [
+    "pexels-7879967.jpg",
+    "pexels-7879796.jpg"
+   ],
+   "punti": [
+    "Acciaio inossidabile",
+    "Fredda 24 ore, calda 12",
+    "750 ml",
+    "Non perde"
+   ],
+   "testo": "L’acqua fredda tutto il giorno, il tè caldo fino a sera.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "marca": [
+     "Sorgente"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-017",
+   "nome": "Manubri 1,5 kg, la coppia",
+   "slug": "manubri-coppia",
+   "cat": [
+    "sport"
+   ],
+   "prezzo": 19,
+   "sconto": 15,
+   "scorta": 80,
+   "voto": 4.6,
+   "recensioni": 640,
+   "evidenza": false,
+   "foto": [
+    "pexels-16679756.jpg",
+    "pexels-16567048.jpg",
+    "pexels-16567046.jpg"
+   ],
+   "punti": [
+    "Rivestiti in vinile",
+    "Esagonali: non rotolano",
+    "Due pesi da 1,5 kg",
+    "Presa morbida"
+   ],
+   "testo": "Per l’allenamento a casa: i manubri che non rotolano.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "marca": [
+     "Asana"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-018",
+   "nome": "Treno dei numeri, legno",
+   "slug": "treno-numeri-legno",
+   "cat": [
+    "bimbi"
+   ],
+   "prezzo": 34,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.9,
+   "recensioni": 410,
+   "evidenza": true,
+   "foto": [
+    "pexels-7269676.jpg",
+    "pexels-7269674.jpg",
+    "pexels-7269668.jpg"
+   ],
+   "punti": [
+    "Legno di faggio",
+    "Colori all’acqua",
+    "Dai 18 mesi",
+    "Si impara a contare"
+   ],
+   "testo": "Il treno coi numeri da infilare: si gioca e si conta.",
+   "upsell": [],
+   "cross": [
+    "CRO-019",
+    "CRO-020"
+   ],
+   "attributi": {
+    "marca": [
+     "Trottola"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-019",
+   "nome": "Animali in legno, sei pezzi",
+   "slug": "animali-legno",
+   "cat": [
+    "bimbi"
+   ],
+   "prezzo": 28,
+   "sconto": 0,
+   "scorta": 50,
+   "voto": 4.8,
+   "recensioni": 260,
+   "evidenza": false,
+   "foto": [
+    "pexels-3661201.jpg",
+    "pexels-3662945.jpg"
+   ],
+   "punti": [
+    "Giraffa, elefante e altri quattro",
+    "Legno levigato a mano",
+    "Dai 12 mesi",
+    "Sacchetto di cotone"
+   ],
+   "testo": "Sei animali di legno levigato, da tenere in mano.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "marca": [
+     "Trottola"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-020",
+   "nome": "Carretto delle forme",
+   "slug": "carretto-forme",
+   "cat": [
+    "bimbi"
+   ],
+   "prezzo": 29,
+   "sconto": 24,
+   "scorta": 35,
+   "voto": 4.7,
+   "recensioni": 188,
+   "evidenza": false,
+   "foto": [
+    "pexels-35230776.jpg"
+   ],
+   "punti": [
+    "Dodici forme colorate",
+    "Le ruote girano",
+    "Dai 12 mesi",
+    "Legno certificato"
+   ],
+   "testo": "Il carretto da tirare, con le forme da far passare dai buchi giusti.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "marca": [
+     "Trottola"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-021",
+   "nome": "Cubi colorati, 20 pezzi",
+   "slug": "cubi-colorati",
+   "cat": [
+    "bimbi"
+   ],
+   "prezzo": 18,
+   "sconto": 0,
+   "scorta": 60,
+   "voto": 4.6,
+   "recensioni": 140,
+   "evidenza": false,
+   "foto": [
+    "pexels-34817526.jpg"
+   ],
+   "punti": [
+    "Legno colorato",
+    "Venti cubi",
+    "Dai 10 mesi",
+    "Scatola di cartone"
+   ],
+   "testo": "Venti cubi di legno per le prime torri.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "marca": [
+     "Trottola"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-022",
+   "nome": "Puzzle in legno, 1000 pezzi",
+   "slug": "puzzle-legno",
+   "cat": [
+    "tempo-libero"
+   ],
+   "prezzo": 24,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.7,
+   "recensioni": 350,
+   "evidenza": false,
+   "foto": [
+    "pexels-3852577.jpg",
+    "pexels-24551366.jpg"
+   ],
+   "punti": [
+    "Pezzi in legno tagliati al laser",
+    "Forme insolite",
+    "50 × 70 cm",
+    "Il poster dell’immagine"
+   ],
+   "testo": "Mille pezzi di legno, ognuno con una forma: la sera di novembre.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "marca": [
+     "Tassello"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-023",
+   "nome": "Caffè in grani Crocevia, 1 kg",
+   "slug": "caffe-grani-crocevia",
+   "cat": [
+    "gourmet"
+   ],
+   "prezzo": 22,
+   "sconto": 18,
+   "scorta": 80,
+   "voto": 4.7,
+   "recensioni": 870,
+   "evidenza": false,
+   "foto": [
+    "pexels-14545422.jpg",
+    "pexels-7657839.jpg"
+   ],
+   "punti": [
+    "Miscela 70% arabica",
+    "Tostatura media",
+    "Per macchina e moka",
+    "Sacchetto con valvola"
+   ],
+   "testo": "La nostra miscela: cioccolato e nocciola, per l’espresso di casa.",
+   "upsell": [],
+   "cross": [
+    "CRO-024",
+    "CRO-008"
+   ],
+   "attributi": {
+    "marca": [
+     "Crocevia"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-024",
+   "nome": "Cioccolato fondente 70%, tre tavolette",
+   "slug": "cioccolato-fondente",
+   "cat": [
+    "gourmet"
+   ],
+   "prezzo": 12,
+   "sconto": 9,
+   "scorta": 120,
+   "voto": 4.8,
+   "recensioni": 1020,
+   "evidenza": false,
+   "foto": [
+    "pexels-6167340.jpg",
+    "pexels-6167329.jpg",
+    "pexels-6167345.jpg"
+   ],
+   "punti": [
+    "Cacao del Perù",
+    "Tre tavolette da 100 g",
+    "Senza lattosio",
+    "Fatto a Modica"
+   ],
+   "testo": "Il fondente al 70%, croccante, di Modica.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "marca": [
+     "Crocevia"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-025",
+   "nome": "Tavolette bianco e latte",
+   "slug": "tavolette-bianco-latte",
+   "cat": [
+    "gourmet"
+   ],
+   "prezzo": 7,
+   "sconto": 0,
+   "scorta": 90,
+   "voto": 4.4,
+   "recensioni": 230,
+   "evidenza": false,
+   "foto": [
+    "pexels-4113365.jpg"
+   ],
+   "punti": [
+    "Una bianca, una al latte",
+    "100 g ciascuna",
+    "Latte delle Alpi",
+    "Per i più golosi"
+   ],
+   "testo": "Due tavolette, bianca e al latte, per chi non ama il fondente.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "marca": [
+     "Crocevia"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-026",
+   "nome": "Il quaderno delle letture",
+   "slug": "quaderno-letture",
+   "cat": [
+    "tempo-libero"
+   ],
+   "prezzo": 18,
+   "sconto": 0,
+   "scorta": 70,
+   "voto": 4.6,
+   "recensioni": 190,
+   "evidenza": false,
+   "foto": [
+    "pexels-32505301.jpg",
+    "pexels-10554053.jpg"
+   ],
+   "punti": [
+    "192 pagine a righe",
+    "Carta avoriata",
+    "Le schede dei libri letti",
+    "Copertina in tela"
+   ],
+   "testo": "Per tenere il conto dei libri letti e delle frasi da ricordare.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "marca": [
+     "Tassello"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-027",
+   "nome": "Maglietta in cotone organico",
+   "slug": "maglietta-cotone-organico",
+   "cat": [
+    "moda"
+   ],
+   "prezzo": 19,
+   "sconto": 15,
+   "scorta": 90,
+   "voto": 4.6,
+   "recensioni": 720,
+   "evidenza": true,
+   "foto": [
+    "pexels-video-9594579.jpg"
+   ],
+   "punti": [
+    "Cotone organico pesante",
+    "Taglio dritto",
+    "Lavabile a 40°",
+    "Il video dell’apertura del pacco nella galleria"
+   ],
+   "testo": "La maglietta bianca di cotone pesante: guardate nel video come arriva, piegata nella carta.",
+   "upsell": [],
+   "cross": [],
+   "video": "pexels-video-9594579.mp4",
+   "poster": "pexels-video-9594579.jpg",
+   "attributi": {
+    "marca": [
+     "Crocevia"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  },
+  {
+   "sku": "CRO-028",
+   "nome": "Confezione regalo Crocevia",
+   "slug": "confezione-regalo",
+   "cat": [
+    "casa"
+   ],
+   "prezzo": 4,
+   "sconto": 0,
+   "scorta": 500,
+   "voto": 4.9,
+   "recensioni": 1280,
+   "evidenza": false,
+   "foto": [
+    "pexels-video-9594575.jpg"
+   ],
+   "punti": [
+    "Scatola di cartone riciclato",
+    "Carta velina e nastro",
+    "Il biglietto scritto da voi",
+    "Il video nella galleria"
+   ],
+   "testo": "Aggiungetela al carrello: il regalo parte incartato, col biglietto. Nel video, com’è fatta.",
+   "upsell": [],
+   "cross": [],
+   "video": "pexels-video-9594575.mp4",
+   "poster": "pexels-video-9594575.jpg",
+   "attributi": {
+    "marca": [
+     "Crocevia"
+    ]
+   },
+   "dentro": "Il prodotto, lo scontrino e l’etichetta per il reso, già pronta."
+  }
+ ],
+ "recensioni": [
+  [
+   5,
+   "Ordinato la sera, arrivato la mattina dopo. Imballo perfetto."
+  ],
+  [
+   5,
+   "Prezzo migliore che altrove e il reso è stato facilissimo."
+  ],
+  [
+   4,
+   "Buon prodotto, la confezione era un po’ ammaccata."
+  ],
+  [
+   5,
+   "Comprato in offerta col codice, ottimo affare."
+  ],
+  [
+   4,
+   "Corrisponde alla descrizione, consegna puntuale."
+  ],
+  [
+   5,
+   "Ho trovato tutto in un posto solo: regali per tutta la famiglia."
+  ],
+  [
+   5,
+   "Assistenza in chat veloce e gentile."
+  ],
+  [
+   3,
+   "Va bene, ma mi aspettavo un colore più acceso."
+  ]
+ ],
+ "nomi": [
+  "Giulia R.",
+  "Marco T.",
+  "Sara B.",
+  "Luca F.",
+  "Elena M.",
+  "Davide C.",
+  "Chiara P.",
+  "Paolo G.",
+  "Francesca L.",
+  "Andrea S.",
+  "Marta V.",
+  "Riccardo N."
+ ]
+}

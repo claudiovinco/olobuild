@@ -1,0 +1,728 @@
+{
+ "tema": "davanzale",
+ "titolo_dentro": "Nella confezione",
+ "attributi": {},
+ "categorie": [
+  {
+   "slug": "illuminazione",
+   "nome": "Illuminazione",
+   "descrizione": "Lampade da tavolo, da comodino e a sospensione.",
+   "foto": "pexels-38986382.jpg"
+  },
+  {
+   "slug": "ceramiche",
+   "nome": "Ceramiche",
+   "descrizione": "Vasi e brocche di gres, fatti al tornio.",
+   "foto": "pexels-14608171.jpg"
+  },
+  {
+   "slug": "cucina-e-tavola",
+   "nome": "Cucina e tavola",
+   "descrizione": "Servizi di piatti, tazze, ciotole.",
+   "foto": "pexels-3847434.jpg"
+  },
+  {
+   "slug": "tessili",
+   "nome": "Tessili",
+   "descrizione": "Tovaglie di lino, plaid di lana, cuscini.",
+   "foto": "pexels-16425094.jpg"
+  },
+  {
+   "slug": "profumi-per-la-casa",
+   "nome": "Candele",
+   "descrizione": "Candele di cera di soia in vetro.",
+   "foto": "pexels-7004674.jpg"
+  },
+  {
+   "slug": "piccolo-arredo",
+   "nome": "Piccolo arredo",
+   "descrizione": "Sgabelli, specchi, tappeti, una poltrona.",
+   "foto": "pexels-27786195.jpg"
+  }
+ ],
+ "prodotti": [
+  {
+   "sku": "DAV-001",
+   "nome": "Lampada Faro, noce e ottone",
+   "slug": "lampada-faro",
+   "cat": [
+    "illuminazione"
+   ],
+   "prezzo": 189,
+   "sconto": 0,
+   "scorta": 14,
+   "voto": 4.9,
+   "recensioni": 212,
+   "evidenza": true,
+   "foto": [
+    "pexels-38986382.jpg",
+    "pexels-38986380.jpg",
+    "pexels-38986383.jpg"
+   ],
+   "punti": [
+    "Noce massello e ottone spazzolato",
+    "Luce calda dimmerabile",
+    "Fatta a mano a Cantù",
+    "Alta 38 cm"
+   ],
+   "testo": "Una lama di luce calda fra due tavole di noce: la lampada da tavolo che illumina la stanza come un camino.",
+   "upsell": [],
+   "cross": [
+    "DAV-017",
+    "DAV-020"
+   ],
+   "dentro": "L’oggetto, la scheda del laboratorio che l’ha fatto, l’imballo di carta e paglia di legno."
+  },
+  {
+   "sku": "DAV-002",
+   "nome": "Lampada da comodino Lume",
+   "slug": "lampada-comodino-lume",
+   "cat": [
+    "illuminazione"
+   ],
+   "prezzo": 129,
+   "sconto": 99,
+   "scorta": 20,
+   "voto": 4.7,
+   "recensioni": 146,
+   "evidenza": false,
+   "foto": [
+    "pexels-27469712.jpg",
+    "pexels-27604117.jpg"
+   ],
+   "punti": [
+    "Base in legno tornito",
+    "Paralume in lino",
+    "Interruttore sul cavo",
+    "Il video nella galleria"
+   ],
+   "testo": "La luce della sera sul comodino: si accende nel video, guardatela.",
+   "upsell": [],
+   "cross": [
+    "DAV-016"
+   ],
+   "video": "pexels-video-7164569.mp4",
+   "poster": "pexels-video-7164569.jpg",
+   "dentro": "L’oggetto, la scheda del laboratorio che l’ha fatto, l’imballo di carta e paglia di legno."
+  },
+  {
+   "sku": "DAV-003",
+   "nome": "Sospensione Pigna, rame",
+   "slug": "sospensione-pigna-rame",
+   "cat": [
+    "illuminazione"
+   ],
+   "prezzo": 245,
+   "sconto": 0,
+   "scorta": 8,
+   "voto": 4.8,
+   "recensioni": 88,
+   "evidenza": false,
+   "foto": [
+    "pexels-35137148.jpg",
+    "pexels-2416875.jpg"
+   ],
+   "punti": [
+    "Lamelle di rame sovrapposte",
+    "Luce riflessa e morbida",
+    "Diametro 35 cm",
+    "Cavo in tessuto da 2 m"
+   ],
+   "testo": "Le lamelle di rame fanno una luce riflessa, mai diretta: sopra il tavolo da pranzo.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "L’oggetto, la scheda del laboratorio che l’ha fatto, l’imballo di carta e paglia di legno."
+  },
+  {
+   "sku": "DAV-004",
+   "nome": "Sospensione Nuvola",
+   "slug": "sospensione-nuvola",
+   "cat": [
+    "illuminazione"
+   ],
+   "prezzo": 165,
+   "sconto": 0,
+   "scorta": 12,
+   "voto": 4.6,
+   "recensioni": 61,
+   "evidenza": false,
+   "foto": [
+    "pexels-18207375.jpg",
+    "pexels-12128458.jpg"
+   ],
+   "punti": [
+    "Paralume in metallo bianco",
+    "Luce diretta",
+    "Diametro 30 cm",
+    "Per la cucina e il corridoio"
+   ],
+   "testo": "Semplice e bianca, in fila sull’isola della cucina.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "L’oggetto, la scheda del laboratorio che l’ha fatto, l’imballo di carta e paglia di legno."
+  },
+  {
+   "sku": "DAV-005",
+   "nome": "Vasi Brezza, set di tre",
+   "slug": "vasi-brezza",
+   "cat": [
+    "ceramiche"
+   ],
+   "prezzo": 79,
+   "sconto": 0,
+   "scorta": 22,
+   "voto": 4.8,
+   "recensioni": 174,
+   "evidenza": true,
+   "foto": [
+    "pexels-14608171.jpg",
+    "pexels-14608172.jpg"
+   ],
+   "punti": [
+    "Gres bianco opaco",
+    "Tre altezze",
+    "Impermeabili",
+    "Fatti al tornio a Castellamonte"
+   ],
+   "testo": "Tre vasi bianchi che stanno bene vuoti, col fiore solo, o con un ramo.",
+   "upsell": [],
+   "cross": [
+    "DAV-008"
+   ],
+   "dentro": "L’oggetto, la scheda del laboratorio che l’ha fatto, l’imballo di carta e paglia di legno."
+  },
+  {
+   "sku": "DAV-006",
+   "nome": "Vaso Anello",
+   "slug": "vaso-anello",
+   "cat": [
+    "ceramiche"
+   ],
+   "prezzo": 59,
+   "sconto": 0,
+   "scorta": 18,
+   "voto": 4.5,
+   "recensioni": 92,
+   "evidenza": false,
+   "foto": [
+    "pexels-6805522.jpg"
+   ],
+   "punti": [
+    "Gres naturale",
+    "Forma ad anello",
+    "Per i fiori secchi",
+    "Pezzo unico, varia un poco"
+   ],
+   "testo": "Il vaso tondo col buco al centro: per un ramo di eucalipto o niente.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "L’oggetto, la scheda del laboratorio che l’ha fatto, l’imballo di carta e paglia di legno."
+  },
+  {
+   "sku": "DAV-007",
+   "nome": "Coppia di vasi Graffio",
+   "slug": "vasi-graffio",
+   "cat": [
+    "ceramiche"
+   ],
+   "prezzo": 98,
+   "sconto": 78,
+   "scorta": 10,
+   "voto": 4.7,
+   "recensioni": 66,
+   "evidenza": false,
+   "foto": [
+    "pexels-7119222.jpg"
+   ],
+   "punti": [
+    "Gres graffiato a mano",
+    "Rosa e grigio",
+    "Alti 28 e 22 cm",
+    "Il video del tornio nella galleria"
+   ],
+   "testo": "Fatti al tornio e graffiati col pettine, uno per uno: guardate nel video come nascono.",
+   "upsell": [],
+   "cross": [],
+   "video": "pexels-video-12171874.mp4",
+   "poster": "pexels-video-12171874.jpg",
+   "dentro": "L’oggetto, la scheda del laboratorio che l’ha fatto, l’imballo di carta e paglia di legno."
+  },
+  {
+   "sku": "DAV-008",
+   "nome": "Brocca Ramo, gres",
+   "slug": "brocca-ramo",
+   "cat": [
+    "ceramiche"
+   ],
+   "prezzo": 45,
+   "sconto": 0,
+   "scorta": 26,
+   "voto": 4.6,
+   "recensioni": 118,
+   "evidenza": false,
+   "foto": [
+    "pexels-7303788.jpg",
+    "pexels-7303773.jpg",
+    "pexels-5700552.jpg"
+   ],
+   "punti": [
+    "Gres smaltato",
+    "Per l’acqua e per i fiori",
+    "Un litro",
+    "Va in lavastoviglie"
+   ],
+   "testo": "La brocca per l’acqua in tavola che diventa vaso per un ramo.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "L’oggetto, la scheda del laboratorio che l’ha fatto, l’imballo di carta e paglia di legno."
+  },
+  {
+   "sku": "DAV-009",
+   "nome": "Tazze Onda, set di due",
+   "slug": "tazze-onda",
+   "cat": [
+    "cucina-e-tavola"
+   ],
+   "prezzo": 38,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.7,
+   "recensioni": 240,
+   "evidenza": false,
+   "foto": [
+    "pexels-4466240.jpg",
+    "pexels-30885857.jpg"
+   ],
+   "punti": [
+    "Gres con decoro inciso",
+    "300 ml",
+    "Lavastoviglie e microonde",
+    "Ognuna un poco diversa"
+   ],
+   "testo": "Le tazze del caffè lungo della domenica, col decoro inciso a mano.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "L’oggetto, la scheda del laboratorio che l’ha fatto, l’imballo di carta e paglia di legno."
+  },
+  {
+   "sku": "DAV-010",
+   "nome": "Servizio Notte, 12 pezzi",
+   "slug": "servizio-notte",
+   "cat": [
+    "cucina-e-tavola"
+   ],
+   "prezzo": 189,
+   "sconto": 0,
+   "scorta": 10,
+   "voto": 4.9,
+   "recensioni": 77,
+   "evidenza": true,
+   "foto": [
+    "pexels-3847434.jpg",
+    "pexels-3847451.jpg",
+    "pexels-3847470.jpg"
+   ],
+   "punti": [
+    "Gres blu notte, grigio e rosso",
+    "Piatti piani, fondi e ciotole per quattro",
+    "Lavastoviglie",
+    "Smalti reattivi: ogni pezzo diverso"
+   ],
+   "testo": "Il servizio per quattro in blu notte, col rosso di una ciotola: la tavola si apparecchia da sola.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "L’oggetto, la scheda del laboratorio che l’ha fatto, l’imballo di carta e paglia di legno."
+  },
+  {
+   "sku": "DAV-011",
+   "nome": "Servizio Arcobaleno",
+   "slug": "servizio-arcobaleno",
+   "cat": [
+    "cucina-e-tavola"
+   ],
+   "prezzo": 149,
+   "sconto": 119,
+   "scorta": 12,
+   "voto": 4.6,
+   "recensioni": 58,
+   "evidenza": false,
+   "foto": [
+    "pexels-8903626.jpg",
+    "pexels-8903358.jpg",
+    "pexels-8903728.jpg"
+   ],
+   "punti": [
+    "Gres in cinque colori",
+    "Per quattro",
+    "Si mescola come si vuole",
+    "Lavastoviglie"
+   ],
+   "testo": "Cinque colori da mescolare: ogni tavola è diversa.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "L’oggetto, la scheda del laboratorio che l’ha fatto, l’imballo di carta e paglia di legno."
+  },
+  {
+   "sku": "DAV-012",
+   "nome": "Tovaglia in lino lavato",
+   "slug": "tovaglia-lino-lavato",
+   "cat": [
+    "tessili"
+   ],
+   "prezzo": 69,
+   "sconto": 0,
+   "scorta": 30,
+   "voto": 4.8,
+   "recensioni": 190,
+   "evidenza": false,
+   "foto": [
+    "pexels-16425094.jpg",
+    "pexels-16425117.jpg"
+   ],
+   "punti": [
+    "Lino lavato, bianco",
+    "160 × 220 cm",
+    "Non si stira",
+    "Tessuta a Biella"
+   ],
+   "testo": "La tovaglia bianca che non si stira: si lava e si stende.",
+   "upsell": [],
+   "cross": [
+    "DAV-010"
+   ],
+   "dentro": "L’oggetto, la scheda del laboratorio che l’ha fatto, l’imballo di carta e paglia di legno."
+  },
+  {
+   "sku": "DAV-013",
+   "nome": "Tovaglia Terracotta",
+   "slug": "tovaglia-terracotta",
+   "cat": [
+    "tessili"
+   ],
+   "prezzo": 74,
+   "sconto": 0,
+   "scorta": 18,
+   "voto": 4.7,
+   "recensioni": 84,
+   "evidenza": false,
+   "foto": [
+    "pexels-16310427.jpg",
+    "pexels-16310389.jpg"
+   ],
+   "punti": [
+    "Lino tinto in capo",
+    "160 × 220 cm",
+    "Colore terracotta",
+    "Tessuta a Biella"
+   ],
+   "testo": "Il colore della terra: con le stoviglie bianche e il legno.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "L’oggetto, la scheda del laboratorio che l’ha fatto, l’imballo di carta e paglia di legno."
+  },
+  {
+   "sku": "DAV-014",
+   "nome": "Plaid Riga in lana",
+   "slug": "plaid-riga-lana",
+   "cat": [
+    "tessili"
+   ],
+   "prezzo": 89,
+   "sconto": 0,
+   "scorta": 16,
+   "voto": 4.8,
+   "recensioni": 132,
+   "evidenza": true,
+   "foto": [
+    "pexels-15221845.jpg"
+   ],
+   "punti": [
+    "Lana merino e cotone",
+    "130 × 180 cm",
+    "Le frange annodate a mano",
+    "Tessuto in Val Seriana"
+   ],
+   "testo": "Il plaid a righe sul bracciolo del divano, pronto per le sere di novembre.",
+   "upsell": [],
+   "cross": [
+    "DAV-016"
+   ],
+   "dentro": "L’oggetto, la scheda del laboratorio che l’ha fatto, l’imballo di carta e paglia di legno."
+  },
+  {
+   "sku": "DAV-015",
+   "nome": "Plaid Mohair, rosso",
+   "slug": "plaid-mohair-rosso",
+   "cat": [
+    "tessili"
+   ],
+   "prezzo": 119,
+   "sconto": 0,
+   "scorta": 9,
+   "voto": 4.9,
+   "recensioni": 47,
+   "evidenza": false,
+   "foto": [
+    "pexels-3996529.jpg"
+   ],
+   "punti": [
+    "Mohair e lana",
+    "Leggerissimo e caldo",
+    "130 × 170 cm",
+    "Rosso lacca"
+   ],
+   "testo": "Leggero come una nuvola, rosso come una lacca: il plaid che si regala.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "L’oggetto, la scheda del laboratorio che l’ha fatto, l’imballo di carta e paglia di legno."
+  },
+  {
+   "sku": "DAV-016",
+   "nome": "Cuscini in lino, set di tre",
+   "slug": "cuscini-lino",
+   "cat": [
+    "tessili"
+   ],
+   "prezzo": 64,
+   "sconto": 0,
+   "scorta": 24,
+   "voto": 4.6,
+   "recensioni": 101,
+   "evidenza": false,
+   "foto": [
+    "pexels-8762876.jpg",
+    "pexels-37023127.jpg"
+   ],
+   "punti": [
+    "Lino lavato",
+    "50 × 50 cm, imbottitura in piuma",
+    "Tre colori di terra",
+    "Federa sfoderabile"
+   ],
+   "testo": "Tre cuscini nei colori della terra, da mescolare sul divano.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "L’oggetto, la scheda del laboratorio che l’ha fatto, l’imballo di carta e paglia di legno."
+  },
+  {
+   "sku": "DAV-017",
+   "nome": "Candele Ambra, set di tre",
+   "slug": "candele-ambra",
+   "cat": [
+    "profumi-per-la-casa"
+   ],
+   "prezzo": 42,
+   "sconto": 0,
+   "scorta": 50,
+   "voto": 4.8,
+   "recensioni": 305,
+   "evidenza": false,
+   "foto": [
+    "pexels-7004674.jpg",
+    "pexels-7004681.jpg",
+    "pexels-7004675.jpg"
+   ],
+   "punti": [
+    "Cera di soia",
+    "Vetro ambrato riutilizzabile",
+    "Legno di cedro e fico",
+    "Trenta ore ciascuna"
+   ],
+   "testo": "Tre vasetti di vetro ambrato che profumano di cedro e fico.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "L’oggetto, la scheda del laboratorio che l’ha fatto, l’imballo di carta e paglia di legno."
+  },
+  {
+   "sku": "DAV-018",
+   "nome": "Candela Pesca",
+   "slug": "candela-pesca",
+   "cat": [
+    "profumi-per-la-casa"
+   ],
+   "prezzo": 26,
+   "sconto": 21,
+   "scorta": 40,
+   "voto": 4.6,
+   "recensioni": 140,
+   "evidenza": false,
+   "foto": [
+    "pexels-5933693.jpg",
+    "pexels-5933684.jpg"
+   ],
+   "punti": [
+    "Cera di soia",
+    "Vetro colorato",
+    "Fiori d’arancio",
+    "Quaranta ore"
+   ],
+   "testo": "Profuma di fiori d’arancio nel vetro color pesca.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "L’oggetto, la scheda del laboratorio che l’ha fatto, l’imballo di carta e paglia di legno."
+  },
+  {
+   "sku": "DAV-019",
+   "nome": "Sgabello Trespolo, rovere",
+   "slug": "sgabello-trespolo",
+   "cat": [
+    "piccolo-arredo"
+   ],
+   "prezzo": 145,
+   "sconto": 0,
+   "scorta": 12,
+   "voto": 4.7,
+   "recensioni": 66,
+   "evidenza": false,
+   "foto": [
+    "pexels-27786195.jpg",
+    "pexels-7193648.jpg",
+    "pexels-39247420.jpg"
+   ],
+   "punti": [
+    "Rovere massello",
+    "Alto 65 cm",
+    "Fa da tavolino accanto al letto",
+    "Fatto a mano in Brianza"
+   ],
+   "testo": "Lo sgabello che fa da comodino, da tavolino, da sgabello.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "L’oggetto, la scheda del laboratorio che l’ha fatto, l’imballo di carta e paglia di legno."
+  },
+  {
+   "sku": "DAV-020",
+   "nome": "Specchio Tondo",
+   "slug": "specchio-tondo",
+   "cat": [
+    "piccolo-arredo"
+   ],
+   "prezzo": 210,
+   "sconto": 0,
+   "scorta": 7,
+   "voto": 4.8,
+   "recensioni": 39,
+   "evidenza": false,
+   "foto": [
+    "pexels-30287174.jpg"
+   ],
+   "punti": [
+    "Cornice in ferro nero",
+    "Diametro 80 cm",
+    "Per l’ingresso e il bagno",
+    "Gancio compreso"
+   ],
+   "testo": "Il tondo nero che allarga l’ingresso.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "L’oggetto, la scheda del laboratorio che l’ha fatto, l’imballo di carta e paglia di legno."
+  },
+  {
+   "sku": "DAV-021",
+   "nome": "Tappeto in juta",
+   "slug": "tappeto-juta",
+   "cat": [
+    "piccolo-arredo"
+   ],
+   "prezzo": 159,
+   "sconto": 129,
+   "scorta": 10,
+   "voto": 4.5,
+   "recensioni": 72,
+   "evidenza": false,
+   "foto": [
+    "pexels-15291102.jpg",
+    "pexels-6634455.jpg"
+   ],
+   "punti": [
+    "Juta e cotone",
+    "160 × 230 cm",
+    "Tessuto a mano",
+    "Antiscivolo sotto"
+   ],
+   "testo": "Il tappeto che scalda il pavimento senza coprire la stanza.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "L’oggetto, la scheda del laboratorio che l’ha fatto, l’imballo di carta e paglia di legno."
+  },
+  {
+   "sku": "DAV-022",
+   "nome": "Poltrona Nido",
+   "slug": "poltrona-nido",
+   "cat": [
+    "piccolo-arredo"
+   ],
+   "prezzo": 690,
+   "sconto": 0,
+   "scorta": 4,
+   "voto": 4.9,
+   "recensioni": 28,
+   "evidenza": true,
+   "foto": [
+    "pexels-37652587.jpg",
+    "pexels-23471276.jpg"
+   ],
+   "punti": [
+    "Struttura in faggio",
+    "Velluto rosa cipria",
+    "Seduta profonda",
+    "Fatta a Meda"
+   ],
+   "testo": "La poltrona in cui si legge un libro intero: profonda, morbida, rosa cipria.",
+   "upsell": [],
+   "cross": [
+    "DAV-014",
+    "DAV-001"
+   ],
+   "dentro": "L’oggetto, la scheda del laboratorio che l’ha fatto, l’imballo di carta e paglia di legno."
+  }
+ ],
+ "recensioni": [
+  [
+   5,
+   "Ancora più bella dal vivo. Imballata con una cura che non avevo mai visto."
+  ],
+  [
+   5,
+   "Si vede il lavoro a mano. Ci hanno scritto chi l’ha fatta."
+  ],
+  [
+   4,
+   "Molto bella, un po’ più piccola di come la immaginavo: leggete le misure."
+  ],
+  [
+   5,
+   "Consegna al piano, montata e il cartone portato via."
+  ],
+  [
+   5,
+   "Mi hanno consigliato loro per email il colore giusto per il soggiorno."
+  ],
+  [
+   4,
+   "Ottima qualità, tempi un po’ lunghi perché fatta su ordinazione."
+  ],
+  [
+   5,
+   "Regalo per la casa nuova di mia sorella: un successo."
+  ],
+  [
+   5,
+   "I colori dello smalto sono diversi in ogni pezzo, proprio come scritto."
+  ]
+ ],
+ "nomi": [
+  "Giulia R.",
+  "Andrea M.",
+  "Federica B.",
+  "Luca T.",
+  "Silvia P.",
+  "Marco C.",
+  "Elisa L.",
+  "Tommaso D.",
+  "Camilla G.",
+  "Pietro V.",
+  "Anna S.",
+  "Matilde F."
+ ]
+}

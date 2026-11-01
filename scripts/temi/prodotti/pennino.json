@@ -1,0 +1,732 @@
+{
+ "tema": "pennino",
+ "titolo_dentro": "Nella confezione",
+ "attributi": {
+  "punta": {
+   "nome": "Punta",
+   "termini": [
+    "Fine",
+    "Media",
+    "Larga"
+   ]
+  }
+ },
+ "categorie": [
+  {
+   "slug": "stilografiche",
+   "nome": "Stilografiche",
+   "descrizione": "Da quella per cominciare all’ebanite.",
+   "foto": "pexels-5264514.jpg"
+  },
+  {
+   "slug": "inchiostri",
+   "nome": "Inchiostri",
+   "descrizione": "Il blu Laguna, il rosso ceralacca, l’oro.",
+   "foto": "pexels-7333604.jpg"
+  },
+  {
+   "slug": "quaderni",
+   "nome": "Quaderni e agende",
+   "descrizione": "Cuciti a mano, in pelle, a puntini.",
+   "foto": "pexels-14436269.jpg"
+  },
+  {
+   "slug": "carta",
+   "nome": "Carta e buste",
+   "descrizione": "Da lettere, da invito, i biglietti.",
+   "foto": "pexels-4792671.jpg"
+  },
+  {
+   "slug": "sigilli",
+   "nome": "Sigilli e ceralacca",
+   "descrizione": "L’iniziale in ottone, la ceralacca.",
+   "foto": "pexels-36824942.jpg"
+  },
+  {
+   "slug": "colori",
+   "nome": "Matite e acquerelli",
+   "descrizione": "Per chi disegna: godet, matite, pennelli.",
+   "foto": "pexels-19196316.jpg"
+  }
+ ],
+ "prodotti": [
+  {
+   "sku": "PEN-001",
+   "nome": "Stilografica Laguna, blu notte",
+   "slug": "stilografica-laguna",
+   "cat": [
+    "stilografiche"
+   ],
+   "prezzo": 89,
+   "sconto": 69,
+   "scorta": 40,
+   "voto": 4.9,
+   "recensioni": 214,
+   "evidenza": true,
+   "foto": [
+    "pexels-5264514.jpg",
+    "pexels-33868622.jpg"
+   ],
+   "punti": [
+    "Pennino d’acciaio lucidato",
+    "Corpo in resina blu notte",
+    "Il nome inciso, gratis",
+    "Converter e due cartucce"
+   ],
+   "testo": "La stilografica di casa: corpo blu notte, pennino d’acciaio, il vostro nome inciso sul cappuccio.",
+   "upsell": [],
+   "cross": [
+    "INK-006",
+    "QUA-009"
+   ],
+   "varianti": {
+    "attributo": "punta",
+    "valori": [
+     "Fine",
+     "Media",
+     "Larga"
+    ],
+    "esaurite": []
+   },
+   "video": "pexels-video-9388054.mp4",
+   "poster": "pexels-video-9388054.jpg",
+   "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
+  },
+  {
+   "sku": "PEN-002",
+   "nome": "Stilografica per cominciare",
+   "slug": "stilografica-cominciare",
+   "cat": [
+    "stilografiche"
+   ],
+   "prezzo": 29,
+   "sconto": 24,
+   "scorta": 40,
+   "voto": 4.7,
+   "recensioni": 388,
+   "evidenza": true,
+   "foto": [
+    "pexels-6918487.jpg",
+    "pexels-6918481.jpg"
+   ],
+   "punti": [
+    "Impugnatura sagomata",
+    "Pennino d’acciaio",
+    "Sei cartucce blu",
+    "Per i dieci anni"
+   ],
+   "testo": "Quella per cominciare: l’impugnatura che guida le dita, il pennino che non graffia, sei cartucce blu.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "punta",
+    "valori": [
+     "Fine",
+     "Media",
+     "Larga"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
+  },
+  {
+   "sku": "PEN-003",
+   "nome": "Stilografica in ebanite nera",
+   "slug": "stilografica-ebanite",
+   "cat": [
+    "stilografiche"
+   ],
+   "prezzo": 149,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.9,
+   "recensioni": 61,
+   "evidenza": false,
+   "foto": [
+    "pexels-114107.jpg",
+    "pexels-35522712.jpg"
+   ],
+   "punti": [
+    "Ebanite tornita a mano",
+    "Pennino in oro 14 carati",
+    "Caricamento a stantuffo",
+    "Astuccio in pelle"
+   ],
+   "testo": "L’ebanite tornita a mano, il pennino d’oro che si adatta alla vostra mano dopo una settimana.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "punta",
+    "valori": [
+     "Fine",
+     "Media",
+     "Larga"
+    ],
+    "esaurite": []
+   },
+   "video": "pexels-video-854192.mp4",
+   "poster": "pexels-video-854192.jpg",
+   "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
+  },
+  {
+   "sku": "PEN-004",
+   "nome": "Cannuccia da calligrafia con sei pennini",
+   "slug": "cannuccia-pennini",
+   "cat": [
+    "stilografiche"
+   ],
+   "prezzo": 24,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.8,
+   "recensioni": 143,
+   "evidenza": false,
+   "foto": [
+    "pexels-7333611.jpg",
+    "pexels-7718655.jpg"
+   ],
+   "punti": [
+    "Cannuccia in legno di pero",
+    "Sei pennini a punta e tronchi",
+    "Per il corsivo inglese",
+    "Scatola di latta"
+   ],
+   "testo": "La cannuccia di pero e sei pennini, a punta e tronchi: quella che usiamo ai corsi.",
+   "upsell": [],
+   "cross": [],
+   "video": "pexels-video-3826729.mp4",
+   "poster": "pexels-video-3826729.jpg",
+   "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
+  },
+  {
+   "sku": "PEN-005",
+   "nome": "Poggiapenne in ottone, il serpente",
+   "slug": "poggiapenne-serpente",
+   "cat": [
+    "stilografiche"
+   ],
+   "prezzo": 32,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.6,
+   "recensioni": 52,
+   "evidenza": false,
+   "foto": [
+    "pexels-15915565.jpg",
+    "pexels-15876131.jpg"
+   ],
+   "punti": [
+    "Ottone brunito",
+    "Fuso a cera persa",
+    "Per una penna",
+    "Fatto a Venezia"
+   ],
+   "testo": "Il serpente d’ottone su cui la penna riposa: fuso a cera persa da un fonditore della Giudecca.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
+  },
+  {
+   "sku": "INK-006",
+   "nome": "Inchiostro blu Laguna, 50 ml",
+   "slug": "inchiostro-laguna",
+   "cat": [
+    "inchiostri"
+   ],
+   "prezzo": 14,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.9,
+   "recensioni": 506,
+   "evidenza": true,
+   "foto": [
+    "pexels-7333604.jpg",
+    "pexels-15877831.jpg"
+   ],
+   "punti": [
+    "Blu che vira al grigio",
+    "Asciuga in dieci secondi",
+    "Boccetta di vetro col calamaio",
+    "Per ogni stilografica"
+   ],
+   "testo": "Il nostro blu: scuro appena scritto, vira al grigio della laguna quando asciuga.",
+   "upsell": [],
+   "cross": [],
+   "video": "pexels-video-11137474.mp4",
+   "poster": "pexels-video-11137474.jpg",
+   "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
+  },
+  {
+   "sku": "INK-007",
+   "nome": "Inchiostro rosso ceralacca, 50 ml",
+   "slug": "inchiostro-ceralacca",
+   "cat": [
+    "inchiostri"
+   ],
+   "prezzo": 14,
+   "sconto": 11,
+   "scorta": 40,
+   "voto": 4.7,
+   "recensioni": 188,
+   "evidenza": false,
+   "foto": [
+    "pexels-6149064.jpg",
+    "pexels-6149082.jpg"
+   ],
+   "punti": [
+    "Rosso pieno",
+    "Per le correzioni e i titoli",
+    "Boccetta di vetro",
+    "Per ogni stilografica"
+   ],
+   "testo": "Il rosso della ceralacca, per i titoli, le correzioni e le firme che si devono vedere.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
+  },
+  {
+   "sku": "INK-008",
+   "nome": "Inchiostro oro per i biglietti, 30 ml",
+   "slug": "inchiostro-oro",
+   "cat": [
+    "inchiostri"
+   ],
+   "prezzo": 16,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.6,
+   "recensioni": 97,
+   "evidenza": false,
+   "foto": [
+    "pexels-6149116.jpg",
+    "pexels-11650189.jpg"
+   ],
+   "punti": [
+    "Oro con la mica",
+    "Per il pennino da calligrafia",
+    "Da agitare",
+    "Sulla carta scura"
+   ],
+   "testo": "L’oro con la mica, che brilla sulla carta scura: per i biglietti e le buste degli inviti.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
+  },
+  {
+   "sku": "QUA-009",
+   "nome": "Quaderno in pelle cucito a mano",
+   "slug": "quaderno-pelle",
+   "cat": [
+    "quaderni"
+   ],
+   "prezzo": 45,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.9,
+   "recensioni": 233,
+   "evidenza": true,
+   "foto": [
+    "pexels-14436269.jpg",
+    "pexels-20729443.jpg"
+   ],
+   "punti": [
+    "Pelle conciata al vegetale",
+    "Carta da 120 grammi",
+    "Cucito a mano, filo cerato",
+    "Si apre piatto"
+   ],
+   "testo": "La pelle che invecchia con voi, la carta da 120 grammi che regge l’inchiostro, il filo cerato.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
+  },
+  {
+   "sku": "QUA-010",
+   "nome": "Tre taccuini di carta riciclata",
+   "slug": "taccuini-tre",
+   "cat": [
+    "quaderni"
+   ],
+   "prezzo": 18,
+   "sconto": 15,
+   "scorta": 40,
+   "voto": 4.6,
+   "recensioni": 412,
+   "evidenza": false,
+   "foto": [
+    "pexels-7718812.jpg",
+    "pexels-7718817.jpg"
+   ],
+   "punti": [
+    "A righe, a quadretti, bianco",
+    "Carta riciclata da 90 grammi",
+    "Formato A6",
+    "Copertine in cartoncino"
+   ],
+   "testo": "Tre taccuini da tasca, a righe, a quadretti e bianco: per la lista della spesa e le idee.",
+   "upsell": [],
+   "cross": [],
+   "video": "pexels-video-7114738.mp4",
+   "poster": "pexels-video-7114738.jpg",
+   "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
+  },
+  {
+   "sku": "QUA-011",
+   "nome": "Taccuino arancio a puntini",
+   "slug": "taccuino-arancio",
+   "cat": [
+    "quaderni"
+   ],
+   "prezzo": 12,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.7,
+   "recensioni": 266,
+   "evidenza": false,
+   "foto": [
+    "pexels-7718893.jpg",
+    "pexels-40249883.jpg"
+   ],
+   "punti": [
+    "Puntini ogni 5 mm",
+    "Elastico e segnalibro",
+    "Formato A5",
+    "Carta da 100 grammi"
+   ],
+   "testo": "L’arancio che si trova in fondo alla borsa: puntini, elastico, segnalibro.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
+  },
+  {
+   "sku": "QUA-012",
+   "nome": "Agenda settimanale 2027",
+   "slug": "agenda-2027",
+   "cat": [
+    "quaderni"
+   ],
+   "prezzo": 28,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.8,
+   "recensioni": 154,
+   "evidenza": false,
+   "foto": [
+    "pexels-5706225.jpg",
+    "pexels-15713286.jpg"
+   ],
+   "punti": [
+    "Una settimana su due pagine",
+    "Copertina in tela",
+    "Le fasi della luna",
+    "Rubrica in fondo"
+   ],
+   "testo": "L’anno nuovo su due pagine alla volta: la tela blu, le fasi della luna, la rubrica.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
+  },
+  {
+   "sku": "CAR-013",
+   "nome": "Carta da lettere vergata, cinquanta fogli",
+   "slug": "carta-vergata",
+   "cat": [
+    "carta"
+   ],
+   "prezzo": 22,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.8,
+   "recensioni": 121,
+   "evidenza": false,
+   "foto": [
+    "pexels-5485169.jpg",
+    "pexels-4792674.jpg"
+   ],
+   "punti": [
+    "Carta di cotone vergata",
+    "Formato A4",
+    "Cinquanta fogli",
+    "Venti buste foderate"
+   ],
+   "testo": "La carta di cotone con le righe d’acqua in controluce, e le buste foderate di blu.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
+  },
+  {
+   "sku": "CAR-014",
+   "nome": "Biglietti con busta kraft, dieci",
+   "slug": "biglietti-kraft",
+   "cat": [
+    "carta"
+   ],
+   "prezzo": 16,
+   "sconto": 13,
+   "scorta": 40,
+   "voto": 4.7,
+   "recensioni": 309,
+   "evidenza": true,
+   "foto": [
+    "pexels-6607587.jpg",
+    "pexels-4968675.jpg"
+   ],
+   "punti": [
+    "Cartoncino avorio",
+    "Buste kraft",
+    "Dieci biglietti",
+    "Per i ringraziamenti"
+   ],
+   "testo": "Dieci biglietti avorio con la busta kraft: per dire grazie a mano.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
+  },
+  {
+   "sku": "CAR-015",
+   "nome": "Buste e cartoncini da invito, venti",
+   "slug": "buste-inviti",
+   "cat": [
+    "carta"
+   ],
+   "prezzo": 24,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.6,
+   "recensioni": 88,
+   "evidenza": false,
+   "foto": [
+    "pexels-11650187.jpg",
+    "pexels-11650092.jpg"
+   ],
+   "punti": [
+    "Cartoncino da 300 grammi",
+    "Buste color sabbia",
+    "Venti inviti",
+    "Si stampano anche qui"
+   ],
+   "testo": "Il cartoncino spesso degli inviti e le buste color sabbia: li scriviamo anche noi, a mano.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
+  },
+  {
+   "sku": "SIG-016",
+   "nome": "Sigillo in ottone con l’iniziale",
+   "slug": "sigillo-iniziale",
+   "cat": [
+    "sigilli"
+   ],
+   "prezzo": 34,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.9,
+   "recensioni": 176,
+   "evidenza": true,
+   "foto": [
+    "pexels-19216748.jpg",
+    "pexels-36824942.jpg"
+   ],
+   "punti": [
+    "La vostra iniziale",
+    "Ottone inciso",
+    "Manico in legno di noce",
+    "Due bastoncini di ceralacca"
+   ],
+   "testo": "Il sigillo con l’iniziale, in ottone inciso e noce: la busta si chiude come una volta.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
+  },
+  {
+   "sku": "SIG-017",
+   "nome": "Ceralacca rossa, sei bastoncini",
+   "slug": "ceralacca-rossa",
+   "cat": [
+    "sigilli"
+   ],
+   "prezzo": 12,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.7,
+   "recensioni": 221,
+   "evidenza": false,
+   "foto": [
+    "pexels-36824941.jpg",
+    "pexels-19216747.jpg"
+   ],
+   "punti": [
+    "Sei bastoncini",
+    "Con lo stoppino",
+    "Rosso ceralacca",
+    "Per una trentina di buste"
+   ],
+   "testo": "Sei bastoncini col loro stoppino: una trentina di buste chiuse di rosso.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
+  },
+  {
+   "sku": "SIG-018",
+   "nome": "Timbri dell’alfabeto in legno",
+   "slug": "timbri-alfabeto",
+   "cat": [
+    "sigilli"
+   ],
+   "prezzo": 39,
+   "sconto": 32,
+   "scorta": 40,
+   "voto": 4.6,
+   "recensioni": 74,
+   "evidenza": false,
+   "foto": [
+    "pexels-3838319.jpg",
+    "pexels-3838334.jpg"
+   ],
+   "punti": [
+    "Ventisei lettere e i numeri",
+    "Gomma su legno",
+    "Cassetta in legno",
+    "Tampone nero"
+   ],
+   "testo": "L’alfabeto di gomma nella sua cassetta: per i pacchi, le etichette, i nomi sui quaderni.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
+  },
+  {
+   "sku": "COL-019",
+   "nome": "Acquerelli in scatola, ventiquattro godet",
+   "slug": "acquerelli-ventiquattro",
+   "cat": [
+    "colori"
+   ],
+   "prezzo": 58,
+   "sconto": 46,
+   "scorta": 40,
+   "voto": 4.8,
+   "recensioni": 167,
+   "evidenza": true,
+   "foto": [
+    "pexels-19196316.jpg",
+    "pexels-7859265.jpg"
+   ],
+   "punti": [
+    "Ventiquattro godet in pasticca",
+    "Scatola di latta",
+    "Un pennello a serbatoio",
+    "Per i taccuini di viaggio"
+   ],
+   "testo": "Gli acquerelli in pasticca nella scatola di latta: per dipingere la laguna sul taccuino.",
+   "upsell": [],
+   "cross": [],
+   "video": "pexels-video-3826741.mp4",
+   "poster": "pexels-video-3826741.jpg",
+   "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
+  },
+  {
+   "sku": "COL-020",
+   "nome": "Matite colorate, trentasei",
+   "slug": "matite-trentasei",
+   "cat": [
+    "colori"
+   ],
+   "prezzo": 26,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.7,
+   "recensioni": 245,
+   "evidenza": false,
+   "foto": [
+    "pexels-194098.jpg",
+    "pexels-4519774.jpg"
+   ],
+   "punti": [
+    "Trentasei colori",
+    "Mina morbida da 3,8 mm",
+    "Legno di cedro",
+    "Scatola di metallo"
+   ],
+   "testo": "Trentasei colori a mina morbida, in legno di cedro: si temperano senza spezzarsi.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
+  },
+  {
+   "sku": "COL-021",
+   "nome": "Pennelli per acquerello, quattro",
+   "slug": "pennelli-quattro",
+   "cat": [
+    "colori"
+   ],
+   "prezzo": 22,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.6,
+   "recensioni": 93,
+   "evidenza": false,
+   "foto": [
+    "pexels-114123.jpg",
+    "pexels-12336448.jpg"
+   ],
+   "punti": [
+    "Pelo sintetico",
+    "Tondi 2, 6, 10 e un piatto",
+    "Manici corti",
+    "Astuccio di tela"
+   ],
+   "testo": "Quattro pennelli in pelo sintetico che tengono l’acqua come la martora: tondi e un piatto.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
+  }
+ ],
+ "recensioni": [
+  [
+   5,
+   "La Laguna scrive benissimo, e il nome inciso è perfetto."
+  ],
+  [
+   5,
+   "L’inchiostro blu vira davvero al grigio: bellissimo."
+  ],
+  [
+   4,
+   "Ottimo, la spedizione ha preso un giorno in più."
+  ],
+  [
+   5,
+   "Il pacchetto incartato a mano era già un regalo."
+  ],
+  [
+   5,
+   "Il quaderno in pelle si apre piatto, la carta regge tutto."
+  ],
+  [
+   4,
+   "Buono, avrei voluto più colori di ceralacca."
+  ],
+  [
+   5,
+   "Il corso di calligrafia è stato il regalo più bello."
+  ],
+  [
+   3,
+   "Bel prodotto, ma la punta fine per me graffia un po’."
+  ]
+ ],
+ "nomi": [
+  "Marco D.",
+  "Giulia S.",
+  "Lorenzo P.",
+  "Francesca R.",
+  "Tommaso B.",
+  "Beatrice C.",
+  "Edoardo F.",
+  "Aurora M.",
+  "Leonardo T.",
+  "Sofia G.",
+  "Mattia V.",
+  "Greta L."
+ ]
+}

@@ -1,0 +1,778 @@
+{
+ "tema": "siero",
+ "titolo_dentro": "Nella confezione",
+ "attributi": {
+  "pelle": {
+   "nome": "Tipo di pelle",
+   "termini": [
+    "Tutti i tipi di pelle",
+    "Pelle secca",
+    "Pelle grassa",
+    "Pelle sensibile",
+    "Pelle matura"
+   ]
+  }
+ },
+ "categorie": [
+  {
+   "slug": "detergenti",
+   "nome": "Detergenti",
+   "descrizione": "Gel, latte e saponette: il primo passo, mattina e sera.",
+   "foto": "pexels-8015784.jpg"
+  },
+  {
+   "slug": "sieri",
+   "nome": "Sieri",
+   "descrizione": "Vitamina C, acido ialuronico, retinolo, oli: il passo che tratta.",
+   "foto": "pexels-11485121.jpg"
+  },
+  {
+   "slug": "creme",
+   "nome": "Creme",
+   "descrizione": "Idratare e proteggere, di giorno e di notte.",
+   "foto": "pexels-9774609.jpg"
+  },
+  {
+   "slug": "trattamenti",
+   "nome": "Trattamenti",
+   "descrizione": "Maschere, contorno occhi, labbra e il rullo di quarzo.",
+   "foto": "pexels-7321352.jpg"
+  },
+  {
+   "slug": "corpo",
+   "nome": "Corpo e mani",
+   "descrizione": "Oli e creme per il corpo, la crema mani da borsa.",
+   "foto": "pexels-19572632.jpg"
+  },
+  {
+   "slug": "kit",
+   "nome": "Kit e routine",
+   "descrizione": "La routine completa in un kit, anche da viaggio.",
+   "foto": "pexels-7691167.jpg"
+  }
+ ],
+ "prodotti": [
+  {
+   "sku": "SIE-001",
+   "nome": "Gel detergente Fiore",
+   "slug": "gel-detergente-fiore",
+   "cat": [
+    "detergenti"
+   ],
+   "prezzo": 24,
+   "sconto": 0,
+   "scorta": 60,
+   "voto": 4.8,
+   "recensioni": 612,
+   "evidenza": true,
+   "foto": [
+    "pexels-8015784.jpg",
+    "pexels-8015792.jpg",
+    "pexels-8015774.jpg"
+   ],
+   "punti": [
+    "Tensioattivi dolci da zucchero",
+    "Acqua di fiori d’arancio",
+    "Non tira, non secca",
+    "Flacone in vetro ricaricabile"
+   ],
+   "testo": "Il primo passo, mattina e sera: si massaggia sul viso umido e si sciacqua. La pelle resta morbida.",
+   "upsell": [],
+   "cross": [
+    "SIE-005",
+    "SIE-009"
+   ],
+   "attributi": {
+    "pelle": [
+     "Tutti i tipi di pelle",
+     "Pelle sensibile"
+    ]
+   },
+   "dentro": "Il flacone in vetro, la scheda degli ingredienti, un campioncino scelto per voi."
+  },
+  {
+   "sku": "SIE-002",
+   "nome": "Latte detergente all’avena",
+   "slug": "latte-detergente-avena",
+   "cat": [
+    "detergenti"
+   ],
+   "prezzo": 22,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.6,
+   "recensioni": 233,
+   "evidenza": false,
+   "foto": [
+    "pexels-8015461.jpg",
+    "pexels-7691112.jpg"
+   ],
+   "punti": [
+    "Avena colloidale",
+    "Toglie anche il trucco",
+    "Senza risciacquo",
+    "Per la pelle che tira"
+   ],
+   "testo": "Per la sera e per la pelle secca: si stende col cotone e toglie anche il trucco.",
+   "upsell": [],
+   "cross": [
+    "SIE-007",
+    "SIE-010"
+   ],
+   "attributi": {
+    "pelle": [
+     "Pelle secca",
+     "Pelle sensibile"
+    ]
+   },
+   "dentro": "Il flacone in vetro, la scheda degli ingredienti, un campioncino scelto per voi."
+  },
+  {
+   "sku": "SIE-003",
+   "nome": "Saponetta all’argilla verde",
+   "slug": "saponetta-argilla-verde",
+   "cat": [
+    "detergenti"
+   ],
+   "prezzo": 12,
+   "sconto": 9,
+   "scorta": 80,
+   "voto": 4.5,
+   "recensioni": 318,
+   "evidenza": false,
+   "foto": [
+    "pexels-3940337.jpg",
+    "pexels-3940335.jpg"
+   ],
+   "punti": [
+    "Argilla verde e olio d’oliva",
+    "Saponificata a freddo",
+    "Senza imballo di plastica",
+    "Dura due mesi"
+   ],
+   "testo": "Purifica senza seccare: per la pelle grassa, anche sul corpo.",
+   "upsell": [],
+   "cross": [
+    "SIE-016"
+   ],
+   "attributi": {
+    "pelle": [
+     "Pelle grassa"
+    ]
+   },
+   "dentro": "Il flacone in vetro, la scheda degli ingredienti, un campioncino scelto per voi."
+  },
+  {
+   "sku": "SIE-004",
+   "nome": "Saponetta al carbone e oliva",
+   "slug": "saponetta-carbone-oliva",
+   "cat": [
+    "detergenti"
+   ],
+   "prezzo": 12,
+   "sconto": 0,
+   "scorta": 55,
+   "voto": 4.4,
+   "recensioni": 141,
+   "evidenza": false,
+   "foto": [
+    "pexels-6690863.jpg"
+   ],
+   "punti": [
+    "Carbone vegetale attivo",
+    "Olio d’oliva",
+    "Saponificata a freddo",
+    "Profumo di salvia"
+   ],
+   "testo": "Il carbone che pulisce i pori e l’olio che nutre: la saponetta della sera.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "pelle": [
+     "Pelle grassa"
+    ]
+   },
+   "dentro": "Il flacone in vetro, la scheda degli ingredienti, un campioncino scelto per voi."
+  },
+  {
+   "sku": "SIE-005",
+   "nome": "Siero Vitamina C 15%",
+   "slug": "siero-vitamina-c",
+   "cat": [
+    "sieri"
+   ],
+   "prezzo": 38,
+   "sconto": 0,
+   "scorta": 45,
+   "voto": 4.9,
+   "recensioni": 1024,
+   "evidenza": true,
+   "foto": [
+    "pexels-11485121.jpg",
+    "pexels-6693950.jpg"
+   ],
+   "punti": [
+    "Vitamina C stabilizzata al 15%",
+    "Illumina e uniforma",
+    "Si usa al mattino, prima della crema",
+    "Il video della goccia nella galleria"
+   ],
+   "testo": "La goccia del mattino: quattro gocce sul viso asciutto, prima della crema. In un mese il colorito è più uniforme.",
+   "upsell": [
+    "SIE-018"
+   ],
+   "cross": [
+    "SIE-009",
+    "SIE-011"
+   ],
+   "video": "pexels-video-7607246.mp4",
+   "poster": "pexels-video-7607246.jpg",
+   "attributi": {
+    "pelle": [
+     "Tutti i tipi di pelle",
+     "Pelle matura"
+    ]
+   },
+   "dentro": "Il flacone in vetro, la scheda degli ingredienti, un campioncino scelto per voi."
+  },
+  {
+   "sku": "SIE-006",
+   "nome": "Siero all’acido ialuronico",
+   "slug": "siero-acido-ialuronico",
+   "cat": [
+    "sieri"
+   ],
+   "prezzo": 34,
+   "sconto": 27,
+   "scorta": 52,
+   "voto": 4.7,
+   "recensioni": 760,
+   "evidenza": true,
+   "foto": [
+    "pexels-7615819.jpg",
+    "pexels-7615869.jpg"
+   ],
+   "punti": [
+    "Tre pesi di acido ialuronico",
+    "Idrata in profondità",
+    "Senza profumo",
+    "Va bene sotto ogni crema"
+   ],
+   "testo": "Il siero dell’acqua: tre pesi di ialuronico che idratano a strati.",
+   "upsell": [],
+   "cross": [
+    "SIE-009",
+    "SIE-012"
+   ],
+   "attributi": {
+    "pelle": [
+     "Tutti i tipi di pelle",
+     "Pelle secca",
+     "Pelle sensibile"
+    ]
+   },
+   "dentro": "Il flacone in vetro, la scheda degli ingredienti, un campioncino scelto per voi."
+  },
+  {
+   "sku": "SIE-007",
+   "nome": "Olio viso alla rosa mosqueta",
+   "slug": "olio-viso-rosa-mosqueta",
+   "cat": [
+    "sieri"
+   ],
+   "prezzo": 32,
+   "sconto": 0,
+   "scorta": 30,
+   "voto": 4.8,
+   "recensioni": 288,
+   "evidenza": false,
+   "foto": [
+    "pexels-4041231.jpg",
+    "pexels-4041392.jpg",
+    "pexels-4041386.jpg"
+   ],
+   "punti": [
+    "Rosa mosqueta spremuta a freddo",
+    "Petali di rosa damascena",
+    "Nutre senza ungere",
+    "Per la sera"
+   ],
+   "testo": "Tre gocce la sera, sul viso ancora umido: la pelle secca si ammorbidisce dalla prima notte.",
+   "upsell": [],
+   "cross": [
+    "SIE-010",
+    "SIE-017"
+   ],
+   "attributi": {
+    "pelle": [
+     "Pelle secca",
+     "Pelle matura"
+    ]
+   },
+   "dentro": "Il flacone in vetro, la scheda degli ingredienti, un campioncino scelto per voi."
+  },
+  {
+   "sku": "SIE-008",
+   "nome": "Siero notte al retinolo",
+   "slug": "siero-notte-retinolo",
+   "cat": [
+    "sieri"
+   ],
+   "prezzo": 42,
+   "sconto": 0,
+   "scorta": 26,
+   "voto": 4.6,
+   "recensioni": 402,
+   "evidenza": false,
+   "foto": [
+    "pexels-6693945.jpg",
+    "pexels-6693972.jpg"
+   ],
+   "punti": [
+    "Retinolo incapsulato 0,3%",
+    "Si comincia due sere a settimana",
+    "Con la protezione solare di giorno",
+    "Flacone scuro, al riparo dalla luce"
+   ],
+   "testo": "Il siero che leviga: si comincia piano, due sere a settimana, e si sale.",
+   "upsell": [],
+   "cross": [
+    "SIE-011",
+    "SIE-010"
+   ],
+   "attributi": {
+    "pelle": [
+     "Pelle matura"
+    ]
+   },
+   "dentro": "Il flacone in vetro, la scheda degli ingredienti, un campioncino scelto per voi."
+  },
+  {
+   "sku": "SIE-009",
+   "nome": "Crema giorno idratante",
+   "slug": "crema-giorno-idratante",
+   "cat": [
+    "creme"
+   ],
+   "prezzo": 34,
+   "sconto": 0,
+   "scorta": 48,
+   "voto": 4.8,
+   "recensioni": 845,
+   "evidenza": true,
+   "foto": [
+    "pexels-9774609.jpg",
+    "pexels-9774606.jpg",
+    "pexels-9774679.jpg"
+   ],
+   "punti": [
+    "Squalano e ceramidi",
+    "Si assorbe in un minuto",
+    "Ottima sotto il trucco",
+    "Il video della texture nella galleria"
+   ],
+   "testo": "La crema di ogni mattina: leggera come un gel, ricca come una crema. Guardatela nel video.",
+   "upsell": [
+    "SIE-010"
+   ],
+   "cross": [
+    "SIE-005",
+    "SIE-011"
+   ],
+   "video": "pexels-video-9697681.mp4",
+   "poster": "pexels-video-9697681.jpg",
+   "attributi": {
+    "pelle": [
+     "Tutti i tipi di pelle",
+     "Pelle secca",
+     "Pelle sensibile"
+    ]
+   },
+   "dentro": "Il flacone in vetro, la scheda degli ingredienti, un campioncino scelto per voi."
+  },
+  {
+   "sku": "SIE-010",
+   "nome": "Crema notte ricca",
+   "slug": "crema-notte-ricca",
+   "cat": [
+    "creme"
+   ],
+   "prezzo": 39,
+   "sconto": 0,
+   "scorta": 33,
+   "voto": 4.7,
+   "recensioni": 391,
+   "evidenza": false,
+   "foto": [
+    "pexels-6167445.jpg",
+    "pexels-6167444.jpg"
+   ],
+   "punti": [
+    "Burro di karité e lavanda",
+    "Ricca, per la notte",
+    "Ripara la barriera",
+    "Vasetto in vetro ambrato"
+   ],
+   "testo": "La crema della sera, ricca e profumata di lavanda.",
+   "upsell": [],
+   "cross": [
+    "SIE-007",
+    "SIE-008"
+   ],
+   "attributi": {
+    "pelle": [
+     "Pelle secca",
+     "Pelle matura"
+    ]
+   },
+   "dentro": "Il flacone in vetro, la scheda degli ingredienti, un campioncino scelto per voi."
+  },
+  {
+   "sku": "SIE-011",
+   "nome": "Fluido protettivo SPF 50",
+   "slug": "fluido-spf-50",
+   "cat": [
+    "creme"
+   ],
+   "prezzo": 29,
+   "sconto": 0,
+   "scorta": 70,
+   "voto": 4.6,
+   "recensioni": 528,
+   "evidenza": false,
+   "foto": [
+    "pexels-8533222.jpg"
+   ],
+   "punti": [
+    "Protezione alta, filtri di nuova generazione",
+    "Non lascia la patina bianca",
+    "Resiste al sudore",
+    "Tutto l’anno"
+   ],
+   "testo": "L’ultimo passo del mattino, ogni giorno dell’anno.",
+   "upsell": [],
+   "cross": [
+    "SIE-005",
+    "SIE-009"
+   ],
+   "attributi": {
+    "pelle": [
+     "Tutti i tipi di pelle"
+    ]
+   },
+   "dentro": "Il flacone in vetro, la scheda degli ingredienti, un campioncino scelto per voi."
+  },
+  {
+   "sku": "SIE-012",
+   "nome": "Contorno occhi al caffè",
+   "slug": "contorno-occhi-caffe",
+   "cat": [
+    "trattamenti"
+   ],
+   "prezzo": 28,
+   "sconto": 0,
+   "scorta": 36,
+   "voto": 4.5,
+   "recensioni": 214,
+   "evidenza": false,
+   "foto": [
+    "pexels-8015480.jpg"
+   ],
+   "punti": [
+    "Caffeina e peptidi",
+    "Sgonfia le borse",
+    "Si picchietta con l’anulare",
+    "Tubetto con la punta fredda"
+   ],
+   "testo": "Il risveglio degli occhi: si picchietta col dito, la mattina.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "pelle": [
+     "Tutti i tipi di pelle"
+    ]
+   },
+   "dentro": "Il flacone in vetro, la scheda degli ingredienti, un campioncino scelto per voi."
+  },
+  {
+   "sku": "SIE-013",
+   "nome": "Balsamo labbra al lampone",
+   "slug": "balsamo-labbra-lampone",
+   "cat": [
+    "trattamenti"
+   ],
+   "prezzo": 9,
+   "sconto": 0,
+   "scorta": 120,
+   "voto": 4.7,
+   "recensioni": 902,
+   "evidenza": false,
+   "foto": [
+    "pexels-8128674.jpg",
+    "pexels-8129894.jpg"
+   ],
+   "punti": [
+    "Burro di cacao e lampone",
+    "Un velo di colore",
+    "Vasetto da borsa",
+    "Vegano"
+   ],
+   "testo": "Il balsamo da borsetta, rosa lampone: nutre e colora appena.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "pelle": [
+     "Tutti i tipi di pelle"
+    ]
+   },
+   "dentro": "Il flacone in vetro, la scheda degli ingredienti, un campioncino scelto per voi."
+  },
+  {
+   "sku": "SIE-014",
+   "nome": "Crema mani alla calendula",
+   "slug": "crema-mani-calendula",
+   "cat": [
+    "corpo"
+   ],
+   "prezzo": 14,
+   "sconto": 11,
+   "scorta": 90,
+   "voto": 4.8,
+   "recensioni": 1302,
+   "evidenza": false,
+   "foto": [
+    "pexels-11417936.jpg"
+   ],
+   "punti": [
+    "Calendula e glicerina",
+    "Non unge, si assorbe subito",
+    "Tubetto da 50 ml",
+    "Il video nella galleria"
+   ],
+   "testo": "La crema mani che si mette in tasca: non unge il telefono.",
+   "upsell": [],
+   "cross": [],
+   "video": "pexels-video-8141586.mp4",
+   "poster": "pexels-video-8141586.jpg",
+   "attributi": {
+    "pelle": [
+     "Tutti i tipi di pelle",
+     "Pelle secca"
+    ]
+   },
+   "dentro": "Il flacone in vetro, la scheda degli ingredienti, un campioncino scelto per voi."
+  },
+  {
+   "sku": "SIE-015",
+   "nome": "Olio corpo all’elicriso",
+   "slug": "olio-corpo-elicriso",
+   "cat": [
+    "corpo"
+   ],
+   "prezzo": 29,
+   "sconto": 0,
+   "scorta": 28,
+   "voto": 4.7,
+   "recensioni": 176,
+   "evidenza": false,
+   "foto": [
+    "pexels-19572632.jpg"
+   ],
+   "punti": [
+    "Olio di mandorle ed elicriso",
+    "Sulla pelle umida, dopo la doccia",
+    "Profumo di erbe",
+    "Flacone a pompa"
+   ],
+   "testo": "Dopo la doccia, sulla pelle ancora umida: profuma di macchia mediterranea.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "pelle": [
+     "Pelle secca"
+    ]
+   },
+   "dentro": "Il flacone in vetro, la scheda degli ingredienti, un campioncino scelto per voi."
+  },
+  {
+   "sku": "SIE-016",
+   "nome": "Maschera all’argilla rossa",
+   "slug": "maschera-argilla-rossa",
+   "cat": [
+    "trattamenti"
+   ],
+   "prezzo": 26,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.6,
+   "recensioni": 233,
+   "evidenza": false,
+   "foto": [
+    "pexels-7321352.jpg",
+    "pexels-7321367.jpg",
+    "pexels-7321363.jpg"
+   ],
+   "punti": [
+    "Argilla rossa in polvere",
+    "Si prepara con l’acqua o il tonico",
+    "Dieci minuti, una volta a settimana",
+    "Per trenta maschere"
+   ],
+   "testo": "Si prepara al momento, come nelle foto: argilla e qualche goccia di olio, dieci minuti.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "pelle": [
+     "Pelle grassa",
+     "Tutti i tipi di pelle"
+    ]
+   },
+   "dentro": "Il flacone in vetro, la scheda degli ingredienti, un campioncino scelto per voi."
+  },
+  {
+   "sku": "SIE-017",
+   "nome": "Rullo in quarzo rosa",
+   "slug": "rullo-quarzo-rosa",
+   "cat": [
+    "trattamenti"
+   ],
+   "prezzo": 26,
+   "sconto": 0,
+   "scorta": 25,
+   "voto": 4.4,
+   "recensioni": 160,
+   "evidenza": false,
+   "foto": [
+    "pexels-4938500.jpg",
+    "pexels-8903614.jpg"
+   ],
+   "punti": [
+    "Quarzo rosa vero",
+    "Due rulli, grande e piccolo",
+    "Tenuto in frigo sgonfia il viso",
+    "Con la custodia"
+   ],
+   "testo": "Il massaggio del mattino, freddo di frigo, dopo il siero.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il flacone in vetro, la scheda degli ingredienti, un campioncino scelto per voi."
+  },
+  {
+   "sku": "SIE-018",
+   "nome": "Kit routine del mattino",
+   "slug": "kit-routine-mattino",
+   "cat": [
+    "kit"
+   ],
+   "prezzo": 79,
+   "sconto": 64,
+   "scorta": 20,
+   "voto": 4.9,
+   "recensioni": 312,
+   "evidenza": true,
+   "foto": [
+    "pexels-7691167.jpg",
+    "pexels-8015698.jpg",
+    "pexels-8015762.jpg"
+   ],
+   "punti": [
+    "Gel detergente Fiore",
+    "Siero Vitamina C",
+    "Crema giorno idratante",
+    "Il kit costa il 19% in meno"
+   ],
+   "testo": "I tre passi del mattino in un kit: detergi, tratta, idrata.",
+   "upsell": [],
+   "cross": [
+    "SIE-011"
+   ],
+   "attributi": {
+    "pelle": [
+     "Tutti i tipi di pelle"
+    ]
+   },
+   "dentro": "Il flacone in vetro, la scheda degli ingredienti, un campioncino scelto per voi."
+  },
+  {
+   "sku": "SIE-019",
+   "nome": "Kit da viaggio",
+   "slug": "kit-viaggio",
+   "cat": [
+    "kit"
+   ],
+   "prezzo": 39,
+   "sconto": 0,
+   "scorta": 30,
+   "voto": 4.6,
+   "recensioni": 98,
+   "evidenza": false,
+   "foto": [
+    "pexels-8049849.jpg",
+    "pexels-7691164.jpg"
+   ],
+   "punti": [
+    "Cinque formati da 15 ml",
+    "Sacchetto in cotone",
+    "Sotto i 100 ml per l’aereo",
+    "Si ricaricano"
+   ],
+   "testo": "La routine intera nel bagaglio a mano.",
+   "upsell": [],
+   "cross": [],
+   "attributi": {
+    "pelle": [
+     "Tutti i tipi di pelle"
+    ]
+   },
+   "dentro": "Il flacone in vetro, la scheda degli ingredienti, un campioncino scelto per voi."
+  }
+ ],
+ "recensioni": [
+  [
+   5,
+   "Pelle più luminosa in tre settimane. Il flacone in vetro è bellissimo."
+  ],
+  [
+   5,
+   "Finalmente una crema che non mi fa venire i brufoli. Ricomprata."
+  ],
+  [
+   4,
+   "Ottima, profumo leggero. Il contagocce a volte gocciola un po’."
+  ],
+  [
+   5,
+   "Pelle sensibile e nessun rossore. Mi hanno consigliato loro la routine per email."
+  ],
+  [
+   4,
+   "Funziona, ci vuole un mese per vedere la differenza come dicono."
+  ],
+  [
+   5,
+   "Arrivato in due giorni con un campioncino in più. Gentilissimi."
+  ],
+  [
+   5,
+   "La ricarica costa meno e il flacone dura per sempre. Bella idea."
+  ],
+  [
+   4,
+   "Texture piacevole, la confezione potrebbe essere più grande."
+  ]
+ ],
+ "nomi": [
+  "Giulia R.",
+  "Federica M.",
+  "Sara B.",
+  "Chiara L.",
+  "Anna P.",
+  "Elena C.",
+  "Laura D.",
+  "Valeria T.",
+  "Silvia G.",
+  "Marta F.",
+  "Paola V.",
+  "Davide S."
+ ]
+}

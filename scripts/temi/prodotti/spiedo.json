@@ -1,0 +1,720 @@
+{
+ "tema": "spiedo",
+ "titolo_dentro": "Nella confezione",
+ "attributi": {
+  "carne": {
+   "nome": "Carne",
+   "termini": [
+    "Pollo",
+    "Vitello",
+    "Misto"
+   ]
+  }
+ },
+ "categorie": [
+  {
+   "slug": "kebab",
+   "nome": "Kebab e dürüm",
+   "descrizione": "La carne dallo spiedo, nel pane o nella piadina.",
+   "foto": "pexels-15202777.jpg"
+  },
+  {
+   "slug": "piatti",
+   "nome": "Piatti e menu",
+   "descrizione": "Col riso, l’insalata, l’hummus; i menu con la bibita.",
+   "foto": "pexels-14457194.jpg"
+  },
+  {
+   "slug": "vegetariano",
+   "nome": "Falafel e vegetariano",
+   "descrizione": "Falafel, hummus, la piadina agli spinaci.",
+   "foto": "pexels-27556250.jpg"
+  },
+  {
+   "slug": "griglia",
+   "nome": "Alla brace",
+   "descrizione": "Spiedini, adana, la grigliata per due.",
+   "foto": "pexels-38602968.jpg"
+  },
+  {
+   "slug": "contorni",
+   "nome": "Contorni e salse",
+   "descrizione": "Patatine, hummus, le salse della casa.",
+   "foto": "pexels-32854867.jpg"
+  },
+  {
+   "slug": "dolci-bibite",
+   "nome": "Dolci e bibite",
+   "descrizione": "Baklava, limonata alla menta.",
+   "foto": "pexels-16107643.jpg"
+  }
+ ],
+ "prodotti": [
+  {
+   "sku": "SPI-001",
+   "nome": "Kebab nel pane",
+   "slug": "kebab-pane",
+   "cat": [
+    "kebab"
+   ],
+   "prezzo": 6.5,
+   "sconto": 5.5,
+   "scorta": 99,
+   "voto": 4.8,
+   "recensioni": 1312,
+   "evidenza": true,
+   "foto": [
+    "pexels-5779372.jpg",
+    "pexels-15202777.jpg"
+   ],
+   "punti": [
+    "La carne dallo spiedo",
+    "Pane cotto al momento",
+    "Insalata, pomodoro, cipolla",
+    "Il video dello spiedo"
+   ],
+   "testo": "Il kebab come si deve: il pane caldo, la carne tagliata dallo spiedo, la salsa allo yogurt.",
+   "upsell": [],
+   "cross": [
+    "SPI-015",
+    "SPI-019"
+   ],
+   "varianti": {
+    "attributo": "carne",
+    "valori": [
+     "Pollo",
+     "Vitello",
+     "Misto"
+    ],
+    "esaurite": []
+   },
+   "video": "pexels-video-5528187.mp4",
+   "poster": "pexels-video-5528187.jpg",
+   "dentro": "Il piatto nella scatola di carta, le posate di legno, i tovaglioli, la salsa scelta."
+  },
+  {
+   "sku": "SPI-002",
+   "nome": "Dürüm",
+   "slug": "durum",
+   "cat": [
+    "kebab"
+   ],
+   "prezzo": 7.5,
+   "sconto": 0,
+   "scorta": 99,
+   "voto": 4.9,
+   "recensioni": 1544,
+   "evidenza": true,
+   "foto": [
+    "pexels-10837796.jpg",
+    "pexels-4899802.jpg"
+   ],
+   "punti": [
+    "Piadina turca arrotolata",
+    "Carne, insalata, pomodoro",
+    "Salsa allo yogurt",
+    "Si mangia camminando"
+   ],
+   "testo": "La piadina turca arrotolata stretta: si mangia camminando per Monti.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "carne",
+    "valori": [
+     "Pollo",
+     "Vitello",
+     "Misto"
+    ],
+    "esaurite": []
+   },
+   "video": "pexels-video-5528188.mp4",
+   "poster": "pexels-video-5528188.jpg",
+   "dentro": "Il piatto nella scatola di carta, le posate di legno, i tovaglioli, la salsa scelta."
+  },
+  {
+   "sku": "SPI-003",
+   "nome": "Dürüm piccante",
+   "slug": "durum-piccante",
+   "cat": [
+    "kebab"
+   ],
+   "prezzo": 8,
+   "sconto": 0,
+   "scorta": 99,
+   "voto": 4.7,
+   "recensioni": 621,
+   "evidenza": false,
+   "foto": [
+    "pexels-15390220.jpg"
+   ],
+   "punti": [
+    "Peperoncino di Urfa",
+    "Salsa harissa",
+    "Cipolla al sommacco",
+    "Piccante davvero"
+   ],
+   "testo": "Il dürüm col peperoncino di Urfa e l’harissa: piccante davvero.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "carne",
+    "valori": [
+     "Pollo",
+     "Vitello",
+     "Misto"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il piatto nella scatola di carta, le posate di legno, i tovaglioli, la salsa scelta."
+  },
+  {
+   "sku": "SPI-004",
+   "nome": "Kebab nel cornetto salato",
+   "slug": "kebab-cornetto",
+   "cat": [
+    "kebab"
+   ],
+   "prezzo": 9.5,
+   "sconto": 0,
+   "scorta": 99,
+   "voto": 4.6,
+   "recensioni": 233,
+   "evidenza": false,
+   "foto": [
+    "pexels-23385290.jpg"
+   ],
+   "punti": [
+    "Cornetto salato al burro",
+    "Vitello dallo spiedo",
+    "Insalata e salsa",
+    "L’invenzione della casa"
+   ],
+   "testo": "L’invenzione della casa: il cornetto salato caldo, col vitello dallo spiedo dentro.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il piatto nella scatola di carta, le posate di legno, i tovaglioli, la salsa scelta."
+  },
+  {
+   "sku": "SPI-005",
+   "nome": "Box kebab e patatine",
+   "slug": "box-kebab",
+   "cat": [
+    "piatti"
+   ],
+   "prezzo": 10.5,
+   "sconto": 8.9,
+   "scorta": 99,
+   "voto": 4.8,
+   "recensioni": 702,
+   "evidenza": true,
+   "foto": [
+    "pexels-15390671.jpg",
+    "pexels-39572215.jpg"
+   ],
+   "punti": [
+    "Carne dallo spiedo",
+    "Patatine fritte al momento",
+    "Due salse",
+    "Nella scatola, con la forchetta"
+   ],
+   "testo": "La scatola col kebab, le patatine fritte al momento e due salse: per il pranzo in ufficio.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "carne",
+    "valori": [
+     "Pollo",
+     "Vitello",
+     "Misto"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il piatto nella scatola di carta, le posate di legno, i tovaglioli, la salsa scelta."
+  },
+  {
+   "sku": "SPI-006",
+   "nome": "Piatto shawarma con hummus",
+   "slug": "piatto-shawarma",
+   "cat": [
+    "piatti"
+   ],
+   "prezzo": 12.5,
+   "sconto": 0,
+   "scorta": 99,
+   "voto": 4.8,
+   "recensioni": 388,
+   "evidenza": false,
+   "foto": [
+    "pexels-18177341.jpg",
+    "pexels-40262789.jpg"
+   ],
+   "punti": [
+    "Shawarma di pollo",
+    "Hummus e pane caldo",
+    "Insalata e sottaceti",
+    "Salsa all’aglio"
+   ],
+   "testo": "Lo shawarma di pollo nel piatto, con l’hummus, il pane caldo e i sottaceti rosa.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il piatto nella scatola di carta, le posate di legno, i tovaglioli, la salsa scelta."
+  },
+  {
+   "sku": "SPI-007",
+   "nome": "Piatto misto per due",
+   "slug": "piatto-misto-due",
+   "cat": [
+    "piatti"
+   ],
+   "prezzo": 24,
+   "sconto": 19,
+   "scorta": 99,
+   "voto": 4.9,
+   "recensioni": 455,
+   "evidenza": true,
+   "foto": [
+    "pexels-14457194.jpg",
+    "pexels-32401042.jpg"
+   ],
+   "punti": [
+    "Kebab, adana, spiedini",
+    "Hummus e tabulè",
+    "Pane caldo",
+    "Per due, anche tre"
+   ],
+   "testo": "La grigliata da dividere: kebab, adana, spiedini, hummus, tabulè e il pane caldo.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il piatto nella scatola di carta, le posate di legno, i tovaglioli, la salsa scelta."
+  },
+  {
+   "sku": "SPI-008",
+   "nome": "Falafel nel pane",
+   "slug": "falafel-pane",
+   "cat": [
+    "vegetariano"
+   ],
+   "prezzo": 6,
+   "sconto": 0,
+   "scorta": 99,
+   "voto": 4.7,
+   "recensioni": 610,
+   "evidenza": false,
+   "foto": [
+    "pexels-27556250.jpg",
+    "pexels-9213971.jpg"
+   ],
+   "punti": [
+    "Falafel fritti al momento",
+    "Hummus e tahina",
+    "Insalata e pomodoro",
+    "Vegano"
+   ],
+   "testo": "I falafel fritti al momento nel pane caldo, con la tahina: vegani.",
+   "upsell": [],
+   "cross": [],
+   "video": "pexels-video-36985377.mp4",
+   "poster": "pexels-video-36985377.jpg",
+   "dentro": "Il piatto nella scatola di carta, le posate di legno, i tovaglioli, la salsa scelta."
+  },
+  {
+   "sku": "SPI-009",
+   "nome": "Bowl di falafel e tabulè",
+   "slug": "bowl-falafel",
+   "cat": [
+    "vegetariano"
+   ],
+   "prezzo": 10,
+   "sconto": 0,
+   "scorta": 99,
+   "voto": 4.6,
+   "recensioni": 205,
+   "evidenza": false,
+   "foto": [
+    "pexels-30488354.jpg",
+    "pexels-6275187.jpg"
+   ],
+   "punti": [
+    "Falafel",
+    "Tabulè di bulgur",
+    "Hummus",
+    "Melograno"
+   ],
+   "testo": "La ciotola leggera: falafel, tabulè, hummus e i chicchi di melograno.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il piatto nella scatola di carta, le posate di legno, i tovaglioli, la salsa scelta."
+  },
+  {
+   "sku": "SPI-010",
+   "nome": "Piadina turca spinaci e formaggio",
+   "slug": "piadina-spinaci",
+   "cat": [
+    "vegetariano"
+   ],
+   "prezzo": 7,
+   "sconto": 0,
+   "scorta": 99,
+   "voto": 4.6,
+   "recensioni": 233,
+   "evidenza": false,
+   "foto": [
+    "pexels-30350308.jpg",
+    "pexels-36100519.jpg"
+   ],
+   "punti": [
+    "Sfoglia tirata a mano",
+    "Spinaci e formaggio",
+    "Cotta sulla piastra",
+    "Vegetariana"
+   ],
+   "testo": "La gözleme: la sfoglia tirata a mano, gli spinaci, il formaggio, la piastra.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il piatto nella scatola di carta, le posate di legno, i tovaglioli, la salsa scelta."
+  },
+  {
+   "sku": "SPI-011",
+   "nome": "Lahmacun, la pizza turca",
+   "slug": "lahmacun",
+   "cat": [
+    "vegetariano"
+   ],
+   "prezzo": 6.5,
+   "sconto": 0,
+   "scorta": 99,
+   "voto": 4.5,
+   "recensioni": 140,
+   "evidenza": false,
+   "foto": [
+    "pexels-1603463.jpg"
+   ],
+   "punti": [
+    "Sottile e croccante",
+    "Carne macinata e spezie",
+    "Prezzemolo e limone",
+    "Si arrotola"
+   ],
+   "testo": "La pizza turca sottile con la carne speziata: si arrotola col prezzemolo e il limone.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il piatto nella scatola di carta, le posate di legno, i tovaglioli, la salsa scelta."
+  },
+  {
+   "sku": "SPI-012",
+   "nome": "Spiedini di pollo, tre pezzi",
+   "slug": "spiedini-pollo",
+   "cat": [
+    "griglia"
+   ],
+   "prezzo": 9.5,
+   "sconto": 0,
+   "scorta": 99,
+   "voto": 4.7,
+   "recensioni": 312,
+   "evidenza": false,
+   "foto": [
+    "pexels-37650413.jpg",
+    "pexels-29244071.jpg"
+   ],
+   "punti": [
+    "Pollo marinato allo yogurt",
+    "Alla brace",
+    "Col riso o le patatine",
+    "Salsa all’aglio"
+   ],
+   "testo": "Il pollo marinato una notte nello yogurt e nelle spezie, sulla brace.",
+   "upsell": [],
+   "cross": [],
+   "video": "pexels-video-35008170.mp4",
+   "poster": "pexels-video-35008170.jpg",
+   "dentro": "Il piatto nella scatola di carta, le posate di legno, i tovaglioli, la salsa scelta."
+  },
+  {
+   "sku": "SPI-013",
+   "nome": "Adana kebab con riso",
+   "slug": "adana-riso",
+   "cat": [
+    "griglia"
+   ],
+   "prezzo": 13,
+   "sconto": 10.5,
+   "scorta": 99,
+   "voto": 4.9,
+   "recensioni": 287,
+   "evidenza": true,
+   "foto": [
+    "pexels-7439809.jpg",
+    "pexels-38209559.jpg"
+   ],
+   "punti": [
+    "Carne macinata a mano",
+    "Peperoncino e grasso di coda",
+    "Alla brace",
+    "Col riso al burro"
+   ],
+   "testo": "L’adana: la carne battuta a mano col peperoncino, sulla brace, col riso al burro.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il piatto nella scatola di carta, le posate di legno, i tovaglioli, la salsa scelta."
+  },
+  {
+   "sku": "SPI-014",
+   "nome": "Spiedini misti alla brace, per due",
+   "slug": "spiedini-misti",
+   "cat": [
+    "griglia"
+   ],
+   "prezzo": 19,
+   "sconto": 0,
+   "scorta": 99,
+   "voto": 4.8,
+   "recensioni": 166,
+   "evidenza": false,
+   "foto": [
+    "pexels-38602968.jpg",
+    "pexels-29244073.jpg",
+    "pexels-12738458.jpg"
+   ],
+   "punti": [
+    "Pollo, vitello, verdure",
+    "Sei spiedini",
+    "Pane caldo",
+    "Due salse"
+   ],
+   "testo": "Sei spiedini misti dalla brace, il pane caldo, due salse: per due.",
+   "upsell": [],
+   "cross": [],
+   "video": "pexels-video-35594347.mp4",
+   "poster": "pexels-video-35594347.jpg",
+   "dentro": "Il piatto nella scatola di carta, le posate di legno, i tovaglioli, la salsa scelta."
+  },
+  {
+   "sku": "SPI-015",
+   "nome": "Patatine con due salse",
+   "slug": "patatine-salse",
+   "cat": [
+    "contorni"
+   ],
+   "prezzo": 4,
+   "sconto": 0,
+   "scorta": 99,
+   "voto": 4.6,
+   "recensioni": 980,
+   "evidenza": false,
+   "foto": [
+    "pexels-32854867.jpg",
+    "pexels-8165289.jpg"
+   ],
+   "punti": [
+    "Fritte al momento",
+    "Due salse a scelta",
+    "Sale e paprika",
+    "Porzione grande"
+   ],
+   "testo": "Le patatine fritte al momento, con due salse della casa.",
+   "upsell": [],
+   "cross": [],
+   "video": "pexels-video-37191796.mp4",
+   "poster": "pexels-video-37191796.jpg",
+   "dentro": "Il piatto nella scatola di carta, le posate di legno, i tovaglioli, la salsa scelta."
+  },
+  {
+   "sku": "SPI-016",
+   "nome": "Hummus e pane caldo",
+   "slug": "hummus-pane",
+   "cat": [
+    "contorni"
+   ],
+   "prezzo": 5.5,
+   "sconto": 0,
+   "scorta": 99,
+   "voto": 4.8,
+   "recensioni": 344,
+   "evidenza": false,
+   "foto": [
+    "pexels-6089614.jpg",
+    "pexels-11842151.jpg"
+   ],
+   "punti": [
+    "Ceci e tahina",
+    "Olio e paprika",
+    "Pane caldo",
+    "Vegano"
+   ],
+   "testo": "L’hummus cremoso con l’olio e la paprika, e il pane appena uscito dal forno.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il piatto nella scatola di carta, le posate di legno, i tovaglioli, la salsa scelta."
+  },
+  {
+   "sku": "SPI-017",
+   "nome": "Le salse della casa, quattro vasetti",
+   "slug": "salse-casa",
+   "cat": [
+    "contorni"
+   ],
+   "prezzo": 3.5,
+   "sconto": 0,
+   "scorta": 99,
+   "voto": 4.7,
+   "recensioni": 412,
+   "evidenza": false,
+   "foto": [
+    "pexels-29908848.jpg",
+    "pexels-6252676.jpg"
+   ],
+   "punti": [
+    "Yogurt e aglio",
+    "Harissa",
+    "Tahina",
+    "Peperoncino"
+   ],
+   "testo": "Le quattro salse: yogurt e aglio, harissa, tahina, peperoncino.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il piatto nella scatola di carta, le posate di legno, i tovaglioli, la salsa scelta."
+  },
+  {
+   "sku": "SPI-018",
+   "nome": "Baklava al pistacchio, sei pezzi",
+   "slug": "baklava-pistacchio",
+   "cat": [
+    "dolci-bibite"
+   ],
+   "prezzo": 7.5,
+   "sconto": 0,
+   "scorta": 99,
+   "voto": 4.9,
+   "recensioni": 377,
+   "evidenza": false,
+   "foto": [
+    "pexels-16107643.jpg",
+    "pexels-20183029.jpg"
+   ],
+   "punti": [
+    "Pasta fillo e burro",
+    "Pistacchi di Antep",
+    "Sciroppo al limone",
+    "Sei pezzi"
+   ],
+   "testo": "La baklava coi pistacchi di Antep: sei pezzi, croccanti e dolcissimi.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il piatto nella scatola di carta, le posate di legno, i tovaglioli, la salsa scelta."
+  },
+  {
+   "sku": "SPI-019",
+   "nome": "Limonata alla menta",
+   "slug": "limonata-menta",
+   "cat": [
+    "dolci-bibite"
+   ],
+   "prezzo": 3.5,
+   "sconto": 2.5,
+   "scorta": 99,
+   "voto": 4.7,
+   "recensioni": 266,
+   "evidenza": false,
+   "foto": [
+    "pexels-9259573.jpg",
+    "pexels-15999630.jpg"
+   ],
+   "punti": [
+    "Limoni spremuti",
+    "Menta fresca",
+    "Poco zucchero",
+    "Mezzo litro"
+   ],
+   "testo": "La limonata spremuta con la menta fresca: spegne il peperoncino.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il piatto nella scatola di carta, le posate di legno, i tovaglioli, la salsa scelta."
+  },
+  {
+   "sku": "SPI-020",
+   "nome": "Menu Spiedo: kebab, patatine e bibita",
+   "slug": "menu-spiedo",
+   "cat": [
+    "piatti"
+   ],
+   "prezzo": 12,
+   "sconto": 9.9,
+   "scorta": 99,
+   "voto": 4.8,
+   "recensioni": 860,
+   "evidenza": true,
+   "foto": [
+    "pexels-15202777.jpg",
+    "pexels-39572215.jpg"
+   ],
+   "punti": [
+    "Kebab nel pane",
+    "Patatine",
+    "Una bibita",
+    "Fino alle 15"
+   ],
+   "testo": "Il menu del pranzo: il kebab nel pane, le patatine e una bibita, fino alle tre.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "carne",
+    "valori": [
+     "Pollo",
+     "Vitello",
+     "Misto"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il piatto nella scatola di carta, le posate di legno, i tovaglioli, la salsa scelta."
+  }
+ ],
+ "recensioni": [
+  [
+   5,
+   "Il miglior dürüm di Roma, e arriva ancora caldo."
+  ],
+  [
+   5,
+   "Ordinato alle 13, ritirato alle 13:12. Perfetto."
+  ],
+  [
+   4,
+   "Buonissimo, la salsa piccante è davvero piccante."
+  ],
+  [
+   5,
+   "I falafel sono croccanti fuori e morbidi dentro."
+  ],
+  [
+   5,
+   "Il piatto misto per due ci ha sfamati in tre."
+  ],
+  [
+   4,
+   "Ottimo, le patatine erano un po’ tiepide con la consegna."
+  ],
+  [
+   5,
+   "La baklava è da ordinare sempre."
+  ],
+  [
+   3,
+   "Buono, ma il venerdì sera la consegna è più lenta."
+  ]
+ ],
+ "nomi": [
+  "Marco D.",
+  "Giulia S.",
+  "Lorenzo P.",
+  "Francesca R.",
+  "Tommaso B.",
+  "Beatrice C.",
+  "Edoardo F.",
+  "Aurora M.",
+  "Leonardo T.",
+  "Sofia G.",
+  "Mattia V.",
+  "Greta L."
+ ]
+}

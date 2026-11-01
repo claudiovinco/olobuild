@@ -1,0 +1,1194 @@
+{
+ "tema": "orlo",
+ "titolo_dentro": "Nella scatola",
+ "attributi": {
+  "taglia": {
+   "nome": "Taglia",
+   "termini": [
+    "XS",
+    "S",
+    "M",
+    "L",
+    "XL",
+    "36",
+    "37",
+    "38",
+    "39",
+    "40",
+    "41"
+   ]
+  }
+ },
+ "categorie": [
+  {
+   "slug": "abiti",
+   "nome": "Abiti",
+   "descrizione": "Lino, crêpe e seta: gli abiti per ogni giorno e per le sere.",
+   "foto": "pexels-8053683.jpg"
+  },
+  {
+   "slug": "camicie",
+   "nome": "Camicie",
+   "descrizione": "Popeline, lino e seta, ampie o dritte.",
+   "foto": "pexels-31747192.jpg"
+  },
+  {
+   "slug": "maglieria",
+   "nome": "Maglieria",
+   "descrizione": "Cashmere, merino e cotone lavorati a Biella.",
+   "foto": "pexels-14641437.jpg"
+  },
+  {
+   "slug": "pantaloni",
+   "nome": "Pantaloni",
+   "descrizione": "Palazzo, dritti, jeans: la vita alta di Orlo.",
+   "foto": "pexels-39457561.jpg"
+  },
+  {
+   "slug": "capispalla",
+   "nome": "Capispalla",
+   "descrizione": "Cappotti, trench e giacche in lana e cotone.",
+   "foto": "pexels-9968534.jpg"
+  },
+  {
+   "slug": "accessori-moda",
+   "nome": "Accessori",
+   "descrizione": "Borse, mocassini e stivaletti in pelle.",
+   "foto": "pexels-8125851.jpg"
+  }
+ ],
+ "prodotti": [
+  {
+   "sku": "ORL-001",
+   "nome": "Abito Vela in lino, arancio",
+   "slug": "abito-vela-lino",
+   "cat": [
+    "abiti"
+   ],
+   "prezzo": 159,
+   "sconto": 119,
+   "scorta": 22,
+   "voto": 4.7,
+   "recensioni": 186,
+   "evidenza": true,
+   "foto": [
+    "pexels-8053672.jpg",
+    "pexels-8053683.jpg"
+   ],
+   "punti": [
+    "Lino lavato, morbido dal primo giorno",
+    "Allacciato in vita, scollo a V",
+    "Lunghezza al polpaccio",
+    "Cucito a Carpi"
+   ],
+   "testo": "L’abito dell’estate che dura fino a ottobre: il lino lavato non si stropiccia più di così e il nodo in vita si stringe come si vuole.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [
+    "ORL-005"
+   ],
+   "cross": [
+    "ORL-023",
+    "ORL-013"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "XS",
+     "S",
+     "M",
+     "L",
+     "XL"
+    ],
+    "esaurite": [
+     "L"
+    ]
+   }
+  },
+  {
+   "sku": "ORL-002",
+   "nome": "Abito Riva, lungo in lino naturale",
+   "slug": "abito-riva-lino",
+   "cat": [
+    "abiti"
+   ],
+   "prezzo": 189,
+   "sconto": 0,
+   "scorta": 18,
+   "voto": 4.8,
+   "recensioni": 94,
+   "evidenza": true,
+   "foto": [
+    "pexels-8190290.jpg",
+    "pexels-8190278.jpg"
+   ],
+   "punti": [
+    "Lino pesante, tinta naturale",
+    "Fiocco sulla schiena",
+    "Tasche nelle cuciture",
+    "Cucito a Carpi"
+   ],
+   "testo": "Lungo, dritto, col fiocco dietro: si porta coi sandali e col cardigan quando la sera rinfresca.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [
+    "ORL-006"
+   ],
+   "cross": [
+    "ORL-013",
+    "ORL-024"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "XS",
+     "S",
+     "M",
+     "L",
+     "XL"
+    ],
+    "esaurite": [
+     "XS"
+    ]
+   }
+  },
+  {
+   "sku": "ORL-003",
+   "nome": "Abito Sottoveste in viscosa, salvia",
+   "slug": "abito-sottoveste-salvia",
+   "cat": [
+    "abiti"
+   ],
+   "prezzo": 139,
+   "sconto": 0,
+   "scorta": 25,
+   "voto": 4.6,
+   "recensioni": 72,
+   "evidenza": false,
+   "foto": [
+    "pexels-8531225-a.jpg",
+    "pexels-8531225-b.jpg"
+   ],
+   "punti": [
+    "Viscosa fluida che si muove con te",
+    "Spalline regolabili",
+    "Taglio in sbieco",
+    "Il video nella galleria"
+   ],
+   "testo": "Il taglio in sbieco lo fa scivolare: guardatelo nel video, quando gira.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [
+    "ORL-006"
+   ],
+   "cross": [
+    "ORL-014",
+    "ORL-025"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "XS",
+     "S",
+     "M",
+     "L",
+     "XL"
+    ],
+    "esaurite": []
+   },
+   "video": "pexels-video-8531225.mp4",
+   "poster": "pexels-video-8531225.jpg"
+  },
+  {
+   "sku": "ORL-004",
+   "nome": "Abito Corallo in crêpe",
+   "slug": "abito-corallo-crepe",
+   "cat": [
+    "abiti"
+   ],
+   "prezzo": 175,
+   "sconto": 139,
+   "scorta": 14,
+   "voto": 4.5,
+   "recensioni": 58,
+   "evidenza": false,
+   "foto": [
+    "pexels-8928272-a.jpg",
+    "pexels-8928272-b.jpg"
+   ],
+   "punti": [
+    "Crêpe di viscosa opaco",
+    "Maniche a sbuffo",
+    "Schiena scoperta con laccio",
+    "Fodera in cupro"
+   ],
+   "testo": "Rosso corallo, la schiena aperta e le maniche a sbuffo: l’abito per un matrimonio in campagna.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [
+    "ORL-005"
+   ],
+   "cross": [
+    "ORL-022",
+    "ORL-024"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "XS",
+     "S",
+     "M",
+     "L",
+     "XL"
+    ],
+    "esaurite": [
+     "XL"
+    ]
+   },
+   "video": "pexels-video-8928272.mp4",
+   "poster": "pexels-video-8928272.jpg"
+  },
+  {
+   "sku": "ORL-005",
+   "nome": "Abito Cobalto plissé",
+   "slug": "abito-cobalto-plisse",
+   "cat": [
+    "abiti"
+   ],
+   "prezzo": 210,
+   "sconto": 0,
+   "scorta": 16,
+   "voto": 4.9,
+   "recensioni": 41,
+   "evidenza": true,
+   "foto": [
+    "pexels-15017748-a.jpg",
+    "pexels-15017748-b.jpg"
+   ],
+   "punti": [
+    "Plissé permanente, non si stira",
+    "Il cobalto di Orlo",
+    "Lungo alla caviglia",
+    "Si piega in valigia"
+   ],
+   "testo": "Il blu che è il nostro colore, plissettato a Como: cammina e si apre come un ventaglio.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [],
+   "cross": [
+    "ORL-022",
+    "ORL-024"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "XS",
+     "S",
+     "M",
+     "L",
+     "XL"
+    ],
+    "esaurite": []
+   },
+   "video": "pexels-video-15017748.mp4",
+   "poster": "pexels-video-15017748.jpg"
+  },
+  {
+   "sku": "ORL-006",
+   "nome": "Abito Notte in seta",
+   "slug": "abito-notte-seta",
+   "cat": [
+    "abiti"
+   ],
+   "prezzo": 290,
+   "sconto": 0,
+   "scorta": 9,
+   "voto": 4.8,
+   "recensioni": 33,
+   "evidenza": false,
+   "foto": [
+    "pexels-12466602.jpg",
+    "pexels-20117725.jpg"
+   ],
+   "punti": [
+    "Raso di seta da 22 momme",
+    "Scollo a cappuccio",
+    "Taglio in sbieco",
+    "Tinto a Como"
+   ],
+   "testo": "Il raso di seta che prende la luce: l’abito delle sere lunghe.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [],
+   "cross": [
+    "ORL-022",
+    "ORL-020"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "XS",
+     "S",
+     "M",
+     "L",
+     "XL"
+    ],
+    "esaurite": [
+     "XS",
+     "XL"
+    ]
+   }
+  },
+  {
+   "sku": "ORL-007",
+   "nome": "Camicione in seta bianca",
+   "slug": "camicione-seta-bianca",
+   "cat": [
+    "camicie"
+   ],
+   "prezzo": 245,
+   "sconto": 0,
+   "scorta": 12,
+   "voto": 4.7,
+   "recensioni": 49,
+   "evidenza": false,
+   "foto": [
+    "pexels-19771938.jpg",
+    "pexels-19771940.jpg"
+   ],
+   "punti": [
+    "Crêpe de chine di seta",
+    "Fiocco al collo",
+    "Lungo, si porta anche aperto",
+    "Bottoni in madreperla"
+   ],
+   "testo": "Si porta come abito o aperto sui pantaloni: la seta bianca va con tutto.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [
+    "ORL-006"
+   ],
+   "cross": [
+    "ORL-016",
+    "ORL-024"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "XS",
+     "S",
+     "M",
+     "L",
+     "XL"
+    ],
+    "esaurite": []
+   }
+  },
+  {
+   "sku": "ORL-008",
+   "nome": "Camicia Ampia in popeline",
+   "slug": "camicia-ampia-popeline",
+   "cat": [
+    "camicie"
+   ],
+   "prezzo": 95,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.6,
+   "recensioni": 312,
+   "evidenza": true,
+   "foto": [
+    "pexels-31747192.jpg",
+    "pexels-13171461.jpg"
+   ],
+   "punti": [
+    "Popeline di cotone organico",
+    "Spalla scesa, maniche lunghe",
+    "Si porta dentro o fuori",
+    "Lavabile a 40°"
+   ],
+   "testo": "La camicia bianca di Orlo: ampia, croccante, con le maniche da arrotolare.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [
+    "ORL-007"
+   ],
+   "cross": [
+    "ORL-017",
+    "ORL-023"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "XS",
+     "S",
+     "M",
+     "L",
+     "XL"
+    ],
+    "esaurite": [
+     "M"
+    ]
+   }
+  },
+  {
+   "sku": "ORL-009",
+   "nome": "Camicia Studio, collo alto",
+   "slug": "camicia-studio",
+   "cat": [
+    "camicie"
+   ],
+   "prezzo": 110,
+   "sconto": 79,
+   "scorta": 21,
+   "voto": 4.4,
+   "recensioni": 88,
+   "evidenza": false,
+   "foto": [
+    "pexels-37524408.jpg",
+    "pexels-31713105.jpg"
+   ],
+   "punti": [
+    "Cotone e seta",
+    "Collo alto con laccio",
+    "Polsini lunghi",
+    "Dall’Archivio, −28%"
+   ],
+   "testo": "Il collo alto e i polsini lunghi di una camicia d’atelier, dall’Archivio della scorsa stagione.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [
+    "ORL-007"
+   ],
+   "cross": [
+    "ORL-016",
+    "ORL-018"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "XS",
+     "S",
+     "M",
+     "L",
+     "XL"
+    ],
+    "esaurite": [
+     "XS"
+    ]
+   }
+  },
+  {
+   "sku": "ORL-010",
+   "nome": "Giacca in lino, uomo",
+   "slug": "giacca-lino-uomo",
+   "cat": [
+    "capispalla"
+   ],
+   "prezzo": 235,
+   "sconto": 0,
+   "scorta": 11,
+   "voto": 4.7,
+   "recensioni": 64,
+   "evidenza": false,
+   "foto": [
+    "pexels-18031036.jpg",
+    "pexels-18031037.jpg"
+   ],
+   "punti": [
+    "Lino e cotone, sfoderata",
+    "Due bottoni in corozo",
+    "Tasche applicate",
+    "Spalla morbida"
+   ],
+   "testo": "La giacca da portare con la camicia aperta: sfoderata, leggera, si stropiccia nel modo giusto.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [],
+   "cross": [
+    "ORL-011",
+    "ORL-024"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "S",
+     "M",
+     "L",
+     "XL"
+    ],
+    "esaurite": [
+     "S"
+    ]
+   }
+  },
+  {
+   "sku": "ORL-011",
+   "nome": "Camicia coreana in lino, uomo",
+   "slug": "camicia-coreana-lino-uomo",
+   "cat": [
+    "camicie"
+   ],
+   "prezzo": 89,
+   "sconto": 0,
+   "scorta": 30,
+   "voto": 4.5,
+   "recensioni": 140,
+   "evidenza": false,
+   "foto": [
+    "pexels-5149729.jpg",
+    "pexels-8367456.jpg"
+   ],
+   "punti": [
+    "Lino lavato",
+    "Collo alla coreana",
+    "Tre bottoni",
+    "Cucita a Carpi"
+   ],
+   "testo": "Senza colletto, col lino lavato: l’estate in città.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [
+    "ORL-010"
+   ],
+   "cross": [
+    "ORL-017",
+    "ORL-023"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "S",
+     "M",
+     "L",
+     "XL"
+    ],
+    "esaurite": []
+   }
+  },
+  {
+   "sku": "ORL-012",
+   "nome": "Maglione Nuvola in cashmere",
+   "slug": "maglione-nuvola-cashmere",
+   "cat": [
+    "maglieria"
+   ],
+   "prezzo": 189,
+   "sconto": 0,
+   "scorta": 26,
+   "voto": 4.9,
+   "recensioni": 221,
+   "evidenza": true,
+   "foto": [
+    "pexels-14642651.jpg",
+    "pexels-14641437.jpg",
+    "pexels-14641596.jpg"
+   ],
+   "punti": [
+    "Cashmere rigenerato e lana",
+    "Filato a Biella",
+    "Girocollo morbido",
+    "Tre colori"
+   ],
+   "testo": "Leggero come il nome, caldo come un cappotto: il maglione che si regala.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [],
+   "cross": [
+    "ORL-016",
+    "ORL-018"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "XS",
+     "S",
+     "M",
+     "L",
+     "XL"
+    ],
+    "esaurite": []
+   }
+  },
+  {
+   "sku": "ORL-013",
+   "nome": "Cardigan Filo rosso",
+   "slug": "cardigan-filo-rosso",
+   "cat": [
+    "maglieria"
+   ],
+   "prezzo": 149,
+   "sconto": 119,
+   "scorta": 17,
+   "voto": 4.6,
+   "recensioni": 97,
+   "evidenza": false,
+   "foto": [
+    "pexels-7585220.jpg",
+    "pexels-7585736.jpg"
+   ],
+   "punti": [
+    "Cotone e alpaca",
+    "Il bordo a contrasto, rosso",
+    "Bottoni in legno",
+    "Lavorato a mano"
+   ],
+   "testo": "Il cardigan col bordo rosso, fatto a mano da una magliaia di Biella.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [
+    "ORL-012"
+   ],
+   "cross": [
+    "ORL-008",
+    "ORL-017"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "XS",
+     "S",
+     "M",
+     "L",
+     "XL"
+    ],
+    "esaurite": [
+     "L"
+    ]
+   }
+  },
+  {
+   "sku": "ORL-014",
+   "nome": "Dolcevita in merino",
+   "slug": "dolcevita-merino",
+   "cat": [
+    "maglieria"
+   ],
+   "prezzo": 129,
+   "sconto": 0,
+   "scorta": 34,
+   "voto": 4.7,
+   "recensioni": 156,
+   "evidenza": false,
+   "foto": [
+    "pexels-6996083.jpg",
+    "pexels-5789010.jpg"
+   ],
+   "punti": [
+    "Merino extrafine",
+    "Collo alto rovesciato",
+    "Polsi a coste lunghi",
+    "Non pizzica"
+   ],
+   "testo": "Il dolcevita che non pizzica: sotto la giacca, sotto il cappotto, da solo.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [
+    "ORL-012"
+   ],
+   "cross": [
+    "ORL-016",
+    "ORL-019"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "XS",
+     "S",
+     "M",
+     "L",
+     "XL"
+    ],
+    "esaurite": []
+   }
+  },
+  {
+   "sku": "ORL-015",
+   "nome": "Pantalone Palazzo, salvia",
+   "slug": "pantalone-palazzo-salvia",
+   "cat": [
+    "pantaloni"
+   ],
+   "prezzo": 119,
+   "sconto": 0,
+   "scorta": 19,
+   "voto": 4.5,
+   "recensioni": 63,
+   "evidenza": false,
+   "foto": [
+    "pexels-39457696.jpg"
+   ],
+   "punti": [
+    "Viscosa stampata",
+    "Vita alta elasticizzata",
+    "Gamba ampia",
+    "Tasche laterali"
+   ],
+   "testo": "Il palazzo stampato che cammina con te: vita alta, gamba larga.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [],
+   "cross": [
+    "ORL-008",
+    "ORL-025"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "XS",
+     "S",
+     "M",
+     "L",
+     "XL"
+    ],
+    "esaurite": [
+     "XS"
+    ]
+   }
+  },
+  {
+   "sku": "ORL-016",
+   "nome": "Pantalone Ampio, nero",
+   "slug": "pantalone-ampio-nero",
+   "cat": [
+    "pantaloni"
+   ],
+   "prezzo": 129,
+   "sconto": 99,
+   "scorta": 24,
+   "voto": 4.6,
+   "recensioni": 118,
+   "evidenza": false,
+   "foto": [
+    "pexels-39457561.jpg",
+    "pexels-28168172.jpg"
+   ],
+   "punti": [
+    "Fresco di lana",
+    "Piega stirata",
+    "Vita alta",
+    "Orlo da adattare"
+   ],
+   "testo": "Il pantalone nero che sta bene con tutto: la piega stirata, la vita alta.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [],
+   "cross": [
+    "ORL-014",
+    "ORL-024"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "XS",
+     "S",
+     "M",
+     "L",
+     "XL"
+    ],
+    "esaurite": []
+   }
+  },
+  {
+   "sku": "ORL-017",
+   "nome": "Jeans Dritto",
+   "slug": "jeans-dritto",
+   "cat": [
+    "pantaloni"
+   ],
+   "prezzo": 99,
+   "sconto": 0,
+   "scorta": 45,
+   "voto": 4.4,
+   "recensioni": 402,
+   "evidenza": false,
+   "foto": [
+    "pexels-39457729.jpg"
+   ],
+   "punti": [
+    "Denim giapponese 13 oz",
+    "Gamba dritta",
+    "Vita alta",
+    "Si scurisce col tempo"
+   ],
+   "testo": "Il jeans dritto di denim giapponese: rigido il primo mese, poi è vostro.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [],
+   "cross": [
+    "ORL-008",
+    "ORL-025"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "XS",
+     "S",
+     "M",
+     "L"
+    ],
+    "esaurite": []
+   }
+  },
+  {
+   "sku": "ORL-018",
+   "nome": "Cappotto Cammello",
+   "slug": "cappotto-cammello",
+   "cat": [
+    "capispalla"
+   ],
+   "prezzo": 390,
+   "sconto": 290,
+   "scorta": 8,
+   "voto": 4.8,
+   "recensioni": 76,
+   "evidenza": true,
+   "foto": [
+    "pexels-19169191.jpg"
+   ],
+   "punti": [
+    "Lana e cashmere",
+    "Cintura in vita",
+    "Lungo al polpaccio",
+    "Dall’Archivio, −26%"
+   ],
+   "testo": "Il cappotto cammello con la cintura: quello che si tiene vent’anni.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [],
+   "cross": [
+    "ORL-014",
+    "ORL-025"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "XS",
+     "S",
+     "M",
+     "L",
+     "XL"
+    ],
+    "esaurite": [
+     "XS",
+     "XL"
+    ]
+   }
+  },
+  {
+   "sku": "ORL-019",
+   "nome": "Cappotto Tabacco",
+   "slug": "cappotto-tabacco",
+   "cat": [
+    "capispalla"
+   ],
+   "prezzo": 360,
+   "sconto": 0,
+   "scorta": 10,
+   "voto": 4.6,
+   "recensioni": 39,
+   "evidenza": false,
+   "foto": [
+    "pexels-12989422.jpg"
+   ],
+   "punti": [
+    "Lana cotta",
+    "Revers ampi",
+    "Tasche a filetto",
+    "Fodera in cupro"
+   ],
+   "testo": "Lana cotta color tabacco: caldo e leggero, senza spalline.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [
+    "ORL-018"
+   ],
+   "cross": [
+    "ORL-012",
+    "ORL-025"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "XS",
+     "S",
+     "M",
+     "L",
+     "XL"
+    ],
+    "esaurite": []
+   }
+  },
+  {
+   "sku": "ORL-020",
+   "nome": "Trench Lungo",
+   "slug": "trench-lungo",
+   "cat": [
+    "capispalla"
+   ],
+   "prezzo": 320,
+   "sconto": 0,
+   "scorta": 13,
+   "voto": 4.9,
+   "recensioni": 88,
+   "evidenza": true,
+   "foto": [
+    "pexels-9968534.jpg",
+    "pexels-9968536.jpg"
+   ],
+   "punti": [
+    "Gabardine di cotone idrorepellente",
+    "Doppiopetto",
+    "Cintura e polsini",
+    "Lungo alla caviglia"
+   ],
+   "testo": "Il trench lungo color sabbia: la pioggia di Milano non lo bagna.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [],
+   "cross": [
+    "ORL-008",
+    "ORL-023"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "XS",
+     "S",
+     "M",
+     "L",
+     "XL"
+    ],
+    "esaurite": [
+     "M"
+    ]
+   }
+  },
+  {
+   "sku": "ORL-021",
+   "nome": "Giacca Tailleur, fucsia",
+   "slug": "giacca-tailleur-fucsia",
+   "cat": [
+    "capispalla"
+   ],
+   "prezzo": 280,
+   "sconto": 0,
+   "scorta": 12,
+   "voto": 4.7,
+   "recensioni": 52,
+   "evidenza": true,
+   "foto": [
+    "pexels-9167976-a.jpg",
+    "pexels-9167976-b.jpg"
+   ],
+   "punti": [
+    "Crêpe di lana fucsia",
+    "Spalla costruita",
+    "Un bottone",
+    "Il video nella galleria"
+   ],
+   "testo": "Il fucsia della passerella di Orlo: guardatelo camminare nel video.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [],
+   "cross": [
+    "ORL-016",
+    "ORL-024"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "XS",
+     "S",
+     "M",
+     "L",
+     "XL"
+    ],
+    "esaurite": [
+     "XL"
+    ]
+   },
+   "video": "pexels-video-9167976.mp4",
+   "poster": "pexels-video-9167976.jpg"
+  },
+  {
+   "sku": "ORL-022",
+   "nome": "Bauletto Paisley",
+   "slug": "bauletto-paisley",
+   "cat": [
+    "accessori-moda"
+   ],
+   "prezzo": 175,
+   "sconto": 0,
+   "scorta": 15,
+   "voto": 4.6,
+   "recensioni": 44,
+   "evidenza": false,
+   "foto": [
+    "pexels-8125851.jpg",
+    "pexels-8125855.jpg",
+    "pexels-8125854.jpg"
+   ],
+   "punti": [
+    "Tela jacquard e pelle",
+    "Due manici e tracolla",
+    "Zip in ottone",
+    "Fodera in cotone"
+   ],
+   "testo": "Il bauletto in tela paisley, coi manici in pelle: da città e da weekend.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [],
+   "cross": [
+    "ORL-024",
+    "ORL-020"
+   ]
+  },
+  {
+   "sku": "ORL-023",
+   "nome": "Tote in tela e pelle",
+   "slug": "tote-tela-pelle",
+   "cat": [
+    "accessori-moda"
+   ],
+   "prezzo": 145,
+   "sconto": 109,
+   "scorta": 20,
+   "voto": 4.5,
+   "recensioni": 61,
+   "evidenza": false,
+   "foto": [
+    "pexels-13025817.jpg"
+   ],
+   "punti": [
+    "Tela di cotone pesante",
+    "Manici in vacchetta",
+    "Tasca interna con zip",
+    "Ci sta il computer"
+   ],
+   "testo": "La borsa di tutti i giorni: grande, robusta, col computer dentro.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [
+    "ORL-022"
+   ],
+   "cross": [
+    "ORL-008",
+    "ORL-017"
+   ]
+  },
+  {
+   "sku": "ORL-024",
+   "nome": "Mocassini in pelle spazzolata",
+   "slug": "mocassini-pelle",
+   "cat": [
+    "accessori-moda"
+   ],
+   "prezzo": 165,
+   "sconto": 0,
+   "scorta": 18,
+   "voto": 4.7,
+   "recensioni": 83,
+   "evidenza": false,
+   "foto": [
+    "pexels-10259873.jpg"
+   ],
+   "punti": [
+    "Vitello spazzolato nero",
+    "Suola in cuoio",
+    "Cuciti a mano nelle Marche",
+    "Calzata regolare"
+   ],
+   "testo": "I mocassini neri lucidi, cuciti a mano nelle Marche.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [],
+   "cross": [
+    "ORL-016",
+    "ORL-023"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "36",
+     "37",
+     "38",
+     "39",
+     "40",
+     "41"
+    ],
+    "esaurite": [
+     "36"
+    ]
+   }
+  },
+  {
+   "sku": "ORL-025",
+   "nome": "Stivaletti texani",
+   "slug": "stivaletti-texani",
+   "cat": [
+    "accessori-moda"
+   ],
+   "prezzo": 210,
+   "sconto": 169,
+   "scorta": 9,
+   "voto": 4.6,
+   "recensioni": 47,
+   "evidenza": false,
+   "foto": [
+    "pexels-30725738.jpg"
+   ],
+   "punti": [
+    "Pelle scamosciata cuoio",
+    "Punta a mandorla",
+    "Tacco da 4 cm",
+    "Cuciti nelle Marche"
+   ],
+   "testo": "Gli stivaletti color cuoio che vanno col lino e col jeans.",
+   "dentro": "Il capo, il sacchetto di cotone per riporlo, il biglietto del laboratorio che l’ha cucito.",
+   "upsell": [],
+   "cross": [
+    "ORL-017",
+    "ORL-018"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "36",
+     "37",
+     "38",
+     "39",
+     "40",
+     "41"
+    ],
+    "esaurite": [
+     "41"
+    ]
+   }
+  }
+ ],
+ "recensioni": [
+  [
+   5,
+   "Veste come in foto. Ho preso la mia taglia solita ed è perfetto."
+  ],
+  [
+   5,
+   "Il tessuto è ancora più bello dal vivo. Arrivato in due giorni, incartato con cura."
+  ],
+  [
+   4,
+   "Bellissimo, un po’ lungo per me: me l’hanno accorciato gratis in atelier."
+  ],
+  [
+   5,
+   "Lo porto da tre stagioni ed è come nuovo. Ne ho preso un secondo."
+  ],
+  [
+   4,
+   "Taglia un po’ abbondante: con la guida delle taglie avrei preso la S."
+  ],
+  [
+   5,
+   "Cambio di taglia fatto in una settimana, senza spese. Gentilissimi."
+  ],
+  [
+   5,
+   "Si vede che è cucito bene: le cuciture dentro sono rifinite come fuori."
+  ],
+  [
+   4,
+   "Colore leggermente più scuro che in foto, ma mi piace di più così."
+  ]
+ ],
+ "nomi": [
+  "Giulia R.",
+  "Martina S.",
+  "Elena B.",
+  "Chiara T.",
+  "Sara L.",
+  "Francesca M.",
+  "Alessandro P.",
+  "Valentina C.",
+  "Marco D.",
+  "Irene F.",
+  "Beatrice G.",
+  "Luca V."
+ ]
+}

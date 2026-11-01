@@ -48,7 +48,11 @@ class Olobuild_Magnetic_Cursor {
      */
     const STILI = [ 'anello', 'scia', 'mirino', 'goccia', 'inverti', 'etichetta', 'cometa', 'aggancio', 'bussola', 'scintille', 'alone',
                     'orbita', 'onde', 'neve', 'cucitura', 'pennello', 'testo', 'lente', 'coriandoli',
-                    'faro', 'brace', 'inchiostro', 'bolle', 'foglie', 'vapore', 'calamita', 'impronte', 'filo' ];
+                    'faro', 'brace', 'inchiostro', 'bolle', 'foglie', 'vapore', 'calamita', 'impronte', 'filo', 'metro', 'perla', 'farina', 'ombra', 'cartellino',
+                    'fibbia', 'paillettes', 'laccio', 'chicco', 'stecca', 'peperoncino',
+                    'pennino', 'ombrello', 'trottola', 'calice', 'elastico', 'respiro', 'luna', 'volante', 'fuoco',
+                    'quota', 'chiave', 'riflesso', 'battito', 'scodinzolo', 'pioggerella', 'ugello', 'passopasso', 'mosaico',
+                    'nappa' ];
 
     /**
      * Il cursore scelto per la pagina che si sta disegnando (Effetti di pagina → Cursore): uno degli STILI, «nessuno»,

@@ -791,8 +791,10 @@ class Olobuild_Theme_Importer {
         };
         if ( $menu_id ) {
             // Una voce può avere «children» (e i figli i loro): sottovoci col genitore giusto, che il Mega Menu
-            // apre a colonne. «description» è la riga sotto la voce nel pannello.
-            $aggiungi = static function ( $voci, $genitore ) use ( &$aggiungi, $menu_id, $pagine_tema, $risolvi ) {
+            // apre a colonne. «description» è la riga sotto la voce nel pannello. «pannello» è la chiave di un template
+            // del tema (tipo megapanel) che il Mega Menu apre sotto la voce: diventa la classe olo-pannello-<id>.
+            // «classi» sono le classi CSS della voce (badge-nuovo, mega-promo…).
+            $aggiungi = static function ( $voci, $genitore ) use ( &$aggiungi, $menu_id, $pagine_tema, $risolvi, $id_map ) {
                 foreach ( (array) $voci as $item ) {
                     $url  = (string) ( $item['url'] ?? '#' );
                     $voce = [
@@ -802,6 +804,13 @@ class Olobuild_Theme_Importer {
                     ];
                     if ( ! empty( $item['description'] ) ) {
                         $voce['menu-item-description'] = sanitize_text_field( (string) $item['description'] );
+                    }
+                    $classi = array_map( 'sanitize_html_class', (array) ( $item['classi'] ?? [] ) );
+                    if ( ! empty( $item['pannello'] ) && isset( $id_map[ $item['pannello'] ] ) ) {
+                        $classi[] = 'olo-pannello-' . (int) $id_map[ $item['pannello'] ];
+                    }
+                    if ( $classi ) {
+                        $voce['menu-item-classes'] = implode( ' ', array_filter( $classi ) );
                     }
                     if ( preg_match( '/^\{\{PAGINA:([a-z0-9_-]+)\}\}$/i', $url, $m ) && isset( $pagine_tema[ $m[1] ] ) ) {
                         $voce['menu-item-type']      = 'post_type';
@@ -861,6 +870,14 @@ class Olobuild_Theme_Importer {
             // La scritta dei prodotti senza prezzo (theme.json → woo → senza_prezzo): «Prezzo riservato».
             if ( isset( $ruoli['senza_prezzo'] ) && is_string( $ruoli['senza_prezzo'] ) && '' !== trim( $ruoli['senza_prezzo'] ) ) {
                 update_option( 'olobuild_woo_senza_prezzo', mb_substr( sanitize_text_field( $ruoli['senza_prezzo'] ), 0, 80 ) );
+            }
+            // Le recensioni (theme.json → woo → recensioni: «acquirenti»): le scrive, col voto, solo chi ha comprato il
+            // prodotto, e accanto al nome compare «proprietario verificato» (opzioni di WooCommerce → Prodotti).
+            if ( 'acquirenti' === ( $ruoli['recensioni'] ?? '' ) ) {
+                update_option( 'woocommerce_enable_reviews', 'yes' );
+                update_option( 'woocommerce_review_rating_verification_required', 'yes' );
+                update_option( 'woocommerce_review_rating_verification_label', 'yes' );
+                $results['activated'][] = 'woo_recensioni_acquirenti';
             }
         }
 

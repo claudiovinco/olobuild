@@ -18,6 +18,8 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from base import Tpl, write_theme, page, lib, mix, radius, solid  # noqa: E402
+from kit import Kit  # noqa: E402
+from negozio import Negozio, pannelli  # noqa: E402
 
 ID = 'tacet'
 NAME = 'Tacet'
@@ -303,9 +305,9 @@ def build_header():
         'menu_id': 'auto', 'logo_text': 'TACET', 'logo_text_size': '19', 'logo_text_color': INK,
         'logo_text_font': 'heading', 'logo_text_weight': '400', 'logo_text_spacing': 9, 'logo_text_transform': 'uppercase',
         'logo_mark': '', 'logo_mark_bg': '', 'logo_dot': False, 'logo_position': 'left',
-        'layout': 'right', 'header_mode': 'overlay', 'sticky': True,
+        'layout': 'right', 'header_mode': 'classic', 'sticky': True,
         'sticky_bg': mix(FONDO, 92), 'sticky_shadow': False, 'sticky_shrink': True, 'sticky_show_on_up': True,
-        'nav_bg': 'transparent', 'text_color': INK, 'hover_color': BRONZO, 'active_color': BRONZO,
+        'nav_bg': FONDO, 'text_color': INK, 'hover_color': BRONZO, 'active_color': BRONZO,
         'font_size': '11', 'font_weight': '500', 'text_transform': 'uppercase', 'letter_spacing': '2.4', 'item_gap': '34',
         'bar_width': 'wide', 'nav_height': '84', 'bar_padding': {'top': 10, 'right': 40, 'bottom': 10, 'left': 40},
         'hover_effect': 'underline', 'hover_effect_color': BRONZO,
@@ -318,6 +320,9 @@ def build_header():
         'mobile_link_font': 'heading', 'mobile_link_weight': '300',
         'border': {'top': 0, 'right': 0, 'bottom': 1, 'left': 0, 'style': 'solid', 'color': mix(INK, 10)},
         'topbar_enabled': False, 'nav_phone': '', 'nav_phone_url': '',
+        # i pannelli delle voci (materiali, nuove acquisizioni): template del tema su tutta la larghezza sotto il menu
+        'panel_bg': FONDO, 'panel_border_top': '1', 'panel_border_color': FILO, 'panel_shadow': 'md',
+        'panel_radius': {'tl': 0, 'tr': 0, 'br': 0, 'bl': 0}, 'panel_open_animation': 'fade', 'panel_origin': 'nav',
     })
     return [t.section([t.one([mm], anim=None)], width='fullbleed', padding='remove-vertical')]
 
@@ -363,30 +368,59 @@ def build_footer():
 #  HOME
 # ══════════════════════════════════════════════════════════════════════════════
 
+# ── La vetrina delle nuove opere, le quattro schede e i pannelli del menu ──
+# Dal 1° nov 2026 i temi con WooCommerce aprono come i negozi grandi: una fascia bassa che scorre da sola invece
+# dell'apertura a tutto schermo, e il mega menu racconta le novità nei suoi pannelli. Una galleria non fa sconti: la
+# fascia dice le nuove acquisizioni, la sala e il gesso, senza bollini. Le parti sono quelle del kit dei negozi.
+P = {'home': HOME, 'negozio': OPERE, 'offerte': OPERE, 'carrello': CARRELLO, 'assistenza': VISIONE}
+K = Kit(ID, MEDIA, raggio=0, peso_titoli='300', corsivo=True, maiuscole_pulsanti=True, tema_chiaro=True)
+N = Negozio(K, NAME, P, raggio=0, ratio='4-5', card='none', hover='swap', peso_titoli='300')
+N.cta_media = (CARTA, INK)  # il primario è quasi nero: sul velo scuro il pulsante va chiaro
+LARGO = 0.42  # la larghezza media di una lettera dei titoli (Cormorant Garamond, per la vetrina)
+
+
+def vetrina(t):
+    f = dict(titoli='Cormorant Garamond', mono='IBM Plex Mono', largo=LARGO)
+    return N.vetrina(t, [
+        N.offerta('ta-o1', K.sfondo_video(V_LUCE, overlay=0.12), 'Nuova acquisizione · K.O., 2024',
+                  'Sezione, n. 4.', 'Marmo tagliato e lucidato a metà: appena arrivata in galleria, 18.000 €.',
+                  'Le opere in marmo', cat_url('marmo'), nota='N. 009 · su appuntamento, a Pietrasanta', primo=True, **f),
+        N.offerta('ta-o2', K.sfondo_video(V_CORRIDOIO, overlay=0.12), 'In sala, questo mese',
+                  'Venti opere, sei artisti.', 'Marmo, gesso, bronzo e pietra: la sala si visita su appuntamento, un’ora, '
+                  'senza fretta.', 'Visione privata', VISIONE, nota='Prezzo riservato su richiesta', **f),
+        N.offerta('ta-o3', K.sfondo_video(V_SCALPELLO, overlay=0.12), 'Il gesso',
+                  'Le opere in gesso, da 3.900 €.', 'Il calco della mano sinistra di Halvik, il torso con la stoffa di I.M.',
+                  'Le opere in gesso', cat_url('gesso'), nota='Spedite in cassa di legno su misura', **f),
+    ], transizione='fadeThroughDark')
+
+
+# le schede sotto la vetrina: «tre» (ogni negozio la sua forma, vedi Negozio.quadri)
+def quadri(t):
+    return N.quadri(t, stile='tre', voci=[
+        ('Le nuove opere', {'orderby': 'date'}, 'Vedi tutte', OPERE),
+        ('Scelte dalla galleria', {'featured': True, 'orderby': 'date'}, 'Vedi tutte', OPERE),
+        ('Il marmo', {'category': 'marmo', 'orderby': 'date'}, 'Vedi tutte', cat_url('marmo')),
+        ('Gesso e bronzo', {'category': 'gesso,bronzo', 'orderby': 'date'}, 'Vedi tutte', OPERE),
+    ])
+
+
+def build_pannello_reparti():
+    return N.pannello_reparti(Tpl(ID, 'pannello-reparti'), 'I materiali', 'Otto materiali, venti opere',
+                              ('Sezione, n. 4,', 'nuova.', 'K.O., marmo, 2024.', 'Il marmo', cat_url('marmo'),
+                               'pexels-35805444.jpg'), colonne=4, tutto='Tutte le opere')
+
+
+def build_pannello_novita():
+    return N.pannello_novita(Tpl(ID, 'pannello-novita'), 'Nuove acquisizioni', 'Appena arrivate in galleria',
+                             [(n, cat_url(s)) for n, s in MATERIALI[:6]],
+                             ('La visione privata,', 'su appuntamento.', 'Un’ora con le opere, senza fretta.', 'Prenota',
+                              VISIONE, 'pexels-7828709.jpg'), tutte='Tutte le opere')
+
+
 def build_home():
     t = Tpl(ID, 'home')
     out = []
-    hero = t.classic('hero', {
-        'preset': 'custom', 'eyebrow_text': 'Pietrasanta · su appuntamento', 'eyebrow_dot': False,
-        'title': 'Opere che parlano<br><em>sottovoce.</em>',
-        'subtitle': 'Marmo, gesso, bronzo, pietra. Venti opere, sei artisti, nessuna fretta.',
-        'media_bg': {'type': 'video', 'video_url': img(V_CORRIDOIO + '.mp4'), 'video_poster': img(V_CORRIDOIO + '.jpg'),
-                     'video_size': 'cover', 'video_position': 'center center'},
-        'overlay_color': FONDO, 'overlay_top': 0.2, 'overlay_bottom': 0.82, 'overlay_sides': True, 'overlay_direction': 'left',
-        'glow_on': False, 'frame_on': False, 'watermark_text': '',
-        'accent': BRONZO, 'text_color': INK, 'title_color': INK, 'subtitle_color': mix(INK, 78),
-        'title_tag': 'h1', 'title_font_family': 'heading', 'title_font_size': 112, 'title_font_weight': '300',
-        'title_line_height': '0.98', 'title_letter_spacing': '-2', 'title_text_transform': 'none',
-        'subtitle_font_size': 17, 'subtitle_max_width': 460,
-        'min_height': '100vh', 'content_max_width': 1320, 'vertical_align': 'bottom', 'horizontal_align': 'center',
-        'text_align': 'left', 'tile_padding': {'top': 140, 'right': 40, 'bottom': 72, 'left': 40},
-        'cta_text': 'Le opere', 'cta_url': OPERE, 'cta_bg_color': INK, 'cta_text_color': FONDO,
-        'cta_radius': SQ, 'cta_size': '11', 'cta_style': 'filled', 'cta_font_weight': '500', 'cta_text_transform': 'uppercase',
-        'cta_letter_spacing': '2.4',
-        'cta2_text': 'Visione privata', 'cta2_url': VISIONE, 'cta2_text_color': INK, 'cta2_style': 'ghost',
-        'meta_text': 'N. 001 — 020', 'scroll_hint': '', 'scene_depth': 'none', 'module': '',
-    })
-    out.append(t.section([t.one([hero], anim=None)], width='fullbleed', padding='remove-vertical'))
+    out += [vetrina(t), quadri(t)]
 
     out.append(t.section([
         t.row([t.col([label(t, 'In sala, questo mese'), headline(t, 'Sei opere. <em>Le altre</em> si chiedono.', size=64, tag='h2',
@@ -773,16 +807,19 @@ def build_404():
 
 
 THEME = {
-    'id': ID, 'name': NAME, 'author': 'Olobuild', 'version': '1.0.0', 'preview_v': '1', 'preview_mobile_v': '1',
-    'category': 'Negozi online', 'zone': 'Opere su appuntamento',
+    'id': ID, 'name': NAME, 'author': 'Olobuild', 'version': '1.0.0', 'preview_v': '2', 'preview_mobile_v': '2',
+    'category': 'Negozi online', 'zone': 'Le nuove opere',
     'requires_plugin': {'slug': 'woocommerce', 'label': 'WooCommerce', 'check': 'class:WooCommerce',
                         'purchase_url': 'https://wordpress.org/plugins/woocommerce/'},
     'tags': ['galleria', 'arte', 'sculture', 'woocommerce', 'minimale', 'lusso', 'marmo'],
-    'description': 'Una galleria d’arte su appuntamento che vende sculture con WooCommerce: le opere in griglia con l’artista e '
+    'description': 'Una galleria d’arte su appuntamento che vende sculture con WooCommerce: in apertura la fascia delle nuove '
+                   'acquisizioni che scorre e le quattro schede coi lavori, il mega menu coi materiali e le novità; le opere in '
+                   'griglia con l’artista e '
                    'il prezzo o «Prezzo riservato», i materiali, gli artisti, e una scheda dell’opera dinamica con la scheda '
                    'tecnica per l’installazione (misure, peso, appoggio, luce, cassa), il pedigree delle mostre e la richiesta '
                    'di visione privata col titolo già scritto.',
-    'menu': {'name': 'Tacet — menu', 'items': [{'title': 'Opere', 'url': OPERE}, {'title': 'Artisti', 'url': ARTISTI},
+    'menu': {'name': 'Tacet — menu', 'items': [{'title': 'Opere', 'url': OPERE}, {'title': 'Novità', 'url': OPERE},
+                                              {'title': 'Artisti', 'url': ARTISTI},
                                               {'title': 'La galleria', 'url': GALLERIA}, {'title': 'Carrello', 'url': CARRELLO},
                                               {'title': 'Visione privata', 'url': VISIONE}]},
     'templates': {
@@ -801,7 +838,7 @@ THEME = {
     'singles': {'product': 'opera'},
     # Template WooCommerce all'import (Impostazioni → Template WooCommerce) e la scritta dei prodotti senza prezzo.
     'woo': {'product_archive': 'opere', 'product_category': 'opere', 'cart': 'carrello', 'checkout': 'cassa',
-            'senza_prezzo': 'Prezzo riservato'},
+            'senza_prezzo': 'Prezzo riservato', 'recensioni': 'acquirenti'},
     'activate': {'404': '404', 'header': 'header', 'footer': 'footer'},
     'pages': {
         'home': {'title': 'Home', 'template': 'home', 'set_as_homepage': True},
@@ -838,13 +875,16 @@ THEME = {
         'links': {'color': '', 'hover_color': '', 'decoration': 'none', 'hover_decoration': 'underline'},
     },
 }
+pannelli(THEME, NAME, {'Opere': ('pannello-reparti', 'Pannello dei materiali'),
+                       'Novità': ('pannello-novita', 'Pannello delle nuove acquisizioni')})
 
 
 def main():
     builds = {'header.json': build_header(), 'footer.json': build_footer(), 'home.json': build_home(),
               'opere.json': build_opere(), 'artisti.json': build_artisti(), 'galleria.json': build_galleria(),
               'visione.json': build_visione(), 'opera.json': build_opera(), 'carrello.json': build_carrello(),
-              'cassa.json': build_cassa(), '404.json': build_404()}
+              'cassa.json': build_cassa(), '404.json': build_404(), 'pannello-reparti.json': build_pannello_reparti(),
+              'pannello-novita.json': build_pannello_novita()}
     write_theme(THEME, builds, MEDIA)
 
 

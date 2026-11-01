@@ -24,6 +24,8 @@ export default {
     thumbnail_position: 'bottom',
     enable_zoom: true,
     enable_lightbox: true,
+    show_video: true,
+    video_position: 'second',
     main_height: '500px',
     max_width: '600',
     thumbnail_size: '80',
@@ -66,6 +68,15 @@ export default {
     { type: 'separator', label: t('Immagine principale') },
     { key: 'enable_zoom', label: t('Abilita zoom'), type: 'toggle' },
     { key: 'enable_lightbox', label: t('Abilita lightbox'), type: 'toggle' },
+
+    { type: 'separator', label: t('Video del prodotto') },
+    { key: 'show_video', label: t('Mostra il video del prodotto'), type: 'toggle',
+      description: t('Il video scelto nella scheda del prodotto in WooCommerce (campo «Video del prodotto»): sta fra le foto col triangolo sulla miniatura, nella foto grande gira senza audio e nella finestra della galleria parte con l’audio e i comandi. Un prodotto senza video mostra solo le foto.') },
+    { key: 'video_position', label: t('Posizione del video'), type: 'select', options: [
+      { value: 'second', label: t('Dopo la prima foto') },
+      { value: 'first', label: t('Per primo') },
+      { value: 'last', label: t('In fondo') },
+    ], condition: { field: 'show_video', op: 'eq', value: true } },
 
     { type: 'separator', label: t('Miniature') },
     { key: 'show_thumbnails', label: t('Mostra miniature'), type: 'toggle' },

@@ -1099,19 +1099,23 @@
                 </div>
               </template>
 
-              <!-- Cursore magnetico — impostazione GLOBALE del sito (option
-                   olo_magnetic_cursor), non della tile: esposta qui perché è
-                   qui che si cercano le impostazioni del puntatore. -->
+              <!-- Cursore del sito — impostazione GLOBALE (option olo_magnetic_cursor: enabled + style), e sotto
+                   il cursore della pagina (page_cursor): non della tile, ma esposti qui perché è qui che si
+                   cercano le impostazioni del puntatore. -->
               <div class="mb-border-t mb-border-gray-700 mb-pt-3 mb-mt-1"></div>
               <div class="mb-flex mb-items-center mb-justify-between">
-                <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
-                  <input type="checkbox" :checked="magCursor?.enabled === true" :disabled="!magLoaded" @change="updateMag('enabled', $event.target.checked)" class="mb-accent-primary-500" />
-                  <span class="mb-text-xs mb-text-gray-300">{{ t('Cursore magnetico') }}</span>
-                  <InfoTip :titolo="t('Cursore magnetico')" :testo="[t('Anello + dot che sostituiscono il puntatore su tutto il sito, con attrazione magnetica sugli elementi interattivi. Vale per tutte le pagine; nel canvas resta il cursore di sistema.'), t('Si salva da solo a ogni modifica — non serve il tasto Salva del template.')]" />
-                </label>
+                <span class="mb-flex mb-items-center mb-gap-2">
+                  <span class="mb-text-xs mb-text-gray-300">{{ t('Cursore del sito') }}</span>
+                  <InfoTip :titolo="t('Cursore del sito')" :testo="[t('Il cursore che segue il mouse in tutto il sito, al posto della freccia. Ogni pagina può sceglierne un altro in «Cursore di questa pagina». Su telefoni e tablet, e nel canvas del builder, resta quello di sistema.'), t('Si salva da solo a ogni modifica — non serve il tasto Salva del template.')]" />
+                </span>
                 <span class="mb-text-[9px] mb-uppercase mb-tracking-wide mb-text-gray-500 mb-bg-gray-800 mb-rounded mb-px-1.5 mb-py-0.5">{{ t('Globale sito') }}</span>
               </div>
+              <FieldSelect ui="dropdown" :aria-label="t('Cursore del sito')" :model-value="stileCursoreSito" :options="cursoreSitoOptions" @update:model-value="scegliCursoreSito" />
               <template v-if="magLoaded && magCursor?.enabled">
+                <div v-if="CURSORI_CON_PAROLA.includes(stileCursoreSito)">
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Parola del cursore') }}</label>
+                  <input type="text" :value="magCursor.label_text || ''" @change="updateMag('label_text', $event.target.value)" class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-xs mb-text-gray-900" />
+                </div>
                 <div class="mb-grid mb-grid-cols-2 mb-gap-2">
                   <div>
                     <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Colore anello') }}</label>
@@ -1130,7 +1134,7 @@
                   <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Ingrandimento su elementi') }}: ×{{ magCursor.hot_scale }}</label>
                   <input type="range" min="1" max="3" step="0.1" :value="magCursor.hot_scale" @input="updateMag('hot_scale', parseFloat($event.target.value))" class="mb-w-full mb-accent-primary-500" />
                 </div>
-                <div>
+                <div v-if="stileCursoreSito === 'anello'">
                   <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Forza magnetica') }}: {{ magCursor.pull_strength }}</label>
                   <input type="range" min="0" max="1" step="0.05" :value="magCursor.pull_strength" @input="updateMag('pull_strength', parseFloat($event.target.value))" class="mb-w-full mb-accent-primary-500" />
                 </div>
@@ -1159,6 +1163,14 @@
                   : magStatus === 'error' ? t('Errore di salvataggio — riprova')
                   : t('✓ Salvato sul sito') }}
               </p>
+              <div class="mb-flex mb-items-center mb-justify-between">
+                <span class="mb-flex mb-items-center mb-gap-2">
+                  <span class="mb-text-xs mb-text-gray-300">{{ t('Cursore di questa pagina') }}</span>
+                  <InfoTip :titolo="t('Cursore di questa pagina')" :testo="t('Il cursore che segue il mouse in questa pagina. «Come il sito» usa il Cursore del sito qui sopra. Si salva col tasto Salva del template.')" />
+                </span>
+                <span class="mb-text-[9px] mb-uppercase mb-tracking-wide mb-text-gray-500 mb-bg-gray-800 mb-rounded mb-px-1.5 mb-py-0.5">{{ t('Pagina') }}</span>
+              </div>
+              <FieldSelect ui="dropdown" :aria-label="t('Cursore di questa pagina')" :model-value="builderStore.pageSettings?.page_cursor || ''" :options="cursorePaginaOptions" @update:model-value="builderStore.updatePageSetting('page_cursor', $event)" />
 
               <!-- HUD mirino — impostazione GLOBALE del sito (option olo_cursor_hud,
                    Olo_Cursor_Hud): crosshair full-viewport + coordinate px + label
@@ -1484,6 +1496,7 @@ import { TILE_PRESETS, BASE_THEME_PRESETS } from '@/config/tilePresets';
 import { ATOMIC_TILE_TYPES } from '@/composables/useBackgroundStyle';
 import { MEGAMENU_TEMPLATES } from '@/config/megamenuTemplates';
 import { sfondoDaPreset } from '@/utils/sfondoDaPreset';
+import { CURSORI, CURSORI_CON_PAROLA } from '@/config/cursori';
 
 // Pannello degli stili tipografici globali, aperto dai campi che li usano.
 const { typographyOpen, closeTypography } = useGlobalPanels();
@@ -1655,7 +1668,20 @@ const TILE_WIDTH_OPTIONS = [
   { value: 'inline', label: 'Contenuto' },
 ];
 
-// ── Cursore magnetico (impostazione GLOBALE, option olo_magnetic_cursor) ──
+// ── Cursore del sito (impostazione GLOBALE, option olo_magnetic_cursor) e della pagina (page_cursor) ──
+const cursoreSitoOptions = [{ value: '', label: t('Nessuno (quello di sistema)') }, ...CURSORI.map(([v, l]) => ({ value: v, label: t(l) }))];
+const cursorePaginaOptions = [
+  { value: '', label: t('Come il sito') }, { value: 'nessuno', label: t('Nessuno (quello di sistema)') },
+  ...CURSORI.map(([v, l]) => ({ value: v, label: t(l) })),
+];
+// Spento = «Nessuno»; acceso senza stile salvato = l'anello, come il PHP.
+const stileCursoreSito = computed(() => (magCursor.value?.enabled ? (magCursor.value.style || 'anello') : ''));
+function scegliCursoreSito(stile) {
+  if (!magCursor.value) return;
+  if (stile) magCursor.value.style = stile;
+  updateMag('enabled', !!stile);
+}
+
 // Whitelist allineata a Olo_Magnetic_Cursor::BLEND_MODES.
 const MAG_BLEND_OPTIONS = [
   { value: 'normal', label: 'Normale' },

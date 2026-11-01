@@ -1,0 +1,670 @@
+{
+ "tema": "madia",
+ "titolo_dentro": "Nella confezione",
+ "attributi": {},
+ "categorie": [
+  {
+   "slug": "pasta-e-riso",
+   "nome": "Pasta e riso",
+   "descrizione": "Trafilata al bronzo, all’uovo, il Carnaroli e i cereali antichi.",
+   "foto": "pexels-8964263.jpg"
+  },
+  {
+   "slug": "olio-e-conserve",
+   "nome": "Olio e conserve",
+   "descrizione": "L’olio del Garda, la passata, i sott’oli della nonna.",
+   "foto": "pexels-9025046.jpg"
+  },
+  {
+   "slug": "formaggi-e-salumi",
+   "nome": "Formaggi e salumi",
+   "descrizione": "Parmigiano di montagna, pecorino, il salame di Felino.",
+   "foto": "pexels-3693283.jpg"
+  },
+  {
+   "slug": "dolci-e-caffe",
+   "nome": "Dolci e caffè",
+   "descrizione": "Cantucci, miele di montagna, caffè tostato a legna.",
+   "foto": "pexels-8621806.jpg"
+  },
+  {
+   "slug": "vini",
+   "nome": "Vini",
+   "descrizione": "I vini dei colli, da piccole cantine.",
+   "foto": "pexels-8472737.jpg"
+  },
+  {
+   "slug": "box-regalo",
+   "nome": "Box e regali",
+   "descrizione": "La box del mese, i taglieri, i regali già pronti.",
+   "foto": "pexels-4087609.jpg"
+  }
+ ],
+ "prodotti": [
+  {
+   "sku": "MAD-001",
+   "nome": "Tagliatelle all’uovo, 500 g",
+   "slug": "tagliatelle-uovo",
+   "cat": [
+    "pasta-e-riso"
+   ],
+   "prezzo": 6.5,
+   "sconto": 0,
+   "scorta": 80,
+   "voto": 4.8,
+   "recensioni": 512,
+   "evidenza": true,
+   "foto": [
+    "pexels-8964263.jpg",
+    "pexels-8963456.jpg",
+    "pexels-8964286.jpg"
+   ],
+   "punti": [
+    "Uova di galline allevate a terra",
+    "Tirata a mano, essiccata lentamente",
+    "Cuoce in tre minuti",
+    "Il video della sfoglia nella galleria"
+   ],
+   "testo": "La sfoglia di Rosa, a Collecchio: uova, farina e mattarello. Guardatela passare nella macchina, nel video.",
+   "upsell": [],
+   "cross": [
+    "MAD-010",
+    "MAD-005"
+   ],
+   "video": "pexels-video-26811243.mp4",
+   "poster": "pexels-video-26811243.jpg",
+   "dentro": "Il prodotto, il biglietto del produttore, la scatola isotermica per i freschi."
+  },
+  {
+   "sku": "MAD-002",
+   "nome": "Ruote tricolori, 500 g",
+   "slug": "ruote-tricolori",
+   "cat": [
+    "pasta-e-riso"
+   ],
+   "prezzo": 4.9,
+   "sconto": 0,
+   "scorta": 90,
+   "voto": 4.5,
+   "recensioni": 188,
+   "evidenza": false,
+   "foto": [
+    "pexels-8964250.jpg",
+    "pexels-8964276.jpg",
+    "pexels-8963420.jpg"
+   ],
+   "punti": [
+    "Colorate con spinaci e pomodoro",
+    "Trafilate al bronzo",
+    "Piacciono ai bambini",
+    "Grano duro italiano"
+   ],
+   "testo": "Spinaci, pomodoro e grano duro: le ruote che fanno mangiare la pasta anche ai bambini.",
+   "upsell": [],
+   "cross": [
+    "MAD-009"
+   ],
+   "dentro": "Il prodotto, il biglietto del produttore, la scatola isotermica per i freschi."
+  },
+  {
+   "sku": "MAD-003",
+   "nome": "Spaghetti di Gragnano, 1 kg",
+   "slug": "spaghetti-gragnano",
+   "cat": [
+    "pasta-e-riso"
+   ],
+   "prezzo": 7.9,
+   "sconto": 6.4,
+   "scorta": 120,
+   "voto": 4.9,
+   "recensioni": 1210,
+   "evidenza": true,
+   "foto": [
+    "pexels-4033404.jpg",
+    "pexels-8963413.jpg"
+   ],
+   "punti": [
+    "Trafilati al bronzo",
+    "Essiccati 48 ore",
+    "Pasta di Gragnano IGP",
+    "Tengono la cottura"
+   ],
+   "testo": "Gli spaghetti ruvidi che tengono il sugo: trafilati al bronzo, essiccati due giorni.",
+   "upsell": [],
+   "cross": [
+    "MAD-009",
+    "MAD-005"
+   ],
+   "dentro": "Il prodotto, il biglietto del produttore, la scatola isotermica per i freschi."
+  },
+  {
+   "sku": "MAD-004",
+   "nome": "Riso Carnaroli e cereali antichi",
+   "slug": "riso-carnaroli-cereali",
+   "cat": [
+    "pasta-e-riso"
+   ],
+   "prezzo": 8.5,
+   "sconto": 0,
+   "scorta": 45,
+   "voto": 4.6,
+   "recensioni": 166,
+   "evidenza": false,
+   "foto": [
+    "pexels-8108069.jpg",
+    "pexels-8108020.jpg"
+   ],
+   "punti": [
+    "Carnaroli invecchiato un anno",
+    "Farro e orzo perlato",
+    "Riso venere",
+    "Quattro sacchetti da 250 g"
+   ],
+   "testo": "Il Carnaroli per il risotto e tre cereali per le zuppe d’inverno.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il prodotto, il biglietto del produttore, la scatola isotermica per i freschi."
+  },
+  {
+   "sku": "MAD-005",
+   "nome": "Olio extravergine del Garda, 500 ml",
+   "slug": "olio-extravergine-garda",
+   "cat": [
+    "olio-e-conserve"
+   ],
+   "prezzo": 19,
+   "sconto": 0,
+   "scorta": 50,
+   "voto": 4.9,
+   "recensioni": 844,
+   "evidenza": true,
+   "foto": [
+    "pexels-9025046.jpg",
+    "pexels-21911357.jpg",
+    "pexels-10548607.jpg"
+   ],
+   "punti": [
+    "Casaliva in purezza",
+    "Raccolto a ottobre, frantoio in giornata",
+    "Fruttato leggero",
+    "Il video dell’olio nella galleria"
+   ],
+   "testo": "L’olio del Garda di Luca, a Malcesine: fruttato leggero, che sa di mandorla.",
+   "upsell": [],
+   "cross": [
+    "MAD-003",
+    "MAD-007"
+   ],
+   "video": "pexels-video-14527415.mp4",
+   "poster": "pexels-video-14527415.jpg",
+   "dentro": "Il prodotto, il biglietto del produttore, la scatola isotermica per i freschi."
+  },
+  {
+   "sku": "MAD-006",
+   "nome": "Olive taggiasche in salamoia",
+   "slug": "olive-taggiasche",
+   "cat": [
+    "olio-e-conserve"
+   ],
+   "prezzo": 9.5,
+   "sconto": 0,
+   "scorta": 60,
+   "voto": 4.7,
+   "recensioni": 233,
+   "evidenza": false,
+   "foto": [
+    "pexels-20927312.jpg"
+   ],
+   "punti": [
+    "Raccolte a mano in Liguria",
+    "Salamoia leggera",
+    "Vaso da 280 g",
+    "Senza conservanti"
+   ],
+   "testo": "Le olive piccole e dolci della Liguria: per l’aperitivo e per la pasta.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il prodotto, il biglietto del produttore, la scatola isotermica per i freschi."
+  },
+  {
+   "sku": "MAD-007",
+   "nome": "Melanzane sott’olio",
+   "slug": "melanzane-sottolio",
+   "cat": [
+    "olio-e-conserve"
+   ],
+   "prezzo": 8.9,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.6,
+   "recensioni": 120,
+   "evidenza": false,
+   "foto": [
+    "pexels-1611560.jpg",
+    "pexels-1414693.jpg"
+   ],
+   "punti": [
+    "Melanzane dell’orto, a fette",
+    "Olio extravergine",
+    "Aglio e menta",
+    "Vaso da 300 g"
+   ],
+   "testo": "Come le faceva la nonna: a fette, con la menta, sotto l’olio buono.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il prodotto, il biglietto del produttore, la scatola isotermica per i freschi."
+  },
+  {
+   "sku": "MAD-008",
+   "nome": "Pomodori secchi sott’olio",
+   "slug": "pomodori-secchi",
+   "cat": [
+    "olio-e-conserve"
+   ],
+   "prezzo": 7.5,
+   "sconto": 5.9,
+   "scorta": 55,
+   "voto": 4.5,
+   "recensioni": 98,
+   "evidenza": false,
+   "foto": [
+    "pexels-533236.jpg"
+   ],
+   "punti": [
+    "Pomodori pugliesi seccati al sole",
+    "Capperi e origano",
+    "Vaso da 280 g",
+    "In offerta"
+   ],
+   "testo": "I pomodori seccati al sole di Puglia, con capperi e origano.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il prodotto, il biglietto del produttore, la scatola isotermica per i freschi."
+  },
+  {
+   "sku": "MAD-009",
+   "nome": "Passata di San Marzano",
+   "slug": "passata-san-marzano",
+   "cat": [
+    "olio-e-conserve"
+   ],
+   "prezzo": 4.9,
+   "sconto": 0,
+   "scorta": 150,
+   "voto": 4.8,
+   "recensioni": 970,
+   "evidenza": false,
+   "foto": [
+    "pexels-33984942.jpg",
+    "pexels-33984944.jpg"
+   ],
+   "punti": [
+    "Pomodoro San Marzano DOP",
+    "Solo pomodoro e sale",
+    "Bottiglia da 700 g",
+    "Il video del sugo nella galleria"
+   ],
+   "testo": "Solo pomodoro e un pizzico di sale: il sugo è già fatto a metà. Guardatelo bollire nel video.",
+   "upsell": [],
+   "cross": [
+    "MAD-003",
+    "MAD-005"
+   ],
+   "video": "pexels-video-19286023.mp4",
+   "poster": "pexels-video-19286023.jpg",
+   "dentro": "Il prodotto, il biglietto del produttore, la scatola isotermica per i freschi."
+  },
+  {
+   "sku": "MAD-010",
+   "nome": "Parmigiano di montagna 30 mesi, 1 kg",
+   "slug": "parmigiano-montagna-30-mesi",
+   "cat": [
+    "formaggi-e-salumi"
+   ],
+   "prezzo": 34,
+   "sconto": 0,
+   "scorta": 30,
+   "voto": 4.9,
+   "recensioni": 1488,
+   "evidenza": true,
+   "foto": [
+    "pexels-3693283.jpg",
+    "pexels-3693282.jpg",
+    "pexels-6660175.jpg"
+   ],
+   "punti": [
+    "Latte di vacche rosse dell’Appennino",
+    "Trenta mesi di stagionatura",
+    "Spedito sottovuoto, refrigerato",
+    "Il video del taglio nella galleria"
+   ],
+   "testo": "Il Parmigiano del caseificio di Corniglio, a 700 metri: trenta mesi, cristalli che scrocchiano. Guardate il taglio nel video.",
+   "upsell": [
+    "MAD-013"
+   ],
+   "cross": [
+    "MAD-012",
+    "MAD-018"
+   ],
+   "video": "pexels-video-6658177.mp4",
+   "poster": "pexels-video-6658177.jpg",
+   "dentro": "Il prodotto, il biglietto del produttore, la scatola isotermica per i freschi."
+  },
+  {
+   "sku": "MAD-011",
+   "nome": "Pecorino stagionato",
+   "slug": "pecorino-stagionato",
+   "cat": [
+    "formaggi-e-salumi"
+   ],
+   "prezzo": 22,
+   "sconto": 0,
+   "scorta": 26,
+   "voto": 4.6,
+   "recensioni": 210,
+   "evidenza": false,
+   "foto": [
+    "pexels-8747538.jpg",
+    "pexels-5732765.jpg"
+   ],
+   "punti": [
+    "Latte di pecora crudo",
+    "Dodici mesi in grotta",
+    "Forma da 900 g",
+    "Crosta trattata con olio"
+   ],
+   "testo": "Il pecorino di grotta, piccante quanto basta, da mangiare con il miele.",
+   "upsell": [],
+   "cross": [
+    "MAD-016"
+   ],
+   "dentro": "Il prodotto, il biglietto del produttore, la scatola isotermica per i freschi."
+  },
+  {
+   "sku": "MAD-012",
+   "nome": "Salame di Felino",
+   "slug": "salame-felino",
+   "cat": [
+    "formaggi-e-salumi"
+   ],
+   "prezzo": 16,
+   "sconto": 0,
+   "scorta": 40,
+   "voto": 4.7,
+   "recensioni": 432,
+   "evidenza": false,
+   "foto": [
+    "pexels-6004718.jpg",
+    "pexels-19585048.jpg",
+    "pexels-6004709.jpg"
+   ],
+   "punti": [
+    "Carne di suino nazionale",
+    "Insaccato nel budello naturale",
+    "Stagionato sessanta giorni",
+    "Circa 500 g"
+   ],
+   "testo": "Il salame dolce della Bassa, tagliato a fetta obliqua come si fa a Felino.",
+   "upsell": [],
+   "cross": [
+    "MAD-010",
+    "MAD-018"
+   ],
+   "dentro": "Il prodotto, il biglietto del produttore, la scatola isotermica per i freschi."
+  },
+  {
+   "sku": "MAD-013",
+   "nome": "Il tagliere delle colline",
+   "slug": "tagliere-colline",
+   "cat": [
+    "box-regalo"
+   ],
+   "prezzo": 59,
+   "sconto": 49,
+   "scorta": 18,
+   "voto": 4.8,
+   "recensioni": 156,
+   "evidenza": true,
+   "foto": [
+    "pexels-4087609.jpg",
+    "pexels-7175710.jpg",
+    "pexels-34621129.jpg"
+   ],
+   "punti": [
+    "Parmigiano, pecorino, salame di Felino",
+    "Miele millefiori e cantucci",
+    "Tagliere in legno di faggio",
+    "Pronto da regalare"
+   ],
+   "testo": "Il tagliere già fatto, col legno da tenere: un regalo che si apre a tavola.",
+   "upsell": [],
+   "cross": [
+    "MAD-018"
+   ],
+   "dentro": "Il prodotto, il biglietto del produttore, la scatola isotermica per i freschi."
+  },
+  {
+   "sku": "MAD-014",
+   "nome": "Cantucci alle mandorle",
+   "slug": "cantucci-mandorle",
+   "cat": [
+    "dolci-e-caffe"
+   ],
+   "prezzo": 8.5,
+   "sconto": 0,
+   "scorta": 70,
+   "voto": 4.7,
+   "recensioni": 610,
+   "evidenza": false,
+   "foto": [
+    "pexels-8621806.jpg",
+    "pexels-8964238.jpg",
+    "pexels-8963387.jpg"
+   ],
+   "punti": [
+    "Mandorle intere di Sicilia",
+    "Cotti due volte",
+    "Sacchetto da 300 g",
+    "Col vin santo, o col caffè"
+   ],
+   "testo": "Croccanti, con le mandorle intere: cotti due volte, come a Prato.",
+   "upsell": [],
+   "cross": [
+    "MAD-017"
+   ],
+   "dentro": "Il prodotto, il biglietto del produttore, la scatola isotermica per i freschi."
+  },
+  {
+   "sku": "MAD-015",
+   "nome": "Miele millefiori di montagna",
+   "slug": "miele-millefiori-montagna",
+   "cat": [
+    "dolci-e-caffe"
+   ],
+   "prezzo": 11,
+   "sconto": 0,
+   "scorta": 44,
+   "voto": 4.8,
+   "recensioni": 288,
+   "evidenza": false,
+   "foto": [
+    "pexels-34185861.jpg",
+    "pexels-34185860.jpg"
+   ],
+   "punti": [
+    "Arnie sopra i mille metri",
+    "Non pastorizzato",
+    "Vaso da 500 g",
+    "Cristallizza: è normale"
+   ],
+   "testo": "Il miele delle arnie di Bardi, sopra i mille metri.",
+   "upsell": [],
+   "cross": [
+    "MAD-011"
+   ],
+   "dentro": "Il prodotto, il biglietto del produttore, la scatola isotermica per i freschi."
+  },
+  {
+   "sku": "MAD-016",
+   "nome": "Miele di castagno",
+   "slug": "miele-castagno",
+   "cat": [
+    "dolci-e-caffe"
+   ],
+   "prezzo": 12,
+   "sconto": 0,
+   "scorta": 38,
+   "voto": 4.6,
+   "recensioni": 140,
+   "evidenza": false,
+   "foto": [
+    "pexels-7615874.jpg"
+   ],
+   "punti": [
+    "Scuro e amarognolo",
+    "Col pecorino e coi formaggi stagionati",
+    "Vaso da 500 g",
+    "Non pastorizzato"
+   ],
+   "testo": "Scuro, amarognolo, buonissimo col pecorino.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il prodotto, il biglietto del produttore, la scatola isotermica per i freschi."
+  },
+  {
+   "sku": "MAD-017",
+   "nome": "Caffè tostato a legna, 500 g",
+   "slug": "caffe-tostato-legna",
+   "cat": [
+    "dolci-e-caffe"
+   ],
+   "prezzo": 16,
+   "sconto": 13,
+   "scorta": 60,
+   "voto": 4.7,
+   "recensioni": 532,
+   "evidenza": false,
+   "foto": [
+    "pexels-12585560.jpg",
+    "pexels-11505588.jpg",
+    "pexels-5714577.jpg"
+   ],
+   "punti": [
+    "Miscela 80% arabica",
+    "Tostato a legna a Fidenza",
+    "In grani o macinato per moka",
+    "Sacchetto con la valvola"
+   ],
+   "testo": "La miscela della torrefazione di Fidenza, tostata nel forno a legna.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il prodotto, il biglietto del produttore, la scatola isotermica per i freschi."
+  },
+  {
+   "sku": "MAD-018",
+   "nome": "Bianco dei colli, 75 cl",
+   "slug": "bianco-dei-colli",
+   "cat": [
+    "vini"
+   ],
+   "prezzo": 14,
+   "sconto": 0,
+   "scorta": 36,
+   "voto": 4.5,
+   "recensioni": 120,
+   "evidenza": false,
+   "foto": [
+    "pexels-8472737.jpg"
+   ],
+   "punti": [
+    "Malvasia di Candia",
+    "Fresco, profumato",
+    "Col salame e coi tortelli",
+    "Piccola cantina"
+   ],
+   "testo": "La Malvasia dei colli di Parma: fresca, profumata, da salame e tortelli.",
+   "upsell": [],
+   "cross": [
+    "MAD-012"
+   ],
+   "dentro": "Il prodotto, il biglietto del produttore, la scatola isotermica per i freschi."
+  },
+  {
+   "sku": "MAD-019",
+   "nome": "La Madia del mese, abbonamento",
+   "slug": "madia-del-mese",
+   "cat": [
+    "box-regalo"
+   ],
+   "prezzo": 39,
+   "sconto": 0,
+   "scorta": 200,
+   "voto": 4.9,
+   "recensioni": 640,
+   "evidenza": true,
+   "foto": [
+    "pexels-8580727.jpg",
+    "pexels-38179370.jpg",
+    "pexels-38164887.jpg"
+   ],
+   "punti": [
+    "Otto prodotti scelti ogni mese",
+    "Una ricetta scritta dalla bottega",
+    "Consegna il primo giovedì",
+    "Si sospende quando volete"
+   ],
+   "testo": "Ogni mese una scatola con otto prodotti dei nostri produttori e una ricetta per usarli.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il prodotto, il biglietto del produttore, la scatola isotermica per i freschi."
+  }
+ ],
+ "recensioni": [
+  [
+   5,
+   "Arrivato refrigerato e imballato benissimo. Il Parmigiano è spettacolare."
+  ],
+  [
+   5,
+   "Si sente che sono prodotti veri. Ho già riordinato la pasta."
+  ],
+  [
+   4,
+   "Tutto buonissimo, la spedizione refrigerata costa un po’ sotto i 59 €."
+  ],
+  [
+   5,
+   "Regalata la box a mia madre: la ricetta allegata è stata la sorpresa più bella."
+  ],
+  [
+   5,
+   "L’olio del Garda è il migliore che abbia comprato online."
+  ],
+  [
+   4,
+   "Ottimi, i cantucci finiti in due giorni. Confezione da fare più grande."
+  ],
+  [
+   5,
+   "Bottega gentilissima, mi hanno chiamato per una sostituzione."
+  ],
+  [
+   5,
+   "Prezzi onesti per la qualità. Si capisce chi fa le cose."
+  ]
+ ],
+ "nomi": [
+  "Giovanna R.",
+  "Paolo M.",
+  "Lucia B.",
+  "Stefano T.",
+  "Antonella P.",
+  "Roberto C.",
+  "Cristina L.",
+  "Matteo D.",
+  "Franca G.",
+  "Alberto V.",
+  "Daniela S.",
+  "Enrico F."
+ ]
+}

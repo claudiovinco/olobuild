@@ -100,6 +100,9 @@ class Olobuild_Woo_Minicart_Tile extends Olobuild_Tile_Base {
                 color: inherit;
                 text-decoration: none;
             }
+            /* Al passaggio resta del suo colore: il colore dei link del tema (scuro) la faceva sparire su una testata scura. */
+            .<?php echo $uid; ?> a.olo-mc-link:hover,
+            .<?php echo $uid; ?> a.olo-mc-link:focus { color: inherit !important; }
             .<?php echo $uid; ?> .olo-mc-link:focus-visible {
                 outline: 2px solid var(--olo-color-primary, #e1474f);
                 outline-offset: 4px;

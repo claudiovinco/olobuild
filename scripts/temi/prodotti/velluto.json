@@ -1,0 +1,1023 @@
+{
+ "tema": "velluto",
+ "titolo_dentro": "Nella confezione",
+ "attributi": {
+  "taglia": {
+   "nome": "Taglia",
+   "termini": [
+    "38",
+    "40",
+    "42",
+    "44",
+    "46",
+    "48",
+    "50",
+    "52",
+    "54"
+   ]
+  }
+ },
+ "categorie": [
+  {
+   "slug": "abiti-da-sera",
+   "nome": "Abiti da sera",
+   "descrizione": "Crêpe di seta, velluto, raso, paillettes.",
+   "foto": "pexels-29368455.jpg"
+  },
+  {
+   "slug": "sposa",
+   "nome": "Sposa e cerimonia",
+   "descrizione": "Pizzo, organza, applicazioni: su appuntamento.",
+   "foto": "pexels-20352747.jpg"
+  },
+  {
+   "slug": "tailleur",
+   "nome": "Giacche e tailleur",
+   "descrizione": "Lana, cashmere, gessato: dal giorno alla sera.",
+   "foto": "pexels-30479352.jpg"
+  },
+  {
+   "slug": "cappe",
+   "nome": "Cappe e capispalla",
+   "descrizione": "Mantelle, cappotti, trench.",
+   "foto": "pexels-29368477.jpg"
+  },
+  {
+   "slug": "uomo",
+   "nome": "Smoking e uomo",
+   "descrizione": "Smoking in lana e in velluto, cuciti su misura.",
+   "foto": "pexels-17420227.jpg"
+  },
+  {
+   "slug": "accessori",
+   "nome": "Gioielli e guanti",
+   "descrizione": "Orecchini d’artista, guanti da sera.",
+   "foto": "pexels-34010218.jpg"
+  }
+ ],
+ "prodotti": [
+  {
+   "sku": "VEL-001",
+   "nome": "Abito Rubino, crêpe di seta",
+   "slug": "abito-rubino",
+   "cat": [
+    "abiti-da-sera"
+   ],
+   "prezzo": 2900,
+   "sconto": 2300,
+   "scorta": 4,
+   "voto": 4.9,
+   "recensioni": 38,
+   "evidenza": true,
+   "foto": [
+    "pexels-29368455.jpg",
+    "pexels-31862127.jpg"
+   ],
+   "punti": [
+    "Crêpe di seta pesante",
+    "Scollo a barca, schiena nuda",
+    "Ventaglio in seta compreso",
+    "Il video della passerella"
+   ],
+   "testo": "Il rosso della collezione Notte: crêpe di seta che cade dritto, la schiena nuda, il ventaglio dello stesso tessuto.",
+   "upsell": [],
+   "cross": [
+    "VEL-022"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "38",
+     "40",
+     "42",
+     "44",
+     "46"
+    ],
+    "esaurite": [
+     "46"
+    ]
+   },
+   "video": "pexels-video-9512045.mp4",
+   "poster": "pexels-video-9512045.jpg",
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-002",
+   "nome": "Abito Notte, velluto nero",
+   "slug": "abito-notte",
+   "cat": [
+    "abiti-da-sera"
+   ],
+   "prezzo": 3400,
+   "sconto": 0,
+   "scorta": 3,
+   "voto": 5.0,
+   "recensioni": 22,
+   "evidenza": true,
+   "foto": [
+    "pexels-33782082.jpg",
+    "pexels-36973652.jpg"
+   ],
+   "punti": [
+    "Velluto di seta",
+    "Lungo a colonna",
+    "Fodera in seta",
+    "Cucito in atelier"
+   ],
+   "testo": "Il velluto nero lungo a colonna: il vestito che non passa di moda, ritoccato su di voi alla prova.",
+   "upsell": [],
+   "cross": [
+    "VEL-024"
+   ],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "38",
+     "40",
+     "42",
+     "44",
+     "46"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-003",
+   "nome": "Abito Champagne, raso",
+   "slug": "abito-champagne",
+   "cat": [
+    "abiti-da-sera"
+   ],
+   "prezzo": 2600,
+   "sconto": 1950,
+   "scorta": 3,
+   "voto": 4.8,
+   "recensioni": 19,
+   "evidenza": false,
+   "foto": [
+    "pexels-38142668.jpg"
+   ],
+   "punti": [
+    "Raso di seta champagne",
+    "Spalline sottili",
+    "Spacco laterale",
+    "Dall’archivio di sartoria"
+   ],
+   "testo": "Il raso color champagne che prende la luce: dall’archivio di sartoria, a meno.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "38",
+     "40",
+     "42",
+     "44",
+     "46"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-004",
+   "nome": "Abito Oltremare, seta",
+   "slug": "abito-oltremare",
+   "cat": [
+    "abiti-da-sera"
+   ],
+   "prezzo": 2400,
+   "sconto": 0,
+   "scorta": 4,
+   "voto": 4.7,
+   "recensioni": 16,
+   "evidenza": false,
+   "foto": [
+    "pexels-27677905.jpg"
+   ],
+   "punti": [
+    "Seta lavata blu oltremare",
+    "Drappeggio sul fianco",
+    "Lungo alla caviglia",
+    "Leggero"
+   ],
+   "testo": "La seta oltremare drappeggiata sul fianco: per le sere d’estate e i matrimoni in giardino.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "38",
+     "40",
+     "42",
+     "44",
+     "46"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-005",
+   "nome": "Abito Girasole, chiffon",
+   "slug": "abito-girasole",
+   "cat": [
+    "abiti-da-sera"
+   ],
+   "prezzo": 1900,
+   "sconto": 0,
+   "scorta": 5,
+   "voto": 4.6,
+   "recensioni": 12,
+   "evidenza": false,
+   "foto": [
+    "pexels-9705033.jpg"
+   ],
+   "punti": [
+    "Chiffon di seta giallo",
+    "Monospalla",
+    "Gonna a balze",
+    "Fodera in raso"
+   ],
+   "testo": "Il giallo per chi non vuole passare inosservata: chiffon a balze, una sola spalla.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "38",
+     "40",
+     "42",
+     "44",
+     "46"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-006",
+   "nome": "Abito Oro, paillettes",
+   "slug": "abito-oro",
+   "cat": [
+    "abiti-da-sera"
+   ],
+   "prezzo": 4200,
+   "sconto": 3400,
+   "scorta": 2,
+   "voto": 4.9,
+   "recensioni": 27,
+   "evidenza": true,
+   "foto": [
+    "pexels-30873276.jpg",
+    "pexels-30873252.jpg"
+   ],
+   "punti": [
+    "Paillettes cucite a mano",
+    "Tulle color carne",
+    "Scollo a V",
+    "Trecento ore di ricamo"
+   ],
+   "testo": "Trecento ore di ricamo, una paillette alla volta: l’abito di Capodanno della collezione.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "38",
+     "40",
+     "42",
+     "44",
+     "46"
+    ],
+    "esaurite": [
+     "38"
+    ]
+   },
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-007",
+   "nome": "Abito Fiamma, tulle",
+   "slug": "abito-fiamma",
+   "cat": [
+    "abiti-da-sera"
+   ],
+   "prezzo": 3100,
+   "sconto": 0,
+   "scorta": 3,
+   "voto": 4.8,
+   "recensioni": 14,
+   "evidenza": false,
+   "foto": [
+    "pexels-31168033.jpg",
+    "pexels-9856621.jpg"
+   ],
+   "punti": [
+    "Tulle rosso a strati",
+    "Corpetto drappeggiato",
+    "Strascico corto",
+    "Sottogonna in organza"
+   ],
+   "testo": "Il tulle rosso a strati che si muove come una fiamma: per i balli e le prime.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "38",
+     "40",
+     "42",
+     "44",
+     "46"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-008",
+   "nome": "Abito Galleria, volant",
+   "slug": "abito-galleria",
+   "cat": [
+    "abiti-da-sera"
+   ],
+   "prezzo": 2800,
+   "sconto": 0,
+   "scorta": 3,
+   "voto": 4.7,
+   "recensioni": 11,
+   "evidenza": false,
+   "foto": [
+    "pexels-39089253.jpg",
+    "pexels-23516316.jpg"
+   ],
+   "punti": [
+    "Raso rosso a volant",
+    "Scollo a cuore",
+    "Gonna a sirena",
+    "Cucito in atelier"
+   ],
+   "testo": "La sirena di raso rosso coi volant fino a terra: da fotografare su uno scalone.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "38",
+     "40",
+     "42",
+     "44",
+     "46"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-009",
+   "nome": "Abito Balcone, paillettes rosse",
+   "slug": "abito-balcone",
+   "cat": [
+    "abiti-da-sera"
+   ],
+   "prezzo": 3600,
+   "sconto": 0,
+   "scorta": 2,
+   "voto": 4.8,
+   "recensioni": 9,
+   "evidenza": false,
+   "foto": [
+    "pexels-7615906.jpg",
+    "pexels-30455749.jpg"
+   ],
+   "punti": [
+    "Paillettes rosse su tulle",
+    "Maniche lunghe",
+    "Gonna ampia",
+    "Ricamo a mano"
+   ],
+   "testo": "Le paillettes rosse a maniche lunghe, con la gonna ampia che gira.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "38",
+     "40",
+     "42",
+     "44",
+     "46"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-010",
+   "nome": "Abito da sposa Ninfea, pizzo",
+   "slug": "sposa-ninfea",
+   "cat": [
+    "sposa"
+   ],
+   "prezzo": 5800,
+   "sconto": 0,
+   "scorta": 2,
+   "voto": 5.0,
+   "recensioni": 31,
+   "evidenza": true,
+   "foto": [
+    "pexels-20352747.jpg",
+    "pexels-8459378.jpg",
+    "pexels-11076482.jpg"
+   ],
+   "punti": [
+    "Pizzo chantilly",
+    "Scollo a barca",
+    "Strascico staccabile",
+    "Tre prove comprese"
+   ],
+   "testo": "Il pizzo chantilly ricamato a mano, lo strascico che si stacca per ballare: tre prove in atelier comprese.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "38",
+     "40",
+     "42",
+     "44",
+     "46"
+    ],
+    "esaurite": []
+   },
+   "video": "pexels-video-8527342.mp4",
+   "poster": "pexels-video-8527342.jpg",
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-011",
+   "nome": "Abito da sposa Aurora, applicazioni",
+   "slug": "sposa-aurora",
+   "cat": [
+    "sposa"
+   ],
+   "prezzo": 6400,
+   "sconto": 0,
+   "scorta": 1,
+   "voto": 4.9,
+   "recensioni": 18,
+   "evidenza": false,
+   "foto": [
+    "pexels-20370082.jpg",
+    "pexels-30826705.jpg"
+   ],
+   "punti": [
+    "Fiori di organza applicati",
+    "Corpetto a stecche",
+    "Gonna in tulle",
+    "Tre prove comprese"
+   ],
+   "testo": "I fiori di organza cuciti uno per uno sul tulle: per un matrimonio di primavera.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "38",
+     "40",
+     "42",
+     "44",
+     "46"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-012",
+   "nome": "Abito da sposa Brezza, organza",
+   "slug": "sposa-brezza",
+   "cat": [
+    "sposa"
+   ],
+   "prezzo": 4900,
+   "sconto": 3900,
+   "scorta": 2,
+   "voto": 4.8,
+   "recensioni": 15,
+   "evidenza": true,
+   "foto": [
+    "pexels-20352749.jpg",
+    "pexels-20091882.jpg"
+   ],
+   "punti": [
+    "Organza di seta",
+    "Ricamo sul corpetto",
+    "Linea ad A",
+    "Dall’archivio: tre prove comprese"
+   ],
+   "testo": "L’organza leggera ricamata sul corpetto: dall’archivio di sartoria, sempre con tre prove.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "38",
+     "40",
+     "42",
+     "44",
+     "46"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-013",
+   "nome": "Tailleur Ardesia, giacca e gonna",
+   "slug": "tailleur-ardesia",
+   "cat": [
+    "tailleur"
+   ],
+   "prezzo": 1650,
+   "sconto": 0,
+   "scorta": 6,
+   "voto": 4.7,
+   "recensioni": 24,
+   "evidenza": false,
+   "foto": [
+    "pexels-30479352.jpg",
+    "pexels-30468671.jpg"
+   ],
+   "punti": [
+    "Lana fredda grigio ardesia",
+    "Giacca sciancrata",
+    "Gonna a matita",
+    "Fodera in seta"
+   ],
+   "testo": "Il tailleur da riunione che arriva a cena: lana fredda, la giacca sciancrata, la gonna a matita.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "38",
+     "40",
+     "42",
+     "44",
+     "46"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-014",
+   "nome": "Giacca Duna, lana e cashmere",
+   "slug": "giacca-duna",
+   "cat": [
+    "tailleur"
+   ],
+   "prezzo": 980,
+   "sconto": 790,
+   "scorta": 7,
+   "voto": 4.8,
+   "recensioni": 33,
+   "evidenza": true,
+   "foto": [
+    "pexels-12911893.jpg"
+   ],
+   "punti": [
+    "Lana e cashmere",
+    "Spalle morbide",
+    "Revers a lancia",
+    "Dall’archivio"
+   ],
+   "testo": "La giacca color sabbia che va su tutto: lana e cashmere, le spalle morbide.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "38",
+     "40",
+     "42",
+     "44",
+     "46"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-015",
+   "nome": "Completo Inchiostro, pantalone a palazzo",
+   "slug": "completo-inchiostro",
+   "cat": [
+    "tailleur"
+   ],
+   "prezzo": 1480,
+   "sconto": 0,
+   "scorta": 5,
+   "voto": 4.6,
+   "recensioni": 12,
+   "evidenza": false,
+   "foto": [
+    "pexels-29632552.jpg",
+    "pexels-39687774.jpg"
+   ],
+   "punti": [
+    "Gessato blu inchiostro",
+    "Giacca doppiopetto",
+    "Pantalone a palazzo",
+    "Orlo su misura"
+   ],
+   "testo": "Il doppiopetto gessato col pantalone a palazzo: l’orlo si fa su di voi, in atelier.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "38",
+     "40",
+     "42",
+     "44",
+     "46"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-016",
+   "nome": "Cappa Ciliegia, lana doppia",
+   "slug": "cappa-ciliegia",
+   "cat": [
+    "cappe"
+   ],
+   "prezzo": 1900,
+   "sconto": 0,
+   "scorta": 4,
+   "voto": 4.9,
+   "recensioni": 17,
+   "evidenza": true,
+   "foto": [
+    "pexels-29368477.jpg"
+   ],
+   "punti": [
+    "Lana doppia rossa",
+    "Collo a cappuccio morbido",
+    "Fodera in seta",
+    "Taglia unica regolabile"
+   ],
+   "testo": "La cappa rossa sopra l’abito da sera: il colpo di teatro all’uscita.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "38",
+     "40",
+     "42",
+     "44",
+     "46"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-017",
+   "nome": "Mantella Plissé, organza",
+   "slug": "mantella-plisse",
+   "cat": [
+    "cappe"
+   ],
+   "prezzo": 1350,
+   "sconto": 0,
+   "scorta": 3,
+   "voto": 4.6,
+   "recensioni": 8,
+   "evidenza": false,
+   "foto": [
+    "pexels-29016259.jpg"
+   ],
+   "punti": [
+    "Organza plissettata",
+    "Iridescente",
+    "Si chiude col fiocco",
+    "Leggerissima"
+   ],
+   "testo": "L’organza plissettata che cambia colore con la luce: sopra un abito nero, sulle spalle nude.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "38",
+     "40",
+     "42",
+     "44",
+     "46"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-018",
+   "nome": "Trench Bordeaux",
+   "slug": "trench-bordeaux",
+   "cat": [
+    "cappe"
+   ],
+   "prezzo": 1200,
+   "sconto": 950,
+   "scorta": 5,
+   "voto": 4.7,
+   "recensioni": 21,
+   "evidenza": false,
+   "foto": [
+    "pexels-9821752.jpg"
+   ],
+   "punti": [
+    "Gabardine di cotone",
+    "Cintura e polsini",
+    "Fodera in seta",
+    "Dall’archivio"
+   ],
+   "testo": "Il trench bordeaux col collo alto: dall’archivio, a meno.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "38",
+     "40",
+     "42",
+     "44",
+     "46"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-019",
+   "nome": "Cappotto Avorio",
+   "slug": "cappotto-avorio",
+   "cat": [
+    "cappe"
+   ],
+   "prezzo": 1650,
+   "sconto": 0,
+   "scorta": 4,
+   "voto": 4.8,
+   "recensioni": 13,
+   "evidenza": false,
+   "foto": [
+    "pexels-6702736.jpg",
+    "pexels-6726841.jpg"
+   ],
+   "punti": [
+    "Lana e cashmere avorio",
+    "Taglio a vestaglia",
+    "Cintura",
+    "Lungo al polpaccio"
+   ],
+   "testo": "Il cappotto avorio a vestaglia: si chiude con la cintura, sta sopra tutto.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "38",
+     "40",
+     "42",
+     "44",
+     "46"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-020",
+   "nome": "Smoking Mezzanotte, lana e raso",
+   "slug": "smoking-mezzanotte",
+   "cat": [
+    "uomo"
+   ],
+   "prezzo": 2200,
+   "sconto": 0,
+   "scorta": 5,
+   "voto": 4.9,
+   "recensioni": 29,
+   "evidenza": true,
+   "foto": [
+    "pexels-17420227.jpg",
+    "pexels-34342524.jpg",
+    "pexels-39117653.jpg"
+   ],
+   "punti": [
+    "Lana fredda nero mezzanotte",
+    "Revers a scialle in raso",
+    "Pantalone con la banda",
+    "Orlo e maniche su misura"
+   ],
+   "testo": "Lo smoking a un bottone col revers a scialle in raso: orlo e maniche si fanno su di voi.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "44",
+     "46",
+     "48",
+     "50",
+     "52",
+     "54"
+    ],
+    "esaurite": []
+   },
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-021",
+   "nome": "Smoking in velluto blu notte",
+   "slug": "smoking-velluto",
+   "cat": [
+    "uomo"
+   ],
+   "prezzo": 2500,
+   "sconto": 1990,
+   "scorta": 3,
+   "voto": 4.8,
+   "recensioni": 14,
+   "evidenza": false,
+   "foto": [
+    "pexels-17728712.jpg",
+    "pexels-36698066.jpg"
+   ],
+   "punti": [
+    "Velluto di cotone blu notte",
+    "Revers in raso nero",
+    "Fodera in seta stampata",
+    "Orlo su misura in due giorni"
+   ],
+   "testo": "La giacca in velluto blu notte per le feste: col pantalone nero o coi jeans.",
+   "upsell": [],
+   "cross": [],
+   "varianti": {
+    "attributo": "taglia",
+    "valori": [
+     "44",
+     "46",
+     "48",
+     "50",
+     "52",
+     "54"
+    ],
+    "esaurite": [
+     "54"
+    ]
+   },
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-022",
+   "nome": "Orecchini Cascata, argento e lapislazzuli",
+   "slug": "orecchini-cascata",
+   "cat": [
+    "accessori"
+   ],
+   "prezzo": 690,
+   "sconto": 0,
+   "scorta": 6,
+   "voto": 4.8,
+   "recensioni": 19,
+   "evidenza": false,
+   "foto": [
+    "pexels-34010218.jpg",
+    "pexels-6642209.jpg"
+   ],
+   "punti": [
+    "Argento 925",
+    "Lapislazzuli",
+    "Pendenti 6 cm",
+    "Nella scatola di velluto"
+   ],
+   "testo": "Gli orecchini a cascata d’argento e lapislazzuli: per l’abito nero e per quello rosso.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-023",
+   "nome": "Orecchini Stella d’oro",
+   "slug": "orecchini-stella",
+   "cat": [
+    "accessori"
+   ],
+   "prezzo": 480,
+   "sconto": 0,
+   "scorta": 8,
+   "voto": 4.7,
+   "recensioni": 23,
+   "evidenza": false,
+   "foto": [
+    "pexels-38404664.jpg",
+    "pexels-32286014.jpg"
+   ],
+   "punti": [
+    "Ottone bagnato in oro",
+    "Stelle traforate",
+    "Leggeri",
+    "Nella scatola di velluto"
+   ],
+   "testo": "Le stelle d’oro traforate a mano: grandi e leggere.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  },
+  {
+   "sku": "VEL-024",
+   "nome": "Guanti da sera in raso",
+   "slug": "guanti-raso",
+   "cat": [
+    "accessori"
+   ],
+   "prezzo": 220,
+   "sconto": 175,
+   "scorta": 10,
+   "voto": 4.9,
+   "recensioni": 41,
+   "evidenza": false,
+   "foto": [
+    "pexels-31052875.jpg",
+    "pexels-31052874.jpg",
+    "pexels-7322157.jpg"
+   ],
+   "punti": [
+    "Raso di seta nero",
+    "Sopra il gomito",
+    "Tre bottoncini al polso",
+    "Dall’archivio"
+   ],
+   "testo": "I guanti lunghi di raso nero sopra il gomito: il dettaglio che fa la sera.",
+   "upsell": [],
+   "cross": [],
+   "dentro": "Il capo nella custodia di velluto, il biglietto della sarta, l’invito alla prova."
+  }
+ ],
+ "recensioni": [
+  [
+   5,
+   "La prova in atelier è stata un’esperienza: l’abito sembrava cucito addosso."
+  ],
+  [
+   5,
+   "Consegnato a mano, nella custodia di velluto. Perfetto per il matrimonio."
+  ],
+  [
+   5,
+   "Il tessuto è meraviglioso, si sente la qualità."
+  ],
+  [
+   4,
+   "Ho dovuto accorciarlo un po’, l’hanno fatto in due giorni."
+  ],
+  [
+   5,
+   "Ho ricevuto più complimenti di tutta la vita."
+  ],
+  [
+   5,
+   "Gentilissimi, mi hanno seguita in tre prove."
+  ],
+  [
+   4,
+   "Bellissimo, la taglia veste un po’ stretta: prendete quella sopra."
+  ],
+  [
+   5,
+   "Lo smoking mi sta come un guanto."
+  ]
+ ],
+ "nomi": [
+  "Beatrice A.",
+  "Ginevra L.",
+  "Costanza R.",
+  "Vittoria M.",
+  "Ludovica F.",
+  "Camilla S.",
+  "Margherita P.",
+  "Alessandro D.",
+  "Edoardo C.",
+  "Aurora B.",
+  "Ottavia G.",
+  "Tommaso V."
+ ]
+}

@@ -112,7 +112,7 @@ export default {
     { type: 'separator', label: t('Layout') },
     { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 8, step: 1 },
     { key: 'columns_tablet', label: t('Colonne tablet'), type: 'range', min: 1, max: 4, step: 1 },
-    { key: 'columns_mobile', label: t('Colonne mobile'), type: 'range', min: 1, max: 2, step: 1,
+    { key: 'columns_mobile', label: t('Colonne mobile'), type: 'range', min: 1, max: 3, step: 1,
       condition: { field: 'scorri_mobile', op: 'neq', value: true } },
     { key: 'scorri_mobile', label: t('Sul telefono scorrono di lato'), type: 'toggle',
       description: t('Sotto i 640 px una sola fila che si scorre col dito, invece delle colonne.') },

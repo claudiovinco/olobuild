@@ -688,9 +688,10 @@ const TIPI_STILE_C = new Set(['color', 'typography', 'font-family', 'border', 'b
 const ESCLUSI_C = new Set(['file_max_size', 'radius_default', 'fit_bounds', 'start_position', 'currency_position',
   'image_size', 'thumbnail_size', 'img_size', 'thumb_size', 'text_effect_cursor_char', 'password_require_uppercase',
   'y_step_size', 'direction']);
-// per tile: il valore È il contenuto (tipo di effetto, font in mostra, colonne della riga)
+// per tile: il valore È il contenuto (tipo di effetto, font in mostra, colonne della riga, in quale diapositiva della
+// galleria prodotto sta il video: l'ordine dei media, non come appaiono)
 const ESCLUSI_TILE_C = new Set(['particlefx:preset', 'variablespecimen:font_family', 'row:layout',
-  'inner-columns:layout', 'section:layout', 'column:layout']);
+  'inner-columns:layout', 'section:layout', 'column:layout', 'woo_product_gallery_slider:video_position']);
 const RE_STILE_C = [
   /(^|_)(italic|bold|uppercase|underline|font_size|font_weight|letter_spacing|line_height|text_transform|tracking)(_|$)/,
   /(^|_)(color|colour|colors|bg|tint|palette)(_|$)/,

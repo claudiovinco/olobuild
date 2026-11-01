@@ -148,6 +148,12 @@ class Olobuild_Demo_Temi {
         if ( ! in_array( 'product_cat', (array) $tassonomie, true ) || empty( self::$tema['id'] ) ) {
             return $args;
         }
+        // I termini di contenuti precisi (object_ids) non si filtrano: WooCommerce carica in una volta tutte le
+        // tassonomie di un prodotto, tipo compreso, e il termine «variable» senza _olo_demo spariva — il prodotto a
+        // varianti diventava «semplice» (niente taglie, prezzo a zero). Il filtro vale per gli elenchi di categorie.
+        if ( ! empty( $args['object_ids'] ) ) {
+            return $args;
+        }
         $mq                 = isset( $args['meta_query'] ) && is_array( $args['meta_query'] ) ? $args['meta_query'] : [];
         $mq[]               = [ 'key' => '_olo_demo', 'value' => (string) self::$tema['id'] ];
         $args['meta_query'] = $mq;
@@ -1191,6 +1197,16 @@ class Olobuild_Demo_Temi {
         ] );
     }
 
+    /** Le classi di una voce del menu del tema: «classi» e il pannello del Mega Menu (olo-pannello-<id del template>). */
+    private static function classi_voce( $v ) {
+        $classi = array_map( 'sanitize_html_class', (array) ( $v['classi'] ?? [] ) );
+        $chiave = (string) ( $v['pannello'] ?? '' );
+        if ( '' !== $chiave && isset( self::$tema['json']['templates'][ $chiave ] ) ) {
+            $classi[] = 'olo-pannello-' . self::id_template( $chiave );
+        }
+        return $classi ? array_values( array_filter( $classi ) ) : [ '' ];
+    }
+
     /** wp_get_nav_menu_items: le voci del menu del tema, con i collegamenti alle pagine della demo. */
     public static function voci_menu( $voci, $menu ) {
         if ( ! is_object( $menu ) || self::id_menu() !== (int) ( $menu->term_id ?? 0 ) ) {
@@ -1218,7 +1234,7 @@ class Olobuild_Demo_Temi {
                     'target'           => '',
                     'attr_title'       => '',
                     'description'      => (string) ( $v['description'] ?? '' ),
-                    'classes'          => [ '' ],
+                    'classes'          => self::classi_voce( $v ),
                     'xfn'              => '',
                     'menu_order'       => $n,
                     'post_type'        => 'nav_menu_item',
