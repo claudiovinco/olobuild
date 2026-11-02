@@ -44,6 +44,15 @@
               <span v-if="v.bloccato" class="orz-riga-blocco"><Icona nome="lucchetto" :dim="12" /> {{ t('%s sta scrivendo').replace('%s', v.bloccato) }}</span>
             </span>
           </span>
+          <span v-if="v.lingue && v.lingue.length" class="orz-riga-lingue">
+            <span
+              v-for="l in v.lingue"
+              :key="l.codice"
+              class="orz-riga-lingua"
+              :class="'orz-riga-lingua--' + (l.id ? l.stato : 'manca')"
+              :title="l.nome + ': ' + (l.id ? nomeStato(l.stato) : t('da tradurre'))"
+            ><span aria-hidden="true">{{ l.codice.toUpperCase() }}</span><span class="screen-reader-text">{{ l.nome + ': ' + (l.id ? nomeStato(l.stato) : t('da tradurre')) }}</span></span>
+          </span>
           <span class="orz-stato" :class="'orz-stato--' + v.stato">{{ nomeStato(v.stato) }}</span>
         </button>
         <a v-if="v.link" class="orz-btn-icona" :href="v.link" target="_blank" rel="noopener" :title="t('Vedi la pagina')" :aria-label="t('Vedi la pagina') + ': ' + (v.titolo || t('(senza titolo)'))">

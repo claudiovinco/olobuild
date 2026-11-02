@@ -49752,3 +49752,169 @@ msgstr "Eine Zahl hervorgehoben"
 #: src/config/elements/statstrip.js
 msgid "Banda: i numeri in colonne a tutta larghezza. Riga: in fila e piccoli, sotto un paragrafo. Elenco: uno sotto l'altro col nome accanto, accanto a una foto o a un testo. Schede: ogni numero in un riquadro. In evidenza: il primo grande, gli altri in una riga sotto."
 msgstr "Band: die Zahlen in Spalten über die volle Breite. Zeile: in einer Reihe und klein, unter einem Absatz. Liste: untereinander mit dem Namen daneben, neben einem Foto oder Text. Karten: jede Zahl in einem Kasten. Hervorgehoben: die erste groß, die anderen in einer Zeile darunter."
+
+#: src/redazione/Lingue.vue
+msgid "Ogni lingua ha la sua traduzione: titolo, riassunto, testo e campi di testo. Date, foto, video, link, scelte, categorie e immagine in evidenza sono quelli dell'originale: si cambiano lì e valgono per tutte le lingue. Una traduzione compare sul sito quando la pubblichi; finché non c'è, in quella lingua si vede l'originale."
+msgstr "Jede Sprache hat ihre eigene Übersetzung: Titel, Kurzfassung, Text und Textfelder. Daten, Fotos, Videos, Links, Auswahlfelder, Kategorien und Beitragsbild stammen aus dem Original: Du änderst sie dort, und sie gelten für alle Sprachen. Eine Übersetzung erscheint auf der Website, sobald du sie veröffentlichst; bis dahin wird in dieser Sprache das Original angezeigt."
+
+#: src/redazione/Lingue.vue
+msgid "originale"
+msgstr "Original"
+
+#: src/redazione/Lingue.vue
+msgid "Preparo…"
+msgstr "Wird vorbereitet …"
+
+#: src/redazione/Lingue.vue
+msgid "da tradurre"
+msgstr "zu übersetzen"
+
+#: src/redazione/Scheda.vue
+#, php-format
+msgid "Traduzione: %s"
+msgstr "Übersetzung: %s"
+
+#: src/redazione/Scheda.vue
+msgid "Traduzione"
+msgstr "Übersetzung"
+
+#: src/redazione/Scheda.vue
+msgid "Qui si traducono titolo, riassunto, testo e i campi di testo. Date, foto, video, link, scelte, categorie e immagine in evidenza sono quelli dell'originale: si cambiano lì e valgono per tutte le lingue. Sul sito la traduzione compare quando la pubblichi."
+msgstr "Hier übersetzt du Titel, Kurzfassung, Text und Textfelder. Daten, Fotos, Videos, Links, Auswahlfelder, Kategorien und Beitragsbild stammen aus dem Original: Du änderst sie dort, und sie gelten für alle Sprachen. Auf der Website erscheint die Übersetzung, sobald du sie veröffentlichst."
+
+#: src/redazione/Scheda.vue
+#, php-format
+msgid "Dall'originale «%s»"
+msgstr "Aus dem Original „%s“"
+
+#: src/redazione/Scheda.vue
+msgid "Apri l'originale"
+msgstr "Original öffnen"
+
+#: src/redazione/Scheda.vue
+msgid "La data è quella dell'originale"
+msgstr "Das Datum ist das des Originals"
+
+#: includes/class-redazione-lingue.php
+msgid "Questa lingua non è attiva."
+msgstr "Diese Sprache ist nicht aktiv."
+
+#: includes/class-redazione-lingue.php
+msgid "Questa è già una traduzione."
+msgstr "Das ist bereits eine Übersetzung."
+
+#: includes/class-redazione.php
+msgid "Questo tipo di contenuto non si traduce."
+msgstr "Dieser Inhaltstyp wird nicht übersetzt."
+
+#: includes/tiles/class-cartellone-tile.php
+msgid "Google Calendar"
+msgstr "Google Kalender"
+
+#: includes/tiles/class-cartellone-tile.php
+msgid "File .ics"
+msgstr ".ics-Datei"
+
+#: includes/tiles/class-cartellone-tile.php
+msgid "Segui il calendario"
+msgstr "Kalender abonnieren"
+
+#: src/config/elements/cartellone.js
+msgid "Calendario del mese, coi giorni segnati"
+msgstr "Monatskalender mit markierten Tagen"
+
+#: src/config/elements/cartellone.js
+msgid "Forma del prossimo"
+msgstr "Form des nächsten"
+
+#: src/config/elements/cartellone.js
+msgid "Scheda, con la locandina"
+msgstr "Karte mit dem Plakat"
+
+#: src/config/elements/cartellone.js
+msgid "Biglietto, una striscia bassa"
+msgstr "Ticket, ein flacher Streifen"
+
+#: src/config/elements/cartellone.js
+msgid "Sotto il calendario, i collegamenti per seguire tutti gli spettacoli del sito dal telefono o dal computer (Apple, Google, Outlook): ogni spettacolo nuovo compare da solo nel calendario di chi lo segue."
+msgstr "Unter dem Kalender die Links, um alle Veranstaltungen der Website auf dem Handy oder Computer zu abonnieren (Apple, Google, Outlook): Jede neue Veranstaltung erscheint von selbst im Kalender der Abonnenten."
+
+#: src/config/elements/megamenu.js
+msgid "Altezza min sul telefono"
+msgstr "Min. Höhe auf dem Handy"
+
+#: src/config/elements/megamenu.js
+msgid "L’altezza della barra sotto il punto in cui il menu diventa l’icona. Vuota: la stessa della barra."
+msgstr "Die Höhe der Leiste unterhalb des Punkts, an dem das Menü zum Symbol wird. Leer: dieselbe wie die Leiste."
+
+#: src/config/elements/worldmap.js
+msgid "Tutto il mondo"
+msgstr "Die ganze Welt"
+
+#: src/config/elements/worldmap.js
+msgid "Solo i paesi colorati"
+msgstr "Nur die farbigen Länder"
+
+#: src/config/elements/worldmap.js
+msgid "Con «Solo i paesi colorati» la cartina si stringe attorno agli stati colorati, con un po’ di margine: per chi ha cantato o lavorato in pochi paesi vicini."
+msgstr "Mit „Nur die farbigen Länder“ zoomt die Karte auf die farbigen Länder, mit etwas Rand: für alle, die in wenigen Nachbarländern gesungen oder gearbeitet haben."
+
+#: src/config/elements/queryloop.js
+msgid "Segno per un campo"
+msgstr "Zeichen für ein Feld"
+
+#: src/config/elements/queryloop.js
+msgid "nome del campo, es. video"
+msgstr "Feldname, z. B. video"
+
+#: src/config/elements/queryloop.js
+msgid "Una piccola icona accanto al titolo delle voci che hanno questo campo personalizzato pieno: per esempio il play sui canti che hanno un video."
+msgstr "Ein kleines Symbol neben dem Titel der Einträge, bei denen dieses benutzerdefinierte Feld ausgefüllt ist: zum Beispiel das Play-Zeichen bei Liedern mit einem Video."
+
+#: src/config/elements/queryloop.js
+msgid "Icona del segno"
+msgstr "Symbol des Zeichens"
+
+#: src/config/elements/queryloop.js
+msgid "Che cosa dice il segno"
+msgstr "Was das Zeichen sagt"
+
+#: src/config/elements/queryloop.js
+msgid "Lo leggono i lettori di schermo e compare passandoci sopra col mouse."
+msgstr "Screenreader lesen es vor, und es erscheint, wenn man mit der Maus darüberfährt."
+
+#: src/config/elements/queryloop.js
+msgid "Con video"
+msgstr "Mit Video"
+
+#: includes/tiles/class-queryloop-tile.php
+msgid "Nessun risultato."
+msgstr "Keine Ergebnisse."
+
+#: src/config/visibilityConditions.js
+msgid "Campo personalizzato pieno"
+msgstr "Benutzerdefiniertes Feld ausgefüllt"
+
+#: src/config/visibilityConditions.js
+msgid "Campo personalizzato vuoto"
+msgstr "Benutzerdefiniertes Feld leer"
+
+#: src/config/elements/cartellone.js
+msgid "Immagine intera"
+msgstr "Ganzes Bild"
+
+#: src/config/elements/cartellone.js
+msgid "La foto o la locandina si vede tutta, con le sue proporzioni, senza ritaglio: per le locandine verticali. Spento, la foto riempie una cornice della proporzione scelta."
+msgstr "Das Foto oder Plakat wird ganz gezeigt, in seinen Proportionen, ohne Zuschnitt: für Plakate im Hochformat. Aus: Das Foto füllt einen Rahmen im gewählten Seitenverhältnis."
+
+#: src/config/elements/megamenu.js
+msgid "Pulsante nella barra mobile"
+msgstr "Schaltfläche in der mobilen Leiste"
+
+#: src/components/ProSlider/ProSliderEditor.vue
+msgid "Sfuma dal basso"
+msgstr "Von unten ausblenden"
+
+#: src/components/ProSlider/ProSliderEditor.vue
+msgid "Sfuma dall’alto"
+msgstr "Von oben ausblenden"

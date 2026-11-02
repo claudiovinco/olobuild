@@ -407,3 +407,43 @@ html.orz-modale-aperta, html.orz-modale-aperta body { overflow: hidden; }
   .orz-social-quando { grid-template-columns: minmax(0, 1fr); }
 }
 .orz-social-foto-campi { margin-bottom: 12px; padding: 12px; border: 1px solid var(--orz-linea); border-radius: 10px; background: var(--orz-fondo); }
+
+/* Lingue (OLOlang): la barra della scheda, il testo originale sopra quello da tradurre, le lingue nelle righe */
+.orz-lingue {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  margin: 0 0 12px; padding: 8px 12px; background: var(--orz-carta); border: 1px solid var(--orz-linea); border-radius: var(--orz-raggio);
+}
+.orz-lingue-nome { display: inline-flex; align-items: center; gap: 6px; margin-right: 6px; font-size: 13px; font-weight: 600; color: var(--orz-testo-2); }
+.orz .orz-lingua {
+  display: inline-flex; align-items: baseline; gap: 6px; min-height: 32px; padding: 5px 12px;
+  border: 1px solid var(--orz-linea); border-radius: 999px; background: var(--orz-carta); color: var(--orz-testo);
+  font: inherit; font-size: 13px; cursor: pointer;
+}
+.orz .orz-lingua:hover { border-color: var(--orz-linea-forte); background: var(--orz-fondo); }
+.orz .orz-lingua:disabled { cursor: default; opacity: .7; }
+.orz .orz-lingua.on { background: var(--orz-accento-tenue); border-color: #f3b4b8; color: #9b1c24; }
+.orz-lingua-nome { font-weight: 600; }
+.orz-lingua-stato { font-size: 12px; color: var(--orz-testo-3); }
+.orz .orz-lingua.on .orz-lingua-stato { color: #9b1c24; }
+.orz .orz-lingua--manca { border-style: dashed; }
+.orz .orz-lingua--publish .orz-lingua-stato { color: #166534; }
+.orz .orz-lingua--draft .orz-lingua-stato { color: #92400e; }
+.orz-originale {
+  display: flex; flex-direction: column; gap: 4px; margin: 0 0 6px; padding: 8px 12px;
+  border-left: 3px solid var(--orz-linea-forte); border-radius: 0 8px 8px 0; background: var(--orz-fondo);
+}
+.orz-originale-nome { font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--orz-testo-3); }
+.orz .orz-originale-testo { margin: 0; max-height: 220px; overflow: auto; color: var(--orz-testo-2); font-size: 14px; line-height: 1.5; }
+.orz .orz-originale-testo p { margin: 0 0 .6em; }
+.orz .orz-originale-testo p:last-child { margin-bottom: 0; }
+.orz-riquadro--traduzione { border-color: #f3b4b8; }
+.orz-riga-lingue { flex: none; display: inline-flex; gap: 4px; }
+.orz-riga-lingua {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 26px; height: 20px; padding: 0 4px;
+  border: 1px dashed var(--orz-linea-forte); border-radius: 4px; color: var(--orz-testo-3); font-size: 11px; font-weight: 700;
+}
+.orz-riga-lingua--publish { border: 1px solid #86efac; background: #dcfce7; color: #166534; }
+.orz-riga-lingua--draft, .orz-riga-lingua--pending { border: 1px solid #fcd34d; background: #fef3c7; color: #92400e; }
+@container (max-width: 640px) {
+  .orz-riga-lingue { display: none; }
+}

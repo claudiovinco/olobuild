@@ -36,6 +36,7 @@
         :id="idAperto"
         @chiudi="chiudi"
         @salvato="salvato"
+        @apri="(id) => vai(tipo.chiave, id)"
       />
     </template>
   </div>

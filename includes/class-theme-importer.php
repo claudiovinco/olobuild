@@ -663,8 +663,11 @@ class Olobuild_Theme_Importer {
                 $content      = $content['content'];
             }
 
-            // Regenerate all IDs
-            self::regenerate_ids( $content );
+            // Regenerate all IDs; i riferimenti fra tile dello stesso modello (il selettore lingua e la ricerca che il Mega
+            // Menu mostra nella barra) seguono il loro id nuovo: prima restavano all'id vecchio e la tile finiva fuori dalla barra.
+            $id_nuovi = [];
+            self::regenerate_ids( $content, $id_nuovi );
+            self::rimappa_riferimenti( $content, $id_nuovi );
 
             // Le foto della libreria si copiano nella Libreria media del sito (una volta sola:
             // un file già copiato, anche da un altro tema o blocco, si riusa).
@@ -1059,15 +1062,39 @@ class Olobuild_Theme_Importer {
         return '' === trim( $testo );
     }
 
-    private static function regenerate_ids( &$nodes ) {
+    /** Id nuovi a tutte le tile; $mappa raccoglie vecchio => nuovo (per rimappa_riferimenti()). */
+    private static function regenerate_ids( &$nodes, &$mappa = [] ) {
         if ( ! is_array( $nodes ) ) return;
         foreach ( $nodes as &$node ) {
-            if ( isset( $node['id'] ) ) $node['id'] = wp_generate_uuid4();
-            if ( ! empty( $node['children'] ) ) self::regenerate_ids( $node['children'] );
+            if ( isset( $node['id'] ) ) {
+                $nuovo = wp_generate_uuid4();
+                $mappa[ (string) $node['id'] ] = $nuovo;
+                $node['id'] = $nuovo;
+            }
+            if ( ! empty( $node['children'] ) ) self::regenerate_ids( $node['children'], $mappa );
             if ( ! empty( $node['settings']['columns_data'] ) ) {
                 foreach ( $node['settings']['columns_data'] as &$col ) {
                     if ( isset( $col['id'] ) ) $col['id'] = wp_generate_uuid4();
-                    if ( ! empty( $col['tiles'] ) ) self::regenerate_ids( $col['tiles'] );
+                    if ( ! empty( $col['tiles'] ) ) self::regenerate_ids( $col['tiles'], $mappa );
+                }
+            }
+        }
+    }
+
+    /** Le impostazioni che nominano un'altra tile del modello (lang_tile_id, search_tile_id) prendono il suo id nuovo. */
+    private static function rimappa_riferimenti( &$nodes, $mappa ) {
+        if ( ! is_array( $nodes ) || ! $mappa ) return;
+        foreach ( $nodes as &$node ) {
+            foreach ( [ 'lang_tile_id', 'search_tile_id' ] as $k ) {
+                $v = (string) ( $node['settings'][ $k ] ?? '' );
+                if ( '' !== $v && isset( $mappa[ $v ] ) ) {
+                    $node['settings'][ $k ] = $mappa[ $v ];
+                }
+            }
+            if ( ! empty( $node['children'] ) ) self::rimappa_riferimenti( $node['children'], $mappa );
+            if ( ! empty( $node['settings']['columns_data'] ) ) {
+                foreach ( $node['settings']['columns_data'] as &$col ) {
+                    if ( ! empty( $col['tiles'] ) ) self::rimappa_riferimenti( $col['tiles'], $mappa );
                 }
             }
         }

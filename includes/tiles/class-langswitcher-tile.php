@@ -333,6 +333,10 @@ class Olobuild_LangSwitcher_Tile extends Olobuild_Tile_Base {
             . '.olsb-switcher.olsb-plain .olsb-item:hover,.olsb-switcher.olsb-plain .olsb-trigger:hover{box-shadow:none}'
             . '.olsb-switcher.olsb-plain .olsb-item{opacity:.55}'
             . '.olsb-switcher.olsb-plain .olsb-item:hover,.olsb-switcher.olsb-plain .olsb-item:focus-visible,.olsb-switcher.olsb-plain .olsb-item.olsb-active{opacity:1}'
+            // Codici e nomi sono testo: attenuati al 55% non si leggevano (bianco su rosso 2,4:1). Restano pieni e la lingua
+            // attiva si riconosce dalla riga sotto; le bandiere sole restano attenuate, non sono testo (1.4.955).
+            . '.olsb-switcher.olsb-plain.olsb-style--codes .olsb-item,.olsb-switcher.olsb-plain.olsb-style--names .olsb-item,.olsb-switcher.olsb-plain.olsb-style--flags_text .olsb-item{opacity:1}'
+            . '.olsb-switcher.olsb-plain.olsb-style--codes .olsb-item.olsb-active .olsb-code,.olsb-switcher.olsb-plain.olsb-style--names .olsb-item.olsb-active .olsb-name,.olsb-switcher.olsb-plain.olsb-style--flags_text .olsb-item.olsb-active .olsb-code{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px}'
             . '.olsb-switcher.olsb-plain .olsb-item.olsb-active{background:transparent;border-color:transparent;color:var(--olsb-color)}'
             . '.olsb-layout--floating{position:fixed;z-index:10050}'
             . '.olsb-float--bottom-right{bottom:20px;right:20px}.olsb-float--bottom-left{bottom:20px;left:20px}.olsb-float--top-right{top:20px;right:20px}.olsb-float--top-left{top:20px;left:20px}.olsb-float--middle-right{top:50%;right:20px;transform:translateY(-50%)}.olsb-float--middle-left{top:50%;left:20px;transform:translateY(-50%)}'

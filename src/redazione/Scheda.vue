@@ -32,6 +32,17 @@
       </span>
     </header>
 
+    <Lingue
+      v-if="barraLingue"
+      :lingue="lingue"
+      :lingua="s.lingua || ''"
+      :originale="traduzione ? s.originale.id : s.id"
+      :traduzioni="s.traduzioni || []"
+      :puo-creare="tipo.crea"
+      @apri="(id) => emit('apri', id)"
+      @errore="(m) => (errore = m)"
+    />
+
     <div class="orz-messaggi">
       <p v-if="errore" class="orz-avviso orz-avviso--errore" role="alert">{{ errore }}</p>
       <p v-if="avviso" class="orz-avviso orz-avviso--ok" role="status">{{ avviso }}</p>
@@ -62,6 +73,7 @@
 
     <div v-else class="orz-scheda-corpo">
       <div class="orz-principale">
+        <Originale v-if="traduzione" :nome="lingue.principale.nome" :testo="s.originale.titolo" />
         <input
           v-model="f.titolo"
           class="orz-titolo"
@@ -76,6 +88,7 @@
             <label for="orz-riassunto">{{ t('Riassunto') }}</label>
             <InfoTip :titolo="t('Riassunto')" :testo="t('Due righe che vanno negli elenchi del sito, nei risultati di ricerca e, se non scrivi un testo apposta, nei social. Vuoto: le prime parole del testo.')" />
           </div>
+          <Originale v-if="traduzione" :nome="lingue.principale.nome" :testo="s.originale.riassunto" />
           <textarea id="orz-riassunto" v-model="f.riassunto" rows="2" :disabled="spento"></textarea>
         </div>
 
@@ -92,7 +105,10 @@
               <Icona nome="esterno" :dim="14" /> {{ s.solaLettura === 'blocchi' ? t('Apri nell\'editor a blocchi') : t('Apri nella scheda di WordPress') }}
             </a>
           </div>
-          <EditorTesto v-else v-model="f.testo" :spento="spento" :segnaposto="t('Scrivi qui il testo…')" />
+          <template v-else>
+            <Originale v-if="traduzione" :nome="lingue.principale.nome" :testo="s.originale.testo" html />
+            <EditorTesto v-model="f.testo" :spento="spento" :segnaposto="t('Scrivi qui il testo…')" />
+          </template>
         </div>
 
         <div v-if="tipo.campi.length && !soloSocial" class="orz-blocco">
@@ -107,10 +123,17 @@
               :media="media"
               :spento="spento"
               @media="aggiungiMedia"
-            />
+            >
+              <Originale
+                v-if="traduzione"
+                :nome="lingue.principale.nome"
+                :testo="(s.originale.campi || {})[c.chiave] || ''"
+                :html="c.tipo === 'formattato'"
+              />
+            </Campo>
           </div>
         </div>
-        <div v-else-if="tipo.configura" class="orz-blocco">
+        <div v-else-if="tipo.configura && !traduzione" class="orz-blocco">
           <div class="orz-etichetta">
             <h2 class="orz-sezione">{{ t('Dettagli') }}</h2>
             <InfoTip :titolo="t('Dettagli')" :testo="t('I campi in più (allegati, foto per i social, date, link…) si aggiungono per tipo in Olobuild › Sistema › Configurazione › Contenuti & Template › Tipi di contenuto e valgono per tutti i suoi contenuti. Dopo averli salvati, ricarica questa pagina.')" />
@@ -121,7 +144,7 @@
           </p>
         </div>
         <Social
-          v-if="socialInfo && f.social"
+          v-if="socialInfo && f.social && !traduzione"
           v-model="f.social"
           :info="socialInfo"
           :campi="f.campi"
@@ -147,9 +170,18 @@
       </div>
 
       <aside class="orz-pannello">
+        <div v-if="traduzione" class="orz-riquadro orz-riquadro--traduzione">
+          <div class="orz-etichetta">
+            <h2 class="orz-sezione">{{ t('Traduzione: %s').replace('%s', nomeLingua) }}</h2>
+            <InfoTip :titolo="t('Traduzione')" :testo="t('Qui si traducono titolo, riassunto, testo e i campi di testo. Date, foto, video, link, scelte, categorie e immagine in evidenza sono quelli dell\'originale: si cambiano lì e valgono per tutte le lingue. Sul sito la traduzione compare quando la pubblichi.')" />
+          </div>
+          <p class="orz-riga-info orz-riga-info--a-capo">{{ t('Dall\'originale «%s»').replace('%s', s.originale.titolo || t('(senza titolo)')) }}</p>
+          <button type="button" class="orz-link" @click="emit('apri', s.originale.id)"><Icona nome="indietro" :dim="14" /> {{ t('Apri l\'originale') }}</button>
+        </div>
         <div class="orz-riquadro">
           <h2 class="orz-sezione">{{ t('Pubblicazione') }}</h2>
-          <template v-if="uscito">
+          <p v-if="traduzione" class="orz-riga-info"><Icona nome="calendario" :dim="14" /> {{ t('La data è quella dell\'originale') }}</p>
+          <template v-else-if="uscito">
             <p class="orz-riga-info"><Icona nome="calendario" :dim="14" /> {{ t('Pubblicato il %s').replace('%s', s.dataLeggibile) }}</p>
             <button v-if="!cambiaData" type="button" class="orz-link" :disabled="spento" @click="apriData">{{ t('Cambia la data') }}</button>
             <input v-else v-model="f.data" type="datetime-local" :aria-label="t('Data di pubblicazione')" :disabled="spento" />
@@ -167,7 +199,7 @@
           </a>
         </div>
 
-        <div v-if="tipo.tassonomie.length" class="orz-riquadro">
+        <div v-if="tipo.tassonomie.length && !traduzione" class="orz-riquadro">
           <h2 class="orz-sezione">{{ t('Organizzazione') }}</h2>
           <Termini
             v-for="x in tipo.tassonomie"
@@ -178,7 +210,7 @@
           />
         </div>
 
-        <div v-if="tipo.immagine" class="orz-riquadro">
+        <div v-if="tipo.immagine && !traduzione" class="orz-riquadro">
           <div class="orz-etichetta">
             <h2 class="orz-sezione">{{ t('Immagine in evidenza') }}</h2>
             <InfoTip :titolo="t('Immagine in evidenza')" :testo="t('La foto del contenuto negli elenchi, nelle card e, se non ne scegli una per i social, nei post dei social.')" />
@@ -244,6 +276,8 @@ import Termini from './Termini.vue';
 import Anteprima from './Anteprima.vue';
 import Social from './Social.vue';
 import Versioni from './Versioni.vue';
+import Lingue from './Lingue.vue';
+import Originale from './Originale.vue';
 import { chiama } from './api.js';
 import { scegli } from './media.js';
 import { nomeStato } from './stati.js';
@@ -252,7 +286,12 @@ const props = defineProps({
   tipo: { type: Object, required: true },
   id: { type: Number, default: 0 },
 });
-const emit = defineEmits(['chiudi', 'salvato']);
+const emit = defineEmits(['chiudi', 'salvato', 'apri']);
+
+// Le lingue di OLOlang (Olobuild_Redazione_Lingue): la barra sui contenuti salvati di un tipo che si traduce; la scheda di
+// una traduzione mostra solo i testi, ognuno con l'originale sopra.
+const lingue = (window.oloData && window.oloData.redazione && window.oloData.redazione.lingue) || null;
+const TRADUCIBILI = ['testo', 'testo_lungo', 'formattato'];
 
 const s = ref(null);
 const f = reactive({ titolo: '', testo: '', riassunto: '', quando: 'subito', data: '', termini: {}, immagine: 0, campi: {}, social: null });
@@ -287,6 +326,12 @@ function istantanea() {
 const modificata = computed(() => originale.value !== '' && istantanea() !== originale.value);
 
 const uscito = computed(() => !!s.value && ['publish', 'private'].includes(s.value.stato));
+const traduzione = computed(() => !!(s.value && s.value.lingua && s.value.originale));
+const barraLingue = computed(() => !!(lingue && lingue.altre.length && props.tipo.traducibile && s.value && (s.value.lingua ? s.value.originale : true)));
+const nomeLingua = computed(() => {
+  const l = lingue && s.value ? lingue.altre.find((x) => x.codice === s.value.lingua) : null;
+  return l ? l.nome : (s.value ? String(s.value.lingua || '').toUpperCase() : '');
+});
 // Il contenuto appena creato (anche dal salvataggio automatico) prima che l'indirizzo della pagina lo dica.
 const idCorrente = computed(() => (s.value ? s.value.id : props.id));
 // Già sul sito o in uscita: il salvataggio automatico va nella copia di sicurezza, non nel contenuto.
@@ -325,7 +370,8 @@ const campiSocialFoto = computed(() => (socialConCampi.value ? campiVisibili.val
 // YouTube e Vimeo caricano il video della libreria di un campo Video (un link non si ricarica).
 const haVideo = computed(() => campiVisibili.value.some((c) => c.tipo === 'video' && /^\d+$/.test(String(f.campi[c.chiave] || ''))));
 const campiSocialTesto = computed(() => (socialConCampi.value ? campiVisibili.value.filter((c) => c.tipo === 'testo_social') : []));
-const campiDettagli = computed(() => campiVisibili.value.filter((c) => !campiSocialFoto.value.includes(c) && !campiSocialTesto.value.includes(c)));
+const campiDettagli = computed(() => campiVisibili.value.filter((c) => !campiSocialFoto.value.includes(c) && !campiSocialTesto.value.includes(c)
+  && (!traduzione.value || TRADUCIBILI.includes(c.tipo))));
 // Tutti i campi del tipo sono dei social: i Dettagli non servono.
 const soloSocial = computed(() => socialConCampi.value && props.tipo.campi.every((c) => ['foto_social', 'testo_social'].includes(c.tipo)));
 
@@ -353,6 +399,8 @@ function dataFutura() {
 const primaria = computed(() => {
   const st = s.value ? s.value.stato : 'draft';
   if (uscito.value) return { etichetta: t('Aggiorna'), azione: 'salva' };
+  // Una traduzione esce con la data dell'originale: niente programmazione.
+  if (traduzione.value) return props.tipo.pubblica ? { etichetta: t('Pubblica'), azione: 'pubblica' } : { etichetta: t('Invia in revisione'), azione: 'revisione' };
   if (!props.tipo.pubblica) return { etichetta: t('Invia in revisione'), azione: 'revisione' };
   if (st === 'future') return f.quando === 'data' ? { etichetta: t('Aggiorna'), azione: 'programma' } : { etichetta: t('Pubblica adesso'), azione: 'pubblica' };
   if (dataFutura()) return { etichetta: t('Programma'), azione: 'programma' };
@@ -362,6 +410,7 @@ const secondaria = computed(() => {
   if (uscito.value) return null;
   const st = s.value ? s.value.stato : 'draft';
   if (st === 'pending') return { etichetta: t('Salva'), azione: 'salva' };
+  if (traduzione.value) return { etichetta: t('Salva bozza'), azione: 'bozza' };
   if (st === 'future') return { etichetta: t('Torna in bozza'), azione: 'bozza' };
   return { etichetta: t('Salva bozza'), azione: 'bozza' };
 });
@@ -520,6 +569,13 @@ function corpo(azione, forza) {
     forza: !!forza,
   };
   if (!s.value || !s.value.solaLettura) c.testo = f.testo;
+  // Una traduzione manda solo i suoi testi: il resto viene dall'originale.
+  if (traduzione.value) {
+    delete c.termini;
+    delete c.immagine;
+    c.data = '';
+    return c;
+  }
   if (f.social) c.social = f.social;
   if (uscito.value) {
     c.data = s.value && f.data !== s.value.data ? f.data : '';

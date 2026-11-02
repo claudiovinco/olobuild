@@ -100,6 +100,8 @@ class Olobuild_Redazione {
             'redazione'    => [
                 'tipi'    => array_values( array_map( [ __CLASS__, 'descrivi_tipo' ], self::tipi() ) ),
                 'formati' => $formati,
+                // Le lingue di OLOlang (null senza traduzioni): la scheda apre la traduzione di ogni contenuto.
+                'lingue'  => Olobuild_Redazione_Lingue::per_la_redazione(),
             ],
         ] );
     }
@@ -138,6 +140,7 @@ class Olobuild_Redazione {
             'crea'       => current_user_can( $pto->cap->create_posts ),
             'pubblica'   => current_user_can( $pto->cap->publish_posts ),
             'versioni'   => post_type_supports( $k, 'revisions' ),
+            'traducibile' => Olobuild_Redazione_Lingue::traducibile( $k ),
             // OLOsocial: gli account e le scelte di partenza per un contenuto nuovo (null = niente social per questo tipo).
             'social'     => self::social_attivo() ? Olo_Social_Riquadro::per_la_scheda( 0, $k ) : null,
             // Dove si aggiungono i campi del tipo: solo per chi può cambiare le impostazioni.
@@ -242,6 +245,8 @@ class Olobuild_Redazione {
             }, $termini ) : [],
             'bloccato'   => $blocco ? self::nome_utente( $blocco ) : '',
             'link'       => 'publish' === $post->post_status ? (string) get_permalink( $post ) : '',
+            // Le traduzioni: [ codice, nome, id, stato ] per ogni lingua (vuoto senza OLOlang).
+            'lingue'     => Olobuild_Redazione_Lingue::traducibile( $post->post_type ) ? Olobuild_Redazione_Lingue::traduzioni( $post->ID ) : [],
         ];
     }
 
@@ -336,6 +341,7 @@ class Olobuild_Redazione {
 
     /** La scheda di un contenuto: tutto ciò che l'app mostra e modifica. */
     private static function scheda( $post ) {
+        $lingua = Olobuild_Redazione_Lingue::lingua_di( $post->ID );
         $motivo = self::motivo_sola_lettura( $post->post_content );
         $modulo = self::modulo_di( $post );
         $evid   = $modulo['immagine'];
@@ -368,8 +374,37 @@ class Olobuild_Redazione {
             'wpModifica'          => (string) get_edit_post_link( $post->ID, 'raw' ),
             'puoCestinare'        => current_user_can( 'delete_post', $post->ID ),
             'copia'               => self::copia_da_riprendere( $post, $motivo, $modulo ),
-            'social'              => self::social_attivo() ? Olo_Social_Riquadro::per_la_scheda( $post->ID ) : null,
+            // Una traduzione non va sui social: ci va l'originale.
+            'social'              => ( self::social_attivo() && '' === $lingua ) ? Olo_Social_Riquadro::per_la_scheda( $post->ID ) : null,
             'versioni'            => self::conta_versioni( $post->ID ),
+            // Le lingue (OLOlang): sull'originale le sue traduzioni, sulla traduzione la lingua e il testo da cui viene.
+            'lingua'              => $lingua,
+            'traduzioni'          => Olobuild_Redazione_Lingue::traducibile( $post->post_type ) ? Olobuild_Redazione_Lingue::traduzioni( '' === $lingua ? $post->ID : Olobuild_Redazione_Lingue::originale_di( $post->ID ) ) : [],
+            'originale'           => '' !== $lingua ? self::originale_per_la_copia( $post ) : null,
+        ];
+    }
+
+    /** Ciò che la scheda di una traduzione mostra dell'originale, accanto a ogni testo da tradurre. */
+    private static function originale_per_la_copia( $copia ) {
+        $o = get_post( Olobuild_Redazione_Lingue::originale_di( $copia->ID ) );
+        if ( ! $o ) {
+            return null;
+        }
+        $campi = [];
+        $t     = Olobuild_Tipi_Contenuto::del_tipo( $o->post_type );
+        foreach ( $t ? Olobuild_Redazione_Lingue::campi_della_copia( $t )['campi'] : [] as $c ) {
+            $v                     = (string) get_post_meta( $o->ID, $c['chiave'], true );
+            $campi[ $c['chiave'] ] = 'formattato' === $c['tipo'] ? self::con_paragrafi( $v ) : $v;
+        }
+        $motivo = self::motivo_sola_lettura( $o->post_content );
+        return [
+            'id'        => $o->ID,
+            'titolo'    => $o->post_title,
+            'riassunto' => $o->post_excerpt,
+            'testo'     => '' === $motivo ? self::con_paragrafi( $o->post_content ) : esc_html( wp_trim_words( wp_strip_all_tags( strip_shortcodes( $o->post_content ) ), 60 ) ),
+            'campi'     => (object) $campi,
+            'stato'     => $o->post_status,
+            'link'      => 'publish' === $o->post_status ? (string) get_permalink( $o ) : '',
         ];
     }
 
@@ -487,6 +522,11 @@ class Olobuild_Redazione {
             'callback'            => [ __CLASS__, 'rest_versione' ],
             'permission_callback' => [ __CLASS__, 'puo_contenuto' ],
         ] );
+        register_rest_route( self::NS, '/redazione/(?P<id>\d+)/traduzione', [
+            'methods'             => 'POST',
+            'callback'            => [ __CLASS__, 'rest_traduzione' ],
+            'permission_callback' => [ __CLASS__, 'puo_contenuto' ],
+        ] );
         register_rest_route( self::NS, '/redazione/(?P<id>\d+)/social', [
             'methods'             => 'POST',
             'callback'            => [ __CLASS__, 'rest_social' ],
@@ -544,6 +584,14 @@ class Olobuild_Redazione {
             'order'               => 'DESC',
             'ignore_sticky_posts' => true,
         ];
+        // Con le lingue di OLOlang l'elenco mostra gli originali (le traduzioni stanno nella loro riga), qualunque sia la
+        // lingua in cui chi scrive ha guardato il sito: olo_lang_tutte e suppress_filters tengono fuori i filtri di OLOlang.
+        $solo_originali = Olobuild_Redazione_Lingue::traducibile( $tipo );
+        if ( $solo_originali ) {
+            $args['meta_query']       = [ [ 'key' => '_olo_lang_source', 'compare' => 'NOT EXISTS' ] ]; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+            $args['olo_lang_tutte']   = true;
+            $args['suppress_filters'] = true;
+        }
         $cerca = sanitize_text_field( (string) $r['cerca'] );
         if ( '' !== $cerca ) {
             $args['s'] = $cerca;
@@ -561,6 +609,11 @@ class Olobuild_Redazione {
         $conteggi = [];
         foreach ( self::STATI as $s ) {
             $c = [ 'post_type' => $tipo, 'post_status' => $s, 'perm' => 'readable', 'posts_per_page' => 1, 'fields' => 'ids' ];
+            if ( $solo_originali ) {
+                $c['meta_query']       = $args['meta_query']; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+                $c['olo_lang_tutte']   = true;
+                $c['suppress_filters'] = true;
+            }
             if ( $proprio ) {
                 $c['author'] = get_current_user_id();
             }
@@ -581,6 +634,20 @@ class Olobuild_Redazione {
             wp_set_post_lock( $post->ID );
         }
         return rest_ensure_response( self::scheda( $post ) );
+    }
+
+    /** Apre la traduzione di un contenuto nella lingua chiesta, creandola se manca (in bozza, da tradurre). */
+    public static function rest_traduzione( WP_REST_Request $r ) {
+        self::carica_admin();
+        $post = get_post( (int) $r['id'] );
+        if ( ! Olobuild_Redazione_Lingue::traducibile( $post->post_type ) ) {
+            return new WP_Error( 'olo_redazione_lingua', __( 'Questo tipo di contenuto non si traduce.', 'olobuild' ), [ 'status' => 400 ] );
+        }
+        $id = Olobuild_Redazione_Lingue::crea_copia( $post->ID, sanitize_key( (string) $r['lingua'] ) );
+        if ( is_wp_error( $id ) ) {
+            return $id;
+        }
+        return rest_ensure_response( [ 'id' => (int) $id ] );
     }
 
     public static function rest_crea( WP_REST_Request $r ) {
@@ -658,8 +725,17 @@ class Olobuild_Redazione {
             $dati['post_excerpt'] = (string) $r['riassunto'];
         }
         // La data: quella scelta; «pubblica» senza data su un contenuto mai uscito = adesso; senza scelta la bozza resta
-        // senza data e WordPress le dà quella dell'uscita.
-        if ( '' !== $data ) {
+        // senza data e WordPress le dà quella dell'uscita. Una traduzione ha sempre la data del suo originale.
+        $originale = $post ? get_post( Olobuild_Redazione_Lingue::originale_di( $post->ID ) ) : null;
+        if ( $originale ) {
+            $dati['post_date']     = $originale->post_date;
+            $dati['post_date_gmt'] = $originale->post_date_gmt;
+            $dati['edit_date']     = true;
+            if ( 'future' === $stato ) {
+                $stato               = $pubblica ? 'publish' : 'pending';
+                $dati['post_status'] = $stato;
+            }
+        } elseif ( '' !== $data ) {
             $dati['post_date']     = $data;
             $dati['post_date_gmt'] = get_gmt_from_date( $data );
             $dati['edit_date']     = true;
@@ -687,7 +763,7 @@ class Olobuild_Redazione {
         update_post_meta( $id, '_edit_last', get_current_user_id() );
         wp_set_post_lock( $id );
         // Le scelte social della scheda (dove, quando, i testi per account), come le salva il riquadro di OLOsocial.
-        $social = $r['social'];
+        $social = $originale ? null : $r['social'];
         $social = is_array( $social ) ? $social : null;
         if ( $social && self::social_attivo() && null !== Olo_Social_Riquadro::per_la_scheda( $id ) ) {
             Olo_Social_Riquadro::salva_scelte( $id, $social );
@@ -701,7 +777,7 @@ class Olobuild_Redazione {
         // OLOsocial: le scelte social partono quando il contenuto esce dalla Redazione (il riquadro, nelle richieste REST,
         // lascia fare a chi salva), o subito con «Condividi adesso» su un contenuto già pubblicato. Una volta sola.
         $adesso = $social && ! empty( $social['adesso'] );
-        if ( 'publish' === get_post_status( $id ) && ( 'publish' !== $prima || $adesso ) && class_exists( 'Olo_Social_Riquadro' )
+        if ( ! $originale && 'publish' === get_post_status( $id ) && ( 'publish' !== $prima || $adesso ) && class_exists( 'Olo_Social_Riquadro' )
             && method_exists( 'Olo_Social_Riquadro', 'condividi' ) && Olo_Social_Riquadro::attivo_per( $tipo )
             && is_array( get_post_meta( $id, Olo_Social_Riquadro::META, true ) ) ) {
             Olo_Social_Riquadro::condividi( $id );
@@ -716,6 +792,13 @@ class Olobuild_Redazione {
 
     /** Categorie e tag, foto in evidenza e campi del tipo che arrivano dalla scheda. */
     private static function scrivi_resto( $id, $tipo, $t, WP_REST_Request $r ) {
+        // Una traduzione scrive solo i suoi testi: categorie, foto e il resto dei campi vengono dall'originale.
+        if ( Olobuild_Redazione_Lingue::originale_di( $id ) ) {
+            if ( $t && is_array( $r['campi'] ) ) {
+                Olobuild_Tipi_Contenuto::salva_campi( $id, Olobuild_Redazione_Lingue::campi_della_copia( $t ), $r['campi'] );
+            }
+            return;
+        }
         $termini = $r['termini'];
         $termini = is_array( $termini ) ? $termini : [];
         foreach ( self::tassonomie( $tipo ) as $x ) {
@@ -786,11 +869,16 @@ class Olobuild_Redazione {
 
     /** L'anteprima di WordPress del contenuto, senza la barra di amministrazione (olo_rz: la mostra la Redazione). */
     private static function link_anteprima( $post ) {
-        return (string) get_preview_post_link( $post, [
+        $args   = [
             'preview_id'    => $post->ID,
             'preview_nonce' => wp_create_nonce( 'post_preview_' . $post->ID ),
             'olo_rz'        => 1,
-        ] );
+        ];
+        $lingua = Olobuild_Redazione_Lingue::lingua_di( $post->ID );
+        if ( '' !== $lingua ) {
+            $args['lang'] = $lingua; // l'anteprima di una traduzione nella sua lingua (OLOlang, indirizzi col parametro)
+        }
+        return (string) get_preview_post_link( $post, $args );
     }
 
     /**
