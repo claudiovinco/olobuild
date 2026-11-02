@@ -48,6 +48,9 @@ const DEFAULT_I18N = {
   requiresVersionTitle: 'Richiede %1$s %2$s o successiva',
   discoverLabel: 'Scopri %s',
   updateLabel: 'Aggiorna %s',
+  // Plugin mancante che si installa da qui (WooCommerce da wordpress.org): l'import lo installa e lo attiva prima
+  importWithLabel: 'Importa con %s',
+  installsTitle: 'Si installa da sé: %s arriva da wordpress.org quando importi il tema',
 };
 
 function esc(s) {
@@ -229,9 +232,12 @@ export function createThemePicker(opts = {}) {
     const reqOk = !req || t.requires_plugin_ok !== false;
     const reqLabel = req ? (req.label || req.slug || '') : '';
     const status = req ? reqStatus(t) : '';
+    // Plugin mancante che il server sa installare e attivare da sé (WooCommerce da wordpress.org, chi guarda può
+    // installare plugin): il tema si importa lo stesso, con «Importa con {label}».
+    const installabile = !!(req && status === 'missing' && req.installabile && !t.is_remote_only);
     // Tema che c'è solo nel catalogo remoto: i suoi file arrivano col plugin che lo porta,
     // quindi qui non si importa anche se il plugin è attivo (una versione che non ha ancora il tema).
-    const blocked = (req && !reqOk) || !!t.is_remote_only;
+    const blocked = (req && !reqOk && !installabile) || !!t.is_remote_only;
     const discoverBtn = (req && blocked && req.purchase_url)
       ? `<a class="otmp-cb-btn is-discover" href="${esc(req.purchase_url)}" target="_blank" rel="noopener" data-stop>${ICON.ext}${esc(fmt(status === 'old' ? i18n.updateLabel : i18n.discoverLabel, reqLabel))}</a>`
       : '';
@@ -241,7 +247,7 @@ export function createThemePicker(opts = {}) {
         ? `<div class="otmp-cb-foot">${ver}${link}${discoverBtn}</div>`
         : `<div class="otmp-cb-foot">
              ${ver}${link}
-             <button class="otmp-cb-btn" data-import="${esc(t.id)}">${ICON.import}${esc(i18n.importLabel)}</button>
+             <button class="otmp-cb-btn" data-import="${esc(t.id)}">${ICON.import}${esc(installabile ? fmt(i18n.importWithLabel, reqLabel) : i18n.importLabel)}</button>
            </div>`;
     const cardCls = `otmp-card${selectMode ? ' is-select' : ''}${selectMode && selectedId === t.id ? ' is-selected' : ''}${req ? ' has-req' : ''}${blocked ? ' req-missing' : ''}`;
     return `<article class="${cardCls}" style="${style}"${selectMode && !blocked ? ` role="button" tabindex="0" data-pick="${esc(t.id)}"` : ''}>
@@ -251,7 +257,7 @@ export function createThemePicker(opts = {}) {
           <div class="otmp-cb-name">${esc(t.name || '')}</div>
           <p class="otmp-cb-desc">${esc(t.description || '')}</p>
           ${tags ? `<div class="otmp-cb-tags">${tags}</div>` : ''}
-          ${req ? reqRowHTML(req, status) : ''}
+          ${req ? reqRowHTML(req, status, installabile) : ''}
           ${foot}
         </div>
       </article>`;
@@ -282,7 +288,7 @@ export function createThemePicker(opts = {}) {
   // scure come il selettore; senza logo, o se non carica, il nome), la versione minima e lo
   // stato sul sito. Con l'edizione (OLObooking: il modulo del tema) il logo ne porta il nome
   // sotto quello del plugin: due righe, quindi un bollino più alto.
-  function reqRowHTML(req, status) {
+  function reqRowHTML(req, status, installabile) {
     const edizione = req.edition ? String(req.edition) : '';
     const label = String(req.label || req.slug || '') + (edizione ? ` ${edizione}` : '');
     const logo = scuro ? (req.logo_light || req.logo) : (req.logo || req.logo_light);
@@ -293,7 +299,8 @@ export function createThemePicker(opts = {}) {
     const min = req.min_version ? String(req.min_version) : '';
     // Nel bollino il plugin senza la versione (30 ott 2026); la versione minima resta nel suggerimento solo quando
     // quella installata è troppo vecchia, perché lì serve a sapere cosa aggiornare.
-    const title = (min && status === 'old') ? fmt(i18n.requiresVersionTitle, label, min) : fmt(i18n.requiresTitle, label);
+    const title = installabile ? fmt(i18n.installsTitle, label)
+      : ((min && status === 'old') ? fmt(i18n.requiresVersionTitle, label, min) : fmt(i18n.requiresTitle, label));
     const st = status === 'ok' ? i18n.reqOkLabel : (status === 'old' ? i18n.reqOldLabel : i18n.reqMissingLabel);
     return `<div class="otmp-cb-req is-${esc(status)}" title="${esc(title)}">
           <span class="otmp-cb-req-lab">${esc(i18n.requirementsLabel)}</span>
@@ -459,10 +466,13 @@ export function createThemePicker(opts = {}) {
     populate();
   }
 
-  function setBusy(on) {
+  // testo: la scritta accanto alla rotella («Installo WooCommerce…», poi «Importazione in corso…»)
+  function setBusy(on, testo) {
     if (mode !== 'modal') return;
     const busy = overlayEl && overlayEl.querySelector('[data-busy]');
     if (busy) busy.hidden = !on;
+    const span = busy && busy.querySelector('span');
+    if (span) span.textContent = testo || opts.busyLabel || i18n.busyLabel;
   }
 
   function open() {

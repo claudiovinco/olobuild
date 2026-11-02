@@ -278,16 +278,33 @@
 
   // ── Hover ──
 
+  // La barra sta sopra la tile: per raggiungerla il puntatore può passare dal contenitore (sezione, colonna) per un
+  // attimo. Il passaggio dalla tile a un suo contenitore aspetta un po': se intanto si arriva alla barra, resta la tile.
+  var passaggioRinviato = null;
+
   function onMouseOver(e) {
     if (previewMode) return;
     if (e.target.closest('.olo-iframe-add-btn, .olo-iframe-toolbar')) {
       clearTimeout(hoverToolbarTimeout);
+      clearTimeout(passaggioRinviato);
       return;
     }
     var tileId = findTileId(e.target);
     if (!tileId) return;
     var el = findTileEl(tileId);
-    if (el === hoveredEl) return;
+    if (el === hoveredEl) {
+      clearTimeout(passaggioRinviato);
+      return;
+    }
+    clearTimeout(passaggioRinviato);
+    if (hoveredEl && el && el.contains(hoveredEl)) {
+      passaggioRinviato = setTimeout(function () { passaAllaTile(el, tileId); }, 280);
+      return;
+    }
+    passaAllaTile(el, tileId);
+  }
+
+  function passaAllaTile(el, tileId) {
     if (hoveredEl) hoveredEl.classList.remove('olo-builder-hover');
     hoveredEl = el;
     if (el && tileId !== selectedId) {
@@ -303,6 +320,8 @@
       clearTimeout(hoverToolbarTimeout);
       return;
     }
+    // Verso un contenitore della tile: ci pensa onMouseOver, col passaggio rinviato.
+    if (related && hoveredEl && related.contains(hoveredEl)) return;
     if (hoveredEl) {
       hoveredEl.classList.remove('olo-builder-hover');
       hoveredEl = null;
@@ -1122,6 +1141,7 @@
 
       hoverToolbar.addEventListener('mouseenter', function() {
         clearTimeout(hoverToolbarTimeout);
+        clearTimeout(passaggioRinviato);
       });
       hoverToolbar.addEventListener('mouseleave', function() {
         if (!gripDragging) hideHoverToolbar();
@@ -1292,14 +1312,25 @@
     } catch (errDiz) { /* tela su un'altra origine: resta il nome italiano */ }
     tb.querySelector('.olo-iframe-toolbar-label').textContent = label;
     tb.setAttribute('data-for-tile', tileId);
-    // Position toolbar inside the element (top-left corner with padding)
-    var topPos = rect.top + window.scrollY + 4;
-    var leftPos = rect.left + window.scrollX + 4;
-    // Clamp to viewport
-    if (topPos < window.scrollY + 2) topPos = window.scrollY + 2;
-    tb.style.top = topPos + 'px';
-    tb.style.left = leftPos + 'px';
+    // Sopra la tile, attaccata al suo bordo (2 nov 2026: dentro, nell'angolo, copriva tutta una tile piccola). Entra di
+    // 2 px nel bordo, così dalla tile si arriva alla barra senza passare dal contenitore. Se sopra non c'è posto nella
+    // finestra va sotto; se la tile è più alta della finestra resta dentro, in alto nella parte che si vede.
+    tb.style.visibility = 'hidden';
     tb.style.display = 'flex';
+    var tbH = tb.offsetHeight || 34;
+    var tbW = tb.offsetWidth || 0;
+    var y;
+    if (rect.top - tbH + 2 >= 0) {
+      y = rect.top - tbH + 2;
+    } else if (rect.bottom + tbH - 2 <= window.innerHeight) {
+      y = rect.bottom - 2;
+    } else {
+      y = Math.max(rect.top, 0) + 4;
+    }
+    var maxLeft = window.scrollX + document.documentElement.clientWidth - tbW - 4;
+    tb.style.top = (y + window.scrollY) + 'px';
+    tb.style.left = Math.max(window.scrollX + 4, Math.min(rect.left + window.scrollX, maxLeft)) + 'px';
+    tb.style.visibility = '';
     tb._forEl = el;
   }
 

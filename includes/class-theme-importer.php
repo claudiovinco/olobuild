@@ -117,6 +117,11 @@ class Olobuild_Theme_Importer {
             $t['requires_plugin_ok']     = $attivo && ! $vecchio;
             $t['requires_plugin_status'] = ! $attivo ? 'missing' : ( ( $vecchio || ! empty( $t['is_remote_only'] ) ) ? 'old' : 'ok' );
             $t['requires_plugin']        = self::plugin_badge( $req );
+            // Mancante ma installabile da qui (WooCommerce da wordpress.org): il selettore offre «Importa con …», che
+            // prima lo installa e lo attiva (installa_plugin_richiesto), poi importa il tema.
+            if ( ! $attivo && empty( $t['is_remote_only'] ) && self::plugin_installabile( $req ) ) {
+                $t['requires_plugin']['installabile'] = true;
+            }
         }
         unset( $t );
 
@@ -248,6 +253,114 @@ class Olobuild_Theme_Importer {
         }
         $dati = get_plugin_data( $path, false, false );
         return isset( $dati['Version'] ) ? (string) $dati['Version'] : '';
+    }
+
+    /**
+     * Il file principale di un plugin installato (attivo o no) dalla sua cartella: «woocommerce/woocommerce.php».
+     * Null se non c'è.
+     */
+    private static function file_plugin( $slug ) {
+        if ( '' === $slug ) return null;
+        if ( ! function_exists( 'get_plugins' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+        $tutti = array_keys( get_plugins() );
+        if ( in_array( $slug . '/' . $slug . '.php', $tutti, true ) ) return $slug . '/' . $slug . '.php';
+        foreach ( $tutti as $file ) {
+            if ( 0 === strpos( $file, $slug . '/' ) ) return $file;
+        }
+        return null;
+    }
+
+    /**
+     * Il plugin richiesto si può mettere a posto da qui, senza mandare l'utente altrove: già installato ma spento
+     * (basta attivarlo, se chi guarda può), oppure su wordpress.org (il suo purchase_url è la sua pagina lì:
+     * WooCommerce sì, OLObooking no), con chi guarda che può installare plugin, nessun divieto di toccare i file
+     * (DISALLOW_FILE_MODS) e WordPress che scrive da sé nella cartella dei plugin (senza chiedere credenziali FTP).
+     */
+    public static function plugin_installabile( $req ) {
+        $slug = is_array( $req ) && isset( $req['slug'] ) ? sanitize_key( (string) $req['slug'] ) : '';
+        if ( '' === $slug || ! current_user_can( 'activate_plugins' ) ) return false;
+        if ( self::file_plugin( $slug ) ) return true;
+        $url = isset( $req['purchase_url'] ) ? (string) $req['purchase_url'] : '';
+        if ( ! preg_match( '#^https://wordpress\.org/plugins/' . preg_quote( $slug, '#' ) . '/?$#', $url ) ) return false;
+        if ( ! current_user_can( 'install_plugins' ) || ! wp_is_file_mod_allowed( 'olobuild_plugin_richiesto' ) ) return false;
+        if ( ! function_exists( 'get_filesystem_method' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+        }
+        return 'direct' === get_filesystem_method( [], WP_PLUGIN_DIR );
+    }
+
+    /**
+     * Installa (da wordpress.org) e attiva il plugin che il tema richiede, prima dell'import: «Importa con
+     * WooCommerce» nel selettore e nella procedura di configurazione. Prima un tema con WooCommerce mancante
+     * mostrava solo «Scopri WooCommerce» e l'import si fermava. L'import viene dopo, in un'altra richiesta, così
+     * trova il plugin caricato per intero.
+     *
+     * @return array|WP_Error [ 'plugin' => file, 'installato' => bool, 'attivato' => bool ]
+     */
+    public static function installa_plugin_richiesto( $theme_id ) {
+        $theme = null;
+        foreach ( self::get_themes() as $t ) {
+            if ( $t['id'] === $theme_id ) { $theme = $t; break; }
+        }
+        if ( ! $theme ) return new WP_Error( 'not_found', sprintf( olobuild_t( 'Tema non trovato: %s' ), $theme_id ) );
+        if ( empty( $theme['requires_plugin'] ) || ! empty( $theme['requires_plugin_ok'] ) ) {
+            return [ 'plugin' => '', 'installato' => false, 'attivato' => false ];
+        }
+        $req   = $theme['requires_plugin'];
+        $slug  = isset( $req['slug'] ) ? sanitize_key( (string) $req['slug'] ) : '';
+        $label = ! empty( $req['label'] ) ? (string) $req['label'] : $slug;
+        if ( 'missing' !== ( $theme['requires_plugin_status'] ?? '' ) || empty( $req['installabile'] ) ) {
+            /* translators: %s: nome del plugin */
+            return new WP_Error( 'requires_plugin', sprintf( olobuild_t( 'Installa e attiva %s da Plugin › Aggiungi nuovo, poi importa il tema.' ), $label ), [ 'status' => 400 ] );
+        }
+
+        require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/misc.php';
+        require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+        require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+        if ( function_exists( 'set_time_limit' ) ) {
+            @set_time_limit( 300 ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- alcuni hosting lo vietano: si continua col limite del server
+        }
+
+        $file       = self::file_plugin( $slug );
+        $installato = false;
+        if ( ! $file ) {
+            $api = plugins_api( 'plugin_information', [ 'slug' => $slug, 'fields' => [ 'sections' => false ] ] );
+            if ( is_wp_error( $api ) || empty( $api->download_link ) ) {
+                /* translators: 1: nome del plugin, 2: il motivo */
+                return new WP_Error( 'requires_plugin', sprintf( olobuild_t( 'Non riesco a scaricare %1$s da wordpress.org: %2$s' ), $label, is_wp_error( $api ) ? $api->get_error_message() : '—' ), [ 'status' => 502 ] );
+            }
+            $skin     = new WP_Ajax_Upgrader_Skin();
+            $upgrader = new Plugin_Upgrader( $skin );
+            $esito    = $upgrader->install( $api->download_link );
+            if ( is_wp_error( $esito ) ) return $esito;
+            if ( is_wp_error( $skin->result ) ) return $skin->result;
+            if ( $skin->get_errors()->has_errors() ) {
+                return new WP_Error( 'requires_plugin', implode( ' ', $skin->get_error_messages() ), [ 'status' => 500 ] );
+            }
+            if ( ! $esito ) {
+                /* translators: %s: nome del plugin */
+                return new WP_Error( 'requires_plugin', sprintf( olobuild_t( 'L\'installazione di %s non è riuscita.' ), $label ), [ 'status' => 500 ] );
+            }
+            wp_clean_plugins_cache();
+            $file       = $upgrader->plugin_info() ?: self::file_plugin( $slug );
+            $installato = true;
+        }
+        if ( ! $file ) {
+            /* translators: %s: nome del plugin */
+            return new WP_Error( 'requires_plugin', sprintf( olobuild_t( 'L\'installazione di %s non è riuscita.' ), $label ), [ 'status' => 500 ] );
+        }
+        $attivato = activate_plugin( $file );
+        if ( is_wp_error( $attivato ) ) return $attivato;
+        // WooCommerce appena attivato manda alla sua procedura di benvenuto alla prossima pagina dell'amministrazione:
+        // qui si sta importando un tema, si resta dove si è.
+        if ( 'woocommerce' === $slug ) {
+            delete_transient( '_wc_activation_redirect' );
+        }
+        return [ 'plugin' => $file, 'installato' => $installato, 'attivato' => true ];
     }
 
     /**

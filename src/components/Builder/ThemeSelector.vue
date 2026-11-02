@@ -44,21 +44,46 @@ function etichette() {
     requiresVersionTitle: t('Richiede %1$s %2$s o successiva'),
     discoverLabel: t('Scopri %s'),
     updateLabel: t('Aggiorna %s'),
+    importWithLabel: t('Importa con %s'),
+    installsTitle: t('Si installa da sé: %s arriva da wordpress.org quando importi il tema'),
   };
+}
+
+// Il plugin che il tema richiede e che il server installa da sé prima dell'import (WooCommerce), o null.
+function pluginDaInstallare(theme) {
+  const req = theme && theme.requires_plugin;
+  return req && req.installabile && theme.requires_plugin_status === 'missing' ? (req.label || req.slug || '') : null;
 }
 
 async function importTheme(theme) {
   if (!theme || !theme.id) return;
   const nome = theme.name || theme.id;
+  const plugin = pluginDaInstallare(theme);
   // La conferma dice tutto ciò che cambia per il sito intero, non solo i template.
   if (!confirm(
     t('Importare il tema') + ' «' + nome + '»?\n\n'
+    + (plugin ? t('Prima installo e attivo %s da wordpress.org, poi importo il tema.').replace('%s', plugin) + '\n\n' : '')
     + t('Per tutto il sito cambiano: colori (anche della modalità scura), tipografia e font, spaziature, header, footer e pagina 404 attivi, cursore e mirino se il tema li porta, e la pagina iniziale, che mostrerà il template del tema. Si creano nuovi template e pagine; il menu del tema, se ne ha uno, prende il posto delle voci di un menu con lo stesso nome. Le pagine che esistono già non si duplicano: la pagina iniziale, quella degli articoli e le pagine che hanno già l\'indirizzo di una pagina del tema prendono il template e il titolo del tema e vengono pubblicate; se il tema ha una pagina degli articoli, diventa quella del sito.') + '\n\n'
     + t('Lo stile di prima resta fra le versioni dello stile: «Ripristina», subito dopo l\'import o da Configurazione › Palette › Versioni dello stile (da amministratore), rimette stile, header, footer, 404, cursore, pagina iniziale e degli articoli, e template, titolo e stato delle pagine che esistevano già. I template, le pagine nuove e le voci del menu restano.')
   )) return;
 
-  picker && picker.setBusy(true);
+  picker && picker.setBusy(true, plugin ? t('Installo e attivo %s…').replace('%s', plugin) : '');
   try {
+    if (plugin) {
+      const pr = await fetch(`${oloData.value.restUrl}themes/${theme.id}/plugin-richiesto`, {
+        method: 'POST',
+        headers: { 'X-WP-Nonce': oloData.value.nonce, 'Content-Type': 'application/json' },
+        credentials: 'same-origin'
+      });
+      const pd = await pr.json().catch(() => null);
+      // Un errore di WordPress ha code e message; «già attivo» (attivato:false senza errore) va bene lo stesso.
+      if (!pr.ok || !pd || pd.code) {
+        if (picker) picker.close();
+        toast.error(t('Non sono riuscito a installare %s').replace('%s', plugin) + (pd && pd.message ? ' — ' + pd.message : ''), 9000);
+        return;
+      }
+      picker && picker.setBusy(true, t('Importazione in corso…'));
+    }
     const res = await fetch(`${oloData.value.restUrl}themes/${theme.id}/import`, {
       method: 'POST',
       headers: { 'X-WP-Nonce': oloData.value.nonce, 'Content-Type': 'application/json' },

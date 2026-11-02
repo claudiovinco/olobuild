@@ -3,6 +3,16 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.924 - 2026-11-02 (icone al posto delle scritte tagliate)
+- Builder, scelte brevi dell'inspector: allineamenti (a sinistra, al centro, a destra, giustificato), in alto / al centro / in basso, lati, angoli, orizzontale e verticale, stessa finestra e nuova scheda, ordine crescente e decrescente, misure S·M·L, forme, elenco e griglia, chiaro e scuro si scelgono con un'icona invece che con una scritta che nella colonna stretta si tagliava («Sini… Cen… Des…»); il nome compare in un popup al passaggio del mouse e col tasto Tab.
+- Builder, Impostazioni e Redazione: ogni scritta tagliata coi puntini si legge intera in un popup al passaggio del mouse.
+
+## v1.4.923 - 2026-11-02 (barra della tile sopra la tile)
+- Builder: la barra delle opzioni che compare passando sopra una tile (o selezionandola) sta subito sopra la tile, attaccata al bordo, invece che dentro nell'angolo, dove copriva tutta una tile piccola. Se sopra non c'è posto va sotto; con una tile più alta della finestra resta dentro, in alto. Andando dalla tile alla barra non salta più sulla sezione o sulla colonna che la contiene.
+
+## v1.4.922 - 2026-11-02 (WooCommerce si installa da sé)
+- Temi che richiedono WooCommerce: se il sito non ce l’ha, la card del tema propone «Importa con WooCommerce» (prima c’era solo «Scopri WooCommerce»): l’import lo scarica da wordpress.org, lo attiva e poi importa il tema, nel builder e nella procedura di configurazione. Serve poter installare plugin e che WordPress scriva i file da sé; se no resta il collegamento alla pagina del plugin. Un plugin già installato ma spento si attiva.
+
 ## v1.4.921 - 2026-11-02 (banner alto quanto la colonna)
 - Banner CTA: «Alta quanto la colonna» (Stile): il banner si allunga fino alla colonna più alta della riga, anche in una riga allineata in alto; il testo resta dove lo mette l’Allineamento verticale.
 - Negozi: nei pannelli del Mega Menu la scheda promozionale è alta quanto le categorie e i prodotti accanto.

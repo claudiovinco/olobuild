@@ -533,6 +533,15 @@ trait Olobuild_Rest_Config_Trait {
         return rest_ensure_response( $result );
     }
 
+    /** POST themes/{id}/plugin-richiesto: installa e attiva il plugin che il tema richiede (prima dell'import). */
+    public function installa_plugin_tema( $request ) {
+        if ( olobuild_imports_disabled() ) return olobuild_imports_disabled_error();
+        require_once OLOBUILD_PATH . 'includes/class-theme-importer.php';
+        $result = Olobuild_Theme_Importer::installa_plugin_richiesto( (string) $request['theme_id'] );
+        if ( is_wp_error( $result ) ) return $result;
+        return rest_ensure_response( $result );
+    }
+
     // === Design Presets ===
 
     public function get_design_presets() {

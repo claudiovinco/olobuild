@@ -403,6 +403,12 @@ class Olobuild_Rest_Api {
             'callback'            => [ $this, 'import_theme' ],
             'permission_callback' => [ $this, 'check_permission' ],
         ] );
+        // Il plugin che il tema richiede (WooCommerce), installato e attivato prima dell'import.
+        register_rest_route( $this->namespace, '/themes/(?P<theme_id>[a-zA-Z0-9_-]+)/plugin-richiesto', [
+            'methods'             => 'POST',
+            'callback'            => [ $this, 'installa_plugin_tema' ],
+            'permission_callback' => function () { return current_user_can( 'activate_plugins' ); },
+        ] );
 
         // Design Presets
         register_rest_route( $this->namespace, '/design-presets', [

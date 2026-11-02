@@ -4,6 +4,7 @@ import App from './App.vue';
 import './assets/styles/main.scss';
 import { guardStaleBundle } from './utils/staleBundleGuard';
 import { ritornoPer } from './utils/ritornoZona';
+import { installaTestoTroncato } from './utils/testoTroncato';
 
 // Header o footer aperto dal chip «Apri il template»: la voce del «Torna a «…»» si
 // controlla qui, prima di ogni ricarica (bundle vecchio qui sotto, nuovo tentativo di
@@ -34,5 +35,7 @@ app.provide('oloData', window.oloData || {
 });
 
 app.mount('#olobuilder-app');
+// Le scritte tagliate dei pannelli si leggono intere in un popup al passaggio del mouse.
+installaTestoTroncato();
 
 }

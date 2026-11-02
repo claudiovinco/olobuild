@@ -27,18 +27,31 @@
   <!-- Segmented (auto): per select brevi i bottoni sono più rapidi del dropdown
        (1 click invece di 2, opzioni sempre visibili). Stesso modello dati del
        select: emette gli stessi value stringa — è SOLO una resa alternativa. -->
-  <div v-else-if="isSegmented" class="fsel-seg" role="radiogroup">
+  <!-- Con le icone (allineamenti, lati, direzioni, misure…: iconeOpzioni) i pulsanti mostrano l'icona e il nome
+       compare nel popup al passaggio e al focus: scritti, nella colonna stretta, si tagliavano («Sini…»). -->
+  <div v-else-if="isSegmented" class="fsel-seg" :class="{ 'fsel-seg--icone': icone }" role="radiogroup" :aria-label="ariaLabel || undefined">
     <button
-      v-for="opt in flatOptions"
+      v-for="(opt, i) in flatOptions"
       :key="opt.value"
       type="button"
       role="radio"
       :aria-checked="isActive(opt)"
+      :aria-label="icone ? t(opt.label) : undefined"
       class="fsel-seg-btn"
       :class="{ 'fsel-seg-btn--active': isActive(opt) }"
-      :title="t(opt.label)"
       @click="$emit('update:modelValue', opt.value)"
-    >{{ t(opt.label) }}</button>
+      @mouseenter="icone ? mostraNome($event, opt) : null"
+      @mouseleave="nome = null"
+      @focus="icone ? mostraNome($event, opt) : null"
+      @blur="nome = null"
+    >
+      <svg v-if="icone && icone[i].svg" class="fsel-seg-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" v-html="icone[i].svg"></svg>
+      <span v-else-if="icone" class="fsel-seg-sigla" aria-hidden="true">{{ icone[i].sigla }}</span>
+      <template v-else>{{ t(opt.label) }}</template>
+    </button>
+    <Teleport to="body">
+      <div v-if="nome && icone" class="fsel-tinta-nome" role="tooltip" :style="{ left: nome.x + 'px', top: nome.y + 'px' }">{{ nome.testo }}</div>
+    </Teleport>
   </div>
 
   <!-- Dropdown custom: il popup nativo del browser non è stilizzabile
@@ -125,6 +138,7 @@ import { t } from '@/i18n';
 import { ref, computed, nextTick, onBeforeUnmount } from 'vue';
 import { useStylesStore } from '@/stores/styles';
 import { resolveColorToken } from '@/utils/colorToken';
+import { iconeOpzioni } from '@/utils/iconeOpzioni';
 
 const props = defineProps({
   modelValue: { type: [String, Number], default: '' },
@@ -142,6 +156,8 @@ const props = defineProps({
   // (DynamicQueryPanel, TemplateLibrary, ecc.).
   theme: { type: String, default: 'light' },
   ariaLabel: { type: String, default: '' },
+  // Chiave ed etichetta del campo: dicono a iconeOpzioni se un «start/center/end» è verticale o orizzontale.
+  campo: { type: String, default: '' },
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -183,11 +199,16 @@ const conAnteprime = computed(() => flatOptions.value.some(o => o.anteprima && o
 const COLONNE_ANTEPRIME = 3;
 const selected = computed(() => flatOptions.value.find(o => isActive(o)) || null);
 
+// Le icone delle opzioni (null se anche una sola non ne ha: il gruppo resta a scritte).
+const icone = computed(() => (props.ui === 'dropdown' || hasGroups.value || conAnteprime.value)
+  ? null : iconeOpzioni(flatOptions.value, props.campo));
+
 const isSegmented = computed(() => {
   if (props.ui === 'dropdown') return false;
   if (conAnteprime.value) return false; // le miniature stanno nel popup
   if (hasGroups.value) return false; // i gruppi hanno senso solo nel popup
   if (props.ui === 'segmented') return true;
+  if (icone.value) return true; // fino a cinque icone stanno in fila, qualunque sia la lunghezza dei nomi
   const opts = flatOptions.value;
   if (opts.length < 2 || opts.length > SEG_MAX_OPTIONS) return false;
   return opts.every(o => String(t(o.label || '')).length <= SEG_MAX_LABEL);
@@ -414,6 +435,22 @@ onBeforeUnmount(() => close(false));
 .fsel-seg-btn:focus-visible {
   outline: 2px solid var(--olo-ui-accent, #e8622a);
   outline-offset: -2px;
+}
+.fsel-seg--icone .fsel-seg-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 2px;
+}
+.fsel-seg-ico {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+.fsel-seg-sigla {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 .fsel-seg-btn--active {
   background: #fff;

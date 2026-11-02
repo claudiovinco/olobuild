@@ -24,6 +24,7 @@ class Olobuild_Setup_Wizard {
         // AJAX handlers
         add_action( 'wp_ajax_olobuild_setup_install_theme', [ $this, 'ajax_install_theme' ] );
         add_action( 'wp_ajax_olobuild_setup_import_theme', [ $this, 'ajax_import_theme' ] );
+        add_action( 'wp_ajax_olobuild_setup_plugin_richiesto', [ $this, 'ajax_plugin_richiesto' ] );
         add_action( 'wp_ajax_olobuild_setup_skip', [ $this, 'ajax_skip' ] );
         add_action( 'wp_ajax_olobuild_setup_blank_starter', [ $this, 'ajax_blank_starter' ] );
 
@@ -344,6 +345,8 @@ class Olobuild_Setup_Wizard {
                 starterReady: <?php echo wp_json_encode( __( 'Header e footer base pronti!', 'olobuild' ) ); ?>,
                 starterIntro: <?php echo wp_json_encode( __( 'Ho creato un header con il logo del sito e un footer con copyright e link rapidi. Personalizzali con un click:', 'olobuild' ) ); ?>,
                 creatingTemplates: <?php echo wp_json_encode( __( 'Creazione template, menu, pagine...', 'olobuild' ) ); ?>,
+                /* translators: %s: nome del plugin che il tema richiede (WooCommerce) */
+                installingPlugin: <?php echo wp_json_encode( __( 'Installo e attivo %s…', 'olobuild' ) ); ?>,
                 templatesCreated: <?php echo wp_json_encode( /* translators: %d: number of templates created */ __( '%d template creati, homepage impostata!', 'olobuild' ) ); ?>
             };
             var oloBuilderBase = <?php echo wp_json_encode( admin_url( 'admin.php?page=olobuilder-templates&template_id=' ) ); ?>;
@@ -435,6 +438,10 @@ class Olobuild_Setup_Wizard {
                         'discoverLabel'        => __( 'Scopri %s', 'olobuild' ),
                         /* translators: %s: nome del plugin */
                         'updateLabel'          => __( 'Aggiorna %s', 'olobuild' ),
+                        /* translators: %s: nome del plugin */
+                        'importWithLabel'      => __( 'Importa con %s', 'olobuild' ),
+                        /* translators: %s: nome del plugin */
+                        'installsTitle'        => __( 'Si installa da sé: %s arriva da wordpress.org quando importi il tema', 'olobuild' ),
                     ] ); ?>,
                     onSelect: function (id) {
                         selectedThemeId = id;
@@ -491,6 +498,43 @@ class Olobuild_Setup_Wizard {
                     return;
                 }
 
+                // Il tema richiede un plugin che manca ma si installa da qui (WooCommerce): prima quello, poi l'import.
+                var tema = oloWizardThemes.filter(function (x) { return x.id === selectedThemeId; })[0];
+                var req = tema ? tema.requires_plugin : null;
+                var daInstallare = !!req;
+                if (daInstallare) daInstallare = !!req.installabile;
+                if (daInstallare) daInstallare = tema.requires_plugin_status === 'missing';
+                if (daInstallare) {
+                    status.textContent = oloSetupI18n.installingPlugin.replace('%s', req.label || req.slug);
+                    fetch(ajaxurl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: 'action=olobuild_setup_plugin_richiesto&_nonce=' + nonce + '&theme_id=' + encodeURIComponent(selectedThemeId)
+                    })
+                    .then(function(r) { return r.json(); })
+                    .then(function(data) {
+                        if (!data.success) {
+                            status.textContent = '⚠ ' + (data.data || oloSetupI18n.error);
+                            btn.disabled = false;
+                            btn.textContent = oloSetupI18n.retry;
+                            return;
+                        }
+                        tema.requires_plugin_status = 'ok';
+                        importaTema();
+                    })
+                    .catch(function(e) {
+                        status.textContent = '⚠ ' + oloSetupI18n.connectionError;
+                        btn.disabled = false;
+                        btn.textContent = oloSetupI18n.retry;
+                    });
+                    return;
+                }
+                importaTema();
+            }
+
+            function importaTema() {
+                var btn = document.getElementById('btn-import');
+                var status = document.getElementById('status-2');
                 status.textContent = oloSetupI18n.creatingTemplates;
 
                 fetch(ajaxurl, {
@@ -606,6 +650,26 @@ class Olobuild_Setup_Wizard {
             'activated'    => $result['activated'] ?? [],
             'menu'         => $result['menu'] ?? null,
         ] );
+    }
+
+    /**
+     * AJAX: installa e attiva il plugin che il tema scelto richiede (WooCommerce), prima dell'import.
+     */
+    public function ajax_plugin_richiesto() {
+        check_ajax_referer( 'olo_setup', '_nonce' );
+        if ( ! current_user_can( 'activate_plugins' ) ) {
+            wp_send_json_error( __( 'Permessi insufficienti.', 'olobuild' ) );
+        }
+        if ( olobuild_imports_disabled() ) {
+            wp_send_json_error( __( 'L\'importazione di temi è disabilitata su questo sito.', 'olobuild' ) );
+        }
+        $theme_id = isset( $_POST['theme_id'] ) ? sanitize_text_field( wp_unslash( $_POST['theme_id'] ) ) : '';
+        require_once OLOBUILD_PATH . 'includes/class-theme-importer.php';
+        $result = Olobuild_Theme_Importer::installa_plugin_richiesto( $theme_id );
+        if ( is_wp_error( $result ) ) {
+            wp_send_json_error( $result->get_error_message() );
+        }
+        wp_send_json_success( $result );
     }
 
     /**

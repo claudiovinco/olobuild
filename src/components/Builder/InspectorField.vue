@@ -97,6 +97,7 @@
             :modelValue="effectiveValue"
             :options="resolvedOptions"
             :ui="field.ui || 'auto'"
+            :campo="campoSelect"
             @update:modelValue="onFieldUpdate($event)"
           />
           <FieldColor
@@ -242,6 +243,7 @@
         :modelValue="effectiveValue"
         :options="resolvedOptions"
         :ui="field.ui || 'auto'"
+        :campo="campoSelect"
         @update:modelValue="onFieldUpdate($event)"
       />
 
@@ -1243,10 +1245,13 @@ const hasNonDefaultValue = computed(() => {
 const etichetta = computed(() => staccaUnita(t(props.field.label), props.field.type));
 const unitaCampo = computed(() => props.field.unit || etichetta.value.unita || '');
 
+// Chiave ed etichetta del campo per le icone delle scelte brevi (FieldSelect → iconeOpzioni).
+const campoSelect = computed(() => `${props.field.key || ''} ${props.field.label || ''}`);
+
 const fieldProps = computed(() => {
   const base = { modelValue: effectiveValue.value };
   switch (props.field.type) {
-    case 'select': return { ...base, options: resolvedOptions.value, ui: props.field.ui || 'auto' };
+    case 'select': return { ...base, options: resolvedOptions.value, ui: props.field.ui || 'auto', campo: campoSelect.value };
     case 'range': return { ...base, min: props.field.min || 0, max: props.field.max || 100, step: props.field.step || 1, defaultValue: fieldDefaultValue.value, unit: unitaCampo.value };
     case 'spacing': return { ...base, mode: 'sides', preview: 'none', sliderMax: Number(props.field.max ?? 200), units: unitaCampo.value ? [unitaCampo.value] : ['px'], defaultUnit: unitaCampo.value || 'px' };
     case 'border-radius': return { ...base, mode: 'corners', units: unitaCampo.value ? [unitaCampo.value] : ['px'], defaultUnit: unitaCampo.value || 'px' };

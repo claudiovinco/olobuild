@@ -48133,3 +48133,39 @@ msgstr "As tall as the column"
 #: src/config/elements/cta-banner.js
 msgid "Il banner si allunga fino alla colonna più alta della riga: ha senso quando è da solo nella sua colonna. Il testo resta dove lo mette l'Allineamento verticale."
 msgstr "The banner stretches to the tallest column in the row: useful when it is alone in its column. The text stays where the Vertical alignment puts it."
+
+#: src/components/Builder/ThemeSelector.vue
+msgid "Importa con %s"
+msgstr "Import with %s"
+
+#: src/components/Builder/ThemeSelector.vue
+msgid "Si installa da sé: %s arriva da wordpress.org quando importi il tema"
+msgstr "Installs by itself: %s comes from wordpress.org when you import the theme"
+
+#: src/components/Builder/ThemeSelector.vue
+msgid "Prima installo e attivo %s da wordpress.org, poi importo il tema."
+msgstr "First I install and activate %s from wordpress.org, then I import the theme."
+
+#: src/components/Builder/ThemeSelector.vue
+msgid "Installo e attivo %s…"
+msgstr "Installing and activating %s…"
+
+#: src/components/Builder/ThemeSelector.vue
+msgid "Non sono riuscito a installare %s"
+msgstr "I could not install %s"
+
+#: includes/class-theme-importer.php
+msgid "Tema non trovato: %s"
+msgstr "Theme not found: %s"
+
+#: includes/class-theme-importer.php
+msgid "Installa e attiva %s da Plugin › Aggiungi nuovo, poi importa il tema."
+msgstr "Install and activate %s from Plugins › Add New, then import the theme."
+
+#: includes/class-theme-importer.php
+msgid "Non riesco a scaricare %1$s da wordpress.org: %2$s"
+msgstr "I cannot download %1$s from wordpress.org: %2$s"
+
+#: includes/class-theme-importer.php
+msgid "L'installazione di %s non è riuscita."
+msgstr "The installation of %s failed."
