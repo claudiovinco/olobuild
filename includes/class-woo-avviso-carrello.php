@@ -177,6 +177,9 @@ class Olobuild_Woo_Avviso_Carrello {
         .olo-avc-vai:hover{filter:brightness(.95)}
         .olo-avc-continua{border:1px solid var(--olo-color-border,#e5e7eb);background:transparent;color:var(--olo-color-text,#111827)}
         .olo-avc-continua:hover{background:var(--olo-color-muted,#f3f4f6)}
+        /* Il colore del testo anche al passaggio: «a:hover» di UIkit pesa più di una classe e lo faceva blu link. */
+        .olo-avc .olo-avc-vai:hover,.olo-avc .olo-avc-vai:focus{color:var(--olo-color-primary-contrast,#fff);text-decoration:none}
+        .olo-avc .olo-avc-continua:hover,.olo-avc .olo-avc-continua:focus{color:var(--olo-color-text,#111827);text-decoration:none}
         .olo-avc a:focus-visible,.olo-avc button:focus-visible{outline:2px solid var(--olo-color-primary,#e1474f);outline-offset:2px}
         @media (max-width:640px){.olo-avc{top:auto;right:16px;bottom:16px;left:16px;width:auto;transform:translateY(8px)}}
         @media (prefers-reduced-motion:reduce){.olo-avc{transition:none}}

@@ -299,7 +299,7 @@ def build_footer():
     legal = text(t, '<p>© 2026 Fuoco Lento di Elia Corradi · Alba · P.IVA 00000000000</p>', size=12)
     social = t.classic('social', {'links': [{'platform': 'instagram', 'url': 'https://instagram.com'}],
                                   'size': '30', 'alignment': 'right', 'icon_color': TENUE, 'hover_effect': 'none'})
-    totop = t.classic('totop', {'icon_color': NERO, 'posizione': 'fisso', 'style': 'default'})
+    totop = t.classic('totop', {'icon_color': CREMA, 'posizione': 'fisso', 'style': 'default'})
     top = t.row([
         t.col([claim, contacts(t)], wm='1-2', ws='1-1'),
         t.col([label(t, 'Le pagine', color=BRACE), pagine], wm='1-4', ws='1-2'),

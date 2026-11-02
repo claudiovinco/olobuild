@@ -57,6 +57,7 @@ class Olobuild_CtaBanner_Tile extends Olobuild_Tile_Base {
         'ratio'                        => '1.4fr 1fr auto',
         'gap'                          => 40,
         'vertical_align'               => 'center',
+        'altezza_colonna'              => false,
         'banner_radius'                => [ 'tl' => 20, 'tr' => 20, 'br' => 20, 'bl' => 20, 'linked' => true ],
         'banner_radius_hover'          => [ 'tl' => 20, 'tr' => 20, 'br' => 20, 'bl' => 20, 'linked' => true ],
         'banner_radius_hover_duration' => 400,
@@ -209,6 +210,14 @@ class Olobuild_CtaBanner_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-ctab__cta2:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
             <?php if ( $banner_radius_h ) : ?>
             .<?php echo $uid; ?>:hover { border-radius: <?php echo $banner_radius_h; ?> !important; }
+            <?php endif; ?>
+            <?php if ( ! empty( $s['altezza_colonna'] ) ) : ?>
+            <?php // Alta quanto la colonna: la sua colonna si allunga fino alla più alta della riga (anche in una riga
+                  // allineata in alto) e il banner la riempie; il testo resta dove lo mette l'Allineamento verticale.
+                  // Nei pannelli dei negozi la scheda promozionale finiva più in alto delle categorie accanto. ?>
+            .uk-grid > :has(.<?php echo $uid; ?>) { align-self: stretch; }
+            .uk-grid > :has(.<?php echo $uid; ?>) > div:has(.<?php echo $uid; ?>), .olo-frontend-tile:has(> .<?php echo $uid; ?>) { height: 100%; }
+            .<?php echo $uid; ?> { height: 100%; box-sizing: border-box; }
             <?php endif; ?>
             @media (max-width: 800px) {
                 .<?php echo $uid; ?> { grid-template-columns: 1fr !important; text-align: center; justify-items: center; gap: 20px !important; }

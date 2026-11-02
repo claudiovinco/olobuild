@@ -48011,3 +48011,11 @@ msgstr "Button icon colour"
 #: src/config/elements/livesearch.js
 msgid "Il pulsante con la sola lente (Compatta e Modale). Vuoto = lo sfondo dell'input."
 msgstr "The magnifier-only button (Compact and Modal). Empty = the input background."
+
+#: src/config/elements/cta-banner.js
+msgid "Alta quanto la colonna"
+msgstr "As tall as the column"
+
+#: src/config/elements/cta-banner.js
+msgid "Il banner si allunga fino alla colonna più alta della riga: ha senso quando è da solo nella sua colonna. Il testo resta dove lo mette l'Allineamento verticale."
+msgstr "The banner stretches to the tallest column in the row: useful when it is alone in its column. The text stays where the Vertical alignment puts it."

@@ -274,7 +274,7 @@ def build_footer():
     social = t.classic('social', {'links': [{'platform': 'instagram', 'url': 'https://instagram.com'},
                                             {'platform': 'vimeo', 'url': 'https://vimeo.com'}],
                                   'size': '30', 'alignment': 'right', 'icon_color': TENUE, 'hover_effect': 'none'})
-    totop = t.classic('totop', {'icon_color': NERO, 'posizione': 'fisso', 'style': 'default'})
+    totop = t.classic('totop', {'icon_color': BIANCO, 'posizione': 'fisso', 'style': 'default'})
     top = t.row([
         t.col([claim, contacts(t)], wm='1-2', ws='1-1'),
         t.col([label(t, 'Le pagine', color=REC), pagine], wm='1-4', ws='1-2'),

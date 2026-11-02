@@ -307,7 +307,7 @@ def build_footer():
     social = t.classic('social', {'links': [{'platform': 'instagram', 'url': 'https://instagram.com'},
                                             {'platform': 'facebook', 'url': 'https://facebook.com'}],
                                   'size': '34', 'alignment': 'right', 'icon_color': ON_DIM, 'hover_effect': 'none'})
-    totop = t.classic('totop', {'icon_color': HEX['accent'], 'posizione': 'fisso', 'style': 'default'})
+    totop = t.classic('totop', {'icon_color': INK, 'posizione': 'fisso', 'style': 'default'})
     line = {'style': 'dashed', 'color': rgba('#FFF6E8', 0.18)}
     first = t.row([t.col([brand, invite], wm='2-3', ws='1-1'), t.col([invite_btn], wm='1-3', ws='1-1')],
                   layout='custom', custom='66.66,33.33', valign='end', anim='slide-up',

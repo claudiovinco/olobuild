@@ -3,6 +3,23 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.921 - 2026-11-02 (banner alto quanto la colonna)
+- Banner CTA: «Alta quanto la colonna» (Stile): il banner si allunga fino alla colonna più alta della riga, anche in una riga allineata in alto; il testo resta dove lo mette l’Allineamento verticale.
+- Negozi: nei pannelli del Mega Menu la scheda promozionale è alta quanto le categorie e i prodotti accanto.
+
+## v1.4.920 - 2026-11-02 (carrello e pannelli)
+- WooCommerce, avviso «Aggiunto al carrello»: al passaggio del mouse il testo di «Vai al carrello» prendeva il blu dei link; ora resta del colore del pulsante (e «Continua gli acquisti» del colore del testo).
+- Negozi: nei pannelli Offerte e Novità del Mega Menu tre prodotti per riga, alti quanto la scheda promozionale accanto.
+
+## v1.4.919 - 2026-11-02 (pannelli dei negozi)
+- Sezioni: con «Rimuovi padding verticale» il padding sopra e sotto scritto nello Stile della sezione non agiva (la classe di UIkit lo annullava): ora vale. Si vede nei pannelli del Mega Menu e nelle testate dei negozi, che avevano il contenuto attaccato ai bordi.
+- Negozi: nel pannello dei reparti le categorie stanno su due righe, alte quanto la scheda promozionale accanto (prima sei in fila, piccole, con una fascia vuota sotto).
+- Slider Pro fermo in cima: i fili sottili su un bordo (il bastone di una tenda) restano sul bordo dello schermo; il resto del disegno resta unito al centro.
+
+## v1.4.918 - 2026-11-02 (aperture fisse a tutto schermo)
+- Slider Pro con «Scroll-fixed timeline»: mentre resta fermo in cima è alto almeno quanto lo schermo. Su un tablet in verticale (e dove la proporzione lo faceva più basso della finestra) sotto restava uno spazio vuoto finché le diapositive non erano passate tutte; ora la composizione sta al centro e i livelli che coprono la slide (fondi, teli, foto) arrivano ai bordi. Il tratto in cui resta fermo è la distanza impostata su ogni schermo.
+- Temi: il pulsante «torna in cima» aveva la freccia quasi invisibile in 59 temi (scura sul fondo scuro, bianca sul fondo chiaro dei negozi): ora ha il colore del testo, e nei negozi il disco del colore d’accento.
+
 ## v1.4.917 - 2026-11-02 (testate e menu mobile)
 - Mega Menu, menu mobile: «Disegno delle voci» (Editoriale, Indice, Schede, Pillole in fila, Al centro, Testata colorata), «Decoro del pannello» (il simbolo del logo in grande, il nome in verticale, un cerchio di colore, una trama di punti) e «Piede del pannello» (Riga, Fascia, Scheda, Social scritti per nome, Colore d’accento): testo, social e link in fondo raccolti in un blocco, in ogni stile del menu mobile. «Lato dell’hamburger»: anche a sinistra, prima del logo.
 - Mega Menu, logo: il simbolo può stare in un anello, un arco, una foglia, un rombo, un esagono o un ciottolo.

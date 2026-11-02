@@ -243,6 +243,69 @@ function initSlider(container) {
     return { mode: desktopHeightMode, value: desktopHeightMode === 'px' ? designH : desktopHeightValue };
   }
 
+  // Fermo in cima mentre la pagina scorre (timeline a scorrimento) lo slider è la scena che resta davanti per tutto il
+  // tratto: è alto almeno quanto lo schermo. In 16:9 su un tablet in verticale occupava 461 px dei 1180 e sotto restava
+  // il vuoto finché le diapositive non erano passate tutte (2 nov 2026). La composizione del formato sta al centro
+  // dell'altezza in più; i livelli che la coprono tutta (fondi, teli, foto a piena slide) si allungano fino ai bordi.
+  var scenaFissa = cfg.scrollTimeline && !cfg.carousel ? container.closest('.mps-scroll-fixed-wrapper') : null;
+  var sondaSchermo = null;
+  function altezzaSchermo() {
+    // 100lvh, la finestra con le barre del browser nascoste: mentre compaiono e spariscono lo slider resta com'è.
+    if (!sondaSchermo) {
+      sondaSchermo = document.createElement('div');
+      sondaSchermo.setAttribute('aria-hidden', 'true');
+      sondaSchermo.style.cssText = 'position:fixed;top:0;left:0;width:0;height:100vh;height:100lvh;visibility:hidden;pointer-events:none;';
+      document.body.appendChild(sondaSchermo);
+    }
+    return Math.max(sondaSchermo.offsetHeight, window.innerHeight || 0);
+  }
+  var stiliDiPartenza = new Map(); // livello → top e height in linea di prima che la scena li allungasse o spostasse
+  function frazione(v, rif) { // top/height calcolati: in px se il livello è disegnato, se no la percentuale scritta
+    var n = parseFloat(v) || 0;
+    return /%$/.test(v) ? n / 100 : n / Math.max(1, rif);
+  }
+  function scenaAPieno(altezza, finalH, scarto, scaleX) {
+    stiliDiPartenza.forEach(function (st, el) { el.style.top = st.top; el.style.height = st.height; });
+    stiliDiPartenza.clear();
+    if (altezza <= finalH) return;
+    var h0 = finalH / scaleX, H = altezza / scaleX, s0 = scarto / scaleX;
+    var segna = function (el) { stiliDiPartenza.set(el, { top: el.style.top, height: el.style.height }); };
+    // Dove sta il livello rispetto ai bordi della tela: 'pieno' li tocca tutti e due; 'su' e 'giu' sono i fili e le
+    // fasce sottili su un bordo (il bastone della tenda resta in cima). Quello che è disegno, anche se tocca un bordo
+    // (il vaso di Clorofilla), resta con la composizione, se no si staccava dalla pianta.
+    var bordo = function (t, h) {
+      if (t <= 0.02 && t + h >= 0.98) return 'pieno';
+      if (h > 0.06) return '';
+      if (t <= 0.02) return 'su';
+      return t + h >= 0.98 ? 'giu' : '';
+    };
+    layerWraps.forEach(function (w) {
+      qsa(w, ':scope > .olo-proslider-layer').forEach(function (el) {
+        if (el.hasAttribute('data-timeline-name')) return; // in alto a sinistra per regola: lo posa la sua timeline
+        var cs = getComputedStyle(el), t = frazione(cs.top, h0), hh = frazione(cs.height, h0), b = bordo(t, hh);
+        if (!b) return;
+        segna(el);
+        if (b === 'pieno') {
+          el.style.setProperty('top', (t * H - s0).toFixed(1) + 'px', 'important');
+          el.style.setProperty('height', (hh * H).toFixed(1) + 'px', 'important');
+        } else {
+          el.style.setProperty('top', (t * h0 + (b === 'su' ? -s0 : s0)).toFixed(1) + 'px', 'important');
+        }
+      });
+    });
+    // I livelli con fusione stanno nella slide, fuori dalla tela, in percentuale della slide: quelli che la coprono si
+    // allungano da soli, gli altri tornano dove li mette la composizione (in cima, in fondo o al centro).
+    var rif = container.offsetHeight;
+    qsa(container, '.mps-blend-layer').forEach(function (el) {
+      if (el.hasAttribute('data-timeline-name')) return;
+      var cs = getComputedStyle(el), t = frazione(cs.top, rif), hh = frazione(cs.height, rif), b = bordo(t, hh);
+      if (b === 'pieno') return;
+      segna(el);
+      el.style.setProperty('top', (t * finalH + (b === 'su' ? 0 : b === 'giu' ? 2 * scarto : scarto)).toFixed(1) + 'px', 'important');
+      if (/%$/.test(el.style.height)) el.style.setProperty('height', (parseFloat(el.style.height) / 100 * finalH).toFixed(1) + 'px', 'important');
+    });
+  }
+
   function updateLayerScale() {
     var cw = container.offsetWidth;
     var f = formatoCorrente();
@@ -253,6 +316,8 @@ function initSlider(container) {
     // la segue, se no un livello al 90% finiva sotto il bordo o a metà schermo.
     var finalH = schermoPieno ? (container.offsetHeight || resolveHeightPx(h.mode, h.value, cw, f.w)) : resolveHeightPx(h.mode, h.value, cw, f.w);
     var layerDesignH = Math.round(finalH / scaleX);
+    var altezza = scenaFissa && !schermoPieno ? Math.max(finalH, altezzaSchermo()) : finalH;
+    var scarto = Math.round((altezza - finalH) / 2);
     // Nel carosello la tela di una slide è larga quanto la card (la stessa frazione della tela del formato):
     // i livelli restano alla scala dello slider (un carattere di 48 resta 48 sulla tela) e si posano sulla
     // card, come nell'editor, che col carosello mostra la tela stretta. Prima la tela era larga quanto
@@ -263,15 +328,27 @@ function initSlider(container) {
       var globale = w.classList.contains('olo-proslider-global-layers');
       w.style.width = (globale ? f.w : slideDesignW) + 'px';
       w.style.height = layerDesignH + 'px';
+      w.style.top = scarto + 'px';
       w.style.transform = 'scale(' + scaleX + ')';
     });
+    if (scenaFissa) scenaAPieno(altezza, finalH, scarto, scaleX);
     // I livelli con fusione stanno fuori dalla tela scalata (il transform isolerebbe la fusione): carattere,
     // spaziatura e padding si moltiplicano per --mps-k, che dentro la tela vale 1 (CSS). Prima il carattere
     // restava quello di progetto e sul telefono un titolo di 120 usciva dallo slider.
     container.style.setProperty('--mps-k', String(scaleX));
     if (!schermoPieno) {
-      container.style.height = finalH + 'px';
+      // Più alta del formato vince sulle regole per formato del PHP (aspect-ratio e height:auto con !important).
+      if (altezza > finalH) {
+        container.style.setProperty('height', altezza + 'px', 'important');
+      } else {
+        container.style.removeProperty('height');
+        container.style.height = finalH + 'px';
+      }
     }
+    // Il tratto in cui lo slider resta fermo è la distanza impostata su ogni schermo: il contenitore che scorre era alto
+    // quanto lo slider del computer più la distanza, e dove lo slider era più basso restava fermo più a lungo.
+    if (scenaFissa) scenaFissa.style.height = (container.offsetHeight + (cfg.scrollTimelineDistance || 2000)) + 'px';
+    if (cubo) profonditaCubo();
   }
 
   updateLayerScale();

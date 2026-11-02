@@ -287,7 +287,7 @@ def build_footer():
     social = t.classic('social', {'links': [{'platform': 'instagram', 'url': 'https://instagram.com'},
                                             {'platform': 'facebook', 'url': 'https://facebook.com'}],
                                   'size': '34', 'alignment': 'right', 'icon_color': ON_DIM, 'hover_effect': 'none'})
-    totop = t.classic('totop', {'icon_color': GIALLO, 'posizione': 'fisso', 'style': 'default'})
+    totop = t.classic('totop', {'icon_color': INK, 'posizione': 'fisso', 'style': 'default'})
     line = {'style': 'solid', 'color': rgba('#FFFFFF', 0.2)}
     top = t.row([
         t.col([giro], wm='1-4', ws='1-1'),

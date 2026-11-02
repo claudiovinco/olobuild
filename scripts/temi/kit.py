@@ -322,7 +322,8 @@ class Kit:
                                 'font_size': '15', 'font_weight': '400', 'tile_padding': {'top': 3, 'right': 0, 'bottom': 3, 'left': 0}})
         soc = t.classic('social', {'links': [{'platform': p, 'url': u} for p, u in social],
                                    'size': '30', 'alignment': 'right', 'icon_color': c['tenue'], 'hover_effect': 'none'})
-        totop = t.classic('totop', {'icon_color': c['nero'], 'posizione': 'fisso', 'style': 'default'})
+        # Il pulsante fisso Predefinito ha il fondo della pagina: la freccia è il colore del testo (col nero spariva nei temi scuri).
+        totop = t.classic('totop', {'icon_color': c['testo'], 'posizione': 'fisso', 'style': 'default'})
         top = t.row([
             t.col([self.text(t, claim, size=15, pad=(0, 0, 18, 0)), self.contacts(t, voci)], wm='1-2', ws='1-1'),
             t.col([self.label(t, 'Le pagine', color=c['acc']), nav], wm='1-4', ws='1-2', width_default='1-2'),

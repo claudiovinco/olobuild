@@ -62,6 +62,7 @@ export default {
     ratio:         '1.4fr 1fr auto',
     gap:           40,
     vertical_align: 'center',
+    altezza_colonna: false,
     banner_radius:                  { ...R(20) },
     banner_radius_hover:            { ...R(20) },
     banner_radius_hover_duration:   400,
@@ -159,6 +160,8 @@ export default {
       { value: 'center', label: t('Centro') },
       { value: 'end',    label: t('In basso') },
     ]},
+    { key: 'altezza_colonna', label: t('Alta quanto la colonna'), type: 'toggle',
+      description: t('Il banner si allunga fino alla colonna più alta della riga: ha senso quando è da solo nella sua colonna. Il testo resta dove lo mette l\'Allineamento verticale.') },
     { key: 'gap', label: t('Gap colonne'), type: 'range', min: 0, max: 120, step: 4 },
   ],
 };

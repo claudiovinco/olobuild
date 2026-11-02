@@ -49550,3 +49550,11 @@ msgstr "Couleur de l’icône du bouton"
 #: src/config/elements/livesearch.js
 msgid "Il pulsante con la sola lente (Compatta e Modale). Vuoto = lo sfondo dell'input."
 msgstr "Le bouton avec la seule loupe (Compacte et Modale). Vide = le fond du champ."
+
+#: src/config/elements/cta-banner.js
+msgid "Alta quanto la colonna"
+msgstr "Aussi haut que la colonne"
+
+#: src/config/elements/cta-banner.js
+msgid "Il banner si allunga fino alla colonna più alta della riga: ha senso quando è da solo nella sua colonna. Il testo resta dove lo mette l'Allineamento verticale."
+msgstr "La bannière s’allonge jusqu’à la colonne la plus haute de la rangée : utile quand elle est seule dans sa colonne. Le texte reste là où le place l’Alignement vertical."

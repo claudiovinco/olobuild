@@ -553,14 +553,21 @@ div.olo-row-gap > .uk-width-5-6 { width: calc(500% / 6 - var(--olo-rg) * 1 / 6);
  * and sections that have any background (color/image/video/gallery): per
  * queste l'utente vuole vedere il riquadro colorato intero, quindi il
  * padding-top deve essere preservato per non tagliare la parte alta. */
-.olo-site-header.olo-header-classic ~ main .olo-template > .olo-frontend-grid > section:first-child:not([style*="padding-top"]):not(.uk-section-large):not(.uk-section-xlarge):not(.uk-section-small):not(.uk-padding-remove-vertical):not(.olo-section-has-bg) {
+.olo-site-header.olo-header-classic ~ main .olo-template > .olo-frontend-grid > section:first-child:not([style*="padding-top"]):not(.uk-section-large):not(.uk-section-xlarge):not(.uk-section-small):not(.uk-padding-remove-vertical):not(.olo-padding-v0):not(.olo-section-has-bg) {
   padding-top: 0 !important;
 }
 /* Una sezione col solo Pannello flottante resta nella pagina (ID, sfondo, condizioni) ma,
  * senza sfondo, è alta zero: in testa al template non deve togliere la regola qui sopra
  * alla prima sezione vera. Prima la sezione non si rendeva affatto. */
-.olo-site-header.olo-header-classic ~ main .olo-template > .olo-frontend-grid > section.olo-sezione-solo-pannello:first-child + section:not([style*="padding-top"]):not(.uk-section-large):not(.uk-section-xlarge):not(.uk-section-small):not(.uk-padding-remove-vertical):not(.olo-section-has-bg) {
+.olo-site-header.olo-header-classic ~ main .olo-template > .olo-frontend-grid > section.olo-sezione-solo-pannello:first-child + section:not([style*="padding-top"]):not(.uk-section-large):not(.uk-section-xlarge):not(.uk-section-small):not(.uk-padding-remove-vertical):not(.olo-padding-v0):not(.olo-section-has-bg) {
   padding-top: 0 !important;
+}
+
+/* «Rimuovi padding verticale» con un padding sopra o sotto scritto nello Stile della sezione: niente padding di UIkit,
+ * ma senza !important, così vince quello in linea della sezione (renderer: olo-padding-v0 al posto della classe di UIkit). */
+.uk-section.olo-padding-v0 {
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 /* Fallback before JS sets the class (flicker prevention) */

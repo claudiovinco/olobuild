@@ -213,7 +213,7 @@ def quadri(t):
 def build_pannello_reparti():
     return N.pannello_reparti(Tpl(ID, 'pannello-reparti'), 'Il negozio', 'Dalla testa all’ombrello',
                               ('La coppola,', '59 €.', 'Il tweed cucito a Trieste.', 'Coppole e baschi', N.cat_url('coppole'),
-                               'pexels-15906278.jpg'), colonne=5, tutto='Tutto il negozio')
+                               'pexels-15906278.jpg'), tutto='Tutto il negozio')
 
 
 def build_pannello_offerte():

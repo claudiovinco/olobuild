@@ -386,15 +386,20 @@ class Negozio:
                           style={'padding_top': 28, 'padding_bottom': 32})]
 
     def _mini_prodotti(self, t, **kw):
+        """I prodotti dei pannelli: tre per riga, alti quanto la scheda promozionale accanto (con quattro restava una
+        fascia vuota sotto, 2 nov 2026)."""
         return self.prodotti(t, **dict(dict(
-            posts_per_page=4, columns=4, columns_tablet=4, columns_mobile=2, show_rating=False, show_rating_count=False,
+            posts_per_page=3, columns=3, columns_tablet=3, columns_mobile=2, show_rating=False, show_rating_count=False,
             show_add_to_cart=False, show_wishlist=False, show_compare=False, mostra_scorta=False, consegna_testo='',
             testo_evidenza='', titolo_righe=1, gap=16), **kw))
 
     def _promo(self, t, promo):
         """La scheda promozionale a destra nei pannelli: (titolo, accento, sotto, pulsante, indirizzo, foto)."""
         tit, acc, sotto, cta, url, foto = promo
-        return self.banner(t, tit, acc, sotto, cta, url, self.K.photo_bg(foto), pad=26, size=24)
+        scheda = self.banner(t, tit, acc, sotto, cta, url, self.K.photo_bg(foto), pad=26, size=24)
+        # Alta quanto la colonna: finiva più in alto delle categorie e dei prodotti accanto (2 nov 2026).
+        scheda['settings']['altezza_colonna'] = True
+        return scheda
 
     def pannello_offerte(self, t, occhiello, titolo, testo, promo, tutte='Tutte le offerte'):
         return self._pannello(t, [self.occhiello(t, occhiello), self.titolo(t, titolo, size=26, tag='p', pad_bottom=6),
@@ -415,10 +420,13 @@ class Negozio:
                                   self.link(t, tutte, self.P['negozio'], align='left', pad_top=14)],
                               [self._mini_prodotti(t, orderby='date')], [self._promo(t, promo)])
 
-    def pannello_reparti(self, t, occhiello, titolo, promo, colonne=6, tutto='Tutto il negozio'):
+    def pannello_reparti(self, t, occhiello, titolo, promo, colonne=3, tutto='Tutto il negozio'):
+        """I reparti su due righe, alte quanto la scheda promozionale accanto: sei in fila erano francobolli con una fascia
+        vuota sotto (2 nov 2026). Tre per riga in 4:3, quattro (otto reparti) quadrati."""
         return self._pannello(t, [self.occhiello(t, occhiello), self.titolo(t, titolo, size=26, tag='p', pad_bottom=12),
                                   self.link(t, tutto, self.P['negozio'], align='left', pad_top=6)],
-                              [self.categorie(t, colonne=colonne, ratio='1-1', scorri=False)], [self._promo(t, promo)])
+                              [self.categorie(t, colonne=colonne, ratio='4-3' if colonne <= 3 else '1-1', scorri=False)],
+                              [self._promo(t, promo)])
 
     # ── testata e piede ───────────────────────────────────────────────────────────────────────────────────────────
     def testata(self, t, logo, icona='', ricerca='Cerca nel negozio…', parole='', annuncio=None, logo_size=30):
@@ -643,7 +651,8 @@ class Negozio:
             'text_color': col2, 'text_size': 12, 'font_family': 'body', 'align': 'right', 'flow': 'wrap', 'gap': 18,
             'variant': 'inline', 'icon_size': 15, 'separator_char': '', 'separator_color': c['filo']},
             style={'padding_top': 0, 'padding_right': 0, 'padding_bottom': 0, 'padding_left': 0})
-        totop = t.classic('totop', {'icon_color': c['on_acc'], 'posizione': 'fisso', 'style': 'default'})
+        # Disco del colore d'accento con la freccia del suo colore di contrasto (Predefinito = fondo chiaro, freccia bianca invisibile).
+        totop = t.classic('totop', {'icon_color': c['on_acc'], 'posizione': 'fisso', 'style': 'primary'})
         riga_legale = t.classic('text-block', {'content': '<p>' + legale + '</p>', 'font_size': 12, 'line_height': 1.7,
                                                'text_color': col2, 'link_color': c['sec'], 'text_align': 'left',
                                                'tile_padding': {'top': 0, 'right': 0, 'bottom': 0, 'left': 0}})

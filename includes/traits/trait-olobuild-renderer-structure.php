@@ -172,6 +172,14 @@ trait Olobuild_Renderer_Structure_Trait {
         // La «Maschera forma» delle Avanzate la sezione la applica più sotto (clip-path): qui niente doppione.
         $this->apply_common_box_styles( $inline_styles, $style, $s, $advanced, [ 'mask_avanzate' => false ] );
 
+        // «Rimuovi padding verticale» toglie quello di UIkit, non quello scritto nello Stile della sezione: la classe di
+        // UIkit ha !important e batteva i px in linea, che non agivano (2 nov 2026: pannelli del Mega Menu e testate dei
+        // negozi senza respiro sopra e sotto). Con un padding suo la sezione prende la regola senza !important.
+        $senza_v = array_search( 'uk-padding-remove-vertical', $classes, true );
+        if ( false !== $senza_v && preg_grep( '/^padding(-top|-bottom)?\s*:/', $inline_styles ) ) {
+            $classes[ $senza_v ] = 'olo-padding-v0';
+        }
+
         // CSS Grid layout (overrides flex se layout_mode=grid) — section-specific.
         $grid_css = $this->css->build_css_grid_css( $s );
         foreach ( $grid_css as $decl ) {
