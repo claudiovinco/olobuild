@@ -41,7 +41,7 @@
         <div
           v-if="slideBg.overlayOpacity > 0"
           class="mb-absolute mb-inset-0"
-          :style="{ background: slideBg.overlay || '#000', opacity: slideBg.overlayOpacity || 0.3 }"
+          :style="{ background: velo(slideBg), opacity: slideBg.overlayOpacity || 0.3 }"
         ></div>
       </div>
 
@@ -164,6 +164,19 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['deselect', 'select-layer', 'update-layer', 'update-keyframe', 'start-edit', 'stop-edit']);
+
+// La sovrapposizione dello sfondo, uniforme o sfumata dall'alto e dal basso (gemella di class-proslider-tile.php).
+function velo(bg) {
+  const c = bg.overlay || '#000';
+  const alto = Math.max(0, Math.min(100, +bg.overlayFadeTop || 0));
+  const basso = Math.max(0, Math.min(100, +bg.overlayFadeBottom || 0));
+  if (!alto && !basso) return c;
+  const tappe = [(alto ? c : 'transparent') + ' 0%'];
+  if (alto) tappe.push('transparent ' + alto + '%');
+  if (basso) tappe.push('transparent ' + (100 - basso) + '%');
+  tappe.push((basso ? c : 'transparent') + ' 100%');
+  return 'linear-gradient(to bottom,' + tappe.join(',') + ')';
+}
 
 const canvasWrap = ref(null);
 const canvasEl = ref(null);

@@ -44,6 +44,8 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
         'testo_info'        => 'Scopri',
         'calendario'        => true,
         'testo_calendario'  => 'Aggiungi al calendario',
+        'iscrizione'        => false,
+        'testo_iscrizione'  => 'Segui il calendario',
         'luogo_evento'      => '',
         'conto'             => true,
         'testo_conto'       => 'Si apre il sipario tra',
@@ -75,6 +77,7 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
         'larghezza_data'    => 120,
         'img_ratio'         => '4/3',
         'img_intera'        => false,
+        'forma_prossimo'    => 'scheda',
         'img_object_position' => 'center center',
         'shadow'            => 'none',
         'filtri_aspetto'    => 'pillole',
@@ -174,7 +177,7 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
     }
 
     /** Minuti di una durata scritta a parole («2 h 10 min», «90 min», «1h30»); 0 se non si capisce. */
-    private static function minuti( $testo ) {
+    public static function minuti( $testo ) {
         $t = strtolower( (string) $testo );
         $h = 0;
         $m = 0;
@@ -237,9 +240,12 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
         $uid     = 'ocrt-' . $this->chiave_stabile( $settings );
         $sel     = '#' . $uid;
         $builder = ! empty( $s['_builder_mode'] );
-        $vista   = in_array( (string) $s['vista'], [ 'lista', 'schede', 'prossimo' ], true ) ? (string) $s['vista'] : 'lista';
+        $vista   = in_array( (string) $s['vista'], [ 'lista', 'schede', 'prossimo', 'mese' ], true ) ? (string) $s['vista'] : 'lista';
         $passati = in_array( (string) $s['passati'], [ 'nascondi', 'attenua', 'mostra' ], true ) ? (string) $s['passati'] : 'nascondi';
-        $immag   = ! empty( $s['immagini'] );
+        // «Il prossimo» a forma di biglietto (1.4.944): una striscia bassa, il giorno in grande, il tagliando col conto
+        $biglietto = 'prossimo' === $vista ? 'biglietto' === (string) $s['forma_prossimo'] : false;
+        $immag   = ! empty( $s['immagini'] ) ? ( 'mese' !== $vista ? ! $biglietto : false ) : false;
+        $iscriviti = ! empty( $s['iscrizione'] ) ? ( 'spettacoli' === (string) $s['fonte'] ? class_exists( 'Olobuild_Spettacoli' ) : false ) : false;
         $stati   = self::stati();
         $ora_ts  = time();
 
@@ -356,6 +362,21 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
             'ora'     => __( 'In scena adesso', 'olobuilder' ),
             'builder' => $builder,
         ];
+        if ( 'mese' === $vista ) {
+            $cfg['oggi']   = wp_date( 'Y-m-d' );
+            $cfg['inizio'] = (int) get_option( 'start_of_week', 1 );
+            $cfg['mesi']   = [];
+            for ( $m = 1; $m <= 12; $m++ ) {
+                $cfg['mesi'][] = self::data_a_parole( 'F', gmmktime( 12, 0, 0, $m, 15, 2026 ) );
+            }
+            // l'1 novembre 2026 è una domenica: da lì i sette giorni, a partire da quello scelto in WordPress
+            $cfg['sett'] = [];
+            for ( $g = 0; $g < 7; $g++ ) {
+                $cfg['sett'][] = self::data_a_parole( 'D', gmmktime( 12, 0, 0, 11, 1 + ( ( $g + $cfg['inizio'] ) % 7 ), 2026 ), true );
+            }
+            $cfg['prec'] = __( 'Mese precedente', 'olobuilder' );
+            $cfg['succ'] = __( 'Mese successivo', 'olobuilder' );
+        }
 
         ob_start();
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS da colori passati da safe_color_css() e dagli helper di Olobuild_Tile_Utils, numeri forzati, costanti interne e selettori generati qui
@@ -450,16 +471,84 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
             echo "{$sel} .ocrt-pross .ocrt-titolo{font-size:clamp(2rem,4.4vw,3.6rem);line-height:1.04}";
             echo "{$sel} .ocrt-conto{margin:1.6rem 0 0}";
             echo "{$sel} .ocrt-conto-et{display:block;margin:0 0 .6rem;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;opacity:.75}";
-            echo "{$sel} .ocrt-cifre{display:flex;gap:clamp(.6rem,2vw,1.4rem)}";
+            // le cifre vanno a capo: in una colonna stretta i secondi uscivano dal bordo (coro Paganella, 2 nov 2026)
+            echo "{$sel} .ocrt-cifre{display:flex;flex-wrap:wrap;gap:.8rem clamp(.6rem,2vw,1.4rem)}";
             echo "{$sel} .ocrt-cifre span{display:flex;flex-direction:column;align-items:center;min-width:3.4rem}";
             echo "{$sel} .ocrt-cifre b{font-weight:400;line-height:1;font-variant-numeric:tabular-nums}";
             echo "{$sel} .ocrt-cifre i{font-style:normal;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;opacity:.7;margin-top:.35rem}";
             echo "{$sel} .ocrt-adesso{font-size:1.2rem;color:var(--ocrt-acc)}";
             echo '@media (max-width:960px){' . "{$sel} .ocrt-pross{grid-template-columns:1fr}" . ( $intera || $rapp_scelto ? '' : "{$sel} .ocrt-pross .ocrt-img{aspect-ratio:16/10}" ) . '}';
+            if ( $biglietto ) {
+                $trat = 'color-mix(in srgb, currentColor 30%, transparent)';
+                echo "{$sel} .ocrt-pross.ocrt-biglietto{grid-template-columns:auto minmax(0,1fr) auto;gap:0;align-items:stretch;padding:0;" . ( $bordo ? '' : 'border:1px solid var(--ocrt-linea);' ) . '}';
+                echo "{$sel} .ocrt-biglietto > *{padding:clamp(1.1rem,2.2vw,1.7rem) clamp(1.2rem,2.6vw,2.3rem)}";
+                echo "{$sel} .ocrt-biglietto .ocrt-data{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:8rem;text-align:center;line-height:1;border-right:1px solid var(--ocrt-linea)}";
+                echo "{$sel} .ocrt-biglietto .ocrt-gg{display:block;font-size:4.2rem;line-height:.9;color:var(--ocrt-acc);font-variant-numeric:tabular-nums}";
+                echo "{$sel} .ocrt-biglietto .ocrt-mm{display:block;margin-top:.5rem;font-size:.78rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase}";
+                echo "{$sel} .ocrt-biglietto .ocrt-sett,{$sel} .ocrt-biglietto .ocrt-ora{display:block;margin-top:.3rem;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;opacity:.75}";
+                echo "{$sel} .ocrt-biglietto .ocrt-corpo{display:flex;flex-direction:column;justify-content:center;min-width:0}";
+                echo "{$sel} .ocrt-biglietto .ocrt-occ{margin:0 0 .5rem;font-size:.72rem}";
+                echo "{$sel} .ocrt-biglietto .ocrt-titolo{margin:0;font-size:clamp(1.5rem,2.6vw,2.2rem);line-height:1.08}";
+                echo "{$sel} .ocrt-biglietto .ocrt-sotto{margin:.3rem 0 0}";
+                echo "{$sel} .ocrt-biglietto .ocrt-meta{margin:.5rem 0 0}";
+                echo "{$sel} .ocrt-biglietto .ocrt-sopra{margin:.75rem 0 0}";
+                echo "{$sel} .ocrt-biglietto .ocrt-lato{position:relative;display:flex;flex-direction:column;justify-content:center;gap:.9rem;border-left:1px dashed {$trat}}";
+                // il tagliando: due mezzelune sul filo tratteggiato, del colore della pagina, solo sul biglietto pieno
+                if ( $sfondo ) {
+                    echo "{$sel} .ocrt-biglietto .ocrt-lato::before,{$sel} .ocrt-biglietto .ocrt-lato::after{content:'';position:absolute;left:-8px;width:15px;height:15px;border-radius:50%;background:var(--olo-color-background, #fff)}";
+                    echo "{$sel} .ocrt-biglietto .ocrt-lato::before{top:-8px}{$sel} .ocrt-biglietto .ocrt-lato::after{bottom:-8px}";
+                }
+                echo "{$sel} .ocrt-biglietto .ocrt-conto{margin:0}";
+                echo "{$sel} .ocrt-biglietto .ocrt-conto-et{margin:0 0 .45rem;font-size:.7rem}";
+                echo "{$sel} .ocrt-biglietto .ocrt-cifre{flex-wrap:nowrap;gap:.4rem .85rem}";
+                echo "{$sel} .ocrt-biglietto .ocrt-cifre span{min-width:2.3rem}";
+                echo "{$sel} .ocrt-biglietto .ocrt-azioni{margin:0;padding:0}";
+                echo '@media (max-width:760px){'
+                    . "{$sel} .ocrt-pross.ocrt-biglietto{grid-template-columns:auto minmax(0,1fr)}"
+                    . "{$sel} .ocrt-biglietto .ocrt-data{min-width:0}"
+                    . "{$sel} .ocrt-biglietto .ocrt-gg{font-size:3rem}"
+                    . "{$sel} .ocrt-biglietto .ocrt-lato{grid-column:1 / -1;border-left:0;border-top:1px dashed {$trat}}"
+                    . ( $sfondo ? "{$sel} .ocrt-biglietto .ocrt-lato::before{left:-8px;top:-8px}{$sel} .ocrt-biglietto .ocrt-lato::after{left:auto;right:-8px;top:-8px;bottom:auto}" : '' )
+                    . '}';
+            }
             if ( $intera ) {
                 // la locandina intera non diventa più alta dello schermo, sul telefono
-                echo "{$sel} .ocrt-pross .ocrt-img img{max-height:88vh;width:auto;max-width:100%;margin:0 auto}";
+                // la figura stretta attorno alla locandina: prima restavano due bande grigie ai lati (coro Paganella, 2 nov 2026)
+                echo "{$sel} .ocrt-pross .ocrt-img{background:none;border-radius:0;overflow:visible}";
+                echo "{$sel} .ocrt-pross .ocrt-img img{max-height:88vh;width:auto;max-width:100%;margin:0 auto;border-radius:var(--ocrt-r)}";
             }
+        }
+        if ( 'mese' === $vista ) {
+            echo "{$sel} .ocrt-cal-testa{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin:0 0 .9rem}";
+            echo "{$sel} .ocrt-cal-mese{margin:0;font-size:1.05rem;font-weight:600;letter-spacing:.02em}";
+            echo "{$sel} .ocrt-cal-testa button{appearance:none;display:grid;place-items:center;width:2.25rem;height:2.25rem;padding:0;border:1px solid var(--ocrt-linea);border-radius:var(--ocrt-rp);background:none;color:inherit;cursor:pointer;transition:border-color .2s ease}";
+            echo "{$sel} .ocrt-cal-testa button:hover{border-color:currentColor}";
+            echo "{$sel} .ocrt-cal-testa svg{width:1rem;height:1rem}";
+            echo "{$sel} .ocrt-cal-sett,{$sel} .ocrt-cal-giorni{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:.2rem;text-align:center}";
+            echo "{$sel} .ocrt-cal-sett span{padding:.35rem 0;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;opacity:.6}";
+            echo "{$sel} .ocrt-cal-g{display:grid;place-items:center;aspect-ratio:1;margin:0;padding:0;border:0;border-radius:50%;background:none;color:inherit;font:inherit;font-size:.92rem;font-variant-numeric:tabular-nums;position:relative}";
+            echo "{$sel} .ocrt-cal-passato{opacity:.45}";
+            echo "{$sel} .ocrt-oggi{box-shadow:inset 0 0 0 1px var(--ocrt-linea)}";
+            echo "{$sel} button.ocrt-cal-g{cursor:pointer;font-weight:600;color:var(--ocrt-acc);transition:background-color .2s ease,color .2s ease}";
+            echo "{$sel} button.ocrt-cal-g::after{content:'';position:absolute;left:50%;bottom:16%;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:currentColor}";
+            // un velo leggero: col 10% un rosso vivo come accento scendeva a 4,3:1 sul suo stesso velo
+            echo "{$sel} button.ocrt-cal-g:hover{background:color-mix(in srgb, var(--ocrt-acc) 5%, transparent)}";
+            echo "{$sel} button.ocrt-cal-g[aria-pressed=\"true\"]{background:var(--ocrt-acc);color:var(--ocrt-su-acc)}";
+            echo "{$sel} .ocrt-cal-g:focus-visible,{$sel} .ocrt-cal-testa button:focus-visible{outline:2px solid var(--ocrt-acc);outline-offset:2px}";
+            echo "{$sel} .ocrt-elenco{display:block;margin-top:1.1rem;padding-top:1rem;border-top:1px solid var(--ocrt-linea)}";
+            echo "{$sel} .ocrt-gv{padding:.2rem 0 .9rem}";
+            echo "{$sel} .ocrt-gv + .ocrt-gv{padding-top:.9rem;border-top:1px solid var(--ocrt-linea)}";
+            echo "{$sel} .ocrt-gv .ocrt-quando{margin:0 0 .3rem;font-size:.85rem;opacity:.75}";
+            echo "{$sel} .ocrt-gv .ocrt-titolo{margin:0 0 .3rem;font-size:1.15rem;line-height:1.25}";
+            echo "{$sel} .ocrt-gv .ocrt-azioni{margin-top:.5rem}";
+        }
+        if ( $iscriviti ) {
+            echo "{$sel} .ocrt-segui{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem 1.1rem;margin:1.4rem 0 0;font-size:.88rem}";
+            echo "{$sel} .ocrt-segui svg{width:1.1rem;height:1.1rem;flex:none}";
+            echo "{$sel} .ocrt-segui a{display:inline-flex;align-items:center;gap:.45rem;color:inherit;text-decoration:none;border-bottom:1px solid var(--ocrt-linea);padding:.15rem 0;transition:border-color .2s ease}";
+            echo "{$sel} .ocrt-segui a:hover{border-bottom-color:currentColor}";
+            echo "{$sel} .ocrt-segui a:focus-visible{outline:2px solid var(--ocrt-acc);outline-offset:3px}";
+            echo "{$sel} .ocrt-segui a.ocrt-segui-primo{color:var(--ocrt-acc);font-weight:600}";
         }
         // tipografia
         echo $this->css_testo( $s, 'giorno', "{$sel} .ocrt-gg" );
@@ -476,12 +565,16 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
         }
         echo '</style>';
         // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+        // Il CSS torna con la tile. Il buffer restava aperto: l'HTML della tile finiva dentro, e l'apertura
+        // dell'involucro della tile usciva fuori posto, prima della sezione; la colonna si chiudeva prima del tempo e le
+        // tile dopo il Cartellone uscivano dalla riga (coro Paganella, 2 nov 2026).
+        $css_tile = ob_get_clean();
 
         $ics_svg  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4M12 12.5v5M9.5 15h5"/></svg>';
         $voce_svg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5h16v10H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg>';
 
         // una voce, nelle tre viste
-        $voce = function ( $x ) use ( $s, $vista, $immag, $generi, $stati, $tag_t, $ics_svg, $voce_svg, $ora_ts ) {
+        $voce = function ( $x ) use ( $s, $vista, $immag, $biglietto, $generi, $stati, $tag_t, $ics_svg, $voce_svg, $ora_ts ) {
             $v      = $x['v'];
             $ts     = $x['ts'];
             $g      = '' !== $x['gslg'] ? $generi[ $x['gslg'] ] : null;
@@ -543,6 +636,12 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
             $azioni   = '' !== $azioni ? '<div class="ocrt-azioni">' . $azioni . '</div>' : '';
             $img_html = ( $immag && '' !== $img ) ? '<img src="' . esc_url( $img ) . '" alt="" loading="lazy" decoding="async">' : '';
 
+            if ( 'mese' === $vista ) {
+                $h  = '<article hidden class="' . $cls . ' ocrt-gv"' . $attr . ' data-giorno="' . esc_attr( wp_date( 'Y-m-d', $ts ) ) . '">';
+                $h .= '<p class="ocrt-quando">' . esc_html( $quando ) . '</p>' . $sopra . $testo
+                    . ( $meta ? '<p class="ocrt-meta">' . esc_html( implode( ' · ', $meta ) ) . '</p>' : '' ) . $azioni;
+                return $h . '</article>';
+            }
             if ( 'lista' === $vista ) {
                 $h  = '<article class="' . $cls . '"' . $attr . '>';
                 $h .= '<div class="ocrt-data">' . $data_html . '<span class="ocrt-sett">' . esc_html( self::data_a_parole( 'D', $ts ) ) . '</span>'
@@ -562,21 +661,39 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
                 return $h . '</article>';
             }
             // prossimo
+            $conto = ! empty( $s['conto'] ) ? '<div class="ocrt-conto" data-conto><span class="ocrt-conto-et">' . esc_html( (string) $s['testo_conto'] ) . '</span><div class="ocrt-cifre" aria-hidden="true"></div></div>' : '';
+            if ( $biglietto ) {
+                $h  = '<article class="' . $cls . ' ocrt-pross ocrt-biglietto"' . $attr . '>';
+                $h .= '<div class="ocrt-data">' . $data_html . '<span class="ocrt-sett">' . esc_html( self::data_a_parole( 'l', $ts ) ) . '</span>'
+                    . ( '' !== $ora ? '<span class="ocrt-ora">' . esc_html( $ora ) . '</span>' : '' ) . '</div>';
+                $h .= '<div class="ocrt-corpo"><span class="ocrt-occ">' . esc_html( (string) $s['occhiello_prossimo'] ) . '</span>' . $testo
+                    . ( $meta ? '<p class="ocrt-meta">' . esc_html( implode( ' · ', $meta ) ) . '</p>' : '' ) . $sopra . '</div>';
+                return $h . '<div class="ocrt-lato">' . $conto . $azioni . '</div></article>';
+            }
             $h  = '<article class="' . $cls . ' ocrt-pross"' . $attr . '>';
             if ( $immag ) {
                 $h .= '<figure class="ocrt-img">' . $img_html . '</figure>';
             }
             $h .= '<div class="ocrt-corpo"><span class="ocrt-occ">' . esc_html( (string) $s['occhiello_prossimo'] ) . '</span>'
                 . '<p class="ocrt-quando">' . esc_html( $quando ) . '</p>' . $sopra . $testo . $dett;
-            if ( ! empty( $s['conto'] ) ) {
-                $h .= '<div class="ocrt-conto" data-conto><span class="ocrt-conto-et">' . esc_html( (string) $s['testo_conto'] ) . '</span><div class="ocrt-cifre" aria-hidden="true"></div></div>';
-            }
-            return $h . $azioni . '</div></article>';
+            return $h . $conto . $azioni . '</div></article>';
         };
 
         // ── Markup ──
-        $h = '<div id="' . esc_attr( $uid ) . '" class="olo-cartellone ocrt ocrt--' . esc_attr( $vista ) . '" data-ocrt="' . esc_attr( wp_json_encode( $cfg ) ) . '">';
-        if ( 'prossimo' !== $vista ) {
+        $h = $css_tile . '<div id="' . esc_attr( $uid ) . '" class="olo-cartellone ocrt ocrt--' . esc_attr( $vista ) . '" data-ocrt="' . esc_attr( wp_json_encode( $cfg ) ) . '">';
+        if ( 'mese' === $vista ) {
+            $freccia = static function ( $d ) {
+                return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="' . $d . '"/></svg>';
+            };
+            $h .= '<div class="ocrt-cal" data-cal><div class="ocrt-cal-testa">'
+                . '<button type="button" class="ocrt-cal-prec" aria-label="' . esc_attr( $cfg['prec'] ) . '">' . $freccia( 'M15 6l-6 6 6 6' ) . '</button>'
+                . '<p class="ocrt-cal-mese" aria-live="polite"></p>'
+                . '<button type="button" class="ocrt-cal-succ" aria-label="' . esc_attr( $cfg['succ'] ) . '">' . $freccia( 'M9 6l6 6-6 6' ) . '</button></div>'
+                . '<div class="ocrt-cal-sett" aria-hidden="true">' . implode( '', array_map( static function ( $g ) {
+                    return '<span>' . esc_html( function_exists( 'mb_substr' ) ? mb_substr( $g, 0, 3, 'UTF-8' ) : substr( $g, 0, 3 ) ) . '</span>';
+                }, $cfg['sett'] ) ) . '</div><div class="ocrt-cal-giorni"></div></div>';
+        }
+        if ( ! in_array( $vista, [ 'prossimo', 'mese' ], true ) ) {
             $chips = '';
             if ( ! empty( $s['filtri_generi'] ) && '' === $solo && count( $usati ) > 1 ) {
                 $chips .= '<div class="ocrt-chips" role="group" aria-label="' . esc_attr__( 'Genere', 'olobuilder' ) . '"><button type="button" class="ocrt-chip is-on" data-g="" aria-pressed="true">' . esc_html( (string) $s['testo_tutti'] ) . '</button>';
@@ -619,7 +736,7 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
                 $primo = $primo && $x['fine'] < $ora_ts;
                 continue;
             }
-            if ( ! empty( $s['raggruppa'] ) ) {
+            if ( ! empty( $s['raggruppa'] ) ? 'mese' !== $vista : false ) {
                 $m = wp_date( 'Y-m', $x['ts'] );
                 if ( $m !== $mese ) {
                     $mese = $m;
@@ -630,6 +747,14 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
         }
         $h .= '</div>';
         $h .= '<p class="ocrt-vuoto"' . ( $voci ? ' hidden' : '' ) . '>' . esc_html( (string) $s['vuoto_testo'] ) . '</p>';
+        if ( $iscriviti ) {
+            // seguire il calendario: le app (Apple, Outlook, Thunderbird) col webcal://, Google con l'indirizzo da aggiungere
+            $webcal = Olobuild_Spettacoli::indirizzo_calendario( true );
+            $h     .= '<p class="ocrt-segui">' . $ics_svg
+                . '<a class="ocrt-segui-primo" href="' . esc_url( $webcal, [ 'webcal', 'https', 'http' ] ) . '">' . esc_html( (string) $s['testo_iscrizione'] ) . '</a>'
+                . '<a href="' . esc_url( 'https://calendar.google.com/calendar/render?cid=' . rawurlencode( $webcal ) ) . '" target="_blank" rel="noopener">' . esc_html__( 'Google Calendar', 'olobuilder' ) . '</a>'
+                . '<a href="' . esc_url( Olobuild_Spettacoli::indirizzo_calendario() ) . '" download="calendario.ics">' . esc_html__( 'File .ics', 'olobuilder' ) . '</a></p>';
+        }
         if ( 'prossimo' !== $vista ) {
             $h .= '<p class="ocrt-nessuno" hidden>' . esc_html( (string) $s['nessun_risultato'] ) . '</p>';
         }
@@ -659,6 +784,23 @@ var vu=el.querySelector(".ocrt-vuoto");if(vu){if(p){vu.setAttribute("hidden","")
 var box=p?p.querySelector("[data-conto] .ocrt-cifre"):null;
 if(box){var u=C.unita||["giorni","ore","minuti","secondi"];box.innerHTML=u.map(function(n){return "<span><b>00</b><i>"+n+"</i></span>";}).join("");var b=box.querySelectorAll("b");
 var giro=function(){var d=p._i-Date.now();if(d<=0){var c=p.querySelector("[data-conto]");if(c){c.innerHTML="<span class=\"ocrt-adesso\">"+(C.ora||"")+"</span>";}return;}var x=[Math.floor(d/864e5),Math.floor(d/36e5)%24,Math.floor(d/6e4)%60,Math.floor(d/1e3)%60];for(var i=0;i<4;i++){b[i].textContent=(x[i]<10?"0":"")+x[i];}setTimeout(giro,1000-(Date.now()%1000));};giro();}
+}else if(C.vista==="mese"){
+var cal=el.querySelector("[data-cal]");var gri=cal?cal.querySelector(".ocrt-cal-giorni"):null;var tm=cal?cal.querySelector(".ocrt-cal-mese"):null;
+if(gri){var dd=function(n){return (n<10?"0":"")+n;};var giorni={};voci.forEach(function(v){var x=v.getAttribute("data-giorno");if(x){if(!giorni[x]){giorni[x]=[];}giorni[x].push(v);}});
+var oggi=C.oggi||"";var pr=null;voci.forEach(function(v){if(!pr){if(!v._p){pr=v;}}});var sel=pr?pr.getAttribute("data-giorno"):"";
+var base=(sel||oggi||"2026-01-01").split("-");var anno=+base[0];var mese=+base[1]-1;var vu3=el.querySelector(".ocrt-vuoto");
+var segna=function(){[].forEach.call(gri.querySelectorAll("button"),function(b){b.setAttribute("aria-pressed",b.getAttribute("data-g")===sel?"true":"false");});};
+var mostra=function(x){sel=x;voci.forEach(function(v){if(v.getAttribute("data-giorno")===x){v.removeAttribute("hidden");}else{v.setAttribute("hidden","");}});segna();if(vu3){if(x){vu3.setAttribute("hidden","");}else{vu3.removeAttribute("hidden");}}};
+var disegna=function(){var nm=(C.mesi||[])[mese]||"";tm.textContent=nm.charAt(0).toUpperCase()+nm.slice(1)+" "+anno;gri.textContent="";
+var off=(new Date(Date.UTC(anno,mese,1)).getUTCDay()-(+C.inizio||0)+7)%7;var tot=new Date(Date.UTC(anno,mese+1,0)).getUTCDate();
+for(var i=0;i<off;i++){var e=document.createElement("span");e.setAttribute("aria-hidden","true");gri.appendChild(e);}
+for(var d=1;d<=tot;d++){var x=anno+"-"+dd(mese+1)+"-"+dd(d);var c=giorni[x]?document.createElement("button"):document.createElement("span");c.className="ocrt-cal-g"+(x===oggi?" ocrt-oggi":"")+(x<oggi?" ocrt-cal-passato":"");c.textContent=d;
+if(giorni[x]){c.type="button";c.setAttribute("data-g",x);c.setAttribute("aria-pressed","false");c.setAttribute("aria-label",d+" "+nm+": "+giorni[x].map(function(v){return v.getAttribute("data-titolo")||"";}).join(", "));(function(xx){c.addEventListener("click",function(){mostra(xx);});})(x);}
+gri.appendChild(c);}segna();};
+var pb=cal.querySelector(".ocrt-cal-prec");var sb=cal.querySelector(".ocrt-cal-succ");
+if(pb){pb.addEventListener("click",function(){mese--;if(mese<0){mese=11;anno--;}disegna();});}
+if(sb){sb.addEventListener("click",function(){mese++;if(mese>11){mese=0;anno++;}disegna();});}
+disegna();mostra(sel);}
 }else{
 var g="",m="",q="";var chi=el.querySelectorAll(".ocrt-chip");var cnt=el.querySelector(".ocrt-conteggio");var nes=el.querySelector(".ocrt-nessuno");var vu2=el.querySelector(".ocrt-vuoto");
 var applica=function(){var n=0;var lim=+C.limite||0;voci.forEach(function(v){var ok=true;if(v._p){if(C.passati==="nascondi"){ok=false;}}if(g){if(v.getAttribute("data-g")!==g){ok=false;}}if(m){if(v.getAttribute("data-mese")!==m){ok=false;}}if(q){if((v.getAttribute("data-cerca")||"").indexOf(q)<0){ok=false;}}if(ok){if(lim){if(n>=lim){ok=false;}}}if(ok){n++;v.removeAttribute("hidden");}else{v.setAttribute("hidden","");}});

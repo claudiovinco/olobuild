@@ -43,6 +43,9 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
         'bg_color'        => '',
         'hover_bg'        => '',
         'accent_color'    => '',
+        'segno_campo'     => '',
+        'segno_icona'     => 'play-circle',
+        'segno_testo'     => 'Con video',
         'overlay_color'   => 'var(--olo-color-dark, #000000)',
         'overlay_opacity' => 60,
         'card_style'      => 'none',
@@ -635,7 +638,16 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
 
                 <?php if ( ! empty( $s['show_title'] ) ) : ?>
                     <<?php echo tag_escape( $title_tag ); ?> class="olo-ql-title"<?php if ( ! empty( $s['title_color'] ) ) echo ' style="color:' . esc_attr( $s['title_color'] ) . '"'; ?>>
-                        <a href="<?php echo esc_url( $permalink ); ?>"<?php if ( ! empty( $s['title_color'] ) ) echo ' style="color:inherit"'; ?>><?php echo esc_html( $title ); ?></a>
+                        <a href="<?php echo esc_url( $permalink ); ?>"<?php if ( ! empty( $s['title_color'] ) ) echo ' style="color:inherit"'; ?>><?php echo esc_html( $title ); ?></a><?php
+                        // «Segno per un campo» (1.4.949): una piccola icona accanto al titolo delle voci che hanno quel
+                        // campo pieno (nel repertorio del coro Paganella: il play sui canti con un video, 2 nov 2026)
+                        $segno_k = sanitize_key( (string) $s['segno_campo'] );
+                        if ( '' !== $segno_k && '' !== trim( (string) get_post_meta( $post_obj->ID, $segno_k, true ) ) ) {
+                            $segno_t = trim( (string) $s['segno_testo'] );
+                            echo ' <span class="olo-ql-segno"' . ( '' !== $segno_t ? ' role="img" aria-label="' . esc_attr( $segno_t ) . '" title="' . esc_attr( $segno_t ) . '"' : ' aria-hidden="true"' ) . '>'
+                                . $this->render_icon_html( (string) $s['segno_icona'] ?: 'play-circle', 1, 'aria-hidden="true"' ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icona dal sistema comune, attributi passati da esc_attr()
+                        }
+                        ?>
                     </<?php echo tag_escape( $title_tag ); ?>>
                 <?php endif; ?>
 
@@ -967,6 +979,8 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
             .olo-ql-title { font-size: 1.1em; font-weight: <?php echo $title_weight; ?>; margin: 0 0 6px; line-height: 1.3; }
             .olo-ql-title a { text-decoration: none; color: inherit; }
             .olo-ql-title a:hover { text-decoration: underline; }
+            .olo-ql-segno { display: inline-flex; vertical-align: -0.08em; margin-left: .3em; color: <?php echo $accent_c; ?>; line-height: 1; }
+            .olo-ql-segno svg { width: .78em; height: .78em; }
             .olo-ql-meta { font-size: 0.82em; color: var(--olo-color-text-muted, #9CA3AF); margin-bottom: 8px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
             .olo-ql-excerpt { font-size: 0.92em; color: var(--olo-color-text-muted, #9CA3AF); line-height: 1.6; margin: 0 0 10px; }
             .olo-ql-readmore { font-size: 0.88em; font-weight: 500; text-decoration: none; color: <?php echo $accent_c; ?>; }

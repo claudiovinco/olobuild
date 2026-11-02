@@ -151,6 +151,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         'mobile_lang_pos'    => 'top',
         // Mobile
         'mobile_breakpoint'  => '1024',
+        'mobile_nav_height'  => '',
         'mobile_style'       => 'offcanvas',
         'mobile_side'        => 'left',
         'mobile_slide_direction' => 'left',
@@ -780,6 +781,9 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-mm-logo--text { gap: 10px; }
         .<?php echo $uid; ?> .olo-mm-logo--con-nome { gap: 12px; }
         .<?php echo $uid; ?> .olo-mm-logo--con-nome img { flex: none; }
+        /* il marchio non si sottolinea al passaggio: «a:hover» di UIkit e del tema lo sottolineava (coro Paganella, 2 nov 2026) */
+        <?php // …e non cambia colore: «a:hover» del tema lo faceva diventare del colore dei link (rosso sul blu della barra, 2,3:1) ?>
+        .<?php echo $uid; ?> a:is(.olo-mm-logo, .olo-mm-mobile-logo, .olo-mm-oc-logo, .olo-mm-fs-logo):is(:hover, :focus, :active) { text-decoration: none; color: inherit; }
         .<?php echo $uid; ?> .olo-mm-logo-text { font-family: var(--olo-font-family-heading, 'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif); font-weight: 700; letter-spacing: -0.02em; line-height: 1; color: inherit; white-space: nowrap; }
         .<?php echo $uid; ?> .olo-mm-logo-dot { width: 9px; height: 9px; border-radius: 50%; background: currentColor; flex: none; }
         .<?php echo $uid; ?> .olo-mm-crest { display: inline-grid; place-items: center; width: 34px; height: 38px; font-family: var(--olo-font-family-heading, 'Archivo',sans-serif); font-weight: 900; font-size: 13px; letter-spacing: .02em; flex: none; border-radius: 14px 14px 16px 16px/14px 14px 22px 22px; box-shadow: inset 0 0 0 2px rgba(255,255,255,.2); }
@@ -1628,6 +1632,14 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
             <?php if ( ( $s['button_mode'] ?? 'none' ) !== 'none' && ( $s['mobile_bar_cta'] ?? true ) ) : // «Pulsante nella barra mobile» (1.4.932) ?>
             .<?php echo $uid; ?> .olo-mm-mobile-cta { display: flex !important; }
+            <?php endif; ?>
+            <?php
+            // «Altezza min sul telefono» (1.4.946): vuota = quella della barra, come prima. Una barra alta 116 px sul
+            // telefono si mangiava un settimo dello schermo (coro Paganella, 2 nov 2026).
+            $mob_h = intval( $s['mobile_nav_height'] ?? 0 );
+            if ( $mob_h > 0 ) : ?>
+            <?php // «html» davanti: la regola della barra che si stringe scorrendo viene dopo e a parità di peso vinceva ?>
+            .<?php echo $uid; ?> .olo-mm-bar, html .olo-header-sticky .<?php echo $uid; ?> .olo-mm-bar { min-height: <?php echo max( 40, $mob_h ); ?>px; }
             <?php endif; ?>
             <?php if ( ! empty( $s['mobile_bar_logo'] ) ) : ?>
             .<?php echo $uid; ?> .olo-mm-mobile-logo { display: flex !important; }

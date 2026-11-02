@@ -447,9 +447,21 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                 $bg_type    = $bg['type'] ?? 'color';
                 $ov_color   = $this->safe_color_css( $bg['overlay'] ?? '#000000' );
                 $ov_opacity = isset( $bg['overlayOpacity'] ) ? floatval( $bg['overlayOpacity'] ) : 0.3;
+                // Sfumata dall'alto e/o dal basso (1.4.943): copre tutta la diapositiva, non solo la tela dei livelli, così
+                // nelle finestre più alte del formato non si vede dove finisce il velo (coro Paganella, 2 nov 2026).
+                $f_alto  = max( 0, min( 100, (int) ( $bg['overlayFadeTop'] ?? 0 ) ) );
+                $f_basso = max( 0, min( 100, (int) ( $bg['overlayFadeBottom'] ?? 0 ) ) );
+                $ov_fondo = $ov_color;
+                if ( $f_alto || $f_basso ) {
+                    $tappe    = [ ( $f_alto ? $ov_color : 'transparent' ) . ' 0%' ];
+                    $tappe[]  = $f_alto ? 'transparent ' . $f_alto . '%' : '';
+                    $tappe[]  = $f_basso ? 'transparent ' . ( 100 - $f_basso ) . '%' : '';
+                    $tappe[]  = ( $f_basso ? $ov_color : 'transparent' ) . ' 100%';
+                    $ov_fondo = 'linear-gradient(to bottom,' . implode( ',', array_filter( $tappe ) ) . ')';
+                }
                 if ( $bg_type !== 'transparent' && $ov_opacity > 0 && $ov_color ) :
                 ?>
-                    <div class="olo-proslider-overlay" style="background:<?php echo $ov_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by the safe_color_css() whitelist above; opacity is floatval()'d ?>;opacity:<?php echo (float) $ov_opacity; ?>"></div>
+                    <div class="olo-proslider-overlay" style="background:<?php echo $ov_fondo; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by the safe_color_css() whitelist above, stops are int-clamped; opacity is floatval()'d ?>;opacity:<?php echo (float) $ov_opacity; ?>"></div>
                 <?php endif; ?>
             </div>
 

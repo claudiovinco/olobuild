@@ -48,6 +48,7 @@ class Olobuild_Spettacoli {
         add_action( 'init', [ __CLASS__, 'registra' ] );
         add_action( 'wp_loaded', [ __CLASS__, 'regole' ] );
         add_action( 'rest_api_init', [ __CLASS__, 'rotte' ] );
+        add_filter( 'rest_pre_serve_request', [ __CLASS__, 'servi_calendario' ], 10, 3 );
         add_action( 'save_post_' . self::TIPO, [ __CLASS__, 'salva' ], 10, 2 );
         if ( is_admin() ) {
             add_action( 'add_meta_boxes_' . self::TIPO, [ __CLASS__, 'riquadri' ] );
@@ -639,6 +640,12 @@ class Olobuild_Spettacoli {
                 return current_user_can( 'edit_posts' );
             },
         ] );
+        // Il calendario da seguire (iCal): pubblico, come le pagine degli spettacoli.
+        register_rest_route( 'olobuild/v1', '/spettacoli/calendario', [
+            'methods'             => 'GET',
+            'callback'            => [ __CLASS__, 'rest_calendario' ],
+            'permission_callback' => '__return_true',
+        ] );
         register_rest_route( 'olobuild/v1', '/spettacoli/da-voci', [
             'methods'             => 'POST',
             'callback'            => [ __CLASS__, 'rest_da_voci' ],
@@ -646,6 +653,103 @@ class Olobuild_Spettacoli {
                 return current_user_can( 'publish_posts' );
             },
         ] );
+    }
+
+    /** L'indirizzo del calendario iCal degli spettacoli (https; webcal:// per «seguirlo» dalle app del calendario). */
+    public static function indirizzo_calendario( $webcal = false ) {
+        $u = rest_url( 'olobuild/v1/spettacoli/calendario' );
+        return $webcal ? preg_replace( '#^https?://#', 'webcal://', $u ) : $u;
+    }
+
+    public static function rest_calendario() {
+        $r = new WP_REST_Response( self::calendario_ics() );
+        $r->header( 'Content-Type', 'text/calendar; charset=utf-8' );
+        $r->header( 'Content-Disposition', 'inline; filename="calendario.ics"' );
+        $r->header( 'Cache-Control', 'public, max-age=1800' );
+        return $r;
+    }
+
+    /** Il calendario esce com'è, non come JSON. */
+    public static function servi_calendario( $servito, $risultato, $richiesta ) {
+        if ( $servito || ! ( $richiesta instanceof WP_REST_Request ) || '/olobuild/v1/spettacoli/calendario' !== $richiesta->get_route() ) {
+            return $servito;
+        }
+        if ( $risultato instanceof WP_REST_Response && 200 === $risultato->get_status() ) {
+            echo (string) $risultato->get_data(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- testo iCal, ogni campo passa da ics_testo()
+            return true;
+        }
+        return $servito;
+    }
+
+    /** Un testo per l'iCal: barra rovescia, punto e virgola, virgola e a capo come vuole lo standard. */
+    private static function ics_testo( $t ) {
+        $t = wp_strip_all_tags( html_entity_decode( (string) $t, ENT_QUOTES, 'UTF-8' ) );
+        return str_replace( [ '\\', ';', ',', "\r\n", "\n", "\r" ], [ '\\\\', '\;', '\,', '\n', '\n', '' ], trim( $t ) );
+    }
+
+    /** Le righe lunghe vanno a capo ogni 75 byte, col seguito che comincia con uno spazio (senza spezzare le lettere). */
+    private static function ics_piega( $riga ) {
+        if ( strlen( $riga ) <= 75 || ! function_exists( 'mb_strcut' ) ) {
+            return $riga;
+        }
+        $out = [];
+        $max = 75;
+        while ( strlen( $riga ) > $max ) {
+            $pezzo  = mb_strcut( $riga, 0, $max, 'UTF-8' );
+            $out[]  = $pezzo;
+            $riga   = substr( $riga, strlen( $pezzo ) );
+            $max    = 74;
+        }
+        $out[] = $riga;
+        return implode( "\r\n ", $out );
+    }
+
+    /** Tutti gli spettacoli pubblicati come calendario iCal: titolo, orari, luogo, testo breve, pagina, annullati. */
+    public static function calendario_ics() {
+        $host   = (string) wp_parse_url( home_url(), PHP_URL_HOST );
+        $nome   = wp_specialchars_decode( (string) get_bloginfo( 'name' ), ENT_QUOTES );
+        $adesso = gmdate( 'Ymd\THis\Z' );
+        $righe  = [ 'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Olobuild//Spettacoli//IT', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
+            'X-WR-CALNAME:' . self::ics_testo( $nome ), 'X-WR-TIMEZONE:' . wp_timezone_string(),
+            'REFRESH-INTERVAL;VALUE=DURATION:PT6H', 'X-PUBLISHED-TTL:PT6H' ];
+        foreach ( self::voci() as $v ) {
+            $ini = self::istante( $v['data'], $v['ora'] );
+            if ( null === $ini ) {
+                continue;
+            }
+            $ev = [ 'BEGIN:VEVENT', 'UID:' . $v['id'] . '@' . $host, 'DTSTAMP:' . $adesso ];
+            if ( ! preg_match( '/^\d{1,2}:\d{2}$/', trim( (string) $v['ora'] ) ) ) {
+                // senza ora: l'appuntamento occupa i giorni interi, fino all'ultimo della tenitura
+                $ultimo = '' !== $v['data_fine'] ? $v['data_fine'] : $v['data'];
+                $dopo   = DateTime::createFromFormat( 'Y-m-d', $ultimo, wp_timezone() );
+                $ev[]   = 'DTSTART;VALUE=DATE:' . str_replace( '-', '', $v['data'] );
+                $ev[]   = 'DTEND;VALUE=DATE:' . ( $dopo ? $dopo->modify( '+1 day' )->format( 'Ymd' ) : str_replace( '-', '', $ultimo ) );
+            } else {
+                $fine_d = self::istante( $v['data_fine'], '23:59' );
+                $min    = class_exists( 'Olobuild_Cartellone_Tile' ) ? Olobuild_Cartellone_Tile::minuti( $v['durata'] ) : 0;
+                $fine   = ( null !== $fine_d && $fine_d > $ini ) ? $fine_d : $ini + 60 * ( $min > 0 ? $min : 120 );
+                $ev[]   = 'DTSTART:' . gmdate( 'Ymd\THis\Z', $ini );
+                $ev[]   = 'DTEND:' . gmdate( 'Ymd\THis\Z', $fine );
+            }
+            $ev[] = 'SUMMARY:' . self::ics_testo( $v['titolo'] );
+            if ( '' !== trim( (string) $v['luogo'] ) ) {
+                $ev[] = 'LOCATION:' . self::ics_testo( $v['luogo'] );
+            }
+            $testo = trim( implode( "\n\n", array_filter( [ trim( (string) $v['sottotitolo'] ), trim( (string) $v['descrizione'] ) ], 'strlen' ) ) );
+            if ( '' !== $testo ) {
+                $ev[] = 'DESCRIPTION:' . self::ics_testo( $testo );
+            }
+            if ( '' !== (string) $v['link_info'] ) {
+                $ev[] = 'URL:' . esc_url_raw( (string) $v['link_info'] );
+            }
+            if ( 'annullato' === $v['stato'] ) {
+                $ev[] = 'STATUS:CANCELLED';
+            }
+            $ev[]  = 'END:VEVENT';
+            $righe = array_merge( $righe, $ev );
+        }
+        $righe[] = 'END:VCALENDAR';
+        return implode( "\r\n", array_map( [ __CLASS__, 'ics_piega' ], $righe ) ) . "\r\n";
     }
 
     public static function rest_stato() {

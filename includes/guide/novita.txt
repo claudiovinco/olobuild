@@ -3,6 +3,46 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.951 - 2026-11-02 (il marchio non cambia colore)
+- Mega Menu: al passaggio del mouse il marchio (logo e nome) resta del suo colore; prima prendeva il colore dei link del tema.
+
+## v1.4.950 - 2026-11-02 (calendario del mese più leggibile)
+- Cartellone, «Calendario del mese»: il velo al passaggio sui giorni dei concerti è più leggero, così il numero resta leggibile anche con un colore d'accento vivo.
+
+## v1.4.949 - 2026-11-02 (il segno per un campo nel Query Loop)
+- Query Loop: «Segno per un campo», una piccola icona accanto al titolo delle voci che hanno pieno un campo personalizzato (per esempio il play sui canti che hanno un video), con l'icona e il testo per i lettori di schermo a scelta.
+
+## v1.4.948 - 2026-11-02 (cartina ritagliata al bordo)
+- Mappa del mondo: con «Solo i paesi colorati» la cartina taglia al suo bordo; prima il resto del mondo si allargava fuori, dietro ai testi accanto.
+
+## v1.4.947 - 2026-11-02 (la cartina sui paesi colorati)
+- Mappa del mondo: «Inquadratura» nello Stile. Oltre a tutto il mondo, «Solo i paesi colorati»: la cartina si stringe attorno agli stati colorati con un po' di margine (per gli stati con territori lontani conta la terra principale).
+- Mega Menu: l'«Altezza min sul telefono» vale anche quando si scorre e la barra si stringe.
+
+## v1.4.946 - 2026-11-02 (barra più bassa sul telefono)
+- Mega Menu: «Altezza min sul telefono», l'altezza della barra quando il menu diventa l'icona. Vuota resta la stessa della barra, come prima; una barra alta pensata per il computer non si mangia più un pezzo dello schermo del telefono.
+
+## v1.4.945 - 2026-11-02 (marchio senza sottolineatura)
+- Mega Menu: il marchio (logo e nome) non si sottolinea più al passaggio del mouse, nella barra, sul telefono e nel pannello del menu.
+
+## v1.4.944 - 2026-11-02 (il prossimo a forma di biglietto)
+- Cartellone, vista «Il prossimo»: la «Forma del prossimo» nello Stile. Oltre alla scheda con la locandina (com'era), il biglietto: una striscia bassa col giorno in grande a sinistra, titolo e luogo al centro e, oltre un filo tratteggiato, il tagliando col conto alla rovescia e i collegamenti.
+
+## v1.4.943 - 2026-11-02 (velo sfumato sullo sfondo della diapositiva)
+- Slider Pro: la sovrapposizione dello sfondo della diapositiva si può sfumare dall'alto e dal basso («Sfuma dall'alto», «Sfuma dal basso»). Copre tutta la diapositiva e non solo la tela dei livelli: nelle finestre più alte del formato non si vede più dove finisce il velo.
+
+## v1.4.942 - 2026-11-02 (il calendario da seguire e il calendario del mese)
+- Spettacoli: il calendario iCal di tutti gli spettacoli pubblicati, da seguire dal telefono o dal computer (Apple, Google, Outlook, Thunderbird): ogni spettacolo nuovo compare da solo, quelli annullati risultano annullati.
+- Cartellone: «Segui il calendario» (con «Spettacoli del sito»), sotto il calendario i collegamenti per seguirlo, per aggiungerlo a Google Calendar e per scaricare il file.
+- Cartellone: la vista «Calendario del mese, coi giorni segnati»: un mese per volta con le frecce, i giorni dei concerti segnati, e scegliendo un giorno sotto compare quello che c'è.
+- Cartellone e Pianta sala: la tile resta dentro la sua colonna. Lasciavano aperto un buffer di uscita: l'involucro della tile usciva fuori posto e le tile messe dopo, nella stessa colonna, finivano fuori dalla riga (un pulsante sotto il calendario andava nella colonna accanto, la colonna accanto sotto la riga).
+
+## v1.4.941 - 2026-11-02 (locandina senza bande)
+- Cartellone, vista «Il prossimo» con «Immagine intera»: la locandina non ha più le due bande grigie ai lati quando è più stretta della colonna.
+
+## v1.4.940 - 2026-11-02 (conto alla rovescia che va a capo)
+- Cartellone, vista «Il prossimo»: le cifre del conto alla rovescia vanno a capo quando la colonna è stretta. Prima i secondi uscivano dal bordo della scheda.
+
 ## v1.4.939 - 2026-11-02 (Mega Menu a vetro senza sorprese)
 - Mega Menu: il «Filtro sfondo» degli Effetti (vetro smerigliato dietro la barra) ora si disegna sulla barra. Sull'involucro della tile faceva comparire nella pagina, sotto la barra, il pannello del menu del telefono anche da chiuso.
 

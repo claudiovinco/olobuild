@@ -29,6 +29,7 @@ class Olobuild_WorldMap_Tile extends Olobuild_Tile_Base {
         'colore_vuoto'        => '',
         'colore_confini'      => '',
         'spessore_confini'    => 0.6,
+        'inquadratura'        => 'mondo',
         'legenda_posizione'   => 'sotto',
         'legenda_allineamento' => 'center',
         'legenda_font_family' => '',
@@ -78,6 +79,76 @@ class Olobuild_WorldMap_Tile extends Olobuild_Tile_Base {
         return $out;
     }
 
+    /**
+     * Il riquadro dei paesi colorati (1.4.947, «Inquadratura: solo i paesi colorati»): per ogni stato il pezzo di
+     * territorio più grande e le isole vicine, non i territori d'oltremare (con la Guyana la Francia allargava la
+     * cartina fino al Sud America); più i puntini colorati. Un margine attorno, una larghezza minima, proporzioni
+     * fra 1,6:1 e 2,6:1. Null se non c'è niente di colorato.
+     */
+    private static function riquadro( $dati, $scelti ) {
+        $box = null;
+        $unisci = static function ( $b ) use ( &$box ) {
+            $box = null === $box ? $b : [ min( $box[0], $b[0] ), min( $box[1], $b[1] ), max( $box[2], $b[2] ), max( $box[3], $b[3] ) ];
+        };
+        foreach ( $dati['stati'] as $st ) {
+            if ( empty( $scelti[ (string) ( $st['c'] ?? '' ) ] ) ) {
+                continue;
+            }
+            // i pezzi del tracciato: M assoluto, l relativi, z chiude
+            $pezzi = [];
+            foreach ( preg_split( '/(?=M)/', (string) $st['d'], -1, PREG_SPLIT_NO_EMPTY ) as $p ) {
+                preg_match_all( '/-?\d*\.?\d+(?:e-?\d+)?/i', $p, $m );
+                $n = array_map( 'floatval', $m[0] );
+                if ( count( $n ) < 2 ) {
+                    continue;
+                }
+                $x = $n[0];
+                $y = $n[1];
+                $b = [ $x, $y, $x, $y ];
+                for ( $i = 2; $i + 1 < count( $n ); $i += 2 ) {
+                    $x += $n[ $i ];
+                    $y += $n[ $i + 1 ];
+                    $b = [ min( $b[0], $x ), min( $b[1], $y ), max( $b[2], $x ), max( $b[3], $y ) ];
+                }
+                $pezzi[] = $b;
+            }
+            if ( ! $pezzi ) {
+                continue;
+            }
+            usort( $pezzi, static function ( $a, $b ) {
+                return ( ( $b[2] - $b[0] ) * ( $b[3] - $b[1] ) ) <=> ( ( $a[2] - $a[0] ) * ( $a[3] - $a[1] ) );
+            } );
+            $grande = $pezzi[0];
+            $unisci( $grande );
+            $vicino = max( 12, 0.6 * max( $grande[2] - $grande[0], $grande[3] - $grande[1] ) );
+            foreach ( array_slice( $pezzi, 1 ) as $b ) {
+                if ( $b[0] < $grande[2] + $vicino && $b[2] > $grande[0] - $vicino && $b[1] < $grande[3] + $vicino && $b[3] > $grande[1] - $vicino ) {
+                    $unisci( $b );
+                }
+            }
+        }
+        foreach ( (array) ( $dati['puntini'] ?? [] ) as $st ) {
+            if ( ! empty( $scelti[ (string) ( $st['c'] ?? '' ) ] ) ) {
+                $unisci( [ floatval( $st['x'] ), floatval( $st['y'] ), floatval( $st['x'] ), floatval( $st['y'] ) ] );
+            }
+        }
+        if ( null === $box ) {
+            return null;
+        }
+        list( , , $vw, $vh ) = array_map( 'floatval', preg_split( '/\s+/', trim( (string) $dati['viewBox'] ) ) );
+        $w  = max( 70, ( $box[2] - $box[0] ) * 1.24 + 8 );
+        $h  = max( 30, ( $box[3] - $box[1] ) * 1.24 + 8 );
+        $w  = max( $w, $h * 1.6 );
+        $h  = max( $h, $w / 2.6 );
+        $cx = ( $box[0] + $box[2] ) / 2;
+        $cy = ( $box[1] + $box[3] ) / 2;
+        $w  = min( $w, $vw );
+        $h  = min( $h, $vh );
+        $x  = max( 0, min( $vw - $w, $cx - $w / 2 ) );
+        $y  = max( 0, min( $vh - $h, $cy - $h / 2 ) );
+        return [ round( $x, 1 ), round( $y, 1 ), round( $w, 1 ), round( $h, 1 ) ];
+    }
+
     public function render( $settings, $style = [] ) {
         $s    = wp_parse_args( $settings, $this->defaults );
         $dati = self::dati();
@@ -104,10 +175,20 @@ class Olobuild_WorldMap_Tile extends Olobuild_Tile_Base {
             list( $v, $nome, $c ) = $voce( $st );
             $tracciati .= '<path class="owm-s' . ( $v ? ' owm-' . $v : '' ) . '" data-c="' . esc_attr( $c ) . '" d="' . esc_attr( (string) $st['d'] ) . '"><title>' . esc_html( $nome ) . '</title></path>';
         }
+        // «Solo i paesi colorati»: la cartina si stringe sul loro riquadro; i puntini restano grandi come prima a vedersi
+        $vista  = (string) $dati['viewBox'];
+        $raggio = 2.6;
+        if ( 'colorati' === (string) $s['inquadratura'] ) {
+            $rq = self::riquadro( $dati, $scelti );
+            if ( $rq ) {
+                $vista  = implode( ' ', $rq );
+                $raggio = round( 2.6 * max( 0.25, $rq[2] / 1000 ), 2 );
+            }
+        }
         $puntini = '';
         foreach ( (array) ( $dati['puntini'] ?? [] ) as $st ) {
             list( $v, $nome, $c ) = $voce( $st );
-            $puntini .= '<circle class="owm-s owm-p' . ( $v ? ' owm-' . $v : '' ) . '" data-c="' . esc_attr( $c ) . '" cx="' . esc_attr( (string) floatval( $st['x'] ) ) . '" cy="' . esc_attr( (string) floatval( $st['y'] ) ) . '" r="2.6"><title>' . esc_html( $nome ) . '</title></circle>';
+            $puntini .= '<circle class="owm-s owm-p' . ( $v ? ' owm-' . $v : '' ) . '" data-c="' . esc_attr( $c ) . '" cx="' . esc_attr( (string) floatval( $st['x'] ) ) . '" cy="' . esc_attr( (string) floatval( $st['y'] ) ) . '" r="' . $raggio . '"><title>' . esc_html( $nome ) . '</title></circle>';
         }
 
         $et1 = trim( (string) $s['etichetta_1'] );
@@ -168,7 +249,8 @@ class Olobuild_WorldMap_Tile extends Olobuild_Tile_Base {
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist with fixed var() fallbacks, floatval() for the stroke width, a fixed map for the alignment, resolve_font_family()/css_len()/font_weight_css() for the legend; $uid is an internal md5-based id. ?>
         <style>
             .<?php echo $uid; ?>{--owm-1:<?php echo $c1; ?>;--owm-2:<?php echo $c2; ?>;--owm-0:<?php echo $vuoto; ?>;--owm-b:<?php echo $confini; ?>;display:flex;flex-direction:column;gap:0.75rem;}
-            .<?php echo $uid; ?> .owm-mappa{display:block;width:100%;height:auto;overflow:visible;}
+            <?php // ritagliata sui paesi colorati taglia al suo bordo: il resto del mondo si allargava fuori dalla cartina ?>
+            .<?php echo $uid; ?> .owm-mappa{display:block;width:100%;height:auto;overflow:<?php echo $vista === (string) $dati['viewBox'] ? 'visible' : 'hidden'; ?>;}
             .<?php echo $uid; ?> .owm-s{fill:var(--owm-0);stroke:var(--owm-b);stroke-width:<?php echo $spessore; ?>px;vector-effect:non-scaling-stroke;stroke-linejoin:round;transition:fill .2s ease;}
             .<?php echo $uid; ?> .owm-1{fill:var(--owm-1);}
             .<?php echo $uid; ?> .owm-2{fill:var(--owm-2);}
@@ -185,7 +267,7 @@ class Olobuild_WorldMap_Tile extends Olobuild_Tile_Base {
         </style>
         <div class="olo-worldmap <?php echo $uid; ?>">
             <?php if ( $sopra ) echo $legenda; ?>
-            <svg class="owm-mappa" viewBox="<?php echo esc_attr( (string) $dati['viewBox'] ); ?>" role="img" aria-labelledby="<?php echo $uid; ?>-t" preserveAspectRatio="xMidYMid meet">
+            <svg class="owm-mappa" viewBox="<?php echo esc_attr( $vista ); ?>" role="img" aria-labelledby="<?php echo $uid; ?>-t" preserveAspectRatio="xMidYMid meet">
                 <title id="<?php echo $uid; ?>-t"><?php echo esc_html( $titolo ); ?></title>
                 <g class="owm-stati"><?php echo $tracciati; ?></g>
                 <g class="owm-puntini"><?php echo $puntini; ?></g>

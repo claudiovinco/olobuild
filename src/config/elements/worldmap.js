@@ -26,6 +26,7 @@ export default {
     colore_confini: '',
     spessore_confini: 0.6,
     legenda_posizione: 'sotto',
+    inquadratura: 'mondo',
     legenda_allineamento: 'center',
     legenda_font_family: '',
     legenda_font_size: '',
@@ -67,6 +68,10 @@ export default {
 
     { type: 'separator', label: t('Forma') },
     { key: 'spessore_confini', label: t('Spessore dei confini'), type: 'range', min: 0, max: 3, step: 0.1, unit: 'px' },
+    { key: 'inquadratura', label: t('Inquadratura'), type: 'select', options: [
+      { value: 'mondo', label: t('Tutto il mondo') },
+      { value: 'colorati', label: t('Solo i paesi colorati') },
+    ], description: t('Con «Solo i paesi colorati» la cartina si stringe attorno agli stati colorati, con un po’ di margine: per chi ha cantato o lavorato in pochi paesi vicini.') },
 
     { type: 'separator', label: t('Disposizione'), condition: { field: 'mostra_legenda', value: true } },
     { key: 'legenda_posizione', label: t('Posizione della legenda'), type: 'select', options: [

@@ -160,6 +160,15 @@
                 <div class="mb-flex mb-gap-1 mb-items-center mb-mt-1">
                   <NumberScrubber theme="dark" class="mb-flex-1" :modelValue="Math.round((currentBg.overlayOpacity ?? 0.3) * 100)" :min="0" :max="100" :step="5" :defaultValue="30" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Sovrapposizione')" @update:modelValue="updateBg('overlayOpacity', $event / 100)" />
                 </div>
+                <!-- sfumata: piena sul bordo, trasparente a questa distanza; 0 = uniforme -->
+                <div class="mb-flex mb-gap-1 mb-items-center mb-mt-1">
+                  <label class="mb-text-[10px] mb-text-gray-400 mb-w-16">{{ t('Sfuma dall’alto') }}</label>
+                  <NumberScrubber theme="dark" class="mb-flex-1" :modelValue="currentBg.overlayFadeTop || 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Sfuma dall’alto')" @update:modelValue="updateBg('overlayFadeTop', $event)" />
+                </div>
+                <div class="mb-flex mb-gap-1 mb-items-center mb-mt-1">
+                  <label class="mb-text-[10px] mb-text-gray-400 mb-w-16">{{ t('Sfuma dal basso') }}</label>
+                  <NumberScrubber theme="dark" class="mb-flex-1" :modelValue="currentBg.overlayFadeBottom || 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Sfuma dal basso')" @update:modelValue="updateBg('overlayFadeBottom', $event)" />
+                </div>
               </div>
             </div>
           </div>

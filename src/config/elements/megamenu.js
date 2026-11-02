@@ -917,6 +917,8 @@ export default {
       show: (s) => stileMobile(s) !== 'offcanvas' },
     { key: 'mobile_logo_height', label: t('Altezza logo mobile'), type: 'range', min: 20, max: 120, step: 2, unit: 'px',
       show: logoMobileAgisce },
+    { key: 'mobile_nav_height', label: t('Altezza min sul telefono'), type: 'range', min: 40, max: 120, step: 2, unit: 'px',
+      description: t('L’altezza della barra sotto il punto in cui il menu diventa l’icona. Vuota: la stessa della barra.') },
 
     // I link extra con «Stile pulsante» nel pannello mobile, nei tre stili.
     { type: 'separator', label: t('Menu mobile — Pulsanti'), show: haPulsantiMobili },

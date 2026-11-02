@@ -492,8 +492,10 @@ class Olobuild_Piantasala_Tile extends Olobuild_Tile_Base {
         echo $this->css_testo( $s, 'legenda', "{$sel} .opia-leg" );
         echo '</style>';
         // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+        // Il CSS torna con la tile: col buffer aperto l'involucro della tile usciva fuori posto (come nel Cartellone).
+        $css_tile = ob_get_clean();
 
-        $h  = '<div id="' . esc_attr( $uid ) . '" class="olo-piantasala opia"' . ( $ini >= 0 ? ' data-scheda="' . $ini . '"' : '' ) . '>';
+        $h  = $css_tile . '<div id="' . esc_attr( $uid ) . '" class="olo-piantasala opia"' . ( $ini >= 0 ? ' data-scheda="' . $ini . '"' : '' ) . '>';
         $h .= '<div class="opia-griglia"><div class="opia-mappa">';
         $h .= '<svg class="opia-svg" viewBox="' . $vb_x . ' ' . $vb_y . ' ' . $vb_w . ' ' . $vb_h . '" role="img" aria-label="' . esc_attr__( 'Pianta della sala', 'olobuilder' ) . '">';
         $h .= $palco . $forme . $platea;
