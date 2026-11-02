@@ -176,6 +176,11 @@ export default {
     { key: 'focus_border_color', label: t('Colore bordo focus'), type: 'color' },
     { key: 'input_height', label: t('Altezza input'), type: 'range', min: 32, max: 72, step: 2 },
     withHover({ key: 'input_border_radius', label: t('Raggio input'), type: 'border-radius' }),
+    // Il pulsante a sola icona delle modalità Compatta e Modale.
+    { key: 'trigger_bg', label: t('Sfondo pulsante'), type: 'color', show: (s) => ['compact', 'modal'].includes(s.mode),
+      description: t('Il pulsante con la sola lente (Compatta e Modale). Vuoto = lo sfondo dell\'input.') },
+    { key: 'trigger_color', label: t('Colore icona pulsante'), type: 'color', show: (s) => ['compact', 'modal'].includes(s.mode) },
+    { key: 'trigger_border_color', label: t('Bordo pulsante'), type: 'color', show: (s) => ['compact', 'modal'].includes(s.mode) },
 
     { type: 'separator', label: t('Stile Popup risultati') },
     { key: 'results_bg', label: t('Sfondo popup'), type: 'color' },

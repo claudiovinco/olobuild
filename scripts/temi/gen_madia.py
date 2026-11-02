@@ -564,7 +564,7 @@ THEME = tema(
     '\'IBM Plex Mono\', ui-monospace, Menlo, monospace', ['Fraunces', 'Karla', 'IBM Plex Mono'], corsivo_di=['Fraunces'],
     peso_titoli='500', raggio=6, grana=3, titoli_line='1.04', titoli_spazio='-0.01em')
 tema_negozio(THEME, NAME)
-THEME['preview_v'] = THEME['preview_mobile_v'] = '2'  # anteprime con la vetrina delle offerte (1° nov 2026)
+THEME['preview_v'] = THEME['preview_mobile_v'] = '4'  # anteprime con le testate nuove (2 nov 2026)
 pannelli(THEME, NAME, {'La dispensa': ('pannello-reparti', 'Pannello del negozio'), 'Offerte': ('pannello-offerte', 'Pannello delle offerte'), 'Novità': ('pannello-novita', 'Pannello delle novità')})
 THEME['cursor']['style'] = 'farina'
 

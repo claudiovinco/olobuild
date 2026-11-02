@@ -631,6 +631,7 @@ tema_negozio(THEME, NAME)
 pannelli(THEME, NAME, {'La cantina': ('pannello-reparti', 'Pannello della cantina'),
                        'Offerte': ('pannello-offerte', 'Pannello delle offerte'),
                        'Novità': ('pannello-novita', 'Pannello delle novità')})
+THEME['preview_v'] = THEME['preview_mobile_v'] = '4'  # anteprime con le testate nuove (2 nov 2026)
 THEME['cursor']['style'] = 'calice'
 THEME['cursor']['ring_color'] = HEX['accent']    # il vetro, verde bottiglia
 THEME['cursor']['dot_color'] = HEX['primary']    # il vino

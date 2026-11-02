@@ -11,6 +11,7 @@ foto delle card, testata chiara o scura. Uso:
     N.testata(Tpl(ID, 'header'), 'orlo', icona='scissors', ...)
 """
 from base import mix, radius, solid
+import testate
 
 
 class Negozio:
@@ -421,83 +422,184 @@ class Negozio:
 
     # ── testata e piede ───────────────────────────────────────────────────────────────────────────────────────────
     def testata(self, t, logo, icona='', ricerca='Cerca nel negozio…', parole='', annuncio=None, logo_size=30):
-        """Barra delle offerte, poi logo · ricerca · account, preferiti e carrello, poi il menu. Sotto i 960 px logo e
-        icone in una riga e la ricerca sotto, a tutta larghezza: ogni tile c'è due volte e si nasconde dove non serve."""
-        c = self.c
-        fondo = c['nero'] if self.scura else c['fondo']
-        col = c['chiaro'] if self.scura else c['testo']
+        """La testata del negozio in una delle otto disposizioni di testate.NEGOZI (una per negozio, perché non siano
+        tutte uguali): classica (logo · ricerca · icone, il menu sotto), in linea (logo e menu sulla stessa riga),
+        logo al centro, menu diviso attorno al logo, ricerca in alto su una fascia, scura compatta, due piani coi social,
+        menu su una fascia colorata. Sul telefono una riga sola: il Mega Menu col suo logo (simbolo e nome) e
+        l'hamburger, le icone di account, preferiti e carrello; la ricerca sotto o nell'icona della lente.
+        Ogni tile c'è due volte (computer / telefono) e si nasconde dove non serve."""
+        c, K = self.c, self.K
+        disp = testate.NEGOZI.get(K.id, 'classica')
+        scura = self.scura or disp == 'scura'
+        fondo = c['nero'] if scura else c['fondo']
+        col = c['chiaro'] if scura else c['testo']
+        hov = c['sec'] if scura else c['acc']
+        icona = icona or testate.LOGHI.get(K.id, '')
         GRANDE = {'visible_tablet': False, 'visible_mobile_landscape': False, 'visible_mobile': False}
         PICCOLO = {'visible_desktop': False, 'visible_tablet_landscape': False}
+        lente = disp in ('menu-diviso', 'scura', 'due-piani')   # la ricerca nell'icona (popup), non nella barra
+        SENZA = {'top': 0, 'right': 0, 'bottom': 0, 'left': 0}
 
-        def marchio(adv, size):
-            o = {'text': logo, 'url': self.P['home'], 'alignment': 'left', 'bg_color': 'transparent', 'text_color': col,
-                 'hover_bg_color': 'transparent', 'hover_text_color': c['sec'] if self.scura else c['acc'], 'border_radius': 0,
-                 'font_size': size,
+        def marchio(adv, size, align='left'):
+            o = {'text': logo, 'url': self.P['home'], 'alignment': align, 'bg_color': 'transparent', 'text_color': col,
+                 'hover_bg_color': 'transparent', 'hover_text_color': hov, 'border_radius': 0, 'font_size': size,
                  'font_weight': self.peso, 'font_family': 'heading', 'letter_spacing': '-0.5', 'text_transform': 'none',
                  'padding_x': 0, 'padding_y': 2}
             if icona:
-                o.update({'icon': icona, 'icon_position': 'left', 'icon_spacing': 6, 'icon_size': int(size * 0.8), 'icon_color': c['acc']})
+                o.update({'icon': icona, 'icon_position': 'left', 'icon_spacing': 8, 'icon_size': int(size * 0.8), 'icon_color': c['acc']})
             return t.classic('button', o, style={'padding_top': 0}, advanced=dict(adv))
 
-        def cerca(adv):
-            return t.bare('livesearch', {
-                'preset': 'custom', 'mode': 'expanded', 'placeholder': ricerca, 'min_chars': 2, 'debounce_ms': 200, 'max_results': 6,
+        def cerca(adv, mode='expanded', alta=46, chiara=None):
+            chiara = scura if chiara is None else chiara
+            o = {
+                'preset': 'custom', 'mode': mode, 'placeholder': ricerca, 'min_chars': 2, 'debounce_ms': 200, 'max_results': 6,
                 'results_columns': 1, 'show_all_url': '', 'show_thumbnail': True, 'show_excerpt': False, 'title_only': False,
                 'no_results_text': 'Nessun prodotto: prova con un’altra parola.', 'post_types': 'product',
-                'input_bg': c['chiaro'] if self.scura else c['sala'], 'input_color': c['testo'] if not self.scura else c['nero'],
-                'icon_color': c['tenue'] if not self.scura else c['nero'], 'input_font_size': 15, 'input_height': 46,
+                'input_bg': c['chiaro'] if chiara else c['sala'], 'input_color': c['testo'] if not chiara else c['nero'],
+                'icon_color': (c['tenue'] if not chiara else c['nero']) if mode in ('expanded', 'inline') else col,
+                'input_font_size': 15, 'input_height': alta,
                 'input_border_color': 'transparent', 'input_border_radius': max(self.r, 4), 'focus_border_color': c['acc'],
                 'results_bg': c['chiaro'], 'results_border_color': c['filo'], 'results_border_radius': max(self.r, 4),
                 'item_hover_bg': c['sala'], 'title_color': c['testo'], 'excerpt_color': c['tenue'], 'results_max_height': 460,
                 'thumb_width': 48, 'thumb_height': 48, 'thumb_radius': self.r, 'animated_placeholder': bool(parole),
-                'placeholder_words': parole}, advanced=dict(adv))
+                'placeholder_words': parole}
+            if mode in ('modal', 'compact'):
+                # La lente nella barra: senza disco attorno, del colore delle altre icone; il campo del popup resta chiaro.
+                o.update({'input_height': 40, 'icon_color': c['tenue'], 'input_bg': c['chiaro'], 'input_color': c['nero'],
+                          'trigger_bg': 'transparent', 'trigger_border_color': 'transparent', 'trigger_color': col})
+            return t.bare('livesearch', o, advanced=dict(adv))
 
-        def icone(adv):
+        def icone(adv, con_lente=False, colore=None):
+            colore = colore or col
             conto = t.classic('icon', {'icon': 'user', 'link_url': self.P['account'], 'link_target': '_self',
-                                       'link_label': 'Il mio account', 'size': 24, 'color': col, 'hover_animation': 'none',
+                                       'link_label': 'Il mio account', 'size': 24, 'color': colore, 'hover_animation': 'none',
                                        'view': 'default', 'alignment': 'center'}, style={'margin_bottom': 0, 'padding_top': 6},
                               advanced=dict(adv))
             cuore = t.bare('woo_wishlist', {'icon': 'heart', 'style': 'icon', 'show_count': True, 'show_grid': False, 'icon_size': 22,
-                                            'icon_color': col, 'icon_color_active': c['acc2'], 'badge_bg': c['acc'],
+                                            'icon_color': colore, 'icon_color_active': c['acc2'], 'badge_bg': c['acc'],
                                             'badge_color': c['on_acc']}, advanced=dict(adv))
             carrello = t.bare('woo_minicart', {'style': 'icon', 'icon': 'bag', 'show_count': True, 'show_total': True, 'dropdown': True,
-                                               'icon_size': 24, 'text_color': col, 'icon_color': col, 'badge_bg': c['acc'],
+                                               'icon_size': 24, 'text_color': colore, 'icon_color': colore, 'badge_bg': c['acc'],
                                                'badge_color': c['on_acc'], 'dropdown_width': 360}, advanced=dict(adv))
-            return t.row([t.col([conto], wm='1-3', ws='1-3', width_default='1-3'), t.col([cuore], wm='1-3', ws='1-3', width_default='1-3'),
-                          t.col([carrello], wm='1-3', ws='1-3', width_default='1-3')],
-                         layout='33-33-33', valign='center', anim=None, stack=False, gap=6)
+            pezzi = ([cerca(adv, mode='modal')] if con_lente else []) + [conto, cuore, carrello]
+            q = len(pezzi)
+            w = {3: ('1-3', '33-33-33'), 4: ('1-4', '25-25-25-25')}[q]
+            return t.row([t.col([p], wm=w[0], ws=w[0], width_default=w[0]) for p in pezzi], layout=w[1], valign='center',
+                         anim=None, stack=False, gap=6)
 
-        alto = t.row([t.col([marchio(GRANDE, logo_size)], wm='1-5', ws='1-5'), t.col([cerca(GRANDE)], wm='3-5', ws='3-5'),
-                      t.col([icone(GRANDE)], wm='1-5', ws='1-5')],
-                     layout='custom', custom='22,58,20', gap=24, valign='center', anim=None, stack=False)
-        piccolo = t.row([
-            t.col([marchio(PICCOLO, int(logo_size * 0.85))], wm='1-2', ws='1-2', width_default='1-2'),
-            t.col([t.row([t.col([], wm='1-3', ws='1-3', width_default='1-3'),
-                          t.col([icone(PICCOLO)], wm='2-3', ws='2-3', width_default='2-3')],
-                         layout='custom', custom='33.33,66.67', anim=None, stack=False, valign='center')],
-                  wm='1-2', ws='1-2', width_default='1-2'),
-        ], layout='50-50', gap=12, valign='center', anim=None, stack=False)
-        sotto = t.one([cerca(PICCOLO)], anim=None, style={'margin_top': 10})
-        menu = t.classic('megamenu', {
-            'menu_id': 'auto', 'logo_text': '', 'logo_mark': '', 'logo_dot': False, 'logo_position': 'left', 'layout': 'left',
-            'header_mode': 'classic', 'sticky': False, 'nav_bg': 'transparent', 'text_color': col,
-            'hover_color': c['sec'] if self.scura else c['acc'], 'active_color': c['sec'] if self.scura else c['acc'], 'font_size': '14', 'font_weight': '600', 'text_transform': 'none', 'letter_spacing': '0',
-            'item_gap': '24', 'bar_width': 'wide', 'nav_height': '46', 'bar_padding': {'top': 0, 'right': 0, 'bottom': 0, 'left': 0},
-            'hover_effect': 'underline', 'hover_effect_color': c['sec'] if self.scura else c['acc'], 'button_mode': 'none', 'social_in_navbar': False,
-            'social_in_mobile': False, 'mobile_style': 'fullscreen', 'mobile_bg': c['nero'], 'mobile_text_color': c['chiaro'],
-            'mobile_accent_color': c['acc'], 'hamburger_style': 'minimal', 'hamburger_color': col, 'mobile_font_size': '26',
-            'mobile_link_size': '26', 'mobile_link_font': 'heading', 'mobile_link_weight': self.peso,
-            'border': {'top': 0, 'right': 0, 'bottom': 0, 'left': 0, 'style': 'solid', 'color': ''},
-            'topbar_enabled': False, 'nav_phone': '', 'nav_phone_url': '',
-            # i pannelli delle voci (offerte, novità, reparti): template del tema su tutta la larghezza sotto il menu
-            'panel_bg': c['fondo'], 'panel_border_top': '1', 'panel_border_color': mix(c['testo'], 14), 'panel_shadow': 'lg',
-            'panel_radius': {'tl': 0, 'tr': 0, 'br': 0, 'bl': 0}, 'panel_open_animation': 'fade', 'panel_origin': 'nav'})
-        out = [self.annuncio(t, *annuncio)] if annuncio else []
-        out += [t.section([alto, piccolo, sotto], bg=solid(fondo), width='large', padding='remove-vertical',
-                          style={'padding_top': 16, 'padding_bottom': 12}),
-                t.section([t.one([menu], anim=None)], bg=solid(fondo), width='large', padding='remove-vertical',
-                          style={'border': {'top': 0, 'right': 0, 'bottom': 1, 'left': 0, 'style': 'solid',
-                                            'color': mix(col, 14)}})]
+        def menu(adv, con_logo=False, layout='left', hover='underline', posizione='left', altezza='46', testo=None,
+                 sopra=None, lato='left'):
+            testo = testo or col
+            sopra = sopra or hov
+            s = {
+                'menu_id': 'auto', 'logo_text': logo if con_logo else '', 'logo_mark': '', 'logo_dot': False,
+                'logo_text_size': str(max(20, min(28, logo_size - 4))), 'logo_text_color': col, 'logo_text_font': 'heading',
+                'logo_text_weight': self.peso, 'logo_text_spacing': 0, 'logo_text_transform': '',
+                'logo_position': posizione, 'layout': layout, 'mobile_bar_logo': True, 'hamburger_side': lato,
+                'header_mode': 'classic', 'sticky': False, 'nav_bg': 'transparent', 'text_color': testo,
+                'hover_color': sopra, 'active_color': sopra, 'font_size': '14', 'font_weight': '600', 'text_transform': 'none',
+                'letter_spacing': '0', 'item_gap': '24', 'bar_width': 'wide', 'nav_height': altezza, 'bar_padding': SENZA,
+                'hover_effect': hover, 'hover_effect_color': sopra, 'hover_effect_height': 2, 'button_mode': 'none',
+                'social_in_navbar': False, 'mobile_bg': c['nero'], 'mobile_text_color': c['chiaro'],
+                'mobile_accent_color': c['acc'], 'hamburger_color': col, 'mobile_link_font': 'heading',
+                'mobile_link_weight': self.peso, 'border': dict(SENZA, style='solid', color=''),
+                'topbar_enabled': False, 'nav_phone': '', 'nav_phone_url': '',
+                # i pannelli delle voci (offerte, novità, reparti): template del tema su tutta la larghezza sotto il menu
+                'panel_bg': c['fondo'], 'panel_border_top': '1', 'panel_border_color': mix(c['testo'], 14), 'panel_shadow': 'lg',
+                'panel_radius': {'tl': 0, 'tr': 0, 'br': 0, 'bl': 0}, 'panel_open_animation': 'fade', 'panel_origin': 'nav'}
+            testate.mobile(K.id, s)
+            if con_logo:
+                testate.simbolo(K.id, s)
+                s['logo_text_color'] = col
+                if scura and s.get('logo_mark'):
+                    # sulla barra scura il primario (spesso scuro) spariva: il simbolo prende l'accento chiaro
+                    pieno = bool(s.get('logo_mark_bg')) and s.get('logo_mark_shape') != 'ring'
+                    s.update({'logo_mark_color': c['nero'] if pieno else c['sec']})
+                    if s.get('logo_mark_bg'):
+                        s['logo_mark_bg'] = c['sec']
+            return t.classic('megamenu', s, advanced=dict(adv))
+
+        def social(adv, align='left', colore=None):
+            reti = [('instagram', '#'), ('facebook', '#'), (testate.TERZO.get('Negozi online', 'pinterest'), '#')]
+            return t.classic('social', {'links': [{'platform': p, 'url': u} for p, u in reti], 'style': 'minimal', 'size': '36',
+                                        'gap': '16', 'icon_color': colore or col, 'hover_effect': 'none', 'alignment': align},
+                             advanced=dict(adv))
+
+        def riga(cols, custom, gap=24, valign='center'):
+            return t.row([t.col(x, wm='1-3', ws='1-3') for x in cols], layout='custom', custom=custom, gap=gap,
+                         valign=valign, anim=None, stack=False)
+
+        def destra(pezzo, vuoto=30):
+            """Un gruppo di icone spinto a destra della sua colonna."""
+            return t.row([t.col([], wm='1-3', ws='1-3', width_default='1-3'),
+                          t.col([pezzo], wm='2-3', ws='2-3', width_default='2-3')],
+                         layout='custom', custom='%d,%d' % (vuoto, 100 - vuoto), anim=None, stack=False, valign='center')
+
+        # Una sola sezione per tutta la testata: le sezioni non si nascondono per dispositivo, le tile sì. Le fasce
+        # colorate (il menu su fondo pieno, la ricerca su una fascia) sono lo sfondo delle tile stesse.
+        def fascia(colore, pad=(12, 14)):
+            return {'bg': solid(colore), 'padding_top': pad[0], 'padding_bottom': pad[0], 'padding_left': pad[1],
+                    'padding_right': pad[1], 'border_radius': max(self.r, 0)}
+        filo_sopra = {'border': {'top': 1, 'right': 0, 'bottom': 0, 'left': 0, 'style': 'solid', 'color': mix(col, 14)},
+                      'padding_top': 0}
+
+        def menu_sotto(**kw):
+            m = menu(GRANDE, **kw)
+            m['style'] = dict(m.get('style') or {}, **filo_sopra)
+            return t.one([m], anim=None, style={'margin_top': 12})
+
+        # ── computer ──
+        if disp == 'in-linea':
+            # logo e menu sulla stessa riga: la ricerca è la lente accanto alle icone (le voci hanno tutto lo spazio)
+            pc = [riga([[menu(GRANDE, con_logo=True, altezza='64', hover='fill-up')], [destra(icone(GRANDE, con_lente=True), vuoto=10)]],
+                       '80,20')]
+        elif disp == 'logo-al-centro':
+            pc = [riga([[cerca(GRANDE, alta=42)], [marchio(GRANDE, logo_size + 4, align='center')], [destra(icone(GRANDE))]],
+                       '30,40,30'),
+                  menu_sotto(layout='center', hover='overline')]
+        elif disp == 'menu-diviso':
+            pc = [riga([[menu(GRANDE, con_logo=True, layout='center', posizione='split', hover='dot', altezza='72')],
+                        [destra(icone(GRANDE, con_lente=True))]], '78,22')]
+        elif disp == 'ricerca-in-alto':
+            larga = cerca(GRANDE, alta=52, chiara=True)
+            larga['style'] = fascia(c['sala'], pad=(14, 220))
+            pc = [riga([[menu(GRANDE, con_logo=True, layout='right', hover='highlight', altezza='68')], [destra(icone(GRANDE))]],
+                       '80,20'),
+                  t.one([larga], anim=None, style={'margin_top': 10})]
+        elif disp == 'scura':
+            pc = [riga([[menu(GRANDE, con_logo=True, layout='center', hover='double-line', altezza='70')],
+                        [destra(icone(GRANDE, con_lente=True))]], '76,24')]
+        elif disp == 'due-piani':
+            pc = [riga([[social(GRANDE)], [marchio(GRANDE, logo_size + 2, align='center')], [destra(icone(GRANDE, con_lente=True))]],
+                       '30,40,30'),
+                  menu_sotto(layout='center', hover='double-line')]
+        elif disp == 'barra-colorata':
+            barra = menu(GRANDE, testo=c['on_acc'], sopra=c['on_acc'], hover='highlight', altezza='50')
+            barra['settings'].update({'nav_bg': c['acc'], 'bar_padding': {'top': 0, 'right': 18, 'bottom': 0, 'left': 18},
+                                     'bar_padding_4lati': True})
+            barra['style'] = dict(barra.get('style') or {}, border_radius=max(self.r, 0))
+            pc = [riga([[marchio(GRANDE, logo_size)], [cerca(GRANDE)], [icone(GRANDE)]], '22,58,20'),
+                  t.one([barra], anim=None, style={'margin_top': 14})]
+        else:  # classica
+            pc = [riga([[marchio(GRANDE, logo_size)], [cerca(GRANDE)], [icone(GRANDE)]], '22,58,20'), menu_sotto()]
+
+        # ── tablet e telefono: il menu col logo e l'hamburger, le icone; la ricerca sotto o nella lente ──
+        lato = 'right' if disp in ('logo-al-centro', 'due-piani', 'scura') else 'left'
+        tel = [riga([[menu(PICCOLO, con_logo=True, altezza='56', lato=lato)],
+                     [destra(icone(PICCOLO, con_lente=lente), vuoto=4 if lente else 30)]],
+                    '48,52' if lente else '56,44', gap=8)]
+        if not lente:
+            tel.append(t.one([cerca(PICCOLO, alta=44)], anim=None, style={'margin_top': 8}))
+
+        out = []
+        if annuncio and disp != 'scura':
+            out.append(self.annuncio(t, *annuncio))
+        out.append(t.section(pc + tel, bg=solid(fondo), width='large', padding='remove-vertical',
+                             style={'padding_top': 12, 'padding_bottom': 12,
+                                    'border': {'top': 0, 'right': 0, 'bottom': 1, 'left': 0, 'style': 'solid',
+                                               'color': mix(col, 14)}}))
+        if annuncio and disp == 'scura':
+            out.append(self.annuncio(t, *annuncio))
         return out
 
     def piede(self, t, logo, icona, claim, colonne, contatti, legale, promesse, newsletter, social=None):

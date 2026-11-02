@@ -30,6 +30,10 @@ class Olobuild_LiveSearch_Tile extends Olobuild_Tile_Base {
         'taxonomy_terms'       => '',
         'exclude_terms'        => '',
         'input_bg'             => 'var(--olo-color-surface, #ffffff)',
+        // Pulsante a sola icona (Compatta e Modale): vuoti = quelli del campo, come prima della 1.4.916.
+        'trigger_bg'           => '',
+        'trigger_color'        => '',
+        'trigger_border_color' => '',
         'input_color'          => '',
         'icon_color'           => '',
         'input_font_size'      => '14',
@@ -363,6 +367,14 @@ class Olobuild_LiveSearch_Tile extends Olobuild_Tile_Base {
             '--ls-thumb-radius'       => Olobuild_Tile_Utils::border_radius( $s['thumb_radius'] ?? 0 ),
             '--ls-columns'            => max( 1, min( 4, intval( $s['results_columns'] ?? 1 ) ) ),
         ];
+        // Il pulsante a sola icona può avere fondo, icona e filo suoi: nella barra di una testata scura il fondo
+        // del campo (chiaro, per scriverci) faceva del pulsante un disco bianco.
+        foreach ( [ 'trigger_bg' => '--ls-trigger-bg', 'trigger_color' => '--ls-trigger-color', 'trigger_border_color' => '--ls-trigger-border' ] as $k => $v ) {
+            $col = $this->safe_color_css( $s[ $k ] ?? '' );
+            if ( $col ) {
+                $css_vars_arr[ $v ] = $col;
+            }
+        }
         // Raggio miniatura in hover: viaggia in variabili (le miniature le disegna il JS e,
         // in modale, l'overlay finisce nel <body>: un selettore sull'id non lo raggiunge).
         $thumb_h = Olobuild_Tile_Utils::radius_hover( $s, 'thumb_radius_hover' );

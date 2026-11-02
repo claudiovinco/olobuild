@@ -49454,3 +49454,99 @@ msgstr "Le sol qui se retourne"
 #: includes/class-theme-importer.php
 msgid "Il sipario di velluto"
 msgstr "Le rideau de velours"
+
+#: src/config/elements/megamenu.js
+msgid "Disegno delle voci"
+msgstr "Dessin des éléments"
+
+#: src/config/elements/megamenu.js
+msgid "Editoriale (numero sopra, filetti)"
+msgstr "Éditorial (numéro au-dessus, filets)"
+
+#: src/config/elements/megamenu.js
+msgid "Indice (numero grande a contorno)"
+msgstr "Index (grand numéro en contour)"
+
+#: src/config/elements/megamenu.js
+msgid "Pillole in fila"
+msgstr "Pilules en rang"
+
+#: src/config/elements/megamenu.js
+msgid "Testata colorata"
+msgstr "En-tête coloré"
+
+#: src/config/elements/megamenu.js
+msgid "Come si presentano le voci nel pannello aperto. «Testata colorata» colora la testa del pannello laterale e di quello a tutto schermo col colore d'accento."
+msgstr "L’aspect des éléments dans le panneau ouvert. « En-tête coloré » colore la tête du panneau latéral et du panneau plein écran avec la couleur d’accent."
+
+#: src/config/elements/megamenu.js
+msgid "Decoro del pannello"
+msgstr "Décor du panneau"
+
+#: src/config/elements/megamenu.js
+msgid "Simbolo del logo, in grande"
+msgstr "Symbole du logo, en grand"
+
+#: src/config/elements/megamenu.js
+msgid "Nome in verticale"
+msgstr "Nom à la verticale"
+
+#: src/config/elements/megamenu.js
+msgid "Cerchio di colore"
+msgstr "Cercle de couleur"
+
+#: src/config/elements/megamenu.js
+msgid "Trama di punti"
+msgstr "Trame de points"
+
+#: src/config/elements/megamenu.js
+msgid "Un disegno leggero dietro le voci. «Simbolo del logo» usa il Simbolo scelto nel Logo."
+msgstr "Un dessin léger derrière les éléments. « Symbole du logo » utilise le Symbole choisi dans le Logo."
+
+#: src/config/elements/megamenu.js
+msgid "Piede del pannello"
+msgstr "Pied du panneau"
+
+#: src/config/elements/megamenu.js
+msgid "Social sotto le voci"
+msgstr "Réseaux sociaux sous les éléments"
+
+#: src/config/elements/megamenu.js
+msgid "Social scritti per nome"
+msgstr "Réseaux sociaux par leur nom"
+
+#: src/config/elements/megamenu.js
+msgid "Colore d'accento"
+msgstr "Couleur d’accent"
+
+#: src/config/elements/megamenu.js
+msgid "Testo in fondo, social e link in fondo raccolti in un blocco in fondo al pannello, in ogni stile del menu mobile."
+msgstr "Texte du bas, réseaux sociaux et lien du bas réunis dans un bloc au pied du panneau, dans tous les styles du menu mobile."
+
+#: src/config/elements/megamenu.js
+msgid "Vuoto = il simbolo da solo. Con un colore il simbolo sta in una forma di quel colore (o dentro un anello)."
+msgstr "Vide = le symbole seul. Avec une couleur, le symbole est dans une forme de cette couleur (ou dans un anneau)."
+
+#: src/config/elements/megamenu.js
+msgid "Anello (solo il filo)"
+msgstr "Anneau (contour seul)"
+
+#: src/config/elements/megamenu.js
+msgid "Ciottolo"
+msgstr "Galet"
+
+#: src/config/elements/megamenu.js
+msgid "Lato dell'hamburger"
+msgstr "Côté du hamburger"
+
+#: src/config/elements/megamenu.js
+msgid "A sinistra, prima del logo"
+msgstr "À gauche, avant le logo"
+
+#: src/config/elements/livesearch.js
+msgid "Colore icona pulsante"
+msgstr "Couleur de l’icône du bouton"
+
+#: src/config/elements/livesearch.js
+msgid "Il pulsante con la sola lente (Compatta e Modale). Vuoto = lo sfondo dell'input."
+msgstr "Le bouton avec la seule loupe (Compacte et Modale). Vide = le fond du champ."

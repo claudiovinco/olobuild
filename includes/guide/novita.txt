@@ -3,6 +3,11 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.917 - 2026-11-02 (testate e menu mobile)
+- Mega Menu, menu mobile: «Disegno delle voci» (Editoriale, Indice, Schede, Pillole in fila, Al centro, Testata colorata), «Decoro del pannello» (il simbolo del logo in grande, il nome in verticale, un cerchio di colore, una trama di punti) e «Piede del pannello» (Riga, Fascia, Scheda, Social scritti per nome, Colore d’accento): testo, social e link in fondo raccolti in un blocco, in ogni stile del menu mobile. «Lato dell’hamburger»: anche a sinistra, prima del logo.
+- Mega Menu, logo: il simbolo può stare in un anello, un arco, una foglia, un rombo, un esagono o un ciottolo.
+- Temi: ogni tema ha il suo simbolo accanto al nome al posto del pallino; il menu mobile di ogni tema è diverso da quello dei vicini (da destra, da sinistra, dall’alto, dal basso, a tutto schermo) col piede sempre coi social; i negozi WooCommerce hanno la testata in otto forme (logo e menu sulla stessa riga, logo al centro, menu diviso attorno al logo, ricerca su una fascia, scura compatta, due piani, menu su una fascia colorata).
+
 ## v1.4.915 - 2026-11-01 (rifiniture)
 - Pulsante del carrello (taglie) e galleria prodotto (video): gli spazi nuovi in unità relative, il pulsante play centrato col translate invece dei margini negativi. Nessun cambiamento visibile.
 

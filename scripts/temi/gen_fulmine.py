@@ -19,6 +19,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from base import Tpl, write_theme, page, lib, mix, radius, solid  # noqa: E402
 from kit import Kit  # noqa: E402
 from negozio import Negozio, pannelli  # noqa: E402
+import testate  # noqa: E402
 
 ID = 'fulmine'
 NAME = 'Fulmine'
@@ -306,14 +307,8 @@ def build_header():
         t.col([ricerca(SOLO_GRANDE)], wm='3-5', ws='3-5'),
         t.col([icone(SOLO_GRANDE)], wm='1-5', ws='1-5'),
     ], layout='custom', custom='18,62,20', gap=24, valign='center', anim=None, stack=False)
-    piccolo = t.row([
-        t.col([logo(SOLO_PICCOLO, size=26)], wm='1-2', ws='1-2', width_default='1-2'),
-        t.col([t.row([t.col([], wm='1-3', ws='1-3', width_default='1-3'), t.col([icone(SOLO_PICCOLO)], wm='2-3', ws='2-3', width_default='2-3')],
-                     layout='custom', custom='33.33,66.67', anim=None, stack=False, valign='center')],
-              wm='1-2', ws='1-2', width_default='1-2'),
-    ], layout='50-50', gap=12, valign='center', anim=None, stack=False)
     sotto = t.one([ricerca(SOLO_PICCOLO)], anim=None, style={'margin_top': 10})
-    menu = t.classic('megamenu', {
+    impostazioni = {
         'menu_id': 'auto', 'logo_text': '', 'logo_mark': '', 'logo_dot': False, 'logo_position': 'left',
         'layout': 'left', 'header_mode': 'classic', 'sticky': False,
         'nav_bg': 'transparent', 'text_color': BIANCO, 'hover_color': GIALLO, 'active_color': GIALLO,
@@ -328,7 +323,19 @@ def build_header():
         # i pannelli delle voci (reparti, offerte, novità): template del tema su tutta la larghezza sotto il menu
         'panel_bg': FONDO, 'panel_border_top': '1', 'panel_border_color': FILO, 'panel_shadow': 'lg',
         'panel_radius': {'tl': 0, 'tr': 0, 'br': 0, 'bl': 0}, 'panel_open_animation': 'fade', 'panel_origin': 'nav',
-    })
+    }
+    testate.mobile(ID, impostazioni)
+    menu = t.classic('megamenu', dict(impostazioni), advanced=dict(SOLO_GRANDE))
+    # Sul telefono il menu porta il logo (il simbolo e il nome) con l'hamburger a sinistra, accanto le icone.
+    tascabile = testate.simbolo(ID, dict(impostazioni, logo_text='fulmine', logo_text_size='24', logo_text_color=BIANCO,
+                                         logo_text_font='heading', logo_text_weight='800', logo_text_spacing=0,
+                                         mobile_bar_logo=True, hamburger_side='left', nav_height='56'))
+    piccolo = t.row([
+        t.col([t.classic('megamenu', tascabile, advanced=dict(SOLO_PICCOLO))], wm='1-2', ws='1-2', width_default='1-2'),
+        t.col([t.row([t.col([], wm='1-3', ws='1-3', width_default='1-3'), t.col([icone(SOLO_PICCOLO)], wm='2-3', ws='2-3', width_default='2-3')],
+                     layout='custom', custom='30,70', anim=None, stack=False, valign='center')],
+              wm='1-2', ws='1-2', width_default='1-2'),
+    ], layout='custom', custom='56,44', gap=8, valign='center', anim=None, stack=False)
     return [t.section([alto, piccolo, sotto], bg=solid(NOTTE), width='large', padding='remove-vertical',
                       style={'padding_top': 14, 'padding_bottom': 14}),
             t.section([t.one([menu], anim=None)], bg=solid(NOTTE2), width='fullbleed', padding='remove-vertical')]
@@ -838,7 +845,7 @@ def build_404():
 
 
 THEME = {
-    'id': ID, 'name': NAME, 'author': 'Olobuild', 'version': '1.0.0', 'preview_v': '2', 'preview_mobile_v': '2',
+    'id': ID, 'name': NAME, 'author': 'Olobuild', 'version': '1.0.0', 'preview_v': '4', 'preview_mobile_v': '4',
     'category': 'Negozi online', 'zone': 'Le offerte lampo',
     'requires_plugin': {'slug': 'woocommerce', 'label': 'WooCommerce', 'check': 'class:WooCommerce',
                         'purchase_url': 'https://wordpress.org/plugins/woocommerce/'},

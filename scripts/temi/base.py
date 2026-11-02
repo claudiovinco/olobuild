@@ -244,6 +244,18 @@ def write_theme(theme, builds, media):
         nodo_timeline(built)
         if r:
             rinforza(theme['id'], built, r)
+    # Le testate seguono testate.py (simbolo del logo, menu mobile, effetto delle voci): kit, negozi e Fulmine lo fanno da
+    # sé (testate.FATTI), qui passano i generatori con un Mega Menu loro.
+    import testate
+    if 'header.json' in builds and theme['id'] not in testate.FATTI:
+        def menu(n):
+            if n.get('type') == 'megamenu':
+                testate.applica(theme['id'], n.setdefault('settings', {}))
+            for c in n.get('children') or []:
+                menu(c)
+        h = builds['header.json']
+        for n in (h['content'] if isinstance(h, dict) else h):
+            menu(n)
     os.makedirs(out, exist_ok=True)
     used = {}
     ids = set()

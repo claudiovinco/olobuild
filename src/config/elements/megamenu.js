@@ -37,6 +37,10 @@ const vociAnimabili = () => true;
 // Il logo mobile sta nella barra (se attivo) e nella testata dell'Off-canvas.
 const logoMobileAgisce = (s) => s.mobile_bar_logo !== false || stileMobile(s) === 'offcanvas';
 // Link extra resi come pulsante (PHP: extra_link_N_button, N = 1…4).
+// Testo e link in fondo agiscono nel Fullscreen o, in ogni stile, con un «Piede del pannello».
+const piedeMobile = (s) => stileMobile(s) === 'fullscreen' || !!s.mobile_foot_look;
+// Disegni delle voci che hanno già il loro numero: «Numeri progressivi» lì non aggiunge niente.
+const vociNumerate = (s) => ['editoriale', 'indice'].includes(s.mobile_look);
 const haPulsantiMobili = (s) => [1, 2, 3, 4].some((n) => !!s[`extra_link_${n}_button`]);
 
 /**
@@ -442,14 +446,16 @@ export default {
     { key: 'mobile_search_overlay', label: t('Ricerca mobile a tutta pagina'), type: 'toggle',
       condition: { field: 'mobile_search', value: true },
       description: t('La lente apre l\'overlay a schermo intero invece del pannello sotto la barra.') },
+    // Le voci «Editoriale» e «Indice» hanno già il loro numero.
     { key: 'mobile_numbers', label: t('Numeri progressivi (01, 02…)'), type: 'toggle',
-      show: (s) => stileMobile(s) === 'fullscreen' },
+      show: (s) => stileMobile(s) === 'fullscreen' && !vociNumerate(s) },
+    // Testo e link in fondo: nel Fullscreen, e in ogni stile quando c'è un «Piede del pannello».
     { key: 'mobile_footer_text', label: t('Testo in fondo'), type: 'text',
-      show: (s) => stileMobile(s) === 'fullscreen' },
+      show: piedeMobile },
     { key: 'mobile_footer_cta_text', label: t('Link in fondo — testo'), type: 'text',
-      show: (s) => stileMobile(s) === 'fullscreen' },
+      show: piedeMobile },
     { key: 'mobile_footer_cta_url', label: t('Link in fondo — URL'), type: 'link',
-      show: (s) => stileMobile(s) === 'fullscreen' && !!s.mobile_footer_cta_text },
+      show: (s) => piedeMobile(s) && !!s.mobile_footer_cta_text },
 
     { type: 'separator', label: t('Header') },
     { type: 'description', description: t('Modalità e sticky agiscono sull\'header del sito: valgono quando il menu sta nel template Header. Messo nel corpo di una pagina, il menu resta dov\'è e l\'header del sito non cambia.') },
@@ -612,11 +618,17 @@ export default {
     { key: 'logo_mark_stroke', label: t('Simbolo — spessore linea'), type: 'range', min: 0.5, max: 4, step: 0.25, condition: { field: 'logo_mark', op: 'ne', value: '' },
       description: t('Per le icone disegnate a linea: sottile accanto a un logo leggero, spessa accanto a uno pieno.') },
     { key: 'logo_mark_bg', label: t('Simbolo — sfondo'), type: 'color', condition: { field: 'logo_mark', op: 'ne', value: '' },
-      description: t('Vuoto = il simbolo da solo. Con un colore il simbolo sta in un cerchio o in un riquadro.') },
+      description: t('Vuoto = il simbolo da solo. Con un colore il simbolo sta in una forma di quel colore (o dentro un anello).') },
     { key: 'logo_mark_shape', label: t('Simbolo — forma dello sfondo'), type: 'select', options: [
       { value: 'circle', label: t('Cerchio') },
       { value: 'rounded', label: t('Riquadro arrotondato') },
       { value: 'square', label: t('Riquadro') },
+      { value: 'ring', label: t('Anello (solo il filo)') },
+      { value: 'arch', label: t('Arco') },
+      { value: 'leaf', label: t('Foglia') },
+      { value: 'diamond', label: t('Rombo') },
+      { value: 'hexagon', label: t('Esagono') },
+      { value: 'blob', label: t('Ciottolo') },
     ], condition: [ { field: 'logo_mark', op: 'ne', value: '' }, { field: 'logo_mark_bg', op: 'ne', value: '' } ] },
     { type: 'separator', label: t('Navbar') },
     { key: 'layout', label: t('Allineamento menu'), type: 'select', options: [
@@ -822,6 +834,32 @@ export default {
       show: (s) => stileMobile(s) !== 'dropdown'
         || (s.mobile_search !== false && !s.mobile_search_overlay && !s.nav_bg) },
     { key: 'mobile_accent_color', label: t('Colore accento mobile'), type: 'color' },
+    { key: 'mobile_look', label: t('Disegno delle voci'), type: 'select', options: [
+      { value: '', label: t('Semplice') },
+      { value: 'editoriale', label: t('Editoriale (numero sopra, filetti)') },
+      { value: 'indice', label: t('Indice (numero grande a contorno)') },
+      { value: 'schede', label: t('Schede') },
+      { value: 'pillole', label: t('Pillole in fila') },
+      { value: 'centrato', label: t('Al centro') },
+      { value: 'fascia', label: t('Testata colorata') },
+    ], description: t('Come si presentano le voci nel pannello aperto. «Testata colorata» colora la testa del pannello laterale e di quello a tutto schermo col colore d\'accento.') },
+    // Il decoro sta dietro le voci del pannello laterale e di quello a tutto schermo (la tendina è troppo bassa).
+    { key: 'mobile_deco', label: t('Decoro del pannello'), type: 'select', options: [
+      { value: '', label: t('Nessuno') },
+      { value: 'simbolo', label: t('Simbolo del logo, in grande') },
+      { value: 'nome', label: t('Nome in verticale') },
+      { value: 'cerchio', label: t('Cerchio di colore') },
+      { value: 'punti', label: t('Trama di punti') },
+    ], show: (s) => stileMobile(s) !== 'dropdown',
+      description: t('Un disegno leggero dietro le voci. «Simbolo del logo» usa il Simbolo scelto nel Logo.') },
+    { key: 'mobile_foot_look', label: t('Piede del pannello'), type: 'select', options: [
+      { value: '', label: t('Social sotto le voci') },
+      { value: 'riga', label: t('Riga') },
+      { value: 'fascia', label: t('Fascia') },
+      { value: 'scheda', label: t('Scheda') },
+      { value: 'nomi', label: t('Social scritti per nome') },
+      { value: 'accento', label: t('Colore d\'accento') },
+    ], description: t('Testo in fondo, social e link in fondo raccolti in un blocco in fondo al pannello, in ogni stile del menu mobile.') },
     { key: 'mobile_overlay_color', label: t('Fondo dietro al pannello'), type: 'color', show: (s) => stileMobile(s) === 'offcanvas' && !s.offcanvas_fullscreen },
     { key: 'mobile_overlay_blur', label: t('Sfocatura del fondo'), type: 'range', min: 0, max: 20, step: 1, unit: 'px', show: (s) => stileMobile(s) === 'offcanvas' && !s.offcanvas_fullscreen },
     // Nel Fullscreen il filetto fra le voci è fisso.
@@ -831,7 +869,7 @@ export default {
       { value: 'dashed', label: t('Tratteggiata') },
       { value: 'gradient', label: t('Sfumatura') },
       { value: 'none', label: t('Nessuno') },
-    ], show: (s) => stileMobile(s) !== 'fullscreen' },
+    ], show: (s) => stileMobile(s) !== 'fullscreen' && !s.mobile_look },
 
     { type: 'separator', label: t('Menu mobile — Testo') },
     // «Dimensione voci»: un solo posto per i tre stili. Dietro ci sono le due chiavi storiche,
@@ -909,6 +947,10 @@ export default {
       { value: 'morph', label: t('Morph (trasformazione fluida)') },
       { value: 'magnetic', label: t('Magnetic (2 step → X)') },
     ]},
+    { key: 'hamburger_side', label: t('Lato dell\'hamburger'), type: 'select', options: [
+      { value: 'right', label: t('A destra') },
+      { value: 'left', label: t('A sinistra, prima del logo') },
+    ] },
     { key: 'hamburger_size', label: t('Dimensione hamburger'), type: 'range', min: 20, max: 44, step: 2, unit: 'px' },
     { key: 'hamburger_color', label: t('Colore hamburger'), type: 'color' },
     { key: 'hamburger_box', label: t('Fondo hamburger'), type: 'select', options: [

@@ -533,7 +533,7 @@ THEME = tema(
     '\'Martian Mono\', ui-monospace, Menlo, monospace', ['Syne', 'Instrument Sans', 'Martian Mono'], corsivo_di=[],
     peso_titoli='600', raggio=4, grana=0, titoli_line='1.0', titoli_spazio='-0.02em')
 tema_negozio(THEME, NAME)
-THEME['preview_v'] = THEME['preview_mobile_v'] = '2'  # anteprime con la vetrina delle offerte (1° nov 2026)
+THEME['preview_v'] = THEME['preview_mobile_v'] = '4'  # anteprime con le testate nuove (2 nov 2026)
 pannelli(THEME, NAME, {'Tutti gli oggetti': ('pannello-reparti', 'Pannello del negozio'), 'Offerte': ('pannello-offerte', 'Pannello delle offerte'), 'Novità': ('pannello-novita', 'Pannello delle novità')})
 THEME['cursor']['style'] = 'ombra'
 

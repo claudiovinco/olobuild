@@ -525,6 +525,7 @@ tema_negozio(THEME, NAME)
 pannelli(THEME, NAME, {'Carambola': ('pannello-reparti', 'Pannello della sala'),
                        'Offerte': ('pannello-offerte', 'Pannello delle offerte'),
                        'Novità': ('pannello-novita', 'Pannello delle novità')})
+THEME['preview_v'] = THEME['preview_mobile_v'] = '4'  # anteprime con le testate nuove (2 nov 2026)
 THEME['cursor']['style'] = 'stecca'
 THEME['cursor']['ring_color'] = HEX['secondary']  # il colore del cursore (sul fondo chiaro il chiaro non si vede)
 

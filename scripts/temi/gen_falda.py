@@ -648,6 +648,7 @@ tema_negozio(THEME, NAME)
 pannelli(THEME, NAME, {'Il negozio': ('pannello-reparti', 'Pannello del negozio'),
                        'Offerte': ('pannello-offerte', 'Pannello delle offerte'),
                        'Novità': ('pannello-novita', 'Pannello delle novità')})
+THEME['preview_v'] = THEME['preview_mobile_v'] = '4'  # anteprime con le testate nuove (2 nov 2026)
 THEME['cursor']['style'] = 'ombrello'
 THEME['cursor']['ring_color'] = HEX['primary']   # la tela dell'ombrello
 THEME['cursor']['dot_color'] = HEX['accent']     # il manico

@@ -48029,3 +48029,99 @@ msgstr "The floor that turns over"
 #: includes/class-theme-importer.php
 msgid "Il sipario di velluto"
 msgstr "The velvet curtain"
+
+#: src/config/elements/megamenu.js
+msgid "Disegno delle voci"
+msgstr "Item design"
+
+#: src/config/elements/megamenu.js
+msgid "Editoriale (numero sopra, filetti)"
+msgstr "Editorial (number above, rules)"
+
+#: src/config/elements/megamenu.js
+msgid "Indice (numero grande a contorno)"
+msgstr "Index (large outlined number)"
+
+#: src/config/elements/megamenu.js
+msgid "Pillole in fila"
+msgstr "Pills in a row"
+
+#: src/config/elements/megamenu.js
+msgid "Testata colorata"
+msgstr "Coloured header"
+
+#: src/config/elements/megamenu.js
+msgid "Come si presentano le voci nel pannello aperto. «Testata colorata» colora la testa del pannello laterale e di quello a tutto schermo col colore d'accento."
+msgstr "How the items look in the open panel. “Coloured header” paints the head of the side and full-screen panels in the accent colour."
+
+#: src/config/elements/megamenu.js
+msgid "Decoro del pannello"
+msgstr "Panel decoration"
+
+#: src/config/elements/megamenu.js
+msgid "Simbolo del logo, in grande"
+msgstr "Logo symbol, large"
+
+#: src/config/elements/megamenu.js
+msgid "Nome in verticale"
+msgstr "Vertical name"
+
+#: src/config/elements/megamenu.js
+msgid "Cerchio di colore"
+msgstr "Colour circle"
+
+#: src/config/elements/megamenu.js
+msgid "Trama di punti"
+msgstr "Dot pattern"
+
+#: src/config/elements/megamenu.js
+msgid "Un disegno leggero dietro le voci. «Simbolo del logo» usa il Simbolo scelto nel Logo."
+msgstr "A light drawing behind the items. “Logo symbol” uses the Symbol chosen in the Logo."
+
+#: src/config/elements/megamenu.js
+msgid "Piede del pannello"
+msgstr "Panel footer"
+
+#: src/config/elements/megamenu.js
+msgid "Social sotto le voci"
+msgstr "Social links below the items"
+
+#: src/config/elements/megamenu.js
+msgid "Social scritti per nome"
+msgstr "Social links by name"
+
+#: src/config/elements/megamenu.js
+msgid "Colore d'accento"
+msgstr "Accent colour"
+
+#: src/config/elements/megamenu.js
+msgid "Testo in fondo, social e link in fondo raccolti in un blocco in fondo al pannello, in ogni stile del menu mobile."
+msgstr "Bottom text, social links and bottom link gathered in one block at the foot of the panel, in every mobile menu style."
+
+#: src/config/elements/megamenu.js
+msgid "Vuoto = il simbolo da solo. Con un colore il simbolo sta in una forma di quel colore (o dentro un anello)."
+msgstr "Empty = the symbol alone. With a colour the symbol sits in a shape of that colour (or inside a ring)."
+
+#: src/config/elements/megamenu.js
+msgid "Anello (solo il filo)"
+msgstr "Ring (outline only)"
+
+#: src/config/elements/megamenu.js
+msgid "Ciottolo"
+msgstr "Pebble"
+
+#: src/config/elements/megamenu.js
+msgid "Lato dell'hamburger"
+msgstr "Hamburger side"
+
+#: src/config/elements/megamenu.js
+msgid "A sinistra, prima del logo"
+msgstr "On the left, before the logo"
+
+#: src/config/elements/livesearch.js
+msgid "Colore icona pulsante"
+msgstr "Button icon colour"
+
+#: src/config/elements/livesearch.js
+msgid "Il pulsante con la sola lente (Compatta e Modale). Vuoto = lo sfondo dell'input."
+msgstr "The magnifier-only button (Compact and Modal). Empty = the input background."

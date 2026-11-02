@@ -683,7 +683,7 @@ THEME = tema(
     '\'DM Mono\', ui-monospace, Menlo, monospace', ['Bodoni Moda', 'Manrope', 'DM Mono'], corsivo_di=['Bodoni Moda'],
     peso_titoli='500', raggio=0, grana=0, titoli_line='1.02', titoli_spazio='-0.01em')
 tema_negozio(THEME, NAME)
-THEME['preview_v'] = THEME['preview_mobile_v'] = '2'  # anteprime con la vetrina delle offerte (1° nov 2026)
+THEME['preview_v'] = THEME['preview_mobile_v'] = '4'  # anteprime con le testate nuove (2 nov 2026)
 pannelli(THEME, NAME, {'Collezione': ('pannello-reparti', 'Pannello del negozio'), 'Offerte': ('pannello-offerte', 'Pannello delle offerte'), 'Nuovi arrivi': ('pannello-novita', 'Pannello delle novità')})
 THEME['cursor']['style'] = 'metro'
 THEME['cursor']['label_text'] = 'Vedi'

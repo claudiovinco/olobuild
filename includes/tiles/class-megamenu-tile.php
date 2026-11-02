@@ -157,7 +157,12 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         'fullscreen_animation'   => 'fade',
         'menu_items_animation'   => 'none',
         'menu_items_stagger'     => '80',
+        // Disegno del pannello mobile (dalla 1.4.916): '' = com'era prima, nessuna regola né markup in più.
+        'mobile_look'            => '',
+        'mobile_deco'            => '',
+        'mobile_foot_look'       => '',
         'hamburger_style'    => 'classic',
+        'hamburger_side'     => 'right',
         'hamburger_size'     => '28',
         'hamburger_color'    => '',
         'mobile_bg'          => 'var(--olo-color-dark, #1e1e2e)',
@@ -1607,6 +1612,9 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                 display: flex !important;
                 order: 999;
             }
+            <?php if ( 'left' === ( $s['hamburger_side'] ?? 'right' ) ) : // «A sinistra, prima del logo», come nei negozi grandi ?>
+            .<?php echo $uid; ?> .olo-mm-hamburger { order: -2; margin-right: .375rem; }
+            <?php endif; ?>
             <?php if ( ! empty( $s['mobile_search'] ) ) : ?>
             .<?php echo $uid; ?> .olo-mm-mobile-search { display: flex !important; }
             <?php endif; ?>
@@ -1879,12 +1887,13 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             padding: 16px 24px;
         }
         .<?php echo $uid; ?> .olo-mm-fs-search form {
-            display: flex; background: rgba(255,255,255,.1); border-radius: 8px; overflow: hidden;
+            display: flex; background: color-mix(in srgb, <?php echo $mob_tc; ?> 10%, transparent); border-radius: 8px; overflow: hidden;
         }
         .<?php echo $uid; ?> .olo-mm-fs-search input {
             flex: 1; padding: 12px 16px; background: transparent; border: none; color: <?php echo $mob_tc; ?>; font-size: 16px; outline: none;
         }
-        .<?php echo $uid; ?> .olo-mm-fs-search input::placeholder { color: rgba(255,255,255,.4); }
+        <?php // Fondo e segnaposto dal colore del testo del pannello: bianchi trasparenti, sui pannelli chiari sparivano. ?>
+        .<?php echo $uid; ?> .olo-mm-fs-search input::placeholder { color: color-mix(in srgb, <?php echo $mob_tc; ?> 60%, transparent); }
         /* La pillola (campo + lente) mostra il focus tutta intera; il campo dentro resta nudo */
         .<?php echo $uid; ?> .olo-mm-fs-search form:focus-within { box-shadow: 0 0 0 3px color-mix(in srgb, <?php echo $mob_acc; ?> 65%, transparent); }
         .<?php echo $uid; ?> .olo-mm-fs-search form input:is(:focus, :focus-visible) { border: none; box-shadow: none; outline: none; }
@@ -2446,6 +2455,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         .olo-sticky-on .<?php echo $uid; ?> .olo-mm-topbar { display: none; }
         <?php endif; ?>
         <?php endif; /* topbar_enabled */ ?>
+        <?php echo $this->css_disegno_mobile( $s, $uid, $mob_bg, $mob_tc, $mob_acc, $mob_drop_bg, $mob_drop_tc ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS da colori passati da safe_color()/safe_color_css() e valori di elenchi fissi ?>
         </style>
         <?php
         // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -2529,6 +2539,245 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         return '<div></div>';
     }
 
+    /* ─── Disegno del pannello mobile: voci, decoro e piede (1.4.916) ─── */
+
+    /**
+     * Le tre scelte del disegno del pannello mobile, ripulite: «Disegno delle voci», «Decoro del pannello» e
+     * «Piede del pannello». '' = com'era prima: nessuna regola e nessun markup in più.
+     *
+     * @param array $s Settings.
+     * @return array [ voci, decoro, piede ].
+     */
+    private function disegno_mobile( $s ) {
+        $voci  = (string) ( $s['mobile_look'] ?? '' );
+        $deco  = (string) ( $s['mobile_deco'] ?? '' );
+        $piede = (string) ( $s['mobile_foot_look'] ?? '' );
+        return [
+            in_array( $voci, [ 'editoriale', 'indice', 'schede', 'pillole', 'centrato', 'fascia' ], true ) ? $voci : '',
+            in_array( $deco, [ 'simbolo', 'nome', 'cerchio', 'punti' ], true ) ? $deco : '',
+            in_array( $piede, [ 'riga', 'fascia', 'scheda', 'nomi', 'accento' ], true ) ? $piede : '',
+        ];
+    }
+
+    /**
+     * Il colore che si legge sopra un colore pieno: bianco o quasi nero secondo la luminanza (WCAG) di un esadecimale,
+     * o secondo la luminosità OKLCH di un token.
+     *
+     * @param string $col Colore già passato da safe_color().
+     * @return string
+     */
+    private function colore_su( $col ) {
+        $col = trim( (string) $col );
+        if ( preg_match( '/^#([0-9a-f]{3}|[0-9a-f]{6})$/i', $col, $m ) ) {
+            $h   = 3 === strlen( $m[1] ) ? preg_replace( '/(.)/', '$1$1', $m[1] ) : $m[1];
+            $lin = function ( $v ) {
+                $v /= 255;
+                return $v <= 0.03928 ? $v / 12.92 : pow( ( $v + 0.055 ) / 1.055, 2.4 );
+            };
+            $lum = 0.2126 * $lin( hexdec( substr( $h, 0, 2 ) ) ) + 0.7152 * $lin( hexdec( substr( $h, 2, 2 ) ) ) + 0.0722 * $lin( hexdec( substr( $h, 4, 2 ) ) );
+            return $lum > 0.179 ? '#111' : '#fff';
+        }
+        // Un token o un altro colore: bianco o nero dalla luminosità vera, col colore relativo (OKLCH). Il «contrasto»
+        // dei ruoli della Palette non bastava: un accento giallo portava il testo bianco (1,5:1).
+        return 'oklch(from ' . $col . ' clamp(0, calc((0.6 - l) * 1000), 1) 0 0)';
+    }
+
+    /**
+     * Il decoro dietro le voci del pannello laterale e di quello a tutto schermo: il simbolo del logo in grande, il
+     * nome in verticale a filo, un cerchio di colore o una trama di punti. Sta sotto il contenuto e non si clicca.
+     *
+     * @param array $s Settings.
+     * @return string HTML sicuro.
+     */
+    private function deco_mobile_html( $s ) {
+        $deco = $this->disegno_mobile( $s )[1];
+        if ( 'simbolo' === $deco ) {
+            $icona = $this->render_icon_html( trim( (string) ( $s['logo_mark'] ?? '' ) ), 12 );
+            return '' === $icona ? '' : '<span class="olo-mm-deco olo-mm-deco--simbolo" aria-hidden="true">' . $icona . '</span>';
+        }
+        if ( 'nome' === $deco ) {
+            $nome = trim( (string) ( $s['logo_text'] ?? '' ) );
+            if ( '' === $nome ) {
+                $nome = trim( wp_strip_all_tags( (string) get_bloginfo( 'name' ) ) );
+            }
+            return '' === $nome ? '' : '<span class="olo-mm-deco olo-mm-deco--nome" aria-hidden="true">' . esc_html( $nome ) . '</span>';
+        }
+        return $deco ? '<span class="olo-mm-deco olo-mm-deco--' . esc_attr( $deco ) . '" aria-hidden="true"></span>' : '';
+    }
+
+    /**
+     * Il piede del pannello mobile, in ognuno dei tre stili: il «Testo in fondo», i social e il «Link in fondo» in un
+     * blocco solo, in fondo al pannello. Prende il posto dei social sotto le voci e del piede del tutto schermo.
+     *
+     * @param array  $s      Settings.
+     * @param string $piede  riga | fascia | scheda | nomi | accento.
+     * @param string $testo  Testo in fondo (raw).
+     * @param string $cta    Testo del link (raw).
+     * @param string $url    URL del link (raw).
+     */
+    private function render_piede_mobile( $s, $piede, $testo, $cta, $url ) {
+        echo '<div class="olo-mm-piede olo-mm-piede--' . esc_attr( $piede ) . '">';
+        if ( '' !== $testo ) {
+            echo '<p class="olo-mm-piede-testo">' . esc_html( $testo ) . '</p>';
+        }
+        $this->render_social_icons( $s, 'footer' );
+        if ( '' !== $cta ) {
+            echo '<a class="olo-mm-piede-cta" href="' . esc_url( $url ?: '#' ) . '">' . esc_html( $cta ) . ' <span aria-hidden="true">&rarr;</span></a>';
+        }
+        echo '</div>';
+    }
+
+    /**
+     * Le regole del disegno del pannello mobile. Le voci si misurano sul colore del testo del loro pannello
+     * (--olo-mm-v-tc): i filetti di prima, bianchi all'8%, sui pannelli chiari non si vedevano.
+     *
+     * @return string CSS.
+     */
+    private function css_disegno_mobile( $s, $uid, $bg, $tc, $acc, $drop_bg, $drop_tc ) {
+        list( $voci, $deco, $piede ) = $this->disegno_mobile( $s );
+        if ( ! $voci && ! $deco && ! $piede ) {
+            return '';
+        }
+        $u    = '.' . $uid;
+        $su   = $this->colore_su( $acc );
+        $l    = "{$u} :is(.olo-mm-mob-nav, .olo-mm-fs-nav, .olo-mm-dp-nav)";
+        $li   = "{$l} > li:not(.olo-mm-mob-btn-li, .olo-mm-mob-sep)";
+        // La riga di una voce: il link, o il gruppo link + freccia del sottomenu.
+        $riga = "{$li} > :is(a, .olo-mm-mob-toggle, .olo-mm-mob-item, .olo-mm-dp-item)";
+        $a    = "{$li} > :is(a, .olo-mm-mob-toggle), {$li} > :is(.olo-mm-mob-item, .olo-mm-dp-item) > a";
+        $att  = "{$l} > li.olo-mm-dp-active > :is(a, .olo-mm-mob-toggle), {$l} > li.olo-mm-dp-active > :is(.olo-mm-mob-item, .olo-mm-dp-item) > a, {$l} > li > a[aria-current=\"page\"]";
+        $filo = 'color-mix(in srgb, var(--olo-mm-v-tc) 18%, transparent)';
+        $css  = "{$u} .olo-mm-offcanvas, {$u} .olo-mm-fullscreen { --olo-mm-v-tc: {$tc}; --olo-mm-v-bg: {$bg}; }"
+            . "{$u} .olo-mm-dropdown-panel { --olo-mm-v-tc: {$drop_tc}; --olo-mm-v-bg: {$drop_bg}; }";
+        $togli = "{$li} { border-bottom: 0; } {$li}::after { content: none; } {$a} { border-bottom: 0; }";
+
+        switch ( $voci ) {
+            // Il numero piccolo sopra la voce e un filetto pieno fra le voci, come l'indice di una rivista.
+            case 'editoriale':
+                $css .= $togli . "{$l} { counter-reset: olommv; }"
+                    . "{$li} { counter-increment: olommv; border-bottom: 1px solid {$filo}; }"
+                    . "{$a} { flex-wrap: wrap; padding-top: 1.125rem; padding-bottom: 1.125rem; }"
+                    . "{$li} > a::before, {$li} > :is(.olo-mm-mob-item, .olo-mm-dp-item) > a::before, {$li} > .olo-mm-mob-toggle::before { content: counter(olommv, decimal-leading-zero); display: block; flex: 0 0 100%; margin: 0 0 .5rem; font-family: var(--olo-font-family, sans-serif); font-size: 11px; font-weight: 600; letter-spacing: .18em; line-height: 1; color: {$acc}; }";
+                break;
+            // Il numero grande col solo contorno a sinistra, la freccia obliqua a destra, filetti tratteggiati.
+            case 'indice':
+                $css .= $togli . "{$l} { counter-reset: olommv; }"
+                    . "{$li} { counter-increment: olommv; border-bottom: 1px dashed {$filo}; }"
+                    . "{$a} { display: flex; align-items: center; gap: .6em; }"
+                    . "{$li} > a::before, {$li} > :is(.olo-mm-mob-item, .olo-mm-dp-item) > a::before, {$li} > .olo-mm-mob-toggle::before { content: counter(olommv); flex: none; min-width: 1.15em; font-family: var(--olo-font-family-heading, inherit); font-size: 1.3em; font-weight: 700; line-height: 1; color: transparent; -webkit-text-stroke: 1px {$acc}; }"
+                    . "{$li} > a::after { content: '\\2197'; margin-left: auto; font-size: .7em; color: {$acc}; }";
+                break;
+            // Ogni voce in una scheda col fondo appena velato e la freccia; la corrente nell'accento.
+            case 'schede':
+                $css .= $togli . "{$l} { display: flex; flex-direction: column; gap: .625rem; padding-top: 1rem; padding-bottom: .5rem; }"
+                    . "{$u} :is(.olo-mm-mob-nav, .olo-mm-dp-nav) { padding-left: 1rem; padding-right: 1rem; }"
+                    . "{$riga} { background: color-mix(in srgb, var(--olo-mm-v-tc) 7%, var(--olo-mm-v-bg)); border-radius: .875rem; }"
+                    . "{$a} { padding-top: .9375rem; padding-bottom: .9375rem; }"
+                    . "{$u} :is(.olo-mm-fs-nav, .olo-mm-dp-nav) > li:not(.olo-mm-mob-btn-li, .olo-mm-mob-sep) > :is(a, .olo-mm-dp-item > a) { padding-left: 1.125rem; padding-right: 1.125rem; }"
+                    . "{$u} .olo-mm-fs-nav > li:not(.olo-mm-mob-btn-li, .olo-mm-mob-sep) > a { display: flex; align-items: center; }"
+                    . "{$li} > a::after { content: '\\2192'; margin-left: auto; padding-left: .75rem; font-size: .75em; opacity: .6; }"
+                    . "{$l} > li.olo-mm-dp-active > :is(a, .olo-mm-mob-toggle, .olo-mm-mob-item, .olo-mm-dp-item), {$l} > li:has(> a[aria-current=\"page\"]) > a { background: color-mix(in srgb, {$acc} 16%, transparent); }";
+                break;
+            // Le voci in fila come pillole col filo, finché ci stanno; quelle coi sottomenu e i pulsanti a tutta riga.
+            case 'pillole':
+                $css .= $togli . "{$l} { display: flex; flex-wrap: wrap; align-items: flex-start; gap: .625rem; padding-top: 1.25rem; padding-bottom: .75rem; }"
+                    . "{$u} :is(.olo-mm-mob-nav, .olo-mm-dp-nav) { padding-left: 1.25rem; padding-right: 1.25rem; }"
+                    . "{$l} > li { flex: 0 1 auto; }"
+                    . "{$l} > li:is(.olo-mm-mob-btn-li, .olo-mm-mob-sep), {$l} > li:has(> .olo-mm-mob-item, > .olo-mm-mob-toggle, > .olo-mm-dp-item) { flex-basis: 100%; }"
+                    . "{$li} > a { display: inline-flex; width: auto; padding: .5em 1.05em; line-height: 1.15; border: 1.5px solid color-mix(in srgb, var(--olo-mm-v-tc) 30%, transparent); border-radius: 99rem; }"
+                    . "{$l} > li.olo-mm-dp-active > a, {$l} > li > a[aria-current=\"page\"] { border-color: currentColor; background: color-mix(in srgb, currentColor 10%, transparent); }"
+                    // a tutto schermo le pillole stanno a metà altezza: in alto lasciavano un vuoto fino al piede
+                    . "{$u} .olo-mm-fullscreen > nav, {$u} .olo-mm-offcanvas > nav { margin-top: auto; margin-bottom: auto; }";
+                break;
+            // Le voci al centro, senza filetti; la corrente sottolineata nell'accento. Il blocco sta a metà altezza.
+            case 'centrato':
+                $css .= $togli . "{$l} { text-align: center; }"
+                    . "{$a} { justify-content: center; text-align: center; padding-top: .75rem; padding-bottom: .75rem; }"
+                    . "{$li} > :is(.olo-mm-mob-item, .olo-mm-dp-item) { justify-content: center; }"
+                    . "{$u} .olo-mm-offcanvas > nav, {$u} .olo-mm-fullscreen > nav { margin-top: auto; margin-bottom: auto; }"
+                    . "{$att} { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .28em; text-decoration-color: {$acc}; }";
+                break;
+            // La testata del pannello è una fascia nel colore d'accento; la voce corrente ha la barra a sinistra.
+            case 'fascia':
+                $css .= $togli . "{$u} .olo-mm-oc-header, {$u} .olo-mm-fs-header { background: {$acc}; color: {$su}; border-bottom: 0; padding-top: 1.625rem; padding-bottom: 1.625rem; }"
+                    . "{$u} .olo-mm-oc-header :is(.olo-mm-oc-logo, .olo-mm-oc-close, .olo-mm-icon-btn), {$u} .olo-mm-fs-header :is(.olo-mm-fs-logo, .olo-mm-fs-close) { color: {$su}; }"
+                    . "{$li} { border-bottom: 1px solid {$filo}; }"
+                    . "{$a} { padding-top: 1rem; padding-bottom: 1rem; }"
+                    . "{$att} { box-shadow: inset 4px 0 0 {$acc}; padding-left: 1rem; }";
+                break;
+        }
+
+        if ( $deco ) {
+            $css .= "{$u} .olo-mm-offcanvas, {$u} .olo-mm-fullscreen { overflow-x: hidden; }"
+                . "{$u} .olo-mm-offcanvas > :not(.olo-mm-deco), {$u} .olo-mm-fullscreen > :not(.olo-mm-deco) { position: relative; z-index: 1; }"
+                . "{$u} .olo-mm-deco { position: absolute; z-index: 0; pointer-events: none; }";
+            switch ( $deco ) {
+                case 'simbolo':
+                    $css .= "{$u} .olo-mm-deco--simbolo { right: -18%; bottom: -5%; width: min(80vw, 460px); line-height: 0; color: {$acc}; opacity: .13; transform: rotate(-12deg); }"
+                        . "{$u} .olo-mm-deco--simbolo > span, {$u} .olo-mm-deco--simbolo svg { display: block; width: 100% !important; height: auto !important; }"
+                        . "{$u} .olo-mm-deco--simbolo svg, {$u} .olo-mm-deco--simbolo svg * { stroke-width: .9; }";
+                    break;
+                case 'nome':
+                    $css .= "{$u} .olo-mm-deco--nome { top: 50%; right: -.06em; writing-mode: vertical-rl; transform: translateY(-50%) rotate(180deg); white-space: nowrap; font-family: var(--olo-font-family-heading, inherit); font-weight: 800; font-size: min(34vh, 250px); line-height: .82; letter-spacing: -.02em; color: transparent; -webkit-text-stroke: 1.5px color-mix(in srgb, var(--olo-mm-v-tc) 17%, transparent); }";
+                    break;
+                case 'cerchio':
+                    $css .= "{$u} .olo-mm-deco--cerchio { top: -36%; right: -58%; width: 125vw; max-width: 760px; aspect-ratio: 1; border-radius: 50%; background: color-mix(in srgb, {$acc} 15%, transparent); }";
+                    break;
+                case 'punti':
+                    $css .= "{$u} .olo-mm-deco--punti { inset: 0; background-image: radial-gradient(color-mix(in srgb, var(--olo-mm-v-tc) 24%, transparent) 1.2px, transparent 1.7px); background-size: 18px 18px; -webkit-mask-image: linear-gradient(165deg, #000 0%, transparent 58%); mask-image: linear-gradient(165deg, #000 0%, transparent 58%); }";
+                    break;
+            }
+        }
+
+        if ( $piede ) {
+            $p    = "{$u} .olo-mm-piede";
+            $css .= "{$p} { margin-top: auto; display: flex; flex-direction: column; gap: .875rem; padding: 1.375rem 1.5rem 1.75rem; color: var(--olo-mm-v-tc); }"
+                . "{$p} .olo-mm-social-footer { order: 0; padding: 0; border: 0; justify-content: flex-start; }"
+                . "{$p}-testo { margin: 0; font-size: 13px; line-height: 1.5; color: var(--olo-mm-v-tc); }"
+                . "{$p}-cta { align-self: flex-start; color: var(--olo-mm-v-tc); font-size: 14px; font-weight: 600; text-decoration: underline; text-decoration-color: {$acc}; text-decoration-thickness: 2px; text-underline-offset: .3em; }"
+                . "{$p}-cta:hover { color: {$acc}; }"
+                . "{$p}-cta:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; border-radius: 2px; }";
+            switch ( $piede ) {
+                // Testo a sinistra e social a destra su una riga, sopra un filetto.
+                case 'riga':
+                    $css .= "{$p}--riga { flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; border-top: 1px solid {$filo}; }"
+                        . "{$p}--riga .olo-mm-piede-testo { flex: 1 1 50%; }"
+                        . "{$p}--riga .olo-mm-piede-cta { flex-basis: 100%; }";
+                    break;
+                // Una fascia appena più scura (o più chiara) del pannello, tutto al centro, il testo in maiuscoletto.
+                case 'fascia':
+                    $css .= "{$p}--fascia { align-items: center; text-align: center; padding: 1.625rem 1.5rem 1.875rem; background: color-mix(in srgb, var(--olo-mm-v-tc) 8%, var(--olo-mm-v-bg)); }"
+                        . "{$p}--fascia .olo-mm-social-footer { justify-content: center; }"
+                        . "{$p}--fascia .olo-mm-piede-testo { font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }"
+                        . "{$p}--fascia .olo-mm-piede-cta { align-self: center; }";
+                    break;
+                // Una scheda col filo e gli angoli tondi; il testo come un titolo, il link come un pulsante pieno.
+                case 'scheda':
+                    $css .= "{$p}--scheda { margin: auto 1.25rem 1.5rem; padding: 1.25rem; border: 1px solid {$filo}; border-radius: 1.125rem; }"
+                        . "{$p}--scheda .olo-mm-piede-testo { font-family: var(--olo-font-family-heading, inherit); font-size: 17px; font-weight: 600; color: var(--olo-mm-v-tc); }"
+                        . "{$p}--scheda .olo-mm-piede-cta { padding: .625rem 1.125rem; border-radius: 99rem; background: {$acc}; color: {$su}; text-decoration: none; }"
+                        . "{$p}--scheda .olo-mm-piede-cta:hover { color: {$su}; filter: brightness(1.08); }";
+                    break;
+                // I social scritti per nome, in maiuscoletto, al posto delle icone.
+                case 'nomi':
+                    $css .= "{$p}--nomi { border-top: 1px solid {$filo}; }"
+                        . "{$p}--nomi .olo-mm-social-footer { flex-wrap: wrap; gap: .5rem 1.25rem; }"
+                        . "{$p}--nomi .olo-mm-social-footer a { width: auto !important; height: auto !important; padding: 2px 0 !important; border: 0 !important; border-radius: 0 !important; background: none !important; color: var(--olo-mm-v-tc) !important; font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }"
+                        . "{$p}--nomi .olo-mm-social-footer a:hover { color: {$acc} !important; transform: none; }"
+                        . "{$p}--nomi .olo-mm-social-footer svg { display: none; }"
+                        . "{$p}--nomi .olo-mm-social-footer .olo-soc-nome { display: inline !important; }";
+                    break;
+                // Il piede pieno nel colore d'accento, col testo nel suo contrasto.
+                case 'accento':
+                    $css .= "{$p}--accento { padding: 1.625rem 1.5rem 1.875rem; background: {$acc}; color: {$su}; }"
+                        . "{$p}--accento .olo-mm-piede-testo, {$p}--accento .olo-mm-piede-cta, {$p}--accento .olo-mm-piede-cta:hover { color: {$su}; text-decoration-color: currentColor; }"
+                        . "{$p}--accento .olo-mm-social-footer a { color: {$su} !important; }";
+                    break;
+            }
+        }
+        return $css;
+    }
+
     /* ─── Simbolo del logo (icona accanto al logo testuale) ─── */
 
     /**
@@ -2555,14 +2804,34 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         $colore  = $this->safe_color_css( $s['logo_mark_color'] ?? '' ) ?: 'var(--olo-color-primary, currentColor)';
         $spessore = is_numeric( $s['logo_mark_stroke'] ?? '' ) ? max( 0.5, min( 4, (float) $s['logo_mark_stroke'] ) ) : 2;
         $fondo   = $this->safe_color_css( $s['logo_mark_bg'] ?? '' );
-        if ( $pannello && ! $fondo ) {
+        $forma   = (string) ( $s['logo_mark_shape'] ?? 'circle' );
+        // L'anello è solo un filo attorno al simbolo: nei pannelli aperti filo e simbolo prendono il colore del testo,
+        // come il simbolo senza sfondo (il colore pensato per la barra sul fondo del pannello poteva sparire).
+        if ( $pannello && ( ! $fondo || 'ring' === $forma ) ) {
             $colore = 'currentColor';
+            if ( 'ring' === $forma && $fondo ) {
+                $fondo = 'currentColor';
+            }
         }
         $stile   = 'color:' . $colore . ';--olo-mm-mark-s:' . $misura . 'px;--olo-mm-mark-w:' . $spessore;
         if ( $fondo ) {
-            $forma  = (string) ( $s['logo_mark_shape'] ?? 'circle' );
-            $raggio = [ 'square' => '0', 'rounded' => round( $misura * 0.32 ) . 'px' ][ $forma ] ?? '50%';
-            $stile .= ';background:' . $fondo . ';padding:' . round( $misura * 0.3 ) . 'px;border-radius:' . $raggio;
+            $pad = round( $misura * 0.3 );
+            if ( 'ring' === $forma ) {
+                $stile .= ';border:' . max( 1.5, round( $misura * 0.07, 1 ) ) . 'px solid ' . $fondo . ';padding:' . round( $misura * 0.26 ) . 'px;border-radius:50%';
+            } elseif ( in_array( $forma, [ 'diamond', 'hexagon' ], true ) ) {
+                // Rombo ed esagono si ritagliano col clip-path: più margine, se no le punte tagliano il simbolo.
+                $clip   = 'diamond' === $forma ? 'polygon(50% 0,100% 50%,50% 100%,0 50%)' : 'polygon(25% 2%,75% 2%,100% 50%,75% 98%,25% 98%,0 50%)';
+                $stile .= ';background:' . $fondo . ';padding:' . round( $misura * ( 'diamond' === $forma ? 0.52 : 0.4 ) ) . 'px;clip-path:' . $clip;
+            } else {
+                $raggi  = [
+                    'square'  => '0',
+                    'rounded' => round( $misura * 0.32 ) . 'px',
+                    'arch'    => round( $misura ) . 'px ' . round( $misura ) . 'px ' . round( $misura * 0.14 ) . 'px ' . round( $misura * 0.14 ) . 'px',
+                    'leaf'    => '0 60% 0 60%',
+                    'blob'    => '42% 58% 63% 37% / 41% 44% 56% 59%',
+                ];
+                $stile .= ';background:' . $fondo . ';padding:' . $pad . 'px;border-radius:' . ( $raggi[ $forma ] ?? '50%' );
+            }
         }
         return '<span class="olo-mm-mark" style="' . esc_attr( $stile ) . '" aria-hidden="true">' . $icona . '</span>';
     }
@@ -2764,7 +3033,10 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             $pcol = $this->safe_color_css( $s['nav_phone_color'] ?? '' ) ?: 'var(--olo-color-primary)';
             $href = $purl !== '' ? $purl : ( 'tel:' . preg_replace( '/[^0-9+]/', '', $phone ) );
             $li   = $context === 'mobile' ? '<li>' : '<li class="olo-mm-tel-li">';
-            echo $li . '<a class="olo-mm-tel" href="' . esc_url( $href ) . '" style="color:' . esc_attr( $pcol ) . '">' . esc_html( $phone ) . '</a></li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $li is a fixed literal <li> string set above; URL/color/text escaped inline (esc_url/esc_attr/esc_html)
+            // Nel pannello mobile il numero prende il colore delle voci: quello della barra (pensato per il suo fondo)
+            // sul fondo del pannello poteva non leggersi (rosso su marrone, 1,5:1).
+            $stile_tel = $context === 'mobile' ? '' : ' style="color:' . esc_attr( $pcol ) . '"';
+            echo $li . '<a class="olo-mm-tel" href="' . esc_url( $href ) . '"' . $stile_tel . '>' . esc_html( $phone ) . '</a></li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $li is a fixed literal <li> string set above; URL/color/text escaped inline (esc_url/esc_attr/esc_html)
         }
     }
 
@@ -2916,6 +3188,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         $mob_foot_text = trim( (string) ( $s['mobile_footer_text'] ?? '' ) );
         $mob_foot_cta  = trim( (string) ( $s['mobile_footer_cta_text'] ?? '' ) );
         $mob_foot_url  = trim( (string) ( $s['mobile_footer_cta_url'] ?? '' ) );
+        $mob_piede     = $this->disegno_mobile( $s )[2];
         $mob_bar_logo= ! empty( $s['mobile_bar_logo'] );
         $search_icon = ! empty( $s['search_icon'] );
         $ham_style_val = $s['hamburger_style'] ?? 'classic';
@@ -3215,6 +3488,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             <!-- Off-Canvas Mobile -->
             <div class="olo-mm-overlay<?php echo $preview_open ? ' olo-mm-vis' : ''; ?>"></div>
             <div class="olo-mm-offcanvas<?php echo $preview_open ? ' olo-mm-vis' : ''; ?>" id="<?php echo esc_attr( $uid ); ?>-mpanel"<?php echo $swipe ? ' data-swipe="' . esc_attr( $swipe ) . '"' : ''; ?> role="dialog" aria-modal="true" aria-label="<?php echo esc_attr( olobuild_t( 'Menu' ) ); ?>" tabindex="-1">
+                <?php echo $this->deco_mobile_html( $s ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by deco_mobile_html(): icon from render_icon_html(), text esc_html() ?>
                 <div class="olo-mm-oc-header">
                     <?php echo $this->logo_pannello_html( $s, 'olo-mm-oc-logo', $logo_link, $logo_img, $mob_logo, $logo_text, $logo_txt_sz ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by logo_pannello_html(): URLs esc_url()-escaped at assignment, texts esc_html/esc_attr ?>
                     <div class="olo-mm-oc-actions">
@@ -3299,7 +3573,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                 </ul>
                 </nav>
                 <?php $this->render_mobile_lang( $s, 'bottom', 'offcanvas' ); ?>
-                <?php $this->render_social_icons( $s, 'footer' ); ?>
+                <?php if ( $mob_piede ) { $this->render_piede_mobile( $s, $mob_piede, $mob_foot_text, $mob_foot_cta, $mob_foot_url ); } else { $this->render_social_icons( $s, 'footer' ); } ?>
             </div>
             <?php endif; ?>
 
@@ -3307,6 +3581,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             <?php if ( $mob_style_val === 'dropdown' || $mob_style_val === 'fullscreen' ) : ?>
             <div class="olo-mm-<?php echo $mob_style_val === 'fullscreen' ? 'fullscreen' : 'dropdown-panel'; ?><?php echo ( $mob_style_val === 'fullscreen' && $mob_numbers ) ? ' olo-mm-numbered' : ''; ?>" id="<?php echo esc_attr( $uid ); ?>-mpanel" tabindex="-1"<?php echo 'fullscreen' === $mob_style_val ? ' role="dialog" aria-modal="true" aria-label="' . esc_attr( olobuild_t( 'Menu' ) ) . '"' : ''; ?>>
                 <?php if ( $mob_style_val === 'fullscreen' ) : ?>
+                <?php echo $this->deco_mobile_html( $s ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by deco_mobile_html(): icon from render_icon_html(), text esc_html() ?>
                 <div class="olo-mm-fs-header">
                     <?php echo $this->logo_pannello_html( $s, 'olo-mm-fs-logo', $logo_link, $logo_img, $mob_logo, $logo_text, $logo_txt_sz ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by logo_pannello_html(): URLs esc_url()-escaped at assignment, texts esc_html/esc_attr ?>
                     <button class="olo-mm-fs-close" type="button" aria-label="<?php echo esc_attr( olobuild_t( 'Chiudi il menu' ) ); ?>">
@@ -3396,10 +3671,11 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                             <?php endforeach; ?>
                         <?php endif; endif; ?>
                     </ul>
-                    <?php $this->render_social_icons( $s, 'footer' ); ?>
+                    <?php if ( ! $mob_piede ) { $this->render_social_icons( $s, 'footer' ); } ?>
                 </nav>
                 <?php $this->render_mobile_lang( $s, 'bottom', $mob_style_val ); ?>
-                <?php if ( $mob_style_val === 'fullscreen' && ( $mob_foot_text !== '' || $mob_foot_cta !== '' ) ) : ?>
+                <?php if ( $mob_piede ) { $this->render_piede_mobile( $s, $mob_piede, $mob_foot_text, $mob_foot_cta, $mob_foot_url ); } ?>
+                <?php if ( ! $mob_piede && $mob_style_val === 'fullscreen' && ( $mob_foot_text !== '' || $mob_foot_cta !== '' ) ) : ?>
                 <div class="olo-mm-fs-foot">
                     <?php if ( $mob_foot_text !== '' ) : ?><span><?php echo esc_html( $mob_foot_text ); ?></span><?php endif; ?>
                     <?php if ( $mob_foot_cta !== '' ) : ?><a href="<?php echo esc_url( $mob_foot_url ?: '#' ); ?>"><?php echo esc_html( $mob_foot_cta ); ?> &rarr;</a><?php endif; ?>

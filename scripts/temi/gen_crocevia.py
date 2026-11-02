@@ -556,7 +556,7 @@ THEME = tema(
     '\'Space Mono\', ui-monospace, Menlo, monospace', ['Bricolage Grotesque', 'Inter', 'Space Mono'], corsivo_di=[],
     peso_titoli='700', raggio=14, grana=0, titoli_line='0.98', titoli_spazio='-0.02em')
 tema_negozio(THEME, NAME)
-THEME['preview_v'] = THEME['preview_mobile_v'] = '2'  # anteprime con la vetrina delle offerte (1° nov 2026)
+THEME['preview_v'] = THEME['preview_mobile_v'] = '4'  # anteprime con le testate nuove (2 nov 2026)
 pannelli(THEME, NAME, {'Tutti i reparti': ('pannello-reparti', 'Pannello dei reparti'), 'Offerte': ('pannello-offerte', 'Pannello delle offerte'), 'Novità': ('pannello-novita', 'Pannello delle novità')})
 next(v for v in THEME['menu']['items'] if v['title'] == 'Offerte')['classi'] = ['badge-oggi']
 THEME['cursor']['style'] = 'cartellino'

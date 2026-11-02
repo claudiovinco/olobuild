@@ -43,9 +43,9 @@
   width: var(--ls-input-height, 44px);
   height: var(--ls-input-height, 44px);
   border-radius: 50%;
-  border: 1px solid var(--ls-input-border-color, #e5e7eb);
-  background: var(--ls-input-bg, #fff);
-  color: var(--ls-icon-color, #9ca3af);
+  border: 1px solid var(--ls-trigger-border, var(--ls-input-border-color, #e5e7eb));
+  background: var(--ls-trigger-bg, var(--ls-input-bg, #fff));
+  color: var(--ls-trigger-color, var(--ls-icon-color, #9ca3af));
   cursor: pointer;
   transition: box-shadow .2s, transform .2s;
   padding: 0;

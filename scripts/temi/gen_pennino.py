@@ -641,6 +641,7 @@ tema_negozio(THEME, NAME)
 pannelli(THEME, NAME, {'Il negozio': ('pannello-reparti', 'Pannello del negozio'),
                        'Offerte': ('pannello-offerte', 'Pannello delle offerte'),
                        'Novità': ('pannello-novita', 'Pannello delle novità')})
+THEME['preview_v'] = THEME['preview_mobile_v'] = '4'  # anteprime con le testate nuove (2 nov 2026)
 THEME['cursor']['style'] = 'pennino'
 THEME['cursor']['ring_color'] = '#B8902B'           # il metallo del pennino
 THEME['cursor']['dot_color'] = HEX['primary']       # l'inchiostro blu

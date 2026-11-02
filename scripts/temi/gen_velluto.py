@@ -558,6 +558,7 @@ tema_negozio(THEME, NAME)
 pannelli(THEME, NAME, {'Le collezioni': ('pannello-reparti', 'Pannello delle collezioni'),
                        'Archivio': ('pannello-offerte', 'Pannello dell’archivio'),
                        'Novità': ('pannello-novita', 'Pannello delle novità')})
+THEME['preview_v'] = THEME['preview_mobile_v'] = '4'  # anteprime con le testate nuove (2 nov 2026)
 THEME['cursor']['style'] = 'paillettes'
 THEME['cursor']['ring_color'] = HEX['secondary']  # il colore del cursore (sul fondo chiaro il chiaro non si vede)
 

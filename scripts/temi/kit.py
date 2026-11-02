@@ -11,6 +11,7 @@ Tutte le tile partono dai campioni dei temi pubblicati (Tpl.classic): l'editor t
 import re
 
 from base import lib, mix, radius, solid  # noqa: F401
+import testate
 
 TOK = {
     'testo': 'var(--olo-color-text)', 'tenue': 'var(--olo-color-text-muted)', 'acc': 'var(--olo-color-primary)',
@@ -288,7 +289,7 @@ class Kit:
     # ── testata e piede ──
     def testata(self, t, logo, logo_size='22', overlay=True, scuro=True):
         c = self.c
-        mm = t.classic('megamenu', {
+        mm = t.classic('megamenu', testate.applica(self.id, {
             'menu_id': 'auto', 'logo_text': logo, 'logo_text_size': logo_size, 'logo_text_color': c['testo'],
             'logo_text_font': 'heading', 'logo_text_weight': self.peso, 'logo_text_spacing': 0, 'logo_text_transform': '',
             'logo_mark': '', 'logo_mark_bg': '', 'logo_dot': True, 'logo_position': 'left',
@@ -308,7 +309,7 @@ class Kit:
             'mobile_font_size': '40', 'mobile_link_size': '40', 'mobile_link_font': 'heading', 'mobile_link_weight': self.peso,
             'border': {'top': 0, 'right': 0, 'bottom': 1, 'left': 0, 'style': 'solid', 'color': mix(c['testo'], 10)},
             'topbar_enabled': False, 'nav_phone': '', 'nav_phone_url': '',
-        })
+        }))
         return [t.section([t.one([mm], anim=None)], width='fullbleed', padding='remove-vertical')]
 
     def piede(self, t, marchio, claim, pagine, titolo_terza, terza_html, voci, legale, social, marchio_size=140, fondo=None):

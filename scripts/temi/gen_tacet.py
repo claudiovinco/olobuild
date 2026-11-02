@@ -807,7 +807,7 @@ def build_404():
 
 
 THEME = {
-    'id': ID, 'name': NAME, 'author': 'Olobuild', 'version': '1.0.0', 'preview_v': '2', 'preview_mobile_v': '2',
+    'id': ID, 'name': NAME, 'author': 'Olobuild', 'version': '1.0.0', 'preview_v': '4', 'preview_mobile_v': '4',
     'category': 'Negozi online', 'zone': 'Le nuove opere',
     'requires_plugin': {'slug': 'woocommerce', 'label': 'WooCommerce', 'check': 'class:WooCommerce',
                         'purchase_url': 'https://wordpress.org/plugins/woocommerce/'},

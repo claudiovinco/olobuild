@@ -12,6 +12,11 @@ window.__ctr = (function(){
   function parse(c){ c = String(c);
     let m = c.match(/color\(srgb ([^)]+)\)/);
     if(m){ const p = m[1].split(/[ \/]+/).filter(Boolean).map(Number); return [p[0] * 255, p[1] * 255, p[2] * 255, p.length > 3 ? p[3] : 1]; }
+    m = c.match(/oklch\(([^)]+)\)/);
+    if(m){ // grigi (bianco o nero dal colore relativo): Y = L³, poi la curva sRGB; la tinta si trascura
+      const p = m[1].split(/[ \/]+/).filter(Boolean); let L = parseFloat(p[0]); if(/%$/.test(p[0])){ L /= 100; }
+      const Y = Math.pow(Math.max(0, Math.min(1, L)), 3); const v = Y <= 0.0031308 ? 12.92 * Y : 1.055 * Math.pow(Y, 1 / 2.4) - 0.055;
+      return [v * 255, v * 255, v * 255, p.length > 3 ? parseFloat(p[3]) : 1]; }
     m = c.match(/rgba?\(([^)]+)\)/); if(!m){ return null; }
     const p = m[1].split(/[ ,\/]+/).filter(Boolean).map(Number); return [p[0], p[1], p[2], p.length > 3 ? p[3] : 1]; }
   function lum(c){ const f = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };

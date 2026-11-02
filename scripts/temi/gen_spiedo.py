@@ -540,6 +540,7 @@ tema_negozio(THEME, NAME)
 pannelli(THEME, NAME, {'Il menù': ('pannello-reparti', 'Pannello del menù'),
                        'Offerte': ('pannello-offerte', 'Pannello delle offerte'),
                        'Novità': ('pannello-novita', 'Pannello delle novità')})
+THEME['preview_v'] = THEME['preview_mobile_v'] = '4'  # anteprime con le testate nuove (2 nov 2026)
 THEME['cursor']['style'] = 'peperoncino'
 THEME['cursor']['ring_color'] = HEX['primary']  # il peperoncino è rosso; il punto (dot) è la curcuma
 THEME['cursor']['dot_color'] = HEX['secondary']
