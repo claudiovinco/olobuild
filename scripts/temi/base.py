@@ -256,6 +256,11 @@ def write_theme(theme, builds, media):
         h = builds['header.json']
         for n in (h['content'] if isinstance(h, dict) else h):
             menu(n)
+    # I numeri della home seguono numeri.py (tolti dove non servono, forma e posto diversi dove restano).
+    import numeri
+    if 'home.json' in builds:
+        h = builds['home.json']
+        numeri.applica(theme['id'], h['content'] if isinstance(h, dict) else h)
     os.makedirs(out, exist_ok=True)
     used = {}
     ids = set()

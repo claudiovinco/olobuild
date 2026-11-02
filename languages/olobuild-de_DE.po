@@ -49732,3 +49732,23 @@ msgstr "Geteilt: Text und Panel"
 #: src/components/Builder/BuilderInspector.vue
 msgid "A tutta larghezza: il testo sopra la scena (foto, video, colore). Divisa: il testo da una parte e un pannello dall'altra (foto con badge, lettore audio, prima e dopo, vetrina di card). Cambiando, occhiello, titolo, sottotitolo, pulsanti e media passano; tornando indietro ritrovi l'altra disposizione com'era."
 msgstr "Volle Breite: der Text über der Szene (Foto, Video, Farbe). Geteilt: der Text auf einer Seite und ein Panel auf der anderen (Foto mit Badge, Audioplayer, Vorher-Nachher, Kartenvitrine). Beim Wechsel werden Dachzeile, Titel, Untertitel, Schaltflächen und Medien übernommen; zurück findest du die andere Anordnung wie zuvor."
+
+#: src/config/elements/statstrip.js
+msgid "Banda con divisori"
+msgstr "Band mit Trennlinien"
+
+#: src/config/elements/statstrip.js
+msgid "Riga, dentro un testo"
+msgstr "Zeile, in einem Text"
+
+#: src/config/elements/statstrip.js
+msgid "Elenco, in una colonna"
+msgstr "Liste, in einer Spalte"
+
+#: src/config/elements/statstrip.js
+msgid "Un numero in evidenza"
+msgstr "Eine Zahl hervorgehoben"
+
+#: src/config/elements/statstrip.js
+msgid "Banda: i numeri in colonne a tutta larghezza. Riga: in fila e piccoli, sotto un paragrafo. Elenco: uno sotto l'altro col nome accanto, accanto a una foto o a un testo. Schede: ogni numero in un riquadro. In evidenza: il primo grande, gli altri in una riga sotto."
+msgstr "Band: die Zahlen in Spalten über die volle Breite. Zeile: in einer Reihe und klein, unter einem Absatz. Liste: untereinander mit dem Namen daneben, neben einem Foto oder Text. Karten: jede Zahl in einem Kasten. Hervorgehoben: die erste groß, die anderen in einer Zeile darunter."

@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.928 - 2026-11-02 (numeri più discreti)
+- Stat Strip: «Forma» nello Stile — oltre alla banda con i divisori, Riga (in fila e piccoli, dentro un testo), Elenco (uno sotto l’altro col nome accanto, in una colonna), Schede (ogni numero in un riquadro) e Un numero in evidenza (il primo grande, gli altri sotto). Le Stat Strip già nelle pagine restano a banda.
+- Temi: le strisce di numeri non sono più in ogni home subito dopo l’apertura. In 24 temi non c’erano numeri indispensabili e sono state tolte; negli altri stanno dentro il testo dell’introduzione, scendono più in basso o prendono un’altra forma, tema per tema.
+
 ## v1.4.927 - 2026-11-02 (una sola Hero)
 - Builder: nella palette c’è una sola Hero. In cima allo Stile, «Disposizione» sceglie fra «A tutta larghezza» (il testo sopra la scena) e «Divisa» (il testo da una parte e un pannello dall’altra: foto con badge, lettore audio, prima e dopo, vetrina di card), che prima era la tile Hero Split. Cambiando passano occhiello, titolo, sottotitolo, pulsanti e media; tornando indietro l’altra disposizione è com’era. Le Hero Split già nelle pagine restano come sono e mostrano lo stesso selettore.
 

@@ -36,7 +36,12 @@ class Olobuild_StatStrip_Tile extends Olobuild_Tile_Base {
         'label_weight'      => '',
         'align'             => 'left',
         'mono_font_family'  => '',
+        // Forma (2 nov 2026): 'banda' è quella di sempre; riga, elenco, schede ed evidenza per mettere i numeri dentro
+        // un testo, in una colonna o in modo meno ingombrante.
+        'forma'             => 'banda',
     ];
+
+    const FORME = [ 'banda', 'riga', 'elenco', 'schede', 'evidenza' ];
 
     public function get_controls() { return []; }
 
@@ -91,6 +96,10 @@ class Olobuild_StatStrip_Tile extends Olobuild_Tile_Base {
         $align    = ( ( $s['align'] ?? 'left' ) === 'center' ) ? 'center' : 'left';
 
         $items = is_array( $s['items'] ) ? $s['items'] : [];
+        $forma = in_array( $s['forma'] ?? 'banda', self::FORME, true ) ? $s['forma'] : 'banda';
+        if ( 'banda' !== $forma ) {
+            return $this->render_forma( $forma, $s, $items, compact( 'uid', 'pad_css', 'v_head', 'v_tail', 'v_size', 'v_color', 'l_wt', 'l_size', 'l_color', 'line', 'dividers', 'band_brd', 'upper', 'align', 'mono', 'cols' ) );
+        }
 
         $band_style = 'padding:' . $pad_css . ';';
         if ( $band_brd ) $band_style .= 'border-top:1px solid ' . $line . ';border-bottom:1px solid ' . $line . ';';
@@ -142,5 +151,82 @@ class Olobuild_StatStrip_Tile extends Olobuild_Tile_Base {
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php
         return ob_get_clean();
+    }
+
+    /**
+     * Le forme diverse dalla banda. Stessi valori, stesse etichette, stessa tipografia; cambia la disposizione:
+     * riga = in fila nel testo, a capo quando non ci sta · elenco = uno sotto l'altro, numero ed etichetta affiancati,
+     * coi filetti se «Divisori» · schede = ogni numero in un riquadro tenue · evidenza = il primo grande, gli altri in
+     * una riga piccola sotto.
+     *
+     * @param string $forma Una di FORME tranne 'banda'.
+     * @param array  $s     Impostazioni.
+     * @param array  $items Voci.
+     * @param array  $v     Valori già calcolati e ripuliti da render().
+     * @return string
+     */
+    private function render_forma( $forma, $s, $items, $v ) {
+        $uid    = $v['uid'];
+        $center = 'center' === $v['align'];
+        $etich  = 'font-family:' . $v['mono'] . ';' . ( '' !== $v['l_wt'] ? 'font-weight:' . $v['l_wt'] . ';' : '' )
+            . 'font-size:' . (int) $v['l_size'] . 'px;color:' . $v['l_color'] . ';line-height:1.4;'
+            . ( $v['upper'] ? 'text-transform:uppercase;letter-spacing:0.06em;' : '' );
+        $valore = function ( $px ) use ( $v ) {
+            return $v['v_head'] . 'font-size:' . (int) $px . 'px;' . $v['v_tail'] . 'color:' . $v['v_color'] . ';';
+        };
+        $bordo  = $v['band_brd'] ? 'border-top:1px solid ' . $v['line'] . ';border-bottom:1px solid ' . $v['line'] . ';' : '';
+        $cella  = function ( $idx, $it, $px, $classe = '' ) use ( $valore, $etich ) {
+            return '<div class="olo-statstrip__cell' . $classe . '">'
+                . '<div class="olo-statstrip__value" style="' . esc_attr( $valore( $px ) ) . '" data-olo-editable="items.' . (int) $idx . '.value">' . esc_html( $it['value'] ?? '' ) . '</div>'
+                . '<div class="olo-statstrip__label" style="' . esc_attr( $etich ) . '" data-olo-editable="items.' . (int) $idx . '.label">' . esc_html( $it['label'] ?? '' ) . '</div>'
+                . '</div>';
+        };
+        $html = '';
+        $css  = '';
+        $sel  = '.' . $uid;
+        if ( 'riga' === $forma ) {
+            foreach ( $items as $idx => $it ) {
+                $html .= $cella( $idx, $it, $v['v_size'] );
+            }
+            $css = $sel . ' .olo-statstrip__grid{display:flex;flex-wrap:wrap;align-items:baseline;gap:.75em 2.2em;' . ( $center ? 'justify-content:center;' : '' ) . '}'
+                . $sel . ' .olo-statstrip__cell{display:inline-flex;align-items:baseline;gap:.55em;}';
+        } elseif ( 'elenco' === $forma ) {
+            foreach ( $items as $idx => $it ) {
+                $html .= $cella( $idx, $it, $v['v_size'] );
+            }
+            $css = $sel . ' .olo-statstrip__grid{display:flex;flex-direction:column;}'
+                . $sel . ' .olo-statstrip__cell{display:grid;grid-template-columns:minmax(4.2em,auto) 1fr;gap:1.1em;align-items:baseline;padding:.85em 0;' . ( $center ? 'text-align:left;' : '' ) . '}'
+                . ( $v['dividers'] ? $sel . ' .olo-statstrip__cell+.olo-statstrip__cell{border-top:1px solid ' . $v['line'] . ';}' : '' );
+        } elseif ( 'schede' === $forma ) {
+            foreach ( $items as $idx => $it ) {
+                $html .= $cella( $idx, $it, $v['v_size'] );
+            }
+            $css = $sel . ' .olo-statstrip__grid{display:grid;grid-template-columns:repeat(' . (int) $v['cols'] . ',minmax(0,1fr));gap:1rem;}'
+                . $sel . ' .olo-statstrip__cell{display:flex;flex-direction:column;gap:.6em;padding:1.4em 1.3em;border-radius:1rem;'
+                . 'background:color-mix(in srgb, ' . $v['v_color'] . ' 6%, transparent);' . ( $center ? 'align-items:center;text-align:center;' : '' ) . '}'
+                . '@media (max-width: 959px){' . $sel . ' .olo-statstrip__grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}}'
+                . $this->css_per_dispositivo( $s, 'columns', $sel . ' .olo-statstrip__grid', $this->decl_colonne( 6 ) );
+        } else { // evidenza
+            $primo = array_slice( $items, 0, 1, true );
+            $altri = array_slice( $items, 1, null, true );
+            foreach ( $primo as $idx => $it ) {
+                $html .= $cella( $idx, $it, min( 160, (int) round( $v['v_size'] * 1.7 ) ), ' olo-statstrip__cell--primo' );
+            }
+            if ( $altri ) {
+                $html .= '<div class="olo-statstrip__altri">';
+                foreach ( $altri as $idx => $it ) {
+                    $html .= $cella( $idx, $it, max( 18, (int) round( $v['v_size'] * 0.5 ) ) );
+                }
+                $html .= '</div>';
+            }
+            $css = $sel . ' .olo-statstrip__grid{display:flex;flex-direction:column;gap:1.4em;' . ( $center ? 'align-items:center;text-align:center;' : '' ) . '}'
+                . $sel . ' .olo-statstrip__cell--primo{display:flex;flex-direction:column;gap:.5em;' . ( $center ? 'align-items:center;' : '' ) . '}'
+                . $sel . ' .olo-statstrip__altri{display:flex;flex-wrap:wrap;gap:.8em 2.2em;padding-top:1.1em;border-top:1px solid ' . $v['line'] . ';' . ( $center ? 'justify-content:center;' : '' ) . '}'
+                . $sel . ' .olo-statstrip__altri .olo-statstrip__cell{display:inline-flex;align-items:baseline;gap:.5em;}';
+        }
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- $html escaped piece by piece above; $css built from safe_color_css() colours, int casts, the internal $uid and css_per_dispositivo()
+        return '<div class="olo-statstrip olo-statstrip--' . esc_attr( $forma ) . ' ' . esc_attr( $uid ) . '" style="' . esc_attr( 'padding:' . $v['pad_css'] . ';' . $bordo ) . '">'
+            . '<div class="olo-statstrip__grid">' . $html . '</div></div><style>' . $css . '</style>';
+        // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
     }
 }

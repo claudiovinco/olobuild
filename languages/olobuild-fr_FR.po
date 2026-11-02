@@ -49738,3 +49738,23 @@ msgstr "Divisée : texte et panneau"
 #: src/components/Builder/BuilderInspector.vue
 msgid "A tutta larghezza: il testo sopra la scena (foto, video, colore). Divisa: il testo da una parte e un pannello dall'altra (foto con badge, lettore audio, prima e dopo, vetrina di card). Cambiando, occhiello, titolo, sottotitolo, pulsanti e media passano; tornando indietro ritrovi l'altra disposizione com'era."
 msgstr "Pleine largeur : le texte sur la scène (photo, vidéo, couleur). Divisée : le texte d’un côté et un panneau de l’autre (photo avec badge, lecteur audio, avant et après, vitrine de cartes). En changeant, surtitre, titre, sous-titre, boutons et médias passent ; en revenant, vous retrouvez l’autre disposition telle quelle."
+
+#: src/config/elements/statstrip.js
+msgid "Banda con divisori"
+msgstr "Bande avec séparateurs"
+
+#: src/config/elements/statstrip.js
+msgid "Riga, dentro un testo"
+msgstr "Ligne, dans un texte"
+
+#: src/config/elements/statstrip.js
+msgid "Elenco, in una colonna"
+msgstr "Liste, dans une colonne"
+
+#: src/config/elements/statstrip.js
+msgid "Un numero in evidenza"
+msgstr "Un nombre mis en avant"
+
+#: src/config/elements/statstrip.js
+msgid "Banda: i numeri in colonne a tutta larghezza. Riga: in fila e piccoli, sotto un paragrafo. Elenco: uno sotto l'altro col nome accanto, accanto a una foto o a un testo. Schede: ogni numero in un riquadro. In evidenza: il primo grande, gli altri in una riga sotto."
+msgstr "Bande : les nombres en colonnes sur toute la largeur. Ligne : alignés et petits, sous un paragraphe. Liste : l’un sous l’autre avec le nom à côté, près d’une photo ou d’un texte. Cartes : chaque nombre dans un cadre. Mis en avant : le premier en grand, les autres sur une ligne en dessous."

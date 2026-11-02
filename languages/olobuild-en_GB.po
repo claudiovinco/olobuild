@@ -48203,3 +48203,23 @@ msgstr "Split: text and panel"
 #: src/components/Builder/BuilderInspector.vue
 msgid "A tutta larghezza: il testo sopra la scena (foto, video, colore). Divisa: il testo da una parte e un pannello dall'altra (foto con badge, lettore audio, prima e dopo, vetrina di card). Cambiando, occhiello, titolo, sottotitolo, pulsanti e media passano; tornando indietro ritrovi l'altra disposizione com'era."
 msgstr "Full width: the text over the scene (photo, video, colour). Split: the text on one side and a panel on the other (photo with badge, audio player, before and after, card showcase). When you switch, eyebrow, title, subtitle, buttons and media carry over; switching back you find the other layout as it was."
+
+#: src/config/elements/statstrip.js
+msgid "Banda con divisori"
+msgstr "Band with dividers"
+
+#: src/config/elements/statstrip.js
+msgid "Riga, dentro un testo"
+msgstr "Line, inside a text"
+
+#: src/config/elements/statstrip.js
+msgid "Elenco, in una colonna"
+msgstr "List, in a column"
+
+#: src/config/elements/statstrip.js
+msgid "Un numero in evidenza"
+msgstr "One number in focus"
+
+#: src/config/elements/statstrip.js
+msgid "Banda: i numeri in colonne a tutta larghezza. Riga: in fila e piccoli, sotto un paragrafo. Elenco: uno sotto l'altro col nome accanto, accanto a una foto o a un testo. Schede: ogni numero in un riquadro. In evidenza: il primo grande, gli altri in una riga sotto."
+msgstr "Band: the numbers in full-width columns. Line: in a row and small, under a paragraph. List: one under the other with the name beside it, next to a photo or a text. Cards: each number in a box. In focus: the first one large, the others in a line below."

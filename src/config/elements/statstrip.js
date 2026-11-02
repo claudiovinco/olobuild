@@ -39,6 +39,7 @@ export default {
 
     align: 'left',
     mono_font_family: '',
+    forma: 'banda',
   },
 
   // Appena nata: quattro numeri credibili di un'attività, centrati, col valore nel colore
@@ -73,8 +74,18 @@ export default {
 
   // ═══ STILE ════════════════════════════════════════════════════
   styleFields: [
+    { type: 'separator', label: t('Forma') },
+    { key: 'forma', label: t('Forma'), type: 'select', ui: 'dropdown', options: [
+      { value: 'banda',    label: t('Banda con divisori') },
+      { value: 'riga',     label: t('Riga, dentro un testo') },
+      { value: 'elenco',   label: t('Elenco, in una colonna') },
+      { value: 'schede',   label: t('Schede') },
+      { value: 'evidenza', label: t('Un numero in evidenza') },
+    ], description: t('Banda: i numeri in colonne a tutta larghezza. Riga: in fila e piccoli, sotto un paragrafo. Elenco: uno sotto l\'altro col nome accanto, accanto a una foto o a un testo. Schede: ogni numero in un riquadro. In evidenza: il primo grande, gli altri in una riga sotto.') },
+
     { type: 'separator', label: t('Banda') },
-    { key: 'columns',        label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1, responsive: true },
+    { key: 'columns',        label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1, responsive: true,
+      show: (s) => ['banda', 'schede'].includes(s.forma || 'banda') },
     { key: 'band_padding', label: t('Padding banda'), type: 'spacing', min: 0, max: 120,
       legacyKeys: { y: 'band_padding_y' } },
     { key: 'align', label: t('Allineamento'), type: 'select', options: [
@@ -83,7 +94,8 @@ export default {
     ]},
 
     { type: 'separator', label: t('Divisori') },
-    { key: 'show_dividers', label: t('Divisori tra le celle'), type: 'toggle' },
+    { key: 'show_dividers', label: t('Divisori tra le celle'), type: 'toggle',
+      show: (s) => ['banda', 'elenco'].includes(s.forma || 'banda') },
     { key: 'band_border',   label: t('Bordo sopra e sotto'),   type: 'toggle' },
     { key: 'divider_color', label: t('Colore linee'),          type: 'color' },
 
