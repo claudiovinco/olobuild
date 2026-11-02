@@ -357,6 +357,15 @@
 
         <!-- ============ Style tab ============ -->
         <div v-else-if="activeTab === 'Stile'" :key="'Stile-' + selectedTile.id" class="mb-space-y-4" role="tabpanel" id="inspector-panel-Stile" :aria-labelledby="'inspector-tab-Stile'">
+          <!-- Una sola Hero (2 nov 2026): la disposizione sceglie fra a tutta larghezza (hero) e divisa (hero-split).
+               I testi passano, l'altra disposizione resta da parte (heroConvert.cambiaDisposizione). -->
+          <div v-if="selectedTile.type === 'hero' || selectedTile.type === 'hero-split'" class="insp-disposizione">
+            <div class="insp-disposizione-head">
+              <span>{{ t('Disposizione') }}</span>
+              <InfoTip :titolo="t('Disposizione')" :testo="t('A tutta larghezza: il testo sopra la scena (foto, video, colore). Divisa: il testo da una parte e un pannello dall\'altra (foto con badge, lettore audio, prima e dopo, vetrina di card). Cambiando, occhiello, titolo, sottotitolo, pulsanti e media passano; tornando indietro ritrovi l\'altra disposizione com\'era.')" />
+            </div>
+            <FieldSelect :model-value="selectedTile.type === 'hero' ? 'piena' : 'divisa'" :options="DISPOSIZIONI_HERO" ui="segmented" :aria-label="t('Disposizione')" @update:model-value="scegliDisposizioneHero" />
+          </div>
           <StyleFieldsRenderer
             :tileStyle="tileStyle"
             :tileFields="campiStileElemento"
@@ -1172,6 +1181,19 @@
               </div>
               <FieldSelect ui="dropdown" :aria-label="t('Cursore di questa pagina')" :model-value="builderStore.pageSettings?.page_cursor || ''" :options="cursorePaginaOptions" @update:model-value="builderStore.updatePageSetting('page_cursor', $event)" />
 
+              <!-- Cursore della sezione (advanced.cursore_sezione): entrando nella sezione il cursore cambia, uscendo
+                   torna quello della pagina (olo-cursori.js, data-olo-cursore sulla sezione). Solo sulle sezioni. -->
+              <template v-if="selectedTile.type === 'section'">
+                <div class="mb-flex mb-items-center mb-justify-between">
+                  <span class="mb-flex mb-items-center mb-gap-2">
+                    <span class="mb-text-xs mb-text-gray-300">{{ t('Cursore di questa sezione') }}</span>
+                    <InfoTip :titolo="t('Cursore di questa sezione')" :testo="t('Il cursore che segue il mouse mentre si è sopra questa sezione: uscendo torna quello della pagina. «Come la pagina» non cambia niente, «Nessuno» mostra la freccia di sistema. Si salva col tasto Salva del template.')" />
+                  </span>
+                  <span class="mb-text-[9px] mb-uppercase mb-tracking-wide mb-text-gray-500 mb-bg-gray-800 mb-rounded mb-px-1.5 mb-py-0.5">{{ t('Sezione') }}</span>
+                </div>
+                <FieldSelect ui="dropdown" :aria-label="t('Cursore di questa sezione')" :model-value="tileAdvanced.cursore_sezione || ''" :options="cursoreSezioneOptions" @update:model-value="updateAdvanced('cursore_sezione', $event)" />
+              </template>
+
               <!-- HUD mirino — impostazione GLOBALE del sito (option olo_cursor_hud,
                    Olo_Cursor_Hud): crosshair full-viewport + coordinate px + label
                    sezione. Stessa famiglia del cursore magnetico. -->
@@ -1474,7 +1496,7 @@ import { isSectionVisible, isFieldVisible as sharedIsFieldVisible } from '@/util
 import { useBuilderStore } from '@/stores/builder';
 import { useTilesStore } from '@/stores/tiles';
 import { getElementDef, getElementFields, getElementDefaults } from '@/config/elementRegistry';
-import { heroConvertTarget, convertHeroTile } from '@/utils/heroConvert';
+import { heroConvertTarget, convertHeroTile, cambiaDisposizione } from '@/utils/heroConvert';
 import { zoneOrigin } from '@/utils/zoneOrigin';
 import PageSettingsPanel from './PageSettingsPanel.vue';
 import ContentItemsEditor from './ContentItemsEditor.vue';
@@ -1672,6 +1694,10 @@ const TILE_WIDTH_OPTIONS = [
 const cursoreSitoOptions = [{ value: '', label: t('Nessuno (quello di sistema)') }, ...CURSORI.map(([v, l]) => ({ value: v, label: t(l) }))];
 const cursorePaginaOptions = [
   { value: '', label: t('Come il sito') }, { value: 'nessuno', label: t('Nessuno (quello di sistema)') },
+  ...CURSORI.map(([v, l]) => ({ value: v, label: t(l) })),
+];
+const cursoreSezioneOptions = [
+  { value: '', label: t('Come la pagina') }, { value: 'nessuno', label: t('Nessuno (quello di sistema)') },
   ...CURSORI.map(([v, l]) => ({ value: v, label: t(l) })),
 ];
 // Spento = «Nessuno»; acceso senza stile salvato = l'anello, come il PHP.
@@ -2265,6 +2291,23 @@ function onConvertToHero() {
   const conv = convertHeroTile(tile.type, tile.settings, getElementDefaults);
   if (!conv) return;
   tilesStore.convertTileType(tile.id, conv.type, conv.settings, conv.styleBg);
+}
+
+// ── Disposizione della Hero: a tutta larghezza (hero) o divisa (hero-split), una sola voce nella palette ──
+const DISPOSIZIONI_HERO = [
+  { value: 'piena', label: t('A tutta larghezza'),
+    icona: '<rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M7 10.5h10M8.5 13.5h7"/>' },
+  { value: 'divisa', label: t('Divisa: testo e pannello'),
+    icona: '<rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M5.5 10.5h4.5M5.5 13.5h3.5"/><path d="M13 7h6v10h-6z" fill="currentColor" stroke="none" opacity=".35"/>' },
+];
+function scegliDisposizioneHero(v) {
+  const tile = selectedTile.value;
+  if (!tile) return;
+  if ((v === 'piena' && tile.type === 'hero') || (v === 'divisa' && tile.type === 'hero-split')) return;
+  const conv = cambiaDisposizione(tile.type, tile.settings, getElementDefaults);
+  if (!conv) return;
+  tilesStore.convertTileType(tile.id, conv.type, conv.settings);
+  builderStore.markDirtyForTile(tile.id);
 }
 
 // Directive minima v-click-outside per chiudere il menu preset
@@ -3403,6 +3446,9 @@ function updateDynamicItemMap(itemMap) {
   border: 1px solid color-mix(in srgb, var(--olo-ui-accent, #e8622a) 30%, transparent);
 }
 .insp-heroconvert-txt { flex: 1; font-size: 11.5px; line-height: 1.45; opacity: .92; }
+/* Disposizione della Hero, in cima allo Stile */
+.insp-disposizione { display: flex; flex-direction: column; gap: 6px; padding-bottom: 12px; border-bottom: 1px solid var(--olo-ui-line, #e5e7eb); }
+.insp-disposizione-head { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; }
 .insp-heroconvert-btn {
   flex: none; padding: 7px 12px; border: 0; border-radius: 6px; cursor: pointer;
   font-size: 11.5px; font-weight: 700;

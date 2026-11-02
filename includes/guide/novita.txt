@@ -3,6 +3,17 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.927 - 2026-11-02 (una sola Hero)
+- Builder: nella palette c’è una sola Hero. In cima allo Stile, «Disposizione» sceglie fra «A tutta larghezza» (il testo sopra la scena) e «Divisa» (il testo da una parte e un pannello dall’altra: foto con badge, lettore audio, prima e dopo, vetrina di card), che prima era la tile Hero Split. Cambiando passano occhiello, titolo, sottotitolo, pulsanti e media; tornando indietro l’altra disposizione è com’era. Le Hero Split già nelle pagine restano come sono e mostrano lo stesso selettore.
+
+## v1.4.926 - 2026-11-02 (hero modificabili in ogni testo)
+- Hero: ogni testo ha il suo controllo di tipografia (font, misura, peso, maiuscolo, spaziatura, interlinea, corsivo, colore) nella zona della sua parte: occhiello, riga in fondo, invito a scorrere, scritta di fondo, dati del mirino, didascalie della striscia, campo e pillole della ricerca, finestra, indicatori e grafico dell’anteprima, nomi e messaggi della chat. Prima avevano misure fisse.
+- Hero Split: lo stesso per occhiello, sottotitolo (ora completo), valori ed etichette delle statistiche, scritte del pannello (media, prima e dopo, badge, brano) e testi della vetrina (badge, numeri, parole, didascalie).
+- Hero: la «Durata» del Raggio in hover del pulsante ora agisce (era fissa a 400 ms).
+
+## v1.4.925 - 2026-11-02 (cursore per sezione)
+- Sezioni: «Cursore di questa sezione» in Avanzate → Effetti mouse. Mentre il mouse è sopra la sezione il cursore diventa quello scelto (uno degli stili, anche l’anello) o la freccia di sistema («Nessuno»); uscendo torna quello della pagina o del sito. Funziona anche su una pagina senza cursore. Su telefoni e tablet resta quello di sistema, come sempre.
+
 ## v1.4.924 - 2026-11-02 (icone al posto delle scritte tagliate)
 - Builder, scelte brevi dell'inspector: allineamenti (a sinistra, al centro, a destra, giustificato), in alto / al centro / in basso, lati, angoli, orizzontale e verticale, stessa finestra e nuova scheda, ordine crescente e decrescente, misure S·M·L, forme, elenco e griglia, chiaro e scuro si scelgono con un'icona invece che con una scritta che nella colonna stretta si tagliava («Sini… Cen… Des…»); il nome compare in un popup al passaggio del mouse e col tasto Tab.
 - Builder, Impostazioni e Redazione: ogni scritta tagliata coi puntini si legge intera in un popup al passaggio del mouse.

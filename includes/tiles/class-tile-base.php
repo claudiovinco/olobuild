@@ -267,6 +267,63 @@ abstract class Olobuild_Tile_Base {
     }
 
     /**
+     * Le dichiarazioni CSS di un controllo `type:'typography'` salvato con le chiavi della convenzione
+     * {prefisso}_font_family, _font_size, _font_weight, _text_transform, _letter_spacing, _line_height, _italic,
+     * _color. Solo quelle impostate: coi campi vuoti la parte resta disegnata com'era, senza migrazioni. Va dopo le
+     * dichiarazioni di sempre della parte, così le sostituisce. Il colore scelto toglie l'opacità di attenuazione.
+     *
+     * @param array  $s        Impostazioni della tile.
+     * @param string $prefisso Prefisso delle chiavi.
+     * @param array  $chiavi   Chiavi fuori convenzione, per nome di proprietà (es. [ 'family' => 'vf_font_family' ]).
+     * @return string Dichiarazioni CSS, '' se nessuna è impostata.
+     */
+    protected function tipografia_css( $s, $prefisso, $chiavi = [] ) {
+        $k   = array_merge( [
+            'family'        => $prefisso . '_font_family',
+            'size'          => $prefisso . '_font_size',
+            'weight'        => $prefisso . '_font_weight',
+            'transform'     => $prefisso . '_text_transform',
+            'letterSpacing' => $prefisso . '_letter_spacing',
+            'lineHeight'    => $prefisso . '_line_height',
+            'italic'        => $prefisso . '_italic',
+            'color'         => $prefisso . '_color',
+        ], $chiavi );
+        $css = '';
+        $ff  = $this->resolve_font_family( $s[ $k['family'] ] ?? '' );
+        if ( '' !== $ff ) {
+            $css .= 'font-family:' . $ff . ';';
+        }
+        $fs = Olobuild_Tile_Utils::css_len( $s[ $k['size'] ] ?? '', 'px' );
+        if ( '' !== $fs ) {
+            $css .= 'font-size:' . $fs . ';';
+        }
+        $fw = $this->font_weight_css( $s[ $k['weight'] ] ?? '' );
+        if ( '' !== $fw ) {
+            $css .= 'font-weight:' . $fw . ';';
+        }
+        $tt = (string) ( $s[ $k['transform'] ] ?? '' );
+        if ( in_array( $tt, [ 'none', 'uppercase', 'lowercase', 'capitalize' ], true ) ) {
+            $css .= 'text-transform:' . $tt . ';';
+        }
+        $ls = Olobuild_Tile_Utils::css_len( $s[ $k['letterSpacing'] ] ?? '', 'px' );
+        if ( '' !== $ls ) {
+            $css .= 'letter-spacing:' . $ls . ';';
+        }
+        $lh = $s[ $k['lineHeight'] ] ?? '';
+        if ( is_numeric( $lh ) && (float) $lh > 0 ) {
+            $css .= 'line-height:' . (float) $lh . ';';
+        }
+        if ( ! empty( $s[ $k['italic'] ] ) ) {
+            $css .= 'font-style:italic;';
+        }
+        $col = $this->safe_color_css( $s[ $k['color'] ] ?? '' );
+        if ( $col ) {
+            $css .= 'color:' . $col . ';opacity:1;';
+        }
+        return $css;
+    }
+
+    /**
      * Regole per dispositivo di un campo `responsive: true` dell'inspector, che
      * salva `<chiave>_tablet_landscape`, `_tablet`, `_mobile_landscape`, `_mobile`.
      * Una media query per ogni dispositivo che ha un valore, dalla più larga alla

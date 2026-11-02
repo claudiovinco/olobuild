@@ -62,6 +62,30 @@ class Olobuild_Magnetic_Cursor {
      */
     public static $pagina = '';
 
+    /**
+     * I cursori delle sezioni della pagina (Avanzate → Effetti mouse → Cursore di questa sezione), come chiavi. Li
+     * segna il renderer delle sezioni; con almeno uno il footer carica olo-cursori.js anche senza il cursore della
+     * pagina o del sito.
+     *
+     * @var array
+     */
+    public static $sezioni = [];
+
+    /**
+     * Il cursore di una sezione, validato (uno degli STILI o «nessuno»; '' = come la pagina), e segnato in $sezioni.
+     *
+     * @param mixed $v Valore salvato in advanced.cursore_sezione.
+     * @return string
+     */
+    public static function cursore_sezione( $v ) {
+        $v = sanitize_key( (string) $v );
+        if ( 'nessuno' !== $v && ! in_array( $v, self::STILI, true ) ) {
+            return '';
+        }
+        self::$sezioni[ $v ] = true;
+        return $v;
+    }
+
     /** Blend mode ammessi per l'anello (whitelist anti-injection). */
     const BLEND_MODES = [ 'normal', 'screen', 'difference', 'exclusion', 'overlay', 'lighten', 'multiply' ];
 
@@ -181,8 +205,10 @@ class Olobuild_Magnetic_Cursor {
      * @param array  $o     Impostazioni.
      * @param string $stile Uno di STILI.
      */
-    private static function render_stile( $o, $stile ) {
+    private static function render_stile( $o, $stile, $anello_sito = false ) {
         $cfg = [
+            // Fuori dalle sezioni col loro cursore c'è l'anello del sito, disegnato qui: olo-cursori.js lo nasconde dentro.
+            'anelloSito' => (bool) $anello_sito,
             'style'      => $stile,
             'ring'       => (float) $o['ring_size'],
             'ringW'      => (float) $o['ring_width'],
@@ -215,18 +241,26 @@ class Olobuild_Magnetic_Cursor {
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- sola visualizzazione, valore in whitelist
         $prova = isset( $_GET['cursore'] ) ? sanitize_key( wp_unslash( $_GET['cursore'] ) ) : '';
         $pagina = sanitize_key( (string) self::$pagina );
+        $sezioni = ! empty( self::$sezioni );
         if ( in_array( $prova, self::STILI, true ) ) {
             $stile = $prova;
         } elseif ( 'nessuno' === $pagina ) {
-            return;
+            if ( ! $sezioni ) return;
+            $stile = 'nessuno';
         } elseif ( in_array( $pagina, self::STILI, true ) ) {
             $stile = $pagina;
         } elseif ( empty( $o['enabled'] ) ) {
-            return;
+            if ( ! $sezioni ) return;
+            $stile = 'nessuno';
         }
         if ( 'anello' !== $stile ) {
+            // «nessuno» con sezioni che hanno un cursore: il motore parte senza cursore e lo accende solo dentro di loro.
             self::render_stile( $o, $stile );
             return;
+        }
+        if ( $sezioni ) {
+            // L'anello del sito lo disegna il codice qui sotto; le sezioni col loro cursore le serve olo-cursori.js.
+            self::render_stile( $o, 'nessuno', true );
         }
 
         // UID per-istanza: prefissa classi, id e @keyframes. Se per qualunque motivo

@@ -48055,3 +48055,151 @@ msgstr "I cannot download %1$s from wordpress.org: %2$s"
 #: includes/class-theme-importer.php
 msgid "L'installazione di %s non è riuscita."
 msgstr "The installation of %s failed."
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Cursore di questa sezione"
+msgstr "Cursor for this section"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Come la pagina"
+msgstr "Same as the page"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Il cursore che segue il mouse mentre si è sopra questa sezione: uscendo torna quello della pagina. «Come la pagina» non cambia niente, «Nessuno» mostra la freccia di sistema. Si salva col tasto Salva del template."
+msgstr "The cursor that follows the mouse while it is over this section: leaving it, the page cursor comes back. “Same as the page” changes nothing, “None” shows the system arrow. It is saved with the template Save button."
+
+#: src/config/elements/hero.js
+msgid "Didascalie"
+msgstr "Captions"
+
+#: src/config/elements/hero.js
+msgid "Modulo — ricerca"
+msgstr "Module — search"
+
+#: src/config/elements/hero.js
+msgid "Campo di ricerca"
+msgstr "Search field"
+
+#: src/config/elements/hero.js
+msgid "Modulo — anteprima"
+msgstr "Module — preview"
+
+#: src/config/elements/hero.js
+msgid "Etichetta della finestra"
+msgstr "Window label"
+
+#: src/config/elements/hero.js
+msgid "Scritta sul media"
+msgstr "Text on the media"
+
+#: src/config/elements/hero.js
+msgid "Nomi degli indicatori"
+msgstr "Indicator names"
+
+#: src/config/elements/hero.js
+msgid "Valori degli indicatori"
+msgstr "Indicator values"
+
+#: src/config/elements/hero.js
+msgid "Variazioni degli indicatori"
+msgstr "Indicator changes"
+
+#: src/config/elements/hero.js
+msgid "Titolo del grafico"
+msgstr "Chart title"
+
+#: src/config/elements/hero.js
+msgid "Nota del grafico"
+msgstr "Chart note"
+
+#: src/config/elements/hero.js
+msgid "Etichette delle barre"
+msgstr "Bar labels"
+
+#: src/config/elements/hero.js
+msgid "In diretta"
+msgstr "Live"
+
+#: src/config/elements/hero.js
+msgid "Nomi"
+msgstr "Names"
+
+#: src/config/elements/hero.js
+msgid "Scritta di fondo"
+msgstr "Background text"
+
+#: src/config/elements/hero.js
+msgid "Misura vuota: cresce con la larghezza della finestra. Colore vuoto: bianco al 6%."
+msgstr "Empty size: it grows with the window width. Empty colour: white at 6%."
+
+#: src/config/elements/hero.js
+msgid "Font vuoto: il monospaziato del tema."
+msgstr "Empty font: the theme monospace."
+
+#: src/config/elements/hero.js
+msgid "Colore vuoto: il colore accento, come il dot. Un colore più scuro o più chiaro aiuta a leggerlo sopra una foto o un video."
+msgstr "Empty colour: the accent colour, like the dot. A darker or lighter colour helps reading it over a photo or a video."
+
+#: src/config/elements/hero.js
+msgid "Riga in fondo"
+msgstr "Bottom line"
+
+#: src/config/elements/hero.js
+msgid "Invito a scorrere"
+msgstr "Scroll hint"
+
+#: src/config/elements/hero-split.js
+msgid "Eyebrow"
+msgstr "Eyebrow"
+
+#: src/config/elements/hero-split.js
+msgid "Valori"
+msgstr "Values"
+
+#: src/config/elements/hero-split.js
+msgid "Colore e corsivo si scelgono voce per voce, qui sopra."
+msgstr "Colour and italic are chosen item by item, above."
+
+#: src/config/elements/hero-split.js
+msgid "Etichette prima e dopo"
+msgstr "Before and after labels"
+
+#: src/config/elements/hero-split.js
+msgid "Numero del badge"
+msgstr "Badge number"
+
+#: src/config/elements/hero-split.js
+msgid "Testo del badge"
+msgstr "Badge text"
+
+#: src/config/elements/hero-split.js
+msgid "Titolo del brano"
+msgstr "Track title"
+
+#: src/config/elements/hero-split.js
+msgid "Dati del brano"
+msgstr "Track details"
+
+#: src/config/elements/hero-split.js
+msgid "Numeri delle card"
+msgstr "Card numbers"
+
+#: src/config/elements/hero-split.js
+msgid "Parole delle card"
+msgstr "Card words"
+
+#: src/config/elements/hero-split.js
+msgid "Colore e corsivo si scelgono card per card, qui sopra."
+msgstr "Colour and italic are chosen card by card, above."
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "A tutta larghezza"
+msgstr "Full width"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Divisa: testo e pannello"
+msgstr "Split: text and panel"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "A tutta larghezza: il testo sopra la scena (foto, video, colore). Divisa: il testo da una parte e un pannello dall'altra (foto con badge, lettore audio, prima e dopo, vetrina di card). Cambiando, occhiello, titolo, sottotitolo, pulsanti e media passano; tornando indietro ritrovi l'altra disposizione com'era."
+msgstr "Full width: the text over the scene (photo, video, colour). Split: the text on one side and a panel on the other (photo with badge, audio player, before and after, card showcase). When you switch, eyebrow, title, subtitle, buttons and media carry over; switching back you find the other layout as it was."

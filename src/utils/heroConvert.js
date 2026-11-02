@@ -440,3 +440,87 @@ export function convertHeroTile(type, settings, getDefaults) {
     styleBg: out.styleBg || null,
   };
 }
+
+/* ── «Disposizione» della Hero (2 nov 2026) ──────────────────────────────────
+ * Nel builder c'è una sola Hero: a tutta larghezza (`hero`) o divisa, testo e pannello (`hero-split`). Restano due
+ * renderer e due insiemi di chiavi (i template salvati non cambiano); il cambio porta i testi (occhiello, titolo,
+ * sottotitolo, pulsanti) e il media (scena di sfondo ↔ pannello), e mette da parte il resto della disposizione
+ * lasciata in `disposizione_prima`: tornando indietro si ritrova com'era. Nessun renderer legge quella chiave. */
+
+const unHtml = (s) => String(s ?? '').replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&lt;/g, '<')
+  .replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/&amp;/g, '&').trim();
+const conMedia = (bg) => !!(bg && typeof bg === 'object' && bg.type && bg.type !== 'none');
+
+/** Il titolo della Hero (righe separate da <br>, una riga tutta in <em> = corsiva) → le righe della Hero divisa. */
+function righeDaTitolo(html, vecchie) {
+  const colori = (Array.isArray(vecchie) ? vecchie : []).map((r) => r && r.color).filter(Boolean);
+  return String(html || '').split(/<br\s*\/?>/i).map((riga, i) => {
+    const t = riga.trim();
+    const tutta = /^<(em|i)>([\s\S]*)<\/\1>$/i.exec(t);
+    const testo = unHtml(tutta ? tutta[2] : t);
+    if (!testo) return null;
+    const r = { text: testo, italic: !!tutta };
+    const c = colori[i] || colori[colori.length - 1];
+    if (c) r.color = c;
+    return r;
+  }).filter(Boolean);
+}
+
+/** Le righe della Hero divisa → il titolo della Hero (le corsive in <em>, colorate dall'accento). */
+function titoloDaRighe(righe) {
+  return (Array.isArray(righe) ? righe : [])
+    .filter((r) => r && String(r.text ?? '').trim() !== '')
+    .map((r) => (r.italic ? `<em>${escHtml(r.text)}</em>` : escHtml(r.text)))
+    .join('<br>');
+}
+
+/**
+ * @param {string} type       'hero' o 'hero-split'
+ * @param {object} settings   settings della tile
+ * @param {function} getDefaults  (type) => defaults — nel builder: getElementDefaults
+ * @returns {{ type: string, settings: object } | null}
+ */
+export function cambiaDisposizione(type, settings, getDefaults) {
+  const verso = type === 'hero' ? 'hero-split' : (type === 'hero-split' ? 'hero' : null);
+  if (!verso) return null;
+  const { disposizione_prima: prima, ...lasciata } = (settings && typeof settings === 'object') ? settings : {};
+  const tornata = !!(prima && prima.type === verso && prima.settings && typeof prima.settings === 'object');
+  const base = tornata ? { ...prima.settings } : { ...(getDefaults(verso) || {}) };
+  const s = { ...base };
+  const porta = (da, a) => { if (lasciata[da] !== undefined) s[a] = lasciata[da]; };
+
+  if (verso === 'hero-split') {
+    porta('eyebrow_text', 'eyebrow_text');
+    if (lasciata.title !== undefined) {
+      const righe = righeDaTitolo(lasciata.title, base.headline_lines);
+      if (righe.length) s.headline_lines = righe;
+    }
+    porta('subtitle', 'subhead');
+    porta('cta_text', 'cta1_text'); porta('cta_url', 'cta1_url'); porta('cta_target', 'cta1_target');
+    porta('cta2_text', 'cta2_text'); porta('cta2_url', 'cta2_url'); porta('cta2_target', 'cta2_target');
+    // La prima volta niente statistiche di esempio: la Hero non ne aveva.
+    if (!tornata) s.stats = [];
+    // La foto o il video della scena va nel pannello; se la disposizione divisa aveva già un pannello senza media
+    // (la vetrina di card) resta quello.
+    if (conMedia(lasciata.media_bg)) {
+      if (!tornata || ['media', 'audio', 'compare'].includes(s.panel)) {
+        if (!tornata) s.panel = 'media';
+        s.panel_media = lasciata.media_bg;
+      }
+    }
+  } else {
+    porta('eyebrow_text', 'eyebrow_text');
+    if (Array.isArray(lasciata.headline_lines)) {
+      const titolo = titoloDaRighe(lasciata.headline_lines);
+      if (titolo) s.title = titolo;
+    }
+    porta('subhead', 'subtitle');
+    porta('cta1_text', 'cta_text'); porta('cta1_url', 'cta_url'); porta('cta1_target', 'cta_target');
+    porta('cta2_text', 'cta2_text'); porta('cta2_url', 'cta2_url'); porta('cta2_target', 'cta2_target');
+    if (['media', 'audio', 'compare'].includes(lasciata.panel) && conMedia(lasciata.panel_media)) {
+      s.media_bg = lasciata.panel_media;
+    }
+  }
+  s.disposizione_prima = { type, settings: lasciata };
+  return { type: verso, settings: s };
+}

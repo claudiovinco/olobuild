@@ -40,11 +40,13 @@
   html.style.setProperty('--oc-w', (+CFG.ringW || 1.5) + 'px');
 
   /* ── utilità ── */
+  var nodiNuovi = null; // i nodi dello stile che si sta creando (crea): si nascondono quando lo stile non è attivo
   function nodo(cls, tag) {
     var e = document.createElement(tag || 'div');
     e.className = P + ' ' + P + '-' + cls;
     e.setAttribute('aria-hidden', 'true');
     document.body.appendChild(e);
+    if (nodiNuovi) nodiNuovi.push(e);
     return e;
   }
   function sposta(e, x, y, dopo) { e.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)' + (dopo || ''); }
@@ -66,6 +68,7 @@
 
   function ciclo(t) {
     giro = null;
+    if (!stile) return;
     var ancora = stile.frame(t || performance.now());
     if (ancora) giro = requestAnimationFrame(ciclo);
   }
@@ -73,6 +76,23 @@
 
   /* ── gli stili ── */
   var STILI = {};
+
+  // Anello e punto. Quello del sito lo disegna Olobuild_Magnetic_Cursor (con l'attrazione dei pulsanti); questo serve
+  // alle sezioni che lo scelgono mentre la pagina ne ha un altro.
+  STILI.anello = function () {
+    var a = nodo('anello'), p = nodo('punto');
+    var ax = mx, ay = my;
+    return {
+      frame: function () {
+        ax += (mx - ax) * (meno ? 1 : 0.2);
+        ay += (my - ay) * (meno ? 1 : 0.2);
+        a.classList.toggle('is-hot', !!hot);
+        sposta(a, ax, ay, hot ? ' scale(' + (+CFG.hotScale || 1.6) + ')' : '');
+        sposta(p, mx, my);
+        return Math.abs(mx - ax) + Math.abs(my - ay) > 0.2;
+      }
+    };
+  };
 
   // Scia: una catena di punti, ognuno insegue quello davanti; il primo cresce sugli elementi interattivi.
   STILI.scia = function () {
@@ -2426,11 +2446,70 @@
     };
   };
 
+  /* ── cursore della sezione (2 nov 2026) ──
+     Una sezione con data-olo-cursore ha un cursore suo: entrandoci il cursore cambia, uscendo torna quello della
+     pagina. Ogni stile si crea la prima volta che serve e poi resta, coi suoi nodi nascosti quando non è attivo; i suoi
+     ascoltatori del puntatore (i clic dei coriandoli…) agiscono solo mentre è lui il cursore. «nessuno» = la freccia di
+     sistema. L'anello del sito lo disegna Olobuild_Magnetic_Cursor (CFG.anelloSito): si nasconde nelle sezioni. */
+  var istanze = {};
+  var attivo = null;       // lo stile attivo (null = nessuno)
+  var attivoChiave = '';   // 'b:' fuori dalle sezioni, 's:' dentro una sezione col suo cursore
+  function crea(nome) {
+    if (istanze[nome]) return istanze[nome];
+    var wAdd = window.addEventListener, dAdd = document.addEventListener;
+    var filtra = function (orig, bersaglio) {
+      return function (tipo, fn, opz) {
+        var avvolta = (typeof fn === 'function' && /^(pointer|mouse|click|touch)/.test(tipo))
+          ? function (e) { if (attivo === nome) return fn.call(this, e); } : fn;
+        return orig.call(bersaglio, tipo, avvolta, opz);
+      };
+    };
+    nodiNuovi = [];
+    window.addEventListener = filtra(wAdd, window);
+    document.addEventListener = filtra(dAdd, document);
+    try {
+      istanze[nome] = { stile: STILI[nome](), nodi: nodiNuovi };
+    } finally {
+      window.addEventListener = wAdd;
+      document.addEventListener = dAdd;
+      nodiNuovi = null;
+    }
+    return istanze[nome];
+  }
+  function anelloSito(visibile) {
+    var m = window.__oloMagCur;
+    if (!m || !m.uid) return;
+    var nodi = document.querySelectorAll('.' + m.uid + '-ring, .' + m.uid + '-dot');
+    for (var i = 0; i < nodi.length; i++) nodi[i].style.visibility = visibile ? '' : 'hidden';
+    html.classList.toggle(m.uid + '-on', visibile);
+  }
+  function attiva(nome, base) {
+    if (!STILI[nome]) nome = 'nessuno';
+    var chiave = (base ? 'b:' : 's:') + nome;
+    if (chiave === attivoChiave) return;
+    attivoChiave = chiave;
+    if (attivo && istanze[attivo] && attivo !== nome) {
+      istanze[attivo].nodi.forEach(function (e) { e.style.display = 'none'; });
+    }
+    var ist = nome === 'nessuno' ? null : crea(nome);
+    attivo = ist ? nome : null;
+    stile = ist ? ist.stile : null;
+    if (ist) ist.nodi.forEach(function (e) { e.style.display = ''; });
+    html.classList.toggle(P + '-on', !!(ist && CFG.hideSys));
+    if (CFG.anelloSito) anelloSito(!!base);
+    chiedi();
+  }
+  function sezioneDi(t) {
+    var s = t && t.closest ? t.closest('[data-olo-cursore]') : null;
+    attiva(s ? s.getAttribute('data-olo-cursore') : STILE, !s);
+  }
+
   /* ── avvio ── */
+  var avviato = false;
   function avvia() {
-    if (!document.body || stile) return;
-    stile = (STILI[STILE] || STILI.scia)();
-    if (CFG.hideSys) html.classList.add(P + '-on');
+    if (!document.body || avviato) return;
+    avviato = true;
+    attiva(STILE, true);
     html.classList.add(P + '-fuori');
     window.addEventListener('pointermove', function (e) {
       if (e.pointerType === 'touch') return;
@@ -2440,10 +2519,11 @@
       if (html.classList.contains(P + '-fuori')) { vx = vy = 0; }
       mx = e.clientX; my = e.clientY; ultimo = t;
       html.classList.remove(P + '-fuori');
-      if (stile.punto) stile.punto(t);
+      if (stile && stile.punto) stile.punto(t);
       chiedi();
     }, { passive: true });
     document.addEventListener('pointerover', function (e) {
+      if (e.pointerType !== 'touch') sezioneDi(e.target);
       var h = e.target && e.target.closest ? e.target.closest(HOT) : null;
       if (h !== hot) { hot = h; chiedi(); }
     }, { passive: true });

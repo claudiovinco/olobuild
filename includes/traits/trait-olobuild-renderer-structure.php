@@ -301,6 +301,12 @@ trait Olobuild_Renderer_Structure_Trait {
         if ( $light_color ) {
             $html .= ' data-olo-light="' . esc_attr( $light_color ) . '"';
         }
+        // Cursore della sezione (Avanzate → Effetti mouse): entrandoci il cursore cambia (olo-cursori.js), uscendo torna
+        // quello della pagina. Il footer carica il motore anche se il sito e la pagina non hanno un cursore.
+        $cursore_sez = class_exists( 'Olobuild_Magnetic_Cursor' ) ? Olobuild_Magnetic_Cursor::cursore_sezione( $advanced['cursore_sezione'] ?? '' ) : '';
+        if ( '' !== $cursore_sez ) {
+            $html .= ' data-olo-cursore="' . esc_attr( $cursore_sez ) . '"';
+        }
         $html .= $scrollspy_attr . $el_parallax_attr . $snap_data_attr . $mouse_attrs . $this->anim->build_spotlight_attr( $advanced ) . $this->anim->build_smear_attr( $advanced ) . '>';
 
         $bg_layers_html = '';

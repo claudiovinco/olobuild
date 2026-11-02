@@ -49594,3 +49594,147 @@ msgstr "Impossible de télécharger %1$s depuis wordpress.org : %2$s"
 #: includes/class-theme-importer.php
 msgid "L'installazione di %s non è riuscita."
 msgstr "L’installation de %s a échoué."
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Cursore di questa sezione"
+msgstr "Curseur de cette section"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Come la pagina"
+msgstr "Comme la page"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Il cursore che segue il mouse mentre si è sopra questa sezione: uscendo torna quello della pagina. «Come la pagina» non cambia niente, «Nessuno» mostra la freccia di sistema. Si salva col tasto Salva del template."
+msgstr "Le curseur qui suit la souris tant qu’elle survole cette section : en sortant, celui de la page revient. « Comme la page » ne change rien, « Aucun » affiche la flèche du système. Il s’enregistre avec le bouton Enregistrer du modèle."
+
+#: src/config/elements/hero.js
+msgid "Didascalie"
+msgstr "Légendes"
+
+#: src/config/elements/hero.js
+msgid "Modulo — ricerca"
+msgstr "Module — recherche"
+
+#: src/config/elements/hero.js
+msgid "Campo di ricerca"
+msgstr "Champ de recherche"
+
+#: src/config/elements/hero.js
+msgid "Modulo — anteprima"
+msgstr "Module — aperçu"
+
+#: src/config/elements/hero.js
+msgid "Etichetta della finestra"
+msgstr "Libellé de la fenêtre"
+
+#: src/config/elements/hero.js
+msgid "Scritta sul media"
+msgstr "Texte sur le média"
+
+#: src/config/elements/hero.js
+msgid "Nomi degli indicatori"
+msgstr "Noms des indicateurs"
+
+#: src/config/elements/hero.js
+msgid "Valori degli indicatori"
+msgstr "Valeurs des indicateurs"
+
+#: src/config/elements/hero.js
+msgid "Variazioni degli indicatori"
+msgstr "Variations des indicateurs"
+
+#: src/config/elements/hero.js
+msgid "Titolo del grafico"
+msgstr "Titre du graphique"
+
+#: src/config/elements/hero.js
+msgid "Nota del grafico"
+msgstr "Note du graphique"
+
+#: src/config/elements/hero.js
+msgid "Etichette delle barre"
+msgstr "Libellés des barres"
+
+#: src/config/elements/hero.js
+msgid "In diretta"
+msgstr "En direct"
+
+#: src/config/elements/hero.js
+msgid "Nomi"
+msgstr "Noms"
+
+#: src/config/elements/hero.js
+msgid "Scritta di fondo"
+msgstr "Texte de fond"
+
+#: src/config/elements/hero.js
+msgid "Misura vuota: cresce con la larghezza della finestra. Colore vuoto: bianco al 6%."
+msgstr "Taille vide : elle grandit avec la largeur de la fenêtre. Couleur vide : blanc à 6 %."
+
+#: src/config/elements/hero.js
+msgid "Font vuoto: il monospaziato del tema."
+msgstr "Police vide : la police à chasse fixe du thème."
+
+#: src/config/elements/hero.js
+msgid "Colore vuoto: il colore accento, come il dot. Un colore più scuro o più chiaro aiuta a leggerlo sopra una foto o un video."
+msgstr "Couleur vide : la couleur d’accent, comme le point. Une couleur plus sombre ou plus claire aide à le lire sur une photo ou une vidéo."
+
+#: src/config/elements/hero.js
+msgid "Riga in fondo"
+msgstr "Ligne du bas"
+
+#: src/config/elements/hero.js
+msgid "Invito a scorrere"
+msgstr "Invitation à défiler"
+
+#: src/config/elements/hero-split.js
+msgid "Valori"
+msgstr "Valeurs"
+
+#: src/config/elements/hero-split.js
+msgid "Colore e corsivo si scelgono voce per voce, qui sopra."
+msgstr "La couleur et l’italique se choisissent élément par élément, ci-dessus."
+
+#: src/config/elements/hero-split.js
+msgid "Etichette prima e dopo"
+msgstr "Libellés avant et après"
+
+#: src/config/elements/hero-split.js
+msgid "Numero del badge"
+msgstr "Nombre du badge"
+
+#: src/config/elements/hero-split.js
+msgid "Testo del badge"
+msgstr "Texte du badge"
+
+#: src/config/elements/hero-split.js
+msgid "Titolo del brano"
+msgstr "Titre du morceau"
+
+#: src/config/elements/hero-split.js
+msgid "Dati del brano"
+msgstr "Détails du morceau"
+
+#: src/config/elements/hero-split.js
+msgid "Numeri delle card"
+msgstr "Numéros des cartes"
+
+#: src/config/elements/hero-split.js
+msgid "Parole delle card"
+msgstr "Mots des cartes"
+
+#: src/config/elements/hero-split.js
+msgid "Colore e corsivo si scelgono card per card, qui sopra."
+msgstr "La couleur et l’italique se choisissent carte par carte, ci-dessus."
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "A tutta larghezza"
+msgstr "Pleine largeur"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Divisa: testo e pannello"
+msgstr "Divisée : texte et panneau"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "A tutta larghezza: il testo sopra la scena (foto, video, colore). Divisa: il testo da una parte e un pannello dall'altra (foto con badge, lettore audio, prima e dopo, vetrina di card). Cambiando, occhiello, titolo, sottotitolo, pulsanti e media passano; tornando indietro ritrovi l'altra disposizione com'era."
+msgstr "Pleine largeur : le texte sur la scène (photo, vidéo, couleur). Divisée : le texte d’un côté et un panneau de l’autre (photo avec badge, lecteur audio, avant et après, vitrine de cartes). En changeant, surtitre, titre, sous-titre, boutons et médias passent ; en revenant, vous retrouvez l’autre disposition telle quelle."

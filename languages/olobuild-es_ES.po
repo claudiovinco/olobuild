@@ -49438,3 +49438,147 @@ msgstr "No puedo descargar %1$s desde wordpress.org: %2$s"
 #: includes/class-theme-importer.php
 msgid "L'installazione di %s non è riuscita."
 msgstr "La instalación de %s no se ha completado."
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Cursore di questa sezione"
+msgstr "Cursor de esta sección"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Come la pagina"
+msgstr "Como la página"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Il cursore che segue il mouse mentre si è sopra questa sezione: uscendo torna quello della pagina. «Come la pagina» non cambia niente, «Nessuno» mostra la freccia di sistema. Si salva col tasto Salva del template."
+msgstr "El cursor que sigue al ratón mientras está sobre esta sección: al salir vuelve el de la página. «Como la página» no cambia nada, «Ninguno» muestra la flecha del sistema. Se guarda con el botón Guardar de la plantilla."
+
+#: src/config/elements/hero.js
+msgid "Didascalie"
+msgstr "Pies de foto"
+
+#: src/config/elements/hero.js
+msgid "Modulo — ricerca"
+msgstr "Módulo — búsqueda"
+
+#: src/config/elements/hero.js
+msgid "Campo di ricerca"
+msgstr "Campo de búsqueda"
+
+#: src/config/elements/hero.js
+msgid "Modulo — anteprima"
+msgstr "Módulo — vista previa"
+
+#: src/config/elements/hero.js
+msgid "Etichetta della finestra"
+msgstr "Etiqueta de la ventana"
+
+#: src/config/elements/hero.js
+msgid "Scritta sul media"
+msgstr "Texto sobre el medio"
+
+#: src/config/elements/hero.js
+msgid "Nomi degli indicatori"
+msgstr "Nombres de los indicadores"
+
+#: src/config/elements/hero.js
+msgid "Valori degli indicatori"
+msgstr "Valores de los indicadores"
+
+#: src/config/elements/hero.js
+msgid "Variazioni degli indicatori"
+msgstr "Variaciones de los indicadores"
+
+#: src/config/elements/hero.js
+msgid "Titolo del grafico"
+msgstr "Título del gráfico"
+
+#: src/config/elements/hero.js
+msgid "Nota del grafico"
+msgstr "Nota del gráfico"
+
+#: src/config/elements/hero.js
+msgid "Etichette delle barre"
+msgstr "Etiquetas de las barras"
+
+#: src/config/elements/hero.js
+msgid "In diretta"
+msgstr "En directo"
+
+#: src/config/elements/hero.js
+msgid "Nomi"
+msgstr "Nombres"
+
+#: src/config/elements/hero.js
+msgid "Scritta di fondo"
+msgstr "Texto de fondo"
+
+#: src/config/elements/hero.js
+msgid "Misura vuota: cresce con la larghezza della finestra. Colore vuoto: bianco al 6%."
+msgstr "Tamaño vacío: crece con el ancho de la ventana. Color vacío: blanco al 6 %."
+
+#: src/config/elements/hero.js
+msgid "Font vuoto: il monospaziato del tema."
+msgstr "Fuente vacía: la monoespaciada del tema."
+
+#: src/config/elements/hero.js
+msgid "Colore vuoto: il colore accento, come il dot. Un colore più scuro o più chiaro aiuta a leggerlo sopra una foto o un video."
+msgstr "Color vacío: el color de acento, como el punto. Un color más oscuro o más claro ayuda a leerlo sobre una foto o un vídeo."
+
+#: src/config/elements/hero.js
+msgid "Riga in fondo"
+msgstr "Línea inferior"
+
+#: src/config/elements/hero.js
+msgid "Invito a scorrere"
+msgstr "Invitación a desplazarse"
+
+#: src/config/elements/hero-split.js
+msgid "Valori"
+msgstr "Valores"
+
+#: src/config/elements/hero-split.js
+msgid "Colore e corsivo si scelgono voce per voce, qui sopra."
+msgstr "El color y la cursiva se eligen elemento por elemento, aquí arriba."
+
+#: src/config/elements/hero-split.js
+msgid "Etichette prima e dopo"
+msgstr "Etiquetas antes y después"
+
+#: src/config/elements/hero-split.js
+msgid "Numero del badge"
+msgstr "Número de la insignia"
+
+#: src/config/elements/hero-split.js
+msgid "Testo del badge"
+msgstr "Texto de la insignia"
+
+#: src/config/elements/hero-split.js
+msgid "Titolo del brano"
+msgstr "Título de la pista"
+
+#: src/config/elements/hero-split.js
+msgid "Dati del brano"
+msgstr "Datos de la pista"
+
+#: src/config/elements/hero-split.js
+msgid "Numeri delle card"
+msgstr "Números de las tarjetas"
+
+#: src/config/elements/hero-split.js
+msgid "Parole delle card"
+msgstr "Palabras de las tarjetas"
+
+#: src/config/elements/hero-split.js
+msgid "Colore e corsivo si scelgono card per card, qui sopra."
+msgstr "El color y la cursiva se eligen tarjeta por tarjeta, aquí arriba."
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "A tutta larghezza"
+msgstr "Ancho completo"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "Divisa: testo e pannello"
+msgstr "Dividida: texto y panel"
+
+#: src/components/Builder/BuilderInspector.vue
+msgid "A tutta larghezza: il testo sopra la scena (foto, video, colore). Divisa: il testo da una parte e un pannello dall'altra (foto con badge, lettore audio, prima e dopo, vetrina di card). Cambiando, occhiello, titolo, sottotitolo, pulsanti e media passano; tornando indietro ritrovi l'altra disposizione com'era."
+msgstr "Ancho completo: el texto sobre la escena (foto, vídeo, color). Dividida: el texto a un lado y un panel al otro (foto con insignia, reproductor de audio, antes y después, vitrina de tarjetas). Al cambiar, antetítulo, título, subtítulo, botones y medios pasan; al volver encuentras la otra disposición como estaba."

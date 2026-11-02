@@ -327,6 +327,13 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
         $plx_module  = $plx( $depth ? [ 'y: 0,-' . $depth[3] . 'vh' ] : [] );
         $plx_wm      = $plx( $depth ? [ 'x: 0,-' . $depth[4] . 'vw' ] : [] );
 
+        // Tipografia delle parti (occhiello, riga in fondo, invito a scorrere, scritta di fondo, testi dei moduli, dati
+        // del mirino): una regola in più dopo quella di sempre, solo con i valori scelti (Olobuild_Tile_Base::tipografia_css).
+        $tipo = function ( $prefisso, $selettore, $chiavi = [] ) use ( $s, $uid ) {
+            $d = $this->tipografia_css( $s, $prefisso, $chiavi );
+            return '' !== $d ? '.' . $uid . ' ' . $selettore . '{' . $d . '}' : '';
+        };
+
         // CTA sizing (range value = font-size in px, padding proportional)
         $cta_fs       = intval( $s['cta_size'] ) ?: 15;
         $cta_pad_y    = round( $cta_fs * 0.8 );
@@ -382,6 +389,7 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-hero-stripmedia{position:relative;overflow:hidden;width:clamp(150px,22vw,240px);<?php echo $strip_ar; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- dichiarazione aspect-ratio prodotta da Olobuild_Tile_Utils::image_frame(), che filtra il valore con una whitelist "W/H" ?>border-radius:<?php echo (int) $strip_rad; ?>px <?php echo (int) $strip_rad; ?>px 8px 8px;background-color:rgba(255,255,255,.06);background-image:repeating-linear-gradient(135deg, rgba(243,233,239,.05) 0 16px, transparent 16px 32px);background-size:cover;background-position:<?php echo esc_attr( $strip_pos ); ?>;}
             <?php if ( $strip_off > 0 ) : ?>.<?php echo $uid; ?> .olo-hero-stripmedia:nth-child(2){margin-top:-<?php echo (int) $strip_off; ?>px;}<?php endif; ?>
             .<?php echo $uid; ?> .olo-hero-stripcap{position:absolute;z-index:1;left:14px;bottom:12px;right:14px;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:color-mix(in srgb, var(--olo-color-light, #ffffff) 90%, transparent);}
+            <?php echo $tipo( 'strip_caption', '.olo-hero-stripcap' ); ?>
             <?php /* didascalia: era un rosato fisso al 40% (sulle foto 1,8-3,3:1); ora il chiaro della Palette su una sfumatura scura in fondo alla foto, solo dove c'è una didascalia (11 ott 2026) */ ?>
             .<?php echo $uid; ?> .olo-hero-stripmedia--cap::after{content:'';position:absolute;left:0;right:0;bottom:0;height:48%;background:linear-gradient(to top, color-mix(in srgb, var(--olo-color-dark, #14161c) 72%, transparent), transparent);pointer-events:none;}
             @media(max-width:600px){.<?php echo $uid; ?> .olo-hero-strip .olo-hero-stripmedia:nth-child(3){display:none;}}
@@ -398,6 +406,7 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-hero-searchbox input{flex:1;background:transparent;border:0;padding:12px 14px;font-size:15px;color:<?php echo $fg; ?>;min-width:0;font-family:inherit;}
             .<?php echo $uid; ?> .olo-hero-searchbox input::placeholder{color:<?php echo $fg; ?>;opacity:.55;}
             .<?php echo $uid; ?> .olo-hero-searchbox input:focus{outline:none;}
+            <?php echo $tipo( 'search_input', '.olo-hero-searchbox input' ); ?>
             <?php // Il focus si vede sulla casella intera, col suo raggio: sul campo, che è trasparente e
             // senza bordo, il contorno diventava un rettangolo attaccato ai bordi della casella. ?>
             .<?php echo $uid; ?> .olo-hero-searchbox:focus-within{border-color:<?php echo $accent_css; ?>;box-shadow:0 0 0 3px <?php echo $mix( $accent_css, 0.3 ); ?>;}
@@ -407,6 +416,7 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-hero-chip{font-size:13px;font-weight:600;opacity:.85;border:1px solid <?php echo $mix( $fg, 0.16 ); ?>;border-radius:999px;padding:7px 15px;text-decoration:none;color:inherit;transition:border-color .15s,opacity .15s;}
             .<?php echo $uid; ?> .olo-hero-chip:hover{border-color:<?php echo $accent_css; ?>;opacity:1;}
             .<?php echo $uid; ?> .olo-hero-chip:focus-visible{outline:2px solid <?php echo $accent_css; ?>;outline-offset:2px;}
+            <?php echo $tipo( 'search_chip', '.olo-hero-chip' ); ?>
             <?php endif; ?>
             <?php
             $mono_ff = "var(--olo-font-family-mono, ui-monospace,'SF Mono',Menlo,monospace)";
@@ -414,29 +424,39 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-hero-winbar{display:flex;align-items:center;gap:7px;padding:13px 16px;border-bottom:1px solid <?php echo $mixc( 10 ); ?>;background:<?php echo $mixc( 7 ); ?>;}
             .<?php echo $uid; ?> .olo-hero-windot{width:11px;height:11px;border-radius:50%;background:<?php echo $mixc( 18 ); ?>;flex:none;}
             .<?php echo $uid; ?> .olo-hero-winlabel{margin-left:13px;font-family:<?php echo $mono_ff; ?>;font-size:11px;opacity:.85;}
+            <?php echo $tipo( 'mock_win_label', '.olo-hero-mockframe .olo-hero-winlabel' ); ?>
+            <?php echo $tipo( 'chat_win_label', '.olo-hero-chatwin .olo-hero-winlabel' ); ?>
             <?php endif; ?>
             <?php if ( 'mockup' === $module ) : ?>
             .<?php echo $uid; ?> .olo-hero-mockframe{max-width:1020px;margin:0 auto;border:1px solid <?php echo $mixc( 10 ); ?>;border-radius:16px 16px 0 0;background:<?php echo $mixc( 5 ); ?>;overflow:hidden;text-align:left;box-shadow:0 -10px 80px -20px <?php echo $mix( $accent_css, 0.4 ); ?>;}
             .<?php echo $uid; ?> .olo-hero-mockmedia{position:relative;overflow:hidden;aspect-ratio:16/8.5;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,.035) 0 16px, transparent 16px 32px);background-size:cover;background-position:center center;<?php echo $mock_media['has'] ? $mock_media['css'] : ''; ?>}
             .<?php echo $uid; ?> .olo-hero-mocklabel{position:absolute;left:14px;bottom:12px;right:14px;font-family:<?php echo $mono_ff; ?>;font-size:10.5px;letter-spacing:.03em;text-transform:uppercase;opacity:.45;text-align:left;}
+            <?php echo $tipo( 'mock_label', '.olo-hero-mocklabel' ); ?>
             .<?php echo $uid; ?> .olo-hero-mockbody{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;padding:20px;text-align:left;}
             .<?php echo $uid; ?> .olo-hero-kpi{background:<?php echo $mixc( 5 ); ?>;border:1px solid <?php echo $mixc( 10 ); ?>;border-radius:11px;padding:16px;}
             .<?php echo $uid; ?> .olo-hero-kpi .k{font-family:<?php echo $mono_ff; ?>;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.6;}
             .<?php echo $uid; ?> .olo-hero-kpi .v{font-weight:700;font-size:26px;margin:7px 0 4px;line-height:1.1;}
             .<?php echo $uid; ?> .olo-hero-kpi .t{font-family:<?php echo $mono_ff; ?>;font-size:11px;color:<?php echo $accent_css; ?>;}
             .<?php echo $uid; ?> .olo-hero-kpi .t.dn{color:inherit;opacity:.6;}
+            <?php echo $tipo( 'kpi_label', '.olo-hero-kpi .k' ); ?>
+            <?php echo $tipo( 'kpi_value', '.olo-hero-kpi .v' ); ?>
+            <?php echo $tipo( 'kpi_delta', '.olo-hero-kpi .t' ); ?>
             .<?php echo $uid; ?> .olo-hero-chart{grid-column:1/-1;background:<?php echo $mixc( 5 ); ?>;border:1px solid <?php echo $mixc( 10 ); ?>;border-radius:11px;padding:18px 18px 10px;}
             .<?php echo $uid; ?> .olo-hero-chhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-size:14px;}
             .<?php echo $uid; ?> .olo-hero-chhead span{font-family:<?php echo $mono_ff; ?>;font-size:11px;opacity:.6;}
+            <?php echo $tipo( 'chart_title', '.olo-hero-chhead' ); ?>
+            <?php echo $tipo( 'chart_meta', '.olo-hero-chhead span' ); ?>
             .<?php echo $uid; ?> .olo-hero-chbars{display:flex;align-items:flex-end;gap:7px;height:120px;}
             .<?php echo $uid; ?> .olo-hero-chcol{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:3px;height:100%;}
             .<?php echo $uid; ?> .olo-hero-chcol i{display:block;width:100%;border-radius:3px 3px 0 0;background:linear-gradient(180deg,<?php echo $accent_css; ?>,<?php echo $mix( $accent_css, 0.25 ); ?>);min-height:4px;}
             .<?php echo $uid; ?> .olo-hero-chcol i.alt{background:linear-gradient(180deg,<?php echo $mixc( 50 ); ?>,<?php echo $mixc( 15 ); ?>);}
             .<?php echo $uid; ?> .olo-hero-chcol span{font-family:<?php echo $mono_ff; ?>;font-size:9.5px;text-align:center;opacity:.55;}
+            <?php echo $tipo( 'chart_bar', '.olo-hero-chcol span' ); ?>
             <?php // Due colonne sul telefono: l'ultimo indicatore, se dispari, prende tutta la riga (restava solo a metà, col valore a capo). ?>
             @media(max-width:680px){.<?php echo $uid; ?> .olo-hero-mockbody{grid-template-columns:1fr 1fr;}.<?php echo $uid; ?> .olo-hero-kpi:nth-child(odd):nth-last-child(2){grid-column:1/-1;}}
             <?php if ( ! empty( $s['mock_live'] ) ) : ?>
             .<?php echo $uid; ?> .olo-hero-live{margin-left:auto;display:inline-flex;align-items:center;gap:.6em;font-family:<?php echo $mono_ff; ?>;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:.35em .95em .35em .85em;border-radius:2em;background:<?php echo $mixc( 8 ); ?>;white-space:nowrap;flex:none;}
+            <?php echo $tipo( 'mock_live', '.olo-hero-live' ); ?>
             <?php // Sul telefono il punto «in diretta» resta su una riga: è l'indirizzo della barra ad accorciarsi coi puntini. ?>
             .<?php echo $uid; ?> .olo-hero-mockframe--live .olo-hero-winlabel{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
             .<?php echo $uid; ?> .olo-hero-live i{width:7px;height:7px;border-radius:50%;background:<?php echo $accent_css; ?>;animation:olo-hero-live-dot 1.6s ease-out infinite;}
@@ -459,6 +479,8 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             @media(max-width:680px){.<?php echo $uid; ?> .olo-hero-msg{max-width:92%;}}
             .<?php echo $uid; ?> .olo-hero-msgname{display:block;margin-bottom:.25em;font-size:12px;font-weight:700;letter-spacing:.01em;opacity:.8;}
             .<?php echo $uid; ?> .olo-hero-msg.ai .olo-hero-msgname{color:<?php echo $accent_css; ?>;opacity:1;}
+            <?php echo $tipo( 'chat_msg', '.olo-hero-msg' ); ?>
+            <?php echo $tipo( 'chat_name', '.olo-hero-msgname' ); ?>
             .<?php echo $uid; ?> .olo-hero-msgrow{display:flex;align-items:flex-end;gap:.65em;max-width:86%;}
             .<?php echo $uid; ?> .olo-hero-msgrow.you{align-self:flex-end;flex-direction:row-reverse;}
             .<?php echo $uid; ?> .olo-hero-msgrow.ai{align-self:flex-start;}
@@ -493,6 +515,7 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
             <?php if ( $wm_text !== '' ) : ?>
             .<?php echo $uid; ?> .olo-hero-wm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:clamp(120px,26vw,380px);font-weight:800;line-height:1;letter-spacing:-0.02em;color:<?php echo $wm_color; ?>;user-select:none;white-space:nowrap;}
+            <?php echo $tipo( 'watermark', '.olo-hero-wm', [ 'color' => 'watermark_no_color' ] ); ?>
             <?php endif; ?>
             <?php endif; ?>
             <?php if ( $accent_set ) : ?>
@@ -502,12 +525,15 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             <?php $eyebrow_css = $this->safe_color_css( $s['eyebrow_color'] ?? '' ) ?: $accent_css; // vuoto: l'accento, come il dot ?>
             .<?php echo $uid; ?> .olo-hero-eyebrow{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:11.5px;letter-spacing:.28em;text-transform:uppercase;color:<?php echo $eyebrow_css; ?>;margin:0 0 18px;}
             .<?php echo $uid; ?> .olo-hero-eyedot{width:6px;height:6px;border-radius:50%;background:<?php echo $accent_css; ?>;box-shadow:0 0 8px <?php echo $accent_css; ?>;flex:none;}
+            <?php echo $tipo( 'eyebrow', '.olo-hero-eyebrow', [ 'color' => 'eyebrow_no_color' ] ); ?>
             <?php endif; ?>
             <?php if ( ! empty( $s['meta_text'] ) ) : ?>
             .<?php echo $uid; ?> .olo-hero-meta{margin-top:22px;font-size:14px;letter-spacing:.16em;text-transform:uppercase;opacity:.85;}
+            <?php echo $tipo( 'meta', '.olo-hero-meta' ); ?>
             <?php endif; ?>
             <?php if ( ! empty( $s['scroll_hint'] ) ) : ?>
             .<?php echo $uid; ?> .olo-hero-scrollhint{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:2;font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.7;}
+            <?php echo $tipo( 'scroll_hint', '.olo-hero-scrollhint' ); ?>
             <?php endif; ?>
 
             .<?php echo $uid; ?> .olo-hero-content {
@@ -574,7 +600,9 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
                 transition: opacity .2s, transform .2s;
                 <?php echo $this->build_cta_css( $s['cta_style'], $cta_bg, $cta_fg ); ?>
             }
-            <?php if ( $cta_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-hero-cta1{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-hero-cta1:hover{border-radius:<?php echo $cta_radius_hover_css; ?> !important}<?php endif; ?>
+            <?php // La durata del Raggio in hover è quella scelta (cta_radius_hover_duration, prima scritta fissa a 400 ms
+                  // e mai letta); la regola riprende anche opacità e spostamento, se no in CSS vinceva solo il raggio. ?>
+            <?php if ( $cta_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-hero-cta1{transition:opacity .2s, transform .2s, border-radius <?php echo esc_attr( Olobuild_Tile_Utils::durata_hover( $s, 'cta_radius_hover_duration', '400ms' ) ); ?> cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-hero-cta1:hover{border-radius:<?php echo $cta_radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-hero-cta1:hover {
                 opacity: .85;
                 transform: translateY(-1px);
@@ -621,6 +649,8 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
                     $this->safe_color_css( $s['vf_accent'] ?? '' ) ?: $accent_css,
                     $this->resolve_font_family( $s['vf_font_family'] ?? '' )
                 );
+                // Misura, peso, maiuscolo e spaziatura dei dati (controllo «Dati»: il font resta vf_font_family, letto qui sopra).
+                echo $tipo( 'vf_text', '.olo-vf-ui', [ 'family' => 'vf_no_family', 'color' => 'vf_no_color' ] ) . $tipo( 'vf_text', '.olo-vf-hint', [ 'family' => 'vf_no_family', 'color' => 'vf_no_color' ] );
             }
             ?>
         </style>
