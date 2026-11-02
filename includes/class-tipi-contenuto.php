@@ -91,6 +91,8 @@ class Olobuild_Tipi_Contenuto {
         add_filter( 'olo_social_foto_rete', [ __CLASS__, 'foto_per_rete' ], 10, 3 );
         add_filter( 'olo_social_testo_rete', [ __CLASS__, 'testo_per_rete' ], 10, 3 );
         add_filter( 'olo_social_video', [ __CLASS__, 'video_per_social' ], 10, 2 );
+        // I campi galleria nella «Sorgente dinamica» › Foto di un campo (Gallery, carosello…): prima solo WooCommerce e ACF.
+        add_filter( 'olobuild_dynamic_image_lists', [ __CLASS__, 'elenchi_di_foto' ] );
         if ( is_admin() ) {
             add_action( 'add_meta_boxes', [ __CLASS__, 'riquadri' ], 10, 2 );
             add_action( 'save_post', [ __CLASS__, 'salva' ], 10, 2 );
@@ -779,6 +781,26 @@ class Olobuild_Tipi_Contenuto {
             }
         }
         return $voci;
+    }
+
+    /**
+     * Gli elenchi di foto dei Tipi di contenuto (i campi «Galleria») per la «Sorgente dinamica» › Foto di un campo: una
+     * Gallery nel modello di un album mostra le foto del suo campo (1.4.932).
+     *
+     * @param array $lists chiave del meta => [ 'label' => etichetta, 'post_types' => tipi ]
+     */
+    public static function elenchi_di_foto( $lists ) {
+        $gruppi = array_merge( [ self::impostazioni()['articoli'] ], self::tipi() );
+        foreach ( $gruppi as $t ) {
+            $nome = 'post' === $t['chiave'] ? ( '' !== $t['nome'] ? $t['nome'] : __( 'Articoli', 'olobuilder' ) ) : $t['nome'];
+            foreach ( $t['campi'] as $c ) {
+                if ( 'galleria' !== $c['tipo'] || isset( $lists[ $c['chiave'] ] ) ) {
+                    continue;
+                }
+                $lists[ $c['chiave'] ] = [ 'label' => $nome . ' › ' . $c['etichetta'], 'post_types' => [ $t['chiave'] ] ];
+            }
+        }
+        return $lists;
     }
 
     /**

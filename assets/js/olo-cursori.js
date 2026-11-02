@@ -2446,6 +2446,53 @@
     };
   };
 
+  // Nota (2 nov 2026, per il Coro Paganella): il puntatore è una nota col gambo, del colore principale e col bordo
+  // chiaro (si vede sul chiaro e sullo scuro). Muovendosi lascia dietro qualche croma piccola che sale ondeggiando e
+  // sbiadisce, come un canto che parte; sui link la nota diventa una croma con la cediglia che sventola.
+  STILI.nota = function () {
+    var T = tela(), st = {}, note = [], strada = 0, px = mx, py = my, n = 0, cresce = 0;
+    var corpo = risolvi(CFG.ringColor || '#8a2523'), bordo = risolvi(CFG.dotColor || '#fbfaf6');
+    function disegna(g, x, y, k, croma, onda, colore) {
+      // la testa ovale inclinata, il gambo a destra verso l'alto e, per la croma, la cediglia
+      g.save(); g.translate(x, y);
+      g.lineWidth = 1.6 * k; g.strokeStyle = bordo; g.fillStyle = colore;
+      g.save(); g.rotate(-0.35); g.beginPath(); g.ellipse(0, 0, 6.2 * k, 4.4 * k, 0, 0, 6.283); g.fill(); g.stroke(); g.restore();
+      var gx = 5.4 * k;
+      g.beginPath(); g.moveTo(gx, -1.5 * k); g.lineTo(gx, -21 * k);
+      if (croma) g.quadraticCurveTo(gx + (8 + onda) * k, -15 * k, gx + (5 + onda * 0.6) * k, -7 * k);
+      g.lineWidth = 3.4 * k; g.strokeStyle = bordo; g.stroke();
+      g.lineWidth = 1.8 * k; g.strokeStyle = colore; g.stroke();
+      g.restore();
+    }
+    return {
+      punto: function (t) {
+        if (meno) return;
+        strada += Math.hypot(mx - px, my - py); px = mx; py = my;
+        if (strada < 90) return;
+        strada = 0;
+        note.push({ x: mx, y: my, t: t, dx: (n % 2 ? 1 : -1) * (6 + Math.random() * 10), k: 0.55 + Math.random() * 0.25,
+                    chiara: n % 3 === 2 });
+        n++;
+        if (note.length > 14) note.shift();
+      },
+      frame: function (t) {
+        var s = passo(st, t);
+        cresce += ((hot ? 1 : 0) - cresce) * 0.2 * s;
+        var g = pulisci(T);
+        for (var i = note.length - 1; i >= 0; i--) {
+          var q = note[i], e = (t - q.t) / 1400;
+          if (e >= 1) { note.splice(i, 1); continue; }
+          g.globalAlpha = (1 - e) * 0.9;
+          disegna(g, q.x + q.dx * e + Math.sin(e * 9 + i) * 6, q.y - 10 - e * 70, q.k, true, Math.sin(t / 120 + i) * 2,
+                  q.chiara ? bordo : corpo);
+        }
+        g.globalAlpha = 1;
+        disegna(g, mx, my, 1 + cresce * 0.25, cresce > 0.5, meno ? 0 : Math.sin(t / 110) * 2.5, corpo);
+        return note.length > 0 || Math.abs((hot ? 1 : 0) - cresce) > 0.01 || cresce > 0.5;
+      }
+    };
+  };
+
   /* ── cursore della sezione (2 nov 2026) ──
      Una sezione con data-olo-cursore ha un cursore suo: entrandoci il cursore cambia, uscendo torna quello della
      pagina. Ogni stile si crea la prima volta che serve e poi resta, coi suoi nodi nascosti quando non è attivo; i suoi

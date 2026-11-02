@@ -400,15 +400,86 @@ export const useTilesStore = defineStore('tiles', {
     // Fase 3 unificazione hero: sostituisce tipo+settings di una tile legacy col
     // canonico mappato (heroConvert). styleFill (es. bg del wrapper) viene applicato
     // SOLO se lo style attuale non ha già uno sfondo proprio.
-    convertTileType(tileId, newType, newSettings, styleFill = null) {
+    convertTileType(tileId, newType, newSettings, styleFill = null, advancedFill = null) {
       const tile = this.getTileById(tileId);
       if (!tile) return false;
       tile.type = newType;
       tile.settings = newSettings;
+      // Avanzate portate dalla conversione (la Pennellata al cursore della vecchia hero Smear): si aggiungono a quelle
+      // della tile, senza toglierne nessuna.
+      if (advancedFill && typeof advancedFill === 'object') {
+        const adv = (!tile.advanced || Array.isArray(tile.advanced)) ? {} : tile.advanced;
+        tile.advanced = { ...adv, ...advancedFill };
+      }
       if (styleFill && typeof styleFill === 'object') {
         const existing = (!tile.style || Array.isArray(tile.style)) ? {} : tile.style;
         const hasBg = existing.bg && existing.bg.type && existing.bg.type !== 'none';
         if (!hasBg) tile.style = { ...existing, ...styleFill };
+      }
+      this.tilesVersion++;
+      return true;
+    },
+
+    /**
+     * «Converti in Hero» di una hero firma che diventa più tile (2 nov 2026). La Hero prende il posto della tile; le
+     * tile vere che la tile di prima disegnava al suo interno vanno accanto: `dopo` subito sotto nella stessa colonna
+     * (Newsletter e Testo della Terminale), `sezionePrima` in una sezione sopra la sua (la testata della Masthead).
+     * Lo sfondo: se la tile stava da sola nella sua sezione passa alla sezione e vale per tutte, se no lo prende
+     * ogni tile nuova. La sezione nuova ha lo stesso sfondo e la stessa larghezza.
+     */
+    convertiHero(tileId, conv) {
+      const dopo = conv.dopo || [];
+      const sezionePrima = conv.sezionePrima || null;
+      if (!dopo.length && !sezionePrima) {
+        return this.convertTileType(tileId, conv.type, conv.settings, conv.styleBg, conv.advanced);
+      }
+      const tile = this.getTileById(tileId);
+      if (!tile) return false;
+      const radici = [this.canvasTiles, this.headerTiles, this.footerTiles];
+      let percorso = null;
+      let radice = null;
+      for (const r of radici) {
+        percorso = findAncestorPath(r, tileId);
+        if (percorso) { radice = r; break; }
+      }
+      const posto = radice ? findParentAndIndex(radice, tileId) : null;
+      if (!percorso || !posto) return false;
+      const sezione = percorso.find((n) => n.type === 'section') || null;
+      const stile = (!tile.style || Array.isArray(tile.style)) ? {} : tile.style;
+      const proprio = stile.bg && stile.bg.type && stile.bg.type !== 'none' ? stile.bg : null;
+      const sfondo = proprio || conv.styleBg?.bg || null;
+      const foglie = (n) => (Array.isArray(n.children) ? n.children.reduce((t, c) => t + foglie(c), 0)
+        : (CONTAINER_TYPES.includes(n.type) ? 0 : 1));
+      const sezSf = sezione?.settings?.bg;
+      const sezioneLibera = sezione && foglie(sezione) === 1 && !(sezSf && sezSf.type && sezSf.type !== 'none');
+
+      tile.type = conv.type;
+      tile.settings = conv.settings;
+      if (conv.advanced) {
+        const adv = (!tile.advanced || Array.isArray(tile.advanced)) ? {} : tile.advanced;
+        tile.advanced = { ...adv, ...conv.advanced };
+      }
+      if (sfondo && sezioneLibera) {
+        sezione.settings = { ...sezione.settings, bg: sfondo, bg_scope: 'section' };
+        if (proprio) tile.style = { ...stile, bg: { type: 'none' } };
+      } else if (sfondo && !proprio) {
+        tile.style = { ...stile, bg: sfondo };
+      }
+      const nuove = dopo.map((n) => {
+        const c = deepCloneWithNewIds(n);
+        if (sfondo && !sezioneLibera) c.style = { ...(c.style || {}), bg: sfondo };
+        return c;
+      });
+      posto.parent.splice(posto.index + 1, 0, ...nuove);
+      if (sezionePrima && sezione) {
+        const sopra = deepCloneWithNewIds(sezionePrima);
+        sopra.settings = { ...sopra.settings, width: sezione.settings?.width || 'default' };
+        if (sfondo) {
+          sopra.settings.bg = sfondo;
+          sopra.settings.bg_scope = 'section';
+        }
+        const dove = findParentAndIndex(radice, sezione.id);
+        if (dove) dove.parent.splice(dove.index, 0, sopra);
       }
       this.tilesVersion++;
       return true;

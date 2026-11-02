@@ -114,6 +114,8 @@ export default {
     title_tag: 'h1',
     title_font_family: '',
     title_font_size: '',
+    title_font_size_tablet: '',
+    title_font_size_mobile: '',
     title_font_weight: '700',
     title_letter_spacing: '0',
     title_line_height: '1.2',
@@ -122,6 +124,8 @@ export default {
 
     // Sottotitolo tipografia
     subtitle_font_size: '',
+    subtitle_font_size_tablet: '',
+    subtitle_font_size_mobile: '',
     subtitle_font_weight: '400',
     subtitle_letter_spacing: '0',
     subtitle_max_width: '',
@@ -731,7 +735,7 @@ export default {
       description: t('Colore vuoto: il colore accento, come il dot. Un colore più scuro o più chiaro aiuta a leggerlo sopra una foto o un video.') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'),
-      responsiveKeys: [],
+      responsiveKeys: ['size'],
       keys: {
         tag:           'title_tag',
         family:        'title_font_family',
@@ -746,7 +750,7 @@ export default {
       sizeMin: 14, sizeMax: 120, sizeStep: 1,
     },
     { type: 'typography', label: t('Sottotitolo'),
-      responsiveKeys: [],
+      responsiveKeys: ['size'],
       keys: {
         size:          'subtitle_font_size',
         weight:        'subtitle_font_weight',

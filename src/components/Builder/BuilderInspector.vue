@@ -2290,7 +2290,7 @@ function onConvertToHero() {
   if (!tile) return;
   const conv = convertHeroTile(tile.type, tile.settings, getElementDefaults);
   if (!conv) return;
-  tilesStore.convertTileType(tile.id, conv.type, conv.settings, conv.styleBg);
+  tilesStore.convertiHero(tile.id, conv);
 }
 
 // ── Disposizione della Hero: a tutta larghezza (hero) o divisa (hero-split), una sola voce nella palette ──

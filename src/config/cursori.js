@@ -20,6 +20,7 @@ export const CURSORI = [
   ['battito', 'Battito (il monitor del cuore)'], ['scodinzolo', 'Scodinzolo'], ['pioggerella', 'Pioggerella'],
   ['ugello', 'Ugello (il filo della stampa 3D)'], ['passopasso', 'Passo passo (scatta sulla griglia)'],
   ['mosaico', 'Mosaico (tessere che si girano)'], ['nappa', 'Nappa (oscilla come un pendolo)'],
+  ['nota', 'Nota (lascia una scia di crome)'],
 ];
 
 // Gli stili che mostrano una parola (la «Parola del cursore», label_text).

@@ -1491,11 +1491,12 @@ class Olobuild_Cookie_Consent {
 
                     if(!stored){
                         this.showBanner();
-                        // Block iframes immediately
-                        if(this.blockIframes){ this.blockThirdPartyIframes(); }
                     } else {
                         this.applyConsent(stored, false);
                     }
+                    // I contenuti esterni si bloccano anche dopo un «Rifiuta» (prima solo al primo arrivo, senza scelta:
+                    // chi aveva rifiutato rivedeva YouTube alla visita dopo); quelli di una categoria accettata restano.
+                    if(this.blockIframes){ this.blockThirdPartyIframes(); }
                     this.bindEvents();
                 },
 
@@ -1573,23 +1574,52 @@ class Olobuild_Cookie_Consent {
                 /* ── Iframe blocking ── */
 
                 blockThirdPartyIframes: function(){
-                    var iframes = document.querySelectorAll('iframe[src]');
-                    var blocked = ['youtube.com','youtube-nocookie.com','youtu.be','vimeo.com','google.com/maps','maps.google','facebook.com','instagram.com'];
-                    for(var i=0;i<iframes.length;i++){
-                        var src = iframes[i].src || '';
-                        var cat = this.getIframeCategory(src, blocked);
-                        if(cat){
+                    var self = this;
+                    var blocked = ['youtube.com','youtube-nocookie.com','youtu.be','vimeo.com','google.com/maps','maps.google','facebook.com','instagram.com','soundcloud.com'];
+                    var blocca = function(frame){
+                        var src = frame.src || '';
+                        var cat = self.getIframeCategory(src, blocked);
+                        if(!cat){ return; }
+                        var scelta = self.getConsent() || {};
+                        if(scelta[cat]){ return; }
+                        if(!frame.parentNode){ return; }
+                        var iframes = [frame], i = 0;
+                        {
                             var wrap = document.createElement('div');
                             wrap.className = 'olo-cc-iframe-placeholder';
                             wrap.setAttribute('data-cc-iframe-cat', cat);
                             wrap.setAttribute('data-cc-iframe-src', src);
                             wrap.style.cssText = 'background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;padding:32px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px;' + (iframes[i].width ? 'width:'+iframes[i].width+'px;' : 'width:100%;') + (iframes[i].height ? 'height:'+iframes[i].height+'px;' : '');
                             wrap.innerHTML = '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'
-                                + '<p style="margin:12px 0 8px;color:#6b7280;font-size:14px"><?php echo esc_js( __( 'Questo contenuto richiede il consenso ai cookie', 'olobuild' ) ); ?></p>'
+                                + '<p style="margin:12px 0 8px;color:#4b5563;font-size:14px"><?php echo esc_js( __( 'Questo contenuto richiede il consenso ai cookie', 'olobuild' ) ); ?></p>'
                                 + '<button class="olo-cc-iframe-load" style="background:<?php echo esc_js( $embBtnBg ); ?>;color:<?php echo esc_js( $embBtnTx ); ?>;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600"><?php echo esc_js( __( 'Accetta e carica', 'olobuild' ) ); ?></button>';
+                            // l'iframe com'era (classi, titolo, misure): torna lui quando si accetta
+                            wrap._oloIframe = iframes[i];
                             iframes[i].parentNode.replaceChild(wrap, iframes[i]);
                         }
+                    };
+                    var presenti = document.querySelectorAll('iframe[src]');
+                    for(var n = 0; n < presenti.length; n++){ blocca(presenti[n]); }
+                    // Le sezioni disegnate mentre si scorre (e gli script delle tile) aggiungono iframe dopo l'avvio:
+                    // prima passavano senza consenso (OLObuild 1.4.934).
+                    if(!this._osservaIframe){
+                        if(window.MutationObserver){
+                            this._osservaIframe = new MutationObserver(function(cambi){
+                                cambi.forEach(function(c){
+                                    for(var k = 0; k < c.addedNodes.length; k++){
+                                        var nodo = c.addedNodes[k];
+                                        if(nodo.nodeType !== 1){ continue; }
+                                        if(nodo.tagName === 'IFRAME'){ blocca(nodo); continue; }
+                                        var dentro = nodo.querySelectorAll ? nodo.querySelectorAll('iframe[src]') : [];
+                                        for(var q = 0; q < dentro.length; q++){ blocca(dentro[q]); }
+                                    }
+                                });
+                            });
+                            this._osservaIframe.observe(document.documentElement, { childList: true, subtree: true });
+                        }
                     }
+                    if(this._clicIframe){ return; }
+                    this._clicIframe = true;
 
                     // Single iframe load button
                     document.addEventListener('click', function(e){
@@ -1624,6 +1654,7 @@ class Olobuild_Cookie_Consent {
                     for(var i=0;i<phs.length;i++){
                         var cat = phs[i].getAttribute('data-cc-iframe-cat');
                         if(cats[cat]){
+                            if(phs[i]._oloIframe){ phs[i].parentNode.replaceChild(phs[i]._oloIframe, phs[i]); continue; }
                             var src = phs[i].getAttribute('data-cc-iframe-src');
                             var iframe = document.createElement('iframe');
                             iframe.src = src;

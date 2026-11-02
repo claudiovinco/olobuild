@@ -3,6 +3,43 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.939 - 2026-11-02 (Mega Menu a vetro senza sorprese)
+- Mega Menu: il «Filtro sfondo» degli Effetti (vetro smerigliato dietro la barra) ora si disegna sulla barra. Sull'involucro della tile faceva comparire nella pagina, sotto la barra, il pannello del menu del telefono anche da chiuso.
+
+## v1.4.938 - 2026-11-02 (righe vuote anche coi campi dinamici)
+- Scheda tecnica (Description List): la riga si salta anche quando la definizione è un campo dinamico rimasto vuoto («{custom_field:…}»). Nel builder la riga col segnaposto resta, per poterla vedere e modificare.
+
+## v1.4.937 - 2026-11-02 (schede che si adattano ai contenuti)
+- Visibilità condizionale: «Campo personalizzato pieno» e «Campo personalizzato vuoto». Una tile si mostra solo se il contenuto ha quel campo, per esempio il titolo «Le fonti» sopra un campo che a volte è vuoto. La condizione 2 legge i suoi campi: prima usava quelli della condizione 1.
+- Scheda tecnica (Description List): una riga senza definizione non compare più. Con un campo dinamico vuoto restava l'etichetta da sola.
+
+## v1.4.936 - 2026-11-02 (contrasti)
+- Il link «Vai al contenuto principale», che compare col tasto Tab, resta bianco sul nero: col colore dei link del tema poteva diventare rosso scuro sul nero e non si leggeva.
+- Il testo del segnaposto dei contenuti esterni («Questo contenuto richiede il consenso ai cookie») è più scuro e si legge meglio.
+
+## v1.4.935 - 2026-11-02 (il consenso blocca davvero i contenuti esterni)
+- Consenso ai cookie: YouTube, Vimeo, SoundCloud e le mappe di Google si bloccano anche quando entrano nella pagina dopo l'avvio, come le sezioni disegnate mentre si scorre. Prima passavano senza consenso.
+- Consenso ai cookie: dopo un «Rifiuta» i contenuti esterni restano bloccati anche nelle visite successive. Prima si bloccavano solo finché non si era scelto. Quando si accetta torna l'iframe com'era, con le sue misure e il suo titolo.
+
+## v1.4.934 - 2026-11-02 (cursore Nota, SoundCloud col consenso)
+- Cursori: «Nota». Il puntatore è una nota col gambo, col bordo chiaro che la fa vedere sul chiaro e sullo scuro. Muovendosi lascia una scia di crome piccole che salgono ondeggiando; sui link diventa una croma con la cediglia che sventola. Si sceglie in Avanzate → Effetti mouse.
+- Consenso ai cookie: il lettore di SoundCloud resta bloccato finché il visitatore non accetta, come già YouTube, Vimeo e le mappe di Google. Al suo posto c'è il pulsante «Accetta e carica».
+
+## v1.4.933 - 2026-11-02 (locandine intere, gallerie della Redazione)
+- Cartellone: «Immagine intera» accanto a Immagini. La locandina si vede tutta, con le sue proporzioni, anche nella vista «Il prossimo». In quella vista vale anche la proporzione scelta: prima restava sempre 4:5, e 16:10 sul telefono.
+- Mega Menu: «Pulsante nella barra mobile». Spento, il pulsante dell'ultima voce sta solo nel menu del telefono e il nome accanto al logo ha più spazio.
+- Tipi di contenuto: i campi Galleria compaiono nella «Sorgente dinamica» › Foto di un campo. Una Gallery nel modello di un tipo mostra le foto di ogni contenuto, per esempio gli album di una galleria fotografica.
+
+## v1.4.932 - 2026-11-02 (logo col nome, filtri del Query Loop)
+- Mega Menu: «Nome accanto all'immagine» nel Contenuto, sotto il logo testuale. Acceso, lo stemma o il simbolo caricato come immagine ha il nome scritto accanto, nella barra, nella barra del telefono e nei pannelli del menu. Spento resta come prima: con un'immagine il testo non compare.
+- Query Loop: le schede per categoria sono pillole col colore d'accento (prima erano pulsanti del browser senza stile), con la scheda scelta piena. Filtrano anche i tipi di contenuto con una categoria propria (Canti, Progetti…) e insieme alla ricerca: una scheda scelta resta valida mentre si scrive. Quando non resta niente compare «Nessun risultato».
+- Query Loop: la categoria mostrata nella card viene dalla categoria del tipo di contenuto, non solo da quella degli articoli. «Titolo card» ha la «Dimensione»: senza valore resta com'era.
+
+## v1.4.931 - 2026-11-02 (le hero firma diventano Hero)
+- «Converti in Hero» anche per le hero Smear, Terminale, North Video e Masthead. Quello che non è la hero diventa tile vere accanto: la pennellata dello Smear è la Pennellata al cursore delle Avanzate; la riga che scrive della Terminale è l’effetto macchina da scrivere del sottotitolo, il suo modulo email una Newsletter con un Testo sotto; la schermata del prodotto di North Video, foto o video, sta nell’anteprima della Hero; la testata della Masthead è una sezione sopra, con Testo, Titolo, due Pulsanti e un Divisore. Le tile di prima restano: le pagine già fatte non cambiano.
+- Hero: misura del titolo e del sottotitolo anche per tablet e telefono, dal selettore del dispositivo nel controllo di tipografia. Senza valore resta com’era.
+- Blocchi & Pagine: i blocchi Terminale che scrive, Prodotto in una finestra e Prima pagina di giornale sono fatti con la Hero e tile vere.
+
 ## v1.4.928 - 2026-11-02 (numeri più discreti)
 - Stat Strip: «Forma» nello Stile — oltre alla banda con i divisori, Riga (in fila e piccoli, dentro un testo), Elenco (uno sotto l’altro col nome accanto, in una colonna), Schede (ogni numero in un riquadro) e Un numero in evidenza (il primo grande, gli altri sotto). Le Stat Strip già nelle pagine restano a banda.
 - Temi: le strisce di numeri non sono più in ogni home subito dopo l’apertura. In 24 temi non c’erano numeri indispensabili e sono state tolte; negli altri stanno dentro il testo dell’introduzione, scendono più in basso o prendono un’altra forma, tema per tema.

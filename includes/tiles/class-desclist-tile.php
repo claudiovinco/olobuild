@@ -231,6 +231,16 @@ class Olobuild_DescList_Tile extends Olobuild_Tile_Base {
             <?php
                 $term_plain = wp_strip_all_tags( $item['term'] );
                 $def_plain  = wp_strip_all_tags( $item['definition'] );
+                // Una riga senza definizione non si disegna (1.4.937): con un campo dinamico vuoto
+                // («{custom_field:epoca}» di un canto che non ce l'ha) restava l'etichetta da sola. I segnaposto si
+                // risolvono dopo il disegno della tile: per sapere se la riga è vuota si risolvono qui (nel builder no,
+                // la riga col segnaposto resta per poterla vedere e modificare).
+                $def_vera = ( empty( $s['_builder_mode'] ) && ! ( defined( 'OLOBUILD_BUILDER_PREVIEW' ) && OLOBUILD_BUILDER_PREVIEW ) && class_exists( 'Olobuild_Dynamic_Content' ) )
+                    ? wp_strip_all_tags( (string) Olobuild_Dynamic_Content::resolve_tokens( (string) $item['definition'] ) )
+                    : $def_plain;
+                if ( '' === trim( $def_vera ) ) {
+                    continue;
+                }
                 list( $term_cls, $term_data ) = $this->tfx_attrs( $s, 'term', $term_plain );
                 list( $def_cls,  $def_data  ) = $this->tfx_attrs( $s, 'definition', $def_plain );
             ?>

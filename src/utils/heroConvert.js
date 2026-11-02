@@ -14,6 +14,9 @@
  * - featuredstory: byline accodata al sottotitolo, media sempre a destra;
  * - searchhero/glowgallery: posizione glow ricondotta ai parametri standard;
  * - ratio colonne non standard → il più vicino tra i preset di hero-split.
+ * - hero firma (2 nov 2026): quello che non è la hero diventa TILE VERE accanto alla Hero, mai markup dentro la Hero:
+ *   il modulo email della Terminale = Newsletter + Testo sotto, la testata della Masthead = una sezione sopra
+ *   (Testo, Titolo, Pulsanti, Divisore). La pennellata dello Smear = «Pennellata al cursore» delle Avanzate.
  *
  * Nessun import dal registry (import.meta.glob è Vite-only): i default di sorgente
  * e target arrivano iniettati via `getDefaults(type)` — nel builder è
@@ -33,6 +36,12 @@ const HERO_TARGETS = {
   featuredstory: 'hero-split',
   introsplit: 'hero-split',
   audiohero: 'hero-split',
+  // Le hero firma (2 nov 2026): la Hero ora sa fare quello che facevano (Pennellata al cursore nelle Avanzate, modulo
+  // email, video nell'anteprima, testata di giornale). Resta a sé solo studiohero (mappa e scritta che si riempie).
+  smearhero: 'hero',
+  terminalhero: 'hero',
+  northvideohero: 'hero',
+  masthead: 'hero',
 };
 
 /** Tipo canonico di destinazione per una tile legacy, o null se non convertibile. */
@@ -419,6 +428,206 @@ const MAPS = {
       styleBg: { bg: { type: 'solid', color: s.bg_color || 'var(--olo-color-dark, #16263d)' } },
     };
   },
+
+  smearhero(s) {
+    return {
+      settings: {
+        // testo al centro, largo 760 (sh-in); occhiello 12 px spaziato, titolo dei titoli a 400, accento in corsivo
+        eyebrow_text: s.eyebrow_text || '', eyebrow_color: s.eyebrow_color || '',
+        eyebrow_font_size: '12', eyebrow_font_weight: '700', eyebrow_letter_spacing: '2.9',
+        title: joinTitle([{ text: s.headline_text }, { text: s.accent_text, em: true }]),
+        title_font_family: 'serif', title_font_weight: '400', title_font_size: '140', title_line_height: '0.96',
+        title_font_size_tablet: '96', title_font_size_mobile: '52', title_letter_spacing: '1.4',
+        subtitle: escHtml(s.subhead || ''), subtitle_color: s.sub_color || '', subtitle_font_size: '18', subtitle_max_width: '460',
+        scroll_hint: s.hint_text || '', scroll_hint_color: s.hint_color || '',
+        scroll_hint_font_size: '12', scroll_hint_letter_spacing: '1.2',
+        text_color: s.text_color || '', accent: s.accent_color || 'var(--olo-color-primary, #e0b13a)',
+        glow_on: true, glow_color: s.glow_color || '',
+        text_align: 'center', vertical_align: 'center', horizontal_align: 'center',
+        content_max_width: '700',
+        min_height: vhpx(s.min_height, '72vh'),
+        tile_padding: s.pad_custom && s.content_padding ? s.content_padding : { top: 90, right: 30, bottom: 90, left: 30 },
+        cta_text: '', cta2_text: '',
+      },
+      styleBg: { bg: { type: 'solid', color: s.bg_color || 'var(--olo-color-dark, #16263d)' } },
+      // La pennellata della tile è la «Pennellata al cursore» delle Avanzate: colori dalla tavolozza del tema (la
+      // tile aveva quattro tinte scritte, che le Avanzate non accettano: i colori vengono solo dai token).
+      advanced: s.smear_enabled === false ? null : { cursor_smear: true },
+    };
+  },
+
+  terminalhero(s, nodo) {
+    const frasi = (Array.isArray(s.type_phrases) ? s.type_phrases : []).map((f) => String((f && f.text) || '').trim()).filter(Boolean);
+    const pref = String(s.type_prefix ?? '');
+    const allinea = s.align === 'left' ? 'left' : 'center';
+    const raggio = Number((s.btn_radius && s.btn_radius.tl) ?? 999);
+    const conModulo = s.show_form !== false;
+    const nota = [escHtml(s.small_text || ''), s.small_link_text ? `<a href="${escHtml(s.small_link_url || '#')}"><strong>${escHtml(s.small_link_text)} →</strong></a>` : '']
+      .filter(Boolean).join(' ');
+    // Sotto la Hero, tile vere: il paragrafo è un Testo largo 560 (nella Hero la riga in fondo non ha una larghezza
+    // sua), il modulo email una Newsletter (campo e pulsante, senza titolo), la riga piccola un Testo. L'ultima tiene
+    // lo spazio sotto che nella tile chiudeva l'apertura.
+    const dopo = [];
+    const fondo = (ultima) => ({ top: 0, right: 28, bottom: ultima ? 96 : 0, left: 28 });
+    if (s.subhead) {
+      dopo.push(nodo('text-block', {
+        content: `<p>${escHtml(s.subhead)}</p>`, text_align: allinea, max_width: '560', font_size: '18', line_height: '1.6',
+        text_color: s.sub_color || '',
+        tile_padding: { top: 0, right: 28, bottom: conModulo || nota ? 32 : 96, left: 28 },
+      }));
+    }
+    if (conModulo) {
+      dopo.push(nodo('newsletter', {
+        title: '', subtitle: '', eyebrow: '', layout: 'horizontal', alignment: allinea, max_width: '560',
+        email_placeholder: s.form_placeholder || '', button_text: s.form_button || '', button_icon: false,
+        redirect_url: s.form_action && s.form_action !== '#' ? s.form_action : '',
+        input_height: '46', input_radius: raggio, btn_radius: raggio, btn_font_size: '15',
+        btn_color: 'var(--olo-color-on-primary, #ffffff)',
+        ...(s.accent ? { btn_bg: s.accent } : {}),
+        tile_padding: fondo(!nota),
+      }));
+    }
+    if (nota) {
+      dopo.push(nodo('text-block', {
+        content: `<p>${nota}</p>`, text_align: allinea, font_size: '13', text_color: s.sub_color || '',
+        link_color: s.text_color || '', tile_padding: { ...fondo(true), top: 16 },
+      }));
+    }
+    return {
+      settings: {
+        // le parole fra [parentesi] erano chip d'accento: restano parole, senza parentesi
+        eyebrow_text: s.show_label === false ? '' : String(s.label || '').replace(/[[\]]/g, ''),
+        eyebrow_font_family: 'mono', eyebrow_font_size: '13', eyebrow_font_weight: '400', eyebrow_letter_spacing: '1',
+        eyebrow_color: s.text_color || '',
+        title: escHtml(s.heading || ''),
+        title_font_family: 'heading', title_font_weight: '700', title_font_size: String(s.h_size_max || 92), title_line_height: String(s.h_line_height || 1.02),
+        // la riga a macchina da scrivere è il sottotitolo, con l'effetto a frasi che si alternano
+        subtitle: escHtml(pref + (frasi[0] || '')),
+        title_font_size_tablet: '62', title_font_size_mobile: String(s.h_size_min || 44),
+        subtitle_font_size: String(s.type_size_max || 34), subtitle_font_weight: '600',
+        subtitle_font_size_tablet: '23', subtitle_font_size_mobile: String(s.type_size_min || 20),
+        subtitle_color: s.text_color || '',
+        text_effect: frasi.length ? 'typewriter-loop' : 'none', text_effect_target: 'subtitle',
+        text_effect_phrases: frasi.map((f) => pref + f).join('\n'),
+        text_effect_speed: String(s.type_speed || 55), text_effect_pause: String(s.type_pause || 1600),
+        cta_text: s.cta1_text || '', cta_url: s.cta1_url || '#', cta2_text: s.cta2_text || '', cta2_url: s.cta2_url || '#',
+        cta_radius: s.btn_radius || { tl: 999, tr: 999, br: 999, bl: 999 },
+        text_color: s.text_color || '', accent: s.accent || '',
+        text_align: allinea, horizontal_align: 'center', vertical_align: 'center',
+        content_max_width: String(s.max_width || 1200),
+        // il modulo segue il testo (nella tile stava subito sotto): niente altezza minima, poco spazio sotto
+        min_height: '0px',
+        tile_padding: { top: (s.pad_custom && s.content_padding && s.content_padding.top) || 96, right: 28, bottom: dopo.length ? 8 : 96, left: 28 },
+      },
+      styleBg: { bg: { type: 'solid', color: s.bg_color || 'var(--olo-color-light, #f8f9fa)' } },
+      dopo,
+    };
+  },
+
+  northvideohero(s) {
+    const video = String(s.video_src || '').trim();
+    const poster = String(s.video_poster || '').trim();
+    const mb = s.media_bg && s.media_bg.type && s.media_bg.type !== 'none' ? s.media_bg : null;
+    let mock = { type: 'none' };
+    if (mb) mock = mb;
+    else if (video) {
+      // nell'anteprima della Hero il video gira da sé, muto e in ciclo (senza comandi: è un'anteprima)
+      mock = { type: 'video', video_url: video, video_poster: poster, video_size: 'cover', video_position: 'center center' };
+    } else if (poster) mock = { type: 'image', image_url: poster, image_size: 'cover', image_position: 'center center' };
+    return {
+      settings: {
+        // testo a sinistra in un blocco largo 1280 al centro; il frame del prodotto sotto
+        eyebrow_text: s.eyebrow_text || '', eyebrow_color: s.eyebrow_color || '',
+        eyebrow_font_family: 'mono', eyebrow_font_size: '14', eyebrow_font_weight: '400', eyebrow_letter_spacing: '0.3',
+        title: joinTitle([{ text: s.headline_text }, { text: s.accent_text, em: true }]),
+        title_font_family: 'heading', title_font_weight: '500', title_font_size: '72',
+        title_font_size_tablet: '62', title_font_size_mobile: '40', title_line_height: '1', title_letter_spacing: '-1.4',
+        subtitle: escHtml(s.subhead || ''), subtitle_color: s.sub_color || '', subtitle_font_size: '18', subtitle_max_width: '560',
+        cta_text: s.cta1_text || '', cta_url: s.cta1_url || '#', cta2_text: s.cta2_text || '', cta2_url: s.cta2_url || '#',
+        cta_radius: { tl: 999, tr: 999, br: 999, bl: 999 },
+        text_color: s.text_color || '', accent: s.accent || '',
+        media_bg: sceneMedia(null, s.bg_fixed_image, '', s.bg_fixed_image_object_position),
+        module: s.mock_mode === 'none' ? '' : 'mockup', mock_mode: 'media', mock_media: mock, mock_label: s.media_label || '',
+        mock_url: '',
+        text_align: 'left', horizontal_align: 'center', vertical_align: 'top',
+        content_max_width: '1200', min_height: '0px',
+        tile_padding: s.content_padding || { top: 160, right: 40, bottom: 40, left: 40 },
+      },
+      styleBg: { bg: { type: 'solid', color: s.bg_color || 'var(--olo-color-dark, #16263d)' } },
+    };
+  },
+
+  masthead(s, nodo) {
+    // L'accento colora l'occhiello e il pulsante; il corsivo del titolo resta del colore del testo (nella Hero un
+    // accento scelto colora anche il corsivo): nella Hero l'accento passa solo se non è il primario del tema.
+    const acc = String(s.accent || '');
+    const accProprio = acc !== '' && !acc.startsWith('var(--olo-color-primary');
+    const inchiostro = s.ink_color || '';
+    const tenue = s.ink_faint_color || '';
+    const soloComputer = { visible_mobile: false, visible_mobile_landscape: false };
+    const r = s.btn_radius || { tl: 2, tr: 2, br: 2, bl: 2 };
+    // La testata è una sezione sopra la Hero, fatta di tile: edizione (Testo), nome (Titolo), Accedi e Abbonati
+    // (Pulsanti, in fila a destra) e il doppio filetto (Divisore). Sul telefono resta il nome, come nella tile.
+    const colonna = (figli, extra = {}) => ({ type: 'column', settings: { width_medium: '1-3', width_small: '1-1', ...extra }, style: {}, advanced: {}, children: figli });
+    const pulsanti = [];
+    if (s.action1_text) {
+      pulsanti.push(nodo('button', {
+        text: s.action1_text, url: s.action1_url || '#', alignment: 'right', bg_color: 'transparent', text_color: tenue,
+        hover_text_color: inchiostro, font_size: '12', font_weight: '400', letter_spacing: '0.24', wrap_padding_y: 0,
+        tile_padding: { top: 0, right: 0, bottom: 0, left: 0 }, border_radius: 0,
+      }, { advanced: soloComputer }));
+    }
+    if (s.action2_text) {
+      pulsanti.push(nodo('button', {
+        text: s.action2_text, url: s.action2_url || '#', alignment: 'right', bg_color: acc || 'var(--olo-color-primary)',
+        font_size: '13', font_weight: '600', letter_spacing: '0.4', wrap_padding_y: 0,
+        tile_padding: { top: 12, right: 22, bottom: 12, left: 22 }, border_radius: r,
+      }, { advanced: soloComputer }));
+    }
+    const sezionePrima = {
+      type: 'section', settings: { width: 'default', padding: 'remove-vertical' }, style: {}, advanced: {},
+      children: [
+        { type: 'row', settings: { layout: '33-33-33', gap: '16', vertical_align: 'center', stack_mobile: true }, style: {}, advanced: {}, children: [
+          colonna([nodo('text-block', {
+            content: `<p>${escHtml(s.edition_text || '')}</p>`, font_size: '12', text_color: tenue,
+            tile_padding: { top: 18, right: 0, bottom: 14, left: 0 },
+          }, { advanced: soloComputer })]),
+          colonna([nodo('headline', {
+            heading: s.nameplate_text || '', tag: 'p', alignment: 'center', heading_font: 'heading', heading_weight: '600',
+            heading_font_size: String(s.nameplate_size || 52), heading_font_size_mobile: '34', decoration: 'none',
+            heading_color: inchiostro,
+          })]),
+          colonna(pulsanti, { flex_justify: 'flex-end', flex_align: 'center', flex_column_gap: '12', flex_wrap: 'wrap' }),
+        ] },
+        { type: 'row', settings: { layout: '100', gap: '0' }, style: {}, advanced: {}, children: [
+          { type: 'column', settings: {}, style: {}, advanced: {}, children: [
+            nodo('divider', { style: 'double', thickness: 7, width: 100, spacing: 0, color: s.rule_color || '' }),
+          ] },
+        ] },
+      ],
+    };
+    return {
+      settings: {
+        eyebrow_text: s.kicker_text || '', eyebrow_color: acc,
+        eyebrow_font_size: '11', eyebrow_font_weight: '700', eyebrow_letter_spacing: '1.1',
+        title: joinTitle([{ text: s.headline_text }, { text: s.headline_italic_text, em: true }]),
+        title_font_family: 'serif', title_font_weight: '600', title_font_size: String(s.headline_size || 54),
+        title_font_size_tablet: '44', title_font_size_mobile: '32',
+        title_line_height: '1.04', title_letter_spacing: '-0.5',
+        subtitle: escHtml(s.subhead || ''), subtitle_color: s.ink_soft_color || '', subtitle_font_size: '17', subtitle_max_width: '620',
+        meta_text: s.byline_text || '', meta_color: tenue,
+        meta_font_size: '12', meta_text_transform: 'none', meta_letter_spacing: '0.2',
+        text_color: inchiostro, title_color: inchiostro, accent: accProprio ? acc : '',
+        // l'articolo d'apertura a sinistra, sotto il filetto
+        text_align: 'left', horizontal_align: 'left', vertical_align: 'top',
+        content_max_width: '820', min_height: '0px',
+        tile_padding: s.pad_custom && s.lead_padding ? { ...s.lead_padding, left: 28, right: 28 } : { top: 52, right: 28, bottom: 60, left: 28 },
+        cta_text: '', cta2_text: '',
+      },
+      styleBg: { bg: { type: 'solid', color: s.bg_color || 'var(--olo-color-light, #f8f9fa)' } },
+      sezionePrima,
+    };
+  },
 };
 
 /**
@@ -426,18 +635,27 @@ const MAPS = {
  * @param {string} type       tipo sorgente (una delle 12)
  * @param {object} settings   settings salvati della tile
  * @param {function} getDefaults  (type) => defaults — nel builder: getElementDefaults
- * @returns {{ type: string, settings: object, styleBg: object|null } | null}
+ * @returns {{ type: string, settings: object, styleBg: object|null, advanced: object|null, dopo: object[], sezionePrima: object|null } | null}
  */
 export function convertHeroTile(type, settings, getDefaults) {
   const target = heroConvertTarget(type);
   const map = MAPS[type];
   if (!target || !map) return null;
   const src = { ...(getDefaults(type) || {}), ...(settings || {}) };
-  const out = map(src);
+  // Tile vere che accompagnano la Hero (senza id: li dà chi le inserisce), coi predefiniti del loro tipo.
+  const nodo = (tipo, impostazioni = {}, extra = {}) => ({
+    type: tipo, settings: { ...(getDefaults(tipo) || {}), ...impostazioni },
+    style: extra.style || {}, advanced: extra.advanced || {},
+  });
+  const out = map(src, nodo);
   return {
     type: target,
     settings: { ...(getDefaults(target) || {}), ...out.settings },
     styleBg: out.styleBg || null,
+    advanced: out.advanced || null,
+    // tile da mettere subito sotto la Hero, nella stessa colonna, e sezione da mettere sopra la sua
+    dopo: out.dopo || [],
+    sezionePrima: out.sezionePrima || null,
   };
 }
 

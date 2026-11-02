@@ -74,6 +74,7 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
         'immagine_lato'     => 'destra',
         'larghezza_data'    => 120,
         'img_ratio'         => '4/3',
+        'img_intera'        => false,
         'img_object_position' => 'center center',
         'shadow'            => 'none',
         'filtri_aspetto'    => 'pillole',
@@ -331,6 +332,15 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
         $cornice = Olobuild_Tile_Utils::image_frame( $s, 'img', [ 'ratio' => '4/3', 'fit' => 'cover' ] );
         $img_ar  = '' !== $cornice['contenitore'] ? $cornice['contenitore'] : 'aspect-ratio:4/3;';
         $img_fit = '' !== $cornice['immagine'] ? $cornice['immagine'] : 'object-fit:cover;';
+        // «Immagine intera» (1.4.932): la locandina con le sue proporzioni, senza ritaglio. Una proporzione scelta vale
+        // anche nella vista «Il prossimo» (prima era sempre 4:5, e 16:10 sotto i 960 px): la sua resta solo per il
+        // valore predefinito.
+        $intera      = ! empty( $s['img_intera'] );
+        $rapp_scelto = ! in_array( str_replace( ':', '/', trim( (string) $s['img_ratio'] ) ), [ '', '4/3' ], true );
+        if ( $intera ) {
+            $img_ar  = 'aspect-ratio:auto;';
+            $img_fit = 'height:auto;object-fit:contain;';
+        }
         $filtri  = 'sottolineati' === (string) $s['filtri_aspetto'] ? 'sottolineati' : 'pillole';
         $tag_t   = in_array( (string) $s['titolo_tag'], [ 'h2', 'h3', 'h4', 'p' ], true ) ? (string) $s['titolo_tag'] : 'h3';
 
@@ -432,7 +442,9 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
             echo $this->css_per_dispositivo( $s, 'colonne', "{$sel} .ocrt-elenco", $this->decl_colonne( 4 ) );
         } else {
             echo "{$sel} .ocrt-pross{display:grid;grid-template-columns:" . ( $immag ? 'minmax(0,1.05fr) minmax(0,1fr)' : 'minmax(0,1fr)' ) . ";gap:clamp(1.5rem,4vw,4rem);align-items:center;" . ( $sfondo ? "background:{$sfondo};padding:clamp(1.25rem,3vw,2.5rem);border-radius:var(--ocrt-r);" : '' ) . ( $bordo ? "border:{$bordo};" : '' ) . ( 'none' !== $ombra ? "box-shadow:{$ombra};" : '' ) . '}';
-            echo "{$sel} .ocrt-pross .ocrt-img{aspect-ratio:4/5}";
+            if ( ! $intera && ! $rapp_scelto ) {
+                echo "{$sel} .ocrt-pross .ocrt-img{aspect-ratio:4/5}";
+            }
             echo "{$sel} .ocrt-occ{display:block;margin:0 0 1rem;font-size:.8rem;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--ocrt-acc)}";
             echo "{$sel} .ocrt-quando{margin:0 0 .9rem;font-size:1.05rem;letter-spacing:.04em}";
             echo "{$sel} .ocrt-pross .ocrt-titolo{font-size:clamp(2rem,4.4vw,3.6rem);line-height:1.04}";
@@ -443,7 +455,11 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
             echo "{$sel} .ocrt-cifre b{font-weight:400;line-height:1;font-variant-numeric:tabular-nums}";
             echo "{$sel} .ocrt-cifre i{font-style:normal;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;opacity:.7;margin-top:.35rem}";
             echo "{$sel} .ocrt-adesso{font-size:1.2rem;color:var(--ocrt-acc)}";
-            echo '@media (max-width:960px){' . "{$sel} .ocrt-pross{grid-template-columns:1fr}{$sel} .ocrt-pross .ocrt-img{aspect-ratio:16/10}" . '}';
+            echo '@media (max-width:960px){' . "{$sel} .ocrt-pross{grid-template-columns:1fr}" . ( $intera || $rapp_scelto ? '' : "{$sel} .ocrt-pross .ocrt-img{aspect-ratio:16/10}" ) . '}';
+            if ( $intera ) {
+                // la locandina intera non diventa più alta dello schermo, sul telefono
+                echo "{$sel} .ocrt-pross .ocrt-img img{max-height:88vh;width:auto;max-width:100%;margin:0 auto}";
+            }
         }
         // tipografia
         echo $this->css_testo( $s, 'giorno', "{$sel} .ocrt-gg" );

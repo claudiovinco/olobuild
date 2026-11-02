@@ -77,6 +77,7 @@ export default {
     immagine_lato: 'destra',
     larghezza_data: 120,
     img_ratio: '4/3',
+    img_intera: false,
     img_ratio_custom: '4/3',
     img_object_position: 'center center',
     shadow: 'none',
@@ -261,11 +262,13 @@ export default {
     { key: 'padding_voce', label: t('Padding voce'), type: 'spacing', max: 96 },
     { key: 'larghezza_data', label: t('Larghezza della data'), type: 'range', min: 64, max: 220, step: 2, unit: 'px',
       condition: { field: 'vista', op: 'eq', value: 'lista' } },
+    { key: 'img_intera', label: t('Immagine intera'), type: 'toggle', condition: { field: 'immagini', op: 'eq', value: true },
+      description: t('La foto o la locandina si vede tutta, con le sue proporzioni, senza ritaglio: per le locandine verticali. Spento, la foto riempie una cornice della proporzione scelta.') },
     ...imageFrameFields('img', {
       separator: false,
       fit: false,
       ratioOpts: { autoValue: '', autoLabel: 'Predefinito (4:3)', custom: true },
-      condition: { field: 'immagini', op: 'eq', value: true },
+      condition: [{ field: 'immagini', op: 'eq', value: true }, { field: 'img_intera', op: 'ne', value: true }],
     }),
 
     { type: 'separator', label: t('Disposizione') },

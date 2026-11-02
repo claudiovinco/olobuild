@@ -65,7 +65,7 @@ class Olobuild_Accessibility {
         ?>
 <style id="olo-accessibility-css">
 /* Skip navigation */
-.olo-skip-nav{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:100001;background:#000;color:#fff;padding:8px 16px;font-size:14px;text-decoration:none;border-radius:0 0 4px 0}
+.olo-skip-nav,.olo-skip-nav:visited{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:100001;background:#000;color:#fff!important;padding:8px 16px;font-size:14px;text-decoration:none;border-radius:0 0 4px 0}
 .olo-skip-nav:focus{position:fixed;left:0;top:0;width:auto;height:auto;overflow:visible;outline:3px solid #4f46e5}
 /* Focus visible — all interactive elements. Niente border-radius qui: il contorno segue già il
    raggio dell'elemento, e il vecchio 2px rendeva quadrati pulsanti e campi arrotondati col focus. */

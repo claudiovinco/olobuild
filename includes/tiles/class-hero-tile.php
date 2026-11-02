@@ -104,6 +104,8 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
         'title_tag'            => 'h1',
         'title_font_family'    => '',
         'title_font_size'      => '',
+        'title_font_size_tablet' => '',
+        'title_font_size_mobile' => '',
         'title_font_weight'    => '700',
         'title_letter_spacing' => '0',
         'title_line_height'    => '1.2',
@@ -113,6 +115,8 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
 
         // Sottotitolo tipografia
         'subtitle_font_size'      => '',
+        'subtitle_font_size_tablet' => '',
+        'subtitle_font_size_mobile' => '',
         'subtitle_font_weight'    => '400',
         'subtitle_letter_spacing' => '0',
         'subtitle_color'          => '',
@@ -521,6 +525,15 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             <?php if ( $accent_set ) : ?>
             .<?php echo $uid; ?> .olo-hero-title em{color:<?php echo $accent_css; ?>;}
             <?php endif; ?>
+            <?php
+            // Misura del titolo e del sottotitolo per tablet e telefono (selettore del dispositivo nel controllo di
+            // tipografia). La misura del computer sta nello style in linea: per vincere serve !important.
+            $misura_disp = static function ( $v ) {
+                return 'font-size:' . max( 10, min( 200, absint( $v ) ) ) . 'px !important';
+            };
+            echo $this->css_per_dispositivo( $s, 'title_font_size', '.' . $uid . ' .olo-hero-title', $misura_disp ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- @media fisse di css_per_dispositivo(), valori absint(), selettore dall'uid interno
+                . $this->css_per_dispositivo( $s, 'subtitle_font_size', '.' . $uid . ' .olo-hero-sub', $misura_disp );
+            ?>
             <?php if ( ! empty( $s['eyebrow_text'] ) ) : ?>
             <?php $eyebrow_css = $this->safe_color_css( $s['eyebrow_color'] ?? '' ) ?: $accent_css; // vuoto: l'accento, come il dot ?>
             .<?php echo $uid; ?> .olo-hero-eyebrow{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:11.5px;letter-spacing:.28em;text-transform:uppercase;color:<?php echo $eyebrow_css; ?>;margin:0 0 18px;}

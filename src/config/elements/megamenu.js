@@ -67,6 +67,7 @@ export default {
 
     logo_image: '',
     logo_text: '',
+    logo_text_with_image: false,
     logo_dot: false,
     logo_dot_color: '',
     logo_dot_position: 'before',
@@ -239,6 +240,7 @@ export default {
     mobile_logo: '',
     mobile_logo_height: '36',
     mobile_bar_logo: true,
+    mobile_bar_cta: true,
     mobile_search: true,
     mobile_search_overlay: false,
     // Pulsanti dei link extra nel menu mobile (Stile › «Menu mobile — Pulsanti»)
@@ -337,6 +339,9 @@ export default {
     { type: 'separator', label: t('Logo') },
     { key: 'logo_image', label: t('Logo desktop'), type: 'image' },
     { key: 'logo_text', label: t('Logo testuale (wordmark, se senza immagine)'), type: 'text' },
+    { key: 'logo_text_with_image', label: t("Nome accanto all'immagine"), type: 'toggle',
+      condition: [{ field: 'logo_image', op: 'ne', value: '' }, { field: 'logo_text', op: 'ne', value: '' }],
+      description: t("Mostra il logo testuale a destra dell'immagine, nella barra e nel menu del telefono: uno stemma o un simbolo accanto al nome scritto. Spento, con un'immagine il testo non compare.") },
     { key: 'logo_dot', label: t('Pallino prima del testo'), type: 'toggle', condition: { field: 'logo_text', op: 'ne', value: '' } },
     { key: 'logo_crest', label: t('Crest / badge (monogramma, es. VF)'), type: 'text' },
     { key: 'logo_mark', label: t('Simbolo'), type: 'icon', condition: { field: 'logo_text', op: 'ne', value: '' },
@@ -439,6 +444,9 @@ export default {
     // grandezze e pulsanti stanno nello Stile, zona «Menu mobile».
     { type: 'separator', label: t('Menu mobile') },
     { key: 'mobile_bar_logo', label: t('Logo nella barra mobile'), type: 'toggle' },
+    { key: 'mobile_bar_cta', label: t('Pulsante nella barra mobile'), type: 'toggle',
+      condition: { field: 'button_mode', op: 'ne', value: 'none' },
+      description: t("Il pulsante dell'ultima voce anche nella barra del telefono, accanto all'hamburger. Spento, sta solo nel menu: il nome del logo ha più spazio.") },
     { key: 'hamburger_label', label: t('Etichetta dell\'hamburger'), type: 'text', placeholder: t('Es. Menu') },
     // Nella barra mobile (se attiva) e nella testata dell'Off-canvas: il Fullscreen usa il logo desktop.
     { key: 'mobile_logo', label: t('Logo mobile'), type: 'image', show: logoMobileAgisce },

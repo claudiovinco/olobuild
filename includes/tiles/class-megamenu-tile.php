@@ -18,6 +18,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         // Logo
         'logo_image'         => '',
         'logo_text'          => '',
+        'logo_text_with_image' => false,
         'logo_dot'           => false,
         'logo_dot_color'     => '',
         'logo_dot_position'  => 'before',
@@ -185,6 +186,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         'mobile_logo'        => '',
         'mobile_logo_height' => '36',
         'mobile_bar_logo'    => true,
+        'mobile_bar_cta'     => true,
         'mobile_search'      => true,
         'mobile_search_overlay' => false,
         // Pulsanti dei link extra nel menu mobile (Stile › «Menu mobile — Pulsanti»)
@@ -608,6 +610,10 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             width: 100%;
             box-sizing: border-box;
             <?php if ( $nav_bg ) : ?>background: <?php echo $nav_bg; ?>;<?php endif; ?>
+            /* il «Filtro sfondo» degli Effetti della tile (vetro smerigliato) si disegna qui, sulla barra: sull'involucro
+               trascinava dentro la pagina il pannello mobile chiuso (1.4.939) */
+            -webkit-backdrop-filter: var(--olo-tile-backdrop, none);
+            backdrop-filter: var(--olo-tile-backdrop, none);
             transition: background .3s, box-shadow .3s;
         }
         <?php if ( $logo_mr > 0 ) : ?>
@@ -772,6 +778,8 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
         }
         .<?php echo $uid; ?> .olo-mm-logo--text { gap: 10px; }
+        .<?php echo $uid; ?> .olo-mm-logo--con-nome { gap: 12px; }
+        .<?php echo $uid; ?> .olo-mm-logo--con-nome img { flex: none; }
         .<?php echo $uid; ?> .olo-mm-logo-text { font-family: var(--olo-font-family-heading, 'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif); font-weight: 700; letter-spacing: -0.02em; line-height: 1; color: inherit; white-space: nowrap; }
         .<?php echo $uid; ?> .olo-mm-logo-dot { width: 9px; height: 9px; border-radius: 50%; background: currentColor; flex: none; }
         .<?php echo $uid; ?> .olo-mm-crest { display: inline-grid; place-items: center; width: 34px; height: 38px; font-family: var(--olo-font-family-heading, 'Archivo',sans-serif); font-weight: 900; font-size: 13px; letter-spacing: .02em; flex: none; border-radius: 14px 14px 16px 16px/14px 14px 22px 22px; box-shadow: inset 0 0 0 2px rgba(255,255,255,.2); }
@@ -1618,7 +1626,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             <?php if ( ! empty( $s['mobile_search'] ) ) : ?>
             .<?php echo $uid; ?> .olo-mm-mobile-search { display: flex !important; }
             <?php endif; ?>
-            <?php if ( ( $s['button_mode'] ?? 'none' ) !== 'none' ) : ?>
+            <?php if ( ( $s['button_mode'] ?? 'none' ) !== 'none' && ( $s['mobile_bar_cta'] ?? true ) ) : // «Pulsante nella barra mobile» (1.4.932) ?>
             .<?php echo $uid; ?> .olo-mm-mobile-cta { display: flex !important; }
             <?php endif; ?>
             <?php if ( ! empty( $s['mobile_bar_logo'] ) ) : ?>
@@ -2526,6 +2534,9 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
     private function logo_pannello_html( $s, $classe, $logo_link, $logo_img, $mob_logo, $logo_text, $logo_txt_sz ) {
         $classe = esc_attr( $classe );
         $img    = $mob_logo ?: $logo_img;
+        if ( $img && ! empty( $s['logo_text_with_image'] ) && $logo_text !== '' ) {
+            return '<a class="' . $classe . ' olo-mm-logo--text olo-mm-logo--con-nome" href="' . $logo_link . '"><img src="' . $img . '" alt="" loading="lazy" />' . $this->logo_wordmark_html( $s, $logo_text, $logo_txt_sz ) . '</a>';
+        }
         if ( $img ) {
             return '<a class="' . $classe . '" href="' . $logo_link . '"><img src="' . $img . '" alt="' . esc_attr( olobuild_t( 'Logo' ) ) . '" loading="lazy" /></a>';
         }
@@ -3168,6 +3179,9 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         $ltc_raw     = trim( (string) ( $s['logo_text_color'] ?? '' ) );
         $logo_txt_c  = preg_match( '/^#[0-9a-fA-F]{3,8}$/', $ltc_raw ) || preg_match( '/^(rgb|hsl|var)/i', $ltc_raw ) ? $ltc_raw : '';
         $logo_txt_sz = max( 12, min( 40, absint( $s['logo_text_size'] ?? 19 ) ) );
+        // «Nome accanto all'immagine» (1.4.932): lo stemma e il nome scritto insieme. Spento, con un'immagine il testo
+        // non compare, come prima.
+        $logo_con_nome = ! empty( $s['logo_text_with_image'] ) && $logo_text !== '';
         $logo_crest  = trim( (string) ( $s['logo_crest'] ?? '' ) );
         $crest_bg    = $this->safe_color_css( $s['logo_crest_bg'] ?? '' ) ?: 'var(--olo-color-primary, #c8ff3c)';
         $crest_col   = $this->safe_color_css( $s['logo_crest_color'] ?? '' ) ?: 'var(--olo-color-primary-contrast, #0a2a1e)';
@@ -3321,8 +3335,8 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             <div class="olo-mm-bar">
                 <?php // Mobile logo (shown only on mobile via CSS) ?>
                 <?php if ( $mob_bar_logo ) : ?>
-                <a class="olo-mm-mobile-logo" href="<?php echo $logo_link; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url()-escaped at assignment above ?>">
-                    <?php if ( $mob_logo ?: $logo_img ) : ?><img src="<?php echo $mob_logo ?: $logo_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- both URLs esc_url()-escaped at assignment above; size absint-clamped, color esc_attr()-escaped inline ?>" alt="<?php echo esc_attr( olobuild_t( 'Logo' ) ); ?>"><?php elseif ( $logo_text !== '' ) : ?><?php echo $this->logo_mark_html( $s ) . $this->logo_wordmark_html( $s, $logo_text, $logo_txt_sz, $logo_txt_c ? ';color:' . esc_attr( $logo_txt_c ) : '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by logo_mark_html() and logo_wordmark_html() with esc_html/esc_attr/safe_color_css ?><?php endif; ?>
+                <a class="olo-mm-mobile-logo<?php echo $logo_con_nome && ( $mob_logo ?: $logo_img ) ? ' olo-mm-logo--con-nome' : ''; ?>" href="<?php echo $logo_link; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url()-escaped at assignment above ?>">
+                    <?php if ( $mob_logo ?: $logo_img ) : ?><img src="<?php echo $mob_logo ?: $logo_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- both URLs esc_url()-escaped at assignment above; size absint-clamped, color esc_attr()-escaped inline ?>" alt="<?php echo esc_attr( $logo_con_nome ? '' : olobuild_t( 'Logo' ) ); ?>"><?php if ( $logo_con_nome ) { echo $this->logo_wordmark_html( $s, $logo_text, $logo_txt_sz, $logo_txt_c ? ';color:' . esc_attr( $logo_txt_c ) : '' ); } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by logo_wordmark_html() with esc_html/esc_attr/safe_color_css ?><?php elseif ( $logo_text !== '' ) : ?><?php echo $this->logo_mark_html( $s ) . $this->logo_wordmark_html( $s, $logo_text, $logo_txt_sz, $logo_txt_c ? ';color:' . esc_attr( $logo_txt_c ) : '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by logo_mark_html() and logo_wordmark_html() with esc_html/esc_attr/safe_color_css ?><?php endif; ?>
                 </a>
                 <?php endif; ?>
 
@@ -3351,9 +3365,10 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                 $is_split = ( $logo_pos_val === 'split' );
                 ?>
                 <?php if ( $logo_img ) : ?>
-                <a class="olo-mm-logo" href="<?php echo $logo_link; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url()-escaped at assignment above ?>">
-                    <img class="olo-mm-logo-default" src="<?php echo $logo_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url()-escaped at assignment above ?>" alt="<?php echo esc_attr( olobuild_t( 'Logo' ) ); ?>">
-                    <?php if ( $logo_sticky ) : ?><img class="olo-mm-logo-sticky" src="<?php echo $logo_sticky; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url()-escaped at assignment above ?>" alt="<?php echo esc_attr( olobuild_t( 'Logo' ) ); ?>" style="display:none;"><?php endif; ?>
+                <a class="olo-mm-logo<?php echo $logo_con_nome ? ' olo-mm-logo--text olo-mm-logo--con-nome' : ''; ?>" href="<?php echo $logo_link; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url()-escaped at assignment above ?>"<?php echo $logo_con_nome && $logo_txt_c ? ' style="color:' . esc_attr( $logo_txt_c ) . '"' : ''; ?>>
+                    <img class="olo-mm-logo-default" src="<?php echo $logo_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url()-escaped at assignment above ?>" alt="<?php echo esc_attr( $logo_con_nome ? '' : olobuild_t( 'Logo' ) ); ?>">
+                    <?php if ( $logo_sticky ) : ?><img class="olo-mm-logo-sticky" src="<?php echo $logo_sticky; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url()-escaped at assignment above ?>" alt="<?php echo esc_attr( $logo_con_nome ? '' : olobuild_t( 'Logo' ) ); ?>" style="display:none;"><?php endif; ?>
+                    <?php if ( $logo_con_nome ) { echo $this->logo_wordmark_html( $s, $logo_text, $logo_txt_sz ); } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by logo_wordmark_html() with esc_html/esc_attr/safe_color_css ?>
                 </a>
                 <?php elseif ( $logo_text !== '' ) : ?>
                 <a class="olo-mm-logo olo-mm-logo--text" href="<?php echo $logo_link; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url()-escaped at assignment above; color esc_attr()-escaped inline ?>"<?php echo $logo_txt_c ? ' style="color:' . esc_attr( $logo_txt_c ) . '"' : ''; ?>>

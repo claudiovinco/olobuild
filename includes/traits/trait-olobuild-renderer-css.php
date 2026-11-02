@@ -241,7 +241,16 @@ trait Olobuild_Renderer_Css_Trait {
 
         // Backdrop filter
         $backdrop = $this->css->build_backdrop_filter_css( $style );
-        if ( $backdrop ) {
+        if ( $backdrop && ! empty( $opts['backdrop_come_variabile'] ) ) {
+            // Mega Menu (1.4.939): un backdrop-filter sull'involucro ne fa il blocco contenitore dei position:fixed, e il
+            // pannello mobile chiuso (fuori schermo) finiva dentro la pagina sotto la barra, come aperto. L'involucro passa
+            // solo il valore; il vetro lo disegna la barra (.olo-mm-bar), che il pannello non contiene.
+            foreach ( $backdrop as $decl ) {
+                if ( 0 === strpos( $decl, 'backdrop-filter:' ) ) {
+                    $inline_styles[] = '--olo-tile-backdrop: ' . trim( substr( $decl, strlen( 'backdrop-filter:' ) ) );
+                }
+            }
+        } elseif ( $backdrop ) {
             foreach ( $backdrop as $decl ) $inline_styles[] = $decl;
         }
 

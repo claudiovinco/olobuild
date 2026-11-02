@@ -376,12 +376,23 @@ class Olobuild_Frontend_Renderer {
                 if ( ! $wc || ! $wc->cart ) return false;
                 return $wc->cart->get_cart_contents_count() > 0;
             case 'custom_field_equals':
-                $cf_key   = $settings['cond_custom_field_key'] ?? '';
-                $cf_value = $settings['cond_custom_field_value'] ?? '';
+            case 'custom_field_not_empty':
+            case 'custom_field_empty':
+                // La condizione 2 ha le sue chiavi (cond_2_custom_field_key…): prima leggeva quelle della 1.
+                $cf_pre   = 'cond_' . ( '' !== $prefix ? $prefix . '_' : '' );
+                $cf_key   = $settings[ $cf_pre . 'custom_field_key' ] ?? ( $settings['cond_custom_field_key'] ?? '' );
                 if ( $cf_key === '' ) return true;
                 global $post;
                 if ( ! is_a( $post, 'WP_Post' ) ) return false;
-                return get_post_meta( $post->ID, $cf_key, true ) === $cf_value;
+                $cf_raw = get_post_meta( $post->ID, $cf_key, true );
+                if ( 'custom_field_equals' === $cond_type ) {
+                    $cf_value = $settings[ $cf_pre . 'custom_field_value' ] ?? ( $settings['cond_custom_field_value'] ?? '' );
+                    return $cf_raw === $cf_value;
+                }
+                // «Campo pieno» / «Campo vuoto» (1.4.937): un titolo che si mostra solo se il campo sotto ha qualcosa
+                // (l'autore di un canto, le fonti della scheda). Spazi e tag vuoti contano come vuoto.
+                $cf_pieno = is_array( $cf_raw ) ? ! empty( array_filter( $cf_raw ) ) : '' !== trim( wp_strip_all_tags( (string) $cf_raw ) );
+                return 'custom_field_not_empty' === $cond_type ? $cf_pieno : ! $cf_pieno;
             case 'acf_field_equals':
                 $acf_key   = $settings['cond_acf_field'] ?? '';
                 $acf_value = $settings['cond_acf_value'] ?? '';
@@ -1148,7 +1159,7 @@ class Olobuild_Frontend_Renderer {
         $box_style = $is_atomic_tile ? self::stile_contenitore_atomico( $style ) : $style;
         $this->apply_common_box_styles(
             $inline_styles, $box_style, $settings, $advanced,
-            [ 'apply_box_shadow' => (bool) $has_bg_any && ! $is_atomic_tile ]
+            [ 'apply_box_shadow' => (bool) $has_bg_any && ! $is_atomic_tile, 'backdrop_come_variabile' => 'megamenu' === $type ]
         );
 
         // Drop-shadow filter per element trasparenti (segue forma SVG/icone via clip-path).

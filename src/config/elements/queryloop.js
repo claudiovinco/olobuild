@@ -77,6 +77,7 @@ export default {
     font_family: 'inherit',
     font_weight: '500',
     title_weight: '700',
+    title_size: '',
     text_transform: 'none',
     letter_spacing: 0,
     title_color: '',
@@ -319,6 +320,7 @@ export default {
       responsiveKeys: [],
       keys: {
         family:        'font_family',
+        size:          'title_size',
         weight:        'title_weight',
         transform:     'text_transform',
         letterSpacing: 'letter_spacing',

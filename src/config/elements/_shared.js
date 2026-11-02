@@ -703,7 +703,10 @@ const conditionTypeOptions = [
   { value: 'woo_cart_empty', label: t('Carrello WooCommerce vuoto') },
   { value: 'woo_cart_has_items', label: t('Carrello WooCommerce con prodotti') },
   { value: 'custom_field_equals', label: t('Campo personalizzato uguale a...') },
+  { value: 'custom_field_not_empty', label: t('Campo personalizzato pieno') },
+  { value: 'custom_field_empty', label: t('Campo personalizzato vuoto') },
 ];
+const CON_CAMPO = ['custom_field_equals', 'custom_field_not_empty', 'custom_field_empty'];
 
 export const conditionFieldsEnhanced = [
   { type: 'separator', label: t('Visibilità condizionale') },
@@ -743,7 +746,7 @@ export const conditionFieldsEnhanced = [
     { value: 'opera', label: t('Opera') },
   ], condition: { field: 'cond_type', op: 'eq', value: 'browser' } },
   { key: 'cond_custom_field_key', label: t('Nome campo'), type: 'text', placeholder: t('meta_key'),
-    condition: { field: 'cond_type', op: 'eq', value: 'custom_field_equals' } },
+    condition: { field: 'cond_type', op: 'in', value: CON_CAMPO } },
   { key: 'cond_custom_field_value', label: t('Valore campo'), type: 'text', placeholder: t('valore'),
     condition: { field: 'cond_type', op: 'eq', value: 'custom_field_equals' } },
   { key: 'cond_2_type', label: t('Condizione 2'), type: 'select', options: conditionTypeOptions },
@@ -778,7 +781,7 @@ export const conditionFieldsEnhanced = [
     { value: 'opera', label: t('Opera') },
   ], condition: { field: 'cond_2_type', op: 'eq', value: 'browser' } },
   { key: 'cond_2_custom_field_key', label: t('Nome campo (cond. 2)'), type: 'text', placeholder: t('meta_key'),
-    condition: { field: 'cond_2_type', op: 'eq', value: 'custom_field_equals' } },
+    condition: { field: 'cond_2_type', op: 'in', value: CON_CAMPO } },
   { key: 'cond_2_custom_field_value', label: t('Valore campo (cond. 2)'), type: 'text', placeholder: t('valore'),
     condition: { field: 'cond_2_type', op: 'eq', value: 'custom_field_equals' } },
 ];

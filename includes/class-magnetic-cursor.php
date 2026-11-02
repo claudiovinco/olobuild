@@ -52,7 +52,7 @@ class Olobuild_Magnetic_Cursor {
                     'fibbia', 'paillettes', 'laccio', 'chicco', 'stecca', 'peperoncino',
                     'pennino', 'ombrello', 'trottola', 'calice', 'elastico', 'respiro', 'luna', 'volante', 'fuoco',
                     'quota', 'chiave', 'riflesso', 'battito', 'scodinzolo', 'pioggerella', 'ugello', 'passopasso', 'mosaico',
-                    'nappa' ];
+                    'nappa', 'nota' ];
 
     /**
      * Il cursore scelto per la pagina che si sta disegnando (Effetti di pagina → Cursore): uno degli STILI, «nessuno»,

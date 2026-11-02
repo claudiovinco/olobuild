@@ -68,6 +68,7 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
         // Tipografia
         'font_family'     => 'inherit',
         'title_weight'    => '700',
+        'title_size'      => '',
         'text_transform'  => 'none',
         'letter_spacing'  => 0,
         // Container
@@ -521,6 +522,47 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
     /**
      * Render a single card.
      */
+    /**
+     * La tassonomia della «categoria» mostrata nella card: le categorie, se il tipo di contenuto le ha (come sempre
+     * per gli articoli), se no quella delle schede per tassonomia, se no la prima tassonomia gerarchica pubblica del
+     * tipo. Prima era sempre `category`, e sui tipi con una tassonomia propria la card non mostrava niente.
+     */
+    private function tassonomia_categoria( $s, $post_type ) {
+        if ( is_object_in_taxonomy( $post_type, 'category' ) ) {
+            return 'category';
+        }
+        $tabs = ! empty( $s['enable_taxonomy_tabs'] ) ? sanitize_key( $s['taxonomy_tabs_taxonomy'] ?? '' ) : '';
+        if ( $tabs && is_object_in_taxonomy( $post_type, $tabs ) ) {
+            return $tabs;
+        }
+        foreach ( get_object_taxonomies( $post_type, 'objects' ) as $tx ) {
+            if ( $tx->hierarchical && $tx->public ) {
+                return $tx->name;
+            }
+        }
+        return '';
+    }
+
+    /**
+     * Il testo sul colore accento (la scheda attiva dei filtri): il contrasto della Palette se l'accento è il
+     * primario, scuro su un accento chiaro, chiaro sugli altri.
+     */
+    private function testo_su_accento( $accent ) {
+        if ( preg_match( '/^var\(\s*--olo-color-primary\s*[,)]/', $accent ) ) {
+            return 'var(--olo-color-primary-contrast, #fff)';
+        }
+        $hex = Olobuild_Tile_Utils::colore_hex( $accent );
+        if ( '' === $hex ) {
+            return 'var(--olo-color-light, #fff)';
+        }
+        $l = 0.0;
+        foreach ( [ 1 => 0.2126, 3 => 0.7152, 5 => 0.0722 ] as $i => $k ) {
+            $v  = hexdec( substr( $hex, $i, 2 ) ) / 255;
+            $l += $k * ( $v <= 0.03928 ? $v / 12.92 : pow( ( $v + 0.055 ) / 1.055, 2.4 ) );
+        }
+        return $l > 0.179 ? 'var(--olo-color-dark, #1F2330)' : 'var(--olo-color-light, #fff)';
+    }
+
     private function render_card( $post_obj, $s ) {
         $permalink  = get_permalink( $post_obj );
         $title      = get_the_title( $post_obj );
@@ -547,6 +589,13 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
         $hover_attr = '';
         if ( ! empty( $s['hover_bg'] ) ) {
             $hover_attr = ' data-olo-ql-hover="' . esc_attr( $s['hover_bg'] ) . '"';
+        }
+        // Le schede per tassonomia filtrano sui termini scritti qui (1.4.932). Prima confrontavano il nome della
+        // categoria mostrata nella card: con la categoria nascosta, o con una tassonomia diversa da quella mostrata,
+        // ogni scheda svuotava la griglia.
+        if ( ! empty( $s['enable_taxonomy_tabs'] ) ) {
+            $tab_terms = get_the_terms( $post_obj->ID, sanitize_key( $s['taxonomy_tabs_taxonomy'] ?? 'category' ) );
+            $hover_attr .= ' data-ql-terms="' . esc_attr( is_array( $tab_terms ) ? implode( ' ', wp_list_pluck( $tab_terms, 'slug' ) ) : '' ) . '"';
         }
 
         // Magic badges
@@ -577,8 +626,9 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
 
             <div class="olo-ql-body">
                 <?php if ( ! empty( $s['show_category'] ) ) :
-                    $cats = get_the_category( $post_obj->ID );
-                    if ( ! empty( $cats ) ) :
+                    $cat_tax = $this->tassonomia_categoria( $s, $post_obj->post_type );
+                    $cats    = $cat_tax ? get_the_terms( $post_obj->ID, $cat_tax ) : [];
+                    if ( ! empty( $cats ) && ! is_wp_error( $cats ) ) :
                 ?>
                     <span class="olo-ql-cat"<?php if ( ! empty( $s['link_color'] ) ) echo ' style="color:' . esc_attr( $s['link_color'] ) . '"'; ?>><?php echo esc_html( $cats[0]->name ); ?></span>
                 <?php endif; endif; ?>
@@ -792,13 +842,16 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
                 if ( taxonomy_exists( $tax ) ) {
                     $tax_terms = get_terms( [ 'taxonomy' => $tax, 'hide_empty' => true ] );
                     if ( ! is_wp_error( $tax_terms ) && ! empty( $tax_terms ) ) {
-                        echo '<div class="olo-ql-tabs"><button class="active" data-tax="*">' . esc_html__( 'Tutti', 'olobuild' ) . '</button>';
+                        echo '<div class="olo-ql-tabs" role="group"><button type="button" class="active" aria-pressed="true" data-tax="*">' . esc_html__( 'Tutti', 'olobuild' ) . '</button>';
                         foreach ( $tax_terms as $term ) {
-                            echo '<button data-tax="' . esc_attr( $term->slug ) . '">' . esc_html( $term->name ) . '</button>';
+                            echo '<button type="button" aria-pressed="false" data-tax="' . esc_attr( $term->slug ) . '">' . esc_html( $term->name ) . '</button>';
                         }
                         echo '</div>';
                     }
                 }
+            }
+            if ( ! empty( $s['enable_search'] ) || ! empty( $s['enable_taxonomy_tabs'] ) ) {
+                echo '<p class="olo-ql-vuoto" role="status" hidden>' . esc_html__( 'Nessun risultato.', 'olobuild' ) . '</p>';
             }
             ?>
 
@@ -893,6 +946,11 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
             .olo-ql-card { overflow: hidden; }
             <?php // Raggio per istanza: come regola globale, con due Query Loop nella pagina vinceva il raggio dell'ultima. ?>
             #<?php echo esc_attr( $instance_id ); ?> .olo-ql-card { border-radius: <?php echo $card_radius_css; ?>; }
+            <?php // «Dimensione» del titolo della card (1.4.932): vuota = 1.1em di sempre, che i titoli h2-h4 del tema scavalcavano. ?>
+            <?php $title_size_css = is_numeric( $s['title_size'] ?? '' ) ? max( 10, min( 96, (float) $s['title_size'] ) ) . 'px' : ''; ?>
+            <?php if ( $title_size_css ) : ?>
+            #<?php echo esc_attr( $instance_id ); ?> .olo-ql-title { font-size: <?php echo $title_size_css; ?>; }
+            <?php endif; ?>
             <?php if ( $hover_bg_c && $layout !== 'list-rich' ) : // «Sfondo card» in Hover: prima finiva in un data-attributo che nessuno leggeva. !important perché lo sfondo normale è nello style della card. ?>
             #<?php echo esc_attr( $instance_id ); ?> .olo-ql-card:hover { background-color: <?php echo $hover_bg_c; ?> !important; }
             <?php elseif ( $hover_bg_c ) : // In «Lista rich» il colore sta sul blocco (voci trasparenti), e lì va anche quello in Hover. ?>
@@ -934,6 +992,13 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
             #<?php echo esc_attr( $instance_id ); ?> .olo-ql-sort-wrap { margin-bottom: 14px; font-size: 13px; }
             #<?php echo esc_attr( $instance_id ); ?> .olo-ql-sort { padding: 6px 10px; border: 1px solid rgba(0,0,0,0.15); border-radius: 6px; background: #fff; margin-left: 6px; }
             #<?php echo esc_attr( $instance_id ); ?> .olo-ql-card.olo-ql-hidden { display: none !important; }
+            <?php // Le schede per tassonomia erano pulsanti del browser senza stile (1.4.932): pillole col colore accento. ?>
+            #<?php echo esc_attr( $instance_id ); ?> .olo-ql-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 24px; }
+            #<?php echo esc_attr( $instance_id ); ?> .olo-ql-tabs button { -webkit-appearance: none; appearance: none; margin: 0; font: inherit; font-size: 14px; line-height: 1.2; padding: 9px 16px; border-radius: 999px; border: 1px solid var(--olo-color-border, rgba(0,0,0,0.15)); background: transparent; color: inherit; cursor: pointer; transition: background-color .2s ease, border-color .2s ease, color .2s ease; }
+            #<?php echo esc_attr( $instance_id ); ?> .olo-ql-tabs button:hover { border-color: <?php echo $accent_c; ?>; color: <?php echo $accent_c; ?>; }
+            #<?php echo esc_attr( $instance_id ); ?> .olo-ql-tabs button.active { background: <?php echo $accent_c; ?>; border-color: <?php echo $accent_c; ?>; color: <?php echo $this->testo_su_accento( $accent_c ); ?>; }
+            #<?php echo esc_attr( $instance_id ); ?> .olo-ql-tabs button:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, <?php echo $accent_c; ?> 30%, transparent); }
+            #<?php echo esc_attr( $instance_id ); ?> .olo-ql-vuoto { margin: 8px 0 0; font-size: 15px; color: var(--olo-color-text-muted, #6B7280); }
 
             <?php if ( $layout === 'masonry' ) : ?>
             #<?php echo esc_attr( $instance_id ); ?> .olo-ql-container .olo-ql-card { break-inside: avoid; margin-bottom: <?php echo $gap; ?>px; }
@@ -973,20 +1038,43 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
             var root = document.getElementById('<?php echo esc_js( $instance_id ); ?>');
             if(!root) return;
 
+            <?php if ( ! empty( $s['enable_search'] ) || ! empty( $s['enable_taxonomy_tabs'] ) ) : ?>
+            // Ricerca e schede filtrano insieme: una scheda scelta resta valida mentre si scrive, e viceversa.
+            var qlQ = '', qlTax = '*';
+            var qlVuoto = root.querySelector('.olo-ql-vuoto');
+            var qlFiltra = function(){
+                var visibili = 0;
+                root.querySelectorAll('.olo-ql-card').forEach(function(c){
+                    var ok = true;
+                    if(qlQ !== ''){
+                        var t = (c.querySelector('.olo-ql-title') || {}).textContent || '';
+                        var e = (c.querySelector('.olo-ql-excerpt') || {}).textContent || '';
+                        var k = (c.querySelector('.olo-ql-cat') || {}).textContent || '';
+                        ok = (t + ' ' + e + ' ' + k).toLowerCase().indexOf(qlQ) !== -1;
+                    }
+                    if(ok){ if(qlTax !== '*'){
+                        var termini = c.getAttribute('data-ql-terms');
+                        if(termini !== null){
+                            ok = (' ' + termini + ' ').indexOf(' ' + qlTax + ' ') !== -1;
+                        } else {
+                            // card senza i termini (template di loop): il nome della categoria mostrata
+                            var catText = ((c.querySelector('.olo-ql-cat') || {}).textContent || '').trim().toLowerCase();
+                            ok = catText.replace(/[^a-z0-9]+/g, '-').indexOf(qlTax.toLowerCase().replace(/[^a-z0-9]+/g, '-')) !== -1;
+                        }
+                    } }
+                    c.classList.toggle('olo-ql-hidden', !ok);
+                    if(ok){ visibili++; }
+                });
+                if(qlVuoto){ qlVuoto.hidden = visibili > 0; }
+            };
+            <?php endif; ?>
+
             <?php if ( ! empty( $s['enable_search'] ) ) : ?>
             var search = root.querySelector('.olo-ql-search');
             if(search){
                 search.addEventListener('input', function(){
-                    var q = (search.value || '').toLowerCase().trim();
-                    var cards = root.querySelectorAll('.olo-ql-card');
-                    cards.forEach(function(c){
-                        var t = (c.querySelector('.olo-ql-title') || {}).textContent || '';
-                        var e = (c.querySelector('.olo-ql-excerpt') || {}).textContent || '';
-                        var hay = (t + ' ' + e).toLowerCase();
-                        if(q === ''){ c.classList.remove('olo-ql-hidden'); }
-                        else if(hay.indexOf(q) === -1){ c.classList.add('olo-ql-hidden'); }
-                        else { c.classList.remove('olo-ql-hidden'); }
-                    });
+                    qlQ = (search.value || '').toLowerCase().trim();
+                    qlFiltra();
                 });
             }
             <?php endif; ?>
@@ -1021,19 +1109,11 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
                 var tabBtns = tabs.querySelectorAll('button');
                 tabBtns.forEach(function(btn){
                     btn.addEventListener('click', function(){
-                        tabBtns.forEach(function(b){ b.classList.remove('active'); });
+                        tabBtns.forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
                         btn.classList.add('active');
-                        var slug = btn.getAttribute('data-tax');
-                        var cards = root.querySelectorAll('.olo-ql-card');
-                        cards.forEach(function(c){
-                            if(slug === '*'){ c.classList.remove('olo-ql-hidden'); return; }
-                            var catEl = c.querySelector('.olo-ql-cat');
-                            var catText = catEl ? catEl.textContent.trim().toLowerCase() : '';
-                            var bSlug = slug.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-                            var bText = catText.replace(/[^a-z0-9]+/g, '-');
-                            if(bText.indexOf(bSlug) !== -1){ c.classList.remove('olo-ql-hidden'); }
-                            else { c.classList.add('olo-ql-hidden'); }
-                        });
+                        btn.setAttribute('aria-pressed', 'true');
+                        qlTax = btn.getAttribute('data-tax') || '*';
+                        qlFiltra();
                     });
                 });
             }
