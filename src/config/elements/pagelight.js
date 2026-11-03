@@ -17,6 +17,7 @@ export default {
   defaults: {
     light_color: '',
     base_color: '',
+    forma: 'alone',
     position: 'center',
     size: 90,
     intensity: 26,
@@ -36,15 +37,19 @@ export default {
 
   // ─── STILE ─────────────────────────────────────────────────
   styleFields: [
-    { key: 'position', label: t('Posizione alone'), type: 'select', options: [
+    { key: 'forma', label: t('Forma della luce'), type: 'select', options: [
+      { value: 'alone', label: t('Alone') },
+      { value: 'tinta', label: t('Tutta la pagina') },
+    ], description: t('Tutta la pagina: il colore della sezione in vista riempie tutto il fondo, e se la sezione ha anche "Colore testo con la luce" il testo cambia con lui (testata e piè di pagina compresi). Le sezioni senza sfondo lasciano vedere il colore.') },
+    { key: 'position', label: t('Posizione alone'), condition: { field: 'forma', op: 'neq', value: 'tinta' }, type: 'select', options: [
       { value: 'center', label: t('Centro') },
       { value: 'top', label: t('Alto') },
       { value: 'top-left', label: t('Alto a sinistra') },
       { value: 'top-right', label: t('Alto a destra') },
       { value: 'spread', label: t('Diffusa (due aloni)') },
     ] },
-    { key: 'size', label: t('Ampiezza alone'), type: 'range', min: 40, max: 140, step: 5 },
-    { key: 'intensity', label: t('Intensità'), type: 'range', min: 5, max: 70, step: 1 },
+    { key: 'size', label: t('Ampiezza alone'), type: 'range', min: 40, max: 140, step: 5, condition: { field: 'forma', op: 'neq', value: 'tinta' } },
+    { key: 'intensity', label: t('Intensità'), type: 'range', min: 5, max: 70, step: 1, condition: { field: 'forma', op: 'neq', value: 'tinta' } },
     { key: 'transition_ms', label: t('Velocità transizione'), type: 'range', min: 100, max: 2500, step: 100 },
     { type: 'separator', label: t('Aspetto') },
     { key: 'light_color', label: t('Colore luce di partenza'), type: 'color',

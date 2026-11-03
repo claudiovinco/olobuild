@@ -122,8 +122,8 @@ class Olobuild_Totop_Tile extends Olobuild_Tile_Base {
         <div class="olo-totop <?php echo esc_attr( $uid ); ?> <?php echo esc_attr( $align_class ); ?><?php echo $fisso ? ' olo-totop--fisso' . ( 0 === $soglia ? ' is-visibile' : '' ) : ''; ?>">
             <a href="#" class="olo-totop-btn olo-totop--<?php echo esc_attr( $style ); ?>"<?php echo $scroll_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed internal string (' uk-scroll' or '') set by a boolean toggle above ?> aria-label="<?php echo esc_attr( olobuild_t( 'Torna su' ) ); ?>"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m18 15-6-6-6 6"/></svg></a>
         </div>
-        <?php if ( $fisso && $soglia > 0 ) : // compare dopo la soglia; niente && nello script (wptexturize) ?>
-        <script>(function(){var b=document.querySelector('.<?php echo esc_js( $uid ); ?>');if(!b){return;}var soglia=<?php echo (int) $soglia; ?>,su=false,t=0;function aggiorna(){t=0;var v=(window.pageYOffset||document.documentElement.scrollTop)>soglia;if(v!==su){su=v;b.classList.toggle('is-visibile',v);}}window.addEventListener('scroll',function(){if(!t){t=requestAnimationFrame(aggiorna);}},{passive:true});aggiorna();})();</script>
+        <?php if ( $fisso && $soglia > 0 ) : // compare dopo la soglia; niente && nello script (wptexturize). Nelle pagine alla rovescia l'inizio è il fondo: conta la distanza dal fondo ?>
+        <script>(function(){var b=document.querySelector('.<?php echo esc_js( $uid ); ?>');if(!b){return;}var soglia=<?php echo (int) $soglia; ?>,su=false,t=0,d=document.documentElement;function aggiorna(){t=0;var y=window.pageYOffset||d.scrollTop;if(d.classList.contains('olo-rovescia')){y=d.scrollHeight-window.innerHeight-y;}var v=y>soglia;if(v!==su){su=v;b.classList.toggle('is-visibile',v);}}window.addEventListener('scroll',function(){if(!t){t=requestAnimationFrame(aggiorna);}},{passive:true});aggiorna();})();</script>
         <?php endif; ?>
         <?php
         // Effetti del bordo (neon, gradiente) sul pulsante, dove sta il bordo.

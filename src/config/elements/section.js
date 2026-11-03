@@ -103,6 +103,8 @@ export default {
     { type: 'separator', label: t('Atmosfera') },
     { key: 'light_color', label: t('Colore luce'), type: 'color',
       description: t('Con la tile "Luce di pagina" in pagina, la luce di sfondo assume questo colore quando la sezione è visibile.') },
+    { key: 'light_text', label: t('Colore testo con la luce'), type: 'color', condition: { field: 'light_color', op: 'notEmpty' },
+      description: t('Con la Luce di pagina "Tutta la pagina": mentre la sezione è in vista il testo di tutta la pagina prende questo colore, insieme al fondo. Vuoto = il testo del tema.') },
 
     { type: 'separator', label: t('Scroll Snap') },
     { key: 'scroll_snap', label: t('Sezione full-screen con snap'), type: 'toggle' },

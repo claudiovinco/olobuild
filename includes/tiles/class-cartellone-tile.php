@@ -503,7 +503,7 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
                 echo "{$sel} .ocrt-biglietto .ocrt-cifre{flex-wrap:nowrap;gap:.4rem .85rem}";
                 echo "{$sel} .ocrt-biglietto .ocrt-cifre span{min-width:2.3rem}";
                 echo "{$sel} .ocrt-biglietto .ocrt-azioni{margin:0;padding:0}";
-                echo '@media (max-width:760px){'
+                echo '@media (max-width:959px){'
                     . "{$sel} .ocrt-pross.ocrt-biglietto{grid-template-columns:auto minmax(0,1fr)}"
                     . "{$sel} .ocrt-biglietto .ocrt-data{min-width:0}"
                     . "{$sel} .ocrt-biglietto .ocrt-gg{font-size:3rem}"

@@ -300,6 +300,11 @@ trait Olobuild_Renderer_Structure_Trait {
         $light_color = $this->sanitize_light_color( $s['light_color'] ?? '' );
         if ( $light_color ) {
             $html .= ' data-olo-light="' . esc_attr( $light_color ) . '"';
+            // Con la Luce di pagina «Tutta la pagina» anche il testo segue la sezione (1.4.957).
+            $light_text = $this->sanitize_light_color( $s['light_text'] ?? '' );
+            if ( $light_text ) {
+                $html .= ' data-olo-light-text="' . esc_attr( $light_text ) . '"';
+            }
         }
         // Cursore della sezione (Avanzate → Effetti mouse): entrandoci il cursore cambia (olo-cursori.js), uscendo torna
         // quello della pagina. Il footer carica il motore anche se il sito e la pagina non hanno un cursore.

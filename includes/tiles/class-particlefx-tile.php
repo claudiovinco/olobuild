@@ -45,6 +45,7 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
         'sparks_y'          => 70,
         'sparks_dir'        => 35,
         'sparks_spread'     => 50,
+        'umbrella_size'     => 48,
         'connect_lines'     => false,
         'connect_distance'  => 90,
         'interact_on_hover' => false,
@@ -94,6 +95,7 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
             'embers'   => [ '#FFB347', '#FF8A1F', '#FF5A1A', '#FFD27A' ],
             // dal più caldo al più freddo: la scintilla passa dal primo all'ultimo mentre si spegne
             'sparks'   => [ '#FFF6D5', '#FFD27A', '#FFB347', '#FF7A1A', '#E8400C' ],
+            'rain'     => [ '#C9DDEE', '#A9C8E2', '#E4EEF7' ],
         ];
         return $map[ $preset ] ?? $map['petals'];
     }
@@ -103,7 +105,7 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
         $uid = 'olo-particlefx-' . wp_rand( 10000, 99999 );
 
         // ── Parametri sistema (clampati) ──────────────────────────────────
-        $presets = [ 'petals', 'snow', 'bubbles', 'stars', 'confetti', 'soccer', 'embers', 'sparks' ];
+        $presets = [ 'petals', 'snow', 'bubbles', 'stars', 'confetti', 'soccer', 'embers', 'sparks', 'rain' ];
         $preset  = in_array( $s['preset'], $presets, true ) ? $s['preset'] : 'petals';
         // 'section' (default) = sfondo della sezione ospite; 'page' = overlay fisso
         // su tutto il documento (il runtime ha già il ramo dedicato: canvas fixed,
@@ -128,6 +130,8 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
         $connect  = ! empty( $s['connect_lines'] );
         $conn_d   = max( 20,  min( 300,   intval( $s['connect_distance'] ) ) );
         $hover    = ! empty( $s['interact_on_hover'] );
+        // Pioggia (1.4.957): con «Reagisci al cursore» il puntatore è un ombrello largo così (metà della larghezza), sotto non piove.
+        $ombrello = max( 0, min( 160, intval( $s['umbrella_size'] ?? 48 ) ) );
         $opacity  = max( 5,   min( 100,   intval( $s['particle_opacity'] ) ) ) / 100;
 
         // ── Palette: color picker non-vuoti, altrimenti palette del preset ──
@@ -167,6 +171,7 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
             'connect'  => $connect,
             'connDist' => $conn_d,
             'hover'    => $hover,
+            'ombrello' => $ombrello,
             'opacity'  => $opacity,
             'colors'   => array_values( $palette ),
         ];
@@ -374,8 +379,13 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
                          life: attesa ? rnd( -1.4, 1 ) : 1, dl: rnd( .011, .026 ), r: Math.max( .5, CFG.size * rnd( .09, .2 ) ), bo: 0 };
             }
 
+            // Pioggia: gocce lunghe e veloci, inclinate dal vento; a ogni goccia la sua velocità, così la pioggia ha
+            // profondità (le più lente sono più corte e più tenui, come lontane).
+            function makeRain() { var z = rnd( .45, 1 ); return { x: rnd( -W * .1, W * 1.1 ), y: ( pageMode ? SCROLL : 0 ) + rnd( -H, H ), z: z, len: ( 8 + CFG.size * 2.6 ) * z, s: ( 9 + 9 * z ) * CFG.speed, col: pick( CFG.colors ), sp: 0 }; }
+
             function makeOne() {
                 switch ( CFG.preset ) {
+                    case 'rain':     return makeRain();
                     case 'sparks':   return makeSpark( true );
                     case 'snow':     return makeSnow();
                     case 'bubbles':  return makeBubble();
@@ -393,6 +403,7 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
             function placeY( p ) {
                 if ( ! pageMode || CFG.preset === 'confetti' ) { return; }
                 if ( CFG.preset === 'sparks' ) { return; }   // nascono dal loro punto, nella parte in vista
+                if ( CFG.preset === 'rain' )       { p.y = rnd( 0, FH ); return; }
                 if ( CFG.preset === 'bubbles' )    { p.y = rnd( FH, 2 * FH ); }
                 else if ( CFG.preset === 'embers' ) { p.y = rnd( 0, FH ); }
                 else if ( CFG.preset === 'stars' ) { p.y = rnd( 0, FH ); }
@@ -446,6 +457,18 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
                     ctx.globalAlpha = a;       ctx.beginPath(); ctx.arc( p.x, p.y, p.r, 0, TAU ); ctx.fill();
                 }
                 ctx.globalCompositeOperation = 'source-over';
+            }
+            function drawRain( p ) {
+                ctx.globalAlpha = CFG.opacity * ( .35 + .65 * p.z ); ctx.strokeStyle = p.col;
+                ctx.lineWidth = .6 + p.z * .9; ctx.lineCap = 'round';
+                if ( p.sp > 0 ) {
+                    // lo schizzo sul bordo dell'ombrello: due goccioline che saltano di lato
+                    ctx.beginPath(); ctx.arc( p.x - p.sp * 3, p.y - 2 - Math.sin( p.sp * 3 ) * 4, 1.1, 0, TAU );
+                    ctx.arc( p.x + p.sp * 3, p.y - 1 - Math.sin( p.sp * 3 ) * 3, .9, 0, TAU ); ctx.fillStyle = p.col; ctx.fill();
+                    return;
+                }
+                var vx = CFG.wind * 2.2 * p.z;
+                ctx.beginPath(); ctx.moveTo( p.x, p.y ); ctx.lineTo( p.x - vx / p.s * p.len, p.y - p.len ); ctx.stroke();
             }
             function drawSpark( p ) {
                 if ( p.life <= 0 ) { return; }
@@ -566,6 +589,24 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
                         }
                         if ( p.x < -40 || p.x > W + 40 ) { p.life = 0; }
                         if ( p.life <= 0 ) { p.life = -.0005; }
+                    } else if ( CFG.preset === 'rain' ) {
+                        if ( p.sp > 0 ) { p.sp -= .08; if ( p.sp <= 0 ) { parts[i] = makeRain(); parts[i].y = ( pageMode ? SCROLL : 0 ) - rnd( 0, 80 ); } continue; }
+                        p.y += p.s * Math.max( .2, CFG.gravity ); p.x += CFG.wind * 2.2 * p.z;
+                        // l'ombrello: la goccia che arriva sulla cupola (mezzo cerchio sopra il puntatore) schizza e
+                        // sparisce, così sotto resta asciutto e ai bordi cade la tenda d'acqua
+                        if ( canHover && mouse.on && CFG.ombrello > 0 ) {
+                            var R = CFG.ombrello, ux = mouse.x, uy = mouse.y + ( pageMode ? SCROLL : 0 ), dx = p.x - ux;
+                            if ( dx > -R && dx < R ) {
+                                var cupola = uy - Math.sqrt( R * R - dx * dx ) * .62;
+                                if ( p.y >= cupola && p.y < uy + R * 6 ) {
+                                    if ( p.y - p.s * Math.max( .2, CFG.gravity ) < cupola + 2 ) { p.y = cupola; p.sp = 1; }
+                                    else { p.x = ux + ( dx < 0 ? -R : R ) + rnd( -1.5, 1.5 ); }
+                                }
+                            }
+                        }
+                        var giu = pageMode ? FH : H + 20;
+                        if ( p.y - p.len > giu ) { var np = makeRain(); np.y = pageMode ? rnd( -60, 0 ) : rnd( -60, -10 ); parts[i] = np; }
+                        if ( p.x > W + 40 ) { p.x -= W + 60; } else if ( p.x < -40 ) { p.x += W + 60; }
                     } else if ( CFG.preset === 'bubbles' ) {
                         p.y -= p.s * CFG.gravity; p.a += .03; p.x += Math.sin( p.a ) * .4 * CFG.wind;
                         if ( canHover && mouse.on ) { repel( p ); }
@@ -617,6 +658,7 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
                         case 'soccer':   drawSoccer( p ); break;
                         case 'embers':   drawEmber( p ); break;
                         case 'sparks':   drawSpark( p ); break;
+                        case 'rain':     drawRain( p ); break;
                         default:         drawPetal( p );
                     }
                 }
@@ -682,8 +724,9 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
 
             // Pointer Events (solo se hover abilitato e device non coarse)
             if ( canHover ) {
-                // sopra il contenuto il canvas non riceve eventi (si clicca sotto): ascolta la sezione
-                var ascolta = ( CFG.scope === 'over' ) ? ( host || canvas ) : canvas;
+                // sopra il contenuto il canvas non riceve eventi (si clicca sotto): ascolta la sezione; su tutta la pagina
+                // il canvas non blocca mai i click, si ascolta la finestra
+                var ascolta = pageMode ? window : ( ( CFG.scope === 'over' ) ? ( host || canvas ) : canvas );
                 ascolta.addEventListener( 'pointermove', function( e ) {
                     var r = canvas.getBoundingClientRect();
                     mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; mouse.on = true;

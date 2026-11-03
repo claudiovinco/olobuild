@@ -3,6 +3,20 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.957 - 2026-11-03 (dieci marchi di moda, il sito alla rovescia, il cambio colore, la pioggia, il sonno)
+- Dieci temi nuovi in Moda e bellezza, dieci marchi di abbigliamento inventati, ognuno col suo logo e una trovata: Rovescio (abiti col rovescio in vista, e un sito che scorre alla rovescia), Cangiante (giacche iridescenti, e un sito che cambia colore sezione per sezione), A Cipolla (abiti a strati, con le sezioni che si coprono come strati), Cerniera (giubbotti e borse, la zip che si apre in apertura), Spaiato (calzini venduti uno alla volta, le due metà che scorrono al contrario), Trentagradi (capi da cento lavaggi, l’oblò della lavatrice che si allarga), Sonnambulo (pigiami di seta, il sito che si addormenta), Scroscio (impermeabili, la pioggia su tutto il sito e il mouse che fa da ombrello), Gomitolo (maglieria, il filo di lana che si srotola fra le sezioni e la maglia che si fa da sola) e Fuorimisura (streetwear oversize, la parola più larga dello schermo). Sono siti di marchio, con la collezione, il marchio e i negozi che lo vendono.
+- Effetti di pagina → «Scorrimento alla rovescia»: la pagina parte dal fondo e si legge salendo, con la testata in fondo allo schermo e il piè di pagina in cima; con «Rotella al contrario» il gesto di sempre fa salire la pagina. Nel builder e per gli screen reader l’ordine resta quello della struttura.
+- Effetti di pagina → «Il sito si addormenta»: dopo i secondi scelti senza un movimento scende un velo con le Z e una scritta, e al primo movimento il sito si sveglia.
+- Luce di pagina, «Forma della luce» → «Tutta la pagina»: il colore della sezione in vista riempie tutto il fondo; con il nuovo «Colore testo con la luce» della sezione cambia anche il testo, testata e piè di pagina compresi.
+- Particelle: il preset «Pioggia», gocce lunghe inclinate dal vento; con «Reagisci al cursore» il puntatore è un ombrello e sotto non piove.
+- Dieci cursori nuovi in Avanzate → Effetti mouse: Specchio, Prisma, Strati, Zip, Spaiato, Centrifuga, Sonno, Ombrello a cupola, Gomitolo, XXL.
+- Vetrina temi: 178 temi di OLObuild; zone tradotte nelle cinque lingue.
+
+## v1.4.956 - 2026-11-03 (la nota con la freccia, lo stemma col nome)
+- Cursore «Nota»: con la freccia di sistema visibile (Effetti mouse, «Nascondi il cursore di sistema» spento) la nota accompagna la freccia in basso a destra e la punta resta libera, così si vede con precisione dove si preme.
+- Logo sito: «Nome accanto all'immagine», lo stemma e il nome del sito in fila (come nel Mega Menu), con il gap fra i due nello Stile.
+- Cartellone, il prossimo a forma di biglietto: il tagliando va sotto fino a 959 px (prima 760), le soglie comuni del builder.
+
 ## v1.4.955 - 2026-11-03 (lingue leggibili senza casella)
 - Selettore lingua senza casella, con codici o nomi: le lingue non attive restano piene invece che attenuate (sui fondi colorati non si leggevano) e quella attiva ha una riga sotto. Con le sole bandiere non cambia niente.
 

@@ -21,6 +21,11 @@ export const CURSORI = [
   ['ugello', 'Ugello (il filo della stampa 3D)'], ['passopasso', 'Passo passo (scatta sulla griglia)'],
   ['mosaico', 'Mosaico (tessere che si girano)'], ['nappa', 'Nappa (oscilla come un pendolo)'],
   ['nota', 'Nota (lascia una scia di crome)'],
+  ['specchio', 'Specchio (un secondo puntatore rovesciato)'], ['prisma', 'Prisma (scompone la luce)'],
+  ['strati', 'Strati (anelli che si sfogliano)'], ['zip', 'Zip (il cursore della cerniera)'],
+  ['spaiato', 'Spaiato (due compagni diversi)'], ['centrifuga', 'Centrifuga (il cestello gira)'],
+  ['sonno', 'Sonno (da fermo fa le Z)'], ['cupola', 'Ombrello a cupola (le gocce scivolano)'],
+  ['gomitolo', 'Gomitolo (srotola il filo)'], ['xxl', 'XXL (un puntatore enorme)'],
 ];
 
 // Gli stili che mostrano una parola (la «Parola del cursore», label_text).

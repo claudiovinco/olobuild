@@ -22,6 +22,7 @@ class Olobuild_Pagelight_Tile extends Olobuild_Tile_Base {
     protected $defaults = [
         'light_color'   => '',
         'base_color'    => '',
+        'forma'         => 'alone',
         'position'      => 'center',
         'size'          => 90,
         'intensity'     => 26,
@@ -30,6 +31,7 @@ class Olobuild_Pagelight_Tile extends Olobuild_Tile_Base {
 
     public function get_controls() {
         return [
+            [ 'key' => 'forma',         'type' => 'select', 'label' => 'Forma della luce', 'options' => [ 'alone' => 'Alone', 'tinta' => 'Tutta la pagina' ] ],
             [ 'key' => 'light_color',   'type' => 'color',  'label' => 'Colore luce di partenza' ],
             [ 'key' => 'base_color',    'type' => 'color',  'label' => 'Fondo pagina (opzionale)' ],
             [ 'key' => 'position',      'type' => 'select', 'label' => 'Posizione alone', 'options' => [ 'center' => 'Centro', 'top' => 'Alto', 'top-left' => 'Alto a sinistra', 'top-right' => 'Alto a destra', 'spread' => 'Diffusa' ] ],
@@ -48,6 +50,10 @@ class Olobuild_Pagelight_Tile extends Olobuild_Tile_Base {
         $size      = max( 40, min( 140, absint( $s['size'] ) ) );
         $intensity = max( 5, min( 70, absint( $s['intensity'] ) ) ) / 100;
         $ms        = max( 100, min( 2500, absint( $s['transition_ms'] ) ) );
+        // «Tutta la pagina» (1.4.957): il colore della sezione in vista riempie tutto il fondo e, se la sezione lo dice
+        // («Colore testo con la luce»), il testo cambia con lui: i token del fondo e del testo dei template della pagina
+        // (testata e piè di pagina compresi) seguono la sezione, con la stessa transizione.
+        $tinta     = 'tinta' === ( $s['forma'] ?? 'alone' );
 
         // Hotspot per preset (x%, y%, scala ampiezza) — stessi punti del bg glow.
         $spots_map = [
@@ -91,9 +97,20 @@ class Olobuild_Pagelight_Tile extends Olobuild_Tile_Base {
         <?php endif; ?>
         #<?php echo esc_attr( $uid ); ?>::after{content:'';position:absolute;inset:0;
           background-color:<?php echo esc_html( $light ); ?>;
+          <?php if ( ! $tinta ) : ?>
           -webkit-mask-image:<?php echo esc_html( $mask_css ); ?>;
           mask-image:<?php echo esc_html( $mask_css ); ?>;
+          <?php endif; ?>
           transition:background-color <?php echo (int) $ms; ?>ms ease;}
+        <?php if ( $tinta ) : ?>
+        @property --olo-color-background{syntax:'<color>';inherits:true;initial-value:#ffffff}
+        @property --olo-color-text{syntax:'<color>';inherits:true;initial-value:#111111}
+        @property --olo-color-text-muted{syntax:'<color>';inherits:true;initial-value:#555555}
+        @property --olo-color-border{syntax:'<color>';inherits:true;initial-value:#dddddd}
+        @property --olo-color-link{syntax:'<color>';inherits:true;initial-value:#111111}
+        .olo-template.olo-pl-tinta{transition:--olo-color-background <?php echo (int) $ms; ?>ms ease,--olo-color-text <?php echo (int) $ms; ?>ms ease,--olo-color-text-muted <?php echo (int) $ms; ?>ms ease,--olo-color-border <?php echo (int) $ms; ?>ms ease,--olo-color-link <?php echo (int) $ms; ?>ms ease}
+        @media (prefers-reduced-motion: reduce){.olo-template.olo-pl-tinta,#<?php echo esc_attr( $uid ); ?>::after{transition:none}}
+        <?php endif; ?>
         </style>
         <script>
         (function(){
@@ -109,7 +126,27 @@ class Olobuild_Pagelight_Tile extends Olobuild_Tile_Base {
             var css=document.createElement('style');
             css.textContent='#<?php echo esc_js( $uid ); ?>::after{background-color:var(--pl,<?php echo esc_js( $light ); ?>) !important;}';
             document.head.appendChild(css);
-            function apply(c){ if(c){ el.style.setProperty('--pl', c); } }
+            var tinta=<?php echo $tinta ? 'true' : 'false'; ?>;
+            /* Un colore scritto come token si risolve prima: dentro i token che cambia, var(--olo-color-…) girerebbe su se stesso. */
+            function vero(c){ if(!c){ return ''; } var p=document.createElement('i'); p.style.color=c; el.appendChild(p); var v=getComputedStyle(p).color; el.removeChild(p); return v; }
+            function apply(c, txt){
+                if(!c){ return; }
+                el.style.setProperty('--pl', c);
+                if(!tinta){ return; }
+                var fondo=vero(c), testo=vero(txt);
+                Array.prototype.forEach.call(document.querySelectorAll('.olo-template'), function(t){
+                    t.classList.add('olo-pl-tinta');
+                    t.style.setProperty('--olo-color-background', fondo);
+                    if(testo){
+                        t.style.setProperty('--olo-color-text', testo);
+                        t.style.setProperty('--olo-color-text-muted', 'color-mix(in srgb, '+testo+' 84%, '+fondo+')');
+                        t.style.setProperty('--olo-color-link', testo);
+                        t.style.setProperty('--olo-color-border', 'color-mix(in srgb, '+testo+' 22%, '+fondo+')');
+                    } else {
+                        ['--olo-color-text','--olo-color-text-muted','--olo-color-border','--olo-color-link'].forEach(function(k){ t.style.removeProperty(k); });
+                    }
+                });
+            }
             /* Sezioni verticali con data-olo-light. Si cercano a pagina caricata: lo
                script gira mentre il browser legge la sezione della tile, e prima
                trovava solo quella (le sezioni dopo non erano ancora nel DOM) — la
@@ -117,16 +154,21 @@ class Olobuild_Pagelight_Tile extends Olobuild_Tile_Base {
             function osserva(){
                 var lit=Array.prototype.slice.call(document.querySelectorAll('section[data-olo-light]'));
                 if(!lit.length){ return; }
-                var io=new IntersectionObserver(function(entries){
-                    entries.forEach(function(e){
-                        /* Le sezioni nei gruppi Cover orizzontale le governa
-                           l'evento olo:hgroup: qui solo le pagine verticali.
-                           intersectionRatio>0 esclude i tocchi di bordo. */
-                        if(e.isIntersecting&&e.intersectionRatio>0&&!e.target.closest('.olo-h-group')){
-                            apply(e.target.getAttribute('data-olo-light'));
-                        }
+                /* Vince la sezione che sta sotto la linea di metà schermo: con la sola fascia centrale due sezioni la
+                   toccavano insieme (una finisce, l'altra comincia) e vinceva l'ultima letta, a volte quella sbagliata.
+                   Le sezioni nei gruppi Cover orizzontale le governa l'evento olo:hgroup: qui solo le pagine verticali. */
+                var ultima=null, giro=0;
+                function scegli(){
+                    giro=0;
+                    var c=window.innerHeight/2, scelta=null;
+                    lit.forEach(function(sec){
+                        var r=sec.getBoundingClientRect();
+                        if(r.top<=c){ if(r.bottom>c){ scelta=sec; } }
                     });
-                },{rootMargin:'-40% 0px -40% 0px'});
+                    if(scelta){ if(scelta!==ultima){ if(!scelta.closest('.olo-h-group')){ ultima=scelta; apply(scelta.getAttribute('data-olo-light'), scelta.getAttribute('data-olo-light-text')); } } }
+                }
+                var io=new IntersectionObserver(scegli,{rootMargin:'-40% 0px -40% 0px'});
+                window.addEventListener('scroll',function(){ if(!giro){ giro=requestAnimationFrame(scegli); } },{passive:true});
                 lit.forEach(function(sec){ io.observe(sec); });
             }
             if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', osserva); } else { osserva(); }
@@ -139,7 +181,7 @@ class Olobuild_Pagelight_Tile extends Olobuild_Tile_Base {
                 var sec=track.children[d.index];
                 if(sec){
                     var c=sec.getAttribute('data-olo-light');
-                    if(c){ apply(c); }
+                    if(c){ apply(c, sec.getAttribute('data-olo-light-text')); }
                 }
             });
         })();

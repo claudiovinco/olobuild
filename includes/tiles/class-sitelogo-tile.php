@@ -29,6 +29,9 @@ class Olobuild_SiteLogo_Tile extends Olobuild_Tile_Base {
         'name_size'           => '',
         'name_weight'         => '',
         'name_color'          => '',
+        // «Nome accanto all'immagine» (1.4.956): lo stemma e il nome del sito in fila, come nel Mega Menu.
+        'name_with_image'     => false,
+        'name_gap'            => '14',
         'alignment'           => 'left',
         'retina_image'        => '',
         'hover_opacity'       => '',
@@ -152,18 +155,22 @@ class Olobuild_SiteLogo_Tile extends Olobuild_Tile_Base {
             $main_html = '<img src="' . esc_url( $main_logo_url ) . '"' . $srcset . ' alt="' . $alt . '" class="olo-logo-main" />';
         } elseif ( $is_svg && $main_logo_url ) {
             $main_html = '<img src="' . esc_url( $main_logo_url ) . '" alt="' . $alt . '" class="olo-logo-main" />';
-        } else {
-            // Text fallback: il nome del sito. Prima non si poteva cambiarne il colore e su un
-            // piè di pagina scuro spariva (prendeva il colore dei titoli del tema).
-            $name_ff  = $this->resolve_font_family( (string) $s['name_font_family'] );
-            $name_fw  = $this->font_weight_css( $s['name_weight'] );
-            $name_fs  = absint( $s['name_size'] );
-            $name_clr = $this->safe_color_css( (string) $s['name_color'] );
-            $name_css = ( $name_ff && $name_ff !== 'inherit' ? 'font-family:' . $name_ff . ';' : '' )
-                . ( $name_fw !== '' ? 'font-weight:' . $name_fw . ';' : '' )
-                . ( $name_fs > 0 ? 'font-size:' . $name_fs . 'px;' : '' )
-                . ( $name_clr ? 'color:' . $name_clr . ';' : '' );
-            $main_html = '<span class="olo-sitelogo-text uk-h3 uk-margin-remove olo-logo-main"' . ( $name_css ? ' style="' . esc_attr( $name_css ) . '"' : '' ) . '>' . esc_html( get_bloginfo( 'name' ) ) . '</span>';
+        }
+        // Il nome del sito: da solo senza immagine, o accanto all'immagine con «Nome accanto all'immagine». Prima non si
+        // poteva cambiarne il colore e su un piè di pagina scuro spariva (prendeva il colore dei titoli del tema).
+        $name_ff   = $this->resolve_font_family( (string) $s['name_font_family'] );
+        $name_fw   = $this->font_weight_css( $s['name_weight'] );
+        $name_fs   = absint( $s['name_size'] );
+        $name_clr  = $this->safe_color_css( (string) $s['name_color'] );
+        $name_css  = ( $name_ff && $name_ff !== 'inherit' ? 'font-family:' . $name_ff . ';' : '' )
+            . ( $name_fw !== '' ? 'font-weight:' . $name_fw . ';' : '' )
+            . ( $name_fs > 0 ? 'font-size:' . $name_fs . 'px;' : '' )
+            . ( $name_clr ? 'color:' . $name_clr . ';' : '' );
+        $con_nome  = '' !== $main_html && ! empty( $s['name_with_image'] );
+        $nome_html = '<span class="olo-sitelogo-text uk-h3 uk-margin-remove' . ( $con_nome ? ' olo-sitelogo-nome' : ' olo-logo-main' ) . '"'
+            . ( $name_css ? ' style="' . esc_attr( $name_css ) . '"' : '' ) . '>' . esc_html( get_bloginfo( 'name' ) ) . '</span>';
+        if ( '' === $main_html ) {
+            $main_html = $nome_html;
         }
 
         // Dark variant
@@ -171,15 +178,25 @@ class Olobuild_SiteLogo_Tile extends Olobuild_Tile_Base {
             $dark_html = '<img src="' . esc_url( $s['dark_image'] ) . '" alt="' . $alt . '" class="olo-logo-dark" />';
         }
 
+        // Lo stemma e il nome in fila: nel link (che allora non ha più line-height 0) o in un contenitore.
+        if ( $con_nome ) {
+            echo '<style>.' . $uid . ' .olo-sitelogo-fila{display:inline-flex;align-items:center;gap:' . absint( $s['name_gap'] ) . 'px;line-height:1.1;text-decoration:none;color:inherit}'
+                . '.' . $uid . ' .olo-sitelogo-fila img,.' . $uid . ' .olo-sitelogo-fila svg{flex:none}</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $uid generato qui, gap da absint()
+            $main_html .= $nome_html;
+        }
+        $fila = $con_nome ? ' olo-sitelogo-fila' : '';
+
         // Wrap in link
         if ( $link_home ) {
-            echo '<a href="' . $link_url . '" class="olo-sitelogo-link" aria-label="' . $alt . '">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $link_url escaped via esc_url() and $alt via esc_attr() at assignment above
+            echo '<a href="' . $link_url . '" class="olo-sitelogo-link' . $fila . '" aria-label="' . $alt . '">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $link_url escaped via esc_url() and $alt via esc_attr() at assignment above; $fila is a fixed literal
             echo $main_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above with esc_url()/esc_attr()/esc_html(); the inline-SVG branch outputs the admin-selected media library SVG file verbatim
             echo $dark_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above with esc_url() and esc_attr()'d alt
             echo '</a>';
         } else {
+            echo $con_nome ? '<span class="olo-sitelogo-fila">' : '';
             echo $main_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above with esc_url()/esc_attr()/esc_html(); the inline-SVG branch outputs the admin-selected media library SVG file verbatim
             echo $dark_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above with esc_url() and esc_attr()'d alt
+            echo $con_nome ? '</span>' : '';
         }
 
         // Tagline

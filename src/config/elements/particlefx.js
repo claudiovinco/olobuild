@@ -49,6 +49,7 @@ export default {
     sparks_y: 70,
     sparks_dir: 35,
     sparks_spread: 50,
+    umbrella_size: 48,
     connect_lines: false,
     connect_distance: 90,
     interact_on_hover: false,
@@ -116,6 +117,7 @@ export default {
       { value: 'soccer',   label: t('Palloni da calcio') },
       { value: 'embers',   label: t('Braci (scintille che salgono)') },
       { value: 'sparks',   label: t('Scintille (schizzano e ricadono)') },
+      { value: 'rain',     label: t('Pioggia') },
     ]},
     { key: 'count', label: t('Numero particelle'), type: 'range', min: 5, max: 300, step: 5,
       description: t('Su mobile il numero viene ridotto automaticamente per le prestazioni.') },
@@ -147,7 +149,7 @@ export default {
 
     { type: 'separator', label: t('Interazione') },
     { key: 'interact_on_hover', label: t('Reagisci al cursore'), type: 'toggle',
-      description: t('Con le costellazioni: collega le stelle al puntatore. Altrimenti le particelle si scostano leggermente dal cursore. Disattivato su touch.') },
+      description: t('Con le costellazioni: collega le stelle al puntatore. Con la pioggia il puntatore è un ombrello: sotto non piove, le gocce schizzano sulla cupola. Altrimenti le particelle si scostano leggermente dal cursore. Disattivato su touch.') },
   ],
 
   // La tile è un decoratore a zero dimensioni: il canvas diventa lo sfondo della sezione che la
@@ -166,6 +168,8 @@ export default {
 
     { type: 'separator', label: t('Forma') },
     { key: 'size', label: t('Dimensione'), type: 'range', min: 1, max: 24, step: 1 },
+    { key: 'umbrella_size', label: t('Ampiezza dell’ombrello'), type: 'range', min: 20, max: 160, step: 2, unit: 'px',
+      condition: [ { field: 'preset', value: 'rain' }, { field: 'interact_on_hover', value: true } ] },
     // Agisce solo nel ramo «Sezione» del runtime: con «Tutta la pagina» non c'è una sezione da
     // allungare e il campo non farebbe niente.
     { key: 'min_height', label: t('Altezza minima'), type: 'range', min: 80, max: 1000, step: 10,

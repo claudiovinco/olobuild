@@ -779,7 +779,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
         }
         .<?php echo $uid; ?> .olo-mm-logo--text { gap: 10px; }
-        .<?php echo $uid; ?> .olo-mm-logo--con-nome { gap: 12px; }
+        .<?php echo $uid; ?> .olo-mm-logo--con-nome { gap: .75rem; }
         .<?php echo $uid; ?> .olo-mm-logo--con-nome img { flex: none; }
         /* il marchio non si sottolinea al passaggio: «a:hover» di UIkit e del tema lo sottolineava (coro Paganella, 2 nov 2026) */
         <?php // …e non cambia colore: «a:hover» del tema lo faceva diventare del colore dei link (rosso sul blu della barra, 2,3:1) ?>

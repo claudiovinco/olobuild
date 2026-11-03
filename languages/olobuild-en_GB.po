@@ -48389,3 +48389,163 @@ msgstr "Fade from the bottom"
 #: src/components/ProSlider/ProSliderEditor.vue
 msgid "Sfuma dall’alto"
 msgstr "Fade from the top"
+
+#: src/config/elements/sitelogo.js
+msgid "Nome accanto all’immagine"
+msgstr "Name next to the image"
+
+#: src/config/elements/sitelogo.js
+msgid "Lo stemma e il nome del sito in fila, come nel Mega Menu: per un piè di pagina o una testata semplice."
+msgstr "The crest and the site name side by side, as in the Mega Menu: for a footer or a simple header."
+
+#: src/config/elements/sitelogo.js
+msgid "Vale quando il logo è il nome del sito (senza immagine) o quando il nome sta accanto all’immagine: vuoto = come i titoli del tema."
+msgstr "Applies when the logo is the site name (no image) or when the name sits next to the image: empty = like the theme headings."
+
+#: src/config/elements/sitelogo.js
+msgid "Gap nome"
+msgstr "Name gap"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Scorrimento alla rovescia"
+msgstr "Reverse scrolling"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "La pagina parte dal fondo e si legge salendo: le sezioni si dispongono dal basso verso l’alto, la testata sta in fondo allo schermo e il piè di pagina in cima. Nel builder e per gli screen reader l’ordine resta quello della struttura. Si vede sul sito, non nel builder."
+msgstr "The page starts at the bottom and is read going up: the sections stack from the bottom upwards, the header sits at the bottom of the screen and the footer at the top. In the builder and for screen readers the order stays the one in the structure. It shows on the site, not in the builder."
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Rotella al contrario"
+msgstr "Reversed wheel"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Acceso: girando la rotella in giù (o coi tasti freccia e pagina giù) la pagina sale, così il gesto di sempre porta avanti. Spento: per salire si gira la rotella in su. Sul telefono il dito trascina la pagina come sempre."
+msgstr "On: turning the wheel down (or pressing the down arrow and page down keys) moves the page up, so the usual gesture goes forward. Off: you turn the wheel up to climb. On phones the finger drags the page as usual."
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Il sito si addormenta"
+msgstr "The site falls asleep"
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Dopo qualche secondo senza un movimento scende un velo scuro con le Z che salgono e una scritta; al primo movimento del mouse, della rotella, dei tasti o del dito il sito si sveglia. Il velo non blocca mai i click. Si vede sul sito, non nel builder."
+msgstr "After a few seconds without any movement a dark veil comes down with rising Zs and a line of text; at the first movement of the mouse, the wheel, the keys or a finger the site wakes up. The veil never blocks clicks. It shows on the site, not in the builder."
+
+#: src/components/Builder/PageSettingsPanel.vue
+msgid "Si addormenta dopo"
+msgstr "Falls asleep after"
+
+#: includes/class-frontend-renderer.php
+msgid "Il sito si è addormentato: basta muovere il mouse per svegliarlo."
+msgstr "The site has fallen asleep: just move the mouse to wake it up."
+
+#: includes/class-frontend-renderer.php
+msgid "Torna all’inizio"
+msgstr "Back to the start"
+
+#: src/config/elements/pagelight.js
+msgid "Forma della luce"
+msgstr "Light shape"
+
+#: src/config/elements/pagelight.js
+msgid "Tutta la pagina: il colore della sezione in vista riempie tutto il fondo, e se la sezione ha anche \"Colore testo con la luce\" il testo cambia con lui (testata e piè di pagina compresi). Le sezioni senza sfondo lasciano vedere il colore."
+msgstr "Whole page: the colour of the section in view fills the whole background, and if the section also has \"Text colour with the light\" the text changes with it (header and footer included). Sections without a background let the colour show through."
+
+#: src/config/elements/section.js
+msgid "Colore testo con la luce"
+msgstr "Text colour with the light"
+
+#: src/config/elements/section.js
+msgid "Con la Luce di pagina \"Tutta la pagina\": mentre la sezione è in vista il testo di tutta la pagina prende questo colore, insieme al fondo. Vuoto = il testo del tema."
+msgstr "With the Page light set to \"Whole page\": while the section is in view, the text of the whole page takes this colour, together with the background. Empty = the theme text colour."
+
+#: src/config/elements/particlefx.js
+msgid "Pioggia"
+msgstr "Rain"
+
+#: src/config/elements/particlefx.js
+msgid "Con le costellazioni: collega le stelle al puntatore. Con la pioggia il puntatore è un ombrello: sotto non piove, le gocce schizzano sulla cupola. Altrimenti le particelle si scostano leggermente dal cursore. Disattivato su touch."
+msgstr "With constellations: links the stars to the pointer. With rain the pointer is an umbrella: it doesn’t rain beneath it and the drops splash on the canopy. Otherwise the particles move slightly away from the cursor. Off on touch screens."
+
+#: src/config/elements/particlefx.js
+msgid "Ampiezza dell’ombrello"
+msgstr "Umbrella size"
+
+#: src/config/cursori.js
+msgid "Specchio (un secondo puntatore rovesciato)"
+msgstr "Mirror (a second, upside-down pointer)"
+
+#: src/config/cursori.js
+msgid "Prisma (scompone la luce)"
+msgstr "Prism (splits the light)"
+
+#: src/config/cursori.js
+msgid "Strati (anelli che si sfogliano)"
+msgstr "Layers (rings that peel apart)"
+
+#: src/config/cursori.js
+msgid "Zip (il cursore della cerniera)"
+msgstr "Zip (the zipper slider)"
+
+#: src/config/cursori.js
+msgid "Spaiato (due compagni diversi)"
+msgstr "Odd pair (two mismatched companions)"
+
+#: src/config/cursori.js
+msgid "Centrifuga (il cestello gira)"
+msgstr "Spin cycle (the drum turns)"
+
+#: src/config/cursori.js
+msgid "Sonno (da fermo fa le Z)"
+msgstr "Sleep (snores Zs when still)"
+
+#: src/config/cursori.js
+msgid "Ombrello a cupola (le gocce scivolano)"
+msgstr "Dome umbrella (the drops slide off)"
+
+#: src/config/cursori.js
+msgid "Gomitolo (srotola il filo)"
+msgstr "Ball of yarn (unwinds the thread)"
+
+#: src/config/cursori.js
+msgid "XXL (un puntatore enorme)"
+msgstr "XXL (a huge pointer)"
+
+#: includes/class-theme-importer.php
+msgid "Il sito alla rovescia"
+msgstr "The upside-down site"
+
+#: includes/class-theme-importer.php
+msgid "Il sito che cambia colore"
+msgstr "The site that changes colour"
+
+#: includes/class-theme-importer.php
+msgid "Gli strati che si coprono"
+msgstr "Layers covering each other"
+
+#: includes/class-theme-importer.php
+msgid "La zip che si apre"
+msgstr "The zip that opens"
+
+#: includes/class-theme-importer.php
+msgid "Le metà che scorrono al contrario"
+msgstr "Halves scrolling the opposite way"
+
+#: includes/class-theme-importer.php
+msgid "L’oblò che si apre"
+msgstr "The porthole that opens"
+
+#: includes/class-theme-importer.php
+msgid "Il sito che si addormenta"
+msgstr "The site that falls asleep"
+
+#: includes/class-theme-importer.php
+msgid "Piove su tutto il sito"
+msgstr "It rains all over the site"
+
+#: includes/class-theme-importer.php
+msgid "La maglia che si fa da sola"
+msgstr "The knit that makes itself"
+
+#: includes/class-theme-importer.php
+msgid "La parola che non ci sta"
+msgstr "The word that doesn’t fit"

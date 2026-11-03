@@ -1007,12 +1007,12 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
             #<?php echo esc_attr( $instance_id ); ?> .olo-ql-sort { padding: 6px 10px; border: 1px solid rgba(0,0,0,0.15); border-radius: 6px; background: #fff; margin-left: 6px; }
             #<?php echo esc_attr( $instance_id ); ?> .olo-ql-card.olo-ql-hidden { display: none !important; }
             <?php // Le schede per tassonomia erano pulsanti del browser senza stile (1.4.932): pillole col colore accento. ?>
-            #<?php echo esc_attr( $instance_id ); ?> .olo-ql-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 24px; }
-            #<?php echo esc_attr( $instance_id ); ?> .olo-ql-tabs button { -webkit-appearance: none; appearance: none; margin: 0; font: inherit; font-size: 14px; line-height: 1.2; padding: 9px 16px; border-radius: 999px; border: 1px solid var(--olo-color-border, rgba(0,0,0,0.15)); background: transparent; color: inherit; cursor: pointer; transition: background-color .2s ease, border-color .2s ease, color .2s ease; }
+            #<?php echo esc_attr( $instance_id ); ?> .olo-ql-tabs { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.5rem; }
+            #<?php echo esc_attr( $instance_id ); ?> .olo-ql-tabs button { -webkit-appearance: none; appearance: none; margin: 0; font: inherit; font-size: 14px; line-height: 1.2; padding: .5625rem 1rem; border-radius: 99em; border: 1px solid var(--olo-color-border, rgba(0,0,0,0.15)); background: transparent; color: inherit; cursor: pointer; transition: background-color .2s ease, border-color .2s ease, color .2s ease; }
             #<?php echo esc_attr( $instance_id ); ?> .olo-ql-tabs button:hover { border-color: <?php echo $accent_c; ?>; color: <?php echo $accent_c; ?>; }
             #<?php echo esc_attr( $instance_id ); ?> .olo-ql-tabs button.active { background: <?php echo $accent_c; ?>; border-color: <?php echo $accent_c; ?>; color: <?php echo $this->testo_su_accento( $accent_c ); ?>; }
             #<?php echo esc_attr( $instance_id ); ?> .olo-ql-tabs button:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, <?php echo $accent_c; ?> 30%, transparent); }
-            #<?php echo esc_attr( $instance_id ); ?> .olo-ql-vuoto { margin: 8px 0 0; font-size: 15px; color: var(--olo-color-text-muted, #6B7280); }
+            #<?php echo esc_attr( $instance_id ); ?> .olo-ql-vuoto { margin: .5rem 0 0; font-size: 15px; color: var(--olo-color-text-muted, #6B7280); }
 
             <?php if ( $layout === 'masonry' ) : ?>
             #<?php echo esc_attr( $instance_id ); ?> .olo-ql-container .olo-ql-card { break-inside: avoid; margin-bottom: <?php echo $gap; ?>px; }

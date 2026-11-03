@@ -1772,7 +1772,7 @@ class Olobuild_Frontend_Renderer {
         if ( ! is_array( $page_settings ) || ! class_exists( 'Olobuild_Crtoverlay_Tile' ) ) {
             return '';
         }
-        $out = '';
+        $out = self::scorrimento_rovescia( $page_settings, $this->builder_mode ) . self::sonno( $page_settings, $this->builder_mode );
 
         if ( ! empty( $page_settings['page_crt_enabled'] ) ) {
             $out .= ( new Olobuild_Crtoverlay_Tile() )->render( [
@@ -1799,6 +1799,76 @@ class Olobuild_Frontend_Renderer {
         }
 
         return $out;
+    }
+
+    /**
+     * Scorrimento alla rovescia (Effetti di pagina, page_rovescia): la pagina parte dal fondo e si legge salendo. Le
+     * sezioni si dispongono dal basso verso l'alto (column-reverse: nel builder e per chi legge con lo screen reader
+     * l'ordine resta quello scritto), la testata sta in fondo allo schermo e il piè di pagina in cima; la rotella e i
+     * tasti vanno al contrario, così il gesto di sempre fa salire la pagina (page_rovescia_rotella, acceso se manca).
+     * Sul telefono si trascina in giù. La classe sull'html arriva subito (prima che il piè di pagina sia letto), il
+     * resto lo fa assets/js/olo-rovescia.js. Nel builder niente: le sezioni restano nell'ordine della struttura.
+     */
+    private static function scorrimento_rovescia( $page_settings, $builder ) {
+        if ( empty( $page_settings['page_rovescia'] ) || $builder ) {
+            return '';
+        }
+        static $fatto = false;
+        if ( $fatto ) {
+            return '';
+        }
+        $fatto   = true;
+        $rotella = ! array_key_exists( 'page_rovescia_rotella', $page_settings ) || ! empty( $page_settings['page_rovescia_rotella'] );
+        wp_enqueue_script( 'olobuild-rovescia', OLOBUILD_URL . 'assets/js/olo-rovescia.js', [], OLOBUILD_VERSION, true );
+        $css = 'html.olo-rovescia .wp-site-blocks{display:flex;flex-direction:column-reverse}'
+            . 'html.olo-rovescia .wp-site-blocks>main,html.olo-rovescia .olo-frontend-grid{display:flex;flex-direction:column-reverse}'
+            . 'html.olo-rovescia .olo-frontend-grid>*{flex:0 0 auto}'
+            // la testata «mostra salendo» o fissa in cima scatterebbe sempre (qui si sale): resta in fondo
+            . 'html.olo-rovescia .olo-site-header{position:sticky!important;top:auto!important;bottom:0;z-index:90;transform:none!important}'
+            . 'html.olo-rovescia .olo-totop-btn svg{transform:rotate(180deg)}'
+            . 'html.olo-rovescia-attesa .wp-site-blocks{opacity:0;animation:olo-rovescia-mostra 0s linear 1.6s forwards}'
+            . '@keyframes olo-rovescia-mostra{to{opacity:1}}';
+        return '<style id="olo-rovescia-css">' . $css . '</style>'
+            . '<script>document.documentElement.classList.add("olo-rovescia","olo-rovescia-attesa");'
+            . 'document.documentElement.setAttribute("data-rovescia-rotella","' . ( $rotella ? '1' : '0' ) . '");'
+            . 'document.documentElement.setAttribute("data-rovescia-inizio",' . wp_json_encode( olobuild_t( 'Torna all’inizio' ) ) . ');</script>';
+    }
+
+    /**
+     * Il sito si addormenta (Effetti di pagina, page_sonno): dopo page_sonno_secondi senza un movimento scende un velo
+     * scuro con le Z che salgono e la scritta page_sonno_testo; al primo movimento il sito si sveglia. Il velo non
+     * riceve i click. Lo pilota assets/js/olo-sonno.js. Nel builder niente.
+     */
+    private static function sonno( $page_settings, $builder ) {
+        if ( empty( $page_settings['page_sonno'] ) || $builder ) {
+            return '';
+        }
+        static $fatto = false;
+        if ( $fatto ) {
+            return '';
+        }
+        $fatto   = true;
+        $secondi = max( 3, min( 120, intval( $page_settings['page_sonno_secondi'] ?? 15 ) ) );
+        $testo   = trim( (string) ( $page_settings['page_sonno_testo'] ?? '' ) );
+        if ( '' === $testo ) {
+            $testo = olobuild_t( 'Il sito si è addormentato: basta muovere il mouse per svegliarlo.' );
+        }
+        wp_enqueue_script( 'olobuild-sonno', OLOBUILD_URL . 'assets/js/olo-sonno.js', [], OLOBUILD_VERSION, true );
+        $css = '.olo-sonno{position:fixed;inset:0;z-index:99980;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;'
+            . 'color:var(--olo-color-light,#fff);opacity:0;visibility:hidden;transition:opacity .35s ease,visibility 0s linear .35s;'
+            . 'background:radial-gradient(120% 90% at 50% 42%,color-mix(in srgb,var(--olo-color-dark,#0b1020) 58%,transparent),color-mix(in srgb,var(--olo-color-dark,#0b1020) 86%,transparent))}'
+            . '.olo-sonno.olo-sonno--dorme{opacity:1;visibility:visible;transition:opacity 1.8s ease,visibility 0s}'
+            . '.olo-sonno-zzz{position:relative;width:140px;height:130px}'
+            . '.olo-sonno-zzz span{position:absolute;left:46%;bottom:0;font-family:var(--olo-font-family-heading,inherit);font-weight:600;line-height:1;opacity:0;animation:olo-zzz 3.6s ease-in infinite;animation-play-state:paused}'
+            . '.olo-sonno--dorme .olo-sonno-zzz span{animation-play-state:running}'
+            . '.olo-sonno-zzz span:nth-child(1){font-size:26px}.olo-sonno-zzz span:nth-child(2){font-size:40px;animation-delay:1.2s}.olo-sonno-zzz span:nth-child(3){font-size:58px;animation-delay:2.4s}'
+            . '@keyframes olo-zzz{0%{transform:translate(-50%,0) rotate(-10deg);opacity:0}18%{opacity:1}100%{transform:translate(30%,-118px) rotate(14deg);opacity:0}}'
+            . '.olo-sonno p{margin:20px 16px 0;max-width:30ch;font-family:var(--olo-font-family,inherit);font-size:16px;line-height:1.5;letter-spacing:.02em}'
+            . '@media (prefers-reduced-motion:reduce){.olo-sonno-zzz{height:auto;width:auto}.olo-sonno-zzz span{position:static;display:inline-block;animation:none;opacity:1;margin:0 4px}}';
+        return '<style id="olo-sonno-css">' . $css . '</style>'
+            . '<div class="olo-sonno" data-secondi="' . (int) $secondi . '" aria-hidden="true" hidden>'
+            . '<div class="olo-sonno-zzz"><span>z</span><span>Z</span><span>Z</span></div>'
+            . '<p>' . esc_html( $testo ) . '</p></div>';
     }
 
     public function render_tiles_array( $tiles, $page_settings = [] ) {

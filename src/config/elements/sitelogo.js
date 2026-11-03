@@ -34,6 +34,8 @@ export default {
     name_size: '',
     name_weight: '',
     name_color: '',
+    name_with_image: false,
+    name_gap: '14',
     alignment: 'left',
     retina_image: '',
     hover_opacity: '',
@@ -86,6 +88,8 @@ export default {
 
     { type: 'separator', label: t('Motto / Tagline') },
     { key: 'show_tagline', label: t('Mostra motto del sito'), type: 'toggle' },
+    { key: 'name_with_image', label: t('Nome accanto all’immagine'), type: 'toggle',
+      description: t('Lo stemma e il nome del sito in fila, come nel Mega Menu: per un piè di pagina o una testata semplice.') },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -120,7 +124,8 @@ export default {
 
     { type: 'separator', label: t('Nome del sito') },
     { type: 'typography', label: t('Nome del sito'), responsiveKeys: [], keys: { family: 'name_font_family', size: 'name_size', weight: 'name_weight', color: 'name_color' }, sizeMin: 12, sizeMax: 72,
-      description: t('Vale quando il logo è il nome del sito, cioè quando non c’è un’immagine: vuoto = come i titoli del tema.') },
+      description: t('Vale quando il logo è il nome del sito (senza immagine) o quando il nome sta accanto all’immagine: vuoto = come i titoli del tema.') },
+    { key: 'name_gap', label: t('Gap nome'), type: 'range', min: 0, max: 48, step: 2, unit: 'px', condition: { field: 'name_with_image', value: true } },
 
     { type: 'separator', label: t('Tagline') },
     { type: 'typography', label: t('Tagline'), responsiveKeys: [], keys: { size: 'tagline_size', color: 'tagline_color' }, sizeMin: 10, sizeMax: 24, condition: { field: 'show_tagline', value: true } },

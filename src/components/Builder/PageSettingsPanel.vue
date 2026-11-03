@@ -222,6 +222,65 @@
               />
             </div>
           </template>
+
+          <!-- Alla rovescia: Olobuild_Frontend_Renderer::scorrimento_rovescia() + assets/js/olo-rovescia.js -->
+          <div class="psp-row">
+            <label for="psp-rovescia" class="psp-label">{{ t('Scorrimento alla rovescia') }}<InfoTip class="psp-info" :testo="t('La pagina parte dal fondo e si legge salendo: le sezioni si dispongono dal basso verso l’alto, la testata sta in fondo allo schermo e il piè di pagina in cima. Nel builder e per gli screen reader l’ordine resta quello della struttura. Si vede sul sito, non nel builder.')" :titolo="t('Scorrimento alla rovescia')" /></label>
+            <FieldToggle
+              id="psp-rovescia"
+              class="psp-switch"
+              role="switch"
+              :aria-checked="String(pageSettings.page_rovescia === true)"
+              :modelValue="pageSettings.page_rovescia === true"
+              @update:modelValue="builderStore.updatePageSetting('page_rovescia', $event)"
+            />
+          </div>
+          <!-- Chiave assente = rotella al contrario, come il PHP (array_key_exists) -->
+          <div v-if="pageSettings.page_rovescia" class="psp-row">
+            <label for="psp-rovescia-rotella" class="psp-label">{{ t('Rotella al contrario') }}<InfoTip class="psp-info" :testo="t('Acceso: girando la rotella in giù (o coi tasti freccia e pagina giù) la pagina sale, così il gesto di sempre porta avanti. Spento: per salire si gira la rotella in su. Sul telefono il dito trascina la pagina come sempre.')" :titolo="t('Rotella al contrario')" /></label>
+            <FieldToggle
+              id="psp-rovescia-rotella"
+              class="psp-switch"
+              role="switch"
+              :aria-checked="String((pageSettings.page_rovescia_rotella ?? true) === true)"
+              :modelValue="(pageSettings.page_rovescia_rotella ?? true) === true"
+              @update:modelValue="builderStore.updatePageSetting('page_rovescia_rotella', $event)"
+            />
+          </div>
+
+          <!-- Si addormenta: Olobuild_Frontend_Renderer::sonno() + assets/js/olo-sonno.js -->
+          <div class="psp-row">
+            <label for="psp-sonno" class="psp-label">{{ t('Il sito si addormenta') }}<InfoTip class="psp-info" :testo="t('Dopo qualche secondo senza un movimento scende un velo scuro con le Z che salgono e una scritta; al primo movimento del mouse, della rotella, dei tasti o del dito il sito si sveglia. Il velo non blocca mai i click. Si vede sul sito, non nel builder.')" :titolo="t('Il sito si addormenta')" /></label>
+            <FieldToggle
+              id="psp-sonno"
+              class="psp-switch"
+              role="switch"
+              :aria-checked="String(pageSettings.page_sonno === true)"
+              :modelValue="pageSettings.page_sonno === true"
+              @update:modelValue="builderStore.updatePageSetting('page_sonno', $event)"
+            />
+          </div>
+          <template v-if="pageSettings.page_sonno">
+            <div class="psp-row">
+              <span class="psp-label">{{ t(SONNO_RANGE.label) }}</span>
+              <FieldRange
+                compact
+                :unit="SONNO_RANGE.unit"
+                :min="SONNO_RANGE.min"
+                :max="SONNO_RANGE.max"
+                :step="SONNO_RANGE.step"
+                :defaultValue="SONNO_RANGE.def"
+                :aria-label="t(SONNO_RANGE.label)"
+                :modelValue="pageNum(SONNO_RANGE)"
+                @update:modelValue="setPageInt(SONNO_RANGE, $event)"
+                @focusout="risincronizza($event, pageNum(SONNO_RANGE))"
+              />
+            </div>
+            <div class="psp-field">
+              <span class="psp-label">{{ t('Scritta') }}</span>
+              <FieldText :aria-label="t('Scritta')" :placeholder="t('Il sito si è addormentato: basta muovere il mouse per svegliarlo.')" :modelValue="pageSettings.page_sonno_testo || ''" @update:modelValue="builderStore.updatePageSetting('page_sonno_testo', $event)" />
+            </div>
+          </template>
         </div>
       </CollapseSection>
     </CollapseSection>
@@ -533,6 +592,7 @@ const GRAIN_RANGES = [
 ];
 // Apertura: durata in ms come intval( … ) del PHP (1000-4000, 2000 se manca).
 const INTRO_RANGE = { key: 'page_intro_duration', label: 'Durata', unit: 'ms', min: 1000, max: 4000, step: 100, def: 2000 };
+const SONNO_RANGE = { key: 'page_sonno_secondi', label: 'Si addormenta dopo', unit: 's', min: 3, max: 120, step: 1, def: 15 };
 const introStyleOptions = [
   { value: 'sipario', label: 'Sipario' },
   { value: 'contatore', label: 'Contatore' },
@@ -542,7 +602,8 @@ const introStyleOptions = [
 const siteName = (oloData.siteInfo && oloData.siteInfo.name) || '';
 const effettiAttivi = computed(() =>
   pageSettings.value.page_crt_enabled === true || pageSettings.value.page_grain_enabled === true
-    || pageSettings.value.page_intro_enabled === true
+    || pageSettings.value.page_intro_enabled === true || pageSettings.value.page_rovescia === true
+    || pageSettings.value.page_sonno === true
 );
 
 // FieldRange emette STRINGHE: si torna all'intero entro gli estremi (i cursori nativi
