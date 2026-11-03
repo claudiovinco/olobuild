@@ -151,7 +151,7 @@ def apertura(t):
                   colore=C['chiaro'], bgColor='transparent', padding=17, borderRadius=999, borderWidth=1,
                   borderColor=mix(C['chiaro'], 60), entra='fadeInUp', ritardo=1300, buttonUrl=PERCORSI,
                   hover={'bgColor': mix(C['chiaro'], 12), 'borderColor': C['chiaro'], 'duration': 250},
-                  responsive={'tablet': {'x': 81}, 'mobile': {'y': 27, 'x': 52, 'fontSize': m(12)}}),
+                  responsive={'tablet': {'x': 82.5}, 'mobile': {'y': 27, 'x': 52, 'fontSize': m(12)}}),
         K.livello('re-n', contenuto='Seguite il cerchio: quattro secondi dentro, quattro fuori.', x=60, y=12, w=34,
                   size=12, peso='500', colore=mix(C['chiaro'], 80), align='right', letterSpacing=1, fontFamily=MONO,
                   ritardo=1800, responsive={'mobile': {'fontSize': m(10), 'x': 7, 'y': 82, 'width': 86, 'textAlign': 'center'}}),

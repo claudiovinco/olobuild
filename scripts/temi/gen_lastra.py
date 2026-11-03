@@ -118,11 +118,11 @@ def apertura(t):
                   bgColor=CIANO, padding=16, borderRadius=4, letterSpacing=3, textTransform='uppercase', buttonUrl=CAPI,
                   scrollMove=fine, entra='fadeIn', ritardo=0, hover={'bgColor': '#FFFFFF', 'duration': 250},
                   responsive={'mobile': {'x': 6, 'y': 26, 'fontSize': m(11)}}),
-        K.livello('la-l', tipo='button', contenuto='Dentro', x=20, y=84, w='auto', size=12, peso='600', colore=C['testo'],
+        K.livello('la-l', tipo='button', contenuto='Dentro', x=20.4, y=84, w='auto', size=12, peso='600', colore=C['testo'],
                   bgColor='transparent', padding=16, borderRadius=4, borderWidth=1, borderColor=mix(C['testo'], 60), letterSpacing=3,
                   textTransform='uppercase', buttonUrl=DENTRO, scrollMove=fine, entra='fadeIn', ritardo=0,
                   hover={'bgColor': mix(C['testo'], 14), 'borderColor': C['testo'], 'duration': 250},
-                  responsive={'tablet': {'x': 25}, 'mobile': {'x': 55, 'y': 26, 'fontSize': m(11)}}),
+                  responsive={'mobile': {'x': 55, 'y': 26, 'fontSize': m(11)}}),
     ]
     M.veli_oltre(livelli)
     M.scendi_tel(livelli)

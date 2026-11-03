@@ -109,11 +109,11 @@ def apertura(t):
                   bgColor=C['acc'], padding=16, borderRadius=10, letterSpacing=3, textTransform='uppercase', buttonUrl=CAPI,
                   scrollMove=fine, entra='fadeIn', ritardo=0, hover={'bgColor': C['nero'], 'duration': 250},
                   responsive={'mobile': {'x': 6, 'y': 28, 'fontSize': m(11)}}),
-        K.livello('ve-l', tipo='button', contenuto='La sartoria', x=20, y=72, w='auto', size=12, peso='600', colore='#FFFFFF',
+        K.livello('ve-l', tipo='button', contenuto='La sartoria', x=20.6, y=72, w='auto', size=12, peso='600', colore='#FFFFFF',
                   bgColor='transparent', padding=16, borderRadius=10, borderWidth=1, borderColor=mix('#FFFFFF', 60), letterSpacing=3,
                   textTransform='uppercase', buttonUrl=SARTORIA, scrollMove=fine, entra='fadeIn', ritardo=0,
                   hover={'bgColor': mix('#FFFFFF', 14), 'borderColor': '#FFFFFF', 'duration': 250},
-                  responsive={'tablet': {'x': 25}, 'mobile': {'x': 55, 'y': 28, 'fontSize': m(11)}}),
+                  responsive={'mobile': {'x': 55, 'y': 28, 'fontSize': m(11)}}),
     ]
     M.veli_oltre(livelli)
     sl = [K.diapositiva('ve-1', K.sfondo_video(V_CEFALU, overlay=0.12, colore=C['nero']), livelli, durata=600000)]

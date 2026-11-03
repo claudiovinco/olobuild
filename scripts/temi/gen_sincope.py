@@ -168,7 +168,7 @@ def apertura(t):
                       colore=C['chiaro'], bgColor='transparent', padding=16, letterSpacing=2, textTransform='uppercase',
                       borderRadius=2, borderWidth=1, borderColor=mix(C['chiaro'], 50), ritardo=1250, buttonUrl=PROGRAMMA,
                       hover={'bgColor': mix(C['chiaro'], 12), 'borderColor': C['chiaro'], 'duration': 250},
-                      responsive={'mobile': {'y': 37, 'x': 52, 'fontSize': m(11)}}),
+                      responsive={'mobile': {'y': 37, 'x': 54.5, 'fontSize': m(11)}}),
         ]
         sl.append(K.diapositiva('si-%d' % n, K.sfondo_video(video, overlay=0.2, colore=C['nero']), livelli, durata=8000,
                                 tab=tab))

@@ -109,7 +109,7 @@ def apertura(t):
                       colore='#FFFFFF', bgColor='transparent', padding=16, borderRadius=6, borderWidth=1,
                       borderColor=mix('#FFFFFF', 60), letterSpacing=2, textTransform='uppercase', entra='fadeInUp', ritardo=1200,
                       buttonUrl=PIOGGIA, hover={'bgColor': mix('#FFFFFF', 14), 'duration': 250},
-                      responsive={'tablet': {'x': 26}, 'mobile': {'y': 86, 'x': 52, 'fontSize': m(11)}}),
+                      responsive={'mobile': {'y': 86, 'x': 52, 'fontSize': m(11)}}),
         ], durata=7500)
 
     sl = [acquazzone('sc-1', 'Piove.', 'Meno male.', 'Impermeabili e cerate per chi esce lo stesso. E qui piove davvero: il '

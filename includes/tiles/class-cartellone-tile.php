@@ -503,11 +503,15 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
                 echo "{$sel} .ocrt-biglietto .ocrt-cifre{flex-wrap:nowrap;gap:.4rem .85rem}";
                 echo "{$sel} .ocrt-biglietto .ocrt-cifre span{min-width:2.3rem}";
                 echo "{$sel} .ocrt-biglietto .ocrt-azioni{margin:0;padding:0}";
-                echo '@media (max-width:959px){'
+                // Il tagliando va sotto quando il BIGLIETTO è stretto, non lo schermo: in una colonna (il prossimo
+                // concerto accanto all'ultima notizia, coro 3 nov 2026) a 1100 px il titolo andava a capo parola per
+                // parola. Sotto, il conto e i pulsanti stanno in fila finché ci stanno.
+                echo "{$sel}{container-type:inline-size;container-name:ocrt-biglietto}";
+                echo '@container ocrt-biglietto (max-width:779px){'
                     . "{$sel} .ocrt-pross.ocrt-biglietto{grid-template-columns:auto minmax(0,1fr)}"
                     . "{$sel} .ocrt-biglietto .ocrt-data{min-width:0}"
                     . "{$sel} .ocrt-biglietto .ocrt-gg{font-size:3rem}"
-                    . "{$sel} .ocrt-biglietto .ocrt-lato{grid-column:1 / -1;border-left:0;border-top:1px dashed {$trat}}"
+                    . "{$sel} .ocrt-biglietto .ocrt-lato{grid-column:1 / -1;border-left:0;border-top:1px dashed {$trat};flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.9rem 1.5rem}"
                     . ( $sfondo ? "{$sel} .ocrt-biglietto .ocrt-lato::before{left:-8px;top:-8px}{$sel} .ocrt-biglietto .ocrt-lato::after{left:auto;right:-8px;top:-8px;bottom:auto}" : '' )
                     . '}';
             }

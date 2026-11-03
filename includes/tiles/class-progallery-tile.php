@@ -759,6 +759,18 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
             echo ".{$uid} .olo-pg-item::before{content:'';position:absolute;inset:{$inset_pad}px;border:1px solid {$frame_color};border-radius:" . max( 0, $radius_raw - $inset_pad ) . "px;z-index:5;pointer-events:none}";
         }
 
+        // ─── Ombra delle foto ───
+        // Il controllo «Ombra» si leggeva e non si disegnava: un controllo che non faceva niente (3 nov 2026). Va su
+        // ogni foto, dopo le cornici, così quella scelta vince sull'ombra di serie di Polaroid, Riquadro ombra, Sparso
+        // e Cascata; parallasse e deriva la scrivono in linea (cambia con la profondità) e restano come sono. Nei
+        // nastri, che tagliano quello che esce dalla riga, sopra e sotto si lascia lo spazio per l'ombra.
+        if ( 'none' !== $shadow ) {
+            echo ".{$uid} .olo-pg-item{box-shadow:{$shadow}}";
+            if ( $is_strip && ! $is_coverflow ) {
+                echo ".{$uid}" . ( 'strip_split' === $layout ? '-row' : '' ) . "{padding-top:.875rem;padding-bottom:2.375rem}";
+            }
+        }
+
         // ─── Bordi animati ───
         if ( $anim_border === 'frame-in' ) {
             // Cornice entrante — bordo che appare al hover dall'esterno verso l'interno
@@ -798,8 +810,9 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         // ─── Entrance: overflow visible per permettere animazioni off-screen ───
         if ( $entrance !== 'none' && ! $is_coverflow && ! $is_strip ) {
             echo ".{$uid}{overflow:visible}";
-            // Dopo l'animazione, ripristina overflow hidden per evitare scrollbar
-            echo ".{$uid}.olo-pg-visible{overflow:hidden}";
+            // Dopo l'animazione, ripristina overflow hidden per evitare scrollbar; con l'ombra resta aperta, se no
+            // l'ombra delle foto sul bordo finiva tagliata (un'ombra non fa comparire barre di scorrimento)
+            echo ".{$uid}.olo-pg-visible{overflow:" . ( 'none' !== $shadow ? 'visible' : 'hidden' ) . '}';
         }
 
         // ─── Entrance animation ───

@@ -128,11 +128,11 @@ def apertura(t):
                       colore=C['on_acc'], bgColor=C['acc'], padding=16, letterSpacing=2, textTransform='uppercase',
                       borderRadius=2, ritardo=1400, buttonUrl=PRENOTA, hover={'bgColor': C['chiaro'], 'duration': 250},
                       responsive={'mobile': {'y': 70, 'x': 7, 'fontSize': m(11)}}),
-            K.livello('np-l%d' % n, tipo='button', contenuto='Il percorso', x=20.5, y=73, w='auto', size=12, peso='600',
+            K.livello('np-l%d' % n, tipo='button', contenuto='Il percorso', x=22.0, y=73, w='auto', size=12, peso='600',
                       colore=C['chiaro'], bgColor='transparent', padding=16, letterSpacing=2, textTransform='uppercase',
                       borderRadius=2, borderWidth=1, borderColor=mix(C['chiaro'], 45), ritardo=1550, buttonUrl=PERCORSO,
                       hover={'bgColor': mix(C['chiaro'], 12), 'borderColor': C['chiaro'], 'duration': 250},
-                      responsive={'mobile': {'y': 70, 'x': 50, 'fontSize': m(11)}}),
+                      responsive={'mobile': {'y': 70, 'x': 52.5, 'fontSize': m(11)}}),
         ], durata=8000, tab=tab))
     # l'anello d'oro tratteggiato che gira piano attorno alla finestra, e il punto che ci corre sopra
     ax, ay, aw, ah = 49.23, 10.0, 44.44, 79.0

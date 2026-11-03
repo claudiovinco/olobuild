@@ -45,6 +45,10 @@ class Olobuild_Image_Tile extends Olobuild_Tile_Base {
         'hover_filter_grayscale'  => '',
         'hover_filter_sepia'      => '',
         'hover_animation'  => 'none',
+        // Ken Burns: lo zoom lento e continuo dentro la cornice (stesse chiavi della Galleria)
+        'fx_kenburns'       => false,
+        'fx_kenburns_speed' => 20,
+        'fx_kenburns_scale' => 1.08,
         'lightbox'         => false,
         // ── SpotlightFX (alone di luce sul cursore — tema 43) ──
         'spotlight_enabled'   => false,
@@ -138,6 +142,12 @@ class Olobuild_Image_Tile extends Olobuild_Tile_Base {
             case 'rotate-ccw': $hover_transform = 'rotate(-2deg) scale(1.02)'; break;
         }
         $init_transform = $anim === 'zoom-out' ? 'transform:scale(1.05);' : '';
+
+        // Ken Burns: la foto si ingrandisce e si sposta piano dentro la cornice, avanti e indietro. La cornice taglia già
+        // (overflow:hidden col raggio); l'animazione vince sullo zoom al passaggio, che con il Ken Burns non serve.
+        $kenburns = ! empty( $s['fx_kenburns'] );
+        $kb_speed = max( 10, min( 40, absint( $s['fx_kenburns_speed'] ?? 20 ) ) );
+        $kb_scale = max( 1.03, min( 1.25, floatval( $s['fx_kenburns_scale'] ?? 1.08 ) ) );
 
         // Border radius (base + optional hover — image_tile uses legacy `hover_border_radius` key,
         // not the canonical `*_hover` convention used elsewhere)
@@ -397,6 +407,17 @@ class Olobuild_Image_Tile extends Olobuild_Tile_Base {
                 echo ".{$uid}.olo-image{transition:border-radius {$br_duration}ms cubic-bezier(.4,0,.2,1);}";
                 echo ".{$uid}.olo-image:hover{border-radius:{$hover_br_css}!important;}";
             }
+            echo '</style>';
+            // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+        }
+        if ( $kenburns ) {
+            $kb_a = number_format( $kb_scale, 3, '.', '' );
+            $kb_b = number_format( 1 + ( $kb_scale - 1 ) * 0.6, 3, '.', '' );
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- numeri ristretti sopra (absint/floatval con min/max); $uid è una classe interna.
+            echo '<style>';
+            echo "@keyframes {$uid}-kb{0%{transform:scale(1) translate(0,0)}50%{transform:scale({$kb_a}) translate(-1.5%,-1%)}100%{transform:scale({$kb_b}) translate(1%,.5%)}}";
+            echo ".{$uid} img{animation:{$uid}-kb {$kb_speed}s ease-in-out infinite alternate;will-change:transform}";
+            echo "@media (prefers-reduced-motion:reduce){.{$uid} img{animation:none}}";
             echo '</style>';
             // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
         }

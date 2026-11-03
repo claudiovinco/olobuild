@@ -141,7 +141,7 @@ def apertura(t):
         K.livello('ae-t2', contenuto='Milleduecento metri,<br><em>e sotto le Langhe.</em>', tag='p', x=6, y=36, w=48, size=70,
                   peso='400', colore=C['chiaro'], fontFamily='DM Serif Display', lineHeight=1.04, entra='fadeIn', ritardo=0,
                   textShadow={'x': 0, 'y': 2, 'blur': 28, 'color': mix(C['nero'], 70)}, scrollMove=entra(32, 48, 72),
-                  responsive={'mobile': {'fontSize': m(33), 'y': 34, 'x': 7, 'width': 86}}),
+                  responsive={'mobile': {'fontSize': m(28), 'y': 34, 'x': 7, 'width': 68}}),
         K.livello('ae-velo', tipo='shape', x=0, y=36, w=100, h=64, entra='fadeIn', ritardo=0,
                   shapeGradient={'angle': 0, 'from': mix(C['nero'], 88), 'to': mix(C['nero'], 0), 'fromStop': 30},
                   scrollMove={'inizio': 66, 'fine': 82, 'da': {'o': 0}, 'a': {'o': 100}},

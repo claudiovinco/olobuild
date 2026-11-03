@@ -113,7 +113,7 @@ def apertura(t):
                   colore=C['chiaro'], bgColor='transparent', padding=17, borderRadius=0, borderWidth=1,
                   borderColor=mix(C['chiaro'], 60), letterSpacing=3, textTransform='uppercase', entra='fadeInUp', ritardo=1400,
                   buttonUrl=SERVIZI, hover={'bgColor': mix(C['chiaro'], 12), 'borderColor': C['chiaro'], 'duration': 250},
-                  responsive={'tablet': {'x': 51}, 'mobile': {'y': 61, 'x': 46, 'fontSize': m(11)}}),
+                  responsive={'mobile': {'y': 61, 'x': 46, 'fontSize': m(11)}}),
     ]
     # il velo: una fascia scura dietro i testi che sfuma verso l'alto e verso il basso (due metà); il lago resta pieno
     fascia = lambda lid, y, h, ang, ym, hm: K.livello(lid, tipo='shape', x=0, y=y, w=100, h=h, entra='fadeIn', ritardo=0,

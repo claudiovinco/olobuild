@@ -152,11 +152,11 @@ def apertura(t):
         K.livello('cl-b', tipo='button', contenuto='Le piante', x=6, y=69, w='auto', size=14, peso='600', colore=C['chiaro'],
                   bgColor=C['acc'], padding=16, borderRadius=999, ritardo=1100, buttonUrl=PIANTE,
                   hover={'bgColor': C['testo'], 'duration': 250}, responsive={'mobile': {'y': 29, 'x': 7, 'fontSize': m(12)}}),
-        K.livello('cl-l', tipo='button', contenuto='Il dottore delle piante', x=15.5, y=69, w='auto', size=14, peso='600',
+        K.livello('cl-l', tipo='button', contenuto='Il dottore delle piante', x=15.9, y=69, w='auto', size=14, peso='600',
                   colore=C['testo'], bgColor='transparent', padding=16, borderRadius=999, borderWidth=1,
                   borderColor=mix(C['testo'], 40), ritardo=1250, buttonUrl=CURA,
                   hover={'bgColor': mix(C['testo'], 8), 'borderColor': C['testo'], 'duration': 250},
-                  responsive={'tablet': {'x': 19}, 'mobile': {'y': 29, 'x': 37, 'fontSize': m(12)}}),
+                  responsive={'mobile': {'y': 29, 'x': 37, 'fontSize': m(12)}}),
     ]
     sl = [K.diapositiva('cl-1', {'type': 'color', 'image': '', 'video': '', 'color': C['fondo'], 'overlay': C['nero'],
                                  'overlayOpacity': 0}, livelli, durata=60000)]

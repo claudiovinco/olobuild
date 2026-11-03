@@ -156,7 +156,7 @@ def apertura(t):
         K.livello('te-b', tipo='button', contenuto='Prenota un posto', x=62, y=15, w='auto', size=12, peso='700',
                   colore=C['on_acc'], bgColor=C['acc'], padding=16, letterSpacing=2, textTransform='uppercase', borderRadius=4,
                   entra='fadeIn', ritardo=0, buttonUrl=PRENOTA, hover={'bgColor': C['chiaro'], 'duration': 250},
-                  scrollMove=fine(76, 92), responsive={'tablet': {'x': 58}, 'mobile': {'y': 82, 'x': 7, 'fontSize': m(11)}}),
+                  scrollMove=fine(76, 92), responsive={'tablet': {'x': 57}, 'mobile': {'y': 82, 'x': 7, 'fontSize': m(11)}}),
         K.livello('te-l', tipo='button', contenuto='Tutte le date', x=78, y=15, w='auto', size=12, peso='700',
                   colore=C['chiaro'], bgColor='transparent', padding=16, letterSpacing=2, textTransform='uppercase',
                   borderRadius=4, borderWidth=1, borderColor=mix(C['chiaro'], 50), entra='fadeIn', ritardo=0, buttonUrl=CENE,

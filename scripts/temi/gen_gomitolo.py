@@ -117,7 +117,7 @@ def apertura(t):
         K.livello('go-b', tipo='button', contenuto='Le maglie', x=52, y=51, w='auto', size=15, peso='700', colore=C['on_acc'],
                   bgColor=C['acc'], padding=17, borderRadius=999, entra='fadeInUp', ritardo=900, buttonUrl=MAGLIE,
                   hover={'bgColor': '#3A2A22', 'duration': 250}, responsive={'tablet': {'x': 56}, 'mobile': {'y': 31, 'x': 7, 'fontSize': m(12)}}),
-        K.livello('go-l', tipo='button', contenuto='La lana', x=62, y=51, w='auto', size=15, peso='700', colore='#3A2A22',
+        K.livello('go-l', tipo='button', contenuto='La lana', x=62.4, y=51, w='auto', size=15, peso='700', colore='#3A2A22',
                   bgColor='#FBF3E8', padding=17, borderRadius=999, entra='fadeInUp', ritardo=1000, buttonUrl=LANA,
                   hover={'bgColor': '#F2B544', 'duration': 250},
                   responsive={'tablet': {'x': 70}, 'mobile': {'y': 31, 'x': 40, 'fontSize': m(12)}}),

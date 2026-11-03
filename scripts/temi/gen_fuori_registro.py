@@ -105,11 +105,11 @@ def apertura(t):
                   bgColor=C['acc'], padding=16, borderRadius=0, letterSpacing=3, textTransform='uppercase', buttonUrl=CAPI,
                   scrollMove=fine, entra='fadeIn', ritardo=0, hover={'bgColor': C['nero'], 'duration': 250},
                   responsive={'mobile': {'x': 6, 'y': 31, 'fontSize': m(11)}}),
-        K.livello('fr-l', tipo='button', contenuto='Il telaio', x=20, y=82, w='auto', size=12, peso='700', colore='#FFFFFF',
+        K.livello('fr-l', tipo='button', contenuto='Il telaio', x=20.7, y=82, w='auto', size=12, peso='700', colore='#FFFFFF',
                   bgColor='transparent', padding=16, borderRadius=0, borderWidth=1, borderColor=mix('#FFFFFF', 60), letterSpacing=3,
                   textTransform='uppercase', buttonUrl=TELAIO, scrollMove=fine, entra='fadeIn', ritardo=0,
                   hover={'bgColor': mix('#FFFFFF', 14), 'borderColor': '#FFFFFF', 'duration': 250},
-                  responsive={'tablet': {'x': 25}, 'mobile': {'x': 55, 'y': 31, 'fontSize': m(11)}}),
+                  responsive={'mobile': {'x': 55, 'y': 31, 'fontSize': m(11)}}),
     ]
     M.veli_oltre(livelli)
     sl = [K.diapositiva('fr-1', K.sfondo_video(V_PRESSA, overlay=0.35, colore=C['nero']), livelli, durata=600000)]

@@ -116,15 +116,15 @@ def apertura(t):
             K.livello(sid + '-s', contenuto=sotto, x=58, y=80.5, w=36, size=16, peso='400', colore=mix(C['chiaro'], 90),
                       lineHeight=1.55, ritardo=900, textAlign='right',
                       responsive={'mobile': {'fontSize': m(13), 'y': 74, 'x': 7, 'width': 86, 'textAlign': 'left'}}),
-            K.livello(sid + '-b', tipo='button', contenuto='La collezione', x=70.5, y=89, w='auto', size=12, peso='600',
+            K.livello(sid + '-b', tipo='button', contenuto='La collezione', x=67.2, y=89, w='auto', size=12, peso='600',
                       colore=C['on_acc'], bgColor=C['acc'], padding=16, borderRadius=0, letterSpacing=3, textTransform='uppercase',
                       entra='fadeInUp', ritardo=1100, buttonUrl=CAPI, hover={'bgColor': C['nero'], 'duration': 250},
                       responsive={'mobile': {'y': 82, 'x': 7, 'fontSize': m(11)}}),
-            K.livello(sid + '-l', tipo='button', contenuto='Il rovescio', x=83, y=89, w='auto', size=12, peso='600',
+            K.livello(sid + '-l', tipo='button', contenuto='Il rovescio', x=81.9, y=89, w='auto', size=12, peso='600',
                       colore=C['chiaro'], bgColor='transparent', padding=16, borderRadius=0, borderWidth=1,
                       borderColor=mix(C['chiaro'], 70), letterSpacing=3, textTransform='uppercase', entra='fadeInUp', ritardo=1200,
                       buttonUrl=ROVESCIO, hover={'bgColor': mix(C['chiaro'], 14), 'borderColor': C['chiaro'], 'duration': 250},
-                      responsive={'tablet': {'x': 80}, 'mobile': {'y': 82, 'x': 45, 'fontSize': m(11)}}),
+                      responsive={'mobile': {'y': 82, 'x': 47.5, 'fontSize': m(11)}}),
         ]
         veli = K.veli(sid + '-v', 'destra', 40, 70, colore=C['nero'], forza=86, mobile_da=56)
         return K.diapositiva(sid, K.sfondo_video(video, overlay=0.2, colore=C['nero']), veli + livelli, durata=7000)

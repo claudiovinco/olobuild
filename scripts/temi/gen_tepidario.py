@@ -157,7 +157,7 @@ def apertura(t):
                       colore=C['nero'], bgColor=ORO, padding=16, letterSpacing=2, textTransform='uppercase', borderRadius=8,
                       ritardo=1100, buttonUrl=CONTATTI + '#prenota', hover={'bgColor': C['chiaro'], 'duration': 250},
                       responsive={'tablet': {'x': 30}, 'mobile': {'y': 68, 'x': 14, 'fontSize': m(11)}}),
-            K.livello('tp-l%d' % n, tipo='button', contenuto='I trattamenti', x=52, y=71, w='auto', size=12, peso='600',
+            K.livello('tp-l%d' % n, tipo='button', contenuto='I trattamenti', x=52.6, y=71, w='auto', size=12, peso='600',
                       colore=C['chiaro'], bgColor='transparent', padding=16, letterSpacing=2, textTransform='uppercase',
                       borderRadius=8, borderWidth=1, borderColor=mix(C['chiaro'], 50), ritardo=1250, buttonUrl=TRATTAMENTI,
                       hover={'bgColor': mix(C['chiaro'], 12), 'borderColor': C['chiaro'], 'duration': 250},

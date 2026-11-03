@@ -425,16 +425,48 @@ class Kit:
                     ov['visible'] = False
                 if not ov:
                     del r[chiave]
-        # Pulsanti e bollini affiancati: sul tablet il primo pulsante è relativamente più largo (padding in pixel),
-        # quello accanto si sposta un po' a destra per non accavallarsi.
-        primi = [L for L in livelli if L.get('type') == 'button' and isinstance(L.get('x'), (int, float)) and L['x'] < 12]
+        # Pulsanti e bollini affiancati a un pulsante: sul notebook e sul tablet la tela è più stretta ma caratteri e
+        # padding restano in pixel, quindi il primo pulsante occupa una fetta più larga della tela e quello accanto gli
+        # finiva sopra. Prima si spostava solo sul tablet, di 4,5 punti fissi, e sul notebook per niente (Fuori Registro
+        # e altri venti temi fra 1025 e 1240 px, 3 nov 2026). Qui la coppia tiene in ogni formato la distanza in pixel
+        # che ha sul computer, ferma dove sta la sua colonna di testo: a sinistra il primo resta dov'è, al centro resta
+        # il centro (l'inizio del secondo), a destra il bordo destro (quello della colonna di testo, o stimato con la
+        # distanza fra i due). I valori scritti a mano nel generatore vincono.
+        num = lambda v: isinstance(v, (int, float))
+        testi = [T for T in livelli if T.get('type') == 'text' and num(T.get('x')) and num(T.get('width'))]
         for L in livelli:
             x, y = L.get('x'), L.get('y')
-            if L in primi or not isinstance(x, (int, float)) or not isinstance(y, (int, float)) or not 12 <= x <= 45:
+            if L.get('type') not in ('button', 'text') or not num(x) or not num(y) or (L.get('fontSize') or 99) >= 30:
                 continue
-            if any(abs(y - P.get('y', -99)) <= 3 for P in primi) and (L.get('fontSize') or 99) < 30:
-                tab = L.setdefault('responsive', {}).setdefault('tablet', {})
-                tab.setdefault('x', round(x + 4.5, 2))
+            vicini = [P for P in livelli if P is not L and P.get('type') == 'button' and num(P.get('x'))
+                      and num(P.get('y')) and abs(P['y'] - y) <= 3 and 0 < x - P['x'] <= 30]
+            if not vicini:
+                continue
+            P = max(vicini, key=lambda v: v['x'])
+            d = x - P['x']
+            # a destra il bordo è quello della colonna di testo allineata a destra, se c'è (Rovescio), se no x + d
+            colonna = [T['x'] + T['width'] for T in testi if T.get('textAlign') == 'right' and abs(T['x'] + T['width'] - (x + d)) <= 4]
+            if P['x'] < 15 or any(abs(T['x'] - P['x']) <= 1 and T.get('textAlign', 'left') == 'left' for T in testi):
+                ancora = 'sinistra'
+            elif x + d > 88 or colonna:
+                ancora = 'destra'
+            elif any(T.get('textAlign') == 'center' and abs(T['x'] + T['width'] / 2 - x) <= 4 for T in testi):
+                ancora = 'centro'
+            else:
+                ancora = 'sinistra'
+            bordo = colonna[0] if colonna else x + d
+            for chiave, tela in (('notebook', 1240.0), ('tablet', 1024.0)):
+                dt = d * 1440 / tela
+                ovL = L.setdefault('responsive', {}).setdefault(chiave, {})
+                ovP = (P.get('responsive') or {}).get(chiave) or {}
+                if ancora == 'sinistra':
+                    ovL.setdefault('x', round(ovP.get('x', P['x']) + dt, 2))
+                    continue
+                x2 = ovL.get('x', x) if ancora == 'centro' else \
+                    ovL.setdefault('x', round(bordo - (bordo - x) * 1440 / tela, 2))
+                if not ovL:
+                    del L['responsive'][chiave]
+                P.setdefault('responsive', {}).setdefault(chiave, {}).setdefault('x', round(x2 - dt, 2))
 
     def veli_dal_testo(self, s, forza=92):
         """Una diapositiva con un velo piatto scuro oltre 0,45 sul suo media (il video diventava una filigrana): il velo

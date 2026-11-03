@@ -114,7 +114,7 @@ def apertura(t):
                   bgColor=C['acc'], padding=17, borderRadius=2, letterSpacing=3, textTransform='uppercase', entra='fadeInUp',
                   ritardo=1000, buttonUrl=LAVORI, hover={'bgColor': C['chiaro'], 'duration': 250},
                   responsive={'mobile': {'y': 26.5, 'x': 7, 'fontSize': m(11)}}),
-        K.livello('ca-l', tipo='button', contenuto='Un preventivo', x=16.5, y=69, w='auto', size=12, peso='600',
+        K.livello('ca-l', tipo='button', contenuto='Un preventivo', x=16.7, y=69, w='auto', size=12, peso='600',
                   colore=C['chiaro'], bgColor='transparent', padding=17, borderRadius=2, borderWidth=1,
                   borderColor=mix(C['chiaro'], 60), letterSpacing=3, textTransform='uppercase', entra='fadeInUp', ritardo=1100,
                   buttonUrl=CONTATTI, hover={'bgColor': mix(C['chiaro'], 12), 'borderColor': C['chiaro'], 'duration': 250},

@@ -50,6 +50,9 @@ export default {
     hover_filter_grayscale: '',
     hover_filter_sepia: '',
     hover_animation: 'none',
+    fx_kenburns: false,
+    fx_kenburns_speed: 20,
+    fx_kenburns_scale: 1.08,
     lightbox: false,
     // ── SpotlightFX (alone di luce sul cursore — tema 43) ──
     // Default OFF: le Immagini esistenti restano invariate (additivo).
@@ -213,6 +216,13 @@ export default {
       { value: 'rotate-ccw', label: t('Rotazione antioraria') },
       { value: 'blur-in', label: t('Sfocatura → nitido') },
     ]},
+
+    { type: 'separator', label: t('Effetti automatici') },
+    { key: 'fx_kenburns', label: t('Ken Burns (zoom cinematico)'), type: 'toggle' },
+    { key: 'fx_kenburns_speed', label: t('Durata ciclo (sec)'), type: 'range', min: 10, max: 40, step: 1,
+      condition: { field: 'fx_kenburns', value: true } },
+    { key: 'fx_kenburns_scale', label: t('Intensità zoom'), type: 'range', min: 1.03, max: 1.25, step: 0.01,
+      condition: { field: 'fx_kenburns', value: true } },
     { key: 'lightbox', label: t('Lightbox al click'), type: 'toggle' },
 
     { type: 'separator', label: t('SpotlightFX (luce sul cursore)') },

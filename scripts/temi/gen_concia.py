@@ -102,7 +102,7 @@ def apertura(t):
                   colore=C['chiaro'], bgColor='transparent', padding=15, letterSpacing=2, textTransform='uppercase',
                   borderRadius=4, borderWidth=1, borderColor=mix(C['chiaro'], 50), ritardo=1150, buttonUrl=SU_MISURA,
                   hover={'bgColor': mix(C['chiaro'], 12), 'borderColor': C['chiaro'], 'duration': 250},
-                  responsive={'tablet': {'x': 77, 'y': 28.5}, 'mobile': {'y': 70, 'x': 50, 'fontSize': m(11)}}),
+                  responsive={'tablet': {'y': 28.5}, 'mobile': {'y': 70, 'x': 50, 'fontSize': m(11)}}),
     ]
     # la vetrina: il video della bottega e i pezzi, in fila; tutti scorrono insieme
     top, alto = 290.0, 340.0                 # computer

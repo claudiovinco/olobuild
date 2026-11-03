@@ -126,11 +126,11 @@ def apertura(t):
                   bgColor=C['acc'], padding=16, borderRadius=2, letterSpacing=3, textTransform='uppercase', buttonUrl=CAPI,
                   scrollMove=fine, entra='fadeIn', ritardo=0, hover={'bgColor': '#FFFFFF', 'duration': 250},
                   responsive={'mobile': {'x': 6, 'y': 87, 'fontSize': m(11)}}),
-        K.livello('co-l', tipo='button', contenuto='Il drop segreto', x=20, y=78, w='auto', size=12, peso='600', colore=C['testo'],
+        K.livello('co-l', tipo='button', contenuto='Il drop segreto', x=20.5, y=78, w='auto', size=12, peso='600', colore=C['testo'],
                   bgColor='transparent', padding=16, borderRadius=2, borderWidth=1, borderColor=mix(C['testo'], 60), letterSpacing=3,
                   textTransform='uppercase', buttonUrl='#drop', scrollMove=fine, entra='fadeIn', ritardo=0,
                   hover={'bgColor': mix(C['testo'], 14), 'borderColor': C['testo'], 'duration': 250},
-                  responsive={'tablet': {'x': 25}, 'mobile': {'x': 55, 'y': 87, 'fontSize': m(11)}}),
+                  responsive={'mobile': {'x': 55, 'y': 87, 'fontSize': m(11)}}),
     ]
     M.veli_oltre(livelli)
     M.scendi_tel(livelli)

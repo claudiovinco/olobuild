@@ -118,11 +118,11 @@ def apertura(t):
                   bgColor=C['acc'], padding=16, borderRadius=2, letterSpacing=3, textTransform='uppercase', buttonUrl=CAPI,
                   scrollMove=fine, entra='fadeIn', ritardo=0, hover={'bgColor': C['nero'], 'duration': 250},
                   responsive={'mobile': {'x': 6, 'y': 36, 'fontSize': m(11)}}),
-        K.livello('ra-l', tipo='button', contenuto='I lavaggi', x=20, y=84, w='auto', size=12, peso='600', colore='#FFFFFF',
+        K.livello('ra-l', tipo='button', contenuto='I lavaggi', x=20.7, y=84, w='auto', size=12, peso='600', colore='#FFFFFF',
                   bgColor='transparent', padding=16, borderRadius=2, borderWidth=1, borderColor=mix('#FFFFFF', 60), letterSpacing=3,
                   textTransform='uppercase', buttonUrl=LAV, scrollMove=fine, entra='fadeIn', ritardo=0,
                   hover={'bgColor': mix('#FFFFFF', 14), 'borderColor': '#FFFFFF', 'duration': 250},
-                  responsive={'tablet': {'x': 25}, 'mobile': {'x': 55, 'y': 36, 'fontSize': m(11)}}),
+                  responsive={'mobile': {'x': 55, 'y': 36, 'fontSize': m(11)}}),
     ]
     M.veli_oltre(livelli)
     sl = [K.diapositiva('ra-1', K.sfondo_video(V_CRUDO, overlay=0.1, colore=C['nero']), livelli, durata=600000)]

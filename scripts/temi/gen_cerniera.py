@@ -146,11 +146,11 @@ def apertura(t):
                   bgColor=C['acc'], padding=16, borderRadius=4, letterSpacing=3, textTransform='uppercase', buttonUrl=CAPI,
                   scrollMove=fine, entra='fadeIn', ritardo=0, hover={'bgColor': '#FFFFFF', 'duration': 250},
                   responsive={'mobile': {'y': 86, 'x': 6, 'fontSize': m(11)}}),
-        K.livello('zi-l', tipo='button', contenuto='La zip', x=20, y=84, w='auto', size=12, peso='600', colore='#FFFFFF',
+        K.livello('zi-l', tipo='button', contenuto='La zip', x=20.4, y=84, w='auto', size=12, peso='600', colore='#FFFFFF',
                   bgColor='transparent', padding=16, borderRadius=4, borderWidth=1, borderColor=mix('#FFFFFF', 60), letterSpacing=3,
                   textTransform='uppercase', buttonUrl=ZIP, scrollMove=fine, entra='fadeIn', ritardo=0,
                   hover={'bgColor': mix('#FFFFFF', 14), 'borderColor': '#FFFFFF', 'duration': 250},
-                  responsive={'tablet': {'x': 25}, 'mobile': {'y': 86, 'x': 55, 'fontSize': m(11)}}),
+                  responsive={'mobile': {'y': 86, 'x': 55, 'fontSize': m(11)}}),
     ]
     sl = [K.diapositiva('zi-1', K.sfondo_video(V_NEON, overlay=0.2, colore=C['nero']), livelli, durata=600000)]
     return K.proslider(t, sl, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='fade', showArrows=False, showDots=False,

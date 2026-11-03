@@ -2089,6 +2089,9 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             /* height esplicita, non solo max-height: gli SVG senza width/height
                intrinseci (solo viewBox) collasserebbero a 0 con il solo max-height. */
             height: <?php echo $mob_logo_h; ?>px; max-height: <?php echo $mob_logo_h; ?>px; width: auto; display: block;
+            /* quando la barra è stretta (pulsante d'azione largo) il logo si stringe ma resta in proporzione: prima l'altezza
+               restava fissa e il disegno si schiacciava in larghezza (Tes.la a 360 px, 3 nov 2026) */
+            object-fit: contain; object-position: left center;
         }
         .<?php echo $uid; ?> .olo-mm-mobile-search {
             display: none; align-items: center; padding: 8px; cursor: pointer;

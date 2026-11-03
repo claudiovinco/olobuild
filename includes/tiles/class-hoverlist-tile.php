@@ -306,6 +306,9 @@ class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
             if (!root) { return; }
             var peek = root.querySelector('.olo-hoverlist__peek');
             if (!peek) { return; }
+            // Solo con un mouse vero: al tocco il telefono simula mouseenter e mai mouseleave, e l'anteprima restava aperta
+            // sopra il testo della pagina (Tes.la, 3 nov 2026). Lì il tocco porta solo alla voce.
+            if (!window.matchMedia || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) { peek.remove(); return; }
             // Sposta il peek nel <body>: position:fixed si rompe se un antenato ha transform
             // (entrance/reveal animations del frontend) — nel builder non c'è quel transform, da cui
             // "funziona solo nel builder". Nel body il fixed segue sempre il viewport.
