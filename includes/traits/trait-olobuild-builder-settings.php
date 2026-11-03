@@ -345,6 +345,8 @@ trait Olobuild_Builder_Settings_Trait {
                     // Posizione come la rende il banner (render_frontend): tutto ciò che non è
                     // 'top' sta in basso. Un vecchio 'bottom_left' o 'center' appare «In basso».
                     $opts['position'] = ( 'top' === $opts['position'] ) ? 'top' : 'bottom';
+                    // Le lingue del sito (OLOlang): i testi del banner si scrivono anche per ognuna.
+                    $opts['lingue'] = class_exists( 'Olobuild_Redazione_Lingue' ) ? Olobuild_Redazione_Lingue::per_la_redazione() : null;
                     return rest_ensure_response( $opts );
                 },
                 'permission_callback' => function () { return current_user_can( 'manage_options' ); },

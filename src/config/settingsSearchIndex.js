@@ -131,22 +131,45 @@ export const SETTINGS_FIELD_INDEX = {
 	],
 	"tipicontenuto": [
 		{
+			"kind": "section",
+			"label": "Redazione",
+			"hint": "Chi aggiorna il sito scrive, traduce e mette in ordine le categorie da un posto solo."
+		},
+		{
+			"kind": "field",
+			"label": "Aggiungi e Modifica",
+			"hint": "Nei menu di WordPress aprono la Redazione. I testi scritti a blocchi si aprono ancora nella scheda di WordPress.",
+			"section": "Redazione"
+		},
+		{
 			"kind": "field",
 			"label": "Nome nel menu",
 			"hint": "Vuoto: Articoli. Per esempio Notizie e Notizia.",
-			"section": ""
+			"section": "Redazione"
 		},
 		{
 			"kind": "field",
 			"label": "Editor",
 			"hint": "Semplice: titoli, grassetto, corsivo, link, elenchi e citazioni, come in un programma di scrittura.",
-			"section": ""
+			"section": "Redazione"
 		},
 		{
 			"kind": "field",
 			"label": "Campi",
 			"hint": "Compaiono nella scheda di ogni articolo, nel riquadro Dettagli.",
-			"section": ""
+			"section": "Redazione"
+		},
+		{
+			"kind": "field",
+			"label": "Nome nel menu",
+			"hint": "Vuoto: Spettacoli. Per esempio Concerti e Concerto.",
+			"section": "Redazione"
+		},
+		{
+			"kind": "field",
+			"label": "Indirizzo",
+			"hint": "Le pagine degli spettacoli stanno qui. Vuoto: spettacoli.",
+			"section": "Redazione"
 		}
 	],
 	"tplconditions": [
@@ -388,38 +411,20 @@ export const SETTINGS_FIELD_INDEX = {
 		},
 		{
 			"kind": "section",
-			"label": "Copy del banner",
-			"hint": "Testi mostrati al visitatore. Supporta multilingua."
+			"label": "Testi del banner",
+			"hint": "Testi mostrati al visitatore, in ogni lingua del sito."
 		},
 		{
 			"kind": "field",
-			"label": "Lingua attiva",
-			"hint": "",
-			"section": "Copy del banner"
-		},
-		{
-			"kind": "field",
-			"label": "Titolo banner",
-			"hint": "",
-			"section": "Copy del banner"
-		},
-		{
-			"kind": "field",
-			"label": "Testo banner",
-			"hint": "",
-			"section": "Copy del banner"
-		},
-		{
-			"kind": "field",
-			"label": "CTA primario",
-			"hint": "",
-			"section": "Copy del banner"
+			"label": "Lingua",
+			"hint": "Nelle altre lingue, un testo vuoto resta quello della lingua principale.",
+			"section": "Testi del banner"
 		},
 		{
 			"kind": "field",
 			"label": "Posizione",
 			"hint": "",
-			"section": "Copy del banner"
+			"section": "Testi del banner"
 		}
 	],
 	"analytics": [

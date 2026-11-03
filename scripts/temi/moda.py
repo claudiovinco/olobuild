@@ -100,3 +100,34 @@ def lettera(K, t, occhiello, righe, testo, invito='Iscriviti', grazie='Fatto: la
                t.col([K.modulo(t, campi, 'Lettera — iscrizione', invito, grazie)], wm='1-2', ws='1-1')],
               layout='50-50', gap=64, valign='end'),
     ], bg=bg, padding='large', width='large', style={'padding_top': 120, 'padding_bottom': 120})
+
+
+def veli_oltre(livelli, oltre=40):
+    """I veli sotto i testi (K.veli) arrivano fino al bordo della tela 16:9; ma lo slider fermo in cima è alto quanto lo
+    schermo e sul tablet (e un poco sul computer) la tela sta in mezzo: sopra e sotto il video continua senza velo e si
+    vedeva un taglio netto. Qui i veli del computer e del tablet escono di `oltre` % dalla tela nel verso in cui sono
+    pieni (i laterali sopra e sotto), con la sfumatura che resta dov'era."""
+    for L in livelli:
+        g = L.get('shapeGradient')
+        if '-velo' not in L.get('id', '') or not isinstance(g, dict) or (L.get('responsive') or {}).get('mobile', {}).get('visible') is not False:
+            continue
+        ang, h = g.get('angle'), float(L['height'])
+        if ang in (90, 270):
+            L['y'], L['height'] = -oltre, 100 + 2 * oltre
+        elif ang in (0, 180):
+            pieno = g.get('fromStop', 0) / 100.0 * h
+            g['fromStop'] = round((pieno + oltre) / (h + oltre) * 100)
+            if ang == 180:
+                L['y'] = L['y'] - oltre
+            L['height'] = h + oltre
+    return livelli
+
+
+def scendi_tel(livelli, dy=3, sotto=40):
+    """Sul telefono la testata sovrapposta occupa la cima dell'apertura: i testi e i pulsanti in alto (y del telefono
+    sotto `sotto` %) scendono di `dy` % della tela, così l'occhiello e il titolo non le finiscono sotto."""
+    for L in livelli:
+        mob = (L.get('responsive') or {}).get('mobile') or {}
+        if L.get('type') in ('text', 'button') and isinstance(mob.get('y'), (int, float)) and mob['y'] < sotto:
+            mob['y'] = round(mob['y'] + dy, 2)
+    return livelli

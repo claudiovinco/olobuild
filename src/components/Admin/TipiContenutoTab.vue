@@ -12,6 +12,27 @@
     </div>
   </div>
 
+  <!-- Un posto solo per scrivere: le voci dei menu di WordPress portano alla Redazione -->
+  <div class="cfg-card">
+    <div class="cfg-card-head">
+      <div class="head-ic"><span class="dashicons dashicons-edit-page" aria-hidden="true"></span></div>
+      <div>
+        <h3>{{ t('Redazione') }}</h3>
+        <p>{{ t('Chi aggiorna il sito scrive, traduce e mette in ordine le categorie da un posto solo.') }}</p>
+      </div>
+    </div>
+    <div class="cfg-card-body">
+      <div class="cfg-row">
+        <div class="label-col"><label>{{ t('Aggiungi e Modifica') }}</label><div class="hint">{{ t('Nei menu di WordPress aprono la Redazione. I testi scritti a blocchi si aprono ancora nella scheda di WordPress.') }}</div><div class="hint">{{ t('Il ruolo «Redattore» vede solo Redazione e Media: lo assegni in Utenti.') }}</div></div>
+        <div class="control-col">
+          <div class="tc-interruttori">
+            <label><button type="button" class="cfg-switch" role="switch" :aria-checked="redazione.apre ? 'true' : 'false'" :class="{ 'is-on': redazione.apre }" @click="redazione.apre = !redazione.apre"></button><span>{{ t('Aprono la Redazione') }}</span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Gli Articoli di WordPress: si rinominano (Notizie, Blog) e prendono campi in più -->
   <div class="cfg-card">
     <div class="cfg-card-head">
@@ -41,6 +62,32 @@
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('Campi') }}</label><div class="hint">{{ t('Compaiono nella scheda di ogni articolo, nel riquadro Dettagli.') }}</div><div v-if="(categorie.post || []).length" class="hint">{{ t('Un campo può valere solo in alcune categorie, sottocategorie comprese.') }}</div></div>
         <div class="control-col"><CfgCampi :campi="articoli.campi" :formati="formati" :reti="reti" :categorie="categorie.post || []" /></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gli spettacoli (tile Cartellone): il sito dà loro il suo nome, Concerti, Film… -->
+  <div v-if="spettacoli" class="cfg-card">
+    <div class="cfg-card-head">
+      <div class="head-ic"><span class="dashicons dashicons-tickets-alt" aria-hidden="true"></span></div>
+      <div>
+        <h3>{{ spettacoli.nome || t('Spettacoli') }}</h3>
+        <p>{{ t('Gli spettacoli del Cartellone, con data, luogo e biglietti.') }}</p>
+      </div>
+    </div>
+    <div class="cfg-card-body">
+      <div class="cfg-row">
+        <div class="label-col"><label>{{ t('Nome nel menu') }}</label><div class="hint">{{ t('Vuoto: Spettacoli. Per esempio Concerti e Concerto.') }}</div></div>
+        <div class="control-col tc-due">
+          <div class="cfg-input"><input type="text" v-model="spettacoli.nome" maxlength="40" :placeholder="t('Spettacoli')" :aria-label="t('Nome plurale')" /></div>
+          <div class="cfg-input"><input type="text" v-model="spettacoli.singolare" maxlength="40" :placeholder="t('Spettacolo')" :aria-label="t('Nome singolare')" /></div>
+        </div>
+      </div>
+      <div class="cfg-row">
+        <div class="label-col"><label>{{ t('Indirizzo') }}</label><div class="hint">{{ t('Le pagine degli spettacoli stanno qui. Vuoto: spettacoli.') }}</div></div>
+        <div class="control-col">
+          <div class="cfg-input tc-indirizzo"><span>/</span><input type="text" :value="spettacoli.indirizzo" maxlength="40" spellcheck="false" placeholder="spettacoli" :aria-label="t('Indirizzo')" @input="spettacoli.indirizzo = slug($event.target.value, '-').slice(0, 40)" /><span>/</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -157,6 +204,10 @@ const reti = ref([]);
 const categorie = ref({});
 const riservati = ref([]);
 const conteggi = ref({});
+// Aggiungi e Modifica dei menu di WordPress aprono la Redazione.
+const redazione = ref({ apre: false });
+// Il nome degli spettacoli (null se il sito non li usa).
+const spettacoli = ref(null);
 let pronto = false;
 
 let prossimo = 1;
@@ -212,6 +263,8 @@ function applica(data) {
   categorie.value = data?.categorie || {};
   riservati.value = data?.riservati || [];
   conteggi.value = data?.conteggi || {};
+  redazione.value = { apre: !!data?.redazione?.apre };
+  spettacoli.value = data?.spettacoli ? { nome: '', singolare: '', indirizzo: '', ...data.spettacoli } : null;
   nextTick(() => { pronto = true; });
 }
 
@@ -232,13 +285,17 @@ async function salva() {
   const res = await okOrThrow(fetch(`${window.oloData.restUrl}tipi-contenuto`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-    body: JSON.stringify({ impostazioni: { articoli: articoli.value, tipi: tipi.value.filter((x) => !chiaveOccupata(x)) } }),
+    body: JSON.stringify({
+      impostazioni: { articoli: articoli.value, tipi: tipi.value.filter((x) => !chiaveOccupata(x)) },
+      redazione: redazione.value,
+      ...(spettacoli.value ? { spettacoli: spettacoli.value } : {}),
+    }),
   }));
   applica(await res.json());
 }
 
 // Ogni modifica (anche dentro i campi) segna la scheda da salvare.
-watch([articoli, tipi], () => { if (pronto) setDirty(true); }, { deep: true });
+watch([articoli, tipi, spettacoli, redazione], () => { if (pronto) setDirty(true); }, { deep: true });
 
 const onSave = cfgJob(TAB_ID, salva);
 const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, carica));

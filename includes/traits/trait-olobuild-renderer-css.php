@@ -744,7 +744,7 @@ trait Olobuild_Renderer_Css_Trait {
         }
         if ( ! empty( $widescreen_decls ) ) {
             $ws_px = intval( $this->breakpoints['widescreen'] ?? 1400 );
-            $this->responsive_css .= "@media (min-width:{$ws_px}px){#{$css_id}{" . implode( ';', $widescreen_decls ) . "}}";
+            $this->responsive_css .= "@media (min-width:{$ws_px}px){#{$css_id}{" . implode( ';', self::valori_per_dispositivo_vincono( $widescreen_decls ) ) . "}}";
         }
 
         $bp_map = [
@@ -931,9 +931,25 @@ trait Olobuild_Renderer_Css_Trait {
 
             if ( ! empty( $decls ) ) {
                 $sel = '#' . esc_attr( $css_id );
-                $this->responsive_css_rules[ $max_width ][] = "{$sel} { " . implode( '; ', $decls ) . "; }";
+                $this->responsive_css_rules[ $max_width ][] = "{$sel} { " . implode( '; ', self::valori_per_dispositivo_vincono( $decls ) ) . "; }";
             }
         }
+    }
+
+    /**
+     * I valori per dispositivo devono battere quelli del computer, che stanno nello style="" in linea (margini, padding,
+     * dimensioni, raggio, allineamento…): senza !important la media query perdeva sempre e il valore scelto per il
+     * tablet o il telefono non faceva niente (3 nov 2026: il padding sopra di una sezione sul telefono restava quello
+     * del computer). Fra due soglie, a pari !important, vince l'ultima stampata, cioè la più stretta
+     * (responsive_css_ordinato()). Le dichiarazioni che lo avevano già restano com'erano.
+     */
+    private static function valori_per_dispositivo_vincono( $decls ) {
+        return array_map(
+            static function ( $d ) {
+                return false !== stripos( $d, '!important' ) ? $d : $d . ' !important';
+            },
+            $decls
+        );
     }
 
     /**

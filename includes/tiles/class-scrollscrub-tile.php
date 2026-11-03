@@ -69,6 +69,7 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
         'edge_fade'               => true,
         'drag_scroll'             => true,
         'snap_strong'             => false,
+        'swing'                   => false,
 
         // Testata
         'heading' => 'Scorri in orizzontale',
@@ -300,6 +301,9 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
         $edge_fade  = ! empty( $s['edge_fade'] );
         $drag_on    = ! empty( $s['drag_scroll'] );
         $snap_hard  = ! empty( $s['snap_strong'] );
+        // «Dondolano scorrendo» (1.4.959): gli elementi stanno appesi dall'alto, come i vestiti su una stender, e
+        // oscillano con la velocità del nastro.
+        $swing      = ! empty( $s['swing'] ) && ! $in_builder;
 
         // Con un solo elemento (o nessuno) non c'è niente da scorrere: frecce
         // sempre spente e un pallino solo sarebbero arredamento, non comandi.
@@ -457,6 +461,9 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                 flex-direction: column;
                 <?php if ( $overlay ) : ?>justify-content: flex-end;<?php endif; ?>
             }
+            <?php if ( $swing ) : ?>
+            .<?php echo $uid; ?> .olo-scrub__item { transform-origin: 50% -28px; will-change: rotate; }
+            <?php endif; ?>
 
             .<?php echo $uid; ?> .olo-scrub__media {
                 position: <?php echo $overlay ? 'absolute' : 'relative'; ?>;
@@ -1185,6 +1192,7 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
             var BEHAVIOR    = '<?php echo esc_js( $behavior ); ?>';
             var PIN_ALLOWED = <?php echo $in_builder ? 'false' : 'true'; ?>;
             var DRAG_OK     = <?php echo ( $drag_on && ! $in_builder ) ? 'true' : 'false'; ?>;
+            var SWING       = <?php echo $swing ? 'true' : 'false'; ?>;
 
             // I comandi: frecce (una per verso, o due dentro la pillola) e
             // indicatori. Se un comando non è stato richiesto, la lista è vuota
@@ -1294,6 +1302,33 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                 measure();
             }
 
+            /* Dondolio: ogni spostamento del nastro dà una spinta (verso opposto al moto, come un vestito appeso
+               che resta indietro), poi una molla smorzata lo riporta fermo. Ogni elemento ha un suo ritmo appena
+               diverso, così non dondolano tutti insieme come un pezzo solo. */
+            var ang = [], vel = [], dondoloGiro = 0;
+            function dondola( dx ){
+                if ( ! SWING || ( rm && rm.matches ) || ! dx ) { return; }
+                for ( var i = 0; i < itemEls.length; i++ ) {
+                    vel[ i ] = ( vel[ i ] || 0 ) - Math.max( -40, Math.min( 40, dx ) ) * ( 0.005 + ( i % 3 ) * 0.0012 );
+                }
+                if ( ! dondoloGiro ) { dondoloGiro = window.requestAnimationFrame( oscilla ); }
+            }
+            function oscilla(){
+                dondoloGiro = 0;
+                var ancora = false;
+                for ( var i = 0; i < itemEls.length; i++ ) {
+                    var a = ang[ i ] || 0, v = vel[ i ] || 0;
+                    v += -a * ( 0.045 + ( i % 3 ) * 0.008 );
+                    v *= 0.9;
+                    a += v;
+                    if ( a > 9 ) { a = 9; v *= -0.3; } else if ( a < -9 ) { a = -9; v *= -0.3; }
+                    if ( Math.abs( a ) < 0.02 && Math.abs( v ) < 0.02 ) { a = 0; v = 0; } else { ancora = true; }
+                    ang[ i ] = a; vel[ i ] = v;
+                    itemEls[ i ].style.rotate = a ? a.toFixed( 2 ) + 'deg' : '';
+                }
+                if ( ancora ) { dondoloGiro = window.requestAnimationFrame( oscilla ); }
+            }
+
             function update(){
                 ticking = false;
                 if ( ! pinned ) { return; }
@@ -1302,6 +1337,7 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                 var top = outer.getBoundingClientRect().top;
                 var p = ( -top ) / total;
                 if ( p < 0 ) { p = 0; } else if ( p > 1 ) { p = 1; }
+                dondola( ( p - progress ) * maxX );
                 progress = p;
                 track.style.transform = 'translateX(' + ( -( p * maxX ) ) + 'px)';
                 if ( bar ) { bar.style.width = ( p * 100 ) + '%'; }
@@ -1518,8 +1554,10 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
             // segue lo scroll orizzontale NATIVO della traccia. Strozzato con un
             // rAF perché ora aggiorna anche pallini e contatore, e lo scroll
             // nativo spara eventi molto più in fretta di quanto si disegni.
-            var tScroll = false;
+            var tScroll = false, ultimoLeft = track.scrollLeft;
             track.addEventListener( 'scroll', function(){
+                if ( ! pinned ) { dondola( track.scrollLeft - ultimoLeft ); }
+                ultimoLeft = track.scrollLeft;
                 if ( pinned || tScroll ) { return; }
                 tScroll = true;
                 window.requestAnimationFrame( function(){

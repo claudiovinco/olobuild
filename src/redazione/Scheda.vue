@@ -120,6 +120,7 @@
               :key="c.chiave"
               v-model="f.campi[c.chiave]"
               :campo="c"
+              :valori="f.campi"
               :media="media"
               :spento="spento"
               @media="aggiungiMedia"

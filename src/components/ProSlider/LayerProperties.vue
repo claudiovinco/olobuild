@@ -540,6 +540,22 @@
             <label class="mps-label">{{ t('Backdrop scala grigi (%)') }}</label>
             <NumberScrubber theme="dark" :modelValue="layer.backdropGrayscale ?? 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Backdrop scala grigi (%)')" @update:modelValue="up('backdropGrayscale', $event)" />
           </div>
+          <div>
+            <label class="mps-label">{{ t('Backdrop contrasto (%)') }}</label>
+            <NumberScrubber theme="dark" :modelValue="layer.backdropContrast ?? 100" :min="0" :max="300" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Backdrop contrasto (%)')" @update:modelValue="up('backdropContrast', $event)" />
+          </div>
+          <div>
+            <label class="mps-label">{{ t('Backdrop saturazione (%)') }}</label>
+            <NumberScrubber theme="dark" :modelValue="layer.backdropSaturate ?? 100" :min="0" :max="300" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Backdrop saturazione (%)')" @update:modelValue="up('backdropSaturate', $event)" />
+          </div>
+          <div>
+            <label class="mps-label">{{ t('Backdrop inverti (%)') }}</label>
+            <NumberScrubber theme="dark" :modelValue="layer.backdropInvert ?? 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Backdrop inverti (%)')" @update:modelValue="up('backdropInvert', $event)" />
+          </div>
+          <div>
+            <label class="mps-label">{{ t('Backdrop rotazione tinta') }}</label>
+            <NumberScrubber theme="dark" :modelValue="layer.backdropHueRotate ?? 0" :min="0" :max="360" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="°" :ariaLabel="t('Backdrop rotazione tinta')" @update:modelValue="up('backdropHueRotate', $event)" />
+          </div>
 
           <!-- ── Ombre ── -->
           <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
@@ -1655,6 +1671,8 @@ const SCROLL_MOVE_CAMPI = [
   { k: 'x', l: 'Sposta in orizzontale', d: 0, min: -2000, max: 2000, step: 10, u: 'px' },
   { k: 'y', l: 'Sposta in verticale', d: 0, min: -2000, max: 2000, step: 10, u: 'px' },
   { k: 's', l: 'Scala', d: 1, min: 0, max: 6, step: 0.05, u: '' },
+  { k: 'sx', l: 'Allunga in orizzontale', d: 1, min: 0, max: 6, step: 0.05, u: '' },
+  { k: 'sy', l: 'Allunga in verticale', d: 1, min: 0, max: 6, step: 0.05, u: '' },
   { k: 'r', l: 'Rotazione', d: 0, min: -720, max: 720, step: 1, u: '°' },
   { k: 'rx', l: 'Rotazione 3D (X)', d: 0, min: -180, max: 180, step: 1, u: '°' },
   { k: 'ry', l: 'Rotazione 3D (Y)', d: 0, min: -180, max: 180, step: 1, u: '°' },

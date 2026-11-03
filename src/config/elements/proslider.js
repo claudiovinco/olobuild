@@ -104,6 +104,10 @@ function defaultLayer(type = 'text') {
     backdropBlur: 0,
     backdropBrightness: 100,
     backdropGrayscale: 0,
+    backdropContrast: 100,
+    backdropSaturate: 100,
+    backdropInvert: 0,
+    backdropHueRotate: 0,
     // Shape gradient
     shapeGradient: null, // { from: '#e1474f', to: '#f4a23b', angle: 180 }
     // SFX block reveal (null = disabilitato)

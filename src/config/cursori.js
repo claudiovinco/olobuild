@@ -26,6 +26,11 @@ export const CURSORI = [
   ['spaiato', 'Spaiato (due compagni diversi)'], ['centrifuga', 'Centrifuga (il cestello gira)'],
   ['sonno', 'Sonno (da fermo fa le Z)'], ['cupola', 'Ombrello a cupola (le gocce scivolano)'],
   ['gomitolo', 'Gomitolo (srotola il filo)'], ['xxl', 'XXL (un puntatore enorme)'],
+  ['raspa', 'Raspa (graffia il denim)'], ['gruccia', 'Gruccia (dondola)'],
+  ['registro', 'Registro (tre colori fuori registro)'], ['lanterna', 'Lanterna rossa (camera oscura)'],
+  ['scanner', 'Scanner (la riga di luce)'], ['forbici', 'Forbici (tagliano lungo il tratteggio)'],
+  ['flash', 'Flash (al clic un lampo)'], ['quadrante', 'Quadrante della cassaforte'],
+  ['ventaglio', 'Ventaglio (si apre sui link)'], ['molla', 'Molla (si allunga e si richiude)'],
 ];
 
 // Gli stili che mostrano una parola (la «Parola del cursore», label_text).

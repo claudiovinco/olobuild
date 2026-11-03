@@ -121,42 +121,27 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2"/><path d="M9 20h6"/><path d="M12 5v15"/></svg>
       </div>
       <div>
-        <h3>{{ t('Copy del banner') }}</h3>
-        <p>{{ t('Testi mostrati al visitatore. Supporta multilingua.') }}</p>
+        <h3>{{ t('Testi del banner') }}</h3>
+        <p>{{ t('Testi mostrati al visitatore, in ogni lingua del sito.') }}</p>
       </div>
     </div>
     <div class="cfg-card-body tight">
-      <div class="cfg-row">
+      <div v-if="lingue.length > 1" class="cfg-row">
         <div class="label-col">
-          <label>{{ t('Lingua attiva') }}</label>
+          <label>{{ t('Lingua') }}</label>
+          <div class="hint">{{ t('Nelle altre lingue, un testo vuoto resta quello della lingua principale.') }}</div>
         </div>
         <div class="control-col">
           <div class="cfg-segment">
-            <button :class="{ 'is-on': activeLang === 'it' }" @click="activeLang = 'it'">🇮🇹 Italiano</button>
-            <button :class="{ 'is-on': activeLang === 'en' }" @click="activeLang = 'en'">🇬🇧 English</button>
+            <button v-for="l in lingue" :key="l.codice" :class="{ 'is-on': activeLang === l.codice }" @click="activeLang = l.codice">{{ l.nome }}</button>
           </div>
         </div>
       </div>
-      <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Titolo banner') }}</label></div>
+      <div v-for="campo in CAMPI_TESTO" :key="campo.k" class="cfg-row">
+        <div class="label-col"><label :for="'cc-' + campo.k">{{ t(campo.label) }}</label></div>
         <div class="control-col">
-          <div class="cfg-input"><input type="text" :value="copy[activeLang].title" :disabled="!loaded" @input="setCopy('title', $event.target.value)" /></div>
-        </div>
-      </div>
-      <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Testo banner') }}</label></div>
-        <div class="control-col">
-          <div class="cfg-textarea"><textarea rows="3" :value="copy[activeLang].body" :disabled="!loaded" @input="setCopy('body', $event.target.value)"></textarea></div>
-        </div>
-      </div>
-      <div class="cfg-row">
-        <div class="label-col"><label>{{ t('CTA primario') }}</label></div>
-        <div class="control-col">
-          <div class="cta-grid">
-            <div class="cfg-input"><input type="text" :value="copy[activeLang].accept_all" :disabled="!loaded" @input="setCopy('accept_all', $event.target.value)" :placeholder="t('Accetta tutti')" /></div>
-            <div class="cfg-input"><input type="text" :value="copy[activeLang].only_essentials" :disabled="!loaded" @input="setCopy('only_essentials', $event.target.value)" :placeholder="t('Solo essenziali')" /></div>
-            <div class="cfg-input"><input type="text" :value="copy[activeLang].customize" :disabled="!loaded" @input="setCopy('customize', $event.target.value)" :placeholder="t('Personalizza')" /></div>
-          </div>
+          <div v-if="campo.lungo" class="cfg-textarea"><textarea :id="'cc-' + campo.k" rows="3" :value="testo(campo.k)" :placeholder="segnaposto(campo.k)" :disabled="!loaded" @input="setTesto(campo.k, $event.target.value)"></textarea></div>
+          <div v-else class="cfg-input"><input :id="'cc-' + campo.k" type="text" :value="testo(campo.k)" :placeholder="segnaposto(campo.k)" :disabled="!loaded" @input="setTesto(campo.k, $event.target.value)" /></div>
         </div>
       </div>
       <div class="cfg-row no-divider">
@@ -211,12 +196,40 @@ const INIZIALE_CATEGORIE = [
 ];
 const categories = ref(copia(INIZIALE_CATEGORIE));
 
-const activeLang = ref('it');
-const INIZIALE_COPY = {
-  it: { title: 'Utilizziamo i cookie', body: 'Per offrirti la migliore esperienza utilizziamo cookie. Puoi accettare tutti, solo gli essenziali o personalizzare le tue preferenze.', accept_all: 'Accetta tutti', only_essentials: 'Solo essenziali', customize: 'Personalizza' },
-  en: { title: 'We use cookies', body: 'To give you the best experience we use cookies. Accept all, essentials only, or customize your preferences.', accept_all: 'Accept all', only_essentials: 'Essentials only', customize: 'Customize' },
-};
-const copy = ref(copia(INIZIALE_COPY));
+// I testi che il banner del sito mostra davvero (Olobuild_Cookie_Consent::TESTI): nella lingua principale le chiavi
+// del runtime, nelle altre lingue di OLOlang testi_lingue[lingua][chiave] (vuoto = il testo principale). Prima qui
+// c'erano testi italiano/inglese che il banner non leggeva.
+const CAMPI_TESTO = [
+  { k: 'banner_title', label: 'Titolo banner' },
+  { k: 'banner_message', label: 'Testo banner', lungo: true },
+  { k: 'accept_all_text', label: 'Pulsante Accetta' },
+  { k: 'reject_all_text', label: 'Pulsante Rifiuta' },
+  { k: 'preferences_text', label: 'Pulsante Preferenze' },
+  { k: 'save_text', label: 'Pulsante Salva preferenze' },
+  { k: 'privacy_text', label: 'Link alla privacy' },
+  { k: 'cookie_policy_text', label: 'Link alla cookie policy' },
+  { k: 'cat_necessary_label', label: 'Cookie necessari: nome' },
+  { k: 'cat_necessary_desc', label: 'Cookie necessari: descrizione', lungo: true },
+  { k: 'cat_analytics_label', label: 'Cookie di statistica: nome' },
+  { k: 'cat_analytics_desc', label: 'Cookie di statistica: descrizione', lungo: true },
+  { k: 'cat_marketing_label', label: 'Cookie di marketing: nome' },
+  { k: 'cat_marketing_desc', label: 'Cookie di marketing: descrizione', lungo: true },
+  { k: 'cat_preferences_label', label: 'Cookie di preferenza: nome' },
+  { k: 'cat_preferences_desc', label: 'Cookie di preferenza: descrizione', lungo: true },
+];
+const lingue = ref([]);
+const principale = ref('');
+const activeLang = ref('');
+const testi = ref({});
+const testiLingue = ref({});
+
+function testo(k) {
+  if (!activeLang.value || activeLang.value === principale.value) return testi.value[k] || '';
+  return (testiLingue.value[activeLang.value] || {})[k] || '';
+}
+function segnaposto(k) {
+  return activeLang.value && activeLang.value !== principale.value ? (testi.value[k] || '') : '';
+}
 
 // Cosa fa DAVVERO il sito col banner acceso (chiavi del runtime lette dal GET):
 // la conferma d'accensione lo elenca da qui, non dai controlli della scheda.
@@ -236,9 +249,13 @@ function set(k, v) {
   form.value[k] = v;
   setDirty(true);
 }
-function setCopy(k, v) {
-  if (copy.value[activeLang.value][k] === v) return;
-  copy.value[activeLang.value][k] = v;
+function setTesto(k, v) {
+  if (testo(k) === v) return;
+  if (!activeLang.value || activeLang.value === principale.value) {
+    testi.value[k] = v;
+  } else {
+    testiLingue.value[activeLang.value] = { ...(testiLingue.value[activeLang.value] || {}), [k]: v };
+  }
   setDirty(true);
 }
 function toggleCategory(i) {
@@ -288,7 +305,8 @@ async function loadSettings() {
     // sotto non toccherebbero niente, lasciando a video ciò che «Annulla» deve togliere.
     form.value = copia(INIZIALE_FORM);
     categories.value = copia(INIZIALE_CATEGORIE);
-    copy.value = copia(INIZIALE_COPY);
+    testi.value = {};
+    testiLingue.value = {};
     runtime.value = copia(INIZIALE_RUNTIME);
     confirmOn.value = false;
     if (data) {
@@ -303,7 +321,12 @@ async function loadSettings() {
       if (data.reshow_months) form.value.reshow_months = data.reshow_months;
       if (data.position) form.value.position = data.position;
       if (Array.isArray(data.categories)) categories.value = data.categories;
-      if (data.copy) Object.assign(copy.value, data.copy);
+      CAMPI_TESTO.forEach(({ k }) => { testi.value[k] = typeof data[k] === 'string' ? data[k] : ''; });
+      testiLingue.value = data.testi_lingue && !Array.isArray(data.testi_lingue) ? copia(data.testi_lingue) : {};
+      const l = data.lingue;
+      principale.value = l && l.principale ? l.principale.codice : '';
+      lingue.value = l ? [l.principale, ...(l.altre || [])].filter(Boolean) : [];
+      if (!lingue.value.some((x) => x.codice === activeLang.value)) activeLang.value = principale.value;
     }
     loaded.value = true;
   } catch (e) {
@@ -318,7 +341,7 @@ async function saveSettings() {
   await okOrThrow(fetch(`${window.oloData.restUrl}cookie-consent`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-    body: JSON.stringify({ ...form.value, categories: categories.value, copy: copy.value }),
+    body: JSON.stringify({ ...form.value, categories: categories.value, ...testi.value, testi_lingue: testiLingue.value }),
   }));
 }
 

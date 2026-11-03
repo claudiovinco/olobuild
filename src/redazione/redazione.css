@@ -447,3 +447,20 @@ html.orz-modale-aperta, html.orz-modale-aperta body { overflow: hidden; }
 @container (max-width: 640px) {
   .orz-riga-lingue { display: none; }
 }
+
+/* Categorie (vista della Redazione per chi gestisce le voci) */
+.orz-categorie-testa { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.orz-categorie-testa .orz-sezione { margin: 0; }
+.orz .orz-categoria .orz-riga-apri:disabled { cursor: default; }
+.orz-categoria--aperta { background: var(--orz-fondo); }
+.orz .orz-categoria-modulo { flex: 1; display: flex; flex-direction: column; gap: 12px; padding: 14px 16px; }
+.orz-elenco > .orz-categoria-modulo { border-bottom: 1px solid var(--orz-linea); }
+.orz-categoria-campi { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px 16px; }
+.orz-categoria-campi .orz-etichetta { justify-content: space-between; }
+.orz-categoria-campi .orz-lingua-nome { color: var(--orz-testo-3); font-weight: 500; }
+.orz-categoria-modulo .orz-nuovo-azioni { display: flex; flex-wrap: wrap; align-items: center; }
+.orz .orz-btn--rischio { color: #b42318; }
+.orz .orz-btn--rischio:hover { color: #8f1c13; background: #fef3f2; }
+@container (max-width: 640px) {
+  .orz-categoria-campi .orz-campo--meta, .orz-categoria-campi .orz-campo--terzo { grid-column: span 6; }
+}

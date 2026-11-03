@@ -911,7 +911,8 @@ function initSlider(container) {
   /* ── Video background ────────────────────────────────── */
   function playVideoBg(slide) {
     var v = qs(slide, '.olo-proslider-bg video');
-    if (v) { try { v.play(); } catch (e) {} }
+    // il video che segue lo scorrimento non parte da solo
+    if (v && !v.hasAttribute('data-video-scorre')) { try { v.play(); } catch (e) {} }
   }
   function pauseVideoBg(slide) {
     var v = qs(slide, '.olo-proslider-bg video');
@@ -1378,7 +1379,7 @@ function initSlider(container) {
       var f = Math.max(0, Math.min(1, (k - a.p) / span));
       f = f * f * (3 - 2 * f);
       var va = a.v[base], vb = b.v[base];
-      var def = base === 's' ? 1 : (base === 'o' ? 100 : 0);
+      var def = (base === 's' || base === 'sx' || base === 'sy') ? 1 : (base === 'o' ? 100 : 0);
       va = va == null ? def : va; vb = vb == null ? def : vb;
       return va + (vb - va) * f;
     }
@@ -1402,8 +1403,10 @@ function initSlider(container) {
         var x = valore(d.t, k, 'x') * fattore, y = valore(d.t, k, 'y') * fattore;
         var s = valore(d.t, k, 's'), rz = valore(d.t, k, 'r'), rx = valore(d.t, k, 'rx'), ry = valore(d.t, k, 'ry');
         var o = valore(d.t, k, 'o');
+        // sx e sy allungano in orizzontale e in verticale, moltiplicando la scala
+        var sx = valore(d.t, k, 'sx'), sy = valore(d.t, k, 'sy');
         m.el.style.translate = x.toFixed(1) + 'px ' + y.toFixed(1) + 'px';
-        m.el.style.scale = s.toFixed(4);
+        m.el.style.scale = sx !== 1 || sy !== 1 ? (s * sx).toFixed(4) + ' ' + (s * sy).toFixed(4) : s.toFixed(4);
         m.el.style.rotate = rx ? 'x ' + rx.toFixed(2) + 'deg' : (ry ? 'y ' + ry.toFixed(2) + 'deg' : rz.toFixed(2) + 'deg');
         if (d.t.some(function (t) { return t.v.o != null; })) m.el.style.filter = 'opacity(' + (o / 100).toFixed(3) + ')';
       });
@@ -1413,6 +1416,44 @@ function initSlider(container) {
     window.addEventListener('scroll', chiedi, { passive: true });
     window.addEventListener('resize', chiedi);
     applica();
+  })();
+
+  /* ── Video di sfondo che segue lo scorrimento (videoScroll) ── */
+  // Il tempo del video è l'avanzamento dello scorrimento (lo stesso dei livelli che si muovono: il tratto in cui lo slider
+  // resta fermo in cima, o la sua uscita dalla finestra); il video ci arriva con una piccola rincorsa, così le tacche
+  // della rotella non fanno scatti. Risalendo torna indietro.
+  (function () {
+    var video = qsa(container, '.olo-proslider-bg video[data-video-scorre]');
+    if (!video.length) return;
+    var avvolto = container.closest('.mps-scroll-fixed-wrapper');
+    var stato = video.map(function (v) { return { v: v, t: 0 }; });
+    var giro = null;
+    function avanzamento() {
+      var r = (avvolto || container).getBoundingClientRect();
+      var p = avvolto ? -r.top / Math.max(1, avvolto.offsetHeight - container.offsetHeight) : -r.top / Math.max(1, r.height);
+      return Math.max(0, Math.min(1, p));
+    }
+    function passo() {
+      giro = null;
+      var p = avanzamento(), ancora = false;
+      stato.forEach(function (s) {
+        var d = s.v.duration;
+        if (!d || isNaN(d)) return;
+        var meta = p * (d - 0.05);
+        s.t += (meta - s.t) * 0.22;
+        if (Math.abs(meta - s.t) < 0.01) s.t = meta; else ancora = true;
+        if (Math.abs(s.v.currentTime - s.t) > 0.02) { try { s.v.currentTime = s.t; } catch (e) {} }
+      });
+      if (ancora) giro = requestAnimationFrame(passo);
+    }
+    function chiedi() { if (!giro) giro = requestAnimationFrame(passo); }
+    stato.forEach(function (s) {
+      s.v.pause();
+      s.v.addEventListener('loadedmetadata', chiedi);
+    });
+    window.addEventListener('scroll', chiedi, { passive: true });
+    window.addEventListener('resize', chiedi);
+    chiedi();
   })();
 
   /* ── Initial state ───────────────────────────────────── */

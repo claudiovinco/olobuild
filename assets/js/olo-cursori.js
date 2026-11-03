@@ -2857,6 +2857,298 @@
     };
   };
 
+  // Raspa (per Raspa): la raspa che graffia il denim: una lima a righe incrociate che, muovendosi, lascia dietro di sé
+  // graffi chiari che sbiadiscono in un attimo; sui link si inclina come per dare l'ultima passata.
+  STILI.raspa = function () {
+    var T = tela(), st = {}, graffi = [], strada = 0, px = mx, py = my, incl = 0;
+    var lima = risolvi(CFG.ringColor || '#9aa7bd'), segno = risolvi(CFG.dotColor || '#e8f0fb');
+    return {
+      punto: function (t) {
+        var d = Math.hypot(mx - px, my - py), a = Math.atan2(my - py, mx - px);
+        strada += d; px = mx; py = my;
+        if (meno) return;
+        while (strada > 7) {
+          strada -= 7;
+          graffi.push({ x: mx + (Math.random() - 0.5) * 10, y: my + (Math.random() - 0.5) * 10, a: a + (Math.random() - 0.5) * 0.5,
+                        l: 6 + Math.random() * 12, t: t });
+        }
+        if (graffi.length > 120) graffi.splice(0, graffi.length - 120);
+      },
+      frame: function (t) {
+        var s = passo(st, t), o = scosta();
+        incl += ((hot ? -0.55 : 0) - incl) * 0.18 * s;
+        var g = pulisci(T);
+        g.lineCap = 'round';
+        for (var i = graffi.length - 1; i >= 0; i--) {
+          var q = graffi[i], e = (t - q.t) / 900;
+          if (e >= 1) { graffi.splice(i, 1); continue; }
+          g.globalAlpha = (1 - e) * 0.85; g.strokeStyle = segno; g.lineWidth = 1.4;
+          g.beginPath(); g.moveTo(q.x - Math.cos(q.a) * q.l / 2, q.y - Math.sin(q.a) * q.l / 2);
+          g.lineTo(q.x + Math.cos(q.a) * q.l / 2, q.y + Math.sin(q.a) * q.l / 2); g.stroke();
+        }
+        g.globalAlpha = 1;
+        g.save(); g.translate(mx + o[0], my + o[1]); g.rotate(-0.6 + incl);
+        g.fillStyle = lima; g.fillRect(-4, -15, 8, 22);
+        g.strokeStyle = 'rgba(0,0,0,.35)'; g.lineWidth = 1;
+        for (var k = -13; k < 6; k += 3) { g.beginPath(); g.moveTo(-4, k); g.lineTo(4, k + 3); g.moveTo(4, k); g.lineTo(-4, k + 3); g.stroke(); }
+        g.fillStyle = 'rgba(0,0,0,.55)'; g.fillRect(-2.5, 7, 5, 9);
+        g.restore();
+        return graffi.length > 0 || Math.abs((hot ? -0.55 : 0) - incl) > 0.005;
+      }
+    };
+  };
+
+  // Gruccia (per Stender): una gruccia appesa sotto il puntatore, che dondola come un pendolo quando si corre di lato e
+  // torna ferma piano; sui link si gira di tre quarti, come quando la si prende dalla stender.
+  STILI.gruccia = function () {
+    var T = tela(), st = {}, ang = 0, va = 0, giro = 0;
+    var filo = risolvi(CFG.ringColor || '#1f3fa0'), gancio = risolvi(CFG.dotColor || '#c8553d');
+    return {
+      frame: function (t) {
+        var s = passo(st, t), o = scosta();
+        va += (-Math.sin(ang) * 0.025 - vx * 0.004 - va * 0.05) * s; ang += va * s; vx *= 0.82; vy *= 0.82;
+        giro += ((hot ? 1 : 0) - giro) * 0.16 * s;
+        if (meno) { ang = 0; va = 0; }
+        var g = pulisci(T);
+        g.save(); g.translate(mx + o[0] + 4, my + o[1] + 2); g.rotate(ang);
+        g.lineWidth = 2.2; g.lineJoin = 'round'; g.lineCap = 'round';
+        g.strokeStyle = gancio; g.beginPath(); g.moveTo(0, 13); g.bezierCurveTo(0, 8, 5, 8, 5, 3); g.bezierCurveTo(5, -2, -3, -2, -3, 2); g.stroke();
+        var w = 17 * (1 - giro * 0.55);
+        g.strokeStyle = filo; g.beginPath(); g.moveTo(0, 13); g.lineTo(w, 26); g.lineTo(-w, 26); g.closePath(); g.stroke();
+        g.restore();
+        return Math.abs(ang) > 0.002 || Math.abs(va) > 0.0005 || Math.abs((hot ? 1 : 0) - giro) > 0.01;
+      }
+    };
+  };
+
+  // Registro (per Fuori Registro): il segno di registro della stampa, e dietro tre copie ciano, magenta e giallo che lo
+  // inseguono ognuna col suo ritardo: correndo vanno fuori registro, da fermi tornano una sopra l'altra. Sui link si pieno.
+  STILI.registro = function () {
+    var T = tela(), st = {}, copie = [{ c: '#00a3d9', k: 0.32, x: mx, y: my }, { c: '#e0007a', k: 0.18, x: mx, y: my },
+                                     { c: '#f2c300', k: 0.1, x: mx, y: my }], pieno = 0;
+    var ink = risolvi(CFG.ringColor || '#161616');
+    function segno(g, x, y, col, r) {
+      g.strokeStyle = col; g.lineWidth = 2; g.beginPath(); g.arc(x, y, r, 0, 6.283); g.stroke();
+      g.beginPath(); g.moveTo(x - r - 6, y); g.lineTo(x + r + 6, y); g.moveTo(x, y - r - 6); g.lineTo(x, y + r + 6); g.stroke();
+    }
+    return {
+      frame: function (t) {
+        var s = passo(st, t), o = scosta(), cx = mx + o[0], cy = my + o[1], fermo = true;
+        pieno += ((hot ? 1 : 0) - pieno) * 0.2 * s;
+        var g = pulisci(T);
+        g.globalCompositeOperation = 'multiply';
+        copie.forEach(function (c) {
+          var k = meno ? 1 : Math.min(1, c.k * s);
+          c.x += (cx - c.x) * k; c.y += (cy - c.y) * k;
+          if (Math.abs(cx - c.x) + Math.abs(cy - c.y) > 0.3) fermo = false;
+          segno(g, c.x, c.y, c.c, 8);
+        });
+        g.globalCompositeOperation = 'source-over';
+        segno(g, cx, cy, ink, 8);
+        if (pieno > 0.02) { g.globalAlpha = pieno; g.fillStyle = ink; g.beginPath(); g.arc(cx, cy, 8, 0, 6.283); g.fill(); g.globalAlpha = 1; }
+        return !fermo || Math.abs((hot ? 1 : 0) - pieno) > 0.01;
+      }
+    };
+  };
+
+  // Lanterna (per Luce Rossa): la luce rossa della camera oscura che segue il puntatore: un alone morbido che respira
+  // appena, con la lampadina al centro; sui link la luce si allarga e si scalda.
+  STILI.lanterna = function () {
+    var T = tela(), st = {}, ax = mx, ay = my, r = 90;
+    var rosso = risolvi(CFG.dotColor || '#e5483d');
+    function rgba(c, a) { var m = c.match(/\d+(\.\d+)?/g) || [229, 72, 61]; return 'rgba(' + m[0] + ',' + m[1] + ',' + m[2] + ',' + a + ')'; }
+    return {
+      frame: function (t) {
+        var s = passo(st, t);
+        ax += (mx - ax) * (meno ? 1 : 0.22 * s); ay += (my - ay) * (meno ? 1 : 0.22 * s);
+        r += ((hot ? 150 : 95) - r) * 0.12 * s;
+        var resp = meno ? 1 : 1 + Math.sin(t / 700) * 0.05, R = r * resp;
+        var g = pulisci(T);
+        var gr = g.createRadialGradient(ax, ay, 0, ax, ay, R);
+        gr.addColorStop(0, rgba(rosso, 0.34)); gr.addColorStop(0.45, rgba(rosso, 0.14)); gr.addColorStop(1, rgba(rosso, 0));
+        g.fillStyle = gr; g.beginPath(); g.arc(ax, ay, R, 0, 6.283); g.fill();
+        g.fillStyle = rosso; g.beginPath(); g.arc(mx, my, 4, 0, 6.283); g.fill();
+        return true;
+      }
+    };
+  };
+
+  // Scanner (per Lastra): il riquadro del metal detector dell'aeroporto: quattro angoli e una riga di luce che sale e
+  // scende dentro; sui link il riquadro si stringe sul bersaglio e la riga si ferma a metà.
+  STILI.scanner = function () {
+    var T = tela(), st = {}, lato = 34, fase = 0;
+    var luce = risolvi(CFG.dotColor || '#45d1ff'), angolo = risolvi(CFG.ringColor || '#e2f2fa');
+    return {
+      frame: function (t) {
+        var s = passo(st, t), o = scosta();
+        lato += ((hot ? 22 : 34) - lato) * 0.2 * s;
+        fase += meno ? 0 : 0.06 * s;
+        var cx = mx + o[0], cy = my + o[1], h = lato / 2, a = h * 0.45;
+        var g = pulisci(T);
+        g.strokeStyle = angolo; g.lineWidth = 2;
+        [[-1, -1], [1, -1], [1, 1], [-1, 1]].forEach(function (q) {
+          g.beginPath(); g.moveTo(cx + q[0] * h, cy + q[1] * (h - a)); g.lineTo(cx + q[0] * h, cy + q[1] * h); g.lineTo(cx + q[0] * (h - a), cy + q[1] * h); g.stroke();
+        });
+        var y = hot ? cy : cy + Math.sin(fase) * (h - 3);
+        g.shadowColor = luce; g.shadowBlur = 8; g.strokeStyle = luce; g.lineWidth = 2;
+        g.beginPath(); g.moveTo(cx - h + 3, y); g.lineTo(cx + h - 3, y); g.stroke(); g.shadowBlur = 0;
+        return !meno || Math.abs((hot ? 22 : 34) - lato) > 0.1;
+      }
+    };
+  };
+
+  // Forbici (per Sbieco): un paio di forbici che si aprono e si chiudono mentre avanzano, girate verso dove si va, e dietro
+  // la riga tratteggiata del taglio che svanisce; sui link si chiudono di colpo.
+  STILI.forbici = function () {
+    var T = tela(), st = {}, strada = 0, dir = 0, px = mx, py = my, taglio = [];
+    var lama = risolvi(CFG.ringColor || '#2a2018'), manico = risolvi(CFG.dotColor || '#a3322b');
+    return {
+      punto: function (t) {
+        var d = Math.hypot(mx - px, my - py);
+        if (d > 0.5) dir = Math.atan2(my - py, mx - px);
+        strada += d; px = mx; py = my;
+        if (!meno) { taglio.push({ x: mx, y: my, t: t }); if (taglio.length > 90) taglio.shift(); }
+      },
+      frame: function (t) {
+        var s = passo(st, t), o = scosta();
+        var g = pulisci(T);
+        g.setLineDash([5, 5]); g.lineWidth = 1.4; g.strokeStyle = lama;
+        for (var i = 1; i < taglio.length; i++) {
+          var e = (t - taglio[i].t) / 1000;
+          if (e >= 1) continue;
+          g.globalAlpha = 1 - e; g.beginPath(); g.moveTo(taglio[i - 1].x, taglio[i - 1].y); g.lineTo(taglio[i].x, taglio[i].y); g.stroke();
+        }
+        while (taglio.length && t - taglio[0].t > 1000) taglio.shift();
+        g.setLineDash([]); g.globalAlpha = 1;
+        var ap = hot || meno ? 0.05 : 0.12 + Math.abs(Math.sin(strada / 18)) * 0.42;
+        g.save(); g.translate(mx + o[0], my + o[1]); g.rotate(dir);
+        [-1, 1].forEach(function (k) {
+          g.save(); g.rotate(k * ap);
+          g.fillStyle = lama; g.beginPath(); g.moveTo(0, 0); g.lineTo(17, k * -1.5); g.lineTo(0, k * 2.6); g.closePath(); g.fill();
+          g.strokeStyle = manico; g.lineWidth = 2.2; g.beginPath(); g.arc(-8, k * 3.5, 4, 0, 6.283); g.stroke();
+          g.restore();
+        });
+        g.fillStyle = lama; g.beginPath(); g.arc(0, 0, 1.6, 0, 6.283); g.fill();
+        g.restore();
+        return taglio.length > 0;
+      }
+    };
+  };
+
+  // Flash (per Falcata): il mirino del fotografo a bordo passerella: quattro angoli e un punto; a ogni clic scatta un
+  // lampo bianco che si allarga e svanisce, e sui link il mirino mette a fuoco (gli angoli stringono).
+  STILI.flash = function () {
+    var T = tela(), st = {}, lampi = [], fuoco = 0;
+    var oro = risolvi(CFG.dotColor || '#e9c46a'), bianco = risolvi(CFG.ringColor || '#f3efe8');
+    document.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'touch' || meno) return;
+      lampi.push({ x: mx, y: my, t: performance.now() });
+      chiedi();
+    });
+    return {
+      frame: function (t) {
+        var s = passo(st, t), o = scosta();
+        fuoco += ((hot ? 1 : 0) - fuoco) * 0.2 * s;
+        var g = pulisci(T);
+        for (var i = lampi.length - 1; i >= 0; i--) {
+          var l = lampi[i], e = (t - l.t) / 520;
+          if (e >= 1) { lampi.splice(i, 1); continue; }
+          var gr = g.createRadialGradient(l.x, l.y, 0, l.x, l.y, 40 + e * 220);
+          gr.addColorStop(0, 'rgba(255,255,255,' + (0.9 * (1 - e)) + ')'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+          g.fillStyle = gr; g.beginPath(); g.arc(l.x, l.y, 40 + e * 220, 0, 6.283); g.fill();
+        }
+        var cx = mx + o[0], cy = my + o[1], h = 14 - fuoco * 5, a = 5;
+        g.strokeStyle = fuoco > 0.5 ? oro : bianco; g.lineWidth = 1.6;
+        [[-1, -1], [1, -1], [1, 1], [-1, 1]].forEach(function (q) {
+          g.beginPath(); g.moveTo(cx + q[0] * h, cy + q[1] * (h - a)); g.lineTo(cx + q[0] * h, cy + q[1] * h); g.lineTo(cx + q[0] * (h - a), cy + q[1] * h); g.stroke();
+        });
+        g.fillStyle = oro; g.beginPath(); g.arc(cx, cy, 2.2, 0, 6.283); g.fill();
+        return lampi.length > 0 || Math.abs((hot ? 1 : 0) - fuoco) > 0.01;
+      }
+    };
+  };
+
+  // Quadrante (per Combinazione): la manopola di una cassaforte con le tacche: gira a scatti quando il puntatore corre
+  // a destra o a sinistra, come chi cerca la combinazione; sui link fa l'ultimo scatto e l'indice si accende.
+  STILI.quadrante = function () {
+    var T = tela(), st = {}, ang = 0, meta = 0, acceso = 0;
+    var ottone = risolvi(CFG.ringColor || '#cfa54c'), indice = risolvi(CFG.dotColor || '#c25555');
+    return {
+      frame: function (t) {
+        var s = passo(st, t), o = scosta();
+        if (!meno) meta += vx * 0.012;
+        vx *= 0.8; vy *= 0.8;
+        var scatto = Math.round(meta / 0.157) * 0.157;
+        ang += (scatto - ang) * 0.3 * s;
+        acceso += ((hot ? 1 : 0) - acceso) * 0.2 * s;
+        var cx = mx + o[0] + 2, cy = my + o[1] + 2, R = 12;
+        var g = pulisci(T);
+        g.strokeStyle = ottone; g.lineWidth = 2; g.beginPath(); g.arc(cx, cy, R, 0, 6.283); g.stroke();
+        g.save(); g.translate(cx, cy); g.rotate(ang);
+        for (var k = 0; k < 20; k++) {
+          g.rotate(0.314); g.lineWidth = k % 5 ? 1 : 1.8; g.beginPath(); g.moveTo(0, -R + 1); g.lineTo(0, -R + (k % 5 ? 4 : 6)); g.stroke();
+        }
+        g.restore();
+        g.fillStyle = acceso > 0.5 ? indice : ottone; g.beginPath(); g.moveTo(cx, cy - R - 2); g.lineTo(cx - 3.5, cy - R - 8); g.lineTo(cx + 3.5, cy - R - 8);
+        g.closePath(); g.fill();
+        g.beginPath(); g.arc(cx, cy, 2.4, 0, 6.283); g.fill();
+        return Math.abs(scatto - ang) > 0.002 || Math.abs(vx) > 0.05 || Math.abs((hot ? 1 : 0) - acceso) > 0.01;
+      }
+    };
+  };
+
+  // Ventaglio (per Ventaglio): un ventaglio piccolo, chiuso finché si va in giro; sui link si apre a mezzaluna e corre
+  // veloce fa vento (le stecche tremano appena).
+  STILI.ventaglio = function () {
+    var T = tela(), st = {}, apre = 0, vento = 0;
+    var c1 = risolvi(CFG.dotColor || '#b8402b'), c2 = risolvi(CFG.ringColor || '#2f7a6a');
+    return {
+      frame: function (t) {
+        var s = passo(st, t), o = scosta();
+        apre += ((hot ? 1 : 0) - apre) * 0.16 * s;
+        vento += (Math.min(1, Math.hypot(vx, vy) / 25) - vento) * 0.2 * s; vx *= 0.85; vy *= 0.85;
+        if (meno) vento = 0;
+        var g = pulisci(T), cx = mx + o[0], cy = my + o[1] + 18, N = 9, ampio = 0.25 + apre * 2.35;
+        for (var k = 0; k < N; k++) {
+          var a = -Math.PI / 2 - ampio / 2 + ampio * k / (N - 1) + Math.sin(t / 60 + k) * vento * 0.05;
+          g.save(); g.translate(cx, cy); g.rotate(a + Math.PI / 2);
+          g.fillStyle = k % 2 ? c2 : c1; g.beginPath(); g.moveTo(0, 0); g.lineTo(-3.2, -20); g.quadraticCurveTo(0, -23, 3.2, -20); g.closePath(); g.fill();
+          g.restore();
+        }
+        g.fillStyle = c1; g.beginPath(); g.arc(cx, cy, 2.4, 0, 6.283); g.fill();
+        return Math.abs((hot ? 1 : 0) - apre) > 0.005 || vento > 0.01;
+      }
+    };
+  };
+
+  // Molla (per Elastan): il punto sta sul puntatore e un anello lo segue legato da una molla a zig-zag: correndo la molla
+  // si allunga e le spire si diradano, fermi si richiude; sui link l'anello scatta addosso al punto.
+  STILI.molla = function () {
+    var T = tela(), st = {}, ax = mx, ay = my, avx = 0, avy = 0;
+    var rosa = risolvi(CFG.dotColor || '#ff4f8b'), acqua = risolvi(CFG.ringColor || '#3df5c8');
+    return {
+      frame: function (t) {
+        var s = passo(st, t), k = hot ? 0.3 : 0.06;
+        if (meno) { ax = mx; ay = my; avx = avy = 0; }
+        avx += ((mx - ax) * k - avx * 0.22) * s; avy += ((my - ay) * k - avy * 0.22) * s;
+        ax += avx * s; ay += avy * s;
+        var g = pulisci(T), dx = mx - ax, dy = my - ay, L = Math.hypot(dx, dy);
+        if (L > 2) {
+          var nx = -dy / L, ny = dx / L, spire = 10, w = Math.max(1.5, 6 - L / 30);
+          g.strokeStyle = acqua; g.lineWidth = 1.6; g.lineJoin = 'round'; g.beginPath(); g.moveTo(ax, ay);
+          for (var i = 1; i < spire * 2; i++) {
+            var f = i / (spire * 2), sg = i % 2 ? 1 : -1;
+            g.lineTo(ax + dx * f + nx * w * sg, ay + dy * f + ny * w * sg);
+          }
+          g.lineTo(mx, my); g.stroke();
+        }
+        g.strokeStyle = acqua; g.lineWidth = 2; g.beginPath(); g.arc(ax, ay, 9, 0, 6.283); g.stroke();
+        g.fillStyle = rosa; g.beginPath(); g.arc(mx, my, 3.5, 0, 6.283); g.fill();
+        return L > 0.3 || Math.abs(avx) + Math.abs(avy) > 0.05;
+      }
+    };
+  };
+
   /* ── cursore della sezione (2 nov 2026) ──
      Una sezione con data-olo-cursore ha un cursore suo: entrandoci il cursore cambia, uscendo torna quello della
      pagina. Ogni stile si crea la prima volta che serve e poi resta, coi suoi nodi nascosti quando non è attivo; i suoi

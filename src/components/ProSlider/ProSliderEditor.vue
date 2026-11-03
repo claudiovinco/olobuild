@@ -123,6 +123,11 @@
                   <button @click="pickSlideVideo" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-500">{{ t('Sfoglia') }}</button>
                 </div>
               </div>
+              <label v-if="currentBg.type === 'video'" class="mb-flex mb-items-center mb-gap-1">
+                <input type="checkbox" :checked="!!currentBg.videoScroll" @change="updateBg('videoScroll', $event.target.checked)" class="mb-rounded" />
+                <span class="mb-text-[10px] mb-text-gray-400">{{ t('Segue lo scorrimento') }}</span>
+                <InfoTip :testo="t('Il video non va da solo: avanza mentre si scorre la pagina e torna indietro risalendo. Con «Timeline a scorrimento» accesa conta il tratto in cui lo slider resta fermo in cima, se no l’uscita dello slider dalla finestra.')" :titolo="t('Segue lo scorrimento')" />
+              </label>
               <!-- Gradient -->
               <template v-if="currentBg.type === 'gradient'">
                 <div>
@@ -293,6 +298,7 @@ import FieldColor from '@/components/Builder/fields/FieldColor.vue';
 import FieldSelect from '../Builder/fields/FieldSelect.vue';
 import NumberScrubber from '../Builder/fields/NumberScrubber.vue';
 import { t } from '@/i18n';
+import InfoTip from '../Builder/InfoTip.vue';
 
 // Option arrays per FieldSelect (stessi value dei vecchi <option>: dati salvati invariati)
 const OPTS_BG_TYPE = [

@@ -319,8 +319,10 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
             }
             .<?php echo $uid; ?> .olo-scratch-reveal:hover {
                 border-color: <?php echo $accent_color; ?>;
-                <?php /* l'accento puro come testo, sui fondi chiari, stava a 2,9:1 (un rosa): la stessa tinta verso il testo (11 ott 2026) */ ?>
-                color: color-mix(in srgb, <?php echo $accent_color; ?> 65%, <?php echo $text_color; ?>);
+                <?php /* l'accento puro come testo, sui fondi chiari, stava a 2,9:1 (un rosa): la stessa tinta verso il testo (11 ott 2026).
+                   Il testo è quello della PAGINA, dove sta il pulsante: il «Colore testo» del premio (chiaro sopra una foto scura)
+                   lo schiariva fino a 3:1 sui fondi chiari (Raspa, 3 nov 2026). */ ?>
+                color: color-mix(in srgb, <?php echo $accent_color; ?> 65%, var(--olo-color-text, currentColor));
             }
             .<?php echo $uid; ?> .olo-scratch-reveal:focus-visible {
                 outline: 2px solid <?php echo $accent_color; ?>;

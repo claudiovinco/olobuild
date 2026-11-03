@@ -541,6 +541,11 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                     return '<iframe src="https://www.youtube-nocookie.com/embed/' . esc_attr( $vid_id ) . '?autoplay=1&mute=1&loop=1&playlist=' . esc_attr( $vid_id ) . '&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>';
                 }
             }
+            // «Segue lo scorrimento» (1.4.959): il video non va da solo, lo porta avanti e indietro lo scorrimento (il JS).
+            if ( ! empty( $bg['videoScroll'] ) ) {
+                $poster = ! empty( $bg['image'] ) ? ' poster="' . esc_url( $bg['image'] ) . '"' : '';
+                return '<video src="' . esc_url( $url ) . '"' . $poster . ' muted playsinline preload="auto" data-video-scorre="1"></video>';
+            }
             return '<video src="' . esc_url( $url ) . '" autoplay muted loop playsinline></video>';
         }
 
@@ -841,9 +846,19 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         $bd_blur = floatval( $layer['backdropBlur'] ?? 0 );
         $bd_bright = floatval( $layer['backdropBrightness'] ?? 100 );
         $bd_gray = floatval( $layer['backdropGrayscale'] ?? 0 );
+        // Inverti, contrasto, saturazione e rotazione della tinta di ciò che sta dietro (1.4.959): un riquadro che fa da
+        // lastra ai raggi X, da negativo, da vetro colorato sopra il video.
+        $bd_contrast = floatval( $layer['backdropContrast'] ?? 100 );
+        $bd_sat = floatval( $layer['backdropSaturate'] ?? 100 );
+        $bd_invert = floatval( $layer['backdropInvert'] ?? 0 );
+        $bd_hue = floatval( $layer['backdropHueRotate'] ?? 0 );
         if ( $bd_blur > 0 ) { $bd_parts[] = 'blur(' . $bd_blur . 'px)'; }
         if ( $bd_bright != 100 ) { $bd_parts[] = 'brightness(' . $bd_bright . '%)'; }
         if ( $bd_gray > 0 ) { $bd_parts[] = 'grayscale(' . $bd_gray . '%)'; }
+        if ( $bd_contrast != 100 ) { $bd_parts[] = 'contrast(' . $bd_contrast . '%)'; }
+        if ( $bd_sat != 100 ) { $bd_parts[] = 'saturate(' . $bd_sat . '%)'; }
+        if ( $bd_invert > 0 ) { $bd_parts[] = 'invert(' . $bd_invert . '%)'; }
+        if ( $bd_hue > 0 ) { $bd_parts[] = 'hue-rotate(' . $bd_hue . 'deg)'; }
         if ( $bd_parts ) {
             $style .= 'backdrop-filter:' . implode( ' ', $bd_parts ) . ';-webkit-backdrop-filter:' . implode( ' ', $bd_parts ) . ';';
         }
@@ -1138,15 +1153,15 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
     /**
      * Il movimento del livello con lo scorrimento, come attributo data-scroll-move: il tratto di scorrimento (inizio e
      * fine, da 0 a 100) e le tappe, ognuna con la posizione nel tratto (p, 0-100) e i valori: x e y in px della tela del
-     * computer, scala, rotazione (r), rotazione 3D (rx, ry) e opacità (o, 0-100). Senza tappe: «da» all'inizio e «a» alla
-     * fine. Solo numeri: tutto il resto si scarta.
+     * computer, scala, allungamento in orizzontale e in verticale (sx, sy: moltiplicano la scala), rotazione (r), rotazione
+     * 3D (rx, ry) e opacità (o, 0-100). Senza tappe: «da» all'inizio e «a» alla fine. Solo numeri: tutto il resto si scarta.
      */
     private function scroll_move_attr( $layer ) {
         $sm = $layer['scrollMove'] ?? null;
         if ( empty( $sm ) || ! is_array( $sm ) ) {
             return '';
         }
-        $chiavi = [ 'x', 'y', 's', 'r', 'rx', 'ry', 'o' ];
+        $chiavi = [ 'x', 'y', 's', 'sx', 'sy', 'r', 'rx', 'ry', 'o' ];
         $pulisci = function ( $v ) use ( $chiavi ) {
             $o = [];
             foreach ( $chiavi as $k ) {

@@ -135,7 +135,30 @@ class Olobuild_Tipi_Contenuto {
             if ( '' === $chiave || ! $n ) {
                 continue;
             }
-            $out[] = array_merge( $n[0], [ 'chiave' => $chiave, 'sistema' => true, 'pubblico' => ! isset( $t['pubblico'] ) || ! empty( $t['pubblico'] ) ] );
+            // Un modulo può tenere i campi in chiavi sue, anche nascoste (_olo_sp_data): la normalizzazione toglie il
+            // trattino basso iniziale, qui torna quella scritta dal modulo.
+            $vere = [];
+            foreach ( (array) ( $t['campi'] ?? [] ) as $c ) {
+                $k = sanitize_key( (string) ( $c['chiave'] ?? '' ) );
+                if ( '' !== $k ) {
+                    $vere[ ltrim( substr( $k, 0, 40 ), '_' ) ] = $k;
+                }
+            }
+            foreach ( $n[0]['campi'] as $i => $c ) {
+                if ( isset( $vere[ $c['chiave'] ] ) ) {
+                    $n[0]['campi'][ $i ]['chiave'] = $vere[ $c['chiave'] ];
+                }
+                if ( '' !== $c['dopo'] && isset( $vere[ ltrim( $c['dopo'], '_' ) ] ) ) {
+                    $n[0]['campi'][ $i ]['dopo'] = $vere[ ltrim( $c['dopo'], '_' ) ];
+                }
+            }
+            $out[] = array_merge( $n[0], [
+                'chiave'   => $chiave,
+                'sistema'  => true,
+                'pubblico' => ! isset( $t['pubblico'] ) || ! empty( $t['pubblico'] ),
+                // Il tipo lo registra il modulo stesso (con la sua scheda in WordPress): qui solo Redazione e lingue.
+                'proprio'  => ! empty( $t['proprio'] ),
+            ] );
         }
         return $out;
     }
@@ -234,7 +257,10 @@ class Olobuild_Tipi_Contenuto {
                 'tipo'      => $tipo,
                 'larghezza' => in_array( $larghezza, [ 'piena', 'meta', 'terzo' ], true ) ? $larghezza : 'piena',
                 'aiuto'     => self::testo( $c['aiuto'] ?? '', 300 ),
+                // Una riga per opzione; «valore|Etichetta» salva il valore e mostra l'etichetta.
                 'opzioni'   => implode( "\n", array_map( 'sanitize_text_field', $opzioni ) ),
+                // Una data che non può venire prima di un'altra (la chiave dell'altra): «Fino al» dopo «Dal».
+                'dopo'      => 'data' === $tipo ? substr( sanitize_key( (string) ( $c['dopo'] ?? '' ) ), 0, 40 ) : '',
                 'formati'   => $formati ? $formati : array_keys( self::FORMATI_SOCIAL ),
                 'reti'      => self::reti_campo( $c['reti'] ?? 'tutte' ),
                 // Vuoto = in tutti i contenuti del tipo; altrimenti solo in quelli di queste categorie (o delle figlie).
@@ -280,6 +306,9 @@ class Olobuild_Tipi_Contenuto {
 
     public static function registra() {
         foreach ( self::tipi() as $t ) {
+            if ( ! empty( $t['proprio'] ) ) {
+                continue; // lo registra il suo modulo (gli Spettacoli)
+            }
             $k     = $t['chiave'];
             $caps  = 'propri' === $t['permessi']
                 ? [ 'capability_type' => [ $k, $k . 's' ], 'map_meta_cap' => true ]
@@ -438,7 +467,7 @@ class Olobuild_Tipi_Contenuto {
             }
             $restano[ $t['chiave'] ] = true;
             $capi = self::capacita( $t['chiave'] );
-            foreach ( [ 'administrator', 'editor' ] as $r ) {
+            foreach ( [ 'administrator', 'editor', 'olo_redattore' ] as $r ) {
                 $ruolo = get_role( $r );
                 if ( $ruolo ) {
                     foreach ( $capi as $c ) {
@@ -459,7 +488,7 @@ class Olobuild_Tipi_Contenuto {
         }
     }
 
-    private static function capacita( $k ) {
+    public static function capacita( $k ) {
         $p = $k . 's';
         return [ "edit_{$p}", "edit_others_{$p}", "edit_published_{$p}", "edit_private_{$p}", "publish_{$p}",
             "delete_{$p}", "delete_others_{$p}", "delete_published_{$p}", "delete_private_{$p}", "read_private_{$p}" ];
@@ -497,7 +526,7 @@ class Olobuild_Tipi_Contenuto {
 
     public static function riquadri( $tipo, $post = null ) {
         $t = self::del_tipo( $tipo );
-        if ( ! $t || ! $t['campi'] ) {
+        if ( ! $t || ! $t['campi'] || ! empty( $t['proprio'] ) ) {
             return;
         }
         add_meta_box( 'olobuild-campi', __( 'Dettagli', 'olobuilder' ), [ __CLASS__, 'riquadro' ], $tipo, 'normal', 'high', [ 'tipo' => $t ] );
@@ -548,8 +577,11 @@ class Olobuild_Tipi_Contenuto {
                 break;
             case 'scelta':
                 echo '<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $nome ) . '"><option value="">—</option>';
-                foreach ( explode( "\n", $c['opzioni'] ) as $o ) {
-                    echo '<option value="' . esc_attr( $o ) . '"' . selected( $v, $o, false ) . '>' . esc_html( $o ) . '</option>';
+                foreach ( array_filter( explode( "\n", $c['opzioni'] ), 'strlen' ) as $o ) {
+                    $p        = strpos( $o, '|' );
+                    $valore   = false === $p ? $o : substr( $o, 0, $p );
+                    $etichetta = false === $p ? $o : substr( $o, $p + 1 );
+                    echo '<option value="' . esc_attr( $valore ) . '"' . selected( $v, $valore, false ) . '>' . esc_html( $etichetta ) . '</option>';
                 }
                 echo '</select>';
                 break;
@@ -651,12 +683,27 @@ class Olobuild_Tipi_Contenuto {
     public static function salva_campi( $post_id, $t, $in ) {
         foreach ( $t['campi'] as $c ) {
             $v = self::pulisci( $c, $in[ $c['chiave'] ] ?? '' );
+            // La data finale mai prima di quella iniziale: se viene prima, non si salva.
+            if ( '' !== $v && ! empty( $c['dopo'] ) ) {
+                $inizio = self::pulisci( [ 'tipo' => 'data' ], $in[ $c['dopo'] ] ?? get_post_meta( $post_id, $c['dopo'], true ) );
+                if ( '' !== $inizio && $v < $inizio ) {
+                    $v = '';
+                }
+            }
             if ( '' === $v ) {
                 delete_post_meta( $post_id, $c['chiave'] );
             } else {
                 update_post_meta( $post_id, $c['chiave'], wp_slash( $v ) );
             }
         }
+    }
+
+    /** I valori che una scelta salva: la riga intera, o ciò che sta prima di «|» nelle righe «valore|Etichetta». */
+    public static function valori_scelta( $c ) {
+        return array_map( function ( $riga ) {
+            $p = strpos( $riga, '|' );
+            return false === $p ? $riga : substr( $riga, 0, $p );
+        }, array_filter( explode( "\n", (string) ( $c['opzioni'] ?? '' ) ), 'strlen' ) );
     }
 
     /** Il valore di un campo come va salvato ('' = niente). */
@@ -677,7 +724,7 @@ class Olobuild_Tipi_Contenuto {
             case 'link':
                 return esc_url_raw( $v );
             case 'scelta':
-                return in_array( $v, explode( "\n", $c['opzioni'] ), true ) ? $v : '';
+                return in_array( $v, self::valori_scelta( $c ), true ) ? $v : '';
             case 'sino':
                 return '1' === $v ? '1' : '';
             case 'immagine':
@@ -768,6 +815,9 @@ class Olobuild_Tipi_Contenuto {
         $voci  = [];
         $gruppi = array_merge( [ self::impostazioni()['articoli'] ], self::tipi() );
         foreach ( $gruppi as $t ) {
+            if ( ! empty( $t['proprio'] ) ) {
+                continue; // i campi di un modulo (gli Spettacoli) hanno le loro fonti
+            }
             $nome = 'post' === $t['chiave'] ? ( '' !== $t['nome'] ? $t['nome'] : __( 'Articoli', 'olobuilder' ) ) : $t['nome'];
             foreach ( $t['campi'] as $c ) {
                 $tipo = in_array( $c['tipo'], [ 'immagine', 'galleria', 'foto_social' ], true ) ? 'image' : ( in_array( $c['tipo'], [ 'link', 'video' ], true ) ? 'url' : ( 'formattato' === $c['tipo'] ? 'html' : 'text' ) );
@@ -792,6 +842,9 @@ class Olobuild_Tipi_Contenuto {
     public static function elenchi_di_foto( $lists ) {
         $gruppi = array_merge( [ self::impostazioni()['articoli'] ], self::tipi() );
         foreach ( $gruppi as $t ) {
+            if ( ! empty( $t['proprio'] ) ) {
+                continue; // i campi di un modulo (gli Spettacoli) hanno le loro fonti
+            }
             $nome = 'post' === $t['chiave'] ? ( '' !== $t['nome'] ? $t['nome'] : __( 'Articoli', 'olobuilder' ) ) : $t['nome'];
             foreach ( $t['campi'] as $c ) {
                 if ( 'galleria' !== $c['tipo'] || isset( $lists[ $c['chiave'] ] ) ) {
@@ -1015,6 +1068,9 @@ class Olobuild_Tipi_Contenuto {
         $voci = [ [ 'value' => '', 'label' => __( 'Elenco qui sotto', 'olobuilder' ) ] ];
         $viste = [];
         foreach ( array_merge( [ self::impostazioni()['articoli'] ], self::tipi() ) as $t ) {
+            if ( ! empty( $t['proprio'] ) ) {
+                continue; // i campi di un modulo (gli Spettacoli) hanno le loro fonti
+            }
             $nome = 'post' === $t['chiave'] ? ( '' !== $t['nome'] ? $t['nome'] : __( 'Articoli', 'olobuilder' ) ) : $t['nome'];
             foreach ( $t['campi'] as $c ) {
                 if ( 'allegati' === $c['tipo'] && empty( $viste[ $c['chiave'] ] ) ) {
@@ -1107,6 +1163,10 @@ class Olobuild_Tipi_Contenuto {
             'categorie'    => (object) self::categorie_per_tipo(),
             'riservati'    => array_values( array_unique( array_merge( self::RISERVATI, $altri ) ) ),
             'conteggi'     => $conteggi,
+            // Aggiungi e Modifica dei menu di WordPress aprono la Redazione (Olobuild_Redazione::apri_qui()).
+            'redazione'    => [ 'apre' => (bool) get_option( 'olobuild_redazione_apre' ) ],
+            // Gli spettacoli (sui siti che li usano): il nome che il sito dà loro, Concerti, Film…
+            'spettacoli'   => class_exists( 'Olobuild_Spettacoli' ) && Olobuild_Spettacoli::in_uso() ? Olobuild_Spettacoli::nomi() : null,
         ] );
     }
 
@@ -1121,6 +1181,12 @@ class Olobuild_Tipi_Contenuto {
         update_option( self::OPZIONE, $dopo );
         self::$cache = null;
         self::aggiorna_ruoli( $prima, $dopo );
+        if ( isset( $dati['redazione'] ) && is_array( $dati['redazione'] ) ) {
+            update_option( 'olobuild_redazione_apre', empty( $dati['redazione']['apre'] ) ? 0 : 1 );
+        }
+        if ( isset( $dati['spettacoli'] ) && is_array( $dati['spettacoli'] ) && class_exists( 'Olobuild_Spettacoli' ) ) {
+            Olobuild_Spettacoli::salva_nomi( $dati['spettacoli'] );
+        }
         return self::rest_leggi();
     }
 }

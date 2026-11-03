@@ -2614,18 +2614,23 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
      */
     private function deco_mobile_html( $s ) {
         $deco = $this->disegno_mobile( $s )[1];
+        $html = '';
         if ( 'simbolo' === $deco ) {
             $icona = $this->render_icon_html( trim( (string) ( $s['logo_mark'] ?? '' ) ), 12 );
-            return '' === $icona ? '' : '<span class="olo-mm-deco olo-mm-deco--simbolo" aria-hidden="true">' . $icona . '</span>';
-        }
-        if ( 'nome' === $deco ) {
+            $html  = '' === $icona ? '' : '<span class="olo-mm-deco olo-mm-deco--simbolo">' . $icona . '</span>';
+        } elseif ( 'nome' === $deco ) {
             $nome = trim( (string) ( $s['logo_text'] ?? '' ) );
             if ( '' === $nome ) {
                 $nome = trim( wp_strip_all_tags( (string) get_bloginfo( 'name' ) ) );
             }
-            return '' === $nome ? '' : '<span class="olo-mm-deco olo-mm-deco--nome" aria-hidden="true">' . esc_html( $nome ) . '</span>';
+            $html = '' === $nome ? '' : '<span class="olo-mm-deco olo-mm-deco--nome">' . esc_html( $nome ) . '</span>';
+        } elseif ( $deco ) {
+            $html = '<span class="olo-mm-deco olo-mm-deco--' . esc_attr( $deco ) . '"></span>';
         }
-        return $deco ? '<span class="olo-mm-deco olo-mm-deco--' . esc_attr( $deco ) . '" aria-hidden="true"></span>' : '';
+        // Lo strato è grande quanto il pannello e taglia il decoro: senza, il nome in verticale (alto quasi due
+        // schermi) allungava lo scorrimento del pannello, e sotto le ultime voci si scorreva nel vuoto per un'altra
+        // altezza di schermo (3 nov 2026, menu del Coro Paganella).
+        return '' === $html ? '' : '<span class="olo-mm-deco-strato" aria-hidden="true">' . $html . '</span>';
     }
 
     /**
@@ -2732,8 +2737,9 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
 
         if ( $deco ) {
             $css .= "{$u} .olo-mm-offcanvas, {$u} .olo-mm-fullscreen { overflow-x: hidden; }"
-                . "{$u} .olo-mm-offcanvas > :not(.olo-mm-deco), {$u} .olo-mm-fullscreen > :not(.olo-mm-deco) { position: relative; z-index: 1; }"
-                . "{$u} .olo-mm-deco { position: absolute; z-index: 0; pointer-events: none; }";
+                . "{$u} .olo-mm-offcanvas > :not(.olo-mm-deco-strato), {$u} .olo-mm-fullscreen > :not(.olo-mm-deco-strato) { position: relative; z-index: 1; }"
+                . "{$u} .olo-mm-deco-strato { position: absolute; inset: 0; overflow: hidden; z-index: 0; pointer-events: none; }"
+                . "{$u} .olo-mm-deco { position: absolute; }";
             switch ( $deco ) {
                 case 'simbolo':
                     $css .= "{$u} .olo-mm-deco--simbolo { right: -18%; bottom: -5%; width: min(80vw, 460px); line-height: 0; color: {$acc}; opacity: .13; transform: rotate(-12deg); }"

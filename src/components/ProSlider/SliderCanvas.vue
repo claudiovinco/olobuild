@@ -427,6 +427,10 @@ function layerStyle(l) {
   if ((l.backdropBlur ?? 0) > 0) bdParts.push(`blur(${l.backdropBlur}px)`);
   if ((l.backdropBrightness ?? 100) !== 100) bdParts.push(`brightness(${l.backdropBrightness}%)`);
   if ((l.backdropGrayscale ?? 0) > 0) bdParts.push(`grayscale(${l.backdropGrayscale}%)`);
+  if ((l.backdropContrast ?? 100) !== 100) bdParts.push(`contrast(${l.backdropContrast}%)`);
+  if ((l.backdropSaturate ?? 100) !== 100) bdParts.push(`saturate(${l.backdropSaturate}%)`);
+  if ((l.backdropInvert ?? 0) > 0) bdParts.push(`invert(${l.backdropInvert}%)`);
+  if ((l.backdropHueRotate ?? 0) > 0) bdParts.push(`hue-rotate(${l.backdropHueRotate}deg)`);
   if (bdParts.length) st.backdropFilter = bdParts.join(' ');
   // Blend mode
   if (l.blendMode && l.blendMode !== 'normal') st.mixBlendMode = l.blendMode;

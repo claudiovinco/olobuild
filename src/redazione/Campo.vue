@@ -19,7 +19,7 @@
 
     <select v-else-if="campo.tipo === 'scelta'" :id="id" :value="modelValue" :disabled="spento" @change="manda($event.target.value)">
       <option value="">—</option>
-      <option v-for="o in opzioni" :key="o" :value="o">{{ o }}</option>
+      <option v-for="o in opzioni" :key="o.valore" :value="o.valore">{{ o.etichetta }}</option>
     </select>
 
     <span v-else-if="campo.tipo === 'sino'" class="orz-sino">
@@ -65,6 +65,7 @@
       :id="id"
       :type="tipoInput"
       :step="campo.tipo === 'numero' ? 'any' : undefined"
+      :min="campo.dopo && valori[campo.dopo] ? valori[campo.dopo] : undefined"
       :value="modelValue"
       :disabled="spento"
       @input="manda($event.target.value)"
@@ -86,11 +87,17 @@ const props = defineProps({
   modelValue: { type: String, default: '' },
   media: { type: Object, required: true },
   spento: { type: Boolean, default: false },
+  // Tutti i valori della scheda: una data «dopo» un'altra non può venire prima di lei (min).
+  valori: { type: Object, default: () => ({}) },
 });
 const emit = defineEmits(['update:modelValue', 'media']);
 
 const id = 'orz-campo-' + props.campo.chiave;
-const opzioni = computed(() => String(props.campo.opzioni || '').split('\n').filter(Boolean));
+// Una riga per opzione; «valore|Etichetta» salva il valore e mostra l'etichetta (Olobuild_Tipi_Contenuto::valori_scelta()).
+const opzioni = computed(() => String(props.campo.opzioni || '').split('\n').filter(Boolean).map((riga) => {
+  const p = riga.indexOf('|');
+  return p < 0 ? { valore: riga, etichetta: riga } : { valore: riga.slice(0, p), etichetta: riga.slice(p + 1) };
+}));
 const tipoInput = computed(() => ({ numero: 'number', data: 'date', ora: 'time', link: 'url' })[props.campo.tipo] || 'text');
 
 function manda(v) {

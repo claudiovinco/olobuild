@@ -50084,3 +50084,291 @@ msgstr "Le tricot qui se fait tout seul"
 #: includes/class-theme-importer.php
 msgid "La parola che non ci sta"
 msgstr "Le mot qui ne tient pas"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Allunga in orizzontale"
+msgstr "Étirer horizontalement"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Allunga in verticale"
+msgstr "Étirer verticalement"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Backdrop contrasto (%)"
+msgstr "Contraste de l’arrière-plan (%)"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Backdrop saturazione (%)"
+msgstr "Saturation de l’arrière-plan (%)"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Backdrop inverti (%)"
+msgstr "Inverser l’arrière-plan (%)"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Backdrop rotazione tinta"
+msgstr "Rotation de teinte de l’arrière-plan"
+
+#: src/components/ProSlider/ProSliderEditor.vue
+msgid "Segue lo scorrimento"
+msgstr "Suit le défilement"
+
+#: src/components/ProSlider/ProSliderEditor.vue
+msgid "Il video non va da solo: avanza mentre si scorre la pagina e torna indietro risalendo. Con «Timeline a scorrimento» accesa conta il tratto in cui lo slider resta fermo in cima, se no l’uscita dello slider dalla finestra."
+msgstr "La vidéo ne défile pas toute seule : elle avance quand on fait défiler la page vers le bas et recule en remontant. Avec « Timeline au défilement » activée, compte le tronçon où le slider reste fixé en haut ; sinon la sortie du slider de la fenêtre."
+
+#: src/config/elements/scrollscrub.js
+msgid "Dondolano scorrendo"
+msgstr "Se balancent au défilement"
+
+#: src/config/elements/scrollscrub.js
+msgid "Gli elementi stanno appesi dall’alto, come i vestiti su una stender: più in fretta scorre il nastro più dondolano, poi tornano fermi. Con «riduci il movimento» restano dritti."
+msgstr "Les éléments sont suspendus par le haut, comme des vêtements sur un portant : plus le ruban défile vite, plus ils se balancent, puis ils s’immobilisent. Avec « réduire les animations » ils restent droits."
+
+#: src/config/cursori.js
+msgid "Raspa (graffia il denim)"
+msgstr "Râpe (griffe le denim)"
+
+#: src/config/cursori.js
+msgid "Gruccia (dondola)"
+msgstr "Cintre (se balance)"
+
+#: src/config/cursori.js
+msgid "Registro (tre colori fuori registro)"
+msgstr "Repérage (trois couleurs hors repérage)"
+
+#: src/config/cursori.js
+msgid "Lanterna rossa (camera oscura)"
+msgstr "Lanterne rouge (chambre noire)"
+
+#: src/config/cursori.js
+msgid "Scanner (la riga di luce)"
+msgstr "Scanner (la ligne de lumière)"
+
+#: src/config/cursori.js
+msgid "Forbici (tagliano lungo il tratteggio)"
+msgstr "Ciseaux (coupent le long des pointillés)"
+
+#: src/config/cursori.js
+msgid "Flash (al clic un lampo)"
+msgstr "Flash (un éclair au clic)"
+
+#: src/config/cursori.js
+msgid "Quadrante della cassaforte"
+msgstr "Cadran du coffre-fort"
+
+#: src/config/cursori.js
+msgid "Ventaglio (si apre sui link)"
+msgstr "Éventail (s’ouvre sur les liens)"
+
+#: src/config/cursori.js
+msgid "Molla (si allunga e si richiude)"
+msgstr "Ressort (s’étire et se referme)"
+
+#: includes/class-theme-importer.php
+msgid "Gratta il crudo"
+msgstr "Grattez le denim brut"
+
+#: includes/class-theme-importer.php
+msgid "La stender che dondola"
+msgstr "Le portant qui se balance"
+
+#: includes/class-theme-importer.php
+msgid "La stampa che va a registro"
+msgstr "L’impression qui se met en repérage"
+
+#: includes/class-theme-importer.php
+msgid "La camera oscura"
+msgstr "La chambre noire"
+
+#: includes/class-theme-importer.php
+msgid "Lo scanner ai raggi X"
+msgstr "Le scanner à rayons X"
+
+#: includes/class-theme-importer.php
+msgid "Il cartamodello che si compone"
+msgstr "Le patron qui s’assemble"
+
+#: includes/class-theme-importer.php
+msgid "La passerella che si cammina"
+msgstr "Le podium qu’on parcourt"
+
+#: includes/class-theme-importer.php
+msgid "Il caveau che si apre"
+msgstr "La chambre forte qui s’ouvre"
+
+#: includes/class-theme-importer.php
+msgid "Il ventaglio che si apre"
+msgstr "L’éventail qui s’ouvre"
+
+#: includes/class-theme-importer.php
+msgid "Il nome che si allunga"
+msgstr "Le nom qui s’étire"
+
+#: includes/class-redazione.php
+msgid "Redattore"
+msgstr "Rédacteur"
+
+#: includes/class-redazione.php
+msgid "Questa voce non c'è più: ricarica la pagina."
+msgstr "Cet élément n’existe plus : rechargez la page."
+
+#: includes/class-redazione.php
+msgid "Una voce non può stare dentro sé stessa o dentro una sua voce."
+msgstr "Un élément ne peut pas se trouver dans lui-même ni dans l’un de ses éléments."
+
+#: includes/class-redazione.php
+msgid "Non puoi eliminare voci qui."
+msgstr "Vous ne pouvez pas supprimer d’éléments ici."
+
+#: includes/class-redazione.php
+msgid "È la categoria predefinita: prima scegline un'altra come predefinita."
+msgstr "C’est la catégorie par défaut : choisissez d’abord une autre catégorie par défaut."
+
+#: includes/class-redazione.php
+msgid "Non puoi cambiare la categoria predefinita."
+msgstr "Vous ne pouvez pas changer la catégorie par défaut."
+
+#: includes/class-spettacoli.php
+msgid "Nessun risultato nel cestino."
+msgstr "Rien dans la corbeille."
+
+#: includes/class-spettacoli.php
+msgid "Foto o locandina"
+msgstr "Photo ou affiche"
+
+#: includes/class-spettacoli.php
+msgid "Usa come foto"
+msgstr "Utiliser comme photo"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Testi mostrati al visitatore, in ogni lingua del sito."
+msgstr "Textes affichés aux visiteurs, dans chaque langue du site."
+
+#: src/components/Admin/CookieTab.vue
+msgid "Nelle altre lingue, un testo vuoto resta quello della lingua principale."
+msgstr "Dans les autres langues, un texte vide reste celui de la langue principale."
+
+#: src/components/Admin/CookieTab.vue
+msgid "Pulsante Accetta"
+msgstr "Bouton Accepter"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Pulsante Rifiuta"
+msgstr "Bouton Refuser"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Pulsante Preferenze"
+msgstr "Bouton Préférences"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Pulsante Salva preferenze"
+msgstr "Bouton Enregistrer les préférences"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Link alla privacy"
+msgstr "Lien vers la confidentialité"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Link alla cookie policy"
+msgstr "Lien vers la politique de cookies"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Cookie necessari: nome"
+msgstr "Cookies nécessaires : nom"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Cookie necessari: descrizione"
+msgstr "Cookies nécessaires : description"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Cookie di statistica: nome"
+msgstr "Cookies de statistiques : nom"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Cookie di statistica: descrizione"
+msgstr "Cookies de statistiques : description"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Cookie di marketing: nome"
+msgstr "Cookies marketing : nom"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Cookie di marketing: descrizione"
+msgstr "Cookies marketing : description"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Cookie di preferenza: nome"
+msgstr "Cookies de préférences : nom"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Cookie di preferenza: descrizione"
+msgstr "Cookies de préférences : description"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Chi aggiorna il sito scrive, traduce e mette in ordine le categorie da un posto solo."
+msgstr "Qui met le site à jour écrit, traduit et range les catégories depuis un seul endroit."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Aggiungi e Modifica"
+msgstr "Ajouter et Modifier"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Nei menu di WordPress aprono la Redazione. I testi scritti a blocchi si aprono ancora nella scheda di WordPress."
+msgstr "Dans les menus de WordPress, ils ouvrent la Rédaction. Les textes écrits en blocs s’ouvrent toujours dans l’éditeur de WordPress."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Il ruolo «Redattore» vede solo Redazione e Media: lo assegni in Utenti."
+msgstr "Le rôle « Rédacteur » ne voit que la Rédaction et les Médias : attribuez-le dans Utilisateurs."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Aprono la Redazione"
+msgstr "Ouvrent la Rédaction"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Gli spettacoli del Cartellone, con data, luogo e biglietti."
+msgstr "Les spectacles de l’Affiche, avec date, lieu et billets."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Vuoto: Spettacoli. Per esempio Concerti e Concerto."
+msgstr "Vide : Spectacles. Par exemple Concerts et Concert."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Le pagine degli spettacoli stanno qui. Vuoto: spettacoli."
+msgstr "Les pages des spectacles se trouvent ici. Vide : spettacoli."
+
+#: src/redazione/Categorie.vue
+msgid "Rendi predefinita"
+msgstr "Définir par défaut"
+
+#: src/redazione/Categorie.vue
+msgid "1 contenuto"
+msgstr "1 contenu"
+
+#: src/redazione/Categorie.vue
+msgid "%d contenuti"
+msgstr "%d contenus"
+
+#: src/redazione/Categorie.vue
+msgid "predefinita"
+msgstr "par défaut"
+
+#: src/redazione/Categorie.vue
+msgid "Aggiunta: %s"
+msgstr "Ajoutée : %s"
+
+#: src/redazione/Categorie.vue
+msgid "Eliminare «%1$s»? I %2$d contenuti restano, senza questa voce."
+msgstr "Supprimer « %1$s » ? Les %2$d contenus restent, sans cet élément."
+
+#: src/redazione/Categorie.vue
+msgid "Eliminare «%s»?"
+msgstr "Supprimer « %s » ?"
+
+#: src/redazione/Categorie.vue
+msgid "Eliminata: %s"
+msgstr "Supprimée : %s"
+
+#: src/redazione/Categorie.vue
+msgid "«%s» è la categoria predefinita"
+msgstr "« %s » est la catégorie par défaut"

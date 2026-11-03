@@ -77,6 +77,35 @@ class Olobuild_Cookie_Consent {
      * OPTIONS
      * ═══════════════════════════════════════════════════ */
 
+    /** I testi del banner che si scrivono anche nelle altre lingue del sito (testi_lingue[lingua][chiave]). */
+    const TESTI = [
+        'banner_title', 'banner_message', 'accept_all_text', 'reject_all_text', 'preferences_text', 'save_text',
+        'privacy_text', 'cookie_policy_text',
+        'cat_necessary_label', 'cat_necessary_desc', 'cat_analytics_label', 'cat_analytics_desc',
+        'cat_marketing_label', 'cat_marketing_desc', 'cat_preferences_label', 'cat_preferences_desc',
+    ];
+
+    /**
+     * Le opzioni con i testi nella lingua di chi guarda il sito (OLOlang): quelli scritti per quella lingua in
+     * Impostazioni › Cookie, gli altri restano nella lingua principale. Nel pannello e nel REST, sempre quelli principali.
+     */
+    private static function nella_lingua( $opts ) {
+        if ( is_admin() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || empty( $opts['testi_lingue'] ) || ! class_exists( 'Olo_Lang_Language' ) ) {
+            return $opts;
+        }
+        $lingua = Olo_Lang_Language::detect_current_lang();
+        if ( $lingua === Olo_Lang_Language::get_default_lang() || empty( $opts['testi_lingue'][ $lingua ] ) || ! is_array( $opts['testi_lingue'][ $lingua ] ) ) {
+            return $opts;
+        }
+        foreach ( self::TESTI as $k ) {
+            $v = (string) ( $opts['testi_lingue'][ $lingua ][ $k ] ?? '' );
+            if ( '' !== $v ) {
+                $opts[ $k ] = $v;
+            }
+        }
+        return $opts;
+    }
+
     public static function get_options() {
         $defaults = [
             'enabled'             => false,
@@ -131,7 +160,7 @@ class Olobuild_Cookie_Consent {
             $saved = [];
         }
 
-        return wp_parse_args( $saved, $defaults );
+        return self::nella_lingua( wp_parse_args( $saved, $defaults ) );
     }
 
     /* ═══════════════════════════════════════════════════
@@ -178,6 +207,21 @@ class Olobuild_Cookie_Consent {
         ];
         foreach ( $strings as $k ) {
             $clean[ $k ] = sanitize_text_field( $input[ $k ] ?? '' );
+        }
+
+        // I testi nelle altre lingue del sito: solo quelli scritti (vuoto = il testo principale).
+        $clean['testi_lingue'] = [];
+        foreach ( (array) ( $input['testi_lingue'] ?? [] ) as $lingua => $testi ) {
+            $lingua = sanitize_key( (string) $lingua );
+            if ( '' === $lingua || ! is_array( $testi ) ) {
+                continue;
+            }
+            foreach ( self::TESTI as $k ) {
+                $v = trim( sanitize_text_field( (string) ( $testi[ $k ] ?? '' ) ) );
+                if ( '' !== $v ) {
+                    $clean['testi_lingue'][ $lingua ][ $k ] = $v;
+                }
+            }
         }
 
         // URLs

@@ -666,10 +666,31 @@ class Olobuild_Frontend_Renderer {
 
         $this->link_depth--;
         if ( $this->link_depth === 0 ) {
-            $html = $this->localize_internal_links( $html );
+            $html = $this->localize_internal_links( self::link_privacy( $html ) );
         }
 
         return $html;
+    }
+
+    /**
+     * Il link «/privacy-policy/» dei temi e dei blocchi (piè di pagina, menu, testi) porta alla pagina della privacy che
+     * il sito ha davvero (Impostazioni → Privacy), che non sempre si chiama così: sul sottosito è /privacy/ e il link
+     * finiva su una pagina che non c'è (3 nov 2026). Come il consenso del modulo (Olobuild_Form_Tile). Senza una pagina
+     * della privacy pubblicata il link resta com'è. Il risultato è già col percorso del sito: localize_internal_links lo salta.
+     */
+    private static function link_privacy( $html ) {
+        if ( ! is_string( $html ) || false === stripos( $html, 'href="/privacy-policy' ) ) {
+            return $html;
+        }
+        static $dove = null;
+        if ( null === $dove ) {
+            $url  = function_exists( 'get_privacy_policy_url' ) ? (string) get_privacy_policy_url() : '';
+            $dove = '' === $url ? '' : wp_make_link_relative( $url );
+        }
+        if ( '' === $dove ) {
+            return $html;
+        }
+        return (string) preg_replace( '#\shref="/privacy-policy/?"#i', ' href="' . esc_attr( $dove ) . '"', $html );
     }
 
     /**

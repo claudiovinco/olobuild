@@ -67,6 +67,7 @@ export default {
     edge_fade: true,            // sfumatura ai bordi: «continua oltre»
     drag_scroll: true,          // trascina col mouse per scorrere
     snap_strong: false,         // aggancio obbligatorio al centro dell'elemento
+    swing: false,               // gli elementi appesi dondolano con la velocità del nastro
 
     // ── Testata (opzionale) ──
     heading: 'Scorri in orizzontale',
@@ -191,6 +192,8 @@ export default {
       description: t('Col mouse il nastro si trascina come una fotografia sul tavolo. Il touch usa già il suo scorrimento nativo e resta intatto.') },
     { key: 'edge_fade', label: t('Sfumatura ai bordi'), type: 'toggle',
       description: t('Gli elementi svaniscono sui bordi del nastro invece di essere tagliati di netto: si capisce a colpo d\'occhio che c\'è dell\'altro.') },
+    { key: 'swing', label: t('Dondolano scorrendo'), type: 'toggle',
+      description: t('Gli elementi stanno appesi dall’alto, come i vestiti su una stender: più in fretta scorre il nastro più dondolano, poi tornano fermi. Con «riduci il movimento» restano dritti.') },
     { key: 'snap_strong', label: t('Aggancio deciso agli elementi'), type: 'toggle',
       description: t('Lo scorrimento si ferma sempre al centro di un elemento, mai a metà strada. Vale dove la fila si scorre da sé (mobile, «scorrimento libero», riduci movimento).') },
     { key: 'show_scrollbar', label: t('Barra di scorrimento'), type: 'toggle',

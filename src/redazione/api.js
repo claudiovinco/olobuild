@@ -57,6 +57,11 @@ export function vociDi(tassonomia) {
   return voci[tassonomia];
 }
 
+/** Le voci appena lette dalla vista Categorie: le schede aperte dopo vedono nomi e voci nuove. */
+export function impostaVoci(tassonomia, lista) {
+  voci[tassonomia] = Promise.resolve(lista);
+}
+
 export function aggiungiVoce(tassonomia, voce) {
   voci[tassonomia] = vociDi(tassonomia).then((l) => (l.some((x) => x.id === voce.id) ? l : [...l, voce]));
   return voci[tassonomia];

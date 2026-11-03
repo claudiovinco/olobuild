@@ -48549,3 +48549,291 @@ msgstr "The knit that makes itself"
 #: includes/class-theme-importer.php
 msgid "La parola che non ci sta"
 msgstr "The word that doesn’t fit"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Allunga in orizzontale"
+msgstr "Stretch horizontally"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Allunga in verticale"
+msgstr "Stretch vertically"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Backdrop contrasto (%)"
+msgstr "Backdrop contrast (%)"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Backdrop saturazione (%)"
+msgstr "Backdrop saturation (%)"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Backdrop inverti (%)"
+msgstr "Backdrop invert (%)"
+
+#: src/components/ProSlider/LayerProperties.vue
+msgid "Backdrop rotazione tinta"
+msgstr "Backdrop hue rotation"
+
+#: src/components/ProSlider/ProSliderEditor.vue
+msgid "Segue lo scorrimento"
+msgstr "Follows the scroll"
+
+#: src/components/ProSlider/ProSliderEditor.vue
+msgid "Il video non va da solo: avanza mentre si scorre la pagina e torna indietro risalendo. Con «Timeline a scorrimento» accesa conta il tratto in cui lo slider resta fermo in cima, se no l’uscita dello slider dalla finestra."
+msgstr "The video doesn’t play by itself: it moves forward as you scroll down the page and goes back as you scroll up. With “Scroll timeline” on, what counts is the stretch in which the slider stays pinned at the top, otherwise the slider leaving the window."
+
+#: src/config/elements/scrollscrub.js
+msgid "Dondolano scorrendo"
+msgstr "Swing while scrolling"
+
+#: src/config/elements/scrollscrub.js
+msgid "Gli elementi stanno appesi dall’alto, come i vestiti su una stender: più in fretta scorre il nastro più dondolano, poi tornano fermi. Con «riduci il movimento» restano dritti."
+msgstr "The items hang from the top, like clothes on a rail: the faster the strip moves, the more they swing, then they settle. With “reduce motion” they stay straight."
+
+#: src/config/cursori.js
+msgid "Raspa (graffia il denim)"
+msgstr "Rasp (scratches the denim)"
+
+#: src/config/cursori.js
+msgid "Gruccia (dondola)"
+msgstr "Hanger (swings)"
+
+#: src/config/cursori.js
+msgid "Registro (tre colori fuori registro)"
+msgstr "Registration (three colours out of register)"
+
+#: src/config/cursori.js
+msgid "Lanterna rossa (camera oscura)"
+msgstr "Red safelight (darkroom)"
+
+#: src/config/cursori.js
+msgid "Scanner (la riga di luce)"
+msgstr "Scanner (the line of light)"
+
+#: src/config/cursori.js
+msgid "Forbici (tagliano lungo il tratteggio)"
+msgstr "Scissors (cut along the dotted line)"
+
+#: src/config/cursori.js
+msgid "Flash (al clic un lampo)"
+msgstr "Flash (a flash on click)"
+
+#: src/config/cursori.js
+msgid "Quadrante della cassaforte"
+msgstr "Safe dial"
+
+#: src/config/cursori.js
+msgid "Ventaglio (si apre sui link)"
+msgstr "Fan (opens on links)"
+
+#: src/config/cursori.js
+msgid "Molla (si allunga e si richiude)"
+msgstr "Spring (stretches and snaps back)"
+
+#: includes/class-theme-importer.php
+msgid "Gratta il crudo"
+msgstr "Scratch the raw denim"
+
+#: includes/class-theme-importer.php
+msgid "La stender che dondola"
+msgstr "The swinging clothes rail"
+
+#: includes/class-theme-importer.php
+msgid "La stampa che va a registro"
+msgstr "The print coming into register"
+
+#: includes/class-theme-importer.php
+msgid "La camera oscura"
+msgstr "The darkroom"
+
+#: includes/class-theme-importer.php
+msgid "Lo scanner ai raggi X"
+msgstr "The X-ray scanner"
+
+#: includes/class-theme-importer.php
+msgid "Il cartamodello che si compone"
+msgstr "The sewing pattern that comes together"
+
+#: includes/class-theme-importer.php
+msgid "La passerella che si cammina"
+msgstr "The runway you walk by scrolling"
+
+#: includes/class-theme-importer.php
+msgid "Il caveau che si apre"
+msgstr "The vault that opens"
+
+#: includes/class-theme-importer.php
+msgid "Il ventaglio che si apre"
+msgstr "The fan that opens"
+
+#: includes/class-theme-importer.php
+msgid "Il nome che si allunga"
+msgstr "The name that stretches"
+
+#: includes/class-redazione.php
+msgid "Redattore"
+msgstr "Editor"
+
+#: includes/class-redazione.php
+msgid "Questa voce non c'è più: ricarica la pagina."
+msgstr "This item no longer exists: reload the page."
+
+#: includes/class-redazione.php
+msgid "Una voce non può stare dentro sé stessa o dentro una sua voce."
+msgstr "An item cannot sit inside itself or inside one of its own items."
+
+#: includes/class-redazione.php
+msgid "Non puoi eliminare voci qui."
+msgstr "You can’t delete items here."
+
+#: includes/class-redazione.php
+msgid "È la categoria predefinita: prima scegline un'altra come predefinita."
+msgstr "It’s the default category: first choose another one as default."
+
+#: includes/class-redazione.php
+msgid "Non puoi cambiare la categoria predefinita."
+msgstr "You can’t change the default category."
+
+#: includes/class-spettacoli.php
+msgid "Nessun risultato nel cestino."
+msgstr "Nothing in the trash."
+
+#: includes/class-spettacoli.php
+msgid "Foto o locandina"
+msgstr "Photo or poster"
+
+#: includes/class-spettacoli.php
+msgid "Usa come foto"
+msgstr "Use as photo"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Testi mostrati al visitatore, in ogni lingua del sito."
+msgstr "Texts shown to visitors, in every language of the site."
+
+#: src/components/Admin/CookieTab.vue
+msgid "Nelle altre lingue, un testo vuoto resta quello della lingua principale."
+msgstr "In the other languages, an empty text stays the one of the main language."
+
+#: src/components/Admin/CookieTab.vue
+msgid "Pulsante Accetta"
+msgstr "Accept button"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Pulsante Rifiuta"
+msgstr "Decline button"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Pulsante Preferenze"
+msgstr "Preferences button"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Pulsante Salva preferenze"
+msgstr "Save preferences button"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Link alla privacy"
+msgstr "Privacy link"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Link alla cookie policy"
+msgstr "Cookie policy link"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Cookie necessari: nome"
+msgstr "Necessary cookies: name"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Cookie necessari: descrizione"
+msgstr "Necessary cookies: description"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Cookie di statistica: nome"
+msgstr "Statistics cookies: name"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Cookie di statistica: descrizione"
+msgstr "Statistics cookies: description"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Cookie di marketing: nome"
+msgstr "Marketing cookies: name"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Cookie di marketing: descrizione"
+msgstr "Marketing cookies: description"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Cookie di preferenza: nome"
+msgstr "Preference cookies: name"
+
+#: src/components/Admin/CookieTab.vue
+msgid "Cookie di preferenza: descrizione"
+msgstr "Preference cookies: description"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Chi aggiorna il sito scrive, traduce e mette in ordine le categorie da un posto solo."
+msgstr "Whoever updates the site writes, translates and tidies the categories from one place."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Aggiungi e Modifica"
+msgstr "Add and Edit"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Nei menu di WordPress aprono la Redazione. I testi scritti a blocchi si aprono ancora nella scheda di WordPress."
+msgstr "In the WordPress menus they open the Newsroom. Texts written with blocks still open in the WordPress editor."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Il ruolo «Redattore» vede solo Redazione e Media: lo assegni in Utenti."
+msgstr "The «Editor» role sees only the Newsroom and Media: assign it in Users."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Aprono la Redazione"
+msgstr "Open the Newsroom"
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Gli spettacoli del Cartellone, con data, luogo e biglietti."
+msgstr "The shows of the Playbill, with date, venue and tickets."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Vuoto: Spettacoli. Per esempio Concerti e Concerto."
+msgstr "Empty: Shows. For example Concerts and Concert."
+
+#: src/components/Admin/TipiContenutoTab.vue
+msgid "Le pagine degli spettacoli stanno qui. Vuoto: spettacoli."
+msgstr "The show pages live here. Empty: spettacoli."
+
+#: src/redazione/Categorie.vue
+msgid "Rendi predefinita"
+msgstr "Make default"
+
+#: src/redazione/Categorie.vue
+msgid "1 contenuto"
+msgstr "1 item"
+
+#: src/redazione/Categorie.vue
+msgid "%d contenuti"
+msgstr "%d items"
+
+#: src/redazione/Categorie.vue
+msgid "predefinita"
+msgstr "default"
+
+#: src/redazione/Categorie.vue
+msgid "Aggiunta: %s"
+msgstr "Added: %s"
+
+#: src/redazione/Categorie.vue
+msgid "Eliminare «%1$s»? I %2$d contenuti restano, senza questa voce."
+msgstr "Delete «%1$s»? The %2$d items stay, without this item."
+
+#: src/redazione/Categorie.vue
+msgid "Eliminare «%s»?"
+msgstr "Delete «%s»?"
+
+#: src/redazione/Categorie.vue
+msgid "Eliminata: %s"
+msgstr "Deleted: %s"
+
+#: src/redazione/Categorie.vue
+msgid "«%s» è la categoria predefinita"
+msgstr "«%s» is the default category"

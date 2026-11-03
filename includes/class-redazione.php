@@ -35,13 +35,27 @@ class Olobuild_Redazione {
     /** L'anteprima in corso: [ 'id' => contenuto, 'modulo' => ciò che la copia tiene oltre al testo ]. */
     private static $anteprima = null;
 
+    /** Aggiungi e Modifica dei menu di WordPress aprono la Redazione (Impostazioni › Tipi di contenuto). */
+    const OPZIONE_APRE = 'olobuild_redazione_apre';
+
+    /** Il ruolo di chi aggiorna il sito: scrive, pubblica e gestisce le categorie, e vede solo Redazione e Media. */
+    const RUOLO = 'olo_redattore';
+
+    /** La versione delle capacità del ruolo: cambiandola, i siti le riallineano. */
+    const RUOLO_VERSIONE = '1';
+
     public static function avvia() {
         add_action( 'rest_api_init', [ __CLASS__, 'rotte' ] );
         add_action( '_wp_put_post_revision', [ __CLASS__, 'fotografa_revisione' ], 10, 2 );
         add_filter( 'wp_save_post_revision_post_has_changed', [ __CLASS__, 'revisione_cambiata' ], 10, 3 );
+        add_filter( 'login_redirect', [ __CLASS__, 'dopo_accesso' ], 10, 3 );
         if ( is_admin() ) {
+            add_action( 'admin_init', [ __CLASS__, 'ruolo' ] );
             add_action( 'admin_menu', [ __CLASS__, 'menu' ] );
+            add_action( 'admin_menu', [ __CLASS__, 'menu_redattore' ], 999 );
             add_action( 'admin_enqueue_scripts', [ __CLASS__, 'script' ] );
+            add_action( 'load-post-new.php', [ __CLASS__, 'apri_qui' ] );
+            add_action( 'load-post.php', [ __CLASS__, 'apri_qui' ] );
         } else {
             add_action( 'init', [ __CLASS__, 'prepara_anteprima' ], 20 );
         }
@@ -70,6 +84,94 @@ class Olobuild_Redazione {
         }
         $pto = get_post_type_object( (string) array_key_first( $tipi ) );
         add_menu_page( __( 'Redazione', 'olobuild' ), __( 'Redazione', 'olobuild' ), $pto->cap->edit_posts, self::SLUG, [ __CLASS__, 'pagina' ], 'dashicons-edit-page', 3 );
+    }
+
+    /* ─────────────────────────────────────────────
+     * Un posto solo per scrivere
+     * ───────────────────────────────────────────── */
+
+    private static function e_redattore() {
+        $u = wp_get_current_user();
+        return $u && in_array( self::RUOLO, (array) $u->roles, true ) && ! current_user_can( 'manage_options' );
+    }
+
+    /**
+     * Aggiungi e Modifica dei menu di WordPress portano alla Redazione: per il Redattore sempre, per gli altri se il sito
+     * lo ha scelto. Restano nella scheda di WordPress i testi che la Redazione non sa scrivere (a blocchi, con HTML) e chi
+     * ci arriva apposta dalla Redazione (olo_wp=1).
+     */
+    public static function apri_qui() {
+        if ( ! get_option( self::OPZIONE_APRE ) && ! self::e_redattore() ) {
+            return;
+        }
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended -- sola lettura dell'indirizzo per decidere dove aprire
+        if ( isset( $_GET['olo_wp'] ) ) {
+            return;
+        }
+        $id = 0;
+        if ( 'load-post.php' === current_action() ) {
+            $azione = isset( $_GET['action'] ) ? sanitize_key( wp_unslash( $_GET['action'] ) ) : '';
+            $id     = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0;
+            $post   = $id ? get_post( $id ) : null;
+            if ( 'edit' !== $azione || ! $post || '' !== self::motivo_sola_lettura( $post->post_content ) ) {
+                return;
+            }
+            $tipo = $post->post_type;
+        } else {
+            $tipo = isset( $_GET['post_type'] ) ? sanitize_key( wp_unslash( $_GET['post_type'] ) ) : 'post';
+        }
+        // phpcs:enable WordPress.Security.NonceVerification.Recommended
+        if ( ! isset( self::tipi()[ $tipo ] ) ) {
+            return;
+        }
+        wp_safe_redirect( admin_url( 'admin.php?page=' . self::SLUG ) . '#' . $tipo . '/' . ( $id ? $id : 'nuovo' ) );
+        exit;
+    }
+
+    /** Il ruolo Redattore: le capacità del ruolo Editor senza le pagine (le disegna OLObuild) né l'HTML libero. */
+    public static function ruolo() {
+        if ( get_option( 'olobuild_ruolo_redattore' ) === self::RUOLO_VERSIONE && get_role( self::RUOLO ) ) {
+            return;
+        }
+        $editor = get_role( 'editor' );
+        $capi   = $editor ? array_filter( $editor->capabilities ) : [ 'read' => true, 'upload_files' => true ];
+        foreach ( array_keys( $capi ) as $c ) {
+            if ( false !== strpos( $c, '_pages' ) || in_array( $c, [ 'unfiltered_html', 'manage_links' ], true ) ) {
+                unset( $capi[ $c ] );
+            }
+        }
+        // I tipi con permessi propri (Impostazioni › Tipi di contenuto) hanno capacità loro.
+        foreach ( Olobuild_Tipi_Contenuto::impostazioni()['tipi'] as $t ) {
+            if ( 'propri' === $t['permessi'] ) {
+                $capi = array_merge( $capi, array_fill_keys( Olobuild_Tipi_Contenuto::capacita( $t['chiave'] ), true ) );
+            }
+        }
+        remove_role( self::RUOLO );
+        add_role( self::RUOLO, __( 'Redattore', 'olobuild' ), $capi );
+        update_option( 'olobuild_ruolo_redattore', self::RUOLO_VERSIONE, false );
+    }
+
+    /** Il Redattore vede Bacheca, Redazione, Media e il suo profilo: i contenuti si scrivono tutti dalla Redazione. */
+    public static function menu_redattore() {
+        if ( ! self::e_redattore() ) {
+            return;
+        }
+        foreach ( array_keys( self::tipi() ) as $k ) {
+            remove_menu_page( 'post' === $k ? 'edit.php' : 'edit.php?post_type=' . $k );
+        }
+        if ( class_exists( 'Olobuild_Spettacoli' ) ) {
+            remove_menu_page( 'edit.php?post_type=' . Olobuild_Spettacoli::TIPO );
+        }
+        remove_menu_page( 'edit-comments.php' );
+        remove_menu_page( 'tools.php' );
+    }
+
+    /** Il Redattore, entrando, arriva nella Redazione. */
+    public static function dopo_accesso( $dove, $richiesto, $utente ) {
+        if ( $utente instanceof WP_User && in_array( self::RUOLO, (array) $utente->roles, true ) && ! user_can( $utente, 'manage_options' ) ) {
+            return admin_url( 'admin.php?page=' . self::SLUG );
+        }
+        return $dove;
     }
 
     public static function pagina() {
@@ -102,6 +204,8 @@ class Olobuild_Redazione {
                 'formati' => $formati,
                 // Le lingue di OLOlang (null senza traduzioni): la scheda apre la traduzione di ogni contenuto.
                 'lingue'  => Olobuild_Redazione_Lingue::per_la_redazione(),
+                // Le categorie hanno il nome anche nelle altre lingue (OLOlang 3.27.16 e più lingue attive).
+                'nomiLingue' => self::nomi_nelle_lingue(),
             ],
         ] );
     }
@@ -119,6 +223,9 @@ class Olobuild_Redazione {
                 'gerarchica' => (bool) $x->hierarchical,
                 'assegna'    => current_user_can( $x->cap->assign_terms ),
                 'crea'       => current_user_can( $x->cap->edit_terms ),
+                'elimina'    => current_user_can( $x->cap->delete_terms ),
+                // Le categorie degli articoli hanno una predefinita: la cambia chi amministra il sito.
+                'predefinita' => 'category' === $x->name && current_user_can( 'manage_options' ),
             ];
         }
         // «Solo nelle categorie»: la scheda mostra il campo quando una di queste (figlie comprese) è spuntata.
@@ -145,7 +252,8 @@ class Olobuild_Redazione {
             'social'     => self::social_attivo() ? Olo_Social_Riquadro::per_la_scheda( 0, $k ) : null,
             // Dove si aggiungono i campi del tipo: solo per chi può cambiare le impostazioni.
             'configura'  => current_user_can( 'manage_options' ) ? admin_url( 'admin.php?page=olobuilder-settings&tab=tipicontenuto' ) : '',
-            'nuovoWp'    => admin_url( 'post-new.php' . ( 'post' === $k ? '' : '?post_type=' . $k ) ),
+            // olo_wp=1: la scheda di WordPress anche quando Aggiungi e Modifica aprono la Redazione (apri_qui()).
+            'nuovoWp'    => add_query_arg( 'olo_wp', 1, admin_url( 'post-new.php' . ( 'post' === $k ? '' : '?post_type=' . $k ) ) ),
         ];
     }
 
@@ -371,7 +479,7 @@ class Olobuild_Redazione {
             'bloccato'            => $blocco ? self::nome_utente( $blocco ) : '',
             'link'                => (string) get_permalink( $post ),
             'anteprima'           => 'publish' === $post->post_status ? (string) get_permalink( $post ) : (string) get_preview_post_link( $post ),
-            'wpModifica'          => (string) get_edit_post_link( $post->ID, 'raw' ),
+            'wpModifica'          => add_query_arg( 'olo_wp', 1, (string) get_edit_post_link( $post->ID, 'raw' ) ),
             'puoCestinare'        => current_user_can( 'delete_post', $post->ID ),
             'copia'               => self::copia_da_riprendere( $post, $motivo, $modulo ),
             // Una traduzione non va sui social: ci va l'originale.
@@ -543,6 +651,24 @@ class Olobuild_Redazione {
                 'callback'            => [ __CLASS__, 'rest_nuovo_termine' ],
                 'permission_callback' => [ __CLASS__, 'puo_tassonomia' ],
             ],
+        ] );
+        // Le categorie del tipo (la vista Categorie): rinomina, sposta, nomi nelle lingue, elimina.
+        register_rest_route( self::NS, '/redazione/termini/(?P<termine>\d+)', [
+            [
+                'methods'             => 'POST',
+                'callback'            => [ __CLASS__, 'rest_cambia_termine' ],
+                'permission_callback' => [ __CLASS__, 'puo_tassonomia' ],
+            ],
+            [
+                'methods'             => 'DELETE',
+                'callback'            => [ __CLASS__, 'rest_elimina_termine' ],
+                'permission_callback' => [ __CLASS__, 'puo_tassonomia' ],
+            ],
+        ] );
+        register_rest_route( self::NS, '/redazione/termini/(?P<termine>\d+)/predefinita', [
+            'methods'             => 'POST',
+            'callback'            => [ __CLASS__, 'rest_predefinita' ],
+            'permission_callback' => [ __CLASS__, 'puo_tassonomia' ],
         ] );
     }
 
@@ -1163,40 +1289,204 @@ class Olobuild_Redazione {
         return rest_ensure_response( [ 'bloccato' => '' ] );
     }
 
-    private static function termine( $x ) {
-        return [
+    private static function termine( $x, $conti = null ) {
+        $out = [
             'id'       => (int) $x->term_id,
             'nome'     => html_entity_decode( $x->name, ENT_QUOTES, 'UTF-8' ),
             'genitore' => (int) $x->parent,
-            'conta'    => (int) $x->count,
+            'conta'    => is_array( $conti ) ? (int) ( $conti[ (int) $x->term_taxonomy_id ] ?? 0 ) : (int) $x->count,
         ];
+        if ( self::nomi_nelle_lingue() ) {
+            $out['nomi'] = (object) Olo_Lang_Term_Translation::get_names( (int) $x->term_id );
+        }
+        // La categoria predefinita di WordPress (dove finiscono gli articoli senza categoria) non si elimina.
+        if ( 'category' === $x->taxonomy && (int) get_option( 'default_category' ) === (int) $x->term_id ) {
+            $out['predefinita'] = true;
+        }
+        return $out;
+    }
+
+    /** OLOlang sa tenere i nomi delle voci nelle altre lingue (dalla 3.27.16) e il sito ha più di una lingua. */
+    private static function nomi_nelle_lingue() {
+        return class_exists( 'Olo_Lang_Term_Translation' ) && method_exists( 'Olo_Lang_Term_Translation', 'set_names' )
+            && null !== Olobuild_Redazione_Lingue::per_la_redazione();
+    }
+
+    /** Scrive i nomi nelle altre lingue arrivati con la richiesta, se ci sono. */
+    private static function scrivi_nomi( $term_id, WP_REST_Request $r ) {
+        $nomi = $r['nomi'];
+        if ( is_array( $nomi ) && self::nomi_nelle_lingue() ) {
+            Olo_Lang_Term_Translation::set_names( (int) $term_id, array_map( 'strval', $nomi ) );
+        }
+    }
+
+    /** La tassonomia della richiesta, se l'utente ne può cambiare le voci; se no l'errore da restituire. */
+    private static function tassonomia_modificabile( $nome ) {
+        $tax = get_taxonomy( sanitize_key( (string) $nome ) );
+        if ( ! $tax || ! current_user_can( $tax->cap->edit_terms ) ) {
+            return new WP_Error( 'olo_redazione_permesso', __( 'Non puoi aggiungere voci qui.', 'olobuild' ), [ 'status' => 403 ] );
+        }
+        return $tax;
+    }
+
+    /** Il termine della richiesta nella sua tassonomia, o l'errore. */
+    private static function termine_della_richiesta( WP_REST_Request $r ) {
+        $tax = self::tassonomia_modificabile( $r['tassonomia'] );
+        if ( is_wp_error( $tax ) ) {
+            return $tax;
+        }
+        $x = get_term( (int) $r['termine'], $tax->name );
+        if ( ! $x || is_wp_error( $x ) ) {
+            return new WP_Error( 'olo_redazione_voce', __( 'Questa voce non c\'è più: ricarica la pagina.', 'olobuild' ), [ 'status' => 404 ] );
+        }
+        return $x;
+    }
+
+    /** Il genitore scelto per una voce, se è valido: della stessa tassonomia e non la voce stessa né una sua figlia. */
+    private static function genitore_valido( $tax, $genitore, $term_id = 0 ) {
+        $genitore = $tax->hierarchical ? absint( $genitore ) : 0;
+        if ( ! $genitore ) {
+            return 0;
+        }
+        $g = get_term( $genitore, $tax->name );
+        if ( ! $g || is_wp_error( $g ) ) {
+            return 0;
+        }
+        if ( $term_id && ( $genitore === (int) $term_id || in_array( (int) $term_id, get_ancestors( $genitore, $tax->name, 'taxonomy' ), true ) ) ) {
+            return new WP_Error( 'olo_redazione_genitore', __( 'Una voce non può stare dentro sé stessa o dentro una sua voce.', 'olobuild' ), [ 'status' => 400 ] );
+        }
+        return $genitore;
     }
 
     public static function rest_termini( WP_REST_Request $r ) {
-        $termini = get_terms( [
-            'taxonomy'   => sanitize_key( (string) $r['tassonomia'] ),
+        $tassonomia = sanitize_key( (string) $r['tassonomia'] );
+        $termini    = get_terms( [
+            'taxonomy'   => $tassonomia,
             'hide_empty' => false,
             'number'     => 1000,
             'orderby'    => 'name',
         ] );
-        return rest_ensure_response( is_array( $termini ) ? array_map( [ __CLASS__, 'termine' ], $termini ) : [] );
+        $conti = self::conti_senza_copie( $tassonomia );
+        return rest_ensure_response( is_array( $termini ) ? array_map( function ( $x ) use ( $conti ) {
+            return self::termine( $x, $conti );
+        }, $termini ) : [] );
+    }
+
+    /**
+     * Quanti contenuti ha ogni voce senza contare le copie tradotte (OLOlang): un canto in quattro lingue è un canto.
+     * term_taxonomy_id => numero, o null se il sito non ha traduzioni (vale il conteggio di WordPress).
+     */
+    private static function conti_senza_copie( $tassonomia ) {
+        if ( null === Olobuild_Redazione_Lingue::per_la_redazione() ) {
+            return null;
+        }
+        global $wpdb;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- un conteggio raggruppato per la vista Categorie, una volta per apertura; nessuna API di WordPress conta escludendo un meta
+        $righe = $wpdb->get_results( $wpdb->prepare(
+            "SELECT tr.term_taxonomy_id AS tt, COUNT(DISTINCT p.ID) AS n
+               FROM {$wpdb->term_relationships} tr
+               JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id AND tt.taxonomy = %s
+               JOIN {$wpdb->posts} p ON p.ID = tr.object_id AND p.post_status NOT IN ('trash','auto-draft','inherit')
+               LEFT JOIN {$wpdb->postmeta} m ON m.post_id = p.ID AND m.meta_key = '_olo_lang_source' AND m.meta_value <> ''
+              WHERE m.meta_id IS NULL
+              GROUP BY tr.term_taxonomy_id",
+            $tassonomia
+        ) );
+        $out = [];
+        foreach ( (array) $righe as $x ) {
+            $out[ (int) $x->tt ] = (int) $x->n;
+        }
+        return $out;
     }
 
     public static function rest_nuovo_termine( WP_REST_Request $r ) {
-        $tax = get_taxonomy( sanitize_key( (string) $r['tassonomia'] ) );
-        if ( ! current_user_can( $tax->cap->edit_terms ) ) {
-            return new WP_Error( 'olo_redazione_permesso', __( 'Non puoi aggiungere voci qui.', 'olobuild' ), [ 'status' => 403 ] );
+        $tax = self::tassonomia_modificabile( $r['tassonomia'] );
+        if ( is_wp_error( $tax ) ) {
+            return $tax;
         }
         $nome = sanitize_text_field( (string) $r['nome'] );
         if ( '' === $nome ) {
             return new WP_Error( 'olo_redazione_nome', __( 'Scrivi il nome.', 'olobuild' ), [ 'status' => 400 ] );
         }
-        $genitore = $tax->hierarchical ? absint( $r['genitore'] ) : 0;
-        $esiste   = term_exists( $nome, $tax->name, $genitore );
-        $fatto    = $esiste ? $esiste : wp_insert_term( $nome, $tax->name, [ 'parent' => $genitore ] );
+        $genitore = self::genitore_valido( $tax, $r['genitore'] );
+        if ( is_wp_error( $genitore ) ) {
+            return $genitore;
+        }
+        $esiste = term_exists( $nome, $tax->name, $genitore );
+        $fatto  = $esiste ? $esiste : wp_insert_term( $nome, $tax->name, [ 'parent' => $genitore ] );
         if ( is_wp_error( $fatto ) ) {
             return $fatto;
         }
+        self::scrivi_nomi( (int) $fatto['term_id'], $r );
         return rest_ensure_response( self::termine( get_term( (int) $fatto['term_id'], $tax->name ) ) );
+    }
+
+    /** Rinomina una voce, la sposta dentro un'altra (o in cima) e ne scrive i nomi nelle altre lingue. */
+    public static function rest_cambia_termine( WP_REST_Request $r ) {
+        $x = self::termine_della_richiesta( $r );
+        if ( is_wp_error( $x ) ) {
+            return $x;
+        }
+        $tax  = get_taxonomy( $x->taxonomy );
+        $dati = [];
+        if ( null !== $r['nome'] ) {
+            $nome = sanitize_text_field( (string) $r['nome'] );
+            if ( '' === $nome ) {
+                return new WP_Error( 'olo_redazione_nome', __( 'Scrivi il nome.', 'olobuild' ), [ 'status' => 400 ] );
+            }
+            $dati['name'] = $nome;
+        }
+        if ( null !== $r['genitore'] && $tax->hierarchical ) {
+            $genitore = self::genitore_valido( $tax, $r['genitore'], $x->term_id );
+            if ( is_wp_error( $genitore ) ) {
+                return $genitore;
+            }
+            $dati['parent'] = $genitore;
+        }
+        if ( $dati ) {
+            $fatto = wp_update_term( $x->term_id, $x->taxonomy, $dati );
+            if ( is_wp_error( $fatto ) ) {
+                return $fatto;
+            }
+        }
+        self::scrivi_nomi( $x->term_id, $r );
+        clean_term_cache( $x->term_id, $x->taxonomy );
+        return rest_ensure_response( self::termine( get_term( $x->term_id, $x->taxonomy ) ) );
+    }
+
+    /**
+     * Elimina una voce: i contenuti restano, senza quella voce (gli articoli rimasti senza categoria vanno in quella
+     * predefinita, come in WordPress); le voci dentro salgono di un livello.
+     */
+    public static function rest_elimina_termine( WP_REST_Request $r ) {
+        $x = self::termine_della_richiesta( $r );
+        if ( is_wp_error( $x ) ) {
+            return $x;
+        }
+        $tax = get_taxonomy( $x->taxonomy );
+        if ( ! current_user_can( $tax->cap->delete_terms ) ) {
+            return new WP_Error( 'olo_redazione_permesso', __( 'Non puoi eliminare voci qui.', 'olobuild' ), [ 'status' => 403 ] );
+        }
+        if ( 'category' === $x->taxonomy && (int) get_option( 'default_category' ) === (int) $x->term_id ) {
+            return new WP_Error( 'olo_redazione_predefinita', __( 'È la categoria predefinita: prima scegline un\'altra come predefinita.', 'olobuild' ), [ 'status' => 400 ] );
+        }
+        $fatto = wp_delete_term( $x->term_id, $x->taxonomy );
+        if ( is_wp_error( $fatto ) ) {
+            return $fatto;
+        }
+        return rest_ensure_response( [ 'eliminata' => (bool) $fatto ] );
+    }
+
+    /** Fa di una categoria degli articoli quella predefinita (dove vanno gli articoli senza categoria). */
+    public static function rest_predefinita( WP_REST_Request $r ) {
+        $x = self::termine_della_richiesta( $r );
+        if ( is_wp_error( $x ) ) {
+            return $x;
+        }
+        if ( 'category' !== $x->taxonomy || ! current_user_can( 'manage_options' ) ) {
+            return new WP_Error( 'olo_redazione_permesso', __( 'Non puoi cambiare la categoria predefinita.', 'olobuild' ), [ 'status' => 403 ] );
+        }
+        update_option( 'default_category', (int) $x->term_id );
+        return rest_ensure_response( self::termine( $x ) );
     }
 }

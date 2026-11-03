@@ -14,6 +14,10 @@
         >{{ x.nome }}</button>
       </nav>
       <span class="orz-spazio"></span>
+      <div v-if="tipo && haCategorie && vista !== 'scheda'" class="orz-segmenti" role="group" :aria-label="tipo.nome">
+        <button type="button" class="orz-segmento" :class="{ on: vista === 'elenco' }" :aria-pressed="vista === 'elenco'" @click="vai(tipo.chiave)">{{ tipo.nome }}</button>
+        <button type="button" class="orz-segmento" :class="{ on: vista === 'categorie' }" :aria-pressed="vista === 'categorie'" @click="vai(tipo.chiave, 'categorie')">{{ t('Categorie') }}</button>
+      </div>
       <button v-if="tipo && tipo.crea && vista === 'elenco'" type="button" class="orz-btn orz-btn--primario" @click="vai(tipo.chiave, 'nuovo')">
         <Icona nome="piu" /> {{ t('Aggiungi') }}: {{ tipo.singolare }}
       </button>
@@ -27,6 +31,12 @@
         :tipo="tipo"
         @apri="(id) => vai(tipo.chiave, id)"
         @nuovo="vai(tipo.chiave, 'nuovo')"
+      />
+      <Categorie
+        v-if="vista === 'categorie'"
+        ref="categorie"
+        :key="'c-' + tipo.chiave"
+        :tipo="tipo"
       />
       <Scheda
         v-if="vista === 'scheda'"
@@ -52,6 +62,7 @@ import { t } from '@/i18n';
 import Icona from './Icona.vue';
 import Elenco from './Elenco.vue';
 import Scheda from './Scheda.vue';
+import Categorie from './Categorie.vue';
 
 const tipi = ((window.oloData && window.oloData.redazione && window.oloData.redazione.tipi) || []);
 // Prima i tipi del sito (Notizie, Comunicati…), poi gli Articoli di WordPress.
@@ -62,8 +73,11 @@ const vista = ref('elenco');
 const idAperto = ref(0);
 const elenco = ref(null);
 const scheda = ref(null);
+const categorie = ref(null);
 
 const tipo = computed(() => tipi.find((x) => x.chiave === chiaveTipo.value) || null);
+// La vista Categorie, per i tipi che ne hanno almeno una che l'utente può cambiare.
+const haCategorie = computed(() => !!tipo.value && (tipo.value.tassonomie || []).some((x) => x.crea || x.elimina));
 
 // L'indirizzo dell'ultima vista mostrata: l'Indietro del browser ci torna se si resta sulla scheda.
 let ultimoHash = window.location.hash;
@@ -73,6 +87,9 @@ function leggiIndirizzo() {
   if (k && tipi.some((x) => x.chiave === k)) chiaveTipo.value = k;
   if (quale === 'nuovo') {
     vista.value = 'scheda';
+    idAperto.value = 0;
+  } else if (quale === 'categorie' && haCategorie.value) {
+    vista.value = 'categorie';
     idAperto.value = 0;
   } else if (/^\d+$/.test(quale || '')) {
     vista.value = 'scheda';
@@ -92,11 +109,12 @@ function scriviIndirizzo(k, quale, sostituisci = false) {
 }
 
 function puoiLasciare() {
-  return !(scheda.value && scheda.value.modificata) || window.confirm(t('Le modifiche non salvate andranno perse. Uscire lo stesso?'));
+  const aperta = vista.value === 'scheda' ? scheda.value : vista.value === 'categorie' ? categorie.value : null;
+  return !(aperta && aperta.modificata) || window.confirm(t('Le modifiche non salvate andranno perse. Uscire lo stesso?'));
 }
 
 function vai(k, quale = '') {
-  if (vista.value === 'scheda' && !puoiLasciare()) return;
+  if ((vista.value === 'scheda' || vista.value === 'categorie') && !puoiLasciare()) return;
   scriviIndirizzo(k, quale);
   leggiIndirizzo();
 }
@@ -126,7 +144,7 @@ function salvato({ id, nuovo, automatico }) {
 
 function indietro() {
   // Indietro del browser con modifiche non salvate: si resta, rimettendo l'indirizzo di prima.
-  if (vista.value === 'scheda' && !puoiLasciare()) {
+  if ((vista.value === 'scheda' || vista.value === 'categorie') && !puoiLasciare()) {
     window.history.pushState(null, '', ultimoHash);
     return;
   }

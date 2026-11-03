@@ -44,7 +44,11 @@ class Olobuild_Spettacoli {
     /** @var array|null Gli spettacoli pubblicati, come voci del Cartellone, per questa richiesta. */
     private static $voci = null;
 
+    /** Il nome del tipo scelto in Impostazioni › Tipi di contenuto: [ 'nome', 'singolare', 'indirizzo' ] (vuoti = Spettacoli). */
+    const OPZIONE_NOMI = 'olobuild_spettacoli_nomi';
+
     public static function avvia() {
+        add_filter( 'olobuild_tipi_di_sistema', [ __CLASS__, 'tipo_redazione' ] );
         add_action( 'init', [ __CLASS__, 'registra' ] );
         add_action( 'wp_loaded', [ __CLASS__, 'regole' ] );
         add_action( 'rest_api_init', [ __CLASS__, 'rotte' ] );
@@ -66,13 +70,48 @@ class Olobuild_Spettacoli {
      * al sito gli indirizzi già condivisi non cambiano. Si può cambiare col filtro olobuild_spettacoli_slug.
      */
     public static function base() {
-        $b = sanitize_title( (string) apply_filters( 'olobuild_spettacoli_slug', 'spettacoli' ) );
+        $scelto = self::nomi()['indirizzo'];
+        $b      = sanitize_title( (string) apply_filters( 'olobuild_spettacoli_slug', '' !== $scelto ? $scelto : 'spettacoli' ) );
         return '' !== $b ? $b : 'spettacoli';
     }
 
-    public static function registra() {
-        register_post_type( self::TIPO, [
-            'labels'            => [
+    /** Il nome scelto per il tipo (un coro li chiama Concerti, un cinema Film): [ 'nome', 'singolare', 'indirizzo' ]. */
+    public static function nomi() {
+        $o = get_option( self::OPZIONE_NOMI, [] );
+        $o = is_array( $o ) ? $o : [];
+        return [
+            'nome'      => (string) ( $o['nome'] ?? '' ),
+            'singolare' => (string) ( $o['singolare'] ?? '' ),
+            'indirizzo' => (string) ( $o['indirizzo'] ?? '' ),
+        ];
+    }
+
+    /** Salva il nome scelto (dalle Impostazioni); un indirizzo nuovo riscrive le regole al prossimo caricamento. */
+    public static function salva_nomi( $in ) {
+        $in    = is_array( $in ) ? $in : [];
+        $testo = static function ( $v ) {
+            return mb_substr( sanitize_text_field( is_scalar( $v ) ? (string) $v : '' ), 0, 40 );
+        };
+        $nome      = $testo( $in['nome'] ?? '' );
+        $singolare = $testo( $in['singolare'] ?? '' );
+        $nomi      = [
+            'nome'      => $nome,
+            'singolare' => '' !== $singolare ? $singolare : $nome,
+            'indirizzo' => substr( sanitize_title( (string) ( $in['indirizzo'] ?? '' ) ), 0, 40 ),
+        ];
+        if ( '' === $nomi['nome'] && '' === $nomi['indirizzo'] ) {
+            delete_option( self::OPZIONE_NOMI );
+        } else {
+            update_option( self::OPZIONE_NOMI, $nomi );
+        }
+        return self::nomi();
+    }
+
+    /** Le etichette del tipo: quelle degli spettacoli, o costruite dal nome scelto (senza articoli, valgono per ogni nome). */
+    private static function etichette() {
+        $n = self::nomi();
+        if ( '' === $n['nome'] ) {
+            return [
                 'name'                  => __( 'Spettacoli', 'olobuilder' ),
                 'singular_name'         => __( 'Spettacolo', 'olobuilder' ),
                 'menu_name'             => __( 'Spettacoli', 'olobuilder' ),
@@ -92,14 +131,97 @@ class Olobuild_Spettacoli {
                 'use_featured_image'    => __( 'Usa come foto dello spettacolo', 'olobuilder' ),
                 'item_published'        => __( 'Spettacolo pubblicato.', 'olobuilder' ),
                 'item_updated'          => __( 'Spettacolo aggiornato.', 'olobuilder' ),
+            ];
+        }
+        $plurale = $n['nome'];
+        $uno     = $n['singolare'];
+        return [
+            'name'                  => $plurale,
+            'singular_name'         => $uno,
+            'menu_name'             => $plurale,
+            'all_items'             => $plurale,
+            'add_new'               => __( 'Aggiungi', 'olobuilder' ),
+            /* translators: %s: il nome singolare scelto per gli spettacoli (Concerto, Film) */
+            'add_new_item'          => sprintf( __( 'Aggiungi: %s', 'olobuilder' ), $uno ),
+            /* translators: %s: il nome singolare scelto per gli spettacoli */
+            'edit_item'             => sprintf( __( 'Modifica: %s', 'olobuilder' ), $uno ),
+            /* translators: %s: il nome singolare scelto per gli spettacoli */
+            'new_item'              => sprintf( __( 'Aggiungi: %s', 'olobuilder' ), $uno ),
+            /* translators: %s: il nome singolare scelto per gli spettacoli */
+            'view_item'             => sprintf( __( 'Vedi: %s', 'olobuilder' ), $uno ),
+            /* translators: %s: il nome plurale scelto per gli spettacoli */
+            'view_items'            => sprintf( __( 'Vedi: %s', 'olobuilder' ), $plurale ),
+            /* translators: %s: il nome plurale scelto per gli spettacoli */
+            'search_items'          => sprintf( __( 'Cerca: %s', 'olobuilder' ), $plurale ),
+            'not_found'             => __( 'Nessun risultato.', 'olobuilder' ),
+            'not_found_in_trash'    => __( 'Nessun risultato nel cestino.', 'olobuilder' ),
+            'featured_image'        => __( 'Foto o locandina', 'olobuilder' ),
+            'set_featured_image'    => __( 'Scegli la foto', 'olobuilder' ),
+            'remove_featured_image' => __( 'Togli la foto', 'olobuilder' ),
+            'use_featured_image'    => __( 'Usa come foto', 'olobuilder' ),
+            'item_published'        => __( 'Pubblicato.', 'olobuilder' ),
+            'item_updated'          => __( 'Aggiornato.', 'olobuilder' ),
+        ];
+    }
+
+    /**
+     * Gli spettacoli nella Redazione di OLObuild: un tipo «di sistema» che registra questo modulo (proprio), coi campi
+     * della scheda nelle stesse chiavi di sempre (_olo_sp_*). Solo sui siti che hanno (o hanno avuto) uno spettacolo,
+     * come il menu.
+     */
+    public static function tipo_redazione( $tipi ) {
+        if ( ! self::menu_visibile() ) {
+            return $tipi;
+        }
+        $m      = self::META;
+        $stati  = [];
+        foreach ( self::stati() as $k => $nome ) {
+            $stati[] = $k . '|' . $nome;
+        }
+        $n      = self::nomi();
+        $tipi[] = [
+            'chiave'    => self::TIPO,
+            'nome'      => '' !== $n['nome'] ? $n['nome'] : __( 'Spettacoli', 'olobuilder' ),
+            'singolare' => '' !== $n['singolare'] ? $n['singolare'] : __( 'Spettacolo', 'olobuilder' ),
+            'indirizzo' => self::base(),
+            'archivio'  => false,
+            'editor'    => 'semplice',
+            'estratto'  => true,
+            'immagine'  => true,
+            'proprio'   => true,
+            'campi'     => [
+                [ 'chiave' => $m . 'sottotitolo', 'etichetta' => __( 'Autore, compagnia, interpreti', 'olobuilder' ), 'tipo' => 'testo' ],
+                [ 'chiave' => $m . 'genere', 'etichetta' => __( 'Genere', 'olobuilder' ), 'tipo' => 'testo', 'larghezza' => 'meta' ],
+                [ 'chiave' => $m . 'luogo', 'etichetta' => __( 'Luogo', 'olobuilder' ), 'tipo' => 'testo', 'larghezza' => 'meta' ],
+                [ 'chiave' => $m . 'data', 'etichetta' => __( 'Data', 'olobuilder' ), 'tipo' => 'data', 'larghezza' => 'terzo' ],
+                [ 'chiave' => $m . 'ora', 'etichetta' => __( 'Ora', 'olobuilder' ), 'tipo' => 'ora', 'larghezza' => 'terzo' ],
+                [ 'chiave' => $m . 'data_fine', 'etichetta' => __( 'Fino al', 'olobuilder' ), 'tipo' => 'data', 'larghezza' => 'terzo', 'dopo' => $m . 'data' ],
+                [ 'chiave' => $m . 'orari', 'etichetta' => __( 'Orari', 'olobuilder' ), 'tipo' => 'testo' ],
+                [ 'chiave' => $m . 'durata', 'etichetta' => __( 'Durata', 'olobuilder' ), 'tipo' => 'testo', 'larghezza' => 'terzo' ],
+                [ 'chiave' => $m . 'prezzo', 'etichetta' => __( 'Prezzo', 'olobuilder' ), 'tipo' => 'testo', 'larghezza' => 'terzo' ],
+                [ 'chiave' => $m . 'stato', 'etichetta' => __( 'Disponibilità', 'olobuilder' ), 'tipo' => 'scelta', 'larghezza' => 'terzo', 'opzioni' => implode( "\n", $stati ) ],
+                [ 'chiave' => $m . 'etichette', 'etichetta' => __( 'Etichette', 'olobuilder' ), 'tipo' => 'testo' ],
+                [ 'chiave' => $m . 'incontro', 'etichetta' => __( 'Incontro col pubblico', 'olobuilder' ), 'tipo' => 'testo' ],
+                [ 'chiave' => $m . 'link_biglietti', 'etichetta' => __( 'Link dei biglietti', 'olobuilder' ), 'tipo' => 'link', 'larghezza' => 'meta' ],
+                [ 'chiave' => $m . 'link_info', 'etichetta' => __( 'Link della scheda', 'olobuilder' ), 'tipo' => 'link', 'larghezza' => 'meta',
+                    'aiuto' => __( 'Vuoto: la pagina dello spettacolo', 'olobuilder' ) ],
             ],
+        ];
+        return $tipi;
+    }
+
+    public static function registra() {
+        register_post_type( self::TIPO, [
+            'labels'            => self::etichette(),
             'public'            => true,
             'show_ui'           => true,
             'show_in_menu'      => self::menu_visibile(),
             'show_in_nav_menus' => true,
             'menu_position'     => 21,
             'menu_icon'         => 'dashicons-tickets-alt',
-            'supports'          => [ 'title', 'editor', 'thumbnail', 'revisions' ],
+            // Il riassunto è la «Descrizione breve» del riquadro dello spettacolo (il riquadro di WordPress si toglie):
+            // il supporto serve alla Redazione, che lo scrive come per gli altri tipi.
+            'supports'          => [ 'title', 'editor', 'thumbnail', 'revisions', 'excerpt' ],
             'has_archive'       => false,
             'rewrite'           => [ 'slug' => self::base(), 'with_front' => false ],
             // Niente editor a blocchi: titolo, testo lungo, foto e la scheda dei dettagli, come una scheda di sala.
@@ -117,6 +239,11 @@ class Olobuild_Spettacoli {
             update_option( self::OPZIONE_REGOLE, $base, false );
             flush_rewrite_rules( false );
         }
+    }
+
+    /** Il sito usa gli spettacoli (ne ha o ne ha avuto uno): per le Impostazioni e la Redazione. */
+    public static function in_uso() {
+        return self::menu_visibile();
     }
 
     /** Il menu si mostra quando il sito ha (o ha avuto) uno spettacolo: sui siti che non ne usano non ingombra. */
@@ -779,6 +906,7 @@ class Olobuild_Spettacoli {
     }
 
     public static function riquadri() {
+        remove_meta_box( 'postexcerpt', self::TIPO, 'normal' );
         add_meta_box( 'olobuild-spettacolo', __( 'Lo spettacolo', 'olobuilder' ), [ __CLASS__, 'riquadro' ], self::TIPO, 'normal', 'high' );
     }
 

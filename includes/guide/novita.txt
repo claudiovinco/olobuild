@@ -3,6 +3,39 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.964 - 2026-11-03 (le categorie contano i contenuti una volta sola)
+- Redazione → Categorie: su un sito in più lingue ogni categoria conta i suoi contenuti una volta sola, senza le copie tradotte (un canto in quattro lingue è un canto; prima 19 canti di Natale risultavano 76).
+
+## v1.4.963 - 2026-11-03 (la Redazione come posto unico per chi aggiorna il sito)
+- Redazione → Categorie: per ogni tipo di contenuto le sue categorie in un albero, con quanti contenuti ha ognuna. Si aggiungono, si rinominano, si spostano dentro un'altra e si eliminano (i contenuti restano); la categoria predefinita degli articoli si cambia da qui. Con OLOlang ogni categoria ha anche il nome nelle altre lingue del sito, e sul sito in quella lingua si legge quello.
+- Redazione, «Aggiungi: Categoria» nella scheda: la categoria nuova nasce già col nome nelle altre lingue.
+- Gli spettacoli del Cartellone sono nella Redazione come gli altri contenuti, coi loro campi (data, ora, luogo, biglietti, disponibilità) e le traduzioni; la data «Fino al» non può venire prima di quella d'inizio.
+- Impostazioni → Tipi di contenuto: il nome degli spettacoli per il sito (Concerti e Concerto, Film…) e l'indirizzo delle loro pagine; prima si cambiavano solo col codice.
+- Impostazioni → Tipi di contenuto → Redazione, «Aggiungi e Modifica aprono la Redazione»: le voci dei menu di WordPress portano alla Redazione (i testi scritti a blocchi si aprono ancora in WordPress). Il ruolo nuovo «Redattore» scrive, pubblica e gestisce le categorie, e vede solo Redazione e Media; entrando arriva nella Redazione.
+- Impostazioni → Cookie, «Testi del banner»: si scrivono i testi che il banner mostra davvero, in ogni lingua del sito. Prima i testi italiano e inglese di quel riquadro non arrivavano al banner.
+- Spazi, dimensioni e allineamento scelti per il tablet o il telefono nello Stile di sezioni, righe, colonne e tile adesso si applicano: prima vinceva sempre il valore del computer.
+- Menu del telefono: non si scorre più nel vuoto sotto le ultime voci. La scritta o il simbolo decorativo dietro le voci restano tagliati alla misura del pannello.
+
+## v1.4.962 - 2026-11-03 (il pulsante «Scopri» leggibile)
+- Gratta e scopri: passando sul pulsante «Scopri» il testo prende l’accento mescolato al colore del testo della pagina, dove il pulsante sta; prima si mescolava al «Colore testo» del premio, che sopra una foto scura è chiaro, e sui fondi chiari il pulsante quasi spariva.
+
+## v1.4.961 - 2026-11-03 (il dondolio più morbido)
+- Scorrimento orizzontale, «Dondolano scorrendo»: la spinta segue meno la rotella e il dondolio arriva al massimo a nove gradi, poi rimbalza indietro; scorrendo in fretta le voci restavano tutte inclinate al massimo.
+
+## v1.4.960 - 2026-11-03 (dieci temi strani, fatti di tile di tutti i giorni)
+- Dieci temi nuovi in Moda e bellezza, dieci marchi inventati col loro logo, ognuno con una trovata costruita con le tile della libreria: Raspa (denim lavato a mano: la raspa graffia il denim scorrendo e i lavaggi si scoprono grattando), Stender (camicie: le lettere del nome appese alla stender scivolano via, e le camicie dondolano sul nastro orizzontale), Fuori Registro (magliette serigrafate: tre copie del nome in ciano, magenta e giallo che vanno a registro), Luce Rossa (foulard di seta: il sito sotto la luce della camera oscura, la fotografia che si sviluppa scorrendo, le pellicole e la ghiera), Lastra (giacche tecniche: lo scanner che trasforma la giacca in una lastra ai raggi X), Sbieco (abiti di seta: i pezzi del cartamodello che volano al loro posto), Falcata (scarpe: la modella cammina solo se scorrete), Combinazione (borse con la serratura: la porta del caveau che si apre e il drop segreto col lucchetto), Ventaglio (abiti d’estate: un ventaglio di foto che si apre) ed Elastan (sport: il nome che si tende come un elastico).
+- Vetrina temi: 188 temi di OLObuild; zone tradotte nelle cinque lingue.
+
+## v1.4.959 - 2026-11-03 (il video che segue lo scorrimento, i livelli che si allungano, la stender che dondola)
+- Slider Pro, sfondo video della diapositiva → «Segue lo scorrimento»: il video non va da solo, avanza mentre si scorre la pagina e torna indietro risalendo (con «Timeline a scorrimento» conta il tratto in cui lo slider resta fermo in cima).
+- Slider Pro, «Movimento con lo scorrimento» dei livelli: «Allunga in orizzontale» e «Allunga in verticale», per tendere un livello come un elastico mentre si scorre (si sommano alla Scala).
+- Slider Pro, i filtri su ciò che sta dietro un livello: oltre a sfocatura, luminosità e grigi anche contrasto, saturazione, inverti e rotazione della tinta (una lastra ai raggi X, un vetro colorato sopra il video).
+- Scorrimento orizzontale (ScrollScrub) → «Dondolano scorrendo»: gli elementi stanno appesi dall’alto come i vestiti su una stender e oscillano con la velocità del nastro, poi tornano fermi.
+- Dieci cursori nuovi in Avanzate → Effetti mouse: Raspa, Gruccia, Registro, Lanterna rossa, Scanner, Forbici, Flash, Quadrante della cassaforte, Ventaglio, Molla.
+
+## v1.4.958 - 2026-11-03 (il link della privacy che porta alla pagina giusta)
+- I link «/privacy-policy/» dei temi e dei blocchi (piè di pagina, menu, testi) portano alla pagina della privacy che il sito ha davvero, quella scelta in Impostazioni → Privacy, come già il consenso del modulo: dove la pagina non si chiama «privacy-policy» il link finiva su una pagina inesistente. Senza una pagina della privacy pubblicata il link resta com’è.
+
 ## v1.4.957 - 2026-11-03 (dieci marchi di moda, il sito alla rovescia, il cambio colore, la pioggia, il sonno)
 - Dieci temi nuovi in Moda e bellezza, dieci marchi di abbigliamento inventati, ognuno col suo logo e una trovata: Rovescio (abiti col rovescio in vista, e un sito che scorre alla rovescia), Cangiante (giacche iridescenti, e un sito che cambia colore sezione per sezione), A Cipolla (abiti a strati, con le sezioni che si coprono come strati), Cerniera (giubbotti e borse, la zip che si apre in apertura), Spaiato (calzini venduti uno alla volta, le due metà che scorrono al contrario), Trentagradi (capi da cento lavaggi, l’oblò della lavatrice che si allarga), Sonnambulo (pigiami di seta, il sito che si addormenta), Scroscio (impermeabili, la pioggia su tutto il sito e il mouse che fa da ombrello), Gomitolo (maglieria, il filo di lana che si srotola fra le sezioni e la maglia che si fa da sola) e Fuorimisura (streetwear oversize, la parola più larga dello schermo). Sono siti di marchio, con la collezione, il marchio e i negozi che lo vendono.
 - Effetti di pagina → «Scorrimento alla rovescia»: la pagina parte dal fondo e si legge salendo, con la testata in fondo allo schermo e il piè di pagina in cima; con «Rotella al contrario» il gesto di sempre fa salire la pagina. Nel builder e per gli screen reader l’ordine resta quello della struttura.

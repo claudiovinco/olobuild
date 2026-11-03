@@ -26,6 +26,15 @@
         </button>
         <form v-else class="orz-nuovo-form" @submit.prevent="crea">
           <input v-model="nuovoNome" type="text" :placeholder="t('Nome')" :aria-label="t('Nome')" />
+          <input
+            v-for="l in lingue"
+            :key="l.codice"
+            v-model="nuoviNomi[l.codice]"
+            type="text"
+            :lang="l.codice"
+            :placeholder="t('Nome') + ' · ' + l.nome"
+            :aria-label="t('Nome') + ' · ' + l.nome"
+          />
           <select v-if="tutti.length" v-model.number="nuovoGenitore" :aria-label="t('Dentro')">
             <option :value="0">{{ t('In cima') }}</option>
             <option v-for="x in alberoTutto" :key="x.id" :value="x.id">{{ '— '.repeat(x.livello) + x.nome }}</option>
@@ -131,8 +140,13 @@ function alterna(id) {
   emit('update:modelValue', lista);
 }
 
+// Le altre lingue del sito, se le categorie hanno il nome anche lì (OLOlang): la voce nuova nasce già tradotta.
+const datiRedazione = (window.oloData && window.oloData.redazione) || {};
+const lingue = datiRedazione.nomiLingue && datiRedazione.lingue ? datiRedazione.lingue.altre || [] : [];
+
 const aggiungi = ref(false);
 const nuovoNome = ref('');
+const nuoviNomi = ref({});
 const nuovoGenitore = ref(0);
 const occupato = ref(false);
 const errore = ref('');
@@ -142,11 +156,12 @@ async function crea() {
   try {
     const x = await chiama('redazione/termini', {
       metodo: 'POST',
-      corpo: { tassonomia: props.tassonomia.nome, nome: nuovoNome.value.trim(), genitore: nuovoGenitore.value },
+      corpo: { tassonomia: props.tassonomia.nome, nome: nuovoNome.value.trim(), genitore: nuovoGenitore.value, nomi: nuoviNomi.value },
     });
     tutti.value = await aggiungiVoce(props.tassonomia.nome, x);
     if (!scelti.value.includes(x.id)) emit('update:modelValue', [...scelti.value, x.id]);
     nuovoNome.value = '';
+    nuoviNomi.value = {};
     aggiungi.value = false;
   } catch (e) {
     errore.value = e.message;
