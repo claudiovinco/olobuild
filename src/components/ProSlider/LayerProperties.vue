@@ -1677,6 +1677,11 @@ const SCROLL_MOVE_CAMPI = [
   { k: 'rx', l: 'Rotazione 3D (X)', d: 0, min: -180, max: 180, step: 1, u: '°' },
   { k: 'ry', l: 'Rotazione 3D (Y)', d: 0, min: -180, max: 180, step: 1, u: '°' },
   { k: 'o', l: 'Opacità', d: 100, min: 0, max: 100, step: 1, u: '%' },
+  // la maschera: quanto del livello resta coperto da ogni lato (il livello si scopre o si copre scorrendo)
+  { k: 'mt', l: 'Maschera dall’alto', d: 0, min: 0, max: 100, step: 1, u: '%' },
+  { k: 'mr', l: 'Maschera da destra', d: 0, min: 0, max: 100, step: 1, u: '%' },
+  { k: 'mb', l: 'Maschera dal basso', d: 0, min: 0, max: 100, step: 1, u: '%' },
+  { k: 'ml', l: 'Maschera da sinistra', d: 0, min: 0, max: 100, step: 1, u: '%' },
 ];
 function toggleScrollMove(enabled) {
   up('scrollMove', enabled ? { inizio: 0, fine: 100, da: {}, a: { y: -120, o: 0 } } : null);

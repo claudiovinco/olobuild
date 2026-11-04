@@ -12,6 +12,9 @@ import { t } from '@/i18n';
  *   styleFields[] → preset, typography_preset, textEffectsFields, autorotate_speed (°/s),
  *                   height (px), border_radius, shadow + borderFields
  */
+// I campi del video valgono solo nel panorama con «Video 360°» (array = tutte vere).
+const conVideo = [{ field: 'mode', value: 'hdri' }, { field: 'source_type', value: 'video' }];
+
 export default {
   type: 'viewer360',
   name: t('Viewer 360°'),
@@ -24,6 +27,11 @@ export default {
     source_type: 'image',
     image_url: '',
     video_url: '',
+    video_url_mobile: '',
+    video_poster: '',
+    video_autoplay: false,
+    video_loop: true,
+    video_audio: true,
     // Object-spin (turntable) — default OFF (mode=hdri): i Viewer360 esistenti restano invariati
     object_image: '',
     object_frames: [],
@@ -50,6 +58,7 @@ export default {
     max_zoom: '80',
     // Layout
     height: '400',
+    height_mobile: '',
     border_radius: 0,
     // Fondo dietro l'oggetto girevole: vuoto = il colore scuro della palette (com'era)
     stage_bg: '',
@@ -93,9 +102,19 @@ export default {
       { value: 'video', label: t('Video 360°') },
     ]},
     { key: 'image_url', label: t('Immagine panoramica 360°'), type: 'image',
-      condition: { field: 'mode', value: 'hdri' } },
-    { key: 'video_url', label: t('Video 360° (URL mp4/webm)'), type: 'text', placeholder: t('https://...video-360.mp4'),
-      condition: { field: 'source_type', value: 'video' } },
+      condition: [{ field: 'mode', value: 'hdri' }, { field: 'source_type', op: 'neq', value: 'video' }] },
+    // Dalla 1.4.975 il video si sceglie dalla Libreria media (la chiave salva sempre l'indirizzo, come prima).
+    { key: 'video_url', label: t('Video 360°'), type: 'media', accept: 'video', condition: conVideo,
+      description: t('Un video equirettangolare (2:1) in mp4 H.264. Per il computer bastano 3840×1920 a circa 10 Mbit/s: più grande non si vede meglio e molti schermi non lo reggono.') },
+    { key: 'video_url_mobile', label: t('Video leggero per il telefono'), type: 'media', accept: 'video', condition: conVideo,
+      description: t('Facoltativo: lo stesso video a 2560×1280, circa 5 Mbit/s. Su telefoni e tablet si usa questo: molti non riescono a disegnare un video più largo di 4096 px e resterebbe nero.') },
+    { key: 'video_poster', label: t('Copertina (foto 360°)'), type: 'image', condition: conVideo,
+      description: t('Un fotogramma del video, in 2:1: si vede e si gira già prima del play. Senza copertina il riquadro resta scuro finché il video non parte.') },
+    { key: 'video_autoplay', label: t('Parte da solo, senza audio'), type: 'toggle', condition: conVideo,
+      description: t('Parte quando arriva sullo schermo e si ferma quando esce. Chi guarda può attivare l’audio dalla barra. Spento: parte col pulsante, già con l’audio.') },
+    { key: 'video_loop', label: t('Ricomincia alla fine'), type: 'toggle', condition: conVideo },
+    { key: 'video_audio', label: t('Pulsante dell’audio'), type: 'toggle', condition: conVideo,
+      description: t('Spento: il video resta sempre muto.') },
     { key: 'object_image', label: t('Immagine oggetto'), type: 'image',
       condition: { field: 'mode', value: 'object-rotate' } },
     { key: 'object_frames', label: t('Frame della rotazione (in ordine)'), type: 'gallery',
@@ -178,6 +197,8 @@ export default {
     // ── LAYOUT ──
     { type: 'separator', label: t('Layout') },
     { key: 'height', label: t('Altezza'), type: 'range', min: 200, max: 800, step: 10 },
+    { key: 'height_mobile', label: t('Altezza sul telefono'), type: 'number', min: 160, max: 1200, step: 10, unit: 'px',
+      placeholder: t('Come sul computer') },
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
 
     ...shadowField,

@@ -1154,14 +1154,16 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
      * Il movimento del livello con lo scorrimento, come attributo data-scroll-move: il tratto di scorrimento (inizio e
      * fine, da 0 a 100) e le tappe, ognuna con la posizione nel tratto (p, 0-100) e i valori: x e y in px della tela del
      * computer, scala, allungamento in orizzontale e in verticale (sx, sy: moltiplicano la scala), rotazione (r), rotazione
-     * 3D (rx, ry) e opacità (o, 0-100). Senza tappe: «da» all'inizio e «a» alla fine. Solo numeri: tutto il resto si scarta.
+     * 3D (rx, ry), opacità (o, 0-100) e maschera (mt, mr, mb, ml: quanto del livello resta coperto dall'alto, da destra,
+     * dal basso e da sinistra, 0-100: il livello si scopre o si copre mentre si scorre). Senza tappe: «da» all'inizio e
+     * «a» alla fine. Solo numeri: tutto il resto si scarta.
      */
     private function scroll_move_attr( $layer ) {
         $sm = $layer['scrollMove'] ?? null;
         if ( empty( $sm ) || ! is_array( $sm ) ) {
             return '';
         }
-        $chiavi = [ 'x', 'y', 's', 'sx', 'sy', 'r', 'rx', 'ry', 'o' ];
+        $chiavi = [ 'x', 'y', 's', 'sx', 'sy', 'r', 'rx', 'ry', 'o', 'mt', 'mr', 'mb', 'ml' ];
         $pulisci = function ( $v ) use ( $chiavi ) {
             $o = [];
             foreach ( $chiavi as $k ) {

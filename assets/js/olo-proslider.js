@@ -1363,6 +1363,10 @@ function initSlider(container) {
       try { return { el: el, d: JSON.parse(el.getAttribute('data-scroll-move')) }; } catch (e) { return null; }
     }).filter(function (m) { return m && m.d && m.d.t && m.d.t.length > 1; });
     if (!mobili.length) return;
+    // la maschera (mt, mr, mb, ml) solo sui livelli che la usano: gli altri restano senza clip-path
+    mobili.forEach(function (m) {
+      m.maschera = m.d.t.some(function (t) { return t.v.mt != null || t.v.mr != null || t.v.mb != null || t.v.ml != null; });
+    });
     // la prospettiva per le rotazioni 3D sta sulla tela del livello
     mobili.forEach(function (m) {
       if (m.d.t.some(function (t) { return t.v.rx || t.v.ry; })) {
@@ -1409,6 +1413,13 @@ function initSlider(container) {
         m.el.style.scale = sx !== 1 || sy !== 1 ? (s * sx).toFixed(4) + ' ' + (s * sy).toFixed(4) : s.toFixed(4);
         m.el.style.rotate = rx ? 'x ' + rx.toFixed(2) + 'deg' : (ry ? 'y ' + ry.toFixed(2) + 'deg' : rz.toFixed(2) + 'deg');
         if (d.t.some(function (t) { return t.v.o != null; })) m.el.style.filter = 'opacity(' + (o / 100).toFixed(3) + ')';
+        // La maschera: quanto del livello resta coperto da ogni lato (in % del livello, che si allunga con la scena): un
+        // video che si scopre sotto una riga che scende (Coro Paganella, 3 nov 2026), una fascia che la segue.
+        if (m.maschera) {
+          m.el.style.clipPath = 'inset(' + ['mt', 'mr', 'mb', 'ml'].map(function (c) {
+            return Math.max(0, Math.min(100, valore(d.t, k, c))).toFixed(2) + '%';
+          }).join(' ') + ')';
+        }
       });
     }
     var giro = null;
