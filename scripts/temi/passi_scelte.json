@@ -1,0 +1,171 @@
+{
+"anima": {
+"la-bottega": "carte"
+},
+"arnia": {
+"apiario": "file"
+},
+"bacca-nera": {
+"la-distilleria": "file"
+},
+"cantiere-aperto": {
+"home": "file"
+},
+"capitonne": {
+"la-bottega": "file"
+},
+"casa-scogliera": {
+"esperienze": "colonne"
+},
+"cementina": {
+"laboratorio": "righe"
+},
+"cerniera": {
+"la-zip": "file"
+},
+"chiavistello": {
+"vendere": "colonne"
+},
+"combinazione": {
+"la-bottega": "file"
+},
+"cordata": {
+"home": "righe"
+},
+"cornicione": {
+"l-impasto": "righe"
+},
+"diottria": {
+"l-esame": "file"
+},
+"doppia-mandata": {
+"team": "file"
+},
+"elastan": {
+"il-tessuto": "carte"
+},
+"falcata": {
+"la-bottega": "fila"
+},
+"fermento": {
+"il-birrificio": "file"
+},
+"filo-a-piombo": {
+"home": "fila"
+},
+"fondente": {
+"il-laboratorio": "file"
+},
+"fornace": {
+"la-fornace": "fila"
+},
+"fuliggine": {
+"la-valle": "carte"
+},
+"fuori-registro": {
+"il-telaio": "colonne"
+},
+"giunto": {
+"come-funziona": "carte"
+},
+"gomitolo": {
+"la-lana": "file"
+},
+"incudine": {
+"la-forgia": "colonne"
+},
+"lastra": {
+"dentro": "righe"
+},
+"luce-rossa": {
+"camera-oscura": "carte"
+},
+"lumen-analytics": {
+"home": "file"
+},
+"mano-libera": {
+"servizi": "file"
+},
+"nido-coworking": {
+"rete": "righe"
+},
+"nove-lune": {
+"home": "file"
+},
+"nove-posti": {
+"il-banco": "colonne"
+},
+"orbita-bassa": {
+"la-costellazione": "fila"
+},
+"pianta-libera": {
+"cantiere": "file"
+},
+"presa-diretta": {
+"lo-studio": "colonne"
+},
+"radice": {
+"consulenze": "colonne"
+},
+"raggiera": {
+"officina": "colonne"
+},
+"raspa": {
+"i-lavaggi": "fila"
+},
+"rastrello": {
+"le-stagioni": "file"
+},
+"rovescio": {
+"il-rovescio": "fila"
+},
+"sbieco": {
+"atelier": "file"
+},
+"scheggia": {
+"la-vetreria": "fila"
+},
+"scia": {
+"cantiere": "carte"
+},
+"scroscio": {
+"la-pioggia": "righe"
+},
+"sifone": {
+"bagni": "file"
+},
+"sirena": {
+"chi-siamo": "righe"
+},
+"sonnambulo": {
+"la-notte": "carte"
+},
+"stender": {
+"su-misura": "file"
+},
+"strada-bianca": {
+"itinerari": "colonne"
+},
+"strato": {
+"progetti": "colonne"
+},
+"telaio": {
+"su-misura": "carte"
+},
+"tepidario": {
+"home": "fila",
+"il-rituale": "fila"
+},
+"trentagradi": {
+"il-lavaggio": "colonne"
+},
+"truciolo": {
+"la-bottega": "file"
+},
+"ventaglio": {
+"la-sartoria": "colonne"
+},
+"zolla": {
+"home": "file"
+}
+}

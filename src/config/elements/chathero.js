@@ -127,7 +127,7 @@ export default {
       description: t('Vuoto = primario del tema.') },
     { key: 'accent2', label: t('Accento 2 (fine gradiente)'), type: 'color',
       description: t('Vuoto = secondario del tema.') },
-    { key: 'accent_on', label: t('Testo su accento (CTA)'), type: 'color' },
+    { key: 'accent_on', label: t('Testo su accento (CTA e bolla utente)'), type: 'color' },
     { key: 'text_color', label: t('Colore titolo'), type: 'color' },
     { key: 'sub_color', label: t('Colore sottotitolo / etichetta'), type: 'color' },
     { key: 'pill_color', label: t('Colore testo pill (vuoto = accento)'), type: 'color' },

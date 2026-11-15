@@ -1,0 +1,762 @@
+{
+"cantina-vallerose/home.json#0": {
+"regia": "nastro",
+"n": 4,
+"largo": 1.0,
+"indicatore": "progress",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "fade"
+}
+},
+"circo-pappagallo/home.json#0": {
+"regia": "coverflow",
+"n": 4,
+"largo": 1.0,
+"indicatore": "fraction",
+"schermo": {
+"lightbox_thumbs": "left",
+"lightbox_thumbs_rows": "2"
+}
+},
+"codice-ragazzi/home.json#0": {
+"regia": "mosaico",
+"n": 4,
+"largo": 1.0,
+"indicatore": "lines",
+"schermo": {
+"lightbox_thumbs": "bottom",
+"lightbox_thumbs_rows": "1"
+}
+},
+"il-gufo/home.json#0": {
+"regia": "coverflow",
+"n": 4,
+"largo": 1.0,
+"indicatore": "dots",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "scale"
+}
+},
+"mezza-delle-mura/home.json#0": {
+"regia": "metro",
+"n": 4,
+"largo": 1.0,
+"indicatore": "progress",
+"schermo": {
+"lightbox_thumbs": "bottom",
+"lightbox_thumbs_rows": "2"
+}
+},
+"mezzanotte/home.json#0": {
+"regia": "masonry",
+"n": 6,
+"largo": 1.0,
+"indicatore": "fraction",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "fade"
+}
+},
+"nido-coworking/home.json#0": {
+"regia": "esagoni",
+"n": 7,
+"largo": 1.0,
+"indicatore": "lines",
+"schermo": {
+"lightbox_thumbs": "right",
+"lightbox_thumbs_rows": "2"
+}
+},
+"nido-coworking/spazi.json#0": {
+"regia": "coverflow",
+"n": 7,
+"largo": 1.0,
+"indicatore": "dots",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "slide"
+}
+},
+"oro-fino/home.json#0": {
+"regia": "nastro",
+"n": 4,
+"largo": 1.0,
+"indicatore": "progress",
+"schermo": {
+"lightbox_thumbs": "bottom",
+"lightbox_thumbs_rows": "2"
+}
+},
+"osteria-fumo/home.json#0": {
+"regia": "sparso",
+"n": 4,
+"largo": 1.0,
+"indicatore": "fraction",
+"schermo": {
+"lightbox_thumbs": "bottom",
+"lightbox_thumbs_rows": "1"
+}
+},
+"parla-mondo/home.json#0": {
+"regia": "griglia_bn",
+"n": 4,
+"largo": 1.0,
+"indicatore": "lines",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "fade"
+}
+},
+"passo-lento/home.json#0": {
+"regia": "collage",
+"n": 6,
+"largo": 1.0,
+"indicatore": "dots",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "scale"
+}
+},
+"sali-argento/archivio.json#0": {
+"regia": "coverflow",
+"n": 4,
+"largo": 1.0,
+"indicatore": "progress",
+"schermo": {
+"lightbox_thumbs": "left",
+"lightbox_thumbs_rows": "1"
+}
+},
+"sartoria-ferro/home.json#0": {
+"regia": "nastro",
+"n": 4,
+"largo": 1.0,
+"indicatore": "fraction",
+"schermo": {
+"lightbox_thumbs": "left",
+"lightbox_thumbs_rows": "2"
+}
+},
+"sartoria-ferro/misure.json#0": {
+"regia": "diagonale",
+"n": 3,
+"largo": 1.0,
+"indicatore": "lines",
+"schermo": {
+"lightbox_thumbs": "bottom",
+"lightbox_thumbs_rows": "2"
+}
+},
+"tostatura-nove/home.json#0": {
+"regia": "coverflow",
+"n": 4,
+"largo": 1.0,
+"indicatore": "dots",
+"schermo": {
+"lightbox_thumbs": "bottom",
+"lightbox_thumbs_rows": "1"
+}
+},
+"vinile-club/home.json#0": {
+"regia": "diagonale",
+"n": 4,
+"largo": 1.0,
+"indicatore": "progress",
+"schermo": {
+"lightbox_thumbs": "right",
+"lightbox_thumbs_rows": "2"
+}
+},
+"volo-leggero/home.json#0": {
+"regia": "giustificato",
+"n": 6,
+"largo": 1.0,
+"indicatore": "fraction",
+"schermo": {
+"lightbox_thumbs": "right",
+"lightbox_thumbs_rows": "1"
+}
+},
+"ago-e-ancora/artisti.json#0": {
+"regia": "coverflow",
+"n": 4,
+"largo": 1.0,
+"indicatore": "lines",
+"schermo": {
+"lightbox_thumbs": "left",
+"lightbox_thumbs_rows": "1"
+}
+},
+"ago-e-ancora/artisti.json#1": {
+"regia": "mosaico",
+"n": 4,
+"largo": 1.0,
+"indicatore": "dots",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "scale"
+}
+},
+"ago-e-ancora/artisti.json#2": {
+"regia": "griglia_bn",
+"n": 4,
+"largo": 1.0,
+"indicatore": "progress",
+"schermo": {
+"lightbox_thumbs": "left",
+"lightbox_thumbs_rows": "1"
+}
+},
+"ago-e-ancora/artisti.json#3": {
+"regia": "diagonale",
+"n": 4,
+"largo": 1.0,
+"indicatore": "fraction",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "scale"
+}
+},
+"lunga-posa/aziende.json#0": {
+"regia": "nastro_doppio",
+"n": 8,
+"largo": 1.0,
+"indicatore": "lines",
+"schermo": {
+"lightbox_thumbs": "left",
+"lightbox_thumbs_rows": "1"
+}
+},
+"lunga-posa/boudoir.json#0": {
+"regia": "collage",
+"n": 3,
+"largo": 0.6,
+"indicatore": "dots",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "scale"
+}
+},
+"lunga-posa/eventi.json#0": {
+"regia": "deriva",
+"n": 8,
+"largo": 1.0,
+"indicatore": "progress",
+"schermo": {
+"lightbox_thumbs": "left",
+"lightbox_thumbs_rows": "1"
+}
+},
+"lunga-posa/famiglia.json#0": {
+"regia": "giustificato",
+"n": 8,
+"largo": 1.0,
+"indicatore": "fraction",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "scale"
+}
+},
+"lunga-posa/lavori.json#0": {
+"regia": "coverflow",
+"n": 4,
+"largo": 0.67,
+"indicatore": "lines",
+"schermo": {
+"lightbox_thumbs": "left",
+"lightbox_thumbs_rows": "1"
+}
+},
+"lunga-posa/lavori.json#1": {
+"regia": "mosaico",
+"n": 4,
+"largo": 0.67,
+"indicatore": "dots",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "scale"
+}
+},
+"lunga-posa/lavori.json#2": {
+"regia": "nastro",
+"n": 4,
+"largo": 0.67,
+"indicatore": "progress",
+"schermo": {
+"lightbox_thumbs": "left",
+"lightbox_thumbs_rows": "1"
+}
+},
+"lunga-posa/lavori.json#3": {
+"regia": "sparso",
+"n": 4,
+"largo": 0.67,
+"indicatore": "fraction",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "scale"
+}
+},
+"lunga-posa/matrimoni.json#0": {
+"regia": "masonry",
+"n": 6,
+"largo": 1.0,
+"indicatore": "lines",
+"schermo": {
+"lightbox_thumbs": "left",
+"lightbox_thumbs_rows": "1"
+}
+},
+"lunga-posa/matrimoni.json#1": {
+"regia": "espandi",
+"n": 6,
+"largo": 0.6,
+"indicatore": "dots",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "scale"
+}
+},
+"lunga-posa/ritratti.json#0": {
+"regia": "griglia_bn",
+"n": 8,
+"largo": 1.0,
+"indicatore": "progress",
+"schermo": {
+"lightbox_thumbs": "left",
+"lightbox_thumbs_rows": "1"
+}
+},
+"solleone/brand.json#0": {
+"regia": "coverflow",
+"n": 8,
+"largo": 1.0,
+"indicatore": "fraction",
+"schermo": {
+"lightbox_thumbs": "left",
+"lightbox_thumbs_rows": "2"
+}
+},
+"ventiquattro/lavori.json#0": {
+"regia": "griglia_bn",
+"n": 3,
+"largo": 0.67,
+"indicatore": "lines",
+"schermo": {
+"lightbox_thumbs": "bottom",
+"lightbox_thumbs_rows": "1"
+}
+},
+"ventiquattro/lavori.json#1": {
+"regia": "espandi",
+"n": 3,
+"largo": 0.67,
+"indicatore": "dots",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "fade"
+}
+},
+"ventiquattro/lavori.json#2": {
+"regia": "diagonale",
+"n": 3,
+"largo": 0.67,
+"indicatore": "progress",
+"schermo": {
+"lightbox_thumbs": "bottom",
+"lightbox_thumbs_rows": "1"
+}
+},
+"ventiquattro/lavori.json#3": {
+"regia": "collage",
+"n": 3,
+"largo": 0.67,
+"indicatore": "fraction",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "fade"
+}
+},
+"venatura/bottega.json#0": {
+"regia": "diagonale",
+"n": 4,
+"largo": 1.0,
+"indicatore": "lines",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "scale"
+}
+},
+"venatura/su-misura.json#0": {
+"regia": "masonry",
+"n": 9,
+"largo": 1.0,
+"indicatore": "dots",
+"schermo": {
+"lightbox_thumbs": "bottom",
+"lightbox_thumbs_rows": "1"
+}
+},
+"penombra/progetti.json#0": {
+"regia": "collage",
+"n": 3,
+"largo": 0.67,
+"indicatore": "progress",
+"schermo": {
+"lightbox_thumbs": "left",
+"lightbox_thumbs_rows": "1"
+}
+},
+"penombra/progetti.json#1": {
+"regia": "espandi",
+"n": 3,
+"largo": 0.67,
+"indicatore": "fraction",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "scale"
+}
+},
+"penombra/progetti.json#2": {
+"regia": "griglia_bn",
+"n": 3,
+"largo": 0.67,
+"indicatore": "lines",
+"schermo": {
+"lightbox_thumbs": "left",
+"lightbox_thumbs_rows": "1"
+}
+},
+"penombra/progetti.json#3": {
+"regia": "diagonale",
+"n": 3,
+"largo": 0.67,
+"indicatore": "dots",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "scale"
+}
+},
+"fuoco-lento/cene.json#0": {
+"regia": "coverflow",
+"n": 6,
+"largo": 1.0,
+"indicatore": "progress",
+"schermo": {
+"lightbox_thumbs": "bottom",
+"lightbox_thumbs_rows": "2"
+}
+},
+"ring/la-palestra.json#0": {
+"regia": "espandi",
+"n": 6,
+"largo": 1.0,
+"indicatore": "fraction",
+"schermo": {
+"lightbox_thumbs": "right",
+"lightbox_thumbs_rows": "1"
+}
+},
+"nove-posti/home.json#0": {
+"regia": "esagoni",
+"n": 8,
+"largo": 1.0,
+"indicatore": "lines",
+"schermo": {
+"lightbox_thumbs": "bottom",
+"lightbox_thumbs_rows": "2"
+}
+},
+"diottria/home.json#0": {
+"regia": "puzzle",
+"n": 8,
+"largo": 1.0,
+"indicatore": "dots",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "slide"
+}
+},
+"orbita-bassa/i-dati.json#0": {
+"regia": "coverflow",
+"n": 8,
+"largo": 1.0,
+"indicatore": "progress",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "fade"
+}
+},
+"bacca-nera/home.json#0": {
+"regia": "giustificato",
+"n": 6,
+"largo": 1.0,
+"indicatore": "fraction",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "scale"
+}
+},
+"anima/home.json#0": {
+"regia": "coverflow",
+"n": 6,
+"largo": 1.0,
+"indicatore": "lines",
+"schermo": {
+"lightbox_thumbs": "right",
+"lightbox_thumbs_rows": "2"
+}
+},
+"fondente/home.json#0": {
+"regia": "nastro",
+"n": 7,
+"largo": 1.0,
+"indicatore": "dots",
+"schermo": {
+"lightbox_thumbs": "right",
+"lightbox_thumbs_rows": "1"
+}
+},
+"girotondo/gli-spazi.json#0": {
+"regia": "coverflow",
+"n": 6,
+"largo": 1.0,
+"indicatore": "progress",
+"schermo": {
+"lightbox_thumbs": "left",
+"lightbox_thumbs_rows": "1"
+}
+},
+"fornace/home.json#0": {
+"regia": "giustificato",
+"n": 7,
+"largo": 1.0,
+"indicatore": "fraction",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "fade"
+}
+},
+"mano-libera/home.json#0": {
+"regia": "diagonale",
+"n": 6,
+"largo": 1.0,
+"indicatore": "lines",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "scale"
+}
+},
+"tavola-errante/menu.json#0": {
+"regia": "griglia_bn",
+"n": 6,
+"largo": 1.0,
+"indicatore": "dots",
+"schermo": {
+"lightbox_thumbs": "right",
+"lightbox_thumbs_rows": "1"
+}
+},
+"telaio/telai.json#0": {
+"regia": "esagoni",
+"n": 5,
+"largo": 1.0,
+"indicatore": "progress",
+"schermo": {
+"lightbox_thumbs": "bottom",
+"lightbox_thumbs_rows": "2"
+}
+},
+"arnia/apiario.json#0": {
+"regia": "masonry",
+"n": 5,
+"largo": 1.0,
+"indicatore": "fraction",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "fade"
+}
+},
+"bolina/la-scuola.json#0": {
+"regia": "coverflow",
+"n": 5,
+"largo": 1.0,
+"indicatore": "lines",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "scale"
+}
+},
+"sincope/il-club.json#0": {
+"regia": "esagoni",
+"n": 6,
+"largo": 1.0,
+"indicatore": "dots",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "slide"
+}
+},
+"aerostato/home.json#0": {
+"regia": "espandi",
+"n": 5,
+"largo": 1.0,
+"indicatore": "progress",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "fade"
+}
+},
+"aerostato/voli.json#0": {
+"regia": "coverflow",
+"n": 5,
+"largo": 1.0,
+"indicatore": "fraction",
+"schermo": {
+"lightbox_thumbs": "right",
+"lightbox_thumbs_rows": "1"
+}
+},
+"foglia-lenta/la-carta.json#0": {
+"regia": "nastro",
+"n": 5,
+"largo": 1.0,
+"indicatore": "lines",
+"schermo": {
+"lightbox_thumbs": "left",
+"lightbox_thumbs_rows": "1"
+}
+},
+"fuorigiri/home.json#0": {
+"regia": "espandi",
+"n": 5,
+"largo": 1.0,
+"indicatore": "dots",
+"schermo": {
+"lightbox_thumbs": "left",
+"lightbox_thumbs_rows": "2"
+}
+},
+"fuorigiri/le-moto.json#0": {
+"regia": "coverflow",
+"n": 5,
+"largo": 1.0,
+"indicatore": "progress",
+"schermo": {
+"lightbox_thumbs": "bottom",
+"lightbox_thumbs_rows": "2"
+}
+},
+"pista-nera/le-piste.json#0": {
+"regia": "griglia_bn",
+"n": 6,
+"largo": 1.0,
+"indicatore": "fraction",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "fade"
+}
+},
+"staffa/passeggiate.json#0": {
+"regia": "esagoni",
+"n": 5,
+"largo": 1.0,
+"indicatore": "lines",
+"schermo": {
+"lightbox_thumbs": "right",
+"lightbox_thumbs_rows": "2"
+}
+},
+"concia/collezione.json#0": {
+"regia": "coverflow",
+"n": 5,
+"largo": 1.0,
+"indicatore": "dots",
+"schermo": {
+"lightbox_thumbs": "right",
+"lightbox_thumbs_rows": "1"
+}
+},
+"clorofilla/piante.json#0": {
+"regia": "sparso",
+"n": 5,
+"largo": 1.0,
+"indicatore": "progress",
+"schermo": {
+"lightbox_thumbs": "left",
+"lightbox_thumbs_rows": "1"
+}
+},
+"soglia/mostre.json#0": {
+"regia": "espandi",
+"n": 5,
+"largo": 1.0,
+"indicatore": "fraction",
+"schermo": {
+"lightbox_thumbs": "left",
+"lightbox_thumbs_rows": "2"
+}
+},
+"pianta-libera/home.json#0": {
+"regia": "diagonale",
+"n": 4,
+"largo": 1.0,
+"indicatore": "lines",
+"schermo": {
+"lightbox_thumbs": "right",
+"lightbox_thumbs_rows": "2"
+}
+},
+"ventaglio/home.json#0": {
+"regia": "nastro",
+"n": 7,
+"largo": 1.0,
+"indicatore": "dots",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "fade"
+}
+},
+"sifone/home.json#0": {
+"regia": "espandi",
+"n": 5,
+"largo": 1.0,
+"indicatore": "progress",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "fade"
+}
+},
+"incudine/home.json#0": {
+"regia": "sparso",
+"n": 5,
+"largo": 1.0,
+"indicatore": "fraction",
+"schermo": {
+"lightbox_thumbs": "bottom",
+"lightbox_thumbs_rows": "1"
+}
+},
+"cric/home.json#0": {
+"regia": "coverflow",
+"n": 5,
+"largo": 1.0,
+"indicatore": "lines",
+"schermo": {
+"lightbox_thumbs": "right",
+"lightbox_thumbs_rows": "2"
+}
+},
+"rastrello/home.json#0": {
+"regia": "masonry",
+"n": 5,
+"largo": 1.0,
+"indicatore": "dots",
+"schermo": {
+"lightbox_thumbs": "none",
+"lightbox_animation": "scale"
+}
+}
+}

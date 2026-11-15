@@ -29,6 +29,7 @@ function defaultLayer(type = 'text') {
     content: type === 'text' ? 'Testo intestazione' : (type === 'button' ? 'Clicca qui' : ''),
     tag: 'h2',
     imageSrc: '',
+    imageAlt: '',
     iconName: 'star',
     buttonUrl: '',
     buttonTarget: '_self',
@@ -422,6 +423,12 @@ export default {
     { key: 'carousel', label: t('Modalita carosello'), type: 'toggle' },
     { key: 'carousel3D', label: t('Rotazione 3D'), type: 'toggle',
       condition: { field: 'carousel', value: true } },
+
+    { type: 'separator', label: t('Interazioni') },
+    { key: 'stati', label: t('Stati all’avvio'), type: 'text', placeholder: 'luce=spenta; tinta=bianco',
+      description: t('I livelli possono cambiare al clic: l’azione «Imposta uno stato» o «Stato successivo» dà un valore a uno '
+        + 'stato (luce = accesa) e i livelli con «Visibile solo in uno stato» si mostrano o si nascondono. Qui il valore di '
+        + 'partenza di ogni stato, nome=valore separati da punto e virgola; uno stato non scritto parte vuoto.') },
 
     { type: 'separator', label: t('Scroll Timeline') },
     { key: 'scrollTimeline', label: t('Scroll-fixed timeline'), type: 'toggle' },

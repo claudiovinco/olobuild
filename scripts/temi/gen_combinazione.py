@@ -88,6 +88,16 @@ def apertura(t):
     quad = segue(245, [{'p': 0, 'r': 0}, {'p': 8, 'r': 0}, {'p': 20, 'r': 252}, {'p': 30, 'r': 108}, {'p': 42, 'r': 360}])
     ruota = segue(245, [{'p': 0, 'r': 0}, {'p': 42, 'r': 0}, {'p': 47, 'r': 120}])
     livelli = K.veli('co-velo', 'sinistra', 34, 56, colore=C['nero'], forza=84, mobile_da=0, mobile_alto=24) + [
+        # dietro la porta il vano: la valigetta con la serratura a combinazione dentro il buco rotondo, e l'anello d'acciaio
+        # con l'ombra dello spessore. Prima dietro non c'era niente e la porta sembrava un cerchio che si deforma
+        # (l'utente, 13 nov 2026)
+        K.livello('co-vano', tipo='image', imageSrc=K.img(VALI[4]), imageAlt='La valigetta nel caveau', objectFit='cover',
+                  objectPosition='55% 50%', borderRadius=999, x=54, y=21.55, w=32, h=56.9, entra='fadeIn', ritardo=100, durata=700,
+                  responsive={'mobile': {'x': 11, 'y': 29.37, 'width': 78, 'height': 35.66}}),
+        K.livello('co-anello', tipo='shape', bgColor='transparent', borderRadius=999, borderWidth=14, borderColor='#16120D',
+                  x=53.5, y=20.67, w=33, h=58.67, entra='fadeIn', ritardo=100, durata=700,
+                  customCSS='box-shadow:inset 0 0 60px 26px rgba(0,0,0,.88),0 0 0 3px rgba(207,165,76,.55),0 20px 60px rgba(0,0,0,.6);',
+                  responsive={'mobile': {'x': 9.5, 'y': 28.69, 'width': 81, 'height': 37.03}}),
         K.livello('co-porta', tipo='shape', x=53, y=19.75, w=34, h=60.5, bgColor=ACCIAIO, borderRadius=999, borderWidth=8,
                   borderColor=C['acc'], entra='fadeIn', ritardo=100, durata=700,
                   shapeGradient={'angle': 145, 'from': '#3A332A', 'to': '#15120E', 'fromStop': 10},

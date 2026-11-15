@@ -68,6 +68,11 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
         'brush_size'       => 32,
         'reveal_threshold' => 60,
         'reset_on_leave'   => false,
+        // 15 nov 2026: gratta al semplice passaggio del mouse (senza tenere premuto), pennello morbido, e copertura che
+        // ricresce da sola in N secondi (0 = mai): il velluto che si schiarisce dove passa la mano e poi torna a posto.
+        'al_passaggio'     => false,
+        'pennello_morbido' => false,
+        'ricresce'         => 0,
 
         // Layout
         'height_mode'   => 'aspect',
@@ -153,6 +158,12 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
         $brush     = max( 6, min( 100, intval( $s['brush_size'] ) ) );
         $threshold = max( 0, min( 100, intval( $s['reveal_threshold'] ) ) );
         $reset     = ! empty( $s['reset_on_leave'] );
+        $passaggio = ! empty( $s['al_passaggio'] );
+        $morbido   = ! empty( $s['pennello_morbido'] );
+        $ricresce  = max( 0, min( 60, floatval( $s['ricresce'] ) ) );
+        if ( $ricresce > 0 ) {
+            $threshold = 0; // una copertura che ricresce non si scopre mai tutta da sola
+        }
 
         // ── Layout ──
         $height_mode = $s['height_mode'] === 'fixed' ? 'fixed' : 'aspect';
@@ -188,10 +199,29 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
             $shadow_css = "box-shadow:{$sins}{$sh}px {$sv}px {$sblur}px {$sspr}px {$scol};";
         }
 
+        // La copertura com'è prima che lo script la dipinga (stessi colori, stessa direzione del gradiente del canvas)
+        $copertura_css = 'gradient' === $cover_type
+            ? 'linear-gradient(' . $cover_angle . 'deg, ' . $cover_c1 . ', ' . $cover_c2 . ')'
+            : $cover_c1;
+
         // Dimensione "box" (aspect-ratio o altezza fissa) applicata al wrapper grattabile
         $box_size_css = $height_mode === 'fixed'
             ? "height:{$height}px;"
             : "aspect-ratio:{$aspect};";
+
+        // ── Testo: un controllo tipografia per testo (15 nov 2026). Vuoti = le misure di sempre qui sotto. ──
+        $tipo_occhiello = $this->tipografia_css( $s, 'eyebrow' );
+        // La misura del titolo scende col telefono come quella di sempre (clamp 28px · 5vw · 52px), in proporzione.
+        $tipo_titolo = $this->tipografia_css( $s, 'title', [ 'size' => 'title_font_size__a_parte' ] );
+        $misura_tit  = $s['title_font_size'] ?? '';
+        if ( is_numeric( $misura_tit ) && (float) $misura_tit > 0 ) {
+            $n            = (float) $misura_tit;
+            $tipo_titolo .= 'font-size:clamp(' . min( 28, $n ) . 'px,' . round( $n / 52 * 5, 2 ) . 'vw,' . $n . 'px);';
+        } elseif ( '' !== Olobuild_Tile_Utils::css_len( $misura_tit, 'px' ) ) {
+            $tipo_titolo .= 'font-size:' . Olobuild_Tile_Utils::css_len( $misura_tit, 'px' ) . ';';
+        }
+        $tipo_desc   = $this->tipografia_css( $s, 'desc' );
+        $tipo_codice = $this->tipografia_css( $s, 'code' );
 
         ob_start();
         ?>
@@ -207,7 +237,14 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
                 position: relative;
                 width: 100%;
                 <?php echo $box_size_css; ?>
+                <?php
+                // Il riquadro si allunga se il premio non ci sta (sul telefono un 2:1 è alto 180 px e il sopra-titolo
+                // finiva tagliato sul bordo): il premio è l'unico figlio nel flusso della griglia, e con overflow:clip
+                // (non è un contenitore di scorrimento) la proporzione diventa un'altezza MINIMA (15 nov 2026).
+                ?>
+                display: grid;
                 overflow: hidden;
+                overflow: clip;
                 <?php if ( $radius_css ) : ?>border-radius: <?php echo $radius_css; ?>;<?php endif; ?>
                 <?php echo $shadow_css; ?>
                 background: <?php echo $under_bg; ?>;
@@ -215,8 +252,8 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
             }
             /* Contenuto premio — SSR, sempre presente sotto */
             .<?php echo $uid; ?> .olo-scratch-under {
-                position: absolute;
-                inset: 0;
+                position: relative;
+                grid-area: 1 / 1;
                 z-index: 1;
                 display: flex;
                 flex-direction: column;
@@ -226,6 +263,14 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
                 padding: 30px;
                 gap: 8px;
                 color: <?php echo $text_color; ?>;
+                <?php
+                // Con la foto sotto, il testo del premio stava direttamente sull'immagine: su una foto di tono medio
+                // (il vaso di partenza) si leggeva male. Una sfumatura dello «Sfondo area premio» — il fondo su cui il
+                // colore del testo è pensato — solo dietro al testo, ai bordi la foto resta piena (15 nov 2026).
+                if ( $image ) :
+                    ?>
+                background: radial-gradient(ellipse 60% 54% at 50% 50%, color-mix(in srgb, <?php echo $under_bg; ?> 84%, transparent) 0%, color-mix(in srgb, <?php echo $under_bg; ?> 58%, transparent) 46%, transparent 80%);
+                <?php endif; ?>
             }
             <?php if ( $image ) : ?>
             .<?php echo $uid; ?> .olo-scratch-img {
@@ -268,6 +313,12 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
                 z-index: 2;
                 width: 100%;
                 height: 100%;
+                <?php
+                // Finché lo script non ha dipinto la copertura il canvas è vuoto e il premio si vedeva (al caricamento
+                // e a ogni modifica nel builder): lo copre lo stesso colore, che lo script toglie al primo disegno.
+                // Senza JavaScript il canvas sparisce (noscript qui sotto) e il premio resta visibile.
+                ?>
+                background: <?php echo $copertura_css; ?>;
                 touch-action: none;
                 cursor: grab;
                 will-change: transform;
@@ -342,6 +393,10 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
                 color: <?php echo $text_color; ?>;
                 user-select: all;
             }
+            <?php if ( $tipo_occhiello ) : ?>.<?php echo $uid; ?> .olo-scratch-eyebrow { <?php echo $tipo_occhiello; ?> }<?php endif; ?>
+            <?php if ( $tipo_titolo ) : ?>.<?php echo $uid; ?> .olo-scratch-title { <?php echo $tipo_titolo; ?> }<?php endif; ?>
+            <?php if ( $tipo_desc ) : ?>.<?php echo $uid; ?> .olo-scratch-desc { <?php echo $tipo_desc; ?> }<?php endif; ?>
+            <?php if ( $tipo_codice ) : ?>.<?php echo $uid; ?> .olo-scratch-code { <?php echo $tipo_codice; ?> }<?php endif; ?>
             .<?php echo $uid; ?> .olo-scratch-copy {
                 display: inline-flex;
                 align-items: center;
@@ -384,6 +439,7 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
                     <?php if ( '' !== $codice ) : ?><p class="olo-scratch-code" data-olo-code><?php echo esc_html( $codice ); ?></p><?php endif; ?>
                 </div>
                 <canvas class="<?php echo esc_attr( $cv ); ?>" aria-hidden="true"></canvas>
+                <noscript><style>.<?php echo esc_attr( $uid ); ?> .<?php echo esc_attr( $cv ); ?>{display:none}</style></noscript>
                 <?php if ( $hint ) : ?>
                     <div class="olo-scratch-hint" data-olo-hint><?php echo $hint; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() above ?></div>
                 <?php endif; ?>
@@ -457,8 +513,12 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
                ma NON sul canvas 2D (fillStyle le ignora). Risolviamo via computed style. */
             /* Il colore come lo vede il browser, riserva compresa: prima si leggeva solo il
                token, e se mancava la pellicola diventava nera. */
-            function resolveVarColor( c ) {
-                if ( typeof c !== 'string' ) { return c; }
+            /* Un colore che il browser non conosce (scritto a mano: «B», «BRINA» mentre si digita) mandava in errore
+               addColorStop e la copertura non si dipingeva più: ripiega sul colore di riserva (15 nov 2026). */
+            function resolveVarColor( c, riserva ) {
+                if ( typeof c !== 'string' || ! c ) { return riserva || c; }
+                var conosciuto = ! riserva || ! window.CSS || ! CSS.supports || CSS.supports( 'color', c );
+                if ( ! conosciuto ) { return riserva; }
                 if ( c.indexOf( 'var(' ) === -1 ) {
                     if ( c.indexOf( 'color-mix(' ) === -1 ) { return c; }
                 }
@@ -473,15 +533,18 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
             }
             <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JS config: every value is passed through json_encode() (escapes quotes and slashes, so it cannot break out of the script context); sources are sanitized above (whitelist/safe_color_css/intval/esc_url); RESET is a fixed literal ternary. ?>
             var COVER_TYPE = <?php echo json_encode( $cover_type ); ?>;
-            var COVER_C1   = resolveVarColor( <?php echo json_encode( $cover_c1 ); ?> );
-            var COVER_C2   = resolveVarColor( <?php echo json_encode( $cover_c2 ); ?> );
+            var COVER_C1   = resolveVarColor( <?php echo json_encode( $cover_c1 ); ?>, '#C9C2CC' );
+            var COVER_C2   = resolveVarColor( <?php echo json_encode( $cover_c2 ); ?>, '#9A93A0' );
             var COVER_ANG  = <?php echo json_encode( $cover_angle ); ?>;
             var COVER_IMG  = <?php echo json_encode( $cover_img ); ?>;
             var COVER_TEXT = <?php echo json_encode( $cover_text ); ?>;
-            var COVER_TXTC = resolveVarColor( <?php echo json_encode( $cover_txt_c ); ?> );
+            var COVER_TXTC = resolveVarColor( <?php echo json_encode( $cover_txt_c ); ?>, 'rgba(0,0,0,0.28)' );
             var BRUSH      = <?php echo json_encode( $brush ); ?>;
             var THRESHOLD  = <?php echo json_encode( $threshold ); ?>;   // 0 = no auto-reveal
             var RESET      = <?php echo $reset ? 'true' : 'false'; ?>;
+            var PASSAGGIO  = <?php echo $passaggio ? 'true' : 'false'; ?>;
+            var MORBIDO    = <?php echo $morbido ? 'true' : 'false'; ?>;
+            var RICRESCE   = <?php echo json_encode( $ricresce ); ?>;   // secondi; 0 = la copertura non ricresce
             <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
             var dpr = Math.min( window.devicePixelRatio || 1, 2 ); // dpr cap
@@ -501,6 +564,28 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
                 var ex = Math.cos( rad ), ey = Math.sin( rad );
                 var half = Math.abs( W * ex ) / 2 + Math.abs( H * ey ) / 2;
                 return [ cx - ex * half, cy - ey * half, cx + ex * half, cy + ey * half ];
+            }
+
+            function disegnaCopertura( alpha ) {
+                ctx.save();
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.globalAlpha = alpha;
+                if ( COVER_TYPE === 'image' && coverImgEl && coverImgEl.complete && coverImgEl.naturalWidth ) {
+                    var iw = coverImgEl.naturalWidth, ih = coverImgEl.naturalHeight;
+                    var k = Math.max( W / iw, H / ih );
+                    ctx.drawImage( coverImgEl, ( W - iw * k ) / 2, ( H - ih * k ) / 2, iw * k, ih * k );
+                } else if ( COVER_TYPE === 'gradient' ) {
+                    var p = gradPoints( COVER_ANG );
+                    var g = ctx.createLinearGradient( p[0], p[1], p[2], p[3] );
+                    g.addColorStop( 0, COVER_C1 );
+                    g.addColorStop( 1, COVER_C2 );
+                    ctx.fillStyle = g;
+                    ctx.fillRect( 0, 0, W, H );
+                } else {
+                    ctx.fillStyle = COVER_C1;
+                    ctx.fillRect( 0, 0, W, H );
+                }
+                ctx.restore();
             }
 
             function fillCover() {
@@ -563,6 +648,7 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
                 H = canvas.height = Math.round( rect.height * dpr );
                 fillCover();
                 painted = true;
+                canvas.style.background = 'none';   // il colore d'attesa del CSS: grattando si vedrebbe sotto il tratto
             }
 
             // Coordinate puntatore → spazio backing store (gestisce dpr + scaling CSS)
@@ -574,13 +660,91 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
                 ];
             }
 
-            function scratch( x, y ) {
+            var ultimo = null;   // l'ultimo punto del tratto: fra due eventi si riempie la strada (niente buchi)
+            // Con la ricrescita il tratto non buca la copertura: si segna su una MASCHERA a parte, che svanisce, e la
+            // copertura si ridisegna intera dall'immagine a ogni fotogramma meno la maschera. Ridipingere la copertura
+            // su sé stessa quasi trasparente centinaia di volte accumulava arrotondamenti: aloni e colore che scuriva.
+            var M = null, mctx = null;
+            function maschera() {
+                if ( ! M ) { M = document.createElement( 'canvas' ); mctx = M.getContext( '2d' ); }
+                if ( M.width !== W || M.height !== H ) { M.width = W; M.height = H; }
+                return mctx;
+            }
+            function componi() {
+                ctx.save();
+                ctx.globalCompositeOperation = 'copy';
+                ctx.globalAlpha = 1;
+                ctx.fillStyle = COVER_C1;
+                ctx.fillRect( 0, 0, W, H );
+                ctx.restore();
+                disegnaCopertura( 1 );
+                ctx.save();
                 ctx.globalCompositeOperation = 'destination-out';
-                ctx.beginPath();
-                ctx.arc( x, y, BRUSH * dpr, 0, Math.PI * 2 );
-                ctx.fill();
+                ctx.drawImage( M, 0, 0 );
+                ctx.restore();
+            }
+            function tocco( x, y ) {
+                var R = BRUSH * dpr;
+                var c = ctx;
+                if ( RICRESCE > 0 ) {
+                    c = maschera();
+                    c.globalCompositeOperation = 'source-over';
+                } else {
+                    c.globalCompositeOperation = 'destination-out';
+                }
+                c.beginPath();
+                if ( MORBIDO ) {
+                    var g = c.createRadialGradient( x, y, 0, x, y, R );
+                    g.addColorStop( 0, 'rgba(0,0,0,0.7)' );
+                    g.addColorStop( 0.55, 'rgba(0,0,0,0.38)' );
+                    g.addColorStop( 1, 'rgba(0,0,0,0)' );
+                    c.fillStyle = g;
+                } else {
+                    c.fillStyle = '#000';
+                }
+                c.arc( x, y, R, 0, Math.PI * 2 );
+                c.fill();
+            }
+            function scratch( x, y, nuovo ) {
+                var R = BRUSH * dpr;
+                if ( ultimo && ! nuovo ) {
+                    var dx = x - ultimo[0], dy = y - ultimo[1], d = Math.sqrt( dx * dx + dy * dy );
+                    var passi = Math.min( 60, Math.floor( d / ( R * 0.35 ) ) );
+                    for ( var k = 1; k <= passi; k++ ) { tocco( ultimo[0] + dx * k / ( passi + 1 ), ultimo[1] + dy * k / ( passi + 1 ) ); }
+                }
+                tocco( x, y );
+                if ( RICRESCE > 0 ) { componi(); }
+                ultimo = [ x, y ];
                 cleared = true;
+                toccato = performance.now();
+                if ( RICRESCE > 0 ) { ricresci(); }
                 if ( hint && ! hintHidden ) { hint.style.opacity = '0'; hintHidden = true; }
+            }
+
+            // La copertura ricresce: la maschera dei tratti svanisce poco a poco (a scatti di un quinto di secondo: con passi
+            // più piccoli gli arrotondamenti si fermavano su un velo che non spariva) e la copertura si ricompone intera; alla fine la maschera si svuota.
+            var toccato = 0, ricrescita = null, tPrima = 0;
+            function ricresci() {
+                if ( ricrescita ) { return; }
+                tPrima = performance.now();
+                ricrescita = requestAnimationFrame( function giro( ora ) {
+                    if ( revealed ) { ricrescita = null; return; }
+                    var dt = ( ora - tPrima ) / 1000;
+                    if ( dt >= 0.2 && M ) {
+                        tPrima = ora;
+                        mctx.save();
+                        mctx.globalCompositeOperation = 'destination-out';
+                        mctx.globalAlpha = Math.min( 1, 1 - Math.exp( -Math.min( dt, 0.5 ) * 4 / RICRESCE ) );
+                        mctx.fillRect( 0, 0, W, H );
+                        mctx.restore();
+                        componi();
+                    }
+                    if ( ora - toccato > RICRESCE * 1250 ) {
+                        if ( M ) { mctx.clearRect( 0, 0, W, H ); }
+                        fillCover(); ricrescita = null; return;
+                    }
+                    ricrescita = requestAnimationFrame( giro );
+                } );
             }
 
             // Stima % grattata campionando gli alpha su una griglia ridotta (economico).
@@ -639,10 +803,18 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
                     try { canvas.setPointerCapture( e.pointerId ); } catch ( err ) {}
                 }
                 var p = pos( e );
-                scratch( p[0], p[1] );
+                scratch( p[0], p[1], true );
             }
+            var FINE = ! ( window.matchMedia && window.matchMedia( '(hover: none), (pointer: coarse)' ).matches );
             function onMove( e ) {
-                if ( ! drawing || revealed ) { return; }
+                if ( revealed || ! painted ) { return; }
+                if ( ! drawing ) {
+                    // al passaggio: col mouse basta passare (senza premere); al tocco resta il trascinamento
+                    if ( ! ( PASSAGGIO && e.pointerType === 'mouse' && FINE ) ) { return; }
+                    var q = pos( e );
+                    scratch( q[0], q[1], false );
+                    return;
+                }
                 e.preventDefault();
                 var p = pos( e );
                 scratch( p[0], p[1] );
@@ -655,6 +827,7 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
 
             canvas.addEventListener( 'pointerdown', onDown );
             canvas.addEventListener( 'pointermove', onMove, { passive: false } );
+            canvas.addEventListener( 'pointerleave', function(){ ultimo = null; } );
             window.addEventListener( 'pointerup', onUp );
             window.addEventListener( 'pointercancel', onUp );
 

@@ -217,7 +217,7 @@ def build_telaio():
         t.one([K.sechead(t, 'In stamperia', ['Chi tira', 'la racla.'], size=60)]),
         K.squadra(t, [(MANI[0], 'Bruno Zanarini', 'Fondatore', 'Stampava manifesti per i concerti; poi qualcuno gli ha chiesto una '
                        'maglietta.', 'center 30%'),
-                      (MODE[2], 'Giulia Testoni', 'Lastre', 'Incide le lastre e decide quanto può sbagliare il registro.',
+                      (MODE[2], 'Giulio Testoni', 'Lastre', 'Incide le lastre e decide quanto può sbagliare il registro.',
                        'center 25%'),
                       (TELA[2], 'Amadou Diallo', 'Racla', 'Tira duecento passate al giorno, tutte uguali.', 'center 30%')],
                   ratio='4/5', size='320', sfondo=C['sala']),

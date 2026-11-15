@@ -96,6 +96,8 @@ export default {
       itemFields: [
         { key: 'letter',              label: t('Lettera monogramma'), type: 'text' },
         { key: 'logo_image',          label: t('Logo prodotto (sostituisce la lettera)'), type: 'image' },
+        { key: 'hover_image',         label: t('Seconda foto al passaggio'), type: 'image',
+          description: t('Col mouse sopra la scheda, la foto lascia il posto a questa (un altro lato del prodotto, il dettaglio, l\'abbinamento). Sul telefono resta la prima.') },
         { key: 'screenshot_label',    label: t('Label outline (metà alta)'), type: 'text' },
         { key: 'brand_label',         label: t('Brand label'),        type: 'text' },
         { key: 'show_badge',          label: t('Mostra badge pill'),  type: 'toggle' },
@@ -118,6 +120,8 @@ export default {
   styleFields: [
     { type: 'separator', label: t('Griglia') },
     { key: 'columns', label: t('Numero colonne'), type: 'range', min: 1, max: 6, step: 1 },
+    { key: 'columns_mobile', label: t('Colonne sul telefono'), type: 'range', min: 1, max: 2, step: 1,
+      description: t('Sotto i 700 px. Due vanno bene per schede brevi (copertine, prodotti col solo nome e il prezzo).') },
     { key: 'gap',     label: t('Gap card'), type: 'range', min: 0, max: 60, step: 2 },
 
     { type: 'separator', label: t('Card') },

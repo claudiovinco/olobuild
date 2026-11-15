@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 248 165" width="248" height="165">
+<rect x="0" y="105" width="56" height="12" rx="3" fill="rgba(255,255,255,.16)"/>
+<rect x="64" y="25" width="56" height="92" rx="3" fill="#7FC24F"/>
+<rect x="128" y="103" width="56" height="14" rx="3" fill="rgba(255,255,255,.16)"/>
+<rect x="192" y="107" width="56" height="10" rx="3" fill="rgba(255,255,255,.16)"/>
+<line x1="0" y1="125" x2="248" y2="125" stroke="rgba(255,255,255,.14)" stroke-width="1"/>
+<text x="28.0" y="152" text-anchor="middle" font-family="-apple-system,'Segoe UI',Roboto,sans-serif" font-size="10" font-weight="600" letter-spacing="1" fill="#64748B">A</text>
+<text x="92.0" y="152" text-anchor="middle" font-family="-apple-system,'Segoe UI',Roboto,sans-serif" font-size="10" font-weight="600" letter-spacing="1" fill="#A3D977">B</text>
+<text x="156.0" y="152" text-anchor="middle" font-family="-apple-system,'Segoe UI',Roboto,sans-serif" font-size="10" font-weight="600" letter-spacing="1" fill="#64748B">C</text>
+<text x="220.0" y="152" text-anchor="middle" font-family="-apple-system,'Segoe UI',Roboto,sans-serif" font-size="10" font-weight="600" letter-spacing="1" fill="#64748B">D</text>
+</svg>

@@ -698,6 +698,7 @@ const conditionTypeOptions = [
   { value: 'url_contains', label: t('URL contiene...') },
   { value: 'day_of_week', label: t('Giorno della settimana') },
   { value: 'time_range', label: t('Fascia oraria') },
+  { value: 'months', label: t('Mesi dell\'anno') },
   { value: 'referrer_url', label: t('Provenienza (referrer)') },
   { value: 'browser', label: t('Browser specifico') },
   { value: 'woo_cart_empty', label: t('Carrello WooCommerce vuoto') },
@@ -707,6 +708,12 @@ const conditionTypeOptions = [
   { value: 'custom_field_empty', label: t('Campo personalizzato vuoto') },
 ];
 const CON_CAMPO = ['custom_field_equals', 'custom_field_not_empty', 'custom_field_empty'];
+const MESI = [
+    { value: '1', label: t('Gennaio') }, { value: '2', label: t('Febbraio') }, { value: '3', label: t('Marzo') },
+    { value: '4', label: t('Aprile') }, { value: '5', label: t('Maggio') }, { value: '6', label: t('Giugno') },
+    { value: '7', label: t('Luglio') }, { value: '8', label: t('Agosto') }, { value: '9', label: t('Settembre') },
+    { value: '10', label: t('Ottobre') }, { value: '11', label: t('Novembre') }, { value: '12', label: t('Dicembre') },
+  ];
 
 export const conditionFieldsEnhanced = [
   { type: 'separator', label: t('Visibilità condizionale') },
@@ -736,6 +743,11 @@ export const conditionFieldsEnhanced = [
     condition: { field: 'cond_type', op: 'eq', value: 'time_range' } },
   { key: 'cond_time_to', label: t('Ora fine'), type: 'time',
     condition: { field: 'cond_type', op: 'eq', value: 'time_range' } },
+  { key: 'cond_month_from', label: t('Dal mese'), type: 'select', options: MESI,
+    description: t('Da questo mese all\'altro, compresi. Anche a cavallo d\'anno: da novembre a febbraio. Con un solo mese, lo stesso nei due campi.'),
+    condition: { field: 'cond_type', op: 'eq', value: 'months' } },
+  { key: 'cond_month_to', label: t('Al mese'), type: 'select', options: MESI,
+    condition: { field: 'cond_type', op: 'eq', value: 'months' } },
   { key: 'cond_referrer', label: t('URL provenienza'), type: 'text', placeholder: t('google.com'),
     condition: { field: 'cond_type', op: 'eq', value: 'referrer_url' } },
   { key: 'cond_browser', label: t('Browser'), type: 'select', options: [
@@ -771,6 +783,10 @@ export const conditionFieldsEnhanced = [
     condition: { field: 'cond_2_type', op: 'eq', value: 'time_range' } },
   { key: 'cond_2_time_to', label: t('Ora fine (cond. 2)'), type: 'time',
     condition: { field: 'cond_2_type', op: 'eq', value: 'time_range' } },
+  { key: 'cond_2_month_from', label: t('Dal mese (cond. 2)'), type: 'select', options: MESI,
+    condition: { field: 'cond_2_type', op: 'eq', value: 'months' } },
+  { key: 'cond_2_month_to', label: t('Al mese (cond. 2)'), type: 'select', options: MESI,
+    condition: { field: 'cond_2_type', op: 'eq', value: 'months' } },
   { key: 'cond_2_referrer', label: t('URL provenienza (cond. 2)'), type: 'text', placeholder: t('google.com'),
     condition: { field: 'cond_2_type', op: 'eq', value: 'referrer_url' } },
   { key: 'cond_2_browser', label: t('Browser (cond. 2)'), type: 'select', options: [

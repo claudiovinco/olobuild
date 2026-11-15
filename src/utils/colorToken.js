@@ -81,7 +81,11 @@ export function tokenDaSalvare(id, stylesStore) {
  * legge, mentre `var(--olo-color-text-fai…` troncato non vuol dire niente.
  */
 export function tokenLabel(val, stylesStore) {
-  const tk = tokenParts(val);
+  // Un token con la trasparenza (`color-mix(in srgb, var(--olo-color-x) 35%, transparent)`, come lo salvano i temi e
+  // le partenze delle tile) ha lo stesso nome: l'alfa la mostra già la sua barra. Prima il campo mostrava «color-mix(».
+  const mix = /^color-mix\(\s*in\s+srgb\s*,\s*(var\(\s*--olo-color-[a-z0-9_-]+\s*(?:,[^()]*)?\))\s*\d+(?:\.\d+)?%\s*,\s*transparent\s*\)$/i
+    .exec(String(val || '').trim());
+  const tk = tokenParts(mix ? mix[1] : val);
   if (!tk) return '';
   const hit = buildSwatchColors(stylesStore).find(s => s.id === tk.id);
   if (hit) return hit.label;

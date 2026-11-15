@@ -562,6 +562,13 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
                 justify-content: <?php echo $h_align; ?>;
                 padding: <?php echo (int) $pad_t; ?>px <?php echo (int) $pad_r; ?>px <?php echo (int) $pad_b; ?>px <?php echo (int) $pad_l; ?>px;
             }
+            <?php if ( $pad_l > 20 || $pad_r > 20 ) : ?>
+            <?php // Telefono: i margini laterali del computer (64 px in Casa Scogliera) stringevano il testo a una colonna
+                  // di 180 px, il titolo spezzava le parole e l'apertura diventava alta 1.100 px (13 nov 2026). ?>
+            @media (max-width: 640px) {
+                .<?php echo $uid; ?> .olo-hero-content { padding-left: <?php echo (int) min( 20, $pad_l ); ?>px; padding-right: <?php echo (int) min( 20, $pad_r ); ?>px; }
+            }
+            <?php endif; ?>
 
             .<?php echo $uid; ?> .olo-hero-inner {
                 max-width: <?php echo (int) $max_w; ?>px;

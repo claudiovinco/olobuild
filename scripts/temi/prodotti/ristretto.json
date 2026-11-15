@@ -43,7 +43,7 @@
    "foto": "pexels-4195607.jpg"
   },
   {
-   "slug": "regali",
+   "slug": "regali-caffe",
    "nome": "Regali",
    "descrizione": "Scatole con le miscele e le tazzine.",
    "foto": "pexels-5994300.jpg"
@@ -528,7 +528,7 @@
    "nome": "Scatola Napoli, tre miscele e due tazzine",
    "slug": "scatola-napoli",
    "cat": [
-    "regali"
+    "regali-caffe"
    ],
    "prezzo": 49,
    "sconto": 39,
@@ -556,7 +556,7 @@
    "nome": "Kit Colazione, capsule e biscotti",
    "slug": "kit-colazione",
    "cat": [
-    "regali"
+    "regali-caffe"
    ],
    "prezzo": 35,
    "sconto": 0,

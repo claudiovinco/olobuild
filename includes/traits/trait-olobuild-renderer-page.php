@@ -351,6 +351,15 @@ trait Olobuild_Renderer_Page_Trait {
             OLOBUILD_VERSION,
             true
         );
+        // Parole intere: una parola più larga della sua colonna si rimpicciolisce invece di andare a capo a metà
+        // («Faccia|mo» nei titoli sul telefono, 13 nov 2026).
+        wp_enqueue_script(
+            'olo-parole-intere',
+            OLOBUILD_URL . 'assets/js/olo-parole-intere.js',
+            [],
+            OLOBUILD_VERSION,
+            array( 'in_footer' => true, 'strategy' => 'defer' )
+        );
 
         // Una sola visita dell'albero per raccogliere le signature di tutti i tile
         // (vs 12+ visite separate prima). $sig['types'][$type] è O(1) lookup.

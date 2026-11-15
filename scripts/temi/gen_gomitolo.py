@@ -225,7 +225,7 @@ def build_lana():
         K.squadra(t, [(MOD[1], 'Rosanna Ferraris', 'Fondatrice', 'Ha imparato a sei anni, sui ferri della nonna.', 'center 25%'),
                       (MOD[3], 'Elisa Bianco', 'La rettilinea', 'Fa un maglione in quattro ore, e lo rifinisce a mano.',
                        'center 25%'),
-                      (MOD[5], 'Tobia Garella', 'I rammendi', 'Ripara i gomiti di maglie di quarant’anni.', 'center 25%')],
+                      (MOD[5], 'Teresa Garella', 'I rammendi', 'Ripara i gomiti di maglie di quarant’anni.', 'center 25%')],
                   ratio='4/5', size='320', sfondo=C['sala']),
     ], padding='large', width='large', style={'padding_top': 90, 'padding_bottom': 100}))
     out.append(K.domande(t, 'Prendersene cura', ['Le domande', 'della lana.'], [

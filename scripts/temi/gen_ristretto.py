@@ -65,7 +65,7 @@ CATEGORIE = [
     ('abbonamenti', 'Abbonamenti', 'La scatola ogni mese, si sospende quando si vuole.', 'pexels-8015467.jpg'),
     ('macchine', 'Macchine e moka', 'A leva, a capsule, la napoletana.', 'pexels-6032786.jpg'),
     ('tazzine', 'Tazzine e tazze', 'Ceramica di Vietri e vetro doppio.', 'pexels-4195607.jpg'),
-    ('regali', 'Regali', 'Scatole con le miscele e le tazzine.', 'pexels-5994300.jpg'),
+    ('regali-caffe', 'Regali', 'Scatole con le miscele e le tazzine.', 'pexels-5994300.jpg'),
 ]
 MACINATURE = ['In grani', 'Per espresso', 'Per moka']
 PRODOTTI = [
@@ -133,11 +133,11 @@ PRODOTTI = [
              ['pexels-12620633.jpg', 'pexels-459489.jpg', 'pexels-15447295.jpg'], ['Ceramica smaltata', '180 ml',
                                                                                     'Per il latte art', 'Col piattino'],
              'Le tazze larghe per il cappuccino e per disegnare col latte.'),
-    prodotto('RIS-017', 'Scatola Napoli, tre miscele e due tazzine', 'scatola-napoli', 'regali', 49, 39, 15, 4.9, 258, True,
+    prodotto('RIS-017', 'Scatola Napoli, tre miscele e due tazzine', 'scatola-napoli', 'regali-caffe', 49, 39, 15, 4.9, 258, True,
              ['pexels-5994300.jpg', 'pexels-19791005.jpg'], ['Tre miscele in capsule', 'Due tazzine di Vietri',
                                                               'Il biglietto scritto a mano', 'Nella scatola col nastro'],
              'Il regalo per chi beve caffè: tre miscele, due tazzine, il biglietto scritto a mano.'),
-    prodotto('RIS-018', 'Kit Colazione, capsule e biscotti', 'kit-colazione', 'regali', 35, 0, 18, 4.6, 87, False,
+    prodotto('RIS-018', 'Kit Colazione, capsule e biscotti', 'kit-colazione', 'regali-caffe', 35, 0, 18, 4.6, 87, False,
              ['pexels-27246443.jpg', 'pexels-34800842.jpg'], ['Cinquanta capsule Cremoso', 'Biscotti al burro',
                                                                'Due tazze', 'Nella scatola regalo'],
              'La colazione da regalare: le capsule Cremoso, i biscotti al burro, due tazze.'),
@@ -195,7 +195,7 @@ def vetrina(t):
                   primo=True, **f),
         N.offerta('ri-o2', K.sfondo_foto('pexels-5994300.jpg', overlay=0.12, scala=1.06), 'Regali · per Natale',
                   'La scatola Napoli a 39 €.', 'Tre miscele, due tazzine di Vietri, il biglietto scritto a mano. Era 49 €.',
-                  'I regali', N.cat_url('regali'), bollino='−20%', nota='Spedita nel giorno che scegliete', **f),
+                  'I regali', N.cat_url('regali-caffe'), bollino='−20%', nota='Spedita nel giorno che scegliete', **f),
         N.offerta('ri-o3', K.sfondo_video(V_FILTRO, overlay=0.12), 'Macchine · il bar a casa',
                   'La macchina a leva a 329 €.', 'Acciaio lucido, caldaia da un litro: l’espresso del bar. Era 389 €.',
                   'Le macchine', N.cat_url('macchine'), bollino='−15%', bollino_x=72, nota='Due anni di garanzia', **f),
@@ -391,7 +391,7 @@ def build_negozio():
     return N.pagina_negozio(t, 'La bottega', 'Tutto il caffè', 'Capsule compostabili, grani e macinato, abbonamenti, macchine, '
                             'tazzine e regali: tostato a legna ogni settimana.', colonne=3,
                             banner=N.banner(t, 'Un regalo?', 'La scatola Napoli.', 'Tre miscele, due tazzine, il biglietto.',
-                                            'I regali', N.cat_url('regali'), K.photo_bg('pexels-19791005.jpg'), size=34))
+                                            'I regali', N.cat_url('regali-caffe'), K.photo_bg('pexels-19791005.jpg'), size=34))
 
 
 def build_offerte():

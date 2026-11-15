@@ -87,9 +87,11 @@ def apertura(t):
         n = i + 1
         sfondo = K.sfondo_video(video, overlay=0.22, colore=C['fondo'])
         sl.append(K.diapositiva('so-%d' % n, sfondo, [
-            # il velo di lino che tiene il testo
+            # il velo che tiene il testo: scuro, come vuole la regola dei temi chiari (chiaro_su_scuro rende chiari i
+            # testi e scurisce i veli sfumati, non quelli a tinta piena: col velo di lino chiaro il titolo bianco non si
+            # leggeva, 13 nov 2026)
             K.livello('so-v%d' % n, tipo='shape', x=0, y=0, w=42, h=100, entra='fadeIn', ritardo=0, durata=900, esce='fadeOut',
-                      bgColor=mix(C['fondo'], 88), responsive={'mobile': {'x': 0, 'y': 47.5, 'width': 100, 'height': 52.5}}),
+                      bgColor=mix(C['nero'], 84), responsive={'mobile': {'x': 0, 'y': 47.5, 'width': 100, 'height': 52.5}}),
             K.livello('so-w%d' % n, tipo='shape', x=42, y=0, w=24, h=100, entra='fadeIn', ritardo=0, durata=900, esce='fadeOut',
                       shapeGradient={'angle': 90, 'from': mix(C['fondo'], 88), 'to': mix(C['fondo'], 0)},
                       responsive={'mobile': {'visible': False}}),

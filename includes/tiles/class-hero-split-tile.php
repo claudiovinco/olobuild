@@ -531,6 +531,16 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
             @media (max-width: 640px) {
                 .<?php echo $uid; ?> .olo-hsplit__stats { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 20px 24px !important; }
                 .<?php echo $uid; ?> .olo-hsplit__card-word { font-size: clamp(18px, 6vw, 36px) !important; overflow-wrap: break-word; }
+                <?php
+                // Il margine interno del computer (64 e 56 px ai lati in Solco) sul telefono lasciava 35 px dentro
+                // ogni card: la parola grande andava a capo a ogni sillaba («mi|sur|a», 13 nov 2026). Sul telefono
+                // al massimo 20 px ai lati, e le card stringono il loro.
+                if ( '' !== $wrap_style && false !== strpos( $wrap_style, 'padding:' ) ) :
+                    $pad_l = min( 20, intval( $s['tile_padding']['left'] ?? 0 ) );
+                    $pad_r = min( 20, intval( $s['tile_padding']['right'] ?? 0 ) ); ?>
+                .<?php echo $uid; ?> { padding-left: <?php echo $pad_l; ?>px !important; padding-right: <?php echo $pad_r; ?>px !important; }
+                <?php endif; ?>
+                .<?php echo $uid; ?> .olo-hsplit__card { padding-left: .625rem !important; padding-right: .625rem !important; }
             }
             <?php if ( $cmp ) : ?>
             .<?php echo $uid; ?> .ohs-cmp:focus-within .ohs-maniglia { outline: 3px solid var(--olo-color-primary, #e1474f); outline-offset: 3px; }

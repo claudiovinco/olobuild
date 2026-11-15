@@ -10,8 +10,9 @@ import { t } from '@/i18n';
  *   styleFields[] → preset, bg_color, height (px), border_radius, shadow + borderFields
  *
  * SSR: il PHP dispone N .toy staticamente (decorativo, aria-hidden) → già visibile senza JS.
- * Runtime: integratore DOM (no canvas) con drag&throw via Pointer Events; off su touch/coarse,
- * ramo statico per prefers-reduced-motion, loop spento fuori viewport (IntersectionObserver).
+ * Runtime: integratore DOM (no canvas) con drag&throw via Pointer Events, anche col dito (1.4.993: prima era spento
+ * sul telefono); «Scuoti» (pulsante e telefono scosso) e legami chimici fra gli elementi; ramo statico per
+ * prefers-reduced-motion, loop spento fuori viewport (IntersectionObserver).
  */
 export default {
   type: 'physicsbin',
@@ -41,6 +42,11 @@ export default {
     walls: true,
     spawn: 'random',
     max_items: '14',
+    hint_text: '',
+    shake: false,
+    shake_label: '',
+    chemistry: false,
+    molecules: [],
     bg_color: '',
     height: '480',
     border_radius: { tl: 28, tr: 28, br: 28, bl: 28 },
@@ -63,6 +69,24 @@ export default {
       ],
       newItemDefaults: { shape: 'circle', color: '#E63E3E', radius: '40', glyph: '', image: '' },
       itemLabel: 'Oggetto',
+    },
+    { key: 'hint_text', label: t('Scritta sul cesto'), type: 'text',
+      description: t('La scritta in alto a sinistra. Vuota: «↯ trascina & lancia». Se la scrivi compare così com’è, senza il simbolo.') },
+
+    { type: 'separator', label: t('Scuoti e molecole') },
+    { key: 'shake', label: t('Pulsante «Scuoti»'), type: 'toggle',
+      description: t('Un pulsante nel cesto lancia in aria gli oggetti. Sul telefono basta scuotere il telefono: su iPhone dopo il primo tocco sul pulsante, che chiede il permesso.') },
+    { key: 'shake_label', label: t('Scritta del pulsante'), type: 'text', description: t('Vuota: «Scuoti».'),
+      condition: { field: 'shake', op: 'eq', value: true } },
+    { key: 'chemistry', label: t('Gli elementi si legano'), type: 'toggle',
+      description: t('Gli oggetti col simbolo di un elemento chimico (H, O, C, Na, Cl…) si legano quando si toccano, secondo la valenza, e sopra ogni molecola compare la formula. Scuotendo, i legami si rompono e si riformano in un altro modo. Gli altri oggetti restano liberi.') },
+    { key: 'molecules', label: t('Nomi delle molecole'), type: 'content-items', itemLabel: t('Molecola'), etichettaDa: 'formula',
+      condition: { field: 'chemistry', op: 'eq', value: true },
+      itemFields: [
+        { key: 'formula', label: t('Formula'), type: 'text', description: t('Come la scriveresti: H2O, NaOH, Sr(OH)2. Vale per ogni molecola con gli stessi atomi.') },
+        { key: 'name', label: t('Nome'), type: 'text' },
+      ],
+      newItemDefaults: { formula: '', name: '' },
     },
 
     { type: 'separator', label: t('Fisica') },

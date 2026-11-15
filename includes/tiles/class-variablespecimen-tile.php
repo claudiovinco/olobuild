@@ -112,13 +112,30 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
         // ── Contenuto ──────────────────────────────────────────────
         $sample      = $s['sample_text'] !== '' ? $s['sample_text'] : 'Ga';
         $sample_html = nl2br( esc_html( wp_strip_all_tags( $sample ) ) );
-        $interaction = in_array( $s['interaction'], [ 'drag', 'sliders', 'both' ], true ) ? $s['interaction'] : 'both';
+        $interaction = in_array( $s['interaction'], [ 'drag', 'sliders', 'both', 'pressione' ], true ) ? $s['interaction'] : 'both';
         $auto        = ! empty( $s['auto_animate'] );
         $auto_speed  = max( 2, min( 16, intval( $s['auto_speed'] ) ) );
         $drag_hint   = esc_html( $s['drag_hint'] );
-        $show_read   = ! empty( $s['show_readout'] );
+        // «Pressione» (15 nov 2026): ogni lettera si tende vicino al puntatore o al dito e torna con una molla;
+        // a riposo la attraversa un'onda lenta. Niente lettura degli assi né suggerimento: la parola parla da sé.
+        $pressione   = ( $interaction === 'pressione' );
+        $show_read   = ! $pressione && ! empty( $s['show_readout'] );
         $has_drag    = ( $interaction === 'drag' || $interaction === 'both' );
         $has_slider  = ( $interaction === 'sliders' || $interaction === 'both' );
+        if ( $pressione ) {
+            $chars = function_exists( 'mb_str_split' ) ? mb_str_split( wp_strip_all_tags( $sample ) ) : str_split( wp_strip_all_tags( $sample ) );
+            $sample_html = '';
+            foreach ( $chars as $ch ) {
+                if ( "\n" === $ch ) {
+                    $sample_html .= '<br>';
+                } elseif ( ' ' === $ch || "\r" === $ch ) {
+                    $sample_html .= ' ';
+                } else {
+                    $sample_html .= '<span class="olo-vf-l" aria-hidden="true">' . esc_html( $ch ) . '</span>';
+                }
+            }
+            $sample_html .= '<span class="olo-vf-sr">' . esc_html( wp_strip_all_tags( $sample ) ) . '</span>';
+        }
 
         $axes = $this->normalize_axes( $s['axes'] ?? [] );
 
@@ -129,6 +146,26 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
         // non puo' stare in un elenco, il browser scartava la dichiarazione intera
         // e il font scelto non si applicava mai.
         $font_css = $this->resolve_font_family( $s['font_family'] ) ?: 'inherit';
+
+        // Assi oltre il peso (larghezza, inclinazione, assi propri): il file servito di solito ha solo il peso, fermo
+        // sul resto. Se il campo nomina una famiglia vera (non un ruolo o una variabile), si scarica la versione
+        // variabile con gli intervalli degli assi della tile, sotto un nome proprio messo in testa all'elenco.
+        $vf_face = '';
+        $tag_extra = array_filter( $axes ?? [], function ( $a ) { return 'wght' !== $a['tag']; } );
+        if ( $tag_extra && class_exists( 'Olobuild_Font_Host' ) ) {
+            $prima = trim( explode( ',', (string) $s['font_family'] )[0], " '\"" );
+            if ( '' !== $prima && false === strpos( $prima, 'var(' ) && ! in_array( strtolower( $prima ), [ 'body', 'sans', 'sans-serif', 'heading', 'serif', 'mono', 'inherit' ], true ) ) {
+                $assi_req = [];
+                foreach ( $axes as $a ) {
+                    $assi_req[ $a['tag'] ] = [ $a['min'], $a['max'] ];
+                }
+                $alias   = $prima . ' VF';
+                $vf_face = Olobuild_Font_Host::get_variable_css( $prima, $assi_req, $alias );
+                if ( '' !== $vf_face ) {
+                    $font_css = "'" . preg_replace( '/[^A-Za-z0-9 \-]/', '', $alias ) . "', " . $font_css;
+                }
+            }
+        }
 
         $text_color  = $this->safe_color_css( $s['text_color'] )  ?: 'var(--olo-color-text, #111827)';
         $accent      = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
@@ -167,6 +204,7 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist colours, intval()-clamped sizes, in_array() whitelisted enums, a font stack validated by Olobuild_Tile_Base::resolve_font_family() and the internally generated $uid. ?>
         <style>
+            <?php echo $vf_face; // @font-face self-hosted generate da Olobuild_Font_Host (solo URL locali) ?>
             .<?php echo $uid; ?> {
                 <?php echo $bg_decl; ?>
                 padding: <?php echo esc_attr( $pad_css ); ?>;
@@ -192,6 +230,11 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
                 word-break: break-word;
                 outline: none;
             }
+            <?php if ( $pressione ) : ?>
+            .<?php echo $uid; ?> .olo-vf-stage { touch-action: pan-y; cursor: default; letter-spacing: 0; white-space: nowrap; }
+            .<?php echo $uid; ?> .olo-vf-l { display: inline-block; font-variation-settings: inherit; will-change: font-variation-settings; }
+            .<?php echo $uid; ?> .olo-vf-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+            <?php endif; ?>
             /* fallback no-varfont: la famiglia gestisce comunque il peso statico */
             .<?php echo $uid; ?>.olo-vf-nofvs .olo-vf-stage {
                 font-variation-settings: normal;
@@ -364,6 +407,73 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
 
             var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
             var REDUCED = !!( rm && rm.matches );
+
+            // ── Pressione: ogni lettera si tende verso il massimo degli assi vicino al puntatore, con una molla ──
+            if ( <?php echo $pressione ? 'true' : 'false'; ?> ) {
+                var L = Array.prototype.slice.call( stage.querySelectorAll('.olo-vf-l') );
+                if ( ! L.length ) { return; }
+                var st = L.map(function(){ return { v: 0, w: 0 }; });
+                var px = null, py = null, last = 0, tw = 0, pr = null;
+                function fmtP(n){ return String( Math.round( n * 10 ) / 10 ); }
+                function fvs(v){
+                    var parts = [];
+                    for ( var a = 0; a < AXES.length; a++ ) {
+                        var ax = AXES[a];
+                        var x = ax.def + ( ax.max - ax.def ) * v;
+                        parts.push('"' + ax.tag + '" ' + fmtP( Math.max( ax.min, Math.min( ax.max, x ) ) ) );
+                    }
+                    return parts.join(',');
+                }
+                function onMove(e){ px = e.clientX; py = e.clientY; last = performance.now(); }
+                stage.addEventListener('pointermove', onMove, { passive: true });
+                stage.addEventListener('pointerdown', onMove, { passive: true });
+                stage.addEventListener('pointerleave', function(){ px = null; });
+                stage.addEventListener('pointercancel', function(){ px = null; });
+                // il dito che si stacca lascia andare la parola (col mouse resta tesa finché il puntatore è sopra)
+                stage.addEventListener('pointerup', function(e){ if ( e.pointerType !== 'mouse' ) { px = null; } });
+                var vivo = false, raf = null;
+                function passo(){
+                    if ( ! vivo ) { return; }
+                    var r = stage.getBoundingClientRect();
+                    var fs = parseFloat( getComputedStyle( stage ).fontSize ) || 100;
+                    var R = Math.max( 60, fs * 1.15 );
+                    var x = px, y = py;
+                    if ( x === null && ! REDUCED && AUTO ) {
+                        // a riposo un'onda attraversa la parola da un capo all'altro
+                        tw += 0.006 * ( 6 / AUTO_SPEED );
+                        x = r.left - R + ( ( Math.sin( tw * 2.2 ) + 1 ) / 2 ) * ( r.width + 2 * R );
+                        y = r.top + r.height / 2;
+                    } else if ( x !== null && ( y < r.top - R * 0.6 || y > r.bottom + R * 0.6 ) ) {
+                        x = null;
+                    }
+                    var fermo = true;
+                    for ( var i = 0; i < L.length; i++ ) {
+                        var q = L[i].getBoundingClientRect();
+                        var t = 0;
+                        if ( x !== null ) {
+                            var d = Math.abs( q.left + q.width / 2 - x );
+                            t = d < R ? ( 1 + Math.cos( Math.PI * d / R ) ) / 2 : 0;
+                        }
+                        var s2 = st[i];
+                        s2.w = ( s2.w + ( t - s2.v ) * 0.16 ) * 0.74;   // molla: un piccolo rimbalzo e torna
+                        s2.v += s2.w;
+                        if ( Math.abs( s2.w ) > 0.0005 || Math.abs( t - s2.v ) > 0.001 ) { fermo = false; }
+                        L[i].style.fontVariationSettings = fvs( s2.v );
+                    }
+                    raf = requestAnimationFrame( passo );
+                }
+                function via(){ if ( ! vivo ) { vivo = true; raf = requestAnimationFrame( passo ); } }
+                function ferma(){ vivo = false; if ( raf ) { cancelAnimationFrame( raf ); raf = null; } }
+                if ( REDUCED ) {
+                    // movimento ridotto: la parola resta ferma alla sua forma di partenza
+                    L.forEach(function(el){ el.style.fontVariationSettings = fvs( 0 ); });
+                    return;
+                }
+                if ( 'IntersectionObserver' in window ) {
+                    new IntersectionObserver(function(en){ en.forEach(function(e){ if ( e.isIntersecting ) { via(); } else { ferma(); } }); }, { threshold: 0 }).observe( root );
+                } else { via(); }
+                return;
+            }
 
             // stato corrente = default di ogni asse
             var vals = AXES.map(function(a){ return a.def; });

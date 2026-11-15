@@ -186,7 +186,7 @@ class Olobuild_ChatHero_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .cht-bar .u{margin-left:12px;font-family:<?php echo $mono; ?>;font-size:11px;color:<?php echo $sub; ?>;}
             .<?php echo $uid; ?> .cht-body{padding:22px;display:flex;flex-direction:column;gap:16px;}
             .<?php echo $uid; ?> .cht-msg{max-width:80%;padding:13px 16px;border-radius:14px;font-size:14.5px;line-height:1.5;}
-            .<?php echo $uid; ?> .cht-msg.you{align-self:flex-end;background:<?php echo $accent; ?>;color:#fff;border-bottom-right-radius:4px;}
+            .<?php echo $uid; ?> .cht-msg.you{align-self:flex-end;background:<?php echo $accent; ?>;color:<?php echo $accOn; ?>;border-bottom-right-radius:4px;}
             .<?php echo $uid; ?> .cht-msg.ai{align-self:flex-start;background:<?php echo $panel2; ?>;color:<?php echo $msgtxt; ?>;border:1px solid rgba(255,255,255,.08);border-bottom-left-radius:4px;}
             @media(max-width:680px){.<?php echo $uid; ?> .cht-msg{max-width:92%;}}
         </style>

@@ -37,7 +37,15 @@ class Olobuild_ImgCompare_Tile extends Olobuild_Tile_Base {
         'autoplay'          => false,
         'autoplay_delay'    => '3',
         'autoplay_speed'    => '2',
-            'border'                  => [],
+        // Etichette (16 nov 2026): vuote = la pillola scura di sempre.
+        'label_bg'             => '',
+        'label_font_family'    => '',
+        'label_font_size'      => '',
+        'label_font_weight'    => '',
+        'label_text_transform' => '',
+        'label_letter_spacing' => '',
+        'label_color'          => '',
+        'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
         'border_effect'           => 'none',
@@ -78,6 +86,9 @@ class Olobuild_ImgCompare_Tile extends Olobuild_Tile_Base {
         $obj_pos     = trim( (string) ( $s['object_position'] ?? 'center center' ) );
         if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
         $handle_c    = $this->safe_color_css( $s['handle_color'] ) ?: '#FFFFFF';
+        // Etichette: sfondo e tipografia dallo Stile (vuoti = bianco su nero al 75%, 12 px, maiuscolo)
+        $label_bg    = $this->safe_color_css( $s['label_bg'] ?? '' ) ?: 'rgba(0,0,0,0.75)';
+        $label_tipo  = $this->tipografia_css( $s, 'label' );
         $handle_sz   = intval( $s['handle_size'] ) ?: 40;
         $handle_bw   = intval( $s['handle_border'] ) ?: 3;
         $line_w      = intval( $s['line_width'] ) ?: 3;
@@ -214,7 +225,7 @@ class Olobuild_ImgCompare_Tile extends Olobuild_Tile_Base {
                 z-index: 1;
                 padding: 4px 12px;
                 border-radius: 4px;
-                background: rgba(0,0,0,0.75);
+                background: <?php echo $label_bg; ?>;
                 color: #fff;
                 font-size: 12px;
                 font-weight: 600;
@@ -223,6 +234,7 @@ class Olobuild_ImgCompare_Tile extends Olobuild_Tile_Base {
                 pointer-events: none;
                 backdrop-filter: blur(2px);
                 -webkit-backdrop-filter: blur(2px);
+                <?php echo $label_tipo; // dopo le misure di sempre: le sostituisce solo dove sono impostate ?>
             }
             .<?php echo $uid; ?> .olo-ic-label-before {
                 <?php if ( $is_vert ) : ?>

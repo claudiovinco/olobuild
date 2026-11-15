@@ -254,9 +254,9 @@ def build_lavaggi():
         t.one([K.sechead(t, 'Al banco', ['Chi tiene', 'la raspa.'], size=60)]),
         K.squadra(t, [(STRADA[1], 'Ines Dal Zotto', 'Fondatrice', 'Lavava i jeans dei fratelli in vasca da bagno, con la pomice '
                        'presa al mare.', 'center 25%'),
-                      (STRADA[4], 'Tommaso Rigon', 'Raspa', 'Tira i baffi a mano: sette per gamba, mai nello stesso punto.',
+                      (STRADA[4], 'Tamara Rigon', 'Raspa', 'Tira i baffi a mano: sette per gamba, mai nello stesso punto.',
                        'center 25%'),
-                      (JEAN[1], 'Aiko Tanaka', 'Tintura', 'Ripassa l’indaco dei lavaggi scuri.', 'center 25%')],
+                      (JEAN[1], 'Akio Tanaka', 'Tintura', 'Ripassa l’indaco dei lavaggi scuri.', 'center 25%')],
                   ratio='4/5', size='320', sfondo=C['sala']),
     ], padding='large', width='large', style={'padding_top': 120, 'padding_bottom': 100}))
     out.append(t.section([

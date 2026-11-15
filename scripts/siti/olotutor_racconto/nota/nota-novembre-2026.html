@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>OLOtutor, nota di sintesi · novembre 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Nota di sintesi di OLOtutor, edizione di novembre 2026: stessa impaginazione di quella di settembre (A4, colonna
+   laterale con i numeri e le note, testatina con la parte del documento). Si stampa con stampa.py (Chrome). */
+@page { size: A4; margin: 0; }
+:root {
+  --ink: #1f242b; --testo: #2f343b; --tenue: #6b7179; --filo: #d9dcd6; --verde: #3a8f3a;
+  --serif: 'Source Serif 4', Georgia, serif; --sans: 'Work Sans', Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #fff; }
+body { font-family: var(--serif); color: var(--testo); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.pagina { width: 210mm; height: 297mm; position: relative; padding: 0 29mm 0 18mm; overflow: hidden; page-break-after: always; break-after: page; }
+.pagina:last-child { page-break-after: auto; break-after: auto; }
+.etichetta { font-family: var(--sans); font-size: 6.3pt; letter-spacing: .3em; text-transform: uppercase; color: var(--tenue); font-weight: 400; }
+/* testata della prima pagina */
+.testata1 { position: absolute; top: 14mm; left: 18mm; right: 29mm; height: 18mm; border-bottom: .6pt solid #7d828a; display: flex; justify-content: space-between; align-items: flex-start; }
+.testata1 img { width: 29mm; margin-top: 2.6mm; }
+.testata1 .destra { text-align: right; line-height: 2.3; padding-top: .6mm; }
+.testata1 .destra .etichetta:first-child { color: var(--ink); }
+/* testatina delle altre pagine */
+.testata { position: absolute; top: 12.6mm; left: 18mm; right: 29mm; padding-bottom: 3.2mm; border-bottom: .5pt solid var(--filo); display: flex; justify-content: space-between; }
+.piede { position: absolute; bottom: 10.5mm; left: 18mm; right: 29mm; padding-top: 3.4mm; border-top: .5pt solid var(--filo); display: flex; justify-content: space-between; }
+.corpo { position: absolute; top: 28mm; left: 18mm; right: 29mm; bottom: 21mm; }
+.pagina.prima .corpo { top: 36mm; }
+.flusso { display: none; }
+h1 { font-family: var(--sans); font-weight: 600; font-size: 23.5pt; line-height: 1.2; color: var(--ink); margin: 0 0 7mm; letter-spacing: -.005em; }
+.riga { display: grid; grid-template-columns: 37mm 1fr; }
+.lato { font-family: var(--sans); font-size: 7.2pt; line-height: 1.62; color: var(--tenue); padding-top: 1.2mm; padding-right: 6mm; letter-spacing: .015em; }
+.lato.num { color: var(--verde); font-weight: 600; font-size: 7pt; padding-top: 1.6mm; }
+.lato.sintesi { padding-top: 1.2mm; }
+h2 { font-family: var(--sans); font-weight: 600; font-size: 13pt; color: var(--ink); margin: 0 0 2.4mm; line-height: 1.35; }
+h3 { font-family: var(--sans); font-weight: 600; font-size: 11pt; color: var(--ink); margin: 0 0 2.4mm; line-height: 1.35; }
+p { font-size: 11pt; line-height: 1.72; margin: 0 0 3.2mm; hyphens: none; }
+.sezione { margin-top: 6.6mm; }
+.sezione:first-child { margin-top: 0; }
+hr.filo { border: 0; border-top: .5pt solid var(--filo); margin: 5.4mm 0 6.6mm; }
+/* tabelle */
+table { width: 100%; border-collapse: collapse; margin: 1mm 0 4.6mm; }
+th { font-family: var(--sans); font-weight: 500; font-size: 6.2pt; letter-spacing: .26em; text-transform: uppercase; color: var(--tenue); text-align: left; padding: 0 0 2.2mm; border-bottom: .5pt solid var(--filo); }
+td { vertical-align: top; padding: 1.8mm 3mm 1.9mm 0; border-bottom: .5pt solid var(--filo); font-size: 9.9pt; line-height: 1.46; }
+td.voce { font-family: var(--sans); font-size: 8.1pt; font-weight: 600; color: var(--ink); line-height: 1.45; }
+td.voce small { display: block; font-weight: 400; color: var(--tenue); font-size: 7.4pt; letter-spacing: .01em; margin-top: .4mm; }
+table.situazioni td.voce { width: 36%; }
+table.aree td.voce { width: 27%; }
+table.misure td.voce { width: 21%; }
+table.misure td { font-size: 9.5pt; }
+table.rif { border-top: .9pt solid var(--ink); margin-top: 2mm; }
+table.rif td { padding: 1.25mm 3mm 1.3mm 0; font-size: 9.6pt; }
+table.rif td.voce { width: 41%; font-size: 7.5pt; }
+.chiusa { border-top: .5pt solid var(--filo); margin-top: 1mm; padding-top: 3.4mm; }
+.chiusa p { color: #5d636b; font-size: 9.8pt; line-height: 1.62; margin: 0; }
+ul.limiti { list-style: none; margin: 0 0 3.3mm; padding: 0; }
+ul.limiti li { font-size: 10.6pt; line-height: 1.62; padding-left: 4.2mm; position: relative; margin-bottom: 1.4mm; }
+ul.limiti li::before { content: ''; position: absolute; left: 0; top: 2.55mm; width: 1.6mm; height: 1.6mm; border-radius: 50%; background: var(--verde); }
+</style>
+</head>
+<body>
+<!-- Il testo sta nel .flusso, un blocco dopo l'altro: impagina() lo versa nelle pagine A4 e manda alla pagina dopo il
+     blocco che non ci sta. data-parte = la testatina a destra della pagina che comincia con quel blocco. Un titolo sta
+     nello stesso blocco del suo primo paragrafo, così non resta mai solo in fondo a una pagina. -->
+<section class="pagina prima">
+  <div class="testata1">
+    <img src="../media/otr-logo.png" alt="OLOtutor">
+    <div class="destra"><div class="etichetta">Nota di sintesi</div><div class="etichetta">Novembre 2026</div></div>
+  </div>
+  <div class="corpo">
+    <h1>Che cosa è OLOtutor, e perché è fatto così</h1>
+    <div class="riga">
+      <div class="lato etichetta" style="font-size:6.3pt;letter-spacing:.3em;padding-top:1.6mm">In sintesi</div>
+      <div>
+        <p>OLOtutor parte dallo studente. Ogni giorno gli dice che cosa ripassare, gli fa esercitare quello che ha appena
+          studiato senza che conti per il voto, e gli fa vedere quali risposte sapeva davvero e quali ha indovinato. Il
+          docente lo usa dentro le lezioni che fa già, in qualunque materia e nel momento che sceglie, con trentaquattro
+          attività da riempire con le proprie domande. La scuola ci tiene registro, medie, presenze e famiglie in un posto
+          solo, e ne usa la parte che le serve: una scuola e un ente di formazione contano cose diverse, e ci sono tutti e
+          due.</p>
+      </div>
+    </div>
+    <hr class="filo">
+    <div class="seguito"></div>
+  </div>
+  <div class="piede"><span class="etichetta">OLOtutor, nota di sintesi</span><span class="etichetta num-pag"></span></div>
+</section>
+
+<div class="flusso">
+
+  <div class="blocco" data-parte="">
+    <div class="riga"><div class="lato num">1</div><div>
+      <h2>La domanda da cui parte</h2>
+      <p>Con gli strumenti che ci sono oggi, come si aiuta un ragazzo a imparare, e a studiare da solo?</p></div></div>
+  </div>
+  <div class="blocco" data-parte="">
+    <div class="riga"><div class="lato"></div><div>
+      <p>Su come si impara, la ricerca dice da decenni le stesse tre cose. Ripassare a distanza di giorni fa ricordare
+        più a lungo che ripassare tutto in una volta. Una risposta tirata fuori dalla memoria si ricorda meglio di una
+        riletta sul libro. Alternare gli argomenti costa fatica sul momento, e prepara meglio a una verifica, dove gli
+        argomenti sono mescolati.</p></div></div>
+  </div>
+  <div class="blocco" data-parte="">
+    <div class="riga"><div class="lato"></div><div>
+      <p>Il docente conosce questi tre metodi, e non ha il tempo di applicarli. Sa benissimo che a uno dei suoi studenti
+        converrebbe rivedere fra tre giorni proprio quelle quattro domande, e non può tenere il conto per venticinque
+        ragazzi, su più materie, per un anno intero. OLOtutor tiene quel conto.</p></div></div>
+  </div>
+
+  <div class="blocco sezione" data-parte="La giornata di uno studente">
+    <div class="riga"><div class="lato num">2</div><div>
+      <h2>Due momenti della stessa giornata</h2>
+      <p>La giornata di uno studente ha due momenti. C’è l’ora di lezione, con la classe tutta nello stesso posto, e ci
+        sono i giorni fra una lezione e l’altra, in cui ognuno studia per conto suo. Oggi per i due momenti si usano due
+        programmi diversi.</p></div></div>
+  </div>
+  <div class="blocco" data-parte="La giornata di uno studente">
+    <div class="riga"><div class="lato"></div><div>
+      <p>Il programma dell’ora di lezione smette di servire quando suona la campanella. Il programma dello studio a casa
+        tiene i materiali e basta, e non dice al docente chi ha capito e chi no: come è andata a casa si scopre alla
+        verifica. In OLOtutor i due momenti stanno nello stesso programma, e quello che succede in uno si vede
+        nell’altro.</p></div></div>
+  </div>
+  <div class="blocco sezione" data-parte="La giornata di uno studente">
+    <div class="riga"><div class="lato num">3</div><div>
+      <h2>L’ora di lezione, in qualunque materia</h2>
+      <p>La lezione resta quella che è. Il docente sceglie dove mettere OLOtutor dentro l’ora e per quanto tempo: dieci
+        minuti a metà spiegazione, un’ora di ripasso prima della verifica, un’uscita didattica, una lezione
+        capovolta.</p></div></div>
+  </div>
+  <div class="blocco" data-parte="La giornata di uno studente">
+    <div class="riga"><div class="lato"></div><div>
+      <p>Le attività sono trentaquattro, ventinove giochi e cinque strumenti, e si riempiono con le proprie domande.
+        Servono tutte alla stessa cosa: far tirare fuori dalla memoria quello che si è appena studiato, subito, e in una
+        forma diversa da quella in cui è stato spiegato. Alcune si fanno al banco, altre chiedono di alzarsi, di cercare
+        qualcosa nell’edificio o di muoversi all’aperto. Il docente conduce l’aula dal suo telefono, e sul proiettore c’è la
+        Regia.</p></div></div>
+  </div>
+  <div class="blocco" data-parte="La giornata di uno studente">
+    <div class="riga"><div class="lato">Il doppio giro di voto lo ha descritto Eric Mazur, e si chiama Peer Instruction.</div><div>
+      <p>Per capire se un concetto è chiaro, il sondaggio si vota due volte. Si fa una domanda, ognuno risponde per conto
+        suo, poi si discute con chi ha risposto in modo diverso e si rivota. Restano scritti tutti e due i giri, e la
+        differenza fra il primo e il secondo dice se la discussione è servita. Una discussione a carte coperte funziona
+        allo stesso modo: si scrive prima di leggere quello che hanno scritto gli altri.</p></div></div>
+  </div>
+  <div class="blocco" data-parte="La giornata di uno studente">
+    <div class="riga"><div class="lato">Marcatore tag36h11 di AprilTag, Edwin Olson.</div><div>
+      <p>Dove i telefoni non ci sono, o non si vogliono, la classe risponde con un cartoncino stampato che si gira, e il
+        docente raccoglie le risposte inquadrando l’aula una sola volta. Otto giochi si fanno così.</p></div></div>
+  </div>
+
+  <div class="blocco sezione" data-parte="Fuori dall’ora di lezione">
+    <div class="riga"><div class="lato num">4</div><div><h2>Gli errori tornano, quando serve</h2></div></div>
+    <div class="riga"><div class="lato">La data la calcola FSRS 4, il Free Spaced Repetition Scheduler.</div><div>
+      <p>Nei corsi in cui il docente accende il ripasso, ogni domanda sbagliata in un quiz o in una partita in aula
+        diventa una carta di ripasso con una data di ritorno, se ha una sola risposta giusta. Nessuno deve segnalare
+        niente: la domanda sbagliata basta da sola. Le carte nuove sono al massimo cinque al giorno per persona, su
+        tutti i corsi insieme: chi è più indietro non riceve più lavoro degli altri.</p></div></div>
+  </div>
+  <div class="blocco" data-parte="Fuori dall’ora di lezione">
+    <div class="riga"><div class="lato">Effetto di ipercorrezione, descritto da Butterfield e Metcalfe nel 2001.</div><div>
+      <p>Nei quiz in cui il docente chiede quanto si è sicuri, le domande sbagliate con sicurezza prendono il primo
+        giorno libero. Un errore fatto con convinzione, una volta corretto, si ricorda meglio di uno fatto nel dubbio,
+        perché lo studente che era sicuro resta sorpreso.</p></div></div>
+  </div>
+  <div class="blocco" data-parte="Fuori dall’ora di lezione">
+    <div class="riga"><div class="lato">Pratica intercalata, o interleaving.</div><div>
+      <p>Nella coda del ripasso gli argomenti si alternano, e le domande di un argomento non escono tutte in fila. Lo
+        stesso vale nei quiz in cui è acceso «Mescola domande».</p></div></div>
+  </div>
+  <div class="blocco sezione" data-parte="Fuori dall’ora di lezione">
+    <div class="riga"><div class="lato num">5</div><div>
+      <h2>Quanto uno sa, e quanto crede di sapere</h2>
+      <p>Nei quiz in cui il docente la attiva, lo studente sceglie la risposta e poi dice quanto ne è sicuro: «So la
+        risposta», «Credo sia questa» o «Sto tirando a indovinare». Mettendo insieme la sicurezza dichiarata e il
+        risultato vengono fuori quattro situazioni che il voto da solo non distingue.</p>
+      <table class="situazioni">
+        <tr><th>Situazione</th><th>Che cosa suggerisce</th></tr>
+        <tr><td class="voce">Conoscenza solida<small>sicuro, risposta giusta</small></td><td>Va bene così.</td></tr>
+        <tr><td class="voce">Convinzione errata<small>sicuro, risposta sbagliata</small></td><td>C’è già una risposta in testa, ed è sbagliata: va tolta prima di rispiegare.</td></tr>
+        <tr><td class="voce">Fortuna o intuizione<small>incerto, risposta giusta</small></td><td>Il voto non la distingue da una conoscenza solida.</td></tr>
+        <tr><td class="voce">Lacuna<small>incerto, risposta sbagliata</small></td><td>Manca un pezzo, e si recupera studiando.</td></tr>
+      </table></div></div>
+  </div>
+  <div class="blocco" data-parte="Fuori dall’ora di lezione">
+    <div class="riga"><div class="lato">Conta come sicura solo la risposta data con «So la risposta».</div><div>
+      <p>Quando escono le soluzioni, lo studente trova le sue risposte nelle quattro caselle e, dal secondo quiz, quante
+        volte ha ragione quando dice di sapere. La sicurezza dichiarata non entra mai nel voto: dove si toglie qualcosa
+        a chi si dichiara sicuro e sbaglia, conviene dirsi incerti sempre, e dopo due verifiche nessuno dice più la
+        verità. Il docente vede, domanda per domanda, quanti erano sicuri e hanno sbagliato: quando capita a mezza
+        classe c’è un punto da rifare insieme, prima della verifica.</p></div></div>
+  </div>
+
+  <div class="blocco sezione" data-parte="Valutare, e tenere il conto">
+    <div class="riga"><div class="lato num">6</div><div>
+      <h2>Tre misure, e il voto per ultimo</h2>
+      <p>Tre informazioni che di solito finiscono in un numero solo restano separate. Il voto viene dopo, e soltanto
+        dalle prove valutate: prima vengono quanto lo studente partecipa e quanto è sicuro di quello che sa.</p>
+      <table class="misure">
+        <tr><th>Misura</th><th>Da dove viene</th><th>Dove entra</th></tr>
+        <tr><td class="voce">Punti<small>quanto partecipa</small></td><td>Lezioni completate, quiz tentati anche se non superati, presenze, forum, giorni di studio di seguito, in parte le risposte giuste.</td><td>Livello, riconoscimenti, classifica. Mai il voto.</td></tr>
+        <tr><td class="voce">Certezza<small>quanto è sicuro</small></td><td>Tre livelli, scelti dopo la risposta, nei quiz in cui il docente la chiede.</td><td>Le quattro caselle, la tabella del docente, il ripasso. Mai il voto.</td></tr>
+        <tr><td class="voce">Voto<small>quanto sa</small></td><td>Prove valutate, compiti corretti, interventi valutati nel forum.</td><td>Registro, media, pagella.</td></tr>
+      </table></div></div>
+  </div>
+  <div class="blocco" data-parte="Valutare, e tenere il conto">
+    <div class="riga"><div class="lato">Pratica di recupero: Roediger e Karpicke, 2006.</div><div>
+      <p>L’allenamento, il quiz che non conta, si rifà quante volte si vuole, e dopo ogni risposta «Controlla» dice
+        subito com’è andata. Resta fuori dalle medie, anche da quelle delle statistiche.</p></div></div>
+  </div>
+  <div class="blocco sezione" data-parte="Valutare, e tenere il conto">
+    <div class="riga"><div class="lato num">7</div><div><h2>Correggere con una griglia</h2></div></div>
+    <div class="riga"><div class="lato">Rubrica analitica, con quattro livelli di partenza.</div><div>
+      <p>I compiti si correggono con una griglia fatta di criteri, e ogni criterio ha i suoi livelli, quattro per
+        cominciare. Scriverne una da zero vuol dire riempire una ventina di caselle, quindi alcune griglie sono già
+        pronte e si adattano in pochi minuti.</p></div></div>
+  </div>
+  <div class="blocco" data-parte="Valutare, e tenere il conto">
+    <div class="riga"><div class="lato"></div><div>
+      <p>Un voto scritto con una griglia si spiega allo studente che lo riceve, e non cambia se a correggere è un’altra
+        persona. La stessa griglia serve anche per far correggere i compiti agli studenti fra loro, senza nomi: ognuno ne
+        corregge alcuni, e ne escono due voti, quanto vale il proprio lavoro e quanto si è stati bravi a giudicare quello
+        degli altri.</p></div></div>
+  </div>
+  <div class="blocco sezione" data-parte="Valutare, e tenere il conto">
+    <div class="riga"><div class="lato num">8</div><div>
+      <h2>Il registro, e chi guarda da casa</h2>
+      <p>Media e frequenza si calcolano ognuna in un solo punto, e registro, stampe, pagelle, quadro della classe,
+        statistiche e schermata della famiglia danno lo stesso numero. Se una famiglia contesta una media, la
+        scuola mostra come è stata calcolata, con il nome della strategia e il peso delle categorie. Le medie sono in
+        percentuale.</p></div></div>
+  </div>
+  <div class="blocco" data-parte="Valutare, e tenere il conto">
+    <div class="riga"><div class="lato"></div><div>
+      <p>A fine lezione il docente scrive sul registro, dentro l’appello, l’argomento e quello che c’è da fare a casa. Le
+        note, disciplinari o didattiche, arrivano allo studente e alla famiglia con un avviso, e la famiglia ne conferma
+        la presa visione; una nota non si cancella, si annulla scrivendo perché. Lo scrutinio lo apre e lo chiude chi
+        coordina la classe: ogni docente propone il voto partendo dalla media del periodo, il consiglio decide, e la
+        pagella di quel periodo stampa i voti dello scrutinio.</p></div></div>
+  </div>
+  <div class="blocco" data-parte="Valutare, e tenere il conto">
+    <div class="riga"><div class="lato"></div><div>
+      <p>Le presenze si possono contare a ore invece che a giornate: in una materia da tre ore, chi arriva alla seconda ne
+        ha fatte due su tre. Le ore restano scritte sulla riga della presenza, così un cambio di orario a gennaio non
+        riscrive le presenze di ottobre.</p></div></div>
+  </div>
+  <div class="blocco" data-parte="Valutare, e tenere il conto">
+    <div class="riga"><div class="lato"></div><div>
+      <p>Un genitore entra con un profilo suo e può soltanto leggere: vede corsi, prove, presenze, argomenti e note, e da
+        lì chiede la giustificazione di un’assenza. Chi apre i dati di un minore resta scritto, e lo studente vede nel suo
+        profilo chi lo segue da casa.</p></div></div>
+  </div>
+  <div class="blocco" data-parte="Valutare, e tenere il conto">
+    <div class="riga"><div class="lato"></div><div>
+      <p>I tutoraggi sono incarichi su una persona, un gruppo o un corso, di cinque tipi: didattico, orientamento, PCTO,
+        inclusione e fra pari. Chi segue uno studente ha un diario in cui ogni nota dice chi la può leggere, e un semaforo
+        su come sta andando. Accanto al colore ci sono sempre le ragioni scritte per esteso.</p></div></div>
+  </div>
+
+  <div class="blocco sezione" data-parte="Dove si usa">
+    <div class="riga"><div class="lato num">9</div><div>
+      <h2>Una scuola, o un ente di formazione</h2>
+      <p>Una scuola è fatta di materie, classi e quadrimestri: il registro, le presenze, le assenze che una famiglia
+        spiega, la media di fine periodo, lo scrutinio.</p></div></div>
+  </div>
+  <div class="blocco" data-parte="Dove si usa">
+    <div class="riga"><div class="lato"></div><div>
+      <p>Un ente di formazione è fatto di percorsi. Più corsi che vanno insieme prendono un nome e un ordine, e ognuno
+        resta un corso intero, coi suoi iscritti, il suo monte ore e il suo registro. Un’unità formativa da quarantotto
+        ore su quattordici giornate diverse è un corso come gli altri, con un contenitore sopra. Le presenze contano la
+        durata effettiva, e le stampe portano le intestazioni del finanziamento, FSE o PNRR.</p></div></div>
+  </div>
+  <div class="blocco sezione" data-parte="Dove si usa">
+    <div class="riga"><div class="lato num">10</div><div>
+      <h2>Le cinque aree, e quanto se ne usa</h2>
+      <table class="aree">
+        <tr><th>Area</th><th>Che cosa ci si fa</th></tr>
+        <tr><td class="voce">In aula</td><td>Strumenti Live con le trentaquattro attività, la stanza aperta con un codice, le presenze col QR o con un adesivo al muro, i turni di laboratorio.</td></tr>
+        <tr><td class="voce">Corsi e lezioni</td><td>Programma, materiali, calendario, unità di apprendimento, glossario, contenuti brevi, lezione capovolta, lezioni a bivi, bacheche a colonne su cui si attaccano biglietti.</td></tr>
+        <tr><td class="voce">Studenti</td><td>Iscrizioni, tutoraggi, accesso delle famiglie, giustificazioni, portfolio, progetti, messaggi, annunci, ricevimento.</td></tr>
+        <tr><td class="voce">Valutazione</td><td>Consegne da valutare, banca delle domande, griglie, competenze, registro con argomenti e note, scrutinio, stampe, certificati, riconoscimenti.</td></tr>
+        <tr><td class="voce">Amministrazione</td><td>Persone, otto ruoli e venti permessi, conteggio delle assenze, giorni di chiusura, ingresso con l’account Google o Microsoft 365 dell’istituto, avvisi verso altri programmi.</td></tr>
+      </table></div></div>
+  </div>
+  <div class="blocco" data-parte="Dove si usa">
+    <div class="riga"><div class="lato"></div><div>
+      <p>Nessuno le usa tutte e cinque, e non serve: punti, classifica, riconoscimenti, certificati, forum, messaggi e
+        ripasso si spengono per tutto il sito, e si comincia da un corso e da una classe.</p></div></div>
+  </div>
+  <div class="blocco" data-parte="Dove si usa">
+    <div class="riga"><div class="lato"></div><div>
+      <p>L’interfaccia parla italiano, inglese, tedesco e francese, e ognuno la vede nella lingua del suo profilo. I corsi
+        no: una scuola tedesca trova le schermate in tedesco, e le lezioni se le scrive lei.</p></div></div>
+  </div>
+
+  <div class="blocco sezione" data-parte="Il sistema, e gli standard">
+    <div class="riga"><div class="lato num">11</div><div>
+      <h2>Il resto del sistema</h2>
+      <p>Unità di apprendimento, griglie e banche di domande si preparano una volta e si riusano negli anni. Un corso
+        preparato si duplica, o si esporta in un pacchetto con le domande dei suoi quiz e il glossario, e l’anno dopo si
+        riparte da lì. Il registro si costruisce una categoria per volta, seguendo il modo in cui in quella scuola si
+        fanno le medie.</p></div></div>
+  </div>
+  <div class="blocco" data-parte="Il sistema, e gli standard">
+    <div class="riga"><div class="lato"></div><div>
+      <p>I messaggi fra segreteria, tutor, studenti e famiglie passano tutti da un solo posto, tenuto come i dati di un
+        minore richiedono. Registri e pagelle si stampano con l’intestazione della scuola: fino a tre loghi, la dicitura
+        del finanziamento e il firmatario, con gli stessi numeri delle schermate. Le statistiche dicono come vanno corsi,
+        classi e singole domande, argomento per argomento, e chi non entra da giorni.</p></div></div>
+  </div>
+  <div class="blocco sezione" data-parte="Il sistema, e gli standard">
+    <div class="riga"><div class="lato num">12</div><div>
+      <h2>Quadri, standard, e che cosa resta alla scuola</h2>
+      <p>Quando un percorso va rendicontato, le competenze si citano con le parole del documento che le definisce. Dentro
+        OLOtutor ci sono sei quadri europei. Di cinque, DigComp 3.0, LifeComp, GreenComp, EntreComp e le venti competenze
+        del Consiglio d’Europa, ci sono i descrittori nelle parole ufficiali: in tutto settantasette definizioni e
+        settantuno sotto-descrittori. Del sesto, il QCER per le lingue, ci sono i livelli e le attività. EntreComp è in
+        inglese perché una traduzione ufficiale non esiste, e una traduzione fatta da noi non si potrebbe citare.</p></div></div>
+  </div>
+  <div class="blocco" data-parte="Il sistema, e gli standard">
+    <div class="riga"><div class="lato"></div><div>
+      <p>A fine corso escono i certificati, con un numero e un collegamento di verifica. I riconoscimenti il server li
+        produce già in Open Badges 2.0, un formato aperto che vale anche fuori da qui; il comando con cui lo studente li
+        porta su un altro sito non c’è ancora. Le schermate sono state riviste e misurate sui criteri WCAG 2.1 AA, quelli
+        a cui rimanda la norma EN 301 549. La piattaforma sta sul sito WordPress dell’istituto, e quello che una scuola
+        scrive resta suo.</p></div></div>
+  </div>
+
+  <div class="blocco sezione" data-parte="La prova, e i riferimenti">
+    <div class="riga"><div class="lato num">13</div><div>
+      <h2>Come si prova</h2>
+      <p>Per provare OLOtutor non serve aprire un progetto. Si parte da una classe e da un corso, e il resto della scuola
+        non se ne accorge finché non lo si decide. Il conto dei punti e la raccolta delle risposte sono provati su sessioni
+        vere. Non è ancora successo che una scuola facesse una giornata intera di lezioni così, con venticinque ragazzi in
+        classe.</p></div></div>
+  </div>
+  <div class="blocco" data-parte="La prova, e i riferimenti">
+    <div class="riga"><div class="lato">Da sapere prima di cominciare.</div><div>
+      <ul class="limiti">
+        <li>Il ripasso dagli errori e la certezza sono spenti di serie: li accende il docente, corso per corso e quiz per quiz.</li>
+        <li>OLOtutor tiene argomenti, note e scrutinio, ma non ha i collegamenti con i sistemi del ministero: in una scuola statale il registro elettronico ministeriale resta necessario.</li>
+        <li>La relazione di conformità EN 301 549 da allegare alla dichiarazione di accessibilità AgID non c’è ancora.</li>
+        <li>Una partita regge 50 studenti collegati insieme, e 100 con il servizio aggiuntivo per il tempo reale.</li>
+      </ul></div></div>
+  </div>
+  <div class="blocco sezione" data-parte="La prova, e i riferimenti">
+    <div class="riga"><div class="lato"></div><div>
+      <h3>Riferimenti</h3>
+      <p>Per ogni metodo qui sotto c’è scritto che cosa fa dentro OLOtutor.</p>
+      <table class="rif">
+        <tr><td class="voce">Butterfield e Metcalfe, 2001</td><td>Quali carte di ripasso tornano per prime.</td></tr>
+        <tr><td class="voce">Eric Mazur, Peer Instruction</td><td>Il doppio giro di voto del sondaggio.</td></tr>
+        <tr><td class="voce">FSRS 4</td><td>La data di ritorno di ogni carta.</td></tr>
+        <tr><td class="voce">Pratica intercalata</td><td>L’ordine in cui escono le domande.</td></tr>
+        <tr><td class="voce">Pratica di recupero</td><td>I quiz di allenamento, fuori dalle medie.</td></tr>
+        <tr><td class="voce">Lezione capovolta</td><td>Studio prima, lavoro insieme in classe.</td></tr>
+        <tr><td class="voce">Rubriche analitiche</td><td>Criteri e livelli, per i compiti.</td></tr>
+        <tr><td class="voce">Quadri di competenza</td><td>Sei, cinque con i descrittori ufficiali.</td></tr>
+        <tr><td class="voce">Legge 170/2010</td><td>Il tempo in più nelle prove, per i DSA.</td></tr>
+        <tr><td class="voce">Open Badges 2.0, WCAG 2.1 AA</td><td>Riconoscimenti, e accessibilità.</td></tr>
+        <tr><td class="voce">AprilTag, tag36h11</td><td>Edwin Olson, University of Michigan.</td></tr>
+      </table></div></div>
+  </div>
+  <div class="blocco" data-parte="La prova, e i riferimenti">
+    <div class="riga"><div class="lato"></div><div>
+      <div class="chiusa"><p>Documento a uso interno e di presentazione. Corsi, domande e glossari restano di chi li
+        scrive, e si esportano in qualsiasi momento.</p></div></div></div>
+  </div>
+</div>
+
+<script>
+/* Impagina il .flusso: ogni blocco va nella pagina corrente finché ci sta, poi se ne apre una nuova. */
+function impagina() {
+  const blocchi = [...document.querySelectorAll('.flusso > .blocco')];
+  const flusso = document.querySelector('.flusso');
+  let seguito = document.querySelector('.pagina.prima .seguito');
+  const nuova = parte => {
+    const s = document.createElement('section');
+    s.className = 'pagina';
+    s.innerHTML = '<div class="testata"><span class="etichetta">OLOtutor, nota di sintesi</span><span class="etichetta">' +
+      parte + '</span></div><div class="corpo"><div class="seguito"></div></div>' +
+      '<div class="piede"><span class="etichetta">Novembre 2026</span><span class="etichetta num-pag"></span></div>';
+    document.body.insertBefore(s, flusso);
+    return s.querySelector('.seguito');
+  };
+  const trabocca = sg => {
+    const c = sg.closest('.corpo').getBoundingClientRect().bottom;
+    const ultimo = sg.lastElementChild;
+    if (!ultimo) return false;
+    const r = ultimo.getBoundingClientRect();
+    // il margine sotto l'ultimo paragrafo non conta
+    const p = ultimo.querySelectorAll('p, table, ul, h2, h3, .chiusa');
+    const fine = p.length ? Math.max(...[...p].map(e => e.getBoundingClientRect().bottom)) : r.bottom;
+    return fine > c + 0.5;
+  };
+  for (const b of blocchi) {
+    seguito.appendChild(b);
+    if (trabocca(seguito) && seguito.children.length > 1) {
+      seguito = nuova(b.dataset.parte || '');
+      seguito.appendChild(b);
+    }
+  }
+  // la testatina dice la parte della prima sezione che comincia nella pagina (se ne comincia una)
+  document.querySelectorAll('.pagina:not(.prima)').forEach(p => {
+    const sez = p.querySelector('.blocco.sezione');
+    if (sez) p.querySelector('.testata .etichetta:last-child').textContent = sez.dataset.parte || '';
+  });
+  const pagine = [...document.querySelectorAll('.pagina')];
+  pagine.forEach((p, i) => { p.querySelector('.num-pag').textContent = (i + 1) + ' di ' + pagine.length; });
+  window.__impaginato = pagine.length;
+}
+document.fonts.ready.then(impagina);
+</script>
+</body>
+</html>

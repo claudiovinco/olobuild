@@ -73,6 +73,7 @@ PHOTOS = [
 TONDI = ['39641643', '24828974', '33647547', '5425021', '9306017', '37657828', '31462802', '24427097', '5060942', '9227980']
 VIDEOS = [V_HERO, V_CONO, V_MANTE, V_SPIAGGIA, V_SCIOLTO]
 MEDIA = set(PHOTOS) | {'pexels-%s-tondo.jpg' % k for k in TONDI} | {v + '.mp4' for v in VIDEOS} | {v + '.jpg' for v in VIDEOS}
+MEDIA |= {'pexels-36729524.jpg'}  # foto sostituita il 13 nov 2026 (patch_persone_2026-11-13.py)
 
 
 def img(name):
@@ -702,7 +703,7 @@ STORIA = [
     ('1966', 'Nasce il Bagnasciuga', 'Il gusto', 'I bagnini chiedono «qualcosa di salato»: Ivonne prova col sale di Cervia e il caramello. Non l’ha più tolto dalla vetrina.', 'pexels-27367377.jpg'),
     ('1974', 'Sul lungomare', 'La bottega', 'La gelateria si sposta in viale Carducci, davanti al bagno 64, col tendone a righe che c’è ancora.', 'pexels-37280334.jpg'),
     ('2003', 'I pozzetti', 'La vetrina', 'Arrivano i pozzetti col coperchio: il gelato resta al buio e al freddo giusto, e si serve con la spatola.', 'pexels-5108033.jpg'),
-    ('2019', 'Marta e Luca', 'Oggi', 'I nipoti prendono il laboratorio: stesse ricette, il latte di una stalla sola e la frutta dal mercato.', 'pexels-25391594.jpg'),
+    ('2019', 'Marta e Luca', 'Oggi', 'I nipoti prendono il laboratorio: stesse ricette, il latte di una stalla sola e la frutta dal mercato.', 'pexels-36729524.jpg'),
 ]
 
 ORE = [

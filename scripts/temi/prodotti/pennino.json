@@ -427,7 +427,7 @@
    "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
   },
   {
-   "sku": "CAR-013",
+   "sku": "CRT-013",
    "nome": "Carta da lettere vergata, cinquanta fogli",
    "slug": "carta-vergata",
    "cat": [
@@ -455,7 +455,7 @@
    "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
   },
   {
-   "sku": "CAR-014",
+   "sku": "CRT-014",
    "nome": "Biglietti con busta kraft, dieci",
    "slug": "biglietti-kraft",
    "cat": [
@@ -483,7 +483,7 @@
    "dentro": "Il pacchetto incartato a mano con la carta blu e lo spago, il biglietto se l’avete chiesto."
   },
   {
-   "sku": "CAR-015",
+   "sku": "CRT-015",
    "nome": "Buste e cartoncini da invito, venti",
    "slug": "buste-inviti",
    "cat": [

@@ -82,6 +82,33 @@
               <span class="orz-nota">{{ notaTesto(a) }}</span>
               <span v-if="a.max" class="orz-conto" :class="{ 'is-troppo': lunghezza(a) > a.max }">{{ lunghezza(a) }} / {{ a.max }}</span>
             </div>
+
+            <!-- YouTube: la playlist in cui entra il video quando esce (le sezioni del canale) -->
+            <div v-if="a.playlist" class="orz-social-playlist">
+              <div class="orz-etichetta">
+                <label :for="'orz-pl-' + a.id">{{ t('Playlist') }}</label>
+                <InfoTip :titolo="t('Playlist')" :testo="AIUTO_PLAYLIST" />
+              </div>
+              <select
+                :id="'orz-pl-' + a.id"
+                :value="playlistDi(a)"
+                :disabled="spento || elenchi[a.id]?.stato === 'carica'"
+                @change="scegliPlaylist(a, $event.target.value)"
+              >
+                <option value="">{{ elenchi[a.id]?.stato === 'carica' ? t('Carico le playlist…') : t('Nessuna playlist') }}</option>
+                <option v-for="p in elenchi[a.id]?.voci || []" :key="p.id" :value="p.id">
+                  {{ p.privacy === 'public' ? p.title : t('%s (non pubblica)').replace('%s', p.title) }}
+                </option>
+                <option v-if="playlistPersa(a)" :value="playlistDi(a)">{{ t('Playlist non più sul canale') }}</option>
+              </select>
+              <small v-if="elenchi[a.id]?.stato === 'errore'" class="orz-social-errore">
+                {{ elenchi[a.id].errore }}
+                <button type="button" class="orz-link orz-link--piccolo" @click="caricaPlaylist(a, true)">{{ t('Riprova') }}</button>
+              </small>
+              <small v-else-if="playlistDi(a) && !a.playlistPermesso" class="orz-social-errore">
+                {{ t('Per la playlist ricollega il canale in OLOsocial › Account: intanto il video esce fuori dalla playlist.') }}
+              </small>
+            </div>
           </div>
         </div>
       </div>
@@ -102,14 +129,14 @@
  * scelte sono quelle del riquadro Social di OLOsocial (Olo_Social_Riquadro::per_la_scheda / salva_scelte): farle qui o
  * nella scheda di WordPress è la stessa cosa.
  */
-import { ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import { t } from '@/i18n';
 import InfoTip from '@/components/Builder/InfoTip.vue';
 import Icona from './Icona.vue';
 import { chiama } from './api.js';
 
 const props = defineProps({
-  // Le scelte nella scheda: { modo, account: [id], testi: { id: testo }, adesso }
+  // Le scelte nella scheda: { modo, account: [id], testi: { id: testo }, playlist: { id: playlist }, adesso }
   modelValue: { type: Object, required: true },
   // I campi del contenuto (f.campi) e quelli «Testo per i social» del tipo: il testo di una rete sta lì, se c'è.
   campi: { type: Object, default: () => ({}) },
@@ -134,6 +161,48 @@ const MODI = [
 ];
 
 const AIUTO = t('Scegli su quali social esce questo contenuto e con quale testo.\n\nInsieme al contenuto: il post parte quando pubblichi, o all\'ora programmata.\n\nCome bozza: OLOsocial prepara il post nel suo calendario; lo pubblichi da qui con «Pubblica adesso sui social».\n\nTesto: se lo lasci vuoto, OLOsocial usa il suo modello (o i campi «Testo per i social» del contenuto). Il link al contenuto lo aggiunge OLOsocial.\n\nFoto: l\'immagine in evidenza, o la «Foto per i social» del contenuto, inquadrata per ogni rete.');
+
+const AIUTO_PLAYLIST = t('Quando il video esce su YouTube, entra in questa playlist del canale: così finisce da solo nella sezione giusta.\n\nLe playlist si creano e si rinominano in YouTube Studio; qui compaiono tutte, anche quelle ancora vuote.\n\nNessuna playlist: il video esce sul canale e basta.');
+
+/* ---------- Playlist di YouTube: l'elenco si chiede al canale una volta per account, quando serve ---------- */
+
+const elenchi = reactive({}); // account → { stato: 'carica' | 'ok' | 'errore', voci: [], errore: '' }
+
+async function caricaPlaylist(a, ancora = false) {
+  if (!ancora && elenchi[a.id] && elenchi[a.id].stato !== 'errore') return;
+  elenchi[a.id] = { stato: 'carica', voci: elenchi[a.id]?.voci || [], errore: '' };
+  try {
+    const voci = await chiama('redazione/social/playlist', { parametri: { account: a.id } });
+    elenchi[a.id] = { stato: 'ok', voci: Array.isArray(voci) ? voci : [], errore: '' };
+  } catch (e) {
+    elenchi[a.id] = { stato: 'errore', voci: [], errore: e.message };
+  }
+}
+
+function playlistDi(a) {
+  return (props.modelValue.playlist || {})[a.id] || '';
+}
+
+function scegliPlaylist(a, id) {
+  const lista = { ...(props.modelValue.playlist || {}) };
+  if (id) lista[a.id] = id;
+  else delete lista[a.id];
+  props.modelValue.playlist = lista;
+}
+
+// La playlist salvata che il canale non ha più resta visibile nella scelta, per non perderla in silenzio.
+function playlistPersa(a) {
+  const scelta = playlistDi(a);
+  const e = elenchi[a.id];
+  return !!scelta && !!e && e.stato === 'ok' && !e.voci.some((p) => p.id === scelta);
+}
+
+// L'elenco arriva quando la carta di YouTube è spuntata (e i social escono): non a ogni scheda aperta.
+watch(
+  () => (props.modelValue.modo !== 'no' ? props.info.accountDisponibili.filter((a) => a.playlist && scelto(a)) : []),
+  (lista) => lista.forEach((a) => caricaPlaylist(a)),
+  { immediate: true },
+);
 
 function iniziale(nome) {
   return String(nome || '?').charAt(0);

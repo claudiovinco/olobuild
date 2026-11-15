@@ -1,0 +1,439 @@
+{
+"cornicione": {
+"o": [
+0,
+1,
+2,
+3,
+4,
+5,
+6,
+7
+],
+"f": "centro",
+"n": null,
+"t": "cornicione"
+},
+"bandeja": {
+"o": [
+0,
+1,
+3,
+2,
+4,
+5,
+6
+],
+"f": "lato",
+"n": null,
+"t": "bandeja"
+},
+"tracolla": {
+"o": [
+0,
+1,
+2,
+3,
+4,
+5,
+6,
+7,
+8,
+9,
+10
+],
+"f": "centro",
+"n": 0,
+"t": "tracolla"
+},
+"velluto": {
+"o": [
+0,
+1,
+2,
+3,
+4,
+5,
+6,
+7,
+9,
+8,
+10
+],
+"f": "lato",
+"n": 1,
+"t": "velluto"
+},
+"suola": {
+"o": [
+0,
+3,
+2,
+1,
+4,
+7,
+6,
+5,
+9,
+8,
+10
+],
+"f": "destra",
+"n": 2,
+"t": "suola"
+},
+"ristretto": {
+"o": [
+0,
+1,
+2,
+5,
+3,
+4,
+6,
+7,
+9,
+8,
+10
+],
+"f": "centro",
+"n": 3,
+"t": "ristretto"
+},
+"carambola": {
+"o": [
+0,
+2,
+3,
+1,
+4,
+5,
+6,
+7,
+8,
+9,
+10
+],
+"f": "lato",
+"n": 4,
+"t": "carambola"
+},
+"spiedo": {
+"o": [
+0,
+1,
+2,
+5,
+4,
+3,
+6,
+7,
+8,
+9,
+10
+],
+"f": "destra",
+"n": 5,
+"t": "spiedo"
+},
+"pennino": {
+"o": [
+0,
+1,
+2,
+3,
+6,
+5,
+4,
+7,
+9,
+8,
+10
+],
+"f": "centro",
+"n": 6,
+"t": "pennino"
+},
+"falda": {
+"o": [
+0,
+1,
+3,
+2,
+6,
+4,
+5,
+7,
+8,
+9,
+10
+],
+"f": "lato",
+"n": 7,
+"t": "falda"
+},
+"trottola": {
+"o": [
+0,
+3,
+2,
+1,
+5,
+4,
+6,
+7,
+8,
+9,
+10
+],
+"f": "destra",
+"n": 8,
+"t": "trottola"
+},
+"calice": {
+"o": [
+0,
+1,
+2,
+3,
+5,
+4,
+7,
+6,
+9,
+8,
+10
+],
+"f": "centro",
+"n": 9,
+"t": "calice"
+},
+"sirena": {
+"o": [
+0,
+1,
+2,
+3,
+4,
+5
+],
+"f": "centro",
+"n": null,
+"t": "sirena"
+},
+"giunto": {
+"o": [
+0,
+3,
+4,
+1,
+2,
+5
+],
+"f": "lato",
+"n": null,
+"t": "giunto"
+},
+"capitonne": {
+"o": [
+0,
+1,
+3,
+4,
+2,
+5
+],
+"f": "destra",
+"n": null,
+"t": "capitonne"
+},
+"rovescio": {
+"o": [
+0,
+1,
+2,
+3,
+4,
+5,
+6
+],
+"f": "centro",
+"n": null,
+"t": "rovescio"
+},
+"cerniera": {
+"o": [
+0,
+1,
+6,
+3,
+2,
+4,
+5,
+7
+],
+"f": "lato",
+"n": null,
+"t": "cerniera"
+},
+"spaiato": {
+"o": [
+0,
+1,
+2,
+6,
+5,
+3,
+4,
+7
+],
+"f": "destra",
+"n": null,
+"t": "spaiato"
+},
+"trentagradi": {
+"o": [
+0,
+1,
+4,
+3,
+2,
+6,
+5,
+7
+],
+"f": "centro",
+"n": null,
+"t": "trentagradi"
+},
+"lastra": {
+"o": [
+0,
+1,
+2,
+3,
+6,
+4,
+5,
+7
+],
+"f": "lato",
+"n": null,
+"t": "lastra"
+},
+"falcata": {
+"o": [
+0,
+1,
+3,
+5,
+2,
+4,
+6,
+7
+],
+"f": "destra",
+"n": null,
+"t": "falcata"
+},
+"ventaglio": {
+"o": [
+0,
+1,
+2,
+4,
+3,
+6,
+5,
+7
+],
+"f": "centro",
+"n": null,
+"t": "ventaglio"
+},
+"sonnambulo": {
+"o": [
+0,
+1,
+2,
+3,
+4,
+5,
+6,
+7
+],
+"f": "centro",
+"n": null,
+"t": "sonnambulo"
+},
+"fuorimisura": {
+"o": [
+0,
+3,
+2,
+4,
+1,
+5,
+6,
+7,
+8
+],
+"f": "lato",
+"n": null,
+"t": "fuorimisura"
+},
+"due-mani": {
+"o": [
+0,
+1,
+2,
+3,
+4,
+5,
+6
+],
+"f": "centro",
+"n": null,
+"t": "due-mani"
+},
+"filo-a-piombo": {
+"o": [
+0,
+1,
+2,
+3,
+5,
+4,
+6
+],
+"f": "lato",
+"n": null,
+"t": "filo-a-piombo"
+},
+"cric": {
+"o": [
+0,
+1,
+2,
+3,
+4,
+5
+],
+"f": "centro",
+"n": null,
+"t": "cric"
+},
+"rastrello": {
+"o": [
+0,
+3,
+1,
+2,
+4,
+5
+],
+"f": "lato",
+"n": null,
+"t": "rastrello"
+}
+}

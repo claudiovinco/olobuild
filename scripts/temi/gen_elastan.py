@@ -3,8 +3,9 @@
 allunga fino al triplo e torna com'era.
 
 La trovata: «tutto si allunga». In apertura il nome ELASTAN è un elastico: scorrendo si tende in larghezza fino a uscire
-dallo schermo (e si assottiglia, come la gomma tirata), poi lo si lascia andare e torna al suo posto con un rimbalzo
-(livelli dello Slider Pro con l'allungamento orizzontale e verticale). Il nastro di scritte si piega con la velocità
+dallo schermo (e si assottiglia, come la gomma tirata), poi lo si lascia andare e torna al suo posto con un rimbalzo.
+Dal 15 nov 2026 il nome si tende col disegno vero del carattere variabile (assi wdth e wght nel movimento a scorrimento
+dello Slider Pro), non più allungando la scritta: solo l'elastico sotto si allunga e si assottiglia. Il nastro di scritte si piega con la velocità
 dello scorrimento e i numeri del tessuto si riempiono in cerchio (CounterCircle).
 
 Tema scuro: nero palestra, rosa acceso e acquamarina. Titoli in Anybody, testo in Manrope, dati in Martian Mono.
@@ -78,36 +79,48 @@ def apertura(t):
     tira = {'inizio': 0, 'fine': 100, 'tappe': [{'p': 0, 'sx': 1, 'sy': 1}, {'p': 8, 'sx': 1, 'sy': 1}, {'p': 46, 'sx': 2.6, 'sy': 0.66},
                                                 {'p': 54, 'sx': 0.78, 'sy': 1.22}, {'p': 59, 'sx': 1.12, 'sy': 0.92},
                                                 {'p': 64, 'sx': 0.95, 'sy': 1.04}, {'p': 69, 'sx': 1, 'sy': 1}, {'p': 100, 'sx': 1, 'sy': 1}]}
-    livelli = K.veli('el-velo', 'basso', 30, 62, colore=C['nero'], forza=82, mobile_da=58) + [
-        K.livello('el-nome', contenuto='ELASTAN', tag='h1', x=0, y=30, w=100, size=230, peso='900', fontFamily='Anybody',
+    # Il nome si tende col disegno vero del carattere (Anybody variabile): la larghezza va da 62 a 150, quasi il triplo
+    # delle lettere strette, e il peso cala come la gomma tirata che si assottiglia; lasciato andare torna più stretto
+    # e più pesante di prima e si assesta in tre rimbalzi. Le lettere restano lettere, non una scritta deformata.
+    nome = {'inizio': 0, 'fine': 100, 'tappe': [{'p': 0, 'wdth': 62, 'wght': 880}, {'p': 8, 'wdth': 62, 'wght': 880},
+                                                {'p': 46, 'wdth': 150, 'wght': 240}, {'p': 54, 'wdth': 50, 'wght': 900},
+                                                {'p': 59, 'wdth': 74, 'wght': 800}, {'p': 64, 'wdth': 57, 'wght': 890},
+                                                {'p': 69, 'wdth': 64, 'wght': 870}, {'p': 74, 'wdth': 62, 'wght': 880},
+                                                {'p': 100, 'wdth': 62, 'wght': 880}]}
+    # un velo leggero anche in cima, solo dietro l'occhiello (lì il video ha le finestre chiare della sala)
+    cima = K.livello('el-velo-cima', tipo='shape', x=0, y=0, w=100, h=26, entra='fadeIn', ritardo=0, durata=600, esce='fadeOut',
+                     shapeGradient={'angle': 180, 'from': mix(C['nero'], 62), 'to': mix(C['nero'], 0), 'fromStop': 30},
+                     responsive={'mobile': {'height': 16}})
+    livelli = [cima] + K.veli('el-velo', 'basso', 30, 62, colore=C['nero'], forza=82, mobile_da=60) + [
+        K.livello('el-nome', contenuto='ELASTAN', tag='h1', x=-30, y=26, w=160, size=290, peso='900', fontFamily='Anybody',
                   colore=C['testo'], align='center', lineHeight=0.9, letterSpacing=4, entra='fadeIn', ritardo=200, durata=900,
-                  customCSS='transform-origin:50% 50%;', scrollMove=tira,
-                  responsive={'mobile': {'fontSize': m(60), 'letterSpacing': 1, 'x': 0, 'y': 31, 'width': 100}}),
-        K.livello('el-elastico', tipo='shape', x=25, y=60, w=50, h=0.9, bgColor=C['acc'], borderRadius=999, entra='fadeIn', ritardo=400,
+                  customCSS='font-variation-settings:"wdth" 62,"wght" 880;white-space:nowrap;', scrollMove=nome,
+                  responsive={'mobile': {'fontSize': m(112), 'letterSpacing': 1, 'x': -30, 'y': 37, 'width': 160}}),
+        K.livello('el-elastico', tipo='shape', x=25, y=62, w=50, h=0.9, bgColor=C['acc'], borderRadius=999, entra='fadeIn', ritardo=400,
                   durata=700, customCSS='transform-origin:50% 50%;', scrollMove=tira,
-                  responsive={'mobile': {'x': 15, 'y': 37.6, 'width': 70, 'height': 0.4}}),
+                  responsive={'mobile': {'x': 15, 'y': 48.6, 'width': 70, 'height': 0.4}}),
         K.livello('el-o', contenuto='Elastan · abbigliamento sportivo · Milano', x=6, y=14, w=50, size=13, peso='500',
                   colore=mix(C['testo'], 86), letterSpacing=3, textTransform='uppercase', fontFamily=MONO, ritardo=150,
                   responsive={'mobile': {'fontSize': m(10), 'x': 6, 'y': 8, 'width': 88}}),
         K.livello('el-s', contenuto='Scorrete: tiratelo.', x=0, y=68, w=100, size=20, peso='500', colore=mix(C['testo'], 92),
                   align='center', ritardo=800,
                   scrollMove={'inizio': 0, 'fine': 30, 'tappe': [{'p': 0, 'o': 100}, {'p': 100, 'o': 0}]},
-                  responsive={'mobile': {'fontSize': m(14), 'x': 0, 'y': 41, 'width': 100}}),
+                  responsive={'mobile': {'fontSize': m(14), 'x': 0, 'y': 51, 'width': 100}}),
     ]
     fine = {'inizio': 0, 'fine': 100, 'tappe': [{'p': 0, 'o': 0}, {'p': 66, 'o': 0}, {'p': 80, 'o': 100}, {'p': 100, 'o': 100}]}
     livelli += [
-        K.livello('el-f1', contenuto='Si allunga del 300%. Torna sempre com’era.', tag='p', x=10, y=68, w=80, size=30, peso='600',
+        K.livello('el-f1', contenuto='Si allunga del 300%. Torna sempre com’era.', tag='p', x=10, y=69, w=80, size=30, peso='600',
                   colore=C['testo'], align='center', lineHeight=1.2, scrollMove=fine, entra='fadeIn', ritardo=0,
-                  responsive={'mobile': {'fontSize': m(17), 'x': 6, 'y': 41, 'width': 88}}),
+                  responsive={'mobile': {'fontSize': m(17), 'x': 6, 'y': 52, 'width': 88}}),
         K.livello('el-b', tipo='button', contenuto='La collezione', x=36, y=78, w='auto', size=12, peso='700', colore=C['on_acc'],
                   bgColor=C['acc'], padding=16, borderRadius=999, letterSpacing=3, textTransform='uppercase', buttonUrl=CAPI,
                   scrollMove=fine, entra='fadeIn', ritardo=0, hover={'bgColor': ACQUA, 'duration': 250},
-                  responsive={'tablet': {'x': 30}, 'mobile': {'x': 8, 'y': 47, 'fontSize': m(11)}}),
+                  responsive={'tablet': {'x': 30}, 'mobile': {'x': 8, 'y': 58, 'fontSize': m(11)}}),
         K.livello('el-l', tipo='button', contenuto='Il tessuto', x=51, y=78, w='auto', size=12, peso='700', colore=C['testo'],
                   bgColor='transparent', padding=16, borderRadius=999, borderWidth=1, borderColor=mix(C['testo'], 60), letterSpacing=3,
                   textTransform='uppercase', buttonUrl=TESSUTO, scrollMove=fine, entra='fadeIn', ritardo=0,
                   hover={'bgColor': mix(C['testo'], 14), 'borderColor': C['testo'], 'duration': 250},
-                  responsive={'tablet': {'x': 52}, 'mobile': {'x': 55, 'y': 47, 'fontSize': m(11)}}),
+                  responsive={'tablet': {'x': 52}, 'mobile': {'x': 55, 'y': 58, 'fontSize': m(11)}}),
     ]
     M.veli_oltre(livelli)
     sl = [K.diapositiva('el-1', K.sfondo_video(V_SPACCATA, overlay=0.3, colore=C['nero']), livelli, durata=600000)]
@@ -122,6 +135,59 @@ def cerchi(t, voci):
         'value': str(v), 'max_value': str(mx), 'suffix': su, 'prefix': '', 'title': ti, 'size': '240', 'stroke_width': '6',
         'stroke_color': col, 'track_color': C['filo'], 'text_color': col, 'title_color': C['testo'], 'duration': '2600',
         'title_position': 'below'}, style={})], wm='1-3', ws='1-1') for v, mx, su, ti, col in voci], layout='33-33-33', gap=32)
+
+
+def due_col(el):
+    """Le schede dei capi a due colonne sul telefono: sono brevi (foto, nome, prezzo), una per riga allungava la pagina."""
+    el['settings']['columns_mobile'] = 2
+    return el
+
+
+def tre_volte(t):
+    """La frase che si tende dove passa il puntatore o il dito (Specimen variabile, «Pressione»): ogni lettera di Anybody
+    va verso la larghezza e il peso massimi quando la si avvicina e torna con una molla; a riposo la attraversa un'onda.
+    Il tessuto si tende dove lo si tocca, il nome nell'apertura si tende scorrendo: due gesti diversi, la stessa idea."""
+    return t.section([t.one([t.classic('variablespecimen', {
+        'font_family': "'Anybody', 'Manrope', sans-serif", 'sample_text': 'Tre volte\ntanto.', 'interaction': 'pressione',
+        'auto_animate': True, 'auto_speed': '7', 'drag_hint': '', 'show_readout': False,
+        'axes': [{'tag': 'wdth', 'label': 'Larghezza', 'min': 50, 'max': 150, 'default_val': 56},
+                 {'tag': 'wght', 'label': 'Peso', 'min': 300, 'max': 900, 'default_val': 640}],
+        'text_color': C['testo'], 'accent_color': C['acc'], 'font_size': '220', 'font_size_tablet': '170', 'font_size_mobile': '112',
+        'font_weight_fallback': '700', 'text_align': 'center', 'padding_y': '20'}, style={})])],
+        bg=solid(C['nero']), padding='large', width='fullbleed', style={'padding_top': 110, 'padding_bottom': 110})
+
+
+def lezioni(t):
+    """Le lezioni della settimana in palestra (Orario dei corsi, a elenco: le altre palestre dei temi lo usano a griglia)."""
+    corsi = [('allunga', 'Allungamento', C['acc'], 'Mezz’ora per sciogliere schiena e gambe, per tutti.', '45'),
+             ('sbarra', 'Sbarra a terra', ACQUA, 'Gli esercizi della danza, sul tappetino.', '60'),
+             ('mobilita', 'Mobilità', HEX['secondary'], 'Anche e spalle, per chi corre e chi sta seduto.', '45'),
+             ('verticale', 'Verticali', '#FFB347', 'Contro il muro, poi senza: si impara a stare a testa in giù.', '60')]
+    piano = [(1, '07:30', '08:15', 'allunga', 'Chiara Bassi', 'Sala grande', 'base'),
+             (1, '19:00', '20:00', 'sbarra', 'Sara Ferri', 'Sala grande', 'intermedio'),
+             (2, '12:30', '13:15', 'mobilita', 'Nia Johnson', 'Sala piccola', 'base'),
+             (3, '07:30', '08:15', 'allunga', 'Chiara Bassi', 'Sala grande', 'base'),
+             (3, '19:30', '20:30', 'verticale', 'Leon Weber', 'Sala grande', 'avanzato'),
+             (4, '18:30', '19:30', 'sbarra', 'Sara Ferri', 'Sala grande', 'intermedio'),
+             (5, '12:30', '13:15', 'mobilita', 'Nia Johnson', 'Sala piccola', 'base'),
+             (6, '10:00', '11:00', 'verticale', 'Leon Weber', 'Sala grande', 'avanzato'),
+             (7, '10:00', '10:45', 'allunga', 'Chiara Bassi', 'Sala grande', 'base')]
+    orario = t.classic('orariocorsi', {
+        'corsi': [{'id': i, 'nome': n, 'colore': col, 'descrizione': d, 'durata': du} for i, n, col, d, du in corsi],
+        'lezioni': [{'id': 'el-l%d' % k, 'giorno': g, 'inizio': a, 'fine': b, 'corso': c, 'istruttore': ins, 'sala': sala,
+                     'livello': liv, 'posti': 12, 'nota': 'gratis' if g == 7 else ''} for k, (g, a, b, c, ins, sala, liv) in enumerate(piano)],
+        'giorni': 'Lunedì,Martedì,Mercoledì,Giovedì,Venerdì,Sabato,Domenica', 'ora_inizio': '07:00', 'ora_fine': '21:00',
+        'vista': 'elenco', 'mostra_filtri': True, 'etichetta_tutti': 'Tutte', 'filtro_livello': True, 'filtro_istruttore': False,
+        'testo_vuoto': 'Nessuna lezione con questo livello.', 'testo_prenota': 'Una prova',
+        'link_prenota': NEGOZI + '?motivo=Una+lezione+in+palestra#scrivi', 'evidenzia_oggi': True, 'mostra_adesso': True,
+        'colore_oggi': C['acc'], 'colore_adesso': ACQUA, 'colore_tenue': C['testo'], 'giorno_font_family': 'heading',
+        'giorno_font_size': 22, 'giorno_font_weight': '800', 'giorno_uppercase': True, 'corso_font_family': 'heading',
+        'corso_font_size': 18, 'corso_font_weight': '800', 'ora_font_family': 'var(--olo-font-family-mono)',
+        'raggio_lezione': radius(14), 'gap': 6, 'forma_filtri': 'pillola'}, style={})
+    return t.section([
+        t.one([K.sechead(t, 'In palestra', ['Le lezioni', 'della settimana.'], size=56)]),
+        t.one([orario]),
+    ], padding='large', width='large', html_id='lezioni', style={'padding_top': 110, 'padding_bottom': 110})
 
 
 def build_home():
@@ -143,13 +209,14 @@ def build_home():
         cerchi(t, [(300, 300, '%', 'Si allunga fino al triplo', C['acc']), (98, 100, '%', 'Torna com’era, dopo cento trazioni', ACQUA),
                    (200, 200, '', 'Lavaggi senza perdere forma', C['acc'])]),
     ], bg=solid(C['sala']), padding='large', width='large', style={'padding_top': 120, 'padding_bottom': 110}))
+    out.append(tre_volte(t))
     out.append(t.section([
         t.one([K.sechead(t, 'La collezione', ['Quattro capi', 'che si tendono.'], size=60)]),
-        t.one([M.capi(K, t, [
+        t.one([due_col(M.capi(K, t, [
             (LEGG[0], 'Leggings', 'Spaccata', '', 'Vita alta, quattro vie.', '95 €', 'nuovo'),
             (TOP[1], 'Top', 'Ponte', '', 'Il sostegno che segue la schiena.', '65 €', ''),
             (LEGG[3], 'Leggings', 'Corsa', '', 'Con la tasca per il telefono.', '90 €', ''),
-            (SPOR[1], 'Tute', 'Sbarra', '', 'Intera, per la danza.', '140 €', '')], CAPI)]),
+            (SPOR[1], 'Tute', 'Sbarra', '', 'Intera, per la danza.', '140 €', '')], CAPI))]),
     ], padding='large', width='large', style={'padding_top': 120, 'padding_bottom': 110}))
     out.append(t.section([
         t.one([K.sechead(t, 'A riposo e tirato', ['Trascinate:', 'è lo stesso tessuto.'], size=60)]),
@@ -177,22 +244,22 @@ def build_collezione():
                    bg=K.video_bg(V_SBARRA, overlay=30), size=96)]
     out.append(t.section([
         t.one([K.sechead(t, 'Leggings', ['Vita alta,', 'nessuna cucitura dietro.'], size=60)]),
-        t.one([M.capi(K, t, [
+        t.one([due_col(M.capi(K, t, [
             (LEGG[0], 'Leggings', 'Spaccata', '', 'Vita alta, quattro vie.', '95 €', 'nuovo'),
             (LEGG[3], 'Leggings', 'Corsa', '', 'La tasca per il telefono.', '90 €', ''),
             (LEGG[4], 'Leggings', 'Rosa', '', 'Il rosa del marchio.', '95 €', ''),
-            (LEGG[5], 'Leggings', 'Notte', '', 'Riflettenti, per la sera.', '100 €', '')], NEGOZI)]),
+            (LEGG[5], 'Leggings', 'Notte', '', 'Riflettenti, per la sera.', '100 €', '')], NEGOZI))]),
     ], padding='large', width='large', style={'padding_top': 110, 'padding_bottom': 90}))
     out.append(t.section([t.one([M.nastro(K, t, ['Quattro vie', 'Trecento per cento', 'Duecento lavaggi', 'Reti da pesca'],
                                           fondo=ACQUA, colore=C['on_acc'], size=56, verso='right')], anim=None)],
                          width='fullbleed', padding='remove-vertical'))
     out.append(t.section([
         t.one([K.sechead(t, 'Top e tute', ['Per chi', 'si piega.'], size=60)]),
-        t.one([M.capi(K, t, [
+        t.one([due_col(M.capi(K, t, [
             (TOP[1], 'Top', 'Ponte', '', 'Il sostegno che segue la schiena.', '65 €', ''),
             (TOP[3], 'Top', 'Rosso', '', 'Le spalline incrociate.', '60 €', ''),
             (SPOR[1], 'Tute', 'Sbarra', '', 'Intera, per la danza.', '140 €', ''),
-            (TOP[5], 'Top', 'Corsa', '', 'Leggero, traforato.', '60 €', 'ultimi')], NEGOZI)]),
+            (TOP[5], 'Top', 'Corsa', '', 'Leggero, traforato.', '60 €', 'ultimi')], NEGOZI))]),
     ], bg=solid(C['sala']), padding='large', width='large', style={'padding_top': 110, 'padding_bottom': 110}))
     return out
 
@@ -219,10 +286,10 @@ def build_tessuto():
     ], bg=solid(C['sala']), padding='large', width='large', style={'padding_top': 120, 'padding_bottom': 110}))
     out.append(t.section([
         t.one([K.sechead(t, 'In palestra', ['Chi lo tira', 'ogni giorno.'], size=60)]),
-        K.squadra(t, [(ATLE[0], 'Chiara Bassi', 'Fondatrice', 'Ex ginnasta: voleva dei leggings che non le stessero addosso.',
+        K.squadra(t, [(ATLE[1], 'Chiara Bassi', 'Fondatrice', 'Ex ginnasta: voleva dei leggings che non le stessero addosso.',
                        'center 25%'),
-                      (ATLE[2], 'Leon Weber', 'Tessuti', 'Prova ogni filo cento volte prima di sceglierlo.', 'center 25%'),
-                      (ATLE[4], 'Nia Johnson', 'Prove', 'Ballerina: prova i capi nella spaccata.', 'center 25%')],
+                      (ATLE[0], 'Leon Weber', 'Tessuti', 'Prova ogni filo cento volte prima di sceglierlo.', 'center 25%'),
+                      (ATLE[3], 'Nia Johnson', 'Prove', 'Cestista: prova i capi in partita.', 'center 25%')],
                   ratio='4/5', size='320', sfondo=C['sala']),
     ], padding='large', width='large', style={'padding_top': 120, 'padding_bottom': 100}))
     out.append(t.section([
@@ -258,6 +325,7 @@ def build_negozi():
                t.col([K.mappa(t, LAT, LNG, 'Elastan · la palestra', scuro=True, hex_marker=HEX['primary'])], wm='1-2', ws='1-1')],
               layout='50-50', gap=56, valign='center'),
     ], bg=solid(C['sala']), padding='large', html_id='palestra', style={'padding_top': 120, 'padding_bottom': 120}))
+    out.append(lezioni(t))
     out.append(K.domande(t, 'Prima di comprare', ['Le domande', 'sul tessuto.'], [
         ('Diventa trasparente piegandosi?', 'No: la maglia è stretta, la proviamo in spaccata davanti alla luce.'),
         ('Si lava?', 'A trenta gradi, senza ammorbidente: duecento lavaggi senza perdere forma.'),

@@ -89,6 +89,13 @@ function olo_demo_termine( $tax, $nome ) {
 $cat_id = [];
 foreach ( (array) $D['categorie'] as $ordine => $c ) {
 	$t  = get_term_by( 'slug', $c['slug'], 'product_cat' );
+	// Uno slug è un termine solo per tutto il sito: se è già di un altro negozio demo, il secondo gli avrebbe rubato
+	// nome, foto e _olo_demo, e la categoria sarebbe sparita dall'altra demo (13 nov 2026: «accessori» di Velluto e
+	// di Carambola, «regali» di Calice, Carambola e Ristretto…). Ogni negozio usa slug suoi.
+	$di = $t ? (string) get_term_meta( $t->term_id, '_olo_demo', true ) : '';
+	if ( '' !== $di && $di !== $TEMA ) {
+		WP_CLI::error( sprintf( 'la categoria «%s» è già del negozio %s: dai a %s uno slug suo', $c['slug'], $di, $TEMA ) );
+	}
 	$id = $t ? (int) $t->term_id : (int) wp_insert_term( $c['nome'], 'product_cat', [ 'slug' => $c['slug'], 'description' => $c['descrizione'] ] )['term_id'];
 	wp_update_term( $id, 'product_cat', [ 'name' => $c['nome'], 'description' => $c['descrizione'] ] );
 	update_term_meta( $id, 'thumbnail_id', olo_demo_foto( $c['foto'], $c['nome'], $TEMA, $LIB ) );
@@ -104,6 +111,12 @@ $fatti = 0;
 foreach ( (array) $D['prodotti'] as $i => $d ) {
 	$var   = $d['varianti'] ?? null;    // { "attributo": "taglia", "valori": [...], "esaurite": [...] }
 	$id    = wc_get_product_id_by_sku( $d['sku'] );
+	// Lo SKU è unico su tutto il sito: se è già di un altro negozio demo, questo gli porterebbe via il prodotto
+	// (13 nov 2026: le carte di Pennino avevano CAR-013…015, gli stessi codici degli accessori di Carambola).
+	$di = $id ? (string) get_post_meta( $id, '_olo_demo', true ) : '';
+	if ( '' !== $di && $di !== $TEMA ) {
+		WP_CLI::error( sprintf( 'lo SKU %s è già del negozio %s: dai a %s codici suoi', $d['sku'], $di, $TEMA ) );
+	}
 	$esiste = $id ? wc_get_product( $id ) : null;
 	if ( $esiste && ( $var ? ! $esiste->is_type( 'variable' ) : $esiste->is_type( 'variable' ) ) ) {
 		$esiste->delete( true );

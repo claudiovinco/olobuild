@@ -44,6 +44,10 @@
                 <button @click="pickImage" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-xs mb-text-gray-300 hover:mb-bg-gray-500">{{ t('Sfoglia') }}</button>
               </div>
             </div>
+            <div>
+              <label class="mps-label">{{ t('Testo alternativo') }}</label>
+              <input :value="layer.imageAlt" @input="up('imageAlt', $event.target.value)" class="mps-input" :placeholder="t('Cosa mostra l’immagine (per chi non la vede)')" />
+            </div>
           </template>
           <!-- Button -->
           <template v-if="layer.type === 'button'">
@@ -162,6 +166,95 @@
               <p v-else class="mb-text-[10px] mb-text-gray-500 mb-italic">{{ t('Nessun altro layer in questa slide') }}</p>
               <p v-if="layer.action.target" class="mb-text-[9px] mb-text-gray-500 mb-mt-1 mb-font-mono">id: {{ layer.action.target }}</p>
             </div>
+          </template>
+
+          <template v-if="layer.action?.type === 'setState' || layer.action?.type === 'cycleState'">
+            <div>
+              <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Nome dello stato') }}<InfoTip :testo="t('Uno stato è un nome con un valore (luce = accesa). I livelli con «Visibile solo in uno stato» si mostrano quando lo stato ha uno dei loro valori. Il valore all’avvio si scrive nelle impostazioni dello slider, «Stati all’avvio».')" :titolo="t('Stati')" /></label>
+              <input :value="layer.action.target || ''" @input="setAction('target', $event.target.value)" class="mps-input mb-w-full" placeholder="luce" />
+            </div>
+            <div v-if="layer.action.type === 'setState'">
+              <label class="mps-label">{{ t('Valore') }}</label>
+              <input :value="layer.action.value ?? ''" @input="setAction('value', $event.target.value)" class="mps-input mb-w-full" placeholder="accesa" />
+            </div>
+            <div v-if="layer.action.type === 'setState'">
+              <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Colore dello stato') }}<InfoTip :testo="t('Facoltativo: il colore va nella variabile --mps-st-nome, che i colori dei livelli possono usare, per esempio var(--mps-st-tinta, #ffffff). Il cambio di colore è sfumato.')" :titolo="t('Colore dello stato')" /></label>
+              <FieldColor :modelValue="layer.action.color || ''" @update:modelValue="setAction('color', $event)" />
+            </div>
+            <div v-if="layer.action.type === 'cycleState'">
+              <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Valori, in ordine') }}<InfoTip :testo="t('Separati da virgole: a ogni clic lo stato passa al valore dopo (1, 2, 3, 4). Due valori fanno un interruttore.')" :titolo="t('Stato successivo')" /></label>
+              <input :value="layer.action.values || ''" @input="setAction('values', $event.target.value)" class="mps-input mb-w-full" placeholder="1,2,3,4" />
+            </div>
+            <label v-if="layer.action.type === 'cycleState'" class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+              <input type="checkbox" :checked="layer.action.loop !== false" @change="setAction('loop', $event.target.checked)" class="mb-rounded" />
+              <span class="mb-text-[11px] mb-text-gray-400">{{ t('Dall’ultimo valore ricomincia') }}</span>
+            </label>
+            <div>
+              <label class="mps-label">{{ t('Nome per chi usa la tastiera o un lettore di schermo') }}</label>
+              <input :value="layer.action.label || ''" @input="setAction('label', $event.target.value)" class="mps-input mb-w-full" :placeholder="t('Accendi la luce')" />
+            </div>
+          </template>
+
+          <!-- Visibile solo in uno stato -->
+          <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+          <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+            <input type="checkbox" :checked="!!layer.stato" @change="up('stato', $event.target.checked ? { nome: '', vale: '', effetto: 'fade', durata: 600, ritardo: 0 } : null)" class="mb-rounded" />
+            <span class="mps-label mb-mb-0 mb-flex mb-items-center mb-gap-1">{{ t('Visibile solo in uno stato') }}<InfoTip :testo="t('Il livello si mostra quando lo stato ha uno dei valori scritti (separati da virgole) e si nasconde negli altri casi. Con il punto esclamativo davanti vale il contrario: «!accesa» = finché non è accesa. Lo stato lo cambiano i livelli con l’azione «Imposta uno stato» o «Stato successivo».')" :titolo="t('Visibile solo in uno stato')" /></span>
+          </label>
+          <template v-if="layer.stato">
+            <div class="mb-grid mb-grid-cols-2 mb-gap-2">
+              <div>
+                <label class="mps-label">{{ t('Stato') }}</label>
+                <input :value="layer.stato.nome || ''" @input="upStato('nome', $event.target.value)" class="mps-input mb-w-full" placeholder="luce" />
+              </div>
+              <div>
+                <label class="mps-label">{{ t('Valori') }}</label>
+                <input :value="layer.stato.vale || ''" @input="upStato('vale', $event.target.value)" class="mps-input mb-w-full" placeholder="accesa" />
+              </div>
+            </div>
+            <div>
+              <label class="mps-label">{{ t('Come compare') }}</label>
+              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.stato.effetto || 'fade'" :options="OPTS_STATO_EFFETTO" @update:model-value="upStato('effetto', $event)" />
+            </div>
+            <div class="mb-grid mb-grid-cols-2 mb-gap-2">
+              <div>
+                <label class="mps-label">{{ t('Durata') }}</label>
+                <NumberScrubber theme="dark" :modelValue="layer.stato.durata ?? 600" :min="0" :max="4000" :step="50" :defaultValue="600" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Durata')" @update:modelValue="upStato('durata', $event)" />
+              </div>
+              <div>
+                <label class="mps-label">{{ t('Ritardo') }}</label>
+                <NumberScrubber theme="dark" :modelValue="layer.stato.ritardo ?? 0" :min="0" :max="4000" :step="50" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Ritardo')" @update:modelValue="upStato('ritardo', $event)" />
+              </div>
+            </div>
+          </template>
+
+          <!-- Da pulire col puntatore (solo immagini) -->
+          <template v-if="layer.type === 'image'">
+            <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+            <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+              <input type="checkbox" :checked="!!layer.pulisci?.attivo" @change="up('pulisci', $event.target.checked ? { attivo: true, pennello: 70, soglia: 60, stato: '', colore: '#111111' } : null)" class="mb-rounded" />
+              <span class="mps-label mb-mb-0 mb-flex mb-items-center mb-gap-1">{{ t('Da pulire col puntatore') }}<InfoTip :testo="t('L’immagine copre quello che c’è sotto e si cancella passandoci sopra col mouse (col dito sul telefono). Pulita la parte scelta, il resto svanisce e lo stato scritto (nome=valore) cambia: così compaiono i livelli di «dopo».')" :titolo="t('Da pulire col puntatore')" /></span>
+            </label>
+            <template v-if="layer.pulisci?.attivo">
+              <div class="mb-grid mb-grid-cols-2 mb-gap-2">
+                <div>
+                  <label class="mps-label">{{ t('Pennello') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.pulisci.pennello ?? 70" :min="10" :max="400" :step="5" :defaultValue="70" emitAs="number" :sliderOnFocus="false" unit="px" :ariaLabel="t('Pennello')" @update:modelValue="upPulisci('pennello', $event)" />
+                </div>
+                <div>
+                  <label class="mps-label">{{ t('Pulito a') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.pulisci.soglia ?? 60" :min="5" :max="100" :step="5" :defaultValue="60" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Pulito a')" @update:modelValue="upPulisci('soglia', $event)" />
+                </div>
+              </div>
+              <div>
+                <label class="mps-label">{{ t('Colore sotto l’immagine') }}</label>
+                <FieldColor :modelValue="layer.pulisci.colore || '#111111'" @update:modelValue="upPulisci('colore', $event)" />
+              </div>
+              <div>
+                <label class="mps-label">{{ t('Stato quando è pulito') }}</label>
+                <input :value="layer.pulisci.stato || ''" @input="upPulisci('stato', $event.target.value)" class="mps-input mb-w-full" placeholder="camino=pulito" />
+              </div>
+            </template>
           </template>
 
           <!-- Parallax depth -->
@@ -1051,11 +1144,15 @@
                   <NumberScrubber theme="dark" :modelValue="layer.scrollMove.fine ?? 100" :min="0" :max="100" :step="1" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Fine del tratto')" @update:modelValue="upScrollMove('fine', $event)" />
                 </div>
               </div>
+              <div>
+                <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Andamento') }}<InfoTip :testo="t('Morbido: fra una tappa e l’altra il livello parte e arriva piano. Costante: va a velocità uniforme e la scala cresce in proporzione, così uno zoom che attraversa più tappe non rallenta a ogni tappa.')" :titolo="t('Andamento')" /></label>
+                <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.scrollMove.andamento || 'morbido'" :options="OPTS_ANDAMENTO" @update:model-value="upScrollMove('andamento', $event === 'morbido' ? undefined : $event)" />
+              </div>
               <p v-if="(layer.scrollMove.tappe || []).length > 2" class="mb-text-[10px] mb-text-gray-500">{{ t('Percorso a tappe: qui si cambiano la prima e l’ultima.') }} ({{ layer.scrollMove.tappe.length }})</p>
               <template v-for="stato in ['da', 'a']" :key="stato">
                 <p class="mb-text-[10px] mb-text-gray-400 mb-mt-1">{{ stato === 'da' ? t('All’inizio') : t('Alla fine') }}</p>
                 <div class="mb-grid mb-grid-cols-2 mb-gap-2">
-                  <div v-for="c in SCROLL_MOVE_CAMPI" :key="stato + c.k">
+                  <div v-for="c in SCROLL_MOVE_CAMPI.filter(c => !c.testo || layer.type === 'text' || layer.type === 'button')" :key="stato + c.k">
                     <label class="mps-label">{{ t(c.l) }}</label>
                     <NumberScrubber theme="dark" :modelValue="smVal(stato, c.k, c.d)" :min="c.min" :max="c.max" :step="c.step" :defaultValue="c.d" emitAs="number" :sliderOnFocus="false" :unit="c.u" :ariaLabel="t(c.l)" @update:modelValue="upSmVal(stato, c.k, $event)" />
                   </div>
@@ -1361,6 +1458,7 @@ const loopAnimGroups = [
     { value: 'pulseLoop', label: 'Pulsazione' },
     { value: 'breathLoop', label: 'Respiro' },
     { value: 'slideHLoop', label: 'Slide orizzontale' },
+    { value: 'windLoop', label: 'Vento (piega dal basso)' },
     { value: 'hoverLoop', label: 'Hover dolce' },
   ]},
 ];
@@ -1380,6 +1478,14 @@ function setAction(field, value) {
   } else {
     up('action', { ...current, [field]: value });
   }
+}
+
+function upStato(key, val) {
+  up('stato', { ...(props.layer?.stato || {}), [key]: val });
+}
+
+function upPulisci(key, val) {
+  up('pulisci', { ...(props.layer?.pulisci || { attivo: true }), [key]: val });
 }
 
 function toggleCharAnim(enabled) {
@@ -1454,6 +1560,17 @@ const OPTS_ACTION_TYPE = [
   { value: 'openUrl', label: 'Apri URL' },
   { value: 'scrollBelow', label: 'Scroll sotto slider' },
   { value: 'toggleLayer', label: 'Toggle visibilita layer' },
+  { value: 'setState', label: t('Imposta uno stato') },
+  { value: 'cycleState', label: t('Stato successivo (a giro)') },
+];
+const OPTS_STATO_EFFETTO = [
+  { value: 'fade', label: t('Dissolvenza') },
+  { value: 'su', label: t('Sale dal basso') },
+  { value: 'giu', label: t('Scende dall’alto') },
+  { value: 'sinistra', label: t('Da sinistra') },
+  { value: 'destra', label: t('Da destra') },
+  { value: 'zoom', label: t('Si ingrandisce') },
+  { value: 'nessuno', label: t('Subito, senza effetto') },
 ];
 const OPTS_FONT_WEIGHT = ['300','400','500','600','700','800','900'].map(v => ({ value: v, label: v }));
 const OPTS_FONT_STYLE = [
@@ -1667,6 +1784,11 @@ function upMotionPath(key, val) {
 }
 
 // Movimento con lo scorrimento (scrollMove): due stati, o la prima e l'ultima delle tappe se ci sono
+// Andamento del movimento con lo scorrimento (scrollMove.andamento): morbido = di serie (nessuna chiave salvata)
+const OPTS_ANDAMENTO = [
+  { value: 'morbido', label: t('Morbido fra le tappe') },
+  { value: 'costante', label: t('Costante (zoom uniforme)') },
+];
 const SCROLL_MOVE_CAMPI = [
   { k: 'x', l: 'Sposta in orizzontale', d: 0, min: -2000, max: 2000, step: 10, u: 'px' },
   { k: 'y', l: 'Sposta in verticale', d: 0, min: -2000, max: 2000, step: 10, u: 'px' },
@@ -1682,6 +1804,9 @@ const SCROLL_MOVE_CAMPI = [
   { k: 'mr', l: 'Maschera da destra', d: 0, min: 0, max: 100, step: 1, u: '%' },
   { k: 'mb', l: 'Maschera dal basso', d: 0, min: 0, max: 100, step: 1, u: '%' },
   { k: 'ml', l: 'Maschera da sinistra', d: 0, min: 0, max: 100, step: 1, u: '%' },
+  // gli assi del carattere variabile (livelli di testo): larghezza e peso veri del disegno, non la scritta deformata
+  { k: 'wdth', testo: true, l: 'Larghezza del carattere', d: 100, min: 25, max: 200, step: 1, u: '' },
+  { k: 'wght', testo: true, l: 'Peso del carattere', d: 400, min: 100, max: 1000, step: 10, u: '' },
 ];
 function toggleScrollMove(enabled) {
   up('scrollMove', enabled ? { inizio: 0, fine: 100, da: {}, a: { y: -120, o: 0 } } : null);

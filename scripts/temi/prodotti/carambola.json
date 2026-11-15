@@ -43,7 +43,7 @@
    "foto": "pexels-11367368.jpg"
   },
   {
-   "slug": "regali",
+   "slug": "carte-regalo",
    "nome": "Carte regalo",
    "descrizione": "Una serata da regalare.",
    "foto": "pexels-31916152.jpg"
@@ -532,7 +532,7 @@
    "nome": "Carta regalo, 50 €",
    "slug": "carta-regalo-50",
    "cat": [
-    "regali"
+    "carte-regalo"
    ],
    "prezzo": 50,
    "sconto": 0,
@@ -559,7 +559,7 @@
    "nome": "Carta regalo: una serata per due",
    "slug": "carta-serata-due",
    "cat": [
-    "regali"
+    "carte-regalo"
    ],
    "prezzo": 39,
    "sconto": 32,

@@ -310,7 +310,7 @@ def produttori(t):
                                                                              'giornata.', 'center 30%'),
         ('pexels-40427744.jpg', 'Matteo, il Parmigiano', 'Corniglio · 700 metri', 'Vacche rosse, latte di montagna, trenta mesi '
                                                                                   'di stagionatura.', 'center 30%'),
-        ('pexels-35855516.jpg', 'Silvia, il vino', 'Colli di Parma', 'Malvasia e Lambrusco da sei ettari di vigna.', 'center 30%')],
+        ('pexels-35855516.jpg', 'Silvio, il vino', 'Colli di Parma', 'Malvasia e Lambrusco da sei ettari di vigna.', 'center 30%')],
         ratio='4/5', size='300')
 
 
@@ -461,7 +461,7 @@ def build_produttori():
              'Casaliva e la porta al frantoio la sera stessa: per questo l’olio è così fresco.', 'olio-e-conserve'),
             ('pexels-33313084.jpg', 'Il Parmigiano · Corniglio', 'Trenta mesi <em>sulle scalere.</em>', 'Le forme di Matteo '
              'stagionano a 700 metri: l’aria di montagna le asciuga piano.', 'formaggi-e-salumi'),
-            ('pexels-30832873.jpg', 'Il vino · Colli di Parma', 'Sei ettari, <em>due vitigni.</em>', 'Silvia fa la Malvasia '
+            ('pexels-30832873.jpg', 'Il vino · Colli di Parma', 'Sei ettari, <em>due vitigni.</em>', 'Silvio fa la Malvasia '
              'ferma e il Lambrusco: poche bottiglie, tutte buone.', 'vini')]):
         out.append(t.section([
             t.row([t.col([K.image(t, foto, occh, ratio='4/3')], wm='1-2', ws='1-1'),

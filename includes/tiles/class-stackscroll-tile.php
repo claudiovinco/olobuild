@@ -239,6 +239,10 @@ class Olobuild_Stackscroll_Tile extends Olobuild_Tile_Base {
                 object-position: <?php echo esc_attr( $obj_pos ); ?>;
                 display: block;
             }
+            /* «Intera» (per card, chiave cards[i].fit = contain, 8 nov 2026): la schermata si vede tutta sul colore
+               della card, invece di perdere i bordi nel riquadro (il ripasso perdeva i tasti di valutazione). */
+            .<?php echo $uid; ?> .scard__media--intera { background: transparent; }
+            .<?php echo $uid; ?> .scard__media--intera img { object-fit: contain; }
             .<?php echo $uid; ?> .scard__media .ph {
                 position: absolute;
                 inset: 0;
@@ -359,7 +363,7 @@ class Olobuild_Stackscroll_Tile extends Olobuild_Tile_Base {
                                 <?php endif; ?>
                             </div>
                             <?php if ( $has_media ) : ?>
-                                <div class="scard__media">
+                                <div class="scard__media<?php echo ( 'contain' === ( $card['fit'] ?? '' ) ) ? ' scard__media--intera' : ''; ?>">
                                     <?php if ( $media !== '' ) : ?>
                                         <img src="<?php echo esc_url( $media ); ?>" alt="<?php echo esc_attr( $title ); ?>" loading="lazy" />
                                     <?php elseif ( $media_lbl !== '' ) : ?>

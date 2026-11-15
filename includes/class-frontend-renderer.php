@@ -347,6 +347,16 @@ class Olobuild_Frontend_Renderer {
                 if ( $cond_day === '' ) return true;
                 $today = strtolower( wp_date( 'l' ) );
                 return $today === $cond_day;
+            case 'months':
+                // 15 nov 2026: «Mesi dell'anno», da un mese a un altro (anche a cavallo d'anno, da novembre a febbraio):
+                // una sezione per stagione o per mese che il sito mostra da solo quando è il suo momento.
+                $p  = '' === $prefix ? 'cond_' : 'cond_' . $prefix . '_';
+                $da = (int) ( $settings[ $p . 'month_from' ] ?? 0 );
+                $a  = (int) ( $settings[ $p . 'month_to' ] ?? 0 );
+                if ( $da < 1 || $da > 12 ) return true;
+                if ( $a < 1 || $a > 12 ) $a = $da;
+                $m = (int) wp_date( 'n' );
+                return $da <= $a ? ( $m >= $da && $m <= $a ) : ( $m >= $da || $m <= $a );
             case 'time_range':
                 $time_from = $settings['cond_time_from'] ?? '';
                 $time_to   = $settings['cond_time_to'] ?? '';

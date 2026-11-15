@@ -234,7 +234,7 @@ def build_rovescio():
         K.squadra(t, [
             (RIT[2], 'Marta Colombo', 'Fondatrice e modellista', 'Ha disegnato la prima giacca double-face nel 2019, per sé.',
              'center 25%'),
-            (RIT[4], 'Samir Haddad', 'Sarto', 'Ribatte le cuciture: millequattrocento punti a giacca.', 'center 25%'),
+            (RIT[4], 'Samira Haddad', 'Sarta', 'Ribatte le cuciture: millequattrocento punti a giacca.', 'center 25%'),
             (MOD[4], 'Giulia Sala', 'Tessuti', 'Sceglie i tessuti a coppie: devono stare bene da tutte e due le parti.',
              'center 25%')], ratio='4/5', size='320', sfondo=C['sala']),
     ], bg=solid(C['sala']), padding='large', width='large', style={'padding_top': 120, 'padding_bottom': 100}))

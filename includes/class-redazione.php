@@ -640,6 +640,11 @@ class Olobuild_Redazione {
             'callback'            => [ __CLASS__, 'rest_social' ],
             'permission_callback' => [ __CLASS__, 'puo_contenuto' ],
         ] );
+        register_rest_route( self::NS, '/redazione/social/playlist', [
+            'methods'             => 'GET',
+            'callback'            => [ __CLASS__, 'rest_social_playlist' ],
+            'permission_callback' => [ __CLASS__, 'puo_social' ],
+        ] );
         register_rest_route( self::NS, '/redazione/termini', [
             [
                 'methods'             => 'GET',
@@ -679,6 +684,11 @@ class Olobuild_Redazione {
     public static function puo_contenuto( WP_REST_Request $r ) {
         $post = get_post( (int) $r['id'] );
         return $post && isset( self::tipi()[ $post->post_type ] ) && current_user_can( 'edit_post', $post->ID );
+    }
+
+    /** Chi può pubblicare sui social con OLOsocial (la capacità c'è solo se OLOsocial è attivo). */
+    public static function puo_social() {
+        return current_user_can( 'olo_social_publish' );
     }
 
     public static function puo_tassonomia( WP_REST_Request $r ) {
@@ -1264,6 +1274,21 @@ class Olobuild_Redazione {
             return new WP_Error( 'olo_redazione_social', __( 'Non è stato possibile: ricarica la scheda e riprova.', 'olobuild' ), [ 'status' => 409 ] );
         }
         return rest_ensure_response( Olo_Social_Riquadro::per_la_scheda( $id ) );
+    }
+
+    /**
+     * Le playlist di un canale YouTube collegato a OLOsocial, per la scelta nella sezione Social (OLOsocial 0.7.4 in su:
+     * Olo_Social_Riquadro::playlist_di). L'elenco arriva dal canale ogni volta: le playlist si creano in YouTube Studio.
+     */
+    public static function rest_social_playlist( WP_REST_Request $r ) {
+        if ( ! self::social_attivo() || ! method_exists( 'Olo_Social_Riquadro', 'playlist_di' ) ) {
+            return new WP_Error( 'olo_redazione_social', __( 'Aggiorna OLOsocial per scegliere la playlist.', 'olobuild' ), [ 'status' => 400 ] );
+        }
+        try {
+            return rest_ensure_response( Olo_Social_Riquadro::playlist_di( absint( $r['account'] ) ) );
+        } catch ( Exception $e ) {
+            return new WP_Error( 'olo_redazione_social', $e->getMessage(), [ 'status' => 400 ] );
+        }
     }
 
     public static function rest_cestina( WP_REST_Request $r ) {

@@ -130,6 +130,11 @@ export default {
     { key: 'cards', type: 'content-items', label: t('Card'), itemLabel: t('Card'), etichettaDa: 'title', miniaturaDa: 'media', itemFields: [
         { key: 'color',       label: t('Colore sfondo card'),    type: 'color' },
         { key: 'text_color',  label: t('Colore testo card'),     type: 'color' },
+        // Per card: una schermata o un disegno non va tagliato ai bordi come una foto (8 nov 2026)
+        { key: 'fit', label: t('Adattamento immagine'), type: 'select', options: [
+          { value: '', label: t('Riempi') },
+          { value: 'contain', label: t('Intera') },
+        ], description: t('Riempi copre il riquadro e può tagliare i bordi; Intera mostra tutta la figura sul colore della card.') },
     ] },
     { type: 'separator', label: t('Colori predefiniti') },
     { key: 'card_bg_default', label: t('Sfondo card (default)'), type: 'color',

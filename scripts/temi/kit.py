@@ -191,7 +191,11 @@ class Kit:
         }, style={})
 
     def domande(self, t, titolo, righe, pairs, prefix, bg=True, nota=''):
-        sinistra = [self.sechead(t, 'Le domande', [titolo, righe], size=48, layout='stack', size_mobile=34)]
+        # due forme: domande(t, 'Prima', 'di venire.') → occhiello «Le domande», titolo in due righe; oppure
+        # domande(t, 'Prima di venire', ['Le domande', 'che ci fanno tutti.']) → il primo è l'occhiello, l'elenco il
+        # titolo. Prima la seconda forma finiva come riga-elenco e il sito scriveva «Array» (13 nov 2026, 30 temi).
+        occhiello, righe_titolo = (titolo, list(righe)) if isinstance(righe, (list, tuple)) else ('Le domande', [titolo, righe])
+        sinistra = [self.sechead(t, occhiello, righe_titolo, size=48, layout='stack', size_mobile=34)]
         if nota:
             sinistra.append(self.text(t, nota))
         return t.section([
@@ -244,6 +248,10 @@ class Kit:
         tiles = [self.label(t, eyebrow, color=self.soft_media, align='center'), tit,
                  self.text(t, testo, size=16, color=self.soft_media, align='center')]
         if extra:
+            # i pulsanti seguono la frase centrata (13 nov 2026: nei negozi restavano a sinistra sotto il testo al centro)
+            for e in extra:
+                if e.get('type') == 'button' and (e.get('settings') or {}).get('alignment') == 'left':
+                    e['settings']['alignment'] = 'center'
             tiles += extra
         # Il video si vede pieno in alto; la frase sta in basso, sulla sfumatura scura che sale dal fondo (31 ott 2026:
         # col velo piatto su tutto il video diventava una filigrana).

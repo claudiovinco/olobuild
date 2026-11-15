@@ -3,6 +3,160 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.1023 - 2026-11-16 (la barra uguale dappertutto)
+- Sistema → Configurazione: la barra in alto è quella di tutte le altre pagine di Olobuild. A destra stringi menu, notifiche, guida e profilo (prima «Guida» e «Anteprima sito» scritti), la versione nel suo badge, «Ctrl K» su Windows («⌘ K» solo sul Mac). La ricerca resta quella delle impostazioni, che porta al campo.
+- Dashboard: il saluto non usa più l'indirizzo email come nome. Chi non ha compilato il nome legge «Buon lavoro»; le iniziali dell'avatar vengono dal nome o dal nome di accesso.
+
+## v1.4.1021 - 2026-11-16 (Confronto Immagini in ordine)
+- Confronto Immagini: lo Stile ha le zone di tutte le tile (Aspetto, Maniglia, Testo, Forma, Immagini, Disposizione). Le etichette «Prima» e «Dopo» hanno il loro sfondo e un controllo tipografia (carattere, misura, peso, maiuscolo, colore); vuoti, restano la pillola scura di sempre.
+- Confronto Immagini, Stile: sei stili che fanno quello che dicono, coi colori della palette (Chiaro, Scuro, Primario, Vetro, Minimo, Grande), al posto di dodici nomi che promettevano effetti mai disegnati. Gli stili cambiano solo maniglia ed etichette, non più la posizione iniziale o l'orientamento.
+
+## v1.4.1020 - 2026-11-15 (la sorpresa resta una sorpresa)
+- Gratta e scopri: il premio non si vede più per un attimo prima che compaia la copertura (al caricamento della pagina e a ogni modifica nel builder): finché la copertura non è dipinta la copre lo stesso colore. Senza JavaScript il premio resta visibile come prima.
+- Gratta e scopri: se il premio non ci sta nella proporzione scelta (sul telefono un 2:1 è alto meno di 200 px) il riquadro si allunga quanto serve, invece di tagliare il sopra-titolo sul bordo.
+
+## v1.4.1019 - 2026-11-15 (la copertura che non sparisce)
+- Gratta e scopri: un colore della copertura che il browser non riconosce (scritto a mano, anche solo a metà mentre si digita) non fa più sparire la copertura: si usa il colore di riserva.
+
+## v1.4.1018 - 2026-11-15 (il premio che si legge sopra la foto)
+- Gratta e scopri: con la foto sotto la copertura, dietro al testo del premio c'è una sfumatura dello «Sfondo area premio» (solo dove c'è il testo, ai bordi la foto resta piena): su una foto di tono medio il testo prima si leggeva male. Etichette più corte: «Colore accento», «Colore scritta».
+- Campi colore: un colore globale con la trasparenza mostra il suo nome (per esempio «Primary contrast» con l'alfa al 35%), non più il codice «color-mix(…».
+
+## v1.4.1017 - 2026-11-15 (Gratta e scopri in ordine)
+- Gratta e scopri: come si gratta (pennello, soglia, al passaggio, pennello morbido, ricrescita) sta nel Contenuto, sotto «Comportamento»; lo Stile ha le zone di tutte le tile: Aspetto, Testo, Immagine premio, Forma, Disposizione. «Incolla stile» porta solo l'aspetto, non più il modo di grattare.
+- Gratta e scopri, Stile → Testo: un controllo tipografia per il sopra-titolo, il titolo del premio, la descrizione e il codice (carattere, misura, peso, colore). Vuoti, restano com'erano; il titolo scende col telefono nella stessa proporzione.
+
+## v1.4.1016 - 2026-11-15 (la scritta che si allarga davvero, la crepa dove si colpisce)
+- Slider Pro, Movimento con lo scorrimento: «Larghezza del carattere» e «Peso del carattere» per i livelli di testo. La scritta si allarga e si assottiglia col disegno vero di un carattere variabile, non stirata; il sito scarica da sé la versione variabile del carattere del livello.
+- Slider Pro: il cambio di stato ricorda il punto del clic, e un livello di quello stato ci si può spostare (`translate: var(--mps-clic-x-<stato>) var(--mps-clic-y-<stato>)` nel suo CSS): la crepa nasce dove si colpisce il vetro.
+- Slider Pro, Animazione continua → «Vento»: il livello si piega dal piede e torna, come l'erba o una tenda leggera.
+- Temi: in Elastan il nome si tende col carattere che si allarga fino al triplo; in Capitonné una tenda di velluto si raccoglie di lato piega dopo piega e la lega il cordone con la nappa; in Rastrello il tosaerba è a cilindro, col manico dietro, e ruote, rullo e lame girano solo mentre avanza, con l'erba alta nel vento; in Ventaglio si apre un ventaglio vero di stoffa stampata, che poi fa aria; in Scheggia ogni colpo crepa il vetro dove si clicca.
+
+## v1.4.1015 - 2026-11-15 (il velluto torna pulito del tutto)
+- Gratta e scopri, «La copertura ricresce»: alla fine non resta nemmeno il velo leggero dove è passata la mano.
+
+## v1.4.1014 - 2026-11-15 (il velluto torna pulito)
+- Gratta e scopri, «La copertura ricresce»: la copertura torna esattamente com'era, senza aloni dove è passata la mano e senza scurirsi. Prima si ridipingeva su sé stessa quasi trasparente centinaia di volte e i piccoli arrotondamenti si sommavano.
+
+## v1.4.1013 - 2026-11-15 (la parola resta tesa sotto il puntatore)
+- Specimen variabile, «Pressione»: le lettere restano tese finché il puntatore è sopra la parola; l'onda lenta riparte solo quando il puntatore esce (o quando si stacca il dito). Prima, col puntatore fermo, dopo un paio di secondi l'onda riprendeva e le lettere sotto il cursore si rilassavano.
+- Gratta e scopri, «Pennello morbido»: il tratto scopre di più a ogni passaggio, così si vede subito dove è passata la mano.
+- Temi: in Capitonné il velluto è grande quanto la sua colonna e sotto la mano si schiarisce di più; in Elastan «Tre volte tanto» è più grande sul telefono e sul tablet.
+
+## v1.4.1012 - 2026-11-15 (il velluto da accarezzare, la parola che si tende e il giardino del mese)
+- Specimen variabile, Controllo → «Pressione»: ogni lettera si allarga e si appesantisce quando il puntatore le passa vicino (sul telefono, scorrendo il dito di lato) e torna com'era con una piccola molla; a riposo un'onda lenta attraversa la parola. Per gli assi oltre il peso (la larghezza, per esempio) il sito scarica da sé la versione variabile del carattere scelto.
+- Gratta e scopri, Comportamento → «Gratta al passaggio del mouse» (senza tenere premuto), «Pennello morbido» (bordi sfumati, ogni passaggio scopre un po' di più) e «La copertura ricresce in» (dopo l'ultimo tocco la copertura torna piena da sola): il velluto che si schiarisce sotto la mano e poi torna scuro, il vetro appannato.
+- Visibilità condizionale → «Mesi dell'anno»: una tile si mostra solo da un mese all'altro (anche da novembre a febbraio). Una sezione per stagione o per mese che il sito cambia da solo.
+- Schede prodotto → «Seconda foto al passaggio»: col mouse sopra la scheda la foto lascia il posto a un'altra (il dettaglio, l'altro lato, l'abbinamento).
+- Temi: Elastan ha la frase «Tre volte tanto» che si tende dove passa il puntatore e l'orario delle lezioni in palestra; Capitonné ha il velluto capitonné da accarezzare; Rastrello mostra da solo «Questo mese» in giardino, con il consiglio dell'agronoma; Ventaglio mostra la stoffa di ogni abito da vicino al passaggio; Scheggia ha il diario degli ultimi lavori. In Elastan e Ventaglio le schede dei capi stanno in due colonne sul telefono.
+
+## v1.4.1011 - 2026-11-14 (l’etichetta «Ingresso libero» leggibile)
+- Cartellone: l’etichetta «Ingresso libero» ha la scritta nel colore del testo e il colore secondario del sito solo nel fondino e nel bordo, così si legge anche sui temi scuri con un secondario scuro.
+
+## v1.4.1010 - 2026-11-14 (il calendario del Cartellone sempre pieno, e lo storico)
+- Cartellone: il calendario del mese, l’elenco e il prossimo appuntamento partono sempre, anche quando la loro parte di pagina arriva prima di quella del primo Cartellone (prima il calendario poteva restare senza mese né giorni).
+- Cartellone: in «Appuntamenti passati» c’è «Solo i passati (lo storico)», che mostra solo quelli già andati in scena senza attenuarli, e il nuovo interruttore «Dal più recente» li mette dall’ultimo al più vecchio. Lo storico si aggiorna da solo coi giorni.
+
+## v1.4.1009 - 2026-11-14 (le anteprime dei temi come sono oggi)
+- Libreria dei temi: rifatte le anteprime (computer e telefono) di tutti i 198 temi dopo la 1.4.1007, così nella Vetrina e nel selettore si vedono i piè di pagina nuovi, la voce dei titoli di ogni tema e le sezioni aggiunte alle pagine che erano quasi vuote.
+- Temi: numeri e contatori più leggibili nei passi e nelle schede a tondi su fondo colorato (Cromo, Lumen, Moneta, Scheda Madre), e i prezzi del laboratorio di Argilla chiari sul verde.
+
+## v1.4.1007 - 2026-11-14 (ogni tema più suo, e nessuna pagina vuota)
+- Temi: un'analisi di tutti i 198 temi ha cercato le somiglianze più evidenti. Le tre più forti erano il piè di pagina (125 temi in tre soli schemi, 72 col nome gigante in fondo), lo stile dei titoli di sezione (133 temi uguali) e l'occhiello in monospazio in alto a sinistra nelle aperture.
+- Temi: il piè di pagina ha quattro disposizioni: nome in fondo, nome in cima, nome piccolo in testa alla prima colonna, nome al centro col menu in riga. I piè a quattro colonne hanno anche la versione con la colonna del marchio più larga.
+- Temi: ogni tema ha la sua voce nei titoli di sezione: il carattere dell'occhiello (monospazio, del testo o dei titoli), il separatore (lineetta, pallino, barra, freccia o niente), le righe una sotto l'altra o di seguito, la seconda riga di un altro colore, nello stesso colore o in corsivo. L'occhiello dell'apertura prende lo stesso carattere.
+- Temi: 108 pagine interne di 53 temi avevano due sole sezioni. Ora ognuna ha una o due sezioni in più scritte per quell'attività (156 in tutto), fatte con tile diverse fra loro: listini, elenchi a righe, carte che si girano con le foto del tema, carte che si impilano, schede tecniche, domande frequenti, passi, citazioni. Ogni tema sembra pronto da usare appena installato.
+- Temi: tolte altre frasi che spiegavano il gesto (« · girate la carta» sulle carte, « · scorrete» negli slider, «La modella cammina solo se scorrete»…).
+
+## v1.4.1006 - 2026-11-14 (le anteprime dei temi cambiati)
+- Libreria dei temi: rifatte le anteprime (computer e telefono) dei 61 temi la cui home è cambiata con la 1.4.1005 (gallerie, titoli, il cruscotto di Cric, la lama di Truciolo), così nella Vetrina e nel selettore si vede il tema com'è oggi.
+
+## v1.4.1005 - 2026-11-14 (gallerie con tutte le loro possibilità, titoli meno in serie)
+- Temi: le Galleria pro usano finalmente le loro possibilità. Prima 68 su 78 erano «Espandi» o «Coverflow 3D», senza entrata e quasi sempre senza effetto al passaggio. Ora ogni galleria ha una regia scelta col tema: giustificato, masonry, mosaico, collage, polaroid sparse, metro, esagoni, diagonale, puzzle a onda, deriva, nastro automatico, nastro doppio, griglia in bianco e nero che torna a colori al passaggio, espandi col Ken Burns, coverflow con l'indicatore a barra, a frazione o a lineette. Cambiano anche entrate, effetti al passaggio, didascalie e cornici. Lo schermo intero alterna dissolvenza, scala e scorrimento, e in molti temi mostra le miniature sotto, a destra o a sinistra.
+- Temi: in nessun tema più di due titoli di sezione cominciano con un numero («Quattro capi, undici zip.», «Tre poltrone, tre mani.»). 188 titoli riscritti dicono la stessa cosa in un'altra forma.
+- Cric: nell'apertura il contagiri e il tachimetro sono più piccoli e raccolti accanto al display.
+- Truciolo: la lama attraversa l'asse. La metà che viene verso chi guarda sta davanti al legno, centrata sulla punta del taglio, e scende con lui.
+
+## v1.4.1004 - 2026-11-13 (le anteprime dei temi come sono oggi)
+- Libreria dei temi: rifatte le anteprime (computer e telefono) di tutti i 198 temi dopo il cambio delle strutture, così nella Vetrina e nel selettore si vede il tema com'è adesso.
+- Temi: tolte altre frasi che dicevano il gesto, anche col «tu» («Gratta, è per te», «Gira il cubo», «Sfoglia l'anno», «Trascina · la vista gira» nel tour di Giroscopio); i titoli dei negozi dei temi di moda sono uno per tema.
+
+## v1.4.1003 - 2026-11-13 (strutture diverse da un tema all'altro)
+- Colonna: nuova impostazione «Prima quando le colonne vanno in pila». Sul telefono, e sul tablet se la colonna non ha una larghezza per il tablet, questa colonna viene per prima: un titolo o un testo che sul computer sta a destra resta sopra.
+- Temi: ogni tema dispone a modo suo le sezioni che prima erano uguali dappertutto: le domande frequenti (titolo a sinistra, al centro sopra, sopra a tutta larghezza o a destra), i contatti e la mappa (modulo e mappa a destra o a sinistra), la fila di quattro foto (uguale, sfalsata, tre quadrate, a nastro senza spazi), l'apertura delle sezioni (titolo largo, centrata, metà e metà, testo largo) e le fasce video, con la frase al centro, a sinistra o a destra.
+- Negozi: le dieci home dei negozi del 4 novembre non sono più una copia dell'altra. Cambiano l'ordine delle sezioni, la forma delle categorie (tondi, ritratti, archi, panorami, provino), quante colonne e quanti prodotti hanno le griglie, carosello o griglia per le offerte. Le griglie non lasciano più posti vuoti o un prodotto solo sull'ultima riga.
+- Negozi: Velluto, Carambola, Ristretto e Crocevia avevano una categoria con lo stesso nome di un altro negozio («accessori», «regali», «sport», «uomo») e una griglia restava vuota («Il dettaglio che fa la sera» in Velluto); le carte di Pennino avevano gli stessi codici degli accessori di Carambola. Ora ogni negozio ha le sue categorie e i suoi codici.
+- Temi di moda e altri gruppi con la stessa home: ordine delle sezioni e fasce video diversi.
+- Temi: tolti i titoli di sezione che spiegavano il gesto («Trascinate: è lo stesso capo», «Toccate i punti», «Girate la carta: dietro c'è il compagno»…) in 37 sezioni; ora dicono cosa si vede. In 30 temi il titolo delle domande frequenti mostrava «Array»: corretto.
+- Negozi: nelle fasce video il pulsante sta al centro sotto la frase centrata (prima restava a sinistra).
+
+## v1.4.1002 - 2026-11-13 (temi più vari, e la sorpresa resta)
+- Cursori con un disegno (chiave, ombrello, gomitolo, livella…): il disegno è più piccolo, sta accanto alla freccia e non copre più quello che c'è sotto.
+- Temi: tolte le frasi che spiegavano l'effetto prima di vederlo («Scorrete: il ventaglio si apre…», «Gira qui ↓», «Passate su una pianta…»), così chi visita ha la sorpresa.
+- Temi: le tappe con la foto e il numero grande, uguali in 56 temi, ora sono di cinque tipi (righe alternate, colonne col numero, carte che si girano, righe con la foto che si affaccia, fila di foto coi passaggi). Ogni tema ha una sua linea grafica: forma delle foto del team, testimonianze, colonne dei numeri e delle schede, banner, elenchi, listini e carte cambiano da un tema all'altro, sempre coi colori del tema.
+- Aperture: in Sifone si stringe il raccordo che perde con la chiave inglese (prima si girava una valvola); in Truciolo la lama taglia di taglio e il solco nasce dalla lama; in Combinazione dietro la porta della cassaforte c'è il vano con la valigetta; in Due Mani il colore arriva solo dove passa il rullo; in Filo a Piombo il muro ha tre file di mattoni.
+
+## v1.4.1001 - 2026-11-13 (l'apertura di Soffio si legge)
+- Tema Soffio: nell'apertura il velo dietro il testo è scuro, come quello sfumato accanto. Prima era color lino e il titolo, chiaro, quasi non si vedeva.
+
+## v1.4.1000 - 2026-11-13 (il vetro della Hero sfoca davvero)
+- Hero col preset «Vetro»: il riquadro sfoca la foto che ha dietro. Prima, col parallasse del contenuto, la sfocatura non vedeva la foto e il testo correva sull'immagine nitida, poco leggibile (Casa Scogliera sul telefono).
+
+## v1.4.999 - 2026-11-13 (le anteprime dei temi aggiornate)
+- Libreria dei temi: rifatte le anteprime (computer e telefono) dei 138 temi la cui home era cambiata dopo l'ultima foto, così nella Vetrina e nel selettore si vede il tema com'è oggi.
+
+## v1.4.998 - 2026-11-13 (le parole intere sul telefono)
+- Tutte le pagine: una parola più larga della sua colonna non va più a capo a metà («Faccia-mo», «Contrabbandie-re»). Il testo che la contiene si rimpicciolisce quanto basta perché ci stia (solo i testi da 18 px in su, al massimo fino a poco più di metà). Succedeva sul telefono nei titoli delle aperture, nelle liste e nelle schede strette.
+- Hero: sul telefono i margini ai lati del contenuto sono al massimo 20 px. Prima restavano quelli del computer (64 px in Casa Scogliera), e il testo si stringeva in una colonna di 180 px. Col preset «Vetro» anche il riquadro stringe il suo margine.
+- Hero Split: sul telefono i margini ai lati sono al massimo 20 px e le card del pannello stringono il loro. Prima nelle card di Solco restavano 35 px, e la parola grande andava a capo a ogni sillaba.
+
+## v1.4.996 - 2026-11-13 (i temi più ricchi e i nomi giusti sotto le foto)
+- Temi: 40 temi fra i più vecchi avevano pagine interne fatte solo di un titolo e un blocco. Ora ogni pagina ha una o due sezioni in più scritte per quell'attività (domande frequenti, passi, numeri, una testimonianza, foto con didascalia, schede, l'invito a contattare), coi colori e i caratteri del tema: 104 sezioni nuove. Codice Ragazzi, Parla Mondo e Synthetica hanno una quarta pagina (Il laboratorio, Il metodo, Sicurezza).
+- Temi: corretti i nomi che non andavano con la foto (un uomo con un nome da donna o il contrario) in undici temi, e cambiate le foto in cinque (Elastan, Morsetto, Sirena, Fenice Calcio, Bagnasciuga). Teatro Seta: il pulsante «Biglietti» dello spettacolo porta alla pagina dei biglietti. Presa Diretta e Rugiada: tornano i video dell'apertura.
+- Temi: nelle sezioni nuove l'occhiello, i numeri dei passi e la parola in corsivo si leggono anche nei temi col primario chiaro (giallo, rosa): prendono il colore dei link del tema o il primario un poco più scuro.
+- Timeline, temi scuri (Notte, Neon, Blu): il tag di ogni tappa schiarisce il colore della sua categoria; prima il blu di «Info» sulle schede blu si leggeva appena.
+
+## v1.4.995 - 2026-11-13 (la formula resta dentro il cesto)
+- Cesto fisico: la formula di una molecola vicina al bordo resta tutta dentro il cesto; prima un nome lungo («NaH · idruro di sodio») usciva a metà.
+
+## v1.4.994 - 2026-11-13 (le molecole del Cesto fisico più vere)
+- Cesto fisico con «Gli elementi si legano»: la formula compare solo sulle molecole complete (prima anche su frammenti come «CH» o «HO»), i metalli si legano solo con ossigeno, zolfo, alogeni e idrogeno (niente più «CNa»), e gli atomi con legami liberi si attirano un poco quando sono vicini, così le molecole si completano anche a cesto fermo.
+- Cesto fisico, «Scuoti»: sui telefoni Android scuotere il telefono funziona subito, senza toccare prima il pulsante.
+
+## v1.4.993 - 2026-11-13 (il Cesto fisico sul telefono, «Scuoti» e le molecole)
+- Cesto fisico: sul telefono gli oggetti si trascinano e si lanciano col dito. Prima sui dispositivi touch erano fermi e il cesto bloccava anche lo scorrimento della pagina; ora sul fondo del cesto la pagina scorre. Sui cesti stretti gli oggetti sono un po’ più piccoli, e il simbolo è scuro sugli oggetti chiari (prima era sempre bianco).
+- Cesto fisico, Contenuto → «Pulsante «Scuoti»»: un pulsante nel cesto lancia in aria gli oggetti; sul telefono basta scuotere il telefono (su iPhone dopo il primo tocco sul pulsante, che chiede il permesso).
+- Cesto fisico, Contenuto → «Gli elementi si legano»: gli oggetti col simbolo di un elemento chimico si legano quando si toccano, secondo la valenza (H con un legame, O con due, C con quattro; due metalli mai fra loro), coi legami doppi e tripli disegnati, e sopra ogni molecola compare la formula. Scuotendo i legami si rompono e gli atomi si ricombinano in un altro modo. In «Nomi delle molecole» si dà il nome da mostrare accanto alla formula (H2O → acqua).
+
+## v1.4.992 - 2026-11-13 (le aperture a scorrimento fluide su telefono e tablet)
+- Slider Pro, livelli col «Movimento con lo scorrimento»: sui browser che lo sanno fare (Chrome dalla 115, Safari dalla 26) il movimento lo fa il browser stesso, in pari col dito, senza ricalcolare la pagina a ogni fotogramma; sugli altri si calcola come prima ma con molto meno lavoro. Un livello che nello scorrimento è spento viene nascosto e il suo video si ferma, e il filtro dell’opacità c’è solo mentre il livello sfuma. Prima, su telefono e tablet, uno zoom come quello delle «Potenze di dieci» scattava.
+- Slider Pro: un livello con un’animazione a fotogrammi chiave sfuma anche con lo scorrimento, se le tappe lo chiedono. Prima l’animazione copriva l’opacità dello scorrimento e il livello restava pieno (gli anelli del tema Respiro ora svaniscono mentre l’apertura esce dallo schermo, come previsto).
+- Tutte le pagine: tolta da UIkit una regola che nessuna pagina di Olobuild usa (il logo «inverse») e che faceva ricalcolare gli stili di tutta la pagina a ogni piccola modifica: gli effetti legati allo scorrimento e al mouse ne guadagnano ovunque.
+
+## v1.4.991 - 2026-11-11 (la scritta del Cesto fisico si legge anche sui temi scuri)
+- Cesto fisico: la pillola della scritta in alto prende il fondo e il testo del sito. Prima era bianca con la scritta grigio tenue, e su un tema scuro la scritta, chiara su bianco, non si leggeva.
+
+## v1.4.990 - 2026-11-11 (l'atomo sulla punta del puntatore)
+- Avanzate → Effetti mouse, cursore «Atomo»: l'atomo sta sulla punta del puntatore invece che accanto, ed è più piccolo (circa 16 px, 23 sui link).
+
+## v1.4.989 - 2026-11-11 (la scritta del Cesto fisico si cambia)
+- Cesto fisico, Contenuto → «Scritta sul cesto»: la scritta in alto a sinistra si scrive da qui. Vuota resta «↯ trascina & lancia» come prima; prima non si poteva cambiare.
+
+## v1.4.988 - 2026-11-10 (la bolla della chat leggibile, le schede a due colonne sul telefono)
+- Hero chat: la bolla dell’utente prende il «Testo su accento (CTA e bolla utente)»; prima era sempre bianca, e su un accento chiaro (un oro, un giallo) non si leggeva.
+- Schede prodotto, Stile → Griglia → «Colonne sul telefono»: una (come prima) o due, per le schede brevi come le copertine dei libri.
+
+## v1.4.987 - 2026-11-10 (lo zoom che non rallenta, e il cursore atomo)
+- Slider Pro, livello → Movimento con lo scorrimento → «Andamento»: con «Costante (zoom uniforme)» il livello va a velocità uniforme fra le tappe e la scala cresce in proporzione (da 1 a 4 come da 4 a 16), così uno zoom che attraversa più tappe non rallenta a ogni tappa. «Morbido fra le tappe» resta quello di sempre.
+- Avanzate → Effetti mouse: il cursore «Atomo», un piccolo atomo accanto al puntatore con tre orbite. Muovendosi gli elettroni girano, sui link l’atomo si eccita (le orbite si allargano) e al clic emette un fotone.
+
+## v1.4.986 - 2026-11-10 (dieci temi di artigiani, e lo Slider Pro che cambia al clic)
+- Dieci temi nuovi nella categoria nuova «Artigiani e mestieri», ognuno con un’apertura che si tocca o si scorre: Morsetto (elettricista: l’apertura è al buio, si tira su la leva del salvavita e si accende la stanza), Sifone (idraulico: il tubo perde, si gira la valvola e l’acqua corre fino al rubinetto), Due Mani (imbianchino: scorrendo il rullo dà la prima mano e la seconda, e quattro barattoli cambiano la tinta), Filo a Piombo (muratore: il muro si alza fila per fila e la bolla della livella va in mezzo), Truciolo (falegname: la lama taglia la tavola e le due metà cadono sulla bottega), Incudine (fabbro: ogni gesto della rotella è un colpo di martello sul ferro rovente), Cric (meccanico: si tocca una spia del cruscotto e il display dice cos’è e quanto costa), Fuliggine (spazzacamino: l’apertura è coperta di fuliggine e si pulisce passandoci sopra), Rastrello (giardiniere: l’erba cresce finché passa il tosaerba) e Scheggia (vetraio: a ogni clic il vetro si crepa, poi va in frantumi e arriva la lastra nuova).
+- Slider Pro, livello → Azione al clic: «Imposta uno stato» e «Stato successivo (a giro)». Uno stato è un nome con un valore (luce = accesa); i livelli con «Visibile solo in uno stato» si mostrano quando lo stato ha uno dei loro valori, con la dissolvenza o uno spostamento a scelta, e i disegni animati e i video ripartono da capo. Nelle impostazioni dello slider, «Stati all’avvio». «Imposta uno stato» può dare anche un colore, che i livelli usano con var(--mps-st-nome): così quattro campioni cambiano la tinta di una parete. Il pulsante dello stato in vigore resta segnato, e i livelli che agiscono al clic si usano anche con la tastiera.
+- Slider Pro, livello immagine → «Da pulire col puntatore»: l’immagine copre quello che c’è sotto e si cancella dove passa il mouse (il dito sul telefono, anche mentre la pagina scorre); pulita la parte scelta, il resto svanisce e cambia lo stato scritto.
+- Avanzate → Effetti mouse: dieci cursori nuovi — arco elettrico, gocciolio, rullo, livella, trucioli, martello, bullone, scovolo, irrigatore, tagliavetro.
+- Vetrina temi: 198 temi di OLObuild; categoria e zone tradotte nelle cinque lingue.
+
 ## v1.4.964 - 2026-11-03 (le categorie contano i contenuti una volta sola)
 - Redazione → Categorie: su un sito in più lingue ogni categoria conta i suoi contenuti una volta sola, senza le copie tradotte (un canto in quattro lingue è un canto; prima 19 canti di Natale risultavano 76).
 

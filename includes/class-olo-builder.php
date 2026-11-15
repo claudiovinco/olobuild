@@ -1061,6 +1061,13 @@ class Olobuild_Builder {
                 // La sitemap di WordPress (scheda SEO globale): con i permalink semplici non è /wp-sitemap.xml.
                 'sitemapUrl'        => function_exists( 'get_sitemap_url' ) ? (string) get_sitemap_url( 'index' ) : '',
                 // Link «Guida» della barra: la documentazione dell'agenzia, se il White Label ne ha una.
+                // La barra della Configurazione = quella delle altre pagine (16 nov 2026): avatar, notifiche, modalità app
+                'shell'             => [
+                    'initials'     => self::iniziali_utente( wp_get_current_user() ),
+                    'profileUrl'   => get_edit_user_link(),
+                    'notificheUrl' => admin_url( 'admin.php?page=olo-form-submissions' ),
+                    'appMode'      => (bool) ( ( (array) get_user_meta( get_current_user_id(), 'olo_dashboard_prefs', true ) )['app_mode'] ?? false ),
+                ],
                 'docsUrl'           => Olobuild_Guida::url_aiuto(),
                 'docsEsterno'       => Olobuild_Guida::aiuto_esterno(),
                 'pluginUrl'         => OLOBUILD_URL,

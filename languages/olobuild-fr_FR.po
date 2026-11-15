@@ -50372,3 +50372,447 @@ msgstr "Supprimée : %s"
 #: src/redazione/Categorie.vue
 msgid "«%s» è la categoria predefinita"
 msgstr "« %s » est la catégorie par défaut"
+
+#: OLObuild 1.4.981
+msgid "Artigiani e mestieri"
+msgstr "Artisans et métiers"
+
+#: OLObuild 1.4.981
+msgid "È saltata la luce"
+msgstr "Plus de courant"
+
+#: OLObuild 1.4.981
+msgid "La perdita da riparare"
+msgstr "La fuite à réparer"
+
+#: OLObuild 1.4.981
+msgid "La prima mano, la seconda"
+msgstr "La première couche, la seconde"
+
+#: OLObuild 1.4.981
+msgid "Il muro che si alza"
+msgstr "Le mur qui monte"
+
+#: OLObuild 1.4.981
+msgid "La tavola tagliata"
+msgstr "La planche sciée"
+
+#: OLObuild 1.4.981
+msgid "Un colpo per gesto"
+msgstr "Un coup par geste"
+
+#: OLObuild 1.4.981
+msgid "La spia accesa"
+msgstr "Le voyant allumé"
+
+#: OLObuild 1.4.981
+msgid "Puliscimi"
+msgstr "Nettoie-moi"
+
+#: OLObuild 1.4.981
+msgid "L’erba che cresce"
+msgstr "L’herbe qui pousse"
+
+#: OLObuild 1.4.981
+msgid "Rompilo pure"
+msgstr "Vas-y, casse-le"
+
+#: OLObuild 1.4.981
+msgid "Imposta uno stato"
+msgstr "Définir un état"
+
+#: OLObuild 1.4.981
+msgid "Stato successivo (a giro)"
+msgstr "État suivant (en boucle)"
+
+#: OLObuild 1.4.981
+msgid "Nome dello stato"
+msgstr "Nom de l’état"
+
+#: OLObuild 1.4.981
+msgid "Uno stato è un nome con un valore (luce = accesa). I livelli con «Visibile solo in uno stato» si mostrano quando lo stato ha uno dei loro valori. Il valore all’avvio si scrive nelle impostazioni dello slider, «Stati all’avvio»."
+msgstr "Un état est un nom avec une valeur (lumière = allumée). Les calques « Visible seulement dans un état » apparaissent quand l’état a l’une de leurs valeurs. La valeur de départ se règle dans le slider, « États au départ »."
+
+#: OLObuild 1.4.981
+msgid "Colore dello stato"
+msgstr "Couleur de l’état"
+
+#: OLObuild 1.4.981
+msgid "Facoltativo: il colore va nella variabile --mps-st-nome, che i colori dei livelli possono usare, per esempio var(--mps-st-tinta, #ffffff). Il cambio di colore è sfumato."
+msgstr "Facultatif : la couleur va dans la variable --mps-st-nom, que les couleurs des calques peuvent utiliser, par exemple var(--mps-st-tinta, #ffffff). Le changement de couleur est fondu."
+
+#: OLObuild 1.4.981
+msgid "Valori, in ordine"
+msgstr "Valeurs, dans l’ordre"
+
+#: OLObuild 1.4.981
+msgid "Separati da virgole: a ogni clic lo stato passa al valore dopo (1, 2, 3, 4). Due valori fanno un interruttore."
+msgstr "Séparées par des virgules : chaque clic fait passer l’état à la valeur suivante (1, 2, 3, 4). Deux valeurs font un interrupteur."
+
+#: OLObuild 1.4.981
+msgid "Stato successivo"
+msgstr "État suivant"
+
+#: OLObuild 1.4.981
+msgid "Dall’ultimo valore ricomincia"
+msgstr "Recommence après la dernière valeur"
+
+#: OLObuild 1.4.981
+msgid "Nome per chi usa la tastiera o un lettore di schermo"
+msgstr "Nom pour le clavier et les lecteurs d’écran"
+
+#: OLObuild 1.4.981
+msgid "Accendi la luce"
+msgstr "Allume la lumière"
+
+#: OLObuild 1.4.981
+msgid "Visibile solo in uno stato"
+msgstr "Visible seulement dans un état"
+
+#: OLObuild 1.4.981
+msgid "Il livello si mostra quando lo stato ha uno dei valori scritti (separati da virgole) e si nasconde negli altri casi. Con il punto esclamativo davanti vale il contrario: «!accesa» = finché non è accesa. Lo stato lo cambiano i livelli con l’azione «Imposta uno stato» o «Stato successivo»."
+msgstr "Le calque apparaît quand l’état a l’une des valeurs écrites (séparées par des virgules) et se cache sinon. Avec un point d’exclamation devant, c’est l’inverse : « !allumée » = tant qu’elle n’est pas allumée. L’état est changé par les calques ayant l’action « Définir un état » ou « État suivant »."
+
+#: OLObuild 1.4.981
+msgid "Come compare"
+msgstr "Comment il apparaît"
+
+#: OLObuild 1.4.981
+msgid "Sale dal basso"
+msgstr "Monte du bas"
+
+#: OLObuild 1.4.981
+msgid "Scende dall’alto"
+msgstr "Descend du haut"
+
+#: OLObuild 1.4.981
+msgid "Si ingrandisce"
+msgstr "S’agrandit"
+
+#: OLObuild 1.4.981
+msgid "Subito, senza effetto"
+msgstr "Tout de suite, sans effet"
+
+#: OLObuild 1.4.981
+msgid "Da pulire col puntatore"
+msgstr "À nettoyer avec le pointeur"
+
+#: OLObuild 1.4.981
+msgid "L’immagine copre quello che c’è sotto e si cancella passandoci sopra col mouse (col dito sul telefono). Pulita la parte scelta, il resto svanisce e lo stato scritto (nome=valore) cambia: così compaiono i livelli di «dopo»."
+msgstr "L’image couvre ce qui est dessous et s’efface là où passe la souris (le doigt sur le téléphone). Une fois la part choisie nettoyée, le reste disparaît et l’état écrit (nom=valeur) change : les calques « après » apparaissent."
+
+#: OLObuild 1.4.981
+msgid "Pulito a"
+msgstr "Propre à"
+
+#: OLObuild 1.4.981
+msgid "Colore sotto l’immagine"
+msgstr "Couleur sous l’image"
+
+#: OLObuild 1.4.981
+msgid "Stato quando è pulito"
+msgstr "État une fois propre"
+
+#: OLObuild 1.4.981
+msgid "Stati all’avvio"
+msgstr "États au départ"
+
+#: OLObuild 1.4.981
+msgid "I livelli possono cambiare al clic: l’azione «Imposta uno stato» o «Stato successivo» dà un valore a uno stato (luce = accesa) e i livelli con «Visibile solo in uno stato» si mostrano o si nascondono. Qui il valore di partenza di ogni stato, nome=valore separati da punto e virgola; uno stato non scritto parte vuoto."
+msgstr "Les calques peuvent changer au clic : l’action « Définir un état » ou « État suivant » donne une valeur à un état (lumière = allumée) et les calques « Visible seulement dans un état » apparaissent ou se cachent. Ici la valeur de départ de chaque état, nom=valeur séparés par des points-virgules ; un état non écrit part vide."
+
+#: OLObuild 1.4.981
+msgid "Arco elettrico (la scarica salta sui link)"
+msgstr "Arc électrique (l’étincelle saute sur les liens)"
+
+#: OLObuild 1.4.981
+msgid "Gocciolio (la goccia cade e schizza)"
+msgstr "Goutte-à-goutte (la goutte tombe et éclabousse)"
+
+#: OLObuild 1.4.981
+msgid "Rullo (lascia una pennellata)"
+msgstr "Rouleau (laisse une trace)"
+
+#: OLObuild 1.4.981
+msgid "Livella (la bolla torna in mezzo)"
+msgstr "Niveau (la bulle revient au centre)"
+
+#: OLObuild 1.4.981
+msgid "Trucioli (la pialla stacca i ricci)"
+msgstr "Copeaux (le rabot les fait boucler)"
+
+#: OLObuild 1.4.981
+msgid "Martello (al clic batte e fa scintille)"
+msgstr "Marteau (frappe au clic et fait des étincelles)"
+
+#: OLObuild 1.4.981
+msgid "Bullone (si avvita sui link)"
+msgstr "Boulon (se visse sur les liens)"
+
+#: OLObuild 1.4.981
+msgid "Scovolo (lascia la fuliggine)"
+msgstr "Hérisson de ramoneur (laisse de la suie)"
+
+#: OLObuild 1.4.981
+msgid "Irrigatore (spruzza a ventaglio)"
+msgstr "Arroseur (asperge en éventail)"
+
+#: OLObuild 1.4.981
+msgid "Tagliavetro (graffia e crepa)"
+msgstr "Coupe-verre (raye et fêle)"
+
+#: OLObuild 1.4.987
+msgid "Andamento"
+msgstr "Allure"
+
+#: OLObuild 1.4.987
+msgid "Morbido fra le tappe"
+msgstr "Doux entre les étapes"
+
+#: OLObuild 1.4.987
+msgid "Costante (zoom uniforme)"
+msgstr "Constant (zoom régulier)"
+
+#: OLObuild 1.4.987
+msgid "Morbido: fra una tappa e l’altra il livello parte e arriva piano. Costante: va a velocità uniforme e la scala cresce in proporzione, così uno zoom che attraversa più tappe non rallenta a ogni tappa."
+msgstr "Doux : entre deux étapes le calque démarre et arrive lentement. Constant : il avance à vitesse régulière et l’échelle croît en proportion, ainsi un zoom qui traverse plusieurs étapes ne ralentit pas à chacune."
+
+#: OLObuild 1.4.987
+msgid "Atomo (elettroni che girano, fotone al clic)"
+msgstr "Atome (électrons en orbite, photon au clic)"
+
+#: OLObuild 1.4.987
+msgid "Testo su accento (CTA e bolla utente)"
+msgstr "Texte sur accent (CTA et bulle de l’utilisateur)"
+
+#: OLObuild 1.4.987
+msgid "Colonne sul telefono"
+msgstr "Colonnes sur téléphone"
+
+#: OLObuild 1.4.987
+msgid "Sotto i 700 px. Due vanno bene per schede brevi (copertine, prodotti col solo nome e il prezzo)."
+msgstr "Sous 700 px. Deux conviennent aux fiches courtes (couvertures, produits avec seulement le nom et le prix)."
+
+#: OLObuild 1.4.989
+msgid "Scritta sul cesto"
+msgstr "Texte sur le bac"
+
+#: OLObuild 1.4.989
+msgid "La scritta in alto a sinistra. Vuota: «↯ trascina & lancia». Se la scrivi compare così com’è, senza il simbolo."
+msgstr "Le texte en haut à gauche. Vide : « ↯ glisse et lance ». Si tu l’écris, il apparaît tel quel, sans le symbole."
+
+#: OLObuild 1.4.989
+msgid "trascina & lancia"
+msgstr "glisse et lance"
+
+#: OLObuild 1.4.989
+msgid "Cesto interattivo: trascina e lancia i giocattoli"
+msgstr "Bac interactif : glisse et lance les jouets"
+
+#: OLObuild 1.4.993
+msgid "Scuoti"
+msgstr "Secouer"
+
+#: OLObuild 1.4.993
+msgid "Scuoti e molecole"
+msgstr "Secouer et molécules"
+
+#: OLObuild 1.4.993
+msgid "Pulsante «Scuoti»"
+msgstr "Bouton « Secouer »"
+
+#: OLObuild 1.4.993
+msgid "Un pulsante nel cesto lancia in aria gli oggetti. Sul telefono basta scuotere il telefono: su iPhone dopo il primo tocco sul pulsante, che chiede il permesso."
+msgstr "Un bouton dans le bac lance les objets en l’air. Sur le téléphone, il suffit de secouer le téléphone : sur iPhone après le premier appui sur le bouton, qui demande l’autorisation."
+
+#: OLObuild 1.4.993
+msgid "Scritta del pulsante"
+msgstr "Texte du bouton"
+
+#: OLObuild 1.4.993
+msgid "Vuota: «Scuoti»."
+msgstr "Vide : « Secouer »."
+
+#: OLObuild 1.4.993
+msgid "Gli elementi si legano"
+msgstr "Les éléments se lient"
+
+#: OLObuild 1.4.993
+msgid "Gli oggetti col simbolo di un elemento chimico (H, O, C, Na, Cl…) si legano quando si toccano, secondo la valenza, e sopra ogni molecola compare la formula. Scuotendo, i legami si rompono e si riformano in un altro modo. Gli altri oggetti restano liberi."
+msgstr "Les objets portant le symbole d’un élément chimique (H, O, C, Na, Cl…) se lient quand ils se touchent, selon leur valence, et la formule apparaît au-dessus de chaque molécule. En secouant, les liaisons se rompent et se reforment autrement. Les autres objets restent libres."
+
+#: OLObuild 1.4.993
+msgid "Nomi delle molecole"
+msgstr "Noms des molécules"
+
+#: OLObuild 1.4.993
+msgid "Molecola"
+msgstr "Molécule"
+
+#: OLObuild 1.4.993
+msgid "Formula"
+msgstr "Formule"
+
+#: OLObuild 1.4.993
+msgid "Come la scriveresti: H2O, NaOH, Sr(OH)2. Vale per ogni molecola con gli stessi atomi."
+msgstr "Comme tu l’écrirais : H2O, NaOH, Sr(OH)2. Elle vaut pour chaque molécule ayant les mêmes atomes."
+
+#: OLObuild 1.4.1003
+msgid "Prima quando le colonne vanno in pila"
+msgstr "En premier quand les colonnes s’empilent"
+
+#: OLObuild 1.4.1003
+msgid "Quando le colonne vanno una sotto l’altra (sul telefono, e sul tablet se la colonna non ha una larghezza per il tablet), questa viene per prima. Utile per un titolo o un testo che sul computer sta a destra."
+msgstr "Quand les colonnes passent l’une sous l’autre (sur téléphone, et sur tablette si la colonne n’a pas de largeur pour tablette), celle-ci vient en premier. Utile pour un titre ou un texte placé à droite sur ordinateur."
+
+#: OLObuild 1.4.1010
+msgid "Dal più recente"
+msgstr "Du plus récent"
+
+#: OLObuild 1.4.1010
+msgid "L’ordine al contrario: in cima l’ultimo appuntamento. Con «Solo i passati» fa lo storico, dall’ultimo andato in scena al più vecchio."
+msgstr "Ordre inversé : le dernier rendez-vous en haut. Avec « Seulement les passés », cela devient l’archive, du dernier joué au plus ancien."
+
+#: OLObuild 1.4.1010
+msgid "Solo i passati (lo storico)"
+msgstr "Seulement les passés (archive)"
+
+#: OLObuild 1.4.1010
+msgid "Con «Solo i passati» la tile mostra solo gli appuntamenti già andati in scena, non attenuati: è lo storico, e si aggiorna da solo coi giorni."
+msgstr "Avec « Seulement les passés », la tuile ne montre que les rendez-vous déjà joués, sans les estomper : c’est l’archive, et elle se met à jour toute seule au fil des jours."
+
+#: OLObuild 1.4.1012
+msgid "Pressione: le lettere si tendono vicino al puntatore"
+msgstr "Pression : les lettres s’étirent près du pointeur"
+
+#: OLObuild 1.4.1012
+msgid "Con «Pressione» ogni lettera va verso il massimo dei suoi assi quando il puntatore (o il dito, scorrendo di lato) le passa vicino, e torna al valore di partenza con una molla. Il valore di partenza è quello «Predefinito» di ogni asse: per un effetto «elastico» tienilo basso (per esempio larghezza 60 su 50–150)."
+msgstr "Avec « Pression », chaque lettre va vers le maximum de ses axes quand le pointeur (ou le doigt, glissé sur le côté) passe près d’elle, et revient à sa valeur de départ avec un ressort. La valeur de départ est la « Par défaut » de chaque axe : gardez-la basse pour un effet élastique (par exemple largeur 60 sur 50–150)."
+
+#: OLObuild 1.4.1012
+msgid "Quando nessuno interagisce, gli assi oscillano dolcemente (con «Pressione», un'onda attraversa la parola). Rispetta prefers-reduced-motion (resta fermo)."
+msgstr "Quand personne n’interagit, les axes ondulent doucement (avec « Pression », une vague traverse le mot). Respecte prefers-reduced-motion (reste immobile)."
+
+#: OLObuild 1.4.1012
+msgid "Gratta al passaggio del mouse"
+msgstr "Gratter au survol de la souris"
+
+#: OLObuild 1.4.1012
+msgid "Col mouse basta passare sopra, senza tenere premuto. Sul telefono si gratta trascinando il dito, come sempre."
+msgstr "À la souris, il suffit de passer dessus sans appuyer. Sur téléphone on gratte en faisant glisser le doigt, comme toujours."
+
+#: OLObuild 1.4.1012
+msgid "Pennello morbido"
+msgstr "Pinceau doux"
+
+#: OLObuild 1.4.1012
+msgid "Il tratto ha i bordi sfumati e scopre poco a poco: ogni passaggio schiarisce un po' di più, come una mano sul velluto o sul vetro appannato."
+msgstr "Le trait a des bords flous et découvre peu à peu : chaque passage éclaircit un peu plus, comme une main sur du velours ou sur une vitre embuée."
+
+#: OLObuild 1.4.1012
+msgid "La copertura ricresce in"
+msgstr "La couverture repousse en"
+
+#: OLObuild 1.4.1012
+msgid "Dopo l'ultimo tocco la copertura torna piano piano piena in questi secondi (il pelo del velluto che si rialza, il vetro che si appanna di nuovo). 0 = resta grattata. Con la ricrescita non c'è lo scoprimento automatico."
+msgstr "Après le dernier toucher, la couverture redevient pleine peu à peu en ces secondes (le poil du velours qui se relève, la vitre qui s’embue de nouveau). 0 = reste grattée. Avec la repousse, pas de découverte automatique."
+
+#: OLObuild 1.4.1012
+msgid "Mesi dell'anno"
+msgstr "Mois de l’année"
+
+#: OLObuild 1.4.1012
+msgid "Dal mese"
+msgstr "Du mois"
+
+#: OLObuild 1.4.1012
+msgid "Al mese"
+msgstr "Au mois"
+
+#: OLObuild 1.4.1012
+msgid "Dal mese (cond. 2)"
+msgstr "Du mois (cond. 2)"
+
+#: OLObuild 1.4.1012
+msgid "Al mese (cond. 2)"
+msgstr "Au mois (cond. 2)"
+
+#: OLObuild 1.4.1012
+msgid "Da questo mese all'altro, compresi. Anche a cavallo d'anno: da novembre a febbraio. Con un solo mese, lo stesso nei due campi."
+msgstr "De ce mois à l’autre, inclus. Aussi à cheval sur deux années : de novembre à février. Pour un seul mois, le même dans les deux champs."
+
+#: OLObuild 1.4.1012
+msgid "Gennaio"
+msgstr "Janvier"
+
+#: OLObuild 1.4.1012
+msgid "Febbraio"
+msgstr "Février"
+
+#: OLObuild 1.4.1012
+msgid "Marzo"
+msgstr "Mars"
+
+#: OLObuild 1.4.1012
+msgid "Aprile"
+msgstr "Avril"
+
+#: OLObuild 1.4.1012
+msgid "Maggio"
+msgstr "Mai"
+
+#: OLObuild 1.4.1012
+msgid "Giugno"
+msgstr "Juin"
+
+#: OLObuild 1.4.1012
+msgid "Luglio"
+msgstr "Juillet"
+
+#: OLObuild 1.4.1012
+msgid "Agosto"
+msgstr "Août"
+
+#: OLObuild 1.4.1012
+msgid "Settembre"
+msgstr "Septembre"
+
+#: OLObuild 1.4.1012
+msgid "Ottobre"
+msgstr "Octobre"
+
+#: OLObuild 1.4.1012
+msgid "Novembre"
+msgstr "Novembre"
+
+#: OLObuild 1.4.1012
+msgid "Dicembre"
+msgstr "Décembre"
+
+#: OLObuild 1.4.1012
+msgid "Seconda foto al passaggio"
+msgstr "Seconde photo au survol"
+
+#: OLObuild 1.4.1012
+msgid "Col mouse sopra la scheda, la foto lascia il posto a questa (un altro lato del prodotto, il dettaglio, l'abbinamento). Sul telefono resta la prima."
+msgstr "Souris sur la carte, la photo laisse la place à celle-ci (un autre côté du produit, le détail, l’association). Sur téléphone, la première reste."
+
+#: OLObuild 1.4.1016
+msgid "Larghezza del carattere"
+msgstr "Largeur de la police"
+
+#: OLObuild 1.4.1016
+msgid "Peso del carattere"
+msgstr "Graisse de la police"
+
+#: OLObuild 1.4.1021
+msgid "Immagine «Prima»"
+msgstr "Image « Avant »"
+
+#: OLObuild 1.4.1021
+msgid "Immagine «Dopo»"
+msgstr "Image « Après »"
+
+#: OLObuild 1.4.1023
+msgid "Buon lavoro"
+msgstr "Bonne journée"

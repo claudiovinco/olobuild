@@ -231,6 +231,8 @@
 .olo-tlsuper.t-neon .super.line-scroll .it.reached .it-node{box-shadow:0 0 14px 2px var(--cat);}
 .olo-tlsuper.t-neon .it-card h4{text-shadow:0 0 14px color-mix(in srgb,var(--cat) 45%,transparent);}
 .olo-tlsuper.t-neon .it-tag{box-shadow:0 0 12px -2px var(--cat);}
+/* Temi scuri: il tag nel colore pieno della categoria (blu di «info», indaco) non si leggeva sulle schede scure (2,45:1 sul tema Blu, 13 nov 2026): si schiarisce verso il bianco, la tinta resta. */
+.olo-tlsuper.t-night .it-tag,.olo-tlsuper.t-neon .it-tag,.olo-tlsuper.t-blue .it-tag{color:color-mix(in srgb,var(--tl-tag-color,var(--cat)) 55%,#fff);}
 .olo-tlsuper.t-neon .comet{box-shadow:0 0 22px 6px var(--cat),0 0 6px #fff;}
 .olo-tlsuper.t-blue{background-image:linear-gradient(rgba(95,208,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(95,208,255,.08) 1px,transparent 1px);background-size:26px 26px;}
 .olo-tlsuper.t-blue .it-card{box-shadow:0 0 0 1px rgba(95,208,255,.08),0 18px 34px -22px #000;}

@@ -254,10 +254,10 @@ def build_dentro():
     ], bg=solid(C['sala']), padding='large', width='large', style={'padding_top': 120, 'padding_bottom': 120}))
     out.append(t.section([
         t.one([K.sechead(t, 'In officina', ['Chi riempie', 'le giacche.'], size=60)]),
-        K.squadra(t, [(STUD[0], 'Paola Gribaudo', 'Fondatrice', 'Ingegnera dei materiali: le giacche le smonta prima di disegnarle.',
+        K.squadra(t, [(STUD[0], 'Paolo Gribaudo', 'Fondatore', 'Ingegnere dei materiali: le giacche le smonta prima di disegnarle.',
                        'center 25%'),
                       (STUD[3], 'Kwame Asante', 'Modellista', 'Disegna dove va ogni cucitura, e quante ne servono.', 'center 25%'),
-                      (STUD[2], 'Irene Bosio', 'Piuma', 'Pesa la piuma di ogni scomparto, al grammo.', 'center 25%')],
+                      (STUD[2], 'Ivano Bosio', 'Piuma', 'Pesa la piuma di ogni scomparto, al grammo.', 'center 25%')],
                   ratio='4/5', size='320', sfondo=C['sala']),
     ], padding='large', width='large', style={'padding_top': 120, 'padding_bottom': 100}))
     out.append(t.section([

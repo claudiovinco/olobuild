@@ -6,7 +6,8 @@ Tema chiaro e caldo, la città di mattoni: avorio, cotto, ottone e il blu ardesi
 corsivo), testo in Work Sans, dati in Fira Code.
 
 Apertura: «l’insegna». Lo slider resta fermo in cima mentre si scorre: sul video dei tetti, a destra, un’insegna a
-bandiera appesa al suo braccio di ferro battuto, che dondola piano. Davanti dice «Vendesi», con la casa e il prezzo.
+bandiera appesa al suo braccio di ferro battuto, che dondola piano (dal 15 nov 2026 disegnata come un oggetto vero: il
+braccio con le volute entra dal bordo destro, le catene a maglie, la tavola con la cornice d'ottone e lo smalto). Davanti dice «Vendesi», con la casa e il prezzo.
 Scorrendo l’insegna si gira in 3D sulle catene e dietro dice «Venduto · in 21 giorni». Cursore: la chiave.
 """
 import os
@@ -44,7 +45,10 @@ PHOTOS = [
     'pexels-37410120.jpg', 'pexels-37842958.jpg', 'pexels-7821728.jpg', 'pexels-19273414.jpg',
 ]
 VIDEOS = [V_TETTI, V_TETTI2, V_TETTI3, V_VICOLO, V_PORTICO, V_PORTONE, V_CHIAVE]
-MEDIA = set(PHOTOS) | {v + '.mp4' for v in VIDEOS} | {v + '.jpg' for v in VIDEOS}
+# l'insegna disegnata il 15 nov 2026 (disegni_aperture_cinque.py: braccio, catena, le due facce della tavola)
+INSEGNA = {'braccio': 'chiavistello-braccio.svg', 'catena': 'chiavistello-catena.svg',
+           'vendesi': 'chiavistello-insegna-vendesi-2.svg', 'venduto': 'chiavistello-insegna-venduto-2.svg'}
+MEDIA = set(PHOTOS) | {v + '.mp4' for v in VIDEOS} | {v + '.jpg' for v in VIDEOS} | set(INSEGNA.values())
 
 K = Kit(ID, MEDIA, raggio=0, peso_titoli='500', corsivo=True, maiuscole_pulsanti=True, tema_chiaro=True,
         accento_su_media='var(--olo-color-secondary)')
@@ -77,72 +81,78 @@ GIRA_A, GIRA_B = 34, 58   # il giro dell'insegna, nel tratto dello scorrimento
 
 def apertura(t):
     m = K.mob
-    # l'insegna sul computer e sul telefono: il braccio (y), le catene, la tavola (x, y, larghezza, altezza)
-    D = dict(bx0=49.0, bx1=84.0, by=16.0, cx0=57.0, cx1=77.0, tx=54.0, ty=31.0, tw=26.0, th=36.0)
-    M = dict(bx0=20.0, bx1=94.0, by=40.0, cx0=34.0, cx1=80.0, tx=26.0, ty=45.5, tw=60.0, th=27.0)
-    pivot = lambda g: ((g['cx0'] + g['cx1']) / 2, g['by'])
+    # L'insegna (15 nov 2026, prima era fatta di forme piatte): il braccio di ferro battuto entra dal bordo destro (la
+    # facciata è appena fuori dallo schermo), le catene scendono dalla barra agli anelli della tavola; la tavola ha la
+    # cornice d'ottone e lo smalto, davanti cotto («Vendesi»), dietro ardesia («Venduto»). Misure: la tavola 640 × 520
+    # col suo arco in alto e gli anelli in (51, 62); il braccio 1000 × 112 con la barra a y 26.
+    tela = {'d': (1440.0, 810.0), 'm': (640.0, 1400.0)}
+    G = {'d': dict(bx=55.0, by=10.5, bw=45.0, px=57.0, py=31.0, pw=28.0),
+         # sul telefono sotto il velo dei testi (che scende fino al 49 %): il ferro scuro lì non si vedeva
+         'm': dict(bx=14.0, by=50.0, bw=86.0, px=18.0, py=58.0, pw=64.0)}
+    for k, g in G.items():
+        W, H = tela[k]
+        g['bh'] = g['bw'] * W / 1000.0 * 112 / H                 # altezza del braccio, in % della tela
+        g['barra'] = g['by'] + 26 / 112.0 * g['bh']                 # la riga della barra
+        g['ph'] = g['pw'] * W / 640.0 * 520 / H                     # altezza della tavola
+        g['a1'] = g['px'] + 51 / 640.0 * g['pw']                    # gli anelli
+        g['a2'] = g['px'] + 589 / 640.0 * g['pw']
+        g['ay'] = g['py'] + 48 / 520.0 * g['ph']                    # la cima degli anelli
+        g['cw'] = 13 / W * 100 if k == 'd' else 22 / W * 100        # larghezza della catena (13 px, 22 unità)
+    pivot = lambda g: ((g['a1'] + g['a2']) / 2, g['barra'])
 
-    def dondola(x, y, w, h, g=D):
+    def dondola(x, y, w, h, g):
         px, py = pivot(g)
         ox, oy = (px - x) / w * 100 if w else 50, (py - y) / h * 100 if h else 0
-        return K.tl(x, y, [(0, {'rotation': -3, 'originX': round(ox, 1), 'originY': round(oy, 1)}, 'sine.inOut'),
-                           (DONDOLA // 2, {'rotation': 3, 'originX': round(ox, 1), 'originY': round(oy, 1)}, 'sine.inOut'),
-                           (DONDOLA, {'rotation': -3, 'originX': round(ox, 1), 'originY': round(oy, 1)})], DONDOLA)
+        return K.tl(x, y, [(0, {'rotation': -2.5, 'originX': round(ox, 1), 'originY': round(oy, 1)}, 'sine.inOut'),
+                           (DONDOLA // 2, {'rotation': 2.5, 'originX': round(ox, 1), 'originY': round(oy, 1)}, 'sine.inOut'),
+                           (DONDOLA, {'rotation': -2.5, 'originX': round(ox, 1), 'originY': round(oy, 1)})], DONDOLA)
 
     def pezzo(lid, gx, **kw):
-        """gx(g) → (x, y, w, h) sul formato g: computer e telefono con la stessa forma."""
-        x, y, w, h = gx(D)
-        xm, ym, wm, hm = gx(M)
+        """gx(g) → (x, y, w, h) per il computer e per il telefono, con la stessa forma."""
+        x, y, w, h = gx(G['d'])
+        xm, ym, wm, hm = gx(G['m'])
         sw = kw.pop('dondola', True)
         L = K.livello(lid, x=round(x, 2), y=round(y, 2), w=round(w, 2), h=round(h, 2), entra='fadeIn',
                       ritardo=kw.pop('ritardo', 300), durata=kw.pop('durata', 900),
                       responsive={'mobile': dict({'x': round(xm, 2), 'y': round(ym, 2), 'width': round(wm, 2),
                                                   'height': round(hm, 2)}, **kw.pop('mob', {}))}, **kw)
         if sw:
-            L['timeline'] = dondola(x, y, w, h)
-        if 'scrollMove' in kw or L.get('scrollMove'):
-            L['customCSS'] = 'backface-visibility:hidden;-webkit-backface-visibility:hidden;'
+            L['timeline'] = dondola(x, y, w, h, G['d'])
+        if L.get('scrollMove'):
+            L['customCSS'] = (L.get('customCSS') or '') + 'backface-visibility:hidden;-webkit-backface-visibility:hidden;'
         return L
 
-    # il giro: davanti da 0 a 180°, dietro da -180 a 0°, con il retro nascosto (backface-visibility): niente opacità,
+    # il giro: davanti da 0 a 180°, dietro da -180 a 0°, col retro nascosto (backface-visibility): niente opacità,
     # perché la timeline del dondolio riscrive il filtro a ogni fotogramma
     davanti = {'inizio': 0, 'fine': 100, 'tappe': [{'p': 0, 'ry': 0.01}, {'p': GIRA_A, 'ry': 0.01}, {'p': GIRA_B, 'ry': 180},
                                                    {'p': 100, 'ry': 180}]}
     dietro = {'inizio': 0, 'fine': 100, 'tappe': [{'p': 0, 'ry': -180}, {'p': GIRA_A, 'ry': -180}, {'p': GIRA_B, 'ry': 0.01},
                                                   {'p': 100, 'ry': 0.01}]}
-    tavola = lambda g: (g['tx'], g['ty'], g['tw'], g['th'])
-    riga = lambda fy, fh: (lambda g: (g['tx'] + g['tw'] * 0.08, g['ty'] + g['th'] * fy, g['tw'] * 0.84, g['th'] * fh))
-    cornice = {'borderWidth': 3, 'borderColor': OTTONE}
+    tavola = lambda g: (g['px'], g['py'], g['pw'], g['ph'])
+    riga = lambda fy, fh, fx=0.12: (lambda g: (g['px'] + g['pw'] * fx, g['py'] + g['ph'] * fy, g['pw'] * (1 - 2 * fx), g['ph'] * fh))
+    catena = lambda chi: (lambda g: (g[chi] - g['cw'] / 2, g['barra'] - 0.5, g['cw'], g['ay'] - g['barra'] + 1.2))
+    img = lambda nome: dict(tipo='image', imageSrc=K.img(INSEGNA[nome]), imageAlt='', objectFit='contain')
     livelli = [
-        # il braccio di ferro battuto e il ricciolo al muro
-        pezzo('ch-braccio', lambda g: (g['bx0'], g['by'] - 0.6, g['bx1'] - g['bx0'], 1.2), tipo='shape', bgColor=C['nero'],
-              borderRadius=999, dondola=False),
-        pezzo('ch-ricciolo', lambda g: (g['bx0'] - 1.2, g['by'] - 3.2, 2.4, 6.4), tipo='shape', bgColor='transparent',
-              borderWidth=3, borderColor=C['nero'], borderRadius=999, dondola=False),
-        # le catene
-        pezzo('ch-catena1', lambda g: (g['cx0'] - 0.15, g['by'], 0.3, g['ty'] - g['by'] + 0.5), tipo='shape',
-              bgColor=mix(C['nero'], 90)),
-        pezzo('ch-catena2', lambda g: (g['cx1'] - 0.15, g['by'], 0.3, g['ty'] - g['by'] + 0.5), tipo='shape',
-              bgColor=mix(C['nero'], 90)),
-        # davanti: Vendesi
-        pezzo('ch-tav-a', tavola, tipo='shape', bgColor=C['acc'], scrollMove=davanti, **cornice),
-        pezzo('ch-a1', riga(0.12, 0.12), contenuto='Via Fillungo · terzo piano', size=13, peso='500', colore=OTTONE,
-              align='center', letterSpacing=2, textTransform='uppercase', fontFamily=MONO, scrollMove=davanti,
-              mob={'fontSize': m(10)}),
-        pezzo('ch-a2', riga(0.30, 0.30), contenuto='Vendesi', size=76, peso='500', colore=C['chiaro'], align='center',
-              fontFamily='Cormorant', fontStyle='italic', lineHeight=1.0, scrollMove=davanti, mob={'fontSize': m(46)}),
-        pezzo('ch-a3', riga(0.68, 0.18), contenuto='Trilocale con le travi · 340.000 €', size=15, peso='500',
-              colore=mix(C['chiaro'], 92), align='center', fontFamily=MONO, scrollMove=davanti, mob={'fontSize': m(11)}),
-        # dietro: Venduto
-        pezzo('ch-tav-b', tavola, tipo='shape', bgColor=ARDESIA, scrollMove=dietro, **cornice),
-        pezzo('ch-b1', riga(0.12, 0.12), contenuto='Via Fillungo · terzo piano', size=13, peso='500', colore=OTTONE,
-              align='center', letterSpacing=2, textTransform='uppercase', fontFamily=MONO, scrollMove=dietro,
-              mob={'fontSize': m(10)}),
-        pezzo('ch-b2', riga(0.30, 0.30), contenuto='Venduto', size=76, peso='500', colore=C['chiaro'], align='center',
-              fontFamily='Cormorant', fontStyle='italic', lineHeight=1.0, scrollMove=dietro, mob={'fontSize': m(46)}),
-        pezzo('ch-b3', riga(0.68, 0.18), contenuto='in 21 giorni, al prezzo chiesto', size=15, peso='500', colore=OTTONE,
-              align='center', fontFamily=MONO, scrollMove=dietro, mob={'fontSize': m(11)}),
+        pezzo('ch-braccio', lambda g: (g['bx'], g['by'], g['bw'], g['bh']), dondola=False, **img('braccio')),
+        pezzo('ch-catena1', catena('a1'), **dict(img('catena'), objectFit='cover', objectPosition='center top')),
+        pezzo('ch-catena2', catena('a2'), **dict(img('catena'), objectFit='cover', objectPosition='center top')),
     ]
+    for lato, giro, parola, sotto, col_sotto in (('a', davanti, 'Vendesi', 'Trilocale con le travi · 340.000 €', mix(C['chiaro'], 90)),
+                                                ('b', dietro, 'Venduto', 'in 21 giorni, al prezzo chiesto', OTTONE)):
+        livelli += [
+            pezzo('ch-tav-' + lato, tavola, scrollMove=giro, **img('vendesi' if lato == 'a' else 'venduto')),
+            # l'indirizzo: avorio sul cotto (l'ottone lì restava a 2,5:1), ottone sull'ardesia
+            pezzo('ch-%s1' % lato, riga(0.25, 0.07), contenuto='Via Fillungo · terzo piano', size=13, peso='600',
+                  colore=mix(C['chiaro'], 92) if lato == 'a' else OTTONE,
+                  align='center', letterSpacing=4, textTransform='uppercase', fontFamily='Cormorant', scrollMove=giro,
+                  mob={'fontSize': m(9), 'letterSpacing': 1, 'x': round(G['m']['px'] + G['m']['pw'] * 0.04, 2),
+                       'width': round(G['m']['pw'] * 0.92, 2)}),
+            pezzo('ch-%s2' % lato, riga(0.33, 0.26), contenuto=parola, size=104, peso='500', colore=C['chiaro'], align='center',
+                  fontFamily='Cormorant', fontStyle='italic', lineHeight=1.0, scrollMove=giro, mob={'fontSize': m(48)}),
+            pezzo('ch-%sr' % lato, riga(0.635, 0.0035, 0.42), tipo='shape', bgColor=OTTONE, scrollMove=giro),
+            pezzo('ch-%s3' % lato, riga(0.68, 0.1), contenuto=sotto, size=31, peso='600', colore=col_sotto, align='center',
+                  fontFamily='Cormorant', lineHeight=1.2, scrollMove=giro, mob={'fontSize': m(15)}),
+        ]
     testi = [
         K.livello('ch-o', contenuto='Chiavistello · case nel centro storico · Lucca', x=6, y=24, w=40, size=12, peso='500',
                   colore=mix(C['chiaro'], 90), letterSpacing=2, textTransform='uppercase', fontFamily=MONO, ritardo=200,
@@ -167,10 +177,6 @@ def apertura(t):
                   borderColor=mix(C['chiaro'], 70), letterSpacing=2, textTransform='uppercase', entra='fadeInUp', ritardo=1100,
                   buttonUrl=VENDERE, hover={'bgColor': mix(C['chiaro'], 14), 'borderColor': C['chiaro'], 'duration': 250},
                   responsive={'tablet': {'x': 30}, 'mobile': {'y': 31, 'x': 7, 'fontSize': m(11)}}),
-        K.livello('ch-hint', contenuto='Scorrete: l’insegna si gira ↓', x=6, y=84, w=30, size=12, peso='500',
-                  colore=mix(C['chiaro'], 84), letterSpacing=1, fontFamily=MONO, ritardo=1300,
-                  scrollMove={'inizio': 0, 'fine': 20, 'tappe': [{'p': 0, 'o': 100}, {'p': 100, 'o': 0}]},
-                  responsive={'mobile': {'fontSize': m(10), 'y': 35.5, 'x': 7, 'width': 86}}),
     ]
     veli = K.veli('ch-velo', 'sinistra', 36, 62, colore=C['nero'], forza=86, mobile_alto=37)
     sl = [K.diapositiva('ch-1', K.sfondo_video(V_TETTI, overlay=0.2, colore=C['nero']), veli + livelli + testi,

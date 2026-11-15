@@ -220,7 +220,13 @@
   };
 
   // Una tela a tutto schermo per gli stili che disegnano (cometa, scintille).
-  function tela() {
+  // opz.mondo: lo stile lascia cose nella pagina (scie, particelle, tagli, gocce) che devono restare dove sono state
+  // disegnate. Lì niente rimpicciolimento di tutta la tela verso il puntatore (14 nov 2026, l'utente: «parte
+  // dell'effetto si trascina quando trascino il puntatore»: scalando attorno al puntatore che si muove, ogni punto
+  // fermo scivolava col 40% del movimento); il disegno sul puntatore si rimpicciolisce da solo con T.glifo(g, x, y)
+  // al posto di g.translate(x, y).
+  function tela(opz) {
+    var mondo = !!(opz && opz.mondo);
     var c = nodo('tela', 'canvas');
     var dpr = Math.min(2, window.devicePixelRatio || 1);
     function misura() {
@@ -230,12 +236,38 @@
     misura();
     window.addEventListener('resize', misura);
     var g = c.getContext('2d');
-    return { c: c, g: g, dpr: dpr };
+    // Disegni piccoli (13 nov 2026, l'utente: «quando il puntatore ha una parte grafica, non esagerare… spesso la vedo
+    // gigante che copre l'animazione»): tutto ciò che uno stile disegna si rimpicciolisce di SCALA verso l'angolo in
+    // basso a destra della freccia di sistema (la punta resta libera e il disegno le sta accanto, come prima ma più
+    // piccolo). Le cancellature e le dissolvenze a tutta tela restano a tutta tela, se no lascerebbero aloni.
+    var SCALA = +CFG.scalaDisegno || 0.6, AX = 10, AY = 14;
+    var setT = g.setTransform.bind(g), pulisci = g.clearRect.bind(g), riempi = g.fillRect.bind(g);
+    if (!mondo) g.setTransform = function (a, b, cc, d, e, f) {
+      if (a && typeof a === 'object') return setT(a);
+      var px = (mx + AX) * dpr, py = (my + AY) * dpr;
+      setT(a * SCALA, b * SCALA, cc * SCALA, d * SCALA, e * SCALA + px * (1 - SCALA), f * SCALA + py * (1 - SCALA));
+    };
+    // Il disegno sul puntatore negli stili «mondo»: stesso rimpicciolimento verso l'angolo della freccia, solo per lui.
+    function glifo(gg, x, y) {
+      var ax = mx + AX, ay = my + AY;
+      gg.translate(ax + (x - ax) * SCALA, ay + (y - ay) * SCALA);
+      gg.scale(SCALA, SCALA);
+    }
+    function tutta(x, y, w, h) { return x <= 0 && y <= 0 && w >= innerWidth - 1 && h >= innerHeight - 1; }
+    g.clearRect = function (x, y, w, h) {
+      if (!tutta(x, y, w, h)) return pulisci(x, y, w, h);
+      g.save(); setT(1, 0, 0, 1, 0, 0); pulisci(0, 0, c.width, c.height); g.restore();
+    };
+    g.fillRect = function (x, y, w, h) {
+      if (!tutta(x, y, w, h)) return riempi(x, y, w, h);
+      g.save(); setT(1, 0, 0, 1, 0, 0); riempi(0, 0, c.width, c.height); g.restore();
+    };
+    return { c: c, g: g, dpr: dpr, glifo: glifo };
   }
 
   // Cometa: il puntatore lascia una scia di luce che si assottiglia e svanisce in mezzo secondo.
   STILI.cometa = function () {
-    var T = tela(), testa = nodo('punto'), pts = [];
+    var T = tela({ mondo: true }), testa = nodo('punto'), pts = [];
     var col = risolvi(CFG.dotColor || '#fff'), colHot = risolvi(CFG.hotColor || CFG.dotColor || '#fff');
     var VITA = 420;
     return {
@@ -319,7 +351,7 @@
 
   // Scintille: muovendosi il puntatore sparge scintille che cadono e si spengono; un clic ne fa uno scoppio.
   STILI.scintille = function () {
-    var T = tela(), p = nodo('punto'), sc = [];
+    var T = tela({ mondo: true }), p = nodo('punto'), sc = [];
     var cols = [risolvi(CFG.dotColor || '#fff'), risolvi(CFG.hotColor || '#fff'), risolvi(CFG.ringColor || '#fff')];
     function sparge(n, forza) {
       if (meno) return;
@@ -436,7 +468,7 @@
 
   // Neve: muovendosi il puntatore lascia cadere fiocchi che scendono ondeggiando e si sciolgono.
   STILI.neve = function () {
-    var T = tela(), p = nodo('punto'), f = [];
+    var T = tela({ mondo: true }), p = nodo('punto'), f = [];
     var col = risolvi(CFG.ringColor || '#fff');
     var prima = 0;
     return {
@@ -474,7 +506,7 @@
 
   // Cucitura: il puntatore cuce: dietro resta una fila di punti di filo tratteggiati che si sfilano in poco tempo.
   STILI.cucitura = function () {
-    var T = tela(), ago = nodo('punto'), pts = [];
+    var T = tela({ mondo: true }), ago = nodo('punto'), pts = [];
     var col = risolvi(CFG.dotColor || '#fff');
     var VITA = 700;
     return {
@@ -505,7 +537,7 @@
 
   // Pennello: una pennellata morbida che segue il puntatore, più larga se si va piano, e svanisce in meno di un secondo.
   STILI.pennello = function () {
-    var T = tela(), p = nodo('punto'), pts = [];
+    var T = tela({ mondo: true }), p = nodo('punto'), pts = [];
     var col = risolvi(CFG.dotColor || '#fff');
     var VITA = 800;
     return {
@@ -584,7 +616,7 @@
 
   // Coriandoli: un punto sul puntatore; ogni clic fa uno scoppio di coriandoli colorati che girano e cadono.
   STILI.coriandoli = function () {
-    var T = tela(), p = nodo('punto'), cc = [];
+    var T = tela({ mondo: true }), p = nodo('punto'), cc = [];
     var cols = [risolvi(CFG.dotColor || '#f55'), risolvi(CFG.hotColor || '#5af'), risolvi(CFG.ringColor || '#fd5'),
                 risolvi(CFG.labelColor || '#fff')];
     document.addEventListener('pointerdown', function (e) {
@@ -647,7 +679,7 @@
 
   // Brace: dal puntatore salgono scintille calde che tremano, si spengono e cambiano colore mentre salgono.
   STILI.brace = function () {
-    var T = tela(), p = nodo('punto'), f = [];
+    var T = tela({ mondo: true }), p = nodo('punto'), f = [];
     var c1 = risolvi(CFG.dotColor || '#ffb347'), c2 = risolvi(CFG.hotColor || CFG.ringColor || '#ff5a36');
     var prima = 0;
     return {
@@ -688,7 +720,7 @@
 
   // Inchiostro: dove passa il puntatore cadono gocce che si allargano e sfumano, come inchiostro nell'acqua.
   STILI.inchiostro = function () {
-    var T = tela(), p = nodo('punto'), f = [], ultimoP = 0;
+    var T = tela({ mondo: true }), p = nodo('punto'), f = [], ultimoP = 0;
     var col = risolvi(CFG.dotColor || '#1a1a1a');
     var prima = 0;
     return {
@@ -726,7 +758,7 @@
 
   // Bolle: dal puntatore partono bolle trasparenti che salgono ondeggiando e scoppiano in un anello.
   STILI.bolle = function () {
-    var T = tela(), p = nodo('punto'), f = [], ultimoP = 0;
+    var T = tela({ mondo: true }), p = nodo('punto'), f = [], ultimoP = 0;
     var col = risolvi(CFG.ringColor || '#ffffff');
     var prima = 0;
     return {
@@ -770,7 +802,7 @@
 
   // Foglie: muovendo il puntatore si staccano foglioline che cadono girando su se stesse e oscillando.
   STILI.foglie = function () {
-    var T = tela(), p = nodo('punto'), f = [], ultimoP = 0;
+    var T = tela({ mondo: true }), p = nodo('punto'), f = [], ultimoP = 0;
     var cols = [risolvi(CFG.dotColor || '#3f7a3a'), risolvi(CFG.ringColor || '#7fb069'), risolvi(CFG.hotColor || '#c9a227')];
     var prima = 0;
     return {
@@ -816,7 +848,7 @@
 
   // Vapore: dal puntatore salgono sbuffi morbidi che si allargano e svaniscono, come il vapore da una tazza.
   STILI.vapore = function () {
-    var T = tela(), p = nodo('punto'), f = [], ultimoP = 0;
+    var T = tela({ mondo: true }), p = nodo('punto'), f = [], ultimoP = 0;
     var col = risolvi(CFG.ringColor || '#ffffff');
     var prima = 0;
     return {
@@ -885,7 +917,7 @@
 
   // Impronte: dietro il puntatore restano ferri di cavallo, uno a sinistra e uno a destra del cammino, che sbiadiscono.
   STILI.impronte = function () {
-    var T = tela(), p = nodo('punto'), f = [], lato = 1, ux = mx, uy = my;
+    var T = tela({ mondo: true }), p = nodo('punto'), f = [], lato = 1, ux = mx, uy = my;
     var col = risolvi(CFG.dotColor || '#7a3e1d');
     var prima = 0;
     return {
@@ -926,7 +958,7 @@
   // pende, ondeggia piano e segue il movimento (con un codino dall'altra parte della cruna e il nodo in fondo). L'ago
   // si inclina con la velocità; sui link si raddrizza e il filo si accorcia.
   STILI.filo = function () {
-    var T = tela(), N = 16, L = 6, pts = [];
+    var T = tela({ mondo: true }), N = 16, L = 6, pts = [];
     var col = risolvi(CFG.dotColor || '#c0392b');
     var acciaio = risolvi(CFG.ringColor || '#e6e6e6');
     for (var i = 0; i < N; i++) pts.push({ x: mx, y: my + i * L, px: mx, py: my + i * L });
@@ -1026,7 +1058,7 @@
   // Metro: il nastro del metro da sarta si srotola dietro il puntatore, con le tacche ogni centimetro e i numeri ogni
   // cinque; da fermo si riavvolge. In testa la linguetta di metallo; sui link il nastro si ritira in fretta.
   STILI.metro = function () {
-    var T = tela(), pts = [], prima = 0;
+    var T = tela({ mondo: true }), pts = [], prima = 0;
     var nastro = risolvi(CFG.ringColor || '#f3e7c9'), tacche = risolvi(CFG.dotColor || '#1b1b1b');
     var MAX = 260, PASSO = 5;
     return {
@@ -1139,7 +1171,7 @@
 
   // Farina: il puntatore lascia cadere un velo di farina che scende piano e si posa; al clic, uno sbuffo.
   STILI.farina = function () {
-    var T = tela(), p = nodo('punto'), grani = [], prima = 0;
+    var T = tela({ mondo: true }), p = nodo('punto'), grani = [], prima = 0;
     // la farina è chiara ma si deve vedere anche sui fondi chiari: un beige caldo col bordo appena più scuro
     var col = risolvi('color-mix(in srgb, ' + (CFG.ringColor || '#f4ead8') + ' 62%, #9a8463)'), bordo = 'rgba(70,52,30,.35)';
     function soffia(x, y, n, forza) {
@@ -1323,7 +1355,7 @@
   // Paillettes: dal puntatore cadono paillettes che girano su sé stesse (si vede il dritto lucido e il rovescio) e
   // luccicano; al clic ne esplode una manciata. Colori dal cursore (oro, il colore del punto) e l'avorio.
   STILI.paillettes = function () {
-    var T = tela(), p = nodo('punto'), pp = [], prima = 0, cx = mx, cy = my;
+    var T = tela({ mondo: true }), p = nodo('punto'), pp = [], prima = 0, cx = mx, cy = my;
     var tinte = [risolvi(CFG.ringColor || '#c8a45c'), risolvi(CFG.dotColor || '#5e0f23'), '#f3e9d6'];
     function getta(x, y, n, forza) {
       for (var i = 0; i < n; i++) {
@@ -1382,7 +1414,7 @@
   // Laccio: un laccio da scarpa appeso al puntatore, con l'occhiello in cima e il puntale in fondo; pende, ondeggia
   // con il movimento e sopra un link si accorcia, tirato come quando si allaccia la scarpa.
   STILI.laccio = function () {
-    var T = tela(), N = 18, L = 5.5, pts = [], prima = null, scossa = 0;
+    var T = tela({ mondo: true }), N = 18, L = 5.5, pts = [], prima = null, scossa = 0;
     var col = risolvi(CFG.ringColor || '#f25c3a'), puntale = risolvi(CFG.dotColor || '#10142e');
     for (var i = 0; i < N; i++) pts.push({ x: mx, y: my + i * L, px: mx, py: my + i * L });
     return {
@@ -1438,7 +1470,7 @@
   // Chicco: un chicco di caffè col suo solco, che gira mentre si muove; al clic se ne spargono alcuni che rotolano e
   // si fermano. Il colore dal punto del cursore (il marrone dell'espresso), il riflesso caldo dall'anello.
   STILI.chicco = function () {
-    var T = tela(), x = mx, y = my, ang = 0, prima = 0, sparsi = [];
+    var T = tela({ mondo: true }), x = mx, y = my, ang = 0, prima = 0, sparsi = [];
     var bruno = risolvi(CFG.dotColor || '#4a2c1d'), crema = risolvi(CFG.ringColor || '#d9a066');
     function chicco(g, cx, cy, a, s, alfa) {
       g.save(); g.translate(cx, cy); g.rotate(a); g.scale(s, s); g.globalAlpha = alfa;
@@ -1530,7 +1562,7 @@
   // Peperoncino: un peperoncino rosso col picciolo verde, che si piega nella direzione in cui si va; al clic sparge i
   // fiocchi che cadono girando.
   STILI.peperoncino = function () {
-    var T = tela(), x = mx, y = my, pieg = 0, prima = 0, fiocchi = [];
+    var T = tela({ mondo: true }), x = mx, y = my, pieg = 0, prima = 0, fiocchi = [];
     var rosso = risolvi(CFG.ringColor || '#b3261e'), seme = risolvi(CFG.dotColor || '#f2b705');
     window.addEventListener('pointerdown', function (e) {
       if (meno) return;
@@ -1590,11 +1622,12 @@
     };
   };
 
-  // Pennino: il pennino d'una stilografica con la punta sul puntatore, il taglio e il foro di sfiato; scrive un tratto
+  // Pennino: il pennino d'una stilografica con la punta sul puntatore e girata come la freccia del mouse (in alto a
+  // sinistra, 8 nov 2026: prima guardava in basso a destra), il taglio e il foro di sfiato; scrive un tratto
   // da calligrafo (sottile in un verso, pieno nell'altro, come la punta tronca) che si asciuga e svanisce; sui link
   // il pennino si drizza, al clic lascia una macchia d'inchiostro con due schizzi.
   STILI.pennino = function () {
-    var T = tela(), pts = [], macchie = [], ang = -0.75, prima = 0;
+    var T = tela({ mondo: true }), pts = [], macchie = [], ang = 2.39, prima = 0;
     var inchiostro = risolvi(CFG.dotColor || '#233a8b'), metallo = risolvi(CFG.ringColor || '#c9a227');
     window.addEventListener('pointerdown', function (e) {
       if (meno) return;
@@ -1644,11 +1677,12 @@
         }
         g.globalAlpha = 1;
         // il pennino: si inclina appena col movimento, sui link si drizza
-        var aT = (hot ? -0.25 : -0.75) + (meno ? 0 : Math.max(-0.35, Math.min(0.35, vx * 0.02)));
+        // 2.39 = la punta verso l'alto a sinistra, il corpo in basso a destra come la freccia; sui link 2.89, quasi dritto
+        var aT = (hot ? 2.89 : 2.39) + (meno ? 0 : Math.max(-0.35, Math.min(0.35, vx * 0.02)));
         ang += (aT - ang) * 0.18;
         vx *= 0.85;
         g.save();
-        g.translate(mx, my);
+        T.glifo(g, mx, my);
         g.rotate(ang);
         // la sagoma: dalla punta (0,0) si allarga verso l'alto, spalle arrotondate
         var gr = g.createLinearGradient(-9, 0, 9, 0);
@@ -1679,7 +1713,7 @@
   // ondeggiare, dalle stecche cadono gocce; sui link si chiude a metà (come quando si entra in un negozio), al clic
   // scrolla una manciata di gocce.
   STILI.ombrello = function () {
-    var T = tela(), ang = 0, va = 0, apre = 1, gocce = [], prima = 0, tic = 0;
+    var T = tela({ mondo: true }), ang = 0, va = 0, apre = 1, gocce = [], prima = 0, tic = 0;
     var tela_c = risolvi(CFG.ringColor || '#0e5a6b'), manico = risolvi(CFG.dotColor || '#7a2e2e');
     function goccia(x, y, vx0, vy0) {
       gocce.push({ x: x, y: y, vx: vx0, vy: vy0, t: 0 });
@@ -1721,7 +1755,7 @@
         }
         g.globalAlpha = 1;
         g.save();
-        g.translate(mx, my);
+        T.glifo(g, mx, my);
         g.rotate(ang);
         // il manico a uncino (il puntatore sta nella curva) e l'asta
         g.strokeStyle = manico; g.lineWidth = 3; g.lineCap = 'round';
@@ -1830,7 +1864,7 @@
   // l'attrito) e si calma da fermo; sui link il calice si inclina per il brindisi e si riempie un po' di più, al clic
   // salta qualche goccia.
   STILI.calice = function () {
-    var T = tela(), onda = 0, vo = 0, liv = 0.45, brind = 0, gocce = [], prima = 0;
+    var T = tela({ mondo: true }), onda = 0, vo = 0, liv = 0.45, brind = 0, gocce = [], prima = 0;
     var vino = risolvi(CFG.dotColor || '#7b1e2b'), vetro = risolvi(CFG.ringColor || '#d8c7a3');
     window.addEventListener('pointerdown', function () {
       if (meno) return;
@@ -1864,7 +1898,7 @@
         }
         g.globalAlpha = 1;
         g.save();
-        g.translate(mx, my);
+        T.glifo(g, mx, my);
         g.rotate(-0.35 * brind);
         // il piede e il gambo
         g.strokeStyle = vetro; g.lineWidth = 1.6; g.lineCap = 'round';
@@ -1966,7 +2000,7 @@
   // Luna: una piccola luna segue il puntatore e cambia fase con la strada fatta (un ciclo ogni 1800 px); fermandosi
   // resta nella sua fase, sui link è piena con l'alone. Muovendosi lascia qualche stella che si spegne.
   STILI.luna = function () {
-    var T = tela(), st = {}, strada = 0, piena = 0, stelle = [], lx = mx, ly = my;
+    var T = tela({ mondo: true }), st = {}, strada = 0, piena = 0, stelle = [], lx = mx, ly = my;
     var chiara = risolvi(CFG.dotColor || '#f4ead2'), cielo = risolvi(CFG.ringColor || '#1a2140');
     return {
       punto: function (t) {
@@ -2156,7 +2190,7 @@
   // Riflesso: il punto e, sotto, il suo riflesso nell'acqua capovolto e mosso dalle onde; muovendosi si allargano
   // cerchi schiacciati sull'acqua; sui link il riflesso si schiarisce.
   STILI.riflesso = function () {
-    var T = tela(), st = {}, cerchi = [], ultimoC = 0, chiaro = 0;
+    var T = tela({ mondo: true }), st = {}, cerchi = [], ultimoC = 0, chiaro = 0;
     var col = risolvi(CFG.dotColor || '#f2e6c8'), acqua = risolvi(CFG.ringColor || '#9cc3d5');
     return {
       punto: function (t) {
@@ -2271,7 +2305,7 @@
   // Pioggerella: una nuvoletta sopra il puntatore che, quando ci si muove, lascia cadere qualche goccia che si
   // apre in un cerchietto sul punto d'arrivo; sui link piove un po' di più.
   STILI.pioggerella = function () {
-    var T = tela(), st = {}, gocce = [], cx = mx, cy = my;
+    var T = tela({ mondo: true }), st = {}, gocce = [], cx = mx, cy = my;
     var nube = risolvi(CFG.ringColor || '#e9efe6'), acqua = risolvi(CFG.dotColor || '#4c9bd6');
     return {
       punto: function () {
@@ -2315,7 +2349,7 @@
   // Ugello: l'ugello di una stampante 3D sul puntatore che stende un filo di plastica calda: arancio vicino
   // all'ugello, si raffredda in grigio lungo la strada e sparisce in un secondo e mezzo; sui link l'ugello si scalda.
   STILI.ugello = function () {
-    var T = tela(), st = {}, pts = [], caldo = 0;
+    var T = tela({ mondo: true }), st = {}, pts = [], caldo = 0;
     var filo = risolvi(CFG.dotColor || '#ff7a1a'), freddo = risolvi(CFG.ringColor || '#9aa0a6');
     function rgb(c) { var m = c.match(/[\d.]+/g) || [0, 0, 0]; return [+m[0], +m[1], +m[2]]; }
     var A = rgb(filo), B = rgb(freddo);
@@ -2382,7 +2416,7 @@
   // Mosaico: il puntatore posa piastrelline quadrate su una griglia: ognuna si gira entrando (come una tessera
   // voltata) e sbiadisce; tre colori a turno; sui link le tessere sono più grandi.
   STILI.mosaico = function () {
-    var T = tela(), st = {}, tessere = [], visti = {}, n = 0;
+    var T = tela({ mondo: true }), st = {}, tessere = [], visti = {}, n = 0;
     var c1 = risolvi(CFG.ringColor || '#1d4e89'), c2 = risolvi(CFG.dotColor || '#e0a526'), c3 = risolvi(CFG.hotColor || '#c6463a');
     var COL = [c1, c2, c3];
     return {
@@ -2452,7 +2486,7 @@
   // Con la freccia di sistema visibile (hide_system spento, 3 nov 2026: «si fatica a capire dove premere») la nota
   // accompagna la freccia in basso a destra e la punta resta libera; senza freccia la testa della nota è il puntatore.
   STILI.nota = function () {
-    var T = tela(), st = {}, note = [], strada = 0, px = mx, py = my, n = 0, cresce = 0;
+    var T = tela({ mondo: true }), st = {}, note = [], strada = 0, px = mx, py = my, n = 0, cresce = 0;
     var corpo = risolvi(CFG.ringColor || '#8a2523'), bordo = risolvi(CFG.dotColor || '#fbfaf6');
     var accanto = !CFG.hideSys, ox = accanto ? 20 : 0, oy = accanto ? 27 : 0;
     function disegna(g, x, y, k, croma, onda, colore) {
@@ -2535,7 +2569,7 @@
   // Prisma (per Cangiante): un piccolo prisma che scompone la luce: muovendosi lascia dietro un ventaglio di raggi
   // dell'arcobaleno lungo quanto la velocità e una scia di puntini colorati; sui link il ventaglio si apre.
   STILI.prisma = function () {
-    var T = tela(), st = {}, scie = [], lung = 0, dir = Math.PI * 0.75, giro = 0, n = 0;
+    var T = tela({ mondo: true }), st = {}, scie = [], lung = 0, dir = Math.PI * 0.75, giro = 0, n = 0;
     var SPETTRO = ['#ff3b3b', '#ff9a1f', '#ffd60a', '#2fd36b', '#1fb6ff', '#5a5cff', '#b44dff'];
     var bordo = risolvi(CFG.ringColor || '#ffffff');
     return {
@@ -2565,7 +2599,7 @@
           g.beginPath(); g.arc(q.x + o[0], q.y + o[1], 2.4 * (1 - e) + 0.6, 0, 6.283); g.fill();
         }
         g.globalAlpha = 1;
-        g.save(); g.translate(cx, cy); g.rotate(giro);
+        g.save(); T.glifo(g, cx, cy); g.rotate(giro);
         g.beginPath(); g.moveTo(0, -9); g.lineTo(8, 5.5); g.lineTo(-8, 5.5); g.closePath();
         g.fillStyle = 'rgba(255,255,255,.35)'; g.fill(); g.lineWidth = 1.6; g.strokeStyle = bordo; g.stroke(); g.restore();
         return lung > 0.5 || scie.length > 0 || v > 0.05;
@@ -2604,7 +2638,7 @@
   // Zip (per Cerniera): il cursore di una cerniera lampo con la sua linguetta: dove passa lascia i denti della zip chiusi,
   // che dopo un attimo si riaprono e svaniscono; la linguetta dondola col moto e sui link si alza.
   STILI.zip = function () {
-    var T = tela(), st = {}, denti = [], strada = 0, px = mx, py = my, dir = Math.PI / 2, ang = 0, va = 0, n = 0, su = 0;
+    var T = tela({ mondo: true }), st = {}, denti = [], strada = 0, px = mx, py = my, dir = Math.PI / 2, ang = 0, va = 0, n = 0, su = 0;
     var metallo = risolvi(CFG.ringColor || '#c9ccd1'), nastro = risolvi(CFG.dotColor || '#ff5a1f');
     return {
       punto: function (t) {
@@ -2633,7 +2667,7 @@
           g.restore();
         }
         g.globalAlpha = 1;
-        g.save(); g.translate(mx + o[0], my + o[1]); g.rotate(dir - Math.PI / 2);
+        g.save(); T.glifo(g, mx + o[0], my + o[1]); g.rotate(dir - Math.PI / 2);
         g.fillStyle = metallo; g.strokeStyle = 'rgba(0,0,0,.4)'; g.lineWidth = 1;
         g.beginPath(); g.moveTo(-6.5, -8); g.lineTo(6.5, -8); g.lineTo(4.5, 7); g.lineTo(-4.5, 7); g.closePath(); g.fill(); g.stroke();
         g.rotate(ang - su * 2.6);
@@ -2708,7 +2742,7 @@
   // Sonno (per Sonnambulo): una falce di luna che lascia qualche stellina quando si muove; ferma per due secondi
   // sbadiglia e fa salire le Z. Sui link si sveglia: la luna diventa piena.
   STILI.sonno = function () {
-    var T = tela(), st = {}, stelle = [], strada = 0, px = mx, py = my, fermo = performance.now(), pieno = 0, attesa = 0;
+    var T = tela({ mondo: true }), st = {}, stelle = [], strada = 0, px = mx, py = my, fermo = performance.now(), pieno = 0, attesa = 0;
     var luna = risolvi(CFG.ringColor || '#f3e7b3');
     function stella(g, x, y, r) {
       g.beginPath();
@@ -2760,7 +2794,7 @@
   // inclina e dal bordo cadono le gocce; sui link si chiude un po'. Fa coppia con la Pioggia delle Particelle: la cupola
   // ha il raggio dell'ombrello della pioggia (48), sotto non piove.
   STILI.cupola = function () {
-    var T = tela(), st = {}, gocce = [], chiude = 0, incl = 0;
+    var T = tela({ mondo: true }), st = {}, gocce = [], chiude = 0, incl = 0;
     var telo = risolvi(CFG.ringColor || '#ffffff'), manico = risolvi(CFG.dotColor || '#ffcc00');
     return {
       punto: function (t) {
@@ -2782,7 +2816,7 @@
           g.globalAlpha = 0.75; g.beginPath(); g.moveTo(q.x, q.y); g.lineTo(q.x, q.y - 3 - q.vy * 1.2); g.stroke();
         }
         g.globalAlpha = 1;
-        g.save(); g.translate(mx, my); g.rotate(incl);
+        g.save(); T.glifo(g, mx, my); g.rotate(incl);
         g.beginPath(); g.ellipse(0, 0, R, R * 0.62, 0, Math.PI, 2 * Math.PI); g.closePath();
         g.fillStyle = 'rgba(255,255,255,.18)'; g.fill(); g.lineWidth = 1.6; g.strokeStyle = telo; g.stroke();
         g.globalAlpha = 0.45; g.lineWidth = 1;
@@ -2802,7 +2836,7 @@
   // Gomitolo (per Gomitolo): un gomitolo di lana che rotola mentre ci si muove e srotola dietro di sé il filo, morbido e
   // ondulato, che poi si riavvolge; sui link il gomitolo si gonfia.
   STILI.gomitolo = function () {
-    var T = tela(), st = {}, filo = [], giro = 0, px = mx, py = my, gonfio = 0;
+    var T = tela({ mondo: true }), st = {}, filo = [], giro = 0, px = mx, py = my, gonfio = 0;
     var lana = risolvi(CFG.ringColor || '#e06c4f'), segno = risolvi(CFG.dotColor || '#ffffff');
     return {
       punto: function (t) {
@@ -2827,7 +2861,7 @@
         }
         var cx = mx + o[0], cy = my + o[1];
         g.fillStyle = lana; g.beginPath(); g.arc(cx, cy, R, 0, 6.283); g.fill();
-        g.save(); g.beginPath(); g.arc(cx, cy, R, 0, 6.283); g.clip(); g.translate(cx, cy); g.rotate(giro);
+        g.save(); g.beginPath(); g.arc(cx, cy, R, 0, 6.283); g.clip(); T.glifo(g, cx, cy); g.rotate(giro);
         g.strokeStyle = segno; g.globalAlpha = 0.5; g.lineWidth = 1;
         for (var k = -3; k <= 3; k++) { g.beginPath(); g.ellipse(0, k * 3, R * 1.15, R * 0.34, 0.5, 0, 6.283); g.stroke(); }
         g.restore(); g.globalAlpha = 1;
@@ -2860,7 +2894,7 @@
   // Raspa (per Raspa): la raspa che graffia il denim: una lima a righe incrociate che, muovendosi, lascia dietro di sé
   // graffi chiari che sbiadiscono in un attimo; sui link si inclina come per dare l'ultima passata.
   STILI.raspa = function () {
-    var T = tela(), st = {}, graffi = [], strada = 0, px = mx, py = my, incl = 0;
+    var T = tela({ mondo: true }), st = {}, graffi = [], strada = 0, px = mx, py = my, incl = 0;
     var lima = risolvi(CFG.ringColor || '#9aa7bd'), segno = risolvi(CFG.dotColor || '#e8f0fb');
     return {
       punto: function (t) {
@@ -2887,7 +2921,7 @@
           g.lineTo(q.x + Math.cos(q.a) * q.l / 2, q.y + Math.sin(q.a) * q.l / 2); g.stroke();
         }
         g.globalAlpha = 1;
-        g.save(); g.translate(mx + o[0], my + o[1]); g.rotate(-0.6 + incl);
+        g.save(); T.glifo(g, mx + o[0], my + o[1]); g.rotate(-0.6 + incl);
         g.fillStyle = lima; g.fillRect(-4, -15, 8, 22);
         g.strokeStyle = 'rgba(0,0,0,.35)'; g.lineWidth = 1;
         for (var k = -13; k < 6; k += 3) { g.beginPath(); g.moveTo(-4, k); g.lineTo(4, k + 3); g.moveTo(4, k); g.lineTo(-4, k + 3); g.stroke(); }
@@ -3000,7 +3034,7 @@
   // Forbici (per Sbieco): un paio di forbici che si aprono e si chiudono mentre avanzano, girate verso dove si va, e dietro
   // la riga tratteggiata del taglio che svanisce; sui link si chiudono di colpo.
   STILI.forbici = function () {
-    var T = tela(), st = {}, strada = 0, dir = 0, px = mx, py = my, taglio = [];
+    var T = tela({ mondo: true }), st = {}, strada = 0, dir = 0, px = mx, py = my, taglio = [];
     var lama = risolvi(CFG.ringColor || '#2a2018'), manico = risolvi(CFG.dotColor || '#a3322b');
     return {
       punto: function (t) {
@@ -3021,7 +3055,7 @@
         while (taglio.length && t - taglio[0].t > 1000) taglio.shift();
         g.setLineDash([]); g.globalAlpha = 1;
         var ap = hot || meno ? 0.05 : 0.12 + Math.abs(Math.sin(strada / 18)) * 0.42;
-        g.save(); g.translate(mx + o[0], my + o[1]); g.rotate(dir);
+        g.save(); T.glifo(g, mx + o[0], my + o[1]); g.rotate(dir);
         [-1, 1].forEach(function (k) {
           g.save(); g.rotate(k * ap);
           g.fillStyle = lama; g.beginPath(); g.moveTo(0, 0); g.lineTo(17, k * -1.5); g.lineTo(0, k * 2.6); g.closePath(); g.fill();
@@ -3038,7 +3072,7 @@
   // Flash (per Falcata): il mirino del fotografo a bordo passerella: quattro angoli e un punto; a ogni clic scatta un
   // lampo bianco che si allarga e svanisce, e sui link il mirino mette a fuoco (gli angoli stringono).
   STILI.flash = function () {
-    var T = tela(), st = {}, lampi = [], fuoco = 0;
+    var T = tela({ mondo: true }), st = {}, lampi = [], fuoco = 0;
     var oro = risolvi(CFG.dotColor || '#e9c46a'), bianco = risolvi(CFG.ringColor || '#f3efe8');
     document.addEventListener('pointerdown', function (e) {
       if (e.pointerType === 'touch' || meno) return;
@@ -3145,6 +3179,522 @@
         g.strokeStyle = acqua; g.lineWidth = 2; g.beginPath(); g.arc(ax, ay, 9, 0, 6.283); g.stroke();
         g.fillStyle = rosa; g.beginPath(); g.arc(mx, my, 3.5, 0, 6.283); g.fill();
         return L > 0.3 || Math.abs(avx) + Math.abs(avy) > 0.05;
+      }
+    };
+  };
+
+  /* ── I dieci cursori dei mestieri (10 nov 2026) ── */
+
+  // Arco (per Morsetto): dalla punta del puntatore parte una scarica a zig-zag verso il link o il pulsante più vicino,
+  // se è a meno di 170 px; lontano da tutto restano due scintille che crepitano sulla punta. La saetta si ridisegna
+  // ogni 50–90 ms, con l'alone. Con «meno movimento» la scarica è ferma e non crepita.
+  STILI.arco = function () {
+    var T = tela(), bersagli = [], cercato = -1e9, saetta = [], rami = [], rifai = 0;
+    var luce = risolvi(CFG.ringColor || '#bfe3ff'), nucleo = risolvi(CFG.dotColor || '#ffd23f');
+    function cerca(t) {
+      if (t - cercato < 260) return;
+      cercato = t; bersagli = [];
+      var els = document.querySelectorAll('a[href], button, [role="button"]');
+      for (var i = 0; i < els.length && bersagli.length < 400; i++) {
+        var r = els[i].getBoundingClientRect();
+        if (r.width > 2 && r.height > 2 && r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth) bersagli.push(r);
+      }
+    }
+    function vicino() {
+      var best = null, bd = 170;
+      for (var i = 0; i < bersagli.length; i++) {
+        var r = bersagli[i], px = Math.max(r.left, Math.min(mx, r.right)), py = Math.max(r.top, Math.min(my, r.bottom));
+        var d = Math.hypot(px - mx, py - my);
+        if (d < bd) { bd = d; best = [px, py, d]; }
+      }
+      return best;
+    }
+    function zigzag(x0, y0, x1, y1, n, amp) {
+      var p = [[x0, y0]], dx = x1 - x0, dy = y1 - y0, L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L;
+      for (var i = 1; i < n; i++) {
+        var f = i / n, a = (Math.random() - 0.5) * amp * Math.sin(Math.PI * f);
+        p.push([x0 + dx * f + nx * a, y0 + dy * f + ny * a]);
+      }
+      p.push([x1, y1]);
+      return p;
+    }
+    function linea(g, p, w, c) {
+      g.strokeStyle = c; g.lineWidth = w; g.beginPath(); g.moveTo(p[0][0], p[0][1]);
+      for (var i = 1; i < p.length; i++) g.lineTo(p[i][0], p[i][1]);
+      g.stroke();
+    }
+    return {
+      frame: function (t) {
+        cerca(t);
+        var g = pulisci(T), v = vicino(), vivo = t - ultimo < 1600;
+        if (!vivo && !v) return false;
+        if (t > rifai || meno) {
+          rifai = t + 50 + Math.random() * 40;
+          if (v && v[2] > 6) {
+            var n = Math.max(4, Math.round(v[2] / 14));
+            saetta = zigzag(mx, my, v[0], v[1], n, Math.min(34, 8 + v[2] * 0.18));
+            rami = [];
+            if (!meno && saetta.length > 3) {
+              var k = 1 + Math.floor(Math.random() * (saetta.length - 2)), q = saetta[k];
+              rami.push(zigzag(q[0], q[1], q[0] + (Math.random() - 0.5) * 40, q[1] + (Math.random() - 0.5) * 40, 3, 10));
+            }
+          } else {
+            saetta = [];
+            rami = [0, 1].map(function () {
+              var a = Math.random() * 6.283, l = 7 + Math.random() * 7;
+              return zigzag(mx, my, mx + Math.cos(a) * l, my + Math.sin(a) * l, 3, 5);
+            });
+          }
+        }
+        g.lineCap = 'round'; g.lineJoin = 'round';
+        g.shadowColor = luce; g.shadowBlur = 14;
+        if (saetta.length) { linea(g, saetta, 3.2, luce); }
+        rami.forEach(function (r) { linea(g, r, 1.6, luce); });
+        g.shadowBlur = 0;
+        if (saetta.length) { linea(g, saetta, 1.1, '#ffffff'); }
+        g.fillStyle = nucleo; g.beginPath(); g.arc(mx, my, 2.6, 0, 6.283); g.fill();
+        if (v && saetta.length) { g.fillStyle = '#ffffff'; g.beginPath(); g.arc(v[0], v[1], 2.2, 0, 6.283); g.fill(); }
+        return !meno;
+      }
+    };
+  };
+
+  // Gocciolio (per Sifone): accanto al puntatore si gonfia una goccia; quando è piena si stacca, cade e schizza in
+  // goccioline che svaniscono. Correndo gocciola più spesso, sui link la goccia si gonfia in fretta; al clic uno spruzzo.
+  STILI.gocciolio = function () {
+    var T = tela({ mondo: true }), st = {}, gonfia = 0, gocce = [], schizzi = [];
+    var acqua = risolvi(CFG.ringColor || '#4fb3e8');
+    function spruzza(x, y, n, forza) {
+      for (var i = 0; i < n; i++) {
+        var a = -Math.PI * (0.1 + 0.8 * Math.random());
+        schizzi.push({ x: x, y: y, vx: Math.cos(a) * forza * (0.5 + Math.random()), vy: Math.sin(a) * forza * (0.6 + Math.random()), v: 1 });
+      }
+    }
+    window.addEventListener('pointerdown', function (e) {
+      if (meno || e.pointerType === 'touch') return;
+      var o = scosta(); spruzza(mx + o[0], my + o[1], 10, 3.2); chiedi();
+    });
+    function goccia(g, x, y, r, lunga) {
+      g.beginPath(); g.moveTo(x, y - r * (2 + lunga));
+      g.quadraticCurveTo(x + r * 1.15, y - r * 0.7, x + r, y);
+      g.arc(x, y, r, 0, Math.PI);
+      g.quadraticCurveTo(x - r * 1.15, y - r * 0.7, x, y - r * (2 + lunga));
+      g.fill();
+    }
+    return {
+      frame: function (t) {
+        var s = passo(st, t), o = scosta(), hx = mx + o[0], hy = my + o[1];
+        var corsa = Math.min(1, Math.hypot(vx, vy) / 20);
+        vx *= 0.85; vy *= 0.85;
+        if (!meno) gonfia += (0.008 + corsa * 0.03 + (hot ? 0.02 : 0)) * s;
+        if (gonfia >= 1) { gonfia = 0; gocce.push({ x: hx, y: hy + 4, y0: hy + 4, vy: 0.6 }); }
+        var g = pulisci(T);
+        g.fillStyle = acqua;
+        gocce = gocce.filter(function (d) {
+          d.vy += 0.38 * s; d.y += d.vy * s;
+          if (d.y - d.y0 > 160) { spruzza(d.x, d.y, 6, 2.2); return false; }
+          g.globalAlpha = 0.95; goccia(g, d.x, d.y, 3.2, Math.min(1.4, d.vy / 6));
+          return true;
+        });
+        schizzi = schizzi.filter(function (p) {
+          p.vy += 0.22 * s; p.x += p.vx * s; p.y += p.vy * s; p.v -= 0.035 * s;
+          if (p.v <= 0) return false;
+          g.globalAlpha = p.v; g.beginPath(); g.arc(p.x, p.y, 1.6, 0, 6.283); g.fill();
+          return true;
+        });
+        g.globalAlpha = 1;
+        var r = 1.6 + gonfia * 2.4;
+        goccia(g, hx, hy + r, r, gonfia * 0.6);
+        g.fillStyle = 'rgba(255,255,255,.7)'; g.beginPath(); g.arc(hx - r * 0.35, hy + r * 0.7, Math.max(0.6, r * 0.28), 0, 6.283); g.fill();
+        return gocce.length > 0 || schizzi.length > 0 || t - ultimo < 3000;
+      }
+    };
+  };
+
+  // Rullo (per Due Mani): un rullo da imbianchino accanto al puntatore; dove passa lascia una pennellata larga, a righe
+  // come la vernice stesa, che si asciuga in un secondo e mezzo. Sui link il rullo si inclina, come per caricarsi.
+  STILI.rullo = function () {
+    var T = tela({ mondo: true }), st = {}, tratti = [], incl = 0;
+    var vernice = risolvi(CFG.dotColor || '#c8553d'), manico = risolvi(CFG.ringColor || '#2b2b2b');
+    var VITA = 1500;
+    return {
+      punto: function (t) {
+        if (meno) return;
+        var o = scosta();
+        tratti.push({ x: mx + o[0], y: my + o[1] + 6, t: t });
+        if (tratti.length > 160) tratti.shift();
+      },
+      frame: function (t) {
+        var s = passo(st, t), o = scosta();
+        incl += ((hot ? -0.45 : 0) - incl) * 0.18 * s;
+        while (tratti.length && t - tratti[0].t > VITA) tratti.shift();
+        var g = pulisci(T);
+        g.lineCap = 'butt'; g.lineJoin = 'round';
+        for (var i = 1; i < tratti.length; i++) {
+          var a = tratti[i - 1], b = tratti[i], k = 1 - (t - b.t) / VITA;
+          if (Math.hypot(b.x - a.x, b.y - a.y) > 140) continue;
+          g.globalAlpha = Math.max(0, k) * 0.5; g.strokeStyle = vernice; g.lineWidth = 22;
+          g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); g.stroke();
+          g.globalAlpha = Math.max(0, k) * 0.22; g.strokeStyle = '#ffffff'; g.lineWidth = 1.2;
+          [-7, -2, 4, 8].forEach(function (d) { g.beginPath(); g.moveTo(a.x, a.y + d); g.lineTo(b.x, b.y + d); g.stroke(); });
+        }
+        g.globalAlpha = 1;
+        g.save(); T.glifo(g, mx + o[0], my + o[1]); g.rotate(incl);
+        // il manico e la staffa, poi il cilindro
+        g.strokeStyle = manico; g.lineWidth = 2; g.lineCap = 'round';
+        g.beginPath(); g.moveTo(14, 2); g.lineTo(18, -4); g.lineTo(6, -9); g.lineTo(6, -14); g.stroke();
+        g.lineWidth = 4.5; g.beginPath(); g.moveTo(6, -14); g.lineTo(4, -26); g.stroke();
+        g.fillStyle = vernice; g.beginPath();
+        if (g.roundRect) g.roundRect(-14, 0, 28, 11, 3); else g.rect(-14, 0, 28, 11);
+        g.fill();
+        g.fillStyle = 'rgba(255,255,255,.28)'; g.fillRect(-12, 2, 24, 2.5);
+        g.restore();
+        return tratti.length > 0 || Math.abs((hot ? -0.45 : 0) - incl) > 0.005;
+      }
+    };
+  };
+
+  // Livella (per Filo a Piombo): una livella da muratore accanto al puntatore. Correndo la bolla scappa dalla parte
+  // opposta e la livella si inclina appena; ferma, la bolla torna in mezzo alle tacche e la fiala si fa verde. Sui link
+  // la bolla va subito in bolla.
+  STILI.livella = function () {
+    var T = tela(), st = {}, bolla = 0, bv = 0, incl = 0, verde = 0;
+    var corpo = risolvi(CFG.ringColor || '#e8b923'), fiala = risolvi(CFG.dotColor || '#8fd16a');
+    return {
+      frame: function (t) {
+        var s = passo(st, t), o = scosta();
+        var spinta = meno ? 0 : Math.max(-1, Math.min(1, -vx / 18));
+        vx *= 0.82; vy *= 0.82;
+        var meta = hot ? 0 : spinta;
+        bv += ((meta - bolla) * 0.12 - bv * 0.25) * s; bolla += bv * s;
+        incl += ((meno || hot ? 0 : Math.max(-0.18, Math.min(0.18, spinta * 0.18))) - incl) * 0.15 * s;
+        var ferma = Math.abs(bolla) < 0.06 && Math.abs(bv) < 0.01;
+        verde += ((ferma ? 1 : 0) - verde) * 0.12 * s;
+        var g = pulisci(T);
+        g.save(); g.translate(mx + o[0] + 8, my + o[1]); g.rotate(incl);
+        g.fillStyle = corpo; g.beginPath();
+        if (g.roundRect) g.roundRect(-26, -6, 52, 12, 2.5); else g.rect(-26, -6, 52, 12);
+        g.fill();
+        g.fillStyle = 'rgba(0,0,0,.22)'; g.fillRect(-26, 3, 52, 3);
+        // la fiala: si colora di verde quando la bolla è in mezzo
+        g.fillStyle = 'rgba(255,255,255,.85)'; g.beginPath();
+        if (g.roundRect) g.roundRect(-11, -3.5, 22, 7, 3.5); else g.rect(-11, -3.5, 22, 7);
+        g.fill();
+        g.globalAlpha = verde; g.fillStyle = fiala; g.beginPath();
+        if (g.roundRect) g.roundRect(-11, -3.5, 22, 7, 3.5); else g.rect(-11, -3.5, 22, 7);
+        g.fill(); g.globalAlpha = 1;
+        g.strokeStyle = 'rgba(0,0,0,.55)'; g.lineWidth = 1;
+        g.beginPath(); g.moveTo(-3.5, -3.5); g.lineTo(-3.5, 3.5); g.moveTo(3.5, -3.5); g.lineTo(3.5, 3.5); g.stroke();
+        g.fillStyle = 'rgba(255,255,255,.95)'; g.strokeStyle = 'rgba(0,0,0,.35)';
+        g.beginPath(); g.ellipse(bolla * 7.5, 0, 3.2, 2.4, 0, 0, 6.283); g.fill(); g.stroke();
+        g.restore();
+        return !ferma || Math.abs(incl) > 0.002 || Math.abs((ferma ? 1 : 0) - verde) > 0.01;
+      }
+    };
+  };
+
+  // Trucioli (per Truciolo): una piccola pialla accanto al puntatore; correndo stacca trucioli di legno arricciati che
+  // girano, cadono e svaniscono. Sui link la pialla si alza come per dare l'ultima passata.
+  STILI.trucioli = function () {
+    var T = tela({ mondo: true }), st = {}, ricci = [], strada = 0, alza = 0;
+    var legno = risolvi(CFG.ringColor || '#d9a66b'), scuro = risolvi(CFG.dotColor || '#8a5a2b');
+    return {
+      punto: function () {
+        if (meno) return;
+        strada += Math.hypot(vx, vy);
+        if (strada > 70) {
+          strada = 0;
+          var o = scosta();
+          ricci.push({ x: mx + o[0] - 8, y: my + o[1] + 4, vx: -vx * 0.08 + (Math.random() - 0.5) * 1.2, vy: -1.4 - Math.random(),
+            r: Math.random() * 6.283, vr: (Math.random() - 0.5) * 0.25, v: 1, k: 4 + Math.random() * 3 });
+          if (ricci.length > 26) ricci.shift();
+        }
+      },
+      frame: function (t) {
+        var s = passo(st, t), o = scosta();
+        alza += ((hot ? 1 : 0) - alza) * 0.18 * s;
+        var g = pulisci(T);
+        ricci = ricci.filter(function (c) {
+          c.vy += 0.12 * s; c.x += c.vx * s; c.y += c.vy * s; c.r += c.vr * s; c.v -= 0.012 * s;
+          if (c.v <= 0) return false;
+          g.save(); g.translate(c.x, c.y); g.rotate(c.r); g.globalAlpha = Math.min(1, c.v * 1.4);
+          g.strokeStyle = legno; g.lineWidth = 2.6; g.lineCap = 'round'; g.beginPath();
+          for (var a = 0; a < 9.4; a += 0.3) { var rr = c.k * (1 - a / 12); var x = Math.cos(a) * rr, y = Math.sin(a) * rr * 0.75; if (a === 0) g.moveTo(x, y); else g.lineTo(x, y); }
+          g.stroke(); g.strokeStyle = scuro; g.lineWidth = 0.8; g.stroke();
+          g.restore();
+          return true;
+        });
+        g.globalAlpha = 1;
+        g.save(); T.glifo(g, mx + o[0], my + o[1] - alza * 6); g.rotate(-0.12 - alza * 0.25);
+        g.fillStyle = scuro; g.beginPath();
+        if (g.roundRect) g.roundRect(-14, -5, 28, 10, 2); else g.rect(-14, -5, 28, 10);
+        g.fill();
+        g.fillStyle = legno; g.beginPath(); g.ellipse(6, -7, 6, 4, 0, 0, 6.283); g.fill();
+        g.fillStyle = '#c9ced6'; g.fillRect(-3, 3, 7, 3);
+        g.restore();
+        return ricci.length > 0 || Math.abs((hot ? 1 : 0) - alza) > 0.005;
+      }
+    };
+  };
+
+  // Martello (per Incudine): un martello da fabbro accanto al puntatore, alzato; al clic cala di colpo e dalla punta
+  // escono le scintille del ferro battuto, che cadono e passano dal giallo al rosso. Sui link il martello si alza di più.
+  STILI.martello = function () {
+    var T = tela({ mondo: true }), st = {}, colpo = 0, scintille = [];
+    var testa = risolvi(CFG.ringColor || '#3a3a3a'), fuoco = risolvi(CFG.dotColor || '#ff8a1f');
+    window.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'touch') return;
+      colpo = 1;
+      if (!meno) {
+        for (var i = 0; i < 16; i++) {
+          var a = -Math.PI * Math.random(), f = 2 + Math.random() * 4.5;
+          scintille.push({ x: mx, y: my, vx: Math.cos(a) * f, vy: Math.sin(a) * f, v: 1 });
+        }
+      }
+      chiedi();
+    });
+    return {
+      frame: function (t) {
+        var s = passo(st, t), o = scosta();
+        colpo = Math.max(0, colpo - 0.09 * s);
+        var g = pulisci(T);
+        scintille = scintille.filter(function (p) {
+          p.vy += 0.2 * s; p.x += p.vx * s; p.y += p.vy * s; p.v -= 0.03 * s;
+          if (p.v <= 0) return false;
+          g.globalAlpha = p.v; g.strokeStyle = p.v > 0.6 ? '#fff3b0' : fuoco; g.lineWidth = 1.6;
+          g.beginPath(); g.moveTo(p.x, p.y); g.lineTo(p.x - p.vx * 2, p.y - p.vy * 2); g.stroke();
+          return true;
+        });
+        g.globalAlpha = 1;
+        // alzato di 50°, o di più sui link; al colpo cala fino a terra
+        var alto = hot ? -1.15 : -0.85, ang = alto + (0.3 - alto) * Math.pow(colpo, 0.6);
+        g.save(); T.glifo(g, mx + o[0] + 16, my + o[1] + 10); g.rotate(ang);
+        g.strokeStyle = '#8a5a2b'; g.lineWidth = 3.4; g.lineCap = 'round'; g.beginPath(); g.moveTo(0, 0); g.lineTo(-22, 0); g.stroke();
+        g.fillStyle = testa; g.fillRect(-28, -7, 9, 14);
+        g.fillStyle = 'rgba(255,255,255,.25)'; g.fillRect(-28, -7, 9, 3);
+        g.restore();
+        return colpo > 0 || scintille.length > 0;
+      }
+    };
+  };
+
+  // Bullone (per Cric): la testa esagonale di un bullone accanto al puntatore, che gira con la strada fatta (avanti
+  // andando a destra, indietro a sinistra); sui link si avvita veloce e rimpicciolisce, come stretto a fondo.
+  STILI.bullone = function () {
+    var T = tela(), st = {}, ang = 0, stretto = 0;
+    var acciaio = risolvi(CFG.ringColor || '#c3c9d1'), segno = risolvi(CFG.dotColor || '#f2b134');
+    return {
+      frame: function (t) {
+        var s = passo(st, t), o = scosta();
+        if (!meno) ang += vx * 0.03 + (hot ? 0.22 * s : 0);
+        vx *= 0.8; vy *= 0.8;
+        stretto += ((hot ? 1 : 0) - stretto) * 0.15 * s;
+        var g = pulisci(T), R = 11 - stretto * 3;
+        g.save(); g.translate(mx + o[0] + 2, my + o[1] + 2); g.rotate(ang);
+        g.fillStyle = acciaio; g.strokeStyle = 'rgba(0,0,0,.45)'; g.lineWidth = 1.2; g.beginPath();
+        for (var k = 0; k < 6; k++) { var a = k * Math.PI / 3; g[k ? 'lineTo' : 'moveTo'](Math.cos(a) * R, Math.sin(a) * R); }
+        g.closePath(); g.fill(); g.stroke();
+        g.beginPath(); g.arc(0, 0, R * 0.55, 0, 6.283); g.strokeStyle = 'rgba(0,0,0,.35)'; g.stroke();
+        g.fillStyle = segno; g.fillRect(-R * 0.55, -1, R * 1.1, 2);
+        g.restore();
+        return Math.abs(vx) > 0.05 || hot || Math.abs((hot ? 1 : 0) - stretto) > 0.005;
+      }
+    };
+  };
+
+  // Scovolo (per Fuliggine): lo scovolo tondo dello spazzacamino accanto al puntatore, con le setole a raggiera che
+  // girano col movimento; correndo lascia cadere granelli di fuliggine. Sui link gira da solo, come dentro la canna.
+  STILI.scovolo = function () {
+    var T = tela({ mondo: true }), st = {}, ang = 0, grani = [];
+    var setole = risolvi(CFG.ringColor || '#2a2624'), manico = risolvi(CFG.dotColor || '#c0782f');
+    return {
+      punto: function () {
+        if (meno) return;
+        var corsa = Math.hypot(vx, vy);
+        if (corsa > 4 && Math.random() < 0.6) {
+          var o = scosta();
+          grani.push({ x: mx + o[0] + (Math.random() - 0.5) * 18, y: my + o[1] + (Math.random() - 0.5) * 18, vx: (Math.random() - 0.5) * 0.6,
+            vy: 0.4 + Math.random() * 0.8, v: 1, r: 0.8 + Math.random() * 1.6 });
+          if (grani.length > 80) grani.shift();
+        }
+      },
+      frame: function (t) {
+        var s = passo(st, t), o = scosta();
+        if (!meno) ang += (vx * 0.02 + vy * 0.02) * s + (hot ? 0.12 * s : 0);
+        vx *= 0.85; vy *= 0.85;
+        var g = pulisci(T);
+        g.fillStyle = '#3b3632';
+        grani = grani.filter(function (p) {
+          p.vy += 0.05 * s; p.x += p.vx * s; p.y += p.vy * s; p.v -= 0.016 * s;
+          if (p.v <= 0) return false;
+          g.globalAlpha = p.v * 0.8; g.beginPath(); g.arc(p.x, p.y, p.r, 0, 6.283); g.fill();
+          return true;
+        });
+        g.globalAlpha = 1;
+        var cx = mx + o[0] + 4, cy = my + o[1] + 4;
+        g.strokeStyle = manico; g.lineWidth = 2.4; g.lineCap = 'round'; g.beginPath(); g.moveTo(cx, cy); g.lineTo(cx + 16, cy + 16); g.stroke();
+        g.save(); T.glifo(g, cx, cy); g.rotate(ang);
+        g.strokeStyle = setole; g.lineWidth = 1.3;
+        for (var k = 0; k < 22; k++) { var a = k * 6.283 / 22, l = 10 + (k % 3); g.beginPath(); g.moveTo(Math.cos(a) * 2.5, Math.sin(a) * 2.5); g.lineTo(Math.cos(a) * l, Math.sin(a) * l); g.stroke(); }
+        g.fillStyle = manico; g.beginPath(); g.arc(0, 0, 2.6, 0, 6.283); g.fill();
+        g.restore();
+        return grani.length > 0 || Math.abs(vx) + Math.abs(vy) > 0.1 || !!hot;
+      }
+    };
+  };
+
+  // Irrigatore (per Rastrello): la testina di un irrigatore oscillante accanto al puntatore; quando ci si muove spruzza a
+  // ventaglio, avanti e indietro, goccioline che fanno l'arco e cadono. Sui link il ventaglio si apre del tutto.
+  STILI.irrigatore = function () {
+    var T = tela({ mondo: true }), st = {}, fase = 0, gocce = [], acceso = 0;
+    var acqua = risolvi(CFG.ringColor || '#7cc6f2'), verde = risolvi(CFG.dotColor || '#2f7d4f');
+    return {
+      frame: function (t) {
+        var s = passo(st, t), o = scosta(), corsa = Math.min(1, Math.hypot(vx, vy) / 14);
+        vx *= 0.86; vy *= 0.86;
+        acceso += ((corsa > 0.08 || hot ? 1 : 0) - acceso) * 0.15 * s;
+        fase += 0.06 * s;
+        var cx = mx + o[0] + 6, cy = my + o[1] + 8, apertura = hot ? 1.2 : 0.7;
+        var dir = -Math.PI / 2 + Math.sin(fase) * apertura;
+        if (!meno && acceso > 0.3) {
+          for (var i = 0; i < 2; i++) {
+            var a = dir + (Math.random() - 0.5) * 0.25, f = 3 + Math.random() * 1.6;
+            gocce.push({ x: cx + Math.cos(dir) * 6, y: cy + Math.sin(dir) * 6, vx: Math.cos(a) * f, vy: Math.sin(a) * f, v: 1 });
+          }
+          if (gocce.length > 120) gocce.splice(0, gocce.length - 120);
+        }
+        var g = pulisci(T);
+        g.fillStyle = acqua;
+        gocce = gocce.filter(function (p) {
+          p.vy += 0.16 * s; p.x += p.vx * s; p.y += p.vy * s; p.v -= 0.022 * s;
+          if (p.v <= 0) return false;
+          g.globalAlpha = p.v * 0.85; g.beginPath(); g.arc(p.x, p.y, 1.4, 0, 6.283); g.fill();
+          return true;
+        });
+        g.globalAlpha = 1;
+        g.fillStyle = verde; g.beginPath();
+        if (g.roundRect) g.roundRect(cx - 7, cy, 14, 6, 2); else g.rect(cx - 7, cy, 14, 6);
+        g.fill();
+        g.save(); T.glifo(g, cx, cy); g.rotate(dir + Math.PI / 2);
+        g.fillStyle = '#c9ced6'; g.fillRect(-1.6, -8, 3.2, 8);
+        g.restore();
+        return gocce.length > 0 || acceso > 0.01;
+      }
+    };
+  };
+
+  // Diamante (per Scheggia): il tagliavetro, col manico e la punta di diamante sul puntatore; dove passa resta un graffio
+  // sottile e chiaro con qualche luccichio, che svanisce. Al clic una piccola stella di crepe, che si richiude.
+  STILI.diamante = function () {
+    var T = tela({ mondo: true }), st = {}, segno = [], stelle = [];
+    var vetro = risolvi(CFG.ringColor || '#d8f3ff'), manico = risolvi(CFG.dotColor || '#2c7a7b');
+    var VITA = 1600;
+    window.addEventListener('pointerdown', function (e) {
+      if (meno || e.pointerType === 'touch') return;
+      var raggi = [];
+      for (var i = 0; i < 7; i++) {
+        var a = i * 6.283 / 7 + Math.random() * 0.5, l = 14 + Math.random() * 22, p = [[0, 0]];
+        for (var k = 1; k <= 3; k++) p.push([Math.cos(a) * l * k / 3 + (Math.random() - 0.5) * 4, Math.sin(a) * l * k / 3 + (Math.random() - 0.5) * 4]);
+        raggi.push(p);
+      }
+      var o = scosta();
+      stelle.push({ x: mx + o[0], y: my + o[1], t: performance.now(), r: raggi });
+      chiedi();
+    });
+    return {
+      punto: function (t) { if (!meno) { var o = scosta(); segno.push({ x: mx + o[0], y: my + o[1], t: t }); if (segno.length > 140) segno.shift(); } },
+      frame: function (t) {
+        var g = pulisci(T);
+        while (segno.length && t - segno[0].t > VITA) segno.shift();
+        stelle = stelle.filter(function (s) { return t - s.t < 1300; });
+        g.lineCap = 'round';
+        for (var i = 1; i < segno.length; i++) {
+          var a = segno[i - 1], b = segno[i], k = 1 - (t - b.t) / VITA;
+          if (Math.hypot(b.x - a.x, b.y - a.y) > 120) continue;
+          g.globalAlpha = Math.max(0, k) * 0.9; g.strokeStyle = vetro; g.lineWidth = 1.1;
+          g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); g.stroke();
+          if (i % 9 === 0) { g.fillStyle = '#ffffff'; g.beginPath(); g.arc(b.x, b.y, 1.6 * k, 0, 6.283); g.fill(); }
+        }
+        stelle.forEach(function (s) {
+          var e = (t - s.t) / 1300;
+          g.globalAlpha = 1 - e; g.strokeStyle = vetro; g.lineWidth = 1;
+          s.r.forEach(function (p) {
+            g.beginPath(); g.moveTo(s.x, s.y);
+            for (var k = 1; k < p.length; k++) g.lineTo(s.x + p[k][0], s.y + p[k][1]);
+            g.stroke();
+          });
+        });
+        g.globalAlpha = 1;
+        // il tagliavetro: la punta sul puntatore, il manico in basso a destra come la freccia
+        var oo = scosta();
+        g.save(); T.glifo(g, mx + oo[0], my + oo[1]); g.rotate(0.62);
+        g.fillStyle = '#c9ced6'; g.fillRect(-1.5, 2, 3, 8);
+        g.fillStyle = vetro; g.beginPath(); g.moveTo(0, 0); g.lineTo(2.4, 3); g.lineTo(-2.4, 3); g.closePath(); g.fill();
+        g.fillStyle = manico; g.beginPath();
+        if (g.roundRect) g.roundRect(-3, 10, 6, 22, 3); else g.rect(-3, 10, 6, 22);
+        g.fill();
+        g.restore();
+        return segno.length > 0 || stelle.length > 0;
+      }
+    };
+  };
+
+  // Atomo (per Ti Consiglia, 10 nov 2026): sulla punta del puntatore un piccolo atomo, il nucleo e tre orbite. Muovendosi
+  // gli elettroni girano, più in fretta quanto più si corre, e da fermi rallentano fino a fermarsi; sui link l'atomo si
+  // eccita (le orbite si allargano e gli elettroni non si fermano) e al clic emette un fotone, un'onda che si allontana.
+  // 11 nov 2026 (utente: «deve stare sulla punta e il mouse è decisamente troppo grande»): centrato sulla punta anche con
+  // la freccia di sistema visibile (prima stava 18 px a destra e 22 sotto) e disegnato a SCALA (circa 16 px, 23 sui link).
+  STILI.atomo = function () {
+    var T = tela({ mondo: true }), st = {}, fase = 0, giri = 0.02, eccita = 0, fotoni = [], SCALA = 0.62;
+    var orbita = risolvi(CFG.ringColor || '#e6b057'), carica = risolvi(CFG.dotColor || '#f6e09b');
+    function scosta() { return [0, 0]; }
+    window.addEventListener('pointerdown', function (e) {
+      if (meno || e.pointerType === 'touch') return;
+      var o = scosta();
+      fotoni.push({ x: mx + o[0], y: my + o[1], t: performance.now(), a: Math.random() * 6.283 });
+      if (fotoni.length > 6) fotoni.shift();
+      chiedi();
+    });
+    return {
+      frame: function (t) {
+        var s = passo(st, t), o = scosta();
+        var corsa = meno ? 0 : Math.min(1, Math.hypot(vx, vy) / 24);
+        vx *= 0.8; vy *= 0.8;
+        giri += ((meno ? 0 : corsa * 0.32 + (hot ? 0.06 : 0)) - giri) * 0.08 * s;
+        fase += giri * s;
+        eccita += ((hot ? 1 : 0) - eccita) * 0.14 * s;
+        var g = pulisci(T), cx = mx + o[0], cy = my + o[1];
+        var rx = 13 + eccita * 6, ry = 4.6 + eccita * 1.8;
+        // i fotoni: un'onda corta che parte dal nucleo e svanisce
+        fotoni = fotoni.filter(function (f) { return t - f.t < 900; });
+        fotoni.forEach(function (f) {
+          var e = (t - f.t) / 900, d = 10 + e * 70;
+          g.save(); g.translate(f.x, f.y); g.rotate(f.a); g.scale(SCALA, SCALA);
+          g.globalAlpha = 1 - e; g.strokeStyle = carica; g.lineWidth = 1.4 / SCALA; g.beginPath();
+          for (var k = 0; k <= 22; k++) { var x = d + k * 1.2, y = Math.sin(k * 0.9 - e * 12) * 3.2; if (k === 0) g.moveTo(x, y); else g.lineTo(x, y); }
+          g.stroke(); g.restore();
+        });
+        g.globalAlpha = 1;
+        // lo spessore delle orbite resta quello di prima (0,9 px) anche rimpicciolito: si leggono ancora sul fondo scuro
+        g.save(); g.translate(cx, cy); g.scale(SCALA, SCALA);
+        for (var i = 0; i < 3; i++) {
+          var r = i * 1.0472;
+          g.save(); g.rotate(r);
+          g.globalAlpha = 0.5 + eccita * 0.3; g.strokeStyle = orbita; g.lineWidth = 0.9 / SCALA;
+          g.beginPath(); g.ellipse(0, 0, rx, ry, 0, 0, 6.283); g.stroke();
+          var a = fase * (1 + i * 0.18) + i * 2.1;
+          g.globalAlpha = 1; g.fillStyle = carica;
+          g.beginPath(); g.arc(Math.cos(a) * rx, Math.sin(a) * ry, 1.9, 0, 6.283); g.fill();
+          g.restore();
+        }
+        // il nucleo: tre nucleoni stretti
+        g.fillStyle = orbita;
+        g.beginPath(); g.arc(-1.3, -0.8, 2.1, 0, 6.283); g.fill();
+        g.beginPath(); g.arc(1.4, -0.5, 2.1, 0, 6.283); g.fill();
+        g.fillStyle = carica;
+        g.beginPath(); g.arc(0, 1.3, 2.1, 0, 6.283); g.fill();
+        g.restore();
+        return giri > 0.004 || Math.abs((hot ? 1 : 0) - eccita) > 0.01 || fotoni.length > 0 || !!hot;
       }
     };
   };

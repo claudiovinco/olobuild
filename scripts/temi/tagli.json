@@ -1,0 +1,90 @@
+[
+{
+"larg": 390,
+"pagina": "/",
+"lingua": "it",
+"tipo": "testo",
+"testo": "Due Shuttle",
+"dove": ".olc-in < .olc-nome",
+"perche": "clip-path inset(-60% 98.2318% -60% -12%)",
+"px": 103,
+"y": 10550
+},
+{
+"larg": 390,
+"pagina": "/",
+"lingua": "it",
+"tipo": "testo",
+"testo": "a prezzi di oggi",
+"dove": ".olc-in < .olc-desc",
+"perche": "clip-path inset(-60% 98.2318% -60% -12%)",
+"px": 103,
+"y": 10550
+},
+{
+"larg": 390,
+"pagina": "/",
+"lingua": "it",
+"tipo": "testo",
+"testo": "Energia per deviare l’asteroide",
+"dove": ".olc-in < .olc-nome",
+"perche": "clip-path inset(-60% 28.3681% -60% -12%)",
+"px": 61,
+"y": 11394
+},
+{
+"larg": 390,
+"pagina": "/",
+"lingua": "it",
+"tipo": "testo",
+"testo": "7 miliardi di miliardi di €",
+"dove": ".olc-in < .olc-prezzo",
+"perche": "clip-path inset(-60% 28.3681% -60% -12%)",
+"px": 87,
+"y": 11394
+},
+{
+"larg": 390,
+"pagina": "/",
+"lingua": "it",
+"tipo": "testo",
+"testo": "a 12 centesimi al chilowattora, prezzo all’ingrosso del 2025",
+"dove": ".olc-in < .olc-desc",
+"perche": "clip-path inset(-60% 28.3681% -60% -12%)",
+"px": 61,
+"y": 11394
+},
+{
+"larg": 820,
+"pagina": "/",
+"lingua": "it",
+"tipo": "testo",
+"testo": "7 miliardi di miliardi di €",
+"dove": ".olc-in < .olc-prezzo",
+"perche": "clip-path inset(-60% 13.0484% -60% -12%)",
+"px": 87,
+"y": 10800
+},
+{
+"larg": 1440,
+"pagina": "/",
+"lingua": "it",
+"tipo": "testo",
+"testo": "Due Shuttle",
+"dove": ".olc-in < .olc-nome",
+"perche": "clip-path inset(-60% 90.2386% -60% -12%)",
+"px": 64,
+"y": 8550
+},
+{
+"larg": 1440,
+"pagina": "/",
+"lingua": "it",
+"tipo": "testo",
+"testo": "7 miliardi di miliardi di €",
+"dove": ".olc-in < .olc-prezzo",
+"perche": "clip-path inset(-60% 17.7946% -60% -12%)",
+"px": 123,
+"y": 9450
+}
+]

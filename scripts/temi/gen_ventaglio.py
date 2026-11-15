@@ -2,9 +2,10 @@
 """Genera il tema «Ventaglio» (id ventaglio): una sartoria di Palermo che cuce abiti d'estate in lino e seta stampata, e
 regala con ogni abito un ventaglio della stessa stoffa.
 
-La trovata: «il ventaglio che si apre». In apertura, sopra il mare di Cefalù, c'è un ventaglio chiuso: scorrendo le sue
-nove stecche, ognuna la foto di un abito, si aprono a mezzaluna attorno al perno (livelli dello Slider Pro che ruotano
-attorno al punto in basso) e mostrano tutta la collezione. Più giù le stoffe in una galleria a ventaglio 3D (Galleria pro,
+La trovata: «il ventaglio che si apre». In apertura, sopra il mare di Cefalù, c'è un ventaglio chiuso: scorrendo i suoi
+quattordici spicchi di stoffa stampata si aprono a mezzaluna attorno al perno (livelli dello Slider Pro che ruotano
+attorno al punto in basso), la stampa si ricompone intera e il ventaglio fa aria (dal 15 nov 2026; prima le stecche
+erano le foto degli abiti). Più giù le stoffe in una galleria a ventaglio 3D (Galleria pro,
 coverflow).
 
 Tema chiaro: sabbia, corallo, verde fico d'India e giallo limone. Titoli in Yeseva One, testo in Jost, dati in Spline Sans
@@ -49,7 +50,10 @@ SAND = f('23495502', '5618939', '33135578', '30979923', '9532741')
 MERC = f('18525765', '5801963', '23025213', '20000379')
 LOGO_S, LOGO_C = 'logo-ventaglio-scuro.png', 'logo-ventaglio-chiaro.png'
 PHOTOS = VENT + ABIT + FIOR + SICI + SETA + DONN + LINO + TERR + SAND + MERC
-MEDIA = set(PHOTOS) | {v + '.mp4' for v in VIDEOS} | {v + '.jpg' for v in VIDEOS} | {LOGO_S, LOGO_C}
+# la stoffa di ogni abito da vicino (ritagliata dalla sua foto): compare al passaggio sulla scheda, ed è la stoffa del ventaglio
+STOFFE = ['11425100', '7789140', '30603525', '28292602', '7509903', '31649718', '18444202', '38270321']
+MEDIA = (set(PHOTOS) | {v + '.mp4' for v in VIDEOS} | {v + '.jpg' for v in VIDEOS} | {LOGO_S, LOGO_C}
+         | {'ventaglio-stoffa-%s.jpg' % n for n in STOFFE} | {'ventaglio-piega-%02d.png' % k for k in range(14)})
 
 K = Kit(ID, MEDIA, raggio=10, peso_titoli='400', corsivo=False, maiuscole_pulsanti=True, tema_chiaro=True,
         accento_su_media='#F6C77A')
@@ -73,22 +77,43 @@ def build_footer():
 
 
 # ── L'apertura: il ventaglio che si apre ──
+# Il ventaglio vero (15 nov 2026; prima nove stecche-foto degli abiti): quattordici spicchi di stoffa a fisarmonica
+# (disegni_aperture_cinque.py: la stessa stoffa stampata tagliata a spicchi già ruotati al contrario, così che aperto la
+# stampa si ricompone intera) con le stecche di bambù fra il perno e la stoffa. Chiuso è una stecca sola; scorrendo gli
+# spicchi si aprono tutti insieme, come li tiene la stoffa, fino a 140°, poi il ventaglio fa aria: due colpi di polso
+# attorno al perno, sempre più piccoli.
+PIEGHE = 14
+APERTURA = 140.0
+PERNO_A = 1000 / 1014.0      # il perno nel disegno dello spicchio: al 98,62 % dell'altezza, in mezzo
+
+
 def apertura(t):
     m = K.mob
-    foto = [ABIT[0], FIOR[0], LINO[0], ABIT[3], FIOR[2], ABIT[2], LINO[3], FIOR[4], ABIT[5]]
     livelli = K.veli('ve-velo', 'sinistra', 32, 54, colore=C['nero'], forza=80, mobile_da=0, mobile_alto=24)
-    for k, img in enumerate(foto):
-        ang = -56 + k * 14
-        da = 10 + abs(k - 4) * 3
+    th = APERTURA / PIEGHE
+
+    def box(px, py, raggio_h, tela_w, tela_h):
+        """il riquadro di uno spicchio (208 × 1014 px, raggio 1000) col perno in (px, py) %, raggio in % dell'altezza"""
+        s = raggio_h / 100.0 * tela_h / 1000.0
+        w = 208 * s / tela_w * 100
+        h = 1014 * s / tela_h * 100
+        return round(px - w / 2, 3), round(py - PERNO_A * h, 3), round(w, 3), round(h, 3)
+    dx, dy, dw, dh = box(70.0, 91.45, 56, 1440, 810)
+    mx, my, mw, mh = box(50.0, 71.0, 23, 390, 844)
+    for k in range(PIEGHE):
+        a = -APERTURA / 2 + th * (k + 0.5)
+        tappe = [{'p': 0, 'r': 0}, {'p': 10, 'r': 0}, {'p': 58, 'r': round(a, 2)}, {'p': 64, 'r': round(a + 5, 2)},
+                 {'p': 71, 'r': round(a - 3.5, 2)}, {'p': 78, 'r': round(a + 2, 2)}, {'p': 85, 'r': round(a - 0.8, 2)},
+                 {'p': 90, 'r': round(a, 2)}, {'p': 100, 'r': round(a, 2)}]
         livelli.append(K.livello(
-            've-s%d' % k, tipo='image', imageSrc=K.img(img), objectFit='cover', objectPosition='center 30%', x=69.75, y=36, w=6.5,
-            h=56, borderRadius=48, entra='fadeInUp', ritardo=150 + abs(k - 4) * 60, durata=700,
-            customCSS='transform-origin:50% 100%;box-shadow:0 10px 26px rgba(0,0,0,.35);outline:3px solid var(--olo-color-background);',
-            scrollMove={'inizio': 0, 'fine': 100, 'tappe': [{'p': 0, 'r': 0}, {'p': da, 'r': 0}, {'p': 58, 'r': ang}, {'p': 100, 'r': ang}]},
-            responsive={'mobile': {'x': 44.5, 'y': 46, 'width': 11, 'height': 24}}))
-    livelli.append(K.livello('ve-perno', tipo='shape', x=72.3, y=90.2, w=1.4, h=2.5, bgColor=C['acc'], borderRadius=999, entra='fadeIn',
+            've-p%d' % k, tipo='image', imageSrc=K.img('ventaglio-piega-%02d.png' % k), imageAlt='' if k else 'Il ventaglio',
+            objectFit='contain', objectPosition='50% 100%', x=dx, y=dy, w=dw, h=dh, entra='fadeInUp', ritardo=150, durata=700,
+            customCSS='transform-origin:50%% %.2f%%;' % (PERNO_A * 100),
+            scrollMove={'inizio': 0, 'fine': 100, 'tappe': tappe},
+            responsive={'mobile': {'x': mx, 'y': my, 'width': mw, 'height': mh}}))
+    livelli.append(K.livello('ve-perno', tipo='shape', x=69.3, y=90.2, w=1.4, h=2.5, bgColor=C['acc'], borderRadius=999, entra='fadeIn',
                              ritardo=600, durata=500, customCSS='box-shadow:0 0 0 3px var(--olo-color-background);',
-                             responsive={'mobile': {'x': 48.4, 'y': 69.3, 'width': 3.2, 'height': 1.5}}))
+                             responsive={'mobile': {'x': 48.4, 'y': 70.25, 'width': 3.2, 'height': 1.5}}))
     livelli += [
         K.livello('ve-o', contenuto='Ventaglio · abiti d’estate · Palermo', x=6, y=16, w=44, size=13, peso='500', colore=mix('#FFFFFF', 88),
                   letterSpacing=3, textTransform='uppercase', fontFamily=MONO, ritardo=150,
@@ -99,7 +124,7 @@ def apertura(t):
         K.livello('ve-t2', contenuto='col caldo.', tag='p', x=6, y=35, w=40, size=100, peso='400', fontFamily='Yeseva One',
                   colore='#F6C77A', lineHeight=0.95, entra='maskFromBottom', ritardo=500, durata=1000,
                   responsive={'mobile': {'fontSize': m(48), 'x': 6, 'y': 15.5, 'width': 88}}),
-        K.livello('ve-s', contenuto='Scorrete: il ventaglio si apre, e ogni stecca è un abito della collezione.', x=6, y=54, w=32,
+        K.livello('ve-s', contenuto='Abiti d’estate in lino e seta stampata, cuciti a Palermo. Con ognuno, il suo ventaglio.', x=6, y=54, w=32,
                   size=17, peso='400', colore=mix('#FFFFFF', 92), lineHeight=1.55, ritardo=800,
                   responsive={'mobile': {'fontSize': m(13), 'x': 6, 'y': 21, 'width': 86}}),
     ]
@@ -120,6 +145,17 @@ def apertura(t):
     return K.proslider(t, sl, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='fade', showArrows=False, showDots=False,
                        showTabs=False, showProgressBar=False, autoplay=False, parallax=False, scrollTimeline=True,
                        scrollTimelineDistance=1600, scrollStep=False, heightMobile={'mode': 'px', 'value': 1400})
+
+
+def con_stoffa(el):
+    """Schede degli abiti: al passaggio la stoffa da vicino (seconda foto) e due colonne sul telefono."""
+    import re as _re
+    for it in el['settings']['items']:
+        m = _re.search(r'pexels-(\d+)\.jpg', (it.get('top_bg') or {}).get('image_url', ''))
+        if m and m.group(1) in STOFFE:
+            it['hover_image'] = K.img('ventaglio-stoffa-%s.jpg' % m.group(1))
+    el['settings']['columns_mobile'] = 2
+    return el
 
 
 def build_home():
@@ -143,11 +179,11 @@ def build_home():
     ], bg=solid(C['sala']), padding='large', width='large', style={'padding_top': 120, 'padding_bottom': 110}))
     out.append(t.section([
         t.one([K.sechead(t, 'La collezione', ['Quattro abiti,', 'quattro ventagli.'], size=60)]),
-        t.one([M.capi(K, t, [
+        t.one([con_stoffa(M.capi(K, t, [
             (ABIT[0], 'Abiti', 'Kalsa', '', 'Seta stampata a fiori, lunga.', '290 €', 'nuovo'),
             (LINO[0], 'Abiti', 'Mondello', '', 'Lino lavato, le maniche a pipistrello.', '240 €', ''),
             (FIOR[2], 'Abiti', 'Zisa', '', 'Cotone a fiori, al ginocchio.', '210 €', ''),
-            (ABIT[3], 'Abiti', 'Vucciria', '', 'Il rosso dei mercati, a portafoglio.', '260 €', '')], CAPI)]),
+            (ABIT[3], 'Abiti', 'Vucciria', '', 'Il rosso dei mercati, a portafoglio.', '260 €', '')], CAPI))]),
     ], padding='large', width='large', style={'padding_top': 120, 'padding_bottom': 110}))
     out.append(t.section([t.one([M.nastro(K, t, ['Lino e seta', 'Cuciti a Palermo', 'Un ventaglio in regalo', 'D’agosto serve'],
                                           fondo=C['sec'], colore='#FFFFFF', size=56)], anim=None)],
@@ -172,19 +208,19 @@ def build_collezione():
                    'stoffa, in regalo.', bg=K.video_bg(V_PRATO, overlay=30), size=96)]
     out.append(t.section([
         t.one([K.sechead(t, 'Seta e cotone', ['I fiori', 'dei giardini.'], size=60)]),
-        t.one([M.capi(K, t, [
+        t.one([con_stoffa(M.capi(K, t, [
             (ABIT[0], 'Abiti', 'Kalsa', '', 'Seta stampata, lunga.', '290 €', 'nuovo'),
             (FIOR[2], 'Abiti', 'Zisa', '', 'Cotone a fiori.', '210 €', ''),
             (FIOR[4], 'Abiti', 'Orto Botanico', '', 'Seta, i fiori grandi.', '300 €', ''),
-            (ABIT[5], 'Abiti', 'Favorita', '', 'Cotone, la gonna a ruota.', '230 €', '')], NEGOZI)]),
+            (ABIT[5], 'Abiti', 'Favorita', '', 'Cotone, la gonna a ruota.', '230 €', '')], NEGOZI))]),
     ], padding='large', width='large', style={'padding_top': 110, 'padding_bottom': 90}))
     out.append(t.section([
         t.one([K.sechead(t, 'Lino', ['Per le giornate', 'più calde.'], size=60)]),
-        t.one([M.capi(K, t, [
+        t.one([con_stoffa(M.capi(K, t, [
             (LINO[0], 'Abiti', 'Mondello', '', 'Le maniche a pipistrello.', '240 €', ''),
             (LINO[2], 'Abiti', 'Capo Gallo', '', 'Il lino bianco, lungo.', '250 €', ''),
             (LINO[3], 'Abiti', 'Arenella', '', 'Il lino ruggine.', '240 €', ''),
-            (ABIT[3], 'Abiti', 'Vucciria', '', 'Il rosso, a portafoglio.', '260 €', 'ultimi')], NEGOZI)]),
+            (ABIT[3], 'Abiti', 'Vucciria', '', 'Il rosso, a portafoglio.', '260 €', 'ultimi')], NEGOZI))]),
     ], bg=solid(C['sala']), padding='large', width='large', style={'padding_top': 110, 'padding_bottom': 110}))
     out.append(t.section([
         t.one([K.sechead(t, 'I ventagli', ['Della stessa', 'stoffa.'], size=60)]),
@@ -214,7 +250,7 @@ def build_sartoria():
         K.squadra(t, [(DONN[3], 'Rosalia Lo Bue', 'Fondatrice', 'Cuciva per le spose della Kalsa; poi ha pensato all’estate.',
                        'center 25%'),
                       (DONN[0], 'Mariam Diop', 'Sarta', 'Cuce gli abiti di seta, i più difficili.', 'center 25%'),
-                      (DONN[1], 'Giuseppe Ferrante', 'Ventagli', 'Monta i ventagli sulle stecche d’ulivo.', 'center 25%')],
+                      (DONN[1], 'Giuseppina Ferrante', 'Ventagli', 'Monta i ventagli sulle stecche d’ulivo.', 'center 25%')],
                   ratio='4/5', size='320', sfondo=C['sala']),
     ], bg=solid(C['sala']), padding='large', width='large', style={'padding_top': 120, 'padding_bottom': 100}))
     out.append(t.section([
@@ -275,8 +311,8 @@ THEME = tema(
     ID, NAME, 'Moda e bellezza', 'Il ventaglio che si apre',
     ['moda', 'abbigliamento', 'abiti', 'estate', 'palermo', 'sicilia', 'chiaro', 'slider pro', 'coverflow'],
     'Una sartoria di abiti d’estate che regala un ventaglio della stessa stoffa: in apertura, sopra il mare, un ventaglio '
-    'chiuso si apre a mezzaluna scorrendo e ogni stecca è la foto di un abito; poi le stoffe in una galleria a ventaglio, la '
-    'collezione, la sartoria nel cortile e i negozi.',
+    'di stoffa stampata, chiuso, si apre scorrendo piega dopo piega fino a mezzaluna e poi fa aria; poi le stoffe in una '
+    'galleria a ventaglio, la collezione con la stoffa da vicino al passaggio, la sartoria nel cortile e i negozi.',
     [('La collezione', CAPI), ('La sartoria', SARTORIA), ('Negozi', NEGOZI)],
     [('home', 'Home', None), ('collezione', 'La collezione', 'collezione'), ('la-sartoria', 'La sartoria', 'la-sartoria'),
      ('negozi', 'Negozi', 'negozi')],

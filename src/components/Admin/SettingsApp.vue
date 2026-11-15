@@ -27,6 +27,13 @@
         </a>
       </nav>
       <div class="spacer"></div>
+      <!-- Stessa barra delle altre pagine (16 nov 2026): menu stretto, ricerca, notifiche, guida, profilo. La ricerca
+           qui resta quella interna alle impostazioni (Ctrl+K va ai campi, vedi olo-palette.js). Prima: «Guida» e
+           «Anteprima sito» scritti, versione verde, «⌘ K» anche su Windows. -->
+      <button type="button" class="ico-btn" :aria-pressed="appMode ? 'true' : 'false'"
+              :title="t('Stringi il menu di WordPress')" :aria-label="t('Stringi il menu di WordPress')" @click="toggleAppMode">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
+      </button>
       <div class="top-search" role="search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <input
@@ -45,18 +52,18 @@
           data-1p-ignore
           data-lpignore="true"
         />
-        <span class="kbd">⌘ K</span>
+        <span class="kbd">{{ kbdRicerca }}</span>
       </div>
-      <div class="top-actions">
-        <a class="doc-link" :href="docsUrl" :target="docsEsterno ? '_blank' : null" :rel="docsEsterno ? 'noopener' : null">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2zM22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"/></svg>
-          {{ t('Guida') }}
-        </a>
-        <a class="doc-link" :href="siteUrl" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
-          {{ t('Anteprima sito') }}
-        </a>
-      </div>
+      <a class="ico-btn" :href="shell.notificheUrl" :title="t('Notifiche')" :aria-label="t('Notifiche')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 0112 0v5l2 2H4l2-2zM10 20a2 2 0 004 0"/></svg>
+      </a>
+      <a class="ico-btn" :href="docsUrl" :target="docsEsterno ? '_blank' : null" :rel="docsEsterno ? 'noopener' : null"
+         :title="t('Guida')" :aria-label="t('Guida')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 015 0c0 1.5-2.5 2-2.5 4M12 17h.01"/></svg>
+      </a>
+      <a class="ico-btn" :href="shell.profileUrl" :title="t('Profilo')" :aria-label="t('Profilo')">
+        <span class="av">{{ shell.initials }}</span>
+      </a>
     </header>
 
     <!-- ═══ Sub-nav dell'area attiva: la STESSA riga delle altre pagine della
@@ -358,6 +365,21 @@ const dashboardUrl = computed(() => (window.oloData?.adminUrl || '') + 'admin.ph
 const docsUrl = computed(() => window.oloData?.docsUrl || ((window.oloData?.adminUrl || '') + 'admin.php?page=olo-guida'));
 const docsEsterno = !!window.oloData?.docsEsterno;
 const siteUrl = computed(() => window.oloData?.siteUrl || '/');
+// La barra comune (come cockpit_shell_open): iniziali, profilo, notifiche, modalità app
+const shell = window.oloData?.shell || { initials: 'U', profileUrl: '', notificheUrl: '', appMode: false };
+const appMode = ref(!!shell.appMode);
+const kbdRicerca = /Mac|iPhone|iPad/i.test(navigator.platform || navigator.userAgent || '') ? '⌘ K' : 'Ctrl K';
+function toggleAppMode() {
+  appMode.value = !appMode.value;
+  document.body.classList.toggle('olobuild-app-mode', appMode.value);
+  const striscia = document.querySelector('.olo-cockpit-appback');
+  if (striscia) striscia.style.display = appMode.value ? '' : 'none';
+  fetch((window.oloData?.restUrl || '') + 'dashboard/prefs', {
+    method: 'POST', credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData?.nonce || '' },
+    body: JSON.stringify({ app_mode: appMode.value }),
+  }).catch(() => {});
+}
 
 // Le 4 aree della shell (dal localize PHP, single source = cockpit_areas()).
 // La console è la pagina dell'area Sistema; i tab traslocati dichiarano la
@@ -888,7 +910,7 @@ onMounted(() => {
 /* ── TOPBAR ────────────────────────────────────────────────────────── */
 .cfg-topbar {
   grid-area: topbar;
-  display: flex; align-items: center; gap: 16px;
+  display: flex; align-items: center; gap: 12px;
   padding: 0 24px;
   background: #fff;
   border-bottom: 1px solid var(--c-line);
@@ -903,18 +925,32 @@ onMounted(() => {
   transition: opacity .15s;
 }
 .cfg-topbar .brand-link:hover { opacity: .75; }
+/* logo, versione, pulsanti e avatar: le misure di .olo-cockpit-topbar (dashboard.css) */
 .cfg-topbar .brand-logo {
-  height: 28px; width: auto; display: block;
+  height: 22px; width: auto; display: block;
 }
 .cfg-topbar .brand-version {
-  font-size: 11px;
-  font-weight: 600;
-  background: var(--c-success-soft);
-  color: var(--c-success);
-  padding: 3px 8px;
-  border-radius: 999px;
-  font-family: var(--c-mono);
+  font-size: 10px; font-weight: 600; line-height: 1;
+  background: var(--c-red-soft);
+  color: var(--c-red-dark);
+  padding: 2px 7px;
+  border-radius: 99px;
   white-space: nowrap;
+}
+.cfg-topbar .ico-btn {
+  width: 32px; height: 32px; flex-shrink: 0;
+  border: 1px solid var(--c-line); border-radius: 6px;
+  background: #fff; color: var(--c-text-mute); cursor: pointer; padding: 0;
+  display: grid; place-items: center; text-decoration: none;
+}
+.cfg-topbar .ico-btn:hover { background: var(--c-bg); color: var(--c-text); }
+.cfg-topbar .ico-btn:focus-visible { outline: 2px solid var(--c-red); outline-offset: 2px; }
+.cfg-topbar .ico-btn[aria-pressed="true"] { background: var(--c-red-soft); color: var(--c-red-dark); }
+.cfg-topbar .ico-btn .av {
+  width: 22px; height: 22px; border-radius: 99px;
+  background: linear-gradient(135deg, var(--c-red), var(--c-red-dark));
+  color: #fff; display: grid; place-items: center;
+  font-size: 10px; font-weight: 700;
 }
 /* Le 4 aree in topbar: stesso linguaggio di .olo-area-tab della shell cockpit. */
 .cfg-topbar .areas {
@@ -987,18 +1023,6 @@ onMounted(() => {
   border-radius: 4px;
   padding: 1px 5px;
 }
-.cfg-topbar .top-actions { display: flex; align-items: center; gap: 8px; }
-.cfg-topbar .doc-link {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 13px; font-weight: 500;
-  color: var(--c-text-mute);
-  padding: 7px 12px;
-  border-radius: 8px;
-  text-decoration: none;
-  white-space: nowrap;
-}
-.cfg-topbar .doc-link:hover { background: var(--c-bg); color: var(--c-navy); }
-.cfg-topbar .doc-link svg { width: 14px; height: 14px; }
 
 /* ── MACROBAR: le 5 aree come schede ──────────────────────────────── */
 .cfg-macrobar {

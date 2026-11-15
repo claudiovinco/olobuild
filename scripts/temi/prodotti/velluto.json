@@ -43,13 +43,13 @@
    "foto": "pexels-29368477.jpg"
   },
   {
-   "slug": "uomo",
+   "slug": "smoking-uomo",
    "nome": "Smoking e uomo",
    "descrizione": "Smoking in lana e in velluto, cuciti su misura.",
    "foto": "pexels-17420227.jpg"
   },
   {
-   "slug": "accessori",
+   "slug": "gioielli-guanti",
    "nome": "Gioielli e guanti",
    "descrizione": "Orecchini d’artista, guanti da sera.",
    "foto": "pexels-34010218.jpg"
@@ -808,7 +808,7 @@
    "nome": "Smoking Mezzanotte, lana e raso",
    "slug": "smoking-mezzanotte",
    "cat": [
-    "uomo"
+    "smoking-uomo"
    ],
    "prezzo": 2200,
    "sconto": 0,
@@ -849,7 +849,7 @@
    "nome": "Smoking in velluto blu notte",
    "slug": "smoking-velluto",
    "cat": [
-    "uomo"
+    "smoking-uomo"
    ],
    "prezzo": 2500,
    "sconto": 1990,
@@ -891,7 +891,7 @@
    "nome": "Orecchini Cascata, argento e lapislazzuli",
    "slug": "orecchini-cascata",
    "cat": [
-    "accessori"
+    "gioielli-guanti"
    ],
    "prezzo": 690,
    "sconto": 0,
@@ -919,7 +919,7 @@
    "nome": "Orecchini Stella d’oro",
    "slug": "orecchini-stella",
    "cat": [
-    "accessori"
+    "gioielli-guanti"
    ],
    "prezzo": 480,
    "sconto": 0,
@@ -947,7 +947,7 @@
    "nome": "Guanti da sera in raso",
    "slug": "guanti-raso",
    "cat": [
-    "accessori"
+    "gioielli-guanti"
    ],
    "prezzo": 220,
    "sconto": 175,

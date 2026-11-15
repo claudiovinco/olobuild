@@ -41,6 +41,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                         'content'        => 'Titolo Slider',
                         'tag'            => 'h2',
                         'imageSrc'       => '',
+                        'imageAlt'       => '',
                         'iconName'       => 'star',
                         'buttonUrl'      => '',
                         'buttonTarget'   => '_self',
@@ -107,6 +108,9 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
      * Normalizza un valore altezza nel formato { mode, value }.
      * Backward compat: numeri semplici → array( 'mode' => 'px', 'value' => N )
      */
+    /** Stati all'avvio dello slider che si sta disegnando (nome => valore). */
+    private $stati_iniziali = [];
+
     private function normalize_height( $val ) {
         if ( is_array( $val ) && isset( $val['mode'] ) ) {
             return $val;
@@ -191,6 +195,11 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             'scrollStep'    => ! isset( $s['scrollStep'] ) || ! empty( $s['scrollStep'] ),
         ];
 
+        // Stati all'avvio (interazioni al clic, 1.4.981): «nome=valore; nome=valore». I livelli con «Visibile solo in
+        // uno stato» si mostrano quando lo stato ha uno dei loro valori; le azioni «Imposta uno stato» e «Stato
+        // successivo» lo cambiano. Uno stato non scritto qui parte vuoto.
+        $this->stati_iniziali = self::leggi_stati( $s['stati'] ?? '' );
+
         // Sizing mode
         $sizing = $s['sizingMode'] ?? 'auto';
 
@@ -219,6 +228,17 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         foreach ( $global_layers_arr as $lay ) {
             $ff = sanitize_text_field( $lay['fontFamily'] ?? '' );
             if ( $ff ) { $google_fonts[ $ff ] = true; }
+        }
+        // I livelli che muovono gli assi del carattere con lo scorrimento: la versione variabile, sotto un nome proprio
+        $vf_css = [];
+        foreach ( $slides as $sl ) {
+            foreach ( ( $sl['layers'] ?? [] ) as $lay ) {
+                list( $vf_alias, $vf_face ) = $this->carattere_variabile( $lay );
+                if ( '' !== $vf_alias ) { $vf_css[ md5( $vf_face ) ] = $vf_face; }
+            }
+        }
+        if ( $vf_css ) {
+            echo '<style class="olo-proslider-vf">' . implode( '', $vf_css ) . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- @font-face generato internamente (Olobuild_Font_Host) con URL locali
         }
         if ( $google_fonts && class_exists( 'Olobuild_Font_Host' ) ) {
             // Self-hosted (Olobuild_Font_Host): nessuna richiesta del visitatore a Google.
@@ -266,6 +286,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             id="<?php echo esc_attr( $uid ); ?>"
             data-transition="<?php echo esc_attr( $is_carousel ? 'carousel' : $transition ); // nel carosello il cambio è lo scorrimento delle card: le regole delle transizioni non devono toccarle ?>"
             data-proslider="<?php echo esc_attr( wp_json_encode( $config ) ); ?>"
+            <?php foreach ( $this->stati_iniziali as $st_nome => $st_val ) { echo ' data-st-' . esc_attr( $st_nome ) . '="' . esc_attr( $st_val ) . '"'; } ?>
             data-design-width="1440"
             data-design-height="<?php echo (int) $height; ?>"
             data-height-mode="<?php echo esc_attr( $h_obj['mode'] ); ?>"
@@ -961,11 +982,74 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         $custom_css_inline = sanitize_text_field( $layer['customCSS'] ?? '' );
         if ( $custom_css_inline ) { $style .= $custom_css_inline; }
         ?>
+        <?php
+        // Un livello che agisce al clic e non è un pulsante si raggiunge anche con la tastiera (Invio o Spazio).
+        if ( $action_attr && 'button' !== $type ) {
+            $etichetta_az = sanitize_text_field( $layer['action']['label'] ?? '' );
+            if ( '' === $etichetta_az ) {
+                $etichetta_az = wp_strip_all_tags( (string) ( $layer['imageAlt'] ?? $layer['content'] ?? '' ) );
+            }
+            $action_attr .= ' role="button" tabindex="0"' . ( '' !== $etichetta_az ? ' aria-label="' . esc_attr( $etichetta_az ) . '"' : '' );
+        }
+        // Il pulsante che imposta lo stato già in vigore all'avvio parte «premuto».
+        if ( $action_attr && 'setState' === ( $layer['action']['type'] ?? '' ) ) {
+            $az_n    = sanitize_key( $layer['action']['target'] ?? '' );
+            $az_v    = sanitize_text_field( (string) ( $layer['action']['value'] ?? '' ) );
+            $premuto = '' !== $az_n && ( $this->stati_iniziali[ $az_n ] ?? '' ) === $az_v;
+            $action_attr .= ' aria-pressed="' . ( $premuto ? 'true' : 'false' ) . '"';
+            if ( $premuto ) {
+                $layer_class .= ' mps-stato-attivo';
+            }
+        }
+        ?>
         <div class="olo-proslider-layer<?php echo esc_attr( $layer_class . $sfx_class . ( $custom_class ? ' ' . $custom_class : '' ) . ( $outside_wrap ? ' mps-blend-layer' : '' ) ); ?>"<?php echo $custom_id ? ' id="' . esc_attr( $custom_id ) . '"' : ''; ?> style="<?php echo esc_attr( $style ); ?>"<?php echo $anim_attrs . $action_attr . $parallax_attr . $mask_attr . $lpx_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute strings built above with esc_attr()/absint() around every dynamic value ?><?php echo $sfx_class ? ' data-sfx-effect="' . esc_attr( $layer['sfx']['effect'] ?? 'blockRight' ) . '"' : ''; ?>>
             <?php echo $mp_open . $this->render_layer_content( $layer, $type, $outside_wrap ) . $mp_close; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- content HTML built by render_layer_content() with esc_attr()/esc_url()/esc_html()/safe_richtext_content() internally ?>
         </div>
         <?php
-        return ob_get_clean();
+        return $this->avvolgi_stato( $layer, ob_get_clean() );
+    }
+
+    /** Valori degli stati all'avvio: «luce=spenta; tinta=bianco» → [ 'luce' => 'spenta', 'tinta' => 'bianco' ]. */
+    private static function leggi_stati( $testo ) {
+        $out = [];
+        foreach ( preg_split( '/[;\n]+/', (string) $testo ) as $coppia ) {
+            $parti = explode( '=', $coppia, 2 );
+            $nome  = sanitize_key( trim( $parti[0] ) );
+            if ( '' !== $nome ) {
+                $out[ $nome ] = isset( $parti[1] ) ? sanitize_text_field( trim( $parti[1] ) ) : '';
+            }
+        }
+        return $out;
+    }
+
+    /** Il valore dello stato è fra quelli della condizione? «a,b» = uno dei due; «!a,b» = nessuno dei due. */
+    private static function stato_vale( $condizione, $valore ) {
+        $condizione = trim( (string) $condizione );
+        $neg        = '' !== $condizione && '!' === $condizione[0];
+        $lista      = array_map( 'trim', explode( ',', $neg ? substr( $condizione, 1 ) : $condizione ) );
+        $dentro     = in_array( (string) $valore, $lista, true );
+        return $neg ? ! $dentro : $dentro;
+    }
+
+    /**
+     * «Visibile solo in uno stato» (1.4.981): il livello sta in un involucro grande quanto la tela, che si mostra e si
+     * nasconde con una dissolvenza (e uno spostamento a scelta) quando lo stato cambia. L'involucro, non il livello,
+     * perché il livello ha già le sue animazioni d'ingresso e di scorrimento sull'opacità e sul transform.
+     */
+    private function avvolgi_stato( $layer, $html ) {
+        $st   = isset( $layer['stato'] ) && is_array( $layer['stato'] ) ? $layer['stato'] : [];
+        $nome = sanitize_key( $st['nome'] ?? '' );
+        if ( '' === $nome ) {
+            return $html;
+        }
+        $vale     = sanitize_text_field( (string) ( $st['vale'] ?? '' ) );
+        $effetto  = in_array( $st['effetto'] ?? 'fade', [ 'fade', 'su', 'giu', 'sinistra', 'destra', 'zoom', 'nessuno' ], true ) ? ( $st['effetto'] ?? 'fade' ) : 'fade';
+        $durata   = min( 4000, absint( $st['durata'] ?? 600 ) );
+        $ritardo  = min( 4000, absint( $st['ritardo'] ?? 0 ) );
+        $visibile = self::stato_vale( $vale, $this->stati_iniziali[ $nome ] ?? '' );
+        return '<div class="mps-stato' . ( $visibile ? '' : ' mps-stato--via' ) . '" data-stato="' . esc_attr( $nome ) . '" data-stato-vale="'
+            . esc_attr( $vale ) . '" data-stato-effetto="' . esc_attr( $effetto ) . '"' . ( $visibile ? '' : ' aria-hidden="true"' )
+            . ' style="--st-d:' . $durata . 'ms;--st-r:' . $ritardo . 'ms">' . $html . '</div>';
     }
 
     /**
@@ -1009,7 +1093,8 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             $base_style .= 'font-style:' . $font_style . ';';
         }
         if ( $font_family ) {
-            $base_style .= "font-family:'" . $font_family . "',sans-serif;";
+            $vf_alias = $this->carattere_variabile( $layer )[0];
+            $base_style .= 'font-family:' . ( '' !== $vf_alias ? "'" . $vf_alias . "'," : '' ) . "'" . $font_family . "',sans-serif;";
         }
         if ( $line_height != 1.2 ) {
             $base_style .= 'line-height:' . $line_height . ';';
@@ -1051,6 +1136,22 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
 
             case 'image':
                 $src = esc_url( $layer['imageSrc'] ?? '' );
+                // «Da pulire col puntatore» (1.4.981): l'immagine (o il colore, senza immagine) si disegna su una tela che
+                // il puntatore cancella passandoci sopra (il dito sul telefono); pulita la parte scelta, il resto se ne va
+                // e lo stato scritto («nome=valore») cambia, così compaiono i livelli di «dopo».
+                $pul = isset( $layer['pulisci'] ) && is_array( $layer['pulisci'] ) ? $layer['pulisci'] : [];
+                if ( ! empty( $pul['attivo'] ) ) {
+                    $dati = [
+                        'img' => $src,
+                        'c'   => $this->safe_color_css( $pul['colore'] ?? '' ) ?: '#111111',
+                        'p'   => max( 10, min( 400, absint( $pul['pennello'] ?? 70 ) ) ),
+                        's'   => max( 5, min( 100, absint( $pul['soglia'] ?? 60 ) ) ),
+                        'st'  => sanitize_text_field( (string) ( $pul['stato'] ?? '' ) ),
+                        'pos' => sanitize_text_field( (string) ( $layer['objectPosition'] ?? 'center' ) ),
+                    ];
+                    return '<canvas class="mps-pulisci-tela" data-pulisci="' . esc_attr( wp_json_encode( $dati ) ) . '" aria-hidden="true"'
+                        . ' style="display:block;width:100%;height:100%;touch-action:pan-y;"></canvas>';
+                }
                 if ( ! $src ) return '';
                 $obj_fit = esc_attr( $layer['objectFit'] ?? 'cover' );
                 $obj_pos = esc_attr( $layer['objectPosition'] ?? 'center' );
@@ -1062,7 +1163,10 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                     $kb_cls = ' class="mps-lkb mps-lkb-' . $kt . '"';
                     $kb_st  = '--mps-lkb-i:' . ( max( 5, min( 50, absint( $layer['kenBurns']['intensity'] ?? 20 ) ) ) / 100 ) . ';--mps-lkb-d:' . max( 1000, min( 20000, absint( $layer['kenBurns']['duration'] ?? 5000 ) ) ) . 'ms;';
                 }
-                return '<img src="' . $src . '" alt="Slide image"' . $kb_cls . ' style="width:100%;height:100%;object-fit:' . $obj_fit . ';object-position:' . $obj_pos . ';' . $kb_st . '" draggable="false" loading="lazy" />';
+                // Il testo alternativo del livello (un logo che fa da titolo, una foto che dice qualcosa); senza, quello di sempre.
+                $alt = trim( (string) ( $layer['imageAlt'] ?? '' ) );
+                $alt = '' !== $alt ? $alt : 'Slide image';
+                return '<img src="' . $src . '" alt="' . esc_attr( $alt ) . '"' . $kb_cls . ' style="width:100%;height:100%;object-fit:' . $obj_fit . ';object-position:' . $obj_pos . ';' . $kb_st . '" draggable="false" loading="lazy" />';
 
             case 'button':
                 $url    = esc_url( $layer['buttonUrl'] ?? '#' );
@@ -1155,7 +1259,8 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
      * fine, da 0 a 100) e le tappe, ognuna con la posizione nel tratto (p, 0-100) e i valori: x e y in px della tela del
      * computer, scala, allungamento in orizzontale e in verticale (sx, sy: moltiplicano la scala), rotazione (r), rotazione
      * 3D (rx, ry), opacità (o, 0-100) e maschera (mt, mr, mb, ml: quanto del livello resta coperto dall'alto, da destra,
-     * dal basso e da sinistra, 0-100: il livello si scopre o si copre mentre si scorre). Senza tappe: «da» all'inizio e
+     * dal basso e da sinistra, 0-100: il livello si scopre o si copre mentre si scorre), assi del carattere variabile
+     * (wdth, wght: la larghezza e il peso veri del disegno, vedi assi_carattere()). Senza tappe: «da» all'inizio e
      * «a» alla fine. Solo numeri: tutto il resto si scarta.
      */
     private function scroll_move_attr( $layer ) {
@@ -1163,7 +1268,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         if ( empty( $sm ) || ! is_array( $sm ) ) {
             return '';
         }
-        $chiavi = [ 'x', 'y', 's', 'sx', 'sy', 'r', 'rx', 'ry', 'o', 'mt', 'mr', 'mb', 'ml' ];
+        $chiavi = [ 'x', 'y', 's', 'sx', 'sy', 'r', 'rx', 'ry', 'o', 'mt', 'mr', 'mb', 'ml', 'wdth', 'wght' ];
         $pulisci = function ( $v ) use ( $chiavi ) {
             $o = [];
             foreach ( $chiavi as $k ) {
@@ -1195,7 +1300,56 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             'f' => max( 0, min( 100, floatval( $sm['fine'] ?? 100 ) ) ),
             't' => $tappe,
         ];
+        // Andamento «costante»: velocità uniforme fra le tappe e scala che cresce in proporzione (uno zoom continuo);
+        // senza, «morbido» come prima (parte e arriva piano a ogni tappa).
+        if ( 'costante' === ( $sm['andamento'] ?? '' ) ) {
+            $dati['c'] = 1;
+        }
         return ' data-scroll-move="' . esc_attr( wp_json_encode( $dati ) ) . '"';
+    }
+
+    /**
+     * Gli assi del carattere variabile che il movimento con lo scorrimento del livello usa (wdth, wght), con
+     * l'intervallo che serve: [ 'wdth' => [ min, max ], … ]. Vuoto se il livello non li usa.
+     */
+    private function assi_carattere( $layer ) {
+        $sm = $layer['scrollMove'] ?? null;
+        if ( empty( $sm ) || ! is_array( $sm ) ) {
+            return [];
+        }
+        $tappe = ( ! empty( $sm['tappe'] ) && is_array( $sm['tappe'] ) ) ? $sm['tappe'] : [ $sm['da'] ?? [], $sm['a'] ?? [] ];
+        $assi  = [];
+        foreach ( [ 'wdth', 'wght' ] as $asse ) {
+            $vals = [];
+            foreach ( $tappe as $t ) {
+                if ( is_array( $t ) && isset( $t[ $asse ] ) && is_numeric( $t[ $asse ] ) ) {
+                    $vals[] = floatval( $t[ $asse ] );
+                }
+            }
+            if ( $vals ) {
+                $assi[ $asse ] = [ min( $vals ), max( $vals ) ];
+            }
+        }
+        return $assi;
+    }
+
+    /**
+     * La versione variabile del carattere di un livello che muove gli assi con lo scorrimento: il file servito di
+     * solito ha solo i pesi fissi, e la larghezza non si muoverebbe. Restituisce [ alias, css @font-face ] o [ '', '' ].
+     * Solo per una famiglia vera (non un ruolo o una variabile del tema).
+     */
+    private function carattere_variabile( $layer ) {
+        $ff = trim( sanitize_text_field( $layer['fontFamily'] ?? '' ), " '\"" );
+        if ( '' === $ff || false !== strpos( $ff, 'var(' ) || ! class_exists( 'Olobuild_Font_Host' ) ) {
+            return [ '', '' ];
+        }
+        $assi = $this->assi_carattere( $layer );
+        if ( ! $assi ) {
+            return [ '', '' ];
+        }
+        $alias = $ff . ' VF';
+        $css   = Olobuild_Font_Host::get_variable_css( $ff, $assi, $alias );
+        return '' === $css ? [ '', '' ] : [ preg_replace( '/[^A-Za-z0-9 \-]/', '', $alias ), $css ];
     }
 
     private function layer_has_timeline( $layer ) {

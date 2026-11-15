@@ -222,7 +222,7 @@ def build_adozioni():
         t.one([K.sechead(t, 'Al calzificio', ['Chi sceglie', 'i compagni.'], size=60)]),
         K.squadra(t, [(PER[0], 'Viola Mazzanti', 'Fondatrice', 'Ha perso il primo calzino nel 1998 e ha deciso di non cercarlo più.',
                        'center 25%'),
-                      (PER[1], 'Ahmed Saleh', 'Le macchine', 'Cambia il disegno della circolare a ogni calzino.', 'center 25%'),
+                      (PER[1], 'Amira Saleh', 'Le macchine', 'Cambia il disegno della circolare a ogni calzino.', 'center 25%'),
                       (PER[3], 'Bianca Lodi', 'Le adozioni', 'Sceglie i compagni: più sono diversi, più è contenta.', 'center 25%')],
                   ratio='4/5', size='320', sfondo=C['sala']),
     ], padding='large', width='large', style={'padding_top': 120, 'padding_bottom': 100}))

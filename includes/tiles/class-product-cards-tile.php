@@ -21,6 +21,7 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
     protected $category = 'layout';
     protected $defaults = [
         'columns' => 5,
+        'columns_mobile' => 1,
         'gap'     => 24,
 
         'items' => [
@@ -98,6 +99,9 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
         $title_family  = $this->resolve_font_family( $s['title_font_family'], $legacy )  ?: $serif;
 
         $cols = max( 1, min( 6, absint( $s['columns'] ) ) );
+        // Sul telefono una colonna (di serie) o due, per le schede brevi: le copertine dei libri di Ti Consiglia, una
+        // sotto l'altra, facevano una pagina lunghissima (10 nov 2026).
+        $cols_m = max( 1, min( 2, absint( $s['columns_mobile'] ?? 1 ) ) );
         $gap  = max( 0, min( 60, absint( $s['gap'] ) ) );
 
         $card_radius   = $this->build_border_radius_css( $s['card_radius'] ?? [] );
@@ -152,6 +156,7 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
         $grid_style = sprintf( 'display:grid;grid-template-columns:repeat(%d,1fr);gap:%dpx;', $cols, $gap );
 
         $items = is_array( $s['items'] ) ? $s['items'] : [];
+        $con_seconda = false;
 
         ob_start();
         ?>
@@ -181,6 +186,9 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
                 $cta_text    = $it['cta_text'] ?? '';
                 $cta_url     = $it['cta_url'] ?? '#';
                 $price       = trim( (string) ( $it['price'] ?? '' ) );
+                // 15 nov 2026: una seconda foto che prende il posto della prima col mouse sopra la scheda
+                $hover_img   = esc_url( (string) ( $it['hover_image'] ?? '' ) );
+                if ( '' !== $hover_img ) { $con_seconda = true; }
             ?>
                 <div class="olo-pcards__card" style="<?php echo esc_attr( $card_bg_css ); ?>;color:<?php echo esc_attr( $card_color ); ?>;<?php if ( $card_radius ) echo 'border-radius:' . esc_attr( $card_radius ) . ';'; ?><?php if ( $card_shadow ) echo 'box-shadow:' . esc_attr( $card_shadow ) . ';'; ?><?php echo esc_attr( $card_border ); ?>overflow:hidden;display:flex;flex-direction:column;transition:transform .3s ease,box-shadow .3s ease<?php if ( $card_radius_h ) echo ',border-radius ' . (int) $card_rdur . 'ms ease'; ?>">
 
@@ -192,6 +200,9 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
                             $ov_clr = $this->safe_color_css( $it['top_bg']['overlay_color'] ?? '#000000' ) ?: '#000000';
                         ?>
                             <div class="olo-pcards__overlay" style="position:absolute;inset:0;background-color:<?php echo esc_attr( $ov_clr ); ?>;opacity:<?php echo esc_attr( min( 100, $ov_op ) / 100 ); ?>;pointer-events:none;z-index:1" aria-hidden="true"></div>
+                        <?php endif; ?>
+                        <?php if ( '' !== $hover_img ) : ?>
+                            <img class="olo-pcards__alt" src="<?php echo esc_url( $hover_img ); ?>" alt="" aria-hidden="true" loading="lazy" decoding="async" />
                         <?php endif; ?>
                         <?php if ( $logo !== '' ) : ?>
                             <img class="olo-pcards__logo" src="<?php echo esc_url( $logo ); ?>" alt="<?php echo esc_attr( $brand_lbl ?: $title ); ?>" style="position:relative;z-index:2;max-height:<?php echo (int) $logo_height; ?>px;max-width:78%;width:auto;height:auto;object-fit:contain;display:block" />
@@ -266,9 +277,17 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
             <?php if ( $card_radius_h ) : ?>
             .<?php echo $uid; ?> .olo-pcards__card:hover { border-radius: <?php echo $card_radius_h; ?> !important; }
             <?php endif; ?>
+            <?php if ( $con_seconda ) : ?>
+            .<?php echo $uid; ?> .olo-pcards__alt { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.04); transition: opacity .55s ease, transform .9s cubic-bezier(.2,.7,.2,1); z-index: 1; pointer-events: none; }
+            @media (hover: hover) {
+                .<?php echo $uid; ?> .olo-pcards__card:hover .olo-pcards__alt,
+                .<?php echo $uid; ?> .olo-pcards__card:focus-within .olo-pcards__alt { opacity: 1; transform: scale(1); }
+            }
+            @media (prefers-reduced-motion: reduce) { .<?php echo $uid; ?> .olo-pcards__alt { transition: opacity .2s linear; transform: none; } }
+            <?php endif; ?>
             .<?php echo $uid; ?> .olo-pcards__cta:focus-visible { outline: none; border-radius: 3px; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
             @media (max-width: 1100px) { .<?php echo $uid; ?> { grid-template-columns: repeat(<?php echo min( $cols, 3 ); ?>, 1fr) !important; } }
-            @media (max-width: 700px)  { .<?php echo $uid; ?> { grid-template-columns: 1fr !important; } }
+            @media (max-width: 700px)  { .<?php echo $uid; ?> { grid-template-columns: repeat(<?php echo (int) $cols_m; ?>, 1fr) !important; } }
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php

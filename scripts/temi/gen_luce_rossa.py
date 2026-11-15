@@ -271,7 +271,7 @@ def build_oscura():
         t.one([K.sechead(t, 'In camera oscura', ['Chi accende', 'la luce rossa.'], size=60)]),
         K.squadra(t, [(TEST[2], 'Nives Furlan', 'Fondatrice', 'Fotografa del porto da trent’anni: i foulard sono le sue foto.',
                        'center 25%'),
-                      (MODE[5], 'Elia Brandolin', 'Stampa', 'Stampa le fotografie a mano; ne butta nove su dieci.', 'center 25%'),
+                      (MODE[5], 'Elisa Brandolin', 'Stampa', 'Stampa le fotografie a mano; ne butta nove su dieci.', 'center 25%'),
                       (TEST[4], 'Amina Haddad', 'Seta', 'Porta le stampe sulla seta e arrotola gli orli.', 'center 25%')],
                   ratio='4/5', size='320', sfondo=C['sala']),
     ], bg=solid(C['sala']), padding='large', width='large', style={'padding_top': 120, 'padding_bottom': 100}))

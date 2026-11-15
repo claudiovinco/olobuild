@@ -1875,6 +1875,11 @@ trait Olobuild_Renderer_Structure_Trait {
                     $classes[] = 'uk-width-expand';
                 }
             }
+            // «Prima quando le colonne vanno in pila» (13 nov 2026): order:-1 sotto il punto in cui la colonna va a
+            // tutta larghezza — 640 px se ha una larghezza per il tablet diversa da 1-1, se no 960 px.
+            if ( ! empty( $s['primo_in_pila'] ) ) {
+                $classes[] = ( $width_small && '1-1' !== $width_small ) ? 'olo-col-primo-s' : 'olo-col-primo-m';
+            }
         }
 
         // Shadow CLASS — column applica sempre (no branch has_bg_any come element).

@@ -8,7 +8,9 @@
  *
  * Tre viste: elenco (con i mesi), schede, o il solo PROSSIMO appuntamento col conto alla rovescia.
  * Filtri per genere e per mese e ricerca, nel browser. Gli appuntamenti passati si nascondono (o si
- * attenuano) nel browser, nel fuso del sito: la pagina resta giusta anche servita dalla cache.
+ * attenuano) nel browser, nel fuso del sito: la pagina resta giusta anche servita dalla cache. Con «Solo i
+ * passati» la tile diventa lo storico (si vedono solo quelli già andati in scena, non attenuati) e «Dal più
+ * recente» inverte l'ordine: lo storico si aggiorna da solo coi giorni (1.4.1010, sito di Aurona).
  * «Aggiungi al calendario» scarica il file .ics dell'appuntamento. Nel builder si vedono tutti, i
  * passati attenuati. Con «Appuntamenti da: Spettacoli del sito» le voci sono gli spettacoli del menu
  * Spettacoli (Olobuild_Spettacoli), gli stessi in ogni copia della tile; nelle demo dei temi restano le voci.
@@ -31,6 +33,7 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
         'vista'             => 'lista',
         'raggruppa'         => true,
         'ordina'            => true,
+        'dal_recente'       => false,
         'limite'            => 0,
         'passati'           => 'nascondi',
         'filtri_generi'     => true,
@@ -241,7 +244,7 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
         $sel     = '#' . $uid;
         $builder = ! empty( $s['_builder_mode'] );
         $vista   = in_array( (string) $s['vista'], [ 'lista', 'schede', 'prossimo', 'mese' ], true ) ? (string) $s['vista'] : 'lista';
-        $passati = in_array( (string) $s['passati'], [ 'nascondi', 'attenua', 'mostra' ], true ) ? (string) $s['passati'] : 'nascondi';
+        $passati = in_array( (string) $s['passati'], [ 'nascondi', 'attenua', 'mostra', 'solo' ], true ) ? (string) $s['passati'] : 'nascondi';
         // «Il prossimo» a forma di biglietto (1.4.944): una striscia bassa, il giorno in grande, il tagliando col conto
         $biglietto = 'prossimo' === $vista ? 'biglietto' === (string) $s['forma_prossimo'] : false;
         $immag   = ! empty( $s['immagini'] ) ? ( 'mese' !== $vista ? ! $biglietto : false ) : false;
@@ -305,6 +308,10 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
             usort( $voci, static function ( $a, $b ) {
                 return $a['ts'] === $b['ts'] ? $a['ord'] - $b['ord'] : $a['ts'] - $b['ts'];
             } );
+        }
+        // «Dal più recente»: l'ordine al contrario (lo storico parte dall'ultimo andato in scena). I mesi seguono le voci.
+        if ( ! empty( $s['dal_recente'] ) ) {
+            $voci = array_reverse( $voci );
         }
         $k = 0;
         foreach ( $generi as $slug => $g ) {
@@ -407,7 +414,10 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
         echo "{$sel} .ocrt-genere::before{content:'';width:.5em;height:.5em;border-radius:50%;background:currentColor}";
         echo "{$sel} .ocrt-stato{font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:.3em .75em;border-radius:5em;background:color-mix(in srgb, var(--ocrt-acc) 14%, transparent);color:var(--ocrt-acc)}";
         echo "{$sel} .ocrt-stato--esaurito,{$sel} .ocrt-stato--annullato{background:color-mix(in srgb, currentColor 10%, transparent);color:inherit;opacity:.75}";
-        echo "{$sel} .ocrt-stato--gratuito{background:color-mix(in srgb, var(--olo-color-secondary) 14%, transparent);color:var(--olo-color-secondary)}";
+        // «Ingresso libero»: la scritta nel colore del testo della voce, il secondario del sito solo nel fondino e nel filo.
+        // Col secondario anche nella scritta, su un tema scuro con un secondario scuro non si leggeva (sito di Aurona,
+        // 14 nov 2026: verde acqua #0E6B66 sul viola, 2,77:1).
+        echo "{$sel} .ocrt-stato--gratuito{background:color-mix(in srgb, var(--olo-color-secondary) 24%, transparent);color:inherit;box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--olo-color-secondary) 60%, transparent)}";
         echo "{$sel} .ocrt-titolo{margin:0}";
         echo "{$sel} .ocrt-sotto{margin:.35rem 0 0;opacity:.85}";
         echo "{$sel} .ocrt-meta{margin:.6rem 0 0;opacity:.75}";
@@ -428,7 +438,10 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
         echo "{$sel} .ocrt-img{margin:0;overflow:hidden;border-radius:var(--ocrt-r);{$img_ar}background:color-mix(in srgb, currentColor 8%, transparent)}";
         echo "{$sel} .ocrt-img img{display:block;width:100%;height:100%;{$img_fit}transition:transform .8s cubic-bezier(.2,.7,.2,1)}";
         echo "{$sel} .ocrt-voce:hover .ocrt-img img{transform:scale(1.04)}";
-        echo "{$sel} .ocrt-passato{opacity:.45}";
+        // nello storico («Solo i passati») sono tutti passati: attenuarli renderebbe solo il testo poco leggibile
+        if ( 'solo' !== $passati ) {
+            echo "{$sel} .ocrt-passato{opacity:.45}";
+        }
         echo "{$sel} .ocrt-passato .ocrt-btn{display:none}";
         echo "{$sel} [hidden]{display:none!important}";
 
@@ -767,13 +780,15 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
         return $h;
     }
 
-    /** Lo script: la funzione una volta per pagina, poi una chiamata per cartellone. Niente && (wptexturize). */
+    /**
+     * Lo script: la funzione (definita una volta sola, «if(!window.oloCartellone)») e la chiamata per questo cartellone.
+     * La funzione va in OGNI istanza, come nel Configuratore: le tile sotto la piega arrivano dentro i <template> delle
+     * sezioni pigre, e una sezione svegliata prima di quella del primo cartellone eseguiva la sua chiamata quando la
+     * funzione non c'era ancora (14 nov 2026, sito di Aurona: il calendario del mese restava senza mese né giorni).
+     * Niente && (wptexturize).
+     */
     private function script( $uid ) {
-        static $funzione = false;
-        $js = '';
-        if ( ! $funzione ) {
-            $funzione = true;
-            $js      .= <<<'JS'
+        $js = <<<'JS'
 if(!window.oloCartellone){window.oloCartellone=function(el){
 if(!el){return;}if(el.getAttribute("data-ocrt-vivo")){return;}el.setAttribute("data-ocrt-vivo","1");
 var C={};try{C=JSON.parse(el.getAttribute("data-ocrt")||"{}");}catch(e){}
@@ -807,14 +822,14 @@ if(sb){sb.addEventListener("click",function(){mese++;if(mese>11){mese=0;anno++;}
 disegna();mostra(sel);}
 }else{
 var g="",m="",q="";var chi=el.querySelectorAll(".ocrt-chip");var cnt=el.querySelector(".ocrt-conteggio");var nes=el.querySelector(".ocrt-nessuno");var vu2=el.querySelector(".ocrt-vuoto");
-var applica=function(){var n=0;var lim=+C.limite||0;voci.forEach(function(v){var ok=true;if(v._p){if(C.passati==="nascondi"){ok=false;}}if(g){if(v.getAttribute("data-g")!==g){ok=false;}}if(m){if(v.getAttribute("data-mese")!==m){ok=false;}}if(q){if((v.getAttribute("data-cerca")||"").indexOf(q)<0){ok=false;}}if(ok){if(lim){if(n>=lim){ok=false;}}}if(ok){n++;v.removeAttribute("hidden");}else{v.setAttribute("hidden","");}});
+var applica=function(){var n=0;var lim=+C.limite||0;voci.forEach(function(v){var ok=true;if(v._p){if(C.passati==="nascondi"){ok=false;}}else{if(C.passati==="solo"){ok=false;}}if(g){if(v.getAttribute("data-g")!==g){ok=false;}}if(m){if(v.getAttribute("data-mese")!==m){ok=false;}}if(q){if((v.getAttribute("data-cerca")||"").indexOf(q)<0){ok=false;}}if(ok){if(lim){if(n>=lim){ok=false;}}}if(ok){n++;v.removeAttribute("hidden");}else{v.setAttribute("hidden","");}});
 [].forEach.call(el.querySelectorAll(".ocrt-mese"),function(h){var vis=false;var s=h.nextElementSibling;while(s){if(s.classList.contains("ocrt-mese")){break;}if(!s.hasAttribute("hidden")){vis=true;}s=s.nextElementSibling;}if(vis){h.removeAttribute("hidden");}else{h.setAttribute("hidden","");}});
 if(cnt){cnt.textContent=(n===1?C.uno:C.tanti||"%d").replace("%d",n);}
 var filtrato=g!==""||m!==""||q!=="";if(nes){if(n===0){if(filtrato){nes.removeAttribute("hidden");}else{nes.setAttribute("hidden","");}}else{nes.setAttribute("hidden","");}}
 if(vu2){if(n===0){if(!filtrato){vu2.removeAttribute("hidden");}}else{vu2.setAttribute("hidden","");}}};
 [].forEach.call(chi,function(c){c.addEventListener("click",function(){var mese=c.hasAttribute("data-m");var val=mese?c.getAttribute("data-m"):c.getAttribute("data-g");if(mese){m=val;}else{g=val;}[].forEach.call(c.parentNode.querySelectorAll(".ocrt-chip"),function(o){var on=o===c;o.classList.toggle("is-on",on);o.setAttribute("aria-pressed",on?"true":"false");});applica();});});
 var cerca=el.querySelector(".ocrt-cerca");if(cerca){var t=0;cerca.addEventListener("input",function(){clearTimeout(t);t=setTimeout(function(){q=(cerca.value||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();applica();},150);});}
-[].forEach.call(el.querySelectorAll(".ocrt-chip[data-m]"),function(c){var mm=c.getAttribute("data-m");if(!mm){return;}if(C.passati!=="nascondi"){return;}var vivo=voci.some(function(v){return !v._p ? v.getAttribute("data-mese")===mm : false;});if(!vivo){c.setAttribute("hidden","");}});
+[].forEach.call(el.querySelectorAll(".ocrt-chip[data-m]"),function(c){var mm=c.getAttribute("data-m");if(!mm){return;}var so=C.passati==="solo";if(C.passati!=="nascondi"){if(!so){return;}}var vivo=voci.some(function(v){var tiene=so?v._p:!v._p;return tiene?v.getAttribute("data-mese")===mm:false;});if(!vivo){c.setAttribute("hidden","");}});
 applica();}
 var due=function(n){return (n<10?"0":"")+n;};
 var fmt=function(ms){var d=new Date(ms);return d.getUTCFullYear()+due(d.getUTCMonth()+1)+due(d.getUTCDate())+"T"+due(d.getUTCHours())+due(d.getUTCMinutes())+"00Z";};
@@ -824,7 +839,6 @@ var ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Olobuild//Cartellone//IT","C
 var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([ics],{type:"text/calendar;charset=utf-8"}));a.download=(tit.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"evento")+".ics";document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},800);});});
 };}
 JS;
-        }
         $js .= '(function(){var e=document.getElementById(' . wp_json_encode( $uid ) . ');if(window.oloCartellone){window.oloCartellone(e);}})();';
         return '<script>' . $js . '</script>';
     }

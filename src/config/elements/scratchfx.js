@@ -111,6 +111,21 @@ export default {
     { key: 'remember', label: t('Ricorda chi ha già grattato'), type: 'toggle',
       description: t("Alla visita successiva il premio è già scoperto, come un vero gratta e vinci. Non vale con «Ricopri all'uscita del mouse».") },
 
+    // Come si gratta: è comportamento, quindi Contenuto (stava nello Stile fino alla 1.4.1016 e «Incolla stile» lo
+    // portava su un'altra tile insieme ai colori).
+    { type: 'separator', label: t('Comportamento') },
+    { key: 'brush_size', label: t('Dimensione pennello'), type: 'range', min: 10, max: 80, step: 2 },
+    { key: 'reveal_threshold', label: t('Soglia auto-reveal'), type: 'range', min: 0, max: 100, step: 5,
+      description: t('Quando la percentuale grattata supera questo valore, il resto si scopre da solo. 0 = disattiva auto-reveal.') },
+    { key: 'reset_on_leave', label: t('Ricopri all\'uscita del mouse'), type: 'toggle',
+      description: t('Ridipinge la copertura quando il puntatore lascia l\'area (se non già completamente rivelata).') },
+    { key: 'al_passaggio', label: t('Gratta al passaggio del mouse'), type: 'toggle',
+      description: t('Col mouse basta passare sopra, senza tenere premuto. Sul telefono si gratta trascinando il dito, come sempre.') },
+    { key: 'pennello_morbido', label: t('Pennello morbido'), type: 'toggle',
+      description: t('Il tratto ha i bordi sfumati e scopre poco a poco: ogni passaggio schiarisce un po\' di più, come una mano sul velluto o sul vetro appannato.') },
+    { key: 'ricresce', label: t('La copertura ricresce in'), type: 'range', min: 0, max: 30, step: 1, unit: 's',
+      description: t('Dopo l\'ultimo tocco la copertura torna piano piano piena in questi secondi (il pelo del velluto che si rialza, il vetro che si appanna di nuovo). 0 = resta grattata. Con la ricrescita non c\'è lo scoprimento automatico.') },
+
     { type: 'separator', label: t('Suggerimento & accessibilità') },
     { key: 'hint', label: t('Testo suggerimento'), type: 'text',
       description: t('Scompare al primo tocco. Lascia vuoto per nasconderlo.') },
@@ -122,7 +137,10 @@ export default {
 
   // ─── STILE ─────────────────────────────────────────────────
   styleFields: [
-    { type: 'separator', label: t('Aspetto copertura') },
+    // Zone standard dello Stile (15 nov 2026, rifinita per la prima «Guida in un minuto»): Aspetto · Testo · Immagine
+    // premio · Forma · Disposizione. Prima: «Aspetto copertura», «Comportamento» (ora nel Contenuto), «Colori
+    // contenuto», «Layout».
+    { type: 'separator', label: t('Aspetto') },
     { key: 'cover_type', label: t('Tipo copertura'), type: 'select', options: [
       { value: 'solid',    label: t('Colore pieno') },
       { value: 'gradient', label: t('Gradiente') },
@@ -138,8 +156,31 @@ export default {
       condition: { field: 'cover_type', op: 'eq', value: 'image' } },
     { key: 'cover_text', label: t('Testo stampigliato'), type: 'text', incollaStile: false,
       description: t('Ripetuto sulla copertura (es. "GRATTA"). Lascia vuoto per nessuno.') },
-    { key: 'cover_text_color', label: t('Colore testo stampigliato'), type: 'color',
+    { key: 'cover_text_color', label: t('Colore scritta'), type: 'color',
       condition: { field: 'cover_text', op: 'neq', value: '' } },
+    { key: 'under_bg', label: t('Sfondo area premio'), type: 'color' },
+    { key: 'accent_color', label: t('Colore accento'), type: 'color' },
+    ...shadowField,
+
+    // Un controllo per testo; vuoto = come prima (le misure di sempre del renderer, nessun template si sposta).
+    { type: 'separator', label: t('Testo') },
+    // Solo i testi dell'area premio (e il codice): il pulsante «Scopri», fuori dall'area, segue la pagina.
+    { key: 'text_color', label: t('Colore testo premio'), type: 'color' },
+    { type: 'typography', label: t('Sopra-titolo'), responsiveKeys: [],
+      keys: { family: 'eyebrow_font_family', size: 'eyebrow_font_size', weight: 'eyebrow_font_weight',
+              transform: 'eyebrow_text_transform', letterSpacing: 'eyebrow_letter_spacing', color: 'eyebrow_color' },
+      sizeMin: 9, sizeMax: 24 },
+    { type: 'typography', label: t('Titolo premio'), responsiveKeys: [],
+      keys: { family: 'title_font_family', size: 'title_font_size', weight: 'title_font_weight', italic: 'title_italic',
+              letterSpacing: 'title_letter_spacing', lineHeight: 'title_line_height', color: 'title_color' },
+      sizeMin: 20, sizeMax: 120 },
+    { type: 'typography', label: t('Descrizione'), responsiveKeys: [],
+      keys: { family: 'desc_font_family', size: 'desc_font_size', weight: 'desc_font_weight', color: 'desc_color' },
+      sizeMin: 11, sizeMax: 28 },
+    { type: 'typography', label: t('Codice'), responsiveKeys: [], condition: { field: 'coupon_code', op: 'notEmpty' },
+      keys: { family: 'code_font_family', size: 'code_font_size', weight: 'code_font_weight',
+              letterSpacing: 'code_letter_spacing', color: 'code_color' },
+      sizeMin: 12, sizeMax: 48 },
 
     // Adattamento e punto focale sono dell'immagine PREMIO (sotto la copertura): stavano
     // in «Aspetto copertura» e sembravano agire sulla copertura, mostrando un'altra foto.
@@ -161,20 +202,8 @@ export default {
         { field: 'image', op: 'neq', value: '' },
         { field: 'object_fit', op: 'neq', value: 'fill' },
       ] },
-    { type: 'separator', label: t('Comportamento') },
-    { key: 'brush_size', label: t('Dimensione pennello'), type: 'range', min: 10, max: 80, step: 2 },
-    { key: 'reveal_threshold', label: t('Soglia auto-reveal'), type: 'range', min: 0, max: 100, step: 5,
-      description: t('Quando la percentuale grattata supera questo valore, il resto si scopre da solo. 0 = disattiva auto-reveal.') },
-    { key: 'reset_on_leave', label: t('Ricopri all\'uscita del mouse'), type: 'toggle',
-      description: t('Ridipinge la copertura quando il puntatore lascia l\'area (se non già completamente rivelata).') },
 
-    { type: 'separator', label: t('Colori contenuto') },
-    { key: 'under_bg', label: t('Sfondo area premio'), type: 'color' },
-    // Solo i testi dell'area premio (e il codice): il pulsante «Scopri», fuori dall'area, segue la pagina.
-    { key: 'text_color', label: t('Colore testo premio'), type: 'color' },
-    { key: 'accent_color', label: t('Colore accento (sopra-titolo)'), type: 'color' },
-
-    { type: 'separator', label: t('Layout') },
+    { type: 'separator', label: t('Forma') },
     { key: 'height_mode', label: t('Modalità altezza'), type: 'select', options: [
       { value: 'aspect', label: t('Proporzione (aspect-ratio)') },
       { value: 'fixed',  label: t('Altezza fissa (px)') },
@@ -190,14 +219,15 @@ export default {
     { key: 'height', label: t('Altezza'), type: 'range', min: 120, max: 700, step: 10,
       condition: { field: 'height_mode', op: 'eq', value: 'fixed' } },
     { key: 'max_width', label: t('Larghezza massima'), type: 'range', min: 200, max: 1000, step: 10 },
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
+
+    { type: 'separator', label: t('Disposizione') },
     { key: 'align', label: t('Allineamento'), type: 'select', options: [
       { value: 'left',   label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
       { value: 'right',  label: t('Destra') },
     ]},
-    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
 
-    ...shadowField,
     ...borderFields(),
   ],
 };

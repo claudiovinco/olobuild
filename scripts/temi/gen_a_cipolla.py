@@ -238,7 +238,7 @@ def build_strati():
         t.one([K.sechead(t, 'In bottega', ['Chi cuce', 'gli strati.'], size=56)]),
         K.squadra(t, [(CIT[1], 'Elena Dal Farra', 'Fondatrice', 'Guida alpina, ha cucito il primo pile per i suoi clienti.',
                        'center 25%'),
-                      (SCI[0], 'Paolo Zanella', 'Sarto', 'Taglia ogni strato perché stia sopra l’altro senza tirare.', 'center 25%'),
+                      (SCI[0], 'Paola Zanella', 'Sarta', 'Taglia ogni strato perché stia sopra l’altro senza tirare.', 'center 25%'),
                       (CIT[3], 'Irene Fant', 'Tessuti', 'Prova le lane in rifugio, d’inverno.', 'center 25%')],
                   ratio='4/5', size='320', sfondo=C['sala']),
     ], padding='large', width='large', style={'padding_top': 120, 'padding_bottom': 100}))

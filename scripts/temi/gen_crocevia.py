@@ -65,7 +65,7 @@ REPARTI = [  # slug, nome, descrizione, foto, sconto, stato
     ('casa', 'Casa', 'Tazze, piante, piccole cose belle.', 'pexels-8533397.jpg', '−25%', 'Imbarco'),
     ('tech', 'Tech', 'Cuffie, smartwatch, casse.', 'pexels-8217430.jpg', '−20%', 'In partenza'),
     ('bellezza', 'Bellezza', 'Profumi, trucchi, pennelli.', 'pexels-15574229.jpg', '3 × 2', 'Ultimi posti'),
-    ('sport', 'Sport', 'Yoga, pesi, borracce.', 'pexels-4793328.jpg', '−40%', 'In partenza'),
+    ('sport-fitness', 'Sport', 'Yoga, pesi, borracce.', 'pexels-4793328.jpg', '−40%', 'In partenza'),
     ('bimbi', 'Bimbi', 'Giochi di legno e costruzioni.', 'pexels-7269676.jpg', '−15%', 'Imbarco'),
     ('tempo-libero', 'Tempo libero', 'Puzzle, libri, giochi da tavolo.', 'pexels-3852577.jpg', '−20%', 'In orario'),
     ('gourmet', 'Gourmet', 'Caffè e cioccolato.', 'pexels-6167340.jpg', '−25%', 'Ultimi posti'),
@@ -125,14 +125,14 @@ PRODOTTI = [
     prodotto('CRO-014', 'Set di pennelli', 'set-pennelli', 'bellezza', 29, 0, 60, 4.6, 302, False,
              ['pexels-3800060.jpg'], ['Otto pennelli', 'Setole sintetiche morbide', 'Bicchiere portapennelli', 'Si lavano'],
              'Otto pennelli nel bicchiere: dal fondotinta alla sfumatura.', attributi={'marca': ['Pesca']}),
-    prodotto('CRO-015', 'Tappetino yoga Lilla', 'tappetino-yoga-lilla', 'sport', 39, 29, 70, 4.7, 960, True,
+    prodotto('CRO-015', 'Tappetino yoga Lilla', 'tappetino-yoga-lilla', 'sport-fitness', 39, 29, 70, 4.7, 960, True,
              ['pexels-4793328.jpg', 'pexels-8899524.jpg', 'pexels-9004302.jpg'], ['Gomma naturale antiscivolo', '6 mm',
              'Cinghia per portarlo', 'Si lava con acqua'], 'Il tappetino che non scivola anche quando si suda.',
              attributi={'marca': ['Asana']}, cross=['CRO-016', 'CRO-017']),
-    prodotto('CRO-016', 'Borraccia termica in acciaio', 'borraccia-termica', 'sport', 25, 0, 100, 4.8, 1320, False,
+    prodotto('CRO-016', 'Borraccia termica in acciaio', 'borraccia-termica', 'sport-fitness', 25, 0, 100, 4.8, 1320, False,
              ['pexels-7879967.jpg', 'pexels-7879796.jpg'], ['Acciaio inossidabile', 'Fredda 24 ore, calda 12', '750 ml',
              'Non perde'], 'L’acqua fredda tutto il giorno, il tè caldo fino a sera.', attributi={'marca': ['Sorgente']}),
-    prodotto('CRO-017', 'Manubri 1,5 kg, la coppia', 'manubri-coppia', 'sport', 19, 15, 80, 4.6, 640, False,
+    prodotto('CRO-017', 'Manubri 1,5 kg, la coppia', 'manubri-coppia', 'sport-fitness', 19, 15, 80, 4.6, 640, False,
              ['pexels-16679756.jpg', 'pexels-16567048.jpg', 'pexels-16567046.jpg'], ['Rivestiti in vinile', 'Esagonali: non '
              'rotolano', 'Due pesi da 1,5 kg', 'Presa morbida'], 'Per l’allenamento a casa: i manubri che non rotolano.',
              attributi={'marca': ['Asana']}),
@@ -319,7 +319,7 @@ def notiziario(t):
         'items': [{'title': s, 'url': u, 'badge': b, 'icon': '', 'timestamp': ''} for s, u, b in [
             ('Sneakers Passo a 49 €: restano il 39 e il 42', N.cat_url('moda'), '−29%'),
             ('Cuffie Eco col silenzio, a 99 €', N.cat_url('tech'), '−23%'),
-            ('Il tappetino yoga Lilla a 29 €', N.cat_url('sport'), '−26%'),
+            ('Il tappetino yoga Lilla a 29 €', N.cat_url('sport-fitness'), '−26%'),
             ('Profumi e trucchi: 3 × 2 fino a domenica', N.cat_url('bellezza'), '3×2'),
             ('Codice CROCEVIA10: un altro 10% su tutto', P['offerte'], 'codice')]],
         'direction': 'horizontal', 'show_label': True, 'label_text': 'Partenze', 'label_icon': 'zap', 'animation_type': 'marquee',
@@ -349,7 +349,7 @@ def vetrina(t):
                   N.cat_url('tech'), bollino='−23%', bollino_x=82, nota='Anche in tre rate senza interessi', **f),
         N.offerta('cv-o4', K.sfondo_foto('pexels-4793328.jpg', overlay=0.12, scala=1.06), 'Sport · per cominciare bene',
                   'Il tappetino Lilla a 29 €.', 'Antiscivolo, si arrotola e si porta ovunque. Era 39 €.', 'Il reparto Sport',
-                  N.cat_url('sport'), bollino='−26%', nota='Reso gratuito in 30 giorni', **f),
+                  N.cat_url('sport-fitness'), bollino='−26%', nota='Reso gratuito in 30 giorni', **f),
     ], transizione='flipV')
 
 
@@ -374,7 +374,7 @@ def build_pannello_offerte():
 
 def build_pannello_novita():
     return N.pannello_novita(Tpl(ID, 'pannello-novita'), 'Novità', 'Arrivati questa settimana',
-                             [(n, N.cat_url(s)) for s, n in (('moda', 'Moda'), ('casa', 'Casa'), ('tech', 'Tech'), ('bellezza', 'Bellezza'), ('sport', 'Sport'), ('gourmet', 'Gourmet'))],
+                             [(n, N.cat_url(s)) for s, n in (('moda', 'Moda'), ('casa', 'Casa'), ('tech', 'Tech'), ('bellezza', 'Bellezza'), ('sport-fitness', 'Sport'), ('gourmet', 'Gourmet'))],
                              ('La cassa Rombo,', '39 €.', 'Bluetooth, resiste alla pioggia. Era 49 €.', 'Il reparto Tech', N.cat_url('tech'), 'pexels-34241799.jpg'))
 
 
@@ -464,7 +464,7 @@ def build_negozio():
 def build_offerte():
     t = Tpl(ID, 'offerte')
     extra = [t.section([t.row([
-        t.col([N.banner(t, 'Il tappetino yoga,', '29 €.', 'Gomma naturale, non scivola.', 'Lo sport', N.cat_url('sport'),
+        t.col([N.banner(t, 'Il tappetino yoga,', '29 €.', 'Gomma naturale, non scivola.', 'Lo sport', N.cat_url('sport-fitness'),
                         K.photo_bg('pexels-9004302.jpg'), size=34)], wm='1-2', ws='1-1'),
         t.col([N.banner(t, 'Profumi e trucchi,', '3 × 2.', 'Il terzo lo paghiamo noi.', 'La bellezza', N.cat_url('bellezza'),
                         K.photo_bg('pexels-7256120.jpg'), size=34)], wm='1-2', ws='1-1')],

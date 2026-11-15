@@ -59,15 +59,15 @@ CATEGORIE = [
     ('sposa', 'Sposa e cerimonia', 'Pizzo, organza, applicazioni: su appuntamento.', 'pexels-20352747.jpg'),
     ('tailleur', 'Giacche e tailleur', 'Lana, cashmere, gessato: dal giorno alla sera.', 'pexels-30479352.jpg'),
     ('cappe', 'Cappe e capispalla', 'Mantelle, cappotti, trench.', 'pexels-29368477.jpg'),
-    ('uomo', 'Smoking e uomo', 'Smoking in lana e in velluto, cuciti su misura.', 'pexels-17420227.jpg'),
-    ('accessori', 'Gioielli e guanti', 'Orecchini d’artista, guanti da sera.', 'pexels-34010218.jpg'),
+    ('smoking-uomo', 'Smoking e uomo', 'Smoking in lana e in velluto, cuciti su misura.', 'pexels-17420227.jpg'),
+    ('gioielli-guanti', 'Gioielli e guanti', 'Orecchini d’artista, guanti da sera.', 'pexels-34010218.jpg'),
 ]
 TAGLIE = ['38', '40', '42', '44', '46', '48', '50', '52', '54']
 DONNA, UOMO = TAGLIE[:5], TAGLIE[3:]
 
 
 def abito(sku, nome, slug, cat, prezzo, sconto, scorta, voto, rec, evid, foto, punti, testo, esaurite=(), video=None, **kw):
-    taglie = UOMO if cat == 'uomo' else DONNA
+    taglie = UOMO if cat == 'smoking-uomo' else DONNA
     return prodotto(sku, nome, slug, cat, prezzo, sconto, scorta, voto, rec, evid, foto, punti, testo,
                     varianti=('taglia', taglie, list(esaurite)), video=video, **kw)
 
@@ -145,24 +145,24 @@ PRODOTTI = [
           ['pexels-6702736.jpg', 'pexels-6726841.jpg'], ['Lana e cashmere avorio', 'Taglio a vestaglia', 'Cintura',
                                                           'Lungo al polpaccio'],
           'Il cappotto avorio a vestaglia: si chiude con la cintura, sta sopra tutto.'),
-    abito('VEL-020', 'Smoking Mezzanotte, lana e raso', 'smoking-mezzanotte', 'uomo', 2200, 0, 5, 4.9, 29, True,
+    abito('VEL-020', 'Smoking Mezzanotte, lana e raso', 'smoking-mezzanotte', 'smoking-uomo', 2200, 0, 5, 4.9, 29, True,
           ['pexels-17420227.jpg', 'pexels-34342524.jpg', 'pexels-39117653.jpg'], ['Lana fredda nero mezzanotte',
                                                                                    'Revers a scialle in raso', 'Pantalone con la banda',
                                                                                    'Orlo e maniche su misura'],
           'Lo smoking a un bottone col revers a scialle in raso: orlo e maniche si fanno su di voi.'),
-    abito('VEL-021', 'Smoking in velluto blu notte', 'smoking-velluto', 'uomo', 2500, 1990, 3, 4.8, 14, False,
+    abito('VEL-021', 'Smoking in velluto blu notte', 'smoking-velluto', 'smoking-uomo', 2500, 1990, 3, 4.8, 14, False,
           ['pexels-17728712.jpg', 'pexels-36698066.jpg'], ['Velluto di cotone blu notte', 'Revers in raso nero',
                                                             'Fodera in seta stampata', 'Orlo su misura in due giorni'],
           'La giacca in velluto blu notte per le feste: col pantalone nero o coi jeans.', esaurite=['54']),
-    prodotto('VEL-022', 'Orecchini Cascata, argento e lapislazzuli', 'orecchini-cascata', 'accessori', 690, 0, 6, 4.8, 19,
+    prodotto('VEL-022', 'Orecchini Cascata, argento e lapislazzuli', 'orecchini-cascata', 'gioielli-guanti', 690, 0, 6, 4.8, 19,
              False, ['pexels-34010218.jpg', 'pexels-6642209.jpg'], ['Argento 925', 'Lapislazzuli', 'Pendenti 6 cm',
                                                                     'Nella scatola di velluto'],
              'Gli orecchini a cascata d’argento e lapislazzuli: per l’abito nero e per quello rosso.'),
-    prodotto('VEL-023', 'Orecchini Stella d’oro', 'orecchini-stella', 'accessori', 480, 0, 8, 4.7, 23, False,
+    prodotto('VEL-023', 'Orecchini Stella d’oro', 'orecchini-stella', 'gioielli-guanti', 480, 0, 8, 4.7, 23, False,
              ['pexels-38404664.jpg', 'pexels-32286014.jpg'], ['Ottone bagnato in oro', 'Stelle traforate', 'Leggeri',
                                                                'Nella scatola di velluto'],
              'Le stelle d’oro traforate a mano: grandi e leggere.'),
-    prodotto('VEL-024', 'Guanti da sera in raso', 'guanti-raso', 'accessori', 220, 175, 10, 4.9, 41, False,
+    prodotto('VEL-024', 'Guanti da sera in raso', 'guanti-raso', 'gioielli-guanti', 220, 175, 10, 4.9, 41, False,
              ['pexels-31052875.jpg', 'pexels-31052874.jpg', 'pexels-7322157.jpg'], ['Raso di seta nero', 'Sopra il gomito',
                                                                                      'Tre bottoncini al polso', 'Dall’archivio'],
              'I guanti lunghi di raso nero sopra il gomito: il dettaglio che fa la sera.'),
@@ -194,7 +194,7 @@ def build_footer():
     return N.piede(Tpl(ID, 'footer'), 'Velluto', 'sparkles', 'Un atelier d’alta moda in via Tornabuoni, a Firenze: abiti da '
                    'sera, sposa e cerimonia, tailleur e smoking cuciti al piano di sopra, provati su di voi.',
                    [('Le collezioni', [('Abiti da sera', N.cat_url('abiti-da-sera')), ('Sposa e cerimonia', N.cat_url('sposa')),
-                                       ('Smoking e uomo', N.cat_url('uomo')), ('L’archivio', P['offerte'])]),
+                                       ('Smoking e uomo', N.cat_url('smoking-uomo')), ('L’archivio', P['offerte'])]),
                     ('Velluto', [('L’atelier', P['atelier']), ('La collezione Notte', P['collezione']),
                                  ('I preferiti', P['preferiti']), ('Il mio account', P['account'])]),
                     ('Aiuto', [('Consegne e resi', P['assistenza'] + '#spedizioni'),
@@ -223,7 +223,7 @@ def vetrina(t):
                   nota='Tre prove comprese, in via Tornabuoni', **f),
         N.offerta('ve-o3', K.sfondo_foto('pexels-36698066.jpg', overlay=0.12, scala=1.06), 'Uomo · per le feste',
                   'Lo smoking in velluto a 1.990 €.', 'Velluto blu notte e revers in raso nero. Era 2.500 €.',
-                  'Smoking e uomo', N.cat_url('uomo'), bollino='−20%', nota='Orlo e maniche su misura, in due giorni', **f),
+                  'Smoking e uomo', N.cat_url('smoking-uomo'), bollino='−20%', nota='Orlo e maniche su misura, in due giorni', **f),
     ], transizione='blur')
 
 
@@ -247,7 +247,7 @@ def build_pannello_offerte():
     return N.pannello_offerte(Tpl(ID, 'pannello-offerte'), 'L’archivio di sartoria', 'Fino al −25%.',
                               'L’archivio chiude tra:',
                               ('I guanti da sera,', '175 €.', 'Raso, sopra il gomito. Era 220 €.', 'Gioielli e guanti',
-                               N.cat_url('accessori'), 'pexels-31052875.jpg'), tutte='Tutto l’archivio')
+                               N.cat_url('gioielli-guanti'), 'pexels-31052875.jpg'), tutte='Tutto l’archivio')
 
 
 def build_pannello_novita():
@@ -262,7 +262,7 @@ W, H, WM, HM = 1440.0, 810.0, 640.0, 1200.0
 PROGRAMMA = [('I', 'Abito Notte', 'Velluto nero', '3.400 €', 'abiti-da-sera'),
              ('II', 'Abito Rubino', 'Crêpe di seta', '2.300 €', 'abiti-da-sera'),
              ('III', 'Abito Oro', 'Paillettes a mano', '3.400 €', 'abiti-da-sera'),
-             ('IV', 'Smoking Mezzanotte', 'Lana e raso', '2.200 €', 'uomo')]
+             ('IV', 'Smoking Mezzanotte', 'Lana e raso', '2.200 €', 'smoking-uomo')]
 
 
 def _pc(x, y, w, h, tw, th):
@@ -356,7 +356,7 @@ def build_home():
                                'Prenota una prova', P['atelier'] + '#prova', K.photo_bg('pexels-20370082.jpg'), size=36)],
                      wm='1-2', ws='1-1'),
                t.col([N.banner(t, 'Gli smoking,', 'cuciti su di voi.', 'Lana, velluto e raso: orlo e maniche compresi.',
-                               'Smoking e uomo', N.cat_url('uomo'), K.photo_bg('pexels-34342524.jpg'), size=36)],
+                               'Smoking e uomo', N.cat_url('smoking-uomo'), K.photo_bg('pexels-34342524.jpg'), size=36)],
                      wm='1-2', ws='1-1')], layout='50-50', gap=20, valign='stretch'),
     ], padding='default', width='large', style={'padding_top': 32, 'padding_bottom': 40}))
     out.append(t.section([
@@ -374,8 +374,8 @@ def build_home():
                              'Al piano di sopra, in via Tornabuoni: le sarte cuciono, ricamano, provano. Ogni capo passa da qui.',
                              overlay=40, extra=[N.pulsante(t, 'L’atelier', P['atelier'], pad_top=20)]))
     out.append(t.section([
-        N.testata_sezione(t, 'Gioielli e guanti', 'Il dettaglio che fa la sera', N.cat_url('accessori')),
-        t.one([N.prodotti(t, category='accessori', posts_per_page=4, columns=4)]),
+        N.testata_sezione(t, 'Gioielli e guanti', 'Il dettaglio che fa la sera', N.cat_url('gioielli-guanti')),
+        t.one([N.prodotti(t, category='gioielli-guanti', posts_per_page=4, columns=4)]),
     ], padding='default', width='large', style={'padding_top': 80, 'padding_bottom': 48}))
     out.append(t.section([
         t.row([t.col([K.image(t, 'pexels-6461076.jpg', 'La sarta prende la misura della vita col metro', ratio='4/5')],

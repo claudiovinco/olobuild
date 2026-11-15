@@ -55,6 +55,10 @@ export default {
     { key: 'width_small', label: t('Larghezza tablet'), type: 'select', options: columnWidthOptions, soloFlex: true },
     { key: 'width_medium', label: t('Larghezza desktop'), type: 'select', options: columnWidthOptions, soloFlex: true },
     { key: 'width_large', label: t('Larghezza schermo grande'), type: 'select', options: columnWidthOptions, soloFlex: true },
+    // 13 nov 2026: una colonna a destra che sul telefono deve venire prima (il titolo accanto alle domande, il testo
+    // accanto al modulo) — prima l'ordine sul telefono era per forza quello del computer.
+    { key: 'primo_in_pila', label: t('Prima quando le colonne vanno in pila'), type: 'toggle', soloFlex: true,
+      description: t('Quando le colonne vanno una sotto l’altra (sul telefono, e sul tablet se la colonna non ha una larghezza per il tablet), questa viene per prima. Utile per un titolo o un testo che sul computer sta a destra.') },
     { key: 'grid_width_default', label: t('Larghezza telefono'), type: 'select', options: columnWidthOptions, soloGriglia: true },
     { key: 'grid_width_small', label: t('Larghezza tablet'), type: 'select', options: columnWidthOptions, soloGriglia: true },
     { key: 'grid_width_medium', label: t('Larghezza desktop'), type: 'select', options: columnWidthOptions, soloGriglia: true },

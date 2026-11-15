@@ -495,9 +495,36 @@ trait Olobuild_Builder_Cockpit_Trait {
         return $map[ $id ] ?? '';
     }
 
+    /**
+     * Il nome con cui salutare l'utente: il nome di battesimo, o il nome visualizzato se non è un indirizzo email.
+     * Prima il saluto diceva «Ciao clod…@gmail.com, buon lavoro» a chi non aveva compilato il nome (16 nov 2026):
+     * brutto, e finiva negli schermi condivisi e nei video. '' = nessun nome da usare.
+     *
+     * @param WP_User $user Utente.
+     * @return string
+     */
+    public static function nome_utente( $user ) {
+        if ( ! empty( $user->first_name ) ) {
+            return (string) $user->first_name;
+        }
+        $nome = (string) $user->display_name;
+        return ( '' !== $nome && false === strpos( $nome, '@' ) ) ? $nome : '';
+    }
+
+    /**
+     * Le due iniziali dell'avatar in barra: dal nome (nome_utente), se no dal nome di accesso.
+     *
+     * @param WP_User $user Utente.
+     * @return string
+     */
+    public static function iniziali_utente( $user ) {
+        $base = self::nome_utente( $user ) ?: (string) $user->user_login ?: 'U';
+        return strtoupper( function_exists( 'mb_substr' ) ? mb_substr( $base, 0, 2 ) : substr( $base, 0, 2 ) );
+    }
+
     public static function cockpit_shell_open( $crumb_html = '' ) {
         $user = wp_get_current_user();
-        $initials = strtoupper( substr( $user->first_name ?: $user->display_name ?: 'U', 0, 2 ) );
+        $initials = self::iniziali_utente( $user );
         $site_host = wp_parse_url( home_url(), PHP_URL_HOST );
 
         $user_prefs = get_user_meta( $user->ID, 'olo_dashboard_prefs', true );
@@ -936,7 +963,7 @@ trait Olobuild_Builder_Cockpit_Trait {
         $hero   = self::dashboard_hero_data();
 
         $user = wp_get_current_user();
-        $first_name = $user->first_name ?: $user->display_name ?: __( 'Utente', 'olobuild' );
+        $first_name = self::nome_utente( $user );
         $site_host = wp_parse_url( home_url(), PHP_URL_HOST );
 
         // Stato "aggiornamento disponibile" (placeholder — TODO collegare a UpdateChecker)
@@ -966,8 +993,12 @@ trait Olobuild_Builder_Cockpit_Trait {
                     <section class="olo-hero">
                         <div class="olo-hero-l">
                             <div class="greet"><?php
-                                /* translators: %s = first name */
-                                printf( esc_html__( 'Ciao %s, buon lavoro', 'olobuild' ), esc_html( $first_name ) );
+                                if ( '' !== $first_name ) {
+                                    /* translators: %s = first name */
+                                    printf( esc_html__( 'Ciao %s, buon lavoro', 'olobuild' ), esc_html( $first_name ) );
+                                } else {
+                                    esc_html_e( 'Buon lavoro', 'olobuild' );
+                                }
                             ?></div>
                             <h1><?php
                                 if ( $hero['is_page'] ) {

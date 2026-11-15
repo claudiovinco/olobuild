@@ -5,9 +5,11 @@ capitonné a mano, le tende su misura, le testiere, la scelta dei tessuti in bot
 Tema scuro e caldo, il velluto: bordeaux profondo, oro, beige e avorio. Titoli in Cinzel, testo in Raleway, dati in
 Victor Mono.
 
-Apertura: «il sipario a pannelli». Lo slider resta fermo in cima mentre si scorre: tutta la tela è coperta da dieci teli
-di velluto a pieghe, col titolo sopra. Scorrendo i teli girano in 3D uno dopo l’altro, da sinistra a destra, come le
-lamelle di una veneziana di stoffa, e scoprono il video della bottega: il tappezziere al banco. Cursore: la nappa.
+Apertura: «la tenda che si raccoglie» (dal 15 nov 2026; prima dieci teli che giravano come una veneziana). Lo slider
+resta fermo in cima mentre si scorre: tutta la tela è coperta da una tenda di velluto a pieghe, col titolo sopra.
+Scorrendo la tenda si tira verso destra come una tenda vera: il bordo libero parte per primo, le pieghe si stringono
+una dopo l'altra e si ammucchiano contro il muro, poi il cordone con la nappa la lega; dietro, il tappezziere al banco.
+Cursore: la nappa.
 """
 import os
 import sys
@@ -45,7 +47,10 @@ PHOTOS = [
     'pexels-3689271.jpg', 'pexels-26805218.jpg',
 ]
 VIDEOS = [V_BANCO, V_CUCITRICE, V_CUCITRICE2, V_TENDA, V_TENDA2, V_VELLUTO, V_ORO, V_MANI, V_TAGLIO]
-MEDIA = set(PHOTOS) | {v + '.mp4' for v in VIDEOS} | {v + '.jpg' for v in VIDEOS}
+# il velluto capitonné da accarezzare: la foto ricolorata sul bordeaux del tema e la stessa col pelo piegato, più chiara
+VELLUTO, VELLUTO_CHIARO = 'capitonne-velluto.jpg', 'capitonne-velluto-chiaro.jpg'
+NAPPA = 'capitonne-nappa.svg'   # la nappa del cordone che lega la tenda (disegnata in mestieri_disegni.py)
+MEDIA = set(PHOTOS) | {v + '.mp4' for v in VIDEOS} | {v + '.jpg' for v in VIDEOS} | {VELLUTO, VELLUTO_CHIARO, NAPPA}
 
 K = Kit(ID, MEDIA, raggio=2, peso_titoli='500', corsivo=False, maiuscole_pulsanti=True)
 C = K.c
@@ -69,33 +74,53 @@ def build_footer():
                    marchio_size=140)
 
 
-# ── L'apertura: il sipario a pannelli ──
-TELI = 10
+# ── L'apertura: la tenda che si raccoglie ──
+# Una tenda di velluto a pieghe copre tutta la tela. Scorrendo la si tira verso destra come una tenda vera: il bordo
+# libero parte per primo e spinge le pieghe, che si stringono una dopo l'altra (la tenda non si deforma: ogni piega si
+# accosta alla vicina) e si ammucchiano contro il muro; arrivata, la tenda rimbalza appena e il cordone con la nappa la
+# lega. Il bastone dorato resta: è il binario. Dietro, la bottega.
+PIEGHE = 14
+RACCOLTA = 85.0      # dove comincia il mucchio delle pieghe raccolte (% della larghezza)
+STRETTA = 0.3        # quanto si stringe ogni piega nel mucchio
 
 
 def apertura(t):
     m = K.mob
     livelli = []
-    w = 100.0 / TELI
-    for k in range(TELI):
-        a = 8 + k * 6.5
-        # le pieghe: ogni telo è un gradiente dal bordeaux scuro alla luce sul colmo della piega
-        piega = 'background:linear-gradient(90deg,#3A0F18 0%,#6E1E2B 30%,#9C3343 52%,#6E1E2B 74%,#2E0B13 100%);'
-        livelli.append(K.livello('ca-telo%d' % k, tipo='shape', x=round(k * w, 3), y=0, w=round(w + 0.06, 3), h=100,
+    w = 100.0 / PIEGHE
+    passo = (100 - RACCOLTA - w * STRETTA) / (PIEGHE - 1)
+    # la piega: il colmo chiaro al centro, l'incavo scuro ai lati; sopra l'ombra in alto e in basso e la passamaneria d'oro
+    piega = ('background:linear-gradient(0deg,#6E521C 0,#E9CC7E .7%,#B8913F 1.5%,rgba(0,0,0,0) 1.5%),'
+             'linear-gradient(180deg,rgba(10,2,4,.45) 0,rgba(10,2,4,0) 26%,rgba(10,2,4,0) 74%,rgba(10,2,4,.35) 100%),'
+             'linear-gradient(90deg,#330D15 0%,#6E1E2B 28%,#A1394A 50%,#6E1E2B 72%,#2A0A11 100%);')
+    for k in range(PIEGHE):
+        dx = round((RACCOLTA + k * passo - k * w) * 14.4, 1)      # px della tela del computer (1440)
+        parte = 6 + k * 2.2                                       # il bordo libero (k = 0) parte per primo
+        tappe = [{'p': 0, 'x': 0, 'sx': 1}, {'p': parte, 'x': 0, 'sx': 1},
+                 {'p': 68, 'x': dx + 6, 'sx': STRETTA * 0.9}, {'p': 74, 'x': dx - 2, 'sx': STRETTA * 1.04},
+                 {'p': 79, 'x': dx, 'sx': STRETTA}, {'p': 100, 'x': dx, 'sx': STRETTA}]
+        livelli.append(K.livello('ca-piega%d' % k, tipo='shape', x=round(k * w, 3), y=0, w=round(w + 0.08, 3), h=100,
                                  bgColor=BORDEAUX, entra='fadeIn', ritardo=0, durata=500,
-                                 customCSS=piega + 'backface-visibility:hidden;-webkit-backface-visibility:hidden;',
-                                 scrollMove={'inizio': 0, 'fine': 100, 'tappe': [{'p': 0, 'ry': 0.01}, {'p': a, 'ry': 0.01},
-                                                                                {'p': a + 18, 'ry': 120},
-                                                                                {'p': 100, 'ry': 120}]},
-                                 responsive={'mobile': {'x': round(k * w, 3), 'y': 0, 'width': round(w + 0.1, 3),
-                                                        'height': 100}}))
-    # il bastone dorato in alto con gli anelli
+                                 customCSS=piega + 'transform-origin:0 50%;',
+                                 scrollMove={'inizio': 0, 'fine': 100, 'tappe': tappe},
+                                 responsive={'mobile': {'x': round(k * w, 3), 'y': 0, 'width': round(w + 0.12, 3), 'height': 100}}))
+    # il bastone dorato in alto: il binario della tenda, resta
     livelli.append(K.livello('ca-bastone', tipo='shape', x=0, y=0, w=100, h=1.6, shapeGradient={'angle': 180, 'from': '#E9CC7E',
                                                                                               'to': '#8E6E2A', 'fromStop': 0},
-                             entra='fadeIn', ritardo=0, durata=600,
-                             scrollMove={'inizio': 0, 'fine': 100, 'tappe': [{'p': 0, 'o': 100}, {'p': 70, 'o': 100},
-                                                                            {'p': 90, 'o': 0}, {'p': 100, 'o': 0}]},
-                             responsive={'mobile': {'height': 0.8}}))
+                             entra='fadeIn', ritardo=0, durata=600, responsive={'mobile': {'height': 0.8}}))
+    # il cordone che lega la tenda raccolta e la nappa che ne pende: arrivano quando la tenda si è fermata
+    lega = {'inizio': 0, 'fine': 100, 'tappe': [{'p': 0, 'o': 0, 'y': -24}, {'p': 76, 'o': 0, 'y': -24},
+                                                {'p': 84, 'o': 100, 'y': 0}, {'p': 100, 'o': 100, 'y': 0}]}
+    livelli += [
+        K.livello('ca-cordone', tipo='shape', x=RACCOLTA - 0.8, y=55.5, w=100 - RACCOLTA + 1.6, h=1.5, borderRadius=999,
+                  shapeGradient={'angle': 180, 'from': '#F1D88E', 'to': '#7A5B22', 'fromStop': 0}, entra='fadeIn', ritardo=0,
+                  durata=300, customCSS='box-shadow:0 3px 6px rgba(0,0,0,.45);', scrollMove=lega,
+                  responsive={'mobile': {'x': RACCOLTA - 1.5, 'y': 57, 'width': 100 - RACCOLTA + 3, 'height': 0.9}}),
+        K.livello('ca-nappa', tipo='image', imageSrc=K.img(NAPPA), imageAlt='', objectFit='contain', x=RACCOLTA - 2.6, y=56.2,
+                  w=3.6, h=15.5, entra='fadeIn', ritardo=0, durata=300, scrollMove=lega,
+                  customCSS='filter:drop-shadow(0 6px 8px rgba(0,0,0,.5));',
+                  responsive={'mobile': {'x': RACCOLTA - 5.2, 'y': 57.4, 'width': 9, 'height': 9.5}}),
+    ]
     testi = [
         K.livello('ca-o', contenuto='Capitonné · tappezzeria e tende · Vicenza', x=6, y=24, w=44, size=12, peso='500',
                   colore=mix(C['chiaro'], 86), letterSpacing=3, textTransform='uppercase', fontFamily=MONO, ritardo=200,
@@ -119,10 +144,6 @@ def apertura(t):
                   borderColor=mix(C['chiaro'], 60), letterSpacing=3, textTransform='uppercase', entra='fadeInUp', ritardo=1100,
                   buttonUrl=CONTATTI, hover={'bgColor': mix(C['chiaro'], 12), 'borderColor': C['chiaro'], 'duration': 250},
                   responsive={'tablet': {'x': 21}, 'mobile': {'y': 26.5, 'x': 40, 'fontSize': m(11)}}),
-        K.livello('ca-hint', contenuto='Scorrete: si apre la bottega ↓', x=6, y=84, w=30, size=12, peso='500',
-                  colore=mix(C['chiaro'], 82), letterSpacing=1, fontFamily=MONO, ritardo=1300,
-                  scrollMove={'inizio': 0, 'fine': 15, 'tappe': [{'p': 0, 'o': 100}, {'p': 100, 'o': 0}]},
-                  responsive={'mobile': {'fontSize': m(10), 'y': 32, 'x': 7, 'width': 86}}),
     ]
     veli = K.veli('ca-velo', 'sinistra', 40, 66, colore=C['nero'], forza=88, mobile_alto=35)
     sl = [K.diapositiva('ca-1', K.sfondo_video(V_BANCO, overlay=0.18, colore=C['nero']), veli + livelli + testi,
@@ -131,6 +152,26 @@ def apertura(t):
                        showDots=False, showTabs=False, showProgressBar=False, autoplay=False, parallax=False,
                        scrollTimeline=True, scrollTimelineDistance=1500, scrollStep=False,
                        heightMobile={'mode': 'px', 'value': 1400})
+
+
+def velluto(t):
+    """Il velluto da accarezzare (15 nov 2026): passando il mouse il pelo si piega e si schiarisce, poi in pochi secondi si
+    rialza e torna scuro (Gratta e scopri al passaggio, pennello morbido, copertura che ricresce). Sul telefono col dito.
+    Niente scritte da scoprire e niente istruzioni: è il velluto di una poltrona, si tocca e basta."""
+    pelo = t.classic('scratchfx', {
+        'image': K.img(VELLUTO_CHIARO), 'object_fit': 'cover', 'object_position': 'center center',
+        'prize_eyebrow': '', 'prize_title': '', 'prize_text': '', 'hint': '', 'show_button': False, 'coupon_code': '',
+        'remember': False, 'cover_type': 'image', 'cover_image': K.img(VELLUTO), 'cover_color': '#4A0F1C',
+        'cover_color2': '#4A0F1C', 'cover_text': '', 'brush_size': 70, 'reveal_threshold': 0, 'reset_on_leave': False,
+        'al_passaggio': True, 'pennello_morbido': True, 'ricresce': 7, 'height_mode': 'aspect', 'aspect': '16/10',
+        'border_radius': 2, 'under_bg': '#4A0F1C', 'shadow': 'none', 'max_width': 1000}, style={})
+    return t.section([
+        t.row([t.col([K.sechead(t, 'I tessuti', ['Seicento tessuti', 'da toccare.'], size=56, layout='stack', size_mobile=36),
+                      K.text(t, 'Velluti, lini, damaschi, pelli: il campionario sta in bottega, e si sceglie con le mani.',
+                             size=17)],
+                     wm='2-5', ws='1-1'),
+               t.col([pelo], wm='3-5', ws='1-1')], layout='custom', custom='36,64', gap=64, valign='center'),
+    ], bg=solid(C['sala']), padding='large', width='large', style={'padding_top': 130, 'padding_bottom': 130})
 
 
 def build_home():
@@ -159,9 +200,7 @@ def build_home():
             ('pexels-7546281.jpg', 'Le testiere', 'Imbottite', 'Per il letto, nel tessuto che volete. Da 380 €.'),
         ], altezza='420'),
     ], bg=solid(C['sala']), padding='large', width='large', style={'padding_top': 130, 'padding_bottom': 120}))
-    out.append(K.video_frase(t, V_VELLUTO, 'I tessuti', 'Seicento tessuti <em>da toccare.</em>',
-                             'Velluti, lini, damaschi, pelli: il campionario sta in bottega, e si sceglie con le mani.',
-                             overlay=22))
+    out.append(velluto(t))
     out.append(t.section([
         t.row([t.col([K.image(t, 'pexels-37886353.jpg', 'Le mani del tappezziere sul tessuto', ratio='4/5')], wm='2-5',
                      ws='1-1'),
@@ -281,10 +320,11 @@ def build_404():
 
 THEME = tema(
     ID, NAME, 'Casa e design', 'Il sipario di velluto',
-    ['tappezzeria', 'tende su misura', 'capitonné', 'artigianato', 'vicenza', 'scuro', 'slider pro', '3d'],
-    'Una bottega di tappezzeria, velluto bordeaux e oro: in apertura dieci teli di velluto a pieghe coprono tutto, e '
-    'scorrendo girano in 3D uno dopo l’altro come una veneziana di stoffa scoprendo il tappezziere al banco; i lavori da '
-    'girare, il listino, i tre passaggi di una poltrona e il preventivo.',
+    ['tappezzeria', 'tende su misura', 'capitonné', 'artigianato', 'vicenza', 'scuro', 'slider pro'],
+    'Una bottega di tappezzeria, velluto bordeaux e oro: in apertura una tenda di velluto a pieghe copre tutto, e '
+    'scorrendo si raccoglie di lato come una tenda vera, piega dopo piega, finché il cordone con la nappa la lega e '
+    'scopre il tappezziere al banco; il velluto da accarezzare, i lavori da girare, il listino, i tre passaggi di una '
+    'poltrona e il preventivo.',
     [('I lavori', LAVORI), ('La bottega', BOTTEGA), ('Contatti', CONTATTI)],
     [('home', 'Home', None), ('lavori', 'I lavori', 'lavori'), ('la-bottega', 'La bottega', 'la-bottega'),
      ('contatti', 'Contatti', 'contatti')],

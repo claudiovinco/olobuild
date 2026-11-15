@@ -132,6 +132,7 @@ const LOOP_ANIM = {
   breathLoop:     'mpsBreathLoop',
   slideHLoop:     'mpsSlideHLoop',
   hoverLoop:      'mpsHoverLoop',
+  windLoop:       'mpsWindLoop',
 };
 
 /* ── Helpers ───────────────────────────────────────────── */
@@ -280,7 +281,7 @@ function initSlider(container) {
       return t + h >= 0.98 ? 'giu' : '';
     };
     layerWraps.forEach(function (w) {
-      qsa(w, ':scope > .olo-proslider-layer').forEach(function (el) {
+      qsa(w, ':scope > .olo-proslider-layer, :scope > .mps-stato > .olo-proslider-layer').forEach(function (el) {
         if (el.hasAttribute('data-timeline-name')) return; // in alto a sinistra per regola: lo posa la sua timeline
         var cs = getComputedStyle(el), t = frazione(cs.top, h0), hh = frazione(cs.height, h0), b = bordo(t, hh);
         if (!b) return;
@@ -929,14 +930,208 @@ function initSlider(container) {
     }
   }
 
+  /* ── Stati (interazioni al clic, 1.4.981) ─────────────── */
+  // Uno stato è un nome con un valore (luce = accesa). Le azioni «Imposta uno stato» e «Stato successivo» lo cambiano; i
+  // livelli con «Visibile solo in uno stato» stanno in un involucro (.mps-stato) che si mostra quando il valore è fra i
+  // loro (o, con «!», quando non lo è). Il valore sta anche sul contenitore (data-st-nome) e, se l'azione porta un
+  // colore, nella variabile --mps-st-nome, che i colori dei livelli possono usare (var(--mps-st-tinta, #fff)).
+  function valoreStato(nome) { return container.getAttribute('data-st-' + nome) || ''; }
+  function statoVale(cond, v) {
+    cond = String(cond || '').trim();
+    var neg = cond.charAt(0) === '!';
+    var lista = (neg ? cond.slice(1) : cond).split(',').map(function (x) { return x.trim(); });
+    var dentro = lista.indexOf(String(v || '')) !== -1;
+    return neg ? !dentro : dentro;
+  }
+  function rianima(w) {
+    // quello che si mostra riparte dall'inizio: i disegni SVG animati, i video
+    qsa(w, 'img').forEach(function (im) {
+      if (/\.svg(#|$)/i.test(im.getAttribute('src') || '')) im.src = im.getAttribute('src').replace(/#.*$/, '') + '#r' + Date.now();
+    });
+    qsa(w, 'video').forEach(function (v) { try { v.currentTime = 0; v.play(); } catch (_) {} });
+  }
+  function impostaStato(nome, valore, colore) {
+    nome = String(nome || '').toLowerCase().replace(/[^a-z0-9_-]/g, '');
+    if (!nome) return;
+    valore = String(valore == null ? '' : valore);
+    container.setAttribute('data-st-' + nome, valore);
+    if (colore) container.style.setProperty('--mps-st-' + nome, colore);
+    qsa(container, '.mps-stato[data-stato="' + nome + '"]').forEach(function (w) {
+      var ok = statoVale(w.getAttribute('data-stato-vale'), valore);
+      var era = !w.classList.contains('mps-stato--via');
+      w.classList.toggle('mps-stato--via', !ok);
+      if (ok) w.removeAttribute('aria-hidden'); else w.setAttribute('aria-hidden', 'true');
+      if (ok && !era) rianima(w);
+    });
+    // i pulsanti che impostano questo stato: acceso quello del valore in vigore
+    qsa(container, '.olo-proslider-layer[data-action]').forEach(function (el) {
+      var a; try { a = JSON.parse(el.getAttribute('data-action')); } catch (_) { return; }
+      if (!a || a.type !== 'setState' || String(a.target || '').toLowerCase() !== nome) return;
+      var on = String(a.value == null ? '' : a.value) === valore;
+      el.classList.toggle('mps-stato-attivo', on);
+      el.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    container.dispatchEvent(new CustomEvent('olo:stato', { detail: { nome: nome, valore: valore } }));
+  }
+  container.oloStato = impostaStato;
+
+  /* ── Livello da pulire col puntatore (1.4.981) ─────────── */
+  // La tela copre il livello con la sua immagine (o il colore) e il puntatore la cancella passandoci sopra; sul telefono
+  // il dito, anche mentre la pagina scorre. Una griglia di 48 × 27 caselle conta quanto è pulito: alla soglia il resto
+  // svanisce e lo stato scritto («nome=valore») cambia. I tratti si ricordano (in frazioni del livello) e si rifanno
+  // quando la tela cambia misura.
+  qsa(container, 'canvas.mps-pulisci-tela').forEach(function (cv) {
+    var o; try { o = JSON.parse(cv.getAttribute('data-pulisci')); } catch (_) { return; }
+    var strato = cv.closest('.olo-proslider-layer') || cv;
+    var g = cv.getContext('2d');
+    if (!g) return;
+    var GC = 48, GR = 27, celle = new Uint8Array(GC * GR), pulite = 0, finito = false;
+    var tratti = [], ultimo = null, img = null, pronto = false, dpr = Math.min(2, window.devicePixelRatio || 1);
+    function raggio() {
+      // il pennello è in px della tela del computer; sul telefono non scende sotto un dito
+      var w = Math.max(container.offsetWidth || 1440, 1000);
+      return o.p * w / 1440 * dpr * ((window.innerWidth || 1440) < 700 ? 1.25 : 1);
+    }
+    function copri() {
+      g.globalCompositeOperation = 'source-over';
+      g.clearRect(0, 0, cv.width, cv.height);
+      g.fillStyle = o.c || '#111';
+      g.fillRect(0, 0, cv.width, cv.height);
+      if (img && img.naturalWidth) {
+        // come object-fit: cover, col punto scelto
+        var s = Math.max(cv.width / img.naturalWidth, cv.height / img.naturalHeight);
+        var w = img.naturalWidth * s, h = img.naturalHeight * s;
+        var pos = String(o.pos || 'center').split(/\s+/);
+        var px = pos[0] === 'left' ? 0 : pos[0] === 'right' ? 1 : (/%$/.test(pos[0]) ? parseFloat(pos[0]) / 100 : 0.5);
+        var py = pos[1] === 'top' ? 0 : pos[1] === 'bottom' ? 1 : (/%$/.test(pos[1] || '') ? parseFloat(pos[1]) / 100 : 0.5);
+        g.drawImage(img, (cv.width - w) * px, (cv.height - h) * py, w, h);
+      }
+    }
+    function punto(nx, ny) {
+      var r = raggio(), x = nx * cv.width, y = ny * cv.height;
+      var grad = g.createRadialGradient(x, y, 0, x, y, r);
+      grad.addColorStop(0, 'rgba(0,0,0,1)');
+      grad.addColorStop(0.55, 'rgba(0,0,0,0.85)');
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      g.globalCompositeOperation = 'destination-out';
+      g.fillStyle = grad;
+      g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill();
+      // le caselle dentro il pennello (un po' più strette del bordo sfumato)
+      var rc = r * 0.7 / cv.width * GC, ry = r * 0.7 / cv.height * GR, cx = nx * GC, cy = ny * GR;
+      for (var j = Math.max(0, Math.floor(cy - ry)); j <= Math.min(GR - 1, Math.floor(cy + ry)); j++) {
+        for (var i = Math.max(0, Math.floor(cx - rc)); i <= Math.min(GC - 1, Math.floor(cx + rc)); i++) {
+          var dx = (i + 0.5 - cx) / Math.max(0.001, rc), dy = (j + 0.5 - cy) / Math.max(0.001, ry);
+          if (dx * dx + dy * dy <= 1 && !celle[j * GC + i]) { celle[j * GC + i] = 1; pulite++; }
+        }
+      }
+    }
+    function tratto(a, b) {
+      // fra due posizioni del puntatore, un punto ogni mezzo pennello: la riga resta continua anche coi movimenti veloci
+      var r = raggio(), d = Math.hypot((b[0] - a[0]) * cv.width, (b[1] - a[1]) * cv.height), n = Math.max(1, Math.ceil(d / (r * 0.45)));
+      for (var k = 1; k <= n; k++) punto(a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n);
+    }
+    function misura() {
+      var r = strato.getBoundingClientRect();
+      if (!r.width || !r.height) return false;
+      cv.width = Math.max(2, Math.round(r.width * dpr));
+      cv.height = Math.max(2, Math.round(r.height * dpr));
+      copri();
+      tratti.forEach(function (t) { if (t.length === 1) punto(t[0][0], t[0][1]); for (var k = 1; k < t.length; k++) tratto(t[k - 1], t[k]); });
+      return true;
+    }
+    function fine() {
+      if (finito) return;
+      finito = true;
+      cv.style.transition = 'opacity 900ms ease';
+      cv.style.opacity = '0';
+      strato.style.pointerEvents = 'none';
+      var st = String(o.st || '').split('=');
+      if (st[0]) impostaStato(st[0].trim(), (st[1] || '').trim());
+    }
+    function passa(cx, cy, nuovo) {
+      if (finito || !pronto) return;
+      var r = strato.getBoundingClientRect();
+      if (!r.width) return;
+      var nx = (cx - r.left) / r.width, ny = (cy - r.top) / r.height;
+      if (nx < -0.05 || nx > 1.05 || ny < -0.05 || ny > 1.05) { ultimo = null; return; }
+      var q = [nx, ny];
+      if (nuovo || !ultimo) { tratti.push([q]); punto(nx, ny); } else { tratti[tratti.length - 1].push(q); tratto(ultimo, q); }
+      ultimo = q;
+      if (pulite / (GC * GR) * 100 >= o.s) fine();
+    }
+    strato.addEventListener('pointermove', function (e) { if (e.pointerType !== 'touch') passa(e.clientX, e.clientY, false); });
+    strato.addEventListener('pointerleave', function () { ultimo = null; });
+    strato.addEventListener('touchstart', function (e) { var t = e.touches[0]; if (t) passa(t.clientX, t.clientY, true); }, { passive: true });
+    strato.addEventListener('touchmove', function (e) { var t = e.touches[0]; if (t) passa(t.clientX, t.clientY, false); }, { passive: true });
+    strato.addEventListener('touchend', function () { ultimo = null; }, { passive: true });
+    // se lo stato cambia da un'altra parte (il pulsante «Pulisci tutto»), la tela se ne va
+    container.addEventListener('olo:stato', function (e) {
+      var st = String(o.st || '').split('=');
+      if (st[0] && e.detail && e.detail.nome === st[0].trim() && e.detail.valore === (st[1] || '').trim() && !finito) {
+        finito = true; cv.style.transition = 'opacity 900ms ease'; cv.style.opacity = '0'; strato.style.pointerEvents = 'none';
+      }
+    });
+    function parti() { pronto = misura(); }
+    if (o.img) {
+      img = new Image();
+      img.onload = parti;
+      img.onerror = function () { img = null; parti(); };
+      img.src = o.img;
+    } else {
+      parti();
+    }
+    var tMis = null;
+    window.addEventListener('resize', function () { clearTimeout(tMis); tMis = setTimeout(function () { if (!finito) pronto = misura(); }, 120); });
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(function () { if (!finito && !pronto) pronto = misura(); }).observe(strato);
+    }
+  });
+
   /* ── Layer Actions ────────────────────────────────────── */
   qsa(container, '.olo-proslider-layer[data-action]').forEach(function (el) {
     el.style.cursor = 'pointer';
+    // i livelli che agiscono e non sono pulsanti hanno role=button (PHP): Invio e Spazio li premono
+    if (el.getAttribute('role') === 'button') {
+      el.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+      });
+    }
+    // Il punto del clic: chi cambia uno stato lascia sullo slider dove lo si è toccato, in px dal centro, per quel valore
+    // (--mps-clic-x-<valore>, --mps-clic-y-<valore>). Un livello di quello stato ci si sposta (translate nel suo CSS):
+    // la crepa nasce dove si colpisce il vetro (Scheggia, 15 nov 2026). Da tastiera il punto è il centro.
+    function segnaPunto(e, valore) {
+      var v = String(valore || '').toLowerCase().replace(/[^a-z0-9_-]/g, '');
+      if (!v) return;
+      var x = 0, y = 0;
+      if (e && e.detail !== 0 && typeof e.clientX === 'number') {
+        var rc = container.getBoundingClientRect();
+        x = Math.round(e.clientX - rc.left - rc.width / 2);
+        y = Math.round(e.clientY - rc.top - rc.height / 2);
+      }
+      container.style.setProperty('--mps-clic-x-' + v, x + 'px');
+      container.style.setProperty('--mps-clic-y-' + v, y + 'px');
+    }
     el.addEventListener('click', function (e) {
       var action;
       try { action = JSON.parse(el.getAttribute('data-action')); } catch (_) { return; }
       if (!action) return;
       switch (action.type) {
+        case 'setState':
+          // un pulsante che cambia uno stato non porta altrove (il suo link «#» farebbe saltare la pagina in cima)
+          if (e && e.preventDefault) e.preventDefault();
+          segnaPunto(e, action.value);
+          impostaStato(action.target, action.value, action.color);
+          break;
+        case 'cycleState':
+          if (e && e.preventDefault) e.preventDefault();
+          // il valore dopo quello in vigore, nell'ordine scritto; dall'ultimo si ricomincia, o ci si ferma
+          var nomeSt = String(action.target || '').toLowerCase();
+          var valori = String(action.values || '').split(',').map(function (x) { return x.trim(); });
+          var ora = valori.indexOf(valoreStato(nomeSt));
+          if (ora === valori.length - 1 && action.loop === false) break;
+          segnaPunto(e, valori[(ora + 1) % valori.length]);
+          impostaStato(nomeSt, valori[(ora + 1) % valori.length]);
+          break;
         case 'nextSlide':  next(); break;
         case 'prevSlide':  prev(); break;
         case 'goToSlide':
@@ -1358,68 +1553,273 @@ function initSlider(container) {
   // all'altra; i valori vanno sulle proprietà singole translate, scale e rotate, che si sommano al transform delle
   // animazioni d'ingresso senza toccarlo, e l'opacità su un filtro. Gli spostamenti sono in px della tela del computer
   // (1440): sulle tele più strette si riducono in proporzione. Con «riduci il movimento» i livelli restano alla prima tappa.
+  //
+  // Fluidità (Ti Consiglia, 13 nov 2026: su telefono e tablet lo zoom scattava, sul computer no):
+  // - dove il browser sa legare un'animazione allo scorrimento (ViewTimeline: Chrome 115, Safari 26) le tappe diventano
+  //   un'animazione del browser che va col compositore, in pari col dito, senza passare dal JavaScript a ogni fotogramma;
+  //   altrove si calcola a ogni fotogramma come prima, ma leggendo le misure tutte prima di scrivere;
+  // - il filtro dell'opacità c'è solo mentre il livello sfuma: a opacità piena il livello torna al filtro suo (ogni
+  //   filtro è una superficie in più da ridisegnare a ogni fotogramma), e lontano dai tratti in cui si vede il livello è
+  //   nascosto (visibility) e il suo video in pausa.
   (function () {
     var mobili = qsa(container, '.olo-proslider-layer[data-scroll-move]').map(function (el) {
       try { return { el: el, d: JSON.parse(el.getAttribute('data-scroll-move')) }; } catch (e) { return null; }
     }).filter(function (m) { return m && m.d && m.d.t && m.d.t.length > 1; });
     if (!mobili.length) return;
-    // la maschera (mt, mr, mb, ml) solo sui livelli che la usano: gli altri restano senza clip-path
+    function usa(m, chiavi) { return m.d.t.some(function (t) { return chiavi.some(function (c) { return t.v[c] != null; }); }); }
     mobili.forEach(function (m) {
-      m.maschera = m.d.t.some(function (t) { return t.v.mt != null || t.v.mr != null || t.v.mb != null || t.v.ml != null; });
-    });
-    // la prospettiva per le rotazioni 3D sta sulla tela del livello
-    mobili.forEach(function (m) {
-      if (m.d.t.some(function (t) { return t.v.rx || t.v.ry; })) {
-        var tela = m.el.parentElement;
-        if (tela) tela.style.perspective = '1600px';
-      }
+      m.tela = m.el.parentElement;
+      // la maschera (mt, mr, mb, ml) solo sui livelli che la usano: gli altri restano senza clip-path
+      m.maschera = usa(m, ['mt', 'mr', 'mb', 'ml']);
+      m.conO = usa(m, ['o']);
+      m.conXY = usa(m, ['x', 'y']);
+      m.conS = usa(m, ['s', 'sx', 'sy']);
+      m.conR = usa(m, ['r', 'rx', 'ry']);
+      // gli assi del carattere variabile (larghezza e peso veri del disegno), nell'ordine fisso: le tappe si fondono
+      m.assi = ['wdth', 'wght'].filter(function (c) { return usa(m, [c]); });
+      // il filtro del livello (Avanzate → CSS: la luminosità di un video) resta sotto l'opacità
+      m.filtro = m.el.style.filter || '';
+      m.video = m.el.querySelector('video');
+      m.scritto = {};
+      // la prospettiva per le rotazioni 3D sta sulla tela del livello
+      if (m.tela && m.d.t.some(function (t) { return t.v.rx || t.v.ry; })) m.tela.style.perspective = '1600px';
     });
     var avvolto = container.closest('.mps-scroll-fixed-wrapper');
-    function valore(t, k, base) {
+    // Andamento «morbido» (di serie): fra una tappa e l'altra si parte e si arriva piano. «Costante» (c): si va a velocità
+    // uniforme e la scala cresce in proporzione (da 1 a 4 come da 4 a 16), così uno zoom che attraversa più tappe non
+    // rallenta a ogni tappa (le potenze di dieci di Ti Consiglia, 10 nov 2026).
+    function valore(t, k, base, costante) {
       var u = 0;
       for (var i = 0; i < t.length - 1; i++) { if (t[i + 1].p >= k) { u = i; break; } u = i; }
       var a = t[u], b = t[Math.min(u + 1, t.length - 1)];
       var span = Math.max(0.0001, b.p - a.p);
       var f = Math.max(0, Math.min(1, (k - a.p) / span));
-      f = f * f * (3 - 2 * f);
+      if (!costante) f = f * f * (3 - 2 * f);
       var va = a.v[base], vb = b.v[base];
-      var def = (base === 's' || base === 'sx' || base === 'sy') ? 1 : (base === 'o' ? 100 : 0);
+      var scala = base === 's' || base === 'sx' || base === 'sy';
+      var def = scala ? 1 : (base === 'o' || base === 'wdth' ? 100 : (base === 'wght' ? 400 : 0));
       va = va == null ? def : va; vb = vb == null ? def : vb;
+      if (costante && scala && va > 0 && vb > 0 && va !== vb) return va * Math.pow(vb / va, f);
       return va + (vb - va) * f;
     }
-    function applica() {
-      giro = null;
+    // dall'avanzamento della scena (0–100) a quello del livello nel suo tratto, e viceversa
+    function delLivello(d, p) {
+      return d.f > d.i ? Math.max(0, Math.min(100, (p - d.i) / (d.f - d.i) * 100)) : (p >= d.i ? 100 : 0);
+    }
+    function dellaScena(d, k) { return d.i + k * (d.f - d.i) / 100; }
+    // i valori di un livello al punto k del suo tratto (t: le tappe da cui leggerli)
+    function stile(m, t, k, fattore) {
+      var c = m.d.c, s = {};
+      if (m.conXY) s.translate = (valore(t, k, 'x', c) * fattore).toFixed(1) + 'px ' + (valore(t, k, 'y', c) * fattore).toFixed(1) + 'px';
+      if (m.conS) {
+        // sx e sy allungano in orizzontale e in verticale, moltiplicando la scala
+        var sc = valore(t, k, 's', c), sx = valore(t, k, 'sx', c), sy = valore(t, k, 'sy', c);
+        s.scale = sx !== 1 || sy !== 1 ? (sc * sx).toFixed(4) + ' ' + (sc * sy).toFixed(4) : sc.toFixed(4);
+      }
+      if (m.conR) {
+        var rx = valore(t, k, 'rx', c), ry = valore(t, k, 'ry', c);
+        s.rotate = rx ? 'x ' + rx.toFixed(2) + 'deg' : (ry ? 'y ' + ry.toFixed(2) + 'deg' : valore(t, k, 'r', c).toFixed(2) + 'deg');
+      }
+      if (m.assi.length) {
+        s.fontVariationSettings = m.assi.map(function (a) { return '"' + a + '" ' + valore(t, k, a, c).toFixed(1); }).join(', ');
+      }
+      if (m.conO) {
+        var o = Math.max(0, Math.min(100, valore(t, k, 'o', c)));
+        s.filter = o >= 99.95 ? (m.filtro || 'none') : (m.filtro ? m.filtro + ' ' : '') + 'opacity(' + (o / 100).toFixed(3) + ')';
+      }
+      return s;
+    }
+    // La maschera: quanto del livello resta coperto da ogni lato (in % del livello, che si allunga con la scena): un
+    // video che si scopre sotto una riga che scende (Coro Paganella, 3 nov 2026), una fascia che la segue.
+    function maschera(m, t, k) {
+      return 'inset(' + ['mt', 'mr', 'mb', 'ml'].map(function (c) {
+        return Math.max(0, Math.min(100, valore(t, k, c, m.d.c))).toFixed(2) + '%';
+      }).join(' ') + ')';
+    }
+    function scrivi(m, prop, v) {
+      if (m.scritto[prop] === v) return;
+      m.scritto[prop] = v;
+      m.el.style[prop] = v;
+    }
+    // I tratti della scena (0–100) in cui il livello si vede, allargati di MARGINE punti per lato: fuori il livello è
+    // nascosto e il suo video fermo. Il margine copre il ritardo del JavaScript quando lo zoom va col compositore.
+    var MARGINE = 4;
+    mobili.forEach(function (m) {
+      if (!m.conO) return;
+      var d = m.d, punti = [0, 100];
+      d.t.forEach(function (t) { punti.push(dellaScena(d, t.p)); });
+      punti = punti.filter(function (p) { return p >= 0 && p <= 100; }).sort(function (a, b) { return a - b; });
+      var tratti = [];
+      for (var i = 0; i < punti.length - 1; i++) {
+        var a = punti[i], b = punti[i + 1];
+        if (b - a < 1e-6) continue;
+        var vede = [a + 1e-4, (a + b) / 2, b - 1e-4].some(function (p) { return valore(d.t, delLivello(d, p), 'o', d.c) > 0.05; });
+        if (!vede) continue;
+        var ult = tratti[tratti.length - 1];
+        if (ult && a - MARGINE <= ult[1]) ult[1] = b + MARGINE; else tratti.push([a - MARGINE, b + MARGINE]);
+      }
+      m.tratti = tratti;
+    });
+    function visibile(m, p) {
+      if (!m.tratti) return;
+      var si = m.tratti.some(function (t) { return p >= t[0] && p <= t[1]; });
+      if (m.via === !si) return;
+      m.via = !si;
+      // '' lascia decidere alla diapositiva (le diapositive non attive nascondono i loro livelli)
+      m.el.style.visibility = si ? '' : 'hidden';
+      if (!m.video) return;
+      if (!si) {
+        if (!m.video.paused) { m.video.pause(); m.fermato = true; }
+      } else if (m.fermato) {
+        m.fermato = false;
+        var pr = m.video.play();
+        if (pr && pr.catch) pr.catch(function () {});
+      }
+    }
+    function avanzamento() {
       var r = (avvolto || container).getBoundingClientRect();
       var vh = window.innerHeight || 800;
-      var p;
-      if (avvolto) {
-        var dist = Math.max(1, avvolto.offsetHeight - container.offsetHeight);
-        p = -r.top / dist;
-      } else {
-        p = -r.top / Math.max(1, r.height);
+      if (r.bottom < -vh || r.top > vh * 2) return null;
+      var p = avvolto ? -r.top / Math.max(1, avvolto.offsetHeight - container.offsetHeight) : -r.top / Math.max(1, r.height);
+      return menoMoto ? 0 : Math.max(0, Math.min(1, p)) * 100;
+    }
+
+    // ── col compositore: un'animazione del browser per livello, legata allo scorrimento ──
+    // Il soggetto è il contenitore che scorre (o lo slider): «contain» va da quando la sua cima tocca la cima della
+    // finestra a quando il suo fondo tocca il fondo (il tratto in cui lo slider resta fermo), «exit-crossing» da quando
+    // la cima dello slider tocca la cima della finestra a quando la tocca il fondo. Solo se fra il soggetto e la pagina
+    // non c'è un altro contenitore che scorre (overflow hidden/auto/scroll): la timeline si legherebbe a quello.
+    function scorreLaPagina(el) {
+      var radice = document.scrollingElement || document.documentElement;
+      for (var n = el.parentElement; n && n !== radice && n !== document.body; n = n.parentElement) {
+        var cs = getComputedStyle(n);
+        if (/(auto|scroll|hidden)/.test(cs.overflowX + ' ' + cs.overflowY)) return false;
       }
-      if (r.bottom < -vh || r.top > vh * 2) return;
-      p = menoMoto ? 0 : Math.max(0, Math.min(1, p)) * 100;
-      mobili.forEach(function (m) {
-        var d = m.d, k = d.f > d.i ? Math.max(0, Math.min(100, (p - d.i) / (d.f - d.i) * 100)) : (p >= d.i ? 100 : 0);
-        var tela = m.el.parentElement;
-        var fattore = tela && tela.offsetWidth ? tela.offsetWidth / 1440 : 1;
-        var x = valore(d.t, k, 'x') * fattore, y = valore(d.t, k, 'y') * fattore;
-        var s = valore(d.t, k, 's'), rz = valore(d.t, k, 'r'), rx = valore(d.t, k, 'rx'), ry = valore(d.t, k, 'ry');
-        var o = valore(d.t, k, 'o');
-        // sx e sy allungano in orizzontale e in verticale, moltiplicando la scala
-        var sx = valore(d.t, k, 'sx'), sy = valore(d.t, k, 'sy');
-        m.el.style.translate = x.toFixed(1) + 'px ' + y.toFixed(1) + 'px';
-        m.el.style.scale = sx !== 1 || sy !== 1 ? (s * sx).toFixed(4) + ' ' + (s * sy).toFixed(4) : s.toFixed(4);
-        m.el.style.rotate = rx ? 'x ' + rx.toFixed(2) + 'deg' : (ry ? 'y ' + ry.toFixed(2) + 'deg' : rz.toFixed(2) + 'deg');
-        if (d.t.some(function (t) { return t.v.o != null; })) m.el.style.filter = 'opacity(' + (o / 100).toFixed(3) + ')';
-        // La maschera: quanto del livello resta coperto da ogni lato (in % del livello, che si allunga con la scena): un
-        // video che si scopre sotto una riga che scende (Coro Paganella, 3 nov 2026), una fascia che la segue.
-        if (m.maschera) {
-          m.el.style.clipPath = 'inset(' + ['mt', 'mr', 'mb', 'ml'].map(function (c) {
-            return Math.max(0, Math.min(100, valore(d.t, k, c))).toFixed(2) + '%';
-          }).join(' ') + ')';
+      return true;
+    }
+    var soggetto = avvolto || container;
+    var conTimeline = !menoMoto && typeof window.ViewTimeline === 'function' && window.Animation &&
+      'rangeStart' in window.Animation.prototype && !window.oloProSliderSenzaTimeline && scorreLaPagina(soggetto);
+    var animazioni = [];
+    // Le tappe di un livello come fotogrammi chiave sull'avanzamento della scena: uno per tappa (col valore suo, anche
+    // quando due tappe stanno allo stesso punto), con l'andamento morbido come curva (cubic-bezier(1/3, 0, 2/3, 1) è
+    // esattamente 3f² − 2f³); dove la scala cresce in proporzione (andamento costante) otto punti intermedi, perché il
+    // browser la interpolerebbe in linea retta.
+    function fotogrammi(m, fattore, soloMaschera) {
+      var d = m.d, t = d.t, kf = [];
+      var curva = d.c ? 'linear' : 'cubic-bezier(0.333, 0, 0.667, 1)';
+      function aggiungi(p, tappe, k) {
+        var f = soloMaschera ? { clipPath: maschera(m, tappe, k) } : stile(m, tappe, k, fattore);
+        f.offset = Math.max(0, Math.min(1, p / 100));
+        f.easing = curva;
+        kf.push(f);
+      }
+      if (dellaScena(d, t[0].p) > 0) aggiungi(0, t, 0);
+      for (var i = 0; i < t.length; i++) {
+        var p = dellaScena(d, t[i].p);
+        if (p < 0 || p > 100) continue;
+        aggiungi(p, [t[i], t[i]], 0);
+        var nx = t[i + 1];
+        if (!soloMaschera && nx && d.c && m.conS && nx.p > t[i].p &&
+            ['s', 'sx', 'sy'].some(function (c) { return (t[i].v[c] == null ? 1 : t[i].v[c]) !== (nx.v[c] == null ? 1 : nx.v[c]); })) {
+          for (var j = 1; j < 8; j++) {
+            var k = t[i].p + (nx.p - t[i].p) * j / 8;
+            aggiungi(dellaScena(d, k), t, k);
+          }
         }
+      }
+      if (dellaScena(d, t[t.length - 1].p) < 100) aggiungi(100, t, 100);
+      // stabile: a parità di punto resta l'ordine delle tappe
+      kf.forEach(function (f, i) { f._n = i; });
+      kf.sort(function (a, b) { return a.offset - b.offset || a._n - b._n; });
+      kf.forEach(function (f) { delete f._n; });
+      return kf;
+    }
+    function fattoreDi(m) { return m.tela && m.tela.offsetWidth ? m.tela.offsetWidth / 1440 : 1; }
+    // Il tratto in cui lo slider resta fermo, in px dalla cima come lo misura avanzamento(): «contain 100%» finirebbe
+    // quando il fondo del contenitore tocca il fondo della finestra, e sul telefono lo slider può essere un po' più alto
+    // della finestra (la tela di 640 × 1400 a 390 px è alta 853 px).
+    function fineTratto() {
+      return avvolto ? 'contain ' + Math.max(1, avvolto.offsetHeight - container.offsetHeight) + 'px' : 'exit-crossing 100%';
+    }
+    if (conTimeline) {
+      try {
+        var tl = new window.ViewTimeline({ subject: soggetto, axis: 'block' });
+        var opz = { timeline: tl, rangeStart: avvolto ? 'contain 0px' : 'exit-crossing 0%', rangeEnd: fineTratto(),
+                    fill: 'both', duration: 'auto' };
+        mobili.forEach(function (m) {
+          m.fattore = fattoreDi(m);
+          if (m.conXY || m.conS || m.conR || m.conO || m.assi.length) {
+            m.anim = m.el.animate(fotogrammi(m, m.fattore), opz);
+            animazioni.push(m.anim);
+            // un browser che accettasse l'animazione ignorando il tratto la legherebbe a tutto il passaggio nella finestra
+            var rs = m.anim.rangeStart;
+            if (String(rs && rs.rangeName || rs).indexOf(avvolto ? 'contain' : 'exit-crossing') !== 0) throw new Error('tratto');
+          }
+          // la maschera a parte: clip-path non va col compositore, e terrebbe fuori anche il resto
+          if (m.maschera) animazioni.push(m.el.animate(fotogrammi(m, m.fattore, true), opz));
+        });
+      } catch (e) {
+        animazioni.forEach(function (a) { try { a.cancel(); } catch (e2) {} });
+        animazioni = [];
+        conTimeline = false;
+      }
+    }
+    if (conTimeline) {
+      container.setAttribute('data-mps-scorre', 'browser');
+      // gli spostamenti in px seguono la larghezza della tela; nascondere i livelli e fermare i video resta al
+      // JavaScript, che scrive solo quando un livello entra o esce dai suoi tratti
+      var fine = fineTratto();
+      var rifai = function () {
+        var f = fineTratto();
+        if (f !== fine) {
+          fine = f;
+          animazioni.forEach(function (a) { a.rangeEnd = f; });
+        }
+        mobili.forEach(function (m) {
+          if (!m.anim || !m.conXY) return;
+          var fatt = fattoreDi(m);
+          if (Math.abs(fatt - m.fattore) < 0.0005) return;
+          m.fattore = fatt;
+          m.anim.effect.setKeyframes(fotogrammi(m, fatt));
+        });
+      };
+      var giroV = null;
+      var segui = function () {
+        giroV = null;
+        var p = avanzamento();
+        if (p == null) return;
+        mobili.forEach(function (m) { visibile(m, p); });
+      };
+      var chiediV = function () { if (!giroV) giroV = requestAnimationFrame(segui); };
+      window.addEventListener('scroll', chiediV, { passive: true });
+      window.addEventListener('resize', function () { rifai(); chiediV(); });
+      if ('ResizeObserver' in window) {
+        var ro = new ResizeObserver(function () { rifai(); });
+        ro.observe(container);
+        if (avvolto) ro.observe(avvolto);
+      }
+      segui();
+      return;
+    }
+
+    // ── senza: a ogni fotogramma, prima le misure (una per tela) e poi le scritture, solo dei valori cambiati ──
+    container.setAttribute('data-mps-scorre', 'js');
+    function applica() {
+      giro = null;
+      var p = avanzamento();
+      if (p == null) return;
+      var larghe = new Map();
+      mobili.forEach(function (m) {
+        if (m.tela && !larghe.has(m.tela)) larghe.set(m.tela, m.tela.offsetWidth);
+      });
+      mobili.forEach(function (m) {
+        var k = delLivello(m.d, p);
+        var lw = m.tela ? larghe.get(m.tela) : 0;
+        var s = stile(m, m.d.t, k, lw ? lw / 1440 : 1);
+        for (var prop in s) scrivi(m, prop, s[prop]);
+        if (m.maschera) scrivi(m, 'clipPath', maschera(m, m.d.t, k));
+        visibile(m, p);
       });
     }
     var giro = null;

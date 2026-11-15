@@ -54,7 +54,8 @@ class Olobuild_Magnetic_Cursor {
                     'quota', 'chiave', 'riflesso', 'battito', 'scodinzolo', 'pioggerella', 'ugello', 'passopasso', 'mosaico',
                     'nappa', 'nota', 'specchio', 'prisma', 'strati', 'zip', 'spaiato', 'centrifuga', 'sonno', 'cupola',
                     'gomitolo', 'xxl', 'raspa', 'gruccia', 'registro', 'lanterna', 'scanner', 'forbici', 'flash', 'quadrante',
-                    'ventaglio', 'molla' ];
+                    'ventaglio', 'molla', 'arco', 'gocciolio', 'rullo', 'livella', 'trucioli', 'martello', 'bullone',
+                    'scovolo', 'irrigatore', 'diamante', 'atomo' ];
 
     /**
      * Il cursore scelto per la pagina che si sta disegnando (Effetti di pagina → Cursore): uno degli STILI, «nessuno»,

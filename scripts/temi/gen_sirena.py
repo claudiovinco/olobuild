@@ -42,6 +42,7 @@ PHOTOS = [
 ]
 VIDEOS = [V_CITTA, V_LUCE, V_STRADA, V_NOTTE2, V_DALTO, V_SFOCATO, V_GUIDA]
 MEDIA = set(PHOTOS) | {v + '.mp4' for v in VIDEOS} | {v + '.jpg' for v in VIDEOS}
+MEDIA |= {'pexels-8543365.jpg'}  # foto sostituita il 13 nov 2026 (patch_persone_2026-11-13.py)
 
 K = Kit(ID, MEDIA, raggio=10, peso_titoli='700', corsivo=False, maiuscole_pulsanti=True)
 C = K.c
@@ -218,7 +219,7 @@ def build_noi():
              'l’ambulanza uno.', 'center 25%'),
             ('pexels-6520140.jpg', 'Giorgio Bettiol', 'Autista soccorritore', 'Pensionato, ex camionista: conosce ogni '
              'strada della provincia.', 'center 25%'),
-            ('pexels-6519852.jpg', 'Samuele Tonon', 'Soccorritore', 'Studente di infermieristica, in turno il sabato.',
+            ('pexels-8543365.jpg', 'Samuele Tonon', 'Soccorritore', 'Studente di infermieristica, in turno il sabato.',
              'center 25%'),
         ], ratio='4/5', size='320', sfondo=C['sala']),
     ], bg=solid(C['sala']), padding='large', width='large', style={'padding_top': 120, 'padding_bottom': 100}))

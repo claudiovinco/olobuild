@@ -293,7 +293,7 @@
    insieme all'ingresso (il JS la aggiunge alla stessa animation) */
 @keyframes mpsMaskReveal {
   from { clip-path: var(--mps-m, inset(0 0 0 0)); }
-  to   { clip-path: inset(0 0 0 0); }
+  to   { clip-path: inset(-25%); }   /* alla fine non ritaglia le code delle lettere (vedi le Mask qui sotto) */
 }
 /* Lettere con partenza personalizzata (data-char-custom): spostamento, rotazione, scala, opacità e
    sfocatura scritti dal PHP sul livello */
@@ -679,18 +679,21 @@
 /* ═══════════════════════════════════════════════════════════
    Layer Animation Library — Mask/Reveal (6+6) — clip-path
    ═══════════════════════════════════════════════════════════ */
-@keyframes mpsMaskFromLeft { from { clip-path:inset(0 100% 0 0); opacity:1 } to { clip-path:inset(0 0 0 0); opacity:1 } }
-@keyframes mpsMaskFromRight { from { clip-path:inset(0 0 0 100%); opacity:1 } to { clip-path:inset(0 0 0 0); opacity:1 } }
-@keyframes mpsMaskFromTop { from { clip-path:inset(0 0 100% 0); opacity:1 } to { clip-path:inset(0 0 0 0); opacity:1 } }
-@keyframes mpsMaskFromBottom { from { clip-path:inset(100% 0 0 0); opacity:1 } to { clip-path:inset(0 0 0 0); opacity:1 } }
-@keyframes mpsMaskZoomOut { from { clip-path:inset(30% 30% 30% 30%); opacity:0; transform:scale(2) } to { clip-path:inset(0 0 0 0); opacity:1; transform:scale(1) } }
-@keyframes mpsMaskCenter { from { clip-path:inset(50% 50% 50% 50%); opacity:1 } to { clip-path:inset(0 0 0 0); opacity:1 } }
-@keyframes mpsMaskOutLeft { from { clip-path:inset(0 0 0 0); opacity:1 } to { clip-path:inset(0 100% 0 0); opacity:1 } }
-@keyframes mpsMaskOutRight { from { clip-path:inset(0 0 0 0); opacity:1 } to { clip-path:inset(0 0 0 100%); opacity:1 } }
-@keyframes mpsMaskOutTop { from { clip-path:inset(0 0 0 0); opacity:1 } to { clip-path:inset(0 0 100% 0); opacity:1 } }
-@keyframes mpsMaskOutBottom { from { clip-path:inset(0 0 0 0); opacity:1 } to { clip-path:inset(100% 0 0 0); opacity:1 } }
-@keyframes mpsMaskZoomIn { from { clip-path:inset(0 0 0 0); opacity:1; transform:scale(1) } to { clip-path:inset(30% 30% 30% 30%); opacity:0; transform:scale(2) } }
-@keyframes mpsMaskOutCenter { from { clip-path:inset(0 0 0 0); opacity:1 } to { clip-path:inset(50% 50% 50% 50%); opacity:1 } }
+/* La maschera scopre il livello e poi NON lo ritaglia: alla fine il riquadro è largo un quarto in più per lato
+   (8 nov 2026: con interlinea 1.0 la coda della «g» di «giorno» restava tagliata da inset(0) per sempre). Anche il
+   punto di partenza sta oltre il bordo, così il fronte della maschera attraversa pure code e sporgenze delle lettere. */
+@keyframes mpsMaskFromLeft { from { clip-path:inset(-25% 125% -25% -25%); opacity:1 } to { clip-path:inset(-25%); opacity:1 } }
+@keyframes mpsMaskFromRight { from { clip-path:inset(-25% -25% -25% 125%); opacity:1 } to { clip-path:inset(-25%); opacity:1 } }
+@keyframes mpsMaskFromTop { from { clip-path:inset(-25% -25% 125% -25%); opacity:1 } to { clip-path:inset(-25%); opacity:1 } }
+@keyframes mpsMaskFromBottom { from { clip-path:inset(125% -25% -25% -25%); opacity:1 } to { clip-path:inset(-25%); opacity:1 } }
+@keyframes mpsMaskZoomOut { from { clip-path:inset(30% 30% 30% 30%); opacity:0; transform:scale(2) } to { clip-path:inset(-25%); opacity:1; transform:scale(1) } }
+@keyframes mpsMaskCenter { from { clip-path:inset(50% 50% 50% 50%); opacity:1 } to { clip-path:inset(-25%); opacity:1 } }
+@keyframes mpsMaskOutLeft { from { clip-path:inset(-25%); opacity:1 } to { clip-path:inset(-25% 125% -25% -25%); opacity:1 } }
+@keyframes mpsMaskOutRight { from { clip-path:inset(-25%); opacity:1 } to { clip-path:inset(-25% -25% -25% 125%); opacity:1 } }
+@keyframes mpsMaskOutTop { from { clip-path:inset(-25%); opacity:1 } to { clip-path:inset(-25% -25% 125% -25%); opacity:1 } }
+@keyframes mpsMaskOutBottom { from { clip-path:inset(-25%); opacity:1 } to { clip-path:inset(125% -25% -25% -25%); opacity:1 } }
+@keyframes mpsMaskZoomIn { from { clip-path:inset(-25%); opacity:1; transform:scale(1) } to { clip-path:inset(30% 30% 30% 30%); opacity:0; transform:scale(2) } }
+@keyframes mpsMaskOutCenter { from { clip-path:inset(-25%); opacity:1 } to { clip-path:inset(50% 50% 50% 50%); opacity:1 } }
 
 /* ═══════════════════════════════════════════════════════════
    Layer Animation Library — Loop Animations (21)
@@ -716,6 +719,9 @@
 @keyframes mpsBreathLoop { 0%,100% { opacity:1; transform:scale(1) } 50% { opacity:0.7; transform:scale(0.97) } }
 @keyframes mpsSlideHLoop { 0%,100% { transform:translateX(0) } 50% { transform:translateX(50px) } }
 @keyframes mpsHoverLoop { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-10px) } }
+/* Vento: il livello si piega dal piede e torna, con un ritorno più lento della raffica (erba, fiori, una tenda leggera) */
+@keyframes mpsWindLoop { 0%,100% { transform:skewX(0deg) } 30% { transform:skewX(-5deg) } 55% { transform:skewX(-2deg) } 75% { transform:skewX(-3.5deg) } }
+.olo-proslider-layer[data-anim-loop="windLoop"] { transform-origin:50% 100%; }
 
 /* ═══════════════════════════════════════════════════════════
    Sizing Modes
@@ -1265,3 +1271,36 @@
   .olo-ps-preset-gradient-aurora .olo-proslider-bg::after { animation: none; }
   .olo-proslider.olo-ps-preset-tilt-parallax:not(.mps-fullwidth):not(.mps-fullscreen) { transition: none; }
 }
+
+/* --- Stati: livelli visibili solo in uno stato (interazioni al clic, 1.4.981) ----------------
+   L'involucro è grande quanto la tela e non prende il puntatore: lo prende il livello dentro, se visibile.
+   Visibile = opacità 1 e nessun transform (nessun contesto di sovrapposizione: le fusioni restano vere). */
+.mps-stato {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: opacity var(--st-d, 600ms) cubic-bezier(.22, 1, .36, 1) var(--st-r, 0ms),
+              transform var(--st-d, 600ms) cubic-bezier(.22, 1, .36, 1) var(--st-r, 0ms),
+              visibility 0s linear var(--st-r, 0ms);
+}
+.mps-stato.mps-stato--via {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--st-d, 600ms) cubic-bezier(.22, 1, .36, 1),
+              transform var(--st-d, 600ms) cubic-bezier(.22, 1, .36, 1),
+              visibility 0s linear var(--st-d, 600ms);
+}
+.mps-stato--via[data-stato-effetto="su"] { transform: translateY(6%); }
+.mps-stato--via[data-stato-effetto="giu"] { transform: translateY(-6%); }
+.mps-stato--via[data-stato-effetto="sinistra"] { transform: translateX(-5%); }
+.mps-stato--via[data-stato-effetto="destra"] { transform: translateX(5%); }
+.mps-stato--via[data-stato-effetto="zoom"] { transform: scale(.9); }
+.mps-stato[data-stato-effetto="nessuno"] { transition: none; }
+/* il livello che ha impostato lo stato in vigore (i campioni di colore, le scelte) */
+.olo-proslider-layer.mps-stato-attivo { outline: 2px solid var(--mps-attivo, #fff); outline-offset: 5px; }
+.olo-proslider-layer[role="button"]:focus-visible { outline: 2px solid var(--mps-attivo, #fff); outline-offset: 5px; }
+@media (prefers-reduced-motion: reduce) {
+  .mps-stato, .mps-stato.mps-stato--via { transform: none !important; }
+}
+/* il livello da pulire col puntatore: la tela riempie il livello */
+.mps-pulisci-tela { cursor: inherit; }

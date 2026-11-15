@@ -62,7 +62,7 @@ CATEGORIE = [
     ('corsi', 'Corsi e tornei', 'Il corso base, il maestro, il torneo del giovedì.', 'pexels-10627100.jpg'),
     ('stecche', 'Stecche e custodie', 'Acero, ebano, la custodia in cuoio.', 'pexels-37157955.jpg'),
     ('accessori', 'Palle, gesso e guanti', 'Tutto per il tavolo di casa.', 'pexels-11367368.jpg'),
-    ('regali', 'Carte regalo', 'Una serata da regalare.', 'pexels-31916152.jpg'),
+    ('carte-regalo', 'Carte regalo', 'Una serata da regalare.', 'pexels-31916152.jpg'),
 ]
 FASCE = ['Pomeriggio', 'Sera', 'Notte']
 
@@ -132,10 +132,10 @@ PRODOTTI = [
     prodotto('CAR-016', 'Triangolo in legno', 'triangolo-legno', 'accessori', 25, 0, 20, 4.5, 37, False,
              ['pexels-13793180.jpg'], ['Faggio', 'Per palle da 57 mm', 'Angoli rinforzati', 'Fatto a mano'],
              'Il triangolo di faggio per stringere le palle come si deve.'),
-    prodotto('CAR-017', 'Carta regalo, 50 €', 'carta-regalo-50', 'regali', 50, 0, 999, 4.9, 140, False,
+    prodotto('CAR-017', 'Carta regalo, 50 €', 'carta-regalo-50', 'carte-regalo', 50, 0, 999, 4.9, 140, False,
              ['pexels-31916152.jpg'], ['Vale un anno', 'Per tavoli, corsi e bar', 'Arriva per email', 'Si stampa'],
              'Cinquanta euro da spendere in sala: tavoli, corsi, bar.'),
-    prodotto('CAR-018', 'Carta regalo: una serata per due', 'carta-serata-due', 'regali', 39, 32, 999, 4.8, 99, False,
+    prodotto('CAR-018', 'Carta regalo: una serata per due', 'carta-serata-due', 'carte-regalo', 39, 32, 999, 4.8, 99, False,
              ['pexels-16064240.jpg', 'pexels-1269042.jpg'], ['Due ore di tavolo', 'Due drink', 'Vale un anno',
                                                               'Arriva per email'],
              'Una serata da regalare: due ore di tavolo e due drink.'),
@@ -389,7 +389,7 @@ def build_negozio():
     return N.pagina_negozio(t, 'Carambola', 'Tavoli, serate, corsi e negozio', 'Si prenota il tavolo a ore, la serata, il corso; '
                             'nel negozio le stecche e tutto per il tavolo di casa.', colonne=3,
                             banner=N.banner(t, 'Una serata', 'da regalare.', 'Due ore di tavolo e due drink, per un anno.',
-                                            'Le carte regalo', N.cat_url('regali'), K.photo_bg('pexels-16064240.jpg'), size=34))
+                                            'Le carte regalo', N.cat_url('carte-regalo'), K.photo_bg('pexels-16064240.jpg'), size=34))
 
 
 def build_offerte():
@@ -398,7 +398,7 @@ def build_offerte():
         t.col([N.banner(t, 'Il guanto,', '9 €.', 'Tre dita, la stecca scorre. Era 12 €.', 'Gli accessori',
                         N.cat_url('accessori'), K.photo_bg('pexels-13089176.jpg'))], wm='1-2', ws='1-1'),
         t.col([N.banner(t, 'La serata per due,', '32 €.', 'Da regalare, vale un anno. Era 39 €.', 'Le carte regalo',
-                        N.cat_url('regali'), K.photo_bg('pexels-1269042.jpg'))], wm='1-2', ws='1-1')],
+                        N.cat_url('carte-regalo'), K.photo_bg('pexels-1269042.jpg'))], wm='1-2', ws='1-1')],
         layout='50-50', gap=20, valign='stretch')], padding='default', width='large', style={'padding_top': 0, 'padding_bottom': 64})]
     return N.pagina_offerte(t, 'Le offerte', 'Fino al −25%, fino a domenica', 'Lo snooker del martedì, la serata per quattro, il '
                             'corso base, la stecca in acero e le carte regalo a meno.', extra=extra)

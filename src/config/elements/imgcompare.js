@@ -44,6 +44,14 @@ export default {
     autoplay: false,
     autoplay_delay: '3',
     autoplay_speed: '2',
+    // Etichette (16 nov 2026): vuote = la pillola scura di sempre (12 px, maiuscolo, bianco su nero al 75%).
+    label_bg: '',
+    label_font_family: '',
+    label_font_size: '',
+    label_font_weight: '',
+    label_text_transform: '',
+    label_letter_spacing: '',
+    label_color: '',
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
@@ -65,8 +73,8 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'before_image', label: 'Immagine "Prima"', type: 'image' },
-    { key: 'after_image', label: 'Immagine "Dopo"', type: 'image' },
+    { key: 'before_image', label: t('Immagine «Prima»'), type: 'image' },
+    { key: 'after_image', label: t('Immagine «Dopo»'), type: 'image' },
     { key: 'before_label', label: t('Etichetta Prima'), type: 'text' },
     { key: 'after_label', label: t('Etichetta Dopo'), type: 'text' },
     { key: 'show_labels', label: t('Mostra etichette'), type: 'toggle' },
@@ -83,36 +91,49 @@ export default {
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
+  // Zone standard (16 nov 2026, rifinita per «Guide in un minuto» N. 02): Aspetto · Maniglia · Testo · Forma · Immagini
+  // · Disposizione. Prima: «Preset stilistico», «Slider — Aspetto», «Card», con dodici stili dai nomi che promettevano
+  // effetti mai disegnati (3D Tilt, Retro VHS, Neon Divider cambiavano solo il colore della maniglia, in esadecimale).
   styleFields: [
-    { type: 'separator', label: t('Preset stilistico') },
+    { type: 'separator', label: t('Aspetto') },
+    // Gli stili (tilePresets.js) toccano solo la maniglia e le etichette, coi colori della palette.
     { key: 'preset', label: t('Stile'), type: 'select', options: [
-      { value: 'modern-slider',   label: t('Modern Slider') },
-      { value: 'minimal-line',    label: t('Minimal Line') },
-      { value: 'magazine-bold',   label: t('Magazine Bold') },
-      { value: 'cinema-wide',     label: t('Cinema Wide') },
-      { value: 'before-after-tag', label: t('Before/After Tags') },
-      { value: 'glass-handle',    label: t('Glass Handle') },
-      { value: 'neon-divider',    label: t('Neon Divider') },
-      { value: 'brutalist-block', label: t('Brutalist Block') },
-      { value: 'gradient-line',   label: t('Gradient Line') },
-      { value: 'sticker-handle',  label: t('Sticker Handle') },
-      { value: 'retro-vhs',       label: t('Retro VHS') },
-      { value: 'tilt-3d',         label: t('3D Tilt') },
-      { value: 'custom',          label: t('Personalizzato') },
+      { value: 'chiaro',  label: t('Chiaro') },
+      { value: 'scuro',   label: t('Scuro') },
+      { value: 'brand',   label: t('Primario') },
+      { value: 'vetro',   label: t('Vetro') },
+      { value: 'minimo',  label: t('Minimo') },
+      { value: 'grande',  label: t('Grande') },
+      { value: 'custom',  label: t('Personalizzato') },
     ]},
-    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { key: 'label_bg', label: t('Sfondo etichette'), type: 'color',
+      condition: { field: 'show_labels', op: 'neq', value: false } },
+    { key: 'card_shadow', label: t('Ombra'), type: 'select', options: [
+      { value: 'none', label: t('Nessuna') },
+      { value: 'sm', label: t('Leggera') },
+      { value: 'md', label: t('Media') },
+      { value: 'lg', label: t('Grande') },
+      { value: 'xl', label: t('Extra grande') },
+      { value: 'custom', label: t('Personalizzata') },
+    ]},
+    { key: 'card_shadow_custom', label: t('Ombra personalizzata'), type: 'box-shadow',
+      legacyKeys: { h: 'card_shadow_h', v: 'card_shadow_v', blur: 'card_shadow_blur', spread: 'card_shadow_spread', color: 'card_shadow_color', inset: 'card_shadow_inset' },
+      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
 
-    { type: 'separator', label: t('Slider — Aspetto') },
+    { type: 'separator', label: t('Maniglia') },
     { key: 'handle_color', label: t('Colore maniglia'), type: 'color' },
     { key: 'handle_size', label: t('Dimensione maniglia'), type: 'range', min: 24, max: 60 },
     { key: 'handle_border', label: t('Spessore bordo'), type: 'range', min: 1, max: 6 },
     { key: 'line_width', label: t('Spessore linea'), type: 'range', min: 1, max: 6 },
 
-    { key: 'orientation', label: t('Orientamento'), type: 'select', options: [
-      { value: 'horizontal', label: t('Orizzontale') },
-      { value: 'vertical', label: t('Verticale') },
-    ]},
-    { type: 'separator', label: t('Card') },
+    { type: 'separator', label: t('Testo') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { type: 'typography', label: t('Etichette'), responsiveKeys: [], condition: { field: 'show_labels', op: 'neq', value: false },
+      keys: { family: 'label_font_family', size: 'label_font_size', weight: 'label_font_weight', transform: 'label_text_transform',
+              letterSpacing: 'label_letter_spacing', color: 'label_color' },
+      sizeMin: 9, sizeMax: 28 },
+
+    { type: 'separator', label: t('Forma') },
     // Con un rapporto scelto l'Altezza non fa più niente, quindi sparisce. L'elenco
     // comprende vuoto/null/undefined perché le tile salvate PRIMA di questo campo non
     // hanno la chiave: leggerle come «non auto» nasconderebbe l'Altezza a tutti loro.
@@ -129,22 +150,19 @@ export default {
       placeholder: t('es. 5/4'),
       condition: { field: 'aspect_ratio', op: 'eq', value: 'custom' } },
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
+    { key: 'card_border', label: t('Bordo card'), type: 'border',
+      legacyKeys: { width: 'card_border_width', color: 'card_border_color' } },
+
+    { type: 'separator', label: t('Immagini') },
     { key: 'object_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI },
     { key: 'object_position', label: t('Punto focale'), type: 'object-position',
       contextKeys: { src: 'before_image', fit: 'object_fit', height: 'height', ratio: 'aspect_ratio', ratioCustom: 'aspect_ratio_custom' } },
-    { key: 'card_border', label: t('Bordo card'), type: 'border',
-      legacyKeys: { width: 'card_border_width', color: 'card_border_color' } },
-    { key: 'card_shadow', label: t('Ombra'), type: 'select', options: [
-      { value: 'none', label: t('Nessuna') },
-      { value: 'sm', label: t('Leggera') },
-      { value: 'md', label: t('Media') },
-      { value: 'lg', label: t('Grande') },
-      { value: 'xl', label: t('Extra grande') },
-      { value: 'custom', label: t('Personalizzata') },
+
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'orientation', label: t('Orientamento'), type: 'select', options: [
+      { value: 'horizontal', label: t('Orizzontale') },
+      { value: 'vertical', label: t('Verticale') },
     ]},
-    { key: 'card_shadow_custom', label: t('Ombra personalizzata'), type: 'box-shadow',
-      legacyKeys: { h: 'card_shadow_h', v: 'card_shadow_v', blur: 'card_shadow_blur', spread: 'card_shadow_spread', color: 'card_shadow_color', inset: 'card_shadow_inset' },
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
 
     ...borderFields(),
   ],

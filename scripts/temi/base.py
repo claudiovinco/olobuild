@@ -264,7 +264,25 @@ def write_theme(theme, builds, media):
     os.makedirs(out, exist_ok=True)
     used = {}
     ids = set()
+    import togli_indicazioni  # niente frasi che spiegano l'effetto prima che si veda (utente, 13 nov 2026)
+    import varia_passi  # la disposizione dei passaggi scelta per il tema, al posto della Step timeline di tutti
+    import varia_home  # l'ordine e le disposizioni della home, dove tante home avevano lo stesso ritmo
+    import varia_ordine  # negozi, temi di moda e gruppetti con la stessa sequenza: ordine, fasce, categorie, griglie
+    import linee_grafiche  # la linea grafica del tema (forme, colonne, disposizioni delle tile ripetute)
+    import strutture  # le disposizioni delle sezioni ripetute (FAQ, contatti, mappa, foto, aperture, fasce video)
+    import gallerie  # la regia delle Galleria pro (schema, entrata, passaggio, schermo intero)
+    import titoli_stile  # la voce dei titoli di sezione del tema (occhiello, separatore, righe, seconda riga)
+    import piedi  # la disposizione del piè di pagina (nome in fondo, in cima, a sinistra, al centro)
     for name, built in builds.items():
+        togli_indicazioni.applica(built, [], theme['id'])
+        varia_passi.applica_tema(theme, name[:-5], built, media)
+        varia_home.applica_tema(theme, name[:-5], built, media)
+        varia_ordine.applica_tema(theme, name[:-5], built, media)
+        linee_grafiche.applica_tema(theme['id'], name, built)
+        strutture.applica_tema(theme['id'], name, built)
+        gallerie.applica_tema(theme['id'], name, built)
+        titoli_stile.applica_tema(theme['id'], name, built)
+        piedi.applica_tema(theme['id'], name, built)
         nodes = built['content'] if isinstance(built, dict) else built
         check(nodes, media, name)
 
@@ -278,7 +296,18 @@ def write_theme(theme, builds, media):
         with open(os.path.join(out, name), 'w', encoding='utf-8', newline='\n') as fh:
             fh.write(json.dumps(built, ensure_ascii=False, separators=(',', ':')))
         used[name] = sorted(tiles_used(nodes, set()))
-    with open(os.path.join(out, 'theme.json'), 'w', encoding='utf-8', newline='\n') as fh:
+    # Le anteprime della Vetrina non tornano mai indietro: le rifà un altro script (preview_v + 1, nella libreria) e il
+    # generatore, rilanciato, le riportava a quelle scritte qui (spesso «1»), cioè alle anteprime più vecchie (15 nov 2026).
+    p_tema = os.path.join(out, 'theme.json')
+    if os.path.exists(p_tema):
+        try:
+            prima = json.load(open(p_tema, encoding='utf-8'))
+            for k in ('preview_v', 'preview_mobile_v'):
+                if str(prima.get(k, '')).isdigit() and int(prima[k]) > int(str(theme.get(k) or '1')):
+                    theme[k] = str(prima[k])
+        except (ValueError, OSError):
+            pass
+    with open(p_tema, 'w', encoding='utf-8', newline='\n') as fh:
         fh.write(json.dumps(theme, ensure_ascii=False, separators=(',', ':')))
     sys.stdout.reconfigure(encoding='utf-8')
     tutti = sorted(set(t for v in used.values() for t in v))

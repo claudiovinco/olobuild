@@ -249,7 +249,7 @@ def build_zip():
     ], padding='large', width='large', style={'padding_top': 120, 'padding_bottom': 110}))
     out.append(t.section([
         t.one([K.sechead(t, 'In laboratorio', ['Chi chiude', 'le zip.'], size=60)]),
-        K.squadra(t, [(PEL[1], 'Dario Benvenuti', 'Fondatore', 'Pellettiere, figlio di pellettieri: la prima zip l’ha messa di '
+        K.squadra(t, [(PEL[1], 'Daria Benvenuti', 'Fondatrice', 'Pellettiera, figlia di pellettieri: la prima zip l’ha messa di '
                        'traverso per sbaglio.', 'center 25%'),
                       (STR[2], 'Nadia Rossi', 'Modellista', 'Disegna dove va ogni zip, e cosa apre.', 'center 25%'),
                       (STR[4], 'Kofi Mensah', 'Pellettiere', 'Cuce le zip col punto doppio.', 'center 25%')],

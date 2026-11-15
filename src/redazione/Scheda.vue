@@ -349,7 +349,10 @@ function socialDa(d) {
   Object.entries(d.testi || {}).forEach(([k, v]) => {
     testi[k] = v;
   });
-  return { modo: d.modo || 'bozza', account: (d.account || []).map(Number), testi, adesso: false };
+  // YouTube: la playlist per account (OLOsocial 0.7.4 in su; prima non c'è e non si manda, così resta quella salvata).
+  const scelte = { modo: d.modo || 'bozza', account: (d.account || []).map(Number), testi, adesso: false };
+  if (d.playlist) scelte.playlist = { ...d.playlist };
+  return scelte;
 }
 
 function socialAggiornato(info) {

@@ -100,7 +100,73 @@ class Olobuild_Font_Host {
             }
         }
         $url = 'https://fonts.googleapis.com/css2?' . implode( '&', $req ) . '&display=swap';
+        return self::fetch( $url, $rifiutata );
+    }
 
+    /**
+     * Il carattere VARIABILE con gli assi chiesti (15 nov 2026): per gli assi oltre il peso (larghezza «wdth»,
+     * inclinazione, assi propri) Google va interrogato con gli intervalli, se no serve il file fermo al valore di
+     * partenza e la tile Specimen variabile non può tendere le lettere. Le regole escono con un nome proprio
+     * ($alias), così non si mescolano con le @font-face statiche della stessa famiglia.
+     *
+     * @param string $family Famiglia Google (es. «Anybody»).
+     * @param array  $axes   tag => [min, max] (es. [ 'wdth' => [50,150], 'wght' => [300,900] ]).
+     * @param string $alias  Nome della famiglia nelle regole generate.
+     * @return string CSS @font-face self-hosted, o '' (famiglia o intervallo che Google non ha, rete assente).
+     */
+    public static function get_variable_css( $family, array $axes, $alias ) {
+        $family = trim( (string) $family );
+        $alias  = trim( preg_replace( '/[^A-Za-z0-9 \-]/', '', (string) $alias ) );
+        if ( '' === $family || '' === $alias || empty( $axes ) ) {
+            return '';
+        }
+        // css2: assi in ordine alfabetico, prima i registrati (minuscoli) poi quelli propri (MAIUSCOLI)
+        $bassi = [];
+        $alti  = [];
+        foreach ( $axes as $tag => $r ) {
+            $tag = substr( preg_replace( '/[^A-Za-z0-9]/', '', (string) $tag ), 0, 4 );
+            if ( '' === $tag || ! is_array( $r ) || count( $r ) < 2 ) {
+                continue;
+            }
+            $lo = min( (float) $r[0], (float) $r[1] );
+            $hi = max( (float) $r[0], (float) $r[1] );
+            $v  = ( $lo === $hi ) ? self::num( $lo ) : self::num( $lo ) . '..' . self::num( $hi );
+            if ( strtolower( $tag ) === $tag ) {
+                $bassi[ $tag ] = $v;
+            } else {
+                $alti[ $tag ] = $v;
+            }
+        }
+        ksort( $bassi, SORT_STRING );
+        ksort( $alti, SORT_STRING );
+        $tutti = $bassi + $alti;
+        if ( empty( $tutti ) ) {
+            return '';
+        }
+        $q   = 'family=' . rawurlencode( $family ) . ':' . implode( ',', array_keys( $tutti ) ) . '@' . implode( ',', $tutti );
+        $key = 'olo_fonthost_v_' . md5( $q . '|' . $alias );
+        $cached = get_transient( $key );
+        if ( is_string( $cached ) ) {
+            return $cached;
+        }
+        $no  = false;
+        $css = self::fetch( 'https://fonts.googleapis.com/css2?' . $q . '&display=swap', $no );
+        if ( '' !== $css ) {
+            $css = preg_replace( '/font-family:\s*[\'"]?' . preg_quote( $family, '/' ) . '[\'"]?\s*;/i', "font-family: '" . $alias . "';", $css );
+        }
+        set_transient( $key, (string) $css, '' === $css ? 5 * MINUTE_IN_SECONDS : MONTH_IN_SECONDS );
+        return (string) $css;
+    }
+
+    /** Numero per css2 senza decimali inutili (100, 62.5). */
+    private static function num( $n ) {
+        return rtrim( rtrim( number_format( (float) $n, 2, '.', '' ), '0' ), '.' );
+    }
+
+    /**
+     * Scarica il CSS da un indirizzo css2 di Google, salva in locale i woff2 e riscrive gli URL.
+     */
+    private static function fetch( $url, &$rifiutata = false ) {
         // User-agent moderno per ottenere la variante woff2.
         $resp = wp_remote_get( $url, [ 'timeout' => 15, 'user-agent' => self::UA ] );
         if ( is_wp_error( $resp ) || 200 !== (int) wp_remote_retrieve_response_code( $resp ) ) {

@@ -31,6 +31,11 @@ export const CURSORI = [
   ['scanner', 'Scanner (la riga di luce)'], ['forbici', 'Forbici (tagliano lungo il tratteggio)'],
   ['flash', 'Flash (al clic un lampo)'], ['quadrante', 'Quadrante della cassaforte'],
   ['ventaglio', 'Ventaglio (si apre sui link)'], ['molla', 'Molla (si allunga e si richiude)'],
+  ['arco', 'Arco elettrico (la scarica salta sui link)'], ['gocciolio', 'Gocciolio (la goccia cade e schizza)'],
+  ['rullo', 'Rullo (lascia una pennellata)'], ['livella', 'Livella (la bolla torna in mezzo)'],
+  ['trucioli', 'Trucioli (la pialla stacca i ricci)'], ['martello', 'Martello (al clic batte e fa scintille)'],
+  ['bullone', 'Bullone (si avvita sui link)'], ['scovolo', 'Scovolo (lascia la fuliggine)'],
+  ['irrigatore', 'Irrigatore (spruzza a ventaglio)'], ['diamante', 'Tagliavetro (graffia e crepa)'], ['atomo', 'Atomo (elettroni che girano, fotone al clic)'],
 ];
 
 // Gli stili che mostrano una parola (la «Parola del cursore», label_text).

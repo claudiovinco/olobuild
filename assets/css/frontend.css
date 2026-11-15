@@ -3023,6 +3023,14 @@ html:has(.olo-frontend-grid) {
   padding: 48px 40px;
   box-shadow: 0 8px 32px rgba(0,0,0,.12);
 }
+/* Il vetro deve vedere la foto che ha dietro: un antenato con will-change: opacity (il parallasse del contenuto) fa
+   da «radice dello sfondo» e la sfocatura non trovava niente da sfocare. Il testo correva sulla foto nitida (Casa
+   Scogliera, 13 nov 2026). */
+.olo-hero-preset-glass-overlay .olo-hero-content { will-change: transform !important; }
+/* Telefono: il riquadro di vetro stringe il suo margine (48/40 px lasciavano al testo meno di metà dello schermo) */
+@media (max-width: 640px) {
+  .olo-hero-preset-glass-overlay .olo-hero-inner { padding: 32px 22px; }
+}
 
 /* ── Neon Cyberpunk — text-shadow glow pulsante + CTA neon border ── */
 .olo-hero-preset-neon-cyberpunk .olo-hero-title {
@@ -3387,3 +3395,7 @@ html:has(.olo-frontend-grid) {
 /* Sfondo con parallasse: dimensione e posizione arrivano dal foglio di stile, dove UIkit le legge
    per allargare la foto quanto lo spostamento (Olobuild_Animation_Builder::bg_image_layer_props()). */
 .olo-bg-par { background-size: var(--olo-bg-size, cover); background-position: var(--olo-bg-pos, center center); }
+
+/* Colonna «Prima quando le colonne vanno in pila» (13 nov 2026) */
+@media (max-width:959px){.olo-col-primo-m{order:-1}}
+@media (max-width:639px){.olo-col-primo-s{order:-1}}

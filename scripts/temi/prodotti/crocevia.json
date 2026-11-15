@@ -45,7 +45,7 @@
    "foto": "pexels-15574229.jpg"
   },
   {
-   "slug": "sport",
+   "slug": "sport-fitness",
    "nome": "Sport",
    "descrizione": "Yoga, pesi, borracce.",
    "foto": "pexels-4793328.jpg"
@@ -559,7 +559,7 @@
    "nome": "Tappetino yoga Lilla",
    "slug": "tappetino-yoga-lilla",
    "cat": [
-    "sport"
+    "sport-fitness"
    ],
    "prezzo": 39,
    "sconto": 29,
@@ -596,7 +596,7 @@
    "nome": "Borraccia termica in acciaio",
    "slug": "borraccia-termica",
    "cat": [
-    "sport"
+    "sport-fitness"
    ],
    "prezzo": 25,
    "sconto": 0,
@@ -629,7 +629,7 @@
    "nome": "Manubri 1,5 kg, la coppia",
    "slug": "manubri-coppia",
    "cat": [
-    "sport"
+    "sport-fitness"
    ],
    "prezzo": 19,
    "sconto": 15,
