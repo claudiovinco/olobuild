@@ -1653,6 +1653,15 @@ class Olobuild_Rest_Api {
             }
         }
 
+        // In un template singolo il valore è quello del contenuto che il canvas mostra (17 nov 2026: il pannello
+        // prendeva l'ultimo articolo, e un campo di un Tipo di contenuto o la navigazione restavano vuoti).
+        if ( ! $post_id && 'single' === ( $body['template_type'] ?? '' ) ) {
+            $scelto = self::post_anteprima_single( sanitize_key( (string) ( $body['post_type'] ?? 'post' ) ), absint( $body['preview_post_id'] ?? 0 ) );
+            if ( $scelto && current_user_can( 'read_post', $scelto->ID ) ) {
+                $post_id = (int) $scelto->ID;
+            }
+        }
+
         // If no post_id provided, use the latest published post for preview
         if ( ! $post_id && in_array( $source, [ 'current_post', 'custom_field', 'acf', 'taxonomy_field', 'author' ], true ) ) {
             $recent = get_posts( [ 'numberposts' => 1, 'post_status' => 'publish' ] );
@@ -1742,6 +1751,72 @@ class Olobuild_Rest_Api {
      * Render a template as HTML for builder preview (header/footer).
      */
     /**
+     * Il contenuto che il builder mostra in un template singolo: quello scelto per l'anteprima (preview_post_id) o, fra
+     * gli ultimi dieci pubblicati del tipo, il primo con testo e foto in evidenza (poi con testo, poi il primo). Uno solo
+     * per il render completo, per quello di una tile e per l'anteprima del collegamento dinamico (17 nov 2026: erano tre
+     * scelte diverse, e una tile ritoccata o il valore nel pannello venivano da un altro contenuto).
+     *
+     * @return WP_Post|null
+     */
+    private static function post_anteprima_single( $post_type, $preview_post_id = 0 ) {
+        if ( $preview_post_id ) {
+            $scelto = get_post( $preview_post_id );
+            return $scelto instanceof WP_Post ? $scelto : null;
+        }
+        $post_type = '' !== $post_type ? $post_type : 'post';
+        // Find a published post with actual content (skip empty test posts)
+        $query_args = [
+            'post_type'      => $post_type,
+            'posts_per_page' => 10,
+            'post_status'    => 'publish',
+            'orderby'        => 'date',
+            'order'          => 'DESC',
+        ];
+
+        // For olo_service with active module, filter by service type
+        if ( $post_type === 'olo_service' && class_exists( 'Olo_Module_Registry' ) ) {
+            $module = Olo_Module_Registry::get_active_module();
+            if ( $module ) {
+                $svc_type_map = [
+                    'real-estate'   => 'property',
+                    'accommodation' => 'accommodation',
+                    'appointments'  => 'service',
+                    'rentals'       => 'service',
+                    'events'        => 'service',
+                    'restaurants'   => 'service',
+                ];
+                $svc_type = $svc_type_map[ $module->get_id() ] ?? '';
+                if ( $svc_type ) {
+                    // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- preview builder: filtro per tipo servizio necessario alla funzione, volume limitato (10 post).
+                    $query_args['meta_query'] = [
+                        [ 'key' => '_olo_service_type', 'value' => $svc_type ],
+                    ];
+                }
+            }
+        }
+
+        $sample = get_posts( $query_args );
+        // Prefer a post with content + gallery (better preview)
+        $best = null;
+        foreach ( $sample as $s ) {
+            if ( ! empty( $s->post_content ) && get_post_thumbnail_id( $s->ID ) ) {
+                $best = $s;
+                break;
+            }
+        }
+        // Fallback: any with content
+        if ( ! $best ) {
+            foreach ( $sample as $s ) {
+                if ( ! empty( $s->post_content ) ) { $best = $s; break; }
+            }
+        }
+        if ( ! $best && ! empty( $sample ) ) {
+            $best = $sample[0];
+        }
+        return $best;
+    }
+
+    /**
      * Builder live render: accepts tiles JSON in POST body, returns HTML with data-olo-tile-id.
      */
     public function builder_render( $request ) {
@@ -1767,62 +1842,9 @@ class Olobuild_Rest_Api {
             global $post, $wp_query;
             $original_post = $post;
 
-            if ( $preview_post_id ) {
-                $post = get_post( $preview_post_id );
-            } else {
-                // Find a published post with actual content (skip empty test posts)
-                $post_type = $body['post_type'] ?? 'post';
-                $query_args = [
-                    'post_type'      => $post_type,
-                    'posts_per_page' => 10,
-                    'post_status'    => 'publish',
-                    'orderby'        => 'date',
-                    'order'          => 'DESC',
-                ];
-
-                // For olo_service with active module, filter by service type
-                if ( $post_type === 'olo_service' && class_exists( 'Olo_Module_Registry' ) ) {
-                    $module = Olo_Module_Registry::get_active_module();
-                    if ( $module ) {
-                        $svc_type_map = [
-                            'real-estate'   => 'property',
-                            'accommodation' => 'accommodation',
-                            'appointments'  => 'service',
-                            'rentals'       => 'service',
-                            'events'        => 'service',
-                            'restaurants'   => 'service',
-                        ];
-                        $svc_type = $svc_type_map[ $module->get_id() ] ?? '';
-                        if ( $svc_type ) {
-                            // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- preview builder: filtro per tipo servizio necessario alla funzione, volume limitato (10 post).
-                            $query_args['meta_query'] = [
-                                [ 'key' => '_olo_service_type', 'value' => $svc_type ],
-                            ];
-                        }
-                    }
-                }
-
-                $sample = get_posts( $query_args );
-                // Prefer a post with content + gallery (better preview)
-                $best = null;
-                foreach ( $sample as $s ) {
-                    if ( ! empty( $s->post_content ) && get_post_thumbnail_id( $s->ID ) ) {
-                        $best = $s;
-                        break;
-                    }
-                }
-                // Fallback: any with content
-                if ( ! $best ) {
-                    foreach ( $sample as $s ) {
-                        if ( ! empty( $s->post_content ) ) { $best = $s; break; }
-                    }
-                }
-                if ( ! $best && ! empty( $sample ) ) {
-                    $best = $sample[0];
-                }
-                if ( $best ) {
-                    $post = $best;
-                }
+            $scelto = self::post_anteprima_single( (string) ( $body['post_type'] ?? 'post' ), (int) $preview_post_id );
+            if ( $scelto ) {
+                $post = $scelto;
             }
 
             if ( $post ) {
@@ -2072,32 +2094,10 @@ class Olobuild_Rest_Api {
         if ( $template_type === 'single' ) {
             global $post, $wp_query;
             $original_post = $post;
-            $preview_post_id = $body['preview_post_id'] ?? 0;
-
-            if ( $preview_post_id ) {
-                $post = get_post( $preview_post_id );
-            } else {
-                $post_type = $body['post_type'] ?? 'post';
-                $sample = get_posts( [
-                    'post_type'      => $post_type,
-                    'posts_per_page' => 10,
-                    'post_status'    => 'publish',
-                    'orderby'        => 'date',
-                    'order'          => 'DESC',
-                ] );
-                $best = null;
-                foreach ( $sample as $s ) {
-                    if ( ! empty( $s->post_content ) ) {
-                        $best = $s;
-                        break;
-                    }
-                }
-                if ( ! $best && ! empty( $sample ) ) {
-                    $best = $sample[0];
-                }
-                if ( $best ) {
-                    $post = $best;
-                }
+            // Lo stesso contenuto del render completo: prima la tile ritoccata poteva mostrarne un altro.
+            $scelto = self::post_anteprima_single( (string) ( $body['post_type'] ?? 'post' ), (int) ( $body['preview_post_id'] ?? 0 ) );
+            if ( $scelto ) {
+                $post = $scelto;
             }
             if ( $post ) {
                 setup_postdata( $post );

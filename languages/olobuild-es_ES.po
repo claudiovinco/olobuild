@@ -54292,3 +54292,67 @@ msgstr "Navegación de entradas"
 #: OLObuild 1.4.1187
 msgid "Media (immagine in evidenza)"
 msgstr "Medios (imagen destacada)"
+
+#: OLObuild 1.4.1190
+msgid "Contenuto della pagina"
+msgstr "Contenido de la página"
+
+#: OLObuild 1.4.1190
+msgid "Link del contenuto"
+msgstr "Enlace del contenido"
+
+#: OLObuild 1.4.1190
+msgid "Contenuto precedente e successivo"
+msgstr "Contenido anterior y siguiente"
+
+#: OLObuild 1.4.1190
+msgid "Titolo del precedente"
+msgstr "Título del anterior"
+
+#: OLObuild 1.4.1190
+msgid "Link del precedente"
+msgstr "Enlace del anterior"
+
+#: OLObuild 1.4.1190
+msgid "Titolo del successivo"
+msgstr "Título del siguiente"
+
+#: OLObuild 1.4.1190
+msgid "Link del successivo"
+msgstr "Enlace del siguiente"
+
+#: OLObuild 1.4.1190
+msgid "Prima categoria"
+msgstr "Primera categoría"
+
+#: OLObuild 1.4.1190
+msgid "nessun tipo"
+msgstr "ningún tipo"
+
+#: OLObuild 1.4.1190
+msgid "Singolo"
+msgstr "Individual"
+
+#: OLObuild 1.4.1190
+msgid "Contenuti"
+msgstr "Contenidos"
+
+#: OLObuild 1.4.1190
+msgid "Filtra per categoria o tag"
+msgstr "Filtrar por categoría o etiqueta"
+
+#: OLObuild 1.4.1190
+msgid "&#9889; Sorgente dinamica accesa: le voci vengono dai contenuti scelti qui sopra"
+msgstr "&#9889; Fuente dinámica activa: los elementos vienen de los contenidos elegidos arriba"
+
+#: OLObuild 1.4.1190
+msgid "Anteprima con"
+msgstr "Vista previa con"
+
+#: OLObuild 1.4.1190
+msgid "Il più recente"
+msgstr "El más reciente"
+
+#: OLObuild 1.4.1190
+msgid "Il contenuto che il canvas usa per mostrare il template: cambialo per vedere lo stesso disegno coi dati di un altro. Sul sito ogni pagina usa il suo."
+msgstr "El contenido que el lienzo usa para mostrar la plantilla: cámbialo para ver el mismo diseño con los datos de otro. En el sitio cada página usa el suyo."

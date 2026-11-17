@@ -21,6 +21,7 @@ export default {
       { id: 'dl-3', term: 'Build Tool', definition: 'Vite 5', icon: 'bolt' },
     ],
     layout: 'stacked',
+    columns: 1,
     show_icon: true,
     icon_color: '',
     icon_size: '20',
@@ -122,6 +123,11 @@ export default {
       { value: 'inline', label: t('Termine e definizione affiancati') },
       { value: 'grid', label: t('In griglia') },
     ]},
+    // Le voci su più colonne (17 nov 2026: i negozi di Scroscio in due colonne, da una sola lista che si può collegare
+    // a una Sorgente dinamica). Si adattano alla colonna della pagina: in poco spazio tornano una sotto l'altra.
+    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 3, step: 1,
+      description: t('Le voci si dispongono in righe su più colonne. Quando lo spazio della tile non basta (sul telefono, in una colonna stretta) tornano una sotto l’altra.'),
+      show: (s) => !['inline', 'grid'].includes(s.layout) },
     { key: 'text_align', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },

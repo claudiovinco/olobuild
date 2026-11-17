@@ -13,7 +13,7 @@
 
     <!-- Dynamic source active message -->
     <div v-if="isDynamicQueryActive" class="cie-dynamic-info">
-      {{ t('&#9889; Sorgente dinamica attiva — elementi generati dalla query') }}
+      {{ t('&#9889; Sorgente dinamica accesa: le voci vengono dai contenuti scelti qui sopra') }}
     </div>
 
     <!-- Static items list (hidden when query active) -->
@@ -57,7 +57,7 @@
           <!-- Expanded editor -->
           <div v-if="expandedId === element.id" class="cie-body">
             <div v-for="(field, fi) in itemFields" :key="(field.key || '') + ':' + (field.type || '') + ':' + (field.label || '')" v-show="campoVisibileNellaVoce(field, fi, element)" class="cie-field" :class="{ 'cie-field--inline': field.type === 'number' || field.type === 'range' }">
-              <label v-if="field.type !== 'separator' && !isDelegated(field) && !linkCollegabile(field)" class="cie-label">{{ etichettaDi(field).testo }}<InfoTip v-if="field.description" class="cie-info" :testo="t(field.description)" :titolo="etichettaDi(field).testo" /></label>
+              <label v-if="field.type !== 'separator' && !isDelegated(field) && !linkCollegabile(field) && !testoCollegabile(field)" class="cie-label">{{ etichettaDi(field).testo }}<InfoTip v-if="field.description" class="cie-info" :testo="t(field.description)" :titolo="etichettaDi(field).testo" /></label>
 
               <!-- separator (intestazione di sezione, nessun input) -->
               <div v-if="field.type === 'separator'" class="cie-separator">{{ field.label }}</div>
@@ -100,6 +100,33 @@
                   {{ mediaButtonLabel(element[field.key], field) }}
                 </button>
               </div>
+
+              <!-- testo di una voce collegabile a un campo del contenuto (17 nov 2026), come il link: la chiave porta
+                   l'id della voce («items.@neg-ind.definition») e il collegamento resta alla sua voce -->
+              <DynamicFieldToggle
+                v-else-if="testoCollegabile(field)"
+                :field="{ ...field, key: chiaveCollegamento(element, field, index), label: etichettaDi(field).testo }"
+                :tileId="tileId"
+                :dynamic="dynamic"
+                voce
+                @update:dynamic="(aggiornato, togli) => collegaVoce(aggiornato, togli)"
+              >
+                <textarea
+                  v-if="field.type === 'textarea'"
+                  :value="element[field.key] || ''"
+                  @input="updateField(index, field.key, $event.target.value)"
+                  class="cie-input cie-textarea"
+                  rows="3"
+                />
+                <input
+                  v-else
+                  type="text"
+                  :value="element[field.key] || ''"
+                  @input="updateField(index, field.key, $event.target.value)"
+                  class="cie-input"
+                  :placeholder="field.placeholder || ''"
+                />
+              </DynamicFieldToggle>
 
               <!-- textarea -->
               <textarea
@@ -224,11 +251,11 @@
                    («items.@il-2.link»), così il collegamento resta alla sua voce se le voci si spostano -->
               <DynamicFieldToggle
                 v-else-if="linkCollegabile(field)"
-                :field="{ ...field, key: chiaveCollegamento(element, field), label: etichettaDi(field).testo }"
+                :field="{ ...field, key: chiaveCollegamento(element, field, index), label: etichettaDi(field).testo }"
                 :tileId="tileId"
                 :dynamic="dynamic"
                 voce
-                @update:dynamic="(aggiornato, togli) => emit('update:dynamic', aggiornato, togli)"
+                @update:dynamic="(aggiornato, togli) => collegaVoce(aggiornato, togli)"
               >
                 <FieldLink
                   :modelValue="element[field.key] || ''"
@@ -363,6 +390,7 @@ import DynamicFieldToggle from './DynamicFieldToggle.vue';
 import FieldToggle from './fields/FieldToggle.vue';
 import BackgroundControls from './BackgroundControls.vue';
 import DynamicQueryPanel from './DynamicQueryPanel.vue';
+import { useDynamicContent } from '@/composables/useDynamicContent';
 import IconPicker from '../ProSlider/IconPicker.vue';
 import { useToast } from '@/composables/useToast';
 import iconsSvg from '../ProSlider/uikitIconsSvg.js';
@@ -440,10 +468,41 @@ const emit = defineEmits(['update:modelValue', 'update:dynamic-query', 'update:d
 // Stile, non quando una «Sorgente dinamica» riempie le voci (lì il link lo dà la ricerca), e solo se si sa quale
 // ripetitore e quale tile.
 function linkCollegabile(field) {
-  return field.type === 'link' && !!props.tileId && !!props.chiave && !props.strutturaFissa && !isDynamicQueryActive.value;
+  return field.type === 'link' && voceCollegabile();
 }
-function chiaveCollegamento(element, field) {
-  return props.chiave + '.@' + element.id + '.' + field.key;
+// Anche i testi delle voci (17 nov 2026): l'indirizzo e gli orari nella lista di un negozio, presi dai suoi campi.
+function testoCollegabile(field) {
+  return (field.type === 'text' || field.type === 'textarea') && voceCollegabile();
+}
+// Le fonti dei collegamenti (in comune con il pannello): servono per dare un nome ai collegamenti delle voci chiuse.
+const { fetchSources, getBindingLabel } = useDynamicContent();
+if (props.dynamic && Object.keys(props.dynamic).some((k) => props.chiave && k.startsWith(props.chiave + '.'))) fetchSources();
+// Il nome del campo a cui è collegato un campo della voce («Titolo», «Negozi › Città»), '' se non è collegato.
+function bindingDellaVoce(element, chiave) {
+  const index = localItems.value.indexOf(element);
+  const b = props.dynamic?.[chiaveCollegamento(element, { key: chiave }, index)];
+  if (!b || !b.source || !b.field) return '';
+  const intero = getBindingLabel(b) || '';
+  const i = intero.indexOf('→');
+  return (i >= 0 ? intero.slice(i + 1) : intero).trim();
+}
+function voceCollegabile() {
+  return !!props.tileId && !!props.chiave && !props.strutturaFissa && !isDynamicQueryActive.value;
+}
+function chiaveCollegamento(element, field, index) {
+  const perId = props.chiave + '.@' + element.id + '.' + field.key;
+  // Un collegamento scritto per posizione («headline_lines.0.text», dai template fatti a script prima del 17 nov 2026):
+  // si mostra e si toglie con la sua chiave; il PHP li legge tutti e due.
+  const perPosizione = props.chiave + '.' + index + '.' + field.key;
+  if (!props.dynamic?.[perId] && props.dynamic?.[perPosizione]) return perPosizione;
+  return perId;
+}
+// Collegando una voce si salvano anche gli id delle voci: una voce senza id ne riceve uno nuovo a ogni apertura
+// dell'inspector, e il collegamento («@<id>») non l'avrebbe più ritrovata dopo il salvataggio (17 nov 2026).
+function collegaVoce(aggiornato, togli) {
+  const salvati = ensureArray(props.modelValue);
+  if (localItems.value.some((v, i) => !salvati[i] || salvati[i].id !== v.id)) emitUpdate();
+  emit('update:dynamic', aggiornato, togli);
 }
 
 // Le spiegazioni dei campi `description` delle voci restano nelle voci (riga con la (i)):
@@ -591,6 +650,10 @@ function valoreLeggibile(element, chiave) {
 function getItemLabel(element) {
   if (!labelField.value) return t(props.itemLabel);
   const campo = String(labelField.value);
+  // La voce che prende il suo nome da un campo collegato a un contenuto (17 nov 2026): il titolo dice il collegamento
+  // («⚡ Titolo»), non il testo scritto a mano, che sul sito non si vede (la riga del titolo di un template singolo).
+  const collegata = voceCollegabile() && !campo.includes('+') && campo.split('|').map((k) => bindingDellaVoce(element, k)).find(Boolean);
+  if (collegata) return '⚡ ' + collegata;
   // `etichettaDa: 'giorno+inizio+corso'`: più campi insieme, separati da « · » («Lunedì · 07:00 · Indoor cycling»).
   if (campo.includes('+')) {
     const parti = campo.split('+').map(k => valoreLeggibile(element, k.trim())).filter(Boolean);

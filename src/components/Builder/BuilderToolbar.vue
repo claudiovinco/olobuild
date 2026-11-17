@@ -1,7 +1,7 @@
 <template>
   <div class="mb-flex mb-items-center mb-h-12 mb-px-4 mb-bg-gray-800 mb-border-b mb-border-gray-700 mb-shrink-0" :class="builderStore.previewMode ? 'mb-justify-center' : 'mb-justify-between'" role="toolbar" :aria-label="t('Barra strumenti builder')">
     <!-- Left: Navigation + Logo — in Anteprima la barra tiene solo dispositivo, zoom e «Esci» -->
-    <div v-show="!builderStore.previewMode" class="mb-flex mb-items-center mb-gap-2">
+    <div v-show="!builderStore.previewMode" class="olo-tb-sinistra mb-flex mb-items-center mb-gap-2">
       <a
         :href="wpAdminUrl"
         class="mb-px-2 mb-py-1 mb-text-gray-500 hover:mb-text-gray-200 mb-text-xs mb-transition-colors mb-no-underline"
@@ -31,8 +31,8 @@
       <span
         v-else
         @click="startEditTitle"
-        class="mb-text-primary-400 mb-font-bold mb-text-sm mb-cursor-pointer hover:mb-underline"
-        :title="t('Clicca per rinominare')"
+        class="olo-tb-titolo mb-text-primary-400 mb-font-bold mb-text-sm mb-cursor-pointer hover:mb-underline"
+        :title="templateTitle + (templateType === 'single' ? ' (' + t('Singolo') + ': ' + singleLabel + ')' : '') + ' — ' + t('Clicca per rinominare')"
       >{{ templateTitle }}</span>
       <span
         v-if="templateType === 'header'"
@@ -44,8 +44,9 @@
       >{{ t('Footer') }}</span>
       <span
         v-if="templateType === 'single'"
-        class="mb-ml-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-amber-600/20 mb-text-amber-300 mb-border mb-border-amber-500/30"
-      >Single: {{ singlePostType }}</span>
+        :title="t('Singolo') + ': ' + singleLabel"
+        class="olo-tb-tipo mb-ml-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-amber-600/20 mb-text-amber-300 mb-border mb-border-amber-500/30"
+      >{{ t('Singolo') }}: {{ singleLabel }}</span>
       <span
         v-if="templateType === 'archive'"
         class="mb-ml-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-cyan-600/20 mb-text-cyan-300 mb-border mb-border-cyan-500/30"
@@ -134,7 +135,7 @@
         :title="t('Apri la pagina reale in un nuovo tab')"
       >
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-        {{ t('Reale') }}
+        <span class="olo-tb-etichetta">{{ t('Reale') }}</span>
       </button>
       <!-- Zoom dropdown -->
       <Teleport to="body">
@@ -150,7 +151,7 @@
     </div>
 
     <!-- Right: Actions -->
-    <div v-show="!builderStore.previewMode" class="mb-flex mb-items-center mb-gap-2">
+    <div v-show="!builderStore.previewMode" class="olo-tb-destra mb-flex mb-items-center mb-gap-2">
       <!--
         VERSIONE DEL CODICE IN ESECUZIONE, sempre a schermo.
         Non è vezzo da changelog: quando una funzione "sparisce" la prima cosa da
@@ -536,7 +537,7 @@
         :title="t('Mostra gabbia di costruzione (bordi celle, righe, sezioni)')"
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-        {{ t('Gabbia') }}
+        <span class="olo-tb-etichetta">{{ t('Gabbia') }}</span>
       </button>
       <button
         v-if="realPreviewUrl"
@@ -545,7 +546,7 @@
         :title="t('Apri la pagina reale in un nuovo tab')"
       >
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-        {{ t('Reale') }}
+        <span class="olo-tb-etichetta">{{ t('Reale') }}</span>
       </button>
       <button
         v-if="builderStore.currentTemplate?.id"
@@ -556,7 +557,7 @@
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="14" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
       </button>
       <!-- Indicatore stato salvataggio -->
-      <div class="mb-flex mb-items-center mb-gap-1 mb-text-[11px] mb-mr-0.5 mb-select-none" :title="saveStatusTitle">
+      <div class="olo-tb-stato mb-flex mb-items-center mb-gap-1 mb-text-[11px] mb-mr-0.5 mb-select-none" :title="saveStatusTitle">
         <template v-if="builderStore.isSaving">
           <svg class="mb-animate-spin mb-text-gray-400" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
         </template>
@@ -1105,6 +1106,12 @@ const isActiveFooter = computed(() => {
 });
 
 const singlePostType = computed(() => builderStore.currentTemplate?.settings?.single_post_type || '');
+// Il cartellino del template singolo col nome del tipo («Pagina singola: Negozi»), non la sua chiave (17 nov 2026).
+const singleLabel = computed(() => {
+  const pt = singlePostType.value;
+  if (!pt) return t('nessun tipo');
+  return (oloData.postTypes || []).find(p => p.value === pt)?.label || pt;
+});
 const activeSingles = ref({ ...(oloData.activeSingles || {}) });
 const isActiveSingle = computed(() => {
   const tplId = builderStore.currentTemplate?.id;
@@ -1348,6 +1355,63 @@ async function regenerateThumbnail() {
   color: #fff;
   background: var(--olo-color-primary, #e1474f);
   border-color: transparent;
+}
+/* Il nome del template su una riga sola: lungo, si tronca coi puntini (17 nov 2026: «Negozi · pagina del negozio»
+   andava a capo in tre righe e la barra alta 48 px ne tagliava la prima). Intero nel suggerimento. */
+.olo-tb-titolo {
+  display: inline-block;
+  max-width: 22ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+/* Quando la barra non ci sta, cede la parte sinistra (il nome del template si accorcia): «Salva» e «Pubblicato» a
+   destra restano sempre in vista (17 nov 2026: a 1440 px, con un template singolo aperto, uscivano dallo schermo). */
+.olo-tb-sinistra {
+  min-width: 0;
+  flex: 1 1 0;
+  overflow: hidden;
+  container-type: inline-size;
+}
+.olo-tb-sinistra > * {
+  flex-shrink: 0;
+}
+.olo-tb-sinistra .olo-tb-titolo {
+  min-width: 4ch;
+  flex: 0 1 auto;
+}
+/* Poco posto: il cartellino del tipo lascia il posto al nome (che lo dice nel suggerimento). */
+@container (max-width: 300px) {
+  .olo-tb-tipo {
+    display: none;
+  }
+}
+.olo-tb-destra {
+  flex-shrink: 0;
+}
+/* Finestra stretta (fino a 1520 px, il notebook e le riprese a 1440): i pulsanti di destra più vicini e «Gabbia» e
+   «Reale» con la sola icona (il nome resta nel suggerimento), così il nome del template ha il suo posto. */
+@media (max-width: 1520px) {
+  .olo-tb-destra {
+    gap: 4px;
+  }
+  .olo-tb-destra .olo-tb-etichetta {
+    display: none;
+  }
+}
+/* Il cartellino del tipo su una riga: a capo spingeva fuori dalla barra «Salva» e «Pubblicato». */
+.olo-tb-sinistra .olo-tb-tipo {
+  white-space: nowrap;
+  flex: 0 1 auto;
+  min-width: 5ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* «Non salvato» su una riga anche quando la barra è stretta. */
+.olo-tb-stato {
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 /* «Torna a «…»»: un nome di pagina lungo si tronca, non allarga la riga. */
 .olo-tb-ritorno {

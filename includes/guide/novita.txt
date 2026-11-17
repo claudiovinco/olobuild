@@ -3,6 +3,44 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.1201 - 2026-11-17 (Ripetitori: la voce chiusa dice a cosa è collegata)
+- Ripetitori: una voce che prende il suo nome da un campo collegato a un contenuto, chiusa, si chiama col collegamento («⚡ Titolo») invece che col testo scritto a mano, che sul sito non compare (la riga del titolo di un template singolo).
+
+## v1.4.1200 - 2026-11-17 (Contenuti dinamici: il collegamento delle voci resta dopo il salvataggio)
+- Ripetitori: collegando il testo o il link di una voce che non aveva ancora un suo identificativo (le righe del titolo di una Testata di sezione, per esempio), l'identificativo ora si salva insieme al collegamento; prima, alla riapertura, la voce ne riceveva uno nuovo e il collegamento non la ritrovava più.
+- Nell'inspector si vedono (e si tolgono) anche i collegamenti delle voci fatti per posizione, come quelli dei template preparati prima di questa versione.
+
+## v1.4.1199 - 2026-11-17 (Template singoli: l'anteprima con un contenuto a scelta)
+- Template singoli, Impostazioni pagina: «Anteprima con» sceglie il contenuto con cui il canvas mostra il template (lo stesso disegno coi dati di un altro negozio, articolo, evento); vuoto è il più recente, come prima. La scelta si salva col template. «Post Type» si chiama «Tipo di contenuto».
+
+## v1.4.1197 - 2026-11-17 (Lista descrittiva: le voci su più colonne)
+- Lista descrittiva, Disposizione: «Colonne» (da 1 a 3) mette le voci in righe su più colonne, con il filo fra una riga e l'altra; quando la tile è stretta (sul telefono, in una colonna piccola) tornano una sotto l'altra. Vale con «Termine sopra, definizione sotto».
+
+## v1.4.1196 - 2026-11-17 (Sorgente dinamica: nomi chiari e campi del loro genere)
+- «Sorgente dinamica»: «Elenco di» propone «Contenuti» (era «Articoli», anche quando l'elenco era di negozi o pagine), «Filtra per categoria o tag» (era «per tassonomia»), e il riquadro sotto le voci dice «le voci vengono dai contenuti scelti qui sopra» (era «elementi generati dalla query»).
+- Mappatura campi: una foto propone solo foto (la foto in evidenza e i campi foto dei Tipi di contenuto), un testo solo testi (non più la foto in evidenza né il link, che ci scrivevano un indirizzo).
+
+## v1.4.1195 - 2026-11-17 (Builder: il nome del template nella barra)
+- Barra del builder: il nome del template prende tutto lo spazio che resta a sinistra; quando è poco, il cartellino del tipo si nasconde e lo dice il suggerimento sul nome. Nelle finestre fino a 1520 px i pulsanti di destra stanno più vicini e «Gabbia» e «Reale» mostrano solo l'icona.
+
+## v1.4.1193 - 2026-11-17 (Contenuti dinamici: anche i testi delle voci)
+- Ripetitori: anche i testi delle voci scritte a mano (il termine e la definizione di una lista, il titolo di una card…) si collegano a un campo del contenuto col fulmine, come già i link: nel template di un negozio la voce «Indirizzo» prende l'indirizzo del negozio aperto. Il collegamento resta alla sua voce se le voci si spostano.
+- Barra del builder: con poco posto si accorciano insieme il nome del template e il cartellino del tipo, senza coprire i pulsanti accanto.
+
+## v1.4.1192 - 2026-11-17 (Builder: la barra in alto non perde «Salva»)
+- Barra del builder: quando non c'è posto, si accorcia il nome del template e non escono più dallo schermo «Salva» e «Pubblicato» (a 1440 px, con un template singolo aperto, sparivano). Il cartellino del template singolo è più corto: «Singolo: Negozi».
+
+## v1.4.1191 - 2026-11-17 (Builder: la barra della tile dopo un ridisegno)
+- Canvas: dopo una modifica che ridisegna la tile (per esempio «Applica collegamento»), la barra della tile torna sopra la tile quando finisce l'animazione d'ingresso della riga; prima restava a metà, sopra il contenuto.
+
+## v1.4.1190 - 2026-11-17 (Contenuti dinamici: nomi chiari, l'anteprima giusta, i campi dei Tipi nelle liste)
+- Pannello dei collegamenti: le fonti e i campi si chiamano come nel resto di Olobuild — «Contenuto della pagina» (era «Articolo corrente»), «Riassunto», «Testo», «Link del contenuto» (era «Permalink»), «Contenuto precedente e successivo» con «Titolo» e «Link» del precedente e del successivo (era «Navigazione post»). «Spettacolo» compare solo sui siti che hanno spettacoli.
+- L'anteprima del pannello mostra il valore del contenuto che il canvas sta mostrando: in un template singolo quello in anteprima (prima l'ultimo articolo, e un campo di un Tipo di contenuto restava vuoto), in una pagina la pagina stessa. Anche precedente e successivo hanno il loro valore.
+- In un template singolo una tile ritoccata si ridisegna con lo stesso contenuto del resto del canvas (poteva prenderne un altro).
+- «Sorgente dinamica», Mappatura campi: oltre ai campi di ogni contenuto, le voci possono prendere i campi dei Tipi di contenuto (Negozi › Indirizzo) e degli spettacoli, del loro genere: testi per i testi, foto per le foto. «Prima categoria» al posto di «Primo termine tassonomia».
+- Sul sito un pulsante col link collegato a un campo vuoto non si disegna (un negozio senza mappa, l'ultimo negozio senza un successivo): prima portava da nessuna parte.
+- Barra del builder: il nome di un template lungo sta su una riga coi puntini (andava a capo e se ne perdeva l'inizio), «Non salvato» su una riga, e il cartellino del template singolo dice «Pagina singola: Negozi» invece di «Single: negozio».
+
 ## v1.4.1189 - 2026-11-17 (Link dinamici: nella Sorgente dinamica solo indirizzi)
 - «Sorgente dinamica», Mappatura campi: per il link delle voci la scelta propone solo indirizzi (Permalink, Link della categoria, i link degli spettacoli e dei Tipi di contenuto), come il pannello dei collegamenti.
 

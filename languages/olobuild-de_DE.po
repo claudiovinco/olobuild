@@ -54446,3 +54446,67 @@ msgstr "Beitragsnavigation"
 #: OLObuild 1.4.1187
 msgid "Media (immagine in evidenza)"
 msgstr "Medien (Beitragsbild)"
+
+#: OLObuild 1.4.1190
+msgid "Contenuto della pagina"
+msgstr "Inhalt der Seite"
+
+#: OLObuild 1.4.1190
+msgid "Link del contenuto"
+msgstr "Link zum Inhalt"
+
+#: OLObuild 1.4.1190
+msgid "Contenuto precedente e successivo"
+msgstr "Vorheriger und nächster Inhalt"
+
+#: OLObuild 1.4.1190
+msgid "Titolo del precedente"
+msgstr "Titel des vorherigen"
+
+#: OLObuild 1.4.1190
+msgid "Link del precedente"
+msgstr "Link zum vorherigen"
+
+#: OLObuild 1.4.1190
+msgid "Titolo del successivo"
+msgstr "Titel des nächsten"
+
+#: OLObuild 1.4.1190
+msgid "Link del successivo"
+msgstr "Link zum nächsten"
+
+#: OLObuild 1.4.1190
+msgid "Prima categoria"
+msgstr "Erste Kategorie"
+
+#: OLObuild 1.4.1190
+msgid "nessun tipo"
+msgstr "kein Typ"
+
+#: OLObuild 1.4.1190
+msgid "Singolo"
+msgstr "Einzelansicht"
+
+#: OLObuild 1.4.1190
+msgid "Contenuti"
+msgstr "Inhalte"
+
+#: OLObuild 1.4.1190
+msgid "Filtra per categoria o tag"
+msgstr "Nach Kategorie oder Schlagwort filtern"
+
+#: OLObuild 1.4.1190
+msgid "&#9889; Sorgente dinamica accesa: le voci vengono dai contenuti scelti qui sopra"
+msgstr "&#9889; Dynamische Quelle aktiv: Die Einträge kommen aus den oben gewählten Inhalten"
+
+#: OLObuild 1.4.1190
+msgid "Anteprima con"
+msgstr "Vorschau mit"
+
+#: OLObuild 1.4.1190
+msgid "Il più recente"
+msgstr "Der neueste"
+
+#: OLObuild 1.4.1190
+msgid "Il contenuto che il canvas usa per mostrare il template: cambialo per vedere lo stesso disegno coi dati di un altro. Sul sito ogni pagina usa il suo."
+msgstr "Der Inhalt, mit dem die Arbeitsfläche die Vorlage zeigt: Wechsle ihn, um dasselbe Design mit den Daten eines anderen zu sehen. Auf der Website verwendet jede Seite ihren eigenen."

@@ -212,7 +212,8 @@ export function useIframeBridge(iframeRef) {
       template_id:        0,
       tile_counter_hint:  counterHint,
       template_type:      tpl?.type || 'page',
-      post_type:          tpl?.settings?.single_post_type || tpl?.post_type || 'post',
+      // Come il render completo: anche settings.post_type, se no la tile ritoccata si disegnava con un altro contenuto.
+      post_type:          tpl?.settings?.single_post_type || tpl?.settings?.post_type || tpl?.post_type || 'post',
       preview_post_id:    tpl?.settings?.preview_post_id || 0,
     };
 

@@ -379,7 +379,7 @@
           @update:itemMap="emit('update:dynamic', { _itemMap: $event })"
         />
         <div v-if="dynamic?._query?.enabled" class="if-dynamic-info">
-          {{ t('&#9889; Sorgente dinamica attiva — elementi generati dalla query') }}
+          {{ t('&#9889; Sorgente dinamica accesa: le voci vengono dai contenuti scelti qui sopra') }}
         </div>
         <FieldGallery
           v-else

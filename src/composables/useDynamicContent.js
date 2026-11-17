@@ -1,5 +1,6 @@
 import { ref, readonly, watch } from 'vue';
 import { t } from '@/i18n';
+import { useBuilderStore } from '@/stores/builder';
 
 const oloData = window.oloData || {};
 
@@ -19,6 +20,29 @@ async function apiFetch(endpoint, options = {}) {
   });
   if (!res.ok) throw new Error(`API error: ${res.status}`);
   return res.json();
+}
+
+/**
+ * Il contenuto di cui l'anteprima del collegamento mostra il valore: quello che il canvas sta mostrando (17 nov 2026).
+ * In un template singolo il PHP sceglie lo stesso contenuto del canvas (post_anteprima_single); in una pagina, la
+ * pagina stessa. Senza, il pannello mostrava l'ultimo articolo, e i campi di un Tipo di contenuto restavano vuoti.
+ */
+function contestoAnteprima() {
+  try {
+    const tpl = useBuilderStore().currentTemplate;
+    if (!tpl) return {};
+    if (tpl.type === 'single') {
+      return {
+        template_type: 'single',
+        post_type: tpl.settings?.single_post_type || tpl.settings?.post_type || 'post',
+        preview_post_id: Number(tpl.settings?.preview_post_id) || 0,
+      };
+    }
+    const pagina = Number(tpl.linked_post_id || tpl.settings?.post_id) || 0;
+    return pagina ? { post_id: pagina } : {};
+  } catch (e) {
+    return {};
+  }
 }
 
 /**
@@ -116,9 +140,10 @@ export function useDynamicContent() {
    */
   async function previewBinding(source, field, postId) {
     try {
+      const ctx = contestoAnteprima();
       return await apiFetch('dynamic-preview', {
         method: 'POST',
-        body: JSON.stringify({ source, field, post_id: postId || 0 }),
+        body: JSON.stringify({ ...ctx, source, field, post_id: postId || ctx.post_id || 0 }),
       });
     } catch (err) {
       console.error('[OlobuilderBuilder] Preview failed:', err);

@@ -18,6 +18,7 @@ class Olobuild_DescList_Tile extends Olobuild_Tile_Base {
             [ 'term' => 'Build Tool', 'definition' => 'Vite 5', 'icon' => 'bolt' ],
         ],
         'layout'               => 'stacked',
+        'columns'              => 1,
         'show_icon'            => true,
         'icon_color'           => '',
         'icon_size'            => '20',
@@ -77,6 +78,9 @@ class Olobuild_DescList_Tile extends Olobuild_Tile_Base {
 
         $uid    = 'mdl-' . wp_rand( 10000, 99999 );
         $layout = in_array( $s['layout'], [ 'stacked', 'inline', 'grid' ], true ) ? $s['layout'] : 'stacked';
+        // Le voci su più colonne (17 nov 2026), solo con il termine sopra la definizione: righe in N colonne quando la tile
+        // è abbastanza larga (container query sulla scatola della lista), se no una sotto l'altra.
+        $colonne = 'stacked' === $layout ? max( 1, min( 3, absint( $s['columns'] ?? 1 ) ) ) : 1;
 
         $term_clr    = $this->safe_color_css( $s['term_color'] );
         $def_clr     = $this->safe_color_css( $s['definition_color'] );
@@ -125,6 +129,29 @@ class Olobuild_DescList_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .mdl-item:last-child {
                 border-bottom: none;
             }
+            <?php if ( $colonne > 1 ) : ?>
+            .<?php echo $uid; ?>-box {
+                container-type: inline-size;
+            }
+            <?php
+            // Per ogni numero di colonne la larghezza da cui entra (220 px a colonna, 40 fra l'una e l'altra); senza
+            // filo le ultime voci di ogni colonna, cioè le ultime N della lista.
+            for ( $c = $colonne; $c >= 2; $c-- ) :
+                $da = $c * 220 + ( $c - 1 ) * 40;
+                $a  = $c < $colonne ? ( $c + 1 ) * 220 + $c * 40 - 1 : 0;
+                ?>
+            @container (min-width: <?php echo (int) $da; ?>px)<?php echo $a ? ' and (max-width: ' . (int) $a . 'px)' : ''; ?> {
+                .<?php echo $uid; ?> {
+                    display: grid;
+                    grid-template-columns: repeat(<?php echo (int) $c; ?>, minmax(0, 1fr));
+                    column-gap: 40px;
+                }
+                .<?php echo $uid; ?> .mdl-item:nth-last-child(-n+<?php echo (int) $c; ?>) {
+                    border-bottom: none;
+                }
+            }
+            <?php endfor; ?>
+            <?php endif; ?>
             <?php if ( $striped ) : ?>
             .<?php echo $uid; ?> .mdl-item:nth-child(even) {
                 background: <?php echo $striped_clr; ?>;
@@ -225,6 +252,7 @@ class Olobuild_DescList_Tile extends Olobuild_Tile_Base {
         $dl_ta = $s['text_align'] ?? '';
         $dl_ta_css = in_array( $dl_ta, [ 'left', 'center', 'right', 'justify' ], true ) ? 'text-align:' . $dl_ta . ';' : '';
         ?>
+        <?php if ( $colonne > 1 ) : ?><div class="<?php echo esc_attr( $uid ); ?>-box"><?php endif; ?>
         <dl class="olo-desclist <?php echo esc_attr( $uid ); ?><?php echo $show_icon ? ' mdl-has-icon' : ''; ?> olo-dl-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="<?php echo $dl_ta_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed text-align declaration from the in_array() whitelist above ?>">
             <?php foreach ( $items as $item ) :
                 $icon = $item['icon'] ?? '';
@@ -286,6 +314,7 @@ class Olobuild_DescList_Tile extends Olobuild_Tile_Base {
             <?php echo $item_close; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed '</a>'/'</div>' literal from the ternary above ?>
             <?php endforeach; ?>
         </dl>
+        <?php if ( $colonne > 1 ) : ?></div><?php endif; ?>
         <?php
         // Text effects: CSS scoped + runtime script (una sola volta per request)
         // Legati a QUESTA lista (uid): con '.olo-desclist' colori e ritardo dell'ultima lista

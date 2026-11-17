@@ -1314,19 +1314,28 @@ class Olobuild_Dynamic_Content {
      * Resolve post navigation fields.
      */
     private function resolve_post_navigation( $field, $post_id ) {
+        // get_previous_post() e get_next_post() guardano il contenuto globale: si mette per un momento quello chiesto
+        // (17 nov 2026: nell'anteprima del pannello e nelle voci della Sorgente dinamica non c'era, e il valore restava vuoto).
+        global $post;
+        $prima = $post;
+        if ( $post_id && ( ! $prima instanceof WP_Post || (int) $prima->ID !== (int) $post_id ) ) {
+            $post = get_post( $post_id ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- rimesso com'era subito sotto
+        }
+        $vicino = null;
+        if ( $post instanceof WP_Post ) {
+            $vicino = 0 === strpos( (string) $field, 'previous_' ) ? get_previous_post() : get_next_post();
+        }
+        $post = $prima; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- il contenuto di prima
+        if ( ! $vicino ) {
+            return '';
+        }
         switch ( $field ) {
             case 'previous_post_title':
-                $prev = get_previous_post();
-                return $prev ? get_the_title( $prev ) : '';
-            case 'previous_post_url':
-                $prev = get_previous_post();
-                return $prev ? get_permalink( $prev ) : '';
             case 'next_post_title':
-                $next = get_next_post();
-                return $next ? get_the_title( $next ) : '';
+                return get_the_title( $vicino );
+            case 'previous_post_url':
             case 'next_post_url':
-                $next = get_next_post();
-                return $next ? get_permalink( $next ) : '';
+                return get_permalink( $vicino );
             default:
                 return '';
         }
@@ -1340,15 +1349,15 @@ class Olobuild_Dynamic_Content {
     public function get_available_sources() {
         $sources = [
             'current_post' => [
-                'label'  => 'Articolo corrente',
+                'label'  => 'Contenuto della pagina',
                 'fields' => [
                     [ 'key' => 'post_title',      'label' => 'Titolo',          'type' => 'text' ],
-                    [ 'key' => 'post_excerpt',     'label' => 'Estratto',        'type' => 'text' ],
-                    [ 'key' => 'post_content',     'label' => 'Contenuto',        'type' => 'html' ],
+                    [ 'key' => 'post_excerpt',     'label' => 'Riassunto',       'type' => 'text' ],
+                    [ 'key' => 'post_content',     'label' => 'Testo',            'type' => 'html' ],
                     [ 'key' => 'featured_image',   'label' => 'Immagine in evidenza', 'type' => 'image' ],
                     [ 'key' => 'post_date',        'label' => 'Data',           'type' => 'text' ],
                     [ 'key' => 'author_name',      'label' => 'Autore',         'type' => 'text' ],
-                    [ 'key' => 'permalink',        'label' => 'Permalink',      'type' => 'url' ],
+                    [ 'key' => 'permalink',        'label' => 'Link del contenuto', 'type' => 'url' ],
                     // La pagina della categoria del contenuto (il primo termine, come «Primo termine»): «Altri Monumenti →».
                     [ 'key' => 'first_term_url',   'label' => 'Link della categoria', 'type' => 'url' ],
                 ],
@@ -1424,8 +1433,10 @@ class Olobuild_Dynamic_Content {
         // Spettacoli del sito: i campi della pagina di uno spettacolo (template singolo di olo_spettacolo)
         if ( class_exists( 'Olobuild_Spettacoli' ) ) {
             $sources['spettacolo'] = [
-                'label'  => 'Spettacolo',
-                'fields' => Olobuild_Spettacoli::campi_dinamici(),
+                'label'     => 'Spettacolo',
+                // Solo sui siti che hanno spettacoli: altrove la fonte non ha niente da dare (17 nov 2026).
+                'available' => Olobuild_Spettacoli::in_uso(),
+                'fields'    => Olobuild_Spettacoli::campi_dinamici(),
             ];
         }
 
@@ -1538,12 +1549,12 @@ class Olobuild_Dynamic_Content {
             ],
         ];
         $sources['post_navigation'] = [
-            'label'  => 'Navigazione post',
+            'label'  => 'Contenuto precedente e successivo',
             'fields' => [
-                [ 'key' => 'previous_post_title', 'label' => 'Titolo post precedente', 'type' => 'text' ],
-                [ 'key' => 'previous_post_url',   'label' => 'URL post precedente',    'type' => 'url' ],
-                [ 'key' => 'next_post_title',     'label' => 'Titolo post successivo',  'type' => 'text' ],
-                [ 'key' => 'next_post_url',       'label' => 'URL post successivo',     'type' => 'url' ],
+                [ 'key' => 'previous_post_title', 'label' => 'Titolo del precedente', 'type' => 'text' ],
+                [ 'key' => 'previous_post_url',   'label' => 'Link del precedente',   'type' => 'url' ],
+                [ 'key' => 'next_post_title',     'label' => 'Titolo del successivo', 'type' => 'text' ],
+                [ 'key' => 'next_post_url',       'label' => 'Link del successivo',   'type' => 'url' ],
             ],
         ];
         $sources['shortcode'] = [

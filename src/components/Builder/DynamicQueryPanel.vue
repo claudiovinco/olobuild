@@ -130,7 +130,7 @@
 
         <!-- Taxonomy filter -->
         <div v-if="!localQuery.segui_archivio" class="dqp-field">
-          <label class="dqp-label">{{ t('Filtra per tassonomia') }}</label>
+          <label class="dqp-label">{{ t('Filtra per categoria o tag') }}</label>
           <FieldSelect ui="dropdown" :model-value="localQuery.taxonomy" :options="taxonomyOpts" @update:model-value="onTaxonomyChange($event)" />
         </div>
 
@@ -269,34 +269,44 @@ const orderOpts = computed(() => {
 const WP_FIELD_OPTS = [
   { value: '', label: '— Non mappato —' },
   { value: 'post_title', label: 'Titolo' },
-  { value: 'post_excerpt', label: 'Estratto' },
-  { value: 'post_content', label: 'Contenuto' },
+  { value: 'post_excerpt', label: 'Riassunto' },
+  { value: 'post_content', label: 'Testo' },
   { value: 'featured_image', label: 'Immagine in evidenza' },
   { value: 'post_date', label: 'Data' },
   { value: 'author_name', label: 'Autore' },
-  { value: 'permalink', label: 'Permalink' },
-  { value: 'first_term', label: 'Primo termine tassonomia' },
+  { value: 'permalink', label: 'Link del contenuto' },
+  { value: 'first_term', label: 'Prima categoria' },
   { value: 'post_year', label: 'Anno' },
   // 01, 02… nell'ordine dell'elenco: per i numeri delle liste e delle card
   { value: '_index', label: 'Numero progressivo' },
 ];
 
-// Un campo link della voce (17 nov 2026, link dinamici) può portare, oltre che al contenuto, alla pagina della sua
-// categoria o a un indirizzo dei suoi campi: il link dei biglietti di uno spettacolo, un campo link dei Tipi di
-// contenuto. Il PHP legge «sorgente:campo» (build_items_from_query).
-function opzioniCampoVoce(field) {
-  if (field?.type !== 'link') return WP_FIELD_OPTS;
-  const extra = [{ value: 'first_term_url', label: 'Link della categoria' }];
+// Oltre ai campi di ogni contenuto, una voce può prendere un campo dei Tipi di contenuto (Negozi › Indirizzo) o di
+// uno spettacolo, del suo genere: testo per i testi, foto per le foto, indirizzi per i link (17 nov 2026). Un link
+// può portare anche alla pagina della categoria. Il PHP legge «sorgente:campo» (build_items_from_query).
+function campiDelGenere(generi) {
+  const extra = [];
   for (const sorgente of ['campi', 'spettacolo']) {
-    const campi = sources.value?.[sorgente]?.fields;
-    if (!Array.isArray(campi)) continue;
-    for (const c of campi) {
-      if (c?.type !== 'url') continue;
-      extra.push({ value: sorgente + ':' + c.key, label: c.label });
+    const src = sources.value?.[sorgente];
+    if (!src || src.available === false || !Array.isArray(src.fields)) continue;
+    for (const c of src.fields) {
+      if (!generi.includes(c?.type)) continue;
+      extra.push({ value: sorgente + ':' + c.key, label: sorgente === 'spettacolo' ? t('Spettacolo') + ' › ' + t(c.label) : c.label });
     }
   }
-  // Solo indirizzi, come nel pannello dei collegamenti: un titolo o una data in un link non portano da nessuna parte.
-  return [...WP_FIELD_OPTS.filter((o) => o.value === '' || o.value === 'permalink'), ...extra];
+  return extra;
+}
+function opzioniCampoVoce(field) {
+  // Solo indirizzi per un link, come nel pannello dei collegamenti: un titolo o una data in un link non portano da nessuna parte.
+  if (field?.type === 'link') {
+    return [...WP_FIELD_OPTS.filter((o) => o.value === '' || o.value === 'permalink'),
+      { value: 'first_term_url', label: 'Link della categoria' }, ...campiDelGenere(['url'])];
+  }
+  // Una foto prende una foto, un testo un testo: la foto in evidenza in un titolo ne scriveva l'indirizzo.
+  const foto = WP_FIELD_OPTS.filter((o) => o.value === '' || o.value === 'featured_image');
+  if (field?.type === 'image') return [...foto, ...campiDelGenere(['image'])];
+  if (field?.type === 'media') return [...foto, ...campiDelGenere(['image', 'url'])];
+  return [...WP_FIELD_OPTS.filter((o) => o.value !== 'featured_image' && o.value !== 'permalink'), ...campiDelGenere(['text', 'html'])];
 }
 
 // ── Foto di un campo ──
@@ -346,7 +356,8 @@ const TESTO_RIGHE = [
 const hasImageField = computed(() => (props.itemFields || []).some((f) => f && f.type === 'image'));
 const originOpts = computed(() => {
   const tutte = [
-    { value: 'posts', label: 'Articoli' },
+    // «Contenuti», non «Articoli»: la ricerca prende qualunque tipo (Negozi, Pagine…), si sceglie sotto (17 nov 2026).
+    { value: 'posts', label: 'Contenuti' },
     { value: 'images', label: 'Foto di un campo' },
     { value: 'righe', label: 'Righe di un campo' },
   ].filter((o) => o.value !== 'images' || hasImageField.value);

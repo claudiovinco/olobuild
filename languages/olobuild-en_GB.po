@@ -52917,3 +52917,67 @@ msgstr "Post navigation"
 #: OLObuild 1.4.1187
 msgid "Media (immagine in evidenza)"
 msgstr "Media (featured image)"
+
+#: OLObuild 1.4.1190
+msgid "Contenuto della pagina"
+msgstr "Page content"
+
+#: OLObuild 1.4.1190
+msgid "Link del contenuto"
+msgstr "Content link"
+
+#: OLObuild 1.4.1190
+msgid "Contenuto precedente e successivo"
+msgstr "Previous and next content"
+
+#: OLObuild 1.4.1190
+msgid "Titolo del precedente"
+msgstr "Previous title"
+
+#: OLObuild 1.4.1190
+msgid "Link del precedente"
+msgstr "Previous link"
+
+#: OLObuild 1.4.1190
+msgid "Titolo del successivo"
+msgstr "Next title"
+
+#: OLObuild 1.4.1190
+msgid "Link del successivo"
+msgstr "Next link"
+
+#: OLObuild 1.4.1190
+msgid "Prima categoria"
+msgstr "First category"
+
+#: OLObuild 1.4.1190
+msgid "nessun tipo"
+msgstr "no type"
+
+#: OLObuild 1.4.1190
+msgid "Singolo"
+msgstr "Single"
+
+#: OLObuild 1.4.1190
+msgid "Contenuti"
+msgstr "Content"
+
+#: OLObuild 1.4.1190
+msgid "Filtra per categoria o tag"
+msgstr "Filter by category or tag"
+
+#: OLObuild 1.4.1190
+msgid "&#9889; Sorgente dinamica accesa: le voci vengono dai contenuti scelti qui sopra"
+msgstr "&#9889; Dynamic source on: the items come from the content chosen above"
+
+#: OLObuild 1.4.1190
+msgid "Anteprima con"
+msgstr "Preview with"
+
+#: OLObuild 1.4.1190
+msgid "Il più recente"
+msgstr "The most recent"
+
+#: OLObuild 1.4.1190
+msgid "Il contenuto che il canvas usa per mostrare il template: cambialo per vedere lo stesso disegno coi dati di un altro. Sul sito ogni pagina usa il suo."
+msgstr "The content the canvas uses to show the template: change it to see the same design with another one’s data. On the site each page uses its own."

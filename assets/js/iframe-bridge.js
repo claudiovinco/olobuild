@@ -1432,6 +1432,16 @@
     clearTimeout(riallineaTimer);
     riallineaTimer = setTimeout(riallineaBarra, ms || 120);
   }
+  // Una tile ridisegnata rientra con la sua animazione d'ingresso (sale di 30 px in 0,8 s): la barra misurata a metà
+  // restava sopra il contenuto, non sopra la tile (17 nov 2026, «Applica collegamento» su un pulsante). Alla fine di
+  // ogni transizione o animazione nel canvas la barra torna al suo posto.
+  ['transitionend', 'animationend'].forEach(function (ev) {
+    document.addEventListener(ev, function (e) {
+      if (!hoverToolbar || hoverToolbar.style.display === 'none') return;
+      if (e.target && e.target.closest && e.target.closest('.olo-iframe-toolbar')) return;
+      riallineaBarraPoi(30);
+    }, true);
+  });
 
   function executeInlineScripts(container) {
     var scripts = container.querySelectorAll('script:not([data-olo-executed])');

@@ -19,13 +19,25 @@
       <CollapseSection :title="t('Layout')" :defaultOpen="true">
         <div class="psp-group">
           <div v-if="isSingleTemplate" class="psp-field">
-            <span class="psp-label">{{ t('Post Type') }}</span>
+            <span class="psp-label">{{ t('Tipo di contenuto') }}</span>
             <FieldSelect
               ui="dropdown"
-              :aria-label="t('Post Type')"
+              :aria-label="t('Tipo di contenuto')"
               :modelValue="pageSettings.single_post_type || ''"
               :options="postTypes"
-              @update:modelValue="builderStore.updatePageSetting('single_post_type', $event)"
+              @update:modelValue="sceltoTipoSingolo($event)"
+            />
+          </div>
+          <!-- Il contenuto con cui il canvas mostra il template (17 nov 2026): lo stesso disegno coi dati di un altro
+               negozio, articolo, evento. Vuoto = il più recente con testo e foto, come prima. -->
+          <div v-if="isSingleTemplate && pageSettings.single_post_type" class="psp-field">
+            <span class="psp-label">{{ t('Anteprima con') }}<InfoTip :titolo="t('Anteprima con')" :testo="t('Il contenuto che il canvas usa per mostrare il template: cambialo per vedere lo stesso disegno coi dati di un altro. Sul sito ogni pagina usa il suo.')" /></span>
+            <FieldSelect
+              ui="dropdown"
+              :aria-label="t('Anteprima con')"
+              :modelValue="String(pageSettings.preview_post_id || '')"
+              :options="anteprimaOpts"
+              @update:modelValue="sceltaAnteprima($event)"
             />
           </div>
           <div v-if="isArchiveTemplate" class="psp-field">
@@ -691,6 +703,44 @@ function removeFavicon() {
 
 const postTypes = oloData.postTypes || [];
 const isSingleTemplate = computed(() => builderStore.currentTemplate?.type === 'single');
+
+// «Anteprima con»: i contenuti del tipo del template singolo (gli ultimi 30 modificati), per scegliere con quale il canvas
+// lo mostra. La scelta si salva col template (settings.preview_post_id, fuori dalla cronologia: useHistory).
+const contenutiAnteprima = ref([]);
+let tipoCaricato = '';
+async function caricaContenutiAnteprima() {
+  const pt = pageSettings.value?.single_post_type || '';
+  if (!pt || pt === tipoCaricato) return;
+  tipoCaricato = pt;
+  try {
+    const r = await fetch(`${oloData.restUrl}link-search?types=${encodeURIComponent(pt)}&per_page=30`, { headers: { 'X-WP-Nonce': oloData.nonce } });
+    const dati = r.ok ? await r.json() : [];
+    const elenco = Array.isArray(dati) ? dati : (Array.isArray(dati?.results) ? dati.results : []);
+    contenutiAnteprima.value = elenco.filter((x) => x && x.type === 'post' && x.id);
+  } catch (e) {
+    contenutiAnteprima.value = [];
+  }
+}
+const anteprimaOpts = computed(() => {
+  if (isSingleTemplate.value) caricaContenutiAnteprima();
+  return [
+    { value: '', label: t('Il più recente') },
+    ...contenutiAnteprima.value.map((x) => ({ value: String(x.id), label: x.title })),
+  ];
+});
+function ridisegnaCanvas() {
+  if (typeof window.__oloBridgeForceRerender === 'function') window.__oloBridgeForceRerender();
+}
+function sceltaAnteprima(v) {
+  builderStore.updatePageSetting('preview_post_id', v ? Number(v) : 0);
+  ridisegnaCanvas();
+}
+function sceltoTipoSingolo(v) {
+  builderStore.updatePageSetting('single_post_type', v);
+  // Un altro tipo: il contenuto d'anteprima di prima non vale più.
+  builderStore.updatePageSetting('preview_post_id', 0);
+  ridisegnaCanvas();
+}
 const isArchiveTemplate = computed(() => builderStore.currentTemplate?.type === 'archive');
 // '' = il generico (olobuild_active_archive): gli archivi dei tipi senza un template loro.
 const archiveTypeOptions = [{ value: '', label: t('Tutti gli archivi') }, ...postTypes];
